@@ -1,82 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793207946;
-	b=JHZLRY7YH4ZqzCf2fBBPbAB6eLqfmZ1q7YdHjoCa9awR2twpPBBVH/Mpme6XUbK927O3
-	 T97K3NjSjRWCgPpj/REys7yxSxcGXjXRWpPb48hnVh50myZv7GImiwViR0qH9YaA4wX8h
-	 ty74nM9P4xRLkt/u+PmTfXkKMWFLYvXbrKUMxKVYWns89Bt8Jlfh1HQPR8L/oewyFqCAg
-	 //gsGOwkac0N7sGHF1w9t5qXvc4zMANwV+e3MvMyOmWSH8ty9pi8q0VkV6BBxHeTAlUwS
-	 kZJd7kzdQni2W5WNNmjoPDCmUJ5R7yQUTsYJGV9RBHbWI1j20Cg3xnEoQxDEKmz0ykw==
+	t=1793208178;
+	b=5WAEObbiBbN4XRuftKLFimghJdAykuxBKxyQpZW8ZmFwq7DUWELi9r88jlx4/fDhh5HL
+	 ZWw+wNMKgW6a7U1e9Swy3j0ki9gfCPK32oysHJRDjCe9qVFVvqmbiQz3Oyffym9WccTog
+	 iGCkiDCjHDgrxMsAPP8ShM60Al3gFa2T6DXVhxyc4S/Qb1k4reTOrqelnOlUSYGtx3Q/7
+	 KKJlZXfxAy2aVt+JyOK4FiL7zefG6n4msj/nuBq083cZYS/32n2DTR1Y9ze4a/r5/ffoc
+	 Nt7iwtOwBs5cSTImdmqLV6tgpiBk9t13iWiMnNKXo3vxvYxmvLBaBIvVto8a43af4XQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793207946;
-	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References;
-	bh=iA59H/LDNhkaV57ivIpVgCN8zVjfYFqLt84NAT8Jikg=;
-	b=l99B9pCp2t5aVP94SJ+EqpgXtoZoyygLgIKlzF6sSM6um80cZq90yyN0HRET+Yu5Z1+g
-	 lvZIvBe5ZXCQEwCyULtliqzZpGqzXg4Gx4GYUVu1tXociRkIykcJaBtOsn5ECMueJFppH
-	 PPVSuOffBvr16aeEJ2a4UF/EmBpo1eH6HPW8j1OXH+Wc0n6J1zmX6ucO5MBWUEPwGf1V7
-	 bRtecm3rQ36aAdy937ygJoQDhylIsxVu3WHO1/f5oAtWcEO62jQARiDHT2graA6dC1fls
-	 Ef9wZ/PvTZGj1FtNMEsV1jxVreQomHgxnD0XSgPAAxP32Sc8sBW9ZPfF0z7XIZtisSg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793208178;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=lZR40KBgJ/2Psdf8gDUdz7tLnIyTakA+gek7ngS14Kk=;
+	b=jJA88Az5Rqfh3JvhUwchQPF01sctfOhohkxCBuBAnGPZ8f2I3fCdD8GE9K59wubvOKvd
+	 zaH6cNmn5lg/3/6BghcJ7k7GooZjHZiBlESaBEZ9eQ3xtFGDKVbIErHjS7sy8WFOWMxOP
+	 ShaYL8/Jmgi3k2vMWHnIv2l7YIWNXSQp28Mu7UEcwadxy8v20tZk3rUlHh2X7qQkSxKmM
+	 l30LUYhL7//witKfCeMc/H2ijsOkl6+/BcqXH3WZvTCWjdXGSDbBKh0Ry4LKxR/XiLJw8
+	 Jz18yL4rd+yKb/4fLnnTBYP1ktF/nWZpzSLj6p4+MgHIbrBQxw5moYaiwnCAlBuGJSQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MeiUkkTx;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JGi33GOb;
+	arc=none smtp.remote-ip=209.85.215.172
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11C0606A31C;
-	Wed, 28 Oct 2026 17:19:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB589606A31C
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 17:22:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB589606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MeiUkkTx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCFE1F01825;
-	Wed, 28 Oct 2026 17:19:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793207945;
-	bh=iA59H/LDNhkaV57ivIpVgCN8zVjfYFqLt84NAT8Jikg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=MeiUkkTxcl/ZYalrXsKfZK5vIOlQrmac2J0jzKLvwfTSVkHW/EqJju3D2t5LraDBO
-	 HFBWcUhcKn1N9O9rwcgt7ycPunBlHdJaWWUmKIi5Obw31rPdeq3wBL2J4pJ0nVXidE
-	 JqByT/tUR5FPDpjikQrL4ioCo1Wm45zMK8adF6UPkLnSHnXG0Df4ZvmeRfQWJm7JT/
-	 v6Cf33DnRjATzw74NYdsy5RY49irRJk+HTAvPxntr1fG3+RRLiOPcAkl/iNMPw1Nh8
-	 S+PflWOLZEOebmXde98cg5hbdX57G7CmBYnXk5vhP+A0kOxw6ai7w29GpWVoPhRJFE
-	 dOLHhWgZtzAMQ==
-Date: Wed, 28 Oct 2026 07:19:04 -1000
-Message-ID: <5572f45165fa3ec7d16e1d17eb2c3fb6@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Hui Zhu <hui.zhu@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Muchun Song <muchun.song@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- davem@davemloft.net, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- KP Singh <kpsingh@kernel.org>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>, Leon Hwang <leon.hwang@linux.dev>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>,
- Tobias Klauser <tklauser@distanz.ch>, Eyal Birger <eyal.birger@gmail.com>,
- Rong Tao <rongtao@cestc.cn>, Hao Luo <haoluo@google.com>,
- Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>,
- Jeff Xu <jeffxu@chromium.org>, mkoutny@suse.com, Jan Hendrik Farr <kernel@jfarr.cc>,
- Christian Brauner <brauner@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
- Brian Gerst <brgerst@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>,
- Willem de Bruijn <willemb@google.com>, Jason Xing <kerneljasonxing@gmail.com>,
- Paul Chaignon <paul.chaignon@gmail.com>, Lance Yang <lance.yang@linux.dev>,
- Jiayuan Chen <jiayuan.chen@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Barry Song <baohua@kernel.org>,
- Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Hui Zhu <zhuhui@kylinos.cn>
-Subject: Re: [RFC PATCH 0/2] memcg_ext: dynamic memory.low and memory.min protection
-In-Reply-To: <c652f3e6198b143fcf29f5540a769228f3d8470c@linux.dev>
-References: <cover.1793086858.git.zhuhui@kylinos.cn>
- <769e80ffa618327ac03c13c4657e7229@kernel.org>
- <c652f3e6198b143fcf29f5540a769228f3d8470c@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JGi33GOb
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc4aa18f9afso641356a12.3
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 10:22:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793208177; x=1793812977; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lZR40KBgJ/2Psdf8gDUdz7tLnIyTakA+gek7ngS14Kk=;
+        b=JGi33GObSCIPOg5GYE3BnSfBBZVmwwsXZw5eBPhKrmHgpciNqlHmJXek03iCaoShb/
+         Wj5OBASXa5rgtunJBpYz7PgBNVHa4wxO3kmcmagshjYaKew1uehhKGUOb27CVWlGm88H
+         R+IgFuPQe7cRTRJKJGkxDEJN5YOR1VmcahJsqMrmIVOOqyajbYR/YVkTLVq3i3c02P56
+         OdVgC0Si4IJDS5HsNRvud8Gy942JJrfW8OGZ7pETOU8WUou8OHUAbs08DHnRZdexiLCh
+         /Yx51RttoshtFjqmVanlByJJtaRO3GQvNDepyO+yxrJ7lm8uPcrQxH+IktwfOakVl3ta
+         /fmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793208177; x=1793812977;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lZR40KBgJ/2Psdf8gDUdz7tLnIyTakA+gek7ngS14Kk=;
+        b=a8pQAn03oE6yBoOnaE75fDAiOupm5bS8/62kYVeTSlIwKRFliHQ3in3uVs1NRGQ+ux
+         KfvvwUsf7ci4JTOJafCXIQUQ1rSXbUlbRAUz2fkTCyVSzabQucoxa6bTSUlE3YjfbEfN
+         4gDenG3SfUdzLJ+FA0bA140GzEarDW2mLj3EJbFm7Z9pq14o0uQKTVCmAKio+Gn302bz
+         lAlwl7QJcn4DV/1+OnOeauKExkbc5IpwlJEQw0UU904pyBRd3V9Gh6GDMr3aISgPTnZz
+         S2VCI3JeVHOdw3PjBH7yzxWjvqXhXDluVdebtIaNXywbYzUXkMkcEW2z5LPhFA8Wb6xg
+         7V4Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzpZpHqS88F6vofJbHVbBlWuGD8TYIWrh82Pez0aj4wKsgfx65KGKrLR0hn0B+uD66b2+Y=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLyOfTuTPCofCNN5mROV7q9m3srCK9yRqlVvusg3rzSmyLEgkGE
+	6zuGV8yumiHh7D0N8eL6dU0o5TsQygqY9km4nQxgvxjkB2hx+sWlLSpcaPwrAg==
+X-Gm-Gg: AYBFou2bqBfIfs0WtgF2cgUtBmTG4SrxLlXS6rLZyp5SyN+uunjCLS0XyFYkzdmQByZ
+	HhvC3qHbTO/ml7i/QqlV7zZ7YRBTSeTvI0AgUnhvw2iEv86fpXGTaHDOXeRzDoRaOJ7IBF7nV/1
+	cbiBMJc2s+ihmrUO31Mu84xZT9N3XYvnM9MFzWfp2w9AcnCmmc1Bgq5hAVq6m/suq/w6LBhhgey
+	wN+LKDJ2veVmumV+mZgGLE5rMRbmuBx2EqAFUBUxXJkpO3G0HgysusXq/bVIu9/nk6yAgKPRcyu
+	2kJHZIjA8Ci6xRqzvUXvyTlSSdWd2B4ExkbQCeO1Mj9gABjgIHyca1YnLtHgSyirVxK4HUzZ1nz
+	E95AHAA4oMSpkdlg6yszDb1lbc8a1nb7OvwuamMyeMkSUkqCc2SkkdHWeEMn+WHiNKabWVYN2PS
+	XEjmHzhzxt5Kyvgl1d3njYUM+69LhGiCOli96ZKPZ3PmehnYPC14bScFTYBWFzLu6G8T84g2FGn
+	l1itWmw7bE6cHIl688IKL9PLoRKETmamqaSBSoZ0xkb4NY777SOAy7+XmCVVMZUYOnNZ70SxSu8
+	z8FvVphaRZV4LWgxn1pNn+BwsZOmhG5WQlDMWnyeI4TYjolL3q9DassLzS2Xf9Vp/XkkWFNDEwL
+	BoXfQD7ReOQ/ud9a8zc8mzl7VgSGeXq5JMg==
+X-Received: by 2002:a17:90b:4b0e:b0:3ac:929e:691 with SMTP id 98e67ed59e1d1-3ae57f9b30cmr2053159a91.17.1793208177177;
+        Wed, 28 Oct 2026 10:22:57 -0700 (PDT)
+Received: from localhost ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e8fb2c5sm380155a91.3.2026.10.28.10.22.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Oct 2026 10:22:56 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 28 Oct 2026 17:22:56 +0000
+Message-Id: <DMGN8VM2BAOR.28NRNN51MCI8I@gmail.com>
+Cc: "Yun Lu" <luyun@kylinos.cn>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Mykyta Yatsenko" <yatsenko@meta.com>, "Shuah
+ Khan" <shuah@kernel.org>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Retire task work before reclaiming
+ hash elements
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yun Lu" <luyun_611@163.com>, <bpf@vger.kernel.org>
+In-Reply-To: <20261028073525.1035605-2-luyun_611@163.com>
+References: <20261028073525.1035605-1-luyun_611@163.com> <20261028073525.1035605-2-luyun_611@163.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,74 +107,96 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
 
-Hello, Hui.
+On Wed, Oct 28, 2026 at 12:35 AM Yun Lu <luyun_611@163.com> wrote:
+> Leave ERR_PTR(-ENOENT) in task-work slots before returning non-preallocated
+> HASH and RHASH elements to the allocator. The existing fetch/acquire error
+> path rejects the retired slot. Reopen it only when the allocator acquires
+> the storage again. Also retire a reinitialized RHASH candidate abandoned
+> after insertion finds an existing element or fails: a reader of a previous
+> incarnation can still hold its value pointer and install a context there.
 
-On Wed, Oct 28, 2026 at 10:27:33AM +0000, Hui Zhu wrote:
-> memory.low is a request, and what reclaim honors is elow, which
-> page_counter_calculate_protection() derives on each pass from the
-> parent's elow, the siblings' requests and the tree's usage.  At the
-> first level below the reclaim root that comes out equal to what was
-> written, and there the knob is enough.  Deeper down it is capped by the
-> parent's budget and shared out between siblings according to what they
-> claimed and what they use, so what a cgroup wrote and what it ends up
-> with can differ.  As far as I can tell none of that is visible from
-> userspace: memory.low reads back the declared value, and I could not
-> find anything that exports elow.
-...
-> So the derived value seems to be usable only where it is derived,
-> inside the check, and that is where low_policy() sits: it is evaluated
-> per pass and is handed that pass's own inputs - the memcg, the reclaim
-> target, the elow just computed, the usage - instead of being state that
-> is read at the check.
+This is overkill.
+It adds a 3rd value of twk->ctx and two new functions that hashtab.c
+calls in 6 places.
+The kfuncs start to work differently for prealloc and non-prealloc maps.
 
-The visibility of effective values is a problem of wider scope, not an
-argument for implementing bpf struct_ops. There were discussions in the
-past on whether we could expose some meaningful effective value. They
-didn't lead to anything conclusive, and we may yet find a way to expose
-something more useful.
+The map knows whether the element is deleted. Look it up.
+In bpf_task_work_acquire_ctx() the prog owns the ctx in PENDING state.
+The irq_work is not queued yet.
 
-Also, the hook doesn't use elow to decide anything. mem_cgroup_below_low()
-and below_min() return true as long as elow or emin covers the usage.
-They ask the policies only once the usage exceeds it, and the only
-answer a policy can give is BELOW, which makes reclaim skip the cgroup.
-So, what the hook buys in the nested case isn't access to the per-pass
-elow. It lets a cgroup escape the ceiling that its parent's protection
-imposes on the subtree.
+  prog                                   delete
+  cmpxchg(&twk->ctx, NULL, ctx)          unlink the element
+  cmpxchg(&ctx->state, .., PENDING)      xchg(&twk->ctx, NULL)
+  lookup
 
-Some of that may be innate to nested protection semantics. One
-shortcoming may be that there's no way for a parent to "passthrough" in
-terms of protection, because there's no way for a parent to be neutral.
-If its memory.low is too low, that's the ceiling for the whole
-subhierarchy. If it's set high, the subtree gets the total protection
-one way or another. There may be arguments for a different semantics
-which changes the shape of the protection.
+Either the lookup doesn't find the element or the xchg() finds the ctx.
+It's the same scheme as the usercnt check in __bpf_async_init().
 
-However, it doesn't make sense to let a BPF program escape the parent's
-policy, and, again, none of this is an argument for adding bpf
-struct_ops.
+hashtab.c doesn't change. A deleted element gets -ENOENT in all map types.
+The cost is one lookup per bpf_task_work_schedule_*().
 
-> The other half is what a policy can key on.  memory.low has one
-> dimension, bytes.  A policy program is not limited to the ctx it is
-> handed; it can also use state that other BPF programs keep, so
-> protection can be a function of activity rather than of size - a
-> workingset refault rate, for instance.  [1] reads those counters from
-> BPF and acts on them; it drives reclaim rather than answering a
-> protection hook, but the signal it reads is the one such a policy would
-> want.  The limit is on the output rather than the input: the hook
-> returns a boolean, so it cannot grant anything memory.low cannot.
+The diff doesn't have the reorder of FREED and detach in
+bpf_task_work_cancel_and_free().
+That's a fix for a different race. It doesn't need a new ctx in a deleted
+element. Pls send it as a separate patch with its own steps.
 
-These signals are all available to userspace. The workingset refault
-counters are in memory.stat, PSI is in memory.pressure, and whatever
-state other BPF programs keep sits in BPF maps which userspace can read.
-So, the inputs aren't the difference. What's left is how quickly and how
-often the protection gets adjusted.
+Something like this (compile tested only):
 
-That may be an argument, but nothing so far shows that struct_ops is
-needed for it. Can you demonstrate a realistic and useful scenario which
-can't be achieved from userspace but can be with struct_ops?
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 648abe1..acd62ef 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1148,6 +1148,14 @@ static void *map_key_from_value(struct bpf_map *map, void *value, u32 *arr_idx)
+ 	return (void *)value - round_up(map->key_size, 8);
+ }
 
-Thanks.
++/* Is the element that holds this value still in the map? */
++static bool bpf_map_value_is_linked(struct bpf_map *map, void *value)
++{
++	u32 idx;
++
++	return map->ops->map_lookup_elem(map, map_key_from_value(map, value, &idx)) == value;
++}
++
+ enum bpf_async_type {
+ 	BPF_ASYNC_TYPE_TIMER = 0,
+ 	BPF_ASYNC_TYPE_WQ,
+@@ -4741,6 +4749,19 @@ static struct bpf_task_work_ctx *bpf_task_work_acquire_ctx(struct bpf_task_work
+ 		return ERR_PTR(-EBUSY);
+ 	}
 
---
-tejun
++	/*
++	 * The prog can still hold a value of an element that was deleted from the map.
++	 * bpf_task_work_cancel_and_free() is done with it and nothing stops a new callback
++	 * when the element is freed. The ctx is published and PENDING at this point: either
++	 * the lookup doesn't find the element or bpf_task_work_cancel_and_free() finds the ctx.
++	 * An idle ctx stays in the element until the element is reused or freed.
++	 */
++	if (!bpf_map_value_is_linked(map, (void *)tw - map->record->task_work_off)) {
++		(void)cmpxchg(&ctx->state, BPF_TW_PENDING, BPF_TW_STANDBY);
++		bpf_task_work_ctx_put(ctx);
++		return ERR_PTR(-ENOENT);
++	}
++
+ 	/*
+ 	 * If no process or bpffs is holding a reference to the map, no new callbacks should be
+ 	 * scheduled. This does not address any race or correctness issue, but rather is a policy
+
+[...]
+
+> +	bpf_task_work_free(&rhtab->map, rhtab_elem_value(elem, rhtab->map.key_size));
+>  	bpf_obj_cancel_fields(&rhtab->map,
+>  			      rhtab_elem_value(elem, rhtab->map.key_size));
+>  	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
+
+bpf_wq and bpf_timer have the same problem.
+bpf_wq_init() on a deleted element installs a new cb. cb->value points to
+the element. htab_mem_dtor() ends in cancel_work(). It doesn't wait for
+bpf_wq_work(). The callback still runs when the element is freed.
+Pls fix all three.
+
+Also trim the commit log. The 5 steps and the splat are enough.
+
+pw-bot: cr
