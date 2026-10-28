@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793149731;
-	b=YNfl70NxeJ/HmpxBWCn/1AdYhkvE35TBYU0K6ize55miW3Bjrq4M6tPoedkyKX0KDTZY
-	 xMQ5uD8DGsXHQt3SLSo9xvF7WzV3SdXBWih1hwhWPNQN6OtPJr4AWGWmlPruJ0XPAi2ns
-	 v4G4bSUbSu2yXhUM7xzpgRV0TCrkYDU2C9L2sSyzivEgY1DAXqdq6eLkBhWeOkxbxUFDJ
-	 GEpXNwfOIw808sbfF3bm/CEf5vB7FX3mi1CsJWd6XL/+rFYHNzt1Dzdb6yEYJw8qqEM6R
-	 GeesZY6mU67xCyC2piNHvUZ8oGXEPxJvcsAroSqI2/39ARfRwjuwrzPfJCiOmHWQMWw==
+	t=1793149816;
+	b=PlTnFp2QL+KK8eM4kcIMntde9X3uDtmJJiR7H9AHONI0eUkkubbQyrBTeXesVaI+1Msb
+	 rUk/12mc9Lmgbg4xEr/LY61r8SogDy0oJrn5mxXtKhaWtXXSgvx/hKIVIOxDLea0/kqyr
+	 Ar0sN14M/Cx1ln75eqM5eg+wB8dLIAkNSc0Ubaz9gVLETE67DMNW6NbyDDReK3+iCtreV
+	 Vi9dsKC4W3KkUmAbSmdZQWzt/nzwga1c5CU4n5YiB+iykm1EicNM4Ubs7pR+gQe7vuF2R
+	 s4GegJQrSj+JVez3dirse4pe6o14hXDwl/cqjQ7xKvpqyD6vD4lG4TKuFp3q1iw5Ypg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793149731;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793149816;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=sqLa92RWf572fIfdy7hSe8FrupuKX6AcDIL3TEONmjI=;
-	b=K6CV/VmZ5In7oGKSxOTAUkwtZPry7/W89NlEWAUhAbEyrqRK4GepihXp/UxwAZ8NWqof
-	 Tg7WhBFk3khHcwQBZlgidFt2goHt5b2zNTceMp6IPRE9byOheE/VRpPRpFtS/Vc1ggy17
-	 xKIS3ps/sp8mmOposbKH2pcaAVtNsqbiEG2T0G/5qYias5KgZSrvZfRI/T8CbSI/ONLC8
-	 bPWrIWklZJv5gVteRERT1JCbao8c286rCQ0petRKrMWjCuilV3yebrtXY82qaUV9LkGMy
-	 pTi68f+Hr/Z2mmUKkckZ/Lck5Y9XJJsgEMHaPqZ/X+6GgvJ8TE2la9VTY4MGSRxKmmA==
+	bh=gh8SXkpFU5ILApurssIZiU0bYCI3BLsEOn3lKsl9M3g=;
+	b=hduhE78V/2PIFNGQWkys8GeXhXhAKmiXTav5Rc9xv/mqr3BpsAv2E+PG0tUUvSvFWDeC
+	 je6pNROQEPhGsTRzi50o+7x24mQdIvpbTvtTQUqGOfjXjokhL57ASsQu55/geDyDg9euY
+	 pBCqpw6IK6xAE4LQztXOBHkivrUwfKFVVuL7VhI7W4Y/QvB0JUKNLzXBvNjqgIMjafjXg
+	 0EvE8QpwQ1fMs0PbOw/O/JS9Pys5ybZfyFKQ1uehvopJWk4ogffmZw3Y/KTztPKFQ85KQ
+	 i/waykQKHYJgMMA0RhPlrHuvaq0II3k6vUUrUy7R0Ek7ZIj3g5iPb1CuU1t9Rp7wC4g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LQQmsjzQ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="PrPFpx3/";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A76606A31A
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987A5606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:10:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LQQmsjzQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 992B01F01825;
-	Wed, 28 Oct 2026 01:08:50 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PrPFpx3/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 560531F01825;
+	Wed, 28 Oct 2026 01:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793149730;
-	bh=sqLa92RWf572fIfdy7hSe8FrupuKX6AcDIL3TEONmjI=;
+	s=k20260515; t=1793149816;
+	bh=gh8SXkpFU5ILApurssIZiU0bYCI3BLsEOn3lKsl9M3g=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=LQQmsjzQ/W8PTdGBjTS8+OP/tJnsS1tY7mEVCKK42kUpuM/E3QAk83mNCy1/w8tz6
-	 T+o12AHUge1AYylcrvwuLumAU4kF3cW76f6XgZxl0vq2vRdUzt6qXbVZjqqK08Po8m
-	 Xw890xUKLkkOEM7/gdfq3CJ0n2a5kUDmD20nRv25GK3x+syQhdDLdUVeNTdfT6mGgj
-	 wAcbGHxE4CBxMx7wAwPrtTAHoQkbEFjgxXAak1FRicmfJKb+E1LtL41AkhZoyqQT2V
-	 +JwqZMmFJR8ISxPL2q/tzmz4Zxz+Dw3AXbCndVg4wWmpcbYSwivxvJXzpGi707kaZB
-	 xRSZ4LweQ/ZWQ==
-Message-ID: <sashiko-outbox-187303@kernel.org>
+	b=PrPFpx3/BM3LrZIAWhe+LEtFPDzHxbQe9IfQTwI7mKATMm2kiomwRtKfSDJ9R4Y88
+	 9jJUGehbiQC6NBrLiPYyjBQVX4tJpQ36ZpxQ6wTMjk81fq0+k0HdNkp/nBSQZmYRph
+	 Y+8to7IbUEBbqckYSoX9ItpkIBa9PWBKuzyscF41PmKpTk4S3me64IjEwdNbgkis2K
+	 eRDRz7Iv6X7OLS0uo1a1GfaCATk9R8uRBOvX6hLgwjeJ+z1AxckIA9P+IMXYOw7HTK
+	 x7zD7+fPI822AZ4lLMLRXe1i4wuDbPt7uBw35cOp8l8CV1RSvb8JOGcTu6tIqWyJ1s
+	 +I9o0pMYNO4gw==
+Message-ID: <sashiko-outbox-187304@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v1 07/11] bpf: Let the callback of
- bpf_find_vma unwind
+Subject: Re: [RFC PATCH bpf-next v1 04/11] bpf: Give the inlined bpf_loop a
+ pad
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <9b98417904ec1b27a1b6e2d6a37b897fe2494073.1793147364.git.memxor@gmail.com>
+In-Reply-To: <a9599f7ed1c7bbb5109d2a9e2c7135af15045738.1793147364.git.memxor@gmail.com>
 References: <cover.1793147364.git.memxor@gmail.com>
- <9b98417904ec1b27a1b6e2d6a37b897fe2494073.1793147364.git.memxor@gmail.com>
+ <a9599f7ed1c7bbb5109d2a9e2c7135af15045738.1793147364.git.memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 28 Oct 2026 01:08:50 +0000
+Date: Wed, 28 Oct 2026 01:10:15 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,151 +62,247 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] bpf: bpf_find_vma() unwound pad unlocks mmap_lock with IRQs disabl=
-ed
-- [High] bpf: vma pointer escapes bpf_find_vma() lock scope via r0 on unwin=
-d_exit
+- [High] bpf: inline_bpf_loop() emits pad to unseen target deleted by dead =
+code removal
+- [High] bpf: inline_bpf_loop() leaves orphaned unwind_goto after LDX_MEM w=
+hen !pad
 --
 
-commit d84887aac74ddde9372c2538e6e860df21d923db
+commit f87a8cc4d4bc638d4f9d4773f7657f7aec4d7868
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf: Let the callback of bpf_find_vma unwind
+bpf: Give the inlined bpf_loop a pad
 
-This commit adds an unwind landing pad to bpf_find_vma() that releases the =
-RCU
-read lock, unlocks mmap_lock, drops any foreign mm reference, and returns t=
-he
-callback's r0 when the callback leaves via unwind_exit.
+This commit updates inline_bpf_loop() to emit an unwind landing pad when the
+callback subprogram can unwind and an unwind_goto instruction follows the
+bpf_loop() call. The inlined pad restores callee-saved registers R6-R8, jum=
+ps
+to the caller's landing pad, and rewrites the original unwind_goto after the
+bpf_loop() call into a no-op jump.
 
-> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> index 2ee7b3b3c10be..ae67c97fe845e 100644
-> --- a/kernel/bpf/task_iter.c
-> +++ b/kernel/bpf/task_iter.c
-
-[ ... ]
-
-> @@ -827,6 +828,20 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task,=
- u64, start,
->  		mmput_async(mm);
->  #endif
->  	return ret;
-> +
-> +unwound:
-> +	/*
-> +	 * The callback left with unwind_exit, under the mmap lock and in the
-> +	 * RCU section. The way out is the same as after a return.
-> +	 */
-> +	rcu_read_unlock();
-> +	bpf_mmap_unlock_mm(work, mm);
-> +#ifdef CONFIG_MMU
-> +	if (mmput_needed)
-> +		mmput_async(mm);
-> +#endif
-
-[Severity: High]
-Can the unwound pad end up calling mmap_read_unlock() and mmput_async() with
-hardware interrupts disabled?
-
-When bpf_find_vma() is entered with interrupts enabled for a foreign task, =
-the
-irqs_disabled() check passes, mmput_needed is set to true, and
-bpf_mmap_unlock_guard_get() returns NULL because !irqs_disabled():
-
-kernel/bpf/mmap_unlock_work.h:bpf_mmap_unlock_guard_get() {
-	struct mmap_unlock_irq_work *work;
-
-	if (!irqs_disabled())
-		return NULL;
-    ...
-}
-
-Inside the callback, callback_ctx (R3) can point to a stack slot in the
-caller's frame. If the callback calls bpf_local_irq_save() on that caller
-stack slot and then executes unwind_exit, process_bpf_exit_full() calls
-check_resource_leak() with check_lock set to false because curframe > 0:
-
-kernel/bpf/verifier.c:process_bpf_exit_full() {
-	int err =3D check_resource_leak(env, exception_exit,
-				      exception_exit || !env->cur_state->curframe,
-				      exception_exit ? "bpf_throw" :
-				      "BPF_EXIT instruction in main prog");
-    ...
-}
-
-Unlike a normal callback return, unwind_exit sets state->unwound =3D true in
-prepare_func_exit(), so push_callback_call() returns 0 on revisit without
-verifying a second callback round and jumps via unwind_goto to the caller's
-pad where bpf_local_irq_restore() restores the caller's stack slot.
-
-At runtime, execution enters the unwound label in bpf_find_vma() with hardw=
-are
-interrupts disabled while work is NULL and mmput_needed is true.
-bpf_mmap_unlock_mm(NULL, mm) then calls mmap_read_unlock(mm) directly with
-IRQs disabled instead of deferring via irq_work, and mmput_async(mm) is also
-called with IRQs disabled, risking a deadlock on rq_lock during reader wake=
-up
-and triggering an invalid wait context under CONFIG_PREEMPT_RT.
-
-> +	bpf_unwind_leave();
-> +	return r0;
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index f062ef7dd943d..94a379c94c675 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -2836,6 +2836,15 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *en=
+v)
+>  	return 0;
 >  }
+> =20
+> +/*
+> + * When the callback can unwind and unwind_goto follows the call of bpf_=
+loop,
+> + * unwind_goto follows the call of the callback, and the pad restores r6=
+-r8 and
+> + * jumps to the pad after the call of bpf_loop with the r0 of the callba=
+ck, which
+> + * the verifier has checked with the state of that r0. The unwind_goto t=
+hat
+> + * followed the call of bpf_loop doesn't follow a call anymore and becom=
+es a
+> + * no-op jump. A loop of no rounds never runs its callback, so the verif=
+ier asked
+> + * for no unwind_goto there, and the insn after the call is some other i=
+nsn.
+> + */
+>  static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
+>  					int position,
+>  					s32 stack_base,
+> @@ -2848,6 +2857,8 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_=
+verifier_env *env,
+>  	int reg_loop_max =3D BPF_REG_6;
+>  	int reg_loop_cnt =3D BPF_REG_7;
+>  	int reg_loop_ctx =3D BPF_REG_8;
+> +	bool pad =3D env->subprog_info[callback_subprogno].can_unwind &&
+> +		   bpf_is_unwind_goto(&env->prog->insnsi[position + 1]);
 
 [Severity: High]
-What prevents the callback from escaping the vma pointer (or pointers walked
-from it, such as vma->vm_file, &vma->vm_file->f_path, or
-vma->vm_file->f_inode) in r0 via unwind_exit after mmap_lock, rcu_read_lock=
-(),
-and the foreign mm reference have been dropped?
+Can this leave a live BPF_JMP32_A instruction targeting a dead caller landi=
+ng
+pad that gets removed by bpf_opt_remove_dead_code(), leading to an
+out-of-bounds read in addrs[] or ctx->offset[] during JIT compilation?
 
-In set_find_vma_callback_state(), R2 (struct vm_area_struct *vma) is marked=
- as
-a plain PTR_TO_BTF_ID:
+In inline_bpf_loop(), pad is enabled without checking whether the target of
+the unwind_goto at position + 1 was actually visited during verification:
 
-kernel/bpf/verifier.c:set_find_vma_callback_state() {
-    ...
-	callee->regs[BPF_REG_2].type =3D PTR_TO_BTF_ID;
-	__mark_reg_known_zero(&callee->regs[BPF_REG_2]);
-	callee->regs[BPF_REG_2].btf =3D  btf_vmlinux;
-	callee->regs[BPF_REG_2].btf_id =3D btf_tracing_ids[BTF_TRACING_TYPE_VMA];
+    caller_pad =3D position + 2 + env->prog->insnsi[position + 1].off;
+    env->insn_aux_data[caller_pad].seen
+
+The caller's landing pad can remain unseen while can_unwind and
+bpf_is_unwind_goto(&env->prog->insnsi[position + 1]) are both true, for
+example when bpf_loop() is called with 0 iterations (r1 =3D=3D 0, which ski=
+ps
+push_callback_call() in check_helper_call() while still marking the call si=
+te
+fit_for_inline in update_loop_inline_state()) or when unwind_exit in the
+callback lies on a branch not taken for this call site.
+
+In bpf_check(), bpf_optimize_bpf_loop() runs before
+bpf_opt_hard_wire_dead_code_branches() and bpf_opt_remove_dead_code():
+
+bpf_check()
+  bpf_optimize_bpf_loop()
+    inline_bpf_loop()
+      bpf_patch_insn_data()
+        adjust_insn_aux_data()
+  bpf_opt_hard_wire_dead_code_branches()
+  bpf_opt_remove_dead_code()
+    verifier_remove_insns()
+      bpf_remove_insns()
+        bpf_adj_branches()
+          bpf_adj_delta_to_off()
+
+When bpf_patch_insn_data() patches the inlined loop, adjust_insn_aux_data()
+marks all patched instructions in insn_buf as seen, including the inlined
+pad and its trailing BPF_JMP32_A instruction, while the original unwind_goto
+is overwritten with BPF_JMP_A(0).
+
+When bpf_opt_hard_wire_dead_code_branches() runs next, it preserves the
+inlined BPF_UNWIND_GOTO because its target (the inlined pad) is marked seen,
+and ignores the BPF_JMP32_A instruction because it is an unconditional jump.
+
+When bpf_opt_remove_dead_code() then removes the unseen caller landing pad
+range [pos, end_old), bpf_adj_delta_to_off() only adjusts forward jumps when
+curr + off + 1 >=3D end_old. Because BPF_JMP32_A targets caller_pad inside =
+the
+removed range [pos, end_old), its imm offset is not adjusted. If caller_pad
+is at the end of a subprogram and preceded by other dead instructions (or
+followed by a subprogram where bpf_do_misc_fixups() calls adjust_jmp_off()
+for may_goto), BPF_JMP32_A jumps past the end of the subprogram, causing
+do_jit() on x86-64 to read past addrs[] and bpf2a64_offset() on arm64 to re=
+ad
+past ctx->offset[].
+
+Should pad also require env->insn_aux_data[position + 2 +
+env->prog->insnsi[position + 1].off].seen to be true?
+
+> =20
+>  	struct bpf_insn *insn_buf =3D env->insn_buf;
+>  	struct bpf_prog *new_prog;
+> @@ -2865,7 +2876,7 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_=
+verifier_env *env,
+>  	 */
+>  	insn_buf[cnt++] =3D BPF_JMP_IMM(BPF_JLE, BPF_REG_1, BPF_MAX_LOOPS, 2);
+>  	insn_buf[cnt++] =3D BPF_MOV32_IMM(BPF_REG_0, -E2BIG);
+> -	insn_buf[cnt++] =3D BPF_JMP_IMM(BPF_JA, 0, 0, 16);
+> +	insn_buf[cnt++] =3D BPF_JMP_IMM(BPF_JA, 0, 0, pad ? 22 : 16);
+>  	/* spill R6, R7, R8 to use these as loop vars */
+>  	insn_buf[cnt++] =3D BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_6, r6_offse=
+t);
+>  	insn_buf[cnt++] =3D BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_7, r7_offse=
+t);
+> @@ -2877,17 +2888,20 @@ static struct bpf_prog *inline_bpf_loop(struct bp=
+f_verifier_env *env,
+>  	/* loop header,
+>  	 * if reg_loop_cnt >=3D reg_loop_max skip the loop body
+>  	 */
+> -	insn_buf[cnt++] =3D BPF_JMP_REG(BPF_JGE, reg_loop_cnt, reg_loop_max, 5);
+> +	insn_buf[cnt++] =3D BPF_JMP_REG(BPF_JGE, reg_loop_cnt, reg_loop_max, pa=
+d ? 6 : 5);
+>  	/* callback call,
+>  	 * correct callback offset would be set after patching
+>  	 */
+>  	insn_buf[cnt++] =3D BPF_MOV64_REG(BPF_REG_1, reg_loop_cnt);
+>  	insn_buf[cnt++] =3D BPF_MOV64_REG(BPF_REG_2, reg_loop_ctx);
+>  	insn_buf[cnt++] =3D BPF_CALL_REL(0);
+> +	if (pad)
+> +		/* to the pad below when the callback left with unwind_exit */
+> +		insn_buf[cnt++] =3D BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, BPF_UNWIND_GO=
+TO, 7, 0);
+>  	/* increment loop counter */
+>  	insn_buf[cnt++] =3D BPF_ALU64_IMM(BPF_ADD, reg_loop_cnt, 1);
+>  	/* jump to loop header if callback returned 0 */
+> -	insn_buf[cnt++] =3D BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, -6);
+> +	insn_buf[cnt++] =3D BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, pad ? -7 : -6);
+>  	/* return value of bpf_loop,
+>  	 * set R0 to the number of iterations
+>  	 */
+> @@ -2896,12 +2910,35 @@ static struct bpf_prog *inline_bpf_loop(struct bp=
+f_verifier_env *env,
+>  	insn_buf[cnt++] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_10, r6_offse=
+t);
+>  	insn_buf[cnt++] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, r7_offse=
+t);
+>  	insn_buf[cnt++] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_8, BPF_REG_10, r8_offse=
+t);
+> +	if (pad) {
+> +		/* over the pad */
+> +		insn_buf[cnt++] =3D BPF_JMP_IMM(BPF_JA, 0, 0, 4);
+> +		/* the pad: r0 is what the callback unwound with */
+> +		insn_buf[cnt++] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_10, r6_offs=
+et);
+> +		insn_buf[cnt++] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, r7_offs=
+et);
+> +		insn_buf[cnt++] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_8, BPF_REG_10, r8_offs=
+et);
+> +		/*
+> +		 * To the pad of the caller, where the unwind_goto that follows
+> +		 * the patch goes. Its offset is known once the patch is in and
+> +		 * the jumps across it are adjusted, see below.
+> +		 */
+> +		insn_buf[cnt++] =3D BPF_JMP32_A(0);
+> +	}
+> =20
+>  	*total_cnt =3D cnt;
+>  	new_prog =3D bpf_patch_insn_data(env, position, insn_buf, cnt);
+>  	if (!new_prog)
+>  		return new_prog;
+> =20
+> +	if (pad) {
+> +		struct bpf_insn *unwind_goto =3D &new_prog->insnsi[position + cnt];
+> +
+> +		/* the jump of the pad, one insn before, takes the target of the unwin=
+d_goto */
+> +		new_prog->insnsi[position + cnt - 1].imm =3D unwind_goto->off + 1;
+> +		/* and the unwind_goto after the call of bpf_loop follows no call anym=
+ore */
+> +		*unwind_goto =3D BPF_JMP_A(0);
+> +	}
+
+[Severity: High]
+What happens if bpf_is_unwind_goto(&new_prog->insnsi[position + cnt]) is tr=
+ue,
+but pad is false (for example, when
+env->subprog_info[callback_subprogno].can_unwind is false, or when the
+caller's landing pad was not reached from this call site)?
+
+In check_unwind_insns() and check_cb_unwind(), an unwind_goto instruction is
+permitted after a bpf_loop() call even when the callback subprogram has
+can_unwind =3D=3D false:
+
+kernel/bpf/verifier.c:check_cb_unwind() {
+    if (!env->subprog_info[subprog].can_unwind)
+        return 0;
     ...
 }
 
-When the callback leaves via unwind_exit, prepare_func_exit() skips the
-SCALAR_VALUE check on R0 and copies callee->regs[BPF_REG_0] into
-caller->regs[BPF_REG_0]:
+When inline_bpf_loop() runs with pad =3D=3D false, it replaces the bpf_loop=
+()
+call with 19 instructions ending in BPF_LDX_MEM(BPF_DW, BPF_REG_8,
+BPF_REG_10, r8_offset), and the error branch BPF_JMP_IMM(BPF_JA, 0, 0, 16)
+jumps directly to new_prog->insnsi[position + cnt].
 
-kernel/bpf/verifier.c:prepare_func_exit() {
-    ...
-	if (callee->in_callback_fn && !unwinds) {
-		if (r0->type !=3D SCALAR_VALUE) {
-			verbose(env, "R0 not a scalar value\n");
-			return -EACCES;
-		}
-    ...
-	} else {
-		for (i =3D 0; i < nregs; i++) {
-			u32 regno =3D ret_regs[i];
+Because the rewrite of *unwind_goto =3D BPF_JMP_A(0) is guarded by if (pad),
+an unwind_goto following the bpf_loop() call is left in place when !pad. If
+the landing pad targeted by that unwind_goto was marked seen via another
+unwinding call in the same subprogram, bpf_opt_hard_wire_dead_code_branches=
+()
+sees:
 
-			bpf_diag_mod_begin(env, &caller->regs[regno], &callee->regs[regno],
-					   BPF_DIAG_MOD_WRITE);
-			caller->regs[regno] =3D callee->regs[regno];
-			bpf_diag_mod_end(env);
-		}
-	}
-    ...
-}
+    if (bpf_is_unwind_goto(insn) && aux_data[i + 1 + insn->off].seen)
 
-Once the unwound pad in bpf_find_vma() runs rcu_read_unlock(),
-bpf_mmap_unlock_mm(work, mm), and mmput_async(mm), the caller's unwind pad
-receives the plain PTR_TO_BTF_ID in R0 outside the lock and RCU scope. If t=
-he
-VMA and its backing file or inode are concurrently unmapped and freed, pass=
-ing
-that dangling R0 pointer to helpers accepting ARG_PTR_TO_BTF_ID (such as
-bpf_ima_file_hash(), bpf_ima_inode_hash(), bpf_d_path(), or
-bpf_inode_storage_get()) can trigger a use-after-free.
+and preserves the orphaned unwind_goto instruction. That leaves
+BPF_UNWIND_GOTO immediately following BPF_LDX_MEM instead of a call
+instruction, causing the x86-64 and arm64 JITs (which assume insn[i - 1] is=
+ a
+call instruction) to emit bogus EX_TYPE_BPF exception table entries and
+unwind stubs keyed inside the BPF_LDX_MEM instruction.
+
+Should new_prog->insnsi[position + cnt] be rewritten to BPF_JMP_A(0) whenev=
+er
+bpf_is_unwind_goto(&new_prog->insnsi[position + cnt]) is true, regardless of
+whether pad is true?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1793147364.gi=
-t.memxor@gmail.com?part=3D7
+t.memxor@gmail.com?part=3D4
