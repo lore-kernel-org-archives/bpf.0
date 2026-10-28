@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793190437;
-	b=A3M3P9ySkNRvfFAmpreyClC8YQBgqWrXu9X+9PDa1/U3rkaqkXYhPXhyofkxmJwS65My
-	 J0r6nvDD/ghYnMQSeGYIXIJtbjeL2UindAax+bhQXUDWYQmoxmV1DW48jes38b64CasIp
-	 ojYCy43xcEHkRB92pNFDbohqD6RBEUJLVmJ7aTw2ZqoyOgHbnyzCc6L+21rFHsU7HqfKl
-	 grYsD1FAbCYmjFJ7SXS0XKBZWEY9jIcBfxXMhbVhsId3Duni0tKl/xURJ9FN4geaEaSYJ
-	 qzJh0iSPe2oMIAPZzQLGn43Ex1Q2vC41iFUToTXKjTA1/XsqFZTAPfGVBaoweDZee7w==
+	t=1793190446;
+	b=IS5e1ZiR4W8iZlVMIk/DLiUZOs0IlVL9Z01hi25nQaZ5ydOfl1nn0JyLTuzyetxt6Uq1
+	 axwIVlqPx2SY7zlk/0cnjSBVvalt9XHwTKnDrPlsSIwyAeVEjN1ti9GIcNXFDmoXYkoD9
+	 1a6flAjmC3Y0vzEjjqsDHrvLgmXieZk7y2e1w0v2T+3JtFd8G1mI1u3ZBqwBP0AFiVgZ1
+	 jn3PH5JBw9ZQjPfjlzOotnrklefoiCqxF3qmNCqiR0+NkOVQlvqrpUc1CMjvN2fDe+vHK
+	 6Yl10eL0XS+tGQtcR6HPibB9U0QuXBQFPEr7A9Q94UppqJ1SHQ6nKzu+t2QkrCgWYbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793190437;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793190446;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=5UYxKGaCGMdLxSaQ2XmYt6w2Y4hTPYmZ9ll9tXrG4Is=;
-	b=uZh0yOPMOqEpsLymWC9TsCgDOs65S/RoZ8CLpVBv7iiPnrZUW/1YC/eQ3jjh/iwFgh46
-	 v7Uh3DarkDyHpnTrOxk5EOYJ5MtJSJlgQbFPuybun4xV7/Q/IjqLMB/Jc5EWk3uicPN1d
-	 3Iyx0ZFDyR7ocofgV844gJB+lHC49P/8ywaFbcMp/sHTYQi2UL6QYbeq22R3cPcYd7HCp
-	 VBlH08xZP4WtRcHSpY7ZVrIRNi4bp9MFtlO8FNDK0YVVPOyruYcV5YalQsS9ldTzGwF00
-	 YLgEYFsy02Yt8UKYydcTZdgjPOkn7qRjHoOKpueTjJL2Ew9fcmuvIqJjb0C3Lz2Ql5A==
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=TD0R0GcnMxsqRw3Dfotwa8QE/YUfAhr68qs15gjH64o=;
+	b=eDNqNspWox62UHYHS8PZKUU/Xg+yY46nMboGS/UbYBDZ3L9YXjjc3+IV4u5hQ0zxIGVF
+	 L9cNqAUItBOewxzpWB/XUT4PAwpQqPg+2rkuQoQJ1W7O5gNBbrBiZNIxggG5CfmLa0pOX
+	 M+8CeDwMF9I+39Ee4uNUujR7YfdCxyRqp1BEHyJ/zR1S7TZRK29TDwfZTiFFrJ9Cck8xb
+	 +FyE28GrC8c9p6+zPMYnzm/NHQpCCpVk2yUQGXw5JTg5N6qLBs1OvOfRj/vc10Q8RxO6s
+	 l3b2vX5tlGhw75KniabZQBwD8wZ5DEESVrrE6DzfjDTC3DJUTpcm4gINBr3GkOrOXng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mTE2hqjx;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iAodqzMX;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21122606A31A;
-	Wed, 28 Oct 2026 12:27:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F5E606A31C;
+	Wed, 28 Oct 2026 12:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mTE2hqjx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 394A21F01825;
-	Wed, 28 Oct 2026 12:27:13 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iAodqzMX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B2D21F01825;
+	Wed, 28 Oct 2026 12:27:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793190436;
-	bh=5UYxKGaCGMdLxSaQ2XmYt6w2Y4hTPYmZ9ll9tXrG4Is=;
-	h=From:To:Cc:Subject:Date;
-	b=mTE2hqjxI5V/wXS4AH8GRcFSHH/EWrSvAk6lf5XBUzLBqhWY9qYQz1/Vb0uEn1G+2
-	 k5pl1SDf5JM3qqhp/YfX21b1rO7sHvvLx2ytmf5igloG9koCpKbxwaGXe4t0gzNSTk
-	 iiOkqVwsVqctr8088Co0dfHIfgrxv+Jgmyl+IrkvuH3pSnSMA+6BWf2+flOdwCDZN/
-	 pRy2sEOyPXLC61F8iWY2AfcNi70c6QAO9SDxHBUf/NyYAphZrwACiVHpxH4E8QAb6c
-	 EhOCAVD40TdXg27jGY+kYQGQhWy7+3LnfV7I0YC6o6r9yQkirCLnc/DGxyYrfme7TV
-	 thXYYRNShBCjQ==
+	s=k20260515; t=1793190446;
+	bh=TD0R0GcnMxsqRw3Dfotwa8QE/YUfAhr68qs15gjH64o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=iAodqzMX5hgwXfh6OLXbobY269RnTV8VpCA0MfWvHX4Iceb/TAc8+boWz4OB6ad7b
+	 dUSjshTEyCL2vK5ltUS8rf763Vxk7dVdkWFXbLOpd9xpQBZLM92ID7CHu6tQCsDGbZ
+	 H2nvfuJFxiC/cKShAlbR49Ibf0YcfAvgdPNZT2KEi6Q7R8L2PEy0+gnx8w4bPiOhhj
+	 N0kImQj2d3SoTUBUGKvcWugnpqjutMgg0O0GjgQr44juEbrRoAADbAKnGeHrtfCNJd
+	 juujZlw/wM1UePDIKV2Q2za5H937olYR2QfjJGTH+zK9f963tpEJI3HLS/RZGB1oKB
+	 MP947OXN9hH7Q==
 From: Eric Dumazet <edumazet@kernel.org>
 To: "David S . Miller" <davem@davemloft.net>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -56,11 +56,14 @@ Cc: Willem de Bruijn <willemb@google.com>,
 	Jiri Pirko <jiri@resnulli.us>,
 	dev@openvswitch.org,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Ren Wei <weir@nebusec.ai>
-Subject: [PATCH net v2 0/5] net: fix eth_type_trans() crashes on skbs coming from the stack
-Date: Wed, 28 Oct 2026 13:26:58 +0100
-Message-ID: <20261028122703.2093730-1-edumazet@kernel.org>
+	Ren Wei <weir@nebusec.ai>,
+	Vega <vega@nebusec.ai>
+Subject: [PATCH net v2 2/5] loopback: use eth_type_trans_careful()
+Date: Wed, 28 Oct 2026 13:27:00 +0100
+Message-ID: <20261028122703.2093730-3-edumazet@kernel.org>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261028122703.2093730-1-edumazet@kernel.org>
+References: <20261028122703.2093730-1-edumazet@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,80 +75,62 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-eth_type_trans() assumes ETH_HLEN bytes are present in skb->head.
-NIC drivers always provide this, and they should keep using the fast
-version, without an extra pskb_may_pull().
+tc egress actions can leave an skb with fewer than ETH_HLEN bytes in
+its linear part. loopback_xmit() then crashes in eth_type_trans():
 
-Devices looping skbs from their transmit path back to their receive
-path get skbs built by the stack instead. tc actions (act_vlan pop_eth,
-act_ife decode), BPF helpers (bpf_skb_change_head() before a redirect)
-or OVS actions (pop_eth followed by pop_mpls/pop_nsh) can leave fewer
-than ETH_HLEN bytes in the linear part, and eth_type_trans() then hits
-the BUG() in __skb_pull().
+  tc qdisc add dev lo clsact
+  tc filter add dev lo egress matchall action vlan pop_eth
+  # AF_PACKET SOCK_RAW: eth / eth / 8192 bytes of payload
 
-Instead of fixing every producer, or adding a check to all
-eth_type_trans() users, fix the few consumers exposed to this:
+  kernel BUG at include/linux/skbuff.h:2839!
+  RIP: 0010:eth_type_trans (include/linux/etherdevice.h:635 net/ethernet/eth.c:163)
+  Call Trace:
+   loopback_xmit (drivers/net/loopback.c:87)
+   dev_hard_start_xmit (include/linux/netdevice.h:5455 include/linux/netdevice.h:5464 net/core/dev.c:4057 net/core/dev.c:4073)
+   __dev_queue_xmit (net/core/dev.c:5066)
+   packet_sendmsg (net/packet/af_packet.c:3157 net/packet/af_packet.c:3189)
 
-- Patch 1 adds eth_type_trans_careful(), which pulls the Ethernet
-  header first and returns a drop reason on failure.
-- Patch 2 uses it in loopback_xmit().
-- Patch 3 uses it in __dev_forward_skb2(), used by BPF redirects to
-  ingress and by veth, macvlan, ipvlan, netdevsim and l2tp_eth.
-- Patch 4 uses it in OVS internal_dev_recv(), covering both the MPLS
-  (TEB) and NSH pop cases at once (only the MPLS case was tested).
-- Patch 5 (from Jamal) fixes act_ife decode on egress, which was
-  consuming the inner Ethernet header. This is no longer a crash after
-  patch 2, but egress decode never delivered a correct frame.
+The same happens with "action ife decode" on lo egress.
 
-Other eth_type_trans() users already pull the header or never see
-such skbs:
-- vrf_process_v{4,6}_outbound() already pull ETH_HLEN + IP header
-  before vrf_local_xmit().
-- tun already uses pskb_may_pull_reason(skb, ETH_HLEN).
-- XDP: bpf_xdp_adjust_head() and bpf_xdp_adjust_tail() keep at least
-  ETH_HLEN bytes in the linear part, and multi-buffer tail shrinking
-  only trims frags.
+Use eth_type_trans_careful(), and drop the packet if the Ethernet
+header can not be pulled.
 
-Tested under virtme-ng with AF_PACKET reproducers. Without the series,
-all four cases crash in eth_type_trans():
-- lo egress "action vlan pop_eth", eth/eth/8192 bytes frame
-- lo egress "action ife decode pipe", IFE frame with 8192 bytes payload
-- lo egress "action vlan pop_eth continue", then a BPF program doing
-  bpf_skb_change_head(skb, 1, 0) + bpf_redirect(veth1, BPF_F_INGRESS)
-- OVS flow "pop_eth,pop_mpls(0x6558),0" to the internal port,
-  eth/mpls/eth/4096 bytes frame
-With the series, no crash. An ICMP echo inside an IFE frame decoded
-on lo egress is now received and answered. Normal traffic on lo,
-veth (including 8000 byte pings) and vrf is unchanged.
-
-v2:
-- Patch 3: update the empty_skb BPF selftest. At lwt_xmit, its
-  "veth ETH_HLEN+1" packet is a 1-byte skb, which is now dropped on
-  veth ingress, as veth_xmit() already does on egress (BPF CI).
-- Rebased on latest net, collected tags from Aaron, Willem and Jamal.
-- No kernel code change.
-
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: Vega <vega@nebusec.ai>
 Link: https://lore.kernel.org/netdev/20261005052249.1914367-2-weir@nebusec.ai/
-Link: https://lore.kernel.org/netdev/ACT-N6N4.v3.r0.20261023200137-4@mojatatu.com/
-v1: https://lore.kernel.org/netdev/20261027082604.1485903-1-edumazet@kernel.org/
+Signed-off-by: Eric Dumazet <edumazet@kernel.org>
+Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Tested-by: Jamal Hadi Salim <jhs@mojatatu.com>
+---
+ drivers/net/loopback.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Eric Dumazet (4):
-  net: add eth_type_trans_careful()
-  loopback: use eth_type_trans_careful()
-  net: use eth_type_trans_careful() in __dev_forward_skb2()
-  openvswitch: use eth_type_trans_careful() in internal_dev_recv()
-
-Jamal Hadi Salim (1):
-  net/sched: act_ife: do not consume the inner header on egress
-
- drivers/net/loopback.c                        |  8 +++++-
- include/linux/etherdevice.h                   | 28 +++++++++++++++++++
- net/core/dev.c                                | 18 ++++++++----
- net/openvswitch/vport-internal_dev.c          |  8 +++++-
- net/sched/act_ife.c                           |  4 +++
- .../selftests/bpf/prog_tests/empty_skb.c      | 19 ++++++++-----
- 6 files changed, 71 insertions(+), 14 deletions(-)
-
+diff --git a/drivers/net/loopback.c b/drivers/net/loopback.c
+index 55ecd5ebac0f21b61b64373c429a6f9ba5d15c8e..8a6cb34e6b5f02c88dfb0c6bf112068c4f51fec1 100644
+--- a/drivers/net/loopback.c
++++ b/drivers/net/loopback.c
+@@ -70,6 +70,7 @@ EXPORT_SYMBOL(blackhole_netdev);
+ static netdev_tx_t loopback_xmit(struct sk_buff *skb,
+ 				 struct net_device *dev)
+ {
++	enum skb_drop_reason reason;
+ 	int len;
+ 
+ 	skb_tx_timestamp(skb);
+@@ -84,7 +85,12 @@ static netdev_tx_t loopback_xmit(struct sk_buff *skb,
+ 	 */
+ 	skb_dst_force(skb);
+ 
+-	skb->protocol = eth_type_trans(skb, dev);
++	reason = eth_type_trans_careful(skb, dev);
++	if (unlikely(reason)) {
++		dev_core_stats_tx_dropped_inc(dev);
++		kfree_skb_reason(skb, reason);
++		return NETDEV_TX_OK;
++	}
+ 
+ 	len = skb->len;
+ 	if (likely(__netif_rx(skb) == NET_RX_SUCCESS))
 -- 
 2.53.0
 
