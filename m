@@ -1,101 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.88
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793225542;
-	b=nv0joYu46hNP/X9kosyUAbzhzeZ4dFbndRYGUw4WxQ9Zd8Tlw7jQz4Wbk1uOAps5xvIX
-	 Un/BYQKZLZ9LRmGDG+EoFh8//iOMDnKGJN1AEdSRWc0Ai4KKafSWY8b1isFo9aqDVJMN5
-	 RBMt+b2MoPPVHVhxQBL7EbcdKvH4u8ulnKveYmVaa4Qgqptv+/3VAoJFSDn/ycJpAxcHR
-	 exLRHX+GzT8i7mSHiycqpwcU2VgmMWAiMUsijSQ0mLLNsEvrcIklAiHaajbUuZnPeW9Va
-	 IBziRAIUHMG9g9eZKA5W98kXa4sW6R+/ls+6keoMdYnulGBQeqXrMcOnGrgVbQJOVng==
+	t=1793226523;
+	b=LGBGtUqS5Fj9JfHpczuGdQhE68lax3q6jwYN4sBXYNtDrNm2ctJhNoEblqcbSh9vOe4t
+	 1qze7qjeTBFsZQy9E8N7umvdidn7BxN3d6n4/OynDqdwpxQtMZ4dcEG/U01P84z25njnz
+	 3HarQU/0tANOFgt8HWfug6bXhSwm7UeVOIGdLc1QYLuovWoko1FF2KGhkzL20P2B8PSCr
+	 RFTHDu6XZHPCvcJ+CNk3C23Ls8hcbLA7o+WIsYQYqt3HrGNwUS1OJQ71v9b37EbbvX1I5
+	 qCCwPDl8nADviiolwvssiftAHmqU2EzM0q9CagemkigPMajib2LjeGRskga0BGiMx5A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793225542;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=QNVgEN77oBKnSnrKxR1ro4BNdRGvz1Bgwq5/dOCieiw=;
-	b=NkZ4KhLhMgRSjKhLHEhnuBU3gh3PrYpCgSBwqR2JaWodX5L1b2iL4E/8cxMSR+6Wwqtk
-	 BVQx8LVBumyQ4VpasM1oRS9HfL8ET6ERscmb7lcy41B2WYcSfufxpXim8nFXR2dP9w3Rj
-	 gx8xMZt1tsVYOMT3iiZGPmAh0TJR8V0Xlnc50gOE2MA0VsAlDZOjeIbM8uYdI5nrxMljP
-	 z9dORnL68x0vMWvv5gNPu307n8RneNKN9kZu7+3uu0ntEF+TC/hk+TI8oUsCHWEB/7dhi
-	 3w+yOEm5lj2OaolCweT7rHZLUAMtBaimj5PdgxgVis6SsawahX+I6BOSXOdehV9aF9A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793226523;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=OGKoilLDqI57ndA3j6iCyQcfcnOJQlWxhVYQp78DFdY=;
+	b=lfFWG9/vxNsUAeqm8lXKpZ504XRna9ksnV5mjoeW2UcI9HDg2RjRS1MSNXzZPSGRrmRg
+	 e5DmvVnfbEL8vBn+OY1b22g32B0WG/ye2mlfP/qWHFifBYE6mQIOSv5lLk79zTUyvPerb
+	 nDdWjv59x9xQvIWnwWhd4n/YDMnqcWur7zRrdKiei0q0Is6pXsQYcWnOlUUik6kDyI4PV
+	 6MFD47ZlfP5il8szChTeG/SY491eU8kWnhOR4l8YVSWm2iIpnDbnMU1eM2L3UYwH3ivg5
+	 oCk064l+CmRQhl/BT6MJ15QTAjx+xqkjUisYrmbAX8q9t3wp1k8Gt9RaXgAqSBMILVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xnkFbGfy;
-	arc=none smtp.remote-ip=209.85.215.170
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Uz2z09VJ;
+	arc=none smtp.remote-ip=95.215.58.88
+Received: from mta1.migadu.com (out-88.mta1.migadu.com [95.215.58.88])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F092606A31C
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 22:12:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F092606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982A5606A31C
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 22:28:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 982A5606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xnkFbGfy
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cd69954c755so1086227a12.3
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 15:12:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793225542; x=1793830342; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=QNVgEN77oBKnSnrKxR1ro4BNdRGvz1Bgwq5/dOCieiw=;
-        b=xnkFbGfyThTA7sluMZxmZe/tFqpjJvZy3BeuOLed26PK8rowB56QV2cjDujQzKsnK5
-         GmKOvl3lLNDF9C5LpnDrWNawxrKWoxxU70rlZ6iwYl0mxsIKQ3ly3Lill8mPGcXbrb4l
-         eUX5LUBQiWAkI0dfYPxeTURpchTwdtOcDD+9FlP4DQFXuXf3UosexQz/ERHwO6vwz+Ra
-         EU6Zrfns5SFmZ3fK7Drf1jdJHaZQHj2LozTBeFtqcK0uWlapx6tvjETJwJOym6hYNh4y
-         u2VCalQu7IZ1Kd+AH+8oGmszIZmyIhJhleepD2SpasexA8HSFfh0mhOul5qFADVgwGkW
-         bkuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793225542; x=1793830342;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QNVgEN77oBKnSnrKxR1ro4BNdRGvz1Bgwq5/dOCieiw=;
-        b=hsBHMqrVcVmHSXq8Mov0Ttia0DP/KILzPaHPbAqT1Q5XBWtVzpwfaw77LNcLp0SCeU
-         GMjaeX7VuIxw5k235C3vplXcA+FPpk5GQHpVjz+PcUeidifxdrvamXDVn3iPD2hF5Ppm
-         URuMaYl87Ika7raW/6I2/hZ7Pn4bS9iwFygR/SNmPXX/vvsnehVL8KObBvKIPSgkQghZ
-         CwaNDVpSossQvzl+6ck9gyT/R0yca7Iznn1WfWG4qXM2MPXtMNIE7Zh0fx3u03vhRTO7
-         NlzShsKBaxFrwAgf5oR8YrxEjcdhi3mRX4lMrBCgrQj1lVe1jMPXsgh2el3FV2rdF75c
-         HzPQ==
-X-Forwarded-Encrypted: i=1; AKwUvByScn28bQrcybG8UvsgpThYNGuW2hAAS6rO+1TxXJjCjt2FP3MhnqFqStQOyfgpnp+MFV4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJo5KwISwxmM4hjj5NaGcTC3gd1wsLCFFQuu8X8Exn3rDSSrA6r
-	eyE2WkrgjcvkdLxFyiSWgf/CrW+N6QImlPxoaEVArfeAfneEV+NlLM6U
-X-Gm-Gg: AYBFou0dZVR3+2MuMExn+W6JNZWt/0Nooh1Jxur8icU3UG4i793khUHL/lJzh0u3HeM
-	R47zmMgYH8CyhtDohfRHGOE046q8WzsXeHzGxop7Xne5j/GQbuqGWI0H6+Ouqr8bLDVSk6bk72z
-	9y0bOEFkgLM5PuHkP9Rs7NemjJtAtjbD7S9atPUt6RWBsBH45dSGea/7xIWXH07VSXtv5iZoTx9
-	BJUdBiOYrsaRlcdqxjqcYth7vEjne983l8d/5ApEaR6MXnu2riPi36Sa8ZEMCGtGrSlVZvR9XAb
-	AlP0TdABvBqa6BkKhN+rhWYRfquSSohC6hcJjWNsDNkA2yrK13K8OsSWTFJdlnBQ+acPM9d1emj
-	qRZCfN9d9ADR6oklQDTWfXuhb1pWQ6dJU/rHf8pHuWZ1hgyeFYsSYGgEop36GulEAz9wyZcj2n0
-	1eWHDaX/TaaWB0v4GL+gEINrD7HYfA4qKFXhKQ7he/S9YiexIxZM6S9T+dsRZQPcpqDRNnhbX/1
-	ydPhM50ezjjZkSntEnBeYgqeYsP5g82/RoViWPRqGclgFfwchp+d8sYSbcfdY0ePKqZ6jAOGVuy
-	0FmqGIzR/wALISqvLDBCypAIn1WhDLP6k0GSwpzxotHM67OLhVVW7JceO082OnF9maCUiWHR7H+
-	/cISAr3MHYl4BnTS00NevjM64honD7WYE7kw=
-X-Received: by 2002:a05:6a21:4c0f:b0:3e2:ac98:68ab with SMTP id adf61e73a8af0-3e90246ec1amr2827999637.54.1793225541650;
-        Wed, 28 Oct 2026 15:12:21 -0700 (PDT)
-Received: from localhost ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd8ccc8f97esm4400709a12.19.2026.10.28.15.12.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2026 15:12:21 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 28 Oct 2026 22:12:20 +0000
-Message-Id: <DMGTEGTLTEUX.HECMYVCWNFQA@gmail.com>
-Cc: "Eric Dumazet" <edumazet@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Willem de Bruijn" <willemb@google.com>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>, "stable@vger.kernel.org"
- <stable@vger.kernel.org>
-Subject: Re: [PATCH net] tcp: restrict SO_ATTACH_BPF to privileged users
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Manjunath Patil" <manjunath.b.patil@oracle.com>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-In-Reply-To: <CY8PR10MB66609715D3216D1B10CC186ACF6F2@CY8PR10MB6660.namprd10.prod.outlook.com>
-References: <CY8PR10MB66609715D3216D1B10CC186ACF6F2@CY8PR10MB6660.namprd10.prod.outlook.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Uz2z09VJ
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=2msV4av53g6r0fL60/qaZ1TAQzVa83d1LHrrXkxGuyI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793226519; v=1; x=1793831319;
+ b=Uz2z09VJ0QHV+sHPbD3QuUNhvSCZ4cnO/UyancUz4ZqW3ubu0s09cqtuLmx4NhPx3VLZmyn+
+ jGUXPUhny9yCWk2DpQ1GBGKTx9RsKurJZ7r4krr1RUUnZKkogQHFC3VvZmD8m+hzGpfgUc8mpMK
+ XyzBjKk6Ynsh4X+oJwbWfsU8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id fd49d74d26d472b6;
+	Wed, 28 Oct 2026 22:28:39 +0000
+X-Mizu-Trace-ID: fd49d74d26d472b6
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <29d16b30-bc19-4865-86a7-1611c8407a12@linux.dev>
+Date: Wed, 28 Oct 2026 15:28:33 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,29 +58,105 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/8] selftests/bpf: Build callx tests with GCC
+ that defines __BPF_FEATURE_CALLX
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, john.fastabend@gmail.com, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ jose.marchesi@oracle.com, david.faust@oss.qualcomm.com,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20261028204158.1021284-2-vineet.gupta@linux.dev>
+ <3833268383adcd104d44051cbbb7687180f4e13bcccb0057e8747f2e10a5ad68@mail.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <3833268383adcd104d44051cbbb7687180f4e13bcccb0057e8747f2e10a5ad68@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 28, 2026 at 02:58 PM Manjunath Patil <manjunath.b.patil@oracle.com> wrote:
-> Commit 5d39580f68e6 ("tcp: restrict SO_ATTACH_FILTER to priv users")
-> requires CAP_NET_ADMIN to attach a classic BPF filter to a TCP socket.
-> However, a caller can still attach an eBPF socket filter through
-> SO_ATTACH_BPF without this capability. Both options install a filter
-> that runs on incoming TCP packets.
+  10/28/26 2:22 PM, bot+bpf-ci@kernel.org wrote:
+>> selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
+> TL;DR:
+> - data_in_arena.c use_ops() isn't converted to CAN_USE_CALLX, so GCC with
+>    callx support may still call add1() directly; commit message claims all
+>    tests converted
+> - Commit message typo (nit)
+>
+>> selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
+>>
+>> Commit 7cd1f73b37ea ("selftests/bpf: Fix build of callx tests with GCC")
+>> gated the callx progs on __clang__. GCC had indirect call support which was
+>> recently refurbished along with a __BPF_FEATURE_CALLX macro [1], so gate
+>> on that as well so once this GCC is released, the tests start passing.
+>>
+>> Put the arch and compiler conditions in a CAN_USE_CALLX macro in
+>> bpf_misc.h, and use it all the test programs.
+>>
+>> While at it, mark the placeholder programs left for unsupported
+>> toolchains and arches with __skip(), so they report SKIP rather than OK.
+>>
+>> [1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ffe3ead4a8ad704b557b0cfa4f823df647c65a0d
+>>
+>> Measured on bpf-next with a stock bpf-gcc that defines
+>> __BPF_FEATURE_CALLX, test_progs before and after: 76 subtests run that
+>> previously did not exist in the report, 75 OK and one @unpriv SKIP,
+>> with no failures.  The two dummy placeholders retire and
+>> callx_rodata_lskel goes SKIP -> OK.
+>>
+>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> The commit message says CAN_USE_CALLX is used in all the test programs, but
+> use_ops() in progs/data_in_arena.c is not converted.  It still gates its
+> indirect call on __clang__ and keeps the same comment this patch removes from
+> the other files:
+>
+> progs/data_in_arena.c:use_ops() {
+>      ...
+> #ifdef __clang__
+> 	return ops.fn(*ops.data) + ops.name[1];
+> #else
+> 	/* gcc doesn't support indirect calls */
+> 	return add1(*ops.data) + ops.name[1];
+> #endif
+>      ...
+> }
+>
+> With a GCC that defines __BPF_FEATURE_CALLX, doesn't this still take the
+> #else branch and call add1() directly?  That means the GCC build never makes
+> the callx through a function pointer in .data.rel.ro, and the "gcc doesn't
+> support indirect calls" comment is now wrong for that compiler.
+>
+> A grep for "indirect call" under progs/ and prog_tests/ shows this is the
+> only remaining gate.  None of the later patches in the series touch
+> data_in_arena.c.
+>
+> Should use_ops() be converted to CAN_USE_CALLX as well?  That would need
+> data_in_arena.c to include bpf_misc.h, and it would add the x86/arm64/riscv64
+> arch gate that clang builds of this file don't have today.  Otherwise, could
+> the commit message be adjusted so it doesn't say all the test programs were
+> converted?
 
-Nack.
-SO_ATTACH_FILTER takes insns that the caller wrote.
-SO_ATTACH_BPF takes a prog FD, and BPF_PROG_LOAD is the gate for it.
-unprivileged_bpf_disabled is 2 by default, so the load needs CAP_BPF.
-An admin who sets it to 0 allows every user to load socket filters.
+Yes it missed the grep. Will be fixed in v3.
+Do note that this also adds the JIT gate which is the right thing to do 
+- the prior __clang__ only check would generate callx even for arches 
+not supporting callx.
 
-> Disabling unprivileged BPF loading does not close this gap: a caller
-> that already holds a socket-filter program file descriptor can still
-> use SO_ATTACH_BPF.
 
-That's not a gap. The FD is the permission.
-A process with CAP_BPF loads the prog and passes the FD to a process
-without caps. See the comment in bpf_prog_load() and
-commit c8644cd0efe7 ("bpf: refine kernel.unprivileged_bpf_disabled behaviour").
-This patch breaks it. It also breaks a process that has CAP_BPF and
-doesn't have CAP_NET_ADMIN.
 
-pw-bot: cr
+> This isn't a bug, but there is a missing word in the commit message:
+>> bpf_misc.h, and use it all the test programs.
+> This should read "use it in all the test programs".
+
+Right, will fix that as well.
+
+Thx,
+-Vineet
+
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40768193895
+
