@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.66
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.72
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793148298;
-	b=CY1IgphIGw5QdXibdLZl82miPTrWa0uZN66/HxeWNed+bFZxL6uxfnln3fiJpqJrzU6W
-	 IDbIaJk3Poja5FcZlfylNh2kRLSY1dsuSXjTnUMf07w2AiKHy0WsbyeYO4W0ukXPc2x6a
-	 TPzUNm2j9kPLLySX56rcVHjjjL2s+BnZexzRm74KHYVVO0FAl94j87qNrzQ+hRG8OxTG5
-	 WvR5eX82SiOvSwocMIwR6R7pJOwoSarL2KQhUmUKnNom5csIetm5rAlKxEK+H5AR2oad6
-	 K/Bfywk45c4Kqpwvs7qiZRKLH46jeienB9XB45IzcW5O5feWQoX/nIJbs693xaoPt3w==
+	t=1793148300;
+	b=mVFnzI6JBwYnCx/tbk+Px19Wc9zB8U3HOdXahUiex1CV/l0x4ipGLWjQO25aC9oSdiLO
+	 bEpLvR830n3fYWxn4Yi/sOdB0eA4LJLG0rg7wwxJE2XkhMTrWnnaDMZPbRK2h3Z+AP0dz
+	 wtm6x2obk2zUdJUNs6EBMD93RJqrVENpU5IwyyTUKF574F8ICD0s1GUzp59xQ4cOp5dsP
+	 rOrkf0xezmHVBK1TJByq2bCr6JLQHn/uMtPzVjDY2W/KEoi1R+JqwTmXTkE/lXqox9JH4
+	 2US+naXidpjEJ/4fjusKD3x3DngBYC9b6t6rptSbzcvNl2fOsZarEB7rPDPRQ1Ie9TA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793148298;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793148300;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=V/Pn267RPewG0W/p9am9YVZxP5Y75eW6Dou0Odt3vhA=;
-	b=G1Xj+hKhhfD/eMCdkCw3YMC8AJpeOdj9mzCKAq8/naZbxziSJ/dYqTaOSq68N1b/+3dX
-	 3vKwPQCxhvYbEwRt3IljpUdCDDwjKzstAFXyqIE1G16ri70H8ZkLmt8LKomc1qQGo5dRh
-	 eIk5wLuWiYx4tt6zUR1OPht8hym+aeCFqddht5+CpgrBrvt5kOHRSb5gBiSIBbpmQYx3a
-	 39TA9PpkMiZieNVendFvf9C4jQw8cmQ5xPe7sAqsCNj9ajLk9hdhpTBgPtlL5kcep5e27
-	 6YQfAU51E87bYj6X8mqWC4x+gcmEc4BsMwCbqkaupPv8HWYBHb43qfkugrnxEgpHmYQ==
+	bh=uFiQQLmNa4cjv5M4GHecIhC4YEKWlT1w13mO3JnRV+8=;
+	b=G1E0OFWarJKJjt5yaVqK0vQ9xM/OWQoHxzHvUVcPbmNQyQVLpSF0t3O9bxl2cPtOirDJ
+	 QiXHUzhH755V+d6SdyacAPvj/0dgGJ5ipeHFWHjBkN25xEaqMctl5s2eob8iE1j3J6TiR
+	 uWT/kkk+n8z+14Dq2zD3moN37rb4i519PwO61uR4fwqhrUo8LgYxBk0KV03/BOcWhXoVG
+	 Xat/4j30teLHyfKel0I2q01DFJlIj2xOUvDgRoXmZLkLRfTqmFM1CLwzs0bwUEWOThMoE
+	 wbs59bXWvPGKT0zjLldCnpsxDhXxN5mjh4SBLT1OBsdbOSdWqJoSKhLo0Gphveoob8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vhRsNPUs;
-	arc=none smtp.remote-ip=209.85.221.66
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EAOcxs8B;
+	arc=none smtp.remote-ip=74.125.225.72
+Received: from mail-wr2-f8.google.com (mail-wr2-f8.google.com [74.125.225.72])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F45D606A31E
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 00:44:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F45D606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41A0606A31D
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 00:44:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B41A0606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vhRsNPUs
-Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-48df0fa43c5so282188f8f.0
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 17:44:58 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EAOcxs8B
+Received: by mail-wr2-f8.google.com with SMTP id ffacd0b85a97d-48df388215aso30962f8f.0
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 17:44:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793148297; x=1793753097; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793148298; x=1793753098; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=V/Pn267RPewG0W/p9am9YVZxP5Y75eW6Dou0Odt3vhA=;
-        b=vhRsNPUsagSVfR4U5DkmjmgRpxRcBaUscO6V2i4SttcpgQEixsrd+Qn5Pww1kuGYGV
-         cckgxi472tQkwXmLSy35MJ8/rEGLIRnsYekbQJntneVwPHen2qi+RHXXkwzQ1t0H3vS2
-         iU5YmU9gQUHGLdaqLVmM/wbvFI+Glgr8B2vtrFePUrDrV+GVRJB+nGHLfZ1Xxtd+DbIS
-         7ezZY5rSh8MSj60My+kY4io3fnY+ZSEKBAmUn1A2uGizzJNCy5eotXdmGiHk7mVaHvFf
-         sw2v8qs+lj/JUP3WjxRqmKO5Afc9mDjlmf5Fe7vrNM4EPtT/BKfKaVVee2lWE+GhfQee
-         z1YQ==
+        bh=uFiQQLmNa4cjv5M4GHecIhC4YEKWlT1w13mO3JnRV+8=;
+        b=EAOcxs8BnHy5hjm/46jS5ZxiGNKoCK4tBaTwopQNbyP+RBo7QfA6J607umzOJCQ+/g
+         9A9FRjzqQYTKPbsPq4zBpfognUQAct1bxi+Qiqka7AsXiwH3fgjprXZ7IEiBuSojeU63
+         nCLFkzKO5Fyq6zHwpe2quEgmI/3qhtaCsI6sE8biaDPOrvIgYpluolygj8Rl9QS5pTFk
+         BqQadGx7VWlDzevyJUxggvjCiXLl7LKBqGy1bGvmEBbRqLPRUnLSiiJYF8BAtCI3R+da
+         EpY6xCydSmQRQodlfCDDhsLiRQph6oH7mvTrQQ1LOvQWmppjYdNv8UzuuoyufSIpnt6O
+         Xf4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793148297; x=1793753097;
+        d=1e100.net; s=20260707; t=1793148298; x=1793753098;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=V/Pn267RPewG0W/p9am9YVZxP5Y75eW6Dou0Odt3vhA=;
-        b=1Dyrpdu6qSpgg7yy1X6TZKKLi/82zLN89PstLf+jBZXyyCmHZ9+PvRerY/ig/fIkab
-         I6BUL+F0Q8gv6lm+waJi8AqHv9epv33Qt2qGUY3/WV1CUjU5LU4CTSdber/SOJRTPrHS
-         sZ1GHeYluEP8o7eut98sGbtnwziJC8bA5z4KLMe7zlw5fYN8tTyUMmMwlmMXI8W2vz+I
-         m8jDPB90yUdNEiNX6MqtZZIrVPyQK1+fTuSfg7HvMuQ6S8eKO+zvhzKyHOF5D/dOdKYT
-         jE//QLKaX0VXdsR7YempDt4lpwUg3ltGtnvixNUIPf9kAyVqoPhIIcQTuJm4JfiAgzs7
-         lRtQ==
-X-Gm-Message-State: AFq9FYIQW2Vh8Di4MMm5EFeBgbvuKYQJCfun8uQhPnQ6a9BT1lGKVPym
-	7jj3+cYjaBCxy1e3ObeKDhga8H60GYXFtvowY+xppxU7G9NSP5ju1FoLlWtLDAoi
-X-Gm-Gg: AYBFou2UIN+oJYGPPlpdnTsDRu4VMG+ROZ4HZcRB5IsGBXxZ42ai8N6P1PMz71Y9Tcf
-	5k3fpIVGTedYWuuCsl5NRDJeVKeTGBJ5M21S263FY5QYmxNReOJulmnC+f3axcPQKVTEAyf3pvn
-	jTxRnwI54xgNADfEGPqHetQiHmWO5esI5Jx7UCRD5uIp9YO+vDWDDuWYZqu+cNEQPZTQkfM9Ykl
-	K+0mzownaQeMu09aBfHjGMVPqCVHLV/D5P0EWQkaXmm7qXZ6ANn5I6C6fG19D1u+pKzPgsYWT/I
-	aJGiSv3tBVm3FeYvK8qlrK9NY/UHqDz9F2DUC5HbXmtvRG1FniKayUD9ovPy04j78XaB48eH6mr
-	4v8fF3AUAso34Aipemym4V9QSpjK/XneNSvjR+kluWzkCEp4nbR3kfGthiE2WykWBtGd5TAeEVb
-	x24PHVHkyZEp2wwN+MlohetXhZl0ascZqOUePX+0D+ErsW7eMutvxc38q5kPxbYosPDaU3/y9z9
-	rrZIDjiZlrQN+qLdwAoymAUGLOr2iBYo/IGZm8CdcX4qMmLZVZMmgb/YytRsQ2q+sn/U+1mVopG
-	kfHrB2Z6YZwyRUcjsrOiiRkJZHZfrEvESuT/pknAnGFufpUU5Zasq/fZQCPJ9+Pp2KDbphh2y8N
-	e1DlfpzvKWy2WkWa77iI=
-X-Received: by 2002:a5d:5f44:0:b0:48e:55bd:9ce2 with SMTP id ffacd0b85a97d-48e55bd9d56mr10370417f8f.20.1793148296675;
-        Tue, 27 Oct 2026 17:44:56 -0700 (PDT)
+        bh=uFiQQLmNa4cjv5M4GHecIhC4YEKWlT1w13mO3JnRV+8=;
+        b=iuLoGKpNiZgxRq3G/A71XII2m/M+EvydIpjsnUQjLPNPv92/55RYN+FeDbb6NVvf2a
+         HiOD0W1Fa25ZO4bTw5ybipu43d/DGuluBep/uAdf5d07igqGgcd+gTdIt/89JPSASDY4
+         uGW7PawYHu29JlN34RA+Nt/DRTYJzTz97OISLStyj0oRmQHfMKGRCAGzLmYS1f7tz28/
+         6zWWP9J2nm27ChRWXVzLSNewZQ2Rc7+7efaAy3stAo5naFd7gJNrZmq/ALMF5oYVX6jx
+         oI9GrEh2hrU10KPOQg/XgUWOX8vu+zOjqlNj75u5lCNdAd598AdRBaI3kRoOdmBfhrqX
+         R4/g==
+X-Gm-Message-State: AFq9FYJAq8/gf5/IZtxurcTbGYgWoN+m61vIWogeL8u5sCojo89n66sy
+	xhIvYdXkFn0DdOiDwYT4EkIE+DlHLncDC/pMXO/QMssckG57WrfAxTkDvpICSwmx
+X-Gm-Gg: AYBFou0rTlxoKS5awVG46UbUpEs4QKhTPMjNuIfiHdDJ1FG2z2Assiv7Y/nY5P+KPFp
+	W6mB2EWSFcSryUSWQWrfKLim0/JkQHM6rtzjFEAxmiSOuZXKjFDgyCsbxR2/CMgDws1ITeTq3zD
+	Lf/m/nHT9mFAeGYJG7PRsUUFA3Qvh8/F7MYdl/ddOm5rW9Z3lA77xvPxSBzkXoHiU08dOJbH2/2
+	6MQ3F83PinJCtqDAQN6P/eETSlawjtwXCEh8JHgHs+GO8aj23+Fe3CQaRNIR/IPm0evly/SlWQ5
+	UYTlz4jb93CY1UBcio+V4doAcBZr64MBH6ELXpM1CRFDnnzQMubW4hEjTNv6GzL7fCFt99eWpc1
+	SBkENFVF9/dnAABjLik/G9Y/r/Tk3Ybfk8XpSKc3eEbIOLX/Ucam3oDPDOnmRPbcEcJRBeKwq3D
+	cvUoDULRfLtJcFEgUx5iv3n+qCrbz4ImBOgLU71uNd9Y/5vt1k08+Wgp+RTJm3iO/oFjJiJuA6d
+	PqydAEi55+tLVtE7FXvnXDQuOyByJ2zapIbV4jhB5+Wcsvp8dcNfUpo1inkZ3op7tGY8POvEG5f
+	QjDWtzo0cO0BlNkEGjXtc8nbl7xuMbRhwN+vz61jYhvzIXUUYGsWO9CZbJSPqG6qJMIb8WfzLpw
+	EW35RFKh60/Galxoh4ho=
+X-Received: by 2002:a05:6000:40d9:b0:48d:efcb:1fea with SMTP id ffacd0b85a97d-48e5d233da0mr2907249f8f.0.1793148297985;
+        Tue, 27 Oct 2026 17:44:57 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecd3555sm24955378f8f.42.2026.10.27.17.44.56
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecd354asm24584392f8f.43.2026.10.27.17.44.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 17:44:56 -0700 (PDT)
+        Tue, 27 Oct 2026 17:44:57 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -88,9 +88,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v1 04/11] bpf: Give the inlined bpf_loop a pad
-Date: Wed, 28 Oct 2026 01:44:41 +0100
-Message-ID: <a9599f7ed1c7bbb5109d2a9e2c7135af15045738.1793147364.git.memxor@gmail.com>
+Subject: [RFC PATCH bpf-next v1 05/11] bpf: Let the callback of bpf_loop unwind
+Date: Wed, 28 Oct 2026 01:44:42 +0100
+Message-ID: <25728094090d9bf3e4cd88feecec336f0493a5a9.1793147364.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1793147364.git.memxor@gmail.com>
 References: <cover.1793147364.git.memxor@gmail.com>
@@ -103,128 +103,83 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5714; i=memxor@gmail.com; h=from:subject:message-id; bh=J0MfcYR8jSu8fiyxDsbQnQU7kwYzJzcmLcs2NSkzq/g=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeuh47M3P7b94U3byq01vcTzb9yTy8vefKx1Us7Y27/27 C2BL4/9OkpZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRwFJGhv+KM94L7rjPrGR0 aautd7DZPwHhuF73p1+rj0y9Y8GaqsvIcPaz1Kcz+zMvWDOExV0ztZ5luvfqGb7d+p7MZ5iUfpm Y8AAA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2404; i=memxor@gmail.com; h=from:subject:message-id; bh=PrhauKrEI3KQjegHAixXV35C7nfq1jyvd7Ono43JjgY=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeuh4zPOubxe1zmnn1eVjai//+ZomWFhbPjKyzWPV2v1K eomPJzdUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIlcOMrwP23XTum2WyJrp2XP mPbprEiG8etlWgGmfLO3iBzmYXKZJ8jwh/9RaiabUv8Ed+9f0ksuHD+0UFI9LIt55XM96YYaida H7AA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The verifier inlines bpf_loop() when the flags are zero and the callback
-is the same at every visit. Once the loop is BPF insns the caller of the
-callback is BPF code, and the pad is the ordinary one: unwind_goto after
-the call of the callback, which costs nothing, and a pad that restores
-r6-r8 and jumps to the pad after the call of bpf_loop with the r0 of the
-callback, the one the verifier checked with the state of that r0. The
-unwind_goto that followed the call of bpf_loop follows no call anymore and
-becomes a no-op jump.
-
-Only a callback with unwind_exit gets the pad, and only when an
-unwind_goto follows the call: a loop of no rounds never runs its
-callback, so the verifier asked for none, and the insn after the call is
-some other insn. The inlined loop of every other program is the one it
-was. Nothing takes the pad yet: the callback of bpf_loop() is let unwind
-next.
+The loop holds nothing, so the pad only leaves, with the r0 of the
+callback. The inlined loop has its pad already, so the verifier lets the
+callback of bpf_loop() unwind from here on.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/fixups.c | 43 ++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 40 insertions(+), 3 deletions(-)
+ kernel/bpf/bpf_iter.c | 10 ++++++++--
+ kernel/bpf/verifier.c |  9 +++++++--
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index f062ef7dd943..94a379c94c67 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -2836,6 +2836,15 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 	return 0;
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index f0b29a170935..efd23c973115 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -5,6 +5,7 @@
+ #include <linux/anon_inodes.h>
+ #include <linux/filter.h>
+ #include <linux/bpf.h>
++#include <linux/bpf_unwind.h>
+ #include <linux/rcupdate_trace.h>
+ 
+ struct bpf_iter_target_info {
+@@ -749,7 +750,7 @@ const struct bpf_func_proto bpf_for_each_map_elem_proto = {
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+-BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
++BPF_CALL_x(4, noinline, bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
+ 	   u64, flags)
+ {
+ 	bpf_callback_t callback = (bpf_callback_t)callback_fn;
+@@ -766,13 +767,18 @@ BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
+ 		return -E2BIG;
+ 
+ 	for (i = 0; i < nr_loops; i++) {
+-		ret = callback((u64)i, (u64)(long)callback_ctx, 0, 0, 0);
++		bpf_call_cb(callback, i, callback_ctx, 0, 0, 0, ret, unwound);
+ 		/* return value: 0 - continue, 1 - stop and return */
+ 		if (ret)
+ 			return i + 1;
+ 	}
+ 
+ 	return i;
++
++unwound:
++	/* The callback left with unwind_exit: the loop is over, and so is the helper */
++	bpf_unwind_leave();
++	return ret;
  }
  
-+/*
-+ * When the callback can unwind and unwind_goto follows the call of bpf_loop,
-+ * unwind_goto follows the call of the callback, and the pad restores r6-r8 and
-+ * jumps to the pad after the call of bpf_loop with the r0 of the callback, which
-+ * the verifier has checked with the state of that r0. The unwind_goto that
-+ * followed the call of bpf_loop doesn't follow a call anymore and becomes a
-+ * no-op jump. A loop of no rounds never runs its callback, so the verifier asked
-+ * for no unwind_goto there, and the insn after the call is some other insn.
-+ */
- static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
- 					int position,
- 					s32 stack_base,
-@@ -2848,6 +2857,8 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
- 	int reg_loop_max = BPF_REG_6;
- 	int reg_loop_cnt = BPF_REG_7;
- 	int reg_loop_ctx = BPF_REG_8;
-+	bool pad = env->subprog_info[callback_subprogno].can_unwind &&
-+		   bpf_is_unwind_goto(&env->prog->insnsi[position + 1]);
+ const struct bpf_func_proto bpf_loop_proto = {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ac9dbe082181..4b4d8479fa87 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11402,10 +11402,15 @@ static int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog)
+ 	return err;
+ }
  
- 	struct bpf_insn *insn_buf = env->insn_buf;
- 	struct bpf_prog *new_prog;
-@@ -2865,7 +2876,7 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
- 	 */
- 	insn_buf[cnt++] = BPF_JMP_IMM(BPF_JLE, BPF_REG_1, BPF_MAX_LOOPS, 2);
- 	insn_buf[cnt++] = BPF_MOV32_IMM(BPF_REG_0, -E2BIG);
--	insn_buf[cnt++] = BPF_JMP_IMM(BPF_JA, 0, 0, 16);
-+	insn_buf[cnt++] = BPF_JMP_IMM(BPF_JA, 0, 0, pad ? 22 : 16);
- 	/* spill R6, R7, R8 to use these as loop vars */
- 	insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_6, r6_offset);
- 	insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_7, r7_offset);
-@@ -2877,17 +2888,20 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
- 	/* loop header,
- 	 * if reg_loop_cnt >= reg_loop_max skip the loop body
- 	 */
--	insn_buf[cnt++] = BPF_JMP_REG(BPF_JGE, reg_loop_cnt, reg_loop_max, 5);
-+	insn_buf[cnt++] = BPF_JMP_REG(BPF_JGE, reg_loop_cnt, reg_loop_max, pad ? 6 : 5);
- 	/* callback call,
- 	 * correct callback offset would be set after patching
- 	 */
- 	insn_buf[cnt++] = BPF_MOV64_REG(BPF_REG_1, reg_loop_cnt);
- 	insn_buf[cnt++] = BPF_MOV64_REG(BPF_REG_2, reg_loop_ctx);
- 	insn_buf[cnt++] = BPF_CALL_REL(0);
-+	if (pad)
-+		/* to the pad below when the callback left with unwind_exit */
-+		insn_buf[cnt++] = BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, BPF_UNWIND_GOTO, 7, 0);
- 	/* increment loop counter */
- 	insn_buf[cnt++] = BPF_ALU64_IMM(BPF_ADD, reg_loop_cnt, 1);
- 	/* jump to loop header if callback returned 0 */
--	insn_buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, -6);
-+	insn_buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, pad ? -7 : -6);
- 	/* return value of bpf_loop,
- 	 * set R0 to the number of iterations
- 	 */
-@@ -2896,12 +2910,35 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
- 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_10, r6_offset);
- 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, r7_offset);
- 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_8, BPF_REG_10, r8_offset);
-+	if (pad) {
-+		/* over the pad */
-+		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JA, 0, 0, 4);
-+		/* the pad: r0 is what the callback unwound with */
-+		insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_10, r6_offset);
-+		insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, r7_offset);
-+		insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_8, BPF_REG_10, r8_offset);
-+		/*
-+		 * To the pad of the caller, where the unwind_goto that follows
-+		 * the patch goes. Its offset is known once the patch is in and
-+		 * the jumps across it are adjusted, see below.
-+		 */
-+		insn_buf[cnt++] = BPF_JMP32_A(0);
+-/* The helper calls its callback with a pad, see bpf_call_cb(). None yet. */
++/* The helper calls its callback with a pad, see bpf_call_cb() */
+ static bool helper_has_cb_pad(enum bpf_func_id func_id)
+ {
+-	return false;
++	switch (func_id) {
++	case BPF_FUNC_loop:
++		return true;
++	default:
++		return false;
 +	}
+ }
  
- 	*total_cnt = cnt;
- 	new_prog = bpf_patch_insn_data(env, position, insn_buf, cnt);
- 	if (!new_prog)
- 		return new_prog;
- 
-+	if (pad) {
-+		struct bpf_insn *unwind_goto = &new_prog->insnsi[position + cnt];
-+
-+		/* the jump of the pad, one insn before, takes the target of the unwind_goto */
-+		new_prog->insnsi[position + cnt - 1].imm = unwind_goto->off + 1;
-+		/* and the unwind_goto after the call of bpf_loop follows no call anymore */
-+		*unwind_goto = BPF_JMP_A(0);
-+	}
-+
- 	/* callback start is known only after patching */
- 	callback_start = env->subprog_info[callback_subprogno].start;
- 	/* Note: insn_buf[12] is an offset of BPF_CALL_REL instruction */
+ /* The kfunc calls its callback with a pad. None yet. */
 -- 
 2.53.0
 
