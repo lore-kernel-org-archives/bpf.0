@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793222557;
-	b=fGo6JFS7vb0wDuSekwut97NEr9a+MAoc1OpOlnpt7Mc9/RyEBlqq9EawUhpUPZXXxK+X
-	 +eX3D/IQg9Nb0q58U1kP5KIFsPpNN5x0xvB4wlEIYUYY3jhLf3Gr+bqSrcEhbEts3fRC1
-	 +uKUBUUvSioHxXjhnnwBkcPuonThA/MqF0HopbKV7ZIkci2YGrqZcEkqEaotCiRPGG0il
-	 bPkdtxb+GNcfqoMi+52YzUJTyf9VYBH7eHZ2xR451YIRNljWxz+cNDP5d1WSV4PP9VxUq
-	 orykA5IdjWKYecui39aJcI8qBfVtX2qRNli9dv2w8a1L0OyFN9cTBBAQdoU6LfJ0BKQ==
+	t=1793222559;
+	b=evpMC1Te30llC7tReHbsld7pgYtQeOwwAOlxLar45TnE6gl9MOh4rIcHT0iYkUjf+73p
+	 gQkY0qOinyy8UN95JJ3THe7oBkfplTeeRXh8jY3ofDVq8gU6L4cAXyARV7bYqHa6/plrb
+	 Ltbk5ucDBK/FjIXhExH3fXzS3eGIE9oU+GR0OkIStPlZEsH8zHDSNzgMIy/pW3Z69LDM+
+	 8/FKUq/cL5i8ska5X8CVOYe1IXCx6/HhvrK3JXnQdiUog273vMqTzsgiJMX9zDOI1hn+F
+	 9/TcD+Qpt4S3xgkbbtCdv06h8z6QdmnMf43lej8hZs02+9rdKKax5nD9Fi0UgUWAoCg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793222557;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793222559;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=zw5Rd3tHLsBi/Wx1LPdx2NJDSF078cu37LQJA05ujQk=;
-	b=qr+hnGntxYcaVWRx9fOikn4nKEWUEzRvbaCX8Sd2IQ5gtxd4euAI+MOB6jSlIwNNXyLA
-	 nDHJJ/fLSOb3S8J2VrrEhvL1NsFpzVdHjuVkSEXg8L/38DeoVZccUGKT2qTPs+lqRE+LF
-	 whyzU5GVY8H16eVHYstffejWtq+wcYM+J10S5nM0zEZguy3JLwxEC08hTzCEnk0ekco+C
-	 nmsqM8va1/SCOA1eF9LizBl7VDk8dQmoFPkDyoNmfHlQEve84MFCLyQHm4Lekr3rtTTtE
-	 VdH0mGDe2VYZjBjWpbB7RWam/ho0uzux1aebfxJ0MTqWjKIJQg2eOLkqDiiVJn9COuQ==
+	bh=kAQ7tBlQYavlf9snX1q18zYIcSo4eg7gEGdLnhqb8cY=;
+	b=hJ3S3mKOx33EM+pd6a+8Tlvnqz9v4sG5XAF1uLI8RIDoSkurj8SUgbIAyohh3Am3bVfB
+	 3E0qxvolwoILh/R+c6kdVsrHg8HpKmTKo9OUlikkDG5xowAmN0wjwcKmgPOyibGh+LUW+
+	 IaKdZFoV6/gx8LERM31cCxthtRQ7cTNkOKPrWOK5G30LtzjggoiZq/JlIiWci5F3ro11c
+	 YY5S5JOeopz8uC0nccdTFTQ2BDZij3IvAJg4MRsNhXxVH7uKkzjv+dZyb9b4kGzotN1WY
+	 kCAKbBZqC0zqbjcTX+n3qNdXUrfj32J1cRjBy6sSsKDoH41OP2Pnb5C5mW0Il5PjnKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lVwhf+Fg;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aYcYOsRR;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB0C606A31D;
-	Wed, 28 Oct 2026 21:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD67606A329;
+	Wed, 28 Oct 2026 21:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lVwhf+Fg
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2946F1F01825;
-	Wed, 28 Oct 2026 21:22:36 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aYcYOsRR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA6171F01829;
+	Wed, 28 Oct 2026 21:22:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793222556;
-	bh=zw5Rd3tHLsBi/Wx1LPdx2NJDSF078cu37LQJA05ujQk=;
+	s=k20260515; t=1793222558;
+	bh=kAQ7tBlQYavlf9snX1q18zYIcSo4eg7gEGdLnhqb8cY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=lVwhf+Fg4q2oYSltVlYMxotSqsNpExaiP4XmNrPCKdKKbUs5LVGjUxVbdVfCfHNfs
-	 ufHJMab4k8e/KivbcqqqFpFz3mMvCi+IisNAEmyHGdzSp3D2KeUUBsjO9IFNqupvaU
-	 6qzaxExxI29wEuC3smf/d6a6gMJ99fkD1othlCEqJfRbbI7Ab90T6KdiS8/N1YGUu3
-	 ptlK0DqaBUAq7zr0GdRdCHllojy8QVPzccBgwA+HTPthf0DkwkzJ6dvUfoGTEfl8no
-	 +FvP3wEOr7PK/YCkNhND1JdubnZ+4J/e9AJyt+/qvk9KTPwfXzb5qCTfSXBkZmYjN2
-	 txoV7at/H2PfQ==
-Content-Type: multipart/mixed; boundary="===============1452548001571172891=="
+	b=aYcYOsRRWXRVoQZo8o9WqX1U9ijj1Hb8dk3xMJs96Ie5PjTP+0eGHEJ6eJydTn4KN
+	 8U+M/d2ZnV9EcOLVbIpuKHGX8GNowAUymJOYzMW4bcb97HuctYZLy8ECyTdyZ7iJwY
+	 MksNcPBAN2tlwdmTRwKxoUtm8CFYO7JAiMv2Jva2qJA1ENwDkTAgc7brEF1pfB3DXM
+	 PFFFuoDUL2paLjVcBTVYP6lz5+cFwpMuYNdUHlwJSc7/shbySLVRiTNa+oBLTu2Yir
+	 K3ZJ/HsPG3tAOdODGxzcO7HKjAao1WHJShq1CwHQsyaWGvugq79m8m0zDQ7Svoj5Fb
+	 gBKiSK4oxJeiw==
+Content-Type: multipart/mixed; boundary="===============3658763065574181209=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,80 +49,87 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <e08eb87415801027d75170c930dc709beaea5f20f4afc92ff0affd434faaa9a0@mail.kernel.org>
-In-Reply-To: <20261028204158.1021284-8-vineet.gupta@linux.dev>
-References: <20261028204158.1021284-8-vineet.gupta@linux.dev>
-Subject: Re: [PATCH bpf-next v2 7/8] selftests/bpf: write the mixed arena/scalar ALU tests in asm
+Message-Id: <3833268383adcd104d44051cbbb7687180f4e13bcccb0057e8747f2e10a5ad68@mail.kernel.org>
+In-Reply-To: <20261028204158.1021284-2-vineet.gupta@linux.dev>
+References: <20261028204158.1021284-2-vineet.gupta@linux.dev>
+Subject: Re: [PATCH bpf-next v2 1/8] selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
 From: bot+bpf-ci@kernel.org
 To: vineet.gupta@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,shuah@kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,jose.marchesi@oracle.com,david.faust@oss.qualcomm.com,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 28 Oct 2026 21:22:36 +0000 (UTC)
+Date: Wed, 28 Oct 2026 21:22:37 +0000 (UTC)
 
---===============1452548001571172891==
+--===============3658763065574181209==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: write the mixed arena/scalar ALU tests in asm
+> selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
 
-TL;DR: Test comment only: the new verifier_arena.c comment claiming the r9
-arena load is needed for addr_space_cast looks stale, since libbpf now binds
-the arena via fd_array. Suggest dropping or rewording it.
+TL;DR:
+- data_in_arena.c use_ops() isn't converted to CAN_USE_CALLX, so GCC with
+  callx support may still call add1() directly; commit message claims all
+  tests converted
+- Commit message typo (nit)
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-> index 21b66d51c61e..b84d8f1e0b39 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-> @@ -539,53 +539,58 @@ int arena_ptr_add_arena_ptr(void *ctx)
->  	return 0;
->  }
+> selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
 >
-> +/*
-> + * The r9 load is never read; it is there so libbpf records the arena map
-> + * as used, which is what lets the verifier accept addr_space_cast at all.
-> + */
->  SEC("syscall")
->  __failure __msg("same insn cannot be used with and without arena pointer")
+> Commit 7cd1f73b37ea ("selftests/bpf: Fix build of callx tests with GCC")
+> gated the callx progs on __clang__. GCC had indirect call support which was
+> recently refurbished along with a __BPF_FEATURE_CALLX macro [1], so gate
+> on that as well so once this GCC is released, the tests start passing.
+>
+> Put the arch and compiler conditions in a CAN_USE_CALLX macro in
+> bpf_misc.h, and use it all the test programs.
+>
+> While at it, mark the placeholder programs left for unsupported
+> toolchains and arches with __skip(), so they report SKIP rather than OK.
+>
+> [1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ffe3ead4a8ad704b557b0cfa4f823df647c65a0d
+>
+> Measured on bpf-next with a stock bpf-gcc that defines
+> __BPF_FEATURE_CALLX, test_progs before and after: 76 subtests run that
+> previously did not exist in the report, 75 OK and one @unpriv SKIP,
+> with no failures.  The two dummy placeholders retire and
+> callx_rodata_lskel goes SKIP -> OK.
+>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 
-Is this comment still accurate?  Commit cd7a395838cb ("libbpf: Bind the arena
-of an object to every program in it") is already in the base of this series.
-With it, bpf_object_load_prog() calls bpf_object__bind_arena(), which puts
-the object's arena into a continuous fd_array when the kernel supports
-fd_array_cnt:
+The commit message says CAN_USE_CALLX is used in all the test programs, but
+use_ops() in progs/data_in_arena.c is not converted.  It still gates its
+indirect call on __clang__ and keeps the same comment this patch removes from
+the other files:
 
-    obj->fd_array[0] = map->fd;
-    load_attr->fd_array = obj->fd_array;
-    load_attr->fd_array_cnt = obj->fd_array_used;
+progs/data_in_arena.c:use_ops() {
+    ...
+#ifdef __clang__
+	return ops.fn(*ops.data) + ops.name[1];
+#else
+	/* gcc doesn't support indirect calls */
+	return add1(*ops.data) + ops.name[1];
+#endif
+    ...
+}
 
-The kernel binds that array before it looks at any insn:
+With a GCC that defines __BPF_FEATURE_CALLX, doesn't this still take the
+#else branch and call add1() directly?  That means the GCC build never makes
+the callx through a function pointer in .data.rel.ro, and the "gcc doesn't
+support indirect calls" comment is now wrong for that compiler.
 
-    process_fd_array_continuous()
-      add_fd_from_fd_array()
-        __add_used_map()
-          check_map_prog_compatibility()
-            env->prog->aux->arena = (void *)map;
+A grep for "indirect call" under progs/ and prog_tests/ shows this is the
+only remaining gate.  None of the later patches in the series touch
+data_in_arena.c.
 
-This happens for every program in verifier_arena.o, including these two,
-whether or not an insn refers to the map.  The addr_space_cast check in
-check_alu_op() (if (!env->prog->aux->arena)) and the prevent_zext/needs_zext
-logic in adjust_reg_min_max_vals() only look at prog->aux->arena, so
-removing the r9 load would not change what either test does with a kernel and
-libbpf from this tree.
+Should use_ops() be converted to CAN_USE_CALLX as well?  That would need
+data_in_arena.c to include bpf_misc.h, and it would add the x86/arm64/riscv64
+arch gate that clang builds of this file don't have today.  Otherwise, could
+the commit message be adjusted so it doesn't say all the test programs were
+converted?
 
-The comment also describes the mechanism differently from what happens.
-libbpf only relocates the ld_imm64 to the map fd, and the verifier records
-the map as used in add_used_map() during resolve_pseudo_ldimm64().
+This isn't a bug, but there is a missing word in the commit message:
 
-The log of the libbpf commit describes referring to the arena artificially,
-as in asm volatile("" :: "r"(&arena)), as something that change makes
-unnecessary.  The r9 load would only matter on a kernel that rejects
-fd_array_cnt, or with the light skeleton loader, which test_loader does not
-use.
+> bpf_misc.h, and use it all the test programs.
 
-The same four comment lines are repeated word for word above
-mixed_arena_scalar_alu64_arena_first().  Could the comment be dropped
-together with the r9 load, or be reworded to say the load is a fallback for
-kernels where libbpf cannot bind the arena through fd_array_cnt?
+This should read "use it in all the test programs".
 
 
 ---
@@ -130,4 +137,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40768193895
---===============1452548001571172891==--
+--===============3658763065574181209==--
