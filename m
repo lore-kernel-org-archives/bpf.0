@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.99
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.107
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793220158;
-	b=QL44VgI9lUQed3G6kgC1xKPWLdvNX+jBKfBaYkY4ao0RjoV1MhGRk6WWtPRwGC1gjp5m
-	 Bbfr+z1Xjpjl2QeYTb95Tu5N/DBRpLmL0Rn07NPZzIcEtyhNwy+sap0muxO+VZZd4ic78
-	 XYVAXUwFoY2Wm2jbxVh/B0PBTHBn9b2eXIg4X3ngJReY6d0CDgwtPduDoW9tv+M5ygap9
-	 82ui9qgbRxTbNR/SeOFa0M5uj1BBxD2GCbpPd8VXj77PFCVT2L4+RR3KBr7imdWC0DqYf
-	 SLnyQDg9kGX+Tvk6fpQqGiZ6U+XjpAiW31EBv5mHY2VcZM7vl9DVl+VAweCFTCJ2R+A==
+	t=1793220163;
+	b=YDf3PhMN2se7UD0UgKKtdcNqwTl2qZDsuJdI/gSPV7HzpriCLdGXHunPawAiN2C7jH2Z
+	 TYxOmkH4ST/e7JxO6ra53YUH4YTsWbCU3tBzZ0TN/4pBkaVh3PP8lx2ZIpJXX0i7XwuJ7
+	 8E837wAkOUZAHxgeYWtDHmIKf1QZq3sa/Bfmkg5dpwM5FMG2xMv92ykC6Od0cpV1i/Pud
+	 tvdBxpd1cYvZm1HEyjKYEPZwQ5e70PPi5NOV+7lOTQKx0s0roNBOkwaHcfNUi0Lo2Od+1
+	 2iiU0Th2pKbj6A7Ge9imm2TkdxbZVCmFkVfNLu+EhJB6q+g7lUXzIIYKFIJJLT5Ka+g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793220158;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793220163;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=QNGlqgR8H4bd+pXzPcFjDheB6zWxT8stQV4v8DEKY7I=;
-	b=chTAkyFOfEzwiRFPyOW4EJKgUmZ5T6zeOVws5WiT9jrnE3+wn9wuw0rmTpJvrIuk5N3V
-	 n1RWbj9qXqEvvnWsRb2VKhPllmhsRWe5ZjFGxfDj5eTedoa/YAsbzt5P3/sjzG4wLDsPY
-	 u4ZTY95L35ARU9U5pCX1ewY+Dn2128fxS+1JIWaAhzurX4KqmjBnmxIezPC2kL0USvhD0
-	 +ULZCtgMHj8hgxLM0mOPRRjTsyxoHvkdXhV6iB6i+rKDzZ4GT7xYdvai+PJA5pxkv0cQc
-	 AUeGS82b+v8iFaiMAY/L7cKESNAMLhhvpqfXJdaBhdmaOLCSksEPVzPVeieuSs1wPqA==
+	bh=+pm9gGaZs/CLh7OoTmuolKvilNEtJFezKPiXE4mTJrk=;
+	b=bVqG/gljYYLKyWe3ec17XWKjSjb9TXD/rdqQMFpzKQTEHvMZePtifoMUyO/YWr9vENgO
+	 sVj7DWDAgXhiqDseXU/o/eWexTLIgBeDJHayznYUeF045SkW98dqnltmc1V2//RNL2RJe
+	 v/3CKTvSiTO0yIkbVgd8Tf/WhSnh903cvBj7ldl+2W1fP1KQTp5dCHKQ3Hhzyoy74ukOu
+	 D2d7VSWDfQnhINF06K0MOLROE+c4SN6kNpRZbzLl1MZVghDpGA/j4a3kEo6C9lt0gNa0n
+	 THUH0pkycPfKofFr/gkRdA15ipZjktrWcVrv/vBTsp3WdVr8nN6dfNzEGJN7h6GlOFA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eYoE8K8n;
-	arc=none smtp.remote-ip=95.215.58.99
-Received: from mta1.migadu.com (out-99.mta1.migadu.com [95.215.58.99])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YuhURIJT;
+	arc=none smtp.remote-ip=95.215.58.107
+Received: from mta1.migadu.com (out-107.mta1.migadu.com [95.215.58.107])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4568760A380C
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 20:42:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4568760A380C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8865D60A3814
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 20:42:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8865D60A3814
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eYoE8K8n
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YuhURIJT
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=E2bqJR0PCitxBd5LvnuDwFRH68U2MlLDyyylJcREwh8=;
+DKIM-Signature: a=rsa-sha256; bh=9fjztXg2DC76hhkmLgtkEbkjo8i8oo2Esga6BzQfns4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793220156; v=1; x=1793824956;
- b=eYoE8K8nxIBhOVH/3vihOjln2S5RvO14qe0VOqnRCUuF1CnBV1CStOTGX9Q70Szc20pz/3L3
- kPiK5/XcxflLzlcFyzSFSp78f6kB+HMGrIjdFaxrEunYEqxx35rnjQaSsgece2H68VoiV8bwoR1
- fuPSRzqIDb+SINKjP9aWFmfc=
+ t=1793220160; v=1; x=1793824960;
+ b=YuhURIJTqVtpy+0SMtTYqYcwxm4h6OtL+780+QhNqZDAeoQqykiySHJWHF3lZPcbUyPX/UW5
+ XOzrR7yzBOFIH97Prfx324RVqBgyMcuTr6IH/Z8s5TGC/3m9roZtJDOCD17U2MX0HPdTkW/5RWR
+ 5oGbEtSQCTJ0noNa1QDiJJQU=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 424a2b0c3436f783;
-	Wed, 28 Oct 2026 20:42:36 +0000
-X-Mizu-Trace-ID: 424a2b0c3436f783
+Received: by smtp.migadu.com with ESMTPS id 7f3db56e337bbf6b;
+	Wed, 28 Oct 2026 20:42:40 +0000
+X-Mizu-Trace-ID: 7f3db56e337bbf6b
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: bpf@vger.kernel.org
@@ -67,9 +67,9 @@ Cc: ast@kernel.org,
 	jose.marchesi@oracle.com,
 	david.faust@oss.qualcomm.com,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v2 7/8] selftests/bpf: write the mixed arena/scalar ALU tests in asm
-Date: Wed, 28 Oct 2026 13:41:57 -0700
-Message-ID: <20261028204158.1021284-8-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v2 8/8] selftests/bpf: skip the struct_ops arena tests without compiler support
+Date: Wed, 28 Oct 2026 13:41:58 -0700
+Message-ID: <20261028204158.1021284-9-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261028204158.1021284-1-vineet.gupta@linux.dev>
 References: <20261028204158.1021284-1-vineet.gupta@linux.dev>
@@ -84,169 +84,178 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-They fail to build with BPF_GCC:
+trigger() in struct_ops_arena.c and its three siblings puts the
+__BPF_FEATURE_ADDR_SPACE_CAST guard inside the function, so without
+arena support the body is gone and the program falls through to
+"return 0".  The host side then does
 
-  progs/verifier_arena.c:566:5: error: optimization may eliminate reads and/or writes to register variables [-Werror=volatile-register-var]
+  err = bpf_prog_test_run_opts(bpf_program__fd(trigger), &topts);
+  ASSERT_OK(err, "test_run");
+  ASSERT_EQ(topts.retval, 0, "trigger_retval");
 
-for
+and passes, having run a program that did nothing.  Two tests report OK
+under a stock bpf-gcc on that basis: arena_arg and arena_autobind.  The
+other two, arena_member and arena_member_render, need a testmod BTF
+carrying the arena type tag and are not reached without one, but are
+fixed the same way.
 
-  volatile register __u64 reg asm("r3");
-
-and GCC means it.  With the warning silenced it drops both scalar
-accesses, leaving nothing that uses r3 as a scalar:
-
-  call	7
-  if w0 == 0 goto .L136
-  r9 = arena ll;r3 = 0;r3 = addr_space_cast(r3, 0, 1);
-  .L136:
-  r0 = 0
-  exit
-
-`reg = 1ULL << 32' and `reg += 1' are both gone.  The tests need one
-instruction reached with r3 live as a scalar on one path and as an
-arena pointer on the other; what is left gives the verifier no reason
-to reject anything, so the __failure expectation would not hold.  A
-local register variable is not guaranteed to survive a helper call
-either, which GCC is also entitled to act on.
-
-Nothing here needs a compiler to allocate registers, so write the
-whole body in asm like mixed_arena_stack_atomic below, which tests the
-same shape.  Both compilers then emit the same sequence, with the
-branch landing on the shared ALU op:
-
-  call 7
-  r6=r0
-  r3=1
-  r3<<=32
-  if w6==0 goto 4          <- lands on r3+=1
-  r9=0 ll
-  r3=0
-  r3 = addr_space_cast(r3, 0, 1)
-  r3+=1                    <- scalar on one path, arena pointer on the other
-  r0=0
-  exit
-
-Take __load_if_JITed() from the sibling while here.  A program binding
-an arena map is rejected in check_map_prog_compatibility() with "JIT is
-required to use arena" during map resolution, before do_check() can
-reach the shared instruction, so without a JIT these would fail on the
-wrong message rather than skip.
-
-Not exercised by a stock bpf-gcc, which compiles both tests out with the
-rest of the arena block; the build failure above needs a compiler that
-has arena support.  Under clang the rewrite is not a no-op either: the
-pre-image spilled r3 to the stack and did the shared ALU op on r1
-reloaded from it, so the test was not exercising one register live as
-both a scalar and an arena pointer.
+These are not driven by test_loader, so __skip_without_arena does not
+reach them.  Use the flag-in-.data pattern linked_externs.c already
+uses for the same situation: the program exports skip_tests, and the
+host checks it before attaching and reports SKIP.
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- .../selftests/bpf/progs/verifier_arena.c      | 85 ++++++++++---------
- 1 file changed, 45 insertions(+), 40 deletions(-)
+ .../bpf/prog_tests/test_struct_ops_arena.c    | 27 +++++++++++++++++++
+ .../selftests/bpf/progs/struct_ops_arena.c    | 10 +++++++
+ .../bpf/progs/struct_ops_arena_autobind.c     | 10 +++++++
+ .../bpf/progs/struct_ops_arena_member.c       | 10 +++++++
+ .../progs/struct_ops_arena_member_render.c    | 10 +++++++
+ 5 files changed, 67 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index 21b66d51c61e..b84d8f1e0b39 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -539,53 +539,58 @@ int arena_ptr_add_arena_ptr(void *ctx)
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
+index e7580b9f0fc2..11b7dab77ff7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
+@@ -31,6 +31,12 @@ static void arena_arg(void)
+ 	if (!ASSERT_OK_PTR(skel, "struct_ops_arena__open_and_load"))
+ 		return;
+ 
++	if (skel->data->skip_tests) {
++		printf("%s:SKIP: no addr_space_cast support in the BPF compiler\n", __func__);
++		test__skip();
++		goto out;
++	}
++
+ 	link = bpf_map__attach_struct_ops(skel->maps.testmod_arena);
+ 	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
+ 		goto out;
+@@ -142,6 +148,13 @@ static void arena_member(void)
+ 	if (!ASSERT_OK_PTR(skel, "struct_ops_arena_member__open_and_load"))
+ 		return;
+ 
++	if (skel->data->skip_tests) {
++		printf("%s:SKIP: no addr_space_cast support in the BPF compiler\n", __func__);
++		test__skip();
++		struct_ops_arena_member__destroy(skel);
++		return;
++	}
++
+ 	attach_and_trigger(skel->maps.testmod_arena_member, skel->progs.trigger);
+ 	struct_ops_arena_member__destroy(skel);
+ }
+@@ -186,6 +199,13 @@ static void arena_autobind(void)
+ 	assert_prog_map(bpf_program__fd(skel->progs.test_arena_cb), info.id, "test_arena_cb");
+ 	assert_prog_map(bpf_program__fd(skel->progs.unrelated), info.id, "unrelated");
+ 
++	if (skel->data->skip_tests) {
++		printf("%s:SKIP: no addr_space_cast support in the BPF compiler\n", __func__);
++		test__skip();
++		struct_ops_arena_autobind__destroy(skel);
++		return;
++	}
++
+ 	attach_and_trigger(skel->maps.testmod_arena_autobind, skel->progs.trigger);
+ out:
+ 	struct_ops_arena_autobind__destroy(skel);
+@@ -268,6 +288,13 @@ static void arena_member_render(void)
+ 	if (!ASSERT_OK_PTR(skel, "struct_ops_arena_member_render__open_and_load"))
+ 		return;
+ 
++	if (skel->data->skip_tests) {
++		printf("%s:SKIP: no addr_space_cast support in the BPF compiler\n", __func__);
++		test__skip();
++		struct_ops_arena_member_render__destroy(skel);
++		return;
++	}
++
+ 	attach_and_trigger(skel->maps.testmod_arena_member_render, skel->progs.trigger);
+ 	struct_ops_arena_member_render__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena.c b/tools/testing/selftests/bpf/progs/struct_ops_arena.c
+index 8aa8639df91f..612ca868c8fe 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_arena.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_arena.c
+@@ -83,6 +83,16 @@ struct bpf_testmod_ops3 testmod_arena = {
+ 	.test_arena_multislot = (void *)test_arena_multislot_cb,
+ };
+ 
++/*
++ * These tests are not driven by test_loader, so __skip_without_arena
++ * cannot reach them; the host side reads this flag and skips instead.
++ */
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
++bool skip_tests __attribute((__section__(".data"))) = false;
++#else
++bool skip_tests = true;
++#endif
++
+ SEC("syscall")
+ int trigger(void *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
+index 495faa0f4a8b..de026d901dcb 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
+@@ -42,6 +42,16 @@ int unrelated(void *ctx)
  	return 0;
  }
  
 +/*
-+ * The r9 load is never read; it is there so libbpf records the arena map
-+ * as used, which is what lets the verifier accept addr_space_cast at all.
++ * These tests are not driven by test_loader, so __skip_without_arena
++ * cannot reach them; the host side reads this flag and skips instead.
 + */
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
++bool skip_tests __attribute((__section__(".data"))) = false;
++#else
++bool skip_tests = true;
++#endif
++
  SEC("syscall")
- __failure __msg("same insn cannot be used with and without arena pointer")
--int mixed_arena_scalar_alu64_scalar_first(void *ctx)
--{
--	volatile register __u64 reg asm("r3");
--	__u32 pick_arena = bpf_get_prandom_u32();
--
--	reg = 1ULL << 32;
--
--	if (pick_arena) {
--		asm volatile (
--			"r9 = %[arena] ll;"
--			"%[reg] = 0;"
--			"%[reg] = addr_space_cast(%[reg], 0x0, 0x1);"
--			: [reg] "=r"(reg)
--			: __imm_addr(arena)
--			: "r9"
--		);
--	}
--
--	reg += 1;
--
--	return 0;
-+__load_if_JITed()
-+__naked void mixed_arena_scalar_alu64_scalar_first(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r6 = r0;					\
-+	r3 = 1;						\
-+	r3 <<= 32;					\
-+	if w6 == 0 goto 1f;				\
-+	r9 = %[arena] ll;				\
-+	r3 = 0;						\
-+	r3 = addr_space_cast(r3, 0, 1);			\
-+1:	r3 += 1;					\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_addr(arena),
-+	  __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
- }
+ int trigger(void *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
+index a2218cd81619..4ec0aead3e95 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
+@@ -77,6 +77,16 @@ struct bpf_testmod_ops3 testmod_arena_member = {
+ 	.test_arena_member = (void *)test_arena_member_cb,
+ };
  
 +/*
-+ * The r9 load is never read; it is there so libbpf records the arena map
-+ * as used, which is what lets the verifier accept addr_space_cast at all.
++ * These tests are not driven by test_loader, so __skip_without_arena
++ * cannot reach them; the host side reads this flag and skips instead.
 + */
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
++bool skip_tests __attribute((__section__(".data"))) = false;
++#else
++bool skip_tests = true;
++#endif
++
  SEC("syscall")
- __failure __msg("same insn cannot be used with and without arena pointer")
--int mixed_arena_scalar_alu64_arena_first(void *ctx)
-+__load_if_JITed()
-+__naked void mixed_arena_scalar_alu64_arena_first(void)
+ int trigger(void *ctx)
  {
--	volatile register __u64 reg asm("r3");
--	__u32 pick_scalar = bpf_get_prandom_u32();
--
--	asm volatile (
--		"r9 = %[arena] ll;"
--		"%[reg] = 0;"
--		"%[reg] = addr_space_cast(%[reg], 0x0, 0x1);"
--		: [reg] "=r"(reg)
--		: __imm_addr(arena)
--		: "r9"
--	);
--
--	if (pick_scalar)
--		reg = 1ULL << 32;
--
--	reg += 1;
--
--	return 0;
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r6 = r0;					\
-+	r9 = %[arena] ll;				\
-+	r3 = 0;						\
-+	r3 = addr_space_cast(r3, 0, 1);			\
-+	if w6 == 0 goto 1f;				\
-+	r3 = 1;						\
-+	r3 <<= 32;					\
-+1:	r3 += 1;					\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_addr(arena),
-+	  __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
- }
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
+index 09b4c740bdca..3ccbc6e71626 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
+@@ -60,6 +60,16 @@ struct bpf_testmod_ops3 testmod_arena_member_render = {
+ 	.test_arena_member = (void *)test_arena_member_render_cb,
+ };
  
++/*
++ * These tests are not driven by test_loader, so __skip_without_arena
++ * cannot reach them; the host side reads this flag and skips instead.
++ */
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
++bool skip_tests __attribute((__section__(".data"))) = false;
++#else
++bool skip_tests = true;
++#endif
++
  SEC("syscall")
+ int trigger(void *ctx)
+ {
 -- 
 2.53.0-Meta
 
