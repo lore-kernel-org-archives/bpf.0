@@ -1,55 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.65
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793153596;
-	b=i+XAObc5Ky4+VzLHed9bmo8teuYfq6RNlqNJhbTHtl13hlDX0fot9WZ9qVv7w5727Vk7
-	 5M168kGIRaN4TZ4uuqJiYn2YRzGybw+I5Y7U2htXa3NGOLeMdowhJ624XOLPnvQ9IhBwj
-	 1N/HO45mrcGXqAzPi6LnXfRGq2ZdhTuTIEQ2g5IddmCgY23u9Z+PFgGphNh+aYgo52Jip
-	 QKsJ5DVOiLPh05AwFrwu2U9je3mzwbf7aOmp8tbnUpTOhb/zwmOl2wKKpTynNBFZ3k3Of
-	 AG1Vis+7KQnMgpuVfwn43xk35L1zJ6MBWuxflbd1O++HGwGBu6fNKlSwV4jWanQZJjA==
+	t=1793153711;
+	b=oC/Up6p12+ND/AminwsUa2BSfdH94bAxJVbSccPt9QplVEuHTZNtUXd1OJ2BkGzx0ucq
+	 aj8LY4w4eGpgNd46+nLibblcIVYcFiQNMEVLjE2ZJ1BU9VhsSvXZiRKDqyxWEffkS4a53
+	 G/+azmfIdLsboqVbpQ7wt1xjEEuD1oy3WXEZrAeWSL8waVhihffU1XM8BWM+/PwWqP6Y2
+	 SacVsQOGKcffLhlzt++nroaZJlfBNrZ1c/8VTb7hWeyfpsc8dsef1U4kdoaOw9IxcZ3UC
+	 1Zs1c5yzYld2zZ0EgxlvIqPsRXNUOrC+aYSh9peSujVYFNGgmNT7NeGT3mos3Fe8rDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793153596;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=B281A5UtD1HWZTU2KjkcuaKvgtDD+lh7fik3l2I45lU=;
-	b=QnAhCbfZl/2T+z9X5wenhtVoFAUW0ilb040mbi+6Zyo0A09cz6PQfnebGGEE8e0pTO03
-	 FP1yIFPVmzFhsgwa0HpWv1FqFBLwIyppH3WL/khzcQrWEaASr8P1NUCeX3zuwobLpIZUK
-	 GDgEYaf0jetRwDGIIRdmK7dbwUGZFxsc0cL2b0cIY9lU+1zZ/zV8RnNnLPMexH8dPwFut
-	 fmENAIV9kaKIeUNuIxjXXsoCgFNew2ayAh2bcCBTU/1/5Zy+H9sa4G4NapFPOQR68+klc
-	 2aPHORbRMyd16rosfhjNIf2G5hqHds22ub7BLqmZp7BjWuJIZD1Y6Hi4BrJ6UVYR7Xg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793153711;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=QGinyiMrrwZtrLAfiO31oHhjeyRs9IZr6anPmafpqog=;
+	b=ZphHWmWr+ksv0Ku5C96pm8JhJ8MGViyXYbvm6doBMcc903WHtOQN1xRUAjgH3YMA604M
+	 K/mTIjvoBiRmek03xLeVrY1umO2pwP20Mm/V7f0BwSfIHxZ1iNZku77jjFOWNu8xPc/qd
+	 UBzNiUpvTJyZc7qFzP3m8UqvoEGz65z/tC6+hAn2/fylY8lj71gk7iSZvEFty753oK0zP
+	 uJHOPyMaXiRSlKQPULSFLiqqs+9aCReMkg6K1LPlK/R43ylc5uQc7J2T/uQUV7qE0Llzx
+	 D7yZfCnzkfXrtusbX+CGJKWEQbJU2jtsbEGSsFBGrwX63IMJDtUT49hsCsYYrl9inAw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RfNqHlxz;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=r8lVUKZu;
+	arc=none smtp.remote-ip=74.125.225.65
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CC89606A321
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 02:13:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7109C606A322
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 02:15:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7109C606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RfNqHlxz
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F29531F031E2;
-	Wed, 28 Oct 2026 02:13:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793153596;
-	bh=B281A5UtD1HWZTU2KjkcuaKvgtDD+lh7fik3l2I45lU=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=RfNqHlxzKE8tZgozPgWvmUzR/6fhkUjqm4S4YTZzWa6Vxhy6bh6Q5kI7GivnFv1jU
-	 JZmD+OUpMY8BfjC6l6J0/ENNvNw0CSG6kX51lD8Wowjjr1VDJY7xMK2a1780OHNAGO
-	 5F3/LZTMI6WzEiwctAOy+Nrg0341lZ2vO+zHb5OmBTq/IbFE4O7E1w4MyIrIu4BcL8
-	 bkFJMciXwb2wehM4Jq550OF618AGzp/9y/Khdm8ds9eO3eD+bpsYXfRT+Zf77jf7Lh
-	 qoo7XmHrnHNkmwp9b6ZZ2k1Ilo/rViXRjPKbp+S4O3bkwOtyCoAdlC96hi5zKLdhWY
-	 VP3dKIqC1cEpw==
-Message-ID: <sashiko-outbox-187334@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: add arena fault recovery tests
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Emil Tsalapatis" <emil@etsalapatis.com>, bpf@vger.kernel.org
-In-Reply-To: <20261028015141.10710-3-emil@etsalapatis.com>
-References: <20261028015141.10710-1-emil@etsalapatis.com>
- <20261028015141.10710-3-emil@etsalapatis.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 28 Oct 2026 02:13:15 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=r8lVUKZu
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-48e0c9fdb31so206660f8f.1
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:15:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793153710; x=1793758510; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=QGinyiMrrwZtrLAfiO31oHhjeyRs9IZr6anPmafpqog=;
+        b=r8lVUKZuN6uvUJKLLmZGBXMDYKcXy4fKleu/9Ilp16H3YTy4MXEI8qaVyv8z9r0wRm
+         BoIILtbnNxSVt0SOJQE1QrIvMPzgauViV+lvK2MWbRQC/Zr7T4dQ8s4R04NPigUOsSHZ
+         80MvkqYEp6t9eQ/TjQ72QvGXJjJHet6tdPdSew5wdiV8JsgUtASPLw9GaY2AaNcCJKIy
+         50verKtmrAPPcMQuiPzuujXRp2oY0bCebOl3Toulf7WoxANpNd9g6/8if3MP/6vjTqFW
+         pINolhhix0+3QqYDO6JbUidulPvdCiC5kRYOZjSjYRuYjz8SaUEDlKqvrqnRF/VDI68G
+         zR3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793153710; x=1793758510;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QGinyiMrrwZtrLAfiO31oHhjeyRs9IZr6anPmafpqog=;
+        b=YAWQ0vSQWP2wSUuXPqrlYsVIvkrFiRGcQVIWajZ7IpS6GDSnUbwdeHzbUoqEGna3zq
+         tSEFqxvtOj4QRROGjdkZo8bYnAmDUYgCtTHVU21r1u/FwgyJdv9blC1lSIxDmCivEp6A
+         9bPeVlrFBeStb5lS/XGLTVcsP4JClda//+XgpYHde0qFh9xoH7BHm5BBviSTXhtM7doG
+         vbK50zcYSVLYP1XNDlw1uxDWHTfxXcLHeeK88S290k/oGarJXhZm4je0SAmJXp5YfSBx
+         14fZ7RTS5fn7cLg2AI3YXmIfpKnkvjMUudOjWAyU6Zsj0TfYjgOH/9Kdcc51KXyRTcMH
+         RdPQ==
+X-Gm-Message-State: AFq9FYLKe+WT1Tdx4Un+tod0OX2Fvgx5iqPV2tY7Hmafp5sA5kCBR+MH
+	L+hnPlUAVEl4tpSM5F7rUOIiucwFbDE6YhgeRvD6lW+9dHFJB4+nPzAylR+IYnf/
+X-Gm-Gg: AYBFou1YuUTQjEp6c9ViPcR4jd7s0so7Rjt8KQo1OjkShiswmruNs68WTerM3OF5pSv
+	YCcI0m6h8zqQ/3Kfsbhnaftg2t+DaD6/bXah2IS3VPQvobM/l6LLGMlrZzED5jQmQI1eg20c8+U
+	UpFl3QqCYgpkXyevThZLV+SNhVxKfkspO/o5DFctDJaXU+uqtg/FlBVaJLqm2cQueQEL0lCtL4i
+	7KP6yD3gS7gpRr2TPycIqQMZCHSGdYx6SQ2BnuuPnN/pUmPUVWucuMPYHz9aKiXizSw8ecHc3jB
+	6HxiFgMt/Xe5vWF2aDr0pEidQLvaXUiU+My8ZLb5Bv27k96RbNgs+vOUNyL1W6QaIMnVf6WKafB
+	UFkCj0YPScxqf8yyCqfKc6FUzyTLl4IWu6VQMVTRPCwbmxmNpao0nebt0h+qk/ICIdzEbezm0oI
+	u5CihX8v3Z/QvCKBC0Ej30dgE9wLn1eeZ/ffxPcc0qAc8qKI3SJdSHNmwsDH5Hqdk7RLoFqGX4o
+	468bIRPhe0QoKGdPE95J+vuZV5EO7yofXTSfB1ajn67mJ7cUyKCjBkZDGKSFhirXIezzKaIIU9w
+	jEzXmi+hNDQ+/gX16tuboX84Eaeu2zwU+NuR0IWWmtQHWYizJFQLFpNi4a7OLOEmCd2n/tL5IPA
+	x+eYC/4pCgUO7va+ezsyHpIXe4nBCFQ1vYy/y5JraydC4d7cEteXsVAEL5MrRWl6A6GMP
+X-Received: by 2002:a05:6000:104b:b0:48b:4a2:8175 with SMTP id ffacd0b85a97d-48e5d308277mr2011252f8f.43.1793153709469;
+        Tue, 27 Oct 2026 19:15:09 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecd35c2sm25220146f8f.39.2026.10.27.19.15.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2026 19:15:09 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next v1 01/11] bpf: Give a helper a way to call its callback with a pad
+Date: Wed, 28 Oct 2026 03:15:08 +0100
+Message-ID: <20261028021508.1203900-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <sashiko-outbox-187312@kernel.org>
+References: <cover.1793147364.git.memxor@gmail.com> <03d6c53ccdf3eb0f5503eae9f9ffa5e6570549c3.1793147364.git.memxor@gmail.com> <sashiko-outbox-187312@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,108 +96,31 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] selftests/bpf: unguarded arena dereference in arena_fault breaks=
- no_alu32/bpf_gcc
---
+On Wed Oct 28, 2026 at 2:20 AM CET, sashiko-bot wrote:
+> [...]
+> [Severity: High]
+> Can evaluating the macro arguments in ___bpf_call_cb() on arm64 and
+> __bpf_call_cb() on x86-64 clobber the caller-saved local register
+> variables before the asm_goto_output() statement is reached?
 
-commit 35e23b7a99b662f29a7ebcdbbc98176bb46d1150
-Author: Emil Tsalapatis <emil@etsalapatis.com>
+Right: the compiler keeps no local register variable across a call, and
+a call in the evaluation of a later argument clobbers the ones set
+before it. The next version evaluates every argument into a temporary
+first and sets the register variables from those.
 
-selftests/bpf: add arena fault recovery tests
+> [...]
+> [Severity: High]
+> Could the compiler eliminate the *slot = to store in bpf_unwind_leave()
+> (on both x86-64 and arm64) as a dead store to the current function's stack
+> frame right before returning?
 
-This commit adds two BPF selftests and a supporting test kernel module to
-verify arena page fault recovery when accessing an unbacked arena page from
-a program with no arena or a program with a different arena map.
+Right, and gcc 15 does drop it, on arm64 and x86-64 alike: that is why
+the gcc runs of BPF CI returned from every helper but the array iterator
+instead of unwinding. The next version stores with WRITE_ONCE(), on the
+shadow call stack too.
 
-> diff --git a/tools/testing/selftests/bpf/progs/arena_fault.c b/tools/test=
-ing/selftests/bpf/progs/arena_fault.c
-> new file mode 100644
-> index 0000000000000..1967b128fdf69
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/arena_fault.c
-> @@ -0,0 +1,55 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#define BPF_NO_KFUNC_PROTOTYPES
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_arena_common.h"
-> +#include "../test_kmods/bpf_test_arena_fault.h"
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARENA);
-> +	__uint(map_flags, BPF_F_MMAPABLE);
-> +	__uint(max_entries, 2);
-> +} arena SEC(".maps");
-> +
-> +u64 __arena arena_pad;
-> +volatile u64 observed;
-> +
-> +SEC("syscall")
-> +int stash_and_free(void *ctx)
-> +{
-> +	u64 __arena *val;
-> +
-> +	val =3D bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-> +	if (!val)
-> +		return 1;
-> +
-> +	*val =3D 42;
-> +	bpf_test_arena_fault_stash((u64 *)val);
-> +	bpf_arena_free_pages(&arena, val, 1);
-> +	return 0;
-> +}
-> +
-> +SEC("syscall")
-> +int fault_stashed_wrong_arena(void *ctx)
-> +{
-> +	u64 __arena *val;
-> +
-> +	val =3D bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-> +	if (!val)
-> +		return 1;
-> +
-> +	*val =3D 1;
-
-[Severity: Medium]
-Will stash_and_free() and fault_stashed_wrong_arena() fail BPF verification
-under test_progs-no_alu32 and test_progs-bpf_gcc when __BPF_FEATURE_ADDR_SP=
-ACE_CAST
-is not defined?
-
-In tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h, __arena
-only includes __attribute__((address_space(1))) when
-__BPF_FEATURE_ADDR_SPACE_CAST is defined:
-
-#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_ASM)
-#define __arena __attribute__((address_space(1))) __attribute__((btf_type_t=
-ag("arena")))
-...
-#else
-#define __arena __attribute__((btf_type_tag("arena")))
-
-When tools/testing/selftests/bpf/Makefile builds test_progs-no_alu32 (with
--mcpu=3Dv2) or test_progs-bpf_gcc, __BPF_FEATURE_ADDR_SPACE_CAST is not
-defined. Without __attribute__((address_space(1))), the compiler does not
-emit a BPF_ADDR_SPACE_CAST instruction before dereferencing val in
-*val =3D 42 and *val =3D 1.
-
-Because bpf_arena_alloc_pages() returns void * in kernel BTF,
-check_kfunc_call() in kernel/bpf/verifier.c leaves R0 typed as SCALAR_VALUE
-until BPF_ADDR_SPACE_CAST converts it to PTR_TO_ARENA in check_alu_op().
-Without that cast, check_mem_access() rejects the stores to *val as invalid
-scalar memory accesses, causing arena_fault__open_and_load() in
-test_wrong_arena() and test_no_arena() in
-tools/testing/selftests/bpf/prog_tests/arena_fault.c to fail instead of
-skipping.
-
-Should the arena pointer dereferences in progs/arena_fault.c be guarded by
-#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) (with the runner skipping when
-unsupported), similar to other arena selftests?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261028015141.1071=
-0-1-emil@etsalapatis.com?part=3D2
+> [...]
