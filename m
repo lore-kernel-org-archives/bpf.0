@@ -1,100 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.139
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793182847;
-	b=sId7Ut9U6DiJNeBVwofCGQEIYED0Y4oHq66i3dr8Oe+O9NAVFLwyCnkH538kobJsfT0J
-	 0fq6YeEFkwg2E/JjLQpX7gG5pps3EwiifT0wC9oetlav8ClasMuj5HF/D8keSgdkDhOAM
-	 GZ2V07ofuN+pAzJkLDakSZkfW7DHmDfwRRK/vcWIAyal26X34puCyL0M9mGFJUUWlXFB9
-	 Bp8VCOW9SNUtLI0NQXl5TSeoEPQCawmMxzbJRtz0KRxoCXPigwth7Rk/8HDNuemcoel3L
-	 wBHzF3kxVrZmm13dI316mlEEmoJTp+avLMz/AkCln/wljKLwpG5AUWYz0QzWc5JP3FQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793182847;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type;
-	bh=QfNvGJSl7H175k6Q4TWKoHQY5yn/6iltV+8UhXFE7eA=;
-	b=RbbvOnSOyG2NX77Ku08ATixmqcsjdXy9BpUVk8Q1ViLUAvmqV90PJXHYZKEFkI9mosz3
-	 ZnJ0q6yBgiEbEsI4IKXxST4WfBW88oRmXfigCqsOAHSyaFifr+vawrXZBFJLEMz16zb7p
-	 1zlmQixpFyCEbwvD7U0YOTylqmPcKGNRjvYRlSLPWJ37zRYBHeaqolVDG1BKyBYz4L79H
-	 MT/f0GxXunRg4Xot7HniT+aiJbG0X7bikxkF/R3xmn0cbdQOJ6uIijFjVUHsKaPDhmj3L
-	 aUVNlzCem/PGyr6u5pdH3h665BX0DdWu+S9NkOL/F4dwMZype63pL41WOch+mEnTEgA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KjNd6RLY;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.139
-Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.120
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793183258;
+	b=y8W1PFwpTqt+NbCNpxUauPXzOJEDKXtjGcGBoXI7QJSAB2DeWKRcf8NYSkrqpi3+NXLC
+	 E3dZyNPKZeedWCaVDOETDcyxh12cE66iQJghT+oBWMDpdCmE5bazhTlt3S2V3BIcO5KiA
+	 9qiyflmXfscXxxRT5PU44V2fcmsij7DhACBNDT/thdzR8l6SvIAw++WlHl+8P/1eDG67i
+	 OlADVJD5+gv2UabXrYNLBVXziUDIoFC16TE8bqcaUpocWtltOkP5W76pSZavyqy+Drlp7
+	 6qYiCTEaDCkBA+OFL5kgh0zm/SxxhS9Hle0evqLftSOHOpG9e0hZlGS1urPICUu9xFQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793183258;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:MIME-Version:Date:Content-Type:
+	 Content-Transfer-Encoding:From:Message-ID:TLS-Required:Subject:To:Cc:
+	 In-Reply-To:References;
+	bh=CAsQNlvEQewVVFce1WqlpSDwej6JOKTiJP6Vd2oTTAg=;
+	b=Em1+06+kqgPSglyXI3p3bFODt2D/7YHSsaXYALg26L+QgKsALhsX45o6sM+GNhl05W/T
+	 yBDc3f8Ig1NcxGKU7Z10aIxzKm8OncKOiVZ+QDcAW54KUO8bbajBdsG4gerx47OMBdp3z
+	 8w570npOJqDRP0SjoLPTldbXV1DkrzWum/lLHtlUdf37RI8r9OZNWhCctBRtu1TvEQNBf
+	 ZYhDwUAyrERND9ZaMFs4x0DwYMCuh8Wg69gs4FrZwIrJqBtGk241OZkYRsJyd3Jd1DZ18
+	 ptICrXaC/8rVRKP5Tjnd60PI9Clriz+v8gl8P9EYEC+vcEGUtvQdOqRzVT+FxH60+kg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="Jmwex/kK";
+	arc=none smtp.remote-ip=91.218.175.120
+Received: from mta0.migadu.com (out-120.mta0.migadu.com [91.218.175.120])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E284606A31A
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 10:20:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1E284606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D56606A31F
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 10:27:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 94D56606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KjNd6RLY
-Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-4a611dcb60dso2084275e9.0
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 03:20:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793182845; cv=none;
-        d=google.com; s=arc-20260327;
-        b=JJzPX6ov66zgqXB4U1xrux4RM04joSZSQvxL6KIdn6MgjvCzAKJWwZbAi+RfCp+ET4
-         OKsI2SdtzqUcnclNQTCJn+gMNI1PRdsNopPMK81lCSoZsIQUegwCfoCZDju8j2pGwyC4
-         EcnJ9Tu36+E1hqq3/ic1G5uYDYWCbIxCzzxqtZzKrLqImVMWOPoE022+IqUaxcUGbWhu
-         NnMcUNntsX6bjh8iMXEg0mRn+FAGJwOTE0FYJzVSpEPpol/6IgqqVi5TRCL8ADYwjWXU
-         YPwdChTuCIziYSycMa1S03geHCjk6jtB2kguIRnaeknEOtrSgjwVfJmYrWf2K4wLOpL9
-         54/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=QfNvGJSl7H175k6Q4TWKoHQY5yn/6iltV+8UhXFE7eA=;
-        fh=ogoijjMSDoSJdjUdjbR65PhK9VE6buLokffzXV7BSrQ=;
-        b=X/1f8POBJ7GbuUgDiewnkYpC361Aj3f96Al+RRgyQRismEiuTqw/leNXrakpt+e/y9
-         7UK28q0Opi0teyXwwnuf9IJCWKzG2YijsNOyDh1eRUixLTZIJ1HRugG/acxjMYSwYDQz
-         DKNoHbyuwIXcJZ/iBv8yTNOkjAYHlAKuWcECz5CX0fVx01ZIBqyEgmsdNSywv9EabfAG
-         7pX2p7OYVBw5/Grk8rk1D4w0NYapnYoVtSX4l001JMLbVQTc/zDKzux8xBkrB/sUDqKS
-         m7oGj6PSW5UbOQwhDLe5rtsLC0PjsSD8ZY5JQQ3kXQPUUuO9XS8hWttGwV2FNBQo/sM2
-         ZxpA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793182845; x=1793787645; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QfNvGJSl7H175k6Q4TWKoHQY5yn/6iltV+8UhXFE7eA=;
-        b=KjNd6RLYvmWnGp56bKsMQKQUaQt1/fBQkF7y+Wgu7kSyO7hQX105X+Zz1LZyUvk3Zl
-         qdEdi9QletzZb78a2KDJV1lDtEM3Ncr1X7ttVWrHva0gN5C5D186MsSYG7rRJSpOcb3M
-         aJP5a1RnZyiRJD/Syjd43rZvmkwhvk3yRYE0frpN7mQtoPup0LqJVJa/LgCkDWbExSH/
-         GiMU+YPiare1YeCy6W5ZG5UdTi6J43o6g/w4HwAi30qBMYj2f+hsE6psZ6JCqHJVIEHA
-         rckgy6HmijY/o5npx45b+6uazv/Z0/2Hqo/VUc3GtsOYQQIKvsOiO7ZyCvyaGKX7I/sf
-         012Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793182845; x=1793787645;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=QfNvGJSl7H175k6Q4TWKoHQY5yn/6iltV+8UhXFE7eA=;
-        b=j58pSV1uEUI50VCM4wP4uJZrR8nXj+CwmWlE6ME8XYHSiLauvkU7d2f/lYOxgyD9U5
-         VYVNjZ8dZszbP1QSIT+WhPmI2Ua7AcfBQnWspa8ok5wT2922tfXmDkDTYTEYlVEv1+gU
-         b2tITIFg2/KfkbBFaczp4VCnh63PjuqRW4FeyhX/TQkVhcGAkznuui5QXMAnwM/oftOG
-         rYxWMiY9VCmaH2YFrafAJfYTx0A1RpwZbQ5tJV35evyXrEgJ5EFgv3kP6mSSeY//vClX
-         MHDVy0jMU/bqvQog8Vkn3LJkq1rrELiPm1mlXCewBIy92PVG99aXlV/IINyNILl1bxWJ
-         LonQ==
-X-Gm-Message-State: AFq9FYKHaT4z/rwuljmtIcSDpaPteTGOUD+tJSM8oOpGSRMgcaeU8eDt
-	wic0z6oztJMrd5H2AOfOsmLX9+xbtLYhTf1BkyXWF5Hz3G6kqo6rLQpHvTl2DpCrPpGA0xccJIx
-	U6hkkEyuU5nAJmBoLl2T0UlYBzHrFI7s=
-X-Gm-Gg: AYBFou0Y6UePsxc5dv1rM/w6uz6AjttPHCx7r+5mA3N6dPhydeQ2FObVwR3uvfWZdCU
-	9m7iBKa5ZhjdpbBijchlQ4YWMKlG3zqbzDXoMeBZJzb/aAHyHkvqThrJBxsLAZt62m1Fv6DEWGC
-	QgNk+0cHhojwblvUU97Md5qHi1TiEFegcmcx5wF3Vzp/+KFrqQ3/WedrPIcFo5K66A3KBDezPKl
-	VT2VI6jDXygkTkXB9MV7C88+B2Op6wQmFTMxv8geJEYlwspSfCimV/uwPMfgpSMwUOxM2DcX/yV
-	sT/EG/1sI4qb12/RgVzTVs9bPZxPoln7VBhIhi+D8DjsOlYgjBClvVd69zSO8pYmGeZEwL465LU
-	eW8gRuQPNGdlmxbr1VpSeHYXrQqJE4pCDIiG8lwsO73yrne6IbJnFrt2Jo7q9xMgr3z0noXxR08
-	lbi68Nk/UTh+lRaR4OeBeVRz5pzZMV9S/LamtJWH3mQRnii/cQFERQje7b9Q5VhjEAGXU7QMGY9
-	rA2d07aDjNMwYZ5
-X-Received: by 2002:a05:600c:1d1a:b0:4a1:f688:a5d5 with SMTP id
- 5b1f17b1804b1-4a966c41de5mr36257645e9.23.1793182845166; Wed, 28 Oct 2026
- 03:20:45 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Jmwex/kK
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=OSNgAFP+VgQv9q7o9VlptAb+MUtYzG3jKiN7D8DtKj8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793183254; v=1; x=1793788054;
+ b=Jmwex/kK7FpuCV4bqSsS5FCwcMt+EqZgDLePJZ4dvcrpEr4L/YHoyx7QKjmO1CIocO5OCbGr
+ tkZmoFbOPWPIzOshnL3/DpTiXzlghHbrudm38WhVc3KkL5yD0mKtIroNlIaYfbth6p94x+Qcx/Q
+ vj7/M3C4X89z4qZWGeENzS/M=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id ee56cd7c32368443;
+	Wed, 28 Oct 2026 10:27:33 +0000
+X-Mizu-Trace-ID: ee56cd7c32368443
+X-Migadu-Flow: FLOW_OUT
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,32 +56,138 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1793147364.git.memxor@gmail.com> <DMG7KVUM9TV8.3QO4MU310J4CU@gmail.com>
-In-Reply-To: <DMG7KVUM9TV8.3QO4MU310J4CU@gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 28 Oct 2026 11:20:07 +0100
-X-Gm-Features: AclHuK_01HbDqinnbPRNOq8kLdSiwRHyb4ceQdOVa56vWRxFaxtM-QrrkRnk_m8
-Message-ID: <CAP01T76uO4ULjNOQ217jXTLWtP5XT0rvB7PZxt8MJcoc==GBEw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v1 00/11] Unwinding for synchronous callbacks
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, kkd@meta.com, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
+Date: Wed, 28 Oct 2026 10:27:33 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+From: "Hui Zhu" <hui.zhu@linux.dev>
+Message-ID: <c652f3e6198b143fcf29f5540a769228f3d8470c@linux.dev>
+TLS-Required: No
+Subject: Re: [RFC PATCH 0/2] memcg_ext: dynamic memory.low and memory.min
+ protection
+To: "Tejun Heo" <tj@kernel.org>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Johannes Weiner" <hannes@cmpxchg.org>, "Michal
+ Hocko" <mhocko@kernel.org>, "Roman Gushchin" <roman.gushchin@linux.dev>,
+ "Shakeel Butt" <shakeel.butt@linux.dev>, "Muchun Song"
+ <muchun.song@linux.dev>, "JP Kobryn" <jp.kobryn@linux.dev>, "Andrew
+ Morton" <akpm@linux-foundation.org>, "Shuah Khan" <shuah@kernel.org>,
+ davem@davemloft.net, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "KP
+ Singh" <kpsingh@kernel.org>, "Tao Chen" <chen.dylane@linux.dev>, "Mykyta
+ Yatsenko" <yatsenko@meta.com>, "Leon Hwang" <leon.hwang@linux.dev>,
+ "Anton Protopopov" <a.s.protopopov@gmail.com>, "Amery Hung"
+ <ameryhung@gmail.com>, "Tobias Klauser" <tklauser@distanz.ch>, "Eyal
+ Birger" <eyal.birger@gmail.com>, "Rong Tao" <rongtao@cestc.cn>, "Hao Luo"
+ <haoluo@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Miguel
+ Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Kees
+ Cook" <kees@kernel.org>, "Jeff Xu" <jeffxu@chromium.org>,
+ mkoutny@suse.com, "Jan Hendrik Farr" <kernel@jfarr.cc>, "Christian
+ Brauner" <brauner@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>,
+ "Brian Gerst" <brgerst@gmail.com>, "Masahiro Yamada"
+ <masahiroy@kernel.org>, "Willem de Bruijn" <willemb@google.com>, "Jason
+ Xing" <kerneljasonxing@gmail.com>, "Paul Chaignon"
+ <paul.chaignon@gmail.com>, "Lance Yang" <lance.yang@linux.dev>, "Jiayuan
+ Chen" <jiayuan.chen@linux.dev>, "Emil Tsalapatis" <emil@etsalapatis.com>,
+ "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Barry Song"
+ <baohua@kernel.org>, "Geliang Tang" <geliang@kernel.org>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-mm@kvack.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, "Hui Zhu" <zhuhui@kylinos.cn>
+In-Reply-To: <769e80ffa618327ac03c13c4657e7229@kernel.org>
+References: <cover.1793086858.git.zhuhui@kylinos.cn>
+ <769e80ffa618327ac03c13c4657e7229@kernel.org>
 
-On Wed, 28 Oct 2026 at 06:06, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Oct 27, 2026 at 05:44 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> > Code that unwinds due to panics or exceptions doesn't often control
-> > where they can be invoked, and reusing the same code in callbacks would
-> > lead to verifier rejections since unwinding across such synchronous
-> > callbacks is not supported.
->
-> I feel that you're too attached to bpf_throw concept.
-> The code was quite intrusive earlier and it is still today.
-> I told my agents that bpf_throw is a dead end. sorry.
-> I really think it's not a kernel job to solve it.
+"Tejun Heo" <tj@kernel.org mailto:tj@kernel.org?to=3D%22Tejun%20Heo%22%20=
+%3Ctj%40kernel.org%3E > :
 
-Huh? This set is about making unwind_goto / unwind_exit work.
+
+>=20
+>=20Hello, Hui.
+>=20
+>=20On Tue, Oct 27, 2026 at 05:11:58PM +0800, Hui Zhu wrote:
+>=20
+>=20>=20
+>=20> Why it matters: memory.low and memory.min protect a cgroup by a fix=
+ed
+> >  threshold and have no idea whether it is using the memory. A
+> >  high-priority cgroup that holds a large working set and then goes id=
+le
+> >  keeps suppressing reclaim on its siblings, and that memory is wasted=
+.
+> >  A policy program sees the real activity - page faults, charges - and
+> >  can grant or withdraw protection as it changes.
+> >=20
+>=20This doesn't justify the changes. Why can't the same be achieved by
+> adjusting memory.low and memory.min from userspace? The arguments made
+> so far are neither convincing nor proven.
+>=20
+>=20Thanks.
+>=20
+>=20--
+> tejun
+>
+
+Hi Tejun,
+
+Thanks for taking a look.
+
+You are right about that paragraph.  It describes what dynamic
+protection does rather than saying why it has to happen in the kernel,
+and at the timescale I described a userspace agent writing memory.low
+would keep up fine.  I will drop it.
+
+Let me try to say what I was reaching for, from the code rather than
+from a benchmark - a comparison between BPF and a userspace agent would
+say at least as much about how well I wrote the agent as about the
+interface, so I am not sure it would settle much.
+
+memory.low is a request, and what reclaim honors is elow, which
+page_counter_calculate_protection() derives on each pass from the
+parent's elow, the siblings' requests and the tree's usage.  At the
+first level below the reclaim root that comes out equal to what was
+written, and there the knob is enough.  Deeper down it is capped by the
+parent's budget and shared out between siblings according to what they
+claimed and what they use, so what a cgroup wrote and what it ends up
+with can differ.  As far as I can tell none of that is visible from
+userspace: memory.low reads back the declared value, and I could not
+find anything that exports elow.
+
+Exporting elow would not help, because elow is not a property of the
+cgroup alone.  It depends on the reclaim root as well, which is why
+page_counter_calculate_protection() warns that it is not stateless and
+is only valid as part of a top-down tree iteration, and why
+mem_cgroup_protection() carries the example of a concurrent global and
+targeted reclaim driving a child's elow to zero.  A file would show
+whichever value the last reclaim happened to leave there.
+
+So the derived value seems to be usable only where it is derived,
+inside the check, and that is where low_policy() sits: it is evaluated
+per pass and is handed that pass's own inputs - the memcg, the reclaim
+target, the elow just computed, the usage - instead of being state that
+is read at the check.
+
+The other half is what a policy can key on.  memory.low has one
+dimension, bytes.  A policy program is not limited to the ctx it is
+handed; it can also use state that other BPF programs keep, so
+protection can be a function of activity rather than of size - a
+workingset refault rate, for instance.  [1] reads those counters from
+BPF and acts on them; it drives reclaim rather than answering a
+protection hook, but the signal it reads is the one such a policy would
+want.  The limit is on the output rather than the input: the hook
+returns a boolean, so it cannot grant anything memory.low cannot.
+
+I would be interested in how you see this - in particular whether the
+nested case is worth supporting at all, and if it is, whether this is
+the right shape for it.  I am happy to rework the patches, and to add a
+demonstration of one concrete policy if that would make it easier to
+judge.
+
+[1] https://github.com/teawater/memcg-async-reclaim/tree/memcg_ext_plus
+
+Thanks,
+Hui
