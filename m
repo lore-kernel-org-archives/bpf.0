@@ -1,54 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793204062;
-	b=0iq6wo1ekSqX1AOhWMKG7PhG0OhMv0yLBJQaReh5oMImSku/hz1JyjLzENb6LrfRUgEo
-	 67Ce0Wxx/ZZf1eA7uufa9ifBVf6NHAkdAGWM43p9vjcou6YTm3amb2TMVTKK0gFwbG87b
-	 oYifjkSu9Pc7OxnEgwpVSu3bkXWwTfUicGeW3N119ptPL+J3Pxd+dKDTmNargtvCLrF2e
-	 dC0fIbuSDczvX9EytPsudgxMXMh4k8ss59LAQi59BEe8/n1Zd5F3tVzDyU9a5lZ2T2Ry0
-	 ldnd4yxkkg0lpoOx3pdka8imFbpQOZsGhIPXU/WS149v2YJBy/2c41u77tl0e2qYZ1A==
+	t=1793204456;
+	b=vnOxCkgi8/QiPyIefzAd4lPbRSr7N2ROu3g1RUIM40PH7A9PEqDE5xQkoxhcxt2C9uvm
+	 czED4cXzViq/6H3rIt0xxpMwIGDObKQybTOPsP8gLWzTqY2qRbmXlWxvCbp/fqK+Fr7F2
+	 fsrDeAr0zS38PFfsHpsVGAxKXwsq3L8wW2kxI4EfsxX5Mp0ihVNloGS94t+/mPKy6cy8s
+	 +zVLKkwv+xjdU4GOssJ0RTyYPP8C0Papvm55ET6Cr0rBTsqddDN+Ve8gZrZ762I+dnr0T
+	 7B85F0XKM/Civu1CyTF1nDQ0GHrsSw8jpBQpEaL4S4K+uN5XUytiHl4TydhuIQWtDfA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793204062;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:References:From:Content-Language:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=jZHvoOT2EeUjl0qBRVikSa4VHep/t0Mtn1K16RSX0t4=;
-	b=OEUfrXtMUNzcgmrEGo9c9EzP1D9ZuaPQd7GCOIF7t/WtmSr/CvbO/p2SQoYl9BQul57d
-	 A5lFl1LmhtkbBsutC1Zz9xwdmz2KxdOEL0zcVnrq3Ti7DQt5pJlUpm1M88DqsYmBIXzNa
-	 d6ZrWsbYxW9P+Tm75kQvspxPueSgYDBmQzlQiHRmKL/AuKKs2RgS9fy3UM/DLDaW2dX+t
-	 2/fKCfWPJWgmMrX9XV/Pn02hLBRIO5Vmas5tomLsoYDF+DQhsagFoM7bG14O3ozWke5vK
-	 lKH5b3DzGI8FJeLZ+dO7oxQG6rWxqR9CE3XocGvwoZkSr//BKH8Xqp0plT+DBco9yeg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793204456;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=Zhr/tHkDJQkZfq7AsFcRymMgMcTsHiAv1mGITq5gBXc=;
+	b=HLHYdX+Di8214IoiPNHJyyg/uAHMx9KzzZxLiSnhKfnfSTn2tU8Mpy7ezIcT32h8GRSo
+	 Xa6dGZscCHq0FyftX6sKATdKpUXte+GBPdu109gpL+VKjspdKqMp5uGQO9MOPXLeczTmq
+	 PJZXU5G8HikSSwZCdicVeYpUZhRcfdXBgNPnENRpqN5WwEJrC0Nq7+3fJ2bFGjv/2UbuV
+	 Iqp9oCmfEkH6GPsNoqtTsqwzdos1mhQjdQ8sOmGqMIYZTTAd8I2eBXLr44r43WlRqxqnR
+	 Gi0e3b5BMOgztZSlHGbcQ1ZTQX4b1gudne3yTtE4vPvcK+/kBuoXKrA3eXEQ0PUps3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JU4E2+wG;
-	arc=none smtp.remote-ip=91.218.175.185
-Received: from mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jTkouKGt;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DC1606A31D
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 16:14:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 94DC1606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B74606A327;
+	Wed, 28 Oct 2026 16:20:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JU4E2+wG
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=KjiL5I9h8+VMhUetGyLFAB5E576LUSfxA1guJ+4SAJQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793204059; v=1; x=1793808859;
- b=JU4E2+wGxuahI8xwCHVkilV0rLBydbzkq5oI1GHRnFC2qcfEAKnGijlUVPt9Cfh0pIObroUO
- s1t+vfD4rHzPpfrcV9O384txe25dtP+IvaATbdTCYEgYUeHP4A4A/ebGhYj6KHcRUmGAg8V2w/x
- BuEzoWDbpLTUMLve9Sg+fVNM=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d491d59290f9609b;
-	Wed, 28 Oct 2026 16:14:19 +0000
-X-Mizu-Trace-ID: d491d59290f9609b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <40dde029-432a-4794-a491-8f1c9d5a2b4e@linux.dev>
-Date: Wed, 28 Oct 2026 09:14:16 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jTkouKGt
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12ECF1F01825;
+	Wed, 28 Oct 2026 16:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793204455;
+	bh=Zhr/tHkDJQkZfq7AsFcRymMgMcTsHiAv1mGITq5gBXc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=jTkouKGtMzl6QkKX8lYJFy+YQW6SzYXd3a0urKEJCz5BZgT7ypkH8Gtn55iMQPdGu
+	 c26sJeUrg/sMeGW4QVPfmIuVuatyaDB1/ww5thGvSnzrkeJuVy2cOHkoC6cvgT4g5W
+	 p24jUZE86JKTN5+bODmcA355kTJLTQnYMpV3Ftin4Deh5DtjL+0M57ZFovYFhJtDt7
+	 7k1IQSulRkBq6jHvtB9eWcCFFcGxJBgOccft/D80T8J/dkJ78U3pATHORyd22I+F5F
+	 hyuS+eMajnA5tyGMg2ac3UudVVDRoQ6NBv6Q38s5WbFEi1/5K1raVZaQydZfsHF4Hi
+	 Zy72ms1PGhk9g==
+Message-ID: <sashiko-outbox-188158@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC 5/8] vhost/vsock: negotiate datagram support with
+ guests
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sergio Lopez" <slp@redhat.com>
+Cc: virtualization@lists.linux.dev, kvm@vger.kernel.org, bpf@vger.kernel.org, linux-hyperv@vger.kernel.org, "Michael
+ S. Tsirkin" <mst@redhat.com>, "Eugenio Perez" <eperezma@redhat.com>
+In-Reply-To: <20261028-vsock-dgram-support-v1-5-e457cf7cee78@sinrega.org>
+References: <20261028-vsock-dgram-support-v1-0-e457cf7cee78@sinrega.org>
+ <20261028-vsock-dgram-support-v1-5-e457cf7cee78@sinrega.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 28 Oct 2026 16:20:54 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,94 +61,118 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v1 3/7] selftests/bpf: report SKIP for arena
- tests a compiler cannot build
-To: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
-References: <20261028000411.4010967-4-vineet.gupta@linux.dev>
- <sashiko-outbox-187262@kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <sashiko-outbox-187262@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 10/27/26 5:13 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] selftests/bpf: missing __skip_without_arena fallback in jit_insns_arena.c
-> --
->
-> commit f37e4c1aa3e5f2decfc920dfa156617c4a66522b
-> Author: Vineet Gupta <vineet.gupta@linux.dev>
->
-> selftests/bpf: report SKIP for arena tests a compiler cannot build
->
-> This commit adds a __skip_without_arena macro and #else fallback programs
-> to BPF selftest files guarded by __BPF_FEATURE_ADDR_SPACE_CAST so that
-> test_progs reports those subtests as skipped when built with a compiler
-> that lacks arena address space support.
->
->> diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
->> index 1b264480e128f..ed1ed1b5bd097 100644
->> --- a/tools/testing/selftests/bpf/progs/bpf_misc.h
->> +++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
->> @@ -156,6 +160,16 @@
->>   #define __success		__test_tag("test_expect_success")
->>   #define __description(desc)	__test_tag("test_description=" desc)
->>   #define __skip(reason)		__test_tag("test_skip=" reason)
->> +
->> +/*
->> + * Without compiler arena support, report the test as SKIP rather than let it
->> + * pass vacuously or fail to load.
->> + */
->> +#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
->> +#define __skip_without_arena
->> +#else
->> +#define __skip_without_arena	__skip("compiler does not support the arena address space")
->> +#endif
-> [Severity: Medium]
-> Should tools/testing/selftests/bpf/progs/jit_insns_arena.c also receive an
-> #else fallback with a dummy arena_unsupported() program marked
-> __skip_without_arena?
->
-> In tools/testing/selftests/bpf/progs/jit_insns_arena.c, both BPF programs
-> in the file (arena_zero_off() and cast_to_user()) are inside a
-> __BPF_FEATURE_ADDR_SPACE_CAST guard without an #else branch:
->
-> tools/testing/selftests/bpf/progs/jit_insns_arena.c:
->      #if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
->      SEC("syscall")
->      __success __retval(0)
->      int arena_zero_off(void *ctx)
->      {
->          ...
->      }
->
->      SEC("syscall")
->      __success __retval(0)
->      int cast_to_user(void *ctx)
->      {
->          ...
->      }
->      #endif
->
->      char _license[] SEC("license") = "GPL";
->
-> When built with a compiler that does not define
-> __BPF_FEATURE_ADDR_SPACE_CAST, such as stock bpf-gcc, jit_insns_arena.c
-> compiles to an object with zero BPF programs. When test_jit_insns() in
-> tools/testing/selftests/bpf/prog_tests/jit_insns.c runs:
->
->      test_jit_insns() -> RUN_TESTS(jit_insns_arena) -> test_loader__run_subtests()
->
-> it silently executes zero subtests for jit_insns_arena instead of reporting
-> a skipped subtest.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] vhost/vsock: missing dgram_allow check in vhost_vsock_handle_tx_=
+kick()
+--
 
-Indeed this was a miss because my prev testing baseline (before rebase) 
-didn't have it.
-Added in v2.
+commit 635912e90dc603f9b7384d44cf174e18056f799d
+Author: Sergio Lopez <slp@redhat.com>
 
-Thx,
--Vineet
+vhost/vsock: negotiate datagram support with guests
 
+This commit exposes VIRTIO_VSOCK_F_DGRAM in the vhost feature bitmap and
+tracks whether datagram support was negotiated per guest via
+vsock->dgram_allow. It also wires up vhost_transport_dgram_allow() to check
+the negotiated feature on the target guest for outbound datagrams.
+
+> diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> index 0cb87971d7491..eb2fbdb721aa9 100644
+> --- a/drivers/vhost/vsock.c
+> +++ b/drivers/vhost/vsock.c
+
+[ ... ]
+
+> @@ -516,6 +520,24 @@ static bool vhost_transport_seqpacket_allow(struct v=
+sock_sock *vsk,
+>  	return seqpacket_allow;
+>  }
+> =20
+> +static bool vhost_transport_dgram_allow(struct vsock_sock *vsk,
+> +					u32 cid, u32 port)
+> +{
+> +	struct net *net =3D sock_net(sk_vsock(vsk));
+> +	struct vhost_vsock *vsock;
+> +	bool dgram_allow =3D false;
+> +
+> +	rcu_read_lock();
+> +	vsock =3D vhost_vsock_get(cid, net);
+> +
+> +	if (vsock)
+> +		dgram_allow =3D vsock->dgram_allow;
+> +
+> +	rcu_read_unlock();
+> +
+> +	return dgram_allow;
+> +}
+> +
+>  static void vhost_vsock_handle_tx_kick(struct vhost_work *work)
+>  {
+>  	struct vhost_virtqueue *vq =3D container_of(work, struct vhost_virtqueu=
+e,
+
+[Severity: Medium]
+Can a guest that has not negotiated VIRTIO_VSOCK_F_DGRAM still send
+VIRTIO_VSOCK_TYPE_DGRAM packets to unconnected bound SOCK_DGRAM sockets on
+the host?
+
+vhost_transport_dgram_allow() checks vsock->dgram_allow on outbound host
+connect() and sendmsg() paths, but on the guest-to-host path in
+drivers/vhost/vsock.c:vhost_vsock_handle_tx_kick(), incoming packets are
+passed to virtio_transport_recv_pkt() without checking vsock->dgram_allow:
+
+drivers/vhost/vsock.c:vhost_vsock_handle_tx_kick() {
+	...
+		/* Only accept correctly addressed packets */
+		if (le64_to_cpu(hdr->src_cid) =3D=3D vsock->guest_cid &&
+		    le64_to_cpu(hdr->dst_cid) =3D=3D
+		    vhost_transport_get_local_cid())
+			virtio_transport_recv_pkt(&vhost_transport, skb,
+						  vsock->net);
+		else
+			kfree_skb(skb);
+	...
+}
+
+Unlike VIRTIO_VSOCK_TYPE_SEQPACKET, where inbound connection requests go
+through virtio_transport_recv_listen() -> vsock_assign_transport() ->
+vhost_transport_seqpacket_allow(), inbound VIRTIO_VSOCK_TYPE_DGRAM packets
+in net/vmw_vsock/virtio_transport_common.c:virtio_transport_recv_pkt() are
+queued directly onto bound unconnected SOCK_DGRAM sockets without calling
+dgram_allow():
+
+net/vmw_vsock/virtio_transport_common.c:virtio_transport_recv_pkt() {
+	...
+	if (le16_to_cpu(hdr->type) =3D=3D VIRTIO_VSOCK_TYPE_DGRAM) {
+		if (le16_to_cpu(hdr->op) !=3D VIRTIO_VSOCK_OP_RW)
+			goto free_pkt;
+
+		sk =3D vsock_find_bound_socket_net(&dst, net);
+		...
+		if (sock_flag(sk, SOCK_DEAD) ||
+		    vsk->transport !=3D &t->transport ||
+		    (sk->sk_socket->state !=3D SS_UNCONNECTED &&
+		     !vsock_check_source(vsk, &t->transport, &src))) {
+			release_sock(sk);
+			sock_put(sk);
+			goto free_pkt;
+		}
+
+		if (sock_queue_rcv_skb(sk, skb))
+			kfree_skb(skb);
+	...
+}
+
+Even with the later virtio_transport_dgram_source_allow() check, unconnected
+bound SOCK_DGRAM sockets return true before consulting dgram_allow().
+
+Should vhost_vsock_handle_tx_kick() drop VIRTIO_VSOCK_TYPE_DGRAM packets
+when !vsock->dgram_allow, or should virtio_transport_recv_pkt() validate
+dgram_allow() for incoming datagrams regardless of whether the receiving
+socket is connected?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261028-vsock-dgra=
+m-support-v1-0-e457cf7cee78@sinrega.org?part=3D5
