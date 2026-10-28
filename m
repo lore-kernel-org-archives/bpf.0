@@ -1,95 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793214085;
-	b=jsHH1bBDRMLqh2JXDF1SBgIkmDNrPHJm8i/gbhqGSjuEXfIBYc8uLECV5nNHHQPGo2JJ
-	 mNy0AZQAlaQhW3mRZp1RFB07SChfIWiPjjk7nAelAYjz5gIKV29Gpwlg6yj/LpidIQ4xy
-	 fMr8jjnynBaU/iOwqbDrepYsheUyfJJOmx1CHFo8D1sVJ9+j2FtehvcWAX5IbA3E77le+
-	 jCs1keBUOr/ssOyxWy5qtecyLFeYKBjZDbtm3KZ/fr+ua133gRn8CRVhfFw18gj0TpECj
-	 IatKVV7bEA3B2NqXIb9MUT3025BtdoXG6Buxy6Ai9cjLGRRUspKvMVfSLR8PvPfDiOA==
+	t=1793214183;
+	b=VizbJ2t4ZLQkoHwKG5cufR6wRJzXvsBvIywbKLSzv4gioLVYSNdq3PdeoX1Jjhgi55JC
+	 bqQIQcH9jA4p0A/ivjC4g3upG0QMmPYxMggnm8WRUAPeLTIo9+Qxwp9RjrmIoKfWMwcft
+	 4e4RBQLioZ1e3fxdep++6WT8rkS6PVgHwcG/roc/SRAN4kK1+jx5i7bMgXlv6HynVWxB+
+	 qaTkW1Xy4p22Raj8/ZpLXCBrAXk+O4KPv+5ajVkx0HX94caPxNrXXJVJmyfv/fPyMFlpK
+	 An5b3qtYCnUKo3v7WiXFOyH8kq1sVT1jInh1jpUopJ96NznmDhPedziA+2j6INXfIpw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793214085;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793214183;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=S9EurIifpUwJy2G+nM4BNN6Q+ATRJxxLHOwW+90amgg=;
-	b=XRmFhPpClyfZNoe2itr4c7lIMemhQhA6pdxmU14ODGPNWKFHxAo+obMa/B0GpdavZwEv
-	 zziI4UQLtXeiRAuutpFh4pHCC6CphMYFaft5/FQIGjbQ9d0RVOe9Qkm/ymuuKPSkXtet6
-	 FrVMK1CGaY9jd2SUHsSXyyprHWJSEb2+HvUb1BW3itINQJGMMNMbkBVV2mKfc/s/sShx1
-	 d85Eup0cTWR/TI0Ktp7edtisGXIfAi5rsVd7jHSRIvnq8XoLR6NWrj2W1VKjKYypmoJxv
-	 hySzI2K/cKUWx2IQtMtXR6uNEviVhXuFOsbkSqgLIc344z6HB1KUpKiuHLwuHSDDgXA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=ul631NrDXm8+b/gieJT7IgLimLORIYpLdIRbSMQpXno=;
+	b=wl6y96h9jeERm+67DeMtLCOOKtJOu+R/FtqYZTKd/0dcGCqODe3sDuedr1XJ+zXbi/0m
+	 bmdK6iXSTh4zomR3v/dFEvjHHSDcUqrZFP7czQfruPxb42pNHH2jmKiMIBA88F6JuUUf5
+	 tclbWyLC7LLT9QIt6qv3BGLjFJ/DATYLkfCzCaBDWw8qk1eFnOnLP9WEDTN6bEY9/YaJu
+	 tHb/b5of3+7QNHEryO2LO1ObKi2feHEbYvhs4R8dRf364E5tISr5EpJxryNsc/WrDLmAb
+	 rQPJwqfEbKuq+PdotKYjjd7Lx6+CrQIsWVsR+DK633i0aa4HnPJ/6vEmnKC4de/wfXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tw6CkUOs;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="P6JZT88/";
+	arc=none smtp.remote-ip=209.85.128.180
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81AF0606A322
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 19:01:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 81AF0606A322
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC86606A320
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 19:03:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0BC86606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tw6CkUOs
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cd61a2dfd7aso499100a12.1
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 12:01:25 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=P6JZT88/
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-8ab395abf79so12666937b3.0
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 12:03:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793214085; x=1793818885; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=S9EurIifpUwJy2G+nM4BNN6Q+ATRJxxLHOwW+90amgg=;
-        b=tw6CkUOsTtCUEVI87JYtosACwojzTkmSCH+5Sm1+ktP/Wh/IvcBqsj4zv/7rsnBdFB
-         Ep1+dBmaHAD1boz0GDehMz/xwhbAbzvn2z1NK/Bhy7Uc/7VXYWwVB0FlESvDf8ja/dMs
-         OEZiBwhqoGBnLRT4EphV6umYTl1j/dnH8DGqE4c69hIu8f7rbQGScqgoYi/rZGUy5Aot
-         7Sq/vRTu2mGNDjfWmV1NrMQTHYN7yHPG8JOD3TgLU4c9u9zGzAv8yQe3ZPc1t3puI6Xg
-         fN/Mi7kzOblTTo+4EK5ix4YY3KZ9egdAxhDHIGgYVZGjURwhUPIZXemQpFl5QFnBgU3E
-         /zEw==
+        d=gmail.com; s=20260707; t=1793214182; x=1793818982; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ul631NrDXm8+b/gieJT7IgLimLORIYpLdIRbSMQpXno=;
+        b=P6JZT88/SvnGvQPtUYU6UYlfLX0q019sjrIEFKXRwFbsQw+KAiuKQdU5r1bbUN97rD
+         tl395zpBurBx4wfQ33p/4MfqlxqcFJ4Ue2pozGmZzM6cGt/UCCedAk5ij99spcO2lEsv
+         D4eahRFDjtT0mrgCoLhG+wxi6SYqSVkGqxNG909A+rcnIXGDKnr2IOwnu9NKq0nYVR9V
+         UWnWJWVxekfhehQel2JYoUPYtJKHmd6YpQLjKu9H6wwr+5tu5e5DNLaGHCcKy40W4+Wh
+         lKDPsayxaWM5R03wB+At9/SXueH9yPRNS66DJDeAFKTRQr0Bv1+zzH3kSQLc0IjygZHA
+         g4gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793214085; x=1793818885;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1793214182; x=1793818982;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=S9EurIifpUwJy2G+nM4BNN6Q+ATRJxxLHOwW+90amgg=;
-        b=2DSZR72P8tDdPpISACYfLi7YUd+aSEusQY2pTio9OfJM/tTj2F0+LO2ym0Yy+p6+G+
-         WECozd4PiIxwy3mz+U0U6qNF/m3SG++afr47teLDbUnjMrGkn18SV8C/tPukT2umpxOz
-         jnbDkcqN+0uOTK2hCTty7PXgMdizBv6dA0cDUcoyCxYmlWWDFXpIGUez3L15bH8HfS1f
-         vMrE06N7Gj8YDmGIVyadgt5T6fwVlZIEUb+K3/J0LD0BhPlUpj4L+DkvieIyzSrRWHlW
-         qRXPv14ACND9s4IP+0hAh6lp1lE7lrbPegBlCUq+P6SPqYr2Mj7cgKrfzMVKHbvS7MK6
-         FXFw==
-X-Gm-Message-State: AFq9FYKNZBA20dRH6ZZyDnqs1IRwP7mgxGUl7CaB7uITWw1UI3ep7iUr
-	YECoiNS8e71E87oBar9B8yIp6bSIjqKwN86hClMWZBDh6UL/v5bXgV+r
-X-Gm-Gg: AYBFou0kAvtfcvEHZeNKtE3LGYkxv4Q9oDgGc3a1u68+rYg+7ElVfaclvNKOrkImRuA
-	BMEw8tO4r6y2HZTTaZ408/b6KiODWj2IylaeA0He97z7SzYblv0TUQFPx12oZgofwxT8ErMJyFz
-	orms7/d+/U/HBuzrQuLQentGj0YDCm9g+0/lohrvAb0+aFrIJ5/lmp5+2XvC7ZhBICdT4Flaj3B
-	tZOtVWP5LiwOpyncjL7b4lY8P2K5p8HAxmXFN+diF3Pj7qzc1cW09KLJuDEzE42ewdBRf/S2wAZ
-	2WnCNfFndNaI23Bu0kmJcdN6w79xmDJYeVmA5DZyO5rPyiM7f8cSH84J4PzLfYXk7ngyI28Zq6k
-	ahKvtqXyhhDQYAy/VZXgIwW73+KOoFLgXHOGqjrCiVPH8s4xyGnGl6JBbwHPTAgaHfCSXsoQbcx
-	WbP6gviB7NfoL9QjhNJqQUoV9JBJNB0+KSJcC2jqYzYB1Y6VBcxkFhecWwz09/ScttymnjAU2pO
-	arXgB4cejXIQQ15Bv5Dy5oK6rzwdi7qAvHw6pUu/RpeGaJ3dNXQYavy4DBDPZdIeTIvwtvsN/TB
-	8kcaFbeDcfEeIqXuante4UBnyd712FOSEq1eJn2sDJIKkiYCwCOJrQ7dClkNqPAAa/BSbrKQWiz
-	7MjLDX+4LgB+8oyXsmOXD5xwzYIrlloFiuQ==
-X-Received: by 2002:a17:90b:4ccc:b0:3a4:9a7a:360 with SMTP id 98e67ed59e1d1-3ae58100a06mr2555079a91.29.1793214084640;
-        Wed, 28 Oct 2026 12:01:24 -0700 (PDT)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae5797f6aasm2275204a91.2.2026.10.28.12.01.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2026 12:01:23 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 28 Oct 2026 19:01:23 +0000
-Message-Id: <DMGPC9G5ZT9O.2NN1B6B3K7STH@gmail.com>
-Cc: <bpf@vger.kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <eddyz87@gmail.com>
-Subject: Re: [PATCH bpf 26/81] bpf: Support BPF_REG_ARENA_SP in the verifier
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-In-Reply-To: <CAP01T75pOz8Nj_YG13quoVeniq6908sY5og4RadfM9-tz5j7PQ@mail.gmail.com>
-References: <20261026025943.404450-1-alexei.starovoitov@gmail.com> <20261026025943.404450-27-alexei.starovoitov@gmail.com> <CAP01T76dRouzrPOZS8AQ4TMnJ0GzyRm8cPJ8RYUTu01bQgf2Xw@mail.gmail.com> <DMF694XH2TJO.P59A31VE6GWP@gmail.com> <CAP01T75HAHkP4bzdGzeazN4n_FNd5w1Pckd3GBN68V0n1PNe_w@mail.gmail.com> <DMFUDQAC6N4S.1CNBGYKG58DMR@gmail.com> <CAP01T74C4bBZntDNLrCxe02prWiF3pnUfYMFTUU6-44O0zbnPA@mail.gmail.com> <DMG76G7GIPN7.HQJKZIE5J8R6@gmail.com> <CAP01T75pOz8Nj_YG13quoVeniq6908sY5og4RadfM9-tz5j7PQ@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
+        bh=ul631NrDXm8+b/gieJT7IgLimLORIYpLdIRbSMQpXno=;
+        b=rHDKmINnCE2jEETrLp838KFui2mnAb4iwMlYOCsKSp9YsNjianmfSqApXmpOhooSZE
+         8e3pl34GB2tY9xS21x2C/HHVvUCkYZtF9UqgDJDkvDHngY0e+GHQUYYcIHNBjr2P36Pv
+         wSXxL/FAAWxuV9vwmGdx6je8Zltv8K7/i46VMClfm7g/0dWWz/gBHvogwV/GNtAesp81
+         U6GBI5sCCk11Ie90umUxJhKevKKazLiH/V+sQSjh0TEvj1VTONPGJj17sX6rxRpQPWa1
+         RoR1Q3zi1mY5MuIiVrxTvL0Wq0E2p2xAqIUSKq3mFMCAxAYBokBHujb4HBbI819DxRCf
+         TpeQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxwP3HLAtfyV+746JiOS0CrmBE0njvcKShUL0hUBUtLIeVot3cn5SN+LZ1kiKippU2JPMk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKkRxuBGJMejY/7cBT1fIbcn74DnmM5wwUwxb4TN98I1xcqka0Z
+	IrDWs7P2PQeeUMWM0b7KRwuko7rLGOdtELBYjqlzQqBuT5WduNB7Rlcb
+X-Gm-Gg: AYBFou1lFIVxqjAA4FqIGFwo0i3yQBKeAM3W/F5ZUnW6J8Q8XXmn2OoBGzVA2j19gn4
+	+ZUJ/66ngXwXzssmzd3PjhjSkBhKOFTmcekdux6s4Bmm7BGO2tXyO0jvN7cmPJQ1ebl3QcW/nCg
+	A8Z4447v6W0dHiT8P6h8TbsiEpfhPdDqSxgmUb2vvSiRlhSjTV0WJ6InMvr4ozPjTj85AckQM36
+	+jwaLdWuceM9hjIVJEAK2mwY4ETicV70LeLn5VwrfqZk28NP9uLTIQRnNRHcpyBgcqByBt6FeV4
+	x16vgUDUlKNo6rQq0bfJFjK9EJTxBwe3AbVYM0D2qKieebitaxdN0K2cUUU0eoQPNS58W6kazRu
+	9g2kO9fHNDBeWLBJcREWYs0zD5kxyMdOeJNHsq7wXkVGx6pGgiAJPdt/8cV6NJj9rbUzEjbhFQ9
+	gpc4k612qze4lnNgsBeqGHNwzCCKlWW5YUHVQaABDfrB7sQ+AOHh6TaFp1chqNTo0hF2G+pseFY
+	lPaMXZfOUgz4PM7QBQUJRbeLEKUcZ8tpEYZ8P5Hz5J4n9pTUcdYQmMuHTayKsp0c3BwxAeICmkw
+	1wEXNnX8n7as5zYUCqllL4Qa3cmpKmuEBH7XBSm8Zr+jls6tu8kAzkuomjvUPBCYieU50XDbWsn
+	09BinPowDqn+ODvmXt1GWOUNM3k5ioiY4dqVO6H+eIPWYZeHLsKnvFQ7TMwLbDixgjLQe
+X-Received: by 2002:a05:690c:34c9:b0:8b0:76e5:ecf0 with SMTP id 00721157ae682-8b1b59e36e3mr25394687b3.4.1793214182076;
+        Wed, 28 Oct 2026 12:03:02 -0700 (PDT)
+Received: from gmail.com (111.46.245.35.bc.googleusercontent.com. [35.245.46.111])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b19e539e34sm33510157b3.9.2026.10.28.12.03.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2026 12:03:01 -0700 (PDT)
+Date: Wed, 28 Oct 2026 15:03:00 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Eric Dumazet <edumazet@kernel.org>, 
+ "David S . Miller" <davem@davemloft.net>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Willem de Bruijn <willemb@google.com>, 
+ Simon Horman <horms@kernel.org>, 
+ netdev@vger.kernel.org, 
+ bpf@vger.kernel.org, 
+ Eric Dumazet <edumazet@kernel.org>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Aaron Conole <aconole@redhat.com>, 
+ Eelco Chaudron <echaudro@redhat.com>, 
+ Ilya Maximets <i.maximets@ovn.org>, 
+ Jamal Hadi Salim <jhs@mojatatu.com>, 
+ Jiri Pirko <jiri@resnulli.us>, 
+ dev@openvswitch.org, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Ren Wei <weir@nebusec.ai>
+Message-ID: <willemdebruijn.kernel.2a72e3d2bb313@gmail.com>
+In-Reply-To: <20261028122703.2093730-4-edumazet@kernel.org>
+References: <20261028122703.2093730-1-edumazet@kernel.org>
+ <20261028122703.2093730-4-edumazet@kernel.org>
+Subject: Re: [PATCH net v2 3/5] net: use eth_type_trans_careful() in
+ __dev_forward_skb2()
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,15 +115,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 28, 2026 at 04:00 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> Sigh. This is not a good response. If you do not want to have a
-> discussion, what is the point of posting patches and asking for
-> feedback?
+Eric Dumazet wrote:
+> A tc egress BPF program can push a tiny link-layer header with
+> bpf_skb_change_head() on an skb whose head is almost empty, then
+> redirect it to an Ethernet device ingress. __bpf_redirect_common()
+> only checks mac_header < network_header, and __dev_forward_skb2()
+> crashes in eth_type_trans():
+> 
+>   tc filter add dev lo egress pref 1 matchall action vlan pop_eth continue
+>   tc filter add dev lo egress pref 2 bpf da obj prog.o
+>   # prog: bpf_skb_change_head(skb, 1, 0);
+>   #       return bpf_redirect(veth1_ifindex, BPF_F_INGRESS);
+>   # AF_PACKET SOCK_RAW on lo: eth / eth / 8192 bytes of payload
+> 
+>   kernel BUG at include/linux/skbuff.h:2839!
+>   RIP: 0010:eth_type_trans (include/linux/etherdevice.h:635 net/ethernet/eth.c:163)
+>   Call Trace:
+>    __dev_forward_skb2 (net/core/dev.c:2507)
+>    dev_forward_skb_nomtu (net/core/dev.c:2546)
+>    __dev_queue_xmit (net/core/dev.c:4738 net/core/dev.c:4998)
+>    packet_sendmsg (net/packet/af_packet.c:3157 net/packet/af_packet.c:3189)
+> 
+> Use eth_type_trans_careful(), and drop the packet if the Ethernet
+> header can not be pulled. This also covers other dev_forward_skb()
+> users (veth, macvlan, ipvlan, netdevsim, l2tp_eth).
+> 
+> Update the empty_skb BPF selftest: at lwt_xmit, BPF_PROG_TEST_RUN
+> strips the Ethernet header, so the "veth ETH_HLEN+1" packet is a 1-byte
+> skb. Redirecting it to veth ingress used to read the Ethernet header
+> past skb->tail and deliver a 1-byte frame; it is now dropped with
+> NET_RX_DROP, as veth_xmit() already does at egress.
+> 
+> Fixes: 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel infrastructure")
+> Signed-off-by: Eric Dumazet <edumazet@kernel.org>
+> Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+> Tested-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
-I do want the discussion. That's why parts 2 and 3 were posted for feedback.
-
-Maybe I missed, but so far I didn't hear an alternative proposal.
-Only worries and concerns and "there must be some way".
-I expored all ways I could think of and listed some of them in prior email.
-If you have a sketch of not a 'stack in arena' approach, I'm all hears.
+Reviewed-by: Willem de Bruijn <willemb@google.com>
