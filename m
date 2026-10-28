@@ -1,50 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.17
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793145901;
-	b=zhgX3e/6VLvD7hglb3PWrdOKC2Fft1McGG6J6A3kCYd94Or2s8IesWy0mayVbrVJSiv9
-	 ZvaAU2r0xIg2EdjEayEFAo0CX4hRmYqDNUocqREDBcGD7PrSqhfNOOUGVIjyZYbp3qev0
-	 z7efg+P/Q2omFx207gCZ90In36dFqmZfZnRvwzVCamMEYew/omntsZSOkFD6WKBMX+ZTg
-	 Q0OHjYsiMcPGzp9z5mHycMgMq1qqH3g44IutVp5mGyxx52J7000QEVGpb5qHV6ylIeiJb
-	 spfCPugozY42M69+grf2JMHLwHyY+lyKfOSqv/5AhB1slUJVXgk7uJQwzPJFEZMmVDg==
+	t=1793145908;
+	b=qi2DxdHmiZCvMAlNKAZC/Hs/VFis+yu/Iyl6xoRCKcrKJPGoGBJU/Kv3ST7/Thfr+VI0
+	 urzVLAwEvw5GevVuU66h+9+nMCZxl7/Gg/KN3Z+m4s6JPMxRqjbpUy+LvDRlN9uyq/Y3g
+	 xlbXXBbsMol8yHBEnWFtb9l3BVZdMaU91oV58r5GYymAJ7PEfgowS3RHVlKGUDF1ALzYA
+	 mw+DYWBLBTCzH+hSYhj9ZQQ2PBB/6VowQqAeZe2hFGPBUQl7Mem6ZnH/aBEPJb4ZLYvy6
+	 bOG1//c1kHGiQFYcG9UAsJdH3LZaU09rMwzUXqQiMsgn2c0Fzi2GxLzrBOExKrioXsw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793145901;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793145908;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=nnZL90A72YzliJVsFi6s6eH/Aa1SRWJrwp+wT9rrDms=;
-	b=rBTzVI7NcIGQsHf5OLvrfYuaqd1k07hjgB9pDNF+rCzXK4ojSTqRSLKNKgjpKa7rud+Z
-	 99UdPO1uWQ8Pi8gZwfrVjWx7W7jN3TyP8bN2dT8Xt/76B+uIa6BgE9llZ4GaoE0fDcGyD
-	 C03bI75sbiybaMDthKq1jncxITqWa3BozlTvfc5MZr0qV23Lf4n5oLCiamvpdjrIunpW6
-	 Tjq/JXpCiq/WVwuhNygJfuPDISJi9UNjwrBUCvDXafWzAADDPEPA5QkuOMLdE3yGCOfTO
-	 gFbtfMHHPCrGZKE5MFuyRRT0gH+tanpzcnr8l1pAQvf7fgBBM2ubu/yBwNHTUmgr8gw==
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=LpfshKx9r3VUKJpK4IAmx+D8pUxvMc3zcV//VOwsUHM=;
+	b=Ey5Tg2NMy8Q/wsabKm+dIh7MRy50it/odlp/P4Pop9a0HlrJu3NzmFpspnNLQNwY25AT
+	 mZfSm4gQMzoD86EuiAxaBmOK82sE3bhj+tbA/erAWKqsRGhSML5lNaJgCNi0DE9Z1o96j
+	 SfHHBw1Ti5b97eysNhUCkXQHEsZPc+oFLD0YcDbuz7xIY+IoWh9d2qrgeOx8C98D73u/w
+	 fMDPCK3gTEgzNUKsvnwD9yNg+KCSbv7hqOqU78bhwvQIdUSVGOLgRrjEMhgX/glZuidbA
+	 EHUyjgPHJ47HhPIANBVqZ5dlq/Oa/MyUOQLxoObxDaEQ9r964Jt7EIL2QvylZTSmJuw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="Rnw9y2/L";
-	arc=none smtp.remote-ip=91.218.175.4
-Received: from mta0.migadu.com (out-4.mta0.migadu.com [91.218.175.4])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FM2Oij51;
+	arc=none smtp.remote-ip=91.218.175.17
+Received: from mta0.migadu.com (out-17.mta0.migadu.com [91.218.175.17])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F91606A324
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 00:04:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05F91606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C9E606A326
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 00:05:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 10C9E606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Rnw9y2/L
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FM2Oij51
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=aPEyoyISxDi/yeqexwsXLjl02S+dFCLV05lgg9mFxD8=;
+DKIM-Signature: a=rsa-sha256; bh=6brww2x3JHuxuisQJDKfBncVXg9MZoFkRgEqMdU4ia4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793145898; v=1; x=1793750698;
- b=Rnw9y2/LSq7Wi6/pF2c8eTGguYcSlZZdHfjTfa+8oJYsu3ZZvltXlaDlyLYJpoLZGa+3y0EQ
- l9bcTMOPBshatVFmo2guMfU3KQTmYBcefXQt3HyThJ8QvuDRARW2Kn2V7TO82B1/tsSG1are0fv
- sDsepL7S1UOZip3koOzSCkY4=
+ t=1793145906; v=1; x=1793750706;
+ b=FM2Oij51PtpIlHi52AM5JiTwrvwrYDH6wiW80itMH7JLjg4PpmDafegqI9XHgeH3BmEfd7BP
+ jdC+/j0uej8dngupoJZeQt4vYzs3Qfm/Beax6y4OMc1fEUG/6eTP5zhEUYtO1sQTAZi/+lLhh1E
+ 5EYwowsIgb6s/LLyCuFyLn7Q=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 53d2ab04e0ac4bf2;
-	Wed, 28 Oct 2026 00:04:58 +0000
-X-Mizu-Trace-ID: 53d2ab04e0ac4bf2
+Received: by smtp.migadu.com with ESMTPS id c17dda34776e8be8;
+	Wed, 28 Oct 2026 00:05:06 +0000
+X-Mizu-Trace-ID: c17dda34776e8be8
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: bpf@vger.kernel.org
@@ -66,9 +66,9 @@ Cc: ast@kernel.org,
 	jose.marchesi@oracle.com,
 	david.faust@oss.qualcomm.com,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v1 5/7] selftests/bpf: don't report arena tests as passing with an empty body
-Date: Tue, 27 Oct 2026 17:04:09 -0700
-Message-ID: <20261028000411.4010967-6-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v1 7/7] selftests/bpf: write the mixed arena/scalar ALU tests in asm
+Date: Tue, 27 Oct 2026 17:04:11 -0700
+Message-ID: <20261028000411.4010967-8-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,407 +79,171 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Some arena tests put the __BPF_FEATURE_ADDR_SPACE_CAST guard inside the
-function rather than around it, so without arena support the program
-still exists, its body is empty, and __success __retval(0) is met by
-doing nothing.  A reader sees
+They fail to build with BPF_GCC:
 
-  #584/1	 verifier_arena/basic_alloc1_nosleep:OK
+  progs/verifier_arena.c:566:5: error: optimization may eliminate reads and/or writes to register variables [-Werror=volatile-register-var]
 
-and concludes arena works.  That is worse than the tests which vanish
-entirely, since nothing hints anything is missing.
+for
 
-The guard was never needed to compile those bodies: without the
-feature __arena is still btf_type_tag("arena"), which every compiler
-accepts.  What it avoided was the load failure that follows from no
-addr_space_cast being emitted — but only for a body that dereferences
-an arena pointer.  The arena kfuncs take one as a plain scalar:
+  volatile register __u64 reg asm("r3");
 
-  static const struct bpf_reg_types arena_types = {
-	  .types = { PTR_TO_ARENA, SCALAR_VALUE }
+GCC means it: with the warning silenced it drops both scalar accesses,
+leaving nothing that uses r3 as a scalar:
 
-so a test that only passes pointers to bpf_arena_{alloc,free,reserve}_pages()
-needs no cast and runs fine.
+  call	7
+  if w0 == 0 goto .L136
+  r9 = arena ll;r3 = 0;r3 = addr_space_cast(r3, 0, 1);
+  .L136:
+  r0 = 0
+  exit
 
-test_loader checks skip_reason before it opens anything, so the body no
-longer has to be empty to stay loadable: drop all 19 in-body guards.
-They do not all need a tag in their place, which is why 19 guards go
-and 7 tags arrive:
+`reg = 1ULL << 32' and `reg += 1' are both gone.  The tests need one
+instruction reached with r3 live as a scalar on one path and as an
+arena pointer on the other; what is left gives the verifier no reason
+to reject anything, so the __failure expectation would not hold.  A
+local register variable is not guaranteed to survive a helper call
+either, which GCC is also entitled to act on.
 
-  6   dereference, so they get __skip_without_arena and report SKIP:
-      basic_alloc1{,_nosleep}, basic_alloc2{,_nosleep}, big_alloc1,
-      access_reserved
-  11  never dereference, so they get no tag and run for real instead
-      of reporting a vacuous OK
-  2   big_alloc3 and big_alloc4, already inside the file's outer
-      whole-program guard, so the in-body one was redundant
+Nothing here needs a compiler to allocate registers, so write the
+whole body in asm like mixed_arena_stack_atomic below, which tests the
+same shape.  Both compilers then emit the same sequence, with the
+branch landing on the shared ALU op:
 
-The 7th tag goes on check_arena_arg_ret(), which has no guard at all
-and is the one verifier_arena subtest that really fails under a stock
-GCC.
+  call 7
+  r6=r0
+  r3=1
+  r3<<=32
+  if w6==0 goto 4          <- lands on r3+=1
+  r9=0 ll
+  r3=0
+  r3 = addr_space_cast(r3, 0, 1)
+  r3+=1                    <- scalar on one path, arena pointer on the other
+  r0=0
+  exit
 
-Measured on bpf-next with a stock bpf-gcc, test_progs before and after:
+Take __load_if_JITed() from the sibling while here.  A program binding
+an arena map is rejected in check_map_prog_compatibility() with "JIT is
+required to use arena" during map resolution, before do_check() can
+reach the shared instruction, so without a JIT these would fail on the
+wrong message rather than skip.
 
-  verifier_arena/basic_alloc1            OK   -> SKIP
-  verifier_arena/basic_alloc1_nosleep    OK   -> SKIP
-  verifier_arena/basic_alloc2            OK   -> SKIP
-  verifier_arena/basic_alloc2_nosleep    OK   -> SKIP
-  verifier_arena_large/big_alloc1        OK   -> SKIP
-  verifier_arena_large/access_reserved   OK   -> SKIP
-  verifier_arena/check_arena_arg_ret     FAIL -> SKIP
-
-the six that dereference stop claiming to pass, and check_arena_arg_ret
-stops failing.  The eleven that do not dereference stay OK, having gone
-from an empty body to actually running.
-
-Removing the guards exposes the arena_base() calls they were hiding.
-The previous patch made that macro opaque to GCC's -Warray-bounds, so
-nothing is needed here beyond the guards going away.
+Not exercised by a stock bpf-gcc, which compiles both tests out with the
+rest of the arena block; the build failure above needs a compiler that
+has arena support.  Under clang the rewrite is not a no-op either: the
+pre-image spilled r3 to the stack and did the shared ALU op on r1
+reloaded from it, so the test was not exercising one register live as
+both a scalar and an arena pointer.
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- .../selftests/bpf/progs/verifier_arena.c      | 31 +++----------------
- .../bpf/progs/verifier_arena_large.c          | 16 ++--------
- 2 files changed, 7 insertions(+), 40 deletions(-)
+ .../selftests/bpf/progs/verifier_arena.c      | 85 ++++++++++---------
+ 1 file changed, 45 insertions(+), 40 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index 3b3410802825..21b66d51c61e 100644
+index 21b66d51c61e..b84d8f1e0b39 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -27,9 +27,9 @@ struct {
- 
- SEC("socket")
- __success __retval(0)
-+__skip_without_arena
- int basic_alloc1_nosleep(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	volatile int __arena *page1, *page2, *no_page;
- 
- 	page1 = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-@@ -52,15 +52,14 @@ int basic_alloc1_nosleep(void *ctx)
- 		return 6;
- 	if (*page2 != 0 && *page2 != 2) /* use-after-free should return 0 or the stored value */
- 		return 7;
--#endif
+@@ -539,53 +539,58 @@ int arena_ptr_add_arena_ptr(void *ctx)
  	return 0;
  }
  
++/*
++ * The r9 load is never read; it is there so libbpf records the arena map
++ * as used, which is what lets the verifier accept addr_space_cast at all.
++ */
  SEC("syscall")
- __success __retval(0)
-+__skip_without_arena
- int basic_alloc1(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	volatile int __arena *page1, *page2, *no_page, *page3;
- 
- 	page1 = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-@@ -91,7 +90,6 @@ int basic_alloc1(void *ctx)
- 		return 9;
- 	if (*page1 != 1)
- 		return 10;
--#endif
- 	return 0;
- }
- 
-@@ -125,9 +123,9 @@ int free_scalar_below_arena(void *ctx)
- 
- SEC("socket")
- __success __retval(0)
-+__skip_without_arena
- int basic_alloc2_nosleep(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	volatile char __arena *page1, *page2, *page3, *page4;
- 
- 	page1 = bpf_arena_alloc_pages(&arena, NULL, 2, NUMA_NO_NODE, 0);
-@@ -157,15 +155,14 @@ int basic_alloc2_nosleep(void *ctx)
- 		return 7;
- 	if (*page4 != 0)
- 		return 8;
--#endif
- 	return 0;
- }
- 
- SEC("syscall")
- __success __retval(0)
-+__skip_without_arena
- int basic_alloc2(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	volatile char __arena *page1, *page2, *page3, *page4;
- 
- 	page1 = bpf_arena_alloc_pages(&arena, NULL, 2, NUMA_NO_NODE, 0);
-@@ -195,7 +192,6 @@ int basic_alloc2(void *ctx)
- 		return 7;
- 	if (*page4 != 0)
- 		return 8;
--#endif
- 	return 0;
- }
- 
-@@ -233,7 +229,6 @@ SEC("socket")
- __success __retval(0)
- int basic_reserve1_nosleep(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *page;
- 	int ret;
- 
-@@ -257,7 +252,6 @@ int basic_reserve1_nosleep(void *ctx)
- 	page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
- 	if (page)
- 		return 4;
--#endif
- 	return 0;
- }
- 
-@@ -265,7 +259,6 @@ SEC("syscall")
- __success __retval(0)
- int basic_reserve1(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *page;
- 	int ret;
- 
-@@ -289,7 +282,6 @@ int basic_reserve1(void *ctx)
- 	page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
- 	if (page)
- 		return 4;
--#endif
- 	return 0;
- }
- 
-@@ -297,7 +289,6 @@ SEC("socket")
- __success __retval(0)
- int basic_reserve2_nosleep(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *page;
- 	int ret;
- 
-@@ -309,7 +300,6 @@ int basic_reserve2_nosleep(void *ctx)
- 	page = bpf_arena_alloc_pages(&arena, page, 1, NUMA_NO_NODE, 0);
- 	if ((u64)page)
- 		return 2;
--#endif
- 	return 0;
- }
- 
-@@ -317,7 +307,6 @@ SEC("syscall")
- __success __retval(0)
- int basic_reserve2(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *page;
- 	int ret;
- 
-@@ -329,7 +318,6 @@ int basic_reserve2(void *ctx)
- 	page = bpf_arena_alloc_pages(&arena, page, 1, NUMA_NO_NODE, 0);
- 	if ((u64)page)
- 		return 2;
--#endif
- 	return 0;
- }
- 
-@@ -338,7 +326,6 @@ SEC("socket")
- __success __retval(0)
- int reserve_twice_nosleep(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *page;
- 	int ret;
- 
-@@ -351,7 +338,6 @@ int reserve_twice_nosleep(void *ctx)
- 	ret = bpf_arena_reserve_pages(&arena, page, 1);
- 	if (ret != -EBUSY)
- 		return 2;
--#endif
- 	return 0;
- }
- 
-@@ -359,7 +345,6 @@ SEC("syscall")
- __success __retval(0)
- int reserve_twice(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *page;
- 	int ret;
- 
-@@ -372,7 +357,6 @@ int reserve_twice(void *ctx)
- 	ret = bpf_arena_reserve_pages(&arena, page, 1);
- 	if (ret != -EBUSY)
- 		return 2;
--#endif
- 	return 0;
- }
- 
-@@ -381,7 +365,6 @@ SEC("socket")
- __success __retval(0)
- int reserve_invalid_region_nosleep(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *page;
- 	int ret;
- 
-@@ -403,7 +386,6 @@ int reserve_invalid_region_nosleep(void *ctx)
- 	ret = bpf_arena_reserve_pages(&arena, page, (1ULL << 32) - 1);
- 	if (ret != -EINVAL)
- 		return 4;
--#endif
- 	return 0;
- }
- 
-@@ -411,7 +393,6 @@ SEC("syscall")
- __success __retval(0)
- int reserve_invalid_region(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *page;
- 	int ret;
- 
-@@ -433,7 +414,6 @@ int reserve_invalid_region(void *ctx)
- 	ret = bpf_arena_reserve_pages(&arena, page, (1ULL << 32) - 1);
- 	if (ret != -EINVAL)
- 		return 4;
--#endif
- 	return 0;
- }
- 
-@@ -478,7 +458,6 @@ SEC("syscall")
- __success __retval(0)
- int arena_kfuncs_under_bpf_lock(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *page;
- 	int ret;
- 
-@@ -503,7 +482,6 @@ int arena_kfuncs_under_bpf_lock(void *ctx)
- 	bpf_arena_free_pages(&arena, page, 1);
- 
- 	bpf_spin_unlock(&arena_bpf_test_lock);
--#endif
- 
- 	return 0;
- }
-@@ -765,6 +743,7 @@ u32 __arena volatile *check_arena_arg_quals2(u32 volatile __arena *arg1, u32 __a
- 
- SEC("syscall")
- __success __retval(0)
-+__skip_without_arena
- int check_arena_arg_ret(void *ctx)
- {
- 	u32 __arena *page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_large.c b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-index 34f0a0f88e12..6ef99793cac1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-@@ -22,9 +22,9 @@ struct {
- 
- SEC("syscall")
- __success __retval(0)
-+__skip_without_arena
- int big_alloc1(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	volatile char __arena *page1, *page2, *no_page, *page3;
- 	u64 base;
- 
-@@ -79,16 +79,15 @@ int big_alloc1(void *ctx)
- 		return 13;
- 	if (*(page2 - PAGE_SIZE) != 0)
- 		return 14;
--#endif
- 	return 0;
- }
- 
- /* Try to access a reserved page. Behavior should be identical with accessing unallocated pages. */
- SEC("syscall")
- __success __retval(0)
-+__skip_without_arena
- int access_reserved(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	volatile char __arena *page;
- 	char __arena *base;
- 	const size_t len = 4;
-@@ -118,7 +117,6 @@ int access_reserved(void *ctx)
- 		if (*page)
- 			return 2 + 2 * i + 1;
- 	}
--#endif
- 	return 0;
- }
- 
-@@ -127,7 +125,6 @@ SEC("syscall")
- __success __retval(0)
- int request_partially_reserved(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	volatile char __arena *page;
- 	char __arena *base;
- 	int ret;
-@@ -142,7 +139,6 @@ int request_partially_reserved(void *ctx)
- 	page = bpf_arena_alloc_pages(&arena, base, 5, NUMA_NO_NODE, 0);
- 	if ((u64)page != 0ULL)
- 		return 2;
--#endif
- 	return 0;
- }
- 
-@@ -150,7 +146,6 @@ SEC("syscall")
- __success __retval(0)
- int free_reserved(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *addr;
- 	char __arena *page;
- 	int ret;
-@@ -177,7 +172,6 @@ int free_reserved(void *ctx)
- 	page = bpf_arena_alloc_pages(&arena, addr + __PAGE_SIZE, 2, NUMA_NO_NODE, 0);
- 	if (!page)
- 		return 3;
--#endif
- 	return 0;
- }
- 
-@@ -292,7 +286,6 @@ SEC("socket")
- __success __retval(0)
- int big_alloc3(void *ctx)
- {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *pages;
- 	u64 i;
- 	int err = 0;
-@@ -314,8 +307,6 @@ int big_alloc3(void *ctx)
- 
- 	bpf_arena_free_pages(&arena, pages, LARGE_PAGE_CNT);
- 	return err;
--#endif
+ __failure __msg("same insn cannot be used with and without arena pointer")
+-int mixed_arena_scalar_alu64_scalar_first(void *ctx)
+-{
+-	volatile register __u64 reg asm("r3");
+-	__u32 pick_arena = bpf_get_prandom_u32();
+-
+-	reg = 1ULL << 32;
+-
+-	if (pick_arena) {
+-		asm volatile (
+-			"r9 = %[arena] ll;"
+-			"%[reg] = 0;"
+-			"%[reg] = addr_space_cast(%[reg], 0x0, 0x1);"
+-			: [reg] "=r"(reg)
+-			: __imm_addr(arena)
+-			: "r9"
+-		);
+-	}
+-
+-	reg += 1;
+-
 -	return 0;
++__load_if_JITed()
++__naked void mixed_arena_scalar_alu64_scalar_first(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r6 = r0;					\
++	r3 = 1;						\
++	r3 <<= 32;					\
++	if w6 == 0 goto 1f;				\
++	r9 = %[arena] ll;				\
++	r3 = 0;						\
++	r3 = addr_space_cast(r3, 0, 1);			\
++1:	r3 += 1;					\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm_addr(arena),
++	  __imm(bpf_get_prandom_u32)
++	: __clobber_all);
  }
  
- /* SYSCALL programs are always sleepable. */
-@@ -323,7 +314,6 @@ SEC("syscall")
- __success __retval(0)
- int big_alloc4(void *ctx)
++/*
++ * The r9 load is never read; it is there so libbpf records the arena map
++ * as used, which is what lets the verifier accept addr_space_cast at all.
++ */
+ SEC("syscall")
+ __failure __msg("same insn cannot be used with and without arena pointer")
+-int mixed_arena_scalar_alu64_arena_first(void *ctx)
++__load_if_JITed()
++__naked void mixed_arena_scalar_alu64_arena_first(void)
  {
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	char __arena *pages;
- 	u64 i;
- 	int err = 0;
-@@ -345,8 +335,6 @@ int big_alloc4(void *ctx)
- 
- 	bpf_arena_free_pages(&arena, pages, LARGE_PAGE_CNT);
- 	return err;
--#endif
+-	volatile register __u64 reg asm("r3");
+-	__u32 pick_scalar = bpf_get_prandom_u32();
+-
+-	asm volatile (
+-		"r9 = %[arena] ll;"
+-		"%[reg] = 0;"
+-		"%[reg] = addr_space_cast(%[reg], 0x0, 0x1);"
+-		: [reg] "=r"(reg)
+-		: __imm_addr(arena)
+-		: "r9"
+-	);
+-
+-	if (pick_scalar)
+-		reg = 1ULL << 32;
+-
+-	reg += 1;
+-
 -	return 0;
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r6 = r0;					\
++	r9 = %[arena] ll;				\
++	r3 = 0;						\
++	r3 = addr_space_cast(r3, 0, 1);			\
++	if w6 == 0 goto 1f;				\
++	r3 = 1;						\
++	r3 <<= 32;					\
++1:	r3 += 1;					\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm_addr(arena),
++	  __imm(bpf_get_prandom_u32)
++	: __clobber_all);
  }
- #else
  
+ SEC("syscall")
 -- 
 2.53.0-Meta
 
