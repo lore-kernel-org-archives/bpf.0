@@ -1,98 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.178
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793203175;
-	b=pCsf6au5oqQtZKkoCyjDjRWfdMBMdZiVZp1ODu1rVdclizEfYMPvOFr0Rqm4gmfMV+1X
-	 8pS4bJIxewOiq67WECsAa7xy/rcJTsPhmLqgDZAP/AvPhBXM0RUJEKs/wVnmNVM48m3ve
-	 7rl1z0t0gwnV/idtpANfH/sqjU2+xEWz8UsUAyXS1N/AVO4RDOgT72Cqmk8wFmb5xtE2K
-	 /Lmt1p6vzS8Il3KMoaC4gf/sUMVPJsucKmZQCEZRPZnIMoMWMULyOB+S3qZpm97XfX6n8
-	 SccBO4MjmH8VfmVfwWrYOZa/k/t3VYmXRll09z1k45AkhaCxbgYKmjw07LP6BPUQg1g==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793203175;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793203504;
+	b=gfCw28Pn9SxthdXLZx97KHtcYTSreMD4ZAmKPV9DnO4OB6ShcbVEMGDjXDNlYMAfg/o6
+	 VlRaN9cUbXvcRsRXxOToHVW3+kL73qriHXW3PND61EjfayGTasEsH796OOnY7cdhibHEV
+	 lYKdaXRIz9WoZ546qlLissVYkSE+jGm0StZVw6xfMEao7Id7b8e9i77PC/bvyPcDo0JX2
+	 ZMgC4UuiMF7ofEPd1WFPF0Z/OPVt291AjJ9aTvJ2TPGfHuTQ6i0MLYAq3Mk0L9xUbYiRN
+	 GJC7WkpNMLh6tj846W6LKQj6xk+YpCaxOnTHGjSTU7Jy9TlMwTevLIxMpGCiNnoBnDg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793203504;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Dc4rW2+COMGPVHylYkAJkFpZ/yamBpz19LqtcOFzV+Y=;
-	b=J7nHC9z6AfOgq9KAVrhEzag5FBMzFmFXnpmaUSVDmfaGhZDCXnUgoxxCT7AUvji8pe0D
-	 HGXPNWRHj3+DKu4bk7Sh46SLbu3m3XBdQcq6HWrxoI0BROxygCqOFslDIEQHbEJf2PJKa
-	 vnsC3jFnJmxzA6sPzPpbh1/lYYdihabZeC87LyCTv+HLbXxJ5AU+0dxJKOCrpS/od73Fi
-	 0koKLvF91JLiTsJf8Vi56a1L333Gz7HPJf+ISQ9bHlsj5kHco1sGGGNsJkpOLPrdd2P80
-	 cSg7X51D1sR2hJlqAz4awPyWkP7FEYJQ9twdntleIkcNmsvHuko5Tfxp0GR1J14vPgA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=paul-moore.com;
-	spf=pass smtp.mailfrom=paul-moore.com;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.178
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 X-Received:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=2ZmH3Ff94m552shkLKSjdWayOpfJ56slpt73alq9sl8=;
+	b=YPuBvvnumlOkS2bg/kNZe1M6hSe293x8kQwkZc4+7WxSsh68iOIIhbnnaG7SkHJmWFg1
+	 0KTE3FlHZDjvczSIRliv19obz60R6hO5cnEWbPsk23NbT2ez/USsmRB0kQyxV2BSo0run
+	 cSn8UikAgYqjjyRttQ3oril2ETRZ4Q/I4NBlwZvQN1fvCNTPmbnuSBdBUlKGJRi8UmW00
+	 h11mbnSwbley/g9a2PJUjIAtNVEJkT5RYtxVZAdnw42RENzMb0kpWUzqwPim+cfUjnqZ/
+	 Fyh3oKm2nTtkvqI2p+MgU/rxMmDhuWy/EDgsmF4pxdV8AeCrX3VHv/oJYKu68+oTd7A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=RGgdv3ov;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=FQm719pg;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEDB60A262F
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 15:59:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BCEDB60A262F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cc4aa18f9afso601912a12.3
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 08:59:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793203164; cv=none;
-        d=google.com; s=arc-20260327;
-        b=m/mdy7ksQPiTIRhahkmKGRLLt2Y2Y47CWEHZezj/Itacqakngt6cjmMYfH5PcgLWh/
-         +LwjuoeZXESi0B1A4dNpL/jGXw3YzfFdPrhLR66ixX+F+3JVQPUkRnyGDWTcNxDu+uI/
-         WJPm7Jq3cxvC80mBxQUagsGIstSotmut2XrI5lmLUir+yhxiCQz8pHMcGdvu6wJyJDKY
-         cdVIWXlUvgkkBvqFy5dMTMUTFSLGZfTMOeqHJjKfE3F8t8jG0VjEEncmpnm1BC44AwDb
-         9/4veQTZvCdpaRt+xqB0w2l/5ff7qX+GpJBzCCYpJ+r3DqNzmPfO96LG7tq0d2t3g2d1
-         j/hQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Dc4rW2+COMGPVHylYkAJkFpZ/yamBpz19LqtcOFzV+Y=;
-        fh=3oPUrWPazN3toic8RbMXxRSSGxn+iNfj4fwvqk0qOgk=;
-        b=GHs62+ry9dMakEPbv7oi39wxpupfw16S7n0Uxn0PmZ5v7ysXwtt10f7hWPDCsSb+Cl
-         Ebjzjhb4SMSlj1bJ96mtKAtdMOI84VlKvWSX+fi4vNPuWb8KXMB9lkBKcF2n0Xv7bXd2
-         RmSza2dEPBKSDVT5NTkjxP2rGxIHq201GHNn835LL7wCyP2ryf5S0HfWe3xzb2JSAmfP
-         U25lxaWoPDeV079w8QQtpOFrF9L9oJh32GDZ5BJgIT8xy/PWH9gatgEmixasA6Z9F/xs
-         T+V1RYbQ86jkDLFZ57bla5BxyXHADzY/JoowilGZRw0Fn6FI5AoYzKHqWFyGoKZ1NQJA
-         zgrQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79436606A31F
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 16:05:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79436606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=RGgdv3ov;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=FQm719pg
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793203502;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2ZmH3Ff94m552shkLKSjdWayOpfJ56slpt73alq9sl8=;
+	b=RGgdv3ov5x7YywirkIc6TwDWPJ6H0Jh2YPm+p4JiMCxLBdbt2nJExSxqKlDmY+ioUhLsS/
+	6hLt5bl2gLnasW2pzm6CCHQV76GeN4gOZ7YCfrx/iPPE+fXzrlPZ4R4HuEyyULdwlc2kU1
+	TAE57ee/SVTdO29ix9QXr/WIcW3c5GI=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-258-b16pKqp_MVq5ks-4XxtQpw-1; Wed, 28 Oct 2026 12:04:55 -0400
+X-MC-Unique: b16pKqp_MVq5ks-4XxtQpw-1
+X-Mimecast-MFC-AGG-ID: b16pKqp_MVq5ks-4XxtQpw_1793203494
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-c25501f4aa2so155391966b.1
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 09:04:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1793203164; x=1793807964; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Dc4rW2+COMGPVHylYkAJkFpZ/yamBpz19LqtcOFzV+Y=;
-        b=Xde8kH+cqlVOr/NMR7Wf2JCxAomM8iaA+yOKnEWQdervZ/w503T0qYZZ6aOIBygAsC
-         qij7djXE5tgEJO6Fg3dvN+llLaU0wfp5K3TXaIKEKfXug0iTHDU8r1pyoHvQ8B8Z6qgt
-         UeXRTBxIPcUoikJFSeVCrlsd1QdQ1PIEIALNNtqalm4GbfnAzTbkILoS8EoRXI+ENlGT
-         pCWcFvtvfNhYIGcmjkVaouZPomu9dr/9De7n53N+UKBzQxVuhbAHnVl9cFD2L8k5xutY
-         S8PhqXCysvqF5qkcIRiApTxBmbXvToeiuo/7lzQYkr6Titoid+3/IYz90R+gzsrC9Oe+
-         jeFg==
+        d=redhat.com; s=google; t=1793203494; x=1793808294; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=2ZmH3Ff94m552shkLKSjdWayOpfJ56slpt73alq9sl8=;
+        b=FQm719pgpZJsJPVOMbeCVPOFeqVtgdSaQLW5q4G1+LouBGH1LcY7GWMtSHET8KPc25
+         Y+sb5/01dGAOR1x7QVxz2PcMbyEwhf58dTE1WstxW7n7/lQsNFXP2rM0KQuBuXewsCDp
+         Qfs5nrWFKsM7mDh7N/QkijSplTTMXuOyOXfGzCNgQ4imR1o6B/JzpySRainwLccUD7Wv
+         TbIFuiRDUep1SmmI+EmeTcwniOM8xSeLhWnHSp4WnttalMp22x90G5cO1Fx5csdh2bOW
+         JY3W2Q+zKsxXqVSoZZ3ryIc3/YPDF8tcErp3rH5++QE7SX1gGzf5VjuQFDsiycSNkCn0
+         qzcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793203164; x=1793807964;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Dc4rW2+COMGPVHylYkAJkFpZ/yamBpz19LqtcOFzV+Y=;
-        b=2nUNbRRS2wwpWaSsuj4B/8OfCx5m1tlRYSqOpA48VEXsHrhIPr50n32Y96pO4K5lIV
-         Vq2fwflhfi5lArzmL379MVIQeQ67nxUj2/G4YxxCQEbVOJTVHpSWwfyPMIml/euG/0ey
-         XfyCeoTutstRvIkRYJtoqeoexuWHrGLH6WqaiDGbqFvWsnxGrTYSKhtMsw29oqnwmPcy
-         FTR2TjFkS9Js90dcDeBKXGKO9d+GFDjCKmePS3JAymWDe3Y76kK+yLaclaVL/GGTPS4p
-         PiC5TOnkYQl0ixMsGAjaaZW4v8MYhE6CyzziPxV1r8AWuYoyK/jP7JdyDTZD9ERBD0E3
-         NcWA==
-X-Forwarded-Encrypted: i=1; AKwUvByEJor0oDg1ivvRbwOcwSe2rpS0JZ69jJUlmxmoKgC9J2stzgO9WyURLJL76hh0iNBtDbs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJc3npmy4cn1S8UisLWN69I8Sg7nAWE9T9kpG2rLFLGogYu+snt
-	NU7uJiAr6rPEBfvbHhhlXXEKNu5hSKVhow9rhLekSDtTRb9rnmfp/7wtzCkppeRGu1o3oWn1xFG
-	Z5SCFwLC4Rq0pc/WvzvbCzwpMFf234a9kYt5/2x53
-X-Gm-Gg: AYBFou1TFJzRoOXtBJxTCM8AHZy+HAEaaiCi8Bo5R2iX4AvZ5W6lOIxO543Qacx4pvi
-	wE4yvLAFCgZTb4foFLS1o2ypH5nVEjLW0iQiy82WOPaZTuTNV3h6IRGRm2Gl6FKl1xIzoa6UmbC
-	CMqSY3iOcia0fjPat9rImhD3XaxtuEKX2tPStoOKDqcCX9EoHAYrQqII5RI1AXqbvgEhB0EPebq
-	NQ5eeBU62n6cefAM1KB+iJwxkyXFmwifcTAEmz9G83K+usaJVDeZYPfsXwG3+lYhY2H4I5cZkqe
-	/o+i2r0C1AZskRJvhwL2GoIm+Oj+VSwLbdNXuqe6Qkb4ZZjN2WxFHDq0Xh4+r2Jn+qq7+ZCTjK8
-	ENhmGNooXPbacdGhSh+D5kwryBWmS/KfmzyZ3F/payoNGtgSVdPtX7WNzwFs/YFAHsUbT+oqEtj
-	JCmZYsdZYW5zV0lw==
-X-Received: by 2002:a05:6a21:6f16:b0:3e2:1823:2b4a with SMTP id
- adf61e73a8af0-3e901e829e8mr2186510637.0.1793203163924; Wed, 28 Oct 2026
- 08:59:23 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1793203494; x=1793808294;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=2ZmH3Ff94m552shkLKSjdWayOpfJ56slpt73alq9sl8=;
+        b=iuAlfN9/lmMacKY8ho5UO1ViBlV1WgVI8cJ8jN8txbU5j3L/PZVLRqib28glQjdrUc
+         RnXOGY95gFMBB+Ik5oCaCgUHTl5lpuXGkK9bmsSAEwcC7CXHWh4/4eTprQM9cA+xqyVx
+         MKDsTceK/y8+/eKUPO1SUM0JBBkLJGUstxjeLO8ZEqWRzUlEU8rW9zJndn1LsuL8+By9
+         wUYddyzLd2AaXRK1VyDhZo/zTTQi7C4Y/4QI8yCRrCHh3vzpmKJY+8ZqDDhJ6q666ah2
+         RlBhdttkCcUylIU3QDCX5exI0Baj5HjOnJ50AqRYBndp4I/psnv30S9NecJnNPokRCWX
+         LamA==
+X-Forwarded-Encrypted: i=1; AKwUvBxkhiBCaNVhoMVPXmF6B1TJ4IHpBh3zW8VNfFNhVMEEiNizjvKNWR2B72PUXkbt5dvOTmk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLjpCywpS87gx/ZCTYiF8N0qcZvIiKiU4dUj6AGCDTSl6NMwUqT
+	CHbCLxf1Y20SwCBPG0vYaq0W+8yAeYMPS1xwcDDTw3+/HTk1Cpp7p8gAOOw01xbPxauFWGguNg9
+	ORPhe1sFEAn92npgV0AHWWF83eH1yTCldExhldBBkfAN4kNtTu5JoJvZkUaxU2etq
+X-Gm-Gg: AYBFou2KgoPTFOeXIIuxqigokN7l0EJJJxBeNOWTR26v8Pnwq8oZQfTe73m2QkOuGsK
+	xexfKy/pSZsrXtzHk153jSTm2rYeq5lr1vc5gkAhFYb9CvYv0qQH/a0jhZXJFomMaSnsL7q3nR+
+	Unvs0FKMFClK8MggAJ2o7gnQv2NFLOTFazjNQlV+TNnsQmv7zYjPvqtK/UTtyRfv3v6191v2JgS
+	nP1+bN0Agt5mC+MgeDH4UXQoyvD7Ar3kYolavx2Xzn4Ckovk0R3Bi3qugBMhtLV3TWR17MtACdw
+	U6p89DqvsU317DHqh+dbxGXiN0+lqXyux2eewveiKeQO4pZb86coKkZlkJWvyeX3LV8jxawcd0X
+	cf1zvcX5LG7g11p5bbAhG+u8WI8pOjM5dO4LrYz0lS+uYCwt19ia+p65Ij5IQnH/TZwGsT7kxgI
+	xh5zIJ39FyuQ8=
+X-Received: by 2002:a17:907:3faa:b0:c2a:ac35:95fb with SMTP id a640c23a62f3a-c49a742b50cmr551014166b.24.1793203493693;
+        Wed, 28 Oct 2026 09:04:53 -0700 (PDT)
+X-Received: by 2002:a17:907:3faa:b0:c2a:ac35:95fb with SMTP id a640c23a62f3a-c49a742b50cmr551001466b.24.1793203492607;
+        Wed, 28 Oct 2026 09:04:52 -0700 (PDT)
+Received: from [192.168.0.19] (217.red-88-4-146.dynamicip.rima-tde.net. [88.4.146.217])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ebd47basm31898410f8f.32.2026.10.28.09.04.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2026 09:04:51 -0700 (PDT)
+From: Sergio Lopez <slp@redhat.com>
+Subject: [PATCH RFC 0/8] vsock: add datagram support to virtio and vhost
+Date: Wed, 28 Oct 2026 17:04:29 +0100
+Message-Id: <20261028-vsock-dgram-support-v1-0-e457cf7cee78@sinrega.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,212 +111,113 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261026-work-security-namespace_free-v1-0-ffa3ebbf71bd@kernel.org>
- <CAHC9VhR4rMydWiD-RFv-ABiYSG_txJuyrtdaowEXPY=CHEvFXA@mail.gmail.com>
- <20261027-heckklappe-halbmarathon-vorsorgen-849ffdc42aac@brauner>
- <CAHC9VhSJMPOY4X78ENEkAiNeVTCpvP76PgVDqTQfwaYfwnYwAQ@mail.gmail.com> <20261028-treiben-probanden-nachkam-e986afed3902@brauner>
-In-Reply-To: <20261028-treiben-probanden-nachkam-e986afed3902@brauner>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 28 Oct 2026 11:59:12 -0400
-X-Gm-Features: AclHuK-yJIwoCb3oIYP-IBqXnljTJgelOwPOEoH9t42fOb1qZ8AgXGe1E7dzuKE
-Message-ID: <CAHC9VhQm+swDGvP31aNefwx6qCCy2mk-CjD4i=4kE74eA+e2zQ@mail.gmail.com>
-Subject: Re: [PATCH 0/8] ns: fixes for the namespace LSM hooks
-To: Christian Brauner <brauner@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-fsdevel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, netdev@vger.kernel.org, stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzNDAyNz3bLi/ORs3ZT0osRc3eLSgoL8ohJdMwvjRJNUg8TUpFRzJaDOgqL
+ UtMwKsKnRSkFuzkqxtbUAP47zmGoAAAA=
+X-Change-ID: 20261027-vsock-dgram-support-683a4e0aebe7
+To: Stefano Garzarella <sgarzare@redhat.com>, 
+ Bobby Eshleman <bobbyeshleman@meta.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Bryan Tan <bryan-bt.tan@broadcom.com>, 
+ Vishnu Dasa <vishnu.dasa@broadcom.com>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Stefan Hajnoczi <stefanha@redhat.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowangio@gmail.com>, 
+ =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+ Dexuan Cui <decui@microsoft.com>
+Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-hyperv@vger.kernel.org, Sergio Lopez <slp@redhat.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3196; i=slp@sinrega.org;
+ h=from:subject:message-id; bh=IAsDh8eAGF2GwPL8C87LSOoOWcUAY+hEvje7pI2yfrQ=;
+ b=owEBbQKS/ZANAwAKAfRpJ40vDAI1AcsmYgBq4h0ayuzqJP9Rcnuf3cdPX7iTWVlDw8ysZGp8Z
+ wGNuM7AzKqJAjMEAAEKAB0WIQS+1fz3US2GgJFC6KL0aSeNLwwCNQUCauIdGgAKCRD0aSeNLwwC
+ NZFHD/99IaYlGVSilyovjaYh2x2j+28+Keg9pElFi2ecT8gYqUy06MR1kFmZOrZsoqHy7pYwssH
+ V4esQeAgESGZQtmvBNjEYuJ+SvP+jxLEqWzkQ7r0RzpIRxnGb+YjcYrTZu4HDNzFxBwL64Wmn02
+ 8ajh2a9t7wNNH/rvCNCpGt0V3zBKlQTB76xmObSCX5LfXENqL+fkV40PShUObL9gFOh6lwDQbkm
+ qaHV0S7DGuhCDKFx+bOHBcI1WPuv+TVqoambXNF/El5GBreBkVoRFTzO4RaSLa2YK4yYsXjGdoN
+ T4z1quggOJHvkITVGN/GItwaAFEOf6Bq8jQZ7QjAixm96Pi5OTxx/GeCmlV78mrHFPJe2gvOy/g
+ WO+59N02oABNlSNaS8u+RQGwPigjgXYNDrITmaZePAtwTHi19KyDSVtI1RUhuTpM0kax/tdgUaV
+ +HtPuC0HnrBXjNsU8UMvsi3soX4qOp3udDj312ClRvwBLneCo83BNxkTIImVlxCYfVCefkaaI22
+ pNdV/ATqALFUZ54VVwWAVjzTvFx+1P/2plUbjAvLPEVGAWqFJGfvWF62xj2IsgkQ5AIMMZX8XBR
+ /jnziV7xCe4LIWvGgd17vYzux4WMnxHqSRgiv/xLo+Ur85IEENwWIklCMJecGG/MYbEJZzl6omK
+ 7+lvOZABr5ugX2g==
+X-Developer-Key: i=slp@sinrega.org; a=openpgp;
+ fpr=BED5FCF7512D86809142E8A2F469278D2F0C0235
 
-On Wed, Oct 28, 2026 at 6:45=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
-> On Tue, Oct 27, 2026 at 06:37:43PM -0400, Paul Moore wrote:
-> > The hooks were merged into the LSM tree on August 31st, and due to
-> > timing I'm guessing they appeared in linux-next the next day,
-> > September 1st.  Considering the merge window opened on October
-> > 18th/19th, that's conservatively a month and a half during which
-> > testing could have uncovered this issue and the behavior of the hook
-> > could have been changed to accommodate your use-case.
->
-> That's what the rc cycle is for.
+This series implements SOCK_DGRAM support for virtio-vsock and
+vhost-vsock, allowing applications to exchange connectionless messages
+through the existing AF_VSOCK datagram API.
 
-I believe the understanding is that basic functional testing occurs
-before the RC cycle.  Considering the NULL check causing problems for
-your use case was present in your first RFC posting back in February,
-it's unlikely that you, or anyone in the BPF LSM space, tested this
-prior to the merge window.
+Support is negotiated through VIRTIO_VSOCK_F_DGRAM. Each datagram uses
+a single VIRTIO_VSOCK_TYPE_DGRAM packet, supporting payloads from zero
+bytes through 64 KiB. Pending sends are bounded by the socket send
+buffer rather than peer credits, with queue accounting and poll
+readiness reflecting pending output.
 
-> I'm not asking for changes to behavior
-> of the hooks to accommodate anything.
+Datagrams use destination-based routing across guest-to-host,
+host-to-guest and loopback transports while retaining the socket's
+transport state. VMCI keeps priority as the dedicated datagram
+transport.  Guest RX buffers accommodate complete messages when
+datagrams are negotiated, preserving message boundaries.
 
-The LSM changes in this patchset do change the behavior, that's the
-point.  The security_namespace_free() hook does not call into the
-individual LSM callbacks if no LSM blobs have been requested; what you
-are proposing now is that we change the hook so that the callback is
-always called, regardless of the LSM blob state.
+The patches first expose the core port allocator and add datagram
+queue reporting, then implement the common data path, guest and host
+feature negotiation, directional routing and RX buffer handling. The
+final patch extends vsock_test with local and host/guest datagram
+coverage, including peer filtering, route changes, message boundaries
+and queue ioctls.  Unsupported cases skip automatically.
 
-> > I know the
-> > Landlock folks were testing the hooks for their usage, but I've gone
-> > back through my inbox and I don't see any reports of BPF LSM failures
-> > using these new hooks in v7.4 until you posted this patchset during
-> > the merge window.
->
-> Because I sent fixes instead of a bug report.
+Tested using QEMU with a patch that exposed the VIRTIO_VSOCK_F_DGRAM
+feature:
 
-... which you sent *after* the merge window opened.  Once again, I see
-no indication that the use case you are concerned about was ever
-tested prior to the merge window.
+https://lists.gnu.org/archive/html/qemu-devel/2026-10/msg08074.html
 
-> > The LSM namespace hooks are new to Linux v7.4, they did not exist in
-> > Linus' tree prior to this merge window which is why I consider both
-> > the BPF LSM and Landlock usage of these hooks to be "new".
->
-> Yes, they're new. That's the argument for fixing them now. Not against
-> it. No released kernel has these hooks. Once v7.4 is out every one of
-> these fixes is a behavior change in a released kernel, needs a stable
-> backport that by your own rules doesn't qualify.
->
-> And on top of that nonsense, userspace has to probe for it forever.
+Code was written and reviewed both manually and assisted by Codex
+(GPT-6.1-Sol) and Claude (Opus 4.6).
 
-It's a one line change in kernel/bpf/bpf_lsm.c to add the
-security_namespace_free() to the existing list of disabled BPF LSM
-callbacks.  No need for a patchset spanning 16 files and over 350
-lines of changes; the BPF LSM callback can be enabled in Linux v7.5
-after it has been properly tested.
+Signed-off-by: Sergio Lopez <slp@redhat.com>
+---
+Sergio Lopez (8):
+      vsock: expose the core port allocator to transports
+      vsock: report datagram receive and send queue state
+      vsock/virtio: implement the datagram data path
+      vsock/virtio: negotiate datagram support on the guest
+      vhost/vsock: negotiate datagram support with guests
+      vsock: allow datagrams to use directional transports
+      vsock: preserve host-to-guest datagram boundaries
+      vsock: add datagram tests to vsock_test
 
-It is probably also worth mentioning again to casual observers that
-the LSM hooks, and their associated callbacks, are intentionally not a
-stable API.  LSMs are advised to implement abstractions before
-exposing the hook/callback API directly to user-visible interfaces
-such as configuration policy, policy as code, etc.
+ drivers/vhost/vsock.c                   |  37 +-
+ include/linux/virtio_vsock.h            |   6 +
+ include/net/af_vsock.h                  |  14 +-
+ include/uapi/linux/virtio_vsock.h       |   2 +
+ net/vmw_vsock/af_vsock.c                | 206 ++++++--
+ net/vmw_vsock/hyperv_transport.c        |   4 +
+ net/vmw_vsock/virtio_transport.c        |  71 ++-
+ net/vmw_vsock/virtio_transport_common.c | 197 +++++++-
+ net/vmw_vsock/vmci_transport.c          |  10 +
+ net/vmw_vsock/vsock_bpf.c               |   3 +-
+ net/vmw_vsock/vsock_loopback.c          |   1 +
+ tools/testing/vsock/Makefile            |   3 +-
+ tools/testing/vsock/README              |  23 +-
+ tools/testing/vsock/util.c              |  62 +--
+ tools/testing/vsock/util.h              |  10 +
+ tools/testing/vsock/vsock_test.c        | 154 +++++-
+ tools/testing/vsock/vsock_test_dgram.c  | 809 ++++++++++++++++++++++++++++++++
+ tools/testing/vsock/vsock_test_dgram.h  |  26 +
+ 18 files changed, 1545 insertions(+), 93 deletions(-)
+---
+base-commit: 65ba8f34ec886ec72b2c07ddc8cf3d815c32869d
+change-id: 20261027-vsock-dgram-support-683a4e0aebe7
 
-> > As mentioned previously, I'm pretty consistent about what goes up to
-> > Linus once the merge window opens: there is the initial pull-request
-> > with the changes from the last development cycle and then after that
-> > I'm pretty strict about only serious bugs/panics and regressions.
->
-> Your README says "serious problems", not panics.
+Best regards,
+-- 
+Sergio Lopez <slp@sinrega.org>
 
-Are we really going to argue about how one defines "serious problems"
-and "panics"?  You'll notice that I've used "serious problems" and
-"panic" somewhat loosely in this email thread because the distinction
-doesn't really apply to our discussion.  The issue you've brought up
-is that a use case that was never tested prior to the merge window
-doesn't work like you want it to work.  There is no kernel panic nor
-any functional regression from previous kernel releases (user visible
-or otherwise).  We'll change how the security_namespace_free() LSM
-hook works for the next release which should give you plenty of time
-to test that it works properly.
-
-> A hook that is
-> exported to bpf as an attach point and never called is a serious
-> problem for an API.
-
-I'll repeat myself again, a little louder for those in the back: the
-LSM hooks and callbacks are not a stable API, if an individual LSM
-needs a stable API to expose to userspace it needs to provide its own
-abstraction layer.
-
-> And it's not how you've handled this before: lsm_get_self_attr() was new
-> in v6.8 and got fixed for apparmor and selinux at v6.8-rc7 (cf. [2]).
-> v7.1-rc5 took Stephen's cred_guard_mutex change for lsm_set_self_attr()
-> without a crash see (cf. [3]).
-
-There is an important difference between those issues and the one
-you've identified with this patchset: lsm_get_self_attr() and
-lsm_set_self_attr() are syscalls while security_namespace_free() is a
-LSM hook.  Linux syscalls are subject to the Linux kernel stable API,
-LSM hooks are not.  Linux syscalls are directly accessible from
-userspace, LSM hooks are not.  We could dive into other minutiae about
-the differences between those issues, but the distinction between
-syscalls and LSM hooks is really the only one that should matter here.
-
-> > Disabling the BPF LSM support for the new hooks in Linux v7.4 should
-> > be relatively easy, much simpler than this patchset, and eliminate any
-> > claimed harm.
->
-> No. That's a change to kernel/bpf/bpf_lsm.c which you don't maintain
-> and the people who do have acked the fixes and asked for the whole
-> series in v7.4.
-
- :D
-
-Instead you're asking someone else to accept your changes in a
-subsystem you don't maintain and when they push back due to lack of
-testing and existing conventions you decide the proper approach is to
-bully them and force the issue with Linus?  I'm used to dealing with
-hypocrisy but this is truly something else ...
-
-> You're proposing to rip working functionality out of someone else's code
-> so you don't have to take a three line deletion. namespace_init and
-> namespace_install work fine for bpf.
->
-> It's also not simpler. The LSM part of this series is deleting three
-> lines I wrote in security.c. The rest is my code and bpf's code with
-> acks. Your version needs a revert in v7.5 so it's two cross-tree changes
-> instead of one.
-
-Adding security_namespace_free() the the disabled BPF LSM hook list
-should be a one line change in Linux v7.4 (maybe three if you need a
-Kconfig conditional for something) and then a one (maybe three) line
-change in Linux v7.5 to allow it again.  Two patches, each at most
-three lines, all contained within the BPF subsystem.
-
-> > Also, as the ongoing friction between the LSM and BPF developers was
-> > brought up, I want to point out that SELinux support for the new LSM
-> > namespace hooks was delayed to Linux v7.5 due to issues uncovered with
-> > these new hooks during the Linux v7.4 development cycle (well before
-> > the merge window opened).
->
-> That's not what happened. Stephen posted the fix on September 16, v3 on
-> September 18. I reviewed it on September 25 and offered to carry it in
-> the namespace tree for v7.4.
->
-> On September 29 you said you'd rather take it through lsm/dev. It's not
-> in lsm/dev. It's not in v7.4. A reviewed fix that was ready three weeks
-> before the merge window didn't get applied. That's the same decision
-> you're making now and it's not a precedent for it.
-
-If you look at that thread, you'll notice I ended my last mail with a
-"Are we all okay with that for this patch?" because I wanted to make
-sure everyone was okay with the patch, and the process before merging
-it.  Stephen answered that he was okay with the approach and you never
-responded; I held the patch back exactly because you never explicitly
-okay'd the approach.  I suspect one could make a lot of interesting
-observations both about how that patch was handled, and how that
-handling is now viewed from different perspectives.
-
-> > I told you "next merge window", which is far from "no".
->
-> For v7.4 it is "no". That's the release these hooks go out in. It means
-> v7.4 ships with a namespace_free hook that never fires and v7.4.y stays
-> that way because by your own rules the fix doesn't qualify for stable.
->
-> > I'll admit to finding it odd that you seem to keep inserting yourself
-> > into that friction point
->
-> A large portion of code where new security functionality is added or
-> modified all of the time is maintained by me and others.
-
-... and when it suits you, or the BPF developers, you override or
-otherwise steal ownership from the LSM space.  We obviously see things
-different here, but if you're trying to convince me that you are doing
-the Right Thing by inserting yourself into some of these discussions,
-e.g. the recent LSM kfunc discussion, you are wasting your time.  To
-borrow a phrase from Alexei's last email on that subject, "I don't
-feel we will converge here".
-
-> You're objection is noted and I'll mention it to Linus and then he can
-> decide.
-
-Please CC the LSM list and me.  I would also encourage you to disclose
-the lack of testing you have done prior to the merge window as well as
-your insistence that the LSM hooks become a stable API; if Linus is
-going to change any of these policies it would be good to know.
-
---
-paul-moore.com
