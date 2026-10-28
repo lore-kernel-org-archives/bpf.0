@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793148373;
-	b=WK+F3/rXID2gN/5lD6NS11N3OJnSOPxa2uG6kjkH+/t+4C8Hsw5+VprSY5N9juFsRAyy
-	 Ocagrq4NgsMPJpuHGhzHasEHrly/XnXUyDE+bCs1DFxkZfUvyXHc4DDyesYbj9WfoPNjB
-	 KtkpM1Z1048xuC9deKTz+7WZW00BSFCieyAJpTmDD+f4BV56uV+YdmCLZcMXGdGmTZHK1
-	 5b92IjY6SkaoWsYj1i4KGHomMWKhV8cUhJrheShhABXSNJkcvkJw00F97YdXWqhIpSbJR
-	 fCKMhEZht6hHxly9oX7Hfvz1knD/FtxYAgQlHA4jqyLBvcsyZd8ZZ6vPIE5pwGX4XZg==
+	t=1793148375;
+	b=FedwY2OeNsUaFdmjHx8gdlomTSfMdxVPdjXkipy69KnRobqAZ601aasERUdKpN9Cz0J3
+	 xTEX5BXr9RaSr9HPXtU+xSTI3Q2x25zisnSgKD0oLxcCAENxX8qvtzOcgiitr1m1FyCMZ
+	 +tFuWi8IGYJaPFPhbk/OkjBIdygv1dJVKT94a/msoBqxW3Lnk93J3LIopcpXkUsDnxbO9
+	 iXAMP6HMyqq4MScxEofZjtCXnaxUdATaUI7oeDjHii4eUCwDfHTa91lwqB6HWiZrw06c0
+	 kU9tAuMIrz9NSSkqi4pbP9sftnw80HjZPh0jGks9eN3sTEtbI6IS59gG2CQUsv8y3Wg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793148373;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793148375;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=JpxKlsBs0nplsqNGjdVZnc+DN8e3WyN47qn9gI+PJkk=;
-	b=JW19zBxhBeLA/18HDFgpFiRI0wq22khJ6z8swyyqCHTYeayb7W3UL4J0ZK9fBL9oDSij
-	 EdRfQeKqs8eTVtCELX2ygceFh2+jrMdfrYE76MAMg7zciBTL5dtEb9m0TVTUsnZewrPIH
-	 6ffBxqidvcGZNwatW5OsCvNSHi3ijHBu0ZsGSagvCV6SNnZvuMqqcQ/G111K28fe2cos3
-	 y686x0HoalUMzMk58SSZ7ISiCpvPNiRJclTBYHrrVfJ5PJx3pf5/ie/c5J0M4P/lO/P6z
-	 //2XCcDPYh3Eg6ru3X8n3QcotJSxCtm+tUZ5jFTw8BKFJ6Gh827zRb+WuTPyvGpzDGA==
+	bh=8gZsuEUTNhk86AZQjQRUY+I5v7lsSZovjlLUpdgI2nU=;
+	b=AKZcmT3cowTDsRWlYvs1GJQm4+q7vaTcJtMoC1ZZrC5sEwonDzgdnKMJxy2H1cpoMobk
+	 Xkd0KNL/44OUk13WLsBYXiqlsHffcJWiEuYQknU5kIV0T3zAlyBMwtki7TSzBfHBpRBB2
+	 bELlsnRNNjvX+r5TEPnmJ/7QXtQok7zSdIKwYQmp02enzSB3/VawHpa89UQhizbMn9BiR
+	 9aA3nEN6t3P7earDinqJoYRSYX2ylOrRKlc9qVHf3tp//eyVmmxyVK6RzQBSjxT5oGK+V
+	 bTiQ+njiBNeKhRVzxNBwJrUhQ+dAyjr6CxHVu07x+o2Xo4YglMf63hETKOCbC/5jwUA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b1L9K0bO;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MH1UuXnF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A4D606A31D;
-	Wed, 28 Oct 2026 00:46:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38A5606A31A;
+	Wed, 28 Oct 2026 00:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b1L9K0bO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA461F01825;
-	Wed, 28 Oct 2026 00:46:12 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MH1UuXnF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CAF21F01828;
+	Wed, 28 Oct 2026 00:46:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793148372;
-	bh=JpxKlsBs0nplsqNGjdVZnc+DN8e3WyN47qn9gI+PJkk=;
+	s=k20260515; t=1793148374;
+	bh=8gZsuEUTNhk86AZQjQRUY+I5v7lsSZovjlLUpdgI2nU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=b1L9K0bOIu+jh5sLGAqI6UsuxIEynRrv7QhLaLTt510Uo3zD/h2QydcZUHjgmf9CW
-	 ODird2lswcOPewGC0mgFv0fb+etPOy0lQMGiixXovQSZ01Urm/I6mXX/UCA0aAa/9E
-	 jR7SBpaapsx1+CL+9aAHL2GshVkJ3ly0kDTw5x9Mk8+m9EAbZ2tpMpLq4Q4GdvZGNL
-	 bKDKWREvcIbbzAhxpHr1eBCs7cNDqpANWniAmYAzEmOblS3smOghVPnA6VyVFXu1/N
-	 dlYHZGujoRlhEItLFdWD8DmauFWv7/EnzFhhMNrFySDr+L12RVmy5nBdcTUCn80UwW
-	 FSxMUgGbEk+Og==
-Content-Type: multipart/mixed; boundary="===============8209792634814655665=="
+	b=MH1UuXnF311mPXcchd12TNma2xme5mcEnYHshxWNnI1DjQUuTuqrhA75x+bqyyqNc
+	 qIf3ooMF5h064caVjREGl4hnkvUfWXPisiX2AR2NyuIerCSOx9VMEh3rhQt9x7iGwP
+	 hxNb+SRFIr/xsgrA/YICZ03yQbiSPf8uyiCW3N6ri0c7gpgxXo2uC4Y670iuuuT11N
+	 0fR+IAIRWV8ziIx+HrGYnd9jJ5h6kDS/ek/VGyxLhSzZhNwKa1oQ+bbraOzFE+3cuB
+	 H0h5Q+vR3qYTci7km73zl6VUBX8o+dH9LkWLTZ2EnBzWoJQSWo4Scut0+SbaDzUABA
+	 19xtWrsFLu1wA==
+Content-Type: multipart/mixed; boundary="===============2729655479492681053=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,85 +49,108 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <804b7fd3c3bf40a5edf65903d90514263e61fc6fa2ef513d35913fe8ed9acad8@mail.kernel.org>
-In-Reply-To: <20261028000411.4010967-2-vineet.gupta@linux.dev>
-References: <20261028000411.4010967-2-vineet.gupta@linux.dev>
-Subject: Re: [PATCH bpf-next v1 1/7] selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
+Message-Id: <bd70230bf88b570044957ec4866a4c0ad3870121a7e6c609e4d60043a13be905@mail.kernel.org>
+In-Reply-To: <20261028000411.4010967-6-vineet.gupta@linux.dev>
+References: <20261028000411.4010967-6-vineet.gupta@linux.dev>
+Subject: Re: [PATCH bpf-next v1 5/7] selftests/bpf: don't report arena tests as passing with an empty body
 From: bot+bpf-ci@kernel.org
 To: vineet.gupta@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,shuah@kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,jose.marchesi@oracle.com,david.faust@oss.qualcomm.com,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 28 Oct 2026 00:46:12 +0000 (UTC)
+Date: Wed, 28 Oct 2026 00:46:14 +0000 (UTC)
 
---===============8209792634814655665==
-Content-Type: text/plain; charset="us-ascii"
+--===============2729655479492681053==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
 
-> selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
+PiBzZWxmdGVzdHMvYnBmOiBkb24ndCByZXBvcnQgYXJlbmEgdGVzdHMgYXMgcGFzc2luZyB3aXRo
+IGFuIGVtcHR5IGJvZHkKClRMO0RSOiBDb21taXQgbWVzc2FnZSBvbmx5OiBpdCBjaXRlcyBhcmVu
+YV90eXBlcyB0byBqdXN0aWZ5IHJ1bm5pbmcgYXJlbmEKa2Z1bmMgdGVzdHMgd2l0aG91dCBhIGNh
+c3QsIGJ1dCB0aGUgYWRkcmVzcyBhcmdzIGFyZSBfX2lnbiAoQVJHX0lHTk9SRSkgYW5kCm5ldmVy
+IGNoZWNrZWQgYWdhaW5zdCBpdC4gQ29uY2x1c2lvbiBsb29rcyByaWdodDsgdGhlIGV4cGxhbmF0
+aW9uIG1heSBuZWVkCnJld29yZGluZy4KCj4gc2VsZnRlc3RzL2JwZjogZG9uJ3QgcmVwb3J0IGFy
+ZW5hIHRlc3RzIGFzIHBhc3Npbmcgd2l0aCBhbiBlbXB0eSBib2R5Cj4KPiBTb21lIGFyZW5hIHRl
+c3RzIHB1dCB0aGUgX19CUEZfRkVBVFVSRV9BRERSX1NQQUNFX0NBU1QgZ3VhcmQgaW5zaWRlIHRo
+ZQo+IGZ1bmN0aW9uIHJhdGhlciB0aGFuIGFyb3VuZCBpdCwgc28gd2l0aG91dCBhcmVuYSBzdXBw
+b3J0IHRoZSBwcm9ncmFtCj4gc3RpbGwgZXhpc3RzLCBpdHMgYm9keSBpcyBlbXB0eSwgYW5kIF9f
+c3VjY2VzcyBfX3JldHZhbCgwKSBpcyBtZXQgYnkKPiBkb2luZyBub3RoaW5nLiAgQSByZWFkZXIg
+c2Vlcwo+Cj4gICAjNTg0LzEJIHZlcmlmaWVyX2FyZW5hL2Jhc2ljX2FsbG9jMV9ub3NsZWVwOk9L
+Cj4KPiBhbmQgY29uY2x1ZGVzIGFyZW5hIHdvcmtzLiAgVGhhdCBpcyB3b3JzZSB0aGFuIHRoZSB0
+ZXN0cyB3aGljaCB2YW5pc2gKPiBlbnRpcmVseSwgc2luY2Ugbm90aGluZyBoaW50cyBhbnl0aGlu
+ZyBpcyBtaXNzaW5nLgo+Cj4gVGhlIGd1YXJkIHdhcyBuZXZlciBuZWVkZWQgdG8gY29tcGlsZSB0
+aG9zZSBib2RpZXM6IHdpdGhvdXQgdGhlCj4gZmVhdHVyZSBfX2FyZW5hIGlzIHN0aWxsIGJ0Zl90
+eXBlX3RhZygiYXJlbmEiKSwgd2hpY2ggZXZlcnkgY29tcGlsZXIKPiBhY2NlcHRzLiAgV2hhdCBp
+dCBhdm9pZGVkIHdhcyB0aGUgbG9hZCBmYWlsdXJlIHRoYXQgZm9sbG93cyBmcm9tIG5vCj4gYWRk
+cl9zcGFjZV9jYXN0IGJlaW5nIGVtaXR0ZWQg4oCUIGJ1dCBvbmx5IGZvciBhIGJvZHkgdGhhdCBk
+ZXJlZmVyZW5jZXMKPiBhbiBhcmVuYSBwb2ludGVyLiAgVGhlIGFyZW5hIGtmdW5jcyB0YWtlIG9u
+ZSBhcyBhIHBsYWluIHNjYWxhcjoKPgo+ICAgc3RhdGljIGNvbnN0IHN0cnVjdCBicGZfcmVnX3R5
+cGVzIGFyZW5hX3R5cGVzID0gewo+IAkgIC50eXBlcyA9IHsgUFRSX1RPX0FSRU5BLCBTQ0FMQVJf
+VkFMVUUgfQo+Cj4gc28gYSB0ZXN0IHRoYXQgb25seSBwYXNzZXMgcG9pbnRlcnMgdG8gYnBmX2Fy
+ZW5hX3thbGxvYyxmcmVlLHJlc2VydmV9X3BhZ2VzKCkKPiBuZWVkcyBubyBjYXN0IGFuZCBydW5z
+IGZpbmUuCj4KPiB0ZXN0X2xvYWRlciBjaGVja3Mgc2tpcF9yZWFzb24gYmVmb3JlIGl0IG9wZW5z
+IGFueXRoaW5nLCBzbyB0aGUgYm9keSBubwo+IGxvbmdlciBoYXMgdG8gYmUgZW1wdHkgdG8gc3Rh
+eSBsb2FkYWJsZTogZHJvcCBhbGwgMTkgaW4tYm9keSBndWFyZHMuCj4gVGhleSBkbyBub3QgYWxs
+IG5lZWQgYSB0YWcgaW4gdGhlaXIgcGxhY2UsIHdoaWNoIGlzIHdoeSAxOSBndWFyZHMgZ28KPiBh
+bmQgNyB0YWdzIGFycml2ZToKPgo+ICAgNiAgIGRlcmVmZXJlbmNlLCBzbyB0aGV5IGdldCBfX3Nr
+aXBfd2l0aG91dF9hcmVuYSBhbmQgcmVwb3J0IFNLSVA6Cj4gICAgICAgYmFzaWNfYWxsb2Mxeyxf
+bm9zbGVlcH0sIGJhc2ljX2FsbG9jMnssX25vc2xlZXB9LCBiaWdfYWxsb2MxLAo+ICAgICAgIGFj
+Y2Vzc19yZXNlcnZlZAo+ICAgMTEgIG5ldmVyIGRlcmVmZXJlbmNlLCBzbyB0aGV5IGdldCBubyB0
+YWcgYW5kIHJ1biBmb3IgcmVhbCBpbnN0ZWFkCj4gICAgICAgb2YgcmVwb3J0aW5nIGEgdmFjdW91
+cyBPSwo+ICAgMiAgIGJpZ19hbGxvYzMgYW5kIGJpZ19hbGxvYzQsIGFscmVhZHkgaW5zaWRlIHRo
+ZSBmaWxlJ3Mgb3V0ZXIKPiAgICAgICB3aG9sZS1wcm9ncmFtIGd1YXJkLCBzbyB0aGUgaW4tYm9k
+eSBvbmUgd2FzIHJlZHVuZGFudAo+Cj4gVGhlIDd0aCB0YWcgZ29lcyBvbiBjaGVja19hcmVuYV9h
+cmdfcmV0KCksIHdoaWNoIGhhcyBubyBndWFyZCBhdCBhbGwKPiBhbmQgaXMgdGhlIG9uZSB2ZXJp
+Zmllcl9hcmVuYSBzdWJ0ZXN0IHRoYXQgcmVhbGx5IGZhaWxzIHVuZGVyIGEgc3RvY2sKPiBHQ0Mu
+Cj4KPiBNZWFzdXJlZCBvbiBicGYtbmV4dCB3aXRoIGEgc3RvY2sgYnBmLWdjYywgdGVzdF9wcm9n
+cyBiZWZvcmUgYW5kIGFmdGVyOgo+Cj4gICB2ZXJpZmllcl9hcmVuYS9iYXNpY19hbGxvYzEgICAg
+ICAgICAgICBPSyAgIC0+IFNLSVAKPiAgIHZlcmlmaWVyX2FyZW5hL2Jhc2ljX2FsbG9jMV9ub3Ns
+ZWVwICAgIE9LICAgLT4gU0tJUAo+ICAgdmVyaWZpZXJfYXJlbmEvYmFzaWNfYWxsb2MyICAgICAg
+ICAgICAgT0sgICAtPiBTS0lQCj4gICB2ZXJpZmllcl9hcmVuYS9iYXNpY19hbGxvYzJfbm9zbGVl
+cCAgICBPSyAgIC0+IFNLSVAKPiAgIHZlcmlmaWVyX2FyZW5hX2xhcmdlL2JpZ19hbGxvYzEgICAg
+ICAgIE9LICAgLT4gU0tJUAo+ICAgdmVyaWZpZXJfYXJlbmFfbGFyZ2UvYWNjZXNzX3Jlc2VydmVk
+ICAgT0sgICAtPiBTS0lQCj4gICB2ZXJpZmllcl9hcmVuYS9jaGVja19hcmVuYV9hcmdfcmV0ICAg
+ICBGQUlMIC0+IFNLSVAKPgo+IHRoZSBzaXggdGhhdCBkZXJlZmVyZW5jZSBzdG9wIGNsYWltaW5n
+IHRvIHBhc3MsIGFuZCBjaGVja19hcmVuYV9hcmdfcmV0Cj4gc3RvcHMgZmFpbGluZy4gIFRoZSBl
+bGV2ZW4gdGhhdCBkbyBub3QgZGVyZWZlcmVuY2Ugc3RheSBPSywgaGF2aW5nIGdvbmUKPiBmcm9t
+IGFuIGVtcHR5IGJvZHkgdG8gYWN0dWFsbHkgcnVubmluZy4KPgo+IFJlbW92aW5nIHRoZSBndWFy
+ZHMgZXhwb3NlcyB0aGUgYXJlbmFfYmFzZSgpIGNhbGxzIHRoZXkgd2VyZSBoaWRpbmcuCj4gVGhl
+IHByZXZpb3VzIHBhdGNoIG1hZGUgdGhhdCBtYWNybyBvcGFxdWUgdG8gR0NDJ3MgLVdhcnJheS1i
+b3VuZHMsIHNvCj4gbm90aGluZyBpcyBuZWVkZWQgaGVyZSBiZXlvbmQgdGhlIGd1YXJkcyBnb2lu
+ZyBhd2F5Lgo+Cj4gU2lnbmVkLW9mZi1ieTogVmluZWV0IEd1cHRhIDx2aW5lZXQuZ3VwdGFAbGlu
+dXguZGV2PgoKVGhlIHBhcmFncmFwaCB0aGF0IHNheXMgIlRoZSBhcmVuYSBrZnVuY3MgdGFrZSBv
+bmUgYXMgYSBwbGFpbiBzY2FsYXIiIGFuZApxdW90ZXMgYXJlbmFfdHlwZXM6IGlzIHRoYXQgdGhl
+IGNoZWNrIHRoYXQgYWN0dWFsbHkgbGV0cyB0aGVzZSB0ZXN0cyBydW4Kd2l0aG91dCBhbiBhZGRy
+X3NwYWNlX2Nhc3Q/CgpicGZfYXJlbmFfYWxsb2NfcGFnZXMoKSwgYnBmX2FyZW5hX2ZyZWVfcGFn
+ZXMoKSBhbmQKYnBmX2FyZW5hX3Jlc2VydmVfcGFnZXMoKSBkZWNsYXJlIHRoZWlyIGFkZHJlc3Mg
+YXJndW1lbnQgd2l0aCB0aGUgX19pZ24Kc3VmZml4IGluIGtlcm5lbC9icGYvYXJlbmEuYzoKCiAg
+X19icGZfa2Z1bmMgdm9pZCAqYnBmX2FyZW5hX2FsbG9jX3BhZ2VzKHZvaWQgKnBfX21hcCwgdm9p
+ZCAqYWRkcl9faWduLCAuLi4pCiAgX19icGZfa2Z1bmMgdm9pZCBicGZfYXJlbmFfZnJlZV9wYWdl
+cyh2b2lkICpwX19tYXAsIHZvaWQgKnB0cl9faWduLCAuLi4pCiAgX19icGZfa2Z1bmMgaW50IGJw
+Zl9hcmVuYV9yZXNlcnZlX3BhZ2VzKHZvaWQgKnBfX21hcCwgdm9pZCAqcHRyX19pZ24sIC4uLikK
+CmdldF9rZnVuY19hcmdfdHlwZSgpIHRlc3RzIHRoZSBfX2lnbiBzdWZmaXggZmlyc3QgYW5kIHJl
+dHVybnMgQVJHX0lHTk9SRToKCiAgaWYgKGlzX2tmdW5jX2FyZ19pZ25vcmUobWV0YS0+YnRmLCAm
+YXJnc1thcmddKSB8fCBpc19rZnVuY19hcmdfaW1wbGljaXQobWV0YSwgYXJnKSkKICAgICAgICAg
+IHJldHVybiBBUkdfSUdOT1JFOwoKYW5kIGNoZWNrX2Z1bmNfYXJnKCkgcmV0dXJucyBmb3IgdGhh
+dCB0eXBlIGJlZm9yZSBhbnkgcmVnaXN0ZXIgdHlwZSBjaGVjazoKCiAgaWYgKGFyZ190eXBlID09
+IEFSR19JR05PUkUpCiAgICAgICAgICByZXR1cm4gMDsKCmFyZW5hX3R5cGVzIGlzIG9ubHkgcmVh
+Y2hlZCB0aHJvdWdoIGNvbXBhdGlibGVfcmVnX3R5cGVzW0FSR19QVFJfVE9fQVJFTkFdLAp3aGlj
+aCBhcHBsaWVzIHRvIGtmdW5jIHBhcmFtZXRlcnMgbmFtZWQgd2l0aCBfX2FyZW5hIG9yIF9fYXJl
+bmFfX251bGxhYmxlIGFuZAp0byBhcmVuYS10YWdnZWQgZ2xvYmFsIHN1YnByb2cgYXJndW1lbnRz
+LiAgcmVzb2x2ZV9idGZpZHMgYWRkcyB0aGUgYXJlbmEgdHlwZQp0YWcgZm9yIEtGX0FSRU5BX0FS
+RzIgYnV0IGtlZXBzIHRoZSBwYXJhbWV0ZXIgbmFtZSwgc28gdGhlIF9faWduIHJ1bGUgc3RpbGwK
+YXBwbGllcy4KClNvIHRoZSBjb25jbHVzaW9uIHRoYXQgbm8gY2FzdCBpcyBuZWVkZWQgbG9va3Mg
+cmlnaHQsIGJ1dCB0aGUgYWRkcmVzcwphcmd1bWVudCBpcyBub3QgY2hlY2tlZCBhZ2FpbnN0IHsg
+UFRSX1RPX0FSRU5BLCBTQ0FMQVJfVkFMVUUgfSBhdCBhbGwuICBUaGUKc2FtZSByZWFzb25pbmcg
+YXBwbGllcyB0byB0aGUgdGVzdHMgdGhhdCBubyBsb25nZXIgaGF2ZSBhIGd1YXJkIG9yIGEgdGFn
+OgpiYXNpY19yZXNlcnZlMSwgYmFzaWNfcmVzZXJ2ZTIsIHJlc2VydmVfdHdpY2UsIHJlc2VydmVf
+aW52YWxpZF9yZWdpb24gYW5kCmFyZW5hX2tmdW5jc191bmRlcl9icGZfbG9jayBpbiB2ZXJpZmll
+cl9hcmVuYS5jLCBhbmQKcmVxdWVzdF9wYXJ0aWFsbHlfcmVzZXJ2ZWQgYW5kIGZyZWVfcmVzZXJ2
+ZWQgaW4gdmVyaWZpZXJfYXJlbmFfbGFyZ2UuYy4KCkNvdWxkIHRoZSBwYXJhZ3JhcGggY2l0ZSB0
+aGUgYWRkcl9faWduL3B0cl9faWduIHBhcmFtZXRlcnMKKGlzX2tmdW5jX2FyZ19pZ25vcmUoKSAt
+PiBBUkdfSUdOT1JFKSBpbnN0ZWFkIG9mIGFyZW5hX3R5cGVzPwoKCi0tLQpBSSByZXZpZXdlZCB5
+b3VyIHBhdGNoLiBQbGVhc2UgZml4IHRoZSBidWcgb3IgZW1haWwgcmVwbHkgd2h5IGl0J3Mgbm90
+IGEgYnVnLgpTZWU6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy92bXRlc3QvYmxv
+Yi9tYXN0ZXIvY2kvY2xhdWRlL1JFQURNRS5tZAoKQ0kgcnVuIHN1bW1hcnk6IGh0dHBzOi8vZ2l0
+aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy9icGYvYWN0aW9ucy9ydW5zLzQwNjA4MzU1MjM0
 
-TL;DR: Nit only: the new __skip() reason in the callx selftests omits riscv64,
-though riscv64 is supported, so a riscv64 build with a GCC lacking callx
-prints a misleading skip message.
-
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-> --- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-> +++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-
-[ ... ]
-
-> @@ -295,6 +295,13 @@
->  #define CAN_USE_LOAD_ACQ_STORE_REL
->  #endif
->
-> +/* clang always emits callx, gcc only when it defines __BPF_FEATURE_CALLX */
-> +#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||	\
-> +     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) &&		\
-> +	(defined(__clang__) || defined(__BPF_FEATURE_CALLX))
-> +#define CAN_USE_CALLX
-> +#endif
-> +
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
-> --- a/tools/testing/selftests/bpf/progs/verifier_callx.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
-
-[ ... ]
-
-> @@ -1075,6 +1073,7 @@ int callx_c_ops_on_stack(void *ctx)
->  #else
->
->  SEC("socket")
-> +__skip("callx needs x86/arm64 JIT and compiler support")
->  __success
->  int dummy(void *ctx)
->  {
-
-this isn't a bug, but the skip reason leaves out riscv64, even though the
-CAN_USE_CALLX macro above accepts it.
-
-The same string is added to the dummy() program in
-verifier_callx_rodata.c.  The riscv64 JIT implements bpf_jit_supports_callx(),
-and commit 530dfafc6107 ("selftests/bpf: Enable callx related testcases for
-RV64") turned these tests on for RV64.
-
-On a riscv64 build with a bpf-gcc that does not define __BPF_FEATURE_CALLX,
-the arch supports callx and only the compiler lacks it, yet run_subtest()
-prints:
-
-  run_subtest:SKIP: callx needs x86/arm64 JIT and compiler support
-
-That reads as though riscv64 itself were unsupported.
-
-Could the reason say x86/arm64/riscv64, or leave the arch list out (for
-example "toolchain or JIT can't do callx", as the new comment in
-callx_rodata_lskel.c does)?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40608355234
---===============8209792634814655665==--
+--===============2729655479492681053==--
