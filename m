@@ -1,101 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.139
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793149510;
-	b=msz/81mGOopf6Z7PH92ZhADU85lcodqCbbbVdCVNnnbeLNH1gXG9W5N0AIyDjX4G2a0d
-	 3KxXpBmP7/Dz0/tvCYfbt1B4Z7599XfS2sNdLMkewE3d+epV6EvBJ9de4+tVJREJP/Kny
-	 DZXV7a18jSmc5q1VrSUKY8RgD+98a55dJWhxSlRPQaja/sn8wMqG7JuJshPVSIhhs4+M0
-	 rDVesTYORrIUY4tuWLcIUv3Khdvj/4L+96+5huUADLuaIe/TMjDZvnHtaRgyXBStUV2dX
-	 vYTDGbZpXSZdRUNROA+jIxGL0bzzinzieQpK9M2p603S9fFLFMxtPT0zTf1ei3mdd5g==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793149510;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=f2rE3NDE9kGP6isczzJJL2zdizHNny9LG2ue9EGEuV0=;
-	b=xgiE5Kc8oAcz3j7lKwtbJcnRSvI3h26wpWl3763FL4hmhu5KBs/nSwlZgH1uyHkvKNck
-	 xjifrOtcmnQyNxsYjC+SGgcwSAylTP+nq0MseY7Q7jnX10aArxbn1+W6nw66NhH7ecu/r
-	 Y1GVNCCeEcWuddOaEmwaBQB9mtVE0WLDeracFUEEc7AJux901M3fboHuaUFdTBEHLbJYg
-	 uDYYK28mxaDQKXrlOEpQhFEQaAkMPu7oU73uTg9nUOdqMdoL2/q0zUIDni2emLeOim7K7
-	 Yg3iGsZvVpMIrl5PFIcN4mHaxNPCnjZ4cXw4MhRdkSvv3AtYJMCwuqARC5gY608SP8g==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Es9PJrky;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.139
-Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793149731;
+	b=YNfl70NxeJ/HmpxBWCn/1AdYhkvE35TBYU0K6ize55miW3Bjrq4M6tPoedkyKX0KDTZY
+	 xMQ5uD8DGsXHQt3SLSo9xvF7WzV3SdXBWih1hwhWPNQN6OtPJr4AWGWmlPruJ0XPAi2ns
+	 v4G4bSUbSu2yXhUM7xzpgRV0TCrkYDU2C9L2sSyzivEgY1DAXqdq6eLkBhWeOkxbxUFDJ
+	 GEpXNwfOIw808sbfF3bm/CEf5vB7FX3mi1CsJWd6XL/+rFYHNzt1Dzdb6yEYJw8qqEM6R
+	 GeesZY6mU67xCyC2piNHvUZ8oGXEPxJvcsAroSqI2/39ARfRwjuwrzPfJCiOmHWQMWw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793149731;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=sqLa92RWf572fIfdy7hSe8FrupuKX6AcDIL3TEONmjI=;
+	b=K6CV/VmZ5In7oGKSxOTAUkwtZPry7/W89NlEWAUhAbEyrqRK4GepihXp/UxwAZ8NWqof
+	 Tg7WhBFk3khHcwQBZlgidFt2goHt5b2zNTceMp6IPRE9byOheE/VRpPRpFtS/Vc1ggy17
+	 xKIS3ps/sp8mmOposbKH2pcaAVtNsqbiEG2T0G/5qYias5KgZSrvZfRI/T8CbSI/ONLC8
+	 bPWrIWklZJv5gVteRERT1JCbao8c286rCQ0petRKrMWjCuilV3yebrtXY82qaUV9LkGMy
+	 pTi68f+Hr/Z2mmUKkckZ/Lck5Y9XJJsgEMHaPqZ/X+6GgvJ8TE2la9VTY4MGSRxKmmA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LQQmsjzQ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C511606A327
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:05:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C511606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A76606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Es9PJrky
-Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-4a5f76661b5so1612125e9.0
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:05:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793149509; cv=none;
-        d=google.com; s=arc-20260327;
-        b=TrPd/X2uhMtAUZHIPQgVfUzMrb7+yKq6gycv6UKzYJezSg8B5PMzIFhgWyaQo6qrbE
-         uzjdqai8AFQmeCKnbNLFSw60UK7dqLnXy51C1G2xAc4ByYaLQrsYuNPzFW3KTsfbltIy
-         qVvxzhfKFici4ii6TMqQ+IotBcHtsgfi42SpbStMDxXhbQ4WOWp2BUv6QzMfZstD+UEn
-         vDm8M8pAI4ChiPyXAWlzDctLyZ8ve9oHbKIgCg3szI+kVm9ZvfeTsGM/syrjPXt+wm3j
-         f4w8+5KQYluwEm3GYuVVU1XGnv0y9VZ2YP+0HdrxmrUM1hTgLY2GinkEnTs1zcvC7O+3
-         BUYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=f2rE3NDE9kGP6isczzJJL2zdizHNny9LG2ue9EGEuV0=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=dHlQkZovlhCFzAN+8tgqKrAkkGrVgvL04vAF4FVTc/q4LtCtrezlfZwg/85epbSlTV
-         E9kTAKBHxD6Jd/nzvlQYqEQ1nBTXbfRfRhWgw7Tboonnuu8HWrOb79YCV5OowsXOl7YP
-         nF6++DRZN2onhTpJtdOpYNTERE06dV9eh1xk30JEydQwlwMbBF0863zDV3JP5y9H170V
-         G6gIN8a23pPR9QSxxgyxVmEeDSqZI0UBxx/sJPQBb+uBCKoaqm1BtteF6yx6E08MRVNT
-         x4/ARDwhs6hHdE5eQHhhl3VOufgKFO214FazAlhQOE88RavUvGVnuZu8DkFa1MkfMFfx
-         Qf7A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793149509; x=1793754309; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=f2rE3NDE9kGP6isczzJJL2zdizHNny9LG2ue9EGEuV0=;
-        b=Es9PJrkyKHFZ5cY09DjdoOcqBCZY7hHy+RkttWYJoKa9e+h6nz+tizXymwm1iBN6eG
-         Bg0cdhu6LnU2xgwXS7fFE2XbgECl6I2Vt7yPOdsENeXPdmhgIh6WAWpLqGbiBSw9gYjJ
-         lP3mPr8f10YJ69UcrllGKWqa+X1XekPFQEEStiUdtQBLCHLZlAGKZmo81kptmiA+QbdM
-         R6G/TLiCQiL0CHcWe3x8K+T1CA0saECuShQOI5XwwXOKkUs4gAu2L5q7WTjZ2aWnArCt
-         QUR0V0hwXFQA3hAlIMZuir0fFpP2PyHFi8wCM2uCGElqn8d3xTWhQfFYyCUg8lMGcCa1
-         Gp7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793149509; x=1793754309;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=f2rE3NDE9kGP6isczzJJL2zdizHNny9LG2ue9EGEuV0=;
-        b=gSECbLvMo5IZWdvQB4f9kfxJh2I6UQCFfc39I+tjAh4yAPVwIv9wArsHSFazbvh7fk
-         MIlDbFTCVI5VuPDkYf8Q/iQlkw4PtUFJZISz7csT/zGDXYzOY/JsUudq7+KoiWIH/iQm
-         HfEKyd50pi4lrBNhOJR292twppZb0ttMH+Qt0WxsuRoSjbM/hN3QNJhbw6mhSoIrhMA9
-         3a1TNzV9rU4aNH+xIInZiY8hTynp8wwdna04BFC7vR9xJOm+1yF2tQIKODKgnp9CmnOe
-         HFWQb+UhIToDQoDnvdFUyJVC+75LmSZ3qvpWglmCon2Z2WA7AiF5LyE30Vhkiqwl3TCO
-         UBtA==
-X-Gm-Message-State: AFq9FYJMWgl3aDKS03d2mpwn9djQG0d1W34rdCaADjFLDRiUCyZ99Uwn
-	EsBU/ghOQWbvKZy7LAXsV5L/hy8cmbXYTjfAmO9kWUoOCOASllTKRXxWSigDVvDv+RfL2d1r7lG
-	Pd4jIIyueO2YMLb+8oHPgIF7sFM40Jv6jKaip
-X-Gm-Gg: AYBFou0LVNRQ8WsTDwv2uErJX7U6TA1yndMVN+vLhER+R9oqT8a35jow+sXbboBZ+C1
-	nVztiIxBrX/aTMCbXJtmtW9Ja1kR3yGZzzkDAcWbqBjZIubwZQcQR2WOGLcGlQTzh9weX4ppjhA
-	Z6MUZZhegZSVb0ouUTwCvBJs7jdHmgE2LlGo7mxOy8drCRILt7rJY+LuLjvqFwuDRlcycRZJZYn
-	d2xfHIQD66VPDqG+TuFdcHSLvRcG56jcF9NjM8iajtPX01hYOZPMBNPJoKM6Ss3GenxE7u83G1H
-	RFo9cYH9+A1mtkxJOId1H1ZxX9y5bWFQxe8o+QNN/DvE1DP23zP0INvUJD0RU21/+3jEX4Bqqhu
-	Iuezh+PhkBPDTpO15m1Uo7wsP9zDvrG/NPqFg3JXIk8YvTzlgbqixrXK4C1NO5urDa+YjMxj50B
-	sIi5WaGtqmHugmSJhdm88BRTLv+dlWR+WkezF3j4BRvJM1x8MU1fmTh6GVFQIxMZbv9TGWJS8Iv
-	8GnRcg2mSR7Q8gNmA==
-X-Received: by 2002:a05:600c:3516:b0:4a8:cb23:f71b with SMTP id
- 5b1f17b1804b1-4a966c4175cmr14124645e9.18.1793149508615; Tue, 27 Oct 2026
- 18:05:08 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LQQmsjzQ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 992B01F01825;
+	Wed, 28 Oct 2026 01:08:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793149730;
+	bh=sqLa92RWf572fIfdy7hSe8FrupuKX6AcDIL3TEONmjI=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=LQQmsjzQ/W8PTdGBjTS8+OP/tJnsS1tY7mEVCKK42kUpuM/E3QAk83mNCy1/w8tz6
+	 T+o12AHUge1AYylcrvwuLumAU4kF3cW76f6XgZxl0vq2vRdUzt6qXbVZjqqK08Po8m
+	 Xw890xUKLkkOEM7/gdfq3CJ0n2a5kUDmD20nRv25GK3x+syQhdDLdUVeNTdfT6mGgj
+	 wAcbGHxE4CBxMx7wAwPrtTAHoQkbEFjgxXAak1FRicmfJKb+E1LtL41AkhZoyqQT2V
+	 +JwqZMmFJR8ISxPL2q/tzmz4Zxz+Dw3AXbCndVg4wWmpcbYSwivxvJXzpGi707kaZB
+	 xRSZ4LweQ/ZWQ==
+Message-ID: <sashiko-outbox-187303@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH bpf-next v1 07/11] bpf: Let the callback of
+ bpf_find_vma unwind
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <9b98417904ec1b27a1b6e2d6a37b897fe2494073.1793147364.git.memxor@gmail.com>
+References: <cover.1793147364.git.memxor@gmail.com>
+ <9b98417904ec1b27a1b6e2d6a37b897fe2494073.1793147364.git.memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 28 Oct 2026 01:08:50 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,171 +59,154 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <cover.1793147364.git.memxor@gmail.com> <98e3a499d89e01ddfb83fcf91e34b2a0e36e1007.1793147364.git.memxor@gmail.com>
- <sashiko-outbox-187297@kernel.org>
-In-Reply-To: <sashiko-outbox-187297@kernel.org>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 28 Oct 2026 02:04:30 +0100
-X-Gm-Features: AclHuK95I9JL3fStnIQS-CsCNB98uLDQyIp3GOawxHVoMRxm7qYeaDFYr7zdMS8
-Message-ID: <CAP01T74tsmsPD=PKVKZkvWVfV=mnKw5SbcPJ9-Npu+NK3J2mzA@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v1 08/11] bpf: Let the callback of
- bpf_user_ringbuf_drain unwind
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, 28 Oct 2026 at 02:01, <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Critical] bpf: missing callback dynptr invalidation on bpf_user_ringbu=
-f_drain() unwind
-> --
->
-> commit 5e41f31a219e475ec387e971ce587d69bc948017
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->
-> bpf: Let the callback of bpf_user_ringbuf_drain unwind
->
-> This commit adds an unwind pad to bpf_user_ringbuf_drain() so that its
-> callback can exit via unwind_exit while releasing the sample, clearing th=
-e
-> busy bit, and queuing any pending wakeup. It also adds
-> BPF_FUNC_user_ringbuf_drain to helper_has_cb_pad() in the verifier.
->
-> > diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-> > index 447863ece26a3..fdd997f36f73d 100644
-> > --- a/kernel/bpf/ringbuf.c
-> > +++ b/kernel/bpf/ringbuf.c
-> [ ... ]
-> > @@ -852,8 +854,23 @@ BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map =
-*, map,
-> >               }
-> >
-> >               bpf_dynptr_init(&dynptr, sample, BPF_DYNPTR_TYPE_LOCAL, 0=
-, size);
-> > -             ret =3D callback((uintptr_t)&dynptr, (uintptr_t)callback_=
-ctx, 0, 0, 0);
-> > +             bpf_call_cb(callback, &dynptr, callback_ctx, 0, 0, 0, ret=
-, unwound_at);
-> > +             if (0) {
-> > +unwound_at:
-> > +                     /*
-> > +                      * The callback left with unwind_exit. The sample=
- is
-> > +                      * consumed and counted like after a return, so t=
-hat
-> > +                      * the wakeup below is sent for it, and the helpe=
-r
-> > +                      * leaves through the door below, as the error pa=
-ths
-> > +                      * do, with the r0 of the callback.
-> > +                      */
-> > +                     unwound =3D true;
-> > +             }
-> >               __bpf_user_ringbuf_sample_release(rb, size, flags);
-> > +             if (unwound) {
-> > +                     samples++;
-> > +                     goto schedule_work_return;
-> > +             }
-> >       }
-> >       ret =3D samples - discarded_samples;
-> >
-> > @@ -867,6 +884,8 @@ BPF_CALL_4(bpf_user_ringbuf_drain, struct bpf_map *=
-, map,
-> >               irq_work_queue(&rb->work);
-> >       else if (!(flags & BPF_RB_NO_WAKEUP) && samples > 0)
-> >               irq_work_queue(&rb->work);
-> > +     if (unwound)
-> > +             bpf_unwind_leave();
-> >       return ret;
-> >  }
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 3c39cc0f358a1..fd63ff36eb909 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -11409,6 +11409,7 @@ static bool helper_has_cb_pad(enum bpf_func_id =
-func_id)
-> >       case BPF_FUNC_loop:
-> >       case BPF_FUNC_for_each_map_elem:
-> >       case BPF_FUNC_find_vma:
-> > +     case BPF_FUNC_user_ringbuf_drain:
-> >               return true;
->
-> [Severity: Critical]
-> Can a callback for bpf_user_ringbuf_drain() smuggle its R1 dynptr (or a
-> slice derived from it via bpf_dynptr_data() or bpf_dynptr_slice()) out to
-> the caller's unwind pad in R0 when exiting via unwind_exit?
->
-> In bpf_user_ringbuf_drain(), struct bpf_dynptr_kern dynptr lives on the
-> C stack frame of bpf_user_ringbuf_drain(). When the callback exits via
-> unwind_exit and jumps to unwound_at, bpf_user_ringbuf_drain() releases th=
-e
-> sample with __bpf_user_ringbuf_sample_release(), clears rb->busy, and
-> returns ret (the callback's R0) to the caller's unwind pad after its stac=
-k
-> frame is popped.
->
-> In the verifier, set_user_ringbuf_callback_state() initializes the
-> callback's R1 using mark_dynptr_cb_reg(), which sets R1 to
-> CONST_PTR_TO_DYNPTR with a fresh id that is not backed by a STACK_DYNPTR
-> slot in the callee's BPF stack:
->
-> kernel/bpf/verifier.c:set_user_ringbuf_callback_state() {
->         ...
->         bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_0]);
->         mark_dynptr_cb_reg(env, &callee->regs[BPF_REG_1], BPF_DYNPTR_TYPE=
-_LOCAL);
->         callee->regs[BPF_REG_2] =3D caller->regs[BPF_REG_3];
->         ...
-> }
->
-> When the callback executes unwind_exit, prepare_func_exit() only rejects
-> PTR_TO_STACK in R0, copies callee->regs[BPF_REG_0] into
-> caller->regs[BPF_REG_0], and calls destroy_dynptrs_in_stack_slots(), whic=
-h
-> only invalidates STACK_DYNPTR slots in the callee's stack frame:
->
-> kernel/bpf/verifier.c:prepare_func_exit() {
->         ...
->                         caller->regs[regno] =3D callee->regs[regno];
->                         bpf_diag_mod_end(env);
->                 }
->         }
->
->         /* Invalidate callee-local dynptrs and their slices before the fr=
-ame goes away. */
->         err =3D destroy_dynptrs_in_stack_slots(env, callee, 0,
->                                              callee->allocated_stack / BP=
-F_REG_SIZE - 1);
->         ...
-> }
->
-> On the revisit of BPF_FUNC_user_ringbuf_drain in check_helper_call(),
-> unwound_r0 is preserved across caller-saved register scrubbing without
-> invalidating the callback's dynptr id:
->
-> kernel/bpf/verifier.c:check_helper_call() {
->         ...
->         if (env->cur_state->unwound) {
->                 regs[BPF_REG_0] =3D unwound_r0;
->                 goto unwound;
->         }
->         ...
-> }
->
-> Wouldn't this leave the caller's unwind pad with a live CONST_PTR_TO_DYNP=
-TR
-> pointing to the popped C stack frame of bpf_user_ringbuf_drain(), or a li=
-ve
-> PTR_TO_MEM slice pointing to the already-released user ringbuf sample?
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] bpf: bpf_find_vma() unwound pad unlocks mmap_lock with IRQs disabl=
+ed
+- [High] bpf: vma pointer escapes bpf_find_vma() lock scope via r0 on unwin=
+d_exit
+--
 
-Known bug which Ihor is already fixing.
+commit d84887aac74ddde9372c2538e6e860df21d923db
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1793147364.=
-git.memxor@gmail.com?part=3D8
+bpf: Let the callback of bpf_find_vma unwind
+
+This commit adds an unwind landing pad to bpf_find_vma() that releases the =
+RCU
+read lock, unlocks mmap_lock, drops any foreign mm reference, and returns t=
+he
+callback's r0 when the callback leaves via unwind_exit.
+
+> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+> index 2ee7b3b3c10be..ae67c97fe845e 100644
+> --- a/kernel/bpf/task_iter.c
+> +++ b/kernel/bpf/task_iter.c
+
+[ ... ]
+
+> @@ -827,6 +828,20 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task,=
+ u64, start,
+>  		mmput_async(mm);
+>  #endif
+>  	return ret;
+> +
+> +unwound:
+> +	/*
+> +	 * The callback left with unwind_exit, under the mmap lock and in the
+> +	 * RCU section. The way out is the same as after a return.
+> +	 */
+> +	rcu_read_unlock();
+> +	bpf_mmap_unlock_mm(work, mm);
+> +#ifdef CONFIG_MMU
+> +	if (mmput_needed)
+> +		mmput_async(mm);
+> +#endif
+
+[Severity: High]
+Can the unwound pad end up calling mmap_read_unlock() and mmput_async() with
+hardware interrupts disabled?
+
+When bpf_find_vma() is entered with interrupts enabled for a foreign task, =
+the
+irqs_disabled() check passes, mmput_needed is set to true, and
+bpf_mmap_unlock_guard_get() returns NULL because !irqs_disabled():
+
+kernel/bpf/mmap_unlock_work.h:bpf_mmap_unlock_guard_get() {
+	struct mmap_unlock_irq_work *work;
+
+	if (!irqs_disabled())
+		return NULL;
+    ...
+}
+
+Inside the callback, callback_ctx (R3) can point to a stack slot in the
+caller's frame. If the callback calls bpf_local_irq_save() on that caller
+stack slot and then executes unwind_exit, process_bpf_exit_full() calls
+check_resource_leak() with check_lock set to false because curframe > 0:
+
+kernel/bpf/verifier.c:process_bpf_exit_full() {
+	int err =3D check_resource_leak(env, exception_exit,
+				      exception_exit || !env->cur_state->curframe,
+				      exception_exit ? "bpf_throw" :
+				      "BPF_EXIT instruction in main prog");
+    ...
+}
+
+Unlike a normal callback return, unwind_exit sets state->unwound =3D true in
+prepare_func_exit(), so push_callback_call() returns 0 on revisit without
+verifying a second callback round and jumps via unwind_goto to the caller's
+pad where bpf_local_irq_restore() restores the caller's stack slot.
+
+At runtime, execution enters the unwound label in bpf_find_vma() with hardw=
+are
+interrupts disabled while work is NULL and mmput_needed is true.
+bpf_mmap_unlock_mm(NULL, mm) then calls mmap_read_unlock(mm) directly with
+IRQs disabled instead of deferring via irq_work, and mmput_async(mm) is also
+called with IRQs disabled, risking a deadlock on rq_lock during reader wake=
+up
+and triggering an invalid wait context under CONFIG_PREEMPT_RT.
+
+> +	bpf_unwind_leave();
+> +	return r0;
+>  }
+
+[Severity: High]
+What prevents the callback from escaping the vma pointer (or pointers walked
+from it, such as vma->vm_file, &vma->vm_file->f_path, or
+vma->vm_file->f_inode) in r0 via unwind_exit after mmap_lock, rcu_read_lock=
+(),
+and the foreign mm reference have been dropped?
+
+In set_find_vma_callback_state(), R2 (struct vm_area_struct *vma) is marked=
+ as
+a plain PTR_TO_BTF_ID:
+
+kernel/bpf/verifier.c:set_find_vma_callback_state() {
+    ...
+	callee->regs[BPF_REG_2].type =3D PTR_TO_BTF_ID;
+	__mark_reg_known_zero(&callee->regs[BPF_REG_2]);
+	callee->regs[BPF_REG_2].btf =3D  btf_vmlinux;
+	callee->regs[BPF_REG_2].btf_id =3D btf_tracing_ids[BTF_TRACING_TYPE_VMA];
+    ...
+}
+
+When the callback leaves via unwind_exit, prepare_func_exit() skips the
+SCALAR_VALUE check on R0 and copies callee->regs[BPF_REG_0] into
+caller->regs[BPF_REG_0]:
+
+kernel/bpf/verifier.c:prepare_func_exit() {
+    ...
+	if (callee->in_callback_fn && !unwinds) {
+		if (r0->type !=3D SCALAR_VALUE) {
+			verbose(env, "R0 not a scalar value\n");
+			return -EACCES;
+		}
+    ...
+	} else {
+		for (i =3D 0; i < nregs; i++) {
+			u32 regno =3D ret_regs[i];
+
+			bpf_diag_mod_begin(env, &caller->regs[regno], &callee->regs[regno],
+					   BPF_DIAG_MOD_WRITE);
+			caller->regs[regno] =3D callee->regs[regno];
+			bpf_diag_mod_end(env);
+		}
+	}
+    ...
+}
+
+Once the unwound pad in bpf_find_vma() runs rcu_read_unlock(),
+bpf_mmap_unlock_mm(work, mm), and mmput_async(mm), the caller's unwind pad
+receives the plain PTR_TO_BTF_ID in R0 outside the lock and RCU scope. If t=
+he
+VMA and its backing file or inode are concurrently unmapped and freed, pass=
+ing
+that dangling R0 pointer to helpers accepting ARG_PTR_TO_BTF_ID (such as
+bpf_ima_file_hash(), bpf_ima_inode_hash(), bpf_d_path(), or
+bpf_inode_storage_get()) can trigger a use-after-free.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1793147364.gi=
+t.memxor@gmail.com?part=3D7
