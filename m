@@ -1,45 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793150739;
-	b=QPmMGDfjth8Xwq8vk1IQ9qrm+pXEna+IzMJfSjduqkiUAHw/Ms7mQ1mgi2FoenGo976M
-	 qiRyulR90oIej+kYEOsV/C14VcKAYZ4NCaCI2TMP7o7SqdlVhO/Xt3HnYi8aQkIsMW+qR
-	 TnoHVsjvTUrInOnleAIKcGPQ+KES6i0J5PYn5oU1mWOZ+rFCwL0t6dWhEtqFoFRtFREav
-	 dXeSdsfwclKFlBT3NgrA22ms97GZFFaubyyrzpfPJYxsSTY5bNOfW+vyce/d5ZtGC+JxV
-	 H9ZsHGvXhEEKdSuR+U2NLQ+OpzCVwf4aasFfHUg+CorOR/qKvHCMmwFVp+clBR23f/w==
+	t=1793151109;
+	b=uxVMaaWi9W0LKwlLQMGu+HYSMA1vnXTmalqenEeJM1myivMBib5+RkZTggyLuE64Urte
+	 UwHLQvvzJSLbnnwPB6hB+ybYDhg43HyzII0/OVlQYjQkgT1qMFuO1OqL/5JThHGRkwbRy
+	 LCMpqqBSWxetvoW58rerJ7MV4ry/64qWdPdJHu9jlMNDC7bK4ksC7Z3wVefhnnHxSe7u8
+	 fj6P9q3ngoGo08qd88bRl0RYKWFrqIcyigwoJpEa62zkopptltZYcs9XXHIHk7jHenV/D
+	 wmcSW7k3D30d/EMJBpi5rnrkS9RlB2INaogoBA51pkZ07Z2ofso0BD04MMdBda8rhpA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793150739;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=RBgZfqDB7GYp9PFiR5euDUE1UAd/kzXQrzqXLg1XATk=;
-	b=yIY/y1bL+OLguq/D1sy/QgoRT4mRUgudl5EQDyDarhl9Q58D0QJETnza8gyq0lmM6srv
-	 fQhSV2gkB55GVaAqsTN/ozqonW4DPcZRvgXUDdigcdv3yTLR/uxp7o++U/8hJpyiiJlUW
-	 MTYXDPlqNxzZKi1nhDg9pb6XfeP+pNSte2xprz8kLJZcPt5YBzQWJiOFIYuidg/fHB1Eq
-	 51sfQwNSvRKUUC3sD/RxSOr2ke7dC4QkoTA513hlEYBif343TFvSNzMmp225MdrYYexE9
-	 Qb0kD7jpOxv5CDHP7B0HP4sHeYK/VSmRdcq/8ruvbn6q9XfIjjyjoXS1OMGhuG/rJxQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793151109;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=3ismksdJxi4Tqj8K5ibFN07MrD5fTK/T56anopTcOSI=;
+	b=jCe0XAbbeSyU3RtI1YP+QiHXDlW0q5zWh1NUcyvyFbyB0GjvTsg5muDSefSPC53OhG3Y
+	 a+PC5/+FAj1qu8lF6ICJIAaggxHSusy5s70UboRWkye2YaMNuXKssP7n9kCqXiftpU9Fp
+	 Z89mX0Yl3MHYLVVgHXEzz1VLfxCb2Kyevu9+3dHwcMtwvyRSZQffECwaaPQ+na9NJ4PSt
+	 +sFkhd+q+tpjA/E2Z9/3iLUkcfj/UPe1fVUN63xZqMSU/LiXcXgqk1GAWum6FBFvRaq4q
+	 TYth3iD+RSSOh8j+UfOQ+SbR5aWLQv7p564Z1lT+hG9/FEPjjVySqc66QyF446DNwdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=btiiZ3oG;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SZ0PYKu2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4A2606A31A
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:25:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E722606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=btiiZ3oG
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3759B1F01825;
-	Wed, 28 Oct 2026 01:25:38 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SZ0PYKu2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4911F01825;
+	Wed, 28 Oct 2026 01:31:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793150738;
-	bh=RBgZfqDB7GYp9PFiR5euDUE1UAd/kzXQrzqXLg1XATk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=btiiZ3oGkAtLQ4LOagpU9vF3am+zV9NOq7Bx/NLRKUxSXIZmGJEUArF2Q8V2MdGcp
-	 +5g6FFvMSyBgV3A4TfwnfYd2EySGfBvb6xyLzxQI/2jcUy8t0hd46tMP6Erottp3dy
-	 /CGWaVsiF76uphtGaAu2GoW64vOWK2KdvAh1jfRiAtYNHOd/c4H52akodxUaY577/m
-	 Nz2qhbFApJJfxc39EGThJJPbZ2IEb2KXocts5sToiZ4Ofsfl7gkUVN394H9ElakX/4
-	 6pgf7/sK1GReFohxGdqj2GlyJa1CP0EZ3BbuJoPBPrQdo/BfJEVBbsBUPgmqNZgl36
-	 /Zr1vf7sQ4fzg==
-Content-Type: multipart/mixed; boundary="===============8226136630849798558=="
+	s=k20260515; t=1793151108;
+	bh=3ismksdJxi4Tqj8K5ibFN07MrD5fTK/T56anopTcOSI=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=SZ0PYKu2Na63mPxQs2qGNB+LGFy9eRNd7u+H1+7qa7trzcezGumlYodiG3zreiQ0+
+	 YJOqG7Zw5Fc8ruYaXPEEgv1unQpaFCO/MgsCQgC/Ex3To6M/6Fe7azM8G0VQKGtTYS
+	 EJ7yUic+YwumW7QXUBNaJivrq6ih6XfwMQyS5hpRngq6J++0njNKyASwmNY112+hQI
+	 aopKvrr9s2e8EdozQO5Ol9+auiJsc1YcePLKhOjL6Wfx+u/lsQkqLmDZ4jX09bBKrg
+	 cJJ+2d9bdogM1X9A07+wsnTzvmeSbmBQfsbaoDrxbwsgiYpNH1yTl8IL83bHUckEfq
+	 tjPvOXGxQ+ezw==
+Message-ID: <sashiko-outbox-187317@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH bpf-next v1 03/11] bpf: Let a callback unwind into
+ the pad of its helper
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <cc848a0c0e4839fe34514b89561884c082650881.1793147364.git.memxor@gmail.com>
+References: <cover.1793147364.git.memxor@gmail.com>
+ <cc848a0c0e4839fe34514b89561884c082650881.1793147364.git.memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 28 Oct 2026 01:31:48 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,164 +59,293 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <89d5a613d296bb9e00c60395d44a45f8b39da90068939a82f8b27ce08557c584@mail.kernel.org>
-In-Reply-To: <d81d996f09e0fd0b07816dcd0541f39c0f451a23.1793147364.git.memxor@gmail.com>
-References: <d81d996f09e0fd0b07816dcd0541f39c0f451a23.1793147364.git.memxor@gmail.com>
-Subject: Re: [RFC PATCH bpf-next v1 09/11] bpf: Let the comparator of bpf_rbtree_add unwind
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 28 Oct 2026 01:25:38 +0000 (UTC)
 
---===============8226136630849798558==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] bpf: prepare_func_exit() clobbers caller R2 on ret_reg_pair cb unw=
+ind
+- [Medium] bpf: verifier_bug_if() in do_check() when callback unwinds with =
+const R0
+- [Medium] bpf: inline_bpf_loop() leaves unwind_goto after BPF_LDX_MEM when=
+ callback cannot unwind
+--
 
-> bpf: Let the comparator of bpf_rbtree_add unwind
+commit 00033d1866979957f9c4c976952ca2e9b1a444c5
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-TL;DR:
-- bpf_rbtree_add() unwind pad may be skipped under fexit/kretprobe/graph
-  tracing, leaving a freed node usable by the program
-- unwound path may leave node->owner poisoned, and may run kptr destructors in
-  NMI-unsafe contexts
+bpf: Let a callback unwind into the pad of its helper
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 648abe1ba63a..f8708b7181d7 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
+This commit extends the BPF verifier to allow synchronous callbacks invoked=
+ by
+helpers or kfuncs to exit via unwind_exit into an unwind pad following the
+helper or kfunc call. Upon unwind_exit, the verifier revisits the callsite
+with the callback's R0 preserved so helper effects are applied before
+proceeding to the unwind_goto instruction. It also updates register liveness
+and precision backtracking to account for R0 flowing from the callback acro=
+ss
+the call.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 5601d20562186..ac9dbe0821811 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/types.h>
+>  #include <linux/slab.h>
+>  #include <linux/bpf.h>
+> +#include <linux/bpf_unwind.h>
+>  #include <linux/btf.h>
+>  #include <linux/bpf_verifier.h>
+>  #include <linux/filter.h>
+> @@ -3435,6 +3436,8 @@ static int next_callx_callee(struct bpf_verifier_en=
+v *env, int caller, int from)
+>   * 'call foo; unwind_goto pad' goes to the pad when foo left with unwind=
+_exit.
+>   * JITs don't emit a branch for it. unwind_exit finds the pad by its ret=
+urn
+>   * address. So unwind_goto has to follow the call and nothing may jump t=
+o it.
+> + * The call may be of a helper or a kfunc that calls a callback: it leav=
+es like
+> + * the callback did, see check_cb_unwind().
+>   */
+>  static int check_unwind_insns(struct bpf_verifier_env *env)
+>  {
+> @@ -3450,8 +3453,10 @@ static int check_unwind_insns(struct bpf_verifier_=
+env *env)
+>  		if (!bpf_is_unwind_goto(insn))
+>  			continue;
+>  		seen =3D true;
+> -		if (!i || !(bpf_pseudo_call(insn - 1) || bpf_is_callx(insn - 1))) {
+> -			verbose(env, "unwind_goto at insn %d doesn't follow a call of a subpr=
+og\n",
+> +		if (!i || !(bpf_pseudo_call(insn - 1) || bpf_is_callx(insn - 1) ||
+> +			    bpf_is_sync_callback_calling_insn(insn - 1))) {
+> +			verbose(env,
+> +				"unwind_goto at insn %d doesn't follow a call of a subprog or of a h=
+elper with a callback\n",
+>  				i);
+>  			return -EINVAL;
+>  		}
+
+[Severity: Medium]
+What happens when unwind_goto follows a call to bpf_loop() that gets inlined
+by bpf_optimize_bpf_loop() -> inline_bpf_loop(), but the callback does not
+unwind (!env->subprog_info[subprog].can_unwind)?
+
+Here check_unwind_insns() permits unwind_goto after any
+bpf_is_sync_callback_calling_insn(insn - 1), and check_cb_unwind() returns 0
+when !env->subprog_info[subprog].can_unwind.
+
+When bpf_loop() is inlined in kernel/bpf/fixups.c:inline_bpf_loop() (both h=
+ere
+and after the later commit "bpf: Give the inlined bpf_loop a pad" when
+!can_unwind):
+
+	insn_buf[cnt++] =3D BPF_JMP_IMM(BPF_JLE, BPF_REG_1, BPF_MAX_LOOPS, 2);
+	insn_buf[cnt++] =3D BPF_MOV32_IMM(BPF_REG_0, -E2BIG);
+	insn_buf[cnt++] =3D BPF_JMP_IMM(BPF_JA, 0, 0, 16);
+	...
+	insn_buf[cnt++] =3D BPF_LDX_MEM(BPF_DW, BPF_REG_8, BPF_REG_10, r8_offset);
+
+the call instruction is replaced with 19 instructions ending in BPF_LDX_MEM
+without converting the trailing unwind_goto into BPF_JMP_A(0), and the
+BPF_JMP_IMM(BPF_JA, 0, 0, 16) instruction jumps directly to that unwind_got=
+o.
+
+If the target of that unwind_goto was marked seen during verification (for
+example, a shared pad or unwind_goto with offset 0) or when !is_priv,
+bpf_opt_hard_wire_dead_code_branches() leaves the unwind_goto instruction in
+place:
+
+	if (bpf_is_unwind_goto(insn) && aux_data[i + 1 + insn->off].seen) {
+		if (!aux_data[i + 1].seen) {
+			memcpy(insn + 1, &trap, sizeof(trap));
+			aux_data[i + 1].seen =3D env->pass_cnt;
+		}
+		continue;
+	}
+
+Wouldn't this leave unwind_goto immediately after BPF_LDX_MEM instead of a
+call instruction (and targeted by a jump), violating the JIT invariant in
+arch/x86/net/bpf_jit_comp.c and arch/arm64/net/bpf_jit_comp.c (including the
+x86-64 priv_frame_ptr path that assumes insn[i - 1] is a call ending in pop=
+ r9
+and keys the exception table at addrs[i - 1] - 2)?
+
+Conversely, in the later commit "bpf: Give the inlined bpf_loop a pad", if
+can_unwind is true for the callback subprog, but R1 (nr_loops) is known to =
+be
+0 at the bpf_loop() callsite, check_helper_call() skips push_callback_call()
+so the unwind pad is never verified. Yet inline_bpf_loop() sees
+subprog_info[callback_subprogno].can_unwind && bpf_is_unwind_goto(insn + 1)
+and emits an inlined pad jumping via BPF_JMP32_A to an unverified pad that
+bpf_opt_remove_dead_code() then strips.
+
+Should inline_bpf_loop() rewrite a trailing unwind_goto to BPF_JMP_A(0) when
+the callback does not unwind during the call, or only emit the pad when the
+unwind_goto target was actually verified?
 
 [ ... ]
 
-> @@ -2796,6 +2801,15 @@ static int __bpf_rbtree_add(struct bpf_rb_root *root,
->  	rb_insert_color_cached(n, (struct rb_root_cached *)root, leftmost);
->  	WRITE_ONCE(node->owner, root);
->  	return 0;
-> +
-> +unwound:
-> +	/*
-> +	 * The comparator left with unwind_exit. The node is not in the tree, and
-> +	 * the caller has let go of it: drop it, as the error path above does.
-> +	 */
-> +	__bpf_obj_drop_impl((void *)n - off, rec, false);
+> @@ -12111,12 +12178,16 @@ static int prepare_func_exit(struct bpf_verifie=
+r_env *env, int *insn_idx)
+>  	}
+> =20
+>  	caller =3D state->frame[state->curframe - 1];
+> -	if (bpf_is_unwind_exit(&env->prog->insnsi[*insn_idx])) {
+> -		/* the helper or the kfunc that called it doesn't expect that */
+> -		if (callee->in_callback_fn) {
+> -			verbose(env, "callback cannot unwind\n");
+> -			return -EINVAL;
+> -		}
+> +	unwinds =3D bpf_is_unwind_exit(&env->prog->insnsi[*insn_idx]);
+> +	if (unwinds) {
+> +		/*
+> +		 * A callback returns into the helper that called it, and to the
+> +		 * pad of the helper when the helper has one. check_cb_unwind()
+> +		 * has seen to that, and to the unwind_goto after the call of
+> +		 * the helper, where the helper leaves to right away, with the
+> +		 * r0 of the callback as it is: the pad gets its state, as the
+> +		 * pad after a subprog call does.
+> +		 */
+>  		if (!bpf_is_unwind_goto(&env->prog->insnsi[callee->callsite + 1])) {
+>  			verbose(env, "unwind_exit, but no unwind_goto after the call at insn =
+%d\n",
+>  				callee->callsite);
+> @@ -12124,7 +12195,7 @@ static int prepare_func_exit(struct bpf_verifier_=
+env *env, int *insn_idx)
+>  		}
+>  		state->unwound =3D true;
+>  	}
+> -	if (callee->in_callback_fn) {
+> +	if (callee->in_callback_fn && !unwinds) {
+>  		if (r0->type !=3D SCALAR_VALUE) {
+>  			verbose(env, "R0 not a scalar value\n");
+>  			return -EACCES;
 
-Does this path leave node->owner set to BPF_PTR_POISON?  The function claims
-the node before the loop:
+[Severity: High]
+Can a callback with a 9..16 byte BTF return type clobber the caller's R2
+argument register when it exits via unwind_exit?
 
-	if (cmpxchg(&node->owner, NULL, BPF_PTR_POISON)) {
+In bpf_compute_subprog_ret_regs(), ret_reg_pair is set for any static subpr=
+og
+whose BTF return type is 9..16 bytes, and btf_check_subprog_call() in
+push_callback_call() does not reject this for callbacks. At the top of
+prepare_func_exit():
 
-The normal exit replaces that with WRITE_ONCE(node->owner, root), but the
-unwound exit never clears the claim.  For a non-refcounted node the drop
-frees it, so that does not matter.
+	callee =3D state->frame[state->curframe];
+	r0 =3D &callee->regs[BPF_REG_0];
+	nregs =3D bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
 
-For a refcounted node with another live reference, __bpf_obj_drop_impl() only
-drops the count and the object lives on with owner still set to
-BPF_PTR_POISON.  Nothing resets it later, since bpf_obj_free_fields() does
-nothing for BPF_RB_NODE and only bpf_rbtree_remove() or a successful add
-writes owner.
+When callee->in_callback_fn && unwinds is true, prepare_func_exit() now tak=
+es
+the else branch:
 
-The other reference can come from m = bpf_refcount_acquire(n) before the
-add, or from the comparator calling bpf_refcount_acquire() on its argument
-(the kfunc is KF_SPINLOCK_SAFE).  The verifier keeps that other reference as
-owning after the unwind, but every later bpf_rbtree_add() of the object
-fails at the cmpxchg, drops the caller's reference and returns -EINVAL.
+	} else {
+		/*
+		 * return to the caller whatever the callee had in the
+		 * return register(s)
+		 */
+		for (i =3D 0; i < nregs; i++) {
+			u32 regno =3D ret_regs[i];
 
-The comment says "drop it, as the error path above does", but the error path
-above never took the claim and this path did.  Would a
-WRITE_ONCE(node->owner, NULL) before the __bpf_obj_drop_impl() call be
-needed here?
+			bpf_diag_mod_begin(env, &caller->regs[regno], &callee->regs[regno],
+					   BPF_DIAG_MOD_WRITE);
+			caller->regs[regno] =3D callee->regs[regno];
+			bpf_diag_mod_end(env);
+		}
+	}
 
-Can this drop also run in a context where the verifier refuses
-bpf_obj_drop()?  check_kfunc_call() rejects bpf_obj_drop() and
-bpf_percpu_obj_drop() when btf_record_has_nmi_unsafe_fields() is true for
-tracing program types, per commit 94c8d1c21be4 ("bpf: Reject bpf_obj_drop()
-from tracing progs").  Every rbtree node type is covered, because
-btf_field_is_nmi_safe() returns false for BPF_RB_NODE.
+If nregs =3D=3D 2, this copies callee->regs[BPF_REG_2] into
+caller->regs[BPF_REG_2] before redirecting *insn_idx back to callee->callsi=
+te.
 
-Before this patch, the only drop in bpf_rbtree_add() was the error path for a
-node already in a collection, and that collection holds a reference of its
-own.  Now a comparator that ends in unwind_exit makes the kfunc call
-__bpf_obj_drop_impl() every time, and for a non-refcounted node that is the
-last reference, so bpf_obj_free_fields() runs inline.
+When the verifier revisits the call instruction at callee->callsite,
+check_helper_call() or check_kfunc_call() re-runs argument validation and s=
+ide
+effects using the overwritten caller->regs[BPF_REG_2]. In particular, for
+bpf_rbtree_add_impl(root, node, less, ...), R2 is the owning reference to t=
+he
+node being added:
 
-Nothing restricts this by program type: BPF_PROG_TYPE_TRACING gets
-generic_kfunc_set, check_map_prog_compatibility() refuses BPF_SPIN_LOCK only
-for is_tracing_prog_type() (which does not include BPF_PROG_TYPE_TRACING),
-and neither check_cb_unwind() nor the new unwound branch in
-check_kfunc_call() tests btf_record_has_nmi_unsafe_fields() or the program
-type.
+	if (is_bpf_list_push_kfunc(meta.func_id) || is_bpf_rbtree_add_kfunc(meta.f=
+unc_id)) {
+		id =3D regs[BPF_REG_2].id;
+		insn_aux->insert_off =3D regs[BPF_REG_2].var_off.value;
+		insn_aux->kptr_struct_meta =3D btf_find_struct_meta(meta.arg_btf, meta.ar=
+g_btf_id);
+		ref_convert_owning_non_owning(env, id);
+	}
 
-For example, a non-sleepable tp_btf or fentry program attached somewhere
-NMI-reachable could allocate:
+If the callback places a different allocated node pointer in its R2 before
+unwind_exit, wouldn't the revisit of check_kfunc_call() release the wrong
+reference ID in the verifier while bpf_rbtree_add_impl() drops the original
+node at runtime, leaving a dangling owning reference to the freed original
+node in the caller's unwind pad?
 
-	struct { struct bpf_rb_node node; struct task_struct __kptr *t; }
+Should nregs be forced to 1 when callee->in_callback_fn is true (or should
+callbacks with ret_reg_pair be rejected)?
 
-store an acquired task in t, take the lock and call bpf_rbtree_add() with a
-comparator that unwinds.  The verifier accepts this although it refuses
-bpf_obj_drop() on the same object, and the pad then runs the task kptr
-destructor (put_task_struct()) from that context.
+[ ... ]
 
-Should the same btf_record_has_nmi_unsafe_fields() and program type check be
-applied to a bpf_rbtree_add() whose comparator can unwind, for example in
-check_cb_unwind() or in the unwound branch of check_kfunc_call()?
+> @@ -20589,7 +20692,8 @@ static int do_check(struct bpf_verifier_env *env)
+>  		}
+> =20
+>  		if (bpf_is_jmp_point(env, env->insn_idx)) {
+> -			err =3D bpf_push_jmp_history(env, state, 0, 0, 0, NULL, 0);
+> +			err =3D bpf_push_jmp_history(env, state, state->unwound ? INSN_F_UNWO=
+UND : 0,
+> +						   0, 0, NULL, 0);
+>  			if (err)
+>  				return err;
+>  		}
 
-> +	bpf_unwind_leave();
-> +	return r0;
->  }
+[Severity: Medium]
+Can revisiting the call instruction with state->unwound set trigger
+verifier_bug_if() in do_check()'s precomputed constant register check?
 
-Can this pad rely on the slot at the frame address of bpf_rbtree_add() or
-bpf_rbtree_add_impl() still holding the BPF caller's return address?  Both
-are ordinary traceable functions: helpers.o is built with ftrace flags and
-btf_id_deny does not list them.
+Before do_check() runs, bpf_compute_const_regs() computes intraprocedural
+constant register values at each instruction. If the caller holds a known
+32-bit constant C1 in R0 before a callback-calling helper or kfunc instruct=
+ion
+(for instance, r0 =3D 0; call bpf_loop; unwind_goto +pad;),
+bpf_compute_const_regs() sets BIT(BPF_REG_0) in
+insn_aux->const_reg_mask and records C1 in
+insn_aux->const_reg_vals[BPF_REG_0].
 
-Several tracers that hook the return rewrite that slot:
+When the callback unwinds with a different constant scalar C2 in R0,
+prepare_func_exit() sets state->unwound =3D true, copies C2 into
+caller->regs[BPF_REG_0], and sets *insn_idx =3D callee->callsite. On the re=
+visit
+of the call instruction in do_check(), just below this hunk:
 
-  - an fexit, fmod_ret or fsession trampoline, which uses
-    BPF_TRAMP_F_CALL_ORIG and calls orig_call + X86_PATCH_SIZE, so the body
-    returns into the trampoline
-  - a kretprobe or fprobe exit (the rethook trampoline)
-  - the function_graph tracer, where ftrace_graph_func() sets
-    *parent = return_to_handler
+		/* Sanity check: precomputed constants must match verifier state */
+		if (!state->speculative && insn_aux->const_reg_mask) {
+			struct bpf_reg_state *regs =3D cur_regs(env);
+			u16 mask =3D insn_aux->const_reg_mask;
 
-In each case bpf_unwind_leave() reads that address.  bpf_unwind_target()
-finds no BPF extable entry for it and no EX_TYPE_BPF kernel entry, and
-returns the address unchanged.  WARN_ON_ONCE(to == *slot) fires (a panic with
-panic_on_warn), and the kfunc returns r0 the normal way.
+			for (int r =3D 0; r < ARRAY_SIZE(insn_aux->const_reg_vals); r++) {
+				u32 cval =3D insn_aux->const_reg_vals[r];
 
-The tracer then sends control to the BPF program's normal return address,
-and the JIT emits nothing for unwind_goto, so the program carries on along
-the path the verifier checked as "comparator returned".  On that path
-ref_convert_owning_non_owning() has made the node a non-owning reference
-that is valid in the tree until unlock, but the kfunc has already called
-__bpf_obj_drop_impl() on it:
+				if (!(mask & BIT(r)))
+					continue;
+				if (regs[r].type !=3D SCALAR_VALUE)
+					continue;
+				if (!tnum_is_const(regs[r].var_off))
+					continue;
+				if (verifier_bug_if((u32)regs[r].var_off.value !=3D cval,
+						    env, "const R%d: %u !=3D %llu",
+						    r, cval, regs[r].var_off.value))
+					return -EFAULT;
+			}
+		}
 
-	__bpf_obj_drop_impl((void *)n - off, rec, false);
-	bpf_unwind_leave();
-	return r0;
+Because regs[BPF_REG_0] now holds the callback's unwound constant C2 rather
+than the caller's pre-call constant C1, wouldn't this fire verifier_bug_if()
+and fail verification with -EFAULT unless BPF_REG_0 is skipped when
+state->unwound is true?
 
-Can the program then read and write a freed node?  For example, it could
-bpf_kptr_xchg() an acquired reference into a kptr field of the dead object
-(kptr_xchg_dest_types allows NON_OWN_REF), and that reference is never
-released.
-
-For helpers with pads, a missed unwind only loses the exception.
-bpf_rbtree_add() is the first one whose two exits leave the object in
-different states (in the tree, or freed), so for it a missed unwind leaves
-the verifier's state wrong.
-
-bpf_check_attach_target() already refuses everything but fentry on a subprog
-that can unwind ("unwind_exit would return to the trampoline that called the
-target"), but kernel functions with a pad get no such restriction, and the
-rest of the series (through 5646f059f1bb) adds none.  Should return-hooking
-tracers be kept off these kfuncs (notrace, a btf_id_deny-style list for
-fexit/fmod_ret/fsession, and no kretprobe or graph tracing), or should the
-pad tolerate a rewritten return address?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40612543702
---===============8226136630849798558==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1793147364.gi=
+t.memxor@gmail.com?part=3D3
