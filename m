@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793219037;
-	b=WWdxhv/d8Zh7bMcs2SX60p9LcKMY5RLijscf9FeDg5m3qtOBv/UPwLznh4ILWul2V+BI
-	 UFWbFr0TWc/pxMoU6f+AAqnOGfzLCFSEMvgACLN+M1JG/0E21x5Jt/LAWzdXVYYCKh7KO
-	 M4ze6Df7XWJYrjEBKryEtjsOexJkPu0OaqsmAU2Vej7sXCU8rY9kXKQfGDkDyngiPx+Ul
-	 S8OUxGSu45V3sPBXfYFLzpMO54eBJBU011EKxcKq1KYD02IssPdnpweOQTX93x4KL/vpM
-	 OnC5Ay8Bxdm1tWxxRS3FBYQGylJ+7ZdE2IM9TM9AkF4HOMDc+cEeeWkTh3sAfBoI5QA==
+	t=1793219038;
+	b=2yUYczmNpAWo9zOW5hNdvP4W192OBW/Xr4kZgtVB10J3Ud0T5hd12lPJ+HFRALY+F4m7
+	 /X3LFxSngj3aClvS6JZpLb9fHOvzKpiNNJ/bD2xLl3aSGj9tFpXqIQS9HDCGsTLZhJzC6
+	 AeyyDoGusc1ubS8QGcGfWvxYaog6WQhJoyVXDYkqgnnBChYboaCixQlEcLx3JOs6m9VVY
+	 iFvWf8s5bj5OC1JThDXGWRAxDSnTBCIFPzgf6Lm98qnuH16sZ/qj74i0zAW0/wyuUShwb
+	 GTV/Yq9bZMgluU5iwDlAFblJs3PrjcO4Z61I6iZbqfaFZWexz64FB93KRiH6+chzSsg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793219037;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793219038;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Virus-Scanned;
-	bh=DCCi5eo/fYB6tzKxD/wYOm7N8O32aM+y60ei7JSb/fM=;
-	b=Rw6yYH7eKEky7VznrLeE0iDtqcjXfN8mufO+Pc509p0JgEZfX985a7f/swhKPLkP+Dhj
-	 YVt5U+3bNt7KX2fR6GtTYGZnKZOPJSJg/fA18pdCnqxFk22Zu8uKA/bPwQSYcqhrp8fBC
-	 /6WuLuOdwhGECvCl7u75PC5EcP91mJjLk4kYKxeqQJ70ZIpdoYR5jyPCTWRVPWtb3/yjp
-	 MyzEjhZrshLurPPm6aESozZPknQrvCLWCbcg7dJwX2jqgjoK7ZMCaFuql3KELD4K915P0
-	 uiDYBxOUj5W1Br226xuI0j1U8b75SUx6jBEc7ZRSreaOygJnRtUFKY7VNPCL3Zc7I1A==
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Virus-Scanned;
+	bh=uM3dzNePX+CkZXaR4uIldLiii3CikIu7SQ4i+5pDCss=;
+	b=p5V9avpvfp7GFiEP/SeI392bJIH01Hf5vOGlSwRMmUyY5fbzFamMFbfCnmtNi3yWpbta
+	 6ozPI/lOC0r89DkEDPZnNzxqrMh/stHuvsB2uXPsIjZ/JobqV+p419BDZPPk7HRckHBf/
+	 Knva19TFs8BgHQ4mfmwmG+qnxJ2xGovsv+mqLiDLIn5Gdo23bqNbT7UCXSMKKgb4TM89o
+	 mxlV60t7/o3yiWphShvOVU3aRbWHKeP7VkKMoOsOSnBT78xDjE2xEHcPkwZR8ecSVrMCE
+	 l9UnQjulCm1UuOFt0PLoYq9y2qT6/PkuBwqC2GfIt0ePDOqRtf49XTUUl9k5a2HNXDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=iogearbox.net;
 	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=iuCksMNr;
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=W6EV8y9Q;
 	arc=none smtp.remote-ip=213.133.104.62
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CB9606A31A
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 20:23:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B5CB9606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95409606A31E
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 20:23:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95409606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=iuCksMNr
+	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=W6EV8y9Q
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=DCCi5eo/fYB6tzKxD/wYOm7N8O32aM+y60ei7JSb/fM=; b=iuCksMNrFHfk744rcdNkL5oX4M
-	hBq4vnhastmYlSqSwO3polVP/xIoSrbViPiHDNlKJoCECptZ2S7ZPimx4Vxa70zMK07e5z13GvToX
-	XxfIGEnLbe6jaOxLkzUV+dntJRU7VuevoIh4BVmmYU+uAa5X0UwjN7jkQJRotUtl5/eOkZf9I9P9s
-	TMEwy4wA7ko6CnVvHahJESHcNE6lfq4L9LO1QUSLzFVoulI/BcPrKYPvR4RMhi13HuWMJhtO7upac
-	aWlygwiTCIT87sS9f/XBi2xYMCNP6hCCaRm4p5SraEpny+UOUB5266ElFmyhzt+UsOwxzv9t2JVBa
-	FbdU2xbA==;
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=uM3dzNePX+CkZXaR4uIldLiii3CikIu7SQ4i+5pDCss=; b=W6EV8y9Qukh/0xoAXErtiSliBy
+	r+F52WN/PCQEfbXLkBrVKoZrJW6BailOTCZ5vlG71JHPI8trIuFeiI7ns8dZr70LL8UI/SgUXFLS1
+	0Zxq9Ffe7NxQh+qEUhOdhKTrfSt22lmwtCkYoVuoTqnbEr5KdVh67coLtxHgNZDvq9pb//wJ9fXuL
+	cWjxV3ll4Vr2EsykaF5YSPqR9GCK1kXwxr3VEEePWNYGWVL5nt6PhSTy6s7EX9rPFPenYFo4Z7UfU
+	74sVXv1HqVuTW/ghIqILoNjrALvA7RmvkUAua8vok7Vg6j/udf2CuzwNCDiQWS+LktPN23/y6wCI1
+	EfpjlMDQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1xMABX-0007IS-0r;
-	Wed, 28 Oct 2026 21:23:47 +0100
+	id 1xMABW-0007I8-1u;
+	Wed, 28 Oct 2026 21:23:46 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: rostedt@goodmis.org,
@@ -57,12 +57,10 @@ Cc: rostedt@goodmis.org,
 	andrii@kernel.org,
 	jolsa@kernel.org,
 	Menglong Dong <dongml2@chinatelecom.cn>
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Test kprobe and fentry/fexit programs on one function
-Date: Wed, 28 Oct 2026 21:23:45 +0100
-Message-ID: <20261028202345.1215859-2-daniel@iogearbox.net>
+Subject: [PATCH bpf v3 1/2] x86/ftrace: Mark jmp mode by clearing bit 63 of trampoline address
+Date: Wed, 28 Oct 2026 21:23:44 +0100
+Message-ID: <20261028202345.1215859-1-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261028202345.1215859-1-daniel@iogearbox.net>
-References: <20261028202345.1215859-1-daniel@iogearbox.net>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -75,162 +73,118 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.6/28167/Wed Oct 28 07:24:17 2026)
 
-A kprobe next to a BPF trampoline makes the ftrace site of the function
-call ftrace_regs_caller and from there the list of ftrace callbacks,
-the path that crashed while ftrace_ops_list_func() started at an odd
-address. No test covers a function traced by both. Thus, attach an
-fentry program and a kprobe to bpf_fentry_test1(), then a second fentry
-program, which modifies the trampoline of the shared site, then an fexit
-program, after which ftrace_regs_caller enters the trampoline by a jmp,
-then detach the kprobe, after which the site jumps to it directly. After
-each step, check that every attached program ran once for the call and
-saw its argument, and the fexit program its return value.
+Since commit 0c3772a8db1f ("x86/ftrace: Implement DYNAMIC_FTRACE_WITH_JMP")
+ftrace_call_replace() emits a jmp instead of a call when bit 0 of the
+target is set, the mark of a direct trampoline that is entered by a jmp.
+ftrace_update_ftrace_func() and arch_ftrace_update_trampoline() use it
+too, for the call of the ftrace callback in ftrace_caller, ftrace_regs_caller
+and the ftrace trampolines, but a callback is a C function and can start
+at an odd address. It does with gcc13 and CONFIG_CC_OPTIMIZE_FOR_SIZE=y:
+gcc13 has no -fmin-function-alignment, so CONFIG_CC_HAS_SANE_FUNCTION_ALIGNMENT
+is not set, and the -falign-functions=16 used in its place does not apply
+to functions optimized for size. Here ftrace_ops_list_func() starts at:
 
-Without the previous fix the test crashes the kernel, but only where
-ftrace_ops_list_func() is at an odd address (in my test with gcc +
-CONFIG_CC_OPTIMIZE_FOR_SIZE=y). With the fix it passes:
+  ffffffff810e0147 T ftrace_ops_list_func
 
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t fentry_kprobe_shared
-  [...]
-  #147     fentry_kprobe_shared:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0/0 FAILED
+ftrace_regs_call then becomes a jmp to the byte before it:
 
+  ftrace_regs_call ffffffff810374f3: e9 4e 8c 0a 00
+
+That byte is the last one of the preceding function's tail jump, and with
+the first two of ftrace_ops_list_func() it decodes as an inc DWORD PTR
+[rcx+0x57], which swallows the push %r15 of the prologue. Entered without
+a return address and one push short, the list function returns through
+the pt_regs that ftrace_regs_caller saved, here to the saved R14:
+
+  BUG: unable to handle page fault for address: ffff888116c29f40
+  #PF: supervisor instruction fetch in kernel mode
+  RIP: 0010:0xffff888116c29f40
+  R13: 0000000000000000 R14: ffff888116c29f40 R15: 0000000000000000
+  Call Trace:
+   ? bpf_trampoline_6442499918+0x1/0x149
+   ? bpf_lsm_file_open+0x5/0x8
+   ? bpf_lsm_file_open+0x5/0x8
+   ? security_file_open+0x19/0x46
+   ? do_dentry_open+0x16c/0x32a
+
+The list function is installed whenever two ftrace_ops are registered,
+and a function that two of them trace calls it. A kprobe next to a BPF
+trampoline is one such case, and with the single ftrace_ops of the BPF
+trampolines every update_ftrace_direct_mod() is another, as it registers
+a stub ops for the sites it modifies. Here, detaching one of several BPF
+LSM programs from a busy hook crashed the tasks that ran the hook during
+the update.
+
+Bit 0 is free only in the direct trampolines that a dyn_ftrace record can
+point to, but bit 63 is set in every kernel text address on x86_64. Thus,
+mark jmp mode by clearing bit 63 instead, so that ftrace_is_jmp() is false
+for any callback, whatever its alignment, and ftrace_regs_caller sets the
+bit again where it cleared bit 0 before. A marked address is not canonical,
+so a return or indirect branch to one that missed ftrace_jmp_get() faults
+instead of running from a byte before its target.
+
+Fixes: 0c3772a8db1f ("x86/ftrace: Implement DYNAMIC_FTRACE_WITH_JMP")
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Cc: Menglong Dong <dongml2@chinatelecom.cn>
-Cc: Steven Rostedt <rostedt@goodmis.org>
 ---
- .../bpf/prog_tests/fentry_kprobe_shared.c     | 65 +++++++++++++++++++
- .../bpf/progs/fentry_kprobe_shared.c          | 49 ++++++++++++++
- 2 files changed, 114 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
+ v2 -> v3:
+   - Removed Kconfig text, rest as-is
+ v1 -> v2:
+   - Steven suggested as an alternative/more generic fix to go
+     the route via bit 63
+   - BPF selftest kept as-is
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c b/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
-new file mode 100644
-index 000000000000..751aa49d6106
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "fentry_kprobe_shared.skel.h"
+ arch/x86/kernel/ftrace_64.S | 6 +++---
+ include/linux/ftrace.h      | 8 +++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+index 62c1c93aa1c6..4b20673a3395 100644
+--- a/arch/x86/kernel/ftrace_64.S
++++ b/arch/x86/kernel/ftrace_64.S
+@@ -286,9 +286,9 @@ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
+ 	RET
+ 
+ 1:
+-	testb	$1, %al
+-	jz	2f
+-	andq $0xfffffffffffffffe, %rax
++	/* See ftrace_jmp_set(), jmp to the trampoline */
++	btsq	$63, %rax
++	jc	2f
+ 	movq %rax, MCOUNT_REG_SIZE+8(%rsp)
+ 	restore_mcount_regs
+ 	/* Restore flags */
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index b041d9142d2b..1c2056a1a68b 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -618,19 +618,21 @@ static inline void arch_ftrace_set_direct_caller(struct ftrace_regs *fregs,
+ #endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_JMP
++#define FTRACE_JMP_BIT	BIT(BITS_PER_LONG - 1)
 +
-+static void trigger(struct fentry_kprobe_shared *skel)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	int err;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry1), &topts);
-+	ASSERT_OK(err, "test_run");
-+}
-+
-+/*
-+ * With a kprobe next to the trampoline, the ftrace site of the function
-+ * reaches the trampoline through the list of ftrace callbacks, and so does
-+ * the site of a trampoline that is modified to add or remove a program.
-+ * With the fexit program, the trampoline is entered by a jmp.
-+ */
-+void test_fentry_kprobe_shared(void)
-+{
-+	struct fentry_kprobe_shared *skel;
-+
-+	skel = fentry_kprobe_shared__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+	skel->bss->pid = getpid();
-+
-+	skel->links.fentry1 = bpf_program__attach(skel->progs.fentry1);
-+	if (!ASSERT_OK_PTR(skel->links.fentry1, "attach_fentry1"))
-+		goto out;
-+	skel->links.kprobe1 = bpf_program__attach(skel->progs.kprobe1);
-+	if (!ASSERT_OK_PTR(skel->links.kprobe1, "attach_kprobe1"))
-+		goto out;
-+	trigger(skel);
-+	ASSERT_EQ(skel->bss->fentry1_hits, 1, "fentry1_hits");
-+	ASSERT_EQ(skel->bss->kprobe_hits, 1, "kprobe_hits");
-+
-+	skel->links.fentry2 = bpf_program__attach(skel->progs.fentry2);
-+	if (!ASSERT_OK_PTR(skel->links.fentry2, "attach_fentry2"))
-+		goto out;
-+	trigger(skel);
-+	ASSERT_EQ(skel->bss->fentry1_hits, 2, "fentry1_hits");
-+	ASSERT_EQ(skel->bss->fentry2_hits, 1, "fentry2_hits");
-+	ASSERT_EQ(skel->bss->kprobe_hits, 2, "kprobe_hits");
-+
-+	skel->links.fexit1 = bpf_program__attach(skel->progs.fexit1);
-+	if (!ASSERT_OK_PTR(skel->links.fexit1, "attach_fexit1"))
-+		goto out;
-+	trigger(skel);
-+	ASSERT_EQ(skel->bss->fentry1_hits, 3, "fentry1_hits");
-+	ASSERT_EQ(skel->bss->fentry2_hits, 2, "fentry2_hits");
-+	ASSERT_EQ(skel->bss->fexit_hits, 1, "fexit_hits");
-+	ASSERT_EQ(skel->bss->kprobe_hits, 3, "kprobe_hits");
-+
-+	bpf_link__destroy(skel->links.kprobe1);
-+	skel->links.kprobe1 = NULL;
-+	trigger(skel);
-+	ASSERT_EQ(skel->bss->fentry1_hits, 4, "fentry1_hits");
-+	ASSERT_EQ(skel->bss->fentry2_hits, 3, "fentry2_hits");
-+	ASSERT_EQ(skel->bss->fexit_hits, 2, "fexit_hits");
-+	ASSERT_EQ(skel->bss->kprobe_hits, 3, "kprobe_hits");
-+out:
-+	fentry_kprobe_shared__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c b/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
-new file mode 100644
-index 000000000000..3d16773aada8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int pid;
-+int fentry1_hits;
-+int fentry2_hits;
-+int fexit_hits;
-+int kprobe_hits;
-+
-+static bool from_test(int a)
-+{
-+	return (bpf_get_current_pid_tgid() >> 32) == pid && a == 1;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry1, int a)
-+{
-+	if (from_test(a))
-+		fentry1_hits++;
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry2, int a)
-+{
-+	if (from_test(a))
-+		fentry2_hits++;
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_fentry_test1")
-+int BPF_PROG(fexit1, int a, int ret)
-+{
-+	if (from_test(a) && ret == 2)
-+		fexit_hits++;
-+	return 0;
-+}
-+
-+SEC("kprobe/bpf_fentry_test1")
-+int BPF_KPROBE(kprobe1, int a)
-+{
-+	if (from_test(a))
-+		kprobe_hits++;
-+	return 0;
-+}
+ static inline bool ftrace_is_jmp(unsigned long addr)
+ {
+-	return addr & 1;
++	return !(addr & FTRACE_JMP_BIT);
+ }
+ 
+ static inline unsigned long ftrace_jmp_set(unsigned long addr)
+ {
+-	return addr | 1UL;
++	return addr & ~FTRACE_JMP_BIT;
+ }
+ 
+ static inline unsigned long ftrace_jmp_get(unsigned long addr)
+ {
+-	return addr & ~1UL;
++	return addr | FTRACE_JMP_BIT;
+ }
+ #else
+ static inline bool ftrace_is_jmp(unsigned long addr)
 -- 
 2.43.0
 
