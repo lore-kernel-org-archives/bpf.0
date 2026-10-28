@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793150733;
-	b=YOFBFj8TBXaovLLbcMNDUqKu1plo346CPN4TgnIzQm96YfNJXleYEfzgsFk/b4pf4r/j
-	 +iUWU/5UqXFeAcfIaIy4C4lcHzBLwsq3VgfdFj3T+QoAW5HdftIWuZHvtpdwKCs8Xl7DM
-	 M8bJ2RwGxGoP82kPLsGuoFisCdQ3METF8lCNP+4I8NlG46RBRGW5xQMEHJYYvU0eGlfA0
-	 z+JwAWJPZ8JTRe6uWVP+OUWm9ZvlhRa7tzdcCQQR5X9tc69cBN2G3gZ/ElMnbJ60PybIk
-	 0/LP1cDAPvL3vTw959Fr6woCKG6TvRCbeSrXIQVZkmeXQojsKq53xYjWZ5MVXJgp9eA==
+	t=1793150736;
+	b=C42RfcLr3lvXocr/Rv1g2xyPwSh4j33+u7LTEza6PdmF1YdKrEtqqHIZFMXkPx0JPX5R
+	 zNLHFQkjqOBR49y+RrAbgMsIcnd651px6hPik2zW5UqzOOyTA8g2vnZXNNX7QoDqJU+iL
+	 ymJqICsw4civcnVBdhlePYcFduT0i+aSPfyEZQ6sLO5ajoqoQ3mgQ9Z0WtdmVA6NPPVrR
+	 e9kqM5DOGN8TJuO2ZfpGw/kRCs8bWGppj8UIyRRiXM1UL1ucBBhIqPJapKeftivAtcsmv
+	 Xp9qfYzhukYRr2Vw8Z5GD2gMbvYq8JS7PKYlwcoG7KbCDBVOA9wE/gUD1lJ+JF6TWvw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793150733;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793150736;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=ZrDj8FzyCe6Slte1Ar+XvlMDgWSj73BLxNLPRjeu8gY=;
-	b=xjoxxBdprIXVvZe/Nk02h7Wc2DFvvmCMr5T8Xyybjp/wF/zYDFUQQju7LmIILpF8CkkG
-	 fMQApxWYtQY5WJTDlI6EFEUnYxaURs4+4SxEggoysJSnNLVOZ3ku4LNXJWSybYpoFtrtk
-	 KsHPw5tunzprbj7JM2G+m4yyIyF2KXnHGYPmPbzOz7MMbnXDeW/IOBQAosdRc2PKnF78G
-	 CXbNXQ4Not7T3UbrOXSwErfORFt+y7lNnDBCT4raWkUO1cBzP53BzRKLB6MG9XPQRkdxy
-	 bDISQef4+DJqkM+hOx7n262bHCkSJNpdlvKpPbgItfyJYvhOYkpv9C/slGujZx4oCGw==
+	bh=uwTFqG+Y3Drm9tBRTvZoHX5U5RK5FD2GNGkB/YHfKwE=;
+	b=WF6nsHv3GQ+Xjfe4pj1gYlMLoTIOHVdYgk3P7GnuvxCre5tekv57Qz6zcsJyddcbz8k5
+	 I9W5J3gTf1SQmxX4/kuogas6zyW8Vn0t/cbHLnTxec2nUzNP6lWrdBQjOeYADCbi+wEUF
+	 1gSnqaRSw+e32UGNvH7k5Su4EJTl05wriCxuSRcPinD9OvrNFsqvSWuWOBC9xNPUBudsA
+	 S7oxNFikcXmDVgBvqsW513wxGCM6/iOWAoplyy7JSrRQrRFytdyRUkmRJqSUXaZFVj3hA
+	 r0pAF17GFtMeZ2inw8o3fLqvyGWYop6pFrHzBp8sZk8YcQV5ElkAOPkORYRkYIfk62A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Hizm0/cy";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JF4okSYa;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BEB606A31A
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:25:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4ED606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Hizm0/cy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D4D1F01825;
-	Wed, 28 Oct 2026 01:25:32 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JF4okSYa
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED991F01825;
+	Wed, 28 Oct 2026 01:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793150733;
-	bh=ZrDj8FzyCe6Slte1Ar+XvlMDgWSj73BLxNLPRjeu8gY=;
+	s=k20260515; t=1793150735;
+	bh=uwTFqG+Y3Drm9tBRTvZoHX5U5RK5FD2GNGkB/YHfKwE=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Hizm0/cyfzB/srrnRprAeoMQv2uofDEg19iw+TkrWC5Y1OCYC8rLrVg3iKLxVM3s8
-	 ZRFbvnSsQHl0+XOb9C+JK8xuBEJojxUo2N2AIyvtD8UfHTbMy7jNSj2Cb+QN0MXtTa
-	 ErTGF/gX9Ml4tInboTp37VBv8OpwixzLNlH6HstjWj86DQZ15lUlt3RsrEY5HpELX2
-	 aXcITsY51/0MFPE5XwpeTwH6KqVVEKKxKZiKJ8UKGu8k61e8Be2Owg1d1tUhqT3NKG
-	 4pFG8bUAOsGMA6R7gUqyv2R0aC7YKHC0oZlMMRL1KWmUSzOhvN3ODRuNeJjqJwLmnA
-	 AvoDLn2cm+I4A==
-Content-Type: multipart/mixed; boundary="===============6530758837708285994=="
+	b=JF4okSYabP7qtOwwR/K+gYk8lt2OwToVO33cXayfWaUS4UkwicxSd/m7IwXp6Icwy
+	 WSQCsoaJjeVPblW4Mjm8UMOYnKMV3I7Y5Ab/bt0qcd7mM33qRHD7UUEyhUmqOxUSvv
+	 1DDPtIaYd8ulhaVZIFlFvtBlxayQbh5OsjHERdjivVQYfKLlrDmT8NwlV4wVb6f/Sh
+	 ZSHzRCv/bJd7rEbfaemExPDYOgsf05QqGhwXprBBAVwlRttKtLp5TONyoB62f9oBz4
+	 +ZSb5byGewOeJBFolSVf5i6hT7BVR5f3o9kKELi/0GDJmwovwEpG8VhcTvWolKLlSO
+	 CmNbB70hOtcng==
+Content-Type: multipart/mixed; boundary="===============8096680168149290584=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,111 +49,133 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <8b767073e860cc55e546b7d5e034d3f757b91d207627e92aea95112977ec002f@mail.kernel.org>
-In-Reply-To: <1b3fb00521b2eda1ffa902ee6e413d30b677bdb0.1793147364.git.memxor@gmail.com>
-References: <1b3fb00521b2eda1ffa902ee6e413d30b677bdb0.1793147364.git.memxor@gmail.com>
-Subject: Re: [RFC PATCH bpf-next v1 06/11] bpf: Let the callback of bpf_for_each_map_elem unwind
+Message-Id: <d7e7a55c00b4ea31b7ff71b901c5e2054ce3f0a67d5c39d9820b29ec215c2208@mail.kernel.org>
+In-Reply-To: <25728094090d9bf3e4cd88feecec336f0493a5a9.1793147364.git.memxor@gmail.com>
+References: <25728094090d9bf3e4cd88feecec336f0493a5a9.1793147364.git.memxor@gmail.com>
+Subject: Re: [RFC PATCH bpf-next v1 05/11] bpf: Let the callback of bpf_loop unwind
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 28 Oct 2026 01:25:32 +0000 (UTC)
+Date: Wed, 28 Oct 2026 01:25:34 +0000 (UTC)
 
---===============6530758837708285994==
+--===============8096680168149290584==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Let the callback of bpf_for_each_map_elem unwind
+> bpf: Let the callback of bpf_loop unwind
 
-TL;DR:
-- Array map callback may return a PTR_TO_MAP_KEY to dead kernel stack after
-  unwind, possibly leaking stale stack
-- bpf_unwind_leave() may misbehave (WARN, wrong return) if the helper is
-  traced
+TL;DR: If bpf_loop() is traced (fexit, kretprobe, function_graph),
+bpf_unwind_leave() may not find the BPF return address, so it may WARN and
+resume the program in a state the verifier never checked, possibly leaking
+pointers or references.
 
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> index 133f189bf6d2..4c81c7c76145 100644
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
+> diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+> --- a/kernel/bpf/bpf_iter.c
+> +++ b/kernel/bpf/bpf_iter.c
 
 [ ... ]
 
-> @@ -823,14 +824,18 @@ static long bpf_for_each_array_elem(struct bpf_map *map, bpf_callback_t callback
->  			val = array_map_elem_ptr(array, i);
->  		num_elems++;
->  		key = i;
-> -		ret = callback_fn((u64)(long)map, (u64)(long)&key,
-> -				  (u64)(long)val, (u64)(long)callback_ctx, 0);
-> +		bpf_call_cb(callback_fn, map, &key, val, callback_ctx, 0, ret, unwound);
+> @@ -749,7 +750,7 @@ const struct bpf_func_proto bpf_for_each_map_elem_proto = {
+>  	.arg4_type	= ARG_ANYTHING,
+>  };
+>
+> -BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
+> +BPF_CALL_x(4, noinline, bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
+>  	   u64, flags)
+>  {
+>  	bpf_callback_t callback = (bpf_callback_t)callback_fn;
 
-Can the PTR_TO_MAP_KEY handed to the callback here outlive the frame it
-points into?
+[ ... ]
 
-&key is a local in the frame of bpf_for_each_array_elem(), and
-map_set_for_each_callback_args() types it as PTR_TO_MAP_KEY in R2 of the
-callback.  With BPF_FUNC_for_each_map_elem now in helper_has_cb_pad(), the
-callback may leave with unwind_exit, and prepare_func_exit() from
-b2f03cf6322f hands the callback's r0 to the pad unchanged, except for
-PTR_TO_STACK, which it refuses.
-
-A PTR_TO_MAP_KEY in r0 therefore reaches the pad after the call, where
-check_mem_access() still allows reads of key_size bytes through it.  By then
-the helper frame has been popped (and, on the indirect path, the frame of
-bpf_for_each_map_elem() too), so the pointer refers to dead kernel stack that
-any later call or interrupt can overwrite.  A program without
-allow_ptr_leaks/allow_uninit_stack would be able to read stale kernel stack
-through it.
-
-The changelog of b2f03cf6322f mentions this case: "the key of the array
-iterator live in the frame of the helper ... the fix for that has to see to
-r0 too".  Nothing between b2f03cf6322f and the end of this series adds that
-fix.  Hash and rhash keys point into map elements rather than the helper
-frame, so only the array iterator is affected.
-
-Should a PTR_TO_MAP_KEY r0 (or any pointer whose lifetime ends with the helper
-frame) be refused or turned into a scalar at the callback's unwind_exit
-before for_each_map_elem is opened up for array maps?  Alternatively, could
-the key live somewhere that outlives the helper?
-
+> @@ -766,13 +767,18 @@ BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
+>  		return -E2BIG;
+>
+>  	for (i = 0; i < nr_loops; i++) {
+> -		ret = callback((u64)i, (u64)(long)callback_ctx, 0, 0, 0);
+> +		bpf_call_cb(callback, i, callback_ctx, 0, 0, 0, ret, unwound);
 >  		/* return value: 0 - continue, 1 - stop and return */
 >  		if (ret)
->  			break;
+>  			return i + 1;
 >  	}
 >
->  	return num_elems;
+>  	return i;
 > +
 > +unwound:
-> +	/* The callback left with unwind_exit: nothing to drop here */
+> +	/* The callback left with unwind_exit: the loop is over, and so is the helper */
 > +	bpf_unwind_leave();
 > +	return ret;
+>  }
+>
+>  const struct bpf_func_proto bpf_loop_proto = {
 
-Does bpf_unwind_leave() work if the helper itself is being traced?
+Can bpf_unwind_leave() find the BPF caller's return address here when
+bpf_loop() is being traced?
 
-It reads the return-address slot of bpf_for_each_array_elem() and looks it up
-with bpf_unwind_target(), which only works if the slot still holds the
-address the BPF caller pushed.  The same leave path is added to
-bpf_for_each_hash_elem(), bpf_each_rhash_elem() and bpf_for_each_map_elem().
-All four are ordinary traceable functions: arraymap.o, hashtab.o and
-bpf_iter.o are not in the CFLAGS_REMOVE list of $(CC_FLAGS_FTRACE) in
-kernel/bpf/Makefile, none of the four is notrace, and none is in btf_id_deny.
+bpf_unwind_leave() looks for the return address of the BPF caller in
+bpf_loop()'s own return-address slot (__builtin_dwarf_cfa() - 1 on x86,
+the frame record LR on arm64).  But bpf_loop() is a regular traceable
+kernel function.  bpf_iter.o is built with the ftrace flags (kernel/bpf/
+Makefile only strips them for percpu_freelist, bpf_lru_list,
+queue_stack_maps, lpm_trie, ringbuf and rqspinlock), bpf_loop() has no
+NOKPROBE_SYMBOL, and it is not in btf_id_deny.  Several tracers change
+that slot or add a frame:
 
-If the function-graph tracer, a kretprobe/rethook, or a BPF fexit/fmod_ret
-trampoline is attached to one of them, the slot would hold return_to_handler,
-the rethook trampoline, or a trampoline address, and bpf_unwind_target()
-would find no entry.  Then WARN_ON_ONCE(to == *slot) fires (fatal with
-panic_on_warn), and the exception comes back as a plain return.  The BPF
-program carries on past the unwind_goto on the normal path, in a state the
-verifier only explored on the unwind edge.
+- An fexit/fsession BPF trampoline calls the original function with
+  emit_rsb_call(&prog, orig_call, ...) in arch/x86/net/bpf_jit_comp.c, so
+  the return address of bpf_loop() points into the trampoline image.
 
-bpf_check_attach_target() already guards the BPF-target version of this
-("unwind_exit would return to the trampoline that called the target", "Only
-fentry can attach to %s, which can unwind"), but kernel-function targets that
-now carry pads get no equivalent check.  bpf_loop() from 4e61c40fe5c0 has the
-same exposure.
+- kretprobe/rethook: arch_rethook_prepare() does
+  stack[0] = arch_rethook_trampoline.
 
-Should these helpers be marked notrace and added to btf_id_deny, or should
-bpf_unwind_leave() recover the original return address (as
-ftrace_graph_ret_addr() and rethook do for unwinders) before the lookup?
+- The function_graph tracer and fprobe exit handlers replace the slot with
+  return_to_handler.
+
+In each case bpf_unwind_target(*slot) does not find a BPF address.
+search_bpf_extables() goes through bpf_prog_ksym_find(), which returns NULL
+for a trampoline ksym (ksym->prog is false), and the kernel and module
+tables have no EX_TYPE_BPF entry there, so the address comes back
+unchanged.  Then WARN_ON_ONCE(to == *slot) fires, which panics with
+panic_on_warn, and bpf_loop() returns ret through the tracer to the
+instruction after "call bpf_loop".  On x86 and arm64 the JIT emits no code
+for unwind_goto, so the program continues along the normal path.
+
+The verifier checked that path only against callback states that returned
+normally, where r0 is RET_INTEGER and the stack and references are as left
+by a normal return.  It checked the unwind_exit state only against the
+pad.  So the BPF program can run in a state the verifier never checked.
+For example:
+
+- r0 can be the pointer or reference the callback unwound with
+  (b2f03cf6322f lets a pointer and its reference reach the pad), now seen
+  as a scalar.  The pointer leaks and the reference is never released.
+
+- Callback writes through callback_ctx on the unwind path only (for
+  example a scalar over a spilled pointer) are seen by code that assumes
+  the old slot type.
+
+The trigger is a bpf_loop() call that the verifier does not inline (flags
+not provably 0, or two callbacks at one call site) whose callback has
+unwind_exit, while kretprobe:bpf_loop, an fexit program on bpf_loop(), or
+the function_graph tracer is active.
+
+bpf_check_attach_target() already treats this hazard as real for BPF
+targets:
+
+    /* unwind_exit would return to the trampoline that called the target */
+    ...
+    "Only fentry can attach to %s, which can unwind"
+
+Nothing equivalent covers bpf_loop(), which this patch turns into a frame
+that unwinds.  No later patch in the series addresses this (no notrace,
+NOKPROBE_SYMBOL or btf_id_deny change, and no ftrace_graph_ret_addr() or
+rethook lookup in bpf_unwind_leave()).  The helpers that get pads later in
+the series (bpf_for_each_map_elem and its ops, bpf_find_vma,
+bpf_user_ringbuf_drain, bpf_rbtree_add) look to have the same problem.
+
+Could bpf_loop() and the other helpers with pads be made untraceable
+(notrace plus NOKPROBE_SYMBOL, and a btf_id_deny entry for fexit/fmod_ret),
+or could bpf_unwind_leave() resolve a hijacked return address?
 
 
 ---
@@ -161,4 +183,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40612543702
---===============6530758837708285994==--
+--===============8096680168149290584==--
