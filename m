@@ -1,51 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.83
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793204765;
-	b=E27rZXZDiQ9SLL0UQVwC5GbgrW8+i9qiCvvK229zYZgUmftTTjWkQJMFVdpWsFdwUCqG
-	 blcl0XdPPdfje4E4u1khOAHt3geOpdaRppw8YJ+oyDidbrlrvznNOvqGKB3pMIxXByZUr
-	 LVHp9lUIlj9ZDRpSd7Gqx6XqnCge8kacngUXDUagOvW7bZJfM/1gZCjWTOeDfhLR8vhRs
-	 Lbu+0rzKeweT7KNb7zaX3yEitx3sDeUvQeFPGE6S2b5FWkulLCJzuAwAsAuwCYmykprxS
-	 FlGgAy0zWEB+aVDA+Oa5+LwuV2PimAg82xmrUIAtPYbIrQwQMCo9HYbjVp4f1/bWCkQ==
+	t=1793205272;
+	b=qA3CqBCY7p0NjkPQkqXQPlUmGj1zilm5Z7AgHyDg96EOQ3yTKaNoc9b/HqgKhQpEAvNq
+	 aB9rBOO2XEwUHKSgwxtGK/c3rRqPVApOtIFrzIhWXWW16slX9wtIsyn5uyx/5nbsU/VEX
+	 AXeTfnker7RPe+eIGxZlbwvg8pbYOCQwFCbLhD7V56pf9lQhquBjuSNu5X4WJph/5MSlc
+	 G91UWx1tDwCWhggr4gyni3oVyOxP5Ef5FeTfikmCdqQ+xHqOMdP2+9KSqACe8XCOYgA9l
+	 zaRXU1r8sUqJ8hLJ+0E8UVYsOkaFERYhJUa+73+oB2vIEL1r9MWgcGXDV3dRBE9alEw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793204765;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=h+HIOOxJx9hUe+jm2hepdbTigAroXYRQmP3amdTNLAk=;
-	b=B3s1+gRGtZHrjTyzQtM3cfDYNpRFey3lfyb+BhYRpoJZ8v9avXyUvUGNae3dyWhAMWkI
-	 mRiofRzo59Xia8XwO3MVDflaCNRcVUFPtqjE3ST/fDXuE7fxEksY8MzPmx41d0EKnrzR0
-	 1ReokrupQ+iK9gxryq4CiRer2YsQq4RR1aIfwptZaWuzq/UK2u/LLzTBLhNi+2Lefq8mo
-	 yTPM11ohvXfmIQ4+5GKcJk0AzXNv9+Sc1GI91uBvk3zKJbUbUEXTN2BOE8b3iLqU8CY8S
-	 qsrAiQJK1hWvVx/n+oLvLoe98JdET67fXjdc7KO5DXt0uxGF0sGktajyCvJN9XeFHfQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793205272;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=0qMByyHPKGaQUWfgXFNZxpLHWxfO4wafpSFpsLM9Ew4=;
+	b=b5O0SiFl6fVJmGn94GRr+z8kJfX4E57T7vwavqlJ/xsTyZgf0nnupsl61OUBdik+/TZA
+	 kC8eyvGNrzYL4tX/x3BKkKsVHPSzJAQesgBX92dIShgHnisBoDH4Juhi0NE2bzm0fRxCA
+	 FAQjgsANEbwPsZ5WcQTjDv0aYNXkhQDwgtwIPbdexN0sV3Alat2XmDo4LKeyCyr3tMJ00
+	 +nQ/+V/JiUtVsVoggdM3Bp+Kuiv7larNlZ/wvjY9J82vfuXwvTGUAJ5iHphJhL6wFwJSz
+	 +q1cTBFkbu8UOzWjeIGyDfqM7XhmdRpPukmpNZHVp3w/Bb1hplLB1WD38MGawzz4GEA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=95.215.58.83
-Received: from mta1.migadu.com (out-83.mta1.migadu.com [95.215.58.83])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Sq0uzUAy;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E54606A31C
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 16:26:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E2E54606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=XuPbLLiPtXAl47QACJO9Vzp6Txe/hdhVtczq1D4shLo=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793204761; v=1; x=1793809561;
- b=YK20ouoCO/cOWldBORgCGpt7Hsd/Uupn6cgIGngaVszBJ06W6heg60hBN62AACoXakzcKZp8
- fbjJgmXgWgkGzuiHhexcWDDCQ08375g0kHRLJN/Zdie9lWafC5kmuHcwWImlFpRJhRl4rSWdqrN
- 59P9UfwZelUEd6hJdGW93g6M=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 40b3dfbd2361a10e;
-	Wed, 28 Oct 2026 16:26:01 +0000
-X-Mizu-Trace-ID: 40b3dfbd2361a10e
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <56eff81f-c7d4-4c81-b087-93cf63f42e35@linux.dev>
-Date: Wed, 28 Oct 2026 09:25:52 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B3A606A31A;
+	Wed, 28 Oct 2026 16:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Sq0uzUAy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 564B31F01825;
+	Wed, 28 Oct 2026 16:34:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793205271;
+	bh=0qMByyHPKGaQUWfgXFNZxpLHWxfO4wafpSFpsLM9Ew4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Sq0uzUAyrwf/IEVsDj/CwujMg6dOti6mqvoJ+DAnV7nsWaSUUelc1lXowij71/91g
+	 aO5kNF9MYq8fwJt/6Ws1eMMBtxvCzCoJUYwBbZPG2wWTbClj5mjo9kCzb98hWRjbJJ
+	 G/EvdgDF4mFH8yszdA4nppTdSfbjJrdaKDQKrS0it3A/ZI/fTzqNJcTbVBdfRfteCZ
+	 eUMU4C8ltDNDftLxTNx89yj9cbkZE0t8w+BlBeq/oB5mhoCdhKxRY5YApiNTHiuI62
+	 6jsqfYUw/VS9A91ksyH5Cwrv3BUkhD4gTYwo53vV9Erp73M6ZO1GxTKAafgP7uZCCi
+	 9nv1z3fbeE2ZQ==
+Message-ID: <sashiko-outbox-188166@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC 6/8] vsock: allow datagrams to use directional
+ transports
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sergio Lopez" <slp@redhat.com>
+Cc: virtualization@lists.linux.dev, kvm@vger.kernel.org, bpf@vger.kernel.org, linux-hyperv@vger.kernel.org, "Michael
+ S. Tsirkin" <mst@redhat.com>, "Eugenio Perez" <eperezma@redhat.com>
+In-Reply-To: <20261028-vsock-dgram-support-v1-6-e457cf7cee78@sinrega.org>
+References: <20261028-vsock-dgram-support-v1-0-e457cf7cee78@sinrega.org>
+ <20261028-vsock-dgram-support-v1-6-e457cf7cee78@sinrega.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 28 Oct 2026 16:34:30 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,139 +61,192 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v1 5/7] selftests/bpf: don't report arena tests
- as passing with an empty body
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, john.fastabend@gmail.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- jose.marchesi@oracle.com, david.faust@oss.qualcomm.com,
- martin.lau@kernel.org, mason@kernel.org
-References: <20261028000411.4010967-6-vineet.gupta@linux.dev>
- <bd70230bf88b570044957ec4866a4c0ad3870121a7e6c609e4d60043a13be905@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <bd70230bf88b570044957ec4866a4c0ad3870121a7e6c609e4d60043a13be905@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 10/27/26 5:46 PM, bot+bpf-ci@kernel.org wrote:
->> selftests/bpf: don't report arena tests as passing with an empty body
-> TL;DR: Commit message only: it cites arena_types to justify running arena
-> kfunc tests without a cast, but the address args are __ign (ARG_IGNORE) and
-> never checked against it. Conclusion looks right; the explanation may need
-> rewording.
->
->> selftests/bpf: don't report arena tests as passing with an empty body
->>
->> Some arena tests put the __BPF_FEATURE_ADDR_SPACE_CAST guard inside the
->> function rather than around it, so without arena support the program
->> still exists, its body is empty, and __success __retval(0) is met by
->> doing nothing.  A reader sees
->>
->>    #584/1	 verifier_arena/basic_alloc1_nosleep:OK
->>
->> and concludes arena works.  That is worse than the tests which vanish
->> entirely, since nothing hints anything is missing.
->>
->> The guard was never needed to compile those bodies: without the
->> feature __arena is still btf_type_tag("arena"), which every compiler
->> accepts.  What it avoided was the load failure that follows from no
->> addr_space_cast being emitted — but only for a body that dereferences
->> an arena pointer.  The arena kfuncs take one as a plain scalar:
->>
->>    static const struct bpf_reg_types arena_types = {
->> 	  .types = { PTR_TO_ARENA, SCALAR_VALUE }
->>
->> so a test that only passes pointers to bpf_arena_{alloc,free,reserve}_pages()
->> needs no cast and runs fine.
->>
->> test_loader checks skip_reason before it opens anything, so the body no
->> longer has to be empty to stay loadable: drop all 19 in-body guards.
->> They do not all need a tag in their place, which is why 19 guards go
->> and 7 tags arrive:
->>
->>    6   dereference, so they get __skip_without_arena and report SKIP:
->>        basic_alloc1{,_nosleep}, basic_alloc2{,_nosleep}, big_alloc1,
->>        access_reserved
->>    11  never dereference, so they get no tag and run for real instead
->>        of reporting a vacuous OK
->>    2   big_alloc3 and big_alloc4, already inside the file's outer
->>        whole-program guard, so the in-body one was redundant
->>
->> The 7th tag goes on check_arena_arg_ret(), which has no guard at all
->> and is the one verifier_arena subtest that really fails under a stock
->> GCC.
->>
->> Measured on bpf-next with a stock bpf-gcc, test_progs before and after:
->>
->>    verifier_arena/basic_alloc1            OK   -> SKIP
->>    verifier_arena/basic_alloc1_nosleep    OK   -> SKIP
->>    verifier_arena/basic_alloc2            OK   -> SKIP
->>    verifier_arena/basic_alloc2_nosleep    OK   -> SKIP
->>    verifier_arena_large/big_alloc1        OK   -> SKIP
->>    verifier_arena_large/access_reserved   OK   -> SKIP
->>    verifier_arena/check_arena_arg_ret     FAIL -> SKIP
->>
->> the six that dereference stop claiming to pass, and check_arena_arg_ret
->> stops failing.  The eleven that do not dereference stay OK, having gone
->> from an empty body to actually running.
->>
->> Removing the guards exposes the arena_base() calls they were hiding.
->> The previous patch made that macro opaque to GCC's -Warray-bounds, so
->> nothing is needed here beyond the guards going away.
->>
->> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
-> The paragraph that says "The arena kfuncs take one as a plain scalar" and
-> quotes arena_types: is that the check that actually lets these tests run
-> without an addr_space_cast?
->
-> bpf_arena_alloc_pages(), bpf_arena_free_pages() and
-> bpf_arena_reserve_pages() declare their address argument with the __ign
-> suffix in kernel/bpf/arena.c:
->
->    __bpf_kfunc void *bpf_arena_alloc_pages(void *p__map, void *addr__ign, ...)
->    __bpf_kfunc void bpf_arena_free_pages(void *p__map, void *ptr__ign, ...)
->    __bpf_kfunc int bpf_arena_reserve_pages(void *p__map, void *ptr__ign, ...)
->
-> get_kfunc_arg_type() tests the __ign suffix first and returns ARG_IGNORE:
->
->    if (is_kfunc_arg_ignore(meta->btf, &args[arg]) || is_kfunc_arg_implicit(meta, arg))
->            return ARG_IGNORE;
->
-> and check_func_arg() returns for that type before any register type check:
->
->    if (arg_type == ARG_IGNORE)
->            return 0;
->
-> arena_types is only reached through compatible_reg_types[ARG_PTR_TO_ARENA],
-> which applies to kfunc parameters named with __arena or __arena__nullable and
-> to arena-tagged global subprog arguments.  resolve_btfids adds the arena type
-> tag for KF_ARENA_ARG2 but keeps the parameter name, so the __ign rule still
-> applies.
->
-> So the conclusion that no cast is needed looks right, but the address
-> argument is not checked against { PTR_TO_ARENA, SCALAR_VALUE } at all.  The
-> same reasoning applies to the tests that no longer have a guard or a tag:
-> basic_reserve1, basic_reserve2, reserve_twice, reserve_invalid_region and
-> arena_kfuncs_under_bpf_lock in verifier_arena.c, and
-> request_partially_reserved and free_reserved in verifier_arena_large.c.
->
-> Could the paragraph cite the addr__ign/ptr__ign parameters
-> (is_kfunc_arg_ignore() -> ARG_IGNORE) instead of arena_types?
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] vsock/virtio: bypass of checks in virtio_transport_dgram_source_al=
+low()
+- [Medium] vsock: vsock_dgram_sendmsg() mutates connected vsk->remote_addr =
+on fallback
+--
 
-Yes this will be fixed in v2.
+commit 634f5c11de9d307a1a88027855c76c28c15f7d96
+Author: Sergio Lopez <slp@redhat.com>
 
-Thx,
--Vineet
+vsock: allow datagrams to use directional transports
 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40608355234
+This commit enables AF_VSOCK datagram sockets to initialize through and
+route across directional transports (such as virtio, vhost, and loopback)
+when a dedicated datagram transport is not registered.
 
+> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> index dc1add2d2e896..6419498a6fe27 100644
+> --- a/net/vmw_vsock/af_vsock.c
+> +++ b/net/vmw_vsock/af_vsock.c
+[ ... ]
+> @@ -1493,7 +1606,8 @@ static int vsock_dgram_sendmsg(struct socket *sock,=
+ struct msghdr *msg,
+>  		remote_addr =3D &vsk->remote_addr;
+> =20
+>  		if (remote_addr->svm_cid =3D=3D VMADDR_CID_ANY)
+> -			remote_addr->svm_cid =3D transport->get_local_cid();
+> +			remote_addr->svm_cid =3D transport->dgram_transport_match ?
+> +				VMADDR_CID_LOCAL : transport->get_local_cid();
+> =20
+>  		/* XXX Should connect() or this function ensure remote_addr is
+>  		 * bound?
+> @@ -1507,13 +1621,14 @@ static int vsock_dgram_sendmsg(struct socket *soc=
+k, struct msghdr *msg,
+>  		goto out;
+>  	}
+> =20
+> -	if (!transport->dgram_allow(vsk, remote_addr->svm_cid,
+> -				    remote_addr->svm_port)) {
+> -		err =3D -EINVAL;
+> +	transport =3D vsock_dgram_get_transport(vsk, remote_addr);
+> +	if (IS_ERR(transport)) {
+> +		err =3D PTR_ERR(transport);
+>  		goto out;
+>  	}
+
+[Severity: Medium]
+When vsock_dgram_sendmsg() is called without msg_name on a connected
+socket, remote_addr points directly to &vsk->remote_addr.
+
+If the socket connected to an active H2G guest CID (leaving
+vsk->remote_addr.svm_flags without VMADDR_FLAG_TO_HOST) and that guest is
+temporarily unavailable while g2h_fallback is enabled,
+vsock_dgram_get_transport() takes the fallback path and mutates
+remote_addr in place:
+
+net/vmw_vsock/af_vsock.c:vsock_dgram_get_transport() {
+	...
+	} else if (sock_net(sk)->vsock.g2h_fallback && transport_g2h &&
+		   transport_g2h->has_remote_cid &&
+		   transport_g2h->has_remote_cid(vsk, cid)) {
+		transport =3D transport_g2h;
+		to_host =3D true;
+	}
+	...
+	if (to_host)
+		remote_addr->svm_flags |=3D VMADDR_FLAG_TO_HOST;
+}
+
+Because vsock_dgram_get_transport() checks VMADDR_FLAG_TO_HOST before
+transport_h2g->has_remote_cid(), won't this permanently pin
+vsk->remote_addr to transport_g2h for subsequent sends, receive source
+checks, and getpeername() even after the H2G guest restarts?
+
+> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virt=
+io_transport_common.c
+> index ae33630d99e71..7c1ec8feb853c 100644
+> --- a/net/vmw_vsock/virtio_transport_common.c
+> +++ b/net/vmw_vsock/virtio_transport_common.c
+> @@ -322,13 +322,18 @@ static int virtio_transport_send_pkt_info(struct vs=
+ock_sock *vsk,
+> =20
+>  	info->type =3D virtio_transport_get_type(sk_vsock(vsk));
+> =20
+> -	t_ops =3D virtio_transport_get_ops(vsk);
+> +	t_ops =3D info->t_ops ?: virtio_transport_get_ops(vsk);
+>  	if (unlikely(!t_ops))
+>  		return -EFAULT;
+> =20
+>  	src_cid =3D t_ops->transport.get_local_cid();
+> +	/* Preserve explicit datagram bindings so loopback replies can find the=
+m. */
+> +	if (info->type =3D=3D VIRTIO_VSOCK_TYPE_DGRAM &&
+> +	    src_cid =3D=3D VMADDR_CID_LOCAL &&
+> +	    vsk->local_addr.svm_cid !=3D VMADDR_CID_ANY)
+> +		src_cid =3D vsk->local_addr.svm_cid;
+>  	src_port =3D vsk->local_addr.svm_port;
+[ ... ]
+> @@ -1861,6 +1877,33 @@ static bool virtio_transport_valid_type(u16 type)
+>  	       (type =3D=3D VIRTIO_VSOCK_TYPE_DGRAM);
+>  }
+> =20
+> +static bool
+> +virtio_transport_dgram_source_allow(struct vsock_sock *vsk,
+> +				    const struct vsock_transport *transport,
+> +				    const struct sockaddr_vm *src)
+> +{
+> +	const struct vsock_transport *peer_transport;
+> +	struct sockaddr_vm peer =3D vsk->remote_addr;
+> +	bool allow;
+> +
+> +	if (!virtio_transport_dgram_transport_match(vsk->transport) ||
+> +	    !virtio_transport_dgram_transport_match(transport))
+> +		return false;
+> +	/* Shutdown preserves the peer; only disconnect removes it. */
+> +	if (sk_vsock(vsk)->sk_socket->state =3D=3D SS_UNCONNECTED)
+> +		return true;
+> +
+> +	peer_transport =3D vsock_dgram_get_transport(vsk, &peer);
+> +	if (IS_ERR(peer_transport))
+> +		return false;
+> +	allow =3D peer_transport =3D=3D transport &&
+> +		src->svm_port =3D=3D vsk->remote_addr.svm_port &&
+> +		(src->svm_cid =3D=3D vsk->remote_addr.svm_cid ||
+> +		 transport->get_local_cid() =3D=3D VMADDR_CID_LOCAL);
+> +	module_put(peer_transport->module);
+> +	return allow;
+> +}
+> +
+>  /* We are under the virtio-vsock's vsock->rx_lock or vhost-vsock's vq->m=
+utex
+>   * lock.
+>   */
+> @@ -1911,14 +1954,14 @@ void virtio_transport_recv_pkt(struct virtio_tran=
+sport *t,
+>  		vsk =3D vsock_sk(sk);
+>  		lock_sock(sk);
+>  		if (sock_flag(sk, SOCK_DEAD) ||
+> -		    vsk->transport !=3D &t->transport ||
+> -		    (sk->sk_socket->state !=3D SS_UNCONNECTED &&
+> -		     !vsock_check_source(vsk, &t->transport, &src))) {
+> +		    !virtio_transport_dgram_source_allow(vsk, &t->transport, &src)) {
+>  			release_sock(sk);
+>  			sock_put(sk);
+>  			goto free_pkt;
+>  		}
+
+[Severity: High]
+Can virtio_transport_dgram_source_allow() bypass feature negotiation,
+local CID transport isolation, and connected peer CID checks?
+
+First, for SS_UNCONNECTED sockets, virtio_transport_dgram_source_allow()
+returns true immediately after virtio_transport_dgram_transport_match(),
+which is a static callback comparison that succeeds for virtio_transport,
+vhost_transport, and loopback_transport without calling
+transport->dgram_allow(vsk, src->svm_cid, src->svm_port).
+
+Since neither vhost_vsock_handle_tx_kick() nor virtio_transport_rx_work()
+checks vsock->dgram_allow before calling virtio_transport_recv_pkt(), a
+peer that has not negotiated VIRTIO_VSOCK_F_DGRAM can deliver
+VIRTIO_VSOCK_TYPE_DGRAM packets to any unconnected bound socket on the
+host (bypassing vhost_transport_dgram_allow()) or on a guest initialized
+via the vhost_transport fallback (bypassing
+virtio_transport_dgram_allow_check()).
+
+Second, returning true early for SS_UNCONNECTED sockets skips checking
+whether vsk->local_addr.svm_cid is compatible with the receiving
+transport. Because virtio_transport_rx_work() does not validate
+hdr->dst_cid against the guest CID and __vsock_find_bound_socket_net()
+matches dst.svm_cid =3D=3D vsk->local_addr.svm_cid or VMADDR_CID_ANY, an
+external peer on virtio_transport can send datagrams addressed to
+VMADDR_CID_LOCAL, VMADDR_CID_HOST, or VMADDR_CID_ANY and reach an
+unconnected socket bound to VMADDR_CID_LOCAL or VMADDR_CID_HOST.
+
+Third, on loopback_transport, virtio_transport_send_pkt_info() now
+preserves explicit vsk->local_addr.svm_cid values in hdr->src_cid, and
+__vsock_find_bound_socket_net() allows distinct local sockets to bind to
+the same port on different local CIDs (such as VMADDR_CID_LOCAL and the
+guest or host CID). Because transport->get_local_cid() =3D=3D VMADDR_CID_LO=
+CAL
+is always true for loopback_transport, won't a local socket bound to
+(VMADDR_CID_LOCAL, port) be accepted by a socket connected to (guest_cid,
+port) despite having a mismatched src->svm_cid?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261028-vsock-dgra=
+m-support-v1-0-e457cf7cee78@sinrega.org?part=3D6
