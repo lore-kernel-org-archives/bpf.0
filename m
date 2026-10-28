@@ -1,58 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.221
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793184707;
-	b=BsTtpkn55B8XkXse/SVeRaaQchYdwX/ADCsC9S/5B9m/Zc1EYp1qC/dyPs7VcASVD29O
-	 AmuVwyu4kqvtk60Jo9l+Gad+VRnrX0GFP1Mq+h7Bu3Ni4m4WHIBY8dnGEy6WapB36Rb9M
-	 P2Ybs44S7po9xUFDDXIVMJZdiXnrNXtOgKNngy3MDjbr6IPMC4WgIlmmBvNQbf95OrUh0
-	 wBJYO8rmIJBcKTNkBlWXJN5ay5oGBnnHFEweJ2BcMBO5thGXQYTd7GevIN54Mo7Mcy2hl
-	 YQWtQiTU9pXZPP5UD+nxxAKgXNwksZUMv9dr8gG82Jpietm4SY7LKFqNNfhZBqjwlmg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793184707;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-	bh=QVuAkEilZ5oFK1qOIjgNohU8C9sqgDos/dquD82VOJ0=;
-	b=3+fxlFKoLQ6XZi9KkJT9fZIgs27lv0GhNRSgqnMZz+Pdx41jplKiGpiPjVViiiQDIHrq
-	 qCDAI0455Fa1/o6ytlvJIj+viTdfOaZOKCtPDJ6gShwpAJdx6VZo64Ijm8ACa10fCdddW
-	 tfU8o5Ox0lxQrNt6vx+kyTl7YwPM5C7SwumFy0M1ha4go2zZ5ar8YaMYzPXtd21hQjx5S
-	 FvdGMWj7cC93bDejXdCT1QwctAUmuo8OY3pQz4toSVAjrKwxi+Qu6I/lCSNA69ttXWP6g
-	 nAH8M/MzY1vAm2iutOmKulwBvAUIm6/W7dWEd/XmO1LRG/LjTS3w1PO3mCpado9Nlzg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=Tjhpe1XE;
-	arc=none smtp.remote-ip=113.46.200.221
-Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.65
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793185258;
+	b=c4jeVx9Zji2srmHaD5nPA2ybnaGJxAt+hu5prWxz6jH1PcQKQsCGX7lFV4lxrkRjOJZ0
+	 XLzYs85YbUhLzTzZtQW3HsRTqO1l0YNYnghT6/IpzQ43aLrcv/P2chTPqGAeSVpKDCSP0
+	 8X0o9Ag631hMxDAUNfDwBtI8KLpAJ0yxJ4+YTxg7eVrtFGJvd7tQXBXuAPJVn/7F6PdEb
+	 SCXxXn/bO1yw+ePRCZg0F7PkgbJWzvUAEjgg4VjqgNMkSclu9BLEHnkuy8vW1Wj/vT3q0
+	 GIPbybzG5Ms/QzAcw6gXPGeIAcH7sfhlDGgbO+jyVXsNZDTYHgJu5tCFh5kvJNp9g/Q==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793185258;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=IeSxBAd8x5bprjGrf/TJXdjLW3ORxdW828S6D90xodc=;
+	b=KM3ZnLPgKhm/C2Nzsbnx6YDXfvaA44BnC1+29BZH+GElL8SoqD/qzectJq1d0c1I7jTz
+	 SgCFZKsV+nKVYNoiViAMyUfFChctCg7QocndqQ7WKTGvY8U1UKkeKLBDh3Xg+WAts932P
+	 YL40ZX+YMUyyRSB8gyaY9ih4d4xvsig2ckVaW65OEeTcDsXvnJJK0NnYaQYF+6N0u0Adh
+	 BipZKX9d5nCFYqGKlQqNCyuk5Btn0TJEhzDwwU4fOBSBTOqB0l/Y1GFC/f3gA7IP3eo39
+	 xZRcj4D6AZF1ITkEjTxvb2BvcbTg+W0bgnN3qgudoDdKpNb9KGMyYrn3HNwVeb4yoWQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tV1ybIHX;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.65
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64033606A31A;
-	Wed, 28 Oct 2026 10:51:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64033606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DA4606A337
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 11:00:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6DA4606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=Tjhpe1XE
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=QVuAkEilZ5oFK1qOIjgNohU8C9sqgDos/dquD82VOJ0=;
-	b=Tjhpe1XEYDomJqQjMX/KSBw4At6Ih1wHlx9vV0r0NhfNLpLnl9LqJLfGM0Z2KbFMG2qQjBdq1
-	/2/qXe1L4oAUtgtr6ufh4G6Z7rsuS8fKO9BPURZ/BEcOQdgjCRtysqIw+3ZYOro+R2d/My5Fr7f
-	ldQynZZycNbuSEdLwcsbUmY=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4jF4110czvzRhT1;
-	Wed, 28 Oct 2026 18:51:33 +0800 (CST)
-Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
-	by mail.maildlp.com (Postfix) with ESMTPS id A0CA240561;
-	Wed, 28 Oct 2026 18:51:41 +0800 (CST)
-Received: from [10.67.110.140] (10.67.110.140) by
- whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 28 Oct 2026 18:51:40 +0800
-Message-ID: <a7a1a3ed-74e2-41a5-abc4-28efbc761263@huawei.com>
-Date: Wed, 28 Oct 2026 18:51:38 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tV1ybIHX
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-48df388215cso229441f8f.1
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 04:00:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793185256; cv=none;
+        d=google.com; s=arc-20260327;
+        b=DlspgHRA5fic0Eyj1flWKRC2qJkFRAWCOI1hwl4xMp6IF3yTWR4SZYS0OpwHWQKWV2
+         qLKKXoWv0AXlp24H7qwHLvEjM4c6xMRNQ7ByGWRCNVvHaxAbDkKnl3s6wyktuYIyXZK1
+         zXdGnvYox2XNiI8vS991ehZxpZiTN8VgiUVzh3HENGrETBephjx5VoV+T7ImxYw+B1UD
+         uwhY485LaIuzJ6klRcqn3SQDJAVO0PU49ibon0e7vDNWv19vEIQTrU2MVBDPMkYQIH5X
+         YA6qSDiZmu+NEKphI7C7Vho7VIEmUAam5OS+68K6y+52aXXCTFVXZh7KNfDEYdRqFjbi
+         +kgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=IeSxBAd8x5bprjGrf/TJXdjLW3ORxdW828S6D90xodc=;
+        fh=nK4o+E/nKAvNbzKwQovufHGBef//cfTPEviVumPIXzA=;
+        b=CzZh5J2yEoTlkv8yrefJkYR2hfFe50bHD8jkwUl2s94kMaiG4kwNQCMLjNBURL67mC
+         QIHgL1FOH2nVrl7pAM+bdgVj+QY3+XUdRzIIN8ZUTXxPGQsOtT3c0I/cM41Q3/cPfMWc
+         TNMzZB7H007g204XABRuCFZWjB9vmr6lDgBhBVR2I3rQbRsTq+8hczACoy9Wa0k3Ng6K
+         FQeqq0QluEfF+wzdVZJO2ZGczZXuN8shdSkAJNowRqDu6N/sEn7bk6N4e8B4mHz17TTS
+         FqwbtucCy9iHLbmwVMuoCorKfy50QGPHIE0haPhlygMAtIyPQwQ4LYLgKRg1ph0LhUDa
+         gp+g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793185256; x=1793790056; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IeSxBAd8x5bprjGrf/TJXdjLW3ORxdW828S6D90xodc=;
+        b=tV1ybIHX9fX0Jx3QL0hD7fiuKDmgVTF9W5kLjfyQ7763DMbXv1Qr1HPC6dGGTQxfq4
+         zfoBkpwjFsFhUAdhsjWTQ7LEAC0B6YGsFFJ8iDjPMnWzWwEk3YypKH03KH1hVYyE00o1
+         bwOOxX/MpliXo5iNpC2ySot8s4S559P9oyBPAA3F7v2jKQSR3bVZr+8qeZVlyt7ZJyNN
+         Dr6/vGaoJTThc+Nz15xDFaDHLpAAqXUgIIcXviH8mP2DrmC4DyoqXdNxL52WgWqfi1FC
+         EtHSEnVWtHgKXTcYv6Bz/1HOsekUQk1JhhiB9tNo522fAuLtyNFziWA5QvhIEGFDHMJT
+         PGxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793185256; x=1793790056;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=IeSxBAd8x5bprjGrf/TJXdjLW3ORxdW828S6D90xodc=;
+        b=UNmSoajyidHUTQjaB77TDIFFRS0+oo6hCs8oKxnXEaV1jPuFl1iij7WrueZwQpoOcF
+         gtcjBYG50yS2uZpOpJhwKnto/cmVjek3bwzbJYHVf0/yi6VxrwNlF0/WnPKNHod0eSu6
+         WMpX3N/rw7eodwC8wfZ+VSCNt4e5psrr1doDb1PbmdHGGRKn2KR5+KKUIJScZtIsIJby
+         Jxer428YSGV5doYGLWCp0YjFE9steVzRlxnTftZwZ44bVrnWj5on2IV2N4hkJur6o+ET
+         gCRAnS5oct4/EdR15KwceFymoja2jsh5eY9BVKOsjOjkywT453cYZK+Z1sESWPsgseYq
+         PxYA==
+X-Gm-Message-State: AFq9FYIryKnONtsXgq7bQeuPSd/Z4WNYF2sd3QvUdpHwR2VA12NOWM5n
+	Lk07CidaI+KQaACMH3DS07H/HJ5tIu4CyuJ/KFRC+H68q3adKggEq+iWmUU6N0HQsh+UVtoR5Z9
+	MoJxqpAaT57VSlLQS27DM84SnzqH31Uo=
+X-Gm-Gg: AYBFou3J46+UCO9zNzvgUBOIQjbEdMzl0p/Hj7ZtRNn1aJxxPTu9gPT33eyCSIWtPRV
+	XNhR1U0ouMFe396zCc+jgPeBcVX2u0kmmk6e86bA3RmlWPKbTKVrNlVE14cwAc2/zHatFoQhVVc
+	Wht1MC4VHzVb9tP0gcmZ+Bv1M2qHpUjm00xm9xLnFtu//inq1Mls6nQGOM1RuGUo7FmbFJHZpAt
+	J64eyPUyLgKK2LMtOo0znxLVCcAM+Bei0TE9k16F7FG/EABNcjNC0fe4Ol+QrL2a/33CEZC1ehR
+	TaIk8pKc+h5RoxvFiZus5iP+Hwcdm7riwdaQscnjxjtlX+lwtePvVLH6jmLruOS82twRUsVS/5i
+	yoDtm3k09HHcZQmq9rCdW/BwxV24RSoaXKgxT2D7/wlxLaXD1AFNKTo64BXehNhYtFbl+52hrA0
+	P2snXkq8hNlb/J4G/SS3ILDWG2bvsqH1z0S96HWhEPdWJn7CYjskErehkIEPI4lRHcmRVrNEZSO
+	hFILlw0YHerkpCY
+X-Received: by 2002:a05:6000:2608:b0:48e:3fc:e393 with SMTP id
+ ffacd0b85a97d-48e5d58cbd1mr4540602f8f.6.1793185254967; Wed, 28 Oct 2026
+ 04:00:54 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,37 +104,43 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 -next 06/18] LSM: pass struct path and struct file to
- the inode xattr hooks
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	<sashiko-reviews@lists.linux.dev>
-CC: <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <selinux@vger.kernel.org>,
-	<dsterba@suse.cz>, Chuck Lever <cel@kernel.org>, Jeff Layton
-	<jlayton@kernel.org>, Anna Schumaker <anna@kernel.org>
-References: <20261027121151.1887650-1-caixinchen1@huawei.com>
- <20261027121151.1887650-7-caixinchen1@huawei.com>
- <sashiko-outbox-186599@kernel.org> <DMFPMAYUPSDU.2AW3225P0W0ON@gmail.com>
-Content-Language: en-US
-From: Cai Xinchen <caixinchen1@huawei.com>
-In-Reply-To: <DMFPMAYUPSDU.2AW3225P0W0ON@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- whupemk100010.china.huawei.com (7.152.184.41)
+References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
+ <20261026025943.404450-27-alexei.starovoitov@gmail.com> <CAP01T76dRouzrPOZS8AQ4TMnJ0GzyRm8cPJ8RYUTu01bQgf2Xw@mail.gmail.com>
+ <DMF694XH2TJO.P59A31VE6GWP@gmail.com> <CAP01T75HAHkP4bzdGzeazN4n_FNd5w1Pckd3GBN68V0n1PNe_w@mail.gmail.com>
+ <DMFUDQAC6N4S.1CNBGYKG58DMR@gmail.com> <CAP01T74C4bBZntDNLrCxe02prWiF3pnUfYMFTUU6-44O0zbnPA@mail.gmail.com>
+ <DMG76G7GIPN7.HQJKZIE5J8R6@gmail.com>
+In-Reply-To: <DMG76G7GIPN7.HQJKZIE5J8R6@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Wed, 28 Oct 2026 12:00:16 +0100
+X-Gm-Features: AclHuK95SFxYeYe1iGMdfX3au-t04quMMCPFYgt4EDgTIkAav0X85EpZh57TThs
+Message-ID: <CAP01T75pOz8Nj_YG13quoVeniq6908sY5og4RadfM9-tz5j7PQ@mail.gmail.com>
+Subject: Re: [PATCH bpf 26/81] bpf: Support BPF_REG_ARENA_SP in the verifier
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-Thanks for the pointer. I will change in the next version.
+On Wed, 28 Oct 2026 at 05:47, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue Oct 27, 2026 at 8:23 PM UTC, Kumar Kartikeya Dwivedi wrote:
+> >
+> > There are other ways to address this, like ensuring r1 holds fully
+> > formed pointer pointing into arena at the point of dereference. I
+> > don't think we sufficiently explored alternatives to this problem,
+> > which is much broader than just stack and arena mismatch, e.g. ringbuf
+> > memory buffer and arena memory buffer as same argument to the same
+> > function has similar problem. The other approach would be testing the
+> > value and deciding the form of access based on that. There must be
+> > some way to distinguish arena ptr from other kernel ptrs at runtime.
+>
+> agree. there is likely another option.
+> Please find one.
+> but I was working on this since March and what you see is the best
+> I could come up with.
+> Once you find it I will be more than happy to delete this approach.
+> Until then we have to move forward.
 
-The other issue the bot reported on this patch is real as well:😭
-walking path->dentry in a BPF LSM program drops PTR_TRUSTED.
-I will add BTF_TYPE_SAFE_TRUSTED for path in next version
-
-On 10/27/2026 11:01 PM, Alexei Starovoitov wrote:
-> On Tue Oct 27, 2026 at 1:02 PM UTC, sashiko-bot wrote:
->> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
->> - [Critical] bpf: missing __nullable on file arg in inode xattr LSM hooks allows NULL deref
-> bot is correct.
-> Please see commit 94e948b7e684 ("bpf: annotate file argument as __nullable in bpf_lsm_mmap_file")
-> and add to kernel/bpf/bpf_lsm_proto.c when args can be NULL.
-> That's how verifier knows.*2*2
+Sigh. This is not a good response. If you do not want to have a
+discussion, what is the point of posting patches and asking for
+feedback?
