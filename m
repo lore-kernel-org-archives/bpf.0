@@ -1,56 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793181597;
-	b=aWL2VimvF5pL8sbGumk1ApEkqgc0n1VdfzfG1ER8mxam+AKMraEWCbdSduAKf6x14FmB
-	 axCMGrNm3K8LJYKal1WzP474/rmgZY+ItL04oQRpgXd5qgdVfDay53pTDPA3Dy4HW5xU2
-	 O8Krs33v6L7F3H4MN2asydpuOn7GByee22PYb3jtqDpegCiuXO9So8/PB0luvcr9TAhBC
-	 s+KEvR2NExdbstNgL0ZP1/uiehi7cs9kW/nu2A+wUZjPPnAk/udAl5DluRDT6sXvALguc
-	 uA6ioOKW7df7U9lkxwsYK6gzKlnklQRdvQJ2aqkkzQkfLUdQusqxDca35eiZ8zvTJaA==
+	t=1793182783;
+	b=BWr3nMxa3Av1SnOizsrV5a+wpWOOKxFQ8Vv0WUSNGt0/eM92zvuuajXAHd8uhZH8Fpdr
+	 SEK0zC/iRH95o8Z0znUyKtboHX1SOekNWZqGS38crlxXf6BxXvISBNsy5/YKPUstgEiof
+	 d9GJbW9tV3wxTVcXveLphAkVGRC2hzvjqBGwL4tdEazeYh3/VV/Z373RPizFPxE373TEJ
+	 wapqfzpIHooG00rgp0ECy4av6UplGlEjTyPNhhE1WSHrY5Q31vULOhMzLePc6gFeej89U
+	 ghKClI8Hh7Xhbhk4gM6YXhyM+9amUu+08sLDvEVkvnH4imypHIYRb10U+pGDmG7IKbg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793181597;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=4PURH1B9VR3wyETq8zfkWcWy50ocxSt1URto7TUlM3I=;
-	b=JADtadlMpBQ2AeSv8LvXMquSfzYTSu3Q3qYsyYVETzRGItU5Pcs/judJqK+KZ3PA6OId
-	 a/Fj2TUxG8gjZ0xAjAVkKZ9bUt/W/Wp4KD7tzzZPz8gddD9fUgQOJBkbqejaHHiVOwifx
-	 F5bHSwcl02VmJQeILLCBnH49TnC5JexT3hBmcsduUArL0PJoXjczJHRw5cEMecKFLs2Mg
-	 U5Bqxt57rxO/cncuj4oZxw/hpd4k/RbDKTlHa0XTI5NwYe6NFZTCfE+mKPCV3uaslbFvD
-	 rpMxHfR14LSXdzalxZYoLus19Y6ohKWUhjdMD6K0muqTmAGzz5sZ4lhdAi2taQHCX0w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793182783;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=P0LBJo2VbqsEvkmMMPt6dVLvdqBYzTvslPWjGjbCJkU=;
+	b=wE/OPmw1ggyIdtiUE1xqYPhJGwfKxPYmgiZpLDN7RRY9UP0xASgMvynZJr87gI8uGCRv
+	 AkLA1zFfJYpqZD8AxwFpZF0tC/s3fzOCmQ0CmLN29WLdpcHk413w4hpX7tM88n34tkWAa
+	 sf8DvtHq50zS64abmaWlYWiPhxWyLiVf0kwOsgTovzZKPVVnb2yq2f9j/ZCXsubCURCZS
+	 9/4wwMk/y+OWU2ZbOELJ18ZER4t9CWQAq85v+91Aa9/TIzOCTjt0N65pgYGWhZ9h0gX8I
+	 /M6LP5vR0EQPom45h4vUGR5bxxl9ESrLvWWJOXTXsUS8hYd/4M045y+qNhrVaCOjxvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="dNA9WxE/";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XK21YGB2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B950606A325;
-	Wed, 28 Oct 2026 09:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28412606A31A;
+	Wed, 28 Oct 2026 10:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dNA9WxE/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A4341F031E1;
-	Wed, 28 Oct 2026 09:59:57 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XK21YGB2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A6A81F01828;
+	Wed, 28 Oct 2026 10:19:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793181597;
-	bh=4PURH1B9VR3wyETq8zfkWcWy50ocxSt1URto7TUlM3I=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dNA9WxE/kF5eFTFnG3rWHmpMzFJ+DcQkW6R/ctVAGiyfv+ZqyFcF0s3RTP26ioG3w
-	 JqcDqa8In0oBCpeaXqXH9/ecF3FAc++QoheKNavEQDI8Eb82PMKBwpM4yZy36vkioo
-	 Ibahi818Y5SvJIi0ezXNj/QsUNQoEDiZmjvuYUbazz7UVhQhYxVWvclCFXNfQDjVIb
-	 SvR7VNvU71h/se91+VLo1OUAaTnAmL2u/kMhdzv+57PW+cGxvmch8LhraoZ31w7c/R
-	 EkTSVnULmKNtYjOlarohYtRzYhkCPo+JG0jNaaalpF8u30xaQIsXMEHkHy14IDYdt4
-	 Kt/0O/O9RI7PQ==
-Message-ID: <sashiko-outbox-187711@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] bpf: Fix suspicious RCU usage for sleepable
- bpf_get_stack()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Feng Yang" <yangfeng59949@163.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-In-Reply-To: <20261028093548.790977-1-yangfeng59949@163.com>
-References: <20261028093548.790977-1-yangfeng59949@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 28 Oct 2026 09:59:56 +0000
+	s=k20260515; t=1793182782;
+	bh=P0LBJo2VbqsEvkmMMPt6dVLvdqBYzTvslPWjGjbCJkU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=XK21YGB20iZcPTso2nm0Xo9s7LFoDqVtDtI8fSzdvTCQ0++HJQ6CNngwCPSZnVGJK
+	 imwJZiHlZ3OOyKBgjCrY2MPocQpc1r6oNOKtEChWV14wDll5jznHSlQXGuubMQnVQO
+	 UxSthCbEpN1UYyWkmaj6g4wBrsFDtLvqj/Sc1dJl1PLVWSIptkgGzEYbB6aTQXv3Up
+	 0ga30VfzF02BRNVH0YJKK3Tq0KeRkTNiO2DhMb5RiaOSRk05hf81e8RGehxRvfqvJf
+	 WpLezqyR01a53UycNyKUlgVL8AgU+SinGHx5gQlmyOP7JB8DrgEo8DD60ygYTBX+8B
+	 Ll96Vi7/jcjbg==
+Content-Type: multipart/mixed; boundary="===============7754228893917277764=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,119 +48,119 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <2a0f5ff1d8db81b07fc4b344b8e68e3505fcbf36f72a471d1678b2f1cecd881b@mail.kernel.org>
+In-Reply-To: <bpf_redirect_neigh_short_linear.v1.r0.20261028033717-1@mojatatu.com>
+References: <bpf_redirect_neigh_short_linear.v1.r0.20261028033717-1@mojatatu.com>
+Subject: Re: [PATCH net] bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
+From: bot+bpf-ci@kernel.org
+To: jhs@mojatatu.com,netdev@vger.kernel.org
+Cc: jhs@mojatatu.com,edumazet@kernel.org,bpf@vger.kernel.org,stable@vger.kernel.org,daniel@iogearbox.net,ast@kernel.org,dsahern@gmail.com,kafai@fb.com,martin.lau@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,davem@davemloft.net,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,jiri@resnulli.us,victor@mojatatu.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 28 Oct 2026 10:19:42 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: per-CPU bpf_raw_tp_regs corruption in bpf_get_stack_raw_tp_sl=
-eepable()
---
+--===============7754228893917277764==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit c66538ad7075b69839a1969f72a7ea7eff53e112
-Author: Feng Yang <yangfeng@kylinos.cn>
+> bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
 
-bpf: Fix suspicious RCU usage for sleepable bpf_get_stack()
+TL;DR: The new skb->mac_len < ETH_HLEN check in __bpf_redirect_neigh() may
+wrongly drop valid packets on tc egress and netkit, where mac_len is often 0;
+a regression that would reach stable.
 
-This patch routes sleepable tracepoint and raw tracepoint/tracing BPF
-programs calling bpf_get_stack() to bpf_get_stack_sleepable() so that
-classic RCU read lock is held when accessing callchain entries and the
-helper is marked might_sleep.
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index b7ac145b68b1..95a8a728a71d 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 14adfb85fdb2b..7887d1c00be83 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
 [ ... ]
-> @@ -1705,6 +1727,33 @@ static const struct bpf_func_proto bpf_get_stack_p=
-roto_raw_tp =3D {
->  	.arg4_type	=3D ARG_ANYTHING,
->  };
-> =20
-> +BPF_CALL_4(bpf_get_stack_raw_tp_sleepable, struct bpf_raw_tracepoint_arg=
-s *, args,
-> +	   void *, buf, u32, size, u64, flags)
-> +{
-> +	struct pt_regs *regs =3D get_bpf_raw_tp_regs();
-> +	int ret;
-> +
-> +	if (IS_ERR(regs))
-> +		return PTR_ERR(regs);
-> +
-> +	perf_fetch_caller_regs(regs);
-> +	ret =3D bpf_get_stack_sleepable((unsigned long) regs, (unsigned long) b=
-uf,
-> +				      (unsigned long) size, flags, 0);
-> +	put_bpf_raw_tp_regs();
-> +	return ret;
-> +}
 
-[Severity: High]
-Can holding the per-CPU bpf_raw_tp_regs slot across bpf_get_stack_sleepable=
-()
-corrupt active register state or exhaust the per-CPU slots on the local CPU?
+> @@ -2451,10 +2451,14 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
+>  static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
+>  				struct bpf_nh_params *nh)
+>  {
+> -	struct ethhdr *ethh = eth_hdr(skb);
+> +	struct ethhdr *ethh;
+>
+>  	if (unlikely(skb->mac_header >= skb->network_header))
+>  		goto out;
+> +	if (unlikely(skb->mac_len < ETH_HLEN ||
+> +		     !pskb_may_pull(skb, ETH_HLEN)))
+> +		goto out;
 
-In kernel/trace/bpf_trace.c, get_bpf_raw_tp_regs() and put_bpf_raw_tp_regs()
-manage a 3-slot per-CPU array indexed as a LIFO stack via
-bpf_raw_tp_nest_level:
+Does the new skb->mac_len < ETH_HLEN test drop valid packets on tc egress
+and netkit?
 
-    static struct pt_regs *get_bpf_raw_tp_regs(void)
-    {
-        struct bpf_raw_tp_regs *tp_regs =3D this_cpu_ptr(&bpf_raw_tp_regs);
-        int nest_level =3D this_cpu_inc_return(bpf_raw_tp_nest_level);
+skb->mac_len is only set on the receive path, where
+__netif_receive_skb_core() calls skb_reset_mac_len().  The transmit path
+only calls skb_reset_mac_header() in __dev_queue_xmit(), and nothing in
+ip_finish_output2(), neigh_output(), eth_header(), sch_handle_egress(),
+tcx_run(), cls_bpf_classify() (egress branch), netkit_xmit() or
+netkit_prep_forward() writes mac_len.
 
-        if (nest_level > ARRAY_SIZE(tp_regs->regs)) {
-            this_cpu_dec(bpf_raw_tp_nest_level);
-            return ERR_PTR(-EBUSY);
-        }
+A packet built by a local socket starts with mac_len == 0, because
+skbuff_clear() zeroes everything before 'tail', and skb_clone() (used by TCP
+transmit) copies that 0.
 
-        return &tp_regs->regs[nest_level - 1];
-    }
+For example, with tc egress and a locally generated IPv4/IPv6 packet:
 
-    static void put_bpf_raw_tp_regs(void)
-    {
-        this_cpu_dec(bpf_raw_tp_nest_level);
-    }
+ip_finish_output2()
+  neigh_output()
+    dev_queue_xmit()
+      __dev_queue_xmit()          <- skb_reset_mac_header() only
+        sch_handle_egress()
+          tc_run() / tcx_run()
+            prog returns bpf_redirect_neigh() = TC_ACT_REDIRECT
+              skb_do_redirect()
+                __bpf_redirect_neigh()
 
-Sleepable BPF programs using raw_tp_prog_func_proto() or
-tracing_prog_func_proto() run under rcu_read_lock_trace() and
-migrate_disable() with preemption enabled. When such a program calls
-bpf_get_stack_raw_tp_sleepable() with BPF_F_USER_STACK | BPF_F_USER_BUILD_I=
-D,
-bpf_get_stack_sleepable() -> __bpf_get_stack() only disables preemption aro=
-und
-get_perf_callchain() and callchain_store(), and then re-enables preemption
-before calling callchain_finalize():
+Here mac_header < network_header passes, because an Ethernet header was
+pushed, but mac_len == 0 < ETH_HLEN, so the skb goes to 'out', gets
+kfree_skb() and -ENOTSUPP is returned.
 
-    /* trace should not be dereferenced after this point */
-    if (may_fault)
-        rcu_read_unlock();
-    preempt_enable();
+The same happens with netkit:
 
-    return callchain_finalize(buf, size, trace_nr, elem_size, flags, may_fa=
-ult);
+netkit_xmit()
+  netkit_run()
+    NETKIT_REDIRECT
+      skb_do_redirect()
+        __bpf_redirect_neigh()
 
-Inside callchain_finalize() -> stack_map_get_build_id_offset_sleepable() ->
-build_id_parse_file(), the task can sleep on page faults or filesystem reads
-while still holding the per-CPU bpf_raw_tp_regs slot.
+with mac_len still 0.  Netkit programs are BPF_PROG_TYPE_SCHED_CLS, and
+tc_cls_act_func_proto() allows BPF_FUNC_redirect_neigh.  Forwarded traffic
+that arrived on a layer 3 device (mac_len 0 on receive) and leaves through
+an Ethernet device's tc egress would be dropped as well.
 
-If task A on a CPU acquires regs[0] (nest_level becomes 1) and sleeps or is
-preempted inside callchain_finalize(), task B on the same CPU can call
-get_bpf_raw_tp_regs(), acquire regs[1] (nest_level becomes 2), populate
-regs[1] via perf_fetch_caller_regs(), and get preempted before
-__bpf_get_stack() disables preemption. If task A then wakes up on the same
-CPU and calls put_bpf_raw_tp_regs(), bpf_raw_tp_nest_level is decremented
-from 2 to 1 while task B is still about to use regs[1]. Any subsequent call=
-er
-on that CPU (another task, or an IRQ/NMI raw tracepoint program calling
-bpf_get_stack_raw_tp(), bpf_get_stackid_raw_tp(), or
-bpf_perf_event_output_raw_tp()) will increment bpf_raw_tp_nest_level back to
-2, receive the same &tp_regs->regs[1] pointer, and overwrite task B's saved
-registers before task B runs get_perf_callchain().
+Before this patch these paths worked, since the Ethernet header is linear
+(dev_hard_header() pushes it into the head) and skb_pull(skb, ETH_HLEN) was
+fine.  bpf_out_neigh_v4/v6() calling sock_confirm_neigh(skb, neigh) also
+suggests the helper is meant to handle locally generated skbs.
 
-In addition, if three sleepable tasks on the same CPU block concurrently in
-build_id_parse_file(), bpf_raw_tp_nest_level stays at 3 for the duration of
-the I/O, causing all get_bpf_raw_tp_regs() calls on that CPU across task,
-IRQ, and NMI contexts to fail with -EBUSY.
+Elsewhere the kernel already treats mac_len as unreliable at egress.
+act_mirred uses:
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261028093548.7909=
-77-1-yangfeng59949@163.com?part=3D1
+    mac_len = at_ingress ? skb->mac_len : skb_network_offset(skb);
+
+and act_mpls uses skb_network_offset(skb) when not at ingress.
+
+The bpf_redirect_neigh selftests (test_tc_neigh, test_tc_neigh_fib,
+test_tc_dtime) all attach at tc ingress, where mac_len is valid, so they
+would not catch this.
+
+Would testing the real MAC header length work instead, for example
+skb_mac_header_len(skb) < ETH_HLEN (network_header - mac_header), or
+skb_network_offset(skb) < ETH_HLEN with skb->data at the MAC header here?
+
+That would still reject the 1-byte header from the commit message (pop_eth
+followed by bpf_skb_change_head(skb, 1, 0)) without dropping egress and
+netkit traffic.  Since the patch carries Cc: stable, this regression would
+also reach stable kernels.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40666397744
+--===============7754228893917277764==--
