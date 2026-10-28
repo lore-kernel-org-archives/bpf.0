@@ -1,162 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.201.142
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793176965;
-	b=2Ooac81GNpH0dGfW6UQJjBx7joQXjAX9KfuW0T6IzuB92Rvrmr+h/QTvyDi0kPMOu59z
-	 B0W3+3vAF76cR1C4pYbvKkQYel8dk1X+QuFvg2kjLixSGAGraWcDkuOmmGd70hQBWpi08
-	 YyEE1356YHEPneWJSaQviH1CcoMpD7XbntRtvebn8v8qY4G0+z8m4mvqdUngEXk2N9OaE
-	 VPy8oyXdUKuuXPUjHccz2J1JZH0Wq9s3KkCiTxCyyRJl0sL2jPtEvdi8TMDvrR4bYYYyC
-	 vt5e7uUy+XxNKqWogb+LOnhA5yiYCD/5gYvwI9kUE7TLrpdY6Ukj9YD6QVEDkVaFsFw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793176965;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 msip_labels:x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
-	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=RkzP348H0sHnY/ZP4OTCBz9VJGCcXeIaljpzW+uzk2c=;
-	b=y5GBZs05jyVS7z6SWDTJMrbbrwyZYKHqiRYPYwIqnFVJMTiDAPSU97ayb/53g+X41K16
-	 RkobowyeFsS6S6XwUXxsYRtaf/MMrLS1lPWmW5jVIlvn08aagVFevoqNHJrBOQCmdSXzR
-	 tIE0gR5MhaPA2jVn7s30/F4U2J5ZiB5x01gnbkwLEQfOF9jvnNF6YpIhw5FO8L06BduvT
-	 oT+zVu/xRrgbSa34g6KXrD1rV9ALA4WqVpZdqHsJn7RfoCUtNrj2kNRY8RDXUzm6gijA9
-	 9R4wcRiQd0jNd2GmfylbiQwOiiju68eHrdsLpORflNnz50+xV/NoRrtJQWNlLDrq+CA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=vecima.com;
-	spf=pass smtp.mailfrom=vecima.com;
-	dkim=pass header.d=vecima.com header.i=@vecima.com header.a=rsa-sha256 header.s=selector1 header.b="sG0/VjL4";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.201.142
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11023142.outbound.protection.outlook.com [40.93.201.142])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793177425;
+	b=VvC4b4Zw8IWdrR3EENBtUS19H1NI4BG9wqqxxjeArTM26hR5T/qorPaeT//vnZdIpov+
+	 YXX6MWuae4WKWeHUcxWuW34Je2pKSxn3I2cNrXZKOQQrxxnnMjOMXmprogO2+55BrZ2EX
+	 0IIbvD7DUqm93SN9/UOTFeIXbBiSvQaXdDI9qrSyveGXRobkARafNwSURU1kFIm6ceQYV
+	 OvpvbJbeIqMtQqy9EZ0rSFSQxY9Ye8L1A3OBt44KCFSqQiBYGGSo6UEZ/wmYPel5GQsck
+	 aAiX6EVvQM+SQaNTnpI26jTM82UxztvZ6vIDbsLlhOKTA7oAM595A9P8PqGKtu+0wYQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793177425;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=ZzkyzMXwhe6xNno6EsFST7VZQ034OlMe3wk9yXIAjBE=;
+	b=I2NGZ/+NQIp9+D185LdcdwmtjPM3apVghMeBDMRCJs9NkZHTWmJPjq2STM1CBOUeOBeK
+	 AI7GVUgLjhRhDPhYjyXp6p/oozNVKhf6h2icB3D2Fh004WqdeTY8d8YTSinVFTLyBlmRj
+	 RWZiSTIPny9XJBR7ztNgr3CrQ/p1gaj1E+soC4CEytDx4Y2e8qUgDLL0GuWvtl5sFb/uv
+	 jQgJm5mStnwk12RiWykrRd5NglOSJB8ZD3ko0E4FIruyFnQfFfZIgndKTcG++BO7Fpu4V
+	 AnsbglWQUXmxCbgPzljcA2CZdtrUsMh3/0psTosAiZMwHSYKdxjj6tP+wIzHvZ97UhQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=1g4.org;
+	spf=pass smtp.mailfrom=1g4.org;
+	dkim=pass header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b="Aiv/oyAL";
+	arc=none smtp.remote-ip=185.70.43.18
+Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCF2606A31A;
-	Wed, 28 Oct 2026 08:42:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5FCF2606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vecima.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vecima.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B98F606A31D;
+	Wed, 28 Oct 2026 08:50:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B98F606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1g4.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=vecima.com header.i=@vecima.com header.a=rsa-sha256 header.s=selector1 header.b=sG0/VjL4
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xTRpJwavuN0bHV4ADpV4RFNj40s3b/wC/ygaW5hO4KyilOm7BSp7u/oqrOGsANBZPfy/NNlqxtSaYWi/jLmYtXLp8D9y2r9/WppL7J+pyQNlvXg64VmRpOJIGV7OlyaY1OCnNfbu1b6To8jdl8F/5IDwixBC3/ESIj8G+tx+nhowZT2YsSOVlo4jYknZl+ZDdQkBMhFKF8VHVqqJbw48D7y7Auvv8kIWaOy6FapeYLV3En6XmrDl/+67N6A+ynUsEPPpwNv8wFKwcazUc40RKBAzvY0HRLY+zR/n0WVyZHT2Q531avYjX+4ZuiQsbFz7Hof/a8jY5ApTmE2semLREA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RkzP348H0sHnY/ZP4OTCBz9VJGCcXeIaljpzW+uzk2c=;
- b=tWJnadYO8ifH7FjqivE2ZxU8BCFk3wMdYIk98io+FNSs6ihUTRAXjX4Me2PswaIq7iLO3QN6IkrJ6RPwE828gjT81NRY6tVhEbMtWW6AiVVdfCCyaDMT0WsMNKtEZdiyTzmOhug3WV4vQ1l5TzL1x27NA2IcmYXvxTLM3hd6XhbbeT3gYQmFb5kJmmgqa1TabZrYTjlC1rAGsrayEthsFAp4jHO3U8KNuYF/MevSlJDRjcHtT/xH7A0XJ3AQ+OQierqjEeuonGCp8V0IuyJqZdl9bfRBjWm5zXlbtw5/+f+pJXjD1PAFmyXZnbIxzdAZbpZR7J0jEz8FBPjTXvnIsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vecima.com; dmarc=pass action=none header.from=vecima.com;
- dkim=pass header.d=vecima.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vecima.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RkzP348H0sHnY/ZP4OTCBz9VJGCcXeIaljpzW+uzk2c=;
- b=sG0/VjL4ZZPLdKayvR4ABzAfSfXTR/sBgdQ6MAOADuM+dZ5uAkAcs/kWKEx07fQ2GGReQPxrPz8dzqKyILqW8vVnWSrecx76q+SmaH1LETIp9SaOCFrCbitXcHfkrNkqRzkQIFsnyeGvzuvfY9DlOkPJhzvf8VPssikU+bw/xcpxDFX0+kkuMY8I2dmqFLV5PEBNKyWZQoH2qJi5v7dEGMcUKmlQktYtvSn0SEAJykw0jDzA60NTHQmvWVPoWsfV8dhwavb1unt3yp5LOYQC2x+0JxPW24aQjNDEZIx4idVeqcbnAPURqpPLvdWY33zxNVm27D4T6nrtJauhH+UR4Q==
-Received: from DS4PPFFD8A841C2.namprd18.prod.outlook.com
- (2603:10b6:f:fc00::ad2) by IA3PR18MB6311.namprd18.prod.outlook.com
- (2603:10b6:208:529::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.22; Wed, 28 Oct
- 2026 08:40:06 +0000
-Received: from DS4PPFFD8A841C2.namprd18.prod.outlook.com
- ([fe80::6a72:cf5b:2c44:9ac0]) by DS4PPFFD8A841C2.namprd18.prod.outlook.com
- ([fe80::6a72:cf5b:2c44:9ac0%4]) with mapi id 15.21.0546.021; Wed, 28 Oct 2026
- 08:40:06 +0000
-From: Marcin Knap <Marcin.Knap@vecima.com>
-To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>, Maciej Fijalkowski
-	<maciej.fijalkowski@intel.com>
-CC: Magnus Karlsson <magnus.karlsson@gmail.com>, Tony Nguyen
-	<anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Magnus Karlsson <magnus.karlsson@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
-	"jtollet@cisco.com" <jtollet@cisco.com>, "intel-wired-lan@lists.osuosl.org"
-	<intel-wired-lan@lists.osuosl.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf] xsk: Do not free ZC Rx buffer when the Rx ring is
- full
-Thread-Topic: [PATCH bpf] xsk: Do not free ZC Rx buffer when the Rx ring is
- full
-Thread-Index:
- AQHdX6MW14dMxGSC9k6V0uDc5Tc4vLcFXSSAgACWooCAAA4QkIAAWoaAgAAN7TOAAYa7AIAKu+BU
-Date: Wed, 28 Oct 2026 08:40:06 +0000
-Message-ID:
- <DS4PPFFD8A841C2FF8203BAD3C773A7784D806F2@DS4PPFFD8A841C2.namprd18.prod.outlook.com>
-References: <20261019-xsk-zc-rx-double-free-v1-1-2aa19f6628fb@vecima.com>
- <ataHK9s/MpNgXWhT@boxer>
- <CAJ8uoz38cE-1diOnih=HYW+ACqq9YQhaM7tz8KCHjTxgZVc+rQ@mail.gmail.com>
- <DS4PPFFD8A841C2AC917618A9B1B19453C480672@DS4PPFFD8A841C2.namprd18.prod.outlook.com>
- <atddQ8qN/R1tU1fk@boxer>
- <DS4PPFFD8A841C22E2663DBBA3A1B4F581E80672@DS4PPFFD8A841C2.namprd18.prod.outlook.com>
- <87ld7r6xqh.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87ld7r6xqh.fsf@all.your.base.are.belong.to.us>
-Accept-Language: en-150, pl-PL, en-US
-Content-Language: aa
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Enabled=True;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_SiteId=9d639caa-2d40-486d-ac82-e59b0005382f;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_SetDate=2026-10-28T08:40:05.739Z;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Name=General;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_ContentBits=1;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Method=Standard;
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vecima.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS4PPFFD8A841C2:EE_|IA3PR18MB6311:EE_
-x-ms-office365-filtering-correlation-id: 648bffac-eb9d-4a25-b7bb-08df34cf116c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|7416014|376014|1800799024|23010399003|38070700021|4143699003|11063799006|10067099003|261026121527099003|261009223027099003|56012099006|22082099003|18002099003;
-x-microsoft-antispam-message-info:
- iOeWfwVjztS1TrXXI3J43h2Kg/0UiCQDouBWjonWUgQz4BaO8h2YqLFw36kfljFL/9QLnjZvNpRwyfauMxP0OrYBMkIEIWatf8P2NgXUsOauHcffztzT/1jGUJKLldrBaHWnBK+fyNocf962MPVRZEqO62DM55j2dLyMEUaolgwr8j3QRNreqGtQkZBp2u93P94O2GCc9I5HwogKLiLpBSKNfPgmrwm9c8NPml2tSRcNjVdVB7Bhejkvx9BHQWw6Xo8645b8YUBESMLJCc7KKwTLamGokzHDbV0Ry9+rg6gH7b8fY2TFj4BYi6snqEXLgJyPpXyrT6vgLMdqSNGJwE40Wst45Kg+yKJ7xfro2kV7kjhFcuyZTco2qra6WjE29XQ5UvUB3Zrn/V1CkSKr7IK28aPHw8cVp5lKlNOZ5X3JqUFYQiPwleBcavkN/66HmLEEojeYbUYN4voQ7/pbZr+LrSqbVpbfa4nvA5skTtQCSWFvY+vJ0Y8cExCRj8ACAgrVnJcCZYO9VGmKDWa+YDbVfuikR+LpU30RtbGjSCqVeJxc+V7gSaZYNRrdhQfvbsC7DO24CBACb0P6r/YRiXHfw/zNmJhfNIWZZbYGjOCUvSTyVLcvg8hbRle7/bS9Ty++KDADSvnzcK+Gq7jDIK49Nvr1tWR+gPIZHDIErVQ=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPFFD8A841C2.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(23010399003)(38070700021)(4143699003)(11063799006)(10067099003)(261026121527099003)(261009223027099003)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?iXAoD1Oewkpn2EmU/I/XeUeIfBh0De4mLKhUnZ6jOY+1hrWWvOojniKdht?=
- =?iso-8859-1?Q?Rui0tY6XooXZa4c5RH5s0d0qZvN7MOWUYnGjYMrUv1Yr4jZtOuBUG7Bm8R?=
- =?iso-8859-1?Q?ENVahVfLzTfTptTHMRgx8R5GPnj8iX2OiUXL5Sf0lbzsS9MTNBNb5b0c4k?=
- =?iso-8859-1?Q?uzqz8uSZx0HiaU8iWaKKC5GmnRF8o50CTTwLYZguPvUTc/1CT36vhrJgpR?=
- =?iso-8859-1?Q?RoCVbhMApYbW0exXzF4mS6RWcXWO10BEYblKi24pCeiuuqpmt9p5Bc6asz?=
- =?iso-8859-1?Q?1/EV+zwLFUEulcZWsrEV1tZxw+8rA7mOGsKYmTJEnfW+ynNk19IraODgU5?=
- =?iso-8859-1?Q?cTjrKsMqqxvP51wiDlZQo34rLxofQPBJ+dxgO6G9dmng6NylWXJ7z+Eqv/?=
- =?iso-8859-1?Q?NGqnNwYgCjQWB9kQk1ugsuT1EGDE3+BJAhnSlKfiLcln8LEL2z2JXuX1FT?=
- =?iso-8859-1?Q?bbQ+ztlPtPmRmnMdbiXT+lQbB6cIsMg9xyIQoU/QjA6ObXBlhZDJfZ/ZX7?=
- =?iso-8859-1?Q?THDnk289OlbZp5F+CcFHfCX3YfSiMQe6mFfYDYd2CDpnNwCaV6n5edeILh?=
- =?iso-8859-1?Q?2tWtnC3UFieiqwGdqyU9jl8MRof/Kmddm2o3HFmMYMcv6UM+6PQyp3qefs?=
- =?iso-8859-1?Q?i0pcHeonMBaPEnJYbyRbojyCmoD069QKZa29aaX0sqWlMXO4c7LPn4ysWq?=
- =?iso-8859-1?Q?5jiuFVBRUaHz8PV7yB25nL9Q8sXRnAwsSHhKcEDkjA5iOaAfQvRWhI1Fiv?=
- =?iso-8859-1?Q?b3whnBL6H4vzy/sYYOMUzE6nQOxraWA4HuqFl9UzS/e3aTlEzfQy0CKAex?=
- =?iso-8859-1?Q?J4TskvEHXIivPtTqrHj6XqLRhhuiVrI0H2/DGmjoacvhPa5ApKD/yt4HWG?=
- =?iso-8859-1?Q?Hg8tXJLa/vy9mK11DKYybSWHWmTghdLg16PfltIYBGRqKO0EGkTtHf6IbK?=
- =?iso-8859-1?Q?LJZOijs+fGYmcBk8YGMAZ43LB2e50y4wAnmHJVu6BUWGbew+TXdcvFJ3WV?=
- =?iso-8859-1?Q?hDh1LHJGKMxTgeI1/RfFxbP1hIjpOEpmgcCMZoWlKiJXK82pPCyMkRgm0h?=
- =?iso-8859-1?Q?dEdyrklMcsJGyCQ5uf1m+raC5LGMRWs36smlrM/czOhpuUKUV2Oeiq1c3l?=
- =?iso-8859-1?Q?N+JnETkVsQbmzmhOT55DaPIm70SPIezxC+mpOJeBFR0bxBejRtPuHdGCi9?=
- =?iso-8859-1?Q?6daGRJT+S7PcANZWwQJP91LjM6GJGYkZts9tB5rZSpQxPT272R2CvNnDHV?=
- =?iso-8859-1?Q?iFZCJU5ABqR9MQFuL8vT87m6vxeQbT96BgtTU9V6hrgMrMUWK55Towghgz?=
- =?iso-8859-1?Q?IDj71+k6GUH698Jevqg3qCKrURRByYvO4YGBWGBwRddpzmqZy1pmDBAwYW?=
- =?iso-8859-1?Q?rUMRYZNQb2XCe1b06UWQ0sl7zwvq3Ayvhff51WcSjdAAg0rRp2dUJ337/k?=
- =?iso-8859-1?Q?SEu14+HObT0IarF0Tcj30B0PLN9EsWIqfmy6WhsuAyyOxL1fjw+FUwNCxV?=
- =?iso-8859-1?Q?wtO8KPJqqS0iktIr2FHYpfxbYs6/lXYJ69rb/Ivv1fz4shKhlbT1gqSzdK?=
- =?iso-8859-1?Q?UmCEmyUsHqCjdsf5HtlK7wei0422PI9Gpdcxxoz5dRT3oTZLkYst9NTxA2?=
- =?iso-8859-1?Q?/47NciZOQuQOtsZ0/Og4t3QEAZVfFvwzgyTalXHJr/1vy4ALij8L5o0bt/?=
- =?iso-8859-1?Q?ZFSnhBmN8V27yCwdTc+fZPxf0tx38H4pLxZdLFHrxEbGk6l7bDjh+aulyA?=
- =?iso-8859-1?Q?XYVhKW86E+vdM0oUt1o7aXr6qDSkCwm8l68ZNY3RPA2eOXdoSIGe2+yti/?=
- =?iso-8859-1?Q?62VEK5Mqug=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key, unprotected) header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=Aiv/oyAL
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1g4.org;
+	s=protonmail; t=1793177422; x=1793436622;
+	bh=ZzkyzMXwhe6xNno6EsFST7VZQ034OlMe3wk9yXIAjBE=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=Aiv/oyALvt2n3RZQkF31lOr2djiawuA5c9HAMMHEy4LA6yEqY6v3kowkl/zJKev5K
+	 DpHG2UX0a2okCA3gHxrzt6frWe4oZhNA8m4mbeSSmvxiNDKKzGENE7Jm+oMMO4J5Lw
+	 9dUOxcjWPEUjRYW3E78JqSbO0jXBlX1OIutdf9u5flB2JxfNcmFo/JskbET/K//T+b
+	 HF7asdf3zAEPr0iob4qOo/M8Wq91Z8zWdrfA/FzD3oGhbnm3zHhAfDHm9KGjDhBmy/
+	 fXMrg2jIKbNqyniUQMAc7avD0jwf/uEPPlWkrA3n+Io0BE+qU3x21/BRhTi3LnVAoi
+	 Dgazhxj00nXvg==
+Date: Wed, 28 Oct 2026 08:50:17 +0000
+To: intel-wired-lan@lists.osuosl.org
+From: Paul Moses <p@1g4.org>
+Cc: netdev@vger.kernel.org, anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, maciej.fijalkowski@intel.com, andre.guedes@intel.com, jithu.joseph@intel.com, vedang.patel@intel.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH net v2] igc: return XSK frame copies on XDP_TX failure
+Message-ID: <20261028084919.3059158-1-p@1g4.org>
+Feedback-ID: 8253658:user:proton
+X-Pm-Message-ID: 3c834f9f3c809d2e7ba6cca99f25171716b11d0b
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -166,37 +61,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: vecima.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS4PPFFD8A841C2.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 648bffac-eb9d-4a25-b7bb-08df34cf116c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2026 08:40:06.4567
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9d639caa-2d40-486d-ac82-e59b0005382f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hg+bLekeqOdZ8MLEqpnqt3hzJRvVQOdWQMEt0wRUVLSxaqbMlxXHKhPFwnX1/oI89Vg07hxIeUz6j0stzwbb8Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA3PR18MB6311
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-> Marcin, FWIW, we'll discuss this topic on the office hours today [1].=0A=
-> Feel free to join! I added a link with suggested wording for a future=0A=
-> doc [2], and asked an LLM to audit the drivers [3].=0A=
-=0A=
-> Bj=F6rn=0A=
-=0A=
-> [1] https://lore.kernel.org/netdev/aqPxxX9MeGmAqGy6@boxer/=0A=
-> [2] https://gist.github.com/fb-bjorn/d6835c49650bc3433b427a9c9708fbe2=0A=
-> [3] https://gist.github.com/fb-bjorn/181786547c4dd8182ba09e23cf394dbe=0A=
-=0A=
-Sorry, for late answer, I couldn't join last week, I can join today if need=
-ed.=0A=
-I saw your audit which is very descriptive, that helps with understanding i=
-t.=0A=
-Thanks! As I understand you would like to fix the drivers ,which broke =0A=
-the R2 handling considering RX Ring Full rule.=0A=
-I can send fix proposal for mlx5 driver. if so should I create another patc=
-h=0A=
-from scratch and link that conversation only?=0A=
-=0A=
-Regards,=0A=
-Marcin =
+Converting an XSK buffer to an XDP frame allocates a page and returns
+the original buffer to its pool. If the TX ring is full or DMA mapping
+fails, igc_xdp_xmit_back() returns an error without freeing the copy.
+The RX cleaner cannot release it, so the page leaks.
+
+Return the copied frame on TX failure. Use the RX memory type so native
+frames remain RX-owned on failure.
+
+Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
+Cc: stable@vger.kernel.org
+Signed-off-by: Paul Moses <p@1g4.org>
+Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+v1..v2
+- Sort declarations
+- Update the description to match the initialization order
+
+v1: https://lore.kernel.org/all/20261023141317.3904442-1-p@1g4.org/
+
+v1 testing:
+Tested on Intel I225-V with baseline and patched kernels. Physical
+pause-frame backpressure caused 46 leaked copies on the baseline.
+With the fix, all 72 rejected copies were returned once and freed,
+and all 192 copies were accounted for.
+
+ drivers/net/ethernet/intel/igc/igc_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethern=
+et/intel/igc/igc_main.c
+index 1fb5f3cbe..d10dfbdb1 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -2488,6 +2488,7 @@ struct igc_ring *igc_get_tx_ring(struct igc_adapter *=
+adapter, int cpu)
+ static int igc_xdp_xmit_back(struct igc_adapter *adapter, struct xdp_buff =
+*xdp)
+ {
+ =09struct xdp_frame *xdpf =3D xdp_convert_buff_to_frame(xdp);
++=09enum xdp_mem_type mem_type =3D xdp->rxq->mem.type;
+ =09int cpu =3D smp_processor_id();
+ =09struct netdev_queue *nq;
+ =09struct igc_ring *ring;
+@@ -2504,6 +2505,10 @@ static int igc_xdp_xmit_back(struct igc_adapter *ada=
+pter, struct xdp_buff *xdp)
+ =09txq_trans_cond_update(nq);
+ =09res =3D igc_xdp_init_tx_descriptor(ring, xdpf);
+ =09__netif_tx_unlock(nq);
++
++=09if (res && mem_type =3D=3D MEM_TYPE_XSK_BUFF_POOL)
++=09=09xdp_return_frame(xdpf);
++
+ =09return res;
+ }
+=20
+--=20
+2.56.GIT
+
+
