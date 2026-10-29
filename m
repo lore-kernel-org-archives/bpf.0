@@ -1,57 +1,120 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793250538;
-	b=FWw6qL+TQn3M4Odc+k8/yoC7/ezQYiBHiXYgzD9TDAkAqM8FmeMN2+bVLW05kcQX4P2t
-	 fJFO6+q0t3OhT3ftCqmTEfDLTLTcr79iPSqJQg0Jk9TCAnRFYtDwPyczOU4z9wV617XY2
-	 JZe/MKt8KH4HLt3pzit/2I2YeA1sX7twUEjlBWrZRFiDrdtecS3WUznP646Fz+7B2LMG3
-	 jp5WwrnLNhYLKkoJ0dUCKmhF2X9Ah7sWPDoHFAbM1mHoC4Q17XtsaEakkqSvjQyYovDlP
-	 EEhNLTPaykygAeHhBlpYPnXcD8EVPrwMRputtM8VCADtVBGOIWK7qheOyP1UTYySCSQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793250538;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=4UYXLnaKFzSQTERwJCQg2GbTAiaoEZmzusk6n2ms8us=;
-	b=2EDBhh6i85NIZ3VXIrdG+eJH5i88HoqZiX3lEXC6xtAX9hpbXBxA7t4gjXhYOVDwZiAM
-	 Vp1Vxm/lh9R+Rcil29lb+6t7yx7lxahQo8CzFPvGZexlrV5JvXiJaotmctbJBcugwi4ua
-	 /kcScuRX0MSuzZJjKhg03RVOIkxPwn0vnOKw4GIdZANndYhrBeJzhl8qFWmWRplRF7EE4
-	 zsSvH5DDKUaTVhUuparV/6vHeH7+tUk1R6jqUqozooROLasvmQxDjkOND9QcP684XXMIB
-	 TV7jd6Ds7OkZxUsu2mXj1frioanTl7pEOi990W2d9xhNm3Q1TYo6z2Ju6slxZvAzAzg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="FJRJ/hho";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.129.124
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793255317;
+	b=ChdcYbLTU9QLsLZOrB/s6cJ7EH61f4DB1d90GnPqKZl93tucQki5Q/WlTtZLVbtPcfPI
+	 v95g+v5mA98nECmjB1u0KeNZuDU55NotHBryhXLUD6beQ5oWB8AcwZSXhFfuuIxfCJWUq
+	 mJONiUpn1Pe14iSDAxICvDaE6awstOK4Cn5ZYmBeBomPcX11bw9wfeF3fNzPtEmVUN+xi
+	 3y4aeotYSXk098uRSAmha3KVcL7OKADnz5nwsevIyHBuY1jWXzM8vHLPD3TSo4XcQmFq3
+	 8NX8m0l2TpiK+Dx8HfqDFV+oJEQWLwXqsCZ61nBWskECDy0wLD18sWplomCZPQ0k9XQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793255317;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=1iJxU2srr5LwVZydpcZZOyNys/GEnKfXjQqJD4/acz4=;
+	b=O3Nf1aZ+BKoct6dV5MYqJCF58wNJah4dWhVin9nFpuJ2uZn71dRzuMcKoCst7AuNmoW8
+	 mWj1oC0M1B6EdNiXMzQfjW6/Hw2x/jjY/C9zdAUa0Lpc2uICenGnP2Sb/l7A9tbiE3WBC
+	 uja0lGBeYAmI/PMSDW/EsRSH3GNthrFFEeRc2whrXf9C/ywisWuhRgweaFLbXkVBZUpr7
+	 eUgGIKE7su6Fqti7ec8zfHCkQ2ZiGHgjJcXigSzZKJncktZs9iXp0rtAIn+4Ieyp6Wety
+	 Dy7qjOLsSLBRmP/RBoT1lbZdyxTh8di86JzCFl4GAYtspMy8B9TlQMwbmZNK9dzWkOA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=dXGQZ8gE;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=XExwyMTA;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55D5606A31A;
-	Thu, 29 Oct 2026 05:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100F2606A31A
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 06:28:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 100F2606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FJRJ/hho
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1305F1F01825;
-	Thu, 29 Oct 2026 05:08:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793250537;
-	bh=4UYXLnaKFzSQTERwJCQg2GbTAiaoEZmzusk6n2ms8us=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FJRJ/hhow7aJRDWlFX3KoJkWQaF+lJksSPCVlNY9eJM/pJEECQwE6QakKsbmo+pDq
-	 U5oEaZ11g6lDqplPxGwTkh//K0WUm7IZwnwom2rJfQugv12ANQPjox0/NWFM+zdLLt
-	 fdpBOCpLJt26O9Z6EG5QTJoWg3Yt6F20lqnDn4plgp8742wpwjj+QKOl33Tef16COp
-	 9kznPs8c6F7pc5P/7Q/rud9om6apCrU1/PLV8N8c0YFreKfYHQxlqb+ZZU6iTIA4if
-	 Sl8fiQ+8QqsymubnrOAo9j3f+kDRMPXtaKACtmX7HKifKzcpzkvuQdn6kF0EoKG05Z
-	 d37IPL0D6Cb9A==
-Message-ID: <sashiko-outbox-188730@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [Patch v5 06/18] perf/x86/amd: Avoid re-enabling PMU and LBR
- for BPF when disabled
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Dapeng Mi" <dapeng1.mi@linux.intel.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261029043914.1395147-7-dapeng1.mi@linux.intel.com>
-References: <20261029043914.1395147-1-dapeng1.mi@linux.intel.com>
- <20261029043914.1395147-7-dapeng1.mi@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 29 Oct 2026 05:08:56 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=dXGQZ8gE;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=XExwyMTA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793255316;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1iJxU2srr5LwVZydpcZZOyNys/GEnKfXjQqJD4/acz4=;
+	b=dXGQZ8gEyOQ5oh3QEezH5FCP2bIHc+ugtLtAan7KtKRVi4GrAdNesMpbYLg0xJ7Sco7hyN
+	eXscDYWjLUAH5lbnXYY7RCRZqOSKHPVF4m7LCON460vnEwvp+TTNqkQxIJHTLQxMpr3anR
+	V+faZnOCEZqbpJjoYyfyfUibw7lFWKs=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-639-1r1ykRA6NM-Bv-sYXf79yw-1; Thu, 29 Oct 2026 02:28:34 -0400
+X-MC-Unique: 1r1ykRA6NM-Bv-sYXf79yw-1
+X-Mimecast-MFC-AGG-ID: 1r1ykRA6NM-Bv-sYXf79yw_1793255313
+Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-5be48f8ead6so965005e87.1
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 23:28:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793255313; cv=none;
+        d=google.com; s=arc-20260327;
+        b=I8IarFvy98PVzQtcf7Kdk6e/wtrIVtmro3/7jok+KJqOSgvxwOqk2DipiYO4Ar8s1p
+         ZYNMZa0BG1hPOOI92FGKKVM3JQGcVwgQfnLgPWMPggwMZ15BzLh87URUYgJt1GlBzQ1x
+         o2PY3ZAfRUdMpeexI/O9kNZyymyPv/LKIgaIGraQvwtxczWmDhrlnethGv+SKe7yC+pH
+         xbCBbMW9HF8ksm+71ahB0IWg08bDGIIk18I85l7bRnYce3e7lwa2KuFwdLlMxwpyIcy7
+         n623zuS7PERuvf6tcfUgPEFkIdyNYqXi3C5yog4swFhmP/v/ZK4ETMWrYLdIvYHf5uvL
+         9foQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1iJxU2srr5LwVZydpcZZOyNys/GEnKfXjQqJD4/acz4=;
+        fh=/6Y5lGVtjSeoIB5n57PvheRdwIaWqnFpTDz0BpDFKFQ=;
+        b=hRbidE0qJO5tCiBY2wsYZvW1cevE4ilgaE2eQo5WXxHYoRx9EVLvfyN3K78LNmDNnC
+         j8dOzaVYqBXOSWlkicBZxQ0lSF6z0c/zM2SAoKFvmuClgUKwbWGQrfusBrpWvvmfD7NY
+         hjCoHhr/PXI5fS1iJ/KIvvikGPjSmgiXtXjlwp6pgk3ef1k46w3E1lpumbnLAKqBr3M8
+         moaW9OOnXlADRUsz9FrWidZrMPof+6k3BUym+NROp4G+HHaLM2Xx3bPgLLhjZxPWN5nq
+         eHTI3FHFJHMmqan50ZnIeduAkL8CInsubVVgKWPsTAZLFf0dH73TBUIdQiu5ww6asLCi
+         F2Hw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1793255313; x=1793860113; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=1iJxU2srr5LwVZydpcZZOyNys/GEnKfXjQqJD4/acz4=;
+        b=XExwyMTA8DYbGGxcBAgigzAVW0ncFH8daEbWVof1HBicSweDQIU9RlX7anvY7lmysf
+         m0XqJHSVZKGmAnYYXH4iR2dDd5VWahEwXyZr+VUM+Ou2Nogratli96r3ctrjc9z5FHZ0
+         NHOXhaUs0n2MzhoySUyTY/s64ZpNAPg1v5rIIefRgTxgMk/efdoYlJGN7Qar9S4/fqaJ
+         5wno6MaPs3c4ncrTtY/0er52+/EQsiseLH2ydHp+GzJ9Lt6OVSuLhaTjz7VntlrXXtdg
+         +7YalFMtHTlECAURj7OwLv/Ht9+9YPk/rSEorxTWmpfO5OIF1ddX8PTUOpgq6I2ebCe7
+         oznw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793255313; x=1793860113;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1iJxU2srr5LwVZydpcZZOyNys/GEnKfXjQqJD4/acz4=;
+        b=JirD7KZDW2vizGkgevPqa5W1ryZQcUyXPI/kiqj37xiBuliQqwLa9NjNACjsaA7rAL
+         Uv5m+F08ekpU/KGFIdKxQCCe6vbucinEpAcZG7a0Y5RLJPKS9V94U6fuI93VfFw6H8wx
+         qkTrDD7N71pIila2Nrv6Am5ikSCXgPn/rYRwopZrQf08UVtwpGwm/nUUuIfwkMmEwjxO
+         60YmGTeS/lm5R1N3Xn0vtsus3flQ3VbIbRSW9fvquwT4UqMHu4c/Ph20u+QeOLZwXIC5
+         Aaz9/hKNtiYJosLxhbLH9PjqynsegFvSjs0pEI5x+plEJzUajawFXeUbcL/ga7MQizdb
+         6sEg==
+X-Forwarded-Encrypted: i=1; AKwUvBwi13zPipuiZZi2h8IWhgFEJdB0WNMm0lNFA/04HUulvUmgEYApiKUD7va7d2YgAVk7y7A=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ3RHLpLBdek35+lJemoOPWL5neKERNK5petpgVr8OIXS/nKT7u
+	SW03QWhRakiD1iDlG3fAUfuIwqItWEUCL3CySqBrrqDAecW4oFgIK0yzfQhcGne7YyCrzRu2fse
+	pUw/sruR+/44BKu32c9S1yKEW4dswjN6PCPqfpD/HN4oLJw8ivcnyUB/XXpp9leUeW+6VX8Y96/
+	Z6QPM+n4uqorkmCjWR6Y3Q59U6uEKt
+X-Gm-Gg: AYBFou3VpjFatRNDW8TmMLDCQA5pCt56cxTA0VUi969h14UJpk2A9HYnE+1J6yhwhax
+	vxF/3+3zvrpAWX65OIXeDwxvAUiGZeaGiYcGmtJ6zCYlGfipx297yBgEBrrLCGgUfzOSPYK2FyX
+	pRzdq3b6uU3TDjdfHidNM3TF7jhJl5s0WLYVlhx3h8gv1+SaYY8snDQPba
+X-Received: by 2002:a05:6512:1318:b0:5b8:f8f9:e080 with SMTP id 2adb3069b0e04-5bfcad432cdmr1771558e87.26.1793255312829;
+        Wed, 28 Oct 2026 23:28:32 -0700 (PDT)
+X-Received: by 2002:a05:6512:1318:b0:5b8:f8f9:e080 with SMTP id
+ 2adb3069b0e04-5bfcad432cdmr1771542e87.26.1793255312465; Wed, 28 Oct 2026
+ 23:28:32 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,103 +123,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+References: <20261028191103.623156-1-ihuguet@riseup.net> <20261028191103.623156-3-ihuguet@riseup.net>
+ <CAAVpQUC7hezdMEQkzAX4oqFdO_uzBmtRwn85_5_iWf4ExPqpTA@mail.gmail.com>
+In-Reply-To: <CAAVpQUC7hezdMEQkzAX4oqFdO_uzBmtRwn85_5_iWf4ExPqpTA@mail.gmail.com>
+From: =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
+Date: Thu, 29 Oct 2026 07:28:21 +0100
+X-Gm-Features: AclHuK-x6fsuiHpokXnJ3Qx6-V8BzmKKkHRK86q2oMBiEy9ie31bHyN-v0SCuv4
+Message-ID: <CACT4oueJgvE=CKSY2T2jkpD0cjT4bwU+ME4bb=j-cno2q57Kxw@mail.gmail.com>
+Subject: Re: [PATCH net v3 2/3] net/ipv6: don't route packets with unknown
+ source address
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@riseup.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	David Ahern <dsahern@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Eric Dumazet <edumazet@kernel.org>, Florian Westphal <fw@strlen.de>, 
+	Ido Schimmel <idosch@nvidia.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Neal Cardwell <ncardwell@google.com>, 
+	Pablo Neira Ayuso <pablo@netfilter.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, bpf@vger.kernel.org, 
+	Breno Leitao <leitao@debian.org>, coreteam@netfilter.org, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Fernando Fernandez Mancera <fmancera@suse.de>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Jeff Layton <jlayton@kernel.org>, 
+	Jiri Olsa <jolsa@kernel.org>, Joe Damato <joe@dama.to>, 
+	John Fastabend <john.fastabend@gmail.com>, Junseo Lim <zirajs7@gmail.com>, 
+	Kees Cook <kees@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, 
+	Li RongQing <lirongqing@baidu.com>, linux-kselftest@vger.kernel.org, 
+	Martin KaFai Lau <martin.lau@linux.dev>, netdev@vger.kernel.org, 
+	netfilter-devel@vger.kernel.org, Phil Sutter <phil@nwl.cc>, 
+	Qi Tang <tpluszz77@gmail.com>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+	Simon Horman <horms@kernel.org>, Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Willem de Bruijn <willemb@google.com>, Xuanqiang Luo <luoxuanqiang@kylinos.cn>, 
+	Yonghong Song <yonghong.song@linux.dev>, Davide Caratti <dcaratti@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] perf/x86/amd: amd_pmu_v2_snapshot_branch_stack() leaves cpuc->en=
-abled set while PMU is disabled
---
+On Thu, Oct 29, 2026 at 1:02=E2=80=AFAM Kuniyuki Iwashima <kuniyu@google.co=
+m> wrote:
+> This changes longstanding user-visible behaviour,
+> so the series should target net-next.
 
-commit cb298524c7ea53df65b77e5a09ad097e570397f6
-Author: Dapeng Mi <dapeng1.mi@linux.intel.com>
+You're absolutely right and I already agreed on sending it to
+net-next, but sent to net by mistake.
 
-perf/x86/amd: Avoid re-enabling PMU and LBR for BPF when disabled
+Please review here and I'll send v4 to net-next.
 
-This commit updates amd_pmu_v2_snapshot_branch_stack() to save the current
-PMU and LBR enabled state and only re-enable them after taking the LBR
-snapshot if they were originally enabled. This avoids unconditionally
-re-enabling the PMU and LBR when called from a PMI context where they were
-already disabled.
-
-> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-> index bf631f60757cc..851d8a938f522 100644
-> --- a/arch/x86/events/amd/core.c
-> +++ b/arch/x86/events/amd/core.c
-> @@ -932,22 +932,28 @@ static int amd_pmu_v2_snapshot_branch_stack(struct =
-perf_branch_entry *entries, u
->  {
->  	struct cpu_hw_events *cpuc;
->  	unsigned long flags;
-> +	int pmu_enabled;
-> +	int lbr_enabled;
-> =20
->  	/*
->  	 * The sequence of steps to freeze LBR should be completely inlined
->  	 * and contain no branches to minimize contamination of LBR snapshot
->  	 */
->  	local_irq_save(flags);
-> +	cpuc =3D this_cpu_ptr(&cpu_hw_events);
-> +	pmu_enabled =3D cpuc->enabled;
-> +	lbr_enabled =3D cpuc->lbr_enabled;
->  	amd_pmu_core_disable_all();
->  	__amd_pmu_lbr_disable();
-> =20
-> -	cpuc =3D this_cpu_ptr(&cpu_hw_events);
-> -
->  	amd_pmu_lbr_read();
->  	cnt =3D min(cnt, cpuc->lbr_stack.nr);
->  	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * c=
-nt);
-> =20
-> -	amd_pmu_v2_enable_all(0);
-> +	if (lbr_enabled)
-> +		amd_pmu_lbr_enable_all();
-> +	if (pmu_enabled)
-> +		amd_pmu_core_enable_all();
-
-[Severity: Medium]
-Should amd_pmu_v2_snapshot_branch_stack() in arch/x86/events/amd/core.c also
-clear cpuc->enabled =3D 0 while the core PMU is disabled, and restore
-cpuc->enabled =3D pmu_enabled before re-enabling it?
-
-While __amd_pmu_lbr_disable() sets cpuc->lbr_enabled =3D 0 and
-amd_pmu_lbr_enable_all() sets cpuc->lbr_enabled =3D 1, amd_pmu_core_disable=
-_all()
-only clears the hardware MSR and leaves cpuc->enabled set to 1.
-
-If a BPF program running in non-NMI context (such as a kprobe, tracepoint, =
-or
-fentry/fexit hook) calls bpf_get_branch_snapshot() ->
-amd_pmu_v2_snapshot_branch_stack() while cpuc->enabled is 1, local_irq_save=
-()
-masks normal interrupts but does not mask NMIs. If an NMI arrives while
-amd_pmu_v2_snapshot_branch_stack() is in amd_pmu_lbr_read() or memcpy(),
-perf_event_nmi_handler() -> amd_pmu_v2_handle_irq() will observe
-cpuc->enabled =3D=3D 1:
-
-arch/x86/events/amd/core.c:amd_pmu_v2_handle_irq() {
-	pmu_enabled =3D cpuc->enabled;
-	cpuc->enabled =3D 0;
-
-	/* Stop counting but do not disable LBR */
-	amd_pmu_core_disable_all();
-	...
-done:
-	cpuc->enabled =3D pmu_enabled;
-
-	/* Resume counting only if PMU is active */
-	if (pmu_enabled)
-		amd_pmu_core_enable_all();
-}
-
-Similarly, if a BPF program triggered inside an NMI calls
-amd_pmu_v2_snapshot_branch_stack() re-entrantly during that window, it will
-also see cpuc->enabled =3D=3D 1.
-
-In both cases, wouldn't the NMI path call amd_pmu_core_enable_all() on exit
-and prematurely re-enable hardware PMU counting before the outer
-amd_pmu_v2_snapshot_branch_stack() has finished?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261029043914.1395=
-147-1-dapeng1.mi@linux.intel.com?part=3D6
+=C3=8D=C3=B1igo Huguet
+
