@@ -1,123 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.152.16
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793313716;
-	b=Gsc+/pUjvlwq+mWXvchFskbyrW7/+mBK/fW5/p025Qiq9e0h+Uz336lBYTh2ObFrRhNF
-	 f0fbD7WdAAEjjd5cqVOgV82z33U8WjO6hL7n9HXq7kPSdZGWUxcHPZQsvzwPdBntx41ko
-	 ViWgeLIvRpxJkmyZ3vuxnidWWtEmopHPVAA5EPYGVtYe0xcNDI5OxY//NJ8PQXMylbJwk
-	 YFjX8j4J9QqxLFycCJ8ccG2pBeK/h+xSirWx3TbyMAUXgdUN/eVWviiG2x32UjHe4ytkh
-	 XomMCDCQ1ZKOE1Hhb/Oku9+Loaqp6L+si06TD1BTQo2dZPR6j93l/MkXw2Z+YVeqrUQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793313716;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:MIME-Version:
-	 References:In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:
-	 Cc:Content-Type:Content-Transfer-Encoding:X-Proofpoint-GUID:
-	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=nEYgDsYRu7XPCr2gCkkPI1pmU7diMsdQ4sgw2JUnNxU=;
-	b=Pt5+m00yZ6/nwzkCSf8TQFAf53bi8gKXgn7L2O4A2YPNwumrd4+xqWBNonxp+aX0aJJo
-	 /MbUgyxZ7pHgM2kYqa2FRIFYs2Sey6wCAj6w9KyMakI5VYZUcZgQdTj5JtSgm8ohsvID0
-	 A/zrkGEKIjiDAy38gQJJZX/Z8+6sBtgjALTsXy3SOZXwjEJFHQL/ZzeoFB1JjPaUvpOOY
-	 aV6ydvL5me4bwxz5+zMasagTlSr7mMZ49Lmkl5RpozhQnAl9JiIPvYbvm5IXZ0o30mdAM
-	 ZK2imNNrMVTmIH9xOlpqkLSjPQVoVPeZnav/FUYoiaWoDu7BOlKni40sJ1kYnONap1g==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=crowdstrike.com;
-	spf=pass smtp.mailfrom=crowdstrike.com;
-	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=m74vDAfN;
-	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=google header.b=XbiRWfcX;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.152.16
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793313931;
+	b=2USpv5+GHBoI68facHkKveTNjtHi4B6whGHzLGkjUPhJ25TFBBtDbGQtvZCbiFnIq9y0
+	 jXGqIr6kAR1+NTy9GIvq63rX72kqtmi8jyoodClSi6kK/p/4vKIcD62FPsW8iG1KYMa1J
+	 JpfIx1x0Atug4yuB3MH5LyK/nRCcRDjz+B4Xb03R3DNqbgP2jQW/gqOA/t/Y3EFA1fNNB
+	 dp8siMIA5A4uz0VrvynxZAd8bnsGpxEnx9jWJgMNeSw4rlp27wG7ND0vn0RM9qUhya89K
+	 GvUqJhG/k6r+6gEKrh7grmB+QMFS/ILYbo7R/5bvDv7/akFysE4Dcz484LgNhx4Jf7A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793313931;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=AaDgtL10FZWHfgxoGHPhD0+OZpkflwZQizDAnx44jY4=;
+	b=i31WK4Tt/RMRBTAEMO3GYR9JFtxycHwR9kFr5GYnwRbg6XidYzi0PuY1Sn9cQ0ZETdxR
+	 WlQzLdyDt/1vUsNg14Or4I/9rPaf8BY0YDTWgkGbXxB4KInr2X5jCkH1T3VQ41kECcgk+
+	 MBTe6wtOY9hq8RS8MivWhdCQfx7CrFfEzMIMaC1MvqOegZT2859ytxZXLiY0e4RIhkcsY
+	 LZ9srlcflGn6gFSsFOnxV9V365R/Anducw1e8YwWpSZQs8I7cvPaZduuAB4wwOSABLcGk
+	 dLy48YGoUco9M7ttTSTi9PNCK0sA8N9PVRbdirJPBNZyYNFyhOU74GBTJWTqrhnwu9g==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ij2PnseZ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C999606A31C
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 22:41:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C999606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFECE606A31A
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 22:45:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=m74vDAfN;
-	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=google header.b=XbiRWfcX
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69TLXEof2715502
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 22:41:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=nEYgDsYRu7XPCr2gCkkPI1pmU7diMsdQ4sgw2JUnNxU=; b=m74v
-	DAfNQchqsVxVkQtPNAtw48insJTxOdqIRY56Cp37gzSUT+m/HOxiWl47NUMt4lSx
-	TViIoWiJogIaAfnLhHZgTkW4MHlMxI0ksLqe8dZOge2IqSdI2NfPqyree3i+vOHm
-	qNSzlzseFK7ldob7SZO/VZAZVuUlDTlxTBRog15mdNiDRGXnzsgT87E7M6VQ2RdY
-	fQkd1n74xK1e2UMJsIOML5W9qpiaQfxOoP5D6ZBzM8JjcwRO3iOzFP2kaKtRu2UH
-	6Y5etljMo7HrYZTnscKMKVOy3S+1yIKuDU5C8GPbGBzk1Msbbe+Y/41UgR3JZ0bM
-	TNJRC/rydeTEpHzong==
-Received: from mail-yx1-f69.google.com (mail-yx1-f69.google.com [74.125.224.69])
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4hme5n86cr-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 22:41:54 +0000 (GMT)
-Received: by mail-yx1-f69.google.com with SMTP id 956f58d0204a3-67906c453b8so272826d50.1
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 15:41:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793313714; cv=none;
-        d=google.com; s=arc-20260327;
-        b=eTgZOzmKD94B/FivZs36kZV5/5CWZ06yuvkZV3+Sq+tIoTiFtN4ClI5ebQGI8MT/X+
-         puYa+hoVpnJA2ynKq+JMKRGAZCzQuUpsVUxPPl34k1ZxDp6ODqtOowPjfbsPE01nQjY2
-         wvNropHemxYlhMfLBTeA4zxj1SUxOwtzGCi3Z5/2Q2A/AkFRC1/48eoBKizow9BuVSPw
-         Xa+Y2JR6HA9zcdC/Wj5gr1zqMPv16YhVh2MReWsU0srKmyf6JNmFU81/Fszcs1kvvVVq
-         aa6L+NZhU/xGn//iUE2ljqWncw7e7XCZKXeVEIzTXIzAKgPA4WlSPctb5fyaRGF/77zx
-         h0Og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nEYgDsYRu7XPCr2gCkkPI1pmU7diMsdQ4sgw2JUnNxU=;
-        fh=Sk/h9kDmk/AgoEHMlZzVb4nBIri4c+4Ya72fOlB0xDs=;
-        b=LJ2hDRDz4UZFRDOdwsJ+Yb1gLX8fhzTnpGSFoycYyZ0xP7qXbhn0tPcC1+TPEyQ2Ed
-         jaxJqAUezSJur5SDx0gz1SSR8hnyYkbxROez/1uMKMD06iJ8tGBcHzFbvXdZhiKx/Bdh
-         PCE51SuYCOKgBPC8xxJBGZHh6CXvdgy9FdXLI6cubkqnWmtHl13AotqaSYPKmjovk3Fw
-         DUcmSFNxjQvB8Q5ljmueb51aOmV+lvf7SpVqKnAjYqlwf7C+KFFKLDQygBLXynjyjSoD
-         obUdtG+CIRB/hWJ2LxKOQdHVlhfrtDX2MVR/DTCm4JocwwFUStJMhvUYpMHpaSbdmcX4
-         cBgQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1793313714; x=1793918514; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=nEYgDsYRu7XPCr2gCkkPI1pmU7diMsdQ4sgw2JUnNxU=;
-        b=XbiRWfcXqvtQb5spiLE9Kl8OcMcP6+eMFZ9kLXX5bBsCUgI4x468G78IDA+pTkQP//
-         PJOOANgT3mx04FJxyo5beaPJ6DV/2XAn/fkIDTSVkV00rV6ACy0CDdy3uZW5yhR368O4
-         Xsd2MGGATWH/ke/oZzeUfBraGRTALT7bWeNcazxly/uXgg/N/BCSSyxbPbxF7NcJWc9w
-         TFrm38eYm/hNvbS/zY3RLAy/unIM0hbjnhHS8jUoIBYeRD3/C/2mX8JfrtRvGsRL3tUL
-         q2FFire1XnRJgzOUpu/gK+hlDToZG1e0VV3hsdN4xXc19rQLSkwwH893GQXsx/4oToOm
-         zLow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793313714; x=1793918514;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=nEYgDsYRu7XPCr2gCkkPI1pmU7diMsdQ4sgw2JUnNxU=;
-        b=Y45cEPTkGsi8UhyVxmh4+jMfq8thlsC+OuqBvFnYWK3911+yGsJKkPAqxhDWwlvYaD
-         5UcIp7hCIP74sYR1haHAPp2lrvJeNf+L7fDVKYiOKQkLHSb+1RtBiHOdmZAaBZZJ+L2I
-         MGad6wOSyzbi6DoJol7R4w+xVvUNpukqBLhT/HSAWEvc/Bb43vg8mp3z8pdEkk5Dvknh
-         FWn0sb5KLrSnRcwvAr2y+4g0RuY3GnBKTmgL9OHUMt+NhviktNE8t5qRSC+0su9enrKD
-         Ly1RtXF/PCV42oSDqw8g7tMPaYwm4D9Q3+jgOTRYCpjfL0m1uCpPt2YQ48IiP/ggkiKt
-         UgzA==
-X-Forwarded-Encrypted: i=1; AKwUvBx/xYJ1iYMFAcaR17o9ZdxW5u29dbMIOc4sHI8WTlmVoAaYipMppVnN3Nd+sNXEXD4xUJg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLNNVmPXKG+OHxStEaEkKxetvAL5O5FcQQ9Y/NTtkI1tUAAMmXi
-	eMBU9pINSxvRvm5+a9x5ObfShPS0dgAnnhikubqWNC/DA0rz0BKlaLPPJOhdOLZtljGjUeUvrBA
-	X1mngEz/YA06BiEOifkQIEElWvRa7rljQpBEj1ZCfQf8eCU0hBYdPwyAEKKOiOXeu59B+zwYJ6r
-	PbN9OwcWllqU3ZGwzFYokp9Ni4cBn3
-X-Gm-Gg: AYBFou3pHFSYaQ0BSmq0Ytq5fuluaJMhlAI25bf2T50SNeSBpsg5fM7gy5h3k2ITFCw
-	d8lcbYp9KDNZwCOUjiZcl0kawmmyGytiKMiv9Ce4LwTIR9S0vLYxIfU5e3neiBF9CTxJl4upRc9
-	RQFuimOW7zogjamceJ452BdpfV4WtdEYZosvG+R2Jpqt3Gz0AenVyvcTSi5Q==
-X-Received: by 2002:a05:690e:13cf:b0:67a:860e:9938 with SMTP id 956f58d0204a3-67a8d4b3870mr2881023d50.37.1793313714272;
-        Thu, 29 Oct 2026 15:41:54 -0700 (PDT)
-X-Received: by 2002:a05:690e:13cf:b0:67a:860e:9938 with SMTP id
- 956f58d0204a3-67a8d4b3870mr2881003d50.37.1793313713794; Thu, 29 Oct 2026
- 15:41:53 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ij2PnseZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7DD41F01816;
+	Thu, 29 Oct 2026 22:45:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793313930;
+	bh=AaDgtL10FZWHfgxoGHPhD0+OZpkflwZQizDAnx44jY4=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=Ij2PnseZTo0dc7T1axNXf0eXz9CTw3EX4kTOozIswJ5niAitgxnm2V8Rd+ER9R45z
+	 zAYFVba50kT3WyXg3sIumiINT28EUiLSd5ui0TYSVbucPNnZUuanz1DZ4pABiqRRdC
+	 4/KPnAvZ4HR2l+VW8FF5FKwwPhytf1VkjtW1kfEr740UV+hGydQFqPYPZCyg4hk0EK
+	 Pgff6wgj0FZTkSuMduQptNFjm6K4fv91Dwy1ov/1HUzm7FjgQd2BPeIV5kPnXquCwO
+	 kyZb5QECOkhiepgOadD5zAcXSOI0OFEhUZb3Rqji8yhpdnTYVnvr1ZwAqdsgAqPB/y
+	 8LHa8T+fytXcQ==
+Message-ID: <sashiko-outbox-190102@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v9 7/7] selftests/bpf: Convert veristat to
+ BPF_PROG_LOAD_STRATEGY_MANUAL
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>, bpf@vger.kernel.org
+In-Reply-To: <20261029223348.3730738-8-andrey.grodzovsky@crowdstrike.com>
+References: <20261029223348.3730738-1-andrey.grodzovsky@crowdstrike.com>
+ <20261029223348.3730738-8-andrey.grodzovsky@crowdstrike.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 29 Oct 2026 22:45:30 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -126,173 +59,117 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261024014514.2959514-1-andrey.grodzovsky@crowdstrike.com>
- <20261024014514.2959514-4-andrey.grodzovsky@crowdstrike.com>
- <DMCRBHQKJP8Y.1KLS4ZA48PV06@gmail.com> <CAOu3gNgnhXnN_tDPnXVmnHAD5MNXwZ5iOc4kO15vy5cu1TpEgQ@mail.gmail.com>
- <CAEf4BzY0PSQc8ugHFk-BSZT=0GSYnL7B4bMLbVV6vHujLwVLTA@mail.gmail.com>
-In-Reply-To: <CAEf4BzY0PSQc8ugHFk-BSZT=0GSYnL7B4bMLbVV6vHujLwVLTA@mail.gmail.com>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Thu, 29 Oct 2026 18:41:42 -0400
-X-Gm-Features: AclHuK_xTEToa4lxoRuiyIbwoba-ikkBOsmIQy3zgeSEzIdkNeNmnurA6xF0LT4
-Message-ID: <CAOu3gNjuxCEf07JpXVw0Rcuq6qbc1mcDOyMcTM0Zop1-0Emreg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 3/7] libbpf: BPF programs manual loading and attaching
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
-        andrii@kernel.org, martin.kelly@crowdstrike.com,
-        slava.imameev@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-GUID: iZrbQXVS3QhsUt6vNIxXixuokQiCVCZt
-X-Authority-Analysis: v=2.4 cv=F4zC5ahN c=1 sm=1 tr=0 ts=6ae3cbb2 cx=c_pps
- a=J+5FMm3BkXb42VdG8aMU9w==:117 a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10
- a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
- a=GCXdLZfFv8EKBZhKOxZ5:22 a=pGLkceISAAAA:8 a=pl6vuDidAAAA:8
- a=bnuYKV3je7ezfTQf6e0A:9 a=QEXdDO2ut3YA:10 a=Epx66wHExT0cjJnnR-oj:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI5MDA4OSBTYWx0ZWRfX3DfKiXTpOxEV
- EGdNVNRPUlF40vq8x+YArBqno0loRZM1StWwg7nyKb9F4G7amoisXbR119FvJKK+sr5YvLsOjg3
- 4y3FTDu0alLk+igxLWcr7ZWCUNehn6hynn9gGcEVNw2uDftn5ArhZq9gl71ykKnt/TEOajM9wf+
- zDzmnipjRkzdSj+fasomDjilfVyAvTY6caTNgHi8Ukv6/33TOm21LerIylRA8UvX1aW0aTum0Rx
- eqUeJ28XfQ8sneacJ8ABJo/trh+dXRS3DVzCmdYqj2l+Gk/52vl6i/rM1Tv5QC98sdrukygBIUc
- 6GDksyuqe6ai2aefa6vG/ZiBkgz1NM5nlLHR6fkrwVEGsMaKQvEIUxvqCx02aRx6bHhC5eSIoZh
- V47dYBypu8aQizUis+dwHK8eAtYVX7tWg+rgianDUq5kUi2uV7dv+FgEwU8chH6BG7t8CqPokVn
- E/8kj0eKiHCwerQI2Ww==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI5MDA4OSBTYWx0ZWRfXwTH5JqaxbKTY
- /CG0fr0705pFiHe2gegwP12dYp1E8HjmmdnbUZHZHNwLkQLF2jffKY7UNexQ3PIQWchQtHD2Dtb
- epBI58Q3yO1JuBnj3TubBpZKdZhckHho5uxXandjtF/W33ZtHES5
-X-Proofpoint-ORIG-GUID: iZrbQXVS3QhsUt6vNIxXixuokQiCVCZt
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11950
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 adultscore=0 phishscore=0 clxscore=1015
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2610190000
- definitions=main-2610290089
 
-On Thu, Oct 29, 2026 at 1:59=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Tue, Oct 27, 2026 at 7:06=E2=80=AFPM Andrey Grodzovsky
-> <andrey.grodzovsky@crowdstrike.com> wrote:
-> >
-> > On Fri, Oct 23, 2026 at 11:45=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Fri, Oct 23, 2026 at 06:45 PM Andrey Grodzovsky <andrey.grodzovsky=
-@crowdstrike.com> wrote:
-> > > > -void bpf_program__unload(struct bpf_program *prog)
-> > > > +static void bpf_program_unload_full(struct bpf_program *prog)
-> > >
-> > > [...]
-> > >
-> > > > +     if (prog->load_strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MANUAL)=
- {
-> > > > +             zclose(prog->fd);
-> > > > +             return;
-> > > > +     }
-> > > > +
-> > > > +     bpf_program_unload_full(prog);
-> > >
-> > > No need for two kinds of unload.
-> > > func_info, line_info and subprogs are filled by bpf_object__relocate(=
-).
-> > > Nothing depends on them being freed in bpf_program__unload().
-> > > Let it close the fd of any prog and free the rest in
-> > > bpf_program__exit(). Then bpf_program_unload_full(), the strategy che=
-ck
-> > > and the second paragraph of the new doc in libbpf.h go away.
-> > > Do it as a prep patch.
-> > > Something like this:
-> > >
-> > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > > index 8fcb8cf..dd15842 100644
-> > > --- a/tools/lib/bpf/libbpf.c
-> > > +++ b/tools/lib/bpf/libbpf.c
-> > > @@ -876,10 +876,6 @@ void bpf_program__unload(struct bpf_program *pro=
-g)
-> > >                 return;
-> > >
-> > >         zclose(prog->fd);
-> > > -
-> > > -       zfree(&prog->func_info);
-> > > -       zfree(&prog->line_info);
-> > > -       zfree(&prog->subprogs);
-> > >  }
-> > >
-> > >  static void bpf_program__exit(struct bpf_program *prog)
-> > > @@ -888,6 +884,9 @@ static void bpf_program__exit(struct bpf_program =
-*prog)
-> > >                 return;
-> > >
-> > >         bpf_program__unload(prog);
-> > > +       zfree(&prog->func_info);
-> > > +       zfree(&prog->line_info);
-> > > +       zfree(&prog->subprogs);
-> > >         zfree(&prog->name);
-> > >         zfree(&prog->sec_name);
-> > >         zfree(&prog->insns);
-> > >
-> > >
-> > > > -     bpf_object_post_load_cleanup(obj);
-> > > > +     bpf_object_post_load_cleanup(obj, true);
-> > >
-> > > I really dislike bools.
-> > > bpf_object__close() is the only caller that passes true.
-> > > Clear obj->has_manual_progs there before the call.
-> >
-> > IMO obj->has_manual_progs naming becomes now somewhat misleading as we
-> > still can have manul progs at that point we clear the flag. I am
-> > thinking to rename the flag to skip_post_load_cleanup to reflect more
-> > precisely what the flag's role.
-> >
->
-> instead of manipulating the flag just move fd_array freeing to after
-> bpf_object_post_load_cleanup()? But bool with comment, e.g., `true /*
-> force */` at the call site is fine for me for such a simple use case.
->
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: uninitialized log buffer in veristat process_prog=
+()
+--
 
-As far as I see, moving freeing of fd_array after
-bpf_object_post_load_cleanup is not enough as we also need to free the
-modules BTF fds and btf_vmlinux inside bpf_object_cleanup_btf so
-either the flag manipulation or the bool flag is needed. In any case,
-since it seems Alexei prefers flag manipulation while you suggest
-keeping the bool, I just kept the bool for now and added a comment
-about 'force' as you suggested. If we still decide down the road we
-really don't want the bool, I will update again.
+commit fdd973586d17be0beb9ecafccb03a9c1c652febc
+Author: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 
->
-> btw, when do you plan to post a new version, it's been a while that we
-> are iterating on this, I think we are close, so let's try to land the
-> next revision
+selftests/bpf: Convert veristat to BPF_PROG_LOAD_STRATEGY_MANUAL
 
-I just posted.
+This patch converts veristat from using bpf_program__clone() to
+BPF_PROG_LOAD_STRATEGY_MANUAL with bpf_program__load() and
+bpf_program__unload() so that RODATA maps are bound during program
+verification. It also adds a test case in test_struct_ops_arena.c covering
+manual program loading.
 
-Andrey
+> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selft=
+ests/bpf/veristat.c
+> index 9cfc9b4b41c12..0cd19b59037f6 100644
+> --- a/tools/testing/selftests/bpf/veristat.c
+> +++ b/tools/testing/selftests/bpf/veristat.c
+> @@ -1678,7 +1678,6 @@ static int process_prog(const char *filename, struc=
+t bpf_object *obj, struct bpf
+>  	const char *base_filename =3D basename(strdupa(filename));
+>  	const char *prog_name =3D bpf_program__name(prog);
+>  	long mem_peak_a, mem_peak_b, mem_peak =3D -1;
+> -	LIBBPF_OPTS(bpf_prog_load_opts, opts);
+>  	char *buf;
+>  	int buf_sz, log_level;
+>  	struct verif_stats *stats;
+> @@ -1726,18 +1725,15 @@ static int process_prog(const char *filename, str=
+uct bpf_object *obj, struct bpf
+>  	if (env.force_reg_invariants)
+>  		bpf_program__add_flags(prog, BPF_F_TEST_REG_INVARIANTS);
+> =20
+> -	opts.log_buf =3D buf;
+> -	opts.log_size =3D buf_sz;
+> -	opts.log_level =3D log_level;
+> +	bpf_program__set_log_buf(prog, buf, buf_sz);
+> +	bpf_program__set_log_level(prog, log_level);
+> =20
+>  	cgroup_err =3D reset_stat_cgroup();
+>  	mem_peak_a =3D cgroup_memory_peak();
+> -	fd =3D bpf_program__clone(prog, &opts);
+> -	if (fd < 0) {
+> -		err =3D fd;
+> -		if (env.verbose)
+> -			fprintf(stderr, "Failed to load program %s %d\n", prog_name, err);
+> -	}
+> +	err =3D bpf_program__load(prog);
+> +	fd =3D err =3D=3D 0 ? bpf_program__fd(prog) : -1;
+> +	if (err && env.verbose)
+> +		fprintf(stderr, "Failed to load program %s %d\n", prog_name, err);
 
->
-> > Andrey
-> >
-> > >
-> > > > +     err =3D bpf_object_load_prog(obj, prog, prog->insns, prog->in=
-sns_cnt,
-> > > > +                                obj->license, obj->kern_version, &=
-prog->fd);
-> > >
-> > > After bpf_object__load() this loses the fixup of the verifier log.
-> > > bpf_object__load_progs() ends with bpf_object__free_relocs(), which
-> > > frees reloc_desc of every prog, MANUAL ones too.
-> > > When a MANUAL prog has a CO-RE relocation that didn't resolve on this
-> > > kernel, fixup_verifier_log() -> find_relo_core() finds nothing
-> > > and the user sees
-> > >   invalid func unknown#195896080
-> > > instead of
-> > >   failed to resolve CO-RE relocation <byte_off> [..] struct
-> > > The same prog loaded between bpf_object__prepare() and
-> > > bpf_object__load() gets the proper message.
-> > > Progs that depend on what the kernel supports is the use case
-> > > from the cover letter.
-> > > Keep reloc_desc of MANUAL progs. bpf_program__exit() frees it.
-> > >
-> > > pw-bot: cr
-> >
+[Severity: Medium]
+Can bpf_program__load(prog) read uninitialized heap memory or over-read buf
+when veristat is run with -v or --top-src-lines?
+
+In tools/testing/selftests/bpf/veristat.c:process_prog(), when env.verbose =
+or
+env.top_src_lines > 0 is set, buf is allocated with malloc(buf_sz), but only
+verif_log_buf[0] is initialized to '\0':
+
+	if (env.verbose || env.top_src_lines > 0) {
+		buf_sz =3D env.log_size ? env.log_size : max_verifier_log_size();
+		buf =3D malloc(buf_sz);
+		if (!buf)
+			return -ENOMEM;
+		...
+	} else {
+		buf =3D verif_log_buf;
+		buf_sz =3D sizeof(verif_log_buf);
+		...
+	}
+	verif_log_buf[0] =3D '\0';
+
+Previously, bpf_program__clone() did not inspect buf in userspace, and
+parse_verif_log() later set buf[buf_sz - 1] =3D '\0' before calling strlen(=
+buf).
+
+With bpf_program__set_log_buf(prog, buf, buf_sz) and bpf_program__load(prog=
+),
+if program loading fails before the kernel verifier writes to the log buffer
+(for example, an early check in bpf_prog_load() before bpf_check() emits any
+verifier log), bpf_program__load() -> bpf_object_load_prog() calls
+fixup_verifier_log() in tools/lib/bpf/libbpf.c:
+
+	/* post-process verifier log to improve error descriptions */
+	fixup_verifier_log(prog, log_buf, log_buf_size);
+
+which immediately calls strlen(buf) on the uninitialized heap buffer:
+
+	if (!buf)
+		return;
+
+	log_sz =3D strlen(buf) + 1;
+
+In addition, if bpf_object__prepare() or bpf_program__load() fails without
+writing to buf, parse_verif_log(), printf(), and print_top_src_lines() in
+process_prog() will read uninitialized or stale log contents from a previous
+program's freed buffer, and freeing buf at the end of process_prog() leaves
+prog->log_buf pointing to freed memory.
+
+Should process_prog() initialize buf[0] =3D '\0' (and buf[buf_sz - 1] =3D '=
+\0')
+instead of verif_log_buf[0] =3D '\0', and clear the log buffer on prog befo=
+re
+freeing buf?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261029223348.3730=
+738-1-andrey.grodzovsky@crowdstrike.com?part=3D7
