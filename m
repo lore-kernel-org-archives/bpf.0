@@ -1,61 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793309237;
-	b=iV9M1M0st3mAOuGn/lp9FXD6WvkTOFugAIPZYQ8/bhPGHEnwBGehGLXrJTUAIT43LQN7
-	 r20vC6/BBwTowpha4vcj0OFeu5uK0HkziKtHcN5X4+Krj9we/9kQhs/TUMrQUKU6E7jbR
-	 GPNiD94GTbwnpv4dvpfDum8PR6IIaLDzqLDENOdVNf7xl4m6VjZdgbWzEDD9mo4rTf2GM
-	 Kf9IZvhwLrX2f6gKCN1wd/zSt5NphYvuVlOh966YaYqwDlk7jr+j0SY8No0JXtBjOcGBF
-	 sHkgrofU8qTjz/u2ETSY0R9S0rgybB4XKUu3ARKdV2gigFO2h7OQjmxhpxzdE9u6GHA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793309237;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=0ojy+UhwC3CeZ0n5OWvhNQedtQf6s/LFGjHqzO8hqIs=;
-	b=tJFBlkSN72gDkhYDf+pbGmdM9GgnV7G19+g947As2qF5PlDbIIxMyh46uzVOdsmmKKVo
-	 SPDzuaQXBD75l6hEVYi2EX6BVnQBhYOuNJqx2IeCGdqctjD2IQUrJWjBxJKXbjjHJ4039
-	 HD8PmWzbBvMizSnsvg0rmadTcSdFN3gW50UIjpPQlKhs7diWh4DpoCMQJXtR6CSjxfurV
-	 f0l+7Bv91S0/0ggA2kOFwa/r7L8hW2uT4MQ67cFIbZNALwLDIGqyVo07Cq7pMpf1enHmu
-	 Z2QFTE95ypwPi1vyDJfuSyOH32HFjjNwNugvpXkgolFScuwA3q4D6O7p2l0D6ezx1Dg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EVelXOyj;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.218.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793309750;
+	b=aSyMWFwRnwtLleIZFBx38xr15ELJDI/Pmb2Kxh/Mfx5Yf//6fHG7+G34NBdCVtLdS5Sd
+	 LvRE6w1arAr9Imw44CJHhkfz5FB6XE5SKEjWnIMBKwWc818Is6JHyqtYCrAeIIQoSrYOI
+	 LdLzPKNHw97C3dV4oba+CaR6ZYJVjmT3zOJTifRKVW/5koub382WTsDq3XYrymwFEyaJn
+	 Awp7sAhzNPt/1hZ0gPFCP8Yck3X9IOJgeGJUDw5RObwmdEQ34o717n8o3GpbcRg1eSVYe
+	 RDmNKoliqCtEqfeZ9r0d0Vnj7eUnsez6jc2bkTPnb2dgsj88ZSHLZIyXnRy5JjInIMg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793309750;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=AjT67sODfv8LIA3zVwUGB//ZCy/sHbwEFOtaC99aW5g=;
+	b=5bwcmq0PiMm+BJeZLDJ/2UpSwIFhtXEAaN9nZ+qYJUMZNQkQI5OXc1Nf3gd/61X7nIlf
+	 wA+xIiWU5tUHK7yCMm6sVwsACN88gmhrLQ+UNduKCYgzj4A2vFBo8RT8jIW08JBruiZYi
+	 +AJ2oeQSzxjcB3KhUQdemKibTxqUZGN4bdGhTaAR/ZndJakV5VwQtxNQPLG+JJZRMCHAa
+	 GE6xrgbLgqhvhBJI8LX7I0mK/xSRfjpKloXY6I4eZP2emswrrzs19pugRaGnD60CWozqI
+	 oldirWmXmcQxEzhKG5Vp+TVBmeopbjL0p03nvz+4jzLBswL9GpEDEPO2u0dcMGVWzjQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ny4Qf79m;
+	arc=fail smtp.remote-ip=209.85.218.43
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A74E606A31A
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 21:27:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0881606A31A
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 21:35:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0881606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EVelXOyj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C9DB1F01816;
-	Thu, 29 Oct 2026 21:27:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793309237;
-	bh=0ojy+UhwC3CeZ0n5OWvhNQedtQf6s/LFGjHqzO8hqIs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=EVelXOyjABrLv4ULU0RJ3o0XRfVChKl+o20IbGRwJiJwWfg5d3X8Eab6sbLaNktl1
-	 9rUkQa5x+qrwknfzJSgz/j3GID5HWSloiERPoPxeDAhHhkX+djEkKRtx9xuK9twBvK
-	 jLyQXeaOwTtCXK0W2lIl6jnJfqHC+R37Cnc6A3+zwpw/7BLUZ6HKLQ1fsbFMBE1DJ3
-	 A2+TLqAs2clx8Djo1RvgjNbdDhG1lI7nUjPgO8lGVPKIdrHjGkhrR+Z3Q6GzptkU6x
-	 nC4Y97Tp6gXkR/bqfwmTsDcnuJ6WgGWlb1vXdSgwuBP5aNTJIofrX/jt7k0WnSBotF
-	 /kwOMPRd0vsTw==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Federico Di Pierro <nierro92@gmail.com>
-Subject: [PATCH bpf-next 8/8] selftests/bpf: Test user memory kfunc errors
-Date: Thu, 29 Oct 2026 22:25:51 +0100
-Message-ID: <20261029212551.56964-9-jolsa@kernel.org>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261029212551.56964-1-jolsa@kernel.org>
-References: <20261029212551.56964-1-jolsa@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ny4Qf79m
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c3f04e0e65fso488766b.2
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 14:35:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793309748; cv=none;
+        d=google.com; s=arc-20260327;
+        b=QaJI8qd6uDKHHg7cUZugdJJMftYCuCEajx9vrKk33DHAe3hWjT9iHiEwyOXftLe8Fz
+         PmPahpuCZG/MtXk22rX//mN+jEUrTHrwgmy68B2VYutFENkFCf9k491vvL/hcCaHmRts
+         bjNB2DAl0GeemYMzamX6l8IIXoLy1KP37YreHWwMLJc622nxSm2KBES1UDjpjTUSdwsD
+         4Dtg+5fk7+FyLM83AEIrkXuidIdmyspH0MmtYDjF/tmZB3TGsKtccz5PNcpOXhdrNmeS
+         2q6NafKOXd3GdlXivCcwduYHIxDal8vExGQs8enxGUiON98bi8z7g/IbtEsY3sK2mAtu
+         CLNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=AjT67sODfv8LIA3zVwUGB//ZCy/sHbwEFOtaC99aW5g=;
+        fh=1Z+TmVYU27QnLiVXu4BvKkiKLBjJhBQUzQ3PAn3ADMQ=;
+        b=hpMWPDA74DsJml7zofnMTkZaOZqxtQ4d4lJPvRCzLYh6YEWaPmCcdAcXrE+4eQYIwI
+         2aAcdcL8X5Y926WbElEfwmUeSTW21NlLXYg9vlq2+vmEHsN3eEAgq8ZJhjdvDcWKcqW6
+         3LPr7SUl3CGemtildleBocjCtK6PDXWK82Y4AnJbKcT5uEkCrMRCoGn7ljFs6UkopFuI
+         eTb2IWT5OEcyRDC5f2aNaVI1HwdygWzWHg6T/xsLyeX76DQuZjWhxhITWhWC+9Az01VJ
+         vUc31JnY2GCuLxtKoiifhVqNdFEz0txabMfAkHm8MVoudfqWksPfvID/xH2v5VW3hMZ9
+         P2AA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793309748; x=1793914548; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=AjT67sODfv8LIA3zVwUGB//ZCy/sHbwEFOtaC99aW5g=;
+        b=Ny4Qf79msA3Ol1Y6e8/IcUAH9yOvaHBe2q/r2VBC2ELpk56XQeNul05malBDOFT8ku
+         3iNV5LUh1WN6OSi58GJtPL1CdzJ6Gfdq1EwPPwQTHQ+fJYrr4uuUNxUlmh+B6VBLkI3H
+         ZEj0B1DaLGuydvsPOrmNnyN+V5M9uzXhIOuB8IAfuS4x7RzFZc8EHwvHkIbq2HZsSAXO
+         f8K9v16/gbB/xNpURIL1Ixe+3ZCyFOiwul7kpsyeMIznZ8WtYjV+3pMV90juEncbUJ39
+         jANFHK4YH+YJxQHzX5N4bA9Y7nUKExBRqIOMrQJ2r0F5nLrYhReYCpQZmLjrgHbgSrOi
+         AU7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793309748; x=1793914548;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AjT67sODfv8LIA3zVwUGB//ZCy/sHbwEFOtaC99aW5g=;
+        b=YDTICPJhdQthnGoM1YQOp61XC8b1da0WVuXka+ZNLSJXwHJjoXGUNYzwO61FOKw8hS
+         eFLRyyUxpxBt/BaxnsjKyZUm+edKm32Jmua+2BFG35nBaX8xV0/kDon8D8DKf33uhBXw
+         OVRbSS/OVOIHQTL+ZDdyysHxqyoOlOuFL+grdcY4kE0DFXwKeTQFcA4TUUgMlHgtsYIU
+         S0cI6DQ4UiIBQY1EmDF/W1UaPPn6pgTeiE49bDvqEhghJ2DGBjAFgpd0yRA1YLsd5z5v
+         3cFgqTznMQxDyNMwhmHO/ftra/b//rEgE9tgzmUqFY3PR4iIwpKdecAuLw3R+4unMDaO
+         PiAA==
+X-Forwarded-Encrypted: i=1; AKwUvBy7H9niKrkiWkdy54PTuylpS/IDHoD2Od7FX7BgbqMp7+zSoseI728ALhNnsATgSHamLb4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKpHmfZXgR24yf0wn7zYoIUAz28gGMX4+cApXcLkWGfgYVmUe+w
+	zcP+8JVR5ohIKsOM/YDh9SSiS858eIoMymYNcEodcZgt8D5IN2ZkCU0IIDozvX2yWRynKR7SF01
+	jLEMiprc5PjIFrdk0rBMaFhwAUh73p+Wq6r7YY/W6
+X-Gm-Gg: AYBFou2Al42Y6mtAigc7jRfjbaYpBiwpVFcAm7Jf2CokOkBmz2MTXMSdxVHbYZeykLE
+	IewhjxNpbXvUpK0oA7kB9xPFW2qaKpXCQrQp0JOG8pIum5Jvcy6wap7fjGCsRS1oHSn3HdFxrei
+	5VeuYyeS+8QLeeRYXqFMuVISZ+IgecO53ObAcjKBT/p5A4toHPOnDfyIZt0z3RKe6bK88Gw8IUj
+	+CV/ujYMemUIWW/LlprYNstWF2elA5ABCnN03edAdA3a3nxXOGlSfBbTFnctEwrrO62OqLIC3eJ
+	SNHsDYO1GZ4PiyMw6VUf2c75uovhvZXH7rzw0gKrT6P0rOL2i0d4jH3tf634Yfua2MC4gRg6n5B
+	tP7KAYTq2uKUW9+33mOZs9hgj5c8QEX50qfW4lh28aHw33EpTGH7GUdyN/Ti90NMCgmZfc6I=
+X-Received: by 2002:a17:907:805:b0:c3f:a728:b437 with SMTP id
+ a640c23a62f3a-c4ca7ac07eemr32967066b.45.1793309747666; Thu, 29 Oct 2026
+ 14:35:47 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,124 +104,155 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-12-wusamuel@google.com>
+ <at8dNNb4vwovNZcZ@krava> <CAG2KctpMEuK5OJSedSFshNMSwOqe1g87m2ZOKBhn=Z5iCA45Aw@mail.gmail.com>
+ <20261028140127.7bfeab46@pumpkin>
+In-Reply-To: <20261028140127.7bfeab46@pumpkin>
+From: Samuel Wu <wusamuel@google.com>
+Date: Thu, 29 Oct 2026 14:35:36 -0700
+X-Gm-Features: AclHuK84Rx0Zv6bqYRMUgm-AA1OaD1X9ao32PPa3PHwJ78sUr0bqSyZbITTizzQ
+Message-ID: <CAG2Kctra0GYjkzggB0cdMxPK-b9U9x-m+gR6E8goAYvhsNXEdA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/6] libbpf: Resolve typeless ksyms via
+ KALLSYMS_QUERY ioctl
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Test invalid copy arguments, zero-length mapping operations, partial copy
-faults, and copying to read-only mappings. Verify that a failed unmap
-leaves the mapping intact, and that non-sleepable programs and programs
-without CAP_SYS_ADMIN cannot call bpf_user_mmap.
+On Wed, Oct 28, 2026 at 7:01=E2=80=AFAM David Laight
+<david.laight.linux@gmail.com> wrote:
+>
+> On Tue, 27 Oct 2026 15:07:44 -0700
+> Samuel Wu <wusamuel@google.com> wrote:
+>
+> > On Mon, Oct 26, 2026 at 2:28=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> =
+wrote:
+> > >
+> > > On Thu, Oct 22, 2026 at 05:16:05PM -0700, Samuel Wu wrote:
+> > >
+> > > SNIP
+> > >
+> > > > +static int bpf_object__query_ksyms(struct bpf_object *obj)
+> > > > +{
+> > > > +     struct kallsyms_query q;
+> > > > +     struct extern_desc *ext;
+> > > > +     int err =3D 0;
+> > > > +     int fd;
+> > > > +     int i;
+> > > > +
+> > > > +     fd =3D open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
+> > > > +     if (fd < 0)
+> > > > +             return -errno;
+> > > > +
+> > > > +     for (i =3D 0; i < obj->nr_extern; i++) {
+> > > > +             ext =3D &obj->externs[i];
+> > > > +             if (ext->type !=3D EXT_KSYM || ext->ksym.type_id)
+> > > > +                     continue;
+> > > > +
+> > > > +             q =3D (struct kallsyms_query){
+> > > > +                     .size =3D sizeof(q),
+> > > > +                     .query_flags =3D KALLSYMS_QUERY_BY_SYMBOL,
+> > > > +                     .sym_name_addr =3D ptr_to_u64(ext->name),
+> > > > +             };
+> > > > +
+> > > > +                     err =3D -errno;
+> > > > +                     if (err =3D=3D -ENOENT) {
+> > > > +                             err =3D 0;
+> > > > +                             continue;
+> > > > +                     }
+> > > > +                     if (err =3D=3D -EADDRNOTAVAIL)
+> > > > +                             pr_warn("extern (ksym) '%s': resoluti=
+on is ambiguous\n",
+> > > > +                                     ext->name);
+> > > > +                     break;
+> > > > +             }
+> > > > +             ext->is_set =3D true;
+> > > > +             ext->ksym.addr =3D q.sym_addr;
+> > > > +             pr_debug("extern (ksym) '%s': resolved in kernel to 0=
+x%llx\n",
+> > > > +                      ext->name, ext->ksym.addr);
+> > > > +     }
+> > > > +     close(fd);
+> > > > +     return err;
+> > > > +}
+> > > > +
+> > > > +static int bpf_object__resolve_typeless_ksyms(struct bpf_object *o=
+bj)
+> > > >  {
+> > > > +     int err;
+> > > > +
+> > > > +     err =3D bpf_object__query_ksyms(obj);
+> > >
+> > > hi,
+> > > we could also add similar support for libbpf_available_kallsyms_parse=
+ and
+> > > probably in some other places like bpf_get_ksyms.. which makes me thi=
+nk it
+> > > could be useful to have KALLSYMS_QUERY support for multiple symbols
+> > >
+> > > thanks,
+> > > jirka
+> > >
+> >
+> > Thanks for lookiing over this Jiri!
+> >
+> > Using KALLSYMS_QUERY for libbpf_available_kallsyms_parse() would
+> > theoretically by O(m*log(n)) instead of O(n*log(m)), where m is the
+> > number of tracefs symbols, and n is lines in kallsyms, with n >> m.
+> > But AFAICT, libbpf_available_kallsyms_parse() would only be called in
+> > pre-6.5 kernels, for kernels without commit 83f74441 (ftrace: Show all
+> > functions with addresses in available_filter_functions_addrs); so this
+> > ioctl could never be called.
+>
+> Isn't that code also O(n*log(m)) ?
 
-Assisted-by: Codex:GPT-6
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/user_mem.c       | 45 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/user_mem.c  | 29 ++++++++++++
- 2 files changed, 74 insertions(+)
+Yes, sorry maybe I wasn't clear before, but the current code is
+O(n*log(m)), and the ioctl approach would be better since it's m
+lookups of O(log(n)) for vmlinux symbols, where n >> m. However, this
+is a red herring because that path only runs on pre-6.5 kernels, which
+won't have this ioctl.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/user_mem.c b/tools/testing/selftests/bpf/prog_tests/user_mem.c
-index c87620e39abb..f3a35f8e005a 100644
---- a/tools/testing/selftests/bpf/prog_tests/user_mem.c
-+++ b/tools/testing/selftests/bpf/prog_tests/user_mem.c
-@@ -263,10 +263,49 @@ static void test_partial_copy_fault(struct user_mem *skel)
- 		munmap((void *)addr, second_page_unmapped ? page_size : page_size * 2);
- }
- 
-+static void test_zero_length_mapping(struct user_mem *skel)
-+{
-+	skel->bss->map_len = 0;
-+	skel->bss->map_prot = PROT_READ | PROT_WRITE;
-+	skel->bss->action = USER_MEM_MMAP;
-+	user_mem_trigger();
-+
-+	ASSERT_EQ(skel->bss->user_addr, (unsigned long)-EINVAL, "zero_length_mapping");
-+}
-+
-+static void test_failed_unmap(struct user_mem *skel)
-+{
-+	long page_size = sysconf(_SC_PAGESIZE);
-+	unsigned long addr = ~0UL;
-+
-+	if (!user_mem_mmap(skel, page_size, PROT_READ | PROT_WRITE, &addr))
-+		return;
-+
-+	skel->bss->user_addr = addr;
-+	skel->bss->map_len = 0;
-+	skel->bss->action = USER_MEM_UNMAP;
-+	user_mem_trigger();
-+
-+	if (ASSERT_EQ(skel->bss->ret, -EINVAL, "zero_length_unmap"))
-+		check_user_mem_vma((void *)addr, page_size, "rw-p");
-+
-+	munmap((void *)addr, page_size);
-+}
-+
-+static void test_invalid_copy(struct user_mem *skel)
-+{
-+	ASSERT_EQ(user_mem_copy(skel, 1, sizeof(data), 0), -EFAULT, "bad_copy");
-+	ASSERT_EQ(user_mem_copy(skel, 1, sizeof(data), 1), -EINVAL, "bad_copy_flags");
-+	ASSERT_EQ(user_mem_copy(skel, 1, 0, 0), 0, "zero_length_copy");
-+	ASSERT_EQ(user_mem_copy(skel, 1, 0, 1), -EINVAL, "zero_length_copy_bad_flags");
-+}
-+
- void test_user_mem(void)
- {
- 	struct user_mem *skel;
- 
-+	RUN_TESTS(user_mem);
-+
- 	skel = user_mem__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "open_and_load"))
- 		return;
-@@ -287,6 +326,12 @@ void test_user_mem(void)
- 		test_copy_to_readonly_mapping(skel);
- 	if (test__start_subtest("partial_copy_fault"))
- 		test_partial_copy_fault(skel);
-+	if (test__start_subtest("failed_unmap"))
-+		test_failed_unmap(skel);
-+	if (test__start_subtest("invalid_copy"))
-+		test_invalid_copy(skel);
-+	if (test__start_subtest("zero_length_mapping"))
-+		test_zero_length_mapping(skel);
- 
- out:
- 	user_mem__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/user_mem.c b/tools/testing/selftests/bpf/progs/user_mem.c
-index 6ebfdc54edad..1ff5be6e3e62 100644
---- a/tools/testing/selftests/bpf/progs/user_mem.c
-+++ b/tools/testing/selftests/bpf/progs/user_mem.c
-@@ -80,3 +80,32 @@ int user_mem_test(struct pt_regs *ctx)
- 
- 	return 0;
- }
-+
-+SEC("?uprobe//proc/self/exe:user_mem_trigger")
-+__failure
-+__msg("program must be sleepable to call sleepable kfunc bpf_user_mmap")
-+__msg("cannot be used in non-sleepable program")
-+int user_mem_nonsleepable(struct pt_regs *ctx)
-+{
-+	bpf_user_mmap(4096, 1);
-+	return 0;
-+}
-+
-+SEC("?kprobe")
-+__failure
-+__msg("program must be sleepable to call sleepable kfunc bpf_user_mmap")
-+__msg("cannot be used in non-sleepable program")
-+int user_mem_kprobe(struct pt_regs *ctx)
-+{
-+	bpf_user_mmap(4096, 1);
-+	return 0;
-+}
-+
-+SEC("?uprobe.s//proc/self/exe:user_mem_trigger")
-+__failure_unpriv __caps_unpriv(CAP_BPF | CAP_PERFMON)
-+__msg_unpriv("calling kernel function bpf_user_mmap is not allowed")
-+int user_mem_no_sysadmin(struct pt_regs *ctx)
-+{
-+	bpf_user_mmap(4096, 1);
-+	return 0;
-+}
--- 
-2.54.0
+> I've got a patch (I might send it after the merge window) that changes
+> one of the ftrace functions to look up every symbol by name, not just
+> when only asked to look up one.
+> It can also use the 'callback' function to detect duplicates.
+> That should be massively faster - especially with my ~18 fold improvement
+> (also waiting for the merge window to end before posting a new
+> (not much changed) version).
 
+Excellent, I'll keep an eye out for it!
+
+> Does look the the code could do with getting the 'symbol name table index=
+'
+> for the symbol so that it can read the entries sequentially from that
+> point onwards.
+>
+> David
+>
+> >
+> > And regarding bpf_get_ksyms(), it loads all traceable functions and
+> > needs the full syms table, so a /proc/kallsyms should fits better.
+> >
+> > I did profile a slightly different form of querying multiple symbols
+> > at once [1], but didn't see much benefit. struct kallsyms_query is
+> > extensible via size and query_flags, so we can update in the future as
+> > needed.
+> >
+> > [1]: https://lore.kernel.org/all/CAG2KctozPSev+EXSpHitM3JWfjufQaEjsPJHS=
+_1HJ1wSm7sJ1w@mail.gmail.com/
+> >
+> > [...]
+> >
+>
