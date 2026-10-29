@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793232862;
-	b=h5mJGw/ycGGjrGPHSsQrER84qQuGKbqahDyeZyqtiO0nzKia5WMLZCXRgFazEzugUSKo
-	 yRBvP3FuG0x4r3KWJ7v0mOPjT+vUj+w4TszGDPH2hlfLaUnpX+LmEN13B23u6ewus34DQ
-	 lx+2Tquc8HMeMDApkEPY5oG+ia3C1Rtf+M/z03UFFVAM68ddXCKSJhDQqMDbzcVxZGM4M
-	 kDQ0J3XvqrgtRftfccxLqi5+bcyvUHUjF/2EGJ5G9JBpmWSfVzo9iLOADUSKufIFMDYo+
-	 eujY3fOsYBzinXPMnytVmjNTb9w1c5+jB3B8TU43NMPrzW6Hj92rb2m52/Jrx1cfF0Q==
+	t=1793233681;
+	b=GU+wyKrMsEzO+S1QvQzpLt9+KKkSQvZB8/1CknQH7MDeYxTHTENkDn6Z74PSMNPCoJEZ
+	 0qCBP+2H4bKusk2fNQY1FWBFytViS5rYni58p9qw0CEtpNCeGwRx7R0b3pWe2RVT/ybyM
+	 xFo+GHxUf5hCxCCIR7BKiYQPxlneayArOGNFDh+ycrP8zuJ097aHSOUOJXtSC1OAAXX3J
+	 LJdRKoNCGsBSkhRT3mBG0fuoDo0O1e+Y5bx33AgCaU2Ax+7eIySRm1lQOepQ1sQjtR5EW
+	 hKAMRC0QTdlJPBVMv4E0AXQbx51mSbH9I2oo5b6PWWCz7iVeTBSdZd6nfMRmD++fgTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793232862;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793233681;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Mime-Version:
 	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
 	 From:To:X-Mailer:References:In-Reply-To;
-	bh=FdKKiWyB90eS21YswIKzqn0RjEeygCBAOFE1/GSl7/I=;
-	b=GRSaby2M40eip7kVvyMQ6gGwrF2yxdr/OwqhxIEdoT6Hm1RCSccT/dK5dM8eIxJRMQZP
-	 ZCjT98UEDGVK1R28g0bX66xodI1m2bPTHkIngXrITD+JraDztclDUN6/jsk/jCTFlP21+
-	 EdUHET3Vxtl8tvHtJECOcCxW/Lux6LUfYIAhrPwFsc9HfYork8WZYr+yKUiI9DOwNoF1l
-	 kLhQ6Z4gSwk6IGEF2W1i0t2amjlLY8daiJ60lR7x2OC6KciATN0JbmbrnAI1B04gdfL2U
-	 JbkGoNvncMiRbsP9Uo73qSVF2NYMwSchps5tYrq7RpGe/JaNkEjiQoPlQdfo9FwWPng==
+	bh=pQk6oAX7+MLyCVigu4scI6cqCYjv8Viw/VpBQ7oRJTU=;
+	b=opnY2Ssd3cjpqPLKex5dcc2/eyhMJT0SL2fSlz/EZmhMKCperMcn8loYy/RCvrtw8YXC
+	 zNkrO1gFX6KO77m3hxZmi6doNS7tAQb+pY4qktpOnzlYFJj6gtVdZ8XPOrdmsWB3QPTpZ
+	 T9p2/SmBTsmgBnf2qg7Y+zDxp+GbQqzEfaRwPTGvhljyZ0tHCAFcF/v+XCKHTGAKkhf0D
+	 9IS4x0FeHi8GB1WXH+F1qDcRJ0fYFF2czUknT0+/i8u0GAXrOJxwcle0bGTCjUX0P1Fiw
+	 kqL54XBvBZjWb94f1lkpn9XafWOjBb7RFPb10eHYt9P3h3YPErT0qqL3sT57MOikuDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vHpque1F;
-	arc=none smtp.remote-ip=209.85.215.181
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ikbgy3W+;
+	arc=none smtp.remote-ip=209.85.216.46
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BE9606A31D
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 00:14:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71BE9606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9736D606A31C
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 00:28:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9736D606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vHpque1F
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cc4be0e5351so693818a12.0
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 17:14:22 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ikbgy3W+
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3ada4c06b7bso778524a91.2
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 17:28:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793232862; x=1793837662; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793233680; x=1793838480; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=FdKKiWyB90eS21YswIKzqn0RjEeygCBAOFE1/GSl7/I=;
-        b=vHpque1FZZNVBsxtFB3jwnTI8sdA+Yohr31G+VUVHYijGYhCX3OcQyE5nW7ssksYQK
-         GuxRI/m5qR35uA/jzVmLo3bVaKsDfdygHjkYdFCJ6JkkZFVj27ehIqkHTTA8T/2dbiX6
-         m1ED7hUsQFj8fJZhv7beCgKHdpbjj+iCDWOeOoThkqIeT6FIkXRGpmQkFPbcVZCOP08u
-         dZYXtLNPoNV5ObQHepbtH70c0rLW2nbJeP3qoV0G4cxy5k2HCkBfVdNnzo82N+FBeyDS
-         eUR1COV9XYixclP9wV3dUsHOB/VgduC0alrX3+EreW41/vfJYgHpy0Q9bq2EsdyxDlcy
-         /u1g==
+        bh=pQk6oAX7+MLyCVigu4scI6cqCYjv8Viw/VpBQ7oRJTU=;
+        b=Ikbgy3W+2PxU14VHNKKhG+ra5clYgdfEyR1zCAOZWXx9iSlyOQvfBImvS3iXp918lZ
+         71PBZhC13Z6/PTs/70lC5TPAmYTh3KCymDAcsDJJzDXSWFtyPfqj+UsK3HtWu+68rFZN
+         XtLJMC/CLEqFTVJzTUfVg4eK4lSzJbBMYMNO+HVqp35TxmtLiCLL30PQwXjC9Bf4ylAE
+         3wCXaykiZvNrG34EH/pS2AqpQPNGpmhtSR6dQ1eSaAsS/lOo2NrHw5EIaRgY6dYph+gx
+         5fATlhUYlWIHoDTmNi+pS4HfMrP2YNn7XVREvdJxIh4+D5FnT7xrdR6RT06UGGaHOLF1
+         LklA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793232862; x=1793837662;
+        d=1e100.net; s=20260707; t=1793233680; x=1793838480;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FdKKiWyB90eS21YswIKzqn0RjEeygCBAOFE1/GSl7/I=;
-        b=O2HwrWRF3Cz7MyyGIYtA2m5oFpioktgroSipQtT5A4ogSdgKbuq3GKsk8piXsneayF
-         +DBZdJrv7xpiAM0uW08ROQeCq0Cm/GJXzTQZ0YziavioQIUNObqnFpu5wQxXXuWOCI+N
-         j390PAvEbihw4vPLu6mvwqLwpSKj73v08HNZuZGR8bB+1qquDhGYAWb4nBRv8GNP7APo
-         OKyrcNItwaCWM6ECNTI77SSa90ZsNqV2Ho+35FNrcaqvaEvQ5VrzCP0O9zprGtEYBQww
-         tKcoq4VY//lh8IHmlE0vqYrPy7HeuJGDIG2M/YsCiEt3pOFu5zqbBb2kXAiIfvQKEMQt
-         FHpA==
-X-Gm-Message-State: AFq9FYJUTJcdo8bQcS4RJXTC90fr9ljSbQ6Zjoi8Uxe1La1qq4DztHaQ
-	FBYIr4xRnaJ6WMyWWpK44lkSyKNpjeUnrZNFjsVBHu49dGuid31MlXrQ
-X-Gm-Gg: AYBFou1XuD/kMY0S/OwqlN5CDTYak1W3W0pOBTX/REgm06uman1e1gQHZqUZhMiAz8b
-	c1fe92VTrg9ddI3YqBTJuUWa4+yn2pEVpbjKfh+zkENqvqb/jGSQ0tlfquDJQTOOfbDeoUeJWIG
-	VuTqz5ehuFs/6eNvjna/OtbsBAeR8ENFF9TEMniBCoU4ddiJMiysK+234UmG4x03IyP6ahZpkBj
-	N0hXRtV+RtU/YG8rPsoY88VR/wAIPvK6sUcqPkg9P8q74czaVJmwaRpeuy5LNnwEW/VD8iY3VON
-	W3KioGmp33fMS8HAWH/v8IcX0HJ0Ih6IIaRQ0oMwd+uDe3xsKkEpItWfb4SROd/HmU6QQKkK7Z3
-	Twdz/DUvasx6y0EHw3WFCa3Dwbv5EakPa+3p5K8tTp/Q6JZ2o2MBTaoGYXpb5A/fY3LRRmNiN+q
-	Hvup3g8QJFW/Qqblm5+ikz+LDwXwbbNf6S3g6pddRLfVKpKPdRSkMl4dI4Fv6zTAUibO7rJKnmc
-	BUTAvps161F7ppx6L5ra5tnwgux0c8iNVpdRQSKo+CNC1yYLkvAnYQMA3USOU52YuNtE4eU8F6d
-	j3+fLfuv0UlxHYRlgq2d/AfV2GK8cyby1Ei8/FDmKlnUuzrAMfkHF3UwW3SofXWubpJsLl6dPL/
-	Om19i8abBkH+G7CF8eLFN1b/RQM6IRTTKDg==
-X-Received: by 2002:a17:90b:2641:b0:3ab:f38:2b41 with SMTP id 98e67ed59e1d1-3ae5822f75cmr3026046a91.39.1793232861666;
-        Wed, 28 Oct 2026 17:14:21 -0700 (PDT)
-Received: from localhost ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae55d1650csm2259292a91.1.2026.10.28.17.14.21
+        bh=pQk6oAX7+MLyCVigu4scI6cqCYjv8Viw/VpBQ7oRJTU=;
+        b=PotSug+kC+gIDSHaRykV6v+YmgX0lMius6VwWUkdhqDuPpK9VcU0/qlJT37yZ54MCJ
+         QsBSdanrBw3D5xLSCWKQM8vfg8Vmfkg7hIMGOR3U6CbIFDHseIyaDIxaahodleddwdy4
+         q+NKuZ5bD4aaqmN3HuaVhyKfVS4BAUH1LyGx5mhb/mM/ocBmqwcJEtnI8qPznxKNNb4Q
+         j0y5xRYAb7CZQ3O7SvQy+9xkOYaj1w1zq4qxl4f4Bd4KfCvlpt6cHmbtnnKQak815Jm/
+         zmIHU1WDy3a7sAiqMl9c8DjvXpYa5dWmjR6ODloXf0A3BgNyAsw5kK/tYPVg9uoYbmmb
+         YfBA==
+X-Gm-Message-State: AFq9FYJQ/kRwvHciEvBf3XzDSFljk5rzgC10CXv7qyc7ff/4TkeYpoPS
+	R+9ghsCMb86ckQG049bH5XUFyCjn5Hg5cJR+ZM8zWXf/AI26VQ+ZBnH9
+X-Gm-Gg: AYBFou36UM3S+G9UDVDQxSMptlCwiH3aI606p6vJ7/PPaYXWOQIqv3tzmDAWn/lkJMf
+	jHYMPv6isD2Gk9Ff/9UQ8UMVgIKURJaugffOq7qZ5q85C0jozU1KU2i9adSI8ujkmm6leqvz9m0
+	1eJYO04O7cN09HmbaS0XWwTPzWKAPfzEz7eHxXg33SewaepV7VaHUWKWk1Qx0f75xwMwkekQWdb
+	HaLYW6nTuo/gHQ1KkssyP1Kry8C3+4vNaAMwKfleD0X+MP32Na0nBj5swNlBcoGam5oH9uz7Kpk
+	rgtecMbG0NxWqifmOSPLph1KlKNo9t+SHTjUeyAGGOZiDZzgjtOI5Yzcb0WaKfhVgzhBqvukeyZ
+	TNgwCahHy7AE8vfYUo9HZHNsARYhiyuUoFV5UE85MUz15WzoTKSlGHBOjiWrXeFEVzgo0CMcvbQ
+	jOgGiIFaDBgYXe1bvCQC01qiomty5ia+Eu+50CGsdsyru5eEtHc+VTEqYRMEb2hIPpCndz406To
+	bKlkJLHt0R/Gsk753IUJf1wJEq4hV9xpzL1bB+5IBDxO7fRYN/puxePu7Bc941uksMYUqkCpzUe
+	eymuYnMjXMjD3Un6VOrVBUrH3N/jGlLbItIWjKzqpEayApbIQOhdBdUSoW7dRAWJDZV/TOFzhMV
+	uVezf3cLa/peVZCTsAuBk07SCn/lHDHsTAg==
+X-Received: by 2002:a17:90b:1c8b:b0:3a4:6e84:e7d8 with SMTP id 98e67ed59e1d1-3ae58145078mr2999600a91.54.1793233679564;
+        Wed, 28 Oct 2026 17:27:59 -0700 (PDT)
+Received: from localhost ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e874bebsm1414510a91.14.2026.10.28.17.27.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2026 17:14:21 -0700 (PDT)
+        Wed, 28 Oct 2026 17:27:58 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -90,116 +90,87 @@ Precedence: list
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 29 Oct 2026 00:14:20 +0000
-Message-Id: <DMGVZVI383KF.3S8YFXWL0UZOB@gmail.com>
-Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- "Ihor Solodrai" <ihor.solodrai@linux.dev>, <kkd@meta.com>,
- <kernel-team@meta.com>
-Subject: Re: [RFC PATCH bpf-next v1 00/11] Unwinding for synchronous
- callbacks
+Date: Thu, 29 Oct 2026 00:27:58 +0000
+Message-Id: <DMGWAB4NG738.305U5MP8YSGY7@gmail.com>
+Cc: <bpf@vger.kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>
+Subject: Re: [PATCH bpf 26/81] bpf: Support BPF_REG_ARENA_SP in the verifier
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <cover.1793147364.git.memxor@gmail.com>
- <DMG7KVUM9TV8.3QO4MU310J4CU@gmail.com>
- <CAP01T76uO4ULjNOQ217jXTLWtP5XT0rvB7PZxt8MJcoc==GBEw@mail.gmail.com>
- <DMGQY7IH5Q3F.4QQNA0FDUWY6@gmail.com>
- <CAP01T747BOE7DHMfUSqFXEVFr20x=mzBbU3W_E04+kNfvUQ44g@mail.gmail.com>
- <448f52ebf21a0d86c5eac836bd99e4bb0892e10f.camel@gmail.com>
-In-Reply-To: <448f52ebf21a0d86c5eac836bd99e4bb0892e10f.camel@gmail.com>
+References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
+ <20261026025943.404450-27-alexei.starovoitov@gmail.com>
+ <CAP01T76dRouzrPOZS8AQ4TMnJ0GzyRm8cPJ8RYUTu01bQgf2Xw@mail.gmail.com>
+ <DMF694XH2TJO.P59A31VE6GWP@gmail.com>
+ <CAP01T75HAHkP4bzdGzeazN4n_FNd5w1Pckd3GBN68V0n1PNe_w@mail.gmail.com>
+ <DMFUDQAC6N4S.1CNBGYKG58DMR@gmail.com>
+ <CAP01T74C4bBZntDNLrCxe02prWiF3pnUfYMFTUU6-44O0zbnPA@mail.gmail.com>
+ <DMG76G7GIPN7.HQJKZIE5J8R6@gmail.com>
+ <CAP01T75pOz8Nj_YG13quoVeniq6908sY5og4RadfM9-tz5j7PQ@mail.gmail.com>
+ <DMGPC9G5ZT9O.2NN1B6B3K7STH@gmail.com>
+ <CAP01T75Edpdne_VV_0XAKEw-ijCh5ShXJQq1MQKpKVf9fRQzUg@mail.gmail.com>
+In-Reply-To: <CAP01T75Edpdne_VV_0XAKEw-ijCh5ShXJQq1MQKpKVf9fRQzUg@mail.gmail.com>
 
-On Wed Oct 28, 2026 at 11:12 PM UTC, Eduard Zingerman wrote:
-> On Wed, 2026-10-28 at 22:42 +0100, Kumar Kartikeya Dwivedi wrote:
+On Thu Oct 29, 2026 at 12:07 AM UTC, Kumar Kartikeya Dwivedi wrote:
+> On Wed, 28 Oct 2026 at 20:01, Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+>>
+>> On Wed, Oct 28, 2026 at 04:00 AM Kumar Kartikeya Dwivedi <memxor@gmail.c=
+om> wrote:
+>> > Sigh. This is not a good response. If you do not want to have a
+>> > discussion, what is the point of posting patches and asking for
+>> > feedback?
+>>
+>> I do want the discussion. That's why parts 2 and 3 were posted for feedb=
+ack.
+>>
+>> Maybe I missed, but so far I didn't hear an alternative proposal.
 >
-> ...
+> I was not making a proposal. I don't even understand half the changes
+> yet, it's a long series (81 minus 16 patches), and I haven't been able
+> to digest it yet in 3 days. The only thing I was trying to understand
+> was the motivation for the split stack, and it wasn't (still isn't)
+> clear to me why it's necessary.
+
+That's why the first thing in the cover letter:
+"
+Where to start
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Patch 69 rewrites Documentation/bpf/verifier.rst. It explains the algorithm
+with 11 examples. Read it first. Then read patches 47, 52 and 53: the join
+of two states, the new main pass, and the switch to it.
+"
+
+Re: stack-in-arena.
+rust routinely needs 32k and in one create it needs 65k.
+The kernel stack cannot support it.
+private stack, the way it is today, doesn't work either,
+since it's non-recursive, but recursion is necessary.
+
+>> Only worries and concerns and "there must be some way".
+>> I expored all ways I could think of and listed some of them in prior ema=
+il.
+>> If you have a sketch of not a 'stack in arena' approach, I'm all hears.
 >
->> There are other various other misc. cases where it is more appropriate
->> or necessary:
->> - Software CFI-checked indirect calls to subprogs (basically, emitting
->> a check on an indirect call (say with pointer from arena) and aborting
->> the program when the CFI-like check fails).
->> - If runtime stack probing or recursion limits are hit, the program is
->> aborted, instead of return 0 (as done in rust-bpf).
->> - Making bpf_spin_lock() just work and aborting on deadlocks.
->> - When writing actual programs in C++ or Rust, inevitably, panic() may
->> be seen (but may not be exercised) in code that is unwinding. The
->> verifier will just reject such cases. In both C++ or Rust the behavior
->> is to panic=3Dabort or std::terminate(), which is a good analogue for
->> simply aborting the program.
->>=20
->> In general, it serves many purposes, has analogue in every other
->> virtual machine runtime, thus is a well understood idea, and
->> encompasses what various alternative proposals for some of the covered
->> use cases do (fast-execute, etc.) but with better semantics.
+> I think it will take time to understand and reason about all this.
+> Decisions on where to place .rodata, how that interacts with the
+> examples you showed, how the verifier works now, what the compiler is
+> doing differently...
 >
-> I agree with Kartikeya on these points.
-> Unwinding and terminating execution is a well understood and common conce=
-pt.
+> But if we don't want to wait, and you feel you have already explored
+> the solution space and all of this seems fine to you, it would be
+> wasted effort on my part. So we can continue with what you have.
 
-I agree with it as well.
-My objection was to 'Eliminate spill overhead for bpf_throw()'
-as a pointless step _today_. If we can make bpf_throw() into works-everywhe=
-re
-mechanism then let's do it, but it has to be that first step.
-Polishing 'spill oveheard' is very much optional follow up.
+Not quite.
+_We_ don't have time to wait.
+If you're saying: I _have_ to spend a week to read the patches before
+I can discuss it, then yeah we're not on the same page.
+I'm asking to do 'Where to start' section.
+It will take an hour. Maybe two.
+verifier.rst and commit logs of these 3 patches are well rewritten
+and easy to understand. They are enough to have the discussion. *now*.
 
-> It is "in distribution", so to speak.
-
-'in distribution' is so early AI lingvo. I hope it's obvious now
-that 'in distribution' is the opposite of what is needed to
-build secure sw stack.
-
-> The new verifier series would benefit from it instead of taking quite
-> unusual and unexpected actions, like inserting additional control flow ex=
-its,
-> or returning 0 from a subprogram that doesn't have stack space to recur.
-> "If loop runs for too long the program is terminated" is a much simpler
-> concept to work with compared to "if loop runs for too long the program
-> is taking some exit from a loop".
-
-Yes, but the base line is different now. goal posts have moved a lot.
-
-> 2K LOC is basically nothing, if one assumes that code is maintained by LL=
-M.
-> There are much more invasive verification concepts atm, like freplace
-> for parts of the program, or tail calls.
-
-it's fine if it's 2k->20k lines too.
-
-Before we do the happy dance pls read section 8
-https://lore.kernel.org/all/20261026025943.404450-70-alexei.starovoitov@gma=
-il.com/
-It needs to support all 3:
-
-1.
-  do { p =3D lookup(hash map); } while (!p);
-  return *p;
-
-2.
-  lock(&v->l);
-  do { v->cnt++; } while (v->flag);
-  unlock(&v->l);
-  return 1;
-
-3.
-  rcu_read_lock();
-  do { p =3D lookup(hash map); } while (!p);
-  x =3D *p;
-  rcu_read_unlock();
-
-The patches I sent don't support 3rd yet. I left it for the follow up.
-
-I'm more than happy to drop may_goto approach,
-but I want to see the patches for bpf_throw-that-works-everywhere,
-including 3rd case above.
-And bpf_throw shouldn't skip rust landing pads.
-That's a bar.
-
-Also time is an essence.
-We cannot sit and debate things like we did in the past.
-If there is code that satisfies the goals that we set, we should be landing=
- it.
-How it achieves the gaols is a minor detail at this point.
+We might throw away all of it, so spending a week to read the patches
+is a waste of time. Do not do it.
 
