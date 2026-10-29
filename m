@@ -1,75 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793291411;
-	b=rqzc2lXHA55EPthBS8HlRcdgIQjCT0Ju/F8FYQVGG3eptIjJRmz9lHJY1HIvSSPMN+++
-	 +GkYuXI70an10A/1eac3JrQ+Ulf6R6J2R8GPreQdMg1mm+QT4RprgocJiYg8gOQpy0+nV
-	 kArdSXHdQ32BroX6+BJG+xnMPFdn4WG4g7WLvWxaHkzro+3KdK7a5FItIN232XnZXlLNL
-	 t53JaCT3HMHjyZ5Npw+Li0xSY336cunj9rY1AtP7DhlJMJe73BGPYwGnxmLXk77QDIr9L
-	 wWSSm741j+epSjpL1qckyQ/nHeEZTa7I+TMPfBMk5p0EzyhWnsYl62IE0aWcFYM8f8w==
+	t=1793291412;
+	b=xSR3/h4xJK9jhW0ln0teJObaSafDo0i9xz6y1AJ5SesWD3xsDqUR46QggjqzkdPeBz/R
+	 iig7jYG+duKadCz/tAkKlwgVIv92N7OanRGEDd8TRAinWPl9/8a4+faNNvftba8RUEaGv
+	 bTjQQiffWpU5SXDkItlz5SDCKrizUSTB+zDom0PsYcXOLTo07rRE8zvl3jIJcAmd9PZA0
+	 ftbmm2AZOwJkK8OhYEmpvT7FkS71v/MwTnOldbx1TnhYOiSdAk5WCkD7CuasEhAKwuqu+
+	 7Ie9JNFTgxlf2xusRcpwkWUQFT4TBC0YlFL0HhAMw2plnMMz4Qvt05nF/Z6sZBrtTVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793291411;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793291412;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=qE1WPTi5bEFrUCOlj2WSbD3YVij6pGJEfq5m52PopnQ=;
-	b=4IVSknBbTFdGtMU2yDHrsgw4VEiPfAieAnSHuPcFsrLWnfj+5mm0xYJ512zfsjKJTsV/
-	 MnuKwpwv/3lhXVzp8b7CdEAwKf5w1sqPGrIWbOpWxG9mG/R2TA0puf0RraY450N7PE+uw
-	 RnLiLQy30hkEu99onM/rE7TfkjJBE96+XEBUweoD6egVNE1RveQhJVAXynGj19vXKtQQn
-	 IJGnl9ezH+u8MC1v2hKOt/e4pg+P3Vt5JRvDtm0XVMhBTOd1tEhQMXUF38O1veyrKGoC8
-	 RAnKF2+3CFQCXmTwk5lHCon0UuYtUAjl7hxV4xElOWNGs+G2x+03CutYyHGliRIKk/w==
+	 Content-Type;
+	bh=S42PX1tAWc2hW5QlTv4Vth3uzTG8jc+BIDEQLZi1wuM=;
+	b=qoTp4XDFhKym8a+2NJm1KmdZQvNt9FbIiUdxCuz5kfxy0LYBo9gsfOIwxD5nQYzaqzTZ
+	 i57WY4iMlA3mhTPFQVvKHaGMru19zW2kQvQv81MhgbDKjSQkWV71tjfPrNSh9WaILib7M
+	 QTI8GgjUy+DCf0wE9ccnu6gC7ryo877epLjhQ0fsZ0vV54yCbTUO8t0hksXety2YywWBh
+	 gRFi02oktjRLIIU2VDF54IAgQU2ulY5sYqniQmyEbt/We+TNPetb3p0Wmz55sbxIw7CmD
+	 /9hruwSGOAb4UhiBelzlmHyGAEPXeHLBRa7V0vyc/MGA1Dxq9XA5CTWkKawGd2WR+jA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gydcJ9id;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=V+xf9yhk;
 	arc=none smtp.remote-ip=74.125.82.198
 Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBB560A260B
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 16:30:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6FBB560A260B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F15460A2629
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 16:30:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F15460A2629
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gydcJ9id
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-36a1e2485fdso4800311eec.1
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 09:30:10 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=V+xf9yhk
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-341eff9e381so4721779eec.1
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 09:30:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793291410; x=1793896210; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=qE1WPTi5bEFrUCOlj2WSbD3YVij6pGJEfq5m52PopnQ=;
-        b=gydcJ9idpOEue8ZjUx/rtqNSTZr0IsychKzCvysy12ArbUyDtwdDX0ohru6Rxk00SE
-         OtI8NkyrpNInn0uxuHqcbf6+iZDsHorCsc0X6IlTmCIeAuCVEP9EScHYMAiC2JGg+1hq
-         q2KQ7KEF+/7VeRDK5Tdkqz91j5FyMHS/GMf4fs5IUAAD3IUXVUgFoEw/sgTL35b/ujy6
-         q7nfGxcVG1rdbGo3EenTJT0cQo0uqm8/Hk8qgwUL4QO5Ghxnhvk3mOC+SbB+4uzS5MrT
-         DdIgp/l11J4ph/H/gmvAvvKk5XmRByTzBftvdzWUypZ41QLjI6jhXKm8aThRgUMvlrj5
-         xFrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793291410; x=1793896210;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1793291412; x=1793896212; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qE1WPTi5bEFrUCOlj2WSbD3YVij6pGJEfq5m52PopnQ=;
-        b=OUQcGbnzgwTTlJ7Fxc2W1p2ccs7evyMG+O1M5AVZ8rUlCw+uFrcTE1al30p6m0mf6H
-         g0h8e7dP+jKTFW6AAkya/tiEPX0fIima5ONQOqNKbLzFDQHvNxHWwXK6S7e9XpxxutqE
-         PjnRwDlutG/9TBFOxjjxtWY0Rn5TY47HfIzaB5hOnmokpAlqKMsWaj+pFjZR1TE37WEq
-         LZc1uQm29py7xJ4l/yNpLcenLctcDmLJVoMoK9H8T7wrpXMiUq7tSCtT8e/oT9zlrAZd
-         VQ7t6l2m7yL+JOp/LAdAa3RHAj30gadYm6niDLeIbj2tpp92kxLc4Ep7Q1k6jP3vApvx
-         c27w==
-X-Forwarded-Encrypted: i=1; AKwUvBxfLFm1vru3pN+r1yIBkHvkBWUGgHUduj5YWjM/JiKwG8OjnL2/z7F0TOB2gYKuTeaNvYs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYILsi+9RkcHUR8EfdGcvYfE/rK2Ii6j6fYg9r4UbfOU640j+4qW
-	n2vcti7/0pDL8u1NhPXwcH6HqsRWUP383nxufaIbfbZlEqGf4yz0wijArKugkzZKzmBco+xsiOz
-	Uj4AYHzWBtw==
-X-Received: from dldyr25-n1.prod.google.com ([2002:a05:701b:4519:10b0:1a7:76f5:9d46])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:298:b0:19a:20d3:a3d6
- with SMTP id a92af1059eb24-1a6c85d1368mr6923933c88.1.1793291409117; Thu, 29
- Oct 2026 09:30:09 -0700 (PDT)
-Date: Thu, 29 Oct 2026 09:29:56 -0700
+        bh=S42PX1tAWc2hW5QlTv4Vth3uzTG8jc+BIDEQLZi1wuM=;
+        b=V+xf9yhk5oDzRPyig7o2rUpqESHx9yBXvctsISy3UPowl+3e2wNaat2gcoSUFPuwMy
+         tHKfTnClUwYlAqLZgARdC91yO2lpHNWuLgTUfWdyGjrad6rBkLDDmXi60HhXxDFb94Su
+         yKlXHJZ/n3gECUKgaiOa5xlQ1mEY9yfF6msVca+MzRVkZw8MiNW7CeHKH3/X/mMy4wwL
+         M84TX1/CHq2VoPYnmjgVTP/rgyXoel2/erQWzbHFo2Tx7niXb05m3pDclqK2f1XiRXYL
+         ZkErdZSwVYSlPfsFKITpdCqC+mN5lTLFoHDBJncwBdOY1IBffxMkqXAV19DOYQKbqrFY
+         FUEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793291412; x=1793896212;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=S42PX1tAWc2hW5QlTv4Vth3uzTG8jc+BIDEQLZi1wuM=;
+        b=AP4v1dmLjZunLnjOdZTB4zpRmuwWbsx8Zx+UAjsH98C7hg+hsqgX7JWQpemdE5hsJS
+         QaXAxx/VsqypbG6sxqhy9NS3m+cA9gsfSLU37Mfd4LYwx8D2zyRfPojmPnpDeqsN3Sae
+         1V9nq/U2rqYUb3TgxqPy+ui9vyGXeBUoA7bpnqiZKjzMIufuYwDbIpIenCJlo28BrLT+
+         RJ0GxbiFiN9bmyi5ZuCRQkUcAV/3X96bbf6jSUZaJxT7fXjZNRd0ei/DTkRA9ssxBeNa
+         Otxtpg3y8M1OSFMf4C6Omc89vBM/hm2ESwOP3jBzEbxW9kyRikf6DtMDVSZnzVf4cW7V
+         dQqg==
+X-Forwarded-Encrypted: i=1; AKwUvBwab010ujCOAwnq9R6Kbnsac7hYyj5SpNpfp53bvMVFl813qpZNpo8aSAfGH+d+wlzcmFE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYImgXAneT15K+7gfiFai5GqtUZ7VQ0WPRWIV2sv/S4X4/38MJjD
+	oHK0KxxVC0X4Wob5fBrz99fedYcEGrub3SCajUVoDO/98aaazVCndnD7+s43cDaqdCPVPeCvcDF
+	JPKbByyFtPw==
+X-Received: from dycoy6.prod.google.com ([2002:a05:7301:fc06:b0:35a:f5b8:c8c])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:fc0d:b0:368:9553:f2da
+ with SMTP id 5a478bee46e88-36a204402d7mr8693177eec.31.1793291411212; Thu, 29
+ Oct 2026 09:30:11 -0700 (PDT)
+Date: Thu, 29 Oct 2026 09:29:57 -0700
 In-Reply-To: <20261029162958.3224280-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,9 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261029162958.3224280-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.0.317.g454f8302e1-goog
-Message-ID: <20261029162958.3224280-2-irogers@google.com>
-Subject: [RFC PATCH v1 1/3] tools build: Add Rust library build infrastructure
- and zlib-rs feature test
+Message-ID: <20261029162958.3224280-3-irogers@google.com>
+Subject: [RFC PATCH v1 2/3] perf build: Prefer zlib-rs over zlib when available
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
@@ -95,491 +93,347 @@ Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
 	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
 	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Add shared Rust library build and feature detection support across tools/
-and implement the zlib-rs feature check:
+Detect and prefer zlib-rs over C zlib in the perf build unless disabled
+with NO_ZLIB_RS=1 (or NO_ZLIB=1 / NO_RUST=1):
 
-- Add tools/build/Makefile.rust with helpers to locate Cargo crate
-  sources in distro (/usr/share/cargo/registry) or user Cargo registries,
-  compile .rlib and .a targets with rustc, and resolve C compiler/linker
-  flags via %-cflags and %-libs targets.
-- Support resolving zlib-rs via LIBZ_RS_DIR, pkg-config
-  (libz-rs-sys-cdylib, zlib-rs, z_rs), or building libz_rs.a (along with
-  libzlib_rs.rlib and liblibc.rlib) into $(OUTPUT)libz_rs/.
-- Add tools/build/feature/test-zlib-rs.c verifying ZLIB_VER_SUBREVISION
-  =3D=3D 15 (0xf) and linking against inflateInit().
-- Extend tools/build/Build.include and tools/build/Makefile.build with
-  cfgs-to-flags, rlibs-to-externs, per-target RUST_FLAGS/RUST_ENVS, and
-  $(OUTPUT)lib%.rlib: %.rs pattern rules.
-- Add RUST_TARGET_FLAGS_<arch> cross-compilation triples to
-  tools/scripts/Makefile.arch and the feature_rust_lib helper macro to
-  tools/scripts/Makefile.include.
+- Move Rust compiler detection ahead of zlib detection in
+  tools/perf/Makefile.config and use feature_check + feature_rust_lib for
+  zlib-rs, setting both HAVE_ZLIB_SUPPORT and HAVE_ZLIB_RS_SUPPORT when
+  zlib-rs is used and falling back to C zlib (-lz) otherwise.
+- Build and clean libz_rs.a in $(OUTPUT)libz_rs/, pass ZLIB_CFLAGS when
+  building static libbpf, and share RUST_OUTPUT with the host bootstrap
+  bpftool build in tools/perf/bpf_skel.mak.
+- Expose 'zlib-rs' in 'perf check feature' / 'perf version --build-options'
+  and document it in perf-check.txt.
+- Add zlib-rs package mappings to tools/perf/scripts/install-build-deps.sh
+  and NO_ZLIB / NO_ZLIB_RS build tests to tools/perf/tests/make.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/build/Build.include          |  14 ++-
- tools/build/Makefile.build         |  13 ++-
- tools/build/Makefile.feature       |   9 +-
- tools/build/Makefile.rust          | 149 +++++++++++++++++++++++++++++
- tools/build/feature/.gitignore     |   1 +
- tools/build/feature/Makefile       |   9 +-
- tools/build/feature/test-zlib-rs.c |  19 ++++
- tools/scripts/Makefile.arch        |  14 +++
- tools/scripts/Makefile.include     |  10 ++
- 9 files changed, 229 insertions(+), 9 deletions(-)
- create mode 100644 tools/build/Makefile.rust
- create mode 100644 tools/build/feature/test-zlib-rs.c
+ tools/perf/.gitignore                    |  1 +
+ tools/perf/Documentation/perf-check.txt  |  1 +
+ tools/perf/Makefile.config               | 89 ++++++++++++++----------
+ tools/perf/Makefile.perf                 | 32 ++++++++-
+ tools/perf/bpf_skel.mak                  |  8 ++-
+ tools/perf/builtin-check.c               |  1 +
+ tools/perf/scripts/install-build-deps.sh |  6 ++
+ tools/perf/tests/make                    |  9 +++
+ 8 files changed, 105 insertions(+), 42 deletions(-)
 
-diff --git a/tools/build/Build.include b/tools/build/Build.include
-index cd0baa7a168d..45b61c31fd4c 100644
---- a/tools/build/Build.include
-+++ b/tools/build/Build.include
-@@ -100,12 +100,18 @@ cxx_flags =3D -Wp,-MD,$(depfile) -Wp,-MT,$@ $(CXXFLAG=
-S) -D"BUILD_STR(s)=3D\#s" $(CXX
-=20
- ###
- # Rust flags to be used on rule definition, includes:
-+# - cfgs-to-flags helper to turn cfg tokens into --cfg=3D'...' flags
-+# - rlibs-to-externs helper to map .rlib prerequisites to --extern <crate>=
-=3D<path>
- # - global $(RUST_FLAGS)
--# - per target Rust flags
--# - per object Rust flags
--rust_flags_1 =3D $(RUST_FLAGS) $(RUST_FLAGS_$(basetarget).o) $(RUST_FLAGS_=
-$(obj))
--rust_flags_2 =3D $(filter-out $(RUST_FLAGS_REMOVE_$(basetarget).o), $(rust=
-_flags_1))
-+# - per target Rust flags ($(RUST_FLAGS_<target>)) and envs ($(RUST_ENVS_<=
-target>))
-+# - per object Rust flags ($(RUST_FLAGS_<obj>)) and envs ($(RUST_ENVS_<obj=
->))
-+cfgs-to-flags =3D $(patsubst %,--cfg=3D'%',$1)
-+rlibs-to-externs =3D $(foreach rlib,$(filter %.rlib,$1),--extern $(patsubs=
-t lib%.rlib,%,$(notdir $(rlib)))=3D$(rlib))
-+
-+rust_flags_1 =3D $(RUST_FLAGS) $(RUST_FLAGS_$(basetarget).o) $(RUST_FLAGS_=
-$(notdir $@)) $(RUST_FLAGS_$(obj))
-+rust_flags_2 =3D $(filter-out $(RUST_FLAGS_REMOVE_$(basetarget).o) $(RUST_=
-FLAGS_REMOVE_$(notdir $@)), $(rust_flags_1))
- rust_flags   =3D $(filter-out $(RUST_FLAGS_REMOVE_$(obj)), $(rust_flags_2)=
-)
-+rust_envs    =3D $(RUST_ENVS_$(notdir $@)) $(RUST_ENVS_$(obj))
-=20
- ###
- ## HOSTCC C flags
-diff --git a/tools/build/Makefile.build b/tools/build/Makefile.build
-index ad69efdd4e85..50c3eb57d34b 100644
---- a/tools/build/Makefile.build
-+++ b/tools/build/Makefile.build
-@@ -79,12 +79,15 @@ quiet_cmd_host_ld_multi =3D HOSTLD  $@
-                           xargs $(HOSTLD) -r -o $@,rm -f $@; $(HOSTAR) rcs=
- $@)
-=20
- rust_common_cmd =3D \
--	$(RUSTC) $(rust_flags) \
--	--crate-type staticlib -L $(objtree)/rust/ \
-+	$(rust_envs) $(RUSTC) $(rust_flags) \
-+	-L $(objtree)/rust/ $(call rlibs-to-externs,$^) \
- 	--emit=3Ddep-info=3D$(depfile),link
-=20
-+quiet_cmd_rustc_rlib_rs =3D $(RUSTC) $(quiet_modtag) $@
-+      cmd_rustc_rlib_rs =3D $(rust_common_cmd) --crate-type rlib --crate-n=
-ame $(patsubst lib%.rlib,%,$(notdir $@)) -o $@ $<
-+
- quiet_cmd_rustc_a_rs =3D $(RUSTC) $(quiet_modtag) $@
--      cmd_rustc_a_rs =3D $(rust_common_cmd) -o $@ -g $< $(cmd_objtool)
-+      cmd_rustc_a_rs =3D $(rust_common_cmd) --crate-type staticlib -o $@ -=
-g $< $(cmd_objtool)
-=20
- ifneq ($(filter $(obj),$(hostprogs)),)
-   host =3D host_
-@@ -117,6 +120,10 @@ $(OUTPUT)%.s: %.c FORCE
-=20
- # it's recommended to build a static rust library, when a foreight (to rus=
-t)
- # linker is used.
-+$(OUTPUT)lib%.rlib: %.rs FORCE
-+	$(call rule_mkdir)
-+	$(call if_changed_dep,rustc_rlib_rs)
-+
- $(OUTPUT)%.a: %.rs FORCE
- 	$(call rule_mkdir)
- 	$(call if_changed_dep,rustc_a_rs)
-diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
-index 4d37d11f674c..c372600ae9e4 100644
---- a/tools/build/Makefile.feature
-+++ b/tools/build/Makefile.feature
-@@ -5,10 +5,11 @@ ifneq ($(OUTPUT),)
-   OUTPUT_FEATURES =3D $(OUTPUT)feature/
-   $(shell mkdir -p $(OUTPUT_FEATURES))
+diff --git a/tools/perf/.gitignore b/tools/perf/.gitignore
+index 3b968c5158b8..8a5df9c9e8ae 100644
+--- a/tools/perf/.gitignore
++++ b/tools/perf/.gitignore
+@@ -55,6 +55,7 @@ libbpf/
+ libperf/
+ libsubcmd/
+ libsymbol/
++libz_rs/
+ fixdep
+ Documentation/doc.dep
+ python_ext_build/
+diff --git a/tools/perf/Documentation/perf-check.txt b/tools/perf/Documentation/perf-check.txt
+index 1406a41c5d09..dda75b1d9cbd 100644
+--- a/tools/perf/Documentation/perf-check.txt
++++ b/tools/perf/Documentation/perf-check.txt
+@@ -66,6 +66,7 @@ feature::
+                 numa_num_possible_cpus  /  HAVE_LIBNUMA_SUPPORT
+                 python-module           /  HAVE_PYTHON_MODULE_SUPPORT
+                 zlib                    /  HAVE_ZLIB_SUPPORT
++                zlib-rs                 /  HAVE_ZLIB_RS_SUPPORT
+                 zstd                    /  HAVE_ZSTD_SUPPORT
+ 
+ OPTIONS
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index b4764f69f47f..4313fca53aa7 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -532,13 +532,57 @@ ifdef CORESIGHT
+   endif
  endif
-+RUST_OUTPUT ?=3D $(abspath $(or $(OUTPUT),$(CURDIR)))/
-=20
- feature_check =3D $(eval $(feature_check_code))
- define feature_check_code
--  feature-$(1) :=3D $(shell $(MAKE) OUTPUT=3D$(OUTPUT_FEATURES) CC=3D"$(CC=
-)" CXX=3D"$(CXX)" CFLAGS=3D"$(EXTRA_CFLAGS) $(FEATURE_CHECK_CFLAGS-$(1))" C=
-XXFLAGS=3D"$(EXTRA_CXXFLAGS) $(FEATURE_CHECK_CXXFLAGS-$(1))" LDFLAGS=3D"$(L=
-DFLAGS) $(FEATURE_CHECK_LDFLAGS-$(1))" -C $(feature_dir) $(OUTPUT_FEATURES)=
-test-$1.bin >/dev/null 2>/dev/null && echo 1 || echo 0)
-+  feature-$(1) :=3D $(shell $(MAKE) OUTPUT=3D$(OUTPUT_FEATURES) RUST_OUTPU=
-T=3D"$(RUST_OUTPUT)" CC=3D"$(CC)" CXX=3D"$(CXX)" RUSTC=3D"$(RUSTC)" $(if $(=
-PKG_CONFIG),PKG_CONFIG=3D"$(PKG_CONFIG)") CFLAGS=3D"$(CLANG_CROSS_FLAGS) $(=
-EXTRA_CFLAGS) $(FEATURE_CHECK_CFLAGS-$(1))" CXXFLAGS=3D"$(CLANG_CROSS_FLAGS=
-) $(EXTRA_CXXFLAGS) $(FEATURE_CHECK_CXXFLAGS-$(1))" RUST_FLAGS=3D"$(RUST_FL=
-AGS)" LDFLAGS=3D"$(LDFLAGS) $(FEATURE_CHECK_LDFLAGS-$(1))" -C $(feature_dir=
-) $(OUTPUT_FEATURES)test-$1.bin >/dev/null 2>/dev/null && echo 1 || echo 0)
- endef
-=20
- feature_set =3D $(eval $(feature_set_code))
-@@ -128,6 +129,8 @@ FEATURE_TESTS_EXTRA :=3D                  \
-          libdebuginfod			\
-          clang-bpf-co-re		\
-          bpftool-skeletons		\
-+         zlib-rs			\
-+         rust				\
-          libunwind			\
-          libunwind-debug-frame		\
-          $(foreach arch,$(LIBUNWIND_ARCHS),libunwind-$(arch) libunwind-deb=
-ug-frame-$(arch))
-@@ -149,6 +152,7 @@ FEATURE_DISPLAY ?=3D              \
-          libcapstone            \
-          llvm-perf              \
-          zlib                   \
-+         zlib-rs                \
-          lzma                   \
-          bpf			\
-          libaio			\
-@@ -216,6 +220,9 @@ ifeq ($(feature-all), 1)
-   $(call feature_check,compile-x32)
-   $(call feature_check,bionic)
-   $(call feature_check,babeltrace2-ctf-writer)
-+  ifneq ($(filter zlib-rs,$(FEATURE_TESTS)),)
-+    $(call feature_check,zlib-rs)
+ 
+-ifndef NO_ZLIB
+-  ifeq ($(feature-zlib), 1)
+-    CFLAGS += -DHAVE_ZLIB_SUPPORT
+-    EXTLIBS += -lz
+-    $(call detected,CONFIG_ZLIB)
++ifndef NO_RUST
++  $(call feature_check,rust)
++  ifneq ($(feature-rust), 1)
++    $(warning Rust is not found. Test workloads with rust are disabled.)
++    NO_RUST := 1
+   else
+-    NO_ZLIB := 1
++    NO_RUST := 0
++    CFLAGS += -DHAVE_RUST_SUPPORT
++    $(call detected,CONFIG_RUST_SUPPORT)
 +  endif
-   $(call feature_check,libunwind)
-   $(call feature_check,libunwind-debug-frame)
-   $(foreach arch,$(LIBUNWIND_ARCHS),$(call feature_check,libunwind-$(arch)=
-))
-diff --git a/tools/build/Makefile.rust b/tools/build/Makefile.rust
-new file mode 100644
-index 000000000000..cd9e0915b929
---- /dev/null
-+++ b/tools/build/Makefile.rust
-@@ -0,0 +1,149 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Shared rules and helpers for discovering and building Rust libraries
-+# (either from pre-installed packages/pkg-config or from local Cargo crate
-+# sources) for tools/ builds and feature detection.
 +
-+ifeq ($(pound),)
-+include $(dir $(lastword $(MAKEFILE_LIST)))../scripts/Makefile.include
++  ifneq ($(CROSS_COMPILE),)
++    ifeq ($(RUST_TARGET_FLAGS_$(ARCH)),)
++      $(error Unknown rust cross compilation architecture $(ARCH))
++    endif
++
++    RUST_FLAGS += --target=$(RUST_TARGET_FLAGS_$(ARCH))
++  endif
 +endif
 +
-+ifeq ($(PKG_CONFIG),)
-+  ifneq (, $(shell which $(CROSS_COMPILE)pkg-config 2>/dev/null))
-+    PKG_CONFIG :=3D $(CROSS_COMPILE)pkg-config
-+  else
-+    PKG_CONFIG :=3D pkg-config
++# Building zlib-rs from Cargo crate sources requires a working rustc.
++ifneq ($(NO_RUST), 0)
++  NO_ZLIB_RS := 1
++endif
 +
-+    ifdef CROSS_COMPILE
-+      ifeq ($(PKG_CONFIG_LIBDIR)$(PKG_CONFIG_PATH)$(PKG_CONFIG_SYSROOT_DIR=
-),)
-+        CROSS_ARCH =3D $(notdir $(CROSS_COMPILE:%-=3D%))
-+        PKG_CONFIG_LIBDIR :=3D /usr/local/$(CROSS_ARCH)/lib/pkgconfig/
-+        PKG_CONFIG_LIBDIR :=3D $(PKG_CONFIG_LIBDIR):/usr/local/lib/$(CROSS=
-_ARCH)/pkgconfig/
-+        PKG_CONFIG_LIBDIR :=3D $(PKG_CONFIG_LIBDIR):/usr/lib/$(CROSS_ARCH)=
-/pkgconfig/
-+        PKG_CONFIG_LIBDIR :=3D $(PKG_CONFIG_LIBDIR):/usr/local/share/pkgco=
-nfig/
-+        PKG_CONFIG_LIBDIR :=3D $(PKG_CONFIG_LIBDIR):/usr/share/pkgconfig/
-+        export PKG_CONFIG_LIBDIR
-+      endif
++# Prefer zlib-rs over C zlib when available, unless disabled via NO_ZLIB=1 or
++# NO_ZLIB_RS=1. Both provide the standard zlib C API (HAVE_ZLIB_SUPPORT), while
++# HAVE_ZLIB_RS_SUPPORT records that zlib-rs is the implementation in use.
++ifndef NO_ZLIB
++  ifndef NO_ZLIB_RS
++    $(call feature_check,zlib-rs)
++    ifeq ($(feature-zlib-rs), 1)
++      ZLIB_RS := 1
++      $(call feature_rust_lib,zlib-rs)
++      ZLIB_CFLAGS := $(FEATURE_CFLAGS-zlib-rs)
++      ZLIB_LIBS := $(FEATURE_LIBS-zlib-rs)
++      CFLAGS += -DHAVE_ZLIB_SUPPORT -DHAVE_ZLIB_RS_SUPPORT $(ZLIB_CFLAGS)
++      EXTLIBS += $(ZLIB_LIBS)
++      $(call detected,CONFIG_ZLIB)
++      $(call detected,CONFIG_ZLIB_RS)
 +    endif
 +  endif
-+endif
-+
-+ifeq ($(findstring -static,${LDFLAGS}),-static)
-+  ifeq ($(findstring --static,$(PKG_CONFIG)),)
-+    PKG_CONFIG +=3D --static
-+  endif
-+endif
-+
-+# Search both distro-packaged Cargo registries (e.g. Debian/Ubuntu
-+# /usr/share/cargo/registry from librust-*-dev packages) and user Cargo
-+# registries ($CARGO_HOME/registry/src/* or ~/.cargo/registry/src/*).
-+# Require a digit after "<crate>-" so prefixes like "libc-" do not match
-+# unrelated crates such as "libc-print-*", and use version sorting (sort -=
-V)
-+# on the "<crate>-<version>" directory basename when multiple versions exi=
-st.
-+CARGO_REGISTRY_DIR ?=3D /usr/share/cargo/registry $(wildcard $(or $(CARGO_=
-HOME),$(HOME)/.cargo)/registry/src/*)
-+cargo_crate_dirs =3D $(strip $(foreach dir,$(CARGO_REGISTRY_DIR),$(wildcar=
-d $(dir)/$(1)-[0-9]*)))
-+cargo_crate_dir =3D $(if $(word 2,$(call cargo_crate_dirs,$(1))),$(shell p=
-rintf '%s\n' $(call cargo_crate_dirs,$(1)) | awk -F/ '{print $$NF, $$0}' | =
-sort -k1,1V | tail -n1 | cut -d' ' -f2-),$(call cargo_crate_dirs,$(1)))
-+
-+# Extract CARGO_PKG_VERSION* environment variables expected by crates usin=
-g
-+# env!("CARGO_PKG_VERSION*") from the "<crate>-<version>" directory name.
-+define cargo_pkg_envs
-+CARGO_PKG_VERSION=3D$(patsubst $(1)-%,%,$(notdir $(2))) \
-+CARGO_PKG_VERSION_MAJOR=3D$(word 1,$(subst ., ,$(patsubst $(1)-%,%,$(notdi=
-r $(2))))) \
-+CARGO_PKG_VERSION_MINOR=3D$(word 2,$(subst ., ,$(patsubst $(1)-%,%,$(notdi=
-r $(2)))))
-+endef
-+
-+# Convert a whitespace-separated list of cfg tokens into --cfg=3D'...' fla=
-gs.
-+cfgs-to-flags =3D $(patsubst %,--cfg=3D'%',$1)
-+
-+# Map .rlib prerequisites to explicit --extern <crate>=3D<path.rlib> flags=
-.
-+# Passing explicit paths avoids -L ambiguity with sysroot crates (e.g. E04=
-64
-+# when both sysroot and local liblibc.rlib exist).
-+rlibs-to-externs =3D $(foreach rlib,$(filter %.rlib,$1),--extern $(patsubs=
-t lib%.rlib,%,$(notdir $(rlib)))=3D$(rlib))
-+rustc_common_flags :=3D -C opt-level=3D3 -C relocation-model=3Dpic
-+
-+cmd_rustc_rlib =3D \
-+	$(rustc_target_envs) $(RUSTC) $(RUST_FLAGS) $(rustc_common_flags) $(rustc=
-_target_flags) \
-+	$(call rlibs-to-externs,$^) --crate-type rlib --crate-name $(patsubst lib=
-%.rlib,%,$(notdir $@)) \
-+	-o $@ $(filter %.rs,$^) > $(@:.rlib=3D.make.output) 2>&1
-+
-+cmd_rustc_staticlib =3D \
-+	$(rustc_target_envs) $(RUSTC) $(RUST_FLAGS) $(rustc_common_flags) $(rustc=
-_target_flags) \
-+	$(call rlibs-to-externs,$^) --crate-type staticlib --crate-name $(patsubs=
-t lib%.a,%,$(notdir $@)) \
-+	-o $@ $(filter %.rs,$^) > $(@:.a=3D.make.output) 2>&1
-+
-+# Helper targets invoked by $(call feature_rust_lib,<name>) to query the
-+# resolved compiler and linker flags for a Rust library feature.
-+%-cflags:
-+	@echo $(FEATURE_CFLAGS-$*)
-+
-+%-libs:
-+	@echo $(FEATURE_LIBS-$*)
-+
-+# Place compiled Rust library artifacts in their own subdirectory under th=
-e
-+# build output root (e.g. $(OUTPUT)libz_rs/, alongside libapi/, libbpf/, e=
-tc.)
-+# rather than inside $(OUTPUT)feature/.
-+RUST_OUTPUT ?=3D $(patsubst %/feature/,%/,$(OUTPUT))
-+LIBZ_RS_OUTPUT ?=3D $(RUST_OUTPUT)libz_rs/
-+
-+$(LIBZ_RS_OUTPUT):
-+	$(Q)mkdir -p $@
-+
-+# Build chain for libz_rs.a from Cargo crate sources:
-+#   libc (liblibc.rlib) -> zlib-rs (libzlib_rs.rlib) -> libz-rs-sys (libz_=
-rs.a)
-+LIBC_RS_DIR ?=3D $(call cargo_crate_dir,libc)
-+libc-cfgs :=3D feature=3D"default" feature=3D"std"
-+libc-flags :=3D --edition=3D2021 $(call cfgs-to-flags,$(libc-cfgs))
-+
-+$(LIBZ_RS_OUTPUT)liblibc.rlib: private rustc_target_flags =3D $(libc-flags=
-)
-+$(LIBZ_RS_OUTPUT)liblibc.rlib: $(wildcard $(LIBC_RS_DIR)/src/lib.rs) | $(L=
-IBZ_RS_OUTPUT)
-+	@$(if $<,$(cmd_rustc_rlib),false)
-+
-+ZLIB_RS_DIR ?=3D $(call cargo_crate_dir,zlib-rs)
-+zlib_rs-cfgs :=3D feature=3D"__internal-api" feature=3D"c-allocator" featu=
-re=3D"rust-allocator" feature=3D"std"
-+zlib_rs-flags :=3D --edition=3D2021 $(call cfgs-to-flags,$(zlib_rs-cfgs))
-+
-+$(LIBZ_RS_OUTPUT)libzlib_rs.rlib: private rustc_target_flags =3D $(zlib_rs=
--flags)
-+$(LIBZ_RS_OUTPUT)libzlib_rs.rlib: $(wildcard $(ZLIB_RS_DIR)/src/lib.rs) | =
-$(LIBZ_RS_OUTPUT)
-+	@$(if $<,$(cmd_rustc_rlib),false)
-+
-+# Enable export-symbols, c-allocator, std, and gz so libz_rs.a exports the
-+# full standard zlib C ABI (inflate*, deflate*, gz*, etc.) without symbol
-+# prefixing.
-+LIBZ_RS_SYS_DIR ?=3D $(call cargo_crate_dir,libz-rs-sys)
-+libz_rs_sys-cfgs :=3D feature=3D"export-symbols" feature=3D"c-allocator" f=
-eature=3D"std" feature=3D"gz"
-+libz_rs_sys-flags :=3D --edition=3D2021 $(call cfgs-to-flags,$(libz_rs_sys=
--cfgs))
-+libz_rs_sys-envs :=3D $(call cargo_pkg_envs,libz-rs-sys,$(LIBZ_RS_SYS_DIR)=
-)
-+
-+$(LIBZ_RS_OUTPUT)libz_rs.a: private rustc_target_envs =3D $(libz_rs_sys-en=
-vs)
-+$(LIBZ_RS_OUTPUT)libz_rs.a: private rustc_target_flags =3D $(libz_rs_sys-f=
-lags)
-+$(LIBZ_RS_OUTPUT)libz_rs.a: $(wildcard $(LIBZ_RS_SYS_DIR)/src/lib.rs) $(LI=
-BZ_RS_OUTPUT)libzlib_rs.rlib $(LIBZ_RS_OUTPUT)liblibc.rlib | $(LIBZ_RS_OUTP=
-UT)
-+	@$(if $(filter %.rs,$^),$(cmd_rustc_staticlib),false)
-+
-+# Resolve zlib-rs flags and libraries in priority order:
-+#   1. Explicit LIBZ_RS_DIR=3D/path/to/prefix override
-+#   2. pkg-config (libz-rs-sys-cdylib, zlib-rs, or z_rs)
-+#   3. Local Cargo crate sources built into $(LIBZ_RS_OUTPUT)libz_rs.a
-+ifdef LIBZ_RS_DIR
-+  FEATURE_CFLAGS-zlib-rs :=3D -I$(LIBZ_RS_DIR)/include
-+  FEATURE_LIBS-zlib-rs :=3D -L$(LIBZ_RS_DIR)/lib -lz_rs
-+endif
-+
-+ifeq ($(FEATURE_LIBS-zlib-rs),)
-+  ZLIB_RS_PC :=3D $(shell $(PKG_CONFIG) --exists libz-rs-sys-cdylib 2>/dev=
-/null && echo libz-rs-sys-cdylib || \
-+                        ($(PKG_CONFIG) --exists zlib-rs 2>/dev/null && ech=
-o zlib-rs) || \
-+                        ($(PKG_CONFIG) --exists z_rs 2>/dev/null && echo z=
-_rs))
-+  ifneq ($(ZLIB_RS_PC),)
-+    FEATURE_CFLAGS-zlib-rs :=3D $(shell $(PKG_CONFIG) --cflags $(ZLIB_RS_P=
-C) 2>/dev/null)
-+    FEATURE_LIBS-zlib-rs :=3D $(shell $(PKG_CONFIG) --libs $(ZLIB_RS_PC) 2=
->/dev/null)
-+  endif
-+endif
-+
-+ifeq ($(FEATURE_LIBS-zlib-rs),)
-+  ifneq ($(and $(ZLIB_RS_DIR),$(LIBZ_RS_SYS_DIR),$(LIBC_RS_DIR)),)
-+    FEATURE_CFLAGS-zlib-rs :=3D -I$(LIBZ_RS_SYS_DIR)/include
-+    FEATURE_STATIC-zlib-rs :=3D $(LIBZ_RS_OUTPUT)libz_rs.a
-+    FEATURE_LIBS-zlib-rs :=3D $(FEATURE_STATIC-zlib-rs)
-+  endif
-+endif
-+
-+zlib-rs-libs: $(FEATURE_STATIC-zlib-rs)
-diff --git a/tools/build/feature/.gitignore b/tools/build/feature/.gitignor=
-e
-index 15fcd34acdb9..2fb933f84bd0 100644
---- a/tools/build/feature/.gitignore
-+++ b/tools/build/feature/.gitignore
-@@ -2,3 +2,4 @@
- *.d
- *.bin
- *.output
-+libz_rs/
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 10340a537224..ff41e3d3569a 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -50,6 +50,7 @@ FILES=3D                                          \
-          test-compile-32.bin                    \
-          test-compile-x32.bin                   \
-          test-zlib.bin                          \
-+         test-zlib-rs.bin                       \
-          test-lzma.bin                          \
-          test-bpf.bin                           \
-          test-libbpf.bin                        \
-@@ -301,6 +302,11 @@ $(OUTPUT)test-compile-x32.bin:
- $(OUTPUT)test-zlib.bin:
- 	$(BUILD) -lz
-=20
-+include ../Makefile.rust
-+
-+$(OUTPUT)test-zlib-rs.bin: $(FEATURE_STATIC-zlib-rs)
-+	$(BUILD) $(FEATURE_CFLAGS-zlib-rs) $(FEATURE_LIBS-zlib-rs) -lpthread -ldl=
- -lm
-+
- $(OUTPUT)test-lzma.bin:
- 	$(BUILD) -llzma
-=20
-@@ -374,4 +380,5 @@ $(OUTPUT)test-rust.bin:
- ###############################
-=20
- clean:
--	rm -f $(FILES) $(OUTPUT)*.d $(FILES:.bin=3D.make.output)
-+	rm -f $(FILES) $(OUTPUT)*.d $(OUTPUT)*.make.output
-+	rm -rf $(LIBZ_RS_OUTPUT)
-diff --git a/tools/build/feature/test-zlib-rs.c b/tools/build/feature/test-=
-zlib-rs.c
-new file mode 100644
-index 000000000000..b8729c5135bb
---- /dev/null
-+++ b/tools/build/feature/test-zlib-rs.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <zlib.h>
-+
-+/*
-+ * libz-rs-sys's bundled zlib.h defines ZLIB_VER_SUBREVISION to 15 (0xf) t=
-o
-+ * distinguish itself from standard C zlib (which defines it to 0). Verify
-+ * we are including the zlib-rs header and can link against its zlib C ABI=
-.
-+ */
-+#if !defined(ZLIB_VER_SUBREVISION) || ZLIB_VER_SUBREVISION !=3D 15
-+#error "Not zlib-rs header"
-+#endif
-+
-+int main(void)
-+{
-+	z_stream zs;
-+
-+	inflateInit(&zs);
-+	return 0;
-+}
-diff --git a/tools/scripts/Makefile.arch b/tools/scripts/Makefile.arch
-index ed5f008d400e..d5f25f3be555 100644
---- a/tools/scripts/Makefile.arch
-+++ b/tools/scripts/Makefile.arch
-@@ -50,3 +50,17 @@ ifeq ($(LP64), 1)
- else
-   IS_64_BIT :=3D 0
++  ifndef ZLIB_RS
++    ifeq ($(feature-zlib), 1)
++      ZLIB_LIBS := -lz
++      CFLAGS += -DHAVE_ZLIB_SUPPORT
++      EXTLIBS += $(ZLIB_LIBS)
++      $(call detected,CONFIG_ZLIB)
++    else
++      NO_ZLIB := 1
++    endif
+   endif
  endif
-+
-+# Map kernel ARCH to rustc --target triples when cross-compiling tools/.
-+ifneq ($(CROSS_COMPILE),)
-+  RUST_TARGET_FLAGS_arm		:=3D arm-unknown-linux-gnueabi
-+  RUST_TARGET_FLAGS_arm64	:=3D aarch64-unknown-linux-gnu
-+  RUST_TARGET_FLAGS_loongarch	:=3D loongarch64-unknown-linux-gnu
-+  RUST_TARGET_FLAGS_m68k	:=3D m68k-unknown-linux-gnu
-+  RUST_TARGET_FLAGS_mips	:=3D mipsel-unknown-linux-gnu
-+  RUST_TARGET_FLAGS_powerpc	:=3D powerpc64le-unknown-linux-gnu
-+  RUST_TARGET_FLAGS_riscv	:=3D riscv64gc-unknown-linux-gnu
-+  RUST_TARGET_FLAGS_s390	:=3D s390x-unknown-linux-gnu
-+  RUST_TARGET_FLAGS_x86		:=3D x86_64-unknown-linux-gnu
-+  RUST_TARGET_FLAGS_x86_64	:=3D x86_64-unknown-linux-gnu
+ 
+@@ -908,7 +952,7 @@ ifdef BUILD_NONDISTRO
+   else ifeq ($(feature-libbfd-liberty), 1)
+     EXTLIBS += -lbfd -lopcodes -liberty
+   else ifeq ($(feature-libbfd-liberty-z), 1)
+-    EXTLIBS += -lbfd -lopcodes -liberty -lz
++    EXTLIBS += -lbfd -lopcodes -liberty $(ZLIB_LIBS)
+   endif
+ 
+   CFLAGS += -DHAVE_LIBBFD_SUPPORT
+@@ -1132,37 +1176,6 @@ ifneq ($(NO_LIBTRACEEVENT),1)
+   endif
+ endif
+ 
+-ifndef NO_RUST
+-  $(call feature_check,rust)
+-  ifneq ($(feature-rust), 1)
+-    $(warning Rust is not found. Test workloads with rust are disabled.)
+-    NO_RUST := 1
+-  else
+-    NO_RUST := 0
+-    CFLAGS += -DHAVE_RUST_SUPPORT
+-    $(call detected,CONFIG_RUST_SUPPORT)
+-  endif
+-
+-  ifneq ($(CROSS_COMPILE),)
+-    RUST_TARGET_FLAGS_arm	:= arm-unknown-linux-gnueabi
+-    RUST_TARGET_FLAGS_arm64	:= aarch64-unknown-linux-gnu
+-    RUST_TARGET_FLAGS_loongarch	:= loongarch64-unknown-linux-gnu
+-    RUST_TARGET_FLAGS_m68k	:= m68k-unknown-linux-gnu
+-    RUST_TARGET_FLAGS_mips	:= mipsel-unknown-linux-gnu
+-    RUST_TARGET_FLAGS_powerpc	:= powerpc64le-unknown-linux-gnu
+-    RUST_TARGET_FLAGS_riscv	:= riscv64gc-unknown-linux-gnu
+-    RUST_TARGET_FLAGS_s390	:= s390x-unknown-linux-gnu
+-    RUST_TARGET_FLAGS_x86	:= x86_64-unknown-linux-gnu
+-    RUST_TARGET_FLAGS_x86_64	:= x86_64-unknown-linux-gnu
+-
+-    ifeq ($(RUST_TARGET_FLAGS_$(ARCH)),)
+-      $(error Unknown rust cross compilation architecture $(ARCH))
+-    endif
+-
+-    RUST_FLAGS += --target=$(RUST_TARGET_FLAGS_$(ARCH))
+-  endif
+-endif
+-
+ # Among the variables below, these:
+ #   perfexecdir
+ #   libbpf_include_dir
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index b74b534e1153..baad492277df 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -75,6 +75,8 @@ include ../scripts/utilities.mak
+ #
+ # Define NO_ZLIB if you do not want to support compressed kernel modules
+ #
++# Define NO_ZLIB_RS if you do not want to use zlib-rs for zlib support
++#
+ # Define NO_BABELTRACE2 if you do not want babeltrace2-ctf-writer support
+ # for CTF data format.
+ #
+@@ -417,6 +419,15 @@ ifdef LIBBPF_STATIC
+   CFLAGS += -I$(LIBBPF_OUTPUT)/include
+ endif
+ 
++ifneq ($(OUTPUT),)
++  LIBZ_RS_OUTPUT = $(abspath $(OUTPUT))/libz_rs
++else
++  LIBZ_RS_OUTPUT = $(CURDIR)/libz_rs
 +endif
-diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.includ=
-e
-index 378387f62960..72394d245d5d 100644
---- a/tools/scripts/Makefile.include
-+++ b/tools/scripts/Makefile.include
-@@ -111,6 +111,16 @@ SYSTEM_BPFTOOL	?=3D bpftool
-=20
- RUSTC		?=3D rustc
-=20
-+# Query tools/build/Makefile.rust for a Rust library feature's CFLAGS and =
-LIBS
-+# (building any required staticlib such as libz_rs.a under $(RUST_OUTPUT))=
-, and
-+# populate FEATURE_CFLAGS-<feat> and FEATURE_LIBS-<feat>.
-+define feature_rust_lib_code
-+  FEATURE_RUST_OUTPUT :=3D $$(if $$(RUST_OUTPUT),$$(RUST_OUTPUT),$$(abspat=
-h $$(or $$(OUTPUT),$$(CURDIR)))/)
-+  FEATURE_CFLAGS-$(1) :=3D $$(shell $$(MAKE) -s --no-print-directory -f $$=
-(srctree)/tools/build/Makefile.rust $$(if $$(PKG_CONFIG),PKG_CONFIG=3D"$$(P=
-KG_CONFIG)") LDFLAGS=3D"$$(LDFLAGS)" $(1)-cflags)
-+  FEATURE_LIBS-$(1) :=3D $$(shell $$(MAKE) -s --no-print-directory -f $$(s=
-rctree)/tools/build/Makefile.rust RUST_OUTPUT=3D"$$(FEATURE_RUST_OUTPUT)" $=
-$(if $$(PKG_CONFIG),PKG_CONFIG=3D"$$(PKG_CONFIG)") RUSTC=3D"$$(RUSTC)" RUST=
-_FLAGS=3D"$$(RUST_FLAGS)" LDFLAGS=3D"$$(LDFLAGS)" $(1)-libs)
-+endef
-+feature_rust_lib =3D $(eval $(feature_rust_lib_code))
++ifdef ZLIB_RS
++  LIBZ_RS = $(filter %/libz_rs.a,$(ZLIB_LIBS))
++endif
 +
- ifeq ($(CC_NO_CLANG), 1)
- EXTRA_WARNINGS +=3D -Wstrict-aliasing=3D3
-=20
---=20
+ ifneq ($(OUTPUT),)
+   LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
+ else
+@@ -741,6 +752,11 @@ ifdef LIBBPF_STATIC
+ prepare: $(LIBBPF)
+ endif
+ 
++ifneq ($(LIBZ_RS),)
++prepare: $(LIBZ_RS)
++bpf-skel-prepare: $(LIBZ_RS)
++endif
++
+ $(OUTPUT)%.o: %.c prepare FORCE
+ 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(build-dir) $@
+ 
+@@ -808,12 +824,22 @@ $(LIBAPI)-clean:
+ $(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
+ 	$(Q)$(MAKE) -C $(LIBBPF_DIR) FEATURES_DUMP=$(FEATURE_DUMP_EXPORT) \
+ 		O= OUTPUT=$(LIBBPF_OUTPUT)/ DESTDIR=$(LIBBPF_DESTDIR) prefix= subdir= \
+-		EXTRA_CFLAGS="-fPIC" $@ install_headers
++		EXTRA_CFLAGS="-fPIC $(ZLIB_CFLAGS)" $@ install_headers
+ 
+ $(LIBBPF)-clean:
+ 	$(call QUIET_CLEAN, libbpf)
+ 	$(Q)$(RM) -r -- $(LIBBPF_OUTPUT)
+ 
++ifneq ($(LIBZ_RS),)
++$(LIBZ_RS): | $(LIBZ_RS_OUTPUT)
++	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.rust LIBZ_RS_OUTPUT=$(LIBZ_RS_OUTPUT)/ \
++		RUSTC="$(RUSTC)" RUST_FLAGS="$(RUST_FLAGS)" $@
++endif
++
++libz-rs-clean:
++	$(call QUIET_CLEAN, libz_rs)
++	$(Q)$(RM) -r -- $(LIBZ_RS_OUTPUT)
++
+ $(LIBPERF): FORCE | $(LIBPERF_OUTPUT)
+ 	$(Q)$(MAKE) -C $(LIBPERF_DIR) O=$(LIBPERF_OUTPUT) \
+ 		DESTDIR=$(LIBPERF_DESTDIR) prefix= subdir= \
+@@ -1026,7 +1052,7 @@ python-clean:
+ 		$(RM) $(OUTPUT)python/perf.pyi; \
+ 	fi
+ 
+-$(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(LIBSUBCMD_OUTPUT) $(LIBSYMBOL_OUTPUT):
++$(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(LIBSUBCMD_OUTPUT) $(LIBSYMBOL_OUTPUT) $(LIBZ_RS_OUTPUT):
+ 	$(Q)$(MKDIR) -p $@
+ 
+ bpf-skel-clean:
+@@ -1050,7 +1076,7 @@ else # When an OUTPUT directory is present, clean up the copied pmu-events/arch
+ endif
+ 
+ clean:: $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(LIBPERF)-clean \
+-		arm64-sysreg-defs-clean fixdep-clean python-clean bpf-skel-clean \
++		libz-rs-clean arm64-sysreg-defs-clean fixdep-clean python-clean bpf-skel-clean \
+ 		pmu-events-clean
+ 	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive \
+ 		$(OUTPUT)perf-iostat $(LANG_BINDINGS)
+diff --git a/tools/perf/bpf_skel.mak b/tools/perf/bpf_skel.mak
+index f2559de39f96..d2ac4c4a7402 100644
+--- a/tools/perf/bpf_skel.mak
++++ b/tools/perf/bpf_skel.mak
+@@ -39,9 +39,15 @@ ifneq ($(WERROR),0)
+   CLANG_OPTIONS += -Werror
+ endif
+ 
++# When not cross-compiling, share the top-level $(OUTPUT)libz_rs/ directory
++# with the host bootstrap bpftool build so libz_rs.a is not compiled twice.
++ifeq ($(CROSS_COMPILE),)
++BPFTOOL_RUST_OUTPUT := RUST_OUTPUT=$(abspath $(or $(OUTPUT),.))/
++endif
++
+ $(BPFTOOL):
+ 	$(Q)mkdir -p $(SKEL_TOOL_TMP_OUT)
+-	$(Q)CFLAGS= $(MAKE) -C ../bpf/bpftool OUTPUT=$(SKEL_TOOL_TMP_OUT)/ bootstrap
++	$(Q)CFLAGS= $(MAKE) -C ../bpf/bpftool OUTPUT=$(SKEL_TOOL_TMP_OUT)/ $(BPFTOOL_RUST_OUTPUT) bootstrap
+ 
+ # Paths to search for a kernel to generate vmlinux.h from.
+ VMLINUX_BTF_ELF_PATHS ?= $(if $(O),$(O)/vmlinux)			\
+diff --git a/tools/perf/builtin-check.c b/tools/perf/builtin-check.c
+index 1e43e097e7a7..fe1fc40561a9 100644
+--- a/tools/perf/builtin-check.c
++++ b/tools/perf/builtin-check.c
+@@ -59,6 +59,7 @@ struct feature_status supported_features[] = {
+ 	FEATURE_STATUS("lzma", HAVE_LZMA_SUPPORT),
+ 	FEATURE_STATUS("numa_num_possible_cpus", HAVE_LIBNUMA_SUPPORT),
+ 	FEATURE_STATUS("zlib", HAVE_ZLIB_SUPPORT),
++	FEATURE_STATUS("zlib-rs", HAVE_ZLIB_RS_SUPPORT),
+ 	FEATURE_STATUS("zstd", HAVE_ZSTD_SUPPORT),
+ 	FEATURE_STATUS("rust", HAVE_RUST_SUPPORT),
+ 
+diff --git a/tools/perf/scripts/install-build-deps.sh b/tools/perf/scripts/install-build-deps.sh
+index 3e53c7bf0f85..605dd9073589 100755
+--- a/tools/perf/scripts/install-build-deps.sh
++++ b/tools/perf/scripts/install-build-deps.sh
+@@ -146,6 +146,9 @@ fedora_pkg_for() {
+ 	zlib)
+ 		echo "zlib-devel"
+ 		;;
++	zlib-rs)
++		echo "rust-libz-rs-sys-devel"
++		;;
+ 	lzma)
+ 		echo "xz-devel"
+ 		;;
+@@ -305,6 +308,9 @@ debian_pkg_for() {
+ 	zlib)
+ 		echo "zlib1g-dev"
+ 		;;
++	zlib-rs)
++		echo "librust-libz-rs-sys-dev"
++		;;
+ 	lzma)
+ 		echo "liblzma-dev"
+ 		;;
+diff --git a/tools/perf/tests/make b/tools/perf/tests/make
+index 7524de522802..96567d9ea2a4 100644
+--- a/tools/perf/tests/make
++++ b/tools/perf/tests/make
+@@ -99,6 +99,8 @@ make_no_babeltrace2 := NO_BABELTRACE2=1
+ make_with_coresight := CORESIGHT=1
+ make_no_sdt	    := NO_SDT=1
+ make_no_libpfm4     := NO_LIBPFM4=1
++make_no_zlib        := NO_ZLIB=1
++make_no_zlib_rs     := NO_ZLIB_RS=1
+ make_with_gtk4      := GTK4=1
+ make_refcnt_check   := EXTRA_CFLAGS="-DREFCNT_CHECKING=1"
+ make_tags           := tags
+@@ -193,6 +195,8 @@ run += make_no_sdt
+ run += make_no_babeltrace2
+ run += make_with_coresight
+ run += make_no_libpfm4
++run += make_no_zlib
++run += make_no_zlib_rs
+ run += make_refcnt_check
+ run += make_help
+ run += make_doc
+@@ -302,6 +306,11 @@ test_make_install_pdf_O  := $(test_ok)
+ test_make_libbpf_dynamic :=   ldd $(PERF_O)/perf | grep -q libbpf
+ test_make_libbpf_dynamic_O := ldd $$TMP_O/perf | grep -q libbpf
+ 
++test_make_no_zlib             := test -x $(PERF_O)/perf && ! $(PERF_O)/perf check -q feature zlib && ! $(PERF_O)/perf check -q feature zlib-rs
++test_make_no_zlib_O           := test -x $$TMP_O/perf && ! $$TMP_O/perf check -q feature zlib && ! $$TMP_O/perf check -q feature zlib-rs
++test_make_no_zlib_rs          := test -x $(PERF_O)/perf && ! $(PERF_O)/perf check -q feature zlib-rs
++test_make_no_zlib_rs_O        := test -x $$TMP_O/perf && ! $$TMP_O/perf check -q feature zlib-rs
++
+ # Feature tests are allowed to fail, so a broken C++ compiler command line
+ # doesn't fail the build, it just quietly turns off everything that needs a
+ # C++ compiler. Check a feature that does, otherwise these tests would pass
+-- 
 2.56.0.313.g2479322e68-goog
 
