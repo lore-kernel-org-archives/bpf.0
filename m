@@ -1,78 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.126
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793269778;
-	b=JTPH0UlmS5yUFJ9E9RCtkjxfGd/OgERKlsV7nbKEYzM+AU4Go6JEiyDZve+12UGL1cWk
-	 BMjo4ke6nWyWVz9JsXtwRheIa/7BRpId0y/jMyfxNaE8tBiU+3Rqs+at0FRrkX03293XR
-	 JkeEphEAr7ieJyJ2Cczatp/qHBT80ExENpJOd8/GpeYOse44HYUKkWWdW6PsafgzwW+db
-	 3rxON53rNlE7s/XZWTiZCJ9pu4fnXcEaBJOysvFiNz/XzkM1+nalmD7aobkNEmx8o6TVR
-	 v7HT82MF5JsWasQZkef1zCZ69KppGJS77CDK6kHWHkAfO17cZO/TFQWY78nPUDyFHRg==
+	t=1793269841;
+	b=eurtDayRi7YMAVJvd2ERyR7IHx6b0vGmkesJ00wIQtqeAtJdn+JwvOQFRLKlJjiBvKtM
+	 +RVNWZpdpAa70j1aEwqf6eerK5HdHv/FPgOKxV5IAy2zx790gqf6/beZiZjGaORxTXatu
+	 ufdt29jHKKzDsIfD4ltoG7gA2SDSuSjUoDOp8dCsbWWTkm6JAU+Hzw3F0MugC0JdgnLZZ
+	 tHs6SoU/Jrp+QMBGm/00boTcHrDrVBVRpjA05MnTDOaV9rcyEV6/7ytlYRoNa9Y2EN2Dz
+	 4SxFcRk0mtZzKXFDV5HoTdN9/5/FufgsSnbTA5pEKX2ZVcoAewXDyLBJchy1hVW7a7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793269778;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=R/lMsusE19estJ9V38aj7rBdTRNza2SkNgqdcGvspKE=;
-	b=szqZbV2glKv61gDiAMsRub2Qd8AswsFy61aPLXsECBvP6BmAvANvdWZCnyPINnnIF8YZ
-	 V9zvDDPoFYByqR6bIz6Yllmgr3m1g7aQZPcXYjojGAqQT8zY8IHwpihY8ZbeHDLfD2LWg
-	 quTtC2XHKaaAf2qDWMEmtBFs27tdfho93mMgmRZ1efV9tV26386bXWdJqfuVMGvT6gIM/
-	 s4r7qpiLw/gpnF1QO+y9KtIJiu9b+h9m/DBXvsTCzNv/JY38xNhmPJi91eoMDPftw5L9c
-	 9Cz2LCYXiAf94qPMhoWVE4+catOHrokzagohla6W6rfdURVZ9C7Ueznk52zQN+IrR3w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793269841;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=giSLGDpNSYIJMqLP2qZuiYCwNonV14bhLRPCEf4xLns=;
+	b=3IOVjgaZN4VHgI8uRZwSuqVpt8loLHsc9mn5OxfwlyH10+7HSEl3IZnpnyh2fEkFib1X
+	 5DGAqxyAFf/+B892nxpQKHh3gc/aQ8Fwa+Xig5vRC+/aLWaRBl97PpNG783LZAtKxSmRQ
+	 M6k2zOCVhAxFoPx3rKgr2lW4h0AYupCR++yzKCldF951r92NWm/7vjE+ZcFDHZSFs8OGr
+	 NE/PZ5Av0grNkSHvJLPWbvDRFyY/WTCjGdsrYlIeT7D9pL1FYxWPAEcHvASc/dRqF2JdD
+	 4BdDAuGkZbSyLZOKTZzNdMjUfY7YiNL221r4caAsYYt41+IoWw2KkDw0TXrG04gno0g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=CEuiE4wh;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=jrgR7Mjy;
+	arc=none smtp.remote-ip=95.215.58.126
+Received: from mta1.migadu.com (out-126.mta1.migadu.com [95.215.58.126])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB7A7606A327;
-	Thu, 29 Oct 2026 10:29:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB7A7606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D18606A31A
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 10:30:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5D18606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=CEuiE4wh
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=R/lMsusE19estJ9V38aj7rBdTRNza2SkNgqdcGvspKE=; b=CEuiE4whPwRJOvlJT1/4ISkmaH
-	yFu7mttcfqMvdF39rwvFEeePWC1/MV/Hc5CAz37LE3dpCCJaw1km5sC7VvA17QDpN6gqlY7r9DS3a
-	h80CwUyehGohUljql3sUWCu0pVBe2E4cXnO4Vk20R9WTpOpQttX7EiAOIy4wTfjj50nS37nTGqq0l
-	ZZeWkC9h+3vigME7XBUZ+Dj6xkA+00c+ycavd3XEAk3+SIG6G3EeRVonj/tjxtt+ViI7NWf1hkbAs
-	D5ypbwrxxBPyVQVKyQNhM7GaUl9zI/u2k8hiYAA5hcBUM09GcowjtQZlrapvHz+30qs4n/gBrHQjs
-	dEUyweEQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xMNNz-0000000GsBu-3dyu;
-	Thu, 29 Oct 2026 10:29:32 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 80967300329; Thu, 29 Oct 2026 11:29:30 +0100 (CET)
-Date: Thu, 29 Oct 2026 11:29:30 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Dapeng Mi <dapeng1.mi@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Andi Kleen <ak@linux.intel.com>,
-	Eranian Stephane <eranian@google.com>,
-	Sandipan Das <sandipan.das@amd.com>,
-	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Ananth Narayan <ananth.narayan@amd.com>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	bpf@vger.kernel.org, Dapeng Mi <dapeng1.mi@intel.com>,
-	Zide Chen <zide.chen@intel.com>,
-	Falcon Thomas <thomas.falcon@intel.com>,
-	Xudong Hao <xudong.hao@intel.com>, Sashiko <sashiko-bot@kernel.org>
-Subject: Re: [Patch v5 09/18] perf/x86/intel: Keep LBR frozen throughout PMI
- handling
-Message-ID: <20261029102930.GK1779021@noisy.programming.kicks-ass.net>
-References: <20261029043914.1395147-1-dapeng1.mi@linux.intel.com>
- <20261029043914.1395147-10-dapeng1.mi@linux.intel.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=jrgR7Mjy
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=rBETPjh7f4oGgIsPGjEmPX6QCVG6xJt6OgxbpYhh3Wo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793269833; v=1; x=1793874633;
+ b=jrgR7MjyyAT5L7x2fUlit3g0DEpIOcb1qWLM8Aaw27Fl1queNchzcw+OFLJggkf14D/hMKOV
+ 5ecI1TbvpxUqkP6vhrpOUUu1AiGIQ342Fmh68dQWBqveFo00ejp743tj/alhBfzH5f9THzz6i8J
+ CNdecxdJCk0I1CRVpzT6ybpM=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 9e1c02ad49984eea;
+	Thu, 29 Oct 2026 10:30:30 +0000
+X-Mizu-Trace-ID: 9e1c02ad49984eea
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <049090ed-48f8-4360-91f2-381357a0d40f@linux.dev>
+Date: Thu, 29 Oct 2026 18:30:16 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -82,83 +58,120 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261029043914.1395147-10-dapeng1.mi@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
+ cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ linux-kselftest@vger.kernel.org, cuitao@kylinos.cn, ameryhung@gmail.com,
+ alexei.starovoitov@gmail.com
+Subject: Re: [PATCH 3/5] selftests/bpf: add iocost cost model test
+To: Tejun Heo <tj@kernel.org>
+References: <20261028143534.135968-1-cui.tao@linux.dev>
+ <20261028143534.135968-4-cui.tao@linux.dev>
+ <b69d96a507aec382c279d62cfb038fa9@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <b69d96a507aec382c279d62cfb038fa9@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 29, 2026 at 12:39:05PM +0800, Dapeng Mi wrote:
-> For the platforms which has 4+ PMU version, streamline LBR freeze is
-> supported. The PERF_GLOBAL_STATUS.LBR_FRZ bit is set to freeze LBR once
-> a PMU counter overflow. However, the current PMI handler clears the LBR
-> freeze bit too early, allowing branch operations that occur during PMI
-> handling to be recorded into the LBR stack.
+Hello Tejun,
+
+在 2026/10/29 04:09, Tejun Heo 写道:
+> Hello, Tao.
 > 
-> This can pollute or overwrite the intended branch snapshot, especially
-> when bpf_get_branch_snapshot() is invoked from bpf_overflow_handler().
-> In that case, branches recorded while processing the PMI are mixed into
-> the original LBR data.
+> On Wed, Oct 28, 2026 at 10:35:32PM +0800, Tao Cui wrote:
+>> +static bool iocost_bpf_supported(void)
+>> +{
+>> +	FILE *f;
+>> +	char line[128];
+>> +	bool any = false, on = false;
+>> ...
+>> +		if (strstr(line, "CONFIG_"))
+>> +			any = true;
+>> ...
+>> +	return on;
 > 
-> Defer unfreezing until after PMI handling completes so the LBR remains
-> frozen for the entire PMI path and no branch activity from the handler
-> is recorded.
+> any is set but never read, so every test skips without /proc/config.gz.
 > 
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/all/sashiko-outbox-179823@kernel.org/
-> Fixes: 425507fa5f32 ("perf/x86/intel/lbr: Optimize v4 LBR unfreezing")
-> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
-> ---
->  arch/x86/events/intel/core.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
+I'll make the probe return whether CONFIG_BLK_CGROUP_IOCOST_BPF=y was
+seen.
+
+>> +	/* isolate the configfs and cgroup mounts from the host */
+>> +	if (unshare(CLONE_NEWNS)) {
 > 
-> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> index 15dcf8b78de9..a67297148bb6 100644
-> --- a/arch/x86/events/intel/core.c
-> +++ b/arch/x86/events/intel/core.c
-> @@ -4062,7 +4062,13 @@ static int intel_pmu_handle_irq(struct pt_regs *regs)
->  	loops = 0;
->  again:
->  	intel_pmu_lbr_read();
-> -	intel_pmu_ack_status(status);
-> +
-> +	/*
-> +	 * Do not clear the LBR frozen status here; keep LBR frozen
-> +	 * throughout PMI handling.
-> +	 */
-> +	intel_pmu_ack_status(status & ~GLOBAL_STATUS_LBRS_FROZEN);
-> +
->  	if (++loops > 100) {
->  		static bool warned;
->  
-> @@ -4081,10 +4087,13 @@ static int intel_pmu_handle_irq(struct pt_regs *regs)
->  	 * Repeat if there is more work to be done:
->  	 */
->  	status = intel_pmu_get_status();
-> -	if (status)
-> +	if (status & ~GLOBAL_STATUS_LBRS_FROZEN)
->  		goto again;
->  
->  done:
-> +	if (status & GLOBAL_STATUS_LBRS_FROZEN)
-> +		intel_pmu_ack_status(status & GLOBAL_STATUS_LBRS_FROZEN);
-> +
->  	if (mid_ack)
->  		apic_write(APIC_LVTPC, APIC_DM_NMI);
->  	/* Only restore PMU state when it's active. See x86_pmu_disable(). */
+> unshare(CLONE_NEWNS) alone doesn't make the mounts private, so the
+> configfs mount propagates to the host, one more per test.
+> 
+I'll follow unshare() with mount(NULL, "/", NULL,
+MS_REC | MS_PRIVATE, NULL).
 
-Given the whole PMU is disabled per __intel_pmu_disable_all(), all that
-can really happen is for more bits to be set, right? I mean, any counter
-cleared on the first ack_status, will never be re-set, it already fired
-and its disabled. All that can happen is that the disable is 'delayed'
-and a counter can maybe fire a little bit after the disable; getting
-missed on the first go.
+>> +	ASSERT_OK(configfs_write("/sys/fs/cgroup/cgroup.subtree_control",
+>> +				 "+io"), "subtree_io");
+>> +	if (!ASSERT_OK(cgroup_mkdir("/sys/fs/cgroup/iocost_pairing"),
+> 
+> The "+io" write to the root cgroup's cgroup.subtree_control is never
+> reverted, the cgroups are created directly under /sys/fs/cgroup and
+> test_progs stays in the root cgroup. cgroup_helpers handles all of this.
+> 
+I'll restore the "+io" setting on exit and move the test process back
+to the root cgroup before removing the test cgroups. I'll also switch
+the test over to cgroup_helpers.
 
-Can we really get more than 1 extra loop there?
+>> +	err = iocost_model__attach(skel);
+>> +	if (err == -EOPNOTSUPP || err == -ENODEV) {
+>> ...
+>> +		test__skip();
+> 
+> -ENODEV and -EOPNOTSUPP from attaching to the test's own null_blk device
+> are failures, not skips. The same goes for
+> serial_test_iocost_model_streams().
+> 
+Both become ASSERT_OK failures.
+>> +		ASSERT_GT(skel->bss->iocg_inits, 0, "pair_init");
+> 
+> This passes on the root blkg alone, so it doesn't show that the test
+> cgroup got iocg_init(). The same goes for eject_had_inits and
+> pair_init_again.
+> 
+Gone with the callbacks.
+>> +		/*
+>> +		 * detach implicitly by closing the link fd instead of
+>> +		 * calling bpf_link__destroy() explicitly: the release
+>> +		 * path must detach the model just like the explicit
+>> +		 * call does
+>> +		 */
+>> +		lfd = bpf_link__fd(skel->links.iocost_2x);
+>> +		bpf_link__disconnect(skel->links.iocost_2x);
+>> +		close(lfd);
+>> +		skel->links.iocost_2x = NULL;
+> 
+> This leaks libbpf's link struct. The reason in the comment doesn't hold
+> either. bpf_link__destroy() on a struct_ops link does the same close().
+> 
+I'll use bpf_link__destroy() instead.
 
-I'm sure this code has changed lots since we added that loop thing
-there.
+>> +void serial_test_iocost_model_streams(void)
+>> ...
+>> +	if (ASSERT_OK(err, "attach")) {
+>> +		err = readback_model(dev, model, sizeof(model));
+>> +		if (ASSERT_OK(err, "readback"))
+>> +			ASSERT_STREQ(model, "bpf", "model_bpf");
+>> +
+>> +		bpf_link__destroy(skel->links.iocost_ms);
+> 
+> The test never enables the controller, so iocost_ms's calc_cost() never
+> runs. The multi-stream results in the cover letter aren't exercised by
+> the test.
+> 
+I'll enable the controller, move the test into a cgroup, drive IO
+through the device, and assert that the model is exercised.
 
-Anyway, if we can never get more than 1 extra loop, we can probably move
-the ack to the end, without having to do a second.
+Thanks,
+Tao
 
-I suppose this isn't something you have to do now, but keep it on the
-todo list or something?
+> Thanks.
+> 
+> --
+> tejun
+
