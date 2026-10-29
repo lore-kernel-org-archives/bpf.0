@@ -1,49 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793292079;
-	b=z35TORQvs+BOqrCT4gv+fSsmDPoQAdFepSH8Ytbk7PkgSoKG6Vl5FyKMWI6B/TeVZtbQ
-	 bPklpIdx/yQYgkaCnbJ8SVWvEFPpTH9NuGx4l2WVB541QJEsrLPMUyfDtQOq52r5tudHT
-	 oWnsF3BBeSl8UPaxtLwrs1zdeXQZpP1Xx5tupmx4noUfC+BQTwUo28eUkfo9c0g315wLO
-	 1etQSHQBlSGVxERo5mhpQnnNYmk7k9n7uMPnWQtzuK3Xfna8mdCHsUkOy3maaZjZfmk6w
-	 grkB1AWfjzLwEvUOpHwUxQ5G9lZ5vRI3ah4qXfl0VCMSfaS+mSG0RNX+POgnu03sLZg==
+	t=1793292072;
+	b=Q6MSX8dXJEtHi1Rh5hB52Bmy/lFpl4K9BwwY5Aeqs/U21i4sdtv1xZO7oLnefAz29mFa
+	 9oBZk8juBGoAcHge4vRnHEGAw2e+/A5svvOHBpVk9+/hCjZShnrscLstYPYdS8zIU4zx/
+	 yC48rq8q6BQy51tVRc9JguVo+KDAc2YZRaya+bsKSSxe+ec6ho0NDhH5UiQAy1TmKZFi1
+	 pKDCQDPts8i5hmOhgb7lVZWktmXxX2SBMMQYEksFOlTfeoQ08tcmyiGjVVlrDbu6hV3nr
+	 12hC7NTvQYxtPF/eJsDAH6WYFB4qCOeuX5NnNlFqaTOOXPueJfmGSfUcnIOeh5hAbVA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793292079;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793292072;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=kIACSg1GN4/Z1pmDBSV+ZT7hHzXLk1muYGH0ic4mbA0=;
-	b=AChYUGhM2ZHlMH9DhtymoJ3T7c/5qlaE3jB5PIfdY6WhOjFEbhswG+DdYpZSAeIcCI+b
-	 rixF7FfgfIiCMmf3oj0IW4WFgfrHSSLKgRK9C9Z091kFEdg24FGnHdLw7Bcd/maJ8PQTk
-	 DKzcPVmQhxVus31g/sQpkwdMmnBq51RrMRJyN7UAeTWXY+A7d5dZTO+0G/aNF7OiZdk+E
-	 SdWg7Q+CuI/i/8YcHlySJz4xsu9sejU+QxoNnlZDFqImQPo49cNFbyHbtUzSD5taLi4Fg
-	 TvnVzC9YEGT7WxhAMmRmSr0An28FRkWaZk9CdCkXMbNsYdTrAos+2PjVnp/wbNQzhvQ==
+	bh=vZbI+36cuLWKSblKMENitfEJ+yoA6aEpBQf4/oO9DlE=;
+	b=LtET9yDhOHr0PMYPGQMkHhw2l2a/D8NNfd+KCgYH0mhUgtJhEfClJm2OIrGi3RRsgdOT
+	 J+8n+xqBaBLcAwLoGBY6kqAg8Ok/RK4kPvFe6sjstq4m2d3YzYMtgkihAZ6PGMePk/Huc
+	 5N6uQYEei6Uo7pL0P0JSFnPWX6bn4u7MQ1NaqsgnhHiEYODY1NNyvDKebygHLxHkwCaEo
+	 6mroc6zkYEF3+TNGHLzwQ0oXbN+mltpzWJPdyM0i6QhmJy0wey+jPJnGhtMHEl8Xg1UN7
+	 ZJ5TSheaCAya4T5QmgWF2bjp+cONd4W1z/uYVWk8mUL9+dTmlq2HqNuOp4mP6MJ7Ywg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AIv5CIvy;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cCFxxLBM;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC663606A32A;
-	Thu, 29 Oct 2026 16:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996B1606A31A;
+	Thu, 29 Oct 2026 16:41:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AIv5CIvy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3DB01F01824;
-	Thu, 29 Oct 2026 16:41:15 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cCFxxLBM
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8672E1F01824;
+	Thu, 29 Oct 2026 16:41:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793292078;
-	bh=kIACSg1GN4/Z1pmDBSV+ZT7hHzXLk1muYGH0ic4mbA0=;
+	s=k20260515; t=1793292072;
+	bh=vZbI+36cuLWKSblKMENitfEJ+yoA6aEpBQf4/oO9DlE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=AIv5CIvyvNfsrxKRklpWYRMnTPnlYr6KJLKVGVWmlBg8XQrT3I+s1xn7dSZq6TkIb
-	 y2jGaOZHkddAxee1QExDx3zc356q27iDokQThCAP2TflaV3wf+yClRNLM+eepLkRUS
-	 BjMpq4a2Hq78GbRS+LgcWGYR0blzE1rNmklJC04fI0f3sTVpt5/adMAoh9w/omXfbB
-	 3+qSIMSkRY+o3uToowP4jDDrNlydAU9zQ9f0djSOlnvV4JC7rVo+dM7Hch+Go2Ml6N
-	 3sJagZGrl464IOHBaejtfUMoJhOSp0dQc7pZfN+anQmMnsyrLJ8hXljubl3a923SQQ
-	 klC36KoQDzfig==
+	b=cCFxxLBMp97ap//WtLS7w322xpRZpmLs68Q4jIBgA/FMQa/L4OcXOSJa/qMlYkQDd
+	 hbpbmqBQesfMi83aEbhOe9t0rNHSHIoWg8lH1bog9wq5Ftm0lpTlkADBu5zCrFCkMH
+	 Bxnk3cX8TQap035qjDI9iX7pOBdWyN8ki8e1UMce0OpUbKVEIlpzzDceZrwOScoJdZ
+	 Wjak97x8JGbcwVv7AyLpxv76z4rtU3uDbLI6BIkCtwthBAwsC3CVtC8yHqiIH/ImJr
+	 Yyfc5vN7Ga9y2uFjSBTk9jkR2yZTqkUEiECTmqHIvChMuryPM4bBGu/YH4ucHLZdql
+	 NInjk1oYdSO0g==
 From: Christian Brauner <brauner@kernel.org>
-Date: Thu, 29 Oct 2026 17:40:58 +0100
-Subject: [PATCH v2 3/7] selftests/bpf: add verifier tests for the namespace
- LSM hooks
+Date: Thu, 29 Oct 2026 17:40:56 +0100
+Subject: [PATCH v2 1/7] lsm: always call the namespace_free hook
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -55,7 +54,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261029-work-security-namespace_free-v2-3-65591dbba7b3@kernel.org>
+Message-Id: <20261029-work-security-namespace_free-v2-1-65591dbba7b3@kernel.org>
 References: <20261029-work-security-namespace_free-v2-0-65591dbba7b3@kernel.org>
 In-Reply-To: <20261029-work-security-namespace_free-v2-0-65591dbba7b3@kernel.org>
 To: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
@@ -65,136 +64,72 @@ Cc: linux-security-module@vger.kernel.org,
  =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
  =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, netdev@vger.kernel.org, 
  Linus Torvalds <torvalds@linux-foundation.org>, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>
+ "Christian Brauner (Amutable)" <brauner@kernel.org>, stable@kernel.org
 X-Mailer: b4 0.17-dev-ce4c1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5058; i=brauner@kernel.org;
- h=from:subject:message-id; bh=D7Bu3xuEXKU6T6CnrKC+mtAnsa77aiI5K6zZtrV1+0E=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQ9LpfPdJ1RUB0uupeFVyBG1TZp6/ddd3fvqHuhLVdy3
- 8JD5s/6jlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgInMW8Hwz4w3qG/G2bk2zy64
- Vc+Ov/vMvrurmsHc6PiVGYpFPvxqdgz/7Mv/rAtTenpqU0zuzbDmtGDxE2f321zy6phpsDf3WPU
- XRgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2360; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=C2BO3VYPrmNUuuCqz/uwcSrR57rLhf95j9OE/k19Z48=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQ9Lpdft1C7ZEXXia0LJ08oeMv/l0UxtPXpLN1ApvBtS
+ s9ZnzAkd5SyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEykSZzhnzWHtcub++/CXX8q
+ T2uauW9XfMhMpcCvdo0vK6yWaIRoBTP8j1b8c+nipab6Fbnn2TVXqDQ4/J/7QqHg77cs5u85Kpr
+ +XAA=
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Add a test kfunc that takes a trusted struct ns_common and check that:
+security_namespace_free() returns early if ns->ns_security is NULL and
+skips the namespace_free hook. But ns->ns_security is only allocated if
+an LSM requests a namespace blob via lbs_ns and currently no LSM does.
+So the namespace_free hook is never called at all.
 
-- namespace_init and namespace_free arguments can't be passed to it
+Landlock only uses namespace_init and namespace_install so it doesn't
+care. But the bpf LSM attaches to every hook and a program attached to
+namespace_free never runs. We want to use it in systemd-nsresourced to
+get notified when a user namespace goes away. Right now it has to kprobe
+retire_userns_sysctls() for that.
 
-- namespace_install arguments can
+Note that a bpf program can't work around this. The size of the
+namespace blob is fixed at boot and the bpf LSM doesn't request one.
+And security_namespace_init() allocates the blob before the
+namespace_init hooks are called anyway.
 
-The test fails if namespace_init and namespace_free are treated as
-trusted.
+The check isn't needed. __ns_common_free() is only ever called after
+__ns_common_init() succeeded and security_namespace_init() only calls
+security_namespace_free() after the blob has been allocated. So if an
+LSM requests a namespace blob it is always there when the hook runs.
+Call the hook unconditionally like security_sb_free(),
+security_file_free() and security_bpf_map_free() do.
 
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Tested-by: Daniel Borkmann <daniel@iogearbox.net>
+The bpf LSM attaches programs to its bpf_lsm_*() stubs so fentry on the
+stubs shows what a bpf LSM program sees. Booted with lsm.debug, which
+prints "LSM: blob(ns) size 0", and created 100 user and uts namespaces:
+
+  bpftrace -e 'fentry:bpf_lsm_namespace_init { @init = count(); }
+               fentry:bpf_lsm_namespace_free { @free = count(); }' &
+  for i in $(seq 100); do unshare -Uu true; done
+
+  before: @init: 200 @free: 0
+  after:  @init: 200 @free: 200
+
+Fixes: f675d2e95569 ("lsm: add LSM blob and hooks for namespaces")
+Cc: <stable@kernel.org> # mainline only
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/verifier.c  |  2 ++
- .../selftests/bpf/progs/verifier_lsm_namespace.c   | 38 ++++++++++++++++++++++
- .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  5 +++
- .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h   |  1 +
- 4 files changed, 46 insertions(+)
+ security/security.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 04740ba37e91..3963a4f71d98 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -147,6 +147,7 @@
- #include "verifier_set_retval.skel.h"
- #include "verifier_lsm.skel.h"
- #include "verifier_lsm_init_xattr.skel.h"
-+#include "verifier_lsm_namespace.skel.h"
- #include "verifier_jit_inline.skel.h"
- #include "irq.skel.h"
- #include "verifier_ctx_ptr_param.skel.h"
-@@ -337,6 +338,7 @@ void test_verifier_bits_iter(void) { RUN(verifier_bits_iter); }
- void test_verifier_set_retval(void)            { RUN(verifier_set_retval); }
- void test_verifier_lsm(void)                  { RUN(verifier_lsm); }
- void test_verifier_lsm_init_xattr(void)       { RUN(verifier_lsm_init_xattr); }
-+void test_verifier_lsm_namespace(void)        { RUN_TESTS(verifier_lsm_namespace); }
- void test_irq(void)			      { RUN(irq); }
- void test_verifier_mtu(void)		      { RUN(verifier_mtu); }
- void test_verifier_jit_inline(void)               { RUN(verifier_jit_inline); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_lsm_namespace.c b/tools/testing/selftests/bpf/progs/verifier_lsm_namespace.c
-new file mode 100644
-index 000000000000..d14fa2363dcc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_lsm_namespace.c
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#include "bpf_misc.h"
-+#include "../test_kmods/bpf_testmod_kfunc.h"
-+
-+/* The namespace hasn't been set up yet. */
-+SEC("lsm/namespace_init")
-+__failure __msg("R1 must be referenced or trusted")
-+int BPF_PROG(namespace_init_untrusted, struct ns_common *ns)
-+{
-+	bpf_kfunc_trusted_ns_test(ns);
-+	return 0;
-+}
-+
-+/* The namespace is being torn down. */
-+SEC("lsm/namespace_free")
-+__failure __msg("R1 must be referenced or trusted")
-+int BPF_PROG(namespace_free_untrusted, struct ns_common *ns)
-+{
-+	bpf_kfunc_trusted_ns_test(ns);
-+	return 0;
-+}
-+
-+/* setns() holds a reference to a fully set up namespace. */
-+SEC("lsm/namespace_install")
-+__success
-+int BPF_PROG(namespace_install_trusted, const struct nsset *nsset,
-+	     struct ns_common *ns)
-+{
-+	bpf_kfunc_trusted_ns_test(ns);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 6380f52f4dd2..8d6bd2237f34 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -350,6 +350,10 @@ __bpf_kfunc void bpf_kfunc_trusted_task_test(struct task_struct *ptr)
+diff --git a/security/security.c b/security/security.c
+index f6583d507395..1e76c097b28d 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -3412,9 +3412,6 @@ int security_namespace_init(struct ns_common *ns)
+  */
+ void security_namespace_free(struct ns_common *ns)
  {
- }
+-	if (!ns->ns_security)
+-		return;
+-
+ 	call_void_hook(namespace_free, ns);
  
-+__bpf_kfunc void bpf_kfunc_trusted_ns_test(struct ns_common *ptr)
-+{
-+}
-+
- __bpf_kfunc struct task_struct *bpf_kfunc_trusted_null_test(void)
- {
- 	return NULL;
-@@ -1030,6 +1034,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_zero_offset_test, KF_ACQUIRE)
- BTF_ID_FLAGS(func, bpf_kfunc_nested_release_test, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_kfunc_trusted_vma_test)
- BTF_ID_FLAGS(func, bpf_kfunc_trusted_task_test)
-+BTF_ID_FLAGS(func, bpf_kfunc_trusted_ns_test)
- BTF_ID_FLAGS(func, bpf_kfunc_trusted_null_test, KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_kfunc_trusted_nullable_test)
- BTF_ID_FLAGS(func, bpf_kfunc_trusted_num_test)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index 3b810f1e438f..bc32c4078d27 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -355,6 +355,7 @@ int bpf_kfunc_st_ops_inc10(struct st_ops_args *args) __ksym;
- 
- void bpf_kfunc_trusted_vma_test(struct vm_area_struct *ptr) __ksym;
- void bpf_kfunc_trusted_task_test(struct task_struct *ptr) __ksym;
-+void bpf_kfunc_trusted_ns_test(struct ns_common *ptr) __ksym;
- struct task_struct *bpf_kfunc_trusted_null_test(void) __ksym;
- void bpf_kfunc_trusted_nullable_test(struct task_struct *ptr__nullable) __ksym;
- void bpf_kfunc_trusted_num_test(int *ptr) __ksym;
+ 	kfree(ns->ns_security);
 
 -- 
 2.53.0
