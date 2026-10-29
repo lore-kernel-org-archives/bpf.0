@@ -1,49 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793291409;
-	b=Vy3TAmseMnY3GhUkcDgXqUsIBMjoepTvRnsJM+5Aer1jtZIdKxVD3MxGbWv1JJ2Lv31O
-	 7XXNFHlAzv5ogJbL3LhKWdpMezfMn8Idq2oyl4aGo5gLBAhEa55ABFQUEmB3ksYzM/+ei
-	 O7hwmW4njCvN8ul7/tgSIjaCip3RphQJjxjaW2cSyjPvvoPRZIr7zFBUMoUuoDTQw2h1J
-	 hLiPvPws5HcFFIahj+ZJtT8POElLMvmgtbLjbNj7XiYmGE8iNuRwznMZTeyZXXNvdxduB
-	 jYRK6A6FR39HywdIGcJrdIWrB8aszIepQAa/pCqH2WxZJMvN+3UT6CJ2GdEWkt/Ghmg==
+	t=1793291418;
+	b=twrZCjD/cNI6eoLJqPHWJsRqt+CPFGKRENM7ZTiiApb/RxivOa8l5u+h5t8COGVge9GE
+	 noO8xgQimYyY8MbC+tQI1e8QeaOzXBl6JYSZtpRfBmDVmTgvMaUfK8gHqv1BBWfWub04g
+	 zcCMioOJUU1hPm63EyZy9vjApDZpVJGWjommu2RFmwQolquHc75+R1BVmlQ1vDA9ynbKq
+	 7OxBBr3c0gosYOxzsrEGYV8aXqQci417DJdEHqxcSgQ9+LzrQY/7SySQBgtDTFnWcruBR
+	 23Q6oPW2Ewo4f9vioSsU75LjpI81Ah75v3JhjQj1yw/15X7UN4+xnhRSh80qrGfF8Uw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793291409;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=9sdoxOsij3ml0E4hBz0Uk1W+O3KE/Jevu63peRDA6+g=;
-	b=nibnCAR6UztfyS6rKyDcyVp89ARhbh3Ig9XmAycy79mk0X4WTEptqCDpdXCzBkN0K94h
-	 EJaSimUo1OjZKqPBDE5HGtHGLnzWBg5M1OgZNHq3h4+jUSlSwCeWqAdF29dfLeMOjs67j
-	 P93HQzlEBZFbP/ajVQcnzkZBLEdLOLRfPS+rgjs7Aku+NoDTYfuC+1s+eVD9mjLF7gyEd
-	 3sBBKXyonVDZ5wG1UWReaFGK9Nd/1aypv97Fa7J9rAGjJ2+Jlrg/4e+lGoamGxBZPEHXb
-	 eVftrbIq2nDPhW+if/cQp7MbRz32uwWGXTJLDGjMEohYHAKV1IXQuovOMRu72NUOU4A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793291418;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=RTCYXgZDAP7kL0c73EPxbRM/Qq3+2h7CL6Elx37qtM4=;
+	b=ZNnQHYmVLOJpAGObTeEjvgmgZxQYttRI1ET1OPcsWbSCQcx46puc5wRyJG3actmyiKAi
+	 rG9hmVMSqFT3mgVvNuWsj/u+WikwxliitOveqrnUP4uiArP43p7VYn4KvTCwQyiOh5CxA
+	 7bQMk7stKT/jZ8K8B9d4shuyDebUURvT4RphqSq8f8Rn5wyhXcdJTd3K0azvGV8RlTWFl
+	 zbkSMPd5nSyAsCaN/RL4CCGpdusWy04/GgZ4hy/GFB5a8YtKiDnxwIt79AlgUEH99rUcV
+	 9sbcrguKnKhzryyscF2xkFxZiE2IAKEdYcJS/uwEbLiKozsa/3qDKeNXgmgUF18N4hg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LuYpXVpz;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Cz3zvFoG;
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D3F606A320;
-	Thu, 29 Oct 2026 16:30:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D734760A381D
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 16:30:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D734760A381D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LuYpXVpz
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63D21F01816;
-	Thu, 29 Oct 2026 16:30:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793291407;
-	bh=9sdoxOsij3ml0E4hBz0Uk1W+O3KE/Jevu63peRDA6+g=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=LuYpXVpzcgZf5I4egFlI4i+W1uV5kDaqKb6zxyn667htazDz/UY5voP6+zzEpXm80
-	 ioWwC0HW+4d/gANJuXS4MTqacHCbrVpK4gMBKRJdj+XgtgjC+Mx/+CO5DeCaVYL/J1
-	 Cf4iWG8Fd0kJDrHQrsfQ17eNGej57KeXNRkpKsVYksC98LjBXhLPUIPSqFEbcPjwp1
-	 SQPUBku2b8m6YljgP62sQ7XYU2ijiMmgXifT2DwJbYSusl6tjT35PPSv9RnOr+81tJ
-	 lxRDpXr7kcht53KRFVmgOLFvu3AwOqQHK9LfqfzdQW1d5kRmrEZ7lMXfXK8fY0PeUy
-	 GLpEJSB1STrjQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA3963808223;
-	Thu, 29 Oct 2026 16:30:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Cz3zvFoG
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-33713e5e6daso2584035eec.0
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 09:30:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793291416; x=1793896216; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RTCYXgZDAP7kL0c73EPxbRM/Qq3+2h7CL6Elx37qtM4=;
+        b=Cz3zvFoGVxx+n4/1NGNRzbUOxTZxjZnueWzXnAt7fVTlP/+2Vyw+iRO5at6NM2LS4Z
+         hpK36ZWQ5MEZPXaBNnRNZTuETMeQgL5BSdRv/b06Os2eNr29CWiUV3UZkOBxQc14vTt1
+         9bYUgxKysN7hDzUb6U27ZKX5wdtk/wK3TO0Apv8WHYxnVYu4I/emkA7S7X0l50VOxtbe
+         PhNeUfIBDf/0fRMY5Ogqy3O5pG4kl1YsVnnF1AcmsWflJ5oYOYSHY3BadTTgl59yUcPv
+         Bx40bF5FE/TRE08DMXq6xjOAdKmJRLO1vww+6WohrtcHR2/ZelJT+VIrX9p/eDhqe46b
+         pqHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793291416; x=1793896216;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=RTCYXgZDAP7kL0c73EPxbRM/Qq3+2h7CL6Elx37qtM4=;
+        b=bLjQkCsdua4biook2iAOqlyCxtFGGlqF43NOyTjQ8Vfvv5Irq7Jubls/oUuQkgetYs
+         wyq2lgN8ffj2Cyp/sBjDsJh1d2GuR1HGw1Nth9rkOemyrxzMIaeN6sO0mmjA3x1rzA/0
+         b3M0XMyz0MMuZSEXVMELFPoODtgF+lqEsRUVjAGBrpN24JEwWYOOcQXRo/Wa0rggA8oH
+         daUMKsZ17UuRnhv+mTPF4ngTIP0OIyKEa/ztqf7ZPmQDAvqVYEzUjbwRhNpyPI+Vw17f
+         rSeg5BwFExDdF3Ml1Zfj4TXF/0y6RODlk+sUA9WHPJgQVsKZAcQMFytafWdofusosFgc
+         MnKw==
+X-Forwarded-Encrypted: i=1; AKwUvBxXipRgB829qyT54UFbKx/XtJczHw1zbM1Ht+liJdNqRjJRzBzUneE+LhtwQOzSKdoQGbE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJYw7d7F5tvkAsbO9I7+5r9bG6o9E+b/oJVUMlTNfWo7qdECObH
+	44V9h9VLvjPpoi3m2d/o2TRVDM/PzeSspXm3GWlG2xJ0/n+VJLKqkdfkegaQx6iljfB84wa4m8X
+	WSSZK0cTlSA==
+X-Received: from dldyr26-n2.prod.google.com ([2002:a05:701b:451a:20b0:195:cde8:ab41])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:ed0a:b0:168:3243:c907
+ with SMTP id a92af1059eb24-1a6ced8f68emr7862817c88.24.1793291415705; Thu, 29
+ Oct 2026 09:30:15 -0700 (PDT)
+Date: Thu, 29 Oct 2026 09:29:58 -0700
+In-Reply-To: <20261029162958.3224280-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -52,64 +78,166 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v5 0/6] bpf: Add syscall common attrs support for
- xdp
- link_create
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179329140655.559085.2587539582409074788.git-patchwork-notify@kernel.org>
-Date: Thu, 29 Oct 2026 16:30:06 +0000
-References: <20261026154948.99408-1-leon.hwang@linux.dev>
-In-Reply-To: <20261026154948.99408-1-leon.hwang@linux.dev>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, rostedt@goodmis.org, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, shuah@kernel.org, kuniyu@google.com,
- liuhangbin@gmail.com, mkarsten@uwaterloo.ca, masashi.honma@gmail.com,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+References: <20261029162958.3224280-1-irogers@google.com>
+X-Mailer: git-send-email 2.56.0.317.g454f8302e1-goog
+Message-ID: <20261029162958.3224280-4-irogers@google.com>
+Subject: [RFC PATCH v1 3/3] bpftool: Prefer zlib-rs over zlib when available
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Quentin Monnet <qmo@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+Add zlib-rs and zlib to FEATURE_TESTS and FEATURE_DISPLAY in
+tools/bpf/bpftool/Makefile and use feature_rust_lib to configure
+ZLIB_CFLAGS and ZLIB_LIBS when zlib-rs is detected, falling back to -lz.
 
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/bpf/bpftool/.gitignore |  1 +
+ tools/bpf/bpftool/Makefile   | 56 ++++++++++++++++++++++++++++++++----
+ 2 files changed, 51 insertions(+), 6 deletions(-)
 
-On Mon, 26 Oct 2026 23:49:41 +0800 you wrote:
-> I'm planning to add syscall common attrs support for LINK_CREATE cmd.
-> 
-> This is the first series for the plan, that adds syscall common attrs
-> support for xdp LINK_CREATE.
-> 
-> Thereafter, retire the tracepoint bpf_xdp_link_attach_failed, because
-> the underlying driver's error can be back-propagated to user space via
-> the syscall common attrs.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v5,1/6] bpf: Add syscall common attrs support for link_create
-    https://git.kernel.org/bpf/bpf-next/c/b891bce3fe4d
-  - [bpf-next,v5,2/6] bpf: Add syscall common attrs support for xdp link_create
-    https://git.kernel.org/bpf/bpf-next/c/cbb143cc97b6
-  - [bpf-next,v5,3/6] bpf: Retire tracepoint bpf_xdp_link_attach_failed
-    https://git.kernel.org/bpf/bpf-next/c/d33d3ec8f730
-  - [bpf-next,v5,4/6] libbpf: Factor out __sys_bpf_fd helper
-    https://git.kernel.org/bpf/bpf-next/c/d6ef68efcece
-  - [bpf-next,v5,5/6] libbpf: Add log_opts support for bpf_link_create
-    https://git.kernel.org/bpf/bpf-next/c/0be729f9f030
-  - [bpf-next,v5,6/6] selftests/bpf: Add tests to verify link_create logs
-    https://git.kernel.org/bpf/bpf-next/c/a1a714b7e947
-
-You are awesome, thank you!
+diff --git a/tools/bpf/bpftool/.gitignore b/tools/bpf/bpftool/.gitignore
+index a736f64dc5dc..ea2222373634 100644
+--- a/tools/bpf/bpftool/.gitignore
++++ b/tools/bpf/bpftool/.gitignore
+@@ -6,5 +6,6 @@ bpftool*.8
+ FEATURE-DUMP.bpftool
+ feature
+ libbpf
++libz_rs
+ /*.skel.h
+ /vmlinux.h
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index b0f7168e7943..a193cf89a034 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ include ../../scripts/Makefile.include
++include ../../scripts/Makefile.arch
+ 
+ ifeq ($(srctree),)
+ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+@@ -16,6 +17,8 @@ else
+ endif
+ BOOTSTRAP_OUTPUT := $(_OUTPUT)bootstrap/
+ 
++LIBZ_RS_OUTPUT := $(_OUTPUT)libz_rs/
++
+ LIBBPF_OUTPUT := $(_OUTPUT)libbpf/
+ LIBBPF_DESTDIR := $(LIBBPF_OUTPUT)
+ LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)include
+@@ -38,7 +41,9 @@ $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT) $(LIBBPF_BOOTSTRAP_OUTPUT) $(LIBBPF_HDRS_DI
+ 
+ $(LIBBPF): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_OUTPUT)
+ 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_OUTPUT) \
+-		DESTDIR=$(LIBBPF_DESTDIR:/=) prefix= $(LIBBPF) install_headers
++		DESTDIR=$(LIBBPF_DESTDIR:/=) prefix= \
++		$(if $(ZLIB_CFLAGS),EXTRA_CFLAGS="$(or $(EXTRA_CFLAGS),-g -O2) $(ZLIB_CFLAGS)") \
++		$(LIBBPF) install_headers
+ 
+ $(LIBBPF_INTERNAL_HDRS): $(LIBBPF_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_HDRS_DIR)
+ 	$(call QUIET_INSTALL, $@)
+@@ -115,8 +120,20 @@ ifneq ($(SKIP_CRYPTO),1)
+   CRYPTO_LIBS := -lcrypto
+ endif
+ 
++ifneq ($(CROSS_COMPILE),)
++  ifneq ($(MAKECMDGOALS),bootstrap)
++    ifneq ($(RUST_TARGET_FLAGS_$(ARCH)),)
++      RUST_FLAGS += --target=$(RUST_TARGET_FLAGS_$(ARCH))
++    else
++      NO_ZLIB_RS := 1
++    endif
++  else
++    NO_ZLIB_RS := 1
++  endif
++endif
++
+ ifeq ($(MAKECMDGOALS),bootstrap)
+-FEATURE_TESTS := libelf-zstd
++FEATURE_TESTS := libelf-zstd $(if $(NO_ZLIB_RS),,zlib-rs) zlib
+ FEATURE_DISPLAY :=
+ else
+ FEATURE_TESTS := clang-bpf-co-re
+@@ -128,6 +145,10 @@ FEATURE_TESTS += libbfd-liberty-z
+ FEATURE_TESTS += disassembler-four-args
+ FEATURE_TESTS += disassembler-init-styled
+ FEATURE_TESTS += libelf-zstd
++ifeq ($(NO_ZLIB_RS),)
++FEATURE_TESTS += zlib-rs
++endif
++FEATURE_TESTS += zlib
+ 
+ FEATURE_DISPLAY := clang-bpf-co-re
+ FEATURE_DISPLAY += llvm
+@@ -135,6 +156,10 @@ FEATURE_DISPLAY += libcap
+ FEATURE_DISPLAY += libbfd
+ FEATURE_DISPLAY += libbfd-liberty
+ FEATURE_DISPLAY += libbfd-liberty-z
++ifeq ($(NO_ZLIB_RS),)
++FEATURE_DISPLAY += zlib-rs
++endif
++FEATURE_DISPLAY += zlib
+ endif
+ 
+ check_feat := 1
+@@ -153,8 +178,27 @@ include $(FEATURES_DUMP)
+ endif
+ endif
+ 
+-LIBS = $(LIBBPF) -lelf $(CRYPTO_LIBS) -lz
+-LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf $(CRYPTO_LIBS) -lz
++# Prefer zlib-rs over C zlib when detected. When cross-compiling, the host
++# bootstrap bpftool still links against the host's -lz.
++ifeq ($(feature-zlib-rs),1)
++  $(call feature_rust_lib,zlib-rs)
++  ZLIB_CFLAGS := $(FEATURE_CFLAGS-zlib-rs)
++  ZLIB_LIBS := $(FEATURE_LIBS-zlib-rs)
++  CFLAGS += $(ZLIB_CFLAGS)
++  ifeq ($(CROSS_COMPILE),)
++    HOST_CFLAGS += $(ZLIB_CFLAGS)
++    LIBBPF_BOOTSTRAP_CFLAGS += $(ZLIB_CFLAGS)
++    ZLIB_BOOTSTRAP_LIBS := $(ZLIB_LIBS)
++  else
++    ZLIB_BOOTSTRAP_LIBS := -lz
++  endif
++else
++  ZLIB_LIBS := -lz
++  ZLIB_BOOTSTRAP_LIBS := -lz
++endif
++
++LIBS = $(LIBBPF) -lelf $(CRYPTO_LIBS) $(ZLIB_LIBS)
++LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf $(CRYPTO_LIBS) $(ZLIB_BOOTSTRAP_LIBS)
+ 
+ ifeq ($(feature-libelf-zstd),1)
+ LIBS += -lzstd
+@@ -200,7 +244,7 @@ else
+   else ifeq ($(feature-libbfd-liberty),1)
+     LIBS += -lbfd -ldl -lopcodes -liberty
+   else ifeq ($(feature-libbfd-liberty-z),1)
+-    LIBS += -lbfd -ldl -lopcodes -liberty -lz
++    LIBS += -lbfd -ldl -lopcodes -liberty $(ZLIB_LIBS)
+   endif
+ 
+   # If one of the above feature combinations is set, we support libbfd
+@@ -304,7 +348,7 @@ clean: $(LIBBPF)-clean $(LIBBPF_BOOTSTRAP)-clean feature-detect-clean
+ 	$(call QUIET_CLEAN, bpftool)
+ 	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)*.o $(OUTPUT)*.d
+ 	$(Q)$(RM) -- $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
+-	$(Q)$(RM) -r -- $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT)
++	$(Q)$(RM) -r -- $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT) $(LIBZ_RS_OUTPUT)
+ 	$(call QUIET_CLEAN, core-gen)
+ 	$(Q)$(RM) -- $(OUTPUT)FEATURE-DUMP.bpftool
+ 	$(Q)$(RM) -r -- $(OUTPUT)feature/
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.56.0.313.g2479322e68-goog
 
