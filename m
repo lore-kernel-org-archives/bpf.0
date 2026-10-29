@@ -1,120 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.129.124
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793255317;
-	b=ChdcYbLTU9QLsLZOrB/s6cJ7EH61f4DB1d90GnPqKZl93tucQki5Q/WlTtZLVbtPcfPI
-	 v95g+v5mA98nECmjB1u0KeNZuDU55NotHBryhXLUD6beQ5oWB8AcwZSXhFfuuIxfCJWUq
-	 mJONiUpn1Pe14iSDAxICvDaE6awstOK4Cn5ZYmBeBomPcX11bw9wfeF3fNzPtEmVUN+xi
-	 3y4aeotYSXk098uRSAmha3KVcL7OKADnz5nwsevIyHBuY1jWXzM8vHLPD3TSo4XcQmFq3
-	 8NX8m0l2TpiK+Dx8HfqDFV+oJEQWLwXqsCZ61nBWskECDy0wLD18sWplomCZPQ0k9XQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793255317;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=1iJxU2srr5LwVZydpcZZOyNys/GEnKfXjQqJD4/acz4=;
-	b=O3Nf1aZ+BKoct6dV5MYqJCF58wNJah4dWhVin9nFpuJ2uZn71dRzuMcKoCst7AuNmoW8
-	 mWj1oC0M1B6EdNiXMzQfjW6/Hw2x/jjY/C9zdAUa0Lpc2uICenGnP2Sb/l7A9tbiE3WBC
-	 uja0lGBeYAmI/PMSDW/EsRSH3GNthrFFEeRc2whrXf9C/ywisWuhRgweaFLbXkVBZUpr7
-	 eUgGIKE7su6Fqti7ec8zfHCkQ2ZiGHgjJcXigSzZKJncktZs9iXp0rtAIn+4Ieyp6Wety
-	 Dy7qjOLsSLBRmP/RBoT1lbZdyxTh8di86JzCFl4GAYtspMy8B9TlQMwbmZNK9dzWkOA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=dXGQZ8gE;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=XExwyMTA;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.242
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793255763;
+	b=nwqx+vwMh1/GIo7YCBaM2rvaFRBwb/eMLzVZKW9urI0gZ5S/5d5Yp/1XXhsKdNVluDgC
+	 jmcBUhPZUEIQcKJWOnJjjN9uM0npWcViQn2ZjcMZuQ+kpDGxdF/6ILG3heSnehLVMm2qT
+	 WQJspDdzWnuwfQJ2VBzGh+dYpMye2TBC0ohjJOi2SksaRcjG7GwqnHMAaB/oNrWeMKHBc
+	 fhCyx5kqRSYGdX8xHee96CYotCGl13he4Rb2OOn9H7ln7IHxHtaB5Os14MkDTpuZRzhfG
+	 pfCJyPUZaa/KjwwIBmsQv1gjBJ7+TjzcZpmTyDWlxgLe0MOivy9JOtYsUEmE+8VvU/A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793255763;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=x9hcFsZYsd6lEY7YKGasOWcWiv3TT8mTfld9Fg2H7/s=;
+	b=F8Sl83mlNTk6svKhlhnGJNrBc1+wPtzpQOwZD2UvNre3HC0R4tKZ9d2CpTdvMSEf1uwe
+	 PsFsCqfTSNJIKZCdY9VpVphEFeZV/GsoxOR7cwOPA6GrFNGECnFEGEp6otHKkmp72lXnX
+	 nOGioeCqZSPisXybJ0NZt5rXmbGFHyll/D1RhHzJjX/64rn1LMuWaSHsFG2FFQhMuHjCp
+	 2bdHrnm1PQXSTDU7LwBXFoGVdDKVmrTvNXXu330m5mieS67D6AGPVhSCF+Zqfc0NzHVBI
+	 OTNZw/5ns9cQFECf5KiavoltTP7+H00CuQ/LEbW5OkAmASkK++zthd8KP3nHRNCYGww==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GFj46ab0;
+	arc=none smtp.remote-ip=95.215.58.242
+Received: from mta1.migadu.com (out-242.mta1.migadu.com [95.215.58.242])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100F2606A31A
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 06:28:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 100F2606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4780D606A31C
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 06:36:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4780D606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=dXGQZ8gE;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=XExwyMTA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793255316;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1iJxU2srr5LwVZydpcZZOyNys/GEnKfXjQqJD4/acz4=;
-	b=dXGQZ8gEyOQ5oh3QEezH5FCP2bIHc+ugtLtAan7KtKRVi4GrAdNesMpbYLg0xJ7Sco7hyN
-	eXscDYWjLUAH5lbnXYY7RCRZqOSKHPVF4m7LCON460vnEwvp+TTNqkQxIJHTLQxMpr3anR
-	V+faZnOCEZqbpJjoYyfyfUibw7lFWKs=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-1r1ykRA6NM-Bv-sYXf79yw-1; Thu, 29 Oct 2026 02:28:34 -0400
-X-MC-Unique: 1r1ykRA6NM-Bv-sYXf79yw-1
-X-Mimecast-MFC-AGG-ID: 1r1ykRA6NM-Bv-sYXf79yw_1793255313
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-5be48f8ead6so965005e87.1
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 23:28:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793255313; cv=none;
-        d=google.com; s=arc-20260327;
-        b=I8IarFvy98PVzQtcf7Kdk6e/wtrIVtmro3/7jok+KJqOSgvxwOqk2DipiYO4Ar8s1p
-         ZYNMZa0BG1hPOOI92FGKKVM3JQGcVwgQfnLgPWMPggwMZ15BzLh87URUYgJt1GlBzQ1x
-         o2PY3ZAfRUdMpeexI/O9kNZyymyPv/LKIgaIGraQvwtxczWmDhrlnethGv+SKe7yC+pH
-         xbCBbMW9HF8ksm+71ahB0IWg08bDGIIk18I85l7bRnYce3e7lwa2KuFwdLlMxwpyIcy7
-         n623zuS7PERuvf6tcfUgPEFkIdyNYqXi3C5yog4swFhmP/v/ZK4ETMWrYLdIvYHf5uvL
-         9foQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1iJxU2srr5LwVZydpcZZOyNys/GEnKfXjQqJD4/acz4=;
-        fh=/6Y5lGVtjSeoIB5n57PvheRdwIaWqnFpTDz0BpDFKFQ=;
-        b=hRbidE0qJO5tCiBY2wsYZvW1cevE4ilgaE2eQo5WXxHYoRx9EVLvfyN3K78LNmDNnC
-         j8dOzaVYqBXOSWlkicBZxQ0lSF6z0c/zM2SAoKFvmuClgUKwbWGQrfusBrpWvvmfD7NY
-         hjCoHhr/PXI5fS1iJ/KIvvikGPjSmgiXtXjlwp6pgk3ef1k46w3E1lpumbnLAKqBr3M8
-         moaW9OOnXlADRUsz9FrWidZrMPof+6k3BUym+NROp4G+HHaLM2Xx3bPgLLhjZxPWN5nq
-         eHTI3FHFJHMmqan50ZnIeduAkL8CInsubVVgKWPsTAZLFf0dH73TBUIdQiu5ww6asLCi
-         F2Hw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793255313; x=1793860113; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=1iJxU2srr5LwVZydpcZZOyNys/GEnKfXjQqJD4/acz4=;
-        b=XExwyMTA8DYbGGxcBAgigzAVW0ncFH8daEbWVof1HBicSweDQIU9RlX7anvY7lmysf
-         m0XqJHSVZKGmAnYYXH4iR2dDd5VWahEwXyZr+VUM+Ou2Nogratli96r3ctrjc9z5FHZ0
-         NHOXhaUs0n2MzhoySUyTY/s64ZpNAPg1v5rIIefRgTxgMk/efdoYlJGN7Qar9S4/fqaJ
-         5wno6MaPs3c4ncrTtY/0er52+/EQsiseLH2ydHp+GzJ9Lt6OVSuLhaTjz7VntlrXXtdg
-         +7YalFMtHTlECAURj7OwLv/Ht9+9YPk/rSEorxTWmpfO5OIF1ddX8PTUOpgq6I2ebCe7
-         oznw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793255313; x=1793860113;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1iJxU2srr5LwVZydpcZZOyNys/GEnKfXjQqJD4/acz4=;
-        b=JirD7KZDW2vizGkgevPqa5W1ryZQcUyXPI/kiqj37xiBuliQqwLa9NjNACjsaA7rAL
-         Uv5m+F08ekpU/KGFIdKxQCCe6vbucinEpAcZG7a0Y5RLJPKS9V94U6fuI93VfFw6H8wx
-         qkTrDD7N71pIila2Nrv6Am5ikSCXgPn/rYRwopZrQf08UVtwpGwm/nUUuIfwkMmEwjxO
-         60YmGTeS/lm5R1N3Xn0vtsus3flQ3VbIbRSW9fvquwT4UqMHu4c/Ph20u+QeOLZwXIC5
-         Aaz9/hKNtiYJosLxhbLH9PjqynsegFvSjs0pEI5x+plEJzUajawFXeUbcL/ga7MQizdb
-         6sEg==
-X-Forwarded-Encrypted: i=1; AKwUvBwi13zPipuiZZi2h8IWhgFEJdB0WNMm0lNFA/04HUulvUmgEYApiKUD7va7d2YgAVk7y7A=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ3RHLpLBdek35+lJemoOPWL5neKERNK5petpgVr8OIXS/nKT7u
-	SW03QWhRakiD1iDlG3fAUfuIwqItWEUCL3CySqBrrqDAecW4oFgIK0yzfQhcGne7YyCrzRu2fse
-	pUw/sruR+/44BKu32c9S1yKEW4dswjN6PCPqfpD/HN4oLJw8ivcnyUB/XXpp9leUeW+6VX8Y96/
-	Z6QPM+n4uqorkmCjWR6Y3Q59U6uEKt
-X-Gm-Gg: AYBFou3VpjFatRNDW8TmMLDCQA5pCt56cxTA0VUi969h14UJpk2A9HYnE+1J6yhwhax
-	vxF/3+3zvrpAWX65OIXeDwxvAUiGZeaGiYcGmtJ6zCYlGfipx297yBgEBrrLCGgUfzOSPYK2FyX
-	pRzdq3b6uU3TDjdfHidNM3TF7jhJl5s0WLYVlhx3h8gv1+SaYY8snDQPba
-X-Received: by 2002:a05:6512:1318:b0:5b8:f8f9:e080 with SMTP id 2adb3069b0e04-5bfcad432cdmr1771558e87.26.1793255312829;
-        Wed, 28 Oct 2026 23:28:32 -0700 (PDT)
-X-Received: by 2002:a05:6512:1318:b0:5b8:f8f9:e080 with SMTP id
- 2adb3069b0e04-5bfcad432cdmr1771542e87.26.1793255312465; Wed, 28 Oct 2026
- 23:28:32 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=GFj46ab0
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=fsw4mEaKOvVgj+UGUu/LrZpgPLPWzYv2PlwxGv6ciVk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793255759; v=1; x=1793860559;
+ b=GFj46ab0bahb2NJJpx9VLGKnugsr2ZfmJ/AnfDS9TKNd8SH+O1aWvGcx6Wg1i2z9TcwlY944
+ YyMVSevlCJNajAycn6aCniQ1YRwBfJo5iD7NFG1uP5PSl13dRb9RMyzvErQ688KWBKg/jeIkDOu
+ 74+5rQA4xFtfDk4kzWl4+v1E=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 0482426e1b8de320;
+	Thu, 29 Oct 2026 06:35:59 +0000
+X-Mizu-Trace-ID: 0482426e1b8de320
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d41c063e-55f0-40e2-93b7-999aa0138cbd@linux.dev>
+Date: Thu, 29 Oct 2026 14:35:53 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -124,52 +58,105 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261028191103.623156-1-ihuguet@riseup.net> <20261028191103.623156-3-ihuguet@riseup.net>
- <CAAVpQUC7hezdMEQkzAX4oqFdO_uzBmtRwn85_5_iWf4ExPqpTA@mail.gmail.com>
-In-Reply-To: <CAAVpQUC7hezdMEQkzAX4oqFdO_uzBmtRwn85_5_iWf4ExPqpTA@mail.gmail.com>
-From: =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
-Date: Thu, 29 Oct 2026 07:28:21 +0100
-X-Gm-Features: AclHuK-x6fsuiHpokXnJ3Qx6-V8BzmKKkHRK86q2oMBiEy9ie31bHyN-v0SCuv4
-Message-ID: <CACT4oueJgvE=CKSY2T2jkpD0cjT4bwU+ME4bb=j-cno2q57Kxw@mail.gmail.com>
-Subject: Re: [PATCH net v3 2/3] net/ipv6: don't route packets with unknown
- source address
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@riseup.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	David Ahern <dsahern@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Eric Dumazet <edumazet@kernel.org>, Florian Westphal <fw@strlen.de>, 
-	Ido Schimmel <idosch@nvidia.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Neal Cardwell <ncardwell@google.com>, 
-	Pablo Neira Ayuso <pablo@netfilter.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, bpf@vger.kernel.org, 
-	Breno Leitao <leitao@debian.org>, coreteam@netfilter.org, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Fernando Fernandez Mancera <fmancera@suse.de>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Jeff Layton <jlayton@kernel.org>, 
-	Jiri Olsa <jolsa@kernel.org>, Joe Damato <joe@dama.to>, 
-	John Fastabend <john.fastabend@gmail.com>, Junseo Lim <zirajs7@gmail.com>, 
-	Kees Cook <kees@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, 
-	Li RongQing <lirongqing@baidu.com>, linux-kselftest@vger.kernel.org, 
-	Martin KaFai Lau <martin.lau@linux.dev>, netdev@vger.kernel.org, 
-	netfilter-devel@vger.kernel.org, Phil Sutter <phil@nwl.cc>, 
-	Qi Tang <tpluszz77@gmail.com>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Simon Horman <horms@kernel.org>, Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Willem de Bruijn <willemb@google.com>, Xuanqiang Luo <luoxuanqiang@kylinos.cn>, 
-	Yonghong Song <yonghong.song@linux.dev>, Davide Caratti <dcaratti@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 1/6] bpf: Add syscall common attrs support for
+ link_create
+To: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+References: <20261026154948.99408-1-leon.hwang@linux.dev>
+ <20261026154948.99408-2-leon.hwang@linux.dev>
+ <sashiko-outbox-185494@kernel.org>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <sashiko-outbox-185494@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 29, 2026 at 1:02=E2=80=AFAM Kuniyuki Iwashima <kuniyu@google.co=
-m> wrote:
-> This changes longstanding user-visible behaviour,
-> so the series should target net-next.
+On 27/10/26 00:06, sashiko-bot@kernel.org wrote:
 
-You're absolutely right and I already agreed on sending it to
-net-next, but sent to net by mistake.
+[...]
 
-Please review here and I'll send v4 to net-next.
+>>  
+>>  	switch (prog->type) {
+>>  	case BPF_PROG_TYPE_CGROUP_SKB:
+>> @@ -5959,12 +5972,20 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+>>  			ret = bpf_uprobe_multi_link_attach(attr, prog);
+>>  		break;
+>>  	default:
+>> +		bpf_log(log, "Invalid prog type.\n");
+>>  		ret = -EINVAL;
+>>  	}
+> 
+> [Severity: Medium]
+> Does calling bpf_prog_attach_check_attach_type() before switch (prog->type)
+> in kernel/bpf/syscall.c:link_create() cause misleading or missing log
+> messages in a few cases?
+> 
+> First, for almost all program types that are unsupported by link_create()
+> (such as BPF_PROG_TYPE_SOCKET_FILTER, BPF_PROG_TYPE_SCHED_ACT,
+> BPF_PROG_TYPE_RAW_TRACEPOINT, or BPF_PROG_TYPE_SYSCALL),
+> link_create() -> bpf_prog_attach_check_attach_type() hits the default
+> branch:
+> 
+> kernel/bpf/syscall.c:bpf_prog_attach_check_attach_type() {
+> 	...
+> 	default:
+> 		ptype = attach_type_to_prog_type(attach_type);
+> 		if (ptype == BPF_PROG_TYPE_UNSPEC || ptype != prog->type)
+> 			return -EINVAL;
+> 		return 0;
+> }
+> 
+> Because attach_type_to_prog_type() never returns those program types for any
+> attach_type, bpf_prog_attach_check_attach_type() returns -EINVAL and
+> link_create() logs "Invalid attach_type.\n" instead of reaching the default
+> branch of switch (prog->type) to log "Invalid prog type.\n".
 
+Either "Invalid attach_type.\n" or "Invalid prog type.\n" is not
+accurate for this case.
 
---=20
-=C3=8D=C3=B1igo Huguet
+The log here is not required to accurately describe the reason. Instead,
+the log tells users something wrong at the position.
+
+> 
+> Second, for BPF_PROG_TYPE_CGROUP_SKB, bpf_prog_attach_check_attach_type()
+> also performs a capability check:
+> 
+> 	case BPF_PROG_TYPE_CGROUP_SKB:
+> 		if (!bpf_token_capable(prog->aux->token, CAP_NET_ADMIN))
+> 			return -EPERM;
+> 
+> When this check fails with -EPERM, link_create() still logs
+> "Invalid attach_type.\n" even when attach_type is valid.
+
+Same above.
+
+> 
+> Third, for BPF_PROG_TYPE_LSM and BPF_PROG_TYPE_TRACING,
+> bpf_prog_attach_check_attach_type() only checks that attach_type maps to the
+> general program type. The stricter expected_attach_type check happens inside
+> switch (prog->type) in link_create():
+> 
+> 	case BPF_PROG_TYPE_LSM:
+> 	case BPF_PROG_TYPE_TRACING:
+> 		if (attr->link_create.attach_type != prog->expected_attach_type) {
+> 			ret = -EINVAL;
+> 			goto out;
+> 		}
+> 
+> If a caller passes an attach_type of the same program type that does not
+> match prog->expected_attach_type, link_create() jumps to out without logging
+> "Invalid attach_type.\n".
+
+Will add a log here when adding log support for tracing link_create in
+the future.
+
+Thanks,
+Leon
+
+> 
+> Should the program type validation and attach_type logging be ordered so
+> that unsupported program types, -EPERM failures, and expected_attach_type
+> mismatches report accurate messages?
+> 
 
