@@ -1,61 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793297777;
-	b=skbsiNl+DRKPyJ76reiPiwOjjPJWwO90ZO3UHcUSB4drgtcKY8LydK7KEgWS7ZPplPcn
-	 ZgPzqVhzk40Nq5FLUlRT2Lnlx21Q29aHrvI5D6RptH1Vwu6i9E9zIomP6lp16gthnQaA/
-	 92hjr1ld+vFl9oTT2xrmUal823YnJw9fgjGmeVCUf0vrOX2C3fayermRYMDTD86I4C4L9
-	 /CVDH2rJL/50iuqNmme1fkI/WbnjigdJ8gD3WAmWjbUOeVDiYVW+9PE2ulOIg07xVxT/T
-	 WGSn378S3TErs5ypmVKxgC1CJnLm6DoOHgzXrP0aUKZPwzzltGCuT/VWQErk+0OPKsQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793297777;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=YCty3KVa5xRdvMsKJANqLK9+srhfOJGoVNkKo5xizWo=;
-	b=fJKxGsXX/Bavsc6TxVcq9jDlx9xEmjhY8BK5M+JBvqGmhvNlKK20dXr0yGMLhMOCpTjD
-	 CHgPIWeSniKH1Hh/jxMbR2BUj2+M1OvACWXZXfIF5ZpXVdst78EBaqQq29pX/n/VL0m5S
-	 kdlZp1Va4MC9ulSbxlNQoMAs0xfe4XrJ9PCyZ49mDtup+Egi0HP1zvuFX05QxWB37LsBL
-	 pHjNjkx8V9LoblHnaFCMzqSxS0d9bQobz7/0iwaAo/cAUnASsJtJ2ELYdViOm8RF39nTt
-	 F1Jz5ltX0NI8WZ98oJfo4QFeOyl84r0x7IOjyzRhC9ec+nVpbqmQzsf50X6Xpd4VLng==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bbcqz8OS;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793298232;
+	b=0qp/zDsOanQV79QQfdOXnvKU7rFUP47jyxh2WXOvb1ccq24KUa7A0W2F57JgxMhcbNjj
+	 uvGeYOjpU3JLmjfb1eYBjWX7hevAO5BLMCNC84VuZ2CaqTXkA+sNLlQPLnSqvgpzdmStq
+	 up3YM/lMivTtxT05b4cYB6Q27xlhciVZX0NlJ+0oZ8WUSFPrz1+zJ9rubRkMp7R7facQC
+	 vKP4iu6w0bp0zKV0vngplIfkzl1EXIJyIurDSaDWSmkhUacr5/ddPcJHhwwmlwyIyz2HQ
+	 r3iINhrB9DhQb9Ec9PHtQmthUkuNt1IGnvU1tgG9aNDgeQdxTiWi/mU9+XGlVOsTvMA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793298232;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=0kPogFiW6B5fuv9DVpnabZaqR2Qn/IyW3R9/wzN8wTc=;
+	b=Ldf6c25KpfXZwofzShFu/1i/CX47C5Q5co8Bri8YXCvNqfePzxEPOgYEayQDt3Nriw9v
+	 Cn1a5B88/raWozCJOL5eS7H41mflYoSRPZVG/nVT7DCM+FWIDZOwiK67dWYmaC2mo7Mqr
+	 WNHwBQ0+oY1oZx6ewfOdfHLT8gQ+DTu8dk01LtkMVQA+fedjS5go4t1X2eKu6zP8SQ4PM
+	 rv2ue/R88Fdt4wlUOrLz36g0znq3RS96quEQJPs/3pG+LSXUTC5TNTd2GVLzp4VxQOoMI
+	 tv74dOFdLMHbIWE42ADLsk/fADAau52u8XlQzV/tTnFVeJvh5PQy+ByQAZ3JBc1ED0g==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DxY9NYue;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080C0606A334;
-	Thu, 29 Oct 2026 18:16:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618FE606A31D
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 18:23:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 618FE606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bbcqz8OS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B711F01816;
-	Thu, 29 Oct 2026 18:16:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793297776;
-	bh=YCty3KVa5xRdvMsKJANqLK9+srhfOJGoVNkKo5xizWo=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Bbcqz8OSZeV6ud3xfB2PxlrFgz5pKWK1/zMaKCk1m2mq2yT9mIsbLw8V3qf9Xl39W
-	 1gUhcmpDxD2uPxNca1PXMKH73YmKUeG2JuVfdTcOM9Zwvv7c1EjxfIBHZIbbpFyghD
-	 DKTV1KU+r+qa30swXgepKl5NY22bm+VWbMmRawdTdeDvqbOgMfjMzJd2C3M8RjdhCx
-	 Bj/kJB5W2iZVjpQrLDQbzYkKfjKIuC5T7IBV4ahs0V36+HLi3nfSmgLZA92KnjN0+B
-	 kk24Ukzi8qlIE0np/oiwQVHdzyhV6gEaCdVm0aXn2E/k5h0fpIfoyD+V2WsQ1HmN2H
-	 ga566q1PqmBOw==
-Subject: Re: [PATCH net v5] net/sched: clamp skb->queue_mapping before
- indexing the tx queue
-From: netdev-bot+sashiko@kernel.org
-To: jhs@mojatatu.com
-Cc: netdev@vger.kernel.org, victor@mojatatu.com, jiri@resnulli.us,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- vinicius.gomes@intel.com, horms@kernel.org, hawk@kernel.org,
- daniel@iogearbox.net, sashiko-bot@kernel.org, bpf@vger.kernel.org,
- stable@vger.kernel.org
-Date: Thu, 29 Oct 2026 18:16:15 +0000
-Message-ID: <179329777513.3134.12135506558709584471@kernel.org>
-In-Reply-To: <QDISC-MD1X.v5.r0.20261026053226-1@mojatatu.com>
-References: <QDISC-MD1X.v5.r0.20261026053226-1@mojatatu.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=DxY9NYue
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-533202fe429so46211cf.0
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 11:23:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793298231; cv=none;
+        d=google.com; s=arc-20260327;
+        b=S1G7d+/dQUwnp6JVbKGm8pdzdQyNz2RNSrX4cWT09NpzaJ542hO9y1Ep4FiZDG4tg2
+         hXVNpSWi/q0d1QQuEquKyPR17qddEgBic6x2mDC6fkE1mN7VQtLNuklQ/g7Tmqm+k2h1
+         Ivn6QkvbZ6p7FvAvOl+SnuVJsTAPt+MSULW1eFYnYx6SQ8OK89gu0ne1Y+vX8Xl5dr9T
+         XRwpKBfZm2a+xom2zgjG05ktNXniBNUfRCM63zUeIftaNRnpqCCXBv6OUo1nwsuXRfj9
+         8G/DGh98CD3fsLKRcebFnoWTtP5/nTF2vp2d9y+bt8wPoGpXXWkmaZFNAwBh7Mb56jHe
+         W4KA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0kPogFiW6B5fuv9DVpnabZaqR2Qn/IyW3R9/wzN8wTc=;
+        fh=+2XRl8ItqVU3FDntDve8gwBhnbtH24lhEcA6DRoMxHM=;
+        b=nkHasKcSJyqhn/aVtFMhSTGx/ypq3+pwjsWsmhKB9GS7rNNAc4rVESameSJfLwdB2B
+         DvKPtHeVdTBdqEvLoSKaTtf3VNCm/bRTmYCuwAjX7ONRLfdTc3l07qbtOoEo60/1cOKT
+         BvUw3ziEUfo/KWgwFr08V7e7QRkizATNHIIYMPFYoO2rs3f0KjIgSl6cFWzwxc6JQGkG
+         0wK9mhgB0G4GmoWTgzwMIoNknl1hDGFITlQB0GiEaJgawPnJvB7LY1lPUzaoVP7IBLjc
+         EtNnr36BnzL6CLv9BT6PSAIYgappUymtQ98aWUwWxF8dm+TmYAT8VNDXl3womTm18Npw
+         hVrw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793298231; x=1793903031; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0kPogFiW6B5fuv9DVpnabZaqR2Qn/IyW3R9/wzN8wTc=;
+        b=DxY9NYueYpPUw54/1LuKABfDp60AROnzubbbXy7OzS6fWMrILGyAPx+k/TBUzTDoQf
+         0+estVcf3DGr+NqskgZltpKjiTwBj0vHxfiZlAv1hdCBqEV+qUGB+fKraqRqaZGJI9Ad
+         aHuqa1XDAyOvsrzYt4e2fwVCkmevUnXplUQksj+fp6M1ZkXl+zkUCRvmoFsMOA3v0kwz
+         Qz991YYvpNKWfDlgqHmAUX1bJTSVeq5mbReuEAT3YssNt+yd0jN+OmcLTEbZqe3twO31
+         DfUU2J0jeNSxbzemGGGlU75TQqjY6sTlc87Wxa++VyWhSCCSHud20YoCA1co6FakOgHn
+         lsdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793298231; x=1793903031;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0kPogFiW6B5fuv9DVpnabZaqR2Qn/IyW3R9/wzN8wTc=;
+        b=0O/W9GrZQUtEVOCk9PMb4Z1kkOCQaFt8+PyPlnTYYTVQKpGRuNskjYTWcj918KFZXs
+         v/gSEqcRULORBWXN6cX5skRwTLAUlhsAu2hvZDFwv1I/pgJkGmOGR8s5rlkr9JiaMQ+C
+         j/WRqRvnA+yQo6bmwyYtJw6Qt9CQO1/SnUHSMzoMquXzM4qhqjVcF5erPqOckzhD6guM
+         uUhea99jrvuEBU51jVBGECiXozciVMv7SbV1RlIlHf4wZa56/5LppUCheG8ySfSQB9RF
+         VaesUoP5P/eBQqGeMY2vX/dcVEMkpOc9RepLEb/JnwD4cM1D3HWlk2Pg7widt+pDxZEX
+         CERA==
+X-Forwarded-Encrypted: i=1; AKwUvBxXWO70xTx1jBoqjR0IgO7M8Xds2INxxnt1kAnPXFdsnbz1w4qPMANpVLDZZhPmkvN5Usk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKW/61fWh/VqulDMtRDqj1D5wxYqJdA8FNMKM1PwlR5rw42s0cD
+	td/hevLj7eb5j1yQkaVP55ckUxROIQgVs5rQcMjShbvzf6qd4lfRKgGdV+4Yeh0HEoJumkCFC9t
+	LRQHJa8xk0gNMo1IPHb1YPCnkVlq0IDn+TRyR85Gk
+X-Gm-Gg: AYBFou3Z7TtWJkTPfjrfJ+HJeWGw6ucb7Kh/7Z5oxAhM1UadVNucXA2TLmaLxDR79gB
+	KRW9iaqI30mZu59kNdxTbYgXWmzkhDGQWJJ4kfcK9U4Ndwh9shK8Jt6vFJkXv9ChwjG+qca4tun
+	xHAVZQKI5yChUnNFVgmvEovJhX6FEpbVMF+LMwSNvhLGoPBYHo3pNMXOfZtYvi4iNcnB07CKsnT
+	OOlnQNcX0pR6YP4Q+RX/qctuOrUkw0pA0GBe27d0tcakz/21ikDF2f9/DasF/Gryn52SDB9jaCq
+	piV8QmAi1WkhMusvZwX+NkGXH3T2aBQYtnhskxfNZQFo26Q27TkIR3sGyUxYiK6/Ge4csbTT4FT
+	HuqGMg4XzhFEhcJgBMp4fFHCyL2cGDEfEjzRd+hRiAG1MHUbvPR30Z44kI4pkjR5J6Q==
+X-Received: by 2002:a05:622a:2b45:b0:532:eff8:3491 with SMTP id
+ d75a77b69052e-5414ebdf590mr23748491cf.14.1793298230692; Thu, 29 Oct 2026
+ 11:23:50 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,133 +104,88 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <20261029162958.3224280-1-irogers@google.com> <CANiq72nrhqK0NP5q8_G=936++gZR3=zrES+cK96T95-ThVTpbg@mail.gmail.com>
+In-Reply-To: <CANiq72nrhqK0NP5q8_G=936++gZR3=zrES+cK96T95-ThVTpbg@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 29 Oct 2026 11:23:39 -0700
+X-Gm-Features: AclHuK8I2R6ZBL0M8gpXX54gY1Y2jQq5EjXVV3xSH1Vs5_u0FZ2MTRQeP10WsJs
+Message-ID: <CAP-5=fU8K4as51_Vi2vKAC-kGMVEFn1LDjCg1WvP8R0Y=8SbcQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 0/3] tools: Add Rust library build infrastructure
+ and prefer zlib-rs
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Quentin Monnet <qmo@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+On Thu, Oct 29, 2026 at 10:32=E2=80=AFAM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Thu, Oct 29, 2026 at 5:30=E2=80=AFPM Ian Rogers <irogers@google.com> w=
+rote:
+> >
+> > 1. **tools build: Add Rust library build infrastructure and zlib-rs fea=
+ture test**:
+> >    - Adds `tools/build/Makefile.rust` with helpers to locate Cargo crat=
+e
+> >      sources in distro (`/usr/share/cargo/registry`) or local Cargo
+> >      registries (`CARGO_HOME` / `~/.cargo`), map `.rlib` prerequisites =
+to
+>
+> When we were discussing whether to vendor crates for the normal build
+> or whether to fetch them locally from the registry a couple years ago,
+> we discussed approaches like this one, i.e. picking a version from the
+> registry by folder name etc.
+>
+> But that doesn't work too well. For instance, the graph of
+> dependencies may change, there may be several versions available (and
+> the highest may not be the proper one to pick), there may be different
+> major versions available (i.e. not backwards compatible), they may
+> change the build scripts, etc. Even picking the highest major wouldn't
+> always be correct, from what I recall.
+>
+> I also asked a few distributions how they felt about it, and they
+> indeed said that it wasn't a great idea without querying properly the
+> registry.
+>
+> So one should really ask Cargo for the right information about the
+> local registry (i.e. offline). It has been a while, so Cargo (or maybe
+> `pkg-config` or whatever) may have better support for querying it
+> nowadays too -- I would suggest checking that first (e.g. `cargo
+> metadata`).
+>
+> I think depending on Cargo for this, especially nowadays and for
+> `tools/`, should be fine (we were considering even back then and for
+> the normal build).
+>
+> By the way, checking Cargo's cache sounds very strange to me: that
+> means the version that gets picked is even more "uncontrolled".
+>
+> I hope that helps!
+>
+> [ In the end, for normal kernel crates, we decided to vendor for other
+> reasons, e.g. we wanted to pin the versions, to customize sometimes,
+> and most importantly to avoid any possible user misconfiguration that
+> could lead to a subtly incorrect kernel. But for `tools/` it makes way
+> more sense, of course. ]
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Hi Miguel,
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+This is great feedback, and it's why I thought this was an RFC series,
+rather than a full blown series intended for immediate merging. I
+think the other obvious point of contention is preferring zlib-rs over
+zlib. I'll incorporate your feedback into v2 along with addressing the
+large amount of feedback Sashiko has given, which may become
+irrelevant if we trust in Cargo more.
 
-- [Medium] The patch silently changes behaviour on stable kernels, and
-  its commit message and docs do not describe the change accurately.
+Thanks,
+Ian
 
---
-
-net/sched: clamp skb->queue_mapping before indexing the tx queue
-
-A tc BPF store can leave skb->queue_mapping out of range. This patch caps
-it in the qdisc dequeue paths in sch_generic.c and in taprio_enqueue(), so
-it can no longer index dev->_tx[] or q->qdiscs[] out of bounds. On a
-TCQ_F_ONETXQUEUE qdisc the mapping is pinned to the qdisc's own
-q->dev_queue instead of being capped to queue 0.
-
-Closes: https://lore.kernel.org/netdev/179033713973.2160803.4914570693994398206@kernel.org/
-Link: https://lore.kernel.org/netdev/179293123940.3134.1149128679923234677@kernel.org/
-Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v4.r0.20261021042722-1%40mojatatu.com
-Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v3.r0.20261015165943-1%40mojatatu.com
-Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v1.20261005193231%40mojatatu.com
-Link: https://lore.kernel.org/netdev/20261015125822.GH83879@horms.kernel.org/
-
-> diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-> index 6f6a6f0d5eb0..5dc1d47f811a 100644
-> --- a/net/sched/sch_generic.c
-> +++ b/net/sched/sch_generic.c
-> @@ -96,9 +96,34 @@ static void qdisc_maybe_clear_missed(struct Qdisc *q,
->  
->  #define SKB_XOFF_MAGIC ((struct sk_buff *)1UL)
->  
-> +/* Re-cap a stale queue_mapping; an ONETXQUEUE qdisc pins q->dev_queue. */
-> +static u16 qdisc_cap_skb_tx_queue(struct Qdisc *q, struct sk_buff *skb)
-> +{
-> +	u16 queue = skb_get_queue_mapping(skb);
-> +	struct net_device *dev = qdisc_dev(q);
-> +	u16 capped;
-> +
-> +	if (q->flags & TCQ_F_ONETXQUEUE)
-> +		capped = q->dev_queue - netdev_get_tx_queue(dev, 0);
-> +	else
-> +		capped = netdev_cap_txqueue(dev, queue);
-
-[Severity: Medium]
-
-On a TCQ_F_ONETXQUEUE qdisc, this branch rewrites the mapping of every skb,
-not just the out-of-range ones. Is that intended for in-range mappings that
-a classifier sets on purpose?
-
-The rewrite happens in several places. dequeue_skb() applies it to the head
-skb and to gso_skb. try_bulk_dequeue_skb() applies it to each follower.
-__skb_dequeue_bad_txq() applies it to skbs taken from skb_bad_txq.
-
-Here is one way to hit it. Take a per-queue child of mq, mqprio, taprio or
-htb offload whose q->dev_queue is txq i. A filter on that child can run
-"action skbedit queue_mapping j" with j != i and j < real_num_tx_queues.
-tcf_skbedit_act() accepts that value:
-
-net/sched/act_skbedit.c:tcf_skbedit_act() {
-    ...
-	if (params->flags & SKBEDIT_F_QUEUE_MAPPING &&
-	    skb->dev->real_num_tx_queues > params->queue_mapping) {
-		if (skb_at_tc_egress(skb))
-			netdev_xmit_skip_txqueue(true);
-		skb_set_queue_mapping(skb, tcf_skbedit_hash(params, skb));
-	}
-    ...
-}
-
-A tc BPF store of an in-range value behaves the same way.
-
-Before this patch, qdisc_restart() sent the packet on
-skb_get_tx_queue(dev, skb), which is queue j. With this patch,
-dequeue_skb()->qdisc_cap_skb_tx_queue() first rewrites j back to i. The
-packet then goes out on queue i, and nothing is logged.
-
-The commit message says:
-
-    netdev_cap_txqueue() already logs a ratelimited notice and selects
-    queue 0.
-
-The TCQ_F_ONETXQUEUE branch never calls netdev_cap_txqueue(), though. That
-also covers the 1-queue reproducer in the commit message, because
-qdisc_create() sets the flag on every non-multiqueue device:
-
-net/sched/sch_api.c:qdisc_create() {
-    ...
-		if (!netif_is_multiqueue(dev))
-			sch->flags |= TCQ_F_ONETXQUEUE;
-    ...
-}
-
-So in that reproducer, a store of 1 from the filter on the prio root is
-quietly pinned to 0, with no notice.
-
-The only place that says in-range mappings from a filter on a per-queue
-child are now overridden is the v4 -> v5 note below the "---". git am drops
-that part, and the patch is tagged for stable.
-
-Documentation/networking/tc-queue-filters.rst also still says:
-
-    2) TC filter directs traffic to a transmit queue with the action
-       skbedit queue_mapping $tx_qid.
-
-It does not limit where the filter can be attached.
-
-Could the commit message describe the pinning of in-range mappings, and the
-missing log message on the TCQ_F_ONETXQUEUE path? Should the documentation
-be updated to match?
-
-> +
-> +	if (unlikely(capped != queue))
-> +		skb_set_queue_mapping(skb, capped);
-> +
-> +	return capped;
-> +}
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v5.r0.20261026053226-1%40mojatatu.com
+> Cheers,
+> Miguel
