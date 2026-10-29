@@ -1,45 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793281612;
-	b=FH9rHjfsO8ZtnVKPl9zPLks/NHrO4qz4OyE3uPuFSfI6HPTj6O2bx2yYrraqd8w6Rsnv
-	 ySq2u9fD0BxytoDB427GONZEUH9brDThzFBAVyVub1FOOlp2ySF+aMOiGT3q/JthbEuve
-	 rgQvYaqvfzEtCVUiZABFBNpuweeaeHeg/Ajv6t4pECdDFbg4Ts1WNdY0WncTsIXVJ0p4D
-	 Z+u3wLkjWi9SOnQ917wix2Z3dgGcQEfrbEuwDbjbuM3WKJD5den6sxfc1WzA2lDpaQwdA
-	 1I6Shuk6hsy0Fz5HknAlF35Nrd48iavXDL2Be66JTifETonmr1zxo1cSMr5OFqIRZ3w==
+	t=1793284808;
+	b=LxTjXKpvDyzaP2E5ZJRD5D7o3U2VpN1mfh8OKFKkQzEmXBgkSpQZ3xPCqerc7qzKXdiA
+	 DTQIh3gsvObjxG6lI1DbtqZokAX+FPBxjer9ZuHTjQP+01ce2P7nYF4zVyQicSpTO2m+i
+	 +AqB2Z8H0vO4o4SKfjy/AY/MjHFb4kKw50dQMQIGpRKaGTsZ3J0Y3L0m4xpBuro7h/OTp
+	 qZ6VB7MvsTFqAeZBXoQhgcbZG6NokGpinVxRMSBOB4ORitk64brfQQ6tvG7HMK/zflhV+
+	 3LR/yQcnlJUHgVqgt3qMBG/5mp2m4xhH0cOaWEvVpz+41wbTrbtWFXuWSuwqrjYTrMQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793281612;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=gZNtzP6cs1GRwvoX88SXgu1Vv29qxW7oVI1eNbb/P/4=;
-	b=nAWgQssHbJSeQpRBloF0EKtxoU1qrR2DlSue73UFYdYZ2OMOlHPLw3PKhmuXdPxoqu0d
-	 R/cjT+ILCo1TYiDK9LJboqgu1rcrhN0A1/LkmQl2gX5z8ToUOIjgnf4ZEKWYHyp68tuGr
-	 O5Irdtyr0/EmcyZmdxk6/YjLEju99I9eNH2Uwk0C98hdjgOjWLs2/98Z0wvWxRKbYRlrO
-	 TkXIgvpC3VXQlw/Ma4UmXxFiTx9UqEBjMhoqNKwsVyNb11ELXQiKsN7HJ8bn5DF3LBEcn
-	 hHm+HxVW+YxyySjBDZh1WV0gIb/4XBTreOWre+e4dtvPwtq9WPpp3mFH5UFVWDuiLfQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793284808;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=3CRl88bTJmQgduOvxN9CZbKqQ7aP6JRqMXHjPcTRYYk=;
+	b=xsdmk15Ep7wY0Knzb6bGFiPlMtQBWtaBN25i9sG21D4/gKTFmNEN4d16hY96gKvGUhXf
+	 Vnf24BcK3A6kW0t89BgVzRM+XHzfRNPDFR6RrvhnbJl8VpcAgM+ZfbrUl3/L+4U2ELT9L
+	 g856KTZnIZui0Dw6QBLb+1sfHKYmVYkA9Em2mDyBU3U2zQBgma/QfCdHwg4suoFlvKyKD
+	 YmGoeTCaYRmzLkM/DU/6utBwdbEGCtccBsQL16gBg+xH4EoCV4oCv3aEKG5D6zeq7uYVA
+	 xOSbuk2OtKWOXssfxfJS9Q4lp1+SB+mhoZ1zsMOVtQPjlXdjH4rwDhmQ7FQz0E4JJwg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DdooD9kw;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JRdnlKnc;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CC2606A31F;
-	Thu, 29 Oct 2026 13:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB0C606A320;
+	Thu, 29 Oct 2026 14:40:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DdooD9kw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A919F1F031E2;
-	Thu, 29 Oct 2026 13:46:51 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JRdnlKnc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C421F01825;
+	Thu, 29 Oct 2026 14:40:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793281612;
-	bh=gZNtzP6cs1GRwvoX88SXgu1Vv29qxW7oVI1eNbb/P/4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DdooD9kwZKAUv2hnFqN4/UAT96adjHY5DQZxppOWhcafmfRbL2quhLzVByJ6nOdFT
-	 Gsq+vGiT/s/2AYbgWxdXKl8KgGznlsW0eFilX+M2IwG581DZtbI/7TSK5Ua52utcKT
-	 oP4g9pwLK/hikbek9t/Z45LXWY9WJRDZFyAKvFOi5iQLl4rZZbextSlPq5d2xSbVr1
-	 SW5N/+cPADmNrpQyRI+ZnxNpaILr3oIjOfqa8j9o/6J7VvzPQMzsTW84gKn0TTwhHX
-	 C0eoOCDeiu7hIkAJrdpEVgid4P2/yr5cARmnDPXqQ/mhssDWpFezoQ4kZmjzAvfab5
-	 m6mXKZNKuqkWg==
-Content-Type: multipart/mixed; boundary="===============3728746382167177240=="
+	s=k20260515; t=1793284807;
+	bh=3CRl88bTJmQgduOvxN9CZbKqQ7aP6JRqMXHjPcTRYYk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=JRdnlKncV9NpTh2juO7SyPref4piGIyC6fnqrXlAwFuOI8nOCfT/86Rh0XJj6QF5S
+	 RHSnhrp+uP1j/ps9f4ALLxBGWGejlRQCWk2s4uZqyqYGlSRqRYUvKCQ5gCj2/ix0Ut
+	 aM2xJFFU7aoWACd1scD5h6EH5QjS0Kj4QoHtDW6En/Kg17xNp/AX7swL3uWTYzFPl6
+	 RrXk0S8rXHJ0M9YQ5pFxKwYW5E14Zgp7tlx1IQmAkabTOE6KjqaU3G09aQ79IidyaK
+	 k+ZnWII++2rIOb0SB2C9DEbM5GDz2u+tjEnlIzj0l8Vt6BcZNBjEiLyn4KIO5OxwAD
+	 GDmOcFNVkBuGA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D1BF380821F;
+	Thu, 29 Oct 2026 14:40:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,114 +53,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <6b3ba80a4fbae6a9b693979e47170a15ec5917f5fd5c92520077aa99b8614a5b@mail.kernel.org>
-In-Reply-To: <20261029-bpftool-plugin-v3-2-87af799da40a@gmail.com>
-References: <20261029-bpftool-plugin-v3-2-87af799da40a@gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] bpftool: Make the LLVM disassembler an optional runtime dependency
-From: bot+bpf-ci@kernel.org
-To: socketpair@gmail.com,qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,nathan@kernel.org,morbo@google.com,justinstitt@google.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,ndesaulniers@google.com
-Cc: linux-kernel@vger.kernel.org,bpf@vger.kernel.org,llvm@lists.linux.dev,socketpair@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 29 Oct 2026 13:46:51 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2 1/1] tcp: check congestion control restriction
+ first
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179328480605.499212.7041046412594690100.git-patchwork-notify@kernel.org>
+Date: Thu, 29 Oct 2026 14:40:06 +0000
+References: 
+ <71c142b2d45af6a2fe7fc6cd4a5ca52c53afbe23.1793075984.git.zhilinz@nebusec.ai>
+In-Reply-To: 
+ <71c142b2d45af6a2fe7fc6cd4a5ca52c53afbe23.1793075984.git.zhilinz@nebusec.ai>
+To: Zhiling Zou <zhilinz@nebusec.ai>
+Cc: edumazet@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ ncardwell@google.com, kuniyu@google.com, davem@davemloft.net,
+ pabeni@redhat.com, horms@kernel.org, jonathon.reinhart@gmail.com,
+ vega@nebusec.ai
 
---===============3728746382167177240==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello:
 
-> bpftool: Make the LLVM disassembler an optional runtime dependency
+This patch was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-TL;DR: Nits only: the new generated llvm-plugin-dir stamp file may need a
-.gitignore entry, and the bpftool man page may need updating, since "llvm" in
-version output now depends on the plugin loading at runtime.
+On Tue, 27 Oct 2026 12:46:49 +0800 you wrote:
+> tcp_set_default_congestion_control() takes a reference to an algorithm
+> before checking whether a non-init network namespace may select it. A
+> rejected request returns -EPERM without dropping the reference.
+> 
+> This affects module-backed algorithms too; BPF is not required. For
+> example, after root loads tcp_bbr, a user with CAP_NET_ADMIN in a
+> non-init network namespace can repeatedly request it as the default
+> although it is not in tcp_allowed_congestion_control. Each rejected
+> write leaks a module reference. Since module->refcnt is an atomic_t,
+> 2^31 such writes can make it negative; later module_put() calls warn,
+> and rmmod can hit the BUG_ON() in try_release_module_ref().
+> 
+> [...]
 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index b0f7168e7943..dc8e4be86296 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
+Here is the summary with links:
+  - [net,v2,1/1] tcp: check congestion control restriction first
+    https://git.kernel.org/netdev/net/c/dda51b737216
 
-[ ... ]
-
-> @@ -290,6 +300,21 @@ $(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOOTSTRAP)
->  $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
->  	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBS) -o $@
->
-> +ifneq ($(LLVM_PLUGIN),)
-> +all: $(LLVM_PLUGIN)
-> +
-> +$(LLVM_PLUGIN): CFLAGS += -fPIC
-> +$(LLVM_PLUGIN): $(OUTPUT)llvm_disasm.o
-> +	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) -shared $< $(LLVM_LIBS) -o $@
-> +
-> +# The plugin directory, $(libdir)/bpftool, is compiled into jit_disasm.o.
-> +# Recompile it if libdir changes, e.g. on "make" then "make install libdir=...".
-> +$(OUTPUT)llvm-plugin-dir: FORCE
-> +	$(Q)echo '$(libdir)/bpftool' | cmp -s - $@ || echo '$(libdir)/bpftool' > $@
-                                                          ^^^^
-
-The new stamp file $(OUTPUT)llvm-plugin-dir is a generated build artifact,
-but it does not look like any ignore pattern matches it.
-
-bpftool-llvm.so is covered by '*.so' and llvm_disasm.o by '*.o', but
-'git check-ignore' finds no pattern for tools/bpf/bpftool/llvm-plugin-dir.
-
-On an in-tree build with a shared libLLVM (make -C tools/bpf/bpftool with
-no OUTPUT), the stamp is written to tools/bpf/bpftool/llvm-plugin-dir and
-shows up as an untracked file in 'git status'.
-
-tools/bpf/bpftool/.gitignore already lists the similar generated file
-FEATURE-DUMP.bpftool.  Should this patch add '/llvm-plugin-dir' there as
-well?
-
-> +
-> +$(OUTPUT)jit_disasm.o: $(OUTPUT)llvm-plugin-dir
-> +endif
-> +
-
-[ ... ]
-
-> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-> index d15fec71b64e..321e928d651c 100644
-> --- a/tools/bpf/bpftool/main.c
-> +++ b/tools/bpf/bpftool/main.c
-> @@ -124,7 +124,8 @@ static int do_version(int argc, char **argv)
->  	const bool has_libbfd = false;
->  #endif
->  #ifdef HAVE_LLVM_SUPPORT
-> -	const bool has_llvm = true;
-> +	/* The LLVM disassembler may be a plugin that is not installed */
-> +	const bool has_llvm = disasm_llvm_available();
-                              ^^^^
-
-With a shared libLLVM, the "llvm" entry printed by "bpftool version" and
-"-V" now depends on whether bpftool-llvm.so can be dlopen()ed at runtime
-rather than on how bpftool was built.  The man page text was not updated
-to match.
-
-tools/bpf/bpftool/Documentation/common_options.rst, which every bpftool man
-page includes, still says:
-
-    Print bpftool's version number (similar to **bpftool version**), the
-    number of the libbpf version in use, and optional features that were
-    included when bpftool was compiled. Optional features include linking
-    against LLVM or libbfd to provide the disassembler for JIT-ted programs
-    (**bpftool prog dump jited**) ...
-
-In this mode bpftool is no longer linked against LLVM at all, and
-do_version() -> disasm_llvm_available() -> llvm_load(false) can fail in
-llvm_plugin_find() or dlopen().  has_llvm then comes back false even though
-bpftool was compiled with HAVE_LLVM_SUPPORT.
-
-Should common_options.rst say that "llvm" is reported only when the
-disassembler plugin is installed and loadable?
-
->  #else
->  	const bool has_llvm = false;
->  #endif
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40881490673
---===============3728746382167177240==--
