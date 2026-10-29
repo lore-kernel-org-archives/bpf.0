@@ -1,62 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793293585;
-	b=1eiVwwTUuilCtDi0tP4pmwCWIycmhDMO+UJO7uyAGMYsEBdsvAkFTP3j5l4ui1oFnZIA
-	 nT5zsENMeBJsBM4DOdSsYZNxmbwatsO1PSFgnUT/jWSaxJPnDXTsyPa2+omc128m9hpW7
-	 ajNEpM9KWNwxDdBoA9kq2Nbil0vqe2wRRCtkTW9qgGagl6hVDlP7z7KjL/ESwwEsLW2sv
-	 js9MKgt6qTTKFCmxhnhRrsd6kDFKKJP+6NkBYkVwKMcU5MLi6FnUvw0W95M8tBhqWzayW
-	 1PWZYvxTHIKBhMHqBn9EmZwkeetYTST6YvlxDNd8GT01kDhJzUpg+x0C6JnkTMRl+2A==
+	t=1793294156;
+	b=5SwWTuwrhoZgIkZsOxlsMdiiDuGamU/RPKiuw4DdaFPUv8jazsJuFW936GZJzBNRsm2Q
+	 chaR9MvZHYRgxbfaST/QDcSePhlRaevvxX3ElZ++sklu7YqZ4wrhLrOA7TtmgWHD//6Oz
+	 YEwBfSE4WuvF4VfdD7PGlbcS7M21xG2XGxIU7DxXr0WmqiteUUbev/+BHSPC9E7YnXZuZ
+	 ozTm/Txl2EMbkmHJY41CbEYon0BRpIQKPFbmle06X6BOPLycLUArAwTG1sDWpi3ziZPl0
+	 qYDZyDA6VtOiQb/YHGbpBv+S9dmwqUYNC2JcVwDQG7MViJtCy5QkKewHqShcRe3vNcA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793293585;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=uhinfOj6G0C6Rx9NfglgMVhwpPTi8kNJ5VV2avR4jbY=;
-	b=0srMFZIaAZP/YDYqR1P9EjcCERmXOyErsAfRZaYWTbG7IdWB1hF3BXgn7pH3lusbDefa
-	 TOF+nqsCWTmtENiXIy34bZNfsGeYnRqUmg0manL1yQ4fR/oeJgERKTggzzi4/sFRNXtNT
-	 I1blhX9mWAPQNsVrFG/1WhSRP9zMDiNJTKmy8ZLB62kLWZ2FsKtXQMjDDoSigaGKIilXD
-	 kIazDFVIQ1EUHKBSKI2cavTpthT+ide7fC5VrPg00jYXYhnsozSK8Rrravx1swCMF9nqG
-	 IwysbO9luGgxpx2J4iuIkuFYY9o5TQPHwfmBK3eHM6GbpYgPYhjKMvg4tyKhik+EdBQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793294156;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:User-Agent;
+	bh=4AC+76/KQ+QerS0vbEfd85krwo5e3I+GiqoZ0yXri7Q=;
+	b=F18DIzQAsgLlHHEvc8SuL/BcvgUVRkhkvqR8enn0Dbr88VGFVoFKcLO8bxKVQUqCMT7f
+	 QTTzt5lk8SnOep2TmQTAmkc0KfTVSHbgOzXwlGKU8t8+sMBcU18OfyY3ZjOsqorrDRups
+	 Tay8uRhUfUzGkx4+b6h92JX+AS9mFjiE6F5EgHwELS3GciYZlxJYSGQAJIUTlf+JDRM6j
+	 6wYqnqJ0KVT1vpGmjfOHwAliZKe/AHQFEnFqy56gKXusdyHQJxiTQ8mpJ/PN9wdzvWlAY
+	 3UcQ6uDtfviYUt1kGCAZACzpE5+sr8PaCJ20owEF2AB+LW35LVQyDFwqtN+jL4h2hFg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iNP6ULfQ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=chrisdown.name;
+	spf=pass smtp.mailfrom=chrisdown.name;
+	dkim=pass header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=dT11O6tJ;
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D7F606A31C;
-	Thu, 29 Oct 2026 17:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9E8606A31C
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 17:15:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AF9E8606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=chrisdown.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisdown.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iNP6ULfQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DC71F01816;
-	Thu, 29 Oct 2026 17:06:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793293584;
-	bh=uhinfOj6G0C6Rx9NfglgMVhwpPTi8kNJ5VV2avR4jbY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iNP6ULfQMAMTf2a8z3iLOeDYZtoddpbgLuEX1NWLLZm4BGmB5RPccw24M2xwJazN7
-	 8KH3UjRaZ6Nx6SN07UVhMQNBeqvd+zGS8izhvcNMAzzEH3dxTxgRw4B/q0azFypsWB
-	 cGHNt6zMgbCEy6cu91V6a/rcuY22Z9rTwTDeYQDniTPI8AiJjxUZ5T1virZbs/m1mL
-	 zrsoq5qIhLUIvQHIjhXPjGOBemuwP08JXMvRQBIHPkFc1aHydowqsrf5T5Kl/eDULT
-	 UdlvJXqMfJCPSi/TlY+sPLLFMbmzaBHAcvpPbEQ9AXHzCpKZTZTECSvTbLSjfe24Ho
-	 UMlIKZeclMUJw==
-Message-ID: <sashiko-outbox-189716@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v1 3/3] bpftool: Prefer zlib-rs over zlib when
- available
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ian Rogers" <irogers@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Ingo
- Molnar" <mingo@redhat.com>, "Arnaldo Carvalho de Melo" <acme@kernel.org>, "Namhyung
- Kim" <namhyung@kernel.org>, "Quentin Monnet" <qmo@kernel.org>, "Miguel
- Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Nicolas
- Schier" <nsc@kernel.org>, "Nick Desaulniers" <ndesaulniers@google.com>, "Bill
- Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, gary@garyguo.net
-In-Reply-To: <20261029162958.3224280-4-irogers@google.com>
-References: <20261029162958.3224280-1-irogers@google.com>
- <20261029162958.3224280-4-irogers@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 29 Oct 2026 17:06:23 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=chrisdown.name header.i=@chrisdown.name header.a=rsa-sha256 header.s=google header.b=dT11O6tJ
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ae1d0caaedso1215571a91.2
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 10:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google; t=1793294155; x=1793898955; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=4AC+76/KQ+QerS0vbEfd85krwo5e3I+GiqoZ0yXri7Q=;
+        b=dT11O6tJyExylRrs1nXl3/kAWbLocR/Q3wbKp6eWfFGOl5xbvupjbb7NLG1DxBS4kR
+         7CZlnnngeHVGtjQ+MGsUgPRdXjy4FoMlT92COUAEAu0lBmC13ZRVYTaNNHG8pHSklvMv
+         oGPPeTCk1PYZuV7eUY1ZVoqclYUFxAJ2al2s8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793294155; x=1793898955;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4AC+76/KQ+QerS0vbEfd85krwo5e3I+GiqoZ0yXri7Q=;
+        b=Phtbfhs1/wP6IkcjuaULRz6U/chQT3+pgFKUZQdiGn89o6HHIS7hHpW01Twn4CeMLQ
+         fj7+LtYq7LTQnlGqPDt4knlFBHb1Abn5j8C+MxN1MUhSfHnY9TTZkJE7CNXtDdWRwy5f
+         cLphKVxak6DuyBLw14ToYfw7HMa0aDLtMAp/gcXOGy7KbqZJRgVwjDdN3zMdwi47WI6G
+         rvFnvU8LnZzw5+bHyM/ndq3Yy6okcjs36NKXL6whLYrPsosXfZjTvu2Z4WF9PA8c9+TK
+         TEOvs210Sj4CSd8S63czMM2lFUjxfa04L6l5Jb3XpSLL23XpOKQI2sb9hIfxM7wLVDuK
+         fmYA==
+X-Forwarded-Encrypted: i=1; AKwUvBzqObRupqr+4qUHl/fhPTP4HIh/1aG1ntbHHsmyE2kJ2Q+l+QltNV81DFJNvbMjigV0/jI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIuP4JtzJ+NQRUB54WQ/yoAyyncFTA2FVHNhkMN4xb3E/M3fDRs
+	OAsUsBt58dIUsVaUZF8rA8S73yLxEagmKT+KF9qUDOcjfgckHKjqRuIV/RNSxkUnFXQ=
+X-Gm-Gg: AYBFou1XKOQcwcbj9yKJyPBIxX5N192RJY0KSZnoyGgXvxDgbqm/gqdMmCht+z0W2Jt
+	5ftK1nxJsbA9exsm2OMfQsbA8kYPzX9tbfKkSl2yp2k3fZLJIFNnQQoQj+OT8WOKGHGIYhrOaA+
+	yqvihM+crKdkDSQmpU0r3zseIUW1WJV50tbIezDUl2iQpo57tBIQxSTPCasgF/+icstKbCSnDvu
+	YuAmi9fx9+NPm6hOsEktZLQ0r3l0fzaM3T6dcvfnpWe4QrUbt987ANNDEdQeiHQFgetQ4A5dJ8i
+	LR+WfCI824ZIrAtnwmCFtjxgUNQs/vK8EHhtCp8ZVSXW+ZQBkjUsmZHyWIEGqEoY2FNV0MBJGFk
+	dFPFdROSbPhHhCV5asHcWg4hzQEzpvDCUbAx4+9ZEg0AE5LqPLmayZaqxXuoZUxnhqYpTNYHz0E
+	x6HEUxEIS4AsuvK1Gd2NvxLrXolAmP2jo+2w4xpV3RU5Se3WVFraPo5JRxiPf8YIqW/Hbtq+qr7
+	JrvDrjCSI+Z0z5DXvtA1fCpNdJRcAn1YKpAh0qi/ZF6Bz3+IiYwjZu38WwUOYKQbrK+trLJUThx
+	LCm8zvCKoW1b0SJ8Nc1N2JwxsYun3bxsyKonPwVYBrcWsvIQgiRPzTuJcf4CDQqkw740ojRsrBd
+	rz6U+AqXZEFfZ8IDKxBgZ/6af20aH4LOyZME4XKPkaaxL2IMhRXYMbgivkaHCcQrEq6VdmWP7
+X-Received: by 2002:a17:90b:3c43:b0:3ab:c80:936f with SMTP id 98e67ed59e1d1-3ae57f95afcmr4290753a91.16.1793294155121;
+        Thu, 29 Oct 2026 10:15:55 -0700 (PDT)
+Received: from localhost ([116.86.153.182])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae85e567ecsm64167a91.3.2026.10.29.10.15.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Oct 2026 10:15:54 -0700 (PDT)
+Date: Fri, 30 Oct 2026 01:15:51 +0800
+From: Chris Down <chris@chrisdown.name>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>, Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf 0/2] bpf: Gate dynptr probe-read kfuncs like helpers
+Message-ID: <auN_R9gCBqNwEkKV@chrisdown.name>
+References: <20260615-f01-07-dynptr-probe-read-cap-v1-0-e626cd61a381@mails.tsinghua.edu.cn>
+ <DJ9QOWVIXFHR.1S8UL5H0USVCB@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,121 +102,31 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DJ9QOWVIXFHR.1S8UL5H0USVCB@gmail.com>
+User-Agent: Mutt/2.3.3 (9073d26d) (2026-06-12)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpftool: link failure with pre-built libbpf.a when zlib-rs is us=
-ed
---
+Hey Alexei,
 
-commit 7a2cb794e37f624ded57767492091a08919fa52c
-Author: Ian Rogers <irogers@google.com>
+Alexei Starovoitov writes:
+> It's fine as-is. Won't fix.
 
-bpftool: Prefer zlib-rs over zlib when available
+Could you expand a bit on the lockdown side of this? I ran into the same 
+discrepancy independently and was preparing fixes until I found this thread 
+while looking for prior discussion.
 
-This commit updates the bpftool Makefile to detect and prefer zlib-rs over
-C zlib, configuring ZLIB_CFLAGS and ZLIB_LIBS via feature_rust_lib and
-falling back to -lz when zlib-rs is unavailable or when cross-compiling
-bootstrap bpftool.
+The CAP_PERFMON side is now covered by 81c975aae375 ("bpf: Require CAP_PERFMON 
+for kfuncs reading memory"), but the probe_read_kernel helpers still check 
+LOCKDOWN_BPF_READ_KERNEL while the matching dynptr kfuncs don't. Is that 
+intentional?
 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index b0f7168e79432..a193cf89a0346 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-[ ... ]
-> @@ -38,7 +41,9 @@ $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT) $(LIBBPF_BOOTSTRAP=
-_OUTPUT) $(LIBBPF_HDRS_DI
-> =20
->  $(LIBBPF): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_=
-OUTPUT)
->  	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=3D$(LIBBPF_OUTPUT) \
-> -		DESTDIR=3D$(LIBBPF_DESTDIR:/=3D) prefix=3D $(LIBBPF) install_headers
-> +		DESTDIR=3D$(LIBBPF_DESTDIR:/=3D) prefix=3D \
-> +		$(if $(ZLIB_CFLAGS),EXTRA_CFLAGS=3D"$(or $(EXTRA_CFLAGS),-g -O2) $(ZLI=
-B_CFLAGS)") \
-> +		$(LIBBPF) install_headers
-[ ... ]
-> @@ -153,8 +178,27 @@ include $(FEATURES_DUMP)
->  endif
->  endif
-> =20
-> -LIBS =3D $(LIBBPF) -lelf $(CRYPTO_LIBS) -lz
-> -LIBS_BOOTSTRAP =3D $(LIBBPF_BOOTSTRAP) -lelf $(CRYPTO_LIBS) -lz
-> +# Prefer zlib-rs over C zlib when detected. When cross-compiling, the ho=
-st
-> +# bootstrap bpftool still links against the host's -lz.
-> +ifeq ($(feature-zlib-rs),1)
-> +  $(call feature_rust_lib,zlib-rs)
-> +  ZLIB_CFLAGS :=3D $(FEATURE_CFLAGS-zlib-rs)
-> +  ZLIB_LIBS :=3D $(FEATURE_LIBS-zlib-rs)
-> +  CFLAGS +=3D $(ZLIB_CFLAGS)
-> +  ifeq ($(CROSS_COMPILE),)
-> +    HOST_CFLAGS +=3D $(ZLIB_CFLAGS)
-> +    LIBBPF_BOOTSTRAP_CFLAGS +=3D $(ZLIB_CFLAGS)
-> +    ZLIB_BOOTSTRAP_LIBS :=3D $(ZLIB_LIBS)
-> +  else
-> +    ZLIB_BOOTSTRAP_LIBS :=3D -lz
-> +  endif
-> +else
-> +  ZLIB_LIBS :=3D -lz
-> +  ZLIB_BOOTSTRAP_LIBS :=3D -lz
-> +endif
-> +
-> +LIBS =3D $(LIBBPF) -lelf $(CRYPTO_LIBS) $(ZLIB_LIBS)
-> +LIBS_BOOTSTRAP =3D $(LIBBPF_BOOTSTRAP) -lelf $(CRYPTO_LIBS) $(ZLIB_BOOTS=
-TRAP_LIBS)
+I also checked bpf_rdonly_cast() plus typed loads, which can still read kernel 
+memory in that mode, so I can see why just gating the two dynptr kfuncs 
+wouldn't give us a consistent boundary. I'm less clear on whether that's the 
+reason for leaving them alone or there's some other reason.
 
-[Severity: Medium]
-Can this cause a link failure with an undefined reference to gzopen64 when
-bpftool is built using a pre-built libbpf.a on a host where zlib-rs is
-detected?
+Thanks,
 
-In tools/lib/bpf/Makefile, libbpf is compiled with:
-
-    override CFLAGS +=3D -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64
-
-When tools/lib/bpf/libbpf.c is compiled without ZLIB_CFLAGS, bpf_object__re=
-ad_kconfig_file()
-includes the system zlib.h with those macros defined, which remaps gzopen()
-to gzopen64() and leaves an undefined reference to gzopen64 in libbpf.a.
-In contrast, libz-rs-sys only exports gzopen and not gzopen64, which is why
-the $(LIBBPF) and $(LIBBPF_BOOTSTRAP) rules here pass $(ZLIB_CFLAGS) so that
-libbpf uses the bundled zlib.h from libz-rs-sys.
-
-However, several Makefiles build libbpf.a directly via tools/lib/bpf/Makefi=
-le
-without ZLIB_CFLAGS and then pass that pre-built archive directory to
-bpftool via LIBBPF_OUTPUT or LIBBPF_BOOTSTRAP_OUTPUT, such as
-tools/testing/selftests/bpf/Makefile:
-
-    $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makef=
-ile)    \
-                        $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
-            $(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)                =
-        \
-                        ARCH=3D CROSS_COMPILE=3D CC=3D"$(HOSTCC)" LD=3D"$(H=
-OSTLD)"         \
-                        EXTRA_CFLAGS=3D'-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXT=
-RA_CFLAGS)' \
-                        EXTRA_LDFLAGS=3D'$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)'  =
-          \
-                        OUTPUT=3D$(HOST_BUILD_DIR)/bpftool/                =
-          \
-                        LIBBPF_OUTPUT=3D$(HOST_BUILD_DIR)/libbpf/
-
-Similar patterns exist in tools/sched_ext/Makefile,
-tools/testing/selftests/sched_ext/Makefile,
-tools/testing/selftests/hid/Makefile, and drivers/hid/bpf/progs/Makefile.
-
-Because $(LIBBPF) or $(LIBBPF_BOOTSTRAP) already exists and is up to date w=
-hen
-bpftool's Makefile runs, the $(LIBBPF) recipe with $(ZLIB_CFLAGS) is skippe=
-d,
-while LIBS and LIBS_BOOTSTRAP replace -lz with $(ZLIB_LIBS) (libz_rs.a).
-Wouldn't linking bpftool then fail with an unresolved gzopen64 symbol from =
-the
-pre-built libbpf.a?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261029162958.3224=
-280-1-irogers@google.com?part=3D3
+Chris
