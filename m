@@ -1,70 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=68.232.153.233
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793274483;
-	b=HC762M/pNEHvBdriG+oHdvyF/UnR278fioTJ6xvx3jMPy7fpB1TnwOcagDG8BAtZGqss
-	 C/mLn8jNgUu3cL+FQ2yKHB6SC9O9O3maF27ZeckyHFwNnXASAZ1WCYj0MfsZurf/ELDeT
-	 1S+7GDS3kL+x46/6HUhM/DfPRmU3RuKj8W+jNTN1Ni3LyhhgbQEUtRLIoKIiyo7m1Wc6M
-	 3KhLfJdFizaYgHPVtt4JOHdJetZHLYQVTRTpoQUktG/1OiITr/nPfAMV+w5FuvgCEkJLq
-	 MQaDDC7ogfOLZCou+bJW6E3aJwVYmJ2wYIQCuxlDSBJDl+7UXJWF7/5ZCZWtgX93T5A==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793274483;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-Amp-Result:Received:Received:Received:From:Date:
-	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-ID:X-B4-Tracking:X-Change-ID:To:CC:X-Mailer;
-	bh=8WIvmGqTPvXreaFe6W/vbeDDH/omFOsI/edvs3rYRbI=;
-	b=clHUmvkYnQJkwcKRo4m7Z+oJLkTqGWAOGOYJfghyzi4oyTLgyeRSpH9Oe39U2csMwyov
-	 5lTFhrBuaWH3bkiBUTvlhX0hMNqLABvrmPdOMuwrLWlOAKGP7QQ/RUJcqQfWFc9KIqtzN
-	 7cLDNpNiOBlauDTAyI6ojRDcQCif/bylF32a+zSrJqr/VSeGyBR0deJKuKJ/wNTjn/dq9
-	 OcPHbHFm+wQQYUEqJj2d+oqqqSfFcOeNBl+sofQGrx8plhFSSqdGgLZduzvnWtTqI1RQa
-	 Z7e9akuaZ4hKreDJA5wEW7Aha55eIQWVJg/p9WNl85b2jIOk1kzVpvNeFmj9VvnGBXQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=microchip.com;
-	spf=pass smtp.mailfrom=microchip.com;
-	dkim=pass header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=u03CH9Y+;
-	arc=none smtp.remote-ip=68.232.153.233
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793277820;
+	b=mITHNMGIqnul2SDew12Wliaqjp9mem/RiFHQ35+7yfdcwzYtvgdUSGejhB0lJmpclG7v
+	 wbswqx/NG/tFwPNvLL+N3LM9uq5pQ5xhlm8ub9zzMgJkySrpgayxQXh7I2yqGMhJ9ZLD0
+	 4IwLkqe6GbO4j1y6myDvRX5L6K1CJjRxr2oFM4LeXyQjTG91Wgfd0jnhSDavKDEoEQYMG
+	 zrfy7Zw6n+26TGMlrHt/6x5rXbOBgiD5xrgxz4M+vSNZruTIeTZFlLgm8EmWFb55aXfZt
+	 3US1I9ouLgIU7nRn+32tR1xrTe3d/aW3CoZucgqWL4HK74EGdo1RybKkL5D1dG8/1Cw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793277820;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=wQJ0T9iVe1s2es6a+GeIR8KtHKblqFsrngbXVEJ2S4E=;
+	b=r+muiPsBJvwywTzKHpcyLgbFgpFpJ32wfvpfoffl5YGb1g18d54KrZ5NQkz6pekWjjHp
+	 SvljQJCO3ddrBSX12XNwbyz27Sk9NTB1K9uoRWGvLkBNsKagqz7DEACik+XKXWY9Qw3Y6
+	 EuEwpD4NGXq59/FidrAPueaeqhiQZSnfrDd8HoNYR2MwX4YgUNgcts/MUMzE9tH2Upc0v
+	 +iOGHesgFSVRt5EfKieRWaRuE5/Etbh0AY5eUZb1yI5/PxW29vUcvjugPwHhNRoo8yn44
+	 Vs8wfSu2eya4lteCz2Fm2oE8cPSOErTl6r2L3O30UZrBEsLOs6CYQYV7AXrKw7nL2Eg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H9iAHg2L;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3221606A31C;
+	Thu, 29 Oct 2026 12:43:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H9iAHg2L
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793277819;
+	b=W4tYeMVMY/kQuD7GUPHFJefsaiIc0/gEMpMKcDT7id1X1ceZq89a+xxjYO5nt8kWnber
+	 iVqm7JaKiCc+wtcQ0YQRiD2kzAj8sX1VJslYOyoviCMQ+8hgIGxspdM1tGGMOXBkPaN3A
+	 qbA9vgS3SLFcOJMSmYxpsDhUW+bACdPO0uTeeWQNQWD1VupRxjTKxDu1dPr0/F3xIIHq1
+	 FAWMAypjlJxT1OnsbooABdXhQdZJFdyFLaP++gTPYybjxXxl5V9xphznslZDHEwu+3+dP
+	 FmzSYiEiHiYjvfviQgA1jhyeN/lT7MPdV4Gwr0iaKHqke3wyAoJU/1ie04UsgtnQ1bA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793277819;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=wQJ0T9iVe1s2es6a+GeIR8KtHKblqFsrngbXVEJ2S4E=;
+	b=QoJpaxLaND/pcYN3S94SqemtFSpMUKHXuq57oDNRK1/KgL2qpvh3rIGCBv2F4ISOYJ9s
+	 NDymAl8FJ5DbzXCb3SuPE3TfDafKqi4QP1uGilS1JiJsJz0blBTP6RsD2B2NiZrHD18u3
+	 dT25bP+DeW3mr7TsHRKCk54+2EJmcQhrPjscFKHOqF2qBmZBvZnESGjffoRV4Kr4Wsgxy
+	 O3EjSdDHhxOnxu/cM6/Jw/LCUOEL3GNN8dy2cQrXUP3m3a6KMgoumB65eS/W27st1sFuD
+	 4eLV67/AJYY3htsZ54/PFEpfaCBL3YIYtNwr/pem8lTvxjKE486gvI6p1XFxL+I7lVQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D7D606A31A;
-	Thu, 29 Oct 2026 11:48:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 08D7D606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=u03CH9Y+
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1793274484; x=1824810484;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=OkcEfyAxMzYgj1tah1rk3PFLgewubHZQCw5aaRuDbp0=;
-  b=u03CH9Y+xA10Hl39Vf7zVjZ7H5MT/CxNJ00t8BrGWwMC6eLY5aw54g+8
-   Av4F6WZQAzFRG3OF4eU1FRS9qiTLXyW6qYv64RZQqtnFYQ+hogyo3KaH5
-   XX3JSZwTMbfkTYZ7LXyb7wA2JrIZ/u/dz3BoMtKx3FLRR0FU//zCzd7Ij
-   aUi5mLaywWRDaP4KAG4uFgwaKy8Ogj70854CEAdyuKh9c2icfaPfvQOuU
-   qp574FszdKhgIC5gWYvbqHTkJscznC8ejFK9GdB+LnI2Kjhf76MaL1GGi
-   HiOcKR7Hfhae0A1Vu0tU6wJBvVWo8exXrGpxvlxXZMhpc5yBYqPc48eyn
-   Q==;
-X-CSE-ConnectionGUID: VISypm3DT5GtS/pqlebFdA==
-X-CSE-MsgGUID: Njsw9srHQZyxWkZ+PCj9BQ==
-X-IronPort-AV: E=Sophos;i="6.27,184,1787036400"; 
-   d="scan'208";a="297149636"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 04:48:03 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.87.152) by
- chn-vm-ex1.mchp-main.com (10.10.87.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.56; Thu, 29 Oct 2026 04:48:01 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Thu, 29 Oct 2026 04:47:59 -0700
-From: Daniel Machon <daniel.machon@microchip.com>
-Date: Thu, 29 Oct 2026 12:47:47 +0100
-Subject: [PATCH net] net: lan966x: don't free XDP buffers in fdma tx clear
- with budget 0
+	by smtp.kernel.org (Postfix) with ESMTPS id DBAB61F01825;
+	Thu, 29 Oct 2026 12:43:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793277819;
+	bh=wQJ0T9iVe1s2es6a+GeIR8KtHKblqFsrngbXVEJ2S4E=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=H9iAHg2LidJdERooqQd15jldIuPAenlE7FlmK/d5M+QCpGI9CwWhb87pyASL2maJV
+	 zAOQdexJXQ7/9wse5lFA+++OqEJ0HN+szKz+F+PY/wy65AItGm6T/9jLt5zjs/oDWV
+	 Orv76h6N3dSFfkWw6PuQXbwvPlc9+2Yds06fJHNsvrI+0M2O2xPTd3PIs40VKQjsy4
+	 2yFOxS+Ze0HGj+/hKmwt125w4RcPbeulNCn8NkfZj9mdZge3FoWEaZoROru7H7CrIS
+	 0g7fmlzNHRg1fvr+xYPdpLQM31em5Zf1jqyYMO1bmyh/64Zk+cEyh/F//g8YjWx6bH
+	 h0XxEDNBK2T1A==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 4DC8E45846;
+	Thu, 29 Oct 2026 12:43:38 +0000 (UTC)
+From: Mark Korenberg via B4 Relay <devnull+socketpair.gmail.com@kernel.org>
+Date: Thu, 29 Oct 2026 17:43:18 +0500
+Subject: [PATCH bpf-next v2 1/2] bpftool: Fix disposal of the LLVM
+ disassembler context
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -75,72 +84,64 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20261029-lan966x-fdma-tx-clear-budget-v1-1-38c52d7aab8c@microchip.com>
-X-B4-Tracking: v=1; b=H4sIAGIy42oC/x3MwQqFIBBA0V+JWTeQQlLvV6LFmFMNlC/UQoj+P
- Wl54HJviByEI/yqGwJfEuXvC1RdwbSSXxjFFYNutFGN7nAj3xuTcXY7Yco4bUwB7ekWTth2LZG
- zJbAKyuIIPEv+9gN4TjA+zwt2edJxcwAAAA==
-X-Change-ID: 20261028-lan966x-fdma-tx-clear-budget-585aadb966b1
-To: Horatiu Vultur <horatiu.vultur@microchip.com>,
-	<UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>
+Message-Id: <20261029-bpftool-plugin-v2-1-1a47b2391b0b@gmail.com>
+References: <20261029-bpftool-plugin-v2-0-1a47b2391b0b@gmail.com>
+In-Reply-To: <20261029-bpftool-plugin-v2-0-1a47b2391b0b@gmail.com>
+To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
+ Justin Stitt <justinstitt@google.com>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
+ Mark Korenberg <socketpair@gmail.com>
 X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793277817; l=924;
+ i=socketpair@gmail.com; s=20260603; h=from:subject:message-id;
+ bh=X2MjSY5tQq8kOSRYHXZwlXNvTlqDdyCp9JF2r6O/Qbg=;
+ b=XSUs+HmZc7S3AnWxy6PF2YQn5Gmv8CW+4abMPsLsQaliMnixfJmpBuszp+CAc5xHnLaVZY2UH
+ DTPbFI/uuWxBp1q2gvXJZXFDMqLAMFjgjyo+3NOr3oYZVQ09S2cXPvf
+X-Developer-Key: i=socketpair@gmail.com; a=ed25519;
+ pk=2iAMjWhs7kA9X8ccetT2YVX8dvniXua2okQogw3Don8=
+X-Endpoint-Received: by B4 Relay for socketpair@gmail.com/20260603 with
+ auth_id=806
+X-Original-From: Mark Korenberg <socketpair@gmail.com>
+Reply-To: socketpair@gmail.com
+Content-Transfer-Encoding: 7bit
 
-lan966x_fdma_tx_clear_buf() runs from the NAPI poll and frees the
-buffers of completed tx DCBs with napi_consume_skb(),
-page_pool_recycle_direct() and xdp_return_frame_bulk().
+From: Mark Korenberg <socketpair@gmail.com>
 
-netpoll calls the NAPI poll with a budget of 0 and hardirqs disabled.
-With a budget of 0, a driver cannot call any XDP or page pool API.
+destroy_context() frees the disassembler context with LLVMDisposeMessage(),
+which is a plain free() meant for strings returned by LLVM. The context is
+therefore never destroyed, leaking about 28 KiB per disassembled function.
+Use LLVMDisasmDispose() instead.
 
-Before this patch, the XDP_TX pages and ndo_xdp_xmit frames are freed
-regardless of the budget. With netconsole on the port that owns the
-FDMA NAPI, such a buffer is freed with hardirqs disabled, and
-__page_pool_put_page() warns via lockdep_assert_no_hardirq().
-
-Leave the XDP buffers of completed DCBs in place when the budget is 0,
-and free them in the next NAPI poll. napi_consume_skb() already handles
-a budget of 0, so skbs are still freed.
-
-Found by an AI code review agent. Reproduced on a lan9668 board with a
-modified kernel that runs the NAPI poll with a budget of 0 and hardirqs
-disabled. With the fix the warning is gone.
-
-Fixes: 19c6f534f636 ("net: lan966x: Add support for XDP_TX")
-Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
+Fixes: eb9d1acf634b ("bpftool: Add LLVM as default library for disassembling JIT-ed programs")
+Signed-off-by: Mark Korenberg <socketpair@gmail.com>
 ---
- drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/bpf/bpftool/jit_disasm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index 21668bbcc9063..1fbe910c5ec38 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -353,6 +353,12 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
- 		if (!fdma_db_is_done(db))
- 			continue;
+diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
+index 04541155e9cc..5ff144ce84a1 100644
+--- a/tools/bpf/bpftool/jit_disasm.c
++++ b/tools/bpf/bpftool/jit_disasm.c
+@@ -115,7 +115,7 @@ init_context(disasm_ctx_t *ctx, const char *arch,
  
-+		/* XDP and page pool APIs can't be used with a budget of 0.
-+		 * Leave these buffers for the next NAPI poll.
-+		 */
-+		if (!weight && !dcb_buf->use_skb)
-+			continue;
-+
- 		dcb_buf->dev->stats.tx_packets++;
- 		dcb_buf->dev->stats.tx_bytes += dcb_buf->len;
+ static void destroy_context(disasm_ctx_t *ctx)
+ {
+-	LLVMDisposeMessage(*ctx);
++	LLVMDisasmDispose(*ctx);
+ }
  
+ static int
 
----
-base-commit: 829a09df899dcce860dcf5f70e09c1b2d7d425ab
-change-id: 20261028-lan966x-fdma-tx-clear-budget-585aadb966b1
-
-Best regards,
 -- 
-Daniel Machon <daniel.machon@microchip.com>
+2.56.0
+
 
