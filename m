@@ -1,108 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793268856;
-	b=yTUTegLhyW4gdFoIovbQ0qCR/SqSYiGaTzG0M0SB0gF3VO4j63fClPw0H1AECT6XlKqv
-	 +BaFakv/LybjuIUFo8fBFuHzRzIXyRDuDVGlWFsLQTBuBKfbcAfm8HbR5lm8Iq4tgSg+z
-	 HdaC5xrbTaI9XnWpJXz8/Yi6DsYOGDRwlCAZuOUaiHSoM8O/uN67S/SFI0rOw4jzFm02s
-	 MTqewClNcwtdYtGdvq+Kq57QciYnGMc+9KQSp64sBRrBKaK8Piabq6aFj+5fEZob0trbn
-	 FsUFrZb57k5OJgdjKbqnYgRzLCZxS773jHRCpBH4Ku00zXsvWxJPBmuagInH8dg6tsQ==
+	t=1793269173;
+	b=XaIw/Q1a3y2BLkCDhOKNOe+0H+MhVaqzaC1aKcvrX6ufQasVAkWACgLJoDqDfLnPU0fK
+	 L1Ht36+AEqodmAmYhI5laOY9Vp2QShbL1Gwo4JItDMynKuBWB74cGuU8/0CyRXD8X60Ou
+	 qjx+KVugQDJ9mTreE1v5p1SzntxU/RGo0j7dZTZ7j4ePcDAN7//+9xu9qqQQbLUrVcc1H
+	 2HCgiS16y0N0l6fdFV7O1rff7SGVjeniePK08YDJ2gJy2X6mUkFNN6C0pmA+H3QmADfh2
+	 gqHXgIxRvJ0rDSJBKIqPqYdW8k7rbfwX8iZtsCzfIUNzAv+yEiUlOWZU6bBbApx3Z1Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793268856;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
-	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=g6ZvoJA1lnqkwFVkrQz/iNNGer9RaAvDbUj4LHUnhUI=;
-	b=2Muzmvae4Mn6szEEm8X5/DGsSkqVFfHS5e2mHe/iC4gP7WKExSXZQ4z9lSk/QxLE9Xa9
-	 4gG5QNZQbVRG83inweug2unjHDwWTa09qeeKdfyQ42H1dOSqZ7P5KKp42t7vMMhT0yqDg
-	 gq3ElwGZsiNjQDfQo3G7d6ZP75HNBQOavgvf/Rsrig35SQCyxoIS1AwA0VMqMATkThvlB
-	 /lm6S6iRwFNEIZxQKurWmwPogIEKTd45waEh2kjeme4YDUx0yf+GGfQfaLBjDSZ/v+l+7
-	 RpEsbErdEG14pQsh4DIIAIf3R/7ibP55p0n0W+ONgyVsW1iMrb7xkz/B+ADG3zCvFWg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793269173;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=vtaqbfBX5vfrkQb9nMFdRAxYBFnpk3c4orXF29WeP8I=;
+	b=2YRuCpfDcSzUB0u6y2+9jVLD6v3KDbDdEG/rDMCIAsaWxftn0+432Zu4H9IQunMdkiCj
+	 Y+ALlCia9QqTZLtmb4XfifB1vdU5zZTF4xiL4ln+7CCbpa9ARTgiJu3/xd051X9n2du1/
+	 yf0QEy2KyqQm0TEJkvYomofXEeb5qAztsrmKuI/LDRDHZrkixo2BqZVKpVGQZ2IhENwbQ
+	 RPf06fHrwRn0aPSRDjvvWoxYwD+FGVAc4Inb5Ms5yp+22HpSPmQZw5bcsVtqgY+W8gQ/R
+	 zRaBPrDZfzzEkk8TEiSYT1g9bGLhOab6X6CPUnalbagWxsy5I8ZC0HyYSMMaPxrl5qQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=XPn6YHW9;
-	dkim=temperror header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=h7ylYXOz;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=nCws2b9a;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D5A606A31D
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 10:14:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49D5A606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98509606B782;
+	Thu, 29 Oct 2026 10:19:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 98509606B782
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=XPn6YHW9;
-	dkim=temperror header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=h7ylYXOz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793268847;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g6ZvoJA1lnqkwFVkrQz/iNNGer9RaAvDbUj4LHUnhUI=;
-	b=XPn6YHW9DhQDS2o01aDR7o0dCOnq6CquwPB4VX55o1hUbxdWsfheCQhMdnVytLhkeNBxIk
-	qxRTdx0ETjekO7E/HdDs++jhLVLjz8XT7ZMHX3qZt3uC28+tjlBU03IFenZ2OHNlxssXhQ
-	yTfS7NJGpImf7kTMHt/t+5gDhnQpfCo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-395-lU3vIHTGPhuvVz8cTZb11w-1; Thu, 29 Oct 2026 06:14:05 -0400
-X-MC-Unique: lU3vIHTGPhuvVz8cTZb11w-1
-X-Mimecast-MFC-AGG-ID: lU3vIHTGPhuvVz8cTZb11w_1793268844
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4a4af69e06fso14103145e9.2
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 03:14:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793268844; x=1793873644; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=g6ZvoJA1lnqkwFVkrQz/iNNGer9RaAvDbUj4LHUnhUI=;
-        b=h7ylYXOz2UEdPWY1fYVL5jqH4FnZo3/o7js8VE+c/8/gAN938wWuh3nsk052MoH7p4
-         VUo348ObDvXdzkJm0/SeUzsJ5m/fx0WbXiyB2sWmuKip59WMuap8Ih7pNkz/tUElCCkg
-         r1hZtXwv0F5wdnwfFGzkdFpJnwS5w+U1E5iabmrHmThpkUTw4/6uDvm1ZTzdQdGOkNQw
-         f29jlZccEfymQux3/Lq0XpMLvscWSlGh0BrIfiiuxxTW+NMMT9NmOqMjXlj25njsrJTm
-         Tl/J9cGN1L3z7lzyz0Or4HMAG5vZS9W8A7pT2CPkr4scbUY1sDx8nQApFziLLPZLQpPH
-         9lpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793268844; x=1793873644;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=g6ZvoJA1lnqkwFVkrQz/iNNGer9RaAvDbUj4LHUnhUI=;
-        b=rtOr0fEL62aJO0XtsinwfJV5QSJsb6HrlfsRCtZLDkADV8C8CMJV+bcqFqK1VI8lL6
-         a0xQkJmdP90uXT0TgGUXegstLasZscghq8sSDgazB2/GRe8kjANuLtxGZ2TsBE+HvQJY
-         DVJ5HSshzmWUOgo6AhIohsi0Yg2GwqrfTxkeXEqCbUVueCKeMuEbHIdPeDiDsVQfDmbW
-         mcubPRlsdijbL3P6rrbrJHPn6tDbmKYVFoSey9sDAWLucePjz+OpcflwOuzjuV8jmxE8
-         khfRfdl3O/V8hJbZBpnaM5wuEO02cgBophppXw8u0eIS5yRcaf6JYn7hyszxCDL+h6tM
-         YqWA==
-X-Forwarded-Encrypted: i=1; AKwUvBwhXNkN83r+YO+JePe3ARxr5rVpqx7o9waaUCmF8rky3SKEl8/l628DFfmbD7KCdKpth94=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJH5PNg2VmAWyGfcH73frxH3E25fQ4Lsg1msTAoLhUmKkeJK1zo
-	Ipd2f1S8y2R1EIb1clpwQ8OpEe8n888gjBkKKeiYnMFyu+k6LeGyWCQr8U5Dzt53VTKhZ6tRcjQ
-	T0gZ8b8VdFM/gqQYKvDNCecBeUVMYSrC2s7/qghLrXfCVc/2Kx4tr2A==
-X-Gm-Gg: AYBFou34x3fJRphtp9ciTiCnsfGQ6afS+1+ddMlbKtQ5beT9C4EkFQvgqZu/CtiMsm1
-	EzQFmutJUR3G1gPFwjZHwA+9DLCdQ4cSKx/tJWIQQdw+hzdkR1nsnMINXDN+UEMo76T9IeLgL1o
-	1MJryV3lDx2WFkvhe3UVGzh7Lcn9LVc5cfXIx9PBAbX0nOgAdHkL+lO5WW7SwpbXjhNwqlh0Tn2
-	mVqkYMwudd4Bp3zK/UMljI+pOHvg8JPNGDhnGyhqo7pF4eVxwTpAKkoMEUA4JmhWsBZcMjU0vis
-	/T7MHdjWAAXOptRaT6zaoXRXOm8JohkfYxNED3Xv9pr42HhwMRJ3EzRjMdi3IWSRtviiCtuAN15
-	6eZU4E2mPPMNS0hyvuwi6o9xteD6bU7uNtWx1GrazXsGaHsYO2O66eCgyWXAgKxZlczDJOwhclL
-	Qez5fxkruQjgFoUw4bWBPPAPsLQWS+OZgvvGEKjgKnEOILSoQ=
-X-Received: by 2002:a05:600c:870f:b0:4a1:fcfa:2a07 with SMTP id 5b1f17b1804b1-4a967f84822mr125620615e9.30.1793268844553;
-        Thu, 29 Oct 2026 03:14:04 -0700 (PDT)
-X-Received: by 2002:a05:600c:870f:b0:4a1:fcfa:2a07 with SMTP id 5b1f17b1804b1-4a967f84822mr125619965e9.30.1793268844145;
-        Thu, 29 Oct 2026 03:14:04 -0700 (PDT)
-Received: from [192.168.188.234] (ip174-129-192-82.pool-bba.aruba.it. [82.192.129.174])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecdd5b3sm33496102f8f.53.2026.10.29.03.14.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Oct 2026 03:14:03 -0700 (PDT)
-Message-ID: <bdc71cf3-5b16-4dbf-ac33-8f35b1a97d9f@redhat.com>
-Date: Thu, 29 Oct 2026 11:14:01 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=nCws2b9a
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=vtaqbfBX5vfrkQb9nMFdRAxYBFnpk3c4orXF29WeP8I=; b=nCws2b9aBxAO9qlUADishe8Fow
+	tLBV9d9y3aNbLuedV1Ok5lmUKi8gJSQDjhawzx3IDOMGadYmEJFkfc8uJ3oBAFNnHCmOXkijyTF7H
+	j0+AWSF2XRL2Fb7X/TzSI8UbytP11pmoJdMp+CWqLdgvPqKTRGz2Z0yJ75dZpw/+XEOew/wO0v0sH
+	Dx5zbPocpnGbs4aLaUT/Hg83sMLeYog12NT06PKbeBtAN1b+HR+EfuNFASb+k328BRZmNrinYbmuB
+	ChOGTBFq47+YU9gPz4SV+wQkhBWnFncr2HM1f43uEYbC8fBFi9L9ZH5AieqP6GAjE+8dVIrE2cFhV
+	OpeMjewg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xMNEG-0000000EJz0-1vue;
+	Thu, 29 Oct 2026 10:19:28 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 90DEE300312; Thu, 29 Oct 2026 11:19:27 +0100 (CET)
+Date: Thu, 29 Oct 2026 11:19:27 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Eranian Stephane <eranian@google.com>,
+	Sandipan Das <sandipan.das@amd.com>,
+	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Ananth Narayan <ananth.narayan@amd.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	bpf@vger.kernel.org, Dapeng Mi <dapeng1.mi@intel.com>,
+	Zide Chen <zide.chen@intel.com>,
+	Falcon Thomas <thomas.falcon@intel.com>,
+	Xudong Hao <xudong.hao@intel.com>
+Subject: Re: [Patch v5 01/18] perf/x86: Disable LBR if x86_pmu.lbr_nr exceeds
+ MAX_LBR_ENTRIES
+Message-ID: <20261029101927.GB1813469@noisy.programming.kicks-ass.net>
+References: <20261029043914.1395147-1-dapeng1.mi@linux.intel.com>
+ <20261029043914.1395147-2-dapeng1.mi@linux.intel.com>
+ <20261029093845.GI1779021@noisy.programming.kicks-ass.net>
+ <041e5185-ff2d-4423-af5d-aed6628973c5@linux.intel.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -112,41 +84,93 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 2/2] net: stmmac: Stop Tx queue when
- (en|dis)abling XSK pools
-To: netdev-bot+sashiko@kernel.org, kurt@linutronix.de
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, kuba@kernel.org, edumazet@kernel.org,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, yoong.siang.song@intel.com, faizal.abdul.rahim@intel.com,
- boon.leong.ong@intel.com, bigeasy@linutronix.de,
- maciej.fijalkowski@intel.com, nb@tipi-net.de, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-References: <20261022-stmmac_xsk_crashes-v4-2-15c0c750bb96@linutronix.de>
- <179299947058.3134.16617492920924670801@kernel.org>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <179299947058.3134.16617492920924670801@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <041e5185-ff2d-4423-af5d-aed6628973c5@linux.intel.com>
 
-On 10/26/26 08:24, netdev-bot+sashiko@kernel.org wrote:
-> - [High] stmmac_xdp_enable_pool() (stmmac_xdp.c:59) and
->    stmmac_xdp_disable_pool() (stmmac_xdp.c:102) now callâ€¦
-> - [Medium] The patch only works if __QUEUE_STATE_DRV_XOFF stays set from
->    stmmac_xdp_stop_tx_queue() until the ring is rebuilt.
-> - [Medium] In stmmac_xdp_xmit_xdpf(), first_entry and entry are read from
->    tx_q->cur_tx when the locals are declared (stmmac_main.c:5263-5264).
-I understand that the comments raised on patch 1/2 are sort of pre-existing,
-as the reported races can be reached by __stmmac_release(), but the above
-ones look legit and unaddressed/unanswered.
+On Thu, Oct 29, 2026 at 05:56:15PM +0800, Mi, Dapeng wrote:
+> 
+> On 10/29/2026 5:38 PM, Peter Zijlstra wrote:
+> > On Thu, Oct 29, 2026 at 12:38:57PM +0800, Dapeng Mi wrote:
+> >> Add a sanity check for x86_pmu.lbr_nr. If the hardware reports more LBR
+> >> entries than MAX_LBR_ENTRIES, disable LBR to avoid out-of-bounds access
+> >> in the cached LBR stack handling path.
+> > Cute, can this actually happen?
+> 
+> Currently it won't happen on real hardware since the maximum LBR stack
+> depth what hardware supports is 32. But it's better have this sanity check
+> assume the LBR stack depth could be extended to 64 or larger.
+> 
+> 
+> >
+> >> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+> >> ---
+> >>  arch/x86/events/amd/lbr.c    | 8 +++++++-
+> >>  arch/x86/events/intel/core.c | 7 +++++++
+> >>  2 files changed, 14 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
+> >> index a55646fcb846..96c5b5e56053 100644
+> >> --- a/arch/x86/events/amd/lbr.c
+> >> +++ b/arch/x86/events/amd/lbr.c
+> >> @@ -433,7 +433,13 @@ __init int amd_pmu_lbr_init(void)
+> >>  	ebx.full = cpuid_ebx(EXT_PERFMON_DEBUG_FEATURES);
+> >>  	x86_pmu.lbr_nr = ebx.split.lbr_v2_stack_sz;
+> >>  
+> >> -	pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
+> >> +	if (x86_pmu.lbr_nr > MAX_LBR_ENTRIES) {
+> >> +		pr_warn("LBR entries %d exceeds max %d, disable LBR.\n",
+> >> +			x86_pmu.lbr_nr, MAX_LBR_ENTRIES);
+> >> +		x86_pmu.lbr_nr = 0;
+> >> +	} else {
+> >> +		pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
+> >> +	}
+> >>  
+> >>  	return 0;
+> >>  }
+> >> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+> >> index 0a34d674df59..10c694db85ea 100644
+> >> --- a/arch/x86/events/intel/core.c
+> >> +++ b/arch/x86/events/intel/core.c
+> >> @@ -9023,6 +9023,13 @@ __init int intel_pmu_init(void)
+> >>  	 */
+> >>  	if (x86_pmu.lbr_tos && !check_msr(x86_pmu.lbr_tos, 0x3UL))
+> >>  		x86_pmu.lbr_nr = 0;
+> >> +
+> >> +	if (x86_pmu.lbr_nr > MAX_LBR_ENTRIES) {
+> >> +		pr_warn("LBR entries %d exceeds max %d, disable LBR.\n",
+> >> +			x86_pmu.lbr_nr, MAX_LBR_ENTRIES);
+> >> +		x86_pmu.lbr_nr = 0;
+> >> +	}
+> >> +
+> >>  	for (i = 0; i < x86_pmu.lbr_nr; i++) {
+> >>  		if (!(check_msr(x86_pmu.lbr_from + i, 0xffffUL) &&
+> >>  		      check_msr(x86_pmu.lbr_to + i, 0xffffUL)))
+> > Would it make sense to have but one copy of this check in
+> > init_hw_perf_events(), after calling into the micro-arch code?
+> 
+> Yes, that's what the previous version does, but Sashiko complains it's too
+> late.
+> 
+> "
+> 
+> Does zeroing x86_pmu.lbr_nr here in init_hw_perf_events() happen too late,
+> after intel_pmu_init() and amd_pmu_init() have already configured hardware
+> and driver state using the unvalidated x86_pmu.lbr_nr value?
+> 
+> "
+> 
+> https://lore.kernel.org/all/sashiko-outbox-179814@kernel.org/
+> 
+> It makes sense in some ways, so move the sanity check into the vendor init
+> in this version. 
 
-You can target `net` with the next revision, and please reply also to
-already discussed comments, even with just a pointer to the previous
-discussion.
+Urgh. But there are no events yet that early, none of that can actually
+happen.
 
-/P
+If we're really worried about this, change the micro-arch init to spawn
+in disabled state and we call x86_pmu_enable_all() at the end.
 
+Also, this is before x86_pmu_static_call_update(), nothing really
+'works' yet anyway.
