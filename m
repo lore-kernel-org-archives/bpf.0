@@ -1,100 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.218.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1793309750;
-	b=aSyMWFwRnwtLleIZFBx38xr15ELJDI/Pmb2Kxh/Mfx5Yf//6fHG7+G34NBdCVtLdS5Sd
-	 LvRE6w1arAr9Imw44CJHhkfz5FB6XE5SKEjWnIMBKwWc818Is6JHyqtYCrAeIIQoSrYOI
-	 LdLzPKNHw97C3dV4oba+CaR6ZYJVjmT3zOJTifRKVW/5koub382WTsDq3XYrymwFEyaJn
-	 Awp7sAhzNPt/1hZ0gPFCP8Yck3X9IOJgeGJUDw5RObwmdEQ34o717n8o3GpbcRg1eSVYe
-	 RDmNKoliqCtEqfeZ9r0d0Vnj7eUnsez6jc2bkTPnb2dgsj88ZSHLZIyXnRy5JjInIMg==
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.178
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793310577;
+	b=c7NNwl/PBB/bD3QVEtpG/syshQDJToFG/4Ujc0F+eRqNlzV0k9Xbn8pjaRsLPw5j7vHW
+	 sJ24o5G/dHc0dtVJ/pgUJbxcHL1yVc+TvJGiMrem2RsGG+sHXM4jr25E1F5dtS5ABWtOs
+	 xHV/W/mHqOit4mDGJpEIKL1+aV9dbAQ8S/7wKKCD7tJCo+oR1TraSw4TCvxAJv2xhX9n1
+	 5tApzCwPjzvHvvJmPIiZTWXgl1UWNcuY9uazIO0FA7xDAS+b8NmrDc8h2AWxXS0v+XEDm
+	 fco4E49vz5G1vecJlkM6dTlNB5ZcTVAOQo2ysHL/cQGCuL8mLvzvRDBGw65l6sIs5XQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793309750;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793310577;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=AjT67sODfv8LIA3zVwUGB//ZCy/sHbwEFOtaC99aW5g=;
-	b=5bwcmq0PiMm+BJeZLDJ/2UpSwIFhtXEAaN9nZ+qYJUMZNQkQI5OXc1Nf3gd/61X7nIlf
-	 wA+xIiWU5tUHK7yCMm6sVwsACN88gmhrLQ+UNduKCYgzj4A2vFBo8RT8jIW08JBruiZYi
-	 +AJ2oeQSzxjcB3KhUQdemKibTxqUZGN4bdGhTaAR/ZndJakV5VwQtxNQPLG+JJZRMCHAa
-	 GE6xrgbLgqhvhBJI8LX7I0mK/xSRfjpKloXY6I4eZP2emswrrzs19pugRaGnD60CWozqI
-	 oldirWmXmcQxEzhKG5Vp+TVBmeopbjL0p03nvz+4jzLBswL9GpEDEPO2u0dcMGVWzjQ==
+	bh=4LvPUtuyu2GhVduPqIuGkGvQXkCV6OpKfaG8/4pXsnI=;
+	b=fBzKdQRMztGDpf+WPibu58RDuUWED/8I4R87n46Bo49jWUiRKsoxEVwYczeus2Vpsho/
+	 bB7HF2qSJj4ZuUiZLOqYsD+G7fN/1kZpnHch+aeFsPxKxu45VmAhPIKVqHJnD+LcdxY3q
+	 1SDth6tLYLqC5XOz2UX1P5zXfdN5u9w7Bi0JcCNhTxcUxk89rWA8SfxM5abvErX2xonVZ
+	 NKo6UYLlaR3MWpFbqx7ynWqXlZtmqDaZHOIAAvauIxFYOPR4hr+QXeIw9osS83Z5vNPFu
+	 V5M0IEKn6Wwhsjoc9tu+nN2N/xoWLJcD9QOxrmcILanzJVHIQiJaIe31OGuMxI0Ltfg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ny4Qf79m;
-	arc=fail smtp.remote-ip=209.85.218.43
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AgRIndwS;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.178
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0881606A31A
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 21:35:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0881606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1157B606A31A
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 21:49:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1157B606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ny4Qf79m
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c3f04e0e65fso488766b.2
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 14:35:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793309748; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AgRIndwS
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e987a2ba0cso513605ad.3
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 14:49:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793310576; cv=none;
         d=google.com; s=arc-20260327;
-        b=QaJI8qd6uDKHHg7cUZugdJJMftYCuCEajx9vrKk33DHAe3hWjT9iHiEwyOXftLe8Fz
-         PmPahpuCZG/MtXk22rX//mN+jEUrTHrwgmy68B2VYutFENkFCf9k491vvL/hcCaHmRts
-         bjNB2DAl0GeemYMzamX6l8IIXoLy1KP37YreHWwMLJc622nxSm2KBES1UDjpjTUSdwsD
-         4Dtg+5fk7+FyLM83AEIrkXuidIdmyspH0MmtYDjF/tmZB3TGsKtccz5PNcpOXhdrNmeS
-         2q6NafKOXd3GdlXivCcwduYHIxDal8vExGQs8enxGUiON98bi8z7g/IbtEsY3sK2mAtu
-         CLNw==
+        b=P+gv2DSWMmkLAYPhjr4D1CToQfK7yZan1n2FrlS770ExeU/Kq3f/VqNCKBZgm0cx+u
+         nzVAmxfd/HLLxmTBsqx3WmWeiMa6F7lXZNNUb+TikLSg7it1gzzKssKdi3zCjzcxiDGr
+         QXabUstDHAu0CR4UoFtb9CsNFRV49hp2SRHLMjaZEXA9KwJuELuLp+m5SzpwTELCxFgz
+         4l53RR4lfSU/pLsxK11U77D2wI6EVZW+1R0Ul2TOZWBvwPFFsRyfK0Pbx1SEuYm1y4Yw
+         AlOf8MMrywKLN8PrI1l/NXvowZdobkcPKaCbWHI1r/wKdEzpDTUG3WZrt7S3/cqlERbY
+         o7Mw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=AjT67sODfv8LIA3zVwUGB//ZCy/sHbwEFOtaC99aW5g=;
-        fh=1Z+TmVYU27QnLiVXu4BvKkiKLBjJhBQUzQ3PAn3ADMQ=;
-        b=hpMWPDA74DsJml7zofnMTkZaOZqxtQ4d4lJPvRCzLYh6YEWaPmCcdAcXrE+4eQYIwI
-         2aAcdcL8X5Y926WbElEfwmUeSTW21NlLXYg9vlq2+vmEHsN3eEAgq8ZJhjdvDcWKcqW6
-         3LPr7SUl3CGemtildleBocjCtK6PDXWK82Y4AnJbKcT5uEkCrMRCoGn7ljFs6UkopFuI
-         eTb2IWT5OEcyRDC5f2aNaVI1HwdygWzWHg6T/xsLyeX76DQuZjWhxhITWhWC+9Az01VJ
-         vUc31JnY2GCuLxtKoiifhVqNdFEz0txabMfAkHm8MVoudfqWksPfvID/xH2v5VW3hMZ9
-         P2AA==;
+        bh=4LvPUtuyu2GhVduPqIuGkGvQXkCV6OpKfaG8/4pXsnI=;
+        fh=EPrjUbnvvSHhBunjQPwZkbkMnJ91Q4Xv6lSbxfgNnFs=;
+        b=jXu/M/S9l5TR0CHltWCCLu9cXp18d4TnF4pxeUPpvvryh4av0aVeCcISwj//+3na4o
+         rFOu0O5h5tuqteoefOc2OAFlJ8hxQgXRHbirrvQoZl45L4+RVobLWS9Rki+Om1uVmkPx
+         4/MCCwE/DQcQM/q8sR11V5s/B3pZNyin+vCydpcNOJhG/b9SlFnv0Fh2M0WEKY5hz1M8
+         GfCng+BOtwqlasAV5AUkKg/Ho7EVL5x/XMgJ63cHDOcWxONnmkZP4l52GbOWwyMfuJsL
+         x4Vbn76cilfuPuyMgUN+7f/EcL7i3thqHdTpkVwPOuo64dS4csmdR+dmc9k9xJYn8u/Z
+         wwGw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793309748; x=1793914548; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793310576; x=1793915376; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=AjT67sODfv8LIA3zVwUGB//ZCy/sHbwEFOtaC99aW5g=;
-        b=Ny4Qf79msA3Ol1Y6e8/IcUAH9yOvaHBe2q/r2VBC2ELpk56XQeNul05malBDOFT8ku
-         3iNV5LUh1WN6OSi58GJtPL1CdzJ6Gfdq1EwPPwQTHQ+fJYrr4uuUNxUlmh+B6VBLkI3H
-         ZEj0B1DaLGuydvsPOrmNnyN+V5M9uzXhIOuB8IAfuS4x7RzFZc8EHwvHkIbq2HZsSAXO
-         f8K9v16/gbB/xNpURIL1Ixe+3ZCyFOiwul7kpsyeMIznZ8WtYjV+3pMV90juEncbUJ39
-         jANFHK4YH+YJxQHzX5N4bA9Y7nUKExBRqIOMrQJ2r0F5nLrYhReYCpQZmLjrgHbgSrOi
-         AU7w==
+        bh=4LvPUtuyu2GhVduPqIuGkGvQXkCV6OpKfaG8/4pXsnI=;
+        b=AgRIndwS3WV6SQRUcimM7vIjUaj2pshPod+JJth0B2JylpaqqNRboC6UCHDDPreh/C
+         lk1oaTX9OpfRGtSrTpedrIp+9TaM4h+FWTo4m9e7WocwOyyitCIhCgXE9Ldtz7r2mPdE
+         beWmZDAhAkuzooTC4A6vvXGq1xVTr6TJ8u3pYEIUXpVySrDXeQ2L3icz+rqNPtKDQPwV
+         VoCJTBYz8EbKYc9Cm0V1+lff6tctPHd/5VU+gLJH90oRpIPl5xkzRl8eY8C8glb3r1hn
+         /tEZUFtXBMp6K1nHdF6mdobY8CsnHFcZEnZ7xTwunkaXl+lavoZ2gjNID6efrjaEj7bI
+         NdbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793309748; x=1793914548;
+        d=1e100.net; s=20260707; t=1793310576; x=1793915376;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=AjT67sODfv8LIA3zVwUGB//ZCy/sHbwEFOtaC99aW5g=;
-        b=YDTICPJhdQthnGoM1YQOp61XC8b1da0WVuXka+ZNLSJXwHJjoXGUNYzwO61FOKw8hS
-         eFLRyyUxpxBt/BaxnsjKyZUm+edKm32Jmua+2BFG35nBaX8xV0/kDon8D8DKf33uhBXw
-         OVRbSS/OVOIHQTL+ZDdyysHxqyoOlOuFL+grdcY4kE0DFXwKeTQFcA4TUUgMlHgtsYIU
-         S0cI6DQ4UiIBQY1EmDF/W1UaPPn6pgTeiE49bDvqEhghJ2DGBjAFgpd0yRA1YLsd5z5v
-         3cFgqTznMQxDyNMwhmHO/ftra/b//rEgE9tgzmUqFY3PR4iIwpKdecAuLw3R+4unMDaO
-         PiAA==
-X-Forwarded-Encrypted: i=1; AKwUvBy7H9niKrkiWkdy54PTuylpS/IDHoD2Od7FX7BgbqMp7+zSoseI728ALhNnsATgSHamLb4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKpHmfZXgR24yf0wn7zYoIUAz28gGMX4+cApXcLkWGfgYVmUe+w
-	zcP+8JVR5ohIKsOM/YDh9SSiS858eIoMymYNcEodcZgt8D5IN2ZkCU0IIDozvX2yWRynKR7SF01
-	jLEMiprc5PjIFrdk0rBMaFhwAUh73p+Wq6r7YY/W6
-X-Gm-Gg: AYBFou2Al42Y6mtAigc7jRfjbaYpBiwpVFcAm7Jf2CokOkBmz2MTXMSdxVHbYZeykLE
-	IewhjxNpbXvUpK0oA7kB9xPFW2qaKpXCQrQp0JOG8pIum5Jvcy6wap7fjGCsRS1oHSn3HdFxrei
-	5VeuYyeS+8QLeeRYXqFMuVISZ+IgecO53ObAcjKBT/p5A4toHPOnDfyIZt0z3RKe6bK88Gw8IUj
-	+CV/ujYMemUIWW/LlprYNstWF2elA5ABCnN03edAdA3a3nxXOGlSfBbTFnctEwrrO62OqLIC3eJ
-	SNHsDYO1GZ4PiyMw6VUf2c75uovhvZXH7rzw0gKrT6P0rOL2i0d4jH3tf634Yfua2MC4gRg6n5B
-	tP7KAYTq2uKUW9+33mOZs9hgj5c8QEX50qfW4lh28aHw33EpTGH7GUdyN/Ti90NMCgmZfc6I=
-X-Received: by 2002:a17:907:805:b0:c3f:a728:b437 with SMTP id
- a640c23a62f3a-c4ca7ac07eemr32967066b.45.1793309747666; Thu, 29 Oct 2026
- 14:35:47 -0700 (PDT)
+        bh=4LvPUtuyu2GhVduPqIuGkGvQXkCV6OpKfaG8/4pXsnI=;
+        b=bBW2kuMKb1ykeL72hCaaiiZKYWEfLIqB5FpCkBDAaaKqa40Bd7HqMNEl7uuHe2Szfz
+         0MxHTuNZ96Rl8/RdUnns8cju6r7ctjFQVfyupTvBHr56+PMO2MngFTc/UqQjhiycF0MH
+         7L1naxiaYNqCg/L3CE7RiNNYodvTAjLBpShCDNeNeJOZMeTMwZ/tamq4WBEuAfMNoX9W
+         HBwe0JvUbpn1jUQ78z43hs+N5jq7MHVqx8UjkT4yr9vQFoGV33t0SnTy3/e6AoObQ63e
+         TV+I0uzWvxcxxlRCVQHLCO7ipH+KSc4KdIgvVIY4fDTYvgbzUbdagXgJfYWvhAE8XL//
+         254Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzIYwVuoEUYIQQ5GUB3VpnZxV+kvPzTbjWZxKTAzJhsRgK/uhg4lsKN/RZRTV5bhwWv5tE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLdjEu+eb+rAc5rc5ORkAmyCNffC+vIg2uTp6xeeZWALKyuLiNC
+	7NjJGLTFf8NnqSJeAWsvbn2sjEHcC3l8tD2ds9xFs+sxpHpfUcMJqvEfa2XXqnPYYc5/l2vA1Sm
+	kfvdSXoc+TU9zOkLJVbHNFsvJ0SEK/I8=
+X-Gm-Gg: AYBFou3MCezkt1B7QkCgElYOEfibvE/cMo227urrBKI/IMCMzZ4lpjpNFbi6Fyzs9Jg
+	IxsktXXm1e7x8xMZ6W5c+SC2dtQR/iI2CC/baqtBeLBBOfJKhEjpCxsJ+e1pfyrZrVAtRBxpweo
+	TVPlCZ8Cq9jEag7FHb/cNwTGcRwSSCMSmn6bZusOmto0cqowq6SM6WSymkTb45E0P4R1N8bfz0q
+	ADoxmAIe8kax98WjnAVPI4YVCbNn5L8hGZ/3QmfjtTey3bWAVJ9MwtDisG3U1fxva+tDCNyZjS2
+	wYYR7epBFfAGK1wTO1Gif3PjzXv3/5E4uIe2Ove/FPNCeKVtr2ugHheiAsD+TBlZCL1dVav1Ax3
+	0eeB3bt3lVeLD15xrg/5OyGruLLilHReXs7nrKGc9UdboFdztbaLEfWrGznH5bLFcaD80jPW6g8
+	PTekoe6zkKEbyN0RcZXeikFjKGa0Pdv5dBBA==
+X-Received: by 2002:a17:90a:c2d0:b0:3ae:533e:7e3c with SMTP id
+ 98e67ed59e1d1-3ae8981bf57mr183023a91.35.1793310576388; Thu, 29 Oct 2026
+ 14:49:36 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,155 +105,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-12-wusamuel@google.com>
- <at8dNNb4vwovNZcZ@krava> <CAG2KctpMEuK5OJSedSFshNMSwOqe1g87m2ZOKBhn=Z5iCA45Aw@mail.gmail.com>
- <20261028140127.7bfeab46@pumpkin>
-In-Reply-To: <20261028140127.7bfeab46@pumpkin>
-From: Samuel Wu <wusamuel@google.com>
-Date: Thu, 29 Oct 2026 14:35:36 -0700
-X-Gm-Features: AclHuK84Rx0Zv6bqYRMUgm-AA1OaD1X9ao32PPa3PHwJ78sUr0bqSyZbITTizzQ
-Message-ID: <CAG2Kctra0GYjkzggB0cdMxPK-b9U9x-m+gR6E8goAYvhsNXEdA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/6] libbpf: Resolve typeless ksyms via
- KALLSYMS_QUERY ioctl
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20261029212551.56964-1-jolsa@kernel.org> <20261029212551.56964-2-jolsa@kernel.org>
+In-Reply-To: <20261029212551.56964-2-jolsa@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 29 Oct 2026 14:49:22 -0700
+X-Gm-Features: AclHuK_5bx_yu4DhThJ8Z6lvpTGvlgJql7An9DPk8XTshDlWp4Rvot3r6HrMVDA
+Message-ID: <CAEf4BzbUQpQcdpCJ0o2g0YkaR_Lwe9EOXdj8Fth0UUpAs-LR6w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/8] bpf: Add __srcptr kfunc argument suffix
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Lorenzo Stoakes <ljs@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Federico Di Pierro <nierro92@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 28, 2026 at 7:01=E2=80=AFAM David Laight
-<david.laight.linux@gmail.com> wrote:
+On Thu, Oct 29, 2026 at 2:26=E2=80=AFPM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> On Tue, 27 Oct 2026 15:07:44 -0700
-> Samuel Wu <wusamuel@google.com> wrote:
+> Generic sized pointer arguments are treated as writable memory. This
+> prevents kfuncs that only read from a source buffer from accepting
+> read-only BPF memory, such as const data.
 >
-> > On Mon, Oct 26, 2026 at 2:28=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> =
-wrote:
-> > >
-> > > On Thu, Oct 22, 2026 at 05:16:05PM -0700, Samuel Wu wrote:
-> > >
-> > > SNIP
-> > >
-> > > > +static int bpf_object__query_ksyms(struct bpf_object *obj)
-> > > > +{
-> > > > +     struct kallsyms_query q;
-> > > > +     struct extern_desc *ext;
-> > > > +     int err =3D 0;
-> > > > +     int fd;
-> > > > +     int i;
-> > > > +
-> > > > +     fd =3D open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
-> > > > +     if (fd < 0)
-> > > > +             return -errno;
-> > > > +
-> > > > +     for (i =3D 0; i < obj->nr_extern; i++) {
-> > > > +             ext =3D &obj->externs[i];
-> > > > +             if (ext->type !=3D EXT_KSYM || ext->ksym.type_id)
-> > > > +                     continue;
-> > > > +
-> > > > +             q =3D (struct kallsyms_query){
-> > > > +                     .size =3D sizeof(q),
-> > > > +                     .query_flags =3D KALLSYMS_QUERY_BY_SYMBOL,
-> > > > +                     .sym_name_addr =3D ptr_to_u64(ext->name),
-> > > > +             };
-> > > > +
-> > > > +                     err =3D -errno;
-> > > > +                     if (err =3D=3D -ENOENT) {
-> > > > +                             err =3D 0;
-> > > > +                             continue;
-> > > > +                     }
-> > > > +                     if (err =3D=3D -EADDRNOTAVAIL)
-> > > > +                             pr_warn("extern (ksym) '%s': resoluti=
-on is ambiguous\n",
-> > > > +                                     ext->name);
-> > > > +                     break;
-> > > > +             }
-> > > > +             ext->is_set =3D true;
-> > > > +             ext->ksym.addr =3D q.sym_addr;
-> > > > +             pr_debug("extern (ksym) '%s': resolved in kernel to 0=
-x%llx\n",
-> > > > +                      ext->name, ext->ksym.addr);
-> > > > +     }
-> > > > +     close(fd);
-> > > > +     return err;
-> > > > +}
-> > > > +
-> > > > +static int bpf_object__resolve_typeless_ksyms(struct bpf_object *o=
-bj)
-> > > >  {
-> > > > +     int err;
-> > > > +
-> > > > +     err =3D bpf_object__query_ksyms(obj);
-> > >
-> > > hi,
-> > > we could also add similar support for libbpf_available_kallsyms_parse=
- and
-> > > probably in some other places like bpf_get_ksyms.. which makes me thi=
-nk it
-> > > could be useful to have KALLSYMS_QUERY support for multiple symbols
-> > >
-> > > thanks,
-> > > jirka
-> > >
-> >
-> > Thanks for lookiing over this Jiri!
-> >
-> > Using KALLSYMS_QUERY for libbpf_available_kallsyms_parse() would
-> > theoretically by O(m*log(n)) instead of O(n*log(m)), where m is the
-> > number of tracefs symbols, and n is lines in kallsyms, with n >> m.
-> > But AFAICT, libbpf_available_kallsyms_parse() would only be called in
-> > pre-6.5 kernels, for kernels without commit 83f74441 (ftrace: Show all
-> > functions with addresses in available_filter_functions_addrs); so this
-> > ioctl could never be called.
->
-> Isn't that code also O(n*log(m)) ?
+> Adding __srcptr to mark pointers the kfunc only reads.
 
-Yes, sorry maybe I wasn't clear before, but the current code is
-O(n*log(m)), and the ioctl approach would be better since it's m
-lookups of O(log(n)) for vmlinux symbols, where n >> m. However, this
-is a red herring because that path only runs on pre-6.5 kernels, which
-won't have this ioctl.
+why can't we infer read-only from constness of a pointer? what's the
+advantage of __srcptr (which, honestly, says absolutely nothing,
+"__readonly" or "__ro" would probably make more sense if we have to go
+with suffix)
 
-> I've got a patch (I might send it after the merge window) that changes
-> one of the ftrace functions to look up every symbol by name, not just
-> when only asked to look up one.
-> It can also use the 'callback' function to detect duplicates.
-> That should be massively faster - especially with my ~18 fold improvement
-> (also waiting for the merge window to end before posting a new
-> (not much changed) version).
+>
+> The get_kfunc_arg_type change sets the initial memory access mode
+> and the resolve_func_arg_type preserves the suffix=E2=80=99s access mode
+> when it converts a BTF pointer classification into a memory argument.
+>
+> Assisted-by: Codex:GPT-6
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  Documentation/bpf/kfuncs.rst | 24 ++++++++++++++++++++++++
+>  kernel/bpf/verifier.c        | 20 +++++++++++++++++---
+>  2 files changed, 41 insertions(+), 3 deletions(-)
+>
 
-Excellent, I'll keep an eye out for it!
-
-> Does look the the code could do with getting the 'symbol name table index=
-'
-> for the symbol so that it can read the entries sequentially from that
-> point onwards.
->
-> David
->
-> >
-> > And regarding bpf_get_ksyms(), it loads all traceable functions and
-> > needs the full syms table, so a /proc/kallsyms should fits better.
-> >
-> > I did profile a slightly different form of querying multiple symbols
-> > at once [1], but didn't see much benefit. struct kallsyms_query is
-> > extensible via size and query_flags, so we can update in the future as
-> > needed.
-> >
-> > [1]: https://lore.kernel.org/all/CAG2KctozPSev+EXSpHitM3JWfjufQaEjsPJHS=
-_1HJ1wSm7sJ1w@mail.gmail.com/
-> >
-> > [...]
-> >
->
+[...]
