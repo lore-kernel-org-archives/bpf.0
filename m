@@ -1,54 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.27
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793270000;
-	b=fnIzhiuSIUVvGlNymKhSSIy/gt+vMdMY6bO2k5I96HL+ObI7Y5QAjzvwZZNdCETI6e1N
-	 LGK4owzRMnGA4SNvZU+dATuIvOVZi9QoeBOfDJJ4ru14BrYFvlDB1qNzQnbZkfqmwGaad
-	 QSfVjojyuHKF5LPgTZotyY5bZW38erGAh9/dx3pWZa7sP4B5WWErSvOFnPe4hJDwuE4UX
-	 odOVIFMHXnYK5NhX2p5rtzt4WyxgQYINenuAej1ukju6YpPAxOf8/dUrC2Pg5p+ME6c22
-	 8c2PQ1tN0NJPL7SOUWF/pPrvbWnA4sQe5RVaynHOuaQj+XjFNhBAEekVfdp5U18ga1g==
+	t=1793270352;
+	b=vVohNnt5rgG+5K4T9zUHJs1siPySuFuA8eJIgTbSAZ/avEHQCDnQsy0AaeZq4GfkHNf5
+	 FY3Fh6ktBAU25fYdF+X7Yf/Tn6hea0NCTKL0EVW+MD9ySIVxOtL/c2O9q1O9e7G9PLup3
+	 Dh+Z/KagAeTWKT9ZpWnfSE7x2zMxSN+hRrQs9/vmRP93H9DBZ3CtkdInQfR8nU5fSbrXV
+	 GFhHN7DWkvfA0YEwQFNAcxwF9IOXfrXMvcUPR7Idh01JZiByPze3kTkYL5O+o1nMlYoyR
+	 WhwN2uPIA32VSbR1l+yEkSf+vaAnci+5znyaWqzCUyFtP5Ham6XgbVCvH9IjpHnkyvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793270000;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=AQbbcg15G9Rdgl9nUgK2PYtfP3hcLsC+WTRWlyTICwA=;
-	b=ULdXTtfIMKaXPOEAHl3ZUlYTT44VDg9BftyOGBGnC3EKY5oRE2rTf9u9T1SSAPp1Rrpk
-	 XRrXN/osPeglDrQOX/wHjWMnKs1JpLWJ7P5dL8tUrlAnS5QPl2yXAMDoMvWx7FFW+xJL8
-	 jeKnClAaWcSumeFVKK4vasmMl0QC77ZEFcrDQjWrtdwGkVEAq0g8R3PsgDkDa2ATfdHX1
-	 MjVoRMV5qJg2u1HgICUtCk/7yZ2wDnUiQSODFOxzQqGmrfL6kA0M9TSTthnb3bD/OdZQU
-	 gwuu6KQPNbd83N8+MTCwGzcgUH9RfQRyeRJfVk+CpZz8DRlbCAm26vpyQ5gMJgLfkHQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793270352;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=2iBpIYvAQVfYbcHm8P5x3d3FwdMPuG4nUpVCtNrACCc=;
+	b=1De4kDd6/UrpCpsPVQ7BT2MGrx3Lk3NJIBXthIapumYtd49tDoDoWFHIIPxQHOrk/lS4
+	 WF0vQN73mkQaC1C67Hd2pk6NiQkeiZikHlXB4CuRt7rSoFmI880SBlshuREX4J5uRrMEI
+	 73wu1f3tiV+q08KIWrzugdq43JcL5mmNrBuABqQAQS99dnowsdkZolXEszc/txIWBBPac
+	 fFLPvcI45Q6Q3xLMn/AcpaxtVRfMWvHreYjXJHzIdHInMK9fArAEF63wM50Ud9NDh0ATh
+	 1JJErXfN+v5rZ1mDfpKvXd3iyr0s5YcWEwa3NO/hxr0RkZhykCJUjS6W0BizxKp6LGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=VcAcw2Oh;
-	arc=none smtp.remote-ip=95.215.58.27
-Received: from mta1.migadu.com (out-27.mta1.migadu.com [95.215.58.27])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=BwSXERQT;
+	arc=none smtp.remote-ip=90.155.92.199
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE44606A31F
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 10:33:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BFE44606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE9E606A31C;
+	Thu, 29 Oct 2026 10:39:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9CE9E606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=VcAcw2Oh
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=J85rkoN1XnhCBt+ZBRQtQySMprDThVLpEudrWZLX1rQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793269997; v=1; x=1793874797;
- b=VcAcw2OhNb8Ngx6ElwFkLwLvwMVCY+eOq9jXaMCps/cuSKMXma2q+6gtBUpqiyDHqHWChBTN
- sng+jaxnGEVj+2NcVZtDgDphJmHuw8dIxMXkNJP2G5KqGsnI7dLXHHnjDFexuTJqJK/Ig+VXs6y
- Rf1EiBQI5fsrasMWufpxL95M=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 14e5668ba4a579be;
-	Thu, 29 Oct 2026 10:33:17 +0000
-X-Mizu-Trace-ID: 14e5668ba4a579be
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <ce3ede81-f70b-4324-9fa4-21cf716e1e33@linux.dev>
-Date: Thu, 29 Oct 2026 18:33:09 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=BwSXERQT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=2iBpIYvAQVfYbcHm8P5x3d3FwdMPuG4nUpVCtNrACCc=; b=BwSXERQT4xqnHuZU7jN1KYdtbp
+	14xvO0Y4r3bgr2IkRqSKmNJW18K1U1HnxQYx3sTVdLX0pHhLXbfn0Xb0Gq0MNfMQOuIRF9IMWZ5Vs
+	+0V1FNETJQw1rBtuX12KU50Vs7RRx11Re7iimQdauXYPNDE1r6jWq6PnQcfUrHauLXRxIT5NXGomm
+	YTMQfi9vOqqz6m8j7qeoBM2UoLTbNEX5JslWq0NUHFqFNl74RgpxmYhujpACvdUnNsnWetqUa0qhH
+	ti1g3E0BZ/+AB/MvTT9qqZsFgloNCliwDrrLYoT9n/+tJKWc5qgA67DXomn8ThzhCwUcU5tDl2Dfd
+	4F0PFkzA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xMNX9-0000000GsYl-3479;
+	Thu, 29 Oct 2026 10:39:04 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id AFB42300312; Thu, 29 Oct 2026 11:38:57 +0100 (CET)
+Date: Thu, 29 Oct 2026 11:38:57 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Dapeng Mi <dapeng1.mi@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Eranian Stephane <eranian@google.com>,
+	Sandipan Das <sandipan.das@amd.com>,
+	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Ananth Narayan <ananth.narayan@amd.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	bpf@vger.kernel.org, Dapeng Mi <dapeng1.mi@intel.com>,
+	Zide Chen <zide.chen@intel.com>,
+	Falcon Thomas <thomas.falcon@intel.com>,
+	Xudong Hao <xudong.hao@intel.com>
+Subject: Re: [Patch v5 10/18] perf/x86/intel: Allow LBR read helpers to
+ operate on explicit stacks
+Message-ID: <20261029103857.GL1779021@noisy.programming.kicks-ass.net>
+References: <20261029043914.1395147-1-dapeng1.mi@linux.intel.com>
+ <20261029043914.1395147-11-dapeng1.mi@linux.intel.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,70 +82,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
- cgroups@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
- linux-kselftest@vger.kernel.org, cuitao@kylinos.cn, ameryhung@gmail.com,
- alexei.starovoitov@gmail.com
-Subject: Re: [PATCH 5/5] docs: cgroup-v2: document the iocost BPF cost model
- attachment
-To: Tejun Heo <tj@kernel.org>
-References: <20261028143534.135968-1-cui.tao@linux.dev>
- <20261028143534.135968-6-cui.tao@linux.dev>
- <72deb196d0dfc413a48f0739013bc610@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <72deb196d0dfc413a48f0739013bc610@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261029043914.1395147-11-dapeng1.mi@linux.intel.com>
 
-Hello Tejun,
+On Thu, Oct 29, 2026 at 12:39:06PM +0800, Dapeng Mi wrote:
+> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+> index ee724b28d90c..63f0504f9d2a 100644
+> --- a/arch/x86/events/intel/lbr.c
+> +++ b/arch/x86/events/intel/lbr.c
+> @@ -105,7 +105,10 @@
+>  
+>  #define ARCH_LBR_CTL_MASK			0x7f000e
+>  
+> -static void intel_pmu_lbr_filter(struct cpu_hw_events *cpuc);
+> +static void intel_pmu_lbr_filter(struct cpu_hw_events *cpuc,
+> +				 struct perf_branch_stack *lbr_stack,
+> +				 struct perf_branch_entry *lbr_entries,
+> +				 u64 *lbr_counters);
+>  
+>  static __always_inline bool is_lbr_call_stack_bit_set(u64 config)
+>  {
+> @@ -741,10 +744,12 @@ void intel_pmu_lbr_disable_all(void)
+>  	}
+>  }
+>  
+> -void intel_pmu_lbr_read_32(struct cpu_hw_events *cpuc)
+> +void intel_pmu_lbr_read_32(struct cpu_hw_events *cpuc,
+> +			   struct perf_branch_stack *lbr_stack,
+> +			   struct perf_branch_entry *lbr_entries)
+>  {
+>  	unsigned long mask = x86_pmu.lbr_nr - 1;
+> -	struct perf_branch_entry *br = cpuc->lbr_entries;
+> +	struct perf_branch_entry *br = lbr_entries;
+>  	u64 tos = intel_pmu_lbr_tos();
+>  	int i;
+>  
+> @@ -775,11 +780,13 @@ void intel_pmu_lbr_read_32(struct cpu_hw_events *cpuc)
+>   * is the same as the linear address, allowing us to merge the LIP and EIP
+>   * LBR formats.
+>   */
+> -void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc)
+> +void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc,
+> +			   struct perf_branch_stack *lbr_stack,
+> +			   struct perf_branch_entry *lbr_entries)
+>  {
+>  	bool need_info = false, call_stack = false;
+>  	unsigned long mask = x86_pmu.lbr_nr - 1;
+> -	struct perf_branch_entry *br = cpuc->lbr_entries;
+> +	struct perf_branch_entry *br = lbr_entries;
+>  	u64 tos = intel_pmu_lbr_tos();
+>  	int i;
+>  	int out = 0;
 
-在 2026/10/29 04:09, Tejun Heo 写道:
-> Hello, Tao.
-> 
-> On Wed, Oct 28, 2026 at 10:35:34PM +0800, Tao Cui wrote:
->> +	When CONFIG_BLK_CGROUP_IOCOST_BPF is enabled, a BPF cost
->> +	model can be bound to a device by attaching an
-> 
-> Users can't select CONFIG_BLK_CGROUP_IOCOST_BPF.
-> 
-The sentence now reads "When BPF cost model support is available".
-
->> +	Only detaching removes the model, after which "model=bpf"
->> +	fails and the device prices with the builtin model again.
->> +	Device removal ejects the attached model as well, while the
->> +	struct_ops link remains until userspace destroys it.  "ctrl"
-> 
-> "Only detaching removes the model" is followed by "Device removal ejects
-> the attached model as well".
-> 
-Dropped "Only".
-
->> +	accepts only "auto" and "user" and never selects a model.  It
->> +	keeps describing the builtin coefficients, which take effect
->> +	again when switched back.  The automatic profile stepping does
->> +	not switch profiles while the BPF model is in use; as with
->> +	user-set parameters, the profile selected from the device
->> +	class still applies.
-> 
-> cgroup-v2.rst doesn't describe automatic profile stepping anywhere else.
-> 
-Those sentences are removed.
->> +	defined.  They remain readable and writable while "model" is
->> +	"bpf" but take effect only after switching back to "linear".
-> 
-> The builtin coefficients taking effect again after switching back is
-> already said above.
-> 
-Removed.
-
-Thanks,
-Tao
-
-> Thanks.
-> 
-> --
-> tejun
-
+This makes no sense; why do you keep passing lbr_entries around when we
+have lbr_stack.entries[] ?
