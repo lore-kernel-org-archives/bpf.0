@@ -1,68 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.190
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793268549;
-	b=BVhL6rIzUBDWdaSqtpy90X2INEAoYN4zITCiNKm8yMGUAlfD4W5uRes09vTbXyZE5R+s
-	 bUXnfUkIVndPqJWWTdgyWu4JACA/dUlkjaDe++vFCKqw2f2fTco+QorCw2OnF97g3Ofsb
-	 p9tG1/bsukovGhd0MGKpqtzLUKVde4nFbaUNSZggEGY29XHZ4/Q64UE+KwrZwrgxzxSSK
-	 +YHS61O8WhktYd5hTUHmlnKqI8ylIQmGIvmtHNh0TFvjYoBP6jsSBa11/Ck8pC1fgruaj
-	 rjaWxgFe3y87nF3MZj9W7Gt85vfumQwsIb5AyOkbUbYjioJve1b2iayqcm1ssq4Se8A==
+	t=1793268697;
+	b=FIR5/a6PEUlnsxdWqs465a1jiE7GnUGwDRekPJ3NtJJlp+ct40LhPxM8Lfs1rGoDhfL5
+	 5A8RMg39eTsrzXzYf0dS0rcoluMjLh8MUceB4VnQqzUqXbOtmB8yWeKYfLCYhePqheLhH
+	 FGBPkt4K9zqFB03u+p2LjWbCkVEspF6xl9mb/QH2k+kg+OOXocLgv5YlaDUn5BXFdibs/
+	 YTDhvJLC4TUR01QuYuVXwMwBprUi5uH+v0uqMgRw5XLnQV0eqDWADY2eWe0ej2SdFOMJR
+	 QrDcHZGNGBqm1eTDgbr2iFnw4ChdQ3RAs51WEz+Rlv4br2kPHjPKHd3mJ53VzUmCNxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793268549;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=EBtBh4mi9vfTbizUgXJjG0zB1ZY51XtTcnlDNfbxwEI=;
-	b=mkrS0qGnQtDe6sUbOBXYPT1Tayjq+7i8Ku5s5A0uF6JoIhzAm2ae3/FBZoMVL9ZBFout
-	 71IGjYGryKb665SBK5voOoVISDQIDwvOEjztiZW56JXQaPMnq3mH4jKPFoVkfK40GndbB
-	 fPElxAgwCcCcIRkNopT3M6jCqH4O2P31VTiu04cp199vggfRiFtzqZO73tucG7JAtVyZO
-	 qm2L6Mnd97pJVGpVRmOR+b145uaa0XBZZg45tEUgOzOARxk7nZ+DWehGMqB8HoAbjRbvF
-	 qRYtBbDGans+DyNJoz9wGdOQXcIArsOv4BVQs1AcB7byESdVjRNDmRJG3IiTb4pVeWg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793268697;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=FAoeFjOhHMIomvSZEyPcUceFOZEousEjiVEkUk7cB2Y=;
+	b=BmEDXBI6++dyuWlYO5qOuQBiUpfjRL+y1SiXyq3nTCpnKwSCJQz62+ui2/0k7TS66ieZ
+	 iKnKkJ12Rf3CW/4BP/2scJRyrs6CR+xchr+pg0yoLbGv3JPnYui8IzSi3OftrlZAznALD
+	 /eMxfccj7DQOl9YV1W4Ono5cvCGNQTZSEc7v3AhWAInV+nY69Uj66Rf/dBw8UMJxSDFc1
+	 YSzGGiutbTNTCScWoSdXn9QCphLaafXFKXrl0/AKsNulAwqMPiIs2D/w4bVVDgQJxlc5u
+	 El0IT1qql7G4iG0+g7Z/gdzZ+ckQ+kKRnQ3IzIaJs1LYAKxEJdhvS8trubdDgpQbA4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ULYsBLem;
-	arc=none smtp.remote-ip=192.198.163.15
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W5WC4w0c;
+	arc=none smtp.remote-ip=95.215.58.190
+Received: from mta1.migadu.com (out-190.mta1.migadu.com [95.215.58.190])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4EF1606A31D;
-	Thu, 29 Oct 2026 10:09:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C4EF1606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C60606A326
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 10:11:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25C60606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=ULYsBLem
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793268549; x=1824804549;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=b4PAL6AHf0COge9APUPqFWFOQ7xTd5l7qZ8iH4onfc8=;
-  b=ULYsBLemL/z+49FpSWPFw4wrWjerDcpy8RZ4WqZlYZRgwC0dcKyhf4yH
-   HnZLj1wFiLpJcb2Hqkuq0odZPmwFl5XvfJcAy2FR5S15EEhm6hrTodfpm
-   RaGwW3XHCy/+qfEWRNL2dhL6Z8+QaVa1AE+YjPo8H7JolcLf3WCji10gk
-   386ojjqNUVxAQ/K1D0x9UGxriUBmmvW95DoJfAsc2uFdQNVgTO8uMN0wS
-   Jw3o8rETR9q3dF+1Di7nkM37O9Hid/rQRK/DqKR41nch/q4JS9obiBudj
-   3nQ2A7EEQHoEwfFBOfuTsJe1n01pACCJZJs+JQrhwxNhEZY5O9W4fxA60
-   A==;
-X-CSE-ConnectionGUID: C/Y+QrxOSGmx7pU9tS2K4A==
-X-CSE-MsgGUID: xPbCGLnlQoKsFNiQLX1QNQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11949"; a="2011259"
-X-IronPort-AV: E=Sophos;i="6.27,184,1787036400"; 
-   d="scan'208";a="2011259"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 03:09:09 -0700
-X-CSE-ConnectionGUID: nqn9YPXVTj2KUUBYURLt5A==
-X-CSE-MsgGUID: 7FXHWvNtSg2LbKodpgZiEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,184,1787036400"; 
-   d="scan'208";a="4982772"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.241.239]) ([10.124.241.239])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 03:09:03 -0700
-Message-ID: <efb39a39-5302-49ee-b7d3-a9ef574ab7d9@linux.intel.com>
-Date: Thu, 29 Oct 2026 18:09:00 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W5WC4w0c
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=O6pECeJaIkk7IfSov1GVY8i4R6cQbSZNmIkkj1P7D6Q=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793268695; v=1; x=1793873495;
+ b=W5WC4w0csS4VEBLZ2tQ0uytPiTEYb99WY1GvVsXg6l0O8ex/VRZXKkrvDBct7VCmR2++I9yt
+ J1Tzsp1mH2e0cfsCaugOhV+bVlES9qtmuDXLzyvlpvaYXbNsekpoZ3NVes9FyZF9eS3QIzsbDxr
+ 13N8iOXXWc173Mkp2JmAx2cA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 73988b42a70c48c5;
+	Thu, 29 Oct 2026 10:11:34 +0000
+X-Mizu-Trace-ID: 73988b42a70c48c5
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <895cb52c-1542-4ff7-abaf-844a73126fa8@linux.dev>
+Date: Thu, 29 Oct 2026 18:11:25 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,94 +59,115 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch v5 02/18] perf/x86/intel: Validate LBR XSAVE state before
- updating LBR stack
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo
- <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Andi Kleen <ak@linux.intel.com>, Eranian Stephane <eranian@google.com>,
- Sandipan Das <sandipan.das@amd.com>, Andrii Nakryiko <andrii@kernel.org>,
- Song Liu <song@kernel.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
- Ananth Narayan <ananth.narayan@amd.com>, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
- Dapeng Mi <dapeng1.mi@intel.com>, Zide Chen <zide.chen@intel.com>,
- Falcon Thomas <thomas.falcon@intel.com>, Xudong Hao <xudong.hao@intel.com>
-References: <20261029043914.1395147-1-dapeng1.mi@linux.intel.com>
- <20261029043914.1395147-3-dapeng1.mi@linux.intel.com>
- <20261029094044.GJ1779021@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <20261029094044.GJ1779021@noisy.programming.kicks-ass.net>
+Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
+ cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ linux-kselftest@vger.kernel.org, cuitao@kylinos.cn, ameryhung@gmail.com,
+ alexei.starovoitov@gmail.com
+Subject: Re: [PATCH 2/5] blk-iocost: add BPF struct_ops cost model support
+To: Tejun Heo <tj@kernel.org>
+References: <20261028143534.135968-1-cui.tao@linux.dev>
+ <20261028143534.135968-3-cui.tao@linux.dev>
+ <0753eaa990c954aa56a0c5fa8ba302e2@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <0753eaa990c954aa56a0c5fa8ba302e2@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Hello Tejun,
 
-On 10/29/2026 5:40 PM, Peter Zijlstra wrote:
-> On Thu, Oct 29, 2026 at 12:38:58PM +0800, Dapeng Mi wrote:
->> intel_pmu_arch_lbr_read_xsave() doesn't check if the LBR data is present
->> in the xsave area. If LBR data is in the INIT state, the LBR data may not
->> be really written into the xsave area.
->>
->> Add an explicit LBR XSAVE state presence check before updating the cached
->> LBR stack. Also clear the cached LBR stack when intel_pmu_lbr_reset() is
->> called, in addition to resetting the hardware LBR register file, to prevent
->> stale LBR data from being reused after a context switch or similar
->> transition.
->>
->> Fixes: c085fb877467 ("perf/x86/intel/lbr: Support XSAVES for arch LBR read")
->> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
->> ---
->>  arch/x86/events/intel/lbr.c | 10 +++++++++-
->>  1 file changed, 9 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
->> index 0b446d8912e4..a2e4ba7e1a4f 100644
->> --- a/arch/x86/events/intel/lbr.c
->> +++ b/arch/x86/events/intel/lbr.c
->> @@ -193,6 +193,8 @@ void intel_pmu_lbr_reset(void)
->>  {
->>  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
->>  
->> +	cpuc->lbr_stack.nr = 0;
->> +
->>  	if (!x86_pmu.lbr_nr)
->>  		return;
->>  
-> This also clears the stack if there is no LBR; was that on purpose? The
-> Changelog is silent on this point.
+在 2026/10/29 04:09, Tejun Heo 写道:
+> Hello, Tao.
+> 
+> On Wed, Oct 28, 2026 at 10:35:31PM +0800, Tao Cui wrote:
+>> +/*
+>> +/*
+>> + * Deliver iocg_init()/iocg_free() to the cgroups already online on the
+> 
+> The comment opens with "/*" twice. clang warns "'/*' within block comment
+> [-Wcomment]" and CONFIG_WERROR builds break.
+> 
+A stray line was left over from an earlier edit. Sorry about that.
+>> +			/*
+>> +			 * A blkg which never went online never reached the
+>> +			 * radix tree, so it must not receive an init either;
+>> ...
+>> +			if (!iocg || !iocg->pd.online)
+>> +				continue;
+> 
+> blkg_create() adds a blkg to q->blkg_list only after radix_tree_insert()
+> succeeds, so the blkgs skipped here are the ones blkg_destroy() already
+> took offline, not ones that never reached the radix tree.
+> 
+You're right, the comment described the wrong blkgs. It goes away with
+the walk, which I'll drop in v12 together with the callbacks.
 
-Yes, it's on purpose. The intent is to clear the cached software LBR stack
-as well when resetting the hardware LBR stack. This is to avoid leak the
-LBR stack information in some unexpected cases. In theory, it can be placed
-after the !x86_pmu.lbr_nr, I hope the software LBR stack can always be
-cleared regardless of there is LBR user or not.
-
-My fault, I missed to describe this change in the change log. I would add
-it in next version.
-
-Thanks.
-
-
->
->> @@ -1010,9 +1012,15 @@ static void intel_pmu_arch_lbr_read_xsave(struct cpu_hw_events *cpuc)
->>  		intel_pmu_store_lbr(cpuc, NULL);
->>  		return;
->>  	}
->> +	xsave->header.xfeatures = 0;
->>  	xsaves(&xsave->xsave, XFEATURE_MASK_LBR);
->>  
->> -	intel_pmu_store_lbr(cpuc, xsave->lbr.entries);
->> +	if (xsave->header.xfeatures & XFEATURE_MASK_LBR) {
->> +		intel_pmu_store_lbr(cpuc, xsave->lbr.entries);
->> +	} else {
->> +		/* Clear the LBR stack to avoid leaking stale entries. */
->> +		cpuc->lbr_stack.nr = 0;
+>> +	if (!disk_live(disk)) {
+>> +		mutex_unlock(&q->rq_qos_mutex);
+>> +		blk_mq_unfreeze_queue(q, memflags);
+>> +		blkdev_put_no_open(bdev);
+>> +		return -ENODEV;
 >> +	}
->>  }
->>  
->>  void intel_pmu_lbr_read(void)
->> -- 
->> 2.34.1
->>
+> 
+> The guard() suggestion from v10 was only partly applied. This unlock,
+> unfreeze and put sequence is repeated on three error paths.
+> 
+I'll fold the reg error path into a single out label. Detach no longer
+needs the freeze after the v12 rework.
+
+>> +	/*
+>> +	 * Scope the mutex so the tail bdev put runs with blkcg_mutex
+>> +	 * already released: dropping the last device reference can
+>> +	 * reach disk_release() -> blkcg_exit_disk() ->
+>> +	 * blkg_destroy_all(), which takes q->blkcg_mutex.
+>> +	 */
+>> +	{
+>> +		guard(mutex)(&q->blkcg_mutex);
+> 
+> The bare { } block isn't necessary, and ioc_bpf_detach() has the same
+> block with the same comment. Can you drop them?
+> 
+I'll drop both.
+>> +	/*
+>> +	 * The attachment is checked under rq_qos_mutex first, so an unmatched
+>> +	 * detach exits without freezing.
+>> +	 */
+>> +	mutex_lock(&q->rq_qos_mutex);
+>> +	spin_lock_irq(&q->queue_lock);
+>> +	ioc = q_to_ioc(q);
+>> +	if (ioc) {
+>> +		spin_lock(&ioc->lock);
+>> +		matched = ioc_attached_model_locked(ioc) == ops &&
+>> +			  ioc->bpf_link == link;
+>> ...
+> 
+> The same 11 lines check the attachment again after the freeze. The check
+> under rq_qos_mutex after the freeze is the one that matters.
+> 
+This goes away with the freeze removal: detach becomes a single
+mutex-critical section.
+>> +/*
+>> + * Pluggable cost model interface for blk-iocost.
+>> + *
+>> + * A BPF struct_ops implementation can take over the cost model of one device.
+>> ...
+>> + * offline and its free. Both callbacks are called with ioc->lock held and must
+>> + * not sleep; the delivery points nest inside queue_lock except for iocg_free()
+>> + * from ioc_pd_free() in blkg_free_workfn().
+>> + */
+> 
+> This restates the attach mechanics and lists the call sites. The comments
+> and descriptions in general are still long and narrate mechanics.
+> 
+v12 folds everything back into blk-iocost.c, so the private header and
+the long interface comment both go away.
+
+Thanks,
+Tao
+
+> Thanks.
+> 
+> --
+> tejun
+
