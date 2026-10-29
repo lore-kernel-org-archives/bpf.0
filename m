@@ -1,62 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.113
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793292648;
-	b=ELL8Kh8Bm26L3y4zgSfJmogxkhVyiYW2dcQicHoCT5Yw5k39mf7elAqGCPLd1z13Bo9T
-	 RiIVwnVYJva1zETUpAoUwPsNaMkTyZEomT6DfUxBt/OF6iGsrPVLerFFqXkf5H1sMlGHt
-	 YcWhsq6RRaxiE+GFj/v+w6SNEXz9Q9p0SY4tU9W86ZltBYg3/0jYfc6fm9GXE4+zDqh5f
-	 ekzpPiADJ5+ICbfaWxT/v0ZTPtLpDogyheak2AAouvdIWkKQjuJOqP+6slUg2Ld4S/Amv
-	 Q/OytOiLEOUtwLmxjSIo/Tz1WwZ4v/3l6EadKIr/iTc2q1xDfdlmFRDTROrhSQNqxvQ==
+	t=1793292822;
+	b=rH7/Nnr1bdGQUdfQz5v65YM6xKwBBm1R4yn+WCul9v94ekNLa+SnSgJnABABo6aHuhAL
+	 JT0iNyi3RQXqpzMxVUAK3Nugb4tTOSEKEgH49jK8MSiQXHSLwbE1cbUURMWmAsvLQKfVz
+	 C2oyB2sV9aFHtoWlxGddYMovNaG3/tiEXYlmNv9QvDkhhcWYlgMt50N+Vark7ZrWCdCsY
+	 SjPMRrV4N3ZuDu0iSGqA1JYEXjfFgQmZ3d9UZOSNUvTAGF7sQ/JdQJB8duo+lh2wDk1gV
+	 PZ+ULoaFpC5/p5D96T3GqC9tYzO2ZYTyvF2f8mpRqEqCrZzok1Uxu/JJe2LCLLhdm9A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793292648;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=MSUjr46/WEerio+UJ5mDFrT7MRqyE1zmZiJiZIWI6D0=;
-	b=fGx2SEqsUmpgugrd35UNgAJyHbS9ohxkEcLul3VQfdvFKoSHnTC/l9zA0IyY3Fy1VZhw
-	 yT0siTNQRx6rq+iNGNwJk7KQD7KQ5oSKAlFzkj6KypkIB7lvTaJe/OL6qimcI54DXwLwG
-	 Mk6gnCvh7PrcLyNQB4SZ4MlAGu2e/YuMqgvKWr0NY6bpsp8Two1pvVQZakFcccpVsUH6U
-	 P5wW7hg5n/GQn+Tf7DYBDeoceTjwb/Ftuu10un7JDtwkTmjTzp+4yAjNtDlIXWHQUgL9r
-	 G6yqqncGepBJNbIaNi5LF2c4vUiltmurZC0YR81UQsh5ZBx1maiaJvWeA5jMWkaGgWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793292822;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 X-B4-Tracking:X-Change-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Disposition;
+	bh=xicm+YH2a4PUoOSmMn8TLqtg/+7g+DqOkRD//rxQtbY=;
+	b=f3Na3GKkmlgOB5z6DEigcGPB2v31K7GUK3QeYZPGUOyhsZLnl66s2cHEXIjl+uw5H8tl
+	 U6W0ctj5foTEuna/45CbOcTfLjtpLH4PB+oLmd0wKoAgXkd7TizgRkqHiW2zsuOr3IH9Z
+	 FeLpPotLkzYTjvFOskXNNWwQqrIzel6XZeRu7MA/1IeqPXBhgsCFXKZYYTMFl0Gjy8TRw
+	 EQdXPGfoo3y83jzg4r5jZyzHZJyzvREwj69acl4yxvfbZnQI+NnxkcZbwptRqhwbrcTdy
+	 dLviM9nZEYFGRV//ZnMn4oIWFA8c2cB48ZPHEv18M+EHWPpMS4OkhhubiqJ9hhxz6uA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HvMzT2rD;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EVxZ22xQ;
+	arc=none smtp.remote-ip=95.215.58.113
+Received: from mta1.migadu.com (out-113.mta1.migadu.com [95.215.58.113])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49403606A31A;
-	Thu, 29 Oct 2026 16:50:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56174606A320
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 16:53:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56174606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HvMzT2rD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D15881F01816;
-	Thu, 29 Oct 2026 16:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793292647;
-	bh=MSUjr46/WEerio+UJ5mDFrT7MRqyE1zmZiJiZIWI6D0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HvMzT2rDkXbMhslstNoQpbUKFgrAbR3ZmT/CxyKvHY7QmTVD3+t7Xp49Svk9zH4JQ
-	 Lrg8OWHK7C8SXftFnxhs7AYJyDU+xDZglVooGsgwsnp0XCDLrWmhy9YRWeDYijlrxr
-	 92QTxKpALyqSlpQG3KxC7OEdOC0p01JFBA46MbDOjqKhU2tOqOzL1Z8xElUvOm9iOc
-	 Vk9Wlbs6yqKbqONfCq5mNhtRMZzcLk5NtsolzwPmQWeajfH9AJVZgt9RhpMkYME1mU
-	 ggcIlicYtNRMhcBWVPSrnosAXpF9e2DZgzs7FFRUdh2AbZJGxFS9xwuN0PRZvgjJiE
-	 CJVnJ8FDGckXA==
-Message-ID: <sashiko-outbox-189684@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v1 2/3] perf build: Prefer zlib-rs over zlib when
- available
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ian Rogers" <irogers@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Ingo
- Molnar" <mingo@redhat.com>, "Arnaldo Carvalho de Melo" <acme@kernel.org>, "Namhyung
- Kim" <namhyung@kernel.org>, "Quentin Monnet" <qmo@kernel.org>, "Miguel
- Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Nicolas
- Schier" <nsc@kernel.org>, "Nick Desaulniers" <ndesaulniers@google.com>, "Bill
- Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, gary@garyguo.net
-In-Reply-To: <20261029162958.3224280-3-irogers@google.com>
-References: <20261029162958.3224280-1-irogers@google.com>
- <20261029162958.3224280-3-irogers@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 29 Oct 2026 16:50:46 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EVxZ22xQ
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=5V+8HyL5uJ0zKjY71SJSOirPlHGHHScakry3b0/ZuAo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793292818; v=1; x=1793897618;
+ b=EVxZ22xQDCcH/lwHniDlwe0CRQ7lrrBeLIQZIBive8RbiMouP2oO5TSq/AQXjVos8S4umjvj
+ YghQl+FID3DBYSxXrjTduzJQ7CTaTuHDK8QSp/NT+Y538XUG+jwymq3aspA0YH91bU9iOzgNyhj
+ fJLFyyn5Bo3AdJoa/nDP5G44=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id a6ae364d7e57fffe;
+	Thu, 29 Oct 2026 16:53:37 +0000
+X-Mizu-Trace-ID: a6ae364d7e57fffe
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 29 Oct 2026 16:53:28 +0000
+From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Puranjay Mohan <puranjay@kernel.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: Ben Cressey <ben@cressey.dev>, 
+	Florent Revest <florent.revest@linux.dev>, Bill Wendling <morbo@google.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Subject: [PATCH v3 0/7] arm64: ftrace: support CALL_OPS on kernels built with
+ kCFI
+Message-ID: <20261029-b4-arm64-callops-kcfi-v3-0-1b011ad5ddec@linux.dev>
+X-B4-Tracking: v=1; b=H4sIANdz42oC/yXMwQ6CMAyA4VchPdOkYrNEX8Vw2EanVQSygiEhv
+ DtTj9/h/zcwySoG12qDLB81HYeCc11BfPjhLqhdMTTUOLoQY2D0+e0Yo+/7cTJ8xaTIRCcn0nE
+ KBKWdsiRdf99b+7ct4Slx/s5g3w8GzHcReQAAAA==
+X-Change-ID: 20260904-b4-arm64-callops-kcfi-40016eed4fb0
+X-Mailer: b4 0.15.2
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,124 +76,134 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] perf build: RUST_FLAGS set after Makefile.feature breaks cross f=
-eature-dump
---
+CALL_OPS and kCFI have been mutually exclusive on arm64 since commit
+baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS").
+kCFI checks the type hash at a fixed offset before the entry point, so
+every function needs the same number of prefix NOPs. Before clang 21 the
+compiler could not emit prefix NOPs without also adding the function to
+ftrace's table. Since commit 9315e22b0c0a ("arm64: ftrace: allow
+DIRECT_CALLS without CALL_OPS") a kCFI kernel can attach BPF
+trampolines. A trampoline out of BL range is reached through
+ftrace_caller. That path costs ~10 ns more per call than on a CALL_OPS
+kernel, plus ~4 ns for every extra ftrace_ops registered. Clang 21 takes
+a section name as a third argument of -fpatchable-function-entry [1].
+This series uses it to give every function three prefix NOPs while
+keeping untraced functions out of ftrace's table, and enables CALL_OPS
+under kCFI. The per-call cost drops by ~10 ns and stops growing with the
+number of ftrace_ops registered.
 
-commit 71bfdd124d6b614e2d4b506eb746a963a59097da
-Author: Ian Rogers <irogers@google.com>
+Patch 1 takes the sorttable entry offset from Kconfig. Patch 2 lets
+notrace keep the prefix NOPs. Patch 3 makes the arm64 prefix layout
+configurable and refuses patch sites that do not fit. Patch 4 applies
+the prefix count where the type hash is emitted or read by hand.
+Patch 5 adds the compiler probe and enables CALL_OPS under CFI. Patch 6
+uses five NOPs on ThinLTO kernels with BTI. Patch 7 gives Rust
+functions the same prefix NOPs.
 
-perf build: Prefer zlib-rs over zlib when available
+The cost is text size, 4.8% of .text on a defconfig-based build with
+CFI and 7.4% with ThinLTO and BTI. CALL_OPS under CFI needs clang 21 or
+later, and Rust 1.98 or later with RUST=y. Commit d3359af21fc9e ("arm64:
+bti: Disable in-kernel BTI with recent versions of Clang") turns BTI
+off on clang 21 or later, so a mainline build has one or the other
+today. A module must be built with the same prefix count as its kernel,
+since vermagic does not carry the count.
 
-This commit updates the perf build system to detect and prefer zlib-rs over=
- C
-zlib unless disabled via NO_ZLIB_RS=3D1, NO_ZLIB=3D1, or NO_RUST=3D1. It mo=
-ves Rust
-compiler detection ahead of zlib detection in Makefile.config, builds
-libz_rs.a in $(OUTPUT)libz_rs/, and exposes the zlib-rs feature in perf che=
-ck.
+Numbers below are from a KVM guest on a Graviton4 host, v7.3-rc1 with
+and without this series, clang 21.1.4. Cost of a fentry program on a
+syscall, per call, the call with the program attached minus the call
+without it:
 
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index b4764f69f47f4..4313fca53aa7c 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -532,13 +532,57 @@ ifdef CORESIGHT
->    endif
->  endif
-> =20
-> -ifndef NO_ZLIB
-> -  ifeq ($(feature-zlib), 1)
-> -    CFLAGS +=3D -DHAVE_ZLIB_SUPPORT
-> -    EXTLIBS +=3D -lz
-> -    $(call detected,CONFIG_ZLIB)
-> +ifndef NO_RUST
-> +  $(call feature_check,rust)
-> +  ifneq ($(feature-rust), 1)
-> +    $(warning Rust is not found. Test workloads with rust are disabled.)
-> +    NO_RUST :=3D 1
->    else
-> -    NO_ZLIB :=3D 1
-> +    NO_RUST :=3D 0
-> +    CFLAGS +=3D -DHAVE_RUST_SUPPORT
-> +    $(call detected,CONFIG_RUST_SUPPORT)
-> +  endif
-> +
-> +  ifneq ($(CROSS_COMPILE),)
-> +    ifeq ($(RUST_TARGET_FLAGS_$(ARCH)),)
-> +      $(error Unknown rust cross compilation architecture $(ARCH))
-> +    endif
-> +
-> +    RUST_FLAGS +=3D --target=3D$(RUST_TARGET_FLAGS_$(ARCH))
-> +  endif
-> +endif
-> +
-> +# Building zlib-rs from Cargo crate sources requires a working rustc.
-> +ifneq ($(NO_RUST), 0)
-> +  NO_ZLIB_RS :=3D 1
-> +endif
-> +
-> +# Prefer zlib-rs over C zlib when available, unless disabled via NO_ZLIB=
-=3D1 or
-> +# NO_ZLIB_RS=3D1. Both provide the standard zlib C API (HAVE_ZLIB_SUPPOR=
-T), while
-> +# HAVE_ZLIB_RS_SUPPORT records that zlib-rs is the implementation in use.
-> +ifndef NO_ZLIB
-> +  ifndef NO_ZLIB_RS
-> +    $(call feature_check,zlib-rs)
+  Kernel            | Trampoline   | Extra      || Per-call cost (ns)
+                    | vs. BL range | ftrace_ops || Median | Min  | Max
+  ==================+==============+============++========+======+======
+  kCFI, base        | out of range |          0 ||   32.9 | 32.6 | 33.4
+  kCFI, base        | out of range |         16 ||   92.6 | 92.4 | 96.3
+  kCFI, base        | in range     |          0 ||   21.3 | 21.0 | 21.8
+  ------------------+--------------+------------++--------+------+------
+  kCFI, this series | out of range |          0 ||   22.7 | 22.0 | 22.9
+  kCFI, this series | out of range |         16 ||   22.1 | 21.9 | 22.4
+  kCFI, this series | in range     |          0 ||   22.4 | 22.1 | 22.6
+  ------------------+--------------+------------++--------+------+------
 
-[Severity: Medium]
-When cross-compiling with the feature-dump target (or FEATURE_TESTS=3Dall),
-does setting RUST_FLAGS here happen too late for tools/build/Makefile.featu=
-re?
+Mark Rutland discussed the uniform prefix with a section for untraced
+entries in 2022 [2]. His review of the DIRECT_CALLS series raised the
+cost of the ftrace_caller path [3]. Josh Poimboeuf's objtool support
+for arm64 livepatch [4] detects the prefix by the CALL_OPS layout and
+treats kCFI and CALL_OPS as never meeting, which this series changes.
 
-In tools/perf/Makefile.perf, building the feature-dump target sets
-FEATURE_TESTS :=3D all before including Makefile.config:
+[1] https://github.com/llvm/llvm-project/pull/131230
+[2] https://lore.kernel.org/all/Y1LBGZPMfCZ8A1bl@FVFF77S0Q05N/
+[3] https://lore.kernel.org/all/amjnf5gz0xP5PTSB@J2N7QTR9R3/
+[4] https://lore.kernel.org/all/cover.1786230311.git.jpoimboe@kernel.org/
 
-tools/perf/Makefile.perf:
-ifeq ($(config),1)
-ifdef MAKECMDGOALS
-ifeq ($(filter feature-dump,$(MAKECMDGOALS)),feature-dump)
-FEATURE_TESTS :=3D all
-endif
-endif
-include Makefile.config
-endif
+---
+Changes in v3:
+- Drop patches 1 and 2 of v2, now in mainline through the tracing tree
+  as commit 6703ab347f4b ("ftrace: Do not leak a module's empty page
+  group") and commit c738829502be ("ftrace: Let ftrace_call_adjust()
+  reject a patch site"). Patches 3 to 9 become 1 to 7.
+- Rebase onto Linus's tree at 8a36f53fd5ec, in the 7.4 merge window.
+- Patch 4: write the second 4 in cfi_get_offset() as AARCH64_INSN_SIZE,
+  include <asm/insn-def.h> for it, and comment the type hash offset
+  (Bill Wendling).
+  https://patch.msgid.link/CAGG=3QVs=e5JtAs-D98vDsj2ax9H0gH-_rPc0oKhx-vNpq_RyQ@mail.gmail.com
+- Patch 7: say in the message that bindgen's C flags lose
+  -fpatchable-function-entry on every architecture (bpf-ci).
+- Collect Alexei Starovoitov's Acked-by for the series.
+  https://patch.msgid.link/DLNXZ2WK7TPD.2RZBUNRS4FA4L@gmail.com
+- Link to v2: https://patch.msgid.link/20260924-b4-arm64-callops-kcfi-v2-0-587865b6d991@linux.dev
 
-Earlier in tools/perf/Makefile.config, tools/build/Makefile.feature is
-included before the NO_RUST block:
+Changes in v2:
+- Drop the RFC tag.
+- New patch 1: free the page group of a module whose patch sites are
+  all skipped (sashiko on v1 patch 1). Tested on arm64 under KVM with
+  KASAN: a module built without the prefix NOPs, loaded 20 times,
+  leaks one page group per load without it and none with it.
+- Patch 2: comment the new check in ftrace_process_locs() (Steven
+  Rostedt).
+- Patch 3: comment the 0 case of the sorttable Makefile guard (bpf-ci).
+- Patches 4 and 9: reword the bindgen comments, the flag can go because
+  removing it does not change the ABI (Miguel Ojeda).
+- Patch 9: filter -fpatchable-function-entry out of bindgen's flags on
+  the bindgen_c_flags_final line, so GCC builds are covered too
+  (Miguel Ojeda).
+- Link to v1: https://patch.msgid.link/20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev
 
-tools/perf/Makefile.config:
-ifeq ($(FEATURES_DUMP),)
-  FEATURE_DISPLAY_DEFERRED :=3D 1
-include $(srctree)/tools/build/Makefile.feature
-else
-include $(FEATURES_DUMP)
-endif
+---
+Jose Fernandez (Anthropic) (7):
+      scripts/sorttable: Make the arm64 before_func offset configurable
+      compiler_types: Let notrace keep the function prefix NOPs
+      arm64: ftrace: Make the CALL_OPS prefix layout configurable
+      arm64: cfi: Use CONFIG_ARM64_FUNCTION_PREFIX_NOPS for the type hash offset
+      arm64: ftrace: Support CALL_OPS on kernels built with kCFI
+      arm64: ftrace: Use five prefix NOPs on ThinLTO kernels with BTI
+      arm64: ftrace: Allow CALL_OPS on kCFI kernels built with Rust
 
-When FEATURE_TESTS is set to all, Makefile.feature expands FEATURE_TESTS to
-include FEATURE_TESTS_EXTRA (which contains zlib-rs) and runs
-$(call feature_check,zlib-rs) while RUST_FLAGS still lacks
---target=3D$(RUST_TARGET_FLAGS_$(ARCH)).
+ arch/arm64/Kconfig                    |  27 +++++++-
+ arch/arm64/Makefile                   |  15 ++++-
+ arch/arm64/include/asm/cfi.h          |  11 ++++
+ arch/arm64/include/asm/ftrace.h       |  16 +++++
+ arch/arm64/include/asm/linkage.h      |  11 ++++
+ arch/arm64/kernel/entry-ftrace.S      |  16 ++---
+ arch/arm64/kernel/ftrace.c            | 120 +++++++++++++++++++---------------
+ arch/arm64/kernel/pi/Makefile         |   2 +
+ arch/arm64/kernel/vdso/Makefile       |   2 +-
+ arch/arm64/net/bpf_jit_comp.c         |   8 ++-
+ drivers/firmware/efi/libstub/Makefile |   2 +-
+ include/linux/compiler_types.h        |   9 +++
+ rust/Makefile                         |   7 +-
+ scripts/Makefile                      |   4 ++
+ scripts/sorttable.c                   |   7 +-
+ 15 files changed, 190 insertions(+), 67 deletions(-)
+---
+base-commit: 8a36f53fd5ec3eff01f1b637d42cbdc3821d0493
+change-id: 20260904-b4-arm64-callops-kcfi-40016eed4fb0
 
-That initial feature check invokes tools/build/Makefile.rust with an empty
-RUST_FLAGS, compiling $(OUTPUT)libz_rs/libz_rs.a for the host architecture.
-Linking test-zlib-rs.bin with the cross-compiler $(CC) against the host
-libz_rs.a then fails and records feature-zlib-rs=3D0 in $(OUTPUT)FEATURE-DU=
-MP.
+Best regards,
+--  
+Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
 
-Furthermore, when execution reaches the second $(call feature_check,zlib-rs)
-above after RUST_FLAGS is populated, $(OUTPUT)libz_rs/libz_rs.a already
-exists on disk from the host build, so Make considers it up-to-date and lin=
-ks
-against the stale host archive again.
-
-Should the CROSS_COMPILE configuration of RUST_FLAGS be moved above the
-inclusion of tools/build/Makefile.feature alongside the CC and CLANG_FLAGS
-cross-compilation setup?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261029162958.3224=
-280-1-irogers@google.com?part=3D2
