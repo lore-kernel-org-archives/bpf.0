@@ -1,102 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793304199;
-	b=UDniCqZhjgDK/qi6EOPv06u0dgaYIm9iRdbRxSNetfjeRDl9kALObOVlt6UGtMUdbH9M
-	 MZiJvyDTGT7f7qNdG7nnoMcrBmwZ84m1unDzjPehwULa0NNQuWfx5DvjrmZN29as0rLPf
-	 R2tk5CFG5G3/CRoOcABXXJPsjEt7+XU3lxChUMCB/eHvMClaoOugMDq0YskZHBMv4M+/P
-	 INnlu10UCEmJr0GpVDbo5RYG2KpkSX0WWjyh0KXe44TJEhQQvNxh25rSmIK4ammtxyD5K
-	 N7KMbBibuRKf5o9iFljGuFlaChx6uNrquWmCYBMUUMRE5GbTxyu12RamxCmB0CROBDw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793304199;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.182
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793305393;
+	b=LbNOQ9t+WQqOZ8HOeznRAT8ojGD2QG/cDlcI8TFQSYUoUnClY0Jv1T/Nw1dqTfu/T20n
+	 RiMKD+6vUsY3KcYW867wwXE+3E9vB0KdZRadnRlL/LMFOBuOVPwxBb0QqMfdqwToEqch5
+	 b1OQL1k7MfqkFZZgmmxhFOhkREFyMOidD+R7O80KQOSgH9H1Yuya1MpRqsMRpkws64vno
+	 4a35wUZmllbYd7rfdjVSJvLESOvX7lTOXPI0aJl3H7gdWUkK9HCLty9Y/cw4cYIFhy4bD
+	 KgBSQ81bkC+mjy9+tQlbzeG5W2d0em56zXq7s2MKRIHII1Y5Dg8vCJ/8Ls1JI/MFhUA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793305393;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=ftnielukM6uo0o23y4MkFIiqFTBwHPktb7DlZc4YxrY=;
-	b=0T/MFmuM49nwl3SQR5XTJLSAA7I7Fw6WLWZrYGa2+8pWQtYI4ESTR8s2CYdzA/7Y3J+M
-	 zip82/v01VNbSv5+7TvdGeTVtHusiHyMWF6oxGyKi0mNkn6hBzdZANX84Z5h1obT5IwsH
-	 74qwVitUQvzKsgC9zb4qE5V3jK0VQA/iEEQAkugw9dOvcD3Ujpg56CEzkVpi60HyVb2up
-	 AJLj1gu7rXQCvNBC8dUfsUUCfv89LNBSufdbNENh2TxeToxzmEozbBxc0NmQSpW2HaBT6
-	 68ZDZqIj0SuIv5sk7t2UCKviW6+hn38wamTwROyaX79ZsrZCxSmCNW/BlwQZwSb85hw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fIqrAftd;
-	arc=none smtp.remote-ip=209.85.128.54
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=KiIhvG8lOlwQG0lb7m/oiOyUeW6Fz+zTOcXywbar0lE=;
+	b=pCRNqexG0moHgqIv4Up0wPuSEFkEGXTXU39pOk765DvCnBx8VSd1SAcNBm9QrapuB4Rq
+	 rQsWshWOj2DAO8bhq3hLPESvoyIM6g0ZvrTFdsq3wXuIQEtpqAJmVQxA81gV0ujUJ7Ens
+	 Yl6ARQd0r41aRhTnnovyBKjsx6olm9Ev14yh2aVPC9OceyC8HjTJ5yvnLq6MdDhGQN+/K
+	 AFLhQa9HH9GPWn/cnl6TVcyPlr2MjSGOozbTbGOIz8RzZO7U/GnE/ef5YZX6uo4P1BIND
+	 fNVBET+qc+p6M/tK9i2w69NBKnsOnrtSEI4iPMwm563ZJ2OI0kChSq6/leeZqIM69FQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=mojatatu.com;
+	spf=none smtp.mailfrom=mojatatu.com;
+	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b="Owv/Hl4t";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.182
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269BA606A31A
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 20:03:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 269BA606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426D7606A31D
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 20:23:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 426D7606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fIqrAftd
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a1fbd52ab6so20273935e9.0
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 13:03:18 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=Owv/Hl4t
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8a070755c8cso1498151b3a.0
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 13:23:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793305393; cv=none;
+        d=google.com; s=arc-20260327;
+        b=lDFzXFrjXLnetiYzF4p0t7LZKZUNrGsCpPGYh1AOXMF+8HsckCoKLN1vNxR4heYQbS
+         9XNRvg+I58CiQLVbdWn9EUondcMr1YlwXMfdIjvb66jY20nndl3w8kIrpJ+EajaQ92sP
+         So7UO73gNIzWzPZdNExg4KI8B0d3P6Fomy3uU5tXvAfD/8qumsMPoa15iQZWs87YBZmJ
+         vLd72YtJhK62CzrrEakGlZEe0oAkXtLLqYFM1NMfaqDBYCJEaKtFuuG3SOGe4sSsn/xN
+         WgPc+EvwqjYfAJMVu0g6OAYuJgHpG0mtiGbsHpyyE+vGcV6Lz/Jzs/AtxatNlnLUkw2b
+         wlRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=KiIhvG8lOlwQG0lb7m/oiOyUeW6Fz+zTOcXywbar0lE=;
+        fh=NOX5ICr6ZDYnULHVBx3fiELSoNsgEMyBYshodlrwoRY=;
+        b=KbDVOd8MatXBTwHv17oSIUxbBWAQ4MSHewjLEAY/oqT1A/XWJP9xYvx7xAcw9BkMDX
+         uvXPqpzeRGasGDRJgsO2li9TSRRK2Sv2lUCs5e2HkAjYOOSOarYMoH6hKbNUVNcP2ZYU
+         V/w0Gg9Eo99brwtALZnQzGNadY4GA2QRGSToHL3/rtB6a+8Hp3g7Tg2n7gf66D7fGTi1
+         kkYQCdRGKjq/tPHM7osaGRPv8O3NnZ3x4vjhUoqYEE84O9xGrgBDXtt/ytpYwf+01/aN
+         yMPF4cmevzFLNGQdj1KBA2hROjLBpieh4vqeqCq1cdD59MwcawM0bbml+UThb1sWbJ42
+         Hnbg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793304197; x=1793908997; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=mojatatu.com; s=google; t=1793305392; x=1793910192; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ftnielukM6uo0o23y4MkFIiqFTBwHPktb7DlZc4YxrY=;
-        b=fIqrAftdm3ad0YHNmcL5gVwcLyhXX3sjl4LR74o2xqWv5EQsN7wWyhN+4/9Ex1pfVH
-         EaegO8LUvc715F2kRy1eZD2czFIrLY7Fg0dmBitSB7j2N8ibX/Km53YC5+wudsFV1o0j
-         fO+xOlZI/Y7MmZYCfRpa+bb8SubeFo/i2bHxCBABMmQuN1F4SF8asYa5Iq+Db0yHhYfC
-         qxUUHGYDY1ne0WvtYCAWSJZE+gSZxoMD4xlDAYlTwxySYAlgQbV7uRyX+/2p5TPMtUR9
-         4iGYCHP/xZuJoqpe5zguqoiygdxi8BdEJwhP/ZEuGb1E8kOd4jP4SWJQqDL3j0bFugKj
-         BEPw==
+        bh=KiIhvG8lOlwQG0lb7m/oiOyUeW6Fz+zTOcXywbar0lE=;
+        b=Owv/Hl4tmYNSAfPAJqqnfF3fbaCCZFLWmIsEAI6P6HzBe2cgGRujaZv5L4P/FsyZZu
+         mi6KbNn4DM+Tf8V2OeBjiLBpc9xXhBMeCKtGsEhgxQaaIivkb1kqphGZw1bPtLXquQ6O
+         t0KsHWo/ZCVrxJxeT5kwhfQk5AEWx5sbkdgFQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793304197; x=1793908997;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1793305392; x=1793910192;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ftnielukM6uo0o23y4MkFIiqFTBwHPktb7DlZc4YxrY=;
-        b=KrOjGPTdcFf0JynHtfXQb1K1QCQJLXAhBxwUwniWbzBMQc2gDEh6sViU7bTnXlZDPV
-         O9K7OSPUPC4glh9kXWsFWJeBFnWhX0lYhpwBmgcx5d8olfrpB37GJ/AjLrHmWGopGUp/
-         cuY1eTwflVbnWu4WQQZs7pG8iQ+V/OS8XP5vwVdO5najm9g6g/nNVDxlVGKjvpYRirsf
-         +ZCu+Sdx2QAh5yPp76m8TP0wPxzfUOG02SM7OyqQ3FzcyND46g3asMxXZyteMXD7tmBu
-         LahnzWSIh2V0Wn12YSphlHGHCvXcGQyeKdF/OCicFZCl9HX1mJU1w23i9wRcd9tSK762
-         R06Q==
-X-Gm-Message-State: AFq9FYJLoLQzEBgTkrv40Kt+scZ7a+Y7XL2lge+JJmudsIQXRvQXt6iL
-	W9R2eLcXuvxFakUF54Bxx04WvOyVvsoVOo6CxlKA/Tyr0bwmEoPAbNHX
-X-Gm-Gg: AYBFou2QgGWytELPWdL/5Z6VwywoEjacPKIS/THmq9wVr+bpIZg5GPVQWfkK0mh6X1r
-	y7Zdq32Ig+O8IECWX/pKaZyNEJKR03IT8JZAqOC0q5qHwPXF11xDC+mrnHioil3hxYIRrFVoTw1
-	Ej5FLWHh1H3NkeC3Qd1A4ceIS4zdJdHv/jAQVXc9lRFCrLT9klFcJlLq5lvzISZH3pPq/JLPJVM
-	n0Qai7t4ET4OrZFn1XpTtnetcMQSw9VNLI7tM/ZcHdHjZZrzxKPAYHlExI6rQ8WhRSAvhiOjcGF
-	6lGQyq10EY9zmj8NCzD/3uk3+eeVv34b9A65+eg1qqKGbA6+HlQ1uFu7Lk/A0Z337kvo5vRj8uG
-	N9Hs/r2q2Ln7tFD5ZjKfI3c0JAI86H4hgGLw4xM41TWAcHRY75uIfk2nHwa0IcgSgF0pdiQIBX6
-	0LqMrc04C+cfpsTRPYBrdffy4JGbIDSXmwQfZta9NJxs5mGNR4pZBoJ/17Uw+jQT7S2mXo1n8xx
-	+MVGPo2H1E8krCeaARm08gE1n9aiadYtT0K3xHu4n0LO/7J0cWs5RjNoXpLNdGPPMzhquR/s2WH
-	As5n8y9uLlSNIeM+hUoSSKYEUpNM9kjggPlK04PsncSQ3egsLevBGC5EeupEbycbAM4=
-X-Received: by 2002:a05:600c:4f82:b0:4a1:e92b:ae4a with SMTP id 5b1f17b1804b1-4ac1889d525mr637875e9.21.1793304197263;
-        Thu, 29 Oct 2026 13:03:17 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf723b5dcsm7913645e9.14.2026.10.29.13.03.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 13:03:16 -0700 (PDT)
-Date: Thu, 29 Oct 2026 21:03:14 +0100
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	linux-kernel@vger.kernel.org,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH bpf] libbpf: Reject excessive program counts in generated
- loaders
-Message-ID: <auOmggldtZA9AlDV@gmail.com>
-References: <20261028183947.9606-1-mahe.tardy@gmail.com>
- <DMHGTWQSAWG9.NUHU0WK9KRK8@gmail.com>
+        bh=KiIhvG8lOlwQG0lb7m/oiOyUeW6Fz+zTOcXywbar0lE=;
+        b=PH5ABalWCCv8hwJRIo7a80PbFDQbDVwbABnPGPKvX3Fgm+Z4LLzh70m6o9WTkxsgaH
+         sIupL7OLmhkCwXO3oMZhR2pAytloderST6sOG/994CpPnOwijYZGvJsI9xrO8++ukOjg
+         cV9DPwGuCBdb1iUl9DS1b0ikEVqT4aGJm0w4f866obP1D8tVxZEoettJo3ENFm4TzwNR
+         pDW2WwrJ2GH9Ms0Vq7l7ItnSUmd1873oYseu3P9EE1HgvkbvTsSKxqnSHIock5E3rXXG
+         6plv12m1HhwQsZ8T2K/Am8N4sTHQEVfq5COU7nmgaRB5TOjlunPVPxDE9BcnBIO2hJB3
+         ZvAw==
+X-Forwarded-Encrypted: i=1; AKwUvBxPj7Grod93Pi9z/MfSgDBbTcxJ2Fs26E2/N+4D664iMDmxbrvjaLvI0SL/wGei3d7Z3A8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIroJYSgweTnPv+qS7k4EmEM+8HisodHF3vzvFeyr/Rrhoh/JqS
+	9xiPP9thcwg+B5AFuKdxUerqCYNVO1TvC48M9/MUhXBl7lGA26F/vwqRYkofp1awvfz3BpURX6H
+	L8O9odq4g8u0kwFOt/T3HXiqHLByqtY1ejAjUUsRZ
+X-Gm-Gg: AYBFou20o9LV0bliOFGjcCerGkxdplSFG4rBFloCsHQj0VkRTOygci9fKDRHtw+e6Xk
+	5F0e4yzklh8NkzD9o5MWpd+bLGIrhqxK6WBMb6XP4lCte6iPrIV25RFn/3FqFhhb4XZpzgdyWl2
+	Q9tC8JM7+IRC8cwu5bn+Qgp1RnKyblyxP2Qp8pmACbQa3n6EPVYduH5cJbJb9BixZxf+DdaXqLK
+	2mf7+jruuH9a5DWJhMHZzdT5KmgfU4/t+7BDe6Ad44uYc8dmQmaqamrOvNZJhIpDj9xBxw9vuHk
+	2fW9NiYfpQWmuHrN3nSrN1AYLxBwa0CRWeN4wyNaoN/ZEsWATse+C60AnBfQ8H4ycw8/u+pmbsd
+	eJFYH8WDm2Zq3f6u4JCN3I5MnfEkGH9vSuz8yucPHhpHy1eW2ZI7JiLZf3Qbseq583YjARknkQS
+	NBR3aQwO63JaIQ5SI=
+X-Received: by 2002:a05:6a00:1814:b0:898:3898:3826 with SMTP id
+ d2e1a72fcca58-8a9be58914bmr217096b3a.14.1793305392573; Thu, 29 Oct 2026
+ 13:23:12 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,79 +102,181 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DMHGTWQSAWG9.NUHU0WK9KRK8@gmail.com>
+References: <QDISC-MD1X.v5.r0.20261026053226-1@mojatatu.com> <179329777513.3134.12135506558709584471@kernel.org>
+In-Reply-To: <179329777513.3134.12135506558709584471@kernel.org>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Thu, 29 Oct 2026 16:23:01 -0400
+X-Gm-Features: AclHuK81fdOF3hQJNx2mlfsMkazycSpdb9h0JGAAUY4VUhgLcYcrWN6YKU1fFJc
+Message-ID: <CAM0EoMm_3=sHFEcoynZpNMb_Y2sT=a8WZeKz_2Ewn4eo9rfJ_g@mail.gmail.com>
+Subject: Re: [PATCH net v5] net/sched: clamp skb->queue_mapping before
+ indexing the tx queue
+To: netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org, victor@mojatatu.com, jiri@resnulli.us, 
+	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
+	vinicius.gomes@intel.com, horms@kernel.org, hawk@kernel.org, 
+	daniel@iogearbox.net, sashiko-bot@kernel.org, bpf@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 29, 2026 at 04:33:56PM +0000, Alexei Starovoitov wrote:
-> On Wed, Oct 28, 2026 at 11:39 AM Mahe Tardy <mahe.tardy@gmail.com> wrote:
-> > @@ -122,6 +122,11 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
-> > +	if (nr_progs > MAX_USED_PROGS) {
-> > +		pr_warn("Total programs exceeds %d\n", MAX_USED_PROGS);
-> > +		gen->error = -E2BIG;
-> > +		return;
-> > +	}
-> 
-> nr_progs is obj->nr_programs. It counts subprogs and progs with
-> autoload == false too. See commit 259172bb6514
-> ("libbpf: Fix gen_loader assumption on number of programs.").
-> Only a prog that reaches bpf_gen__prog_load() takes a slot in prog_fd[].
-> 
-> Two objects with obj->nr_programs == 33:
-> 
->   object               today            this patch     should be
->   -------------------  ---------------  -------------  -------------
->   33 progs             -EACCES at load  -E2BIG at gen  -E2BIG at gen
->   1 prog, 32 subprogs  -EACCES at load  -E2BIG at gen  loads
-> 
-> The second object fails today because of the cleanup loop in
-> bpf_gen__init(). It closes nr_progs slots of prog_fd[], and
-> prog_fd[32] is at r10 + 0:
-> 
->   r1 = *(u32 *)(r10 +0)
->   invalid read from stack R10 off=0 size=4
-> 
-> Lets fix both: clamp the loop and check the limit where a prog takes
-> the slot, like add_map_fd() does.
-> Something like this (not even compile tested):
-> 
-> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-> --- a/tools/lib/bpf/gen_loader.c
-> +++ b/tools/lib/bpf/gen_loader.c
-> @@ -139,6 +139,8 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
->  	emit(gen, BPF_MOV64_IMM(BPF_REG_3, 0));
->  	emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
->  
-> +	/* nr_progs includes subprogs and progs that are not loaded */
-> +	nr_progs = min(nr_progs, MAX_USED_PROGS);
->  	/* amount of stack actually used, only used to calculate iterations, not stack offset */
->  	nr_progs_sz = offsetof(struct loader_stack, prog_fd[nr_progs]);
->  	/* jump over cleanup code */
-> @@ -1134,6 +1136,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
->  		gen->attach_kind = 0;
->  	}
->  	emit_check_err(gen);
-> +	if (gen->nr_progs == MAX_USED_PROGS) {
-> +		pr_warn("Total programs exceeds %d\n", MAX_USED_PROGS);
-> +		gen->error = -E2BIG;
-> +		return;
-> +	}
->  	/* remember prog_fd in the stack, if successful */
->  	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_7,
->  			      stack_off(prog_fd[gen->nr_progs])));
-> 
-> since it was already applied. pls send a follow up.
+On Thu, Oct 29, 2026 at 2:16=E2=80=AFPM <netdev-bot+sashiko@kernel.org> wro=
+te:
+>
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
+>
+> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 =C2=B7 Low: 0
+>
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwor=
+k
+> know by including "pw-bot: cr" as a separate line at the end of your repl=
+y
+> (one such reply per series is enough).
+>
+> - [Medium] The patch silently changes behaviour on stable kernels, and
+>   its commit message and docs do not describe the change accurately.
+>
 
-Ah yes this is correct, I bumped into this trying extend the lskel (but
-mostly trying to understand their generation for now to be honest) to
-allow them to call BPF_LINK_CREATE and somehow I adjusted the nr_progs
-passed to bpf_gen__init() earlier to the actual number of progs so I was
-not paying attention.
+sigh. Exhausting. I will send v6 with the commit message fixed.
 
-Your patch makes sense to me now and works locally (since
-bpf_object__load_progs() is filtering the subprogs and autoload=false we
-have at the stage of filling the prog_fd, of course, the correct number
-of progs), I tested on an object with 1 prog and 32 subprogs and it's
-good now.
+cheers,
+jamal
 
-I'll send this shortly! Thanks!
+> --
+>
+> net/sched: clamp skb->queue_mapping before indexing the tx queue
+>
+> A tc BPF store can leave skb->queue_mapping out of range. This patch caps
+> it in the qdisc dequeue paths in sch_generic.c and in taprio_enqueue(), s=
+o
+> it can no longer index dev->_tx[] or q->qdiscs[] out of bounds. On a
+> TCQ_F_ONETXQUEUE qdisc the mapping is pinned to the qdisc's own
+> q->dev_queue instead of being capped to queue 0.
+>
+> Closes: https://lore.kernel.org/netdev/179033713973.2160803.4914570693994=
+398206@kernel.org/
+> Link: https://lore.kernel.org/netdev/179293123940.3134.114912867992323467=
+7@kernel.org/
+> Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v4.r=
+0.20261021042722-1%40mojatatu.com
+> Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v3.r=
+0.20261015165943-1%40mojatatu.com
+> Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v1.2=
+0261005193231%40mojatatu.com
+> Link: https://lore.kernel.org/netdev/20261015125822.GH83879@horms.kernel.=
+org/
+>
+> > diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+> > index 6f6a6f0d5eb0..5dc1d47f811a 100644
+> > --- a/net/sched/sch_generic.c
+> > +++ b/net/sched/sch_generic.c
+> > @@ -96,9 +96,34 @@ static void qdisc_maybe_clear_missed(struct Qdisc *q=
+,
+> >
+> >  #define SKB_XOFF_MAGIC ((struct sk_buff *)1UL)
+> >
+> > +/* Re-cap a stale queue_mapping; an ONETXQUEUE qdisc pins q->dev_queue=
+. */
+> > +static u16 qdisc_cap_skb_tx_queue(struct Qdisc *q, struct sk_buff *skb=
+)
+> > +{
+> > +     u16 queue =3D skb_get_queue_mapping(skb);
+> > +     struct net_device *dev =3D qdisc_dev(q);
+> > +     u16 capped;
+> > +
+> > +     if (q->flags & TCQ_F_ONETXQUEUE)
+> > +             capped =3D q->dev_queue - netdev_get_tx_queue(dev, 0);
+> > +     else
+> > +             capped =3D netdev_cap_txqueue(dev, queue);
+>
+> [Severity: Medium]
+>
+> On a TCQ_F_ONETXQUEUE qdisc, this branch rewrites the mapping of every sk=
+b,
+> not just the out-of-range ones. Is that intended for in-range mappings th=
+at
+> a classifier sets on purpose?
+>
+> The rewrite happens in several places. dequeue_skb() applies it to the he=
+ad
+> skb and to gso_skb. try_bulk_dequeue_skb() applies it to each follower.
+> __skb_dequeue_bad_txq() applies it to skbs taken from skb_bad_txq.
+>
+> Here is one way to hit it. Take a per-queue child of mq, mqprio, taprio o=
+r
+> htb offload whose q->dev_queue is txq i. A filter on that child can run
+> "action skbedit queue_mapping j" with j !=3D i and j < real_num_tx_queues=
+.
+> tcf_skbedit_act() accepts that value:
+>
+> net/sched/act_skbedit.c:tcf_skbedit_act() {
+>     ...
+>         if (params->flags & SKBEDIT_F_QUEUE_MAPPING &&
+>             skb->dev->real_num_tx_queues > params->queue_mapping) {
+>                 if (skb_at_tc_egress(skb))
+>                         netdev_xmit_skip_txqueue(true);
+>                 skb_set_queue_mapping(skb, tcf_skbedit_hash(params, skb))=
+;
+>         }
+>     ...
+> }
+>
+> A tc BPF store of an in-range value behaves the same way.
+>
+> Before this patch, qdisc_restart() sent the packet on
+> skb_get_tx_queue(dev, skb), which is queue j. With this patch,
+> dequeue_skb()->qdisc_cap_skb_tx_queue() first rewrites j back to i. The
+> packet then goes out on queue i, and nothing is logged.
+>
+> The commit message says:
+>
+>     netdev_cap_txqueue() already logs a ratelimited notice and selects
+>     queue 0.
+>
+> The TCQ_F_ONETXQUEUE branch never calls netdev_cap_txqueue(), though. Tha=
+t
+> also covers the 1-queue reproducer in the commit message, because
+> qdisc_create() sets the flag on every non-multiqueue device:
+>
+> net/sched/sch_api.c:qdisc_create() {
+>     ...
+>                 if (!netif_is_multiqueue(dev))
+>                         sch->flags |=3D TCQ_F_ONETXQUEUE;
+>     ...
+> }
+>
+> So in that reproducer, a store of 1 from the filter on the prio root is
+> quietly pinned to 0, with no notice.
+>
+> The only place that says in-range mappings from a filter on a per-queue
+> child are now overridden is the v4 -> v5 note below the "---". git am dro=
+ps
+> that part, and the patch is tagged for stable.
+>
+> Documentation/networking/tc-queue-filters.rst also still says:
+>
+>     2) TC filter directs traffic to a transmit queue with the action
+>        skbedit queue_mapping $tx_qid.
+>
+> It does not limit where the filter can be attached.
+>
+> Could the commit message describe the pinning of in-range mappings, and t=
+he
+> missing log message on the TCQ_F_ONETXQUEUE path? Should the documentatio=
+n
+> be updated to match?
+>
+> > +
+> > +     if (unlikely(capped !=3D queue))
+> > +             skb_set_queue_mapping(skb, capped);
+> > +
+> > +     return capped;
+> > +}
+>
+> [ ... ]
+>
+> --
+> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
+set/QDISC-MD1X.v5.r0.20261026053226-1%40mojatatu.com
