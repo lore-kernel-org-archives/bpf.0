@@ -1,58 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793292324;
-	b=axMKHzqX3F72j+RyT4gZEoSMuqdYREt+GFD60Y2Alrs95LkwIezf+CUIpbxDJ0rJs6X7
-	 R8VfLi55hNxyoXMM+ACgTF0Ez7LuDtClNM916j0f8EDoMBLCgKMaqYel1j/ejg6MwHoo0
-	 QbLKbRCxO+Tnv0KFpCUk3gocA1DkU5ye/rIDV+Wx5G62K/M8yZsRSg2A5sESLcUMa189Q
-	 rDCq93NwYSfEh/w2IAdknGNzCGyMAsPFqaCgOTfcNmyfdTZqwYz9kXI274TkvZZds9zbt
-	 6v6L+VXrRKVZhpSxbcVTE9McI/Og04ltS4oJqR11KlNHzdUN72wXqvUKWTNXFWuXs/A==
+	t=1793292648;
+	b=ELL8Kh8Bm26L3y4zgSfJmogxkhVyiYW2dcQicHoCT5Yw5k39mf7elAqGCPLd1z13Bo9T
+	 RiIVwnVYJva1zETUpAoUwPsNaMkTyZEomT6DfUxBt/OF6iGsrPVLerFFqXkf5H1sMlGHt
+	 YcWhsq6RRaxiE+GFj/v+w6SNEXz9Q9p0SY4tU9W86ZltBYg3/0jYfc6fm9GXE4+zDqh5f
+	 ekzpPiADJ5+ICbfaWxT/v0ZTPtLpDogyheak2AAouvdIWkKQjuJOqP+6slUg2Ld4S/Amv
+	 Q/OytOiLEOUtwLmxjSIo/Tz1WwZ4v/3l6EadKIr/iTc2q1xDfdlmFRDTROrhSQNqxvQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793292324;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
-	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=jTL0Vn1vZcwRC6504YEz/5KSf6ShhFurO/agsa1xCzo=;
-	b=AMFpvPp7czN7FZyel3q6VUWedpFieT5m4AceSNpWr1bHi+xxIU73SC1iJ/YxLIw7pMnY
-	 IHyCGicg21YTvTiUROT4kqLxE+iWWZW5V/s4QAufXfoDgRQsUAuy9GVpocV38Tz2YCz7/
-	 oJvlbs8gxAEiSTi+s7dvSNLIdLAb6bPqAYvHaVqyGO7vdNUJCtUrdCRxlcks/qsOIgQ8c
-	 CNGHDZYjYaAEEcLUaRhimsS3xHwKrKjH5EfJm5pn+fvoJnc77dBZfZ+7Tq+2sTo0vgfW2
-	 65Jw9aQqEZy4Xp0qQN9mCgnSYoV2baOz9CmyJp0Bd5QvnFZypwchlj/Sgp8mwy5u+Qw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793292648;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=MSUjr46/WEerio+UJ5mDFrT7MRqyE1zmZiJiZIWI6D0=;
+	b=fGx2SEqsUmpgugrd35UNgAJyHbS9ohxkEcLul3VQfdvFKoSHnTC/l9zA0IyY3Fy1VZhw
+	 yT0siTNQRx6rq+iNGNwJk7KQD7KQ5oSKAlFzkj6KypkIB7lvTaJe/OL6qimcI54DXwLwG
+	 Mk6gnCvh7PrcLyNQB4SZ4MlAGu2e/YuMqgvKWr0NY6bpsp8Two1pvVQZakFcccpVsUH6U
+	 P5wW7hg5n/GQn+Tf7DYBDeoceTjwb/Ftuu10un7JDtwkTmjTzp+4yAjNtDlIXWHQUgL9r
+	 G6yqqncGepBJNbIaNi5LF2c4vUiltmurZC0YR81UQsh5ZBx1maiaJvWeA5jMWkaGgWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=OXEPlS1h;
-	arc=none smtp.remote-ip=216.40.44.15
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HvMzT2rD;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFEB606A31A
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 16:45:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7BFEB606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49403606A31A;
+	Thu, 29 Oct 2026 16:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=OXEPlS1h
-Received: from omf18.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 9BC861A04D3;
-	Thu, 29 Oct 2026 16:45:21 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf18.hostedemail.com (Postfix) with ESMTPA id D42142F;
-	Thu, 29 Oct 2026 16:45:19 +0000 (UTC)
-Date: Thu, 29 Oct 2026 12:45:18 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, <bpf@vger.kernel.org>,
- <andrii@kernel.org>, <jolsa@kernel.org>, "Menglong Dong"
- <dongml2@chinatelecom.cn>
-Subject: Re: [PATCH bpf v3 1/2] x86/ftrace: Mark jmp mode by clearing bit 63
- of trampoline address
-Message-ID: <20261029124518.1953fd57@gandalf.local.home>
-In-Reply-To: <DMHGVE026N3I.1V3834R8WLSYB@gmail.com>
-References: <20261028202345.1215859-1-daniel@iogearbox.net>
-	<DMHGVE026N3I.1V3834R8WLSYB@gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HvMzT2rD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D15881F01816;
+	Thu, 29 Oct 2026 16:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793292647;
+	bh=MSUjr46/WEerio+UJ5mDFrT7MRqyE1zmZiJiZIWI6D0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=HvMzT2rDkXbMhslstNoQpbUKFgrAbR3ZmT/CxyKvHY7QmTVD3+t7Xp49Svk9zH4JQ
+	 Lrg8OWHK7C8SXftFnxhs7AYJyDU+xDZglVooGsgwsnp0XCDLrWmhy9YRWeDYijlrxr
+	 92QTxKpALyqSlpQG3KxC7OEdOC0p01JFBA46MbDOjqKhU2tOqOzL1Z8xElUvOm9iOc
+	 Vk9Wlbs6yqKbqONfCq5mNhtRMZzcLk5NtsolzwPmQWeajfH9AJVZgt9RhpMkYME1mU
+	 ggcIlicYtNRMhcBWVPSrnosAXpF9e2DZgzs7FFRUdh2AbZJGxFS9xwuN0PRZvgjJiE
+	 CJVnJ8FDGckXA==
+Message-ID: <sashiko-outbox-189684@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v1 2/3] perf build: Prefer zlib-rs over zlib when
+ available
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ian Rogers" <irogers@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Arnaldo Carvalho de Melo" <acme@kernel.org>, "Namhyung
+ Kim" <namhyung@kernel.org>, "Quentin Monnet" <qmo@kernel.org>, "Miguel
+ Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Nicolas
+ Schier" <nsc@kernel.org>, "Nick Desaulniers" <ndesaulniers@google.com>, "Bill
+ Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, gary@garyguo.net
+In-Reply-To: <20261029162958.3224280-3-irogers@google.com>
+References: <20261029162958.3224280-1-irogers@google.com>
+ <20261029162958.3224280-3-irogers@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 29 Oct 2026 16:50:46 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,44 +65,124 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: D42142F
-X-Stat-Signature: uxc6fechprh9xex4cm34ui4m8ts5scer
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18DwL4jwXjaJ95BavNzvUDIL95SULF3ajg=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=jTL0Vn1vZcwRC6504YEz/5KSf6ShhFurO/agsa1xCzo=; b=OXEPlS1hpL4yTbB5NOA+Wl5nlBqcmi9JDYPFIzqfmu3SUKV/fE6lbIVsF37hOF46iB/3HIYtBnf2mQzC7vHc660tT1U7JdTtMU3oBmsXDd6MkGGVox4vvO/VlnxiGDN5kCDvCUOgkqoIXhq0lR1fAypyNrhsJmkFEydrbV4BGvk=
-X-HE-Tag: 1793292319-381902
-X-HE-Meta: U2FsdGVkX189lvmw6xSs0YAnkcBrhBO8y+Lvp+JNwGYhh5alivt+0OO/xSDkxSIQXlCNwa9KH0ThPC8PeBb2KfBn7gm4yxPxyL/5DyL7ZsaU5T9JtKlbdPo7JMWp3QprJ+IDy3UE0fKUCCHE1NAiq6eDJft8zLnKQSk6UX88CppcbxKV2oQH/DLb6y9zDXnIaboMmVpoqyyq6F48nVn0CccwpsI3GifLkmAe4NdmxO0Xk2lr+1IBHLT4zemDVXjuL4tAxrgpVBWrDlLBZDmww/t1+V4cVw1vcrlG2KUcSWi2TFY6VcPWD7mzMqZ14fmq2V4TjJD4yOGf9skVVlIP+F4bwhS7tQ/2v4GdcVjmxwzRcc+r26DfRj35ThTeweBenRuk7EEZEp/oEGb+C9IVUxgGY64/bROgWwr/ikdQmbSjTgnieHF3fNNrtWN0rAt7uP9W361hIWMfDRSZIKjL5A==
 
-On Thu, 29 Oct 2026 16:35:52 +0000
-"Alexei Starovoitov" <alexei.starovoitov@gmail.com> wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] perf build: RUST_FLAGS set after Makefile.feature breaks cross f=
+eature-dump
+--
 
-> On Wed, Oct 28, 2026 at 01:23 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >
-> >  static inline unsigned long ftrace_jmp_set(unsigned long addr)
-> >  {
-> > -	return addr | 1UL;
-> > +	return addr & ~FTRACE_JMP_BIT;
-> >  }
-> >
-> >  static inline unsigned long ftrace_jmp_get(unsigned long addr)
-> >  {
-> > -	return addr & ~1UL;
-> > +	return addr | FTRACE_JMP_BIT;
-> >  }
-> >  #else
-> >  static inline bool ftrace_is_jmp(unsigned long addr)  
-> 
-> Steven,
-> the code is the same as in v2. Only the Kconfig text is gone, as you asked.
-> patch 2 is a bpf selftest.
-> Mind if I take it via bpf tree?
+commit 71bfdd124d6b614e2d4b506eb746a963a59097da
+Author: Ian Rogers <irogers@google.com>
 
-Sure. Please add:
+perf build: Prefer zlib-rs over zlib when available
 
-Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
+This commit updates the perf build system to detect and prefer zlib-rs over=
+ C
+zlib unless disabled via NO_ZLIB_RS=3D1, NO_ZLIB=3D1, or NO_RUST=3D1. It mo=
+ves Rust
+compiler detection ahead of zlib detection in Makefile.config, builds
+libz_rs.a in $(OUTPUT)libz_rs/, and exposes the zlib-rs feature in perf che=
+ck.
 
--- Steve
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index b4764f69f47f4..4313fca53aa7c 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -532,13 +532,57 @@ ifdef CORESIGHT
+>    endif
+>  endif
+> =20
+> -ifndef NO_ZLIB
+> -  ifeq ($(feature-zlib), 1)
+> -    CFLAGS +=3D -DHAVE_ZLIB_SUPPORT
+> -    EXTLIBS +=3D -lz
+> -    $(call detected,CONFIG_ZLIB)
+> +ifndef NO_RUST
+> +  $(call feature_check,rust)
+> +  ifneq ($(feature-rust), 1)
+> +    $(warning Rust is not found. Test workloads with rust are disabled.)
+> +    NO_RUST :=3D 1
+>    else
+> -    NO_ZLIB :=3D 1
+> +    NO_RUST :=3D 0
+> +    CFLAGS +=3D -DHAVE_RUST_SUPPORT
+> +    $(call detected,CONFIG_RUST_SUPPORT)
+> +  endif
+> +
+> +  ifneq ($(CROSS_COMPILE),)
+> +    ifeq ($(RUST_TARGET_FLAGS_$(ARCH)),)
+> +      $(error Unknown rust cross compilation architecture $(ARCH))
+> +    endif
+> +
+> +    RUST_FLAGS +=3D --target=3D$(RUST_TARGET_FLAGS_$(ARCH))
+> +  endif
+> +endif
+> +
+> +# Building zlib-rs from Cargo crate sources requires a working rustc.
+> +ifneq ($(NO_RUST), 0)
+> +  NO_ZLIB_RS :=3D 1
+> +endif
+> +
+> +# Prefer zlib-rs over C zlib when available, unless disabled via NO_ZLIB=
+=3D1 or
+> +# NO_ZLIB_RS=3D1. Both provide the standard zlib C API (HAVE_ZLIB_SUPPOR=
+T), while
+> +# HAVE_ZLIB_RS_SUPPORT records that zlib-rs is the implementation in use.
+> +ifndef NO_ZLIB
+> +  ifndef NO_ZLIB_RS
+> +    $(call feature_check,zlib-rs)
+
+[Severity: Medium]
+When cross-compiling with the feature-dump target (or FEATURE_TESTS=3Dall),
+does setting RUST_FLAGS here happen too late for tools/build/Makefile.featu=
+re?
+
+In tools/perf/Makefile.perf, building the feature-dump target sets
+FEATURE_TESTS :=3D all before including Makefile.config:
+
+tools/perf/Makefile.perf:
+ifeq ($(config),1)
+ifdef MAKECMDGOALS
+ifeq ($(filter feature-dump,$(MAKECMDGOALS)),feature-dump)
+FEATURE_TESTS :=3D all
+endif
+endif
+include Makefile.config
+endif
+
+Earlier in tools/perf/Makefile.config, tools/build/Makefile.feature is
+included before the NO_RUST block:
+
+tools/perf/Makefile.config:
+ifeq ($(FEATURES_DUMP),)
+  FEATURE_DISPLAY_DEFERRED :=3D 1
+include $(srctree)/tools/build/Makefile.feature
+else
+include $(FEATURES_DUMP)
+endif
+
+When FEATURE_TESTS is set to all, Makefile.feature expands FEATURE_TESTS to
+include FEATURE_TESTS_EXTRA (which contains zlib-rs) and runs
+$(call feature_check,zlib-rs) while RUST_FLAGS still lacks
+--target=3D$(RUST_TARGET_FLAGS_$(ARCH)).
+
+That initial feature check invokes tools/build/Makefile.rust with an empty
+RUST_FLAGS, compiling $(OUTPUT)libz_rs/libz_rs.a for the host architecture.
+Linking test-zlib-rs.bin with the cross-compiler $(CC) against the host
+libz_rs.a then fails and records feature-zlib-rs=3D0 in $(OUTPUT)FEATURE-DU=
+MP.
+
+Furthermore, when execution reaches the second $(call feature_check,zlib-rs)
+above after RUST_FLAGS is populated, $(OUTPUT)libz_rs/libz_rs.a already
+exists on disk from the host build, so Make considers it up-to-date and lin=
+ks
+against the stale host archive again.
+
+Should the CROSS_COMPILE configuration of RUST_FLAGS be moved above the
+inclusion of tools/build/Makefile.feature alongside the CC and CLANG_FLAGS
+cross-compilation setup?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261029162958.3224=
+280-1-irogers@google.com?part=3D2
