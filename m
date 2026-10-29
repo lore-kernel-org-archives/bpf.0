@@ -1,70 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.26
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793293015;
-	b=j3TZbxOmapXZBO8DNWABfnj07yk7llSULgny0DPHB0axpsJ0Xf4cHShf6EbHxLiR6ldu
-	 +c3X3wGEgOmBRDogmb6AwWDkmxS1TDoBnPlHESlxdg3s0fcharJhvrilXZ++jwIfkFbpY
-	 vn7OzrRXQmZ86s0ir5sDW0lHHWZOWqIaPgczuKJUS5zkcHMq1sOSdBT5KW0e6dRp0LpTW
-	 MFZ00phxswOYIzjiTVTt0gYokNbX8jqLdDHpuDwSRsrHnmK4knCog5jJx2X+pAOzoCF13
-	 UlMkdd2jDzuYea6wvIadCTqw+uoSzvTdoBQo9U40boj4vdAuxwa8itqYRwFhl+xcZIg==
+	t=1793293026;
+	b=nPLWuvz8x/pmReb1N4D2hnILOFpfjzdqzUlSk3KvgTqYG3NSybJK9XxdmZ8kDFgYmBoV
+	 KN20U1LDcu/S2xRfqV4HGGtHHSPyIbU50bmZtDJW+JThoN6NJ+8nVRiA1AvIlHI+x8Jri
+	 Fh3lRJjrP8YdiVUSbihiBC+WhPFtV95oxsDTNAm+EBT5I/DwIBoVzmipFGaVGBTf9bJiT
+	 4JRqy0MuTnrFonL/dzeIqatVZyYd177bX3QxmUhG8YHryqfGbpg1NmIfXKEOn2QJKHNJ3
+	 TXYXTVx9YW76t18/rUvsagLB0ge19LAQRxT8iMITz3BPn8KpYKfnMsfu5RTNVOPyaXg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793293015;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 X-Mailer:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=Hl2FAoChiij72hAtomRJkkZ9M0nlYfCdBuDh7jqAxB4=;
-	b=A2y49/szJHOAi15VhR9o7t4Z0jeitKVexW0k8t4R34kMqwrte5LHIFsXBJPwTLQq1TGO
-	 6B1CC0kpq1SqXH7m7qSH3to0VRjB956EGX3ylc+TPwGeblD6w+i8SVEfUajmUxWdKBoGo
-	 FS14K6iFLg3peusCXKddB7vaEEB2dVdyYWmVlCLAeTa3QZ+klrG4ymaqCNBmvC0yXgyIa
-	 6JwcNIR3CotUMhsHhpEA/d4qL400g5C+HKiT2bLwMeIzTWP+kZi7OgBl3YfSezpR7eOGS
-	 /6Z+KemxaJulwklrdA+5M+o+WWMa9L1+ytm4sb4MsbPy1fVnplLgk7+tEWwyeMPTVEA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793293026;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=3YMGJT4pTkEsEKwWB46LfYjpDcUnYVe1X3rwCQXzAqI=;
+	b=W2ck81K9zDtwP9Ey2aspC6Kf9NC3bnPWbmIBi91s1rw/3OqIojYRjHrTnwGJ/SfaL5rL
+	 5ZghncngbSs+G+T5RfqPs+x1pNayqlB+SGLIChLcu3rXFQBL4sYzXsKoe/ez4sDYafjXc
+	 PKkZsIHwffCPx3+5sa8SinhqJsIGSLvG/d+1CGFvU95wfN2f0sElug99yT1t+dWgGi+BK
+	 P4uhLcgVqPWm+o2KTjgsILoPDzar7ryG5qK341X77JAw3DNLG+nUhnMCCt6N2VydE2uC7
+	 Q5B/88IpRl8/HU3rLbDpATIyVJ2QMdTfD12TlYAVkt6Z56ig1XY5b5dxNDslcwYmwAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HBpBkoHc;
-	arc=none smtp.remote-ip=95.215.58.26
-Received: from mta1.migadu.com (out-26.mta1.migadu.com [95.215.58.26])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eYrfMnSi;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19ED4606A324
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 16:56:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19ED4606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4EB8606A31C;
+	Thu, 29 Oct 2026 16:57:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HBpBkoHc
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/dXjDDSTBXGEfyEbgPW2q5whv/wUPaoNdKn8g3XixeA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793293013; v=1; x=1793897813;
- b=HBpBkoHcFVqLjDak0A0AiIuKpaOWWoIm72CoiuStEa7WVSzIyXKrh0+rtgqzDyrPFxC+d914
- GA1H+ITTAuwpUjVgMe/TUyvq3K6E5aZv+yaTkNN1OrPXnpMPP0b6Q/3QOmGw8GUzjDQJQ/2PCse
- pFHaeYTco1wtDPGjsWEK0rD0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 28a782b4a7711c87;
-	Thu, 29 Oct 2026 16:56:53 +0000
-X-Mizu-Trace-ID: 28a782b4a7711c87
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 29 Oct 2026 16:56:43 +0000
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Puranjay Mohan <puranjay@kernel.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
-Cc: Ben Cressey <ben@cressey.dev>, 
-	Florent Revest <florent.revest@linux.dev>, Bill Wendling <morbo@google.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Subject: [PATCH v3 5/7] arm64: ftrace: Support CALL_OPS on kernels built with
- kCFI
-Message-ID: <20261029-b4-arm64-callops-kcfi-v3-5-1b011ad5ddec@linux.dev>
-X-Mailer: b4 0.15.2
-References: <20261029-b4-arm64-callops-kcfi-v3-0-1b011ad5ddec@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eYrfMnSi
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B0E1F01816;
+	Thu, 29 Oct 2026 16:57:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793293025;
+	bh=3YMGJT4pTkEsEKwWB46LfYjpDcUnYVe1X3rwCQXzAqI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=eYrfMnSifep1QDuQP2NxmzU4emaUV6HXxr4z5831C1pto+08/y8MD989X1Jm4YeFA
+	 zsm2CROrsEwHQgabZyLkz885MNOaC2vipkhyLgp9w8qpqdDzvPHUiXZTV7CG78dQI4
+	 HufkHDMFGmSt0K18QO8A+SH7mBs2leBDfjG6pxr+LtudFTW7agTH4RdQLT9Hjs+beZ
+	 4Cdt94/w+P7WWksRzcErdvxZbf+iNAkCQUiWr+QiCidPfpcO/vN5Jqrct2uxssGisL
+	 PhlUqcqJvjKEBHRBJqm1W0jehFytwxSk/3w3fJ+ODKFMuU4Hufu/QxaGmCwp3MPA8C
+	 yNdL2dLRy00tw==
+Message-ID: <sashiko-outbox-189694@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v1 1/3] tools build: Add Rust library build
+ infrastructure and zlib-rs feature test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ian Rogers" <irogers@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Arnaldo Carvalho de Melo" <acme@kernel.org>, "Namhyung
+ Kim" <namhyung@kernel.org>, "Quentin Monnet" <qmo@kernel.org>, "Miguel
+ Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Nicolas
+ Schier" <nsc@kernel.org>, "Nick Desaulniers" <ndesaulniers@google.com>, "Bill
+ Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, gary@garyguo.net
+In-Reply-To: <20261029162958.3224280-2-irogers@google.com>
+References: <20261029162958.3224280-1-irogers@google.com>
+ <20261029162958.3224280-2-irogers@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 29 Oct 2026 16:57:04 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,193 +65,195 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261029-b4-arm64-callops-kcfi-v3-0-1b011ad5ddec@linux.dev>
 
-CALL_OPS and kCFI have been mutually exclusive on arm64 since commit
-baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS").
-kCFI checks the type hash at a fixed offset before the entry point, so
-every function needs the same number of prefix NOPs. Before clang 21,
-prefix NOPs came only with an entry in ftrace's table, and untraced
-functions had none. Since commit 9315e22b0c0a ("arm64: ftrace: allow
-DIRECT_CALLS without CALL_OPS") a kCFI kernel can attach BPF
-trampolines. But without CALL_OPS, a trampoline out of BL range is
-reached through ftrace_caller, ~10 ns more per call than on a CALL_OPS
-kernel, plus ~4 ns for every extra ftrace_ops registered.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Medium] tools build: sub-make PKG_CONFIG override blocks --static append
+- [Medium] tools build: lib%.rlib pattern rule fails for subdirectory targe=
+ts
+- [Medium] tools build: missing rustc --target in Makefile.rust and early f=
+eature check
+--
 
-Clang 21 added a third argument to -fpatchable-function-entry that names
-the section the entries go to [1]. Point it at a section the linker
-scripts already drop and a function gets prefix NOPs with no entry in
-ftrace's table. When CFI and CALL_OPS are both enabled, compile every
-object with
--fpatchable-function-entry=M,M,.discard.patchable_function_entries,
-where M is CONFIG_ARM64_FUNCTION_PREFIX_NOPS.
+commit 15e2b90d3792008ff59190071c3b1973f7ab8c0b
+Author: Ian Rogers <irogers@google.com>
 
-Gate CALL_OPS under CFI on ARM64_CFI_PERMITS_CALL_OPS, which needs
-clang 21 or newer and RUST off. rustc has its own flag for the prefix
-NOPs and this patch does not pass it, so Rust functions would have no
-prefix and a different hash offset.
+tools build: Add Rust library build infrastructure and zlib-rs feature test
 
-M is 3 because the ops pointer needs an aligned 8-byte slot inside the
-prefix NOPs, and the 4-byte hash puts the NOPs at offset 4. A traced
-function, with the two entry NOPs from CC_FLAGS_FTRACE, then looks
-like this:
+This patch adds shared Rust library build and feature detection infrastruct=
+ure
+under tools/build/ and tools/scripts/, along with a feature test for zlib-r=
+s.
+It supports locating Cargo crate sources or pkg-config packages, compiling
+.rlib and .a targets with rustc, and resolving C compiler and linker flags.
 
-  func-16:            .word <hash>    // kCFI type hash
-  func-12:            NOP
-  func-08:            NOP             // ops pointer, 8 bytes
-  func-04:            NOP             //
-  func+00:    func:   NOP             // To be patched to MOV X9, LR
-  func+04:            NOP             // To be patched to BL <caller>
+> diff --git a/tools/build/Makefile.build b/tools/build/Makefile.build
+> index ad69efdd4e85c..50c3eb57d34b8 100644
+> --- a/tools/build/Makefile.build
+> +++ b/tools/build/Makefile.build
+[ ... ]
+> @@ -117,6 +120,10 @@ $(OUTPUT)%.s: %.c FORCE
+> =20
+>  # it's recommended to build a static rust library, when a foreight (to r=
+ust)
+>  # linker is used.
+> +$(OUTPUT)lib%.rlib: %.rs FORCE
+> +	$(call rule_mkdir)
+> +	$(call if_changed_dep,rustc_rlib_rs)
 
-Size of .text in vmlinux on a defconfig-based config with clang 21.1.4:
+[Severity: Medium]
+Will this pattern rule match .rlib targets located in subdirectories?
 
-  Kernel                 || .text bytes | Delta       | Delta
-  =======================++=============+=============+=======
-  kCFI, base             ||  21,023,888 |             |
-  kCFI, M = 3            ||  22,031,504 |  +1,007,616 | +4.8%
-  -----------------------++-------------+-------------+-------
+Later in tools/build/Makefile.build, targets in obj-y are prefixed with both
+$(OUTPUT) and $(dir)/:
 
-Numbers below are from a KVM guest on a Graviton4 host, v7.3-rc1 with
-and without this series. The workload is a fentry program on
-__arm64_sys_getpid, 20M calls per pass, six passes per boot, six
-boots, each cell the call with the program attached minus the call
-without it. The in-range rows are the same kernels booted with nokaslr.
+    objprefix    :=3D $(subst ./,,$(OUTPUT)$(dir)/)
+    obj-y        :=3D $(addprefix $(objprefix),$(obj-y))
 
-  Kernel            | Trampoline   | Extra      || Per-call cost (ns)
-                    | vs. BL range | ftrace_ops || Median | Min  | Max
-  ==================+==============+============++========+======+======
-  kCFI, base        | out of range |          0 ||   32.9 | 32.6 | 33.4
-  kCFI, base        | out of range |         16 ||   92.6 | 92.4 | 96.3
-  kCFI, base        | in range     |          0 ||   21.3 | 21.0 | 21.8
-  ------------------+--------------+------------++--------+------+------
-  kCFI, this series | out of range |          0 ||   22.7 | 22.0 | 22.9
-  kCFI, this series | out of range |         16 ||   22.1 | 21.9 | 22.4
-  kCFI, this series | in range     |          0 ||   22.4 | 22.1 | 22.6
-  ------------------+--------------+------------++--------+------+------
+Other pattern rules in tools/build/Makefile.build place % immediately after
+$(OUTPUT), such as $(OUTPUT)%.o: %.c FORCE and $(OUTPUT)%.a: %.rs FORCE, wh=
+ich
+allows the stem % to match <subdir>/<name>.
 
-Out of range this saves ~10 ns per call and the cost stops growing
-with extra ftrace_ops. In range both kernels branch straight to
-the trampoline and the numbers roughly match.
+Because $(OUTPUT)lib%.rlib places the literal prefix lib immediately after
+$(OUTPUT), a target in a subdirectory expands to
+$(OUTPUT)<subdir>/lib<name>.rlib. When $(OUTPUT) is non-empty, the pattern
+contains a slash, so GNU Make matches against the full path and fails to ma=
+tch
+$(OUTPUT)lib%.rlib whenever <subdir> is present. When $(OUTPUT) is empty,
+directory-stripped matching sets the stem % to <name> without <subdir>/, so
+the prerequisite %.rs looks for <name>.rs in the current directory rather t=
+han
+in <subdir>/.
 
-ftracetest and the BPF trampoline, struct_ops and kprobe_multi
-selftests pass with CFI enforcing.
+> diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+> index 4d37d11f674c5..c372600ae9e44 100644
+> --- a/tools/build/Makefile.feature
+> +++ b/tools/build/Makefile.feature
+> @@ -5,10 +5,11 @@ ifneq ($(OUTPUT),)
+>    OUTPUT_FEATURES =3D $(OUTPUT)feature/
+>    $(shell mkdir -p $(OUTPUT_FEATURES))
+>  endif
+> +RUST_OUTPUT ?=3D $(abspath $(or $(OUTPUT),$(CURDIR)))/
+> =20
+>  feature_check =3D $(eval $(feature_check_code))
+>  define feature_check_code
+> -  feature-$(1) :=3D $(shell $(MAKE) OUTPUT=3D$(OUTPUT_FEATURES) CC=3D"$(=
+CC)" CXX=3D"$(CXX)" CFLAGS=3D"$(EXTRA_CFLAGS) $(FEATURE_CHECK_CFLAGS-$(1))"=
+ CXXFLAGS=3D"$(EXTRA_CXXFLAGS) $(FEATURE_CHECK_CXXFLAGS-$(1))" LDFLAGS=3D"$=
+(LDFLAGS) $(FEATURE_CHECK_LDFLAGS-$(1))" -C $(feature_dir) $(OUTPUT_FEATURE=
+S)test-$1.bin >/dev/null 2>/dev/null && echo 1 || echo 0)
+> +  feature-$(1) :=3D $(shell $(MAKE) OUTPUT=3D$(OUTPUT_FEATURES) RUST_OUT=
+PUT=3D"$(RUST_OUTPUT)" CC=3D"$(CC)" CXX=3D"$(CXX)" RUSTC=3D"$(RUSTC)" $(if =
+$(PKG_CONFIG),PKG_CONFIG=3D"$(PKG_CONFIG)") CFLAGS=3D"$(CLANG_CROSS_FLAGS) =
+$(EXTRA_CFLAGS) $(FEATURE_CHECK_CFLAGS-$(1))" CXXFLAGS=3D"$(CLANG_CROSS_FLA=
+GS) $(EXTRA_CXXFLAGS) $(FEATURE_CHECK_CXXFLAGS-$(1))" RUST_FLAGS=3D"$(RUST_=
+FLAGS)" LDFLAGS=3D"$(LDFLAGS) $(FEATURE_CHECK_LDFLAGS-$(1))" -C $(feature_d=
+ir) $(OUTPUT_FEATURES)test-$1.bin >/dev/null 2>/dev/null && echo 1 || echo =
+0)
+>  endef
+[ ... ]
+> diff --git a/tools/build/Makefile.rust b/tools/build/Makefile.rust
+> new file mode 100644
+> index 0000000000000..cd9e0915b9298
+> --- /dev/null
+> +++ b/tools/build/Makefile.rust
+> @@ -0,0 +1,149 @@
+[ ... ]
+> +ifeq ($(findstring -static,${LDFLAGS}),-static)
+> +  ifeq ($(findstring --static,$(PKG_CONFIG)),)
+> +    PKG_CONFIG +=3D --static
+> +  endif
+> +endif
 
-[1] https://github.com/llvm/llvm-project/pull/131230
+[Severity: Medium]
+When LDFLAGS contains -static, does PKG_CONFIG +=3D --static take effect if=
+ the
+caller passes PKG_CONFIG on the sub-make command line?
 
-Reviewed-by: Ben Cressey <ben@cressey.dev>
-Reviewed-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-Assisted-by: LLM
-Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
----
- arch/arm64/Kconfig                    | 15 ++++++++++++++-
- arch/arm64/Makefile                   | 12 +++++++++++-
- arch/arm64/kernel/pi/Makefile         |  2 ++
- arch/arm64/kernel/vdso/Makefile       |  2 +-
- drivers/firmware/efi/libstub/Makefile |  2 +-
- 5 files changed, 29 insertions(+), 4 deletions(-)
+Both feature_check_code in tools/build/Makefile.feature and
+feature_rust_lib_code in tools/scripts/Makefile.include pass
+$(if $(PKG_CONFIG),PKG_CONFIG=3D"$(PKG_CONFIG)") as a command-line argument=
+ to
+$(MAKE). When invoked from Makefiles that initialize PKG_CONFIG (such as
+tools/perf/Makefile.perf or tools/tracing/rtla/Makefile.rtla), PKG_CONFIG h=
+as
+command-line origin in the sub-make.
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index aa7d5e1859af..6715adcae38b 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -190,7 +190,8 @@ config ARM64
- 	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS \
- 		if DYNAMIC_FTRACE_WITH_ARGS
- 	select HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS \
--		if (DYNAMIC_FTRACE_WITH_ARGS && !CFI && \
-+		if (DYNAMIC_FTRACE_WITH_ARGS && \
-+		    (!CFI || ARM64_CFI_PERMITS_CALL_OPS) && \
- 		    (CC_IS_CLANG || !CC_OPTIMIZE_FOR_SIZE))
- 	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY \
- 		if DYNAMIC_FTRACE_WITH_ARGS
-@@ -271,8 +272,20 @@ config GCC_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS
- 	def_bool CC_IS_GCC
- 	depends on $(cc-option,-fpatchable-function-entry=2)
- 
-+config CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
-+	# The section argument needs clang 21 or later:
-+	# https://github.com/llvm/llvm-project/pull/131230
-+	def_bool $(cc-option,-fpatchable-function-entry=1$(comma)1$(comma).discard.patchable_function_entries)
-+
-+config ARM64_CFI_PERMITS_CALL_OPS
-+	def_bool y
-+	depends on CFI
-+	depends on CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
-+	depends on !RUST
-+
- config ARM64_FUNCTION_PREFIX_NOPS
- 	int
-+	default 3 if DYNAMIC_FTRACE_WITH_CALL_OPS && CFI
- 	default 2 if DYNAMIC_FTRACE_WITH_CALL_OPS
- 	default 0
- 
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index ed28f94be428..9fbfe5ab3724 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -137,7 +137,17 @@ CHECKFLAGS	+= -D__aarch64__
- 
- ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS),y)
-   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
--  CC_FLAGS_FTRACE := -fpatchable-function-entry=4,2
-+  prefix_nops := $(CONFIG_ARM64_FUNCTION_PREFIX_NOPS)
-+  CC_FLAGS_FTRACE := -fpatchable-function-entry=$(shell expr $(prefix_nops) + 2),$(prefix_nops)
-+  ifeq ($(CONFIG_CFI),y)
-+    # Every object gets the prefix NOPs and no ftrace entry by default.
-+    # CC_FLAGS_FTRACE comes later for traced objects and overrides the
-+    # -fpatchable-function-entry.
-+    CFI_PREFIX_CFLAGS := -fpatchable-function-entry=$(prefix_nops),$(prefix_nops),.discard.patchable_function_entries \
-+			 -DCC_USING_PATCHABLE_FUNCTION_PREFIX=$(prefix_nops)
-+    KBUILD_CFLAGS += $(CFI_PREFIX_CFLAGS)
-+    export CFI_PREFIX_CFLAGS
-+  endif
- else ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_ARGS),y)
-   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-   CC_FLAGS_FTRACE := -fpatchable-function-entry=2
-diff --git a/arch/arm64/kernel/pi/Makefile b/arch/arm64/kernel/pi/Makefile
-index a273ab5af805..0ccae4ff00a0 100644
---- a/arch/arm64/kernel/pi/Makefile
-+++ b/arch/arm64/kernel/pi/Makefile
-@@ -18,6 +18,8 @@ CFLAGS_map_range.o += -mstrict-align
- KBUILD_CFLAGS	:= $(filter-out $(CC_FLAGS_SCS), $(KBUILD_CFLAGS))
- # disable LTO
- KBUILD_CFLAGS	:= $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
-+# the discard section holds absolute relocations, which relacheck rejects
-+KBUILD_CFLAGS	:= $(filter-out $(CFI_PREFIX_CFLAGS), $(KBUILD_CFLAGS))
- 
- hostprogs	:= relacheck
- 
-diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-index f6619e1cb2ce..334ea3fac812 100644
---- a/arch/arm64/kernel/vdso/Makefile
-+++ b/arch/arm64/kernel/vdso/Makefile
-@@ -38,7 +38,7 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
- CC_FLAGS_REMOVE_VDSO := $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
- 			$(RANDSTRUCT_CFLAGS) $(KSTACK_ERASE_CFLAGS) \
- 			$(GCC_PLUGINS_CFLAGS) \
--			$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
-+			$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(CFI_PREFIX_CFLAGS) \
- 			-Wmissing-prototypes -Wmissing-declarations
- 
- CC_FLAGS_ADD_VDSO := -O2 -mcmodel=tiny -fasynchronous-unwind-tables $(CONFIG_CC_OPT_INLINE_MEMSET)
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index bbab12b8eb4b..5bbb57c64fe0 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -54,7 +54,7 @@ KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS), $(KBUILD_CFLAGS))
- # remove SCS flags from all objects in this directory
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_SCS), $(KBUILD_CFLAGS))
- # disable CFI
--KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
-+KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_CFI) $(CFI_PREFIX_CFLAGS), $(KBUILD_CFLAGS))
- # disable LTO
- KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
- 
+In GNU Make, ordinary non-override +=3D appends to a command-line variable =
+are
+ignored, so PKG_CONFIG +=3D --static in both tools/build/Makefile.rust and
+tools/build/feature/Makefile:
 
--- 
-2.54.0
+    ifeq ($(findstring -static,${LDFLAGS}),-static)
+      PKG_CONFIG +=3D --static
+    endif
 
+is skipped during static builds, omitting transitive static libraries from
+pkg-config queries. Should these use override PKG_CONFIG +=3D --static?
+
+[ ... ]
+> +cmd_rustc_rlib =3D \
+> +	$(rustc_target_envs) $(RUSTC) $(RUST_FLAGS) $(rustc_common_flags) $(rus=
+tc_target_flags) \
+> +	$(call rlibs-to-externs,$^) --crate-type rlib --crate-name $(patsubst l=
+ib%.rlib,%,$(notdir $@)) \
+> +	-o $@ $(filter %.rs,$^) > $(@:.rlib=3D.make.output) 2>&1
+> +
+> +cmd_rustc_staticlib =3D \
+> +	$(rustc_target_envs) $(RUSTC) $(RUST_FLAGS) $(rustc_common_flags) $(rus=
+tc_target_flags) \
+> +	$(call rlibs-to-externs,$^) --crate-type staticlib --crate-name $(patsu=
+bst lib%.a,%,$(notdir $@)) \
+> +	-o $@ $(filter %.rs,$^) > $(@:.a=3D.make.output) 2>&1
+[ ... ]
+> diff --git a/tools/scripts/Makefile.arch b/tools/scripts/Makefile.arch
+> index ed5f008d400ed..d5f25f3be555f 100644
+> --- a/tools/scripts/Makefile.arch
+> +++ b/tools/scripts/Makefile.arch
+> @@ -50,3 +50,17 @@ ifeq ($(LP64), 1)
+>  else
+>    IS_64_BIT :=3D 0
+>  endif
+> +
+> +# Map kernel ARCH to rustc --target triples when cross-compiling tools/.
+> +ifneq ($(CROSS_COMPILE),)
+> +  RUST_TARGET_FLAGS_arm		:=3D arm-unknown-linux-gnueabi
+> +  RUST_TARGET_FLAGS_arm64	:=3D aarch64-unknown-linux-gnu
+> +  RUST_TARGET_FLAGS_loongarch	:=3D loongarch64-unknown-linux-gnu
+> +  RUST_TARGET_FLAGS_m68k	:=3D m68k-unknown-linux-gnu
+> +  RUST_TARGET_FLAGS_mips	:=3D mipsel-unknown-linux-gnu
+> +  RUST_TARGET_FLAGS_powerpc	:=3D powerpc64le-unknown-linux-gnu
+> +  RUST_TARGET_FLAGS_riscv	:=3D riscv64gc-unknown-linux-gnu
+> +  RUST_TARGET_FLAGS_s390	:=3D s390x-unknown-linux-gnu
+> +  RUST_TARGET_FLAGS_x86		:=3D x86_64-unknown-linux-gnu
+> +  RUST_TARGET_FLAGS_x86_64	:=3D x86_64-unknown-linux-gnu
+> +endif
+
+[Severity: Medium]
+How does RUST_TARGET_FLAGS_$(ARCH) get passed to rustc when tools/build/fea=
+ture
+or tools/build/Makefile.rust builds libz_rs.a during cross-compilation?
+
+tools/scripts/Makefile.arch defines RUST_TARGET_FLAGS_<arch> when CROSS_COM=
+PILE
+is set, but neither Makefile.arch, Makefile.include, Makefile.feature, nor
+Makefile.rust adds --target=3D$(RUST_TARGET_FLAGS_$(ARCH)) to RUST_FLAGS or
+rustc_common_flags.
+
+When feature_check runs for zlib-rs without --target in RUST_FLAGS (for
+example, in tools/build/Makefile.feature when FEATURE_TESTS=3Dall is evalua=
+ted
+before a caller sets RUST_FLAGS, or in standalone feature checks),
+cmd_rustc_rlib and cmd_rustc_staticlib in tools/build/Makefile.rust compile
+liblibc.rlib, libzlib_rs.rlib, and libz_rs.a for the host architecture. Lin=
+king
+test-zlib-rs.bin with the cross-compiler $(CC) then fails, and because the
+rules in tools/build/Makefile.rust do not rebuild when RUST_FLAGS changes, =
+the
+host-architecture archives remain cached in $(LIBZ_RS_OUTPUT) for subsequent
+invocations in the same build directory.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261029162958.3224=
+280-1-irogers@google.com?part=3D1
