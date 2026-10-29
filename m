@@ -1,87 +1,65 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793316343;
-	b=mmLeTa5WUGz3y+6+zv6p3OkNbPn/m4esBKvDk8Hd6K03/XDnedfeH+oss53y3ATRwC5x
-	 c4oD34e2tlCs41nPWwAexZMvaWhxvXSFOcwHVCbxMvrSb7xB4U6wMLbd/MielRMLVamSh
-	 qm/63gU0Qv3rYRboepaSuhCxvPs53aRfkwCjMqsiL975vCUTqOkSNQsoxeTBNT0rGsvuJ
-	 FxFhHtxmMqBXG+2exP9/V1knAfr9tUnL9fKmPExfU/n6uCVX1ANs9jwCzv+as/EkDYBf/
-	 9h/QzQdUnNchiL4zES9Dgh7D58zFs3Z5TIM7jUExPQ5UmVvKTvQ6bSHPG5FF8GFPzLA==
+	t=1793317042;
+	b=JcXBXpiTW6hIT/Nb+QC4YDByYQDfPh4bZ0D5eI3ksD9FuPa1ZTNCIick7j9uDlrip0RB
+	 mLy2pt8AY/EgT9okp03gP22jLrY4Bk4K7YmMshEybW9LFaMHJRrBtOmP2ckRssgU4vzLi
+	 3qYVhMrxXyaplD70HHCQtja5QKdNmVnX+tco/0WRoQNcKuNT83eAGiVhKHSVvnCnliHpG
+	 GtdVU4BADIDmnZQMPf4NxZyeqF440wbWHmvtGd79xCdsqTCtWDU5r5ti2vzkiDAQai48K
+	 r5A2MtIDhXe2NoeaxbRrPFMP8PfR0KAiPaWAOmtKGZBQNXJYBgQtgu9SKMoyPrHfKaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793316343;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=uy/FZh24B32RYF0ZgiKoGJHXlBRYP7HqQOuRiOOjXeE=;
-	b=LS6MDKGgtsAODh/0Ih6bmsdgV0HF4eRNJzShiFPdmHsuHvVDCrKs6/dThW4wYoJsOCm1
-	 zgc6nz/8WHcuXQb9oAsMxNL4oIVTu0Co9zUm5LIEIhQwN5RAq1pxrbvebWCDMmhxaMVHs
-	 766bzLtlbrmU9GJYGP9A0fIlMD1gNhskfvOTKZWgZWhY1RmII0QN6XOQm8atU7kpeySD2
-	 MEJE0JOI9VWYQRKvwdyPVaUVafdQ/k0JNKa/M+p4Ipg93OU4973X/eTaGdaivp3wk1LTR
-	 Mo9rnVifEtUxM5i7tap4Zg60FlzuyBaYOmSdCSm/8P/Sr4nxo0xyfZHgMom9XpxZvJg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793317042;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=/wR/f/jzNnM9IMnZQSLQFeKmskM7rJOSKrq8cFGbuJU=;
+	b=A2tXL37GkZ5vIBRhAZKNo5YGTs7U6A7f2pfZt1AeYBd8E2TFTX7CixC54KO/eoDRb+2K
+	 kY4Zk6jNn83cCzwg+/1oIRVVvEin6rQ1abxtUPku5GyqLVOTXkmd6cmWZU5/+lcyhG673
+	 01thw6wd8AlHFcFLvxqzOZA+3JYDCmQgXQ9kAdgVVosxDcFWXyCCY+iAQv8OmGdlTF6rD
+	 4dHn0xfNFFHJL1fGplvBrzy5zUAMxLsUiS9PViUqJQGqrWOCMxOZyIhMWoR6ofThv1FUj
+	 ZEyvwgXhZI66F9EbpYELubwQZ/ujt/oxlLlg1D1NccCa5/vJqUlXQHNvRsmMBzxeh5w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="n/UfjZG4";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R05gLblW;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id D93EA606A31A;
-	Thu, 29 Oct 2026 23:25:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E38606A31A;
+	Thu, 29 Oct 2026 23:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n/UfjZG4
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id A7A761F00A22;
-	Thu, 29 Oct 2026 23:25:41 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R05gLblW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E0F41F000C1;
+	Thu, 29 Oct 2026 23:37:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793316342;
-	bh=uy/FZh24B32RYF0ZgiKoGJHXlBRYP7HqQOuRiOOjXeE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=n/UfjZG4Xre6CtdKbTCQPofGneqZlZHEt/PF/tXrPp/zphplFkx0MAcItFQeicMWW
-	 zUpED7Jle7zZ4V/nsPgVEFr8TofdfoK1fk3ZKLuC+7hWk/OCl/e/fIP2hnYoRTviZi
-	 hWVdzNIbN4JKVWQZn34gJM7dL9kPxLR2UU20xjUOM2OItlo4pTLUhCnXMGUpL+YiF2
-	 uh5N+dtNYyzCmhxVUxFKFtchSQ5ds0unIwm2uGKTr8FGYRDhqV7r0z7xD9m1y3heSO
-	 VcM16OMo1CXD4Q8ODXLxqMYnLxy66ib0QiYT4HJ1g71PJ0VL88NezJVsWlS2m2CWDk
-	 ZnrNnganPBxfA==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: keyrings@vger.kernel.org,
-	Eric Biggers <ebiggers@kernel.org>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Lukas Wunner <lukas@wunner.de>,
-	Ignat Korchagin <ignat@linux.win>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Alasdair Kergon <agk@redhat.com>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-crypto@vger.kernel.org (open list:ASYMMETRIC KEYS),
-	linux-kernel@vger.kernel.org (open list),
-	dm-devel@lists.linux.dev (open list:DEVICE-MAPPER  (LVM)),
-	fsverity@lists.linux.dev (open list:FSVERITY: READ-ONLY FILE-BASED AUTHENTICITY PRO...),
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v4 1/3] KEYS: Introduce keyring_is_empty()
-Date: Fri, 30 Oct 2026 01:24:09 +0200
-Message-ID: <20261029232437.2581640-2-jarkko@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261029232437.2581640-1-jarkko@kernel.org>
-References: <20261029232437.2581640-1-jarkko@kernel.org>
+	s=k20260515; t=1793317041;
+	bh=/wR/f/jzNnM9IMnZQSLQFeKmskM7rJOSKrq8cFGbuJU=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=R05gLblWTTN824zu82pI3l2ENb3x0UJOC2wCnnFXkei5l9JntgziiPL8ezIF4Mt5P
+	 +GarUUsN4gosKnKJjeHjcU2z85IFjIoTdqFY6iS8Mi4t2pXW1r2oJLpYKqtJeVsSWy
+	 ANNh8H2cs7eB7GGM/yncFyPqQXSQswnxNhQmQqxHUm7C/UzfBbSZWzEfCD1PsavHZ1
+	 LTkboY5WWkDMdeztFiiP8A16Q+aHX5cYaewmA/Hs+iRxBCboWHqtCTtUbaYCfxOmLZ
+	 8+7cVlSEgKnq5HsUo1MlKFdIt7k0xXJubn+o6mCBA5jTP2w7EsdfwajLbZ3SP4p1/2
+	 REq73ohMTC4aw==
+Subject:
+ Re: [PATCH net v3 1/2] igc: only strip RX timestamp header from first buffer
+From: netdev-bot+sashiko@kernel.org
+To: p@1g4.org
+Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+ anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ vedang.patel@intel.com, jithu.joseph@intel.com, maciej.fijalkowski@intel.com,
+ andre.guedes@intel.com, aleksandr.loktionov@intel.com,
+ avigailx.dahan@intel.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ stable@vger.kernel.org
+Date: Thu, 29 Oct 2026 23:37:20 +0000
+Message-ID: <179331704005.3134.12545545223659652020@kernel.org>
+In-Reply-To: <20261028083344.3047350-2-p@1g4.org>
+References: <20261028083344.3047350-2-p@1g4.org>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -91,106 +69,107 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Introduce keyring_is_empty() in order to decouple for BPF, dm-verity and
-fs-verity how keyring internally manages the keys.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- drivers/md/dm-verity-verify-sig.c                      |  2 +-
- fs/verity/signature.c                                  |  2 +-
- include/linux/key.h                                    |  1 +
- kernel/bpf/keys.c                                      |  2 +-
- security/keys/keyring.c                                | 10 ++++++++++
- .../selftests/dm-verity/test-dm-verity-keyring.sh      |  2 +-
- 6 files changed, 15 insertions(+), 4 deletions(-)
+Critical: 0 · High: 1 · Medium: 0 · Low: 0
 
-diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
-index aadcf5e4a47c..cad21e9144ed 100644
---- a/drivers/md/dm-verity-verify-sig.c
-+++ b/drivers/md/dm-verity-verify-sig.c
-@@ -153,7 +153,7 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
- 	if (ret != -ENOKEY && ret != -EKEYREJECTED)
- 		return ret;
- 
--	if (dm_verity_keyring->keys.nr_leaves_on_tree &&
-+	if (!keyring_is_empty(dm_verity_keyring) &&
- 	    dm_verity_keyring->restrict_link)
- 		ret = verify_pkcs7_signature(root_hash, root_hash_len,
- 					     sig_data, sig_len,
-diff --git a/fs/verity/signature.c b/fs/verity/signature.c
-index 0302a4e506ec..890d33b9d812 100644
---- a/fs/verity/signature.c
-+++ b/fs/verity/signature.c
-@@ -67,7 +67,7 @@ int fsverity_verify_signature(const struct fsverity_info *vi,
- 		return 0;
- 	}
- 
--	if (fsverity_keyring->keys.nr_leaves_on_tree == 0) {
-+	if (keyring_is_empty(fsverity_keyring)) {
- 		/*
- 		 * The ".fs-verity" keyring is empty, due to builtin signatures
- 		 * being supported by the kernel but not actually being used.
-diff --git a/include/linux/key.h b/include/linux/key.h
-index c4486e938a06..20ca43f5eab1 100644
---- a/include/linux/key.h
-+++ b/include/linux/key.h
-@@ -439,6 +439,7 @@ extern int restrict_link_reject(struct key *keyring,
- 				struct key *restriction_key);
- 
- extern int keyring_clear(struct key *keyring);
-+bool keyring_is_empty(const struct key *keyring);
- 
- extern key_ref_t keyring_search(key_ref_t keyring,
- 				struct key_type *type,
-diff --git a/kernel/bpf/keys.c b/kernel/bpf/keys.c
-index bffc356839ac..24e0416abc99 100644
---- a/kernel/bpf/keys.c
-+++ b/kernel/bpf/keys.c
-@@ -29,7 +29,7 @@ struct bpf_key *bpf_lookup_keyring(void)
- 
- 	if (!bpf_keyring)
- 		return NULL;
--	if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
-+	if (keyring_is_empty(bpf_keyring) ||
- 	    !READ_ONCE(bpf_keyring->restrict_link))
- 		return NULL;
- 
-diff --git a/security/keys/keyring.c b/security/keys/keyring.c
-index 5281da9d5bf7..ac48d6204915 100644
---- a/security/keys/keyring.c
-+++ b/security/keys/keyring.c
-@@ -443,6 +443,16 @@ static void keyring_destroy(struct key *keyring)
- 	assoc_array_destroy(&keyring->keys, &keyring_assoc_array_ops);
- }
- 
-+/**
-+ * keyring_is_empty - Check whether a keyring is empty
-+ * @keyring: The keyring to check.
-+ */
-+bool keyring_is_empty(const struct key *keyring)
-+{
-+	return READ_ONCE(keyring->keys.nr_leaves_on_tree) == 0;
-+}
-+EXPORT_SYMBOL(keyring_is_empty);
-+
- /*
-  * Describe a keyring for /proc.
-  */
-diff --git a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
-index 1f9601ef22f8..792449d356cf 100755
---- a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
-+++ b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
-@@ -746,7 +746,7 @@ test_keyring_inactive_when_empty() {
-     log_info "TEST: Verify dm-verity keyring is inactive when sealed empty"
- 
-     # When keyring_unsealed=0, the keyring is sealed immediately while empty
--    # This means it should NOT be used for verification (nr_leaves_on_tree=0)
-+    # An empty keyring should NOT be used for verification.
- 
-     log_info "Keyring state (should be empty and sealed):"
-     list_keyring_keys
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [High] At this commit by itself, the new first-buffer test `!skb &&
+  igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP)` in igc_clean_rx_irq()…
+
+--
+
+igc: only strip RX timestamp header from first buffer
+
+igc_clean_rx_irq() used to subtract IGC_TS_HDR_LEN from every descriptor
+with TSIP set, which truncated multi-buffer packets. With this patch the
+timestamp header is only stripped when skb is NULL, which the commit treats
+as marking the first buffer of a new packet.
+
+Link: https://lore.kernel.org/all/20260625-igb-rx-ts-fix-v3-1-99b3efa08dca@aweta.nl/
+
+> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+> index 1fb5f3cbe93c5..41b293dc10c3a 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> @@ -2639,7 +2639,8 @@ static int igc_clean_rx_irq(struct igc_q_vector *q_vector, const int budget)
+>  
+>  		pktbuf = page_address(rx_buffer->page) + rx_buffer->page_offset;
+>  
+> -		if (igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP)) {
+> +		if (!skb &&
+> +		    igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP)) {
+>  			ctx.rx_ts = pktbuf;
+>  			pkt_offset = IGC_TS_HDR_LEN;
+>  			size -= IGC_TS_HDR_LEN;
+
+[Severity: High]
+
+Is skb == NULL a reliable first-buffer marker when an XDP program is
+attached? The commit message says:
+
+    Only consume the timestamp header when skb is NULL, which identifies the
+    first buffer of a new packet.
+
+Suppose igc_xdp_run_prog() returns IGC_XDP_CONSUMED, IGC_XDP_TX or
+IGC_XDP_REDIRECT for the first, non-EOP buffer of a multi-descriptor frame.
+Then no skb is built, and igc_clean_rx_irq() moves on to the continuation
+descriptor with skb still NULL:
+
+		/* fetch next buffer in frame if non-eop */
+		if (igc_is_non_eop(rx_ring, rx_desc))
+			continue;
+
+The continuation descriptor still has TSIP set, so this check strips
+IGC_TS_HDR_LEN a second time. If that descriptor holds fewer than 16 bytes,
+can the unsigned size wrap here?
+
+The continuation buffer then goes through the new-frame path:
+
+		if (!skb) {
+			xdp_init_buff(&ctx.xdp, truesize, &rx_ring->xdp_rxq);
+			xdp_prepare_buff(&ctx.xdp, pktbuf - igc_rx_offset(rx_ring),
+					 igc_rx_offset(rx_ring) + pkt_offset,
+					 size, true);
+
+In that case the XDP program would see a data_end about 4 GiB past data.
+On XDP_PASS, the same size would reach igc_build_skb() or
+igc_construct_skb(), and the __skb_put() there does not check it.
+
+At this commit, XDP with multi-descriptor frames looks possible on kernels
+with PAGE_SIZE >= 8192. igc_set_rx_mode() only clamps RLPML under the
+small-page #if:
+
+#if (PAGE_SIZE < 8192)
+	if (adapter->max_frame_size <= IGC_MAX_FRAME_BUILD_SKB)
+		rlpml = IGC_MAX_FRAME_BUILD_SKB;
+#endif
+	wr32(IGC_RLPML, rlpml);
+
+On large-page kernels, RLPML therefore stays at MAX_JUMBO_FRAME_SIZE while
+igc_rx_bufsz() returns IGC_RXBUFFER_2048. igc_xdp_set_prog() only checks
+dev->mtu > ETH_DATA_LEN, not the hardware receive length limit.
+
+This needs RX hardware timestamping enabled, an XDP program that returns a
+non-PASS verdict for a first buffer, and a peer that sends frames larger
+than about 2032 bytes.
+
+The next patch in this series, "igc: fix AF_XDP receive buffer size for 2K
+UMEM chunks", adds igc_set_rlpml(). It caps RLPML at 1526 bytes whenever
+XDP is enabled, whatever PAGE_SIZE is. It is called from igc_setup_rctl()
+and igc_xdp_set_prog(). With that change, XDP frames always fit in a single
+descriptor, and skb == NULL becomes a correct first-buffer marker.
+
+This patch is tagged Cc: stable and could be backported on its own. Should
+it depend on that follow-up change, or should the two patches be swapped in
+the series?
+
 -- 
-2.47.3
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261028083344.3047350-1-p%401g4.org
