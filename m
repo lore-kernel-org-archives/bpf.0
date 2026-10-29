@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793292072;
-	b=Q6MSX8dXJEtHi1Rh5hB52Bmy/lFpl4K9BwwY5Aeqs/U21i4sdtv1xZO7oLnefAz29mFa
-	 9oBZk8juBGoAcHge4vRnHEGAw2e+/A5svvOHBpVk9+/hCjZShnrscLstYPYdS8zIU4zx/
-	 yC48rq8q6BQy51tVRc9JguVo+KDAc2YZRaya+bsKSSxe+ec6ho0NDhH5UiQAy1TmKZFi1
-	 pKDCQDPts8i5hmOhgb7lVZWktmXxX2SBMMQYEksFOlTfeoQ08tcmyiGjVVlrDbu6hV3nr
-	 12hC7NTvQYxtPF/eJsDAH6WYFB4qCOeuX5NnNlFqaTOOXPueJfmGSfUcnIOeh5hAbVA==
+	t=1793292088;
+	b=JtIqi+Zhi00Ydhh83Q87Hzcxwsk7owtE8teqmAKsCXZ+vGkDbPRihNn9yDzk2/+/7XWL
+	 ZIDE5uVYtsTSMqroaxKyRLjCwsezzLeQtDxgllpn1U9St75cWZn2AAWpv18UqrjGSMJPw
+	 SfuhIeHAPdZmL62mV9+ZkfGHzr12vuv7hNNw/SgMkoCI9TyQhj1zO+QXBwJCKLO3vQcfN
+	 odK5N0bpNdN+mdiAZ19ketb5gW7Wje120bVWIFhq0E8QXUi4MsvPfEvp4eglZ4lLwPVgD
+	 vL2hY6HvhxTU8RgWoWNXWvj5NHuhfLBZGz7mNv1IPV1VLuHFkvKh5Q+HNGKHPJLzkTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793292072;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793292088;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=vZbI+36cuLWKSblKMENitfEJ+yoA6aEpBQf4/oO9DlE=;
-	b=LtET9yDhOHr0PMYPGQMkHhw2l2a/D8NNfd+KCgYH0mhUgtJhEfClJm2OIrGi3RRsgdOT
-	 J+8n+xqBaBLcAwLoGBY6kqAg8Ok/RK4kPvFe6sjstq4m2d3YzYMtgkihAZ6PGMePk/Huc
-	 5N6uQYEei6Uo7pL0P0JSFnPWX6bn4u7MQ1NaqsgnhHiEYODY1NNyvDKebygHLxHkwCaEo
-	 6mroc6zkYEF3+TNGHLzwQ0oXbN+mltpzWJPdyM0i6QhmJy0wey+jPJnGhtMHEl8Xg1UN7
-	 ZJ5TSheaCAya4T5QmgWF2bjp+cONd4W1z/uYVWk8mUL9+dTmlq2HqNuOp4mP6MJ7Ywg==
+	bh=67EUHCtqjfB+tccUv3dsIzzhumxwNVJ2yslHfCYJQGw=;
+	b=JjbpWSE/J9Hr+nhuGLuZvbcBXDuBbKfNIi92QS9nmKXgmnytESuPlKw9RDqiykMLKvdE
+	 finivJP4cufu/oSfHkldk3Zwu/vrPx6Q6VHyQt3ZgmHJOdP72+2VdVl5Qf5+JuVHNDK3R
+	 I41tZCoijcDGpQE/ZxBM6eaOH9nv/MIzC5ub0Q4C5V/EDh3bp7mhj72TyvisQVEM76xm8
+	 0jRa2dGfcr0jZg0mOEGh7Fnw/99tWn9mJ11SsgQo35fz2RDe2VkY3UtIoGBdzP6/9CFAF
+	 jDLBtABDP9++ZdR2K0wrQBIQJIr7xBtDTzTZ9glsRoBJvgLOs0NKtQa3giqhvw0rDyw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cCFxxLBM;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xw6ZHbkE;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996B1606A31A;
-	Thu, 29 Oct 2026 16:41:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E35D606A33D;
+	Thu, 29 Oct 2026 16:41:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cCFxxLBM
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8672E1F01824;
-	Thu, 29 Oct 2026 16:41:09 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xw6ZHbkE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82AC11F01816;
+	Thu, 29 Oct 2026 16:41:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793292072;
-	bh=vZbI+36cuLWKSblKMENitfEJ+yoA6aEpBQf4/oO9DlE=;
+	s=k20260515; t=1793292088;
+	bh=67EUHCtqjfB+tccUv3dsIzzhumxwNVJ2yslHfCYJQGw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=cCFxxLBMp97ap//WtLS7w322xpRZpmLs68Q4jIBgA/FMQa/L4OcXOSJa/qMlYkQDd
-	 hbpbmqBQesfMi83aEbhOe9t0rNHSHIoWg8lH1bog9wq5Ftm0lpTlkADBu5zCrFCkMH
-	 Bxnk3cX8TQap035qjDI9iX7pOBdWyN8ki8e1UMce0OpUbKVEIlpzzDceZrwOScoJdZ
-	 Wjak97x8JGbcwVv7AyLpxv76z4rtU3uDbLI6BIkCtwthBAwsC3CVtC8yHqiIH/ImJr
-	 Yyfc5vN7Ga9y2uFjSBTk9jkR2yZTqkUEiECTmqHIvChMuryPM4bBGu/YH4ucHLZdql
-	 NInjk1oYdSO0g==
+	b=Xw6ZHbkEFUGlYZcgEYEkT5Z2AOxg+q8msKR94rB0I8id9fYqWFHd8VXng5aQCEIKd
+	 Vdzqaf95Mfg25eIgtZJapL7w6gdmf98YvewMqBdkHOrRWOrZUwHFV6yFfPVMXRST3F
+	 IRyGtVzMZ9M3O1BHNnN6bpEVpCIybZSDjLf/GHIUpD+F/814h1yT/VHuqppEVKwUMX
+	 W7G3a9mGX7/Wt0fVoXU+vP8c82x7oGdZTRd6ckS/MzuFFAOu9SBFB0AoOewplxoZrB
+	 YMvqOS49jIUyM9Plhj5eAplSWHqvg+hanw5KOKomQIISjXXtL8tFDpA5uo9Hmhw3vH
+	 bie+D0NogZQcw==
 From: Christian Brauner <brauner@kernel.org>
-Date: Thu, 29 Oct 2026 17:40:56 +0100
-Subject: [PATCH v2 1/7] lsm: always call the namespace_free hook
+Date: Thu, 29 Oct 2026 17:41:01 +0100
+Subject: [PATCH v2 6/7] lsm: fix the security_namespace_init() kernel-doc
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,7 +54,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261029-work-security-namespace_free-v2-1-65591dbba7b3@kernel.org>
+Message-Id: <20261029-work-security-namespace_free-v2-6-65591dbba7b3@kernel.org>
 References: <20261029-work-security-namespace_free-v2-0-65591dbba7b3@kernel.org>
 In-Reply-To: <20261029-work-security-namespace_free-v2-0-65591dbba7b3@kernel.org>
 To: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
@@ -66,70 +66,52 @@ Cc: linux-security-module@vger.kernel.org,
  Linus Torvalds <torvalds@linux-foundation.org>, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>, stable@kernel.org
 X-Mailer: b4 0.17-dev-ce4c1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2360; i=brauner@kernel.org;
- h=from:subject:message-id; bh=C2BO3VYPrmNUuuCqz/uwcSrR57rLhf95j9OE/k19Z48=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQ9Lpdft1C7ZEXXia0LJ08oeMv/l0UxtPXpLN1ApvBtS
- s9ZnzAkd5SyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEykSZzhnzWHtcub++/CXX8q
- T2uauW9XfMhMpcCvdo0vK6yWaIRoBTP8j1b8c+nipab6Fbnn2TVXqDQ4/J/7QqHg77cs5u85Kpr
- +XAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1633; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=LU/y2L5eVemTv0E47phbRKaXIXa34YzJQ/j0ZrgeaAA=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQ9Lpc/l33tR/cyqb/pey/I1Ra8+ZOoeMWix9tC+iwLb
+ 3pzZ3ZpRykLgxgXg6yYIotDu0m43HKeis1GmRowc1iZQIYwcHEKwESMTjAy7NzzUba0XzMmceqk
+ Uoey1A0z1zY9+ij+WT99lezu179+pTMybD/waE9bmgnzrCaJV7Pk9MtfuZ6aofqWd17D1Wr+8Oz
+ 3DAA=
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-security_namespace_free() returns early if ns->ns_security is NULL and
-skips the namespace_free hook. But ns->ns_security is only allocated if
-an LSM requests a namespace blob via lbs_ns and currently no LSM does.
-So the namespace_free hook is never called at all.
+The kernel-doc claims that the owning user namespace is available via
+ns->ops->owner(ns). But security_namespace_init() is called from
+__ns_common_init() before the namespace has been set up. Apart from
+network namespaces the owning user namespace isn't set at that point so
+->owner() returns NULL. And for init_net with CONFIG_NET_NS=n ns->ops
+itself is NULL.
 
-Landlock only uses namespace_init and namespace_install so it doesn't
-care. But the bpf LSM attaches to every hook and a program attached to
-namespace_free never runs. We want to use it in systemd-nsresourced to
-get notified when a user namespace goes away. Right now it has to kprobe
-retire_userns_sysctls() for that.
+What a namespace_init hook can rely on is the namespace type and, now
+that it is allocated before the hook is called, the namespace id. So
+document that instead.
 
-Note that a bpf program can't work around this. The size of the
-namespace blob is fixed at boot and the bpf LSM doesn't request one.
-And security_namespace_init() allocates the blob before the
-namespace_init hooks are called anyway.
-
-The check isn't needed. __ns_common_free() is only ever called after
-__ns_common_init() succeeded and security_namespace_init() only calls
-security_namespace_free() after the blob has been allocated. So if an
-LSM requests a namespace blob it is always there when the hook runs.
-Call the hook unconditionally like security_sb_free(),
-security_file_free() and security_bpf_map_free() do.
-
-The bpf LSM attaches programs to its bpf_lsm_*() stubs so fentry on the
-stubs shows what a bpf LSM program sees. Booted with lsm.debug, which
-prints "LSM: blob(ns) size 0", and created 100 user and uts namespaces:
-
-  bpftrace -e 'fentry:bpf_lsm_namespace_init { @init = count(); }
-               fentry:bpf_lsm_namespace_free { @free = count(); }' &
-  for i in $(seq 100); do unshare -Uu true; done
-
-  before: @init: 200 @free: 0
-  after:  @init: 200 @free: 200
+No functional changes.
 
 Fixes: f675d2e95569 ("lsm: add LSM blob and hooks for namespaces")
 Cc: <stable@kernel.org> # mainline only
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- security/security.c | 3 ---
- 1 file changed, 3 deletions(-)
+ security/security.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/security/security.c b/security/security.c
-index f6583d507395..1e76c097b28d 100644
+index 1e76c097b28d..81dac9e48a51 100644
 --- a/security/security.c
 +++ b/security/security.c
-@@ -3412,9 +3412,6 @@ int security_namespace_init(struct ns_common *ns)
+@@ -3382,9 +3382,9 @@ int security_create_user_ns(const struct cred *cred)
+  * security_namespace_init() - Initialize LSM security data for a namespace
+  * @ns: the namespace being initialized
+  *
+- * Initialize the LSM security blob attached to the namespace. The namespace type
+- * is available via ns->ns_type, and the owning user namespace (if any)
+- * via ns->ops->owner(ns).
++ * Initialize the LSM security blob attached to the namespace. The namespace
++ * hasn't been set up yet but its type and id are available via ns->ns_type
++ * and ns->ns_id.
+  *
+  * Return: Returns 0 if successful, otherwise < 0 error code.
   */
- void security_namespace_free(struct ns_common *ns)
- {
--	if (!ns->ns_security)
--		return;
--
- 	call_void_hook(namespace_free, ns);
- 
- 	kfree(ns->ns_security);
 
 -- 
 2.53.0
