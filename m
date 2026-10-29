@@ -1,54 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.190
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793268697;
-	b=FIR5/a6PEUlnsxdWqs465a1jiE7GnUGwDRekPJ3NtJJlp+ct40LhPxM8Lfs1rGoDhfL5
-	 5A8RMg39eTsrzXzYf0dS0rcoluMjLh8MUceB4VnQqzUqXbOtmB8yWeKYfLCYhePqheLhH
-	 FGBPkt4K9zqFB03u+p2LjWbCkVEspF6xl9mb/QH2k+kg+OOXocLgv5YlaDUn5BXFdibs/
-	 YTDhvJLC4TUR01QuYuVXwMwBprUi5uH+v0uqMgRw5XLnQV0eqDWADY2eWe0ej2SdFOMJR
-	 QrDcHZGNGBqm1eTDgbr2iFnw4ChdQ3RAs51WEz+Rlv4br2kPHjPKHd3mJ53VzUmCNxQ==
+	t=1793268856;
+	b=yTUTegLhyW4gdFoIovbQ0qCR/SqSYiGaTzG0M0SB0gF3VO4j63fClPw0H1AECT6XlKqv
+	 +BaFakv/LybjuIUFo8fBFuHzRzIXyRDuDVGlWFsLQTBuBKfbcAfm8HbR5lm8Iq4tgSg+z
+	 HdaC5xrbTaI9XnWpJXz8/Yi6DsYOGDRwlCAZuOUaiHSoM8O/uN67S/SFI0rOw4jzFm02s
+	 MTqewClNcwtdYtGdvq+Kq57QciYnGMc+9KQSp64sBRrBKaK8Piabq6aFj+5fEZob0trbn
+	 FsUFrZb57k5OJgdjKbqnYgRzLCZxS773jHRCpBH4Ku00zXsvWxJPBmuagInH8dg6tsQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793268697;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793268856;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=FAoeFjOhHMIomvSZEyPcUceFOZEousEjiVEkUk7cB2Y=;
-	b=BmEDXBI6++dyuWlYO5qOuQBiUpfjRL+y1SiXyq3nTCpnKwSCJQz62+ui2/0k7TS66ieZ
-	 iKnKkJ12Rf3CW/4BP/2scJRyrs6CR+xchr+pg0yoLbGv3JPnYui8IzSi3OftrlZAznALD
-	 /eMxfccj7DQOl9YV1W4Ono5cvCGNQTZSEc7v3AhWAInV+nY69Uj66Rf/dBw8UMJxSDFc1
-	 YSzGGiutbTNTCScWoSdXn9QCphLaafXFKXrl0/AKsNulAwqMPiIs2D/w4bVVDgQJxlc5u
-	 El0IT1qql7G4iG0+g7Z/gdzZ+ckQ+kKRnQ3IzIaJs1LYAKxEJdhvS8trubdDgpQbA4A==
+	bh=g6ZvoJA1lnqkwFVkrQz/iNNGer9RaAvDbUj4LHUnhUI=;
+	b=2Muzmvae4Mn6szEEm8X5/DGsSkqVFfHS5e2mHe/iC4gP7WKExSXZQ4z9lSk/QxLE9Xa9
+	 4gG5QNZQbVRG83inweug2unjHDwWTa09qeeKdfyQ42H1dOSqZ7P5KKp42t7vMMhT0yqDg
+	 gq3ElwGZsiNjQDfQo3G7d6ZP75HNBQOavgvf/Rsrig35SQCyxoIS1AwA0VMqMATkThvlB
+	 /lm6S6iRwFNEIZxQKurWmwPogIEKTd45waEh2kjeme4YDUx0yf+GGfQfaLBjDSZ/v+l+7
+	 RpEsbErdEG14pQsh4DIIAIf3R/7ibP55p0n0W+ONgyVsW1iMrb7xkz/B+ADG3zCvFWg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W5WC4w0c;
-	arc=none smtp.remote-ip=95.215.58.190
-Received: from mta1.migadu.com (out-190.mta1.migadu.com [95.215.58.190])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=XPn6YHW9;
+	dkim=temperror header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=h7ylYXOz;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C60606A326
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 10:11:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25C60606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D5A606A31D
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 10:14:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49D5A606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W5WC4w0c
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=O6pECeJaIkk7IfSov1GVY8i4R6cQbSZNmIkkj1P7D6Q=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793268695; v=1; x=1793873495;
- b=W5WC4w0csS4VEBLZ2tQ0uytPiTEYb99WY1GvVsXg6l0O8ex/VRZXKkrvDBct7VCmR2++I9yt
- J1Tzsp1mH2e0cfsCaugOhV+bVlES9qtmuDXLzyvlpvaYXbNsekpoZ3NVes9FyZF9eS3QIzsbDxr
- 13N8iOXXWc173Mkp2JmAx2cA=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 73988b42a70c48c5;
-	Thu, 29 Oct 2026 10:11:34 +0000
-X-Mizu-Trace-ID: 73988b42a70c48c5
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <895cb52c-1542-4ff7-abaf-844a73126fa8@linux.dev>
-Date: Thu, 29 Oct 2026 18:11:25 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=XPn6YHW9;
+	dkim=temperror header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=h7ylYXOz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793268847;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=g6ZvoJA1lnqkwFVkrQz/iNNGer9RaAvDbUj4LHUnhUI=;
+	b=XPn6YHW9DhQDS2o01aDR7o0dCOnq6CquwPB4VX55o1hUbxdWsfheCQhMdnVytLhkeNBxIk
+	qxRTdx0ETjekO7E/HdDs++jhLVLjz8XT7ZMHX3qZt3uC28+tjlBU03IFenZ2OHNlxssXhQ
+	yTfS7NJGpImf7kTMHt/t+5gDhnQpfCo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-395-lU3vIHTGPhuvVz8cTZb11w-1; Thu, 29 Oct 2026 06:14:05 -0400
+X-MC-Unique: lU3vIHTGPhuvVz8cTZb11w-1
+X-Mimecast-MFC-AGG-ID: lU3vIHTGPhuvVz8cTZb11w_1793268844
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4a4af69e06fso14103145e9.2
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 03:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1793268844; x=1793873644; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=g6ZvoJA1lnqkwFVkrQz/iNNGer9RaAvDbUj4LHUnhUI=;
+        b=h7ylYXOz2UEdPWY1fYVL5jqH4FnZo3/o7js8VE+c/8/gAN938wWuh3nsk052MoH7p4
+         VUo348ObDvXdzkJm0/SeUzsJ5m/fx0WbXiyB2sWmuKip59WMuap8Ih7pNkz/tUElCCkg
+         r1hZtXwv0F5wdnwfFGzkdFpJnwS5w+U1E5iabmrHmThpkUTw4/6uDvm1ZTzdQdGOkNQw
+         f29jlZccEfymQux3/Lq0XpMLvscWSlGh0BrIfiiuxxTW+NMMT9NmOqMjXlj25njsrJTm
+         Tl/J9cGN1L3z7lzyz0Or4HMAG5vZS9W8A7pT2CPkr4scbUY1sDx8nQApFziLLPZLQpPH
+         9lpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793268844; x=1793873644;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=g6ZvoJA1lnqkwFVkrQz/iNNGer9RaAvDbUj4LHUnhUI=;
+        b=rtOr0fEL62aJO0XtsinwfJV5QSJsb6HrlfsRCtZLDkADV8C8CMJV+bcqFqK1VI8lL6
+         a0xQkJmdP90uXT0TgGUXegstLasZscghq8sSDgazB2/GRe8kjANuLtxGZ2TsBE+HvQJY
+         DVJ5HSshzmWUOgo6AhIohsi0Yg2GwqrfTxkeXEqCbUVueCKeMuEbHIdPeDiDsVQfDmbW
+         mcubPRlsdijbL3P6rrbrJHPn6tDbmKYVFoSey9sDAWLucePjz+OpcflwOuzjuV8jmxE8
+         khfRfdl3O/V8hJbZBpnaM5wuEO02cgBophppXw8u0eIS5yRcaf6JYn7hyszxCDL+h6tM
+         YqWA==
+X-Forwarded-Encrypted: i=1; AKwUvBwhXNkN83r+YO+JePe3ARxr5rVpqx7o9waaUCmF8rky3SKEl8/l628DFfmbD7KCdKpth94=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJH5PNg2VmAWyGfcH73frxH3E25fQ4Lsg1msTAoLhUmKkeJK1zo
+	Ipd2f1S8y2R1EIb1clpwQ8OpEe8n888gjBkKKeiYnMFyu+k6LeGyWCQr8U5Dzt53VTKhZ6tRcjQ
+	T0gZ8b8VdFM/gqQYKvDNCecBeUVMYSrC2s7/qghLrXfCVc/2Kx4tr2A==
+X-Gm-Gg: AYBFou34x3fJRphtp9ciTiCnsfGQ6afS+1+ddMlbKtQ5beT9C4EkFQvgqZu/CtiMsm1
+	EzQFmutJUR3G1gPFwjZHwA+9DLCdQ4cSKx/tJWIQQdw+hzdkR1nsnMINXDN+UEMo76T9IeLgL1o
+	1MJryV3lDx2WFkvhe3UVGzh7Lcn9LVc5cfXIx9PBAbX0nOgAdHkL+lO5WW7SwpbXjhNwqlh0Tn2
+	mVqkYMwudd4Bp3zK/UMljI+pOHvg8JPNGDhnGyhqo7pF4eVxwTpAKkoMEUA4JmhWsBZcMjU0vis
+	/T7MHdjWAAXOptRaT6zaoXRXOm8JohkfYxNED3Xv9pr42HhwMRJ3EzRjMdi3IWSRtviiCtuAN15
+	6eZU4E2mPPMNS0hyvuwi6o9xteD6bU7uNtWx1GrazXsGaHsYO2O66eCgyWXAgKxZlczDJOwhclL
+	Qez5fxkruQjgFoUw4bWBPPAPsLQWS+OZgvvGEKjgKnEOILSoQ=
+X-Received: by 2002:a05:600c:870f:b0:4a1:fcfa:2a07 with SMTP id 5b1f17b1804b1-4a967f84822mr125620615e9.30.1793268844553;
+        Thu, 29 Oct 2026 03:14:04 -0700 (PDT)
+X-Received: by 2002:a05:600c:870f:b0:4a1:fcfa:2a07 with SMTP id 5b1f17b1804b1-4a967f84822mr125619965e9.30.1793268844145;
+        Thu, 29 Oct 2026 03:14:04 -0700 (PDT)
+Received: from [192.168.188.234] (ip174-129-192-82.pool-bba.aruba.it. [82.192.129.174])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecdd5b3sm33496102f8f.53.2026.10.29.03.14.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Oct 2026 03:14:03 -0700 (PDT)
+Message-ID: <bdc71cf3-5b16-4dbf-ac33-8f35b1a97d9f@redhat.com>
+Date: Thu, 29 Oct 2026 11:14:01 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,115 +113,40 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
- cgroups@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
- linux-kselftest@vger.kernel.org, cuitao@kylinos.cn, ameryhung@gmail.com,
- alexei.starovoitov@gmail.com
-Subject: Re: [PATCH 2/5] blk-iocost: add BPF struct_ops cost model support
-To: Tejun Heo <tj@kernel.org>
-References: <20261028143534.135968-1-cui.tao@linux.dev>
- <20261028143534.135968-3-cui.tao@linux.dev>
- <0753eaa990c954aa56a0c5fa8ba302e2@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <0753eaa990c954aa56a0c5fa8ba302e2@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH net-next v4 2/2] net: stmmac: Stop Tx queue when
+ (en|dis)abling XSK pools
+To: netdev-bot+sashiko@kernel.org, kurt@linutronix.de
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, kuba@kernel.org, edumazet@kernel.org,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, yoong.siang.song@intel.com, faizal.abdul.rahim@intel.com,
+ boon.leong.ong@intel.com, bigeasy@linutronix.de,
+ maciej.fijalkowski@intel.com, nb@tipi-net.de, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+References: <20261022-stmmac_xsk_crashes-v4-2-15c0c750bb96@linutronix.de>
+ <179299947058.3134.16617492920924670801@kernel.org>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <179299947058.3134.16617492920924670801@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hello Tejun,
+On 10/26/26 08:24, netdev-bot+sashiko@kernel.org wrote:
+> - [High] stmmac_xdp_enable_pool() (stmmac_xdp.c:59) and
+>    stmmac_xdp_disable_pool() (stmmac_xdp.c:102) now call…
+> - [Medium] The patch only works if __QUEUE_STATE_DRV_XOFF stays set from
+>    stmmac_xdp_stop_tx_queue() until the ring is rebuilt.
+> - [Medium] In stmmac_xdp_xmit_xdpf(), first_entry and entry are read from
+>    tx_q->cur_tx when the locals are declared (stmmac_main.c:5263-5264).
+I understand that the comments raised on patch 1/2 are sort of pre-existing,
+as the reported races can be reached by __stmmac_release(), but the above
+ones look legit and unaddressed/unanswered.
 
-在 2026/10/29 04:09, Tejun Heo 写道:
-> Hello, Tao.
-> 
-> On Wed, Oct 28, 2026 at 10:35:31PM +0800, Tao Cui wrote:
->> +/*
->> +/*
->> + * Deliver iocg_init()/iocg_free() to the cgroups already online on the
-> 
-> The comment opens with "/*" twice. clang warns "'/*' within block comment
-> [-Wcomment]" and CONFIG_WERROR builds break.
-> 
-A stray line was left over from an earlier edit. Sorry about that.
->> +			/*
->> +			 * A blkg which never went online never reached the
->> +			 * radix tree, so it must not receive an init either;
->> ...
->> +			if (!iocg || !iocg->pd.online)
->> +				continue;
-> 
-> blkg_create() adds a blkg to q->blkg_list only after radix_tree_insert()
-> succeeds, so the blkgs skipped here are the ones blkg_destroy() already
-> took offline, not ones that never reached the radix tree.
-> 
-You're right, the comment described the wrong blkgs. It goes away with
-the walk, which I'll drop in v12 together with the callbacks.
+You can target `net` with the next revision, and please reply also to
+already discussed comments, even with just a pointer to the previous
+discussion.
 
->> +	if (!disk_live(disk)) {
->> +		mutex_unlock(&q->rq_qos_mutex);
->> +		blk_mq_unfreeze_queue(q, memflags);
->> +		blkdev_put_no_open(bdev);
->> +		return -ENODEV;
->> +	}
-> 
-> The guard() suggestion from v10 was only partly applied. This unlock,
-> unfreeze and put sequence is repeated on three error paths.
-> 
-I'll fold the reg error path into a single out label. Detach no longer
-needs the freeze after the v12 rework.
-
->> +	/*
->> +	 * Scope the mutex so the tail bdev put runs with blkcg_mutex
->> +	 * already released: dropping the last device reference can
->> +	 * reach disk_release() -> blkcg_exit_disk() ->
->> +	 * blkg_destroy_all(), which takes q->blkcg_mutex.
->> +	 */
->> +	{
->> +		guard(mutex)(&q->blkcg_mutex);
-> 
-> The bare { } block isn't necessary, and ioc_bpf_detach() has the same
-> block with the same comment. Can you drop them?
-> 
-I'll drop both.
->> +	/*
->> +	 * The attachment is checked under rq_qos_mutex first, so an unmatched
->> +	 * detach exits without freezing.
->> +	 */
->> +	mutex_lock(&q->rq_qos_mutex);
->> +	spin_lock_irq(&q->queue_lock);
->> +	ioc = q_to_ioc(q);
->> +	if (ioc) {
->> +		spin_lock(&ioc->lock);
->> +		matched = ioc_attached_model_locked(ioc) == ops &&
->> +			  ioc->bpf_link == link;
->> ...
-> 
-> The same 11 lines check the attachment again after the freeze. The check
-> under rq_qos_mutex after the freeze is the one that matters.
-> 
-This goes away with the freeze removal: detach becomes a single
-mutex-critical section.
->> +/*
->> + * Pluggable cost model interface for blk-iocost.
->> + *
->> + * A BPF struct_ops implementation can take over the cost model of one device.
->> ...
->> + * offline and its free. Both callbacks are called with ioc->lock held and must
->> + * not sleep; the delivery points nest inside queue_lock except for iocg_free()
->> + * from ioc_pd_free() in blkg_free_workfn().
->> + */
-> 
-> This restates the attach mechanics and lists the call sites. The comments
-> and descriptions in general are still long and narrate mechanics.
-> 
-v12 folds everything back into blk-iocost.c, so the private header and
-the long interface comment both go away.
-
-Thanks,
-Tao
-
-> Thanks.
-> 
-> --
-> tejun
+/P
 
