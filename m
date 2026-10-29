@@ -1,68 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.251
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793267791;
-	b=JZ0icpjmZNU/PE3f1LzHiq1/QZ0ZpxBz+hWX9wCJMPOXlB2NwmyqG0I9dKVU37qaNSlV
-	 Ccd9R334MSKjG7w/bHzjQA/sm6M8Q9eQAFnI+zrFIYoOS+Hx5JiDsNswgQxmeVnQ7jU9t
-	 F6WL2cP0UWNmNfmeM7roC3IhzGvDftkA67loC4hChqqnMw0BswyVrenWDBHNCl4vg8qj2
-	 dONuNlNKKWrnYgz+DZopHgR29ECn4ArvMDojtgm/a6P2Lo+yIXTN4kRh4QNRt/WC7PGp/
-	 tcWFWX1T9SholbSuLo55bsOMh9ha8eXiM7qrWpVipIW7SfhVYTLZZ+KcBbJZMCbUG9w==
+	t=1793267837;
+	b=maxvCDBc6PPhNOP+iLlcEBWf+9T59x03b/0msbRZMaHPtbjB/uXAWUdB3YNgUp0csal3
+	 e+5ASCUItTidPIvecJkIbVuqHkVBeahb4mGJhqNYr2YIOFu3ehDL243pXqeORsTL2nEuT
+	 GFeuh2l4ma2q8XWMTSUBZs7tLEBJsSJGULHhyRfsF39FkaU0hJsefOo04wHS+C8vcGphV
+	 hbRYbUnVhy8e1JWYt7USAskmSjmRjqJDLra9q1w6LP5Qr//Z5zgmKm5AhN6G66LnxEMnu
+	 a7duJOaGa3UaiqGSsmb2rvVbsKJRnwg8HU0OaKMmN1kmHpW7fqPNyEZRxDLOBQN6suA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793267791;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=KF3Zf3Cykfts2TbK8WZyR/MUwrLHSnrm/Y67M51a1rM=;
-	b=WOq/zjVefd2EM3tgKpoKlR70YHfFK+NaQOG3Or8likIjJEji0LcwFFmszC2HuN0qGw8W
-	 wOAl5PodvXuLCTlRNjGaTyRMvrSpKQlYO//Kp2Y1/TZl1JVes28AmAdCM5M0GvH4PoSo4
-	 NEhi4Ti3zg5vuxmGaNP6npsYastOSBwgsXE69yZk0bO4m7rboAWoe9tI7MpSWsEoO6Tbo
-	 3NmLjg2Um57dZlSgrdTzVhaGiZ85CToA+XTAlLQK0QY2dCuGUn3N5ke5VzZeeYbj2us1F
-	 40/k5UeaRaCN9sBfEaxtHQKdwcs+/2McaMsVRGR9x+FJl7T84/8Lghxw3xzieo5iLOA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793267837;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=hWaXPrGDhyWCEUeKdoM63o7PKlFaYUkm9xCkqBAxeQ8=;
+	b=ka4LKKM91/5vPo/REH30hHivfvK/5b2KAU1gcOv2NlfxrEUjl4t19temwch3PA6Srhhh
+	 dGQrWbZX/4FwjCShBWhDFwfFLIlyv0C+2gnNiC9L3+GRl2iw8sR6glCcHDXJQYhF8+CAt
+	 /+/wTKmpM70djSUjycTTNesyxMoOd2ylGlAIjOp/TV7rBiFdHvu2w+H+hjpDg0dmoo79/
+	 AgFFRKlf7N3+yEEtk9RIwjtHb7CbVax2wnIwD1HdxCy2SoD7OE9yw9bUj50u73TpoUT/8
+	 BQ7c+VeJe5xOAWztTKTAEN/3lPmkgDxvBzJQRhDOa2WOQ5XL/QVT6NKLLronnEWLCEQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=U4OAYyvw;
-	arc=none smtp.remote-ip=192.198.163.11
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W+8t3+4h;
+	arc=none smtp.remote-ip=95.215.58.251
+Received: from mta1.migadu.com (out-251.mta1.migadu.com [95.215.58.251])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F19E606A321;
-	Thu, 29 Oct 2026 09:56:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F19E606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4744C606A32C
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 09:57:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4744C606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=U4OAYyvw
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793267791; x=1824803791;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kR3ldE4ZOJmbjcyVdOxZzAlfKm7+NFARdgV9/T/pxwk=;
-  b=U4OAYyvwuN7Be6YS9cf+SgfBKGHBwTbwKleoKki8qF5NNPY7BkiPfnwz
-   aUI9zyEC00QrqMQPeag3cSVPy9EcH696K7Z61pli+xnFOpgQ0BP+sOo8n
-   I2KkoPus5MgIfXXl70ASAXW7spQ9Y0YtcohuObedxUTX8tadSHj9M23h+
-   qmddJ3EGfxSEL6hnjepnj0vxpUGzqCAiDQVn4+RV5XQiUsGJsYrAdyxD7
-   hDe0vUoLm6NT3wn8qymWGAQQoNSenaz9uKj29Olihd9+wqI68fCiplymp
-   3BLY+9ZgHGsFe6iznxYpCloSbuaHQJ9DnCiWbKfdiIBIITUmKoeyZc/h8
-   A==;
-X-CSE-ConnectionGUID: RogJ6kcRTxOg2Z2cXe6lmw==
-X-CSE-MsgGUID: 3mYgwjKORYuK4xF7B1H38w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11949"; a="1916998"
-X-IronPort-AV: E=Sophos;i="6.27,184,1787036400"; 
-   d="scan'208";a="1916998"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 02:56:30 -0700
-X-CSE-ConnectionGUID: zdlSamq5QmiVQA3upHNftA==
-X-CSE-MsgGUID: wUExTh3tTfi7w2KPV+sFfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,184,1787036400"; 
-   d="scan'208";a="5435511"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.241.239]) ([10.124.241.239])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 02:56:24 -0700
-Message-ID: <041e5185-ff2d-4423-af5d-aed6628973c5@linux.intel.com>
-Date: Thu, 29 Oct 2026 17:56:15 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W+8t3+4h
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Io8Za75LZDFiHR23Q0ReXlDPmUPWVZA1pjzJJhGltWs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793267835; v=1; x=1793872635;
+ b=W+8t3+4hzBuvDinHlL4/EKDxfKXJ4cubc1EvEM0vXLoktC0n9sSWJmPduSJC7rgYYU5smwZQ
+ cSW/Bh7BxQrBADVQivNj+JWahrOFiESZrj9Jr4N8UEwkwbshany87jIUJB9D8FfYbLD5aTZGoO+
+ WzvPqaCenb7HrvGiHq/D6bi0=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 1cb8ab88aefdeb15;
+	Thu, 29 Oct 2026 09:57:15 +0000
+X-Mizu-Trace-ID: 1cb8ab88aefdeb15
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <9145109e-0030-451b-9cca-d23eab30a826@linux.dev>
+Date: Thu, 29 Oct 2026 17:57:05 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,105 +59,47 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch v5 01/18] perf/x86: Disable LBR if x86_pmu.lbr_nr exceeds
- MAX_LBR_ENTRIES
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo
- <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Andi Kleen <ak@linux.intel.com>, Eranian Stephane <eranian@google.com>,
- Sandipan Das <sandipan.das@amd.com>, Andrii Nakryiko <andrii@kernel.org>,
- Song Liu <song@kernel.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
- Ananth Narayan <ananth.narayan@amd.com>, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
- Dapeng Mi <dapeng1.mi@intel.com>, Zide Chen <zide.chen@intel.com>,
- Falcon Thomas <thomas.falcon@intel.com>, Xudong Hao <xudong.hao@intel.com>
-References: <20261029043914.1395147-1-dapeng1.mi@linux.intel.com>
- <20261029043914.1395147-2-dapeng1.mi@linux.intel.com>
- <20261029093845.GI1779021@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <20261029093845.GI1779021@noisy.programming.kicks-ass.net>
+Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
+ cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ linux-kselftest@vger.kernel.org, cuitao@kylinos.cn, ameryhung@gmail.com,
+ alexei.starovoitov@gmail.com
+Subject: Re: [RFC PATCH v11 0/5] blk-iocost: BPF struct_ops cost model
+To: Tejun Heo <tj@kernel.org>
+References: <20261028143534.135968-1-cui.tao@linux.dev>
+ <07deddf44be391f58d6c3f2e4843582b@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <07deddf44be391f58d6c3f2e4843582b@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+Hello Tejun,
 
-On 10/29/2026 5:38 PM, Peter Zijlstra wrote:
-> On Thu, Oct 29, 2026 at 12:38:57PM +0800, Dapeng Mi wrote:
->> Add a sanity check for x86_pmu.lbr_nr. If the hardware reports more LBR
->> entries than MAX_LBR_ENTRIES, disable LBR to avoid out-of-bounds access
->> in the cached LBR stack handling path.
-> Cute, can this actually happen?
+Thank you for the review.
 
-Currently it won't happen on real hardware since the maximum LBR stack
-depth what hardware supports is 32. But it's better have this sanity check
-assume the LBR stack depth could be extended to 64 or larger.
+在 2026/10/29 04:09, Tejun Heo 写道:
+> Hello, Tao.
+> 
+> Besides the restructuring agreed in my reply to Alexei, dropping
+> iocg_init()/iocg_free() and moving everything into blk-iocost.c, the
+> series still has problems, which I replied to on the patches. 
+I'll rework the series accordingly: drop iocg_init()/iocg_free(),
+remove the detach freeze, fold everything back into blk-iocost.c and
+drop patch 1, reducing the series to four patches.
 
+The cover
+> letter is still long and narrates mechanics, and it still carries the
+> v9 and v10 changelogs.
+> 
+I'll shorten it, focus on the motivation, and drop the v9/v10
+changelogs.
 
->
->> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
->> ---
->>  arch/x86/events/amd/lbr.c    | 8 +++++++-
->>  arch/x86/events/intel/core.c | 7 +++++++
->>  2 files changed, 14 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
->> index a55646fcb846..96c5b5e56053 100644
->> --- a/arch/x86/events/amd/lbr.c
->> +++ b/arch/x86/events/amd/lbr.c
->> @@ -433,7 +433,13 @@ __init int amd_pmu_lbr_init(void)
->>  	ebx.full = cpuid_ebx(EXT_PERFMON_DEBUG_FEATURES);
->>  	x86_pmu.lbr_nr = ebx.split.lbr_v2_stack_sz;
->>  
->> -	pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
->> +	if (x86_pmu.lbr_nr > MAX_LBR_ENTRIES) {
->> +		pr_warn("LBR entries %d exceeds max %d, disable LBR.\n",
->> +			x86_pmu.lbr_nr, MAX_LBR_ENTRIES);
->> +		x86_pmu.lbr_nr = 0;
->> +	} else {
->> +		pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
->> +	}
->>  
->>  	return 0;
->>  }
->> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
->> index 0a34d674df59..10c694db85ea 100644
->> --- a/arch/x86/events/intel/core.c
->> +++ b/arch/x86/events/intel/core.c
->> @@ -9023,6 +9023,13 @@ __init int intel_pmu_init(void)
->>  	 */
->>  	if (x86_pmu.lbr_tos && !check_msr(x86_pmu.lbr_tos, 0x3UL))
->>  		x86_pmu.lbr_nr = 0;
->> +
->> +	if (x86_pmu.lbr_nr > MAX_LBR_ENTRIES) {
->> +		pr_warn("LBR entries %d exceeds max %d, disable LBR.\n",
->> +			x86_pmu.lbr_nr, MAX_LBR_ENTRIES);
->> +		x86_pmu.lbr_nr = 0;
->> +	}
->> +
->>  	for (i = 0; i < x86_pmu.lbr_nr; i++) {
->>  		if (!(check_msr(x86_pmu.lbr_from + i, 0xffffUL) &&
->>  		      check_msr(x86_pmu.lbr_to + i, 0xffffUL)))
-> Would it make sense to have but one copy of this check in
-> init_hw_perf_events(), after calling into the micro-arch code?
+Thanks,
+Tao
 
-Yes, that's what the previous version does, but Sashiko complains it's too
-late.
-
-"
-
-Does zeroing x86_pmu.lbr_nr here in init_hw_perf_events() happen too late,
-after intel_pmu_init() and amd_pmu_init() have already configured hardware
-and driver state using the unvalidated x86_pmu.lbr_nr value?
-
-"
-
-https://lore.kernel.org/all/sashiko-outbox-179814@kernel.org/
-
-It makes sense in some ways, so move the sanity check into the vendor init
-in this version. 
-
-Thanks.
-
+> Thanks.
+> 
+> --
+> tejun
 
