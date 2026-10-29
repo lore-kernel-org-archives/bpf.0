@@ -1,97 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793291754;
-	b=U5FMUM/IaIp3Qds64IUMv88UFOJyf97h+dx2Tz7egvq/VwQBa7EriED9D8Hrx2CFcLDx
-	 TsSXBtt5r+rRvM/ZQXy9fBGaY9HScvtjlMIrXW88wg3n7vBTuzUrkDxA+5wL1OqsSvkkB
-	 6qg068S9nTKqYMzNw1amhd105F7h2dAqgTCSQz2MyxUCvmK4iLcMuO7Rhn2IUCJvLOEuQ
-	 r/4rwhz0d5iPI3jcSeZ5eVAggRxDDIjegt/CP8yZvHe1rcQgVwcWYVShp07FAoNjV0Zcl
-	 O/w9jbZTjqcPwgqlh5gaxOUlmUhBEir/E5GsfBRFSvaYNLqaNGQuTHjA2DHMaqv2aEw==
+	t=1793292069;
+	b=IS8UvaWfwtMbBZq+QEQbkxNy5SFIG7vo5LxQ2oUMafBLZTkvj+qHOXa7OawptOpULC8Y
+	 aOcL2f2Jzb0neBdKI63Uxk/Wdhv0FXermPbpnFLxV0OM3wXbzaXmSZ92STuMzL8GxHEfq
+	 wjWRLaQae3z87mp04JGK+kOQhz7ntjRoie1D0ZmiL+7XNluS/Z0+eRZ2Yf26O2XVh3xxh
+	 jgwucUGlpGtWDnr7kntWy5jlkxAG8++VwCh/DkTg59FiEkoZOr0HVNCD09stdQPTJNbxz
+	 KAuH8eyph/ABBglsxLIlQVuYAt0twpsPXd4yCYHAAIKKGhNg/3HEC2vmVGc69QeU/HA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793291754;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=les2g87PSHgvNrrOSQca0MPNOKPP1t4sZIzgv+XDxaY=;
-	b=EUn7ghZ4LUprRLJna9xDrC2EfcFGZ5zDUnRRg+rD0OrD3CBecCvLazHEgOzj3AbwCcSn
-	 xjY7Qti3dBW3ssnDW/76CJXN8Q11AExL64VgBi7shJVzx5KOGXSYhA2qYCSD6aLk1Hy+q
-	 nWIYGQceqqQ9aU0jy5y22fH3HJN0LDKElHHvmv/Quoh8o3ZjkZPci7l53Gh7MxCfYG6z7
-	 QVUPtCVbXZ5ZX5iqa1+SnLN+mtRKtGkndP6flWjKc9YsSFFIxnBwdC6prm8juXDqeUBZM
-	 nl99hAQrhl/+zU9hGNrQUkn2e0JilhDG0gVc3aWF8rwItKPVG/11AgLlRU8wvFbXsMA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793292069;
+	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=xIaVelgG3iKr0vUc0CeNr3kvoJjxr3r74nvfKNYTmzg=;
+	b=BaLoob0uy41b5ikWZA7UUvRNVApnw8dxIOAezVySGGhVtVdsYB484FmysM1pZqqbKRvX
+	 tQ8JGyEbl+BGK/NbBn3jbDIrUBCxH99yS6NFzRJC6QtUNr3jnHt489qbBD9wZD5x7jmXT
+	 0yHICUg3RgCkAe/90rRIPZdnNkFiewYgi+PkbpB4JyGH/SRlaeFb3Dc61dJY96GIErYhr
+	 XjeIo+W0DacXd17amofiutTC7a2IZoVWOt/OpIdQfA0aq+DwzGiYsHAdKVqhpEqEBGmFy
+	 NjuttFTNtiyb0I/3G1RxVoGia0hFCOdZkMTwtQsDQR3iLSak/mqVcEhtEZCZ9MKA3qg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Isc/nwI9";
-	arc=none smtp.remote-ip=209.85.215.182
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G10Qf0Io;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3573A606A31A
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 16:35:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3573A606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA23606A31C;
+	Thu, 29 Oct 2026 16:41:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Isc/nwI9
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd8ca57ef64so463570a12.0
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 09:35:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793291753; x=1793896553; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=les2g87PSHgvNrrOSQca0MPNOKPP1t4sZIzgv+XDxaY=;
-        b=Isc/nwI9X3oBw6g+hHgW2ESomBs2zEJXw028q1i2bf/9Pn6gNEQ1C3sn+HYXMn+YKw
-         2SKlkNucmZQxU9biihGCWYNB0QG9BMs4mt0M5Nf0FOuw9AqFCDoQczWLwdkXKkcQmAxx
-         BHdB7XyBCxbYfsUMmKDV4ndDvf+soRYXkDKkan9Ga9ETpBG5p6kiIXTtZkBnaP3//xH0
-         vhH3nNEDR34BL7Gu3Xz3PnUQAqoc8lufv+AdDQKrLO5oE+OTqzFWfh6CvAndB9XUxnlt
-         0c6MOv3Y7fyOo9jeFZaR948lacxNxRW05Noue4EwY4oRBaT0FvuhM21vexyatF9d/hxg
-         pIPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793291753; x=1793896553;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=les2g87PSHgvNrrOSQca0MPNOKPP1t4sZIzgv+XDxaY=;
-        b=jhUpJ+U8zvjqEVUJoZGnvFwTvAbJiav8RbGO6EEU2ap4c4uTIE/tlWOWqoocTwvay4
-         GxW30NcOkPalFX09b2mfzt+a7EnuHK4AIict8yLCEtJu9eTrGICuodmjSQkDKWjKUKDf
-         EUn8Q82f9/WA8NXLop/pvn2rQVTG4+bdRbct+XWvXjWqJGOhMR98FkJL4V9ApCeGLeGz
-         6nHdEq6rfzEqxzgVH7ZIOj4JKB7rR3C/e5R8Pm399XHj59L9A5KdiDCLfXuRptanf2uA
-         6QEaRKKmqQjkuEZQTVrqn6r6TG10GxIdqun9crznBx8usgG9Cf6JovBUnDF4Jp2cf8b+
-         rebw==
-X-Forwarded-Encrypted: i=1; AKwUvBzhjx8cLxMuOd9kS4Lii1qX0/ISvtUeXi/XHta0Uh6icTBOb316I3jAyVR7fgbZ8ePn2UE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLQnTUsKUGH2fl9a208qzIcnpGTcWzFfWTFXkHjq+bpJXrBQFpd
-	MJ+mgbZ2zJrjhxLQlrSKzqAJaHQ7CiDaRApeHG48fEtPFOem11u1TdQd
-X-Gm-Gg: AYBFou2/K6bN5Kr831BUBdu+9cCIZfzM9JLTL2YH/HGmWaRk/1aKKTjoMFiGIFr8VP1
-	hvz6BCYzhRGC3eIHUOqjcoa7GmM5iKf37VeoHDt8jLDOLDDQBiaTNbG2yZlM5M7mUd9uWpLQQV1
-	ZwDTe5JwzIy8HclOcT+4Qv1PuZqKbfzDrlwVPcdftp2PECgZPOwAXpAumMlSRxug5gmJOEH7fIb
-	K1mSOGL9gd07Avut4ScABG/PMpHsayjQOXb4g1v2WaOksSIJjsOTtGWmu+Rtoi/2nhqpif5+2eI
-	5uTL6cQx3+AOaDKnlWcbg0O2hDJyD0mtiu5Xdx4U7Ry9jS9a/8sR8uXPzXk/lLtJVUVsKEwF6jg
-	SI7EXLLSwj8mmMWr4EBKb9Smnqv0bontGazEE6MDob+931RcCW9bWqGM2TyBNydqg/zgG2fkt/N
-	1qzD33lqSnpVekPtIVtVGr+slQ4x/EBoC+Nve20qkIUG+3fST8KEKb7aksWVsVhOiAV3DhNYRcf
-	C/f0NtQ1ll7/kN6LUiNRcIj+iopmAs0ia+uFQ3KoQ+CWaE7ABdwZlNpK9RyRboZKEbMDX6tCtPc
-	Ce9OOF8aB65Jguc30LlzN3VKueOT7FbpNgXWiPuIAL0GDZw8G8jyADB35GsC3cR2rDjVMk8xOkM
-	diCF3h7QIShyAdeONEQeqUAF4ssew/pQbSQ==
-X-Received: by 2002:a17:90b:1dc1:b0:3ac:9ed8:f301 with SMTP id 98e67ed59e1d1-3ae6ed6bd58mr1816660a91.30.1793291753149;
-        Thu, 29 Oct 2026 09:35:53 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e98f888sm4850133a91.13.2026.10.29.09.35.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Oct 2026 09:35:52 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 29 Oct 2026 16:35:52 +0000
-Message-Id: <DMHGVE026N3I.1V3834R8WLSYB@gmail.com>
-Cc: <rostedt@goodmis.org>, <andrii@kernel.org>, <jolsa@kernel.org>,
- "Menglong Dong" <dongml2@chinatelecom.cn>
-Subject: Re: [PATCH bpf v3 1/2] x86/ftrace: Mark jmp mode by clearing bit 63
- of trampoline address
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Daniel Borkmann" <daniel@iogearbox.net>, <bpf@vger.kernel.org>
-In-Reply-To: <20261028202345.1215859-1-daniel@iogearbox.net>
-References: <20261028202345.1215859-1-daniel@iogearbox.net>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G10Qf0Io
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 454381F01816;
+	Thu, 29 Oct 2026 16:41:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793292069;
+	bh=xIaVelgG3iKr0vUc0CeNr3kvoJjxr3r74nvfKNYTmzg=;
+	h=From:Subject:Date:To:Cc;
+	b=G10Qf0IoKNknYxn2cWpn9WtJX1M7rQZoSA4hZrHteyTf3p7K46rIcXRZ1i0uGpps+
+	 C0B2FvFf2jjraySVM9xRk6K28+Xtmq5K69PHpLKzMvQp4VXGhMVO9GsCIS4AAsx/FE
+	 n9QtotPIp3+0HrDREHFu4L8ngjg1NLBgh546cmzS0GYxbisniEi+AO02jqpAAWp2ud
+	 wMzYWGdptDa07W4uRM1XQ/qCzYLSD8x7a9jGD8grbeMF9tauB0sNGHyixbX4EFfkCs
+	 D1zY6hO5phHPAsje+V+ItnX4IWQX3KOZ5ORrDeDHHn54LBVRJF8Ac1rYbscXTD549H
+	 crP4WPecN3iCw==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH v2 0/7] ns: fixes for the namespace LSM hooks
+Date: Thu, 29 Oct 2026 17:40:55 +0100
+Message-Id: <20261029-work-security-namespace_free-v2-0-65591dbba7b3@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,24 +53,115 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42OQQ6CMBBFr0K6tgYwirryHoaYafmFihYzA6gx3
+ F2KF3DxF+/P5OV/lIA9RB2Tj2KMXnwXZshXibINhRraVzOrPM132Rz97LjVAjuw79860B3yIIu
+ LY0AXRG5/MFuTplCz4sFw/rXoz+WPZTBX2D4644chgTZMwTaxupP04HhovPQdv5dhYxYFf24YM
+ 51q52gDY1yRmerUggNu645rVU7T9AVsFTJE9AAAAA==
+X-Change-ID: 20261026-work-security-namespace_free-7aaf89b5b00e
+To: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Paul Moore <paul@paul-moore.com>, 
+ =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, netdev@vger.kernel.org, 
+ Linus Torvalds <torvalds@linux-foundation.org>, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>, stable@kernel.org
+X-Mailer: b4 0.17-dev-ce4c1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4703; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=aibw0ecUu/mSCbaP2VJxKpwSnHUs0UEmrzP6RFE9law=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQ9LpfnyCzWKeh//enb4okv9Q84NjMEvJKzu86e9+vBs
+ WPiiZo+HaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABMxYGf4K+91yeqJXLIW+9dH
+ /S47FZ1XBz9eIv8i95zDD7XDftsC5zL8d92kxbjsv6qU0b35IZfzGO+cakxqyZwQ6lKoKbyyeYE
+ rBwA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Wed, Oct 28, 2026 at 01:23 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
->  static inline unsigned long ftrace_jmp_set(unsigned long addr)
->  {
-> -	return addr | 1UL;
-> +	return addr & ~FTRACE_JMP_BIT;
->  }
->
->  static inline unsigned long ftrace_jmp_get(unsigned long addr)
->  {
-> -	return addr & ~1UL;
-> +	return addr | FTRACE_JMP_BIT;
->  }
->  #else
->  static inline bool ftrace_is_jmp(unsigned long addr)
+I tried to switch systemd-nsresourced over to the namespace_free LSM
+hook that went in this cycle. I explicitly developed it to work nicely
+with that. But the version that is merged is broken for that case.
 
-Steven,
-the code is the same as in v2. Only the Kconfig text is gone, as you asked.
-patch 2 is a bpf selftest.
-Mind if I take it via bpf tree?
+The namespace_free hook is never called. security_namespace_free() bails
+if ns->ns_security is NULL and that's only allocated if an LSM requests
+a namespace blob. Nobody does. Landlock doesn't care as it only uses
+namespace_init and namespace_install but a bpf program attached to
+namespace_free never runs. And it can't work around that either. We
+could make the bpf LSM request a blob but that would just be a way to
+make the hook fire. So call it unconditionally like we do for
+superblocks, files and bpf maps.
+
+The bpf LSM also marks the arguments of namespace_init and
+namespace_free as trusted. Curiously that patch was also dropped.
+
+namespace_init is called before the namespace is set up and if anything
+fails afterwards the namespace is freed without looking at its reference
+count. namespace_free is called on the way out. There's no kfunc that
+takes a namespace yet but once there is one a program could take a
+reference to a namespace that's about to be freed. So add both hooks to
+untrusted_lsm_hooks.
+
+The namespace_init hook also always sees a namespace id of zero because
+the id is only allocated after the hook has run. The id is the only
+identifier of a namespace that is never recycled. So it's what a bpf LSM
+wants to use to track a namespace from namespace_init until
+namespace_free.
+
+The inode number is recycled way too quickly for that. So allocate the
+id in __ns_common_init() before the hook is called. Then ns_tree_add()
+doesn't need to allocate ids anymore and ns_tree_add_raw() can go.
+Landlock now logs that id instead of zero when it denies the creation of
+a namespace.
+
+I'd want to get the whole series into v7.4 since the hooks are new this
+cycle. Otherwise v7.4 is the only release where namespace_init sees a
+zero id and where Landlock logs zero for a denied namespace creation.
+The systemd change I have for this uses the namespace_free hook whenever
+the kernel has it. On a kernel with the hook but without the first fix
+it would never learn about dead user namespaces.
+
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+Changes in v2:
+- Drop "landlock: pass the namespace id to log to check_ns_type()".
+  Landlock now logs the real namespace id for denied namespace creation
+  and its documentation and selftests are updated in "ns: allocate the
+  namespace id before the namespace_init hook" (Mickaël):
+  https://patch.msgid.link/20261028.oonaisai0Doh@digikod.net
+- Link to v1: https://patch.msgid.link/20261026-work-security-namespace_free-v1-0-ffa3ebbf71bd@kernel.org
+
+---
+Christian Brauner (7):
+      lsm: always call the namespace_free hook
+      bpf: don't mark namespace_init and namespace_free arguments as trusted
+      selftests/bpf: add verifier tests for the namespace LSM hooks
+      ns: allocate the namespace id before the namespace_init hook
+      nstree: drop ns_tree_add_raw()
+      lsm: fix the security_namespace_init() kernel-doc
+      selftests/bpf: add a lifecycle test for the namespace LSM hooks
+
+ Documentation/admin-guide/LSM/landlock.rst         |   5 +-
+ Documentation/trace/events-landlock.rst            |   5 +-
+ fs/namespace.c                                     |   6 +-
+ include/linux/ns_common.h                          |  16 ++-
+ include/linux/nstree.h                             |  29 +----
+ include/trace/events/landlock.h                    |   3 +-
+ ipc/namespace.c                                    |   3 +-
+ kernel/bpf/bpf_lsm.c                               |   2 +
+ kernel/nscommon.c                                  |   7 +-
+ kernel/nstree.c                                    |   2 +-
+ net/core/net_namespace.c                           |   4 +-
+ security/landlock/ns.c                             |   3 +-
+ security/security.c                                |   9 +-
+ .../selftests/bpf/prog_tests/ns_lifecycle.c        | 145 +++++++++++++++++++++
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
+ .../selftests/bpf/progs/test_ns_lifecycle.c        |  88 +++++++++++++
+ .../selftests/bpf/progs/verifier_lsm_namespace.c   |  38 ++++++
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c |   5 +
+ .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h   |   1 +
+ tools/testing/selftests/landlock/ns_test.c         |   7 +-
+ 20 files changed, 323 insertions(+), 57 deletions(-)
+---
+base-commit: 21a7f44fd0765fcc5194130b28767786eba1d1e7
+change-id: 20261026-work-security-namespace_free-7aaf89b5b00e
+
