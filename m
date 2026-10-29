@@ -1,70 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.99
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793293072;
-	b=yLlAljQXgZ61x0wb613xPPRxqLeE/tqQKSUxQiL999FUoZOSK22JSj8QnGdUZKGjuUcN
-	 5avCmQF9WLn/djqr0lz70TAA0YIj+Za3McIKbALklYVjVahDvAFHfHYD0tOre33jcBw2u
-	 0Z7X5Yu5b3kRz6boRgwxZs3o1uI8VV9BLSmTbvNWb5zTHGb0km3BM/hr2QKRl1jObgfzi
-	 PYVc+N35oKekxPQuK1VwRZNh+xT9WWAcRE+Jnp9p4QeGjKrdHwS+pCWjs/yruppOTFv91
-	 VZCXKnFQzpsgqJe5QpVEsyF6M/JUUETx3m9V2AyRQEZaMNnDs7J6kw+zTZvu6hKx2Wg==
+	t=1793293585;
+	b=1eiVwwTUuilCtDi0tP4pmwCWIycmhDMO+UJO7uyAGMYsEBdsvAkFTP3j5l4ui1oFnZIA
+	 nT5zsENMeBJsBM4DOdSsYZNxmbwatsO1PSFgnUT/jWSaxJPnDXTsyPa2+omc128m9hpW7
+	 ajNEpM9KWNwxDdBoA9kq2Nbil0vqe2wRRCtkTW9qgGagl6hVDlP7z7KjL/ESwwEsLW2sv
+	 js9MKgt6qTTKFCmxhnhRrsd6kDFKKJP+6NkBYkVwKMcU5MLi6FnUvw0W95M8tBhqWzayW
+	 1PWZYvxTHIKBhMHqBn9EmZwkeetYTST6YvlxDNd8GT01kDhJzUpg+x0C6JnkTMRl+2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793293072;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 X-Mailer:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=qS+HEkR0vDGWLdjeSo4joCKjj6Y1JdTXkJiDIbjQdvo=;
-	b=PHwZSwDlUdfs7EjoMX7QB5eywpfy3WSJNyiN8lYLJLbRTZlC1gUHMGKVvK/tyibhgkh8
-	 u+s+R+nL4BPs/o3q5ysXpeo6H6L/RhlIf3JQ4b9tO+ZEZclBy5YLeeSFjHdf/pNNf/p+m
-	 OhjpZ40K5a0izGefskSltEmyutCP1E0zUL9cx+gT97OR4L8vsZTOw9/0j0B9gxLATPn+d
-	 VpIQDMqhSFdoHSuXobWKIgjIwQoNkHF7A2R4IQCOHy4b99kVKuyKGgQnzerK8oG9Mq+1Y
-	 EHRTuRTqug4Sq9HCNSFdORw2VgnuLNLr6ok17x4UGmSfyS0reKlFzWhVVvjJZZefmeA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793293585;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=uhinfOj6G0C6Rx9NfglgMVhwpPTi8kNJ5VV2avR4jbY=;
+	b=0srMFZIaAZP/YDYqR1P9EjcCERmXOyErsAfRZaYWTbG7IdWB1hF3BXgn7pH3lusbDefa
+	 TOF+nqsCWTmtENiXIy34bZNfsGeYnRqUmg0manL1yQ4fR/oeJgERKTggzzi4/sFRNXtNT
+	 I1blhX9mWAPQNsVrFG/1WhSRP9zMDiNJTKmy8ZLB62kLWZ2FsKtXQMjDDoSigaGKIilXD
+	 kIazDFVIQ1EUHKBSKI2cavTpthT+ide7fC5VrPg00jYXYhnsozSK8Rrravx1swCMF9nqG
+	 IwysbO9luGgxpx2J4iuIkuFYY9o5TQPHwfmBK3eHM6GbpYgPYhjKMvg4tyKhik+EdBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DJJ6of28;
-	arc=none smtp.remote-ip=95.215.58.99
-Received: from mta1.migadu.com (out-99.mta1.migadu.com [95.215.58.99])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iNP6ULfQ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBAA60A261E
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 16:57:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6EBAA60A261E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D7F606A31C;
+	Thu, 29 Oct 2026 17:06:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DJJ6of28
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=CAYOtMfAj2CKhNyLkHjEGE+Ku1FgcGL4RmYNUgnppcs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793293069; v=1; x=1793897869;
- b=DJJ6of28Sv53LKrKVpHYxU8UvNo/3F/LAeH/M2sEW9rTsJBNEGzpOMrVf+DGC8Jpnn1d1qIY
- pURL1Sanj3w5ARUiBNlp5LIY8SPvHaXCvGproA52siS7rf7jNznJbk7JMCDIdmOjn7E385Z+Kds
- cLAewYbrHlWZPtgNnjh4mX3A=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b8a209880955641a;
-	Thu, 29 Oct 2026 16:57:49 +0000
-X-Mizu-Trace-ID: b8a209880955641a
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 29 Oct 2026 16:57:38 +0000
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Puranjay Mohan <puranjay@kernel.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
-Cc: Ben Cressey <ben@cressey.dev>, 
-	Florent Revest <florent.revest@linux.dev>, Bill Wendling <morbo@google.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Subject: [PATCH v3 7/7] arm64: ftrace: Allow CALL_OPS on kCFI kernels built
- with Rust
-Message-ID: <20261029-b4-arm64-callops-kcfi-v3-7-1b011ad5ddec@linux.dev>
-X-Mailer: b4 0.15.2
-References: <20261029-b4-arm64-callops-kcfi-v3-0-1b011ad5ddec@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iNP6ULfQ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DC71F01816;
+	Thu, 29 Oct 2026 17:06:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793293584;
+	bh=uhinfOj6G0C6Rx9NfglgMVhwpPTi8kNJ5VV2avR4jbY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=iNP6ULfQMAMTf2a8z3iLOeDYZtoddpbgLuEX1NWLLZm4BGmB5RPccw24M2xwJazN7
+	 8KH3UjRaZ6Nx6SN07UVhMQNBeqvd+zGS8izhvcNMAzzEH3dxTxgRw4B/q0azFypsWB
+	 cGHNt6zMgbCEy6cu91V6a/rcuY22Z9rTwTDeYQDniTPI8AiJjxUZ5T1virZbs/m1mL
+	 zrsoq5qIhLUIvQHIjhXPjGOBemuwP08JXMvRQBIHPkFc1aHydowqsrf5T5Kl/eDULT
+	 UdlvJXqMfJCPSi/TlY+sPLLFMbmzaBHAcvpPbEQ9AXHzCpKZTZTECSvTbLSjfe24Ho
+	 UMlIKZeclMUJw==
+Message-ID: <sashiko-outbox-189716@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v1 3/3] bpftool: Prefer zlib-rs over zlib when
+ available
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ian Rogers" <irogers@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Arnaldo Carvalho de Melo" <acme@kernel.org>, "Namhyung
+ Kim" <namhyung@kernel.org>, "Quentin Monnet" <qmo@kernel.org>, "Miguel
+ Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Nicolas
+ Schier" <nsc@kernel.org>, "Nick Desaulniers" <ndesaulniers@google.com>, "Bill
+ Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, gary@garyguo.net
+In-Reply-To: <20261029162958.3224280-4-irogers@google.com>
+References: <20261029162958.3224280-1-irogers@google.com>
+ <20261029162958.3224280-4-irogers@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 29 Oct 2026 17:06:23 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,90 +65,121 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261029-b4-arm64-callops-kcfi-v3-0-1b011ad5ddec@linux.dev>
 
-Pass -Zpatchable-function-entry=M,M,.discard.patchable_function_entries
-to rustc when CFI and CALL_OPS are both enabled, so Rust functions get
-the same prefix NOPs as C functions. The section argument needs
-Rust 1.98 [1]. Probe for it, and let ARM64_CFI_PERMITS_CALL_OPS
-accept RUST=y when the probe passes.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpftool: link failure with pre-built libbpf.a when zlib-rs is us=
+ed
+--
 
-Filter -fpatchable-function-entry out of bindgen's C flags on every
-architecture, not only on arm64 with CFI, since removing the flag does
-not change the ABI.
+commit 7a2cb794e37f624ded57767492091a08919fa52c
+Author: Ian Rogers <irogers@google.com>
 
-[1] https://github.com/rust-lang/rust/pull/157445
+bpftool: Prefer zlib-rs over zlib when available
 
-Suggested-by: Ben Cressey <ben@cressey.dev>
-Reviewed-by: Ben Cressey <ben@cressey.dev>
-Reviewed-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-Assisted-by: LLM
-Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
----
- arch/arm64/Kconfig  | 7 ++++++-
- arch/arm64/Makefile | 3 +++
- rust/Makefile       | 7 ++++++-
- 3 files changed, 15 insertions(+), 2 deletions(-)
+This commit updates the bpftool Makefile to detect and prefer zlib-rs over
+C zlib, configuring ZLIB_CFLAGS and ZLIB_LIBS via feature_rust_lib and
+falling back to -lz when zlib-rs is unavailable or when cross-compiling
+bootstrap bpftool.
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index e8cb44d881d0..e64d053e1854 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -277,11 +277,16 @@ config CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
- 	# https://github.com/llvm/llvm-project/pull/131230
- 	def_bool $(cc-option,-fpatchable-function-entry=1$(comma)1$(comma).discard.patchable_function_entries)
- 
-+config RUSTC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
-+	# The section argument needs Rust 1.98.0 or later:
-+	# https://github.com/rust-lang/rust/pull/157445
-+	def_bool $(rustc-option,-Zpatchable-function-entry=1$(comma)1$(comma).discard.patchable_function_entries)
-+
- config ARM64_CFI_PERMITS_CALL_OPS
- 	def_bool y
- 	depends on CFI
- 	depends on CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
--	depends on !RUST
-+	depends on !RUST || RUSTC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
- 
- config ARM64_FUNCTION_PREFIX_NOPS
- 	int
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 9fbfe5ab3724..b47733b585b5 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -147,6 +147,9 @@ ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS),y)
- 			 -DCC_USING_PATCHABLE_FUNCTION_PREFIX=$(prefix_nops)
-     KBUILD_CFLAGS += $(CFI_PREFIX_CFLAGS)
-     export CFI_PREFIX_CFLAGS
-+    # Rust functions are not patched by ftrace, but they are called indirectly
-+    # from C and make indirect calls themselves, so they need the same prefix.
-+    KBUILD_RUSTFLAGS += -Zpatchable-function-entry=$(prefix_nops),$(prefix_nops),.discard.patchable_function_entries
-   endif
- else ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_ARGS),y)
-   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-diff --git a/rust/Makefile b/rust/Makefile
-index 0ac9ab28cc2b..686964c826f7 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -511,7 +511,12 @@ endif
- # prototypes for functions like `memcpy` -- if this flag is not passed,
- # `bindgen`-generated prototypes use `c_ulong` or `c_uint` depending on
- # architecture instead of generating `usize`.
--bindgen_c_flags_final = $(bindgen_c_flags_lto) -fno-builtin -D__BINDGEN__
-+#
-+# Do not pass -fpatchable-function-entry to bindgen: its libclang may not
-+# support the section argument (Clang >= 21), and removing the flag does not
-+# change the ABI.
-+bindgen_c_flags_final = $(filter-out -fpatchable-function-entry=%, \
-+	$(bindgen_c_flags_lto)) -fno-builtin -D__BINDGEN__
- 
- # `--rust-target` points to our minimum supported Rust version.
- quiet_cmd_bindgen = BINDGEN $@
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index b0f7168e79432..a193cf89a0346 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+[ ... ]
+> @@ -38,7 +41,9 @@ $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT) $(LIBBPF_BOOTSTRAP=
+_OUTPUT) $(LIBBPF_HDRS_DI
+> =20
+>  $(LIBBPF): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_=
+OUTPUT)
+>  	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=3D$(LIBBPF_OUTPUT) \
+> -		DESTDIR=3D$(LIBBPF_DESTDIR:/=3D) prefix=3D $(LIBBPF) install_headers
+> +		DESTDIR=3D$(LIBBPF_DESTDIR:/=3D) prefix=3D \
+> +		$(if $(ZLIB_CFLAGS),EXTRA_CFLAGS=3D"$(or $(EXTRA_CFLAGS),-g -O2) $(ZLI=
+B_CFLAGS)") \
+> +		$(LIBBPF) install_headers
+[ ... ]
+> @@ -153,8 +178,27 @@ include $(FEATURES_DUMP)
+>  endif
+>  endif
+> =20
+> -LIBS =3D $(LIBBPF) -lelf $(CRYPTO_LIBS) -lz
+> -LIBS_BOOTSTRAP =3D $(LIBBPF_BOOTSTRAP) -lelf $(CRYPTO_LIBS) -lz
+> +# Prefer zlib-rs over C zlib when detected. When cross-compiling, the ho=
+st
+> +# bootstrap bpftool still links against the host's -lz.
+> +ifeq ($(feature-zlib-rs),1)
+> +  $(call feature_rust_lib,zlib-rs)
+> +  ZLIB_CFLAGS :=3D $(FEATURE_CFLAGS-zlib-rs)
+> +  ZLIB_LIBS :=3D $(FEATURE_LIBS-zlib-rs)
+> +  CFLAGS +=3D $(ZLIB_CFLAGS)
+> +  ifeq ($(CROSS_COMPILE),)
+> +    HOST_CFLAGS +=3D $(ZLIB_CFLAGS)
+> +    LIBBPF_BOOTSTRAP_CFLAGS +=3D $(ZLIB_CFLAGS)
+> +    ZLIB_BOOTSTRAP_LIBS :=3D $(ZLIB_LIBS)
+> +  else
+> +    ZLIB_BOOTSTRAP_LIBS :=3D -lz
+> +  endif
+> +else
+> +  ZLIB_LIBS :=3D -lz
+> +  ZLIB_BOOTSTRAP_LIBS :=3D -lz
+> +endif
+> +
+> +LIBS =3D $(LIBBPF) -lelf $(CRYPTO_LIBS) $(ZLIB_LIBS)
+> +LIBS_BOOTSTRAP =3D $(LIBBPF_BOOTSTRAP) -lelf $(CRYPTO_LIBS) $(ZLIB_BOOTS=
+TRAP_LIBS)
 
--- 
-2.54.0
+[Severity: Medium]
+Can this cause a link failure with an undefined reference to gzopen64 when
+bpftool is built using a pre-built libbpf.a on a host where zlib-rs is
+detected?
 
+In tools/lib/bpf/Makefile, libbpf is compiled with:
+
+    override CFLAGS +=3D -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64
+
+When tools/lib/bpf/libbpf.c is compiled without ZLIB_CFLAGS, bpf_object__re=
+ad_kconfig_file()
+includes the system zlib.h with those macros defined, which remaps gzopen()
+to gzopen64() and leaves an undefined reference to gzopen64 in libbpf.a.
+In contrast, libz-rs-sys only exports gzopen and not gzopen64, which is why
+the $(LIBBPF) and $(LIBBPF_BOOTSTRAP) rules here pass $(ZLIB_CFLAGS) so that
+libbpf uses the bundled zlib.h from libz-rs-sys.
+
+However, several Makefiles build libbpf.a directly via tools/lib/bpf/Makefi=
+le
+without ZLIB_CFLAGS and then pass that pre-built archive directory to
+bpftool via LIBBPF_OUTPUT or LIBBPF_BOOTSTRAP_OUTPUT, such as
+tools/testing/selftests/bpf/Makefile:
+
+    $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makef=
+ile)    \
+                        $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
+            $(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)                =
+        \
+                        ARCH=3D CROSS_COMPILE=3D CC=3D"$(HOSTCC)" LD=3D"$(H=
+OSTLD)"         \
+                        EXTRA_CFLAGS=3D'-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXT=
+RA_CFLAGS)' \
+                        EXTRA_LDFLAGS=3D'$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)'  =
+          \
+                        OUTPUT=3D$(HOST_BUILD_DIR)/bpftool/                =
+          \
+                        LIBBPF_OUTPUT=3D$(HOST_BUILD_DIR)/libbpf/
+
+Similar patterns exist in tools/sched_ext/Makefile,
+tools/testing/selftests/sched_ext/Makefile,
+tools/testing/selftests/hid/Makefile, and drivers/hid/bpf/progs/Makefile.
+
+Because $(LIBBPF) or $(LIBBPF_BOOTSTRAP) already exists and is up to date w=
+hen
+bpftool's Makefile runs, the $(LIBBPF) recipe with $(ZLIB_CFLAGS) is skippe=
+d,
+while LIBS and LIBS_BOOTSTRAP replace -lz with $(ZLIB_LIBS) (libz_rs.a).
+Wouldn't linking bpftool then fail with an unresolved gzopen64 symbol from =
+the
+pre-built libbpf.a?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261029162958.3224=
+280-1-irogers@google.com?part=3D3
