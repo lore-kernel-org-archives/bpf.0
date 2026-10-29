@@ -1,66 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.16
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.99
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793293063;
-	b=YFIUw7urNReQH0y+Fy82iBLq3GxubS9Iem6920as4VeoeoMQdIViUQQJ3ZlLY5r0qKGN
-	 j9LwVL3WnDcL9ijs2JT/VD9N60iX7xFmIbTX8vXEbzlYgK45qvEFHxKQy6Qogw1giebRU
-	 YEajcpB3JzfSxE3Rec42ceGfCMxvjkZhBqbT+cApmT+r0mXyGk68/8qq85eayU37xuUMq
-	 ZjqPCFrXg3ZkCxDbMLbXG0W1/HNLRGP1t5MdXA1Q4z+DWIktgc5rC1NvpWsglcfQiXf+e
-	 C4UHTg6L1J7rrVQDNkmwnllFXZfPdmA0B5/ODRDtMXm3szybzqdAEeDmuVFFwYl//OQ==
+	t=1793293072;
+	b=yLlAljQXgZ61x0wb613xPPRxqLeE/tqQKSUxQiL999FUoZOSK22JSj8QnGdUZKGjuUcN
+	 5avCmQF9WLn/djqr0lz70TAA0YIj+Za3McIKbALklYVjVahDvAFHfHYD0tOre33jcBw2u
+	 0Z7X5Yu5b3kRz6boRgwxZs3o1uI8VV9BLSmTbvNWb5zTHGb0km3BM/hr2QKRl1jObgfzi
+	 PYVc+N35oKekxPQuK1VwRZNh+xT9WWAcRE+Jnp9p4QeGjKrdHwS+pCWjs/yruppOTFv91
+	 VZCXKnFQzpsgqJe5QpVEsyF6M/JUUETx3m9V2AyRQEZaMNnDs7J6kw+zTZvu6hKx2Wg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793293063;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
-	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=o9qVXnmYPWwEWL6vYT0sE4rqArVgEZmH/7qwJmZBvWo=;
-	b=EeoBPIFjIDfLi+PLijMP3UZJCJ6SdwTxibp6teiII/cuTazq/fyhM8iafyLh8Bwtm0Ra
-	 rVzb8i9ILfyR4AXkS4SgwYszECDu2KR1zZd5kf9tM8U95v+PhMVks70D6YGHF7rGajdZ/
-	 mu5nlqU7e+EByMFtcUJIWk1r96v1LmlM3hyAauvhpWpzzgQQ1yfF6t6d/KObsWZFeY1LM
-	 kiwkwyKEciEKdNLln9dg/7yu8uNBcQ07C/OoQLwPoI5xynYMeJb6qRBm50qgbI8XOBuyS
-	 Iq3Ihcj+Ff+jg0Fgzz6PJZSo+gubxwDbozeuw1MZMYh8FXtr/ktqfq5Zn5mWGHp9JUA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793293072;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 X-Mailer:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To;
+	bh=qS+HEkR0vDGWLdjeSo4joCKjj6Y1JdTXkJiDIbjQdvo=;
+	b=PHwZSwDlUdfs7EjoMX7QB5eywpfy3WSJNyiN8lYLJLbRTZlC1gUHMGKVvK/tyibhgkh8
+	 u+s+R+nL4BPs/o3q5ysXpeo6H6L/RhlIf3JQ4b9tO+ZEZclBy5YLeeSFjHdf/pNNf/p+m
+	 OhjpZ40K5a0izGefskSltEmyutCP1E0zUL9cx+gT97OR4L8vsZTOw9/0j0B9gxLATPn+d
+	 VpIQDMqhSFdoHSuXobWKIgjIwQoNkHF7A2R4IQCOHy4b99kVKuyKGgQnzerK8oG9Mq+1Y
+	 EHRTuRTqug4Sq9HCNSFdORw2VgnuLNLr6ok17x4UGmSfyS0reKlFzWhVVvjJZZefmeA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=O2XMX68m;
-	arc=none smtp.remote-ip=216.40.44.16
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DJJ6of28;
+	arc=none smtp.remote-ip=95.215.58.99
+Received: from mta1.migadu.com (out-99.mta1.migadu.com [95.215.58.99])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED3660A261D;
-	Thu, 29 Oct 2026 16:57:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EED3660A261D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBAA60A261E
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 16:57:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6EBAA60A261E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=O2XMX68m
-Received: from omf06.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay10.hostedemail.com (Postfix) with ESMTP id F0AF6C0482;
-	Thu, 29 Oct 2026 16:57:38 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf06.hostedemail.com (Postfix) with ESMTPA id A233B2000E;
-	Thu, 29 Oct 2026 16:57:34 +0000 (UTC)
-Date: Thu, 29 Oct 2026 12:57:33 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
- <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Kees Cook
- <kees@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Puranjay Mohan <puranjay@kernel.org>, Ard
- Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Ben
- Cressey <ben@cressey.dev>, Florent Revest <florent.revest@linux.dev>, Bill
- Wendling <morbo@google.com>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-Subject: Re: [PATCH v3 1/7] scripts/sorttable: Make the arm64 before_func
- offset configurable
-Message-ID: <20261029125733.75e80eec@gandalf.local.home>
-In-Reply-To: <20261029-b4-arm64-callops-kcfi-v3-1-1b011ad5ddec@linux.dev>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DJJ6of28
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=CAYOtMfAj2CKhNyLkHjEGE+Ku1FgcGL4RmYNUgnppcs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793293069; v=1; x=1793897869;
+ b=DJJ6of28Sv53LKrKVpHYxU8UvNo/3F/LAeH/M2sEW9rTsJBNEGzpOMrVf+DGC8Jpnn1d1qIY
+ pURL1Sanj3w5ARUiBNlp5LIY8SPvHaXCvGproA52siS7rf7jNznJbk7JMCDIdmOjn7E385Z+Kds
+ cLAewYbrHlWZPtgNnjh4mX3A=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b8a209880955641a;
+	Thu, 29 Oct 2026 16:57:49 +0000
+X-Mizu-Trace-ID: b8a209880955641a
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 29 Oct 2026 16:57:38 +0000
+From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Puranjay Mohan <puranjay@kernel.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: Ben Cressey <ben@cressey.dev>, 
+	Florent Revest <florent.revest@linux.dev>, Bill Wendling <morbo@google.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Subject: [PATCH v3 7/7] arm64: ftrace: Allow CALL_OPS on kCFI kernels built
+ with Rust
+Message-ID: <20261029-b4-arm64-callops-kcfi-v3-7-1b011ad5ddec@linux.dev>
+X-Mailer: b4 0.15.2
 References: <20261029-b4-arm64-callops-kcfi-v3-0-1b011ad5ddec@linux.dev>
-	<20261029-b4-arm64-callops-kcfi-v3-1-1b011ad5ddec@linux.dev>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,79 +74,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: A233B2000E
-X-Stat-Signature: 5754sd9cpbybo3dm5dhdrqmqhjwxwxuo
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX184EGAq7MiFwVvUPkOypaUue5Jo3FQ2e0k=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=o9qVXnmYPWwEWL6vYT0sE4rqArVgEZmH/7qwJmZBvWo=; b=O2XMX68m845O3WDKi9BwaEt1caAlqa+gEtKsxmrIIXNytcUCtD3BLyldTS0/IqEKS+sM7VNwEUlYgK6umqv9OZFhwN3O6EcrWATSvs8oQY4SOY6qfWglzjOxnxrIIqI8aklfLUt5fgWJsPkh/9yXX3eCqzf2tdv2eG8c3TO57KM=
-X-HE-Tag: 1793293054-777104
-X-HE-Meta: U2FsdGVkX189UC0rZjNrMJ6F5e65lS1+Gv5SMF2ZBhu39yNWsJkFs5+b6b9Q7YHTZ0snpCrHrxfBnDULhMEot5zJLRVz16QoQvulVN2CjfPk/B4EESInm3Qu2xcMbOjvRUMSZRmcu7Dj0JBbZ2rVgfy2wQ2z3CVuhez61PkigHP9sX7MmtxCCC3hgT+XwqT65rAlL0cskuWuJAgOialQh17Xaia6U9QUQBR/v1+1u+dr/FCg5+MG7XBrcDyJ/uDV+BxJRnh7vFNPdsY5om5V62LCUzZqD7vQuuF2wpxe+IuJ0UzeFfIc/MT8nHjhRVBEEtcK9bRoft+1iCaWP9ubvWrJAZ3Q6yh4zFo5GQOjHX5aayr72SZvIX5uZJPXZ9sQu7Cr0vzyiAGwZ1F60kRIfg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261029-b4-arm64-callops-kcfi-v3-0-1b011ad5ddec@linux.dev>
 
-On Thu, 29 Oct 2026 16:53:58 +0000
-"Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev> wrote:
+Pass -Zpatchable-function-entry=M,M,.discard.patchable_function_entries
+to rustc when CFI and CALL_OPS are both enabled, so Rust functions get
+the same prefix NOPs as C functions. The section argument needs
+Rust 1.98 [1]. Probe for it, and let ARM64_CFI_PERMITS_CALL_OPS
+accept RUST=y when the probe passes.
 
-> sorttable hardcodes before_func to 8 bytes on arm64 (two prefix NOPs).
-> Make it configurable from CONFIG_ARM64_FUNCTION_PREFIX_NOPS instead.
-> kCFI kernels with CALL_OPS need three NOPs. The symbol does not exist
-> yet, so no functional change.
-> 
-> Reviewed-by: Ben Cressey <ben@cressey.dev>
-> Reviewed-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
-> Acked-by: Alexei Starovoitov <ast@kernel.org>
-> Assisted-by: LLM
-> Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+Filter -fpatchable-function-entry out of bindgen's C flags on every
+architecture, not only on arm64 with CFI, since removing the flag does
+not change the ABI.
 
-Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
+[1] https://github.com/rust-lang/rust/pull/157445
 
--- Steve
+Suggested-by: Ben Cressey <ben@cressey.dev>
+Reviewed-by: Ben Cressey <ben@cressey.dev>
+Reviewed-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+Assisted-by: LLM
+Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+---
+ arch/arm64/Kconfig  | 7 ++++++-
+ arch/arm64/Makefile | 3 +++
+ rust/Makefile       | 7 ++++++-
+ 3 files changed, 15 insertions(+), 2 deletions(-)
 
-> ---
->  scripts/Makefile    | 4 ++++
->  scripts/sorttable.c | 7 ++++++-
->  2 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/scripts/Makefile b/scripts/Makefile
-> index d7fbb7ca098b..7ef1c84cf79d 100644
-> --- a/scripts/Makefile
-> +++ b/scripts/Makefile
-> @@ -54,6 +54,10 @@ endif
->  
->  ifdef CONFIG_BUILDTIME_MCOUNT_SORT
->  HOSTCFLAGS_sorttable.o += -DMCOUNT_SORT_ENABLED
-> +# 0 or unset (no prefix NOPs) leaves sorttable's built-in default in place.
-> +ifneq ($(filter-out 0,$(CONFIG_ARM64_FUNCTION_PREFIX_NOPS)),)
-> +HOSTCFLAGS_sorttable.o += -DFUNCTION_PREFIX_BYTES=$(shell expr 4 \* $(CONFIG_ARM64_FUNCTION_PREFIX_NOPS))
-> +endif
->  endif
->  
->  hostprogs += gen_init_cpio
-> diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-> index 88e49a5c4251..2e951f2f60e8 100644
-> --- a/scripts/sorttable.c
-> +++ b/scripts/sorttable.c
-> @@ -281,6 +281,11 @@ static int add_field(uint64_t addr, uint64_t size)
->  /* Used for when mcount/fentry is before the function entry */
->  static int before_func;
->  
-> +/* How far before the function entry a patchable entry may be recorded */
-> +#ifndef FUNCTION_PREFIX_BYTES
-> +#define FUNCTION_PREFIX_BYTES	8
-> +#endif
-> +
->  /* Only return match if the address lies inside the function size */
->  static int cmp_func_addr(const void *K, const void *A)
->  {
-> @@ -912,7 +917,7 @@ static int do_file(char const *const fname, void *addr)
->  		/* fallthrough */
->  	case EM_RISCV:
->  		/* arm64 and RISC-V place patchable entries before the function. */
-> -		before_func = 8;
-> +		before_func = FUNCTION_PREFIX_BYTES;
->  #else
->  	case EM_AARCH64:
->  	case EM_RISCV:
-> 
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index e8cb44d881d0..e64d053e1854 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -277,11 +277,16 @@ config CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
+ 	# https://github.com/llvm/llvm-project/pull/131230
+ 	def_bool $(cc-option,-fpatchable-function-entry=1$(comma)1$(comma).discard.patchable_function_entries)
+ 
++config RUSTC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
++	# The section argument needs Rust 1.98.0 or later:
++	# https://github.com/rust-lang/rust/pull/157445
++	def_bool $(rustc-option,-Zpatchable-function-entry=1$(comma)1$(comma).discard.patchable_function_entries)
++
+ config ARM64_CFI_PERMITS_CALL_OPS
+ 	def_bool y
+ 	depends on CFI
+ 	depends on CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
+-	depends on !RUST
++	depends on !RUST || RUSTC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
+ 
+ config ARM64_FUNCTION_PREFIX_NOPS
+ 	int
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index 9fbfe5ab3724..b47733b585b5 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -147,6 +147,9 @@ ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS),y)
+ 			 -DCC_USING_PATCHABLE_FUNCTION_PREFIX=$(prefix_nops)
+     KBUILD_CFLAGS += $(CFI_PREFIX_CFLAGS)
+     export CFI_PREFIX_CFLAGS
++    # Rust functions are not patched by ftrace, but they are called indirectly
++    # from C and make indirect calls themselves, so they need the same prefix.
++    KBUILD_RUSTFLAGS += -Zpatchable-function-entry=$(prefix_nops),$(prefix_nops),.discard.patchable_function_entries
+   endif
+ else ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_ARGS),y)
+   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+diff --git a/rust/Makefile b/rust/Makefile
+index 0ac9ab28cc2b..686964c826f7 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -511,7 +511,12 @@ endif
+ # prototypes for functions like `memcpy` -- if this flag is not passed,
+ # `bindgen`-generated prototypes use `c_ulong` or `c_uint` depending on
+ # architecture instead of generating `usize`.
+-bindgen_c_flags_final = $(bindgen_c_flags_lto) -fno-builtin -D__BINDGEN__
++#
++# Do not pass -fpatchable-function-entry to bindgen: its libclang may not
++# support the section argument (Clang >= 21), and removing the flag does not
++# change the ABI.
++bindgen_c_flags_final = $(filter-out -fpatchable-function-entry=%, \
++	$(bindgen_c_flags_lto)) -fno-builtin -D__BINDGEN__
+ 
+ # `--rust-target` points to our minimum supported Rust version.
+ quiet_cmd_bindgen = BINDGEN $@
+
+-- 
+2.54.0
 
