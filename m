@@ -1,101 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793291638;
-	b=L2utMz1+wBfrZs+XFXPQ9iTsPHT4rKivZkKjo8+nhv4vRTRqw8HwLbdr99kd3HdbLdvt
-	 WOx0l4+3hz/OmDrffWM/eNOEb74+8cD0813D0Zcp86sgnqi6hUeWYgNdlzF6OH/2hS1n/
-	 TMDXTRkExmC3esUKDl6fKl8UKGPt3Q9JfVzhzHE+ZG85N2o9r2+0a/zaIYz45FSDI3xUH
-	 JL09p3H8+2CbOa8/uDEJl52ypQr/y6dIATbeLtK3r/nKGZaWuwsIysAFJA7ccelEUGeFc
-	 ElKWarX2tQayrmbbmboIuw4HAxacl0EujrdRUmn6iIrydsmzi/NUgXHiYjKeZ8FG6rQ==
+	t=1793291754;
+	b=U5FMUM/IaIp3Qds64IUMv88UFOJyf97h+dx2Tz7egvq/VwQBa7EriED9D8Hrx2CFcLDx
+	 TsSXBtt5r+rRvM/ZQXy9fBGaY9HScvtjlMIrXW88wg3n7vBTuzUrkDxA+5wL1OqsSvkkB
+	 6qg068S9nTKqYMzNw1amhd105F7h2dAqgTCSQz2MyxUCvmK4iLcMuO7Rhn2IUCJvLOEuQ
+	 r/4rwhz0d5iPI3jcSeZ5eVAggRxDDIjegt/CP8yZvHe1rcQgVwcWYVShp07FAoNjV0Zcl
+	 O/w9jbZTjqcPwgqlh5gaxOUlmUhBEir/E5GsfBRFSvaYNLqaNGQuTHjA2DHMaqv2aEw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793291638;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793291754;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
 	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=AUEgA+KIhVNOjMXzh3FXk0P/lrvgmm68bIk2PmEsd2Q=;
-	b=Rog9TnVJMWydWcJdyU7W/ul04UkrLxH9aSGgBfjaeeEbHS8DZbueWF6PoyLywO4w2FQD
-	 JDRtX40w/puBJ6VYUqkN5tf/aUh4FO7lk2EE34ucQVIW7uhOOB57y4WChvWFl25d1mVwz
-	 6V9JUv4EmmQxwcGYCvNlztgAMsuC1ktlVafVzYBfN8OidFveidjFuUWADzzVHWqHJECBd
-	 REVDZHV1c26uCy96EjirR+EekPm2VyoOv35kcSiS8lGACxu4sJmIOeJ9L9O45Q0acKgD5
-	 6JxZiAnE3afP3lFAyiwI5vas99F/MmirevrJlYXP6garQXOOEwQFAj0JlgSnq5lC0YQ==
+	bh=les2g87PSHgvNrrOSQca0MPNOKPP1t4sZIzgv+XDxaY=;
+	b=EUn7ghZ4LUprRLJna9xDrC2EfcFGZ5zDUnRRg+rD0OrD3CBecCvLazHEgOzj3AbwCcSn
+	 xjY7Qti3dBW3ssnDW/76CJXN8Q11AExL64VgBi7shJVzx5KOGXSYhA2qYCSD6aLk1Hy+q
+	 nWIYGQceqqQ9aU0jy5y22fH3HJN0LDKElHHvmv/Quoh8o3ZjkZPci7l53Gh7MxCfYG6z7
+	 QVUPtCVbXZ5ZX5iqa1+SnLN+mtRKtGkndP6flWjKc9YsSFFIxnBwdC6prm8juXDqeUBZM
+	 nl99hAQrhl/+zU9hGNrQUkn2e0JilhDG0gVc3aWF8rwItKPVG/11AgLlRU8wvFbXsMA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CRodfhJe;
-	arc=none smtp.remote-ip=209.85.214.172
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Isc/nwI9";
+	arc=none smtp.remote-ip=209.85.215.182
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FEC9606A31D
-	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 16:33:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4FEC9606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3573A606A31A
+	for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 16:35:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3573A606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CRodfhJe
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2e99b1e5b4cso15424255ad.0
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 09:33:58 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Isc/nwI9
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd8ca57ef64so463570a12.0
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 09:35:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793291638; x=1793896438; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=AUEgA+KIhVNOjMXzh3FXk0P/lrvgmm68bIk2PmEsd2Q=;
-        b=CRodfhJeEOikU0i+dQEuNpBaaDuycDWWjkuIV45tbb06Q1oe98Exbp4+RqKKNMYSEx
-         WqHz6cusTxgQx5H57r4dL54D4B7825h9o1QGCamhOF0IueIDECAWTyiLzrLUcJ05C2Z4
-         xuYSKCEvkN5rvq9P9J0pDcoLjoLM1d1taYXoUHliMo5CLG4HqJkdBEpQX6RLHIOZTfaE
-         y+v/w2FDE841G4y9uutJ8gNMvLvbl+gtTwP4YyCKDSMFbUOPZ1rq51gvgJpTJEVtnePO
-         5dY/aQ88F7VH78L8H8b97AObets7WjHiAYntCB0SjNFspam6J4iFmwxt8rdOaOSKnNh5
-         ChkQ==
+        d=gmail.com; s=20260707; t=1793291753; x=1793896553; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=les2g87PSHgvNrrOSQca0MPNOKPP1t4sZIzgv+XDxaY=;
+        b=Isc/nwI9X3oBw6g+hHgW2ESomBs2zEJXw028q1i2bf/9Pn6gNEQ1C3sn+HYXMn+YKw
+         2SKlkNucmZQxU9biihGCWYNB0QG9BMs4mt0M5Nf0FOuw9AqFCDoQczWLwdkXKkcQmAxx
+         BHdB7XyBCxbYfsUMmKDV4ndDvf+soRYXkDKkan9Ga9ETpBG5p6kiIXTtZkBnaP3//xH0
+         vhH3nNEDR34BL7Gu3Xz3PnUQAqoc8lufv+AdDQKrLO5oE+OTqzFWfh6CvAndB9XUxnlt
+         0c6MOv3Y7fyOo9jeFZaR948lacxNxRW05Noue4EwY4oRBaT0FvuhM21vexyatF9d/hxg
+         pIPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793291638; x=1793896438;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1793291753; x=1793896553;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=AUEgA+KIhVNOjMXzh3FXk0P/lrvgmm68bIk2PmEsd2Q=;
-        b=aqvcoJjKbO3DipBqX5eUz8Chck9ycuVlzi69vWQ8M2DI8Mk3I4+5zY2/+ZdNzf47SO
-         ibo5dFQq5gVY1WGeIWD1SX34dolLz3X9J/1tD2qs5N1CS77jJgYxRi4nsJBxMXYC9Rnj
-         r0l0DnoeWIqcThxXskj/bgoWrUuLCyjw9CdhRbbdTfD96wihMw7YXeSw4aj6V2L9ET/P
-         3yDerQJEW3DjGl4gFUW6vCa/NQKPKzDxOUbCGJywDl/J939qcM3DPjwDnGC4zaXrQwD4
-         cgCgG4ygrvhDorSrQDzAOvxpU1dDpxTF/OCKcOnLH59S5dCunof+UTuf+i2MKluGGzFa
-         FuEg==
-X-Forwarded-Encrypted: i=1; AKwUvBwLkvSGoC2biTei3e3phwVb97vKgi56M5p57XJIiwVu5AMv5fQzhhBEkLalgklQoe98c08=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJOf1vj34Eie/CK2giXP5Rn8GrgSxUBSb9v4y6wRdcGcXnX0dUv
-	R0BF5xeIaYplVSPEdtE9i1ICRbJJWDBM5HueMeyVwNjCfS4l+KMDWlSSqznJog==
-X-Gm-Gg: AYBFou3hhH9/EyuREcZspdGfiTncbbcx3pC+AZKmjBD4s3oBIACYD+lWy75yZzGBiJg
-	eoMlMliXHE5xkO8UNSFlU71SARdlCOPge7LGMb7x5ccs3Z8/0TVLx2wqH6wf++xigmKzhh8RSek
-	CGnJeg57I80vYWCeLGvYalGwSH6D832wFa3A3ElZqz0iOszolb2LTrxpHPPCd1mvRWolDt6tS7Z
-	F0aSRlKFAdudUT+51K7lzznbPT14DJasHUatc5bgDX/6VQiaExe3fic6l/CW2SbWpFWWG1WmhwL
-	EW4FLu/VxVmBI8tEn/T7T50hP/V3okFIGnY651KFCVTSPV+AjvSnWxDVDbi4PHazxibo/EOocWf
-	Srhkkc7UMthrvjCVykQm41P23/lbgHBMTQ4gPNEd7+8Bd+SK2jcd+EcpmJ4Bq0iG44hh5Bp2n1P
-	jZAsYGI2X6nZKuRX0vdMMyIvuIlzIDPb0I3X9A4x4jNrukF5FO33U51Gx84ODl5m+x4nYm3ATOU
-	XrrHo8n5jLJRIY9shmD1xcI1zxMnfnc53fP5PSjq/BexWYnziXnBkyvVOIBydLrMYvClEV0A1wZ
-	fmmbAcFJG7vXw5G+wUlbEkXfHajM6neN65WMhj9nHAQ+a+cOhdCV+bIimWBE2N55du/ACfGyY/r
-	R5K4lJrBIaxRoVtpFdWDgHI6x8/msW3hZkg==
-X-Received: by 2002:a17:903:faf:b0:2e2:bfe8:aa7e with SMTP id d9443c01a7336-2eb000852dbmr59313085ad.7.1793291637435;
-        Thu, 29 Oct 2026 09:33:57 -0700 (PDT)
+        bh=les2g87PSHgvNrrOSQca0MPNOKPP1t4sZIzgv+XDxaY=;
+        b=jhUpJ+U8zvjqEVUJoZGnvFwTvAbJiav8RbGO6EEU2ap4c4uTIE/tlWOWqoocTwvay4
+         GxW30NcOkPalFX09b2mfzt+a7EnuHK4AIict8yLCEtJu9eTrGICuodmjSQkDKWjKUKDf
+         EUn8Q82f9/WA8NXLop/pvn2rQVTG4+bdRbct+XWvXjWqJGOhMR98FkJL4V9ApCeGLeGz
+         6nHdEq6rfzEqxzgVH7ZIOj4JKB7rR3C/e5R8Pm399XHj59L9A5KdiDCLfXuRptanf2uA
+         6QEaRKKmqQjkuEZQTVrqn6r6TG10GxIdqun9crznBx8usgG9Cf6JovBUnDF4Jp2cf8b+
+         rebw==
+X-Forwarded-Encrypted: i=1; AKwUvBzhjx8cLxMuOd9kS4Lii1qX0/ISvtUeXi/XHta0Uh6icTBOb316I3jAyVR7fgbZ8ePn2UE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLQnTUsKUGH2fl9a208qzIcnpGTcWzFfWTFXkHjq+bpJXrBQFpd
+	MJ+mgbZ2zJrjhxLQlrSKzqAJaHQ7CiDaRApeHG48fEtPFOem11u1TdQd
+X-Gm-Gg: AYBFou2/K6bN5Kr831BUBdu+9cCIZfzM9JLTL2YH/HGmWaRk/1aKKTjoMFiGIFr8VP1
+	hvz6BCYzhRGC3eIHUOqjcoa7GmM5iKf37VeoHDt8jLDOLDDQBiaTNbG2yZlM5M7mUd9uWpLQQV1
+	ZwDTe5JwzIy8HclOcT+4Qv1PuZqKbfzDrlwVPcdftp2PECgZPOwAXpAumMlSRxug5gmJOEH7fIb
+	K1mSOGL9gd07Avut4ScABG/PMpHsayjQOXb4g1v2WaOksSIJjsOTtGWmu+Rtoi/2nhqpif5+2eI
+	5uTL6cQx3+AOaDKnlWcbg0O2hDJyD0mtiu5Xdx4U7Ry9jS9a/8sR8uXPzXk/lLtJVUVsKEwF6jg
+	SI7EXLLSwj8mmMWr4EBKb9Smnqv0bontGazEE6MDob+931RcCW9bWqGM2TyBNydqg/zgG2fkt/N
+	1qzD33lqSnpVekPtIVtVGr+slQ4x/EBoC+Nve20qkIUG+3fST8KEKb7aksWVsVhOiAV3DhNYRcf
+	C/f0NtQ1ll7/kN6LUiNRcIj+iopmAs0ia+uFQ3KoQ+CWaE7ABdwZlNpK9RyRboZKEbMDX6tCtPc
+	Ce9OOF8aB65Jguc30LlzN3VKueOT7FbpNgXWiPuIAL0GDZw8G8jyADB35GsC3cR2rDjVMk8xOkM
+	diCF3h7QIShyAdeONEQeqUAF4ssew/pQbSQ==
+X-Received: by 2002:a17:90b:1dc1:b0:3ac:9ed8:f301 with SMTP id 98e67ed59e1d1-3ae6ed6bd58mr1816660a91.30.1793291753149;
+        Thu, 29 Oct 2026 09:35:53 -0700 (PDT)
 Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb361f392esm107005ad.3.2026.10.29.09.33.56
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e98f888sm4850133a91.13.2026.10.29.09.35.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Oct 2026 09:33:57 -0700 (PDT)
+        Thu, 29 Oct 2026 09:35:52 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 29 Oct 2026 16:33:56 +0000
-Message-Id: <DMHGTWQSAWG9.NUHU0WK9KRK8@gmail.com>
-Subject: Re: [PATCH bpf] libbpf: Reject excessive program counts in
- generated loaders
+Date: Thu, 29 Oct 2026 16:35:52 +0000
+Message-Id: <DMHGVE026N3I.1V3834R8WLSYB@gmail.com>
+Cc: <rostedt@goodmis.org>, <andrii@kernel.org>, <jolsa@kernel.org>,
+ "Menglong Dong" <dongml2@chinatelecom.cn>
+Subject: Re: [PATCH bpf v3 1/2] x86/ftrace: Mark jmp mode by clearing bit 63
+ of trampoline address
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- <linux-kernel@vger.kernel.org>, "John Fastabend" <john.fastabend@gmail.com>
-In-Reply-To: <20261028183947.9606-1-mahe.tardy@gmail.com>
-References: <20261028183947.9606-1-mahe.tardy@gmail.com>
+To: "Daniel Borkmann" <daniel@iogearbox.net>, <bpf@vger.kernel.org>
+In-Reply-To: <20261028202345.1215859-1-daniel@iogearbox.net>
+References: <20261028202345.1215859-1-daniel@iogearbox.net>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -107,60 +102,23 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Wed, Oct 28, 2026 at 11:39 AM Mahe Tardy <mahe.tardy@gmail.com> wrote:
-> @@ -122,6 +122,11 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
-> +	if (nr_progs > MAX_USED_PROGS) {
-> +		pr_warn("Total programs exceeds %d\n", MAX_USED_PROGS);
-> +		gen->error = -E2BIG;
-> +		return;
-> +	}
+On Wed, Oct 28, 2026 at 01:23 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+>  static inline unsigned long ftrace_jmp_set(unsigned long addr)
+>  {
+> -	return addr | 1UL;
+> +	return addr & ~FTRACE_JMP_BIT;
+>  }
+>
+>  static inline unsigned long ftrace_jmp_get(unsigned long addr)
+>  {
+> -	return addr & ~1UL;
+> +	return addr | FTRACE_JMP_BIT;
+>  }
+>  #else
+>  static inline bool ftrace_is_jmp(unsigned long addr)
 
-nr_progs is obj->nr_programs. It counts subprogs and progs with
-autoload == false too. See commit 259172bb6514
-("libbpf: Fix gen_loader assumption on number of programs.").
-Only a prog that reaches bpf_gen__prog_load() takes a slot in prog_fd[].
-
-Two objects with obj->nr_programs == 33:
-
-  object               today            this patch     should be
-  -------------------  ---------------  -------------  -------------
-  33 progs             -EACCES at load  -E2BIG at gen  -E2BIG at gen
-  1 prog, 32 subprogs  -EACCES at load  -E2BIG at gen  loads
-
-The second object fails today because of the cleanup loop in
-bpf_gen__init(). It closes nr_progs slots of prog_fd[], and
-prog_fd[32] is at r10 + 0:
-
-  r1 = *(u32 *)(r10 +0)
-  invalid read from stack R10 off=0 size=4
-
-Lets fix both: clamp the loop and check the limit where a prog takes
-the slot, like add_map_fd() does.
-Something like this (not even compile tested):
-
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -139,6 +139,8 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
- 	emit(gen, BPF_MOV64_IMM(BPF_REG_3, 0));
- 	emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
- 
-+	/* nr_progs includes subprogs and progs that are not loaded */
-+	nr_progs = min(nr_progs, MAX_USED_PROGS);
- 	/* amount of stack actually used, only used to calculate iterations, not stack offset */
- 	nr_progs_sz = offsetof(struct loader_stack, prog_fd[nr_progs]);
- 	/* jump over cleanup code */
-@@ -1134,6 +1136,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- 		gen->attach_kind = 0;
- 	}
- 	emit_check_err(gen);
-+	if (gen->nr_progs == MAX_USED_PROGS) {
-+		pr_warn("Total programs exceeds %d\n", MAX_USED_PROGS);
-+		gen->error = -E2BIG;
-+		return;
-+	}
- 	/* remember prog_fd in the stack, if successful */
- 	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_7,
- 			      stack_off(prog_fd[gen->nr_progs])));
-
-since it was already applied. pls send a follow up.
+Steven,
+the code is the same as in v2. Only the Kconfig text is gone, as you asked.
+patch 2 is a bpf selftest.
+Mind if I take it via bpf tree?
