@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.241
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.1
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793403255;
-	b=5lkqVglphDrNMDdbpua7VPZlRb4TbLdQQSezhG8rmVHCKMoZ76dy0UFOoJ9Ar1qi1BtL
-	 2VYaF4NhH83saS6t6tzeOqgCSpZC6Qar0Ra8Fzlijv+g/ZW3jiPSZAroai17Anj/HJR2J
-	 IcX62m+cGEUqIGgH0VXvj9gTU8fmBx6J6vdvgUNltpOnfvzp5JZ9JYc2mVOo0+BQ8m1CL
-	 JHrVEkR3ccbU/Nb/3WmyE1hQ4fpicwlpEkPqiVFBqJ/YNctgODlJEjTxNzAPwI3UAAtaP
-	 d6+k42k8t1J7YMZLZgbaktAdmTpUK0P6FIcBsXyPu8x+DPENfYwziCfHR0Uag57U6rA==
+	t=1793403268;
+	b=K1TNvWBXR/n8MR/U8mNkkZe2gH1AfrTrJdez3RqQx7j2/uUmeSDCUNC4/41F2iNl1vx/
+	 W7NwTS5ciy7+MxkUOnmFMGLR0CO/TUTpOZrnIz4+xYu9pl0tV1IIpLrMN262YjAAgcwDf
+	 mX686jDchI0aGSzEJQbSTSVDet3TuHLBXooA0GnkZf9z0JhWbkUDpz5JUfKx4ti0/NtNG
+	 SRK9NjySZUoInfqEuWUyHNhXKlHYPUPZe/G/ao/IokEzvupxiu0kUfwuR8kVZwyQ7e7r8
+	 pT9szD1q4m7y6wbeA2+PykiM7nRv/zawtopxW+UYFbGo8W/tEjenlrxhVnbi5/qs4oA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793403255;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793403268;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=H8/NYbp+Nd3F65sdejDq1wglbQaMWNH2+Ant5BwsApM=;
-	b=UjAep/L+1aujS9lCncz0a14gfh5YdYch4qWHNl3Vez6O3XdY/aIXBLFoaLuzAOYvqF1F
-	 fSWKis7ZQshTmGp32aTBbTS/F8rG6q/hEWaTH9F/Pj/Dqgk0Uwt6tJ22Pj6UJic3HByGl
-	 jsFRWAtZGZcNpY9UBGeZSgrBzrbrd2SLKBr05cn6ZXPcw3Sq0JCjMeCvUU9PGrLHwrWn+
-	 RFoMQJG11KAofA+s+tJNDJnB9QZEm2a52+xH2WVPiQxixbgRAq1QYF2NMdrEzDUj7Xf6M
-	 aOFRObTnagQ2rhuRSqYm9zF/TbOfG7JAFZ0r0xdbedjLwghOuzJPo4OLfYT1AgrXBiw==
+	bh=aOETFB11lK61JVpcrF0adyQknR1ZnwtVjLv9AkP3jO0=;
+	b=4PC3a9y7eCVz1EaBS3h1mbkYdLnNh1K/CEk7wjA8SwWeWBELTGCXn2srV6gwHKGWdUIT
+	 a78tSAtWtyrfcGb7h2jkkl3mWkwBPhAO2LMmZC5kwXJuk4A+taR1frSiZNBbAAYGJxsYX
+	 GpoHSUzoTw/sTwHg1nex6Q5WbY6eyUTZI2PUUiBJ8nqLBP+MmaaHjf0BhpKup4eF6m3Fu
+	 z45O7J3sKnY4SFqI1LQTQfndAGH3THzC28Ttsbltx/u4lwDK16jAKPO2m8qRQRgfne05F
+	 V7og4fafx9GlhBkGjy82i+Ls12dsCnBL1/QJOcLpUP3GuYRAzcOXbtNb1lrH16mzHng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lbORuZih;
-	arc=none smtp.remote-ip=91.218.175.241
-Received: from mta0.migadu.com (out-241.mta0.migadu.com [91.218.175.241])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CMeKZfQV;
+	arc=none smtp.remote-ip=91.218.175.1
+Received: from mta0.migadu.com (out-1.mta0.migadu.com [91.218.175.1])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33FE606A31D
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 23:34:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E33FE606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54708606A31A
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 23:34:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54708606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lbORuZih
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CMeKZfQV
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ExIFrPPy71wHVY1eT2nJ5LwJ0NamPJjJ+06dpy5RLJw=;
+DKIM-Signature: a=rsa-sha256; bh=/l7JijRqeIH4ZNLQaYcxMZRJzO7OBEldHxwLVhwg5x4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793403251; v=1; x=1794008051;
- b=lbORuZihXBNYvfCiBv4T7ibKJdVU7mWdVtnCT3gIg624ofe6zAY8TSenRn1EdyIstsBtXEqS
- S1xZelhOVpERR+6uu1m/9C3VbT6MfLgRAYlaHSWqYvdV77V2rqa6ZzUWKtNd0tKBImmIV57xmUO
- /OGGlx5csn9IPx9tk8eJLNVU=
+ t=1793403265; v=1; x=1794008065;
+ b=CMeKZfQV+jm3CbX1w4BYMTDX1DAlP0m3vlgcnIoMS2HX0k94DQs9Jlg/VVs9CSnXai/xfgLp
+ fgMoOjo3ZqHJYzrEU6GDLKZY+LZGVAGegFc58tH6nyBzScb2KQM7OzGZQw8w06U6UsfxZQYgD9w
+ ls2+tKqW3kJxixZUIaBHpEAI=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 49366713bf841172;
-	Fri, 30 Oct 2026 23:34:11 +0000
-X-Mizu-Trace-ID: 49366713bf841172
+Received: by mta12.migadu.com with ESMTPS id 32629bfefc829c4b;
+	Fri, 30 Oct 2026 23:34:25 +0000
+X-Mizu-Trace-ID: 32629bfefc829c4b
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -62,9 +62,9 @@ Cc: bpf@vger.kernel.org,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	Vineet Gupta <vineet.gupta@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v3 01/13] libbpf: Look up BTF strings without making BTF modifiable
-Date: Fri, 30 Oct 2026 16:33:43 -0700
-Message-ID: <20261030233355.1836749-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v3 04/13] bpftool: Normalize legacy arena type tags before C dumps
+Date: Fri, 30 Oct 2026 16:33:46 -0700
+Message-ID: <20261030233355.1836749-5-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261030233355.1836749-1-ihor.solodrai@linux.dev>
 References: <20261030233355.1836749-1-ihor.solodrai@linux.dev>
@@ -79,122 +79,89 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-btf__find_str() needs a hash index of the string section, and gets one
-by making BTF modifiable. That copies types and strings out of the raw
-data, and fails with -EOPNOTSUPP on BTF with unknown extension bytes.
+Older kernel BTF encodes kflagged arena type tags as
+"address_space(1)". pahole emitted them since commit 21cb33c7e065
+("kbuild, bpf: Enable --btf_features=attributes"), and resolve_btfids
+since commit 27a78c2e7eee ("resolve_btfids: Process KF_ARENA_* flags
+in resolve_btfids").
 
-btf__add_str() and split btf__dedup() look up strings in the base BTF
-first. So adding a string to split BTF, or deduping it, makes the base
-modifiable as a side effect, and fails if the base comes from a newer
-kernel with new header fields.
+Now that btf_dump prints kflagged tags as is, C dumps of such BTF
+declare arena kfunc pointers as "void address_space(1) *", which does
+not compile.
 
-Build the string index without making BTF modifiable, and reuse it if
-BTF becomes modifiable later. The index can now exist on read-only
-BTF, so btf__free() frees it unconditionally.
+Rewrite these tags to "__attribute__((address_space(1)))" in memory
+before dumping C. BTF without "address_space(1)" type tags stays
+read-only.
 
+Split BTF is dumped as is.
+
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/lib/bpf/btf.c | 37 +++++++++++++++++++++++--------------
- 1 file changed, 23 insertions(+), 14 deletions(-)
+ tools/bpf/bpftool/btf.c | 37 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index d2ff6f5d6d5b..47a04be0a55a 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -153,9 +153,10 @@ struct btf {
- 	 */
- 	int start_str_off;
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index 385521e6b028..94237befec67 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -26,6 +26,7 @@
  
--	/* only one of strs_data or strs_set can be non-NULL, depending on
--	 * whether BTF is in a modifiable state (strs_set is used) or not
--	 * (strs_data points inside raw_data)
-+	/*
-+	 * strs_data points inside raw_data until BTF becomes modifiable,
-+	 * then strings live in strs_set. Before that, strs_set may exist
-+	 * as a lookup index for btf__find_str().
- 	 */
- 	void *strs_data;
- 	/* a set of unique strings */
-@@ -1258,9 +1259,9 @@ void btf__free(struct btf *btf)
- 		 * which will be unconditionally freed below.
- 		 */
- 		free(btf->types_data);
--		strset__free(btf->strs_set);
- 		free(btf->layout);
- 	}
-+	strset__free(btf->strs_set);
- 	btf_free_raw_data(btf);
- 	free(btf->raw_data_swapped);
- 	free(btf->type_offs);
-@@ -2042,6 +2043,21 @@ static void btf_invalidate_raw_data(struct btf *btf)
- 	btf->named_start_id = 0;
+ #define KFUNC_DECL_TAG		"bpf_kfunc"
+ #define FASTCALL_DECL_TAG	"bpf_fastcall"
++#define LEGACY_ARENA_TAG	"address_space(1)"
+ 
+ #define MAX_ROOT_IDS		16
+ #define MAX_BTF_FILES		64
+@@ -1092,13 +1093,47 @@ static struct sort_datum *sort_btf_c(const struct btf *btf)
+ 	return datums;
  }
  
-+static int btf_ensure_strs_set(struct btf *btf)
+-static int dump_btf_c(const struct btf *btf,
++/*
++ * Older kernel BTF encodes kflagged arena type tags as "address_space(1)",
++ * which btf_dump prints as is. Rewrite them to the complete specifier.
++ */
++static int btf_c_fixup_legacy_arena_tags(struct btf *btf)
 +{
-+	struct strset *set;
++	__u32 i, cnt = btf__type_cnt(btf);
++	int off;
 +
-+	if (btf->strs_set)
++	if (btf__base_btf(btf) ||
++	    btf__find_by_name_kind(btf, LEGACY_ARENA_TAG, BTF_KIND_TYPE_TAG) < 0)
 +		return 0;
 +
-+	set = strset__new(BTF_MAX_STR_OFFSET, btf->strs_data, btf->hdr.str_len);
-+	if (IS_ERR(set))
-+		return PTR_ERR(set);
++	off = btf__add_str(btf, "__attribute__((address_space(1)))");
++	if (off < 0) {
++		p_err("failed to rewrite legacy arena type tags: %s", strerror(-off));
++		return off;
++	}
 +
-+	btf->strs_set = set;
++	for (i = 1; i < cnt; i++) {
++		struct btf_type *t = (struct btf_type *)btf__type_by_id(btf, i);
++
++		if (btf_is_type_tag(t) && btf_kflag(t) &&
++		    !strcmp(btf__name_by_offset(btf, t->name_off), LEGACY_ARENA_TAG))
++			t->name_off = off;
++	}
++
 +	return 0;
 +}
 +
- /* Ensure BTF is ready to be modified (by splitting into a three memory
-  * regions for types, strings and layout. Also invalidate cached
-  * raw_data, if any.
-@@ -2049,7 +2065,6 @@ static void btf_invalidate_raw_data(struct btf *btf)
- static int btf_ensure_modifiable(struct btf *btf)
++static int dump_btf_c(struct btf *btf,
+ 		      __u32 *root_type_ids, int root_type_cnt, bool sort_dump)
  {
- 	void *types, *layout = NULL;
--	struct strset *set = NULL;
- 	int err = -ENOMEM;
+ 	struct sort_datum *datums = NULL;
+ 	struct btf_dump *d;
+ 	int err = 0, i;
  
- 	if (btf_is_modifiable(btf)) {
-@@ -2077,18 +2092,14 @@ static int btf_ensure_modifiable(struct btf *btf)
- 		       btf->hdr.layout_len);
- 	}
- 
--	/* build lookup index for all strings */
--	set = strset__new(BTF_MAX_STR_OFFSET, btf->strs_data, btf->hdr.str_len);
--	if (IS_ERR(set)) {
--		err = PTR_ERR(set);
-+	err = btf_ensure_strs_set(btf);
++	err = btf_c_fixup_legacy_arena_tags(btf);
 +	if (err)
- 		goto err_out;
--	}
- 
- 	/* only when everything was successful, update internal state */
- 	btf->types_data = types;
- 	btf->types_data_cap = btf->hdr.type_len;
- 	btf->strs_data = NULL;
--	btf->strs_set = set;
- 	if (layout)
- 		btf->layout = layout;
- 	/* if BTF was created from scratch, all strings are guaranteed to be
-@@ -2107,7 +2118,6 @@ static int btf_ensure_modifiable(struct btf *btf)
- 	return 0;
- 
- err_out:
--	strset__free(set);
- 	free(types);
- 	free(layout);
- 	return err;
-@@ -2130,8 +2140,7 @@ int btf__find_str(struct btf *btf, const char *s)
- 			return off;
- 	}
- 
--	/* BTF needs to be in a modifiable state to build string lookup index */
--	err = btf_ensure_modifiable(btf);
-+	err = btf_ensure_strs_set(btf);
- 	if (err)
- 		return libbpf_err(err);
- 
++		return err;
++
+ 	d = btf_dump__new(btf, btf_dump_printf, NULL, NULL);
+ 	if (!d)
+ 		return -errno;
 -- 
 2.56.0
 
