@@ -1,82 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.228.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.228.6
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793327581;
-	b=RHIDyqJzBogBTPU3hihEJ6t6EoS4hYQn4JNXbio4G+na0okrwI9nAKEDeM4u+tpLBzjr
-	 WLPwGGapKsogMYLEIlYUhQXFzmuMIWTBVLTWzSE18a1wJBG+CrtLj81R5XCG+Fk8XYYbr
-	 SyPikWFdR2GDW4BnuqQUzpZrop2pTNENlc/+iIXBt5KIpzGn0LmGO7qSAH593Ta4+CtzZ
-	 QD8xg58/Lm4SAaj6U+FW1L2NeJ3zOavVH8zPUfjT7YUL2ETDucHvw3EQ2arhhg4PV3jGv
-	 jo44DHbLKUK0AHL0z16H6pld0J2AoVN2kVrdrnzoucAq0xynNtfZUhnSMw9tYsVvF9w==
+	t=1793327588;
+	b=W6Kjv6EwhdOKSHyFfF/yAu9LcGsyt36Iu3K4/8mMWfs6DixL3mo+nC9aY1cfNd9M771D
+	 mRyjNJU0rWhze6x+NnqcWTCiwR+TUO8w0Y2456/jimmUgSV96A82vzkuNBB8nNJZlNy79
+	 6xz6Zf9b4k/LqByAPktsq4HA1CLhfVUXn08BA7zJGb3jjRrLmHRnuRAUtTcuL6T0UcAss
+	 vbRg8CleOpp0OByKtkYuRunlWnGegld9H4mPpbfK8e87LEF06GCCbDbQKqCIFJ+QGt4ct
+	 iPORAlZIMLRZ4GUynHVKfvywa0DMNAY6XjiTxThHYvJYD8p+t8Ie0d5K0eJFey1VPKg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793327581;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793327588;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=pcgb/vipsFKI93zItJdvIwVM2kRByvoCBd5I2lEqCew=;
-	b=1FKSYT9qCBT+ADeZxqni2CKvtZ2eT9QOftOsGvqN8dTWLfrP8nhj8XOSGOfRsD6/lGG6
-	 fUkYGCRkD2Vjv2mr46WBHlJCajMuOagMh3XKmOWzWRHoxlMvJct2vdtJzVjDfEnJUU7na
-	 MJ9c6Hi28a3rKb7hiJ5xNn0sJLF0J8bwCqUKmyLbmioeWj1l68oelaRDn2DAayi5tcIDG
-	 vmi7dU8MyDJ171X1Erm0M1tWCt/0/GNxedrOahmCQ17AbCxNS6FdZWk5fz5ofqhW+Ic78
-	 LU8IPCcaa1kIv17/jpN7WBxhIy6A/g9EQFq59FKngxFTiwTSU/blQdP8S3+ekpUgrfQ==
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=SIKkfA67UvQRqidJv7Hfli6cr7/y7nUfM2Bx1BgiLkE=;
+	b=m/5SlGhYjJwHYIWuCTyEw5/25/HYIq5XEUafexMUoZOrkj5eGmsOrfZTbyrAoBvCMFFv
+	 63lHgTPdNq1fLyNVTe1d+8FkWDrPdBv2Rp9cJaaKgMMbLAHKVcAc5+k1pkJSAAZGHF4cw
+	 9zBi60hRic6r7QJ2ia3xG8JzvLTzfSwqUzyC9vvnnb5/KTYa6Bz+XCVQ3ZIP3I4kba3Cm
+	 8yx6hcqGKWcw6/o0m8oJX+Y2dPrK+yfV4VbwwOktmO2kv2Tye4E3L21R+1Hhbd/kGkFHu
+	 8BJa+LiOVKdYLRzM933p3fkLAnyD8Vu9YWyone6u0nuft3T/10risGPMP4ATauiaYyw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I4cVE3zN;
-	arc=none smtp.remote-ip=74.125.228.5
-Received: from mail-pz2-f5.google.com (mail-pz2-f5.google.com [74.125.228.5])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QyXdKLmK;
+	arc=none smtp.remote-ip=74.125.228.6
+Received: from mail-pz2-f6.google.com (mail-pz2-f6.google.com [74.125.228.6])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF765606A31C
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 02:33:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DF765606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D557C606A31F
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 02:33:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D557C606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I4cVE3zN
-Received: by mail-pz2-f5.google.com with SMTP id 41be03b00d2f7-cdac0ac5f19so101738a12.1
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 19:33:00 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QyXdKLmK
+Received: by mail-pz2-f6.google.com with SMTP id 41be03b00d2f7-cd61053473aso2924a12.0
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 19:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793327580; x=1793932380; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pcgb/vipsFKI93zItJdvIwVM2kRByvoCBd5I2lEqCew=;
-        b=I4cVE3zNaa166lxyWLucLPwYv+KKUvcJb2782h1+tYmj2lVTSPBnTdH7SA9m7E9MjF
-         0opo8avjoUPnItlZu0TYg2a1aVmH7OVIHTMN9HDYSVB6OTsM+uzbXx5oJMSmRtRxDgQF
-         Psf7xF69LvGaOsj8RTjjMLfwRyOAE17xVsMKWn67GPX6PGAQQADemFAaNfTmHs3G/uga
-         24/DqDEdEZbMqcql04HYUY8Mabl+kRXlUmp3Aq4hzHPqCDpfDigrJEXAjWyr7+pwGU4Q
-         9gJSjAfD5AGxdLhscnnIyTuY7pH3wocg5//cRWle78FoXGuQ4ZLJP094+OwKCV6FPTWi
-         i28g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793327580; x=1793932380;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793327587; x=1793932387; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=pcgb/vipsFKI93zItJdvIwVM2kRByvoCBd5I2lEqCew=;
-        b=G2LVbc2qiNhIa9nWragtXaVsJAoASZsbDe7rxGWFMMUxK8pNgkdMRd4GuX30R7YAwY
-         y3DiEqfPPhW4EfoVvu99+R4gCBFJN3hnEVKYCg1xAj813E0zv8WTrpqYzSvcnHvPVPY9
-         ncjIKW+K+u5ooUeb3F38g+nwIGDXrAbHUh9D2avr3AsJcbj4I83/6qj+w9/NKxpwhk4E
-         QNN69i2aFHhZBkyie+4x7zehnWRW8yFCgIUhrpt1cgEpo4T7BS+kkshS5cTgZA8op98v
-         Tvakik4RcZ/UWpnzoaQqjufEIiyxmGixR0ob1689bEQRAEVEpNOJbqj/u/OwamBVOGUG
-         Uk+g==
-X-Forwarded-Encrypted: i=1; AKwUvBzuz9FpqZCOhL79ZoycxFqjgKrV6SjLdD/1ySSFXAlWOuDV7nPsYvXH6stoc61B16ufBgo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLY0RPJwbBEaqf0nbKOe/gH3T66IECurFxQLaaMnwrYUXdLrPqY
-	n/p2khCrelxhE3qL4tNA5ZxAgssUAanDxjy/mB6QzEkphmlLori8/n4R
-X-Gm-Gg: AYBFou1Husx4Biec9YLYmwm/nEVOix7yvZtlslnTLkRR0SLjBU86V21XvX7wFerjzyr
-	l1GuzBBT3BT1/TFz6WaSJI5i6m4a6t6HoH80RtKNOQJnhOytkiey464SBLB8E5sYrZdrLXZjdma
-	p5wFdaZ29GAkEcbeQJd8pwhQSJsswaxzrBrSdAXqoPtzM/ywolzi0NBmOjlm899+hCpJ6eedCug
-	bhMbH1TzMBaFV0IumqagxhKNFlElHgtp6SVnucvT52c11i3S0ClxSlht+O5FaJDithi3RJWCcin
-	SIR63zXIRZZaS0/vxPJg+SPlUp8lqFmTGAJ7T4s+99oWiTACJvz1nE+TwDpIvmdOk188cr8jX9R
-	NgA+3HgAVKDhPaAV3ag0rqnl+pxlU5KxX2Hp39dPaOVOl/ZMq1RXtBC9NlXYTbqbGG7XA4trUik
-	hQm+L1td5j8MKYIygpJ6Xb5OjEVJA2y9GNQkX59jZVTWudPqjHy7ZIvgpQA5D5MDKyBvi4+S6GN
-	uDrN5udIFZUO68JKkx0QZZTdw7fBU8RXRch2UM/7eWaf3bDsO3BE6PPFjzLB00X/GQWWRgNRfxJ
-	BQkkUVYIk2U0N90C9pfCNYvaFzP7EDMNyKqbN7in8q/Tlyqh0JENcQ==
-X-Received: by 2002:a05:6a00:140f:b0:89e:f8e9:205e with SMTP id d2e1a72fcca58-8a9bf71c0f3mr783776b3a.40.1793327580059;
-        Thu, 29 Oct 2026 19:33:00 -0700 (PDT)
+        bh=SIKkfA67UvQRqidJv7Hfli6cr7/y7nUfM2Bx1BgiLkE=;
+        b=QyXdKLmKaR0WHK0cJTyFaUEpfibyyQ5fW3kfeppI+vJOMhX/FDqjeS5UvEkcfOh/Uo
+         1Wshvu8W9MHdPi+8huvuLQyvCeClepU067PEo9L6qJSpL3CLideAGORYNP+htWkiex35
+         cuuJAzAs60zHbt9J/E0/3obXUk5lF8JFwiBzv/wsVpJ1WGdxrVyuTWIJjTIDNVs2eKAo
+         x8+ehuhDeYWrDvVihQjj1onRG9tt+RHuw9H+aoVnYhPozwBhthzYcwLwFNEn889tbE78
+         qia9oIKxu6TAi7PmpnL4ocyoXPtmVJtBOpTsYLyaFb6R2iZyosdbH9WnJkpghCJWGGoc
+         Mc9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793327587; x=1793932387;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SIKkfA67UvQRqidJv7Hfli6cr7/y7nUfM2Bx1BgiLkE=;
+        b=PMHBs730NLnIVSkh9er14hg4u7Jehp5EoZZ4rajN/lGd41b1PvDkA2p+Cp5yMe99jJ
+         MTrjoYCAVYdBu7tV9b39oed9UsDVx4lvzC0GiOW8Cg+s8cgikyioEFL/gY4kYHX9sEDv
+         VTxzLyvhQL64nPZS9j/qDYvUR8LhAwbdwghPt5c8/uMBNDehQDQ3w7k+fUv/6yE6cvVr
+         8c95N2rStS4Rmbq54oLTGVqMFm7PXvSK06WO24lVSMx7rkzzsjgw+nR48Pd3nxEqPYyX
+         63lLrp5Hivenp99EduRoNjPGGGiqbiaF3q/5BslTfjfVT4FzEPbF3uPeP1H06E9UuvuI
+         VO7A==
+X-Forwarded-Encrypted: i=1; AKwUvByySCUAtV38HRZxEn5GHW+JFgXgliRBguEmPuBAjYa6rSZzZTdTDXd/bukVc5icXx8lXsI=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKtLfGC7aPQgrMmAAYDCE3LHviXIU7/IpoOuI4WQILlz7VYhq+S
+	55rpj+hYFQHxGzY4Hc2l4PrWfREkA9LmDcFDlWYroKXfMR9wBXqwI6mk
+X-Gm-Gg: AYBFou06OKqvB3KLGk8oL/o+HYvPXhlTrUxgEOPrd981ZIIz63OhicpGu+ZMZE3IOH5
+	UZbAER8o/IqdxX0yjQ+Gii0N7jVykoa3xKDXyb2KIk2JcgXscNfaiYyPy76OTtuC5BwSV7MXfOI
+	BOlJxlSQn2712iRxc0Rhbq073JP6vFQ6sKF9j03zC7pXXihvp3ePzTSw9quzjX/4LfJUljwlTcg
+	mAsTzW3k/nGy/XglsttSfcO+oJysesXJtuetKV7Im+DKOCOoFzepBptF1DXau0T9hXHkpCiaIfQ
+	ZBhNVr/dX4bpwE3rkSYjlEQ/iqwOYwJmKSViwcG46FcwyPlz3vQkuxR54llV7aCPeonr9RMZx4+
+	RBDGGVI1yiP5VlBH7+YYd/JnlKJz+t9+WdURjQ6C+q/nO0YegYCdCb3zz0dYkeB3xHRZtK528he
+	vxgqcoqUcAOQdZrpxgdxZffUHmkwOYORWFjrAJmq9mS3u3V+XbqHasPHJAOKDyKqFO7D/FLMFp0
+	Y36tMIB1vEOl819KifwR4h03L82OFhOuiJSSzFqoijkVQ66BaA5x6x5w1HYUAIqWLpAIhK+mrmw
+	oo0edrppfy6005QQtcMjtwxyTSwn79MQuoqPtVGAKzRi4U8kOyo6L5M=
+X-Received: by 2002:a05:6a00:a256:b0:882:2195:5a73 with SMTP id d2e1a72fcca58-8a9bfde0494mr516804b3a.29.1793327587137;
+        Thu, 29 Oct 2026 19:33:07 -0700 (PDT)
 Received: from localhost.localdomain ([58.247.233.220])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a9eef95f2dsm152216b3a.10.2026.10.29.19.32.54
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a9eef95f2dsm152216b3a.10.2026.10.29.19.33.00
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 29 Oct 2026 19:32:59 -0700 (PDT)
+        Thu, 29 Oct 2026 19:33:06 -0700 (PDT)
 From: Rongzheng Wang <testwrzwrz@gmail.com>
 To: netdev@vger.kernel.org
 Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -88,10 +89,12 @@ Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Rongzheng Wang <testwrzwrz@gmail.com>
-Subject: [PATCH net v4 0/2] xsk: fix multi-buffer TX software checksum
-Date: Fri, 30 Oct 2026 10:32:46 +0800
-Message-Id: <20261030023248.78802-1-testwrzwrz@gmail.com>
+Subject: [PATCH net v4 1/2] xsk: defer software checksum until the skb is complete
+Date: Fri, 30 Oct 2026 10:32:47 +0800
+Message-Id: <20261030023248.78802-2-testwrzwrz@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20261030023248.78802-1-testwrzwrz@gmail.com>
+References: <20261030023248.78802-1-testwrzwrz@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,42 +106,74 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is v4 of the AF_XDP multi-buffer TX software checksum fix.
+When XDP_UMEM_TX_SW_CSUM is used with multi-buffer TX, xsk_skb_metadata()
+calls skb_checksum_help() while only the first descriptor has been added to
+the skb. The checksum therefore covers just the first fragment, and
+skb_checksum_help() sets ip_summed to CHECKSUM_NONE, so the remaining
+fragments are never included in the checksum.
 
-I found this while testing multi-buffer TX with XDP_UMEM_TX_SW_CSUM: a
-two-descriptor packet had a bad wire checksum, while a single descriptor was
-correct. There was no production or syzbot report.
+Move the software checksum calculation to the point where the last
+descriptor has been added to the skb.
 
-Patch 1 moves the software checksum calculation from xsk_skb_metadata() to
-the point where the last descriptor has been added to the skb.  The old
-code calculated the checksum after the first descriptor, so multi-buffer
-packets only included the first fragment in the checksum.
+On a checksum failure the packet is now dropped instead of being returned
+to the application for a retry. This path is not reachable with the
+existing metadata validation, but the behavior change is intentional.
 
-Patch 2 sends the packet using every descriptor count from 1 through
-MAX_SKB_FRAGS + 1, and runs the existing metadata and checksum verification
-for each case.  The last case is the copy-mode frame limit documented in
-af_xdp.rst.
+Fixes: 11614723af26 ("xsk: Add option to calculate TX checksum in SW")
+Cc: stable@vger.kernel.org
+Signed-off-by: Rongzheng Wang <testwrzwrz@gmail.com>
+---
+ net/xdp/xsk.c | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-Patch 1 is unchanged since v3.  The updated selftest passes in a local QEMU
-run.
-
-v4:
-- exercise every descriptor count up to MAX_SKB_FRAGS + 1 (Maciej)
-- keep the last descriptor within the packet length (Maciej)
-- fix the local variable declaration order (Maciej)
-
-v3: https://lore.kernel.org/all/20261028025026.11401-1-testwrzwrz@gmail.com/
-v2: https://lore.kernel.org/all/20261024141157.59301-1-testwrzwrz@gmail.com/
-v1: https://lore.kernel.org/all/20261024091256.17918-1-testwrzwrz@gmail.com/
-
-Rongzheng Wang (2):
-  xsk: defer software checksum until the skb is complete
-  selftests/bpf: cover AF_XDP multi-buffer TX software checksum
-
- net/xdp/xsk.c                                 |  23 ++-
- .../selftests/bpf/prog_tests/xdp_metadata.c   | 147 +++++++++++-------
- 2 files changed, 107 insertions(+), 63 deletions(-)
-
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 33475b180ea6..aa6b010192ad 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -1011,14 +1011,6 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
+ 		skb->csum_start = hr + csum_start;
+ 		skb->csum_offset = csum_offset;
+ 		skb->ip_summed = CHECKSUM_PARTIAL;
+-
+-		if (unlikely(pool->tx_sw_csum)) {
+-			int err;
+-
+-			err = skb_checksum_help(skb);
+-			if (err)
+-				return err;
+-		}
+ 	}
+ 
+ 	if (flags & XDP_TXMD_FLAGS_LAUNCH_TIME)
+@@ -1030,6 +1022,15 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
+ 	return 0;
+ }
+ 
++static int xsk_skb_sw_csum(struct sk_buff *skb, struct xsk_buff_pool *pool)
++{
++	if (unlikely(pool->tx_sw_csum &&
++		     skb->ip_summed == CHECKSUM_PARTIAL))
++		return skb_checksum_help(skb);
++
++	return 0;
++}
++
+ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
+ 					      struct xdp_desc *desc)
+ {
+@@ -1275,6 +1276,12 @@ static int __xsk_generic_xmit(struct sock *sk)
+ 		if (xp_mb_desc(&desc)) {
+ 			xs->skb = skb;
+ 			continue;
++		} else {
++			err = xsk_skb_sw_csum(skb, xs->pool);
++			if (unlikely(err)) {
++				xsk_drop_skb(skb);
++				goto out;
++			}
+ 		}
+ 
+ 		err = __dev_direct_xmit(skb, xs->queue_id);
 -- 
 2.39.5 (Apple Git-154)
 
