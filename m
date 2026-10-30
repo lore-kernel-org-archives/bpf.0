@@ -1,101 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.47
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793390580;
-	b=5Plvo+BaE0OozGTyTrA+me1sljcyJK83L9h7AmrJyn6SkCMLMmvrmBrskAat6Rx4ECu2
-	 3+mhb6HRCq+aF3PSA+VKfWKqARHvY90mlFLy/+8PFKSuqaFoANr8hnk7m/S5pYFETJ+eX
-	 KKM5XW085I4PIwUMteFM5fQhFbBtTgLABFP5MNVEep7P1snBVnQB89ag2Yf5qp4rZkOnK
-	 aqsGjrbxRzCOa9F6YYhjM/Eszj9XicXTMhme9kWFPAzmNgtR/kDACU/8umc6vt8STcbtS
-	 PHkEE8jGDudj+s5f4i/C41RmmG8UrXeE8V5OpuiU59Pf5mKGjfiSdpm6rJl1MFFtFQA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793390580;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=nbenqoNggPOGuK4qGvw8vJitQbUecGnq+5smM7bEIBU=;
-	b=ghJh6P72lNwdQvFADhmKc3/o2mBjYoA7O4FGGbsQgQ1fvqUqez1l7lHvi8Vu6XWTzwpD
-	 LSzKqsqR2B94yYDoET5YM+cCDzx51U35iHivYSoLi9wZUQV1BVcLluAQwlACHH/21W8Il
-	 VLe8pnsu871JW7Q6sIVFYIQiGYtlK/g1ZNAAIb9WY3N0yV3ucx6Qex8x05a0NZrMm63Pp
-	 qzSGlssG6YIK+bIJI3sHEN7fGBrobdAruT7fznyD/7PQLIBYUSi9lJ5eCy3pkiWzoQZ4+
-	 HwlaxIJOT1Jt8ApaFi1I/m2yVqZsymPdfecgKBfoP1ZW77F+Uiurqo6Yt6lnAOkgNIQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=su5zxmIv;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.47
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=194.13.80.246
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793391154;
+	b=jPQ3Zko/NBIJioeQBWjfGGbMRbvKE+K2d8xdZc2QNaHpcfpxvxD9i16Wq/hB7D1u4vTQ
+	 s/LEmzIkinYxTBOw54+ONkic+KyDgtWlrwCHnA9VyyLr0b7pqZyj6VoiL9t0OUD+SXu3V
+	 GoZkM/epbDoXOeLrM/v1u82ON4mScppFLpMJss0+pu5Xoi/V89XdUzqdm8161godAgPHK
+	 Tx/Wy3EYcHTMC6e4+B5b0CUgv2Fqd+EOAyV70zCMf0FGA47YqzVEsXJ/1rWzf6e1bqcFc
+	 gvRK/zsSB6z95R5KfA6eS4DprUSqVKbZxSpUJkLo+P/TMMaIutiqwm2+1pSj2FWxcdA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793391154;
+	h=DMARC-Filter:Received:DKIM-Signature:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Last-TLS-Session-Version;
+	bh=f/EQ4RTL5ZaofeX+YVVBXEXZZ41Q19YQIBhtCHASxOM=;
+	b=PrchOWu6P8KJNtS7Fc5uKJoUkBWcm3jJfBrYeRthNHZASPWC3LBwR9HuNlyqDEPM/IIN
+	 mt53cFp7BKTlYCjeV6gy5kB41ewenk2JQjkjqI5ce+FeJG78joAV8gmidkpaF/R/S6rqW
+	 x4IZCU4OHff078ghv48dDS3uqfPNy3lg95VFIHDnMcsksepePjeS4/FCJCrU4FrCiZ2Xq
+	 XPuxOEV7qBOO8G+0ytZNgkolk8JLzRGVrdt6zqAS56btTwiijBI0L067gKju7+fJPYQev
+	 iiioby3G32Aid0Lx/FlJ1N/3aAyYS/Y4f/Z2p9BA8R+MKbXl1cCR9NbtxZlCJBpHbkA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=tipi-net.de;
+	spf=pass smtp.mailfrom=tipi-net.de;
+	dkim=pass header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=Z8OPLDjq;
+	arc=none smtp.remote-ip=194.13.80.246
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4D7606A324
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 20:02:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AE4D7606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C44606A326;
+	Fri, 30 Oct 2026 20:12:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 15C44606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=su5zxmIv
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3ac451e128cso772052a91.1
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 13:02:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793390579; cv=none;
-        d=google.com; s=arc-20260327;
-        b=XEMfiAsPsJxrEGpUDylF2ZDjhBXyZdhPlhEmh/+rfstG37OYU5GoXEqum04EfAhbKx
-         zXFtAFM5WVbFuhCrJt0BKoOYewGeOK5s1kgQPRjD77ITVZzctOaSrrC5cshW63KH6a32
-         lyWPh4ZJUVR7Wew1n/SDc4Px4LJbVDUebjaT0/bRqHqU2F5+o5NC5sLxcVGNeoVTE1YT
-         HD8NbhNtJRXt5NJc1EcCO5YOdcYUCdCggsC+s7tm0H1uj7DwuA2x+i0tuzHkYjkBQYNM
-         FqSykYS4+RqtDX+jY3xVqSNaOpQah/ygnVhPqXQ/xB8FDDPzl4Gj8qZK6UPRAC3GtQvL
-         /MBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nbenqoNggPOGuK4qGvw8vJitQbUecGnq+5smM7bEIBU=;
-        fh=QnpM+1/kzR2vDJ3jl1GOe6nOdSMWQ+JNfcjcUoMVk0I=;
-        b=U3cGm3B5tsnay1cwKCloVHu7bPb3v4MCzxnnkBRmdnu2RMbW48+oTuMKy33+kpLRT6
-         BqvrjEF1CNiXUWTHaCGKuquiQcibLnpZkDS8rdbFOQ5dMDaYmcxW/74lTowGZ1FqXeue
-         2ghSY55bHshZfv+Es6bn8zs+Dg3FLl4wZA1x1xYjGruq+PbfY7DCa47rCO01OIP/l/N7
-         UHjjOwI1LswLQRyMKGDnA4FyoQWfpKniWS1v4BytxTDM6yXGGFgENuAkN4A8VY4tP8j9
-         4oC7BlgoJI+Oor86mMOOuDTH+7y866BGKu4h4QfYFjhgXv/am28k9H0rV2NTco0yVAB4
-         Cuzg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793390579; x=1793995379; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=nbenqoNggPOGuK4qGvw8vJitQbUecGnq+5smM7bEIBU=;
-        b=su5zxmIvmu1AjjCLpDSFUAIU7fLZKX0xQjfo/8LkAIGqgh3yzGqpVNlJ7400H6svzu
-         VpjRXuQNDAIyEPlg2PnktHdejMIWrS8g3XeKyH40w1xordt93xlqFQy1LUv+UAh4cjL1
-         THMHfWjqy6PMSxNjqoIhWng1w/URUEsER/4TOVU473LDiVYxIGBk/zFOIlHUywFpIace
-         241TNf8fEUetetwteFjVNEPigRclBYld9zUAH7d/uCFE5dzanoDcpjnPMYmQiGGGX6RX
-         qMQeIcDbVZSNdQhGve430T0bLiK2bPeHPqGPqiyVWasIVEDr3hnkp4kpRLWw+dzLKf8X
-         klgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793390579; x=1793995379;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=nbenqoNggPOGuK4qGvw8vJitQbUecGnq+5smM7bEIBU=;
-        b=2jsRkrTmEdiHIagwJ+drpasSWaaZpNo2oDxH6NeMZmBfl7pX4yxeKOnturA5QC8fp0
-         Ocv7xt3DLAwKPf70g9CR5s8Qy+Sf5vKegioBARH7+5bM+hBEXTolm04zB5dlDGy8sCaX
-         e9s8GREtjys/AOgal9FAnk/Fny6YapnkJyJnLQM5V2OKepiNPpIdbqWPN/FH1Z3f0zDT
-         Ztx7D2D1jWGB6xk8+0qCj3B+9MJ9RWfaINUV6VS21PmEgN9bVx8NGqqdHT8gBrzr9vvU
-         YjOcnEvlz/cD69X1pHq7I63ByQhtshPjLie3Ye1+rRMEON7foU3pkzlv55nP1ebkWt/C
-         bo6g==
-X-Forwarded-Encrypted: i=1; AKwUvByyLobTITgPGDc01+4mcQR8MUlUXatwDQpt2NW6xsKUUQQpwbzbcDuPqwGYRFjYcVhopcA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLtT2b9hDpN4lsD6gBdI1ihoFoxcbS3j7OF1ca3Pna7YhSDw0HA
-	RXvuSorgnh+XGl46Q5KDYWJZBKKD7YTq0HFhGuTdhulzMSk1tM+ipie2ourTKXsPhc2l5U1YoTf
-	jY4sypIAJ5TdGBsEnfJBm8OKaI+I7OKg=
-X-Gm-Gg: AYBFou2/TM0tattthYt21C8QG7/xrHjFNhuCOrElZ4gjGvnYyGo3lneggRScliNsYIH
-	OgIVUZngXL/lulp/vr1hNjXdKT5oJwBO/JmE/lyu+BvTD6PmHEhM9eJMBG4feOUl/6KjqtZ0DXC
-	ztOICkHgbI5IkvO5ZNM8XzyP0aS5CN5UTC/T4JQQS+NjBlsS2rVGcX5OKK3ihCpTdb4ya5iqeD8
-	Sp4Zz9bXClWCA86iRXpqGNxa7KIz5Qo7QdTNYck9F9QxSWsSuFr03guYqTHQTLnTt4bY0gsbWQu
-	b09nAV66+sD/Q6vz1dpQZVvz8Swpc/zq67KC5Kfk4bQFCexdlhL8u1H8VLeEoqc7rrnoFpCGy6z
-	zJDACEdCtdC6YQM/WNjuiNFRykEcinnfcfHCwJIuCNo+HsV/ETNeAHguAjPUr4eKLFid7+FVWaV
-	mK9asae28ddT7LfBiPeC9WFu9TdffMWpuN3A==
-X-Received: by 2002:a17:90b:5807:b0:3ab:be66:ddbf with SMTP id
- 98e67ed59e1d1-3ae8981dd4dmr2709491a91.54.1793390579014; Fri, 30 Oct 2026
- 13:02:59 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=Z8OPLDjq
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CDAE9A1579;
+	Fri, 30 Oct 2026 21:12:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1793391150; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=f/EQ4RTL5ZaofeX+YVVBXEXZZ41Q19YQIBhtCHASxOM=;
+	b=Z8OPLDjqD4THolW8m69iOqwWZ10KH3uaPNX5f4GJ2JzC3e9G2tqC0kYky2SW8OQDQZQreS
+	Uc2NfypAXgRpmsnT2cec7Z1g+wZ1xSWRIjdd34LUeEusNAwIKbdV4/Jf/cpdE2nTycicrA
+	U/4CovaMqVddZ+8QRVnB0xUtK5xkv02y49QfD60Gcb8e0Mjbmqrh/FcKkiE59+yBHKw4wE
+	a2lH81G/RddNm9YlCtbKRj1PjbR1sOmZMFa7DMWKr/yMR7x1qrZyGn6L9gwTzCwMXDlZdx
+	e/fKMwL71qDezNCBoxcyF3zbGEr6Kpe2NFN+Zx/qt4ZURlYCgg0k6vjcordkoA==
+From: Nicolai Buchwitz <nb@tipi-net.de>
+Date: Fri, 30 Oct 2026 21:12:03 +0100
+Subject: [PATCH net] octeontx2-pf: fix XDP frames freed as skbs on
+ interface down
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,33 +56,82 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261030090913.76944-1-dennylin0707@gmail.com>
- <CAEf4BzaMDRa8xD1oR587P82MYKCYR61gyjgvjKySSnnqFb27pw@mail.gmail.com> <CAGEkeHcq7HeecPyTSYuHWMhCyOAbF7br+UjrFfLiQmgi6kTxhw@mail.gmail.com>
-In-Reply-To: <CAGEkeHcq7HeecPyTSYuHWMhCyOAbF7br+UjrFfLiQmgi6kTxhw@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 30 Oct 2026 13:02:45 -0700
-X-Gm-Features: AclHuK_Wbx7tTAl_S8XFq74Lo6HCz6RCzxmpAzM8Agr_hE29nmfggcjLF7bCVLA
-Message-ID: <CAEf4BzZOWM-v0f_25vNU2LKHRjco+nCYXYnQ0MxiQW8HOtQZ8Q@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next] bpftool: avoid sign extension in unsigned
- enum JSON dumps
-To: Hungyu Lin <dennylin0707@gmail.com>
-Cc: qmo@kernel.org, bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261030-nb-otx2-xdp-cqe-cleanup-net-v1-1-710635c0f504@tipi-net.de>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM2wrCMBCE4Vcpe+1CEg8UX0W8aJNRV2Qbk7QES
+ t/dqJf/MHwrZSRBpnO3UsIiWSZtYXcd+cegd7CE1uSMO1njetaRp1Id1xDZv8H+hUHnyIrCx96
+ acDCwYW+oCTHhJvWnX6gd6Pof8zw+4cvXpW37AKG1UmyEAAAA
+X-Change-ID: 20261028-nb-otx2-xdp-cqe-cleanup-net-5810d40e1d30
+To: Sunil Goutham <sgoutham@marvell.com>, 
+ Geetha sowjanya <gakula@marvell.com>, 
+ Ratheesh Kannoth <rkannoth@marvell.com>, 
+ Subbaraya Sundeep <sbhatta@marvell.com>, 
+ Bharat Bhushan <bbhushan2@marvell.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Suman Ghosh <sumang@marvell.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, Nicolai Buchwitz <nb@tipi-net.de>
+X-Mailer: b4 0.16.0
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, Oct 30, 2026 at 1:00=E2=80=AFPM Hungyu Lin <dennylin0707@gmail.com>=
- wrote:
->
-> > please drop RFC tag and report with Quentin's ack
->
-> Reposted as v2 with the RFC tag removed and Quentin's ack added.
->
-> For future bpftool fixes during the merge window, would you prefer
-> regular bpf-next patches or RFCs?
->
+On interface down, the TX completion cleanup also runs on the XDP
+queues, but treats the pending xdp_frames as skbs. Freeing them with
+dev_kfree_skb_any() corrupts page pool memory.
 
-regular, bpf-next is generally open during merge window
+This happens when XDP_TX or redirected packets are still in flight on
+ifdown, or when the XDP program is replaced.
 
-> Thanks,
-> Hungyu
+Fixes: 94c80f748873 ("octeontx2-pf: use xdp_return_frame() to free xdp buffers")
+Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
+---
+Pre-existing bug, flagged by the clashiko review of my ipsec transmit
+fixes for this driver [1], which seems reasonable (and fixable) to me.
+
+The other pre-existing findings there (e.g. the SA lifetime in
+cn10k_ipsec_del_state()) may be worth fixing too, but I'll leave those
+to the maintainers.
+
+Compile-tested only, I have no octeontx2 hardware.
+
+[1] https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261027-nb-otx2-ipsec-tx-fixes-net-v1-0-2114c4f10c36%40tipi-net.de
+---
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+index 90af9b9044aa0..e3b07e5335fb8 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+@@ -1332,6 +1332,7 @@ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
+ 	struct nix_cqe_tx_s *cqe;
+ 	struct netdev_queue *txq;
+ 	int processed_cqe = 0;
++	int xsk_frames = 0;
+ 	struct sg_list *sg;
+ 	int qidx;
+ 
+@@ -1348,6 +1349,10 @@ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
+ 
+ 		if (!cqe)
+ 			continue;
++		if (cq->cq_type == CQ_XDP) {
++			otx2_xdp_snd_pkt_handler(pfvf, sq, cqe, &xsk_frames);
++			continue;
++		}
+ 		sg = &sq->sg[cqe->comp.sqe_id];
+ 		skb = (struct sk_buff *)sg->skb;
+ 		if (skb) {
+
+---
+base-commit: d8a4f4c59da52b7c31ae337243b8473a19a3f819
+change-id: 20261028-nb-otx2-xdp-cqe-cleanup-net-5810d40e1d30
+
+Best regards,
+--  
+Nicolai Buchwitz <nb@tipi-net.de>
+
