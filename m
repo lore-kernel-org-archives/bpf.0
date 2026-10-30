@@ -1,55 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793336052;
-	b=cGzouxRy/R9ljDVlPMwSt/vLOdw02qGlDAAfcjvCJ+XbVo3aU17EO3OcNukJJe3Hj8Pp
-	 0ga7emZqG7JYu8Zze4W++LLw8UlFdIV4aedFOxkZOdPM2Afws5YDmcsBEP2I/4YvY78GO
-	 NJOB75qMo6RLmPPAnfxlj18jZM82u11DuMo9Q0IV1BJw+WpUqkNrUjTQirrwyCUePTiET
-	 MCbAAMK1aQ+YxepuQnWiuSEI0Y6FqJLFpZAme3ZRuYFtzcos/zNOWi1PB7m7nG3XAhCZw
-	 7qny91CZywPN4S9lurM5Px69KTpjWtrJAScZHF/acRsIhgi3Fv3bqJQXgMKJDQIY2YQ==
+	t=1793336065;
+	b=KMlAwCXBv83HCH5Cp/OlNW33tOpNO2L9DVdTrkruHYz5LWvRBWGHCdO96W0J5LdXjE3r
+	 lKekaojxllVex64D4CRSFLLhcYvaU5GwnKzyB+dCL8Lc8hhlBTLv/EU580zzkoKsTEJ9y
+	 t5vzDN3uap9YGnpN9AFheYGjvb8NLCOrDX2iSwrZH+k0bB70uZms9SKSKIUvFS2VGm3xy
+	 YDRwDsI5QKSiuWFsGCYUJWLh9PAIiQU5hnPjnolZ6Hr9mApOe/AVfHiAEHIS0iA+80FGs
+	 WJnx8lLbSz2WdRskRPVaUxbcMHUCeCc7vlCbvhgmpQIehwGLn0TglagMCeEXIJEz/Zw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793336052;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793336065;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=TbGHKFPPLo2wQPCmojJuICMylpn/j7mUUAS4fY43dqA=;
-	b=uZvdv0OluqxBioj6Y521GBsfH6L7NPwJzbMQYEWisSbeKFyAUspzpTIRrtxruLbKqqXI
-	 X4eWEMVW7w/zneA1pidzAHSLrYPe79sjfmPHeJEvnmZZx/HDDWiK+6zRRT7Pj8ddl+6Hv
-	 I1G60szywKaGhjXDxSQQD8V4QFV380/lQy+XfnfoPDKAwaa/d2NyOZ6wwOiqDyUsz0wkm
-	 U2cDIvv2gZsPTT/q7p3/wdwPavkQ6nlFEzJxw2x/YxR5X2GYHrDlCnCG59VnWnTwJ/Z4P
-	 +yvMytN0oyoS9raIZf0QLX/vkhR1L2sG8L0Ar3GR3+c8yyD8b1zlRcc4tVjzS3Ym0Mg==
+	bh=OJZSzTa4yBRKXfuO6IV5ZUatTYQAwmlhKy+RHqaMoFs=;
+	b=HsFv0I9tIst7ZDs3zcYKaJD4ORtqKU4Ibg8wZjZl99Wpc55aMUKjbpJQ6+z2QmmNZIRK
+	 UH1oJTzR4wjzCJHAZnVzM74bkJdmeTNhTQf2CN643ww0vbVwjzeU6EfNSAoHIqwH+VXoa
+	 c3BSZJGK0hzGV22TwZ6KfZ4b7DGTIxSbdnrB0WdhQvVWhcZGKW+Bx7KPxX4e4ipYVHe9W
+	 +UetPI7rNW4rLVREewtIAod4UpqvpyL2spDkLmGJjsZchK7vHJNoOK1cDLJUcdOf1pgoG
+	 ha01I7kdbmdCLz+28+RiuXPEr1yO7ulNsPH4fefcvbK2e/xviMRvqH2UroqT2GQBrPg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B3lr+5PY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="eEMMLOe/";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3C0606A31E
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B2D606A321
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:54:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B3lr+5PY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A294E1F00A02;
-	Fri, 30 Oct 2026 04:54:11 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eEMMLOe/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E755E1F00A02;
+	Fri, 30 Oct 2026 04:54:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793336051;
-	bh=TbGHKFPPLo2wQPCmojJuICMylpn/j7mUUAS4fY43dqA=;
+	s=k20260515; t=1793336065;
+	bh=OJZSzTa4yBRKXfuO6IV5ZUatTYQAwmlhKy+RHqaMoFs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=B3lr+5PYIJOPMgRqWH46+55/QBWflLNHADCWGiAqQ/qgt113rGWznx693kgIPe+kn
-	 slFlBel1HOcMbr5Pizh0bnomI2egOmp37P9XnSmIK6vs+K0xl+yxtel0raMHMe9JDT
-	 dbJvNpH7CEXqDkqWVjP53v6N7oKgF2vIzmvMFnIacw+xfkTh6KUm5+iDn68BVw9Wn2
-	 SaMzT9t1hiwC1VO7y59RUr8Mw2gQ8cxBAi/+AXnV2NBPRVohIM98F6HLKTAghfqkhj
-	 wTUfnIL90FRBiu6F8KL/xPYH87TxCsanWIVZ7a6+LMzS6bOyhdP/zo3SAbKKr7R5F+
-	 O6cPGuRpTd7EQ==
-Message-ID: <sashiko-outbox-190419@kernel.org>
+	b=eEMMLOe/ke1NLUjsrT/3Y/8YNm66DtO15MzXEVo2n4LWaflIod2KxOW+lPVy5DJEh
+	 /tQ/+dXxH4hfjqpDG0a53QoJjc9LkZcsBFGvwa1raR8pJPuF5NgdKn2iLqH5mxGsS6
+	 XU9AJQweLoG/a++OwTOtdGwtBStzld9s8denZSkgKbmtr5BgRMKhQAB6r6MvWXQJp+
+	 fWkiHpEa2MOEmEMuE9DgnEjvwZb6XO8VOxKkz/ou3pOzSS4bSACdnUmn3CAhU8ZiJ7
+	 RU1E8o4GnNSUBGSV3VWB/A7pb8C/xYBWwambkZ8qEwvZs06ngwFon2W9uH2UH3+lXl
+	 NitTVj+1iCAHw==
+Message-ID: <sashiko-outbox-190462@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC net-next 4/4] veth: use generic skb XDP handling
+Subject: Re: [PATCH net-next v8 1/2] tcp: rehash onto different local ECMP
+ path on retransmit timeout
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>
+To: "Neil Spring" <ntspring@meta.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260509084858.773921-5-maciej.fijalkowski@intel.com>
-References: <20260509084858.773921-5-maciej.fijalkowski@intel.com>
+In-Reply-To: <20260522215733.929238-2-ntspring@meta.com>
+References: <20260522215733.929238-2-ntspring@meta.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 30 Oct 2026 04:54:11 +0000
+Date: Fri, 30 Oct 2026 04:54:24 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,65 +62,64 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Missing statistic accounting for skb-backed XDP_TX failures.
+- [High] IPv6 flowlabel reflection (REPFLOW) is broken for SYN-ACKs when sy=
+ncookies are triggered.
 --
 
-commit 3f79161429d884ed3854644cf3a7b111ce3c40fa
-Author: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+commit b64f3a9b6e1ac0e884a330cb07667e97df46001c
+Author: Neil Spring <ntspring@meta.com>
 
-veth: use generic skb XDP handling
+tcp: rehash onto different local ECMP path on retransmit timeout
 
-This commit transitions veth to use the generic skb XDP helper for skb-back=
-ed
-packets. It routes XDP_REDIRECT and XDP_TX through the generic paths while
-retaining the existing veth xdp_frame path for packets arriving as frames.
+This commit updates the TCP transmit hashing logic to re-roll the txhash on
+RTO, PLB, and spurious retransmission events. It additionally ensures the
+cached destination route is invalidated and sets up the routing lookup to
+use the new txhash for selecting a different local ECMP path.
 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-
-[ ... ]
-
-> @@ -808,94 +764,33 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth=
-_rq *rq,
->  		goto out;
->  	}
-> =20
-> +	ret =3D __do_xdp_generic(xdp_prog, &skb, &ctx);
-> +	switch (ctx.act) {
->  	case XDP_PASS:
->  		break;
->  	case XDP_TX:
-> +		if (!ctx.err)
-> +			stats->xdp_skb_tx++;
-
-Should there be an else branch here to increment stats->xdp_tx_err?
-
-It looks like if the generic XDP_TX fails and ctx.err is non-zero, the
-failure is not recorded in the local stats structure.
+> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> --- a/net/ipv4/tcp_input.c
+> +++ b/net/ipv4/tcp_input.c
 
 [ ... ]
 
-> @@ -947,7 +842,9 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budge=
-t,
+> @@ -7656,6 +7659,11 @@ int tcp_conn_request(struct request_sock_ops *rsk_=
+ops,
+>  	/* Note: tcp_v6_init_req() might override ir_iif for link locals */
+>  	inet_rsk(req)->ir_iif =3D inet_request_bound_dev_if(sk, skb);
 > =20
->  	u64_stats_update_begin(&rq->stats.syncp);
->  	rq->stats.vs.xdp_redirect +=3D stats->xdp_redirect;
-> +	rq->stats.vs.xdp_tx +=3D stats->xdp_skb_tx;
->  	rq->stats.vs.xdp_bytes +=3D stats->xdp_bytes;
-> +	rq->stats.vs.xdp_tx_err +=3D stats->xdp_tx_err;
+> +	if (want_cookie) {
+> +		isn =3D cookie_init_sequence(af_ops, sk, skb, &req->mss);
+> +		tcp_rsk(req)->txhash =3D isn;
+> +	}
+> +
+>  	dst =3D af_ops->route_req(sk, skb, &fl, req, isn);
 
-This aggregation was added to collect the errors, but since stats->xdp_tx_e=
-rr
-is never incremented in veth_xdp_rcv_skb(), are the skb-backed XDP_TX errors
-entirely missing from veth's private ethtool statistics?
+[Severity: High]
+Could this change break IPv6 flowlabel reflection (REPFLOW) for SYN-ACKs wh=
+en
+syncookies are active?
 
-If the local increment was intentionally omitted to prevent double-counting=
- in
-the global dev_core_stats->tx_dropped (which generic_xdp_tx() increments),
-does adding this aggregation line leave the ethtool stats inconsistent by
-only tracking xdp_frame drops?
+By moving the cookie initialization before the route_req() call, isn is now
+a non-zero cookie value rather than zero when a SYN flood is detected.
+
+For IPv6, af_ops->route_req() maps to tcp_v6_route_req(), which passes this
+isn value as the tw_isn parameter to tcp_v6_init_req().
+
+Because tw_isn is now the generated syncookie (a non-zero value) rather tha=
+n 0,
+the if (!tw_isn && ...) check inside tcp_v6_init_req() evaluates to false.
+This causes it to skip saving the SYN packet's ireq->pktopts.
+
+Later, when tcp_v6_send_synack() attempts to send the SYN-ACK, it checks:
+
+	if (inet6_test_bit(REPFLOW, sk) && ireq->pktopts)
+
+Since ireq->pktopts was not saved and is NULL, the SYN-ACK fails to reflect
+the IPv6 flowlabel during SYN floods.
+
+>  	if (!dst)
+>  		goto drop_and_free;
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260509084858.7739=
-21-1-maciej.fijalkowski@intel.com?part=3D4
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260522215733.9292=
+38-1-ntspring@meta.com?part=3D1
