@@ -1,54 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.22
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793325336;
-	b=5hEhY+ElTzYwIxYDP9qooRTPi9UeBKKYRl3DgASylcWB0TcRgN5iSd2k3XtoUntJt7oF
-	 0rqGdhknhrbwVMLmzlMHCV8qQcqh+IDiRUFYlTqPIidlCVH1HeYvsu+APxansCuUFUDpy
-	 kx7/QFeEn+WFNqqPE+Cgly6ylT6K7rnrnDhnX9IKT7Y7pj80aOqXDBkcA5IYn6pC734Oo
-	 hIYke2sZkI6ZMpABkt5ayXXTMc4fmACjXkBU2AOfaW6sie5tygkh1E9soW/518xL9pPwB
-	 7ioghaIfoEFKyVHidT1AFt43qv5y6nhDivIyAj4rse9EIJLpoXLpUYa2a0oJ8x54rNQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793325336;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=NW47OZGG+imSFWQTUojgxKaRsVA/dxTDAH6Z79eqPk4=;
-	b=MZTH2RlvdMg9EwQzN1zDWeUu3ePeqeBto2kVKF/7sO/VbBCb1c5MB4CSFA3rsKN09Uij
-	 5FYiizyZ+EByrRsxCj9wBP4zZryei+iS4T9FyH6eP1PvLv2VIYqMKfZ+wHD4sBkOhCn2f
-	 /mssnJtNP22P8HQ/Q/3d4e1LD5RTMy2RK3/keVjlfBJaxk1Eos5Zz88bKwZWOo954ef7i
-	 lznqPKFs80CAHEAYzsOcIcvs6jL18UZwQ7zihhI91loVPojsAoJ/jdXBG9olBTgj3MD8K
-	 zNK4QgXSpSuJdXGmlWjgl89FVOk5ndc6b7Z9i1asFvPFfZBO/m1Q/VXvKUXnLApgGrA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=kNOyyoQ2;
-	arc=none smtp.remote-ip=91.218.175.22
-Received: from mta0.migadu.com (out-22.mta0.migadu.com [91.218.175.22])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.176
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793327441;
+	b=sksolE3mwj9TCOrc+Q/BfKJ9yygJvVnj+kGQzORQDAjWOnfR7DT1IhdLB8aaGOB3yj4h
+	 Hz8mxYVEyyNverR8nMe/Wb18u9DW9Uq68jlxHmH0ECX2i75HyLZiGe2UTo0bJbJ4f2ZjC
+	 N8IsjRlDyHPb330AfXGb8sjEetqwbB4LGEZj1bvPdFQ0I6+e3V/qI2hGaNyQE1jQ8eQEv
+	 1Qm+2yhf61lo6C0h7fyRDnzT95A2lGAsa6a2kPxbfGyTH6vJIrPnYR4SIBpkejI7rwyyU
+	 AesnMCSL1PDSUOZfF5IMB77RJWCva+R/PdugSP6Y1W2I/zV+AMGENy2ZyvO7S9k/XpA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793327441;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=v5VYmc2HDzcSq4knARbKbUwFAzTpnHrwQ7qzGl0SDd8=;
+	b=gFNljummD/NYS+ScvUB0SysJ4DGt+SBVk3iwVSNLjgxqvYhhTMv+Ra2vEN+JDiVdCt6C
+	 jHyYAd5EZ824/pK1KavEtqQ5IUgMJBOBs8fRdyqiap1X9vRwqqy/R05yKzDyGaO+NuuKU
+	 RtApdjfKaBDg+bKB1N2N4RgwmTu65q01yN1KH6ZWQnfW+B83KapmgM2BAGLuN3Rpsd2RN
+	 /7GqMxmiggkoP31shzJf6cYuXTj8VecQVDaKe8hdspfjjt7uSV1aunsyI6DL29SgiJCht
+	 Qy+8ETOILtZ421ezA492ORr8RUROOawF6IWJPs2vbJL9xd3QbOqWJwr8OEKdRXxoWzw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e8gfzGoR;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.176
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A2F606A31C
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 01:55:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E0A2F606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5E1606A323
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 02:30:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF5E1606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=kNOyyoQ2
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=yLibGXRg0x614xy7jj1umLLnLSoSQ8rxXuFtkSyAjTw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793325333; v=1; x=1793930133;
- b=kNOyyoQ2kccYEwJSs9fkON5SJeS4BIk9be8SXVvPt/xfMMN3MLnRxEiOWuie9PmC0YFzCc61
- SJbyeWhk89gYyB64YxEyiUSVuQiFDyjICqmrW9apPymR+i0hGDE8W1wmpoF9h9Fw1cX1THlK7yj
- 7FKJdy6fIGiX+JgaIjKpnOcY=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6e53ba925bba0fe2;
-	Fri, 30 Oct 2026 01:55:29 +0000
-X-Mizu-Trace-ID: 6e53ba925bba0fe2
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <96dfb9b7-1eaf-4bb2-8136-9a2478e1a068@linux.dev>
-Date: Fri, 30 Oct 2026 09:55:17 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e8gfzGoR
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-3ab46699a09so2054361fa.0
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 19:30:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793327439; cv=none;
+        d=google.com; s=arc-20260327;
+        b=U6t9zy4dNW3r6Nx7jetpu9qTGAawIoR0Ipcq4N+dTw7G/q9QQyAuDBHFMK2Qw5KnSY
+         uvbBNXVUMDigX47sVY/8eNIqllgKfivthAok+FvPeMNzy9eMoPO6Fm45cLXI6D+o5wqh
+         fi9vaVoIy9a47Gtqs2Yakyd3a8cXqADO5uJuZKcwJ4cr/m5rrpDc2n1HpsRPb6xtAua4
+         2qPfe8jSfgn/vpWRvJPdUWutJHpp4hjymokcLaDzbCljCOUbQhgR+vdYhvEJNk9TtGHN
+         kIG9UYnJTx45WY5yT5g+OXD1TdIfdTZ1evWfHERg05kQ1yeD/XUIVKpm53r66Utem0ju
+         ZlhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=v5VYmc2HDzcSq4knARbKbUwFAzTpnHrwQ7qzGl0SDd8=;
+        fh=3kDDruLelXz89DXnY1qANDzbmxOp7/v4pquEXkKn9tg=;
+        b=gVpEUmAN6MECSmfwzx80WKK+OOq6aZjyYmlMDEbs30ixzTK/fAJMqNRufe2LmpMVjj
+         wQYBJuqccAZzvHetJ0wHQkxCWRv/My3wdO3RRaYcnX8esNLGN2UQg9Xi2SKfZvO/iPxX
+         oEhpaa264dD8oeGYfQnwXl40BhxLD7WRZUgb/gWuSCe2LnNw6ilGMc+yh3vhae6yIJwY
+         Rqkvv7JjF3xWNwQAKNr1HLbU0HUgtML6R3OzBriAEbXxJEU8XpC2QOINd5DXMQ9vUUHS
+         MqEeIc+I1qdOlxTUeElfIDwXfsi3dA2lSi4HI+VdTQQWhwkRCYqug6nQEABgwvfV/peL
+         rP6Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793327439; x=1793932239; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=v5VYmc2HDzcSq4knARbKbUwFAzTpnHrwQ7qzGl0SDd8=;
+        b=e8gfzGoRM385FEsKyD02HVJxEcPcs7T3QOF/fJWMMm30PlbFERmKncV3Hstqsx2052
+         lf0xfBvCVoO5IbSgaLtFUi3IOlIFZz1uzqLANxW84fUcWsKuv/UhGHOgEFLFNpxKSITg
+         iZr0fs5CcKrN13lt42exXW7GYdCcJsaFZq1uGXQ+jrn6ASA4gprfcgsdP4KKcpG1aYfU
+         C+NMi78+7JV7NTPtMAWIFI7q/n2x8uJES+rD5YbbVVnNBM1jrYwFbIqfjStrL9BYr9jO
+         zsfza/TSP1s8HBRuKorim1idzGf7awlWuP58iN3WCOzZWQE5eRHJv9Wta5sLZjEEvL0F
+         LSEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793327439; x=1793932239;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=v5VYmc2HDzcSq4knARbKbUwFAzTpnHrwQ7qzGl0SDd8=;
+        b=b6bIx+GkSYyvCeSqWgkrEQn5OXzCRq8XV3og+CZLBu3m2RdMjOChh6f1w3a2bu94lK
+         TMMWpuOBcPaxrVr8U/Sq1sQXPaD7dMu2dk7Xb7vnTo2Ke2lOPnk+Rn4EvTzLfqj9AFJR
+         9l0uEhrUNuKpHnw18W23v1spCJGWrQ0BO/EpzRGqblRmvoNaNvSaqXxSsX0QJ7tXXmxH
+         84OKqN9CjjG5r3WlIpeuDboB9OsMefxVhFBL0ttq7vndofrTxxH+P7fRZZyEFogzm+PX
+         v16oNb0qGm6CpYoAPjOVHQRRW8ZH25pIcSkgXq/+wTSeI0i0mK9bSPh8hlcrZ50E1tRC
+         SFtw==
+X-Forwarded-Encrypted: i=1; AKwUvBz9PnuvhBLK+2sjIWRV9Gw/cvgxAjZumFI5fOh/eSid6buB44BxWseOYqvjZv0BCROlbFA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJHZF3DXTcKNqAtYE/k8gredy1XOVrCkN0JPNVzJp1Buysj5LIi
+	v1h42E0qKJIizsMHdH5eR8JznJc9G+3KTrMlzk4T0p3aJ6IEwBJ11SP5vr7XlILeoxK5EWGeRQd
+	4AIq98TzI/WADQUSYEGFIJr38g9jftxU=
+X-Gm-Gg: AYBFou2b2NtsPHqonZ16eX40dvTdg6gp0qojfysB02BdmCCDgScxoj6gWhsI3JjVzZ/
+	5gxCEGlfcUeDE3S92dj4FGe2t6TREB3ClFiuYzlL7S6abCxA7zT71l8wv5nmzFGmPFHugwmyfKd
+	inWCI71IR5mzNmYpMSxyip/rr4lRCuOoBYmcwZvBnk+zMj7zuBZbphNuGgOTlzPknI/tEvHrNME
+	gh7ta9uPaOoq05ZCqyCp8jsUQbGWekv3dQQkEYT4Njs1l7zT8kbKrP0jA5WpcQ0+J1pe4TULwDY
+	qCyO1Qnbboihpn//6H/cilWk1Bh39ccKaYIBwZ5rXTsm6K8mNrQFW4vMl5j3gSNmu2aWLGgcyL4
+	35eNDm3P8sPoku89RhgeRwrUVRM+RBq03e6E1iSIevOEAuFiEDzuAUpMRJYdrZOuaFNcfL+kFRf
+	edmR5naldi3yImUSKcpQ2RJMhSyFl8Qzbufg9hp0jMjMpqFkM5bdlVcK+9zykRixFXjsrr5cUTC
+	R3ejAO/mM1Q
+X-Received: by 2002:a05:6512:2251:b0:5bf:cfc3:5954 with SMTP id
+ 2adb3069b0e04-5bfd954b9f2mr211780e87.1.1793327438692; Thu, 29 Oct 2026
+ 19:30:38 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,100 +106,108 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 5/6] libbpf: Add log_opts support for
- bpf_link_create
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- Hangbin Liu <liuhangbin@gmail.com>, Martin Karsten <mkarsten@uwaterloo.ca>,
- Masashi Honma <masashi.honma@gmail.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261026154948.99408-1-leon.hwang@linux.dev>
- <20261026154948.99408-6-leon.hwang@linux.dev>
- <CAEf4BzbW4zwL-9j8e2B6KNXVNwsfWyMSAo_RsGCqv-nu_yGhTg@mail.gmail.com>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4BzbW4zwL-9j8e2B6KNXVNwsfWyMSAo_RsGCqv-nu_yGhTg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20261028025026.11401-1-testwrzwrz@gmail.com> <20261028025026.11401-2-testwrzwrz@gmail.com>
+In-Reply-To: <20261028025026.11401-2-testwrzwrz@gmail.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Fri, 30 Oct 2026 10:30:00 +0800
+X-Gm-Features: AclHuK9V4fvZWJ4AFY9w_N67m8fmBuNScc36Y8vzCOEgxwll8I8B9GuAiObXkno
+Message-ID: <CAL+tcoA0jyxR875KocG6fwNSOPjfC-pdhJt0xCbsDQMtiNx8qQ@mail.gmail.com>
+Subject: Re: [PATCH net v3 1/2] xsk: defer software checksum until the skb is complete
+To: Rongzheng Wang <testwrzwrz@gmail.com>
+Cc: netdev@vger.kernel.org, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev <sdf@google.com>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, stable@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 30/10/26 00:22, Andrii Nakryiko wrote:
-> On Mon, Oct 26, 2026 at 8:51 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+On Wed, Oct 28, 2026 at 10:50=E2=80=AFAM Rongzheng Wang <testwrzwrz@gmail.c=
+om> wrote:
+>
+> When XDP_UMEM_TX_SW_CSUM is used with multi-buffer TX, xsk_skb_metadata()
+> calls skb_checksum_help() while only the first descriptor has been added =
+to
+> the skb. The checksum therefore covers just the first fragment, and
+> skb_checksum_help() sets ip_summed to CHECKSUM_NONE, so the remaining
+> fragments are never included in the checksum.
+>
+> Move the software checksum calculation to the point where the last
+> descriptor has been added to the skb.
+>
+> On a checksum failure the packet is now dropped instead of being returned
+> to the application for a retry. This path is not reachable with the
+> existing metadata validation, but the behavior change is intentional.
+>
+> Fixes: 11614723af26 ("xsk: Add option to calculate TX checksum in SW")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Rongzheng Wang <testwrzwrz@gmail.com>
 
-[...]
+Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
 
->> @@ -960,12 +970,12 @@ int bpf_link_create(int prog_fd, int target_fd,
->>                         return libbpf_err(-EINVAL);
->>                 break;
->>         default:
->> -               if (!OPTS_ZEROED(opts, flags))
->> +               if (!OPTS_ZEROED(opts, iter_info_len))
-> 
-> semantically cleaner would be to use log_opts here instead of
-> iter_info_len, send in a follow up?
+> ---
+>  net/xdp/xsk.c | 23 +++++++++++++++--------
+>  1 file changed, 15 insertions(+), 8 deletions(-)
+>
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 33475b180ea6..aa6b010192ad 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -1011,14 +1011,6 @@ static int xsk_skb_metadata(struct sk_buff *skb, v=
+oid *buffer,
+>                 skb->csum_start =3D hr + csum_start;
+>                 skb->csum_offset =3D csum_offset;
+>                 skb->ip_summed =3D CHECKSUM_PARTIAL;
+> -
+> -               if (unlikely(pool->tx_sw_csum)) {
+> -                       int err;
+> -
+> -                       err =3D skb_checksum_help(skb);
+> -                       if (err)
+> -                               return err;
+> -               }
+>         }
+>
+>         if (flags & XDP_TXMD_FLAGS_LAUNCH_TIME)
+> @@ -1030,6 +1022,15 @@ static int xsk_skb_metadata(struct sk_buff *skb, v=
+oid *buffer,
+>         return 0;
+>  }
+>
+> +static int xsk_skb_sw_csum(struct sk_buff *skb, struct xsk_buff_pool *po=
+ol)
+> +{
+> +       if (unlikely(pool->tx_sw_csum &&
+> +                    skb->ip_summed =3D=3D CHECKSUM_PARTIAL))
+> +               return skb_checksum_help(skb);
+> +
+> +       return 0;
+> +}
+> +
+>  static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
+>                                               struct xdp_desc *desc)
+>  {
+> @@ -1275,6 +1276,12 @@ static int __xsk_generic_xmit(struct sock *sk)
+>                 if (xp_mb_desc(&desc)) {
+>                         xs->skb =3D skb;
+>                         continue;
 
-Will do.
+nit: since we have 'continue' here.
 
-> 
->>                         return libbpf_err(-EINVAL);
->>                 break;
->>         }
->>  proceed:
->> -       fd = sys_bpf_fd(BPF_LINK_CREATE, &attr, attr_sz);
->> +       fd = __sys_bpf_fd(BPF_LINK_CREATE, &attr, attr_sz, log_opts);
->>         if (fd >= 0)
->>                 return fd;
->>         /* we'll get EINVAL if LINK_CREATE doesn't support attaching fentry
->> @@ -975,6 +985,10 @@ int bpf_link_create(int prog_fd, int target_fd,
->>         if (err != -EINVAL)
->>                 return libbpf_err(err);
->>
->> +       /* bpf_raw_tracepoint_open() does not support log_opts */
->> +       if (log_opts)
->> +               return libbpf_err(err);
->> +
->>         /* if user used features not supported by
->>          * BPF_RAW_TRACEPOINT_OPEN command, then just give up immediately
->>          */
->> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
->> index 826d9cc9ab65..fe3b7fd8512b 100644
->> --- a/tools/lib/bpf/bpf.h
->> +++ b/tools/lib/bpf/bpf.h
->> @@ -422,7 +422,10 @@ union bpf_iter_link_info; /* defined in up-to-date linux/bpf.h */
->>  struct bpf_link_create_opts {
->>         size_t sz; /* size of this struct for forward/backward compatibility */
->>         __u32 flags;
->> -       union bpf_iter_link_info *iter_info;
->> +       union {
->> +               union bpf_iter_link_info *iter_info;
->> +               struct bpf_log_opts *log_opts;
->> +       };
->>         __u32 iter_info_len;
-> 
-> in a follow up, let's add comment next to iter_info above and
-> iter_info_len here that these are deprecated and that iter.info and
-> iter.info_len should be used instead
-> 
-Will add comment when adding log_opts support for BPF_TRACE_ITER in
-libbpf in near future.
+> +               } else {
+
+How about removing the 'else' branch to avoid unnecessary indentation?
 
 Thanks,
-Leon
+Jason
 
+> +                       err =3D xsk_skb_sw_csum(skb, xs->pool);
+> +                       if (unlikely(err)) {
+> +                               xsk_drop_skb(skb);
+> +                               goto out;
+> +                       }
+>                 }
+>
+>                 err =3D __dev_direct_xmit(skb, xs->queue_id);
+> --
+> 2.39.5 (Apple Git-154)
+>
