@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793399424;
-	b=vJj44HUffpe2ZSbh2wnBD7uDkBSWWqXeetxCrbeE2+DEN4FyjbyZl9RHcQLrJyfzgHU2
-	 MrJX13uZJjJc0triTrS8Hb/ejjyAztcoJ0P/Q5vHlmoPTM1A2bFpuRg/wRWdwZQlCsBmM
-	 vpwE2OIQ1tI+nFczqFsOF0NItwK+BykfHO3ZZgMv1K7zokhrzFZGVoAsGTp38sNY1ZQLq
-	 xwUW84J+HxTz0gZdhx4kM4cByQkiweGQ6zbmfLEtFgYHF1kpjF/FuZnheE+8iuqFHFgNa
-	 KaRYPvGsk8PSNXzi+qRcfnT8DQInQIXXVYc2c38oVYp77mB9J3xgmE5rnZUmYmGpkIQ==
+	t=1793400006;
+	b=12PJjrvY1erWbafxF5+Pku3ZNuw2EgsTxc3K7NPGNvcL28qqvVDURpYspOYsV1N/8Y2F
+	 vWw9Ww/530CtDJwSqLmhlajuRpwEshXovTjpf5s/X56ZNf5MrGZ6IkFul74lkGMvdnEpv
+	 sFW+20GjwVFfGPnSx6pj9gUnOP3/Tho4BcbrHPlL8MYuyYnrwcfUY4NLXPWkUBUJedeB+
+	 t38ObNP1K/bCPbrOEGotko3m4dK+EJ5UBD+ueUqZ6bpSI7raXO6SLEVX0B9Ytln6dmPvM
+	 WJCh9/jcDiAovO6XwYzhvUlf4zF929coDoEMa7EbjC7nP36+7e7hmHi1b/+uUxB+oQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793399424;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793400006;
 	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
 	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
 	 In-Reply-To:To:Cc;
-	bh=dVkm8zvKQXVLLuyqIgzY9dSoIh5QazfvxEH685+2UD0=;
-	b=OoqOteIy4e4moRvcVjwWDWVMi0y8jz/H7EH4NYtQrDA2WyTCSXIH38bdFMhi9QFhjcaQ
-	 4/oAhyKlSidI6BdazzaDiDzio3OnEJUhbWHBmwqOPfDXgLDAoT0Jfu8Z7rxtVZ2qM7nZH
-	 Eq0LubpxruVX68P9rDLo6ZS3R//jVPntO6ef6IdMDOLJPdkJec3nQnl5GG10QceDaY2ZU
-	 vAshljtRlTdYxN7phiNRRh0eHwJ8m0gmj/u+VFU05F+WpxJxKw5QLfjWPd+XVrxSy7iu5
-	 d8lIAvSk+aJBqidN3isqwJZzgOAoCTC2kxUdFXdTcbwdedAwclK8d9fP7ak9FFc8QDA==
+	bh=2917MQdWb7ZVHpTWRczogd/OU9+rUmeFfqqry+6Zqyo=;
+	b=FgMW3KERbQzxJIrTzrBoNV3lstI0DLTD+vKVSiK4OCqKtBuogcgynpFJumalmWRjabtG
+	 rQFLQ4ZCmPNpHvu/PhpGMK4CLNtKTf5rHmZ8AA71t7OhikYmJFCrHvD3QxvrRc9jhyWDD
+	 xZdBlWQtNPDgVL0MUIHgFvr9Blg0aSh+O/onAiUuv4j3KzS/+aejYtdoXO9ytb/8wKOlN
+	 wkzPv9KfOHN54PwCLYXQGQVZBN1TOt+EmGU5e2m27LSrUTqUh42DcP4bQ6AR+t6lGQaSZ
+	 qSy4DNO08EFiu/eIQivrgOV8cJda/OnTPjakMA6oMT8fWM34H123ZxcAIffHcHO5/AQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ns+pgqaB;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iwxVVD1Q;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7523A606A320;
-	Fri, 30 Oct 2026 22:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA78606A320
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 22:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ns+pgqaB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E80F1F000C1;
-	Fri, 30 Oct 2026 22:30:24 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iwxVVD1Q
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B9AD1F0093A;
+	Fri, 30 Oct 2026 22:40:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793399424;
-	bh=dVkm8zvKQXVLLuyqIgzY9dSoIh5QazfvxEH685+2UD0=;
+	s=k20260515; t=1793400006;
+	bh=2917MQdWb7ZVHpTWRczogd/OU9+rUmeFfqqry+6Zqyo=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Ns+pgqaBaqlEZGgZaWtTnMQ1ce6C0/Z49ia3x/KJY+m406KGjhpdv3mzJVCxs70i5
-	 +FBQR8iPzDuOw1ge8xdp2UEciSyuxarhQNX9kyKmrQVDElQAzDNnNMG2/rq+Bb5r4Z
-	 /UEUefqorIS2Ne29jMMM1FA77Jys8aR22WtX0hZXGpjZHSu3+xgyG1VQZi3rzy/sti
-	 onI/yoXaaxjmmiibDrVCPQNF6nxX8h8KeZUxmAFTlmrheFCyJvC7txASk2o1gvRZOz
-	 t4Ac4FP0yWu5CCRdlXJu3n2r74z7Rd3MYn7EwGJglSfWSMLinrL6ajE+Taf7zCmo3T
-	 is0LnL5UKr8ZA==
+	b=iwxVVD1Q/0iBldy8Uu/fvZBSMdCiwsmukz77TD2Ay38LAdQE82l176kbsE14JX7vh
+	 2U9gsMwZ9I0CsTcwn62BeQcfM6uLW+0OjxOEAf32Go4adVVQSWr/mpjiyGrf1IY4yz
+	 QlsXm8ytfkY20abc95td3hLaocfJAmnMj5MsXVRRVa5LIrWw6RwdDgS6UnVdVG5x2X
+	 n7Laeq215g8SzEbPmLaaiPONtoJI4xEcN8U8+9flnMNaBHfuLYMpF7Pzzt3kWW6nby
+	 V4K5QA73n7C6xnAHCEuTYP1eiI5rt9A7sotV+dUG6aeylTfc+SDvyNKz/lO7UwHTSg
+	 j1rn6RMItGs8g==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 032643800478;
-	Fri, 30 Oct 2026 22:30:24 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 400B93800478;
+	Fri, 30 Oct 2026 22:40:06 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,45 +54,42 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Add bpf_ksock_bind() kfunc
+Subject: Re: [PATCH bpf-next v1] selftests/bpf: Cap the CPUs taking part in
+ the
+ rqspinlock stress test
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179339942259.1805657.15391838052896137149.git-patchwork-notify@kernel.org>
-Date: Fri, 30 Oct 2026 22:30:22 +0000
-References: <20261026190342.137069-1-mahe.tardy@gmail.com>
-In-Reply-To: <20261026190342.137069-1-mahe.tardy@gmail.com>
-To: Mahe Tardy <mahe.tardy@gmail.com>
+ <179340000506.1810026.1894626929998366923.git-patchwork-notify@kernel.org>
+Date: Fri, 30 Oct 2026 22:40:05 +0000
+References: 
+ <7fb2cf7baeb262c7486b8e9b5204e2a159402608.1793394762.git.memxor@gmail.com>
+In-Reply-To: 
+ <7fb2cf7baeb262c7486b8e9b5204e2a159402608.1793394762.git.memxor@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, davem@davemloft.net, willemb@google.com,
- eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
- kuba@kernel.org, horms@kernel.org, liamwisehart@meta.com,
- martin.lau@linux.dev, pabeni@redhat.com, song@kernel.org,
- netdev@vger.kernel.org, sdf.kernel@gmail.com, yonghong.song@linux.dev,
- jolsa@kernel.org, kuniyu@google.com, memxor@gmail.com, emil@etsalapatis.com,
- almagui@kernel.org
+ daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, kkd@meta.com, kernel-team@meta.com
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Mon, 26 Oct 2026 19:03:41 +0000 you wrote:
-> Part of the effort to make ksock have all basic socket operations. This
-> is for example useful when replying to a peer which expects a message
-> from a particular source port.
-> 
-> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
-> ---
->  net/core/bpf_ksock.c | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
+On Fri, 30 Oct 2026 22:14:54 +0100 you wrote:
+> The stress test module starts a worker on every online CPU, and each one
+> holds its lock for 20ms with interrupts disabled before releasing it and
+> queueing again at once. A waiter that is not at the head of the queue has
+> no timeout, so the queue holds every worker but the holder, and the last
+> one in line waits for all of them: the longest wait, spent with interrupts
+> off, grows linearly with the number of CPUs. On a 4 CPU VM that is 40ms,
+> on a 128 CPU VM it is 2.5s, and the NMI handlers of the test spend the
+> same time in the queue:
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v2,1/2] bpf: Add bpf_ksock_bind() kfunc
-    https://git.kernel.org/bpf/bpf-next/c/d5b5913f03b9
-  - [bpf-next,v2,2/2] selftests/bpf: Test bpf_ksock_bind() kfunc
-    https://git.kernel.org/bpf/bpf-next/c/e6fd1b7163cd
+  - [bpf-next,v1] selftests/bpf: Cap the CPUs taking part in the rqspinlock stress test
+    https://git.kernel.org/bpf/bpf-next/c/05f8c094848f
 
 You are awesome, thank you!
 -- 
