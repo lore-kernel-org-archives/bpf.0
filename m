@@ -1,87 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793361122;
-	b=NeGIGBPn7f76fn1OrEwHc/On1iOCMytBazTNszoYyhvPfxELyuXZI8YaMsnvQfEJkjmC
-	 xvX7eF4SQo37Wi9TCrFa49XpI/4V6BJEgCaRdMlKjNOT5jtquAVgLtZtPk+su7zChZUEI
-	 YFSvfUoJVKi5L5RpmR9fCZpGpVDtwHL+JX1GQjhuhGEcAYUNwpdDSv1QRpzVIlBJUq7Tf
-	 HHuobM1RBXuOZjXe5PvDYIir1ll3AAp9GAa59n2tmu9VusMXh7LInXfD/OK9kKrJHnzgG
-	 c9UR8VImfQcNk/zY2FoSszqOFqZluaZFSR9B8Hz+K0NOr8EQUnzzNcDIEsE3rOMSF2Q==
+	t=1793361128;
+	b=gM2MbJVAhqYaeJtVehteP/yXdqGvNuNKKChJda0+5fJgjhEo1p+mq8yG1uZuBzpzt+FE
+	 GgnXYG5PwnZu+hI/K6u5D+icpx+SbGz8aDNFJz+srIOqYOju3Uk3vp1yKt8nnZxsnZXnl
+	 wJ/h0XAvUvEzR9ow/HBReTG2MAVtN5VradaPSnzwgPDy6aEyGYniSg5NRj/cUj7VoktPe
+	 EJDjhZ5axFhEdn9GsqN85QxhuQPuhz5CaxLNKAFnFVY8MmAZGB95d264JMcbj4Z3KJ87T
+	 0i3UkUwJY8/nA16XQ/R3zIJQvywGvZ5dNv4HuFFjjehULAniUWFP1H52tu/Pb+LPybw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793361122;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793361128;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
 	 References:In-Reply-To:To:Cc:X-Mailer;
-	bh=8K83MvirmLcedwTYF9Q4UGI3XIPEELC6zheJN0q7Km8=;
-	b=bN5/mCKJe17mZswCloHkW3Xel6NW7ovK8FObDOu3P6XWYiwBdeKV9XXSvDmX2e+f08kx
-	 wM794WGcz5NesUTcCeXZ+r6zk8zS0cN/FGVgKmZVs0V00KKwDv6Ble+IDG93zni8jtuQW
-	 oHRPrR7OEHTtqTlbP+9a8epUl5bFIQ26p6G+CWnxsHLQymhEYOsxFKBHseDpZDQK3CkE1
-	 TsgBlaW7vKAqbsFjGLw3wB7HSjL66YyhOlPxy/gZeSzbDCi+vB7DBOiIrYWNzOYBnxpMV
-	 +0jz48dBJX4fKX6d/ZK3sPFROuMxEk8KUsIUz6tGQ9cwefNwhWO3/Orx+YylIcribvA==
+	bh=bg8z49bq7mHJrjEaBS03cZdttt/0WynaCaNHuuBDWWU=;
+	b=ef5wb97X2FvoRh7g9+l1gOT2WUhxSf2Ccd7YUCYnYoTDAHxVre7HOEfnuwcfwT0PzzJJ
+	 xT4mt7qPb99xMdoS7lkrqshDwxNGr8ysL4f0utyzaJsYrTRJ4bKuKxSLf/NAa8OdUC80T
+	 YRmESKfsfwlptqXTqokvXIR58HtczwiQcQYDy3w0sH1Zm3K1bQ1iUlgG5mFXEi3nYa5hs
+	 MvNilJt1dbskBxQzM7yV7VqNa6JyPlyQk4JktVjc2kgsrjJ9Dfm6fYMEJW/I0Tctcw/Fg
+	 7mxLLQQf9YYeEE0ddWS3zmlT2WoQuv+ORSxaXvq4Vs4v+LBq7iqap7jsUy9SijP8tlg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="eXWG5/Ci";
-	arc=none smtp.remote-ip=74.125.82.41
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LiUYlrvM;
+	arc=none smtp.remote-ip=74.125.82.179
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B18606A329
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 11:52:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 13B18606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3569B606A322
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 11:52:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3569B606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eXWG5/Ci
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1a3c08d6928so718314c88.0
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:52:01 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LiUYlrvM
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-36a1947498bso1584024eec.1
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793361121; x=1793965921; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793361127; x=1793965927; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8K83MvirmLcedwTYF9Q4UGI3XIPEELC6zheJN0q7Km8=;
-        b=eXWG5/CiHLE2ofZX9CA7yn4yhNP+++MBTukCLVchIVP3wiGWo3MH85VA2CYCTWDATc
-         5VVOF+ySJhG8R5/6RSsqivvQ7qDEH4EEEsGv0daTwWSYKxcjYDgzUYHSSc0fdul/r8ml
-         G99nfWuFm9sYy80KCBn8Uetxux/+AID1xuyx62vmHKYl5Bjl2kvXmr29JJS7SCq48916
-         jK1IVMvGhFCA7P00HkTPEJHY+3BfI6AD6+6GPArjhAHKUMdE5Yg5F8gBDh/GflsPYz7O
-         SH1u74g9tybp177RDoXXpUXO98dGjWH8XyD2Kwt4FZDHRrAbvy2OtRJJJQUA137i3ZS3
-         k6Yw==
+        bh=bg8z49bq7mHJrjEaBS03cZdttt/0WynaCaNHuuBDWWU=;
+        b=LiUYlrvM1Y1n/OcMST6U7xSYZLiv2K+LjKtZaBuRrJwt36VvtyMPBn+GMzFzZdXXLm
+         uEIs+z2frshfDKs/T2lCfoCwNVFy+s/XUXDoSqee1zaV+5TkvZHo4jHHuXrN8jMHNQVV
+         GbSrKiIxhUybUPa2fH7gYk00qpQyQMu8EGVetPuYsCvuc7QvghkyeLWps7rOvxKR/MdX
+         S1FXS3cqIjlX4SvGWlJXDUkx4kHYcTb6fToaKdchXHDmPI6rm5uNYke3kMd3fTS33q/8
+         7TWbefjZ8PmFjgNiwO2YfTVmVOoHvy7efDYt6qjonfgi+vsTqKVkYYguvR0+fuZXHZXr
+         fJmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793361121; x=1793965921;
+        d=1e100.net; s=20260707; t=1793361127; x=1793965927;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8K83MvirmLcedwTYF9Q4UGI3XIPEELC6zheJN0q7Km8=;
-        b=2FtiGLoGRfJH55yCXn8MHSaUM6TVWPbRQyI+9Hxh+Qt0lMM7VQM+dZC0OAWHqwnt04
-         cwY+wxSxdPUtvEaw+es+rY5dJjOomsi+izBovddHiA+HDEtmjiy/r9IxpPPgeZIkpY+6
-         vZIg0rcn97VnjXPplN6K0BYGwcIW2+4iyqS8xUPbUbizfVNMXFzfcUGxI6cqyhkUraIW
-         LmxrAzPWvhOfL3waUSr7ZWUThTlX6vNmzAi9hgHIYbCF19bty//2SveaVVKOE45geKYE
-         C5alt2Cc3j3xM5+VRecJ7kw3uqKL+OehnR9e4fPrux7GVTF5lXtaS+1bn0ECU+ngkoAr
-         fEcw==
-X-Gm-Message-State: AFq9FYJQs08sp0ubl7AAq1srfeyv+uquA5W3G9V1IwBDblL/K9Dem1qD
-	f5VjeK+AS4OFZuKz/mwfmcxepY4EuOvY0sWBenwYRqPbU/vBHBxRdLMT
-X-Gm-Gg: AYBFou2n8htucLv7TapdJJDqLf7XXVLPooNfZhcyF0aDvsiz9yWo8iU+MAvpj3S0lQz
-	cDO4pkDULZT0cNaB29hZNoJUw4jvsJkX6w3TEHscj7aPY+lwWhvEph01Kusy8wbxe07imt0xwe3
-	LsPTPBC12XuK9G4YRFuXMBaPxnd4u2ZowSdRpHJPaNS8ZTk5KM9C9xW5lqQ4PWz69PKWfjmMsmj
-	RxnxYSctWD0co0SAVK12WiVYCIZpyxo8b1xlqi1JFuXAB5e9oTSrkAGJbojrJah40mDST+7Nadk
-	J5hT/kKToZTTrSl6q0S+74IPxZgTBETKt5GBpiekxZSAODW5p2lHLWi+adoPGZPbn4W15gYIfKk
-	OzMYb8PBu1ysl1macBexOXxTIy+23D3+n9RXhcxWI8/ANdXOU9RrO+/L3UH0CHu4mmjKgkzwcHB
-	cl4XfXWWls9QQiK+riyzQSOL+MtvKRBCQ57WCr0z8euCrSiAfgM/8TgMutuyxYpmXy9qD1luzSL
-	Q+DGmr+wGIo1wgvizN0NyPcMCQ9cxeZ7VFnUZarM4MwBZGRI62Nz4zJ/BAczIW6n8GKk46tUF6o
-	rug8+/IWKoFDsxV4FUpm7Fsr
-X-Received: by 2002:a05:7022:eb44:10b0:154:dc96:c1d8 with SMTP id a92af1059eb24-1ac56c9fda4mr2899533c88.2.1793361121009;
-        Fri, 30 Oct 2026 04:52:01 -0700 (PDT)
+        bh=bg8z49bq7mHJrjEaBS03cZdttt/0WynaCaNHuuBDWWU=;
+        b=E5Xpks1B+ogfHQT83SBalthsgodwCxibQbnuqC6GH74BAcFykaP8juUJs8dsJaDxiY
+         qYfvvN6D6UCIYy5LownKnV+OlrapOiVm81sGvnqWwYb142gzZJjRZHPYk8Z9sJ9a1J7p
+         xQydRkgE5i7DPsKBdcicGvxJSPh1vnPS1ZQ0hBe8p2QJwePAIuvp5HV9PzmAT8zS1fED
+         wG5Z+zF9losRRU4lDGtT2SSaFJMHDVlufITDY9t2DOfn3mA3pu02NIrQ+yGvEv5mraTB
+         VR8wwW5WK3iPuNB8E5RRyxqudPTbW6qpTV79V6KWfMTK7TMlqAULf8hRWNmXRMQn2pCI
+         UL8w==
+X-Gm-Message-State: AFq9FYJfWvSZlNgplmdQfSFROlmqwFZcHkJXPy8cF0BdL13aHyupPeNq
+	0QYOkIi8nzrMIAiQgRYmWJvJB023rtRfCuawWmCHh3qi8BDmyvitTsDN
+X-Gm-Gg: AYBFou2GKhgnqZ9wCPo6dm2HFkCvzBun5Hf3vkkJ+BKiT5ZFld8skjhvjI81/E1QJqb
+	kzrs3XsocveZIJnJAPhv5MbACp9YDld+77IKYwZ9fq1kOj35TkdyZzgdXgVrjaTnBrA7ji9nKtv
+	EglVpsDfo9VeBKOZKW4UGTnCYScjfpMfTnzcdf/sHzhnnDhlxtHfvOGwY8Cdr67cKhM3I/z/EUy
+	TWZGgYCojWBBgbV4muu+/Bei2h1OG34GnLTbwDimY8xelpiahOE05/voJ62ytzsOiFFF6IW/2nd
+	SY/dntBJ6KTIiZeGDK9IDt6st0GsPA7Gtbr24IClaDKPFdcOfkMxZlumbrYvaO3d1GeR+sSI8K1
+	8/Y1NnCoVCrxqWnKnfd0UWhhOoEllWKyrv4Jk0E9WgxmAADDc9ptJIqu1UX3jThe1Nk+c0fJ9k2
+	v/jGuGgthDQSN2eq8leYI5xApbHXXFtyPl+yCNQkQl+qMi1ktZZ9PlJNmWY02U17XRz5G26CPS2
+	yGb+4+JdnIDx24RG6X/S5fXfRBSxnRpRNc3J6XTB8giySUXNG+pdAZkXrJudn/a2OtVbS9wjtzi
+	aOBQIi27mxXubt1x/qD6eaay
+X-Received: by 2002:a05:7022:160b:b0:196:e254:db24 with SMTP id a92af1059eb24-1ac5c64cf5amr3818603c88.21.1793361127129;
+        Fri, 30 Oct 2026 04:52:07 -0700 (PDT)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1abcd6f1sm6437304c88.20.2026.10.30.04.51.55
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1abcd6f1sm6437304c88.20.2026.10.30.04.52.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 04:52:00 -0700 (PDT)
+        Fri, 30 Oct 2026 04:52:06 -0700 (PDT)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Fri, 30 Oct 2026 07:51:46 -0400
-Subject: [PATCH bpf-next v2 01/22] bpf: Add a list of deferred instruction
- patches
+Date: Fri, 30 Oct 2026 07:51:47 -0400
+Subject: [PATCH bpf-next v2 02/22] bpf: Remap the verifier state through
+ the patch list
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -93,7 +93,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261030-bpf-verifier-patch-batch-v2-1-55cd43439f7c@gmail.com>
+Message-Id: <20261030-bpf-verifier-patch-batch-v2-2-55cd43439f7c@gmail.com>
 References: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com>
 In-Reply-To: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -109,316 +109,269 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-bpf_patch_insn_data() and bpf_patch_insn_single() apply a patch right
-away. They move the tail of the program and walk all of it to fix up
-the branches and everything else that names an instruction.
+Besides the program, the verifier keeps aux data for every instruction
+and tables that name instructions: subprog starts, function pointers
+and instruction arrays. bpf_patch_insn_data() fixes all of them up
+with each patch.
 
-A pass that patches M instructions of an N instruction program does
-O(N * M) work. pyperf180 from the selftests has 930
-bpf_map_lookup_elem() calls on hash maps, and inlining each of them
-into 3 instructions of its 24k instruction program takes about a fifth
-of the time to load it.
+The image that the patch list builds leaves them behind, so verifier
+passes can't queue their patches on it yet.
 
-Add a list of patches that a rewrite queues against the unpatched
-program, in increasing order of the instruction they replace, and build
-the patched image from it in O(N + inserted instructions). Map each old
-index to the first instruction of its patch, as bpf_patch_insn_data()
-names a patched instruction, and relocate every jump that leaves its
-patch through that map. Build the image aside, so that a jump that gets
-out of range leaves the program untouched, and move the poke
-descriptors and the line info along when installing it. Keep all of
-this in core.c without a verifier env, so that rewrites without one can
-use it too.
+Add bpf_patch_list_add() and bpf_patch_list_commit(), which keep the
+list in the verifier env. Install the new image on commit and move the
+aux data, the subprog starts, the function pointers and the instruction
+arrays along with it, filling in the aux data of patched instructions
+the way adjust_insn_aux_data() does. Allocate everything before
+installing the image, so that a failure leaves the program and the env
+as they were.
 
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- include/linux/bpf_verifier.h |  47 ++++++++++
- kernel/bpf/core.c            | 213 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 260 insertions(+)
+ include/linux/bpf.h          |   1 +
+ include/linux/bpf_verifier.h |   5 ++
+ kernel/bpf/bpf_insn_array.c  |  18 ++++++
+ kernel/bpf/fixups.c          | 151 +++++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c        |   1 +
+ 5 files changed, 176 insertions(+)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 580f89c450b55..9bb5e0c823627 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -4378,6 +4378,7 @@ int bpf_insn_array_ready(struct bpf_map *map);
+ void bpf_insn_array_release(struct bpf_map *map);
+ void bpf_insn_array_adjust(struct bpf_map *map, u32 first, u32 len);
+ void bpf_insn_array_adjust_after_remove(struct bpf_map *map, u32 off, u32 len);
++void bpf_insn_array_remap(struct bpf_map *map, const u32 *new_off, u32 cnt, s32 grow);
+ 
+ #ifdef CONFIG_BPF_SYSCALL
+ void bpf_prog_update_insn_ptrs(struct bpf_prog *prog, u32 *offsets, void *image);
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 5926f13ff43cc..a56a996b3d953 100644
+index a56a996b3d953..49a6e443de75d 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1060,6 +1060,53 @@ struct bpf_fd_array {
- 	};
- };
+@@ -1154,6 +1154,7 @@ struct bpf_verifier_env {
+ 	bool signature;
+ 	u32 insn_aux_data_len;
+ 	struct bpf_insn_aux_data *insn_aux_data; /* array of per-insn state */
++	struct bpf_patch_list patch_list;
+ 	const struct bpf_line_info *prev_linfo;
+ 	struct bpf_verifier_log log;
+ 	struct bpf_diag *diag;
+@@ -2061,6 +2062,10 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env);
+ int bpf_fixup_call_args(struct bpf_verifier_env *env);
+ int bpf_do_misc_fixups(struct bpf_verifier_env *env);
+ int bpf_insn_def32(struct bpf_prog *prog, struct bpf_insn *insn);
++struct bpf_insn *bpf_patch_list_add(struct bpf_verifier_env *env, u32 off,
++				    const struct bpf_insn *patch, u32 len);
++int bpf_patch_list_commit(struct bpf_verifier_env *env);
++void bpf_patch_list_free(struct bpf_verifier_env *env);
  
-+/* one deferred patch: insn 'off' is replaced by 'len' insns */
-+struct bpf_insn_patch {
-+	u32 off;
-+	u32 len;
-+	u32 start;		/* first insn of the patch in bpf_patch_list.insns */
-+	struct bpf_insn orig;	/* the replaced insn when the patch was queued */
-+};
-+
-+/*
-+ * Patches queued by a rewrite pass, applied together by
-+ * bpf_patch_list_commit() in O(prog->len + inserted insns).
-+ */
-+struct bpf_patch_list {
-+	struct bpf_insn_patch *patches;
-+	struct bpf_insn *insns;
-+	u32 cnt;
-+	u32 cap;
-+	u32 insn_cnt;
-+	u32 insn_cap;
-+};
-+
-+/* the image of a program with the queued patches applied, see bpf_patch_list_build() */
-+struct bpf_patch_image {
-+	struct bpf_insn *insns;
-+	u32 *new_off;
-+	u32 cnt;
-+	u32 new_cnt;
-+	s32 grow;
-+	u32 bad;
-+};
-+
-+/* Map an offset in the old program, which may be past its end. */
-+static inline u32 bpf_patch_image_remap(const struct bpf_patch_image *img,
-+					const u32 *map, u32 off)
-+{
-+	return off <= img->cnt ? map[off] : off + img->grow;
-+}
-+
-+struct bpf_insn *__bpf_patch_list_add(struct bpf_patch_list *pl,
-+				      const struct bpf_prog *prog, u32 off,
-+				      const struct bpf_insn *patch, u32 len);
-+void bpf_patch_list_release(struct bpf_patch_list *pl);
-+int bpf_patch_list_build(const struct bpf_patch_list *pl, const struct bpf_prog *prog,
-+			 struct bpf_patch_image *img);
-+void bpf_patch_image_free(struct bpf_patch_image *img);
-+void bpf_patch_image_install(struct bpf_prog *prog, const struct bpf_patch_image *img);
-+
- /* single container for all structs
-  * one verifier_env per bpf_check() call
-  */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 3030beb531d99..d2c36db09c8c9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -531,6 +531,219 @@ int bpf_remove_insns(struct bpf_prog *prog, u32 off, u32 cnt)
- 	return err;
+ int bpf_flip_opcode(u32 opcode);
+ u8 bpf_rev_opcode(u8 opcode);
+diff --git a/kernel/bpf/bpf_insn_array.c b/kernel/bpf/bpf_insn_array.c
+index 92bbb71576ae3..dbfcf1eddb91e 100644
+--- a/kernel/bpf/bpf_insn_array.c
++++ b/kernel/bpf/bpf_insn_array.c
+@@ -253,6 +253,24 @@ void bpf_insn_array_adjust(struct bpf_map *map, u32 first, u32 len)
+ 	}
  }
  
-+static int patch_list_reserve_patch(struct bpf_patch_list *pl)
++/*
++ * Move each offset to new_off[offset], new_off[] covers [0, cnt]. Offsets
++ * past the end of the old program only move by 'grow'.
++ */
++void bpf_insn_array_remap(struct bpf_map *map, const u32 *new_off, u32 cnt, s32 grow)
 +{
-+	struct bpf_insn_patch *p;
-+	u32 cap;
++	struct bpf_insn_array *insn_array = cast_insn_array(map);
++	u32 off;
++	int i;
 +
-+	if (pl->cnt < pl->cap)
-+		return 0;
-+
-+	cap = max(pl->cap * 2, 16U);
-+	p = kvrealloc(pl->patches, array_size(cap, sizeof(*p)), GFP_KERNEL_ACCOUNT);
-+	if (!p)
-+		return -ENOMEM;
-+	pl->patches = p;
-+	pl->cap = cap;
-+	return 0;
-+}
-+
-+static int patch_list_reserve_insns(struct bpf_patch_list *pl, u32 cnt)
-+{
-+	struct bpf_insn *insns;
-+	u32 cap;
-+
-+	if (pl->insn_cnt + cnt <= pl->insn_cap)
-+		return 0;
-+
-+	cap = max3(pl->insn_cap * 2, pl->insn_cnt + cnt, 64U);
-+	insns = kvrealloc(pl->insns, array_size(cap, sizeof(*insns)), GFP_KERNEL_ACCOUNT);
-+	if (!insns)
-+		return -ENOMEM;
-+	pl->insns = insns;
-+	pl->insn_cap = cap;
-+	return 0;
-+}
-+
-+/* Extract the pc-relative operand of a jump, a subprog call or a ld_imm64 of a subprog. */
-+static bool insn_get_rel(const struct bpf_insn *insn, s64 *rel, bool *is_imm)
-+{
-+	u8 code = insn->code;
-+
-+	if (bpf_pseudo_func(insn) || bpf_pseudo_call(insn)) {
-+		*rel = insn->imm;
-+		*is_imm = true;
-+		return true;
++	for (i = 0; i < map->max_entries; i++) {
++		off = insn_array->values[i].xlated_off;
++		if (off == INSN_DELETED)
++			continue;
++		insn_array->values[i].xlated_off = off <= cnt ? new_off[off] : off + grow;
 +	}
-+	if ((BPF_CLASS(code) != BPF_JMP && BPF_CLASS(code) != BPF_JMP32) ||
-+	    BPF_OP(code) == BPF_CALL || BPF_OP(code) == BPF_EXIT)
-+		return false;
-+
-+	*is_imm = code == (BPF_JMP32 | BPF_JA);
-+	*rel = *is_imm ? insn->imm : insn->off;
-+	return true;
 +}
 +
-+/* Set the pc-relative operand that insn_get_rel() extracted. */
-+static int insn_set_rel(struct bpf_insn *insn, s64 rel, bool is_imm)
+ void bpf_insn_array_adjust_after_remove(struct bpf_map *map, u32 off, u32 len)
+ {
+ 	struct bpf_insn_array *insn_array = cast_insn_array(map);
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index f062ef7dd943d..0697f66b1ffc1 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -380,6 +380,157 @@ struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 off,
+ 	return __bpf_patch_insn_data(env, off, patch, len, BPF_PATCH_KEEP_TARGET);
+ }
+ 
++/*
++ * Queue the replacement of insn 'off' by 'patch[0..len)' until
++ * bpf_patch_list_commit(), see __bpf_patch_list_add().
++ */
++struct bpf_insn *bpf_patch_list_add(struct bpf_verifier_env *env, u32 off,
++				    const struct bpf_insn *patch, u32 len)
 +{
-+	if (is_imm) {
-+		if (rel < S32_MIN || rel > S32_MAX)
-+			return -ERANGE;
-+		insn->imm = rel;
-+	} else {
-+		if (rel < S16_MIN || rel > S16_MAX)
-+			return -ERANGE;
-+		insn->off = rel;
-+	}
-+	return 0;
++	struct bpf_patch_list *pl = &env->patch_list;
++
++	if (bpf_rewrite_must_abort())
++		return ERR_PTR(-EINTR);
++
++	if (verifier_bug_if(!len || off >= env->prog->len ||
++			    (pl->cnt && off <= pl->patches[pl->cnt - 1].off),
++			    env, "insn %u patched out of order", off))
++		return ERR_PTR(-EFAULT);
++
++	return __bpf_patch_list_add(pl, env->prog, off, patch, len);
++}
++
++void bpf_patch_list_free(struct bpf_verifier_env *env)
++{
++	bpf_patch_list_release(&env->patch_list);
 +}
 +
 +/*
-+ * insn is number 'idx' of the 'len' insns that replace insn 'off' of the old
-+ * image (an insn that isn't patched is its own patch of length 1). It lands
-+ * at 'pos' of the new image. 'new_off' maps the old image to the new one.
++ * Fill the aux data of the 'p->len' insns at 'slot' from the aux data 'old'
++ * of the insn they replace, the same way as adjust_insn_aux_data() does.
 + */
-+static int patch_list_adj_insn(struct bpf_insn *insn, const u32 *new_off,
-+			       u32 cnt, u32 off, u32 idx, u32 len, u32 pos)
++static void patch_list_adj_aux(struct bpf_prog *prog, struct bpf_insn_patch *p,
++			       struct bpf_insn *patch,
++			       const struct bpf_insn_aux_data *old,
++			       struct bpf_insn_aux_data *slot)
 +{
-+	bool is_imm;
-+	s64 rel, tgt;
-+
-+	if (!insn_get_rel(insn, &rel, &is_imm))
-+		return 0;
-+
-+	/* relative to the first insn of the patch */
-+	tgt = (s64)idx + rel + 1;
-+	if (tgt >= 0 && tgt < len)
-+		return 0;
-+
-+	/* the patch pushed what follows 'off' down by len - 1 */
-+	tgt = tgt < 0 ? off + tgt : off + tgt - len + 1;
-+	if (tgt < 0 || tgt > cnt)
-+		return -EFAULT;
-+
-+	rel = (s64)new_off[tgt] - pos - 1;
-+	return insn_set_rel(insn, rel, is_imm);
-+}
-+
-+/*
-+ * Queue the replacement of insn 'off' of 'prog' by 'patch[0..len)'. Patches
-+ * are queued in increasing order of 'off' and applied together, so a pass
-+ * keeps addressing insns by their index in 'prog'. Jumps in the patch that
-+ * leave it are relative to the patch placed at 'off'.
-+ *
-+ * Return the copy of the last insn of the patch, which stays valid until the
-+ * next call.
-+ */
-+struct bpf_insn *__bpf_patch_list_add(struct bpf_patch_list *pl,
-+				      const struct bpf_prog *prog, u32 off,
-+				      const struct bpf_insn *patch, u32 len)
-+{
-+	struct bpf_insn_patch *p;
-+	int err;
-+
-+	err = patch_list_reserve_patch(pl) ?: patch_list_reserve_insns(pl, len);
-+	if (err)
-+		return ERR_PTR(err);
-+
-+	p = &pl->patches[pl->cnt++];
-+	p->off = off;
-+	p->len = len;
-+	p->start = pl->insn_cnt;
-+	p->orig = prog->insnsi[off];
-+	memcpy(pl->insns + p->start, patch, len * sizeof(*patch));
-+	pl->insn_cnt += len;
-+
-+	return &pl->insns[p->start + len - 1];
-+}
-+
-+void bpf_patch_list_release(struct bpf_patch_list *pl)
-+{
-+	kvfree(pl->patches);
-+	kvfree(pl->insns);
-+	memset(pl, 0, sizeof(*pl));
-+}
-+
-+/*
-+ * Build the image of 'prog' with the queued patches applied in img->insns,
-+ * without touching 'prog'. img->new_off[] maps each old insn to the start of
-+ * its patch. On -ERANGE, img->bad is the old insn whose jump got out of range.
-+ */
-+int bpf_patch_list_build(const struct bpf_patch_list *pl, const struct bpf_prog *prog,
-+			 struct bpf_patch_image *img)
-+{
-+	u32 cnt = prog->len, i, k, n;
-+	int err;
-+
-+	memset(img, 0, sizeof(*img));
-+	img->cnt = cnt;
-+	img->new_off = kvmalloc_array(cnt + 1, sizeof(u32), GFP_KERNEL_ACCOUNT);
-+	if (!img->new_off)
-+		return -ENOMEM;
-+
-+	for (i = 0, k = 0; i <= cnt; i++) {
-+		img->new_off[i] = i + img->grow;
-+		if (k < pl->cnt && pl->patches[k].off == i)
-+			img->grow += pl->patches[k++].len - 1;
-+	}
-+	img->new_cnt = cnt + img->grow;
-+
-+	img->insns = kvmalloc_array(img->new_cnt, sizeof(*img->insns), GFP_KERNEL_ACCOUNT);
-+	if (!img->insns)
-+		return -ENOMEM;
-+
-+	for (i = 0, k = 0; i < cnt; i++) {
-+		const struct bpf_insn *src = &prog->insnsi[i];
-+		u32 len = 1, pos = img->new_off[i];
-+
-+		if (k < pl->cnt && pl->patches[k].off == i) {
-+			src = &pl->insns[pl->patches[k].start];
-+			len = pl->patches[k++].len;
-+		}
-+
-+		for (n = 0; n < len; n++) {
-+			img->insns[pos + n] = src[n];
-+			err = patch_list_adj_insn(&img->insns[pos + n], img->new_off,
-+						  cnt, i, n, len, pos + n);
-+			if (err) {
-+				img->bad = i;
-+				return err;
-+			}
-+		}
-+	}
-+	return 0;
-+}
-+
-+void bpf_patch_image_free(struct bpf_patch_image *img)
-+{
-+	kvfree(img->insns);
-+	kvfree(img->new_off);
-+	memset(img, 0, sizeof(*img));
-+}
-+
-+/*
-+ * Put the new image in 'prog', which has room for it, and move the poke
-+ * descriptors and the line info along.
-+ */
-+void bpf_patch_image_install(struct bpf_prog *prog, const struct bpf_patch_image *img)
-+{
++	struct bpf_insn_aux_data *last = slot + p->len - 1;
++	struct bpf_insn *orig = &p->orig;
 +	u32 i;
 +
-+	memcpy(prog->insnsi, img->insns, sizeof(*img->insns) * img->new_cnt);
-+	prog->len = img->new_cnt;
++	*last = *old;
++	last->zext_dst = bpf_insn_def32(prog, &patch[p->len - 1]) >= 0;
++	memset(slot, 0, sizeof(*slot) * (p->len - 1));
 +
-+	for (i = 0; i < prog->aux->size_poke_tab; i++)
-+		prog->aux->poke_tab[i].insn_idx =
-+			bpf_patch_image_remap(img, img->new_off,
-+					      prog->aux->poke_tab[i].insn_idx);
++	for (i = 0; i < p->len - 1; i++) {
++		slot[i].seen = last->seen;
++		slot[i].zext_dst = bpf_insn_def32(prog, &patch[i]) >= 0;
++		if (!memcmp(&patch[i], orig, sizeof(*orig))) {
++			slot[i].non_stack_access = last->non_stack_access;
++			last->non_stack_access = false;
++		} else if (bpf_is_mem_insn(&patch[i])) {
++			slot[i].non_stack_access = true;
++		}
++	}
 +
-+	for (i = 0; i < prog->aux->nr_linfo; i++)
-+		prog->aux->linfo[i].insn_off =
-+			bpf_patch_image_remap(img, img->new_off,
-+					      prog->aux->linfo[i].insn_off);
++	if (bpf_is_mem_insn(&patch[p->len - 1]) &&
++	    memcmp(&patch[p->len - 1], orig, sizeof(*orig)))
++		last->non_stack_access = true;
++
++	/* indirect jumps to the replaced insn land on the first new one */
++	if (last->indirect_target) {
++		slot[0].indirect_target = 1;
++		last->indirect_target = 0;
++	}
 +}
 +
- static void bpf_prog_kallsyms_del_subprogs(struct bpf_prog *fp)
- {
- 	int i;
++/*
++ * Apply all queued patches in one go. Everything that names an insn of the
++ * old image follows it to the new one, a patched insn is named by the first
++ * insn of its patch, like with bpf_patch_insn_data().
++ */
++int bpf_patch_list_commit(struct bpf_verifier_env *env)
++{
++	struct bpf_patch_list *pl = &env->patch_list;
++	struct bpf_insn_aux_data *data = NULL;
++	struct bpf_prog *prog = env->prog;
++	struct bpf_patch_image img = {};
++	u32 i, k, end;
++	struct bpf_insn_patch *p;
++	int err = 0;
++
++	if (!pl->cnt)
++		goto out;
++
++	/* Leave the program untouched until nothing can fail anymore. */
++	err = bpf_patch_list_build(pl, prog, &img);
++	if (err == -ERANGE) {
++		verbose(env, "insn %d cannot be patched due to 16-bit range\n",
++			env->insn_aux_data[img.bad].orig_idx);
++		goto out;
++	}
++	if (verifier_bug_if(err == -EFAULT, env, "insn %u jumps out of the program",
++			    img.bad))
++		goto out;
++	if (err)
++		goto out;
++
++	err = -ENOMEM;
++	data = __vmalloc(array_size(img.new_cnt, sizeof(*data)),
++			 GFP_KERNEL_ACCOUNT | __GFP_ZERO);
++	if (!data)
++		goto out;
++
++	prog = bpf_prog_realloc(prog, bpf_prog_size(img.new_cnt), GFP_USER);
++	if (!prog)
++		goto out;
++	env->prog = prog;
++
++	bpf_patch_image_install(prog, &img);
++
++	for (i = 0, k = 0; i < img.cnt; i = end) {
++		if (k < pl->cnt && pl->patches[k].off == i) {
++			p = &pl->patches[k++];
++			patch_list_adj_aux(prog, p, &pl->insns[p->start],
++					   &env->insn_aux_data[i],
++					   &data[img.new_off[i]]);
++			end = i + 1;
++			continue;
++		}
++		end = k < pl->cnt ? pl->patches[k].off : img.cnt;
++		memcpy(data + img.new_off[i], env->insn_aux_data + i,
++		       sizeof(*data) * (end - i));
++	}
++	vfree(env->insn_aux_data);
++	env->insn_aux_data = data;
++	env->insn_aux_data_len = img.new_cnt;
++	data = NULL;
++
++	for (i = 0; i < env->func_ptr_cnt; i++) {
++		struct bpf_func_ptr *fp = &env->func_ptrs[i];
++
++		if (fp->xlated_off == BPF_FUNC_PTR_DELETED)
++			continue;
++		fp->xlated_off = bpf_patch_image_remap(&img, img.new_off, fp->xlated_off);
++	}
++
++	/* NOTE: fake 'exit' subprog should be updated as well. */
++	for (i = 0; i <= env->subprog_cnt; i++)
++		env->subprog_info[i].start =
++			bpf_patch_image_remap(&img, img.new_off, env->subprog_info[i].start);
++
++	for (i = 0; i < env->insn_array_map_cnt; i++)
++		bpf_insn_array_remap(env->insn_array_maps[i], img.new_off,
++				     img.cnt, img.grow);
++
++	err = 0;
++out:
++	vfree(data);
++	bpf_patch_image_free(&img);
++	bpf_patch_list_release(pl);
++	return err;
++}
++
+ /*
+  * insn was moved down by delta insns inside its own patch. Operands relative
+  * to the pc that point in front of the old position did not move with it.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5601d20562186..b6b120bf5433c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -24158,6 +24158,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (env->insn_aux_data)
+ 		bpf_clear_insn_aux_data(env, 0, env->insn_aux_data_len);
+ 	vfree(env->insn_aux_data);
++	bpf_patch_list_free(env);
+ 	kvfree(env->fd_array);
+ 	bpf_free_scev(env);
+ 	bpf_stack_liveness_free(env);
 
 -- 
 2.43.0
