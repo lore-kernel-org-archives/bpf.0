@@ -1,65 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793335088;
-	b=tEUVbLvQqYHesDFpgwijGZsGOI5/Mc6bKVXs1TrXKATF+h7VcymRCWiEb1HhQM3IPSnF
-	 LDOXbgyC1+2fDoUVkS+HnceHTPFf3D/ovu7wzJQafCbS/oeKWwNOSXd6ZZejLRpo+jaks
-	 xXK6s0KIKzAkVJcndBAHu5ympcbJ/O3q3/BOPA7AoOekowEAm+yGb5PxZ0/ZpLdwJYxaU
-	 xz6eYDRV1YDguQqevJa2YUhg8i2Jyy4wbz3N4m2TTO+1K+JD0WTdb3UbB76zLMl2pwxRv
-	 qj8gHmyw32b6FBtXQ3idral9Do4MmdUt7NdYOBQv370OKOVrqixv2tmKgYkBQhsM9xg==
+	t=1793336037;
+	b=FstOU9+CDGtig7vhnZT6hVVigjV0VAOPC7Ba4VlO0JZZuQTnLAsxIhMtPfX/ZxUBZOVU
+	 UW09ShnvzHeBIqPOyxTswV0uO2ql4iuJf3nMsjOWJWODzOAvGlueKA6hZs1hmdea075H/
+	 vP7bq4r7FhQ/FFS95aayHOwWj2HXIOWzOfVTS8GPlY4DFI7okyPXhW5M6bGqRfa85wx0S
+	 Zk/M/XFWRzCloEu/c6Hy7HpVkIgNUlJUx87mmhe9hVEv3HWSFnS4HPJ9/l8tPFCdvGgJw
+	 7NEhjz/J0kEc9sr6Z4GDUO+qFWT3YSU+FhaZvOwFiwAZe+TXqNOL0fqJQLrJ3X7qi7g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793335088;
-	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Spam-Status:X-Spam-Checker-Version;
-	bh=WwvcOsEObJ8qzzuuobsmrvvwKxGTjF3cc2+TTpbW1e0=;
-	b=xXia2cN3vuYKVkgWNl64MDPty6ldAebpE5dQSF2F6CLB6GKdqLjx5Nk0rFmmpQcfuKAS
-	 VSo28wBbHDA0uIFsWWwYXcO0z1X36ASkMnEqpav9mN41Kr43zpRAZzT+/1B5ss2y3QA+H
-	 AmTL2xGVq9yQ7zD1q5GpoeXYGB0rkVXEZqipRVZWawhFtBYNj/DDpOWTKELQRSyJnmfXA
-	 UoPvbQImCmxkgAtaS84s21KB6EeUd6ZUG8z6ngQGbBPzshIuUbwXxW1P70Gj56O32+4Ys
-	 jh755UUmjK75F5UUix8OkGUXj6BTCh4E09IJnzXvkSe5+E5sFE0YPaqzYY0Rawe34zg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793336037;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=fo63kHnTTdpmA3nwVAGZN/RGaMNHgl/7dJJnSEM5/bg=;
+	b=Sbzn7HSahgye1tlONn6SBUr8g+MV8h+UNn742glH4SeJUstCwRJuQyb7NTjo+SgqMLHZ
+	 srp14lT1FWC6EpUE8xxB8enybKxywYP14s7JcrgY5S1sqIuewjvm97D1+mk2lsac5ZAC0
+	 RYIHGetgJywngx7JM17+OUFkBkFHMf/NSEYJVkBSm9nkmm+96c4ilep9fIFDdrW91XxxU
+	 DkachqPdjbWmj5r0cgqJYZFHgS5ANtB+a/+43gOIMuHYiisjTh7DPAVztD01rb++PiAik
+	 bYgB8/3zTs6Q8hX8rk6u3qdIHSOEe0Rdo9pPaP5qM5M/y6mX/X0kvKRCmEmOt2dKjww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.microsoft.com;
-	spf=pass smtp.mailfrom=linux.microsoft.com;
-	dkim=pass header.d=linux.microsoft.com header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default header.b=NJPsdvAy;
-	arc=none smtp.remote-ip=13.77.154.182
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B74A0606A31C;
-	Fri, 30 Oct 2026 04:38:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B74A0606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nkos66Ga;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4043A606A327;
+	Fri, 30 Oct 2026 04:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default header.b=NJPsdvAy
-Received: from kali (unknown [4.213.232.17])
-	by linux.microsoft.com (Postfix) with ESMTPSA id B148C20B7166;
-	Thu, 29 Oct 2026 21:37:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B148C20B7166
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1793335074;
-	bh=WwvcOsEObJ8qzzuuobsmrvvwKxGTjF3cc2+TTpbW1e0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NJPsdvAyMdl07uIfgdrypurLmehiQZeL4zrhUYZxR96TMW5UhWVD/k6TDPncHWr08
-	 HBDhGEi+B7G362mYoL0sIW0o2+nYfbIXv9oTWCTovARis9B9tYry7LlUyDoTTX9uPX
-	 WKbEfCrsL3+VJgHmXIOzVAcYs4vOqZdpgIkHgEhs=
-Date: Thu, 29 Oct 2026 23:37:54 -0500
-From: Sahil Chandna <sahilchandna@linux.microsoft.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
-	will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
-	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
-	ast@kernel.org, rafael@kernel.org, daniel.lezcano@kernel.org,
-	memxor@gmail.com, zhenglifeng1@huawei.com,
-	xueshuai@linux.alibaba.com, rdunlap@infradead.org,
-	david.laight.linux@gmail.com, broonie@kernel.org,
-	boris.ostrovsky@oracle.com, ashok.bhat@arm.com
-Subject: Re: [PATCH v16 00/16] barrier: Add
- smp_cond_load_{relaxed,acquire}_timeout()
-Message-ID: <auQfIuQdpd2i2IrX@kali>
-References: <20261016070837.440748-1-ankur.a.arora@oracle.com>
- <auLHZnaCIajW1kxX@kali>
- <87v76lezeq.fsf@oracle.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nkos66Ga
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB2681F000C1;
+	Fri, 30 Oct 2026 04:53:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793336036;
+	bh=fo63kHnTTdpmA3nwVAGZN/RGaMNHgl/7dJJnSEM5/bg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=nkos66GaOwkjNTnfMc9CbYf1dD5nWycPk6Xwq7cPspTROFD5fEWNtf4qGdx5ViNQn
+	 t/pisdzde0vXdmEEuAlpNaj28hYnY39SKMhNbtyr2JcNWBt4jTaHuHgJA/2bOetjtZ
+	 MvQ6MdEkKruvFI0qSfJa8JGhYu1kXz7JzVGJ0juXh5bGFmGqjC5/JbwgOmpX0Ep63d
+	 H5inWHaXnVkNlCer1AykSLPOQJ97awlTdWS95oGgwyfoOIJ8JgiWOkuswiqNzxQVHc
+	 CwURngisSN/kLgnDzL4rpJuQKcfVHmy5Hsl4QtI9hENT6GxBBK0tNMaIceUF0MaAqF
+	 RDgGXbw59x/dA==
+Message-ID: <sashiko-outbox-190384@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v3 3/8] net: devmem: support TX over
+ NETMEM_TX_NO_DMA devices
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
+Cc: linux-rdma@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260507-tcp-dm-netkit-v3-3-52821445867c@meta.com>
+References: <20260507-tcp-dm-netkit-v3-3-52821445867c@meta.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 30 Oct 2026 04:53:56 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,68 +59,153 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v76lezeq.fsf@oracle.com>
 
-On Thu, Oct 29, 2026 at 12:31:09AM -0700, Ankur Arora wrote:
->
-> Sahil Chandna <sahilchandna@linux.microsoft.com> writes:
->
-> > On Fri, Oct 16, 2026 at 12:08:21AM -0700, Ankur Arora wrote:
-> >> Hi,
-> >>
-> >> Changes in this version address sashiko comments [17]. The major change
-> >> is the change in the exit path in __smp_cond_load_relaxed_timeout()
-> >> which allows us to simplify providing ACQUIRE semantics in
-> >> smp_cond_load_acquire_timeout():
-> >>
-> [ ... ]
-> >>
-> > Hi Ankur,
-> >
-> > I tested this patch series on an Azure Cobalt 100
-> > (neoverse-n2 on 64-vCPU Hyper-V guest (Standard_D64ps_v6),
-> > on v7.2.12 + this series + arm64 cpuidle-haltpoll enablement[1]
-> >
-> > cpuidle-haltpoll loaded with force=1, guest_halt_poll_ns=200000.
-> >
-> > Baseline: no cpuidle driver(only WFI).
-> >
-> > Workload: PostgreSQL 16.15/pgbench scale 100, client and server in
-> > the same VM over a unix socket, with single run:
-> >
-> >             with (-S)                         TPC-B-like r/w
-> > clients  base TPS  haltpoll lat avg   base TPS   haltpoll  lat avg
-> >    2       38658     +89%   52->27us     5299     +86%    378->203us
-> >    4       72987     +99%   55->28      10305     +87%    388->208
-> >   16      300895     +91%   53->28      42035     +83%    381->208
-> >   32      590987     +93%   55->28      78319     +85%    410->221
-> >   64      987749      +0%   65->65     130675      +3%    490->474
-> >
-> > Tested-by: Sahil Chandna <sahilchandna@linux.microsoft.com>
->
-> Thanks Sahil. That's very helpful. Btw what's the (-S) option with
-> in your first heading?
->
-Hi Ankur,
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [Critical] Missing reference counting on `dev` and `vdev` leads to a Use-=
+After-Free when the netlink socket is closed.
+- [High] `validate_xmit_unreadable_skb()` completely skips validation for n=
+etkit guest devices, breaking virtual device isolation.
+- [High] Acquiring multiple `net_device` locks sequentially triggers a lock=
+dep recursive locking warning.
+- [Medium] A netmem TX binding is leaked if `genlmsg_reply()` fails in `net=
+dev_nl_bind_tx_doit()`.
+--
 
-This is the -Select Only option running one statement per transaction,
-more info captured in [1] [2].
+commit c3a040f13f3fa1b8e979677a0a83d0686597944b
+Author: Bobby Eshleman <bobbyeshleman@meta.com>
 
-TPC_B like runs small bank transfer transaction.
-> Just to double check: was the VM  created with any special option
-> such as kvm-arm.wfe_trap_policy?
->
-No, the host in my case is Hyper-V. The cmdline does not have any idle
-related parameters.
-console=tty1 console=ttyAMA0 earlycon=pl011,0xeffec000 panic=-1
-> --
-> ankur
->
-Regards,
-Sahil
+net: devmem: support TX over NETMEM_TX_NO_DMA devices
 
-[1] https://www.postgresql.org/docs/16/pgbench.html#PGBENCH-OPTION-SELECT-ONLY
-[2] https://www.postgresql.org/docs/16/pgbench.html#TRANSACTIONS-AND-SCRIPTS
+When a netkit virtual device leases queues from a physical NIC, devmem
+TX bindings created on the netkit device must still result in the dmabuf
+being mapped for dma by the physical device. This patch accomplishes
+this by teaching the bind handler to search for the underlying
+DMA-capable device by looking it up via leased rx queues.
+
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index fbe4c328a3674..268417c9ef224 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -3999,6 +3999,9 @@ static struct sk_buff *validate_xmit_unreadable_skb=
+(struct sk_buff *skb,
+>  	if (dev->netmem_tx =3D=3D NETMEM_TX_NONE)
+>  		goto out_free;
+> =20
+> +	if (dev->netmem_tx =3D=3D NETMEM_TX_NO_DMA)
+> +		goto out;
+> +
+
+The commit message states that the skb is validated twice: once on the netk=
+it
+guest device and again on the physical NIC. However, this check seems to
+completely bypass the validation for the guest device rather than validating
+it.
+
+Since all virtual devices leasing queues from the same physical NIC share t=
+he
+same binding->dev, the physical NIC cannot distinguish between their devmem
+payloads. Should this instead explicitly validate that
+READ_ONCE(binding->vdev) =3D=3D dev to preserve isolation?
+
+>  	shinfo =3D skb_shinfo(skb);
+> =20
+>  	if (shinfo->nr_frags > 0) {
+
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index cde4c89bc146a..644c286b778f1 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+[ ... ]
+> @@ -212,6 +212,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+>  	}
+> =20
+>  	binding->dev =3D dev;
+> +	binding->vdev =3D vdev;
+>  	xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
+
+Are dev and vdev missing reference counting here?
+
+Because TX bindings are not attached to device queues, their lifetime is
+strictly tied to the netlink socket's priv->bindings list. If either network
+device is unregistered and its memory freed while the socket remains open,
+binding->dev and binding->vdev would become dangling pointers.
+
+When the socket is later closed, netdev_nl_sock_priv_destroy() iterates over
+the bindings and could dereference the freed memory, causing a use-after-fr=
+ee.
+Also, net_devmem_get_binding() might compare dst_dev to the dangling vdev
+pointer.
+
+> diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+> index 4d2c49371cdb4..b4d48f3672a5b 100644
+> --- a/net/core/netdev-genl.c
+> +++ b/net/core/netdev-genl.c
+[ ... ]
+> @@ -1171,22 +1205,41 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, s=
+truct genl_info *info)
+>  		goto err_unlock_netdev;
+>  	}
+> =20
+> +	bind_dev =3D netdev_find_netmem_tx_dev(netdev);
+> +	if (!bind_dev) {
+> +		err =3D -EOPNOTSUPP;
+> +		NL_SET_ERR_MSG(info->extack,
+> +			       "No DMA-capable device found for netmem TX");
+> +		goto err_unlock_netdev;
+> +	}
+> +
+> +	if (bind_dev !=3D netdev)
+> +		netdev_lock(bind_dev);
+> +
+
+Will acquiring this second lock trigger a lockdep recursive locking warning?
+
+The virtual device's lock is acquired implicitly via
+netdev_get_by_index_lock() earlier. Here we explicitly call
+netdev_lock(bind_dev) to lock the physical device.
+
+Since all net_device locks (dev->lock) are initialized at the same call site
+in alloc_netdev_mqs(), lockdep assigns them to the identical lock class.
+Acquiring two instances of the same lock class sequentially without a nesti=
+ng
+annotation might violate locking rules.
+
+> +	dma_dev =3D netdev_queue_get_dma_dev(bind_dev, 0, NETDEV_QUEUE_TYPE_TX);
+> +
+> +	binding =3D net_devmem_bind_dmabuf(bind_dev,
+> +					 bind_dev !=3D netdev ? netdev : NULL,
+> +					 dma_dev, DMA_TO_DEVICE, dmabuf_fd,
+> +					 priv, info->extack);
+>  	if (IS_ERR(binding)) {
+>  		err =3D PTR_ERR(binding);
+> -		goto err_unlock_netdev;
+> +		goto err_unlock_bind_dev;
+>  	}
+> =20
+>  	nla_put_u32(rsp, NETDEV_A_DMABUF_ID, binding->id);
+>  	genlmsg_end(rsp, hdr);
+> =20
+> +	if (bind_dev !=3D netdev)
+> +		netdev_unlock(bind_dev);
+>  	netdev_unlock(netdev);
+>  	mutex_unlock(&priv->lock);
+> =20
+>  	return genlmsg_reply(rsp, info);
+
+Does this leak the netmem TX binding if genlmsg_reply() fails?
+
+After successfully establishing the TX binding, the function unlocks the
+devices and calls genlmsg_reply(), directly returning its error code. If
+genlmsg_reply() fails (e.g., due to socket buffer exhaustion), the user
+application receives an error and assumes the bind operation failed.
+
+However, the binding remains fully active in the kernel and is attached to =
+the
+socket's priv->bindings list. Because the user never received the binding->=
+id,
+they cannot explicitly unbind it.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507-tcp-dm-net=
+kit-v3-0-52821445867c@meta.com?part=3D3
