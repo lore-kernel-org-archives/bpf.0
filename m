@@ -1,101 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.44
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793386012;
-	b=zLjTZyPD4k7JAi1AyOdaiLdzsWOfYVVev9+mhMeo1CDMde+05J9lIsoVSkcSpbwhx/n3
-	 gZ87n/jyLUdys4yoZjgKkYezhUZR3I/IGffyH3EShqH9QAfWN+H6kEIvgjwMDqDS2q91t
-	 NNA7sjASl9hQXAvK0SMNj0pRGAsDBHvhsJxqI3LkJ6yNykOV0QJe5sylZpb+gel6SQT02
-	 9smbkZG1W66+nQWOI4riZpxpQlSxLs7/el+tPWpfrXKC5ytUrMQlWphnl/JuNlJP9lyml
-	 w6P6R6IAu4rZYaZoPQymSQaWrGA/ifVUN5MLremniOe4C4wPmUh3LPAso95deSC6m/w==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793386012;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Yft5IyV/xpJOt9PtsEc3/1GOTRmgmfnSHPrRuIdkolU=;
-	b=hOM8ZgiOm7yef56NCXK9QXJUpsxu9bJGB4cajl1erKiL5mcqLjLGegKOC2i7W/b5BqM+
-	 98nDbr56cVYkN0I2iCZsio/HiwJfHJwHKNq53+c1tAZEx4CnEzUd8EbNhN9dGMIfKxVPK
-	 HkIjJs24fR6MdQCP2m4TbtJm0ZJW4b33wteVAiHvqqkqf/OJCzVJ1WDxHNH9NlEl75XnP
-	 vzvcrbyneLbDaaEuu77x2TYpJYAxx+ZT1ZW2UaaiqAUpYllrmdi8Eu+O3c05WVeBsB3cI
-	 V+1uyIn0G7ejQ9oDM3Lxai3MNmoHwS+MRsxhcgH+c79H0BoAcBNcboxxFB6IFuvaF8g==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RpG9nWi+;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.44
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793386279;
+	b=RIfDd+4C6gGPq6cz2X7gOrqehWyrU8Rs/+S3WDSRRmCc9IwE1Qij2BUcVAjMwM6P/QdY
+	 lZzYgjW4/JV8yIkbBKvstLvhJ0vhu1ZcK40T/v5mGTFkJo86gE7EjzLZKuvKLZ0RG7wqd
+	 6CJTQgNTIWu2ILXYAmjXPMKVdjX5Vfgwy4hoKnNyxNCtY88ggaXl04WRiQLHYuhvVqyGO
+	 6bQzcAphgNhvaHMtJ5z5zviyp67DtmrTPzzQ4kP8MxLuj8UrSIM4+N3HosCUW6zjr/c3L
+	 SL2ShJ52hFtLuwH6CB0yHp0gACtYOi+mUA+DxTcWXu9L8bB154r9BMO4fimFtt6/itg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793386279;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:Date:
+	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Last-TLS-Session-Version;
+	bh=tGPD1kG0muCiRaH+onMJbF8McQXw/3iybmvF3qayq9M=;
+	b=VoLg3GpVNmec21mJ3hsT1qeHUjAV3yqracK+nFXFJj2IwI42pEsglzrg6CWCKMq8bvtY
+	 GmwWGSu8QkRBhuL3sNJfdpYvH0Jg3ULtYLlAPw9/enfEglLtbHgDH6YOFjiXa16gYYPfo
+	 t0x4Agu+y5BdWwoJwE1cgu/je4JXI5H9Pk6Sok8WYiEP1xZKGKrPf7vuFg8oZ9aoqqLm+
+	 PJRpE2rYj760/qJl9xxcRE9+bIxkfaegiyDBXRE8xXFWosGkxdFiFQfhyReHekDXjr2j/
+	 Vzn1ltyJ81kxE10tTJ0XfunJ00fYOh6/5tLwstRCpHneUHF7SJCsKRlGorJUHnplB4g==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Qw57GVyK;
+	arc=none smtp.remote-ip=185.171.202.116
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123E0606A31A
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 18:46:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 123E0606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16215606A324
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 18:51:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16215606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RpG9nWi+
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3acb11973c3so905791a91.3
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 11:46:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793386011; cv=none;
-        d=google.com; s=arc-20260327;
-        b=LQOlGo1poFu2HESSX9KQYbxLNQoSG7gg/7gNCPn2/CUmMHxPhRKSfb2suxc487tOpS
-         MAqXCC4BM0JmZPKy4kPTBPxnub6JM3ozk0ZU/cN9hPC1SoaVOVH+tBJ1tCx8rdH3G21M
-         0cP56cxdXK6TpP5uqyS79F9NTfkiANPe+GqZD2WuQfWAs44TL/xLJJgRX/A9Frg+43jf
-         cZHDAGunAHYvRNuWDYie36plJ+Mr5EumBLllwGdBqKe4M3H1kLJAh0orlYFTLojd/+85
-         Bs3Z0UaDUtcDy010wW60QiYfsv1O+IikBCee3k3MVc4ggwXd993d2j/ag0plTvng35/G
-         lYWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Yft5IyV/xpJOt9PtsEc3/1GOTRmgmfnSHPrRuIdkolU=;
-        fh=Afy2XiopY8lSrbL2hBY8NxgFfFuZa2uGweoSFVLi0Jo=;
-        b=CD1Z5kUTo9UFjWYioFxKCkJCG6SpL0xYyHvSZsyvv7Xo8Z37aEhQnCiOuLy0YQ8z/H
-         YkkdX+Bd+qa30M3TKc7R4HOG63KhrdrgnSP1gUP4N9r6oGwFKAWkj5aKzIARY1QHSLhg
-         3lalQoxgCawmPDfr/iD9a6lunp7LUoOPla7TxFx1wsMqRkIkPAPlv9TNfhCp9hLCMitc
-         pI8BvJJw3qzHgxI/6MlyEaw/C/Dauemq3ip0RGF40lNmzVNkOyRpDNbg22Gj3CrR6Kv8
-         1Xaj6kX+HEKVe2mcakITf1h18oCL30Tg81N22IaVIyVkkmAd/AHsLQV08oEYUxPffdLD
-         h6yA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793386011; x=1793990811; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Yft5IyV/xpJOt9PtsEc3/1GOTRmgmfnSHPrRuIdkolU=;
-        b=RpG9nWi+ZKZZWc/DkNMA83Z9UtRpSslN4KqWD6J5EXh+HiXKD2gHraxT5ud7euPIBF
-         cZe/CRChoqxgWOsLvo1/dZceKUHRRMfv1PNbN5fCPEonX8k+7y4Fo6QQKdoesI69izGD
-         R7wcqjNUTF40M+owIN41gjfFh2MaOUIikO2wxjlDsv1n9TwXBPcEDRcdrKiWXhKU/yAE
-         gasrhk1UJOT32b34GxEzm1jygwYHNf8R/0ZC6KwwHz6i8zBf0NWrX9VSoyo8Dzx2Nz3Q
-         an6SUyaW9AasJAe7rIckyBn/crcOLhcLkVx6htT8C/dHctAMsYKTLBzZiYOnM1NLIyWZ
-         XlZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793386011; x=1793990811;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Yft5IyV/xpJOt9PtsEc3/1GOTRmgmfnSHPrRuIdkolU=;
-        b=YE+enO2F0mKIFC0UidsU5HDyVRsyM702at5gIMvugJ8hmymHAeKsfjYkig6aFRydg9
-         QNDalN+oDxc53DRq7d59Qd2qJA5EEvnVehUl86Qi8clnr00uHuqVK9u2dXE2jlD8Nxqx
-         iclPJ+YdJP945dfalaRQDpZRZqMQi2Pz3t+E8WayOJuRkiy8/UqDdDBJnzUd6k4qKmEu
-         P5TXsk1Pyf4z5AT8UYZp4HB9gWiJHcRn7UvEkYxeeEf5R0zbS6+F6UuUEXxNF9kR4+SG
-         zjuFfrLz9dyc/gvaqDLN5aNzahEDdizUxVM45MlxUZrj5umfu74iyHn6PXy+eIfQ0tAP
-         Pu6w==
-X-Forwarded-Encrypted: i=1; AKwUvByn+nVOQD8ewIMkzlRn3qZ2wMx5x+gXZKPqg/941lhFKhwvRMzD6bxKvVLmWGyNWf4MpeA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ/ijRdyvM4uyb+PKpWBepp3AwTMMqSXmSaPifS0IBfcNAUkYGC
-	pd55TKdDkb3TA7WMN+vS1h7ntfmTMpMcfEw+UZt+XScNhKAfJChb/OMvbYg9KZD9Ez5x8nKJ+kY
-	8KiCknOG+t1GkIStAB8DPeLdfCpamDpI=
-X-Gm-Gg: AYBFou3LalzkcLAZbRikNoGaZEBlzcXflxd1LZC4x8uAQs5n+b9TFQbpBHE0khj9hDX
-	m4F2Hcs42j7Ej+pxmGBMf06WXCR0/LciXJXT0gh3h8RMJVAPiJ71hDj711NEQ/8htx1R+wpVNnv
-	9Y9uMdGP0aZxf4yOcfxpCEoSnkoC6f/ckXEYIBP81IVJxkyfle7FKmEjFiqoRDMkWLCp5fiwlBf
-	MZAWeFjOuJ6x2FIr9yO8zgegdqZnrzqG7XPc7jgvbpHUr9eeByQ+G/L0K6h5g0InOjvCgbbPMRv
-	zIF4c/CtDeAEVQ3etFm0c4m5cKrygRVT9iZr2pqsW7Oq5ntQf2ZK3Z/Q7Bwowu+WCx9VeNl0Ks0
-	7605zdLdtydMj+GTlgXqIwTwTc9fSe44RvUqW2CUVXF5oNj9wcJ2p3yPPgA9nJtEL87gKvoOq7C
-	qJIlrr1osx2+wpWVSqHRxuCo2OADig+0Paxw==
-X-Received: by 2002:a17:90b:2803:b0:3a4:bd4e:6d15 with SMTP id
- 98e67ed59e1d1-3ae89763070mr2620334a91.34.1793386011367; Fri, 30 Oct 2026
- 11:46:51 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Qw57GVyK
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 1F307C49F67;
+	Fri, 30 Oct 2026 18:52:18 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 37E91603C2;
+	Fri, 30 Oct 2026 18:51:15 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8B4D1103290EE;
+	Fri, 30 Oct 2026 19:51:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1793386270; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=tGPD1kG0muCiRaH+onMJbF8McQXw/3iybmvF3qayq9M=;
+	b=Qw57GVyKDhm66E50/4M5x8JdNW3QxpdeVHS09WY2sC399HrrlHeDaQjSES0W8b/aHJr3aj
+	1kj+Ml0n2AJMr/wFRaJvq06j3maHegSC2tVAQTSvmk2zgLefhSfGwKseQPLRr2yMb/yKl1
+	BCVOFEhpsl4BsOWju5FFycYRdLdEWxylEXvB23NUP92h+27NPS9rjWddWAPCYRHumj85uZ
+	cil3sLuqvNaj+lhDhgoRfbEbWahg59PxxtMkpUUIFdZTKXmy7PUX7BmlMsO1M3fFpjK56Y
+	rpUstMBq/LY4ebEmiDVY3vvREYNBqeNIWlCpB0iIF+5Opv9R3G7ijrNFtDzG/w==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Fri, 30 Oct 2026 19:50:40 +0100
+Subject: [PATCH bpf-next 1/2] selftests/bpf: add helpers to manipulate
+ ftrace
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,68 +64,329 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261028125148.1348-1-yangsongsen@insta360.com> <20261029073344.729148-1-yangfeng59949@163.com>
-In-Reply-To: <20261029073344.729148-1-yangfeng59949@163.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 30 Oct 2026 11:46:37 -0700
-X-Gm-Features: AclHuK9JgZQ0yY9pjUZS0J7oNwln-ZzXOo3HkJmw0fssJ8tLcUosj90ClGtkpxo
-Message-ID: <CAEf4BzbRh4sof8aD4kj1y27kE3-VfAR3SOr8QMcH5n8rkUB-bA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Fix suspicious RCU usage for sleepable bpf_get_stack()
-To: Feng Yang <yangfeng59949@163.com>
-Cc: yangsongsen@insta360.com, andrii@kernel.org, ast@kernel.org, 
-	bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, jolsa@kernel.org, 
-	kpsingh@kernel.org, linux-trace-kernel@vger.kernel.org, martin.lau@linux.dev, 
-	mathieu.desnoyers@efficios.com, matt@bobrowski.net, memxor@gmail.com, 
-	mhiramat@kernel.org, rostedt@goodmis.org, song@kernel.org, 
-	yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20261030-ftrace_in_test_progs-v1-1-aa50c5dd1ccc@bootlin.com>
+References: <20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com>
+In-Reply-To: <20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com>
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.16.0
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu, Oct 29, 2026 at 12:34=E2=80=AFAM Feng Yang <yangfeng59949@163.com> =
-wrote:
->
-> On Wed, 28 Oct 2026 20:51:47 +0800, Songsen Yang wrote:
-> > Hi Feng,
-> >
-> > I hit the same root cause independently via syzbot and sent a fix a
-> > few hours after yours, without having seen this patch -- sorry for the
-> > overlap:
-> >
-> >  https://lore.kernel.org/bpf/20261028121859.994-1-yangsongsen@insta360.=
-com/
->
-> Hi Songsen,
->
-> Please don't worry about the overlap.
->
-> I hadn't noticed the issue Sashiko raised when I prepared my fix;
-> It looks like a pt_regs on the stack can fix this.:
->
->         BPF_CALL_4(bpf_get_stack_raw_tp_sleepable, struct bpf_raw_tracepo=
-int_args *, args,
->                    void *, buf, u32, size, u64, flags)
->         {
->                 struct pt_regs regs;
->
->                 perf_fetch_caller_regs(&regs);
->                 return bpf_get_stack_sleepable((unsigned long) &regs, (un=
-signed long) buf,
->                                                (unsigned long) size, flag=
-s, 0);
+Add helpers to allow a test_progs test to tune ftrace configuration.
+This new set of helpers work with an opaque structure: this one is used
+to record any change performed on ftrace, so that we can restore those
+automatically once the test is done.
 
-using sleepable variant of bpf_get_stacks is a better approach,
-because stack traces might request build id, and in sleepable mode
-that works reliably instead of bailing early if memory is not paged
-in, so I think having specialized sleepable version is better.
+The new helpers distinguish between two entries types:
+- basic controls, that are "knobs"
+- filters, for which writes are "additive"
 
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+ tools/testing/selftests/bpf/trace_helpers.c | 247 +++++++++++++++++++++++++++-
+ tools/testing/selftests/bpf/trace_helpers.h |   9 +
+ 2 files changed, 254 insertions(+), 2 deletions(-)
 
->         }
->
-> That said, I think your approach is the simpler one and the better fit
-> for the fix itself.  So if the maintainers prefer your version, feel
-> free to ignore my patch.
->
-> Thanks,
-> Feng
->
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 6d7a4b8c4ab8..1f26a057a810 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -21,8 +21,12 @@
+ #include "bpf/libbpf_internal.h"
+ #include "bpf_util.h"
+ 
+-#define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
+-#define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
++#define TRACEFS		"/sys/kernel/tracing"
++#define TRACEFS_PIPE	TRACEFS "/trace_pipe"
++#define DEBUGFS		"/sys/kernel/debug/tracing"
++#define DEBUGFS_PIPE	DEBUGFS "/trace_pipe"
++
++#define CHUNK_SIZE	128
+ 
+ static struct ksyms *ksyms;
+ static pthread_mutex_t ksyms_mutex = PTHREAD_MUTEX_INITIALIZER;
+@@ -557,6 +561,245 @@ void read_trace_pipe(void)
+ 	read_trace_pipe_iter(trace_pipe_cb, NULL, 0);
+ }
+ 
++static const char *tracefs_mountpoint(void)
++{
++	return access(TRACEFS_PIPE, F_OK) == 0 ? TRACEFS : DEBUGFS;
++}
++
++static int tracefs_path(char *buf, size_t size, const char *file)
++{
++	int ret = snprintf(buf, size, "%s/%s", tracefs_mountpoint(), file);
++
++	return ret < 0 ? ret : 0;
++}
++
++static int tracefs_read(int fd, char **content)
++{
++	size_t len = 0;
++	char tmp[CHUNK_SIZE];
++	char *buf = NULL;
++	ssize_t n;
++	int ret;
++
++	ret = lseek(fd, 0, SEEK_SET);
++	if (ret < 0)
++		return ret;
++
++	do {
++		n = read(fd, tmp, CHUNK_SIZE);
++		if (n < 0) {
++			if (buf)
++				free(buf);
++			return n;
++		}
++		if (!n)
++			break;
++		buf = realloc(buf, len + n + 1);
++		memcpy(buf + len, tmp, n);
++		len += n;
++	} while (1);
++
++	/* No data read at all, file was empty */
++	if (!buf) {
++		buf = malloc(1);
++		if (!buf)
++			return -ENOMEM;
++	}
++	buf[len] = '\0';
++	*content = buf;
++	return 0;
++}
++
++static int tracefs_write(int fd, const char *str)
++{
++	ssize_t ret;
++
++	ret = lseek(fd, 0, SEEK_SET);
++	if (ret < 0)
++		return ret;
++
++	ret = write(fd, str, strlen(str));
++	if (ret < 0)
++		return ret;
++	return 0;
++}
++
++static int tracefs_write_file(const char *path, const char *str)
++{
++	int fd, err;
++
++	fd = open(path, O_CLOEXEC | O_WRONLY | (*str ? 0 : O_TRUNC));
++	if (fd < 0)
++		return fd;
++
++	err = tracefs_write(fd, str);
++	close(fd);
++	return err;
++}
++
++enum tracefs_ctl_kind {
++	TRACEFS_CTL_FILTER,
++	TRACEFS_CTL_VALUE,
++};
++
++struct tracefs_ctl_entry {
++	char path[PATH_MAX];
++	char *old;
++	enum tracefs_ctl_kind kind;
++};
++
++struct tracefs_ctl {
++	struct tracefs_ctl_entry *entries;
++	size_t cnt;
++};
++
++struct tracefs_ctl *tracefs_ctl_init(void)
++{
++	return calloc(1, sizeof(struct tracefs_ctl));
++}
++
++static int tracefs_ctl_update(struct tracefs_ctl *ctl, const char *file,
++			      const char *str, enum tracefs_ctl_kind kind)
++{
++	struct tracefs_ctl_entry *entry, *tmp;
++	char path[PATH_MAX];
++	char *old = NULL;
++	bool recorded = false;
++	size_t i;
++	int fd, err;
++
++	if (!ctl)
++		return -EINVAL;
++
++	err = tracefs_path(path, sizeof(path), file);
++	if (err)
++		return err;
++
++	for (i = 0; i < ctl->cnt; i++) {
++		if (strcmp(ctl->entries[i].path, path))
++			continue;
++		if (ctl->entries[i].kind != kind)
++			return -EINVAL;
++		/* Already altered, keep the value read on the first write. */
++		return tracefs_write_file(ctl->entries[i].path, str);
++	}
++
++	fd = open(path, O_CLOEXEC | O_RDWR);
++	if (fd < 0)
++		return fd;
++
++	err = tracefs_read(fd, &old);
++	if (!err) {
++		tmp = realloc(ctl->entries, (ctl->cnt + 1) * sizeof(*tmp));
++		if (!tmp) {
++			free(old);
++			close(fd);
++			return -ENOMEM;
++		}
++		ctl->entries = tmp;
++		entry = &ctl->entries[ctl->cnt];
++		strcpy(entry->path, path);
++		entry->old = old;
++		entry->kind = kind;
++		recorded = true;
++	}
++
++	err = tracefs_write(fd, str);
++	close(fd);
++	if (err) {
++		free(old);
++		return err;
++	}
++
++	if (recorded)
++		ctl->cnt++;
++	return 0;
++}
++
++int tracefs_ctl_filter_write(struct tracefs_ctl *ctl, const char *file,
++			     const char *pattern)
++{
++	return tracefs_ctl_update(ctl, file, pattern, TRACEFS_CTL_FILTER);
++}
++
++int tracefs_ctl_set(struct tracefs_ctl *ctl, const char *file, const char *value)
++{
++	return tracefs_ctl_update(ctl, file, value, TRACEFS_CTL_VALUE);
++}
++
++static const char *tracefs_next_line(const char *content, char *buf, size_t size,
++				     int *err)
++{
++	const char *end;
++	size_t len;
++
++	*err = 0;
++	while (*content) {
++		end = strchrnul(content, '\n');
++		len = end - content;
++		content = *end ? end + 1 : end;
++
++		if (!len || end[-len] == '#')
++			continue;
++
++		if (len + 2 > size) {
++			*err = -ENAMETOOLONG;
++			return NULL;
++		}
++		memcpy(buf, end - len, len);
++		buf[len++] = '\n';
++		buf[len] = '\0';
++		return content;
++	}
++
++	return NULL;
++}
++
++static int tracefs_restore_file(const struct tracefs_ctl_entry *entry)
++{
++	char buf[CHUNK_SIZE];
++	const char *content = entry->old;
++	int err = 0;
++
++	if (!content)
++		return 0;
++
++	if (entry->kind == TRACEFS_CTL_FILTER) {
++		err = tracefs_write_file(entry->path, "");
++		if (err)
++			return err;
++	}
++
++	while ((content = tracefs_next_line(content, buf, sizeof(buf), &err))) {
++		err = tracefs_write_file(entry->path, buf);
++		if (err)
++			return err;
++	}
++
++	return err;
++}
++
++void tracefs_ctl_restore(struct tracefs_ctl *ctl)
++{
++	size_t i;
++	int err;
++
++	if (!ctl)
++		return;
++
++	for (i = ctl->cnt; i > 0; i--) {
++		struct tracefs_ctl_entry *entry = &ctl->entries[i - 1];
++
++		err = tracefs_restore_file(entry);
++		if (err)
++			fprintf(stderr, "Failed to restore %s: %s\n",
++				entry->path, strerror(-err));
++		free(entry->old);
++	}
++	free(ctl->entries);
++	free(ctl);
++}
++
+ static size_t symbol_hash(long key, void *ctx __maybe_unused)
+ {
+ 	return str_hash((const char *) key);
+diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
+index 0f8d99746084..432a95016b69 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.h
++++ b/tools/testing/selftests/bpf/trace_helpers.h
+@@ -57,6 +57,15 @@ void read_trace_pipe(void);
+ int read_trace_pipe_iter(void (*cb)(const char *str, void *data),
+ 			 void *data, int iter);
+ 
++struct tracefs_ctl;
++
++struct tracefs_ctl *tracefs_ctl_init(void);
++int tracefs_ctl_filter_write(struct tracefs_ctl *ctl, const char *file,
++			     const char *pattern);
++int tracefs_ctl_set(struct tracefs_ctl *ctl, const char *file,
++		    const char *value);
++void tracefs_ctl_restore(struct tracefs_ctl *ctl);
++
+ ssize_t get_uprobe_offset(const void *addr);
+ ssize_t get_rel_offset(uintptr_t addr);
+ 
+
+-- 
+2.56.0
+
