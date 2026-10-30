@@ -1,96 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.136
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793394605;
-	b=LiN2BXggKCyv3nUPqLaCF83mrTI1DcQtlZk+Y0kCbYUYnrqGM+nwmEOpXcAJ+t4O5WH/
-	 uQYczlI3O7NANpn+KHyKGL8jGpraExyEsSdjCBAgDuRZ6iX7+1Ow0rbS2x3GkVsU3IbKn
-	 hFXnv277IxOFa+wHB29vTn6OG4Q+e5PB6iNthaJL+9KcKrYXtb7Qd+kwBQAsz1owdEcki
-	 YZ+I/VjCcO8UwUP1a9NGDZnlm2HixDUA99NRjuUtYB7cinfrfcMWx9CqPbFQfskgTka4C
-	 ENelZl454KHOQnohMcboMnp648cWDUefHB6sDow5DqErXQJzgwU7qJxqKCAAcAg51LQ==
+	t=1793394898;
+	b=2KMswCyemlCQHEuh/NIdO8hhsVUWk7Xg2E+7JPMlpNIFaRuCjLbsFEzLErQJwIbWgC7C
+	 mF3pgM7+N31oG6aHMOffdQCZ4A/UIpOZlB3rZdoqEjY4lqULqihyp7aHs9Sy8kTQr2WQs
+	 x9khMuQ8agfjpO0KqTqBhjelbkxx++c5owMFaamGJUeS4gPqj1uL6dv5oWI63kuGqABYb
+	 4RN5VXGstNghZ8PVTQ7Ji3XwJR3Z6tC0soROMo8lwMDBEJgJhrw7J+mKbf1xFdcHFBA7C
+	 WBEx2/w/QSIbHLzhzuKwT/suHEJcRNQEF/ffLRcrQgYdYlKHaticqQb9aPhOG6k1sUA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793394605;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793394898;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=2eWUMS2+ezGEv3VSKsBCsTcRq38lP78Aysa+2VWEh2k=;
-	b=bVI2pl4B6pnlXbHfjRM2QXiVbfId+sn8l2jR8eN4LnCzU6NX7ne1fbg7A8boNCDiTVQ1
-	 m1wNSeaJQtPepj+ce+MPvgYjPAgUHCIQMFtcjtXahc3yL1rbdzbeuZUv7KHxk1yMlvaI0
-	 O+3PKQeczqWIVEJsHOoQwGVk/BsaI6LvcRdOjuokrDKofrFiXGfYysYFO42vzSQqp/NtN
-	 Rlw7jlT/c9vK3ZNpIMifsawbCNIzurJ+oLeZsFzb31SCEpHH/PzOFkcCIz+02gbBjahu4
-	 yKAS4Dkj4VjWZpJC5wvvM8cKeyYG8jVRZNV2QzzPsNIAeXn+DxITWBOQO6FEoybnU0g==
+	 Date:Message-ID:X-Mailer:MIME-Version:X-Developer-Signature:
+	 X-Developer-Key:Content-Transfer-Encoding;
+	bh=rTShxCozmhSSeMWa7fG8X0mBP0JSHd6Gbx0iKXmpMcg=;
+	b=VNE4f/I3nELDGQgT9h09169Go6hNQXaJfA3n2xztou2lJH8AFv1AzUE0e1qle/pFntWo
+	 eBqo/N4zxKgEDI63IRCgwp3ByjmKf4a+gEQ/cPcgYSg2b4+X1m4Fm55wrAhBcjgRoNRjf
+	 cfHqTlNkkbf17amn2pLiavdeHu1amOqrDo2jqwUo0IH5M4vteV31HxZQqzo10Uo3tlVr5
+	 TADj/vcLiCms7R5e0dfS4GyHOvuoeM4iqNCk+kbXIFmi6Qh2ihzYB1IKi55Ds7yHbnbun
+	 pWdpOkWds1HNg7fcKV9MCmcoARlF+jFsY/DDrs4BWbn7F+0NeRgq2RBlxt6TNJdKyjA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=thdwtGgG;
-	arc=none smtp.remote-ip=209.85.215.182
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K93qHA99;
+	arc=none smtp.remote-ip=74.125.224.136
+Received: from mail-yx2-f8.google.com (mail-yx2-f8.google.com [74.125.224.136])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FCB606A31A
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 21:10:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66FCB606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2103F60A260B
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 21:14:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2103F60A260B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=thdwtGgG
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-ccce6d9abfeso841950a12.1
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 14:10:05 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=K93qHA99
+Received: by mail-yx2-f8.google.com with SMTP id 00721157ae682-8b0c81dcf98so4033097b3.1
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 14:14:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793394605; x=1793999405; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=2eWUMS2+ezGEv3VSKsBCsTcRq38lP78Aysa+2VWEh2k=;
-        b=thdwtGgG2XBxvv09kLDxLO80vDEM58PgBBjk/qwQwh8jgwPG86apsBVwbxQmiQGtP6
-         vXOuI7S/8/D0ZCwd9GTf1N0KXMHEaPmizBhea8jU8kcK8+JXHMYzdvEqOXb+j5DDe7b+
-         rq07A77a8dBF+rL06YSYk0lreltNfzrMs9Q6qMVZI0G5jYvLyixNh/0Ri1jw28pRq8zY
-         3rxgKQPEcWLzs3Gr6PDIfmEEZPnWKlgauhhsGcdXEHMqtYkbxP5mlr1fJN8zmKveIhmo
-         SJi9WNEhxfokhwDgmpx4fJ4YLtjEkitGKBHm0Z+T44Cy0UpkS0qIIXEEeFzQQUxn9Y4Z
-         XVtw==
+        d=gmail.com; s=20260707; t=1793394897; x=1793999697; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=rTShxCozmhSSeMWa7fG8X0mBP0JSHd6Gbx0iKXmpMcg=;
+        b=K93qHA99T0Dmy3B5qb8JERE3q0KWUF+pIIzE67Eu648G8sUPcTJImR9GFZtAyIl8mY
+         Ra9hX/nBsMI0l8V5qJqwHpiNTUVBehbBOmhZ4VhLmrKvpQzMCaS6GH2ScRguY8MWXhIM
+         8jfx9nJH3JmH0OB1ml8knE+uuUZM7gcBDJYXbLXacOBn+p81EDj4x3P2ODeE4LWFVPxo
+         UwWBo9+YKoAoJHJC5DpcNIZTt918Z7vDmCL7JzoiBHR40OI19SxeFwl2RvQhmWuhxZzb
+         i4/PKEFQa4EiPJtF6v79fW8VE2a8XEwVIRFhhMzQT7P+imgEOcOoUDy+72U0jkk57DxP
+         QUHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793394605; x=1793999405;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2eWUMS2+ezGEv3VSKsBCsTcRq38lP78Aysa+2VWEh2k=;
-        b=zyV+4ibNURU8CIzGf2ITc/z6gDwpPZWGLY3uEqY8dhoBxapRhs3w6TeMl3rjOSdfw3
-         a8/WK/1QtVorSeGzCrW7mdjQdqokEQJRBCEHeTzcoCeY2MZYoIfsqQaGI4rLd86Gh/7G
-         yw30KIxKoPq/IgXg3Ht0wUqlgCFpAmW2f/OmHVNvnfeR9ox5qxCK2xfg6TQrbKyc2q5S
-         Dbwnqihm2/Hgcfl031CEchnVvIXEwjxrS1l+DlZYy14iAH0S+VA+ddpW7uZjS2i84tDd
-         JIkRJSouhzya5RkBHELum6eMjd6f9bOUzquFHS223+a6rOhEeVuCbdTS036/2mfwzgE3
-         s4vA==
-X-Gm-Message-State: AFq9FYK3zfa8OHn85IqmmsC/h8BP1x36buLVT2uDjnTCrvTthaBugagd
-	KLLWkvgy+hy7QBSgkBXaIcGIZ3PQC24V2KS0vHNtqK3AoiNLDWof3XcVCqve0w==
-X-Gm-Gg: AYBFou0wedqxbH6BzvoLFMXdRGrUhN6i0od0HqFMdhCh9/Xs4mv8uD8LSmy8LCi8/fl
-	GBmtAkgXaM8JYh5BDhzZl8INBMA86Zbk3/HmJ307z2PkvgyaID743PL0QZrn6Qn2pM7iOVXFQ81
-	qi7TqWJEO9Gav+KaF1ViP42ZfQKxhsK7UfYJa5YDvjFbgzF1Rlvsrj35LRB17Fl4BJh4iTjGeR1
-	N04XZoIM5NpztiHy9nAZU1RmZGxnos2yViDBWtA7nk5/opRQ7yf4ogpcPQDGuuyaSVpa1YRQj5W
-	hPS7rODYHjXdzVungVXaB7J5v1Inwf00OMHFY4agj7Mo3hMGD4qEj4kuXqo+WQ2Jb7HEYWiACzO
-	Jl/1BZRJfnTApmRaW4B7BNdTiHnftgwSUF2HOz+6gDWQ3oD5nd/eMXRcZ5Nmt9SGF05eEz3nkUJ
-	BSIulj3rInFB7y5JvIkrzBygyoOdwHBQai9OJp6hNko5vHVTTeV5Jcver2IuLZuUATlcj8+aZ6e
-	YUHMlauc0st/hsAbJg5HiK8SUXQqdKbfSAFu3yxPnldeUj+MTVnxhDIz7rcNOhxntORqvOAsn/e
-	P8NFFNR/8ULD1/zS3YxXizWtW1iVJFCeuVWNpjcojuUCun3JjomcOExq97+FAepUswdnHM7kn3F
-	dNMFVsmpjKaaBfGUWzZpjrFTUkH3ps/5IsNMaP3kLgz6ahQ1suYMq8PFQaj0K++23gQq3+xp3vA
-	==
-X-Received: by 2002:a05:6a21:151b:b0:3e2:95fb:8cff with SMTP id adf61e73a8af0-3e928a29f19mr2866757637.55.1793394604586;
-        Fri, 30 Oct 2026 14:10:04 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aada7b7d09sm401054b3a.44.2026.10.30.14.10.04
+        d=1e100.net; s=20260707; t=1793394897; x=1793999697;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rTShxCozmhSSeMWa7fG8X0mBP0JSHd6Gbx0iKXmpMcg=;
+        b=AjD5lHxH6DVS4xxJP52IyZcBfjFwdEjtH01rWRKuvFKQftJW+mOl1jarYtjSWFkFca
+         j+9qYhbomoFTSCsIgLxRik0XBZVzaXRgFnUGK5Mj8PWIGzSVaGmPug8UXeQU5mwk4m/q
+         Pvom337VtIDJW6oPHWo6wmI+2/25lcpjoG9hXKLpk/suKz/8h6K7Y0nJK0ibVizOIp7N
+         v4XM4mqfdUn0SVuzGDdKmYyiEPZ+vTewIv6v4tX56NkZe3sldkqeVILPw5/sk1uC4nYE
+         JwiRu1ep3gX4ANt6M9P1KATiW1xdaI1fKLDykCLXgj1RT5NeevVzQuAGCi30+W1brYHQ
+         IbGw==
+X-Gm-Message-State: AFq9FYLdi/+zhpy2BqElkqs+YdhWtKbyEZG4GEV3CB5/vH8zFLwRTKfL
+	1Ul8W/zfXIg+G//53RfeHTFuhjr4o1sZ1otdQrcU7YRYh/UKyRPkbh/UIS2j9297
+X-Gm-Gg: AYBFou05Y35f4TRfCSpyLIYV0A+BBoRGE7CuhqRV7pOA2GQ5eroB9NC8TjGOD6B1Bqw
+	m0aMtNGA3xBHFAtS5JbpmHunBTPH08ysiTgk384xl1P2tIG6m8tizO5m5NWpwVnlUrrEHJ2s2Kx
+	X5E/n3WQavm3kEBYdpqSW8NbchQll84ye+GCO5dnrwOH/ja0Gbv5EpUcBMBsJ8KBh7FPaM1kVeS
+	euZjAWpn5+sli2yIZIoCnLoXn0ptIc8cAjsJQae4BLUZlrLyjaok2nh53HbknX0+pLLfcFGXsH1
+	I6mc82bNtzecC54B+jYEQfpUH6hfgtsglkJiqIzC8C84yOtfODztIYt9SFvCJB79/tmIeFIP2cM
+	3sXecRfB03h6RR0AhuLBYQkoxZ6mky3sziKjiKNFf2kxMEhUheU08ZCgEaO/zAPTsKiBNX1/Q/a
+	QwBVALufKJTjuTiJ9jjp1MVoIbetsCwHB84sUMsu/AWKXYjh0JtA10yzIUUfS+e24/I7n4WJ6Zj
+	LXq+cT+td3VTacaWHr42HMiD6UNmQfyerjKnq89zVzm+XVaQAVZqIQnOBNUMdG4pRYj2nCZdh7G
+	gEg71bVq3De0Y7wTQrdVOTJyto/LD7LJ0z8c4gJnw0PIh61tcvQ/NwuAnD5H7QU2Vmpgr2VI3OU
+	VMb8YMDVj6w8rQkt8fjKsl53AtBHYYSDyZxD9
+X-Received: by 2002:a05:690c:a0a7:10b0:8a8:6fac:21af with SMTP id 00721157ae682-8b2b66e2087mr22437777b3.12.1793394896955;
+        Fri, 30 Oct 2026 14:14:56 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:15::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b2b7125371sm14420067b3.11.2026.10.30.14.14.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 14:10:04 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+        Fri, 30 Oct 2026 14:14:55 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH v2 bpf 2/2] selftests/bpf: Test the valid bytes of a packet pointer in a counted loop
-Date: Fri, 30 Oct 2026 21:09:50 +0000
-Message-ID: <20261030210950.1904640-3-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261030210950.1904640-1-alexei.starovoitov@gmail.com>
-References: <20261030210950.1904640-1-alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1] selftests/bpf: Cap the CPUs taking part in the rqspinlock stress test
+Date: Fri, 30 Oct 2026 22:14:54 +0100
+Message-ID: <7fb2cf7baeb262c7486b8e9b5204e2a159402608.1793394762.git.memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,224 +100,104 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4177; h=from:subject:message-id; bh=002onRIw0vfydK3FXaz7B61j8F5yvS3kYorQfUHPMcw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIesph9fvr5mfqnfpZtySCrmWleOwTtPj0UynuFlqH7JZJm/f pSTdUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIk4HGb4H8wybcdNH+9b55I2/d9a6W Jyzeuuw5pH/wK0pKcLz/q02ZuRYbPo+a9CJfuLSlVncX4X2nv005X7YR69u525TuScLU66ygwA
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+The stress test module starts a worker on every online CPU, and each one
+holds its lock for 20ms with interrupts disabled before releasing it and
+queueing again at once. A waiter that is not at the head of the queue has
+no timeout, so the queue holds every worker but the holder, and the last
+one in line waits for all of them: the longest wait, spent with interrupts
+off, grows linearly with the number of CPUs. On a 4 CPU VM that is 40ms,
+on a 128 CPU VM it is 2.5s, and the NMI handlers of the test spend the
+same time in the queue:
 
-Each test adds r4 to a packet pointer. r4 is 0, 8 .. 48, but its umax is
-50.
+  INFO: NMI handler (perf_event_nmi_handler) took too long to run: 2560.853 msecs
+  perf: interrupt took too long (33533733 > 25008210), lowering kernel.perf_event_max_sample_rate to 1000
+  tsc: Marking TSC unstable due to clocksource watchdog
 
-  test                                      umax gets smaller    result
-  ----------------------------------------  -------------------  ------
-  widen_pkt_pointer_step_lowers_umax        at the loop entry    reject
-  widen_pkt_pointer_step_lowers_umax_down   the same, r6 += -8   reject
-  widen_pkt_pointer_negative_offset         no, only smax        reject
-  clamp_pkt_pointer_step_lowers_umax        at the back edge     reject
-  union_pkt_pointer_var_off_lowers_umax     r5 is r6 + 8 or r6   reject
-  widen_pkt_pointer_keeps_valid_bytes       at the loop entry    loads
+Enabling the perf events alone takes over a minute, as each IPI waits for
+its CPU to reenable interrupts, and the test takes 145s instead of 10s.
+Once the host is oversubscribed, the waits stretch further, timers run
+late, and the soft lockup detector fires, which panics the VM with
+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1 from the selftests config:
 
-The first five progs load without the fix. The last prog reads only bytes
-that the compare with pkt_end covers.
+  WARNING: kernel/time/hrtimer.c:1098 at hrtimer_forward+0x76/0xc0, CPU#6: rqsl_w/6/1185
+  watchdog: BUG: soft lockup - CPU#25 stuck for 21s! [kworker/R-mm_pe:13]
 
-widen_pkt_pointer_beyond_pkt_end makes sure that the mark "beyond pkt_end"
-is not in the state at the head of the loop.
+Andrii reports that the test panics his 128 vCPU VM every time, while the
+same kernel and module pass with 8 vCPUs.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Limit the test to the first 8 CPUs by default, which bounds the longest
+wait to 120ms with the default critical section length. A new max_cpus
+module parameter overrides the limit, and 0 restores the old behavior of
+using every online CPU. The worker threads and the perf events are both
+created for the capped set of CPUs, and teardown walks the threads by
+index instead of by online CPU so that it covers the same set.
+
+Fixes: 15cf39221e89 ("selftests/bpf: Add stress test for rqspinlock in NMI")
+Reported-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_scev.c       | 182 ++++++++++++++++++
- 1 file changed, 182 insertions(+)
+ .../bpf/test_kmods/bpf_test_rqspinlock.c      | 21 ++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index fa01a616af9d..0be4fe8aadc7 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -3936,4 +3936,186 @@ __naked void clamp_pkt_pointer_keeps_range_of_entry(void)
- 	: __clobber_all);
- }
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_test_rqspinlock.c b/tools/testing/selftests/bpf/test_kmods/bpf_test_rqspinlock.c
+index 7b4ae5e81d32..a9cc5f496f46 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_test_rqspinlock.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_test_rqspinlock.c
+@@ -68,6 +68,11 @@ module_param(nmi_delay, int, 0644);
+ MODULE_PARM_DESC(nmi_delay,
+ 		 "rqspinlock critical section length for NMI context (10ms default)");
  
-+/*
-+ * r4 is 0, 8 .. 48, but its umax is 50. @bytes from r6 are in the packet: the range of r6 is
-+ * @start + 50 + @bytes.
-+ */
-+#define PKT_PLUS_R4(start, bytes)					\
-+	"r7 = *(u32 *)(r1 + %[data_end]);"				\
-+	"r6 = *(u32 *)(r1 + %[data]);"					\
-+	"r4 = *(u32 *)(r1 + %[mark]);"					\
-+	"r4 &= 0x38;"							\
-+	"if r4 > 50 goto 9f;"						\
-+	"r6 += " #start ";"						\
-+	"r6 += r4;"							\
-+	"r5 = r6;"							\
-+	"r5 += " #bytes ";"						\
-+	"if r5 > r7 goto 9f;"
++static int max_cpus = 8;
++module_param(max_cpus, int, 0444);
++MODULE_PARM_DESC(max_cpus,
++		 "maximum number of CPUs taking part in the test, 0 for all online CPUs (8 default)");
 +
-+#define PKT_IMMS							\
-+	__imm_const(data, offsetof(struct __sk_buff, data)),		\
-+	__imm_const(data_end, offsetof(struct __sk_buff, data_end)),	\
-+	__imm_const(mark, offsetof(struct __sk_buff, mark))
+ static struct perf_event **rqsl_evts;
+ static int rqsl_nevts;
+ 
+@@ -216,7 +221,7 @@ static void free_rqsl_threads(void)
+ 	int i;
+ 
+ 	if (rqsl_threads) {
+-		for_each_online_cpu(i) {
++		for (i = 0; i < rqsl_nthreads; i++) {
+ 			if (rqsl_threads[i])
+ 				kthread_stop(rqsl_threads[i]);
+ 		}
+@@ -247,7 +252,17 @@ static int bpf_test_rqspinlock_init(void)
+ 		return -EINVAL;
+ 	}
+ 
+-	pr_err("Mode = %s\n", rqsl_mode_names[test_mode]);
++	/*
++	 * Every worker holds its lock for normal_delay ms with interrupts
++	 * disabled, and a queued waiter does not time out until it reaches the
++	 * head of the queue, so the longest wait, spent with interrupts off,
++	 * grows with the number of contending CPUs. Limit the test to the first
++	 * max_cpus CPUs to keep it bounded on large machines.
++	 */
++	if (max_cpus > 0)
++		ncpus = min(ncpus, max_cpus);
 +
-+/*
-+ * r6 is 0..58 at the head, and 0..56 with the step of 8. The range must go from 58 to 56 too:
-+ * in the second iteration no byte from r6 is in the packet.
-+ */
-+SEC("tc")
-+__failure __msg("invalid access to packet, off=56 size=2, R6(id=2,off=56,r=56)")
-+__naked void widen_pkt_pointer_step_lowers_umax(void)
-+{
-+	asm volatile (
-+	PKT_PLUS_R4(0, 8)
-+	"r9 = 0;"
-+"1:"
-+	"r0 = *(u16 *)(r6 + 0);"
-+	"r6 += 8;"
-+	"r9 += 1;"
-+	"if r9 < 2 goto 1b;"
-+"9:"
-+	"r0 = 0;"
-+	"exit;"
-+	:: PKT_IMMS : __clobber_all);
-+}
-+
-+/* The pointer goes down. 8 bytes from the first r6 are in the packet, not 10. */
-+SEC("tc")
-+__failure __msg("invalid access to packet, off=120 size=2, R6(id=2,off=120,r=120)")
-+__naked void widen_pkt_pointer_step_lowers_umax_down(void)
-+{
-+	asm volatile (
-+	PKT_PLUS_R4(64, 8)
-+	"r9 = 0;"
-+"1:"
-+	"r0 = *(u16 *)(r6 + 8);"
-+	"r6 += -8;"
-+	"r9 += 1;"
-+	"if r9 < 2 goto 1b;"
-+"9:"
-+	"r0 = 0;"
-+	"exit;"
-+	:: PKT_IMMS : __clobber_all);
-+}
-+
-+/*
-+ * r6 is -8..50 at the head, and -8..48 with the step of 8. Its umax is U64_MAX in the two cases.
-+ * r5 is 0..56 and has the range of r6. In the first iteration no byte from r5 is in the packet.
-+ */
-+SEC("tc")
-+__failure __msg("invalid access to packet, off=56 size=2, R5(id=2,off=56,r=56)")
-+__naked void widen_pkt_pointer_negative_offset(void)
-+{
-+	asm volatile (
-+	PKT_PLUS_R4(0, 8)
-+	"r9 = 0;"
-+"1:"
-+	"r5 = r6;"
-+	"r5 += 8;"
-+	"r0 = *(u16 *)(r5 + 0);"
-+	"r6 += -8;"
-+	"r9 += 1;"
-+	"if r9 < 2 goto 1b;"
-+"9:"
-+	"r0 = 0;"
-+	"exit;"
-+	:: PKT_IMMS : __clobber_all);
-+}
-+
-+/* The access is in the second iteration only: the verifier gets to it after the clamp */
-+SEC("tc")
-+__failure __msg("invalid access to packet, off=56 size=2, R6(id=3,off=56,r=56)")
-+__naked void clamp_pkt_pointer_step_lowers_umax(void)
-+{
-+	asm volatile (
-+	PKT_PLUS_R4(0, 8)
-+	"r9 = 0;"
-+	"w1 = 0;"
-+	"*(u32 *)(r10 - 8) = r1;"
-+"1:"
-+	"w1 = *(u32 *)(r10 - 8);"
-+	"if w1 == 0 goto 2f;"
-+	"r0 = *(u16 *)(r6 + 0);"
-+"2:"
-+	"w1 = 1;"
-+	"*(u32 *)(r10 - 8) = r1;"
-+	"r6 += 8;"
-+	"r9 += 1;"
-+	"if r9 < 2 goto 1b;"
-+"9:"
-+	"r0 = 0;"
-+	"exit;"
-+	:: PKT_IMMS : __clobber_all);
-+}
-+
-+/* r5 is r5 = r6 + 8 or r6 at the head. Here var_off lowers umax. No byte from r6 + 8 is valid. */
-+SEC("tc")
-+__failure __msg("invalid access to packet, off=56 size=2, R5(id=2,off=56,r=56)")
-+__naked void union_pkt_pointer_var_off_lowers_umax(void)
-+{
-+	asm volatile (
-+	PKT_PLUS_R4(0, 8)
-+	"r9 = 0;"
-+"1:"
-+	"r0 = *(u16 *)(r5 + 0);"
-+	"r5 = r6;"
-+	"r9 += 1;"
-+	"if r9 < 2 goto 1b;"
-+"9:"
-+	"r0 = 0;"
-+	"exit;"
-+	:: PKT_IMMS : __clobber_all);
-+}
-+
-+/* 16 bytes from r6 are in the packet: two iterations read 8 bytes each */
-+SEC("tc")
-+__success __retval(0)
-+__naked void widen_pkt_pointer_keeps_valid_bytes(void)
-+{
-+	asm volatile (
-+	PKT_PLUS_R4(0, 16)
-+	"r9 = 0;"
-+"1:"
-+	"r0 = *(u64 *)(r6 + 0);"
-+	"r6 += 8;"
-+	"r9 += 1;"
-+	"if r9 < 2 goto 1b;"
-+"9:"
-+	"r0 = 0;"
-+	"exit;"
-+	:: PKT_IMMS : __clobber_all);
-+}
-+
-+/*
-+ * r6 is beyond pkt_end in front of the loop and comes back into the packet. The mark is not for
-+ * all iterations: the verifier must look at the two branches of the compare in the first pass.
-+ */
-+SEC("tc")
-+__success
-+__log_level(2)
-+__msg("widening r6 to 32..96 step 32")
-+__msg("6: R6=pkt(id=1,r=0,smin=umin=smin32=umin32=32,smax=umax=smax32=umax32=96")
-+__naked void widen_pkt_pointer_beyond_pkt_end(void)
-+{
-+	asm volatile (
-+	"r7 = *(u32 *)(r1 + %[data_end]);"
-+	"r6 = *(u32 *)(r1 + %[data]);"
-+	"r6 += 96;"
-+	"if r6 > r7 goto 1f;"
-+	"goto 9f;"
-+"1:"
-+	"r9 = 0;"
-+"2:"
-+	"if r6 > r7 goto 3f;"
-+	"r0 = *(u8 *)(r6 - 1);"
-+"3:"
-+	"r6 += -32;"
-+	"r9 += 1;"
-+	"if r9 < 3 goto 2b;"
-+"9:"
-+	"r0 = 0;"
-+	"exit;"
-+	:: PKT_IMMS : __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
++	pr_err("Mode = %s, CPUs = %d\n", rqsl_mode_names[test_mode], ncpus);
+ 
+ 	if (ncpus < test_mode + 2)
+ 		return -ENOTSUPP;
+@@ -279,7 +294,7 @@ static int bpf_test_rqspinlock_init(void)
+ 	}
+ 	rqsl_nthreads = ncpus;
+ 
+-	for_each_online_cpu(i) {
++	for (i = 0; i < ncpus; i++) {
+ 		struct task_struct *t;
+ 
+ 		t = kthread_create(rqspinlock_worker_fn, NULL, "rqsl_w/%d", i);
+
+base-commit: b116ac6087541d3d98031e786adbe9c733cd6df3
 -- 
-2.55.0
+2.53.0-Meta
 
