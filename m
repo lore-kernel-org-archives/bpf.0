@@ -1,100 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.228.6
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.2
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793349627;
-	b=rTd52ArXygEb5sITTm6Wvh6dsTcH59oS0ou3vh+ISfcU+QO2DWKk2SsZQ478jHLhnXIm
-	 BhPz3sX/KTk+4T7BMRFWBnwquLETB4EeuEvbHBzdWuFLMSLtMhgonGkw3mg43n3fw7nD2
-	 nbg6vQe7mIS0teyA7xHasxgX1Kt8LBpW0KqID2fXO0hQZp7CUozOcDsQGTGvGfwp2XaNj
-	 6CWsGe7DnnFH5h0z92ZHNX/f1kGI6mXyqlsmN2xUiRri9bOOIx4i/asF7tTONSYNuNVV5
-	 x8efMsa4uWbpHjaHHbuvWJCRan8JXwHnp4wlwYWioOOsgMoTqzMEKgUsvu3Av2GxsJQ==
+	t=1793349819;
+	b=ki0aKWiSkKxf2l2oMfcq2u85Pgo2T5BnTqrA7J/dtXYBymkA3BM0SOL5ofJg3yu3jIhq
+	 97ySq9jqTtF8gXx8T0vKGOuTisOBds7s1DGNwXfBArvWbcw0QFa8P73ni2tgbJgRk7vLg
+	 9yVq5uE4+jMdAxuTDIlvZZD4iIRGN9emlDtaGvG3SCsIBIcCTb5eo7MTRY5oybn2Pu08U
+	 FY98zc/NNia0tN7lscWxvjC168ADhSGV1SMqqWG2GX3BgP+m57RjoOCmjQiQXWRiByEu9
+	 w+33mr3HTs8Coosc2x39ZWfzf38QC0Vv7wpM6FC+6xmSdVhwYCnQ0uy6pieCpjuCAUA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793349627;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=p2lbErXysC5keIICd/9Oecm+satsW+gqAIlkh7mZJ8M=;
-	b=xryamodnSs8GdiUzC/j9nVz8whNv0gLOM3dPVTNlWDJ8P+YlCmSiHANihyBoy90wOnTw
-	 REu2Q0ZGL+EvBesZE/MPSiKlbsYZHAFrH+taXVRlY3ElLt89eeUsLfGc5pEBSC48YFfys
-	 m3zI5a0FdRnFyjvJMoXfLD/g5Jy09sUdGMw4pApRCYyzwOPcuzuoaA9+OO+FKir21qzwF
-	 oQgrGoGgjD0DPO3CB+qHjwLSGu5VeXHEev5rv4oUZx7gM1FDorg5UFkrMkxTeon1DYFAj
-	 uhR4a42mJN7pqZHPbNKjxlTLI5T85o29ZWDe0TubESTa3eTIes3U/dm7IfjElwX9G5A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793349819;
+	h=DMARC-Filter:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=aOJY1TVcA8c8VZRDhmaCuv4+pieyekjBeLYUwH6dOsY=;
+	b=HRAHcIyNGg6bxf8EDRxUWW9VJ4SvvD63p9pZHrKeGWG8WniHKkku4wk4nJ0gE1dx/zXT
+	 Lh8Daj/zi1+Qd7GSIBbfAL7JSyTX/JhC11D9LZ7z9CZM3e1dP3o2ruSE8uRry+4dQ+OfN
+	 tCIjUzLSa40tN22s7WHNmd9ECvKrLmfR74h9Svqotj4DH4uzstjWnaKVrtc0Xy68xsDQy
+	 2fhgRmt4lYvMq1OSAyax9r5V+M5sQp3KFXXYidRGsXHGTTuUw7VLCM+bmXXmPD80r+HRJ
+	 oP4TPOVzPnokLDYkkamcxEzWpc78GFpWFdfdrhjfo5c2jUmim30MZvyvzoMV8d2q2TA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hwGefDb1;
-	arc=none smtp.remote-ip=74.125.228.6
-Received: from mail-pz2-f6.google.com (mail-pz2-f6.google.com [74.125.228.6])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=aG9PnAR7;
+	arc=none smtp.remote-ip=220.197.31.2
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC74C606A31C
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 08:40:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC74C606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECE1606A31D
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 08:43:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BECE1606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hwGefDb1
-Received: by mail-pz2-f6.google.com with SMTP id 41be03b00d2f7-cd8b58dd4c1so7862a12.1
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 01:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793349626; x=1793954426; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=p2lbErXysC5keIICd/9Oecm+satsW+gqAIlkh7mZJ8M=;
-        b=hwGefDb1SWctrOe6SQdKvltFiVhjCBvK4nzZjKCLo7KEWh0S1Zef9SO464ErUQOnLK
-         8FjZ1sDDtHIsonQIgKxdTbLw4uIwlQi2nGAu4hwzz932I4/O5msW4V89rV0kqfPaLFRU
-         ZOMZ4hAF3PZ+bdVnT6jOMAnlLN0O6O2bNyLkCE38yNOTsQb+5ERP3XhcxZTbgSh8SEzT
-         /gGQsfwAVL7tr+QOnNY7VjxbAkKIfyvzEwF8oaJytuHFBdkInK5U+5Jg6sYYnc4Yqwjo
-         jNeC6Qp9fJRlf3KL++vTrCllFwypFsOFxMglcQOeCJww6ajRJy0ioYfNOuXNSBojxPhi
-         gQOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793349626; x=1793954426;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=p2lbErXysC5keIICd/9Oecm+satsW+gqAIlkh7mZJ8M=;
-        b=1JMx8PzlKqdTVkpgHsGmuRv7mJIJuiaxeRoO19BAk1DCuZzYPDyy3NJYW/GzhKysec
-         VP/o+jAj2eFrw+lHpE9Hct7bprRweIXlppnqmH9BoxWt4JuDDkX/GojEjXTEejnExLMY
-         t5NjJyVIIYzEpO8gYvlU0A+mkfzzcamkrZdcMvrL/SBa6IenEdKTbLkuCJmwUrosPSAF
-         fEgDqO6QVNAj51LGwNvvNbhztgGRb27PHXzzE10/bzvXDaccp7y/Ss5tSZs4/8eTWyW6
-         UxutD2lXQsZ65RzGwII+xuWeejafhYGAqtv4EP2KBP/c+QXOlYxp0lPQ/65QPcagj3H/
-         ZQAQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzRCfJlYnDhciRppWvrcXhTd4BVmFUx5q7b+x1DEU3PVoNrIuJj3VXe3peeGdCakc0fTVM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYINruzABFNrbDslcBe+K1oPMnM/IfFRKucRSu2puvLKbKzo5JJ3
-	+ppzfp/Y8wPxV5y7E/RdYnf+8pSMKCQWT9HphMT8n/tKYuDvLb+t1lPO
-X-Gm-Gg: AYBFou3nHZSKHwOmefR4QMm8XWxrxTMoZjM/ypeEYVKPSwLnQIcpk+myTgVYB7I69p6
-	9UOj6z6986w8no7QIkJextRLJdQArxQEha3AW55GBNyn7477JZ2WmCMxWL1gtY7yVU/4xMfVvv0
-	bGJf5e842w0+htmefMeVAlQ/qpBqoqddeYDtNClqqoDfDlJiGnCrJHLzcSm/cylPWB5FwhnM0Rr
-	QztIUTU6q1zmn/Lo6q560uM55DFbJhyfMeHqHGWJp1BOhStRS/JMTYvYhUeHd8i/c8An6na9rUT
-	Ju0d+MLv8DMi0D3AhyONkh1FVbtCC/wiEnnFM8bcjn2Sj4mHO8oby4VDY91/Vk8kjl2ShRVCzhr
-	/mlvehwiL76eqX9zsQT1MmZMKI46C6ekAtySXVqScr5bk9zOT4rQeK6+JMo93PhSERIsademZaO
-	jC7vn5W5QFltxDRXutJBIiJrZmzK7GKF57cN1GC14QYdZkkwlOdI9FxwdatK3eEkmpBsjPKuHJu
-	4xHNmPZkm1a3ePsuADC/H1xg4xE6Anr83pH/hB8hbu6l5qpwe9LkU2KNSb0uE3iXYjEHwZZ2owp
-	Hgr6oG9prBtHVA67GdY9hmftKNvNDgHTXC5GCrfwxvuU5rc8iYziqdmN0Wc47Qc=
-X-Received: by 2002:a05:6a20:2586:b0:3e1:9071:acb2 with SMTP id adf61e73a8af0-3e928a0b0bbmr1315570637.33.1793349626005;
-        Fri, 30 Oct 2026 01:40:26 -0700 (PDT)
-Received: from localhost.localdomain ([240e:46d:2600:2f3f:1d83:9185:c6a1:9ca1])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a9eef96e53sm486051b3a.20.2026.10.30.01.40.21
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 30 Oct 2026 01:40:25 -0700 (PDT)
-From: Rongzheng Wang <testwrzwrz@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: netdev@vger.kernel.org,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	stable@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v4 1/2] xsk: defer software checksum until the skb is complete
-Date: Fri, 30 Oct 2026 16:40:17 +0800
-Message-Id: <20261030084017.16202-1-testwrzwrz@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <CAL+tcoDUGqk-KfMBqdG4RBURHQc=9J+Ce7B7CZZWRN5yN7pRrw@mail.gmail.com>
-References: <20261030023248.78802-1-testwrzwrz@gmail.com> <20261030023248.78802-2-testwrzwrz@gmail.com> <CAL+tcoDUGqk-KfMBqdG4RBURHQc=9J+Ce7B7CZZWRN5yN7pRrw@mail.gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=aG9PnAR7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=aOJY1TVcA8c8VZRDhmaCuv4+pieyekjBeLYUwH6dOsY=;
+	b=aG9PnAR7xhaRmj4/O7rSeUUWkpq8yxlfQAsXCG3Kl4URzKV0BSyMcDVrfY6ARF
+	XONsbqYHoUSTDNBxDKK4tZzBunFLkOEURhU4O5p5iXpw4XOEpnl+aEqQ5nZAQHGH
+	lHWg61/lp6FkDR3h2uuMOfZM30aWcQ/N9BBkLvBHd6/Qk=
+Message-ID: <09113d83-4517-4d8f-92c0-92475dab16ed@163.com>
+Date: Fri, 30 Oct 2026 16:42:44 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,19 +51,141 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/2] bpf: Retire task work before reclaiming hash
+ elements
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Mykyta Yatsenko <yatsenko@meta.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org
+References: <20261028073525.1035605-1-luyun_611@163.com>
+ <20261028073525.1035605-2-luyun_611@163.com>
+ <DMGN8VM2BAOR.28NRNN51MCI8I@gmail.com>
+Content-Language: en-US
+From: luyun <luyun_611@163.com>
+In-Reply-To: <DMGN8VM2BAOR.28NRNN51MCI8I@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAH5yOEWORqZL6ODw--.13249S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXFW3Ww4DGF4fJr1furW3Wrg_yoWrZF4UpF
+	Z5Kry7CrWDZa9Fvry0vw48CryrGwsaq345CF98Jry5Ar98WF92qr10yFy2qFWfCr1kJF4Y
+	yr4j9FZxC3y5uFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U5sqAUUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC7AYL2WrkWIbpMwAA3y
 
-Hi Jason,
+Hi Alexei and Mykyta,
 
-Thanks for the review. This was a timing race, not intentional: your v3
-reply (the Reviewed-by plus the else-branch nit) arrived at 10:30, while
-v4 was sent at 10:32 and had already been prepared without it. I should
-have checked the thread before sending.
+Thanks for the review and suggestions.
 
-I'll send a v5 as a new thread with the unnecessary else removed, exactly
-as you suggested, and your Reviewed-by carried on patch 1. Patch 2 is
-unchanged.
+I've reworked and validated the task_work fixes following Alexei's approach.
+The revised fixes check that a map lookup returns the same value before
+queueing work, and mark the context FREED before detaching it, without
+adding special-field poisoning or allocator hooks.
+
+Now working on the corresponding fixes and validation for bpf_wq and
+bpf_timer. I'll send the complete patch series once validation is complete.
+
+---
 
 Thanks,
-Rongzheng
+
+Yun Lu
+
+在 2026/10/29 01:22, Alexei Starovoitov 写道:
+> On Wed, Oct 28, 2026 at 12:35 AM Yun Lu <luyun_611@163.com> wrote:
+>> Leave ERR_PTR(-ENOENT) in task-work slots before returning non-preallocated
+>> HASH and RHASH elements to the allocator. The existing fetch/acquire error
+>> path rejects the retired slot. Reopen it only when the allocator acquires
+>> the storage again. Also retire a reinitialized RHASH candidate abandoned
+>> after insertion finds an existing element or fails: a reader of a previous
+>> incarnation can still hold its value pointer and install a context there.
+> This is overkill.
+> It adds a 3rd value of twk->ctx and two new functions that hashtab.c
+> calls in 6 places.
+> The kfuncs start to work differently for prealloc and non-prealloc maps.
+>
+> The map knows whether the element is deleted. Look it up.
+> In bpf_task_work_acquire_ctx() the prog owns the ctx in PENDING state.
+> The irq_work is not queued yet.
+>
+>    prog                                   delete
+>    cmpxchg(&twk->ctx, NULL, ctx)          unlink the element
+>    cmpxchg(&ctx->state, .., PENDING)      xchg(&twk->ctx, NULL)
+>    lookup
+>
+> Either the lookup doesn't find the element or the xchg() finds the ctx.
+> It's the same scheme as the usercnt check in __bpf_async_init().
+>
+> hashtab.c doesn't change. A deleted element gets -ENOENT in all map types.
+> The cost is one lookup per bpf_task_work_schedule_*().
+>
+> The diff doesn't have the reorder of FREED and detach in
+> bpf_task_work_cancel_and_free().
+> That's a fix for a different race. It doesn't need a new ctx in a deleted
+> element. Pls send it as a separate patch with its own steps.
+>
+> Something like this (compile tested only):
+>
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 648abe1..acd62ef 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1148,6 +1148,14 @@ static void *map_key_from_value(struct bpf_map *map, void *value, u32 *arr_idx)
+>   	return (void *)value - round_up(map->key_size, 8);
+>   }
+>
+> +/* Is the element that holds this value still in the map? */
+> +static bool bpf_map_value_is_linked(struct bpf_map *map, void *value)
+> +{
+> +	u32 idx;
+> +
+> +	return map->ops->map_lookup_elem(map, map_key_from_value(map, value, &idx)) == value;
+> +}
+> +
+>   enum bpf_async_type {
+>   	BPF_ASYNC_TYPE_TIMER = 0,
+>   	BPF_ASYNC_TYPE_WQ,
+> @@ -4741,6 +4749,19 @@ static struct bpf_task_work_ctx *bpf_task_work_acquire_ctx(struct bpf_task_work
+>   		return ERR_PTR(-EBUSY);
+>   	}
+>
+> +	/*
+> +	 * The prog can still hold a value of an element that was deleted from the map.
+> +	 * bpf_task_work_cancel_and_free() is done with it and nothing stops a new callback
+> +	 * when the element is freed. The ctx is published and PENDING at this point: either
+> +	 * the lookup doesn't find the element or bpf_task_work_cancel_and_free() finds the ctx.
+> +	 * An idle ctx stays in the element until the element is reused or freed.
+> +	 */
+> +	if (!bpf_map_value_is_linked(map, (void *)tw - map->record->task_work_off)) {
+> +		(void)cmpxchg(&ctx->state, BPF_TW_PENDING, BPF_TW_STANDBY);
+> +		bpf_task_work_ctx_put(ctx);
+> +		return ERR_PTR(-ENOENT);
+> +	}
+> +
+>   	/*
+>   	 * If no process or bpffs is holding a reference to the map, no new callbacks should be
+>   	 * scheduled. This does not address any race or correctness issue, but rather is a policy
+>
+> [...]
+>
+>> +	bpf_task_work_free(&rhtab->map, rhtab_elem_value(elem, rhtab->map.key_size));
+>>   	bpf_obj_cancel_fields(&rhtab->map,
+>>   			      rhtab_elem_value(elem, rhtab->map.key_size));
+>>   	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
+> bpf_wq and bpf_timer have the same problem.
+> bpf_wq_init() on a deleted element installs a new cb. cb->value points to
+> the element. htab_mem_dtor() ends in cancel_work(). It doesn't wait for
+> bpf_wq_work(). The callback still runs when the element is freed.
+> Pls fix all three.
+>
+> Also trim the commit log. The 5 steps and the splat are enough.
+>
+> pw-bot: cr
+
