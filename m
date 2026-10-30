@@ -1,60 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=79.135.106.105
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793378869;
-	b=OPNWCKoq4D+5AJkMrnfDekg4m/pyFxjofsVwbvecKQhnabWwUV4ZPFR9fgY3lMFQk7Gc
-	 iGoQJgSx3X/hAUkH6vSHBY+lx5W82+BYiiAob3yq4ApwaMt/q9byH1HkVgkFopWXlyXTj
-	 bJbAmOIUfDCWkTBhkElx3gKkTLhNBj44FWe+yatY0oPOTwxRMEaOn8va0C4M7W3/zMJhS
-	 2USUBBS/alMPjMZqlIAeSMeSvlpAGbjFpkK+kbnLKTSzeB7Ao0v7BHkNZF4PcAXQYyJvp
-	 RdLqZNFTyKZFZW0ySBPQZwCY0GEHwwEmP9ZG0hV695vyU2AwD7nNLqQV6vazla9+5BA==
+	t=1793380721;
+	b=vjkVT7+H/CWJlypkFZu9Ey9j9dqxLDAupktaIJlBKmgU8ljbWZahtvG1jUtFr1dHI5hR
+	 50Xh9CMDEoUC+n2BB1UVtImX8MtDo9gNZsy2Amd9m3G1ODJMYAc/3IUMwDRgjKLmJ6UqJ
+	 hDL1zLnQAm274uBhNebCoLffUvn0i7WNHBet42JbWvb26sisbIU5ikmAqUJNroyNhZe6K
+	 JHyZxjI40Aq9AQ39w9dRcfqGTFlx3EA2XWlx6B8ILW6iO3mWxWfp12DJ7qkUvz4JwhDd0
+	 Y4dJ4ypExXQp2kftxqWzbeP0jMtlUY7WRCGfHH/9Oew4vjnfqBOcojyc2XttgqClNvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793378869;
-	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
-	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=PQ4G7FWKXf3yOQR/cwzdiaA0meyXV45WbDf7zl6Ty7Y=;
-	b=C7Ubog2tcfVXlGtEOlBH/0Ts3/nN0NzGUlHGY/zurh4m5CsbJaNhxNMz5mwz+WAB+OX6
-	 SEqmxGrNY3CsMVZBYraPcRZWkjdCCoAwCV1vCRFklBgS3XiNhkijV6OdpttfGMvy1iUzN
-	 r7diR7IJ6wv0YHGr2KoKKOi8y0uZRoOLXKIeHfdA/DMsHOM1KIShOOvEY73rAVQc0Z2Fq
-	 KG7U4HulRIkslHlMqR+zqz6Dp2xi2XJi/W9SUCb6zfuU8Te6/b8rXL8U/0WcoJSBdrqsU
-	 fetWVV6BT4VQbEjvP/XaxRpCV5PLMP//D3klZxgEs51bTABz63xmlivZzaCr2/umcAw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793380721;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:In-Reply-To:References:Message-ID:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=P1uqo7C/JrGtMIVNU/yYgKX0OwbZ0XFibLQffeq3In8=;
+	b=oWcWrlzJjZajTNDyoF+LVtMart6sHHvXDnpyuY5TGBXQN8DLaa2EqrQRxYt8rmhhv4si
+	 zsDsbr5Gc2VUMTydWM3/VRiSVC1GvPTyvUlPAtXznnqH/HqFADsWIFK0T4qlKlYTTojpx
+	 akSh8kKGj+rlrPYzAel+rlPaqPm7wfpGUDEuzy4i/MX9YzIi6/0dtQJ+eVAPg1HLjHomw
+	 94HqMxgFXbxYojVH4vfgT2OzIPtfcpJhCWjKsUdRTSFyIr8I6wew6/T/c1n4eQyvgkF2D
+	 OdfQW74Pe05gBmnnV3zStJVRDW5H3phXX+S+S1HZVpAaRpB6ycrmkrh+jbGfEMX2pvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=1g4.org;
-	spf=pass smtp.mailfrom=1g4.org;
-	dkim=pass header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b="FVn/2D+f";
-	arc=none smtp.remote-ip=79.135.106.105
-Received: from mail-106105.protonmail.ch (mail-106105.protonmail.ch [79.135.106.105])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ij27kj3r;
+	arc=none smtp.remote-ip=209.85.208.42
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1A6606A31D
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 16:47:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E1A6606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1g4.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC5D606A31F
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 17:18:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1EC5D606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=FVn/2D+f
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1g4.org;
-	s=protonmail; t=1793378865; x=1793638065;
-	bh=PQ4G7FWKXf3yOQR/cwzdiaA0meyXV45WbDf7zl6Ty7Y=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=FVn/2D+flZn6H8vP2GLlWJUdJLMxbEZltl2dwzm79NEaRK/Z8naG14DvxyU87xkwk
-	 wJO5ki6kmYY5rUMMh3rZcD9lXOQ6Eywmf3ICN9PhejJ6h0yjmtQZ0am8E6+jtSZF+N
-	 ALA6WuLnApuJghH8566r/GXuGLyN66TtU75wZKR+/9AHzEda5jNO85vpBRxQ0OEjHa
-	 c8dYnXKlVocWkNRmD2v1i386uaAVdDfFukRaqgMxIE9hz0Hccsq/FL66gTMUZhZDQL
-	 hxiuA1cIhwUm/R7BUPmewtmLU6RtBFQTwxLKFBVUhKxWZZpda5w1hbOn54MWJi9bUx
-	 knwa1R4xP7qpQ==
-Date: Fri, 30 Oct 2026 16:47:36 +0000
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-From: Paul Moses <p@1g4.org>
-Cc: netdev-bot+sashiko@kernel.org, intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, vedang.patel@intel.com, jithu.joseph@intel.com, andre.guedes@intel.com, aleksandr.loktionov@intel.com, avigailx.dahan@intel.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH net v3 1/2] igc: only strip RX timestamp header from first buffer
-Message-ID: <K-58hRuSyY_aSjvzkpmwBMeDzvfjQyLMRjMsDlEL1M60FHZJTS1WXTaTrh79pf1igf7bt5MCaORbxYVJJliJ0FhGCzjtiEVvagd50w65Ssg=@1g4.org>
-In-Reply-To: <auSDQtz8l8hzzr86@boxer>
-References: <20261028083344.3047350-2-p@1g4.org> <179331704005.3134.12545545223659652020@kernel.org> <auSDQtz8l8hzzr86@boxer>
-Feedback-ID: 8253658:user:proton
-X-Pm-Message-ID: 4c2a5fe1fa4764ac796a6e023df421e8b58cd007
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ij27kj3r
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6b1a86c0316so1200225a12.0
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 10:18:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793380719; x=1793985519; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:content-type:message-id
+         :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=P1uqo7C/JrGtMIVNU/yYgKX0OwbZ0XFibLQffeq3In8=;
+        b=Ij27kj3rh7jDkNne4YmRr09xPVJSWqvJL4NGnEalvehb71QAzoX8wEXHxvuo9/2xm7
+         aqoT7d+vLeunRxOxYniOCOGso1HtJXGiMMujjJ+cmW6jUHQbtdKVMdlqCLiAwCaRxAls
+         QZDGC9c/wj6FnYWGdmPh2iHTsb4cgWqiTZ8PYHenUiO4O/CL0WQCeuZD+STR5xFmAUcC
+         9+armJyqi7yQL1EUxe0onoGIYAoMCXp+A+onBxpxnBaR4zM+OAoeQ0tw1wsNeyts7HQT
+         LLFFfg0uoxFW7/DM3Kr9BqgsP1mTCu8gSztVxps+LmpVJwCTobgBHWPHmaEfxSB3P4Jx
+         ZEdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793380719; x=1793985519;
+        h=mime-version:content-transfer-encoding:content-type:message-id
+         :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=P1uqo7C/JrGtMIVNU/yYgKX0OwbZ0XFibLQffeq3In8=;
+        b=QiETUE8hB3NwG0bePcA4c1l8++w0xVSzB/+6xAcYHDRJrCZrqIrMiJCm8IE8yvOofg
+         yUDahvJgRHrWEGuv6CM2EI5+Pk1BqSvTPboYVx37lBOx2rRwx6dUmOmMc1ZlodACbIu5
+         HaCNXAZFX4YNSHiwgHaebXgX6mOTqGwg6lQP71ocIIRqd+l/FZ0LgaxSvHShY/fJkS+w
+         jgo/dFnASUCDIv6CZHR/sl7BF3fZC95adb+UUDgFB/thd+jw6flXSq1NoAV4WqdoBzpg
+         cjjMVs2OAfipfp7RLMkZqGDOYu8XorPE7hz34zCkqVmJ5nc7cZmf7cByiDNpO26+cL15
+         fgzQ==
+X-Gm-Message-State: AFq9FYI+Vms1N0fvFjIB7WQfDQe1NkvDfeJ9fq12RetD5IjUmSY++ctW
+	v5tb5ie3QXdERABXQiaFp56vX4Fnttca7oGJy6uKkwnJfBTl8WpXKWFs
+X-Gm-Gg: AYBFou1FXN4wpFLAsEw7qni55b6G/j9c9K8rCZOz49nXkwy7QuRygZ8WBTI/YV2LbXP
+	JYVV5ay9yLuPua76Z+FbECvIWOdxVTnUSIc8B/WPvBUOlTGWxbYBQBA8ilgfGOI/RdC9eEKfKUy
+	OKwtFleaoaUPd8Ex9k4KE9ddRHqEPb99GjN2a4++sFgKthPZVEQbitQj1xCLix4G1BugVY8VFKF
+	3CmhH1ZhNdfZKJapLPGWIucR7IzOHYY0c0F1QGYh5Q5hdE7WK+Bldhwmz/gCxGxBCBjq91GXBep
+	w/+jXFUYO0SC44orqRlL430Pe4Ko56XJEAFiBbwEy2fxRcHS5V8jUi38bJfX4OxxVppuUhGAtyE
+	jlF19U6f3KBd1Wna/WGG+2XUtePYgObTk2eAfz4RLF5XNc7R+xMaGsUW+vGtxky0K+0Pgmwd7Ra
+	vgA0AfZoEtat1DJ0Ctm1kG6dc+3moURu2J69iSkqUTlaxB/bWvQx1Meypr0xZwXnJbjTK/1pKIl
+	IkPPR5HMyKM0V4ivU4RN3B5wV/D3zmHPVVWUo9a1vqkyJlgNETwv24JvvlwvuhcEU6kwTMK0/uQ
+	jtR8ihxDtc2bTMBySjLgK3o5Juu5Fbgq388r8G/2gHsUKTmmA4SHaDi5TDHjLPh1Qg==
+X-Received: by 2002:a05:6402:1654:b0:6b4:7c1:ce3c with SMTP id 4fb4d7f45d1cf-6b4d44803c7mr1595508a12.8.1793380719230;
+        Fri, 30 Oct 2026 10:18:39 -0700 (PDT)
+Received: from localhost ([2603:5004:a0:200::3516])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b4eca214fdsm177695a12.36.2026.10.30.10.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 10:18:38 -0700 (PDT)
+Date: Fri, 30 Oct 2026 18:18:36 +0100
+From: Jerome Tollet <jerome.tollet@gmail.com>
+To: Marcin Knap <marcin.knap@vecima.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject:
+ Re: [PATCH bpf v2] xsk: Do not free ZC Rx buffer when the Rx ring is full
+In-Reply-To: <20261030-xsk-zc-rx-double-free-v2-1-cf01d4a9f3f7@vecima.com>
+References: <20261030-xsk-zc-rx-double-free-v2-1-cf01d4a9f3f7@vecima.com>
+Message-ID: <179338069669.22800.12175576942287801197@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,167 +99,30 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
+Hi Marcin,
 
+I tested this patch on a ConnectX-5 (firmware 16.26.1040) with
+AF_XDP zero-copy. Both test kernels include my earlier mlx5e fixes,
+e01620844c5c and 63811edf5125. The only source difference between
+them is this v2 patch.
 
+The receiver deliberately stopped consuming the RX ring for two
+seconds while continuing to supply FQ buffers. Each run recorded
+roughly 1.8–2.6 million RX-ring-full events.
 
+With striding RQ enabled, the kernel without this patch reported
+225 RX frame ownership errors immediately after consumption resumed.
+I reproduced this with need_wakeup both enabled and disabled. With
+this patch, both runs completed 15 seconds and received over
+15 million packets without an ownership error.
 
-On Friday, October 30th, 2026 at 6:45 AM, Maciej Fijalkowski <maciej.fijalk=
-owski@intel.com> wrote:
+With cyclic RQ, neither kernel reported an ownership error under
+the same test. This is consistent with my earlier cyclic reproducer,
+which was fixed by the mlx5e change alone.
 
-> On Thu, Oct 29, 2026 at 11:37:20PM +0000, netdev-bot+sashiko@kernel.org w=
-rote:
-> > Thank you for your contribution! Sashiko AI review found 1 potential
-> > issue(s) to consider.
-> >
-> > Critical: 0 =C2=B7 High: 1 =C2=B7 Medium: 0 =C2=B7 Low: 0
-> >
-> > If you believe none of the issues are legitimate, please reply to each
-> > issue of Medium severity or higher and explain why the AI is wrong.
-> > If any of them are legitimate and you plan to respin, please let patchw=
-ork
-> > know by including "pw-bot: cr" as a separate line at the end of your re=
-ply
-> > (one such reply per series is enough).
-> >
-> > - [High] At this commit by itself, the new first-buffer test `!skb &&
-> >   igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP)` in igc_clean_rx_irq(=
-)=E2=80=A6
-> >
-> > --
-> >
-> > igc: only strip RX timestamp header from first buffer
-> >
-> > igc_clean_rx_irq() used to subtract IGC_TS_HDR_LEN from every descripto=
-r
-> > with TSIP set, which truncated multi-buffer packets. With this patch th=
-e
-> > timestamp header is only stripped when skb is NULL, which the commit tr=
-eats
-> > as marking the first buffer of a new packet.
-> >
-> > Link: https://lore.kernel.org/all/20260625-igb-rx-ts-fix-v3-1-99b3efa08=
-dca@aweta.nl/
-> >
-> > > diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/=
-ethernet/intel/igc/igc_main.c
-> > > index 1fb5f3cbe93c5..41b293dc10c3a 100644
-> > > --- a/drivers/net/ethernet/intel/igc/igc_main.c
-> > > +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> > > @@ -2639,7 +2639,8 @@ static int igc_clean_rx_irq(struct igc_q_vector=
- *q_vector, const int budget)
-> > >
-> > >  =09=09pktbuf =3D page_address(rx_buffer->page) + rx_buffer->page_off=
-set;
-> > >
-> > > -=09=09if (igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP)) {
-> > > +=09=09if (!skb &&
-> > > +=09=09    igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP)) {
-> > >  =09=09=09ctx.rx_ts =3D pktbuf;
-> > >  =09=09=09pkt_offset =3D IGC_TS_HDR_LEN;
-> > >  =09=09=09size -=3D IGC_TS_HDR_LEN;
-> >
-> > [Severity: High]
-> >
-> > Is skb =3D=3D NULL a reliable first-buffer marker when an XDP program i=
-s
-> > attached? The commit message says:
-> >
-> >     Only consume the timestamp header when skb is NULL, which identifie=
-s the
-> >     first buffer of a new packet.
-> >
-> > Suppose igc_xdp_run_prog() returns IGC_XDP_CONSUMED, IGC_XDP_TX or
-> > IGC_XDP_REDIRECT for the first, non-EOP buffer of a multi-descriptor fr=
-ame.
-> > Then no skb is built, and igc_clean_rx_irq() moves on to the continuati=
-on
-> > descriptor with skb still NULL:
-> >
-> > =09=09/* fetch next buffer in frame if non-eop */
-> > =09=09if (igc_is_non_eop(rx_ring, rx_desc))
-> > =09=09=09continue;
-> >
-> > The continuation descriptor still has TSIP set, so this check strips
-> > IGC_TS_HDR_LEN a second time. If that descriptor holds fewer than 16 by=
-tes,
-> > can the unsigned size wrap here?
-> >
-> > The continuation buffer then goes through the new-frame path:
-> >
-> > =09=09if (!skb) {
-> > =09=09=09xdp_init_buff(&ctx.xdp, truesize, &rx_ring->xdp_rxq);
-> > =09=09=09xdp_prepare_buff(&ctx.xdp, pktbuf - igc_rx_offset(rx_ring),
-> > =09=09=09=09=09 igc_rx_offset(rx_ring) + pkt_offset,
-> > =09=09=09=09=09 size, true);
-> >
-> > In that case the XDP program would see a data_end about 4 GiB past data=
-.
-> > On XDP_PASS, the same size would reach igc_build_skb() or
-> > igc_construct_skb(), and the __skb_put() there does not check it.
-> >
-> > At this commit, XDP with multi-descriptor frames looks possible on kern=
-els
-> > with PAGE_SIZE >=3D 8192. igc_set_rx_mode() only clamps RLPML under the
-> > small-page #if:
-> >
-> > #if (PAGE_SIZE < 8192)
-> > =09if (adapter->max_frame_size <=3D IGC_MAX_FRAME_BUILD_SKB)
-> > =09=09rlpml =3D IGC_MAX_FRAME_BUILD_SKB;
-> > #endif
-> > =09wr32(IGC_RLPML, rlpml);
-> >
-> > On large-page kernels, RLPML therefore stays at MAX_JUMBO_FRAME_SIZE wh=
-ile
-> > igc_rx_bufsz() returns IGC_RXBUFFER_2048. igc_xdp_set_prog() only check=
-s
-> > dev->mtu > ETH_DATA_LEN, not the hardware receive length limit.
-> >
-> > This needs RX hardware timestamping enabled, an XDP program that return=
-s a
-> > non-PASS verdict for a first buffer, and a peer that sends frames large=
-r
-> > than about 2032 bytes.
-> >
-> > The next patch in this series, "igc: fix AF_XDP receive buffer size for=
- 2K
-> > UMEM chunks", adds igc_set_rlpml(). It caps RLPML at 1526 bytes wheneve=
-r
-> > XDP is enabled, whatever PAGE_SIZE is. It is called from igc_setup_rctl=
-()
-> > and igc_xdp_set_prog(). With that change, XDP frames always fit in a si=
-ngle
-> > descriptor, and skb =3D=3D NULL becomes a correct first-buffer marker.
->=20
-> Wow - finally.
->=20
-> >
-> > This patch is tagged Cc: stable and could be backported on its own. Sho=
-uld
-> > it depend on that follow-up change, or should the two patches be swappe=
-d in
-> > the series?
->=20
-> How would we make sure both commits from this set get actually backported
-> together?
->=20
-> >
-> > --
-> > Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/pat=
-chset/20261028083344.3047350-1-p%401g4.org
->=20
+So this test shows a remaining striding-RQ failure despite both mlx5e
+fixes, and confirms that this patch resolves it on my CX5.
 
-I did forget to tag yours for stable, so maybe the will satisfy it?
-
-I think ultimately, it sees all related bugs as one big problem in
-an effort to catch adjacent. My understanding has been that unless
-there's true interdependence of patches, ie. kernel will be left broken
-unless taken together, a series in itself adequately satisfies this require=
-ment.
-
-Should I do a v4 to add the tag? Or can this be rectified through=20
-intel's process?
-
-Paul
+Thanks,
+Jerome
