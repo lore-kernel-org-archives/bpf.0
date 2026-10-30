@@ -1,52 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.8
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793391154;
-	b=jPQ3Zko/NBIJioeQBWjfGGbMRbvKE+K2d8xdZc2QNaHpcfpxvxD9i16Wq/hB7D1u4vTQ
-	 s/LEmzIkinYxTBOw54+ONkic+KyDgtWlrwCHnA9VyyLr0b7pqZyj6VoiL9t0OUD+SXu3V
-	 GoZkM/epbDoXOeLrM/v1u82ON4mScppFLpMJss0+pu5Xoi/V89XdUzqdm8161godAgPHK
-	 Tx/Wy3EYcHTMC6e4+B5b0CUgv2Fqd+EOAyV70zCMf0FGA47YqzVEsXJ/1rWzf6e1bqcFc
-	 gvRK/zsSB6z95R5KfA6eS4DprUSqVKbZxSpUJkLo+P/TMMaIutiqwm2+1pSj2FWxcdA==
+	t=1793391179;
+	b=nLHU9dIRq1LEYLDLborC7j7vy4Ne7//EDV0tFIfEHj/f4uHs4YTzMequ87qJZMJEVSPI
+	 A0n3IgPhlF8yyOLcLrrNjYruJexya+M8GUduAw8TU/zRR2I9EWcd1oJFJiqxu7vzlj2za
+	 ekAbhwsWIcgX4n+5nhDCPVPXAVUegFxygsSsAyXe/nDB8RqDs1wQFQjEzLGtlcpFvvaSe
+	 kmohx17XV4rfmMO+wkSUVsoZYbZ7/AA1vipEvJakiIWyT7Xvmtd+tnu9WA4kJhfRRZtpo
+	 TGuM8uOsEzyt/iABpZq/5ZKUmBCuvK5XVapqyG7TTq3kAPtDzcJ4vl7KuwLExK7KP2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793391154;
-	h=DMARC-Filter:Received:DKIM-Signature:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Last-TLS-Session-Version;
-	bh=f/EQ4RTL5ZaofeX+YVVBXEXZZ41Q19YQIBhtCHASxOM=;
-	b=PrchOWu6P8KJNtS7Fc5uKJoUkBWcm3jJfBrYeRthNHZASPWC3LBwR9HuNlyqDEPM/IIN
-	 mt53cFp7BKTlYCjeV6gy5kB41ewenk2JQjkjqI5ce+FeJG78joAV8gmidkpaF/R/S6rqW
-	 x4IZCU4OHff078ghv48dDS3uqfPNy3lg95VFIHDnMcsksepePjeS4/FCJCrU4FrCiZ2Xq
-	 XPuxOEV7qBOO8G+0ytZNgkolk8JLzRGVrdt6zqAS56btTwiijBI0L067gKju7+fJPYQev
-	 iiioby3G32Aid0Lx/FlJ1N/3aAyYS/Y4f/Z2p9BA8R+MKbXl1cCR9NbtxZlCJBpHbkA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793391179;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=+uEj7dkzggUb6lkggRktE0fOB+YC39Gh7yxfAZ3lKo4=;
+	b=fOnP36itTR/Rz3PdTe72ke3uPv+bxfgyW1WqtxpTR8rSh7/KBaGHEkrKa1dYMniHsDj+
+	 mrHF7Pjwj+U1wEJgaU6409aszh80Z1UIRKad/PzZAzHuA+lBH40rqWfb+UVXmQGUwtfcr
+	 Jop4M8wkG4Yx8vMsVKyXDqX/Qnc9oU0iCzuKgcCfRkzhx77e5Xaallj3LxHTnMVQ9gn3M
+	 6cZhUdpDnBFNvXvAIIqvWdhOSgxKJ9DstlgNva1ZLr/nb8tF5s/+Dl3QBvIUJ3AaMhgw4
+	 0gBtusR/HkH45j4GN9EEwLc/UCcGC1YdeYtHgX13oQYb05IfM+x3y44+WQ+Df6DvCdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=tipi-net.de;
-	spf=pass smtp.mailfrom=tipi-net.de;
-	dkim=pass header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=Z8OPLDjq;
-	arc=none smtp.remote-ip=194.13.80.246
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SbdZiQoN;
+	arc=none smtp.remote-ip=74.125.229.8
+Received: from mail-dy2-f8.google.com (mail-dy2-f8.google.com [74.125.229.8])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C44606A326;
-	Fri, 30 Oct 2026 20:12:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 15C44606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46442606A32C
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 20:12:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46442606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=Z8OPLDjq
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CDAE9A1579;
-	Fri, 30 Oct 2026 21:12:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1793391150; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=f/EQ4RTL5ZaofeX+YVVBXEXZZ41Q19YQIBhtCHASxOM=;
-	b=Z8OPLDjqD4THolW8m69iOqwWZ10KH3uaPNX5f4GJ2JzC3e9G2tqC0kYky2SW8OQDQZQreS
-	Uc2NfypAXgRpmsnT2cec7Z1g+wZ1xSWRIjdd34LUeEusNAwIKbdV4/Jf/cpdE2nTycicrA
-	U/4CovaMqVddZ+8QRVnB0xUtK5xkv02y49QfD60Gcb8e0Mjbmqrh/FcKkiE59+yBHKw4wE
-	a2lH81G/RddNm9YlCtbKRj1PjbR1sOmZMFa7DMWKr/yMR7x1qrZyGn6L9gwTzCwMXDlZdx
-	e/fKMwL71qDezNCBoxcyF3zbGEr6Kpe2NFN+Zx/qt4ZURlYCgg0k6vjcordkoA==
-From: Nicolai Buchwitz <nb@tipi-net.de>
-Date: Fri, 30 Oct 2026 21:12:03 +0100
-Subject: [PATCH net] octeontx2-pf: fix XDP frames freed as skbs on
- interface down
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SbdZiQoN
+Received: by mail-dy2-f8.google.com with SMTP id 5a478bee46e88-36a24f47293so634815eec.0
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 13:12:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793391178; x=1793995978; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+uEj7dkzggUb6lkggRktE0fOB+YC39Gh7yxfAZ3lKo4=;
+        b=SbdZiQoNd9v8nZxQuOMNPRPAe3YN2K/2lS+7X9Bn5BxLITOLrcB/hcYjzkI20WWS4y
+         fQtDhN+STPp2Dp0/8jJwHW/ofizMr/sz7JyYnt0QKsCias2AT1scQyiu3EUysCy2pkMm
+         5+8smIXAqprspCMZSCaCNLCvO9EIOEqYqVaFzDA4ea+YmKxbDNbpYljFke/oD5wDjtz7
+         KVbwuTxXV9dDsWLdse7wjZIq7JVItQopjnOPpBeL6CnpdEAh51fr4V/62fxwkrOom3al
+         rq9la/RooBlB1Fx85WhoLa0CIdH4Nn6lEELyrTkCoIaEivYuHKS1p/GFeD36Mx+YqvSp
+         eTWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793391178; x=1793995978;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+uEj7dkzggUb6lkggRktE0fOB+YC39Gh7yxfAZ3lKo4=;
+        b=WMdFRJiP4sieX6joSa22c4cYJX1eP3CiHBZmcCw6//pq4ledYaiHsz7Qqz7PVqxONi
+         lqlVzT0ly5vOjblusNZEu4Tjp6NdxS5ls/6UgvwPE08OmA4ACrumDXf7SEjU6gUP7Dsu
+         zxFccUtcWQlvK4Rm1KCFTOLPsuckkb7aGFnimIuAVwAkNZilNsDvtgFJcKuSjS6lM24a
+         P1v5PKTPf1Z8lXCQMi4OEvkzcb5DPSh3mK+wgcbD/5bxTlEgiVsATe8x94BnOHTPOgjk
+         1GcNqxx6uGJVeDOT+s4w1ySPHaCk7IxbRPzSGuWeFoMGVcUJtiN7IKvboB4ts6UYFDDz
+         Ts5w==
+X-Forwarded-Encrypted: i=1; AKwUvBz3xMrs82fFPmH+ZC8ORY7t8xLfxjvc53KnQK93fdgDawtccUK+yoHWGRk/jiGHlHCfjqo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLw5aBLO1naumrmOTDkyRJGAp1c0EUVKS0bKKUgpi/v6p4+B11Z
+	fLvYNfXnBNm8PPNHec6OwuJ9gTK2UTs3M1mYRVpu7HZ0SzhyevkLk+dC
+X-Gm-Gg: AYBFou18X6s5ssEOk4Wv8KfTtlfN4n/ujiQl23FURqCDy8cU7znVkI+AiaEi84DC2AO
+	bPJ/QRpO3M9W761OI3WRpUGWsW3wEtITLNrW9wnfJZYhKSJ9RpvHGFtjtxg+s4Ms7VzeUAF8bvW
+	QTXW1oar2jdxeqyJ4dWpAXHpxGHBo/z3eMm7BzR0PdUF42GHif+oqserg+jKOBVVgbrw9hnUgY6
+	4MBlUIpsB9Yqov3li/y+OqfLyH7m/aWFcJT0Hm6XntNFUcmsmFkj7UlwJLbhRI6LVy929iKtxJ6
+	CD5fBNtB8D4zi012FRGazYc3815UbbIqQzHLJ8ByyibmnldZTZ75mNhA+8sYG5QF0FPKjk9+rJJ
+	TBi4sYVuzPn8R/Nb7N+FrXPv0KrRNZkNsa8OUVqbybKU5stL2G1Mt3StqF+9UYLUG6bEExBlWpv
+	CEZUfUWWN4b7AWI+UxF6h7sHyEhya2kqhqeDJwAFrHT1spEVW7qd1jQpQiiH/IE5xwf9P2GN2mz
+	YkTJMkGR/fJJc7eTbLqfPYkzCrs5cwjh5TX5tLZUNzMhhnDzIaLEiTTWi/PA6uAkgasmcsct0CT
+	UAaxJwcac9hblCwQ8/qDFdc=
+X-Received: by 2002:a05:7300:e9c5:10b0:367:3d68:8480 with SMTP id 5a478bee46e88-36a4206d82emr5086488eec.0.1793391178247;
+        Fri, 30 Oct 2026 13:12:58 -0700 (PDT)
+Received: from localhost ([2a03:2880:9ff:6a::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a429467cdsm9450626eec.19.2026.10.30.13.12.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 13:12:57 -0700 (PDT)
+Date: Fri, 30 Oct 2026 13:12:53 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Rongzheng Wang <testwrzwrz@gmail.com>
+Cc: netdev@vger.kernel.org, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Jason Xing <kerneljasonxing@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, stable@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v4 2/2] selftests/bpf: cover AF_XDP multi-buffer TX
+ software checksum
+Message-ID: <auT51NbSPvKJwgiD@devvm16445.scu0.facebook.com>
+References: <20261030023248.78802-1-testwrzwrz@gmail.com>
+ <20261030023248.78802-3-testwrzwrz@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -56,82 +101,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261030-nb-otx2-xdp-cqe-cleanup-net-v1-1-710635c0f504@tipi-net.de>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM2wrCMBCE4Vcpe+1CEg8UX0W8aJNRV2Qbk7QES
- t/dqJf/MHwrZSRBpnO3UsIiWSZtYXcd+cegd7CE1uSMO1njetaRp1Id1xDZv8H+hUHnyIrCx96
- acDCwYW+oCTHhJvWnX6gd6Pof8zw+4cvXpW37AKG1UmyEAAAA
-X-Change-ID: 20261028-nb-otx2-xdp-cqe-cleanup-net-5810d40e1d30
-To: Sunil Goutham <sgoutham@marvell.com>, 
- Geetha sowjanya <gakula@marvell.com>, 
- Ratheesh Kannoth <rkannoth@marvell.com>, 
- Subbaraya Sundeep <sbhatta@marvell.com>, 
- Bharat Bhushan <bbhushan2@marvell.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Suman Ghosh <sumang@marvell.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, Nicolai Buchwitz <nb@tipi-net.de>
-X-Mailer: b4 0.16.0
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261030023248.78802-3-testwrzwrz@gmail.com>
 
-On interface down, the TX completion cleanup also runs on the XDP
-queues, but treats the pending xdp_frames as skbs. Freeing them with
-dev_kfree_skb_any() corrupts page pool memory.
+On 10/30, Rongzheng Wang wrote:
+> Extend test_xdp_metadata to send the same UDP packet using every descriptor
+> count from 1 through MAX_TX_DESCS (MAX_SKB_FRAGS + 1), and to run the
+> existing metadata and checksum verification for each case.
+> 
+> Build the packet once and write it into the TX descriptors in a loop
+> instead of using a flat two-descriptor layout. Keep the first descriptor
+> large enough to cover the checksum offset; the remaining payload is split
+> across the continuation descriptors, with the last descriptor taking the
+> remaining length.
+> 
+> Reuse the existing AF_XDP setup, packet generation, completion, and receive
+> helpers in xdp_metadata.c instead of adding a separate test harness.
+> 
+> Signed-off-by: Rongzheng Wang <testwrzwrz@gmail.com>
+> ---
+>  .../selftests/bpf/prog_tests/xdp_metadata.c   | 147 +++++++++++-------
+>  1 file changed, 92 insertions(+), 55 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+> index 5c31054ad4a4..17da0a145666 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+> @@ -18,12 +18,15 @@
+>  #define TX_NAME "veTX"
+>  #define RX_NAME "veRX"
+>  
+> -#define UDP_PAYLOAD_BYTES 4
+> +#define UDP_PAYLOAD_BYTES 32
+> +
 
-This happens when XDP_TX or redirected packets are still in flight on
-ifdown, or when the XDP program is replaced.
+[..]
 
-Fixes: 94c80f748873 ("octeontx2-pf: use xdp_return_frame() to free xdp buffers")
-Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
----
-Pre-existing bug, flagged by the clashiko review of my ipsec transmit
-fixes for this driver [1], which seems reasonable (and fixable) to me.
+> +#define MAX_SKB_FRAGS 17 /* minimum CONFIG_MAX_SKB_FRAGS */
 
-The other pre-existing findings there (e.g. the SA lifetime in
-cn10k_ipsec_del_state()) may be worth fixing too, but I'll leave those
-to the maintainers.
-
-Compile-tested only, I have no octeontx2 hardware.
-
-[1] https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261027-nb-otx2-ipsec-tx-fixes-net-v1-0-2114c4f10c36%40tipi-net.de
----
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-index 90af9b9044aa0..e3b07e5335fb8 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-@@ -1332,6 +1332,7 @@ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
- 	struct nix_cqe_tx_s *cqe;
- 	struct netdev_queue *txq;
- 	int processed_cqe = 0;
-+	int xsk_frames = 0;
- 	struct sg_list *sg;
- 	int qidx;
- 
-@@ -1348,6 +1349,10 @@ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
- 
- 		if (!cqe)
- 			continue;
-+		if (cq->cq_type == CQ_XDP) {
-+			otx2_xdp_snd_pkt_handler(pfvf, sq, cqe, &xsk_frames);
-+			continue;
-+		}
- 		sg = &sq->sg[cqe->comp.sqe_id];
- 		skb = (struct sk_buff *)sg->skb;
- 		if (skb) {
-
----
-base-commit: d8a4f4c59da52b7c31ae337243b8473a19a3f819
-change-id: 20261028-nb-otx2-xdp-cqe-cleanup-net-5810d40e1d30
-
-Best regards,
---  
-Nicolai Buchwitz <nb@tipi-net.de>
-
+Any reason you're not reading the real value from
+/proc/sys/net/core/max_skb_frags ? 
