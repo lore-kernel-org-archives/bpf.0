@@ -1,56 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793336039;
-	b=a3LgTLbZb3GeIRjBEAeNMUqnCy26VF/DFvwmHlb+PC/lmDAe/8oQqbxpwhHwFBhZ/Okn
-	 NSB/xSX1HZrkZbTvmB+xM5YKKFe1kCzh0KQoydcnyrGRHYJz4Adpc/3AAO5Ph/zR02O1r
-	 fzbzkZB+WWWhdc1puFbdr+arfMxfGJPZABRTV9v7yobq+5uTumX4bYs91gyc5qVPfgdFn
-	 k1Ac/ZcEYoYZq42EJ3LkIt3SjS3bMrN0L0EbQpe4uXUJqp3u5rV3Hguubp/dMVOmz6eB5
-	 je9S0A7oEpWUlUMTCPQZm65drpn95PS0fh2KXqOuBlmv7Tu6DPaMVwxZPB/izechBng==
+	t=1793336052;
+	b=cGzouxRy/R9ljDVlPMwSt/vLOdw02qGlDAAfcjvCJ+XbVo3aU17EO3OcNukJJe3Hj8Pp
+	 0ga7emZqG7JYu8Zze4W++LLw8UlFdIV4aedFOxkZOdPM2Afws5YDmcsBEP2I/4YvY78GO
+	 NJOB75qMo6RLmPPAnfxlj18jZM82u11DuMo9Q0IV1BJw+WpUqkNrUjTQirrwyCUePTiET
+	 MCbAAMK1aQ+YxepuQnWiuSEI0Y6FqJLFpZAme3ZRuYFtzcos/zNOWi1PB7m7nG3XAhCZw
+	 7qny91CZywPN4S9lurM5Px69KTpjWtrJAScZHF/acRsIhgi3Fv3bqJQXgMKJDQIY2YQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793336039;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793336052;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=VIUfn/NrF8EDgjqOAEyF2z5otVH2OlaeAPEo4Ck2bfc=;
-	b=U4VOPdv18GbCJyZ63pNCckazxVgGMLSwLkm7CNxRxRVErgh6gCj1SO7wvgDOtbIc8pue
-	 SYm9qgtWiEyTMCI6M3KHtbklftcM08BtZXM2R7YLSUcIrFLLtAdoj0OMfA4+Bqyj+3WDg
-	 tDGL1QmlDOBSv/SrYSIfgMSAWYhYMvUchLEGATMvMKFAyr6HPvpYQUNwOdu7a5S5t1vOP
-	 cxCueIFTOANQU9iu/ud6/sDnX6lL1rFr3WnJdcEPhPmPXQlRBw6CSN7su23OzfATjUWIl
-	 epAnMunnb97TWcL7FhcD4NOR5S8Ev7x2JZEAO+9RggBYyehQcv6jvTVNU0cEy36j3vQ==
+	bh=TbGHKFPPLo2wQPCmojJuICMylpn/j7mUUAS4fY43dqA=;
+	b=uZvdv0OluqxBioj6Y521GBsfH6L7NPwJzbMQYEWisSbeKFyAUspzpTIRrtxruLbKqqXI
+	 X4eWEMVW7w/zneA1pidzAHSLrYPe79sjfmPHeJEvnmZZx/HDDWiK+6zRRT7Pj8ddl+6Hv
+	 I1G60szywKaGhjXDxSQQD8V4QFV380/lQy+XfnfoPDKAwaa/d2NyOZ6wwOiqDyUsz0wkm
+	 U2cDIvv2gZsPTT/q7p3/wdwPavkQ6nlFEzJxw2x/YxR5X2GYHrDlCnCG59VnWnTwJ/Z4P
+	 +yvMytN0oyoS9raIZf0QLX/vkhR1L2sG8L0Ar3GR3+c8yyD8b1zlRcc4tVjzS3Ym0Mg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=duw1onrG;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B3lr+5PY;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3282606A31F;
-	Fri, 30 Oct 2026 04:53:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3C0606A31E
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:54:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=duw1onrG
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 523011F00A1C;
-	Fri, 30 Oct 2026 04:53:59 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B3lr+5PY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A294E1F00A02;
+	Fri, 30 Oct 2026 04:54:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793336039;
-	bh=VIUfn/NrF8EDgjqOAEyF2z5otVH2OlaeAPEo4Ck2bfc=;
+	s=k20260515; t=1793336051;
+	bh=TbGHKFPPLo2wQPCmojJuICMylpn/j7mUUAS4fY43dqA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=duw1onrGDMp9RRzaoisMTr9vPasYm35dKzRBLGV07UDD2jQQ1QRtK9Zu1M/mvkzmh
-	 9m1ZkYPa/Uv8dJD35+RoFnOgdP3k8g8dj+J7J7E0RPy8clUQpmuZen56XSD4WimER9
-	 qaN+zbBunhiWe+9q1WhGMnfyRA3XmWa5xH2XD6+qqJHTy61+ykPUy4Y8GTckMam3RG
-	 RTwmpKGUjb/AOnz6Yy3UopQzlRtvSnsKyKvR/OXp7QzKRxze8Q7oL7yTjbVJHQUKJu
-	 3aYJy8eZt8kiROX8+th7HCMoM+JPZnxyg2ZdTkzgiLEMXASOSW43PuC0wG7aiCzKkA
-	 xRUa3B1Lg+GyA==
-Message-ID: <sashiko-outbox-190388@kernel.org>
+	b=B3lr+5PYIJOPMgRqWH46+55/QBWflLNHADCWGiAqQ/qgt113rGWznx693kgIPe+kn
+	 slFlBel1HOcMbr5Pizh0bnomI2egOmp37P9XnSmIK6vs+K0xl+yxtel0raMHMe9JDT
+	 dbJvNpH7CEXqDkqWVjP53v6N7oKgF2vIzmvMFnIacw+xfkTh6KUm5+iDn68BVw9Wn2
+	 SaMzT9t1hiwC1VO7y59RUr8Mw2gQ8cxBAi/+AXnV2NBPRVohIM98F6HLKTAghfqkhj
+	 wTUfnIL90FRBiu6F8KL/xPYH87TxCsanWIVZ7a6+LMzS6bOyhdP/zo3SAbKKr7R5F+
+	 O6cPGuRpTd7EQ==
+Message-ID: <sashiko-outbox-190419@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 8/8] selftests: drv-net: add netkit devmem
- tests
+Subject: Re: [PATCH RFC net-next 4/4] veth: use generic skb XDP handling
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
-Cc: linux-rdma@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260507-tcp-dm-netkit-v3-8-52821445867c@meta.com>
-References: <20260507-tcp-dm-netkit-v3-8-52821445867c@meta.com>
+To: "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260509084858.773921-5-maciej.fijalkowski@intel.com>
+References: <20260509084858.773921-5-maciej.fijalkowski@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 30 Oct 2026 04:53:58 +0000
+Date: Fri, 30 Oct 2026 04:54:11 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,76 +59,67 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] If configure_nic(cfg) fails halfway, the script exits without exec=
-uting cleanup_nic(cfg), permanently leaving the physical NIC in a disrupted=
- state.
-- [High] The script performs highly disruptive physical NIC configuration c=
-hanges unconditionally, bypassing the framework's DISRUPTIVE=3DFalse skip m=
-echanism.
+- [Medium] Missing statistic accounting for skb-backed XDP_TX failures.
 --
 
-commit 605c5904b1c331eeb3043ea246464b1479d4bb3f
-Author: Bobby Eshleman <bobbyeshleman@meta.com>
+commit 3f79161429d884ed3854644cf3a7b111ce3c40fa
+Author: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-selftests: drv-net: add netkit devmem tests
+veth: use generic skb XDP handling
 
-This commit adds nk_devmem.py with four tests for TCP devmem through a netk=
-it
-device. The script configures the NIC once before running the test cases and
-cleans it up in a finally block to avoid toggling settings around every tes=
-t.
+This commit transitions veth to use the generic skb XDP helper for skb-back=
+ed
+packets. It routes XDP_REDIRECT and XDP_TX through the generic paths while
+retaining the existing veth xdp_frame path for packets arriving as frames.
 
-> diff --git a/tools/testing/selftests/drivers/net/hw/nk_devmem.py b/tools/=
-testing/selftests/drivers/net/hw/nk_devmem.py
-> new file mode 100755
-> index 0000000000000..0e36a0fa96888
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
 
 [ ... ]
 
-> +def main() -> None:
-> +    """Configure the NIC once, then run the netkit devmem test cases."""
-> +    with NetDrvContEnv(__file__, rxqueues=3D2, primary_rx_redirect=3DTru=
-e) as cfg:
-> +        setup_test(cfg,
-> +                   os.path.join(os.path.dirname(os.path.abspath(__file__=
-)),
-> +                                "ncdevmem"))
-> +
-> +        require_devmem(cfg)
-> +        configure_nic(cfg)
+> @@ -808,94 +764,33 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth=
+_rq *rq,
+>  		goto out;
+>  	}
+> =20
+> +	ret =3D __do_xdp_generic(xdp_prog, &skb, &ctx);
+> +	switch (ctx.act) {
+>  	case XDP_PASS:
+>  		break;
+>  	case XDP_TX:
+> +		if (!ctx.err)
+> +			stats->xdp_skb_tx++;
 
-Because configure_nic(cfg) is called here in main() outside of ksft_run(),
-does this bypass the DISRUPTIVE=3DFalse skip mechanism?
+Should there be an else branch here to increment stats->xdp_tx_err?
 
-Since the test functions themselves are marked with @ksft_disruptive, runni=
-ng
-with DISRUPTIVE=3DFalse will skip the tests, but it appears the disruptive =
-NIC
-configuration will still unconditionally execute.
+It looks like if the generic XDP_TX fails and ctx.err is non-zero, the
+failure is not recorded in the local stats structure.
 
-> +        try:
+[ ... ]
 
-If configure_nic(cfg) fails halfway through, will this permanently leave the
-physical NIC in a disrupted state?
+> @@ -947,7 +842,9 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budge=
+t,
+> =20
+>  	u64_stats_update_begin(&rq->stats.syncp);
+>  	rq->stats.vs.xdp_redirect +=3D stats->xdp_redirect;
+> +	rq->stats.vs.xdp_tx +=3D stats->xdp_skb_tx;
+>  	rq->stats.vs.xdp_bytes +=3D stats->xdp_bytes;
+> +	rq->stats.vs.xdp_tx_err +=3D stats->xdp_tx_err;
 
-If an exception is raised before the try block is entered (for example, if
-the driver doesn't support queue leases during configuration),
-cleanup_nic(cfg) would be entirely bypassed.
+This aggregation was added to collect the errors, but since stats->xdp_tx_e=
+rr
+is never incremented in veth_xdp_rcv_skb(), are the skb-backed XDP_TX errors
+entirely missing from veth's private ethtool statistics?
 
-Could configure_nic() be moved inside the try block to ensure cleanup
-always runs?
-
-> +            ksft_run([check_nk_rx, check_nk_tx, check_nk_tx_chunks,
-> +                      check_nk_rx_hds], args=3D(cfg,))
-> +        finally:
-> +            cleanup_nic(cfg)
-> +
-> +    ksft_exit()
+If the local increment was intentionally omitted to prevent double-counting=
+ in
+the global dev_core_stats->tx_dropped (which generic_xdp_tx() increments),
+does adding this aggregation line leave the ethtool stats inconsistent by
+only tracking xdp_frame drops?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507-tcp-dm-net=
-kit-v3-0-52821445867c@meta.com?part=3D8
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260509084858.7739=
+21-1-maciej.fijalkowski@intel.com?part=3D4
