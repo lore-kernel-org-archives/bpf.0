@@ -1,119 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.70.25
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793360882;
-	b=hm0bc+gG6mVCso66LbklqBMsoiwtrVDpbBbjBzqLZlwozB38HFjBzVTBSuiN9IF022gV
-	 JFm++NMvzYIAIcflUPkCS1i23w2PNUU18hTJ6C6Orrp8DhYCpdiWNNdQyoF2BNjZiiSJP
-	 7CPe2SjHz22eQJuM84yjXWxVSY9nJAZuRUT1vcKn8qN1nnyGuO7oGWPDHnNcRxVxB4VHO
-	 bAA1J1XT1oR899G7Qz/P9osmEqsjb72C16Qu+cx9JS+ON8NCi4WS6eDm6zsCOnhsO5ZUt
-	 xeH66+XJ+X8S4d5qeAj5qaVwOKUGRzB2HbksLKQ2zC5uzBBincmfqZKgzNfIkKslToQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793360882;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:Content-Transfer-Encoding:Content-Type:
-	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=HTeOB6YV+jgrF78grOKOC7Crho7VfrzZEJy4NurXtKM=;
-	b=q3yruCq4OG7V4E6+CUiB8cgd9VdYubofPuI58VRmGcSAk2X4+9vSc2CGg+2/H6HBo63y
-	 l49eq59trhVHcIHfmJiYzknVZfrOEQ5ndjHlbruz8pgYtVkyxpV8t/2uOkzNTtgywqbnH
-	 Mi4Jt/6R4Bf2JLxkFwfNmGjPi6T5Ss8BfXvbI2lvIlEiTPTaZSxYHtdS42oVOOn3oj4dW
-	 9wW7W2IBTm0vAL2M6sqgbOQsg5+6ESNU9BQlswqOPJRG1sb1RsPQKCCnYok97GIotY9g0
-	 +WCEe0JqoUTzRZsABd8GmHykfCTZuTid1EeUQ/t2p1e+VsQBbkloLt/tTPo1vSV3ODA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nxp.com;
-	spf=pass smtp.mailfrom=nxp.com;
-	dkim=pass header.d=nxp.com header.i=@nxp.com header.a=rsa-sha256 header.s=selector1 header.b=iapwY4Rv;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.70.25
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011025.outbound.protection.outlook.com [52.101.70.25])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.46
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793361116;
+	b=x1kMTan9k3ASf7vjkJ1+C21pMyHSnd6eshoja6Kr5O0EZl1fi0XXPK4OoGbd6qqqRO5R
+	 SJHWTx/hwuMSXDJXB9/IUBLCdFD1M2F/U22O+4dWh8VPvm/SIpPAqnfo+tiEL9jpuhBop
+	 NEl0z18KIpbpNJGS1voNJl8M8skyFx6Aed7t9b5PQt8g/D2qxb5IsT9JngkmF6UaF/Rz1
+	 Nm1DFcz+SAMItPsEjDT4YqbOc49j0m5jB/U4PDNz/KItT+zD+IToNEXmepiCnJyIZ4MRT
+	 LPs+er4fADhBNhfuvZPaaS4CbesaFhar9WCj67kKxnjrVf/JLjRIpp3hD2v3gzqrgRA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793361116;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Subject:Date:
+	 Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-B4-Tracking:To:Cc:X-Mailer;
+	bh=n9kcoaXq9ZX8rpwr/RlmQNWBtCpFTUM1yYrrw2E3eQY=;
+	b=k1ojHlq1D1Jn4jGmrYEnEiO6Hk+L9saNDe/vBYy+mG56F7KM5bKi2h1kxYrrUQbZxmmk
+	 eaEMfgTMShJ+Fdbctw44pE6OHZ7NZf7pHOIoK5h5sB4zw/s6LifdWHvutbdhhQ9kHtyqm
+	 FdMMkc8g61ObOV3UHrDaOTeg3yNaARyiQ3Ew7uUm7bOrEgP9lPi1VbBEMxXmPJdw3lsbj
+	 03LAoPCr+ssoCGx3ZuK7HYBxbd0PB3bfNRQ8KwzKBenpP4KAySAHjDXQx03jBWuL3MqpN
+	 q6mJicIgN8t+YcTsLtklenUFsERC+Sg6w+ZJ4ENb7UIcUqi4xzLVOFCkuHMnILhwwdA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HevXf8d8;
+	arc=none smtp.remote-ip=74.125.82.46
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95161606A31A;
-	Fri, 30 Oct 2026 11:48:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95161606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E083606A31C
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 11:51:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7E083606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nxp.com header.i=@nxp.com header.a=rsa-sha256 header.s=selector1 header.b=iapwY4Rv
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fhwDDaV38d4zlrWa2SzK8cFBvOPC3fBxoxbW6o8Q2oWm6Zwk64u6e7T+IzZsdPGwhxn+SMuaoN/VwvDo3ZxAcG2gWmWI7Y0eBC9LzSAFq9EaggqDkskYY5DMObjk+kvg6r+OmbLzPXPQU0rrG57Y525gTmDMBEY4L963pqlx3rI7BgZmO8aCCMszbw14W3ww8xfIkcr6ElSAlIIifaTaNyFXQ5Jm8XR4pSKPjwYtrOpXjCqcDVHtQJwS8glm5s0QcoZI5nvrL4+4UgglsuTN/9/Pr3BSw9FqvFosjmjUGIYarIHPBvglXp8nVmlN2HllSODLokt5CylIfLfZZrrJug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HTeOB6YV+jgrF78grOKOC7Crho7VfrzZEJy4NurXtKM=;
- b=tuRSdnaJcK7JlTfirG+QaDL/A99RdOsQZsPgWaLWp32fQVnZGE2QcMu8bQsN6uOuPSHkPTPWyjkFwa65MqgFIbpabJAVGjVMAWGsjJn98hbPowB2vGX1lIEuEwpQV7DCoq9nfXSq9gaqJ95pthUD88DKHR3+ogi5AUqoo1kl9944m2k0RdPrpAMc18pLT52GKsgwCSLzV3oCdpa7K7w8Hj6+QFAyy7WjjEsRnJzJGE3TVkh+blKnHBAzzw3JlU0vJpsnKmH8BFy+edYb3bEi3Jq7BGr4Kk+EjKBvp4NgqWAMUp9c7pdYJNd8cq+DprB+KFZFSBqT4VxYHS3uc1QpHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HTeOB6YV+jgrF78grOKOC7Crho7VfrzZEJy4NurXtKM=;
- b=iapwY4Rv7Zh2QKL9PoqBs7UXaHgNJ7uLTMuo3BPhJF5R5r/8p4DOlVLM7BsHlgSabP5LsGSRB+M3/rK4qhtewwowNx9h9b/EfsbdAUUmb1u36jlsME1VjSJ8TdDBhgJUxxs+gL6FnPLMp3NlErQ3s9TsRb7gPMuGWmeR94Xf1k+rxx594goHCFJSl1nh9IhSIbQ92NtZ0DLHu2jmRTDo3y0zvlXdWDmjcsav71eT6rwMu03Cmk0ovH7MAJ9vbzwb8E9akJ8xCNoDLk/R0gqh9pIkc4xLqapjOFganPAJMVrntrVhtJZAOKLfoelYkB8mYEIpcjjWhurW+ip9oikhKw==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6900.eurprd04.prod.outlook.com (2603:10a6:208:17d::10)
- by AM9PR04MB7571.eurprd04.prod.outlook.com (2603:10a6:20b:2dd::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.569.9; Fri, 30 Oct
- 2026 11:47:58 +0000
-Received: from AM0PR04MB6900.eurprd04.prod.outlook.com
- ([fe80::7fda:8431:ca1b:b023]) by AM0PR04MB6900.eurprd04.prod.outlook.com
- ([fe80::7fda:8431:ca1b:b023%4]) with mapi id 15.21.0569.009; Fri, 30 Oct 2026
- 11:47:58 +0000
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Wang Zhan <wang.zhan@smartx.com>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Toshiaki Makita <makita.toshiaki@lab.ntt.co.jp>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowangio@gmail.com>,
-	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	virtualization@lists.linux.dev,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Subject: [PATCH net 1/2] net: pass the XDP action to generic_xdp_tx() for tracing
-Date: Fri, 30 Oct 2026 13:47:52 +0200
-Message-ID: <20261030114753.185281-1-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.43.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AS4P192CA0035.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:658::18) To AM0PR04MB6900.eurprd04.prod.outlook.com
- (2603:10a6:208:17d::10)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HevXf8d8
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-15943c9c005so1059774c88.1
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793361116; x=1793965916; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=n9kcoaXq9ZX8rpwr/RlmQNWBtCpFTUM1yYrrw2E3eQY=;
+        b=HevXf8d8OLPlf55rrpk2CJ2RYu0Pok6eNVW1u67C3MLD1VKcGuWmoeGKx9unYYZB3d
+         vbN5SD9iZgXFEV5BUMja5rI2DrtE3/dqfAMtnqzY5QDiLS6PcoJHEDg+uWG09nmyDREY
+         BKHrDnEYxA8wxEDyr+EFwMdffM7oKdRG1LJGE0HvaMNiOpgn/ucUPXjqpRH/GS5RRCEs
+         ZICuZMN8emg3UF6hGfCqNymAUxO7f07LU9kmH+96QyTLV92MJjZfofrfFwEKYhaiQkN1
+         nMO5dXFXOSyQ6YnU9Vb13vIYVurOOjbHcSYYVaMhXkKQb9flw6LQLq7kaig0GWUTmd7l
+         DuhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793361116; x=1793965916;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=n9kcoaXq9ZX8rpwr/RlmQNWBtCpFTUM1yYrrw2E3eQY=;
+        b=Y7SmnFMz2Sf6rPHlFct7rKhZB+YX+WpAN0hnGD+hswD4+oMv47REEWAACJVmQiM1Qi
+         UBgF0JR6ibVQhgiTDjNFKQFBODVegv6MK99N9KeKV5WhQzDnQhLrIhAm5xQ4NezaG18X
+         stn/yhBg1dxxTcJqtKy37ef3KMOMon6KP8rsSo/qcsJlqxH5qeBi5SMWhdNW2oSdwKlV
+         OZ/EtAgQMZ7PfnggYo6Wr24i/jOTBNqdobsand5k1JA7s4p4+20hdO5/GzhdLr7e0Rtp
+         ToVtirgQU4URTRJBearj1FX6WIbrC/Qj9+7rU6RvL+GASjwiOROMloQ36kPUC7C5RNP2
+         ygdQ==
+X-Gm-Message-State: AFq9FYJ0mL8H4iOl2t1bmfOc26GW3s/cq/Qd6dYjU3DLmEwmZX3y5ioG
+	HKJ6yW8c9p6OIXLNILnZ+P1mohJ3YaWU5Fmuy3imnoY2vJXbNaje4c4v
+X-Gm-Gg: AYBFou0SfDvRo2ckqKBzXTzh7362XhLDjgyol95vx2tcQlvFTCkGBBPR+7aBEp9RhGT
+	oD9hTzk1MQX+GpTHkxrR8Pl61RnEdyq0IIdcUmtlIHhDOiMoKEgNsqZVNoUwvQ5MCTl5VcnzF59
+	Z0GtPPoliiwm/+5xVpk1DY1LKWLCNQrLkFfxNZtJRQMy7abGr2OCElRe4idJYePc0NmTU/jd1Iy
+	/UL/v81tXLJPRMLUvazF8I470FppHSlZOLN/woBknpaGu3G5cm69mc/gEnCIyiaibatiD4BPlc2
+	Eea0CPNtBKPn1g5p4ze6jZXIXEyLI11e8mKap/2yj8OUQdr8SSDqTrYSD0sHFsrIKpznoxQaDrW
+	qx0iGxO6GApezkltNSHdWHbwS2YfR55HF8sPBXGVGLMFeJ78qOtSKMLspmRUglJnh/AEIEjXkRz
+	De+hsJM6byw2y7bWfDfTaTTDoxIrDFR++g9a9oSPozW4Qs85auXR44fzLhJOmFIOFkiBq3A/9n8
+	GALG5SZXQq/fwt/8uhouTfoQ8Ord4mcGTuATB5SHYvTPumRwMAHCvIJ0yvXiqT/C3o5YE9sdPgk
+	FelKBStiHIeH2J2GTUfl7iMe
+X-Received: by 2002:a05:7022:b90d:b0:163:a197:722d with SMTP id a92af1059eb24-1ac55777052mr2693722c88.4.1793361115315;
+        Fri, 30 Oct 2026 04:51:55 -0700 (PDT)
+Received: from [127.0.1.1] ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1abcd6f1sm6437304c88.20.2026.10.30.04.51.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 04:51:54 -0700 (PDT)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+Subject: [PATCH bpf-next v2 00/22] bpf: Replace bpf_patch_insn_data() with
+ a list of deferred patches
+Date: Fri, 30 Oct 2026 07:51:45 -0400
+Message-Id: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -123,164 +91,142 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6900:EE_|AM9PR04MB7571:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5ec29c31-12c3-42e6-65c9-08df367ba46d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|23010399003|1800799024|366016|19092799006|11063799006|56012099006|261009223027099003|261026140227099003|261026121527099003|261028144727099003|261021123027099003|261021121427099003|261022105027099003|10067099003|18002099003|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	Q9Gt8zAuZyNqKaZjNdYqeHr5T9ccXwdd1b7WoszetLb7Gtw1BZTArhGIDIbP/UeBx3f38gWKa8vaW3c+b+LtgYeyRVfjhlYkFBCsGrl0hVUzjtUTJB1lDkv6SjuScDxxKKHPmQ+/IID141AwToVUlrEImbu+wuan5zZs74+TBXeo3GbgbHlrKiqcek1Y7Yyi7f+Fcq+vbRmzNZoaOfFyBlQLCQr0JLo2LXNIVxsZ2kCq85p5juB7QWEStt8ByVAUNVuBcqKEPmLldGDU9SzB4+QM1b4Db7DbqpYiCNUkni/iwZcnkEEdN1kmL2t0W3BMtOgfpTWTkzPsBUX4d8tsg/D3qjDdsaDb177QtQ4LDxKajNgDb0BEFroN0bt/QgkRaBJ4id6Kg8EZCMHUCN+us958nSkr/8LmHcGyCGW2unV2EnvJHEC7S8sL1SzzDH1Z2QZnR+JHdQN0jWH10iZSTjTuW5hfMjTGXfZnl2mX/f7UhOHZ9qe7PQfZ3ZhXTJ2gdr8l682jF4cVHA5fvESZyP8n5QrqABI8ivtWEMEXKft0WOlA7f5bn4oU3MoeQ44ih2UCGArRjBwrR9ei2wzg5R5X++ljhtYKv82beWPlPPe7jWfUZaiQDCENiVIi2/MAMvQ49SbcB+1gpHT14/dcAXSWouXB/7JTc7bH79XxYws=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6900.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(23010399003)(1800799024)(366016)(19092799006)(11063799006)(56012099006)(261009223027099003)(261026140227099003)(261026121527099003)(261028144727099003)(261021123027099003)(261021121427099003)(261022105027099003)(10067099003)(18002099003)(6133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?JmmIMSi0zVFcx6qP/aLrns9UhK9R7CnkjFuNmxsCGHnF07UiVlQio7cnVfS0?=
- =?us-ascii?Q?AcaO+0u/ojIi4RIR6b4gMaXwtmiBmtSukJPBM/HwaolRrOqhTNwI1q4UNIeB?=
- =?us-ascii?Q?hDdIwl7uvCi7BdcGqXDypI7gJpsebnU/jTAwd86CDoAYAeS1jiEG8yuLdsbI?=
- =?us-ascii?Q?630zsk+bhpxDtEofZ9jpMOi84pK0efEc+L4+YLyPcubXzQdUOLmwgcdnFjPX?=
- =?us-ascii?Q?F7vKvac17G9BjHrQ1lZklbTpDs1VAt4BEi4dxatcn/qoZVnvcm7+7o8pe1Uu?=
- =?us-ascii?Q?GkN3QdD6mIf24v4SvFOYbe1Vd61eINGB+Jr6XklzjRGz9o9jgbGhZ4zEheCv?=
- =?us-ascii?Q?65saLlIabaV2uGRmekm3RljjG9TbHCKFw68e1w85zDtjS0/c5zaS9QgktNHA?=
- =?us-ascii?Q?Ag45ShSaXfZZ9BGWx2qZ1mai0nesj+cfXo8t3xqfbBn+NxuteEXlwhCHb5Fv?=
- =?us-ascii?Q?Scs43/zmEtANVFMBnKMUDI/MTQzghfr8/lJtfOhytmT3SPidWVXQbOXJ3xoc?=
- =?us-ascii?Q?tCEEuah7Z40K5ury3JFB88ZI6+uhtSvA2c3Il85M0ftyOuZc4F22ZvIB0eeV?=
- =?us-ascii?Q?bUqVw1sUSkgPpSWVSqrdcdcMDHiNrywl0NW/xkIPAYT/UfXweWn5fzZggbn7?=
- =?us-ascii?Q?dZXABSxqSQ7ggqGJKIHV2C0vN9LC5uw2rCFoU+TgZmGHXplKdhKVXpsOs7wz?=
- =?us-ascii?Q?Q1WFMxFnTtaMq9zVsJ9+eZC7T7MKyVZBXOoLjD2pRkMdUnAETd9Zs1L3ety8?=
- =?us-ascii?Q?BUunPrlDrz5twVySZGk9R0kv3fKDES+hlYKfpJ1E3AXlI2e3T8xJcg/43KEr?=
- =?us-ascii?Q?9Thwe0mmWavkT5cpkWK6J4x2KmeAWbU/jpTRKxTB+vQyOFapxiP9CNLod9d5?=
- =?us-ascii?Q?iqaZt/qAfy1W5zH+l45th1ewkDACkzmKfuig1KW0hLvCM3QSa+5+gS7Vs78B?=
- =?us-ascii?Q?akJlktIpE5GiIruofaRkpXIqZ9NHpBiEC6V/D0ktM2KRU3EU/jnQsU6LIS2q?=
- =?us-ascii?Q?e8uC6WXL6LmoIZPbMww2EKMVUHj4YvdjdxaqTTWoUQcWZ9mDQTh8wtZfgC10?=
- =?us-ascii?Q?YJ8ODiso4zfOWEjVkTnIOpZwga2C99ilnMnihd5/ftzWvm82je0xRdVQaZ5M?=
- =?us-ascii?Q?ZmQedjgDkZSPopPzOQy2OENnJFe1tmlV0iKx4KNUciWrJOwyhKJ1XrBB33PA?=
- =?us-ascii?Q?tMdDBkO25ePuy+xz4k8rnpSa4ypJ5v8Dv8uSlHwXmCtmhDWHID3Fbvb5Wwtd?=
- =?us-ascii?Q?izpIwSQoiFVmNTHp/GzA37dAny1pcU0Q3M1eBDKp+MkrtAp7q/kWSgbXveSA?=
- =?us-ascii?Q?hzfexnnfZtmihBxm9uKUsY7v95t6OlKuz0WSR2TusvPl0dES2R8gGrGTqO6P?=
- =?us-ascii?Q?X5q1H0rlQku6/UuOEebM3cRf9IyGBSU8+3UVNG1pfxns4WHrRhzSiYvg5G0L?=
- =?us-ascii?Q?7ld60+QHQvoldvu9URneDCoddALuakLFWqiXotTNrSOHYSMlfGwmItdm0jaZ?=
- =?us-ascii?Q?LTCEL7ANLOrvryBQxqA4GI8Fy2lkdxPb4g6GdzISpwfdIvVRTzdFdxY91l/D?=
- =?us-ascii?Q?N0rnQ8Q8ANJg+3HoyWQR6Mp1xuJLPiK0ZUndVOkcCBZVRc3OvtwS7hOUwur9?=
- =?us-ascii?Q?LmWdnK6eU6Fxz5ErTHJBixLXnIgtcxzy62uOTDAqADQinJPdX1arATnv+v/S?=
- =?us-ascii?Q?k2fNA9b9bFJ0eGCZb8FVEClC2k+4bb6hdz1QURzBfKCTE7RFChEwPr2k0Vvj?=
- =?us-ascii?Q?cLH+KUPyVcBZBWGeU2myzsBSfLnijC8=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ec29c31-12c3-42e6-65c9-08df367ba46d
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6900.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2026 11:47:58.0294
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d9AfYLyKpwYqxRnMMhTCaHbisp0rKbCUv5HJ28igpsWeyl6fntZdEk2FGjWCCzye37Yv6jbb2dMrjsiRp7Z/uw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7571
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANKE5GoC/4WNQQqDMBBFryKz7pRJKtZ25T2Ki6gTHagaEgkW8
+ e5Nc4FuPjw+7/8DAnvhAM/iAM9RgqxLAn0poJ/MMjLKkBg06UoRKeycxZgcK+zRma2fsMupy1J
+ TTVzf7gMk3Xm2sufpF/yshfcN2tRMErbVf/JnVLn/Px8VEhqlB1sbeqiKmnE28r726wzteZ5fS
+ tp2v8oAAAA=
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
+X-Mailer: b4 0.13.0
 
-When generic_xdp_tx() fails to transmit an skb, it reports the drop
-through trace_xdp_exception() with the action hardcoded to XDP_TX.
-That was right when generic XDP was added, and XDP_TX was the only
-caller. Since then, two XDP_REDIRECT paths have started to transmit
-through generic_xdp_tx() as well:
+bpf_patch_insn_data() and bpf_patch_insn_single() apply a patch right
+away: they move the tail of the instruction and aux data arrays and walk
+the whole program to fix up branches and every table that names
+instructions. Removing instructions works the same way.
 
-- xdp_do_generic_redirect(), for a redirect to an ifindex
-- dev_map_generic_redirect(), for DEVMAP and DEVMAP_HASH redirects,
-  including broadcast
+A pass that patches M instructions of an N instruction program does
+O(N * M) work. Eduard pointed out that this takes a large share of the
+time to load pyperf180 [1], and with bpf_jit_harden=2 or many nops to
+remove it gets to minutes.
 
-Drops on those paths are reported as XDP_TX, an action which the
-program never returned. Tools which count xdp:xdp_exception events per
-action, such as the samples/bpf programs built on xdp_sample, therefore
-attribute generic XDP redirect drops to the wrong action. Drivers with
-native XDP already report XDP_TX and XDP_REDIRECT drops separately.
+Replace them with a list that a pass fills with patches and commits
+once in O(N + inserted instructions). Following the layout of Jiong's
+RFC [2], the list goes to core.c and the verifier side to fixups.c,
+then each pass moves over and the last patch removes the old code. As
+Andrii suggested there, map every old index to a new one once and
+relocate all jumps through that map. Since passes queue patches in
+increasing order of the instruction they replace, keep the list in a
+sorted array instead of a linked list.
 
-Add an "act" argument to generic_xdp_tx(), and have each caller pass
-the action that led to the transmission: XDP_TX from do_xdp_generic(),
-XDP_REDIRECT from the two redirect paths. generic_xdp_tx() is not
-exported, so these are all of its users.
+  1-3   the patch list in core.c and in the verifier
+  4-6   bpf_do_misc_fixups(), gotol for a backward may_goto
+  7-9   removal of instructions, dead code and nops
+  10    zext
+  11-13 patching an instruction twice, inserting in front of one
+  14-17 ctx accesses, may_goto counter setup, hidden subprog, bpf_loop()
+  18-19 commit without a verifier env, constant blinding
+  20    removal of the old code
+  21-22 selftests
 
-Fixes: 6103aa96ec07 ("net: implement XDP_REDIRECT for xdp generic")
-Fixes: 6d5fc1957989 ("xdp: Fix handling of devmap in generic XDP")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Load times on an x86_64 VM with 32 vCPUs, the base commit below with
+and without the series, measured in one round: perf stat -r30 --
+veristat -q <obj> averaged over two runs, -r10 for BPF_F_TEST_RND_HI32
+and bpf_jit_harden=2, three runs of loading 131072 "ja 0":
+
+                                   base       patched
+  pyperf180                       0.512 s    0.350 s
+  pyperf600                       1.407 s    0.885 s
+  strobemeta                      0.591 s    0.588 s
+  test_verif_scale2               0.643 s    0.646 s
+  pyperf180, BPF_F_TEST_RND_HI32  1.708 s    0.360 s
+  pyperf600, BPF_F_TEST_RND_HI32  5.161 s    0.891 s
+  pyperf180, bpf_jit_harden=2     3.185 s    0.362 s
+  pyperf600, bpf_jit_harden=2     9.879 s    0.899 s
+  131072 "ja 0" removed          53.146 s    0.769 s
+
+With bpf_jit_harden=2, test_verifier's "ld_dw: xor semi-random 64 bit
+imms, test 5" doesn't load within 900 s on base and loads in 5 s with
+the series.
+
+For the 1052 objects of the selftests, every program that loads has the
+same xlated code, line info and func info on both kernels, by default,
+with BPF_F_TEST_RND_HI32 and with bpf_jit_harden=2, masking the
+immediates that hold addresses, BTF ids and blinding constants.
+test_verifier passes on both, test_bpf fails the same 53 tests on both
+when hardened, and test_progs only shows failures that are flaky in
+parallel runs.
+
+[1] https://lore.kernel.org/bpf/a714ee96d0ad96bbc9d51037616e5c4e2790a8ec.camel@gmail.com/
+[2] https://lore.kernel.org/bpf/1562275611-31790-1-git-send-email-jiong.wang@netronome.com/
+
+Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- include/linux/netdevice.h | 3 ++-
- kernel/bpf/devmap.c       | 2 +-
- net/core/dev.c            | 7 ++++---
- net/core/filter.c         | 2 +-
- 4 files changed, 8 insertions(+), 6 deletions(-)
+V1 -> V2:
+- Convert every pass and remove the old patching code (Alexei)
+- Build the new image in core.c, so that blinding without a verifier env
+  uses the list too
+- Let the list remove instructions, insert in front of one and patch one
+  twice
+- Pick JEQ or gotol for a backward may_goto from its offset grown by the
+  patches in between, v1 picked JEQ when that offset was -32768 (CI bot)
+- Test a backward may_goto expanded to gotol
+- Test a jump that the patches push out of its 16-bit range, and a gotox
+  to a patched insn
+- Rebase onto current bpf-next, which adds the arena_scalar rewrite
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index c0ae442c4344..b988afe797c3 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -4355,7 +4355,8 @@ static inline void dev_consume_skb_any(struct sk_buff *skb)
- 
- u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
- 			     const struct bpf_prog *xdp_prog);
--void generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog);
-+void generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog,
-+		    u32 act);
- int do_xdp_generic(const struct bpf_prog *xdp_prog, struct sk_buff **pskb);
- int netif_rx(struct sk_buff *skb);
- int __netif_rx(struct sk_buff *skb);
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index 1b8f0d7f8455..c73e8797c0fc 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -731,7 +731,7 @@ int dev_map_generic_redirect(struct bpf_dtab_netdev *dst, struct sk_buff *skb,
- 		return 0;
- 
- 	skb->dev = dst->dev;
--	generic_xdp_tx(skb, xdp_prog);
-+	generic_xdp_tx(skb, xdp_prog, XDP_REDIRECT);
- 
- 	return 0;
- }
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 3ac700d37e59..88860185f583 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -5851,7 +5851,8 @@ static u32 netif_receive_generic_xdp(struct sk_buff **pskb,
-  * and DDOS attacks will be more effective. In-driver-XDP use dedicated TX
-  * queues, so they do not have this starvation issue.
-  */
--void generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog)
-+void generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog,
-+		    u32 act)
- {
- 	struct net_device *dev = skb->dev;
- 	struct netdev_queue *txq;
-@@ -5868,7 +5869,7 @@ void generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog)
- 	}
- 	HARD_TX_UNLOCK(dev, txq);
- 	if (free_skb) {
--		trace_xdp_exception(dev, xdp_prog, XDP_TX);
-+		trace_xdp_exception(dev, xdp_prog, act);
- 		dev_core_stats_tx_dropped_inc(dev);
- 		kfree_skb(skb);
- 	}
-@@ -5896,7 +5897,7 @@ int do_xdp_generic(const struct bpf_prog *xdp_prog, struct sk_buff **pskb)
- 					goto out_redir;
- 				break;
- 			case XDP_TX:
--				generic_xdp_tx(*pskb, xdp_prog);
-+				generic_xdp_tx(*pskb, xdp_prog, XDP_TX);
- 				break;
- 			}
- 			bpf_net_ctx_clear(bpf_net_ctx);
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 09c60a58c82a..7c6f8bcc6c29 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4821,7 +4821,7 @@ int xdp_do_generic_redirect(struct net_device *dev, struct sk_buff *skb,
- 
- 		skb->dev = fwd;
- 		_trace_xdp_redirect(dev, xdp_prog, ri->tgt_index);
--		generic_xdp_tx(skb, xdp_prog);
-+		generic_xdp_tx(skb, xdp_prog, XDP_REDIRECT);
- 		return 0;
- 	}
- 
+v1: https://lore.kernel.org/r/20261001-bpf-verifier-patch-batch-v1-0-a12df8a09160@gmail.com
+
+---
+Qiliang Yuan (22):
+      bpf: Add a list of deferred instruction patches
+      bpf: Remap the verifier state through the patch list
+      bpf: Apply single-instruction patches of the verifier in place
+      bpf: Queue the rewrites of bpf_do_misc_fixups()
+      bpf: Expand a backward may_goto to gotol when patches push it out of range
+      bpf: Drop the constant delta from bpf_do_misc_fixups()
+      bpf: Let the patch list remove instructions
+      bpf: Remove dead code through the patch list
+      bpf: Strip nops through the patch list
+      bpf: Batch the patches of bpf_opt_subreg_zext_lo32_rnd_hi32()
+      bpf: Allow patching an instruction twice through the patch list
+      bpf: Teach the patch list to insert in front of an instruction
+      bpf: Allow inserting in front of a queued patch
+      bpf: Move bpf_convert_ctx_accesses() to the patch list
+      bpf: Insert the may_goto counter setup through the patch list
+      bpf: Append the hidden subprog through the patch list
+      bpf: Inline bpf_loop() calls through the patch list
+      bpf: Apply the patch list without a verifier env
+      bpf: Blind constants through the patch list
+      bpf: Remove the old instruction patching code
+      selftests/bpf: Test jumps around patches of bpf_do_misc_fixups()
+      selftests/bpf: Cover a backward may_goto pushed out of range by patches
+
+ include/linux/bpf.h                                |    4 +-
+ include/linux/bpf_verifier.h                       |   87 +-
+ include/linux/filter.h                             |   16 -
+ kernel/bpf/bpf_insn_array.c                        |   35 +-
+ kernel/bpf/core.c                                  |  552 ++++++---
+ kernel/bpf/fixups.c                                | 1285 +++++++++-----------
+ kernel/bpf/verifier.c                              |   46 +-
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |    2 +
+ .../selftests/bpf/progs/verifier_patch_list.c      |  210 ++++
+ 9 files changed, 1240 insertions(+), 997 deletions(-)
+---
+base-commit: 7101b10cf281f629ac58c99697ca6f6d082b99a7
+change-id: 20261001-bpf-verifier-patch-batch-2442080e837d
+
+Best regards,
 -- 
-2.43.0
+Qiliang Yuan <odys.yuan@gmail.com>
 
