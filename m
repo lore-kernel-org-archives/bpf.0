@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793334711;
-	b=dMwskS74edtGgQssbBVQkaNtCskmPFsq7ShzjQjr34g5hDvTcuZ0jcaiZn6mV62u84kv
-	 dmu4VoECTqzbdiHy2ejktQ/vEhurg2KBSEPTHGV+oFCtpkkeYv3h5/0k8YAu4E8uZ0QAS
-	 ONxb/RHRU5RDrX4gqL6RVD3STRt1stWEHxeuIgpfkm/0fsw8zmMSl5n3eB1TjzMnBV57M
-	 IZEBUFtWsbU8Xg7uMMl1ntEoMn/XCb/yvMXqbTcdiEbRvdsnRb8BsjLwU9INCHprXUxD0
-	 6KIzKliepPygRVEYVw+ilXxtUIkHWs3uko2IvIMg1egKYvATesgnZjPplZQGq4JJLYg==
+	t=1793334712;
+	b=NpJywrWfAXir+BIoJKnEg2S/mnTP0c1eThCZIftXJwXDHutjigx3+l/25vybcvLoI722
+	 mOfh2aK6QaaU9ap4yWb/yZ3yeNs5PX6DvFjy5/UP9TurzfM5NBV7KyAB+Dckba2wIUUQG
+	 y2RBspxLe6rIiUg+9wrrEASOHvBsv6IHJVst7CjHnwXKd9rCDfmvH1hA4x75KAxI+C88E
+	 YDrmFQeRWY1MX7+v0q4V4lXFp8UNpB0/V9xU+vNnCqyJLFlMSPHANWHBZAEB6HQd9vUNf
+	 XG1VZdtIfIqEB0cYxoZHAjl91CTFxEoIe4ZfNNFgc+44G7SuoYksP1ieRfHaK6Wzm1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793334711;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793334712;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=ZziXw8Mhu/MliXEzo41WRhscDvJYaH0eawGMV1Y+J3k=;
-	b=Wu/Neyj8DKkoQom0LFQLO++i1pHq3fupNDxKslZKIUFC2FNZX5DNVidKLo3gQbeIrJ4A
-	 +0fXTJv5vMtL6lb7EHeUjTdvLTdb9lZgYmglCgPbO88d+/Nfu2mckFafgZ4oGwm7ISyux
-	 7pN6Zsy8s2DoiCQYp+7PLToBtWy2bc48aoORTALV2TdmpR0Cs0vBakAQIU/NhxG9PaWfk
-	 IQTDjpHOdn8ecPuQlSU6o/vFgtbWhGyFwxzBtFXY7F7jUBVV8Vod3C5DMiOTOmgqGO1k9
-	 0eIKDAmk5UlhySxTNLpp4tjUvUmoSjRDt/mvDHE1ioHep3BLgYE7mmiRFHSBjqqexbA==
+	bh=bMdKaLnci5rE3Vyxt1ztOm4nlJPbyxipNoi6qOdT6zs=;
+	b=CvOgAIBJAtpQzx6hgBG3yAy55ucQhHFLFafw0ef7+/xMEyCW3W9fDpK79uY9KAmOzKLf
+	 BYE3IbITXcXclNevR6HPNxvcZfaoNQvtoKyab8RSVk6665UezfK8GcuNscuRbNuZKzVY6
+	 43ufd3toEd/pONM7TMuNeb28VBj5DZcANrcMNS4ygMhPODx7vUHzMsjWGQwx+HLx/oyTv
+	 7KkDBYHxJOlVFL9d28FCgfCyq7DHeTVdTeewcXwfwg+u76wJU4+MRlyJlbLeeRNxyLZdO
+	 OMb8L0AedH9TRLNDgL9wxBvXSWRj8avErxdhGhQIs0uKXC73HTACuCHS+srM7OKUWHw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--weiwan.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bn+lZmgA;
-	arc=none smtp.remote-ip=209.85.210.200
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=lSEH1gbN;
+	arc=none smtp.remote-ip=209.85.214.199
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520DF606A325
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:31:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 520DF606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F08606A334
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:31:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44F08606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--weiwan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bn+lZmgA
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-8a05b68f851so1392768b3a.1
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 21:31:51 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=lSEH1gbN
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2e869e00005so5915425ad.2
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 21:31:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20260707; t=1793334711; x=1793939511; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ZziXw8Mhu/MliXEzo41WRhscDvJYaH0eawGMV1Y+J3k=;
-        b=bn+lZmgA+J+K0XjBuCBZNUoxB3sifXpY12KNQK8KWDfMsytY/wKL2pHp1dJSeGaE7D
-         ZEQazoGfio2Txj+JSTcIdJp8Go/uOHd/z/DwJda2mi+om3+f7rBQoCQjudXJzEtzSRbU
-         cWGw8il0bjvGIaTWl3bxtswJiBGYmiT2RsV5EssKW18Rx9648jrtMBg8BMZ4bLo3ZqwP
-         sB6MXxj2q/+KqtpYAfNKggECAH7Wdd82b7Sl5NZls6i2eWJ1WMouWQnM+ptnw/hfiHit
-         ObpC5AdyslPLqOAFvuWsvcN74r/8beARAhhFgy8UE1fkPiglm5jiYEv5RQgilBA4E9sx
-         PfFg==
+        bh=bMdKaLnci5rE3Vyxt1ztOm4nlJPbyxipNoi6qOdT6zs=;
+        b=lSEH1gbNP3ZVkTl4v2zJcvBd3Y394pd5Rf9aUUUw3bNnmBItW5OHVYUPZkuZ404dHz
+         aB5UQblxmNl1PR+UBp+OWoZKtdNYc0iCrFmxbtJw3q8v9oRXUtqmMevl92R9ZKwIapkC
+         heTOI14FQ+TdF/ZfG7EypqtcXQU4HxbK01XZtpXiEJl1XWHjj8kDnLD2P8xw/yTf87xl
+         0JACiTgl9dRYLn1mBQ+3nrQ/jkE14+f6wTEs7F5tV43CQ3l9vqqC1kCmiN4h7hPMAt4d
+         jPnntgwydj5T53bvcB5wV/4vr2X5m8A4ytDMkpBSuQM0sAYeD2P/Sl5dMvC2p1w+UhZ9
+         yqEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1793334711; x=1793939511;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ZziXw8Mhu/MliXEzo41WRhscDvJYaH0eawGMV1Y+J3k=;
-        b=Xm7/4WEUyLTteTeFqRQ2tfoYbz1IcrTm2WYX2QRPmlV/MeFmtvwJlqv3wj1T0T0TEp
-         3GgBDQKrnuoCHZ/O/3bCcLEQLmM5ylUC6Vz6rN+sqg6x/YpYNNyFfjY4ujSxXGlPy/yd
-         emVCiTw7d1PjmmMTHUO0DlLCoI687TMKn5KgT3MnfhFe6Y1BR0IHVtci9SIcTGFaHPHL
-         5G5mkP6e0AxYtTfboZdcrUsPCR6JCdnE+qN3ilyk+xMf0JSqBo1PFHP8YNU2WHrf8hPB
-         1cRdTbYyRP3MBdyjANnfLLBJDDToXsKhhq/zT8GOzgtC36VIl5S9slwGLsNh+BwnXqdt
-         venA==
-X-Forwarded-Encrypted: i=1; AKwUvBzw/RcVe1FLKPQzFCWH19ISFyktYJgMlTYoJ6O53rv9BZdiPeMehtds6f5N7uu3vv2FDZg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLZBBFk+IQQAmwRcCmmvUSCY0tnsR+2OpkcbVmhnC6ElK4FHes5
-	dgOMIwbMmqlfn83Rl4MATOSAM1wz/OIWDSME44YU7qkqo/4xmQABG0kYhjprOgOVx7Y07iL1MCv
-	mPrTRVg==
-X-Received: from pfbgi11.prod.google.com ([2002:a05:6a00:63cb:b0:8a0:4085:d831])
- (user=weiwan job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:a94:b0:3e1:8a37:bf1e
- with SMTP id adf61e73a8af0-3e928a78297mr835173637.42.1793334710498; Thu, 29
- Oct 2026 21:31:50 -0700 (PDT)
-Date: Fri, 30 Oct 2026 04:31:44 +0000
+        bh=bMdKaLnci5rE3Vyxt1ztOm4nlJPbyxipNoi6qOdT6zs=;
+        b=kMVNM2g1hJNBuOro8fAe3xSgWuA7b7Zek2iakx8e3iN8gZBSv0z5AdHwRZUXQvtU2v
+         RLFSDwookPXzzN+twzFgpS5Q7zt8VU8OJaMpjBEnltYpQ/SkCQOV2tNHJUuTjf+MBgub
+         sHFJpLwY0nhylhcQlLrZeU6tiaN14mIzPSaW2ERP+ogmlxMY96jNeq4PhQaEHj9rfMJM
+         nkpzvpVuBLPw1Nm37wsjlZDCcJpYQ7FCpIgERQzK2VqceP62iVqluhZOFbNduptFeiBA
+         NwIJjkVT0wVxFeqKoQx+cnuI0f14BjZ6QA7A63HNJvbJckiI2HjkI05VEPUgo7rizbdw
+         R6lA==
+X-Forwarded-Encrypted: i=1; AKwUvByyzQybAaBttqZe2MKrdIlL/uIBvUx5uMF+Bmj9SMbCPZAqRvPLoLnm0LdCiazAKaRUOLE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKUX9YrRvWR7SxJQQ0Xhdds8BbzL4SI+2XGCZLe9LElCBwN4fpI
+	k3vg/h32W38SyHBdg1cvqLC/4db04brsXVTGOXdaHiFE2pIfTwoOwmQQGfSOSvaQ9dmqGu7khF0
+	0t5EFvA==
+X-Received: from plkg13.prod.google.com ([2002:a17:903:19cd:b0:2e8:1f84:7c18])
+ (user=weiwan job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3c27:b0:2e9:460e:ca57
+ with SMTP id d9443c01a7336-2eb36426e0bmr13063885ad.15.1793334711324; Thu, 29
+ Oct 2026 21:31:51 -0700 (PDT)
+Date: Fri, 30 Oct 2026 04:31:45 +0000
 In-Reply-To: <20261030043145.2185700-1-weiwan@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261030043145.2185700-1-weiwan@google.com>
 X-Mailer: git-send-email 2.56.0.317.g454f8302e1-goog
-Message-ID: <20261030043145.2185700-2-weiwan@google.com>
-Subject: [PATCH net v2 1/2] net: Make PSP skb extension survive packet scrubbing
+Message-ID: <20261030043145.2185700-3-weiwan@google.com>
+Subject: [PATCH net v2 2/2] selftests/net: psp: test bidirectional data transfer
 From: Wei Wang <weiwan@google.com>
 To: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
 	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
@@ -92,92 +92,54 @@ Cc: Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>,
 	bpf@vger.kernel.org, Wei Wang <weiwan@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-skb_scrub_packet() drops all skb extensions unconditionally via
-skb_ext_reset(). It runs on tunnel encap/decap (ip_tunnel_rcv, vxlan_rcv,
-etc.) and virtual device forwarding/redirection (dev_forward_skb,
-netkit_xmit, skb_do_redirect).
+_data_basic_send() and _data_basic_send_netkit_psp_assoc() currently
+only verify unidirectional data transmission from the test socket to
+psp_responder. As a result, they do not exercise the receive path for
+PSP-encrypted TCP data segments arriving at the test socket (such as
+packets redirected across a netkit interface associated via dev-assoc,
+which relies on SKB_EXT_PSP surviving packet scrubbing).
 
-When a virtual device such as netkit is associated with a PSP device in
-another network namespace via PSP_CMD_DEV_ASSOC, incoming PSP packets
-decapsulated by psp_dev_rcv() lose their SKB_EXT_PSP extension when
-scrubbed during redirection into the peer netns. Without SKB_EXT_PSP,
-__psp_sk_rx_policy_check() rejects incoming TCP data segments at the
-socket layer with SKB_DROP_REASON_PSP_INPUT.
+Use the existing "data echo" command in psp_responder to verify that the
+test socket can also receive PSP-encrypted data from the peer in both
+_data_basic_send() and _data_basic_send_netkit_psp_assoc().
 
-Introduce a static skb_ext_scrub() helper in net/core/skbuff.c to
-preserve SKB_EXT_PSP across skb_scrub_packet() while dropping all other
-extensions. If SKB_EXT_PSP is not active, skb_ext_scrub() simply calls
-skb_ext_reset(). If SKB_EXT_PSP is the only extension in the skb_ext
-buffer, nothing needs to be scrubbed. Otherwise, save the PSP metadata,
-reset the extension block, and re-add a fresh SKB_EXT_PSP extension (or
-clear skb->decrypted if the allocation fails).
-
-Fixes: 06c2dce2d0f6 ("psp: add new netlink cmd for dev-assoc and dev-disassoc")
-Link: https://lore.kernel.org/r/20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com
-Reported-by: Daniel Zahka <daniel.zahka@gmail.com>
-Closes: https://lore.kernel.org/netdev/DLODSKPY6ON6.1G6SP3CFFLCPJ@gmail.com/
-Co-developed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 Signed-off-by: Wei Wang <weiwan@google.com>
 ---
- net/core/skbuff.c | 31 +++++++++++++++++++++++++++++--
- 1 file changed, 29 insertions(+), 2 deletions(-)
+ tools/testing/selftests/drivers/net/psp.py | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 93c2f440b9ec..5c4a2e982ebc 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -6369,6 +6369,32 @@ bool skb_try_coalesce(struct sk_buff *to, struct sk_buff *from,
- }
- EXPORT_SYMBOL(skb_try_coalesce);
+diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
+index 473500901879..e507951b440b 100755
+--- a/tools/testing/selftests/drivers/net/psp.py
++++ b/tools/testing/selftests/drivers/net/psp.py
+@@ -120,6 +120,12 @@ def _check_data_rx(cfg, exp_len):
+     ksft_eq(read_len, exp_len)
  
-+static void skb_ext_scrub(struct sk_buff *skb)
-+{
-+#if IS_ENABLED(CONFIG_INET_PSP)
-+	struct psp_skb_ext *pse = skb_ext_find(skb, SKB_EXT_PSP);
+ 
++def _check_data_echo(cfg, s):
++    _send_with_ack(cfg, b'data echo\0')
++    s.settimeout(1.0)
++    ksft_eq(s.recv(5), b'echo\0')
 +
-+	if (pse) {
-+		struct skb_ext *ext = skb->extensions;
-+		struct psp_skb_ext tmp = *pse;
 +
-+		/* Nothing else to scrub if PSP is the only extension in ext. */
-+		if (ext->chunks == SKB_EXT_CHUNKSIZEOF(*ext) +
-+				   skb_ext_type_len[SKB_EXT_PSP])
-+			return;
-+
-+		skb_ext_reset(skb);
-+		pse = skb_ext_add(skb, SKB_EXT_PSP);
-+		if (pse)
-+			memcpy(pse, &tmp, sizeof(*pse));
-+		else
-+			skb->decrypted = 0;
-+		return;
-+	}
-+#endif
-+	skb_ext_reset(skb);
-+}
-+
- /**
-  * skb_scrub_packet - scrub an skb
-  *
-@@ -6380,7 +6406,8 @@ EXPORT_SYMBOL(skb_try_coalesce);
-  * operations.
-  * skb_scrub_packet can also be used to clean a skb before injecting it in
-  * another namespace (@xnet == true). We have to clear all information in the
-- * skb that could impact namespace isolation.
-+ * skb that could impact namespace isolation. Note that PSP skb extension is
-+ * preserved across packet scrubbing by design.
-  */
- void skb_scrub_packet(struct sk_buff *skb, bool xnet)
- {
-@@ -6388,7 +6415,7 @@ void skb_scrub_packet(struct sk_buff *skb, bool xnet)
- 	skb->skb_iif = 0;
- 	skb->ignore_df = 0;
- 	skb_dst_drop(skb);
--	skb_ext_reset(skb);
-+	skb_ext_scrub(skb);
- 	nf_reset_ct(skb);
- 	nf_reset_trace(skb);
+ def _check_data_outq(s, exp_len, force_wait=False):
+     outq = 0
+     for _ in range(10):
+@@ -478,6 +484,7 @@ def _data_basic_send(cfg, version, ipver):
+ 
+     data_len = _send_careful(cfg, s, 100)
+     _check_data_rx(cfg, data_len)
++    _check_data_echo(cfg, s)
+     _close_psp_conn(cfg, s)
+ 
+ 
+@@ -726,6 +733,7 @@ def _data_basic_send_netkit_psp_assoc(cfg, version, ipver):
+ 
+         data_len = _send_careful(cfg, sock, 100)
+         _check_data_rx(cfg, data_len)
++        _check_data_echo(cfg, sock)
+         _close_psp_conn(cfg, sock)
+ 
  
 -- 
 2.56.0.317.g454f8302e1-goog
