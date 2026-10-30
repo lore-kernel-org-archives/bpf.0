@@ -1,99 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.225
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793401267;
-	b=iANxiWLAeit6+xDWAXgjD2bieGELCWoT0WJKhIKECPn91VMLy7Q7iCo13D83y4sCizyS
-	 jSeU+m5WX4ntjmIk0kBEppQHyiwKAcXX5ZCwagDxMFNznOf+YnPRZPtlACcl0VdFp0zbF
-	 KrpcfI+ekUMEl+oHG7zXPbe/oyW9+wjXk1fscXxrLRKS5JH9vC6mCzwgcY77/ZUgsQoF9
-	 Hw6SHDQUu4NDMp5fNSY7G+0JiKLs/5bcWJ57b+tzZv18hVw/8qqkoD2JU1TO9JjDUppuI
-	 Iu4b+nykwDdwPlyKbs96Oa3XCHhNBvb8fLBZ9lgtDP4X71mljHpfPM+qEYoiPHidPNw==
+	t=1793403254;
+	b=ChzI+e72oIC57mKj33rBKZEnX4Lzaj2DIxUEreVLQzBf1hYQI+ceORFy36KN6xD01Dtl
+	 sGQu28TXr/RXaM6nt231/HWw+nYPQuiXQ95aLHml+1dep1FF7L+znRHtX1ZLl6f2CTONe
+	 MBquPICZbiupy0vcZHhn0p2QKzQyfhQVkWxKtF/Xvw0TGJhphNSqZuutdUbnbmwnlz/hh
+	 1EH7rBy1Y5c+Y7CGiqhlFoj5AKiadcNcQn8vlaiNFYJputAF8vj4OqfZ0LVlNybO9nnBc
+	 kbHZ8UXgJSyju3WnvzWTTnx2SlCokVIMwlHb+s254s2LtVgIblzRUABN+ooiPQAbB/g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793401267;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=ZqxcF4lJNEYISFgEKoKl5OomytwhwZ+IBxXpkIJsLHc=;
-	b=QvqmAR5BNkUgfgKGnWUYuzlJU3BHilcngXCRyknbIzVjMCyXpqftPiUujfN2cvwoY++g
-	 O/r4FDtFuOeuxQr8nayPpdFwf/83cSfrqnQoSuOo3Ou8N0suAVnsSSYs1mDsXXZc09e3q
-	 kNCmfLe+FaO/hV3c4sIybXJiO74KZamn259j/aqfPOeC13DybvnCTaeEBEBMclZsRawS9
-	 VEgXBLi1P+SfC+pKHoXbEPs8v1hSOZHx7ej606k2G3jFYHTyMzeNxIn1BzCsg9XyC1XKf
-	 HjRjkpOs3hFjaSxhQsGC8hSOej1JrTcN2MqUCL4APIDb0zjSYEqQbsN1Ze+9y/QEtlw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793403254;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=nXlePuNX/aHKNhET7caWGPRxDvNjWk2+tSos2Fry/uk=;
+	b=nLKv2E9w/TjZxzhmyjyQU3nutdAyPoDIFDHWRSP4dBKctBRrREnzYvlD//unYtkEi/zE
+	 9mXie16MPCyWRAYlWZ1FDBWDrKCsaF2+CUiI+CQfVku48joF5BQKWAsZDKCWQXQDDxC3S
+	 O+L4vc/OWFhYRKCRYgP2HB21wiSKmsA+xishypBIA+KPcjVnC3Q6vxv4osnhNfvX2Y7oB
+	 +kU+VzlMSVN35aADNIH/7SU/LlvmW7wo2Q4urUDvGTdNUH18rZOtfg5nEkgXALczKSv0O
+	 j30FtQ43MbVUb84FR6DWczbd+3pnn32GmcnDb44IpZPP7xlld1+UAhRXyHiIFoPWe2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y1MGzY+G;
-	arc=none smtp.remote-ip=209.85.128.48
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ancqPh3I;
+	arc=none smtp.remote-ip=95.215.58.225
+Received: from mta1.migadu.com (out-225.mta1.migadu.com [95.215.58.225])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF8F606A31A
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 23:01:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BCF8F606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2690C606A31A
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 23:34:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2690C606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y1MGzY+G
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a35ac4475dso8753085e9.2
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 16:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793401265; x=1794006065; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ZqxcF4lJNEYISFgEKoKl5OomytwhwZ+IBxXpkIJsLHc=;
-        b=Y1MGzY+GegyFz1M+MFM6aXhBvcDzQnMAMjztRJMq2QYPjxoLKaPZtqT+sZAvQvQ9DF
-         wOwz9TY8Fdhkq5mJ7EXTI1zgDXnch1tSsCB6lCniM5o+ox4Q5yZsG/jdW+Aqv1XV1yRo
-         FnIloNuZHDxvW7MeiUtnFktF9Wi2pZme9VVcw/bBcHTa9YNyuPtpoX5ob3vONfsSie8Y
-         iTghVfURy9pRn31fjcC6ntxa8N6VLyC17fCdaoAGLWMrlEM6y17RVR1DyncQ2DQ2WbG2
-         ME7f3wpZ57H6QXaBN25dp24jPMVasD2R8+RbJUmbcfK8EZYCYgcd4q5Ek8U1D3UErFoo
-         1LTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793401265; x=1794006065;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ZqxcF4lJNEYISFgEKoKl5OomytwhwZ+IBxXpkIJsLHc=;
-        b=Op8MH1GgFXjfu1ADDpvTJGjL52ZTKC/UMm9pSCNAdkjuy5ihmKKZYElH/EbVuaxsV5
-         s+5upVJX35p7Hw+ug/9tMRA0cP2Us2vBYDAMTUm+tJSPhpRnkik0Q6SACH5JZ256Fbk4
-         3Ydwpk3xf7ly+WtGyAJangKBfG/b2IZsuDapFEYw4GPlQpjeV0JjfKUT6juqMJolc8WU
-         QYJ6lt54qNQfWUKox/ajPkW9pgoR12t9mTcbULk5XZp/2/J7yGxXupeq4XuQw+OXdo6/
-         FlbaoiYaYylg8tPBWrpOlKCFCasaDg6SwzbwzkEAe8m8M2AYRCpVoi8O0CQYAmaPoq79
-         FYWg==
-X-Forwarded-Encrypted: i=1; AKwUvBxTggA4ft2/4k0eNP7xXKpTe51QhuB/F2irn6xho/ZIVEwD1uwQNV/fcrX+PhZ9ChwcVuo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLFu8fRDEWXfo1GjQTJu2MOrg2pBj/Bal5tIfGZQBCg1870TJ5t
-	nmYglYDGE5gmn/Bb9OmOUF4OPMeo9r6WXP54uZ+uCXz0zIqVEV5UPMnYasGSeg==
-X-Gm-Gg: AYBFou1E4Qq1vaSyh/JlXngMttWXwrhgiWPKKYdlWyDBxA1g6tmfoTo+VdXlR59ms/E
-	dR7MXviETTuQpDNPsyseMDrVyN2JIRU2hXxJVO/9hArWsY7ySY44GASGb038ABwu92zyvls+0fG
-	EPyRkNxDYhTyqhgPZFbvekhbDZwJQc+dfFiGL+N0TrUs/ciWyNhhsT+kjNq06owazvan7o3KSmI
-	ySGKWnHrMry/7TPR8j0R+tfW25K6RCu4GEn38hdxMZTKyMdH0BxE1vVmjVSxxBzpGxBwi3qR1dq
-	y1azFpOjR1sKVgRcvxQDmc1hEzDPrgWVJ+QZGcgaEYl9RmIXEMovLPtIgBU8eyRIVMKEW0wbz8J
-	OpfukGUOQCOwO26NRa13MUkKw9ZuHp7eMQb6KfZmzVEuSIXee6XgsOoKmh5fcoxUVHUcaEQ4tck
-	xExvZiGEuVwI07/Ge9KAqtS3OMO3VPTQHUNJPXmv28ydTliQwiV6/F6ez5VtVmtYyEh5rdVUwIe
-	cOvZJNmP54i6/dD1aO45RCWSQm3mHpPPrfVvgV6w2fNYfgPp9DHm8a+amDs3a8MHZ0aS0ldRQdl
-	bp2NySxiasHqO2WVOiyi8eWe1lSvN8IfHiOI2unYhEnxLWcKdT7dHGXlIlVVmjDecNv5Jpw=
-X-Received: by 2002:a05:600c:6285:b0:4a1:fa27:df7c with SMTP id 5b1f17b1804b1-4ac182dc8f6mr83184385e9.34.1793401264862;
-        Fri, 30 Oct 2026 16:01:04 -0700 (PDT)
-Received: from krava (ip-94-113-247-31.net.vodafone.cz. [94.113.247.31])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71a4d425sm5743208f8f.1.2026.10.30.16.01.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 16:01:04 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sat, 31 Oct 2026 00:01:02 +0100
-To: HyeongJun An <sammiee5311@gmail.com>
-Cc: olsajiri@gmail.com, bpf@vger.kernel.org, simon@swine.de, ast@kernel.org,
-	andrii@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
-	tj@kernel.org, yonghong.song@linux.dev, stable@vger.kernel.org,
-	andrii.nakryiko@gmail.com, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH bpf v3 1/2] bpf: disable private stack for sleepable
- programs
-Message-ID: <auUhrnOOUWY3Mb9y@krava>
-References: <20260822225444.2774461-2-simon@swine.de>
- <CAADnVQ+MCsQxn5KTp-y7pZu9DrV0Lhy9=+T4yofCfZEZGZcWdg@mail.gmail.com>
- <apC6-9YqBpOjFLGr@krava>
- <20261030012258.3005240-1-sammiee5311@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ancqPh3I
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JgQB6eQyJeOLF0EbOq6HesW51HXnBkikKOZnGecsjCE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793403247; v=1; x=1794008047;
+ b=ancqPh3IwR3rm/Xkv6Xu1KM4qPM64X3u2A4QT6z9gtRHM8ykxWjOXQ4og0iBBCD1jZcihLdu
+ tAxm1gwnkxPpZXNT8lciJzj39TSKtiyWG6WNEwqsSOnzV8J23SKdpdrMkTFrQYX8sMPEo6mavw7
+ OipvuaVodtof6asR2sM8P0Tk=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id 44c884ca5602a9f9;
+	Fri, 30 Oct 2026 23:34:07 +0000
+X-Mizu-Trace-ID: 44c884ca5602a9f9
+X-Migadu-Flow: FLOW_OUT
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Quentin Monnet <qmo@kernel.org>
+Cc: bpf@vger.kernel.org,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Cupertino Miranda <cupertino.miranda@oracle.com>,
+	David Faust <david.faust@oss.qualcomm.com>,
+	Ian Rogers <irogers@google.com>,
+	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
+	Vineet Gupta <vineet.gupta@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 00/13] bpftool: Per-record CO-RE attributes in the C dump
+Date: Fri, 30 Oct 2026 16:33:42 -0700
+Message-ID: <20261030233355.1836749-1-ihor.solodrai@linux.dev>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,212 +74,120 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261030012258.3005240-1-sammiee5311@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 30, 2026 at 10:22:58AM +0900, HyeongJun An wrote:
-> On Fri, Aug 28, 2026 at 12:32:27AM +0200, Jiri Olsa wrote:
-> > > my understanding is that preemptable kernel doesn't mean that
-> > > bpf prog can be preempted by user space.
-> > > only by kernel.
-> [...]
-> > hum.. non-sleepable uprobe prog is run by bpf_prog_run_array_uprobe
-> > and it disables only task migration, preemption is not disabled and
-> > holds rcu_read_lock (which seems ok for preemption)
-> > so I'm not sure why it wouldn't be preemptible by another task
-> 
-> It is preemptible, and the private stack gets corrupted when it happens.
-> We hit this in a uprobe/uretprobe based tracer and reduced it to a small
-> reproducer.
-> 
-> The second writer is not user space. The scheduler preempts the task
-> while it is inside the program. migrate_disable() keeps that task on its
-> CPU, but the CPU can still run another task. That task hits the same
-> uprobe, runs the same program and writes its frame into the same per-CPU
-> private stack. When the first task resumes, its frame holds the second
-> task's values. Neither uprobe run path disables preemption:
-> 
->   bpf_prog_run_array_uprobe()  migrate_disable(), plus rcu_read_lock()
->                                for non-sleepable programs
->   uprobe_prog_run() (multi)    migrate_disable(), plus rcu_read_lock()
->                                or rcu_read_lock_trace()
-> 
-> With PREEMPT_RCU, rcu_read_lock() does not disable preemption.
-> 
-> bpf_enable_priv_stack() gives a private stack to every
-> BPF_PROG_TYPE_KPROBE program with at least BPF_PRIV_STACK_MIN_SIZE of
-> stack and no tail call. So classic uprobes and uprobe.multi are
-> affected as well, not only sleepable programs.
-> 
-> The test: four processes pinned to one CPU call getppid() in a loop for
-> 10 s. The program fills 16 stack slots (a 216-byte frame) with
-> bpf_get_current_pid_tgid(), spins with 200 bpf_ktime_get_ns() calls,
-> and counts runs where a slot no longer matches a fresh
-> bpf_get_current_pid_tgid(). The JIT output confirms that this program
-> uses the private stack. The controls do not: one adds a tail call into
-> an empty PROG_ARRAY, the other uses a single slot.
-> 
-> Clobbered entry runs / total runs, one 10 s run per cell (7.0: one of
-> two runs, the other was within a few percent), x86_64, 4-vCPU KVM
-> guests:
-> 
->   kernel         preempt    uprobe      uprobe.multi  uprobe.s
->   6.12.112       voluntary  0/288000    0/296000      0/288000  *
->   6.18.56        none       0/272000    0/288000      0/288000
->   6.18.56        voluntary  0/272000    0/288000      0/288000
->   6.18.56        full       497/272000  481/280000    501/280000
->   6.18.56        lazy       0/280000    0/280000      0/288000
->   7.0 (Ubuntu)   full       1221/856004 1202/864004   1158/856004
->   7.0 (Ubuntu)   lazy       0/840004    0/848004      1/856004
->   7.2.10         full       649/296000  654/288000    642/288000
->   7.2.10         lazy       642/288000  622/280000    655/288000
->   bpf-next       full       700/288000  595/280000    619/280000
->   bpf-next       lazy       634/288000  670/288000    647/288000
-> 
-> * 6.12 has no private stack. Its JIT output uses the task stack.
-> 
-> The return probes gave numbers of the same size. Both controls stayed at
-> 0 in every row. On 7.0 under lazy, each variant gave 0 to 2 clobbered
-> runs per 10 s run across repeats. bpf-next was 7.3.0-rc5-g763187dbbf83.
-> On 6.18, lazy stays at zero while 7.2 and bpf-next corrupt under lazy as
-> often as under full. We did not look into why.
-> 
-> In the tracer this showed up as copies from another task's buffer
-> pointer and length (wrong bytes or -EFAULT), and as return probes that
-> found no entry state because the tid in the frame was not theirs.
-> This was on the Ubuntu 7.0 kernel with its default lazy preemption, at
-> one to four bad calls per million under steady load, and more when the
-> host was busy. It went to zero once the programs stopped using the
-> private stack.
-> 
-> On the fix: I agree with Andrii that skipping the second run is wrong
-> for uprobes. It is a separate, legitimate event, and a tracer that
-> counts calls would silently lose it. Disabling the private stack for
-> uprobes, sleepable or not, as he suggested, avoids that. At load time a
-> classic uprobe program cannot be told apart from a kprobe, so this needs
-> either the load-time marker that was discussed or dropping the private
-> stack for BPF_PROG_TYPE_KPROBE. For uprobe.multi, expected_attach_type
-> already says BPF_TRACE_UPROBE_MULTI.
-> 
-> Until then, a single tail call into an empty PROG_ARRAY keeps a program
-> off the private stack.
-> 
-> I can turn the reproducer into a selftest, or run any version of the fix
-> on these kernels.
+bpftool's C dump wraps its output in a clang attribute pragma:
 
-sorry.. seems this fell through cracks
+  #pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
 
-could we add a BPF_TRACE_UPROBE expected attach type for classic uprobes?
+GCC-BPF implements preserve_access_index, but not the pragma. Since
+the commit 675b4e24bc50 ("bpf: Temporarily define
+BPF_NO_PRESEVE_ACCESS_INDEX for GCC") the BPF selftests build GCC
+objects with -DBPF_NO_PRESERVE_ACCESS_INDEX, which drops CO-RE from
+vmlinux.h altogether.
 
-but I think we can't reject attaching an unmarked BPF_PROG_TYPE_KPROBE
-program to a uprobe if it was JITed to use a private stack, that would 
-break existing users
+This series replaces the pragma with an explicit attribute on each
+record definition, and uses the same mechanism to annotate the context
+types that the verifier rewrites with preserve_static_offset.
 
-thoughts?
+Jose proposed per-record attributes in May 2024 [1]. It stalled on a
+requirement from preserve_static_offset (PSO) work [2] to add
+attributes on selected types only, which a fixed string cannot
+express.
 
-thanks,
-jirka
+BTF decl tags can carry an arbitrary attribute list since commit
+51d1b1d42841 ("libbpf: Introduce kflag for type_tags and decl_tags in
+BTF"), and btf_dump renders them on record definitions, since
+76ea31239021 ("libbpf: Render decl_tags in btf_dump"). This allows
+bpftool to put any attribute on any subset of records, with no new
+libbpf API.
 
+Patch "libbpf: Dump kflagged BTF tags as is" makes btf_dump print
+kflagged tag strings as is, instead of wrapping them in
+__attribute__((...)). Record definitions then carry plain macro names,
+which the generated header defines. resolve_btfids, the only in-tree
+producer of kflagged tags, now encodes the complete arena specifier
+__attribute__((address_space(1))), and bpftool handles the legacy
+encoding correctly for backwards compatibility with older kernels.
+Old bpftool emits invalid C from the new kernel BTF; this is accepted.
+
+[1] https://lore.kernel.org/bpf/20240503111836.25275-1-jose.marchesi@oracle.com/
+[2] https://lore.kernel.org/bpf/20231208000531.19179-1-eddyz87@gmail.com/
 
 ---
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 8d7228834305..c0bb356b1f46 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1200,6 +1200,7 @@ enum bpf_attach_type {
- 	BPF_TRACE_FENTRY_MULTI,
- 	BPF_TRACE_FEXIT_MULTI,
- 	BPF_TRACE_FSESSION_MULTI,
-+	BPF_TRACE_UPROBE,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 02ed5368f056..8dfa98b22be9 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2800,6 +2800,12 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
- 		return -EINVAL;
- 
- 	switch (prog_type) {
-+	case BPF_PROG_TYPE_KPROBE:
-+		if (expected_attach_type == BPF_TRACE_UPROBE ||
-+		    expected_attach_type == BPF_TRACE_UPROBE_MULTI ||
-+		    expected_attach_type == BPF_TRACE_UPROBE_SESSION)
-+			return 0;
-+		return expected_attach_type ? -EINVAL : 0;
- 	case BPF_PROG_TYPE_CGROUP_SOCK:
- 		switch (expected_attach_type) {
- 		case BPF_CGROUP_INET_SOCK_CREATE:
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 26a5ee0708a3..d9f390b0d289 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5699,6 +5699,10 @@ static enum priv_stack_mode bpf_enable_priv_stack(struct bpf_prog *prog)
- {
- 	if (!bpf_jit_supports_private_stack())
- 		return NO_PRIV_STACK;
-+	if (prog->expected_attach_type == BPF_TRACE_UPROBE ||
-+	    prog->expected_attach_type == BPF_TRACE_UPROBE_MULTI ||
-+	    prog->expected_attach_type == BPF_TRACE_UPROBE_SESSION)
-+		return NO_PRIV_STACK;
- 
- 	/* bpf_prog_check_recur() checks all prog types that use bpf trampoline
- 	 * while kprobe/tp/perf_event/raw_tp don't use trampoline hence checked
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 457d75ea7142..5fb8b40f52e0 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -11835,6 +11835,19 @@ static int __perf_event_set_bpf_prog(struct perf_event *event,
- 	    (is_syscall_tp && prog->type != BPF_PROG_TYPE_TRACEPOINT))
- 		return -EINVAL;
- 
-+	/* XXX leftover.. Multi and session uprobes must use their BPF link attachment path. */
-+	if (prog->expected_attach_type == BPF_TRACE_UPROBE_MULTI ||
-+	    prog->expected_attach_type == BPF_TRACE_UPROBE_SESSION)
-+		return -EINVAL;
-+
-+	if (prog->expected_attach_type == BPF_TRACE_UPROBE && !is_uprobe)
-+		return -EINVAL;
-+
-+	/* XXX can we do this? */
-+	/* A preempted uprobe can be re-entered and overwrite its private stack. */
-+	if (is_uprobe && !prog->expected_attach_type && prog->aux->jits_use_priv_stack)
-+		return -EINVAL;
-+
- 	if (prog->type == BPF_PROG_TYPE_KPROBE && prog->sleepable && !is_uprobe)
- 		/* only uprobe programs are allowed to be sleepable */
- 		return -EINVAL;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 8d7228834305..c0bb356b1f46 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1200,6 +1200,7 @@ enum bpf_attach_type {
- 	BPF_TRACE_FENTRY_MULTI,
- 	BPF_TRACE_FEXIT_MULTI,
- 	BPF_TRACE_FSESSION_MULTI,
-+	BPF_TRACE_UPROBE,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 02e75b183ed0..3b7aa4903758 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -10842,11 +10842,11 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("sk_reuseport/migrate",	SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT_OR_MIGRATE, SEC_ATTACHABLE),
- 	SEC_DEF("sk_reuseport",		SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT, SEC_ATTACHABLE),
- 	SEC_DEF("kprobe+",		KPROBE,	0, SEC_NONE, attach_kprobe),
--	SEC_DEF("uprobe+",		KPROBE,	0, SEC_NONE, attach_uprobe),
--	SEC_DEF("uprobe.s+",		KPROBE,	0, SEC_SLEEPABLE, attach_uprobe),
-+	SEC_DEF("uprobe+",		KPROBE,	BPF_TRACE_UPROBE, SEC_NONE, attach_uprobe),
-+	SEC_DEF("uprobe.s+",		KPROBE,	BPF_TRACE_UPROBE, SEC_SLEEPABLE, attach_uprobe),
- 	SEC_DEF("kretprobe+",		KPROBE, 0, SEC_NONE, attach_kprobe),
--	SEC_DEF("uretprobe+",		KPROBE, 0, SEC_NONE, attach_uprobe),
--	SEC_DEF("uretprobe.s+",		KPROBE, 0, SEC_SLEEPABLE, attach_uprobe),
-+	SEC_DEF("uretprobe+",		KPROBE, BPF_TRACE_UPROBE, SEC_NONE, attach_uprobe),
-+	SEC_DEF("uretprobe.s+",		KPROBE, BPF_TRACE_UPROBE, SEC_SLEEPABLE, attach_uprobe),
- 	SEC_DEF("kprobe.multi+",	KPROBE,	BPF_TRACE_KPROBE_MULTI, SEC_NONE, attach_kprobe_multi),
- 	SEC_DEF("kretprobe.multi+",	KPROBE,	BPF_TRACE_KPROBE_MULTI, SEC_NONE, attach_kprobe_multi),
- 	SEC_DEF("kprobe.session+",	KPROBE,	BPF_TRACE_KPROBE_SESSION, SEC_NONE, attach_kprobe_session),
+
+v2->v3:
+  * Print kflagged decl and type tags as is in btf_dump, and encode
+    the complete arena specifier in resolve_btfids (Andrii)
+  * Define __bpf_relocatable and __bpf_static_offset as complete
+    attribute specifiers, so record definitions carry only the macro
+    names (Andrii)
+  * New patch "bpftool: Normalize legacy arena type tags before C dumps"
+    keeps C dumps of older kernel BTF valid
+  * Rename the no_pai map and helper to non_relocatable, and use a bool
+    array instead of linux/bitmap.h (Andrii)
+  * selftest refactoring: build bpftool_btf_dump fixtures in
+    btf_to_tmpfile()
+  * Commit message and documentation rewording, other nits
+
+v2: https://lore.kernel.org/bpf/20261023222652.3927736-1-ihor.solodrai@linux.dev/
+
+v1->v2:
+  * Rename __bpf_core_pai to __bpf_relocatable
+  * Rename __bpf_core_pso to __bpf_static_offset
+  * Use a split BTF to add decl_tags in bpftoo instead of a detached
+    copy (Alexei, Alan)
+    * New patch "libbpf: Look up BTF strings without making BTF
+      modifiable" lets btf__find_str() build its string index without
+      making BTF modifiable
+    * Dropped patch "bpftool: Dump C from a detached BTF copy"
+  * The Clang crash on __builtin_preserve_field_info over PSO types is
+    fixed in LLVM. PSO stays on by default; -D__bpf_static_offset=
+    remains the documented workaround for Clang 18 through 23
+  * GCC-BPF gets __bpf_relocatable from patch #3, so its narrow loads
+    from context types fail verification until patch #4 (bpf-ci bot),
+    left as is
+  * Commit message and documentation rewording
+
+v1: https://lore.kernel.org/bpf/20261016000012.2232059-1-ihor.solodrai@linux.dev/
+
+---
+
+Ihor Solodrai (13):
+  libbpf: Look up BTF strings without making BTF modifiable
+  libbpf: Dump kflagged BTF tags as is
+  docs, libbpf: Document complete BTF annotation strings
+  bpftool: Normalize legacy arena type tags before C dumps
+  selftests/bpf: Build BTF fixtures in btf_to_tmpfile()
+  selftests/bpf: Cover legacy arena type tags in bpftool C dumps
+  selftests/bpf: Cover unknown BTF header-extension bytes in btf dump
+  bpftool: Apply __bpf_relocatable per record on BTF dump
+  bpftool: Skip __bpf_relocatable on verifier-rewritten context types
+  bpftool: Emit __bpf_static_offset on verifier-rewritten context types
+  selftests/bpf: Cover record attributes in bpftool BTF dumps
+  selftests/bpf: Cover context and socket accesses through vmlinux.h
+  bpftool: Document __bpf_relocatable and __bpf_static_offset
+
+ Documentation/bpf/btf.rst                     |  14 +-
+ Documentation/bpf/kfuncs.rst                  |   3 +-
+ .../bpf/bpftool/Documentation/bpftool-btf.rst |  26 +++
+ tools/bpf/bpftool/btf.c                       | 188 +++++++++++++++--
+ tools/bpf/resolve_btfids/main.c               |   2 +-
+ tools/lib/bpf/btf.c                           |  43 ++--
+ tools/lib/bpf/btf_dump.c                      |   4 +-
+ .../bpf/bpftool_btf_dump_sorted.expected      |  48 ++++-
+ .../bpf/bpftool_btf_dump_unsorted.expected    |  48 ++++-
+ .../bpf/prog_tests/bpftool_btf_dump.c         | 194 +++++++++++++++---
+ .../selftests/bpf/prog_tests/btf_dump.c       |  91 ++++----
+ .../selftests/bpf/prog_tests/btf_write.c      |   4 +-
+ .../selftests/bpf/prog_tests/resolve_btfids.c |   4 +-
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_ctx_rewritten.c        |  59 ++++++
+ 15 files changed, 601 insertions(+), 129 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_ctx_rewritten.c
+
+
+base-commit: eaae576c34d7e001767b6845a5950b0b8db3e68a
+-- 
+2.56.0
+
