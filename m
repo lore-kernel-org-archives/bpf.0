@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.10
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793403275;
-	b=SVplRcdM7LocuqGr1YDfx2uBHYaLTnfmyTCMK8sAFMK6jmqtV2dv22BZXRsiMO/kY19l
-	 kKIDVtFhGZUdnW3N7SdwgxNWIHS2tMkxMRJfNcbRPIaeZqMMK/jZqxswDt80+cAiVMiuF
-	 S6OwgsrbFpGpLXJ8iDeLRTl+cMDsfggL3olcHsBi0DsEaUTlc4hYsw3rVcPWbk3TaI0OL
-	 aPwHvgTLoAs2Nb46+iSF16CzSZitAkFeJ2orrSeiFeD4EOaSmoW4yqj8Lwvf8qUG56TLM
-	 U/7LgEvnmmwCeFT/3nJQIZYUZ+8SZ+RbCwirzaTn6jhzPFPfSlDhU2YbWO19Tkfnh1w==
+	t=1793403279;
+	b=ASJNyQCd0rDvqDnmvhzLO25q0WGEKb/Xg77AlqCFmcz+woYH0vg1ZXNGi4AH2UOJV+qJ
+	 TC/rgIZO6kGoiAAngBFWJj2EcjUhYP+ArCkff03+HSrCjuk486tKl/OrQOT0oPARKvKHU
+	 OlHs3WMYp0XguLZb/JrQPc1kfk4kLCwXxfLmEx4t03ztM5xtzcauZW92A+zdohwvtvz34
+	 l8G2yEhSeBOV3Bw51RiC1fQDV1J5eU6E9mVFKfVgU6ksYSpNoCjGNBnuSNi8Ylq1l+zGw
+	 0i6N7l/HibNFJuix19g1/AXSrUQz/IBnEjBiwEDhdbsj/JldSMHDn2sf89AZor9VHUg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793403275;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793403279;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=uGsegirvneLN+oPwS5M46TKzpsJLJlgUZkuHZXd++2s=;
-	b=c3MuOMJA5Qq+gLJx8toRKoWLPpV20jKHWvbpd5M6eBy+8fBJAAF+x7w/xghBySh7MX3g
-	 FMhvCy3UvUv8aewGTjeJUlXiTFLqA1LZ028WLeoB/jJpxLEHY40rNRoDbTkxBW7aZm/W0
-	 WRnqMiYK5PyHUyAr2uI2NozCXP7MuPAUeO6MuyYUbzPV6ophcqcrcYGIjrcUSOjGL6qRE
-	 plXbZjFVw2I7fH61wRC4/uWwf2RIOWdMPFzlBpU6DdB59V2CGvr+FjvMv8Cx9rGnh6Uuv
-	 aGErzYF2b80TSRS6HQhet7mhMmbP0UF+oIrc4ZxRT4Kic/QGjPkklAk1nX74IMRvP/g==
+	bh=G3YFAaaxl0Inr2/H53xz8FfOpWErwcq/FMtfYO1jp6U=;
+	b=kMEWezvfXuL11fU/g1uKREct4cra2/SATMo3h7l9hult/2RQI6prblPMYSUEplRqmK74
+	 EfEXf2fOyUpkjkFr51oSeSpQM7NdKMMq2UYLKcEsj2bI1fdPlFHINFP07402C5tIE77Ce
+	 fkwfcTagit8NYqm9Jg8lFqeziLHUM8wVoTvwyPefnOCGXBwdFcIT4By+qP2pDKdcXngtQ
+	 92mwmoRSOXP5ynzSsO10JyXqmJ7IZjjgYn/wklhQkylPT7bSju7n78XmU68mClQBewst0
+	 n2RSd2L4670kYcWp1xq9JFQ1WoEEX3NdYBY9qSkOzMAYZaCbYpiPaIxnuJHARJNsGSA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SoLPffDI;
-	arc=none smtp.remote-ip=95.215.58.10
-Received: from mta1.migadu.com (out-10.mta1.migadu.com [95.215.58.10])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X2Ek2HkO;
+	arc=none smtp.remote-ip=91.218.175.12
+Received: from mta0.migadu.com (out-12.mta0.migadu.com [91.218.175.12])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372D6606A31A
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 23:34:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 372D6606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3BA606A31A
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 23:34:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA3BA606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SoLPffDI
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=X2Ek2HkO
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ogC6mtvWjMyRThpRlxxFVBsUROpjuaEhgLRLA1X3eUs=;
+DKIM-Signature: a=rsa-sha256; bh=QwsJ5AyRpbL/65NQ5weSQJ5m3J9xoPU4+GfbGvNUP7w=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793403273; v=1; x=1794008073;
- b=SoLPffDIXzBg4YPS8Nhw7bdiZy71ZznjNSoNA+RvEL28pWGjOLtKd1nZH+59Ah4+JL/rrYs7
- gFbXopZkqL1F/OXNDoaCa3vCZHvSh/q/FFTanIyKc29hShdNJd/fOVOoU5/8c7Qs6/yRMx13njJ
- cqHcMmfiM7uxYBPJBFYJ+tA8=
+ t=1793403276; v=1; x=1794008076;
+ b=X2Ek2HkOCEKsSPhXpxtqDvTnw5jTLicnlM+j7vaxfW4rFjxxp3PPBZdZnDPXvylmcxAWOe9B
+ 5kKMoXGeh9dszOVM592Y3FiID6jNL+UeMi+pq9KuCyt7LWUQ9C12B9brgkGCT33c6p8ireg14jz
+ rcvwD3jmB1uSSnMBFdlecPvc=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id edb194e944abea32;
-	Fri, 30 Oct 2026 23:34:33 +0000
-X-Mizu-Trace-ID: edb194e944abea32
+Received: by mta12.migadu.com with ESMTPS id 657d2b4e2f082f61;
+	Fri, 30 Oct 2026 23:34:36 +0000
+X-Mizu-Trace-ID: 657d2b4e2f082f61
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -62,9 +62,9 @@ Cc: bpf@vger.kernel.org,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	Vineet Gupta <vineet.gupta@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v3 06/13] selftests/bpf: Cover legacy arena type tags in bpftool C dumps
-Date: Fri, 30 Oct 2026 16:33:48 -0700
-Message-ID: <20261030233355.1836749-7-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v3 07/13] selftests/bpf: Cover unknown BTF header-extension bytes in btf dump
+Date: Fri, 30 Oct 2026 16:33:49 -0700
+Message-ID: <20261030233355.1836749-8-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261030233355.1836749-1-ihor.solodrai@linux.dev>
 References: <20261030233355.1836749-1-ihor.solodrai@linux.dev>
@@ -79,94 +79,79 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpftool rewrites kflagged "address_space(1)" type tags from older
-kernel BTF to the complete attribute specifier before dumping C.
+libbpf can parse BTF with a header carrying unknown nonzero extension
+bytes, such as BTF from a newer kernel, but refuses to modify it.
 
-Add a bpftool_btf_dump subtest that dumps a minimal BTF with an arena
-kfunc in the legacy encoding, and checks that its C prototype carries
-the complete specifier, fixed up by bpftool.
+It is expected for a C dump of a BTF with extension bytes to match the
+dump of the same BTF without them, but there is no test for this.
+
+Add a test case to bpftool_btf_dump to cover it.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../bpf/prog_tests/bpftool_btf_dump.c         | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ .../bpf/prog_tests/bpftool_btf_dump.c         | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
-index 80e8e435d702..e66e686e4e12 100644
+index e66e686e4e12..3bfbd185a74d 100644
 --- a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
 +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
-@@ -57,6 +57,38 @@ static struct btf *mk_btf(void)
+@@ -57,6 +57,42 @@ static struct btf *mk_btf(void)
  	return btf;
  }
  
-+/*
-+ * Older kernel BTF encodes the arena attribute as "address_space(1)":
-+ *
-+ *	int __attribute__((address_space(1))) *arena(void);
-+ */
-+static struct btf *mk_legacy_arena_btf(void)
++/* mk_btf() with a nonzero byte in an unknown header extension */
++static struct btf *mk_hdr_extra_btf(void)
 +{
-+	struct btf *btf;
++	struct btf *btf, *ext_btf = NULL;
++	const __u32 extra_sz = 4;
++	__u32 hdr_len, sz;
++	const void *raw;
++	char *ext;
 +
-+	btf = btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf, "new_empty"))
++	btf = mk_btf();
++	if (!btf)
 +		return NULL;
 +
-+	btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
-+	btf__add_type_attr(btf, "address_space(1)", 1);
-+	btf__add_ptr(btf, 2);
-+	btf__add_func_proto(btf, 3);
-+	btf__add_func(btf, "arena", BTF_FUNC_GLOBAL, 4);
-+	btf__add_decl_tag(btf, "bpf_kfunc", 5, -1);
++	raw = btf__raw_data(btf, &sz);
++	if (!ASSERT_OK_PTR(raw, "raw_data"))
++		goto out;
 +
-+	VALIDATE_RAW_BTF(
-+		btf,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] TYPE_TAG 'address_space(1)' type_id=1 kflag=1",
-+		"[3] PTR '(anon)' type_id=2",
-+		"[4] FUNC_PROTO '(anon)' ret_type_id=3 vlen=0",
-+		"[5] FUNC 'arena' type_id=4 linkage=global",
-+		"[6] DECL_TAG 'bpf_kfunc' type_id=5 component_idx=-1");
++	hdr_len = ((const struct btf_header *)raw)->hdr_len;
 +
-+	return btf;
++	ext = calloc(1, sz + extra_sz);
++	if (!ASSERT_OK_PTR(ext, "alloc_ext"))
++		goto out;
++
++	memcpy(ext, raw, hdr_len);
++	ext[hdr_len] = 0xA5; /* any nonzero value */
++	memcpy(ext + hdr_len + extra_sz, raw + hdr_len, sz - hdr_len);
++	((struct btf_header *)ext)->hdr_len = hdr_len + extra_sz;
++
++	ext_btf = btf__new(ext, sz + extra_sz);
++	ASSERT_OK_PTR(ext_btf, "btf_new_ext");
++	free(ext);
++out:
++	btf__free(btf);
++	return ext_btf;
 +}
 +
- static struct btf *mk_loc_btf(void)
- {
- 	struct btf *btf;
-@@ -234,6 +266,19 @@ static void test_dump(const char *btf_path, bool sorted)
- 	free(dump);
- }
- 
-+static void test_legacy_arena(const char *btf_path)
-+{
-+	char *dump;
-+
-+	dump = dump_c(btf_path, true);
-+	if (!dump)
-+		return;
-+
-+	ASSERT_HAS_SUBSTR(dump, "int __attribute__((address_space(1))) *arena(void)",
-+			  "arena_kfunc");
-+	free(dump);
-+}
-+
- static void test_loc_dump(const char *btf_path)
- {
- 	const char expected[] =
-@@ -283,6 +328,12 @@ void test_bpftool_btf_dump(void)
+ /*
+  * Older kernel BTF encodes the arena attribute as "address_space(1)":
+  *
+@@ -328,6 +364,12 @@ void test_bpftool_btf_dump(void)
  		unlink(path);
  	}
  
-+	if (!btf_to_tmpfile(mk_legacy_arena_btf, path)) {
-+		if (test__start_subtest("legacy_arena"))
-+			test_legacy_arena(path);
++	if (!btf_to_tmpfile(mk_hdr_extra_btf, path)) {
++		if (test__start_subtest("hdr_extra"))
++			test_dump(path, true);
 +		unlink(path);
 +	}
 +
- 	if (!btf_to_tmpfile(mk_loc_btf, path)) {
- 		if (test__start_subtest("loc_dump"))
- 			test_loc_dump(path);
+ 	if (!btf_to_tmpfile(mk_legacy_arena_btf, path)) {
+ 		if (test__start_subtest("legacy_arena"))
+ 			test_legacy_arena(path);
 -- 
 2.56.0
 
