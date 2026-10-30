@@ -1,100 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.48
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793320095;
-	b=RqHtFkB+CC2LYr68cXGVV6hYmczPEpVUnoHO4XptUvAAWAYWa1+eDYS/ahB7cH5haP0p
-	 aBwApAE7Yx7TjxYNpxSLUV/b+Hekbn2Kx+u+2Cy0cYbx7v+Qf5BCO8AfN+w8d+wNSdHgF
-	 5F2K6XLDfAUTXtSNnq+20NjVh53CbEgeigmhd9PGGkmSKHa4x958O/7OcBoUjQ5usd0N1
-	 /KM4C9zCt3Y/Lc8HRfWuNb9lt+530TPQgPmJSiDuS3V94+GX1i/845URXaz0zStZ68EHr
-	 STU6WqYBoiwLSU1Z6yH5hpfifX/yaSfKj4fmLRKl1OAWR6SEjhe9CSNN2ksRa5cylbw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793320095;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=brgLj6lJ9qrzkbEmy6aUespMxR1HwV6CvzIg1+zIkpE=;
-	b=uFV8gpPcjgoriKEGE7SgNQi1/+zbqlpr2ilZX/5olLOuZ+wIbq/MdwMiUiLBbmHM2x3h
-	 exZloWgiywWh46w79In/FzlbEaWffNe37jyhBAWHaGmmThxIP/jiVddjjs0gI/ZSgXDRq
-	 x22RHD1cfwLJH5PSsNR2rD37buiolNjUP0SkwqSwJAuqKl1LDYcXPvlZJ+ePOZ22IuErm
-	 gThLDRGX2ub4N9+uyLE2BU79OxsTz4nWAMaL88brqAyDCTHEag8f6iLAxPPTazJ8RfeoQ
-	 ZPLtQO22KCLsMUDfV6zumh3fNGpMT5Xc3nzWW4oox2Dsz1TITTqL9dP+5VfmNhgYEdQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EPx92SD2;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.48
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.13
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793321140;
+	b=Xrkn7XSsXL0b7+O0h+o9RLl2qmuNphcIOZi3zzsHwMLYNOg+n/S0EahARHCq+Jis9OzZ
+	 WJPUFOW29wUlUo+r+gYYTVrLsb8v/bORcVZ1J5yLNqjINXxHMK0K2SwO5fda84ftcdlmj
+	 IhhuIKpXzP+3wdDv2t3GUpBhwaJxU1NLJKxcdAraHEQ14VTUiJfU5nuM4QHi6GPfKAzBg
+	 bho2vJiGrEp63pmsvyrtPM9nkgiDIQSOT4QzC4ufkyPeY+nE6T6jjdWHjliHXHdLAECCI
+	 t5V6e7ZUfKqQBS7oHjWpW/3rZZ8ZdVt427TuVO1APmBsucIe0fykb1toS32UZy/1cFw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793321140;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=dqTSZz88EEh8ZELacMbZ3PLmZPsLOwVoSmrw//6jRJg=;
+	b=mIR7jnVM5ga00ASli5Gjkt8BvY3fTs7TlVKYV8DYuZx8E7LJzdTJnQFdQ5O1SmxcS8L2
+	 hmsyU7xj/hYOYjEm4KMxK9qf43RFMJ48F5HimSGK4WgJNi+0td84eGM8z2tHQCCdd/i5X
+	 yOvvKUBnqjrui3XuUnA0xJgmtFGS+D3HtOGddfZ5/JIN76tW2GNj4G6YCXloZW6oOdlu9
+	 CgwFo2xH1hQI41K2+S67zgl1pqKUlMYhlVOBzC6IZyRb5PwKv2kqIDG9a1KKUkIoUBo7m
+	 BF1Wf29wPSuh3WIOPsxiS/pWmkXsJGSzQIKfJj4ZnOtw0DFmZxltjfQH6ZuNeFUWYHw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=J7m3UpnX;
+	arc=none smtp.remote-ip=192.198.163.13
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B07A606A31F
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 00:28:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B07A606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B5D606A31A;
+	Fri, 30 Oct 2026 00:45:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51B5D606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=EPx92SD2
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c40f29667e6so15476066b.0
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 17:28:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793320094; cv=none;
-        d=google.com; s=arc-20260327;
-        b=n7aQu85ovcPeQNiYybIsguJ1nt59UO3b4hJRGlu0Qbzqbp+MBk7pFFxzo/AfNSzZXR
-         wJPsAXDrCyHSsQBniRMFf+8sxMD4wGUoquXKkgOYDAwHmCXDE/2c3c7AhSeCIWQzUhR4
-         NyoxmG/6kPmkN8WdF6rIrkaJXMy4imMZQQDwSOvFURmfkgpmVaMnedDP8pE3PKSZ35j+
-         H9QeHxbfxBBdURf6NtQ8pNi4WXVFJmrD0ImGMhNdYA7+Nc3xOtf4BxhiYq9Ym8bHnsRV
-         E75XOSUwRfWCEY6bQKLSsfjwInXHOieAZUzHwL85EKgaovmkTShMgxdndyBFZY/apBxU
-         B7jA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=brgLj6lJ9qrzkbEmy6aUespMxR1HwV6CvzIg1+zIkpE=;
-        fh=u+a5O4bjHVD3yAl9wj5UNJFq7BXtyv1kU7Kqg+SxQxE=;
-        b=FRxaaPlnBNgAiUxx0B9kWJSSvktqSqpS8avdRBmmkbShD0x0S19CdueEzX+q8UjgPX
-         Pnh0DJqTvTVniy6zGhvVdCIFNdj3E2DBdQ1btn67DgSCyuRsDG5wlQSZ4XIK/kJU+6Si
-         Yoe7TDOfZmj4eRLoQZYGua5zJzxPllzWsYYVfNwuTsM8zb/jcNRrrp69426gdyD3NLBn
-         bSJDeRhOKajmE8Rd2xOVOpHsJgoHR6vCPx6FB7H7Zl3cX04i7sIcp+YUFZMdo39jCrzN
-         z/sH3pcUood50tD0J0EFNoKhzxpWxu7Sd7HyrsJOIX7/fDmmKTBgzdst1OLoCJgrnxE6
-         4/6g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793320094; x=1793924894; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=brgLj6lJ9qrzkbEmy6aUespMxR1HwV6CvzIg1+zIkpE=;
-        b=EPx92SD2/nlj7Gy51oiGKSuUhEEV6f/QjPP90GOkDFVvLeS6MkjDeipocwNmUYAOHo
-         Nma4hshQFzy8X4MAfiLVXTjTch8fzebGbKsTHtFJVZmvtcJ/XLqiU+X5MXeqsCMVmIYv
-         Za79hAeh1NeJmDlCqaGo8wCd2EdswfqWUwrXH4+pxbUG3u1MGAduayGdfH3uUrZKg2FG
-         eri6QEgtNhdn53F3TkjFc1eyvmQSMpWYENciLq1Xsp6jUql6lXYYI0BBLIWwe3DleuAP
-         Gnl0sybHD7FswrWEWSln9OeTt7tTQs+RyhYAc6FCxYbGnZJZKGP3TlK3uV0H5AyQZyiV
-         9+1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793320094; x=1793924894;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=brgLj6lJ9qrzkbEmy6aUespMxR1HwV6CvzIg1+zIkpE=;
-        b=M/adrObk7w7iLwu76fJYwSkoV5qFzgqr/O3WE4n+uxAMeBYc9+fjBDH2ovhkEFCjb3
-         g91adYHyd1B/z5lVidzn+fjGnSz/n1j6KTnkrmCwjFWfYwLHfcAyMD3JjnB/ZlnZvA+X
-         oaBrtwkIllOylj1anrN5IwJEI5pW7LPCaT5Ngux3QsQcugpMpHDIyF5LQWhchugtWTud
-         vNfbdM8qxcrsxlWzD5Q+Uct50gq7OKvLTJ8PRP8BSWCCgzDoqC7b214vuOMIMOWw3/Yx
-         E5kvRyaNkDucJbFa9E/hkUZQzoYeFlF7C5PpCv8JFJoIkYf1e3RPzwMogJCfambApW7S
-         UmBQ==
-X-Forwarded-Encrypted: i=1; AKwUvByklf7aPFplh+tOPpQSqgFLrSXHtdUAv62dS9lUVt64TdbLAjnmFYxiDAuVBY7szRfYc2I=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJpeQxbQUOnMEKNl+dz9GwEu6l93rE35I5zigIvZcQVhXdf5lwv
-	vvnDyOHv6dC+weyRZ1GhUkOKoIuwMIc4qHANNcoogsbxNVWjUuKW/SoMDBKiFOSukIKTbhJyJPB
-	u6+Z9lItPEqyfbJdgbVTccRP5feM/50ai8FDefUni
-X-Gm-Gg: AYBFou1BT6wEa2fGgO0m4Be4Ilx/fFeiQKCnLQ/yhFKn09+pYg9z/E4AtvV3FiL0GKQ
-	Mn5LeiI2UluwHmXXQYiihzOkKTWZpFxSAD0udw6BWziU6uBkN3JFTEDvpW6LN3neKvQ8AJ8esZl
-	QRA52qC2j5G29tqJV4ajODko3OFGkg9hFtPYjYQ4fVHTC8iGvWZ8PPxjXvdW8vxe2n4mLxUVcY9
-	PLL1XQEP6yN0RmEGA9VwY7QLYeFVztZvn/nYLk7+zCpSqFix77gIC2aBJ+X+JaDSTHXDgDxTygj
-	Bi4UfCutbCwnQ61Ud8iy0qfwT6L1ufVdK8+opfsRMhNV/7n+4tGHnvJQCFkK7giLSPDLZt/n53l
-	3AXCBtDj15CJx4SGnW/+99Jpob/4/z/1U0iju6oCF+AuovcnROGXm9MCeypaGkW1synfYVSM=
-X-Received: by 2002:a17:906:730f:b0:c49:a849:cb90 with SMTP id
- a640c23a62f3a-c4ca7a9b33bmr56944566b.39.1793320093443; Thu, 29 Oct 2026
- 17:28:13 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=J7m3UpnX
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793321140; x=1824857140;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M4PqKloQ+6YTYsFOI0TadbR2AC/12M332qvttXbFns4=;
+  b=J7m3UpnX8ZFn6CC75yeYVtBr47fFztcAaRF+JXK+I//qdjEgZU9eicJ7
+   nyhBP2AQv3hxKOK7Ffrz5R5mK5Q1gSVXzrdG+QM/8V5mEjR0kMVVggCj7
+   V6D0BTicIXmm9ZgJzuKiNn2oSjksYGz5HlK4G215EzXyWXnGyO3zYsk0u
+   XHSpmVPJSTCQFzgj4qcaOh/GfBwQRVgrn3JTp/9t8vqp1SMksscXIyjg8
+   31RMSEOql9j5uY0HBNDXUkjq3LPHXBI/mieiUW4swt2NqAz+o+oC3iW2A
+   wwbkIUcRfILmH+PvyI+H4VIU63DuUDUMgwmbFt7Sgsnke4N4c4kD2jxvG
+   Q==;
+X-CSE-ConnectionGUID: 4ZQuNp+pRlKp0/cSp7Cvzg==
+X-CSE-MsgGUID: 6H+7snwmTzKP0Yn03xwtAQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11950"; a="2071727"
+X-IronPort-AV: E=Sophos;i="6.27,185,1787036400"; 
+   d="scan'208";a="2071727"
+Received: from fmviesa012.fm.intel.com ([10.60.135.152])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 17:45:39 -0700
+X-CSE-ConnectionGUID: 2AaxHfzmRZSTr+ZYbMytHA==
+X-CSE-MsgGUID: i1jLULhJTdWRBrIo/d77LQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,185,1787036400"; 
+   d="scan'208";a="7077310"
+Received: from unknown (HELO [10.238.2.61]) ([10.238.2.61])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2026 17:45:34 -0700
+Message-ID: <3d477ba2-d2af-44a4-a615-3664b0c79c01@linux.intel.com>
+Date: Fri, 30 Oct 2026 08:45:31 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,75 +72,120 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
- <20261028134012.01d52e94@pumpkin> <CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
- <CAEf4BzYT4rvKwbOJ6UQ3zcp4wdsSBqRsMz-2=U1DA2RyUA3XSg@mail.gmail.com>
-In-Reply-To: <CAEf4BzYT4rvKwbOJ6UQ3zcp4wdsSBqRsMz-2=U1DA2RyUA3XSg@mail.gmail.com>
-From: Samuel Wu <wusamuel@google.com>
-Date: Thu, 29 Oct 2026 17:28:01 -0700
-X-Gm-Features: AclHuK9TILtLrldY6faAGXZBT-kc2c2frEEMYWdaANb8mW26TierZlqcroORRGk
-Message-ID: <CAG2KctrwzWGFRs6CZcSRaFOWx49WbH9LQVQJunWsPD3MOXn_iw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: David Laight <david.laight.linux@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Patch v5 01/18] perf/x86: Disable LBR if x86_pmu.lbr_nr exceeds
+ MAX_LBR_ENTRIES
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Andi Kleen <ak@linux.intel.com>, Eranian Stephane <eranian@google.com>,
+ Sandipan Das <sandipan.das@amd.com>, Andrii Nakryiko <andrii@kernel.org>,
+ Song Liu <song@kernel.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
+ Ananth Narayan <ananth.narayan@amd.com>, linux-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+ Dapeng Mi <dapeng1.mi@intel.com>, Zide Chen <zide.chen@intel.com>,
+ Falcon Thomas <thomas.falcon@intel.com>, Xudong Hao <xudong.hao@intel.com>
+References: <20261029043914.1395147-1-dapeng1.mi@linux.intel.com>
+ <20261029043914.1395147-2-dapeng1.mi@linux.intel.com>
+ <20261029093845.GI1779021@noisy.programming.kicks-ass.net>
+ <041e5185-ff2d-4423-af5d-aed6628973c5@linux.intel.com>
+ <20261029101927.GB1813469@noisy.programming.kicks-ass.net>
+Content-Language: en-US
+From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
+In-Reply-To: <20261029101927.GB1813469@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 29, 2026 at 3:16=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+
+On 10/29/2026 6:19 PM, Peter Zijlstra wrote:
+> On Thu, Oct 29, 2026 at 05:56:15PM +0800, Mi, Dapeng wrote:
+>> On 10/29/2026 5:38 PM, Peter Zijlstra wrote:
+>>> On Thu, Oct 29, 2026 at 12:38:57PM +0800, Dapeng Mi wrote:
+>>>> Add a sanity check for x86_pmu.lbr_nr. If the hardware reports more LBR
+>>>> entries than MAX_LBR_ENTRIES, disable LBR to avoid out-of-bounds access
+>>>> in the cached LBR stack handling path.
+>>> Cute, can this actually happen?
+>> Currently it won't happen on real hardware since the maximum LBR stack
+>> depth what hardware supports is 32. But it's better have this sanity check
+>> assume the LBR stack depth could be extended to 64 or larger.
+>>
+>>
+>>>> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+>>>> ---
+>>>>  arch/x86/events/amd/lbr.c    | 8 +++++++-
+>>>>  arch/x86/events/intel/core.c | 7 +++++++
+>>>>  2 files changed, 14 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
+>>>> index a55646fcb846..96c5b5e56053 100644
+>>>> --- a/arch/x86/events/amd/lbr.c
+>>>> +++ b/arch/x86/events/amd/lbr.c
+>>>> @@ -433,7 +433,13 @@ __init int amd_pmu_lbr_init(void)
+>>>>  	ebx.full = cpuid_ebx(EXT_PERFMON_DEBUG_FEATURES);
+>>>>  	x86_pmu.lbr_nr = ebx.split.lbr_v2_stack_sz;
+>>>>  
+>>>> -	pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
+>>>> +	if (x86_pmu.lbr_nr > MAX_LBR_ENTRIES) {
+>>>> +		pr_warn("LBR entries %d exceeds max %d, disable LBR.\n",
+>>>> +			x86_pmu.lbr_nr, MAX_LBR_ENTRIES);
+>>>> +		x86_pmu.lbr_nr = 0;
+>>>> +	} else {
+>>>> +		pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
+>>>> +	}
+>>>>  
+>>>>  	return 0;
+>>>>  }
+>>>> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+>>>> index 0a34d674df59..10c694db85ea 100644
+>>>> --- a/arch/x86/events/intel/core.c
+>>>> +++ b/arch/x86/events/intel/core.c
+>>>> @@ -9023,6 +9023,13 @@ __init int intel_pmu_init(void)
+>>>>  	 */
+>>>>  	if (x86_pmu.lbr_tos && !check_msr(x86_pmu.lbr_tos, 0x3UL))
+>>>>  		x86_pmu.lbr_nr = 0;
+>>>> +
+>>>> +	if (x86_pmu.lbr_nr > MAX_LBR_ENTRIES) {
+>>>> +		pr_warn("LBR entries %d exceeds max %d, disable LBR.\n",
+>>>> +			x86_pmu.lbr_nr, MAX_LBR_ENTRIES);
+>>>> +		x86_pmu.lbr_nr = 0;
+>>>> +	}
+>>>> +
+>>>>  	for (i = 0; i < x86_pmu.lbr_nr; i++) {
+>>>>  		if (!(check_msr(x86_pmu.lbr_from + i, 0xffffUL) &&
+>>>>  		      check_msr(x86_pmu.lbr_to + i, 0xffffUL)))
+>>> Would it make sense to have but one copy of this check in
+>>> init_hw_perf_events(), after calling into the micro-arch code?
+>> Yes, that's what the previous version does, but Sashiko complains it's too
+>> late.
+>>
+>> "
+>>
+>> Does zeroing x86_pmu.lbr_nr here in init_hw_perf_events() happen too late,
+>> after intel_pmu_init() and amd_pmu_init() have already configured hardware
+>> and driver state using the unvalidated x86_pmu.lbr_nr value?
+>>
+>> "
+>>
+>> https://lore.kernel.org/all/sashiko-outbox-179814@kernel.org/
+>>
+>> It makes sense in some ways, so move the sanity check into the vendor init
+>> in this version. 
+> Urgh. But there are no events yet that early, none of that can actually
+> happen.
 >
-> On Thu, Oct 29, 2026 at 3:06=E2=80=AFPM Samuel Wu <wusamuel@google.com> w=
-rote:
-> >
-> > BY_NAME matches names exactly, like kallsyms_lookup_name(), so they
-> > would be different symbols at different addresses. Please correct me
-> > if I'm missing something here!
-> >
+> If we're really worried about this, change the micro-arch init to spawn
+> in disabled state and we call x86_pmu_enable_all() at the end.
 >
-> foo and foo.constprop0 are different functions with different
-> arguments, so I think we should distinguish them. The only special
-> case is .llvm.<hash> because that suffix is added by compiler for LTO
-> and I don't think the function itself is any different from the
-> original
+> Also, this is before x86_pmu_static_call_update(), nothing really
+> 'works' yet anyway.
 
-[...]
+Yeah, I agree. I don't think it would cause any real functionality issue by
+deferring the LBR disabling into init_hw_perf_events(). The only flaw is
+that the vendor pmu init function has already printed the LBR stack depth
+which indicates LBR works, and then init_hw_perf_events() prints LBR is
+disabled. It may cause some confusion for uses. But anyway, I don't think
+it's a big deal.
 
-> I do think it would be good to spend a bit of thought on how to
-> support at least one-by-one pagination from the get go. The same
-> mechanism can then be used by batch version. I.e., think what can we
-> use to provide data back to user which they can use to continue search
-> after the symbol we just returned (at least for fixed set of symbols
-> in vmlinux and modules; we also have dynamic symbols added for [bpf]
-> "module", etc, we should support those as much as possible with the
-> least possible deviation, IMO)
 
-Let me sit on this a bit and figure out how to distill all of this
-into a clean interface. I'll keep the .llvm.<hash>, pagination, and
-batching in mind for the design.
-
-[...]
-
-> user code can be easily written by always setting buffer size, even if
-> kallsyms_query is reused. This is the pattern with PROCMAP_QUERY,
-> let's keep it consistent.
-
-Ack, will have size in the struct for v3.
-
-> also, returning actual size even if buffer is too short is a good way
-> for user space to "probe" and increase buffer if necessary. unless it
-> adds tons of complexity, this is a good and flexible UAPI
-
-Ack.
