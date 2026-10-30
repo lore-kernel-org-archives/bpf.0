@@ -1,114 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793355209;
-	b=mZbckbtDYAK58bWihPAf8JXXRC4z+YbtAjGL59y6OT1zrwBvirYQfk3eTITZUCr/FoH9
-	 uT0VpQnIXl1Vh71+UcTNZfKCmBlN1X/OO6BipFnUTKfO04dPSvjq6oxPzmn1lq1E35kFm
-	 YK3qcVwEHDSLeejALUGVlF5BUeRIJjRqN9CKRzoaGkViCp54ccTTdhQwuxjwPv0d8AS3r
-	 h8zwLdbng/PFeHFFCTG/8+b6DhPa2RpIp7m/rchniVd52RiET+6ON2j2+kmza4oDxcAy7
-	 qk4p0a0Zd4HGf1h+fEqpjzCnM7TuRogZtyNtRB8CFaUM42OVKHh540/HhjM2tjvgT/w==
+	t=1793355296;
+	b=dJpLh4ErFSKxNuUzheg5NG1j1p8gYSfaKcj53xXCIijgFXV2LbqXQ2UVkMi6V+9P7fLR
+	 rqHUBC53pTm/RzL3MQWxSFnB6Ldlg6wJlt+iXAYHvaJqaDkaxEEDdRaqtdD+GYkqxnG4Y
+	 2l71se8gwzPsp3IqLCxjjPeOrsaAjTmOqpV2sTMCuJrueR8HhQQ2oAxW2wsLfln/Oqs3Y
+	 itXnVZeff0OF78Saapt/cdrPN2OW6af6g5yjGB18n87KMP6yxV56NEoDxtB2V6pf5NDpR
+	 eDApPncTEArf/QPc/PpVMNjbbId1xlj1fpR45BnaoQcNzJEck8hg4EWv/48eIrBvi3g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793355209;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=O0rp/2ctYtAz5V4l4tmKFoGrP6ExbbPlGpEkX5p3g2U=;
-	b=1ib4ULN8HNnT+Pq+WnD2nc73zBCi2NTdPMbW796l8GE5ohfXggbQjCv1jIXNNAmbF3e5
-	 FW5sL2I3RDIg7m07gXJ7i7C79mC5oGlmFnAcm+IyG0gE9NEILpZtFv5xnNifPWcUYrk8k
-	 Q8d4luQ23hqQkisSP4qvem7UiuAvKqyBQ9AQa/fg+h0U3cdW99Txn+dd4Qv+mDBttRM90
-	 mGioOuA75ikZ8v4hO3YfPnZUE0X28zyCpLsI9q7InySN4tzDmfvKByaIxrFqugDuEYbqv
-	 0ahwUNJ/8b8zmJYdkooVlltTuLeNuZ1jBrbJzVkKC5rU7VnqQcnDYIAh+PCOlfIf0/A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793355296;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=w+JD3u6Dxdi41StGp1M2/D2DhAk8dxZzkihehYnQT4Q=;
+	b=Bhi7+JwbfZBHrAvH26cmM6yfd1a/eYbXHvkV/jYRk/Fl16IdSzjYK5W6rD6nHeRIgOyQ
+	 nhxAwtSxf1VWdR8s55NF4a2cTXE5y2Sbe3uegYNRh1ME0Q0d9oDj/p0/KKgLFrvCEszYG
+	 OGXXejoGaU7Q6nu0PvegL7v1vK5gQ6Aa+isx/Av/LRa+8p/ps/doCiym3pMCpQaz3krB4
+	 Q/Yharqh3RxUjfj+JZ9kiPDJ5eg3bR/5ksBMr0pHhCwIXPSs7rNreLB8z8bx+R3jvCVuW
+	 LHiB23ZhGcJkkVoludYBzjD+HKvKdTG9dxtkYYCFpipkf/u8qesL8SMF1uEdmg66sHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I3h9DkOI;
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P4ytUL2d;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634EE606A31A
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 10:13:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 634EE606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A39606A322;
+	Fri, 30 Oct 2026 10:14:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I3h9DkOI
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a210470b49so3445475e9.2
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 03:13:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793355208; x=1793960008; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=O0rp/2ctYtAz5V4l4tmKFoGrP6ExbbPlGpEkX5p3g2U=;
-        b=I3h9DkOIpQJfiLOJkWzU+F+nPPRWSkcb4dbv9kO6K07IIVFYsKxGLBPLOqWTMuykEn
-         VKDTCbqKgutj4HKN5yEW46u6stV2GNB6iiHZEHO7E+flswLc9KJKu8DXDL+rfs/DapUf
-         2XcMWn40rVgoIOd/hjL5MmxSr9pUSIS1AmE1i1IRDRtnnGiFhiRwiTQQt2BioISqbPOJ
-         Hf4LRtKKXm0QHr1WLLFC+Ipj+mLyjBv4YXUEHPHSHKiSVolTgTLyM440W2IYv3VeTo1K
-         SfHz7uZ3RLIGapJidF3e4/0IodvjQjvRAvHhTbJa+WNZ03WefM9L5amBDUVsUWXoMCJa
-         FgVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793355208; x=1793960008;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=O0rp/2ctYtAz5V4l4tmKFoGrP6ExbbPlGpEkX5p3g2U=;
-        b=oQx/wC+YElRG11JUlZkp4yZef9xsi0J30tz1lgSoU43C8WXcrDbFHT3Tw6FmOO8R5/
-         wHMEXkP8OUNB0I5eGPVEqKCByA5v1z6TjO1FMqfcI94nITGspD5DNeCzEtV/IiOeuwFG
-         W0CgoE4ViGBtKjX3Ked2PV8Qzqyt4T4KAAW0erMV8nzJQAd4PYgEFeYpoSIFJdf642Hb
-         2alBzcihHwlKHYmfm9hZrEXdz8xhk0ZDCzC5wZ94BqGEB0XVNSWuBT3+2u7IkU/d/G2M
-         jTxtCePEkWqM02igYzO3tuysY4EezQAGDzr6r6wWnPnlP7nqgdP2HNInzJiZnEST6qwa
-         OHwA==
-X-Forwarded-Encrypted: i=1; AKwUvBwosWVN5ETW/xDp0ULPUJOApNyslumD/Rjztmeibwi6F9xNl351HVEXNKqP0oqOZ+IRc5I=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK1117X2dyFMRpGavwjxG4oNEIvv5Jb1JbPxytDw2XYwww/vX/j
-	viqH8VnuXgedtNi+A0/2Y6aUXzrqU++sj/tajW40oW5FJeL6flcVlDb7
-X-Gm-Gg: AYBFou0+fP3N+tX1RlCEWhmlcuGZVV2xVxi4EpyOoH78kpTN+nXI4DnnXFSsW/Xlpd/
-	O/FtDOBB8ndE1VNJKONwEbpCUfIH8nPvE6JPnPPtFyEFSZdEw13zhWLbwai1tEtIsGYJmqMQ6Gc
-	pnU1J+vKk2IWeXoUxM49mIspeYo/3SCyhBEc4qDfoxVxQCQKJAaHOHcGhD+ludl1sf6zIIywW5W
-	AZ85uhTvavQV9jNkKQBVILTrdhlmP01nuMXZxqGYdtRO7VXj9DZ3FW2cPkVIG57AukXLJWBCvTh
-	9Tcsu3mVKm3/cRmF2EFvXjdNvOWh+LDpiyvkA5WTT13uPCHjB8inLF4GvvG3/HoZbwAk7X62Dp6
-	wHRnZ87OHuntAMfailWFVEmP8CYgPE8zpWU1qxpzKCUBevlLwib3N75lkFvvdgEmvuCAUm+ck53
-	1FwjGz40DytS9HDzX7gYlsnjvbDsSUZ6cQnk/ifUfUZXmA6qZmyJ4HA2zYVyuJ7gK5eaMa/aWFm
-	78dYKr15ARfXtecIRImOjlmWK0Uq2chic20KAHLkdfz9bqjADGn4A1IZlg6KdzSTqoRq6RO+/p2
-	jzKfhtJUurZ0xzL+mgWmcSkRkakyDNdbIYuc7UDNCPgK+J3on3GxCjEOCRwdFIdhVkuU24zAy9l
-	CTjuAuMRhUK4=
-X-Received: by 2002:a05:600c:8b06:b0:4a2:d:5ccc with SMTP id 5b1f17b1804b1-4ac17b2bc63mr39008955e9.10.1793355207707;
-        Fri, 30 Oct 2026 03:13:27 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa81a896ecsm133317305e9.9.2026.10.30.03.13.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 03:13:27 -0700 (PDT)
-Date: Fri, 30 Oct 2026 10:13:25 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Samuel Wu <wusamuel@google.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii
- Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Ihor
- Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi
- <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- kernel-team@android.com, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to
- /proc/kallsyms
-Message-ID: <20261030101325.6406e8ce@pumpkin>
-In-Reply-To: <CAG2KctrwzWGFRs6CZcSRaFOWx49WbH9LQVQJunWsPD3MOXn_iw@mail.gmail.com>
-References: <20261023001603.560210-8-wusamuel@google.com>
-	<20261023001603.560210-9-wusamuel@google.com>
-	<20261028134012.01d52e94@pumpkin>
-	<CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
-	<CAEf4BzYT4rvKwbOJ6UQ3zcp4wdsSBqRsMz-2=U1DA2RyUA3XSg@mail.gmail.com>
-	<CAG2KctrwzWGFRs6CZcSRaFOWx49WbH9LQVQJunWsPD3MOXn_iw@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P4ytUL2d
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0898F1F000C1;
+	Fri, 30 Oct 2026 10:14:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793355295;
+	bh=w+JD3u6Dxdi41StGp1M2/D2DhAk8dxZzkihehYnQT4Q=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=P4ytUL2deDLpG/s6gi3nA1RPO0NZyuHqn4Cc08ztiHLoVbQoBFM0wId6gQGHRmc9g
+	 B/pglAOLX7PsOx0EzAKEuIRs77z7QVpLnrfjsFrbBg/EvniLUBFVfIPU/tQxcvB6Xr
+	 gERY4KLDyqYvwSi9UpFaH0XFP1P5hIshT5LvFVC8UbUaWJaw9zucJ8LedV1T/6dA4M
+	 Pdm76QEUtZcAZfxTnk0L2vJg/awT6VU4uzwOXUVx0BII1l18Mbg8EpfUTeIQQWB1Ik
+	 8Rr+Q1NHx7tu4Bw1CWEODeZc+LbteADUC8C6C+bIouK5acfc5ZHgg+dUu+C2CCP1I/
+	 /+FmlDFu74P0A==
+Content-Type: multipart/mixed; boundary="===============2457037860811280631=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -118,71 +49,130 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <c3d38e0d458ec830e8f94f5eb68bf2402a609b3c0b07fc9ba87115712b80b28e@mail.kernel.org>
+In-Reply-To: <20261030092248.7388-1-mahe.tardy@gmail.com>
+References: <20261030092248.7388-1-mahe.tardy@gmail.com>
+Subject: Re: [PATCH bpf] libbpf: Enforce program limit only for loaded programs
+From: bot+bpf-ci@kernel.org
+To: mahe.tardy@gmail.com,bpf@vger.kernel.org
+Cc: andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,linux-kernel@vger.kernel.org,john.fastabend@gmail.com,mahe.tardy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 30 Oct 2026 10:14:55 +0000 (UTC)
 
-On Thu, 29 Oct 2026 17:28:01 -0700
-Samuel Wu <wusamuel@google.com> wrote:
+--===============2457037860811280631==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On Thu, Oct 29, 2026 at 3:16=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Thu, Oct 29, 2026 at 3:06=E2=80=AFPM Samuel Wu <wusamuel@google.com>=
- wrote: =20
-> > >
-> > > BY_NAME matches names exactly, like kallsyms_lookup_name(), so they
-> > > would be different symbols at different addresses. Please correct me
-> > > if I'm missing something here!
-> > > =20
-> >
-> > foo and foo.constprop0 are different functions with different
-> > arguments, so I think we should distinguish them. The only special
-> > case is .llvm.<hash> because that suffix is added by compiler for LTO
-> > and I don't think the function itself is any different from the
-> > original =20
->=20
-> [...]
->=20
-> > I do think it would be good to spend a bit of thought on how to
-> > support at least one-by-one pagination from the get go. The same
-> > mechanism can then be used by batch version. I.e., think what can we
-> > use to provide data back to user which they can use to continue search
-> > after the symbol we just returned (at least for fixed set of symbols
-> > in vmlinux and modules; we also have dynamic symbols added for [bpf]
-> > "module", etc, we should support those as much as possible with the
-> > least possible deviation, IMO) =20
->=20
-> Let me sit on this a bit and figure out how to distill all of this
-> into a clean interface. I'll keep the .llvm.<hash>, pagination, and
-> batching in mind for the design.
->=20
-> [...]
->=20
-> > user code can be easily written by always setting buffer size, even if
-> > kallsyms_query is reused. This is the pattern with PROCMAP_QUERY,
-> > let's keep it consistent. =20
->=20
-> Ack, will have size in the struct for v3.
+> libbpf: Enforce program limit only for loaded programs
 
-It just adds code.
-If you use the size from the ioctl (which will match the structure
-the application passes) then you don't need to do the extra get_user()
-just to get the length.
-It isn't really hard to have:
-	case KALLSYMS_QUERY_v1:
-	case KALLSYMS_QUERY:
-		return do_kallsys_query(m->private, cmd, (void __user *)arg)
-It also saves all the problems of the two values mismatching.
+TL;DR:
+- Patch is based on a tree lacking its Fixes: target aac5ba0a4d52; applied
+  there, the early E2BIG check in bpf_gen__init() may still reject the object
+  and the new clamp is dead code
+- Fixes: tag may need to name ba05fd36b851
 
-That is why there is a length (and the r/w flags) embedded in the ioctl
-cmd value.
+>     libbpf: Enforce program limit only for loaded programs
+>
+>     As explained in commit '259172bb6514 ("libbpf: Fix gen_loader assumption
+>     on number of programs.")', nr_progs which is obj->nr_programs at this
+>     stage is including subprogs and autoload=false progs which are filtered
+>     later during the generation.
+>     Quoting Alexei, previous patch 'aac5ba0a4d52 ("libbpf: Reject excessive
+>     program counts in generated loaders")' does move rejection at gen time
+>     instead of load time, but some programs are still wrongfully rejected:
+>
+>       Two objects with obj->nr_programs == 33:
+>
+>         object               before aac5ba0a  after aac5ba0a should be
+>         -------------------  ---------------  -------------  -------------
+>         33 progs             -EACCES at load  -E2BIG at gen  -E2BIG at gen
+>         1 prog, 32 subprogs  -EACCES at load  -E2BIG at gen  loads
+>
+>       The second object fails today because of the cleanup loop in
+>       bpf_gen__init(). It closes nr_progs slots of prog_fd[], and
+>       prog_fd[32] is at r10 + 0:
+>
+>         r1 = *(u32 *)(r10 +0)
+>         invalid read from stack R10 off=0 size=4
+>
+>     We now clamp the loop generating the cleanups, which may still be more
+>     numerous than necessary and do the actual E2BIG check just before
+>     writing the actual prog_fd into the stack for the cleanups, after
+>     bpf_object__load_progs() has been doing the filtering on progs.
+>
+>     Fixes: aac5ba0a4d52 ("libbpf: Reject excessive program counts in generated loaders")
+>     Suggested-by: Alexei Starovoitov <ast@kernel.org>
+>     Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 
-David
+The commit message's own table shows that the "1 prog, 32 subprogs" object
+already failed with -EACCES at load time before aac5ba0a4d52, and the cause
+it names is the cleanup loop in bpf_gen__init() that closes nr_progs slots of
+prog_fd[].
 
->=20
-> > also, returning actual size even if buffer is too short is a good way
-> > for user space to "probe" and increase buffer if necessary. unless it
-> > adds tons of complexity, this is a good and flexible UAPI =20
->=20
-> Ack.
+That unclamped nr_progs-sized loop was introduced by ba05fd36b851 ("libbpf:
+Perform map fd cleanup for gen_loader in case of error"), where
+bpf_gen__init() computes nr_progs_sz from obj->nr_programs.  Commit
+259172bb6514 ("libbpf: Fix gen_loader assumption on number of programs.")
+then relaxed bpf_gen__finish() so that such objects reached load time, and is
+a possible alternative target.
 
+aac5ba0a4d52 only moved the failure from load time to gen time.
+
+Should the Fixes: tag point at the commit that introduced the problem
+instead, so the stable backport scope covers kernels since 5.16:
+
+  Fixes: ba05fd36b851 ("libbpf: Perform map fd cleanup for gen_loader in case of error")
+
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> index 251392aa8b41..555d4757a898 100644
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
+> @@ -139,6 +139,8 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
+>  	emit(gen, BPF_MOV64_IMM(BPF_REG_3, 0));
+>  	emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
+>
+> +	/* nr_progs includes subprogs and progs that are not loaded */
+> +	nr_progs = min(nr_progs, MAX_USED_PROGS);
+>  	/* amount of stack actually used, only used to calculate iterations, not stack offset */
+>  	nr_progs_sz = offsetof(struct loader_stack, prog_fd[nr_progs]);
+>  	/* jump over cleanup code */
+
+Does this fix work on a tree that contains the Fixes: target?
+
+The preimage blob of this diff (251392aa8b41) is the file as it was before
+aac5ba0a4d52, and aac5ba0a4d52 is not an ancestor of this commit.  The patch
+applies to aac5ba0a4d52:tools/lib/bpf/gen_loader.c with only an offset, and
+leaves this check in bpf_gen__init() untouched:
+
+	if (nr_progs > MAX_USED_PROGS) {
+		pr_warn("Total programs exceeds %d\n", MAX_USED_PROGS);
+		gen->error = -E2BIG;
+		return;
+	}
+
+With that check present, bpf_object_load() still passes obj->nr_programs ==
+33 to bpf_gen__init() for the "1 prog, 32 subprogs" object.  The early return
+sets gen->error = -E2BIG before the new min() clamp is reached, and
+bpf_gen__finish() returns -E2BIG, so the object still fails at gen time
+instead of loading.
+
+The new min(nr_progs, MAX_USED_PROGS) is also dead code there, since nr_progs
+can never exceed MAX_USED_PROGS once that check has passed.
+
+In the tree this diff was generated against, which lacks aac5ba0a4d52, the
+code is correct, but then the Fixes: tag names a commit that is not in this
+history.
+
+Should this be rebased onto aac5ba0a4d52 and also delete the early nr_progs
+check in bpf_gen__init(), or should the Fixes: tag name the commit that
+actually introduced the problem (ba05fd36b851)?
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41035838634
+--===============2457037860811280631==--
