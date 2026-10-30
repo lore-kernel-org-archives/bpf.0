@@ -1,101 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=74.125.82.176
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1793341915;
-	b=zVElINKDfr/Ltcrkq2StakVoPV+EfTED4xE/IEzOKt4fVfyXVKo1yq1rZIw0pcbbWaTu
-	 CbdsTvxAxxsBcKBF5sY2/oTw3jZEhFJiHUr+UiaWFOVtqRr/BJOGBLM2SouB/dZYXoCZt
-	 tccu7/UCd3wbZg/sImlAatRHkGZcVkryIUZRpg86MOBo5RCSwjLc+xlkLg4wuBI0RXr7d
-	 Fe4Pge0jrPySKSexi32HPYCSZvNx7LNOJUAg5nH7zKjQ8r4TD3sFIabjbBIXAl7eeXrcW
-	 Tr+5e5ElxllEDOB87H70xPKWclH3e9EcSHtSSD676eI0ifJ93togThaZAXBAHRutLgA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793341915;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=po4/7/QhF/scBRTBfQcn8+7a7UueR9Kf354VoVoto3E=;
-	b=rzhcbu+D83Bf159Bz2hU4gV3Y93tXZD+zj54oFa/zsNu2Xl/vdMrXNWEonj0iqL0ZVhB
-	 cpUXq/6JeGJX6oYnxOSgT/QZ5zlYXqmlDF5qOZGMQtF8Id5dDVFpsMoHgaKvlDhfAvJIP
-	 Fixv2vznqUh1RWSCoBWG5ht/srV6ofK4f5StZFVWHaZqt94E45PM+uzsSneeY+nisTqj4
-	 BoyzpIaDK8+3/GDWhq6lkbJxpGIj1aJ2gtS9V31GgRMXRcc6fYVMQSEVo1ODetJjWGMmd
-	 xAM5I/YQaIOVdteWWRLK/NxCFm5BRwDuYWiH9tAO5deJMLmY93sg8qSYquC+EWzhPmQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cHhGZfld;
-	arc=fail smtp.remote-ip=74.125.82.176
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.225
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793342227;
+	b=kSkYHzOy5RHX1uSJzBgmAqaLY+yb74px466XoByJ7qst5FJXR36hvuR42k9BF2X9O3XK
+	 FCYDUZO+cE52TNfSRMKoOF5yRz6woJKefMBhOjSrg7M8FK48kiL/l1NvM+g/iRwJgLCN8
+	 qBZjF+TtbU5EOTWTyYN9f9g2cL75BY0hail1lcHAAViS81vgSmTYK+T+p+QX64SGvz7Oi
+	 ycPiz4VORQ6lnMa8/7EIdlKbYWiNrliayxOwVDfIY1e5yxqLZwXIoBKoBhjm5yzNMlJ2D
+	 MVb5jBuvrFgxdlYqsTUiZtqn0pc001esqEMTgXtj1cg6HREfX82UADNdKIYlMH1xKyQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793342227;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=Bo4ZhhQq3yMt0wv9i4UwU4CIn7AaRsfAQO0VX/Sm23w=;
+	b=GSpZU8L1ozdix5SstsUp9NDhwRsPp2l3fNlJP+MTX8ZWQKG5mOg/iNHxguoOH2V+D+o3
+	 1plF4mf1yJ85fsq1KSdIN41BVbhUiQ9qIh8tZGHA416JJMGKNxMWWF+1Rme//CxXMy28x
+	 eJhWOtOKx34OtNrVjsnedLCknvBjESYnItUPi0z330SdSipBsAKGDrNW9NVc2OgFR4ZeT
+	 FfGJaPzTskCCKqFCoeeVZ62lgVkQETUvd0zm7z9JlobeLkWiMMv5nVw4XTuuk6kg6VDQk
+	 ekniP/9IVU18b/zAmXiGSAd3PWwQwuVulEeCxb37SRyraw9YslT3z5BASaDJOPrMJSg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=C139ypLQ;
+	arc=none smtp.remote-ip=113.46.200.225
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FEEC606A31C
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 06:31:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6FEEC606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A65606A31A;
+	Fri, 30 Oct 2026 06:37:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9A65606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cHhGZfld
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-35b2c599f43so920965eec.0
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 23:31:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793341915; cv=none;
-        d=google.com; s=arc-20260327;
-        b=FCAs3mTvZ8TVdhcpRkZDCh/TBZeQ51SL+ymPr4FpvTN31o/PO6mpCwIEYNMxs/NJAw
-         xjQQXanvKrV/Sur7yWDeaAfVY4fIFGKWGu+5eAxvCHbPf5MVP4Y5vvag+4hXRjBojMpU
-         U2A0PqHZLpEyDcILRUfVnONdtLtlXkssMibxaVsb59MwV0J1BWFVrryysYVcB0FHmI6E
-         dddYWOnQCCFsXjkhwzoIHtcd59/y2AfDk/McIn26+ycpQw6hbJ256RQmtsKmmqmV7Vug
-         fGY8lekPbgC/s5aPlynjFmkvnPVHU73wu+mJu1OzjWnbVhrDzDiDszSIXVz1lRZWyNrt
-         Hqtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=po4/7/QhF/scBRTBfQcn8+7a7UueR9Kf354VoVoto3E=;
-        fh=UVcVs4+xB9QZTql5d93TJfKUlBDUvHnK0BN/ZQo+wSk=;
-        b=oE8Y2fDqsD5JZZcwziIGDh1yyY/9LkNj2Wjj26lPfQXNmMY1RSn1Lh8fgJeH/n4b6c
-         lAGT5/zppQYlOcHQG6rhjqvbxLiDt8WpFhMmCv+mrPZxSOgE0t7fSzKNCyWbQD7YLEOz
-         lSIYAcVt9GH9SczMSX0GZztoCOIs0nG0bUsMQnUvcx7psrZSM3EsRO+4EiLXUBz/sX10
-         qtR17++ipXNM6GnqztqtfT9YvWOLnRm7nGi/JaiLdK1HTgtmVCGJZukrbPTE3FfFKz+Q
-         8hpJLsRief7QgqswWsKvKsmUqsIy6eJR4S3z3tYj8XrjWJIjFQiFK1yWPred+yjd7xKm
-         v4+A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793341915; x=1793946715; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=po4/7/QhF/scBRTBfQcn8+7a7UueR9Kf354VoVoto3E=;
-        b=cHhGZfldf7rwLhH5KKbJjNDRKRapNAbZx8eScm4G6BCmNEX/trTh3APCkLfh7RB+2A
-         cOLu7dpCFuIi/m+jx/yTUFUZMcJ/kJsLk0BeCCxGTjWwhL7Fcn2U+1mjgVSS+5x+MocD
-         3qorXUcfIr3oq9+t+uVpP9+qFn8OYOWEu8f4WNt8FwjsiisYzVDtYEsHOQZK7cmuVU8s
-         3WGPwDeL6kTP/eAYTW0bJDdrufMyckcJZzLXjlZWf5QW4juLEPZ3WWHwuz41GyBX9HjW
-         PKxwgfe8XIQzCbxMVJIXkqmN2gVFfKVlfxMITH16qONvocH7wAlowIOwo20nkYQaUR7p
-         pDAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793341915; x=1793946715;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=po4/7/QhF/scBRTBfQcn8+7a7UueR9Kf354VoVoto3E=;
-        b=CZhm5+WQ189AKiHFSSKRTUjoI/ujK0tudFEcKaUyQQegrPbb9te8RAmKNWp3uJ4+vT
-         tl6R6mw8YEjuU+cvBkSFCGt1kaLT+9R6dDkbalnqICvHFzqm5c4L2RtXWti2uZCiVSTC
-         sXJDbYkSw5yplAOSQzgne3u4pKROxtf7xG35ZGMbvKzalPR+kSyYrevwObCjVQAXJBFc
-         AYm8gLKPUu23iv1v+2x1z0NtUR60zvhNdgvwjeMpRUx4Cl3w5UfKog6b0mhED4BuND8q
-         3o0FF5f62kDB9LimL4hdhe1ADu37GhgIpOzSGXe0YeJ4yi6vEcmIs7GfNiDqQhHIxzkb
-         ZZ4A==
-X-Forwarded-Encrypted: i=1; AKwUvBwIK8lDRWOktxC2/Pt+DfR1LnNGoOzIgJ6XyhHUeVvwW2iyP2gTUYpxkzusy5EOWl8QRGw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJc4+MTSGGpRDbaJ/aG4dQXp8VPw+dUufUU/awHUg5e5oBLIhU/
-	FpEv4WxxmBBzYvJaEIezel/7mCgxcPuB8+apPLf8xz8liiYgeQZkfM1zOUb4wvlcTtjICxNfueT
-	iMt9qUlTdoK3XHZgWt4q2xi3Si/ATAJoQdg==
-X-Gm-Gg: AYBFou3vOTp/20VZ4P/OWUxAndMk0p+AdNqBmu94Q5I7v4jj33MkR9j5/P5Bi4VQsLr
-	tjezaZ1mWk4I7gjGg6Zdhr169mG0mK2gsYXSDTvnPKA4BJgtu3oth7eUX+gzxU4KtLS5x4q/F0L
-	PCnsyS+INYmhZHWX8ZSTyRJdTdqAidECSlsz4iBWou71lMbm0Ze5a7S6leBtb2LBokWRDOS83K5
-	+QbGgLJ17oz+ORBbZw+KvxpWhRdMS4qRBFwRXcS283DFBZ0lcprFT7vAliF9ZucfYFeajLVYhxC
-	o8IZtjDUIYRvC+OQzhXnAhH0p8fNzEw74Xx9KquUU0pQ4eU521Oftds5O+oVjJ2DX4JA1tS97uN
-	eKoaCViuc70GK9xKcfBwOvXdLTM7sURZDkW2+jNOsOWtujY45in/2ksV+RD//wtTQOfd2w/dg9L
-	M4ViYBSunFp6EFOKdd9fRo2LZjFjtpr47YBIq55Rdj3MXJVyj3qdo=
-X-Received: by 2002:a05:7301:618f:20b0:369:fa8b:d725 with SMTP id
- 5a478bee46e88-36a42440a69mr2479370eec.35.1793341914428; Thu, 29 Oct 2026
- 23:31:54 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=C139ypLQ
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Bo4ZhhQq3yMt0wv9i4UwU4CIn7AaRsfAQO0VX/Sm23w=;
+	b=C139ypLQc7vC7rupszvT/Imlc/LVfT7OLVXviMfG7SGjw0epOcAM46mKxRl+FmB/yMKBallky
+	32HSMDaDTLP25vR6NVIXMzRwvjNiqrRIiHyTlgXc3kHBWPWbQbsDnttKYVIhPO+SySmG4VgP+uh
+	APdoB0Y0CRFo93U+zgvvi7g=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4jGBGL1gmGz1K9VX;
+	Fri, 30 Oct 2026 14:36:58 +0800 (CST)
+Received: from kwepemk200008.china.huawei.com (unknown [7.202.194.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id E92AB4055B;
+	Fri, 30 Oct 2026 14:36:59 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemk200008.china.huawei.com
+ (7.202.194.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Fri, 30 Oct
+ 2026 14:36:59 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <oleg@redhat.com>, <linux@armlinux.org.uk>, <kees@kernel.org>,
+	<luto@amacapital.net>, <wad@chromium.org>, <shuah@kernel.org>,
+	<pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+	<alex@ghiti.fr>, <stevenrwalter@gmail.com>, <will@kernel.org>,
+	<wade_farnsworth@mentor.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <bpf@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH v2 1/2] ARM: ptrace: Fix seccomp seeing stale syscall arguments
+Date: Fri, 30 Oct 2026 14:36:29 +0800
+Message-ID: <20261030063630.1218302-2-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261030063630.1218302-1-ruanjinjie@huawei.com>
+References: <20261030063630.1218302-1-ruanjinjie@huawei.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,106 +75,203 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261030023248.78802-1-testwrzwrz@gmail.com> <20261030023248.78802-2-testwrzwrz@gmail.com>
-In-Reply-To: <20261030023248.78802-2-testwrzwrz@gmail.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Fri, 30 Oct 2026 14:31:14 +0800
-X-Gm-Features: AclHuK-3MmLI6pDH5EvsdDyQjqZxLAj0eXtw9LqREvrfIl7g5xpi_yP0zHn6NUo
-Message-ID: <CAL+tcoDUGqk-KfMBqdG4RBURHQc=9J+Ce7B7CZZWRN5yN7pRrw@mail.gmail.com>
-Subject: Re: [PATCH net v4 1/2] xsk: defer software checksum until the skb is complete
-To: Rongzheng Wang <testwrzwrz@gmail.com>
-Cc: netdev@vger.kernel.org, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, stable@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemk200008.china.huawei.com (7.202.194.74)
 
-On Fri, Oct 30, 2026 at 10:33=E2=80=AFAM Rongzheng Wang <testwrzwrz@gmail.c=
-om> wrote:
->
-> When XDP_UMEM_TX_SW_CSUM is used with multi-buffer TX, xsk_skb_metadata()
-> calls skb_checksum_help() while only the first descriptor has been added =
-to
-> the skb. The checksum therefore covers just the first fragment, and
-> skb_checksum_help() sets ip_summed to CHECKSUM_NONE, so the remaining
-> fragments are never included in the checksum.
->
-> Move the software checksum calculation to the point where the last
-> descriptor has been added to the skb.
->
-> On a checksum failure the packet is now dropped instead of being returned
-> to the application for a retry. This path is not reachable with the
-> existing metadata validation, but the behavior change is intentional.
->
-> Fixes: 11614723af26 ("xsk: Add option to calculate TX checksum in SW")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Rongzheng Wang <testwrzwrz@gmail.com>
-> ---
->  net/xdp/xsk.c | 23 +++++++++++++++--------
->  1 file changed, 15 insertions(+), 8 deletions(-)
->
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 33475b180ea6..aa6b010192ad 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -1011,14 +1011,6 @@ static int xsk_skb_metadata(struct sk_buff *skb, v=
-oid *buffer,
->                 skb->csum_start =3D hr + csum_start;
->                 skb->csum_offset =3D csum_offset;
->                 skb->ip_summed =3D CHECKSUM_PARTIAL;
-> -
-> -               if (unlikely(pool->tx_sw_csum)) {
-> -                       int err;
-> -
-> -                       err =3D skb_checksum_help(skb);
-> -                       if (err)
-> -                               return err;
-> -               }
->         }
->
->         if (flags & XDP_TXMD_FLAGS_LAUNCH_TIME)
-> @@ -1030,6 +1022,15 @@ static int xsk_skb_metadata(struct sk_buff *skb, v=
-oid *buffer,
->         return 0;
->  }
->
-> +static int xsk_skb_sw_csum(struct sk_buff *skb, struct xsk_buff_pool *po=
-ol)
-> +{
-> +       if (unlikely(pool->tx_sw_csum &&
-> +                    skb->ip_summed =3D=3D CHECKSUM_PARTIAL))
-> +               return skb_checksum_help(skb);
-> +
-> +       return 0;
-> +}
-> +
->  static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
->                                               struct xdp_desc *desc)
->  {
-> @@ -1275,6 +1276,12 @@ static int __xsk_generic_xmit(struct sock *sk)
->                 if (xp_mb_desc(&desc)) {
->                         xs->skb =3D skb;
->                         continue;
-> +               } else {
+[Background]
+When user space enters a syscall, the ARM entry code copies r0 into
+ARM_ORIG_r0.  r0 carries the first syscall argument, but the syscall
+also returns its value in r0, so the kernel keeps a copy.
 
-Why are you still using this 'else' as you already posted a new one?
-Please take a look at my previous feedback.
+4 places use the first argument:
+ - seccomp and the sys_enter tracepoint read ARM_ORIG_r0, through
+   syscall_get_arguments();
+ - audit_syscall_entry() reads r0;
+ - the syscall itself runs with r0;
+ - do_signal() copies ARM_ORIG_r0 back into r0 when a syscall restarts.
 
-And please carry the reviewed-by tags through the version next time.
+[The problem]
+A tracer can change r0 while the tracee is stopped before the syscall
+runs, at a syscall-entry stop (PTRACE_SETREGS, PTRACE_POKEUSR) or at a
+SECCOMP_RET_TRACE stop.  Only r0 changes then, so ARM_ORIG_r0 keeps the
+old value:
+ - seccomp and the tracepoint see the old argument, while the syscall
+   runs with the new one.  With SECCOMP_RET_TRACE this is easy to hit:
+   the tracer changes the argument, the filters run again, and they
+   still match on the old value;
+ - a syscall that returns -ERESTARTSYS restarts with the old argument,
+   because the restart path copies ARM_ORIG_r0 into r0.
 
-Thanks,
-Jason
+A tracer that uses SECCOMP_RET_TRACE to check syscalls changes the
+first argument at the PTRACE_EVENT_SECCOMP stop, and expects
+the filters that run again to see the new value.
 
+arm64 has the same problem and fixed in commit 88b839ce497c ("arm64:
+ptrace: Keep 'orig_x0' in-sync with x0 on syscall entry").
 
-> +                       err =3D xsk_skb_sw_csum(skb, xs->pool);
-> +                       if (unlikely(err)) {
-> +                               xsk_drop_skb(skb);
-> +                               goto out;
-> +                       }
->                 }
->
->                 err =3D __dev_direct_xmit(skb, xs->queue_id);
-> --
-> 2.39.5 (Apple Git-154)
->
+x86 does not have this problem.  32-bit x86 saves only the syscall
+number in orig_ax, and every reader gets it back with syscall_get_nr():
+
+  do_int80_emulation()
+    -> regs->orig_ax = regs->ax & GENMASK(31, 0)
+       regs->ax = -ENOSYS
+    -> nr = syscall_32_enter()
+       -> regs->orig_ax
+    -> nr = syscall_enter_from_user_mode_work(regs, &nr)
+         -> syscall_trace_enter()
+              -> arch_ptrace_report_syscall_permit_entry()
+              -> __seccomp_permit_syscall()
+                 -> syscall_get_nr() -> regs->orig_ax
+              -> trace_syscall_enter()
+                 -> syscall_get_nr() -> regs->orig_ax
+              -> syscall_enter_audit()
+                  -> syscall_get_nr() -> regs->orig_ax
+         -> nr = syscall_get_nr() -> regs->orig_ax
+    -> do_syscall_32_irqs_on(regs, nr) // Use orig_ax as the system call number
+                                       // to execute the system call. This is\
+                                       // consistent with seccomp, audit, and
+                                       // tracepoint.
+
+arm32 instead has two copies of the first argument.  seccomp and the
+tracepoints read one copy, and the syscall runs with the other:
+
+  vector_swi
+    -> str r0, [sp, #S_OLD_R0]          // backup r0 to ARM_ORIG_r0
+    -> syscall_trace_enter()
+         -> report_syscall()
+         -> seccomp_permit_syscall()
+              -> syscall_get_arguments() -> ARM_ORIG_r0
+         -> trace_sys_enter()
+              -> syscall_get_arguments() -> ARM_ORIG_r0
+         -> audit_syscall_entry(scno, ARM_r0, ARM_r1, ARM_r2, ARM_r3)
+				      ^^^^^^
+    -> invoke_syscall, reload r0-r6
+       -> use r0 here!
+             ^^^^
+
+So after a tracer changes r0, seccomp and the tracepoints still read the
+old ARM_ORIG_r0, audit reads the new ARM_r0, and the syscall runs with
+the new ARM_r0.
+
+riscv and loongarch also keep a copy of the first argument (orig_a0),
+but they pass that copy to both the syscall and
+syscall_get_arguments(), so they stay consistent.  On arm32 the syscall
+runs with a different register than the one seccomp and the tracepoints
+read.
+
+The syscall number has a similar copy (abi_syscall), but there the
+readers and the dispatcher both use syscall_get_nr(), so only the first
+argument is affected.
+
+[Fix]
+Copy r0 into ARM_ORIG_r0 after a ptrace register write, but only when
+the tracee is stopped before its syscall runs:
+ - at a syscall-entry stop or a SECCOMP_RET_TRACE stop, r0 still holds
+   the first argument, and seccomp, the tracepoints, audit and the
+   syscall itself are about to read it;
+ - at a syscall-exit stop, r0 holds the return value (-ERESTARTSYS and
+   friends).  ARM_ORIG_r0 must stay, or a restarted syscall would run
+   with the error code as its first argument;
+ - for any other exception, the entry code sets ARM_ORIG_r0 to ~0 and it
+   has no meaning, so it must not be overwritten.
+
+The stop type is the same classification that
+ptrace_get_syscall_info_op() uses for PTRACE_GET_SYSCALL_INFO.
+
+audit_syscall_entry() takes the first argument from r0 directly.  Give
+it ARM_ORIG_r0, as seccomp and the tracepoints do, so audit describes
+the syscall that really runs.
+
+Tested on arm32 with a real gdb in qemu-system-arm: after
+"catch syscall getpid" the tracer sets r0 to a value the seccomp filter
+rejects.  With this patch the filter refuses the syscall, without it the
+syscall runs with the old argument.
+
+Cc: stable@vger.kernel.org
+Fixes: bf2c9f986692 ("ARM: 7373/1: add support for the generic syscall.h interface")
+Link: https://lore.kernel.org/all/al98jdcleu-6tMDL@willie-the-truck/
+Suggested-by: Will Deacon <will@kernel.org>
+Link: https://lkml.org/lkml/2020/9/11/1282
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+---
+ arch/arm/kernel/ptrace.c | 41 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/kernel/ptrace.c b/arch/arm/kernel/ptrace.c
+index ed7a2a87a670..6ec81e5a205e 100644
+--- a/arch/arm/kernel/ptrace.c
++++ b/arch/arm/kernel/ptrace.c
+@@ -163,6 +163,42 @@ static inline long get_user_reg(struct task_struct *task, int offset)
+ 	return task_pt_regs(task)->uregs[offset];
+ }
+ 
++/*
++ * Is @target stopped after entering a syscall, but before it has been
++ * dispatched?  This is the same classification that
++ * ptrace_get_syscall_info_op() performs for PTRACE_GET_SYSCALL_INFO.
++ */
++static bool stopped_in_syscall_entry(struct task_struct *target)
++{
++	struct kernel_siginfo *info = target->last_siginfo;
++
++	if (!info)
++		return false;
++
++	if (info->si_code == (SIGTRAP | 0x80))
++		return target->ptrace_message == PTRACE_EVENTMSG_SYSCALL_ENTRY;
++
++	return info->si_code == (SIGTRAP | (PTRACE_EVENT_SECCOMP << 8));
++}
++
++static void update_syscall_orig_r0_after_ptrace(struct task_struct *target)
++{
++	struct pt_regs *regs = task_pt_regs(target);
++
++	/*
++	 * ARM_r0 holds the first syscall argument only before the syscall is
++	 * dispatched; seccomp, the syscall tracepoints and the syscall restart
++	 * code all read that argument from ARM_ORIG_r0 instead.  At a syscall
++	 * exit stop ARM_r0 holds the return value and must not be copied, and
++	 * for other exceptions ARM_ORIG_r0 is set to ~0 and carries no
++	 * meaning.
++	 */
++	if (!stopped_in_syscall_entry(target))
++		return;
++
++	regs->ARM_ORIG_r0 = regs->ARM_r0;
++}
++
+ /*
+  * this routine will put a word on the processes privileged stack.
+  * the offset is how far from the base addr as stored in the THREAD.
+@@ -180,6 +216,8 @@ put_user_reg(struct task_struct *task, int offset, long data)
+ 
+ 	if (valid_user_regs(&newregs)) {
+ 		regs->uregs[offset] = data;
++		if (offset == 0)
++			update_syscall_orig_r0_after_ptrace(task);
+ 		ret = 0;
+ 	}
+ 
+@@ -566,6 +604,7 @@ static int gpr_set(struct task_struct *target,
+ 		return -EINVAL;
+ 
+ 	*task_pt_regs(target) = newregs;
++	update_syscall_orig_r0_after_ptrace(target);
+ 	return 0;
+ }
+ 
+@@ -868,7 +907,7 @@ asmlinkage int syscall_trace_enter(struct pt_regs *regs)
+ 	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+ 		trace_sys_enter(regs, scno);
+ 
+-	audit_syscall_entry(scno, regs->ARM_r0, regs->ARM_r1, regs->ARM_r2,
++	audit_syscall_entry(scno, regs->ARM_ORIG_r0, regs->ARM_r1, regs->ARM_r2,
+ 			    regs->ARM_r3);
+ 
+ 	return scno;
+-- 
+2.34.1
+
