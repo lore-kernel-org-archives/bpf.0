@@ -1,102 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.187
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793382725;
-	b=fn51sJJKhwmkmTF8H7+qcbJuNLgKJ3WNTMin/AVwsr9NtLkGlmfm+dCHz9ulymv2NQHf
-	 f+y+HB8RZkjp1AcFy8rjoX5o1EY7XxWRldr0LtFBGVpOu+CQaZ/GYaImKZBkkAyo60unu
-	 QTq4LM8RY7WOYOjg8p8QyQUZeubkUrDgEdhDgQDgoZrqdMKz3Uj4XlMCxGhsFzjMXjTCL
-	 ntpRJANrPX2lIoCHW/qnW8eHQhIxW9zoZWdKKjw1EiBc2DKVAZMHyDI6dhv7kqr5z0NAj
-	 E/yuz5NQ9tupSJcosW0Kfkho5tUNFC6cpSnQB49NEOPZdwbGzohFE9b/Xy4n/JEt1YQ==
+	t=1793384080;
+	b=S3TKbb4hVQ49zVkkJgvzTsv5CZ1Rxp/Xqwy07MvXYadsW56Ty4wrCO2JaxIuyCx48Nc1
+	 K8AD4QH7ExBTSF44Mr67S8QVIaYVuxToRkmo4XWcr10ACvN+9v2fjKHONJYHSvcpgtNdF
+	 spia1VLZ4MI5LBS7ZtOWACPXu3g02Aq6vF261unCAju6qDJW5IEyWky+vC8ezlqcdxoVI
+	 etIm2zMFlIHc2HvZAZ9rYWWI7YSFuHtWF3IjpXWxTv7H3zSMICfc4Rswe+cVZblXVZejQ
+	 83j+2h7qW+2FrCkDr6IBQt3WaIdN8b/3h0kS46J0IhHUTWZj5Ub8o8l3mUfEZKh3vmg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793382725;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=A8Qg/pMJM7YKXFTAJR9+7x3FSNCuA32iDB+ph1tKvW8=;
-	b=LLzSOA/0TR8svQFEcjZnEGvu2HPHR4KKV8u9yLT3PpkRqPI+a0w/2BP8y+ufQKW4HUu6
-	 wv5zX/7drU9DoYIZruR37BeMrTWcMjDIBTrQ7EhWDYTqnqf4qKDuB/xZp3PlhFA9ojBQo
-	 qYvbkILX7boeM3eAjoFIBjMkmdkWPdnUc/A7+LLIvo/ZWWoi+CQMSUXCAyEY39Y6ZvNNl
-	 eDu3jcMZr7cw63B38iabR0v0g/ACx3YbUb5T99rwBf5TUZHQTjfdO3tL/DB9H6CeggAVq
-	 1UDhzip1WuBCT/uNdROxrpqezHVKoz731NuDpJtBVC1GNZyV0gUE21b4K9+OaW90P/w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793384080;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 X-B4-Tracking:X-Change-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Disposition;
+	bh=XauGCChzOkT4Lzvx2Lh+z/UKMAlrTOSpwUdfYUCdd3s=;
+	b=Pvl+lawbQZq+Qh7jF0QPwVfXX1WIjCRY9vryPfxkPSF7KTQSAxNj7IygTjQVHav/Dj6I
+	 1hRqbbO9LE2HCvgIeQX4iQopjykKDM0CnLX5qsq9vHVZVjOwnXHH51fZTQ6jqlliS7zkW
+	 mM223HI2HYlGJKrDH9E/iW/zuLfJnB0Flm6tdXQiuH+nIlY0iAeqFJYdNrdelv6TffhmZ
+	 5Dlnm7bY2yyZi5tkHzUz5ShnAripUuTECE2h439cS3+hxfQQmp51VEJS9c0Sr7igJyEkT
+	 xWaajIKVsRU1qyuzYg1FqjPsFbuYLRAdfFaR5sK4xVHz38MkEmMXcr8yhqvwSQmRU+g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gMjz0H0R;
-	arc=none smtp.remote-ip=74.125.82.43
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sAk9vhac;
+	arc=none smtp.remote-ip=91.218.175.187
+Received: from mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7AB2606A331
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 17:52:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C7AB2606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE122606A31C
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 18:14:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AE122606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gMjz0H0R
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-18cdcfc05ffso1344024c88.1
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 10:52:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793382724; x=1793987524; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=A8Qg/pMJM7YKXFTAJR9+7x3FSNCuA32iDB+ph1tKvW8=;
-        b=gMjz0H0RIRMM5QvfYV6/Ej/bAPyVkgOILxvt/3iq5/cdQX451SCDHLnj1fHGFPpYAM
-         dmZ4eBmqBDNGjDyFZUsXvh2CvpSNAGgLe2Lt139SOzXkkESnWDqGg+7vSfc7VuQ+eX7V
-         eWonTrVPqd3bddDTnhH3AWkzZpehVy8BjrlRsuEctZ2MgnAIgVPWZwx8e8qqdGLNgqdn
-         U4zBHnmv2I56iUPzrbjdAcvJ9zfHJ9J+ZWAWqj6LxKnefglO7ogDxh6zYVfVgBXWWDEf
-         wxEQasae2fsoJ0FIVlkQkxrWmnNLXtQFCvEmO2iGbOB3W09FWMg67h3y4+ybI8ErnGcO
-         O1jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793382724; x=1793987524;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=A8Qg/pMJM7YKXFTAJR9+7x3FSNCuA32iDB+ph1tKvW8=;
-        b=ECyjOWRvCAUGaCQOAS4ggv/SYir8ySmZGVgFHeWKsDAj3OqNDkgCEUgf3M2oedu3k1
-         fwsdR1NaP8ge/4Ic7OzBXDBnUbAul3fTDUQyNm1YxHxyOzDbC+qiWi1MNoctPE3DbVHW
-         HBvFQgkM29JgLf94sxjCbP/nVqjua3bht4gB695hk7n/jLSF/Jlmj4//QPDxHmY5dKT3
-         O8qe/q8JxmbmyNksIi5jZTbqo6651T+afj3am2qzpGemeqpHBka+96yeZIZmzouA8Std
-         Ia+u+m8piu9DjYEX+CDmHs4Ljwaib/EqttRh3xyzDKOqjS5zt/Em+1riyrQ/1NzMHpce
-         xZNw==
-X-Forwarded-Encrypted: i=1; AKwUvBzbN8sW337+vdqpAXo8f2V0ULodab1sg4jIfxdmS9fB8lBTXVKOSkkgyW4sr37e1F0G47g=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJT8mHR9NRsmS3gujkNMeSitwTO/uop9BA7R2WYC02RR/kWV6Bt
-	hxBoJJ+H8u7VTSC//A3HuewVzd5bPmo15LI8wbqlYK9uavkkhCCpvZRY
-X-Gm-Gg: AYBFou2JUsFpLPQ6XnmCamjcOEPAH3nWnaZ96F9wrNjX/PxF3EJkjmTW+laOkKI63Q/
-	0eCiNKDDyRyVtXToekzh/RRaj2S4QULRfVHb0VrGoow6Xkpnoj5+CQa7NU/b+q1u6phKjvR6rZL
-	4zBhIAf6WXrX+DSXeml50QtWdCMG/oes7mz6qaHJpakL6slO/QtUcqQ1RfrVNrCuCAogwq3A+Sj
-	gynWQdHF83+NFDsDj5g3yRvqpPSV9zxReNzydoUVnn4L3PGrakdbmy1x5qvYWvYP7NGjN1H/Aes
-	zucr8GLrgU7ZOqHm9iK/NVfyz5iiZzLZV818RaFyPKsGB4n8P8e5vWnC4QHvDOVS1cK+voX4dG7
-	omufU/z09gLTULAAHsOI5SJyygf+muLPBgA8tDhkXsDiHEOcoGK1203XitGCdJGCXS1sLl7FjBW
-	lmAAz8XfZr0OEPGPF+OW04x5fKMyZ5CH1ORIh6hARk1lCePuvyqUq5x7WV3RqAPOV2tAF5K+zTM
-	VlgBXOJ6KPto2GcMQIPWNJPMJv+WBswyhwuVFUCTEQqUnJH45nYDEALlK4XnlqhRx8WQ4fkIavI
-	96WDMylhnF64+Gn+2LbqcbZyOE33/SJ2/Hr5+u9yUtXGoJE26JOfj19wGk8B9zeNPMyyhEMS9ue
-	Eqd5Llq6UCGs=
-X-Received: by 2002:a05:7022:eb45:20b0:184:992:c9ef with SMTP id a92af1059eb24-1ac5de547a4mr3991157c88.36.1793382723587;
-        Fri, 30 Oct 2026 10:52:03 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:5d10:1794:f0d8:db5b? ([2620:10d:c090:500::4:1201])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac13ef1a16sm7637612c88.1.2026.10.30.10.52.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 10:52:03 -0700 (PDT)
-Message-ID: <bec189f3ba6ff18c2a09f3cbc19bb73e4d3277cf.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 06/12] bpf: Track low-32 scalar equality
- across sign-extending movs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Vineet Gupta <vineet.gupta@linux.dev>, ast@kernel.org,
- daniel@iogearbox.net, 	andrii@kernel.org, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
-	john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Fri, 30 Oct 2026 10:52:00 -0700
-In-Reply-To: <20261020161907.2115379-7-vineet.gupta@linux.dev>
-References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
-	 <20261020161907.2115379-7-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sAk9vhac
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=+TY283G1borHAZaLlZTGzy3/NR1BKFVZwd1ZnwDzwwY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793384071; v=1; x=1793988871;
+ b=sAk9vhacnCG4G0BRbv+RUr2STznQC/GMNOMR1Pa7jqMuFDS603ChwiDIe2Z21sE7+l5vQO1z
+ GdB+cDbOx05Byd5LomnCRmaAncX4+m/KXDKwa9Wehsupvt9geNIo8SQCHDZFnji9CzQuo/WQ3Qk
+ e0aVKgxMFdiAmRSlVND1Wz5Y=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id f6094ec407c97bfb;
+	Fri, 30 Oct 2026 18:14:31 +0000
+X-Mizu-Trace-ID: f6094ec407c97bfb
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 30 Oct 2026 18:14:22 +0000
+From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Ilya Leoshkevich <iii@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Peter Zijlstra <peterz@infradead.org>, 
+	Puranjay Mohan <puranjay@kernel.org>, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Maxwell Bland <mbland@motorola.com>, Will Deacon <will@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>
+Cc: bpf@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, Pu Lehui <pulehui@huawei.com>, 
+	Sashiko <sashiko-bot@kernel.org>, "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Subject: [PATCH bpf v2] bpf: Fix jited line info off by the CFI preamble
+Message-ID: <20261030-b4-arm64-bpf-linfo-cfi-v2-1-4eac83435d4b@linux.dev>
+X-B4-Tracking: v=1; b=H4sIAA/c5GoC/yWM0QrCMBAEf6XsswchprX1V8SH5rzTE01LoiKU/
+ rtRH2fZmQVFsknBvlmQ5WXFplTBbxrwZUxnITtVhne+c4NvKQYa870LFGelmyWdiNVIW972w06
+ C6xlVnrOovX/hA+oVx/9YnvEq/Pgmsa4fd/SC6X8AAAA=
+X-Change-ID: 20260925-b4-arm64-bpf-linfo-cfi-f5c3897e408c
+X-Mailer: b4 0.15.2
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,210 +83,100 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 2026-10-20 at 09:19 -0700, Vineet Gupta wrote:
-> A 32-bit sign extension shares the source's low 32 bits too, filling the
-> high half from bit 31:
->
->   r6 =3D ...              /* full 64-bit unknown */
->   r7 =3D (s32)r6          /* 32-bit sign-extending mov */
->   if w6 =3D=3D -1 goto ...  /* taken: r6's low 32 bits are all ones */
->   ...                   /* r7 is -1, not deduced today */
->
-> No constant k makes dst =3D=3D (u32)(src + k) a sign extension, so this
-> needs a third kind, BPF_REG_LINK_SEXT, driven by sext_32_to_64() where
-> the zero-extending arm uses zext_32_to_64(). The enum already had room,
-> so bpf_reg_state stays 80 bytes.
->
-> Both work from the base's 32-bit range, which is what a 32-bit compare
-> narrows; coerce_reg_to_size_sx() cannot serve, as it reads smin/smax,
-> which straddle after such a compare. tnum_sext() is the counterpart to
-> tnum_cast(), keeping the known low bits where a tnum_range() over the new
-> bounds would not.
->
-> sext_32_to_64() resets the register's base/step line; the comment there
-> gives the arithmetic. Note it resets unconditionally, where
-> coerce_reg_to_size_sx() and coerce_subreg_to_size_sx() return early when
-> the extension is a provable no-op and keep the line. That costs a little
-> precision in the same case here, which is not worth an extra branch on a
-> path that has just rebuilt the value from the base.
->
-> Unlike the zero-extending arm, the source's delta comes along. Both
-> base + d and (u32)(base + d) have low half (base + d), so dst is
-> (s32)(base + d) whichever the source was:
->
-> 	w7 =3D w6;	/* BPF_REG_LINK_ZEXT, delta 0 */
-> 	w7 +=3D 5;	/* BPF_REG_LINK_ZEXT, delta 5 */
-> 	r8 =3D (s32)r7;	/* BPF_REG_LINK_SEXT, delta 5 */
->
-> keeps r8 tied to r6. sext_mov_inherits_delta pins it; without the
-> inheritance the program is rejected. A self-mov can form a link here too,
-> which is how a sign-extended int return lands.
->
-> sync_linked_regs() needs no separate sext path: the differencing arm
-> already copies the base and adds the delta difference, and which extensio=
-n
-> follows is just the member's kind. Where the base does fit 32 bits the
-> reverse direction runs for both narrow kinds with the *zero* extension --
-> the base is then below 2^32 and equal to the member's low half, whichever
-> way the member filled its own high half.
+With CONFIG_CFI=y, every jited line info entry after a function's
+first is cfi_get_offset() bytes too high on x86-64, riscv64 and arm64,
+so tools that use it show the wrong source line.
 
-The above paragraph is very hard to parse.
-sync_linked_regs() does call sext_32_to_64().
-Please re-read whatever comments and messages the machine generates.
-For whatever reason the bias is towards a wall of text and complex
-sentences. I do read those and it hurts. Asking my machine rewrite
-your machine's text, such that I can understand it is very time consuming.
+The JITs count the insn_to_jit_off[] offsets from the start of the
+image. Since the CFI commits below, prog->bpf_func starts
+cfi_get_offset() bytes into the image, and bpf_prog_fill_jited_linfo()
+adds the offsets to prog->bpf_func. s390 corrects its offsets before
+the call, the other three JITs do not.
 
-...
+Subtract cfi_get_offset() once in bpf_prog_fill_jited_linfo() and drop
+the s390 correction. jited_linfo[0] stays prog->bpf_func, the
+function's ksym address. Without CONFIG_CFI, cfi_get_offset() is 0 and
+nothing changes.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index ce7016446936..dffcaa2e1392 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3763,7 +3763,7 @@ static void assign_scalar_id_before_mov(struct bpf_=
-verifier_env *env,
->  	 * rY->id has special linked register already.
->  	 * Cleared it, since multiple rX +=3D const are not supported.
->  	 */
-> -	if (src_reg->link_kind)
-> +	if (src_reg->link_kind && src_reg->link_kind !=3D BPF_REG_LINK_SEXT)
+Fixes: 4f9087f16651 ("x86/cfi,bpf: Fix BPF JIT call")
+Fixes: e63985ecd226 ("bpf, riscv64/cfi: Support kCFI + BPF on riscv64")
+Fixes: 710618c760c0 ("arm64/cfi,bpf: Support kCFI + BPF on arm64")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/all/20260904014748.C04AA1F000E9@smtp.kernel.org/
+Reported-by: Alexei Starovoitov <ast@kernel.org>
+Closes: https://lore.kernel.org/all/DLNXZ2WK7TPD.2RZBUNRS4FA4L@gmail.com/
+Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+---
+Changes in v2:
+- Fix it once in bpf_prog_fill_jited_linfo() instead of in the arm64
+  JIT, which covers x86-64 and riscv64 too, and drop the s390
+  correction loop.
+- Link to v1: https://lore.kernel.org/r/20260925-b4-arm64-bpf-linfo-cfi-v1-1-e930ab335170@linux.dev
 
-Why is this rule relaxed only for SEXT?
-Can it be relaxed for ZEXT/FULL as well?
+Stable trees that do not have commit 227b4e108adc ("s390/bpf: Add
+kCFI support") take this without the s390 hunk.
 
->  		bpf_clear_scalar_id(src_reg);
->  	/*
->  	 * Ensure that src_reg has a valid ID that will be copied to
-> @@ -6057,6 +6057,25 @@ static void zext_32_to_64(struct bpf_reg_state *re=
-g)
->  	reg_set_urange64(reg, reg_u32_min(reg), reg_u32_max(reg));
->  }
->
-> +/*
-> + * The sign-extending counterpart. Signed bounds carry over directly bec=
-ause
-> + * sign extension is monotonic over the signed 32-bit range.
-> + */
-> +static void sext_32_to_64(struct bpf_reg_state *reg)
-> +{
-> +	/*
-> +	 * See comment at reg_step_check_unsigned(). Sign extension subtracts
-> +	 * 2^32 from every value with bit 31 set, which preserves a residue
-> +	 * mod step only when step divides 2^32, so the line cannot be kept.
-> +	 * The zero-extending twin calls reg_step_check_unsigned(reg, 32) for
-> +	 * the same reason; the unsigned form does not apply here because the
-> +	 * result is not the low 32 bits but the low 32 bits moved.
-> +	 */
-> +	reg_step_reset(reg);
-> +	reg->var_off =3D tnum_sext(reg->var_off, 4);
-> +	reg_set_srange64(reg, reg_s32_min(reg), reg_s32_max(reg));
-> +}
-> +
+Drafted with the help of an AI assistant and reviewed by the sender.
+---
+ arch/s390/net/bpf_jit_comp.c | 2 --
+ kernel/bpf/core.c            | 8 +++++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Please use coerce_reg_to_size_sx(). You can improve it by doing:
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index 56ec49894dda..83da3a00db7e 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -2428,8 +2428,6 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	fp->jited_len = jit.size - cfi_get_offset();
+ 
+ 	if (!fp->is_func || extra_pass) {
+-		for (int i = 0; i < fp->len; i++)
+-			jit.addrs[i] -= cfi_get_offset();
+ 		bpf_prog_fill_jited_linfo(fp, jit.addrs + 1);
+ free_addrs:
+ 		kvfree(jit.addrs);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 7cf37690d41f..b9709e3b7656 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -206,7 +206,9 @@ void bpf_prog_jit_attempt_done(struct bpf_prog *prog)
+  * here is relative to the prog itself instead of the main prog.
+  * This array has one entry for each xlated bpf insn.
+  *
+- * jited_off is the byte off to the end of the jited insn.
++ * jited_off is the byte off to the end of the jited insn, counted from
++ * the start of the jited image, which is cfi_get_offset() bytes before
++ * prog->bpf_func.
+  *
+  * Hence, with
+  * insn_start:
+@@ -220,7 +222,7 @@ void bpf_prog_jit_attempt_done(struct bpf_prog *prog)
+  *
+  * For i > linfo_idx,
+  *
+- * jited_linfo[i] = prog->bpf_func +
++ * jited_linfo[i] = prog->bpf_func - cfi_get_offset() +
+  *	insn_to_jit_off[linfo[i].insn_off - insn_start - 1]
+  */
+ void bpf_prog_fill_jited_linfo(struct bpf_prog *prog,
+@@ -248,7 +250,7 @@ void bpf_prog_fill_jited_linfo(struct bpf_prog *prog,
+ 		/* The verifier ensures that linfo[i].insn_off is
+ 		 * strictly increasing
+ 		 */
+-		jited_linfo[i] = prog->bpf_func +
++		jited_linfo[i] = prog->bpf_func - cfi_get_offset() +
+ 			insn_to_jit_off[linfo[i].insn_off - insn_start - 1];
+ }
+ 
 
-  reg->var_off =3D tnum_sext(reg->var_off, 4);
-  reg_set_srange64(reg, reg_s32_min(reg), reg_s32_max(reg));
+---
+base-commit: fb7bd3a2aad70a76232a7168a505386d0a1396af
+change-id: 20260925-b4-arm64-bpf-linfo-cfi-f5c3897e408c
 
->  /* truncate register to smaller size (in bytes)
->   * must be called with size < BPF_REG_SIZE
->   */
-> @@ -17544,12 +17563,29 @@ static int check_alu_op(struct bpf_verifier_env=
- *env, struct bpf_insn *insn)
->  						return -EACCES;
->  					} else if (src_reg->type =3D=3D SCALAR_VALUE) {
->  						bool no_sext;
-> +						/*
-> +						 * A 32-bit sign extension keeps the low 32
-> +						 * bits, so dst shares them with whatever src
-> +						 * shares them with. Both base + d and
-> +						 * (u32)(base + d) have low half (base + d), so
-> +						 * dst is (s32)(base + d) either way: inherit
-> +						 * src's id and delta and record
-> +						 * BPF_REG_LINK_SEXT.
-> +						 */
-> +						bool subreg_link =3D
-> +							(insn->off >> 3) =3D=3D 4 &&
-                                                        ^^^^^^^^^^^^^^^^^^^=
-^^
-                                    please make this a bool variable is_sex=
-t32
+Best regards,
+--  
+Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
 
-> +							(src_reg !=3D dst_reg || src_reg->id);
->
->  						no_sext =3D reg_umax(src_reg) < (1ULL << (insn->off - 1));
->  						if (no_sext)
->  							assign_scalar_id_before_mov(env, src_reg);
-> +						else if (subreg_link && !src_reg->id &&
-> +							 !tnum_is_const(src_reg->var_off))
-> +							src_reg->id =3D ++env->id_gen;
-
-I don't like how this code sidesteps assign_scalar_id_before_mov().
-
->  						*dst_reg =3D *src_reg;
-> -						if (!no_sext)
-> +						if (!no_sext && subreg_link && src_reg->id)
-> +							dst_reg->link_kind =3D BPF_REG_LINK_SEXT;
-> +						else if (!no_sext)
->  							bpf_clear_scalar_id(dst_reg);
->  						coerce_reg_to_size_sx(dst_reg, insn->off >> 3);
->  					} else {
-> @@ -18485,17 +18521,29 @@ static void sync_linked_regs(struct bpf_verifie=
-r_env *env, struct bpf_verifier_s
->  		if (reg->id !=3D known_reg->id)
->  			continue;
->  		/*
-> -		 * A zero-extending link, spelled BPF_REG_LINK_ZEXT: the
-> -		 * relation reg =3D=3D (u32)(base + delta) does not invert once the
-> -		 * base is wider than 32 bits, so the reverse direction is
-> -		 * skipped.
-> +		 * The reverse direction does not work for a narrow known_reg:
-> +		 * it knows only its low 32 bits, which say nothing about a
-> +		 * wider reg's high half. Neither (u32)(base + delta) nor
-> +		 * (s32)(base + delta) inverts once the base is wider than 32
-> +		 * bits.
-
-Why is this "reverse direction"? what's "inverts"?
-
->  		 */
-> -		if (known_reg->link_kind =3D=3D BPF_REG_LINK_ZEXT &&
-> +		if ((known_reg->link_kind =3D=3D BPF_REG_LINK_ZEXT ||
-> +		     known_reg->link_kind =3D=3D BPF_REG_LINK_SEXT) &&
-> +		    reg->link_kind !=3D BPF_REG_LINK_ZEXT &&
-> +		    reg->link_kind !=3D BPF_REG_LINK_SEXT &&
-
-On a second thought, it appears it would make sense to collapse FULL
-and NONE into the same category. E.g. the above condition would become
-known_reg->link_kind !=3D FULL && reg->link_kind =3D=3D FULL,
-much clearer.
-
->  		    get_reg_width(reg) > 32)
->  			continue;
->  		/*
-> -		 * Skip mixed 32/64-bit links: the delta relationship doesn't
-> -		 * hold across different ALU widths.
-> +		 * Skip a pair of differing kinds. Where BPF_REG_LINK_FULL meets
-> +		 * a 32-bit kind the delta relationship genuinely does not hold:
-> +		 * the deltas were added at different ALU widths.
-> +		 * BPF_REG_LINK_ZEXT against BPF_REG_LINK_SEXT is not that case
-> +		 * -- both are base + delta in the low 32 bits, so narrowing one
-> +		 * really does narrow the other -- but that deduction is
-> +		 * declined on purpose. It makes an int loop counter a fresh
-> +		 * constant on every iteration, so no two iterations prune
-> +		 * against each other and the program runs to the instruction
-> +		 * limit. See sext_no_sync_from_zext_sibling.
->  		 */
->  		if (reg->link_kind && known_reg->link_kind &&
->  		    reg->link_kind !=3D known_reg->link_kind)
-
-Does this check skips propagation in the following case?
-
-  w7 =3D w6              ; r6=3D{NONE,0}, r7=3D{ZEXT,0}
-  r6 +=3D 1              ; r6=3D{FULL,1}
-  if w6 !=3D 5 goto ...
-
-known_reg is r6 in this case, so:
-ZEXT && FULL && ZEXT !=3D FULL -> true, continue is hit.
-
-...
