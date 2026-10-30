@@ -1,100 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.228.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793363084;
-	b=1E8JHjKbkr+QaZsy0ejlOlENh6I7VTTZoY7OTFQdB78cYHRsOc2zutUjkqlc+4E+qgvx
-	 pSaD7FhAzObkM2/3ugbY05AnZzsk1hOLdX6mZkFmkdgor/UMoG7FpzqgRUHKCZ8cb1DdP
-	 YQlnazrEiWwdbSUQAU+n4HsAcXNQm5VAWl9sUMBEON4DaYUtdhT9UV8akQvRYDjkshYoB
-	 kKPLdSP2LKPAhCPaORvXPGBkENVYwbOPTOrv0Qtt1bXnUng1qNOJda2ADOQYiHSnPIvwX
-	 FomdFL3UaJMv9gBv1TXj5dgtuEoA56lcYmk65xUADCa+TgMuvsb2JHqoodJrYBk9X5Q==
+	t=1793363200;
+	b=x2/lNlq3j7UxLwzNCJ6K024duw/OlVHH1lct9F0tpSZUTjCkZ/gGCaGO5XZljZVTRUyk
+	 5XViv+auHJg4PTj/QnoTsvfsk+/OF8lfsXMMzVAnf6OGMue3SVLgv7FAljEsXwHGPT4o/
+	 DEKVH8R1LgEwD1+Wnobn4MCqjVhpcdFxOBwqhIUk4eZ+SH6TiDRnt4eP+WVV24aT4wo46
+	 kuiqGA4jRfOCpvODTtTWUnBIjaGdD/mPo192O96LagyUICynPaYqDRQyYmul0lmItCoeq
+	 d/JK0aT90j6ZJF/XWRcW9dalFmT5hpLR10+Kog+Pm1JwRoxr7D4WnD7I/NuqQWrO5sA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793363084;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793363200;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 From:To:Cc:Subject:In-Reply-To:References:User-Agent:Date:Message-ID:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=+yrymDp79FZjbqEueI9kZqfriu2oDHzO0g8H9zdbK7E=;
-	b=nRC1Vwo7jaXRQYj/lPNAQ9C7AjEId/R1lUgy+d+EdMkpnFkoeViV863VUtv5YRWV8qhP
-	 wrTgy86/+O9OxYlNfukZ8MyDSIYxwjZqr9qWUOy+RcUeCK4V+vXlTgytn9PCunZrGlHug
-	 TSTs8DDLHQMQtOItNmlhbhmJ8RjIVR/ovt6XoGEFZRpHXXr3hKS02NicfYgUZoklHte63
-	 MSp+Wx9jaP6yKPzisGV2toGhcRv0E06GLrBdKko+JzibAekpRA85G5/hKBQ46VQpOVH/X
-	 N3dagWxwK2GOZvgoW5Lgvk5jQPs5A/rS2VsBIX46DbuXUM4U24fsmiSfLg7YJiRdnaQ==
+	bh=Ib0ZIb2YOYQ7w34USWape/G8EkDxIb1fCiEOQLBLNlA=;
+	b=z3hVHRC7Is/54LJFOf3RSfx/0zDPdLJL1SjxYzny6e+r4zcnF8Dtvr2PIZbOoYo6UWZC
+	 Mc8qtBo2aBwn1LF7CAIyjKLOSHryvkKKkgIvHubvWQeZ/8FYvF6w5Kp7N4550rAwPOsbt
+	 jn6qiSDtZzbto+ZOvg6Zz1n5jpwXpJYX/TP/TfWpyNoqyzj5VP2WyLXD4OX9yKlfZ9Nuk
+	 B//pvyMeNaaEVR0+5wITAWWR/GT/NcHkv0N7iJiDOVTLrSh6R3TG2S8aUdIsqalHXDzRi
+	 MlUYYcO+kBgCzOwQmez2XWd+mS7GqXToBVPPWxN13C111ffxnxPQ+DdvcOwTe8NXIKg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kDl7HVvK;
-	arc=none smtp.remote-ip=74.125.228.5
-Received: from mail-pz2-f5.google.com (mail-pz2-f5.google.com [74.125.228.5])
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=fhXFza+Y;
+	arc=none smtp.remote-ip=209.85.208.53
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96262606A31F
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 12:24:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96262606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC4E606A321
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 12:26:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CC4E606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kDl7HVvK
-Received: by mail-pz2-f5.google.com with SMTP id 41be03b00d2f7-cdac0ac5f19so340822a12.1
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 05:24:43 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=fhXFza+Y
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6b408f2d936so774572a12.1
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 05:26:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793363083; x=1793967883; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=+yrymDp79FZjbqEueI9kZqfriu2oDHzO0g8H9zdbK7E=;
-        b=kDl7HVvKhavC8dBhxopELEbRq96LLaI6slGnuyyzzpW6HiVfGW+5iNPWoH9zW/heUE
-         w8JVowdf9BDkIaRkb7XkvY6hKwgR0yzPfsDWcGZ/TEK3ir2aGz2DFMTmEl5ZhJjIRj65
-         IaYA3vc9JbhxAqMO4AE7rw37++O1oUWN3Nmqcedd8UaAiPLTaFv3cdQA9uxOBqo02BDu
-         ss3CrAEcE9GJBCtpgMGVvQtPYxRYHv/K46Bxi/obXBWgOIplzdfvA+5nCQS18C+R5zJo
-         1LWEf+wYAQtEBy64hU04DLZ9zd58muabV/fqQF+M8lsvlA7BwXW74bgmo1u6xwlDDvrO
-         Yo8g==
+        d=cloudflare.com; s=google09082023; t=1793363199; x=1793967999; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :user-agent:references:in-reply-to:subject:cc:to:from:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Ib0ZIb2YOYQ7w34USWape/G8EkDxIb1fCiEOQLBLNlA=;
+        b=fhXFza+Yzy3VG+9OGHMOcR47ihiPebAoAFmsMUY2P6j1pr41QmigtuRDAv5TPC+uDE
+         0J3nvWYLFmutTaTKdFz30ALFGAiiWg7cTyjr82gecO8pWjzBrrlyLSTp8j3jYXv3pL43
+         xFkN4qEcHAjm2DJwQl7q5XooRBhI0bAl0tueGBxYCb0WgpV8Ybtpi4mCobTc/mvoUD5+
+         sZmdzO9P3Ja8qlIWOVILGj0XA2BiBzcjS4Vj+W/j4ZnusyI8UcB9l0j6YLD/mCxJCQzZ
+         tj2PheJ8/nEusRkl5R9YusrHcvJUoURwDOSSceCnHGjKE2frWjKllo14yQ/XiJ8aZEKi
+         JfnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793363083; x=1793967883;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1793363199; x=1793967999;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :user-agent:references:in-reply-to:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+yrymDp79FZjbqEueI9kZqfriu2oDHzO0g8H9zdbK7E=;
-        b=KvHtx1jNpGnLTtnFmbu4gko999uYGYyX8/pQJ+e2rLipMFuk+Sv/qrP0F3KWozRxUU
-         balgV/xSPABPf0cBcti9f7bYdSZ7mlyFk0ZrIi+DSrtfybJwqK8GHW1h/EZuN2JMGc8B
-         TOC4txodBnEFIphyb6RLoUYVX20fqi7qsNoXa90leW+jHAPrPqFJpbu9JQzTFx5dzwZR
-         yzsFg2mNYh83zXad9EBTuAzo0MYRwV78FoWFWeoF0iWDNDBF5wDbfcxb+QxjfYfFJkgJ
-         XcmXd/r0NquMvwUZSoWEx3S4D7bDA4T5Eybwp8I+psh3cR4FOIPt9MsNcC9UzfeClP/p
-         EcnQ==
-X-Forwarded-Encrypted: i=1; AKwUvByR4YO/uZxPbemJ9UpgC4OSaM9eEftlTfPgp/IOjxOtROLrxE4FI2PlT2xI586rDGir1AQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI40Dwrj+lxQl1ZCnhpcrMSP0iMaR2CgFNmHI6bBYIJLh3hNeNW
-	NretdoMvr7YzjvAkQXEC0lmmBKpjvFBtpmvIaQkA/0QHsGuxvTPOEIjd
-X-Gm-Gg: AYBFou2bBsbNDxg5UwKV03B0BqJGCtmp1koOgb/8cVRLn5MZFVrH+JsKkWBSAxv+t1R
-	GVNVwHzWzRuLj3evebRFLSyn0n9QULyNPUfvSuflqdyGmp/9GXfLuKQOcpCHy87vp725jcMp5AY
-	gVhYZPYmZ3JCO0LYKLJq7IjfJQDwN6EI4qYHsVWu8EFN1m/MThPLeCpwbLtXSXqxVyNi4ChuX0H
-	QY/2DxxqSR2NTtua3cMqQfIu+4qitfolq4vpluC5VNCeBxPxzyAOUERbUv54x3F8rSHwb/SNzoF
-	JFavRVtuTbTu0wQzGSHIM2zDzEi/JGlAu3I4Obfv3Qb2Db6mS+4gjqxhABk4w+bwDE6XThIsAzO
-	J++VPsnOgZ1LW+HG6vNaaxSV7ZrsgP0qkdx0Fl5NhoYHDtB4h879VsTfvZq3igguPxg755NjlT+
-	k/NzCVx3ouCvKLRRwmx7EVAUBuvYow5kM+dpLoRLv7r8rYX2jkmKXZVtJIAtw3vW3GaYqkQokXZ
-	cajGwGY4CqZHgOO5i+fL9vjhONQd/AzPmc7Gg7coaygu59+HMzw2mmdzL5vsma5zeHmkynHqI6d
-	7wwnm9axjhTOQSKpTOuGBb+2GgbsuatyQsAiHZq9wmkZ68jXDmz6/M37RQ==
-X-Received: by 2002:a05:6a00:2d85:b0:873:f7a4:433f with SMTP id d2e1a72fcca58-8a9bea6ad35mr1985118b3a.26.1793363082777;
-        Fri, 30 Oct 2026 05:24:42 -0700 (PDT)
-Received: from 192.168.1.3 ([2409:8a1e:2331:2850:d40c:1fcf:6319:8524])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a9ef56b38dsm687929b3a.31.2026.10.30.05.24.39
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 30 Oct 2026 05:24:42 -0700 (PDT)
-From: Rongzheng Wang <testwrzwrz@gmail.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Jason Xing <kerneljasonxing@gmail.com>,
-	netdev@vger.kernel.org,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	stable@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v4 1/2] xsk: defer software checksum until the skb is complete
-Date: Fri, 30 Oct 2026 20:24:34 +0800
-Message-Id: <20261030122434.91530-1-testwrzwrz@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <auSF/bDmOW0Y7T4D@boxer>
-References: <20261030023248.78802-1-testwrzwrz@gmail.com> <20261030023248.78802-2-testwrzwrz@gmail.com> <CAL+tcoDUGqk-KfMBqdG4RBURHQc=9J+Ce7B7CZZWRN5yN7pRrw@mail.gmail.com> <20261030084017.16202-1-testwrzwrz@gmail.com> <CAL+tcoBThTe7299eVU=tsUdi392dS9cioXX5RA5AKRsYAGbdVg@mail.gmail.com> <20261030094633.27910-1-testwrzwrz@gmail.com> <auSF/bDmOW0Y7T4D@boxer>
+        bh=Ib0ZIb2YOYQ7w34USWape/G8EkDxIb1fCiEOQLBLNlA=;
+        b=lT60+Lw1Sg33QTMJkTmTCSWK+IO0cPjDo+gOWXTVuX35dKuzoHOSdTmvS8tf15NVUO
+         CQh4AxsDicVW3hdPIPh83DtpREeza73tdVQ9H15PACGXXvWAZTelLGtabSX3OpVjKdiy
+         eJKyEzBh65vINqNYKtUgDhgk2TVxaEVm5/RPq/IyXHn/pT5Sa2tZx2aFW4LHu+IFtxoS
+         Uf+829T0hxKf6bIqjc6sm4BX+Yw7bInPEdudXBZZ6nUyTPRRouW9zcCbPQ3t/yuSW/X0
+         C+PeAp7bUjnBjSe9Ebit6ynt55Ur6irhRU7vp7kXDZbLIket8mF7QtqBqeFTGL6Dntxt
+         PZBw==
+X-Forwarded-Encrypted: i=1; AKwUvBy7v5QWurkuESDeeh1AeaU1zy9/PT7LCLZltZFi6T1kQfYLxFArSWsLkxAHiYpupxWw7U8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIq3Exur2HioDDU7B3Y6/xSEIt6Jtv6Tx24uAbmC34+YH8R3yd5
+	Cj8cFcP2L+nmYQQJmjGyo9bBXbjnviFz0dFOOGJFJ8DX69d15bvD1sL2EfCE3FgjQz0=
+X-Gm-Gg: AYBFou2cXPCWqXBZ/BaJqJXW7bwogFw/coXjadX/FnX+BX9FI8oKX11IvktT2ECz++H
+	bkBVKKWtWEa/j23nmBdgfCPxP+Ii0KhzMmCkrmZckyvFLmORqU06+nxeqCLAawXaXUdDvi98+Xu
+	HEOH0gHs2rq23On3Fp8W+26Ua5jBCGXpo8fyJBc39mKNET8lqrIPHpY2cs1BpHiq8RcNoT7gDvk
+	4jcSUvnqX106WmGKYTYvKdZmX+ScTZ1eXuSJMbo5fbCDqkawkiOuK9Pwb0NV8FV0Q6Cz9nGDZga
+	95UmOOle1fmmufT4dhlWmKHLDa6LQGEk3zCAU5+mxJoCWlL1DVDMQVpqLDOFQpwlHqboHrSG7ja
+	ajmCXUji5qwEviXyBXltwTFrg2QpexR7xLipNWpYQnyomJyL3V5rtoUtrg4mkRHg8K3paZBFwFB
+	Ju+RRwWPho0aWqKohw4Eh2jUSlsENN3ypRMBVCZ2BM2mkNWyCah8an0EFCXrsm18FRcGgbVSZ4a
+	VfYm1dioy28deYltC12SdOO+h+SAqC/dhAA1jF78vXfMrxccYSazvqjsg3OH5rtIlE2eZqbSXQd
+	vRbg2XVnaUwQfx6Ug4R9xZAHgyj8gwodsHmGgaA+PQ==
+X-Received: by 2002:a05:6402:c516:20b0:6a9:a3df:e4f1 with SMTP id 4fb4d7f45d1cf-6b4d4c714a4mr1147063a12.25.1793363198834;
+        Fri, 30 Oct 2026 05:26:38 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac6:5067:295f::41f:54])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b4d7b3fc5csm540597a12.33.2026.10.30.05.26.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 05:26:37 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: "phx" <phx0fer@gmail.com>,  "John Fastabend" <john.fastabend@gmail.com>,
+  "Jiayuan Chen" <jiayuan.chen@linux.dev>,  "Network Development"
+ <netdev@vger.kernel.org>,  "bpf" <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf v2] bpf, sockmap: annotate the psock teardown data
+ races
+In-Reply-To: <DMFRU74YCDSH.1WJJT7VL3MEYE@gmail.com> (Alexei Starovoitov's
+	message of "Tue, 27 Oct 2026 16:46:11 +0000")
+References: <20261021155629.68813-1-phx0fer@gmail.com>
+	<20261022054811.35008-1-phx0fer@gmail.com>
+	<DMBHB0TQOV1L.38MECMYFGUS5B@gmail.com> <871p9g6ym1.fsf@cloudflare.com>
+	<CAADnVQLTe611mm0iJEf5gJi2GtW42kxNHH3sUPevD039FvzL7g@mail.gmail.com>
+	<87v76o63qv.fsf@cloudflare.com>
+	<CAKvCo-zf6=ABrMEn_8r7rJFFvaaXQrz8GAUQ9Uz4h0Ze9gY68w@mail.gmail.com>
+	<87pkwv5cj8.fsf@cloudflare.com> <DMFRU74YCDSH.1WJJT7VL3MEYE@gmail.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Fri, 30 Oct 2026 13:26:36 +0100
+Message-ID: <87pkwrtlvn.fsf@cloudflare.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,23 +107,27 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the review, the suggestions, and the Reviewed-by on 2/2.
+On Tue, Oct 27, 2026 at 04:46 PM GMT, Alexei Starovoitov wrote:
+> On Tue Oct 27, 2026 at 4:33 PM UTC, Jakub Sitnicki wrote:
+>> On Tue, Oct 27, 2026 at 01:10 PM +08, phx wrote:
+>>> Sorry for the long silence =E2=80=94 my laptop died right after v2 and =
+took the
+>>> local mail and the working tree with it. Agreed that the ordering fix is
+>>> the right one; please go ahead with the commandeer, Jakub.
+>>>
+>>> I do still have the reproducer (a KCSAN selftest for this race, verified
+>>> in QEMU). Say the word and I will post it, or send it to you to fold in=
+to
+>>> your respin.
+>>
+>> Feel free to iterate on the patch once you get your dev env restored.
+>
+> I very much prefer if you Jakub will take it over.
+> 'phx' is a clueless bot that sends spam across all subsystem.
 
-> Can you stop removing all the previous conversations and rather reply
-> inline to related paragraphs?
+Fix now posted:
 
-Sorry, I'll reply inline from now on.
-
-> I don't think v5 is necessary. And as Jason said you received 3 review/ack
-> tags and none of them got included in v4.
-
-You're right. v4 went out before Jason's tag arrived, and I missed the
-other two tags from v3. Since you don't think v5 is necessary, I won't
-send one; if there is another revision, I'll carry all the tags.
-
-I learned a lot from this patch and from the review feedback. I'll be more
-careful with future patches and wait longer for reviewers' feedback before
-sending the next version.
+https://patch.msgid.link/20261030-bpf-next-v1-0-035eabf8eae7@cloudflare.com
