@@ -1,87 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793361242;
-	b=wysN1BoxS0D6ly2PfWD9dbOzLfXKTBqOEyTqSIcqQgxkii+E/gxV0ooEFf6azvYmfpeE
-	 j8wmDwpKxI7wxmn1BYK6Lsr5IzwSxrTYBi2n3MG2T9iDhC2JNFaV8nr+yfTX5MiVC8Vmc
-	 VXitOXkVV2eXdqj2J4Nz5xYIUxUMShqAh/pv9NEtG3LYUDU8AO0QME803l6M8Y9LNCXlB
-	 nC5IWMLhMZagbwSXACOCv92YntLo2wcXU9MOJ8Bxj8pqFt9GHDlCDC6BTb2kW8ZyC0lng
-	 jWdC7EX6b4v7uSPW97xHsaFfusgd8DMVKmKyBEb7RuuUQEic+pSfAiOHrGLCJqi1OsA==
+	t=1793361256;
+	b=Ok7vg5OlsrbW6qedXaeHj0sJCREH/d21XvzysUTdHNwo+8/KfeNtZwpeaFL5CisXw0GU
+	 yE1km0JUIqvzuMFj6MIEGI/lUXQYRNc1edM1vg1vq8ojgxPMoA+ZJ55FqvB+fSgXFXFfe
+	 /XZ7cPfBXzNNBxLN2SEcHnlfQKqGgrTmfvof6DY2xv/DOgsgesDTXEPcQSdVj8OIpBhhn
+	 ALe6J325FBimXlDTR6WTDXEz9n0xVic8rllZumw8PkdDdA8QpVl6RpZg6BttUZCVIscsX
+	 1Wo9EH1ThXe6PyZFaGa9Opv42uWgkplk2SHLnKFNGugbAuqYR1Hzwz+YOZoA6FbTlWg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793361242;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793361256;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
 	 References:In-Reply-To:To:Cc:X-Mailer;
-	bh=rifggq3wvmtKN9HBpcJIa5sJWlnd49WFlLOgBeYNSRk=;
-	b=GezNqAAQuFttcr+rbHIQmi8X2Cun1MFA6L+hM0rvdTkLTauEKuiQHBHF6D7DwDJsl3D9
-	 d7k+8NoZdbRIr0tmv1uv23fNsqlSO8DxWQLlBR5XE+Cu1tZHQ7LLZu8+iHMWIvAYFbP4U
-	 gF7Y6KJ0vjZnI7utTxhvYdrJddteMIGHPcYhx45dvAANJaoRPSswj7vM4LgW6JgDWaeDW
-	 qSN+CUFed3r0bAGw9J1BXbPb2cNSyg/cKv5nv7MSt3cYOEP04FI3Oy/FSUJZPzDh/5s+Y
-	 jkQNYzQxm0KFo01uCOg03exLN/2eCw+/THUbXor4fT4Mp/1sTxXyNOrz6F6yngRS4fQ==
+	bh=U7T4/LBkZ2aLLguzrEpLCCec6wWvaqt4jUv6X0yRJyg=;
+	b=4w7HKUNis/r1fvYVcQXjZhCsaGU1hs1td/jgJ78uHqjoerklrTXmJjzm8vvHm3P68E8h
+	 cFv2WJ5Qfc15iSrzyV0xdA26277PL8A5ONXWCtCjf97ozz3a1Nsgv6TVUNES5Lghkp9/n
+	 dDeW3bmDvVlqnjtDgtrcLf+duws2Y6eKSqyi16maVjxvApnNa/hpDf0O2bVJKMIFlxf06
+	 QxXdeYmWQRua6ix9Wbvvjw9ug1vGDvDdzYWPtef9ZUOB8ss33ZKY3sfT4ZUz8+j/pLCNt
+	 wGMbtvXMS0Lf1jl17/5Z1IoxlpGo9UTytBxWxZpm+jCd/F8qFeCTp8JVQH7D6PBkk3w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xxyEvOzq;
-	arc=none smtp.remote-ip=74.125.82.46
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dV6pIqMz;
+	arc=none smtp.remote-ip=74.125.82.48
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672E660A2603
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 11:54:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 672E660A2603
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC68606A336
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 11:54:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3FC68606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xxyEvOzq
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-15ea896ddc8so961435c88.0
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:54:01 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dV6pIqMz
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-1a3c08d6928so720337c88.0
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:54:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793361240; x=1793966040; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793361255; x=1793966055; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=rifggq3wvmtKN9HBpcJIa5sJWlnd49WFlLOgBeYNSRk=;
-        b=xxyEvOzqrbzcQJzLVkp035VbfRAh6iTF2D9eMoC/wyCk+0IIWkwpm/ITiz0QLnIO8N
-         8O9s+KvlI7UG1pa5k49XfYk+MFxePnmHyNvOIyF0YRPFWOaVfPLf0mWy41/QCJRrtBlD
-         KSwubb821xm13piN6Y0kp/IxqMw5jXvei/Zd2KzTYLxdBaWIqDxBtdorCY94fGec/Zry
-         IWzXeKPRKcY5MaBzhvXA3NiTeD/CfDebU/S8TvA+jXmNN4+m5JLMkp3MIg7tEh89OfA/
-         bhDfwfbl6d7nVrPYWQ4anN6xKq0u+2dZetbJbfU1bktQZlWZQ9d8D3ZQi7l2Y25uCvd9
-         11hA==
+        bh=U7T4/LBkZ2aLLguzrEpLCCec6wWvaqt4jUv6X0yRJyg=;
+        b=dV6pIqMz6qcj5WU78ZHzj/KF4aKibYvrs8/6ji6nXDDNh5PDxdyvZSyJvYni9ymT1r
+         rNBf1xYhAG/jXaKaFzktQpG2ZK9zdhVyN+y95XF127auwbS8LhI8r0OYqS0XolIPwWOW
+         dzxadP/bMd8Vo8VmB2dYjuIMwpZ41MKi4hAOcuDJvY93EbmF+afT1IXyACyZlAW79pT8
+         posjpZxdFgNsC0zIb6JimPVaNaLxI6Fqvryx+FhEZTBU+5IIxX0mQrHvFA0khE5DcsMT
+         fRBicev11S9ZrLyo5ptfT703aUlKAzBvjIf58F4+8XG+XIcudN/+gRF0zygAR/5rE9vM
+         McOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793361240; x=1793966040;
+        d=1e100.net; s=20260707; t=1793361255; x=1793966055;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rifggq3wvmtKN9HBpcJIa5sJWlnd49WFlLOgBeYNSRk=;
-        b=y8IJBymC14GUl/1LxWvTmrVb1Ha7J8J6vihHHWN31fs2EmNS2S2aJ2IuDzrg9EC401
-         Njc367Sf0cDF9+SH120E1glU1zk83XhWDX9evmLyPbM4A0O1lhQMvm5SmGDAWFvXrAvi
-         V2E9iKmmLt8rdbWdQzINhHPVOchNW8zoLJGdUHjocblqKyNtRK+Zv5l1adZi9lAYvkZQ
-         anvAfS2+tJ/osPlm5kAOuu5kz6C84JdjxPCstWZAG5dpVXJc7j6OdBkoHzpXsedwooA9
-         uGgV/l6VU5csZYiOTYsdtmbmaTTTSQLRGPXmGAMTYawNy9fxadtbtWbn/MbWntlTgsQO
-         k5Tg==
-X-Gm-Message-State: AFq9FYKGgAihLb4ZDStqAC1DTDL8wvNDVsCpVw4bhBzGZfSAsi8jPe3y
-	VC/HWLDmoVrQNFblK81ojmFTPPBCx5RCBzZvuj46C6wfffWPd7NTJUPi
-X-Gm-Gg: AYBFou0BURcM/qQwbfhsvbQ43m+MEpdKmWDx7CVj1hKrtZ+E4isnIedCOOyxJI30wQu
-	eXng+yw8kV+ey+mCDO/6YoCHnqUSRqMo2J96DQhZ2V6Q7LfhHvhjLLDw4rc+SNV8Sy5QjM0rHVt
-	1GIL/FblEllIEObRE+iuQ4jDdm4qjBp6Cr70PL+m0dxZ0ZEXJMz9eM45+NdtIezIlbHjtCFI0cF
-	0B7DpiJpzc98mtBMv3AZRpVJZdky4rIo9m5yh5B638xR60B90tbKuOgb8K3H5TMDYIPo9mPrv9q
-	/0tMTkJnXWBktxxrgdeOR6uhByFqL8+k47wBpu/aHsQUercxzHMqZ3yPZDmHNRo96j+fexVD3K0
-	FI1e2vJTpSNgLLLZ47Rn0mstZyh04rsfAwUEd+WDzeBgkBDhmIfu6d9SfjOamTqKsr+B4LgkOE8
-	OuxVcq8AAyQYv5d+juq+DNOlQRCToZC16fPevLxaScixWudQM3b9bTltalHE8Rgxj1yXY492Mqn
-	D/+4UDF52JVf261YpaNA2aWRfogc9P2/wu45HnAoYhaudNoE2UIcU/8xQ9RcjeYRvBw257F83o+
-	CohiQ003OJ1JEZ624/6bFDaL
-X-Received: by 2002:a05:701b:2311:b0:189:d6bf:7ec7 with SMTP id a92af1059eb24-1ac5ae39462mr2790819c88.19.1793361240486;
-        Fri, 30 Oct 2026 04:54:00 -0700 (PDT)
+        bh=U7T4/LBkZ2aLLguzrEpLCCec6wWvaqt4jUv6X0yRJyg=;
+        b=nOvNgEcPJWyHAoG3jSVenXrNCQeXZ+7iPeOag0Fl1T/ep2nUazuUaWwIOJskRQj3LY
+         XxZ7Q631WC6uU3pbWmeKRYCg3G6IyWhbWZhssBv22EYb8GmaLrwrtBCGGO3yt26K6DM6
+         Ljb3tqb24MwbIp5iTbG86rGl8lD1SgLyQq+y5kG+lKHh9IAt0LFKetTohGoiH8qQ+8fw
+         Q9lsiPqbmgIposuMnhwA+qM3MO/K8s4RZjgiSP99sjUbkiPYZsWRb33XMv//zVRzfhHi
+         WC/UdDJkGH4fhKSSTvQ4gVYuAYqRasNMuopnOzOZwSYwjF3ZVanxuMEtj6P5w10Jylm1
+         Qpgw==
+X-Gm-Message-State: AFq9FYK+MOboBZwiEJfnqWWvnG/JchN2ky56hqyOC3WT8iaC7hkzl+uO
+	fTX/qD5c/uzkI5rENqSUWI7A7YYXR4guKOshr3v4+UYYfXewZyPbuZLI
+X-Gm-Gg: AYBFou2HsZ+UVFWnbAvPIFi6aaMd25g+lfHvxINWA80zzqoj6NRSV1FfpTgevYvNzjT
+	NdyF4XY6HU4dFRZilG/y6pKgpLdd5rDes8jLJtulpBBVsE6JkMoYTCMkDc/4C0RlM5dAlm6wXrH
+	v2w5HCm6P0qodMb8wtOFTIllJy2x+O57N6lluc8qtwcHivYiOrfKYp2+k9wG9AhU4E+kvauLty1
+	Whmaz+a5WR5SQT/SFfLhVmSqSAt3g185pNRe2nwxDzE1TVEXHcn40xIHZzW8B24t/0Fn3BEbkYO
+	2ThnhugSfD+5aE/Qj8JDdfn5WuAX/U7cngS+XDROlvOznR3yAGu7cBUc3aj1aWSXzWwFGeCsOmq
+	1+6x5F3g2JZVXWRx96vHwhqARpNM3Eno66Ao2+a7Ss2ZXMhrmBfJW7BNhkwIh/eB05+B0LWP2bQ
+	5A6vrWjtSEiZbLJcngSmKPIaLbH9+bbOoMA8xhgOf/FJ+1UwvSroatr1NlpPnG/LiK6JKHaJiS5
+	MjZKAD4gAVWCZLU1uKmrPK7mSi5DUjQZgYFdpZ31CgO1bE5f6UgB+2dBPVP0K5UnhUcycIn2XxX
+	ypEyUPJs9zDBceL1rzkH2IOD
+X-Received: by 2002:a05:7022:b053:10b0:190:da74:2c89 with SMTP id a92af1059eb24-1ac5bda4447mr3052864c88.21.1793361255352;
+        Fri, 30 Oct 2026 04:54:15 -0700 (PDT)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1abcd6f1sm6437304c88.20.2026.10.30.04.53.55
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1abcd6f1sm6437304c88.20.2026.10.30.04.54.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 04:54:00 -0700 (PDT)
+        Fri, 30 Oct 2026 04:54:13 -0700 (PDT)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Fri, 30 Oct 2026 07:52:06 -0400
-Subject: [PATCH bpf-next v2 21/22] selftests/bpf: Test jumps around patches
- of bpf_do_misc_fixups()
+Date: Fri, 30 Oct 2026 07:52:07 -0400
+Subject: [PATCH bpf-next v2 22/22] selftests/bpf: Cover a backward may_goto
+ pushed out of range by patches
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -93,7 +93,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261030-bpf-verifier-patch-batch-v2-21-55cd43439f7c@gmail.com>
+Message-Id: <20261030-bpf-verifier-patch-batch-v2-22-55cd43439f7c@gmail.com>
 References: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com>
 In-Reply-To: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -109,226 +109,65 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-bpf_do_misc_fixups() queues its patches and applies them at once,
-relocating every jump through a map from old to new indices.
+bpf_do_misc_fixups() expands a backward may_goto to gotol when the
+patches queued between it and its target push its offset out of the
+16-bit range.
 
-No test checks the xlated code of jumps that target, skip or leave such
-patches, a jump that the patches push out of its 16-bit range, or an
-indirect jump to a patched instruction.
+No test covers a backward may_goto whose expanded jump only goes out
+of the 16-bit range through the patches in between.
 
-Check the xlated code for forward and backward jumps to a patched
-instruction, jumps over patches, and a may_goto whose jump leaves its
-own patch and crosses another one. Check that a jump over 8200 guarded
-divisions fails to load, and that a gotox to a guarded modulo by zero
-lands on the guard.
+Check that a may_goto jumping back over 8191 guarded divisions loads
+and is expanded to gotol.
 
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
- .../selftests/bpf/progs/verifier_patch_list.c      | 175 +++++++++++++++++++++
- 2 files changed, 177 insertions(+)
+ .../selftests/bpf/progs/verifier_patch_list.c      | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 04740ba37e918..40788891641b5 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -96,6 +96,7 @@
- #include "verifier_netfilter_retcode.skel.h"
- #include "verifier_bpf_fastcall.skel.h"
- #include "verifier_or_jmp32_k.skel.h"
-+#include "verifier_patch_list.skel.h"
- #include "verifier_percpu_addr.skel.h"
- #include "verifier_precision.skel.h"
- #include "verifier_prevent_map_lookup.skel.h"
-@@ -287,6 +288,7 @@ void test_verifier_netfilter_ctx(void)        { RUN(verifier_netfilter_ctx); }
- void test_verifier_netfilter_retcode(void)    { RUN(verifier_netfilter_retcode); }
- void test_verifier_bpf_fastcall(void)         { RUN(verifier_bpf_fastcall); }
- void test_verifier_or_jmp32_k(void)           { RUN(verifier_or_jmp32_k); }
-+void test_verifier_patch_list(void)           { RUN(verifier_patch_list); }
- void test_verifier_percpu_addr(void)          { RUN(verifier_percpu_addr); }
- void test_verifier_precision(void)            { RUN(verifier_precision); }
- void test_verifier_prevent_map_lookup(void)   { RUN(verifier_prevent_map_lookup); }
 diff --git a/tools/testing/selftests/bpf/progs/verifier_patch_list.c b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-new file mode 100644
-index 0000000000000..1370cdd5e5836
---- /dev/null
+index 1370cdd5e5836..302e739caf83c 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_patch_list.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-@@ -0,0 +1,175 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "../../../include/linux/filter.h"
-+#include "bpf_misc.h"
-+
+@@ -172,4 +172,39 @@ l0_%=:							\
+ }
+ #endif
+ 
 +/*
-+ * bpf_do_misc_fixups() guards each division by a register against division
-+ * by zero with a 4 insn patch. Jumps to a patched insn must land on the
-+ * first insn of its patch, other jumps must follow the insns they target.
++ * may_goto jumps back by 8195 insns, by 32768 once each of the 8191
++ * divisions is guarded by a patch of 4 insns. That still fits the 16 bits of
++ * may_goto, but not the jump it expands to, which has to become gotol. Once
++ * the budget runs out, may_goto jumps back with r6 set and the program exits.
 + */
-+
 +SEC("raw_tp")
-+__description("patch list: forward jumps to and over patched insns")
-+__arch_x86_64
-+__arch_arm64
-+__success
-+__xlated("0: call")
-+__xlated("1: r1 = r0")
-+__xlated("2: r0 = 7")
-+__xlated("3: if r1 > 0x5 goto pc+1")
-+__xlated("4: r0 = 9")
-+__xlated("5: if r1 != 0x0 goto pc+2")
-+__xlated("6: w0 ^= w0")
-+__xlated("7: goto pc+1")
-+__xlated("8: r0 /= r1")
-+__xlated("9: if r0 > 0x3 goto pc+4")
-+__xlated("10: if r1 != 0x0 goto pc+2")
-+__xlated("11: w0 ^= w0")
-+__xlated("12: goto pc+1")
-+__xlated("13: r0 /= r1")
-+__xlated("14: exit")
-+__naked void patch_list_forward(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r1 = r0;"
-+	"r0 = 7;"
-+	"if r1 > 5 goto l0_%=;"
-+	"r0 = 9;"
-+"l0_%=:"
-+	"r0 /= r1;"
-+	"if r0 > 3 goto l1_%=;"
-+	"r0 /= r1;"
-+"l1_%=:"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("raw_tp")
-+__description("patch list: backward jump to a patched insn")
-+__arch_x86_64
-+__arch_arm64
-+__success
-+__xlated("0: call")
-+__xlated("1: r1 = r0")
-+__xlated("2: r2 = 0")
-+__xlated("3: if r1 != 0x0 goto pc+2")
-+__xlated("4: w0 ^= w0")
-+__xlated("5: goto pc+1")
-+__xlated("6: r0 /= r1")
-+__xlated("7: r2 += 1")
-+__xlated("8: if r2 < 0x3 goto pc-6")
-+__xlated("9: exit")
-+__naked void patch_list_backward(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r1 = r0;"
-+	"r2 = 0;"
-+"l0_%=:"
-+	"r0 /= r1;"
-+	"r2 += 1;"
-+	"if r2 < 3 goto l0_%=;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* The jump of may_goto leaves its own patch and crosses another one. */
-+SEC("raw_tp")
-+__description("patch list: may_goto between patched insns")
++__description("patch list: backward may_goto expanded to gotol")
 +__arch_x86_64
 +__success
-+__xlated("0: *(u64 *)(r10 -16) = 65535")
-+__xlated("1: *(u64 *)(r10 -8) = 0")
-+__xlated("2: call")
-+__xlated("3: r1 = r0")
-+__xlated("4: if r1 != 0x0 goto pc+2")
-+__xlated("5: w0 ^= w0")
-+__xlated("6: goto pc+1")
-+__xlated("7: r0 /= r1")
-+__xlated("8: r12 = *(u64 *)(r10 -16)")
-+__xlated("9: if r12 == 0x0 goto pc+9")
 +__xlated("...")
-+__xlated("15: if r1 != 0x0 goto pc+2")
-+__xlated("16: w0 ^= w0")
-+__xlated("17: goto pc+1")
-+__xlated("18: r0 /= r1")
-+__xlated("19: exit")
-+__naked void patch_list_may_goto(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r1 = r0;"
-+	"r0 /= r1;"
-+	".8byte %[may_goto];"
-+	"r0 /= r1;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 1 /* offset */, 0))
-+	: __clobber_all);
-+}
-+
-+/*
-+ * The conditional jump skips 8200 divisions, which their patches turn into
-+ * 32800 insns, too far for its 16-bit offset.
-+ */
-+SEC("raw_tp")
-+__description("patch list: jump pushed out of range by patches")
-+__failure __msg("cannot be patched due to 16-bit range")
-+__naked void patch_list_jump_out_of_range(void)
++__xlated("{{[0-9]+}}: gotol pc-{{[0-9]+}}")
++__naked void patch_list_may_goto_gotol(void)
 +{
 +	asm volatile ("					\
 +	call %[bpf_get_prandom_u32];			\
 +	r1 = r0;					\
-+	if r0 == 0 goto 0f;				\
-+	.rept 8200;					\
++	r6 = 0;						\
++	goto 0f;					\
++1:	r0 = 0;						\
++	exit;						\
++0:	if r6 != 0 goto 1b;				\
++	.rept 8191;					\
 +	r0 /= r1;					\
 +	.endr;						\
-+0:	r0 = 0;						\
++	r2 = 0;						\
++	r6 = 1;						\
++	may_goto 0b;					\
++	r0 = 0;						\
 +	exit;						\
 +"	:
 +	: __imm(bpf_get_prandom_u32)
 +	: __clobber_all);
 +}
 +
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_powerpc)
-+/*
-+ * An indirect jump to a patched insn must land on the first insn of its
-+ * patch, here the check that skips the modulo by zero.
-+ */
-+SEC("socket")
-+__description("patch list: indirect jump to a patched insn")
-+__success __retval(7)
-+__naked void patch_list_indirect(void)
-+{
-+	asm volatile ("					\
-+	.pushsection .jumptables,\"\",@progbits;	\
-+jt0_%=:							\
-+	.quad l0_%= - socket;				\
-+	.size jt0_%=, 8;				\
-+	.global jt0_%=;					\
-+	.popsection;					\
-+	r1 = 0;						\
-+	r6 = 7;						\
-+	r0 = jt0_%= ll;					\
-+	r0 = *(u64 *)(r0 + 0);				\
-+	.8byte %[gotox_r0];				\
-+l0_%=:							\
-+	r6 %%= r1;					\
-+	r0 = r6;					\
-+	exit;						\
-+"	:
-+	: __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X, BPF_REG_0, 0, 0, 0))
-+	: __clobber_all);
-+}
-+#endif
-+
-+char _license[] SEC("license") = "GPL";
+ char _license[] SEC("license") = "GPL";
 
 -- 
 2.43.0
