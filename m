@@ -1,109 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793396853;
-	b=lv3Cfg50tgDjiU0fk5aCjaXUzMLZHUKfIZoOss4zYl8sLYLmhoyKuVTgoq8iq0VzqHMG
-	 5U258+EAzLdso8lZZ3xm+FoMwxCIS1gSgG38XMsvJVStVxveF5k5dPoMNiJDVmQ4LbOa7
-	 D2DRHE7K2jY0gINq+HQcwCKyu8ZiKE9j+33BYFVl5lbsQo7weSkPTvZPJq+xQWd4aowo5
-	 kSyzom7s05TjQFLp41uc4NhR2DwWlkBctYZ3D9IGJHF6uahZZm37lv83mqzicVkQUMNYT
-	 SKirXGiz070ZAE+JcO6yxvXbpDsilToB+EqVL/tYDW9pDrci+5xGa+kZELLzeppxDtg==
+	t=1793398809;
+	b=hYGoKZfr+HxF/z8uwVB9Y6sygDP7lzADjMRIRJ9ecJeT0trbflm53FVxn2R7kJAiU54u
+	 ILNFqYm2M51NhVuRW8trCez3JdI4nbzywWtx2tmFVr+9A9z2FOTEmPwlfG5CarmFV62xd
+	 CvnsGTbsNzoym1q9MRmAO7zNmGm4f9C5i4d7caO+QUvsjF5ZmpmYGhDsj9XB0RcRapryp
+	 DU2L2vtdv1Sab9r/Z9YvIAAyaCoh5xBY7DHwJVQFj2bqbc/fPGawDi90O27ri+OuKpk6n
+	 yamuHVmG9+Ai6sJQI2zzEFetchYGIRN1t3Sh5dw9LMde8hZ9B4R1YfE/mGmueC6GGyA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793396853;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793398809;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=gIM0Lf0RizPpF2lV6gAp9aopG/Lg9g5C4lkrOp+TfwU=;
-	b=asDgn5tl1u3qbZwlUHPfFDVuAU7aeXbiJtz/HMfecZbHAqYGY76atI7HJ+dPCmCk+VDQ
-	 xLRMuKMiSD0XQ2hd6oyvUbg1c9H8OVkyp7J8atuOT8BRm1R0R8fJ7xaDtUtCxjCJZ2a7a
-	 77Gu6xNVb4MvGTwM6OarFYa+1BLzkkuK5S1F2DxRq4kZHJoYjY13LdPalvxcIycgTZ8nd
-	 ODOxP5Jsd9NBwtpulyLAv8kiY78yE65p20Rb5LnjFvKmfnlAb6SAJPYnzKbV21TxcSNf4
-	 r4j5X823l6GB3Q02fyAEUTNGCrqZR434Iz1cnCWOPYRpWVWfCbPqpHg71Cxo4DWZ3Fg==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=R9WkDjxK7zVEzCY4SXeBmf8ikp33jo06C8ygkpysgmA=;
+	b=JFtUVy7LVHxpHUIG7Vv+qYoO7pLr2oTEqSrdZG+8fHVjxOWLQsUySOOi2KMOweT2iiXf
+	 m0a4ypHHuPvt5g0bgJydOtGAUeMK0uFM3BE7N58BH7vjP3DBwxNQuwRekBOJZlHlC6r8/
+	 4xEAA6Bi5tqnYrruROaqHu1WjiWZriqn1qJdt3QEEN+ppnHVcsxagNcK0EEocrV6iA0+F
+	 cQmEPrfKs2G7koz9UDhg2qpU/NXbNShMFXXsR2C78h4ka6Hqxp+U7iSkg/Ipfdcuxvw81
+	 TGlFSxvY691hPi3wkv+s1K/3TVgRaxQMvrGlAkH4bdbfJVhUUmoxaGYZkxy6qkteWbA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QwLgp5NI;
-	arc=none smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C50Qkv9V;
+	arc=none smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA91606A31D
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 21:47:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BBA91606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37ADF606A31A
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 22:20:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37ADF606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QwLgp5NI
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e60f9af6e6so11367755ad.3
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 14:47:32 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C50Qkv9V
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a60f9474c4so13740435e9.0
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 15:20:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793396852; x=1794001652; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=gIM0Lf0RizPpF2lV6gAp9aopG/Lg9g5C4lkrOp+TfwU=;
-        b=QwLgp5NIIMg4AA8/Z8CtU3veu8cREA/NoPqO23FoHKGC2AvsPNQmzks5z8NjAGnG/7
-         BD+ScScN5uJUv8ITeksQDGK+fqx3rm7eK5nu5JL35HXr5EeDTZqo8H6lUhoriOU0kp3T
-         n4Cr6obn1rdNu4BtmuGD/0gHHQOz/9joE+tLRnTxTz3OpMJ8aym3QAdjy+0zl7O+2L0w
-         OcJWym7XY8P4pwpSMytqPjqzLzyaJmqOxy6zVKYr8aq3T+f039sSxExWB+CFDlN8z0yd
-         uiAKWbQYezGYKcGlBy2DHE+7yOcvR6xCHyhfPmirxfPFcswd06xFfor8tls/BoU2Rz6I
-         NofQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793396852; x=1794001652;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20260707; t=1793398807; x=1794003607; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gIM0Lf0RizPpF2lV6gAp9aopG/Lg9g5C4lkrOp+TfwU=;
-        b=Rwb56EpqyzftNGjClUaWXsrSRNhf3iye9zDuL0d11NY0nyZ3+XNQn/U2qLDHNmy7A9
-         dLOmQeKGzFEJ2qmhIE6CK24GF0ll/eJnWCVXwYlJwNXkfuXF3lNYIOpjGIehaX+8sD3G
-         1QvnUW4WRapKuepeqVX6KHk8GDDlKT/s/yJiVcrf0zeiMdKafJitOUjh/B1DdU/1xxzx
-         JHX3cqqnoCElX7jE3KAFrNW664MqxPgEHJq44mPde0nuKZK83iKCnfdGXqaukV7g5RCF
-         UNAZSU6nR8IUL/v3pjoDG0v/hS6Ol7JbRLs4s3dIP0tF/bU9YFfkHXbrCOea87oVyF3n
-         CA4Q==
-X-Forwarded-Encrypted: i=1; AKwUvByX641qfEsWpbGuWRIfTsBYqZxN59fi8SDn6Dxxf5ggfEqYoXOs6/U2Jok5bFm0V+Z6tmU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKsTAuLYbDTh77QwfuBTFiK+NjO0DVZAnAO5a/L765VCx3+y1vR
-	W0gCcVyKB9p4NaUhMyfVNFTefFpTdh3i+OoI8ZWSBqJTxVo7ajyKy+xg
-X-Gm-Gg: AYBFou2OXiUr8bNiNmRbu2nDoxtisWnwNw6l5amvp3iVx/Qqr+nD5Nxpn5hsdEBrnOs
-	f931Ynkjqi3p3P63wU5Ue2PAqFxGBetCzSWzXw/71+1CHcCbgHAxSRDd33zYPq4iTHkpVP5B91N
-	m/PQViwcaM9TXMXoXKQSo6hoJ7n156nSYfhH6EGuNsMiv1sC2yDvHcalSfu2w7rMxTrFiKpfFZj
-	1qcE3ZBTQGOSGmS+MOxfWjDR1g0dd85zZ1wVAAEd+ihbbFEkBmgt+bapqHqzHn/FsVPcRqJCYLS
-	s83FMspiAA3hTdqhbm+qrdOKTPJ3PqRd1qEt83iT7iu396GhBPZFzG02DLVTOq+NfWblMoi7Jez
-	UHV4Vd1pj72E+HlUZJspiUBXlsFgQqDNXuVMDYZkvZ2yaXwM6pVO6mlh0KDsJir3fnZ+yYLK43j
-	d4vYWQVbZXSIY9b3LahI+jz7yj9mgT7NTiWPwVIg7itd5P7JmYGqTJvJZk2lIJgWvbFVFbOBXuq
-	xXnMacIo5s4XMSHhguUm9D9/tD3KDswPpCXYqbjiO2L1Ac6BG1X/z6PnpWPIUbHtiI/3+dbX0yB
-	meq4M5uUzfc8zL/DKz7/JMWRy3MMg77gCJYeXPZp742cmg20rdbo7+s7+l8qFxBSMF2yEN4JigJ
-	edLKCc5PPojzEdvPl2+aG+wvO3rmU3/Hw3w==
-X-Received: by 2002:a17:903:144b:b0:2e9:42d8:48d3 with SMTP id d9443c01a7336-2eb364d2529mr35787295ad.36.1793396851935;
-        Fri, 30 Oct 2026 14:47:31 -0700 (PDT)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb39230bbfsm11775285ad.19.2026.10.30.14.47.30
+        bh=R9WkDjxK7zVEzCY4SXeBmf8ikp33jo06C8ygkpysgmA=;
+        b=C50Qkv9Vb8l6DqAkl984FSwFKYrACvgv5PfdgrD1yW/pzhPfAdQ6LaidNqZE70nHFf
+         E2fTOyI5V6fZflAz9gecmboy9DvVnCrsYUA8kq+5NygNv/uCcu6HKtexi7QhsMWjWYi5
+         aGlAuNVeOAWAnsuWN4kCffwXBaeGOiiS66Z9k5wtLRLHHu3oXjrurtS7AZTt/UxoHU87
+         FQRTSQ8A+EqvLpznXZGOIP0QSJb8VjY/BqXqd2H0KDPxMs/s9Ap37DSCrnkGonZIobe3
+         mHiLq7SxkAxAXw8OAMcdJMAeTpIgj7hvhd0w91U00lwrIgc/I0+AWO+D0jUzFElTTohS
+         rPIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793398807; x=1794003607;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=R9WkDjxK7zVEzCY4SXeBmf8ikp33jo06C8ygkpysgmA=;
+        b=FCvnYB7cESKvPe1PhSLizOhaD55ZUP4YOqT/ePrsSv0e9DXvQQyaVNT6tmScJUfRZR
+         RZxmhHM9a1lKMzsHIfiNycUAHSzae2HJi2x2GDbSkz9AoCFXbIM2jfiQ5YOjIM0RS4rh
+         sge+2CNeyVHxC5e3b97FaK4l+HAxIarV4G25iYeWMTU7Y9X1psRJ2F6UiFQgyeE4ySRt
+         YOH3UdMW+iQWPqf5hSmWvZ9UiYTl9jBD2tWonHWtuKWvhYcNoa2MZ+KvWywOyPi5/hXY
+         voOskmd//tKvPHa6UZh6ySgDFWdMEU3xNnvnjODQWhr3RgxpMXvQuZOij6sbCETdjnj+
+         v8Bg==
+X-Gm-Message-State: AFq9FYJFYBUr5evQ8m8uuMOstoFVUtxlEvghk8bzaUSH9C75CVpB6pP6
+	NVKNqnwgivjxdCigKg26aKH7topKKmmc7K9FuVNt9gjuqKnHM0BM/i0g
+X-Gm-Gg: AYBFou2yMk9U/1Wf6Q94NUPP8/B9nDjWtyOVkzZ9GJiIH+qZx2OkZR/SsPFl3uQYy3t
+	1i/a9Q3mGQ2DR0rwwyMdMhxoVlMSUWgWTFoL0ckaNin4fOp7V6LE6S1RIZAqQ/PzdzagE3cfNfl
+	GU0ip/v7xyjgiV5NZ3RVX2sjMCDkrhl4Uikq2q1WJKlURtoDGtWL59DAe61JMsIJ30T1rasz16W
+	QAAGzmyLryOwhRiQBSKMIvXjJ9tW8b10CnoxoybZNsIg8fvE0+7XWUxHlJJ7tzGkAGUAJQr/c9W
+	mGmXnpl7/ByqvRkyne5pffMJDdk30PeVsMfnbnYrZREVyIdFSIASePD1bo6AT0hRqr+Ky9Gl+u6
+	+P+4B4mxcKIbEIMIBxmtONXOUPz2SKWjnjjCpRY5I9Ck8RZCXxrNR22VDQ+kViJiIOf4xnGu/Gk
+	TTRDvnsGhVTV9zPrSs5S8NOSXRU4TL/8AoN4E/0orY0J3EnoAEi0jCrp6aJDH+osjuhFeB/lvRX
+	YnaDHy7GTG4NImjAG8YzewARD5BffQzyoZEiFUYuQMbyjXEsOakUhFqHsuSJyc8Rg7wCTYdk3K9
+	XDwzhtihW0IZQz02PSZ3MoUeaCFXQKPwMRtQjpbNHIg47VeX0nRM2OI+6aCKZgNt2buG3Petk10
+	bAOZvZgy7XA0aKA==
+X-Received: by 2002:a05:600c:698d:b0:4a2:994:575c with SMTP id 5b1f17b1804b1-4ac185bcc4emr81753345e9.34.1793398807279;
+        Fri, 30 Oct 2026 15:20:07 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf0b36853sm79094145e9.0.2026.10.30.15.20.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Oct 2026 14:47:31 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 30 Oct 2026 21:47:30 +0000
-Message-Id: <DMII4JGTEUEG.2WRJPT6ODT6J0@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jamal Hadi Salim" <jhs@mojatatu.com>, <netdev@vger.kernel.org>
-Cc: "Eric Dumazet" <edumazet@kernel.org>, <bpf@vger.kernel.org>,
- <bot+bpf-ci@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "David
- Ahern" <dsahern@gmail.com>, "Martin KaFai Lau" <kafai@fb.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "David S . Miller" <davem@davemloft.net>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Jiri Pirko" <jiri@resnulli.us>, "Victor
- Nogueira" <victor@mojatatu.com>, <linux-kselftest@vger.kernel.org>, "Shuah
- Khan" <shuah@kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH net v2] bpf: Fix skb_pull() BUG in
- __bpf_redirect_neigh()
-In-Reply-To: <bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1@mojatatu.com>
-References: <bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1@mojatatu.com>
-Content-Transfer-Encoding: 8bit
+        Fri, 30 Oct 2026 15:20:06 -0700 (PDT)
+Message-ID: <6cc98d17-f595-474d-af75-2162b4882fe8@gmail.com>
+Date: Fri, 30 Oct 2026 22:20:06 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -113,99 +91,145 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Check the strobemeta variable
+ read instead of its location
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com,
+ vineet.gupta@linux.dev, Mykyta Yatsenko <yatsenko@meta.com>
+References: <20261029-bpf-selftests-branch-order-v1-0-425cc1ef8581@meta.com>
+ <20261029-bpf-selftests-branch-order-v1-1-425cc1ef8581@meta.com>
+ <CAEf4Bzb-pLa8KSfc5VQJ3LnHvksTzwOgn6PY-xNq5k=zUPJyuw@mail.gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <CAEf4Bzb-pLa8KSfc5VQJ3LnHvksTzwOgn6PY-xNq5k=zUPJyuw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 29, 2026 at 02:36 AM Jamal Hadi Salim <jhs@mojatatu.com> wrote:
-> Add egress coverage to tc_redirect_neigh: the existing test only attaches
-> redirect_neigh at ingress, where mac_len is populated.
 
-This test cannot hit the BUG.
-Just drop it and respin as [PATCH bpf v3].
 
->  static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
->  				struct bpf_nh_params *nh)
->  {
-> -	struct ethhdr *ethh = eth_hdr(skb);
-> +	struct ethhdr *ethh;
->
->  	if (unlikely(skb->mac_header >= skb->network_header))
->  		goto out;
-> +	if (unlikely(skb_mac_header_len(skb) < ETH_HLEN ||
-> +		     !pskb_may_pull(skb, ETH_HLEN)))
-> +		goto out;
-> +	ethh = eth_hdr(skb);
+On 10/30/26 6:17 PM, Andrii Nakryiko wrote:
+> On Thu, Oct 29, 2026 at 5:49 PM Mykyta Yatsenko
+> <mykyta.yatsenko5@gmail.com> wrote:
+>>
+>> From: Mykyta Yatsenko <yatsenko@meta.com>
+>>
+>> With an LLVM change that lets the BPF backend reorder conditional
+>> branches [1], strobemeta and strobemeta_nounroll{1,2} hit the 1M
+>> instruction limit. calc_location() is inlined, and the compiler copies
+>> the "if (!location)" check after it into each of its return paths. When
+>> a copy makes "variable missing" the fall-through, the verifier first
+>> explores all later variables with an unchanged payload offset, and the
+>> paths that read the variable, with wider offsets, can't be pruned.
+>>
+>> Check the bpf_probe_read_user() result instead. It fails for a NULL
+>> location, so missing variables are still skipped, but the compiler
+>> can't push the check into calc_location()'s paths. Mark the read
+>> failures in read_map_var() unlikely so that the fully unrolled program
+>> also keeps them off the fall-through.
+>>
+>> Verified insns/states, before -> after (fail: 1M insn limit):
+>>
+>>   current LLVM:
+>>     strobemeta           v3   163591/4755 -> 170708/4780
+>>     strobemeta           v4   157733/4779 -> 167288/4896
+>>     strobemeta_nounroll1 v3    55975/1708 -> 50165/1617
+>>     strobemeta_nounroll1 v4    50745/1728 -> 49286/1656
+>>     strobemeta_nounroll2 v3   115445/4341 -> 116942/4267
+>>     strobemeta_nounroll2 v4   108121/4306 -> 109775/4210
+>>     strobemeta_subprogs  v3    53647/1611 -> 52413/1771
+>>     strobemeta_subprogs  v4    51204/1573 -> 50749/1795
+>>     strobemeta_bpf_loop  v3      2624/217 -> 2695/214
+>>     strobemeta_bpf_loop  v4      2632/213 -> 2668/210
+>>   patched LLVM [1]:
+>>     strobemeta           v3   163591/4755 -> 170708/4780
+>>     strobemeta           v4          fail -> 167813/4892
+>>     strobemeta_nounroll1 v3          fail -> 51250/1755
+>>     strobemeta_nounroll1 v4          fail -> 47480/1796
+>>     strobemeta_nounroll2 v3          fail -> 121092/3969
+>>     strobemeta_nounroll2 v4          fail -> 117302/3708
+>>     strobemeta_subprogs  v3    49653/1693 -> 51831/1548
+>>     strobemeta_subprogs  v4    48305/1649 -> 44104/1577
+>>     strobemeta_bpf_loop  v3      5017/398 -> 2815/225
+>>     strobemeta_bpf_loop  v4      5053/394 -> 2792/221
+>>
+>> [1] https://github.com/llvm/llvm-project/pull/236189
+>>
+>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+>> ---
+>>  tools/testing/selftests/bpf/progs/strobemeta.h | 8 +++-----
+>>  1 file changed, 3 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/strobemeta.h b/tools/testing/selftests/bpf/progs/strobemeta.h
+>> index 6e1918deaf26..584a68248764 100644
+>> --- a/tools/testing/selftests/bpf/progs/strobemeta.h
+>> +++ b/tools/testing/selftests/bpf/progs/strobemeta.h
+>> @@ -366,10 +366,9 @@ static __always_inline uint64_t read_str_var(struct strobemeta_cfg *cfg,
+>>
+>>         data->str_lens[idx] = 0;
+>>         location = calc_location(&cfg->str_locs[idx], tls_base);
+>> -       if (!location)
+>> +       if (bpf_probe_read_user(value, sizeof(struct strobe_value_generic), location))
+>>                 return 0;
+>>
+>> -       bpf_probe_read_user(value, sizeof(struct strobe_value_generic), location);
+>>         len = bpf_probe_read_user_str(&data->payload[off], STROBE_MAX_STR_LEN, value->ptr);
+>>         /*
+>>          * if bpf_probe_read_user_str returns error (<0), due to casting to
+>> @@ -400,11 +399,10 @@ static __always_inline uint64_t read_map_var(struct strobemeta_cfg *cfg,
+>>         descr->cnt = -1; /* presume no value is set */
+>>
+>>         location = calc_location(&cfg->map_locs[idx], tls_base);
+>> -       if (!location)
+>> +       if (unlikely(bpf_probe_read_user(value, sizeof(struct strobe_value_generic), location)))
+>>                 return off;
+>>
+>> -       bpf_probe_read_user(value, sizeof(struct strobe_value_generic), location);
+>> -       if (bpf_probe_read_user(&map, sizeof(struct strobe_map_raw), value->ptr))
+>> +       if (unlikely(bpf_probe_read_user(&map, sizeof(struct strobe_map_raw), value->ptr)))
+> 
+> just off-topic, but it would be interesting to experiment with just
+> marking all/most error-returning BPF helpers (or at least all the
+> unsafe memory read ones) as unlikely-to-err-by-default, because that's
+> really what is expected. Not sure if we have clean way (though we can
+> do that in bpf_helper_defs.h for sure at codegen time). Can you run
+> your comparison scripts with such change before/after?
+> 
+Clean bpf-next (without this patch), verifier insns without → with hints:
+┌──────────────────────┬─────────────────┬─────────────────┬───────────────────┬───────────────────┐
+│       Program        │   Old LLVM v3   │   Old LLVM v4   │    New LLVM v3    │    New LLVM v4    │
+├──────────────────────┼─────────────────┼─────────────────┼───────────────────┼───────────────────┤
+│ strobemeta           │ 163.6K → 172.5K │ 157.7K → 156.7K │ 163.6K → 172.5K   │ 1M fail → 1M fail │
+├──────────────────────┼─────────────────┼─────────────────┼───────────────────┼───────────────────┤
+│ strobemeta_nounroll1 │ 56.0K → 41.6K   │ 50.7K → 43.5K   │ 1M fail → 1M fail │ 1M fail → 1M fail │
+├──────────────────────┼─────────────────┼─────────────────┼───────────────────┼───────────────────┤
+│ strobemeta_nounroll2 │ 115.4K → 115.2K │ 108.1K → 102.0K │ 1M fail → 1M fail │ 1M fail → 1M fail │
+├──────────────────────┼─────────────────┼─────────────────┼───────────────────┼───────────────────┤
+│ strobemeta_subprogs  │ 53.6K → 58.1K   │ 51.2K → 52.1K   │ 49.7K → 53.3K     │ 48.3K → 48.8K     │
+├──────────────────────┼─────────────────┼─────────────────┼───────────────────┼───────────────────┤
+│ strobemeta_bpf_loop  │ 2.6K → 2.7K     │ 2.6K → 2.7K     │ 5.0K → 4.1K       │ 5.1K → 4.1K       │
+└──────────────────────┴─────────────────┴─────────────────┴───────────────────┴───────────────────┘
 
-ETH_HLEN is not enough.
-__bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6() read ip_hdr()
-and ipv6_hdr() right after the pull. Nothing makes these headers linear.
-Take the AF_PACKET frame from the commit log without pop_eth and
-bpf_skb_change_head():
+With this patch:
+┌──────────────────────┬─────────────────┬─────────────────┬─────────────────┬─────────────────┐
+│       Program        │   Old LLVM v3   │   Old LLVM v4   │   New LLVM v3   │   New LLVM v4   │
+├──────────────────────┼─────────────────┼─────────────────┼─────────────────┼─────────────────┤
+│ strobemeta           │ 169.1K → 168.7K │ 167.3K → 173.3K │ 169.1K → 168.7K │ 167.8K → 173.5K │
+├──────────────────────┼─────────────────┼─────────────────┼─────────────────┼─────────────────┤
+│ strobemeta_nounroll1 │ 49.7K → 46.6K   │ 48.8K → 45.1K   │ 50.3K → 56.3K   │ 47.0K → 51.1K   │
+├──────────────────────┼─────────────────┼─────────────────┼─────────────────┼─────────────────┤
+│ strobemeta_nounroll2 │ 116.5K → 117.5K │ 109.3K → 104.4K │ 120.2K → 119.2K │ 116.9K → 107.5K │
+├──────────────────────┼─────────────────┼─────────────────┼─────────────────┼─────────────────┤
+│ strobemeta_subprogs  │ 52.0K → 49.4K   │ 50.3K → 45.3K   │ 51.5K → 55.0K   │ 43.8K → 49.0K   │
+├──────────────────────┼─────────────────┼─────────────────┼─────────────────┼─────────────────┤
+│ strobemeta_bpf_loop  │ 2.7K → 2.7K     │ 2.7K → 2.8K     │ 2.8K → 2.8K     │ 2.8K → 2.9K     │
+└──────────────────────┴─────────────────┴─────────────────┴─────────────────┴─────────────────┘
+>>                 return off;
+>>
+>>         descr->id = map.id;
+>>
+>> --
+>> 2.53.0-Meta
+>>
 
-  packet_snd()                     headlen == 14, IP header in frags
-  skb_pull(skb, ETH_HLEN)          headlen == 0
-  skb_reset_network_header(skb)    network header == skb->tail
-  ip4h->daddr, ip4h->saddr         read past skb->tail
-
-The route lookup runs on garbage.
-
-Eric's skb_network_offset() check also covers
-mac_header >= network_header. No need for two checks.
-
-Something like this:
-
-diff --git a/net/core/filter.c b/net/core/filter.c
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2290,10 +2290,14 @@ static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb,
- static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
- 				   struct bpf_nh_params *nh)
- {
--	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
- 	struct net *net = dev_net(dev);
- 	int err, ret = NET_XMIT_DROP;
-+	const struct ipv6hdr *ip6h;
-+
-+	if (unlikely(!pskb_may_pull(skb, sizeof(*ip6h))))
-+		goto out_drop;
-+	ip6h = ipv6_hdr(skb);
- 
- 	if (!nh) {
- 		struct dst_entry *dst;
- 		struct flowi6 fl6 = {
-@@ -2399,10 +2403,14 @@ static int bpf_out_neigh_v4(struct net *net, struct sk_buff *skb,
- static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
- 				   struct bpf_nh_params *nh)
- {
--	const struct iphdr *ip4h = ip_hdr(skb);
- 	struct net *net = dev_net(dev);
- 	int err, ret = NET_XMIT_DROP;
-+	const struct iphdr *ip4h;
-+
-+	if (unlikely(!pskb_may_pull(skb, sizeof(*ip4h))))
-+		goto out_drop;
-+	ip4h = ip_hdr(skb);
- 
- 	if (!nh) {
- 		struct flowi4 fl4 = {
- 			.flowi4_flags = FLOWI_FLAG_ANYSRC,
-@@ -2451,15 +2459,14 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
- static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
- 				struct bpf_nh_params *nh)
- {
--	struct ethhdr *ethh = eth_hdr(skb);
--
--	if (unlikely(skb->mac_header >= skb->network_header))
-+	if (unlikely(skb_network_offset(skb) < ETH_HLEN ||
-+		     !pskb_may_pull(skb, ETH_HLEN)))
- 		goto out;
- 	bpf_push_mac_rcsum(skb);
--	if (is_multicast_ether_addr(ethh->h_dest))
-+	if (is_multicast_ether_addr(eth_hdr(skb)->h_dest))
- 		goto out;
- 
--	skb_pull(skb, sizeof(*ethh));
-+	skb_pull(skb, ETH_HLEN);
- 	skb_unset_mac_header(skb);
- 	skb_reset_network_header(skb);
- 
-
-pw-bot: cr
