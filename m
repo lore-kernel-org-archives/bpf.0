@@ -1,100 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.45
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793385183;
-	b=tEW5gZUp+IbHqMpk+GS66rZpUptBl2w7Tlo8nBdVEAWzwsY7eX40DqU4FkW7ytQCsL5i
-	 878gNsRQarjlVjv8xoAZ1bmcqQOgJfs8qLPta7fUnjD+w7w2VFTT4E16ojPYn6rtRbxaB
-	 F3oLHdDnFdcG9koDbXrVwbJBNEa7hPxWgVS+jKTn/UEP+z828h0ZvV8KMAQIPhmZaA6PU
-	 oNVY4MUVV1V8bisv176YUzMNOCNMQORcoZoBWTSHuvSKHQBWMohWL8+JDAbLAOpGXplgo
-	 XyPQ3KrNbLLr5bhOIdZ4wmWLj5yjMbUlfc6uJIFXtd0T9JsRCqMsBzJGjdIEejesRKQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793385183;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793385188;
+	b=0vnR0heQl8tJsD8fLCmn0xmYMcbgHo/YVe2sZPwnJR1l2eeshWKxRHf7jWQhf2YQRAtC
+	 bv9vyLILFstO3REdStsyZxTVFm0f5/d1UVRNVI5SzzT8J9qWhd+iJuCy872GWPKe50Nzk
+	 KiQN3Fra5GL91cO5mQj2fjEP0LGcNXxaLA2sqnjdEtRcO2WAEiNgeABk7ukGkVBb2ha/x
+	 l+zHmhqRBtB2IXNnB1ii7JY/P9IzBbjD6uKinBRePSnDomwF6Ns88ACf6dHAoYd7vPZfe
+	 aNIBQ6oKNkbT9PXcCueyY56QQJi/kCfd75HvgfSMl4T7sOiFOUbHlyg74ewbUL2mEfA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793385188;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=6diPpuSI7ZQakc5U3rnHtMFr6ZbHOPgPX5V4mX9Aiqk=;
-	b=fFzFBIQN8uxDswSJ6QISzx+SORhXprpucLIW7t4phgm4yFB9wtfW8hBlO+qAk+qcsLyD
-	 jPcl0RC1e76TgLRBFZJRJ5E+otYkiER7ZoiYJgaPqHjXWl9WHyxgMohLZEyfDREZjg5+p
-	 BOhcgp44OOaAXMX1YJ1TAESfOXUVS4LgWUluKxoA7NfGvgaT9WnT6nW4OvrCtaDwy9ND8
-	 oAqbsEiq3/RMfdsRCif+n2y4J9i/FDLtmqyPqYIGVesAnihzQeQ7MTCDF0rS6BkuleAYq
-	 NBWg0ovn1BzBVtNaMcd6hkM8JzoNSmyIxxooHnAPTEh/nLSQ3kjipPOAHW6mRE5FVIA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=LqwO/tbXEMHl9nOAdKfhCSfefmnSAVqYf2mSAzV9dbw=;
+	b=r1Mg8rw/Dm7YPIdf8KxcscgFiPHpYsqw8PNDirteMtFdBvVgMjwWzgv9JimYYSP0mr4w
+	 RlsM7rpCTUblMRjOUvabmvUp1DoNpCRm/1nvfxJNSPghjK/hf/GP4GamJdJirX3ak8eV2
+	 /VOINtWsIstb0CspOHI2NdmBrEIuUkcVvlBIkWgqbzgLvQUBCsxGdo9pwdU2ZTsuEYB0m
+	 QM2BCBFAyNHXpAc85xfH5N7ilfwQYn5Tkuk0VIB6laKCY8JJNM6mgXi5dacPVmkM+7CXV
+	 +xdVCQevCmmiQ82uqGTqvU5F6U77a2FChevgBa2l54h1TTQWuMnhtpsBvnQnxMYrCAQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NlktPH42;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.45
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xhYb4R9K;
+	arc=none smtp.remote-ip=209.85.210.177
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0189F606A32C
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 18:33:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0189F606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2543D606A31F
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 18:33:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2543D606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NlktPH42
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ab98332238so642076a91.3
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 11:33:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793385182; cv=none;
-        d=google.com; s=arc-20260327;
-        b=G6Tzi9Onr2v/jyXrkkwD6BsR43Nm+ZN3Znd2Od17PeD03+H8eK4a0/+bQ/dc8ivcFS
-         gZra3grhndYTk6Ttr7dsbYny5+nX7VFRaWqp9GCIMiDJ1X3WeUdq57r/ek6u4hLKGtIA
-         UYotXCW6euLn2ozZpBrhdXukZBEnqNKWi8+n8CdC8u2a3SDLHWIN0Jmslc71nU3EM/wn
-         TbQBMEHAr/QV83Hv9SvD68dEWh625D3QJeep8nPF3X17/P2Dv68bLTQtTov+89RwXccW
-         Pyef/lACtTWsQvQ7jA1z6IXhcHIJySdJ1lZVaY6Lf5DwcCKIUz3PjHk/n41Ck7+owXAq
-         TPNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6diPpuSI7ZQakc5U3rnHtMFr6ZbHOPgPX5V4mX9Aiqk=;
-        fh=hxRZ/yxzH0mnIMeGpQd7Zzze8yONgMQRyPM05yvEJ80=;
-        b=PjVloQ4S42C2JPpmCwJu9d69aTlZcKXhyqD93KxIdDdTalvUjNvFEJf2FoiTz9AFeb
-         oGNezlP08wnNntohBQjQHDwaDEmwzT7YT4gK5/DSCns2hfR20+DCj0T1UKT4TQfffxrl
-         xBC78y7eShvJ2Q0rxD58cZcpYbQk3abKZlnarSxSqTIMhRWDEo1skOTJMuVeMB9oAQbS
-         gh6gt336y9eQwWxF/9Y9EwyXloC+mIAryDy2w0S6ScZ8z1hW63u4ElkYBEIiU0jJsk8B
-         kuTnahz+F3SI4okyTagJcM/sgPXuxJXgu1vLQH85L50h2Ie2Y3F7oKD2blK9rX40j7n5
-         pLaw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xhYb4R9K
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-89f28c3ac7bso439086b3a.0
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 11:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793385182; x=1793989982; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=6diPpuSI7ZQakc5U3rnHtMFr6ZbHOPgPX5V4mX9Aiqk=;
-        b=NlktPH42Pj3UDBtIZQdJct8Vg0WhcUJG1f6/zFRjnGSaeg1jER6ad8dQbgBR5ExngT
-         3EsFDZ1Wnph09jogEYZKXPRruyY5zdYo2wExoZmV+pAZfrTz7mvvUlg+b0z+ALNvTfi7
-         q4ZNImjXS++UfjzW9KOCouuUNeVGqTuCuCMWR2UW+iyg+ee/V8rOKvmMArCWqk/dP6zk
-         821QEEGl8AVtmzlJHPATxEledcebDrfk6blFeAUVsW0ecc5m/6KvCuU59JdVMrioQgxf
-         8opUwaWdmSjBaYeoYpkKGl5gUXVIvM/X8bVzlBVs4RXfYhy3cNndzBtgz13/nLicXn3F
-         4xFQ==
+        d=gmail.com; s=20260707; t=1793385187; x=1793989987; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=LqwO/tbXEMHl9nOAdKfhCSfefmnSAVqYf2mSAzV9dbw=;
+        b=xhYb4R9Ke1pTbYaBTbVPzyJbfQ75coDEa6uWXn6/sNo3GzqjzQKUd+RPmOwaU1Pchd
+         9nvrvbd6PS/ug+Rjmsp0eojNT2kGZH48VrRb0EaRVtDJXVh98Mu8UcrFXr2QZEUiobyT
+         Q/NgTTE2dK5NxejmA519jIBnqvIWmXWAtePFO3DhA934zR47V210H3H6JfE0Eq7c/bYT
+         LhIM79VQi3YdewhRCSgcAbOLlSLvc/jj+w+vpKjx+qnRRYJs4Y2b54VgpS3zei/sStzd
+         eGKvDygp4jzAZPeVNSc9uykE9p0BKQ0dgJOeOsDOvgbki0BjaDXaAXQMm84dTghXGs9D
+         0soA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793385182; x=1793989982;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1793385187; x=1793989987;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6diPpuSI7ZQakc5U3rnHtMFr6ZbHOPgPX5V4mX9Aiqk=;
-        b=oAhUKCZEZY/AflVR684YioK2kopwoNWqnW6d7QilicdltPpmkA5FqMdsj7xa4cL3na
-         JhH4rgVMn0r5v81DNn3Md4Nu9X2ydyQQUzFJ1S2kd7qkM3dalYzBfP0rvKd8BCKx6SBf
-         dL013ugxyL58+z1ecsVSeXAdVXLfS81vFAUyH4ewO43Ie9VJwE4vTfBP7ZNbzAGR1oQI
-         HYBnY+kpkbfOVbpIyLCBR7bWRomVrbOuSsN3U9HfYcpBIdKe01olu22npoRvm+47Kx2V
-         UW4dEPXvF6g/PEiDxScMJNHUrXu8I/dv20dKrrvNAu5zKNV6TA9i06nml/RUnRcYxV3M
-         M1pg==
-X-Gm-Message-State: AFq9FYLnHPxxw46FLKbXfT6I3sC5ZaIEbBVxxNI1TOC4vvHZaLyZFehm
-	5pi1D69LxH2NvVJV7NHE+jRfDI6//nmNJPLS5L72ZBYgbi5/8Abe9eu4e+tj+UAjUXk6/QEoJFM
-	ywLwJ9VlhSlPq9ky/cTm6Gugm0FkbHbQ=
-X-Gm-Gg: AYBFou0lOl+1OaBy4096QvflPcuFNhfB2/ZzPf5YeSCOrlrcaHUj0tW6Yo13eCsV6wZ
-	mSwEpIMgx65K4iDBKClkeBnmcr3iPypwVXkeDi5QkcMT7uFf0PaJa38TsIIw+ggKJec7MsMr6g6
-	Hr5rxkmpGZASuOnRPhB9xU7sbywPba772jt2UM5ki/uv4MVhwj0nZAW4WoJpknDltVNKxULXTFS
-	6lWNJmnbgDOEDEPbxg1nROsDL1ZMQZEABLoMpGrjSDM2TfU0MaF5PpNcdbL+cX9g0g7QkBswbij
-	8sukntIQtLmUaafLmgAtpNCM19UMyWVwl/vGFzt/vMONiJL7v6/lvThvlzBxix8hbZgFPGyzpvw
-	E51X8bDaa6upfCO2sEAPPxRRZzmn+Q1TlpZzBixmivh1hjo7q3dsOBahy7Q/+uGYm3HVib8jCw/
-	sLDGjNKhf6cTy6MFp6aoHH2nwK6/CeK2uij22hSJfsXj2L2hQ73sh2F2M=
-X-Received: by 2002:a17:90b:17c1:b0:3ac:a7ee:6760 with SMTP id
- 98e67ed59e1d1-3ae896f7f94mr2731780a91.23.1793385182251; Fri, 30 Oct 2026
- 11:33:02 -0700 (PDT)
+        bh=LqwO/tbXEMHl9nOAdKfhCSfefmnSAVqYf2mSAzV9dbw=;
+        b=1TplWokVy0zWI/64FS7oe5UrZaHh3yZ1uwo2yojkESfN1nEL3MSp6FWPJHsg05JzNI
+         LXA2y0oWFfklg2OrueSupZQYiKWzb5pUWylL8wgxJJyFoz4IU5M7o3ZA20IlifjkGdJ0
+         rOEzIuB2ZmBUrR6XYcz0hNzA4Me0TCSkRtJUFctpv2dYMGuIvTnHYozjJL831ANM6RdI
+         1E7gBudJ11+a9F+clckTctcEfyZddfIdz2JmERP3HE7TOXrkYg0W++xa8WyAquyZHb9P
+         VqS8bT4oGdLW4+217zxpIYVk5B9zJiSYm0lLKaESv9ietLFvgpxMBka6CuATzqKJ9sZL
+         CRlQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxjzvCZF2zebN75r7C/hDo0XsTj1LcyuLgaW5Fxv5s3SGsYYpsaBm1MLlSJR24MwDxu21k=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJcgok9qrSgjfZACkgNYNT9f6Hx43Noe2SLlZr17jQJlvz2DYz1
+	l1ch7KJEe3XzgPXB/i0hyhUajukSZ1uKNpxUg0pptP4wwskjGjjCsqLO
+X-Gm-Gg: AYBFou0ih716YDd46PSNfcbxDoRxAmT1fq/B7TmT8fGu3eg1Y6id57nAm0awNeZ7/Dm
+	zV7QH4K55r0zuguLqSTMV3ZbMNSf+b2MwJNdAW7o6LZ8NTIygqQf0fUDxpfgoVx1bH+0zcjSjd+
+	y7AMAZTz/wmh3yseKlTDrJ8sYh6kcDYGrNuczJo36G1XhjO2jRjU+w+VahgqmTSpUk0fxSxzj3/
+	9iryfXmxRugbq86voHwvQppZ5uL9g8IrnMxpuiGQkqRROQsDg2uL3pj4etg+saCye5k5cdTMxbW
+	SB/eiWoQdPLKxWKKcK8EI15YAFdEwuF2K6npSA04wnotn9v/fZ/cB5jmR8cFO66n8eaWNamq0d+
+	mZ7oHQ+JOHX/XBOOE6gReWGHaoXw5OkqqSuyFXJqcu0zE9EtLl8nUaIkKCZEIS6nejufEmuxTa9
+	0Jh3Iw4+vJkPoKJoGm2XzEN6VEYmyuEGwcSRX0d+5IcJpbuEeDDaVBPJO1lzlYkei1Q3Lfu1sq6
+	W2k6X57/BXISBossuqoFXlL6HN6TJYawiq9n4Ja447iKFLkPNT5uyM5PgSldURrYgl8UWQ0UJeU
+	ScxHfQ1DBkoVbm/flZHakasZ9+Fa4iKqjopFt8qzE6hTnXVvTAZcDbpdIq40Ox0nUVNb7CgWTkL
+	aLKjlfLoEj+w=
+X-Received: by 2002:a05:6a21:2212:b0:3e1:d43e:367f with SMTP id adf61e73a8af0-3e9290ff9f2mr3005488637.73.1793385187421;
+        Fri, 30 Oct 2026 11:33:07 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:5d10:1794:f0d8:db5b? ([2620:10d:c090:500::4:1201])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aadaf86e6dsm336098b3a.57.2026.10.30.11.33.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 11:33:07 -0700 (PDT)
+Message-ID: <727459335119599b851b7a1ed72dbe6220e14571.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 11/12] [do not merge] bpf: Track low-32
+ scalar equality across narrowing stack spills
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Vineet Gupta <vineet.gupta@linux.dev>, ast@kernel.org,
+ daniel@iogearbox.net, 	andrii@kernel.org, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Fri, 30 Oct 2026 11:33:04 -0700
+In-Reply-To: <20261020161907.2115379-12-vineet.gupta@linux.dev>
+References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
+	 <20261020161907.2115379-12-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,42 +106,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261029223348.3730738-1-andrey.grodzovsky@crowdstrike.com> <20261029223348.3730738-8-andrey.grodzovsky@crowdstrike.com>
-In-Reply-To: <20261029223348.3730738-8-andrey.grodzovsky@crowdstrike.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 30 Oct 2026 11:32:49 -0700
-X-Gm-Features: AclHuK87zHNq5nxU6nrnLe6A1tQzWhCKeqUUjPPJrWfpsnkeIVEdLv14FJFXDC4
-Message-ID: <CAEf4BzbcY1+CJY02-bwJrg8Wr9Mc9E8qowG0iRF50any2p1D-A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 7/7] selftests/bpf: Convert veristat to BPF_PROG_LOAD_STRATEGY_MANUAL
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
-	martin.kelly@crowdstrike.com, slava.imameev@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 29, 2026 at 3:34=E2=80=AFPM Andrey Grodzovsky
-<andrey.grodzovsky@crowdstrike.com> wrote:
->
-> veristat used bpf_program__clone() to verify each program in
-> isolation. Replace it with BPF_PROG_LOAD_STRATEGY_MANUAL plus
-> bpf_program__load()/bpf_program__unload().
-> Unlike clone(), which skips binding RODATA maps to avoid mutating
-> shared object state, bpf_program__load() does bind them - but each
-> program is unloaded right after verification, dropping the binding
-> along with it.
->
-> Also, add relevant test case to struct_ops_arena tests.
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-> ---
->  .../bpf/prog_tests/test_struct_ops_arena.c    | 48 +++++++++++++++++--
->  tools/testing/selftests/bpf/veristat.c        | 20 ++++----
->  2 files changed, 53 insertions(+), 15 deletions(-)
->
+On Tue, 2026-10-20 at 09:19 -0700, Vineet Gupta wrote:
+> A spill narrower than its source stores the source's low 32 bits, so the
+> slot is their zero-extension -- the mov relation, in the store direction:
+>=20
+>   r6 =3D ...                  /* full 64-bit unknown */
+>   *(u32 *)(r10 - 8) =3D r6;   /* slot holds r6's low 32 bits */
+>   if w6 !=3D 0 goto ...       /* not taken: r6's low 32 bits are 0 */
+>   r2 =3D *(u32 *)(r10 - 8);
+>   if r2 =3D=3D 0 goto ...       /* not deduced today */
+>=20
+> A store never sign-extends, so BPF_REG_LINK_ZEXT is the only kind that
+> arises. save_register_state() copies the source whole, including bounds
+> for bits the store did not write, so the slot must be truncated before
+> the kind goes on it -- otherwise the first sync_linked_regs() intersects
+> the correctly rebuilt low half against those stale bounds and empties
+> the slot.
+>=20
+> Only one order pays. sync_linked_regs() walks spilled slots, so narrowing
+> while the value is still on the stack narrows the slot and the fill copie=
+s
+> an already narrowed value. Filling first does not benefit: the fill is a
+> mov, and a mov drops a zero-extending link.
+>=20
+> Posted, not proposed. This is the direction asked for, implemented and
+> measured, and the measurement says do not take it. Against the ten patche=
+s
+> before it, on 441 cilium/katran/fb/sched_ext objects, 1467 programs:
+>=20
+>   verdicts      no change at all
+>   total_insns   102 changed, 63 worse, +84,450 (+0.34%)
+>                   +59,616 (+57.2%)  104,160 -> 163,776  test_file_open
+>                   +19,784 (+89.7%)   22,053 ->  41,837  rusty_enqueue
+>                    +2,688 (+40.6%)    6,626 ->   9,314  layered_enqueue
+>   total_states   64 changed, 63 worse
 
-I'm dropping this patch for now, please split it into selftest
-addition and veristat change (those go separately just like libbpf and
-bpftool is separate from kernel and selftest).
+I'd still prefer to keep things symmetric.
+Instruction budget should be less of a concert for 7.5,
+as far as I understand.
 
-[...]
+...
