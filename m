@@ -1,101 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=37.230.196.243
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793358168;
-	b=a9wLE28WXCfLtAzPt4Qa2fficHMCpWCTiWs8ZR22q1vTu6xmMnT4lRMEUB2WlKJgRz6h
-	 IY4baQSBVMEbNRb/BcnSlHKrAeNV31Qoekat1gNRWi1CuqSvmwprbPLqu0sep/a477+Zs
-	 SveCEinM6svMRDDodZqzBrQmbc4NsErkZEZEQ1aOJjYjrdw/BIuofgUlCKHUuqDZfAgcS
-	 wtUJHwlB5FGb0cYjJvwFFrmoKcGmqTSPDDkgWThylL4DCixf88CPWVpbo8ZLmGrFlxoVS
-	 eAHnR0JJ3rXjdgmwsMOU8ynO+GH3qt75rg2jH6UwjcL3oWbfGDE4Ddm5Po9vwaScCQA==
+	t=1793358531;
+	b=Q0vmQR2ILngbEOKwG5lOGshoiMfmOtDlsEZZAMPmIlcC6XkOtyFUGEtMQTahyhlX/PHI
+	 mdGiTEk0Af+sZHqhdzQ37ikmeDG/FqUuzPUEpeji2jwFqvWErwWsCRx2bSxEz1SgesEKZ
+	 konmN7uNd4DPm5hlyra32qVH5g1nHKKOtLr/shVK0EfNvz4dlqiUZrMpOoI3Wb4TnXTOO
+	 HcYkeV0f+WLKI7WDTXnOsMV01/Amqeu3s99SX75+m2CvF9B5O8IvLmVB6T/XXBWIcDmhd
+	 MgBdzPBrqd7kGOmwD5VVHfyOYq3hq5+XNYlbap95atvc0nKozko3tzBht281hPfhO9A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793358168;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding:X-KSMG-AntiPhishing:X-KSMG-AntiSpam-Auth:
-	 X-KSMG-AntiSpam-Envelope-From:X-KSMG-AntiSpam-Info:
-	 X-KSMG-AntiSpam-Interceptor-Info:X-KSMG-AntiSpam-Lua-Profiles:
-	 X-KSMG-AntiSpam-Method:X-KSMG-AntiSpam-Rate:X-KSMG-AntiSpam-Status:
-	 X-KSMG-AntiSpam-Version:X-KSMG-AntiVirus:X-KSMG-AntiVirus-Status:
-	 X-KSMG-LinksScanning:X-KSMG-Message-Action:X-KSMG-Rule-ID;
-	bh=H9TixdvCYfAxhdujwN74ql2Wvj86XbJl7rH8qpd1rDs=;
-	b=FlOcCINOM3OL+BpUBdvaljTueRl4hJL5k2cq6BMeujK7/1+0uyMvsojEoSExWVKZTJnS
-	 tDpuVr9emkfwFjVxmqnJrr+/U/Xh8gB8l198lmiJzGQNUYuOiS8+Zf415IaiRvp6FnPsa
-	 iVn8oTxRs3c/P1S9YoW/4g4ujVXqaQ6eSNOOZOMkkJCMCT1U2p7nx7EH5X+LkZnKA3P6j
-	 g+2ZCJyiXTIg2ba6GgMMsLaAR2r8utQ0lwZSFegO1FIMq7V+Z5uBJTMPxfaSSDLkkXp0s
-	 p0u5Zw1lSgdUoAt+dUYYCeU+yoaFlEp7GtjIyufcakPLpfPnRPyEjjEV5pxtEOKR52g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793358531;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=gdeCa3x7O2p6X4CzDfNArZvHnuzUnaCRCf8ceCdxpuM=;
+	b=0HfkjlvHC/DAqxStlF4QpgAAfjlbpmTtdzOTPcCGBz+FnGGJG/qGoAsqLkxrxCMLbcBP
+	 5AKATQIKFU1yZ6mVjQQZCpXXv+YNLtST0DN6T+6aqrOPEZGFDXhoNfq/O0kWvJm8kwLCH
+	 q1KBiGORTgKM6MlAdQxO5rny+i7uzIRkOPp0V7/OSHrzmmutKJHl7OG4d5Z4V1FvtLyY0
+	 AczbgPRKmPg55WCwNOUk6wu2CtDz8qANeo8/dvJW44o4Lr4ff9vGnxCJ0+aoquCJ9F6c4
+	 SLPefJJcsfgpPJyfoE7McBa++rXixK9zmuDaVwExC6znVaL5X4x+xjViU6m3V1AqvRA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=astralinux.ru;
-	spf=pass smtp.mailfrom=astralinux.ru;
-	dkim=pass header.d=astralinux.ru header.i=@astralinux.ru header.a=rsa-sha256 header.s=mail header.b=JE4+caH8;
-	arc=none smtp.remote-ip=37.230.196.243
-Received: from mail-gw01.astralinux.ru (mail-gw01.astralinux.ru [37.230.196.243])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DC8XtGi5;
+	arc=none smtp.remote-ip=209.85.221.42
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F72606A335;
-	Fri, 30 Oct 2026 11:02:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 26F72606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=astralinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421F2606A31A
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 11:08:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 421F2606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=astralinux.ru header.i=@astralinux.ru header.a=rsa-sha256 header.s=mail header.b=JE4+caH8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=astralinux.ru;
-	s=mail; t=1793358162;
-	bh=jUFlfZP4fmlVy7cT7aawURCBbnI/ZDRP3SAo3SZoNDc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=JE4+caH8RmJhWsRV8AgvtaobgG8GjmvBHbGh4RknMFvSUjEXHuSsdDoAJN0ZEuorP
-	 Zq7coXNLdaGgHE3hRkyqLdmU/dHDRo2jIbXwheiMyDXgClt3br7j0U5mgQ0Yq95wpM
-	 qitKd0PNdxPXmMKNHvGCiRyEWV0yHug5bELWOcVG/KJjNLTqJAAQhQM/iJXxBH2qRD
-	 NIzjaSR1tArrLcuVC5/U9oHlLBQaE/EJu5uGg1oe0PiMmAHbZHthDBDAyZiFCok5CO
-	 hy5FAetUlGlnpcxdyPZObnH58upp3Z2ikVOHoCz/TvTSyG5gRg3MHFyv2ZcbxJ877r
-	 ELO2wqhQwQYJw==
-Received: from gca-sc-a-srv-ksmg01.astralinux.ru (localhost [127.0.0.1])
-	by mail-gw01.astralinux.ru (Postfix) with ESMTP id B347424E8A;
-	Fri, 30 Oct 2026 14:02:42 +0300 (MSK)
-Received: from new-mail.astralinux.ru (unknown [10.205.207.13])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail-gw01.astralinux.ru (Postfix) with ESMTPS;
-	Fri, 30 Oct 2026 14:02:25 +0300 (MSK)
-Received: from DESKTOP-D46TNHI (unknown [10.198.26.228])
-	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4jGJ6z1V40z1V2r;
-	Fri, 30 Oct 2026 14:00:59 +0300 (MSK)
-From: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>
-To: stable@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>,
-	Sasha Levin <sashal@kernel.org>,
-	Luxiao Xu <rakukuip@gmail.com>,
-	Ren Wei <enjou1224z@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DC8XtGi5
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-48c4be28b82so584665f8f.2
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793358530; x=1793963330; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=gdeCa3x7O2p6X4CzDfNArZvHnuzUnaCRCf8ceCdxpuM=;
+        b=DC8XtGi5mewivxD1HqoCFxDC0obecJLrPTTTnloYz3HyAZP2za/Pb7oTQGPgiNz5nU
+         d0ZEAFltMXEnZNVAkP5OercmshnvlL8E29F8sqYTr432/hoq/rjQluttSeuyihlP12I4
+         0wsntBRhY9cvDARrw8oXo/dKVHRgMBtnuX1HFBY0PE4HIe0IFGeajheBsh9bV9hklgKT
+         S1N5U6x1quXT7BaLeEFAuIoaJiQJvLYq1GXJhqLZplKy0sRUmhliK4GQ0lPVvSSobaqB
+         Lj9NxgT1vCrsCctnm0ZT5vmZk/JJBCs1bmqYCHXKRUceNhs6RpHJJ/1DK6jUKkPW+NK1
+         /5GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793358530; x=1793963330;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=gdeCa3x7O2p6X4CzDfNArZvHnuzUnaCRCf8ceCdxpuM=;
+        b=XDor4QVVAL78oWuraqeJPCanE8bRcMzzakZ/YyTNDDlBB643BH8QWxxFZskgpJHJiu
+         zMi7VoObIKvAao1PkRb0r2y6gtQiTJ76LiEdm3/IF7QUqEvjOZIAqOA8z3bMQ3d+9FRf
+         Y06Cb24DOMJOWoDD7muqrGxHH0NbOa/T1z1+mLv4p5JZlWrRX2xYw3XSgvcdlZ4EQZNa
+         jpURAmNsvIUcXoTJPzv1VJNgP+WrS3841KOeK4fUGiBr8YbYO/V20vQBzsULzjxurT0a
+         vYZ0/JQv3yPF3MzMyj0eZh9PmhXzmRGuytxLecOnQ5fKzmSy2rHh0jNQdF7YuPEHkitR
+         Oyjg==
+X-Forwarded-Encrypted: i=1; AKwUvBzLOQ7Oj2Mbg6F1ZbS856yywl5j7oCTI1RdGfD2twE2RpjadxI+8FIKVySBdK+7xwV5tAU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKqJ05T5G12v1VjP8RQkZiY+gPHxqMuVODCMdlpVUbQsFg3lXWd
+	ZlWVIqV7FckhEVvjXr6JcUa9LHAbZ6qL10G5KEh/Z67isdqaAIDk6mxx
+X-Gm-Gg: AYBFou3NZ18trjHcbTulRPd2AFIeGjZ9ooODmxs5N/fugC8E3BNSCB5ShpWq1hWNZHz
+	PbWaBHr9yNf8EJaUQIDj6nYCUxBnuYPHMB4hDGjBzi4zbLXxmFyw4ap/dYZoGLNryAMXEhB3OhS
+	d+7WyYvPSpYD5+0WxQJ62T3PEImLuIEHGxxZDNAbxUpX/GfB1YnQ/wJTXw1PIvIdZmLnHusqtct
+	vzym4rPcH3BYKah/FX1Ltxg3B2/JUidn9Xotr2+ZGhDsudpVqggElHxQScBQDgIPrKEl1jrowP+
+	5TTRboZErHEA6uRgC3Y/htLNC8wh5nSjYf8Xw3uUvL9pfzTpB8cYpae7EX0mGPD5dAm9fID5mLM
+	E3VDvd53C4fMQQ3PyC5TPsxX//yDGz69s0zN78FxQrtGOzKERdg3H9jGppkDOjAekIVxo/yqsoA
+	U2s4/9BmSaWJ02002OBzuj/YhDCM/9WWGLrPx3vYcSm8aBOxcG079OzKZhhiWRVbZi1BxsAN7q7
+	kh0+9mCVLvjGd+nbLqfNpJaDNwqOLnJ+U2iEAO2fO2OmRZfv1SrltVGUbU3TqWDyjIUfxefszWT
+	HSvrxqywiDNkkiWwG260L+4=
+X-Received: by 2002:a5d:5d06:0:b0:487:88b:4681 with SMTP id ffacd0b85a97d-48e6e303c2dmr4961705f8f.10.1793358529616;
+        Fri, 30 Oct 2026 04:08:49 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::25dc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71ba5dc2sm2545582f8f.54.2026.10.30.04.08.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 04:08:49 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 30 Oct 2026 12:08:47 +0100
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+	linux-mm@kvack.org, Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org,
-	Vega <vega@nebusec.ai>,
-	Eric Dumazet <edumazet@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>
-Subject: [PATCH 5.10/5.15] bpf: Check sk_state before sk_protocol in bpf_tcp_*_syncookie
-Date: Fri, 30 Oct 2026 13:59:48 +0300
-Message-ID: <20261030105949.1538-1-mdmitrichenko@astralinux.ru>
-X-Mailer: git-send-email 2.54.0.windows.1
+	Lorenzo Stoakes <ljs@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Federico Di Pierro <nierro92@gmail.com>
+Subject: Re: [PATCH bpf-next 2/8] bpf: Add user memory kfuncs
+Message-ID: <auR6v7rEVTlEALJ-@krava>
+References: <20261029212551.56964-1-jolsa@kernel.org>
+ <20261029212551.56964-3-jolsa@kernel.org>
+ <CAEf4BzaAbWxWfjn4u8vieaWzhjE+Af+KV8sLFH9kfgGT5PtAGw@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,70 +106,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-KSMG-AntiPhishing: NotDetected, bases: 2026/10/30 10:30:00
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Envelope-From: mdmitrichenko@astralinux.ru
-X-KSMG-AntiSpam-Info: LuaCore: 133 0.3.133 d508d579b02cdb6df47808421a9b9e12fc9fb75b, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;lore.kernel.org:7.1.1;astralinux.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;new-mail.astralinux.ru:7.1.1, FromAlignment: s
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiSpam-Lua-Profiles: 207136 [Oct 30 2026]
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Version: 6.1.1.27
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.0.7854, bases: 2026/10/30 08:35:00 #28764057
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected, bases: 2026/10/30 10:30:00
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 1
+In-Reply-To: <CAEf4BzaAbWxWfjn4u8vieaWzhjE+Af+KV8sLFH9kfgGT5PtAGw@mail.gmail.com>
 
-From: Luxiao Xu <rakukuip@gmail.com>
+On Thu, Oct 29, 2026 at 03:00:50PM -0700, Andrii Nakryiko wrote:
+> On Thu, Oct 29, 2026 at 2:26 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Add sleepable kfuncs to copy data into a task's address space and to map
+> > or unmap private anonymous memory in the current process.
+> >
+> > Require a usable user mm for mmap and munmap. Register the kfuncs for
+> > KPROBE programs and gate them on CAP_SYS_ADMIN BPF token capability and
+> > the BPF_WRITE_USER lockdown check.
+> >
+> > Use FOLL_FORCE | FOLL_WRITE for task memory copies and return -EFAULT
+> > when a copy is incomplete.
+> >
+> > Rename the syscall info-copy helper to bpf_copy_to_user_buf to avoid
+> > the name collision.
+> >
+> > Assisted-by: Codex:GPT-6
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  kernel/bpf/helpers.c | 102 +++++++++++++++++++++++++++++++++++++++++++
+> >  kernel/bpf/syscall.c |  10 ++---
+> >  2 files changed, 107 insertions(+), 5 deletions(-)
+> >
+> 
+> [...]
+> 
+> > +/**
+> > + * bpf_user_mmap() - Map private anonymous memory into the current process
+> > + * @len:  Length of the mapping
+> > + * @prot: PROT_* flags of mmap(2), including PROT_EXEC
+> > + *
+> > + * This maps memory by calling vm_mmap() directly. It does not invoke the
+> > + * mmap(2) syscall, so seccomp filters do not mediate this mapping.
+> > + *
+> > + * Return: The address of the mapping on success, -EPERM if the caller has no
+> > + * user mm, or an unsigned-long encoded negative error code, as returned by
+> > + * vm_mmap().
+> > + */
+> > +__bpf_kfunc unsigned long bpf_user_mmap(unsigned long len, unsigned long prot)
+> 
+> bpf_user_anon_mmap(), so we can conceivably have a more generic
+> bpf_user_mmap(struct file*, ...) in the future?
 
-commit 31a420a822ff92e2090bd5d65efe8e34e2d6d9b8 upstream.
+yes, will change
 
-bpf_tcp_gen_syncookie and bpf_tcp_check_syncookie accept a socket pointer
-'sk' with argument type ARG_PTR_TO_BTF_ID_SOCK_COMMON. However, they access
-sk->sk_protocol without validating whether 'sk' represents a full socket.
-
-Fix this issue by checking sk->sk_state != TCP_LISTEN before inspecting
-sk->sk_protocol in both bpf_tcp_gen_syncookie and bpf_tcp_check_syncookie.
-Since mini-sockets are never in the TCP_LISTEN state, the condition
-short-circuits and prevents dereferencing fullsock-specific fields.
-
-Fixes: 399040847084 ("bpf: add helper to check for a valid SYN cookie")
-Fixes: 70d66244317e ("bpf: add bpf_tcp_gen_syncookie helper")
-Reported-by: Vega <vega@nebusec.ai>
-Signed-off-by: Luxiao Xu <rakukuip@gmail.com>
-Signed-off-by: Ren Wei <enjou1224z@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-Link: https://lore.kernel.org/bpf/6218aa3534d0d2d3f448fde70a8dc2769d7a8201.1785823138.git.rakukuip@gmail.com
-Signed-off-by: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>
----
-Backport fix for CVE-2026-80738
-
- net/core/filter.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index b885b8b..b8b8dd3 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -6626,5 +6626,5 @@ BPF_CALL_5(bpf_tcp_check_syncookie, struct sock *, sk, void *, iph, u32, iph_len
- 
- 	/* sk_listener() allows TCP_NEW_SYN_RECV, which makes no sense here. */
--	if (sk->sk_protocol != IPPROTO_TCP || sk->sk_state != TCP_LISTEN)
-+	if (sk->sk_state != TCP_LISTEN || sk->sk_protocol != IPPROTO_TCP)
- 		return -EINVAL;
- 
-@@ -6701,5 +6701,5 @@ BPF_CALL_5(bpf_tcp_gen_syncookie, struct sock *, sk, void *, iph, u32, iph_len,
- 		return -EINVAL;
- 
--	if (sk->sk_protocol != IPPROTO_TCP || sk->sk_state != TCP_LISTEN)
-+	if (sk->sk_state != TCP_LISTEN || sk->sk_protocol != IPPROTO_TCP)
- 		return -EINVAL;
- 
--- 
-2.51.1
-
+thanks,
+jirka
