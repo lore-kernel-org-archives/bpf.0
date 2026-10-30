@@ -1,53 +1,53 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793336039;
-	b=w2RMLc6uHXCOcwwZQIhqzobzllTDp2SYGvk7+k9u/ytWDb+OeFPByFfQlAOT7GRaN4f4
-	 HOles+EZLt+fck743nvLLogn02AgRtvqTW2BI2jgR8Sp7ghCzxFvrtnTaD1HBZ5+gI5xg
-	 quBgPQHk2+3e5qOmCIN+m+V+EitP6vEF3U9J8/HWP1UTo6ByElDXlKYJ1WK+zqbjABnCx
-	 Eo9dHsYCoe4IkNTVnppNuxnmuLHP2jZRzYd7xXNS3YUKOZp+Ecw0sTdswoJrCNQHdtmOK
-	 vKnF+08YyS4LKs3E8e1Kq5BI91apAY/9/qfIJlyxf4Nx76BvK0wpbeVktQ5wtvtfifA==
+	b=a3LgTLbZb3GeIRjBEAeNMUqnCy26VF/DFvwmHlb+PC/lmDAe/8oQqbxpwhHwFBhZ/Okn
+	 NSB/xSX1HZrkZbTvmB+xM5YKKFe1kCzh0KQoydcnyrGRHYJz4Adpc/3AAO5Ph/zR02O1r
+	 fzbzkZB+WWWhdc1puFbdr+arfMxfGJPZABRTV9v7yobq+5uTumX4bYs91gyc5qVPfgdFn
+	 k1Ac/ZcEYoYZq42EJ3LkIt3SjS3bMrN0L0EbQpe4uXUJqp3u5rV3Hguubp/dMVOmz6eB5
+	 je9S0A7oEpWUlUMTCPQZm65drpn95PS0fh2KXqOuBlmv7Tu6DPaMVwxZPB/izechBng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793336039;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=oxmGXofS5xrZ7ACyHxtlRvmrt6g+0VHbN8MBay/cgt8=;
-	b=TMhEmsdmjwxCJcCrCi/UWA759J1MQhCTuk+iN3zJh11dTPLK/GM3QYX/WzKXduvljm3C
-	 XZihtmcn8BBETJ9PWzKI/TlfP8rJcHAqdl6IEZaZaJANQDOYqSJsEdDvJN7/5NeFrtl/d
-	 QcWbKRR4e8l4FkTEG5cKs1F5P3+NdWwvvIdjFHrvRbgRhU/3hniYKd8uZsZE/Vp39XiLT
-	 yarQiXEtnHSnglq9hI8O81vwVqhfSBWTlyOjWcpDxLA9g+trpYUP6MfBmwMPiJiCG/999
-	 dHkfIaYgjXw6jTmO+hBg5kbYLajRIITWA75hvYqM7HFcMJ40bwcNHN348GR/h2HdhlA==
+	bh=VIUfn/NrF8EDgjqOAEyF2z5otVH2OlaeAPEo4Ck2bfc=;
+	b=U4VOPdv18GbCJyZ63pNCckazxVgGMLSwLkm7CNxRxRVErgh6gCj1SO7wvgDOtbIc8pue
+	 SYm9qgtWiEyTMCI6M3KHtbklftcM08BtZXM2R7YLSUcIrFLLtAdoj0OMfA4+Bqyj+3WDg
+	 tDGL1QmlDOBSv/SrYSIfgMSAWYhYMvUchLEGATMvMKFAyr6HPvpYQUNwOdu7a5S5t1vOP
+	 cxCueIFTOANQU9iu/ud6/sDnX6lL1rFr3WnJdcEPhPmPXQlRBw6CSN7su23OzfATjUWIl
+	 epAnMunnb97TWcL7FhcD4NOR5S8Ev7x2JZEAO+9RggBYyehQcv6jvTVNU0cEy36j3vQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YBTarPqj;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=duw1onrG;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B0B606A31C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3282606A31F;
 	Fri, 30 Oct 2026 04:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YBTarPqj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF3C71F00A15;
-	Fri, 30 Oct 2026 04:53:58 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=duw1onrG
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 523011F00A1C;
+	Fri, 30 Oct 2026 04:53:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793336038;
-	bh=oxmGXofS5xrZ7ACyHxtlRvmrt6g+0VHbN8MBay/cgt8=;
+	s=k20260515; t=1793336039;
+	bh=VIUfn/NrF8EDgjqOAEyF2z5otVH2OlaeAPEo4Ck2bfc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YBTarPqj7vwhq/+oXXgSfXfC9/kMV2m8aqRrwxPVt8yu3GqpLfTcZo4UrHcxllGH/
-	 2eFOPk30yqd/RnyQpoWzDalW5nprR0IUdbUQT6Rn0841oFxXR+IdvbvdRFSKIKsfMb
-	 pASyjaJi2kLChyv2TXtb8uc0juRgiqi61ddahFvGyLTveIfx7nbe54z1nv3KxcDxDP
-	 HfJJGKY0/vt8gm0tbNgBYicljEu1pvCQht2u/JCGPHrinBG9dLSOJ+R9iJ/ilm/XE9
-	 A1/BiC4vt/k7FQu1f/jy3h2MXK6PnIDJxkYa6zz3Vq9J6rGyslVITX6J2GYZMmhosd
-	 UQoqmAzCZcL6Q==
-Message-ID: <sashiko-outbox-190387@kernel.org>
+	b=duw1onrGDMp9RRzaoisMTr9vPasYm35dKzRBLGV07UDD2jQQ1QRtK9Zu1M/mvkzmh
+	 9m1ZkYPa/Uv8dJD35+RoFnOgdP3k8g8dj+J7J7E0RPy8clUQpmuZen56XSD4WimER9
+	 qaN+zbBunhiWe+9q1WhGMnfyRA3XmWa5xH2XD6+qqJHTy61+ykPUy4Y8GTckMam3RG
+	 RTwmpKGUjb/AOnz6Yy3UopQzlRtvSnsKyKvR/OXp7QzKRxze8Q7oL7yTjbVJHQUKJu
+	 3aYJy8eZt8kiROX8+th7HCMoM+JPZnxyg2ZdTkzgiLEMXASOSW43PuC0wG7aiCzKkA
+	 xRUa3B1Lg+GyA==
+Message-ID: <sashiko-outbox-190388@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 7/8] selftests: drv-net: add
- primary_rx_redirect support to NetDrvContEnv
+Subject: Re: [PATCH net-next v3 8/8] selftests: drv-net: add netkit devmem
+ tests
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
 Cc: linux-rdma@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260507-tcp-dm-netkit-v3-7-52821445867c@meta.com>
-References: <20260507-tcp-dm-netkit-v3-7-52821445867c@meta.com>
+In-Reply-To: <20260507-tcp-dm-netkit-v3-8-52821445867c@meta.com>
+References: <20260507-tcp-dm-netkit-v3-8-52821445867c@meta.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Fri, 30 Oct 2026 04:53:58 +0000
@@ -60,109 +60,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Hardcoded little-endian byte order for BPF map values breaks tes=
-ts on big-endian architectures.
-- [Low] BPF program fails to account for IPv6 extension headers, potentiall=
-y misrouting ICMPv6 packets.
-- [Low] Unsafe dictionary access when parsing `tc filter show` output can l=
-ead to a `KeyError`.
+- [High] If configure_nic(cfg) fails halfway, the script exits without exec=
+uting cleanup_nic(cfg), permanently leaving the physical NIC in a disrupted=
+ state.
+- [High] The script performs highly disruptive physical NIC configuration c=
+hanges unconditionally, bypassing the framework's DISRUPTIVE=3DFalse skip m=
+echanism.
 --
 
-commit 431500c080b55b59605689dc687523876de45d23
+commit 605c5904b1c331eeb3043ea246464b1479d4bb3f
 Author: Bobby Eshleman <bobbyeshleman@meta.com>
 
-selftests: drv-net: add primary_rx_redirect support to NetDrvContEnv
+selftests: drv-net: add netkit devmem tests
 
-This commit adds a BPF program and Python harness support to redirect RX
-traffic from the host netkit interface to the physical NIC. It skips ICMPv6
-packets so neighbor discovery continues to work locally. It also extracts m=
-ap
-ID lookups into a reusable helper.
+This commit adds nk_devmem.py with four tests for TCP devmem through a netk=
+it
+device. The script configures the NIC once before running the test cases and
+cleans it up in a finally block to avoid toggling settings around every tes=
+t.
 
-> diff --git a/tools/testing/selftests/drivers/net/hw/nk_primary_rx_redirec=
-t.bpf.c b/tools/testing/selftests/drivers/net/hw/nk_primary_rx_redirect.bpf=
-.c
-> new file mode 100644
+> diff --git a/tools/testing/selftests/drivers/net/hw/nk_devmem.py b/tools/=
+testing/selftests/drivers/net/hw/nk_devmem.py
+> new file mode 100755
+> index 0000000000000..0e36a0fa96888
 > --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/hw/nk_primary_rx_redirect.bpf.c
+> +++ b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
 
 [ ... ]
 
-> +	ip6h =3D data + sizeof(struct ethhdr);
-> +	if ((void *)(ip6h + 1) > data_end)
-> +		return TC_ACT_OK;
+> +def main() -> None:
+> +    """Configure the NIC once, then run the netkit devmem test cases."""
+> +    with NetDrvContEnv(__file__, rxqueues=3D2, primary_rx_redirect=3DTru=
+e) as cfg:
+> +        setup_test(cfg,
+> +                   os.path.join(os.path.dirname(os.path.abspath(__file__=
+)),
+> +                                "ncdevmem"))
 > +
-> +	if (ip6h->nexthdr =3D=3D IPPROTO_ICMPV6)
-> +		return TC_ACT_OK;
+> +        require_devmem(cfg)
+> +        configure_nic(cfg)
 
-Will this check miss ICMPv6 packets if the IPv6 packet contains extension
-headers?
+Because configure_nic(cfg) is called here in main() outside of ksft_run(),
+does this bypass the DISRUPTIVE=3DFalse skip mechanism?
 
-For example, Multicast Listener Discovery packets use the Hop-by-Hop Options
-header where nexthdr is 0. For these packets, ip6h->nexthdr won't equal
-IPPROTO_ICMPV6 here, causing them to be incorrectly redirected to the
-physical NIC instead of being processed by the host netkit interface.
+Since the test functions themselves are marked with @ksft_disruptive, runni=
+ng
+with DISRUPTIVE=3DFalse will skip the tests, but it appears the disruptive =
+NIC
+configuration will still unconditionally execute.
 
+> +        try:
+
+If configure_nic(cfg) fails halfway through, will this permanently leave the
+physical NIC in a disrupted state?
+
+If an exception is raised before the try block is entered (for example, if
+the driver doesn't support queue leases during configuration),
+cleanup_nic(cfg) would be entirely bypassed.
+
+Could configure_nic() be moved inside the try block to ensure cleanup
+always runs?
+
+> +            ksft_run([check_nk_rx, check_nk_tx, check_nk_tx_chunks,
+> +                      check_nk_rx_hds], args=3D(cfg,))
+> +        finally:
+> +            cleanup_nic(cfg)
 > +
-> +	return bpf_redirect_neigh(phys_ifindex, NULL, 0, 0);
-> +}
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/te=
-sting/selftests/drivers/net/lib/py/env.py
-> index 409b419222454..af8e1de8ed7b1 100644
-> --- a/tools/testing/selftests/drivers/net/lib/py/env.py
-> +++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-
-[ ... ]
-
-> +    def _attach_primary_rx_redirect_bpf(self):
-> +        """Attach BPF redirect program on the primary netkit ingress."""
-
-[ ... ]
-
-> +        filters =3D json.loads(
-> +            cmd(f"tc -j filter show dev {self._nk_host_ifname} ingress")=
-.stdout)
-> +        redirect_prog_id =3D None
-> +        for bpf in filters:
-> +            if 'options' not in bpf:
-> +                continue
-> +            if bpf['options']['bpf_name'].startswith('nk_primary_rx_redi=
-rect'):
-> +                redirect_prog_id =3D bpf['options']['prog']['id']
-> +                break
-
-Could this throw a KeyError if a non-BPF filter is present on the interface?
-
-Other filter types, such as u32 or matchall, might have an options dictiona=
-ry
-but lack the bpf_name key. Using .get('bpf_name', '') might be a safer way
-to check the prefix.
-
-> +        if redirect_prog_id is None:
-> +            raise Exception("Failed to get primary RX redirect BPF prog =
-ID")
-> +
-> +        bss_map_id =3D self._find_bss_map_id(redirect_prog_id)
-> +        phys_ifindex_bytes =3D self.ifindex.to_bytes(4, byteorder=3D'lit=
-tle')
-
-Will hardcoding the byteorder to little break this test on big-endian
-architectures?
-
-BPF programs access memory using host-native byte order. Writing a
-little-endian value via bpftool on a big-endian system like s390x might
-cause the BPF program to read an incorrect ifindex, leading to a failure
-in the bpf_redirect_neigh() call.
-
-> +        value_hex =3D ' '.join(f'{b:02x}' for b in phys_ifindex_bytes)
-> +        bpftool(f"map update id {bss_map_id} key hex 00 00 00 00 value h=
-ex {value_hex}")
+> +    ksft_exit()
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507-tcp-dm-net=
-kit-v3-0-52821445867c@meta.com?part=3D7
+kit-v3-0-52821445867c@meta.com?part=3D8
