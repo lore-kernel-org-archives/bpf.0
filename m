@@ -1,103 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793387237;
-	b=QX81wm9EI58oRoZ5Z1OfJuSOVNa1G5RGt6XwXoHoW8lDB3CUHkWdKgB6reHBvSyWcofn
-	 fC1bvJqaTwRjL8WeV4NAsquA/uN4frGs9RrINiEzevlCpQw5Ot8uvcC8xbt+wPkRawHdb
-	 X+o8GGzfPWwJ+7Bo5LNY/HVHB+gUjTPwPWNbBrZWjmJik/fQrg6F1MpqW7iY4UsyRK8kC
-	 b9/AWA0KcNYwWaYjOQ+g8wUH6M8OZOUbtHXSlPPtnoKCGPwxwyQIHEsbw6UuxqvIGMwwc
-	 LDDl0A160yu0wjtuNByLgmFBvERcK7IPAR/r+dMTGxGrzGfl7i2WRP3Fwqv7V0VTVFg==
+	t=1793388899;
+	b=WYzJEzHt5m/He/Cm9yXkN/lZtDsnI9cPBmzQWiEwfkMoVXyXhSWemxpsAX+gBOH8KbAy
+	 cAIIfX/iLk+D9YyGYQABsoLfTS/MpGPTVbNIezXitzL8LgskNAzHFlz67TEqwuLV8zpLw
+	 bjjGfYYgpIjDGCrwaaWhlOWpmFbF13V5NqtpB+35EgHovdz4RzJMam/y2UXv0487HyUX7
+	 /fDjqFTxFWtTZFf1EHh4YaP0uijgORA3kr5zjiSOOZA0nlcEW3FtcqHrhaZoPM3/VCQ1q
+	 cD38fQho0k5P7QJkgBxsg722jyXA+YWR+n2Yk6qfv4hkSIj9NP3ol44aWOFDnjmpymg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793387237;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=OCftNx47efIzs+YCBM+El8sBn0JBNPv/PH6FqnaTqa8=;
-	b=ERe9O1LIQitWVEA6hp+izGStNlhiRoe8YiFfP8ElJyrlQyLHRVryURMtYx56wElBByju
-	 exnS2i4PcXuBiZeDJRo2F+VM7BbwfAW7B91aL2bskB5IGi0nGB4lb8Mwk0z8jpjAOfnMg
-	 YF3W3tMYRw4AXgbZO7bcpySSRJX1o772dxEllvGNGxPlpFPAXZHhx2CHWQWsqiOUinN3A
-	 kDfTafk9/swbBUwHaWZFjsRkoulS+dz51LnxgHAm+9CJU1GMKGPqJnrMbs5pTaDNw32y6
-	 56YCJgprJArh7H2krVauD+uier4ZgC/fiHLkU2E2AXtQwPoD/4CunlfQJf2DOhUyxjQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793388899;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=crQRzA1NZRP9Kane1rHo0PkkqJUfG1/DLCkh3lApae8=;
+	b=haQXuwOVly6SAtyVvw68J3OlMd6VYnz9FSmbMOLJo5M3r+2ItmiNJwXbQCGI8cQJEc38
+	 vGtJiAmgoOBOKpcAPbgbF0jPC8Yt2MMYk5FMaj0igPgKRqDd2TImhwD1qvFcMp3q98Hzn
+	 iH3HCZDU/VVMPoPNyO8wpdC86yICJ5lCDI+Fw1O5aJ+ZDlAAN1foIVCfLE0dWrlzQofQq
+	 V7+BLyfSD9eu3R2dFATnGfYYf8LwOVjAsrK/J41r0WleK8bbuUXVHsdXxlCJZx3PpU94w
+	 pEu2T03bIHSgy9lzeViYuQnd6fSOZvv5ZekXPGMEzdSh98E5uF401ubcrHDi42Be2VQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jG7RPOnJ;
-	arc=none smtp.remote-ip=209.85.221.42
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lv64Q36d;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042F9606A31C
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 19:07:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 042F9606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F65C606A31C;
+	Fri, 30 Oct 2026 19:34:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jG7RPOnJ
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-48afcd7ba9bso767922f8f.3
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 12:07:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793387235; x=1793992035; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OCftNx47efIzs+YCBM+El8sBn0JBNPv/PH6FqnaTqa8=;
-        b=jG7RPOnJKiyo3F6OohUf7Cl6JQWWLnKEi8fLxdzp2dHRi9EWa4x/KsravX1CCSg+KU
-         YcGIpZvLfEZNxAg2F58Jx+YKGKkqtMBT7p/4f8SBiCaI1vHsE0GBTChTEjktYyWKnYc9
-         KkX21fwordXlCuFabT8RZ2DNNhVaihpCywh9gyPkWytn92/353ezfJhImBVbSHb/6LfT
-         qNrEgAQP4WbtxfurLl3gNVt+RojTgVmZZM/y5mk6ij7ANGunIRWC9fB3vlNZGmbHLNP+
-         4E7tEJ6LqlqH5LnzTFnQM+3V625h+CoDdm9dw3K5hynoJMZRJQ1Mcs9PQguLvjzp6wEP
-         93dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793387235; x=1793992035;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=OCftNx47efIzs+YCBM+El8sBn0JBNPv/PH6FqnaTqa8=;
-        b=qRs5n34gkhaxsOAwG0JbLjBJxvpX6+u+mF0xR9/8XSj2YBIpgkcTHksKr6jRC9NLRb
-         qtBjYuOCrnPfr+JB6chXXeMZQ2ofCrsZiphWdZUFED5vkyNvsn4nVHb91qCLICTcw3bS
-         nMfNukBsD9ERQ/h+lGKEhEEEVM6LVWTuhZRyW6LsjAq65+hE5ZKoOxvogYB7tktMJemN
-         sxAanCXY2/VhUNAIyo1gxUZHqG1Kfd+3Sv7QJeR0K+TvqYZZDwbOjjD9SP5rkBtIVM9O
-         8vRekevyW4e6kSw22NeKynC/A+D9m092ZI9T38aPGN9QdTpSVP4m6GiCzowCB4cfP2//
-         8/TA==
-X-Gm-Message-State: AFq9FYJwTepC7xbMwFPKfJbQrF7GWGxtzxBTEsGB//+kS1dfNHmAX7Yo
-	PyWuEun+nBm8kkNCTXR/AMMzQRMO0a8KahAx3E+rsrOMHTg9zYv3+i/C
-X-Gm-Gg: AYBFou0vESMsyBhixAa9Ov9NuYw1GSdKdiPOzq/BGfzVyheUuWpVV7ogWCaYH+VqSSd
-	RJhx1cbv4TuFAYl5KW6pMlZU1YFBIpnK5ykz+dIWAVPqE/Xhi4sl891FFjvvF9E6KKYrGY6ngDB
-	a2eY3jS0oWlt63FZkQ4YPF/NayMlazRNyhdp/UOBmTKp1qEoi5jiykRIAqWbssjRz9mKDM+NT04
-	yqb3azUam0QHpx9Pt2DpXp/at8DcHrnbzXb1HmsEgiXqurfDOE4x+rkMBZLI7LehhXf1RnQu0lF
-	gtA8W+1HaQDRVIF7mtPB4X4Eywhi3NLL1Zq8xHfOtQrHv51jMmxsLNNyXKGhfV4h3v0TViGREeW
-	0TvulUVRA4fTDzJ988l659QRdevmQ3PnSNWNjwEweWHcFrcBCurfwYAnw2EzeaqtPiCj1BWKEt7
-	9PHYH3DMFnCNxkYTZPee/qau4AU9Kv/A8tBXyKxgOtMaU2mI8NL8yJVJmHo0bw8I9T3miKFI7io
-	CZJcnQSg1jwDh5lkYh8MnkEyTOO3c+if9ZFr1WW5zySA76SZ/K5tboIcZSDb3Ja6XgiCwvCj5Ca
-	hot6aXOK4G89z+funRWZC96jD0JRrEaffKD8XAh5HA4g0QAu
-X-Received: by 2002:a05:6000:e89:b0:487:baa:aa6b with SMTP id ffacd0b85a97d-48e6e4fac5bmr6104063f8f.43.1793387235182;
-        Fri, 30 Oct 2026 12:07:15 -0700 (PDT)
-Received: from gmail.com ([2a01:e0a:bc7:8550:45c5:9dc1:ecb:5d17])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b9eaeesm4813362f8f.49.2026.10.30.12.07.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 12:07:14 -0700 (PDT)
-Date: Fri, 30 Oct 2026 20:07:12 +0100
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	linux-kernel@vger.kernel.org,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH bpf] libbpf: Enforce program limit only for loaded
- programs
-Message-ID: <auTq4Fhs8T-lO36-@gmail.com>
-References: <20261030092248.7388-1-mahe.tardy@gmail.com>
- <CAEf4BzaUg_KPB+k14ntDTaqU-3hEUQ8o5E2hSeUkaw4xwFwi9A@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lv64Q36d
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D141F000C1;
+	Fri, 30 Oct 2026 19:34:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793388898;
+	bh=crQRzA1NZRP9Kane1rHo0PkkqJUfG1/DLCkh3lApae8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=lv64Q36dqcfNzh9rv+WZ16OOePlRH6JNyTyhtKgdajymrh/a6wJkIxQKelCoEpCG8
+	 K2NBflVPluGAlDJJ2swH25jXWDWOP4L7LAOUbjA4jnzZ1jgPCXu6Bi1wbxYPh+OUuf
+	 4pdLu7cVa2M2/0ls6FV6C5o60me2UUMxN301lcahnwnMTBVPQAJMMAOmjiiiJwmTfC
+	 PmTui3Qtkx0jEoxWBXLWf9P5eo7HivRwmVMwcf6RKv4eby6q9gfjGE8nmL/zr5bJnP
+	 JilI3c50W9J2qggRmcNVnNGPmIRpiMohfOiB76OcU2CRIJIowq2wFrUPDRyy0icpHB
+	 VRXI88NVcfgsg==
+Content-Type: multipart/mixed; boundary="===============1483456430051234551=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,24 +49,124 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzaUg_KPB+k14ntDTaqU-3hEUQ8o5E2hSeUkaw4xwFwi9A@mail.gmail.com>
+Message-Id: <09475f69602098aa106af66960f75de688d53ca24efdf8dcdc6f91c0d2a59c6e@mail.kernel.org>
+In-Reply-To: <20261030-ftrace_in_test_progs-v1-1-aa50c5dd1ccc@bootlin.com>
+References: <20261030-ftrace_in_test_progs-v1-1-aa50c5dd1ccc@bootlin.com>
+Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: add helpers to manipulate ftrace
+From: bot+bpf-ci@kernel.org
+To: alexis.lothore@bootlin.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 30 Oct 2026 19:34:58 +0000 (UTC)
 
-On Fri, Oct 30, 2026 at 11:35:41AM -0700, Andrii Nakryiko wrote:
-> On Fri, Oct 30, 2026 at 2:23 AM Mahe Tardy <mahe.tardy@gmail.com> wrote:
-> >
-> > As explained in commit '259172bb6514 ("libbpf: Fix gen_loader assumption
-> > on number of programs.")', nr_progs which is obj->nr_programs at this
-> > stage is including subprogs and autoload=false progs which are filtered
-> > later during the generation.
-> >
-> > Quoting Alexei, previous patch 'aac5ba0a4d52 ("libbpf: Reject excessive
-> 
-> we had a rebase, git sha changed, updated it here and in Fixes below.
-> because of that patchworks bot might not send confirmation, but this
-> landed in bpf-next, thanks
+--===============1483456430051234551==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks Andrii, indeed I didn't know. Have a nice weekend!
+> selftests/bpf: add helpers to manipulate ftrace
 
+TL;DR: Restoring ftrace filters in trace_helpers.c may abort on a saved line
+over 126 bytes (128-byte buffer), leaving the filter empty, so all functions
+get traced and global ftrace state isn't restored.
+
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+> index 6d7a4b8c4ab8..1f26a057a810 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
+
+[ ... ]
+
+> +#define CHUNK_SIZE	128
+
+[ ... ]
+
+> +static const char *tracefs_next_line(const char *content, char *buf, size_t size,
+> +				     int *err)
+> +{
+> +	const char *end;
+> +	size_t len;
+> +
+> +	*err = 0;
+> +	while (*content) {
+> +		end = strchrnul(content, '\n');
+> +		len = end - content;
+> +		content = *end ? end + 1 : end;
+> +
+> +		if (!len || end[-len] == '#')
+> +			continue;
+> +
+> +		if (len + 2 > size) {
+> +			*err = -ENAMETOOLONG;
+> +			return NULL;
+> +		}
+> +		memcpy(buf, end - len, len);
+> +		buf[len++] = '\n';
+> +		buf[len] = '\0';
+> +		return content;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static int tracefs_restore_file(const struct tracefs_ctl_entry *entry)
+> +{
+> +	char buf[CHUNK_SIZE];
+> +	const char *content = entry->old;
+> +	int err = 0;
+> +
+> +	if (!content)
+> +		return 0;
+> +
+> +	if (entry->kind == TRACEFS_CTL_FILTER) {
+> +		err = tracefs_write_file(entry->path, "");
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	while ((content = tracefs_next_line(content, buf, sizeof(buf), &err))) {
+> +		err = tracefs_write_file(entry->path, buf);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	return err;
+> +}
+
+Can a saved line longer than 126 bytes abort the restore here?
+
+tracefs_restore_file() splits the saved content into a buffer sized by the
+read chunk constant:
+
+	char buf[CHUNK_SIZE];     /* CHUNK_SIZE is 128 */
+
+and tracefs_next_line() fails the whole restore with -ENAMETOOLONG when
+len + 2 > size.  The kernel can print much longer entries than that.
+print_rec() emits the full symbol (KSYM_NAME_LEN is 512) plus the
+" [module]" suffix, so mangled Rust symbols or long C names with a module
+suffix can exceed 126 bytes.
+
+For TRACEFS_CTL_FILTER entries the file has already been emptied by
+tracefs_write_file(entry->path, "") before the long line is reached:
+
+	if (entry->kind == TRACEFS_CTL_FILTER) {
+		err = tracefs_write_file(entry->path, "");
+		...
+	}
+	while ((content = tracefs_next_line(content, buf, sizeof(buf), &err))) {
+
+so the restore stops part-way, every entry after the long line is lost, and
+if none were restored yet the filter is left empty.  For set_ftrace_filter
+an empty filter means all functions are traced, which is the opposite of
+the original restriction, and the global ftrace state is not restored.
+
+Should the line buffer be sized to the actual line length (or should the
+content be written straight from the saved string) instead of being tied to
+CHUNK_SIZE?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41113297251
+--===============1483456430051234551==--
