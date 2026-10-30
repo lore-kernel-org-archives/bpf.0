@@ -1,100 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793329875;
-	b=2Zbz270PNFTZefib1XAgsqdiiENGuSUmgPHyzF/paBGgZR8lzpueNX0EyInXL5Wrx38m
-	 uPz2Cm8PEqXvZEBuGn5jiF5jOCOGCy0UJBxAkzkfvIOgw8Qx0hmaovm6EHu/c5OYW6US+
-	 bP/NjtpDAmOPD8a2Rgx5jRZR0whMYP5sxYIKEbzbOD4YQPv7h7DvHO0qWanFUwZbBU9HN
-	 yk2jhm6HM3tTqPvZxfpFF15qo669Yu12TO5jEennWDMqWw7NCrXAt4jOb8W+TTInAJCUZ
-	 5WduVizj+GMV5GhhgzN7IB2OGqhkE/G67TIel+PlBvlOV4z2WXW7yY3guYl7PUMNh5Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793329875;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.46
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793334101;
+	b=TVRsrWvIo8QUAxObkG+jWmgWimyA+sqNkdokIuXOeitWLl5Z9Gm5bgSAVr/F1MbuIR71
+	 Jbtfhwcf+eWa7WU2eZGZj60KLfiIOYc8XmPCnVBASMS7emPMXXyXSFpH252FLbguD2ibl
+	 YrtJ7NtvRLVbN7ND1yh92ykymLzWpcMPAWK01mqIxDjLSq3nd/dRLeZ8EEXEAKcentQeB
+	 CvVzutaJZWWSJfTXokep9Vr6ji9kMZcF8HaltqzTV+3+hH2mr3h/y1N63qkfJL1q/97YW
+	 ThXt32mqA1VMlPJfj2YZsAzmQjSRmcdvqK1xpRctfWwGhMKapgTPL26FU5F75SlY1Uw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793334101;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=hoVHC65GR8n9FjINMXnaahKi7WXhnhvguTlzPVQW3pA=;
-	b=doJoq3UZTfLXQ1aJp2npSZZnp88J41S5u0UWfzdUIE/HIYrTkHHTty2dv4ViX0HUkq0t
-	 hNL7MNFhMZAbIgqaQZgYqlE8JcV0NYleyCuTGuQA6YAVz60rBA0+Lf/QkL8CYqoAmggJI
-	 /SWz5mDvUF4+1P2SJ0TE1v6vhRo753kZJhX0TIlPEQmty85Wwr9nkR3IQB2Xnp8uFx1tJ
-	 sFsOYOgev2rioGkFB+wIArm1NRHYkDLcJtPKn1cpe4wIoVSRGPUmabSOU7gWGJPdfnwHz
-	 4/s7PZSuk8Nr1mRprq5FPWGlsnWIkTFuIRhuzCZfDlVgniJ1ChXVdAr4oTTnN9U4rYw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=kh2HrdRU;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=PMpIblKmZXt8BOY3Honm+2Ww2wYw3iNTalEqXhUNRCc=;
+	b=L5WGQqKryma55sCuPylSVTL00yPApQOTZCKN6bjb8MxttdSv3iKIKqqsw/amiq8Y23UA
+	 wTALJgFP8lzS68emkneEd0R7lV0Xazfd/hgwm/r6xHyrPScirJqOGJidWZR+lXLbcWIuf
+	 I4mOceF8MXrt1siLevK3EMidRAX9ZHHWB8xZ8vCzqku/ObaAtoWI2mnnK22duEo0kAAUe
+	 Cxcm/6qzUHr81ZRrg9CwuZeH+q78rymzqgnTnvs9tPwtepOiDJzunqwe+BQtfAyvePOBN
+	 8tmuD4a1X/BMNcf38MnD43nQFZJeL4xF1QzOX+T3AqiqOGubYpVFL84DYEfvEVTartQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=openai.com;
+	spf=pass smtp.mailfrom=openai.com;
+	dkim=pass header.d=openai.com header.i=@openai.com header.a=rsa-sha256 header.s=google header.b=V2Tu+7XG;
+	arc=none smtp.remote-ip=209.85.160.46
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11F8606A320
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 03:11:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B11F8606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EAE5606A31A
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:21:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5EAE5606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=kh2HrdRU
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-5337c7b9937so164001cf.0
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 20:11:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793329873; cv=none;
-        d=google.com; s=arc-20260327;
-        b=HPTNFoXtMaqApCScfIgOGVgSBYrlDPKu3ms3PBvCJkPHlWtsbOgXHeZnKT75g4IJva
-         Yg6Uvs/qCTKdraoE5GJw1jv9FSlLne/ZWdN8AH2yThLnh+qPtjVt+MH4MJZ9kS5UJpZE
-         QNFYkow+f62baUUFBK59iMHvaAMo701kQZlR52gZVoqLOSwMXeWI/NkHF7XoEFu8lEIX
-         0uw0qPFZv8hbfVc/ieBFEDfNC4BtPHPmtRZnTjatG97f1gX8BKuqyLCush1WJdfxrtGZ
-         g39KGXUyYbQdhIMUglp7ZlZ+loDy5p4VpkRhujHY0fMsHWRYtBcYNEEY4leQRPxt7YK/
-         zeHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=hoVHC65GR8n9FjINMXnaahKi7WXhnhvguTlzPVQW3pA=;
-        fh=UkC2+vTl0RbkugVIE6v23tPtnWskZmP7pRzNXzd+/wI=;
-        b=If4W4sj7ISEHt5ObOvZAugdu7LwW/bGdfufmcc75f3pyYf1pW5W48NbuiO1oZQ3fdT
-         oyUBJUOqtHa8A4T/XcgEzJ/h1Vas0KAEphxnf+2gYm+tL1LFCv/IbUCbOQvKDiXuApcR
-         J6Q2BXvw3fG56RtyC39eyCF4kyREiFachageN5mIjyOXrf+QIvCsvHvGVnv7HYuxU5YG
-         8PX9RZ+5BJn9zWZQ/Klcpvw6/ul59VfAJxNLocqQEe7xTK/YA6Sugjj0LrIWHVzdIHAo
-         bhEimArLoQujyC3yRvlTN3HUkNRFfuwR/nnjBZi2rkehZ/CfYNr2IspA1OIhE84L4+J5
-         uuxA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key, unprotected) header.d=openai.com header.i=@openai.com header.a=rsa-sha256 header.s=google header.b=V2Tu+7XG
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-48e94879f02so96452fac.0
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 21:21:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793329873; x=1793934673; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=hoVHC65GR8n9FjINMXnaahKi7WXhnhvguTlzPVQW3pA=;
-        b=kh2HrdRUmrMNIG/6fwizpyRV2s3ZGcRq8l+qhBw8D3lvG8emEl6JjqraKmxtxX2X2O
-         ZVgvajWvOtpUnbYl7ZWbzrX3gx+Nz56XLrBfUp/MmTdYPJ3VGsBg83OgypsE+VVnTee0
-         B1zec4y+h6QhIc4Iu4oy6WYjms9OJRLgyK3xNdLlO7bckZRnUc/bDAtF8JBpXU0XMUOn
-         1I8oAMJqjNaCzflStpKVCF0Bp9tH4SII9WfY81WZQT/FvfENzypAo+IMJO27Nyr6kjlf
-         vYvY0iyeiRpFjkQcCmE8mKfeZW5WkPkXWbwrjjVJ2hhNOQ+832Moo79dOhNjQ7s/j5df
-         umBw==
+        d=openai.com; s=google; t=1793334100; x=1793938900; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=PMpIblKmZXt8BOY3Honm+2Ww2wYw3iNTalEqXhUNRCc=;
+        b=V2Tu+7XGLweuI6JuW4q0Atp29krGpuRTqzaj3uF28jN846RWoygzoK6hQsvoo1UC9X
+         knJAdo9MZNzSZj+rmkB/s1YKmt1kHg8xySqg/Y7Ilb8KXauOASd9C4O2nnuE4TRK807M
+         J6rcR7iWe6FJEElVS0i4BdLAwdMFYZoYnAJMc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793329873; x=1793934673;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hoVHC65GR8n9FjINMXnaahKi7WXhnhvguTlzPVQW3pA=;
-        b=y7eJk95i0S+my3xx+KUiyO4QNoAgKqKhuAXIiHdru5yhxxO9u/jAvXLnNJAEJlViN7
-         rhCl9CHq7SmF7HPj2+zq2bQpA5aGWq7MFeOCP0JfX8YI1dIaBBNBD+tpMl0S2JrMg0Nh
-         BmgT5K0GXcO7JxjVuNiY5BoXrszA211GoPu1eIHS0+aVafOSKx8tqNbtPVRvZSVfYhsz
-         OZ31nhN+PDCbIbYxOv1UOrZooZ3z2EUhneuadFX3/nT059lzYWKS30iVarzfCljHqP0M
-         rCZwB4iioeiskY57n8lXDDp7Z9jXcVVJCyi6GQfiwNqmTvBsUiUYxW+MWojSK6U7D880
-         /9lA==
-X-Forwarded-Encrypted: i=1; AKwUvBz8wnn4HaJIUGqmObXjvhgQRNsfKpaK/BWURzSjcCxDvQJm9q0kxF+kenY3Upv6ZNv2Sgg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKQEBZxvolfQ4zJrHEiYmL3f6oPp1SPtzIu/hsRF0nBSPjCWgmw
-	JriqL/SFES2udwu32DE4m19wi7AsdG5JhRo7kCKYDdcf2CdE8WLDeAWfwSpMZ7fD6RX+j8Biu0J
-	MqywL7EBw7JdmXDENb1MdZvK+1e0lW7ZZ2O3pGpBy
-X-Gm-Gg: AYBFou37g5reKnjudUTTBmPk4weU4mlaIJgw4vGQArnx+n1ah8OrOchn796PSxEE2xz
-	ErMbWM94GrwPSwRAe79m3ntc6fyRnsF0Y6ay9sPynZAj74AXg2fT18GHx9nwwj9xiyhfEUG21nk
-	XDCrB7sFNb3KF3IKwnEvmDpHK5YWJCz8628OQi21xBEdClXFk4Z1zbGsZZ1kKLw4/fNKwmsCIvz
-	qaZj/GUekR5rPY1+vZvn4BJs+h0QsnMKcqTlFuBlCpicB/dEhD7LfLuoLVQ1eKh4SlQToquH8Rc
-	q3WtVB7z/qXV7ArzYezZW4akKuf2EHJZTSM0tnlrDjvzud8S2aOYMReB/tgapKLjpMHnH1nKAne
-	w+S1em1P8NIAwmoa5cSaxjew1Y3R6PABsKtEqyg==
-X-Received: by 2002:a05:622a:1b0e:b0:536:6d88:600a with SMTP id
- d75a77b69052e-5414de1cf2dmr34323151cf.9.1793329872551; Thu, 29 Oct 2026
- 20:11:12 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1793334100; x=1793938900;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=PMpIblKmZXt8BOY3Honm+2Ww2wYw3iNTalEqXhUNRCc=;
+        b=Dr9zQRio7Yo9oJUzCfVXvv7mPfilGN1mJj0Y5ooHgcpPHybw1g0Qa82Wy12A054Nkt
+         LuuHvit1flhUo1klqedLuvhN+BiRYA+l1No4RFs2EEZfR8rAMk0C7/8B855xpP8DHKur
+         vv94TDM3lH+G5Ju5rnw32t00K88PdDWIDzVV9YtPP7eSWM/1OtyezcrKFlwxxJUMjXgW
+         Nf0dKCig9i6GNcDpx0PxA3Kff9Vom9yExFZM8QNnnXYmdJqitraEvq+txCvamVhRTN37
+         DB8hfa2ZdziTDZmnIF7XiyaKH1Y/BM6Od1+uDpYCAOmhrw8yCO2mVut6r0iShnBSq3f4
+         fJKA==
+X-Gm-Message-State: AFq9FYJssmcPCrLTv0wXkLxtGr6g3AlJl4auoSZfGgs2b6PKZOat7TS+
+	bBy7ErlE1J+6iTaSBeiU1OI5PNCmXlG6xldaBASGP0LQt4QeS6KlPXnV7Fts4u/Du5AozH7WUyF
+	XAHPYR/M=
+X-Gm-Gg: AYBFou3M8qfUy66AnJLMdVOceCC8/b39oeGWkpb0DNsJYAahwx8ta8zcMoitkm+WwPg
+	BHI/WG0C0Z6pmRxWAcYrERg68kt4O+t9zflWCnbJauLYBA7ULrIi4B9oM9ygbSyfStUzo4zefl/
+	lNafCujEGJAvIBFXtqKWNSITWaYG00LWLBcdOI8ukQa2/TRBt4t7FvFcGBB8ce9nvdF+K158/xn
+	V+t/YOpyjlDmIHuLupv4cO3Pcmr2gH0whpSxSnonUTVmijVw1pAZ4njjQ7KAcv3lCqmRu+lRE/3
+	c/sAOZF5frrBrn4BRWFGFHv9ghJP0Xg4ULuqGBPyHAbwXy6nFgxJIHGIAk8zJoE/I0PaspfaMFr
+	U1czLK0mSx200whb6xODiydT7ROeUz5wkOb0W85plxTR/jJKR4hlakYmwNhd3N2qfAmDOOlSeEq
+	wJijO1q9Aq6shuLCXpWlHM5mxBE8KplfBbiKeHaUHW0fImFMv3ejbB8mZGNzWBpn51fZK3d+o9Z
+	njxX+3jM8Ofs6JlObdELm8A8YfvuxahRWAiapW3Q4bs6lRpMWm6hrmakIPU5KKtbEWO8OnFlnRv
+	/tit/l828KDQZRa7xUC5LNQQW1VnO41P1Ejvxtxh9mk7VpUs7I/z4uWHh1I7qaunT0Spc0OuUub
+	G/dZXW3nrDyHkn1s6dHIOptDHWdsIlw==
+X-Received: by 2002:a05:6870:1f0a:b0:49d:c8ab:967b with SMTP id 586e51a60fabf-4a907775750mr775519fac.47.1793334100321;
+        Thu, 29 Oct 2026 21:21:40 -0700 (PDT)
+Received: from com-75606.corp.openai.org ([199.47.143.5])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a90af650a1sm769349fac.15.2026.10.29.21.21.39
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 29 Oct 2026 21:21:40 -0700 (PDT)
+From: Kyle Zeng <kylebot@openai.com>
+To: bpf@vger.kernel.org
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	outbounddisclosures@openai.com
+Subject: [PATCH] net: skmsg: fix copy cursor when coalescing clones
+Date: Thu, 29 Oct 2026 21:21:38 -0700
+Message-ID: <20261030042138.73739-1-kylebot@openai.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,94 +95,69 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261029162958.3224280-1-irogers@google.com> <20261029162958.3224280-4-irogers@google.com>
- <d1267d81-0ed8-4b3f-a535-88ddba51af88@kernel.org>
-In-Reply-To: <d1267d81-0ed8-4b3f-a535-88ddba51af88@kernel.org>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 29 Oct 2026 20:11:01 -0700
-X-Gm-Features: AclHuK9rCNoYtTV6H1GziiI59-c1QFU3f9f-3J74Fr_QKbxS-WGNb4D7UrtMMqU
-Message-ID: <CAP-5=fWaLj-ToYvAowp-_dk5tL-_Ju+i=U90GRK_obFNqn5axg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 3/3] bpftool: Prefer zlib-rs over zlib when available
-To: Quentin Monnet <qmo@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-perf-users@vger.kernel.org, 
-	bpf@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 29, 2026 at 5:15=E2=80=AFPM Quentin Monnet <qmo@kernel.org> wro=
-te:
->
-> 2026-10-29 09:29 UTC-0700 ~ Ian Rogers <irogers@google.com>
-> > Add zlib-rs and zlib to FEATURE_TESTS and FEATURE_DISPLAY in
-> > tools/bpf/bpftool/Makefile and use feature_rust_lib to configure
-> > ZLIB_CFLAGS and ZLIB_LIBS when zlib-rs is detected, falling back to -lz=
-.
->
->
-> Hi Ian, bpftool doesn't make an intensive use of zlib (mostly, it's a
-> requirement from other dependencies; we may also use it to unzip the
-> kernel config on the host if necessary for probing BPF features on the
-> system, but only on some distributions). So I'm struggling to understand
-> the motivation for your proposal, what do we gain by switching to
-> zlib-rs when available? I understand this implementation is in Rust, but
-> I'm not sure the added complexity and feature probing in the build
-> system is worth it.
+A splice or zero-copy append can leave the destination copy cursor at
+sg.end. If sk_msg_clone() subsequently coalesces with the last entry,
+sg.end does not advance and the cursor still points at an unused slot.
+sk_msg_memcopy_from_iter() can then walk around the ring and write into
+older entries, including file pages spliced from a read-only descriptor.
 
-Hi Quentin,
+Software TLS can reach this with an ordinary MSG_MORE send after a file
+splice and a splice from another TCP socket. Both TCP and the TLS
+encrypted-message allocation can use the sending task's page fragment,
+so the TCP-sourced plaintext can be contiguous with the next cloned
+encrypted-message range.
 
-At my workplace, we are transitioning from zlib to zlib-rs for both
-security and performance reasons. I'd like to keep upstream tools
-aligned but they don't have to be, it just seems nice. I agree zlib is
-of a lower priority to users than, say, zstd. For attackers, like with
-brotli, it is probably an area of interest. Knowing the implementation
-is memory safe is at least something in favor of zlib-rs. I sent this
-series out as an RFC because I obviously have no way to mandate what
-upstream should or shouldn't be doing. There are things that can make
-life a little nicer and easier, and this patch series, for me, is one
-of them.
+When coalescing with an exhausted destination, move the copy cursor to
+the tail and set copybreak to its old length before extending it. Find
+the actual tail on each iteration using the ring iterator, including
+when end wraps to zero. Leave an existing copy cursor unchanged and
+preserve the normal coalescing, reference counting, and memory charging.
 
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/bpf/bpftool/.gitignore |  1 +
-> >  tools/bpf/bpftool/Makefile   | 56 ++++++++++++++++++++++++++++++++----
-> >  2 files changed, 51 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/tools/bpf/bpftool/.gitignore b/tools/bpf/bpftool/.gitignor=
-e
-> > index a736f64dc5dc..ea2222373634 100644
-> > --- a/tools/bpf/bpftool/.gitignore
-> > +++ b/tools/bpf/bpftool/.gitignore
-> > @@ -6,5 +6,6 @@ bpftool*.8
-> >  FEATURE-DUMP.bpftool
-> >  feature
-> >  libbpf
-> > +libz_rs
-> >  /*.skel.h
-> >  /vmlinux.h
-> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> > index b0f7168e7943..a193cf89a034 100644
-> > --- a/tools/bpf/bpftool/Makefile
-> > +++ b/tools/bpf/bpftool/Makefile
-> > @@ -1,5 +1,6 @@
-> >  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >  include ../../scripts/Makefile.include
-> > +include ../../scripts/Makefile.arch
->
->
-> Looking at the GitHub mirror repository for bpftool, I'd avoid including
-> this additional Makefile if I could.
+Fixes: fda497e5f5b8 ("Optimize sk_msg_clone() by data merge to end dst sg entry")
+Cc: stable@vger.kernel.org
+Signed-off-by: Kyle Zeng <kylebot@openai.com>
+---
+I have a reproducer for this issue and can share via DM
 
-Ack. I also acknowledge that the CI failed because the patches were
-against perf-tools-next.
+ net/core/skmsg.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Thanks,
-Ian
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index df385a5a961e..0e9ff4be78ba 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -103,16 +103,26 @@ int sk_msg_clone(struct sock *sk, struct sk_msg *dst, struct sk_msg *src,
+ 	}
+ 
+ 	while (len) {
++		int last = dst->sg.end;
++
+ 		sge_len = sge->length - off;
+ 		if (sge_len > len)
+ 			sge_len = len;
+ 
+-		if (dst->sg.end)
+-			sgd = sk_msg_elem(dst, dst->sg.end - 1);
++		sgd = NULL;
++		if (dst->sg.size) {
++			sk_msg_iter_var_prev(last);
++			sgd = sk_msg_elem(dst, last);
++		}
+ 
+ 		if (sgd &&
+ 		    (sg_page(sge) == sg_page(sgd)) &&
+ 		    (sg_virt(sge) + off == sg_virt(sgd) + sgd->length)) {
++			/* Start copying at the newly cloned suffix. */
++			if (dst->sg.curr == dst->sg.end) {
++				dst->sg.curr = last;
++				dst->sg.copybreak = sgd->length;
++			}
+ 			sgd->length += sge_len;
+ 			dst->sg.size += sge_len;
+ 		} else if (!sk_msg_full(dst)) {
 
-> Thanks,
-> Quentin
+base-commit: d89e1d186ec9271bf78e62771779e9fc03bf0fc3
+-- 
+2.56.0
