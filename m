@@ -1,45 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793365175;
-	b=b7Li4151AhLB8yNpvRfvNGK5AZTHk4+1S/5p2/kgmykx2WFBh0NlUv+BhZsj2J0zXPQa
-	 GhyYevLQ2VSq7kWxXxH6s+CyR07Ypv6UrLMIN8xLPQnwyHInh5XJkEyJzOEQmbis4izmi
-	 5hGc8XGUWc3kqKRDIqjTtYLfW+yIYmeeT05hSd05kHcWGWw3lRC7fcJlHQmjUbsH2MA7d
-	 AUf4z/MxfcloHOYlpp2E/KCObyo4gbRjnfde2uVLMAtGLq+2Btknohj7AZkpf7JjNaeV/
-	 YDxPSIzmjOX9cTpSOZSq6FCZEMdZNazzOTg69Rr3ZJFt3Nv3j+3fAwdIrPC/IVQzLPw==
+	t=1793365660;
+	b=5gnn31/n7D/zhm3DAPqxBToDEQumTvp5yhCzOyB6bD5/wdqgTYFnYZe3Wp6Md/A0Devd
+	 nVUHrQjIUh5SP3WBSUOx7QR3Rmqvebl7ouNja3Akv1QuvfOFWeU/pTwBW9CC+VJFKAizp
+	 KgbVw6JUn2qDf4blGSYcG9nMLagyWC1+jk0ph39k63crQ/RaD+6VkhdvyjyWf0EQGA8sS
+	 pNIIdtXT/zuuS43CBDddc/fRGelNGc2Byrbg/APG0g1A7ngXMpMgPE7JBk4mxUhWJQjfv
+	 7j9iadvJtOY9b/QdzPB3APsvQHl1k5kDmCigMA4OyJomtd+1QsafSdlVKYRREIY19Gg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793365175;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=lvKBwCgVqUax5qNd5AsU9XWWoRcofUbjmwMFYfXyy7E=;
-	b=LkkSgGNm3PIp5xUEn/iax54YX+QqaDN/rmS46YmnL8e4SZqmYb/mZysyg5iIXnOl+uyS
-	 R9yEQVY/YY2IbenqbJhwGoNNyxOHaK9+KNLpInS1QB/5qmFpKSC4SfUDRMKG458oG3nm+
-	 GBhQCC4DVM2FQv7mgAfp/lGEyFn68fkXLZF5Aw658i81VDS9lXENX/TgZNrNtGudpt7Au
-	 xWhSW04nMzBH2Bw4KRsgfdUT/L/saxwp371SpxabYHEM+v97EgilJUYeYEfxpgEGvXamD
-	 fi/Khy8hQIZxfU+K5PeYrugBMLIZ1NV0klgiqSRyFDAo2WJrv2SFhqxGsqAaDQz9Pww==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793365660;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=2CXkmd/O2aNTlZ+qEZ1HRRpRXyJoN5I797iFBoYREzI=;
+	b=GDG0aW7MCcn8UVcG9VY7Nv45mKi5v662i71LvH9E3zLpsb3s4GSANEXGicXde2WNfYlB
+	 DL8N6jF7+tPMFuMseoBSmiHg88+kxqTuOh6r90qiMTsVS0y93YM7G2AOnf6RlKhBJkwTg
+	 HISbKVRvBpkmdue1KzIiHNNWf8O/AY+zeo4uc2JitB/h/Z3wreg7SaQB7eff/dab5s7pX
+	 Todg+MZt+Y+csWTSzsM7pRDKKOFCToi3/YG/G1g1ydQWpAzCKL5UWyUBvjSGlTPqPb9L0
+	 AdIZfzTbRiE1uhXO1lPe32vaFXK4+QWpS8a8vcDYPQ5/sLI1BwA2qbVfPUc/RlE7X2A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JQKgJKF9;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=U2uW+tmH;
+	arc=none smtp.remote-ip=209.85.221.52
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB6C60A260B;
-	Fri, 30 Oct 2026 12:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359AD606A31F
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 13:07:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 359AD606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JQKgJKF9
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 542A71F0093A;
-	Fri, 30 Oct 2026 12:59:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793365174;
-	bh=lvKBwCgVqUax5qNd5AsU9XWWoRcofUbjmwMFYfXyy7E=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=JQKgJKF9p6qlA5gouG7fJ0kHH6t0mI6CrViW/uM10YWP1FaEbN9GumCYOR6ssW553
-	 9ftiwE9mcUj52Dz6FaDjbfklj958jE07w7v6gZithw8B0TX56TOvTVAqPlWOc3o+XY
-	 neMZqgYK1p10DqbeRn1B5ApEHlaGJFCizlNgHuWHTd/buTdZvUG4mFfwl+hvfc6tPC
-	 hSCj0EwJTakAuzrgBTWIzl+0VHWl7qSLzowJy9hw1cyRpNihw2ElXwb4hYvrtCWCGp
-	 6HpiCPYLvYp5h+hgi6KQb+IiBqJs2uKRBzDFA6Li2vxQ+NxAvrsQXHtuckzTRIQQUl
-	 hbGSAE754Vl+g==
-Content-Type: multipart/mixed; boundary="===============1236647830006293705=="
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=U2uW+tmH
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-48e0d1da913so516710f8f.1
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 06:07:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793365658; x=1793970458; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2CXkmd/O2aNTlZ+qEZ1HRRpRXyJoN5I797iFBoYREzI=;
+        b=U2uW+tmH+jZ4SficOARdAU3HBbBTI5RN2cg+Wb894aXlhp0IzQaummM8vVPYTZCF3/
+         hKZeWq3KXtoUFqmoONsEmvdlODqFzRTKPXgvEHHYLEWXfMgl/gsY6AGDD9uNmZizR7Xl
+         6XFGyAhcZ9CO9ONKLz7490//d++2dGUoIwGqR5WwQA+2FNr+v0ufv4QPsFUdA4at4R0h
+         w67ny6817oHVwyLo2c30y1f5Iq8n5ON8+JvQMhTtIfcH8NiT+hoipkXqR6GzqptZ5cZs
+         57rkJ3HmfaKY1t5acz7WtzJip6Jvv9XDrJVPvvdKvbJtWYTN/1G4hShAEM547w9Zcg4T
+         BPXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793365658; x=1793970458;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2CXkmd/O2aNTlZ+qEZ1HRRpRXyJoN5I797iFBoYREzI=;
+        b=cqCG3lj74/I9Wj/laoICv3/0lKJ7IAwNHoIC31URdyHUyZ82KoZmP/Mb1Nf8SoSaG/
+         WU06Fdy3d1B+26Yjd+SMXyC2Th96oiWK+X13k6ZMFlAyTBFvP3oK30c+Nqk5VhAmF4TR
+         HztMzZIiWaiO0VPPcOCf2+Is6IoNNQrUtPkYpwgBgipfVsIdjVL8hB/HmXt95+EJ/owV
+         Hutdzq4JIXzWH//qm9GJqid6N2nepFsceGfK+2Q4Q1g56h1rn2fAZXa8i3aQnG8pFkyz
+         m+wObWOBa67ZPsV1z2KmVZOuUzSCuJrrQnL15mQog7MpcBAsyRXOZCYuD4dcRleICuBY
+         ZfDg==
+X-Forwarded-Encrypted: i=1; AKwUvBxwsAv/Yh29I/ObXLTaM8zMyqPZraWM61Keh2auWDAsLbxNla1ZuP5J6YkjiS65Prz9mis=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIB0x5y7/S/HaK7AYw5D40EAPL8TtNGVhXIQYIYVCvXII2Z3Kb5
+	DupRBisCBOygQxSLnRxTWNiCfhtXRzSLyT+DrCi8QGTUHDXRvjeP15vP
+X-Gm-Gg: AYBFou3R+NL9j4goX8Dg3T619OtskBLzSU1ISg1HtbNv/Saaa61ScWL4NWYsnAWuEoC
+	oocIs+3Zrl41+yxWflaOqTFx/46SLoEyUIdC5OP9nBbhr3PepizE2yBn5RfrSdGQOWSJ2wBBVYV
+	DiWAEQjLSpTGJ5/yikSIjeHV9DpOf+0tknV2fT2/x6lZGxvMXkLFGmNEOT/MKW+CwDNL/lsj1KJ
+	9zQqArMw7jdTBNeoz3adCdYOLJbjGubiFQ6L4+/R82tWriFGjXf08xwzQb+yzkFLCYqX2Qd9L2u
+	XFup5O5woMcmVmWNIz4Xblrx4uC7OnsD6KX1Lt77f9zTNU8I2zfhzwYqiOsle2r0FjibggVDaIf
+	Th0bPP2GiGpSY7ynUtbIta+MQQt4O0Cg4Sq/BT4lxtZ301pE8YRdyWchzwN6iP6F3AY3Cxi29By
+	oqmi1m/RqMmYr5oJS+UDDh5dWcucR2awdDYivwJ12CtcHQ8BeA3z8pWZNEnHO3Jsy+9zQ0U80EZ
+	6iWvXd8zNpiRPnjPuQ60gWmx0JuqevWzC9wfOAmxiqEWxAIsAHrZDV2vIywzcl24M4tYqIVtzyt
+	0A==
+X-Received: by 2002:a05:6000:4910:b0:48c:69b3:6114 with SMTP id ffacd0b85a97d-48e6494c24fmr14608261f8f.3.1793365658172;
+        Fri, 30 Oct 2026 06:07:38 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::25dc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b789c6sm3482083f8f.26.2026.10.30.06.07.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 06:07:37 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 30 Oct 2026 14:07:35 +0100
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
+	linux-mm@kvack.org, andrii@kernel.org, eddyz87@gmail.com,
+	memxor@gmail.com, ljs@kernel.org, john.fastabend@gmail.com,
+	nierro92@gmail.com, martin.lau@kernel.org, yonghong.song@linux.dev,
+	mason@kernel.org, ihor.solodrai@linux.dev
+Subject: Re: [PATCH bpf-next 2/8] bpf: Add user memory kfuncs
+Message-ID: <auSWl0wLpYO8RjHz@krava>
+References: <20261029212551.56964-3-jolsa@kernel.org>
+ <571f32a410a85199bc9bcecfe07a9a9b6ef425b2052643e64031dd246c13691e@mail.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,86 +101,33 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <7b3485c45dbd413cc9c48ca9f1891a307181ab0db3a999aaa41823284e700831@mail.kernel.org>
-In-Reply-To: <20261030-bpf-verifier-patch-batch-v2-5-55cd43439f7c@gmail.com>
-References: <20261030-bpf-verifier-patch-batch-v2-5-55cd43439f7c@gmail.com>
-Subject: Re: [PATCH bpf-next v2 05/22] bpf: Expand a backward may_goto to gotol when patches push it out of range
-From: bot+bpf-ci@kernel.org
-To: odys.yuan@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,odys.yuan@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 30 Oct 2026 12:59:34 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <571f32a410a85199bc9bcecfe07a9a9b6ef425b2052643e64031dd246c13691e@mail.kernel.org>
 
---===============1236647830006293705==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, Oct 29, 2026 at 10:12:12PM +0000, bot+bpf-ci@kernel.org wrote:
 
-> bpf: Expand a backward may_goto to gotol when patches push it out of range
+SNIP
 
-TL;DR: Nits only: the new may_goto_expand() comment on 'reach' overstates
-coverage, since forward jumps are still unadjusted, and it detaches the older
-function comment.
+> arch_validate_prot() in arch/powerpc/include/asm/mman.h rejects:
+> 
+> - any bit outside PROT_READ|PROT_WRITE|PROT_EXEC|PROT_SEM|PROT_SAO
+> - PROT_SAO when !cpu_has_feature(CPU_FTR_SAO), for example on Power10
+> - PROT_SAO in a guest without CONFIG_PPC_PROT_SAO_LPAR
+> 
+> vm_mmap() -> vm_mmap_pgoff() -> do_mmap() never calls arch_validate_prot().
+> Instead do_mmap() -> calc_vm_prot_bits() -> arch_calc_vm_prot_bits() sets
+> VM_SAO for PROT_SAO without any check, and vm_get_page_prot() then adds
+> _PAGE_SAO to the page table entries.
+> 
+> So a program can create strong-access-ordering mappings that the architecture
+> code deliberately refuses.  The Kconfig help for PPC_PROT_SAO_LPAR warns that
+> using them may cause issues when migrating a guest from a host that supports
+> strong access ordering to one that does not.
+> 
+> Would it make sense to validate prot with arch_validate_prot(), or to
+> restrict it to PROT_READ|PROT_WRITE|PROT_EXEC?
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index c9963d8d8135..1d281428acbb 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -1968,16 +1968,21 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
->   * may_goto when it is zero, then the tail that updates the count.
->   * Use gotol when the target is too far for 16-bit offset of a conditional jump.
->   */
-> -static int may_goto_expand(struct bpf_insn *insn_buf, int off, int stack_off,
-> -			   const struct bpf_insn *tail, int tail_cnt)
-> +/*
-> + * 'off' is the offset of may_goto, 'reach' how far it jumps once the patches
-> + * in between are applied, which decides whether a 16-bit jump will do.
-> + */
-> +static int may_goto_expand(struct bpf_insn *insn_buf, int off, int reach,
-> +			   int stack_off, const struct bpf_insn *tail, int tail_cnt)
+arch_validate_prot seems ok to me
 
-This isn't a bug, but the new comment says 'reach' is how far may_goto jumps
-once the patches in between are applied.  Does that hold for forward jumps?
-
-may_goto_off() returns the unpatched offset for them:
-
-	if (off >= 0)
-		return off;
-
-so reach == off for a forward may_goto, and a forward may_goto that later
-patches push past S16_MAX still gets a 16-bit JEQ.  That then fails in
-bpf_patch_list_commit() -> patch_list_adj_insn() -> insn_set_rel() with
--ERANGE, the same as before this patch.
-
-Could the comment say that 'reach' only accounts for the patches already
-queued, so only backward jumps are covered?
-
-Also, the new comment block sits directly below the existing comment for
-may_goto_expand(), which leaves the older comment detached from the function
-it describes.  Could the two be merged into one?
-
->  {
->  	int cnt = 0;
->
->  	/* Forward jump has to step over the tail */
->  	off = off >= 0 ? off + tail_cnt : off - 1;
-> +	reach = reach >= 0 ? reach + tail_cnt : reach - 1;
->
->  	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
-> -	if (off == (s16)off) {
-> +	if (reach == (s16)reach) {
->  		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_AX, 0, off);
->  	} else {
->  		insn_buf[cnt++] = BPF_JMP_IMM(BPF_JNE, BPF_REG_AX, 0, 1);
-> @@ -1987,6 +1992,23 @@ static int may_goto_expand(struct bpf_insn *insn_buf, int off, int stack_off,
->  	return cnt + tail_cnt;
->  }
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41053659762
---===============1236647830006293705==--
+jirka
