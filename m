@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793346628;
-	b=a4fyy1gpl9P7/LWAi5DCsHYynWHuJ9OuwCLr4efjINFWCwqPyrR43oTXNxFxA1BvJ7T9
-	 GoXfWwumQiHcX5SI4TQ8zuuVwlYX3UlfV3b+X17HLTDgQqNEea2LcGFH9b6IW4OdB85rM
-	 Jef5GwjqWmQWUXZ9mhr1v70o8bnxb4XS5F55sHZrfEiVrADvnyhJYaC+S9AiOFnW5ZslP
-	 7zCcm7alaiZOt8xHAbTcNhwBEI7AwVyiHNfLNmn1sdkyn4Hj7nPFalvYYghJBQdwjnHWM
-	 XWDA9Ix9VOfx4nUkkojxd0d6ueTzYAcEdlBOcGZr+Tj3nF+Y+mP2jtjyIpDcHMserYQ==
+	t=1793346627;
+	b=cflHZHZ7+ay9NLYcQV2WsTg3G4kkfjeW8WfL+1Uauz74YG37ZPJnl9rswalSc5olSBiw
+	 UOyiTC8CGm71TuD3H5jLoATt8KQXrF7CoXRgpiPyjJyUEFKqi8oeImPP23KXr21q8cVOE
+	 KdWRX7DCTs5KbzJ/m/6u8WcRlkOMZ1Kz84rXV7h6aUaEksxl7oBlh6iQmyC8VHg+Ud45a
+	 P18DMo7RNxsb5etkXJzK31H9PbhA5OLU1ezWqUbYYraLzgXRty9hzZhqXv+qWJea1VmvN
+	 EEIQjlJU2dSfD/ksqFzV27yZeqABXctD4rEECFr72WiUQ7XI+fBMHotd58upnXFkEzA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793346628;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793346627;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=9QbTMCo8QhI3rZTi++6hxe83pTxoV8DQ3LgUnh1nOB0=;
-	b=1L9aMJYrWt/c31qESCBs+72mkIiUVGdEUTGtj2yfPypS36bUA+CMhVmlVGYnSRB3au/f
-	 P/yLV+iIYvLuDfbv826FRk9hXBor8NuQUiEJGXHizDQW4lB9FcCZL2l14SwFHcGodWVFm
-	 RuThVOsIDUCVJTe7podyg8kUQ1lvTa1oJhOCjUJBo8u0WaKkHYRK03REmGIWfcosHopCE
-	 9hp3d63ztXs9jw2mDlvp4WfvgqQQM2SPeJUM1Sz0wgQFr1AcNtdYEA+Jwv7ZUwFWrdUHj
-	 s9yIBRnvmA+mbxzal1TsHSbRlQOvQiWLrhXJs9AlTTMpMVS7GM6Vk3p4cZ5/l4gSNCA==
+	bh=pSVuupfgvH55ah2uc/4cO+U4koLlkrLKcG9N9i7AWqQ=;
+	b=q3AetBHhVw5uKdprPPNMq4Cfxs4+TM5qlLaLBzhj/6CgY9uQeQcOtoMzlALYBH9Z29Rm
+	 VN+cLAa1PWbYKtdHDa/cl1PW6w1JnfDLZWAcuzKrQw+lQD0O9gesHC0ItSFg7tdDtbjeI
+	 GxZX/86sRHi0xZCuJ87RMhyDUiVj0ozk/GN3/8uB94QnEQfB4AmH+hzxsJ7CMtJH8gguj
+	 dalpjqBQCu333adEYskiJvSD9GBcteTUTfA3UY06sujBMNfBG1/Qih3WvqudZ7jxGhbTS
+	 sF3Kp4mdqT32zy0TTvpORP5wvR+RIwkWgKmrHfE46w8YaPCnptgipsDu0056qr6wG/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TScUShkf;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=g8qTDhP1;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F76606A31C;
-	Fri, 30 Oct 2026 07:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF8F606A331;
+	Fri, 30 Oct 2026 07:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TScUShkf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578891F000C1;
-	Fri, 30 Oct 2026 07:50:27 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=g8qTDhP1
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C16F21F0093A;
+	Fri, 30 Oct 2026 07:50:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793346628;
-	bh=9QbTMCo8QhI3rZTi++6hxe83pTxoV8DQ3LgUnh1nOB0=;
+	s=k20260515; t=1793346626;
+	bh=pSVuupfgvH55ah2uc/4cO+U4koLlkrLKcG9N9i7AWqQ=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=TScUShkfykqiD9fruEHDK0sEh8jbm5B7WTgEQ8H6cQ4rEyYIuTogngl5WuB375nrC
-	 8JcjKlKeVAKSji0gGkQDRY/XEL402GNBIpw1HnpBqrsVmHjPKU86yFyNrCn99AoBCt
-	 /Ft6RqIz37gKj8JVXzhLHSRfisml4bOD1V41Fz/+pKAE+0FJACEnrifDHgG3wJADrc
-	 6ba12dlO8vvJo83MG9S0GfEQnJOT/MR45xxQBSKljYhuhd0YndxQweSWXuornLaWh+
-	 VcdM4sZJbucCUAKL1CytYHeHSZMv7vx4AHEXHszgq9sApxZfxaPEr4LU8LJKEg6+q2
-	 jYFtX3uB49iIA==
-Subject: Re: [PATCH net v2 5/6] net: stmmac: fix VLAN tag stripping on short
- and non-linear RX frames
+	b=g8qTDhP14+NRM3nkr8pRXgUEh9V4F3CDNqckyoYIAi1mEj8kq1aooiCIQ3KqrMPMG
+	 9TxzAFI7VQtxvTmoc5sWOgZTMcMLYB21UGqXUHRb6nverM2uvja39BdjlxGMvlHF6Y
+	 dhk01nI7HFgik9m0nb/4ed8lQusp6Nlzu+IbRIfNMcSGChhyXiGV8iWdzt5PIkBbUP
+	 fGZ8RnAVPwZpUhhJ3Jsv/O1MZze3MDVB2A53/7AEMTnX3atNXxdbwY7R3ZGTO+yHlw
+	 i2I9tklyW8R9VRGsrsBm5jHoCpnSUL02wSCgRrf6A/ZV6/gKvH8oEOOCMns6Waojd9
+	 zv1rnyQTUGi9g==
+Subject:
+ Re: [PATCH net v2 4/6] net: stmmac: copy XDP metadata in AF_XDP zero-copy RX
 From: netdev-bot+sashiko@kernel.org
 To: lorenzo.bianconi@oss.qualcomm.com
 Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
@@ -51,10 +51,10 @@ Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
  sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
  o.rempel@pengutronix.de, netdev@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Date: Fri, 30 Oct 2026 07:50:26 +0000
-Message-ID: <179334662692.3134.6357778981334990835@kernel.org>
-In-Reply-To: <20261027-stmmac-xdp-fixes-v2-5-10eae8a093a8@oss.qualcomm.com>
-References: <20261027-stmmac-xdp-fixes-v2-5-10eae8a093a8@oss.qualcomm.com>
+Date: Fri, 30 Oct 2026 07:50:25 +0000
+Message-ID: <179334662537.3134.7910783540285829149@kernel.org>
+In-Reply-To: <20261027-stmmac-xdp-fixes-v2-4-10eae8a093a8@oss.qualcomm.com>
+References: <20261027-stmmac-xdp-fixes-v2-4-10eae8a093a8@oss.qualcomm.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -71,7 +71,7 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0 (1)
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -79,147 +79,87 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] The commit message says the VLAN-pop code now moves the XDP
-  metadata written with bpf_xdp_adjust_meta() along with the MAC header,…
-
-Pre-existing issues:
-- [Low] priv->xstats.rx_dropped is a single device-wide unsigned long
-  (struct stmmac_extra_stats, common.h:240).
+- [Medium] In this patch, stmmac_construct_skb_zc()
+  (drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:5521-5525) copies…
 
 --
 
-net: stmmac: fix VLAN tag stripping on short and non-linear RX frames
+net: stmmac: copy XDP metadata in AF_XDP zero-copy RX
 
-stmmac_rx_vlan() now pulls ETH_HLEN, and then VLAN_ETH_HLEN, into the
-linear area before it reads the VLAN header. It returns an error so that
-stmmac_rx() and stmmac_dispatch_skb_zc() drop malformed frames. When the
-tag is popped, it also moves any XDP metadata together with the MAC
-addresses.
+This patch changes stmmac_construct_skb_zc() to copy the XDP metadata in
+[xdp->data_meta, xdp->data) into the new skb together with the packet
+data. The metadata sits right before skb->data, and its length is recorded
+with skb_metadata_set().
 
 > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index d9fc2464a160a..fb3b7174599e0 100644
+> index 71858af6fd66d..d9fc2464a160a 100644
 > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5102,22 +5102,35 @@ static netdev_features_t stmmac_features_check(struct sk_buff *skb,
-
-[ ... ]
-
-> +		__be16 vlan_proto = veth->h_vlan_proto;
-> +		u8 meta_len = skb_metadata_len(skb);
-> +		u16 vlanid;
-> +
->  		/* pop the vlan tag */
-> +		if (!pskb_may_pull(skb, VLAN_ETH_HLEN))
-> +			return -EINVAL;
-> +
-> +		veth = skb_vlan_eth_hdr(skb);
->  		vlanid = ntohs(veth->h_vlan_TCI);
-> -		memmove(skb->data + VLAN_HLEN, veth, ETH_ALEN * 2);
-> +		memmove(skb->data - meta_len + VLAN_HLEN,
-> +			skb->data - meta_len, meta_len + ETH_ALEN * 2);
+> @@ -5519,7 +5519,8 @@ static struct sk_buff *stmmac_construct_skb_zc(struct stmmac_channel *ch,
+>  		return NULL;
+>  
+>  	skb_reserve(skb, xdp->data - xdp->data_hard_start);
+> -	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
+> +	__skb_put(skb, datasize);
+> +	memcpy(skb->data - metasize, xdp->data_meta, datasize + metasize);
+>  	if (metasize)
+>  		skb_metadata_set(skb, metasize);
 
 [Severity: Medium]
+Does the metadata stay valid for VLAN tagged frames that are stripped in
+software?
+
 The commit message says:
 
-  Also move the XDP metadata written with bpf_xdp_adjust_meta() together
-  with the MAC header when the tag is popped, so data_meta still points at
-  the metadata after eth_type_trans() anchors mac_header
+  This keeps data_meta valid for the stack and TC BPF after eth_type_trans()
+  anchors mac_header.
 
-Does that hold for frames coming from stmmac_rx(), or only for the AF_XDP
-zero-copy path?
+When priv->hw->hw_vlan_en is false, stmmac_dispatch_skb_zc() calls
+stmmac_rx_vlan() after the skb is built and before eth_type_trans() runs:
 
-On the page_pool path, the XDP buffer is set up with meta_valid set to
-true. However, the XDP_PASS skb is built without calling
-skb_metadata_set():
-
-stmmac_rx() {
+stmmac_dispatch_skb_zc() {
+    skb = stmmac_construct_skb_zc(ch, xdp);
     ...
-	xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
-			 buf->page_offset, buf1_len, true);
-    ...
-	head_pad_len = ctx.xdp.data - ctx.xdp.data_hard_start;
-	skb_reserve(skb, head_pad_len);
-	skb_put(skb, buf1_len);
-	skb_mark_for_recycle(skb);
+    else
+        /* Driver level stripping. */
+        stmmac_rx_vlan(priv->dev, skb);
+    skb->protocol = eth_type_trans(skb, priv->dev);
     ...
 }
 
-napi_build_skb() clears skb_shared_info up to dataref, and meta_len sits
-before dataref. So skb_metadata_len(skb) is always 0 here.
+For an 802.1Q frame with NETIF_F_HW_VLAN_CTAG_RX set (or 802.1AD with
+NETIF_F_HW_VLAN_STAG_RX), stmmac_rx_vlan() moves only the MAC addresses
+and then pulls the tag:
 
-On that path, this memmove() does the same MAC-address-only move as
-before. The metadata written by the XDP program stays where it was, and
-TC/BPF sees an empty data_meta range.
+stmmac_rx_vlan() {
+    ...
+    memmove(skb->data + VLAN_HLEN, veth, ETH_ALEN * 2);
+    skb_pull(skb, VLAN_HLEN);
+    ...
+}
 
-The only skb_metadata_set() call in the driver appears to be in
-stmmac_construct_skb_zc():
+The metadata stays at [D - metasize, D), where D is the original frame
+start. eth_type_trans() then sets mac_header to D + VLAN_HLEN. Since
+skb_metadata_end() is skb_mac_header(), TC BPF and the stack would see
+the window [D + 4 - metasize, D + 4).
 
-	if (metasize)
-		skb_metadata_set(skb, metasize);
+Wouldn't that window lose the first 4 bytes of metadata and end with 4
+stale destination MAC bytes?
 
-The last patch of the series does not seem to add another one either.
+This can happen with AF_XDP zero-copy, an XDP program that calls
+bpf_xdp_adjust_meta() and returns XDP_PASS, and a VLAN tagged frame on a
+core where hw_vlan_en is false. stmmac_dvr_probe() sets
+NETIF_F_HW_VLAN_CTAG_RX for all cores but only sets hw_vlan_en for xmac
+cores, so dwmac100/dwmac1000 use software stripping by default.
 
-The missing skb_metadata_set() in stmmac_rx() predates this patch. Still,
-the Fixes: tag points at 5fabb01207a2 ("net: stmmac: Add initial XDP
-support"), which is the page_pool path.
+Before this patch the metadata was not copied at all, so this does not
+make things worse than they were. A later patch in the same series, "net:
+stmmac: fix VLAN tag stripping on short and non-linear RX frames", changes
+stmmac_rx_vlan() to move meta_len + ETH_ALEN * 2 bytes starting at
+skb->data - meta_len before skb_pull(), which fixes this case.
 
-Would it make sense to add something like
-skb_metadata_set(skb, ctx.xdp.data - ctx.xdp.data_meta) in stmmac_rx()?
-Alternatively, the commit message could say that the metadata handling
-only applies to the zero-copy path.
-
->  		skb_pull(skb, VLAN_HLEN);
->  		__vlan_hwaccel_put_tag(skb, vlan_proto, vlanid);
->  	}
-
-[ ... ]
-
-> @@ -5546,12 +5559,15 @@ static void stmmac_dispatch_skb_zc(struct stmmac_priv *priv, u32 queue,
->  	}
->  
->  	stmmac_get_rx_hwtstamp(priv, p, np, skb);
-> -	if (priv->hw->hw_vlan_en)
-> +	if (priv->hw->hw_vlan_en) {
->  		/* MAC level stripping. */
->  		stmmac_rx_hw_vlan(priv, priv->hw, p, skb);
-> -	else
-> -		/* Driver level stripping. */
-> -		stmmac_rx_vlan(priv->dev, skb);
-> +	} else if (stmmac_rx_vlan(priv->dev, skb)) {
-> +		dev_kfree_skb_any(skb);
-> +		priv->xstats.rx_dropped++;
-
-[Severity: Low]
-This is a pre-existing issue, not one introduced by this patch. Can
-updates to priv->xstats.rx_dropped get lost here?
-
-The counter is a single unsigned long in struct stmmac_extra_stats, shared
-by all queues. Several per-queue NAPI contexts update it with a plain
-read-modify-write:
-
-stmmac_dispatch_skb_zc():
-	priv->xstats.rx_dropped++;
-
-stmmac_rx_zc():
-	priv->xstats.rx_dropped += rx_dropped;
-
-stmmac_rx():
-	priv->xstats.rx_dropped += rx_dropped;
-
-With per-channel MSI or threaded NAPI, polls for different queues can run
-on different CPUs at the same time. stmmac_get_stats64() then reads the
-counter without any locking, so the reported rx_dropped value can be too
-low.
-
-This patch adds another writer that follows the existing pattern, and the
-new VLAN drops in stmmac_rx() go through the same shared update.
-
-> +		return;
-> +	}
-> +
->  	skb->protocol = eth_type_trans(skb, priv->dev);
-
-[ ... ]
+Could the commit message mention that the VLAN stripping path is fixed
+separately, or could the two patches be reordered?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261027-stmmac-xdp-fixes-v2-0-10eae8a093a8%40oss.qualcomm.com
