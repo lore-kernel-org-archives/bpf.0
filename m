@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793394599;
-	b=qOgG16ECKEEOJ53T58ecg3t8KR85bU0uTG1RBI4TVUQTyWrzWhsWvH2l3MEKajwGu1P2
-	 1i16GvqpXmWZuAz5lClFM9c/8MFq7kLQvyfRQNjq+Ti0aNJ/PjebWCOVlReUceQRoLMAB
-	 ktwbtIVQW5g3S2SeV+OdRctlDeyAwMuN5gwBcjH5EU2nMA8PWqodF3pxsUVRNNhmej8eu
-	 V5g3Kqhq80bGPbJbL+YDchJgNDQKuHaJGbBnwLyoRfgrIo9rEFufsJVUuq51zyinMzexR
-	 W5v4JZPAUnVOY7o5BzVGqfLOnhSVLVMUor4ypJCPU6NXehNg8lw25ly1FNf6p4CS1KA==
+	t=1793394605;
+	b=LiN2BXggKCyv3nUPqLaCF83mrTI1DcQtlZk+Y0kCbYUYnrqGM+nwmEOpXcAJ+t4O5WH/
+	 uQYczlI3O7NANpn+KHyKGL8jGpraExyEsSdjCBAgDuRZ6iX7+1Ow0rbS2x3GkVsU3IbKn
+	 hFXnv277IxOFa+wHB29vTn6OG4Q+e5PB6iNthaJL+9KcKrYXtb7Qd+kwBQAsz1owdEcki
+	 YZ+I/VjCcO8UwUP1a9NGDZnlm2HixDUA99NRjuUtYB7cinfrfcMWx9CqPbFQfskgTka4C
+	 ENelZl454KHOQnohMcboMnp648cWDUefHB6sDow5DqErXQJzgwU7qJxqKCAAcAg51LQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793394599;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793394605;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=UeWsWBdX7J4FJQTPBJcMohdQ3j/ghfWXSqsNvUyru/g=;
-	b=0FYfZglgLDz0LOTOrmPQUN4TwD68eHTm7RptjwpE29FgCp1DH+e0bwwql/GPyvE6FGgG
-	 6g/NG25TGvXq81PjFDSPW2hKYJMT1UB+6wfMyxmGj93vdgadudgqqfTfN9ssyAr+rljSQ
-	 DsOeLcm39TvaVeBjvpcl7qUJnLXfi3NaevOXr2iyBB/iq41p3mujX0+Ui/Pxt0b3MsqT3
-	 mmuBd2/3lUWO4i7Oauwjt5/G4pPDeuPloFoComBmzkFunLd0R0y/6Wa7isRHAVkDIU8h7
-	 hZM9TRW4ZibI/Hv6y22v9r5n/UvmsyigPgWGJ4gHMdgDv0X9MaBBtA9xCm3WukX3esA==
+	bh=2eWUMS2+ezGEv3VSKsBCsTcRq38lP78Aysa+2VWEh2k=;
+	b=bVI2pl4B6pnlXbHfjRM2QXiVbfId+sn8l2jR8eN4LnCzU6NX7ne1fbg7A8boNCDiTVQ1
+	 m1wNSeaJQtPepj+ce+MPvgYjPAgUHCIQMFtcjtXahc3yL1rbdzbeuZUv7KHxk1yMlvaI0
+	 O+3PKQeczqWIVEJsHOoQwGVk/BsaI6LvcRdOjuokrDKofrFiXGfYysYFO42vzSQqp/NtN
+	 Rlw7jlT/c9vK3ZNpIMifsawbCNIzurJ+oLeZsFzb31SCEpHH/PzOFkcCIz+02gbBjahu4
+	 yKAS4Dkj4VjWZpJC5wvvM8cKeyYG8jVRZNV2QzzPsNIAeXn+DxITWBOQO6FEoybnU0g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="VI/SC3Ex";
-	arc=none smtp.remote-ip=209.85.216.54
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=thdwtGgG;
+	arc=none smtp.remote-ip=209.85.215.182
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53AD8606A31A
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 21:09:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 53AD8606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FCB606A31A
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 21:10:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66FCB606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VI/SC3Ex
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ae6b4c669fso1521424a91.0
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 14:09:59 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=thdwtGgG
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-ccce6d9abfeso841950a12.1
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 14:10:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793394599; x=1793999399; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793394605; x=1793999405; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=UeWsWBdX7J4FJQTPBJcMohdQ3j/ghfWXSqsNvUyru/g=;
-        b=VI/SC3ExwemPg6OUJ87NvG27qgjBIAqRpzl5Ls8gXurLY11eYSKzESVOSUL2VT6Ydj
-         HSkUc89tXP310JSALIhMf845lAbrSMLlfBBpdwrmn8HWNCEF3/ReVUMgkSHDKnXmIamE
-         n3B7NVPyHuTZZSHqmb+C/zwIser69RDSN/+9u4OoUZp6wHHfauaTQplu5Mt2PDm7VoDv
-         QuGtdjERKxw+LvQrUp4h3CI8HLfPi0z9jnHAtmDLKDOpH3LQ5WPkML44sbhbVoAP8MMm
-         CFahoTOIZ31wsXPjmxIRreD8czaMf9F7gCrSMEwHn6u8KxRcN92S0ExoS46XSpCWDFZC
-         1Svg==
+        bh=2eWUMS2+ezGEv3VSKsBCsTcRq38lP78Aysa+2VWEh2k=;
+        b=thdwtGgG2XBxvv09kLDxLO80vDEM58PgBBjk/qwQwh8jgwPG86apsBVwbxQmiQGtP6
+         vXOuI7S/8/D0ZCwd9GTf1N0KXMHEaPmizBhea8jU8kcK8+JXHMYzdvEqOXb+j5DDe7b+
+         rq07A77a8dBF+rL06YSYk0lreltNfzrMs9Q6qMVZI0G5jYvLyixNh/0Ri1jw28pRq8zY
+         3rxgKQPEcWLzs3Gr6PDIfmEEZPnWKlgauhhsGcdXEHMqtYkbxP5mlr1fJN8zmKveIhmo
+         SJi9WNEhxfokhwDgmpx4fJ4YLtjEkitGKBHm0Z+T44Cy0UpkS0qIIXEEeFzQQUxn9Y4Z
+         XVtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793394599; x=1793999399;
+        d=1e100.net; s=20260707; t=1793394605; x=1793999405;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UeWsWBdX7J4FJQTPBJcMohdQ3j/ghfWXSqsNvUyru/g=;
-        b=ZQQ9zGSvKc2aGoaknGqO0aHL3hR1NBIWPLuDgqmbQhjQXUJrZOFqYIRHBqcvtQqpyY
-         7GvHU/c90N8j90I7ysa1V6+2MaSM6ZBDLa4oz6eChFWEZNqxc7C11/6lSVUZ1omRdmSG
-         7j7BvC8xFY1btEIJgu+6aGLLi5BbDml8x7x+gywKR/DU8pYgnxc5RaQZvr7KIYEaJey6
-         Tq6ldd4qKKWBbBHuBElgT3uGIvTUGZhOzGQqIrmi0+ZvJsVWzd34YgNtX8IyTFZN5JcJ
-         R1sI4akioeiCzJoWOkVcrCHgIkR/bgSkUekQTE8QiBSPlTtOFG0jyLvWgV+1/U4PNVTf
-         uCFg==
-X-Gm-Message-State: AFq9FYJJZTWMHcotfkjo0Ot6e2zPiyghLjA4z8huaNJHdWDUiKWIelOo
-	NwNBJY9eU0RtPBczSNSmoESO+vj851g3NqDAIzMH8aXb+x8u9M2We+hmwMqGNw==
-X-Gm-Gg: AYBFou1M+APNAgo5wtKkhpKKQowCDCbVpXNcJYTwoADlmopPxIXZkFYHgm7AZlrpgSq
-	c8xWHY62h5ehY1KiqoS6qnkiinMb4yO0q+AGEYM2u2LKSuUdVChCLzmP9f/JfjrTxWD+HJFcd3V
-	xgVK+Uc/9qEsTmxNHpSqfvGwvZib9wf+PB4IfTriEtR607svylXzqT3nsiD7fnzXF71geLHjzHM
-	ByWJ1vYj4S7g0YOicMGlzjFTZHwwTNkwYG1d1gT6TGbI10ktSxyqsZKRORJMyq3qBMT7GmiHsbO
-	Qrlf++UbWPoJvN71oMLqY3ABTW5uyBWM8d4W76Ul2TTl8RNBhL9uTyE3ialRgjfwbFmc/RwZ2vE
-	6d1LGWcExN00cW2hh8hDv7xA1FtTG2mTaIKm2qmiJy0OKv2ka0sgToZ9dJP24oE8nIFtoMO2B/Q
-	FyraZg0x2E4AqBO/z7+gjF5HFIdTbB1u/4AGu1vVwxm4c6bkAeIIo8/yg1oyN+yaHSX3eOUa2Wm
-	yZNrSZzj/JKq1oPUP0OXnjpfcyM5Iw7WljPVOjpTQkHVmLAl1ZVlxHVQncarMNzKLIWTP5WRy/a
-	5qccSvTgZ7HkcshunFQaJUWiD5V2fwaIAw9I8YJvUxzNd2FpJfn/ZHp8RvTqtpb/5zQjnl3yQlF
-	zyo1Sgn8sTbG6hS8jdcIMYnr2b0s8BdPNSjCtvYJrbESMSl00exHS1uwgH8xF9clj+YsEdPUgCg
+        bh=2eWUMS2+ezGEv3VSKsBCsTcRq38lP78Aysa+2VWEh2k=;
+        b=zyV+4ibNURU8CIzGf2ITc/z6gDwpPZWGLY3uEqY8dhoBxapRhs3w6TeMl3rjOSdfw3
+         a8/WK/1QtVorSeGzCrW7mdjQdqokEQJRBCEHeTzcoCeY2MZYoIfsqQaGI4rLd86Gh/7G
+         yw30KIxKoPq/IgXg3Ht0wUqlgCFpAmW2f/OmHVNvnfeR9ox5qxCK2xfg6TQrbKyc2q5S
+         Dbwnqihm2/Hgcfl031CEchnVvIXEwjxrS1l+DlZYy14iAH0S+VA+ddpW7uZjS2i84tDd
+         JIkRJSouhzya5RkBHELum6eMjd6f9bOUzquFHS223+a6rOhEeVuCbdTS036/2mfwzgE3
+         s4vA==
+X-Gm-Message-State: AFq9FYK3zfa8OHn85IqmmsC/h8BP1x36buLVT2uDjnTCrvTthaBugagd
+	KLLWkvgy+hy7QBSgkBXaIcGIZ3PQC24V2KS0vHNtqK3AoiNLDWof3XcVCqve0w==
+X-Gm-Gg: AYBFou0wedqxbH6BzvoLFMXdRGrUhN6i0od0HqFMdhCh9/Xs4mv8uD8LSmy8LCi8/fl
+	GBmtAkgXaM8JYh5BDhzZl8INBMA86Zbk3/HmJ307z2PkvgyaID743PL0QZrn6Qn2pM7iOVXFQ81
+	qi7TqWJEO9Gav+KaF1ViP42ZfQKxhsK7UfYJa5YDvjFbgzF1Rlvsrj35LRB17Fl4BJh4iTjGeR1
+	N04XZoIM5NpztiHy9nAZU1RmZGxnos2yViDBWtA7nk5/opRQ7yf4ogpcPQDGuuyaSVpa1YRQj5W
+	hPS7rODYHjXdzVungVXaB7J5v1Inwf00OMHFY4agj7Mo3hMGD4qEj4kuXqo+WQ2Jb7HEYWiACzO
+	Jl/1BZRJfnTApmRaW4B7BNdTiHnftgwSUF2HOz+6gDWQ3oD5nd/eMXRcZ5Nmt9SGF05eEz3nkUJ
+	BSIulj3rInFB7y5JvIkrzBygyoOdwHBQai9OJp6hNko5vHVTTeV5Jcver2IuLZuUATlcj8+aZ6e
+	YUHMlauc0st/hsAbJg5HiK8SUXQqdKbfSAFu3yxPnldeUj+MTVnxhDIz7rcNOhxntORqvOAsn/e
+	P8NFFNR/8ULD1/zS3YxXizWtW1iVJFCeuVWNpjcojuUCun3JjomcOExq97+FAepUswdnHM7kn3F
+	dNMFVsmpjKaaBfGUWzZpjrFTUkH3ps/5IsNMaP3kLgz6ahQ1suYMq8PFQaj0K++23gQq3+xp3vA
 	==
-X-Received: by 2002:a17:90b:5687:b0:3ac:9ad9:6afe with SMTP id 98e67ed59e1d1-3ae897c71e8mr1758853a91.39.1793394598679;
-        Fri, 30 Oct 2026 14:09:58 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae84542a13sm5292202a91.5.2026.10.30.14.09.58
+X-Received: by 2002:a05:6a21:151b:b0:3e2:95fb:8cff with SMTP id adf61e73a8af0-3e928a29f19mr2866757637.55.1793394604586;
+        Fri, 30 Oct 2026 14:10:04 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aada7b7d09sm401054b3a.44.2026.10.30.14.10.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 14:09:58 -0700 (PDT)
+        Fri, 30 Oct 2026 14:10:04 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH v2 bpf 1/2] bpf: Keep the valid bytes of a packet pointer in scalar evolution
-Date: Fri, 30 Oct 2026 21:09:49 +0000
-Message-ID: <20261030210950.1904640-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH v2 bpf 2/2] selftests/bpf: Test the valid bytes of a packet pointer in a counted loop
+Date: Fri, 30 Oct 2026 21:09:50 +0000
+Message-ID: <20261030210950.1904640-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261030210950.1904640-1-alexei.starovoitov@gmail.com>
 References: <20261030210950.1904640-1-alexei.starovoitov@gmail.com>
@@ -104,146 +104,220 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-check_packet_access() accepts an access when umax + off + size <= range.
-Thus 'range - umax' bytes from a packet pointer are in the packet, and
-nothing can make umax smaller without a change of the range. For this
-reason commit b88822d2584f ("bpf: Fix packet range of pointers sharing an
-id") removed reg_bounds_sync() from the arithmetic on packet pointers.
+Each test adds r4 to a packet pointer. r4 is 0, 8 .. 48, but its umax is
+50.
 
-At the head of a counted loop scalar evolution gives new bounds to a packet
-pointer, in bpf_set_reg_range() and in bpf_reg_union(). The two functions
-call reg_bounds_sync(). Then the step or var_off makes umax smaller.
+  test                                      umax gets smaller    result
+  ----------------------------------------  -------------------  ------
+  widen_pkt_pointer_step_lowers_umax        at the loop entry    reject
+  widen_pkt_pointer_step_lowers_umax_down   the same, r6 += -8   reject
+  widen_pkt_pointer_negative_offset         no, only smax        reject
+  clamp_pkt_pointer_step_lowers_umax        at the back edge     reject
+  union_pkt_pointer_var_off_lowers_umax     r5 is r6 + 8 or r6   reject
+  widen_pkt_pointer_keeps_valid_bytes       at the loop entry    loads
 
-     r4 &= 0x38
-     if r4 > 50 goto 2f         ; r4 is 0, 8 .. 48, but umax is 50
-     r6 = pkt
-     r6 += r4
-     r5 = r6
-     r5 += 8
-     if r5 > pkt_end goto 2f    ; 8 bytes from r6 are in the packet
-  1: r0 = *(u16 *)(r6 + 0)
-     r6 += 8
-     r9 += 1
-     if r9 < 2 goto 1b
+The first five progs load without the fix. The last prog reads only bytes
+that the compare with pkt_end covers.
 
-  r6                       umax  range  valid bytes
-  -----------------------  ----  -----  ------------
-  in front of the loop       50     58  8
-  in all iterations          58     58  0
-  after the step of 8        56     58  2, incorrect
+widen_pkt_pointer_beyond_pkt_end makes sure that the mark "beyond pkt_end"
+is not in the state at the head of the loop.
 
-In the second iteration r6 can be pkt_end. The verifier accepts the prog,
-and the prog reads 2 bytes after the packet. A kernel without scalar
-evolution rejects it.
-
-Make the range smaller by the same number as the largest offset.
-
-The largest offset is smax, not umax. With 'r6 += -8' in the loop the
-offset can be negative. Then umax is U64_MAX before and after
-reg_bounds_sync(). The verifier rejects an access through such r6. It
-accepts an access through 'r5 = r6; r5 += 8', and r5 has the range of r6.
-
-All registers of a union have the same range, and bpf_reg_union() makes
-sure of that for each register. Thus change the range one time, after the
-last register. The range goes with the largest offset of all registers.
-
-The range can also be a mark: the pointer is at pkt_end or beyond pkt_end.
-The mark is for the pointer at the entry of the loop, not for all
-iterations. Remove it when the pointer is widened. The arithmetic in the
-loop removes the mark too. Thus the state that returns to the head was not
-pruned, and the verifier made one more pass with the two branches of each
-compare. Now the first pass examines the two branches. The verdict can
-change only when no state returned to the head: the mark sent each path out
-of the loop, and the other insns of the loop were dead code.
-
-Fixes: 6ccf49f79327 ("bpf: Use SCEV to widen bounded loops")
-Closes: https://lore.kernel.org/bpf/sashiko-outbox-187068@kernel.org/
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  1 +
- kernel/bpf/scev.c            |  7 +++++++
- kernel/bpf/verifier.c        | 13 +++++++++++++
- 3 files changed, 21 insertions(+)
+ .../selftests/bpf/progs/verifier_scev.c       | 182 ++++++++++++++++++
+ 1 file changed, 182 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 7baeb831281f..8852c173c53e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1900,6 +1900,7 @@ bpf_global_subprog_stack_access_bytes(struct bpf_verifier_env *env,
- int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
- bool bpf_same_memory_origin(const struct bpf_reg_state *reg_a,
- 			    const struct bpf_reg_state *reg_b);
-+void bpf_trim_pkt_range(struct bpf_reg_state *reg, s64 smax);
- int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 		      struct cnum64 r64, struct cnum32 r32, u16 base, u16 step);
- bool bpf_reg_union_compatible(const struct bpf_reg_state *a, const struct bpf_reg_state *b);
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 7b82fd79f9cc..1123a14e7389 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -2762,6 +2762,7 @@ static int union_any_reg(struct bpf_verifier_env *env, struct bpf_func_state *lo
- 	const struct bpf_reg_state *leaf_reg;
- 	struct scev *scev = env->scev;
- 	u32 l, r, leaf, order;
-+	s64 smax = reg_smax(acc);
- 	s64 imm;
- 	int err;
- 
-@@ -2785,10 +2786,13 @@ static int union_any_reg(struct bpf_verifier_env *env, struct bpf_func_state *lo
- 			verifier_bug(env, "scev ANY union has an unsupported leaf");
- 			return -EFAULT;
- 		}
-+		smax = max(smax, reg_smax(leaf_reg));
- 		err = bpf_reg_union(env, acc, leaf_reg);
- 		if (err)
- 			return err;
- 	}
-+	/* All leaves have the same range. It goes with the largest offset of all leaves. */
-+	bpf_trim_pkt_range(acc, smax);
- 	return 0;
- }
- 
-@@ -2837,6 +2841,9 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
- 				bpf_log(log, "\n");
- 			}
- 			scratch_widened_reg_id(env, reg);
-+			/* "at pkt_end" and "beyond pkt_end" are not valid in all iterations */
-+			if (type_is_pkt_pointer(reg->type))
-+				reg->range = max(reg->range, 0);
- 			err = bpf_set_reg_range(env, reg, bounds.r64, bounds.r32,
- 						bounds.base, bounds.step);
- 			if (err)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 26a5ee0708a3..a90bc6c4033a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17736,6 +17736,18 @@ bool bpf_same_memory_origin(const struct bpf_reg_state *reg_a,
- 	}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index fa01a616af9d..0be4fe8aadc7 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -3936,4 +3936,186 @@ __naked void clamp_pkt_pointer_keeps_range_of_entry(void)
+ 	: __clobber_all);
  }
  
 +/*
-+ * 'range - smax' bytes from a packet pointer are in the packet. reg_bounds_sync() can make smax
-+ * smaller than @smax: with a step of 8, or with 3 zero bits in var_off, 58 becomes 56. Make the
-+ * range smaller by the same number, so that the number of bytes does not grow. umax is not
-+ * sufficient: it is U64_MAX when the offset can be negative.
++ * r4 is 0, 8 .. 48, but its umax is 50. @bytes from r6 are in the packet: the range of r6 is
++ * @start + 50 + @bytes.
 + */
-+void bpf_trim_pkt_range(struct bpf_reg_state *reg, s64 smax)
++#define PKT_PLUS_R4(start, bytes)					\
++	"r7 = *(u32 *)(r1 + %[data_end]);"				\
++	"r6 = *(u32 *)(r1 + %[data]);"					\
++	"r4 = *(u32 *)(r1 + %[mark]);"					\
++	"r4 &= 0x38;"							\
++	"if r4 > 50 goto 9f;"						\
++	"r6 += " #start ";"						\
++	"r6 += r4;"							\
++	"r5 = r6;"							\
++	"r5 += " #bytes ";"						\
++	"if r5 > r7 goto 9f;"
++
++#define PKT_IMMS							\
++	__imm_const(data, offsetof(struct __sk_buff, data)),		\
++	__imm_const(data_end, offsetof(struct __sk_buff, data_end)),	\
++	__imm_const(mark, offsetof(struct __sk_buff, mark))
++
++/*
++ * r6 is 0..58 at the head, and 0..56 with the step of 8. The range must go from 58 to 56 too:
++ * in the second iteration no byte from r6 is in the packet.
++ */
++SEC("tc")
++__failure __msg("invalid access to packet, off=56 size=2, R6(id=2,off=56,r=56)")
++__naked void widen_pkt_pointer_step_lowers_umax(void)
 +{
-+	if (type_is_pkt_pointer(reg->type) && reg->range > 0)
-+		reg->range = max_t(s64, reg->range - (smax - reg_smax(reg)), 0);
++	asm volatile (
++	PKT_PLUS_R4(0, 8)
++	"r9 = 0;"
++"1:"
++	"r0 = *(u16 *)(r6 + 0);"
++	"r6 += 8;"
++	"r9 += 1;"
++	"if r9 < 2 goto 1b;"
++"9:"
++	"r0 = 0;"
++	"exit;"
++	:: PKT_IMMS : __clobber_all);
 +}
 +
- int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 		      struct cnum64 r64, struct cnum32 r32, u16 base, u16 step)
- {
-@@ -17745,6 +17757,7 @@ int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 	reg->base = base;
- 	reg->var_off = tnum_unknown;
- 	reg_bounds_sync(reg); /* this should infer the tnum alignment */
-+	bpf_trim_pkt_range(reg, cnum64_smax(r64));
- 	return reg_bounds_sanity_check(env, reg, "bpf_set_reg_range");
- }
- 
++/* The pointer goes down. 8 bytes from the first r6 are in the packet, not 10. */
++SEC("tc")
++__failure __msg("invalid access to packet, off=120 size=2, R6(id=2,off=120,r=120)")
++__naked void widen_pkt_pointer_step_lowers_umax_down(void)
++{
++	asm volatile (
++	PKT_PLUS_R4(64, 8)
++	"r9 = 0;"
++"1:"
++	"r0 = *(u16 *)(r6 + 8);"
++	"r6 += -8;"
++	"r9 += 1;"
++	"if r9 < 2 goto 1b;"
++"9:"
++	"r0 = 0;"
++	"exit;"
++	:: PKT_IMMS : __clobber_all);
++}
++
++/*
++ * r6 is -8..50 at the head, and -8..48 with the step of 8. Its umax is U64_MAX in the two cases.
++ * r5 is 0..56 and has the range of r6. In the first iteration no byte from r5 is in the packet.
++ */
++SEC("tc")
++__failure __msg("invalid access to packet, off=56 size=2, R5(id=2,off=56,r=56)")
++__naked void widen_pkt_pointer_negative_offset(void)
++{
++	asm volatile (
++	PKT_PLUS_R4(0, 8)
++	"r9 = 0;"
++"1:"
++	"r5 = r6;"
++	"r5 += 8;"
++	"r0 = *(u16 *)(r5 + 0);"
++	"r6 += -8;"
++	"r9 += 1;"
++	"if r9 < 2 goto 1b;"
++"9:"
++	"r0 = 0;"
++	"exit;"
++	:: PKT_IMMS : __clobber_all);
++}
++
++/* The access is in the second iteration only: the verifier gets to it after the clamp */
++SEC("tc")
++__failure __msg("invalid access to packet, off=56 size=2, R6(id=3,off=56,r=56)")
++__naked void clamp_pkt_pointer_step_lowers_umax(void)
++{
++	asm volatile (
++	PKT_PLUS_R4(0, 8)
++	"r9 = 0;"
++	"w1 = 0;"
++	"*(u32 *)(r10 - 8) = r1;"
++"1:"
++	"w1 = *(u32 *)(r10 - 8);"
++	"if w1 == 0 goto 2f;"
++	"r0 = *(u16 *)(r6 + 0);"
++"2:"
++	"w1 = 1;"
++	"*(u32 *)(r10 - 8) = r1;"
++	"r6 += 8;"
++	"r9 += 1;"
++	"if r9 < 2 goto 1b;"
++"9:"
++	"r0 = 0;"
++	"exit;"
++	:: PKT_IMMS : __clobber_all);
++}
++
++/* r5 is r5 = r6 + 8 or r6 at the head. Here var_off lowers umax. No byte from r6 + 8 is valid. */
++SEC("tc")
++__failure __msg("invalid access to packet, off=56 size=2, R5(id=2,off=56,r=56)")
++__naked void union_pkt_pointer_var_off_lowers_umax(void)
++{
++	asm volatile (
++	PKT_PLUS_R4(0, 8)
++	"r9 = 0;"
++"1:"
++	"r0 = *(u16 *)(r5 + 0);"
++	"r5 = r6;"
++	"r9 += 1;"
++	"if r9 < 2 goto 1b;"
++"9:"
++	"r0 = 0;"
++	"exit;"
++	:: PKT_IMMS : __clobber_all);
++}
++
++/* 16 bytes from r6 are in the packet: two iterations read 8 bytes each */
++SEC("tc")
++__success __retval(0)
++__naked void widen_pkt_pointer_keeps_valid_bytes(void)
++{
++	asm volatile (
++	PKT_PLUS_R4(0, 16)
++	"r9 = 0;"
++"1:"
++	"r0 = *(u64 *)(r6 + 0);"
++	"r6 += 8;"
++	"r9 += 1;"
++	"if r9 < 2 goto 1b;"
++"9:"
++	"r0 = 0;"
++	"exit;"
++	:: PKT_IMMS : __clobber_all);
++}
++
++/*
++ * r6 is beyond pkt_end in front of the loop and comes back into the packet. The mark is not for
++ * all iterations: the verifier must look at the two branches of the compare in the first pass.
++ */
++SEC("tc")
++__success
++__log_level(2)
++__msg("widening r6 to 32..96 step 32")
++__msg("6: R6=pkt(id=1,r=0,smin=umin=smin32=umin32=32,smax=umax=smax32=umax32=96")
++__naked void widen_pkt_pointer_beyond_pkt_end(void)
++{
++	asm volatile (
++	"r7 = *(u32 *)(r1 + %[data_end]);"
++	"r6 = *(u32 *)(r1 + %[data]);"
++	"r6 += 96;"
++	"if r6 > r7 goto 1f;"
++	"goto 9f;"
++"1:"
++	"r9 = 0;"
++"2:"
++	"if r6 > r7 goto 3f;"
++	"r0 = *(u8 *)(r6 - 1);"
++"3:"
++	"r6 += -32;"
++	"r9 += 1;"
++	"if r9 < 3 goto 2b;"
++"9:"
++	"r0 = 0;"
++	"exit;"
++	:: PKT_IMMS : __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
