@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793362274;
-	b=jZthxmxpOWL99jr2oMXMbj4t49niVNOTBEVBiwWCT0KJaERRSlNfwewMOuRd8IPkZuCj
-	 9Pkfk4EfchCs0QMXNSNBybSpN2DHJR9C+eYou4ALdhMum6V7i/KaYIuDzE0fp+s27EtHs
-	 W73FP+NvIJePdxvr0RrJ4MQKGXdwukaxdotZeOXqNXYc9MDo69X9FD4lGiiA796pje6RZ
-	 R9B4PphrclUFZoAXOUViWKJZS0fZc14O32ye6acJSb/AK5UinUbufhArNCZZ5mACJNC01
-	 pQNSZgs5KoF0xRNULAZyhxSp5zDQew7bF/3wZZOOIEsD1YUSJzfcHPO6o8Xk0AzMi8g==
+	t=1793362385;
+	b=ymPySHLl9aDOdG/kG3Hmylgl9blolqVD2W9nL8zdfr/z3YAgtIsw62AaIfuPjVQToZZK
+	 HU0/vvWSiMDsmN4K1ZpiG0G6/g6YH1H0OoNu8HJUEsHxIgbZdv3rMBS8i3D+zxzT0OA9z
+	 461KPIzbL74NcCE5Q7QcSUZcDcd4mEdMNd1eR8fG8XvYGjrFI+V283hv9c9h5O2XaivpK
+	 iRLI++yRft2MXVg6Y2AzuLzpSsH6+VjDi44dx1mZGNhe0Bte05lx0+ceONsRsTW1XmSd8
+	 80XZ4Dh1qsx7k6lNLqMEC7NrEqzd3lxRZh7DlwE+FAza5mLYx3JDvFcD/6nueey/QDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793362274;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793362385;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=yljzukfVQ6RvifJJrutFp7JpNebDDmCgqLwBlSS8Zy0=;
-	b=yHgRNwQ8uKVPzSiP5zwCg+JuZjdxaC7yu+TV8QuJUb92GKg2bIC8G9W8JKCME8aILPi0
-	 NRTNK3LqxAfZVN90AYaVzAi9XW8e7Co1JMeggN14h73geM96AWy6Q2zhlTslQ9S6c9zV/
-	 KlWgyMPQZYQhSp7Bbsg0n2xd2ApuBETjf0yIt82K0cSj5WvOOTkSuC4iKuPLDe968OxV6
-	 oNOiC7UO9NMx44ZtpnOwET4wSxIpNKiyO3Bx2Du27eU+Mw1z1ibvs5nRjKyfzskAq1PTw
-	 cbmkKFxad6C5qI702PFBfgMPv/c3i166ahKSY+JHnmuc56KogNOEM6ZRxK9VcaWLEwQ==
+	bh=f2m0OoQ7+fZDkv7a5+IsOODIy9a+e/4AwgDVcbjlvpU=;
+	b=JurmvvNmXeaj0byev3jxyLh+7GqC5uZBxptk/caZrRj9Xz1ruYx8ags3u25yzc7BBwFZ
+	 zmA8JYuu57qcL2Gi3rgSNHdIAvgriCpquE88s/SD33pjgDJBAwDCR8gY0gGgajb43Qegw
+	 QIywtRT4YrAYM/YyAIQBN9uws0fSon4WJz3GpC06nmU5Ac7nuxF55JzEEDi04wbwpLQ6u
+	 cHbr6Lx74Z+BeL+Qw0ZWIoVCZDyROoUqYtguxWrgzRSKM3uxg+GlGdGf+YI67QbO7VsiO
+	 KCgFcAfSypr4+EKYh4naebOb6S8yjcldL3ps0ae3SLHpIvICiVMerwMT85LZJ0buUyg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L+BCjLMh;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GXN5nFpQ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB7E606A31A
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 12:11:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C889E606A320
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 12:13:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L+BCjLMh
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC141F0093A;
-	Fri, 30 Oct 2026 12:11:13 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GXN5nFpQ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81FBB1F00A02;
+	Fri, 30 Oct 2026 12:13:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793362273;
-	bh=yljzukfVQ6RvifJJrutFp7JpNebDDmCgqLwBlSS8Zy0=;
+	s=k20260515; t=1793362384;
+	bh=f2m0OoQ7+fZDkv7a5+IsOODIy9a+e/4AwgDVcbjlvpU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L+BCjLMhU/81z76Y9nLuspc7zVThSuyX16cyqiqGSWtQ90g4M9J2UKcXKuPHIzlCe
-	 rZlKDLYOVWc6hfWgYKf/Q4eqXTwoZ/QoS/cs3mr0vqjUJZBNvNsr6mqXvv4vMGzFbE
-	 5IdJDD4gsvnyFCWInUjVAJ71iWXPv6n0G5MhVdj1r+yaoz4DTcpRZKspk2wNN7PojD
-	 5bB4ZSaMIRFjsMjnkGFfRt0fy7n0t/UFc+7w+fzSatd7XjzrzGYzPxdByzDmgvnzVo
-	 lKoVm/IJdz9ZuzCBaMBwRO5VtdkA67lNe3GWRyH0DrCeEpiaRyRsZbJVKSOojeDwW8
-	 H2yYjQZ2gHXRg==
-Message-ID: <sashiko-outbox-190997@kernel.org>
+	b=GXN5nFpQbkwXpcFXeFGchXswF+/YUrtUX17gQjrKgL8IudVxFwPPUWfNcCotX8+OH
+	 Pk02dwNGnyG2KVLmHw+OmMOO1bMWBQdbJAU2Ovzma+6kQzbEaKgl989dvFfWusKOWo
+	 m9Xv4YYVPZDmYqQiuEXsa7IzZ6GZFNoxZt3oLXSqpUXlYc45XzLbBchJQ9tZp0mMWD
+	 ub6IGYK0zTinPWjwVrBESCEeWZxIPFWcVd2zrhG/JH4ts+irIdCsN6vh2oJ2GQZeBV
+	 cbJUpypD1zhe41LQu1j6jh6CBaXR34NRDRAaLTmSpuTDLW2hfTRlCR5CNiCJ4ZzI9Q
+	 zCIhzHov/HgJQ==
+Message-ID: <sashiko-outbox-190999@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 07/22] bpf: Let the patch list remove
- instructions
+Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: Cover concurrent sockmap
+ update and delete
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Qiliang Yuan" <odys.yuan@gmail.com>
+To: "Jakub Sitnicki" <jakub@cloudflare.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261030-bpf-verifier-patch-batch-v2-7-55cd43439f7c@gmail.com>
-References: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com>
- <20261030-bpf-verifier-patch-batch-v2-7-55cd43439f7c@gmail.com>
+In-Reply-To: <20261030-bpf-next-v1-1-035eabf8eae7@cloudflare.com>
+References: <20261030-bpf-next-v1-0-035eabf8eae7@cloudflare.com>
+ <20261030-bpf-next-v1-1-035eabf8eae7@cloudflare.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 30 Oct 2026 12:11:12 +0000
+Date: Fri, 30 Oct 2026 12:13:04 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,85 +61,129 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] bpf: premature prog->len update breaks bpf_find_subprog() in bpf_p=
-atch_list_commit()
+- [Low] selftests/bpf: non-standard multi-line comments in sockmap_listen.c
+- [Low] selftests/bpf: deprecated CHECK_FAIL wrappers used in test_update_d=
+elete_with_prog()
 --
 
-commit 36c5b3c1e86de2cef14800f7c3faaea5d0fafe3d
-Author: Qiliang Yuan <odys.yuan@gmail.com>
+commit c179b4e18de0bb4b1070c566c62402a2a9a2d3f1
+Author: Jakub Sitnicki <jakub@cloudflare.com>
 
-bpf: Let the patch list remove instructions
+selftests/bpf: Cover concurrent sockmap update and delete
 
-This commit adds bpf_patch_list_del() to allow the verifier's patch list to
-queue instruction removals alongside replacements, updating line info,
-subprogs, function pointers, instruction arrays, and offloaded programs when
-committed.
+This commit adds a sockmap_listen subtest that concurrently inserts and
+deletes a TCP socket in a sockmap with an attached verdict program to
+exercise races between insert and delete paths under KCSAN.
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 940265cb80ebf..1a1a374a076b1 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-[ ... ]
-> @@ -514,25 +624,43 @@ int bpf_patch_list_commit(struct bpf_verifier_env *=
-env)
->  	env->insn_aux_data_len =3D img.new_cnt;
->  	data =3D NULL;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/to=
+ols/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> index 235e1d56f044f..dca1f0de92e0e 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> @@ -646,6 +646,82 @@ static void test_race_insert_listen(struct test_sock=
+map_listen *skel __always_un
+>  	xclose(s);
+>  }
 > =20
-> +	/* before subprogs are removed, since it looks at them */
->  	for (i =3D 0; i < env->func_ptr_cnt; i++) {
->  		struct bpf_func_ptr *fp =3D &env->func_ptrs[i];
-> +		int subprog;
-> =20
->  		if (fp->xlated_off =3D=3D BPF_FUNC_PTR_DELETED)
->  			continue;
-> +		if (bpf_patch_image_deleted(&img, fp->xlated_off)) {
-> +			subprog =3D bpf_find_subprog(env, fp->xlated_off);
-> +			if (subprog <=3D 0 ||
-> +			    img.new_off[env->subprog_info[subprog].start] =3D=3D
-> +			    img.new_off[env->subprog_info[subprog + 1].start]) {
-> +				fp->xlated_off =3D BPF_FUNC_PTR_DELETED;
-> +				continue;
-> +			}
+> +struct update_delete_ctx {
+> +	unsigned int nr_iter;
+> +	unsigned int done;
+> +	int mapfd;
+> +};
+> +
+> +static void *delete_elem_thread(void *arg)
+> +{
+> +	struct update_delete_ctx *ctx =3D arg;
+> +	unsigned int i;
+> +
+> +	for (i =3D 0; i < ctx->nr_iter; i++) {
+> +		/* Expecting EINVAL (sockmap) or ENOENT (sockhash) when the
+> +		 * entry is already gone.
+> +		 */
+> +		if (bpf_map_delete_elem(ctx->mapfd, &(u32){0}) &&
+> +		    errno !=3D EINVAL && errno !=3D ENOENT) {
+> +			FAIL_ERRNO("map_delete");
+> +			break;
+> +		}
+> +	}
+> +
+> +	WRITE_ONCE(ctx->done, 1);
+> +	return NULL;
+> +}
+> +
+> +/* One thread keeps inserting a socket into a sockmap with an attached
+> + * verdict program while another thread deletes the same map entry.
+> + */
+> +static void test_update_delete_with_prog(struct test_sockmap_listen *ske=
+l,
+> +					 int family, int sotype, int mapfd)
+> +{
+> +	struct update_delete_ctx ctx =3D { 0 };
+> +	int err, s, verdict;
+> +	pthread_t t;
+> +	u64 value;
+> +
+> +	verdict =3D bpf_program__fd(skel->progs.prog_skb_verdict);
+> +	err =3D xbpf_prog_attach(verdict, mapfd, BPF_SK_SKB_VERDICT, 0);
+> +	if (err)
+> +		return;
+> +
+> +	s =3D xsocket(family, sotype, 0);
+> +	if (s < 0)
+> +		goto detach;
+> +
+> +	err =3D xlisten(s, 1);
+> +	if (err)
+> +		goto close;
+> +
+> +	ctx.mapfd =3D mapfd;
+> +	ctx.nr_iter =3D 10000;
+> +
+> +	err =3D xpthread_create(&t, NULL, delete_elem_thread, &ctx);
+> +	if (err)
+> +		goto close;
+> +
+> +	value =3D s;
+> +	while (!READ_ONCE(ctx.done)) {
+> +		/* Expecting EBUSY while a deleted socket's psock still
+> +		 * holds the verdict program.
+> +		 */
+
+[Severity: Low]
+This isn't a bug, but should the three new multi-line comments in
+delete_elem_thread() and test_update_delete_with_prog() in
+tools/testing/selftests/bpf/prog_tests/sockmap_listen.c place the opening
+/* on its own line with the comment text starting on the following line to
+match BPF coding style conventions?
+
+> +		err =3D bpf_map_update_elem(mapfd, &(u32){0}, &value, BPF_ANY);
+> +		if (err && errno !=3D EBUSY) {
+> +			FAIL_ERRNO("map_update");
+> +			break;
 > +		}
 
-[Severity: High]
-Can calling bpf_find_subprog() here with the old-image offset fp->xlated_off
-falsely mark a live function pointer as BPF_FUNC_PTR_DELETED when the progr=
-am
-shrinks?
+[Severity: Low]
+In tools/testing/selftests/bpf/prog_tests/socket_helpers.h, FAIL_ERRNO()
+and the x* helper wrappers (such as xbpf_prog_attach(), xsocket(),
+xlisten(), xpthread_create(), xpthread_join(), xclose(), and
+xbpf_prog_detach2()) report failures through _FAIL(), which expands to the
+deprecated CHECK_FAIL() macro:
 
-Earlier in bpf_patch_list_commit(), bpf_patch_image_install() updates
-prog->len to img.new_cnt:
+#define _FAIL(errnum, fmt...)                                              =
+    \
+	({                                                                     \
+		error_at_line(0, (errnum), __func__, __LINE__, fmt);           \
+		CHECK_FAIL(true);                                              \
+	})
 
-kernel/bpf/core.c:bpf_patch_image_install() {
-	memcpy(prog->insnsi, img->insns, sizeof(*img->insns) * img->new_cnt);
-	prog->len =3D img->new_cnt;
-    ...
-}
-
-When bpf_patch_list_commit() then calls
-bpf_find_subprog()->bpf_find_containing_subprog(), it checks the old-image
-offset against the already-shrunk env->prog->len:
-
-kernel/bpf/verifier.c:bpf_find_containing_subprog() {
-	if (off >=3D env->prog->len || off < 0 || env->subprog_cnt =3D=3D 0)
-		return NULL;
-    ...
-}
-
-If a live static subprogram near the end of the program has its entry
-instruction removed (for example, a nop or simplified branch removed in
-bpf_opt_remove_nops()) and earlier instruction removals shrink the program
-such that fp->xlated_off >=3D img.new_cnt, bpf_find_subprog() will return
--ENOENT.
-
-Wouldn't that cause the subprog <=3D 0 check to set fp->xlated_off to
-BPF_FUNC_PTR_DELETED even though the subprogram still has live instructions,
-causing resolve_func_ptrs() during bpf_jit_subprogs() to write NULL into the
-read-only map slot used by callx?
+Could delete_elem_thread() and test_update_delete_with_prog() in
+tools/testing/selftests/bpf/prog_tests/sockmap_listen.c use the ASSERT_*()
+macros from test_progs.h (such as ASSERT_OK(), ASSERT_OK_FD(), and
+ASSERT_TRUE() or ASSERT_EQ()) instead of FAIL_ERRNO() and the CHECK_FAIL()
+wrappers when checking setup and map update/delete results?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261030-bpf-verifi=
-er-patch-batch-v2-0-55cd43439f7c@gmail.com?part=3D7
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261030-bpf-next-v=
+1-0-035eabf8eae7@cloudflare.com?part=3D1
