@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793336071;
-	b=MWyNWFYTidyd7okyrTyaljMfReZHQsd83/B3ZrMjl1buHqEH3D55ZQpjMeKNtLg0XR1J
-	 jn8RXVJcocyIWrqVZbBa12+jrG6HtVVq4RfWIFSBOM5ORc3fo0/rSWc3BJReR3dkVe2FL
-	 d6KjVUiSkDqwfmbuRSEe/6f8DwJkXloQVNe1XpjSiDy0rsjI5WIllMLdbMohUZyGXUg/1
-	 qMywWOrz0IZcYP15U12HTzW3X6pNOadCwnghzW3DWcXuYWEGAwr1we+9pOK2kjAFMGqZP
-	 nEZ8+xhP7UHz4sz2lFDZ+Ci0HeviM+vXJz38QSk3Hk0FhnfIN2+OVw5p5LRXcc5Cyuw==
+	b=uC831iLh8Bn5mc7dIb9nUSatFYX7AzkoNJOeqQPknrbI7xhBe6brZF6LMHhW5rduZuH7
+	 +4+ZuhYKnzsIiAyd3GYQVEqX1B0S/BrZFF5w5w8hEWjpTmB9D37qGw84NFmwxFUwiz547
+	 Buzju+3qwcdy2hzH98/P01oq4c3I5Gkz6gpFBJn2SnDkUZ+4hBbPNvHSbUEMn52ZWC8ey
+	 LSiVnhqA3eVMZ2Di2LfK4VpuT02JtFmwup4l5TjV2OLFUKpziVN0XEfxFj9uTbAUmOIUx
+	 4m1elHEY+QuVcCunN/6QCnKemn13TlMOAJiQx9QNoOs2Yz3NFwDBnefuaM3tDfcCRyA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793336071;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=+hPfw+J+BfepkAJuL0WfCFotcBUDhWGmGVsgJvUGQaY=;
-	b=h4kCHTcnl4+epdvR90tsCwKSSBmFo96OaIan4iUQP2sosaYdBCAAql7URTK3jV5Uqtip
-	 1D9aWNSiRnv/lfguyPzqgE2HvAraD5EIatU0y+VEBgj+pptvTTnwE1l+fWk101vdYSaat
-	 zXxx+T3LYRv119jCA884PWcV2mLGskaszAwDeE/Ru4NEd3RvtfvwEs1U/G/+7ImHWWBou
-	 0mb7KztYbDn83tKmG5lk4Z+eX/nr8kZWq+/D3/ubX8l6K9mz2TaGmMGaY0H7YWpKzpoZS
-	 zsNo7O+1EjVZr7V32DmMKMFnfCdEsMK2bY30km2aCJWlX/1p/RfnxVtWKa3t5dc1AXQ==
+	bh=lnaRr1x2pXORJ8K5W4iu6OOkUasvS073P3gMyN9X08E=;
+	b=eWVJmmm8i7hQFhKl6TeW8RgPpsvQI/Np3e53Qo4oyLTEpM/uHvF0qt8syK/VwWO+SIDo
+	 4RUBe4LM5Bdfjmw4dCX4HklHI1iQC+40Ur9V7DdTUJfk+RxzOS5ffTe99lb82p9Vdq611
+	 AKB2XEkC1QSi7cxy3RjgzkM2nw2tldHCfPy7O29JUh3eNC0Tou/J0Pkp3M/QKVZd9XKEO
+	 3FDZoJ2s1J+D0r9Jon/aGoXYr2yfNMkrCaQeZthVFdxDt8RnsnChHZg6D9686Z7iaoZ57
+	 IGsY+IbH6PpsmN1nAX1Pu2WNE05fgcC6PxqJ7YOQ0EAfpkbmZv7Yq3LzT7rkptaCotA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Pp+mUCeJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eQPNpZJv;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5F6606A31A
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:54:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053D3606A31D
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:54:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Pp+mUCeJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43F091F0093A;
-	Fri, 30 Oct 2026 04:54:29 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eQPNpZJv
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 758781F000C1;
+	Fri, 30 Oct 2026 04:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793336069;
-	bh=+hPfw+J+BfepkAJuL0WfCFotcBUDhWGmGVsgJvUGQaY=;
+	s=k20260515; t=1793336070;
+	bh=lnaRr1x2pXORJ8K5W4iu6OOkUasvS073P3gMyN9X08E=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Pp+mUCeJtyKOmDAC+HLUEgli+IppG5d3IBb9bIIK5CsdvIGpzsskEohA4557yTEy6
-	 0IobaJxAFRZUjz3pWTDX5jN3gPC9TPbKHgZNRlImX64myneEb99RF7vc/cemB4RvtV
-	 ykfYrGblIIJwtq643khhgJCdVLttK2d2rGsXIh4eJaDCWJL7qdLFxx0eSrnO/dZUAW
-	 bi3kAbTwnNYc6kw1webBkKmuamoqxisqo+HMGhmEceGE+GBPcfdJUpOV/rOIUd6dd8
-	 YfjT9EnbOCDNiK9b5JzPt9dO/ESnikQGi5vZBEpr5ymdVguuPgtnaC7OUdhhXWOtTe
-	 iPE9dMhp6oVhQ==
-Message-ID: <sashiko-outbox-190468@kernel.org>
+	b=eQPNpZJv/VxN1Ba1CNeipTxRF8KypgM4qNw8tgJSDtORk8sXtKKB8BTQUjYuarSL7
+	 JXrHiIcCiDvyW64+IZS21d6OD6nt6XPO/vjRCfpDhfFlCaZV1dl7KecufOh3BZ9w/u
+	 8Jz7y5Ko/G02skaCm6fqhB4u6H8uluczSQGfo88w74NnCNXg2FjKbzBLlIJP13ib+u
+	 JHQuR1i+jj+BKvugirlokzW9aDXn5wdsqhNCS+Df19IMWyblV8K3eXluM8d2NKWzHu
+	 KY1xh7vcnOacoap7T0C8WcESJqqifE4BOfHQf6djXc+uxe2EyDcbVy1i8RJmegq+c7
+	 G7+PUgwyjkX6A==
+Message-ID: <sashiko-outbox-190470@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 02/13 RFC net-next] net: core: add IPv4 fallback stubs
- and guards for CONFIG_IPV4=n
+Subject: Re: [PATCH 04/13 RFC net-next] net: tcp: move protocol agnostic TCP
+ functions out of tcp_ipv4.c
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Fernando Fernandez Mancera" <fmancera@suse.de>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260712013941.4570-3-fmancera@suse.de>
+In-Reply-To: <20260712013941.4570-5-fmancera@suse.de>
 References: <20260712013941.4570-1-fmancera@suse.de>
- <20260712013941.4570-3-fmancera@suse.de>
+ <20260712013941.4570-5-fmancera@suse.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 30 Oct 2026 04:54:28 +0000
+Date: Fri, 30 Oct 2026 04:54:30 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,147 +61,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Critical] The `SIOCGIFCONF` ioctl handler returns `-EAFNOSUPPORT` instea=
-d of an empty list, breaking UAPI.
-- [High] RCU read lock leak in `neigh_xmit()` when CONFIG_IPV4 is disabled.
-- [Low] Missing stubs for IPv4 functions called by IPv6 code leads to undef=
-ined references.
-- [Low] Missing stubs for IP output functions and unconditional `tcp_prot` =
-reference lead to undefined reference linker errors.
-- [Low] Undefined reference to `tcp_twsk_unique` in IPv6 hashtables when CO=
-NFIG_IPV4 is disabled.
+- [Medium] Disabling CONFIG_IPV4 completely hides `/proc/net/sockstat` and =
+`/proc/net/snmp`, causing a total loss of global TCP memory and SNMP metric=
+s.
+- [Low] Unused static structs `ipv6_mapped` and `tcp_sock_ipv6_mapped_speci=
+fic` trigger `-Wunused-variable` and cause undefined references when `CONFI=
+G_IPV4` is disabled.
 --
 
---- Patch [2]: [PATCH 02/13 RFC net-next] net: core: add IPv4 fallback stub=
-s and guards for CONFIG_IPV4=3Dn ---
-commit c3ba15b9e372b7ea2df4737d8f114c24f3baec0c
+--- Patch [4]: [PATCH 04/13 RFC net-next] net: tcp: move protocol agnostic =
+TCP functions out of tcp_ipv4.c ---
+commit 75343bf3b73e175ff640d8d0645b680b7c8368bd
 Author: Fernando Fernandez Mancera <fmancera@suse.de>
+Subject: net: tcp: move protocol agnostic TCP functions out of tcp_ipv4.c
 
-net: core: add IPv4 fallback stubs and guards for CONFIG_IPV4=3Dn
+This patch moves generic TCP functions out of tcp_ipv4.c into tcp.c to allow
+compilation with CONFIG_IPV4=3Dn. It renames tcp_v4_destroy_sock() to
+tcp_destroy_sock() to reflect its shared usage and guards IPv4-specific
+code in the IPv6 TCP implementation.
 
-To enable compiling the core network stack without IPv4, generic
-networking code must avoid referencing missing IPv4 symbols.
-
-This patch provides static inline stubs in include/net/ip.h and
-include/net/route.h that return a proper error code when IPv4 is
-disabled. This behaves as IPv6 code does. In addition, it introduces
-guards around IPv4 specific code in generic implementations to prevent
-undefined reference errors while linking.
-
-> diff --git a/include/net/ip.h b/include/net/ip.h
-> index 7f2fe1a8401b1..aeac40d11c725 100644
-> --- a/include/net/ip.h
-> +++ b/include/net/ip.h
-[ ... ]
-> @@ -225,27 +235,58 @@ int ip_append_data(struct sock *sk, struct flowi4 *=
-fl4,
-[ ... ]
-> +static inline void ip_flush_pending_frames(struct sock *sk)
-> +{
-> +}
-> +#endif
-> +
-> +int ip_generic_getfrag(void *from, char *to, int offset, int len, int od=
-d,
-> +		       struct sk_buff *skb);
-> +int ip_send_skb(struct net *net, struct sk_buff *skb);
-> +int ip_push_pending_frames(struct sock *sk, struct flowi4 *fl4);
-> +int ip_queue_xmit(struct sock *sk, struct sk_buff *skb, struct flowi *fl=
-);
-
-[Severity: Low]
-Could these un-stubbed declarations cause undefined reference errors during
-linking?=20
-
-The declarations for ip_generic_getfrag(), ip_send_skb(),
-ip_push_pending_frames(), and ip_queue_xmit() are placed outside the
-CONFIG_IPV4 guard without providing static inline stubs. If net/ipv4/af_ine=
-t.c
-and net/ipv4/udp.c are compiled without CONFIG_IPV4, references to these
-functions and tcp_prot will break the build.
-
-Additionally, are there missing stubs for IPv4 functions called directly by=
- the
-IPv6 subsystem? When building with CONFIG_IPV6=3Dy and CONFIG_IPV4=3Dn, IPv=
-6 mapped
-socket code directly calls IPv4 functions:
-
-net/ipv6/datagram.c:ipv6_mapped_datagram_connect() calls __ip4_datagram_con=
-nect()
-net/ipv6/tcp_ipv6.c:tcp_v6_connect() calls tcp_v4_connect()
-net/ipv6/inet6_hashtables.c:__inet6_check_established() calls tcp_twsk_uniq=
-ue()
-
-Without stubs for these functions, or proper guards in the IPv6 code, the l=
-inker
-will fail.
-
-> diff --git a/net/core/dev_ioctl.c b/net/core/dev_ioctl.c
-> index a320e264eaaf0..f7ca3701b6bd1 100644
-> --- a/net/core/dev_ioctl.c
-> +++ b/net/core/dev_ioctl.c
-> @@ -39,6 +39,7 @@ static int dev_ifname(struct net *net, struct ifreq *if=
-r)
+> diff --git a/net/ipv4/proc.c b/net/ipv4/proc.c
+> index bfc06d1713ecb..b7f4e5ecf64d8 100644
+> --- a/net/ipv4/proc.c
+> +++ b/net/ipv4/proc.c
+> @@ -50,6 +50,7 @@
 >   */
->  int dev_ifconf(struct net *net, struct ifconf __user *uifc)
+>  static int sockstat_seq_show(struct seq_file *seq, void *v)
 >  {
 > +#if IS_ENABLED(CONFIG_IPV4)
->  	struct net_device *dev;
->  	void __user *pos;
->  	size_t size;
-[ ... ]
-> @@ -82,6 +83,9 @@ int dev_ifconf(struct net *net, struct ifconf __user *u=
-ifc)
->  	rtnl_net_unlock(net);
+>  	struct net *net =3D seq->private;
+>  	int orphans, sockets;
+
+[Severity: Medium]
+By guarding the entire body of sockstat_seq_show() with CONFIG_IPV4, does
+this completely hide the output of /proc/net/sockstat when IPv4 is disabled?
+
+Looking at inet_init() in net/ipv4/af_inet.c (around line 2062), the call to
+ipv4_proc_init() is already bypassed entirely when CONFIG_IPV4=3Dn. This me=
+ans
+ip_misc_proc_init() is never called to register the sockstat and snmp procfs
+files in the first place.
+
+Since the IPv6 equivalents (sockstat6 and snmp6) do not report shared TCP
+global metrics, does this unintentionally leave administrators without
+visibility into global TCP memory limits (like orphans and allocated socket=
+s)
+and TCP SNMP metrics?
+
+> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+> index ebe161d72fbd0..7f2ec3dfd2f07 100644
+> --- a/net/ipv6/tcp_ipv6.c
+> +++ b/net/ipv6/tcp_ipv6.c
+> @@ -217,6 +217,7 @@ static int tcp_v6_connect(struct sock *sk, struct soc=
+kaddr_unsized *uaddr,
+>  	 */
 > =20
->  	return put_user(total, &uifc->ifc_len);
-> +#else
-> +	return -EAFNOSUPPORT;
-> +#endif
->  }
-
-[Severity: Critical]
-Will this break legacy userspace applications that enumerate interfaces?
-
-By returning -EAFNOSUPPORT instead of an empty list, the behavior changes
-for the SIOCGIFCONF ioctl when the kernel is compiled without IPv4.
-
-Could this branch instead return 0 interfaces via put_user(0, &uifc->ifc_le=
-n)
-to maintain backwards compatibility for tools expecting the ioctl to succee=
-d?
-
-> diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-> index 1349c0eedb642..1a40a0ab041b8 100644
-> --- a/net/core/neighbour.c
-> +++ b/net/core/neighbour.c
-> @@ -3208,9 +3208,13 @@ int neigh_xmit(int index, struct net_device *dev,
->  			goto out_kfree_skb;
->  		}
->  		if (index =3D=3D NEIGH_ARP_TABLE) {
+>  	if (addr_type & IPV6_ADDR_MAPPED) {
 > +#if IS_ENABLED(CONFIG_IPV4)
->  			u32 key =3D *((u32 *)addr);
-> =20
->  			neigh =3D __ipv4_neigh_lookup_noref(dev, key);
-> +#else
-> +			goto out_kfree_skb;
-> +#endif
->  		} else {
->  			neigh =3D __neigh_lookup_noref(tbl, addr, dev);
->  		}
+>  		u32 exthdrlen =3D icsk->icsk_ext_hdr_len;
+>  		struct sockaddr_in sin;
 
-[Severity: High]
-Does this error path leak the RCU read lock?
+[Severity: Low]
+With this CONFIG_IPV4 guard, the references to ipv6_mapped and
+tcp_sock_ipv6_mapped_specific inside tcp_v6_connect() are compiled out.
 
-The function neigh_xmit() acquires the rcu_read_lock() earlier, and this
-goto out_kfree_skb jumps directly to the cleanup label, missing the
-rcu_read_unlock() call.
+However, the definitions of these static structs at lines 2055 and 2068
+in net/ipv6/tcp_ipv6.c are left unguarded. Could this trigger compiler
+warnings for unused variables when CONFIG_IPV4 is disabled?
 
-Could this stall RCU grace periods if a packet is transmitted where
-index =3D=3D NEIGH_ARP_TABLE when CONFIG_IPV4 is disabled?
+Furthermore, because these structs reference IPv4-specific functions like
+tcp_v4_md5_lookup, could this result in undefined reference linker errors
+if the compiler does not fully discard the unused structs?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260712013941.4570=
--1-fmancera@suse.de?part=3D2
+-1-fmancera@suse.de?part=3D4
