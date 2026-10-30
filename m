@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793321360;
-	b=xhy1B9U1fdd/4YqAduz9wssy5bBV4uWCh9G0djda4NXwX3raK9h9WadMJiZEEOg68q6k
-	 tLcR6U+rrYYCQS42nTJrdGCb1Avv1K9UF2kYcAOzgLDoL+OAbPTRLD6Zx5lxqZ/r+BKLo
-	 M+SjNMFDY6PKYZ7NutZY6JjXyTAw2tSVrgcm8N1yfUzDsf+qhhhh72C+TidIVa3IOc6GK
-	 RFteVy1U98lGyAGFH1xIdfj6ybkn6OTEs3cHkUI3j9Vxti0rjN8MojJxREH/6i6KYOX1q
-	 DstRyJRgUYxGcKJigTW5pvLK63SLBZ42WCZDN1q6pSRelfzxsJGkHgYGp46TnmtvI3Q==
+	t=1793321362;
+	b=2glIPy98eO35RUKQv3fNeX5YydQCEL0seO2mHQVenWh7OGKlilk9TDjS3O3YFxa16fHq
+	 mlT6C6Alz/wsicv3lJswvcS083udrjxDdhwM6r7AYJOrcurRngl275k3vtj2z+NL0msx5
+	 bUXmEbgvOnIjueDEWKthDF/BbIp2himlriOOIDG1qix6JT1x9i8z7gYwonZEs97gZwlDB
+	 Po1ECneC/jvKpL7BgCkhYM2IuojtL8S9N2zNEnLqo5vWEG9m51UqmIfFyr8s6CGX1a7ve
+	 H/t0q9xb3AIe0Ubg/UXGtdFPjuhq2kkC+g7GAyuoZK7EmVJTt1cwABhRh7EWuzqun4w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793321360;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793321362;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Subject:Date:
-	 Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	 References:In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:
 	 X-Developer-Key;
-	bh=EeM3D31E2eSYjdhcWDyWLCwhjM8hc/qZ+87RM9c/GcE=;
-	b=Xh9g/+z0ntcsG48A/uLt/TquyZc2i5rppW0PeqrkOa3eBCVeQa+RVRSUl+BCtKVGcjp8
-	 mke/VQeKKixJUlKzz40Pgcqh+XOVIhGFW0FI6aQgNusePZmSviGutdGCuYlvQPzjU73Y5
-	 yK6NH0SmkcetWaSMFx0bxgvCBH+OXaRrn4i8M4nvqQLRObk+jJMw4hswkPQlcJdPrObx1
-	 HSjdRZ4ztFEvZdWNgVJmAgdCsflIh5Va9k+Ky3h59bOcgevTmFdPPqF5QNs2Dp8OfXKtj
-	 urtzIirSacKpNAT7wS409UhMDMA+0ghtUZXcDAqF7zO54jhLV+5zBebXL1daaFbwWZg==
+	bh=t9Bmho/2eiUgmDCVdKSiojvfYHYLG+Fr/08JNYPiiik=;
+	b=pK61tsSAWbOkFXgHGekA3NQOXmKhSJqAgZE5MKTm3CDE2r1TpppY7N+7xnb9lAxnGqO8
+	 P9ruSMy5PXZT2KJ52CSxELL+27Y9cmoSmLhiyS8epUcsCthPZQHOwOpmbkFlFYE3+kfVH
+	 vBTmdPVY4OD9LruAhiarsYHKp7FXFrvbeWp4ozd96lZTN9j1zIblRZ7r5LpYg6XkRoVZv
+	 fBrQRTmG9VGh38bwOzEYW1yhsHlzaiXdNltwqbA+SUJbgtapIjTwC0r/Iy1z7/4YlDHEP
+	 JBBTyygesF7zEWSBreMetEqkH9IjXLeVfoQIEZtBVtFKGyiAmCT8bYFxilQtFWeOYNA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Jnm7yDRZ;
-	arc=none smtp.remote-ip=209.85.128.175
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Bv3AHppu;
+	arc=none smtp.remote-ip=209.85.128.179
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25775606A31A
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 00:49:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25775606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069D9606A31A
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 00:49:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 069D9606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Jnm7yDRZ
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-8b0ca1ebc8bso1722607b3.2
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 17:49:19 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Bv3AHppu
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-8b0d91601bdso11316017b3.1
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 17:49:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793321359; x=1793926159; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=EeM3D31E2eSYjdhcWDyWLCwhjM8hc/qZ+87RM9c/GcE=;
-        b=Jnm7yDRZzgh3wEIbH41vNkuSPYTMFlu0SwbTT33zx/ogtId/M0jppaJFYSP9gUSViz
-         d+NFbTKj0B7dYK5euKIAGwHSMrYpidzKQRx6uZFRdaZu2yAArtsAnog413kdyudBCnve
-         k812UWQYl7V5CmJVtTV2j1kVlO1CDALWRWcjMg1D6nXEoJ56gmnt3UQVgnYoqWl8tHmb
-         R1yatjqM1wsPfsveArvF4WYYViKClMtbLC6t1G9UBlqMplJz3a7vAL1oQ2ptWn7a5+E2
-         H4JZKPx36YiL9WifQaTSa+J2eLUbALE1UnnqSjVXMytu2VU4WjhjJQVy6KcANSBkpaxs
-         HMIg==
+        d=gmail.com; s=20260707; t=1793321361; x=1793926161; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=t9Bmho/2eiUgmDCVdKSiojvfYHYLG+Fr/08JNYPiiik=;
+        b=Bv3AHppuIWGTR6BF5QaUfVXSv3GE5B4uy8687xg41/mXvBwxJ/sH7qXRbr6nwNZubV
+         TJ/N0SegvY4HRNZuWwiwi/5BFyeHxKTLm6iSwFqlv9BNb/i1zhPyLsg7LH9CFRO0DByy
+         sOoLcy00Cmxo5pbnvPFaLvBnFMmpPZ/tFtLnPlTuSnUq5M53lJSEqMjlVuUQd4IP4FBE
+         5l+G07305eG99P9pd2oU1bUe2MgiuPJwQkR+VUVwMLn8WwdCrx8rvtLbV9yMdu4jqsOW
+         uyiA8NaE/ubJPyfwaLhCWnXMoSUsPNo7eo94JedJzL8y6W+6v8CrrdT2NYRVmJUHmkFh
+         Q9nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793321359; x=1793926159;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=EeM3D31E2eSYjdhcWDyWLCwhjM8hc/qZ+87RM9c/GcE=;
-        b=A9EUA8sd6vGZEv2vwd8MmqqY8riz+6JlMbDIQakmkV83tJlG8EfUrz3LLVJ8VOusMp
-         KubIA9zXxYw5ajKT1qbCl/GiQVmwNUbgtD8QuelruueOVllMzCJrbWfHqjjU2oDy/8lX
-         kk2XZF3FbmeOvn4jaB5vNBe7+HWEDY7XqERC+huww5I8sX3d4ZjDLlMbGCxBlZwg7IBi
-         0mlvTp0GLnp5B6BBh3JGEvbIdbMRsOqVb7Te8GTq5tY2pXPHBO4gCYG5DN2DvQ7yfTGG
-         +3KNhHL5N0z2EeylUhdNTubHP4NihqpGXYAQnY7K/hxMLhcHg9jJKBGm3ZoJGRyS4EvU
-         dUxg==
-X-Gm-Message-State: AFq9FYLK0RoMfuQMMvIBZSio/G3P+wdSEd7Vq8ar+z6rEJEI1Y0vMOFy
-	iftqzuhcKSWoGCrq7rwqoT597o3WMZ2TCH0JZb/aZKx+eJ92iZ8LsQLc
-X-Gm-Gg: AYBFou2/EbaVF9y/V6rmlplfA7BaVQqi/ImJc2lUyDw8he1RRI/26kNEHlggojiyJhr
-	Od3wVqTpJXv8csVpSHntDHceTqOOS1nLU/xHzueiAwHsPrKVHLIsHkLD7THkpcX1byH91CHpL9Q
-	NzjUB1rlvFAOlLe91BZmrQslniqczD2Mg8gCAI+AgalAf1AOSYe2FrSMb7O1n5WewzJwnp48l2m
-	Z89yVKCVxbMsj1/h8mAY/0WQ6lR0wv/ki+ONnnvJZX2RpUeBhcnUIAUxuU5X8IJv88i9RKfAHqk
-	VLppEFzj2pFxSRIaST6+eu7g80PajWJXOctVwhh00PDtjy7QoLbnhV9OmZ0MSB5jYuGFHXFHQZg
-	JI6ot+7QJ59qDdxc4S2YIr544EoWVs+pkP83yHNs0RNazOMCEiIUVss3MvbybMf5F2Cky/swity
-	ZiKMAVLoKBBFXDC9QaJtbG3ehQqP1dK9TJB1PCkR3eIzSOZDJXg67dn6MC4PmvdrR67w1cAW9nO
-	10vbOZshLcsdJe8uhjy6GGP68/7NjQPagj7h8GDc65XN0aekVx/vvVo4n225MUaBNziD9j0ZP/7
-	l0NdIjfyOLnBfrzhyJx9
-X-Received: by 2002:a05:690c:dc8:b0:8a8:7fda:15ee with SMTP id 00721157ae682-8b2b676a6e5mr4519907b3.50.1793321358869;
-        Thu, 29 Oct 2026 17:49:18 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:42::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b2b714bd4csm1889657b3.24.2026.10.29.17.49.18
+        d=1e100.net; s=20260707; t=1793321361; x=1793926161;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=t9Bmho/2eiUgmDCVdKSiojvfYHYLG+Fr/08JNYPiiik=;
+        b=Dv2b2+iLzNhzjIdAviYiWn84fiIv6X0bPORR/eiUdExbmtrCUDckESMFnQrguCxyhy
+         b0fFMcU+BHishcKuXU9xbkajOHTT/kXt1XmDbh/zUMcV43k0hE/3DYI7TajBB8uBAomt
+         qiXrXl/+p3TlU3IBx3vt+WZS26ooLNjwMjdb+LKWRzMGq5woXkPYwaEoQshymRa69In8
+         FZ2IIWTjSAqvz2oVC6qzeh5xOzdyOyZndwQ+VaYysIOu17qBUjjeh8+FDM5ZAD3477an
+         oCtB9ZoKFIKjkP1hojZ4bt4KCExBvr7wUfKKeIYDvp102uXJ/242rX/guTEfEEAywFe5
+         vg+Q==
+X-Gm-Message-State: AFq9FYKNz7Xl1Zme2SGYHuDxFFeGHSA0Vdz22doDm1HEaVibG2lT8cJh
+	ECKcHwI0jHAIBKW0FplaY4uZ7qVaeX2FWq211puxue8/l4AsmFK5USpQ
+X-Gm-Gg: AYBFou1hpgRzTUrSHuBwxOO2XpRv/5mUQalyJZRL8rjTdBXu8NNKWH7KT/1zuTQ1ORl
+	ZxdBCpz8QI7/7f/R9yJblMYo8pG4jaVnCgdJPTu5EnE/p1wDLuKNsciATXc+6C7/PNYVcvU0zDy
+	nBNGe+jTmHINRb4HPo120c+y0sJa7bu91TDgn1WZ3bwl5Znk4W3FbHfJ8ZzaIyfdFdNtIUBF3q6
+	0BG/688e4UwOHCx3e9SjNBjlgkaE/lcoHT+O8Q5aTBIgbRfo1F0tLdbVeGUa2ZrrCKyYHuZsEYQ
+	22gTY49/LjalmePYUteHfYVYSQv1Jpr/nmgsFx7fA9WIaseWo8AX1CJOhlJddw1h5ZcsCQb22rD
+	XgKhbRbRr7+XZA/dXC9a/6QDL6BCSjO1OZJL3NWCj7+R/0QIUjx/jQrhbH0wUGCqlcrP9qQ15OF
+	VAaS27HPrqZrzsGsUn9L24KfVUk3FThz2az7MRv6nyCOoGWSs4Z8k2RLF6birO8vf0GawOQ2PE2
+	YnQxmtW2dDCi/eUtH+MvL4XF24yheWIm6SyjDEfAHgwlM3LwjFpLayUg9Dp0qWnWPseZQtOF59r
+	eFDWjk9JOHZFmyRkBeMb3e9vILQvEzVqM1bASf5N
+X-Received: by 2002:a05:690e:4854:10b0:677:a948:8d50 with SMTP id 956f58d0204a3-67ba4f064a5mr400440d50.14.1793321360962;
+        Thu, 29 Oct 2026 17:49:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:3::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67ba756cbbbsm139597d50.22.2026.10.29.17.49.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 17:49:18 -0700 (PDT)
+        Thu, 29 Oct 2026 17:49:20 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH bpf-next 0/3] selftests/bpf: Make strobemeta and pyperf
- robust to branch reordering
-Date: Thu, 29 Oct 2026 17:49:09 -0700
-Message-Id: <20261029-bpf-selftests-branch-order-v1-0-425cc1ef8581@meta.com>
+Date: Thu, 29 Oct 2026 17:49:10 -0700
+Subject: [PATCH bpf-next 1/3] selftests/bpf: Check the strobemeta variable
+ read instead of its location
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -94,77 +94,101 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAIbp42oC/x3MQQrDIBAF0KvIX2dApQT0KqULNWMjFBNmpARC7
- l6aA7x3QlkaK6I5Ifxt2raOaNxkUNbU30xtQTTw1s/O+kB5r6T8qYN1KGVJvay0ycJCzj5CKCn
- nUC0mg124tuPOn/i7zsfA67p+wJHI53YAAAA=
-X-Change-ID: 20261029-bpf-selftests-branch-order-10499cabb9f0
+Message-Id: <20261029-bpf-selftests-branch-order-v1-1-425cc1ef8581@meta.com>
+References: <20261029-bpf-selftests-branch-order-v1-0-425cc1ef8581@meta.com>
+In-Reply-To: <20261029-bpf-selftests-branch-order-v1-0-425cc1ef8581@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
  vineet.gupta@linux.dev
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793321356; l=2638;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793321356; l=3724;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=xvsRBYRP4Lx86ab5lUhEb31AKZ9RLjV94vLxATFGLww=;
- b=LfG1HoE0U9vkvCmlw20WVWYqIofr9QE25utl7EUUaOnx8hcSkr4fwik9pTOaqJ7sszIGufVkG
- 54bAcQe4wMYBb8ir8Ezf7Jtq98TuNLEJEexaAqGgjA8ABtW4oEfbrS2
+ bh=tCpvK57zK+MAMMIJ7n8zc94JY3VyaPwpR9jdRNJGtLw=;
+ b=LB+5O0d0iAJUFLosKnAcyHQaQRYCi0XSduSQv7yyWPsjTV3Ct03nyr7vi23E9DYuOU4/9rtUQ
+ mbbN47x8fZSBbRsGJg3gGdJPP+22WrxIgl32X9sp4GEFrWzFA2OBzk0
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-An LLVM BPF backend change ("[BPF] Analyze conditional branches" [1])
-lets generic passes such as branch folding and block placement invert
-and reorder conditional branches on -mcpu=v3 and v4. Some verifier scale
-tests are sensitive to which side of a branch the verifier explores
-first, because that decides which states get cached for pruning. With
-that compiler these programs hit the 1M instruction limit (insns with
-the current compiler in parentheses):
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-  v4: pyperf600_nounroll   (460,049)
-      strobemeta           (157,733)
-      strobemeta_nounroll1  (50,745)
-      strobemeta_nounroll2 (108,121)
-  v3: pyperf600_nounroll   (466,200)
-      strobemeta_nounroll1  (55,975)
-      strobemeta_nounroll2 (115,445)
+With an LLVM change that lets the BPF backend reorder conditional
+branches [1], strobemeta and strobemeta_nounroll{1,2} hit the 1M
+instruction limit. calc_location() is inlined, and the compiler copies
+the "if (!location)" check after it into each of its return paths. When
+a copy makes "variable missing" the fall-through, the verifier first
+explores all later variables with an unchanged payload offset, and the
+paths that read the variable, with wider offsets, can't be pruned.
 
-In strobemeta the branches that flip are the early "variable missing"
-exits after calc_location(): when one of them is the fall-through, the
-verifier first explores every later variable with an unchanged payload
-offset, and the paths that do read variables arrive with wider offset
-ranges that can't be pruned. Patch 1 checks the result of reading the
-variable instead of its location, so all of calc_location()'s outcomes
-merge before that exit and the read succeeding stays the fall-through.
-The payload format and the scale of the tests are unchanged. Patch 2
-fixes the payload offset being reset to 0 when a string can't be read;
-it depends on patch 1 to keep strobemeta_nounroll{1,2} within the
-512-byte stack. Patch 3 makes pyperf leave its frame loop once frame_ptr
-is NULL instead of running the remaining iterations.
+Check the bpf_probe_read_user() result instead. It fails for a NULL
+location, so missing variables are still skipped, but the compiler
+can't push the check into calc_location()'s paths. Mark the read
+failures in read_map_var() unlikely so that the fully unrolled program
+also keeps them off the fall-through.
 
-With the series, all strobemeta and pyperf programs verify with both
-the current and the patched LLVM, at about the same cost as today:
+Verified insns/states, before -> after (fail: 1M insn limit):
 
-  strobemeta             167K-171K insns
-  strobemeta_nounroll1    47K-51K
-  strobemeta_nounroll2   110K-121K
-  pyperf600_nounroll     ~423K (current LLVM), ~340K (patched)
+  current LLVM:
+    strobemeta           v3   163591/4755 -> 170708/4780
+    strobemeta           v4   157733/4779 -> 167288/4896
+    strobemeta_nounroll1 v3    55975/1708 -> 50165/1617
+    strobemeta_nounroll1 v4    50745/1728 -> 49286/1656
+    strobemeta_nounroll2 v3   115445/4341 -> 116942/4267
+    strobemeta_nounroll2 v4   108121/4306 -> 109775/4210
+    strobemeta_subprogs  v3    53647/1611 -> 52413/1771
+    strobemeta_subprogs  v4    51204/1573 -> 50749/1795
+    strobemeta_bpf_loop  v3      2624/217 -> 2695/214
+    strobemeta_bpf_loop  v4      2632/213 -> 2668/210
+  patched LLVM [1]:
+    strobemeta           v3   163591/4755 -> 170708/4780
+    strobemeta           v4          fail -> 167813/4892
+    strobemeta_nounroll1 v3          fail -> 51250/1755
+    strobemeta_nounroll1 v4          fail -> 47480/1796
+    strobemeta_nounroll2 v3          fail -> 121092/3969
+    strobemeta_nounroll2 v4          fail -> 117302/3708
+    strobemeta_subprogs  v3    49653/1693 -> 51831/1548
+    strobemeta_subprogs  v4    48305/1649 -> 44104/1577
+    strobemeta_bpf_loop  v3      5017/398 -> 2815/225
+    strobemeta_bpf_loop  v4      5053/394 -> 2792/221
 
 [1] https://github.com/llvm/llvm-project/pull/236189
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
-Mykyta Yatsenko (3):
-      selftests/bpf: Check the strobemeta variable read instead of its location
-      selftests/bpf: Keep payload offset for missing strobemeta strings
-      selftests/bpf: Exit the pyperf frame loop once frame_ptr is NULL
+ tools/testing/selftests/bpf/progs/strobemeta.h | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
- tools/testing/selftests/bpf/progs/pyperf.h     | 32 +++++++++++++++-----------
- tools/testing/selftests/bpf/progs/strobemeta.h | 12 ++++------
- 2 files changed, 23 insertions(+), 21 deletions(-)
----
-base-commit: 33cbc5c2cadfe3b43f024e89880dd8fe2efb3a2e
-change-id: 20261029-bpf-selftests-branch-order-10499cabb9f0
+diff --git a/tools/testing/selftests/bpf/progs/strobemeta.h b/tools/testing/selftests/bpf/progs/strobemeta.h
+index 6e1918deaf26..584a68248764 100644
+--- a/tools/testing/selftests/bpf/progs/strobemeta.h
++++ b/tools/testing/selftests/bpf/progs/strobemeta.h
+@@ -366,10 +366,9 @@ static __always_inline uint64_t read_str_var(struct strobemeta_cfg *cfg,
+ 
+ 	data->str_lens[idx] = 0;
+ 	location = calc_location(&cfg->str_locs[idx], tls_base);
+-	if (!location)
++	if (bpf_probe_read_user(value, sizeof(struct strobe_value_generic), location))
+ 		return 0;
+ 
+-	bpf_probe_read_user(value, sizeof(struct strobe_value_generic), location);
+ 	len = bpf_probe_read_user_str(&data->payload[off], STROBE_MAX_STR_LEN, value->ptr);
+ 	/*
+ 	 * if bpf_probe_read_user_str returns error (<0), due to casting to
+@@ -400,11 +399,10 @@ static __always_inline uint64_t read_map_var(struct strobemeta_cfg *cfg,
+ 	descr->cnt = -1; /* presume no value is set */
+ 
+ 	location = calc_location(&cfg->map_locs[idx], tls_base);
+-	if (!location)
++	if (unlikely(bpf_probe_read_user(value, sizeof(struct strobe_value_generic), location)))
+ 		return off;
+ 
+-	bpf_probe_read_user(value, sizeof(struct strobe_value_generic), location);
+-	if (bpf_probe_read_user(&map, sizeof(struct strobe_map_raw), value->ptr))
++	if (unlikely(bpf_probe_read_user(&map, sizeof(struct strobe_map_raw), value->ptr)))
+ 		return off;
+ 
+ 	descr->id = map.id;
 
-Best regards,
---  
-Mykyta Yatsenko <yatsenko@meta.com>
+-- 
+2.53.0-Meta
 
