@@ -1,103 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793363200;
-	b=x2/lNlq3j7UxLwzNCJ6K024duw/OlVHH1lct9F0tpSZUTjCkZ/gGCaGO5XZljZVTRUyk
-	 5XViv+auHJg4PTj/QnoTsvfsk+/OF8lfsXMMzVAnf6OGMue3SVLgv7FAljEsXwHGPT4o/
-	 DEKVH8R1LgEwD1+Wnobn4MCqjVhpcdFxOBwqhIUk4eZ+SH6TiDRnt4eP+WVV24aT4wo46
-	 kuiqGA4jRfOCpvODTtTWUnBIjaGdD/mPo192O96LagyUICynPaYqDRQyYmul0lmItCoeq
-	 d/JK0aT90j6ZJF/XWRcW9dalFmT5hpLR10+Kog+Pm1JwRoxr7D4WnD7I/NuqQWrO5sA==
+	t=1793364297;
+	b=IjxXHD6S0l5R1H0FIyFaKwXSOxDukWz0THpAB7JCXg67jp4omIEERczgLwXoqu3Uq/HR
+	 FXSEDiQwn4HeJTUefULJPhurdrrB4evTFUEBQEqAsKVx74P/Dl0w7cw2xhNVGFe3kyZIA
+	 gSHajTWOUSZoZEv1SDubJotyLdOxh6HeGjJ2kAi2ztZtARh0Je+rDbOe4wlg+0f61EYWl
+	 qwsSpdrw7O7r77ma6v/mae9hebHcJ2Fp6S78LWUlgEp4hHuzXhyBt0FQXp6j+gr42Yg0b
+	 Q1t0v9oE6nUj1qZQmOkFjksNqJo7VJNncawa5nw4ALxrgrtYEqWoHatbDwrRiQM5RfQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793363200;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:In-Reply-To:References:User-Agent:Date:Message-ID:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=Ib0ZIb2YOYQ7w34USWape/G8EkDxIb1fCiEOQLBLNlA=;
-	b=z3hVHRC7Is/54LJFOf3RSfx/0zDPdLJL1SjxYzny6e+r4zcnF8Dtvr2PIZbOoYo6UWZC
-	 Mc8qtBo2aBwn1LF7CAIyjKLOSHryvkKKkgIvHubvWQeZ/8FYvF6w5Kp7N4550rAwPOsbt
-	 jn6qiSDtZzbto+ZOvg6Zz1n5jpwXpJYX/TP/TfWpyNoqyzj5VP2WyLXD4OX9yKlfZ9Nuk
-	 B//pvyMeNaaEVR0+5wITAWWR/GT/NcHkv0N7iJiDOVTLrSh6R3TG2S8aUdIsqalHXDzRi
-	 MlUYYcO+kBgCzOwQmez2XWd+mS7GqXToBVPPWxN13C111ffxnxPQ+DdvcOwTe8NXIKg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793364297;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=apqrbw11QaPVj7uVWqwA/UVR0O0Dp6d3kr8ppBa52Hs=;
+	b=Ijbu1sgHcm6ouzUcehvKkSFF/oewRlFS0lKNvrBTKDiDX3mLRBEUyv8PQllydwrFjNME
+	 lci3oB5+1CvOOiAummI+uMScxa3Ra8GHYrP1j6z5Bv7Ua036jX8BchGgSuWQAAMRReqQu
+	 IS1WiAKs6Vbaqrtr6DvNOOaXaFjfN7t66qB8uk7/kZKW+T0Sfk+FsWcfaVzBek0Msn1f/
+	 t127oZXtuQhh2ekkB2b8cVaXx2UZzFJxWOEgqpnQy8gD8vWzAfJwFYrLHpgEzMaynyPYx
+	 ZFSWc4zz5RHHiXjHf5vjzi4cx1b3Iq5yjkZ41bs0gsCsKywi/ombEQPOeDImmOhmtzg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=fhXFza+Y;
-	arc=none smtp.remote-ip=209.85.208.53
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eV3H1Bi2;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC4E606A321
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 12:26:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CC4E606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F116606A31A;
+	Fri, 30 Oct 2026 12:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=fhXFza+Y
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6b408f2d936so774572a12.1
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 05:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1793363199; x=1793967999; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :user-agent:references:in-reply-to:subject:cc:to:from:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Ib0ZIb2YOYQ7w34USWape/G8EkDxIb1fCiEOQLBLNlA=;
-        b=fhXFza+Yzy3VG+9OGHMOcR47ihiPebAoAFmsMUY2P6j1pr41QmigtuRDAv5TPC+uDE
-         0J3nvWYLFmutTaTKdFz30ALFGAiiWg7cTyjr82gecO8pWjzBrrlyLSTp8j3jYXv3pL43
-         xFkN4qEcHAjm2DJwQl7q5XooRBhI0bAl0tueGBxYCb0WgpV8Ybtpi4mCobTc/mvoUD5+
-         sZmdzO9P3Ja8qlIWOVILGj0XA2BiBzcjS4Vj+W/j4ZnusyI8UcB9l0j6YLD/mCxJCQzZ
-         tj2PheJ8/nEusRkl5R9YusrHcvJUoURwDOSSceCnHGjKE2frWjKllo14yQ/XiJ8aZEKi
-         JfnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793363199; x=1793967999;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :user-agent:references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ib0ZIb2YOYQ7w34USWape/G8EkDxIb1fCiEOQLBLNlA=;
-        b=lT60+Lw1Sg33QTMJkTmTCSWK+IO0cPjDo+gOWXTVuX35dKuzoHOSdTmvS8tf15NVUO
-         CQh4AxsDicVW3hdPIPh83DtpREeza73tdVQ9H15PACGXXvWAZTelLGtabSX3OpVjKdiy
-         eJKyEzBh65vINqNYKtUgDhgk2TVxaEVm5/RPq/IyXHn/pT5Sa2tZx2aFW4LHu+IFtxoS
-         Uf+829T0hxKf6bIqjc6sm4BX+Yw7bInPEdudXBZZ6nUyTPRRouW9zcCbPQ3t/yuSW/X0
-         C+PeAp7bUjnBjSe9Ebit6ynt55Ur6irhRU7vp7kXDZbLIket8mF7QtqBqeFTGL6Dntxt
-         PZBw==
-X-Forwarded-Encrypted: i=1; AKwUvBy7v5QWurkuESDeeh1AeaU1zy9/PT7LCLZltZFi6T1kQfYLxFArSWsLkxAHiYpupxWw7U8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIq3Exur2HioDDU7B3Y6/xSEIt6Jtv6Tx24uAbmC34+YH8R3yd5
-	Cj8cFcP2L+nmYQQJmjGyo9bBXbjnviFz0dFOOGJFJ8DX69d15bvD1sL2EfCE3FgjQz0=
-X-Gm-Gg: AYBFou2cXPCWqXBZ/BaJqJXW7bwogFw/coXjadX/FnX+BX9FI8oKX11IvktT2ECz++H
-	bkBVKKWtWEa/j23nmBdgfCPxP+Ii0KhzMmCkrmZckyvFLmORqU06+nxeqCLAawXaXUdDvi98+Xu
-	HEOH0gHs2rq23On3Fp8W+26Ua5jBCGXpo8fyJBc39mKNET8lqrIPHpY2cs1BpHiq8RcNoT7gDvk
-	4jcSUvnqX106WmGKYTYvKdZmX+ScTZ1eXuSJMbo5fbCDqkawkiOuK9Pwb0NV8FV0Q6Cz9nGDZga
-	95UmOOle1fmmufT4dhlWmKHLDa6LQGEk3zCAU5+mxJoCWlL1DVDMQVpqLDOFQpwlHqboHrSG7ja
-	ajmCXUji5qwEviXyBXltwTFrg2QpexR7xLipNWpYQnyomJyL3V5rtoUtrg4mkRHg8K3paZBFwFB
-	Ju+RRwWPho0aWqKohw4Eh2jUSlsENN3ypRMBVCZ2BM2mkNWyCah8an0EFCXrsm18FRcGgbVSZ4a
-	VfYm1dioy28deYltC12SdOO+h+SAqC/dhAA1jF78vXfMrxccYSazvqjsg3OH5rtIlE2eZqbSXQd
-	vRbg2XVnaUwQfx6Ug4R9xZAHgyj8gwodsHmGgaA+PQ==
-X-Received: by 2002:a05:6402:c516:20b0:6a9:a3df:e4f1 with SMTP id 4fb4d7f45d1cf-6b4d4c714a4mr1147063a12.25.1793363198834;
-        Fri, 30 Oct 2026 05:26:38 -0700 (PDT)
-Received: from cloudflare.com ([2a09:bac6:5067:295f::41f:54])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b4d7b3fc5csm540597a12.33.2026.10.30.05.26.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 05:26:37 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: "phx" <phx0fer@gmail.com>,  "John Fastabend" <john.fastabend@gmail.com>,
-  "Jiayuan Chen" <jiayuan.chen@linux.dev>,  "Network Development"
- <netdev@vger.kernel.org>,  "bpf" <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf v2] bpf, sockmap: annotate the psock teardown data
- races
-In-Reply-To: <DMFRU74YCDSH.1WJJT7VL3MEYE@gmail.com> (Alexei Starovoitov's
-	message of "Tue, 27 Oct 2026 16:46:11 +0000")
-References: <20261021155629.68813-1-phx0fer@gmail.com>
-	<20261022054811.35008-1-phx0fer@gmail.com>
-	<DMBHB0TQOV1L.38MECMYFGUS5B@gmail.com> <871p9g6ym1.fsf@cloudflare.com>
-	<CAADnVQLTe611mm0iJEf5gJi2GtW42kxNHH3sUPevD039FvzL7g@mail.gmail.com>
-	<87v76o63qv.fsf@cloudflare.com>
-	<CAKvCo-zf6=ABrMEn_8r7rJFFvaaXQrz8GAUQ9Uz4h0Ze9gY68w@mail.gmail.com>
-	<87pkwv5cj8.fsf@cloudflare.com> <DMFRU74YCDSH.1WJJT7VL3MEYE@gmail.com>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Fri, 30 Oct 2026 13:26:36 +0100
-Message-ID: <87pkwrtlvn.fsf@cloudflare.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eV3H1Bi2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BED1F000C1;
+	Fri, 30 Oct 2026 12:44:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793364296;
+	bh=apqrbw11QaPVj7uVWqwA/UVR0O0Dp6d3kr8ppBa52Hs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=eV3H1Bi21LSF3sbraY7DbhzeROld+GxHFLDTk3I6bLhxGQ7R3wlXC2Vs1DLm7/u6T
+	 iOVD/MmPdJ88WApdoPGWZ9rkK6BZRcB9d7Tkmy5kvs2A4k+Q+UH0ol8+oC2x463GPe
+	 deQ0Oea7d8Ji8W/txgUnlarCrtVN98Lq/a+5AWg2jutKMYmbSEsNeA/NFpZDLgVYz4
+	 4MJlYtQAOffUWz7drAxAUU5f2uh+3jMGlrjiOBRyaMrtHK9tVORqt1L4MBkbDcmrGb
+	 dmXHKghdMJJddNOuFcb7nDzzX/kAvzCchmUrzs35qQrC2EWkxOMc0Km9T54RCG3yb7
+	 lOx2vM4O3UGxw==
+Content-Type: multipart/mixed; boundary="===============3217382710323847077=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,27 +49,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <55f77cb13998286fa0f959e0025d33923ca6fff066f3e9019c2830eee8f75288@mail.kernel.org>
+In-Reply-To: <20261030-bpf-verifier-patch-batch-v2-12-55cd43439f7c@gmail.com>
+References: <20261030-bpf-verifier-patch-batch-v2-12-55cd43439f7c@gmail.com>
+Subject: Re: [PATCH bpf-next v2 12/22] bpf: Teach the patch list to insert in front of an instruction
+From: bot+bpf-ci@kernel.org
+To: odys.yuan@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,odys.yuan@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 30 Oct 2026 12:44:56 +0000 (UTC)
 
-On Tue, Oct 27, 2026 at 04:46 PM GMT, Alexei Starovoitov wrote:
-> On Tue Oct 27, 2026 at 4:33 PM UTC, Jakub Sitnicki wrote:
->> On Tue, Oct 27, 2026 at 01:10 PM +08, phx wrote:
->>> Sorry for the long silence =E2=80=94 my laptop died right after v2 and =
-took the
->>> local mail and the working tree with it. Agreed that the ordering fix is
->>> the right one; please go ahead with the commandeer, Jakub.
->>>
->>> I do still have the reproducer (a KCSAN selftest for this race, verified
->>> in QEMU). Say the word and I will post it, or send it to you to fold in=
-to
->>> your respin.
->>
->> Feel free to iterate on the patch once you get your dev env restored.
->
-> I very much prefer if you Jakub will take it over.
-> 'phx' is a clueless bot that sends spam across all subsystem.
+--===============3217382710323847077==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Fix now posted:
+> bpf: Teach the patch list to insert in front of an instruction
 
-https://patch.msgid.link/20261030-bpf-next-v1-0-035eabf8eae7@cloudflare.com
+TL;DR: Nit only: the updated header comment on bpf_patch_list_commit() says
+everything follows the insn itself after an insertion, but only jumps, insn
+arrays and poke descriptors do; the code and commit message differ.
+
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index a56b743be006..bb4fd75a7062 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+
+[ ... ]
+
+> @@ -533,8 +557,9 @@ static void patch_list_del_subprogs(struct bpf_verifier_env *env,
+>  /*
+>   * Apply all queued patches and removals in one go. Everything that names an
+>   * insn of the old image follows it to the new one. A patched insn is named by
+> - * the first insn of its patch, a removed insn by the next insn that stays,
+> - * like with bpf_patch_insn_data().
+> + * the first insn of its patch, or the insn itself if insns were inserted in
+> + * front of it, a removed insn by the next insn that stays, like with
+> + * bpf_patch_insn_data().
+>   */
+>  int bpf_patch_list_commit(struct bpf_verifier_env *env)
+>  {
+
+This isn't a bug, but is the updated header comment accurate about which
+users follow the insn itself after an insertion?
+
+It says everything that names an old insn follows it, and that an insn with
+insns inserted in front of it is named by the insn itself.  In
+bpf_patch_list_commit() that only holds for jumps, insn arrays and poke
+descriptors, which use img.new_tgt:
+
+    bpf_insn_array_remap(env->insn_array_maps[i], img.new_off,
+                         img.new_tgt, img.cnt, img.grow);
+
+Subprog starts, func pointers and line info still use img.new_off, which is
+the first inserted insn:
+
+    env->subprog_info[i].start = bpf_patch_image_remap(&img, img.new_off, ...)
+    fp->xlated_off = bpf_patch_image_remap(&img, img.new_off, fp->xlated_off)
+
+patch_list_adj_insn() also sends calls and ld_imm64 of subprogs to new_off.
+
+The commit message and the comment above __bpf_patch_list_insert() describe
+this split correctly, so this comment now disagrees with them.  Also,
+"like with bpf_patch_insn_data()" now trails a clause that
+bpf_patch_insn_data() never implements, since it always uses
+BPF_PATCH_KEEP_TARGET.
+
+Could the comment say that jumps, instruction arrays and poke descriptors go
+to the insn itself, while subprogs, line info, function pointers and calls go
+to the first inserted insn?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41053659762
+--===============3217382710323847077==--
