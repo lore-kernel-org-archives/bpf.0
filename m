@@ -1,47 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793349819;
-	b=ki0aKWiSkKxf2l2oMfcq2u85Pgo2T5BnTqrA7J/dtXYBymkA3BM0SOL5ofJg3yu3jIhq
-	 97ySq9jqTtF8gXx8T0vKGOuTisOBds7s1DGNwXfBArvWbcw0QFa8P73ni2tgbJgRk7vLg
-	 9yVq5uE4+jMdAxuTDIlvZZD4iIRGN9emlDtaGvG3SCsIBIcCTb5eo7MTRY5oybn2Pu08U
-	 FY98zc/NNia0tN7lscWxvjC168ADhSGV1SMqqWG2GX3BgP+m57RjoOCmjQiQXWRiByEu9
-	 w+33mr3HTs8Coosc2x39ZWfzf38QC0Vv7wpM6FC+6xmSdVhwYCnQ0uy6pieCpjuCAUA==
+	t=1793350072;
+	b=PYkFmNNO9n4tb9UiXLPaXwsqa4uyuyBauVZchwFDJWDKJA9AcrkMzpQZxTrcOvjc+gdR
+	 SIojEN4UJas2RlvHcGZP6bcBHkQNdnajzWai9FLXkAw1IWlci70QzWiITco+2ytlrLgK8
+	 PtCtpjnjezaxc5ITRrnRg8Rn52Pww/+nHXpn2+xRpqvoOA+1qvyWeTybYjunz0ghFjYww
+	 iaIQFlzxZnfFjmU2VFgfapQAxrBp+4jPAPw8sF1ltaxGbsmk0mpKgqltwZKMWhv06DiNn
+	 lB7sZjHcukpuyGzPm87tY7lyaSW21nRL35q8esCHg1/5W057cBSBhrI72WTL57mcbxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793349819;
-	h=DMARC-Filter:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=aOJY1TVcA8c8VZRDhmaCuv4+pieyekjBeLYUwH6dOsY=;
-	b=HRAHcIyNGg6bxf8EDRxUWW9VJ4SvvD63p9pZHrKeGWG8WniHKkku4wk4nJ0gE1dx/zXT
-	 Lh8Daj/zi1+Qd7GSIBbfAL7JSyTX/JhC11D9LZ7z9CZM3e1dP3o2ruSE8uRry+4dQ+OfN
-	 tCIjUzLSa40tN22s7WHNmd9ECvKrLmfR74h9Svqotj4DH4uzstjWnaKVrtc0Xy68xsDQy
-	 2fhgRmt4lYvMq1OSAyax9r5V+M5sQp3KFXXYidRGsXHGTTuUw7VLCM+bmXXmPD80r+HRJ
-	 oP4TPOVzPnokLDYkkamcxEzWpc78GFpWFdfdrhjfo5c2jUmim30MZvyvzoMV8d2q2TA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793350072;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=KrD/LT25yUr4hzgtq3ozTYQoswHyYhMKqnTj9MrA7yQ=;
+	b=vJ6YZ8Zvy8b1RMdWaKBPNHyWXfvy5VFwKves5bdQtjTb4q8xZIJL6YCDFa3vkJo8rFQ4
+	 YjgoF/44qF0L9ikDelnW0x25vOD8Z0mSWc0eeVpdNxU2C4XTu+ogSp0rHSXX+p62PPYH/
+	 ovjyf2n8/ytT/Q+B/3OP/44ZQn7giMSCFiQKXMUOAHW4HtTcx34RzfnEY28aUQc4pWila
+	 pZfpV3evkZVkXQKyUiJ0A6ajjgEkYUTluQH00QdiNT1Cg2BW+tJvnjpA8fD7NrH5dFB+A
+	 HpN5jQm8NPPyuNkGOnjVU2zDfde95ckM9Kr+5BoOx9YX8N/tCggimT39ImRrdhz/i6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=aG9PnAR7;
-	arc=none smtp.remote-ip=220.197.31.2
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="QjMA/2B8";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECE1606A31D
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 08:43:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BECE1606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1AE606A31C;
+	Fri, 30 Oct 2026 08:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=aG9PnAR7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=aOJY1TVcA8c8VZRDhmaCuv4+pieyekjBeLYUwH6dOsY=;
-	b=aG9PnAR7xhaRmj4/O7rSeUUWkpq8yxlfQAsXCG3Kl4URzKV0BSyMcDVrfY6ARF
-	XONsbqYHoUSTDNBxDKK4tZzBunFLkOEURhU4O5p5iXpw4XOEpnl+aEqQ5nZAQHGH
-	lHWg61/lp6FkDR3h2uuMOfZM30aWcQ/N9BBkLvBHd6/Qk=
-Message-ID: <09113d83-4517-4d8f-92c0-92475dab16ed@163.com>
-Date: Fri, 30 Oct 2026 16:42:44 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QjMA/2B8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C8B01F000C1;
+	Fri, 30 Oct 2026 08:47:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793350072;
+	bh=KrD/LT25yUr4hzgtq3ozTYQoswHyYhMKqnTj9MrA7yQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=QjMA/2B8CZscQfaFu/WT/U6Y2M4NWtO4+THO4uTPFwCSiZ1smfQcK0uUxM4zrg9Vb
+	 LqswBte6CIMZ2ITHE67rlkTTB33tqXHR1JIa9KsVGLgxQd5EFYsQMyX+iFqGQLT/qe
+	 /giQal94WXwHFMPz28VqsVj/Bu1RG8X0FwmqEsYZe1h5Cb93gu9P5KmZ5B79A4FimV
+	 24IF9UBSwNFykEF1OSWahsjUocfMdi/tzsrj8DxUgIkVritNttSW5oBlqb5X7q5UK2
+	 doJVCkexnpQ/EQ4EJKCTaBSj/5CVv6fbThRkmpbjyUrY7X85S/84vYPTxrOtk4Y1F5
+	 9L1CdTdw7Oh6g==
+Content-Type: multipart/mixed; boundary="===============2292663351581088568=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,141 +49,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/2] bpf: Retire task work before reclaiming hash
- elements
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Mykyta Yatsenko <yatsenko@meta.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org
-References: <20261028073525.1035605-1-luyun_611@163.com>
- <20261028073525.1035605-2-luyun_611@163.com>
- <DMGN8VM2BAOR.28NRNN51MCI8I@gmail.com>
-Content-Language: en-US
-From: luyun <luyun_611@163.com>
-In-Reply-To: <DMGN8VM2BAOR.28NRNN51MCI8I@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAH5yOEWORqZL6ODw--.13249S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXFW3Ww4DGF4fJr1furW3Wrg_yoWrZF4UpF
-	Z5Kry7CrWDZa9Fvry0vw48CryrGwsaq345CF98Jry5Ar98WF92qr10yFy2qFWfCr1kJF4Y
-	yr4j9FZxC3y5uFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U5sqAUUUUU=
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC7AYL2WrkWIbpMwAA3y
+Message-Id: <36d13f061c48206a13e7a38cb846f4c71e0a15fcf0459ab56a2b01f67a57172e@mail.kernel.org>
+In-Reply-To: <20261030-xsk-zc-rx-double-free-v2-1-cf01d4a9f3f7@vecima.com>
+References: <20261030-xsk-zc-rx-double-free-v2-1-cf01d4a9f3f7@vecima.com>
+Subject: Re: [PATCH bpf v2] xsk: Do not free ZC Rx buffer when the Rx ring is full
+From: bot+bpf-ci@kernel.org
+To: marcin.knap@vecima.com,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,andrew+netdev@lunn.ch,davem@davemloft.net,edumazet@kernel.org,kuba@kernel.org,pabeni@redhat.com,magnus.karlsson@intel.com,maciej.fijalkowski@intel.com,sdf@fomichev.me,horms@kernel.org,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,jtollet@cisco.com
+Cc: intel-wired-lan@lists.osuosl.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,marcin.knap@vecima.com,joshwash@google.com,hramamurthy@google.com,sgoutham@marvell.com,gakula@marvell.com,rkannoth@marvell.com,sbhatta@marvell.com,bbhushan2@marvell.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 30 Oct 2026 08:47:51 +0000 (UTC)
 
-Hi Alexei and Mykyta,
+--===============2292663351581088568==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks for the review and suggestions.
+> xsk: Do not free ZC Rx buffer when the Rx ring is full
 
-I've reworked and validated the task_work fixes following Alexei's approach.
-The revised fixes check that a map lookup returns the same value before
-queueing work, and mark the context FREED before detaching it, without
-adding special-field poisoning or allocator hooks.
+TL;DR: Commit message only: the code change looks correct, but the "freed
+twice" claim seems inaccurate for drivers that free immediately (i40e, ice,
+etc.); only deferred-release drivers like mlx5e are affected.
 
-Now working on the corresponding fixes and validation for bpf_wq and
-bpf_timer. I'll send the complete patch series once validation is complete.
+>     xsk: Do not free ZC Rx buffer when the Rx ring is full
+>
+>     When an XDP program redirects a zero-copy buffer to an XSK and the
+>     socket's Rx ring is full, xsk_rcv_zc() frees the buffer and returns
+>     -ENOBUFS to xdp_do_redirect().
+>
+>     A failed xdp_do_redirect() leaves the buffer owned by the caller, and
+>     most drivers rely on that: mlx5e treats the failure as XDP_DROP and
+>     releases the buffer when the Rx WQE is refilled, while i40e, ice,
+>     ixgbe, igb, igc, stmmac, idpf and others free it themselves. The
+>     buffer is therefore freed twice. It gets reused for another Rx
+>     descriptor, the second free puts an in-use buffer back on the pool
+>     free list, and the same UMEM frame is later handed to user space
+>     twice. ixgbe and igb keep the buffer in the ring on their need_wakeup
+>     -ENOBUFS (XDP_EXIT) path and run it through XDP again on the next poll,
+>     after the core has freed it.
+>
+>     Leave the buffer with the caller on both the single-buffer and the
+>     multi-buffer -ENOBUFS paths, as xsk_rcv() and xsk_rcv_check() already
+>     do. A few drivers relied on the core freeing the buffer, so make them
+>     free it:
+>
+>     - i40e and ice consume the descriptor on XDP_EXIT without freeing it.
+>     - gve DQO counts the redirect error without freeing the buffer.
+>     - octeontx2 returns false on a failed redirect, so the caller goes on
+>       to build an skb from the already freed buffer. Free the buffer and
+>       report it as consumed instead.
+>
+>     Seen on Mellanox ConnectX-6 DX MT2892 (FW 22.47.1026) with AF_XDP
+>     zero-copy on 7.3.0-rc6 when the user-space consumer could not keep up
+>     with the Rx ring. With this change no duplicate frames were seen with
+>     striding RQ on or off.
+>
+>     Fixes: 269009893146 ("xsk: recycle buffer in case Rx queue was full")
+>     Signed-off-by: Marcin Knap <marcin.knap@vecima.com>
+
+The changelog says that for i40e, ice, ixgbe, igb, igc, stmmac, idpf and the
+others the buffer is "freed twice" and that "the second free puts an in-use
+buffer back on the pool free list".  Is this accurate for those drivers?
+
+All of them call xsk_buff_free() on the redirect failure path straight after
+xdp_do_redirect() returns, before any xp_alloc() can run.  xp_free() starts
+with:
+
+    void xp_free(struct xdp_buff_xsk *xskb)
+    {
+        if (!list_empty(&xskb->list_node))
+            return;
+        ...
+
+and the xsk_buff_free() from the old xsk_rcv_zc() err label has already put
+list_node on pool->free_list.  So wouldn't the second free simply return
+early here?
+
+For a multi-buffer frame, xskb_list is already emptied by then, and the head
+hits the same early return.
+
+The corruption described seems to happen only where the second release comes
+later, after the buffer may have been reallocated:
+
+- mlx5e releases the buffer on WQE refill.
+- ixgbe and igb keep the buffer in the ring on XDP_EXIT and run XDP on it
+  again.
+- dpaa2 calls dpaa2_eth_recycle_buf(), which hands the address back to the
+  hardware pool while the buffer is also on free_list.
+- octeontx2 builds an skb from the freed buffer.
+
+The code change itself looks correct.  Could the changelog be reworded to
+name the drivers with a deferred second release, or the reuse after free, as
+the ones affected, instead of the drivers that free the buffer immediately?
+
 
 ---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Thanks,
-
-Yun Lu
-
-在 2026/10/29 01:22, Alexei Starovoitov 写道:
-> On Wed, Oct 28, 2026 at 12:35 AM Yun Lu <luyun_611@163.com> wrote:
->> Leave ERR_PTR(-ENOENT) in task-work slots before returning non-preallocated
->> HASH and RHASH elements to the allocator. The existing fetch/acquire error
->> path rejects the retired slot. Reopen it only when the allocator acquires
->> the storage again. Also retire a reinitialized RHASH candidate abandoned
->> after insertion finds an existing element or fails: a reader of a previous
->> incarnation can still hold its value pointer and install a context there.
-> This is overkill.
-> It adds a 3rd value of twk->ctx and two new functions that hashtab.c
-> calls in 6 places.
-> The kfuncs start to work differently for prealloc and non-prealloc maps.
->
-> The map knows whether the element is deleted. Look it up.
-> In bpf_task_work_acquire_ctx() the prog owns the ctx in PENDING state.
-> The irq_work is not queued yet.
->
->    prog                                   delete
->    cmpxchg(&twk->ctx, NULL, ctx)          unlink the element
->    cmpxchg(&ctx->state, .., PENDING)      xchg(&twk->ctx, NULL)
->    lookup
->
-> Either the lookup doesn't find the element or the xchg() finds the ctx.
-> It's the same scheme as the usercnt check in __bpf_async_init().
->
-> hashtab.c doesn't change. A deleted element gets -ENOENT in all map types.
-> The cost is one lookup per bpf_task_work_schedule_*().
->
-> The diff doesn't have the reorder of FREED and detach in
-> bpf_task_work_cancel_and_free().
-> That's a fix for a different race. It doesn't need a new ctx in a deleted
-> element. Pls send it as a separate patch with its own steps.
->
-> Something like this (compile tested only):
->
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 648abe1..acd62ef 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -1148,6 +1148,14 @@ static void *map_key_from_value(struct bpf_map *map, void *value, u32 *arr_idx)
->   	return (void *)value - round_up(map->key_size, 8);
->   }
->
-> +/* Is the element that holds this value still in the map? */
-> +static bool bpf_map_value_is_linked(struct bpf_map *map, void *value)
-> +{
-> +	u32 idx;
-> +
-> +	return map->ops->map_lookup_elem(map, map_key_from_value(map, value, &idx)) == value;
-> +}
-> +
->   enum bpf_async_type {
->   	BPF_ASYNC_TYPE_TIMER = 0,
->   	BPF_ASYNC_TYPE_WQ,
-> @@ -4741,6 +4749,19 @@ static struct bpf_task_work_ctx *bpf_task_work_acquire_ctx(struct bpf_task_work
->   		return ERR_PTR(-EBUSY);
->   	}
->
-> +	/*
-> +	 * The prog can still hold a value of an element that was deleted from the map.
-> +	 * bpf_task_work_cancel_and_free() is done with it and nothing stops a new callback
-> +	 * when the element is freed. The ctx is published and PENDING at this point: either
-> +	 * the lookup doesn't find the element or bpf_task_work_cancel_and_free() finds the ctx.
-> +	 * An idle ctx stays in the element until the element is reused or freed.
-> +	 */
-> +	if (!bpf_map_value_is_linked(map, (void *)tw - map->record->task_work_off)) {
-> +		(void)cmpxchg(&ctx->state, BPF_TW_PENDING, BPF_TW_STANDBY);
-> +		bpf_task_work_ctx_put(ctx);
-> +		return ERR_PTR(-ENOENT);
-> +	}
-> +
->   	/*
->   	 * If no process or bpffs is holding a reference to the map, no new callbacks should be
->   	 * scheduled. This does not address any race or correctness issue, but rather is a policy
->
-> [...]
->
->> +	bpf_task_work_free(&rhtab->map, rhtab_elem_value(elem, rhtab->map.key_size));
->>   	bpf_obj_cancel_fields(&rhtab->map,
->>   			      rhtab_elem_value(elem, rhtab->map.key_size));
->>   	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
-> bpf_wq and bpf_timer have the same problem.
-> bpf_wq_init() on a deleted element installs a new cb. cb->value points to
-> the element. htab_mem_dtor() ends in cancel_work(). It doesn't wait for
-> bpf_wq_work(). The callback still runs when the element is freed.
-> Pls fix all three.
->
-> Also trim the commit log. The 5 steps and the splat are enough.
->
-> pw-bot: cr
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41025962641
+--===============2292663351581088568==--
