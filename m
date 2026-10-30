@@ -1,79 +1,123 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793348188;
-	b=jsbFRD2L9zxTnefg5hKFJXT52k3MxRAXMO26omS8FoCmH/gmrVVzvdPigPFXrgeolJYh
-	 YOpSkeQvdcfddaYuSeu/MUaUuu6I3bM3ZeD1xaio4MQuerP6ncDpZXzP6L9KPdtKr/Kwy
-	 lgZhIbY9V1B25b4gi1+9PGRQKf986z9bCxVoFQxSux2h0bIfRps4a8KI1W4e/L331WztQ
-	 sVsIKXa1xX4uvCcFu+ReXvQGGmOCzhTBbe+IkQV8Y6bDURME0VOCMODiSy9zRjrm0quHL
-	 peviFzFEdpyXAcQnz5ittT4F5co1WiB2T2GOBxzaqJ/TosWjvwymRgwrFWbtUd8W79Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793348188;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=nxb4ICs48/EH3I4EV/LG2u9tIdfwalBWWFtzW7PUfTc=;
-	b=Swnjc2QiyaCkuDFEknWkd/Vpz14d6L5B0AuRBpKknVamFmHSMQ0oqIkCVaTpQSZcEYcg
-	 HlRhK2fhYULTHcHYRhYnaMa5ATXVOoar/vExPwRQtCxE1Albnve/yibKzgo6kwXEu0BWR
-	 Lz2psDuqoyqe9J4JPIuiY0p5ubX1y9yCdk8x9wgAWFdGHG6HVy5sn5l7WXpDAPa3fGWlL
-	 rpXLH1D42gg0gOIk/JWqRkMeuExTZ3Y593XzcDc/r9mhh9qmuPMzO2wK0P2UKPt2PNqBb
-	 3qmXkC1b+JjAWnA/xb69ep2vfj2SupFpWkx3J+1c/TctjXW4ooVIcGV8l3NNvSukChg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GxCTz2HF;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFB8606A31A;
-	Fri, 30 Oct 2026 08:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GxCTz2HF
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793348187;
-	b=ktgjPCVtkgx+UJUxOWm6fSy6sX3RrxFJqMZE1nZmdkMVHoOKvMtT/fZkM/atRLz+VOeM
-	 jYNXNQJmHRoYsnwTC3OvvLJuDwyv6JayAbhhIpLiwZYOogSboQz/r2/dKaLGGs5hvQixA
-	 4fDBPiquQBDGqAFDOWf00c+JrQVxTF40insE9uUgNKFMI1u5jWqM2SjF6rfY5RvhszEH+
-	 7r+sYHd+EqRon/VDoMmrn3GrBPyk7A+c7iW8Yw9LFJ1hQdFIIC5gYxoodUW0Nm7dk33SC
-	 ZbRBOtAYXrXitiD1B/4j6aHHEY7cqX50PGyQwTbWk6YFfvoPR3HbcIdCTsCMFmVDeYw==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793348187;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=nxb4ICs48/EH3I4EV/LG2u9tIdfwalBWWFtzW7PUfTc=;
-	b=B1tHP2rBHe5NGFezdb3tSeKSbH0EsyztrQ2o9cPc4x1exAxRx0IoV/8tUq/5/hDkr+KU
-	 YPu/SSPQ43qHvLU5/prTdswYDgMHjvFzODd/mNdKj33KTaH0beZKUrVEm9Tr5Wd5W7mIt
-	 d8tT4zhSeLHZUc5SBVc0T7GRjdpBc+jTQlkExIrnYLbXDhY/ezXDdIIe71+ePT1Q9xXG7
-	 wpBt3fTzhg7aLJ9l7a2oCDq6dtD3TR/vk0CH6t9wUledN417jMN2/BBzo4BsOcIfDfIiU
-	 xbkbiFLNycEzifPI7A4wSAYinXElJBGLxeyUhGrTZ2rVbokraVDOJjSlh3RYaChYCzg==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793349533;
+	b=2/6QlX8kLmErjJceQnJdA2KSAFHr8YdGebn7FOLW/FfZFMW9bIvclL8dnTI4F+S2AAYa
+	 8S/SJdqg4P/6ZsnCkw+aJgoKVATJU1yKH7vom9SWwAGMeDLO/hj+p2Soa+q95YdpSuVTJ
+	 XGrY78AwEOR2fkWAYTU+Fgct6r0z+lX79sGq/W3YihsiNczw6dWIugfgyLlH0usGgoJs+
+	 X3rLbDocmL0IiffzKEkXLJdPE0R1RnQntKyOaytCWYPP7Z1cPClc1k58SgdyBmja82LvD
+	 R0JA041n91Xvt33an8xqP+QtitfpXcsiC+vylDmOyk5vNewUO+gBKp3g2r4ER5Pw0qw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793349533;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Date:From:
+	 To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+	 X-Authority-Analysis:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=SMwk5Ye/bYPS4wNLtjuoo+6vOdmAzp9/klLAmSpZWgA=;
+	b=OcSgd18zfe5W56wJnnVnRS1AgzhrGm2EKKY2e+ZRKqntDkJYgmCDmhiycfNF/7OntxIW
+	 NtGPlO81lB1x3nU9UDnAK2N5Mf7GYTtT/cVMaaCCBDDeeKY3ESSlXnxxRUVkOSXBOHgC+
+	 UP8DDtxVjB2xOeLxEuqice/gtFWvr5TkrBkIzIfd4hJkbwfemUS7vE+0AFXgR111lej9/
+	 M3LHIlSXjMgGw/yRQxGwoxUXT9+uvFILskAlYDwyGFrlwUIOeBcok9IJnfSWDPn0lX7R/
+	 JwygUeXEZ0ApQjfqwLtKw0pYgTudFzoD4Ks9EfuARBYdPxcqS7iw8tvUZjA9ME9xpPQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=oss.qualcomm.com;
+	spf=pass smtp.mailfrom=oss.qualcomm.com;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=kvDMF3W9;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=IeDnrxqo;
+	arc=none smtp.remote-ip=205.220.180.131
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C674D1F000C1;
-	Fri, 30 Oct 2026 08:16:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793348187;
-	bh=nxb4ICs48/EH3I4EV/LG2u9tIdfwalBWWFtzW7PUfTc=;
-	h=From:Date:Subject:To:Cc:Reply-To;
-	b=GxCTz2HFnhjMHn9BaJehym9NHJiHfz70aN+nvDttXwy94/7hTA7D8x/w8zjwLjiSn
-	 vjVJazyvgt7Y71gqXT2DNKmGgpjBgtspTs1azQE6unS5yKF8rUtwipuJwwMZ3BuJLy
-	 AwFY3Iif4KI+CtwVGAGH1RtezmkkHNd3/fNho1W/7/Fd5SN1DbXekB6gyYcu6M/RQB
-	 hXp5vrWg2UJkDbdRXIqBG2+LtsXx4yy8UVY/dWxPONJa5TRSGSobKQ7vjnkjyHdVbH
-	 Y0FDS9Ii9DmmEd6uxXXNEirmem5/HqmfHq6p6d1rYR8Q3pejEvRLwvqZjlgQU/gJfM
-	 LUuZHtUg/Nd5g==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 25F3D436CC;
-	Fri, 30 Oct 2026 08:16:26 +0000 (UTC)
-From: Marcin Knap via B4 Relay <devnull+marcin.knap.vecima.com@kernel.org>
-Date: Fri, 30 Oct 2026 09:14:17 +0100
-Subject: [PATCH bpf v2] xsk: Do not free ZC Rx buffer when the Rx ring is
- full
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594C0606A31D
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 08:38:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 594C0606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=kvDMF3W9;
+	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=IeDnrxqo
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69U8FU201663561
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 08:38:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=SMwk5Ye/bYPS4wNLtjuoo+6v
+	OdmAzp9/klLAmSpZWgA=; b=kvDMF3W9l+sTSqDU+lhaXNONwEDOIOtO64ZpR0fV
+	HSk17FtTM1wXg0hbU4I9QcCj2R7xmYyIcW9PPmipGme4V/utBR4nOyhdpskrNq3M
+	ZqRQRHZInjnqDm1lEZ0Hy90ynGjL21AiVvYaIXrkkPPCYsDEwtTekddKQIVLsMwF
+	Ai/Y9pYvM82uCXuI8o2ujUg000vGZcIy2lfnRqq3DtH8j4zddI+feWxtVSpRNr0Z
+	lvIbRBdyYdI4nZ+UtFC/Pu/M53nToFaxtDeVLCUW5W3OMLuTBupz9lIlZbwVk5/r
+	u/Uq7iOtxLZOMIZ1vGQzHO7XVy2nIqzLgUAkKCqyWI4EJQ==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hme6p23b8-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 08:38:51 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-93f13c143c8so72602485a.3
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 01:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1793349530; x=1793954330; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=SMwk5Ye/bYPS4wNLtjuoo+6vOdmAzp9/klLAmSpZWgA=;
+        b=IeDnrxqoDiOa5FAeNVjZm52ubN/s//yPlh14+dtOror+VU51+2Dxx+SUoawGla429d
+         zIuDjT7j2fOckcz1l+5f235SBaIMDD03/C7V6L4Or3H8XbIE4eSO7it1BfT9P7is43AY
+         1nsvy7H2dCBbS+nngMagB7vRuItlWaCASC5aJ0V4ovT330c1+e6c6pdqG+eM3+ZfyISR
+         gcV2cWwpyXAMt+H+aXnJVqNecyje3N1D5uj2pfEo+2HkGQMZH6XqIEUhu7dHkCi/HRAZ
+         2HcF9BrGHdEjyt4llQ9UdBlvWBV0HvCzjWpdkd9NmbCXfAKWpFD/7/dUbRXrNl7iHpSL
+         tRvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793349530; x=1793954330;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SMwk5Ye/bYPS4wNLtjuoo+6vOdmAzp9/klLAmSpZWgA=;
+        b=yCf+vvA4/aeSdQnNtLINI0b/ptKcvLRwaa14vz5Fc4E+kBbGHM12ILlGe0tA6qTLGZ
+         +6V1XengkwEJz39QfOzfWsvsg1Ia5+MU1/QEzAHYlrELvAbG1W9zKdH0lbJ6JHvgHgsh
+         HkQknh0ySWLwbvluQv6l8Q3GA9sKTMEud+5lUJ4wnDC8VdfoKu2pUU/FRYDOyWRFUwHr
+         Lmyb69tBOBduOydMxWcHLYXaPkSASR7fH/gQ0yjrbRry6zZrsD41elZ8QjwkJSOGSVs/
+         XQLIgX2VEPaKEqzFbQEOyR7V9K4ivB5Imda+3Imb8kzeUP+EMl3waLP5ten7mvXPHNsb
+         Eamw==
+X-Forwarded-Encrypted: i=1; AKwUvBwdavca5fPPgoY8zXbtNSy8Vpm/lnn2knPosQ14H8yaxOZWxDOznYstbx1+lRELhMZcgN4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKwVAJfYv4xU2LlDqXBLG9ssVD+rXYDqiWv6GZ2YvrUwsFPknXO
+	V8+s8CJBextmodvRmux6AnJM2fh50aHgMGJG4rR+QXfjTM58MgyvzYUzWrJ4IzVVPJlo+5fjYda
+	9dDCBAXWlIvzTQsSJsKCHmPXg88cNQ5dN3SzEduTB2GOM4FEhemaxZiI=
+X-Gm-Gg: AYBFou0xVm5ikBFL4OHn9if49DqyYWurd9/R5ifjHpR/olazhYrRyHjmdXbFTMZT+Ht
+	HAOpIKSrjxDRTfQtSeJZstBg3MDgFuncr+d9Flwpwu1WwsijZwKPhLmXlptjf4O8NpVB5zOFk66
+	wALCU3YoX+Px49M1sjbWxHr4jB/wSs6gM5F137jE8YWA5fsfIWbqqMn9wvYADY1lmnG46wSRcso
+	C5PC05ITidvbVG3ZEvcygKSbA0GMwwkFgKAZQa5wwXrzf3YvkMVaYwlR+dwqFONq4+fLyDvUfXg
+	Pm8uDlSVFfugE9omiANWIVzydnRw2iiRX9kLSqRFjsddLAF9TzVq6eq5vkL5fufIlqGgvz8+GOk
+	JCh7O/IMEQLs2NcgmLmCBZJ9+4Q8L1/XiKNYp0Z85YfaM/jsVlhN0/wxBbDGHmsoW2aR7GOASXQ
+	pBn2EoJqvV69Ia7kZBCrh2cg==
+X-Received: by 2002:a05:620a:8014:b0:939:733d:cbe0 with SMTP id af79cd13be357-9442158555emr265487185a.3.1793349530452;
+        Fri, 30 Oct 2026 01:38:50 -0700 (PDT)
+X-Received: by 2002:a05:620a:8014:b0:939:733d:cbe0 with SMTP id af79cd13be357-9442158555emr265483385a.3.1793349529805;
+        Fri, 30 Oct 2026 01:38:49 -0700 (PDT)
+Received: from localhost (net-93-144-6-81.cust.dsl.teletu.it. [93.144.6.81])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abebe33e79sm32889715e9.2.2026.10.30.01.38.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2026 01:38:48 -0700 (PDT)
+Date: Fri, 30 Oct 2026 09:38:48 +0100
+From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+        edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, sdf@fomichev.me, Jose.Abreu@synopsys.com,
+        boon.leong.ong@intel.com, o.rempel@pengutronix.de,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH net v2 1/6] net: stmmac: take ownership of saved RX state
+ at poll entry
+Message-ID: <auRXmDYaLRkls6ea@lore-desk>
+References: <20261027-stmmac-xdp-fixes-v2-1-10eae8a093a8@oss.qualcomm.com>
+ <179334662373.3134.1104093737847451563@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,231 +127,266 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261030-xsk-zc-rx-double-free-v2-1-cf01d4a9f3f7@vecima.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WNQQ6CMBBFr0Jm7RimKhFX3sOwaMtUqkJJC02Vc
- HcBD+Dy/7z//gSBveUAl2wCz9EG67oliF0GupHdndHWSwaRi4JyKjGFJ340+oS1G9WL0XhmJHl
- Q+anU9ZEMLNves7Fp895A9QaqXxlG9WA9rMYVa2wYnH9v75E2+M9RJCQUUlJpikKcjbpG1raVe
- +1aqOZ5/gLbBU1M0gAAAA==
-X-Change-ID: 20261019-xsk-zc-rx-double-free-1a3b059cd41f
-To: Tony Nguyen <anthony.l.nguyen@intel.com>, 
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Magnus Karlsson <magnus.karlsson@intel.com>, 
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, jtollet@cisco.com
-Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- Marcin Knap <marcin.knap@vecima.com>, 
- Joshua Washington <joshwash@google.com>, 
- Harshitha Ramamurthy <hramamurthy@google.com>, 
- Sunil Goutham <sgoutham@marvell.com>, Geetha sowjanya <gakula@marvell.com>, 
- Ratheesh Kannoth <rkannoth@marvell.com>, 
- Subbaraya Sundeep <sbhatta@marvell.com>, 
- Bharat Bhushan <bbhushan2@marvell.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793348185; l=7209;
- i=marcin.knap@vecima.com; s=20261019; h=from:subject:message-id;
- bh=zjCC53eamxy9uMwrekd/GVBEJYRREa6qEen7NhdsQgY=;
- b=JMsIQYe1NE5OYniKA2lvB97Xsdw88oJQPtAmSCDaKi15sBjcyt+WyWBhB9YeXee+577TW/01w
- /fa+Lx6zDrDB5c+neYFJxGKWLQW+14dC7+7u0rC92WOgK05a3sJFBL1
-X-Developer-Key: i=marcin.knap@vecima.com; a=ed25519;
- pk=rCvVOuopf4s4BHtLE+FRnv0x83PoFHgBPo9mtNlvzLk=
-X-Endpoint-Received: by B4 Relay for marcin.knap@vecima.com/20261019 with
- auth_id=1237
-X-Original-From: Marcin Knap <marcin.knap@vecima.com>
-Reply-To: marcin.knap@vecima.com
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="GwTlmuwKyHB3BHtS"
+Content-Disposition: inline
+In-Reply-To: <179334662373.3134.1104093737847451563@kernel.org>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDMwMDAzNCBTYWx0ZWRfX8gjZZ6ymps51
+ 3FZ2A6RDzCM0JVqsnvIa+J/rHi5mXqIVbtxsSnojEj7eq5dt0PSL/XjluReXto9Cq4eMUGJHwmf
+ iD81n//l3/yJYKuDG6P6MdSZwpapDIGTb2XHi4LvlSEH5/uE5oZkNZ7dwwcyGrEkJwEnTT9l8du
+ LMKUyBM+UBWBShlAb3+Og7VJ3+jbfww3O275TuFR3VP/LWuxGlpPHCbTpC+YuuoG+a9Ua2hbHsg
+ +7kmIOIFGVo/4BMfuaA7NrBAttT9EU71O+uVWEVzoAk+HGKXJwzHiyWyaQBVi3bgHR/3QRJgPy0
+ eK+5GFA408JYjcsiFHLTDYi0A/0xto8TkoyezHFlaTlzxQ3wkw/hehY2EBmcZkybb7eqIqCDLJJ
+ M1nsFD2uQjj45ytE0ODOovuoAzRiX+3JyeAMOvBiEJ9TX4shKdW4TB+Fr5XbKEPYvYHU0hukmWo
+ tk19+ewTBxiA5CiBD8A==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDMwMDAzNCBTYWx0ZWRfX+SeeTCsp4o43
+ lyJbde/PFDTxiNjxRPx55eoV5ug86uWrjAkp03uyWgk+fT2bqI/lpaEyS3WgJdhIGKsWSr2FBYY
+ MATHj9l59SQmyxjJDDoMYOfDP0uywuk=
+X-Proofpoint-ORIG-GUID: I32Knp5ScotEQ5bACQZoGlEGNbCm5RNb
+X-Proofpoint-GUID: I32Knp5ScotEQ5bACQZoGlEGNbCm5RNb
+X-Authority-Analysis: v=2.4 cv=TL3Q2Fla c=1 sm=1 tr=0 ts=6ae4579b cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=7fYLNvKHbgS61GKHX+yayQ==:17
+ a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22 a=9R54UkLUAAAA:8
+ a=EUspDBNiAAAA:8 a=x-ypl-TzxbZATBLWrugA:9 a=QEXdDO2ut3YA:10
+ a=o3Dn75d1IjpRQCD25FcA:9 a=IoWCM6iH3mJn3m4BftBB:22 a=YTcpBFlVQWkNscrzJ_Dz:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-10-30_03,2026-10-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 clxscore=1015
+ adultscore=0 bulkscore=0 malwarescore=0 phishscore=0 suspectscore=0
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2610190000
+ definitions=main-2610300034
 
-From: Marcin Knap <marcin.knap@vecima.com>
+--GwTlmuwKyHB3BHtS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-When an XDP program redirects a zero-copy buffer to an XSK and the
-socket's Rx ring is full, xsk_rcv_zc() frees the buffer and returns
--ENOBUFS to xdp_do_redirect().
+> Thank you for your contribution! Sashiko AI review found more severe
+> issue(s) in other patches of this series. This mail is only an FYI, in ca=
+se
+> you want to address the nit picks below when you respin.
+>=20
+> Low priority / nit picks for your consideration:
+>=20
+> - [Low] The commit message gives the trigger as a saved partial packet
+>   completing "with a poll budget of one".
+>=20
+> Pre-existing issues:
+> - [High] In stmmac_rx(), if napi_build_skb() fails on a non-last
+>   descriptor, the code recycles the page, does rx_dropped++ and count++,=
+=E2=80=A6
+> - [High] On resume, the RX ring is handed back to the DMA without its
+>   buffers being refilled or their addresses rewritten, and this patch=E2=
+=80=A6
+>=20
+> --
+>=20
+> net: stmmac: take ownership of saved RX state at poll entry
+>=20
+> This patch makes stmmac_rx() and stmmac_rx_zc() take the saved
+> partial-frame state at poll entry, clear it right away, and save it again
+> only if the frame is still incomplete when the loop exits. The in-progress
+> flag is now tracked separately from the status of the last descriptor
+> read. The saved skb is also dropped in stmmac_reset_rx_queue() and
+> __free_dma_rx_desc_resources().
+>=20
+> > When a saved partial packet completes with a poll budget of one, the
+> > old loop can leave state_saved and state.skb pointing at an skb that
+> > has already been delivered or freed. The next poll then reuses that
+> > pointer, causing a use-after-free or double free.
+>=20
+> [Severity: Low]
+> Could the commit message say how a budget of one happens on a running
+> system?
 
-A failed xdp_do_redirect() leaves the buffer owned by the caller, and
-most drivers rely on that: mlx5e treats the failure as XDP_DROP and
-releases the buffer when the Rx WQE is refilled, while i40e, ice,
-ixgbe, igb, igc, stmmac, idpf and others free it themselves. The
-buffer is therefore freed twice. It gets reused for another Rx
-descriptor, the second free puts an in-use buffer back on the pool
-free list, and the same UMEM frame is later handed to user space
-twice. ixgbe and igb keep the buffer in the ring on their need_wakeup
--ENOBUFS (XDP_EXIT) path and run it through XDP again on the next poll,
-after the core has freed it.
+I guess this comment is minor, I can amend it if I need to rebase.
 
-Leave the buffer with the caller on both the single-buffer and the
-multi-buffer -ENOBUFS paths, as xsk_rcv() and xsk_rcv_check() already
-do. A few drivers relied on the core freeing the buffer, so make them
-free it:
+>=20
+> With limit > 1, the old else branch cleared state_saved on the second loop
+> iteration. So the stale pointer only survives when limit =3D=3D 1. Normal
+> net_rx_action() polling passes the NAPI weight.
+>=20
+> stmmac_napi_poll_rx() passes its budget straight through:
+>=20
+>     work_done =3D stmmac_rx(priv, budget, chan);
+>=20
+> Busy polling can supply a budget of 1. In ep_eventpoll_ioctl(), EPIOCSPAR=
+AMS
+> only asks for CAP_NET_ADMIN above NAPI_POLL_WEIGHT:
+>=20
+>     if (epoll_params.busy_poll_budget > NAPI_POLL_WEIGHT &&
+>         !capable(CAP_NET_ADMIN))
+>             return -EPERM;
+>=20
+> SO_BUSY_POLL_BUDGET in sk_setsockopt() can also be lowered without
+> privilege.
+>=20
+> So an unprivileged local user who receives multi-descriptor frames can
+> reach the use-after-free. Would it be worth saying so in the changelog, so
+> stable reviewers can see this is a user-triggerable memory-safety fix?
+>=20
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/driver=
+s/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > index 9ded31150fbe6..fa7108919e90d 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+>=20
+> [ ... ]
+>=20
+> > @@ -6041,10 +6051,8 @@ static int stmmac_rx(struct stmmac_priv *priv, i=
+nt limit, u32 queue)
+> >  		/* Remove FCS if needed */
+> >  		if (!fcs_stripped && pskb_trim(skb, len)) {
+> >  			dev_kfree_skb_any(skb);
+> > -			skb =3D NULL;
+> >  			rx_dropped++;
+> > -			count++;
+> > -			continue;
+> > +			goto next;
+> >  		}
+>=20
+> [Severity: High]
+> This is a pre-existing issue, but what happens in stmmac_rx() when
+> napi_build_skb() fails on a descriptor that is not the last one in the
+> frame?
 
-- i40e and ice consume the descriptor on XDP_EXIT without freeing it.
-- gve DQO counts the redirect error without freeing the buffer.
-- octeontx2 returns false on a failed redirect, so the caller goes on
-  to build an skb from the already freed buffer. Free the buffer and
-  report it as consumed instead.
+This issue has not been introduced by this patch and it needs to be fixed i=
+n a
+dedicated patch.
 
-Seen on Mellanox ConnectX-6 DX MT2892 (FW 22.47.1026) with AF_XDP
-zero-copy on 7.3.0-rc6 when the user-space consumer could not keep up
-with the Rx ring. With this change no duplicate frames were seen with
-striding RQ on or off.
+>=20
+>     skb =3D napi_build_skb(page_address(buf->page),
+>                          rx_q->napi_skb_frag_size);
+>     if (!skb) {
+>             page_pool_recycle_direct(rx_q->page_pool,
+>                                      buf->page);
+>             buf->page =3D NULL;
+>             rx_dropped++;
+>             count++;
+>             goto drain_data;
+>     }
+>=20
+> error stays 0 and skb stays NULL, and drain_data jumps back to read_again
+> because rx_not_ls is set. The next descriptor of the same hardware frame
+> passes the error checks and takes the if (!skb) frame-start path. A new
+> skb is then built from only the tail of the frame.
+>=20
+> len still counts the dropped prefix, so the pskb_trim(skb, len) above does
+> nothing and the FCS is not removed. The trailing payload bytes are then
+> delivered as a standalone Ethernet frame.
+>=20
+> With Split Header active, stmmac_rx_buf1_len() returns 0 for any
+> descriptor after the first:
+>=20
+>     if (priv->sph_active && len)
+>             return 0;
+>=20
+> That leaves the rebuilt skb with no linear data, only the buf2 frag.
+> Wouldn't eth_type_trans() then hit the BUG() in __skb_pull()?
+>=20
+>     eth_type_trans()
+>       eth_skb_pull_mac()
+>         skb_pull_inline(skb, ETH_HLEN)
+>           __skb_pull()
+>             skb->len < skb->data_len -> BUG()
+>=20
+> If the stale page bytes look like a VLAN header, stmmac_rx_vlan() can hit
+> the same BUG() through skb_pull(skb, VLAN_HLEN).
+>=20
+> An on-link peer sending a frame that spans several descriptors, plus a
+> GFP_ATOMIC allocation failure, is enough to trigger this. With this patch,
+> the in_progress tracking also carries this skb =3D=3D NULL, error =3D=3D =
+0 state
+> across a poll boundary. Nothing else in the series seems to address it.
+>=20
+> Should the napi_build_skb() failure path set error =3D 1, so the rest of =
+the
+> frame is thrown away?
+>=20
+> [ ... ]
+>=20
+> > @@ -8421,6 +8430,9 @@ static void stmmac_reset_rx_queue(struct stmmac_p=
+riv *priv, u32 queue)
+> >  {
+> >  	struct stmmac_rx_queue *rx_q =3D &priv->dma_conf.rx_queue[queue];
+> > =20
+> > +	dev_kfree_skb_any(rx_q->state.skb);
+> > +	rx_q->state.skb =3D NULL;
+> > +	rx_q->state_saved =3D false;
+> >  	rx_q->cur_rx =3D 0;
+> >  	rx_q->dirty_rx =3D 0;
+> >  }
+>=20
+> [Severity: High]
+> This is a pre-existing issue, but this new free happens just before
+> stmmac_resume() re-arms the RX ring in place:
 
-Fixes: 269009893146 ("xsk: recycle buffer in case Rx queue was full")
-Signed-off-by: Marcin Knap <marcin.knap@vecima.com>
----
-Tested on mlx5 (ConnectX-6 DX) in zero-copy single-buffer mode.
-The i40e and ice changes and the multi-buffer path are build-tested
-only, as I don't have that hardware available.
----
-Changes in v2:
-- Also free the buffer on zero-copy redirect failure in gve DQO and
-  octeontx2, which relied on the core freeing it (AI review).
-- Audited the remaining zero-copy drivers against Björn's table.
-  ixgbe and igb no longer run XDP on a freed buffer after
-  XDP_EXIT; making them drop and consume the descriptor (R2) is
-  left for a follow-up unless you prefer it in this patch.
-- Rebased on current bpf.
-- Link to v1: https://patch.msgid.link/20261019-xsk-zc-rx-double-free-v1-1-2aa19f6628fb@vecima.com
+This issue has not been introduced by this patch and it needs to be fixed i=
+n a
+dedicated patch.
 
-To: Joshua Washington <joshwash@google.com>
-To: Harshitha Ramamurthy <hramamurthy@google.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>
-To: "David S. Miller" <davem@davemloft.net>
-To: Eric Dumazet <edumazet@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-To: Sunil Goutham <sgoutham@marvell.com>
-To: Geetha sowjanya <gakula@marvell.com>
-To: Ratheesh Kannoth <rkannoth@marvell.com>
-To: Subbaraya Sundeep <sbhatta@marvell.com>
-To: Bharat Bhushan <bbhushan2@marvell.com>
-To: Magnus Karlsson <magnus.karlsson@intel.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-To: Simon Horman <horms@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: intel-wired-lan@lists.osuosl.org
-Cc: bpf@vger.kernel.org
----
- drivers/net/ethernet/google/gve/gve_rx_dqo.c           |  4 +++-
- drivers/net/ethernet/intel/i40e/i40e_xsk.c             |  1 +
- drivers/net/ethernet/intel/ice/ice_xsk.c               |  1 +
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c |  3 ++-
- net/xdp/xsk.c                                          | 15 +++------------
- 5 files changed, 10 insertions(+), 14 deletions(-)
+Regards,
+Lorenzo
 
-diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-index 82ed5e48b00a..cc544420df11 100644
---- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-+++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-@@ -686,8 +686,10 @@ static void gve_xsk_done_dqo(struct gve_priv *priv, struct gve_rx_ring *rx,
- 			goto err;
- 		break;
- 	case XDP_REDIRECT:
--		if (unlikely(xdp_do_redirect(priv->dev, xdp, xprog)))
-+		if (unlikely(xdp_do_redirect(priv->dev, xdp, xprog))) {
-+			xsk_buff_free(xdp);
- 			goto err;
-+		}
- 		break;
- 	}
- 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index 51a05ce4c7ce..a11ee1f3fa38 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -360,6 +360,7 @@ static void i40e_handle_xdp_result_zc(struct i40e_ring *rx_ring,
- 		return;
- 
- 	if (xdp_res == I40E_XDP_EXIT) {
-+		xsk_buff_free(xdp_buff);
- 		*failure = true;
- 		return;
- 	}
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index 0643017541c3..7c1dd4c87a71 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -636,6 +636,7 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring,
- 		if (likely(xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR))) {
- 			xdp_xmit |= xdp_res;
- 		} else if (xdp_res == ICE_XDP_EXIT) {
-+			xsk_buff_free(first);
- 			failure = true;
- 			first = NULL;
- 			break;
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-index 90af9b9044aa..6d10c132f61c 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-@@ -1555,7 +1555,8 @@ static bool otx2_xdp_rcv_pkt_handler(struct otx2_nic *pfvf,
- 				*need_xdp_flush = true;
- 				return true;
- 			}
--			return false;
-+			xsk_buff_free(xsk_buff);
-+			return true;
- 		}
- 
- 		err = xdp_do_redirect(pfvf->netdev, &xdp, prog);
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 781ba46eb152..89bac2feeff2 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -224,21 +224,15 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- 	struct list_head *xskb_list;
- 	u32 contd = 0;
- 	u32 num_desc;
--	int err;
- 
--	if (likely(!frags)) {
--		err = __xsk_rcv_zc(xs, xskb, len, contd);
--		if (err)
--			goto err;
--		return 0;
--	}
-+	if (likely(!frags))
-+		return __xsk_rcv_zc(xs, xskb, len, contd);
- 
- 	contd = XDP_PKT_CONTD;
- 	num_desc = xdp_get_shared_info_from_buff(xdp)->nr_frags + 1;
- 	if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
- 		xs->rx_queue_full++;
--		err = -ENOBUFS;
--		goto err;
-+		return -ENOBUFS;
- 	}
- 
- 	__xsk_rcv_zc_safe(xs, xskb, len, contd);
-@@ -252,9 +246,6 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- 	}
- 
- 	return 0;
--err:
--	xsk_buff_free(xdp);
--	return err;
- }
- 
- static void *xsk_copy_xdp_start(struct xdp_buff *from)
+>=20
+> stmmac_resume()
+>     stmmac_reset_queues_param()
+>         stmmac_reset_rx_queue()    <- frees state.skb, rewinds cur/dirty
+>     stmmac_free_tx_skbufs()
+>     stmmac_clear_descriptors()
+>         stmmac_clear_rx_descriptors()
+>             stmmac_init_rx_desc()  <- sets OWN only
+>     stmmac_hw_setup()
+>         stmmac_init_dma_engine()   <- restores the tail pointer
+>=20
+> No refill and no stmmac_set_desc_addr() runs before the DMA restarts. That
+> means two kinds of descriptors get re-armed with a bad buffer address:
+>=20
+>   - slots stmmac_rx() consumed whose refill failed. stmmac_rx_refill()
+>     uses GFP_ATOMIC and stops at the first page_pool_alloc_pages()
+>     failure, so buf->page is left NULL.
+>=20
+>   - descriptors the DMA wrote back after napi_disable() in
+>     stmmac_suspend() and before stmmac_stop_all_dma().
+>=20
+> On dwmac4/xgmac, write-back overwrites des0/des1, which hold the buffer
+> address in read format (dwmac4_wrback_get_rx_vlan_tci() reads des0 as the
+> VLAN tag). dwmac4_rd_init_rx_desc() only sets OWN/BUF1V/IOC in RDES3. The
+> DMA would then write to whatever status data is left in those words.
+>=20
+> On norm/enh descriptors, the old address stays in des2. The slots most
+> likely to have failed refill are the ones whose pages went into the saved
+> partial skb. The dev_kfree_skb_any() above now returns those pages, still
+> DMA-mapped, to the page_pool just before the hardware is re-armed to write
+> into them.
+>=20
+> Can this lead to DMA into pages the pool has already handed to another
+> descriptor or released?
+>=20
+> Also, if DMA completes into a slot with buf->page =3D=3D NULL, stmmac_rx()
+> calls page_address(NULL) and napi_build_skb() on it, which would oops.
+>=20
+> The commit message notes that "the RX buffer addresses are not
+> reprogrammed" on this path. Would a full fix need stmmac_resume() to
+> refill and reprogram every RX descriptor before setting OWN?
+>=20
+> --=20
+> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
+set/20261027-stmmac-xdp-fixes-v2-0-10eae8a093a8%40oss.qualcomm.com
 
----
-base-commit: fb7bd3a2aad70a76232a7168a505386d0a1396af
-change-id: 20261019-xsk-zc-rx-double-free-1a3b059cd41f
+--GwTlmuwKyHB3BHtS
+Content-Type: application/pgp-signature; name=signature.asc
 
-Best regards,
---  
-Marcin Knap <marcin.knap@vecima.com>
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCauRXmAAKCRA6cBh0uS2t
+rNC5APwJ0r1A/1E3GxQ3pBn+CW8KtnycbSdAVH4ybEyCN8sjSQEA9LVEsM/6+ynf
+5roRrlhlgDObZ9LYdupLViYh6FkLcgQ=
+=C9fm
+-----END PGP SIGNATURE-----
 
+--GwTlmuwKyHB3BHtS--
