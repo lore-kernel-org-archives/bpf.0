@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.216.41
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1793385762;
-	b=UjGK57eprBWwS48LqQSXmDxeBD3Hhe5ksUpEsR+sGeaziNhBRT28lG/lH2IGsKWRT+jT
-	 F+87rjpPGJJ12JEZ3U3b/wDcsvezzI0wOTp81HeSH5BIO7eQVNag7VsZ9Z0mUj9lJNU2P
-	 TSrWO3GwiXLcyf5k/5A5tgAmyo12uRCk1/HVG6kGcBqw1u1hotjBeITbOyS55Dcn2mJ2/
-	 cnVD4lV6jRaOYCFgB4VMw5ecerBh39SpYBX9kUI1rRjiOnErJ36E4UFpPDQzkvJ0VKssa
-	 6hiBaOJhnJieRxPFoV7dZyFCmkRR/CyyDtCOb60hlpBVXgq9BpIc7r/kgWocI+xsrZw==
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.44
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793386012;
+	b=zLjTZyPD4k7JAi1AyOdaiLdzsWOfYVVev9+mhMeo1CDMde+05J9lIsoVSkcSpbwhx/n3
+	 gZ87n/jyLUdys4yoZjgKkYezhUZR3I/IGffyH3EShqH9QAfWN+H6kEIvgjwMDqDS2q91t
+	 NNA7sjASl9hQXAvK0SMNj0pRGAsDBHvhsJxqI3LkJ6yNykOV0QJe5sylZpb+gel6SQT02
+	 9smbkZG1W66+nQWOI4riZpxpQlSxLs7/el+tPWpfrXKC5ytUrMQlWphnl/JuNlJP9lyml
+	 w6P6R6IAu4rZYaZoPQymSQaWrGA/ifVUN5MLremniOe4C4wPmUh3LPAso95deSC6m/w==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793385762;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793386012;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ArYrG0SZmM4/M6BZSvCDJn/YoiUDh8QaQvrAG71KqZI=;
-	b=n+BSMpbVkQGzP2w8uX8k33GKwb40/lO/MUP7xxNRm4AsjX8b5leZ1Q+8QMRjrC7vswm0
-	 ZRHcA90k7Qj+yjt6aDl1AUJvYVj23tcggoP9Dho5bFpLAv1FN6qaHucxHh2Wvfhfobgou
-	 LMyY1BFo2qST380qN9okAi7KD2Ol7UChfvgb7JZhsPAAxzC8aUxACA45NjMkG4yVNExLg
-	 GgBRePdi8Pqgsp7Udkm/QndrT8rX09J1grst5TflywaWlVxKgG1AZ2XX44MR7HEn5KawW
-	 L4rm7cEeS1B/DfjBPLS/yw2iAbxk9A7G2bjlaOHoyBBNNObwF1TDL0ns423RvYMC3BA==
+	bh=Yft5IyV/xpJOt9PtsEc3/1GOTRmgmfnSHPrRuIdkolU=;
+	b=hOM8ZgiOm7yef56NCXK9QXJUpsxu9bJGB4cajl1erKiL5mcqLjLGegKOC2i7W/b5BqM+
+	 98nDbr56cVYkN0I2iCZsio/HiwJfHJwHKNq53+c1tAZEx4CnEzUd8EbNhN9dGMIfKxVPK
+	 HkIjJs24fR6MdQCP2m4TbtJm0ZJW4b33wteVAiHvqqkqf/OJCzVJ1WDxHNH9NlEl75XnP
+	 vzvcrbyneLbDaaEuu77x2TYpJYAxx+ZT1ZW2UaaiqAUpYllrmdi8Eu+O3c05WVeBsB3cI
+	 V+1uyIn0G7ejQ9oDM3Lxai3MNmoHwS+MRsxhcgH+c79H0BoAcBNcboxxFB6IFuvaF8g==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ilhiRFdm;
-	arc=fail smtp.remote-ip=209.85.216.41
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RpG9nWi+;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.44
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB41606A31E
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 18:42:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDB41606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123E0606A31A
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 18:46:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 123E0606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ilhiRFdm
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ada4c06b7bso496168a91.2
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 11:42:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793385761; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RpG9nWi+
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3acb11973c3so905791a91.3
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 11:46:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793386011; cv=none;
         d=google.com; s=arc-20260327;
-        b=AwyPKRQ/nLgeJZgz0psFl5tC5hbvpK/i80dJDAbjd+9OBzeHLmLqBsEsDR8B4YBNFI
-         PftAH5u7tgwa/JZYI57HQcv9BMppRnwdT/8Lqvc4GKoDNG8XluyYM2oeEQC4AOxksQW1
-         N6kyqhBGKk+mU+FtNfGtimxJuSUC+EdisexgCCrGSu+X2RMk9Ym2kjMAw89ypxydL980
-         +bVmb97rcY243IpYU1jgVZ79fzvgJSQ8OYtbP1H9nRCzS99fBwI4MQSwHOKNrXjTswkV
-         elGqxlAc8Ep3l/nmteG0YWTvqxNWZW4Vddr+Qz29Q9kXaayPdwPNSz8xFB7+BPqLuDVV
-         y9xw==
+        b=LQOlGo1poFu2HESSX9KQYbxLNQoSG7gg/7gNCPn2/CUmMHxPhRKSfb2suxc487tOpS
+         MAqXCC4BM0JmZPKy4kPTBPxnub6JM3ozk0ZU/cN9hPC1SoaVOVH+tBJ1tCx8rdH3G21M
+         0cP56cxdXK6TpP5uqyS79F9NTfkiANPe+GqZD2WuQfWAs44TL/xLJJgRX/A9Frg+43jf
+         cZHDAGunAHYvRNuWDYie36plJ+Mr5EumBLllwGdBqKe4M3H1kLJAh0orlYFTLojd/+85
+         Bs3Z0UaDUtcDy010wW60QiYfsv1O+IikBCee3k3MVc4ggwXd993d2j/ag0plTvng35/G
+         lYWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=ArYrG0SZmM4/M6BZSvCDJn/YoiUDh8QaQvrAG71KqZI=;
-        fh=opvLAvW+oSVSjjR/z4LQU+HWkDC6GPZINA0sNBCfu/s=;
-        b=dduHnc2iK1UwmQbO9gfhdh1Sb3Ihgto8KxJZFqfZ9fVXPVs0cbGpf8iQ7ZOaFFwCRL
-         MoKMyYhYpBV3deP3VaAqDib1AfUemug8JCaYSzIhmPN3O76YCjrhxpWsaqhpySHfEyO/
-         IVMrMUmKqLkqlQ412XUf933uIb8R0ajVk8xl9JUOeBTnW+3aL6dleh84Y+FmdI9180zv
-         m8fyDD1UA7KYFUWaEXKpfePnoj2eSRmjDEBAlmvTy6lAJq6dLvK51F6djDoyy65PzKkM
-         zCe5b7wWet8oJ2tcX1/dEUS6he7n1vCnc1BtZbV47QCixzlzD6mnijc2IzDPIU30d7kP
-         w1FA==;
+        bh=Yft5IyV/xpJOt9PtsEc3/1GOTRmgmfnSHPrRuIdkolU=;
+        fh=Afy2XiopY8lSrbL2hBY8NxgFfFuZa2uGweoSFVLi0Jo=;
+        b=CD1Z5kUTo9UFjWYioFxKCkJCG6SpL0xYyHvSZsyvv7Xo8Z37aEhQnCiOuLy0YQ8z/H
+         YkkdX+Bd+qa30M3TKc7R4HOG63KhrdrgnSP1gUP4N9r6oGwFKAWkj5aKzIARY1QHSLhg
+         3lalQoxgCawmPDfr/iD9a6lunp7LUoOPla7TxFx1wsMqRkIkPAPlv9TNfhCp9hLCMitc
+         pI8BvJJw3qzHgxI/6MlyEaw/C/Dauemq3ip0RGF40lNmzVNkOyRpDNbg22Gj3CrR6Kv8
+         1Xaj6kX+HEKVe2mcakITf1h18oCL30Tg81N22IaVIyVkkmAd/AHsLQV08oEYUxPffdLD
+         h6yA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793385761; x=1793990561; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793386011; x=1793990811; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ArYrG0SZmM4/M6BZSvCDJn/YoiUDh8QaQvrAG71KqZI=;
-        b=ilhiRFdmDF7b2CCOVYg3yrhn1I/DSoWRa475WOgAruostyli6ZMqjZ8ESu/yy5CChS
-         ORPsHXhLPSB1d8qNrTp62GpyH8yrD+KcK/Sl4X0TBIun9uQC8HbkSLeOQxdSLJiYuFMf
-         XQv6Iyxweil5+vEvXvkSgud6DAU4epItDzW6UJ1rlDcLV2A5Mbef3YHl3NS1jQUpnBCz
-         cXtS2Y1FhBsB8+HetmFOuYCQG3xb3XiaIZrXChQ1r6BwCboqJU6zWBFLaNgS9KhzrizS
-         BIhSTD4xZXL4O7bpS/UEY3kl5bLzYJWvjxr8L2bxTLch81x4AItH1ByoYLZFjTdsOMix
-         sxDQ==
+        bh=Yft5IyV/xpJOt9PtsEc3/1GOTRmgmfnSHPrRuIdkolU=;
+        b=RpG9nWi+ZKZZWc/DkNMA83Z9UtRpSslN4KqWD6J5EXh+HiXKD2gHraxT5ud7euPIBF
+         cZe/CRChoqxgWOsLvo1/dZceKUHRRMfv1PNbN5fCPEonX8k+7y4Fo6QQKdoesI69izGD
+         R7wcqjNUTF40M+owIN41gjfFh2MaOUIikO2wxjlDsv1n9TwXBPcEDRcdrKiWXhKU/yAE
+         gasrhk1UJOT32b34GxEzm1jygwYHNf8R/0ZC6KwwHz6i8zBf0NWrX9VSoyo8Dzx2Nz3Q
+         an6SUyaW9AasJAe7rIckyBn/crcOLhcLkVx6htT8C/dHctAMsYKTLBzZiYOnM1NLIyWZ
+         XlZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793385761; x=1793990561;
+        d=1e100.net; s=20260707; t=1793386011; x=1793990811;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ArYrG0SZmM4/M6BZSvCDJn/YoiUDh8QaQvrAG71KqZI=;
-        b=2tHqv2zDINh5Gwj2elU5WjOLQzPfOlA6jMN/mpat3jv6N4yoOdRb3XagHximyIePn4
-         U/9A8IBO/uAVDkKoWH36ZJP56MsUpShoEWAv72dJZlDupLPjtIHoBlCPK60WvGvzkOWp
-         IP4RhjJsX+4qv/ukkPadP4fyP97ZNwuRjZjpd5Pi09297iX6ZS85SqDEFe5uKZA+oDdr
-         oa6CdgC2LAV+GnfULJHVqnkkBUFeP78GT6Zc+XQGEQeB6dVgY5RINFj86xdI5XUOfVmr
-         po+Z+jfxNXLATAk8AgQdW1ZY0ytV3VnBus+K+37TeZZEJtCbHftvBFnqBT2DKcg5+J9Q
-         /BRw==
-X-Forwarded-Encrypted: i=1; AKwUvBxxTMuQpiP5uNKw9S71Kr/6JqfgVKibHyiCbq6j/fHvD33QORa919kVstKc8nuJbsHh+e0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJyfXbcvVsaLXmkoA0XHh1cv2XtiCcyJo1b61d0ZKcdtH9wkST7
-	MtumZXZfj5c5gLCzQKDY9qANfdIuJKpCc5Cz0lsUOYQh27bDXUSskkDuG3Y9dg99ooYzgoxP+w1
-	+lD1SsORj/id1o8J5UIBKiwXNKnjsjlE=
-X-Gm-Gg: AYBFou0TwezIvt9KwiOgr8HLxjpNvAg3NDHjPI8wg3lwZAJsgytF+5LUVU9ps2tbquM
-	pBx7U25r00+UOBaGOOS/WFu8JNcsAfQccMCx4MqrXmyiIlXfKAKrU5dLpRr7rILOO/S8BUxVxSY
-	CiOzRmWl9oi+MB+ar4+LdggzjMt3VVHdpgP8KXNqx4X/m2/fbAo038E4ua0r2Jliql4UQHCU33A
-	PTdIPr6sXODlTVJERq/faz+709p2aROP60ehUgvh8rNhgJU97dSAOf7aSbAPYYaI9Qf5+ysvVEt
-	HdTQco97tYwPC1BSW9UfADerYpTMbd583qOfTU0UVrDyPMa9o3Fy/7QbXdWXPivM9LhPF2DCBbY
-	BqQNkPCbtRmmQoN5+l1a/MbQaLU93biSBQX5yZN0EwZLAsbU1xmn/LOYIa4ukMWpmJNV2NnCyo9
-	NZ392K613V5LHOljlqfT89ToeQ/AUcS10NNQnPGrUkSskSi3mT9p7OiU0=
-X-Received: by 2002:a17:90b:54cd:b0:3ab:2737:3392 with SMTP id
- 98e67ed59e1d1-3ae897a87admr2747287a91.53.1793385761164; Fri, 30 Oct 2026
- 11:42:41 -0700 (PDT)
+        bh=Yft5IyV/xpJOt9PtsEc3/1GOTRmgmfnSHPrRuIdkolU=;
+        b=YE+enO2F0mKIFC0UidsU5HDyVRsyM702at5gIMvugJ8hmymHAeKsfjYkig6aFRydg9
+         QNDalN+oDxc53DRq7d59Qd2qJA5EEvnVehUl86Qi8clnr00uHuqVK9u2dXE2jlD8Nxqx
+         iclPJ+YdJP945dfalaRQDpZRZqMQi2Pz3t+E8WayOJuRkiy8/UqDdDBJnzUd6k4qKmEu
+         P5TXsk1Pyf4z5AT8UYZp4HB9gWiJHcRn7UvEkYxeeEf5R0zbS6+F6UuUEXxNF9kR4+SG
+         zjuFfrLz9dyc/gvaqDLN5aNzahEDdizUxVM45MlxUZrj5umfu74iyHn6PXy+eIfQ0tAP
+         Pu6w==
+X-Forwarded-Encrypted: i=1; AKwUvByn+nVOQD8ewIMkzlRn3qZ2wMx5x+gXZKPqg/941lhFKhwvRMzD6bxKvVLmWGyNWf4MpeA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ/ijRdyvM4uyb+PKpWBepp3AwTMMqSXmSaPifS0IBfcNAUkYGC
+	pd55TKdDkb3TA7WMN+vS1h7ntfmTMpMcfEw+UZt+XScNhKAfJChb/OMvbYg9KZD9Ez5x8nKJ+kY
+	8KiCknOG+t1GkIStAB8DPeLdfCpamDpI=
+X-Gm-Gg: AYBFou3LalzkcLAZbRikNoGaZEBlzcXflxd1LZC4x8uAQs5n+b9TFQbpBHE0khj9hDX
+	m4F2Hcs42j7Ej+pxmGBMf06WXCR0/LciXJXT0gh3h8RMJVAPiJ71hDj711NEQ/8htx1R+wpVNnv
+	9Y9uMdGP0aZxf4yOcfxpCEoSnkoC6f/ckXEYIBP81IVJxkyfle7FKmEjFiqoRDMkWLCp5fiwlBf
+	MZAWeFjOuJ6x2FIr9yO8zgegdqZnrzqG7XPc7jgvbpHUr9eeByQ+G/L0K6h5g0InOjvCgbbPMRv
+	zIF4c/CtDeAEVQ3etFm0c4m5cKrygRVT9iZr2pqsW7Oq5ntQf2ZK3Z/Q7Bwowu+WCx9VeNl0Ks0
+	7605zdLdtydMj+GTlgXqIwTwTc9fSe44RvUqW2CUVXF5oNj9wcJ2p3yPPgA9nJtEL87gKvoOq7C
+	qJIlrr1osx2+wpWVSqHRxuCo2OADig+0Paxw==
+X-Received: by 2002:a17:90b:2803:b0:3a4:bd4e:6d15 with SMTP id
+ 98e67ed59e1d1-3ae89763070mr2620334a91.34.1793386011367; Fri, 30 Oct 2026
+ 11:46:51 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,209 +105,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
- <CAEf4Bzb--Jzz696u057G9_CgQN7zf6ksvoL80KJacKO2CorsnQ@mail.gmail.com>
- <CAG2Kctojb7xiOqTmwWqoAKFaNUECjOzXVc_t6KbG13Pqm2dbng@mail.gmail.com>
- <CAEf4Bzbs8F1DPBz=WXVTExrrNjzvaFsi4L+HEj+zbUTpPSTX5g@mail.gmail.com>
- <CAG2KctpSTCyWQHgJ8GyFEhHPdFawUa6zy0g7rkfCcujJRN6f6w@mail.gmail.com>
- <CAEf4BzbyqPC=RQGWEdpkqu1WDQ2_S0H8pZU2i=_gLuSDQtpFbg@mail.gmail.com> <20261030153528.0d5113e7@pumpkin>
-In-Reply-To: <20261030153528.0d5113e7@pumpkin>
+References: <20261028125148.1348-1-yangsongsen@insta360.com> <20261029073344.729148-1-yangfeng59949@163.com>
+In-Reply-To: <20261029073344.729148-1-yangfeng59949@163.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 30 Oct 2026 11:42:28 -0700
-X-Gm-Features: AclHuK-VjFk5niMzo0il-rDmeKs0ZQg3btwvPCyolGTPblfqirktPQXtvuort7I
-Message-ID: <CAEf4Bzbw6hZ3T6uO-ah7c0+K9_kc+k32hV88YFP=qPnHos+-AQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Samuel Wu <wusamuel@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Date: Fri, 30 Oct 2026 11:46:37 -0700
+X-Gm-Features: AclHuK9JgZQ0yY9pjUZS0J7oNwln-ZzXOo3HkJmw0fssJ8tLcUosj90ClGtkpxo
+Message-ID: <CAEf4BzbRh4sof8aD4kj1y27kE3-VfAR3SOr8QMcH5n8rkUB-bA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Fix suspicious RCU usage for sleepable bpf_get_stack()
+To: Feng Yang <yangfeng59949@163.com>
+Cc: yangsongsen@insta360.com, andrii@kernel.org, ast@kernel.org, 
+	bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, jolsa@kernel.org, 
+	kpsingh@kernel.org, linux-trace-kernel@vger.kernel.org, martin.lau@linux.dev, 
+	mathieu.desnoyers@efficios.com, matt@bobrowski.net, memxor@gmail.com, 
+	mhiramat@kernel.org, rostedt@goodmis.org, song@kernel.org, 
+	yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 30, 2026 at 8:35=E2=80=AFAM David Laight
-<david.laight.linux@gmail.com> wrote:
+On Thu, Oct 29, 2026 at 12:34=E2=80=AFAM Feng Yang <yangfeng59949@163.com> =
+wrote:
 >
-> On Thu, 29 Oct 2026 15:54:01 -0700
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> > On Thu, Oct 29, 2026 at 3:36=E2=80=AFPM Samuel Wu <wusamuel@google.com>=
- wrote:
-> ...
-> > > > > Makes sense, but I'm thinking v3 doesn't need pagination or batch=
-ing.
-> > > > > I didn't see any performance wins when profiling libbpf, and it c=
-an be
-> > > > > added later without breaking UAPI.
-> > > > >
-> > > > > > on input I'd also add module name as optional input argument, w=
-ith
-> > > > > > "vmlinux" limiting to just vmlinux, set module name to just tha=
-t name,
-> > > > > > and NULL/zero meaning "we don't care"
-> > > > >
-> > > > > Makes sense, so here is a possible plan for QUERY_BY_NAME:
-> > > > > - Optional module filter: NULL =3D any, "vmlinux", or a module na=
-me
-> > > > > - Returns the first match by default (vmlinux first, then modules=
-). An
-> > > > > ALL_MATCHES flag searches everything and reports the number of ma=
-tches
-> > > >
-> > > > searches everything as in all modules, or you mean just full linear=
- scan?
-> > >
-> > > I envision ALL_MATCHES to do some form of lower_bound() +
-> > > upper_bound() on vmlinux since it's sorted, and then linear scan of
-> > > all modules. Of course, just one of the two or both aforementioned
-> > > things depending on the module filter (any, vmlinux, module).
+> On Wed, 28 Oct 2026 20:51:47 +0800, Songsen Yang wrote:
+> > Hi Feng,
 > >
-> > no point in upper_bound() if it's sorted, you just start at
-> > lower_bound and go linearly from there. I don't think it's realistic
-> > to assume large number of duplicates, so I wouldn't optize for that,
-> > one log(N) lower bound + linear scan will be faster in most cases,
-> > probably
->
-> Doing a system call for each symbol is probably fine and scales nicely.
-
-Yep, I agree, for BY_NAME case it should be totally adequate. And I
-agree about not needing to do full count, just whether there is more
-is good enough, good suggestion!
-
-> Just return the symbol number (in the by-address list or by-name list)
-> so that the application can request the next one.
-> While the application probably isn't interested in symbols with a
-> lot of duplicates, some symbols get duplicated thousands of times.
-> So you have to allow for them.
->
-> (My kallsyms patches get scripts/kallsyms to mark when a symbol is a dupl=
-icate
-> of the previous one, but after a short linear scan for the first it falls
-> back on the binary search otherwise looking up some symbols takes a long =
-time.)
->
-> ...
-> > > > >
-> > > > > > tl;dr, this is the right direction, but I think we should polis=
-h API a
-> > > > > > bit more to be more universally useful and extensible
-> > > > > > > +
-> > > > > > > +#define KALLSYMS_QUERY_SIZE_VER0       40 /* sizeof first pu=
-blished struct */
-> > > > > > > +
-> > > >
-> > > > [...]
-> > > >
-> > > > > >
-> > > > > > PROCMAP_QUERY uses offsetofend() for the last defined field, an=
-y
-> > > > > > reason to have this #define and BUILD_BUG_ON here?
-> > > > >
-> > > > > David pointed out that the size field in struct kallsyms_query is
-> > > > > redundant. In v3, I can drop the size field and use _IOC_SIZE(cmd=
-),
-> > > > > keep the *_SIZE_VER0 define (since we need minimum size). Perfect=
-ly
-> > > > > fine to switch to the PROCMAP_QUERY style though if preferred.
-> > > >
-> > > > I'm not sure how size is redundant, I don't see ioctl subsystem
-> > > > accepting argument size as a separate parameter, so the size has to
-> > > > come from the user and be embedded in user-provided structure, if w=
-e
-> > > > want any sort of backward/forward compatibility. At least looking a=
-t
-> > > > PROCMAP_QUERY I don't see how we could have avoided it, so not sure
-> > > > how we can do that here.
-> > >
-> > > My understanding is that the size is encoded in the ioctl command
-> > > itself: _IOWR() puts sizeof(struct) into the command number when
-> > > userspace is compiled, so _IOC_SIZE(cmd) is the struct size of the
-> > > header the caller was built against.
->
-> Yep, I think that was added by the BSD kernels (but not SYSV) when they
-> changed from 16bit to 32bit.
-> Linux mostly uses it, but not always.
-> If it were used consistently (or the high two direction bits are guarante=
-ed
-> unset) then the ioctl syscall wrapper can do the user copies.
->
-> You'll find that _IOC_SIZE() is used in many places.
-> Amongst other things it can select between 64bit and 32bit compat structu=
-res.
-
-I see the trend to stick to fixed sized __u64 and __u32, which allows
-to not worry about compat. I'd go with that (we have used that
-appraoch extensively in BPF syscall and it has never backfired, as far
-as I know)
-
->
-> > oh, interesting, I didn't realize we embed struct size into ioctl cmd
-> > and match it exactly. I see that pm_scan_arg has the same __u64 size
-> > in the struct approach, I'd stick to that, and when we extend any of
-> > them we'd need to make sure to either ignore or hard-code the size
-> > part, hm..
+> > I hit the same root cause independently via syzbot and sent a fix a
+> > few hours after yours, without having seen this patch -- sorry for the
+> > overlap:
 > >
-> > > That said, either way is fine. We could mirror PROCMAP_QUERY style fo=
-r
-> > > consistency.
+> >  https://lore.kernel.org/bpf/20261028121859.994-1-yangsongsen@insta360.=
+com/
 >
-> There is nothing to be consistent with.
-> These are the first ioctls for /proc/kallsyms.
-
-consistency in the sense of these ioctl-based interfaces into
-otherwise historically text-based interfaces.
-
-I'm intending to fix PROCMPA_QUERY's embedded size (so that to
-user-space it stays the same no matter the evolution of PROCMAP_QUERY
-interface). I really think we should start with embedded size zero
-here and have size embedded in query struct itself. This is another
-thing that we've been doing in bpf() syscall for a really long while,
-and given how dynamic and complex that syscall is, we had a great
-success in building and evolving API in such a way that user-space
-code doesn't have to care all that much about multitude of different
-versions.
-
-I'd really-really want us to not have
-KALLSYMS_QUERY_BY_NAME_{V1,V2,V3}, it's just a pain for user space.
-The evolution logic for versioning is simple: if user space provides
-too large struct, unrecognized (by kernel) fields should be zero. If
-user space provides too short struct (for initial version we can
-enforce minimal supported version from the get go), then we just not
-touch any fields added after that size. That's all there is to it.
-User space, on its part, just provides its knowledge of struct size,
-and then kernel will implicitly assume zeros where appropriate.
-
-really, this is a good way to evolve API
-
+> Hi Songsen,
 >
-> I'd also point out the _IOC_SIZE() is limited to 14 bits.
-> There is much less scope for applications causing grief with very out
-> of range values - indeed you don't get past the switch statement.
+> Please don't worry about the overlap.
 >
-> David
+> I hadn't noticed the issue Sashiko raised when I prepared my fix;
+> It looks like a pt_regs on the stack can fix this.:
 >
-> > >
-> > > > >
-> > > > > Thanks Andrii for all the thoughtful feedback!
-> > > > >
-> > > > > > > +               return -EINVAL;
-> > > > > > > +
-> > > > > > > +       err =3D copy_struct_from_user(&karg, sizeof(karg), ua=
-rg, usize);
-> > > > > > > +       if (err)
-> > > > > > > +               return err;
-> > > > > > > +
-> > > > > >
-> > > > > > [...]
-> >
+>         BPF_CALL_4(bpf_get_stack_raw_tp_sleepable, struct bpf_raw_tracepo=
+int_args *, args,
+>                    void *, buf, u32, size, u64, flags)
+>         {
+>                 struct pt_regs regs;
+>
+>                 perf_fetch_caller_regs(&regs);
+>                 return bpf_get_stack_sleepable((unsigned long) &regs, (un=
+signed long) buf,
+>                                                (unsigned long) size, flag=
+s, 0);
+
+using sleepable variant of bpf_get_stacks is a better approach,
+because stack traces might request build id, and in sleepable mode
+that works reliably instead of bailing early if memory is not paged
+in, so I think having specialized sleepable version is better.
+
+
+>         }
+>
+> That said, I think your approach is the simpler one and the better fit
+> for the fix itself.  So if the maintainers prefer your version, feel
+> free to ignore my patch.
+>
+> Thanks,
+> Feng
 >
