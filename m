@@ -1,75 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=13.77.154.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793334712;
-	b=NpJywrWfAXir+BIoJKnEg2S/mnTP0c1eThCZIftXJwXDHutjigx3+l/25vybcvLoI722
-	 mOfh2aK6QaaU9ap4yWb/yZ3yeNs5PX6DvFjy5/UP9TurzfM5NBV7KyAB+Dckba2wIUUQG
-	 y2RBspxLe6rIiUg+9wrrEASOHvBsv6IHJVst7CjHnwXKd9rCDfmvH1hA4x75KAxI+C88E
-	 YDrmFQeRWY1MX7+v0q4V4lXFp8UNpB0/V9xU+vNnCqyJLFlMSPHANWHBZAEB6HQd9vUNf
-	 XG1VZdtIfIqEB0cYxoZHAjl91CTFxEoIe4ZfNNFgc+44G7SuoYksP1ieRfHaK6Wzm1g==
+	t=1793335088;
+	b=tEUVbLvQqYHesDFpgwijGZsGOI5/Mc6bKVXs1TrXKATF+h7VcymRCWiEb1HhQM3IPSnF
+	 LDOXbgyC1+2fDoUVkS+HnceHTPFf3D/ovu7wzJQafCbS/oeKWwNOSXd6ZZejLRpo+jaks
+	 xXK6s0KIKzAkVJcndBAHu5ympcbJ/O3q3/BOPA7AoOekowEAm+yGb5PxZ0/ZpLdwJYxaU
+	 xz6eYDRV1YDguQqevJa2YUhg8i2Jyy4wbz3N4m2TTO+1K+JD0WTdb3UbB76zLMl2pwxRv
+	 qj8gHmyw32b6FBtXQ3idral9Do4MmdUt7NdYOBQv370OKOVrqixv2tmKgYkBQhsM9xg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793334712;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=bMdKaLnci5rE3Vyxt1ztOm4nlJPbyxipNoi6qOdT6zs=;
-	b=CvOgAIBJAtpQzx6hgBG3yAy55ucQhHFLFafw0ef7+/xMEyCW3W9fDpK79uY9KAmOzKLf
-	 BYE3IbITXcXclNevR6HPNxvcZfaoNQvtoKyab8RSVk6665UezfK8GcuNscuRbNuZKzVY6
-	 43ufd3toEd/pONM7TMuNeb28VBj5DZcANrcMNS4ygMhPODx7vUHzMsjWGQwx+HLx/oyTv
-	 7KkDBYHxJOlVFL9d28FCgfCyq7DHeTVdTeewcXwfwg+u76wJU4+MRlyJlbLeeRNxyLZdO
-	 OMb8L0AedH9TRLNDgL9wxBvXSWRj8avErxdhGhQIs0uKXC73HTACuCHS+srM7OKUWHw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793335088;
+	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:X-Spam-Status:X-Spam-Checker-Version;
+	bh=WwvcOsEObJ8qzzuuobsmrvvwKxGTjF3cc2+TTpbW1e0=;
+	b=xXia2cN3vuYKVkgWNl64MDPty6ldAebpE5dQSF2F6CLB6GKdqLjx5Nk0rFmmpQcfuKAS
+	 VSo28wBbHDA0uIFsWWwYXcO0z1X36ASkMnEqpav9mN41Kr43zpRAZzT+/1B5ss2y3QA+H
+	 AmTL2xGVq9yQ7zD1q5GpoeXYGB0rkVXEZqipRVZWawhFtBYNj/DDpOWTKELQRSyJnmfXA
+	 UoPvbQImCmxkgAtaS84s21KB6EeUd6ZUG8z6ngQGbBPzshIuUbwXxW1P70Gj56O32+4Ys
+	 jh755UUmjK75F5UUix8OkGUXj6BTCh4E09IJnzXvkSe5+E5sFE0YPaqzYY0Rawe34zg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--weiwan.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=lSEH1gbN;
-	arc=none smtp.remote-ip=209.85.214.199
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F08606A334
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 04:31:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44F08606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--weiwan.bounces.google.com
+	dmarc=pass header.from=linux.microsoft.com;
+	spf=pass smtp.mailfrom=linux.microsoft.com;
+	dkim=pass header.d=linux.microsoft.com header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default header.b=NJPsdvAy;
+	arc=none smtp.remote-ip=13.77.154.182
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B74A0606A31C;
+	Fri, 30 Oct 2026 04:38:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B74A0606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=lSEH1gbN
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2e869e00005so5915425ad.2
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2026 21:31:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793334711; x=1793939511; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bMdKaLnci5rE3Vyxt1ztOm4nlJPbyxipNoi6qOdT6zs=;
-        b=lSEH1gbNP3ZVkTl4v2zJcvBd3Y394pd5Rf9aUUUw3bNnmBItW5OHVYUPZkuZ404dHz
-         aB5UQblxmNl1PR+UBp+OWoZKtdNYc0iCrFmxbtJw3q8v9oRXUtqmMevl92R9ZKwIapkC
-         heTOI14FQ+TdF/ZfG7EypqtcXQU4HxbK01XZtpXiEJl1XWHjj8kDnLD2P8xw/yTf87xl
-         0JACiTgl9dRYLn1mBQ+3nrQ/jkE14+f6wTEs7F5tV43CQ3l9vqqC1kCmiN4h7hPMAt4d
-         jPnntgwydj5T53bvcB5wV/4vr2X5m8A4ytDMkpBSuQM0sAYeD2P/Sl5dMvC2p1w+UhZ9
-         yqEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793334711; x=1793939511;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bMdKaLnci5rE3Vyxt1ztOm4nlJPbyxipNoi6qOdT6zs=;
-        b=kMVNM2g1hJNBuOro8fAe3xSgWuA7b7Zek2iakx8e3iN8gZBSv0z5AdHwRZUXQvtU2v
-         RLFSDwookPXzzN+twzFgpS5Q7zt8VU8OJaMpjBEnltYpQ/SkCQOV2tNHJUuTjf+MBgub
-         sHFJpLwY0nhylhcQlLrZeU6tiaN14mIzPSaW2ERP+ogmlxMY96jNeq4PhQaEHj9rfMJM
-         nkpzvpVuBLPw1Nm37wsjlZDCcJpYQ7FCpIgERQzK2VqceP62iVqluhZOFbNduptFeiBA
-         NwIJjkVT0wVxFeqKoQx+cnuI0f14BjZ6QA7A63HNJvbJckiI2HjkI05VEPUgo7rizbdw
-         R6lA==
-X-Forwarded-Encrypted: i=1; AKwUvByyzQybAaBttqZe2MKrdIlL/uIBvUx5uMF+Bmj9SMbCPZAqRvPLoLnm0LdCiazAKaRUOLE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKUX9YrRvWR7SxJQQ0Xhdds8BbzL4SI+2XGCZLe9LElCBwN4fpI
-	k3vg/h32W38SyHBdg1cvqLC/4db04brsXVTGOXdaHiFE2pIfTwoOwmQQGfSOSvaQ9dmqGu7khF0
-	0t5EFvA==
-X-Received: from plkg13.prod.google.com ([2002:a17:903:19cd:b0:2e8:1f84:7c18])
- (user=weiwan job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3c27:b0:2e9:460e:ca57
- with SMTP id d9443c01a7336-2eb36426e0bmr13063885ad.15.1793334711324; Thu, 29
- Oct 2026 21:31:51 -0700 (PDT)
-Date: Fri, 30 Oct 2026 04:31:45 +0000
-In-Reply-To: <20261030043145.2185700-1-weiwan@google.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default header.b=NJPsdvAy
+Received: from kali (unknown [4.213.232.17])
+	by linux.microsoft.com (Postfix) with ESMTPSA id B148C20B7166;
+	Thu, 29 Oct 2026 21:37:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B148C20B7166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1793335074;
+	bh=WwvcOsEObJ8qzzuuobsmrvvwKxGTjF3cc2+TTpbW1e0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NJPsdvAyMdl07uIfgdrypurLmehiQZeL4zrhUYZxR96TMW5UhWVD/k6TDPncHWr08
+	 HBDhGEi+B7G362mYoL0sIW0o2+nYfbIXv9oTWCTovARis9B9tYry7LlUyDoTTX9uPX
+	 WKbEfCrsL3+VJgHmXIOzVAcYs4vOqZdpgIkHgEhs=
+Date: Thu, 29 Oct 2026 23:37:54 -0500
+From: Sahil Chandna <sahilchandna@linux.microsoft.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+	will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
+	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
+	ast@kernel.org, rafael@kernel.org, daniel.lezcano@kernel.org,
+	memxor@gmail.com, zhenglifeng1@huawei.com,
+	xueshuai@linux.alibaba.com, rdunlap@infradead.org,
+	david.laight.linux@gmail.com, broonie@kernel.org,
+	boris.ostrovsky@oracle.com, ashok.bhat@arm.com
+Subject: Re: [PATCH v16 00/16] barrier: Add
+ smp_cond_load_{relaxed,acquire}_timeout()
+Message-ID: <auQfIuQdpd2i2IrX@kali>
+References: <20261016070837.440748-1-ankur.a.arora@oracle.com>
+ <auLHZnaCIajW1kxX@kali>
+ <87v76lezeq.fsf@oracle.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,69 +68,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261030043145.2185700-1-weiwan@google.com>
-X-Mailer: git-send-email 2.56.0.317.g454f8302e1-goog
-Message-ID: <20261030043145.2185700-3-weiwan@google.com>
-Subject: [PATCH net v2 2/2] selftests/net: psp: test bidirectional data transfer
-From: Wei Wang <weiwan@google.com>
-To: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
-Cc: Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Daniel Zahka <daniel.zahka@gmail.com>, Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Wei Wang <weiwan@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v76lezeq.fsf@oracle.com>
 
-_data_basic_send() and _data_basic_send_netkit_psp_assoc() currently
-only verify unidirectional data transmission from the test socket to
-psp_responder. As a result, they do not exercise the receive path for
-PSP-encrypted TCP data segments arriving at the test socket (such as
-packets redirected across a netkit interface associated via dev-assoc,
-which relies on SKB_EXT_PSP surviving packet scrubbing).
+On Thu, Oct 29, 2026 at 12:31:09AM -0700, Ankur Arora wrote:
+>
+> Sahil Chandna <sahilchandna@linux.microsoft.com> writes:
+>
+> > On Fri, Oct 16, 2026 at 12:08:21AM -0700, Ankur Arora wrote:
+> >> Hi,
+> >>
+> >> Changes in this version address sashiko comments [17]. The major change
+> >> is the change in the exit path in __smp_cond_load_relaxed_timeout()
+> >> which allows us to simplify providing ACQUIRE semantics in
+> >> smp_cond_load_acquire_timeout():
+> >>
+> [ ... ]
+> >>
+> > Hi Ankur,
+> >
+> > I tested this patch series on an Azure Cobalt 100
+> > (neoverse-n2 on 64-vCPU Hyper-V guest (Standard_D64ps_v6),
+> > on v7.2.12 + this series + arm64 cpuidle-haltpoll enablement[1]
+> >
+> > cpuidle-haltpoll loaded with force=1, guest_halt_poll_ns=200000.
+> >
+> > Baseline: no cpuidle driver(only WFI).
+> >
+> > Workload: PostgreSQL 16.15/pgbench scale 100, client and server in
+> > the same VM over a unix socket, with single run:
+> >
+> >             with (-S)                         TPC-B-like r/w
+> > clients  base TPS  haltpoll lat avg   base TPS   haltpoll  lat avg
+> >    2       38658     +89%   52->27us     5299     +86%    378->203us
+> >    4       72987     +99%   55->28      10305     +87%    388->208
+> >   16      300895     +91%   53->28      42035     +83%    381->208
+> >   32      590987     +93%   55->28      78319     +85%    410->221
+> >   64      987749      +0%   65->65     130675      +3%    490->474
+> >
+> > Tested-by: Sahil Chandna <sahilchandna@linux.microsoft.com>
+>
+> Thanks Sahil. That's very helpful. Btw what's the (-S) option with
+> in your first heading?
+>
+Hi Ankur,
 
-Use the existing "data echo" command in psp_responder to verify that the
-test socket can also receive PSP-encrypted data from the peer in both
-_data_basic_send() and _data_basic_send_netkit_psp_assoc().
+This is the -Select Only option running one statement per transaction,
+more info captured in [1] [2].
 
-Signed-off-by: Wei Wang <weiwan@google.com>
----
- tools/testing/selftests/drivers/net/psp.py | 8 ++++++++
- 1 file changed, 8 insertions(+)
+TPC_B like runs small bank transfer transaction.
+> Just to double check: was the VM  created with any special option
+> such as kvm-arm.wfe_trap_policy?
+>
+No, the host in my case is Hyper-V. The cmdline does not have any idle
+related parameters.
+console=tty1 console=ttyAMA0 earlycon=pl011,0xeffec000 panic=-1
+> --
+> ankur
+>
+Regards,
+Sahil
 
-diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-index 473500901879..e507951b440b 100755
---- a/tools/testing/selftests/drivers/net/psp.py
-+++ b/tools/testing/selftests/drivers/net/psp.py
-@@ -120,6 +120,12 @@ def _check_data_rx(cfg, exp_len):
-     ksft_eq(read_len, exp_len)
- 
- 
-+def _check_data_echo(cfg, s):
-+    _send_with_ack(cfg, b'data echo\0')
-+    s.settimeout(1.0)
-+    ksft_eq(s.recv(5), b'echo\0')
-+
-+
- def _check_data_outq(s, exp_len, force_wait=False):
-     outq = 0
-     for _ in range(10):
-@@ -478,6 +484,7 @@ def _data_basic_send(cfg, version, ipver):
- 
-     data_len = _send_careful(cfg, s, 100)
-     _check_data_rx(cfg, data_len)
-+    _check_data_echo(cfg, s)
-     _close_psp_conn(cfg, s)
- 
- 
-@@ -726,6 +733,7 @@ def _data_basic_send_netkit_psp_assoc(cfg, version, ipver):
- 
-         data_len = _send_careful(cfg, sock, 100)
-         _check_data_rx(cfg, data_len)
-+        _check_data_echo(cfg, sock)
-         _close_psp_conn(cfg, sock)
- 
- 
--- 
-2.56.0.317.g454f8302e1-goog
-
+[1] https://www.postgresql.org/docs/16/pgbench.html#PGBENCH-OPTION-SELECT-ONLY
+[2] https://www.postgresql.org/docs/16/pgbench.html#TRANSACTIONS-AND-SCRIPTS
