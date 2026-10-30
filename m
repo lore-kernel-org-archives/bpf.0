@@ -1,51 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793351593;
-	b=cNhInUuGopzEvE9qshVMkchueCVUXgDTjvTLF4Dqy7NBv38jwFbaUuyykX3YQZLHfMRt
-	 dT6j3xobOH6t7A8hpq2QKH6+rqCuM45ICQJRU3EQHySoqhUKXfeTMTO2MzjPs51vWpvGr
-	 jpMkczP9ZExoCZ0nLJFj6v9SYPjWLhvrGmYQH0H4TgmkJMVn1BNsyTydx5sWMwTKx2lEE
-	 v4eyyPELDjScHk2joUX75+PJR22Vl45uUVwsTtX6CrCPZFtsG3WLHJkQgyfHQ1ahEMVkg
-	 TuPaQ/mocGVR9moFbCaYiTXYGguzq8R7BCxG7rlzHTvIF1RtOgm7JY2Lqcczs9Y2D/g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793351593;
-	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=XmIjZzmN9QtdmMFdq/RvopM7L7VH+D444+wD0S3j5jA=;
-	b=Z7ufi9gInSXvbzcBSQEOUCfhTgOgOuRWiQJd1DCBR/T19MeLB1iyA+x7i1iRT8ddc9cv
-	 E4JViAgqZELaFO87JiGONf3KgRJPvf0XLnW1CyrH9EzeWS5es9iNfe/KrY7tL63kxSQJJ
-	 t5GBxiuL1XsnZM4xL/d6z0wDXstPgjtwd92H9OHo/iqvBYPKFaOlRJo2//sI+55N9RmSL
-	 GBio/T72btl3mt3vN5FSpsn5zMMWVz0pYAOePmNim4Khg1WX7oHfnRK9DK51Fq3K54gO4
-	 lUFO2X+ohq9u+irL8Yqz8Bo5/gdkd0AaZTWKpoHyzpenbmhX90ePDEL6pG6Muy6sSLg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35697606A31C;
-	Fri, 30 Oct 2026 09:13:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 35697606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8Cx_9KkX+RqZckaAA--.12333S3;
-	Fri, 30 Oct 2026 17:13:08 +0800 (CST)
-Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJDxTs+iX+Rqp2sxAA--.37235S2;
-	Fri, 30 Oct 2026 17:13:07 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2] selftests/bpf: Enable signed overflow and small value tests for LoongArch
-Date: Fri, 30 Oct 2026 17:13:05 +0800
-Message-ID: <20261030091305.3277-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.51
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793351752;
+	b=VYjO9XfRvX9COxj5zAPuECzQjFbmq28HjMN2Flx5PmXZyA8z4ezvJmnBDDoC07/yVpVJ
+	 oRL52vdHp8OISKwpRTAOxkKMHWkttvCiCe1JaN7ifTZ5ry3oykZ2A9VJr7CHi293sBDp6
+	 OsOKFkWmhea5l8sCrPyDWQYI7XZ8nhS+Gf0btgV7bklGGCGkfmGbkBg2KmXZDBgfKWZ1u
+	 FizRscIH6LeuRfdbGnokRsej9xHSvQzXl4HcG3PJfen4VNn95dcockkUJ2y8Fs1H653tH
+	 b/muU+iMB/QEVZjBgZEgxdqbAzOHDIRA4YjGY/KCrRgSve1VszIAaqwzRASy4qO0zDA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793351752;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=ic0l6s4/vCSv2HTg51cnmOpg7vz5TShRFb99sP2LwP0=;
+	b=QTgxAIClT/3tGYEDuB9usw86YS3M1HZ2/yPISgAYWnEn/qbyYHNBAbUVheMlAW+OHmmB
+	 y7eOcKWaft+XENlpXCEIGoC8Fz5OGcmG7+YftbTGFKr4Lueexxq3zlxnz26yHpR744Lqj
+	 AIiGU60bqkGjdqlBYhXvBFc0m1d4v1E8sWBUnOh4bB7LovRjSqulQfDqUVlMLMafOBR4+
+	 7Eg2zQVozI3WWMRr9Qp13LFe9upcJrdu9g3AVNnwxKYhs+qY+46YxTdBZFseR01Z4bPaF
+	 jCKRjgRzFafupT9rYAv1MrjMDTHcYtiHCMT1TJDNA8q+dsFlHFDIa6O2rROf4gwDRuA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qfLBsasI;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.51
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5E3606A31F
+	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 09:15:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F5E3606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qfLBsasI
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5be4d648aacso423319e87.3
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 02:15:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793351750; cv=none;
+        d=google.com; s=arc-20260327;
+        b=FJBPtc/Cw5ZHYkARDjzC9WGq50sfCOE6IiPbPPKs2tRr2GV6Iqh6E80oZPN3yz/4Pi
+         TVcFFVpLS9tHW6JaXIQI3TbGCtmjs2Qh/s0T8R9Gs2gRwBzdqX8I5VHW1NNwEqbU03ct
+         4MokaDLb9QC9SS5nMQYeDggd6UVc1gSammkA6bYPQHOOE8YbV/oHwVpyyaXFoQhj8wnV
+         gqEBaYTQzsl9ekXNW8n1U3IxdcZwAYQDZu8OeFyoMOsEaLQ0EfC+1EHMaFd3bIUuVLF9
+         mygGX4wFwfKi9mkpwE2XVIBigDesByRNhVee0iXOSQHtuCcG+V1pxryLfX+xCYOKcAqk
+         65dA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ic0l6s4/vCSv2HTg51cnmOpg7vz5TShRFb99sP2LwP0=;
+        fh=uDrRgaOGqr6MPuNbwhCAyitv9+UhhBe5U0hCb2FliKo=;
+        b=ENQuZ3yi5LQl/LMpOQ9jzDh3MY1wiCvk+h+hBzULc5J7RoLW4bSN7d6rQhZ2NJmbWn
+         5QADuLLuw3NvhOmREWrln3u5mR+TzhmVMY8hjCvhRl++eQyTdmpjIyVsmeUAJGkyW9PL
+         obVul7fVCSR4ZHt3Oy1ZliZY+HCDOrRGBBRM2vEr8bvBG0BLLiqTWQLbrvS3cPY4PFkj
+         Czu5q5iLWaG71JbbDzVkQX9/9uAKzgddQ9QlKQu8lwaqkEvmjC5VZSw1vnnyIfFGnpe7
+         LzKGKI4mc3bSef0adklLixKDtMiDGA90LgO9j7czu0owYi9waIYht8ZMniOEhmEfTlUO
+         rf2g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793351750; x=1793956550; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ic0l6s4/vCSv2HTg51cnmOpg7vz5TShRFb99sP2LwP0=;
+        b=qfLBsasIj0ueC2Rm80cM4nkkefayvn27KbmgG9N1xFUzMEPOSqzCiMGte6z7f09SF4
+         QmWsSi62JZAp1RCu0wer6f6lUJX1sJ82VugRSHYhS8MY3FDXFsBB/dBcPf5cY78sljLS
+         29tbFUMSzh46Yk+v0t8EEiyT++a/3d1cuXI6gpTD/vwdTq6cONvNdeZsBWQTIt4qQPEI
+         g0jTMXVQjRwnlAANKJN6lmCYJaFnWZTIOD11otdk2g0iz/rbU7Jly1s8j0J00HNX/cyS
+         m4urrgVCOlPkuR9hRQpEhUNOot9aqiTcAYJL2bCL1P+kYfL3FhVAdBp+etp1DtqyniQW
+         vZnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793351750; x=1793956550;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ic0l6s4/vCSv2HTg51cnmOpg7vz5TShRFb99sP2LwP0=;
+        b=lqZNnTxQAn/KefS22Q8fpijxZdUJHy+6t8VLK2wOx0vGiZfypJrtTiku1OknLuZ1pI
+         rftxJZJwkpnTbpK43sC7UKAVPsu88IgiHbv0nLAva2XKp9dlLbiki0k8mgtX8vbuaAgV
+         KMH1YCGTITD6us++L1yQY863owaHFJ0JBrwt5AMmv4uRfVpG+qNSqrnrz4dgsLb8nu/L
+         srszckJthVPz3SH6JUtoHCHcJoG/EjMSC/TOoYXSlDChPj07T97ewNAk8cb9R9pGWPT5
+         sgkzSJiexJejSzsf1iYS++nmpkwTUomCXtgjGQYJ4u7e+yBd/cXMj5ZuNFQA/uEos9hx
+         ryZg==
+X-Forwarded-Encrypted: i=1; AKwUvBwCpZME1MQ33Zz28QsQrKMXq6lVluL41V/hcCW7Rtl16+rsvUHYESboHUGeGspXwdOl+70=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKXT+Y6QhmH1J9NaTJMZWnVV5amNn0WxvmULvtS0uThHYWJi/cp
+	QTKoz2wZVPLRFJeFK0NaRrNEbUhzxwroH4oqQD8mUraMHjph/O8XsasV0c/Ma34BvkMpfDK933s
+	p1kiLsy/EVFzhSGMVm0xS2ujlnT5O38I=
+X-Gm-Gg: AYBFou2q3R4KM8ex4I3x6Tml9MswVxM0PNWEK3eX+ngg9y4RFUDr3JrYEmQj1bvNHw6
+	JrnHKplfcLHlgI8za6ZsR22a2e0W75qaqkSO/OnquTZE8jGxL4O9K/RTMIgD4r4uXw9RyxH7T3Q
+	y1wT6MGSzhnHRxAaYuJLiGSityZkQN/Zgfl/ht6Aa2iXAqAl8grQoL+8gQdKO79jEVDmV6Jv5Oq
+	azZXF2XmZTpWe51Wc2Us5vLdF2xfJniburHmBmcMOggSO5tJve8PP8qLMjy+DrH4+UEdxaO8tU9
+	WIiz7E8dkKzMXyz95mx6R//EstGZkNeZerkMT6/8DpmpIloTFSfOZsxjKn7IR/+TxmYYhQNO4AM
+	4zrj1MajfgnFPUV1pxicyWVJJIFX23zOxycRDbQMSzxe6+CytqeUWvIO7nots//jez7aE6maqtR
+	hRGfzQnYdiiBN1tZxXps9nPRERogRm2N4cWumiTRJ0QWJorHYl57U=
+X-Received: by 2002:a05:6512:15a8:b0:5bf:a352:9c25 with SMTP id
+ 2adb3069b0e04-5bfd95200c1mr558923e87.5.1793351749887; Fri, 30 Oct 2026
+ 02:15:49 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -55,182 +105,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxTs+iX+Rqp2sxAA--.37235S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxAw47XFykXFyfWFyxGF1kXrc_yoWrKFWfpF
-	WUu3sxGr48Xw17WrZIqFWDGF45ZFn2ga4rWr9Yqr1fAw4DJr9Fqw1Ivws5GayYqF18uwn0
-	9F17Z3ZIq3Wjy3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
-	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-	kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkUUUUU=
+References: <20261030023248.78802-1-testwrzwrz@gmail.com> <20261030023248.78802-2-testwrzwrz@gmail.com>
+ <CAL+tcoDUGqk-KfMBqdG4RBURHQc=9J+Ce7B7CZZWRN5yN7pRrw@mail.gmail.com> <20261030084017.16202-1-testwrzwrz@gmail.com>
+In-Reply-To: <20261030084017.16202-1-testwrzwrz@gmail.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Fri, 30 Oct 2026 17:15:11 +0800
+X-Gm-Features: AclHuK_tqEbHK_O2Qvnq3pma3G6-PFR5lcMFBxShPN1h2GTemzUuLTxLrhij11k
+Message-ID: <CAL+tcoBThTe7299eVU=tsUdi392dS9cioXX5RA5AKRsYAGbdVg@mail.gmail.com>
+Subject: Re: [PATCH net v4 1/2] xsk: defer software checksum until the skb is complete
+To: Rongzheng Wang <testwrzwrz@gmail.com>
+Cc: netdev@vger.kernel.org, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, stable@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The LoongArch hardware divider handles signed overflow boundaries (such
-as INT_MIN/-1 or LLONG_MIN/-1) natively and perfectly well on physical
-silicon: (1) for division operations, it naturally returns the dividend
-itself; (2) for modulo operations, it returns 0.
+On Fri, Oct 30, 2026 at 4:40=E2=80=AFPM Rongzheng Wang <testwrzwrz@gmail.co=
+m> wrote:
+>
+> Hi Jason,
+>
+> Thanks for the review. This was a timing race, not intentional: your v3
+> reply (the Reviewed-by plus the else-branch nit) arrived at 10:30, while
+> v4 was sent at 10:32 and had already been prepared without it. I should
+> have checked the thread before sending.
+>
+> I'll send a v5 as a new thread with the unnecessary else removed, exactly
+> as you suggested, and your Reviewed-by carried on patch 1. Patch 2 is
+> unchanged.
 
-Furthermore, small value signed calculations with negative divisors work
-correctly as expected.
+Thanks.
 
-Thus add the __arch_loongarch macro tag to these 16 test cases to enable
-them for LoongArch in verifier_sdiv.c.
+Since I'm not that familiar with the selftest, I would not comment on
+that one. I believe Maciej and Bjorn will give their opinions, so I
+highly recommend you to wait for their feedback on the selftest patch
+:)
 
-Before:
-  $ sudo ./test_progs -t verifier_sdiv | tail -1
-  Summary: 1/128 PASSED, 16 SKIPPED, 0/0 FAILED
-
-After:
-  $ sudo ./test_progs -t verifier_sdiv | tail -1
-  Summary: 1/144 PASSED, 0 SKIPPED, 0/0 FAILED
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- .../testing/selftests/bpf/progs/verifier_sdiv.c  | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-index d6cbe1e27fd6..4ac92335da91 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-@@ -775,6 +775,7 @@ SEC("socket")
- __description("SDIV64, overflow r/r, LLONG_MIN/-1")
- __success __retval(1)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 0x8000000000000000")
- __xlated("2: r3 = -1")
- __xlated("3: r4 = r2")
-@@ -810,6 +811,7 @@ SEC("socket")
- __description("SDIV64, r/r, small_val/-1")
- __success __retval(-5)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 5")
- __xlated("1: r3 = -1")
- __xlated("2: r12 = r3")
-@@ -839,6 +841,7 @@ SEC("socket")
- __description("SDIV64, overflow r/i, LLONG_MIN/-1")
- __success __retval(1)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 0x8000000000000000")
- __xlated("2: r4 = r2")
- __xlated("3: r2 = -r2")
-@@ -865,6 +868,7 @@ SEC("socket")
- __description("SDIV64, r/i, small_val/-1")
- __success __retval(-5)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 5")
- __xlated("1: r4 = r2")
- __xlated("2: r2 = -r2")
-@@ -887,6 +891,7 @@ SEC("socket")
- __description("SDIV32, overflow r/r, INT_MIN/-1")
- __success __retval(1)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = -2147483648")
- __xlated("1: w3 = -1")
- __xlated("2: w4 = w2")
-@@ -922,6 +927,7 @@ SEC("socket")
- __description("SDIV32, r/r, small_val/-1")
- __success __retval(5)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = -5")
- __xlated("1: w3 = -1")
- __xlated("2: w4 = w2")
-@@ -953,6 +959,7 @@ SEC("socket")
- __description("SDIV32, overflow r/i, INT_MIN/-1")
- __success __retval(1)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = -2147483648")
- __xlated("1: w4 = w2")
- __xlated("2: w2 = -w2")
-@@ -979,6 +986,7 @@ SEC("socket")
- __description("SDIV32, r/i, small_val/-1")
- __success __retval(-5)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = 5")
- __xlated("1: w4 = w2")
- __xlated("2: w2 = -w2")
-@@ -1001,6 +1009,7 @@ SEC("socket")
- __description("SMOD64, overflow r/r, LLONG_MIN/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 0x8000000000000000")
- __xlated("2: r3 = -1")
- __xlated("3: r4 = r2")
-@@ -1031,6 +1040,7 @@ SEC("socket")
- __description("SMOD64, r/r, small_val/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 5")
- __xlated("1: r3 = -1")
- __xlated("2: r4 = r2")
-@@ -1061,6 +1071,7 @@ SEC("socket")
- __description("SMOD64, overflow r/i, LLONG_MIN/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 0x8000000000000000")
- __xlated("2: r4 = r2")
- __xlated("3: w2 = 0")
-@@ -1083,6 +1094,7 @@ SEC("socket")
- __description("SMOD64, r/i, small_val/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 5")
- __xlated("1: r4 = r2")
- __xlated("2: w2 = 0")
-@@ -1105,6 +1117,7 @@ SEC("socket")
- __description("SMOD32, overflow r/r, INT_MIN/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = -2147483648")
- __xlated("1: w3 = -1")
- __xlated("2: w4 = w2")
-@@ -1137,6 +1150,7 @@ SEC("socket")
- __description("SMOD32, r/r, small_val/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = -5")
- __xlated("1: w3 = -1")
- __xlated("2: w4 = w2")
-@@ -1169,6 +1183,7 @@ SEC("socket")
- __description("SMOD32, overflow r/i, INT_MIN/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = -2147483648")
- __xlated("1: w4 = w2")
- __xlated("2: w2 = 0")
-@@ -1191,6 +1206,7 @@ SEC("socket")
- __description("SMOD32, r/i, small_val/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = 5")
- __xlated("1: w4 = w2")
- __xlated("2: w2 = 0")
--- 
-2.42.0
-
+Thanks,
+Jason
