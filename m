@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793483764;
-	b=lP8NujHEzJuu9A74TqnJuCZwfDPsc5iRGFbFDmi0WcDg5YzjkAhteIWAp3aOUfmkGNJK
-	 +TrTIc9f3RiMHjqx0k2W1Ll+IGH+FrzikIIRw3ev/611Ao1tX37t0KVUZMkrFDfTo2aOM
-	 AnIm9ZIJNEHfUBsjXKRlPMgQTh54TVrimGIi7iQBtELtHRIY71cLr6fl+RenM8tCtInae
-	 v+9+tjXc5GDUm8aTXWwv569VvjFhWvGDsvIkUjn1GLZHnabmMrn1hu6mGS6+iIWLvKCjD
-	 hB4JIRfQDbP+txh6xWC6Xdo68tcGuRPB6i8asjrNTIeTEpUG7t0dvuRipqgI1NLx6IA==
+	t=1793483771;
+	b=2WElpPbR4oz5CSrMmOyuWutzia+e17bNh6Jn2CnGNQk7X3QCf/qJ3AVS5LBz/6Qe8DuZ
+	 BcOoYBHK2c4a7Fal090VDrqFhF0lHGtfx+27W4R9/D1m7AaIR1zBdC/TljBKHuWclCmf5
+	 AcOwMMocpUiH7XrHpLISoeJ8QAGcUX7HJOq6T0GyjraBnL8Og0cz38l6AllOMcq0p1GLB
+	 aZhCUgnxnQpaqsWEMTd7aE0vGeS7F9Hb5QhpCXuwsgbJvOu2ZCQYAsULczThpMqbLAg5V
+	 I63egWAHI+gKyvY0iNmZgFlvJNnEtUmzRiBm/Otj6lBRVxa1xhSBwudJ751sJ4n5FUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793483764;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793483771;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=mklt+ccNlE2WV11kdzk0vP8ANWjoRC2PThez0W7y1ak=;
-	b=SHedHeBOpMe7HTt0xFljBUMqOYEQCqtrR8Mfy807pIKPyJ0UR4+YgSyBMtvukUe6ntxX
-	 wBtNnJCWazL9kRJPsc/uOqCx7qvquEt1L8Ucg0dLJvGH7UKKed1QkoldZ/erPPJOmlLwx
-	 baLtrg95x18dygpx/7+3iLzDMsxqrpxCf4fRXyACux9Q+opnl3TI11YuPJgTQMl+hxm9T
-	 FlAt/9gYtYlEYAMHNuLKGEkvYhZveyFuxXy0Jq2SA6wpmmJl8t6QlT2eHv9KciPw9BmnM
-	 56I4eYwo+jiOZYKXyFu3dQKIJg2bBENWO1qovd7C7bfhbj1bzl3VhaT4vyLa7K3c69w==
+	bh=q14RjMpudaFdUjddLhv2OAVcO4AQVOykTv5dYcxhOCo=;
+	b=ZUaFf5NLd+ikP6Gc7g96nfQC9oHkmfxTzV/8f/5E+wmTc6McDlyddHFI2Jz0me1w+qWA
+	 82GKDT7rtCQBE5Ik38g6kp+WXC+1R5HXO+kwrXLE8BTnxAdANowWBYkFsd0OLDIT5MPXA
+	 v9jNl8GtQWXrpi7m3D+q4T7Tce+HA/ajY12J9SWP+BvLolF2NUDYfvEO25+heDxveYz3V
+	 2WATVcx4MQvrJRQ0g+whr/VGCLmjlh9Zi5jYlmj+CEWCzU6z9PPsL3tfyGhjxzzkAS0oS
+	 Bl3zsovp1zYuetPQlonD/BCIqNpAOF1MQqpfOTLv6tXFymX3ALP0jnxDASaQmDu/UlA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lPZfhurw;
-	arc=none smtp.remote-ip=209.85.215.174
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SnfRYEWe;
+	arc=none smtp.remote-ip=209.85.216.49
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27789606A333
-	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 21:56:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 27789606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCEB7606A333
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 21:56:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DCEB7606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lPZfhurw
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cd6a7e1f4e4so776949a12.2
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 14:56:04 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SnfRYEWe
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3ac77270fbfso881455a91.2
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 14:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793483763; x=1794088563; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793483770; x=1794088570; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mklt+ccNlE2WV11kdzk0vP8ANWjoRC2PThez0W7y1ak=;
-        b=lPZfhurwqTDUssOmRSzPCEY8QBfUtRjCXCLkLkE1ZpCJ9nrAxCa8HXb1zXVslPduxZ
-         lqOpPn7APiRl9P67lFO14hhjB3ss4iis6NmRmqiTKWqLpkL7p4zbPMpghGbOggeCyjt9
-         P8qIydJgAVmyCnB2rU/GpVvIGhWVRrGdtzrea7ak8skzKgMwhfIj5PDAQIfrzv9/XdzW
-         XTGIezgKt/IkN/BhCDdgpAHHLRQUscB8gf8AvNwdmWwIbbsnRIGslzQ1wZIjiPv0Yen+
-         HESlNHw6MkUQkAdwWEPvj34lwwj9qwjtO3y7jFYGlmf/NkG9+w9/vns0wo0yOdG1vq0F
-         qGuw==
+        bh=q14RjMpudaFdUjddLhv2OAVcO4AQVOykTv5dYcxhOCo=;
+        b=SnfRYEWeKJeL0PM5SNBJu7ova7K2xWyKEGLTMUOnpeUx0optRUWyhuZgSpJl1g2U1V
+         oADdgEnBKIS7z4zC4Xcl72V7wLZNTcaIhONAe78dbL0ENndE/M0KMSp7tR6S6KKZzzkb
+         m5VSSpbt2ufnc5M8c9gpllKW74DWFS24Cm46r2OtfBe4Jm5ijLD0fY2qwwIkjj7LD04H
+         Xv8PkOCTPl4yqyDLwMD0jFAlJar0AYVph9e0eNU5kmJtEHULOoI0rNGre0qp1gpZGsi/
+         XdcCpb4lgn1PHfq5DOefXmTxMyT78tmTkk/y0KKGLWtwi23l+VFc1G6nn1/408FJ1ZBX
+         6kWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793483763; x=1794088563;
+        d=1e100.net; s=20260707; t=1793483770; x=1794088570;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mklt+ccNlE2WV11kdzk0vP8ANWjoRC2PThez0W7y1ak=;
-        b=LWIE491L2PDwdgfwIvRBnNy90G78TrkvsvQDvszkFjk535tHNgUkQrjpRiHymzRn26
-         xSR2aKmNAhxmlzNGMXWfpcUrpuxzKB17lECYEhXH+wHbsthqRDbzJ0TlDc5YzTDMXawp
-         gTNgqtppSbU6IaRQzBF9ChuBhwInOl/xkzWGH0fb8P8ZgauHhbwImx8GnrpOrzFTMaz2
-         lqEJloIm6rgniHSm8Kp3liyyz2YpdRoXVgM1rnrKbWCCTXmT7IkrXsDcsUdUxdNk84B5
-         Ll2hov04kb9cNN4w1jxXnL2AhDnyJFNDLu/wLaCYw9IOUaPhO5kfCRd/+aqWV4U6c5O2
-         Wtjw==
-X-Gm-Message-State: AFq9FYIP6At+2fnB4381QjjkpFdoSlMMFcDTQdLqIpXKKVCzpuArLdaS
-	jVoySOrTQfFql30BDZHeUtUCjWFdCU7jyRxhXB2BpSGEjvPCExyr5IH2cEvTXw==
-X-Gm-Gg: AYBFou3yqSO6mrgY59uG1Jqr8la1YCiTuPX7sQE0/pyWYwwxy6zLErEQVobg/DCfvsa
-	AZWh1lQCyHB5MwDuE55qzNRRc52K6vTfNB+MhkzMFjkSKtED3KgOrZQ8zx2CM1IFKoeos7ki3O9
-	LGA7dEHwe44ltKnI4fcqhjokD6+0S1oQ6smWxsCP/5vi/s+OiGBp3gF7vhr7jPXda44zxvkjlUX
-	cPmZ9lzsSmyPrzyJ3t46zz8Zi5Elbbbc9e0oW9YNrBpp4QmOLcECE39vpHFtBDbrQkaIO7cFP6n
-	KtGp1kZ3k78b8l/73UKzoznkYEShXAYsFPl8/nJM7ORhtBSiBYXZrreevhzC0Gxf2QoI1VC3XHT
-	6eYU1qweZu1DB6UM4MgKqLFIeUMWT7RaobVHwtRiBgy4slOC3Jiae5xr2KImjCT/fI5JU3S4y7f
-	xsQOEqpBi8lZbzVtwTvF7s569u7Nth9E2UbBS+tl+VnKULi1/aH96V7G5TeB/TgVjmRvcAvaC/7
-	9nSujCM8JYS8+8WgfTwZ55RXOvBcjCt2jZ66+lfrPqAf7jK6kGR7+93uMW9mOx3/7dj8ndX4V/o
-	uNYKdlCJc6sdlLZd+XpLZWZGCsRlIQbLosgU3lbTpd/Z8f0OtWOtOs+94HwBqN8/Xqo+ZAYVT2L
-	b3N4R2BChfBMzKxqtJ1f8nI9lb7pc6TkzNhrRY8V1vs+pVyAAC1J+S84Svx9ahD96hijCnAymOM
-	G7nt8mCM/Q0l5B9oZ9+WUV
-X-Received: by 2002:a17:90b:4a4d:b0:3ac:9e5e:d19c with SMTP id 98e67ed59e1d1-3ae897ccc1emr5247729a91.17.1793483763514;
-        Sat, 31 Oct 2026 14:56:03 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae845ecaf5sm8470829a91.16.2026.10.31.14.56.02
+        bh=q14RjMpudaFdUjddLhv2OAVcO4AQVOykTv5dYcxhOCo=;
+        b=uRABEYLZPu2Jo9MOjayWphvmnpxyst9WOU7HETZ/WCpCIOMZ5Xm87Pj2UCA8CQUTMX
+         CY+D4ncxd4AFH2ng6bybGxDHM1Wxghsn/yFCGN2s0TqdBFFg/KIw1Ln9Uvx7Kjm5qM7u
+         Xcp4/cIGWt1MCJIV2gApd3qgjru1f/FzI8jl+C29Qyt9bT2TmJfILOKJ5HdAPKz68Sgg
+         8M4nHZ9Hq1ucDHrRty+/C7ExsibqCFC/hp9WiuPTrRxjUI2LcisRsAfaxDx96Ng0yEIz
+         7CPz05NtUhQ42gCd2yY0Cr4pqmZD1dwVWEkis/FCi1SENDm5sKXkvSbxKrnfu/UFsxgL
+         aFEA==
+X-Gm-Message-State: AFq9FYLrE6MBoZxL7AnaC+ks+2OcpID8vYfJiKj/w3qAqbRxSknQqFa6
+	qmWfTyF4hr6rmLXfbJfA2B5L0TkwHAsQWd3seZFXfvcoG28zm6Du6XF2jLzF9w==
+X-Gm-Gg: AYBFou3drXt4WX7Gw+ZgCmFdNrTLF5CeC/8JJA24AZVWbT0x3vhkk+Wgm/5hStscNGg
+	MuaPqUgkvxl7vp9RFHteKpTxBaSr5HcwvDEh2pD7DAid14xec7F7w5jlpni7wBaM+aPCzp4A6kO
+	aPfScGW/uid5xFMSK89LGhzz6M1Vpoy/VdAZt+8YC5nS7PKLGdWTDDT4w4DgXsPn1V8QFDZFYBs
+	gyBLcNw/uNKtBejyxDEGEHha4v/4SRP7PpASR7sG1LPI1VEcNSUXMOg3gYpKndC1MLk0QP9Y1qJ
+	y/EZkj3qUFQiiJHoJtX5LN4hjJu+mHWlGH7gGERIvdSvrlf3vny7JbxVAj3vEeK7OVwP7ZUYvi6
+	enP6/nzwyVXmle4a406ZKDaoAph7V5DUw3ioMHjYkK1x5UGaYkY0tW21O8Zf/KqGMgtEe3FH2tE
+	n1ZJ+bx43SveOrKbX5PXByA1Xc6tixyTrHfzX2fMmi86S2U0WVjMVoZUw6dvDcfXf3I9PyQwQOg
+	r+nMrVmK0q36yegZ4Hflz/ZtX8yiH5jsYsjwIXZ/bOF+cx7IWstOq05tswAK1avrWFSLMvdvDNP
+	23X0IGS7qYHwmoUmDT8XMbRCybBnlVCz410C0/38N2fqZzUqILFhmIyOoU4JWNPR9SP4YELBoO+
+	VSw0SNzHnPquAMXemTiBObwMM7xFMUOKLoRS5XpJn1PHwbHDKJjexYkfT7+UVHGfZYm/q52PuGx
+	c6nHHMl47YFBBz7J0Ycec=
+X-Received: by 2002:a17:90b:2741:b0:3ac:7556:8eda with SMTP id 98e67ed59e1d1-3ae897b955emr4934907a91.26.1793483769459;
+        Sat, 31 Oct 2026 14:56:09 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae85e4ff4csm5039128a91.1.2026.10.31.14.56.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2026 14:56:03 -0700 (PDT)
+        Sat, 31 Oct 2026 14:56:09 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf v2 3/9] selftests/bpf: Give the first loop of cond_break5 an end
-Date: Sat, 31 Oct 2026 21:55:37 +0000
-Message-ID: <20261031215543.682284-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf v2 4/9] selftests/bpf: End the loop of parallel_test_bitmap after 50 ms
+Date: Sat, 31 Oct 2026 21:55:38 +0000
+Message-ID: <20261031215543.682284-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261031215543.682284-1-alexei.starovoitov@gmail.com>
 References: <20261031215543.682284-1-alexei.starovoitov@gmail.com>
@@ -104,35 +104,72 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The main prog of cond_break5 spins until may_goto stops the loop. Then it
-calls a subprog and expects that the loop of the subprog makes iterations.
-This is true only while each stack frame has a time slice of its own.
+The two progs of parallel_test_bitmap change bits of the same words in a
+loop of 10000000 iterations with can_loop. The loop goes on until may_goto
+stops it. The functions that it calls retry a cmpxchg that fails:
 
-Stop the first loop after 100 iterations. The test still makes sure that
-may_goto works in the main prog and in a subprog of one prog.
+  do {
+          ...
+          actual = cmpxchg(&bmp->bits[idx], old, new);
+          if (actual == old)
+                  return true;
+  } while (can_loop);
+  return false;
+
+The retry is always possible only while each stack frame has a time slice
+of its own. With one time slice for all may_goto of a prog, a function that
+is called after the time is up makes no iteration. The bit does not change,
+and the test fails with -EINVAL, in 53 of 900 runs.
+
+Leave the loop after 50 ms.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/progs/verifier_iterating_callbacks.c      | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../bpf/libarena/selftests/test_parallel_bitmap.bpf.c  | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-index 1fbcc5228306..4dd98acc6436 100644
---- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-@@ -553,7 +553,11 @@ int cond_break5(const void *ctx)
- {
- 	int cnt1 = zero, cnt2;
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_parallel_bitmap.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_bitmap.bpf.c
+index ea1fac95b461..017add229bef 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/test_parallel_bitmap.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_bitmap.bpf.c
+@@ -11,6 +11,7 @@
+ #define TEST_BITMAP_BITS	(2 * BITS_PER_LONG_LONG)
+ #define TEST_BITMAP_SYNC_SPINS	BPF_MAX_LOOPS
+ #define TEST_BITMAP_ITERS	10 * 1000 * 1000
++#define TEST_BITMAP_NSEC	(50 * 1000 * 1000)
  
--	for (;;) {
-+	/*
-+	 * There is one time slice for all may_goto of the prog. When it's used up a function that
-+	 * is called after that makes no iteration. So this loop has an end.
-+	 */
-+	for (; cnt1 < 100;) {
- 		cond_break;
- 		cnt1++;
+ static struct arena_bitmap __arena *bitmap;
+ static volatile u64 started;
+@@ -129,6 +130,7 @@ static int bitmap_test_common_single(int parity)
+ 
+ static int bitmap_test_common(int parity)
+ {
++	u64 start;
+ 	int ret;
+ 	u32 i;
+ 
+@@ -138,6 +140,7 @@ static int bitmap_test_common(int parity)
+ 	if (ret)
+ 		return ret;
+ 
++	start = bpf_ktime_get_ns();
+ 	for (i = zero; i < TEST_BITMAP_ITERS && can_loop; i++) {
+ 		ret = bitmap_test_common_single(parity);
+ 		if (ret)
+@@ -147,6 +150,13 @@ static int bitmap_test_common(int parity)
+ 			break;
+ 
+ 		bitmap_test_reset_single(parity);
++
++		/*
++		 * Stop before the time slice of may_goto is used up. After that the
++		 * bmp_*() functions can't retry a cmpxchg that fails.
++		 */
++		if (bpf_ktime_get_ns() - start > TEST_BITMAP_NSEC)
++			break;
  	}
+ 
+ 	return 0;
 -- 
 2.55.0
 
