@@ -1,73 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793403302;
-	b=OlcuFtclwDvamMmjDbm4Mfo1KHZgfzq4VlW6VYzL7Uo5WI2IHo22eLShs9gxx/WNJLHF
-	 aVX0eA45rnEIQObZH0AkiS3ApKLGGcP8aiVn1wJN0wSFRhKzdTF5KE1uJ+WNlb5QHLcDp
-	 y5hs/PAmwCbYxqNF6C7SqFyTJgyfN4HpiAUCo7PqcU5ubCKtQqaRmoG1kBpBOng2sbD54
-	 7ch/zDWbD5A47h534tXeQ2FbRj4mMapYNDZ7r8QHJuacKee23AoJQ6lHdTPMzj+T9/Auk
-	 QR85qO3hhXqQJG2/X6YONinP+AzogusGzU5Ab/P9aphb62hZGsUPLiDOEr8OcbQiiuw==
+	t=1793405785;
+	b=boKju0qCRD9D4kcFrOFPz1hb4nKXLtL1ixxecq2lg1H1VEfxgb/MZkYOz9LSiDHtd2xV
+	 cbDhLG2K0xpb6Xz9IsYmxFhzy1KVp955EcZC6k7yLFzmuMZZSp6XS9je5VmDer2+r6ust
+	 XE+7guE7Yw7aYQ3AfXxveQFH0/uhEaqptmM02Mk8rT45K96brfcRn7GZLRcn9LBpj6zo9
+	 FQV8oDfIhgqrTxCEyOKquonNPOoPxZCH/CmGBToaEv143quy5vazekpT9IRF27wpB62Bi
+	 UQwVFpUybGjfsoqrrr35cU3FiMl3/Ck4UUgWQlosSfqf/CuPT9ZMXbtjmm4U3CuaTuQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793403302;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=PW75fuYRTck7inYQSwvPjwVqfjnHi/lsVFB1vgmA5s8=;
-	b=4dUs7I89daWDbEXNi/SehJsPG/gnWG20xCMFKd73QGkD5zi44cGvbEs2TMRxgnkcsZ0H
-	 GGFI5uMiayGZdhCcauHHUe+kIdNfsvjT55yjaOsr1yKH/5YavWjEaYdAU2xbjI2uEkgaa
-	 h4BnMKUnVKmXi5ANpkmGwg1XLVxGL3BHiOWEq/eCEOqg5sOuP+23jfZglkiN6Psam3nmJ
-	 1HGtSCjc8PDSIr1fMRzsZmTqHSzI0T45AvlEvUMqiMHwvKF6Fdr+CqkDMSC0JGFYCHpgF
-	 YboapGBbDYS0oWSYMjiWs1UTI5Q+rWmx24btzhOFReVOV/z/NMJzzt2sz5Eg+LzLD/Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793405785;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=baHVzQWK6QitYPoz7RmaiN67zEu21Ve7wKubwk9k4yY=;
+	b=GJK/3jgX3B4nFA2cUt0mqvZXtTE+cpt33afCIXLEMOCiPLJqCJW8eEV6zi9Q61NB6pR4
+	 RtwwSnQ33tFfnXYHo6nzN/eK/ie4u6QaXbILCcXh4BSpf8FziGrKTRJakwaA4sCALGxg5
+	 gTRpb9urnsG3/bo28C9DW233ESrSAPLWGoZqw7g29Snqsex4aT1XrX2NbfNypvVyT97Hi
+	 HOhKw2JGW0IbLKOOJ6Jv3iYbmyThXPOKJayJwkuMk6v+kZ29syrXWCMixUWupQN7pZNjJ
+	 6Wu5DJ0Oka1mCpet6hOAOCzlvmKPSuqqirFTgvRIO4s+2aVzD9WG6fO02ZYmVUX/eyg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HwDxi7rK;
-	arc=none smtp.remote-ip=91.218.175.41
-Received: from mta0.migadu.com (out-41.mta0.migadu.com [91.218.175.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LImvnGYL;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FCF606A31C
-	for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 23:35:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07FCF606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A57606A31A
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 00:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HwDxi7rK
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=8lSXJzMU9zvQ9DgtNFshofjCGIcMM+m6oMEhuu/zLHs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793403300; v=1; x=1794008100;
- b=HwDxi7rKvYzI270ySsHcTYmJNkSB0y7q9x0cGl3G5MVOZsU93UsboWu1wJNqyinIe9uYSONV
- EwfEheSlNwBkYQGG1aGwiKNU/VZ0FUj10eoRdZzjXsOvBWIPFahEAxJkI4tWFFjaBxmuIjqvF78
- hcE5RcPuW5i+2a7XMdYOOUq0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 1b5a8022bc45df32;
-	Fri, 30 Oct 2026 23:35:00 +0000
-X-Mizu-Trace-ID: 1b5a8022bc45df32
-X-Migadu-Flow: FLOW_OUT
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>
-Cc: bpf@vger.kernel.org,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Cupertino Miranda <cupertino.miranda@oracle.com>,
-	David Faust <david.faust@oss.qualcomm.com>,
-	Ian Rogers <irogers@google.com>,
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
-	Vineet Gupta <vineet.gupta@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v3 13/13] bpftool: Document __bpf_relocatable and __bpf_static_offset
-Date: Fri, 30 Oct 2026 16:33:55 -0700
-Message-ID: <20261030233355.1836749-14-ihor.solodrai@linux.dev>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261030233355.1836749-1-ihor.solodrai@linux.dev>
-References: <20261030233355.1836749-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LImvnGYL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E5781F00A02;
+	Sat, 31 Oct 2026 00:16:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793405784;
+	bh=baHVzQWK6QitYPoz7RmaiN67zEu21Ve7wKubwk9k4yY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=LImvnGYL8w8HxHAAgi8VnDWm8ejLDa7bNUXzCsJnhGuiTwDT0bEw/GBBov5ibRJ7F
+	 EAPgMNv9umlDl/Qlb6TG4JxFc2rc8pbGZVkb5rIwsuXg8q/fWzOsANtInh8vJjmDLy
+	 ZE+Cprzb6IEwZTSoLCf+GxWxm0YblhditsoP8kG+v9vLgHlUb+e52yj3xkZoMFVcP5
+	 g4ahlcrzo4e1bBMFMd2Xp+rGy7eDj/VfMnVK0SlDWLwOqhRUsEVBJiPMn4BcY9/XqB
+	 QOBdovG5mNsjh6OqZFgwGxsQlue0y3bSy1xnS8CeDY319ZHfz5zxrC098Cy2SWLdoe
+	 q7/ZXkKgEy+jQ==
+Content-Type: multipart/mixed; boundary="===============4602126625831348860=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -77,62 +49,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <68d4cce002dd78be96cb549d4d228cec0fca46ae9be77a82b7521bd56c06f684@mail.kernel.org>
+In-Reply-To: <20261030233355.1836749-4-ihor.solodrai@linux.dev>
+References: <20261030233355.1836749-4-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v3 03/13] docs, libbpf: Document complete BTF annotation strings
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,qmo@kernel.org
+Cc: bpf@vger.kernel.org,alan.maguire@oracle.com,cupertino.miranda@oracle.com,david.faust@oss.qualcomm.com,irogers@google.com,jose.marchesi@oracle.com,vineet.gupta@linux.dev,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 31 Oct 2026 00:16:24 +0000 (UTC)
 
-The C dump annotates record definitions with the __bpf_relocatable and
-__bpf_static_offset macros. Programs control the attributes through
-these macros and BPF_NO_PRESERVE_ACCESS_INDEX, which disables only
-__bpf_relocatable.
+--===============4602126625831348860==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Both macros expand to complete attribute specifiers and can be
-pre-defined by the user.
+> docs, libbpf: Document complete BTF annotation strings
 
-Update bpftool documentation to explain both macros, and how to avoid
-the Clang crash on CO-RE field-info builtins over __bpf_static_offset
-types.
+TL;DR: The BTF docs drop the old bare attribute-list form for kflagged tags
+without noting it. Older kernel BTF uses it, so consumers following the new
+text may print "address_space(1)" uncompilably. Should btf.rst mention it?
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+> index 29de1222c3e7..98c1f0440f8b 100644
+> --- a/Documentation/bpf/btf.rst
+> +++ b/Documentation/bpf/btf.rst
+
+[ ... ]
+
+> @@ -539,8 +540,9 @@ normal type tag, and the ``name_off`` encodes btf_type_tag attribute
+>  string.
+>
+>  If ``info.kind_flag`` is 1, then the type tag represents an arbitrary
+> -__attribute__, and the ``name_off`` encodes a string representing the
+> -attribute-list of the attribute specifier.
+> +annotation. As with decl tags, ``name_off`` encodes the complete annotation
+> +string, which ``btf_dump`` prints unchanged. An attribute specifier must
+> +include its wrapper, for example ``__attribute__((address_space(1)))``.
+>
+>  2.2.19 BTF_KIND_ENUM64
+>  ~~~~~~~~~~~~~~~~~~~~~~
+
+The old text, which described the string as the attribute-list (for example
+aligned(4)), is removed without any note that BTF in that older form exists.
+Should the format reference say something about it?
+
+Kernel BTF already in use is in the older form.  pahole emitted kflagged
+arena type tags as "address_space(1)" via --btf_features=attributes (commit
+21cb33c7e065, "kbuild, bpf: Enable --btf_features=attributes") until
+27a78c2e7eee dropped that pahole feature.  resolve_btfids then emitted the
+same string:
+
+    #define TYPE_ATTR_ARENA "address_space(1)"
+
+until 0c5eab4faab1 changed it to "__attribute__((address_space(1)))".
+
+The kernel accepts both forms.  btf_ref_type_check_meta() only lets kflag
+through for type tags, and btf_type_tag_walk() / btf_ptr_has_type_tag() skip
+kflagged tags without looking at the string.
+
+A consumer written from the updated text prints such a tag unchanged and
+gets "void address_space(1) *", which does not compile.  libbpf's own
+btf_dump_emit_type_chain() now does exactly that:
+
+    if (btf_kflag(t))
+            btf_dump_printf(d, " %s", name);
+
+Later in this series, fd1278be39e3 ("bpftool: Normalize legacy arena type
+tags before C dumps") adds a bpftool special case for this string, and its
+message says "Older kernel BTF encodes kflagged arena type tags as
+"address_space(1)"".  No later commit in the series touches btf.rst, so the
+format reference never mentions the legacy encoding.
+
+Could sections 2.2.17 and 2.2.18 add a note that BTF produced before this
+change (pahole --btf_features=attributes, older resolve_btfids) stores the
+bare attribute-list, so that consumers know to expect it?
+
+
 ---
- .../bpf/bpftool/Documentation/bpftool-btf.rst | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-index c6dc445cd4a1..6840d5d3c39d 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-@@ -70,6 +70,32 @@ bpftool btf dump *BTF_SRC* [format *FORMAT*] [root_id *ROOT_ID*]
-     formatting, the output is sorted by default. Use the **unsorted** option
-     to avoid sorting the output.
- 
-+    C output annotates struct and union definitions individually, with or
-+    without **unsorted**. Most records carry ``__bpf_relocatable``. The
-+    generated header defines it as
-+    ``__attribute__((preserve_access_index))`` where supported, or as empty
-+    when **BPF_NO_PRESERVE_ACCESS_INDEX** is defined or the compiler lacks
-+    the attribute. GCC-BPF can apply CO-RE through these attributes.
-+
-+    Context and socket types whose field accesses the verifier rewrites
-+    carry ``__bpf_static_offset`` instead, and their nested anonymous
-+    records carry no attribute. Where supported (Clang 18 and later),
-+    ``__bpf_static_offset`` expands to
-+    ``__attribute__((preserve_static_offset))``. It is empty otherwise.
-+    The attribute keeps static field offsets in load and store instruction
-+    immediates. **BPF_NO_PRESERVE_ACCESS_INDEX** does not affect
-+    ``__bpf_static_offset``.
-+
-+    Either macro may be pre-defined as a complete annotation, such as
-+    ``__attribute__((preserve_access_index))``, or as empty to override
-+    the policy.
-+
-+    Clang 18 through 23 crash when ``__builtin_preserve_field_info`` is used
-+    on a type marked ``__bpf_static_offset``, including through
-+    ``bpf_core_field_*`` and the CO-RE bitfield helpers. Compile with
-+    ``-D__bpf_static_offset=`` to use these helpers with an affected
-+    compiler.
-+
-     **root_id** option can be used to filter a dump to a single type and all
-     its dependent types. It cannot be used with any other types of filtering
-     (such as the "key", "value", or "kv" arguments when dumping BTF for a map).
--- 
-2.56.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41147288626
+--===============4602126625831348860==--
