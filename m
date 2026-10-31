@@ -1,104 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.81
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793439754;
-	b=QETGE634/PflSbreThgdMTH1WcNOrjmphjcnnRTliJm2EWrjOKdjZd2VqG4eHke6XhiZ
-	 0SP5qadHD1foEdovzt0FT+/ivL+qZEjZCRlEFM76dfDDB+Y6+Ld/MJqCapY6FReVfgIPm
-	 /YsTT7UWxT9KzreAvCPmBf/GyCurKF7GOSPea69xdH0jQo8bHjh6Kav16a0jXDT1R3tOB
-	 pRN2m8ZFtqsqA287EG0DuioB9nSAEkOBvWAXbRSdUeLB3p5qrQcJEtBCuScnzl2m4AdQF
-	 g60SSM0nzZzKsyjwfvCZOkuCb0MITL6hN+zdZaiWTcLmSyY/sGqwie1Sukc/sTKkajQ==
+	t=1793441579;
+	b=d1nJyh/M5eBXow4ptuOlxMhbaCF0cR7A1smcItO+z4qXx9jq5i78eEIiQgQdWX+z+pAi
+	 yGTQOJAAfbQsUnl0CNXKB5Q2YbXB1T7+9ykAQguSfns6d2kr6ap7p17BgQfFqWVvy+Fal
+	 cB8q4Gn7wv2ZLLFBG0PggUWI229KsknCo6SmgxaoGbKRxAl1cHukpicr8IPX6Ye6CGuhJ
+	 E2CFXLPv9DzbFCzJSt6Reoyv45d3ltm7D1sFa7IUV4dx6NrJV1lG7jeNd0n4KBrQYkZA/
+	 z8nEX2Mm4laxlPSkLAjDi0bMlIUNw/oTxQaLy2UWK89Cm6aWaacDfhKj99LetuxxwcQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793439754;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=RLB0kdHt66s3t+IPpIovcCtAwBJ8pIpA8QeJXXPpv0E=;
-	b=yr1ZXNa3B5d8pseSfbySxVkTSCFALZvuhYPoxlseuerAGo0DsFq3Bx726L4TwF4/C+AG
-	 6ZEY29jtVn7rvJN5E0sehz7ECbornVwD/+7U46Y8AadlJ/ireMxk0q42OlnaXeKe7vUWY
-	 9g0PQo2kIn6sfQM2w1RWXMNqmhePDTNVz90REqnovFxJ7kf02MvWfY1R6nzimdbDMHWMz
-	 mu/5QUrzN44TFIxMJg2GaiFGbayC6E8zLoZCcxcfKwXvFCrphis2rbTn8NIm1Stz3Wv+Z
-	 7iFimHLNOTegVO5URWo/BaV+pbC9eYigJiaREM5lkEjvberiNO2WmB/u3sBLUwTZSWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793441579;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Content-Type:Mime-Version:Subject:From:
+	 In-Reply-To:Date:Cc:Content-Transfer-Encoding:Message-Id:References:
+	 To:X-Mailer;
+	bh=dDCOuaNWdFHWDg4eo0if1LTvwbtTxO+pnWs7/GHeHF8=;
+	b=f5ybpk6S+mLt3lKiXSRTjQNotJMGhmhpQ4L+dwEaUG/mtm5m6MZryygkXlCk+hs2ElMY
+	 1/sq4xk3/BI0juqDyGDuO+9OuwUQCW2MmcsQ5e9jUgTdzibeLfJnbpYXqskJk1KuaFpYe
+	 yZ3SvkHfxMmWItuLtWmbuByXh1xj0b2rRFxgwMyKVjXC/WOfrrVp5jgPd5HjeTh5iOAyB
+	 2fLM7Z71Yj5oBNmunBA7xZAvdL+10Z9TUqa/NEjvy/IUx4YC5SGiEb/BE+hnCNsMdHJ9H
+	 ckrIcC8qzKK62OyGOaiPlWca9pKI28BYbJatHwa9iIIt4BmH9BHas9ffSQ1n1XW8Xxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VWgLEKxR;
-	arc=none smtp.remote-ip=74.125.82.182
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=oLB06oPt;
+	arc=none smtp.remote-ip=91.218.175.81
+Received: from mta0.migadu.com (out-81.mta0.migadu.com [91.218.175.81])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080F9606A31A
-	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 09:42:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 080F9606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D542606A31A
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 10:12:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9D542606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VWgLEKxR
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-35b2c599f43so1111657eec.0
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 02:42:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793439753; x=1794044553; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=RLB0kdHt66s3t+IPpIovcCtAwBJ8pIpA8QeJXXPpv0E=;
-        b=VWgLEKxRcfS/9ljvof9oZChkCGzRlROs//Et3cMkFIm/CL80NTVURSo3AWRyZekSuR
-         D3yY3CoxtuzzGJA1U2ViHKXlkLmHTv4SeI64mNZZfkoueIDd103ePYKLV89IHTdXJvn+
-         0LAs8aMhALUyyvcp/YZkwtMm8X1nGSVFnPSYmQK5v8aYskVlOIj0tuOVgaUAodzL4UPz
-         NUA8j3UAj1LfgrgBj2MJygQcHAWW6a0VpkM1wNqKjm7iY4rMvODMi1MwuS0vqOrKNazX
-         63P8YBW5C/FAfpytwd9eI0cPMHg6irpyJ1Jpdj35CS+xDza99M+gWz3Q2SfXM06vqJYY
-         or7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793439753; x=1794044553;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RLB0kdHt66s3t+IPpIovcCtAwBJ8pIpA8QeJXXPpv0E=;
-        b=SK9YRtvPYNBJbhkWlyaJoxCwH9VVR9QqxsGulPQtFIyQxVXyGyPVfq1zly08VNDzL9
-         1nf4LYCXkDucSkxnmnilbJj7RXCZ6y6dCs69cmG9QX4COJ8n4J9eQs5i4GALmJENONsA
-         Ax8KRQbkiAyZ4wDdSaPlECibUD+h0eBE5nDjZ6MVPPre4DY/em8xVFbx8mq3YZ9cga21
-         B6WX3ED8IlYTt1i2E1Debymh7tBeY1gn3Y+ixMisQLM2VEhQsUvBZ1ST9Zgs6o7oAcs+
-         MkPBbAZtVegpQyn1q8K0+3j5sxiTwt+/ttZh0wDCV3KR6JBlOpTV853jxqRb6g/G+TKh
-         cMnw==
-X-Forwarded-Encrypted: i=1; AKwUvBydZZy5D3eE7sjP+VJq2gl5431ajU5caBOo+YVwoWsKpJaSpCUim9737PRqZ2MvpUaJYZU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ02LsghWDDSVtlBQoMMnnXEBEsSCsd5YQnam4JNa9jJUIjiese
-	zES5bdqZ7+NHyy6kObi+2iLB6TXFaSMqgLtCDN+Tm4Jb1ksx6cz1XQwr
-X-Gm-Gg: AYBFou1gAqHkuJaij+CwSZxfwFTVlyjD6iSTrBTMpW4T+kKZ4GHH7XYJG3OLDyzLpxi
-	fbqeHtXha2Jy/BtHF42x/CpQVudo3bzWy0ZmIU6K2ZOMSDNHBZYpLDaOvA+VzznXf+GwUah9vPk
-	O1our6v8dz+C27+FWGuouLp+qzJUrx5Cqk523o8xmICVZ4phX/syMf2b/lOWDrewGKAPVdLTFHW
-	cC8jbDG6MevETZ+uT/mOHkAzUV7vdzZelQD+ADPAKgrGIkEBx942D97hhVfdDHJgtXhsKw+lEVg
-	fZxbKe6Qs4Z3dxBuhLt5/UEDhYRjEC43yg+7jDdppf4XSFiL783TjZAywX+UdrUT2cH5IKnnaAO
-	PycJWTn40hbqwO73FPmEGRsduYL64RtybmhX6X9SqLIRd2E1SmagB6XmTRlR01UrlXCmGTcizE8
-	cQ6aPPdTw5yKPv9psmSdf1dbprVA3G/iHY5HDM+AK2yf2U21BPvIy1etyW5BB8riUNUXlnUqIVt
-	S2h1vbYc6x0wwjSHYhLPROEdygRXTzJCDOGuBNCL4JxzcxGGB/+EKEadWAYqdnG1B6hwmMCT/II
-	YKeqxdMd3urzWTFgYv2UyHMjRqSnlmkleuw3P31y3Snv6do3hrMKCm1N+pjhDoG59XffHdSAMXb
-	A2DjAdz8/vjUoMitOYqYtn5eS49zRgzmfBjiKt7Za
-X-Received: by 2002:a05:693c:6092:b0:361:7ab9:479d with SMTP id 5a478bee46e88-36a423ee70bmr8382142eec.27.1793439753023;
-        Sat, 31 Oct 2026 02:42:33 -0700 (PDT)
-Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a428af1dfsm15758617eec.7.2026.10.31.02.42.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2026 02:42:32 -0700 (PDT)
-From: HyeongJun An <sammiee5311@gmail.com>
-To: alexei.starovoitov@gmail.com
-Cc: HyeongJun An <sammiee5311@gmail.com>,
-	Jiri Olsa <olsajiri@gmail.com>,
-	bpf@vger.kernel.org,
-	Christian Simon <simon@swine.de>,
-	ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org,
-	tj@kernel.org,
-	yonghong.song@linux.dev,
-	stable@vger.kernel.org,
-	andrii.nakryiko@gmail.com
-Subject: Re: [PATCH bpf v3 1/2] bpf: disable private stack for sleepable programs
-Date: Sat, 31 Oct 2026 18:42:12 +0900
-Message-ID: <20261031094212.2303487-1-sammiee5311@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <DMIRF0WAH6DP.1Q88Y58797IJ4@gmail.com>
-References: <20260822225444.2774461-2-simon@swine.de> <CAADnVQ+MCsQxn5KTp-y7pZu9DrV0Lhy9=+T4yofCfZEZGZcWdg@mail.gmail.com> <apC6-9YqBpOjFLGr@krava> <20261030012258.3005240-1-sammiee5311@gmail.com> <auUhrnOOUWY3Mb9y@krava> <20261031011900.1355507-1-sammiee5311@gmail.com> <DMIRF0WAH6DP.1Q88Y58797IJ4@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=oLB06oPt
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=lZTmGrotgsDGI65tFXKRdBILlZ1ISbBZpIj7+K9DZDI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793441574; v=1; x=1794046374;
+ b=oLB06oPtTuGAdIRr8hXKWIyuAE/VFfRZ2aSmX+nn2L9fhl77u8r1uFIBARMhGEesrc4oTcLk
+ Ny18QOASskvHzGJGUQU9J9Xr62mA/lMG67loRk4XIPBfwTHygeyAP57pQtg+X9uScl77eSjNhc9
+ ynBvjhd1WXGHSz4P5Yf3JqXA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta11.migadu.com with ESMTPS id 3800c739b860db0f;
+	Sat, 31 Oct 2026 10:12:54 +0000
+X-Mizu-Trace-ID: 3800c739b860db0f
+X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain;
+	charset=us-ascii
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,13 +57,80 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3901.100.1.1.12\))
+Subject: Re: [PATCH v5 4/6] mm/vmscan: pass scan_control to the vmscan
+ tracepoints
+From: Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20261031090041.58574-5-ridong.chen@linux.dev>
+Date: Sat, 31 Oct 2026 18:12:27 +0800
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Johannes Weiner <hannes@cmpxchg.org>,
+ Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>,
+ Dave Chinner <david@fromorbit.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Qi Zheng <qi.zheng@linux.dev>,
+ Kairui Song <kasong@tencent.com>,
+ Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>,
+ Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>,
+ Baoquan He <baoquan.he@linux.dev>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ David Hildenbrand <david@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>,
+ linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ linux-mm@kvack.org,
+ "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" <cgroups@vger.kernel.org>,
+ bpf@vger.kernel.org,
+ Ridong Chen <chenridong@xiaomi.com>,
+ "open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org (ope>)
+Content-Transfer-Encoding: 7bit
+Message-Id: <DBDE2024-5586-4938-A8A5-B6247E2B2BF2@linux.dev>
+References: <20261031090041.58574-1-ridong.chen@linux.dev>
+ <20261031090041.58574-5-ridong.chen@linux.dev>
+To: Ridong Chen <ridong.chen@linux.dev>
+X-Mailer: Apple Mail (2.3901.100.1.1.12)
 
-Sorry, and thank you for the correction. You're right that this was
-already nacked on the list, and I should have found it first. I'll
-be more careful to check lore before sending next time. Sorry for
-the noise.
 
-Thanks,
-HyeongJun
+
+> On Oct 31, 2026, at 17:00, Ridong Chen <ridong.chen@linux.dev> wrote:
+> 
+> From: Ridong Chen <chenridong@xiaomi.com>
+> 
+> Several vmscan tracepoints spell out reclaim state as individual
+> arguments, all of which the caller already holds in struct scan_control.
+> Now that the struct is visible from the trace header, pass sc directly
+> and pick the fields out in TP_fast_assign instead of spelling them out
+> at every callsite:
+> 
+> - mm_vmscan_direct_reclaim_begin, mm_vmscan_memcg_reclaim_begin and
+>  mm_vmscan_node_reclaim_begin: gfp_mask and order.
+> 
+> - mm_vmscan_lru_isolate, mm_vmscan_lru_shrink_inactive and
+>  mm_vmscan_lru_shrink_active: reclaim_idx, order and priority.
+> 
+> - mm_vmscan_reclaim_pages: nr_scanned. nr_reclaimed stays a separate
+>  argument: it is the return value of shrink_folio_list(), which does
+>  not update sc->nr_reclaimed.
+> 
+> - mm_vmscan_balance_pgdat_end: order and nr_reclaimed. highest_zoneidx
+>  stays a separate argument: it is a balance_pgdat() parameter, and
+>  sc.reclaim_idx may differ from it by the time the end event fires.
+> 
+> No functional change. The tracefs event format (TP_STRUCT__entry and
+> TP_printk) is unchanged, so tracefs-based consumers are unaffected.
+> BPF programs attached via raw_tp/tp_btf see the new TP_PROTO and need
+> to be adjusted; tracepoints are not a stable ABI (see
+> Documentation/bpf/bpf_design_QA.rst).
+> 
+> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+
+Acked-by: Muchun Song <muchun.song@linux.dev>
+
+Thanks
+
