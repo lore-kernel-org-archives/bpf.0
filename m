@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793453830;
-	b=sok4QkyxTSW9N4HXJY59l4ulgszvx8QgoNSqWA2hJMd9EDkzwU8owxZQnwu8Iv+huVca
-	 7bMcLqs1ZObke5IS6ENQZyT0iSLknnIkc16jQXl5A/dnHc+rtv7iMpWrKzdVbMASjjEF1
-	 bBnO0Bfiadfqhf3iQODKte4//0PcWM7WV4MROfiY18lZuOfj/CpzP3Hws9/9cxBloFKK9
-	 7jRMGaAoXKKfwP1nOIldCRdpe+BxW7/+b9M/tuPmEjuC/qKYPaLOhO+Em2hPk4p5D/Idw
-	 ZuO596gc5ipKily/wly4MtYd5BHhD95vkmodUj5+OFv/4ClJZW88XeDOv5byHP38ipg==
+	t=1793453867;
+	b=M/VQjVXVCzdEbLWY/S5ORVyFLAyNjQFDLtcKbDSj5sYGp8Jrhfuga+q5bvwMi9JO51I+
+	 I2B7+BtSMIgcGdEXfsiukyoa1dy7QsohQ96syQ/K7QJ9Vg2zHu7MrCu37F0iIQKe6BrJ4
+	 /qqCLbKWARJdPVj4ccKC9BhbvMHWUWIqGWUQkEh0P6GLYwR0h+YwCzeKcBIGFpVrAvPMy
+	 fk5hqtog3Nk4IHOZ/+TFPSokUCtoL16OB42dhuvpt06ZVIymadQS8QEfK67/O6foaCYWu
+	 pBJGIGwxM6WQWcCYXT9oOkH2LqAmGLQ8AE3Q9rG3p8WfHmrZr4Dt2ypXDw41o5OARJg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793453830;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793453867;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=yvmt+PxpujZuntRtWqUrAq13mLgWXMBz246RFVlts+0=;
-	b=PVwtC1KPrZiphmwy0+Ig+uaHwrMeNDA56hUpgi5QnOLx18WaLtxvVxctX6aZezDHCZ6K
-	 EVr/Dr0cBki3HYOFpu1vCO27/nRFwmqFJWTV/9Pef2JhsJpOACgHEqIIWDszAqM/TWbNQ
-	 kv6hSKWmfAx6SURaW1w9kyS56AVODUdRSB3Z8qajos92CohG61HzYmnnu+unxoOPhk6DJ
-	 ZBIruKo3cnQD1yohfkWGaftnJxyQF8GfKnEHXX7/c2YNcBLG13ya5HD7DlUXb0odYzyy/
-	 tLXHK+rhCvl3P7FQQd1gyXwPvxL5Qo8Z89mQzdl7fGD1gGuRSzE/slNRpN81eL9dt7Q==
+	bh=reLu0xQA8FLqqGz8ZHz4SlAvBNfLvWfysLu2HEWzZeo=;
+	b=FIc4fpNyumvZAszTBqA6erE/NciosX6xVBEtKAvBC2Ne6juYWpWoNTCaWEMeW3oiwTi1
+	 39FwnQ2bDhiHBS5xXUvwY9v4SngASaWRFQKdIgpY7Cy+MOmQVX8D+VEIub8gvdx2DuTgo
+	 9Qlpo23iEEew4Q0llImKucWyocL0rsgm8lTPzfKnzzpITguFqddW/6FgBu3PfWCH1Bly/
+	 n1BtS/tz/jNuFtqZAkI1VG2QtoFnDipGvsfEnLAdNYyFrkm3Af8zpqRO+fo/kOgqGSdJ3
+	 +LOxR/1vwLp1DE0WOFpT+Mj6kDcW7gHhfE/Wxockt8+LbRPGdiZn1AdExvCeRTePQVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V9HyArey;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MQnBJbN0;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EC5606A31A;
-	Sat, 31 Oct 2026 13:37:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21469606A31A;
+	Sat, 31 Oct 2026 13:37:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V9HyArey
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232EC1F000C1;
-	Sat, 31 Oct 2026 13:37:09 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MQnBJbN0
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E354F1F000C1;
+	Sat, 31 Oct 2026 13:37:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793453830;
-	bh=yvmt+PxpujZuntRtWqUrAq13mLgWXMBz246RFVlts+0=;
+	s=k20260515; t=1793453867;
+	bh=reLu0xQA8FLqqGz8ZHz4SlAvBNfLvWfysLu2HEWzZeo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=V9HyAreywWMvCn8vSXYMBQcwiFNL1jPhcxE2nsxB5Z19uxtFnTLCVOC6T/D/N1yuD
-	 rplc+AH8uL1oiJSg3ah2DZ9pF3+E8AlD/28K9pJJffGJl8fkg786z8gm3aYIdqvY2n
-	 SE+2l7kQ5xjdLe0D0IMyT0sPtbopI4djd+Ho14lXtzjtWm9SqjKXMJUUfApXEB+XNz
-	 lbDJ2ErxYf7NIF/sDISVUh79cRxYrtpROVHyN1uutzhEdRcheTLxZByNNhwKdpP6HB
-	 M2VfLmVAcc92Lu5SrWgVaXA5AGIvD64SWQ8FHhAVQUp1ZAnlCrMbOqQCwpHuYTBbcy
-	 gE9somoS9HPiw==
-Message-ID: <sashiko-outbox-191980@kernel.org>
+	b=MQnBJbN0l/ahabnh/gPVxN0vG9Tvmd1iQdTe1wbVDQsrV3gYspM6N/zWSwVeCZkPw
+	 dlpniNXhwavNTyTcXgM7wgRE4R3KAa3RWTeZuodHoHLP2Al5yT5vpgmEjEpFE3BGEj
+	 rMIkk4TzaCszn37iYatRtdwzV7l2x1+eZX1U+ZF5N9/Sfe3BcIHscuB3nLXsJrhW0d
+	 2DqWcoBn5QUhrQ9FQH8budo+GPSqEl/owB0h0JBrocYtKeIqI1wHHUSpSKBX0OB0h8
+	 0zSDFazsbWKU/PPw3Z1VHDz5hYuzAsdyt53ef8we0xkLBsr8RSRPxDFp91qMjME6pw
+	 bqbU0HvzEWdxQ==
+Message-ID: <sashiko-outbox-191981@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 08/13] tracing: parse the vmlinux BTF when
- BTF-typed output is enabled
+Subject: Re: [PATCH bpf-next 11/13] bpf: keep module BTF until the vmlinux
+ BTF is parsed
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jay Wang" <wanjay@amazon.com>, bpf@vger.kernel.org, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
  Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
@@ -54,12 +54,12 @@ Cc: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alan Maguire" <almagui@kernel.or
  Chancellor" <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, linux-kbuild@vger.kernel.org, "Arnd
  Bergmann" <arnd@arndb.de>, x86@kernel.org, "Hazem Mohamed Abuelfotoh" <abuehaze@amazon.com>, "Bjoern
  Doebel" <doebel@amazon.de>, "Martin Pohlack" <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
-In-Reply-To: <20261031130959.23472-9-wanjay@amazon.com>
+In-Reply-To: <20261031130959.23472-12-wanjay@amazon.com>
 References: <20261031130959.23472-1-wanjay@amazon.com>
- <20261031130959.23472-9-wanjay@amazon.com>
+ <20261031130959.23472-12-wanjay@amazon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 31 Oct 2026 13:37:08 +0000
+Date: Sat, 31 Oct 2026 13:37:45 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,128 +69,276 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
 s) to consider:
-- [Medium] tracing: missing trace_btf_prepare() in irqsoff and wakeup trace=
-rs
-- [Medium] tracing: missing trace_btf_prepare() for persistent buffers and =
-latency tracers
+- [High] bpf: NULL deref in btf_parse_kept_modules() after inline sysfs fai=
+lure
+- [High] bpf: UAF of btf_mod->data in btf_free_rcu() after kept module unpa=
+rse
+- [High] bpf: premature btf_idr publication in btf_parse_kept_modules() cau=
+ses UAF
+- [Medium] bpf: btf_parse_kept_modules() drops kept inline BTF on -ENOMEM
+- [Medium] bpf: drop kept module BTFs in btf_drop_all_deferred() on vmlinux=
+ BTF failure
 --
 
-commit b7e170f2972f546cc8806104f942bd820ff8ecbb
-Author: Ihor Solodrai <ihor.solodrai@linux.dev>
+commit c77c66110b385c53a4bc18e94bea01ef20eb7416
+Author: Jay Wang <wanjay@amazon.com>
 
-tracing: parse the vmlinux BTF when BTF-typed output is enabled
+bpf: keep module BTF until the vmlinux BTF is parsed
 
-This commit prepares the vmlinux BTF when BTF-typed function or function_gr=
-aph
-tracer output is enabled or when reading an event's btf_ids file, and chang=
-es
-print_function_args() and btf_trim_retval() to peek at the vmlinux BTF rath=
-er
-than parsing it on demand while holding trace read locks.
+With CONFIG_DEBUG_INFO_BTF_LAZY enabled, this commit keeps in-tree module
+BTF and inline BTF unparsed when a module loads before vmlinux BTF is
+parsed, exposing their sysfs files immediately and parsing the kept module
+BTFs under btf_vmlinux_lock when vmlinux BTF is first parsed.
 
-> diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-> index a5ad76175d10d..cdb926c9d4e21 100644
-> --- a/kernel/trace/trace_output.c
-> +++ b/kernel/trace/trace_output.c
-> @@ -739,6 +739,9 @@ void print_function_args(struct trace_seq *s, unsigne=
-d long *args,
->  	if (lookup_symbol_name(func, name))
->  		goto out;
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index a5b1cd63a1e43..631f5a32ec174 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+
+[ ... ]
+
+> @@ -9395,6 +9398,149 @@ static DEFINE_MUTEX(btf_module_mutex);
+>  static void purge_cand_cache(struct btf *btf);
+>  static void btf_drop_deferred_regs(struct module *owner);
 > =20
-> +	/* see trace_btf_prepare() */
-> +	if (IS_ERR_OR_NULL(bpf_peek_btf_vmlinux()))
-> +		goto out;
+> +/* /sys/kernel/btf/<module> and <module>.inline */
+> +static void btf_module_add_files(struct btf_module *btf_mod, const char =
+*name,
+> +				 void *data, u32 data_size)
+> +{
+> +	char inline_name[MODULE_NAME_LEN + sizeof(".inline")];
+> +	struct bin_attribute *attr;
+> +
+> +	attr =3D sysfs_btf_add(name, data, data_size, false, NULL);
+> +	if (IS_ERR(attr))
+> +		return;
+> +	btf_mod->sysfs_attr =3D attr;
+> +
+> +	if (!btf_mod->btf_inline_data)
+> +		return;
+> +	snprintf(inline_name, sizeof(inline_name), "%s.inline", name);
+> +	attr =3D sysfs_btf_add(inline_name, btf_mod->btf_inline_data,
+> +			     btf_mod->btf_inline_data_size, false, NULL);
+> +	if (IS_ERR(attr)) {
+> +		kvfree(btf_mod->btf_inline_data);
+> +		btf_mod->btf_inline_data =3D NULL;
+> +		return;
+> +	}
+
+[Severity: High]
+Can this trigger a NULL pointer dereference when btf_parse_kept_modules()
+later parses this module?
+
+In btf_module_keep(), btf_mod->btf_inline_data_size is set to a non-zero
+inline_data_size before calling btf_module_add_files(). If sysfs_btf_add()
+fails for the .inline file here, btf_mod->btf_inline_data is freed and set
+to NULL, but btf_mod->btf_inline_data_size remains non-zero.
+
+Later, btf_parse_kept_modules() passes btf_mod->btf_inline_data (NULL) and
+btf_mod->btf_inline_data_size (non-zero) to btf_parse_module():
+
+    if (inline_data_size) {
+        inline_btf =3D btf_parse_split(env, module_name, inline_data,
+                                     inline_data_size, btf);
+
+which calls btf_parse_split() -> btf_parse_hdr() with btf->data =3D=3D NULL=
+ and
+btf->data_size > 0, dereferencing hdr =3D btf->data.
+
+Should btf_mod->btf_inline_data_size also be reset to 0 here (and if the
+first sysfs_btf_add() call fails above, should btf_mod->btf_inline_data also
+be freed and cleared)?
+
+> +	btf_mod->sysfs_inline_attr =3D attr;
+> +}
+
+[ ... ]
+
+> +/* Undo btf_parse_kept_modules() of a round that is not published */
+> +static void btf_unparse_kept_modules(void)
+> +{
+> +	struct btf_module *btf_mod;
+> +
+> +	lockdep_assert_held(&btf_module_mutex);
+> +	list_for_each_entry(btf_mod, &btf_modules, list) {
+> +		if (!btf_mod->data || !btf_mod->btf)
+> +			continue;
+> +		btf_mod->btf->data =3D NULL;	/* the kept copy */
+> +		btf_put(btf_mod->btf);
+> +		btf_mod->btf =3D NULL;
+> +	}
+> +}
+
+[Severity: High]
+Could btf_free_rcu() read freed btf_mod->data memory after
+btf_unparse_kept_modules() runs?
+
+In btf_apply_deferred(), after btf_parse_kept_modules() sets up
+btf_mod->btf in place over btf_mod->data, an earlier deferred
+BTF_DEFER_ST_OPS registration can populate btf_mod->btf->struct_ops_tab via
+__register_bpf_struct_ops() -> btf_add_struct_ops() ->
+bpf_struct_ops_desc_init(), storing st_ops_desc->type =3D btf_type_by_id()
+which points directly into btf_mod->data.
+
+If a subsequent deferred registration in btf_apply_deferred() fails with
+-ENOMEM, btf_unparse_kept_modules() sets btf_mod->btf->data =3D NULL, sched=
+ules
+asynchronous destruction of btf_mod->btf via btf_put() -> call_rcu(), and
+resets btf_mod->btf =3D NULL.
+
+If the module unloads (MODULE_STATE_GOING) before that RCU grace period
+finishes, btf_module_notify() sees !btf_mod->btf and calls
+btf_module_drop_kept(btf_mod), which immediately frees btf_mod->data with
+kvfree(). When btf_free_rcu() -> btf_free() -> btf_free_struct_ops_tab() ->
+bpf_struct_ops_desc_release() later executes:
+
+    arg_info =3D st_ops_desc->arg_info;
+    for (i =3D 0; i < btf_type_vlen(st_ops_desc->type); i++)
+        kfree(arg_info[i].info);
+
+doesn't btf_type_vlen(st_ops_desc->type) dereference the already freed
+btf_mod->data buffer?
+
+> +
+> +/*
+> + * Called under btf_vmlinux_lock by the task that parses the vmlinux BTF,
+> + * before that is published.  Parses the kept module BTFs in place, olde=
+st
+> + * first so that ids follow the load order as without
+> + * CONFIG_DEBUG_INFO_BTF_LAZY; in-tree module BTF and its inline BTF nee=
+d no
+> + * relocation, so sysfs serves the same bytes before and after.  A module
+> + * whose BTF fails validation cannot be refused any more: it stays loaded
+> + * without BTF, and its files go away; an invalid inline BTF loses its f=
+ile.
+> + * Returns -ENOMEM, with this round's module BTFs freed again, if memory=
+ ran
+> + * out.
+> + */
+> +static int btf_parse_kept_modules(void)
+> +{
+> +	struct btf_module *btf_mod, *tmp;
+> +	void *inline_data;
+> +	struct btf *btf;
+> +	int err;
+> +
+> +	lockdep_assert_held(&btf_vmlinux_lock);
+> +	guard(mutex)(&btf_module_mutex);
+> +	list_for_each_entry_safe_reverse(btf_mod, tmp, &btf_modules, list) {
+> +		if (btf_mod->btf || !btf_mod->data)
+> +			continue;
+> +		btf =3D btf_parse_module(btf_mod->module->name, btf_mod->data,
+> +				       btf_mod->data_size, NULL, 0,
+> +				       btf_mod->btf_inline_data,
+> +				       btf_mod->btf_inline_data_size, &inline_data);
+> +		if (!IS_ERR(btf)) {
+> +			err =3D btf_alloc_id(btf);
+> +			if (err) {
+> +				btf->data =3D NULL;	/* the kept copy */
+> +				btf_free(btf);
+> +				btf =3D ERR_PTR(err);
+> +			}
+> +		}
+
+[Severity: High]
+Is it safe to publish btf into btf_idr via btf_alloc_id(btf) before the rest
+of btf_parse_kept_modules() and btf_apply_deferred() have succeeded?
+
+In btf_get_fd_by_id(), the return value of bpf_get_btf_vmlinux() is ignored:
+
+    if (IS_ENABLED(CONFIG_DEBUG_INFO_BTF_LAZY))
+        bpf_get_btf_vmlinux();
+
+    rcu_read_lock();
+    btf =3D idr_find(&btf_idr, id);
+    if (!btf || !refcount_inc_not_zero(&btf->refcnt))
+
+If task A's bpf_get_btf_vmlinux() fails with -ENOMEM, task A still proceeds
+to idr_find(&btf_idr, id) while task B is inside btf_apply_deferred() ->
+btf_parse_kept_modules(). Task A (or a deferred struct_ops ->init() callback
+calling bpf_find_btf_id()) can grab a reference to btf_mod->btf from btf_id=
+r,
+raising refcnt above 1.
+
+If task B then hits -ENOMEM on a later module or deferred registration,
+btf_unparse_kept_modules() sets btf_mod->btf->data =3D NULL and calls
+btf_put(btf_mod->btf), and bpf_get_btf_vmlinux() frees the unpublished
+vmlinux BTF via btf_put(). Because btf_mod->btf->refcnt > 1, btf_put() does
+not free btf_mod->btf or remove it from btf_idr, leaving a live BTF object
+with btf->data =3D=3D NULL (which crashes in btf_get_info_by_fd() on
+copy_to_user(ubtf, btf->data, btf_copy)) and a dangling btf->base_btf
+pointer to the freed vmlinux BTF.
+
+> +		if (btf =3D=3D ERR_PTR(-ENOMEM)) {
+> +			btf_unparse_kept_modules();
+> +			return -ENOMEM;
+> +		}
+> +		if (IS_ERR(btf)) {
+> +			pr_warn("failed to validate module [%s] BTF: %ld\n",
+> +				btf_mod->module->name, PTR_ERR(btf));
+> +			btf_module_drop_kept(btf_mod);
+> +			continue;
+> +		}
+> +		btf_mod->btf =3D btf;
+> +		if (btf_mod->btf_inline_data && !inline_data) {
+> +			if (btf_mod->sysfs_inline_attr)
+> +				sysfs_btf_remove(btf_mod->sysfs_inline_attr);
+> +			btf_mod->sysfs_inline_attr =3D NULL;
+> +			kvfree(btf_mod->btf_inline_data);
+> +			btf_mod->btf_inline_data =3D NULL;
+> +			btf_mod->btf_inline_data_size =3D 0;
+> +		}
 
 [Severity: Medium]
-Can this cause recorded function arguments to be omitted (printed as empty
-parentheses) for latency tracers and persistent boot ring buffers when
-CONFIG_DEBUG_INFO_BTF_LAZY is enabled and nothing else has triggered vmlinux
-BTF parsing yet?
+If parsing a kept module's inline BTF fails with -ENOMEM inside
+btf_parse_module(), doesn't this permanently drop the module's inline BTF
+and sysfs file instead of rolling back the round?
 
-First, when CONFIG_FUNCTION_TRACE_ARGS is enabled, the irqsoff, preemptoff,
-preemptirqsoff, wakeup, wakeup_rt, and wakeup_dl latency tracers record
-function arguments via fregs into TRACE_FN entries since commit 76fe0337c219
-("ftrace: Add arguments to function tracer"):
+In btf_parse_module(), an error from btf_parse_split() on inline_btf (such
+as ERR_PTR(-ENOMEM)) is logged and cleared to inline_btf =3D NULL, returning
+the main module btf with inline_data =3D=3D NULL. btf_parse_kept_modules() =
+then
+treats !inline_data as a validation failure and removes
+btf_mod->sysfs_inline_attr and frees btf_mod->btf_inline_data, even if the
+round fails with -ENOMEM and is retried later.
 
-kernel/trace/trace_irqsoff.c:irqsoff_tracer_call() {
-	...
-	trace_function(tr, ip, parent_ip, trace_ctx, fregs);
-}
+> +	}
+> +	return 0;
+> +}
 
-kernel/trace/trace_sched_wakeup.c:wakeup_tracer_call() {
-	...
-	local_irq_save(flags);
-	trace_function(tr, ip, parent_ip, trace_ctx, fregs);
-	local_irq_restore(flags);
-}
+[ ... ]
 
-When reading trace or trace_pipe in default (non-graph) mode,
-irqsoff_print_line() and wakeup_print_line() return TRACE_TYPE_UNHANDLED,
-which dispatches TRACE_FN entries through trace_fn_trace() ->
-print_fn_trace() -> print_function_args():
+> @@ -11206,8 +11349,13 @@ static int btf_apply_deferred(void)
+>  			break;
+>  		}
+>  		module_put(reg->owner);
+> -		if (err =3D=3D -ENOMEM)
+> +		if (err =3D=3D -ENOMEM) {
+> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+> +			guard(mutex)(&btf_module_mutex);
+> +			btf_unparse_kept_modules();
+> +#endif
+>  			return err;
+> +		}
+>  		if (err)
+>  			pr_warn("failed to apply deferred BTF registration for %s: %d\n",
+>  				reg->owner ? reg->owner->name : "vmlinux", err);
 
-kernel/trace/trace_output.c:trace_fn_trace() {
-	...
-	args_size =3D iter->ent_size - offsetof(struct ftrace_entry, args);
-	if (args_size >=3D FTRACE_REGS_MAX_ARGS * sizeof(long))
-		args =3D field->args;
-	else
-		args =3D NULL;
+[Severity: Medium]
+What happens to kept module BTFs if btf_parse_vmlinux() in
+bpf_get_btf_vmlinux() fails with a non-ENOMEM error (or btf_apply_deferred()
+were to return a non-ENOMEM error)?
 
-	print_fn_trace(s, field->ip, field->parent_ip, args, iter->tr, flags);
-}
-
-However, neither __irqsoff_tracer_init() / register_irqsoff_function() nor
-__wakeup_tracer_init() / register_wakeup_function() calls trace_btf_prepare=
-().
-
-Second, when a persistent trace_array instance (TRACE_ARRAY_FL_LAST_BOOT) is
-set up across boots via trace_instance=3D on the command line (using reserv=
-e_mem
-or backup=3D in enable_instances()), allocate_trace_buffer() and
-setup_trace_scratch() preserve the ring buffer events and address deltas fr=
-om
-the previous boot while the instance starts in the new boot with nop_trace =
-and
-default tracer flags. Selecting a tracer in the new boot via
-tracing_set_tracer() calls update_last_data(tr), which resets the ring buff=
-er
-and clears the previous boot data (and backup=3D instances are marked
-TRACE_ARRAY_FL_RDONLY):
-
-kernel/trace/trace.c:tracing_set_tracer() {
-	...
-	guard(mutex)(&trace_types_lock);
-
-	update_last_data(tr);
-	...
-}
-
-When reading trace or trace_pipe from that persistent instance to inspect t=
-he
-previous boot's TRACE_FN or TRACE_GRAPH_ENT entries, print_trace_fmt()
-dispatches them to trace_fn_trace() -> print_fn_trace() ->
-print_function_args() or print_graph_function_event() ->
-print_graph_entry_leaf() / print_graph_entry_nested() ->
-print_function_args() without trace_btf_prepare() having been called in the
-current boot:
-
-kernel/trace/trace_output.c:print_fn_trace() {
-	...
-	ip =3D trace_adjust_address(tr, ip);
-	parent_ip =3D trace_adjust_address(tr, parent_ip);
-
-	seq_print_ip_sym(s, ip, flags);
-	if (args)
-		print_function_args(s, args, ip);
-	...
-}
-
-Should trace_btf_prepare() also be called when initializing the irqsoff and
-wakeup tracers and when setting up a persistent last-boot trace buffer?
+In bpf_get_btf_vmlinux(), when btf is a non-ENOMEM error pointer,
+btf_apply_deferred() is not run (or fails) and btf_drop_all_deferred() is
+called before publishing the error pointer to btf_vmlinux. However,
+btf_drop_all_deferred() only frees entries in btf_deferred_regs and does not
+call btf_module_drop_kept() on kept entries in btf_modules, leaving their
+unparsed data buffers and /sys/kernel/btf/<module> sysfs files around until
+module unload. Should btf_drop_all_deferred() also drop kept module entries?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261031130959.2347=
-2-1-wanjay@amazon.com?part=3D8
+2-1-wanjay@amazon.com?part=3D11
