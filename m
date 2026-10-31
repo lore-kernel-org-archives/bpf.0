@@ -1,102 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.53
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793430442;
-	b=lKCIzoLAD1IJFS59tX5iDPdNLnUhZTj9e44A/muYKKzifkvKR9Vy2DChnZXKF03qEWsb
-	 GEIEgtxXnAwwhlMLXMGVxcnIlvFOsGitfX0qfW7hXhxi5QaC0LO+nqJUrJfHZQVlR7Yxy
-	 Jj/JYvCLlt3gfvVoSjz0j7NR9NAvM9YgRyvYIhR1fP0+VilR6+2+ugSlFh4RkI8ybxVfv
-	 4galpvBnNfLDbMEEyAwcA95qmQlJU5JBb0KJI3XDYfiXena+L0QddF4/yk2Mkzyn6Xgce
-	 agnNVChIZtft/obcExR5U2jpqVMMqKts+aSQ1pc0uD3xGOG7GdyjVZv7lq9LDFKe4Ow==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793430442;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=txDCh0MaBRHOsX7sa9cngelOTlX0ltFLjaAJVMdJYaM=;
-	b=oIOoT2Gtt5dq3dd4p6S8t30HGZiFXWL4QJ0CcH/VKb479yAGrMrhISdnAJ+eHhC/DSJX
-	 q0FOMff1cREBnq3b6t0q1q3SAZOpNSEXnauzb54qn9705T6pgNxDyiMuOEQ1KXuxUDu4b
-	 1GWGJ0FXCb98qHKp+tXqYlEVnXSVYJnK+iIPm1HztZdk2EbDq063Hmitd/UQPkZDMXCxk
-	 bC33MQJojXftKL9FL8mOihH57PIZJHsrgsBi/XN+OwaY7GRUX+fhNZE96Ao0/Uuu1kHLZ
-	 mSIivSXP2R4799T/9AxRxR464h7odaoxdvba9ubURqvPh5L6T7uisq4RCou2v40sR1w==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="mUC/ZNRG";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.53
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793437261;
+	b=LoMAaZnPLMfinB+jAJC6QsF9/kmjJQOqKo2JXrK/O93BKVu5SNl/7x6Pv+XJ3et94MPA
+	 BAxBfiZ/hyJRS76Yadpwcis74PBm0yxPHJ4sefML+o3DUcz2Lizm4aGUPN1usDd9Qrbao
+	 h1bpDhWGoAdKybB+LoMUuAO8CZWvo6bWti8jZH0fbcuVPhAPDB3f2FI4r1PvXdgX1GGCO
+	 vzGhTO/51hCZRGPqUcxKfhCC2Gusa/+ZZYXsznkvQGODjrV1rv84HMnUYCLr8+x6MxKvU
+	 izNLw/PR+6jIiCFTnBFS0YvT2nD+rgArPVPTAiDTQXnFNcFY77oRJ4Sff8adRH5t6zQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793437261;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=/+cDz8z+S13VVW23DttFiWRGg6YpwxqQvUMi2t0mKYg=;
+	b=GkBHfBtKDiqsxCKcZnTjfj0voNM6ynatHAlMCzSqo/xaNABNhEhNtjtotBoMzW8DAaOk
+	 6BzEEFiofL1Er91m9nCT8rplYkKGn9T9Uh2vcwHB5xXuGUJv8EFT+9ElqzooVF5jhuWPE
+	 FbIHDs/iJXAE8cDkbZtLU65/1x2KZaHyb9hn49tokiLbSLrWEgqTAC09zUttaW5D4gYGs
+	 eCejEz65tuTMk8/+2cEIksYrjc4SiohEObpO2Vqchlwy9fMivB5uxR8w3inLFJjcqj0Pu
+	 ovaVt6z4Aq7j1mCDoGNLfv01CGSgQTlbi6bg+C1wYh4eQVEUpRL58NI4qEgoD6bgthg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="d/AIhSmj";
+	arc=none smtp.remote-ip=95.215.58.18
+Received: from mta1.migadu.com (out-18.mta1.migadu.com [95.215.58.18])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E6C606A31E
-	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 07:07:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76E6C606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45017606A329
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 09:00:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 45017606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mUC/ZNRG
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5be416e603cso1013262e87.2
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 00:07:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793430441; cv=none;
-        d=google.com; s=arc-20260327;
-        b=XoniS2hHjnmbrS2HrdF6Yr9anfPc7ws30vfLYLStvCrMAHhMvgKMWtDXl5qrUPWyaf
-         u3YlScRYLtclzX6eeNTllXn6CMTzYBjIvFN9dRtZJe218tb2K3lFFz8rGEa425+SDHD/
-         Qnjz9VB0IP6QJLtxULSCAzMW/59yE+k8w7NnltZowGF1GcOKzxJrXMI4vijUfjUUMHSW
-         dk1fW71cWaXDWECW8xb1HwrfUp2kFFKg9RnPpIT4J3fBJVaIAxXFJlUg+hsgsJP0uo9z
-         o/7EBPvvLkNn1WQRDtWjzRo0bvNvvgLzTuzJH2LJyxqMtQbvHudbC+6kF/B35r320mfu
-         7f2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=txDCh0MaBRHOsX7sa9cngelOTlX0ltFLjaAJVMdJYaM=;
-        fh=WGWjWZoOxV7TgGS2edlD4Eyh/co5FN5m640+q9VkGuw=;
-        b=Ya0s5A8h7qiiJuZqB2t0f7vd4k4kfCe31eHdpGZT1lMq7j5+lic4/k1ngQ8GUhnuHj
-         z6v7XcAJOfdfy0qU7UjjMFoVO2T8V0sb11cZjxKBJ0cZ4mz6kAUPsYXw06riTRQFJD33
-         nIXoZnKn9jfggbGEbjnrCLiK8FxbMp0hdi2TbPKdw13CRl2VDy+QcgR1G918DU6oou3c
-         lcWEUwrlHeCRImab25KV6pBwTCXTgAkOVNW+seKMs+tNjE9VajPlT0RFnL6jt1eYHYGH
-         /MDVo6cCaEOPUeoV2aHzBWpZb239zYEw79WSLc20KZhRo5xqP+OCFL5hbpCkCt2KEfHm
-         M8NA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793430441; x=1794035241; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=txDCh0MaBRHOsX7sa9cngelOTlX0ltFLjaAJVMdJYaM=;
-        b=mUC/ZNRGxHvMseEtdOEJmWVOL8SEcrnIyl+LO+rOY+pCywr6fgr+KDK2CIyE8lIsuz
-         yQ1Np9gk8b8jKxaAfhEqP2bROPaNrhie/nknplsY5izO+GtjCMaTsnSI4wdjbSEFbJ2A
-         v1V+FQHw3oxr+3yAX12D/DT/sUQ9qKE4G+uooZlPDxfs/u+oPXzxb9TRBVUps5TvUVPa
-         1zS0+tldYvPBypmRuTh5upf+mvaRVO/3IMi4ZTkryxZGkOjq3yCeaf6+X5a4ylvGgOOQ
-         lKmC7vQgmHoRcJHX40cgu4raIzql04uewGD2ZHWOa8sSFvfRTprZZlnZaInECB72XWYU
-         O0Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793430441; x=1794035241;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=txDCh0MaBRHOsX7sa9cngelOTlX0ltFLjaAJVMdJYaM=;
-        b=fBATnq4ipNUnt8MFdoajhMdrSEM6gi8ZtiK4slWjldG0qlllzI2Anl0GBO0eYSn32G
-         tREahV5u3vyv3FlteA6fGEkv92uVsCa+Jt8WGQmGe9PW+xM+45Nn+fkPxXFq8gx02w6s
-         S34yku9sigjogY3nL+6FQNHiL5BqopSArNT4fQuyhdxhZw4/peAvSsyWuCcCy6PWtuPV
-         sB6z16mkHDl58hY/XwF1Jk17RO9PoWbG71398havkuEEC5OYpQmmAxJgx9cF1SWd9GSM
-         lVaY6tmbZrBwOUbkL5A+P7LjJOXxKo+gSMG7HzY6YZOMtHrMTyOjX9ZZYf+1pp+JEIkg
-         VXFw==
-X-Forwarded-Encrypted: i=1; AKwUvBy1k6zz8bOYhP1ydBfgMActYaHKceIEs1w+RRkyEzDBwUjb/AALui14kS6Vt/bZEMJuq3U=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIBnDzj/RRyF4QRlXEkHdePmWUNHr1o4S+Z3rSCbQjwmkfHOEaY
-	LhdwRYsy/mgNqaMeTrzg5u20cP7rXA4ylPfDwlDRivYWK/pOe/RfDpWjz6PgUEOGuO8R7CxZBBA
-	MapA/zkH8v6Ba0ePc/wEbzY5iiRNw0lg=
-X-Gm-Gg: AYBFou0re2+j6OavT0SG5gWZRNeRzVcDkuNXRKW7Gou3/VdO8ejZSDGis/LNrNnqh/3
-	hgCWRfINnnGBKuQCfCc7cBX28qTkLX2cywAtSnEMybvBMZS89CE0GcLQD1FQi4zZccXyxkW9mxC
-	+0KgHbisE9gb8LZO+I1CT85FgQoLJNCQLa8q8EewklHOkc8ii+7NX/KT17WM01WIFL7XxRZ/HCg
-	unzUYDLoNeOLmLnY24lTzOyxpeXiyDOS25/8qIF42mabu3P/XRixa+LKD1pVaogXmn+ugguA8jK
-	LPsxS5/1Ijebhl4eHA6NXGqVlIaJru0sj3ivgUGGmq8mlEfxhe18QAAKB3vLWkb6WbBEPyMt5xU
-	Grtvoq4TX9Iz95bW+yGhHGdP+u8EjcP1eqjGc8frHvMxXVwFI3ql8HmCn1tC2rJBm0och4M5kBK
-	b+6yIbv99E34zXPgRfCHxjaUV81lpDIACDoaYEX4vLvrang9f+8nX43YDpjaKiBW8q7SkwaWigj
-	3O4Ao+ZZYY=
-X-Received: by 2002:a05:6512:1393:b0:5bf:cfc6:edb2 with SMTP id
- 2adb3069b0e04-5bfd951d540mr1610800e87.1.1793430440393; Sat, 31 Oct 2026
- 00:07:20 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=d/AIhSmj
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=9ESn0iXGOsbPe21qbfI7nx+GR2XMCLLmsCh+GUZKzlI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793437257; v=1; x=1794042057;
+ b=d/AIhSmjk5wYePxo28ut9MO2TWV5KHyRlSNA9yN9Kw+F8IpI4OnHWv2y6wMoyklQXNhvhAR4
+ UeF6hb+My090UMmwqJ6sm2kJ+LvMSSSoYB0xtOcUtxidraIs4npx2HSFqt9zReV4aj2awIUrOGn
+ b5vOToj3/U5KYogTVT9OztRQ=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e4beb363cb06b63a;
+	Sat, 31 Oct 2026 09:00:57 +0000
+X-Mizu-Trace-ID: e4beb363cb06b63a
+X-Migadu-Flow: FLOW_OUT
+From: Ridong Chen <ridong.chen@linux.dev>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Dave Chinner <david@fromorbit.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Qi Zheng <qi.zheng@linux.dev>,
+	Kairui Song <kasong@tencent.com>,
+	Barry Song <baohua@kernel.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>,
+	Wei Xu <weixugc@google.com>,
+	Baoquan He <baoquan.he@linux.dev>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	cgroups@vger.kernel.org (open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)),
+	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_)),
+	Ridong Chen <ridong.chen@linux.dev>
+Subject: [PATCH v5 0/6] mm/vmscan: move tracepoints to mm/ and add MGLRU tracepoints
+Date: Sat, 31 Oct 2026 17:00:35 +0800
+Message-ID: <20261031090041.58574-1-ridong.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,49 +86,166 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261030023248.78802-1-testwrzwrz@gmail.com> <20261030023248.78802-2-testwrzwrz@gmail.com>
- <CAL+tcoDUGqk-KfMBqdG4RBURHQc=9J+Ce7B7CZZWRN5yN7pRrw@mail.gmail.com>
- <20261030084017.16202-1-testwrzwrz@gmail.com> <CAL+tcoBThTe7299eVU=tsUdi392dS9cioXX5RA5AKRsYAGbdVg@mail.gmail.com>
- <20261030094633.27910-1-testwrzwrz@gmail.com> <auSF/bDmOW0Y7T4D@boxer>
-In-Reply-To: <auSF/bDmOW0Y7T4D@boxer>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Sat, 31 Oct 2026 15:06:42 +0800
-X-Gm-Features: AclHuK-0fsS0Xg_Rkxrpa9yorygM-pSbQySVfqzZJZ8DT6_AjEHZacGUrZv2dts
-Message-ID: <CAL+tcoC+bwVdf2N+Ku92+ifPOQMvak8KMYM9RvMpv6hkdpMt2w@mail.gmail.com>
-Subject: Re: [PATCH net v4 1/2] xsk: defer software checksum until the skb is complete
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Rongzheng Wang <testwrzwrz@gmail.com>, netdev@vger.kernel.org, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, stable@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 30, 2026 at 7:57=E2=80=AFPM Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> On Fri, Oct 30, 2026 at 05:46:33PM +0800, Rongzheng Wang wrote:
-> > Hi Jason,
-> >
-> > Makes sense, thanks. I'll wait for their feedback on the selftest patch
-> > before sending v5, and fold it in together with the rest.
->
-> Can you stop removing all the previous conversations and rather reply
-> inline to related paragraphs?
->
-> I don't think v5 is necessary. And as Jason said you received 3 review/ac=
-k
-> tags and none of them got included in v4.
+From: Ridong Chen <chenridong@xiaomi.com>
 
-Given it's his first contribution, I suggest sending a v5 with our
-tags and that change (removing else), so you don't need to re-add the
-tags one by one :) And then Jakub can easily pick it up with auto
-tagging.
+Background
+==========
 
-Thanks,
-Jason
+MGLRU currently has no tracepoints of its own. The scan and evict paths
+reuse the classic-LRU tracepoints (trace_mm_vmscan_lru_isolate() and
+trace_mm_vmscan_lru_shrink_inactive()), which predate MGLRU and carry no
+generation, sequence or memcg context. A trace of a running system
+therefore cannot tell which memcg a given scan belongs to, how far
+reclaim has progressed through the generations, or when a new generation
+is created.
 
->
-> >
-> > Thanks,
-> > Rongzheng
+While reviewing an earlier version that added two MGLRU tracepoints,
+Steven suggested moving include/trace/events/vmscan.h to
+mm/trace_vmscan.h [1], as several other subsystems already do. Once the
+header lives under mm/, struct scan_control can be moved there too,
+letting the trace events access its fields directly instead of having
+each callsite copy the scalars out by hand. This version merges the two
+efforts into one series: the restructuring first, then the two new
+tracepoints built on top of it.
+
+Implementation
+==============
+
+Part 1, restructuring (patches 1-4):
+
+  1) drop the unused vmscan trace include from memcontrol.c;
+  2) move include/trace/events/vmscan.h to mm/trace_vmscan.h, setting
+     TRACE_INCLUDE_PATH to "." and adding -I$(src) for vmscan.o;
+  3) move struct scan_control into a dedicated mm/vmscan.h with an
+     ordinary include guard, which trace_vmscan.h pulls in;
+  4) pass scan_control to the vmscan tracepoints and pick the fields
+     out in TP_fast_assign: the reclaim-begin events, the LRU
+     isolate/shrink events, mm_vmscan_reclaim_pages and
+     mm_vmscan_balance_pgdat_end.
+
+Part 2, MGLRU tracepoints (patches 5-6):
+
+  5) add mm_mglru_scan_folios on the scan path, next to the classic
+     mm_vmscan_lru_isolate, reporting the same counters plus nr_sorted
+     and the nid, memcg id, max_seq, tier and min_seq of the lruvec;
+  6) add mm_mglru_inc_max_seq on the aging path, reporting the nid,
+     memcg id, the new max_seq, the anon/file min_seq and the
+     per-generation page counts of both types.
+
+Both new events only take pointers (lruvec, sc) plus the local counters,
+and derive everything else in TP_fast_assign(), so the reclaim paths do
+no extra work when they are disabled.
+
+Effect
+======
+
+Part 1 moves the loads of the tracepoint arguments out of the reclaim
+paths and into the trace event callbacks, which only run when the event
+is enabled. On x86_64 with gcc 11.4, the callers in mm/vmscan.o shrink
+accordingly (bytes), e.g.:
+
+  isolate_lru_folios    4060 -> 3896 (-164)
+  __node_reclaim        2407 -> 2225 (-182)
+  isolate_folios        8706 -> 8577 (-129)
+  shrink_active_list    3674 -> 3549 (-125)
+  evict_folios          4858 -> 4769  (-89)
+
+There is no functional change in part 1. TP_STRUCT__entry and TP_printk
+of the existing events are untouched, so their tracefs format is
+identical. This was confirmed by diffing the tracefs format files before
+and after, and by capturing the direct/memcg/node reclaim-begin events
+under load in a QEMU guest (order, gfp_flags and memcg_id all match).
+BPF programs attached via raw_tp/tp_btf do see the new TP_PROTO and need
+to be adjusted; tracepoints are not a stable ABI (see
+Documentation/bpf/bpf_design_QA.rst).
+
+highest_zoneidx and nr_reclaimed stay separate arguments: the former is
+a balance_pgdat() parameter (sc.reclaim_idx may differ from it by the
+time the end event fires), and the latter is the return value of
+shrink_folio_list(), which does not update sc->nr_reclaimed.
+
+Part 2 makes the full aging-to-eviction window observable per memcg:
+aging advances max_seq (the leading edge), scanning consumes the oldest
+generations, and the min_seq/max_seq pair on each event shows how the
+generation window moves over time. A sample trace, with the classic-LRU
+tracepoints left enabled to show how they interleave:
+
+  mm_vmscan_lru_isolate: classzone=4 order=0 nr_requested=4 nr_scanned=1 nr_skipped=0 nr_taken=1 lru=inactive_file
+  mm_mglru_scan_folios: nid=0 memcg_id=1833 classzone=4 order=0 nr_requested=4 nr_scanned=1 nr_sorted=0 nr_skipped=0 nr_taken=1 lru=inactive_file max_seq=3 tier=3 min_seq=0
+  mm_vmscan_lru_shrink_inactive: nid=0 nr_scanned=1 nr_reclaimed=1 nr_dirty=0 nr_writeback=0 nr_congested=0 nr_immediate=0 nr_activate_anon=0 nr_activate_file=0 nr_ref_keep=0 nr_unmap_fail=0 priority=2 flags=RECLAIM_WB_FILE|RECLAIM_WB_ASYNC
+  mm_mglru_inc_max_seq: nid=0 memcg_id=1833 max_seq=4 anon_min_seq=1 file_min_seq=1 nr_anon={0x0,0x0,0x0,0x0} nr_file={0x0,0x12,0x0,0x0}
+  mm_vmscan_lru_isolate: classzone=4 order=0 nr_requested=3 nr_scanned=3 nr_skipped=0 nr_taken=3 lru=inactive_file
+  mm_mglru_scan_folios: nid=0 memcg_id=1833 classzone=4 order=0 nr_requested=3 nr_scanned=3 nr_sorted=0 nr_skipped=0 nr_taken=3 lru=inactive_file max_seq=4 tier=3 min_seq=1
+  mm_vmscan_lru_shrink_inactive: nid=0 nr_scanned=3 nr_reclaimed=3 nr_dirty=0 nr_writeback=0 nr_congested=0 nr_immediate=0 nr_activate_anon=0 nr_activate_file=0 nr_ref_keep=0 nr_unmap_fail=0 priority=2 flags=RECLAIM_WB_FILE|RECLAIM_WB_ASYNC
+
+The mm_mglru_scan_folios lines carry the node, memcg id and the
+generation window (max_seq/min_seq) that the bare mm_vmscan_lru_isolate
+lines above them cannot - those cannot even say which memcg they came
+from. The mm_mglru_inc_max_seq line then shows a new generation being
+created (max_seq 3 -> 4) with the per-generation page counts for both
+types, and the following scan already reports the moved window
+(max_seq=4 min_seq=1).
+
+[1]: https://lore.kernel.org/linux-mm/20260916095122.50cbb620@robin/
+
+This series was developed with the assistance of an LLM-based coding
+assistant. All changes have been reviewed by hand, and I take full
+responsibility for them.
+
+---
+Changes in v5:
+  - Squash v4 patches 4-7 into a single patch 4 (Barry).
+  - Link to v4: https://lore.kernel.org/linux-mm/20261019034426.2354049-1-ridong.chen@linux.dev/
+
+Changes in v4:
+  - Merge the MGLRU tracepoint series [2] into this one, on top of the
+    restructuring, and drop the RFC tag.
+  - Patch 2: use TRACE_INCLUDE_PATH "." with CFLAGS_vmscan.o += -I$(src)
+    instead of a relative path (Steven).
+  - Patches 8-9: pass lruvec/sc and compute the fields in
+    TP_fast_assign() instead of at the call site (Steven).
+  - Patches 8-9: add nid, derived from the lruvec (Baoquan).
+  - Patch 8: group the int fields at the end of the entry to avoid
+    padding on 64-bit (Steven).
+  - Drop "mm/mglru: factor out lru_gen_seq_nr_pages()" from [2]: the
+    per-generation page count is now summed inside TP_fast_assign(), so
+    the helper has no user. The Reviewed-by tags given to [2] are not
+    carried over, as patches 8-9 changed substantially.
+  - Link to RFC v3: https://lore.kernel.org/all/20261013131309.2790253-1-ridong.chen@linux.dev/
+
+Changes in RFC v3:
+  - Use "Assisted-by: LLM" (Muchun).
+  - Note the BPF raw_tp/tp_btf impact in the changelogs (Sashiko).
+  - Changelog wording fixes and minor indentation fixes.
+  - Link to RFC v2: https://lore.kernel.org/all/20260928114625.3609130-1-ridong.chen@linux.dev/
+
+Changes in RFC v2:
+  - Convert the remaining vmscan tracepoints too.
+  - Move struct scan_control to mm/vmscan.h (Baoquan).
+
+[2]: https://lore.kernel.org/all/20260911102939.2485750-1-ridong.chen@linux.dev/
+
+Ridong Chen (6):
+  mm/memcontrol: drop unused vmscan tracepoint include
+  mm/vmscan: move vmscan tracepoints to a local header
+  mm/vmscan: move struct scan_control to a dedicated header
+  mm/vmscan: pass scan_control to the vmscan tracepoints
+  mm/mglru: add tracepoint for scan_folios()
+  mm/mglru: add tracepoint for inc_max_seq()
+
+ MAINTAINERS                                   |   4 +
+ mm/Makefile                                   |   1 +
+ mm/memcontrol.c                               |   2 -
+ mm/shrinker.c                                 |   2 +-
+ .../events/vmscan.h => mm/trace_vmscan.h      | 193 ++++++++++++++----
+ mm/vmscan.c                                   | 140 ++-----------
+ mm/vmscan.h                                   | 118 +++++++++++
+ 7 files changed, 296 insertions(+), 164 deletions(-)
+ rename include/trace/events/vmscan.h => mm/trace_vmscan.h (76%)
+ create mode 100644 mm/vmscan.h
+
+-- 
+2.43.0
+
