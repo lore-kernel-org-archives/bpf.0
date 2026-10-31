@@ -1,103 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793424586;
-	b=F9hEDNwy7QN4ogLIu3XhDzrZ3wfB2a3F4o+oJtpOqvF9kqZPr/Uabyh+giGZTy3pkt2z
-	 ts25OgHfKgnAbwPSbhFa4y0xmL4jdbDzPT3rtyeOoNuQ2PHwOB47wubSH7k4tZxFuu/y7
-	 u9a568Ja8eFa9qtciPG6lqE92qt6ceiCzW+Z8lxNw1AYfrVTI1Wt587Hd8IOgI4T4aDE4
-	 K+/biscWpUgj/Yq2UmvkPdHHDJf4TDoEkGKRDtmP36rHZtAKtArTSJdRdx4qfNUY+ucZ0
-	 Ue27dxBXC9DBNUUYnnhtEmbQl4OtvLiSmfibgb9u4knrqZ3EODemoZuuAMjAd8ArsTQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793424586;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.53
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793430442;
+	b=lKCIzoLAD1IJFS59tX5iDPdNLnUhZTj9e44A/muYKKzifkvKR9Vy2DChnZXKF03qEWsb
+	 GEIEgtxXnAwwhlMLXMGVxcnIlvFOsGitfX0qfW7hXhxi5QaC0LO+nqJUrJfHZQVlR7Yxy
+	 Jj/JYvCLlt3gfvVoSjz0j7NR9NAvM9YgRyvYIhR1fP0+VilR6+2+ugSlFh4RkI8ybxVfv
+	 4galpvBnNfLDbMEEyAwcA95qmQlJU5JBb0KJI3XDYfiXena+L0QddF4/yk2Mkzyn6Xgce
+	 agnNVChIZtft/obcExR5U2jpqVMMqKts+aSQ1pc0uD3xGOG7GdyjVZv7lq9LDFKe4Ow==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793430442;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:To:Cc:Subject:From:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=pPCYtQzMZtajXWmvtb2q+ThOcxjNXkaUo5PJHZCV/CM=;
-	b=hUcQVwfWMMkbUNBPGhd8ZXvZ4J0n3/HHAs5DKQQfSs9KEvB5ZgCQsxOykaDYOI2KXY8B
-	 FFl50CZ0WtehIhBS9TiONvOMvXi/goFeuHMKC1KnJz7qf/cPEvDwHZZjNOi0tjSbsVujw
-	 od/TWXQG/IcSIpezdTLmrj6T8s7Avru1MnID6Gmfa3IYaJQ8Z3VDlMAeoSpqwe9DNBZJj
-	 pr6S39Pk6yHGHrm67xGU621bo6u2qko0GnUcNOA0PeFqizT0tHFfpcCmvt+O+VZi8F7RX
-	 Fc+wMWf6JnNHC4aaiBuQbhN+xTvmjE3850CoOCuzHVPR8UxUUFL/AaOM91L9tx65FZQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=txDCh0MaBRHOsX7sa9cngelOTlX0ltFLjaAJVMdJYaM=;
+	b=oIOoT2Gtt5dq3dd4p6S8t30HGZiFXWL4QJ0CcH/VKb479yAGrMrhISdnAJ+eHhC/DSJX
+	 q0FOMff1cREBnq3b6t0q1q3SAZOpNSEXnauzb54qn9705T6pgNxDyiMuOEQ1KXuxUDu4b
+	 1GWGJ0FXCb98qHKp+tXqYlEVnXSVYJnK+iIPm1HztZdk2EbDq063Hmitd/UQPkZDMXCxk
+	 bC33MQJojXftKL9FL8mOihH57PIZJHsrgsBi/XN+OwaY7GRUX+fhNZE96Ao0/Uuu1kHLZ
+	 mSIivSXP2R4799T/9AxRxR464h7odaoxdvba9ubURqvPh5L6T7uisq4RCou2v40sR1w==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ocmjj6TV;
-	arc=none smtp.remote-ip=209.85.216.48
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="mUC/ZNRG";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.53
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B54606A320
-	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 05:29:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C2B54606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E6C606A31E
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 07:07:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76E6C606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ocmjj6TV
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3ae691283ecso747956a91.0
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2026 22:29:45 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mUC/ZNRG
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5be416e603cso1013262e87.2
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 00:07:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793430441; cv=none;
+        d=google.com; s=arc-20260327;
+        b=XoniS2hHjnmbrS2HrdF6Yr9anfPc7ws30vfLYLStvCrMAHhMvgKMWtDXl5qrUPWyaf
+         u3YlScRYLtclzX6eeNTllXn6CMTzYBjIvFN9dRtZJe218tb2K3lFFz8rGEa425+SDHD/
+         Qnjz9VB0IP6QJLtxULSCAzMW/59yE+k8w7NnltZowGF1GcOKzxJrXMI4vijUfjUUMHSW
+         dk1fW71cWaXDWECW8xb1HwrfUp2kFFKg9RnPpIT4J3fBJVaIAxXFJlUg+hsgsJP0uo9z
+         o/7EBPvvLkNn1WQRDtWjzRo0bvNvvgLzTuzJH2LJyxqMtQbvHudbC+6kF/B35r320mfu
+         7f2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=txDCh0MaBRHOsX7sa9cngelOTlX0ltFLjaAJVMdJYaM=;
+        fh=WGWjWZoOxV7TgGS2edlD4Eyh/co5FN5m640+q9VkGuw=;
+        b=Ya0s5A8h7qiiJuZqB2t0f7vd4k4kfCe31eHdpGZT1lMq7j5+lic4/k1ngQ8GUhnuHj
+         z6v7XcAJOfdfy0qU7UjjMFoVO2T8V0sb11cZjxKBJ0cZ4mz6kAUPsYXw06riTRQFJD33
+         nIXoZnKn9jfggbGEbjnrCLiK8FxbMp0hdi2TbPKdw13CRl2VDy+QcgR1G918DU6oou3c
+         lcWEUwrlHeCRImab25KV6pBwTCXTgAkOVNW+seKMs+tNjE9VajPlT0RFnL6jt1eYHYGH
+         /MDVo6cCaEOPUeoV2aHzBWpZb239zYEw79WSLc20KZhRo5xqP+OCFL5hbpCkCt2KEfHm
+         M8NA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793424585; x=1794029385; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=pPCYtQzMZtajXWmvtb2q+ThOcxjNXkaUo5PJHZCV/CM=;
-        b=ocmjj6TVIvlHNqe4suqwOILLkAWxwzL2+oK3CrsX4xlSxWKBbGvRQxBURZ6Hoa1vkQ
-         /MCoc2qsnAJwrym5ldC7tWZaik4xJgiRUwuGDrM013ukasqiZTX7EOjTDpKU2W+nv+Lp
-         +r4Oyojn0AcdY6tZI32VcYdlKIM6FZXMEnakR+WWXid2sLZbpKB2/DlSyHH1X9/6NOvn
-         sKT/Ve5Yr5wO+HcxxcwNV1VEsFPg2aUVDlSq1Hl+Ab8rnBHiM+OkVbJMzkyM1SxoME+8
-         HoDqGtybBm/6JHnUlk2lhcLE9k8UlOQpBE8/nCzMyQPYtUIaTIHzDPiMp9qXS6OCoOaS
-         BOUQ==
+        d=gmail.com; s=20260707; t=1793430441; x=1794035241; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=txDCh0MaBRHOsX7sa9cngelOTlX0ltFLjaAJVMdJYaM=;
+        b=mUC/ZNRGxHvMseEtdOEJmWVOL8SEcrnIyl+LO+rOY+pCywr6fgr+KDK2CIyE8lIsuz
+         yQ1Np9gk8b8jKxaAfhEqP2bROPaNrhie/nknplsY5izO+GtjCMaTsnSI4wdjbSEFbJ2A
+         v1V+FQHw3oxr+3yAX12D/DT/sUQ9qKE4G+uooZlPDxfs/u+oPXzxb9TRBVUps5TvUVPa
+         1zS0+tldYvPBypmRuTh5upf+mvaRVO/3IMi4ZTkryxZGkOjq3yCeaf6+X5a4ylvGgOOQ
+         lKmC7vQgmHoRcJHX40cgu4raIzql04uewGD2ZHWOa8sSFvfRTprZZlnZaInECB72XWYU
+         O0Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793424585; x=1794029385;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1793430441; x=1794035241;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pPCYtQzMZtajXWmvtb2q+ThOcxjNXkaUo5PJHZCV/CM=;
-        b=Aw5mWP9zEB3yxLSAit4NuHcCevxWN5xARmZTCCKbAIQya4+/fOSqWZTY/knPrDw9YZ
-         AdTGcV6bQ3jovS4q0t1t8oloFP8ypS6Q0dYuPwUiNEONOTpaYYqvzwazhEIX7Yx6BrRj
-         fiz0EuwoNA7ua7zH8t5QYKm+YXgLmXSOzAzrPOo4NPzu5om/l9VlVkVURZBwH8VZ4szw
-         eCL9XRTP7MnOOiyCrCRiS7Ynglzo4WW/YXfddge/dZTJIvP12BnPC/3w07HlJPH6TCzi
-         UYpBK6GqjIllW5HgwpivviC6gMWlb9SqvGWke01aT5gxP1Kwt2YPnTEFcn6X9uMUrBum
-         TLYg==
-X-Gm-Message-State: AFq9FYJfBaNpp9BzBl32De4AHDJXhjeBxbs08YJigFc64BRXrTz/SP56
-	7l+MfJ704yFYEeV4RFA6Jze3fMN6C2pG1ynEkI664FVLdCJv1cz/5Bww
-X-Gm-Gg: AYBFou0+/Qn48zSmROwD/q3EQXi6LkPYuP1BMnzvIEcOtijB92jBQt01GgLixFHh8CE
-	scVkN8xGN8BuBXfesKO0jebpDUGOemfDg8/DWarOQCQi0650meJDomuTEz37J7QW5k6KyXZhgtF
-	ihyZFKV7QseWaQU1J1ql+FK1LyfyDOGacL0ZqfPZLEGm2q1KNdO2dxS0/85ALQIbhk5QVMJ4rlf
-	E/Scg/qvwufJKZxXYqwaD2KcApRwxdEaiVa0qWc2OAXQYYl77QplLbW4QRvvzvJTmv5+Mn0gj0R
-	pLu8e41F16Ef+cUWIonkIAMP+30Ak2cp70iM1rsI6gssiveTAl8TX3YGU2O1KkqK3eH5zEZm3N7
-	q9n6Xl/3cd5EbsaO6/3NtMxKUaddQZCbt9TMZV6I3/0rTxd2O+o5BOnIE88helVHI/d8UyBQJ9g
-	DFGajBOulxyCkFOWNZRN9mMHNWOEuo7Z20OwyOtYMWLk1cg+vw/rZXLmyGf2PLhiJ9PGP2BYlYc
-	/IRy7p+VLhvSqVuhWL/K46sdB/Mu7/qkSVZJT1c4ZAOHyMYiZvFph7zkWxFRIXd+0LWWWxervPC
-	r8PN2mYSQ8av5FxH/tIwV7rld/5mKY6O/eDT3oU+FiyV6cjbEbRq6HwbAGUKyT0J3PWaZP+4ZJF
-	a4c/y9qhYZZiYgLPvL7WfAvJr4rQtW1E7gmM=
-X-Received: by 2002:a17:90b:4c4c:b0:3a6:d2ac:74ce with SMTP id 98e67ed59e1d1-3ae8972b662mr2341161a91.19.1793424584986;
-        Fri, 30 Oct 2026 22:29:44 -0700 (PDT)
-Received: from localhost ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae8826a769sm2582771a91.4.2026.10.30.22.29.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Oct 2026 22:29:44 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 31 Oct 2026 05:29:43 +0000
-Message-Id: <DMIRYFU9YEX1.14HBEXD0UQR7H@gmail.com>
-To: "Qiliang Yuan" <odys.yuan@gmail.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 07/22] bpf: Let the patch list remove
- instructions
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20261030-bpf-verifier-patch-batch-v2-7-55cd43439f7c@gmail.com>
-References: <20261030-bpf-verifier-patch-batch-v2-0-55cd43439f7c@gmail.com> <20261030-bpf-verifier-patch-batch-v2-7-55cd43439f7c@gmail.com>
-Content-Transfer-Encoding: 8bit
+        bh=txDCh0MaBRHOsX7sa9cngelOTlX0ltFLjaAJVMdJYaM=;
+        b=fBATnq4ipNUnt8MFdoajhMdrSEM6gi8ZtiK4slWjldG0qlllzI2Anl0GBO0eYSn32G
+         tREahV5u3vyv3FlteA6fGEkv92uVsCa+Jt8WGQmGe9PW+xM+45Nn+fkPxXFq8gx02w6s
+         S34yku9sigjogY3nL+6FQNHiL5BqopSArNT4fQuyhdxhZw4/peAvSsyWuCcCy6PWtuPV
+         sB6z16mkHDl58hY/XwF1Jk17RO9PoWbG71398havkuEEC5OYpQmmAxJgx9cF1SWd9GSM
+         lVaY6tmbZrBwOUbkL5A+P7LjJOXxKo+gSMG7HzY6YZOMtHrMTyOjX9ZZYf+1pp+JEIkg
+         VXFw==
+X-Forwarded-Encrypted: i=1; AKwUvBy1k6zz8bOYhP1ydBfgMActYaHKceIEs1w+RRkyEzDBwUjb/AALui14kS6Vt/bZEMJuq3U=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIBnDzj/RRyF4QRlXEkHdePmWUNHr1o4S+Z3rSCbQjwmkfHOEaY
+	LhdwRYsy/mgNqaMeTrzg5u20cP7rXA4ylPfDwlDRivYWK/pOe/RfDpWjz6PgUEOGuO8R7CxZBBA
+	MapA/zkH8v6Ba0ePc/wEbzY5iiRNw0lg=
+X-Gm-Gg: AYBFou0re2+j6OavT0SG5gWZRNeRzVcDkuNXRKW7Gou3/VdO8ejZSDGis/LNrNnqh/3
+	hgCWRfINnnGBKuQCfCc7cBX28qTkLX2cywAtSnEMybvBMZS89CE0GcLQD1FQi4zZccXyxkW9mxC
+	+0KgHbisE9gb8LZO+I1CT85FgQoLJNCQLa8q8EewklHOkc8ii+7NX/KT17WM01WIFL7XxRZ/HCg
+	unzUYDLoNeOLmLnY24lTzOyxpeXiyDOS25/8qIF42mabu3P/XRixa+LKD1pVaogXmn+ugguA8jK
+	LPsxS5/1Ijebhl4eHA6NXGqVlIaJru0sj3ivgUGGmq8mlEfxhe18QAAKB3vLWkb6WbBEPyMt5xU
+	Grtvoq4TX9Iz95bW+yGhHGdP+u8EjcP1eqjGc8frHvMxXVwFI3ql8HmCn1tC2rJBm0och4M5kBK
+	b+6yIbv99E34zXPgRfCHxjaUV81lpDIACDoaYEX4vLvrang9f+8nX43YDpjaKiBW8q7SkwaWigj
+	3O4Ao+ZZYY=
+X-Received: by 2002:a05:6512:1393:b0:5bf:cfc6:edb2 with SMTP id
+ 2adb3069b0e04-5bfd951d540mr1610800e87.1.1793430440393; Sat, 31 Oct 2026
+ 00:07:20 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,152 +106,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <20261030023248.78802-1-testwrzwrz@gmail.com> <20261030023248.78802-2-testwrzwrz@gmail.com>
+ <CAL+tcoDUGqk-KfMBqdG4RBURHQc=9J+Ce7B7CZZWRN5yN7pRrw@mail.gmail.com>
+ <20261030084017.16202-1-testwrzwrz@gmail.com> <CAL+tcoBThTe7299eVU=tsUdi392dS9cioXX5RA5AKRsYAGbdVg@mail.gmail.com>
+ <20261030094633.27910-1-testwrzwrz@gmail.com> <auSF/bDmOW0Y7T4D@boxer>
+In-Reply-To: <auSF/bDmOW0Y7T4D@boxer>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Sat, 31 Oct 2026 15:06:42 +0800
+X-Gm-Features: AclHuK-0fsS0Xg_Rkxrpa9yorygM-pSbQySVfqzZJZ8DT6_AjEHZacGUrZv2dts
+Message-ID: <CAL+tcoC+bwVdf2N+Ku92+ifPOQMvak8KMYM9RvMpv6hkdpMt2w@mail.gmail.com>
+Subject: Re: [PATCH net v4 1/2] xsk: defer software checksum until the skb is complete
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Rongzheng Wang <testwrzwrz@gmail.com>, netdev@vger.kernel.org, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, stable@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 30, 2026 at 04:51 AM Qiliang Yuan <odys.yuan@gmail.com> wrote:
->  	bpf_patch_image_install(prog, &img);
-[...]
-> +	/* before subprogs are removed, since it looks at them */
->  	for (i = 0; i < env->func_ptr_cnt; i++) {
->  		struct bpf_func_ptr *fp = &env->func_ptrs[i];
-> +		int subprog;
+On Fri, Oct 30, 2026 at 7:57=E2=80=AFPM Maciej Fijalkowski
+<maciej.fijalkowski@intel.com> wrote:
 >
->  		if (fp->xlated_off == BPF_FUNC_PTR_DELETED)
->  			continue;
-> +		if (bpf_patch_image_deleted(&img, fp->xlated_off)) {
-> +			subprog = bpf_find_subprog(env, fp->xlated_off);
-> +			if (subprog <= 0 ||
+> On Fri, Oct 30, 2026 at 05:46:33PM +0800, Rongzheng Wang wrote:
+> > Hi Jason,
+> >
+> > Makes sense, thanks. I'll wait for their feedback on the selftest patch
+> > before sending v5, and fold it in together with the rest.
+>
+> Can you stop removing all the previous conversations and rather reply
+> inline to related paragraphs?
+>
+> I don't think v5 is necessary. And as Jason said you received 3 review/ac=
+k
+> tags and none of them got included in v4.
 
-Sashiko is right. It's real, and it crashes the kernel.
+Given it's his first contribution, I suggest sending a v5 with our
+tags and that change (removing else), so you don't need to re-add the
+tags one by one :) And then Jakub can easily pick it up with auto
+tagging.
 
-bpf_patch_image_install() already set prog->len to the new length.
-bpf_find_subprog() gets an old offset and compares it with prog->len.
-When the prog shrinks enough it doesn't find a live function.
-The func ptr is marked as deleted and the slot in .rodata becomes NULL.
+Thanks,
+Jason
 
-It needs two things:
-- the first insn of the function goes away as a nop
-- this commit removes at least (end of prog - start of function) insns
-
-Plain C hits it:
-
-  #include <linux/bpf.h>
-  #include <bpf/bpf_helpers.h>
-
-  struct st { int a; } g = { .a = 10 };
-
-  #define OP(name, expr)					\
-  static __noinline int name(struct st *s)		\
-  {							\
-  	if (!s)						\
-  		return bpf_get_prandom_u32();		\
-  	return expr;					\
-  }
-  OP(op_a, s->a + 2) OP(op_b, s->a + 3) OP(op_c, s->a + 4) OP(op_d, s->a + 5)
-  OP(op_e, s->a + 6) OP(op_f, s->a + 7) OP(op_g, s->a + 8) OP(op_h, s->a + 9)
-
-  static int (* const volatile ops[])(struct st *) = {
-  	op_a, op_b, op_c, op_d, op_e, op_f, op_g, op_h
-  };
-
-  SEC("socket")
-  int vt_all(struct __sk_buff *skb)
-  {
-  	int i, sum = 0;
-
-  	for (i = 0; i < 8; i++)
-  		sum += ops[i](&g);
-  	return sum;
-  }
-  char _license[] SEC("license") = "GPL";
-
-The verifier knows that &g is not NULL, so every op starts with a nop.
-
-  bpf-next:     Return value: 124
-  this series:  BUG: kernel NULL pointer dereference, address: 0000000000000000
-                RIP: 0010:0x0
-
-That's the shape of any table of ops.
-
-The minimal fix is to do the lookup before the install.
-On top of the whole series:
-
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index a442188647bc..de758ce7afac 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -451,6 +451,28 @@ int bpf_patch_list_commit(struct bpf_verifier_env *env)
- 		}
- 	}
- 
-+	/*
-+	 * Before the new image is installed and subprogs are removed:
-+	 * bpf_find_subprog() looks at prog->len and at the subprogs.
-+	 */
-+	for (i = 0; i < env->func_ptr_cnt; i++) {
-+		struct bpf_func_ptr *fp = &env->func_ptrs[i];
-+		int subprog;
-+
-+		if (fp->xlated_off == BPF_FUNC_PTR_DELETED)
-+			continue;
-+		if (bpf_patch_image_deleted(&img, fp->xlated_off)) {
-+			subprog = bpf_find_subprog(env, fp->xlated_off);
-+			if (subprog <= 0 ||
-+			    img.new_off[env->subprog_info[subprog].start] ==
-+			    img.new_off[env->subprog_info[subprog + 1].start]) {
-+				fp->xlated_off = BPF_FUNC_PTR_DELETED;
-+				continue;
-+			}
-+		}
-+		fp->xlated_off = bpf_patch_image_remap(&img, img.new_off, fp->xlated_off);
-+	}
-+
- 	bpf_patch_image_install(prog, &img);
- 
- 	for (i = 0, k = 0; i < img.cnt; i = end) {
-@@ -474,25 +496,6 @@ int bpf_patch_list_commit(struct bpf_verifier_env *env)
- 	env->insn_aux_data_len = img.new_cnt;
- 	data = NULL;
- 
--	/* before subprogs are removed, since it looks at them */
--	for (i = 0; i < env->func_ptr_cnt; i++) {
--		struct bpf_func_ptr *fp = &env->func_ptrs[i];
--		int subprog;
--
--		if (fp->xlated_off == BPF_FUNC_PTR_DELETED)
--			continue;
--		if (bpf_patch_image_deleted(&img, fp->xlated_off)) {
--			subprog = bpf_find_subprog(env, fp->xlated_off);
--			if (subprog <= 0 ||
--			    img.new_off[env->subprog_info[subprog].start] ==
--			    img.new_off[env->subprog_info[subprog + 1].start]) {
--				fp->xlated_off = BPF_FUNC_PTR_DELETED;
--				continue;
--			}
--		}
--		fp->xlated_off = bpf_patch_image_remap(&img, img.new_off, fp->xlated_off);
--	}
--
- 	if (img.del)
- 		patch_list_del_subprogs(env, img.new_off);
- 
-
-With it the prog above returns 124.
-
-But that fixes one instance.
-The commit changes prog->len, aux data, func ptrs, subprogs, line info and
-insn arrays one after another, and helpers read env and prog in between.
-So the order of the steps is load-bearing, and nothing says so.
-Make each table a function of (old value, new_off[]), with no helper that
-looks at env or prog, and install the image as the last step.
-Then this class of bugs cannot happen.
-
-Please add a selftest for it: callx through a pointer in .rodata, the callee
-starts with a nop, and main loses more insns than the callee has.
-All tests in patches 21 and 22 pass on bpf-next without the series,
-so they don't tell whether a remap rule of the commit is wrong.
-
-Also patches 4 and 6 don't apply anymore, since arena_scalar is gone.
-
-Other than that the patches look great.
-
-pw-bot: cr
+>
+> >
+> > Thanks,
+> > Rongzheng
