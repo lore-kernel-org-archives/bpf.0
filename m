@@ -1,48 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.94
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793438891;
-	b=mykzlnADmyccJg13MXlZzuV+huZj2nGGhqURSarYONQJZ6CeA/FMrc2SePwlWE0xaflT
-	 udtntMFNfOa4tVkoNRUX4R1BFmXqdoQj755fRdK7l8kRA1XjPonMkZS+0f0aAEtwbME8S
-	 ZMgGyD4yW4JOhqFFVS33FvH6yqYlNEeutIUzldOK2gpug4vd6j8bnHtoufR/BonN+XsEi
-	 h+sA8mnjOzbUJkl0jGRai5bBG3WazH8z2uPcCpLTUQDTkcOCqNV97yapyegBrmYP87hn8
-	 zjc2fLd/sbJCB35vaLHZjemF3iOwMdBREDlbhaBLnvzLMWb2+mvcyLWhC5y9DNrwLLA==
+	t=1793439043;
+	b=h5JPEbCjHGemDXOFhY4Uzh0ejU/NNJafUbykCz79mWQH8XlzCcsy/efrX79kse5e93vk
+	 4DjZtVsrHASA3fyS0zgSz+NGJFPJCfsV77lUIb49RPJWf6To/n/0Mk8ID1ShCw7NA4Q+s
+	 wECRGqbzys4/mNdNSKsvIZ/WywDXUvSn58O34V3tYXstAfgqDf8Zz5mkW1cQ9Bk5cH7FM
+	 w3F4WG8BAt5USIB/fbk0OyRzjQW0Aj1xaftRij2cq3zcb6mpspnh9HbTyoCnJ+3v+8OVf
+	 BXD2qSt6jfWy2Qfl1G+v73lBcFnEG/s1Vy81/3zCYNTlb+Z9tJTzUukgRkqLuaZFOiw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793438891;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793439043;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Content-Type:Mime-Version:Subject:From:
 	 In-Reply-To:Date:Cc:Content-Transfer-Encoding:Message-Id:References:
 	 To:X-Mailer;
-	bh=/He75rqZEHTrbQuKFrcjCckncTUr+jB2aL3GERrJXuo=;
-	b=wwaAip4pcVPhhhBOX5JkO0vPdttGpdZAqFXmNPzwZe4S8w17hontk3KI8JILreAU38YR
-	 rR4X8XhWyWYjGMHlx5kwqKtJdfHmi/R9NGKH6+cXyuZPRsAPx5NWf8KkhMVkh6SfUBmXS
-	 wUvBrEdOUgXuq0HQRk80tDIFRbnqTSqBtn9NmyijCitOndqEuNGnv6gSD1cZeiFefEs54
-	 z4LGci7674hf1IaD4GGC3utgAX3x8jcIJPUMBXvkDQQmtuLeD2jK6M0BAGUcibqY0SM8k
-	 O2NwzvmUrZyAualbwoRUfXGc6G7AGXfQN0WUEa2HxTyofYPf2ZMDQzcz7lnYWZNFDjQ==
+	bh=znrLCuEJJGmNbO1Yhr6pNkt2XZN+PDlviOAs+EksPeM=;
+	b=BBmpgrlo2RXQ14WgTToBF+SYfeWB+I+wi7UIa2ApMSr8a0aRzqhv+eCnKuFK8ua2YwlW
+	 wyzQZTYiITL3vpZHh1YggzQJGu8Di0uhXUrTu02k2m8aIaSOkFy835ZeSeEZw97TV1o8j
+	 w5pl12UFJMAGyg7tLxdmK65pD3rO/Xy+tLSW94TIGCxFmMSMwm9c/8VrHeJ9KhrI9VFCk
+	 xnWyG+HhDLSWNPCrqYsHFKI5KIkB0g+DsMC9Rj90AWamkJshLMqRb0jwrzw3okYVLh3KY
+	 4IkEdsuqlDN0nurZnjO3co2iPXmafWtF8EjR539j4aHEmqZv6IKGYfsxgVCQAngGCLw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=95.215.58.42
-Received: from mta1.migadu.com (out-42.mta1.migadu.com [95.215.58.42])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=onn1sehd;
+	arc=none smtp.remote-ip=95.215.58.94
+Received: from mta1.migadu.com (out-94.mta1.migadu.com [95.215.58.94])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC14B606A31A
-	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 09:28:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC14B606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C1E606A321
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 09:30:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B8C1E606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=onn1sehd
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=08Ba43Ng1QTJoClFmEOcfURkhCB+iyftKxXyUWNmLKg=;
+DKIM-Signature: a=rsa-sha256; bh=PvpE2xVkJZQp9Z5Dmn2rK7a3rOZLgmd/wYqlMX90kr4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793438888; v=1; x=1794043688;
- b=sVxs5SaDkDBa09uTFu4hFJOaqrtNtfEPrN2fBpSuwy9ko181eiquYUD8AOWi9trGcmunnpcx
- sLJzJIJ+JB9/1wP5f764vUWk8rhW4KYWW1Qfb0Kx6k3KcUZKmeE4KbhbIDn+wtMKR2i8l7yWZgt
- o5KYGeBJItZdvSCZKs9EPhTo=
+ t=1793439039; v=1; x=1794043839;
+ b=onn1sehdzhf2xVt9I5V0tDQ5w9aAfRk0sOy/O9MWDjUCaWL8OHQphb5kYXw9lprgNKlkr/MS
+ yocmdX1yyu4yR+KFfILxLldFXdGYjd9gx/6b43A2Zc+p2/kh4Dr2f8mKdfMkwsgEkWOdiGpuCX+
+ 7ItVumMlQ8COOuay8M73TH1s=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 034d958c6540cbee;
-	Sat, 31 Oct 2026 09:28:07 +0000
-X-Mizu-Trace-ID: 034d958c6540cbee
+Received: by mta12.migadu.com with ESMTPS id 9f95f1fa206c4141;
+	Sat, 31 Oct 2026 09:30:09 +0000
+X-Mizu-Trace-ID: 9f95f1fa206c4141
 X-Migadu-Flow: FLOW_OUT
 Content-Type: text/plain;
 	charset=us-ascii
@@ -55,11 +58,11 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3901.100.1.1.12\))
-Subject: Re: [PATCH v5 2/6] mm/vmscan: move vmscan tracepoints to a local
+Subject: Re: [PATCH v5 3/6] mm/vmscan: move struct scan_control to a dedicated
  header
 From: Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20261031090041.58574-3-ridong.chen@linux.dev>
-Date: Sat, 31 Oct 2026 17:27:45 +0800
+In-Reply-To: <20261031090041.58574-4-ridong.chen@linux.dev>
+Date: Sat, 31 Oct 2026 17:29:49 +0800
 Cc: Steven Rostedt <rostedt@goodmis.org>,
  Masami Hiramatsu <mhiramat@kernel.org>,
  Andrew Morton <akpm@linux-foundation.org>,
@@ -87,9 +90,9 @@ Cc: Steven Rostedt <rostedt@goodmis.org>,
  Ridong Chen <chenridong@xiaomi.com>,
  "open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org (ope>)
 Content-Transfer-Encoding: 7bit
-Message-Id: <9F0BED6B-4992-4F67-A8C6-D9550FBCEF22@linux.dev>
+Message-Id: <CB3856A6-C6D5-41E1-B6BB-B263BB63BCD6@linux.dev>
 References: <20261031090041.58574-1-ridong.chen@linux.dev>
- <20261031090041.58574-3-ridong.chen@linux.dev>
+ <20261031090041.58574-4-ridong.chen@linux.dev>
 To: Ridong Chen <ridong.chen@linux.dev>
 X-Mailer: Apple Mail (2.3901.100.1.1.12)
 
@@ -99,18 +102,22 @@ X-Mailer: Apple Mail (2.3901.100.1.1.12)
 > 
 > From: Ridong Chen <chenridong@xiaomi.com>
 > 
-> Move include/trace/events/vmscan.h to mm/trace_vmscan.h so that the
-> tracepoints can be extended to reference vmscan-internal structures such
-> as struct scan_control, which is not visible outside mm/.  This mirrors
-> what several other subsystems already do with their trace headers (e.g.
-> fs/fuse/fuse_trace.h, fs/gfs2/trace_gfs2.h, fs/lockd/trace.h).  As they
-> do, set TRACE_INCLUDE_PATH to "." and add mm/ to the include path of
-> vmscan.o, the only user that defines CREATE_TRACE_POINTS.
+> The definition of struct scan_control has lived inline at the top of
+> mm/vmscan.c. Move it out to a new mm/vmscan.h so the reclaim-internal
+> state can be referenced from other reclaim translation units without
+> duplicating the definition.
+> 
+> The header uses an ordinary include guard and pulls in only what the
+> struct needs (nodemask_t, gfp_t and struct reclaim_state).
+> 
+> mm/trace_vmscan.h includes the new header directly so that any
+> translation unit pulling in the trace events (mm/vmscan.c, mm/shrinker.c)
+> sees the full definition of struct scan_control regardless of include
+> order.
 > 
 > No functional change.
 > 
 > Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
-> Reviewed-by: Barry Song <baohua@kernel.org>
 
 Acked-by: Muchun Song <muchun.song@linux.dev>
 
