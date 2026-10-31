@@ -1,65 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793454169;
-	b=Kao9d8kxpn+6U7CdOvdANQ/CMa2pSxfyx1rze23MA74rzMmhYSARA1BvAt5jx4+Py/xq
-	 pQIXFM/h2w213oj8c2XVafdY+LCpWfrGHzLTdc5ouKzFfGs9A/1IrE0emqbzy+DCpxOUE
-	 P5aKyHeH2rMksjMOMV7RiNWK45rAlZRBaeruw3QI80bX0hyIhnCQTsFzStSxdJYus2pgU
-	 y/52iGdKBqaf9I59LXh4nIVv8YOiai3GgwMC1f2IglpUJLkqfBleR8GveH1hJNiAxCaTE
-	 m7zc/bTpqFQlcM+/bro+ajG3m7fe3hCtpfEUS5d9ip3DgBQ9yRWsWZgLGrpDUsQu1WA==
+	t=1793454206;
+	b=aKChXKb3MZp2l7gb1rdYI0/dkjXr2ZPLwEE0BZBBJyYvpLULVqf7b0b47lxbcCgaKOoi
+	 Z3PrrO+Hga9ULLx+FpnECMTJyt2U9tjccmdGcasxjrRGoH0Q/y0Lre+r1O1uOfFJ+OVuX
+	 4wnG1/xtiLd8DMpjg39nZ7rv+KrkGMpBBevMXESZoplHloC90X10QUnOxESKu/Ae8OWp3
+	 arj/NXRh7ljyKwXKrMSpKJK/drFoq3lZo1r+2lERn6zgKtrLO1BKI6K4L/7aN5tGawlkK
+	 UK80UfnC79OGbxdM0kKcc666CAgPOGLXZ9Ihuty1tLpgvspf3Pi7v7R9RcKv7IhAl5g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793454169;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=ZOPSy2txvMbOY4X1AQdaor/eQTWwQ//qa48gECG4DCw=;
-	b=C8OCaFkMfsVXvscYVhBxYzFPn4u8PXQxQClD9UsbvmV6JUm0uc1XsgojDkgRAJpaptp1
-	 RIXbM4dD/mMLA5xhP2gNKZpmTsF1k3suvh/N58aODVjFeVDSMpS1RICxieTU/yBga579J
-	 u9LCqJJVBxdjpSAvWPNynjQIGz6BY5+Stw31hVoL3NlyV7SP68SZUPhh3EJRfAItFs2br
-	 Efrr+hit8/eOwjyBvO5F4qrEYaRpwbximA+IbCSKz3t3TwoI9zXzIyaEfcsEBDQobepSy
-	 zEiURlVR5giVx3fxttsbpnlKfwFONPsjX/8ylfUadm5mhYTetYrAYw/qMheTBahunUw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793454206;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=K/3NpGaOdOCqKy0a8BAsT2YmdkWElJhbX3+c/KHAt7M=;
+	b=ED4DFQDxoHZioTdBAya9OAPvONWTNZmdLR1ARlNDeM4mx4l61+VSY2GkEV23sYulaBDu
+	 QZy8V996K3WkthmJ5oVqnfceisHzWjb6qxygqUXhAi5yr4zBK6+c4z2fWQOmTjUDswWMI
+	 MBmfd9hrFsNi9EokfLxkrc4tdNQfrKuUaQYj0AWp32UMHDIFhq8QTF6k1RL5EdGNIj5nM
+	 s8A/FGSKbGjMQIWAxQlfiK477DNvJPQVo1i5g2zPRdHplvWCpzHbshBudQQpwBhIcxuSV
+	 +jcRmYXjC8VTdvCJ15idVIy20o38nZGW0B4MGDiR3x1pCDJAxIVTTHu4+8bKuDo0Rww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bEEZC2gW;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CGLHA7QH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F97606A31A;
-	Sat, 31 Oct 2026 13:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D915606A322;
+	Sat, 31 Oct 2026 13:43:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bEEZC2gW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8AFE1F00919;
-	Sat, 31 Oct 2026 13:42:47 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CGLHA7QH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71C9A1F00A02;
+	Sat, 31 Oct 2026 13:43:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793454169;
-	bh=ZOPSy2txvMbOY4X1AQdaor/eQTWwQ//qa48gECG4DCw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bEEZC2gW1dGDtu3R3r/E5p75m/L05NojSXM2uke/v5srbS1iHd5LOGpQLB3tnBunE
-	 IlP5eUXaE88RH2KvaqdCiOc01dMefa0fShsheh7hpRdyCW0Vr0c2FOTAw7mRZYMVHh
-	 53EinQ5gN8WaIXN+KsoGOA+GXlnK1B6bnUJ+SpeinHPbJBN0LVjPvJIOtKAHEdBDHi
-	 P/ZvswsIFhRZPN+OWQLwf7AgkREE7gtTxNDxkTSYf2jJxCtJJuwozE5YFw35b/iTE+
-	 ZLTMs2yWBDbDNXI+3A4VWkKFF59QdtMn22uqVqn6E6Fpwu/lQvKSue8W/cq1NFGjVu
-	 SrY3kon9TTjAg==
-Message-ID: <sashiko-outbox-191985@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 02/13] bpf: fetch the vmlinux BTF where kernel
- types enter a program
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jay Wang" <wanjay@amazon.com>, bpf@vger.kernel.org, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alan Maguire" <almagui@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
- Olsa" <jolsa@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Masami
- Hiramatsu" <mhiramat@kernel.org>, "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, linux-trace-kernel@vger.kernel.org, "Nathan
- Chancellor" <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, linux-kbuild@vger.kernel.org, "Arnd
- Bergmann" <arnd@arndb.de>, x86@kernel.org, "Hazem Mohamed Abuelfotoh" <abuehaze@amazon.com>, "Bjoern
- Doebel" <doebel@amazon.de>, "Martin Pohlack" <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
-In-Reply-To: <20261031130959.23472-3-wanjay@amazon.com>
-References: <20261031130959.23472-1-wanjay@amazon.com>
- <20261031130959.23472-3-wanjay@amazon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 31 Oct 2026 13:42:47 +0000
+	s=k20260515; t=1793454206;
+	bh=K/3NpGaOdOCqKy0a8BAsT2YmdkWElJhbX3+c/KHAt7M=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=CGLHA7QHL35PGdIJ2e9gXahPunJnzTXMbOqojkffoN8nTSZMKVEtzZdydz3VlSepV
+	 qm0xkdgXRor96yV2WJRAyBPV3/oeModYxXopFfzZSZbIvKw2b3mHCC0Y8Xh/aKYTWg
+	 tb+snBpAF/dDUhp45oqlQ8XWV9wPy2t7iGmj1oQArmEVudrNdS9kCyqdepv+11WOuA
+	 XA+nT5H7eokTadpc2aEjlm8bgMVK5RT3eGX5MqbNd2s6nX05ojdu7OcHeSsQdpIi7M
+	 SgjGgMIOy5Z+ZzhjjsLgs9LepIQqVPYaToed5TKmqMSYXGR++ETdvaaNoNDVVKUbqf
+	 YpvNm1fEcQugg==
+Content-Type: multipart/mixed; boundary="===============5978086059840683749=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,267 +48,148 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <83ccd128fbdbace58c73028a40bd77eafadd86168bebf213801692bb97fb216d@mail.kernel.org>
+In-Reply-To: <20261031130959.23472-8-wanjay@amazon.com>
+References: <20261031130959.23472-8-wanjay@amazon.com>
+Subject: Re: [PATCH bpf-next 07/13] bpf: parse the vmlinux BTF before taking cand_cache_mutex
+From: bot+bpf-ci@kernel.org
+To: wanjay@amazon.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: ihor.solodrai@linux.dev,almagui@kernel.org,martin.lau@linux.dev,yonghong.song@linux.dev,jolsa@kernel.org,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com,linux-trace-kernel@vger.kernel.org,nathan@kernel.org,nsc@kernel.org,linux-kbuild@vger.kernel.org,arnd@arndb.de,linux-arch@vger.kernel.org,x86@kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,abuehaze@amazon.com,doebel@amazon.de,mpohlack@amazon.de,jay.wang.upstream@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 31 Oct 2026 13:43:25 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] bpf: NULL or ERR_PTR btf_vmlinux dereference via check_pseudo_btf_=
-id()
-- [Low] bpf: unreachable !btf check in check_ptr_to_map_access() when BTF i=
-s disabled
-- [Low] bpf: unresolved TODO-NEEDS-IHOR Signed-off-by placeholder in commit=
- log
---
+--===============5978086059840683749==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit a99de2b5b9828d221e9bcde23ac921cf3c9fc798
-Author: Jay Wang <wanjay@amazon.com>
+> bpf: parse the vmlinux BTF before taking cand_cache_mutex
 
-bpf: fetch the vmlinux BTF where kernel types enter a program
+TL;DR:
+- New early returns on vmlinux BTF fetch failure may skip verifier log
+  messages in btf.c, contradicting "No functional change"
+- Author's Signed-off-by is a TODO placeholder
 
-This commit drops the up-front vmlinux BTF fetch in bpf_check() and instead
-fetches the vmlinux BTF on demand at the points where kernel types enter the
-verifier state, avoiding unnecessary BTF parsing for programs that do not u=
-se
-kernel types.
-
->     bpf: fetch the vmlinux BTF where kernel types enter a program
->    =20
->     bpf_check() fetches the vmlinux BTF up front for every program, wheth=
-er
->     the program uses kernel types or not.  That is free today because the
->     BTF is parsed at boot anyway.  Once it can be parsed on first use
->     (CONFIG_DEBUG_INFO_BTF_LAZY, later in this series), it would make eve=
-ry
->     program load pay for parsing 5-7 MB of BTF, including the socket filt=
-ers
->     systemd loads at boot.
->    =20
->     Drop the up-front fetch and fetch where kernel types enter the verifi=
-er
->     state instead:
->    =20
->      - bpf_add_kfunc_call(), for the first kfunc call of a program;
->      - check_ptr_to_map_access(), for map_ptr field access;
->      - check_pseudo_btf_id(), for ldimm64 of a kernel variable (ksym);
->      - check_helper_call(), for helpers whose prototype takes
->        ARG_PTR_TO_BTF_ID or returns RET_PTR_TO_BTF_ID, and for
->        bpf_snprintf_btf() and bpf_seq_printf_btf(), which take a kernel
->        type id inside struct btf_ptr (helper_uses_vmlinux_btf()).
->    =20
->     The other ways in already fetch the BTF themselves: attach_btf in
->     bpf_prog_load(), struct_ops map creation, CO-RE candidate lookup,
->     bpf_find_btf_id(), btf_prepare_func_args() for kernel-typed arguments
->     and the kernel context type lookups.  The remaining reads of the
->     btf_vmlinux global in the verifier are on paths dominated by one of
->     these fetches.  A program that uses none of them, such as a socket
->     filter, does not need the vmlinux BTF any more, and verifies the same
->     whether or not it has been parsed.
->    =20
->     Four related changes keep it that way:
->    =20
->      - The "in-kernel BTF is malformed" check in bpf_check() read the
->        global right after the up-front fetch.  Without the fetch it would
->        pass or fail depending on whether something else had parsed the BTF
->        before, so drop it; every fetch point reports a missing BTF itself
->        and passes on an error of the parse, as that check did.
->    =20
->      - check_ptr_to_map_access() checks allow_ptr_leaks before it fetches
->        the BTF, and bpf_prog_load() falls back to the vmlinux BTF for an
->        attach_btf_id only with CAP_BPF, which all program types that take
->        one need, so that an unprivileged load cannot make the kernel parse
->        it only to be refused.  The map_ptr permission error can then not
->        name the map's struct any more and says "map_ptr access is allowed
->        only to CAP_PERFMON and CAP_SYS_ADMIN".  A ksym, which unprivileged
->        programs may use, still parses it.
->    =20
->      - Add bpf_peek_btf_vmlinux(), which returns the vmlinux BTF only if =
-it
->        is parsed already, and use it in bpf_btf_printf_prepare().  The BTF
->        printf helpers run in program context, which may be atomic, and the
->        verifier has fetched the BTF for every program that calls them.
->    =20
->      - is_kfunc_dynptr_write(), reached from the argument checks that
->        helpers and kfuncs share, compared meta->btf with the global, which
->        a helper's NULL matches while the global is NULL.  Check that the
->        call is a kfunc first, as the other kfunc predicates there do.
->    =20
->     Helpers taking ARG_PTR_TO_BTF_ID_SOCK_COMMON are left out on purpose:
->     they take sockets without BTF types too, the shared argument check re=
-ads
->     the global only for a PTR_TO_BTF_ID register, and every source of such
->     a register fetched the BTF.
->    =20
->     No functional change with CONFIG_DEBUG_INFO_BTF=3Dy, where kfunc
->     registrations at boot parse the BTF, other than that error message and
->     that, if the vmlinux BTF fails to parse (a broken toolchain), programs
->     that use no kernel types now load instead of failing.  Without BTF the
->     new helper check is compiled out and the existing error paths are
->     unchanged.
->    =20
->     Co-developed-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->     TODO-NEEDS-IHOR: Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.de=
-v>
+>     bpf: parse the vmlinux BTF before taking cand_cache_mutex
+>
+>     bpf_core_find_cands() calls bpf_get_btf_vmlinux() with cand_cache_mutex
+>     held, from btf_get_ptr_to_btf_id() and bpf_core_apply().  Once the
+>     vmlinux BTF is parsed on first use (later in this series), parsing also
+>     parses the module BTFs kept until then, under btf_module_mutex, while a
+>     module going away takes btf_module_mutex and then cand_cache_mutex
+>     (purge_cand_cache()).  That would be an ABBA deadlock:
+>
+>       cand_cache_mutex -> btf_vmlinux_lock -> btf_module_mutex
+>       btf_module_mutex -> cand_cache_mutex
+>
+>     Have both callers fetch the BTF before they take cand_cache_mutex, and
+>     make bpf_core_find_cands() only peek with bpf_peek_btf_vmlinux().  The
+>     ordering was found by design review.  With the whole series applied
+>     and the fetch moved back under the mutex, PROVE_LOCKING reports this
+>     cycle at the first rmmod of a BTF module after a kernel CO-RE load
+>     parsed the BTF; with this patch the same sequence is clean.
+>
+>     No functional change: the BTF is parsed at the same points, just
+>     before the mutex is taken; a broken BTF fails the load with the error
+>     of its parse, and bpf_core_find_cands() handles a missing BTF as before.
+>
+>     TODO-NEEDS-IHOR: Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>     [pass the error of the fetch on instead of -EINVAL from the peek]
 >     Signed-off-by: Jay Wang <wanjay@amazon.com>
 
-[Severity: Low]
-This isn't a bug in the code, but the commit log still has an unresolved
-TODO-NEEDS-IHOR prefix on the Signed-off-by trailer following
-Co-developed-by. Should that placeholder be resolved before merging?
+The author's sign-off is the placeholder line "TODO-NEEDS-IHOR:
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>", and the only real
+Signed-off-by tag is the one from Jay Wang.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5601d20562186..1b901e3cb3c22 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+Can this be applied with that placeholder in place?  The submitting-patches
+document (Documentation/process/submitting-patches.rst) expects a
+Signed-off-by from the author, and checkpatch will flag both the unknown tag
+and the missing sign-off.
 
-[ ... ]
+Separately, the commit message says "No functional change", but the verifier
+log differs when the vmlinux BTF fetch fails.  Before this patch the fetch
+ran inside bpf_core_find_cands() and both callers logged the failure.  After
+it, the new early returns skip that logging (see the comments on the diff
+below).  Could that sentence be reworded to match?
 
-> @@ -6867,30 +6883,33 @@ static int check_ptr_to_map_access(struct bpf_ver=
-ifier_env *env,
->  	enum bpf_type_flag flag =3D 0;
->  	const struct btf_type *t;
->  	const char *tname;
-> +	struct btf *btf;
->  	u32 btf_id;
->  	int ret;
-> =20
-> -	if (!btf_vmlinux) {
-> -		verbose(env, "map_ptr access not supported without CONFIG_DEBUG_INFO_B=
-TF\n");
-> -		return -ENOTSUPP;
-> -	}
-> -
->  	if (!map->ops->map_btf_id || !*map->ops->map_btf_id) {
->  		verbose(env, "map_ptr access not supported for map type %d\n",
->  			map->map_type);
->  		return -ENOTSUPP;
->  	}
-> =20
-> -	t =3D btf_type_by_id(btf_vmlinux, *map->ops->map_btf_id);
-> -	tname =3D btf_name_by_offset(btf_vmlinux, t->name_off);
-> -
-> +	/* before the BTF fetch: unprivileged loads must not parse it */
->  	if (!env->allow_ptr_leaks) {
-> -		verbose(env,
-> -			"'struct %s' access is allowed only to CAP_PERFMON and CAP_SYS_ADMIN\=
-n",
-> -			tname);
-> +		verbose(env, "map_ptr access is allowed only to CAP_PERFMON and CAP_SY=
-S_ADMIN\n");
->  		return -EPERM;
->  	}
-> =20
-> +	btf =3D bpf_get_btf_vmlinux();
-> +	if (IS_ERR(btf))
-> +		return vmlinux_btf_err(env, btf);
-> +	if (!btf) {
-> +		verbose(env, "map_ptr access not supported without CONFIG_DEBUG_INFO_B=
-TF\n");
-> +		return -ENOTSUPP;
-> +	}
-
-[Severity: Low]
-Can this !btf check in check_ptr_to_map_access() ever be reached?
-
-When CONFIG_DEBUG_INFO_BTF is disabled, BTF_ID_LIST_SINGLE() and
-BTF_ID_LIST_GLOBAL_SINGLE() in include/linux/btf_ids.h define zero-initiali=
-zed
-arrays:
-
-    #define BTF_ID_LIST_SINGLE(name, prefix, typename) static u32 __maybe_u=
-nused name[1];
-    #define BTF_ID_LIST_GLOBAL_SINGLE(name, prefix, typename) u32 __maybe_u=
-nused name[1];
-
-Because *map->ops->map_btf_id is 0 for all map types when
-CONFIG_DEBUG_INFO_BTF is disabled, moving bpf_get_btf_vmlinux() after the
-!*map->ops->map_btf_id check causes check_ptr_to_map_access() to always exit
-early with "map_ptr access not supported for map type %d", leaving the !btf
-branch unreachable.
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 3e947bdb224c..095362c0a1cd 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
 
 [ ... ]
 
-> @@ -20898,12 +20941,14 @@ static int check_pseudo_btf_id(struct bpf_verif=
-ier_env *env,
->  			return -EINVAL;
->  		}
->  	} else {
-> -		if (!btf_vmlinux) {
-> +		btf =3D bpf_get_btf_vmlinux();
-> +		if (IS_ERR(btf))
-> +			return vmlinux_btf_err(env, btf);
-> +		if (!btf) {
->  			verbose(env, "kernel is missing BTF, make sure CONFIG_DEBUG_INFO_BTF=
-=3Dy is specified in Kconfig.\n");
->  			return -EINVAL;
->  		}
-> -		btf_get(btf_vmlinux);
-> -		btf =3D btf_vmlinux;
-> +		btf_get(btf);
+> @@ -8608,6 +8609,10 @@ static int btf_get_ptr_to_btf_id(struct bpf_verifier_log *log, int arg_idx,
+>  		t = btf_type_by_id(btf, t->type);
 >  	}
-> =20
->  	err =3D __check_pseudo_btf_id(env, insn, aux, btf);
+>
+> +	/* parse it, if this is its first use, before taking cand_cache_mutex */
+> +	vmlinux_btf = bpf_get_btf_vmlinux();
+> +	if (IS_ERR(vmlinux_btf))
+> +		return PTR_ERR(vmlinux_btf);
+>  	mutex_lock(&cand_cache_mutex);
+>  	cc = bpf_core_find_cands(&ctx, type_id);
+>  	if (IS_ERR(cc)) {
 
-[Severity: High]
-Can a program create a PTR_TO_BTF_ID register through check_pseudo_btf_id()
-without btf_vmlinux being fetched or validated, leading to a NULL or ERR_PTR
-dereference of btf_vmlinux in check_func_arg()?
+Previously a failed fetch came back through bpf_core_find_cands() and ended
+up in the bpf_log() just below:
 
-In check_helper_call(), bpf_get_btf_vmlinux() is only called when
-IS_ENABLED(CONFIG_DEBUG_INFO_BTF) && helper_uses_vmlinux_btf(func_id, fn), =
-and
-helper_uses_vmlinux_btf() omits ARG_PTR_TO_BTF_ID_SOCK_COMMON under the
-assumption that every source of a PTR_TO_BTF_ID register has already fetched
-btf_vmlinux.
+    bpf_log(log, "arg#%d reference type('%s %s') candidate matching error: %d\n",
+            arg_idx, btf_type_str(t), __btf_name_by_offset(btf, t->name_off),
+            err);
 
-However, in check_pseudo_btf_id(), when btf_fd (insn[1].imm) is non-zero:
+Doesn't this early return skip that message, so a load that fails because
+btf_vmlinux is an ERR_PTR (btf_parse_vmlinux() failing with -ENOMEM or on
+malformed BTF) now returns a bare errno with nothing in the verifier log?
 
-    btf_fd =3D insn[1].imm;
-    if (btf_fd) {
-        btf =3D btf_get_by_fd(btf_fd);
-        if (IS_ERR(btf)) {
-            verbose(env, "invalid module BTF object FD specified.\n");
-            return -EINVAL;
-        }
-    } else {
-        btf =3D bpf_get_btf_vmlinux();
-        ...
-    }
+Earlier in this series, commit 32ad8adbb1a8 ("bpf: fetch the vmlinux BTF
+where kernel types enter a program") added vmlinux_btf_err() in verifier.c so
+that every fetch point reports a failed parse:
 
-btf_get_by_fd() accepts any BTF fd, including a user-loaded BTF created via
-BPF_BTF_LOAD (which does not fetch btf_vmlinux), and check_pseudo_btf_id()
-does not verify btf_is_module(btf) or btf_is_kernel(btf). If a user loads a
-BTF containing a BTF_KIND_STRUCT and a BTF_KIND_VAR whose name matches a
-kernel symbol in kallsyms, __check_pseudo_btf_id() sets
-aux->btf_var.reg_type =3D PTR_TO_BTF_ID and check_ld_imm() marks the destin=
-ation
-register as PTR_TO_BTF_ID while btf_vmlinux is still NULL (with
-CONFIG_DEBUG_INFO_BTF_LAZY=3Dy before first parse, or CONFIG_DEBUG_INFO_BTF=
-=3Dn)
-or ERR_PTR (if btf_parse_vmlinux() failed).
+    verbose(env, "in-kernel BTF could not be parsed: %ld\n", PTR_ERR(btf));
 
-When that PTR_TO_BTF_ID register is then passed to a helper taking
-ARG_PTR_TO_BTF_ID_SOCK_COMMON (or ARG_PTR_TO_BTF_ID when
-CONFIG_DEBUG_INFO_BTF=3Dn), check_func_arg() does:
+Would a bpf_log() before this return, along the lines of that message, keep
+the diagnostic?  None of the later patches in this series appears to add one
+at this site.
 
-    case ARG_PTR_TO_BTF_ID:
-    case ARG_PTR_TO_BTF_ID_SOCK_COMMON:
-    {
-        const u32 *arg_btf_id =3D fn->arg_btf_id[arg];
-        const struct btf *arg_btf =3D is_kfunc(meta) ? meta->btf : btf_vmli=
-nux;
-        ...
-        if (!meta->btf) {
-            ...
-            if (base_type(reg->type) !=3D PTR_TO_BTF_ID)
-                break;
-        }
-        ...
-        if (!process_arg_ptr_to_btf_id(env, reg, regno, arg_btf_id, arg_btf=
-, meta))
+[ ... ]
 
-which passes arg_btf =3D btf_vmlinux (NULL or ERR_PTR) into
-bpf_diag_fmt_btf_type() and process_arg_ptr_to_btf_id() ->
-btf_type_skip_modifiers() -> btf_type_by_id(), dereferencing arg_btf.
+> @@ -10725,8 +10731,18 @@ int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *relo,
+>
+>  	if (need_cands) {
+>  		struct bpf_cand_cache *cc;
+> +		struct btf *main_btf;
+>  		int i;
+>
+> +		/*
+> +		 * Parsing the vmlinux BTF takes btf_module_mutex, which is
+> +		 * taken before cand_cache_mutex when a module goes away.
+> +		 */
+> +		main_btf = bpf_get_btf_vmlinux();
+> +		if (IS_ERR(main_btf)) {
+> +			kfree(specs);
+> +			return PTR_ERR(main_btf);
+> +		}
+>  		mutex_lock(&cand_cache_mutex);
+>  		cc = bpf_core_find_cands(ctx, relo->type_id);
+>  		if (IS_ERR(cc)) {
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261031130959.2347=
-2-1-wanjay@amazon.com?part=3D2
+The same applies here.  A failed fetch used to reach the bpf_log() in this
+branch:
+
+    bpf_log(ctx->log, "target candidate search failed for %d\n",
+            relo->type_id);
+
+and, at BPF_LOG_LEVEL2, the candidate cache dump that follows it.
+
+Can this return PTR_ERR(main_btf) leave the CO-RE relocation failing with no
+log output at all?  Would a bpf_log() here, matching the other fetch points
+in the series, make sense?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41205212136
+--===============5978086059840683749==--
