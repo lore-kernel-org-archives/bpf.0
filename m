@@ -1,98 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.181
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793453539;
-	b=ejWcbOc7sonllW+YsVnT63h07lNVedHKE1lXcqZ95bQe1mUwGM0wSgGcSKMXSvwyzNsP
-	 mvJRDRt71JJUVHXf1+MJG/05rArQ3FK62myqNKXj5xUU8tbFjMHbpmAZxOR0JXoKRiCFC
-	 /DnZiFzLRaYRx0pmqf0DsPeyuSwpYkqnbjDvWBjNr7K8vZInB/qOeccaEOVrrU/DUQZB2
-	 QhUJrDTqHbx6oDLodPrhuvAsj3d6dxxgt2lnVUXVcSfB/uULHLaJULEEUyUphMTmA72kk
-	 924m4v+WqkRAYwRgWC/XWADlWTNo5GgRF2CZQV9k1ZT+w3LXLK54rfDJCo6e8PmcEgA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793453539;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=QrhJINBYjJTT5louKFAwSUTUsf/5n1vYlK1qTtlzMCY=;
-	b=TpJGSbT2zcHclSA0llyj936vdnJetwFwGAJIXS+XIrzW6JG3hN/17UhPGQQm2+FZSLFW
-	 234sfxNHwfox/Lz+PjPbgCZ+SC9ZCaxP5sbOVlQWTFwatd7Pprg90AwkjF9eKpVtPPOOc
-	 rlKmI0jrz+0wIrh6vQAOOF49+q4HMaDVhO6Rdc0X+FpUYgqm7ka8sy6auCwFYaHydaJw2
-	 wt8E0+RzkcGOz452iXTQSY7CC0PdHXvvyChbR5PtiUCtPyZZYEHzHZ3QaulExkcHHSojd
-	 UqFl7jvY7sqyJcHE4VMeM9QNxzaUYBhOtOwstcTV2MBLJWl+94eeYEP2PaVKuRCFAKA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=XKnOjMRP;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.181
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793453597;
+	b=BMwRHq60SUJfdLjXNtxbCbUgIXcL9iQm7syG9buxRDhPv2EPDc1GFdC4zlZjA3TUsy4a
+	 lyH+8wfBTitV9CYXsKXzeDM0Sml+JvVRNxeV+rY3j8EINFMUSa6QFfS3bAGU8krdvzC+k
+	 h1LEKWjA8HfBiV9LfJtTziGLPuPan7YXpePPkiL+r6h+3ZQ9KieAknSeuhpw02oR9TaNU
+	 yY0xLRaAhQKRrYDxOwFwkYXSQyWwqsUkYtzLL9LyrNbB8gb/2UWpEsFFXQusGBq901nXq
+	 +9lJazmx9qkumwJ3QjTC1RlS/clwHTGJnFD/HSZpmzGGa+53ehmBV6asrkAWcg7+SDw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793453597;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=lQYqO0jtSJ1Lg8qOxAs/GI8FQqxgwI2WqZcooFV2bjQ=;
+	b=lU/SkJYCiH26r3kmml0krsHf0lqquwFZ+bkovlNoFtSz5fZGaCtC6VwS2/vEFe6e6yis
+	 N2GTxPITrrbnn6w1Gcp4d+3xnbbTplc10DEqKSF+NbdCjfDO6RYEd0ZMkijfhHnqQSXlZ
+	 47hkymbSCoBgGnvFjZ74xEURTPGx/Xe6hTourqc2cshD90Pxr+gyMn+Kcm+Pooqq0Vi7j
+	 bTdNQS3i0OBRSVY7XnId/5oLFUgpjSd/vFSzROx99QLVlF2thxWZkJ4NiAdvVlc0ud+vH
+	 38ub8+6xtaFGIQdcPoFKA44CcNJ/w+ejWFBDD8CIUGZiPWo6IxcEZedI99tUaRp09pw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FuHoVSUA;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CFC606A31F
-	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 13:32:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25CFC606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6C1606A31A;
+	Sat, 31 Oct 2026 13:33:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=XKnOjMRP
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8a058f74a54so621794b3a.1
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 06:32:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793453538; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ST1IMigqqN/PZ2N9ABZCERvK1TN3GN2PDveDWdfzeHqSqsncL0OxvP0JnaqE1lfhQU
-         TtnD7hXYUH/oMkEFjXEk+EEW1wBP6L/J3o7tOAQJT3yCstLOJdp1N49XTlZuNHs2Yv0p
-         2/S09X/dxc5eLxOGUehNtd/HSk2QFxZNqMv+0ERKO6Pz9DVV9OAhkL4Mfr8VmpYeA9zJ
-         2AP6WuVuZxKNxW0fDXekyn1ZCoeUFTHeMLkogwqmlz6zMGrFi6ZF5Evo5ux9vVcZhuV1
-         ziuW0fygJHqFtwLShNRuTX1ABgDGgL8Qjksmr62Eej8n2r4YD9RYBNa9VWWZBf7D3gtk
-         nLtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=QrhJINBYjJTT5louKFAwSUTUsf/5n1vYlK1qTtlzMCY=;
-        fh=PAWUf9svO4hj7N26HOMPqebDnYPl6LJWOMNtuDChdkA=;
-        b=nwGlmeczHsYr3vFNBmGBJhZ3a6eC+pSp4Z3ueI3sVU0p8y2kWyqC7FlhmsT1RMOAW6
-         yfrZNyv1KmfE61+xGFq8yGTaS9iWeLJzQdsKR83ZKC7kZn3xICEMKfIIdY+iIE3onYop
-         v4wbpJvGpRIVjXOPILB9ZppoR4+cxY6dnjLwWeZg8jj3WiyMfkaN1tq6p079HvE5UwQV
-         emJjoC7IQwnaN1sTHb0UwF9W/25E0QFMaq6tXY7oxwdyTnN0Td58+kB7HA0Gmj1NW9/M
-         yeSciHDPVNapNZ8bzZhpCWMV064+IcqYg53OQuCjwCNYu613EZ1xXGuIkGMAObbohjwJ
-         2Mqg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1793453538; x=1794058338; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=QrhJINBYjJTT5louKFAwSUTUsf/5n1vYlK1qTtlzMCY=;
-        b=XKnOjMRPi1xowFEnisIR1z4LU2wkmPn460uIbnYFo262VHWeQFoTh/HoQdkw60dc1a
-         1zdDrd+OqzuW41lm62mCj7dcoHFjgW2MOlHyj83i9lgrOZCcxL6XKUo55Ov0N0HUDQ5d
-         EdoSbP9yfU2qWOluiS20Xn3hWPcx7/ZppJ26A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793453538; x=1794058338;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QrhJINBYjJTT5louKFAwSUTUsf/5n1vYlK1qTtlzMCY=;
-        b=VAbky60VOLOEbs0EBsht16pR2CH3W0G7R4x+oCezI+dDktxll/T8p6cHfWspaayMwq
-         Nd8e8v5MgHrBH9PrglqrCCTYfdbYSjPjee4DSKzYI/IJDGNS67zVaFPAwsqZ4heqvXQI
-         xW4wydabasdpwhtk7AbmBEPOjdOwJVhdYIPgqxKT9z0V+GjY6uBv/NiP0DJoKDrGGEdy
-         l3bRXek8wc6NEe2pGC0rSUXuL+r2sq9x8vhPW5ZmY69wI+ghTNLV7OT/5NtlQgsxZIwI
-         6UuknUZtaKuP5t8RzuoQ2IKGGYdLn4/TdxbpTlmorM6nYxpn8qfYCnKtQUCVZCKd2IJr
-         kTbw==
-X-Forwarded-Encrypted: i=1; AKwUvBySZBAm/izGxnnmFWrZT86Im4IQUKr4O+wN3yy6YXbm4ES2vi3dp8URDPiRokDmidkn2RA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJaXs/6rdoiUf32tMf3HdWlQy3N5RfkDifn31RWfng/06YQJSJD
-	MTPWp5yqn3L0IYRwF0HoEFV7lNJtxknitdlh/e1orfPfpnHW5/0d+ioJhvl+udacjOrmkgT4p/T
-	otc3cNAIlGRsIDg6JbkGxYL2QpXzham6QmlwxxjjY
-X-Gm-Gg: AYBFou2K/fDl6flsAhTPOTC+k8j81dtmILuYEFOr6N38FLwkAtYdzzG0tQ6wM0phZ76
-	rrs24aRJJZ3ABxfhscWousyuoNaP+uMH0xqyVX3j4vVedTzmDf1nEUZw6xH0+wIugNoOajshjO5
-	1hruVrNsg+qJ7nu+kKTjV6Obmb49HN+dcdIuNysYbkBDlhlf3EZVKKDB6DJrlvqWc+tITi8Mngf
-	9qDWV81+IkT1PitzKizu2VxpN5uWSW+Rg3srWAOjUEoR2vHX4YAO305V2U+RelmsqpDZ2vYXDiU
-	0zA+TiLCv7B90ShtEP6w4Kl/xbh/9jgaepqFtqmJFBNBGMj7TMsfIg6neoH4yIOISyF0dzKn7Mr
-	DxoTey/TaqzfVIx4mAINJ8WWJEk15F3v6o7Uz4TB+Op980TKpigYX+P7KrSjQtiHcjIPtSa1Xce
-	s/0gR86lHypMdSf7g=
-X-Received: by 2002:a05:6a00:4b12:b0:89e:fc56:a25e with SMTP id
- d2e1a72fcca58-8a9bfa02bd4mr4056675b3a.41.1793453538349; Sat, 31 Oct 2026
- 06:32:18 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FuHoVSUA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0112F1F00A02;
+	Sat, 31 Oct 2026 13:33:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793453597;
+	bh=lQYqO0jtSJ1Lg8qOxAs/GI8FQqxgwI2WqZcooFV2bjQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=FuHoVSUAjLXDizMaNd+S3zLENXfKhdaOVhsDv4RKD/cAv8MKUIMzYgcdjlPU95sZw
+	 gYFuKCyeKD+HSRFcfbaCaKtHOan8Ukb7+wKOrHKFv9IUq1YuiIK7gF2Z6+3xiujiw1
+	 OvGY0c8WX9UzX+hQXe4y1XBh748ACb8AesF5Zh2nXDduleMxkuuNLS63r7he5Q7j8W
+	 MYT2SPulvNkojbQgyBPivtuM1r381zGbhXiCmn6hiQg3Mz8+jIWnozz15f4Mn18yKU
+	 FQEtazYk4lzDfNecxrVrHfvfcjEL9bCxBi2Oe+zD0Peet1IjGFMK3eq6juzehHuHuJ
+	 emDMpO+pEcmDQ==
+Message-ID: <sashiko-outbox-191977@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 09/13] bpf: keep the vmlinux BTF
+ zstd-compressed in the kernel image
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jay Wang" <wanjay@amazon.com>, bpf@vger.kernel.org, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alan Maguire" <almagui@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
+ Olsa" <jolsa@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Masami
+ Hiramatsu" <mhiramat@kernel.org>, "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, linux-trace-kernel@vger.kernel.org, "Nathan
+ Chancellor" <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, linux-kbuild@vger.kernel.org, "Arnd
+ Bergmann" <arnd@arndb.de>, x86@kernel.org, "Hazem Mohamed Abuelfotoh" <abuehaze@amazon.com>, "Bjoern
+ Doebel" <doebel@amazon.de>, "Martin Pohlack" <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
+In-Reply-To: <20261031130959.23472-10-wanjay@amazon.com>
+References: <20261031130959.23472-1-wanjay@amazon.com>
+ <20261031130959.23472-10-wanjay@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 31 Oct 2026 13:33:15 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,146 +68,131 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1@mojatatu.com>
- <DMII4JGTEUEG.2WRJPT6ODT6J0@gmail.com>
-In-Reply-To: <DMII4JGTEUEG.2WRJPT6ODT6J0@gmail.com>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Sat, 31 Oct 2026 09:32:06 -0400
-X-Gm-Features: AclHuK-ddqUaxwQGu_QsdsX_5VreQz3XrjlPaOLjbuJHGuyWX_YBYrjskp5eDDg
-Message-ID: <CAM0EoMn7kvsfZbsOdU3jHiT1Ypc6OHHu_+empy=Fmu33Etfhug@mail.gmail.com>
-Subject: Re: [PATCH net v2] bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@kernel.org>, bpf@vger.kernel.org, 
-	bot+bpf-ci@kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
-	David Ahern <dsahern@gmail.com>, Martin KaFai Lau <kafai@fb.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	"David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Jiri Pirko <jiri@resnulli.us>, 
-	Victor Nogueira <victor@mojatatu.com>, linux-kselftest@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 30, 2026 at 5:47=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Oct 29, 2026 at 02:36 AM Jamal Hadi Salim <jhs@mojatatu.com> wrot=
-e:
-> > Add egress coverage to tc_redirect_neigh: the existing test only attach=
-es
-> > redirect_neigh at ingress, where mac_len is populated.
->
-> This test cannot hit the BUG.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Low] bpf: non-standard multi-line comment style in btf_free()
+- [Low] bpf: unresolved TODO-NEEDS-IHOR placeholder before Signed-off-by tag
+--
 
-It was reachable _before_ the fix, normally useful to include such tests.
-I will drop it, but if you think it is still useful and you catch me
-before i send v3 i can include it (or can be sent afterwards).
+commit 569512ffc44983e01a69cb1de127bbcd4ca67c62
+Author: Jay Wang <wanjay@amazon.com>
 
+bpf: keep the vmlinux BTF zstd-compressed in the kernel image
 
-> Just drop it and respin as [PATCH bpf v3].
->
+This commit adds CONFIG_DEBUG_INFO_BTF_LAZY to store the vmlinux BTF
+zstd-compressed in the kernel image and decompress it on first access via
+btf_vmlinux_data().
 
-Will do a v3 sometimes today for below...
+>     bpf: keep the vmlinux BTF zstd-compressed in the kernel image
+>    =20
+>     The vmlinux BTF is 5-7 MB of read-only data in every kernel built with
+>     CONFIG_DEBUG_INFO_BTF=3Dy, resident whether or not anything on the sy=
+stem
+>     ever uses BTF.  Add CONFIG_DEBUG_INFO_BTF_LAZY to keep it compressed
+>     with zstd in the image instead, at about a quarter of the size, and
+>     decompress it in the kernel when it is first needed.  This is the
+>     transport half of the option; the next two patches defer the
+>     parsing.
+>    =20
+>     kbuild: gen_btf_o() in scripts/gen-btf.sh compresses the final
+>     ${ELF}.BTF with zstd -19 and adds it as a second section, .init.BTF.z=
+st,
+>     of the same .btf.o, so neither an extra link pass nor a size
+>     reservation is needed.  .BTF stays in the vmlinux ELF file as a
+>     non-alloc section: pahole --btf_base, resolve_btfids for modules,
+>     bpftool and libbpf's on-disk fallback find it by name and keep working
+>     unchanged, and so do out-of-tree module builds.  The linker script
+>     puts .init.BTF.zst in INIT_DATA, bounded by __start_BTF_zst and
+>     __stop_BTF_zst, and .BTF in ELF_DETAILS at address 0.  The BTF macro
+>     is renamed RO_BTF, because the token BTF in ".BTF 0 : { ... }" would
+>     otherwise be macro-expanded.  x86 strips .BTF from the ELF it puts in
+>     the compressed boot image, and arm64 makes its Image with objcopy
+>     -O binary, which drops non-alloc sections.  The option is limited to
+>     these two architectures for now: several others build their boot
+>     image from a stripped ELF copy of vmlinux, which keeps non-alloc
+>     sections and would carry the uncompressed BTF.  The inline BTF
+>     (CONFIG_DEBUG_INFO_BTF_INLINE) is left as it is: built in, .BTF.inline
+>     stays in the image; as a module it is not in memory anyway.
+>    =20
+>     kernel: btf_vmlinux_data() returns the raw BTF.  With the option it
+>     decompresses the blob once, under a leaf mutex, into vmalloc_user()
+>     memory that is never freed; the size comes from the zstd frame header,
+>     so /sys/kernel/btf/vmlinux gets its size without decompressing.  A
+>     late_initcall_sync copies the blob out of init memory before that is
+>     freed, unless it is decompressed by then, and the copy is freed after
+>     decompression, so a system that uses BTF ends up with the same
+>     footprint as today.  The copy uses vmalloc(): kvmemdup() of the
+>     ~1.4 MB blob would get a 2 MB kmalloc_large() allocation.  If the copy
+>     fails, the BTF is unavailable for the rest of the boot: that is logged
+>     once, and later fetches fail with -ENOMEM right away instead of
+>     allocating the raw buffer for nothing each time.  A blob that does not
+>     decompress is logged once and dropped, and fetches fail with -EINVAL
+>     from then on.  btf_parse_vmlinux() and the read and mmap handlers of
+>     /sys/kernel/btf/vmlinux use btf_vmlinux_data(); mmap of the
+>     decompressed copy uses remap_vmalloc_range().  Without the option
+>     btf_vmlinux_data() returns __start_BTF, and the sysfs file keeps its
+>     current handlers.
+>    =20
+>     btf_vmlinux_data() lives in sysfs_btf.c, which is now built whenever
+>     CONFIG_DEBUG_INFO_BTF is enabled, with the sysfs file itself still
+>     under CONFIG_SYSFS: btf_parse_vmlinux() needs the data without sysfs
+>     too, and with the option the blob has to be copied out of init memory
+>     either way.
+>    =20
+>     Reading /sys/kernel/btf/vmlinux decompresses but never parses, and
+>     only vmalloc and zstd run under btf_vmlinux_data_lock, so the sysfs
+>     mmap path (mmap_lock -> kernfs -> btf_vmlinux_data_lock) cannot form
+>     a cycle with module or cand_cache locks.
+>    =20
+>     On its own this patch only changes where the bytes come from: initcall
+>     kfunc registrations still parse the vmlinux BTF at boot.
+>    =20
+>     Measured with a distribution config: the raw .BTF is 5.47 MB on x86_64
+>     and 5.57 MB on arm64, and 1.44 and 1.46 MB with zstd -19.  xz -9e wou=
+ld
+>     save another 0.17 MB but decodes about 6 times slower (72 vs 12 ms in
+>     user space).  Decompression in the kernel takes ~7 ms on x86_64.
+>    =20
+>     Trade-offs: the compressed blob stays resident on systems that never
+>     use BTF (~1.4 MB), so with the next two patches they save about 80% of
+>     what the BTF costs rather than all of it (~6 of ~7.5 MB, the raw BTF
+>     plus what parsing it allocates); the x86 bzImage on disk is ~0.3 MB
+>     smaller; building needs the zstd tool; __start_BTF/__stop_BTF do not
+>     exist with the option (the ksyms and linked_vars selftests use them; a
+>     later patch adapts them).
+>    =20
+>     Co-developed-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>     TODO-NEEDS-IHOR: Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.de=
+v>
+>     Signed-off-by: Jay Wang <wanjay@amazon.com>
 
-cheers,
-jamal
-> >  static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device=
- *dev,
-> >                               struct bpf_nh_params *nh)
-> >  {
-> > -     struct ethhdr *ethh =3D eth_hdr(skb);
-> > +     struct ethhdr *ethh;
-> >
-> >       if (unlikely(skb->mac_header >=3D skb->network_header))
-> >               goto out;
-> > +     if (unlikely(skb_mac_header_len(skb) < ETH_HLEN ||
-> > +                  !pskb_may_pull(skb, ETH_HLEN)))
-> > +             goto out;
-> > +     ethh =3D eth_hdr(skb);
->
-> ETH_HLEN is not enough.
-> __bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6() read ip_hdr()
-> and ipv6_hdr() right after the pull. Nothing makes these headers linear.
-> Take the AF_PACKET frame from the commit log without pop_eth and
-> bpf_skb_change_head():
->
->   packet_snd()                     headlen =3D=3D 14, IP header in frags
->   skb_pull(skb, ETH_HLEN)          headlen =3D=3D 0
->   skb_reset_network_header(skb)    network header =3D=3D skb->tail
->   ip4h->daddr, ip4h->saddr         read past skb->tail
->
-> The route lookup runs on garbage.
->
-> Eric's skb_network_offset() check also covers
-> mac_header >=3D network_header. No need for two checks.
->
-> Something like this:
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2290,10 +2290,14 @@ static int bpf_out_neigh_v6(struct net *net, stru=
-ct sk_buff *skb,
->  static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_devic=
-e *dev,
->                                    struct bpf_nh_params *nh)
->  {
-> -       const struct ipv6hdr *ip6h =3D ipv6_hdr(skb);
->         struct net *net =3D dev_net(dev);
->         int err, ret =3D NET_XMIT_DROP;
-> +       const struct ipv6hdr *ip6h;
-> +
-> +       if (unlikely(!pskb_may_pull(skb, sizeof(*ip6h))))
-> +               goto out_drop;
-> +       ip6h =3D ipv6_hdr(skb);
->
->         if (!nh) {
->                 struct dst_entry *dst;
->                 struct flowi6 fl6 =3D {
-> @@ -2399,10 +2403,14 @@ static int bpf_out_neigh_v4(struct net *net, stru=
-ct sk_buff *skb,
->  static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_devic=
-e *dev,
->                                    struct bpf_nh_params *nh)
->  {
-> -       const struct iphdr *ip4h =3D ip_hdr(skb);
->         struct net *net =3D dev_net(dev);
->         int err, ret =3D NET_XMIT_DROP;
-> +       const struct iphdr *ip4h;
-> +
-> +       if (unlikely(!pskb_may_pull(skb, sizeof(*ip4h))))
-> +               goto out_drop;
-> +       ip4h =3D ip_hdr(skb);
->
->         if (!nh) {
->                 struct flowi4 fl4 =3D {
->                         .flowi4_flags =3D FLOWI_FLAG_ANYSRC,
-> @@ -2451,15 +2459,14 @@ static int __bpf_redirect_neigh_v4(struct sk_buff=
- *skb, struct net_device *dev,
->  static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *=
-dev,
->                                 struct bpf_nh_params *nh)
->  {
-> -       struct ethhdr *ethh =3D eth_hdr(skb);
-> -
-> -       if (unlikely(skb->mac_header >=3D skb->network_header))
-> +       if (unlikely(skb_network_offset(skb) < ETH_HLEN ||
-> +                    !pskb_may_pull(skb, ETH_HLEN)))
->                 goto out;
->         bpf_push_mac_rcsum(skb);
-> -       if (is_multicast_ether_addr(ethh->h_dest))
-> +       if (is_multicast_ether_addr(eth_hdr(skb)->h_dest))
->                 goto out;
->
-> -       skb_pull(skb, sizeof(*ethh));
-> +       skb_pull(skb, ETH_HLEN);
->         skb_unset_mac_header(skb);
->         skb_reset_network_header(skb);
->
->
-> pw-bot: cr
+[Severity: Low]
+This isn't a bug in the code, but the commit message still has an
+unresolved TODO-NEEDS-IHOR prefix on the Signed-off-by trailer pairing with
+Co-developed-by. Should this placeholder be resolved to a clean
+Signed-off-by tag?
+
+[ ... ]
+
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 70adc52f5d7c7..a7bb780743fb2 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -1901,7 +1901,8 @@ static void btf_free(struct btf *btf)
+>  	kvfree(btf->resolved_sizes);
+>  	kvfree(btf->resolved_ids);
+>  	/* vmlinux does not allocate btf->data, it simply points it at
+> -	 * __start_BTF.
+> +	 * __start_BTF, or at the decompressed copy with
+> +	 * CONFIG_DEBUG_INFO_BTF_LAZY, which is never freed either.
+>  	 */
+
+[Severity: Low]
+This isn't a bug, but when updating this multi-line comment in btf_free()
+in kernel/bpf/btf.c, could the opening /* be placed on its own line to
+follow the BPF coding style?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261031130959.2347=
+2-1-wanjay@amazon.com?part=3D9
