@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793483771;
-	b=2WElpPbR4oz5CSrMmOyuWutzia+e17bNh6Jn2CnGNQk7X3QCf/qJ3AVS5LBz/6Qe8DuZ
-	 BcOoYBHK2c4a7Fal090VDrqFhF0lHGtfx+27W4R9/D1m7AaIR1zBdC/TljBKHuWclCmf5
-	 AcOwMMocpUiH7XrHpLISoeJ8QAGcUX7HJOq6T0GyjraBnL8Og0cz38l6AllOMcq0p1GLB
-	 aZhCUgnxnQpaqsWEMTd7aE0vGeS7F9Hb5QhpCXuwsgbJvOu2ZCQYAsULczThpMqbLAg5V
-	 I63egWAHI+gKyvY0iNmZgFlvJNnEtUmzRiBm/Otj6lBRVxa1xhSBwudJ751sJ4n5FUw==
+	t=1793483777;
+	b=g/I5w0XlY24E59+7NFvpV7X6/NBvLx10KaZZEH4GE/oAbcdDBX+HGSw80mPVs/6kdwLH
+	 qVIJxo3TwK6B+Q5TwKUWUpR3mKWpvJLpHOgZPuC4WeD33/CgxXbgE59JhPGHjqKr2/w9k
+	 NgT5EW2nrJK2v7RCApDzpiIg7VEmLHld0Ci60LwPSGEtotYje4P+B4IZr037JlOQf8S5T
+	 kttGeF7MQdInBcriOL8AIMJkQ/vjyZwEjgCdOfJGDErfwty0pgH1lw4gQxME/7tGbdknJ
+	 ESeU0gYag46JKYa0xfbJnmkg7AIRRAU/UsrK84sAbrXlm5SHawUg11/2koDsWnTHmsQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793483771;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793483777;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=q14RjMpudaFdUjddLhv2OAVcO4AQVOykTv5dYcxhOCo=;
-	b=ZUaFf5NLd+ikP6Gc7g96nfQC9oHkmfxTzV/8f/5E+wmTc6McDlyddHFI2Jz0me1w+qWA
-	 82GKDT7rtCQBE5Ik38g6kp+WXC+1R5HXO+kwrXLE8BTnxAdANowWBYkFsd0OLDIT5MPXA
-	 v9jNl8GtQWXrpi7m3D+q4T7Tce+HA/ajY12J9SWP+BvLolF2NUDYfvEO25+heDxveYz3V
-	 2WATVcx4MQvrJRQ0g+whr/VGCLmjlh9Zi5jYlmj+CEWCzU6z9PPsL3tfyGhjxzzkAS0oS
-	 Bl3zsovp1zYuetPQlonD/BCIqNpAOF1MQqpfOTLv6tXFymX3ALP0jnxDASaQmDu/UlA==
+	bh=vqSh0uZ1V0W/BdRWlLoVmtHOwoQQs1uY7VkISMDOrTg=;
+	b=BLN5aCwyqFNtfWg8X8zVEMdbg0NaVKjkw4037ETKWXuWEuZUNFH6zhCOy92/0kx3jV74
+	 vDYdEyD1nBVSRWUv0SzkDRmzYy6hfAU5lXIHUKQiLm4U8BbABQPSWtRDqM7Jfs7gz75s9
+	 WNBYVBSh+NR8lZv1C0d3RYQeP3zirejBUu1u1FRJA3JYA+/YL3a/2t4IK4qzuZK19MUkN
+	 B3KT9FYK0gd8H2oBau28dlPtGQ4K3r/PTvlTFUXYXgKU8fpDMbcFFWy2B3h5/trvCToqy
+	 juVaFUPRg/GBHsmvp64+GkhdqLfWxzBQQr5AhZsLE4SNsXSRzzxeciIu9KP8rDhm1Vw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SnfRYEWe;
-	arc=none smtp.remote-ip=209.85.216.49
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HkSY+omm;
+	arc=none smtp.remote-ip=209.85.215.175
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCEB7606A333
-	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 21:56:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DCEB7606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A74606A31C
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 21:56:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C7A74606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SnfRYEWe
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3ac77270fbfso881455a91.2
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 14:56:10 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HkSY+omm
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cd623dfe420so1391314a12.0
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 14:56:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793483770; x=1794088570; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793483776; x=1794088576; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=q14RjMpudaFdUjddLhv2OAVcO4AQVOykTv5dYcxhOCo=;
-        b=SnfRYEWeKJeL0PM5SNBJu7ova7K2xWyKEGLTMUOnpeUx0optRUWyhuZgSpJl1g2U1V
-         oADdgEnBKIS7z4zC4Xcl72V7wLZNTcaIhONAe78dbL0ENndE/M0KMSp7tR6S6KKZzzkb
-         m5VSSpbt2ufnc5M8c9gpllKW74DWFS24Cm46r2OtfBe4Jm5ijLD0fY2qwwIkjj7LD04H
-         Xv8PkOCTPl4yqyDLwMD0jFAlJar0AYVph9e0eNU5kmJtEHULOoI0rNGre0qp1gpZGsi/
-         XdcCpb4lgn1PHfq5DOefXmTxMyT78tmTkk/y0KKGLWtwi23l+VFc1G6nn1/408FJ1ZBX
-         6kWw==
+        bh=vqSh0uZ1V0W/BdRWlLoVmtHOwoQQs1uY7VkISMDOrTg=;
+        b=HkSY+ommD6cUp1uB34YGRWbrypxZrRE13c3Jqsr345XErpqjKBm9wxonlGwClkZta9
+         nUisl1dfZE46SYGQ9bFWUcU4DDVD/NQth6yt67kJ3Kxisp0qX32V2P8dydMwnvwGIVTM
+         xx8Jk/6GaIDiU1YebuUycWQOhLmjmqvzBCxJIxEsxkhsuY4TbBSZVbKtBjyCfnLIRW+O
+         cKGyRzAVNYD8zfL1SiSWTRVv3wZ8ms0+RofNuzUpT59eLaPmqJZHeCXtffZ8jQ9jzNFZ
+         TIBVKyzGyF066Yft3JZ1sq3Eiw4mEFf/ybnmV8x+y4YMNgkjr+J4aKvX1cEBT9mJGoLN
+         7ZYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793483770; x=1794088570;
+        d=1e100.net; s=20260707; t=1793483776; x=1794088576;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=q14RjMpudaFdUjddLhv2OAVcO4AQVOykTv5dYcxhOCo=;
-        b=uRABEYLZPu2Jo9MOjayWphvmnpxyst9WOU7HETZ/WCpCIOMZ5Xm87Pj2UCA8CQUTMX
-         CY+D4ncxd4AFH2ng6bybGxDHM1Wxghsn/yFCGN2s0TqdBFFg/KIw1Ln9Uvx7Kjm5qM7u
-         Xcp4/cIGWt1MCJIV2gApd3qgjru1f/FzI8jl+C29Qyt9bT2TmJfILOKJ5HdAPKz68Sgg
-         8M4nHZ9Hq1ucDHrRty+/C7ExsibqCFC/hp9WiuPTrRxjUI2LcisRsAfaxDx96Ng0yEIz
-         7CPz05NtUhQ42gCd2yY0Cr4pqmZD1dwVWEkis/FCi1SENDm5sKXkvSbxKrnfu/UFsxgL
-         aFEA==
-X-Gm-Message-State: AFq9FYLrE6MBoZxL7AnaC+ks+2OcpID8vYfJiKj/w3qAqbRxSknQqFa6
-	qmWfTyF4hr6rmLXfbJfA2B5L0TkwHAsQWd3seZFXfvcoG28zm6Du6XF2jLzF9w==
-X-Gm-Gg: AYBFou3drXt4WX7Gw+ZgCmFdNrTLF5CeC/8JJA24AZVWbT0x3vhkk+Wgm/5hStscNGg
-	MuaPqUgkvxl7vp9RFHteKpTxBaSr5HcwvDEh2pD7DAid14xec7F7w5jlpni7wBaM+aPCzp4A6kO
-	aPfScGW/uid5xFMSK89LGhzz6M1Vpoy/VdAZt+8YC5nS7PKLGdWTDDT4w4DgXsPn1V8QFDZFYBs
-	gyBLcNw/uNKtBejyxDEGEHha4v/4SRP7PpASR7sG1LPI1VEcNSUXMOg3gYpKndC1MLk0QP9Y1qJ
-	y/EZkj3qUFQiiJHoJtX5LN4hjJu+mHWlGH7gGERIvdSvrlf3vny7JbxVAj3vEeK7OVwP7ZUYvi6
-	enP6/nzwyVXmle4a406ZKDaoAph7V5DUw3ioMHjYkK1x5UGaYkY0tW21O8Zf/KqGMgtEe3FH2tE
-	n1ZJ+bx43SveOrKbX5PXByA1Xc6tixyTrHfzX2fMmi86S2U0WVjMVoZUw6dvDcfXf3I9PyQwQOg
-	r+nMrVmK0q36yegZ4Hflz/ZtX8yiH5jsYsjwIXZ/bOF+cx7IWstOq05tswAK1avrWFSLMvdvDNP
-	23X0IGS7qYHwmoUmDT8XMbRCybBnlVCz410C0/38N2fqZzUqILFhmIyOoU4JWNPR9SP4YELBoO+
-	VSw0SNzHnPquAMXemTiBObwMM7xFMUOKLoRS5XpJn1PHwbHDKJjexYkfT7+UVHGfZYm/q52PuGx
-	c6nHHMl47YFBBz7J0Ycec=
-X-Received: by 2002:a17:90b:2741:b0:3ac:7556:8eda with SMTP id 98e67ed59e1d1-3ae897b955emr4934907a91.26.1793483769459;
-        Sat, 31 Oct 2026 14:56:09 -0700 (PDT)
+        bh=vqSh0uZ1V0W/BdRWlLoVmtHOwoQQs1uY7VkISMDOrTg=;
+        b=BOIb7WsOubU8RRx8TlZ8wAa4FCABLYeqTzjVQDcyhOriQo6EpTYOTZSxx2T6Tyjfan
+         lZyHiXs1x0lDDgM3JbMKJsEXpTA3cjZDNp6OAJ6yLj1K4lwgSOP7SDLk7DKRSfZZ5AWM
+         sX+39/IUqDKTVmUSJew49t4OYh+vXKjyuXt7nidtrsAeDR6IFZ/AHwAt1lPOodsc959u
+         f71F5kE/V55chjqgkSc6L0EPNrjYcv6TVgz6HwoXkhLPcr2OLLMlK5yfaAmZrBRVaQh7
+         3lfmtNqYkyjfK4UAkXFTpxcUsvp+rIyRoUDc+uF44Y/FcZykzfaLHN0tQxbjBnl7A5Kr
+         j3bg==
+X-Gm-Message-State: AFq9FYIf8h0pu/rV/xTXvucg40SJHoG0+y0wquzWDff8840jTEpDXpy6
+	ZwuVZtUjLgZH/tewX+Cr49MHtbNxqPDeh1fwP1jwhI/m2/FSpG66YhkKaYDYyQ==
+X-Gm-Gg: AYBFou2RVAsq8moG3rJq5DmzHi20Y5EPbHJ77VKlBbQUkW3FsOjqTluD8LoMHaystwz
+	lLUDRdesCb/Ft22q/eUZpozyXAnkrxfSCqLdeybO6eUYJPk1VbbFl8KKN6PRCgQM0AKvq7GcDXc
+	LORc41jVE++1RK9KMibI4AwuFUAD+zCirFKa1cDlnlVjTsrpJscta2GP3ZSN+N6/oymDiLgnPXn
+	rx3toddigRmribh1vhb2d/wIOAhXUohcoh+J5muAwoBhRtk0g/W7JAZEEk8m4/PDXrtUHnXOh1I
+	95B7IFfx2eEu66sEIwDo2vsqttgCXPjLHg9eVU75zCJ1ZuLARJCJEWkaofI2L75XE3jsxsDFzez
+	4v+s2uun/Cg4P/uuMz1yX+VQ/PpqgPlfv41bNFGZMsBeTaY5ZeeYB7hGX+PKuRTx31F9o2SqXCI
+	JlRpZ1b93s6e7/aQR0X1Nh50lyuFMoRBq+IJWWGKFhz9Npv+zhxSd7DHwfOVF1rQCCKwKV4tXg8
+	opmBh/0aNWhFviC0A4G91DuDR38xtPRiOBxU78GdtgEBrxINlmf0tSLlqsXCgrJccwGT8Bit3uD
+	BbFGeUYyoFBisSjHS4x0ghz2/d5WPYiajjM9clzAFkilWPtcvpyL3gMWRX3EWtaW/0eCq7Cdg+h
+	ENMdtUSRIbGk0/yc61uVci/BAEzDgTxtN2Q0v3df8r6hCLTNfLWl7k8CVTGtLf2MyJxJidvOVgv
+	k6YMEy0kAyyMZ/Pl9JH/U=
+X-Received: by 2002:a05:6a21:62c3:b0:3e2:6f90:b544 with SMTP id adf61e73a8af0-3e9288224c3mr5582604637.0.1793483775986;
+        Sat, 31 Oct 2026 14:56:15 -0700 (PDT)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae85e4ff4csm5039128a91.1.2026.10.31.14.56.08
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aada6bfdbesm888237b3a.42.2026.10.31.14.56.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2026 14:56:09 -0700 (PDT)
+        Sat, 31 Oct 2026 14:56:15 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf v2 4/9] selftests/bpf: End the loop of parallel_test_bitmap after 50 ms
-Date: Sat, 31 Oct 2026 21:55:38 +0000
-Message-ID: <20261031215543.682284-5-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf v2 5/9] s390/bpf: Support internal-only MOV instruction to resolve per-CPU addrs
+Date: Sat, 31 Oct 2026 21:55:39 +0000
+Message-ID: <20261031215543.682284-6-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261031215543.682284-1-alexei.starovoitov@gmail.com>
 References: <20261031215543.682284-1-alexei.starovoitov@gmail.com>
@@ -104,72 +104,54 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The two progs of parallel_test_bitmap change bits of the same words in a
-loop of 10000000 iterations with can_loop. The loop goes on until may_goto
-stops it. The functions that it calls retry a cmpxchg that fails:
+The verifier emits BPF_MOV64_PERCPU_REG to turn the address of a per-cpu
+variable into the address of the copy of this cpu. s390 keeps the per-cpu
+offset of the cpu in the lowcore. Add it to the register with one insn, the
+way the JIT reads cpu_nr and current_task for the helpers that it inlines.
 
-  do {
-          ...
-          actual = cmpxchg(&bmp->bits[idx], old, new);
-          if (actual == old)
-                  return true;
-  } while (can_loop);
-  return false;
-
-The retry is always possible only while each stack frame has a time slice
-of its own. With one time slice for all may_goto of a prog, a function that
-is called after the time is up makes no iteration. The bit does not change,
-and the test fails with -EINVAL, in 53 of 900 runs.
-
-Leave the loop after 50 ms.
+With bpf_jit_supports_percpu_insn() the verifier inlines the lookup in
+per-cpu array and per-cpu hash maps, and resolves the address of a value in
+a per-cpu array. Patch 7 needs the insn for may_goto.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../bpf/libarena/selftests/test_parallel_bitmap.bpf.c  | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ arch/s390/net/bpf_jit_comp.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_parallel_bitmap.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_bitmap.bpf.c
-index ea1fac95b461..017add229bef 100644
---- a/tools/testing/selftests/bpf/libarena/selftests/test_parallel_bitmap.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/selftests/test_parallel_bitmap.bpf.c
-@@ -11,6 +11,7 @@
- #define TEST_BITMAP_BITS	(2 * BITS_PER_LONG_LONG)
- #define TEST_BITMAP_SYNC_SPINS	BPF_MAX_LOOPS
- #define TEST_BITMAP_ITERS	10 * 1000 * 1000
-+#define TEST_BITMAP_NSEC	(50 * 1000 * 1000)
- 
- static struct arena_bitmap __arena *bitmap;
- static volatile u64 started;
-@@ -129,6 +130,7 @@ static int bitmap_test_common_single(int parity)
- 
- static int bitmap_test_common(int parity)
- {
-+	u64 start;
- 	int ret;
- 	u32 i;
- 
-@@ -138,6 +140,7 @@ static int bitmap_test_common(int parity)
- 	if (ret)
- 		return ret;
- 
-+	start = bpf_ktime_get_ns();
- 	for (i = zero; i < TEST_BITMAP_ITERS && can_loop; i++) {
- 		ret = bitmap_test_common_single(parity);
- 		if (ret)
-@@ -147,6 +150,13 @@ static int bitmap_test_common(int parity)
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index 56ec49894dda..ec32e10be24b 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -1005,6 +1005,17 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 					(jit->prg - patch_brc) >> 1;
  			break;
- 
- 		bitmap_test_reset_single(parity);
+ 		}
++		if (insn_is_mov_percpu_addr(insn)) {
++			const u64 *percpu_offset = &get_lowcore()->percpu_offset;
 +
-+		/*
-+		 * Stop before the time slice of may_goto is used up. After that the
-+		 * bmp_*() functions can't retry a cmpxchg that fails.
-+		 */
-+		if (bpf_ktime_get_ns() - start > TEST_BITMAP_NSEC)
++			if (dst_reg != src_reg)
++				/* lgr %dst,%src */
++				EMIT4(0xb9040000, dst_reg, src_reg);
++			/* ag %dst,percpu_offset */
++			EMIT6_DISP_LH(0xe3000000, 0x0008, dst_reg, REG_0, REG_0,
++				      (unsigned long)percpu_offset);
 +			break;
- 	}
++		}
+ 		switch (insn->off) {
+ 		case 0: /* DST = SRC */
+ 			/* lgr %dst,%src */
+@@ -3116,6 +3127,11 @@ bool bpf_jit_supports_timed_may_goto(void)
+ 	return true;
+ }
  
- 	return 0;
++bool bpf_jit_supports_percpu_insn(void)
++{
++	return true;
++}
++
+ bool bpf_jit_inlines_helper_call(s32 imm)
+ {
+ 	switch (imm) {
 -- 
 2.55.0
 
