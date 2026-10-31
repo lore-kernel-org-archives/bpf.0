@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793453867;
-	b=M/VQjVXVCzdEbLWY/S5ORVyFLAyNjQFDLtcKbDSj5sYGp8Jrhfuga+q5bvwMi9JO51I+
-	 I2B7+BtSMIgcGdEXfsiukyoa1dy7QsohQ96syQ/K7QJ9Vg2zHu7MrCu37F0iIQKe6BrJ4
-	 /qqCLbKWARJdPVj4ccKC9BhbvMHWUWIqGWUQkEh0P6GLYwR0h+YwCzeKcBIGFpVrAvPMy
-	 fk5hqtog3Nk4IHOZ/+TFPSokUCtoL16OB42dhuvpt06ZVIymadQS8QEfK67/O6foaCYWu
-	 pBJGIGwxM6WQWcCYXT9oOkH2LqAmGLQ8AE3Q9rG3p8WfHmrZr4Dt2ypXDw41o5OARJg==
+	t=1793453899;
+	b=mM2sTSyQ0dCpb/EnY5Q37IayfECSWXyIHWQhVne6hR2Uo9dME7Po2E59qOs7TbLb/VrI
+	 hXdckTp9LkZmMrE4lgQKh51lG4mC+CPzyk9Uw6RFtgTMpge58jhrdPTzBEwMqqtvjU3A7
+	 VU1XnZmwTcz5i2FTGV7UYXs8ec+2aHvocyX99qr4fKwpZ4qsZ/5bwMsKTpqOJpWbPJKxz
+	 Cl8zwF1xPG1+FeUO8XebCWgy8mtBF6loIPx+Ghjr5FTnKAO/qN7cNV83ZThAc+qAnc80t
+	 Cs3OCqSRGXh68zpHQfbkmVJi8A4NaeQomJ3X139V9ofm0A6IlI958lLI48mBKT8IbdQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793453867;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793453899;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=reLu0xQA8FLqqGz8ZHz4SlAvBNfLvWfysLu2HEWzZeo=;
-	b=FIc4fpNyumvZAszTBqA6erE/NciosX6xVBEtKAvBC2Ne6juYWpWoNTCaWEMeW3oiwTi1
-	 39FwnQ2bDhiHBS5xXUvwY9v4SngASaWRFQKdIgpY7Cy+MOmQVX8D+VEIub8gvdx2DuTgo
-	 9Qlpo23iEEew4Q0llImKucWyocL0rsgm8lTPzfKnzzpITguFqddW/6FgBu3PfWCH1Bly/
-	 n1BtS/tz/jNuFtqZAkI1VG2QtoFnDipGvsfEnLAdNYyFrkm3Af8zpqRO+fo/kOgqGSdJ3
-	 +LOxR/1vwLp1DE0WOFpT+Mj6kDcW7gHhfE/Wxockt8+LbRPGdiZn1AdExvCeRTePQVg==
+	bh=Sea389r7QNIe0tGj1KM6zedtIgXrndN4T9rt7442krs=;
+	b=QIshKyvpg04Lj51WiYy6xVVOrvEPAbt5M6TC9/KROoRi7BcpkdsSb2rL1IKCOi3KUTaq
+	 S6usQMl308vIdfxvlREH9++rKFOcwFvMiFjww6rY3luoCxhgTs/jEI8Qrw2hDaonnnpA2
+	 84ORA2QJTofXKS7PrmdEIsAE+y4Z+a8pYTAmtJq46Xp33GZkb/paHKW3le4gz34IQyWnW
+	 7HkoLzNqUupP9Nni567AYnIUhYh7uUECzX8n1noPwqBs/5AI/ilEdAH/ovIkImws+gfnU
+	 8Gr1sJV3l1fK+7GtpykL5LeQ7KpGZg7wZDU6EpM38T7vv6HHSUpea0fkMsomLQHuSVw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MQnBJbN0;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ChDBZKzs;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21469606A31A;
-	Sat, 31 Oct 2026 13:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF070606A31C;
+	Sat, 31 Oct 2026 13:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MQnBJbN0
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E354F1F000C1;
-	Sat, 31 Oct 2026 13:37:45 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ChDBZKzs
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9242A1F00919;
+	Sat, 31 Oct 2026 13:38:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793453867;
-	bh=reLu0xQA8FLqqGz8ZHz4SlAvBNfLvWfysLu2HEWzZeo=;
+	s=k20260515; t=1793453898;
+	bh=Sea389r7QNIe0tGj1KM6zedtIgXrndN4T9rt7442krs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MQnBJbN0l/ahabnh/gPVxN0vG9Tvmd1iQdTe1wbVDQsrV3gYspM6N/zWSwVeCZkPw
-	 dlpniNXhwavNTyTcXgM7wgRE4R3KAa3RWTeZuodHoHLP2Al5yT5vpgmEjEpFE3BGEj
-	 rMIkk4TzaCszn37iYatRtdwzV7l2x1+eZX1U+ZF5N9/Sfe3BcIHscuB3nLXsJrhW0d
-	 2DqWcoBn5QUhrQ9FQH8budo+GPSqEl/owB0h0JBrocYtKeIqI1wHHUSpSKBX0OB0h8
-	 0zSDFazsbWKU/PPw3Z1VHDz5hYuzAsdyt53ef8we0xkLBsr8RSRPxDFp91qMjME6pw
-	 bqbU0HvzEWdxQ==
-Message-ID: <sashiko-outbox-191981@kernel.org>
+	b=ChDBZKzsOygyco4QgTXIWsEiiozkSqI7z/rptCRx1RCxYCKQJDOWMgruv0hHeK2Or
+	 ODlrATVDS0eh96OymOlZLp65wwqbtLS/XlYrSLWfGgxtX4Rb7t4y3VUHRQlKrS/wxT
+	 ndXDcqD+K0jHzKmJh6jcI1IXqv3mCxacEoWWCb6YzOM7xrvFZZRbXghX0tC6JtzYm4
+	 5a8/Jg8r+kdsH/jBs70nawPV7d0ZSDuF/F2XSH69KlI3+d/PROxNlDwZ24DtmPg/u4
+	 dmPUsIPljGBXf3vWfWsnMlc9fMQ3Fh/h7T231tZ6qHwFm1ut9AB1pd4mNHFUO2HfX2
+	 GfFj9xYC2dG7Q==
+Message-ID: <sashiko-outbox-191982@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 11/13] bpf: keep module BTF until the vmlinux
- BTF is parsed
+Subject: Re: [PATCH bpf-next 10/13] bpf: defer kfunc and struct_ops
+ registrations until first BTF use
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jay Wang" <wanjay@amazon.com>, bpf@vger.kernel.org, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
  Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
@@ -54,12 +54,12 @@ Cc: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alan Maguire" <almagui@kernel.or
  Chancellor" <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, linux-kbuild@vger.kernel.org, "Arnd
  Bergmann" <arnd@arndb.de>, x86@kernel.org, "Hazem Mohamed Abuelfotoh" <abuehaze@amazon.com>, "Bjoern
  Doebel" <doebel@amazon.de>, "Martin Pohlack" <mpohlack@amazon.de>, jay.wang.upstream@gmail.com
-In-Reply-To: <20261031130959.23472-12-wanjay@amazon.com>
+In-Reply-To: <20261031130959.23472-11-wanjay@amazon.com>
 References: <20261031130959.23472-1-wanjay@amazon.com>
- <20261031130959.23472-12-wanjay@amazon.com>
+ <20261031130959.23472-11-wanjay@amazon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 31 Oct 2026 13:37:45 +0000
+Date: Sat, 31 Oct 2026 13:38:17 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,276 +69,320 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] bpf: NULL deref in btf_parse_kept_modules() after inline sysfs fai=
-lure
-- [High] bpf: UAF of btf_mod->data in btf_free_rcu() after kept module unpa=
-rse
-- [High] bpf: premature btf_idr publication in btf_parse_kept_modules() cau=
-ses UAF
-- [Medium] bpf: btf_parse_kept_modules() drops kept inline BTF on -ENOMEM
-- [Medium] bpf: drop kept module BTFs in btf_drop_all_deferred() on vmlinux=
- BTF failure
+- [Medium] bpf: propagate st_ops->init() error in bpf_struct_ops_desc_init()
+- [Medium] bpf: premature btf_idr publication of vmlinux BTF before btf_app=
+ly_deferred()
+- [Medium] bpf: missing bpf_get_btf_vmlinux() in cgroup_bpf_prog_query()
 --
 
-commit c77c66110b385c53a4bc18e94bea01ef20eb7416
+commit ee51b32030c948007ccf4ba129182f790083514d
 Author: Jay Wang <wanjay@amazon.com>
 
-bpf: keep module BTF until the vmlinux BTF is parsed
+bpf: defer kfunc and struct_ops registrations until first BTF use
 
-With CONFIG_DEBUG_INFO_BTF_LAZY enabled, this commit keeps in-tree module
-BTF and inline BTF unparsed when a module loads before vmlinux BTF is
-parsed, exposing their sysfs files immediately and parsing the kept module
-BTFs under btf_vmlinux_lock when vmlinux BTF is first parsed.
+When CONFIG_DEBUG_INFO_BTF_LAZY is enabled, this commit queues kfunc set,
+dtor kfunc, and struct_ops registrations made before vmlinux BTF is parsed
+and replays them synchronously inside bpf_get_btf_vmlinux() before publishi=
+ng
+btf_vmlinux. It also triggers vmlinux BTF parsing from btf_get_fd_by_id() a=
+nd
+BPF_BTF_GET_NEXT_ID so kernel BTF IDs are allocated before IDR lookups.
 
 > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index a5b1cd63a1e43..631f5a32ec174 100644
+> index a7bb780743fb2..a5b1cd63a1e43 100644
 > --- a/kernel/bpf/btf.c
 > +++ b/kernel/bpf/btf.c
-
-[ ... ]
-
-> @@ -9395,6 +9398,149 @@ static DEFINE_MUTEX(btf_module_mutex);
->  static void purge_cand_cache(struct btf *btf);
->  static void btf_drop_deferred_regs(struct module *owner);
+> @@ -6930,17 +6930,54 @@ struct btf *btf_parse_vmlinux(void)
+>  }
 > =20
-> +/* /sys/kernel/btf/<module> and <module>.inline */
-> +static void btf_module_add_files(struct btf_module *btf_mod, const char =
-*name,
-> +				 void *data, u32 data_size)
+>  static DEFINE_MUTEX(btf_vmlinux_lock);
+> +/* CONFIG_DEBUG_INFO_BTF_LAZY: the task applying deferred work, and its =
+BTF */
+> +static struct task_struct *btf_vmlinux_builder;
+> +static struct btf *btf_vmlinux_new;
+> +static int btf_apply_deferred(void);
+> +static void btf_drop_all_deferred(int err);
+> +
+> +static bool btf_vmlinux_building(void)
 > +{
-> +	char inline_name[MODULE_NAME_LEN + sizeof(".inline")];
-> +	struct bin_attribute *attr;
-> +
-> +	attr =3D sysfs_btf_add(name, data, data_size, false, NULL);
-> +	if (IS_ERR(attr))
-> +		return;
-> +	btf_mod->sysfs_attr =3D attr;
-> +
-> +	if (!btf_mod->btf_inline_data)
-> +		return;
-> +	snprintf(inline_name, sizeof(inline_name), "%s.inline", name);
-> +	attr =3D sysfs_btf_add(inline_name, btf_mod->btf_inline_data,
-> +			     btf_mod->btf_inline_data_size, false, NULL);
-> +	if (IS_ERR(attr)) {
-> +		kvfree(btf_mod->btf_inline_data);
-> +		btf_mod->btf_inline_data =3D NULL;
-> +		return;
-> +	}
-
-[Severity: High]
-Can this trigger a NULL pointer dereference when btf_parse_kept_modules()
-later parses this module?
-
-In btf_module_keep(), btf_mod->btf_inline_data_size is set to a non-zero
-inline_data_size before calling btf_module_add_files(). If sysfs_btf_add()
-fails for the .inline file here, btf_mod->btf_inline_data is freed and set
-to NULL, but btf_mod->btf_inline_data_size remains non-zero.
-
-Later, btf_parse_kept_modules() passes btf_mod->btf_inline_data (NULL) and
-btf_mod->btf_inline_data_size (non-zero) to btf_parse_module():
-
-    if (inline_data_size) {
-        inline_btf =3D btf_parse_split(env, module_name, inline_data,
-                                     inline_data_size, btf);
-
-which calls btf_parse_split() -> btf_parse_hdr() with btf->data =3D=3D NULL=
- and
-btf->data_size > 0, dereferencing hdr =3D btf->data.
-
-Should btf_mod->btf_inline_data_size also be reset to 0 here (and if the
-first sysfs_btf_add() call fails above, should btf_mod->btf_inline_data also
-be freed and cleared)?
-
-> +	btf_mod->sysfs_inline_attr =3D attr;
+> +	return in_task() && READ_ONCE(btf_vmlinux_builder) =3D=3D current;
 > +}
-
-[ ... ]
-
-> +/* Undo btf_parse_kept_modules() of a round that is not published */
-> +static void btf_unparse_kept_modules(void)
-> +{
-> +	struct btf_module *btf_mod;
+> =20
+>  struct btf *bpf_get_btf_vmlinux(void)
+>  {
+>  	/* Pairs with the smp_store_release() on the parse path below. */
+>  	struct btf *btf =3D smp_load_acquire(&btf_vmlinux);
+> =20
+> -	if (!btf && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
+> -		mutex_lock(&btf_vmlinux_lock);
+> -		btf =3D btf_vmlinux;
+> -		if (!btf) {
+> -			btf =3D btf_parse_vmlinux();
+> +	/* with CONFIG_DEBUG_INFO_BTF_LAZY any call may be the one that parses =
+*/
+> +	if (IS_ENABLED(CONFIG_DEBUG_INFO_BTF_LAZY))
+> +		might_sleep();
+> +	if (btf || !IS_ENABLED(CONFIG_DEBUG_INFO_BTF))
+> +		return btf;
+> +	/* the registrations btf_apply_deferred() applies see the new BTF */
+> +	if (btf_vmlinux_building())
+> +		return btf_vmlinux_new;
 > +
-> +	lockdep_assert_held(&btf_module_mutex);
-> +	list_for_each_entry(btf_mod, &btf_modules, list) {
-> +		if (!btf_mod->data || !btf_mod->btf)
-> +			continue;
-> +		btf_mod->btf->data =3D NULL;	/* the kept copy */
-> +		btf_put(btf_mod->btf);
-> +		btf_mod->btf =3D NULL;
-> +	}
-> +}
-
-[Severity: High]
-Could btf_free_rcu() read freed btf_mod->data memory after
-btf_unparse_kept_modules() runs?
-
-In btf_apply_deferred(), after btf_parse_kept_modules() sets up
-btf_mod->btf in place over btf_mod->data, an earlier deferred
-BTF_DEFER_ST_OPS registration can populate btf_mod->btf->struct_ops_tab via
-__register_bpf_struct_ops() -> btf_add_struct_ops() ->
-bpf_struct_ops_desc_init(), storing st_ops_desc->type =3D btf_type_by_id()
-which points directly into btf_mod->data.
-
-If a subsequent deferred registration in btf_apply_deferred() fails with
--ENOMEM, btf_unparse_kept_modules() sets btf_mod->btf->data =3D NULL, sched=
-ules
-asynchronous destruction of btf_mod->btf via btf_put() -> call_rcu(), and
-resets btf_mod->btf =3D NULL.
-
-If the module unloads (MODULE_STATE_GOING) before that RCU grace period
-finishes, btf_module_notify() sees !btf_mod->btf and calls
-btf_module_drop_kept(btf_mod), which immediately frees btf_mod->data with
-kvfree(). When btf_free_rcu() -> btf_free() -> btf_free_struct_ops_tab() ->
-bpf_struct_ops_desc_release() later executes:
-
-    arg_info =3D st_ops_desc->arg_info;
-    for (i =3D 0; i < btf_type_vlen(st_ops_desc->type); i++)
-        kfree(arg_info[i].info);
-
-doesn't btf_type_vlen(st_ops_desc->type) dereference the already freed
-btf_mod->data buffer?
-
+> +	mutex_lock(&btf_vmlinux_lock);
+> +	btf =3D btf_vmlinux;
+> +	if (!btf) {
+> +		btf =3D btf_parse_vmlinux();
+> +		if (IS_ENABLED(CONFIG_DEBUG_INFO_BTF_LAZY) && !IS_ERR(btf)) {
+> +			int err;
 > +
-> +/*
-> + * Called under btf_vmlinux_lock by the task that parses the vmlinux BTF,
-> + * before that is published.  Parses the kept module BTFs in place, olde=
-st
-> + * first so that ids follow the load order as without
-> + * CONFIG_DEBUG_INFO_BTF_LAZY; in-tree module BTF and its inline BTF nee=
-d no
-> + * relocation, so sysfs serves the same bytes before and after.  A module
-> + * whose BTF fails validation cannot be refused any more: it stays loaded
-> + * without BTF, and its files go away; an invalid inline BTF loses its f=
-ile.
-> + * Returns -ENOMEM, with this round's module BTFs freed again, if memory=
- ran
-> + * out.
-> + */
-> +static int btf_parse_kept_modules(void)
-> +{
-> +	struct btf_module *btf_mod, *tmp;
-> +	void *inline_data;
-> +	struct btf *btf;
-> +	int err;
-> +
-> +	lockdep_assert_held(&btf_vmlinux_lock);
-> +	guard(mutex)(&btf_module_mutex);
-> +	list_for_each_entry_safe_reverse(btf_mod, tmp, &btf_modules, list) {
-> +		if (btf_mod->btf || !btf_mod->data)
-> +			continue;
-> +		btf =3D btf_parse_module(btf_mod->module->name, btf_mod->data,
-> +				       btf_mod->data_size, NULL, 0,
-> +				       btf_mod->btf_inline_data,
-> +				       btf_mod->btf_inline_data_size, &inline_data);
-> +		if (!IS_ERR(btf)) {
-> +			err =3D btf_alloc_id(btf);
+> +			btf_vmlinux_new =3D btf;
+> +			WRITE_ONCE(btf_vmlinux_builder, current);
+> +			err =3D btf_apply_deferred();
+> +			WRITE_ONCE(btf_vmlinux_builder, NULL);
+> +			btf_vmlinux_new =3D NULL;
 > +			if (err) {
-> +				btf->data =3D NULL;	/* the kept copy */
-> +				btf_free(btf);
+> +				/* nothing saw it: drop it with what was applied to it */
+> +				bpf_ctx_convert.t =3D NULL;
+> +				btf_put(btf);
 > +				btf =3D ERR_PTR(err);
 > +			}
 > +		}
-
-[Severity: High]
-Is it safe to publish btf into btf_idr via btf_alloc_id(btf) before the rest
-of btf_parse_kept_modules() and btf_apply_deferred() have succeeded?
-
-In btf_get_fd_by_id(), the return value of bpf_get_btf_vmlinux() is ignored:
-
-    if (IS_ENABLED(CONFIG_DEBUG_INFO_BTF_LAZY))
-        bpf_get_btf_vmlinux();
-
-    rcu_read_lock();
-    btf =3D idr_find(&btf_idr, id);
-    if (!btf || !refcount_inc_not_zero(&btf->refcnt))
-
-If task A's bpf_get_btf_vmlinux() fails with -ENOMEM, task A still proceeds
-to idr_find(&btf_idr, id) while task B is inside btf_apply_deferred() ->
-btf_parse_kept_modules(). Task A (or a deferred struct_ops ->init() callback
-calling bpf_find_btf_id()) can grab a reference to btf_mod->btf from btf_id=
-r,
-raising refcnt above 1.
-
-If task B then hits -ENOMEM on a later module or deferred registration,
-btf_unparse_kept_modules() sets btf_mod->btf->data =3D NULL and calls
-btf_put(btf_mod->btf), and bpf_get_btf_vmlinux() frees the unpublished
-vmlinux BTF via btf_put(). Because btf_mod->btf->refcnt > 1, btf_put() does
-not free btf_mod->btf or remove it from btf_idr, leaving a live BTF object
-with btf->data =3D=3D NULL (which crashes in btf_get_info_by_fd() on
-copy_to_user(ubtf, btf->data, btf_copy)) and a dangling btf->base_btf
-pointer to the freed vmlinux BTF.
-
-> +		if (btf =3D=3D ERR_PTR(-ENOMEM)) {
-> +			btf_unparse_kept_modules();
-> +			return -ENOMEM;
-> +		}
-> +		if (IS_ERR(btf)) {
-> +			pr_warn("failed to validate module [%s] BTF: %ld\n",
-> +				btf_mod->module->name, PTR_ERR(btf));
-> +			btf_module_drop_kept(btf_mod);
-> +			continue;
-> +		}
-> +		btf_mod->btf =3D btf;
-> +		if (btf_mod->btf_inline_data && !inline_data) {
-> +			if (btf_mod->sysfs_inline_attr)
-> +				sysfs_btf_remove(btf_mod->sysfs_inline_attr);
-> +			btf_mod->sysfs_inline_attr =3D NULL;
-> +			kvfree(btf_mod->btf_inline_data);
-> +			btf_mod->btf_inline_data =3D NULL;
-> +			btf_mod->btf_inline_data_size =3D 0;
-> +		}
+> +		/* a lazy parse that ran out of memory is retried by the next caller */
+> +		if (!IS_ENABLED(CONFIG_DEBUG_INFO_BTF_LAZY) || btf !=3D ERR_PTR(-ENOME=
+M)) {
+> +			if (IS_ERR(btf))
+> +				btf_drop_all_deferred(PTR_ERR(btf));
+>  			/*
+>  			 * Order the parsed BTF contents and the globals the
+>  			 * parse populated (e.g. bpf_ctx_convert.t) before
+> @@ -6949,8 +6986,8 @@ struct btf *bpf_get_btf_vmlinux(void)
+>  			 */
+>  			smp_store_release(&btf_vmlinux, btf);
+>  		}
+> -		mutex_unlock(&btf_vmlinux_lock);
+>  	}
+> +	mutex_unlock(&btf_vmlinux_lock);
+>  	return btf;
+>  }
+> =20
+> @@ -9302,6 +9339,10 @@ int btf_get_fd_by_id(u32 id)
+>  	struct btf *btf;
+>  	int fd;
+> =20
+> +	/* kernel BTFs get their ids while parsed, before they are published */
+> +	if (IS_ENABLED(CONFIG_DEBUG_INFO_BTF_LAZY))
+> +		bpf_get_btf_vmlinux();
+> +
+>  	rcu_read_lock();
+>  	btf =3D idr_find(&btf_idr, id);
+>  	if (!btf || !refcount_inc_not_zero(&btf->refcnt))
 
 [Severity: Medium]
-If parsing a kept module's inline BTF fails with -ENOMEM inside
-btf_parse_module(), doesn't this permanently drop the module's inline BTF
-and sysfs file instead of rolling back the round?
+Can a concurrent caller of btf_get_fd_by_id() or __sys_bpf() (for
+BPF_BTF_GET_NEXT_ID) observe and pin btf_vmlinux_new via btf_idr while
+btf_apply_deferred() is still mutating it or rolling it back on -ENOMEM?
 
-In btf_parse_module(), an error from btf_parse_split() on inline_btf (such
-as ERR_PTR(-ENOMEM)) is logged and cleared to inline_btf =3D NULL, returning
-the main module btf with inline_data =3D=3D NULL. btf_parse_kept_modules() =
-then
-treats !inline_data as a validation failure and removes
-btf_mod->sysfs_inline_attr and frees btf_mod->btf_inline_data, even if the
-round fails with -ENOMEM and is retried later.
+In kernel/bpf/btf.c, btf_parse_vmlinux() allocates the IDR entry before
+btf_apply_deferred() runs:
 
-> +	}
-> +	return 0;
-> +}
+btf_parse_vmlinux()
+	err =3D btf_alloc_id(btf);
+
+Both btf_get_fd_by_id() and the BPF_BTF_GET_NEXT_ID case in __sys_bpf()
+call bpf_get_btf_vmlinux() and ignore its return value before querying
+btf_idr without holding btf_vmlinux_lock.
+
+If task A calls btf_get_fd_by_id() and its bpf_get_btf_vmlinux() attempt
+fails with ERR_PTR(-ENOMEM) (for example, if task A is killed or hits a
+memory limit during vmalloc()), bpf_get_btf_vmlinux() leaves btf_vmlinux
+as NULL and releases btf_vmlinux_lock. Because btf_get_fd_by_id() ignores
+the error, task A proceeds to idr_find(&btf_idr, id).
+
+If task B concurrently acquires btf_vmlinux_lock, runs btf_parse_vmlinux()
+(publishing btf_vmlinux_new into btf_idr via btf_alloc_id()), and enters
+btf_apply_deferred(), task A can find task B's unpublished btf_vmlinux_new
+in btf_idr and increment btf->refcnt from 1 to 2 via
+refcount_inc_not_zero().
+
+This exposes btf_vmlinux_new to userspace while btf_apply_deferred() is
+still mutating kfunc_set_tab, dtor_kfunc_tab, and struct_ops_tab via
+krealloc() and sort(). Furthermore, if task B's btf_apply_deferred() then
+fails with -ENOMEM, the rollback path in bpf_get_btf_vmlinux() assumes
+nothing else saw btf:
+
+	if (err) {
+		/* nothing saw it: drop it with what was applied to it */
+		bpf_ctx_convert.t =3D NULL;
+		btf_put(btf);
+		btf =3D ERR_PTR(err);
+	}
+
+Because task A holds an extra reference, btf_put(btf) will not drop
+btf->refcnt to zero or call btf_free_id(btf), leaving the aborted vmlinux
+BTF in btf_idr while a subsequent caller parses and allocates a second
+vmlinux BTF.
 
 [ ... ]
 
-> @@ -11206,8 +11349,13 @@ static int btf_apply_deferred(void)
->  			break;
->  		}
->  		module_put(reg->owner);
-> -		if (err =3D=3D -ENOMEM)
-> +		if (err =3D=3D -ENOMEM) {
-> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> +			guard(mutex)(&btf_module_mutex);
-> +			btf_unparse_kept_modules();
-> +#endif
->  			return err;
-> +		}
->  		if (err)
->  			pr_warn("failed to apply deferred BTF registration for %s: %d\n",
->  				reg->owner ? reg->owner->name : "vmlinux", err);
+> @@ -11009,6 +11131,9 @@ int __register_bpf_struct_ops(struct bpf_struct_o=
+ps *st_ops)
+>  	struct btf *btf;
+>  	int err =3D 0;
+> =20
+> +	if (btf_defer_reg(st_ops->owner, BTF_DEFER_ST_OPS, 0, st_ops, 0, &err))
+> +		return err;
+> +
+>  	btf =3D btf_get_module_btf(st_ops->owner);
+>  	if (!btf)
+>  		return check_btf_kconfigs(st_ops->owner, "struct_ops");
 
 [Severity: Medium]
-What happens to kept module BTFs if btf_parse_vmlinux() in
-bpf_get_btf_vmlinux() fails with a non-ENOMEM error (or btf_apply_deferred()
-were to return a non-ENOMEM error)?
+When __register_bpf_struct_ops() is deferred until the first
+bpf_get_btf_vmlinux() call, could BPF_PROG_QUERY with attach_type
+BPF_STRUCT_OPS fail with -ENOENT if invoked before vmlinux BTF is parsed?
 
-In bpf_get_btf_vmlinux(), when btf is a non-ENOMEM error pointer,
-btf_apply_deferred() is not run (or fails) and btf_drop_all_deferred() is
-called before publishing the error pointer to btf_vmlinux. However,
-btf_drop_all_deferred() only frees entries in btf_deferred_regs and does not
-call btf_module_drop_kept() on kept entries in btf_modules, leaving their
-unparsed data buffers and /sys/kernel/btf/<module> sysfs files around until
-module unload. Should btf_drop_all_deferred() also drop kept module entries?
+Normally, built-in cgroup struct_ops (such as bpf_tcp_ops registered in
+__bpf_tcp_ops_init()) are registered during initcalls via:
+
+__register_bpf_struct_ops()
+	btf_add_struct_ops()
+		cgroup_bpf_struct_ops_register()
+
+which populates cgroup_struct_ops[cgroup_atype].type_id.
+
+With CONFIG_DEBUG_INFO_BTF_LAZY enabled, btf_defer_reg() defers
+__register_bpf_struct_ops(), leaving cgroup_struct_ops[].type_id as 0 until
+bpf_get_btf_vmlinux() runs btf_apply_deferred().
+
+If a user reads the struct_ops type_id from /sys/kernel/btf/vmlinux (which
+decompresses raw BTF via btf_vmlinux_data() without calling
+bpf_get_btf_vmlinux()) and invokes BPF_PROG_QUERY with attach_type
+BPF_STRUCT_OPS, execution reaches kernel/bpf/cgroup.c:
+
+bpf_prog_query()
+	cgroup_bpf_prog_query()
+		cgroup_bpf_query()
+			__cgroup_bpf_query()
+
+In __cgroup_bpf_query():
+
+	if (type =3D=3D BPF_STRUCT_OPS) {
+		u32 type_id =3D attr->query.type_id;
+
+		atype =3D find_atype_by_struct_ops_id(type_id);
+		if (atype =3D=3D CGROUP_BPF_ATTACH_TYPE_INVALID)
+			return -ENOENT;
+
+Because neither cgroup_bpf_prog_query() nor __cgroup_bpf_query() calls
+bpf_get_btf_vmlinux(), the deferred struct_ops registrations have not been
+applied yet, so find_atype_by_struct_ops_id() returns
+CGROUP_BPF_ATTACH_TYPE_INVALID and the query fails with -ENOENT instead of
+succeeding with prog_cnt =3D 0.
+
+> @@ -11034,6 +11159,93 @@ int __register_bpf_struct_ops(struct bpf_struct_=
+ops *st_ops)
+>  EXPORT_SYMBOL_GPL(__register_bpf_struct_ops);
+>  #endif
+> =20
+> +static void btf_free_deferred_reg(struct btf_deferred_reg *reg)
+> +{
+> +	list_del(&reg->list);
+> +	if (reg->kind !=3D BTF_DEFER_ST_OPS)
+> +		kfree(reg->data);
+> +	kfree(reg);
+> +}
+> +
+> +/*
+> + * Called under btf_vmlinux_lock, by the task that parsed the vmlinux BT=
+F and
+> + * before it publishes it, so that nothing sees the BTF without its kfun=
+cs
+> + * and struct_ops.  bpf_get_btf_vmlinux() returns the new BTF to
+> + * this task, so the registrations are applied as if they were made now,=
+ and
+> + * any they make in turn (a struct_ops ->init() may register kfuncs) too.
+> + * They run in whichever task needs the BTF first, with the locks it hol=
+ds:
+> + * they must not load modules or take locks that users of the BTF hold.
+> + *
+> + * Returns -ENOMEM if memory ran out, which may be only because that tas=
+k is
+> + * being killed: the caller then drops the new BTF with whatever was app=
+lied
+> + * to it, and the next caller starts over with the queue intact, as for =
+the
+> + * vmlinux BTF itself; a struct_ops ->init() then runs again with the BT=
+F of
+> + * that round.  Any other error of a registration is only logged.
+> + */
+> +static int btf_apply_deferred(void)
+> +{
+> +	struct btf_deferred_reg *reg, *tmp;
+> +	int err;
+> +
+> +	list_for_each_entry(reg, &btf_deferred_regs, list) {
+> +		/* a going module's exit() runs before GOING drops its entries */
+> +		if (!try_module_get(reg->owner))
+> +			continue;
+> +		err =3D 0;
+> +		switch (reg->kind) {
+> +		case BTF_DEFER_KFUNCS:
+> +			err =3D __register_btf_kfunc_id_set(reg->hook, reg->data);
+> +			break;
+> +		case BTF_DEFER_DTORS:
+> +			err =3D register_btf_id_dtor_kfuncs(reg->data, reg->cnt, reg->owner);
+> +			break;
+> +		case BTF_DEFER_ST_OPS:
+> +#if defined(CONFIG_BPF_JIT)
+> +			err =3D __register_bpf_struct_ops(reg->data);
+> +#endif
+> +			break;
+> +		}
+> +		module_put(reg->owner);
+> +		if (err =3D=3D -ENOMEM)
+> +			return err;
+
+[Severity: Medium]
+What happens if a struct_ops ->init() callback fails with -ENOMEM while
+registering kfuncs during btf_apply_deferred()?
+
+In-tree struct_ops ->init() callbacks such as bm_bpf_init() in
+fs/binfmt_misc_bpf.c and bpf_io_init() in io_uring/bpf-ops.c call
+register_btf_kfunc_id_set() and return its error code.
+
+When btf_apply_deferred() replays BTF_DEFER_ST_OPS while
+btf_vmlinux_building() is true, register_btf_kfunc_id_set() runs directly
+against btf_vmlinux_new via btf_populate_kfunc_set(). If memory allocation
+fails with -ENOMEM in btf_populate_kfunc_set(), it jumps to label end and
+frees the entire kfunc_set_tab on btf_vmlinux_new:
+
+btf_populate_kfunc_set()
+	...
+end:
+	btf_free_kfunc_set_tab(btf);
+	return ret;
+
+However, in kernel/bpf/bpf_struct_ops.c, bpf_struct_ops_desc_init()
+discards the -ENOMEM return value from st_ops->init(btf) and replaces it
+with -EINVAL:
+
+	if (st_ops->init(btf)) {
+		pr_warn("Error in init bpf_struct_ops %s\n",
+			st_ops->name);
+		err =3D -EINVAL;
+		goto errout;
+	}
+
+As a result, __register_bpf_struct_ops() returns -EINVAL instead of
+-ENOMEM to btf_apply_deferred(). Because btf_apply_deferred() only aborts
+the round when err =3D=3D -ENOMEM, wouldn't it log a warning, free all queu=
+ed
+entries in btf_deferred_regs, and return 0, causing bpf_get_btf_vmlinux()
+to permanently publish a btf_vmlinux whose kfunc_set_tab was wiped out by
+btf_free_kfunc_set_tab()?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261031130959.2347=
-2-1-wanjay@amazon.com?part=3D11
+2-1-wanjay@amazon.com?part=3D10
