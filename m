@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793483752;
-	b=JwvSpsGdYOFEEzuDz0glhmwXSadgQoB2D54kFBlSfwl1NyeeGPX1K7lmNoBTP1QC+eVN
-	 vvV5XDf6G+IDC9Uz9F/wtERKlsZ0Bv9DaKi0yj0W2FzZWwk1hBdsklcK+WW3TeIeGjP0j
-	 HbEbp0LeQ/wzfhbz7rsMmz5qu2UneD75gk01qvmTFpY90fL8/a5r5Cbe8b15zYyFcZb/2
-	 87FBN7R63NaE8yOzj1dwwvBnr/zhPio/N0uW7O7QSLkRM3S9c7HVMsF7umzCGKcuUFEnE
-	 +S4tbww6wXt2XfRewp0+jzgbqgV+9nL/4hValSCsMLBvvOdE3Y1FIaLwRs4EY7hjo/A==
+	t=1793483758;
+	b=BO8WQj8hl4Xq1CaKdA424McHheD9BYL806mdlHZ5aht8iajjzBY0K1nlfIRd4r+yx/L3
+	 BUaOyYkCpU3J6FFWrTtqUu5vy3vZTdusP/UOvOrrebAATG5A7zYdFCDFzUZlhAWntNLhv
+	 4P5yc/t3WiZHhs75/FPNbBD/QEqrkeuYYJ9JcL27kmfDNyWggmyGBi5oWkReo1wz7s5BD
+	 KLftqP6B41uEHBV/+gG+/F4aGYkVSIhnEApc20LIUvmVMREGVmRdosIcfAUYTI+ju44Ju
+	 f/YEHTkRnaSWG0nWTrdPzSI8hhLenjBDL5287tFSKAlbWlofWpJ+o3N1n9HV/AawFyw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793483752;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793483758;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=IQTgQTVA2chtacysaQLNSMmmd4eqeXf912PsodY2diY=;
-	b=mbKxfJW7zgUNjyDYBl8bpSfxO34dq2aM+0A1v19XgWcZ2gOs1aaEXx19Bod4sjMNbt+6
-	 PQASv/jNM83rtvdVMD58GTaaFujIUAERUx/mz85J8+pY4lFxzQqNzvxdn0qVX9Bv2wl1M
-	 c4uiBIM3YWmfycsEHi7ZLESKAnr621ZyHq7TT11oEYqNMH3svemIs6uKm7PweOdbPsHGw
-	 i9UNnPaLsiy5gMkNv6W2MeBy33aYfpsJMcb8rbj2O2OG6hc7V7E5VlV5lhIccbD1Iag/Z
-	 VPOeXhJwfpoIgfhCHU4F7AnfAOz4+rh1W0Rsm2zuTmqlhzLKFOAfIVisy8U1k68fBFQ==
+	bh=wDSVlXXj9Bsrc76r4zOIREW8YPuhOLaER4w5brQWvo4=;
+	b=Tzjv2ey68PNuWwn4daRu4yNH2V3h57wVdCd6Jit2fqUhesrmgjR3qjniHbAjqVIL6jWN
+	 qtuRzKKG/26aM9BjD+8SlYzgNh3frNyXvuXn6XketMbdVYVa8BRvs2q+FGCs3U1/AcJin
+	 dKAPrESX8kcTdccTjzjQnjLMwF+XZMpqFGv/LECGeHjvSA6h6ds2W13M0wPqlwYgLgfrp
+	 LmI34XqriQM0RfaQ9uYT5GxR8RmwNxE1nFcYLgmOsDnb67TRpX57+d17Ho9JrF64biH4w
+	 CFOwYsGSa1cK1mo6gbWgxC+tcmdQ5GgP37/AP6N/MxjlMMsLQkzjBOlI16jX9qjAQRw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CV2GxjFw;
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BDFeGHtH;
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B49606A31A
-	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 21:55:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37B49606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50159606A31A
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 21:55:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 50159606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CV2GxjFw
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3ad2b3b1c02so991594a91.1
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 14:55:51 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BDFeGHtH
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3adc4590de4so1547652a91.2
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 14:55:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793483751; x=1794088551; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793483758; x=1794088558; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IQTgQTVA2chtacysaQLNSMmmd4eqeXf912PsodY2diY=;
-        b=CV2GxjFwif/RK5rUnPnXPkn8WfeLS+QOhU0MCQTRaBiKSHJ63Nk4WO0vLaC5VDqJ86
-         HfMbkS9CuQxXgrsUGRWxMh8bUaUa1ojZrTBSl/Mj0rRUO2hJt9oB+Cm/7I3zsJn4sgKJ
-         qj81t8a/Exz3446hj+7oYIeFEPSboc2l4iNxmFoJ1LV9CDQaY0vRe7YRGXBXmy7jtWOG
-         PHF6SblaI49PI0xfsSnqVA/7gGAynLKPQ+Pppw3ZE34kIuVfXUyMYKTKH+vFmCieVbV+
-         qbLt6mk3Kot41OqqWfN1EsgXraTBpNl9MhudbWPZOczorMTQAw9AES9Kz3THN6M4PxGs
-         ifhA==
+        bh=wDSVlXXj9Bsrc76r4zOIREW8YPuhOLaER4w5brQWvo4=;
+        b=BDFeGHtHTL9cBqb8hpx6Z4G0xCNcBKqp/aR40rqhkGDHnVhXmbLlKYjLHdgLkpj0xS
+         iKgGeJqGCho02g/sbH+J+tI18FDqBFUlUXCloazyuX/TII85DhN46gbiR42exo1PP/xz
+         gsA20yyT9bu5MJPGn3rL70uD/5iFoaSdm3Dg3crpE+OppdV3GxZ+V/Zsni8p2zoihZeG
+         5UcY6rTKXb+nE8nngzHTWaXRgdNSKt8olouQSOD3z/PuHLKJxmQpj9vMLyTN4eaQrMcn
+         DixwWmmqCUzqZ1tVG2UfAAY1RVQ0ha9EpDKMP0K8Wsb30Xk2aumHjDfQh3o9ALiEIviX
+         Q2og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793483751; x=1794088551;
+        d=1e100.net; s=20260707; t=1793483758; x=1794088558;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IQTgQTVA2chtacysaQLNSMmmd4eqeXf912PsodY2diY=;
-        b=TL8DKqOHSbnbGbfeB7W29ofmQAVW9PTx37IIREdoo/JgVWcpMu1oCWOBoutTvrUIHW
-         6qxaZ2uVcBarZmThplprlQjmz1vg6sx/1Gls0HxdY9fm45kbibFdAzah02LDF4TwgDMf
-         PYov9xWDjuwHUm45jDn5CeWmf7ESAs8HFd+dgnq8teJ5HKVm0MaFUKajOeieY7aL5kIR
-         xIqNljSxSehuImaRkuJYG3ql4DOvs5oobWcglrup/wWo5SPZ4Dgk+xbX2TuwET4mi+Lm
-         oBC9ywaDomgbuC2sfpGeLUtwg1epNWwHBPFO5Wa7iM/zBs/GdmPDcs2gRWPDc2f7Soya
-         ZEBA==
-X-Gm-Message-State: AFq9FYL3TZ6j665DohcR2pxCAW24ecysUBLMOZGu2kvprJbhd3pwCIYF
-	VTGA/TL6E2aKQEO4qplfzdjsTz/ErdPEnaDLlLXl1r2z6UlsXof2CR6qlOKgxg==
-X-Gm-Gg: AYBFou10eUugOlTbxlmqw2u7sncjFMIH36W24hz6UHYeDdJNSQss0y++SScMSGsr0gR
-	wblq3fJ+lq7DV0gj/trk5STzTdOrgTqxTkET2MF1eBJ0KYeMYaTLEMO3kuynAZyQqMmLyrtwVsx
-	YZPlstpf97E62b6GdgyopP+JBqAj+sXsQbj5GuvUxBfKkNDWwB2BeJN6Zg4c9odGEUhbxdDObgb
-	7L2NfWIQeHMlSfmZMHh7H41KJT+ZWaYZK37dyYETE+dsyt6Je31yD8nvchP9ZGaUfhUYOlNFzhU
-	Gh4Fp/F/441/fzg++2VOkaMK+VIess4TJ1UmJhTSzAxU4ivmVtbliv24ESplmAFtbU/Yqq+MJA6
-	jiasPtynn9nJyCvaOMeafMlXf/StNLArKS+ILhaiH/n/REqQFF6jaglKtN1J+FINx3V2kXN1iTK
-	FwpbT4RCsC1bBBEpXQjd4o6TCAA1EifysTE+27xdG4vG1J5TdNMssEQDHG87WL+CQz7ZXNq8gAt
-	MWUXISjdIEYk7anwEHUyJK6x27h5RXASmjZ/Hd6cCTinV2DmKgJ8uQWaYVHng9LWvCLBGumc+H3
-	VXAUeej1D6neLYaWyyZZQd5D2AmHpCzjf87S/cEwM2u6aXIul82I1zMf44C7qUdLmwkBSoOB3I9
-	B3Mfp8JUUATW9x3i6/NVegnES1EkjEi1h9EtXSt0+OdMPM3c5gxh8Rn6FJjmqXM+AhWs95KHgH+
-	s=
-X-Received: by 2002:a17:90b:4ccc:b0:3a8:32f2:f4a5 with SMTP id 98e67ed59e1d1-3ae898385aemr5133444a91.53.1793483751283;
-        Sat, 31 Oct 2026 14:55:51 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae87fc548fsm4864488a91.4.2026.10.31.14.55.50
+        bh=wDSVlXXj9Bsrc76r4zOIREW8YPuhOLaER4w5brQWvo4=;
+        b=KTHIJUk5mva6+iQZciP/7MTfDatEkw1Kf6oKpIV1sm60JiILbgmbiwVVXkZSaIFiQr
+         m4JYpVfWxJLO0UFTBSu0c1hNP6I7cT4HFs7UlF7C9paQ6IWfPEzITKcysDy3pCe8lEPM
+         x8o6EHuXWr/ki1WGSVhb5xnl6cNVQgrW9bJwcUky+578S35BiweUGHZ93tmAk1qaWcEB
+         8yasbabH731jHgQi8RJMOuIBBl/MXP/X5+EXp90DRQrOFqAstJEWA2ItsVGpNWb0JmbK
+         Zzyy70U+b3MbxMAN/HIODXERBkXO6q2zvh54Af+cWODThrhtViOqFX12CHW95ft1BPbw
+         RgiQ==
+X-Gm-Message-State: AFq9FYIzwTwmE4WCGGRa5HF5MIGuIUMksIEpjsAapMfIyx8o71C07LWI
+	cZ5hgDyVoOudL26ax3tqFYfdhHkqjY5oTWhCbRBBB9CW9Z4pR+va7XoX+/qv4Q==
+X-Gm-Gg: AYBFou1WwMKI8XXglj9HUtv/PltuY3ZwTgz3/N2pSN2QoK77RI/cQIq8sknOvk0mlGc
+	GpA4+k9JSOsqRB609qxXjyxgPAdn7n+yBqb/BsW3uN9jcuta0wKT1Bnq3EILcS0hCCTqMzc5kpO
+	BrYmt5rpFwIu96+rnSp2tyWNiBHYJEz5fsYNacGBGNMWkqnQlyut2kyl9FA3LqU/+qekb1N4qfD
+	k+Ci4knUNg0AJqS+wDARwRILH6+GYqzgINsbXZ8CndtWmIzPHMsz4hVyo1CpVb5oiPopyl5anSf
+	Z3JmyTDx3pVhLAJcPB+w4390ke8nBM5LaN0vVkkVaXMTCrjkOr8uZSGem9NYQnR5twdau1TXrBM
+	2k3zMv03wrVvHMnmIyeA5xnJS5eN84r6YoIXafHC5Y5AHDjXU3Um42n0BZ/yA2fVM09horAKLUS
+	4s55ynwREdnnMLjc69LO1AdulizhaPdzaT+pJjl4GvxImj4muKTLmEgKMeqYUxz4qcmqpTCFDuP
+	Koq/YFKCbrGRqfAJJCe1w49ngK+V3BtoZjE6SLXTmktvhd3x7oHO3EhlW3BnMoRrEpw1KbjREy5
+	+KyKQu2qS6JPvhvfYR6M0boHsB1ClOXhogOw5PmAkjnvmBGjuDGMyFGN5S8BrOrbXjpdmujeIJs
+	L2ADn2I7MbLpV0UwPyZZj2RgFJ6dA7ssekIUaoy6a1wEF4Slp+03JcdEJdkpnI9Kyr68RdTnupA
+	==
+X-Received: by 2002:a17:90b:55c5:b0:3a4:ad5c:d48a with SMTP id 98e67ed59e1d1-3ae8987e75dmr5445306a91.67.1793483757530;
+        Sat, 31 Oct 2026 14:55:57 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e9b1506sm12761032a91.15.2026.10.31.14.55.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2026 14:55:50 -0700 (PDT)
+        Sat, 31 Oct 2026 14:55:56 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf v2 1/9] bpf: Emit timed may_goto for JITed progs only
-Date: Sat, 31 Oct 2026 21:55:35 +0000
-Message-ID: <20261031215543.682284-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf v2 2/9] selftests/bpf: Don't cast a pointer to .bss in arena_htab_asm
+Date: Sat, 31 Oct 2026 21:55:36 +0000
+Message-ID: <20261031215543.682284-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261031215543.682284-1-alexei.starovoitov@gmail.com>
 References: <20261031215543.682284-1-alexei.starovoitov@gmail.com>
@@ -104,91 +104,37 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The timed form of may_goto calls arch_bpf_timed_may_goto(). This function
-takes its argument and returns its result in BPF_REG_AX, in a register of
-the cpu. Only JITed code can call it.
+arena_htab_asm is arena_htab.c with BPF_ARENA_FORCE_ASM. In this variant
+__arena has no address space, so arr1 is in .bss, and cast_kern() is a real
+insn. cast_kern(arr) turns the pointer to .bss into an offset in the arena.
+Each of the 100000 stores to arr[i] faults, and the fault handler of the
+arena skips it.
 
-The verifier emits the timed form when the arch has a JIT that supports it.
-It does not look at the prog. With CONFIG_BPF_JIT_ALWAYS_ON=n the
-interpreter can run such a prog: the JIT is off, or it fails. The
-interpreter calls the function like a helper. The function takes what the C
-code left in that register for a pointer, and bpf_check_timed_may_goto()
-reads and writes through it.
+Remove the cast. In the other variant it is a nop. The prog takes 67 ms in
+place of 950 ms on a kernel with lockdep.
 
-Emit the timed form only when the prog asks for a JIT, and make the JIT
-mandatory for such a prog. All other progs get the form that counts down
-from BPF_MAX_LOOPS.
+With one time slice for all may_goto of a prog, may_goto stops the loops of
+the old prog after 250 ms. The test does not see that, because it looks at
+the first keys only.
 
-One test of verifier_may_goto_1 shows the insns of the timed form. Load it
-only when progs are JITed.
-
-Fixes: e723608bf428 ("bpf: Add verifier support for timed may_goto")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/fixups.c                                     | 9 ++++++---
- tools/testing/selftests/bpf/progs/verifier_may_goto_1.c | 1 +
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/progs/arena_htab.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 41bc37e205e0..bb6b57f5e144 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1823,6 +1823,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 	struct bpf_subprog_info *subprogs = env->subprog_info;
- 	u16 stack_depth = subprogs[cur_subprog].stack_depth;
- 	u16 stack_depth_extra = 0;
-+	/* arch_bpf_timed_may_goto() takes and returns AX in a cpu register: for JITs only */
-+	bool timed_may_goto = prog->jit_requested && bpf_jit_supports_timed_may_goto();
+diff --git a/tools/testing/selftests/bpf/progs/arena_htab.c b/tools/testing/selftests/bpf/progs/arena_htab.c
+index 81eaa94afeb0..80cc14bb1c0f 100644
+--- a/tools/testing/selftests/bpf/progs/arena_htab.c
++++ b/tools/testing/selftests/bpf/progs/arena_htab.c
+@@ -34,8 +34,6 @@ int arena_htab_llvm(void *ctx)
+ 	cast_kern(htab);
+ 	htab_init(htab);
  
- 	if (env->seen_exception && !env->exception_callback_subprog) {
- 		struct bpf_insn *patch = insn_buf;
-@@ -2078,7 +2080,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 			goto next_insn;
- 		}
- 
--		if (bpf_is_may_goto_insn(insn) && bpf_jit_supports_timed_may_goto()) {
-+		if (bpf_is_may_goto_insn(insn) && timed_may_goto) {
- 			int stack_off_cnt = -stack_depth - 16;
- 			/*
- 			 * AX is used as an argument to pass in stack_off_cnt
-@@ -2108,6 +2110,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 			 * after subtraction, rinse and repeat.
- 			 */
- 			stack_depth_extra = 16;
-+			prog->jit_required = 1;
- 			cnt = may_goto_expand(insn_buf, insn->off, stack_off_cnt,
- 					      tail, ARRAY_SIZE(tail));
- 
-@@ -2730,7 +2733,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 
- 	env->prog->aux->stack_depth = subprogs[0].stack_depth;
- 	for (i = 0; i < env->subprog_cnt; i++) {
--		int delta = bpf_jit_supports_timed_may_goto() ? 2 : 1;
-+		int delta = timed_may_goto ? 2 : 1;
- 		int subprog_start = subprogs[i].start;
- 		int stack_slots = subprogs[i].stack_extra / 8;
- 		int slots = delta, cnt = 0;
-@@ -2744,7 +2747,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 		}
- 
- 		stack_depth = subprogs[i].stack_depth;
--		if (bpf_jit_supports_timed_may_goto()) {
-+		if (timed_may_goto) {
- 			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_FP, -stack_depth,
- 						     BPF_MAX_TIMED_LOOPS);
- 			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_FP, -stack_depth + 8, 0);
-diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-index faf9eec0a63e..c19b0522df61 100644
---- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-@@ -82,6 +82,7 @@ __naked void may_goto_batch_1(void)
- 
- SEC("raw_tp")
- __description("may_goto batch with offsets 2/0")
-+__load_if_JITed()
- __arch_x86_64
- __arch_s390x
- __arch_arm64
+-	cast_kern(arr);
+-
+ 	/* first run. No old elems in the table */
+ 	for (i = zero; i < 100000 && can_loop; i++) {
+ 		htab_update_elem(htab, i, i);
 -- 
 2.55.0
 
