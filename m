@@ -1,95 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.135
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793486197;
-	b=l+crtNT5fBMT2x75D9Nwsja845Lwx7jNDFIps/uguMVdJ+yKaz7h0HSEpAtWesO6snKZ
-	 X0/z7iiphLMQD8Pm6bFfMtGV6wflO11rTqlNDLKku9uSf4EKRoapSCTGzX5DZYcp/cRkv
-	 bSU4GHAqQOQBXgTSz+xD/YlFd4q4YWuQZoM0wxpg6miifXnRFWvlLsWa9JIEvamDPQpwH
-	 za6T4KKSAqMsMtVn5PV2A48RFHKAMjwLHPkBs+GW25TLbjAknOtEtvxOwpYhBatFidMCB
-	 Xp748iC5OPpEbcSAQX6xqWnV+fCdRlkQLMawWUj95AOxrLGoDJzU27yvP6aSr+zPAuQ==
+	t=1793486235;
+	b=uI3It1TrhSX0wlfBPfVoJTFLSG1lO61fnjvqOXJoUee7f0cCIhPMXHWwmo34vhx0XGOU
+	 1/W3Ucdx80tlDFybSswieAWMiPyZJyHKKmfvF56Zson/ESQJ2hRwwt0v0qE6WW945/tpl
+	 nz/zmIMNv3BBpJkQtMo9dti8fkvbeuzWlIsnaSPH7ZnAK9kzynt8z8LrIAKQEyh8ba/A7
+	 5HSiB+40MwbgUJxdAmEsIvGXfkel5oWJV6m0g4jXxTU0Ig3rTF6vbEo+/A7hyfnXoAkJv
+	 uTcRaoKl4lOX5/lVbbgwuIcusiy2HQPWPwSk7ODi5EmY04v0tIW2bwea+52ufP+dXXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793486197;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=bkpWIEHziPjnT8rJEJwToENhjzu687upk8/9/pEsB7M=;
-	b=YzDiLvimD9DhaieIN9SnXjscWHpUS3kEsU6lU9pF53SFJW/fvES9XAfPKkUoXXJ0mySA
-	 ohG0LsdQr04VxjoKVq9x1msJH2msVYbZnQCbsA0MUH6LWgTVYVeoyMi7xI7nu/aJP/G4X
-	 xRw/3tFBYOj8stXHk6CWROzxgG6n/NFxgEtgrC0wddBLuAyiuUffXpaZeVyESiypMzzTB
-	 Um3ORUwmj1/QKK5/t8vo5gamIlu/Lu2W4s5ueYxlr5YN6zKivZVKyCc3nSI2JKsKcNHFM
-	 ykFyNsdCr37JgQ8s3PfC3noPiptvsZATxxsr0UMEqQHWXdH7HUjUinEtis0vTGvGiPw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793486235;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=3V+G99mf0mZJVX2bsANp32lmmuQTTNG42VRqGNz+0R4=;
+	b=pkk9cPeQAkAtsqSWoLggpVAU4HqKb7wBzHPveMnvG0C9ywOicSdSIGGnUYuIGEtDPOgf
+	 iCVBIb0TpWXXootWO7vkXqpWtpSL9fqzn8RJ/SHzzCGB8leiuKcOP7eWU3tlO1+FP+/Q5
+	 mMLjgbutKkt/raauodX2my/410jDzhplvHXBCqpxUR8jxzMnXijB13M4KuOxatdoSbgMh
+	 5UCRLggJv206GFxU2EtY/GqTUfZSNpzM2IgXTcF3+eLZA5DTzLu/5W2R3JP8Q0KwGYBOn
+	 H9AohNOMczp513aEiEMKlR7xhJuTU2OmXhuhTCRcsq4ASsSsTcuBxS+F6TueJUyVQwA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Z9N1huY7;
-	arc=none smtp.remote-ip=74.125.229.135
-Received: from mail-dl2-f7.google.com (mail-dl2-f7.google.com [74.125.229.135])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CcjLmMcX;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06414606A31A
-	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 22:36:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 06414606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80CA606A31A
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 22:37:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Z9N1huY7
-Received: by mail-dl2-f7.google.com with SMTP id a92af1059eb24-13985f8229aso2165229c88.1
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 15:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793486196; x=1794090996; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bkpWIEHziPjnT8rJEJwToENhjzu687upk8/9/pEsB7M=;
-        b=Z9N1huY7qFESMQyI5LNoW0gz2mla2DzjhJYIRSqot1aSHjD6tHBCrXorjvGTlGYNaG
-         i7kqfy3So8cJxayW/LGjK4NV1/5D6wimZBSddgyiKKQXdf4QCn9LDt8lIqrCkVbgB2lk
-         Nqgct6jsUWotIAI9U5HBZTNtkUGykMehFtNcrI34/b3d0QQLCQknUj79fMNgiyJ2sbBd
-         ZgU/jUlnQHHXwjoZjBq//Bqcjf41eTvCoWjPgj0670NXLgrYGsh2Fy1N9y9JW7O8nT+M
-         01EBMJ34bjcejSuMNmEj6q8v4z+AuZZ4QALv/jFtW2q9teW+6TwUU7TWLQo9Q6WHkDBb
-         mwDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793486196; x=1794090996;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bkpWIEHziPjnT8rJEJwToENhjzu687upk8/9/pEsB7M=;
-        b=1qxgnl9XoaEPbDTfhEUcpPCPtJvQjsrG19WoPHgplNd2sheM7v8wiNIcIU07a+N9uW
-         vvajx+UvqPW7ZhU09H/dawDW3zOaKA45BZRFOcHS+5muL+KV6pHpkO4MDrhXPQVQX465
-         i54nTYlDcQKDXvkVc1uAyizmW2M+hoWIPAquIndMKyEn4GTox7y05UWGdl3ZLHWBzcG9
-         tmblbbmgSwaZggVY1jvb8moD95U7p8IDgKTaGfL5Gq7ttPiYdYs486KqhA2SVWZ5Bh9J
-         bvvLpglZbP9pwFpEYoBfmU15KFyWRSnU/loCHyHiL+mThxVuK7yMg4n9BQVJ4eLEtS6a
-         kIqg==
-X-Forwarded-Encrypted: i=1; AKwUvBzSHN/OzsOTOi5EJl2u6SDXBtM4YAqdcOG0YPE5V29vuV/wBzRmkdo9wAr+BDGu53usgOY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ+qDvHg6uLbR/v8LsdoldZzJZTu5nOAJRDtmBJRn/Xj0iPcjYi
-	shVxngUwzy1zWrFEknzpomJS19SONW78DBtJI7KSzjt0tgEykT3oeuZgZ93z1m/gOb0=
-X-Gm-Gg: AYBFou0kgb85y31YglM/zJaaPtzDlsdmrLk6rqD9LcoiRMeJ1jT2+ZlZCtZho6AfxoU
-	Q9quaVrIWRg6/gxAs22tadmPdUp33FRblRDe+9cOkciMFsgRstQkCO/TlZ26zeoVt//4neFLv9u
-	ohjCyqFKmYWfKVnvrC2nR87NMXYk9vH65sINQkScrvWAGAIEwq9TQfn/tzrp2B6cbKT5ySFHM22
-	p+1TrPsyM/FvT3j+9lYo/9Qh1xV5SEQoKv7HrDmNfLkRP9DricBB/KTZ52exBRa/T5kI2YR1bXF
-	wlHuUCbSjioo12DL+Fb/wzgS++8r/6zZIfc0WH70hd//IKo+hTRiauvob97FlTt2/+QFAvNOENJ
-	i1c13EPsyXJx0wXFCqe75qrKb8jbJoZNIk5RXWq94P5lo5mRZEoPIcOdYAh66CH6L/0Yu+fnCdL
-	TRKDx5H/MkRzn2hq5qoiBlCIPjP5SzquxHhhiClbi2qHqIFDJNh1CqlgmABpEADK2G6OBeQREXB
-	U81EKF0BEfoRa1p271b0raHEuUcpY0wqMPH/t1l1VX6X/LKI01yu/mmNiP5Xuqk/ukCjXVTx+i7
-	vaTRV8haTl8p944dSHYyTr6R8XhOVEpL35rmPqjNADjzRzqRZXEfi9+g
-X-Received: by 2002:a05:693c:65d1:b0:36a:3407:26ed with SMTP id 5a478bee46e88-36a4243cd68mr9092660eec.34.1793486196026;
-        Sat, 31 Oct 2026 15:36:36 -0700 (PDT)
-Received: from localhost.localdomain ([98.148.34.5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a4239ca82sm19959967eec.0.2026.10.31.15.36.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2026 15:36:35 -0700 (PDT)
-From: Hungyu Lin <dennylin0707@gmail.com>
-To: qmo@kernel.org,
-	bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	linux-kernel@vger.kernel.org,
-	Hungyu Lin <dennylin0707@gmail.com>
-Subject: [PATCH bpf-next] bpftool: Preserve unsigned enum64 values in data dumps
-Date: Sat, 31 Oct 2026 22:36:16 +0000
-Message-ID: <20261031223617.367-1-dennylin0707@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CcjLmMcX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D991F000C1;
+	Sat, 31 Oct 2026 22:37:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793486234;
+	bh=3V+G99mf0mZJVX2bsANp32lmmuQTTNG42VRqGNz+0R4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=CcjLmMcXL80Gqnqu8Zoq1falrXpq/JxD6mV3FPfmuTxysJPIzxcjEkti5q5RucKE/
+	 SQIaoWFVxzuJo4aCmZ/G6hLHNBlE3wWbcZe+A4zFkixxEwaesLHMhcLn73Ak+vdVBk
+	 7PFXamHyy7sWdk0D7yBX9+qx1xmRpqjSsE608NcznsdHWngmjkOjTfWLoBSRTfMJKy
+	 e7pBUNgpDT15Em+gbnWPIZCk8sqv7mszBgdrv9zxnmZwO+tLXBM1q7WuuxPCsKKtQh
+	 gTJaMqypE8z4jtYXv08vuSrN4lwthBGbb2AiI7J5/OdOTS+Da+B+hZqiVVYRWMh1eG
+	 zzYsMreHWNmrQ==
+Content-Type: multipart/mixed; boundary="===============1416503460861640838=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,42 +49,199 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <73b8a2912eb3c15e4721bb685bf2231afec7537b620367e257ee1a0d41058a19@mail.kernel.org>
+In-Reply-To: <20261031215543.682284-8-alexei.starovoitov@gmail.com>
+References: <20261031215543.682284-8-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf v2 7/9] bpf: One may_goto time slice per prog invocation
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 31 Oct 2026 22:37:14 +0000 (UTC)
 
-When an enum64 data value does not match a named enumerator,
-btf_dumper_enum64() always prints it as signed. Unsigned values with
-bit 63 set therefore appear negative in BTF-formatted map dump and
-lookup output, in both plain and JSON modes. For example,
-0x8000000000000001 is printed as -9223372036854775807 instead of
-9223372036854775809.
+--===============1416503460861640838==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Choose the numeric writer according to the enum's signedness. Keep
-signed values and named enumerators unchanged.
+> bpf: One may_goto time slice per prog invocation
 
-Fixes: 58a53978fdf6 ("bpftool: Add btf enum64 support")
-Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
+TL;DR: Each main-prog entry resets the shared per-cpu may_goto state, so a
+nested invocation (or one interrupting an async callback) may restart the 250
+ms slice repeatedly, letting loops spin unbounded and causing soft lockups.
+
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 5cbab55d84be..66b9d1d9e961 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+
+[ ... ]
+
+> @@ -2734,24 +2767,36 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+>
+>  	env->prog->aux->stack_depth = subprogs[0].stack_depth;
+>  	for (i = 0; i < env->subprog_cnt; i++) {
+
+[ ... ]
+
+> +		/* an invocation begins, see bpf_timed_may_goto_save() for async callbacks */
+> +		bool main_prog = tmg && !i;
+
+[ ... ]
+
+>  		stack_depth = subprogs[i].stack_depth;
+>  		if (timed_may_goto) {
+> +			struct bpf_insn ld_tmg[] = {
+> +				BPF_LD_IMM64(BPF_REG_0, (__force unsigned long)tmg)
+> +			};
+> +			int count_off = offsetof(struct bpf_timed_may_goto, count);
+> +			int timestamp_off = offsetof(struct bpf_timed_may_goto, timestamp);
+> +			int owner_off = offsetof(struct bpf_timed_may_goto, owner);
+> +
+> +			/* R0 has nothing at the entry */
+> +			insn_buf[cnt++] = ld_tmg[0];
+> +			insn_buf[cnt++] = ld_tmg[1];
+> +			insn_buf[cnt++] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
+> +			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, count_off,
+>  						     BPF_MAX_TIMED_LOOPS);
+> +			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, timestamp_off, 0);
+> +			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, owner_off, 0);
+
+Can a nested invocation of the same prog extend the time slice of the
+invocation it interrupted without bound?
+
+Every entry into the main prog now writes count = BPF_MAX_TIMED_LOOPS and
+timestamp = 0 into the per-cpu struct bpf_timed_may_goto that is shared with
+every other invocation of that prog on the same CPU, and nothing puts the
+old values back when that invocation returns.  Only the async callers,
+bpf_timed_may_goto_save() and bpf_timed_may_goto_restore(), save and
+restore.
+
+bpf_check_timed_may_goto() treats timestamp == 0 as "start a new 250 ms
+window", so after each nested entry the interrupted loop gets a full new
+slice.  If nested entries keep coming more often than every 250 ms, the
+interrupted loop never reaches the timeout.  Before this patch the count
+and timestamp were in the stack frame of each invocation, so nesting could
+not touch them.
+
+There are two ways the same prog can nest on one CPU.
+
+First, an async callback interrupted by the main prog.  bpf_timer_cb()
+(softirq), bpf_wq_work() (kworker, migration disabled) and
+bpf_task_work_callback() run callback_fn without taking prog->active.  So
+bpf_prog_get_recursion_context() in __bpf_trace_run(), or the trampoline
+recursion check, does not stop a main invocation of the same prog from
+running in hardirq or softirq on top of the callback.  Each such entry runs
+the prologue above, which sets owner = 0 and resets count and timestamp.
+The callback's while (can_loop) loop then starts over, and its restore is
+skipped because cur->owner != &saved.  Example: a tp_btf prog on a frequent
+hardirq tracepoint with a bpf_timer callback, or an XDP prog with a bpf_wq
+callback while traffic arrives on that CPU.
+
+Second, main over main, for prog types without per-prog recursion
+protection.  For example, a cgroup_skb egress prog runs from process
+context with BH enabled (bpf_prog_run_array_cg() only does
+migrate_disable() and rcu_read_lock()) and also from softirq (TCP ACKs and
+retransmits, or ingress when the same prog is attached there too).
+
+In both cases the outer loop can spin with no bound.  On
+PREEMPT_NONE/VOLUNTARY that is the soft lockup this commit is meant to
+prevent.
+
+The commit message says "A second invocation of the prog on the same cpu
+gives more time to the first one".  But each nested entry restarts the
+whole window, so the extra time is unbounded, not a one-off extension.  The
+later commit 954996f5c8be ("bpf: End bpf_loop() when the time of may_goto
+is up") in the same series does not change this.
+
+Should the main prog entry save and restore the state the way the async
+callers do, or only reset it when no invocation owns the state?
+
+[ ... ]
+
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 58e357302850..2b75f7ba07a5 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1222,6 +1222,8 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+>  {
+
+[ ... ]
+
+> @@ -1242,8 +1244,10 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+>
+>  	key = map_key_from_value(map, value, &idx);
+>
+> +	bpf_timed_may_goto_save(prog, &saved);
+>  	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
+>  	/* The verifier checked that return value is zero. */
+> +	bpf_timed_may_goto_restore(prog, &saved);
+
+Does the save/restore pair here protect the callback from an invocation of
+the main prog that interrupts it?
+
+Before this patch an async callback subprog containing may_goto set up its
+own count and timestamp in its own stack frame, so nothing else could reset
+them and its loops ended after 250 ms.  After this patch the callback has
+no prologue.  It uses the per-cpu prog->aux->timed_may_goto that
+bpf_timed_may_goto_save() resets here, and the first insns of the main prog
+of the same prog write to that same memory on every invocation
+(bpf_do_misc_fixups(), the main_prog prologue):
+
+    insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, count_off, BPF_MAX_TIMED_LOOPS);
+    insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, timestamp_off, 0);
+    insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, owner_off, 0);
+
+The save/restore pair protects an invocation that the callback interrupts.
+It does not protect the callback from an invocation of the main prog that
+interrupts it.  Each such invocation sets timestamp back to 0, and
+bpf_check_timed_may_goto() then just takes a new timestamp:
+
+    if (!p->timestamp) {
+        p->timestamp = time;
+        return BPF_MAX_TIMED_LOOPS;
+    }
+
+So if the prog is invoked on the CPU at least once every 250 ms while the
+callback is looping, the time check never fires and the loop never ends.
+Nothing stops this nesting: bpf_timer_cb() increments neither
+bpf_prog_active nor prog->active, so trace_call_bpf() and
+__bpf_prog_enter_recur() let the same prog run in hardirq while its timer
+callback is running in softirq.
+
+Example: a kprobe or fentry prog P on a function in the tick or irq path
+(bpf_timer_* are in bpf_base_func_proto, and nothing in the verifier keeps
+tracing progs from using timers any more) arms a timer whose callback runs
+while (can_loop) {...}.  The tick invokes P every 1-4 ms on that CPU, the
+callback loops forever in HRTIMER_SOFTIRQ, and the result is a soft lockup
+or an RCU stall.  That is the failure this patch is meant to fix.
+
+The same applies to the other three callers changed in this file:
+
+- bpf_wq_work() and bpf_task_work_callback() run in task context with BH
+  enabled.  A TC or XDP invocation of the same prog in NET_RX softirq on
+  that CPU resets the state on every packet (common_kfunc_set, which holds
+  bpf_wq_* and bpf_task_work_*, is registered for BPF_PROG_TYPE_UNSPEC).
+  The kworker then runs forever with migration disabled and
+  rcu_read_lock_trace held: a soft lockup on non-preemptible kernels, and a
+  tasks-trace RCU stall on any kernel.
+
+- bpf_rcu_run_callback() has the same problem with hardirq invocations.
+
+The commit message says "A second invocation of the prog on the same cpu
+gives more time to the first one", but with periodic invocations the extra
+time has no bound.  Neither 954996f5c8be ("bpf: End bpf_loop() when the
+time of may_goto is up") nor 837f057a25f6 ("selftests/bpf: Test one
+may_goto time slice per prog invocation") later in the series changes this.
+
+Should an async callback be protected from main-prog invocations too?  For
+example, the main prog prologue could leave count and timestamp alone while
+owner is set, or the async callers could mark the prog as active so that a
+nested invocation of it is skipped.
+
+
 ---
- tools/bpf/bpftool/btf_dumper.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
-index 3267163119dc..88c0da29f246 100644
---- a/tools/bpf/bpftool/btf_dumper.c
-+++ b/tools/bpf/bpftool/btf_dumper.c
-@@ -204,7 +204,10 @@ static int btf_dumper_enum64(const struct btf_dumper *d,
- 		}
- 	}
- 
--	jsonw_int(d->jw, value);
-+	if (btf_kflag(t))
-+		jsonw_int(d->jw, value);
-+	else
-+		jsonw_uint(d->jw, value);
- 	return 0;
- }
- 
-
-base-commit: eaae576c34d7e001767b6845a5950b0b8db3e68a
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41246505049
+--===============1416503460861640838==--
