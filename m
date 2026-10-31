@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793454201;
-	b=PkphfHDoP4zDVKSLlts8WKUJXE6cv6A4jWvKAQDQd+ijU0yWvp8H91YTdiwQ6q5ga9pj
-	 fr1lAxlRBECNGGnPbVjnXpKroDAhUQD0ooaVZh1lB7y0y7Eeoza5W86wH4cdBYCvOUrYL
-	 rI6klYR2rLxUg+v2NaKZw7rSmXtAMXCA33ul3MtzHJO/zXoh/n2O2lkQevqrgYEyYEBUR
-	 Zpj5J4FhrkGLrO1/jMw5fjZGEkXF6HMuiJwVnsmAUoaImweXUVRlqiCcMtvDQzwG6dips
-	 3vSaNTKpYiQ7ObSzmNUq8TZG/WMb5UrpwPWRr494WYlGAast7hQQONNTK4kRC84e3BA==
+	t=1793454203;
+	b=ZHVLPpPz9qjCDAx14zX0UhEd4DCKc2HsQ4UMaxi2ouPR6Hw+rmrzEkzLFEVkl8RJOFx1
+	 tSHhyOX44fYws/vIgsvw1TGEiM8LQCj6ZoBJ3K6LZiqIcyRl15Zc7Tp9WxXtBjTy4Wjrl
+	 UhKpus5klY93cnok1R82OsgUt2fMfMIGzo/u/m2XWueDYZkfHcIeQKYf2WbJyuFCO6Y0F
+	 bFZM/UpR1Ull7hG6DCVp5ADdaoBGYdGFi7N79j3m239z0oPthWP8eTXJ+k7Z65LMRvQYn
+	 F9LclYphOtOjJ3DpZDd4AE6wnPtH1Z721aEdU7bGk+5dosnhheYE6M7QRWWTeupGJ7g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793454201;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793454203;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=/3QIoDxh4ZfJDNF85SK3xAmU1m/92IEBeqvqPnhUvUU=;
-	b=ZU8NAaHnbcPFtEtAwzEGF3n/ORjLTkqAH8h2GEUmWnChTcRQ93sZU92XbFvBw04zJsMJ
-	 dXAsKB5/+I5GvxVltmqxx2MMSy8lrgpHPhkwPa0PQ+outJ7X4GasbEQkA0y0exjuVlnw4
-	 6IJCfUv5/e04Va1MZmDaKohoi7hkXCm4vXtiSBA1KWV51kZJaC3pxObA2onCbidJO+2hK
-	 Zg0zcFPMx6DXs4sQFmkeT3xogwr7/jOn7D0T23VmDBoy6D0q7tUWjifVgJ8/mJshhiGg6
-	 iiJLqj+/nCiVMNKtxWoxdn9KYb3DYLyl7ZI7doZvpWhsI37iOEu2m1YYVYU/NTkdI/w==
+	bh=66bgSKb0DOWL4SFUCIicrUlT3Lz+gWTcaaEHqOFnbvs=;
+	b=tmXyMmN07nI19qFjSkZRPkFtJ21mvQpItN9+6EGpzaoDnbOZ3+n24A8K7LqkLJvlFuvL
+	 xORUDDX41U1aoH6UyJd/xrEvv/6syd0JXRfeVQnBcNFbyt0Av8tf7cv0FuhoOnRHquy0Y
+	 U1Hy2704/noaZxZnQSO9g0XbO20ySdzsrrVhWQBKs5EyDgu3yN603cIHq0Pd88GJ0zOnc
+	 uYU82QhuNYTOfrVDjhHGJQujEHg1dWZXRaoqcy+9tO2tJogbv/i5N0M42DbTw+pl7PwsK
+	 002r3xN6LPuGUOD6K/FyFI9UwVpOmd1JgHE/H4EYb2R8V2VYoSeB4pBkTaSgscbj21g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FkIftn2O;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eA0mAa2z;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A6B606A31A;
-	Sat, 31 Oct 2026 13:43:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4D9606A324;
+	Sat, 31 Oct 2026 13:43:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FkIftn2O
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52AEC1F00919;
-	Sat, 31 Oct 2026 13:43:20 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eA0mAa2z
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A481F00919;
+	Sat, 31 Oct 2026 13:43:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793454200;
-	bh=/3QIoDxh4ZfJDNF85SK3xAmU1m/92IEBeqvqPnhUvUU=;
+	s=k20260515; t=1793454202;
+	bh=66bgSKb0DOWL4SFUCIicrUlT3Lz+gWTcaaEHqOFnbvs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=FkIftn2OkpwnkV6gos9ANTeOHNf3B4fGkhTogS/fg0/5HEUJqPl5WZ40kcBbdba0N
-	 lnHSDI+/GG5kZ9+Y5s9WVTeD2bS4jxKDOaGgJFesy8Bx0brnTnh7IpnmJywNnpBaQ1
-	 1F675+hH0abuAv9EAMGmDCaBUs9xLPWnOL5VoryJaXvFJo8GU0ZdtS6dHhxb0Ux1V1
-	 D3dmFc0NarOmwP+Um0vmGJhhWU9ac3Gv1XhZKtBEpgSNnUPt5g1LIFrTzb9ZHxxxwB
-	 ZwaapDrlnsivRfW07B0yf3X4+bgiwRQg7n7iawiS3pOrQGcVLud3lZp/UZYdR1+CdO
-	 ku4xERm5plGlg==
-Content-Type: multipart/mixed; boundary="===============1857917533697366889=="
+	b=eA0mAa2zpNV970IeSP3nCf8NZ/Lo5128hSuJJkq9RoO5z+Wxup+loZ9BC1MYkevi5
+	 mv+BPh6ZStV+K1XWrSt3U5UbsWDj2vxoGeo52REvpZSywVkspdyMIm+/LMCkHD6qWH
+	 1DQKqgFSRoY1nRQHIJ3AfRZ+FnwETJ+lU1EJDzEUNpKlqF8QjbqzGdtO0Ku7Weqj7P
+	 A2jEbxQgVmXr8hGkohLjyaOMA61/7sa+6ZV/gQxx1XDKAAgJmNN8Fv8DFV383P87ss
+	 mhtKSXYiCSbKdLvvPVkmkpQvGQX5oN/Zbcd6yo9LN6jkAEAGJCunJuG2B+mnE3gUTa
+	 qbtTcU4EqEFZw==
+Content-Type: multipart/mixed; boundary="===============8608813931786842918=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,68 +49,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <da17bdf7c8df8932b3b7adfdc3796a512c0302c72315be2ce16fd928763ee6df@mail.kernel.org>
-In-Reply-To: <20261031130959.23472-4-wanjay@amazon.com>
-References: <20261031130959.23472-4-wanjay@amazon.com>
-Subject: Re: [PATCH bpf-next 03/13] bpf: check CAP_SYS_ADMIN before looking up bpffs delegation names
+Message-Id: <77f8506fd544603f9852ce2dc5b520d69a471ae727537cf4fe3896df90b8e804@mail.kernel.org>
+In-Reply-To: <20261031130959.23472-5-wanjay@amazon.com>
+References: <20261031130959.23472-5-wanjay@amazon.com>
+Subject: Re: [PATCH bpf-next 04/13] bpf: move bpf_get_btf_vmlinux() to btf.c
 From: bot+bpf-ci@kernel.org
 To: wanjay@amazon.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
 Cc: ihor.solodrai@linux.dev,almagui@kernel.org,martin.lau@linux.dev,yonghong.song@linux.dev,jolsa@kernel.org,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com,linux-trace-kernel@vger.kernel.org,nathan@kernel.org,nsc@kernel.org,linux-kbuild@vger.kernel.org,arnd@arndb.de,linux-arch@vger.kernel.org,x86@kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,abuehaze@amazon.com,doebel@amazon.de,mpohlack@amazon.de,jay.wang.upstream@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 31 Oct 2026 13:43:20 +0000 (UTC)
+Date: Sat, 31 Oct 2026 13:43:21 +0000 (UTC)
 
---===============1857917533697366889==
+--===============8608813931786842918==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: check CAP_SYS_ADMIN before looking up bpffs delegation names
+> bpf: move bpf_get_btf_vmlinux() to btf.c
 
-TL;DR: Commit message only: the "TODO-NEEDS-IHOR:" prefix on Ihor Solodrai's
-Signed-off-by line looks like a leftover placeholder, so the tag isn't parsed.
-The code change itself looks fine.
+TL;DR: Commit message only: the author's Signed-off-by is behind a
+TODO-NEEDS-IHOR placeholder, so it won't parse as a trailer; most other
+patches in the series have the same placeholder.
 
->     bpf: check CAP_SYS_ADMIN before looking up bpffs delegation names
+> bpf: move bpf_get_btf_vmlinux() to btf.c
 >
->     bpf_parse_param() resolves the symbolic values of the delegate_cmds,
->     delegate_maps, delegate_progs and delegate_attachs mount options with
->     find_bpffs_btf_enums(), which fetches the vmlinux BTF, and only then
->     refuses a non-zero mask from a caller without CAP_SYS_ADMIN.  bpffs can
->     be mounted in a user namespace, so any local user can run
->     "unshare -Urm mount -t bpf -o delegate_cmds=any bpf /mnt" and get
->     EPERM, after the lookup.
+> Move bpf_get_btf_vmlinux(), bpf_peek_btf_vmlinux() and btf_vmlinux_lock
+> from verifier.c to btf.c, next to btf_parse_vmlinux().
 >
->     That is free today because the vmlinux BTF is parsed at boot.  Once it
->     is parsed on first use (CONFIG_DEBUG_INFO_BTF_LAZY, later in this
->     series), it would let any user make the kernel parse it and keep it
->     parsed until reboot, which is what the option is meant to avoid on
->     systems that do not use BTF.
+> Parsing the vmlinux BTF on first use (later in this series) makes the
+> accessor apply deferred kfunc, dtor kfunc and struct_ops registrations
+> and kept module BTF under btf_vmlinux_lock.  That state lives in btf.c;
+> with the accessor and its lock there, it can stay static.
 >
->     Check the capability first.  An unprivileged caller could only ever set
->     an empty mask; such a no-op delegate option, and a malformed value,
->     now fail with EPERM as well instead of being accepted or failing with
->     EINVAL.  Privileged callers are not affected.
+> No functional change.
 >
->     TODO-NEEDS-IHOR: Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->     Signed-off-by: Jay Wang <wanjay@amazon.com>
+> TODO-NEEDS-IHOR: Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> Signed-off-by: Jay Wang <wanjay@amazon.com>
 
-Is the "TODO-NEEDS-IHOR:" prefix on the first sign-off line a leftover
-placeholder?
+The author's sign-off is behind a placeholder prefix, so git
+interpret-trailers will read that line as a TODO-NEEDS-IHOR trailer and not
+as a Signed-off-by.  That leaves only the Signed-off-by from Jay Wang in the
+trailer block.
 
-With that prefix the line is not parsed as a Signed-off-by tag by git, b4 or
-checkpatch, so the only valid sign-off on the commit is the one from Jay Wang,
-and the commit has no Signed-off-by matching its From: identity.
+Documentation/process/submitting-patches.rst asks for the author's
+Signed-off-by ahead of the sender's.  Should the placeholder line be
+replaced with a real "Signed-off-by: Ihor Solodrai
+<ihor.solodrai@linux.dev>" once the author provides it?
 
-The same prefix appears to be present on the other commits in this series.
-
-Should the line be resolved before this is applied, either to a plain:
-
-  Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-
-or dropped?
-
-The code change itself looks fine.  The unconditional capable(CAP_SYS_ADMIN)
-runs strictly before the old "msk && !capable(CAP_SYS_ADMIN)" test, and
-privileged callers see no difference.
+The same placeholder shows up in most of the other commits in this series
+(2a58754b9ead, 32ad8adbb1a8, cc9b43c0e23c, 699a8e9536e8, c97dea7ddbb0,
+38e2751cdb40, 66c4a6a9293d, e46b5971bc91, cae96a9f7395), so those would need
+the same fix.
 
 
 ---
@@ -118,4 +105,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41205212136
---===============1857917533697366889==--
+--===============8608813931786842918==--
