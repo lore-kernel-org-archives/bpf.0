@@ -1,62 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793471620;
-	b=OVjsBgmzgOb70EutCKKfLnyYh0tUInflfiy7HJq3rIAxiaQSRru00gYQlovZfUzC8yiN
-	 m6Oi3meH3Jd3o6Y4L11gBUzGb/Y6jrqxhIueVV4+yEIMkszO9++VMd/hRP8yTGEP8s5B5
-	 FG3ZiBcEdXHStco3oXNtwLH3iWs1kJ0g4juu+9kjVYmHHKebTag1EftVF17NYMhkLBkrd
-	 8Y26iBJ88AbCDcX3a5YwOU47Tm4MVPcjsXMXisavdSjgFyZQFKRNQza4J6pjb7X1VmhXH
-	 8+XD7U8Svu3ujxjjIOXCAVgNOCIC63IggqSXD65WHMqW5oKMIKygjT1FspADvlJuH8g==
+	t=1793475538;
+	b=jNtRlriKHXf5fprjUGZjC9MSm/27MUr9IAf8bRx+GZ+M77aoZdo9NogHHWoeY3utu1cE
+	 Pz/roumb4WP5nLRadeysfE1ALoq7fx/JtChlXn1TM0K5ebXHO9Z+AWM7zZVPh+rnUsjxN
+	 dXUfvKcI5g1rfyqHn0Xk8Z4X1jbil042Omwb5HApWVyPOHPwCOkUEm7hSNvcrxCb5LAbX
+	 43lF+45JAHeyoBpeYkOmCrRWRga4bltyuG2NOfdBqGhRIOHQY/dZfcbKkf1ExOE0jj+aM
+	 KoJ5bgL6gnx4N4XGtXU0QzVlXKAnyDSZ7X5anepfl9/MxfhJh5339Qfcd2xKBJlw2Aw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793471620;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=gUXelQFoAaI5jynLT5aPVvI7AsH4CRynYyPjzWgjXdA=;
-	b=AyOiORPFu1UanZs1PynYYB50J7By5PKvVGGX03610g041uQJi5eCY/600Ry0cm1N+by4
-	 tvHz66mdz99YXDT0DCCMdANc28XyJFKrqyp7gJ0id7ELjKixhqUqCBxQQ5nBxt4kf6LjC
-	 DUG4860d81PKygXIscH3tBIghtAJ7Ln4xnr2UuR/2nozUHeTX7iSDRi4VEItRjlLRjOWv
-	 lF0Jb9n0+djc97DJ10KcuCdTO3XL9DKZtdLU6KE/vNED8tftup1/sOiSF/I9oE79PhWJ0
-	 63yQjDZlUjDdOo0id95DhF6o+yTxOArC0xAxwF2nOK4ZktN4sFfVwPulzDhVGOHIEmg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793475538;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=bQgrellhBss/UuVF8iWJXrXw5PzovFu/NGuBFfL7ORU=;
+	b=5gmMeIwHbnh4cFogJaJpgayKl7Vu02vnmY3eK4iNK2mcaSS7kH5ZlB5Dur43jUDe37vn
+	 F+IzS08O3S46nqmF7hh42WDF2pB5BbVHiIvSYuQpbIdEcJ3CnW2fYfWaWHOHlJIMnak7/
+	 tYQfhdwuzLgf8cLj7LU23hLUem35eE5vMoliJbgTjbVpcGzE5m0SeQ6iiJA5pbEnv9DsH
+	 QAv7q8JmBYAlBJlTuEslreL898gTSlzc/B9nLPrcaD0p6idnEeE/F7tgtI3ho0dQaCCaN
+	 kD1pqQqJYY1Ojv/64WflYFipzjHUdkCbVsNsKd1X9ZNyornrkootabtXWvLYFY8aaTw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="FQmseRQ/";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=mojatatu.com;
+	spf=none smtp.mailfrom=mojatatu.com;
+	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=djtcKBBB;
+	arc=none smtp.remote-ip=209.85.160.169
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC9E606A31A;
-	Sat, 31 Oct 2026 18:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6771606A31C
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 19:38:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E6771606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FQmseRQ/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E11DC1F000C1;
-	Sat, 31 Oct 2026 18:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793471619;
-	bh=gUXelQFoAaI5jynLT5aPVvI7AsH4CRynYyPjzWgjXdA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=FQmseRQ/55r3aD8bUbHhXMhbIjAQq301If/WSd9+dxS25rJJw3yGCnUKDAEEaIE7x
-	 0eGFWM1fbfy0gYJ0MtZFIqaDeXGXq9ELbUgIRFD5Rv8TdSJvukY2HmH+VNpHwjheLH
-	 wyCOo3mcHHIuDcZENu/bK79hgDW+V339LQLmmPLOyAn6lYY1U8wh7IzS+/OPmn4KsT
-	 J0VPbuwnt4KfRC8pzR6s91z3MgWMoxaBNR5POfn/kKCwlxPUnZl52Ds8mJb8K1g0Zk
-	 imDcyyerGXwK4F4Hax745BrGejU7lYPt+MOanBPUeFuhQgXj3p0TZhyK+InZS6lTDI
-	 4EyWW2Xj6KYag==
-Date: Sat, 31 Oct 2026 18:33:34 +0000
-From: Simon Horman <horms@kernel.org>
-To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Alexander Duyck <alexanderduyck@fb.com>,
-	Jakub Kicinski <kuba@kernel.org>, kernel-team@meta.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	dkim=pass (1024-bit key, unprotected) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=djtcKBBB
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-5361e313e63so20161411cf.3
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 12:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu.com; s=google; t=1793475537; x=1794080337; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=bQgrellhBss/UuVF8iWJXrXw5PzovFu/NGuBFfL7ORU=;
+        b=djtcKBBBOn+WVZLjii7ZcxViiQUURHCSkc0IPNwbqDRia+Whlq9TL2HsXmtlnvTVOq
+         QREPlWkWCrR6JCi2fuqIDkPdsdhSKfW5OWhmalzlr947MlpFKjWRAUiupsxMcu4oSDpw
+         NyDdrC12mHwYaWbaxPGy9j0sh6OLNYBoZDcH4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793475537; x=1794080337;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=bQgrellhBss/UuVF8iWJXrXw5PzovFu/NGuBFfL7ORU=;
+        b=G9/ygqZdJORb73JkeEIRXaX9Xu+Q9GNEtLu/qa7tNOZUxaKf5ZMCnUJtXZfMwj9Pjx
+         S3tRPqAycI2oNWPpX43RYsPWQTIvcpOEnOTOZ7CdQP3ysNHeu+hgRQzkS7v445PFo7xy
+         h5jxb6GFgJNFOZ5K3EY8KdvbcsKZ8XWyvQzqX48BvbUlftmL4jjhLMuI8rHW4p3CNZ/B
+         mihUH4cgLv9ZZusvX+JM82smV0bIT5DVn1Yhae/YMraIHVmbGb24pxy15xKTRNISWkUg
+         M66u4uab+iftvx3AhEGlklNX98pKmxm1tYuPSTJQdaNseN4Go9OYmcu/JGUN3vDKeX0p
+         oSww==
+X-Gm-Message-State: AFq9FYJ5VNRYrZzvymzLRudnVcP7wEY395P1944DfzFcCttgBgTaYiJs
+	8c1StSUzKoiLHQnGOPR6QGVDwb7r6nDkwGTfxhdxuB3PHOcc+dK2LLVDj1eqhGfrHuGLplmnC+V
+	E2uE=
+X-Gm-Gg: AYBFou3Mm5hBFZnhnPkXxXD33xAGoC6I3dp71OyBlpim61paErQuKIVSsFTcSjws7LU
+	kLekvnf3xzu5DkiNnqqB99ZfGhSlTppCSrtXlTxs0STfVTgCI9gsoWIp3XCwM8P7VT3EDao2lPV
+	3r1ZDoScWM/EmgjEvuV3J2RJpKfaINvG8uKw9cBab3ea09nfpxgEu0PGCflKFS+lD9z4mnsid+v
+	PDd9Rt5nZ5nEInp25BllUNUelfVB5NCAfv5eZNlsKpthE57kfji3rxv6pYQfi8E4rt7KooEkqlp
+	em0Ig137NjnfwwXtv/C+bOjWSu0Ow/+MqvSqqDZAOQ/IT11rNA24iahHBvlY2DeBLpzkPuZSTld
+	p0K3b/Uv2NTQJlAtl9IpDZIftoYaXn8P6lPfr7EkzJdXs+t1r//CuflEddawT34kIv069UPSM9t
+	GrJlCvXJlH8tiIeypJiqNN0tHzHtXP7BE+Rx4GDWvR9q3VQ0hje7s5bbWRKmd/vs4ewkpJPBT9Y
+	slES9uXJW/Ccbv/iIAb9msyoaw61fqXUnGppajWRELKQ9YVYjPWzNZrHsFMvi5Af9DCfnl/c/px
+	uTvHq+hv+fe5/Z9zdRrjHCilDkFTtE+cgyEsv0tAsqfrhH1EWNPDBsmmC/v3L4UxljNiU4Trhdu
+	sGT4QWfV5mrs6UjM=
+X-Received: by 2002:a05:622a:138f:b0:533:8b99:fcd2 with SMTP id d75a77b69052e-542b7048954mr101358611cf.40.1793475536764;
+        Sat, 31 Oct 2026 12:38:56 -0700 (PDT)
+Received: from mbili.tail33bf8.ts.net ([64.203.83.2])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91ca8082914sm47802206d6.42.2026.10.31.12.38.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Oct 2026 12:38:56 -0700 (PDT)
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+To: bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <kafai@fb.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net] eth: fbnic: Report the logical RX queue to XDP
-Message-ID: <20261031183334.GX257209@horms.kernel.org>
-References: <20261030141452.1173282-1-bjorn@kernel.org>
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	David Ahern <dsahern@gmail.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Victor Nogueira <victor@mojatatu.com>,
+	stable@vger.kernel.org
+Subject: [PATCH bpf v3] bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
+Date: Sat, 31 Oct 2026 15:38:52 -0400
+Message-Id: <bpf_redirect_neigh_short_linear.v3.r0.20261031153053-1@mojatatu.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,29 +114,153 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261030141452.1173282-1-bjorn@kernel.org>
 
-On Fri, Oct 30, 2026 at 03:14:50PM +0100, Björn Töpel wrote:
-> fbnic reports queue 0 to XDP on all RX queues. The XDP RX queue is
-> registered with the header buffer queue index, which is always 0,
-> instead of the completion queue index, which is the netdev queue id.
-> 
-> Any XDP program that reads rx_queue_index gets 0 on every queue, so a
-> program that uses the queue id uses the wrong queue. AF_XDP has the
-> same problem: XSKMAP finds the wrong socket, and redirect to a socket
-> on another queue fails.
-> 
-> Triggered on fbnic hardware (50G, firmware 25.08.05-004) with AF_XDP
-> zero-copy: sockets on queues other than 0 got no packets. With this
-> fix, a socket on queue 43, and sockets on four queues at once, get
-> their packets. On the QEMU model with two queues, a kprobe shows 0 and
-> 0 before the fix, and 0 and 1 after it.
-> 
-> Fixes: 894d4a4ea6cb ("eth: fbnic: move xdp_rxq_info_reg() to resource alloc")
-> Signed-off-by: Björn Töpel <bjorn@kernel.org>
+The issue:
+This is a follow-up to the short link-layer header fixes from Eric.
+After vlan pop_eth, a privileged SCHED_ACT BPF program can call
+bpf_skb_change_head(skb, 1, 0) and then bpf_redirect_neigh().
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+__bpf_redirect_neigh() calls skb_pull(skb, sizeof(*ethh)) after checking
+only that mac_header < network_header.  Nothing verifies that the MAC
+header is long enough, that it is linear, or that the IP header the
+redirect goes on to read is linear either.
+
+A SCHED_ACT BPF program can do:
+
+    bpf_skb_change_head(skb, 1, 0);
+    bpf_redirect_neigh(lo, NULL, 0, 0);
+
+after vlan pop_eth.  The skb then has mac_len == 1 and only one byte of
+linear data; skb_pull(ETH_HLEN) trips the skb->len < skb->data_len BUG in
+__skb_pull():
+
+    kernel BUG at ./include/linux/skbuff.h:2839!
+    RIP: skb_pull+0x40/0x50
+    Call Trace: skb_do_redirect -> packet_xmit -> packet_sendmsg
+    Kernel panic - not syncing: Fatal exception in interrupt
+
+The v4 and v6 paths read ip_hdr() and ipv6_hdr() as soon as the MAC
+header is gone.  On the AF_PACKET frame below that leaves headlen == 0
+after the pull, so the network header sits at skb->tail and the route
+lookup reads ip4h->protocol, ip4h->saddr and ip4h->daddr past the linear
+area.
+
+The Fix:
+Use skb_network_offset(), which is the MAC header span, instead of
+skb->mac_len.  mac_len is zero for locally generated tc egress and netkit
+packets, while the span still rejects the one-byte header produced by
+pop_eth + bpf_skb_change_head(skb, 1, 0).  The single check also covers
+the mac_header >= network_header test it replaces.
+
+Use pskb_may_pull() to make the Ethernet header linear before it is read
+or pulled, and to make the IP header linear in both the v4 and the v6
+path before ip_hdr()/ipv6_hdr() is read.  The header pointers are taken
+after the pull, since pskb_may_pull() may reallocate skb->head.
+
+Conditions to recreate the bug:
+On x86-64 with 4 KiB pages, enable CONFIG_PACKET, CONFIG_BPF_SYSCALL,
+CONFIG_NET_SCH_INGRESS, CONFIG_NET_CLS_MATCHALL, CONFIG_NET_ACT_VLAN and
+CONFIG_NET_ACT_BPF.  Run as root with BPF loading, network administration
+and raw-packet privileges.  Bring lo up and attach a SCHED_ACT program
+that calls bpf_skb_change_head(skb, 1, 0), then returns
+bpf_redirect_neigh(skb->ifindex, NULL, 0, 0):
+
+  ip link set lo up
+  tc qdisc add dev lo clsact
+  tc filter add dev lo egress matchall action vlan pop_eth pipe \
+      action bpf object-file neigh_chghead.o section action
+
+Send an untagged ETH_P_IP frame of ETH_HLEN + 8192 bytes through an
+AF_PACKET/SOCK_RAW socket bound to lo, without PACKET_VNET_HDR or
+PACKET_QDISC_BYPASS.  Use a unicast destination MAC.  The sender's skb
+has a 14-byte linear Ethernet prefix and a fragmented payload; pop_eth
+removes that prefix and change_head restores only one linear byte.
+The unfixed neighbor redirect then tries to pull 14 bytes and BUGs.
+
+Sending the same frame without pop_eth and change_head leaves the IP
+header in the frags, which is the route lookup reading past skb->tail.
+
+Fixes: b4ab31414970 ("bpf: Add redirect_neigh helper as redirect drop-in")
+Link: https://lore.kernel.org/netdev/20261027082604.1485903-1-edumazet@kernel.org/
+Link: https://lore.kernel.org/all/2a0f5ff1d8db81b07fc4b344b8e68e3505fcbf36f72a471d1678b2f1cecd881b@mail.kernel.org/
+Link: https://lore.kernel.org/netdev/DMII4JGTEUEG.2WRJPT6ODT6J0@gmail.com/
+Cc: stable@vger.kernel.org
+Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+---
+v3:
+- linearize the IP header in the v4 and v6 paths with pskb_may_pull()
+  before ip_hdr()/ipv6_hdr() is read; the Ethernet check alone left the
+  route lookup reading past skb->tail
+- collapsed the MAC-header check to skb_network_offset(), which also
+  covers the offset test it replaces (Alexei)
+- dropped the tc-egress: it cannot hit the BUG (Alexei)
+- retarget to the bpf tree
+
+v2:
+- use skb_mac_header_len() instead of mac_len; mac_len is zero for
+  locally generated tc egress and netkit packets
+- add tc-egress coverage to tc_redirect_neigh
+- document the nonlinear AF_PACKET reproduction conditions
+---
+ net/core/filter.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 09c60a58c82a..303c0c44dc2c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2290,9 +2290,13 @@ static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb,
+ static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
+ 				   struct bpf_nh_params *nh)
+ {
+-	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
+ 	struct net *net = dev_net(dev);
+ 	int err, ret = NET_XMIT_DROP;
++	const struct ipv6hdr *ip6h;
++
++	if (unlikely(!pskb_may_pull(skb, sizeof(*ip6h))))
++		goto out_drop;
++	ip6h = ipv6_hdr(skb);
+ 
+ 	if (!nh) {
+ 		struct dst_entry *dst;
+@@ -2399,9 +2403,13 @@ static int bpf_out_neigh_v4(struct net *net, struct sk_buff *skb,
+ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
+ 				   struct bpf_nh_params *nh)
+ {
+-	const struct iphdr *ip4h = ip_hdr(skb);
+ 	struct net *net = dev_net(dev);
+ 	int err, ret = NET_XMIT_DROP;
++	const struct iphdr *ip4h;
++
++	if (unlikely(!pskb_may_pull(skb, sizeof(*ip4h))))
++		goto out_drop;
++	ip4h = ip_hdr(skb);
+ 
+ 	if (!nh) {
+ 		struct flowi4 fl4 = {
+@@ -2451,15 +2459,14 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
+ static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
+ 				struct bpf_nh_params *nh)
+ {
+-	struct ethhdr *ethh = eth_hdr(skb);
+-
+-	if (unlikely(skb->mac_header >= skb->network_header))
++	if (unlikely(skb_network_offset(skb) < ETH_HLEN ||
++		     !pskb_may_pull(skb, ETH_HLEN)))
+ 		goto out;
+ 	bpf_push_mac_rcsum(skb);
+-	if (is_multicast_ether_addr(ethh->h_dest))
++	if (is_multicast_ether_addr(eth_hdr(skb)->h_dest))
+ 		goto out;
+ 
+-	skb_pull(skb, sizeof(*ethh));
++	skb_pull(skb, ETH_HLEN);
+ 	skb_unset_mac_header(skb);
+ 	skb_reset_network_header(skb);
+ 
+-- 
+2.43.0
 
