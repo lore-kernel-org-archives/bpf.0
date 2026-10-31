@@ -1,110 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793475538;
-	b=jNtRlriKHXf5fprjUGZjC9MSm/27MUr9IAf8bRx+GZ+M77aoZdo9NogHHWoeY3utu1cE
-	 Pz/roumb4WP5nLRadeysfE1ALoq7fx/JtChlXn1TM0K5ebXHO9Z+AWM7zZVPh+rnUsjxN
-	 dXUfvKcI5g1rfyqHn0Xk8Z4X1jbil042Omwb5HApWVyPOHPwCOkUEm7hSNvcrxCb5LAbX
-	 43lF+45JAHeyoBpeYkOmCrRWRga4bltyuG2NOfdBqGhRIOHQY/dZfcbKkf1ExOE0jj+aM
-	 KoJ5bgL6gnx4N4XGtXU0QzVlXKAnyDSZ7X5anepfl9/MxfhJh5339Qfcd2xKBJlw2Aw==
+	t=1793477562;
+	b=ksv6dXmr976ckLBNrRvEGM2uJOuMvZIjxq6zmjtlyAR/z8WPY0JM2/+mTMoYTG7dMtdq
+	 6OvbDG+9nTntIOtTAHEIYUXaH9MInUOdiswEbauL5RGuEy4fozZJRjvu/CfTbYIYzud08
+	 iYcAdP/f9ts05ZUOKPoo0imzYbKAMDBMaim/Ze+dd/91HAC6PYRr/OmX89/d+kifmWX86
+	 I1UcP3Vlrll70uO1w9OcQMlpokZ3PTqGmgEOeybBZFGSRDCzMR5eXnaCaFf+ZnAOU7s/A
+	 tmq1nBGymUR6DewrqmSM+EZ2qjLbCgEhG2SIZwt9Kugy+8VGeBs0YZI7xFdGJoczDRA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793475538;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=bQgrellhBss/UuVF8iWJXrXw5PzovFu/NGuBFfL7ORU=;
-	b=5gmMeIwHbnh4cFogJaJpgayKl7Vu02vnmY3eK4iNK2mcaSS7kH5ZlB5Dur43jUDe37vn
-	 F+IzS08O3S46nqmF7hh42WDF2pB5BbVHiIvSYuQpbIdEcJ3CnW2fYfWaWHOHlJIMnak7/
-	 tYQfhdwuzLgf8cLj7LU23hLUem35eE5vMoliJbgTjbVpcGzE5m0SeQ6iiJA5pbEnv9DsH
-	 QAv7q8JmBYAlBJlTuEslreL898gTSlzc/B9nLPrcaD0p6idnEeE/F7tgtI3ho0dQaCCaN
-	 kD1pqQqJYY1Ojv/64WflYFipzjHUdkCbVsNsKd1X9ZNyornrkootabtXWvLYFY8aaTw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793477562;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=+jLmvJ5t53axHFDMbwy4AxcIHS6SnEcNicwbVHTR+jM=;
+	b=mlseZJAy/hjvxw0Oy7/Jf7b4NlK/CymjQbf1kxlLz9t4EumzdWdo0yLJgsHHXPd++oMF
+	 JtVOsn7ilFH1Izun6MjTcnR153UDv9PSqrcRRbAqFCZ3RLj9cO/BnBh+DpK3xzvL7xfaA
+	 AXulVymiSCP+JQaOYtKBWfY9kn9gGK9qOBPMlQiBJstytFamEnR6noYsGg7DTraD84RAL
+	 kMSuBgK8K3gtrx9epe5D4WPZj25v4q23JDW7cmwUBH7sDorERpJDQe73eu0G++sFYfC4/
+	 /ELOIw5jBFT/78VGnxMqLjqLxVpM9qbq7q3E/7kXOXTkln+cM9q8ZGvzkcjY6tvBxkA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=djtcKBBB;
-	arc=none smtp.remote-ip=209.85.160.169
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="jV6ZN2w/";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6771606A31C
-	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 19:38:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E6771606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4395E606A31A
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 20:12:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=djtcKBBB
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-5361e313e63so20161411cf.3
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 12:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1793475537; x=1794080337; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bQgrellhBss/UuVF8iWJXrXw5PzovFu/NGuBFfL7ORU=;
-        b=djtcKBBBOn+WVZLjii7ZcxViiQUURHCSkc0IPNwbqDRia+Whlq9TL2HsXmtlnvTVOq
-         QREPlWkWCrR6JCi2fuqIDkPdsdhSKfW5OWhmalzlr947MlpFKjWRAUiupsxMcu4oSDpw
-         NyDdrC12mHwYaWbaxPGy9j0sh6OLNYBoZDcH4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793475537; x=1794080337;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bQgrellhBss/UuVF8iWJXrXw5PzovFu/NGuBFfL7ORU=;
-        b=G9/ygqZdJORb73JkeEIRXaX9Xu+Q9GNEtLu/qa7tNOZUxaKf5ZMCnUJtXZfMwj9Pjx
-         S3tRPqAycI2oNWPpX43RYsPWQTIvcpOEnOTOZ7CdQP3ysNHeu+hgRQzkS7v445PFo7xy
-         h5jxb6GFgJNFOZ5K3EY8KdvbcsKZ8XWyvQzqX48BvbUlftmL4jjhLMuI8rHW4p3CNZ/B
-         mihUH4cgLv9ZZusvX+JM82smV0bIT5DVn1Yhae/YMraIHVmbGb24pxy15xKTRNISWkUg
-         M66u4uab+iftvx3AhEGlklNX98pKmxm1tYuPSTJQdaNseN4Go9OYmcu/JGUN3vDKeX0p
-         oSww==
-X-Gm-Message-State: AFq9FYJ5VNRYrZzvymzLRudnVcP7wEY395P1944DfzFcCttgBgTaYiJs
-	8c1StSUzKoiLHQnGOPR6QGVDwb7r6nDkwGTfxhdxuB3PHOcc+dK2LLVDj1eqhGfrHuGLplmnC+V
-	E2uE=
-X-Gm-Gg: AYBFou3Mm5hBFZnhnPkXxXD33xAGoC6I3dp71OyBlpim61paErQuKIVSsFTcSjws7LU
-	kLekvnf3xzu5DkiNnqqB99ZfGhSlTppCSrtXlTxs0STfVTgCI9gsoWIp3XCwM8P7VT3EDao2lPV
-	3r1ZDoScWM/EmgjEvuV3J2RJpKfaINvG8uKw9cBab3ea09nfpxgEu0PGCflKFS+lD9z4mnsid+v
-	PDd9Rt5nZ5nEInp25BllUNUelfVB5NCAfv5eZNlsKpthE57kfji3rxv6pYQfi8E4rt7KooEkqlp
-	em0Ig137NjnfwwXtv/C+bOjWSu0Ow/+MqvSqqDZAOQ/IT11rNA24iahHBvlY2DeBLpzkPuZSTld
-	p0K3b/Uv2NTQJlAtl9IpDZIftoYaXn8P6lPfr7EkzJdXs+t1r//CuflEddawT34kIv069UPSM9t
-	GrJlCvXJlH8tiIeypJiqNN0tHzHtXP7BE+Rx4GDWvR9q3VQ0hje7s5bbWRKmd/vs4ewkpJPBT9Y
-	slES9uXJW/Ccbv/iIAb9msyoaw61fqXUnGppajWRELKQ9YVYjPWzNZrHsFMvi5Af9DCfnl/c/px
-	uTvHq+hv+fe5/Z9zdRrjHCilDkFTtE+cgyEsv0tAsqfrhH1EWNPDBsmmC/v3L4UxljNiU4Trhdu
-	sGT4QWfV5mrs6UjM=
-X-Received: by 2002:a05:622a:138f:b0:533:8b99:fcd2 with SMTP id d75a77b69052e-542b7048954mr101358611cf.40.1793475536764;
-        Sat, 31 Oct 2026 12:38:56 -0700 (PDT)
-Received: from mbili.tail33bf8.ts.net ([64.203.83.2])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91ca8082914sm47802206d6.42.2026.10.31.12.38.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2026 12:38:56 -0700 (PDT)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <kafai@fb.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	David Ahern <dsahern@gmail.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Victor Nogueira <victor@mojatatu.com>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf v3] bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
-Date: Sat, 31 Oct 2026 15:38:52 -0400
-Message-Id: <bpf_redirect_neigh_short_linear.v3.r0.20261031153053-1@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jV6ZN2w/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97D3B1F000C1;
+	Sat, 31 Oct 2026 20:12:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793477561;
+	bh=+jLmvJ5t53axHFDMbwy4AxcIHS6SnEcNicwbVHTR+jM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=jV6ZN2w/Yo9iqBo0VQBb2qBPNJWk+Yn6Br2Sk8AZYsdwANaw0Z/8cEP6hMmQqmodQ
+	 t9GZZkTP66494ycEvjp4XIz4DKVQPngSRYWPzPMN6dcj4Tx69PrunHYeS72Ht/C6Uh
+	 NbiZ+wMj783rlAuBwDcVhckyXccieNp+wCagDMgRGosHzC84jW8cX3WMhMdC9+qmct
+	 cwpD3IqELBXOurAOw/hcuoZ588AgfJirfWuqnrVEq+MWiaR0W67xu872oSx+FIP5tE
+	 P/0FWzZcSCVZm8shbE9JkoUlwHFrQ0oK67oIUHQCi4MDVgLKIWpvRXMRtMvo4dVfX+
+	 a0GZm47Kju/PA==
+Message-ID: <sashiko-outbox-192109@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net] octeontx2-pf: fix XDP frames freed as skbs on
+ interface down
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Nicolai Buchwitz" <nb@tipi-net.de>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261030-nb-otx2-xdp-cqe-cleanup-net-v1-1-710635c0f504@tipi-net.de>
+References: <20261030-nb-otx2-xdp-cqe-cleanup-net-v1-1-710635c0f504@tipi-net.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 31 Oct 2026 20:12:41 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -113,154 +59,80 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The issue:
-This is a follow-up to the short link-layer header fixes from Eric.
-After vlan pop_eth, a privileged SCHED_ACT BPF program can call
-bpf_skb_change_head(skb, 1, 0) and then bpf_redirect_neigh().
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] octeontx2-pf: missing xsk_tx_completed() call in otx2_cleanup_tx=
+_cqes()
+--
 
-__bpf_redirect_neigh() calls skb_pull(skb, sizeof(*ethh)) after checking
-only that mac_header < network_header.  Nothing verifies that the MAC
-header is long enough, that it is linear, or that the IP header the
-redirect goes on to read is linear either.
+commit 40946781f760bef2ef894a136c752dbc204d2650
+Author: Nicolai Buchwitz <nb@tipi-net.de>
 
-A SCHED_ACT BPF program can do:
+octeontx2-pf: fix XDP frames freed as skbs on interface down
 
-    bpf_skb_change_head(skb, 1, 0);
-    bpf_redirect_neigh(lo, NULL, 0, 0);
+This commit updates otx2_cleanup_tx_cqes() to handle CQ_XDP completions via
+otx2_xdp_snd_pkt_handler() instead of freeing pending xdp_frame pointers wi=
+th
+dev_kfree_skb_any() during interface teardown or XDP program replacement.
 
-after vlan pop_eth.  The skb then has mac_len == 1 and only one byte of
-linear data; skb_pull(ETH_HLEN) trips the skb->len < skb->data_len BUG in
-__skb_pull():
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/dri=
+vers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> index 90af9b9044aa0..e3b07e5335fb8 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> @@ -1332,6 +1332,7 @@ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, st=
+ruct otx2_cq_queue *cq)
+>  	struct nix_cqe_tx_s *cqe;
+>  	struct netdev_queue *txq;
+>  	int processed_cqe =3D 0;
+> +	int xsk_frames =3D 0;
+>  	struct sg_list *sg;
+>  	int qidx;
+> =20
+> @@ -1348,6 +1349,10 @@ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, s=
+truct otx2_cq_queue *cq)
+> =20
+>  		if (!cqe)
+>  			continue;
+> +		if (cq->cq_type =3D=3D CQ_XDP) {
+> +			otx2_xdp_snd_pkt_handler(pfvf, sq, cqe, &xsk_frames);
+> +			continue;
+> +		}
 
-    kernel BUG at ./include/linux/skbuff.h:2839!
-    RIP: skb_pull+0x40/0x50
-    Call Trace: skb_do_redirect -> packet_xmit -> packet_sendmsg
-    Kernel panic - not syncing: Fatal exception in interrupt
+[Severity: Medium]
+Does otx2_cleanup_tx_cqes() also need to pass xsk_frames to
+xsk_tx_completed() after draining the loop?
 
-The v4 and v6 paths read ip_hdr() and ipv6_hdr() as soon as the MAC
-header is gone.  On the AF_PACKET frame below that leaves headlen == 0
-after the pull, so the network header sits at skb->tail and the route
-lookup reads ip4h->protocol, ip4h->saddr and ip4h->daddr past the linear
-area.
+When AF_XDP zero-copy TX descriptors are reaped in
+drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c:
 
-The Fix:
-Use skb_network_offset(), which is the MAC header span, instead of
-skb->mac_len.  mac_len is zero for locally generated tc egress and netkit
-packets, while the span still rejects the one-byte header produced by
-pop_eth + bpf_skb_change_head(skb, 1, 0).  The single check also covers
-the mac_header >= network_header test it replaces.
+otx2_xdp_snd_pkt_handler() {
+	...
+	sg =3D &sq->sg[snd_comp->sqe_id];
+	if (sg->flags & OTX2_AF_XDP_FRAME) {
+		(*xsk_frames)++;
+		return;
+	}
+	...
+}
 
-Use pskb_may_pull() to make the Ethernet header linear before it is read
-or pulled, and to make the IP header linear in both the v4 and the v6
-path before ip_hdr()/ipv6_hdr() is read.  The header pointers are taken
-after the pull, since pskb_may_pull() may reallocate skb->head.
+the handler only increments xsk_frames and relies on the caller to publish
+the completions to sq->xsk_pool, as done in the normal NAPI completion path=
+ via
+otx2_tx_napi_handler() -> otx2_zc_submit_pkts():
 
-Conditions to recreate the bug:
-On x86-64 with 4 KiB pages, enable CONFIG_PACKET, CONFIG_BPF_SYSCALL,
-CONFIG_NET_SCH_INGRESS, CONFIG_NET_CLS_MATCHALL, CONFIG_NET_ACT_VLAN and
-CONFIG_NET_ACT_BPF.  Run as root with BPF loading, network administration
-and raw-packet privileges.  Bring lo up and attach a SCHED_ACT program
-that calls bpf_skb_change_head(skb, 1, 0), then returns
-bpf_redirect_neigh(skb->ifindex, NULL, 0, 0):
+	if (*xsk_frames)
+		xsk_tx_completed(xsk_pool, *xsk_frames);
 
-  ip link set lo up
-  tc qdisc add dev lo clsact
-  tc filter add dev lo egress matchall action vlan pop_eth pipe \
-      action bpf object-file neigh_chghead.o section action
+In otx2_cleanup_tx_cqes(), xsk_frames is accumulated across the while
+(cq->pend_cqe) loop, but it is never read afterwards. If an interface with =
+an
+active AF_XDP zero-copy TX socket is brought down or has its XDP program
+replaced while AF_XDP TX completions are pending in a CQ_XDP queue, wouldn't
+those completion ring entries be leaked without calling
+xsk_tx_completed(sq->xsk_pool, xsk_frames)?
 
-Send an untagged ETH_P_IP frame of ETH_HLEN + 8192 bytes through an
-AF_PACKET/SOCK_RAW socket bound to lo, without PACKET_VNET_HDR or
-PACKET_QDISC_BYPASS.  Use a unicast destination MAC.  The sender's skb
-has a 14-byte linear Ethernet prefix and a fragmented payload; pop_eth
-removes that prefix and change_head restores only one linear byte.
-The unfixed neighbor redirect then tries to pull 14 bytes and BUGs.
-
-Sending the same frame without pop_eth and change_head leaves the IP
-header in the frags, which is the route lookup reading past skb->tail.
-
-Fixes: b4ab31414970 ("bpf: Add redirect_neigh helper as redirect drop-in")
-Link: https://lore.kernel.org/netdev/20261027082604.1485903-1-edumazet@kernel.org/
-Link: https://lore.kernel.org/all/2a0f5ff1d8db81b07fc4b344b8e68e3505fcbf36f72a471d1678b2f1cecd881b@mail.kernel.org/
-Link: https://lore.kernel.org/netdev/DMII4JGTEUEG.2WRJPT6ODT6J0@gmail.com/
-Cc: stable@vger.kernel.org
-Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
-v3:
-- linearize the IP header in the v4 and v6 paths with pskb_may_pull()
-  before ip_hdr()/ipv6_hdr() is read; the Ethernet check alone left the
-  route lookup reading past skb->tail
-- collapsed the MAC-header check to skb_network_offset(), which also
-  covers the offset test it replaces (Alexei)
-- dropped the tc-egress: it cannot hit the BUG (Alexei)
-- retarget to the bpf tree
-
-v2:
-- use skb_mac_header_len() instead of mac_len; mac_len is zero for
-  locally generated tc egress and netkit packets
-- add tc-egress coverage to tc_redirect_neigh
-- document the nonlinear AF_PACKET reproduction conditions
----
- net/core/filter.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 09c60a58c82a..303c0c44dc2c 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2290,9 +2290,13 @@ static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb,
- static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
- 				   struct bpf_nh_params *nh)
- {
--	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
- 	struct net *net = dev_net(dev);
- 	int err, ret = NET_XMIT_DROP;
-+	const struct ipv6hdr *ip6h;
-+
-+	if (unlikely(!pskb_may_pull(skb, sizeof(*ip6h))))
-+		goto out_drop;
-+	ip6h = ipv6_hdr(skb);
- 
- 	if (!nh) {
- 		struct dst_entry *dst;
-@@ -2399,9 +2403,13 @@ static int bpf_out_neigh_v4(struct net *net, struct sk_buff *skb,
- static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
- 				   struct bpf_nh_params *nh)
- {
--	const struct iphdr *ip4h = ip_hdr(skb);
- 	struct net *net = dev_net(dev);
- 	int err, ret = NET_XMIT_DROP;
-+	const struct iphdr *ip4h;
-+
-+	if (unlikely(!pskb_may_pull(skb, sizeof(*ip4h))))
-+		goto out_drop;
-+	ip4h = ip_hdr(skb);
- 
- 	if (!nh) {
- 		struct flowi4 fl4 = {
-@@ -2451,15 +2459,14 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
- static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
- 				struct bpf_nh_params *nh)
- {
--	struct ethhdr *ethh = eth_hdr(skb);
--
--	if (unlikely(skb->mac_header >= skb->network_header))
-+	if (unlikely(skb_network_offset(skb) < ETH_HLEN ||
-+		     !pskb_may_pull(skb, ETH_HLEN)))
- 		goto out;
- 	bpf_push_mac_rcsum(skb);
--	if (is_multicast_ether_addr(ethh->h_dest))
-+	if (is_multicast_ether_addr(eth_hdr(skb)->h_dest))
- 		goto out;
- 
--	skb_pull(skb, sizeof(*ethh));
-+	skb_pull(skb, ETH_HLEN);
- 	skb_unset_mac_header(skb);
- 	skb_reset_network_header(skb);
- 
--- 
-2.43.0
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261030-nb-otx2-xd=
+p-cqe-cleanup-net-v1-1-710635c0f504@tipi-net.de?part=3D1
