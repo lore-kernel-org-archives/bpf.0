@@ -1,109 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793466432;
-	b=WT6CodUELfn2obgHIfPGxLdOm/zo8WruAtOEk8ZRwROnlmymYOdwvBmbQdrQveF40qOH
-	 ZefmfUflJMhx7fJS4OTvs3NdMTr8mW6FixFhfYQmTQGdNSNgAD/luJkbFtg3XPpQXlmcl
-	 +JPnE3eJEWHBYL/ILHvOMcv64FzCojGJ1Xoqr1EKTPw87UMk6GDqQai5Ytl45wfd9vzHI
-	 FSB0a1K/Vz0Bl7JrP9xgNCxQVoCxGNBK5pO3P6GYsOkgVq1TMzacbZtWM4mGXLfGrY9hF
-	 akcBv+2tLWluExIrMrr0t1TevITgPB8FQj9y0ULkskuoNkaochm/dIWxCKg4eHGEJOg==
+	t=1793466609;
+	b=HwFm/kGocLSOVj5vlt049sVaZW74DA6y8ixYlPDqhroxpA337Ia2AaiU/9xSEyJzh/L8
+	 3BtYl5IY+HNR1Flxmpw5H4zmBZlaDq+hr1Ve7Dvij46s9Y8D/Xo9FGzXAXxpgifmixWvv
+	 Zrm2TlwsIIo6HuzMhioF0xnHz0R3CpB78UIgJb9siDf9P5V9yXZAQs4n/EPvBGkI4PWBf
+	 MnppSd/0CvnhtFRbL5qaSVvLveTPAqhPoMD5qtI2d8RTMJH4hj3SroueatvD+jlmPyIw7
+	 L1hfnJrowRwfm9JrDVe9ZGw7QsWBnUuudGHs9F+ujeuXpezFICxFofUdFFIJdNX2Geg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793466432;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793466609;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
 	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=PqeTs0OEdiP2uTtWFXvUGWh5yzCA93pDqS6ulQ6Xi/U=;
-	b=HX+XeJBHyVNnfZ1TH9eeDpqUs7UN5qtoxCXUuLRrN9LSRKRyVxYoNYyWyGU+Zr0mTDIT
-	 snlUhq8XFPHcIDJ3rOJhD+NnP8pS4k+A9+kMQ3NzXmbmW0r6QRnwXqFGCgqKfs+ZvUVX1
-	 /v0Hu2t/DMqVSeqcJswCyt92N9GFy5L2RU3FN1puW40H33EQn1kdQjFsEcynZQ6qnHSHL
-	 tgNwxLCIhOrtxcUHmATFc+BPgl+DshjAg0IqGk5FjzKPG8FNQaPM5zRIl21gKQy2IktgU
-	 waAqgDnzBdKecgc6gUHomn2TLNyCpGoSXTFW9EdLvN8a+HukvtNVJG1tFn2RwmRxfuQ==
+	bh=S02zFKQTw98qLAlbNryreV97fiHHWFWx7ndQG3y57t8=;
+	b=HTcVzOo9PTdoQ2vC9ykozeGPWkpRV7mVY9AlPip14eOiYHNjKYlIYynE+s8J8z0/5btL
+	 lOIsH0jAtG1py0/yE0fT6wMHhUz9QMjGuvecg2ccAS/6zylCEmU5yUrTg9LzD2xQJzhZI
+	 5FgSE3ok6Cz/oeublHN2ubvySGeyJkpG9NzNP4Ed8r2dE8YGe/IOUZ165k5RtLi6GVKXg
+	 kk4yTErr9ZJVmONhn7i5WtWmdiWTM4CxdBxwRcVRJ1tNK3ga7fhDlBlADSQbChmdPh1UJ
+	 ysgBN/UTypQ4vS9enRbCtCGv6dXgnsPlmPurk3JlQUEebYWEhe1H0GTnsjLzvzWCBnw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="vXIZK/vH";
-	arc=none smtp.remote-ip=209.85.215.170
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zAlQpn7V;
+	arc=none smtp.remote-ip=209.85.215.173
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D09606A31C
-	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 17:07:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1D09606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512A6606A321
+	for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 17:10:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 512A6606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vXIZK/vH
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cd8ba7c2694so533503a12.1
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 10:07:11 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zAlQpn7V
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cd5c9e52398so817757a12.1
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 10:10:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793466431; x=1794071231; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=PqeTs0OEdiP2uTtWFXvUGWh5yzCA93pDqS6ulQ6Xi/U=;
-        b=vXIZK/vH67BDbgcwM4Cb7hOXrAAAQ5hvncYeaLI3z0CprXTvfb0bHlhdAEOjnEFbCl
-         kUa6hwsWyXZYiWpHlHfpW4332fM6P3EL0Vy8yzFjo7A2OO2EsiNRAAR51TOafHkLAg+4
-         gfsSR5lmtLwMBuqd6Rs0FwvvZWaS9WdZWwN+gRl8GK50NlG2ESNM8BjH2CNvYAcXotXc
-         1nXaMPS4oXjaDFBqYWkXU4bv9ZKK1gJHBhqD2CW/O6L9Nhg0H60yMPu9i+wM1eA8xjAd
-         lb8zbaNI3El31j4+LPN8YXN9JcSza/Fc1mg4nPCdxwip24m9MHV4woYMACgRUD5GjChd
-         Jcmw==
+        d=gmail.com; s=20260707; t=1793466609; x=1794071409; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=S02zFKQTw98qLAlbNryreV97fiHHWFWx7ndQG3y57t8=;
+        b=zAlQpn7V5Yxzz3a/EooOjbQS76Q6xQ0YpJEIcGp4YzdScOrPhhAvrUur4/FQHYJqRA
+         8zfHghpz6jXKETFWCpI+22lxZ4tiU8Y1Wc2I1LGCzNcA48QIfHM0NthCxotitdxVloRD
+         7jW5L//FxVzW4EuToHyaxOBM6p67ZQEXBbXMiVGM13bEtgPc/LRBcWVgFZo7OtjjXbae
+         x38X4P6bQH9CmqpDSl/U0Gq7hPzrHgec0DsPUl+NFmdA/2pRimxjub456nrjYLulRtoc
+         kY3kMmeFOtp3fe5XwkcAgy2f09rE2oqb/7WSkbZ5wd7smSeRqi0JaRIl0JBf3GPVA6ml
+         lPLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793466431; x=1794071231;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1793466609; x=1794071409;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=PqeTs0OEdiP2uTtWFXvUGWh5yzCA93pDqS6ulQ6Xi/U=;
-        b=Nhm13fsCsXDahEEwr5PlpoKtWXb3KBPGh8L32mAoWlSDS5AhXYpLYrHKTFVwACs1Tw
-         atc5f11xuPRw7tg9DCUDdRLW3Da9n1kNUxCQ7NgJim1nnGQAtBNDm6nVjkxrYTq2V382
-         pYA8UqOsi/QttVo4/fnvh6GhqNpO/v4JddzoMZV75W1yJKNodeMbi+21sdkPP/n+uCBw
-         aaWOwuDbh7EH0eA8qt8mQm9KgkuBUHh+QGHYe6sKWMg8HmfZuzpSoD+5zCqq6wxpoQ75
-         EjBSUNJg/U1YR4ab0EshnEz3UpEU5s9Mp/1njzgVjQKlPpDIeYhwdM2Cjx/eOawz9AoO
-         +4Gw==
-X-Forwarded-Encrypted: i=1; AKwUvBzWPEtRd6NZIf4nMjXDtrZ33fq/C6hu6eRZCYw2+sZJG8nWz3Mp1vOcTAYTfhF0A8jjpCc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLPnEEgAaFGmjk73pXTjS7H506Ivurt+uV8jcKvBBL8FXqCybgM
-	1r0nGyX6ovfe5bzIQezlsXE+V4RnYpOypdqpj5JgTKWjkd7OL15JKjZN
-X-Gm-Gg: AYBFou1KPHQKVXz1BEAvTu0iPVZMro+qIArp2s+e9UxMdvd0VrK0LLgQ6yvFLQXXY7O
-	FPTAQJPBnL9bq+ltqSGsg89UUWw1maTP+VrER8H9g2Pbd2fzpj1aKfBcLq7+VHMxqUG5wh+gcjg
-	4sEuUrgofqZMfHyDyXFhlDii9DxCCdzVdeHOo7LpGvZ1FyQD7m5gLUiEQ/fkL7qM8FBImxQKTr+
-	5xd0NJEV04u1jVZWQHDPjyVhKDUFQnw2Fv7UEj+/G03LXnm4mtN+oHofFKEeesOMlrkts7A3PCS
-	49Wsg8HmlUiZ3r9D6pi6e2BZM9NQwOK2+bXJQxs93hb7Lgm17YGOud0z/z4aRm/wSoKQNMQvQ4F
-	ivBXSKeTJP5wqGq9Rmg03wHWz/UZR0Y7oE/gGINBZroXONO7krq1ZPN3mJloEwlytKYfYeZkLa0
-	QXhinBYN+iHmF5QghYjz90UxtfuZc4ac82kPgqas35IC0DMb6Mn9tQL3jMMPns4sMm1T6OQaZWB
-	tH4wk+2fFuL0TM5IcYZ/toPZtEDlTJxfB+PfxxrIjkjzddqlLIHm1JWLhJ0314f/EjbrLWQf5vQ
-	502P1ytKwpouR4LxtWV880mxRiqDw7gPO+CWM22Y1hpzlO1nlOEuGiiqmY+tKjShVXzjs22KJCF
-	CAx/jb7S3bJTy7iXwmY6jCj5JCuQL90dwpg==
-X-Received: by 2002:a17:90b:5145:b0:3ac:9706:772c with SMTP id 98e67ed59e1d1-3ae8984cefamr5029531a91.60.1793466430956;
-        Sat, 31 Oct 2026 10:07:10 -0700 (PDT)
-Received: from localhost ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e9bc6f7sm12221824a91.16.2026.10.31.10.07.10
+        bh=S02zFKQTw98qLAlbNryreV97fiHHWFWx7ndQG3y57t8=;
+        b=Z6ordswOqTBC7/xkSbSK0cR+2ocm3k9mZ35ftbZZcuwBwF9iXIa/ubvoUx8J4MWLrk
+         JBFyqRc9Qc2vfrLrfI6a+czKZK8qUKHdFSdl80NGPiD5nM7rQwi2UoCP/s+bdtGtGlxT
+         pAF5s6C/UA10u5G2mOLi90beAkgSlPEsD0HTZMqhTBpKqrs/S+k1pQd/hNGO+2PlTgRa
+         +K+iXwQUvZ6TU7KZnmKvJSRqxaDt87WhvUhKOKL3FYqI4o91vm7Y+Ixg6ZNC9KtTmSQ0
+         Vd/gDHNqVZ5S9zZi2VPR1elDQClRJ7+5VuGDp9easXeHMB5HaWWr7/f3oN/FdPHCuS+l
+         YKPw==
+X-Forwarded-Encrypted: i=1; AKwUvBzN/vO4IawinutK/gHs6BfZE7jW2osr6bdPix7dFffQn2k85JEvoExZJ2ksfYcdtQMLE9Y=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJKK8+a64rkzYryqDKXswCWzbHldmm9nU7NPgmEDpW5BaWSuE3p
+	SnCRnx9QY+FJ4/sfMDVU+b8/ZclwMhHlnGmmONhJBdgflcQjJckzJGHq
+X-Gm-Gg: AYBFou3HceP021I4k9gtX0YuGWEwfmxPG8/QjvmWubPlHGPpu0ljWVLR8gZX+vzSpe/
+	PMX5a5/EdLmSo/D6fm6tq/f+3d2ZCkPv8BvEP4S+LewiLyv9EelHCTYSSatS9U1p1A3Q4H8XBt5
+	8RQY9USUrLf8Vk6Tpqiq5IpoGGb53om7tIaJA94FCJ95zVzdMK8dkzh6TI3wtz6935MRuYusB4R
+	wseSywFlLkPSlp+Kxc49mOvgny270vv/ZJiC+wXxVbz4KDGIK6ceY9QJ0CZMZ8WZt2Kok3N2Qdz
+	MtDH3Ty6u+OC/6J5iqp5+BKu9Ual1TwFEHtMXpfIC0nT0ZUppuJjFJ13sHpHo93aOVrtSHH/JsY
+	cvcd3VI3YdQlUwt+PGv9WW3BQXZIInR9zwBbJYHztz7n1IgszBMXeRgksr/Qg2PkIT/rQAJ48ES
+	cTOtpcsxH50ao0UwJh6OPPJp4nCOW06qw2CqiE7RMxONC50fM1ggmPO8SNL9UOYF1/+TFPxrtOj
+	1ySdDoLBcIqNYXYTcjMGXPIs88BChmljP54PJGw5XoI7zS9FCA5UtjHFiw5q3Sv8OLxsxbyS6Rx
+	XoEAe9LYV1Q9poM+k+ho6qytqP0/NIdCa7boSjqoQ61iIE8/w/czF01KEdsMSfZFJx7EsFph6FY
+	Y9nH6p1+748YwgFmPiJenPNeTPSBeKzvb4g==
+X-Received: by 2002:a17:90b:1a8b:b0:3ac:9e76:aa76 with SMTP id 98e67ed59e1d1-3ae8970fd9dmr5106038a91.13.1793466608564;
+        Sat, 31 Oct 2026 10:10:08 -0700 (PDT)
+Received: from localhost ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae845df666sm8093713a91.14.2026.10.31.10.10.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Oct 2026 10:07:10 -0700 (PDT)
+        Sat, 31 Oct 2026 10:10:08 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 31 Oct 2026 17:07:09 +0000
-Message-Id: <DMJ6SFP2GD3X.1AW7OEM6GPY4Z@gmail.com>
-To: "Jay Wang" <wanjay@amazon.com>, <bpf@vger.kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>
-Cc: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alan Maguire"
- <almagui@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Steven
- Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- <linux-trace-kernel@vger.kernel.org>, "Nathan Chancellor"
- <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>,
- <linux-kbuild@vger.kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
+Date: Sat, 31 Oct 2026 17:10:07 +0000
+Message-Id: <DMJ6UP7FV1X1.2E7I2ILPBS34P@gmail.com>
+Cc: <ihor.solodrai@linux.dev>, <almagui@kernel.org>, <martin.lau@linux.dev>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <rostedt@goodmis.org>,
+ <mhiramat@kernel.org>, <mathieu.desnoyers@efficios.com>,
+ <linux-trace-kernel@vger.kernel.org>, <nathan@kernel.org>,
+ <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>, <arnd@arndb.de>,
  <linux-arch@vger.kernel.org>, <x86@kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Hazem Mohamed
- Abuelfotoh" <abuehaze@amazon.com>, "Bjoern Doebel" <doebel@amazon.de>,
- "Martin Pohlack" <mpohlack@amazon.de>, <jay.wang.upstream@gmail.com>
-Subject: Re: [PATCH bpf-next 10/13] bpf: defer kfunc and struct_ops
- registrations until first BTF use
+ <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <abuehaze@amazon.com>, <doebel@amazon.de>, <mpohlack@amazon.de>,
+ <jay.wang.upstream@gmail.com>, <martin.lau@kernel.org>, <mason@kernel.org>
+Subject: Re: [PATCH bpf-next 11/13] bpf: keep module BTF until the vmlinux
+ BTF is parsed
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20261031130959.23472-11-wanjay@amazon.com>
-References: <20261031130959.23472-1-wanjay@amazon.com> <20261031130959.23472-11-wanjay@amazon.com>
+To: <bot+bpf-ci@kernel.org>, <wanjay@amazon.com>, <bpf@vger.kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>
+In-Reply-To: <df56aa51cd704ab9a9b03d3574e6ab4c61d5e6d4cdddc17f4b0253f67cc077da@mail.kernel.org>
+References: <20261031130959.23472-12-wanjay@amazon.com> <df56aa51cd704ab9a9b03d3574e6ab4c61d5e6d4cdddc17f4b0253f67cc077da@mail.kernel.org>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -115,76 +111,42 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Sat, Oct 31, 2026 at 06:09 AM Jay Wang <wanjay@amazon.com> wrote:
-> The first use can run out of memory, also only because its task is
-> being killed: vmalloc() gives up then.  A round that fails with
-> -ENOMEM, in the parse or in a replayed registration, is not published:
-> the new BTF is dropped with whatever was applied to it, the queue stays
-> as it is, and the next caller starts over (a struct_ops ->init() then
-> runs again with the new BTF; the in-tree ones only look types up or
-> store the BTF pointer, which nothing can use before the BTF is
-> published).
+On Sat, Oct 31, 2026 at 06:55 AM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel.org> wrote:
+>> +/* Undo btf_parse_kept_modules() of a round that is not published */
+>> +static void btf_unparse_kept_modules(void)
+>> +{
+> [ ... ]
+>> +		btf_mod->btf->data = NULL;	/* the kept copy */
+>> +		btf_put(btf_mod->btf);
+>> +		btf_mod->btf = NULL;
+>> +	}
+>> +}
+[...]
+> Can a module BTF that is rolled back by btf_unparse_kept_modules() still be
+> reachable through btf_idr?
 
-can we do the first use from a work item ?
-A kworker has no signals and is never an OOM victim.
-Then -ENOMEM is as unlikely as in an initcall today, and an error can
-be final, like without the option.
-workqueue_init() runs before the first initcall, so it works at boot.
-No need for the retry, for btf_unparse_kept_modules() in patch 11 and
-for ->init() that runs twice.
+Yes. It's real. The NULL deref in the inline BTF is real too.
 
-Something like this (not even compile tested):
+This is quite heavy. As you can see both bots poked plenty of holes.
+Five of them are in the -ENOMEM rollback of patches 10 and 11:
 
-static void btf_vmlinux_first_use(struct work_struct *work)
-{
-	struct btf *btf;
+  where                        what goes wrong
+  ---------------------------  -------------------------------------------
+  btf_get_fd_by_id()           takes a ref on a BTF that is rolled back
+  btf_free_rcu()               reads btf_mod->data that rmmod freed
+  btf_parse_kept_modules()     -ENOMEM in the inline BTF removes its file
+  bpf_struct_ops_desc_init()   -ENOMEM of ->init() becomes -EINVAL
+  btf_vmlinux_data()           -ENOMEM without btf_zst repeats forever
 
-	guard(mutex)(&btf_vmlinux_lock);
-	if (btf_vmlinux)
-		return;
-	btf = btf_parse_vmlinux();
-	if (IS_ERR(btf)) {
-		btf_drop_all_deferred(PTR_ERR(btf));
-	} else {
-		btf_vmlinux_new = btf;
-		WRITE_ONCE(btf_vmlinux_builder, current);
-		btf_apply_deferred();
-		WRITE_ONCE(btf_vmlinux_builder, NULL);
-		btf_vmlinux_new = NULL;
-	}
-	smp_store_release(&btf_vmlinux, btf);
-}
+The rollback exists because vmalloc() gives up when the task is killed.
 
-static DECLARE_WORK(btf_vmlinux_work, btf_vmlinux_first_use);
+can we run the parse from a work item, schedule_work() + flush_work() ?
+A kworker gets no signals, so -ENOMEM can be final, like without the
+option. Every parse then ends in smp_store_release(&btf_vmlinux), and
+btf_get_fd_by_id() sleeps on btf_vmlinux_lock until that.
+Then no need for the retry, btf_unparse_kept_modules(), the 2nd call
+of ->init(), etc.
 
-struct btf *bpf_get_btf_vmlinux(void)
-{
-	struct btf *btf = smp_load_acquire(&btf_vmlinux);
+See my other reply.
 
-	if (btf || !IS_ENABLED(CONFIG_DEBUG_INFO_BTF))
-		return btf;
-	if (btf_vmlinux_building())
-		return btf_vmlinux_new;
-	queue_work(system_dfl_wq, &btf_vmlinux_work);
-	flush_work(&btf_vmlinux_work);
-	return smp_load_acquire(&btf_vmlinux);
-}
-
-The undo has a hole already.
-bpf_io_init() and bm_bpf_init() don't only look types up. They register
-kfuncs. And bpf_struct_ops_desc_init() turns every ->init() error into
--EINVAL:
-
-  btf_apply_deferred()
-    __register_bpf_struct_ops(&bpf_ring_ops)
-      bpf_struct_ops_desc_init()
-        bpf_io_init()
-          register_btf_kfunc_id_set()
-            btf_populate_kfunc_set()      krealloc() fails
-              btf_free_kfunc_set_tab()    frees all vmlinux kfunc sets
-            returns -ENOMEM
-        returns -EINVAL
-    pr_warn(), next entry
-
-The BTF is published. The kfunc sets that were applied before this
-entry are gone until reboot.
+pw-bot: cr
