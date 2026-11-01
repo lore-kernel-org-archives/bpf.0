@@ -1,57 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793562145;
-	b=LMeewKbDaUaHCBvHZ5zoKuylSmooUeHljE89S44fqQuiZV/r5DUXycimct9tEKG6yCku
-	 ehumhm3Zvx5QisTnh1OjMr5li8XpbW1mFnFVuy8AYcI6weaUhbqRi9kxMfMoLrLk4kp8D
-	 ZXv2Axzqf7qhh8iHHAXz7eIYA7H/G0RcPCT4xNhGpOjccY/GMshDvpDTdKpBOfen7hs7Z
-	 IWHJT/AlxzYQxz6A6xedly5RDbw5jXid2wufwfp6ZcjKmk1E9YRJKWI/rzGiusJ5iBRdD
-	 oATzR0rIUSGLjHTnnW6isPL5wJZ/2MGR/lvji/qzG05zINEEuuE5iDm0qRUQJx9ygxQ==
+	t=1793562282;
+	b=2MRzgBEEv6MzjV2WSsaF8/pgmERk2E5OpDNWc7OrVBlTTRczDxZ8dBJi4D6N6an6vWXL
+	 QOKlvYRohmWK2yrKFP2dmyfl957KzHcaRsQTdOlhzyMzeHKnDaIfeTFYF+LQHeconn9TD
+	 ThHSXQd27WGaaiqNprf6B10XY9K8roh/pqDAu/GN2lvRazg/o8KglkPsQwNh+vBrCDL3g
+	 F+UdlFqpPi+uTkt6BxxC7rzj7dls7yrLRKDteJOR9PDDC8ZpQwDxMgwCq5TW0W8/M8g2I
+	 b0JVNUTqlQQfwc1GTmd1RdzA5j0F3C52vs/H+54eYIMCmSZq94C6hR46BpYUVXgb9wg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793562145;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Ou2CWqyOX19zXhgRxQT3aRF18Pi5mS4L54mPCi0Zwf4=;
-	b=b9U/vxMG9xt18AS81xcLJGb0MTPOVzhVqdQatMXNgbNZh0IndKi8BKjBqxfBegj2s7rC
-	 BIGSK1IM/Up4vFJra0/hj5rajhKlzuPxPSqnu7kbXvSLJIiWpKriFzyHsHYfX6HZfm8/+
-	 Ae+Qa3uEEVtBoHZUIEYjjXM6qonLaNVKbfhr70KWcPz1T6KJ4ztVvLBtrZ5uGtkIPztNo
-	 Ns5v4tad0SrHKZPrnEVoLIlgDgblfThJLYnYF89abMG2kaYsHdKILtkwdbwcfOURlxgWt
-	 cxzuYziAGn6LxAhpIr7Hj3OKrxMlMoYaDUHIn78p5eobksiLYviB9ar5CFvmikwZAew==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793562282;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=n6JuWpF+eef2V525L5oCizLHk8iadx9qRsILopmNHm8=;
+	b=XHcR7yH/Op6HUkgFjNrin+DJuP4yF9BydBooT5zcvvCz4Dof2Y+Zb/h5EhMpn0nM+TOR
+	 k/n3rFKKX0WJMBe8LtZObZ8b6B734sS4bfe09U5pmVHxAkm2GyCxFQMoVxdO3OsifWYUv
+	 y0jzEhPO0s6CM1V5SR7rolRv1RiTP8roUaFsQGHc9oW2HxVQRBjZ1PbtGrvRCx1rLQRG0
+	 lPFSxbizHvLGPhcq3tJ79Shzz+ze1Xsvqf/6r4ss36AbyQ5PAGmdCO9wjPMbBY0YbIY+m
+	 KZh4bVYXpi/Qe297FSC+R3AQ97A/0JbMt2HAgHnDRCmH8Iwm19Umt9HX5B7hSrwABLQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ND9EpqCd;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JMfzN6r6;
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695E8606A324;
-	Sun,  1 Nov 2026 19:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2067606A32C
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:44:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2067606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ND9EpqCd
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45F91F000C1;
-	Sun,  1 Nov 2026 19:42:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793562145;
-	bh=Ou2CWqyOX19zXhgRxQT3aRF18Pi5mS4L54mPCi0Zwf4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ND9EpqCdXEVZIBhApfIC7uK4IlDDcgtEQg7JxiK8Sf/Qu8i8w6ARn+5AQnJBAwoqI
-	 zO585jQVAfgj6izGpDjReHiq6qZ8/GRv0myzboGNGy8kVC9lEbiRXLwTRv5KuUC9mQ
-	 tCeX6qfhtwPYkjcO845+Do2WXFKv8Ru/ON/DzURYHkSwjT46vsardJQoslQcJ3EOsx
-	 ovErVZL1rniJeaGlcX0nn4HNlc0ywk0Ai34SyYWih8eIeK76oPJ72AJcH300JHyNkt
-	 fdkFdafCuYe3TMtkM/1TZahNvsp3+FUyeA1GCzbKXqYrDzeDVzGOBt1LPgA5Rj7d8a
-	 9Ttingd64EAzA==
-Message-ID: <sashiko-outbox-192629@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 03/15] bpf, sockmap: Don't let an SK_PASS verdict
- cover the next message
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: mptcp@lists.linux.dev
-In-Reply-To: <20261101192057.2296489-4-alexei.starovoitov@gmail.com>
-References: <20261101192057.2296489-1-alexei.starovoitov@gmail.com>
- <20261101192057.2296489-4-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 01 Nov 2026 19:42:24 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JMfzN6r6
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ad41b47541so1816723a91.1
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:44:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793562281; x=1794167081; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=n6JuWpF+eef2V525L5oCizLHk8iadx9qRsILopmNHm8=;
+        b=JMfzN6r62tAPM45iQwOIp1BthxUrUWJaVIkoUWk3ykeDifSIkN2JBh1At4A8kMyO3K
+         pjOt4MzNIt+mHsnQ0xoajiUApx0MFvsPC5nPp4SXnt3KHsONDglCjPED7N0XcRWjoyR+
+         aHFKINocDldisxAg4byJp+qkByRH2mEY/+XRzjEzzEGNT8Lo6VGB9KpbK/3/0IjB386L
+         UWh4lrL32PtUK3AjU/H7tqENxFH6iibw5UbIiAY1Vf/84GpbVDttAVs5lsvooUXJMFaX
+         M9L4y7c6+7l+RVum0NFY6nniMYGdwKVdhzcj+VrHQKGrADFJvYIqgbJPSmWl2lULln6r
+         MLBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793562281; x=1794167081;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=n6JuWpF+eef2V525L5oCizLHk8iadx9qRsILopmNHm8=;
+        b=u97Z6zzSN7fejkpYJMpDqUqhIo6oQzFpscgjEySvfXirV7rQlsVBaRujPbLwmFxgQL
+         7t2+uF7+gSl7D4Ia92zAnNI7cKUnve4ZhuwUnDlPz4wcArdVBOt2Kwk+GBShsDXvS25L
+         ab+tGgGDE2CfH9H5p7LJya42oFziuCaiPn2oAqP+OXFuCC9qBHpeP3gEz2Gc1FniLdtu
+         Ut4McoleDinEkyd+unwskRMsC24sjxsrWpTdjrHTNdGNkBYID9RjUDlj+Yv05bDCl9zO
+         /wSyn8vHMN4aS/dCXUJb/fymij2JVboJOpxY2wZs1WYl/16bIruuJAD5efTMKk9/hYkg
+         wH9A==
+X-Forwarded-Encrypted: i=1; AKwUvBxnPDMg5uCGyVXKI95Q+65fGpPNy8tl40fa65iCeh2MawmC+MSdrAhxI93FJ4iSfohvYzI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8TnRPwKKOAcJPZiQp8mnlx+lRil+iNptmtiiOlpoten23j4NgG
+	jSFuLS6gsvMpvALduLPvL65fugEtudOhQoPMP6Bje6s9YOBahQ2e+UQU
+X-Gm-Gg: AYBFou0T2HGlmtPOvXLa4ANWgxuQvEyJzrzv7KJi8l2WKhByxrI5YGTBEwQ9NY1gjTp
+	TB9PNFgOFqJWITkJzcAVlJ8X9kFnmJetJnghIiFiiFJtsJxQHco6pANN6mC8bgSO0TgNv9uBN1t
+	ds6NiqBE/UG1is77KkGuEdoXbKCmqOfDpXhvdM8Wf9xi9uUCFiVcK0h4SIEkwBa0G4H7nx/Fbb2
+	XQLsySy7vSUXvZbcXxh9Z3kXkiVXGCykSVJr2k6GM8X89UK5EzCQUMExFfRgxjP8+MS+NQUOvak
+	2dX3YDXoDm4y+fsUcXfAhn9EjN5Y4wlu6pR03qA4BQDGjWenz7fh5f5ggYsnuYLnvauiYU7TYZw
+	WC7MDoyD7lVi3lDDeV8T80W6OCwwQPJ7kgUGk84r5W3TUHZTD2mcIA0E65Ux++dJqCOx7pzODzg
+	rALw3LxunhOe1DswrA5iCZGO4+6qUXwNHpOkP0xFZQZIM6hZKn10rPb6PELZlf8s5YSWxT4e2e7
+	wYzT7gRFWvOx1UhoQu4c+ouwxntajRGeGXyMfOVNmExRQWimzi4EQCWkGWaEBFHrLEllJVPOzAm
+	bNgyCuxUOtBT6bYnGfEnDTn3AKpxwe6PfsnpLeJhTHfqjDPsWGeX5M1rhckBzFYoRxIx5YY4Qv9
+	mcbdExOl8KGPfDlbaG6Dq6Z5IgC8DI4/IVD2Vrj5SKKgqoK1C6N2kEMA00l5F5aZP/og7skyIUb
+	A=
+X-Received: by 2002:a17:90b:2641:b0:3ac:8446:c1b5 with SMTP id 98e67ed59e1d1-3ae8974b804mr6376412a91.31.1793562280788;
+        Sun, 01 Nov 2026 11:44:40 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae881c5624sm5824167a91.4.2026.11.01.11.44.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Nov 2026 11:44:40 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	dongchenchen2@huawei.com,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net
+Subject: [PATCH net] net: reject a negative TCP header offset in qdisc_pkt_len_segs_init()
+Date: Sun,  1 Nov 2026 19:44:33 +0000
+Message-ID: <20261101194433.2637113-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,101 +101,49 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: corrupt verdict state after tcp_bpf_push() in tcp_bpf_send_ve=
-rdict()
---
+From: Alexei Starovoitov <ast@kernel.org>
 
-commit cb1b40f55f45104a6d23bf64e86e3c0a379b2459
-Author: Alexei Starovoitov <ast@kernel.org>
+qdisc_pkt_len_segs_init() stores skb_transport_offset(), or the inner
+offset, in the unsigned hdr_len. A header in front of skb->data gives a
+negative offset. For an offset a little below zero, pskb_may_pull() gets a
+small length and succeeds. Then a 64-bit kernel reads the TCP header far
+after the skb and can crash. Further below zero pskb_may_pull() fails.
 
-bpf, sockmap: Don't let an SK_PASS verdict cover the next message
+Commit 28a57fb2c5df ("net: iptunnel: fix stale transport header during
+tunnel decapsulation") fixed one source of such offsets. Other code that
+removes bytes from the front of a packet can leave the same stale header.
 
-This commit resets psock->eval before calling tcp_bpf_push() when
-psock->apply_bytes is 0, and subtracts any sent bytes from
-psock->apply_bytes if tcp_bpf_push() fails.
+Return SKB_DROP_REASON_SKB_BAD_GSO for a negative offset in the TCP branch.
+SKB_GSO_UDP_L4 and the other GSO types read no header and still get a wrong
+qdisc_pkt_len(). On a 64-bit kernel only packets that cause the read after
+the skb today get a new result. Then __dev_queue_xmit() drops them and
+returns -EINVAL, but sch_handle_ingress() ignores the result. Their content
+can be valid. Thus the code that leaves the header stale needs its own fix.
 
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index d90bcc911b36b..072ffd8347a6f 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-> @@ -457,8 +457,14 @@ static int tcp_bpf_send_verdict(struct sock *sk, str=
-uct sk_psock *psock,
-> =20
->  	switch (psock->eval) {
->  	case __SK_PASS:
-> +		/* The push may sleep without the socket lock, and it may fail */
-> +		if (!psock->apply_bytes)
-> +			psock->eval =3D __SK_NONE;
-> +		origsize =3D msg->sg.size;
->  		ret =3D tcp_bpf_push(sk, msg, tosend, flags, true);
->  		if (unlikely(ret)) {
-> +			/* A part of it may have gone out */
-> +			sk_msg_apply_bytes(psock, origsize - msg->sg.size);
->  			*copied -=3D sk_msg_free(sk, msg);
->  			break;
->  		}
+Fixes: 7fb4c1967011 ("net: pull headers in qdisc_pkt_len_segs_init()")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ net/core/dev.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-[Severity: High]
-Can this corrupt a concurrent sender's verdict state or leave psock->eval
-set when psock->apply_bytes reaches 0?
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 3ac700d37e59..ccf4b02e08de 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4320,7 +4320,9 @@ static enum skb_drop_reason qdisc_pkt_len_segs_init(struct sk_buff *skb)
+ 	if (likely(shinfo->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6))) {
+ 		const struct tcphdr *th;
+ 
+-		if (!pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
++		/* A header in front of skb->data gives a negative offset. */
++		if ((int)hdr_len < 0 ||
++		    !pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
+ 			return SKB_DROP_REASON_SKB_BAD_GSO;
+ 
+ 		th = (const struct tcphdr *)(skb->data + hdr_len);
+-- 
+2.55.0
 
-In tcp_bpf_send_verdict() under case __SK_PASS, if Thread A enters with
-psock->apply_bytes =3D=3D 0, it resets psock->eval =3D __SK_NONE before cal=
-ling
-tcp_bpf_push(). If tcp_bpf_push() -> tcp_sendmsg_locked() releases the
-socket lock in sk_stream_wait_memory(), a concurrent Thread B in
-tcp_bpf_sendmsg() -> tcp_bpf_send_verdict() can see psock->eval =3D=3D __SK=
-_NONE,
-run sk_psock_msg_verdict(), and install a new psock->eval (including
-__SK_REDIRECT with psock->sk_redir) and psock->apply_bytes.
-
-When Thread A returns from tcp_bpf_push(), it still calls
-sk_msg_apply_bytes() on both the error and success paths, and on success ru=
-ns
-the post-switch cleanup:
-
-net/ipv4/tcp_bpf.c:tcp_bpf_send_verdict() {
-	...
-	case __SK_PASS:
-		/* The push may sleep without the socket lock, and it may fail */
-		if (!psock->apply_bytes)
-			psock->eval =3D __SK_NONE;
-		origsize =3D msg->sg.size;
-		ret =3D tcp_bpf_push(sk, msg, tosend, flags, true);
-		if (unlikely(ret)) {
-			/* A part of it may have gone out */
-			sk_msg_apply_bytes(psock, origsize - msg->sg.size);
-			*copied -=3D sk_msg_free(sk, msg);
-			break;
-		}
-		sk_msg_apply_bytes(psock, tosend);
-		break;
-	...
-	if (likely(!ret)) {
-		if (!psock->apply_bytes) {
-			psock->eval =3D  __SK_NONE;
-			if (psock->sk_redir) {
-				sock_put(psock->sk_redir);
-				psock->sk_redir =3D NULL;
-			}
-		}
-}
-
-Wouldn't Thread A subtract its own sent bytes from Thread B's
-psock->apply_bytes, and if psock->apply_bytes is 0 when ret =3D=3D 0, reset
-Thread B's psock->eval to __SK_NONE and drop Thread B's psock->sk_redir?
-
-Also, on the error path (unlikely(ret)), if sk_msg_apply_bytes(psock,
-origsize - msg->sg.size) reduces a non-zero psock->apply_bytes to 0 (for
-instance if another sender consumed part of psock->apply_bytes while
-tcp_bpf_push() slept), the post-switch block is skipped because ret !=3D 0.
-Wouldn't that leave psock->eval as __SK_PASS with psock->apply_bytes =3D=3D=
- 0,
-causing the next message to bypass the sk_msg program?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261101192057.2296=
-489-1-alexei.starovoitov@gmail.com?part=3D3
