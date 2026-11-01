@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793560005;
-	b=BReL7VKmPVBme9x2w9xCmGy3mmXYn4RIagxDk2Rr2GeXq2U+UfPG1PsS3d7VpALirmxy
-	 cNtL0xdmqjESBZIV3uTFiiYRXiVjAAHLTEeqMdwX5XPel7b0R/kZOs8QLnk49sGWXdHLd
-	 kEwcw7rhlhoueZExqj2r4cynxzWWNZg9x0YPDEsNHM9zAESgdtgJBiHM2TFmvuNNaqr/G
-	 nX4wu6qZ4FqIdiW0tfl+EIQSYfrdFCs3NHla2WH7gpU7PTMQjkKhjoTGNbq7uu3nP0/zi
-	 owV5CV2E0b4ixJTjcS1Gs7G8o3V2yec3zlSooi5UwCvf9eIDqbrp0PEYrC7U2eqjFcQ==
+	t=1793560011;
+	b=eHNAE1neDOjxvoxABrWLjoBBA+6NinTAR6PaQchH/2UcB85Zpxat4fRPiypyOlhH3pbX
+	 tvQP4E97UX1+OkJS/JNXsJNS/lnXD/b0ThTdvEg0zul9esiRES0E+eGiOotsFv1Fw6eg1
+	 vNG3Gqp1CSESrzbjMNjDj5xoqhhHIqbj0KhNIvgr0YqBy5DE7HlcO0HONVWj/z78kEW8B
+	 44qXb+ijuSa4/UvmlsrpkMsSyjHkJTABLwjGNhQRO4weqFvv8e+JvXDSMd076pkxZu/nT
+	 9eDPZp2+zGPq8eOeZs7PxNalH41ok97U/11Rz+oz7WPhuRrAthmGR/FeAUnkbDZUW1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793560005;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793560011;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=GGVF8NPVYvpdU6BCTsMYlQNnPnKditwSLi3K4JDjxlg=;
-	b=jG494sJ6k0OTiKhB1NS5uZ4wSXXwVwx4FqNDkk81rLig2KFKgOMtB0xEcEdl8RPCoen8
-	 JZWU0YKaG4O2zloxffM5ugJxtq0TFs8bR2I6UJ9sY4jM7o9mIMqvXcxf03zne9Pume2nQ
-	 siwToeoVkLmIjTgRwDBaXNDuQwLqFhB8yA8+62OP300KbRcsMCX4gczAXtWuEKgvh8+Y2
-	 iZQpWq877Y1Rnmah8A/Zkohy3kiD1NCzVQudFP7RHOr+xmA8sfrdgI9vaZdH1xxebNBp6
-	 JhGRoN7zMF8H4ETnmmuy77sJDVFGd9PTMtC27iyexNQOtibMFNsq731J8RhpwQoDclQ==
+	bh=TGjs5rzvGQiTsQRwE47K693DPakZ/Tmr+xfd0UMO86A=;
+	b=rvMgoMAeTd638OxIMehhSj1G8/VFal87VtHSSYR9uWk1fXvyYVgaAUdD6hB+QT1tpz0B
+	 3Lt9u5O/Nef9UDlphKiZEuRpLk7QIQFxd8EkWRRhPd+C41eFl9uI1w29YinUUpQjQJi8U
+	 9CtMd0NiDesAuJEwxZ6EWsMz+/bN9FTgnkONyyXVJfkYBKcOMRJRZqmK3L823hSVJNX0m
+	 ya4JWxAvFGYaNd7J6O0W49WPW1MKDC+Vh8GaOopAccCG5uvpJt9ksY+Vlpwvx03judxb4
+	 DrBGq3PLiUdbZCTaQETgZjFR24WdNlRb/TBDAQW234Vw1U9i51JO6l4zTWchroTnEpQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=amDvMArE;
-	arc=none smtp.remote-ip=209.85.214.176
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="mH/TKZbD";
+	arc=none smtp.remote-ip=209.85.216.41
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3521606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:06:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E3521606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B001606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:06:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B001606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=amDvMArE
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2e9e53d011eso18316035ad.1
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:06:44 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mH/TKZbD
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ae6b4c669fso2004148a91.0
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:06:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793560004; x=1794164804; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793560010; x=1794164810; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GGVF8NPVYvpdU6BCTsMYlQNnPnKditwSLi3K4JDjxlg=;
-        b=amDvMArEFjFrtGw0ZIxA/Rlkueks8VgZRdEKIBl8I+8OMvXvlJBZDqBnnJq6sH1Ngn
-         X2a7kLxj1hPx/kyN6Td2A91xtr+HvzvMvLcTdu/h+YZPnpsxbtdlhQ1pV4r6qrJ+DP0T
-         seaP/bg+TKIrVqLwEtlRr0JrCPgmzobJFWOdIJdI0epqKwb+FZDzAX9EBW28e9zMgnRo
-         hXnGG5g9jcA4jCWxnKolpncwgIJDXmzBgCX1b54sB/m/BCo/8Ydu4tlFWSF2RFcmFynT
-         bULDz/f/Vqv5Ak+9ND9kp5PRuL4Lzp/iYCkCWABi5yB1o/us1oOjGEBRrsxNdbdkiZ6x
-         K62w==
+        bh=TGjs5rzvGQiTsQRwE47K693DPakZ/Tmr+xfd0UMO86A=;
+        b=mH/TKZbDLL+jDcBBkK+++azHifMzDu9thaDvNdcI1tjTJZtK8tascllMR+phOodlO1
+         8vq7qdvcDwvT2/rQxFgOcaAq+8f9ZmJLhaDheKvr75OgSiLXmuT7O68xVHY4EIvOvX8B
+         HYiVnnirEyu304CBhUkCzvk5aFbBbnSdEmLMBIS9gBENc6Qd1gcgLFCfbsj8OwiG8rM3
+         +FuQaxQu7YZENBHWxMQw/MksnM3jldO2epr98gxG5aoT1WkJaFAQgDhi0CUNfOQ7TPG6
+         RuLd/BqB1E/6A7lov4K8kxlejsvwqwjKBS9I7qNphfdknfvDvky2O0ekgYMTFZysxLt/
+         SMhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793560004; x=1794164804;
+        d=1e100.net; s=20260707; t=1793560010; x=1794164810;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GGVF8NPVYvpdU6BCTsMYlQNnPnKditwSLi3K4JDjxlg=;
-        b=wLxO98UF+PxLF2Nwy+2lhN9ids8GpWElPj6aR5zPX9gSwz+SyfcElFzLn469Hqzbse
-         XWsq9uoWjN/ammP7Pb48/EMuSHsrfkTTbG60l1xG2PlrDzpOnwy0lGhg42ov97HXsUGE
-         jwMz+O1L88yw12DVJu3JKAKb4S+NrOKBiaQ5KAgeU252qrMlbV2pZB23BjjvawQG5IUd
-         hEZKh3OsfJPm1yW2MzUdxa3MswaRqC8Ord+uPvo/jK9heKG74B5KWkNaNblwJQ0e9k7B
-         A1pUf37BzEws3XBelOAJs0BzKahs6Y34A4tjPlDa2je0fl0/sT8HaV9A8k4ReBjqhkix
-         gryQ==
-X-Gm-Message-State: APuU4Z8jh108VhWTFPNPgpIzyUrPZBWAjbVqtI78ZJLEpSAF1/VuYdnR
-	N7cYJVrI2K8knVFidw0P/1R4FmZe+svRCKaGbC6vkvUNOta2NVlvXQZbIif3zQ==
-X-Gm-Gg: AYBFou3zTMOM7ubpTCDz+2Nxw+WpxeH+GQ1KomxAy8mUcTAy7tVaGPlvy4FagqBU1w6
-	+9058FNAtGL+a2/ngD3prh0GDSXNDtzyodU+fP/fspfhNubIxKj7RWzd3RLEMij46WZYqtCklP3
-	hWTOetJY8MkI6aQLBTuHO0xFnXNo/AyEwIiEy+i+K134I3Tn3q417PQCg7MNtu+mBvx/t5V89zy
-	mvdVdIpnquSgJyUW7WyH5WvexA4gZWHbsQoaZfPinr0hUyk5NpEGxpq6V+xn9qsyivlYEXCJTcq
-	SqimUz9iTSX8+mWiJZutLVvRVjNjHb5wrUMUIK1I9g6UIFnPn8gLwwvXiHQU3s3u64MqQ7TsGzZ
-	AwNFOKrjOJGUDdo4ZXETesRVpKBED26beJGoVTW0w5nXqNI5w7usH6P/Ke3w3HzTd9cJ5pimb9m
-	UJtBiEs69nyw5aDjM4Kuv7BTmgJ74u7inq0b6YRgQNhUq/Wba0zoNNTDRRel6rfLw3z7N1mFAiZ
-	JnXEHa1qDw1SuTHnuJWwWW+ff14A6n7JSlXuxmOosr6CVyk/xGT4+8hEpgDDXU1EELdmsofrnom
-	rQ1gTrrwVFSTIeZckEgsC9+s2btTcED9c/yrIx/p2rJHmTjeOt0f8G686cOlP18Ge8sufSCIAXF
-	eSRT/Mh6Gh5ASf7iroILEMllKHpSUlPXorMxVu4JQLtlnAzVdnf7rLs8tod28vgOH1wTqEGhXsj
-	s=
-X-Received: by 2002:a17:903:3804:b0:2ca:e19c:97b with SMTP id d9443c01a7336-2eb36405304mr83269135ad.5.1793560004026;
-        Sun, 01 Nov 2026 11:06:44 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb39052effsm19108775ad.3.2026.11.01.11.06.43
+        bh=TGjs5rzvGQiTsQRwE47K693DPakZ/Tmr+xfd0UMO86A=;
+        b=BevcX7N7mKIvQ+ZXzZX6k88euzqSz60D3bTB6X2wIZJmsMlnn+sDc4XenKZkTaNKuL
+         J0FGgkDaYeC8SpJsSLRoPbQeOb1LPcv49W0p1dfGofuml7vCuW+2iybe1ZG5R1wfoiq/
+         70e3E8v8Tjjj4FbqDXDm4lcsUEWaqdT0cjYLNMEWhdeh6URB/TpkqD3/ZADZzSV9cIbl
+         UfwsgHKiUDtx0vDmYsU0WguwCDBIvYyaLnK1rk97C2PKWoQuLkdhVZkFViwAF/NUb4ca
+         /em1tbp0+pENMkeIo17vZ9MnbKw95GExN1wixO3mb14HX/U0KQObsB2bjAO+R4jdKdVq
+         ojFg==
+X-Gm-Message-State: APuU4Z/UlWgLGtYzOPedpDnuiUQoWoANDsStHbX1IwGzPhIV24Mm3IyP
+	hecFOwf7nCswX6hlUiNTO9hpzLsFCwBGHhPLVqGZOAinBvdCAhCPgnhlJKHznQ==
+X-Gm-Gg: AYBFou0J8LN4d4IkyleSSHDbGThjRz0Pwd/gNytZv+C7MxCFJ05qk6USvczSlSryTAu
+	xisvfeo5b8LbrCs9NriQonJD0L1SSbCDyeGBq6rwE8nDiWIUEggiPt4lr0YhEsSl8R3ZzlR9yRy
+	ibRB0Gad6O3bKESocdSnn8708kiArgztDNU3uXgcalylC90fMPVsx9BqitEBDHaDqbLdH0olp3W
+	1gDtqf9/d8HyFCWRNxlK69FWGjvSUVXSGpqLR1HXdCcSvy93s8LStApm0S8G+0AuFy1FVxUKB96
+	z7PKmk39QZJ7RZXU8O/NYLaFeOvdyI0jFt7XZPej9ceBVnD3o2UoocX2jgizBRhuEjR5CB4hKJg
+	o2WJFG3p+3xt9iNQztVFj35CNPt91+JzqwvSn0LLE9Q/aAjErxjGvwtq/iZVqQMGFQAnNVWJBAk
+	bQDZqRvyiBU8SIJFw/4PJC45ofg7Ze+U+B4fdpZ/jTfgHl6I/M4X3Oqu6tsmDwq52oCXqqps/L6
+	lDFTQQIH5sw2ewiWTre9HEXgNR84at6gesdjGljn6FjdXYSQTPfAtVP1aPccCafN2rh906gSt27
+	ZkionHOI8oNmHkW6TDa1b9UNjnvz4O3nsymwgw3zLV2g8vF3RAEzqefWSGyQgKK257y6bn8rF9w
+	j8WurXgJ65Kg+1AcV+0cJhdh4P4BcMxb/debDmFoXmxS1rSccU0Su+x7sWlh6fPYQdjNRF7UoQH
+	wwpMYGNHUhbd3/Ja7j7Lc=
+X-Received: by 2002:a17:90b:184c:b0:3ae:3b3d:c617 with SMTP id 98e67ed59e1d1-3ae89778667mr4226537a91.29.1793560009896;
+        Sun, 01 Nov 2026 11:06:49 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e98afe3sm15105019a91.12.2026.11.01.11.06.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:06:43 -0800 (PST)
+        Sun, 01 Nov 2026 11:06:49 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -87,9 +87,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf 11/27] bpf: Compare the arguments of an extension with those of its target
-Date: Sun,  1 Nov 2026 19:05:19 +0000
-Message-ID: <20261101190535.1454146-12-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 12/27] selftests/bpf: Test the arguments of an extension prog
+Date: Sun,  1 Nov 2026 19:05:20 +0000
+Message-ID: <20261101190535.1454146-13-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
 References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
@@ -106,178 +106,257 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-An extension replaces its target, a global function of another prog. From
-BTF, btf_prepare_func_args() derives the kind of each argument, such as the
-context, memory of a given size or a kernel object. The verifier checks the
-callers with the BTF of the target and the extension with its own BTF.
+An extension must not expect more of its arguments than the callers of the
+replaced function provide. It must fail if it expects more memory, a
+non-NULL pointer or another kind of argument. The same argument, less
+memory or a pointer that can be NULL must pass. Test check_ext_args() at
+load and at attach to another function of the same target prog. The load
+must fail with the message of the check, and the attach with -EINVAL.
 
-Only btf_check_func_type_match() compares the two prototypes. For a pointer
-to a struct, it compares only the struct names and assumes that the pointer
-is the context. That was true until the commit below added pointers to
-memory. Later the __arg_* tags added more kinds. Thus an extension can rely
-on more than the callers guarantee (size, not NULL, kind). Then what the
-verifier proved for it is false at run time.
-
-Keep the result of btf_prepare_func_args() in bpf_func_info_aux and compare
-the two results at load and on attach to another target. Return -EINVAL
-unless the kind and the BTF id are the same and the memory is not larger.
-The extension can also accept NULL where the callers never pass it. An
-extension with the prototype and the tags of its target loads as before. An
-argument that is the context only because of __arg_ctx needs the tag in the
-extension too. The tag __arg_untrusted or __arg_arena on the extension only
-is safe, but it is rejected because the kind differs.
-
-Fixes: e5069b9c23b3 ("bpf: Support pointers in global func args")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h          | 10 +++++++++
- include/linux/bpf_verifier.h |  8 -------
- kernel/bpf/btf.c             | 10 ++++++---
- kernel/bpf/verifier.c        | 43 +++++++++++++++++++++++++++++++++++-
- 4 files changed, 59 insertions(+), 12 deletions(-)
+ .../selftests/bpf/prog_tests/freplace_args.c  | 92 +++++++++++++++++++
+ .../selftests/bpf/progs/freplace_args.c       | 53 +++++++++++
+ .../selftests/bpf/progs/freplace_args_tgt.c   | 70 ++++++++++++++
+ 3 files changed, 215 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/freplace_args.c
+ create mode 100644 tools/testing/selftests/bpf/progs/freplace_args.c
+ create mode 100644 tools/testing/selftests/bpf/progs/freplace_args_tgt.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 1a8c3e514284..0b44bcb4f56e 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1752,12 +1752,22 @@ enum bpf_func_context {
- 	BPF_FUNC_CTX_CNT,
- };
- 
-+struct bpf_subprog_arg_info {
-+	enum bpf_arg_type arg_type;
-+	union {
-+		u32 mem_size;
-+		u32 btf_id;
-+	};
+diff --git a/tools/testing/selftests/bpf/prog_tests/freplace_args.c b/tools/testing/selftests/bpf/prog_tests/freplace_args.c
+new file mode 100644
+index 000000000000..d1930af23fa0
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/freplace_args.c
+@@ -0,0 +1,92 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "freplace_args.skel.h"
++#include "freplace_args_tgt.skel.h"
++
++/*
++ * An extension must not expect more of its arguments than the callers of the
++ * function that it replaces provide. The progs are loaded and attached to each
++ * other. None of them runs.
++ */
++static const struct test {
++	const char *name;
++	const char *ext;	/* prog of freplace_args.c */
++	const char *tgt;	/* prog of freplace_args_tgt.c */
++	const char *func;	/* function of tgt that ext is loaded for */
++	const char *func2;	/* function of tgt that ext is attached to */
++	int bad_reg;		/* argument that is refused, 0: none */
++} tests[] = {
++	{ "same_nonnull",		"ext_mem_nonnull",  "tc_prog", "mem_nonnull" },
++	{ "same_trusted",		"ext_task_trusted", "tc_prog", "task_trusted" },
++	{ "smaller_struct",		"ext_mem_smaller",  "tc_prog", "mem_smaller" },
++	{ "larger_struct",		"ext_mem_larger",   "tc_prog", "mem_larger", NULL, 1 },
++	{ "nullable_for_nonnull",	"ext_mem",	    "tc_prog", "mem_nonnull" },
++	{ "nonnull_for_nullable",	"ext_mem_nonnull",  "tc_prog", "mem", NULL, 2 },
++	{ "trusted_for_mem",		"ext_task_trusted", "tc_prog", "task_mem", NULL, 1 },
++	{ "arg_ctx_for_ctx_type",	"ext_skb_ctx",	    "tc_prog", "skb_ctx" },
++	{ "mem_for_arg_ctx",		"ext_tp_mem",	    "tp_prog", "tagged_ctx", NULL, 1 },
++	{ "attach_nullable_to_nonnull",	"ext_mem",	    "tc_prog", "mem", "mem_nonnull" },
++	{ "attach_nonnull_to_nullable",	"ext_mem_nonnull",  "tc_prog", "mem_nonnull", "mem", 2 },
 +};
 +
- struct bpf_func_info_aux {
- 	u16 linkage;
- 	bool unreliable;
- 	bool called[BPF_FUNC_CTX_CNT];
- 	bool verified[BPF_FUNC_CTX_CNT];
- 	bool called_with_pkt_ptrs;
-+	/* what the callers of a global function are checked against */
-+	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_REG_ARGS];
- };
- 
- enum bpf_jit_poke_reason {
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 7baeb831281f..3cb91c4787c9 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -923,14 +923,6 @@ struct bpf_func_ptr {
- /* the subprog that a bpf_func_ptr pointed to was removed as dead code */
- #define BPF_FUNC_PTR_DELETED ((u32)-1)
- 
--struct bpf_subprog_arg_info {
--	enum bpf_arg_type arg_type;
--	union {
--		u32 mem_size;
--		u32 btf_id;
--	};
--};
--
- enum priv_stack_mode {
- 	PRIV_STACK_UNKNOWN,
- 	NO_PRIV_STACK,
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index fe24e459c1b1..8bf39098ba97 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -8492,9 +8492,8 @@ static int btf_check_func_type_match(struct bpf_verifier_log *log,
- 		}
- 		/* This is an optional check to make program writing easier.
- 		 * Compare names of structs and report an error to the user.
--		 * btf_prepare_func_args() already checked that t2 struct
--		 * is a context type. btf_prepare_func_args() will check
--		 * later that t1 struct is a context type as well.
-+		 * check_ext_args() compares what btf_prepare_func_args()
-+		 * derives for the two arguments.
- 		 */
- 		s1 = btf_name_by_offset(btf1, t1->name_off);
- 		s2 = btf_name_by_offset(btf2, t2->name_off);
-@@ -9028,6 +9027,11 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
- 		return err;
- 	sub->arg_slot_cnt = slots_used;
- 
-+	/* check_ext_args() needs them after env is freed */
-+	if (is_global)
-+		memcpy(subprog_aux(env, subprog)->args, sub->args,
-+		       sizeof(subprog_aux(env, subprog)->args));
-+
- 	sub->args_cached = true;
- 
- 	return 0;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a456adaa459b..1f19fbd627d2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -22514,6 +22514,37 @@ static bool func_has_rcu_read_lock(const struct bpf_prog *prog, int subprog)
- 	       !sub_aux->called[BPF_FUNC_CTX_NO_RCU_LOCK];
- }
- 
-+/*
-+ * The callers of a global function are checked against the arguments that its
-+ * BTF describes, and an extension is verified with those of its own BTF. It
-+ * must not expect more than the callers of the function provide.
-+ *
-+ * While an extension is loaded, bpf_check_attach_target() runs before its
-+ * arguments are known. check_attach_btf_id() does the check when they are.
-+ */
-+static int check_ext_args(struct bpf_verifier_log *log, const struct bpf_prog *prog,
-+			  const struct bpf_prog *tgt_prog, int subprog)
++static void run_test(struct freplace_args_tgt *tgt_skel, const struct test *t)
 +{
-+	const struct bpf_subprog_arg_info *tgt = tgt_prog->aux->func_info_aux[subprog].args;
-+	const struct bpf_subprog_arg_info *ext = prog->aux->func_info_aux[0].args;
++	struct bpf_program *ext, *tgt;
++	struct freplace_args *skel;
++	char log[4096], msg[128];
++	struct bpf_link *link;
++	int err;
++
++	skel = freplace_args__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++
++	ext = bpf_object__find_program_by_name(skel->obj, t->ext);
++	tgt = bpf_object__find_program_by_name(tgt_skel->obj, t->tgt);
++	if (!ASSERT_OK_PTR(ext, "ext") || !ASSERT_OK_PTR(tgt, "tgt"))
++		goto out;
++
++	log[0] = '\0';
++	bpf_program__set_autoload(ext, true);
++	/* libbpf prints the log of a load that fails and must not */
++	if (t->bad_reg && !t->func2)
++		bpf_program__set_log_buf(ext, log, sizeof(log));
++	err = bpf_program__set_attach_target(ext, bpf_program__fd(tgt), t->func);
++	if (!ASSERT_OK(err, "set_attach_target"))
++		goto out;
++
++	err = freplace_args__load(skel);
++	if (t->bad_reg && !t->func2) {
++		snprintf(msg, sizeof(msg),
++			 "Extension program's argument in R%d is incompatible with original",
++			 t->bad_reg);
++		if (ASSERT_ERR(err, "load"))
++			ASSERT_HAS_SUBSTR(log, msg, "log");
++		goto out;
++	}
++	if (!ASSERT_OK(err, "load") || !t->func2)
++		goto out;
++
++	link = bpf_program__attach_freplace(ext, bpf_program__fd(tgt), t->func2);
++	ASSERT_EQ(libbpf_get_error(link), t->bad_reg ? -EINVAL : 0, "attach");
++	bpf_link__destroy(link);
++out:
++	freplace_args__destroy(skel);
++}
++
++void test_freplace_args(void)
++{
++	struct freplace_args_tgt *tgt_skel;
 +	int i;
 +
-+	for (i = 0; i < MAX_BPF_FUNC_REG_ARGS && ext[i].arg_type != ARG_UNUSED; i++) {
-+		/* An extension may accept NULL where the callers never pass it. */
-+		if ((ext[i].arg_type == tgt[i].arg_type ||
-+		     ext[i].arg_type == (tgt[i].arg_type | PTR_MAYBE_NULL)) &&
-+		    (base_type(ext[i].arg_type) == ARG_PTR_TO_MEM ?
-+		     ext[i].mem_size <= tgt[i].mem_size : ext[i].btf_id == tgt[i].btf_id))
-+			continue;
++	tgt_skel = freplace_args_tgt__open_and_load();
++	if (!ASSERT_OK_PTR(tgt_skel, "tgt_open_and_load"))
++		return;
 +
-+		bpf_log(log, "Extension program's argument in R%d is incompatible with original\n",
-+			i + 1);
-+		return -EINVAL;
++	for (i = 0; i < ARRAY_SIZE(tests); i++) {
++		if (test__start_subtest(tests[i].name))
++			run_test(tgt_skel, &tests[i]);
 +	}
 +
++	freplace_args_tgt__destroy(tgt_skel);
++}
+\ No newline at end of file
+diff --git a/tools/testing/selftests/bpf/progs/freplace_args.c b/tools/testing/selftests/bpf/progs/freplace_args.c
+new file mode 100644
+index 000000000000..6e8f16bd5d8e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/freplace_args.c
+@@ -0,0 +1,53 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++/* In freplace_args_tgt.c each of them has 16 bytes. */
++struct buf { __u64 v[2]; };
++struct larger { __u64 v[4]; };
++struct smaller { __u64 v[1]; };
++struct tp_ctx { __u64 v[2]; };
++
++SEC("?freplace")
++int ext_mem(int a, struct buf *p)
++{
 +	return 0;
 +}
 +
- int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			    const struct bpf_prog *prog,
- 			    const struct bpf_prog *tgt_prog,
-@@ -22801,7 +22832,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			return -EINVAL;
- 		}
- 		if (prog_extension &&
--		    btf_check_type_match(log, prog, btf, t))
-+		    (btf_check_type_match(log, prog, btf, t) ||
-+		     check_ext_args(log, prog, tgt_prog, subprog)))
- 			return -EINVAL;
- 		t = btf_attach_func_proto(log, btf, btf_id);
- 		if (!t || !btf_type_is_func_proto(t))
-@@ -23021,6 +23053,15 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 		 */
- 		env->ops = bpf_verifier_ops[tgt_prog->type];
- 		prog->expected_attach_type = tgt_prog->expected_attach_type;
++SEC("?freplace")
++int ext_mem_nonnull(int a, struct buf *p __arg_nonnull)
++{
++	return 0;
++}
 +
-+		/* only now it is known what the arguments of prog stand for */
-+		ret = btf_prepare_func_args(env, 0);
-+		if (ret)
-+			return ret;
-+		ret = check_ext_args(&env->log, prog, tgt_prog,
-+				     find_tgt_subprog(tgt_prog, btf_id));
-+		if (ret)
-+			return ret;
- 	}
- 
- 	/* store info about the attachment target that will be used later */
++SEC("?freplace")
++int ext_mem_larger(struct larger *p)
++{
++	return 0;
++}
++
++SEC("?freplace")
++int ext_mem_smaller(struct smaller *p)
++{
++	return 0;
++}
++
++SEC("?freplace")
++int ext_task_trusted(struct task_struct *t __arg_trusted)
++{
++	return 0;
++}
++
++SEC("?freplace")
++int ext_skb_ctx(struct __sk_buff *skb __arg_ctx)
++{
++	return 0;
++}
++
++SEC("?freplace")
++int ext_tp_mem(struct tp_ctx *p)
++{
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/freplace_args_tgt.c b/tools/testing/selftests/bpf/progs/freplace_args_tgt.c
+new file mode 100644
+index 000000000000..4f1d1d3d2891
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/freplace_args_tgt.c
+@@ -0,0 +1,70 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++/* In freplace_args.c 'larger' has 32 bytes and 'smaller' has 8 bytes. */
++struct buf { __u64 v[2]; };
++struct larger { __u64 v[2]; };
++struct smaller { __u64 v[2]; };
++struct tp_ctx { __u64 v[2]; };
++
++__weak int mem(int a, struct buf *p)
++{
++	return 0;
++}
++
++__weak int mem_nonnull(int a, struct buf *p __arg_nonnull)
++{
++	return 0;
++}
++
++__weak int mem_larger(struct larger *p)
++{
++	return 0;
++}
++
++__weak int mem_smaller(struct smaller *p)
++{
++	return 0;
++}
++
++/* No tag: memory of the size of the struct. */
++__weak int task_mem(struct task_struct *t)
++{
++	return 0;
++}
++
++__weak int task_trusted(struct task_struct *t __arg_trusted)
++{
++	return 0;
++}
++
++__weak int skb_ctx(struct __sk_buff *skb)
++{
++	return 0;
++}
++
++SEC("tc")
++int tc_prog(struct __sk_buff *skb)
++{
++	struct smaller smaller = {};
++	struct larger larger = {};
++	struct buf buf = {};
++
++	return mem(0, &buf) + mem_nonnull(0, &buf) + mem_larger(&larger) + mem_smaller(&smaller) +
++	       task_mem(NULL) + task_trusted(bpf_get_current_task_btf()) + skb_ctx(skb);
++}
++
++/* In a tracepoint prog the tag makes a context of any struct. */
++__weak int tagged_ctx(struct tp_ctx *ctx __arg_ctx)
++{
++	return 0;
++}
++
++SEC("tracepoint")
++int tp_prog(void *ctx)
++{
++	return tagged_ctx(ctx);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
