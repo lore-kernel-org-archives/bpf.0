@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793560093;
-	b=0p1aNTYlGoNbMYfxzuOru43p/l20TVbFHCp56TSioEen7h9Yeho0BphTE1VxveGl6EvH
-	 uR4sIBrJrqoXItPR4+vwcu+3TI8fcZ4rYFU1abyVdklcqP3laRBo6JheWlrk6nToXGfQY
-	 IXkE5PYhI4+x6gPH3nFBtzjm/AQSx0i4CzYJBJi6UwTBJqOCFUx7hGoX5/2kt2uNP9fxx
-	 tXlyO5ZL8PclwScSmeYFO46bB2XZYnIK3O4EwOLfre/G+ewNp+XAWgeyIpyxDyFb2kfCM
-	 B2bsNSOb5924kjUd1/uhIqYEpod7RB/dJJAluKzxlkb/ZiQ9aKT7jQtzhpfkRxVH1SA==
+	t=1793560099;
+	b=vs7O0vkTKwcMwduXTgrPNQAglH1MLuijqRJxi3dcj9SAk3lwo7bieYmXR25XEFd9DwM8
+	 tSG+j78Qqa1AfehGaF87+jUFzt55xJvD1Gqibq6KAmoI/+O/kQwCeft+YuYjRF6ZJn6CK
+	 pkc+jGwPP0tzbn3p0x9h3f4Fr0lMWk8f6H8FSIlcpMdOqLpXe6KSxWKHk9gus00MP3U1x
+	 0rnLUP6eLdcpWyR6UQNNwIcNt+J/TxOEMe6DVTBUpFNlTZ8EA316JlZUTpwyxHyP261tI
+	 acp/3W+v2l0J1D5nhFxcvUQfRfUdCCXibUkzZaa7ivSvvpIBEojHYKoO4BC7gZL+QqA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793560093;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793560099;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=CsiluyGRakOaR5XR/iwOkpZ9F8Pt5DmMJ649bbsv0P4=;
-	b=u30DplSPBzxbt56awGKmshKp4KSu5NBwxavUYWBoB5CoBNLrvRLfXPyaOizwRzZVSMIi
-	 NlvFfR+lLelX0KJk8F1cxZbWOIzxDHxSlQGvW1qJIZF1wzcyw9Z7cFpMZjAsd8io63as6
-	 PXiMA2J3LKHNTRZZt7osgFhzjuoXldCtZDOrbSp/atoxaXBc0z6KODDQ+kekw8WQFoYyz
-	 TyzHBG03LIop4miYP1wdyDivGYTTyPp4ShO49aGMPs8sKXw42neyTxyPaVFKZFnHwLGc5
-	 Tncz8pYTHgB4DQ15Gj3IuPLO2oGDnElrzsRrXJVDOesfc9FaFYhac4KVAX2dOTTdx8Q==
+	bh=gb8r2/lCmQ8I8eDeF+hFlEYTai+zb7Es+79DuXDNsho=;
+	b=NoX2ozUOGJeruYk7ZD2ZmdSOsQXkzjn2UT6Bd/JVp9N0nWDKtnpxWDtmeYqWyB1zBHzW
+	 gr2VYdi72Nkkx49uqszap6jmHgJFO2upIpJQJxIoXa7HFY2YN2KltPPRQ3Ny6lG75riWX
+	 wYf7+Sc+Do2Yf2BzbGiYwM8m1Yvcem/ye4y2/RZU61emXSKlPoOImDt0r4WoHPwMRUbK1
+	 aHXfz688wNnFKzrvyeotI/tY+oQlYiuL/Ylwmj4s8RYmPHwdfn9OejBoWdbFlsNdtvTYp
+	 XjtivJ2ifaKcUUCp0TAqx48VVMl+ffkKGLz9y89uiq9DfoRXNKGpnp+l5K//t11zAaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XGGHCLEj;
-	arc=none smtp.remote-ip=209.85.210.177
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fXvPxlUb;
+	arc=none smtp.remote-ip=209.85.216.48
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 595AC606A329
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:08:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 595AC606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF025606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:08:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EF025606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XGGHCLEj
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8a06e79e152so1003413b3a.0
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:08:13 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fXvPxlUb
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3ace1f3897cso1003293a91.0
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:08:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793560093; x=1794164893; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793560098; x=1794164898; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CsiluyGRakOaR5XR/iwOkpZ9F8Pt5DmMJ649bbsv0P4=;
-        b=XGGHCLEjqJcDufkOqs+RvbqCq5XLi8S6oCqlP6KunTPsd9oZ3IA+EZRpWrOLWmP98w
-         0T+ocJ9sDCKUNfXi9ItWj+xvu+r1SMmiVONGLgnN55ootrVhWgR9BgepzoKnecIF4Hh8
-         oTpzshXzp6gl2KBwASn3ecwv7Qv3I1HwzJ3WvxqP1XgzZAHZ7Xmj2ag0q1UwaTxS0nL2
-         ufktKe/94uuNxD9e/3vIDacWO8lgJi8XEwzFjQI6tjcn1qVGSwUIV4kq0tHhqKQAjRog
-         JHza95DVpCxgEPNFD59bhAb/Z3KNYWQWJnMDUJgEbSZtmCzEX+8eftxSDUuyBjlJnXnK
-         V77g==
+        bh=gb8r2/lCmQ8I8eDeF+hFlEYTai+zb7Es+79DuXDNsho=;
+        b=fXvPxlUbz+VUhqd2t1+gElQR+/KJi/a6MOscajOg4oUkvPPSvbih7nBHW2+eOt1k9s
+         FROYs3yv96ypqIFRMmLGDYEbtCs5wvt3AYP48iCGXQOHv/2KMtTVFbcYGleciNWxb9Yp
+         enC3hRvhTeK5v4p0ZNlKovbA1Vw0IZZaBdb7z+SSyfXndU1jtBQZF+jgV7J5iBW6Un6n
+         z9wbmiYUnmgVf4Vliqb1YdcHKhOfN+tya/BBGx662AX1yS5WiXOX2l4zGbvqnv1+ciJV
+         GggOKJuh63qkg7vQFHfMihPrvWvi696SqwdymMgZw/hzim8F80fdw4pCOa5oDM24sj6t
+         RhFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793560093; x=1794164893;
+        d=1e100.net; s=20260707; t=1793560098; x=1794164898;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CsiluyGRakOaR5XR/iwOkpZ9F8Pt5DmMJ649bbsv0P4=;
-        b=l8YjLGM39YxgxuzQ2OJXwsV32iNF5WCDI01zlELG4coxH6RMQPbKIyvG8gibaDVCEN
-         roqWlh8LMJ1sndBic1VNoHbVyz79yhAtxRygeUP1J4XKo8ooYO0G1LY6HbbHo9YeD5YE
-         CA4Nsk3mUBkWVm9hV5kvVnV1S7+T1fMM7/4oe6/2KK9g9T5RDikrvjNYVxaYYdqm59N6
-         aSxy9V0UOG8WEwYva+AFl5cYrQJCuFH891DW9btyteKTUhNafcOVLI8yK5LsONFjuI0B
-         3Tn91TlCaKOQO03wsxinDt+LqLeG1Ioqrm6KsfxEyUvuf4Qqb1uWCK1udgR9qbhrF/Kh
-         Z1eQ==
-X-Gm-Message-State: AFq9FYLqEf84cFs08JWaNhgHxaTfttwcmpWHElwQB5BY4Nt8D3E3OXU/
-	FV399qZPs7jGRvMHNFHESJ51VajFj/BzyJJTpotYytBdBImCrmSdJEvKB3fWuw==
-X-Gm-Gg: AYBFou2M9r92eFuFLX+7kX3Y+9nUDF4rdNm/32yYrZh8hzoFVI1sxQuT3JkFy9Qapad
-	3K6Dyr6JZj9UlfFse7HiUXjQjdejLFobM885wtDa6221bsZSvUAWwx6lKCJFTQZB+BoAqxv3hhJ
-	AmxYFXyP1Ur1m9OprKzpSqlbByQIWL/23MAeuZk2ijLjryf0QgAHIC1SpmUyttyQ33fGTAUTEQD
-	nve8UVujQzx3cc5LJPlZ+C7NCU4OjAPxgP0GxA9njquGz/tJnuEvSQ5GJKFoyh+mR2TVmLJaqi6
-	QVGUFZgw0xr9VyK9ZgFJzgKUGcwkOfafPVsh8aZG+hrj0+Dp4MXUwVoZA/B5eq9otXjSl6wDeNz
-	V7QtxXRxb8i4oayxutQDYG9+6GrOArXYTC6Tue9h/Z+ews6AkIt7RWEnVi6rA9SxSnFQyh3OPpj
-	jLBu8U2inalKL6sIFeX1y1OVW7xZc97WHUXXSE05DFNSyepCmwNYppkD3ng3wCmHwtyztnDbc9Y
-	LXnng/dB+91ALsAY0heRHCKtfBn8+a2bhl622e1qAj97NQxVmzvv1gdSnqsO/+amXlqNIgWWXmS
-	EzWl1DVbITIhu01IeQOpVAFR+0Uc9y5D4gEezfpDcHVA/TfsUW8IdKLRmW9uzlAhwwqQR2Hx6Zc
-	8StJQXYUoB7Aze/Xnd8oEMWe0oTXQLRPbjiw+rt58jM31bbG1fS4sr2uwiRmL2vXHC/5YgrhonQ
+        bh=gb8r2/lCmQ8I8eDeF+hFlEYTai+zb7Es+79DuXDNsho=;
+        b=fpR+TSIOtIzUwMRbmacW5mHjQL12VKP+ELZEuE5V4av173pbexcC/7bmKYYkxwcicV
+         7bPCHA8jPCI/8ww+dh/1C/eFY3HT2CnmFxLiGBI9u3106siYkIQOjC3FcrGli1ZXjbRj
+         5R5J+mRjX11jxHITXGj9Jk/SpYz7/9YQ2AtdNhuiXGlgX0e0g7TV1m5MGJ/dbhHKvwMB
+         UQ+c4dZtR/qJAEm1r1vvhPEmEht2+8TstVGnNDBpkdepeMowBKDyna9Pq56Hi1dT6pjC
+         /JhtqmzxjgT5HfSdctw9FOB3VaCnjNBD99FdwUNh0F3TskvNpN1P8hRu8tlZz3mmfLeD
+         JH2w==
+X-Gm-Message-State: APuU4Z9cvrwobZtffF0fDofrf0fRR7jTP68zo+qX0olCMpQGkbEwxuTM
+	jCtDjouhJiSIhcFc6wJL3FkrELKSUStfmFPaDRNBZfNfBPmZbcE7VZsylRtZCg==
+X-Gm-Gg: AYBFou25VX1hLkqAKS0wLnUkjDKah0miDqOKEZK53U6BChhld3ERcUNvFGFVgPzJq7b
+	zqbZwTDOeVMbInHt19lw9zzGCVRD8jjKOgB3xpSu/0Er+0DMzLDDpNsaXIzBiz9+VDWw4vXa7Fb
+	r9PaH1OMJV+0HpqMcQGEt3ceYKwG0H6rND75+u2MZm3rWYmCGCccfcJqD6LaS3UC4nahJUTHwHZ
+	1W3vLlzfNq7Nm+Dw258Lph9L+oGzdLuxhxyzI7HrNmSaxpr/z8GnGJcEq2B/0/bZ7DhLnvIl7hx
+	bxT/VhKIt0ueLcsYM5wz/CWMp2iJbRdvh1+ACKS4vaxCvRBCLyQEr8uugfzE1cuZlQ63VTUp/xh
+	E20CZXAn/1DdbT0y98Ids9GzN0+8F1IAJSC3BHng0gmoVDunww+C31u0h3eSLcn0iDFuodo6X3K
+	CT+0k5zPmvUi+fUMW9LNfuQ4JwZx7Bf8Y1TeHysGA2s00USe5fqZdn+W5kwWcIoxgob/ScQM2jG
+	rw+BMw6ZLj3wOoRXIyh5yecIxPjC+TcViunlLRxefMHjZKFCk7ukRo9X6SU1oeM2JX7gFiLS/RJ
+	qAJNfUYFDKgNMoCWY51deFXSUUUTzLcJbllvvr9DYcEEqTMWQ32DybTri8hxUfs6MGRLPsIQW23
+	W0AP9CRXQf8aLFkVa9M+goUEULZjjt8g9qRYeXMP3mP08m0JEKAFbaKvvaOIv3xSDZHtlkll45g
 	==
-X-Received: by 2002:a05:6a00:44c9:b0:8a0:3ed7:93a2 with SMTP id d2e1a72fcca58-8a9bffd2a04mr6480051b3a.52.1793560092552;
-        Sun, 01 Nov 2026 11:08:12 -0800 (PST)
+X-Received: by 2002:a17:90a:e7d2:b0:3a7:f4d:b23d with SMTP id 98e67ed59e1d1-3ae8984dde2mr7201486a91.52.1793560098382;
+        Sun, 01 Nov 2026 11:08:18 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aada9ae2b7sm1197731b3a.51.2026.11.01.11.08.12
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae84596e3bsm11126419a91.9.2026.11.01.11.08.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:08:12 -0800 (PST)
+        Sun, 01 Nov 2026 11:08:18 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -87,9 +87,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf 26/27] bpf: Use the inner transport header after a decap
-Date: Sun,  1 Nov 2026 19:05:34 +0000
-Message-ID: <20261101190535.1454146-27-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 27/27] bpf: Check the offset in bpf_skb_generic_{push,pop}()
+Date: Sun,  1 Nov 2026 19:05:35 +0000
+Message-ID: <20261101190535.1454146-28-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
 References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
@@ -106,86 +106,60 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Mason <mason@kernel.org>
 
-If skb->encapsulation is set, qdisc_pkt_len_segs_init() reads the TCP
-header of a GSO packet at skb->inner_transport_header. Otherwise it uses
-skb->transport_header. A decap with BPF_F_ADJ_ROOM_DECAP_L4_{GRE,UDP}
-removes the outer transport header. It clears skb->encapsulation if no
-tunnel flag remains in gso_type. The result in BPF_ADJ_ROOM_MAC mode is:
+To make room for len bytes at offset off, bpf_skb_generic_push() moves the
+first off bytes and clears len bytes after them. It assumes that the first
+off bytes are in the linear part. But in bpf_skb_adjust_room() off can be
+the end of the IP header, and this header can be in a frag. Then the
+function reads and writes after skb->tail, and can damage skb_shared_info.
 
-  before  | MAC | outer IP | GRE | inner IP | TCP | payload
-          transport_header ^                ^ inner_transport_header
-  after                    | MAC | inner IP | TCP | payload
-                transport_header ^          ^ inner_transport_header
+bpf_skb_generic_pop() checks off + len, but this u32 sum can wrap to a
+small value. bpf_skb_adjust_room() and bpf_skb_change_proto() calculate off
+from skb_mac_header_len(). This length is a very large u32 when
+network_header < mac_header. Then the check can pass, and memmove() reads
+and writes far outside the skb.
 
-Then qdisc_pkt_len_segs_init() reads the inner IP header as a TCP header.
-Thus the kernel can drop a valid packet with SKB_DROP_REASON_SKB_BAD_GSO.
+Return -ENOMEM from both functions, like the present check, when
+off > skb->len. Thus the sum cannot wrap. In bpf_skb_generic_push() also
+pull the first off bytes into the linear part. Now bpf_skb_adjust_room()
+fails when a prog grows an skb that ends before off. network_header stays
+wrong.
 
-Copy skb->inner_transport_header to skb->transport_header when a decap
-clears skb->encapsulation. Keep skb->transport_header if it is larger. This
-occurs if nothing sets the inner field. At tc ingress nothing changes for
-IPIP or GRO packets. Both fields are at the TCP header there.
-
-Fixes: ec20dee2f2c4 ("bpf: Clear decap state on skb_adjust_room shrink path")
+Fixes: 6578171a7ff0 ("bpf: add bpf_skb_change_proto helper")
+Fixes: 2be7e212d541 ("bpf: add bpf_skb_adjust_room helper")
 Signed-off-by: Chris Mason <mason@kernel.org>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/filter.c | 29 +++++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
+ net/core/filter.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/net/core/filter.c b/net/core/filter.c
-index b5534dac9e6d..21fcdc7cd950 100644
+index 21fcdc7cd950..9245009d9f1e 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -3769,6 +3769,25 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
- 	return 0;
- }
+@@ -3369,6 +3369,10 @@ static const struct bpf_func_proto bpf_skb_vlan_pop_proto = {
  
-+/*
-+ * Code that went by the inner transport header while skb->encapsulation was set
-+ * goes by the transport header from now on. So take the inner one over, unless
-+ * it is the smaller one, as it is if nobody has set it. Do not leave the result
-+ * in front of @off, where the bytes were removed.
-+ */
-+static void bpf_skb_clear_encap(struct sk_buff *skb, u32 off)
-+{
-+	int thoff;
-+
-+	if (!skb->encapsulation)
-+		return;
-+
-+	thoff = max(skb->inner_transport_header, skb->transport_header) -
-+		skb_headroom(skb);
-+	skb_set_transport_header(skb, max_t(int, thoff, off));
-+	skb->encapsulation = 0;
-+}
-+
- static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
- 			      u64 flags)
+ static int bpf_skb_generic_push(struct sk_buff *skb, u32 off, u32 len)
  {
-@@ -3850,8 +3869,7 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
- 						  SKB_GSO_IPXIP4 |
- 						  SKB_GSO_IPXIP6 |
- 						  SKB_GSO_ESP)))
--				if (skb->encapsulation)
--					skb->encapsulation = 0;
-+				bpf_skb_clear_encap(skb, off);
- 		}
++	/* The bytes in front of @off are moved with skb->data. */
++	if (unlikely(off > skb->len || !pskb_may_pull(skb, off)))
++		return -ENOMEM;
++
+ 	/* Caller already did skb_cow() with meta_len+len as headroom,
+ 	 * so no need to do it here.
+ 	 */
+@@ -3389,9 +3393,10 @@ static int bpf_skb_generic_pop(struct sk_buff *skb, u32 off, u32 len)
+ 	void *old_data;
  
- 		/* Header must be checked, and gso_segs recomputed. */
-@@ -3859,10 +3877,9 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
- 		shinfo->gso_segs = 0;
- 	} else {
- 		/* For non-GSO packets, clear encapsulation if decap flags are set */
--		if ((flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
--			      BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) &&
--		    skb->encapsulation)
--			skb->encapsulation = 0;
-+		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-+			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK))
-+			bpf_skb_clear_encap(skb, off);
- 	}
+ 	/* skb_ensure_writable() is not needed here, as we're
+-	 * already working on an uncloned skb.
++	 * already working on an uncloned skb. The first test
++	 * keeps off + len from wrapping.
+ 	 */
+-	if (unlikely(!pskb_may_pull(skb, off + len)))
++	if (unlikely(off > skb->len || !pskb_may_pull(skb, off + len)))
+ 		return -ENOMEM;
  
- 	return 0;
+ 	old_data = skb->data;
 -- 
 2.55.0
 
