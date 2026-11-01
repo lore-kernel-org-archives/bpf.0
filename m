@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793560916;
-	b=YlxH343mpQpon2erQ0bzpl2J0nHpJWp1uvpsnvomP27nTfSbmolTnhTK5G4Da5yL5oXs
-	 eadhxsTxxNTs0pDQbSGFpIdNP+WJi2mfOsDxrFlMwB78SMsP26/oYtCR6Vcv43HyEUXO4
-	 Pg18foTD3r3OaOkWKWyg1U94+IECchMn4NpbOywB9EqFw/66ddSTLvaZpXiRKAx5H7uzB
-	 qdM4IUiWdJbLKeGd3Frv1MlozQhNJLcp2C8Wl4R70Ucfj7a/miozqJ4a899paf/GtERGI
-	 8lMwKc6iA1QjgRZ94mRFcwYNoKUgzNdDAfWGqUSV1uud5IE8nT/vmTjd/SRVU6qs1UQ==
+	t=1793560922;
+	b=C8WWdg+phJwC7fYz91w3h8BBEun6fd4kuetGPG9NViWopEQ65a7HtdejmpKKzivosH2w
+	 F/j+qLMkovzHSm0O4SllkxZruC+dhDAi2cm0mbl71rXU+4rvenQEwdV5C/CiO3eVUXwfP
+	 Ydc9UL0DOIhTRKSbtEj+XmA3f8B1K1JW/pX7EFycRfZ3LEF6o2R0L84N1hLIJpCPjl5vI
+	 zGIFtaNr5nPuvGA/OTvJMfS2fcw5hVu9a29HoZiqQ4gRzlKhDQb9DHUVo86EmNtA3jT5u
+	 hgdQg1FZmstH2Bszyyydf2ijngK4nTXdIJ/lfxzIi/pB9M+e1R4as17DAls/QobyC3A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793560916;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793560922;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=iEAaFxE93Z66HvVgBeBCzXXUprLmZg1keqaBn6ibVEs=;
-	b=F7l973pTR41wc18i8/ruDa58DIR8pkM+c2Z2O+sXP3tFOsM6fqfJB9hSIdOJeHlxs7rp
-	 7YKXQu9s+AtvOxRz0o72aRJfXPmMMwfztGP/7hFTmiVnz0ngSqE1TpPqs0P7yI3mTT/v2
-	 qJJFZZOuwlj4H4F3sB1ii5hVL2YeVlwP3EB1UU56pwJq+HPsNgFLteLRnDTu9mCGKtyJo
-	 9lWtAkoTy3SAMwLEv4qZNeYRGV71lwS+bjLKKD8cDDQErGJ6il2jlAdbJ+cZ1Z/cZxFOW
-	 eQg75qv0slg4Zisqy7lbSoUPw+ZL6fVYe9dv6nImiC4YyOB0FeGDyV+Kmsm/+2OUHJA==
+	bh=XsgHBoShd1l16ZkCMwetUuA2WCLMhgmDmGz78nTCX+Q=;
+	b=v93xKTDjWO5Haj2KM7ju8GLf+UYqWLg7vlEso5If6kAtFr6+HHsv62fUVm5h+XN62MSO
+	 ajBlgq8773SNlF6LbHbvt8iRnZ4OFgo/mcxIkMVhHEDfWDOYVgzgUltBjrOH6LCp15q/1
+	 S42+KdiEj7nArupi6qKh98E1tVJ5KECq0MoVnrA2MNFlnvZeblok0aAUHFP+tzB8OztsI
+	 M3IiVYKahPYRXNNkNh7GwlUVh9bVsJVhxPOUqynVYfeXJoSABPumvAA//NZJMJWMcIhYC
+	 MniHRBCWakl9ysUEVgMqHQPAPu7UxBmslpyi8AEjB4SZifm9nxlDB/kdgf30SXBejQQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KGkdRIyO;
-	arc=none smtp.remote-ip=209.85.216.54
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RniuFtKT;
+	arc=none smtp.remote-ip=209.85.210.174
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C97606A325
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:21:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 63C97606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F2C606A326
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:22:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71F2C606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KGkdRIyO
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ad41b47541so1811186a91.1
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:21:56 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RniuFtKT
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-886e61fa30fso765032b3a.1
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:22:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793560916; x=1794165716; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793560922; x=1794165722; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=iEAaFxE93Z66HvVgBeBCzXXUprLmZg1keqaBn6ibVEs=;
-        b=KGkdRIyOVTNIFEqxmnOgCEMdttl/Ya277iv4MbVxowwHC/nKur/m7RLM5g5l9a19AL
-         3Et6EXzjS+h9hCj4WS8yDaaIaY7uzqjGgY2h0GdMxnH0MZ5Vz/vvloux4gGrFamqX4/X
-         S//qLiiJjVvd6g5IXZ5CKMbJN3YqUMsU1DFUd7uzh5V0EZJNKnFTO3TJEcIpRNWx4Du/
-         pRmTAxrQSJQ9Fuynbd31oFgZJLIFpnJ/JhoQJO2rl4tcAwFK2EXYBpd9+pVGEuFP3V6l
-         GUHczH5p8hhCLYqAnZC9xWQVPWtZ2Iuu+x3fwKUmBTy4ouhVBT6g9LEEf7YxAm5WHVkK
-         hgDQ==
+        bh=XsgHBoShd1l16ZkCMwetUuA2WCLMhgmDmGz78nTCX+Q=;
+        b=RniuFtKT7ssagL3Jk341poHqV5zD81WJa/Y+uWZg2wzqG8Wgm4lXIip6mhB6uPk7Te
+         FvARWpFp+GFqhltoQW7Tq9nZYmzT0T+/8uK0+9wjz762djOtMMT2f0OLNxdn5DRw/Lvr
+         1KU/H0RUdsuFvchBXKfGh9Z4RPZr3naBVw4mJ/dVtkStpccwAg2IazdVuNuNS0e0jakN
+         vO72D8Gl5+l89ONUqYMk+EslGorGH3MO+9syQdKBp2uusvY2ZN5tvbdZ7jcH+Hy4QfxF
+         RKu0/sPsXbwc1L7BvTz1oCUmD3MMypB1PpkxfAd5Me50gcXjeW/mCyKQj+YW51nGYTVC
+         5gng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793560916; x=1794165716;
+        d=1e100.net; s=20260707; t=1793560922; x=1794165722;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=iEAaFxE93Z66HvVgBeBCzXXUprLmZg1keqaBn6ibVEs=;
-        b=yQ1sJYdZDCcnu4vyDJ/mVV5qWd5EuqmFjNC22kdSSD+LsQahG3E1wMI3brBEBHdtL+
-         pGKb4uaOBYHpBg4FidSYuxtMsVerdE+n/kLE+rgbu8ZLokZiJIPhTKf/PmlnEN0rz/1H
-         5pAyWFiGLAXAHoKYn/wA3B7523lJeQttB8VBW+RZrru1oDSbDfagbFH/pFZpkYWgO37A
-         rSTnQPk+A2x2Vx3WrLkiRLHrp7iqs929NVGBYHLBYynyA3FrQwfNpqH2JQeYRq42moUs
-         4cXySP5pvQXWu0ExvCsuyHxoV8WMapMMpejJX3GeNVhCrlGAVVTV5HeXcMqfIbBwQbOa
-         V0gQ==
-X-Gm-Message-State: APuU4Z8rD/yx08yg72GH70g2gFK79LQt4ayXyHFHxI8P5i1KQ2U9au0r
-	GoTKegIW5QLe/Ws4kYGYgtLtYs/Yuiy74kyBUei0dzrQWumT1G0qguhBYyoo3w==
-X-Gm-Gg: AYBFou1V5xgr44ZrjwmBohjHTGtKYmQQ7+TsCJ9B1z3j0Asebyovwd9oVygmtcZw3GT
-	hQxRjXKfJGQJE/rHg5cVZV4ym9CmKWfh8E93mWtB+PrF2RVpyrpr5D0GipDxkhFtLP/pAbvXM5d
-	DsmLbE/wab0WG74lUYBp9kaUF0+JA/HuCGP1vRfgW+4JHRGJoEOvIQd4i7RmhGIUTJqzOcv0ijh
-	oRwNDh1U4j5SYHy6MdvbmkXQfk5btqfoYe5fqVDd1bVAR6+RsxEJ70i75v40/hTAsjKuu4T719F
-	am0XLszsa5Dc0LTbSG9rN4l3vVyIVcs5oCPZwK8OEI5xZkUx7tXh/8kO9kLyIHNcWEVyvMG+RtT
-	ZUbZbBbPO8ecctUZGlxSlj+c4dy80nEJxvFBoLq02lQa621xCk1nkN5k2lTU2gJ6euHuT/GwhxY
-	59LQ2/HF36c9jDe7KalWikvKCSoy42xt+WPKHM2m6UNe+VJaFMQLk+A6W/renz0C89cS24OH5G4
-	blKFnZYwX4MWyc/W9SKm0vY+I09i8x3+lmTh5e+WalCqJl1s3gCmL6FaNVh7k4kBjIFCbebPnT6
-	T7ljSVd73oWTqKPKS1ecSTgzJjAMi7dgwyjZRHlTZT9DB7ZuOux8uTcsSZHnDAtKJ5ONxSaBZvN
-	/VtEucjnc0Zx/LZnTky2/upti+VP3C8TuVxvrZrQbExDWXUfPxLqeSHpIgmN4ykfXT9mASx2QKg
-	==
-X-Received: by 2002:a17:90b:2641:b0:3ac:8446:c1b5 with SMTP id 98e67ed59e1d1-3ae8974b804mr6354294a91.31.1793560915674;
-        Sun, 01 Nov 2026 11:21:55 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae87fc548fsm6851876a91.4.2026.11.01.11.21.55
+        bh=XsgHBoShd1l16ZkCMwetUuA2WCLMhgmDmGz78nTCX+Q=;
+        b=KwXjhteGGLpa2CAUSaNG0fyBscCj5xuwhGFBZ4FQhipmgaCh0LkxLgahzgdZ1bJlNe
+         UvB2okSgnJ1a7FOmBoDX4QFmrT4lkVnyN3NrKX3uxFdObfE7yrpe0N8ZfY38tmrtWyC4
+         TpUPgRa5sxECDKcCrP4JioiHD0tsHiuxLA9rAUJp2L/HatjGc2kH5VJdfPAvcU2dBBD8
+         9zem18VUqI44X3yhSDSFdAPF8ROMWqaimVQ1l/2581GhCu9alhCYOaHlyFqWdfR1rDLA
+         lnlAZH/EPjIbttQgfGsLM6VpozRMh0OuKdt9ioJQHEAD8mEElfsVLflYwGfHnhqvj7Qy
+         JSAw==
+X-Gm-Message-State: AFq9FYKPX/nxbwoai2QJKwlEuhtYecxMTA54jclX9v4V3nAIi6Pkp7+y
+	Kov3D/dsUZQ640dcvrv2n7Zo14NqKp5h4f3EKzSgbObNrjfVSwGkL60IMWbA8g==
+X-Gm-Gg: AYBFou1E0NG0z9pmTF1rsQdhXU3rQZ3JTyB5vi8WFn9Tp72in+7jpoYjzDjF4k2qxMY
+	QFClGdF3U/36dsZ2yeEWzGD7uQ9JBfm3XRvLvV+B0thcEW7LJpghiQ37NE9wEjh5KpFmZ+mnxt+
+	20DpTI00ld7VOWPHAtEHBwRu9EsqZzxbkTBU424hz0TVBrOoTgNK2Ohbo95+VNM080OSGWU7STB
+	ZTHSDYVNGuEijMsD0Q60kMB/6Q+5UIcY5dreBNG0Jy3vSzWGSI2VDyCz/WtMikFrogyebhX66tp
+	iD+Zs7LG6/UGeWKZdXbfICvWLx106EPi4cBRwgvd/3hcgiYrDQYm6oV1ebTVrAz9GSbEwhCPq8X
+	xRVArTC85Wi6HjlODrSbqiWjhChYwUnHNfOS+GdvpCLrloVA6lkidmHKH9cbl7G339rV8tvPQ8o
+	4Ks64CcWR1r2ytyEy7/ZqusoJqRVE95iZb+Pj/NHfy7G50nTZtTjEMhNrEbLi+C56QKggFEYQ+X
+	9RIjjhiWO2JvH0IQHozWAmLRXbbFX9ySoieWHIjk6QU8ywiD8sBbBf2hqMN1VSaLmcdO0laLuU7
+	X72KYWCaPovmoCnpDyrP/QajtfS5ZmSulTeUcyWGATMCAgw3h7CUYrQmBN1uhDXQjdU3Epui/in
+	7l1guHOFJbm8ots9pzEUjt0FV4/pknzfyZgT44PJHWvKsT3ABvKKRZj2GeEf6qjeIyeo/PS8Cj7
+	YOnK07iLIGFyAuz9OzG30=
+X-Received: by 2002:a05:6a21:487:b0:3dd:a196:30a1 with SMTP id adf61e73a8af0-3e928ad8fd0mr5379597637.81.1793560921776;
+        Sun, 01 Nov 2026 11:22:01 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb096b8323sm2347314a12.6.2026.11.01.11.22.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:21:55 -0800 (PST)
+        Sun, 01 Nov 2026 11:22:01 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -100,9 +100,9 @@ Cc: daniel@iogearbox.net,
 	mptcp@lists.linux.dev,
 	mason@kernel.org,
 	josef@toxicpanda.com
-Subject: [PATCH bpf 09/15] bpf, sockmap: Check the TCP state in recvmsg()
-Date: Sun,  1 Nov 2026 19:20:51 +0000
-Message-ID: <20261101192057.2296489-10-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 10/15] bpf, sockmap: Reset the copy position when corking
+Date: Sun,  1 Nov 2026 19:20:52 +0000
+Message-ID: <20261101192057.2296489-11-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101192057.2296489-1-alexei.starovoitov@gmail.com>
 References: <20261101192057.2296489-1-alexei.starovoitov@gmail.com>
@@ -119,79 +119,102 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Mason <mason@kernel.org>
 
-With an sk_skb verdict prog, tcp_bpf_recvmsg_parser() copies data from the
-psock. Then it calls __tcp_cleanup_rbuf() to calculate the receive window
-and to send an ACK. The window and the ACK need a connection on the socket.
-But tcp_disconnect() keeps the socket in the sockmap and the data on the
-psock. For a TCP socket sock_map_redirect_allowed() rejects only
-TCP_LISTEN. Thus the psock can also get data after tcp_disconnect().
+sk_msg_memcopy_from_iter() writes to the copy position: byte sg.copybreak
+after the offset of element sg.curr. Both tcp_bpf_push() and sk_msg_xfer()
+remove bytes from the front of an element. They increase its offset, but
+they do not change sg.copybreak when the element is sg.curr.
 
-__tcp_select_window() divides by icsk_ack.rcv_mss, which can be 0 in
-TCP_CLOSE. In TCP_SYN_SENT the new peer can get an ACK with the sequence
-numbers of the old connection.
+tcp_bpf_send_verdict() can send a part of a message and keep the rest as
+the cork. tcp_bpf_sendmsg() appends new data to it. If sk_msg_alloc() then
+extends element sg.curr, the peer can get memory that nobody wrote:
 
-Call __tcp_cleanup_rbuf() only when tcp_can_send_ack() returns true.
-recvmsg() returns the data as before. Move tcp_can_send_ack() from MPTCP to
-tcp.h. It also returns false for a fastopen child in TCP_SYN_RECV. From its
-peer the child has only the SYN data, and the SYN-ACK acknowledges it.
+  old offset    offset    end of data     offset + sg.copybreak
+  | removed     | rest    | not written   | new data
 
-Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
+Move sk_msg_reset_curr() from filter.c to skmsg.h. Call it when a message
+becomes the cork, as the helpers that change a message do. It sets the copy
+position to the end of the data. Without removed bytes it changes nothing.
+
+Fixes: 91843d540a13 ("bpf: sockmap, add msg_cork_bytes() helper")
 Signed-off-by: Chris Mason <mason@kernel.org>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/net/tcp.h    | 6 ++++++
- net/ipv4/tcp_bpf.c   | 3 ++-
- net/mptcp/protocol.c | 6 ------
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ include/linux/skmsg.h | 19 +++++++++++++++++++
+ net/core/filter.c     | 14 --------------
+ net/ipv4/tcp_bpf.c    |  5 +++++
+ 3 files changed, 24 insertions(+), 14 deletions(-)
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 3560adddf821..23a22d70718e 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1845,6 +1845,12 @@ static inline void tcp_adjust_rcv_ssthresh(struct sock *sk)
- void tcp_cleanup_rbuf(struct sock *sk, int copied);
- void __tcp_cleanup_rbuf(struct sock *sk, int copied);
- 
-+/* Is the socket in a state in which TCP may send an ACK? */
-+static inline bool tcp_can_send_ack(const struct sock *sk)
-+{
-+	return !((1 << inet_sk_state_load(sk)) &
-+	       (TCPF_SYN_SENT | TCPF_SYN_RECV | TCPF_TIME_WAIT | TCPF_CLOSE | TCPF_LISTEN));
-+}
- 
- /* We provision sk_rcvbuf around 200% of sk_rcvlowat.
-  * If 87.5 % (7/8) of the space has been consumed, we want to override
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index b635d3ebf4fb..9848c8e5a2cd 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -343,7 +343,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
- 	if (!peek)
- 		WRITE_ONCE(tcp->copied_seq, seq);
- 	tcp_rcv_space_adjust(sk);
--	if (copied > 0)
-+	/* Data on the psock outlives the connection that it came in on */
-+	if (copied > 0 && tcp_can_send_ack(sk))
- 		__tcp_cleanup_rbuf(sk, copied);
- 
- unlock:
-diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index 7a22e9388e0e..d62cfbf2d490 100644
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -619,12 +619,6 @@ static void mptcp_set_timeout(struct sock *sk)
- 	__mptcp_set_timeout(sk, tout);
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index d5e35f24738d..f0e27b4b929f 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -196,6 +196,25 @@ static inline void sk_msg_init(struct sk_msg *msg)
+ 	sg_init_marker(msg->sg.data, NR_MSG_FRAG_IDS);
  }
  
--static inline bool tcp_can_send_ack(const struct sock *ssk)
++/*
++ * sk_msg_memcopy_from_iter() writes to byte sg.copybreak of element sg.curr,
++ * counted from the offset of that element. Point both past the last byte of
++ * the message, after something other than a copy has changed its elements.
++ */
++static inline void sk_msg_reset_curr(struct sk_msg *msg)
++{
++	if (!msg->sg.size) {
++		msg->sg.curr = msg->sg.start;
++		msg->sg.copybreak = 0;
++	} else {
++		u32 i = msg->sg.end;
++
++		sk_msg_iter_var_prev(i);
++		msg->sg.curr = i;
++		msg->sg.copybreak = msg->sg.data[i].length;
++	}
++}
++
+ static inline void sk_msg_xfer(struct sk_msg *dst, struct sk_msg *src,
+ 			       int which, u32 size)
+ {
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 303c0c44dc2c..e187e3c27999 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2677,20 +2677,6 @@ BPF_CALL_2(bpf_msg_cork_bytes, struct sk_msg *, msg, u32, bytes)
+ 	return 0;
+ }
+ 
+-static void sk_msg_reset_curr(struct sk_msg *msg)
 -{
--	return !((1 << inet_sk_state_load(ssk)) &
--	       (TCPF_SYN_SENT | TCPF_SYN_RECV | TCPF_TIME_WAIT | TCPF_CLOSE | TCPF_LISTEN));
+-	if (!msg->sg.size) {
+-		msg->sg.curr = msg->sg.start;
+-		msg->sg.copybreak = 0;
+-	} else {
+-		u32 i = msg->sg.end;
+-
+-		sk_msg_iter_var_prev(i);
+-		msg->sg.curr = i;
+-		msg->sg.copybreak = msg->sg.data[i].length;
+-	}
 -}
 -
- void __mptcp_subflow_send_ack(struct sock *ssk)
+ static bool sk_msg_elem_is_copy(const struct sk_msg *msg, u32 i)
  {
- 	if (tcp_can_send_ack(ssk))
+ 	return test_bit(i, msg->sg.copy);
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 9848c8e5a2cd..d24ebcd7633b 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -469,6 +469,11 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+ 				return -ENOMEM;
+ 			}
+ 		}
++		/*
++		 * A push or a redirect may have taken bytes off the front of
++		 * element sg.curr. The next sendmsg() appends to the cork.
++		 */
++		sk_msg_reset_curr(msg);
+ 		memcpy(psock->cork, msg, sizeof(*msg));
+ 		return 0;
+ 	}
 -- 
 2.55.0
 
