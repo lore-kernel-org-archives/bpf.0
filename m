@@ -1,101 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793557435;
-	b=re7SHmwkHvcS28lClF9kihbbgDAElQUCa5Bd4qBs09l/r+//seHfXLzENp3vIqGf5XXE
-	 KafSw5VueLJL7mNJRJ+v6m/hK1TM3TABw0Lf1jQ2RdvpKMWHfQ79VXQqrUT74Uo494qRi
-	 qaVIGSHsgR6sJppqupwN2rw8k74VuRvSnf7MShzJxMLgOuqUZ4tbBZBY4tRxThy3DbMPx
-	 NNjazDvQyeyY3KAr+zc+Ve1Oqf3Q6XSetf7Lm1lI4VNjP7PNhNtJKUlj312dS7teLtJWM
-	 JJn/lqWY/CN4J6jIp9t5t8cJfiNpOtyjSF3wXzdLNXnANE6xfNz4FrDt4Ak3ugORDUg==
+	t=1793557884;
+	b=350YzjCGernyej9bTEYKFZ+w4ubpIW9EzL3MGxfZ9dXhFy75K4mid2uxGF1B7hYe9OT/
+	 8VxNHf5+gBMw3eE7LAjMXWU7czmR2pSjeJtfLbKQmINuuvDY0sB9udpptrH5UgmD/WyIW
+	 qCl7gq+tJ9928mNFB12SzAuTb4drkWIhoYm2k+sY2751KjWKTd8MBBza6TkWf2I3JxeW1
+	 fcNC/pIc+EyEvq5QcGLHqEV/62SmW1yW8pcjvqhsj356sfw1Ox9cmlCqwL7iME895MW1R
+	 reUZvMk4AnxzEVkvFX2V7kD+puwG00oPvnnumBSsLr598hVI4D7Ze7gzIWRAtxIU7mA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793557435;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=PousPftMuxge1de4JgtYSbXjOqqZ3UAm2KBK0fUdmuE=;
-	b=FvSvTigxxjDO/JsuwZxufhWRMHTPfwzk3aLrvB2mv7U6/7NE7Q909RhtCAzYCea/8d6v
-	 nylSz82KFc+1iwqJIGm6rXGHe5cwUKOV75C8FZdSLoXWjrBBV8nvEcnz1OlVZ3iz+Ogia
-	 f1pqBhCWifvYNkDXZbTcd1YYZdAKBN2VqdLOXaUGTPFAgFpu8H7F6ND11Enxf63Om6gHB
-	 sv5xg7VGJxsyMRXIeb9n0kV97IPB+sCcx4SwH5l7vlqwSirALLQ7uGJ7Tq4PT0XtDT/vp
-	 SPkUxo/+hRxD4XL3GrjcDquf/h1+hOc+2CD4LrwA5BsRAgjiHF8ApA9yGvkBaCNUsGw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793557884;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=noxXZsFaiYKZpmIh+5P0JmnW1Vf3sBx9HEZ5XiMmsLk=;
+	b=5nt2UCX9H58YwRkjodJqteTjKf3oAiKQ15jFX0jIE4kryWD3ARPPehWj1h9ym0/juneh
+	 ezE9oLol45WorNnJ6uohOUk6tEj+wzx9MbCk0hDrNlsJG44Ydvs1TC7AKkcXbYDL40/OO
+	 XYyb7ur+NFFZqQouBgQutbCJlogxZGQiV0ldhoH/hxpBDY8PeQTuuUPzV4SRJZR82Y4nk
+	 LSMW0UcbSxxiWDDmP9NSUlyUVga+TNgTcepAZ7enZ3RN8kDEucs7NjXg/LPlZtDehgrGj
+	 wdHy6f2Lj0Uv+zmbB/aQWmTv7z/UKZjSlJEZf7i4zH54ZnC41Az8DX3UXh/ta4avvDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jSFaeFYu;
-	arc=none smtp.remote-ip=74.125.82.174
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m7jMUlTS;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1EE606A325
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 18:23:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B1EE606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA2F606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 18:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jSFaeFYu
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-35b2c599f43so3266040eec.0
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 10:23:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793557434; x=1794162234; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PousPftMuxge1de4JgtYSbXjOqqZ3UAm2KBK0fUdmuE=;
-        b=jSFaeFYuK/zwL+ige/xGHmU4b5Ji2VCn1jiK5QiS2ac9ZOVljLBgogYTjdJtZeAvVe
-         E6A/aFGnyDJZAEicrf9Cz4yQfDorfvGJTLIMlqgPpIh0Pmcd3hcnkQnOxitpF2/597lZ
-         o25RBf8S7etBYJcRT4rputGTabU14ly7UIyemBAprUfCiAtZH1ssDoRsuJoCFz1Gwlzu
-         sM7+6oyQuztxUNRLzhFhXTaTV8an2LUi69zW0xRIcvs07fgz6g5feOshuDRA5c9hztI7
-         rQtG7FiY+Il4e61X0NIWWHRxVetattD5Ft+mXkSQ7rJymROdkFcR3LOX8lNDZXZiKcxr
-         xD0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793557434; x=1794162234;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=PousPftMuxge1de4JgtYSbXjOqqZ3UAm2KBK0fUdmuE=;
-        b=nRmZhRjQkXmOdSohEtZSW5bYvnwWuFI/4/vnpKVzAMvWxIqx5rVXjzcwTNs+1QtgCh
-         03B/xCZqZE420db+thwHwuOgZpdaNoL20pT0xdUjbgRaGsC4XyCog/pt5Xy0PsY2Ki66
-         Ra9QScBWkdCjzIImK7LouNm3JXSpNt7Iimawf40P5Zq7mEGQrNRdo7IYVmh3Cz4l4oGu
-         y+fXZPBU/nkQnO3MMmZfuC00fULDdaibiku3HTa470IfeicbXVZNxGC/82HZ/HlmpYxJ
-         jz0zbbqWLY2HYAMfAMDfbdf0HYhZNMdk2bi7K6QcR+3dt00gDDis+YXOQ0YL59BEQ9EK
-         1Wag==
-X-Forwarded-Encrypted: i=1; AKwUvBwLoLQ00Gp/yX5mgaVv76pKZr6J1d2rDn187O2jsIL6HPVc6WRb2FPb1eSnsz9dbYMeAN0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLyO+C0a7PINrlLdv5WWhnu0xTH7lLdgx4UJPkpm2WWZ8y6GsGF
-	moljr9Xk2xpJQrniYeRUd9Vlkq6/bDTRqVR0tAbtoHRNqqxblm3vtc4R
-X-Gm-Gg: AYBFou0UjRxKZ0kGABxfNEa+4SJYv7OJjYbCgYVhWOlznHPHlB2yZixaK4D1GU3pSNr
-	6zqQX7UXWQe8KJ+4c6JDRZ765boJkZgEFh5i/cCPL3CYpcJHJWYVYg1iFeX6bKqx8kQHlQWg+g/
-	YcAXHZ9iy2Bb2eePwttRvcsu2C54faGjsuydBbAuEDOq2aKMoEEYnitxGI/OVyrzJcfI/CDJQih
-	zPfLuOBVoTaMtnuTk81eaQytHsJwlFNKkLMtjvyPzHvqqubtOZg3Sx/gwDqvtz9qMJrcXgNcNIm
-	6UsZbDpEuokS6WH9TjK/R9O/0f26B+ndSwAoDp840jd/wYlPrGK6jaXfQmsWHSFE9OINhOsx8vW
-	6qXZoMegBAAtoAyVZzxd/XwF4gIfd1I9jmRJAg1ItU23IdnFokHr2ioYVwy1GNaxxxjJHqZPikV
-	6eeFH1kGbPvOiH5Ol4BmXEYUGrrejsI9YNGCGUhiozAYMuL8/CTs7VdZ89Il81d0Hte/g4Gtp/6
-	W4aonAEEBPCcywvqNiiLWNqv+pVQakoBAT03T/wC1n65qKhp1oIbLAMol+sHlLDo9ejudsgn6+c
-	+bH9N+DAH+yDhi1HLU5hVTvXGojskhysDEf0c8e58PIZG9DwnqHeg/NZDKIzagHEgQ==
-X-Received: by 2002:a05:7300:e9cf:10b0:369:f126:9ce2 with SMTP id 5a478bee46e88-36a42481f39mr14812550eec.41.1793557434277;
-        Sun, 01 Nov 2026 10:23:54 -0800 (PST)
-Received: from localhost.localdomain ([2400:d802:dd7:8000:50b9:9b10:1e19:1f0a])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a428fa380sm27298976eec.12.2026.11.01.10.23.49
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 01 Nov 2026 10:23:53 -0800 (PST)
-From: Yuqiang Sun <izaiahsun@gmail.com>
-To: davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com
-Cc: horms@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org,
-	ast@kernel.org,
-	tgraf@suug.ch,
-	zirajs7@gmail.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH net] bpf: lwt: Free the skb when bpf_xmit() fails to expand the headroom
-Date: Mon,  2 Nov 2026 02:23:43 +0800
-Message-ID: <20261101182343.17991-1-izaiahsun@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m7jMUlTS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0A191F000C1;
+	Sun,  1 Nov 2026 18:31:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793557883;
+	bh=noxXZsFaiYKZpmIh+5P0JmnW1Vf3sBx9HEZ5XiMmsLk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=m7jMUlTSlxplXFhKsjtkBufxkBuXa5Qg+zVhD0xjkrqW3x5AarQiIP+0zIsLRWjAW
+	 uwW2+bkjpRqNDafApy/jzuI1X9IGP911fq2Z/m2FCIwvr9S9kpIITC8BHO8+fs1vA0
+	 l6XxF+rBY1Y0ycxpITxVBBl7Rl/zOk7FyRSgV9M7PNkVjBDypcPEpj6FyEySurNOe/
+	 ZLIX7YEx1mfwhMVrqcdDDRqfagxiQ767jl/vyOpSScAxGmCucA6ThNMmbN78mgP3/E
+	 cd+t1w5o51qutmFB6LvdqtXkMEY2D9Owi/pVz/V3Lw3FHCGbog3X0WuNDf8sHtRHB0
+	 qHjkPpP9V/Liw==
+Content-Type: multipart/mixed; boundary="===============2438624405266919593=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,71 +49,111 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <8581ffeb7c773e5dc931ab99c0fd6a7cee06a0771aefddce1183890550402cb7@mail.kernel.org>
+In-Reply-To: <20261101174405.4055052-3-alexei.starovoitov@gmail.com>
+References: <20261101174405.4055052-3-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Test liveness of an implicit kfunc argument
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun,  1 Nov 2026 18:31:23 +0000 (UTC)
 
-When an LWT xmit program returns BPF_OK, bpf_xmit() makes sure that
-the skb still has room for the link layer header. If
-pskb_expand_head() fails there, bpf_xmit() returns -ENOMEM without
-freeing the skb. Its callers, lwtunnel_xmit() and then
-ip_finish_output2() or ip6_finish_output2(), take any return value
-other than LWTUNNEL_XMIT_CONTINUE to mean that the skb has been
-consumed, so nothing frees it.
+--===============2438624405266919593==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Each such failure leaks the skb, together with what it holds: its dst
-and its charge to the sending socket, so the socket is never freed
-either. The other error paths of bpf_xmit() (BPF_DROP, an illegal
-return code, a changed protocol, a failed reroute) all free the skb.
+> selftests/bpf: Test liveness of an implicit kfunc argument
 
-Free it here too.
+TL;DR: The new selftest uses the may_goto mnemonic in inline asm without an
+__BPF_FEATURE_MAY_GOTO guard, so older clang (e.g. 18) may fail to assemble it
+and break the whole selftest build.
 
-The leak was found with kbound, a static analysis prototype for
-ownership mismatches at kernel interfaces, on v7.2.12; it is present in
-mainline.
+> diff --git a/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c b/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
+> --- a/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
+> +++ b/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
 
-Build-tested with x86_64 and arm64 allmodconfig (W=1, sparse): no new
-warnings. Run-tested on QEMU (x86_64, KVM) with KASAN: a route through a
-dummy device with an LWT xmit program that pushes one byte with
-bpf_skb_change_head(), so the headroom check has to expand the head, and
-failslab limited to allocations under bpf_xmit(). Each of 10 pings then
-fails with ENOMEM. Without this patch each leaves a raw socket behind
-(RAW slab objects 6 -> 16); with it none does (6 -> 6), and nothing else
-is reported. Without injection both kernels go from 6 to 6.
+[ ... ]
 
-Fixes: 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel infrastructure")
-Cc: stable@vger.kernel.org
-Signed-off-by: Yuqiang Sun <izaiahsun@gmail.com>
+> +/*
+> + * r0 and r1 are live at may_goto, r2 is the first register that is not. The
+> + * insns that the verifier adds for may_goto are free to use r2: 'r2 = aux'
+> + * comes behind them.
+> + */
+> +SEC("syscall")
+> +__retval(5)
+> +__naked void implicit_arg_after_may_goto(void)
+> +{
+> +	asm volatile (
+> +	"r6 = 1;"
+> +"1:"
+> +	"r0 = r6;"
+> +	"r1 = r6;"
+> +	"may_goto 2f;"
+                  ^^^^
+
+Can this build with a clang that predates the BPF assembler support for the
+may_goto mnemonic?
+
+implicit_arg_after_may_goto() writes may_goto straight into the inline asm
+with no guard.  The LLVM BPF assembler learned the mnemonic after LLVM 18
+was released, together with the __BPF_FEATURE_MAY_GOTO macro.  Commit
+965c6167c93f ("selftests/bpf: Using llvm may_goto inline asm for cond_break
+macro") says "Using llvm may_goto insn is controlled by macro
+__BPF_FEATURE_MAY_GOTO".
+
+With an older clang, the asm fails to assemble, so kfunc_implicit_args.bpf.o
+is not built.  kfunc_implicit_args.skel.h is then missing, and test_progs
+and its no_alu32 and cpuv4 flavors fail to build.  That takes down the
+whole BPF selftest build, not only this test.
+
+This looks like the only unguarded use of the mnemonic under progs/.  The
+other users either guard it:
+
+verifier_large_stack.c and verifier_stack_ptr.c:
+    #ifdef __BPF_FEATURE_MAY_GOTO
+    ...
+    may_goto l0_%=;
+
+or encode the instruction as raw bytes, as compute_live_registers.c and
+verifier_may_goto_1.c do:
+
+    ".8byte %[may_goto];"
+    ...
+    __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, ...))
+
+libarena/include/bpf_may_goto.h also falls back to ".byte 0xe5 ..." when
+__BPF_FEATURE_MAY_GOTO is not defined.
+
+The selftests still support pre-19 compilers on purpose: bpf_misc.h gates
+features on __clang_major__ >= 18, and commit f7213961e8e2 gates on LLVM 23
+and falls back to a dummy test.  Ubuntu 24.04 ships clang 18 as its default.
+The default LLVM version in .github/scripts/matrix.py is 21, so that
+configuration would not exercise this.
+
+Should implicit_arg_after_may_goto() be wrapped in #ifdef
+__BPF_FEATURE_MAY_GOTO, as verifier_large_stack.c does?  Alternatively,
+could the instruction be encoded with .8byte and __imm_insn(), as
+compute_live_registers.c does?  For that option the file would need
+BPF_RAW_INSN, since it includes vmlinux.h and not
+../../../include/linux/filter.h.
+
+> +	"call %[bpf_kfunc_implicit_arg];"
+> +	"if r0 != r6 goto 2f;"
+> +	"r6 += 1;"
+> +	"if r6 < 5 goto 1b;"
+> +	"r0 = r6;"
+> +"2:"
+> +	"exit;"
+> +	:
+> +	: __imm(bpf_kfunc_implicit_arg)
+> +	: __clobber_all);
+> +}
+
+
 ---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Notes:
-    The bug was found with kbound, a research static analysis prototype.
-    The patch, the changelog and the test setup were written with the help
-    of an AI coding assistant (Claude); I have reviewed and tested them as
-    described above.
-    
-    The runs were on mainline d135ab453a74; the code this patch touches is
-    the same there and in net, which it is based on.
-
- net/core/lwt_bpf.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index da49364ec63d..dfb2f9253e81 100644
---- a/net/core/lwt_bpf.c
-+++ b/net/core/lwt_bpf.c
-@@ -304,8 +304,10 @@ static int bpf_xmit(struct sk_buff *skb)
- 			 * made before LWT xmit.
- 			 */
- 			ret = xmit_check_headroom(skb, hroom);
--			if (unlikely(ret))
-+			if (unlikely(ret)) {
-+				kfree_skb(skb);
- 				return ret;
-+			}
- 
- 			return LWTUNNEL_XMIT_CONTINUE;
- 		case BPF_REDIRECT:
-
-base-commit: cb284914e749388eef402938bdb3115fe1f6d337
--- 
-2.53.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41334428337
+--===============2438624405266919593==--
