@@ -1,98 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.156
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793562282;
-	b=2MRzgBEEv6MzjV2WSsaF8/pgmERk2E5OpDNWc7OrVBlTTRczDxZ8dBJi4D6N6an6vWXL
-	 QOKlvYRohmWK2yrKFP2dmyfl957KzHcaRsQTdOlhzyMzeHKnDaIfeTFYF+LQHeconn9TD
-	 ThHSXQd27WGaaiqNprf6B10XY9K8roh/pqDAu/GN2lvRazg/o8KglkPsQwNh+vBrCDL3g
-	 F+UdlFqpPi+uTkt6BxxC7rzj7dls7yrLRKDteJOR9PDDC8ZpQwDxMgwCq5TW0W8/M8g2I
-	 b0JVNUTqlQQfwc1GTmd1RdzA5j0F3C52vs/H+54eYIMCmSZq94C6hR46BpYUVXgb9wg==
+	t=1793562363;
+	b=20JOHEnpKbHGpBZ73/lHu8QIZL9UlAwsBNC+btAHgLm5Q9wCD8bbp9k1jSFeTuWaUluu
+	 SImJz7YR8ZxWefuX9vWkGeOuIhN+NyY52+WHoNxTP70qVfaVAjV94HTarQ+gHDbcCNQ0f
+	 onQtJdi+QB93zuoj4t6ygStm0p+uKZx5ASehl2ydLPjO8C4lgqe8i2uIsYiyUT/e2rrmE
+	 IgsbbVeAA+JpFR+6Dcf9A0930iys/mYUXnpP7/6q+2Pg+A9t1DfIjTVEh+PgKVLIf2uzM
+	 C77PXAadk8RuBm5J/klURhJsbe8x3VsoTFj4pJ10sjVOQePLdLPL0jZnRg64kELdwrA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793562282;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=n6JuWpF+eef2V525L5oCizLHk8iadx9qRsILopmNHm8=;
-	b=XHcR7yH/Op6HUkgFjNrin+DJuP4yF9BydBooT5zcvvCz4Dof2Y+Zb/h5EhMpn0nM+TOR
-	 k/n3rFKKX0WJMBe8LtZObZ8b6B734sS4bfe09U5pmVHxAkm2GyCxFQMoVxdO3OsifWYUv
-	 y0jzEhPO0s6CM1V5SR7rolRv1RiTP8roUaFsQGHc9oW2HxVQRBjZ1PbtGrvRCx1rLQRG0
-	 lPFSxbizHvLGPhcq3tJ79Shzz+ze1Xsvqf/6r4ss36AbyQ5PAGmdCO9wjPMbBY0YbIY+m
-	 KZh4bVYXpi/Qe297FSC+R3AQ97A/0JbMt2HAgHnDRCmH8Iwm19Umt9HX5B7hSrwABLQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793562363;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=XL5M91BSp4AAft2kzoFv3DfkIiGz5Ajg83L723WR2fE=;
+	b=weJYMfNUPXnGbk10VAfiKiQ4GAuV+nfb69kB31zGkA71xph5jckcDO/na52e9A7Lwne2
+	 9fISOzHuGdVWGF2WkLkb+9emoVExSVEt7Vi2oVtqffXJv6ev9p4TkePJH9zTfUZl+yGVl
+	 +QdhSw+H+e6Y3sSO6lLKbMkd6ffV8Jl5PvD8OGnWrXHdIlLL71Bn060pK3uj+PD5VO7IE
+	 Q21n+qUt8s4uSEmquLNIk1iAniQsY4+xkvOhLM153vQJh5OQEpo3w4ZCEqjpHmE4PoZHX
+	 Fbgmd0YrRv3uzdVxD44gxL1Rr9qcoNbEbTT4L9QNb3DzPFzlw0xiuhjVeWV3u8u1ZCA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JMfzN6r6;
-	arc=none smtp.remote-ip=209.85.216.54
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b="bAfiBn4/";
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=YPYNbiub;
+	arc=none smtp.remote-ip=103.168.172.156
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2067606A32C
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:44:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2067606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C53606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:46:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16C53606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JMfzN6r6
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ad41b47541so1816723a91.1
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:44:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793562281; x=1794167081; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=n6JuWpF+eef2V525L5oCizLHk8iadx9qRsILopmNHm8=;
-        b=JMfzN6r62tAPM45iQwOIp1BthxUrUWJaVIkoUWk3ykeDifSIkN2JBh1At4A8kMyO3K
-         pjOt4MzNIt+mHsnQ0xoajiUApx0MFvsPC5nPp4SXnt3KHsONDglCjPED7N0XcRWjoyR+
-         aHFKINocDldisxAg4byJp+qkByRH2mEY/+XRzjEzzEGNT8Lo6VGB9KpbK/3/0IjB386L
-         UWh4lrL32PtUK3AjU/H7tqENxFH6iibw5UbIiAY1Vf/84GpbVDttAVs5lsvooUXJMFaX
-         M9L4y7c6+7l+RVum0NFY6nniMYGdwKVdhzcj+VrHQKGrADFJvYIqgbJPSmWl2lULln6r
-         MLBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793562281; x=1794167081;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=n6JuWpF+eef2V525L5oCizLHk8iadx9qRsILopmNHm8=;
-        b=u97Z6zzSN7fejkpYJMpDqUqhIo6oQzFpscgjEySvfXirV7rQlsVBaRujPbLwmFxgQL
-         7t2+uF7+gSl7D4Ia92zAnNI7cKUnve4ZhuwUnDlPz4wcArdVBOt2Kwk+GBShsDXvS25L
-         ab+tGgGDE2CfH9H5p7LJya42oFziuCaiPn2oAqP+OXFuCC9qBHpeP3gEz2Gc1FniLdtu
-         Ut4McoleDinEkyd+unwskRMsC24sjxsrWpTdjrHTNdGNkBYID9RjUDlj+Yv05bDCl9zO
-         /wSyn8vHMN4aS/dCXUJb/fymij2JVboJOpxY2wZs1WYl/16bIruuJAD5efTMKk9/hYkg
-         wH9A==
-X-Forwarded-Encrypted: i=1; AKwUvBxnPDMg5uCGyVXKI95Q+65fGpPNy8tl40fa65iCeh2MawmC+MSdrAhxI93FJ4iSfohvYzI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8TnRPwKKOAcJPZiQp8mnlx+lRil+iNptmtiiOlpoten23j4NgG
-	jSFuLS6gsvMpvALduLPvL65fugEtudOhQoPMP6Bje6s9YOBahQ2e+UQU
-X-Gm-Gg: AYBFou0T2HGlmtPOvXLa4ANWgxuQvEyJzrzv7KJi8l2WKhByxrI5YGTBEwQ9NY1gjTp
-	TB9PNFgOFqJWITkJzcAVlJ8X9kFnmJetJnghIiFiiFJtsJxQHco6pANN6mC8bgSO0TgNv9uBN1t
-	ds6NiqBE/UG1is77KkGuEdoXbKCmqOfDpXhvdM8Wf9xi9uUCFiVcK0h4SIEkwBa0G4H7nx/Fbb2
-	XQLsySy7vSUXvZbcXxh9Z3kXkiVXGCykSVJr2k6GM8X89UK5EzCQUMExFfRgxjP8+MS+NQUOvak
-	2dX3YDXoDm4y+fsUcXfAhn9EjN5Y4wlu6pR03qA4BQDGjWenz7fh5f5ggYsnuYLnvauiYU7TYZw
-	WC7MDoyD7lVi3lDDeV8T80W6OCwwQPJ7kgUGk84r5W3TUHZTD2mcIA0E65Ux++dJqCOx7pzODzg
-	rALw3LxunhOe1DswrA5iCZGO4+6qUXwNHpOkP0xFZQZIM6hZKn10rPb6PELZlf8s5YSWxT4e2e7
-	wYzT7gRFWvOx1UhoQu4c+ouwxntajRGeGXyMfOVNmExRQWimzi4EQCWkGWaEBFHrLEllJVPOzAm
-	bNgyCuxUOtBT6bYnGfEnDTn3AKpxwe6PfsnpLeJhTHfqjDPsWGeX5M1rhckBzFYoRxIx5YY4Qv9
-	mcbdExOl8KGPfDlbaG6Dq6Z5IgC8DI4/IVD2Vrj5SKKgqoK1C6N2kEMA00l5F5aZP/og7skyIUb
-	A=
-X-Received: by 2002:a17:90b:2641:b0:3ac:8446:c1b5 with SMTP id 98e67ed59e1d1-3ae8974b804mr6376412a91.31.1793562280788;
-        Sun, 01 Nov 2026 11:44:40 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae881c5624sm5824167a91.4.2026.11.01.11.44.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:44:40 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	dongchenchen2@huawei.com,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net
-Subject: [PATCH net] net: reject a negative TCP header offset in qdisc_pkt_len_segs_init()
-Date: Sun,  1 Nov 2026 19:44:33 +0000
-Message-ID: <20261101194433.2637113-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=bAfiBn4/;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=YPYNbiub
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id E71B71400181
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 14:45:59 -0500 (EST)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Sun, 01 Nov 2026 14:46:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1793562356;
+	 x=1793648756; bh=XL5M91BSp4AAft2kzoFv3DfkIiGz5Ajg83L723WR2fE=; b=
+	bAfiBn4/DIWkqkQUxxg3Tb6y6cbChQkhNKMFK2D+c36GSOmOwIaPPbVjyHkoUVxe
+	cw5hEPANRwox8+VRg2f2eefII3zuGpi3hp0abQINTTvQe4vxQi5y1eU6rHRmKHIS
+	KIr/1ztd/JTeAHPYVI6RLYmrHcN4yiG1ir3LTH/vS6k2YjyF8yFDWrzkP1YGlw5z
+	gbTB8Rz5a9ppKzgkyH2thLCN2+A1BV2I7h6D2aZB5CoEQl3QJH7/aR+yyMr6aa0q
+	GzmGAZkWympkTgEKSV5qhN99bp4fcSd8vAjc2pfKC9QG+Kv/5RfktQJGErRj+upN
+	QgHgSpywnT34pW1MwS61rA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793562356; x=
+	1793648756; bh=XL5M91BSp4AAft2kzoFv3DfkIiGz5Ajg83L723WR2fE=; b=Y
+	PYNbiubSn9MMP7KHrFPAFbQdJe4c633qAnayf25nYCPf1XFHu0du+xdRcUqj3snn
+	T/O/9PiWYbcrQRLh+/e0+DAKW1RqMpNUl4D7Ki4ZhxPDfHl66qcJuvgeHR1h+qC5
+	38SOO3PY9S7xYqsb+a1HMbpn3MR2o45WD9SQEcZE1rznMQGHOouUMOmuChZso0Xh
+	qtBkDu/uih9L2BAdIrNiWH2d+LmkIEloth5M7dO0C/dDiAMPV8kjKSNcnwhFHppC
+	hTg8X59vdkuM7atxM8js0NjwfkcyjMRxDelV7CHXIcVjxCywI1PpbQ+AjN/dqEOR
+	83fiOpf+m3KwHffWHj3iA==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793562356; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PGJwZkB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:iiBGbrJVJuorxFuUYsxM+M/8vP30KHdHmdmQZ/cAwmpWcSY
+	JSRcSARE6qcXKUAquFNckyvm6QOGXYUUTeYfU1mkpoIG7gq/V/xq37urTj9HP9EA
+	QjE3FcOpZgSd5TSjfckELz6Ga1+865IjaUuU3x+qwsagEPnkeE4H2bEUUE8cspVQ
+	IzGrivdqP3ExtELS7eoRtph2+Odlj3Ef8waugD96W3VzQ+R5t/RgePj0Hn4WLqFS
+	Uuyf/d9/M8QbR2f7EGLtU9tR3gdeflcvMO+YS9wYkktnv5d2Ldxvy5iKmkbzXhpJ
+	bqXRKzmxVhNmjE6Jp4Zs6VqpJtpWFYqUcW594RQ==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:tVKU6x6Hpa8+j/X/xHhKxol+ZR0276eFx2r5IaeIxmo=:ZpJZa0RF5+QGwaEdzSO/cu72cdWSAvwHkZvNhEgoujY=;
+X-ME-Sender: <xms:8ZbnakOYMSWEsemSaXapmHpnCu8zpieg9UREQTFgsISEI1EEmAcDRw>
+    <xme:8ZbnalzaPLidekYo8i2rtkboUsFHjK1HMZs78tIHTpRFAWeG-1q2JnnM0Nup4bz88
+    J7cJ7j4OqxJE0UEwdXCBLENyIyETJEm3jU2GRTjwP7w2F8UliBJo_33>
+X-ME-Proxy-Cause: dmFkZTEU6JWhB3TLYMF5uFOSIuMrIcUT4lNAjQf/JM331pvv5qvR9X6bo/nK3gvmMufUr8
+    ybDW9jtvmnTebXBKKdu54eJi4GQfSFqLaH367aaiCzgmaVkk5XA//fR0IiLK45NZGijfLS
+    uoiIh9Db9QWnUcd3Q4a/JpTUzEHrccxJbjPp85ONjf7V1BrGYZ+MTvSP6YsAJRaldDWgcd
+    AwroZy6sM1MSBdIsgagOAcgPNkU/c2OPjnl15tP0WqSdrESw/OYpdiMsZXzPqUdidI2wtn
+    vNbhI9SqayT5bgxtEpTlIOCzgRp+ByStLKNVCBaaCD5nF0D7zLBLzak92KsoCPiYmjw2Es
+    TPsptJo/RsTMuz2LgskRrlQaHduYmvylhsC7iyzw5Nx/7Is8kYL2HD0lR7zTM7fys/mm4e
+    OctzPUlFL0uXC2wL7OCE+QAsajvIGQ5Z0LGbkZ+2KcanlpcLJ2iECD6DzpQIMNqa6yKHsy
+    x3or2AOE1pSyYZLW3PzkkS51wH2bTLLK+G2kMng4mkrlKAYsQbJjZiLEY0RmhI3BL0E94i
+    zGM9xdtGecwftNRzOIY6A8Ftp40QTNlbuADg2B46Y+TKL9A/gxqHwl6OAjWV2BIVM+c2yk
+    gXtLhHdfAHvqlHUvFRy6JiZzrsPRTr2lBAo0N45K/KBmXpL8zrtTCjOHBYbg
+X-ME-Proxy: <xmx:8pbnahowgsz2IBXOvVWPZYZqY3N-HSFfjxWXXtJ9QAmsp5Bl2ktqjQ>
+    <xmx:8pbnaomMKvw67cfG-LK7uBWv0uNZ-WWSFTAQEA7ip8tYwtbdx04iHA>
+    <xmx:8pbnaiccLXbUFszydGtXNuGom6OPXBdQwyDgy_IK1QnzAh58a1e5gw>
+    <xmx:8pbnasq8FbDc4HFxbLBxfXTGL96aTU0bf5zt3rmL9pf4czWhiZ2QJw>
+    <xmx:9JbnatMbgZ5ZcuUtu58AWpli_b72R8SkwkCwzLvsgC1rmzKbtMIHQ_C7>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 1557532A0093; Sun,  1 Nov 2026 14:45:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,48 +114,46 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: Ap4PcZ20AeuN
+Date: Sun, 01 Nov 2026 20:45:32 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Vineet Gupta" <vgupta@kernel.org>, "Sasha Levin" <sashal@kernel.org>,
+ linux-snps-arc@lists.infradead.org
+Cc: "Andrii Nakryiko" <andrii@kernel.org>,
+ "Ilya Leoshkevich" <iii@linux.ibm.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ "schuster.simon@siemens-energy.com" <schuster.simon@siemens-energy.com>
+Message-Id: <ca697a3c-fee0-40a9-98e6-12e24febb3b7@app.fastmail.com>
+In-Reply-To: <7de128f0-4f17-4a33-9a7a-14d5bbf62e64@kernel.org>
+References: <20261015154044.4058618-1-sashal@kernel.org>
+ <09db4d22-2836-4656-8c6a-a7e5377710fb@kernel.org>
+ <8b4688ca-db5c-4122-b616-8e3964e403f8@app.fastmail.com>
+ <7de128f0-4f17-4a33-9a7a-14d5bbf62e64@kernel.org>
+Subject: Re: [PATCH] ARC: Strip libgcc debug information when generating BTF
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Sun, Nov 1, 2026, at 19:38, Vineet Gupta wrote:
+> On 11/1/26 03:09, Arnd Bergmann wrote:
+>>> I'm working on getting rid of libgcc linking for ARC.
+>>
+>> I hope there is some overlap with what you need for arc in the
+>> lib/*.c functions. I can take both through the asm-generic tree
+>> to reduce the dependencies if that helps.
+>
+> Oh that fits the bill perfectly. Mine also switched the others (with 
+> build test using their cross tool-chains).
+> Anyhow I'll wait for that to land. Would this need to wait full cycle ? 
+> If it can land in 7.4-rcX, I can hold off my existing patches for 
+> switching to current in-tree lib/* to also use the new ones and be done 
+> with libgcc.
 
-qdisc_pkt_len_segs_init() stores skb_transport_offset(), or the inner
-offset, in the unsigned hdr_len. A header in front of skb->data gives a
-negative offset. For an offset a little below zero, pskb_may_pull() gets a
-small length and succeeds. Then a 64-bit kernel reads the TCP header far
-after the skb and can crash. Further below zero pskb_may_pull() fails.
+If you need this to fix the regression, I think it's fine to merge
+the shared lib/*.c files for for 7.4 along with whatever you need on
+top. I suspect though based on Sasha's patch, the only thing we
+actually need is to stop exporting the floating point functions
+so the types don't leak into btf. If you can verify that this
+is the case, I would do the full conversion for both nios2
+and arc in 7.5.
 
-Commit 28a57fb2c5df ("net: iptunnel: fix stale transport header during
-tunnel decapsulation") fixed one source of such offsets. Other code that
-removes bytes from the front of a packet can leave the same stale header.
-
-Return SKB_DROP_REASON_SKB_BAD_GSO for a negative offset in the TCP branch.
-SKB_GSO_UDP_L4 and the other GSO types read no header and still get a wrong
-qdisc_pkt_len(). On a 64-bit kernel only packets that cause the read after
-the skb today get a new result. Then __dev_queue_xmit() drops them and
-returns -EINVAL, but sch_handle_ingress() ignores the result. Their content
-can be valid. Thus the code that leaves the header stale needs its own fix.
-
-Fixes: 7fb4c1967011 ("net: pull headers in qdisc_pkt_len_segs_init()")
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- net/core/dev.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 3ac700d37e59..ccf4b02e08de 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4320,7 +4320,9 @@ static enum skb_drop_reason qdisc_pkt_len_segs_init(struct sk_buff *skb)
- 	if (likely(shinfo->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6))) {
- 		const struct tcphdr *th;
- 
--		if (!pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
-+		/* A header in front of skb->data gives a negative offset. */
-+		if ((int)hdr_len < 0 ||
-+		    !pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
- 			return SKB_DROP_REASON_SKB_BAD_GSO;
- 
- 		th = (const struct tcphdr *)(skb->data + hdr_len);
--- 
-2.55.0
-
+     Arnd
