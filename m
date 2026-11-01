@@ -1,96 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793555060;
-	b=RXUs/OtQNklOuBhDZKAC/W8/+VZ2Z0HfGfHFoTTypuR/YWrm+tnCfb0DCoBletpKpyQK
-	 AVwiKiv3/JdX4HfWDv9fPaJNCft7CoeictLC3b8CwsEpju2HEMnq2uuLU6LWLVzZyPtBY
-	 psNF8a/3PFaNWpmKwxvll2rHtSrOrn8vKqndTZhG0yQnSJbZPfj6AgS9MxyIjrZfP+J+B
-	 yYCCkWz2DQ+tcVpN3qd/R74zBizfOkLGjRFb+vuJusU7EDL/+ydf3afLCWp7Qr2nwjwGr
-	 XtRU2RRLsSKOHDc73btOAZHg+ClWHpg+7IA0edxMCJ42x6C2sJYALR+Jz5M7HV6r6Xw==
+	t=1793555226;
+	b=FFBZBi2/fNzm/BOaV9f+ZkbKgAc3eA/W9Dlc16+V3Ei+PzxoCNCP1X/kq4P80jjBJW61
+	 nV/ev9GEGgSq7WuP+KXdILEvb5jnD/k9yZ6twyGJNDP4NNUPmVkEfUQn0KjLF8bSHRO5Z
+	 81skE4YY1VgeWSXRlJ2VK5QsenhzZpQK99LI2gR8yV9Obg8QEIGUcWTAVgvD0KlQM4Nnh
+	 CZqAckmvvAubYuXiI9xFLCKZQ29HBFkzUNW6Np+l8VrZTyC7IIxbh0QVebhlkfu5FtYhd
+	 R1gdVBFACJs7YwqVq2CAdiyoNyfdLVi1i6+lJBECRk8ZmFQjKkUb1y7/Lt3GiRXM3rw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793555060;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793555226;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=9fRXydjuRH7BpORHVZPwsis6/JuJxC/QJTbLSxAyO4I=;
-	b=Oew1tPiwal+YKiTgwK8VRaXc64AtDlps0PLQG7/YH7fAQv7bPosaH5/p4nYppCIDz7cK
-	 XpyVIJZ3TkHGPSqkcC7mZvrz5ozGLWFUs4hAqWL1toS8Ky2bDq9yM8w7BEnS06oqcQQBW
-	 qiS31m5V1oxUXnyM7EvgxGYFiEJqXFxhoaTnmlvVyjRk15iYSbrZTW6CKppgeJgnhS3e/
-	 0IYAlqtfJhBZm/O44h7bVdmR4CizJ7Jbhe5dILv8+FviUsH+6DPRQ2IO1DgW2j21e5Nrv
-	 dyJf2z507iQNH3Pvl6avhsIEOxV93QLZD1b4TBHS97a3uD4XkwKiBqEQv/QtwFPUtQw==
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=Pxgf9cvWbSYKVp93yG88n3vImKWoHSAOauFaqlsNeCk=;
+	b=gamxTgF5I+XuxrHsgrkNcY/1vKPqo6KMd3gmrNV6erH46NypH8RqtSege6JWHxyj3f7D
+	 YdE8iFKJQaOKbvEiP6vxAxIQOobnJJYQLUqZewmWqi7nyGRyNUAvX6iT2QVsXS173Nj8T
+	 cdQc2NrMNuRi3YuVu/s7zdrOaNnQrKH1otWOAWuMSbWaMdIwvDh4i41YRCCuU+20HqpqN
+	 sSxi2ZRzyYaXSJPg5rH8OzcXR2gRyqBW+ogHJvw7vzgwHPGHlQ8jrp+z8zm4inrSiR4aj
+	 cDf0k9/p5pBJp2n729EEUzI55xJKcepjH2/wFPZrsym8iKYKkzLbRx2EkPssnQaSLwA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C7RY0vEi;
-	arc=none smtp.remote-ip=209.85.214.172
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vRJEZcca;
+	arc=none smtp.remote-ip=209.85.128.173
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3454B606A326
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 17:44:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3454B606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277B6606A334
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 17:47:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 277B6606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C7RY0vEi
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2e60f9af6e6so21104595ad.3
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 09:44:20 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vRJEZcca
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-8b2d149693fso4806997b3.0
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 09:47:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793555060; x=1794159860; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=9fRXydjuRH7BpORHVZPwsis6/JuJxC/QJTbLSxAyO4I=;
-        b=C7RY0vEiSfD+V574M7lKfZxkd4wIxiQKqpImzYngViHe2Zo72j8k0p2TKuojdzvbMg
-         UVagdLoLc6gf+brKkPMpsZnpHUhYhfwbSlSMR/wGxn64chiREdR6gu8qWgzbQU9/vUpx
-         m1vUJ/ILFcGnwRf1OKcXMzi7LO7r1tjudW+hRUNPyR9ZyeelEn4e3YoNYY1ApslpnqRt
-         uSjuik8HHYC997WOSVslSS3HPb0JQFLgkDH7VnPDFO+u63rkb3yhwL5O0ottAcVCWvAY
-         bdVjC2lrW1mG3NMuUL9c1dQb2lmUe94gur0QfYBbCGpK6btre4cOcfcXPAKT/i2lZWuP
-         Eq3g==
+        d=gmail.com; s=20260707; t=1793555225; x=1794160025; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Pxgf9cvWbSYKVp93yG88n3vImKWoHSAOauFaqlsNeCk=;
+        b=vRJEZcca0kWsUYurp24B3N9EMZZ10YKNcvYYKchOZT0onPnAbX0fFr1xFcZogJtRCf
+         p7JcdFVu58HG6XckQWJwp7vFwsWlmCdVOicnV3IqTc8+wTGzl0K0vtWXuYT/J3mmQRCP
+         OnOHwq+CRnN3K3t0LKnKLBdPizoktBfZzryDnYEckr2Si38lRw8PmUnsOrYAI54IAJ2A
+         BRN0Sr8kHvsaMXWqI8udEoKUGdFu7ahZDpkQN1lD7x5dmfNILaj6MxDjoICpxI4Gl2MJ
+         fGNE9Xm05DUtvWRUDnaJjEHKPpDpFYM32HxvN9/FoMoxxlpSWRDACHYxqKSwPh+zGZiv
+         wTsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793555060; x=1794159860;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9fRXydjuRH7BpORHVZPwsis6/JuJxC/QJTbLSxAyO4I=;
-        b=sfD6NS/5dRRPl/OSHcAmxRHewl4i65HkpPQjukwii9XK0gYwz8OvoxNFHmdULE0KyO
-         cGauHy7pgvF8LG1rioSx3QAHYrcAFFDx+Z/pQ44HywhqaKS14vXJOieelgatb8g7f+na
-         +Db7Y4VMrwyApt4Xz/ub01pCmzkRm8pokapqNV/6IB9eRXwb+Y5PcYpTyfQpoU1IuEwi
-         FG/67h9+5OWiYQGSzJ9boZ0ReG+wMlC09Z4/oRkUambXvX4gooeSu/YZ3FArcrSdJt8B
-         bvRnESqAJLMnzSklnAUui91+h0dUH3/jbjLlxqfIJsvWyr6XZHu2/dhRM2WyBC+BlpPO
-         Gwxg==
-X-Gm-Message-State: APuU4Z+bOKYUQUPs1rNd4rhJwWJHxUBicSeg1m2G/g26hBWH2F66of5Y
-	va0i09rPS+NJ9hUDCRXSKan9eSLksbLIOSvzkqskXtk4Bw/3YdiSsT5EeLLPXw==
-X-Gm-Gg: AYBFou2IcQZv51JaBnpicWKEPNAg5xRxmjbJXwS8LyZ5cbuBhIIMm7ck9oifnHaDKQL
-	iT2pTGU637i/QqceywzzQv7ftwvDGe2SutLMPaBXrkXoSX/88XdSIcco54Y6p+CG/QIdO9DOfHu
-	tGkaoyTe5gAIW9C6rMOGVHu7QrdEEJyjI2Db+sn60CrwswroY/MNPpoKaP6+mTMcIi3q4mE5tYw
-	6PV0yOJtioBa2EQGHHuwdWTA6WkJXDhuqHcO4yHLfmlFAQ+NhXK9dG3y7Gq8+fq9q6Jn9Ni5H6b
-	XyquGrlMdQfdzkWaQTcEo0JSezr2Tonx81kytdLyvwyqHQdgy/Qc08TIP2CNJ0uQPyRShBGYTWD
-	Rxsyn9618XnbAo5kLAxAdXyS/9BsIquiPZsb3YQlvoiqLRGw2G5DbqjizoRBpp1tB9z2ndKbUHH
-	b5aWm44f/bPqh8RrWYCzYLUlTz/MPLYAqeXW+wpc6zZVkFIwz/BAMZwc0bKaPjV4qbXlYle2360
-	Nx2ADg+MQCB6+ON2e7wwLJV/N9/COkJuelg8dyKNHnG9m3W60hnTsxF1mpU/lLRcrlTEdWzyjnM
-	wTFkzTrxWjr62VX59YWeacDj4a2T+ik0euJ7d06O6KdTtQsQY5WvtpsHYIEEa0kOVvtehaS3TDS
-	bFC2IrBC2e8LP0J87s0t+hHZOnYeH8YZ10JFcSK8723jI2Yn8LiTrcqu38kt5i8qWxXIdkfWcTa
-	c=
-X-Received: by 2002:a17:903:298f:b0:2e3:1d30:8654 with SMTP id d9443c01a7336-2eb36494399mr81262285ad.10.1793555059343;
-        Sun, 01 Nov 2026 09:44:19 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb392a489bsm18642485ad.63.2026.11.01.09.44.18
+        d=1e100.net; s=20260707; t=1793555225; x=1794160025;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Pxgf9cvWbSYKVp93yG88n3vImKWoHSAOauFaqlsNeCk=;
+        b=eSJpGlWEt4l3HmfIdEbCejN072JUJjId20Br5CbVdZUkWd8yAKqu0mS3YV80+YNJJU
+         iqmKQHgt91qIb0R9FMDnB/510b3a5gm9Gt4HCtX47Xle1ZXqA02wTbOhmBcYjuKKZ+Gp
+         rvs2ffUQsF3uEJcqTrcJ2ywapHvr1KaYSLwFAXAGuN4Uz+SPf972ZkpI2Hzskejc5ZcD
+         vZ1o5n+o0nrppvGR5/tB+nAqu8hP7qul6POLCLiEOz1Qyurt9gQJ5ULE1ogexqNN8N8K
+         xKFBLXGaRYqQ9IpqUrN+Jz+N6rkjX7rFrgphZi337gzGPg+rOhGtglpZlpq8Bs41sCYR
+         AdbA==
+X-Gm-Message-State: APuU4Z9RYhsWJ69r9E5bc8YOQa5bZNNO/OXzVv744U/UN5WIGoWeoelk
+	9zvDRgUg9hak34g9cILasxzkF9/1ytgzyPIxs1W7SMAFQy1xu0/5xGBa+jVEOQ==
+X-Gm-Gg: AYBFou0NeEjM4QWlddYFU1bTtd2+8EUmpNMTgTMFGPiWJ4dH7ScA+FhmOk6K2mPZ1tX
+	M4cxNB8BmM4FOFG9K4praZtiOS8sozcr567RUvOXFhUGOuAx8O2jYjl+9a9hl3Fln+sWJFfvyzI
+	EKhsyf0/SHJtMjTQwMslIeit11/QY3NpR3E8kq/4nxxzph863fYGlUnD9uLp/TD8sp4u1uAFg6b
+	9Fdn1RTGXsjjZUO9OY8fvx7v1Fq4356poJxAGkhCIVoQN4cZaYwcROVdakKCHLi39XGn3WzGi0T
+	ZNKVJWL40AozjqQHookOcwtegNFtesf4j5K51BQShkuwCNK580MYvgSEJlp4QxPGg8EqIp0nmxr
+	BhqrsqiaR4BzV4A2bMdbeCs9IBGkp6pC1iZRSBKBHpg+Bx80dJgL6HjEU/Z5lD/1PCNE4wN+QxW
+	UqWqhDUP6v0wDKY0v+2AuCKTcea57ermkKqY1biciy+Lcu+3w9XS8RxS13iQFToVagwCnBucjFl
+	8CgylIgPLP71R6x4Xk7t2fueQdTO9DgftkibSKkCMnJxK7PQjcJBKI29DfTo+2xu+urnsY2ihG2
+	nyThxXlz1jOUTbfX9LpOLYP/NbbUosH0jLl+PTaQoPAE93o83FNQB1ws020n8Yf7ZWNdLo7OPLn
+	xVuvlcRbrdfS+4kR7mLBg72f/R8BOYSGGyZXXCBa5ZnhIjKPTBpYK4QXLMptTdsLcfs8riKScnq
+	w=
+X-Received: by 2002:a05:690c:e3eb:b0:8ae:9448:14c2 with SMTP id 00721157ae682-8b2b67dad22mr46466867b3.99.1793555225032;
+        Sun, 01 Nov 2026 09:47:05 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67baf2aa655sm3516610d50.10.2026.11.01.09.47.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 09:44:18 -0800 (PST)
+        Sun, 01 Nov 2026 09:47:04 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test liveness of an implicit kfunc argument
-Date: Sun,  1 Nov 2026 17:44:05 +0000
-Message-ID: <20261101174405.4055052-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 0/2] bpf: A lookup in an array is not NULL when the largest key is below max_entries
+Date: Sun,  1 Nov 2026 17:46:58 +0000
+Message-ID: <20261101174700.4086827-1-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261101174405.4055052-1-alexei.starovoitov@gmail.com>
-References: <20261101174405.4055052-1-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,174 +100,64 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The register of an implicit argument is not live before the call:
+A lookup in an array or in a per-cpu array returns NULL only when the key
+is not below max_entries. The verifier knows that for a key that is a
+constant. Then the prog needs no NULL check, and the verifier does not
+examine a NULL branch that the prog cannot take.
 
-  kfunc                                 live
-  ------------------------------------  -----
-  bpf_stream_vprintk()                  r1-r4
-  bpf_kfunc_implicit_arg_legacy()       r1-r2
-  bpf_kfunc_implicit_arg_legacy_impl()  r1-r3
+Patch 1 does the same for a key that has a range, for example 'cpu & 3'.
+Patch 2 has the tests.
 
-The last kfunc has no KF_IMPLICIT_ARGS: the prog passes all three
-arguments.
+The counter of a loop is such a key since scalar evolution gives it one
+range for all iterations. The verifier rejects this loop today, and it
+accepted the loop before scalar evolution:
 
-kfunc_implicit_arg_in_a_loop calls bpf_stream_print_stack() 4 times. r2 is
-its implicit argument. The test expects that the loop is counted and that
-each live register has a formula.
+  for (i = 0; i < 64; i++) {
+          key = i;
+          bpf_map_lookup_elem(&array, &key)->cnt = 0;
+  }
 
-Two more progs run. One jumps to the call, one has may_goto in front of the
-call. The kfunc has to get aux in both.
+veristat, progs that load before (A) and after (B):
+
+  progs of               progs  that change   insns
+  ---------------------  -----  -----------  -------
+  sched-ext/scx            493           29   -4.22%
+  scx, as BPF CI has it    428           25  -11.84%
+  36 builds of Cilium     5029            0
+  selftests               3891            0
+
+No verdict changes. Progs of the two sets of scx that change by more than
+5%:
+
+Program            Insns (A)  Insns (B)       Insns (DIFF)
+-----------------  ---------  ---------  -----------------
+flow_select_cpu       293093     145475  -147618 (-50.37%)
+mlfq_running             600        333     -267 (-44.50%)
+mlfq_select_cpu         7227       6293     -934 (-12.92%)
+mlfq_exit_task            54         50        -4 (-7.41%)
+flow_running              92         99        +7 (+7.61%)
+forge_init               535        772     +237 (+44.30%)
+flow_dispatch (CI)    411387     186252  -225135 (-54.73%)
+flow_enqueue (CI)      19362      28793    +9431 (+48.71%)
+
+A prog needs more insns when its key is precise now: two states with
+different ranges of the key are not equal.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- .../bpf/progs/compute_live_registers.c        | 13 +++++
- .../selftests/bpf/progs/kfunc_implicit_args.c | 55 +++++++++++++++++++
- .../selftests/bpf/progs/verifier_scev.c       | 33 +++++++++++
- 3 files changed, 101 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-index 1ff24bbc7beb..de0496ce7d5e 100644
---- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
-+++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-@@ -538,6 +538,19 @@ void gotox(void)
- 
- #endif /* gotox: x86, arm64, riscv64 */
- 
-+extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args,
-+			      __u32 len__sz) __weak __ksym;
-+
-+/* The verifier fills in the implicit argument of the kfunc. The prog does not pass r5. */
-+SEC("syscall")
-+__log_level(2)
-+__msg(": .1234..... (85) call bpf_stream_vprintk")
-+int kfunc_implicit_arg(void *ctx)
-+{
-+	bpf_stream_printk(1 /* BPF_STDOUT */, "x");
-+	return 0;
-+}
-+
- /* to retain debug info for BTF generation */
- void kfunc_root(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c b/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
-index 89b6a47e22dd..250fc0c7b355 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
-@@ -27,15 +27,70 @@ int test_kfunc_implicit_arg_impl_illegal(void *ctx)
- }
- 
- SEC("syscall")
-+__log_level(2)
-+__msg(": .12....... (85) call bpf_kfunc_implicit_arg_legacy#")
- __retval(7)
- int test_kfunc_implicit_arg_legacy(void *ctx)
- {
- 	return bpf_kfunc_implicit_arg_legacy(3, 4);
- }
- 
-+/* The prog passes all three arguments of this kfunc. */
- SEC("syscall")
-+__log_level(2)
-+__msg(": .123...... (85) call bpf_kfunc_implicit_arg_legacy_impl#")
- __retval(11)
- int test_kfunc_implicit_arg_legacy_impl(void *ctx)
- {
- 	return bpf_kfunc_implicit_arg_legacy_impl(5, 6, NULL);
- }
-+
-+/*
-+ * The verifier adds 'r2 = aux' in front of the call. A jump to the call has to
-+ * execute the new insn: the kfunc returns -EINVAL when aux is NULL.
-+ */
-+SEC("syscall")
-+__retval(5)
-+__naked void implicit_arg_jump_to_call(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r1 = 5;"
-+	"r2 = 0;"
-+	"if r0 != 0 goto 1f;"
-+	"r2 = 0;"
-+"1:"
-+	"call %[bpf_kfunc_implicit_arg];"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_kfunc_implicit_arg)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * r0 and r1 are live at may_goto, r2 is the first register that is not. The
-+ * insns that the verifier adds for may_goto are free to use r2: 'r2 = aux'
-+ * comes behind them.
-+ */
-+SEC("syscall")
-+__retval(5)
-+__naked void implicit_arg_after_may_goto(void)
-+{
-+	asm volatile (
-+	"r6 = 1;"
-+"1:"
-+	"r0 = r6;"
-+	"r1 = r6;"
-+	"may_goto 2f;"
-+	"call %[bpf_kfunc_implicit_arg];"
-+	"if r0 != r6 goto 2f;"
-+	"r6 += 1;"
-+	"if r6 < 5 goto 1b;"
-+	"r0 = r6;"
-+"2:"
-+	"exit;"
-+	:
-+	: __imm(bpf_kfunc_implicit_arg)
-+	: __clobber_all);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index fa01a616af9d..bede3f48fe38 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -1411,6 +1411,39 @@ __naked void widened_reg_is_not_linked(void)
- 	: __clobber_all);
- }
- 
-+extern int bpf_stream_print_stack(int stream_id) __weak __ksym;
-+
-+/*
-+ * The verifier fills in r2, the implicit argument of the kfunc. The call clobbers r2 and nothing
-+ * sets it: if r2 is live at the head of the loop it has no formula.
-+ */
-+SEC("syscall")
-+__success __retval(0)
-+__log_level(2)
-+__msg("loop header at 1, header_count is 4 ")
-+__not_msg("can't widen")
-+__naked void kfunc_implicit_arg_in_a_loop(void)
-+{
-+	asm volatile (
-+	"r6 = 0;"
-+"1:"
-+	"r1 = 2;"
-+	"call %[bpf_stream_print_stack];"
-+	"r6 += 1;"
-+	"if r6 < 4 goto 1b;"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_stream_print_stack)
-+	: __clobber_all);
-+}
-+
-+/* to retain debug info for BTF generation */
-+void kfunc_root(void)
-+{
-+	bpf_stream_print_stack(0);
-+}
-+
- /* The unknown SCEV of an unbound STACK_MISC slot must not prevent widening. */
- SEC("tracepoint")
- __success
+Alexei Starovoitov (2):
+  bpf: A lookup in an array is not NULL when the largest key is below
+    max_entries
+  selftests/bpf: Test array lookups with a key that is not a constant
+
+ include/linux/bpf_verifier.h                  |   2 +-
+ kernel/bpf/verifier.c                         |  38 ++--
+ .../bpf/progs/verifier_array_access.c         | 165 ++++++++++++++++++
+ .../selftests/bpf/progs/verifier_map_in_map.c |  31 ++++
+ 4 files changed, 220 insertions(+), 16 deletions(-)
+
+
+base-commit: a30c772627b2ef4bc715332b1b04938a914556cd
 -- 
 2.55.0
 
