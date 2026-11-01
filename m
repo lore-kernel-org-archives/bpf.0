@@ -1,82 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793559939;
-	b=5Mv2Vr5RTYse16mov7sZ2I5xy53oAGpn8iPLNCAYBfrkncmStLjICsMAtyyYyYyDWz88
-	 ukOvplyK1daaSFSuguiI24i4WubNRVSaiwXVIaUftbekbni3WvJSyf+m2KKD16OBMtsKo
-	 pBpUAH9USvufSSAtQOKP9pMBipo/s2tO8kajgaAvqAE8kFCs/MYaHDPf6NsFOZS4L/c/z
-	 +oeBEW8G87JbPD2H0/HJhtskNrc/7Jia1cqtsYieNAPWtVm1JnRrC+F1p9ZZiEvUrC4eF
-	 dd14B0uUrOL2MMs8udtK5G9EoIop2fB4VwgTUMqQWFi6CmbD3emhl0aJcxSgjE+NCjg==
+	t=1793559945;
+	b=z/JIwzar5JugS9WGSijBANxiXUC8fnXvx9+JjRnO4uzVk9sdDK6x5QA1UHsDyvUxJu4w
+	 Ycvqmo1G7xOf8hJxaT9bTzZOvkWmY2xebEruGiiloOaXzb+hsOg3qXAe5Gsx9r7HiqG8V
+	 I+HALUbZYjGSmC+KEMc7lKLq3Mgo/djXcmUCAuI2bLGDXRKXLZXCuM5GuPTFprdACzgBD
+	 X4DX7Q1/8V4SZMqEegocIvPx2xxZ5FbdVqrKSm0WknSHcteqXvWjmwuxb7vhdWjbaezdo
+	 4QwzDcHPGNnnn9riVuaefu4fMeBlW47RuesHvQ/uwfKM8trdtSg14sJI0zUgNaL8vng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793559939;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793559945;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=aAHMZ8nI+Il8kcq5Xp6Q1kXlDMol4bWQsZUaWcfD+lM=;
-	b=FgQv8VpUU85RQ74jybpKbtb/IyoNxRaAZIF2eciF7Hoha1/a0s79yUKsUy6Vi8Tskj0b
-	 e+sMollJ0Umy82HAEthdbKWD6oMNpxZXfViNjobIzZ+fxpXT2DAWvXROoeoeklcd/+ONj
-	 OfWSjo4wJ0DJ/dZ1y0TQRZeVGUKDzSnXu5OKOasLAo1i6YoYAU5bmmhIcUzIrc8Lqb4HF
-	 X1P0rUHnXmkvvUnIGoPxd/izwaygmW7HPgQPa80j3fwpUIGnaHrBayT7cAGIAs4Wbfbm0
-	 SEL/ft//MchmvUqxfwItDX2lJ7MGhqAu35+i25NPK77rvSjZg+fhYqVvpRo+FXZN0Ig==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=svjOE/n/Fd13ROHNQetyktt5qAG2/EiumbQrkwIKbsU=;
+	b=hVAbw64pLVNvtW00n4dO+oamnq+BXrOs6w45Uv6pwI8ZrXTtbNAd9Fnc+Nujepksjywc
+	 2cIup3NGyKDJGFhyHQSyoGypI//4PH7KOH5ntC5iQx7K98Xwbd7bng65bxPgVdfqWHsmG
+	 +4howAg/H1UWV4GPZ9z9UHaphyGtIRZRTrILN8LW8Bfi7baGntiCpzTMtlIgqFhPtyLvF
+	 gf5iDHABGxzeORYUMSTR5olSS4UPt421HUCy6lAgu7q/4wgUjNWP81J0lpjje+db79GBz
+	 dkyf1eGCVqbxJNVcqMOAyxzUbvdktSKK4RIbqYOgk5vwvKNqtE40nNF5dTxuFbwZMiA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vcEfl75l;
-	arc=none smtp.remote-ip=209.85.215.172
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XKtTurX3;
+	arc=none smtp.remote-ip=209.85.210.172
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A586606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:05:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A586606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0A7606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:05:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7C0A7606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vcEfl75l
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc1bc88a20eso1575891a12.3
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:05:39 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XKtTurX3
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8a058f74a54so700964b3a.1
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:05:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793559939; x=1794164739; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=aAHMZ8nI+Il8kcq5Xp6Q1kXlDMol4bWQsZUaWcfD+lM=;
-        b=vcEfl75ln4PYoC0CVIXPpKCAGCOx+9Lw2b3+RLryEKDVxe4Y5GJd6DQGbmyhNLeGTs
-         wMD8WaBTsWS1jF6hwPfQyRbnmRffCEsy19jggNfgXCXY/r1Ey5k9U4b1w7nWi6Cj1D5z
-         7hACWByfmeFQxQjHolc1EeSUag3IVbTesDgfXrNfjg6ObIrWtMYmfXFR0buRoZcd8rVZ
-         OdDZC0gaBeNvXJFXb6tc3or2XO7XD18T9ranV09wAsLq4f3xgYjVlFRrq52VL8exa0t8
-         Hkt2CFGDXs2YnqFEyi3zJ6kDdveCnorS5uFsjUhtIoBjlpC0hmmg+MzaE/nMHAtiqspo
-         Blug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793559939; x=1794164739;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793559945; x=1794164745; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=aAHMZ8nI+Il8kcq5Xp6Q1kXlDMol4bWQsZUaWcfD+lM=;
-        b=FUBCc1odfSHOIhL2sDePkY8pq0sFJqIN1ujDDCefRgBw0rWCRgrtXYuQ0h5dHNtGsY
-         6gEiT78f7j0bkHxylz12FH2musBbC68Rz3h2Pw4TSrXjeM/b5yT6WLvCTTgHVtNaSQlR
-         YG2caDC27qmIjgwirDqjqiKjbHsPylX/K9Sl2i4yfBWn76j9sTKheXiO1FXsCNTfJ9H+
-         s8enx+KEMSd7Yef0Ziak/j4suPH46ONg6C2c1iBpcX+P5pOCLs81wHz9AZDEPXRhjktb
-         uuum2Hi37GZJaqvWlAS6n0cPxUW8+9fTIDrSdhe/Yv0XIkgnL5TfcJGlzTMJA3aByc8U
-         536A==
-X-Gm-Message-State: APuU4Z8vRjSkzt9jL5hv4QdAK9EwV67ja3WaVb8z45jIKhlfD8qp0ib8
-	YGmdZdAwU7j5QDV8JlVtKGRh2SsVGHkjX+4PWIYdu6fe4AG0c/NS3xPpww5n1Q==
-X-Gm-Gg: AYBFou1CB9f0h4RKmjhcmpmYIfWXStQYdYVGZVyJz7anYnztZx5r33VphiwmdfahwqV
-	cFq+FORFxJjvm+csK+9/f5NIWRbuHlkaDYLvh/rh8A39ggaJcUd7r8sA6tEusE99Nrk0UXSkoZH
-	s7cl1FBurAVSqglTXRN1vGIZM+zs0GWDfM5m/ZlagvxQmxqmIEg0gsWEdA4D0XKIVeyQSzspzmY
-	EHAlfJjJ4nRavXgclnoDgdAVqhjliHdHNXxJfGQrwMt26EKQFP3mmH+pV0h2zeiSXAm+fT9FiEd
-	56pJXhZuV996HH/IXM7vv7NIPO58gzvugOCFz3+1jhCu2olW7fgwvpDpFrM6zk3PCr+E3kx6cXu
-	0VtwHzeqmuSXNwwRREoD1PiIG8WSJNYXBgSa5+2FWKioMac/id1gMOCk2f/aiyp2c64jZnA7Xja
-	Ekidlyo/Tu96uBcwzNs6B+VQd7A5bb2rpp78Rw9KIMNUq8kOGvFf5m1BYhEMP67RgAF9W+1n1gW
-	tltOZ9JxbuE+Wby+90urHaWXRmLckHS+NAQBpMgbIQXVP1yGpVxt+mPFA8T9xI1m0OIu/MQ2Y4q
-	2B+cD8yZRtT+hZo3ImOK0mN61+P9Mapz4gkWrKGIbO95K5BcB24RbLl/x0rhFqy3TDYYG181mc0
-	DRUGO4Kbnh2ijov8el6PBdCP1GYkscMOhld1wu/G4ii+7CG13Kvr586KF0+ZmkZhthT1luKFUQg
+        bh=svjOE/n/Fd13ROHNQetyktt5qAG2/EiumbQrkwIKbsU=;
+        b=XKtTurX3Ql5Zu+RBfoPTH6MLol7lxHvIDhdRdkIdStReD7Dg70d70sifCQSrNcQBiu
+         YI0QQqpkVUZd5dQvqIDmTl8l/1b2IcuEFuPIE8xYE0hxxIUJ3qFwsMNZzNnq6PuxVk2Q
+         d3X/9vzTgfp5Bwp7Ffn0LHmV4QQeesyq2bQOWcHm6FscdaUyCHjdZvEGTai56S3g69G+
+         uoozO32Hfp47ohDzO79zPSYobDVo+8QulibP1dyEHTiOMeKfu9rBSWeFDL0LIx2sFyxq
+         4sBf5FYPL4olfuyKlYWCZ3vl8UJNpAjtLjPkAVm0xul2EmSNyGxwdvP67Fhd4Zgvx6r0
+         wGNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793559945; x=1794164745;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=svjOE/n/Fd13ROHNQetyktt5qAG2/EiumbQrkwIKbsU=;
+        b=AAwF/1eGwD215KeBxcfntKUtghigunTeY4DrKDOiNb7zUCnC5D5Rok5A/pg8Qx2GW9
+         aXBm9dftdjGj2jDTRJo9gc/zOX3clhMGD+l9XSRBEkgAAFutb4ZYC9yeYsx2mvoWXi5o
+         p852BnVFG5IgWYPhm1Vl62wK+FEGF63Yp2FCrIm3oQtO2T5WKVYNgmf9dUXLaCL2GZK+
+         N/PDMkGjb6KX51RZ9pBEA5lilroomsY5ZkNLpZUt2Qvvqn0Rb684g8IjeEKXCvkqD6XG
+         b64XYqZe7BgRvNfGdHwYxeavrbtGy4AHMZv7HTi6JnKYZjkkscTjrVIxkXQA51Ya3Lc9
+         IWgQ==
+X-Gm-Message-State: AFq9FYJGHqETSF8ViWHbRedKRO8sE+uWg8NzBuf7pELe1foi/+K2cGpW
+	LZ1K9vz8ddIqi0R/XLxjLkRfF13rIqFfoG12oyDkVLG+Cct3qY6S7ZoPjmHGtw==
+X-Gm-Gg: AYBFou3rEig+SJr4jbonbIvGpy9EmlEgJdCU5jAMz0MwEHGWwHepGLFUVNUQnAhEyNO
+	ryGukQm5TyJjBcmJoOO1loGPuKd2okKYl65As65VQ+WiWPL9am1XTLlZLoNlyaw34841hsMp7xc
+	dBvmaexO32E94nOZ5IBFAn/Qvwp7pACBEur/ogkl46XDc48hKV45doSKUZTYFYbDhUKAy5+1HwB
+	msyot43W3ZjvD6Kx7LOlFNdhknPFoBhn57iax9k4GbfnqdZ6afZ9yvS0hZ67Ny8AMXS07D1imQH
+	Jqm9HYjiDeLzPiLVlfbuVcADFoDxzDtPqlgb5+8H5/eh8Fer03/pjAtqKOCVFRsNMSUoog8S1V3
+	02D902A2zefXMdj1Wt17PKXYbjqiZafyYE99/lY4ug2PvxypDm25Qatl0Q/m2mJ8FQuWBHkQA1r
+	X6CLFIYaAvAlIBE4PkWdZXdBiN8ZoC379z5zhWFqu8FJFnl2xTEBuXP0V96Vz476p+3WLUJtrJh
+	+K8pudGc02d15sDua2sN+7Hd4ONLayxqP/o28C4hKsTs9CoWaLTxDAU0kR0hi+1zXbq+0C0Lg7H
+	wn+mYNsXNV53Z7/1WQW1Vjr4TJRUgHYR1Rqin4HKV0tH7/oN40DqJ1qfGWwmsAgZMeZQvELqnxh
+	Z2y1WE9zvaqtreeZgfzYMRhc5bxp1DH5V8WPc10uvenp41UyNy/FStt3lGSMSUtjZ6N4e1WUDtg
 	==
-X-Received: by 2002:a17:90b:5111:b0:3ab:3384:1a44 with SMTP id 98e67ed59e1d1-3ae897c64b4mr6091759a91.12.1793559938522;
-        Sun, 01 Nov 2026 11:05:38 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae880b1f71sm6264529a91.4.2026.11.01.11.05.37
+X-Received: by 2002:a05:6a00:1491:b0:8a6:1bfd:41fc with SMTP id d2e1a72fcca58-8a9bafda28bmr6398365b3a.1.1793559944538;
+        Sun, 01 Nov 2026 11:05:44 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aad9d03424sm1211500b3a.24.2026.11.01.11.05.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:05:38 -0800 (PST)
+        Sun, 01 Nov 2026 11:05:44 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -85,10 +87,12 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf 00/27] bpf: Fixes for the verifier, arena, skb and lwt helpers
-Date: Sun,  1 Nov 2026 19:05:08 +0000
-Message-ID: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 01/27] bpf: Clamp the trace length in __bpf_get_stack() again
+Date: Sun,  1 Nov 2026 19:05:09 +0000
+Message-ID: <20261101190535.1454146-2-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
+References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,83 +104,75 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Josef Bacik <josef@toxicpanda.com>
 
-These patches fix bugs in BPF:
+get_perf_callchain() and get_callchain_entry_for_task() store a trace in a
+per-CPU entry, one per context. They release the entry before they return
+it. Thus a second user in the same context can write to the entry while the
+first user reads it. preempt_disable() stops only other tasks.
 
-  patches  area
-  -------  ----------------------------------------------------------------
-  01-02    stack traces: the limit of the trace length
-  03-07    arena: the range of mmap() and of bpf_arena_free_pages()
-  08-12    arguments of kfuncs and of extension progs
-  13       cgroup detach: the permission check
-  14       cgroup skb progs: the network offset
-  15       bpf_skb_adjust_room(): the limit of gso_size
-  16-24    lwt and seg6local End.BPF progs: pushed headers, skb->cb, dst
-  25-27    skb offsets when a helper adds or removes room
+__bpf_get_stack() requests at most max_depth frames. This is skip plus the
+frames that fit in the buffer, but not more than perf_event_max_stack.
+Since the commit below, it copies 'trace->nr - skip' frames with no limit.
+But a second user can store a longer trace. The unwinders of PowerPC add
+context markers that max_depth does not limit. In both cases the copy
+writes after the end of the buffer.
 
-10 of the patches are from Chris Mason and Josef Bacik. Patches 07 and 12
-are selftests.
+Read trace->nr one time. Clamp the value to max_depth before the skip test,
+as __bpf_get_stack_pe() does. Thus when max_depth is less than skip, the
+helper returns -EFAULT, and 'trace_nr - skip' does not underflow. The
+copied frames can still be those of the second user.
 
+Fixes: e17d62fedd10 ("bpf: Refactor stack map trace depth calculation into helper function")
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ kernel/bpf/stackmap.c | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
 
-Alexei Starovoitov (17):
-  bpf: Clamp the trace length before the skip test in stackid_init()
-  bpf: Refuse to map an arena at address 0
-  bpf: Don't let bpf_arena_free_pages() see a half-set user range
-  bpf: Refuse an arena mmap() longer than max_entries pages
-  bpf: Remove the WARN from arena_get_unmapped_area()
-  selftests/bpf: Test the length and the address of an arena mmap()
-  bpf: Don't turn struct arguments of KF_ACQUIRE kfuncs into memory
-  bpf: Don't turn kfunc arguments of an empty struct type into memory
-  bpf: Compare the arguments of an extension with those of its target
-  selftests/bpf: Test the arguments of an extension prog
-  bpf: Don't let bpf_skb_adjust_room() raise gso_size to GSO_BY_FRAGS
-  bpf: Set a dst for test runs of lwt_in progs
-  bpf: Don't look for the SRH again in the End.BPF helpers
-  bpf: Don't leave a stale MAC header in bpf_lwt_push_ip_encap()
-  bpf: Reset skb->cb after an lwt prog pushes an IP header
-  bpf: Require BPF_LWT_REROUTE when an lwt_in prog changes the protocol
-  bpf: Don't let lwt_in progs call into IPv6 when it is disabled
-
-Chris Mason (9):
-  bpf: Reject memory for kfunc projection type args
-  bpf: Require prog fd or capability for cgroup detach
-  bpf, cgroup: Keep the skb network offset signed
-  bpf: Reject non-IPv6 packets in BPF_LWT_ENCAP_SEG6
-  bpf: Limit the SRH length in bpf_lwt_seg6_adjust_srh()
-  bpf: Move the MAC header in bpf_lwt_seg6_adjust_srh()
-  bpf: Move the transport header with the moved headers
-  bpf: Use the inner transport header after a decap
-  bpf: Check the offset in bpf_skb_generic_{push,pop}()
-
-Josef Bacik (1):
-  bpf: Clamp the trace length in __bpf_get_stack() again
-
- Documentation/bpf/kfuncs.rst                  |   7 +
- include/linux/bpf.h                           |  10 ++
- include/linux/bpf_verifier.h                  |   8 --
- include/linux/btf.h                           |   1 +
- kernel/bpf/arena.c                            |  16 ++-
- kernel/bpf/btf.c                              |  19 ++-
- kernel/bpf/cgroup.c                           |  26 +++-
- kernel/bpf/stackmap.c                         |  33 +++--
- kernel/bpf/verifier.c                         |  66 ++++++++-
- net/bpf/test_run.c                            |   3 +-
- net/core/filter.c                             | 133 ++++++++++++++----
- net/core/lwt_bpf.c                            |  53 ++++++-
- .../selftests/bpf/prog_tests/arena_mmap.c     |  37 +++++
- .../selftests/bpf/prog_tests/freplace_args.c  |  92 ++++++++++++
- .../selftests/bpf/progs/freplace_args.c       |  53 +++++++
- .../selftests/bpf/progs/freplace_args_tgt.c   |  70 +++++++++
- 16 files changed, 564 insertions(+), 63 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_mmap.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/freplace_args.c
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_args.c
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_args_tgt.c
-
-
-base-commit: 5b96632457e4ccae88ecb751cf48176b2e3629a7
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index f7e8d766d128..7d90891cce0a 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -822,14 +822,20 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 					   crosstask, false, 0);
+ 	}
+ 
+-	if (unlikely(!trace) || trace->nr < skip) {
+-		if (may_fault)
+-			rcu_read_unlock();
+-		preempt_enable();
+-		goto err_fault;
+-	}
++	if (unlikely(!trace))
++		goto err_unlock;
++
++	/*
++	 * trace->nr can be above max_depth. The per-CPU entry is released
++	 * already: a tracing program or an NMI which takes a callchain in the
++	 * same context before the copy below reuses it. And the unwinders of
++	 * PowerPC store context markers on top of max_depth.
++	 */
++	trace_nr = min_t(u32, READ_ONCE(trace->nr), max_depth);
++	if (trace_nr < skip)
++		goto err_unlock;
+ 
+-	trace_nr = callchain_store(trace, trace->nr, buf, elem_size, flags);
++	trace_nr = callchain_store(trace, trace_nr, buf, elem_size, flags);
+ 
+ 	/* trace should not be dereferenced after this point */
+ 	if (may_fault)
+@@ -838,6 +844,10 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 
+ 	return callchain_finalize(buf, size, trace_nr, elem_size, flags, may_fault);
+ 
++err_unlock:
++	if (may_fault)
++		rcu_read_unlock();
++	preempt_enable();
+ err_fault:
+ 	err = -EFAULT;
+ clear:
 -- 
 2.55.0
 
