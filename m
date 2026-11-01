@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793559987;
-	b=lO95YikKafQR28PoCb0WdO58ufiFDVaSU/XxV4jVz42IUBao7vtbUw7J0WAUcAwkaVmx
-	 SfneIB+9rIIXlQzT8USxmzoU5/yyP76dZJ5IQ7tJVVZQiJp7Cj4lb1GmqdatwD6tPIud6
-	 m9HgaeV3UnIa21noZG/QIrWDvwEsaqVU5jsXf3bFKsQaq/1hGz9NtYI+remsWzfojKN9Z
-	 7wiFJhFGs+RatSZf45jZVqW4odmi5VevAA+ojrhqGs4Wo23MJlriFVpIloZw8aY/Enn/4
-	 9Y5RAHafm85ZLsYjISy+3Kpc2WjnlP+VlUV++LM71hskt8FmSnU+imEZPprRvukbm7w==
+	t=1793559993;
+	b=26UKBtDN1T4cqVDgGVSRbNmMjgID4d9/rW25D6OjPlDCpau5h+wJgRZECOtQ62qrCeeW
+	 v7bW0oVrYUglHgoc76AwTP3tAPSw+x7lyrpu4OH3YkqNRDw1519SMW48r7kyfgQuteqDE
+	 QL7TfnVO/dv1I2sYNhojeLLTR7tRWy0avzANn/8rl1/1Jwm2wJgJAjebU179FGQl2ghYl
+	 AxqJoPCxeGio0LwV+Nwtj2SnScXXtA1i2lJfoU3qdy/TFoTQiWosbAsu3BHy4gTLNJgox
+	 01ovS+MQjh7WPI9RXDoxFAWLRiu0m4zHAsqCmdcel9dn3/z+430HuXjxHzUg3+U+s5g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793559987;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793559993;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=kYlJ0iN3+bIdrZcrpJOswolp96cgw2ook/zkH9WCZzs=;
-	b=VUCl8Q8SihWinMcMm5Cx2BYcVk7MEDc+bSf/TgfLd6eWpXSyx6ZEEhzQiVQpb6U0IPON
-	 lWO/WtEPNz6cmy4msHpOTSVyxuhDW74I+QD+fD1e1BOjD2jTEm4H4xGB0NFGK4HpXJnPK
-	 FBv7cZ+vKBZLRD3fxuB+lEdtYg9FishE82a0oBWZSlOk8wguAPStA81k8HZ90F4WFH2HH
-	 iZugvYeKmDzmsOck+2PEFue2FE2qKAr9ERmc2VYHTeq6ivtvjuFS3oPRtbaEm6a/w308p
-	 Toz68jZLGZ24sNElAyWI9vfvhsqWdandRjr/GQk5AdTrHqpD8myii3fK6N5ACb8l3UA==
+	bh=/j5NKGrL+SffqVVvzist4S4FwCKb9cxuYmbaWGqRFGI=;
+	b=AFd/EhpSLBGlLGTBxEYvjbNpdnWT++ABb3JH8iqWLKpe401V6F2s49q9AExudrH2plHr
+	 LcYxCSXWLYUT0leiyR/UTGM5NJPa3J1niYlTuq4Kf99EaPG3SpRdZD3OTf2kpE1hk0hye
+	 bePmMf4g0NJllXIEpW1trRrd0Z21WqjJN6Cj4IXCQfiEAK4DSEWP9VkYqogJXTExVbJJk
+	 mw2c1UgybzysApX4o4u8ZODc1CiA7XVGxUWxfZwb+fZs1ZGtZvN8KKjgDv44W4vKUCm2a
+	 /6pp08Eymxlcms0WUcx65NQ90U7wDEv5wOzbyOgpeAbRjwApj0HM3LDjut1vrp5l/NA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0FtctUmA;
-	arc=none smtp.remote-ip=209.85.214.173
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NsxynuN4;
+	arc=none smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46842606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:06:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46842606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F88606A326
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:06:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 15F88606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0FtctUmA
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2e8da6ef7ddso12922175ad.3
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:06:27 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NsxynuN4
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3adf5f6833cso1204327a91.0
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:06:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793559986; x=1794164786; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793559992; x=1794164792; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=kYlJ0iN3+bIdrZcrpJOswolp96cgw2ook/zkH9WCZzs=;
-        b=0FtctUmAdZi1fMWH/ht4EDDuwsiRBMbwzDpgZhFOZ0J8n3QgsuPiOi6+6dKVyWT60g
-         AsFjM0kdn/N36E6Ww2osLXBEB/Zk5hfZbyr1pj2oinw8EbESAC1rs1AFqY+RmKjUCwYk
-         GUsjP5C4kNWJDOMnKjMeUsUlfowOJC3vB0W9Eif/rRUo6qYxOziMTStdFBOHMQbC31mt
-         qMaUvnyJ7YYsfoAoEcegvspToHzmSc1mi/76F2HVQe+Rx+1VMMAp1zMre9bSITy0HRnn
-         lRsA5mi2ijdN7YMObWIZOjpycwcsM4MA1uj/koDEXO3c+6Y0jxPsMyErcJxkAD/4Hs6U
-         2lQQ==
+        bh=/j5NKGrL+SffqVVvzist4S4FwCKb9cxuYmbaWGqRFGI=;
+        b=NsxynuN40lnHS4mrsV7mWmSPEXZeWzHiBIUAQr9U3CH56TTUn8iKE91EqbuqNf3goC
+         pGTJNR0adCXpzjFXfiLvMNoKMORdxsA1Rd3sAFhKKrmXoCL97EgeOtbkZ+uk+JZ5e/cE
+         w0VDjhSarbtJ1Xkhd9LPtFftSxZOZ36zI6xWTKIJw+d9G+sZtRdV0QxQK2SxlNafbSqb
+         Fb+yyShubiK/hzmQqCIAd1I8Jz8+oAxOvXbSzRuMjYQy+TFbZjZWThi6BKKCtndnlDkD
+         ijGKDUD5Z6fXD5DTIbnVlr7PRcFcs0pAmztdZlnaM0kZ1IXEypxUgCIdQXiLndR6DalD
+         Nf5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793559986; x=1794164786;
+        d=1e100.net; s=20260707; t=1793559992; x=1794164792;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kYlJ0iN3+bIdrZcrpJOswolp96cgw2ook/zkH9WCZzs=;
-        b=jZC2tQME+Sztg/Irfytte4zZNmDB1Cm/YNM3PNDo1kCW3JS2lGlDT3GS2kiRMBqZXW
-         vbdGJc1dII7eADH6DGkxroyvl9Mb/GokzaaH/5cp+xRZicKbzWDmlNPp0laz8JfrdKUA
-         y39acianQ5fmBaxqg0UMD3bVZT1V4wgq0Xe4dpSF6yIOKAfubZH0YIskAEFdnaTeddHw
-         uF0VLaxadPi0TFo5ejcctgfh7hg8YgXg1lkr8PuT6ipysKu3X4L1O/Hpo1pDN/i51uKC
-         rJPMtwVOOVj/yPWukLmDmdsO4pohOYUY5itt4Qez9YBCiqPI3of7FvAzpnPGQDtlTlMc
-         umNg==
-X-Gm-Message-State: APuU4Z+k0/RuOli4KMxVG15KLE5tyxEG1Tgfj/6QzIcrLjLVfJSA0i8A
-	Q1I+jIRzOL3N/GU2Gtx01DfChQ4kj95pWi5I94fYiMsPjXdlffotuXC8oQoHtQ==
-X-Gm-Gg: AYBFou2MSZVDfaVdNg8wnko2Uuj90BugZyqsC6cC5PD01MwTvSlIOesNC1pqRphFFHC
-	9sBYndYBnz0bdiCpH2mAT6ypjcveTVqvF+27hFw+9V24eFq02a1vvQlJXlg9RldWJAPiHhhf6ND
-	FKXsYncNfUnRDThyKvmuelFZW22jPJ65pAklPdTUd2SWJTIjvQgxHpZ1i/2QE+TSMPNim9hesVa
-	HiSr15ixDId0URpz+eItZ7KAbQ/vkYrVCPRoorNVRY5wLBnK8tWirajDDXTTQZDM8YsG4lUbCWI
-	bwl+XOeAOwK/Kf/9c1q+Hn7WCkLz9W62JPe3kmN8zs2CBd2Q4MsU75Z1OcD1nLn9NSWsrteGI/v
-	s39F1+cCX8TZKSxO/yydrdsbsC4vE1Vun0K21exWDpjk6wTbv9Cuc1iibIy0FEjk7DlOVgGnUcM
-	5gR43x2sPzqEseRqNGJ3PZS0OBkBVAF899Ux8S+md0csrOoS5I2F8yNBGEdm+UiGcXSswOX1XdC
-	NUCNOfZA37VMQLKoPeif8HNLeyVw18EOjskHtPw5P0zSP0AGZyJH03/BLC8ujCKv9+t0c8NCawH
-	qAK5VpdbLBA0zJFVaZr+U5IF1JhR0Yy/Gmag0P7sOsrwMj58+vZzmwH8vYexvkpbeXsCRDlTcst
-	AD5uVxGfLqhnrI3j+4+lnjrY58Euh83JF+gigs2dGq7IN1546ecRGDJU719szWdcU3KvXsh5+mA
-	==
-X-Received: by 2002:a17:902:e88f:b0:2e8:6540:11b0 with SMTP id d9443c01a7336-2eb36464449mr81099925ad.38.1793559986339;
-        Sun, 01 Nov 2026 11:06:26 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb392ae011sm18689745ad.69.2026.11.01.11.06.25
+        bh=/j5NKGrL+SffqVVvzist4S4FwCKb9cxuYmbaWGqRFGI=;
+        b=NiZYiA138p2ejxnuBaMjtqaKwetSgQwskkoU8hwf/4/RxGI2dEZj1FhR/ShQ4Pxt4E
+         wPSk3YVWFZqOVKxxrTe0KghO9VmAOhd8cZ7Jm+ETVBk8hVGW7hSx5J6khnSZeEEGqzbQ
+         K3294MTDoZxu/YRBCTDatzXLgyml/k2ZAPxWeRIUYOBhUwm8dZwgDtdBC1rPhpyecnTA
+         vo2nIuIDKvfnCs9j8NP3/NztCLTQsOE8lR0xTPvZ1AiVyPFdqH3zsuBwB/QEWPk+YN94
+         LNAsH2owbmBW2+Yuux/nJYajFezQIBg2aun/xqyJc9EvSGs2XaA2BxU5B3TDSrU9Pqoj
+         Ig5Q==
+X-Gm-Message-State: APuU4Z+MxBy2cMdr9I9XwSYBq6Mwb/X9IABIffY+HdExDcZwxK3s2lJY
+	K/P2jMAM5UAJYsjn/jHDXP7G8Ap6G/0i/s5qOX/w743xoX+7dYc7YC+AJX5XRw==
+X-Gm-Gg: AYBFou0ca8wGWfK1JnMcsWwufLNoglgmq8mnTUgYsuOExPdoYlVElydVpcQEFhjOO4Y
+	34UiW19B/PCEPa3RWaJjKKkTqRidIfBM72gK2+cun0qQ71YFFkePQus6xInhlIKhy1tMSnkSv/K
+	wDKdH+8iJKf12f9CZMT6U68SFpSHWAnNUUR5EpPbQqY8dNDy5Jy5UH4j68v8sKfZqYxJZYRM59B
+	PCczJzPRvvylDM12dI1oiJzsdpUXvlo/iaR+Rq6mfkbqKmUCrW9nFZyVG8A/Eg1B9+8GdrNpBKO
+	r+1WDTjCShN/EmSvIKoVJm/bDz6QBakUryDXd3VZ5/Qrx0wp76GCex5yAyJEDUnR1Z9EjGlqbHX
+	dC+05F5Cr8PMfhowThYD4fObzY4E/S3R0nsBeYNHsxWnJ3ahGon5fIfLNlUu0DBrsnOjvew4O26
+	Jvk8EiZaitEoitaWTHtpOT4xWqjlpk7i4R4e6YgRCa/EflAIPOhdNw66jxq6F2Y92YxCfOmnsrY
+	Imp6pQiTW2cbOXVzIRvSJp0yyKqJS1dI/jqqxFp9rvFxpuqwhQN/hhhCEcET7VDOMy8JkdK7MB2
+	qUMgafv8IQMtfb6OlOPYxwlJ7YsgNgRtt1ZjNj9UFLbukqf3jqtgfLGvKMHaLlo5Ul639k4hiOu
+	Wm2/bGt11O6EIWtZK3ljSZT/gp69odCZ/qjXHi1mCId4oAraGxfBAqT1S/bDVp1y5imhRvlEYYS
+	Y=
+X-Received: by 2002:a17:90b:3d8e:b0:3ac:8897:7baa with SMTP id 98e67ed59e1d1-3ae8979a140mr5844718a91.40.1793559992173;
+        Sun, 01 Nov 2026 11:06:32 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e9bc6f7sm14837968a91.16.2026.11.01.11.06.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:06:25 -0800 (PST)
+        Sun, 01 Nov 2026 11:06:31 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -87,9 +87,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf 08/27] bpf: Reject memory for kfunc projection type args
-Date: Sun,  1 Nov 2026 19:05:16 +0000
-Message-ID: <20261101190535.1454146-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 09/27] bpf: Don't turn struct arguments of KF_ACQUIRE kfuncs into memory
+Date: Sun,  1 Nov 2026 19:05:17 +0000
+Message-ID: <20261101190535.1454146-10-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
 References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
@@ -104,106 +104,68 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Chris Mason <mason@kernel.org>
+From: Alexei Starovoitov <ast@kernel.org>
 
-struct __sk_buff and struct xdp_md are projection types of struct sk_buff
-and struct xdp_buff. A kfunc that takes a projection type casts the
-argument to the underlying type. When the projection type is the ctx type
-of the prog, the verifier accepts only the ctx. In other progs,
-process_arg_ptr_to_btf_id() accepts a pointer to the underlying type.
+When a kfunc takes a pointer to a struct that has only scalar members, the
+verifier also accepts memory of the prog. Then resolve_func_arg_type()
+changes ARG_PTR_TO_BTF_ID to ARG_PTR_TO_MEM. This is correct for a struct
+of parameters. But struct bpf_cpumask also has only scalar members, and the
+kernel allocates and frees it. Thus bpf_cpumask_acquire() returns memory of
+the prog as a referenced object, and bpf_cpumask_release() can free it.
 
-But this function identifies the underlying type only by its name. A struct
-of the same name in prog BTF also matches. Its objects are memory of the
-prog. This test also ignores the offset of the register. Thus the kfunc
-uses memory of the prog, or the middle of an skb, as an skb.
+The verifier does not change the argument that a kfunc releases. KF_ACQUIRE
+does not say which argument is the object. Thus do not change any argument
+of a KF_ACQUIRE kfunc. Then the verifier rejects memory there. No other
+KF_ACQUIRE kfunc takes memory in an ARG_PTR_TO_BTF_ID argument. Add to
+kfuncs.rst that a KF_ACQUIRE kfunc must pair a struct of parameters with a
+__sz argument.
 
-Accept the underlying type only from kernel BTF, and only at offset 0. A
-prog that passes an skb of the kernel sees no change.
+The first commit below added the bug. Later the struct had pointers in an
+rcu_head, so the verifier rejected memory. The second commit removed them.
 
-struct xdp_md has only scalar members. Thus in a prog with another ctx
-type, resolve_func_arg_type() changes ARG_PTR_TO_BTF_ID to memory, and the
-verifier accepts memory of the prog. Keep ARG_PTR_TO_BTF_ID for projection
-types. The first Fixes tag is for this change. That commit merged the
-conntrack kfunc sets of two prog types with different ctx types. Thus
-bpf_xdp_ct_{alloc,lookup}() can use memory of the prog as an xdp_buff.
-
-Fixes: a4703e318432 ("bpf: Switch to new kfunc flags infrastructure")
-Fixes: ec209ad86324 ("bpf: verifier: Relax caller requirements for kfunc projection type args")
-Signed-off-by: Chris Mason <mason@kernel.org>
+Fixes: 516f4d3397c9 ("bpf: Enable cpumasks to be queried and used as kptrs")
+Fixes: 8e07bb9ebcd9 ("bpf: Convert bpf_cpumask to bpf_mem_cache_free_rcu.")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/btf.h   |  1 +
- kernel/bpf/btf.c      |  9 +++++++++
- kernel/bpf/verifier.c | 16 +++++++++++++---
- 3 files changed, 23 insertions(+), 3 deletions(-)
+ Documentation/bpf/kfuncs.rst | 7 +++++++
+ kernel/bpf/verifier.c        | 5 +++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index a18254b7521b..87fad4076f0e 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -631,6 +631,7 @@ s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id);
- int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_cnt,
- 				struct module *owner);
- struct btf_struct_meta *btf_find_struct_meta(const struct btf *btf, u32 btf_id);
-+bool btf_is_projection_type(const char *pname);
- bool btf_is_projection_of(const char *pname, const char *tname);
- bool btf_is_prog_ctx_type(struct bpf_verifier_log *log, const struct btf *btf,
- 			   const struct btf_type *t, enum bpf_prog_type prog_type,
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 1be30487a2fa..fe24e459c1b1 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6590,6 +6590,15 @@ static int find_kern_ctx_type_id(enum bpf_prog_type prog_type)
- 	return ctx_type->type;
- }
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index 73578a4c3b1f..329d1510b02a 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -407,6 +407,13 @@ referenced kptr (by invoking bpf_kptr_xchg). If not, the verifier fails the
+ loading of the BPF program until no lingering references remain in all possible
+ explored states of the program.
  
-+/*
-+ * A projection type is the view that programs have of a kernel object with
-+ * another layout: see btf_is_projection_of() for the two types behind them.
-+ */
-+bool btf_is_projection_type(const char *pname)
-+{
-+	return strcmp(pname, "__sk_buff") == 0 || strcmp(pname, "xdp_md") == 0;
-+}
++A pointer to a struct in the arguments of a KF_ACQUIRE kfunc accepts only an
++object of that type. The same applies to the argument that a KF_RELEASE kfunc
++releases. For other arguments a kfunc also accepts memory of the program, if the
++struct has only scalar members. struct __sk_buff and struct xdp_md never accept
++memory. A KF_ACQUIRE kfunc which wants such memory has to pair the pointer with
++a __sz argument.
 +
- bool btf_is_projection_of(const char *pname, const char *tname)
- {
- 	if (strcmp(pname, "__sk_buff") == 0 && strcmp(tname, "sk_buff") == 0)
+ 2.5.2 KF_RET_NULL flag
+ ----------------------
+ 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 26a5ee0708a3..53272f50226a 100644
+index 53272f50226a..cc2ba4dc9da3 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -13585,7 +13585,13 @@ static int resolve_func_arg_type(struct bpf_verifier_env *env,
- 	ref_t = btf_type_skip_modifiers(btf, ref_id, &ref_id);
- 	ref_tname = btf_name_by_offset(btf, ref_t->name_off);
- 
--	if (!btf_type_is_scalar_struct(env, btf, ref_t))
-+	/*
-+	 * A kfunc that takes a projection type (ie. xdp_md) casts it to the
-+	 * underlying type. So memory of the program cannot stand in for it,
-+	 * even if the projection type holds only scalars.
-+	 */
-+	if (btf_is_projection_type(ref_tname) ||
-+	    !btf_type_is_scalar_struct(env, btf, ref_t))
+@@ -13574,7 +13574,12 @@ static int resolve_func_arg_type(struct bpf_verifier_env *env,
+ 	if (base_type(*arg_type) != ARG_PTR_TO_BTF_ID)
  		return 0;
  
- 	resolve_ret = btf_resolve_size(btf, ref_t, arg_size);
-@@ -14340,9 +14346,13 @@ static int process_arg_ptr_to_btf_id(struct bpf_verifier_env *env, struct bpf_re
- 
- 	/* If kfunc is accepting a projection type (ie. __sk_buff), it cannot
- 	 * actually use it -- it must cast to the underlying type. So we allow
--	 * caller to pass in the underlying type.
-+	 * caller to pass in the underlying type. Only kernel BTF has that type:
-+	 * a type of the same name in the BTF of the program is program memory.
-+	 * And only a pointer to the start of the object points to that type.
- 	 */
--	taking_projection = is_kfunc(meta) && btf_is_projection_of(arg_tname, reg_tname);
-+	taking_projection = is_kfunc(meta) && btf_is_kernel(reg_btf) &&
-+			    !reg->var_off.value &&
-+			    btf_is_projection_of(arg_tname, reg_tname);
- 	if (!taking_projection && !struct_same) {
- 		verbose(env, "%s %s expected pointer to %s %s but %s has a pointer to %s %s\n",
- 			meta->func_name, reg_arg_name(env, argno),
++	/*
++	 * A kfunc that releases an object, or that takes a reference to one,
++	 * needs the object itself: memory of the program cannot stand in for it.
++	 */
+ 	if (!is_kfunc(meta) || arg_type_is_release(*arg_type) ||
++	    is_kfunc_acquire(meta) ||
+ 	    base_type(reg->type) == PTR_TO_BTF_ID ||
+ 	    reg2btf_ids[base_type(reg->type)])
+ 		return 0;
 -- 
 2.55.0
 
