@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793560016;
-	b=jgblSI8Qi6pFxyH7D1yQ3OOBGxiQsiMbZL0mKc4Ewq6vefeuT+uZENfS1RMS0yorctbR
-	 vAxBnuHP+w76H83Sd7Pee60Qe2gKDztoOqVfLsO3BL6bw3zL7+0OcOKi6reKtK0o0c7Hc
-	 W1exw/1gNSvtmc2F4Quw/E6FOmwKEmLy9ZlN4fgfVvI4zOlmyC/s3iVppPCatSr5yElUT
-	 cn9NKOjxBLrTBwZYnDxQJpZxbzbHqHSg7NaI+6oh/AvtFMyyplciGtqInSuF01SfkfPII
-	 TONCG0vvoaxfpsW6/qkdwzt5dSQGK/g2OUf0/VCWo+MH2M8ZgauF/HrT6q1BeYmUBvg==
+	t=1793560022;
+	b=lJ6/UUzLEp421lhoRuwHDt1xvFwvj1lK+du2UWfCi1q/2Bvlu2DMgCBfg6dQnCjyf50b
+	 dBLOhktYXU0AzyUvA5byLRy/n0Eo95wLQ5n4UdgEVsu1+yUqbfOv3IJX+vDZAU5eg2S+L
+	 flRdFZOcNCNnB8pB4iYcMxQsFP0jJwYOlgQ0ZXlYV7Yg3DFZz2NH5a/PAPaKUU4FmLZSD
+	 VjVJ6CtigOjY6v7qF2sGt6Qc7vC7DOqqKQP2UZLQdP/1/CSxGXATJ+1+9E+/VZbyUlJpt
+	 ueyZCbkUXdneWiNK0lXO6XIIdRumA9RAvRlqrgiXHGw8DNpjIe3BwD5uoMOs5xr1mIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793560016;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793560022;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=d4pbkTqS8rd8iJLTsXjJradA2PUz9xr2RYOUf6mVjws=;
-	b=tdfGxgzW/CirTaIAJpmQPE3UNXVDHZvjWDsd8xM6ZREKxUoVMZaaP4luufuIK0+jELxR
-	 dCDZasbLF7Zw9llcroiA8uUujkBgX5AtMZDSil/aaLMy6ngIdMcyx0lcwPEvwhop39zwF
-	 XzX5oyjFzPcoLN8SVYzGTBAQb52Awej+7ZLNq1mUgN6cha8sqDNKESCNqpIyLmfu9u0Da
-	 OjnrE2v2ytTnwVwJ+jpEsrMFcFes2UPRqHyXbCSZyqWKXgcb7OoI3G+foBzC3TkjTong5
-	 0Q8IljQShSAvXPMgcepgF6ryUzfCvBvJpay8IIAP/uBKqmq6aAcchRie2MtUaDIRYCw==
+	bh=dyLl2bdfqfraD3mjemdszQJ72yihqWirD/TyY2NJGmA=;
+	b=jJJG0voaTebGs76MTrMLU7AN1tA51wZ04binovR1+hx8aHmluRimF3Gku/XlAvnMqHHZ
+	 c+LLRZMUgFBd7nBFa7yyViU4/q4Ryu5t++Jn4IWYgHX9fM9mayH6ZovQNgzavxgfFfyeT
+	 FecPAdnApaEH6d9TNVAenH+Lw4NmNn02tqY8StvfQZpnZXg3r7EwTVgg2ZLjQtXjTyp7h
+	 Y7CM0SNPYJZG8MVm1C0bK+WHVaYe2WojLJmyOcTFl7O8gx4Z5jxMJ1AStzYzcWRaK9lC3
+	 ZgunHwkI9MNo94zolL3F7Ut4AtdO1NSULtbCdX1YQ2pXqyF94fNY8W8j5vTbJqBhdTQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H54P50jr;
-	arc=none smtp.remote-ip=209.85.214.175
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=COOAoiW9;
+	arc=none smtp.remote-ip=209.85.215.171
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591F4606A325
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:06:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 591F4606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76040606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:07:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76040606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H54P50jr
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2e8fe8e343fso14969915ad.2
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:06:56 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=COOAoiW9
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cc751eddf25so1314020a12.3
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:07:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793560016; x=1794164816; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793560022; x=1794164822; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=d4pbkTqS8rd8iJLTsXjJradA2PUz9xr2RYOUf6mVjws=;
-        b=H54P50jr0gqpxt0fAAVcB3ouQJisQK/vMQm3WiHcQGwrO4S5XEtGS/4Xwll/9tvUSW
-         bno6bgUNQYiCdnCZTUoM6ERb5+JlvF9Q7arTJp75CEHSmbrUqYJkJQhQA+dN5c/E9hi+
-         ifuHIw+m/6NTGEweH1NptBIVxYaYRNesEhIHrRVCtYFf/seGMJUUTqRoFWgIGx28bJz4
-         9+UziIMQYFsUkzwmnCD3PdKgphq4HdZCnMUsikqmAmQBqe2LSQDqmu1SpDjLgDYEtuNK
-         +2wDHxXQ87rtMgLL+XpFqcW9Si9eQ7fBPu9UiZt20Tjuwdj6xoR+aDo/ewKqPsLzXbVx
-         IwjA==
+        bh=dyLl2bdfqfraD3mjemdszQJ72yihqWirD/TyY2NJGmA=;
+        b=COOAoiW9I0TfBv6DH6vOQJOnr1f2G5xiOeHQ5T5lE5tgW1mIphkIUVZR4+T3u5VFi7
+         1z7YRaVylWCJOuzUthisVSQT2I1iV0NzAI0tLqsxyQwGqeQTCCVuhBukSnvDYYu215f2
+         3fPPuWIrBCBijuIP96K6X2fWE46t99sXe+btJiyyT5v1kQf6iwmZFnEh3PBIMiut0bpE
+         akQ0lvzuGus6l98L+Z7hequmu9Y7byBIf+O4yrK78geHAp6IqzPmqrdrMkKvBD6OGp4u
+         Yo9PFGcEJCO02JlLWvJ97luFdACIUeZU1q5SxObfAyR1glQgMcQfwIV6RYr5XUTe7cX5
+         alGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793560016; x=1794164816;
+        d=1e100.net; s=20260707; t=1793560022; x=1794164822;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=d4pbkTqS8rd8iJLTsXjJradA2PUz9xr2RYOUf6mVjws=;
-        b=KXd0kmAS1ogq1TCEjWigaEaPYAhWNM6Y30yhmQGyo/VgBpauXKNbrSu+tA0dvHjgSn
-         v26PuYqTGtoc+xdX8YZYf8gJrVRb/GxjGthlZfA0ltB56UMCZ0rr+JiAINbBHoyY6fH+
-         FqN79gsq0sXogGwSIsmCROoYeZMnmA7LIZNtlX1DjnjzaN5rEuG/Hv80CIsuUpMDWTiV
-         W26mDHB/t3UgyoMkbXzCMkop4Aa5Y0uD3hYIh5+Y/gpQxhLB/GT74eYfzO5gW8VU2woq
-         HvHdiK3EwYJi2NiMuAYeW64Ld1ixc7qwGtyYFjwzeas7hN+GAOd7VlcPbwq2/LUBrfpa
-         1+GQ==
-X-Gm-Message-State: APuU4Z+lLU5DAKoOS+iIejVBHP9Xn6zdNuI3RzpKNnY9RDsOgSvtVD8s
-	r6wmPqrJydQs4SAVlbZB+xn7CAcLYa09w4I0lmifzkK61OQVmzHzZegcSvl4qQ==
-X-Gm-Gg: AYBFou34jsaDZdZeF3PCh8sfUwJYo+nN1ZgE2v9rzShyGevXof2HALVkIskdbAq3mjf
-	dWtNc4q7fFloWvvMH0sdNBBayNURqxFbC+Go5tc2KMo7vcr+Ps1AV4ZkcpYZ2zPeWgZC0TOFHZw
-	/0T0JvqSsuYaBNzeu0/LONfmnHFnIhpOWzZQ8efudi8XRTc6B36XyuKwLNdFN0fwtzcnWslMtH6
-	edZmcrXTgXy9g030q19UNNNBKMMHlWFCULGdyvHLYG5G7wFgbk/MtrVg1xPw1IFwAAQlmvON6Jc
-	1i8oA0kW8iyVigZAcZn+IkS34Jwz/MmYFE/0SiHRbS1uR7yR/91GIBVG87aCMGcVCvktks1Geij
-	zo0mr88ciyDkOxOSOZe/cUJcKHj6KO1FzXJC8p/xoqNxonOVW38WcaQyM/HHRM0ePOV4iEA6QJg
-	884N1D2UUHZEpD1yfKP8iQrgJ4b4YFyJqyobAjYnLZX8o1gl86iweTMsBSNbunw7w60eBV0Ce3b
-	iOi95bYOrgqjsLArvAsVEHqvVdln77p7VA6eyIZSsh3McIZscQwIlfOD+iE5QQp/Cx4G6vzGf0i
-	ogQvLEdioiWkmwlr9I6Poquydaa3rJX3JK7dSm/jTi3t6IofR2NogiBFFnuldZC1IqGbPVbTi7Q
-	HzFn3pqJlgNmBKUeJlV/+irvWWUipV7TOqym5jEMtu8qEg93f/h7fSGPCwCbHwWIrlFXhNtRlCQ
+        bh=dyLl2bdfqfraD3mjemdszQJ72yihqWirD/TyY2NJGmA=;
+        b=TKgjsil3WWqAHQAeZ8QAZGlBvBQ73d2QPjBsQtHQIMb+emW2JsNcafTtafsDO8fnfu
+         B822AV3FPGbR4wcJ8l0PIY0SDrtBmUqJvj2TJV/+hWvbgB4z+uc8v70G/HJRLu+M6/W2
+         da+xuWUne+HONjCUbPtrDXxejlTPfF8MRqhiE3KXqL413zQNPnJ4ELilSSBnGMGUWnJr
+         0XNXGyf+m/eS0HrJZ7VH0aC0KZbz9O5hIHf8Tqg0JOyr7YDyC0/95QmESXLmObZK2vGz
+         QDolKqCVJDGqdDb5qOWgGHTfD1fyEWC8Z5oQgTUjGBmHI1JqGzbAll9YQaaeYQ8oj/0e
+         Y1IQ==
+X-Gm-Message-State: AFq9FYKBsv9QxMaP/dXbnbGs6McN0UrA58RkKnBZnZO3xkXd12TLwgND
+	tmpJe4qLwbv0wuMVO9whhxoxTuWloA7q6ZxVLYjykE8/FbiHoCOZ3isFw25/tQ==
+X-Gm-Gg: AYBFou3jkrpzHlUW//agUZxjKHPHol3zF2xVjId/KQArBVrepWzI60S+B1ISLD4AoZP
+	VTvoewvLRsYCaW54hMFntKBFFNy11VHzfwb9fTKhmbr8PBZP5LDOe3Hmz74ld5x8T4UxQFPjHxr
+	39F2VwYIGjXGZLaOMMug3xyLdskGekWwxzGD+OmKMgdx8Uh+8FAqYu2yMkdg+mukJLbffRzis73
+	r9zhTzp8zh6QSPhQSGIssiHWmNXvYqPqL2HhRb/rx2q936oZzl0/H+twuownjDx1M4NaZjhsNGh
+	WeogCKwgHtpKh9wHSnvTt8Eqy/9zHeZRJj/QRQvEFpha6m09ByrPK7x5Utlbl/4IUBZuGh/EbO/
+	6QCx36g7O5gsnt6AnKZiLQ/EPLb8wuWh84u+uugCjbQAUrka1gIkSKZTyYf8nyjFfyFhT48BW32
+	ZIFHCsRtWX55dwJvvtb9cOUPmKTVlBUIrs0Rev7kbpDHEwRKHLeVrGeamioLOYY1RYmDzQSfE2k
+	Fxe2gmKcCDqCAzXqOsEpaQtalKGfP8uSgI8Q58Ywblcle8lPtK090Z9AXmfsp0V/ozrOfjk+th5
+	kz0Ui7ksnjBwCVNPQc60fo691hm+09Vge415pSGiU+/5/0EtwdZyKR8RM4EsVkLQnFSYKwvi7cu
+	/0aDIuYZDic2eFIcKwB8OteCmHRWpe5SNdCtlw8KUnKMiCyBJI5Iu3guvurPY1tLKOCsgvGrWzQ
 	==
-X-Received: by 2002:a17:903:3904:b0:2e3:1d30:8658 with SMTP id d9443c01a7336-2eb36396775mr73203875ad.10.1793560015738;
-        Sun, 01 Nov 2026 11:06:55 -0800 (PST)
+X-Received: by 2002:a05:6a21:328c:b0:3cc:8344:1213 with SMTP id adf61e73a8af0-3e928646152mr8676454637.8.1793560021574;
+        Sun, 01 Nov 2026 11:07:01 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb39052bcbsm19290385ad.10.2026.11.01.11.06.55
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aad9c09086sm1119273b3a.23.2026.11.01.11.07.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:06:55 -0800 (PST)
+        Sun, 01 Nov 2026 11:07:01 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -87,9 +87,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf 13/27] bpf: Require prog fd or capability for cgroup detach
-Date: Sun,  1 Nov 2026 19:05:21 +0000
-Message-ID: <20261101190535.1454146-14-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 14/27] bpf, cgroup: Keep the skb network offset signed
+Date: Sun,  1 Nov 2026 19:05:22 +0000
+Message-ID: <20261101190535.1454146-15-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
 References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
@@ -106,49 +106,70 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Mason <mason@kernel.org>
 
-Since the commit below a cgroup prog detach does not require CAP_NET_ADMIN.
-The fd of the attached prog gives the permission instead. But the detach
-requires this fd only with BPF_F_ALLOW_MULTI. Without this flag a cgroup
-has only one prog per attach type. Then find_detach_entry() returns this
-prog and does not compare it with the prog of the caller. Thus the kernel
-detaches this prog for a caller with neither the fd nor a capability.
+cgroup_skb progs see a packet from its network header. While they run,
+__cgroup_bpf_run_filter_skb() moves skb->data there. It assumes that the
+network header is not after skb->data. It negates skb_network_offset(skb)
+and pushes skb->data by this offset. The offset is an unsigned int.
 
-Compare the two progs. If they are different, require CAP_NET_ADMIN or
-CAP_SYS_ADMIN in the initial user namespace. The error is -EPERM. A detach
-from tcx or netkit without a prog fd already requires these capabilities.
-With BPF_F_ALLOW_MULTI nothing changes.
+But ip6mr_cache_report() and bpf_lwt_xmit_reroute() can pass an skb that
+has data before the network header. Then the offset wraps. On a 64-bit
+kernel skb->data is then far below skb->head.
 
-Without these capabilities, a caller of bpf_prog_detach() of libbpf must
-now use bpf_prog_detach2() with the fd of the attached prog.
+skb->len has 32 bits and wraps to the correct value, thus only skb->data is
+wrong. A read of packet data faults or gets other memory.
 
-Fixes: 2c78ee898d8f ("bpf: Implement CAP_BPF")
+Keep the offset in an int. Pull skb->data when the network header is after
+it. Otherwise push it, as today.
+
+Fixes: 3007098494be ("cgroup: add support for eBPF programs")
 Signed-off-by: Chris Mason <mason@kernel.org>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/cgroup.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ kernel/bpf/cgroup.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index ce82963bcfc7..ca681d626c9e 100644
+index ca681d626c9e..57a785241d42 100644
 --- a/kernel/bpf/cgroup.c
 +++ b/kernel/bpf/cgroup.c
-@@ -1279,9 +1279,14 @@ static struct bpf_prog_list *find_detach_entry(struct hlist_head *progs,
- 			return ERR_PTR(-ENOENT);
+@@ -1790,7 +1790,7 @@ int __cgroup_bpf_run_filter_skb(struct sock *sk,
+ 				struct sk_buff *skb,
+ 				enum cgroup_bpf_attach_type atype)
+ {
+-	unsigned int offset = -skb_network_offset(skb);
++	int offset = skb_network_offset(skb);
+ 	struct sock *save_sk;
+ 	void *saved_data_end;
+ 	struct cgroup *cgrp;
+@@ -1802,7 +1802,15 @@ int __cgroup_bpf_run_filter_skb(struct sock *sk,
+ 	cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+ 	save_sk = skb->sk;
+ 	skb->sk = sk;
+-	__skb_push(skb, offset);
++
++	/*
++	 * The program sees the packet from its network header on, on
++	 * whichever side of skb->data that header lies.
++	 */
++	if (offset > 0)
++		__skb_pull(skb, offset);
++	else
++		__skb_push(skb, -offset);
  
- 		/* to maintain backward compatibility NONE and OVERRIDE cgroups
--		 * allow detaching with invalid FD (prog==NULL) in legacy mode
-+		 * allow detaching with invalid FD (prog==NULL) in legacy mode.
-+		 * Without the FD of the attached program the caller needs
-+		 * CAP_NET_ADMIN or CAP_SYS_ADMIN in the initial user namespace.
- 		 */
--		return hlist_entry(progs->first, typeof(*pl), node);
-+		pl = hlist_entry(progs->first, typeof(*pl), node);
-+		if (pl->prog != prog && !bpf_net_capable())
-+			return ERR_PTR(-EPERM);
-+		return pl;
+ 	/* compute pointers for the bpf prog */
+ 	bpf_compute_and_save_data_end(skb, &saved_data_end);
+@@ -1844,7 +1852,10 @@ int __cgroup_bpf_run_filter_skb(struct sock *sk,
+ 			ret = -EFAULT;
  	}
+ 	bpf_restore_data_end(skb, saved_data_end);
+-	__skb_pull(skb, offset);
++	if (offset > 0)
++		__skb_push(skb, offset);
++	else
++		__skb_pull(skb, -offset);
+ 	skb->sk = save_sk;
  
- 	if (!prog && !link)
+ 	return ret;
 -- 
 2.55.0
 
