@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793560034;
-	b=WTECb6rq7BmyFU8ctBvsF4/ypd0LdGKOvCGKmomGHCBdMaeDBFtw3yZdg+MhEd1cQzhL
-	 2xPK/1QsCf+8an1lPHP09F8y63WloXXPnLDPBchLZAuxgmAKuIZlvpTJHgG7fvk0IeA6a
-	 BOGideB+Bsutqazj9dQSLVyWsVgp5FiUYSdcB//qiamoIH5nUN6TMHHWTGwDlDtqmk/WW
-	 L7kg+iEQVO6Yiyxi5vvnCuVGbeSuzZ+BcWNKSCB2yx4ln/hEaLlVxtKhX3clM4b6TX4DV
-	 J1Juo9ejnuUa2qdVzAfuaLN2Irpz95S5vedLtW7yFYDvJdom82sp42fIVRm72iwGXyg==
+	t=1793560040;
+	b=LZL8ndxIyL+RcGwXPI0TEhl8xNKqt8usFW0+BeVsmBCTOTn4J+Grv3Ji3sp/SA0jWNTT
+	 s2E0ooUQZM/DZbfBJlperkc/9oSvgm0+q5JcT4RTM56NyCQyzEVKDyx7Jk//h6svcj0xL
+	 17Wi87g/Oopw4AI+EBd23YRtD6yxiDr7UQ3GGrNKd/f/+KTsL7RJSlK01s+IvNmdhEAyc
+	 aquitA5CHoChnTqFOnXhi7suP8eELnZRhbuE/v+TczOZwPI+q99Rlxv83jbwO4o9bzdjI
+	 oh3w84OKi0/Klf+NBE4jvXiEEuTniIOUhKeF6lc1i5OyVUKIKAUaUUYcpaecpifNJwA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793560034;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793560040;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=pVndV0n/YkRP/thIpSXgVugQOXgz4joR1U8HGW5tXlg=;
-	b=2u+AOH77clyx6AhBYvB6JZE4SsKKTIvzrUA8DNYpLjo5AqofkJPXYkZvDGTdxjoWPt3n
-	 mRwdod8jPnGlcBNy1Oq9qlGhX8792Cqvs/FgdCXeyX0OH3hamwVrZDKZSZrd8vOaPWjXa
-	 iQFiKQAgWp3Dpcykct2QihTtUUj/WOgKxAT7B1EAauAKk5OjCGsHpFeF42wIRS3izVtpY
-	 xyZwYBX2BscJFanuZrpZ/QMYfVMxpwLdbR6pePxF0UC7T7HRwGIjr4FSHw/+lj1gCLiy7
-	 ok74dNbknXel8hW+OQuVAOsBtoclh9y9LFDeziTZZv0C6/94S6SLDpxRYUIyEeTqncA==
+	bh=a21O82dvQUevxkezjOIgTCThf5P+xceMeGRnT6Lu/Vg=;
+	b=Wu1yrBBnKtyqrqbFHwfX/YOaIpE/y65mcJPIWraH0R4xdnsFTar2dAVRQj2s+hBY+7TQ
+	 WL1cHV4W89NJr4xrBtp4uDxYSYZNzPZEjwW5WmGP7sq28BPM8W5GDGOKDECOVLsNd2rwV
+	 v9Q2nLgI266jBlsxl0dj24pnz7Bb+I8ERLCJH145MM5xxDer/sqTqz33FPScxZH0dnXqi
+	 cQpi4kq5K8HAEqacB93auZUfrxIPlUj58rb7/9XdJZm8d1r30cqEAwCj2uybB3Yr1LIIv
+	 33xD2Kdu2VpyMcGtVuhmNQMUsCsxMSXdjtuyrqS++B/rL5kQJuWe0Y5HeEikxhl55nQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eE3eD3sv;
-	arc=none smtp.remote-ip=209.85.215.182
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OWmuWie7;
+	arc=none smtp.remote-ip=209.85.216.48
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09AAF606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:07:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 09AAF606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB59A606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:07:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB59A606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eE3eD3sv
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd6028ff33fso875327a12.0
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:07:13 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OWmuWie7
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3aded3c6103so1046495a91.0
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:07:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793560033; x=1794164833; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793560039; x=1794164839; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=pVndV0n/YkRP/thIpSXgVugQOXgz4joR1U8HGW5tXlg=;
-        b=eE3eD3sv0kMPldxvF23ZhXGQ3mkh8ugBV4PW3lWD4i7E14vjzL4T4oEu2rqoL4MJTO
-         /otLSoAa/wdmG4+BXv6LMcWJGV0oFLhpCUzTpVPiiGWznFA1nDqR+LzlSUoJe0qIgsOw
-         PPpx73zsVI8ali06crjmRkWv6rSS3swMo6YdfdqdSvEZJhKya5V6SNxJFOiQBO4/FvX3
-         bwZmZSrLMQG4WP+6+sV8Qpshc8Vv/YDp6kIkQcqDbNLMbNajkURcEnfqc8WgWv2weryC
-         J2eR9IcBfG5MKfgpJ2XseJFx1nPHFSP7qTx2MJBPfGw6p/muQm5QpwcY3tSCOTmK7qAY
-         72Wg==
+        bh=a21O82dvQUevxkezjOIgTCThf5P+xceMeGRnT6Lu/Vg=;
+        b=OWmuWie7hUIAuYGDZfiG3aScX5Jex3OZed9ZumHP8IuX6kd5EaDAylRMk+Pdlg6/Ai
+         1ShCtdn1vt3maKc3s2Ti+Z6u81/tIEV7H+FgKjIx7ReUlCPebAyEluNX4987W3xRy7oj
+         63obR8eq9rSUjdNlNTjQ7/9VXSm7Da1iXFnJnP705egl8ozURRK2+CbM4sGNzKohCSly
+         pcA+WFZ4ibAZ6ejKUIf57elx7bwDLKoednzK0dFEpsKifUpwnDwh/vn2ZNBaTrUxY0v7
+         3KhcDqZ4ljX+2MnD22Mn/Nqxf5pSmBvVdGveXCuFcAD8qwOA2aqhg10xUEChoitVn0wp
+         p4WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793560033; x=1794164833;
+        d=1e100.net; s=20260707; t=1793560039; x=1794164839;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pVndV0n/YkRP/thIpSXgVugQOXgz4joR1U8HGW5tXlg=;
-        b=EBuLvDnR+eFQ4nqSyVUviSVSQz8HXKwvJmH1q9p+trTimHUCYfuGTHNFtXClq2XkCU
-         OBMSGVcEv8uVfPNwnY0o/9weuoFl07tynJhizblCn0aAKFvl2GqqnjvusY1tJUKErDNM
-         We/pNAG/Sv23hBxefh0WBE1lMxF9Omb0gTvQRCtqwFTVv4Rg4tmSD/v+L/VMaiipG3l+
-         BU1PwnfegA8fVp4FpzgoA1VF0hroga7BzunVSKIit1zqqGq28AarAcPZkndOUXz6C+rX
-         tBAxz5bZyNVBgWCMcJot7lhJbwZEJgtD7/kIffRmzAM3NpyrpCmpPnOW3h7CfXiPv/+C
-         Ic4w==
-X-Gm-Message-State: APuU4Z8OADsOwzsoPhi0nbN+PiDclc63iyfr5QUW9XfxEI5gVs1B8ApA
-	07d5ELb/srDrT2rzu+yLW2qPb1D7MuqWCLasoNotpFI5EoZxHNn4mSr6pn4RuQ==
-X-Gm-Gg: AYBFou3rUqbZ9WEf20FrAMAsdBjF+Jmk994fM4HsYP9t1Bg+Aep4xwV+OGsPgL67Ov3
-	/ec4FNyO535qIumJmJjO6M+T+YUjZAaRd6hMLht5K5klTynhmO7YGx6H7+p906Y3nfruRV/S4Dz
-	Djf/me0FXkaSBDPOhjAd6RfEWdFYcIaew9IkiANYT/sqfPsunNos+1AJze8sSTr7nT/tLg5+F5s
-	N2H4z3v47R3gWnFLq//FT/XOJbtQD1QfWorUAdlRyPWfWWgHoB8sTWQhTkccDr5DNWc765yM7Gz
-	yf9D0gmdSGgQxLS9dW2k08AwzT0ir5BZv8M+iHhZr6EDQMNDU9vhPJfaLRz0ob1vsjmfVnml7aT
-	wTnFX/mNUZS3lLP0Igle5JGEVG6DgJorheo5X3VZvY2lAnqgw38dkxd4hZpm6drqTvdlhJ8sdVD
-	RtVIoDDPA9b6yduUg0YVFbr/ufQS/00HqtxAYKRlOQDX+qWYPx76j6ZAqUBB3LPL86R3iQh1yPa
-	0PjdnKy8SDLANsQhx4YyOec6WNYa/Rd/UVuVhF1RQ4gTfTXBxgFRkOKqCbhg7r5nfoUjPHAhMuC
-	3nu81Jd13A+J2u7u4UsiUB1nN+fRllhzdoHJClo+V1NWY6n3SG9KyAQo7PcgmyKhsXrXh4XCMpY
-	S3Z71eZML2Q5bqU3ShVpn/IxdUMA1ZZVyEW/IzgbtNLRHpTKPrdP8flzWxc0lW4LZMm3jXIXuRA
+        bh=a21O82dvQUevxkezjOIgTCThf5P+xceMeGRnT6Lu/Vg=;
+        b=NmHNp1C01NpF0RsB6Px3UFg4lbWBcyuBABE1zQYevX/pZQmIhCL4MCgm9M6dcvYgfe
+         XS0WYqe9IBg2xHJ0DEfrVGHhyqDE8kZKygvgjbls/vttCNR/1BwVlwlNFDcMch9O2Ozw
+         E9kFyQXOClDqGyu0Y3U8zTWMRvyWtpDt6yzBYLdU5n3h3lQw6VAT0iKlSoqTOJSx7+/N
+         2Uq00457VSWBlgplevK4I0CJAnRoravMuX/Ia0tazQhhArzrGxqXXO1ckwkI0UXt1DFn
+         DSf2TSssT90xnLrIo4Gd6WNgKi3cWwwmt7kNJQmDy9GHZa0irrwqF9FsXwuEHkXNtSuq
+         rE9Q==
+X-Gm-Message-State: APuU4Z/Eh6nqUXlVO5+TPMkY55+RNstLiEc/lt0MvFdV40nXOJ/Kt55f
+	llJ56nr2gJewdVkO2FJ7r9zGjhDUlKQX/8sq7NMCwKhE2+eNxUOer6rCwK3E5g==
+X-Gm-Gg: AYBFou33R984K7mbcbwFVUKW0dNvD1blHb1ebJKaL8QYgHPMqPX2nlRyViAJw/4qEQE
+	24jcz6Otazp/9Ur54yRHwfTIKqawAFmTdSdqXKjFF2eyFinfQq4h7fIsHmu/4YK8v6Iscvn8Xi5
+	vYeEJqLTbklAO0KTJm+tITFkkCRml4AzsZbR6qdPpN4z5qN2KjTYipWPaoQ5ItHBg4hTokAT4ez
+	EP06yI/6R2N2AVDHrIt3HGYREgbjt7enzchZ9IcOI0bQyxhgCQabVKVAv1koaKAffUun0bonxR1
+	heSHjozvwit6yL/m7MXBQNO0pr8opXI8xJJH6i8g6czYFCEVqIJyMfv1aNYPVgMgvl+bx1erLLU
+	Tl3vwgXBmaEncC1Zqq6S8NzVXl/H+rz9nxyx2YS2UhWNdynQo3ejc2pRc1ajQlj6EEhkAko0FtZ
+	JBnChMMBJ6eos4b6j78hHAOlQSgv6smon6I3hqn7TZoKWvq9go25Jwja/INS2ky3u8SjNKwe+Et
+	0W7tWQbO0oNLxIdYHU4r9wiUTDOiwC0Q7i+hn5JYxoqdWqccOxQmd19NimEEIeD4a0Ji/ezmWLE
+	5E6HZ0Y7wPseNm5c1f7MNgYAVKGVaz5o0PupxcGNBG/WlCVYNC4ASesS7XPpgydkoZJmLCS8RyJ
+	G5tYKG9Ll0nHoqQcq0uRcqfIK/HEeL8sbzNEzcsHcNMU0lSJ9k8Bhr5We1+/rABKE8+pNCLQalg
 	==
-X-Received: by 2002:a17:90b:518c:b0:3ae:2961:14d5 with SMTP id 98e67ed59e1d1-3ae8979807emr6131020a91.42.1793560033451;
-        Sun, 01 Nov 2026 11:07:13 -0800 (PST)
+X-Received: by 2002:a17:90b:4e8f:b0:3ac:4e18:238c with SMTP id 98e67ed59e1d1-3ae89806287mr6106143a91.49.1793560039281;
+        Sun, 01 Nov 2026 11:07:19 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae845df666sm10844618a91.14.2026.11.01.11.07.12
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3aebc89475asm1244481a91.0.2026.11.01.11.07.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:07:13 -0800 (PST)
+        Sun, 01 Nov 2026 11:07:18 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -87,9 +87,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf 16/27] bpf: Reject non-IPv6 packets in BPF_LWT_ENCAP_SEG6
-Date: Sun,  1 Nov 2026 19:05:24 +0000
-Message-ID: <20261101190535.1454146-17-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 17/27] bpf: Set a dst for test runs of lwt_in progs
+Date: Sun,  1 Nov 2026 19:05:25 +0000
+Message-ID: <20261101190535.1454146-18-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
 References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
@@ -104,55 +104,37 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Chris Mason <mason@kernel.org>
+From: Alexei Starovoitov <ast@kernel.org>
 
-The mode BPF_LWT_ENCAP_SEG6 of bpf_lwt_push_encap() pushes an IPv6 header
-and an SRH, and it replaces the dst. The SRH says that IPv6 follows, and
-skb->protocol does not change. Thus the mode assumes an IPv6 packet, but an
-lwt_in prog also runs for IPv4 packets. After the prog, bpf_input() calls
-orig_input() of the old dst. This IPv4 handler reads the pushed headers as
-IPv4. It can write after the packet data, and the kernel crashes.
+When an lwt prog runs on a route, the skb always has a dst. To push an SRH,
+bpf_lwt_push_encap() reads the device from this dst. But
+bpf_prog_test_run_skb() sets a dst for lwt_xmit progs only. Thus the helper
+dereferences a NULL dst in a test run of an lwt_in prog.
 
-                 after the push         orig_input() expects
-                 ---------------------  --------------------
-  skb->protocol  ETH_P_IP               ETH_P_IP
-  dst            rt6_info               rtable
-  packet         | IPv6 | SRH | IPv4 |  | IPv4 |
-
-The mode BPF_LWT_ENCAP_SEG6_INLINE returns -EBADMSG for non-IPv6 packets.
-Apply this check to both modes. End.BPF does not change, because
-seg6_local_input() drops non-IPv6 packets.
+Set the same dst, ip6_null_entry, for lwt_in progs. When IPv6 is disabled
+or not built, their test run now fails with -EOPNOTSUPP too. An lwt_out
+prog cannot call this helper.
 
 Fixes: fe94cc290f53 ("bpf: Add IPv6 Segment Routing helpers")
-Signed-off-by: Chris Mason <mason@kernel.org>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/filter.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ net/bpf/test_run.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index c0fc9ff04bd5..a69f6817e273 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -6927,11 +6927,15 @@ static int bpf_push_seg6_encap(struct sk_buff *skb, u32 type, void *hdr, u32 len
- 	if (!seg6_validate_srh(srh, len, false))
- 		return -EINVAL;
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 3043a7393c29..d6c9dc62182e 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1210,7 +1210,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 		skb->ip_summed = CHECKSUM_COMPLETE;
+ 	}
  
-+	/*
-+	 * The encap mode names IPv6 as the inner protocol, and neither mode
-+	 * updates skb->protocol.
-+	 */
-+	if (skb->protocol != htons(ETH_P_IPV6))
-+		return -EBADMSG;
-+
- 	switch (type) {
- 	case BPF_LWT_ENCAP_SEG6_INLINE:
--		if (skb->protocol != htons(ETH_P_IPV6))
--			return -EBADMSG;
--
- 		err = seg6_do_srh_inline(skb, srh);
- 		break;
- 	case BPF_LWT_ENCAP_SEG6:
+-	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
++	if (prog->type == BPF_PROG_TYPE_LWT_IN ||
++	    prog->type == BPF_PROG_TYPE_LWT_XMIT) {
+ 		if (!ipv6_mod_enabled()) {
+ 			pr_warn_once("Please test this program with IPv6 enabled kernel\n");
+ 			ret = -EOPNOTSUPP;
 -- 
 2.55.0
 
