@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793559969;
-	b=bIYym2Rb/8z0n4ak9Ao2/nM0hPuVeLm6dJjcdUgAmFz8mEX3+1lsm6sq1rhZ1u2ot6zg
-	 9aH032lMYJbXeIe0Z91VMgU+mD/90jAPwBo6+bsQMcozPBAXwgu2akVpqa5XirAGmcrw9
-	 TbddDSLf6bDI3kfJF6Hnn3hFETpMJ+tzIoKSlLGpBAGu3E9VrC+8vGxsAFd/jJJlIlwTy
-	 woR2HMVm29FmlZRHR9Rf25hEPGlLsosqX7tlxP+f2caBkRx1g239GrPd3fzNY4Rrh0TSh
-	 zb7GrC+gfdnMqAU74tUWF96Uj2BHrcu0yzNRjuz9exceo/yn2QnbbSRwzBswl8/MbMw==
+	t=1793559975;
+	b=cqH7fVOyu7DKRemBtWEwIiFZNi45bqz1/QiHo4h74m4Y5L9W0C6qzZC/clHBtKjeKYRn
+	 wbwVkMcR0+ZTtdoBF/t6NvW20/wXalq5cqgOYMshIVMWko9ucKrtiAlW5mBeVmjrkjyDv
+	 pfMaNCiGlKSUElT7r0AUbUdUoi9hCpQDH43L6SHpKPLd0fmyHaPsfNCFqSjqhZQEIBzu+
+	 6scHCnXYZa7sUlc+74S3yCyT8A6Z6sRTyMbebP/c9NVRey0fFFR/TL4QlUGvKWdoQdF2P
+	 cjOHRssbRykFdghTfMv9doLkbwG+xhRp7Ss2LA6vLrLvwjHyA93Gu75QpIBLlXngqFg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793559969;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793559975;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=M92D0oaLFXe3ISp0B/6fuOAUn1w++UPKBGzm+YeQP7I=;
-	b=Vq/CBhfLeywHQLQPgZ133EaR40NdnAcEuu+h0fR8tisj9X1nqxb00r+lQFeFc15E6eip
-	 3gonuR/cf8oW7HFFoDv56PZqppV3ldtiC0oPV6H27pL2/K5B9y6wr3tA+oovksdL0+Zff
-	 U/Fi6TLzsRIESq/rzUGmyPT6UY55/Y3wePc5iUA5HliF+kvUi/lqO8TFHe3MDLNNOiWIh
-	 9c0ckboKJEt3nXe67pwsD1Om4hKiitZvncSB3FqdPgNTS4wZmqqitz2XQ/1WYKykTAVjA
-	 kq2eNyq943TYbN8flYev1pZooX3FRJkM0kZH486h20mbGnrfLbAzIJRC7ZNXRQ+4d7w==
+	bh=0oloNdgdEUDNGLIKpNuIKcPdlbDJvtMjgAZ92YTAtiU=;
+	b=wKyeNnOrnbGxWiw779DPMaCQ2weFOHJq3e0p/76JxNKmbNSqEYMvoksdoMe9LJ8lf+fY
+	 JTkiehZeuCN8fB16vIdAsNs9bNzyfdod6+4Esvq2/NaFQwfJW1aBi8tsYGLmQ7YhCbsu0
+	 rYqen+BmZrAsrwD/XMmrQE8cdlRSGl+ipD0aP5h2PEVvysGRe0gNGP299kPJjgAkJSc7U
+	 oHjcVVKy+wcRIumUpx2k6V4xNiOjG5RkjIS+u3+CRuPFwP6EHJdYAzaM56OxxcyUkmwrA
+	 Zny7J2rbjsoPnEBRDhBQSFjXF3J7xSSC3riegGnJ8Eufq6Afi21GxwSGqMDuIVBz97Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="nxl/5xth";
-	arc=none smtp.remote-ip=209.85.215.180
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xwJPcrpe;
+	arc=none smtp.remote-ip=209.85.215.173
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A62F606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:06:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8A62F606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6A8606A331
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:06:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A6A8606A331
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nxl/5xth
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cd61cef87f1so776654a12.0
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:06:09 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xwJPcrpe
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cc147d86bebso1546697a12.0
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:06:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793559969; x=1794164769; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793559975; x=1794164775; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=M92D0oaLFXe3ISp0B/6fuOAUn1w++UPKBGzm+YeQP7I=;
-        b=nxl/5xthgg0w5npd4lHvSSM8fhMi7K1ZX49keEuVom4+wET5EIPKCAqQZFJYWJSpen
-         N9nilKp9gLife4t/pMZB1cPP2DhexRjjyB2zXYL+wlWoTRKsAoEOKcjpBopCd3RRejr7
-         Mvi0evL1CE2xRED9kL1bd1UelHWF6OgZ+Tw1xDV2lJqFalOiykR1q02OuVK4FkcLKphV
-         kbkTB1UOBdUiffdcsFCcbXOAffO6JgopwSwViPVq+H8zIKgkakxxlhdKEGloUVUAjYyj
-         AUORNj8uTgh0ymoinrLtdY0moEkWXCoahCC3Eyo4Qk0k8jj3yhDYKOqHj42DYKn37XBF
-         /v2w==
+        bh=0oloNdgdEUDNGLIKpNuIKcPdlbDJvtMjgAZ92YTAtiU=;
+        b=xwJPcrpeAOyAZQOOS784j7Bg5cIvV7KCh00tVEbCkLb/0cOqjqoMWkFXFHsYR96xiz
+         HPIgmrT/Ld6QYv0IX5AnYrmZqXwCQ7gog+MB3jbG1ndo2JJu3yLwk3WxVXsS0xG8OKlc
+         hW8yvGDhgjo8/dFRzSXEcmgwPlr+zKSiQqUTOt+ZROfiqA121kA8et1eEkLogLy5MbNG
+         DzdLcifWnnbIMTGfrOUJ/A09+FTXPiUC0bYz8A4O3o1DtF+02s2dewer+IkbXYNo1l/E
+         NojmfkW58m+laWXCV+qmnoWAtV5s+Md0No6ZyWgtm79R2M2BK9klD6+XnegrrGOX4d+Z
+         pa6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793559969; x=1794164769;
+        d=1e100.net; s=20260707; t=1793559975; x=1794164775;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=M92D0oaLFXe3ISp0B/6fuOAUn1w++UPKBGzm+YeQP7I=;
-        b=jn61253LhdCOOwC5yXLKT47IBn+A1oL2ExMcpfZYVLrRcFIhWpV2MJVKJjBQKlGgwM
-         JHPIsZh02jfIblUuzWpAkI0jBxBj68UYBwx5M5cSGtO0Ky0kXgmmrnVCdpc+FTpZyHVH
-         S0WGZfdJtIcp3T2vcZBJW+yNYokdZlmHsCtnPA0chWipW37BOostsyLcAJ3ClyTXiv8T
-         LJ9BsdfGf01yoBTREEZRy2tW8jQVa9zhLqZn5+Y5T5Tdzpduo1VovmeSW+wfc/3WDzbO
-         KDZWbRiIfVWnFm0b58kfpqxqudXUgerLV92D+9XdLA6akWioTtC36XfAbzWZo85FpE4s
-         XI6w==
-X-Gm-Message-State: APuU4Z+3T97Ti3Zq9KTZ9NPyaeOekYAKfUinvU7ZQvLcRY/sWY1btRQT
-	PynlRqz5n/5prR5KeRTFxlnPtonTQv/tigLS8dme/4Luc31o6rAKlfGPyhECsA==
-X-Gm-Gg: AYBFou0IsXUlk7BLOLT5NQcGO4TAfZuPqsPv9KxjkrbctaXMP2p4fuwzluUtYHn5amz
-	pzfaM1xQ1AKEysphDZ4GNTdKS5esFD3HVtgn4LZIeUB99di6VfgY4iqj6i0gTVbVUwZW/vHGz+H
-	6DPgNmy7ezkumqN/GsDRG8CeyTZZ62a+VKZmYnKSN1v9I8i5AmSaJP1ubkuQ1MHC4wmdaB/tvuR
-	CKJtFNy0OUAShXWlhEZlRArFwFzdNYhvABuBTpMEiiItFKmphG91/wvKN3f7VGy8u4KSre+DK20
-	o1yT63+5VS+dYWIZSVBjqZlyqJ3d3CnwuqrtDkQ7QyPe78R+gSQ2VwWc5DWHG4+1q/a5H/G5i0b
-	2ylFhDHgZCzkZGE5GKa8YomhE1dZFlMNghLISK3om9o4q7/1VU8MdjeLuApU0O3s9RCViHUSvbi
-	6QiSH76WiYNmUIofdU310UlnYe9DTnMgpK/l/HcfV4wCneoEHuJPM4cb6Yl9VL1Bb4ZQN+y7m0z
-	McvL/FsvnY4Abht6egaXjR9pvPVh2lfPwQAKW747IFBe5hrtyaEZfI4o9pLew32DstWJAiD15Yo
-	bHT3d3DWr3Deb22PMZ1jbCxSWgzCHe3phRiyr7y1iAzd/qzn9NaBaa2hcq0TZq7ib0f8bKI+u8o
-	UjgFaegpIawlxz8ifuOkOO/Jdzr7BWAMQx9CUcabjanfxELPWPqNt9EYWpnf34XVIMOre+svlCw
-	dFGfk6m+udlnX92EBAMOE=
-X-Received: by 2002:a17:90b:4a02:b0:3ac:6fcf:81a2 with SMTP id 98e67ed59e1d1-3ae89821660mr6006321a91.57.1793559968690;
-        Sun, 01 Nov 2026 11:06:08 -0800 (PST)
+        bh=0oloNdgdEUDNGLIKpNuIKcPdlbDJvtMjgAZ92YTAtiU=;
+        b=Lc8vs5IHpy5POHYZ7DhgGGIL3rCQF57vqXV1QzAd0tQUsAMH6bqPyevebfY5WlBHMF
+         gKwLTv0j+UxkzIM4cpZW9V33mFD/+k1SaiMhO224anTxYrovTBEjmJYfl8G0Vz1RG/pt
+         ZAoVsvc0yj2gdwiVNbpyiDCpa1ztfvEN+OHSnp0wS5cQpEmsqvQuFf4w8TQSMaBfQURu
+         PECAsL6+5XBH9o1w7kPwdtHjJ0cJXyW+MCHqb5ZHgXQTvXEIa1lvScE/NLmeytz/S4OA
+         NmFUd2gD62h2XKk2gtGx7HPU3A3HFCUKo9mkfpxo+19VFNCSMF/JRDlEzUFY2VzukXeQ
+         JlPg==
+X-Gm-Message-State: APuU4Z8OUdajSRrvChaBKgF6UMAebSN1w9TJ4pVkcYdsbW9tN3vINWL8
+	x6sunVvPoIhy4u6qtOyglD92Xb+2OOlbVE7/tHJa8fsjTFziZ72Mq6u/xumSWQ==
+X-Gm-Gg: AYBFou1P13odd/ZeiO7ihUFXeVz9gFBOF0h+Bsh9I4cjEMnT422Oo9Tz52NAWlm8CDJ
+	4NAGcWdIj1P6tu2ArgF+NWAxdxubNnaCLhBnniHjgPw/gNJiVaaT4oGKYl1mMmuhRMCbMYqFXMi
+	8KiIvmWkdI/rv1GKFupt5PvJs+KwLiu3p34WNtLEkcCei8tf9S8O62/r2VcApaV1Z9r1VxKZzDG
+	FqdO0Cy+KecdYLW1nPvuF6bim6+7AwrIreZJPJGFDIxoqxxm96bp2UIkDA81A1q4mK02skM/fzF
+	xLdjxwmxyBOJ8z8+qbcvHqaY9f4FTH5YIwbDiNThHVXcieuNg4WI2VrMLF5BYtFDNkTFhefMEn1
+	pH5RHFjib1aHgSNcCLtckSOsDF28rCaMRAdNyuKwDNw+cPS5s11j6d2rf/2v4tLhS8RCoTB+d8d
+	jgMcTXO53mfK2IDldXEspqve7ftjjsWAAjpspObDBEHjGzAMIHOFOnyOAOxhCL0MV6h1xBteRt6
+	IKfgpLq3A7o1PFjIduAJX6DfDXJnlTRZKwReV8hyYJPgD+ypehqspv9YzJkLumehodXi8UUAuUg
+	PyCZ7E11venkYQj1mGkMQ/JqXpfcCOr2hz85I/yrPDPtN4bqJxnXG4KuwmrH79CMZAZ5iwkW3d6
+	dWbUbeSSf1Q94ZD0JQIWLZmczPI0JYVAfEwoVIaooGuFhpczYNEguGZa2R/YbkQyrc/OFcfH1XQ
+	==
+X-Received: by 2002:a17:90b:3a4c:b0:3a4:7195:ecba with SMTP id 98e67ed59e1d1-3ae8972d1d8mr3696947a91.20.1793559974596;
+        Sun, 01 Nov 2026 11:06:14 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e7d5b8csm15778671a91.1.2026.11.01.11.06.08
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae87f5dcc3sm6552905a91.3.2026.11.01.11.06.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:06:08 -0800 (PST)
+        Sun, 01 Nov 2026 11:06:14 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -87,9 +87,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf 05/27] bpf: Refuse an arena mmap() longer than max_entries pages
-Date: Sun,  1 Nov 2026 19:05:13 +0000
-Message-ID: <20261101190535.1454146-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 06/27] bpf: Remove the WARN from arena_get_unmapped_area()
+Date: Sun,  1 Nov 2026 19:05:14 +0000
+Message-ID: <20261101190535.1454146-7-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
 References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
@@ -106,45 +106,37 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-arena_map_alloc() puts max_entries free pages in the range tree of an
-arena. But the arena kfuncs check their arguments against user_vm_start and
-user_vm_end. Without map_extra, arena_map_mmap() takes both from the first
-vma. This vma can be up to 4 GiB long. Then arena_free_pages() also marks
-pages as free that were never in the range tree. Thus max_entries does not
-limit the memory of the arena, but these pages are inside kern_vm.
+The user range of an arena must not cross a 4 GiB boundary. Thus
+arena_get_unmapped_area() asks the mm for 2 * len bytes and rounds the
+result up if necessary. If user_vm_start is not 0, addr must be equal to
+it. A WARN_ON_ONCE() assumes that the mm returns addr. But addr is only a
+hint without MAP_FIXED, and the mm can return a different range that
+crosses a boundary. This is not a kernel bug.
 
-Refuse an mmap() longer than max_entries pages with -E2BIG. With map_extra
-this limit exists already. libbpf always maps max_entries pages. Replace
-both SZ_4G checks with this limit, because it is at most 4 GiB.
+Remove the WARN_ON_ONCE() and its -EFAULT. arena_map_mmap() already
+compares vm_start with user_vm_start under arena->lock. If the rounded
+result is user_vm_start, mmap() succeeds. If not, it returns -EBUSY.
 
 Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/arena.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/arena.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index e331130662be..c35b82f44f66 100644
+index c35b82f44f66..0b1ec3306ea4 100644
 --- a/kernel/bpf/arena.c
 +++ b/kernel/bpf/arena.c
-@@ -634,7 +634,7 @@ static unsigned long arena_get_unmapped_area(struct file *filp, unsigned long ad
- 
- 	if (pgoff)
+@@ -655,9 +655,6 @@ static unsigned long arena_get_unmapped_area(struct file *filp, unsigned long ad
  		return -EINVAL;
--	if (len > SZ_4G)
-+	if (len > (u64)map->max_entries * PAGE_SIZE)
- 		return -E2BIG;
+ 	if ((ret >> 32) == ((ret + len - 1) >> 32))
+ 		return ret;
+-	if (WARN_ON_ONCE(arena->user_vm_start))
+-		/* checks at map creation time should prevent this */
+-		return -EFAULT;
+ 	return round_up(ret, SZ_4G);
+ }
  
- 	/* if user_vm_start was specified at arena creation time */
-@@ -682,7 +682,7 @@ static int arena_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
- 		return -EBUSY;
- 
- 	/* Earlier checks should prevent this */
--	if (WARN_ON_ONCE(vma->vm_end - vma->vm_start > SZ_4G || vma->vm_pgoff))
-+	if (WARN_ON_ONCE(vma_pages(vma) > map->max_entries || vma->vm_pgoff))
- 		return -EFAULT;
- 
- 	if (remember_vma(arena, vma))
 -- 
 2.55.0
 
