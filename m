@@ -1,98 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793560099;
-	b=vs7O0vkTKwcMwduXTgrPNQAglH1MLuijqRJxi3dcj9SAk3lwo7bieYmXR25XEFd9DwM8
-	 tSG+j78Qqa1AfehGaF87+jUFzt55xJvD1Gqibq6KAmoI/+O/kQwCeft+YuYjRF6ZJn6CK
-	 pkc+jGwPP0tzbn3p0x9h3f4Fr0lMWk8f6H8FSIlcpMdOqLpXe6KSxWKHk9gus00MP3U1x
-	 0rnLUP6eLdcpWyR6UQNNwIcNt+J/TxOEMe6DVTBUpFNlTZ8EA316JlZUTpwyxHyP261tI
-	 acp/3W+v2l0J1D5nhFxcvUQfRfUdCCXibUkzZaa7ivSvvpIBEojHYKoO4BC7gZL+QqA==
+	t=1793560784;
+	b=hwg+x8NA0kWAsPkY1Hu14V27Yxb9lCmvBI9anlTCINL8QrxSnm75bpoHoKtgOCRMv3OI
+	 T47qfIAe2XVrxrHK20ZiOaBbLbQ0YX1XvgE6mewBwB7OdKUnamp/aiXS9JeR+Ue/gsV6h
+	 qMhaUFMM9TwEGH2yaHm3CjYtoZx9f6miYCntC28e/HZ7lSCht3dsWptVlkxpHdgvQGrjw
+	 xtBC+xtZCLXTuFIdJqev4UTqzeq49KcDg7/OmuvAoekR2e+LYwIVhSQDnjsvObH8/gbpn
+	 Wk88bSbiy1PnKfvIlR3ky05750qyzPt4FN2IHUtE332QLvgEDLc7SqvEJ95zTBR/DDw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793560099;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=gb8r2/lCmQ8I8eDeF+hFlEYTai+zb7Es+79DuXDNsho=;
-	b=NoX2ozUOGJeruYk7ZD2ZmdSOsQXkzjn2UT6Bd/JVp9N0nWDKtnpxWDtmeYqWyB1zBHzW
-	 gr2VYdi72Nkkx49uqszap6jmHgJFO2upIpJQJxIoXa7HFY2YN2KltPPRQ3Ny6lG75riWX
-	 wYf7+Sc+Do2Yf2BzbGiYwM8m1Yvcem/ye4y2/RZU61emXSKlPoOImDt0r4WoHPwMRUbK1
-	 aHXfz688wNnFKzrvyeotI/tY+oQlYiuL/Ylwmj4s8RYmPHwdfn9OejBoWdbFlsNdtvTYp
-	 XjtivJ2ifaKcUUCp0TAqx48VVMl+ffkKGLz9y89uiq9DfoRXNKGpnp+l5K//t11zAaA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793560784;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=jj+Ig1S/FGx8AiMwFhaDjZMRs+GqISHjm15x3K2/wpI=;
+	b=zmz6g9tsOUu8HUXlgfsUbSSvBvfGLaN2g0uH3V1qTmN5JCwI1ej+55VDVQ+1Sy5//Qxl
+	 lqh0lTZ/BUxcLPlOsLX3hrbZH9k9Ntxzvm/4V57QwNGkU+znrVs2qEcapieXSX6rkDm0h
+	 dVqAeAeBgdv8lzEcemPKUPqmA08hFIG5eWNWlVVlpgu7UBn538Yua7S79p5eWoZ8DRGFp
+	 vEboXBb7pH2xU84QMCi2XN/8NAAdqwFGBXTMXGPxI94JYzcZwODqWDP1MeO7QFWsjP5I+
+	 0w0gZAcr6ub9+q2LX1eCfoLEfpaeNoK59o6Ug5lkwgvLd6TFwNjlPoQBW/Kh2DQaJxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fXvPxlUb;
-	arc=none smtp.remote-ip=209.85.216.48
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BQpdacoM;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF025606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:08:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EF025606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58244606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:19:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fXvPxlUb
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3ace1f3897cso1003293a91.0
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:08:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793560098; x=1794164898; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=gb8r2/lCmQ8I8eDeF+hFlEYTai+zb7Es+79DuXDNsho=;
-        b=fXvPxlUbz+VUhqd2t1+gElQR+/KJi/a6MOscajOg4oUkvPPSvbih7nBHW2+eOt1k9s
-         FROYs3yv96ypqIFRMmLGDYEbtCs5wvt3AYP48iCGXQOHv/2KMtTVFbcYGleciNWxb9Yp
-         enC3hRvhTeK5v4p0ZNlKovbA1Vw0IZZaBdb7z+SSyfXndU1jtBQZF+jgV7J5iBW6Un6n
-         z9wbmiYUnmgVf4Vliqb1YdcHKhOfN+tya/BBGx662AX1yS5WiXOX2l4zGbvqnv1+ciJV
-         GggOKJuh63qkg7vQFHfMihPrvWvi696SqwdymMgZw/hzim8F80fdw4pCOa5oDM24sj6t
-         RhFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793560098; x=1794164898;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gb8r2/lCmQ8I8eDeF+hFlEYTai+zb7Es+79DuXDNsho=;
-        b=fpR+TSIOtIzUwMRbmacW5mHjQL12VKP+ELZEuE5V4av173pbexcC/7bmKYYkxwcicV
-         7bPCHA8jPCI/8ww+dh/1C/eFY3HT2CnmFxLiGBI9u3106siYkIQOjC3FcrGli1ZXjbRj
-         5R5J+mRjX11jxHITXGj9Jk/SpYz7/9YQ2AtdNhuiXGlgX0e0g7TV1m5MGJ/dbhHKvwMB
-         UQ+c4dZtR/qJAEm1r1vvhPEmEht2+8TstVGnNDBpkdepeMowBKDyna9Pq56Hi1dT6pjC
-         /JhtqmzxjgT5HfSdctw9FOB3VaCnjNBD99FdwUNh0F3TskvNpN1P8hRu8tlZz3mmfLeD
-         JH2w==
-X-Gm-Message-State: APuU4Z9cvrwobZtffF0fDofrf0fRR7jTP68zo+qX0olCMpQGkbEwxuTM
-	jCtDjouhJiSIhcFc6wJL3FkrELKSUStfmFPaDRNBZfNfBPmZbcE7VZsylRtZCg==
-X-Gm-Gg: AYBFou25VX1hLkqAKS0wLnUkjDKah0miDqOKEZK53U6BChhld3ERcUNvFGFVgPzJq7b
-	zqbZwTDOeVMbInHt19lw9zzGCVRD8jjKOgB3xpSu/0Er+0DMzLDDpNsaXIzBiz9+VDWw4vXa7Fb
-	r9PaH1OMJV+0HpqMcQGEt3ceYKwG0H6rND75+u2MZm3rWYmCGCccfcJqD6LaS3UC4nahJUTHwHZ
-	1W3vLlzfNq7Nm+Dw258Lph9L+oGzdLuxhxyzI7HrNmSaxpr/z8GnGJcEq2B/0/bZ7DhLnvIl7hx
-	bxT/VhKIt0ueLcsYM5wz/CWMp2iJbRdvh1+ACKS4vaxCvRBCLyQEr8uugfzE1cuZlQ63VTUp/xh
-	E20CZXAn/1DdbT0y98Ids9GzN0+8F1IAJSC3BHng0gmoVDunww+C31u0h3eSLcn0iDFuodo6X3K
-	CT+0k5zPmvUi+fUMW9LNfuQ4JwZx7Bf8Y1TeHysGA2s00USe5fqZdn+W5kwWcIoxgob/ScQM2jG
-	rw+BMw6ZLj3wOoRXIyh5yecIxPjC+TcViunlLRxefMHjZKFCk7ukRo9X6SU1oeM2JX7gFiLS/RJ
-	qAJNfUYFDKgNMoCWY51deFXSUUUTzLcJbllvvr9DYcEEqTMWQ32DybTri8hxUfs6MGRLPsIQW23
-	W0AP9CRXQf8aLFkVa9M+goUEULZjjt8g9qRYeXMP3mP08m0JEKAFbaKvvaOIv3xSDZHtlkll45g
-	==
-X-Received: by 2002:a17:90a:e7d2:b0:3a7:f4d:b23d with SMTP id 98e67ed59e1d1-3ae8984dde2mr7201486a91.52.1793560098382;
-        Sun, 01 Nov 2026 11:08:18 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae84596e3bsm11126419a91.9.2026.11.01.11.08.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:08:18 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	josef@toxicpanda.com,
-	mason@kernel.org
-Subject: [PATCH bpf 27/27] bpf: Check the offset in bpf_skb_generic_{push,pop}()
-Date: Sun,  1 Nov 2026 19:05:35 +0000
-Message-ID: <20261101190535.1454146-28-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BQpdacoM
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D2AA1F000C1;
+	Sun,  1 Nov 2026 19:19:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793560784;
+	bh=jj+Ig1S/FGx8AiMwFhaDjZMRs+GqISHjm15x3K2/wpI=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=BQpdacoMHqp2e9T798ax/LTNTzv/rSw/+e4H6vps8M6k5tSWz69iQ5XF4dTj1SvLj
+	 E6NqxPUVM8hC2qo36U/9SI2HcN6/r7EOHi8NJQcBB2CFMsxeYuCCL+ys1mwhr3EnW9
+	 /D/+loQIZ4W+LLTXgu30I2xTVa7d9L2CTy7u+cZFGib6yzyUiIFbIk+0smpDgkx5XV
+	 03fXAnglfwI1Nr5FFJ4HM8Co8es4wCdA9KmgHo2aOgtVHsbGhF/fpzrimQJTPbu8i9
+	 XR89QQMpu1Tgrfue9ljL2IrYs/5SrF48VcnQgMHDBkEJ6cLAlR0sLTNxDE+ydM1qUQ
+	 XcYEjA/UiwqhQ==
+Message-ID: <sashiko-outbox-192586@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 03/27] bpf: Refuse to map an arena at address 0
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261101190535.1454146-4-alexei.starovoitov@gmail.com>
 References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
+ <20261101190535.1454146-4-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 01 Nov 2026 19:19:43 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,65 +58,88 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Chris Mason <mason@kernel.org>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: round_up() overflow in arena_get_unmapped_area() maps arena=
+ at 0
+--
 
-To make room for len bytes at offset off, bpf_skb_generic_push() moves the
-first off bytes and clears len bytes after them. It assumes that the first
-off bytes are in the linear part. But in bpf_skb_adjust_room() off can be
-the end of the IP header, and this header can be in a frag. Then the
-function reads and writes after skb->tail, and can damage skb_shared_info.
+commit 3145de230091dc6bb32f02294ed0d9f801a1c145
+Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf_skb_generic_pop() checks off + len, but this u32 sum can wrap to a
-small value. bpf_skb_adjust_room() and bpf_skb_change_proto() calculate off
-from skb_mac_header_len(). This length is a very large u32 when
-network_header < mac_header. Then the check can pass, and memmove() reads
-and writes far outside the skb.
+bpf: Refuse to map an arena at address 0
 
-Return -ENOMEM from both functions, like the present check, when
-off > skb->len. Thus the sum cannot wrap. In bpf_skb_generic_push() also
-pull the first off bytes into the linear part. Now bpf_skb_adjust_room()
-fails when a prog grows an skb that ends before off. network_header stays
-wrong.
+This commit rejects mapping a BPF arena at address 0 in
+arena_get_unmapped_area() by returning -EINVAL when mm_get_unmapped_area()
+returns 0, preventing arena->user_vm_start from remaining 0 after the
+first mmap().
 
-Fixes: 6578171a7ff0 ("bpf: add bpf_skb_change_proto helper")
-Fixes: 2be7e212d541 ("bpf: add bpf_skb_adjust_room helper")
-Signed-off-by: Chris Mason <mason@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- net/core/filter.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 3c61c181a6fa9..ad8aab5510939 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -650,6 +650,9 @@ static unsigned long arena_get_unmapped_area(struct f=
+ile *filp, unsigned long ad
+>  	ret =3D mm_get_unmapped_area(filp, addr, len * 2, 0, flags);
+>  	if (IS_ERR_VALUE(ret))
+>  		return ret;
+> +	if (!ret)
+> +		/* user_vm_start =3D=3D 0 means that the user range is not set yet */
+> +		return -EINVAL;
+>  	if ((ret >> 32) =3D=3D ((ret + len - 1) >> 32))
+>  		return ret;
+>  	if (WARN_ON_ONCE(arena->user_vm_start))
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 21fcdc7cd950..9245009d9f1e 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3369,6 +3369,10 @@ static const struct bpf_func_proto bpf_skb_vlan_pop_proto = {
- 
- static int bpf_skb_generic_push(struct sk_buff *skb, u32 off, u32 len)
- {
-+	/* The bytes in front of @off are moved with skb->data. */
-+	if (unlikely(off > skb->len || !pskb_may_pull(skb, off)))
-+		return -ENOMEM;
-+
- 	/* Caller already did skb_cow() with meta_len+len as headroom,
- 	 * so no need to do it here.
- 	 */
-@@ -3389,9 +3393,10 @@ static int bpf_skb_generic_pop(struct sk_buff *skb, u32 off, u32 len)
- 	void *old_data;
- 
- 	/* skb_ensure_writable() is not needed here, as we're
--	 * already working on an uncloned skb.
-+	 * already working on an uncloned skb. The first test
-+	 * keeps off + len from wrapping.
- 	 */
--	if (unlikely(!pskb_may_pull(skb, off + len)))
-+	if (unlikely(off > skb->len || !pskb_may_pull(skb, off + len)))
- 		return -ENOMEM;
- 
- 	old_data = skb->data;
--- 
-2.55.0
+[Severity: Medium]
+Can arena_get_unmapped_area() still return 0 via integer overflow in the
+subsequent round_up(ret, SZ_4G) when mmap() is called with MAP_FIXED?
 
+In mm/mmap.c, __get_unmapped_area() invokes get_area() before checking
+whether addr exceeds TASK_SIZE - len:
+
+mm/mmap.c:__get_unmapped_area() {
+	...
+	if (get_area) {
+		addr =3D get_area(file, addr, len, pgoff, flags);
+	...
+	if (IS_ERR_VALUE(addr))
+		return addr;
+
+	if (addr > TASK_SIZE - len)
+		return -ENOMEM;
+}
+
+When arena->user_vm_start is 0 and userspace passes MAP_FIXED (or
+MAP_FIXED_NOREPLACE) with a page-aligned addr in the range
+[0xffffffff00001000UL, 0xfffffffffffff000UL], mm_get_unmapped_area()
+returns addr directly without checking TASK_SIZE.
+
+In kernel/bpf/arena.c:arena_get_unmapped_area():
+
+	ret =3D mm_get_unmapped_area(filp, addr, len * 2, 0, flags);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+	if (!ret)
+		/* user_vm_start =3D=3D 0 means that the user range is not set yet */
+		return -EINVAL;
+	if ((ret >> 32) =3D=3D ((ret + len - 1) >> 32))
+		return ret;
+	if (WARN_ON_ONCE(arena->user_vm_start))
+		/* checks at map creation time should prevent this */
+		return -EFAULT;
+	return round_up(ret, SZ_4G);
+
+Here IS_ERR_VALUE(ret) is false because ret is below -MAX_ERRNO, and !ret
+is false. Because ret is a signed long, (ret >> 32) sign-extends to
+0xffffffffffffffffUL while ((ret + len - 1) >> 32) is unsigned and
+evaluates to 0xffffffffUL (or wraps to 0), so the 4 GiB check is also
+false.
+
+Execution then reaches round_up(ret, SZ_4G), which overflows 64-bit
+arithmetic to 0. __get_unmapped_area() receives 0, passes the
+addr > TASK_SIZE - len check, and maps the arena at address 0.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261101190535.1454=
+146-1-alexei.starovoitov@gmail.com?part=3D3
