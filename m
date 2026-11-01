@@ -1,70 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.152.16
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793562910;
-	b=F4gZgzcjaOlBJVfsEePGPL+SgOJkTQ5UikHsyiq1Bkg4SaxpZ5iWxthkZVcP9k9c20GZ
-	 LPF1kn54gsK+beRkPI4ycoEOkYGOVYVQy/mNhcf4YPxjjiBsQ9mUhEAwfv1znMNLD9LgC
-	 MAfoDiMiPUUhCePJy56LxVSPN9XSUtnomScwdOCUMXDHpugSa/0r1v87gQWlXpPbKGmDh
-	 B39+M+aBWSEef7kN9T1+Jg56rrqGShKLWCG5X1GHdnWknhAUiHfYc2pcou+JJS5MMDoD+
-	 gjFWPtHBRo+AAWn0lwD/7a+xSdkfaTnc1lUnA2MFXEH2CKTXKPd/NJCclqUk3wJ8FKQ==
+	t=1793562911;
+	b=k5K1giwLRFn3uSUHqTNzOnDLGHT1yf1royOhWM2fUmugB7b3ctWn2debWrMh+jmNCqOX
+	 MgA52y5FykR2VOiOIcsoKIJUBy2yoYTLhS+Fvrt92mSwbaBS5zExIeCFIRUUijkONIU+P
+	 UN5Z/tpjeuvOkM8flDt9LEzWlfvxlTD9mWFLVTQKqaBiylinmHyR8sM8mNSYCfXtbKW3k
+	 kqN3zss983SR5MM2IBMaBmnJZ/zsK6wvu7ffZFGuU4ncpOzxpv9ufdGmRk+UFntkqcCCT
+	 v7q42qwsxOJlXlUcUNaYvfWazNoiXkrCHSK/ADaaiPxpyI2jnSmltkys74jCspX66Dw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793562910;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793562911;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy:X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Details-Enc:
-	 X-Authority-Analysis:X-Proofpoint-Virus-Version:
+	 X-ClientProxiedBy:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Spam-Details-Enc:X-Authority-Analysis:X-Proofpoint-GUID:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
 	 X-Proofpoint-Spam-Details;
-	bh=Cu4b/AJAXtIPxIgigkKjXnS7hlbxXvUr/2CInjv64AE=;
-	b=lkRwQeQXrYtaNRXmUpZRU20mrCdPSqlOdtvHEkQXdaVr3yHFjUkIm4QFf4qqsUsN49tV
-	 yjFUt3i/cxVuHCeuqKspVNg/A0h2tiIAfvixIhJmiJ4tmbKF1PA+FKrYFJ/U/yY/hHqrR
-	 fNQhSYlf88mZRbdsiSVPa3TMv9l8aC9N5R1zHEDUl//8oUQWxlBV8XGPo2qVCnBaKBtDN
-	 CnUMwHewPDXjwWjozAEV/MvigM/ctwdlp5qaxNAnu0R+X81e12OsBg2yOaNT4vNWlzsFj
-	 V3Zc21I5dhnQutZv/Q4a0vGoMs14iGPXSkblaOArWUhzUIF3JeqwURI2E0C3JrPuMcA==
+	bh=h8ZP1jcnBJ69e4OgdKWiZGmv8o1kdu5671Gq1KeTvqY=;
+	b=RDZOJbmZYYjSlZtSbtA6tTPBCt36SJ6Va2sZekCfXrf2tz8pM35NLD7LmeV2F7F8fZf0
+	 W/Ln1M1ul2T/BAykiPwd73Qp/+19PuZkEsHhpjKo8e4HSafPYahaJtBM+9NG3tIBxLZSc
+	 exRx/PTKbWaYp/+CWTz3Oo3GdQYhHGHv9gbdcW1AZoLbUNGA7TuDaum9/XK9u/Sk2wzIC
+	 q1L0ED0L6yyIBBsaiFFewKkKWT+Pz/WKpL71KcbbFQtuKaqpOkJYlIfbRXltrWba3ETu2
+	 gFff7RaYdUExPobo03NoEe85n/ocwf2IfIaQKz8YMUk4sdJ3SNHF9jS9SRDGNjlWWyA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=crowdstrike.com;
 	spf=pass smtp.mailfrom=crowdstrike.com;
-	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=d0gP+igQ;
-	arc=none smtp.remote-ip=148.163.148.77
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=lWSZCyoq;
+	arc=none smtp.remote-ip=148.163.152.16
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E1B606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:55:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 74E1B606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECB7606A33D
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:55:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9ECB7606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=d0gP+igQ
-Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A1DUOKk4168530;
-	Sun, 1 Nov 2026 19:54:56 GMT
+	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=lWSZCyoq
+Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A1ESNUE2671675;
+	Sun, 1 Nov 2026 19:54:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
 	 h=cc:content-transfer-encoding:content-type:date:from
-	:message-id:mime-version:subject:to; s=default; bh=Cu4b/AJAXtIPx
-	IgigkKjXnS7hlbxXvUr/2CInjv64AE=; b=d0gP+igQSeJy4GkDo2fZVf9/GS8yE
-	2DBRcPXkvTwR+yy45x6glYibsFInl8/EuFWtnx5BaST+AZQ6CfqG1ELBgVF2dH9v
-	YKlrFqqkBvYNxqAUqFYnzJw6ZpCIbrtxSeknD/uHA62dYBsKLJsmAQFZqOI9uXrm
-	Kex7N7+BE4akYbqESr2NtYnsNNTOe7RTFKx5wSLKYmwfF/c5N0IlOy+vTiOl6tph
-	/EmVupaRyjfmS211tGXP9tIPLlrJSKvuMEsKqwqrN/F1GhMgBXp8cRjW3pQBDh2n
-	hTQWmkw8UXP4khhcZS7S7vA60iEr5P27b6E77Cp+9NSS4gpKQwoMAW/xQ==
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=h8ZP1jcnBJ69e4OgdKWiZGmv8o1kdu5671Gq1KeTvqY=; b=lWSZ
+	Cyoq1gtQo3j8T6S4GpF49/UyTPsE3V/5OddK+FxnhPchwXQc9HFP4m0wBNSxpxQm
+	QGqoBQ/D5ounEjt6lwMevZjPVTOQFk5gPAHrB3mzAS5hbF27F4kr7H1wE3f3GBYP
+	QhYhT9A+n9l1ZTCPCZACUs4D6U2o34CVAD2611v4P77t067VZu7Ldyw1pseL+POs
+	/OxjeHPsXaw1zp9lRsevbBFC1vIYB8y+lyRxTO85tR391vZCfSpy/D2GOvROuluy
+	qVdwomNso/vyU36YVWNfoygVI1aNj8dmUexAXiU4HE5ds1YbK1I5LMsMl1bvoy3z
+	ASnwtOWBh9Joi/MofQ==
 Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4hnvtc1jh2-1
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4hnvkbhabq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 01 Nov 2026 19:54:56 +0000 (GMT)
+	Sun, 01 Nov 2026 19:54:57 +0000 (GMT)
 Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
  04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.53; Sun, 1 Nov 2026 19:54:54 +0000
+ 15.2.2562.53; Sun, 1 Nov 2026 19:54:55 +0000
 From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 To: <bpf@vger.kernel.org>
 CC: <andrii@kernel.org>, <martin.kelly@crowdstrike.com>,
         <slava.imameev@crowdstrike.com>
-Subject: [PATCH bpf-next 0/3] libbpf: Follow-ups to BPF program manual loading
-Date: Sun, 1 Nov 2026 14:54:50 -0500
-Message-ID: <20261101195453.3859308-1-andrey.grodzovsky@crowdstrike.com>
+Subject: [PATCH bpf-next 1/3] selftests/bpf: Convert veristat to BPF_PROG_LOAD_STRATEGY_MANUAL
+Date: Sun, 1 Nov 2026 14:54:51 -0500
+Message-ID: <20261101195453.3859308-2-andrey.grodzovsky@crowdstrike.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261101195453.3859308-1-andrey.grodzovsky@crowdstrike.com>
+References: <20261101195453.3859308-1-andrey.grodzovsky@crowdstrike.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,56 +81,102 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: 04WPEXCH006.crowdstrike.sys (10.100.11.70) To
  04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Proofpoint-GUID: ntwx-njLzPT81L6fBQJzLGa09TTcYK6I
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAxMDA3OSBTYWx0ZWRfX6OVzVtOsuW57
- FuXJezHLlwQOiOazCbbBGs47jlYS4L8/SQJHuHKZx+sKJZQCJJiu3kZxSCrdBBZkyNpWqGWwp/k
- PaQh6NNk6iNP8MnTNPDBH05gNW9qjxKStjYlkP+GZaR+rJEf4VN6
-X-Proofpoint-ORIG-GUID: ntwx-njLzPT81L6fBQJzLGa09TTcYK6I
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAxMDA3OSBTYWx0ZWRfXz1h1dE8WYjL4
- KHf564E5V2iEF50QDwmPB49snpPsB/dq+XAB5Dr7kFd2pdCK0TZqU0i/o6QXJuOBJWoi1i0b9fU
- iYIh2l/pYoO2G/nkiRaU89FC/GNSmqF9lJv0c4yGKwZit6ltExEymJhgW8IV5E2x7NVNlzy4CS3
- FZD8rNZ6HBnLlXAY2/OKXp3zsKB3rQoPAqombEUYBa4HL2LHeKyqRDtvut6HdGTR9yL1Egtl7ac
- pegKJStvNGQZLGdT2kSbCzXBQy/7/H2flnWNcTIbYN6gbXuhA6VWxjGpLC7n2szH0JWvUrW0hdE
- yj/8o220GlPNXHpBpuasMDbllQTBcRejFVTwHTSh6B9BBp7dfXbYJ2ex9Ab7lKAEtjAoD4Z5GK/
- Hdjkz3RrHazPglQs3kj+3IA3R/dSg8Kw56+bxV9fHg31oUbW6neDXMhU01NnjuhpNrCacyGlY+k
- u6IIeCTiz4OxSK/wXVQ==
-X-Authority-Analysis: v=2.4 cv=V4boQuni c=1 sm=1 tr=0 ts=6ae79910 cx=c_pps
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAxMDA3OSBTYWx0ZWRfXyKOCDa3GHkQD
+ w13UiY007SCe7415ziId6MOzzoM4+OadKFseZmqWBClcxh7WqgAH5b0AomSuVrSLqRbKjCizsVv
+ UYdy0SHRTBqTc9Br+hEx+hmED+IkLT529nujpuJwg9ivwAi1vJmo
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAxMDA3OSBTYWx0ZWRfXxNfe4KqtY07r
+ rDB0jT1NQk0zLL2tQO/k7dLZLxjdEFH/CWL6+NlfhDkQ5Q7eRcu61/AB0xmXBpJKU/oHnOUfWZ3
+ OTYDgLnRSLeRPViKgdlZOnQdIY8wM7Bgvsct7OjobjiHZ75Ymh3e/YyARbLztOaklM04oSkPm9q
+ L42raAtOqQvwTmUeQQa6/qZo8pT5n9Mqsch++mDcqumqs+aXUeQz2pEeUrAWRCUML3jkcSFP2I0
+ N6VVUqhAaaOnOkd1qmy2rs+Pcx4Vr0YQ8Bf79A/G08SfcVEJDmFIn7VCLu2jmwJ80velaJOmvnc
+ yx7+ulf1uDOeOOo3J7sPMfl6vAi9lXxrwQMm6RBVQU/i9+3AdHKJvg4qlkOUOvUhlYwVlZeyk8F
+ ++m1p3LbLygxyK0LYfL2J1HmN4P2NZtcdXTs4EosfOh5sM50BVKgFmUHCpQ192dNF03HigXUASz
+ nlC5HnxP8p09Rqwl6Lg==
+X-Authority-Analysis: v=2.4 cv=TbQDJhQh c=1 sm=1 tr=0 ts=6ae79911 cx=c_pps
  a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
  a=EjBHVkixTFsA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=t04HzT_fAfAF5W-3wVZy:22 a=VwQbUJbxAAAA:8
- a=pl6vuDidAAAA:8 a=6UH4ogtkg5L0KfqMFyYA:9
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=vDKVRhTs-M86Ea50iKLw:22 a=VwQbUJbxAAAA:8
+ a=pl6vuDidAAAA:8 a=SRqYExgKO4NbpJmBA6UA:9 a=+jEqtf1s3R9VXZ0wqowq2kgwd+I=:19
+X-Proofpoint-GUID: hqmNAnAAUrJ0QdgzmuwFjIuFln4uGAY_
+X-Proofpoint-ORIG-GUID: hqmNAnAAUrJ0QdgzmuwFjIuFln4uGAY_
 X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11953
  signatures=596817
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 adultscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0
- bulkscore=0 suspectscore=0 impostorscore=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 spamscore=0 adultscore=0
+ malwarescore=0 clxscore=1015 suspectscore=0 impostorscore=0 phishscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2610300000 definitions=main-2611010079
 
-This is a follow-up to the libbpf BPF program manual loading series [1].
-It addresses a few review comments made in that series.
+veristat used bpf_program__clone() to verify each program in
+isolation. Replace it with BPF_PROG_LOAD_STRATEGY_MANUAL plus
+bpf_program__load()/bpf_program__unload().
 
-  - Patches 1-2: Split the veristat conversion work into two separate
-    patches, one for the actual conversion and another for the arena
-    selftest update.
-  - Patch 3: Small libbpf cleanups in the manual loading code, and
-    documentation of when bpf_program__set_autoload() and
-    bpf_program__set_load_strategy() fail.
+Unlike clone(), which skips binding RODATA maps to avoid mutating
+shared object state, bpf_program__load() does bind them - but each
+program is unloaded right after verification, dropping the binding
+along with it.
 
-[1] https://lore.kernel.org/bpf/20261029223348.3730738-1-andrey.grodzovsky@crowdstrike.com/
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+---
+ tools/testing/selftests/bpf/veristat.c | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
-Andrey Grodzovsky (3):
-  selftests/bpf: Convert veristat to BPF_PROG_LOAD_STRATEGY_MANUAL
-  selftests/bpf: Test arena autobind with BPF_PROG_LOAD_STRATEGY_MANUAL
-  libbpf: Clean up BPF program manual loading
-
- tools/lib/bpf/libbpf.c                        | 15 +++---
- tools/lib/bpf/libbpf.h                        | 14 +++++-
- .../bpf/prog_tests/test_struct_ops_arena.c    | 48 +++++++++++++++++--
- tools/testing/selftests/bpf/veristat.c        | 20 ++++----
- 4 files changed, 72 insertions(+), 25 deletions(-)
-
-base-commit: eaae576c34d7e001767b6845a5950b0b8db3e68a
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index 9cfc9b4b41c1..0cd19b59037f 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -1678,7 +1678,6 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
+ 	const char *base_filename = basename(strdupa(filename));
+ 	const char *prog_name = bpf_program__name(prog);
+ 	long mem_peak_a, mem_peak_b, mem_peak = -1;
+-	LIBBPF_OPTS(bpf_prog_load_opts, opts);
+ 	char *buf;
+ 	int buf_sz, log_level;
+ 	struct verif_stats *stats;
+@@ -1726,18 +1725,15 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
+ 	if (env.force_reg_invariants)
+ 		bpf_program__add_flags(prog, BPF_F_TEST_REG_INVARIANTS);
+ 
+-	opts.log_buf = buf;
+-	opts.log_size = buf_sz;
+-	opts.log_level = log_level;
++	bpf_program__set_log_buf(prog, buf, buf_sz);
++	bpf_program__set_log_level(prog, log_level);
+ 
+ 	cgroup_err = reset_stat_cgroup();
+ 	mem_peak_a = cgroup_memory_peak();
+-	fd = bpf_program__clone(prog, &opts);
+-	if (fd < 0) {
+-		err = fd;
+-		if (env.verbose)
+-			fprintf(stderr, "Failed to load program %s %d\n", prog_name, err);
+-	}
++	err = bpf_program__load(prog);
++	fd = err == 0 ? bpf_program__fd(prog) : -1;
++	if (err && env.verbose)
++		fprintf(stderr, "Failed to load program %s %d\n", prog_name, err);
+ 	mem_peak_b = cgroup_memory_peak();
+ 	if (!cgroup_err && mem_peak_a >= 0 && mem_peak_b >= 0)
+ 		mem_peak = mem_peak_b - mem_peak_a;
+@@ -1774,7 +1770,7 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
+ 	if (verif_log_buf != buf)
+ 		free(buf);
+ 	if (fd > 0)
+-		close(fd);
++		bpf_program__unload(prog);
+ 	return 0;
+ }
+ 
+@@ -2297,7 +2293,7 @@ static int process_obj(const char *filename)
+ 	env.files_processed++;
+ 
+ 	bpf_object__for_each_program(prog, obj) {
+-		bpf_program__set_autoload(prog, true);
++		bpf_program__set_load_strategy(prog, BPF_PROG_LOAD_STRATEGY_MANUAL);
+ 		prog_cnt++;
+ 	}
+ 
 -- 
 2.34.1
 
