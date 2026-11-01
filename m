@@ -1,105 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793496647;
-	b=ZBiqAoWoHvx5bU2z2sPM+d8eHGKNFpgCtcQcWi8b5azKjaA6/aJ6w/jvHKeZDgNj66LV
-	 yAjb4QKqDIsRTAUZZSB6V+5nvyO/HNY1XVVoY85U5g35tk5tu3cM3wuw0SPJlIV+KUOWY
-	 CM++ONTkFlnCytx0E4oIHCa4pBtX+ERUY8VCTC3DJCG/8TBvR1TwI+eZ1/Swg93jK0np+
-	 anQxT+cUKxR9THyzn4x2ppOLfMCibPUkl5JwvB1Ba7iuDN022ZTf+0dVKbPoS7lnYOymE
-	 oW2jQUyjwQ8QgyckyEjX3yBf0IiSoz52FMwj9cLlmjIFJ8bvQpUn21NOHL00FYS3Hwg==
+	t=1793496680;
+	b=q9/rzvm52nngq554bSXhl4Q1XzXKtphpV/fLtbe/ZrI8NqKJtKR6E9GM0lc1E6uB1qIo
+	 f+k+WJ1uuV8Sp/LFVN/KqX+I5roUjNI/iYzhHFo48vtFcgRwUUrTxSFipPDiEgBixReJl
+	 UB7F4A/yaMYVWFQ/4qR5adaDqtBy8BT2WZ/ACcgTDfsIm3VZbFjeSro+eCY+j0Y19YhoH
+	 iGBn3J2B96RxiTj84yBMX5hj7DH+A3FeFKNwZaZq9z3g9v01tLFPJHV1LpGA2cQ9sgHTi
+	 uKS1mu1ugoREI269yOQqZdBVTFN8AK62ayso8qGDe76NpYIp40P9EBHbzKUlf3rmpIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793496647;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=HKpTgsAdietgImbWPM33Hs3sIvDzrbl29q+l/XmMzoc=;
-	b=ts3I4cY23pHH9AvxTrry4AwAD+Obv1oK8tFsUuQJ22GUojFIwp3LPJQO8B29Dyl/H5q7
-	 sQtxNbcA6ja30ctObeJ0mLgxvTFn2oU5J3ziGdzrzxTSoJeyVyZ1Qb98QX8b00YHm3JaO
-	 99VMAwokvtg/pAbiUtHac49HMrm7HYoaY4uAh+UoxJgxpp/Udh4ABawm1I6o8TFULu+z+
-	 3XMSBz4LNScjPpN+r91y4nGBewqHhKpfkoHZ64tW+tJ6Xo6vcsw/fG04hne13QWWLxbjF
-	 FBkqDjF7mE4DHyBT7L4HdZeG45y+oFblCd2drfffbC8o/SdQXzpniMHs4iXyeXRJQfw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793496680;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=QgdEOgj5DO6aO92lXMWuugu+LCn/lcYayg1XM5OwHcY=;
+	b=oaaNaRkM73JW/JYCuNnCmzpjk7GYQF+nSTR82UlV5rdcAZmv3RW6e7KMHloGjbSSrjpI
+	 DQhqEeXQl8i1RVnEjNKdB0WoqlAvh7ZEd08T9gcAqQtXwwea/+NxO13RhEjg4WthcqqPm
+	 WaVjR3/9QJo9yuc8K1/LDbe0OAj84x3cRGw18fpQAOWN7BQNusaaxy++MkW7+U6AemASh
+	 EKoZYwoHjVQE3BJGjwQxctmGMk4WAVAauKvUZ78iA1fovCjyeRbRng4mu3lydUl7Wyag9
+	 g4Q2944I9seOzuVISdRauAuBumiZtFxfZuQ+kxTM4HaBsQBeKcyA+UZktlBcfP7xNDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BTG+RZM2;
-	arc=none smtp.remote-ip=209.85.214.182
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kKvJIUbW;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A0E606A31C
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 01:30:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 17A0E606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4833B606A31A
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 01:31:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BTG+RZM2
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e977109392so12929635ad.0
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 18:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793496646; x=1794101446; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=HKpTgsAdietgImbWPM33Hs3sIvDzrbl29q+l/XmMzoc=;
-        b=BTG+RZM2xdbQ1q707/pPe1Q7+sBufQLL/wOMexWBWzDWtLevA4L8vRmK26LT2AHamY
-         cIzAVZTBuqn1rXHupAwaEOnQcbqlerPMsi3EB98YF0YD0+VtCtTyy0VQrcGXpw/fnBik
-         eH5yGVldbfawrH6cpOQT194fLr9WVkwg2zhxXkqF159mwVJCt5D+Opp3cg5TBZiQNDBI
-         EI5H11dxfspvci5DgyIozxTWsYt0sQwssEzoc2ywqz+7mvR7xCW2cPAft4GJj8Rp4R+U
-         Q+gy1AJ3Ro4JqIL7b5VvcwxiJKp8Wy2k/OHib11NqVFkfhUInQ1hL6kWZ0swIH5oCSfA
-         E7rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793496646; x=1794101446;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HKpTgsAdietgImbWPM33Hs3sIvDzrbl29q+l/XmMzoc=;
-        b=XImLz+Dbj9r8vJAnxMD0qxLzQTZLE1rCG9MvyW4dsmgqnYtm1Nf28HbXdpgzLAOB82
-         Jb2LHr+BRwtNWGDQY8d6thAxcfAbVwcaKTsqQPAUkJjTAlLW+lFgsFcXD9t6fZGVPSbM
-         51M2LNqlGPa9tznfhqxLj/hkUnvMoAQCOCGAJ7wc79ULJJnaslyF0ve6OChDV6seEGCs
-         IMYbPBO2WmUreEgwFzrZYnTLA+YdX11yfQKCurAJ6H83TgxHqEnGxNoz7nnkhFm+ho36
-         bE7eHQ5EJUh6GYceRb09B28gabb1hG77oFEJUvxB9b+6/qId6lKYrJWwFClIusxxEOkD
-         ElbQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxBhNJ79yB8P80eL2zQM+6Q1W0httOiw2OAAX67BFLL4zwrSlKA4jQodtkThahLegzNjmA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9xoJmVbtHjJnA1n1DGtYlrNXxcC5rna/7LRr462DLg/Ymot5aA
-	pJNJw9aKZPxLnX3ZC0WLr1Z5YJ8Xxk+KqPPTauld0K46JyVJ0+PYDWAe
-X-Gm-Gg: AYBFou0gCf6pmr0gwGP24RaG3Pi5caTGdIVxWE0zzy0DEOP4EX+6M/dcD2RQgJxqTZs
-	hbHTaCvoaEcxjDnSVc900zjaL+3nsjRAkXn7GzJBxORlBm2tWExkRCm1rT9/Q3ezrPT8SNwrxAT
-	4K9XmEGpI42jJZoT8giFs/zKg37p7egfXP0t9NfwheuU4CBTsW9kxocSNPi886OWzhOEcR1ufWe
-	5Nofx+WPjciFNI317iBgqqKj9hvqvGsadi0R6zQ9HOhmcOCbbHI68L0pec46WGKrO3m1a+xR+2j
-	m64+jNZe+J8e01dcry3LMPjtpGiK3slu9tkka8f1TiYxedBcwoNEi/meWM1zTuSf51ma7NZVMDj
-	PfxQcBo7BNNr3Hqrg3suICUzFFfgWoXe584IKZuTojjDyTVujYLY7TYtZYQ+Ze261oearyl+q0X
-	6QWRme5S9FICp+KOPwQ0HwtQ7xn9H4zd7DSkcz6so7pPkM7tvgCW4r16UIzZWT0M7EsIW1lgaiA
-	RtfX4M4KFH9uPDBpWnsZfeIEACQTPQ36FNZ3ouAL5hZRtP6snaRJU7qIokqDVc74BYcaUW84h6I
-	rnU0DrkbTbI5/RkwJEI5ehC4hdr0dn4Hl5WHwRg6GhhCZPC9NpxPZAgAMk0pBPc4vsNx1ma6E/0
-	OMRWqI1W3rGC5ZyQwKazlU1OmCFp7f4i0ScQ=
-X-Received: by 2002:a17:90b:5145:b0:3ac:9706:772c with SMTP id 98e67ed59e1d1-3ae8984cefamr5674017a91.60.1793496646286;
-        Sat, 31 Oct 2026 18:30:46 -0700 (PDT)
-Received: from localhost ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae84577911sm8943687a91.7.2026.10.31.18.30.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Oct 2026 18:30:45 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 01 Nov 2026 01:30:44 +0000
-Message-Id: <DMJHI077QR5H.5KF9WFI089UJ@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Josef Bacik" <josef@toxicpanda.com>, "Paul E. McKenney"
- <paulmck@kernel.org>, "Frederic Weisbecker" <frederic@kernel.org>, "Steven
- Rostedt" <rostedt@goodmis.org>
-Cc: "Boqun Feng" <boqun@kernel.org>, "Masami Hiramatsu"
- <mhiramat@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>, "Peter
- Zijlstra" <peterz@infradead.org>, "Thomas Gleixner" <tglx@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>,
- <rcu@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-trace-kernel@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 00/14] rcu-tasks: build Tasks RCU on Tasks Trace
- readers in trampolines
-In-Reply-To: <20260929-b4-rcu-tasks-preempt-qs-v6-0-c111ee02caca@toxicpanda.com>
-References: <20260929-b4-rcu-tasks-preempt-qs-v6-0-c111ee02caca@toxicpanda.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kKvJIUbW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93A5D1F000C1;
+	Sun,  1 Nov 2026 01:31:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793496679;
+	bh=QgdEOgj5DO6aO92lXMWuugu+LCn/lcYayg1XM5OwHcY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=kKvJIUbWr3H5WDMm27L+KudNgjAE3F6mB9TOYTnn0UzivvuKBQGC7PuSo4mt9Em1R
+	 n5NfO0BTAkld3sol2iGGsHTQ8do7Pvs1BaQpI7j2HdtRBfdf7uGAd9rKTJFLqktoAt
+	 2VJbkCM4uQbHDeDGRw+Un12RvarscH8VB9CB5h0Kqnk/qoxV6L9tkcoU1VmshwDB5C
+	 YIjDsmi80osqjjVFyUyB1IOQiGfHIGlSHsoxSAl8Ro0wq+TNe/KunzUGO9J8foTOiJ
+	 6qH7MZDQHqi+nbMWptHf02oK1RXWttwnxVU3az4gPktsWMbKTj6QShsoxfPGNOAw9G
+	 TyejjbgfMFMfA==
+Content-Type: multipart/mixed; boundary="===============6958672853171962060=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,259 +49,105 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Message-Id: <b1947ab81fda5aa875d2c81e9df76bc2e7746a30a9941997635709e48e5f7e34@mail.kernel.org>
+In-Reply-To: <20261101004657.3406576-2-alexei.starovoitov@gmail.com>
+References: <20261101004657.3406576-2-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Don't trust pointers spilled in slots that a callee can write
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun,  1 Nov 2026 01:31:19 +0000 (UTC)
 
-On Tue, Sep 29, 2026 at 10:07 AM Josef Bacik <josef@toxicpanda.com> wrote:
->                    Graviton4                  Xeon 8375C
->                    base   series   C          base   series   C
->   nothing          87.0    87.8   87.7        70.3    70.5   69.8
->   function tracer 103.7   105.6  105.9        87.2    88.0   88.2
->   kprobe event    215.5   215.6  216.4       119.9   123.2  124.7
->   fentry          101.3   109.7  111.3        77.0    77.9   78.3
->   fexit           118.8   136.2  139.3        78.4    80.7   80.5
->   fentry+fexit    134.1   151.0  154.5        83.2    85.6   85.5
+--===============6958672853171962060==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On Graviton4, on top of the bare syscall:
+> bpf: Don't trust pointers spilled in slots that a callee can write
 
-                  today      the series adds
-  fentry          14.3 ns     8.4 ns
-  fexit           31.8 ns    17.4 ns
-  fentry+fexit    47.1 ns    16.9 ns
+TL;DR: The new join may leave a spilled r10 (fp+0) slot unchanged, since the
+fp+0 join fix isn't in the tree. A valid program may be rejected, or an
+out-of-bounds map access missed. Needs the fix first or folded in?
 
-Every fentry and fexit prog pays that on every call :(
-while synchronize_rcu_tasks() is rare.
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
 
-> mutex, and the hung task detector panicked the machine. The kprobe jump
-> optimizer is worse in principle: it does synchronize_rcu_tasks() under
-> kprobe_mutex, text_mutex and cpus_read_lock(), so one long-running
-> kthread can stall static key updates and CPU hotplug for its whole run.
+[ ... ]
 
-Not anymore.
+> @@ -1443,21 +1466,22 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>  		*dst = none;
+>  	} else if (class == BPF_JMP && code == BPF_CALL) {
+>  		/*
 
-  who waits for Tasks RCU     how                      locks in the wait
-  kprobe optimizer            call_rcu_tasks()         none
-  bpf detach on x86           call_rcu_tasks()         none
-  bpf image and prog free     call_rcu_tasks()         none
-  ftrace_shutdown() of a      synchronize_rcu_tasks()  ftrace_lock and
-  dynamic ftrace_ops                                   what the caller has
+[ ... ]
 
-The first row is
-commit 06e0d3b89da1 ("kprobes: Make optprobe optimizer multi-generational and asynchronous").
-The second row is
-commit 424f6a361096 ("bpf,x86: Use single ftrace_ops for direct calls").
-bpf on arm64 still allocates ftrace_ops per trampoline.
-That's the last row.
+> +		 * Static subprogs and callbacks can't store an FP-derived pointer into the frame of
+> +		 * the caller, but they can store any other pointer there. The caller can fill it
+> +		 * and store through it. With the stale spill that store would be a definite write
+> +		 * to a stack slot, and it doesn't touch the stack. Callees are analyzed after the
+> +		 * caller, and they reach the whole frame from one pointer to it. So after the call
+> +		 * every slot holds what it held before or a value that is not FP-derived.
+>  		 */
+> +		if (subprog_gets_local_fp(env, insn, insn_idx, at_out, depth))
+> +			for (slot = 0; slot < nslots; slot++)
+> +				at_stack_out[slot] = __arg_track_join(at_stack_out[slot], none);
+>  		for (r = BPF_REG_0; r <= BPF_REG_5; r++)
+>  			at_out[r] = none;
+>  	} else if (class == BPF_LDX) {
 
-Another idea...
-livepatch had the same problem with PREEMPT_LAZY.
-commit 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and live-patching")
-solved it with a stack walk of prev in __schedule().
-can we do the same for a holdout task ?
-A preempted task is in a quiescent state when its stack trace is
-reliable and has no address in a trampoline.
-On x86 ORC unwinds through the interrupt frame.
-bpf_has_frame_pointer() makes it reliable through progs and trampolines.
+Does this join leave a spilled copy of r10 unchanged?
 
-                                   series              stack walk
-  cost in a trampoline             0.8 to 17.4 ns      none
-  copies of rcu_read_lock_trace()  6                   none
-  hook in the irq exit path        yes                 no
-  return thunks, __bhi_args        listed by hand      return address is
-                                                       on the stack
-  register_ftrace_direct() users   must take a reader  as-is
-  implementations of Tasks RCU     2                   1
-  scan of the task list            only for kprobes    as today
+In __arg_track_join(), a slot holding fp+0 joined with ARG_NONE takes this
+path:
 
-Then no need for patches 2, 3 and 6-13, rcu_tasks_irq_ip,
-rcu_tasks_wait_irq_preempted(), etc.
+    if (a.frame >= 0 && b.frame == ARG_NONE) {
+        if (a.off_cnt == 1)
+            return arg_merge_offsets(a, arg_single(a.frame, 0));
+        return a;
+    }
 
-  not in the diff            what it needs
-  kprobe jump window         kprobe_in_optimized_region() of patch 4 in
-                             rcu_tasks_stack_entry()
-  trampolines in modules     the flag of patch 5 in the same place
-  fexit on a long function   the task in it stays a holdout, like today
-  nohz_full                  resched_cpu() for a running holdout
-  rcutorture                 a reader that the walk can see
-  arm64                      see below
+arg_merge_offsets() dedups {fp+0} with {fp+0}, so the result is still
+{fp+0} with off_cnt == 1, and at_stack_out[slot] comes out of the call
+unchanged.
 
-arm64 is the hard part. arch_stack_walk_reliable() stops at an exception
-boundary, because LR can be live there. So a task that an irq preempted
-is never clean. A false positive is fine for this check. The walk can
-report regs->pc and regs->regs[30] and go on with the frame records.
-Mark has to say whether that is enough.
+The commit message says "For a spilled copy of r10 this needs 'bpf: Fix the
+join of fp+0 with a value that is not a pointer to stack'", but that
+commit is not in the base tree, and the series range
+753751ee76c8..82224cfc9354 contains only this patch and the selftest.
 
-Patch 1 is useful on its own. It removes two smp_mb() from every
-sleepable prog. Pls send it separately.
+With only this series applied, a sequence like this still goes wrong:
 
-Something like this
+    *(u64 *)(r10 - 16) = r10        ; fp-16 = fp0+0
+    r1 = r10; r1 += -16; r2 = map_value; r2 += 8
+    call sub                        ; *(u64 *)(r1 + 0) = r2
+    r7 = *(u64 *)(r10 - 16)         ; verifier: map_value+8, arg_track: fp0+0
+    *(u64 *)(r7 - 8) = 0            ; off_cnt == 1 -> must_write fp-8
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 15fd9ec..83cb440 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -288,6 +288,7 @@ config X86
- 	select MMU_GATHER_RCU_TABLE_FREE
- 	select MMU_GATHER_MERGE_VMAS
- 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
-+	select HAVE_RCU_TASKS_STACK_QS		if UNWINDER_ORC && DYNAMIC_FTRACE
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RELIABLE_STACKTRACE		if UNWINDER_ORC || STACK_VALIDATION
- 	select HAVE_FUNCTION_ARG_ACCESS_API
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 17d6edf..a3a33e9 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -275,6 +275,21 @@ static inline void tramp_free(void *tramp)
- 	execmem_free(tramp);
- }
+sub stores a PTR_TO_MAP_VALUE, so the "cannot spill pointers to stack into
+stack frame of the caller" check in check_stack_write_fixed_off() does not
+fire, and r7 - 8 is map_value+0.
 
-+#ifdef CONFIG_TASKS_RCU_STACK_QS
-+extern void ftrace_static_tramp_end(void);
-+
-+/*
-+ * ftrace_caller(), ftrace_regs_caller() and return_to_handler() keep the
-+ * address of ftrace_ops, of a direct trampoline or of the caller in a register.
-+ * The unwinder does not see it.
-+ */
-+bool arch_rcu_tasks_trampoline_text(unsigned long addr)
-+{
-+	return addr >= (unsigned long)ftrace_caller &&
-+	       addr < (unsigned long)ftrace_static_tramp_end;
-+}
-+#endif
-+
- /* Defined as markers to the end of the ftrace default trampolines */
- extern void ftrace_regs_caller_end(void);
- extern void ftrace_caller_end(void);
-diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-index 62c1c93..c0e8c50 100644
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -403,3 +403,9 @@ SYM_CODE_START(return_to_handler)
- 		    X86_FEATURE_CALL_DEPTH
- SYM_CODE_END(return_to_handler)
- #endif
-+
-+/* See arch_rcu_tasks_trampoline_text() */
-+SYM_CODE_START_NOALIGN(ftrace_static_tramp_end)
-+	UNWIND_HINT_UNDEFINED
-+	ANNOTATE_NOENDBR
-+SYM_CODE_END(ftrace_static_tramp_end)
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 44c07a6..2eb88c6 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -180,9 +180,16 @@ static inline void rcu_nocb_flush_deferred_wakeup(void) { }
- #ifdef CONFIG_TASKS_RCU_GENERIC
+Two outcomes follow from arg_track still seeing fp-8 as a certain write.
+A later read of fp-8 can fail with "slot poisoned by dead code elimination",
+which rejects a valid program.  And with the hidden-store pattern from the
+commit message, spill_to_stack() with cnt == 1 overwrites fp-8 with
+ARG_NONE, so a later store through a pointer filled from fp-8 drops out of
+the may_write mask.  reset_scevs_at_indirect_writes() then misses it, which
+is the out-of-bounds map access this patch is meant to close.
 
- # ifdef CONFIG_TASKS_RCU
-+#  ifdef CONFIG_TASKS_RCU_STACK_QS
-+bool rcu_tasks_preempted_qs(struct task_struct *t);
-+bool arch_rcu_tasks_trampoline_text(unsigned long addr);
-+#  else
-+static inline bool rcu_tasks_preempted_qs(struct task_struct *t) { return false; }
-+#  endif
- # define rcu_tasks_classic_qs(t, preempt)				\
- 	do {								\
--		if (!(preempt) && READ_ONCE((t)->rcu_tasks_holdout))	\
-+		if (READ_ONCE((t)->rcu_tasks_holdout) &&		\
-+		    (!(preempt) || rcu_tasks_preempted_qs(t)))		\
- 			WRITE_ONCE((t)->rcu_tasks_holdout, false);	\
- 	} while (0)
- void call_rcu_tasks(struct rcu_head *head, rcu_callback_t func);
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index 332df7a..93a6a83 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -107,6 +107,20 @@ config TASKS_RCU
- 	default NEED_TASKS_RCU && PREEMPTION
- 	select IRQ_WORK
+The new comment says "So after the call every slot holds what it held before
+or a value that is not FP-derived", but the join does not encode that for
+fp+0 slots.
 
-+config HAVE_RCU_TASKS_STACK_QS
-+	bool
-+	help
-+	  Select this if arch_stack_walk_reliable() can walk the stack of
-+	  a task that was preempted by an interrupt, and if
-+	  arch_rcu_tasks_trampoline_text() reports the kernel text that
-+	  keeps the address of a trampoline or of ftrace_ops in a register.
-+
-+config TASKS_RCU_STACK_QS
-+	def_bool TASKS_RCU && HAVE_RCU_TASKS_STACK_QS && HAVE_RELIABLE_STACKTRACE
-+	help
-+	  A preempted task is in a Tasks RCU quiescent state when its stack
-+	  has no address in a trampoline.
-+
- config FORCE_TASKS_RUDE_RCU
- 	bool "Force selection of Tasks Rude RCU"
- 	depends on RCU_EXPERT
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 6272953..69f7aef 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -1089,6 +1089,44 @@ static void rcu_tasks_postscan(struct list_head *hop)
- 		timer_delete_sync(&tasks_rcu_exit_stall_timer);
- }
+This is not a new regression, since the r10 case behaved the same before
+the patch.  Should the fp+0 join fix be applied before this patch, or
+folded into it?
 
-+#ifdef CONFIG_TASKS_RCU_STACK_QS
-+/*
-+ * Tasks RCU protects the text outside of the kernel and of the modules
-+ * (ftrace and bpf trampolines, optprobe slots) and what the arch adds.
-+ */
-+static bool rcu_tasks_stack_entry(void *cookie, unsigned long addr)
-+{
-+	if (core_kernel_text(addr))
-+		return !arch_rcu_tasks_trampoline_text(addr);
-+	return is_module_text_address(addr);
-+}
-+
-+static int rcu_tasks_stack_is_clean(struct task_struct *t, void *arg)
-+{
-+	if (t != current && task_curr(t))
-+		return 0;
-+	return !arch_stack_walk_reliable(rcu_tasks_stack_entry, NULL, t);
-+}
-+
-+/*
-+ * A preempted task is in a quiescent state when its stack trace is reliable
-+ * and has no address in the protected text.  __schedule() asks for current.
-+ * The grace-period kthread asks for a task that waits on a runqueue.
-+ */
-+bool rcu_tasks_preempted_qs(struct task_struct *t)
-+{
-+	bool ret;
-+
-+	if (t == current)
-+		return rcu_tasks_stack_is_clean(t, NULL);
-+	if (!try_get_task_stack(t))
-+		return false;
-+	ret = task_call_func(t, rcu_tasks_stack_is_clean, NULL);
-+	put_task_stack(t);
-+	return ret;
-+}
-+#endif
-+
- /* See if tasks are still holding out, complain if so. */
- static void check_holdout_task(struct task_struct *t,
- 			       bool needreport, bool *firstreport)
-@@ -1098,6 +1136,7 @@ static void check_holdout_task(struct task_struct *t,
- 	if (!READ_ONCE(t->rcu_tasks_holdout) ||
- 	    t->rcu_tasks_nvcsw != READ_ONCE(t->nvcsw) ||
- 	    !rcu_tasks_is_holdout(t) ||
-+	    rcu_tasks_preempted_qs(t) ||
- 	    (IS_ENABLED(CONFIG_NO_HZ_FULL) &&
- 	     !is_idle_task(t) && READ_ONCE(t->rcu_tasks_idle_cpu) >= 0)) {
- 		WRITE_ONCE(t->rcu_tasks_holdout, false);
-diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-index b62735a..a21b76f 100644
---- a/kernel/rcu/update.c
-+++ b/kernel/rcu/update.c
-@@ -25,6 +25,8 @@
- #include <linux/interrupt.h>
- #include <linux/sched/signal.h>
- #include <linux/sched/debug.h>
-+#include <linux/sched/task_stack.h>
-+#include <linux/stacktrace.h>
- #include <linux/torture.h>
- #include <linux/atomic.h>
- #include <linux/bitops.h>
 
-pw-bot: cr
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41259422626
+--===============6958672853171962060==--
