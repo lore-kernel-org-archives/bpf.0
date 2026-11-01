@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793502331;
-	b=NKy2Qs729bIV4NEwk+gY2Lr3TsmG0ohUMqhG5GGf1+xNSdBfhQ1fqJvQ73JBnFLrMc1V
-	 clHrNcqCt4gTHf7/e8Fbwudoe1BK0D0MjVEtsNqQE+rNkfq8GzjXVZAuHBnByFPEdpRqu
-	 QAv9yPq7ihbU4dcJfbvzc7YJKyXgb6K7pTHwgqKtFCScQDcJWLZs4qwKM22oz7VyTdbhG
-	 yHFCt8teRETfpQKbVMwRIkPP9L/AuknPckI1gf5cSGwOap3Hq+jBHN+yV43Hv8CmGC1fV
-	 Pegqndl5GUWK44JoY5YHn+QlPpj52yLAnQq6IRGuKwxOKd+xnq2sgEC1u04bZwdllAg==
+	t=1793502337;
+	b=UWGMmh2gs+Ey3bPZdaya+lFJ69X5/SAlruOM49q0Cno6zpNjt2+ixh28HcJQKk6WM9OP
+	 T12RsOErqJSMJKhTTfdTGehgWnvm3oqr+go7woV/egtRoSISxNZl8MSdkqQUuOipbiFu4
+	 5jlFZsNhu1qnzFQ4rwweP/sNef2cyhlW/5YG7lvkZr4lecKBkzJy/7oRLobmDU0AOOrDn
+	 SQhYkcTvRr1myOpAgsGqzTVBB/vIkwkePQMLCjm4ypD1vSlRimN5YYff5Pfn7l9LXCFvz
+	 hwa3gPpli08a087XyuUo1sP0XfQziaJRaDDyGyE8c/CLFZArxBNNCKbXg8Zl3+A3XIQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793502331;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793502337;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=PUfeEsnq77a4lCfrk3rcb888yzMGRzooM4fsbJpHu5s=;
-	b=jrgcpIQXjQvd8GfiaouPybu4Kxk+uX2sr6cn9LW1fv4rb+iB3+BXVGd5RFru/iByXPZL
-	 fr072sAvs9Dwj4BgybngCinK4n/pRLPFFmfSAS2XWjK3YX+7s1heaf5q27TQWbHOZnv5b
-	 QJwwJ2li03GEeTkZpSAUq3PKu0CJ26ajLTt4WZdKCmBBeROYLPSUVvO5KpFVe4EuwkDtG
-	 zRY7GbcUnSEg3Li2Zs+9p9KzBSd5F0FO6ZH18cr+XZG/Mf8084o2m4OhYaR/8DVKy75cr
-	 MF0mZVys2ab6+ZfcUQ37XYuhDcA7F3f6o9MNtdgdrBV9waTahVWE7sTqkDYAKj4aJ6Q==
+	bh=aHsNLHl4aybtuO1BBotS5onWTGNNFy5/yD5WWybDJ6s=;
+	b=JaHn9ygn5lxZxXbcUTFAaW5To/theHuOqK8lPQbeGE42vRJCFYG6E9fRQE7suqci/w6G
+	 NfR6PLkjwmY3m7cRoMkRGYQYtjmmdEkf/afLKuxXToHYYY4iR+PUGidVb2HdV0+95nDOE
+	 ksDLt0x1v3R0oghNU3JvHg1FoLujYRb1Pzan54WND8lJAREX1w7l6MUfeg2xWup5U00gU
+	 3T1OUhZwMgh96oEv+c1hb1dzOHvtH72Ga6w9OOFyOUmv5Ze+mhIhEhUZgNPrkN2g6CDr0
+	 sY8kueQWT6aKuSnRsY37kvRZl9LmqGOHWV/F+dlY4+gSxkDONR+GuHHnqCpf330qwgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LhDifgBc;
-	arc=none smtp.remote-ip=209.85.216.51
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="pN9h4s/G";
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC33606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 03:05:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CC33606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B566606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 03:05:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B566606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LhDifgBc
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3ada4c06b7bso785942a91.2
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 20:05:31 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pN9h4s/G
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ac6794fe45so1440707a91.0
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 20:05:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793502331; x=1794107131; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793502337; x=1794107137; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=PUfeEsnq77a4lCfrk3rcb888yzMGRzooM4fsbJpHu5s=;
-        b=LhDifgBc6sNzaZpRmwkBQmTrbqqsXDwB1sNWgSo6hac389HKsSm4O7GDprni8VjRz6
-         YPA94N18wAao3gMIGw4SWMUGx0VsRY6qqC24Y7ceFg8ri7gmYy+xYfcu8Tuf6dNp3LPc
-         G9unxvsvtki2HMm96q6T6AlgS8aj401BSIcUBZJEnkWHslcAj2MBhkQlzmlVan59kvvk
-         pbLi/yIq7ngh935bTQNa6sekv1NjQfecL1ykfCuYqdlkSwnC9WUpXvq20PUThUum7OkV
-         h+R/v6dz1NR21Mh1c2719JQJoF3j05A+WkigTzsyL5QwnFdg3kIDAeCG9wLmi2FZtvbp
-         JqjA==
+        bh=aHsNLHl4aybtuO1BBotS5onWTGNNFy5/yD5WWybDJ6s=;
+        b=pN9h4s/G3GPrG31g6McOmdK6ztGYUN+w0jd8GcIQCJNvvp9kfMfIAT1Grruqm87noZ
+         7u9Br1xqdjZ3swft2CP24BAtx795dNZNZRg1Sn2YvG24mISqqReGWr1rHQoq7amZbY5y
+         CFDryvwu9k0GMVSWbNrVmhQX53aYg1E6yYpyZZtX6uOgDzn8K/4KUMjz4xRribtYswfP
+         kHeuoX9Qd89n6oFGwUPxtqYv2NnuH1cnJCVMKoBa+5fFwIE8vxaPw9nnOzX9ElVfy5ql
+         9QKRnb3enHEd7hor72p7gV01Qz91VjZ27J4QSEclffYHvGAuteXQ+pULefHYIMh0CoZD
+         4T6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793502331; x=1794107131;
+        d=1e100.net; s=20260707; t=1793502337; x=1794107137;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PUfeEsnq77a4lCfrk3rcb888yzMGRzooM4fsbJpHu5s=;
-        b=U4hgCmpVbS7ACkWlsSX3v7sJk8eUhJXkyeeIZAooDACjX9bwiSzKFbzRBtq9vBKyiF
-         xqxX5GkNg/gdY6mLvbsC4x5/SFKjespHJ9Jx6qSOZQnomxoVy9WFFl81ijS3plu/Dcf3
-         wOvnAFO4p0XPuU2OfOmbCkxyC0I/fUH/qryTb92USbah1Wk7n6HQqeijrsAquCe2M05J
-         K2jExgTRvtKdnhWYQcBnQpSpM7EyOERy7mDo0h2ULgBkwoda8tLmUl4FfMlimAaO6qnT
-         fKdDg2jpmN8g8meTVrVq9ypfQXfHM92aK/n0mFkeKqXEc3jYeUnR20k27xPxKVmFZMxw
-         JVug==
-X-Gm-Message-State: AFq9FYLELGHTTDc/SblMCeVu3eOp6GQ1JJmBIWplH3EaL4Nql4ukSsrF
-	DTPhEFbTaWf000f3NxGFVwKES3qXumLGThKcBQJcw6vk5V32G3pnyxe67DE5lg==
-X-Gm-Gg: AYBFou2lz50xbGEojRjWCR1MLWkOakW+4VZencYfJepLcX/ZVdxuTueNpKspD9rXejh
-	uVt6kuteqYtJ3ksHYA6We7df1rwygiCxGQx8u8iGtiAmTO3Z3tUQXw/nfhUE+Fi11xRcVNvvnOX
-	EApFfmL27mbX8P1j+03v/z3y4lCDgPysV6GISlP1RcszYNAruFOCRtVBPcNzYY+rfLNpuVSs0IQ
-	uYoAEsurbGVuwARWsZ9C5TSwLNKcl7VPzdPOePOlKE3+IomULmEJYprFGD7rFbbCXVNK/pJOQjh
-	nNNwHrIFLZ1dBcLDg53fOUckDtoznx2tNKYZ8U6BQZ3twda0RBnXwnil4I53Kg8pogoJwM9Oh0x
-	xm8luFUiLzRfSIbRqRRJTPtnGmjW3B7F2xDBj9oova+uJ247HVXUB4OTCJfVXju+Aw8Vk/gAxJP
-	8/EnjE54lAfmPovQUOcSho4b0x0BEIAvrb23b4kPE3Wzjr0F5a9czr+u76nvJG2xOUlAlAfpIrg
-	rmyFmOhmACugR7QLluZtgBaluV7TVA/W9Q2ZMDyjxcIedsJ+9d48IB+ike21iVTOc6Q2YK87yrB
-	1eik8lczzHQvR+K/Z2UihTncNWxIpACDyqESLyZonHpSb1CYiBQC3d3K1wV+0KbnQnX4Zjh47l3
-	kniPX7ndXX2kurJYNL3FwwjXp0l2LJmmDJmb/tWW+EAhS3zu/mP1t7JXX/z8/M0eLFlDPhtbkcg
+        bh=aHsNLHl4aybtuO1BBotS5onWTGNNFy5/yD5WWybDJ6s=;
+        b=Sy0YM1g3GS6Uu8m+TNWc3ZZN7V/r5n+cqHsCO3/w0Yxwjb4KjiIiW6iRAijVQaWqcC
+         lj1oA0IxiqJ74fphOMElXadeywa/PrhCVtjDCrhSIj8dvmSs038a8RfwqIz//3rlCNzV
+         Tvph57QrtEnGlK6KiJ82Y8WGyO9bipIv197Rx32lp+PYGgrCmW4qsEQL76fEBQ+bW9/n
+         xo33B2ETJ/cinqbS2QrZ65u2f69XY4Y0lWiplBpo6lO8jGAbbsc01jnBxg/zCVKAYUMy
+         gCCUEDofxetOIFImGFqPVNyhu1ztquBs5Rki8OU26y2f4VkVVrFEvtJxh9uPjUntRFlF
+         27Pg==
+X-Gm-Message-State: APuU4Z/w/sige+yifcXKnGh+cj4B6BS90Bs9Y9Brd/QnM8yIulumfvFl
+	2VkU5VuaQat2ugfCzBnu26XMsleOLa3sd1EG255GVbLZZsDfgJxivABMuCTmyw==
+X-Gm-Gg: AYBFou2QGHzgdD7Isr8AdntVQwU5gb6l8pwSfE2Qanp7d1SrL5ApI34iRl5GkRI0kK+
+	Yr66q39IgSMgCVFU5maHvVjGdP3suoFim6FgIMtt83+ulkJrq12w+vvsUiLezYuuaAl0jfC0nPO
+	hNUbjzrMPrdzqTZTUj+AcXZcSObDrbhSTvV52I/5vkcgcOX8XjEcvxTV24Y9JCOPrKQx50xGOp+
+	RHVkyQK20LTr5MDOogWQf6zqpEsXb1+0/EsM3l2jjIXKcCcowJk+DMJf7gvPlvC3n57Y0AfBDze
+	BLqPim/3VtyUZPvwiaPSh7KDl8gRe2F4j58aDhJezDSXLE4E6ZlfRn5Jjx7rWfMeADRCmZqzWwg
+	xgtFymLoGwRxsEUTZulEUfAAwyxXH3KjaFqusipN8yR2mNzp1sY/wqLsbms3P3sV58XQkVFptmX
+	5jZB5H/ivFD4Q4ne9OqNvBgzW/8zTztNXvVRsdB06yDxk0bpMl1yxg5nwvslZ8GMe97TKp0rmiY
+	cf/sCpZjn8Ma5Xx1l9AVGnOsMQgz1rq15ZYi6ngVS9YElmH+ohTXZOgTa3CUKGyqnHIyzq4+wnn
+	TmOJQtEiW1IRRA+qFdO//csjqFM9HJGkcOYSC5db1vC5seTfWJqQQ/V7SDg0omwk3Tua66rd0k8
+	asn2vYIUPIVnBryxBovIHfx77jhGffiwdp1abIKzXGa94l2UsSdJVbW7+CWtf15kSCjm5GVWYBw
 	==
-X-Received: by 2002:a17:90b:4e83:b0:3aa:f4af:1e0f with SMTP id 98e67ed59e1d1-3ae89536c2emr5331094a91.8.1793502330623;
-        Sat, 31 Oct 2026 20:05:30 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae8803a80asm4747944a91.3.2026.10.31.20.05.30
+X-Received: by 2002:a17:90b:5808:b0:3ac:aa8d:19de with SMTP id 98e67ed59e1d1-3ae895743ebmr5591696a91.3.1793502336457;
+        Sat, 31 Oct 2026 20:05:36 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e2a703esm13689575a91.0.2026.10.31.20.05.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2026 20:05:30 -0700 (PDT)
+        Sat, 31 Oct 2026 20:05:36 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 03/14] bpf: Treat addr_space_cast of a pointer that is not in arena as a move
-Date: Sun,  1 Nov 2026 03:04:59 +0000
-Message-ID: <20261101030511.1578690-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 04/14] selftests/bpf: Test addr_space_cast of pointers that are not in arena
+Date: Sun,  1 Nov 2026 03:05:00 +0000
+Message-ID: <20261101030511.1578690-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101030511.1578690-1-alexei.starovoitov@gmail.com>
 References: <20261101030511.1578690-1-alexei.starovoitov@gmail.com>
@@ -104,240 +104,847 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-'rX = addr_space_cast(rY, 0, 1)' makes a pointer to arena from an address
-in arena. The verifier gives rX the type PTR_TO_ARENA and replaces the insn
-with 'wX = wY', which keeps the low 32 bits. The JIT adds the base of the
-arena in each access. Thus an access through PTR_TO_ARENA cannot leave the
-arena, and the verifier does not check it.
+The verifier does not check an access through a pointer to arena. Thus a
+kernel pointer must keep its type after the cast to address space 0. See
+"bpf: Treat addr_space_cast of a pointer that is not in arena as a move".
 
-In C the __arena attribute marks the pointers to arena, and clang casts
-only these pointers. Rust has no address spaces. The compiler follows each
-pointer back to its origin, and it does not cast a pointer that comes from
-the kernel. But it cannot always find the origin. For example, two progs of
-an object call the same function. One prog passes a ring buffer record, and
-the other prog passes an object in arena:
+  test                         what the prog does or shows           result
+  ---------------------------  ------------------------------------  ------
+  map_value                    the cast is 'r6 = r0'                 loads
+  map_value_same_reg           the cast of r0 to r0 is removed       loads
+  map_value_bounds             access beyond the map value           reject
+  map_value_or_null            access without a NULL check           reject
+  map_value_null_check_of_src  NULL check of r0 applies to r6        loads
+  ctx                          r6 is ctx                             loads
+  btf_id                       r6 is trusted_ptr_task_struct         loads
+  ref_released                 releases a reference through r1       loads
+  ref_leaked                   does not release a reference          reject
+  stack                        r6 is fp-8                            loads
+  spill_through_cast           spills ctx through r6, fills it       loads
+  callee_writes                callee writes the caller's stack      loads
+  callee_reads                 callee reads the caller's stack       loads
+  number                       r6 is arena, the cast is 'w6 = w6'    loads
+  number_and_pointer           one cast gets a number and ctx        reject
+  pointer_and_number           the same, the paths are exchanged     reject
+  cast_user                    cast of ctx to as(1) gives a scalar   loads
 
-  fn fill(e: &mut Event)
+The progs that return the content of a map value or of a stack slot also
+run. The result shows that they read the object and not arena. callee_reads
+needs the change in arg_track_xfer().
 
-  r6 = addr_space_cast(r1, 0, 1)     ; a ring buffer record, or a number
-  *(u64 *)(r6 + 0) = r2
+The analysis of live stack slots can take a number for a pointer to the
+stack: a slot held such a pointer, and a helper or a short store overwrote
+it. The cast of this number gives a pointer to arena. A store through it
+must not count as a write to the stack:
 
-When the compiler does not know the origin, it casts the pointer. The
-verifier does not examine the type of r1. r6 becomes PTR_TO_ARENA in the
-two progs. The first prog loads, and it writes to arena instead of the
-record.
-
-The verifier knows the type of rY. Let the type select what the cast does:
-
-  rY                             the cast becomes      rX
-  -----------------------------  --------------------  ------------
-  number (scalar), PTR_TO_ARENA  wX = wY, as before    PTR_TO_ARENA
-  all other pointers             rX = rY, or nothing   a copy of rY
-                                 when X == Y
-
-All other pointers are kernel pointers, and they are in address space 0
-already. Thus a move is the correct cast. rX is a copy of rY. The verifier
-applies the same checks to the two registers: bounds, NULL, references.
-
-The verifier replaces the cast one time, for all paths. Thus it rejects a
-prog in which the same cast gets a number on one path and a kernel pointer
-on a different path:
-
-  same addr_space_cast insn cannot be used with a number and with a pointer
-
-NULL is a number too.
-
-The analysis of live stack slots follows a pointer to the stack through a
-move. Make arg_track_xfer() follow it through the cast too. Otherwise the
-analysis does not see a read of the stack through rX, and the verifier
-forgets a slot that the prog reads. This analysis runs before the verifier
-knows the type of rY, and it can take a number for a pointer to the stack.
-Then rX points to arena. Thus rX is "the slot of rY, or not a pointer" for
-the analysis: an access through rX can read or write that slot, and it is
-never a certain write.
-
-The cast continues to be one insn at most. A prog in C gets different code
-only where it casts a pointer that is not in arena. In selftests
-arena_htab_asm casts the address of a variable in .bss. It accessed arena
-at the low 32 bits of that address, and now it accesses the variable.
-
-The kernel marks the pointers to arena in its structs with
-btf_type_tag("arena"). gcc does not emit the tag. Then such a member is
-a kernel pointer for the verifier, and the cast is a move now.
+  test                             what the prog does or shows       result
+  -------------------------------  --------------------------------  ------
+  stale_spill_store                the store hides a write to the    reject
+                                   counter of a loop
+  stale_spill_store_r10            the same, the stale value is r10  reject
+  stale_spill_live_slot            a slot is read after the store    loads
+  stale_spill_live_slot_of_caller  the same, a slot of the caller    loads
+  store_over_spilled_r10           a pointer to a map value is       reject
+                                   stored over r10 through the cast
+  r10_stored_to_arena              r10 is stored to arena            reject
+  callee_writes_in_loop            the loop stays counted when the   loads
+                                   callee writes through the cast
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  3 ++
- kernel/bpf/fixups.c          | 20 +++++++++++++
- kernel/bpf/liveness.c        | 15 ++++++++--
- kernel/bpf/verifier.c        | 54 ++++++++++++++++++++++++++++++++++--
- 4 files changed, 86 insertions(+), 6 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/verifier_arena_cast.c | 762 ++++++++++++++++++
+ 2 files changed, 764 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_arena_cast.c
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 7baeb831281f..3562e57ebb5e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -782,6 +782,8 @@ struct bpf_insn_aux_data {
- 	u64 non_sleepable:1; /* helper/kfunc may be called from non-sleepable context */
- 	u64 is_iter_next:1; /* bpf_iter_<type>_next() kfunc call */
- 	u64 call_with_percpu_alloc_ptr:1; /* {this,per}_cpu_ptr() with prog percpu alloc */
-+	u64 cast_arena:1; /* addr_space_cast of an address in arena */
-+	u64 cast_mov:1; /* addr_space_cast of a pointer that is not in arena, it's a move */
- 	u64 bb_end:1; /* last instruction of a basic block */
- 	u64 need_scev:1;
- 	u64 alu_state:5; /* used in combination with alu_limit */
-@@ -2013,6 +2015,7 @@ int bpf_optimize_bpf_loop(struct bpf_verifier_env *env);
- void bpf_opt_hard_wire_dead_code_branches(struct bpf_verifier_env *env);
- int bpf_opt_remove_dead_code(struct bpf_verifier_env *env);
- int bpf_opt_remove_nops(struct bpf_verifier_env *env);
-+void bpf_lower_cast_mov(struct bpf_verifier_env *env);
- int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env, const union bpf_attr *attr);
- int bpf_convert_ctx_accesses(struct bpf_verifier_env *env);
- int bpf_jit_subprogs(struct bpf_verifier_env *env);
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 41bc37e205e0..b0f0262e5263 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -723,6 +723,26 @@ int bpf_opt_remove_dead_code(struct bpf_verifier_env *env)
- 	return 0;
- }
- 
-+/* addr_space_cast of a pointer that is not in arena is a move, see is_cast_mov() */
-+void bpf_lower_cast_mov(struct bpf_verifier_env *env)
-+{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	struct bpf_insn *insn = env->prog->insnsi;
-+	int i;
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 386ad81051a9..a1180076bdf0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -12,6 +12,7 @@
+ #include "verifier_align.skel.h"
+ #include "verifier_and.skel.h"
+ #include "verifier_arena.skel.h"
++#include "verifier_arena_cast.skel.h"
+ #include "verifier_arena_large.skel.h"
+ #include "verifier_arena_globals1.skel.h"
+ #include "verifier_arena_globals2.skel.h"
+@@ -206,6 +207,7 @@ void test_verifier_aggregate_ret(void)        { RUN_TESTS(verifier_aggregate_ret
+ void test_verifier_align(void)                { RUN(verifier_align); }
+ void test_verifier_and(void)                  { RUN(verifier_and); }
+ void test_verifier_arena(void)                { RUN(verifier_arena); }
++void test_verifier_arena_cast(void)           { RUN(verifier_arena_cast); }
+ void test_verifier_arena_large(void)          { RUN(verifier_arena_large); }
+ void test_verifier_arena_globals1(void)       { RUN(verifier_arena_globals1); }
+ void test_verifier_arena_globals2(void)       { RUN(verifier_arena_globals2); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_cast.c b/tools/testing/selftests/bpf/progs/verifier_arena_cast.c
+new file mode 100644
+index 000000000000..799c61aa3746
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_arena_cast.c
+@@ -0,0 +1,762 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+	for (i = 0; i < env->prog->len; i++, insn++) {
-+		if (!aux[i].cast_mov)
-+			continue;
-+		/* an address in arena has 32 bits, this pointer has 64 */
-+		aux[i].zext_dst = false;
-+		if (insn->dst_reg == insn->src_reg)
-+			/* bpf_opt_remove_nops() removes it */
-+			*insn = NOP;
-+		else
-+			*insn = BPF_MOV64_REG(insn->dst_reg, insn->src_reg);
-+	}
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "../../../include/linux/filter.h"
++#include "bpf_misc.h"
++
++struct task_struct {};
++struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
++void bpf_task_release(struct task_struct *p) __ksym;
++
++#ifdef __TARGET_ARCH_arm64
++#define ARENA_VM_START (1ull << 32)
++#else
++#define ARENA_VM_START (1ull << 44)
++#endif
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 4);
++	__ulong(map_extra, ARENA_VM_START);
++} arena SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, long long);
++} hash SEC(".maps");
++
++/* BTF FUNC records are not generated for kfuncs referenced from inline assembly */
++void __kfunc_btf_root(void)
++{
++	bpf_task_release(bpf_task_acquire(0));
 +}
 +
- int bpf_opt_remove_nops(struct bpf_verifier_env *env)
- {
- 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index b49374a1ae0a..f30ea7b570e6 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -1454,8 +1454,16 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		if (code == BPF_MOV) {
- 			if (insn->off == 0) {
- 				*dst = *src;
-+			} else if (insn->off == BPF_ADDR_SPACE_CAST && insn->imm == 1) {
-+				/*
-+				 * The cast of a pointer to stack to as(0) is a move. But src
-+				 * can be a stale spill, see below. Then it's a number for the
-+				 * verifier, and dst points to arena. A store through dst must
-+				 * not count as a certain store to a slot of the stack.
-+				 */
-+				*dst = __arg_track_join(*src, none);
- 			} else {
--				/* addr_space_cast destroys a pointer */
-+				/* the cast to as(1) and sign extension destroy a pointer */
- 				*dst = none;
- 			}
- 		} else {
-@@ -1472,8 +1480,9 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		 * Helpers, kfuncs and global subprogs can scratch stack slots. The verifier reads
- 		 * a scalar from a scratched slot, but at_stack_out[slot] is not cleared, and
- 		 * fill_from_stack() returns the stale spill: an FP-derived arg_track for a scalar.
--		 * A scalar can't be dereferenced, so the stale value can only set liveness bits
--		 * for stack accesses that don't happen. That is conservative.
-+		 * A scalar can't be dereferenced before addr_space_cast, see above. So the stale
-+		 * value can only set liveness bits for stack accesses that don't happen. That is
-+		 * conservative.
- 		 *
- 		 * Static subprogs and callbacks can't store an FP-derived pointer into the frame of
- 		 * the caller, but they can store any other pointer there. The caller can fill it
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1b6c0674ff6a..f1eaff892beb 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17835,6 +17835,51 @@ int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
- 	return reg_bounds_sanity_check(env, acc, "bpf_reg_union");
- }
- 
++/* dst = addr_space_cast(src, 0, 1) */
++#define CAST_KERN(dst, src) \
++	BPF_RAW_INSN(BPF_ALU64 | BPF_MOV | BPF_X, dst, src, BPF_ADDR_SPACE_CAST, 1)
++/* dst = addr_space_cast(src, 1, 0) */
++#define CAST_USER(dst, src) \
++	BPF_RAW_INSN(BPF_ALU64 | BPF_MOV | BPF_X, dst, src, BPF_ADDR_SPACE_CAST, 1 << 16)
++
++/* r0 = the element of the hash map or NULL. There is one after the update. */
++#define UPDATE_AND_LOOKUP				\
++	"r1 = 0;"					\
++	"*(u32 *)(r10 - 4) = r1;"			\
++	"r1 = 7;"					\
++	"*(u64 *)(r10 - 16) = r1;"			\
++	"r1 = %[hash] ll;"				\
++	"r2 = r10;"					\
++	"r2 += -4;"					\
++	"r3 = r10;"					\
++	"r3 += -16;"					\
++	"r4 = 0;"					\
++	"call %[bpf_map_update_elem];"			\
++	"r1 = %[hash] ll;"				\
++	"r2 = r10;"					\
++	"r2 += -4;"					\
++	"call %[bpf_map_lookup_elem];"
++
++SEC("syscall")
++__description("arena cast: a pointer to map value, it's a move")
++__success __retval(7)
++__xlated("r6 = r0")
++__xlated("r0 = *(u64 *)(r6 +0)")
++__naked void map_value(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	UPDATE_AND_LOOKUP
++	"if r0 == 0 goto 1f;"
++	".8byte %[cast_r6_r0];"
++	"r0 = *(u64 *)(r6 + 0);"
++"1:"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_addr(hash),
++	  __imm(bpf_map_update_elem),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_insn(cast_r6_r0, CAST_KERN(BPF_REG_6, BPF_REG_0))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: a pointer to map value into the same register, it's removed")
++__success __retval(7)
++__xlated("r7 = r0")
++__xlated("r0 = *(u64 *)(r0 +0)")
++__xlated("exit")
++__naked void map_value_same_reg(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	UPDATE_AND_LOOKUP
++	"if r0 == 0 goto 1f;"
++	"r7 = r0;"
++	".8byte %[cast_r0_r0];"
++	"r0 = *(u64 *)(r0 + 0);"
++"1:"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_addr(hash),
++	  __imm(bpf_map_update_elem),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_insn(cast_r0_r0, CAST_KERN(BPF_REG_0, BPF_REG_0))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: bounds of map value are checked after the cast")
++__failure __msg("invalid access to map value, value_size=8 off=8 size=8")
++__naked void map_value_bounds(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	UPDATE_AND_LOOKUP
++	"if r0 == 0 goto 1f;"
++	".8byte %[cast_r6_r0];"
++	"r0 = *(u64 *)(r6 + 8);"
++"1:"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_addr(hash),
++	  __imm(bpf_map_update_elem),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_insn(cast_r6_r0, CAST_KERN(BPF_REG_6, BPF_REG_0))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: a pointer that may be NULL has to be checked after the cast")
++__failure __msg("R6 invalid mem access 'map_value_or_null'")
++__naked void map_value_or_null(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	UPDATE_AND_LOOKUP
++	".8byte %[cast_r6_r0];"
++	"r0 = *(u64 *)(r6 + 0);"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_addr(hash),
++	  __imm(bpf_map_update_elem),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_insn(cast_r6_r0, CAST_KERN(BPF_REG_6, BPF_REG_0))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: NULL check of the pointer is for its copy too")
++__success __retval(7)
++__naked void map_value_null_check_of_src(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	UPDATE_AND_LOOKUP
++	".8byte %[cast_r6_r0];"
++	"if r0 == 0 goto 1f;"
++	"r0 = *(u64 *)(r6 + 0);"
++"1:"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_addr(hash),
++	  __imm(bpf_map_update_elem),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_insn(cast_r6_r0, CAST_KERN(BPF_REG_6, BPF_REG_0))
++	: __clobber_all);
++}
++
++SEC("tc")
++__description("arena cast: a pointer to ctx")
++__success __log_level(2)
++__msg("R6=ctx()")
++__naked void ctx(void)
++{
++	asm volatile (
++	"r2 = %[arena] ll;"
++	".8byte %[cast_r6_r1];"
++	"r0 = *(u32 *)(r6 + %[len]);"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_const(len, offsetof(struct __sk_buff, len)),
++	  __imm_insn(cast_r6_r1, CAST_KERN(BPF_REG_6, BPF_REG_1))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: a pointer to task_struct")
++__success __log_level(2)
++__msg("R6=trusted_ptr_task_struct()")
++__naked void btf_id(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	"call %[bpf_get_current_task_btf];"
++	".8byte %[cast_r6_r0];"
++	"r0 = *(u32 *)(r6 + 0);"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm(bpf_get_current_task_btf),
++	  __imm_insn(cast_r6_r0, CAST_KERN(BPF_REG_6, BPF_REG_0))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: a reference is released through the copy")
++__success __retval(0)
++__naked void ref_released(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	"call %[bpf_get_current_task_btf];"
++	"r1 = r0;"
++	"call %[bpf_task_acquire];"
++	"if r0 == 0 goto 1f;"
++	".8byte %[cast_r1_r0];"
++	"call %[bpf_task_release];"
++"1:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm(bpf_get_current_task_btf),
++	  __imm(bpf_task_acquire),
++	  __imm(bpf_task_release),
++	  __imm_insn(cast_r1_r0, CAST_KERN(BPF_REG_1, BPF_REG_0))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: a reference doesn't go away")
++__failure __msg("Unreleased reference")
++__naked void ref_leaked(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	"call %[bpf_get_current_task_btf];"
++	"r1 = r0;"
++	"call %[bpf_task_acquire];"
++	"if r0 == 0 goto 1f;"
++	".8byte %[cast_r0_r0];"
++"1:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm(bpf_get_current_task_btf),
++	  __imm(bpf_task_acquire),
++	  __imm_insn(cast_r0_r0, CAST_KERN(BPF_REG_0, BPF_REG_0))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: a number")
++__success __log_level(2)
++__msg("R6=arena")
++__xlated("w6 = w6")
++__naked void number(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	"r6 = %[addr] ll;"
++	".8byte %[cast_r6_r6];"
++	"r0 = *(u64 *)(r6 + 0);"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_const(addr, ARENA_VM_START),
++	  __imm_insn(cast_r6_r6, CAST_KERN(BPF_REG_6, BPF_REG_6))
++	: __clobber_all);
++}
++
++/* static analysis of the stack follows the pointer through the cast */
++SEC("syscall")
++__description("arena cast: a pointer to stack")
++__success __retval(7) __log_level(2)
++__msg("R6=fp-8")
++__naked void stack(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	"r6 = r10;"
++	"r6 += -8;"
++	".8byte %[cast_r6_r6];"
++	"r0 = 7;"
++	"*(u64 *)(r6 + 0) = r0;"
++	"r0 = *(u64 *)(r10 - 8);"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_insn(cast_r6_r6, CAST_KERN(BPF_REG_6, BPF_REG_6))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: a pointer is spilled through the cast of a pointer to stack")
++__success
++__naked void spill_through_cast(void)
++{
++	asm volatile (
++	"r2 = %[arena] ll;"
++	"r6 = r10;"
++	"r6 += -8;"
++	".8byte %[cast_r6_r6];"
++	"*(u64 *)(r6 + 0) = r1;"
++	"r2 = *(u64 *)(r10 - 8);"
++	/* it's ctx */
++	"r0 = *(u32 *)(r2 + 0);"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_insn(cast_r6_r6, CAST_KERN(BPF_REG_6, BPF_REG_6))
++	: __clobber_all);
++}
++
++static __naked __noinline __used long writes_through_cast(long p)
++{
++	asm volatile (
++	".8byte %[cast_r1_r1];"
++	"r0 = 7;"
++	"*(u64 *)(r1 + 0) = r0;"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_insn(cast_r1_r1, CAST_KERN(BPF_REG_1, BPF_REG_1))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: the callee writes to the stack of the caller")
++__success __retval(7)
++__naked void callee_writes(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	"r0 = 0;"
++	"*(u64 *)(r10 - 8) = r0;"
++	"r1 = r10;"
++	"r1 += -8;"
++	"call writes_through_cast;"
++	"r0 = *(u64 *)(r10 - 8);"
++	"exit;"
++	:
++	: __imm_addr(arena)
++	: __clobber_all);
++}
++
++static __naked __noinline __used long reads_through_cast(long p)
++{
++	asm volatile (
++	"r6 = r1;"
++	/* a place where what is not live is forgotten */
++	"call %[bpf_get_prandom_u32];"
++	"if r0 == 0 goto +0;"
++	".8byte %[cast_r6_r6];"
++	"r0 = *(u64 *)(r6 + 0);"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32),
++	  __imm_insn(cast_r6_r6, CAST_KERN(BPF_REG_6, BPF_REG_6))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: the callee reads the stack of the caller")
++__success __retval(5)
++__naked void callee_reads(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	"r0 = 5;"
++	"*(u64 *)(r10 - 8) = r0;"
++	"r1 = r10;"
++	"r1 += -8;"
++	"call reads_through_cast;"
++	"exit;"
++	:
++	: __imm_addr(arena)
++	: __clobber_all);
++}
++
 +/*
-+ * There are no address spaces in Rust. The compiler doesn't cast a pointer that
-+ * comes from the kernel. But it can't always tell, and then it casts the pointer
-+ * to as(0) before the access, like an address in arena.
-+ * A pointer that the verifier knows is in as(0) already, so the cast is a move.
-+ * arg_track_xfer() does the same for pointers to stack.
++ * r7 = a number that static analysis of the stack takes for fp + off: fp-16 holds fp + off,
++ * a helper overwrites fp-16, and the analysis doesn't follow what helpers write.
 + */
-+static bool is_cast_mov(const struct bpf_insn *insn, const struct bpf_reg_state *src_reg)
-+{
-+	/* cast from as(1) to as(0) */
-+	if (insn->imm != 1)
-+		return false;
++#define STALE_SPILL_R7(off)				\
++	"r1 = r10;"					\
++	"r1 += " #off ";"				\
++	"*(u64 *)(r10 - 16) = r1;"			\
++	"r1 = r10;"					\
++	"r1 += -16;"					\
++	"r2 = 8;"					\
++	"call %[bpf_get_current_comm];"			\
++	"r7 = *(u64 *)(r10 - 16);"
 +
-+	switch (base_type(src_reg->type)) {
-+	case SCALAR_VALUE:
-+	case PTR_TO_ARENA:
-+		return false;
-+	default:
-+		return true;
-+	}
++#define SPILL_FP24_TO_FP8				\
++	"r1 = r10;"					\
++	"r1 += -24;"					\
++	"*(u64 *)(r10 - 8) = r1;"
++
++/*
++ * fp-24 counts 0, 1, ... 7 and it's the offset in the map value in r9. fp-8 holds &fp[-24],
++ * and the store through r8 changes the offset. When the analysis loses the pointer in fp-8,
++ * it doesn't see that store, and the verifier takes 0 ... 7 for all values of fp-24.
++ */
++#define LOOP_WRITES_FP24_THROUGH_FP8			\
++	"r8 = *(u64 *)(r10 - 8);"			\
++	"r1 = 0;"					\
++	"*(u64 *)(r10 - 24) = r1;"			\
++	"r6 = 0;"					\
++"1:"							\
++	"r1 = *(u64 *)(r10 - 24);"			\
++	"r2 = r9;"					\
++	"r2 += r1;"					\
++	"r0 = *(u8 *)(r2 + 0);"				\
++	"r1 += 1;"					\
++	"*(u64 *)(r10 - 24) = r1;"			\
++	"r3 = 4096;"					\
++	"*(u64 *)(r8 + 0) = r3;"			\
++	"r6 += 1;"					\
++	"if r6 < 8 goto 1b;"
++
++SEC("syscall")
++__description("arena cast: a store to arena doesn't replace what is spilled to the stack")
++__failure __msg("invalid access to map value, value_size=8 off=4096 size=1")
++__naked void stale_spill_store(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	UPDATE_AND_LOOKUP
++	"if r0 == 0 goto 2f;"
++	"r9 = r0;"
++	STALE_SPILL_R7(-8)
++	".8byte %[cast_r7_r7];"
++	SPILL_FP24_TO_FP8
++	/* to arena, not to fp-8 */
++	"r0 = 0;"
++	"*(u64 *)(r7 + 0) = r0;"
++	LOOP_WRITES_FP24_THROUGH_FP8
++"2:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_addr(hash),
++	  __imm(bpf_map_update_elem),
++	  __imm(bpf_map_lookup_elem),
++	  __imm(bpf_get_current_comm),
++	  __imm_insn(cast_r7_r7, CAST_KERN(BPF_REG_7, BPF_REG_7))
++	: __clobber_all);
 +}
 +
-+static int check_addr_space_cast(struct bpf_verifier_env *env, struct bpf_insn *insn,
-+				 struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg)
++/* fp+0 is what the analysis adds to fp-N to say "or not a pointer to stack" */
++SEC("syscall")
++__description("arena cast: a store to arena doesn't replace what is spilled, stale r10")
++__failure __msg("invalid access to map value, value_size=8 off=4096 size=1")
++__naked void stale_spill_store_r10(void)
 +{
-+	struct bpf_insn_aux_data *aux = cur_aux(env);
-+
-+	if (is_cast_mov(insn, src_reg)) {
-+		aux->cast_mov = true;
-+		*dst_reg = *src_reg;
-+	} else {
-+		aux->cast_arena = true;
-+		mark_reg_unknown(env, cur_regs(env), insn->dst_reg);
-+		if (insn->imm == 1) /* cast from as(1) to as(0) */
-+			dst_reg->type = PTR_TO_ARENA;
-+	}
-+
-+	/* it's either wX = wY or rX = rY, see bpf_lower_cast_mov() */
-+	if (aux->cast_mov && aux->cast_arena) {
-+		verbose(env, "same addr_space_cast insn cannot be used with a number and with a pointer\n");
-+		return -EINVAL;
-+	}
-+	return 0;
++	asm volatile (
++	"r1 = %[arena] ll;"
++	UPDATE_AND_LOOKUP
++	"if r0 == 0 goto 2f;"
++	"r9 = r0;"
++	STALE_SPILL_R7(0)
++	".8byte %[cast_r7_r7];"
++	SPILL_FP24_TO_FP8
++	"r0 = 0;"
++	"*(u64 *)(r7 - 8) = r0;"
++	LOOP_WRITES_FP24_THROUGH_FP8
++"2:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_addr(hash),
++	  __imm(bpf_map_update_elem),
++	  __imm(bpf_map_lookup_elem),
++	  __imm(bpf_get_current_comm),
++	  __imm_insn(cast_r7_r7, CAST_KERN(BPF_REG_7, BPF_REG_7))
++	: __clobber_all);
 +}
 +
- /* check validity of 32-bit and 64-bit arithmetic operations */
- static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- {
-@@ -17896,9 +17941,9 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 			if (BPF_CLASS(insn->code) == BPF_ALU64) {
- 				if (insn->imm) {
- 					/* off == BPF_ADDR_SPACE_CAST */
--					mark_reg_unknown(env, regs, insn->dst_reg);
--					if (insn->imm == 1) /* cast from as(1) to as(0) */
--						dst_reg->type = PTR_TO_ARENA;
-+					err = check_addr_space_cast(env, insn, dst_reg, src_reg);
-+					if (err)
-+						return err;
- 				} else if (insn->off == 0) {
- 					/* case: R1 = R2
- 					 * copy register state to dest reg
-@@ -24122,6 +24167,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (ret == 0)
- 		ret = bpf_optimize_bpf_loop(env);
- 
-+	if (ret == 0)
-+		bpf_lower_cast_mov(env);
++/* compilers use a slot for two variables: a pointer to a local, then the buffer of a helper */
++SEC("syscall")
++__description("arena cast: a stack slot is live over a store to arena")
++__success
++__naked void stale_spill_live_slot(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	UPDATE_AND_LOOKUP
++	"if r0 == 0 goto 3f;"
++	"r9 = r0;"
++	"call %[bpf_get_prandom_u32];"
++	"r6 = r0;"
++	STALE_SPILL_R7(-8)
++	".8byte %[cast_r7_r7];"
++	"r1 = 0;"
++	"if r6 == 0 goto 1f;"
++	"r1 = 7;"
++"1:"
++	"*(u64 *)(r10 - 8) = r1;"
++	/* a place where what is not live is forgotten */
++	"if r6 == 1 goto +0;"
++	"r1 = 0;"
++	"*(u64 *)(r7 + 0) = r1;"
++	"r1 = *(u64 *)(r10 - 8);"
++	"r9 += r1;"
++	"r0 = *(u8 *)(r9 + 0);"
++"3:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_addr(hash),
++	  __imm(bpf_map_update_elem),
++	  __imm(bpf_map_lookup_elem),
++	  __imm(bpf_get_current_comm),
++	  __imm(bpf_get_prandom_u32),
++	  __imm_insn(cast_r7_r7, CAST_KERN(BPF_REG_7, BPF_REG_7))
++	: __clobber_all);
++}
 +
- 	if (is_priv) {
- 		if (ret == 0)
- 			bpf_opt_hard_wire_dead_code_branches(env);
++/* r1 is a number, r2 is &fp[-8] of the caller */
++static __naked __noinline __used long writes_arena_reads_stack(long a, long *p)
++{
++	asm volatile (
++	".8byte %[cast_r1_r1];"
++	"r0 = 0;"
++	"*(u64 *)(r1 + 0) = r0;"
++	"r0 = *(u64 *)(r2 + 0);"
++	"exit;"
++	:
++	: __imm_insn(cast_r1_r1, CAST_KERN(BPF_REG_1, BPF_REG_1))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: a stack slot of the caller is live over a store to arena in the callee")
++__success
++__naked void stale_spill_live_slot_of_caller(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	UPDATE_AND_LOOKUP
++	"if r0 == 0 goto 3f;"
++	"r9 = r0;"
++	"call %[bpf_get_prandom_u32];"
++	"r6 = r0;"
++	STALE_SPILL_R7(-8)
++	"r1 = 0;"
++	"if r6 == 0 goto 1f;"
++	"r1 = 7;"
++"1:"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r1 = r7;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"call writes_arena_reads_stack;"
++	"r9 += r0;"
++	"r0 = *(u8 *)(r9 + 0);"
++"3:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_addr(hash),
++	  __imm(bpf_map_update_elem),
++	  __imm(bpf_map_lookup_elem),
++	  __imm(bpf_get_current_comm),
++	  __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * A store through the result of the cast is a store to an unknown slot: each slot keeps what
++ * it had, or it has the new value. Static analysis must not make "it's fp+0" from
++ * "it's fp+0, or it's not a pointer to stack".
++ */
++SEC("syscall")
++__description("arena cast: a pointer to map value is stored over r10 through the cast")
++__failure __msg("invalid access to map value, value_size=8 off=4096 size=1")
++__naked void store_over_spilled_r10(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	UPDATE_AND_LOOKUP
++	"if r0 == 0 goto 2f;"
++	"r9 = r0;"
++	"*(u64 *)(r10 - 16) = r10;"
++	"r7 = r10;"
++	"r7 += -16;"
++	".8byte %[cast_r7_r7];"
++	"r1 = r9;"
++	"r1 += 8;"
++	"*(u64 *)(r7 + 0) = r1;"
++	/* it's the map value, not r10 */
++	"r7 = *(u64 *)(r10 - 16);"
++	SPILL_FP24_TO_FP8
++	"r0 = 0;"
++	"*(u64 *)(r7 - 8) = r0;"
++	LOOP_WRITES_FP24_THROUGH_FP8
++"2:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_addr(hash),
++	  __imm(bpf_map_update_elem),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_insn(cast_r7_r7, CAST_KERN(BPF_REG_7, BPF_REG_7))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena cast: r10 is stored to arena, a pointer to map value is in the stack")
++__failure __msg("invalid access to map value, value_size=8 off=4096 size=1")
++__naked void r10_stored_to_arena(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	UPDATE_AND_LOOKUP
++	"if r0 == 0 goto 2f;"
++	"r9 = r0;"
++	STALE_SPILL_R7(-8)
++	".8byte %[cast_r7_r7];"
++	"r1 = r9;"
++	"r1 += 8;"
++	"*(u64 *)(r10 - 32) = r1;"
++	/* to arena, not to fp-32 */
++	"*(u64 *)(r7 + 0) = r10;"
++	"r7 = *(u64 *)(r10 - 32);"
++	SPILL_FP24_TO_FP8
++	"r0 = 0;"
++	"*(u64 *)(r7 - 8) = r0;"
++	LOOP_WRITES_FP24_THROUGH_FP8
++"2:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_addr(hash),
++	  __imm(bpf_map_update_elem),
++	  __imm(bpf_map_lookup_elem),
++	  __imm(bpf_get_current_comm),
++	  __imm_insn(cast_r7_r7, CAST_KERN(BPF_REG_7, BPF_REG_7))
++	: __clobber_all);
++}
++
++static __naked __noinline __used long fills_through_cast(long *p, long v)
++{
++	asm volatile (
++	".8byte %[cast_r1_r1];"
++	"*(u64 *)(r1 + 0) = r2;"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_insn(cast_r1_r1, CAST_KERN(BPF_REG_1, BPF_REG_1))
++	: __clobber_all);
++}
++
++/* the callee writes to fp-16 only, the verifier still can count the loop */
++SEC("syscall")
++__description("arena cast: the callee writes to a local, the counter of the loop is in the stack")
++__success
++__naked void callee_writes_in_loop(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	"r1 = 0;"
++	"*(u64 *)(r10 - 8) = r1;"
++"1:"
++	"r1 = r10;"
++	"r1 += -16;"
++	"r2 = *(u64 *)(r10 - 8);"
++	"call fills_through_cast;"
++	"r1 = *(u64 *)(r10 - 8);"
++	"r1 += 1;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"if r1 < 1000000 goto 1b;"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena)
++	: __clobber_all);
++}
++
++SEC("tc")
++__description("arena cast: a number and a pointer at the same insn")
++__failure __msg("same addr_space_cast insn cannot be used with a number and with a pointer")
++__naked void number_and_pointer(void)
++{
++	asm volatile (
++	"r2 = %[arena] ll;"
++	"r6 = r1;"
++	"call %[bpf_get_prandom_u32];"
++	"if r0 == 0 goto 1f;"
++	"r6 = 4096;"
++"1:"
++	".8byte %[cast_r6_r6];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm(bpf_get_prandom_u32),
++	  __imm_insn(cast_r6_r6, CAST_KERN(BPF_REG_6, BPF_REG_6))
++	: __clobber_all);
++}
++
++SEC("tc")
++__description("arena cast: a pointer and a number at the same insn")
++__failure __msg("same addr_space_cast insn cannot be used with a number and with a pointer")
++__naked void pointer_and_number(void)
++{
++	asm volatile (
++	"r2 = %[arena] ll;"
++	"r6 = 4096;"
++	"r7 = r1;"
++	"call %[bpf_get_prandom_u32];"
++	"if r0 == 0 goto 1f;"
++	"r6 = r7;"
++"1:"
++	".8byte %[cast_r6_r6];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm(bpf_get_prandom_u32),
++	  __imm_insn(cast_r6_r6, CAST_KERN(BPF_REG_6, BPF_REG_6))
++	: __clobber_all);
++}
++
++SEC("tc")
++__description("arena cast: the cast to as(1) of a pointer is a number")
++__success __log_level(2)
++__msg("R6=scalar()")
++__naked void cast_user(void)
++{
++	asm volatile (
++	"r2 = %[arena] ll;"
++	".8byte %[cast_r6_r1];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_insn(cast_r6_r1, CAST_USER(BPF_REG_6, BPF_REG_1))
++	: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
