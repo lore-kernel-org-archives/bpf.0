@@ -1,54 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.23
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793523579;
-	b=RCCcY6fE+fYg2pVoYZ/xznGBUCHmEmHZe0PFiV1Eb6INDE90Pk0TyTiJeKE6JHNb2Mkv
-	 JBCp+SV/C+uvRbMo1xxgyFVF/uz/sOgDlobocdw4PSrSDd/zscrdWcUV0R/JvJZat+2zC
-	 cjnHGuDOesYP3Y+1TwjmXNtJmai1JroQOVyOZGi0a7YR5mREJEnIXV5u4KogGs2/cs77q
-	 e8+Bvb667vjWsya8+NsjGWKyq9xRowzM06IwQDPImu3yYIuPXvz4f6GrZ6WWUtQ8Xfq/L
-	 Ou3C+cnru9plQVaLnx9qI9coaWZfojjmWkOK0SxCw47SAXKLBpf2dsVRvFhm/9tBTBg==
+	t=1793525532;
+	b=souXFDdMs/OXy225xXish9rGM4Zlo9yWJHLuLUdK6PduleC97nr9maFa4YXPv4LnttRg
+	 4tDAoNVBauUMakRRStD89vys4INdh2prEFHkSVBvEk2aS7JPevE7nsSGwa35KRjt/6+6r
+	 AsP32GLUs1SkFyWDKtjQYYaRyLjEzn4ttsasr0+n3mWaIhahypQ6HHIpUmM0shxUpw+Pt
+	 i3jfrAwnkLl+KIRvy74P6fDFrs7FpNY7cRHNDrH1XPoc2XE99cILsroEKnB2sV+r+rsnd
+	 xmFx8yrUMBYAmBNvPIjn7St/1BxHXXiEb1D1LViXj/p/SKIiGNBtYLQgUbnGqmC56LA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793523579;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=4kxF/94wbk2i6i6EpQc2k4Yrf154N/75+q/upOz5nY4=;
-	b=hllDFUx083Hi3Oxe8bP3+h5AtNr0uHVYM7fvDMNcF/W7oXCcG17XrS0Px6lrDhJg/U6Q
-	 UuwTUJ88QGGzNy5vBiwjbjBIgOTLuOJqzeCjtfkGZV7GrHCXLGIuayzBRsgk04WA1zsBi
-	 dg0WkggtZOFqlF1snU3C7o14jSWy5C2AoPVZdl5Gm+CeWZFTmdhoFKTwFaQUtXj2iSjIp
-	 GzzAGtej3dJhwAgvAM41HPdxbghTwd78tf1IDxiXzpE4BpHeaQkjGwg+MpyIIZ6KGG1vC
-	 EAsnkTejgsmwLt5BA+McDaOXnrzPQ1G9j5oj09ynCNEhapjXPQQEzs5hUjsv1eWg/Sg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793525532;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=BfOppHSMHd40VVAofaOH1a1+TKTbbwvAtZJDZ0+ZsUM=;
+	b=AK8FrXhem0xXNJ38N788dba2V40YuRfKLnvyPnTT3dD7llBghZp3/KFbKSOyLSmpp14f
+	 Nnr365juKwW7dg8dsnuDTxPSNUhTJ7e0Iq42/nBOiggDhZhtx70NwV6VbKCVVz1E+C+sS
+	 VsJ9AxMUYEASH+BjDnKOVMLvAdtzqCSeTCM5FFnrN4qQV3oDMVuK9+QwNmAlQMfeEYzNz
+	 arYAvZGTjC88IWuMNqaJmvthWQw6PnBv+vopWsyS1LJo8tWSbdOpBH91pieB96ZFsm5Om
+	 mwKbRS9UyU1KIpXkRvXQ6JiKlnvh/Exx2k3+dU51Q3yJXCcB4Z34nsp7u5BORq1dSjg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=iaNAkeXr;
-	arc=none smtp.remote-ip=95.215.58.23
-Received: from mta1.migadu.com (out-23.mta1.migadu.com [95.215.58.23])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mG8ODZgs;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57747606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 08:59:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57747606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B77606A324;
+	Sun,  1 Nov 2026 09:32:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=iaNAkeXr
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=zJCLMv9oohgEU5GfF1c6n3tzdOi91gEiAjTsaLmb7pg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793523575; v=1; x=1794128375;
- b=iaNAkeXr8vinftj3+7HcK3/9YLM4DfZqFenKDNBGnqUU+p3IvJUaZJ9eGskMwK/19Di6NT9m
- KsD1xKFeixNvYBm/b/vwl+SKmKTgf/QPbyhLT5B2ENIHpEA5mkL9mlDTbVI196tIttV91qcGx7i
- j6HY0Ifky0Pj+j4sg4enqHFY=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 406eb5847f623d12;
-	Sun, 01 Nov 2026 08:59:35 +0000
-X-Mizu-Trace-ID: 406eb5847f623d12
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <455f7257-25b9-4070-8313-42af8005b948@linux.dev>
-Date: Sun, 1 Nov 2026 16:59:28 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mG8ODZgs
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 026801F000C1;
+	Sun,  1 Nov 2026 09:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793525531;
+	bh=BfOppHSMHd40VVAofaOH1a1+TKTbbwvAtZJDZ0+ZsUM=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=mG8ODZgsfE09gOUhcnav6h9O3t75df9ocm+xFngMd3fiWI49HTol93aCLvr+dMToe
+	 TRdncPb83nzQ9OCXzKVqRAgvaaf57+gj50phV4BtLGVfusRObTZb5jgFGJdcWZH9y3
+	 OQA/wyMAba+iB8ybq9mMul8kAH7wfLjI3ifgkysJGhm4Bhci6H+HoI3nYNbPIgNjpK
+	 tSBaWhpovUKX+dHgx3E7Y4CCJ/RqFSgYL/fXLc/lEwVEm06l8bpDMr/YZA3BAcQfKy
+	 o0TLobjI3GDoLoJh/PqUFqhCiOjKSBvVecC3VOse0q3E3T2rFuXFlPY6ZJBOvxyens
+	 2jodF3+g7FIxw==
+Subject: Re: [PATCH net] bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
+From: netdev-bot+sashiko@kernel.org
+To: jhs@mojatatu.com
+Cc: netdev@vger.kernel.org, edumazet@kernel.org, bpf@vger.kernel.org,
+ stable@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
+ dsahern@gmail.com, kafai@fb.com, martin.lau@linux.dev,
+ john.fastabend@gmail.com, sdf@fomichev.me, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ jiri@resnulli.us, victor@mojatatu.com
+Date: Sun, 01 Nov 2026 09:32:09 +0000
+Message-ID: <179352552950.3131.18338438529583349627@kernel.org>
+In-Reply-To:
+ <bpf_redirect_neigh_short_linear.v1.r0.20261028033717-1@mojatatu.com>
+References:
+ <bpf_redirect_neigh_short_linear.v1.r0.20261028033717-1@mojatatu.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,128 +69,179 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] libbpf: btf__raw_data() returns stale data after
- btf__relocate()
-To: =?UTF-8?B?5rSb?= <wanghai8081@gmail.com>, bpf@vger.kernel.org
-References: <CAPig4swEOLsU0K=Xskyh1p2nQALRfSojSW82g5LdsQd6nSetMA@mail.gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <CAPig4swEOLsU0K=Xskyh1p2nQALRfSojSW82g5LdsQd6nSetMA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-On 11/1/26 1:53 PM, 洛 wrote:
-> Hi,
->
-> I found a case where btf__raw_data() returns stale data after a
-> successful btf__relocate(). The type references in memory are updated,
-> but the serialized data still contains the old references.
->
-> I reproduced this with libbpf commit
-> 85c0d575a447651bbeb8e2376eacd64c30dce9a6 on Ubuntu 22.04, x86_64,
-> running kernel 6.8.0-138-generic.
->
-> The reproducer creates a split BTF with a pointer to an int in the
-> base BTF, then calls btf__raw_data() to populate the cache. It relocates
-> the split BTF to a new base where the int has a different type ID.
-> After relocation, the live pointer has the correct target, but
-> serializing and parsing it again gives the old target.
->
-> Save the following as repro_cache.c in the libbpf source root:
->
-> #include <assert.h>
-> #include <stdio.h>
-> #include "btf.h"
->
-> int main(void)
-> {
->      struct btf *old = btf__new_empty();
->      struct btf *target = btf__new_empty();
->      struct btf *split, *roundtrip;
->      const void *raw;
->      unsigned int size;
->      unsigned int live_id, serialized_id;
->
->      assert(old && target);
->      assert(btf__add_int(old, "int", 4, BTF_INT_SIGNED) == 1);
->      split = btf__new_empty_split(old);
->      assert(split && btf__add_ptr(split, 1) == 2);
->
->      /* Populate the serialization cache before relocation. */
->      assert(btf__raw_data(split, &size));
->
->      assert(btf__add_int(target, "padding", 4, BTF_INT_SIGNED) == 1);
->      assert(btf__add_int(target, "int", 4, BTF_INT_SIGNED) == 2);
->      assert(btf__relocate(split, target) == 0);
->
->      /* The pointer has ID 3 with the new base. */
->      live_id = btf__type_by_id(split, 3)->type;
->      raw = btf__raw_data(split, &size);
->      assert(raw);
->      roundtrip = btf__new_split(raw, size, target);
->      assert(roundtrip);
->      serialized_id = btf__type_by_id(roundtrip, 3)->type;
->
->      printf("live_target=%u serialized_target=%u expected=2\n",
->             live_id, serialized_id);
->
->      btf__free(roundtrip);
->      btf__free(split);
->      btf__free(old);
->      btf__free(target);
->      return live_id == 2 && serialized_id == 2 ? 0 : 1;
-> }
->
-> Build and run with GCC and the libelf/zlib development packages
-> installed:
->
->    make -C src -j2
->    gcc -g -O0 -UNDEBUG -Isrc -Iinclude -Iinclude/uapi \
->        repro_cache.c src/libbpf.a -lelf -lz -o repro_cache
->    ./repro_cache
->
-> No root privileges are needed. Keep assertions enabled, since some
-> API calls in this reproducer are inside assert().
->
-> Actual output, with exit status 1:
->
->    live_target=2 serialized_target=1 expected=2
->
-> Expected output, with exit status 0:
->
->    live_target=2 serialized_target=2 expected=2
->
-> In the new base, ID 1 is padding and ID 2 is int, so the serialized
-> pointer ends up referring to the wrong type.
->
-> It looks like btf_relocate() updates the types and string offsets
-> without invalidating the raw-data caches. A later btf__raw_data()
-> call then returns the cached data through btf_get_raw_data().
->
-> I tried calling btf_ensure_modifiable(btf), checking its return value,
-> and then calling btf_relocate() in btf__relocate(). With that change,
-> the reproducer produces the expected output. Checks for both
-> endianness caches, file round-trips, and repeated relocation also
-> pass with the change.
->
-> I also added a regression test to the Linux 6.8 BPF selftests. It
-> fails before the change and passes after it in both test_progs and
-> test_progs-no_alu32. The broader selftests run needed compatibility
-> adjustments for libbpf 1.8 and had other failures and skips, so I
-> don't have a clean full-suite pass.
->
-> Would btf_ensure_modifiable() in btf__relocate() be the right way to
-> handle this? I couldn't find an existing report; please point me
-> to it if this is already being discussed.
->
-> Thanks.
+Critical: 0 · High: 2 · Medium: 0 · Low: 0 (1)
 
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Thanks for the report. Yes, btf__relocate() misses invalidating the
-cached raw_data, and btf_ensure_modifiable() is the right fix, same
-as btf__permute() does. I can fix it.
+- [High] The new `skb->mac_len < ETH_HLEN` test in __bpf_redirect_neigh()
+  (net/core/filter.c:2439) breaks bpf_redirect_neigh() for locally…
+- [High] The same short-L2 skb from the commit message still hits the
+  __skb_pull() BUG if the program calls bpf_redirect() instead of…
 
-BTW, how did you run into this? Is there a real use case
-that calls btf__raw_data() before and after btf__relocate().
+Pre-existing issues:
+- [Low] Concern: after pulling the Ethernet header,
+  __bpf_redirect_neigh_v4()/__bpf_redirect_neigh_v6() read…
 
+--
+
+bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
+
+This patch adds a check to __bpf_redirect_neigh() that drops skbs whose
+mac_len is shorter than ETH_HLEN. It also calls pskb_may_pull() so the
+Ethernet header is linear before it is read and pulled. The goal is to
+avoid the __skb_pull() BUG that a TC program can trigger with
+bpf_skb_change_head(skb, 1, 0) after vlan pop_eth.
+
+Link: https://lore.kernel.org/netdev/20261027082604.1485903-1-edumazet@kernel.org/
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 70dc621672f2e..4d344ec097361 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -2432,10 +2432,14 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
+>  static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
+>  				struct bpf_nh_params *nh)
+>  {
+> -	struct ethhdr *ethh = eth_hdr(skb);
+> +	struct ethhdr *ethh;
+>  
+>  	if (unlikely(skb->mac_header >= skb->network_header))
+>  		goto out;
+> +	if (unlikely(skb->mac_len < ETH_HLEN ||
+> +		     !pskb_may_pull(skb, ETH_HLEN)))
+> +		goto out;
+
+[Severity: High]
+Can this check drop valid locally generated packets when
+bpf_redirect_neigh() is called from TC egress (clsact or tcx)?
+
+As far as I can tell, skb->mac_len is only set on the receive path, by
+skb_reset_mac_len() in __netif_receive_skb_core() and by a few BPF helpers.
+The transmit path never sets it. __dev_queue_xmit() only does:
+
+    skb_reset_mac_header(skb);
+
+The IPv4/IPv6 output, neighbour and eth code don't touch mac_len either.
+That means a locally created skb still has mac_len == 0 from allocation.
+Clones, such as TCP retransmit clones, inherit that 0 through C(mac_len) in
+__skb_clone().
+
+Such an skb has a valid 14 byte linear Ethernet header. With this patch it
+still takes the goto out path, gets freed, and -ENOTSUPP is returned. The
+return value is then ignored in sch_handle_egress():
+
+	case TC_ACT_REDIRECT:
+		/* No need to push/pop skb's mac_header here on egress! */
+		skb_do_redirect(skb);
+		*ret = NET_XMIT_SUCCESS;
+
+So the packet is dropped silently and the sender is told the transmit
+succeeded. Forwarded packets still pass the check because the RX path set
+mac_len to 14.
+
+Other TC code already avoids mac_len at egress. tcf_mirred_to_dev() does:
+
+		mac_len = at_ingress ? skb->mac_len :
+			  skb_network_offset(skb);
+
+and bpf_push_mac_rcsum() only reads mac_len when skb_at_tc_ingress() is
+true.
+
+skb->data == mac_header on both paths here. Would checking
+skb_network_offset(skb) < ETH_HLEN (or skb_mac_header_len(skb)) work
+instead? Another option is to use pskb_may_pull(skb, ETH_HLEN) together
+with the mac_header/network_header distance, and not use the cached
+mac_len at all.
+
+The existing selftests (test_tc_neigh*.c, test_tc_dtime.c) only call this
+helper from ingress, so they would not catch this.
+
+> +	ethh = eth_hdr(skb);
+>  	bpf_push_mac_rcsum(skb);
+>  	if (is_multicast_ether_addr(ethh->h_dest))
+>  		goto out;
+
+[Severity: High]
+Can the same short L2 header BUG still be hit through bpf_redirect()?
+
+__bpf_redirect_common() has the same weak check that the commit message
+calls insufficient:
+
+net/core/filter.c:__bpf_redirect_common() {
+	/* Verify that a link layer header is carried */
+	if (unlikely(skb->mac_header >= skb->network_header || skb->len == 0)) {
+		kfree_skb(skb);
+		return -ERANGE;
+	}
+	...
+}
+
+Take the skb from the commit message (mac_len == 1, one linear byte,
+skb->len >= 14). If the program calls bpf_redirect(ifindex, BPF_F_INGRESS)
+in place of bpf_redirect_neigh(), the path looks like this:
+
+skb_do_redirect()
+  __bpf_redirect()
+    __bpf_redirect_common()
+      __bpf_rx_skb()
+        dev_forward_skb_nomtu()
+          __dev_forward_skb2()
+            eth_type_trans()
+              eth_skb_pull_mac()
+                skb_pull_inline(skb, ETH_HLEN)
+                  __skb_pull()  -> BUG()
+
+____dev_forward_skb() only calls skb_orphan_frags() and
+__is_skb_forwardable(), and neither of those linearizes the skb. Without
+BPF_F_INGRESS, the egress path to lo or veth reaches eth_type_trans() in
+the driver's xmit routine the same way.
+
+If the linked series from Eric already covers __bpf_redirect_common() or
+eth_type_trans(), it would handle this case. In this tree, though, neither
+__bpf_redirect_common() nor eth_skb_pull_mac() has such a guard.
+
+Should __bpf_redirect_common() get the same pskb_may_pull(skb, ETH_HLEN)
+check?
+
+[Severity: Low]
+This is a pre-existing issue and was not introduced by this patch. After
+the Ethernet pull, __bpf_redirect_neigh() dispatches on skb->protocol
+without checking how much data is left:
+
+	if (skb->protocol == htons(ETH_P_IP))
+		return __bpf_redirect_neigh_v4(skb, dev, nh);
+	else if (skb->protocol == htons(ETH_P_IPV6))
+		return __bpf_redirect_neigh_v6(skb, dev, nh);
+
+__bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6() then read header
+fields to build the flow key, without pskb_may_pull(skb,
+sizeof(struct iphdr)) or the ipv6hdr equivalent:
+
+net/core/filter.c:__bpf_redirect_neigh_v4() {
+	const struct iphdr *ip4h = ip_hdr(skb);
+	...
+		.flowi4_proto = ip4h->protocol,
+		.daddr	      = ip4h->daddr,
+		.saddr	      = ip4h->saddr,
+	...
+}
+
+If a program trims the skb down to only the L2 header, or the L3 header
+sits in frags, can these reads go past skb->tail?
+
+The reads appear to stay inside the head allocation (tailroom plus
+skb_shared_info). So the result would be a garbage route/neighbour lookup,
+not a memory safety problem.
+
+Would it make sense to add an L3 pskb_may_pull() while hardening this path?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/bpf_redirect_neigh_short_linear.v1.r0.20261028033717-1%40mojatatu.com
