@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793560076;
-	b=cy62hTO7dnzf2TXk8GuSRo9tKzW8d8LJtPb6CORTMDKzSGno/zyHhSZyitVZ+mNu1pBQ
-	 4JiQfQrQH8RMtbc80pqH4UfhioWiHsOFz3G4vLBUutawz/cOfzMpFmxFmI39uVLndjIV2
-	 tcli11fyhUEnsfiM2OgSMEctBOijNoJN0615lpe16om+z0Tl0Qqx9rWfxO+hplSuPUFDB
-	 U+eu9iHQIMxCLowYBcnUJcexiZgbOtJW/4LphQiicn862MaZVR27C8kEwXs3m7/DPVDMo
-	 FZlxjwBw/yuLFclHFXyL5E/zw4FY3RX2Q8SDnijNgcWFnoLma69HgkphhsVWcDVAdfA==
+	t=1793560081;
+	b=VWPnK0kkB+UIuFipEGqTANSR6eiLPu8aY9BvxPLWmWqFzgPxJl+2rQepnPmTLgWg+hdD
+	 bJY9qF7Myq3b1B+/zu/8OvH7PqrrVccGo3YsqD1sQJeRPEVPbY8/L4eYC4uxUq/5wlgiU
+	 YYKbybuqGyTYsQxVKSH294C5FiRREjjrY2pmx/m+rhQ9TdPPfr2MtLaKhWc2ZpVa88Rsv
+	 1QtrSaWGHfEb1gmwjaz4qUCyhuh5GhdsLKVnxJGmFOJ4QarU/dMhMpoPuOUhwEWQfcwE+
+	 B8GF1Gf1AnQDCwH2G8CWeLHkhDXDDw1GPfGrODjihayGluV8oTZJW5QgTBKltfS5rew==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793560076;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793560081;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=G17/r5+gfb0brPfboLGHK3O5BHFPdOD4rw96BSh3q40=;
-	b=Hon3ZilipsiMNDA2xtuG8VNh+rqYWu1ibuSZ5vmVJLc85/DRUodHuO/g99x8WgOEzgqB
-	 kdZAoS6/eXImj8CLLMBMTSwDOyD1qAIg58rqg+cECqTQ7jBeQgQKVU4CRjVkpGU9or59N
-	 Lif67SHuWuy9I/x7grVxgRVmUKjjHPJIJK1o+kP4NHS2seCrMYLQt4zQYmq99WdWP4Lf6
-	 e8d8XjXb8s8+DMMbmBH0orw5nc+x0QzCjE6z3JgbOMZQRb+YziGNhpIjugtqyKVJuYUi7
-	 qFDslh758sL+9QArr2ZIDZsNRsVdxm9X/oxh1Hdnphy2lCGG+WZDEnAATy6X5imuE6w==
+	bh=+UOxuYBMkJ+wSapEqQUvRP4XzP1iFenzIi9awHoYZ+8=;
+	b=REfPpjpw+H+oJTF1D0+F45RU33qLYZvFn1qZKfiOR+4B6qers0Tm4Q5Oa36BvDvuit9c
+	 1kthG/vrtr/Ki1FPygGho9QKUW95VtQicZx5TO7UxlPYBnLgTG0h7rFyXsZwNq7t2ktwV
+	 sNtqlKxgBLswxSSLjZsRpjb78oC61zWwH22B57ZyoYMp7og6OmHH+/NZOQI6bSIbZ1s5j
+	 UfoGRQFd36snNYQKev8n2EX+nKabAdt92Mf00/qbV0fSiDUf3bx7t8O7N3BsmweR5dbW6
+	 oD9uiGN5to3VZlE8BuFeCEMPA8t1mpBFOyEY2Xhx91MUHA4trW1wpClmohN7Tt7JRJg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yRZKZ1ib;
-	arc=none smtp.remote-ip=209.85.215.178
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TSWOPSbd;
+	arc=none smtp.remote-ip=209.85.214.174
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7BFD606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:07:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A7BFD606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83447606A326
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:08:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 83447606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yRZKZ1ib
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cdadf7e248aso762062a12.3
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:07:55 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TSWOPSbd
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e9eb579c0eso11531945ad.3
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:08:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793560075; x=1794164875; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793560081; x=1794164881; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=G17/r5+gfb0brPfboLGHK3O5BHFPdOD4rw96BSh3q40=;
-        b=yRZKZ1ib2kye8ldNVcU1Y7qUkP/Uz+LnTEF1hJ6tzrY3oOiqYuMn1pgHS9ZOfXs4UF
-         NZ8FmtJCuIOhRkvL0jSkMu/jrpVb53jztWcT5ydrrkYaUzO5rrnuV2eD/RNZ/Vhc6tsj
-         n02iZLLUAJ/fkMgPcO0RrFSGD4Xjp90outg5OBUy8HCH87JlDG+TFFYcrUqi1gEkwjNp
-         OTwrPNWgpoQ3rbJ6DZmJI9qAP4zyqCEfH2iceWOieSNUuqjhm98YX6tR7R41BJgRk0DK
-         0uW0cIQiEzEK1GccyTRfN09rSrHnNyLEPgC7IPCvX+cSzehhnF16GnvxHgpVNsm0qol4
-         OLtQ==
+        bh=+UOxuYBMkJ+wSapEqQUvRP4XzP1iFenzIi9awHoYZ+8=;
+        b=TSWOPSbdw943B4xveMHSrS2H9Njgfua8KGoIZ4pFwaKbeL3qRuopZli7lLGKs+zscr
+         AfRv//IAqKonjlPtuq2hr9OJLgAO+u5GWIuL8fhLyEoht2jXe06FzhU2ciK2BI0ifchT
+         Su7i5kj7y9lJAXqhRiux5JMNbgAHltxseWkTva7x9k5mP3wbHI7FMVkgJwgOepRS+RAq
+         ZhUbHVBTEdeXyCvoai4HBZbKjJBuQuGrrAtcoabaLVt0kJlvgmmnUanMmzIc6PBUeSak
+         R33OcXvBfxl8WxM6IkXEHUGzTO+MXd0Dd0FIlWbdnDPjk9SpGZ9TcvKy+/gTD78I+lCc
+         oDLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793560075; x=1794164875;
+        d=1e100.net; s=20260707; t=1793560081; x=1794164881;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=G17/r5+gfb0brPfboLGHK3O5BHFPdOD4rw96BSh3q40=;
-        b=v2ILDvdaNg6SCU6jwTLNUzzuJLOoHm452TFmueVDOTdKmo9QfazAxKQETdZB2hwUfG
-         taDs5zwyS7maYGI1sLq+rTLbvKel4e6I6o8OpFBCfrMKjSH44yVans6Ry+yL7JNZFs5C
-         lpoYM4EZTRp/NFeZ9jkZCJYT2oyYWrR5U6lWKWN62M+f3m6EkiiW8JkFs/f/cJy9UD5i
-         3RzkB8RqUGYy0pqDCc0FAJfhioP+ws7WnGylhhrPdOctRLWb8Fy6oKwjNjeFpGg+qcLi
-         oGO4vokFmHwWU6aQd6hfcdpidgAEZkr11QJUTzbDUUhZgzaY8B94SNejM77+oCvjb2Nf
-         x8Zw==
-X-Gm-Message-State: AFq9FYI1BnwTwPjElILzVBng8aroyma6LYbH3Kkr0+HYuavzz9kVt/su
-	vXDDbWEc8ZorHGjQc+KsBQXHCPO2c1mwGExq1JyBL+vJVnLvc3/Q77X9ug8eOg==
-X-Gm-Gg: AYBFou0sPCXYXmApXid6I2NpTzioycZzXR9/fKSbqZ0JagoC0BcqlTunzK+0yUwHp1W
-	0msxMXDv5nJ/bsIjnBwmS2/12o4E/CmlkK8Np0uhp2gl2FUmVsCNnFwzyFxjHGmvB2USscmRI1t
-	ziXqk2PvIvO1q4ZqUMSJkM7+WvfB3mxiFI8ZxyGz+uaxl5RN5YRzPprfi7x4QYlrZ1Ko1KiNgSI
-	a3rKE3Ep/Vl0gakp02jDQFWgFRsC27KSbfeTQ0bDQfKvXVwuswUMnBL/tn4sMkhqdN10e2Wllca
-	4rjGmXnhjXUGC3DSovI9PDLh/tvAUxQO4+ZjyrpyWVIO1elEKXFOpTD0X0whukAceAlVLa4fDPK
-	NaexHq/fa3bM3Vz1slaYZTova2z6gDKn3L/PRXM/C60APo6ndt2demWc24vhB28OAFBDdJ4ezvq
-	lyZDng0rnNsDdU1lYmiGHlJAGWdl2re4f+drBMWKzZ083S4mwcdq67EI/J4pyHiAW//B2QZRdks
-	OZbv7V6zFK8Q9YWp7JEvF09fjUcSMgzHFaVo2F6w/VMdJqI5KhDyS8FU8Uzifbae5AEo+vmoa7i
-	g4M8vb1Z7Mo8yp2vmaNuR5TMXsAJwW25jXiysUWPV4jdrAk47v8le2NN2X062dhcyxSTckb+F21
-	nx8gQrmv0noFSr2IMcxAllq/2atA2pPwGIPNfsjWRoE1jIOEROiUrGI9XpoJPAGappqyYSqxxKw
+        bh=+UOxuYBMkJ+wSapEqQUvRP4XzP1iFenzIi9awHoYZ+8=;
+        b=a9GQxb0sfQJSC42aSb+o36cx9tiFJP0Sko1jDaTbnA3hJdB1MGYthnM21hqUnxF8Hx
+         Lqa5Wltnf0XFd4XcJDQB5DhfyMu+cPkvYrkpgdXMCwHN/mfIVf1pQJPH1PsYPHJYAjjU
+         AWznTG7gjBHstpMS2OPSoUmwBeafh9w/9OO4Tlt1JlF9pqxZIFTA62HNymuD7UlgpFPu
+         3dCMV6fPf5mdABwWmuJS9N1LraEAvDObGZXwQrWlyn91puUXoW9/MatqM5yAi/Iiq0NG
+         JmYqaLqbANkhjrxaOCqltQahGLEsgnZeh4OGTKRYwQ19BddxLtsmgA19ViXJg0rSMmO/
+         WzVQ==
+X-Gm-Message-State: APuU4Z9iEuP1UQBXee2I69kB4nSNXi/ousdJg6HXHJgTcippaE6QYRmV
+	6DxPYWs0RlcaetUFFNKdOruY2hlZoamkbssNBAj7CD99MDV1rrTVNkcT0CuulQ==
+X-Gm-Gg: AYBFou2T/tijDjspgLvN20KONZrSpAzMN3Yo/gnqIW9UFOVBLRql5m1PB4KGryZAqTd
+	DVeECSqdeSn1ioGPY9CB7zOKHk5boFXAsvuXnL46L03SEWcOhsLDTH6BW+qIOms0m2aTwAgq69K
+	4gZOrZZ0Efj8Y2tP5Zq7VlCsB1OsRFou0XTw8L7DYJvC0c2BuaktrpHTxk7w2RK1npwVTXsc5rf
+	oOeTv3tzA/kJnuw9H2GDeMLrVH+emaTy3dKcJ0yYLiTsCEv5eN8ib+TSlf+35guyLKbADdsLwyY
+	MuELH7hvzoyOLQsxCiuGkfG8vezNUE8LbTh+JcPqVTzxxy4LyBhRf1fwIwCof15r7vSTeCpsZF2
+	w0G/1mS77QEIYivXkqvTWt78fWGIMtgqj6k9OmZSQIUT7fg7w+dAv2YMPM1tG2PkO77anQrY+We
+	N0FPpAun4/7grc/Vl+PlhMYdcF0WqUdd95zilImzEVcWGWNTAw6Qjk2Vxix9YC1PjZp/NbAu+ra
+	lBKCELEm4GhFTo9raMLmAOg9/VLw3z6DJg9eALnnpgzCoeW687yK71eOKTBEzsmdT/V6ZvYW4wL
+	v4nKY+2BJ5pHHHeURRrfBBPz18lAgJpyyVt1/r/XVhGIxR62ShX4xKdOffKG+4yobdX99ko7Fgz
+	tWZpjEFUkN8Y/Z8bOCtros2ImaEeCzab/sWRz/cwY3fKlZ3OHFhHLNUtOxwjgIOhpqJrNWTvbGA
 	==
-X-Received: by 2002:a05:6a21:4d8c:b0:3e2:a935:8bc4 with SMTP id adf61e73a8af0-3e928df1650mr6611815637.13.1793560074914;
-        Sun, 01 Nov 2026 11:07:54 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb096fcf15sm2172533a12.18.2026.11.01.11.07.54
+X-Received: by 2002:a17:90a:ec8e:b0:3ac:9599:a689 with SMTP id 98e67ed59e1d1-3ae897d5fc0mr5554678a91.34.1793560080773;
+        Sun, 01 Nov 2026 11:08:00 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae87ee7765sm6826287a91.2.2026.11.01.11.08.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:07:54 -0800 (PST)
+        Sun, 01 Nov 2026 11:08:00 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -87,9 +87,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf 23/27] bpf: Require BPF_LWT_REROUTE when an lwt_in prog changes the protocol
-Date: Sun,  1 Nov 2026 19:05:31 +0000
-Message-ID: <20261101190535.1454146-24-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 24/27] bpf: Don't let lwt_in progs call into IPv6 when it is disabled
+Date: Sun,  1 Nov 2026 19:05:32 +0000
+Message-ID: <20261101190535.1454146-25-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
 References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
@@ -106,51 +106,57 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-When an lwt_in prog returns BPF_OK, bpf_input() calls orig_input(), the
-input handler of the route. This handler is for one IP version and needs a
-dst of the same family. But BPF_LWT_ENCAP_IP lets the prog push a header of
-the other IP version and thus change skb->protocol. Then the handler reads
-and changes a header of the other IP version. The push of an SRH also
-replaces the dst, because seg6_lookup_nexthop() puts an rt6_info into the
-skb. Then ip_forward() uses the rt6_info as a struct rtable.
+With ipv6.disable=1, inet6_init() returns before it registers any pernet
+subsystem. Thus net->ipv6.devconf_all and net->ipv6.seg6_data stay NULL.
+IS_ENABLED(CONFIG_IPV6) only says that the code is built in.
+bpf_lwt_input_reroute() and bpf_push_seg6_encap() call into IPv6, but do
+not test ipv6_mod_enabled(). An lwt_in prog also runs with ipv6.disable=1,
+and skb->protocol == htons(ETH_P_IPV6) does not prove that IPv6 is enabled.
+Thus the kernel dereferences NULL and crashes.
 
-Drop the skb with -EINVAL when skb->protocol changes, as bpf_xmit() does.
-Drop it also when the family of the dst changes, because skb->protocol does
-not always show this change. Today no such skb leaves as the prog made it.
-A prog works as before if it returns BPF_LWT_REROUTE, or if it pushes an
-SRH on an IPv6 route.
+Return -EAFNOSUPPORT before these calls if ipv6_mod_enabled() is false.
+BPF_LWT_REROUTE then drops an IPv6 skb. With IPv6 enabled nothing changes.
 
-The commit in the first Fixes tag lets a prog change skb->protocol. The
-commit in the second tag adds the check to bpf_xmit() only.
+The first Fixes tag is for bpf_push_seg6_encap(), which never had this
+test. The second tag is for bpf_lwt_input_reroute(). Until that commit it
+used ipv6_stub, which returned -EAFNOSUPPORT with ipv6.disable=1.
 
-Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
-Fixes: 3bd0b15281af ("bpf: add handling of BPF_LWT_REROUTE to lwt_bpf.c")
+Fixes: fe94cc290f53 ("bpf: Add IPv6 Segment Routing helpers")
+Fixes: ad84b1eefe28 ("bpf: remove ipv6_bpf_stub completely and use direct function calls")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/lwt_bpf.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ net/core/filter.c  | 4 ++++
+ net/core/lwt_bpf.c | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 482f8132d9ca..08168ea381c2 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6924,6 +6924,10 @@ static int bpf_push_seg6_encap(struct sk_buff *skb, u32 type, void *hdr, u32 len
+ 	int err;
+ 	struct ipv6_sr_hdr *srh = (struct ipv6_sr_hdr *)hdr;
+ 
++	/* With ipv6.disable=1 the netns has no seg6 data and no IPv6 tables. */
++	if (!ipv6_mod_enabled())
++		return -EAFNOSUPPORT;
++
+ 	if (!seg6_validate_srh(srh, len, false))
+ 		return -EINVAL;
+ 
 diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index 3a946e8709b1..60f4eda7dae9 100644
+index 60f4eda7dae9..774fad4e9fbf 100644
 --- a/net/core/lwt_bpf.c
 +++ b/net/core/lwt_bpf.c
-@@ -165,6 +165,16 @@ static int bpf_input(struct sk_buff *skb)
- 			bpf_lwt_reset_cb(skb, proto);
- 		if (ret == BPF_LWT_REROUTE)
- 			return bpf_lwt_input_reroute(skb);
-+		/*
-+		 * orig_input() is for the old protocol only, see bpf_xmit().
-+		 * It also needs a dst of the old family. BPF_LWT_ENCAP_SEG6
-+		 * puts an IPv6 dst into the skb.
-+		 */
-+		if (skb->protocol != proto ||
-+		    skb_dst(skb)->ops->family != dst->ops->family) {
-+			kfree_skb(skb);
-+			return -EINVAL;
-+		}
- 	}
- 
- 	if (unlikely(!dst->lwtstate->orig_input)) {
+@@ -128,7 +128,7 @@ static int bpf_lwt_input_reroute(struct sk_buff *skb)
+ 		dev_put(dev);
+ 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
+ 		skb_dst_drop(skb);
+-		if (IS_ENABLED(CONFIG_IPV6)) {
++		if (ipv6_mod_enabled()) {
+ 			ip6_route_input(skb);
+ 			err = skb_dst(skb)->error;
+ 		} else {
 -- 
 2.55.0
 
