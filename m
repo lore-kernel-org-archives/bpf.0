@@ -1,105 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793494990;
-	b=1rOXp7u1Epo180HEq+jFhvHyWCedkHu03+ZDnOfNoXKJxTHutX2yv3UpaUK1ly3xmTFn
-	 IwcbZHUsbCUH09TK9fd3oXkmq8B5dZnwiilFb7wfwIV1xwZ+MJaZ1FKVvUFqAZc7HgYnN
-	 SiTjnIi2qwA1Lmv4xAZNsej1pWTaDtuvAbjBObbPCzCIeMto0dZUs8az11hAYB9JVEBkm
-	 Kl9eXDWhjTyvEboJSqT4ae2fwzSmH2L4iTZimrZwo2ZXGjH6kv5GiKozuu93KR56bDBFE
-	 VpOiK7XIvp7A95SUvKIpcVxPaXBEq+Cnt61HXn9VZPPeoRk4G4qcVDGQn+ZH3YLLOHw==
+	t=1793495043;
+	b=eF1OQu9VPTR35Ch3Jmd5jSKSBOtHpp2aeA05a97lTelHGjmGULnnq4Ayw4JgCtdxJXSF
+	 v8B7A15sJ/hH9b8ZYuWmnSD8AJ/vfcVTUBkNTiCkoYw1TbAysfFkNJj+J0700TqUJjoyZ
+	 SDhi1Dwc4XS6R+etfFtwjy4oVDAhe6khJfJ01DQiJSgFmFX4BGbidSj/i5wqlNUfaVj10
+	 CgQmCmR+Z0Z2Q7SAssPV/DTrWxK7agTWcZo+dZknfR23l4V0aVQXKRAmD9bPRAk9/kqAj
+	 s/28O5zfR2SBfOVOv7DZ/eXQYJluz13P4un/UvWKEGEWSN6BqLmrz3NmiunCBsc/hdw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793494990;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=/U+dm6O7ibLuqp1u5mfZ05KhbMMiFWjnF5fZVcet2uE=;
-	b=QXqPqcC56EeHrmAAY1NLNfQtz5WxeTTbMb7zHrhcJwyUFxdaFiAXZr1A+SwoNnBs70Hl
-	 uTzveD/OVyKaVSb2rM5JjRcgBWb00hpf+IG3jTaQ+9I7T1viTn03NW2kgVS7Pls0S9Jrj
-	 MBNia7K6pdLpUMXsKmOWOeoQtioFjGFEzaEGSFP+e5hmNaITnSc93hFts7zyi6sUlFfKg
-	 t84KHyPJI4g7Np1pkuQ8Ju3GaOwT1U2RlI6eKpUOLTCUWH+wCecZ7/8uTzHxdJrag9yHA
-	 SUy4nMfKehdXW8gjluIMwTxdCTu6sFTcb+uzXKIyvtHN16xEnnxM/6QXChkaH7rc/bg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793495043;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=VYTTSTczGEfRjwG36VgyHOdbxUJfLIKC4RqA43YT4FI=;
+	b=T3+wrxOpIOhth9kdgbIyz4fMgAVM/5v0Gn+NgFXOnrCXJhUzZy97CQD5hj4C5eMib9EB
+	 0ZNr85b4nbrb842MS0ehSgN8CK8yQMQKdVOuAj1dWDirHRA2l/jQGOkjmapuqQzgNhzX2
+	 DO3m76TcVSUS5oWCJjuVXy5gUKE9NCkb9rOM670iu3RAL4wZbNKfsFSm6vEmHeepDENNF
+	 Oy677l0PbYQwHvlB97why0rNFSSZpfSOmBVvNifKYemDZDO4pgBck1GUv5fAO0F2Gi5JV
+	 kGnGVJG3rFm0M9jhB5Y7C9w50XwcACy0LrhWZnP5NeVkH8bLtkqNq5BJL9yxNhvAxIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e80VcSTP;
-	arc=none smtp.remote-ip=209.85.216.49
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dMaUfqfF;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186E0606A31C
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 01:03:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 186E0606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A277606A31A;
+	Sun,  1 Nov 2026 01:04:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e80VcSTP
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3ac78f4c10bso850715a91.1
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 18:03:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793494989; x=1794099789; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=/U+dm6O7ibLuqp1u5mfZ05KhbMMiFWjnF5fZVcet2uE=;
-        b=e80VcSTPEtt+Rqb+MVQ7zyTHE1DjqfAfg4HaJ1qxZqT47NXqiL0RJkcrMzTz7Jgw2q
-         BNgkv1CdagEzyEPK9CqJ3ElM6tP4DsQGcuQN9c5U+5/rElou5PiS0yMPgA+csE0rLTrS
-         RRf7Lj6ZW3STr8rwnVdX0snKtXHEC6K260p8EhcOijSK5hOLpVkfSJjm98tpv5UtgdF6
-         u7oIy2ErClch2aW+dXVQrAan3ZSNhGsO/4iU9QU944mQr38Kgktm8k/X0n51TyeQXjWN
-         iIuJJ2uHNYdOT4SC6ODalg6slpVi5JFxDnEfmx7LtADgEaHhLxR6TWzXfJP4/RPxbg9R
-         rkow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793494989; x=1794099789;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/U+dm6O7ibLuqp1u5mfZ05KhbMMiFWjnF5fZVcet2uE=;
-        b=1aBpMI41Ngc5OOpd8H11lYah4k/u1Ao14zp+/f+LuN/QIezZVteuIulOUl2dgA2ZdX
-         8i2BqmOZv/gH4U6OW/rOBUcdcs/UobZ6oOCzrkgU1Fx3OFEw/seldWkhgAJyMNvVG/Zi
-         YTAuFEmhdEY/l4mmfn4ijsQSZO8kYu3nBdD4GQHgDR8nuWUuEbqfRJEA5og34kiRD1n0
-         iS5ykOK0PMuW0RYFmuKoytZD/jc7YeqpJiLxuL2p9VorEJiQeqt5WBlPrT9xhrJdfgdy
-         cym0pYYncR6XsXJDkj2ZFM4YePBHhJbur36F15n98K/RS/vvvA/iCFPuO0SDv1Sy6BZB
-         7adA==
-X-Forwarded-Encrypted: i=1; AKwUvByAxILxZ7i+bZ0oseIGQKAWB5v3uEG9yzj5OHBt3u1FufNZNWsNYxZy/A7pJLj+0ooJ7mM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8mGyCHdXyrPhzA9BCluH7+dq5OvLTXKLbBdWXhy00a1t07q7dZ
-	mD/IP5VlsilPhTXCjsv4SA8ebG+HZ1WJjtLmbTwZD0WJRIqt/oJOoS9J
-X-Gm-Gg: AYBFou21vh/7G2W5zwN5q5Gr4DFsRrQ0Qqi2T8mVYyCccGseSjL/oJWye6t2oJgZQtO
-	Uh7201BbnZ9Z5PghD9GKE6ir5wNhSCnDBqUI/K8cMrHibpOXBEDzN7lsFwwwl2fHV5xBEkJga6M
-	K1fP1aEmIvSqYVA5HzoAuaWoqcaczrPE4Ga6pFh9Hq448cCdVS4EDWbZe7Rd+UF13q6Op5gHU6Z
-	4+tOCfizLVrJ3p5jFr1B3wXwzXux1GJrmMCT+Hx7Sq+kclZCVi0w0SSORV77fOxBmZKMBc5Fkhb
-	T2dEwFI7/Mp7N3MqxIgehhtzq+GL/EuxxtP+dxuFc6FHGhh15CzDbDgfoZzPe/EniSE4o+C/2TF
-	XgLrpceFQBXZDCympOxc2DQt8F+CW0AsE/CbXFint0YHKGMQi1dB2UPNZVU0MMRkIVR1sr51swr
-	Dy9Vzd4fFVZZnbB3vF1rXBx7feAZ18dnL4UaxNXVjziB1ptRdZZ+byhmmMbg6R6p5l6syZ5Ovrl
-	kdEV7iYdot1FTPQJY1du/cQBsPC0Iisr9eZmVsKeHlBWFGmeHuae9sXl/eHKaE/KyYQ60RqRgWT
-	44w7+EU03XR+aWQqXRyU3kFFXK4mwhiyZXG88s2xLz92oOVPjNXf/7PgTZFXPW/oKdGwsFZWnR0
-	YSweCG/xYEzodYl2TGbmxHI3w4aE61f2sErXcGS6wAEVdEeKaT9y0n4Y=
-X-Received: by 2002:a17:90b:17cb:b0:3ac:9ed8:f309 with SMTP id 98e67ed59e1d1-3ae89736030mr5688613a91.29.1793494989295;
-        Sat, 31 Oct 2026 18:03:09 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e98afe3sm13151497a91.12.2026.10.31.18.03.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Oct 2026 18:03:08 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 01 Nov 2026 01:03:08 +0000
-Message-Id: <DMJGWV96Y5SV.33OTYFHFZQ1WT@gmail.com>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Ihor Solodrai" <ihor.solodrai@linux.dev>, <david.dai@linux.dev>, "Gavin
- Guo" <gavinguo@igalia.com>, <bpf@vger.kernel.org>,
- <sched-ext@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <kernel-dev@igalia.com>
-Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: libarena: Cache the
- rbtree's leftmost node and count
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Changwoo Min" <changwoo@igalia.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Shuah Khan" <shuah@kernel.org>, "Emil Tsalapatis"
- <emil@etsalapatis.com>
-In-Reply-To: <20261028060046.549097-3-changwoo@igalia.com>
-References: <20261028060046.549097-1-changwoo@igalia.com> <20261028060046.549097-3-changwoo@igalia.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dMaUfqfF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CCF61F000C1;
+	Sun,  1 Nov 2026 01:04:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793495042;
+	bh=VYTTSTczGEfRjwG36VgyHOdbxUJfLIKC4RqA43YT4FI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=dMaUfqfFCmP2M/5asa9VfGfocDpvlcu6SRHwzVzXC/BL3wHIIK9hgIYeXm3GJDlbs
+	 c0K9bYDs8skteMMZqjB2cdoaVGNOUxRIjTXG1syF3zZkjwZTV4HaPQ6zslX/CmdJHW
+	 AJA9AkEhlxfRVwznhCnU4GgFT8zLcccntfgH0CFE0zdZNMjoZaZxTHHVAW8ydsMq4V
+	 Kb2WLbEN2wbuPO09oS26AsJzF5r9RtsmfiTMPobH9QBcUU1T1PR3Cstk1/BLgnkruE
+	 LKlyULpBXK7nNBvRkGEkZFZb1QOBWT+rDnc+QlnFqPSJ9aGAzyMondqeZri+E3VGr7
+	 sm3ZllZ4g44JA==
+Message-ID: <09db4d22-2836-4656-8c6a-a7e5377710fb@kernel.org>
+Date: Sat, 31 Oct 2026 18:04:01 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,63 +51,106 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] ARC: Strip libgcc debug information when generating BTF
+To: Sasha Levin <sashal@kernel.org>, Vineet Gupta <vgupta@kernel.org>,
+ linux-snps-arc@lists.infradead.org
+Cc: Andrii Nakryiko <andrii@kernel.org>, Ilya Leoshkevich
+ <iii@linux.ibm.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Arnd Bergmann <arnd@arndb.de>
+References: <20261015154044.4058618-1-sashal@kernel.org>
+From: Vineet Gupta <vgupta@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20261015154044.4058618-1-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 27, 2026 at 11:00 PM Changwoo Min <changwoo@igalia.com> wrote:
->  struct rbtree {
-> +	/* Writer fields, on a cache line of their own. */
->  	struct rbnode __arena *root;
->  	enum rbtree_alloc alloc;
->  	enum rbtree_insert_mode insert;
+
+
+On 10/15/26 08:40, Sasha Levin wrote:
+> ARC links against the compiler's libgcc archive. The ARC GNU 2023.03
+> toolchain ships this library with debug information, including complex
+> floating-point types in integer arithmetic helpers such as __udivdi3.
+> These types reach vmlinux even though the kernel does not use complex
+> floating-point arithmetic.
+>
+> When floating-point BTF encoding is enabled, pahole rejects those types:
+>
+>    Complex, interval and imaginary float types are not supported
+>    Error while encoding BTF.
+>    FAILED: load BTF from .tmp_vmlinux1.BTF.1: No such file or directory
+>
+> KernelCI's upgrade to pahole 1.31 exposed this long-standing problem as
+> failed ARC builds. As of 1.32, pahole still rejects these types, and
+> older versions will stay in use, so the kernel build has to keep them
+> out of vmlinux. Commit f122668ddcce ("ARC: Add eBPF JIT support")
+> documented the same failure along with a workaround of disabling
+> floating-point BTF encoding, but that also discards supported
+> floating-point types from kernel BTF.
+>
+> For CONFIG_DEBUG_INFO_BTF, generate a debug-stripped copy of the selected
+> libgcc archive in the output tree and link that copy. Preserve the archive
+> structure so that only needed helpers are linked, and use the normal
+> Kbuild objcopy rule to track input and command changes. The trade-off is
+> that vmlinux in BTF-enabled builds no longer carries DWARF for the libgcc
+> helpers. Debug information for kernel code, the installed toolchain and
+> non-BTF builds stay unchanged.
+>
+> Reproduced and tested with ARC GCC 12.2.1 and pahole 1.31 and 1.32 using
+> an ARCv2 tinyconfig with BPF_SYSCALL and DWARF4/BTF enabled. Before and
+> after vmlinux.o files are identical after stripping debug information.
+>
+> Fixes: db16c1fe92d7 ("bpf: Generate BTF_KIND_FLOAT when linking vmlinux")
+> Link: https://github.com/kernelci/kernelci-core/commit/e71b8c9f42253180596e734c18965a5aad80c8c5
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   arch/arc/Makefile     | 9 ++++++++-
+>   arch/arc/lib/Makefile | 8 ++++++++
+>   2 files changed, 16 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arc/Makefile b/arch/arc/Makefile
+> index 868805ffcfeab..4ea705a331c7c 100644
+> --- a/arch/arc/Makefile
+> +++ b/arch/arc/Makefile
+> @@ -86,7 +86,14 @@ core-$(CONFIG_ARC_PLAT_TB10X)	+= arch/arc/plat-tb10x/
+>   core-$(CONFIG_ARC_PLAT_AXS10X)	+= arch/arc/plat-axs10x/
+>   core-$(CONFIG_ARC_SOC_HSDK)	+= arch/arc/plat-hsdk/
+>   
+> -libs-y		+= arch/arc/lib/ $(LIBGCC)
+> +libs-y		+= arch/arc/lib/
 > +
-> +	/*
-> +	 * The leftmost node and the node count on their own cache line.
-> +	 * The writer keeps them current, and readers may read them without
-> +	 * the writer's lock (see rb_first() and friends).
-> +	 */
-> +	struct {
-> +		struct rbnode __arena *first;
-> +		uint64_t nr;
-> +	} __attribute__((aligned(RB_CACHELINE_SIZE)));
->  };
-
-That's 16 -> 128 bytes.
-Without perf numbers it's a premature optimization.
-
-> +	ret = rbnode_remove(rbtree, node);
-> +	if (ret)
-> +		return ret;
+> +ifdef CONFIG_DEBUG_INFO_BTF
+> +export LIBGCC := $(LIBGCC)
+> +libs-y		+= arch/arc/lib/libgcc.a
+> +else
+> +libs-y		+= $(LIBGCC)
+> +endif
+>   
+>   boot		:= arch/arc/boot
+>   
+> diff --git a/arch/arc/lib/Makefile b/arch/arc/lib/Makefile
+> index 30158ae69fd4a..2807ee24f27e6 100644
+> --- a/arch/arc/lib/Makefile
+> +++ b/arch/arc/lib/Makefile
+> @@ -13,3 +13,11 @@ lib-$(CONFIG_ISA_ARCV2)		+=memcpy-archs-unaligned.o
+>   else
+>   lib-$(CONFIG_ISA_ARCV2)		+=memcpy-archs.o
+>   endif
 > +
-> +	if (was_first)
-> +		rb_set_first(rbtree, next);
+> +# libgcc can contain complex floating-point debug types unsupported by BTF.
+> +# Strip only the debug information from a local copy of the selected archive.
+> +always-$(CONFIG_DEBUG_INFO_BTF) += libgcc.a
+> +OBJCOPYFLAGS_libgcc.a := --strip-debug
+> +
+> +$(obj)/libgcc.a: $(LIBGCC) FORCE
+> +	$(call if_changed,objcopy)
 
-In an RB_ALLOC tree rbnode_remove() frees the node and then rebalances
-the tree. first points to the freed node all that time:
+I'm working on getting rid of libgcc linking for ARC.
+This requires adding some GENERIC_LIB_* routines, but as part of that 
+series I'll propose a revert of this and then the dropping the first link.
+Don't intend to revert this per se, but revert just makes it cleaner.
 
-  CPU 0, holds the lock            CPU 1, no lock
-  rb_pop()
-    rb_node_remove()
-      rbnode_remove()
-        rb_node_free(node)
-                                   rb_first_key()
-                                     first = rbtree->first
-                                     first->key    <- use after free
-        rebalance
-      rb_set_first(next)
+Just FYI.
 
-buddy_free() poisons the node. A prog built with ASAN gets a report from
-rb_first_key().
-
-rb_erase_cached() moves rb_leftmost before rb_erase().
-Should it be the same here?
-Move rb_next() from patch 3 in front of this patch. Then at the top of
-rb_node_remove():
-
-  if (rbtree->first == node)
-          rb_set_first(rbtree, rb_next(node));
-  WRITE_ONCE(rbtree->nr, rbtree->nr - 1);
-
-and no need for the wrapper, was_first and the rename to rbnode_remove().
-
-Patch 1 looks good.
-
-pw-bot: cr
+Thx,
+-Vineet
