@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793555054;
-	b=l4KD5y1IFxT+VrUxOl2IE9GhtB/JUNockwbnmX/eBdps8CvCbjF/6rbY2aidRh896hRY
-	 IPLJIPJ6TZaF7+rBJEWBpmESScf4qlnbKI6ebuYViRgmpwQua9HAmh0UmyewNNW9F+92E
-	 39Y4aD4gVOTMLyw3tveUBdMEmts2aHyb1q29YcD7epM9UeH1Uxm4o10FJgp7t46OANaGP
-	 V8Gk5vr3FsSYQrkXNsnIl0v92LN7qIsbtaF/rrCtCzgTGRJNSLuXF5U7sNQnjSV7bQwZh
-	 XkZuXzwlDDgdy+v6cnu/okloV/ZVE14u2BBvT2ci9vLIdEs/D8lnfNqqdk8o4tlLisQ==
+	t=1793555060;
+	b=RXUs/OtQNklOuBhDZKAC/W8/+VZ2Z0HfGfHFoTTypuR/YWrm+tnCfb0DCoBletpKpyQK
+	 AVwiKiv3/JdX4HfWDv9fPaJNCft7CoeictLC3b8CwsEpju2HEMnq2uuLU6LWLVzZyPtBY
+	 psNF8a/3PFaNWpmKwxvll2rHtSrOrn8vKqndTZhG0yQnSJbZPfj6AgS9MxyIjrZfP+J+B
+	 yYCCkWz2DQ+tcVpN3qd/R74zBizfOkLGjRFb+vuJusU7EDL/+ydf3afLCWp7Qr2nwjwGr
+	 XtRU2RRLsSKOHDc73btOAZHg+ClWHpg+7IA0edxMCJ42x6C2sJYALR+Jz5M7HV6r6Xw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793555054;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793555060;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=fuzX9I+IjCZo8iGf/tRRs3qiWSHTYVsbPr2QsG7o6pQ=;
-	b=xJVzQ0r7uFZWZhE6hhl3v4I+nVaWx4vs/qZwq3pX2nrzHD3fQRL8rkqHlMqElT6fxCOk
-	 U/D8LeNvckj7V0lRUd3U4FfOeK+Gw9d5sgNKnRlVXzy1mIATBgsUMtM1knfEAxeWM1Wel
-	 USUn7WVLvHyeT4xb3NUETeG88Xg3brY1T4CNB1n8iAnoJGDsqNDP3Kz3EnSP44IM1ccTw
-	 RKl6bpLBHMPYnxIptTfWZWULajWbdB8yvWhg5B0V/+8enSKYfXrPFaqLmJVWQEX7CHJYI
-	 nElaua+KChR1R63HbBcdamo/YwJBRLbVIvWieHSOEDU+kb52n/8bD80yass4t5d1DGQ==
+	bh=9fRXydjuRH7BpORHVZPwsis6/JuJxC/QJTbLSxAyO4I=;
+	b=Oew1tPiwal+YKiTgwK8VRaXc64AtDlps0PLQG7/YH7fAQv7bPosaH5/p4nYppCIDz7cK
+	 XpyVIJZ3TkHGPSqkcC7mZvrz5ozGLWFUs4hAqWL1toS8Ky2bDq9yM8w7BEnS06oqcQQBW
+	 qiS31m5V1oxUXnyM7EvgxGYFiEJqXFxhoaTnmlvVyjRk15iYSbrZTW6CKppgeJgnhS3e/
+	 0IYAlqtfJhBZm/O44h7bVdmR4CizJ7Jbhe5dILv8+FviUsH+6DPRQ2IO1DgW2j21e5Nrv
+	 dyJf2z507iQNH3Pvl6avhsIEOxV93QLZD1b4TBHS97a3uD4XkwKiBqEQv/QtwFPUtQw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=N1rLXfJm;
-	arc=none smtp.remote-ip=209.85.215.169
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C7RY0vEi;
+	arc=none smtp.remote-ip=209.85.214.172
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C119606A32E
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 17:44:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C119606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3454B606A326
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 17:44:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3454B606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=N1rLXfJm
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cc7e79c1eaaso755589a12.2
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 09:44:14 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=C7RY0vEi
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2e60f9af6e6so21104595ad.3
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 09:44:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793555053; x=1794159853; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793555060; x=1794159860; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=fuzX9I+IjCZo8iGf/tRRs3qiWSHTYVsbPr2QsG7o6pQ=;
-        b=N1rLXfJmCZn1mwUmiPrU10q/bDb1JHcnnsPzVaAGzskKwphuoWGoFM2rJ/GdbjEs4A
-         7BG8RdYmQcqNbIMMII/qT/nxYIKfnhfMSO2WcPt24zQ1dugTY8zIkH17b2UMB0CJZR01
-         j4cmJ8UfaXMKyM9/kItHkxcYvokcJm0r8IBoVJtX08gB9B3CElXu8JokM5R7pj1YI0H4
-         iPxIAHImBHgebL0MnibCVsIdKHeezTpMho4DhOgODiSw79qN781Uwyl0SkeIkplD8dUm
-         Q6AlihRH3tTcGXlwgVWE/Jd48SSw+eYqxJ54QNqN9SyCx9qg4+rgo5/lIgQRjIBHiYaf
-         Wcpw==
+        bh=9fRXydjuRH7BpORHVZPwsis6/JuJxC/QJTbLSxAyO4I=;
+        b=C7RY0vEiSfD+V574M7lKfZxkd4wIxiQKqpImzYngViHe2Zo72j8k0p2TKuojdzvbMg
+         UVagdLoLc6gf+brKkPMpsZnpHUhYhfwbSlSMR/wGxn64chiREdR6gu8qWgzbQU9/vUpx
+         m1vUJ/ILFcGnwRf1OKcXMzi7LO7r1tjudW+hRUNPyR9ZyeelEn4e3YoNYY1ApslpnqRt
+         uSjuik8HHYC997WOSVslSS3HPb0JQFLgkDH7VnPDFO+u63rkb3yhwL5O0ottAcVCWvAY
+         bdVjC2lrW1mG3NMuUL9c1dQb2lmUe94gur0QfYBbCGpK6btre4cOcfcXPAKT/i2lZWuP
+         Eq3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793555053; x=1794159853;
+        d=1e100.net; s=20260707; t=1793555060; x=1794159860;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fuzX9I+IjCZo8iGf/tRRs3qiWSHTYVsbPr2QsG7o6pQ=;
-        b=FhQKg0Iz36wiFDutBCERK7YcWqWD6uyXTKCz2hiUo0Bxt69OCZq/qN/I9G16BplqLT
-         Fr2FeJwQu4n0VG0HSO9aBgRLcaxZiJgMQT4MeWU+TE+gowd6yFLqOkl+h46Zd7O6KaL9
-         wYVhuznhIVE86eA4ATx6s4FFl42yf90Z/3VbRr2PmV7uekPaDP8SSG1j5ajJR6ilpijP
-         71ogLr9oTp3KJehTThaxtXlmut5SZBJQHUvmkYJD55qp1CJMiMhffQW77B/ygXvaCtbr
-         89CO0Wa0li56D1qP2p2StJHYDBDlGyD40cBYjv7nNxNW+BWvLdIZFlzDK5Lcsma+I40x
-         nlMw==
-X-Gm-Message-State: APuU4Z93se8DWFpvxJ02pFZCRbFfAjPIZS/OV7O2MXlMlHbVPlU/fnGS
-	DQlVCD99SYCi7OgpnwusTlwj88HqibpEs+8sv8U3gyY5epYyq1jYCU0rbuOtfA==
-X-Gm-Gg: AYBFou2rzMYsJQ6ZqVZdg44NOnnyaYpzr+GAAh0nOahK9D41E3DjoKeR5paUCqllnLH
-	CzaOHzSb1jDtd2XTldqT7fELyktEkrePqtK3sk2PPlzR2r0Pk3SO1cT/Xw8i9jouNCew74R7OTW
-	uDMp5La6jBkFmYKe1m4pC2xVHQfBrlHvPoeLHg3NxbGTbDgH5+0AY6C8xuqfB5q5FV0eq5jNOS7
-	pjQAtW2luHoMO+a1B9pW1cADSAf1kflaAq6JQ4u4uR/mrUs4EJII+HBP5i+01TwXtR/1beHVtLc
-	m2FrKWiS+8xHx80cARMUVjkv+DOawSpf7RODAlGogsUSg7EH2fzXLPSWezC6FTfgH+OUTyrxfiy
-	vStrevQ5nvToJBw8E0M+TpTN0CQ5QG9mbFHk6t6ydjDbE26LT39i1w6tJ/8dmA0hL9efSyMjYDI
-	YgojxY2aIAZzEYvqflqhibUQkPBvBmTDYf/6til98VNZ+q/FAem1z1WmtT9tSd5MqhZDs2YF3Tu
-	O2FNYjyggc4fKsOXrP29FKqymWa5x91XgxZ2kuNUi4XKrZ0ALJ1V/6NTdFNHOokLso6SvozrFJl
-	VS8c7RjBVJV1UVkythTxZKkRbo8GPOXAMHC1GFySoDEAkD8q+TUsTwYfKs+PEw0fhwn0TAs91X0
-	KIP9aVmGl0CglyhuFWUPGhBmU6vwM8av58ku+YADPXw21cnhSETqrgtPLMVU3XXQFxBC7f/Cdcn
-	M=
-X-Received: by 2002:a17:90b:4f42:b0:3ac:a521:953 with SMTP id 98e67ed59e1d1-3ae897c777fmr6100962a91.46.1793555053360;
-        Sun, 01 Nov 2026 09:44:13 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e98f888sm15096560a91.13.2026.11.01.09.44.12
+        bh=9fRXydjuRH7BpORHVZPwsis6/JuJxC/QJTbLSxAyO4I=;
+        b=sfD6NS/5dRRPl/OSHcAmxRHewl4i65HkpPQjukwii9XK0gYwz8OvoxNFHmdULE0KyO
+         cGauHy7pgvF8LG1rioSx3QAHYrcAFFDx+Z/pQ44HywhqaKS14vXJOieelgatb8g7f+na
+         +Db7Y4VMrwyApt4Xz/ub01pCmzkRm8pokapqNV/6IB9eRXwb+Y5PcYpTyfQpoU1IuEwi
+         FG/67h9+5OWiYQGSzJ9boZ0ReG+wMlC09Z4/oRkUambXvX4gooeSu/YZ3FArcrSdJt8B
+         bvRnESqAJLMnzSklnAUui91+h0dUH3/jbjLlxqfIJsvWyr6XZHu2/dhRM2WyBC+BlpPO
+         Gwxg==
+X-Gm-Message-State: APuU4Z+bOKYUQUPs1rNd4rhJwWJHxUBicSeg1m2G/g26hBWH2F66of5Y
+	va0i09rPS+NJ9hUDCRXSKan9eSLksbLIOSvzkqskXtk4Bw/3YdiSsT5EeLLPXw==
+X-Gm-Gg: AYBFou2IcQZv51JaBnpicWKEPNAg5xRxmjbJXwS8LyZ5cbuBhIIMm7ck9oifnHaDKQL
+	iT2pTGU637i/QqceywzzQv7ftwvDGe2SutLMPaBXrkXoSX/88XdSIcco54Y6p+CG/QIdO9DOfHu
+	tGkaoyTe5gAIW9C6rMOGVHu7QrdEEJyjI2Db+sn60CrwswroY/MNPpoKaP6+mTMcIi3q4mE5tYw
+	6PV0yOJtioBa2EQGHHuwdWTA6WkJXDhuqHcO4yHLfmlFAQ+NhXK9dG3y7Gq8+fq9q6Jn9Ni5H6b
+	XyquGrlMdQfdzkWaQTcEo0JSezr2Tonx81kytdLyvwyqHQdgy/Qc08TIP2CNJ0uQPyRShBGYTWD
+	Rxsyn9618XnbAo5kLAxAdXyS/9BsIquiPZsb3YQlvoiqLRGw2G5DbqjizoRBpp1tB9z2ndKbUHH
+	b5aWm44f/bPqh8RrWYCzYLUlTz/MPLYAqeXW+wpc6zZVkFIwz/BAMZwc0bKaPjV4qbXlYle2360
+	Nx2ADg+MQCB6+ON2e7wwLJV/N9/COkJuelg8dyKNHnG9m3W60hnTsxF1mpU/lLRcrlTEdWzyjnM
+	wTFkzTrxWjr62VX59YWeacDj4a2T+ik0euJ7d06O6KdTtQsQY5WvtpsHYIEEa0kOVvtehaS3TDS
+	bFC2IrBC2e8LP0J87s0t+hHZOnYeH8YZ10JFcSK8723jI2Yn8LiTrcqu38kt5i8qWxXIdkfWcTa
+	c=
+X-Received: by 2002:a17:903:298f:b0:2e3:1d30:8654 with SMTP id d9443c01a7336-2eb36494399mr81262285ad.10.1793555059343;
+        Sun, 01 Nov 2026 09:44:19 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb392a489bsm18642485ad.63.2026.11.01.09.44.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 09:44:13 -0800 (PST)
+        Sun, 01 Nov 2026 09:44:18 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 1/2] bpf: The register of an implicit kfunc argument is not live
-Date: Sun,  1 Nov 2026 17:44:04 +0000
-Message-ID: <20261101174405.4055052-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Test liveness of an implicit kfunc argument
+Date: Sun,  1 Nov 2026 17:44:05 +0000
+Message-ID: <20261101174405.4055052-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101174405.4055052-1-alexei.starovoitov@gmail.com>
 References: <20261101174405.4055052-1-alexei.starovoitov@gmail.com>
@@ -104,105 +104,174 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The verifier fills in the last arguments of a kfunc that has
-KF_IMPLICIT_ARGS. The prog does not pass them:
+The register of an implicit argument is not live before the call:
 
-  bpf_stream_vprintk(stream_id, fmt, args, len)         the prog calls
-  bpf_stream_vprintk(stream_id, fmt, args, len, aux)    the kernel has
+  kfunc                                 live
+  ------------------------------------  -----
+  bpf_stream_vprintk()                  r1-r4
+  bpf_kfunc_implicit_arg_legacy()       r1-r2
+  bpf_kfunc_implicit_arg_legacy_impl()  r1-r3
 
-The prog sets r1-r4. The verifier adds 'r5 = aux' in front of the call.
+The last kfunc has no KF_IMPLICIT_ARGS: the prog passes all three
+arguments.
 
-bpf_compute_live_registers() counts the arguments of the second prototype.
-Thus r5 is live before the call, and up to the previous insn that writes to
-r5. In a loop that is the same call in the previous iteration: r5 is live
-at the loop head, its value is what the call left in it, and it has no
-formula. Scalar evolution gives up on a loop that has such a register. The
-verifier also compares r5 when it looks for an equal state.
+kfunc_implicit_arg_in_a_loop calls bpf_stream_print_stack() 4 times. r2 is
+its implicit argument. The test expects that the loop is counted and that
+each live register has a formula.
 
-Let bpf_get_call_summary() tell how many of the last argument slots are
-implicit, and do not count them as used.
-
-Nothing reads r5 between the last write of the prog and 'r5 = aux':
-check_func_arg() does not look at the register of such an argument, and a
-jump to the call goes to the added insn. The call clobbers r5 as before.
-
-Almost all scx_bpf_*() kfuncs have an implicit argument. So have
-bpf_obj_new(), bpf_obj_drop(), bpf_list_push_*(), bpf_rbtree_add() and
-bpf_stream_*().
-
-Insns that the verifier processes:
-
-  progs                    progs that change    insns
-  -----------------------  -----------------  -------
-  scx, as BPF CI has it    26 of 466          -18.9 %
-  scx, master              26 of 563          -10.5 %
-  selftests                52 of 6329          -0.3 %
-
-lavd_dispatch of scx_lavd goes from 281049 to 5589. No prog of Cilium
-changes, no verdict changes. In each set of scx 3 progs get more insns, at
-most 1.2 %: a path ends earlier, and that moves where later paths end.
+Two more progs run. One jumps to the call, one has may_goto in front of the
+call. The kfunc has to get aux in both.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h | 2 ++
- kernel/bpf/liveness.c        | 3 ++-
- kernel/bpf/verifier.c        | 9 +++++++++
- 3 files changed, 13 insertions(+), 1 deletion(-)
+ .../bpf/progs/compute_live_registers.c        | 13 +++++
+ .../selftests/bpf/progs/kfunc_implicit_args.c | 55 +++++++++++++++++++
+ .../selftests/bpf/progs/verifier_scev.c       | 33 +++++++++++
+ 3 files changed, 101 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 7baeb831281f..c28f43d60900 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1235,6 +1235,8 @@ static inline bool bpf_ret_reg_pair(struct bpf_verifier_env *env, int subprog)
+diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
+index 1ff24bbc7beb..de0496ce7d5e 100644
+--- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
++++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
+@@ -538,6 +538,19 @@ void gotox(void)
  
- struct bpf_call_summary {
- 	u8 arg_slot_cnt;
-+	/* the last of them are filled in by the verifier, the prog doesn't pass them */
-+	u8 implicit_slot_cnt;
- 	bool is_void;
- 	bool fastcall;
- };
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index e657e6d95408..215f839bd2fb 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -2621,7 +2621,8 @@ static void compute_insn_live_regs(struct bpf_verifier_env *env,
- 			def = ALL_CALLER_SAVED_REGS;
- 			use = def & ~BIT(BPF_REG_0);
- 			if (bpf_get_call_summary(env, insn, &cs)) {
--				use = GENMASK(min_t(u8, cs.arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS), 1);
-+				use = GENMASK(min_t(u8, cs.arg_slot_cnt - cs.implicit_slot_cnt,
-+						    MAX_BPF_FUNC_REG_ARGS), 1);
- 			} else if (bpf_pseudo_call(insn)) {
- 				/* a static callee's reads are added in bpf_compute_live_registers() */
- 				subprog = callee_subprog(env, insn);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1b6c0674ff6a..8509e65889bd 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19687,6 +19687,7 @@ bool bpf_get_call_summary(struct bpf_verifier_env *env, struct bpf_insn *call,
- 				bpf_jit_inlines_helper_call(call->imm));
- 		cs->is_void = fn->ret_type == RET_VOID;
- 		cs->arg_slot_cnt = 0;
-+		cs->implicit_slot_cnt = 0;
- 		for (i = 0; i < ARRAY_SIZE(fn->arg_type); ++i) {
- 			if (fn->arg_type[i] == ARG_UNUSED)
- 				break;
-@@ -19703,6 +19704,14 @@ bool bpf_get_call_summary(struct bpf_verifier_env *env, struct bpf_insn *call,
- 			/* error would be reported later */
- 			return false;
- 		cs->arg_slot_cnt = btf_proto_slots(meta.btf, meta.func_proto);
-+		cs->implicit_slot_cnt = 0;
-+		if (meta.kfunc_flags & KF_IMPLICIT_ARGS) {
-+			const struct btf_type *func = btf_type_by_id(meta.btf, meta.func_id);
+ #endif /* gotox: x86, arm64, riscv64 */
+ 
++extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args,
++			      __u32 len__sz) __weak __ksym;
 +
-+			/* the prototype without implicit args, see is_kfunc_arg_implicit() */
-+			cs->implicit_slot_cnt = cs->arg_slot_cnt -
-+				btf_proto_slots(meta.btf, btf_type_by_id(meta.btf, func->type));
-+		}
- 		cs->fastcall = meta.kfunc_flags & KF_FASTCALL;
- 		cs->is_void = btf_type_is_void(btf_type_by_id(meta.btf, meta.func_proto->type));
- 		return true;
++/* The verifier fills in the implicit argument of the kfunc. The prog does not pass r5. */
++SEC("syscall")
++__log_level(2)
++__msg(": .1234..... (85) call bpf_stream_vprintk")
++int kfunc_implicit_arg(void *ctx)
++{
++	bpf_stream_printk(1 /* BPF_STDOUT */, "x");
++	return 0;
++}
++
+ /* to retain debug info for BTF generation */
+ void kfunc_root(void)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c b/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
+index 89b6a47e22dd..250fc0c7b355 100644
+--- a/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
++++ b/tools/testing/selftests/bpf/progs/kfunc_implicit_args.c
+@@ -27,15 +27,70 @@ int test_kfunc_implicit_arg_impl_illegal(void *ctx)
+ }
+ 
+ SEC("syscall")
++__log_level(2)
++__msg(": .12....... (85) call bpf_kfunc_implicit_arg_legacy#")
+ __retval(7)
+ int test_kfunc_implicit_arg_legacy(void *ctx)
+ {
+ 	return bpf_kfunc_implicit_arg_legacy(3, 4);
+ }
+ 
++/* The prog passes all three arguments of this kfunc. */
+ SEC("syscall")
++__log_level(2)
++__msg(": .123...... (85) call bpf_kfunc_implicit_arg_legacy_impl#")
+ __retval(11)
+ int test_kfunc_implicit_arg_legacy_impl(void *ctx)
+ {
+ 	return bpf_kfunc_implicit_arg_legacy_impl(5, 6, NULL);
+ }
++
++/*
++ * The verifier adds 'r2 = aux' in front of the call. A jump to the call has to
++ * execute the new insn: the kfunc returns -EINVAL when aux is NULL.
++ */
++SEC("syscall")
++__retval(5)
++__naked void implicit_arg_jump_to_call(void)
++{
++	asm volatile (
++	"call %[bpf_get_prandom_u32];"
++	"r1 = 5;"
++	"r2 = 0;"
++	"if r0 != 0 goto 1f;"
++	"r2 = 0;"
++"1:"
++	"call %[bpf_kfunc_implicit_arg];"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32),
++	  __imm(bpf_kfunc_implicit_arg)
++	: __clobber_all);
++}
++
++/*
++ * r0 and r1 are live at may_goto, r2 is the first register that is not. The
++ * insns that the verifier adds for may_goto are free to use r2: 'r2 = aux'
++ * comes behind them.
++ */
++SEC("syscall")
++__retval(5)
++__naked void implicit_arg_after_may_goto(void)
++{
++	asm volatile (
++	"r6 = 1;"
++"1:"
++	"r0 = r6;"
++	"r1 = r6;"
++	"may_goto 2f;"
++	"call %[bpf_kfunc_implicit_arg];"
++	"if r0 != r6 goto 2f;"
++	"r6 += 1;"
++	"if r6 < 5 goto 1b;"
++	"r0 = r6;"
++"2:"
++	"exit;"
++	:
++	: __imm(bpf_kfunc_implicit_arg)
++	: __clobber_all);
++}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index fa01a616af9d..bede3f48fe38 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -1411,6 +1411,39 @@ __naked void widened_reg_is_not_linked(void)
+ 	: __clobber_all);
+ }
+ 
++extern int bpf_stream_print_stack(int stream_id) __weak __ksym;
++
++/*
++ * The verifier fills in r2, the implicit argument of the kfunc. The call clobbers r2 and nothing
++ * sets it: if r2 is live at the head of the loop it has no formula.
++ */
++SEC("syscall")
++__success __retval(0)
++__log_level(2)
++__msg("loop header at 1, header_count is 4 ")
++__not_msg("can't widen")
++__naked void kfunc_implicit_arg_in_a_loop(void)
++{
++	asm volatile (
++	"r6 = 0;"
++"1:"
++	"r1 = 2;"
++	"call %[bpf_stream_print_stack];"
++	"r6 += 1;"
++	"if r6 < 4 goto 1b;"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_stream_print_stack)
++	: __clobber_all);
++}
++
++/* to retain debug info for BTF generation */
++void kfunc_root(void)
++{
++	bpf_stream_print_stack(0);
++}
++
+ /* The unknown SCEV of an unbound STACK_MISC slot must not prevent widening. */
+ SEC("tracepoint")
+ __success
 -- 
 2.55.0
 
