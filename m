@@ -1,49 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793496008;
-	b=MxVzj9riRP5FRSRIyucC7QdbTtI+kk75MHdrGpkuZ1sjVmvF9vN+bdHIQZ0pIUCqhAiV
-	 dPJ31XTHReJk3VRUNYFVnyYjo3Gbk1BxE+STTmeLc6oBCi4+ZAyTtbiCSkVwVHXn2WJZC
-	 G4wISgoba58DnIx4WY96Wltz1UPbHoYBUDULM1bE79ZW3WSOJjXJm50SyS1DM5Zs1SHdl
-	 m7+dXUIKnXU/z8LAUEOZgNKEp2zajOw+YmmthxBKPNRNFnhEAwZdGJ1smVWnX/9ECCC5S
-	 PoYXHpahvuvA+3z76EZvhEjL2aTLDLoDda2jRrWfHJMy3Db++YGqAkejdHDxflANwYw==
+	t=1793496489;
+	b=JALGygQtB6o0Wws6VlbH6DGAaW/o6jI+zpNmfdOFCTNZHALP+Uy0rBhe+x42DvUJ1HVd
+	 uShGjul9rbP7fYQwA/ivURXqG9HGE5/ykHtTbwysB3biedXWJeBEbGA0/Iz7tAIwp6B9w
+	 MDK3ML1nnoShUVEGMacjjsLpdNrEYleOo6cUX6WBQP/C2xVdrjE4TzRUfxKg3wlM6RJtv
+	 xMCWPmnXLwFX6dY60NCI/azno5BiZF/XArV957QUW/VG4KyHxs96DDADMsAAKCEOekzw3
+	 7LVhSO6iZugJEg6wTe7NblTUdQpm3OlLVYBkw5flot6yO2lUbn7XfRcdGNaS07+I4zg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793496008;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=dvpzB0yzQjGhBjkYwzzjz5S+INhesgIz56ILGUC/Uy4=;
-	b=yRm4T2UtHgtD4M5VQ+jbmgE8YYYwaLzAzFc8xQKI3YmRTiwfsh3SvWXHOfItPtHGJ3XN
-	 Y4QA9pIGkc6jO3g2ZB1gPctvXyoWe0TlBjNkSl1F1DVuy6ZI1NO+jEfxncdV5qNO5i9Jy
-	 WFtFD0VCUghETWNzamJqB7leFFjpYR0Aet3JTv9EuPhtyJskhvvxxhNym6+bIxMQCV4bl
-	 gU0YE7XMfPeO4SDBslPHg+yP3P4fri0JSnWWOZ0c5pKBHMzJOoomGiw+OWd/d9qzzhiRO
-	 FgjX++tsz2Y4ZyQE2neplggN6MkBHQSBx3kwVtRO/gsQdar2CaSzKEF0Jhz0YJSkf4A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793496489;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:Subject:From:To:Cc:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=7LrPxy9BAKXEpY6N5O++ZaxG2WFSWYtlj7o2XKSx/mA=;
+	b=YV73f4iMi5yRu5oauJH6SgscFctH30umbi1Rh9NKJFrLAh0/Bxtv9w7St3QX9svxWZzM
+	 fEzS675j7wnAiCL++luD17nRq+X4S3iCHp10KSN0FYLRAp0UiuJ3OPi9mffIcPBGmQ75j
+	 O16q/9TpW12+YXSzPHwooV4GiR9wa6M2qVZ5zuFs28ORaLUqfTrFeAKErBvRkNFqV0I43
+	 kXV8xP0X+Mzgy6G4rmcxBhg0kTTH2s2kv1erWqKKLKGG/JOyW/1FfQHdGgwquKPhkge8V
+	 Q0MedxMhpCRsSgH2zL/nn5JfmepCZ7+2XA1JFnazB+l1lakEuyovFOXmNhneNsvgtWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LESISDDS;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e7QGLOUt;
+	arc=none smtp.remote-ip=209.85.214.178
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F530606A31A;
-	Sun,  1 Nov 2026 01:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF20606A31A
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 01:28:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDF20606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LESISDDS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E6001F000C1;
-	Sun,  1 Nov 2026 01:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793496007;
-	bh=dvpzB0yzQjGhBjkYwzzjz5S+INhesgIz56ILGUC/Uy4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=LESISDDSC7vHVwr+zYQA5bfOZdfj+K0LuvUPw2XPtC4ZKO+xjGLB2m30qRh3d/qnR
-	 M7YjHUqKRfy47QAI7YzBzZwDaick0/rW6L+I6r0vtXDocZqYnLn1tqA+TtNJacOv0b
-	 7fuB7sJHATwYrqVYdyFXUs5zWBu6pMTlvFtH4ctaNWW70yo8f0Aibu/UwnYT22MIQr
-	 kRK7JEej1/XcYfXtCAbJoxeZpMCwikECA7VI9nq80OBxpIGceqXWroU6riq6qtahwy
-	 FPfXfAMVhHjjQ+PLmzIfimHbUpDf+gP5eUc7U4hqWctAKmFRHraB7Rn6VlkPl/9Yrk
-	 ky2KA+PEDcq0g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 0321F38003EB;
-	Sun,  1 Nov 2026 01:20:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e7QGLOUt
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e9eb579c0eso9785225ad.3
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 18:28:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793496488; x=1794101288; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=7LrPxy9BAKXEpY6N5O++ZaxG2WFSWYtlj7o2XKSx/mA=;
+        b=e7QGLOUt1jxbs51TNaA0p1UUxmGARGoDenhBRBvjutBP0RHrN3UgwV4ztk4nScfO2I
+         CE0Khf/XsabYm+Az0Fh2deLwMw4WrujKvXwboO7GN+8g/mw3DBwk3vAe2ccjnq0v0y8K
+         m1GbyoFMkINnRyNsmQx2GyNiWksPqWZd8cZg21VJhUR9Utr5VjzGL0yU4w6zsqwVVekr
+         8JaIez//EUyXR/rRBaNHY3y98GohEKGOtA09sJN19Od5PNGhCKHglo8MNnVhwLeIJXHS
+         1ll7DAejSrLUJGKn2R8vIExPLwpt9dh6o+h4OeI4WLiPUCWOy2DmJbDq1x39rNKV0usU
+         QgEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793496488; x=1794101288;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7LrPxy9BAKXEpY6N5O++ZaxG2WFSWYtlj7o2XKSx/mA=;
+        b=SC4jo28U7sPYcr5sXn28vBQzYezUr7UMWPDp02dOrq1Usyk4+WXgziblvx8lEut0Wk
+         V5HhJwva17PNtLLpY/PBTlpPrmx7gwl8NST1gtsfkSFuXexl1CMx4xgDphrBQ9KL8g9C
+         0yjKbUv+x3DH5Qod3FbPL583STF/Lu37rlqjr7izgIJEZo3p3mGX/cBbJQ0yh17ZxK/h
+         lKUbv7xCPQa1saGLEyvdgkiepL/LuCWbrwOV5Pzr1+4OJid7x24WW+BSAO45HiV7bsOp
+         L9fSz8fOoHprMK1bpYJy3n7ulYseUrJBJ7UxO3aYU56ASJPihF2arHoxboD7K2UhXNY+
+         62Tg==
+X-Gm-Message-State: APuU4Z/Jtd2luZPwMqKMDbG0CCBj9Bx/16/mpt+vsL7T4Fq+6lXlcnW0
+	XjhmIfud260FE6MTMdzMbuLSaMGAXWU2b14xSWpzMU1HHO1ZwwAMXo+5
+X-Gm-Gg: AYBFou288tiYWAbqDQj5WfCK4Dw6Y/GgkUvIYtgkJtKkCICsqPE4X7dsUE4Asqp4nmY
+	eu9OdIZFgVZIo/p552+EOFfBvDARqcRsZCAZ5MgihppJMtQNkUTW/585fnXIc0SqaNm0Swjk9JP
+	M8/WtHQoX//RiSBLOQKNfzgFeYPs8XcctkMBG4gUkN0RohhdFJL8c/imhpfnvKduUXbwYjOzVGj
+	nPHaFuwZC7aGBLAeThtppkUWnRFUx3ebTUuAn5BcR8dvbElP2Kmw98fw38MGgf4r0NgN6+7TBdm
+	YUEBw4/LDjFovnZO6s1xXPoAR2GYXYh0aslCBhyz9in+KKcjcQScCEFYn14qdbQopDjshfFb+ju
+	7MFznB7f1t4U37VJrzaJEonTJrVqgM5WZdfNWwu9HaqRd11cXbSTDU+Oox1bqAtN1OFp4DiI1pY
+	+5QQMCNbICz5TAYBRwiI9SROniJ6Zqs62RUTNBeUI2tVq0GpNfUTVUr8SdR+6TMW+i3rmVlOf1s
+	FqClruxlUbzeWgUlp6a1ru+MrFZXU562ycPcGG+00O3vwf6+GdjlXU1zrc1K0HGrqDwKxY03IQr
+	uY+gjEyOhWxpteY/EZ1rdfXoZ4eKhxZdzWWqv66rWC7hAYpp8FuFpQVu4qvlYsVIp+tgHZ21zsx
+	aVy3iwkwFl+NK6JwfJqLtD/YrwHh/vG/+XA==
+X-Received: by 2002:a17:902:d585:b0:2e8:422e:19c5 with SMTP id d9443c01a7336-2eb3647c0b4mr52613375ad.55.1793496488003;
+        Sat, 31 Oct 2026 18:28:08 -0700 (PDT)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb39298329sm16832345ad.61.2026.10.31.18.28.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 31 Oct 2026 18:28:07 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 01 Nov 2026 01:28:06 +0000
+Message-Id: <DMJHFZPKETD8.PUM30IJH9D66@gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] bpf, sockmap: Restrict iter-context
+ sockmap updates to iter/sockmap
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Michal Luczaj" <mhal@rbox.co>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, "Lorenz Bauer" <lmb@cloudflare.com>
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Sashiko" <sashiko-bot@kernel.org>, "Jakub
+ Sitnicki" <jakub@cloudflare.com>
+In-Reply-To: <0bcebb4f-4b36-4f8e-a3cd-1eb0455081a8@rbox.co>
+References: <20261016-sockmap-update-limit-iter-v1-0-23fa946db59e@rbox.co> <20261016-sockmap-update-limit-iter-v1-2-23fa946db59e@rbox.co> <DM6O08VBRY20.1PFUYACCZ38JL@gmail.com> <a9ba4549-4bae-4516-85ef-ee38f13551cd@rbox.co> <DM92JCFA4X4U.30MTDH0KCPTJ@gmail.com> <0bcebb4f-4b36-4f8e-a3cd-1eb0455081a8@rbox.co>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,46 +108,28 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 0/2] bpf: Fix overlapping copies in
- bpf_dynptr_copy()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179349600580.2297828.9362269929771966458.git-patchwork-notify@kernel.org>
-Date: Sun, 01 Nov 2026 01:20:05 +0000
-References: <20261026162810.12862-1-ayushmanrout27@gmail.com>
-In-Reply-To: <20261026162810.12862-1-ayushmanrout27@gmail.com>
-To: Ayushman Rout <ayushmanrout27@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, netdev@vger.kernel.org
 
-Hello:
+On Wed, Oct 21, 2026 at 04:12 AM Michal Luczaj <mhal@rbox.co> wrote:
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+sorry for delay.
 
-On Mon, 26 Oct 2026 21:58:07 +0530 you wrote:
-> bpf_dynptr_copy() can corrupt data when both ranges are in the same xdp
-> packet and overlap: a slice of one range is used as the buffer for
-> __bpf_dynptr_read() or __bpf_dynptr_write(), and the chunk loop always
-> copies forward.
-> 
-> Patch 1 does not use a slice as the buffer for a copy within one packet
-> and copies from the end when the destination is above the source.
-> Patch 2 adds selftests. They pass with the fix.
-> 
-> [...]
+> But, if I understand correctly, the removal of plain PTR_TO_BTF_ID will
+> make pointers like `peer` inaccessible to helpers. And we just accept progs
+> have to deal with potentially stale data, e.g. the value of sk_shutdown.
 
-Here is the summary with links:
-  - [bpf,v2,1/2] bpf: Fix bpf_dynptr_copy() for overlapping ranges in one packet
-    https://git.kernel.org/bpf/bpf/c/696f0954e3b6
-  - [bpf,v2,2/2] selftests/bpf: Test overlapping dynptr copies on xdp frags
-    https://git.kernel.org/bpf/bpf/c/8f92b56d228d
+Right. Then the lock can go.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> Ah, sure. So the same bit for unix_reg_info left for later?
 
+Yes. iter/unix cannot update sockmap after this patch.
 
+> I've noticed commit 7cc639dc45c5 ("bpf: Don't take an extension for an
+> iterator program") got merged. Should I post v2 with the env->prog->type
+> check dropped or you guys don't want to restrict iters anymore?
+
+The former. We still want it.
+bpf-next doesn't close during merge window. Only people that
+can process patches get busier.
+Pls send the PTR_TRUSTED part in v2.
+
+I'd also limit tracing_iter_filter() to iter/tcp and iter/udp.
