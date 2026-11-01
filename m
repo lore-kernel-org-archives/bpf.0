@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793502355;
-	b=Q4RN8ZnT4ZBB3r+G+/kqxwpi9nnhH0vtlC+E1RMAqRkzkxCFaqC9LdrVs7+xGf9nLu32
-	 gzhCsRu8TwcHj35V5B7G4ukSIBQ5nVvkckwQYLkWXmJvFAx1PirZJfGzi9bLwOyi5fW/Z
-	 c3f4KH5YW/EsNwhMI7jGyluJCU2Dl7rMzEaNgzVYh3fNRsIqIcGSKnYYjlf8TyiPfaP0q
-	 /or4YAbb6XbPPkWP+9N4eTaExJCHP88rrvaxioaFrUXvc+/te5n235ppmf8qVvsbjCc9R
-	 scAWvyvfB5bE63qMXx5OYepGUUdbNt9jySZJogwGXwAFLLhhPOvzm9DQiHZBTItnMWQ==
+	t=1793502361;
+	b=jXOIBR2jZW4l5GE3WgFqJWiOFyOpnVTDJqW30SEsA05aHjJ41/N8e34ObxAC8XamGAHQ
+	 m6n9Yxx8H1WI92rwuffQt6pzG7wFPQhZhkQsBmBJRvcay2YiypV7wTr4+RzX99qiusa0N
+	 7lzqnR/uH7Osvzj33ImiKGenT1uThggC5h7Gm3DxesgCv3shFykUOyUmvlU21c1alv3jR
+	 0QJBax63/dPC9uRIEmcskoeK+Dg7NkjIy7jfy5sfNyyNVmqT9kwzj2pUHgbZbmd8Cl9HN
+	 w764K3tmz5B9kCd5Q/6DX8IHwSBBPiNn9CfbOe2TIhiSPGTkQ7YTU2cKiKxJ5I1cZXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793502355;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793502361;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=yS47cYMGxHUT4HugbU9YNQZ4btzuRGBRfWoE4TfcrPw=;
-	b=dZTaWC3BHo5874tYoQ6W9k93rsvHWowVv6aIlmCM33xFjJnfbXExN0/1X6SkWomdSQVW
-	 3h86D7FtmVdWHsiCYAybp7BaUEELN92HhMb/TktYZh1RQVrQtS6yw1xgJ8FufgUJ5ESPM
-	 eI0d0KBFsoVJPcjEz9l2DuQ2TTthld+XxCZNJxrevdbS/+29isRKxkDhK+HFFUi/biAIO
-	 kyS1zOIe1by8OfW9dATvodmd5rLXv12pGe2y3fPG2UkVcYjsSQAYg9mvGp0Pb1YOUExHO
-	 UqKvC56bc73DHjxOQnxqL+tIFX5fo2Xfr2OVdSa3biQjJ6P2v+BD7I5Dk4JSIQSqMkg==
+	bh=Q+g1SoJk0IMG5iDATITlmaPSh0Vf7kHVgVcxNLVDi10=;
+	b=DTYxZzdBgfkbdJpt6QrggY0Wtr1xCXWMdX4K7KhNvG4+2vLbzx5Afx5YB8FP1eFvMiWf
+	 J7awMhw0ldmPPBWBhnyTDgdSxRyw4VXVBy7MAjgEooueo190aYNXZogjkoTlT47KOeybl
+	 GKC+/Ko/fDxAJ0RdrX/TtZGUgKYPxcwh4pY+lPE7QP5uMzLDyAO+yh/prtvgQQjhJMI2E
+	 PHV4gxmpbPOljTsAeEdbJoW53MmGNwT4je/7W/F3a4tLiIjA9fsQUkdx86uYzVWTQkPam
+	 zdfqvbnbrclhAegtbtWgoZ7wdB5wWycH5kFf4HSU5beo8ESD97nCcTYJ+5jEzPmOLAQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="n0/CBdVl";
-	arc=none smtp.remote-ip=209.85.216.52
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=deaSll+Q;
+	arc=none smtp.remote-ip=209.85.215.172
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3D6606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 03:05:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E3D6606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BC4606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 03:06:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01BC4606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n0/CBdVl
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3acb11973c3so1564375a91.3
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 20:05:54 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=deaSll+Q
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cdab938dc83so760398a12.3
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 20:06:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793502354; x=1794107154; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793502360; x=1794107160; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=yS47cYMGxHUT4HugbU9YNQZ4btzuRGBRfWoE4TfcrPw=;
-        b=n0/CBdVlWeEnJSesXUIkGgwnnSAOIP7Vxb0YATpzDbk8n1vxnYnsZnPjqQ9J8W116I
-         Gqiwwb+0ugyDHZAUEoCbBZB4D+yE08z9Ws8CqcXkLkJes3OJSPST5lxJKMH6D/YvDTJV
-         kSw4SU0iOx/BGDzfSJWHkBIlQMOlIDFhmJb+wbWKPunnHEH5ASXVkv+E6tOBX2QsUhWu
-         OryWKkv8+iPDDznuo+2wwsbNFHe3hRC985fUdis0MV6oTu29cE3QFFOPhE2PZJE5pGh0
-         qEHaT2ew+FNK5sY3YARlJE9brkyStS7t/tsskWBHXW2QHi9E3JpXBDZTyqkkl/Wd3Yxm
-         lATw==
+        bh=Q+g1SoJk0IMG5iDATITlmaPSh0Vf7kHVgVcxNLVDi10=;
+        b=deaSll+QQwG5/gBEvDhcIZu1WalL3zcN2/tUSpiw0s5gzdTST8eqoGtsD2BHvVOdVN
+         GeJSBQPE2d+CNhp+jqMtcK/1Qi376Ml075AvqU3n8F2fIy7jHshUERfZtDAFWXj3i5QL
+         FSV3XEC+FrH6GESpH8y5tz8OCHdy89ewTncGUMcMaE6BpeyQ9YoNebjBKUAAHifmqzaa
+         Eh5Zj21qfGbhK2SlqCbGtDLzvlNCJw+eXywlOXhLuHoVppWPaqhMEbRc2OHJcXRCrS2E
+         bAYFAlpeM/w6WrUcRexoxS7u8q7CNqvT71+yYa0iA/sc7m5gP6vEvhREywSrXZftGuLg
+         5pGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793502354; x=1794107154;
+        d=1e100.net; s=20260707; t=1793502360; x=1794107160;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yS47cYMGxHUT4HugbU9YNQZ4btzuRGBRfWoE4TfcrPw=;
-        b=HqYblgIQ7JSCk9jZ/pVDJ8RGc010ZLKQBIDXERZt124wAeGGWdp+Har+VQ5FjOgBw3
-         yJdgtqoEr+TfvbgpeiqWUpg7QWjKLsDqN4txeGrPkL8a61CrIKr1JcsWtyGC/azSAfnK
-         YMEutORd2JMlXb3rdEr09NUM4l6aEd3DQXi/SOmiLX47aGEiL+sKTez6t74AUwVsWS5K
-         KTaayVEG8rhymY7s4agHmsScUsiEEFqhVC+FQGNaXvgeDILLtHglfreXdioUdp78IKht
-         F9CcZ1KbfFSUjMDjb+5zhj/fTctIGS2yA1C3n4UIbq2YeAkXq1H3PuiCcpK91OR4H1Xm
-         gMfQ==
-X-Gm-Message-State: APuU4Z9mNggwTLePS+0EiqzV+gzu8qfptKG20hkb7b27xuVzh55lCMvb
-	9NCp7nnt7ckYviCA4kHUudQrSP3vk+cbxGVHvkL7/XAU70s7TOjMV2Ke2O2vng==
-X-Gm-Gg: AYBFou085rpdhoQluHo+I2Flq0ne6qV1ty9lyrEHto//I75Mwvzl2djzds5J2dpKFD1
-	5oXzQRWwjiWU0F+MktQ+ENVWFzhtpQ15+6Wbc+qGPd0YcOdRlHrm6bI+oUc4r99FCpctZ/w3uUL
-	LyCzmcWEHh7v8CKfHQJsNZhgipM2x2LEwd4P8U2bbHIWEJWDgV3xJ7G9dKQ282e3PlySSpKS7JO
-	l3K8ZE6bDwMh/KUlhxiN2kNJYaTuO7xDtLEvt5eOnM5sMGfq0mwaq6cSkJUQneVJFkbDP3Edn8e
-	XztdGayHdqpD6aGt6J/I6xRKiP8NkBvHrAw4Edu9iqDRK7XAi6ZDIaS9auIFuDqN/FJnCqAVjpR
-	2mvRAkiDCOkSusUWy8OD8lu+VfO3TfoDBIpiuCb54100lulj3bQLWBnUI8l6TcJbBcB759QOYj/
-	KV05VIJ41ooTHl1R2ana/NVmqy91D6nP2h6Jpr5vSAuHbeXoylbVELD7d23Peda1GLkuSlmGyF4
-	/aWJk0hOL/jqRt9z+H8KbJDDpXv6dHuXYRwtM9AtEH9ZG8WB4qYpjz1LXM2lTfqIMNhKHn5uwyE
-	K1ZG0VpTuOZsMPcUvju6+mB5nG30N0tgqIYpdsIyDJ84Vz2GSGA/v8QRRUu0kUmfvDvMfKeERA/
-	2C+1N10Fp5btEnsAhFnqNqCtE8wkrK2obKJ8QX5wmbzTDqVSXikjSD5uZdQTppFGqiIdBbEwbjQ
+        bh=Q+g1SoJk0IMG5iDATITlmaPSh0Vf7kHVgVcxNLVDi10=;
+        b=cxu4CKHj1XXys6zNG3/6sun6p6csf1FvyWKAzAEvUay74r3rKkFGqD9wls584bhLYi
+         eLO6u80IJTk39z3DnZqp8JO4KWN6/eNcfUojm/saFRM62SUXD+4wzCkueatWLU6fAptB
+         MId1oebalmRUjwtWgoW95WT5/pA2B54BWBHJuFghyCDkcwMk4e1O37vBPYCKg+xNIi1t
+         7Ye9dxGShJnqgQXJPhOxZnD0nfYPWTGRV+FzhDks+O792tSvRxiXoEctBT79JL+9Ykij
+         tZ7jBpNMXOzxiTE+9VcQ3I1pHHAXOTSmM5FpiL28ptZh3RFNGzWvqNS5y4EvPXV0UsZ1
+         j49A==
+X-Gm-Message-State: AFq9FYJRStWoYHSxhSj8xKCZ1Ccq+FC/QVLMNuxzj8/fTQuXfdq3J10v
+	5hzIH97Cei676+kutkRVMPOEsy/2uU2JBtYRahZTritFR6xcVnqSG8sjl0eXuA==
+X-Gm-Gg: AYBFou0LSbFkrS7P7SjW8b18tyX5zzE0VzOzcoBAr/9IFPoCAVQWTq7vHP2EuHQlGqP
+	vwj/qN9Uxoett6HupErHDJLbpKwr3Gzpmt8yIoEnCjXYNAppJ1Y8lz8rxyWzy4usPV0m1eueT/s
+	OD2XagG0tL6ghBWR+1ikQilj/QR+a+o72TS9nJswzIYTUmEOzvq7C0g7bGfBKEAS+0LMQpmBUus
+	u92yHCpOXw0XEeOMpnV4Ng6TElksUDw7dXoYgYQ5lO81qvoSZRzQ73NVcPwqj8ZZ0CcCXshAu1x
+	wP6vRmby0ZlhoH9k7wQM9WL4Tq+vXeoXQhbtkD30t1+ftT3yagBfpd6gAivGa168yMnqHMA9P7Y
+	ccrfjZuNslAkCAb/W+odagp2Y5PXmXoUFaYu96H6yjB97Cgk4z0pJbsw8zBLJtIeZNHKkVFy+4R
+	M657KwKs9jtxqGaRBzhKD8jeBl4fV6RgsWzWneTqrKMBJltJcIfj2Qs7Il1KA3crxc7qTSk0/lo
+	XiKBwikyKPPkXX520878D1pSbxdgEXZZJCJXNGQrK9TK5cjW4jnSrkLJdaP5dFkFnyk6CMXgXrj
+	l8tqEOj99PlrljDOSx1fGeIHElSp1N8EQZmu19wLw4gTSsZt/ueikxguVhTehEjurBJlBwru+Kb
+	vPAIl8r/F03G40Pg0h2CssIigSg/NKSU7mn4A7QIIrIPjDH/HwJ/JtvgDLVzN0OUP3qWSarfsVg
 	==
-X-Received: by 2002:a17:90b:2f8f:b0:3ab:b39f:41b9 with SMTP id 98e67ed59e1d1-3ae897f8c61mr5289433a91.61.1793502354239;
-        Sat, 31 Oct 2026 20:05:54 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae85f662basm4263066a91.1.2026.10.31.20.05.53
+X-Received: by 2002:a05:6a21:6f0d:b0:3e8:b7fd:628f with SMTP id adf61e73a8af0-3e928c8d3d8mr5493453637.22.1793502360179;
+        Sat, 31 Oct 2026 20:06:00 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb096d3827sm2001929a12.12.2026.10.31.20.05.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2026 20:05:53 -0700 (PDT)
+        Sat, 31 Oct 2026 20:05:59 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 07/14] selftests/bpf: Test pointers in arena and .bss.addr_space.1
-Date: Sun,  1 Nov 2026 03:05:03 +0000
-Message-ID: <20261101030511.1578690-8-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 08/14] bpf: Introduce bpf register BPF_REG_ARENA_SP
+Date: Sun,  1 Nov 2026 03:05:04 +0000
+Message-ID: <20261101030511.1578690-9-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101030511.1578690-1-alexei.starovoitov@gmail.com>
 References: <20261101030511.1578690-1-alexei.starovoitov@gmail.com>
@@ -104,306 +104,305 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The initial values of variables in arena point to other variables in arena:
+A Rust function that gets &T does not know where T is. T can be on the
+heap, a static, or a local variable of the caller. The same insn accesses
+all three. The heap and the statics of a Rust prog are in arena. Thus a
+local variable whose address is taken must be in arena too, and the prog
+needs a second stack there.
 
-  pointer       points to
-  ------------  -------------------------------------------
-  px            an int
-  parr          the third element of an array
-  head, next    the elements of a list
-  pbig          an element of an array in .bss.addr_space.1
-  psx           a static int
-  psbig         an element of a static array in .bss.addr_space.1
+Each function must find the end of this stack. The places for the stack
+pointer that were tried:
 
-The prog and user space must see the same pointers:
- - The prog follows each pointer and examines the value that it finds.
- - User space compares px, parr, head and next with the addresses in the
-   skeleton.
- - User space reads through pbig, psx and psbig the values that the prog
-   stored there. Static variables are not in the skeleton.
+  stack pointer in         what is wrong with it
+  -----------------------  ----------------------------------------------
+  a per-cpu variable       A second run on the same cpu moves it, and the
+                           first run can continue before the second ends.
+  bpf_run_ctx              Load, add and store in each function.
+  a hidden argument        It takes an argument register and a callee
+                           saved register. BTF does not match the code.
+  r9, reserved             The verifier changes too, and the prog has one
+                           register less.
+  a new register           It costs verifier code and a register in each
+                           JIT. This series.
 
-The selftests link each object with the static linker. Thus the object with
-psx and psbig does not build without the change in linker.c.
+Introduce BPF_REG_ARENA_SP, r12, the stack pointer of the stack in arena.
+BPF_REG_AX stays the last register and becomes r13:
 
-The variables in .bss.addr_space.1 must be zero and aligned, and the object
-file must be smaller than these variables.
+  register            before    after
+  ----------------    ------    -----
+  BPF_REG_PARAMS      r11       r11
+  BPF_REG_ARENA_SP              r12
+  BPF_REG_AX          r12       r13
 
-A second object has a pointer in arena to a variable that is not in arena.
-The open of this object must fail.
+This patch only reserves the number. The verifier continues to reject insns
+with r12.
+
+BPF_REG_AX is visible in xlated insns. Adjust the selftests that match it
+there.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile.skel     |   3 +-
- .../bpf/prog_tests/arena_data_ptrs.c          |  70 +++++++++
- .../selftests/bpf/progs/arena_data_ptrs.c     | 135 ++++++++++++++++++
- .../bpf/progs/arena_data_ptrs_fail.c          |  25 ++++
- 4 files changed, 232 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_data_ptrs.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_data_ptrs.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_data_ptrs_fail.c
+ include/linux/filter.h                        |  5 +-
+ kernel/bpf/core.c                             |  3 +-
+ .../selftests/bpf/prog_tests/ctx_rewrite.c    | 14 ++--
+ .../bpf/progs/verifier_bpf_fastcall.c         | 24 +++----
+ .../selftests/bpf/progs/verifier_may_goto_1.c | 12 ++--
+ .../selftests/bpf/progs/verifier_sdiv.c       | 64 +++++++++----------
+ 6 files changed, 62 insertions(+), 60 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
-index e8699903feef..b8eaecc7f429 100644
---- a/tools/testing/selftests/bpf/Makefile.skel
-+++ b/tools/testing/selftests/bpf/Makefile.skel
-@@ -20,7 +20,8 @@ ifneq ($(BPF_CC),)
- BPF_SRCS := $(notdir $(wildcard progs/*.c))
- BPF_OBJS := $(patsubst %.c,$(RDIR)/%.bpf.o,$(BPF_SRCS))
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 904ac8613098..f5387d12c448 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -61,8 +61,9 @@ struct ctl_table_header;
  
--SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
-+SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c	\
-+		  arena_data_ptrs_fail.c
+ /* Kernel hidden auxiliary/helper register. */
+ #define BPF_REG_PARAMS		MAX_BPF_REG
+-#define BPF_REG_AX		(MAX_BPF_REG + 1)
+-#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 2)
++#define BPF_REG_ARENA_SP	(MAX_BPF_REG + 1)
++#define BPF_REG_AX		(MAX_BPF_REG + 2)
++#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 3)
+ #define MAX_BPF_JIT_REG		MAX_BPF_EXT_REG
  
- LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- 		linked_vars.skel.h linked_maps.skel.h linked_arena.skel.h \
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_data_ptrs.c b/tools/testing/selftests/bpf/prog_tests/arena_data_ptrs.c
-new file mode 100644
-index 000000000000..aeeb6c0cd102
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_data_ptrs.c
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+
-+struct elem {
-+	struct elem *next;
-+	int val;
-+};
-+
-+#include "arena_data_ptrs.skel.h"
-+
-+static int run_prog(struct bpf_program *prog)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+
-+	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(prog), &opts), "run"))
-+		return -1;
-+	return opts.retval;
-+}
-+
-+static void test_ptrs_and_bss(void)
-+{
-+	struct arena_data_ptrs *skel;
-+	size_t elf_sz;
-+
-+	skel = arena_data_ptrs__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	ASSERT_OK(run_prog(skel->progs.use_ptrs), "use_ptrs");
-+	if (skel->bss->skip) {
-+		printf("%s:SKIP:compiler doesn't support arena_cast\n", __func__);
-+		test__skip();
-+		goto out;
-+	}
-+	ASSERT_OK(run_prog(skel->progs.use_bss), "use_bss");
-+
-+	/* addresses are the same in user space */
-+	ASSERT_EQ((void *)skel->arena->px, (void *)&skel->arena->x, "px");
-+	ASSERT_EQ((void *)skel->arena->parr, (void *)&skel->arena->arr[2], "parr");
-+	ASSERT_EQ((void *)skel->arena->head, (void *)&skel->arena->n1, "head");
-+	ASSERT_EQ((void *)skel->arena->n1.next, (void *)&skel->arena->n2, "n1.next");
-+	ASSERT_EQ(*(long *)skel->arena->pbig, 7, "*pbig");
-+	/* static variables are not in the skeleton */
-+	ASSERT_EQ(*(int *)skel->arena->psx, 45, "*psx");
-+	ASSERT_EQ(*(long *)skel->arena->psbig, 9, "*psbig");
-+
-+	/* 'big' is not in the file */
-+	arena_data_ptrs__elf_bytes(&elf_sz);
-+	ASSERT_LT(elf_sz, 8192 * sizeof(long), "elf_sz");
-+out:
-+	arena_data_ptrs__destroy(skel);
-+}
-+
-+static void test_ptr_to_not_arena(void)
-+{
-+	struct bpf_object *obj;
-+
-+	obj = bpf_object__open_file("./arena_data_ptrs_fail.bpf.o", NULL);
-+	if (!ASSERT_ERR_PTR(obj, "open"))
-+		bpf_object__close(obj);
-+}
-+
-+void test_arena_data_ptrs(void)
-+{
-+	if (test__start_subtest("ptrs_and_bss"))
-+		test_ptrs_and_bss();
-+	if (test__start_subtest("ptr_to_not_arena"))
-+		test_ptr_to_not_arena();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/arena_data_ptrs.c b/tools/testing/selftests/bpf/progs/arena_data_ptrs.c
-new file mode 100644
-index 000000000000..4af059a98236
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/arena_data_ptrs.c
-@@ -0,0 +1,135 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define BPF_NO_KFUNC_PROTOTYPES
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_experimental.h"
-+#include <bpf_arena_common.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 64);
-+} arena SEC(".maps");
-+
-+bool skip;
-+
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+
-+struct elem {
-+	struct elem __arena *next;
-+	int val;
-+};
-+
-+int __arena x = 42;
-+int __arena arr[4] = { 1, 2, 3, 4 };
-+struct elem __arena n3 = { NULL, 3 };
-+struct elem __arena n2 = { &n3, 20 };
-+struct elem __arena n1 = { &n2, 100 };
-+
-+/* variables that are zero and take no space in the file */
-+#define __arena_bss __arena SEC(".bss.addr_space.1")
-+char __arena_bss one;
-+long __arena_bss big[8192];
-+char __arena_bss aligned64[64] __attribute__((aligned(64)));
-+
-+/* a pointer to a static variable is relocated against the section, not against a symbol */
-+static int __arena sx = 44;
-+static long __arena_bss sbig[16];
-+
-+/* pointers to variables in arena that are stored in variables in arena */
-+int __arena * __arena px = &x;
-+int __arena * __arena parr = &arr[2];
-+struct elem __arena * __arena head = &n1;
-+long __arena * __arena pbig = &big[8000];
-+int __arena * __arena psx = &sx;
-+long __arena * __arena psbig = &sbig[3];
-+
-+SEC("syscall")
-+int use_ptrs(void *ctx)
-+{
-+	struct elem __arena *n;
-+	int i, sum = 0;
-+
-+	if (*px != 42)
-+		return 1;
-+	*px = 43;
-+	if (x != 43)
-+		return 2;
-+	if (parr[0] != 3 || parr[1] != 4)
-+		return 3;
-+	for (n = head, i = 0; n && i < 10; n = n->next, i++)
-+		sum += n->val;
-+	if (sum != 123)
-+		return 4;
-+	if (*psx != 44)
-+		return 5;
-+	*psx = 45;
-+	if (sx != 45)
-+		return 6;
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int use_bss(void *ctx)
-+{
-+	unsigned long addr = (unsigned long)&aligned64;
-+
-+	if (one || big[0] || big[8000] || big[8191] || aligned64[63])
-+		return 1;
-+	*pbig = 7;
-+	if (big[8000] != 7 || big[7999] || big[8001])
-+		return 2;
-+	big[8191] = 8;
-+	one = 1;
-+	/* variables that are not zero are where they were */
-+	if (arr[3] != 4)
-+		return 3;
-+	/* hide the address from the compiler, it knows that '& 63' is 0 */
-+	asm volatile ("" : "+r"(addr));
-+	if (addr & 63)
-+		return 4;
-+	if (sbig[2] || sbig[3] || sbig[4])
-+		return 5;
-+	*psbig = 9;
-+	if (sbig[3] != 9 || sbig[2] || sbig[4])
-+		return 6;
-+	return 0;
-+}
-+
-+#else
-+
-+/* The skeleton has to have what user space looks at */
-+struct elem {
-+	struct elem *next;
-+	int val;
-+};
-+
-+int __arena_global x;
-+int __arena_global arr[4];
-+struct elem __arena_global n2;
-+struct elem __arena_global n1;
-+int * __arena_global px;
-+int * __arena_global parr;
-+struct elem * __arena_global head;
-+long * __arena_global pbig;
-+int * __arena_global psx;
-+long * __arena_global psbig;
-+
-+SEC("syscall")
-+int use_ptrs(void *ctx)
-+{
-+	skip = true;
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int use_bss(void *ctx)
-+{
-+	skip = true;
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/arena_data_ptrs_fail.c b/tools/testing/selftests/bpf/progs/arena_data_ptrs_fail.c
-new file mode 100644
-index 000000000000..93533dea5f71
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/arena_data_ptrs_fail.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define BPF_NO_KFUNC_PROTOTYPES
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_experimental.h"
-+#include <bpf_arena_common.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 1);
-+} arena SEC(".maps");
-+
-+/* the pointer is in arena, what it points to is not */
-+int y = 1;
-+int *py SEC(".addr_space.1") = &y;
-+
-+SEC("syscall")
-+int prog(void *ctx)
-+{
-+	return y;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ /* unused opcode to mark special call to bpf_tail_call() helper */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index e6593febbc35..43a8000aad3a 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1367,7 +1367,8 @@ static int bpf_jit_blind_insn(const struct bpf_insn *from,
+ 	u32 imm_rnd = get_random_u32();
+ 	int off;
+ 
+-	BUILD_BUG_ON(BPF_REG_PARAMS + 2 != MAX_BPF_JIT_REG);
++	BUILD_BUG_ON(BPF_REG_PARAMS + 3 != MAX_BPF_JIT_REG);
++	BUILD_BUG_ON(BPF_REG_ARENA_SP + 2 != MAX_BPF_JIT_REG);
+ 	BUILD_BUG_ON(BPF_REG_AX + 1 != MAX_BPF_JIT_REG);
+ 
+ 	/* Constraints on AX register:
+diff --git a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
+index 2c3124092b73..2d0bb771626d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
++++ b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
+@@ -69,19 +69,19 @@ static struct test_case test_cases[] = {
+ #if defined(__x86_64__) || defined(__aarch64__)
+ 	{
+ 		N(SCHED_CLS, struct __sk_buff, tstamp),
+-		.read  = "r12 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+-			 "if w12 & 0x4 goto pc+1;"
++		.read  = "r13 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
++			 "if w13 & 0x4 goto pc+1;"
+ 			 "goto pc+4;"
+-			 "if w12 & 0x3 goto pc+1;"
++			 "if w13 & 0x3 goto pc+1;"
+ 			 "goto pc+2;"
+ 			 "$dst = 0;"
+ 			 "goto pc+1;"
+ 			 "$dst = *(u64 *)($ctx + sk_buff::tstamp);",
+-		.write = "r12 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+-			 "if w12 & 0x4 goto pc+1;"
++		.write = "r13 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
++			 "if w13 & 0x4 goto pc+1;"
+ 			 "goto pc+2;"
+-			 "w12 &= -4;"
+-			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) = r12;"
++			 "w13 &= -4;"
++			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) = r13;"
+ 			 "*(u64 *)($ctx + sk_buff::tstamp) = $src;",
+ 	},
+ #endif
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
+index e0c389102db9..5cd503e87df9 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
+@@ -913,13 +913,13 @@ __xlated("...")
+ __xlated("4: r0 = &(void __percpu *)(r0)")
+ __xlated("...")
+ /* may_goto expansion starts */
+-__xlated("6: r12 = *(u64 *)(r10 -24)")
+-__xlated("7: if r12 == 0x0 goto pc+6")
+-__xlated("8: r12 -= 1")
+-__xlated("9: if r12 != 0x0 goto pc+2")
+-__xlated("10: r12 = -24")
++__xlated("6: r13 = *(u64 *)(r10 -24)")
++__xlated("7: if r13 == 0x0 goto pc+6")
++__xlated("8: r13 -= 1")
++__xlated("9: if r13 != 0x0 goto pc+2")
++__xlated("10: r13 = -24")
+ __xlated("11: call unknown")
+-__xlated("12: *(u64 *)(r10 -24) = r12")
++__xlated("12: *(u64 *)(r10 -24) = r13")
+ /* may_goto expansion ends */
+ __xlated("13: *(u64 *)(r10 -8) = r1")
+ __xlated("14: exit")
+@@ -954,13 +954,13 @@ __xlated("1: *(u64 *)(r10 -16) =")
+ __xlated("2: r1 = 1")
+ __xlated("3: call bpf_get_smp_processor_id")
+ /* may_goto expansion starts */
+-__xlated("4: r12 = *(u64 *)(r10 -24)")
+-__xlated("5: if r12 == 0x0 goto pc+6")
+-__xlated("6: r12 -= 1")
+-__xlated("7: if r12 != 0x0 goto pc+2")
+-__xlated("8: r12 = -24")
++__xlated("4: r13 = *(u64 *)(r10 -24)")
++__xlated("5: if r13 == 0x0 goto pc+6")
++__xlated("6: r13 -= 1")
++__xlated("7: if r13 != 0x0 goto pc+2")
++__xlated("8: r13 = -24")
+ __xlated("9: call unknown")
+-__xlated("10: *(u64 *)(r10 -24) = r12")
++__xlated("10: *(u64 *)(r10 -24) = r13")
+ /* may_goto expansion ends */
+ __xlated("11: *(u64 *)(r10 -8) = r1")
+ __xlated("12: exit")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
+index faf9eec0a63e..fb1180dae308 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
++++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
+@@ -89,13 +89,13 @@ __arch_riscv64
+ __arch_loongarch
+ __xlated("0: *(u64 *)(r10 -16) = 65535")
+ __xlated("1: *(u64 *)(r10 -8) = 0")
+-__xlated("2: r12 = *(u64 *)(r10 -16)")
+-__xlated("3: if r12 == 0x0 goto pc+6")
+-__xlated("4: r12 -= 1")
+-__xlated("5: if r12 != 0x0 goto pc+2")
+-__xlated("6: r12 = -16")
++__xlated("2: r13 = *(u64 *)(r10 -16)")
++__xlated("3: if r13 == 0x0 goto pc+6")
++__xlated("4: r13 -= 1")
++__xlated("5: if r13 != 0x0 goto pc+2")
++__xlated("6: r13 = -16")
+ __xlated("7: call unknown")
+-__xlated("8: *(u64 *)(r10 -16) = r12")
++__xlated("8: *(u64 *)(r10 -16) = r13")
+ __xlated("9: r0 = 1")
+ __xlated("10: r0 = 2")
+ __xlated("11: exit")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
+index 4ac92335da91..02e2065c9669 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
+@@ -779,10 +779,10 @@ __arch_loongarch
+ __xlated("0: r2 = 0x8000000000000000")
+ __xlated("2: r3 = -1")
+ __xlated("3: r4 = r2")
+-__xlated("4: r12 = r3")
+-__xlated("5: r12 += 1")
+-__xlated("6: if r12 > 0x1 goto pc+4")
+-__xlated("7: if r12 == 0x0 goto pc+1")
++__xlated("4: r13 = r3")
++__xlated("5: r13 += 1")
++__xlated("6: if r13 > 0x1 goto pc+4")
++__xlated("7: if r13 == 0x0 goto pc+1")
+ __xlated("8: r2 = 0")
+ __xlated("9: r2 = -r2")
+ __xlated("10: goto pc+1")
+@@ -814,10 +814,10 @@ __arch_x86_64
+ __arch_loongarch
+ __xlated("0: r2 = 5")
+ __xlated("1: r3 = -1")
+-__xlated("2: r12 = r3")
+-__xlated("3: r12 += 1")
+-__xlated("4: if r12 > 0x1 goto pc+4")
+-__xlated("5: if r12 == 0x0 goto pc+1")
++__xlated("2: r13 = r3")
++__xlated("3: r13 += 1")
++__xlated("4: if r13 > 0x1 goto pc+4")
++__xlated("5: if r13 == 0x0 goto pc+1")
+ __xlated("6: r2 = 0")
+ __xlated("7: r2 = -r2")
+ __xlated("8: goto pc+1")
+@@ -895,10 +895,10 @@ __arch_loongarch
+ __xlated("0: w2 = -2147483648")
+ __xlated("1: w3 = -1")
+ __xlated("2: w4 = w2")
+-__xlated("3: r12 = r3")
+-__xlated("4: w12 += 1")
+-__xlated("5: if w12 > 0x1 goto pc+4")
+-__xlated("6: if w12 == 0x0 goto pc+1")
++__xlated("3: r13 = r3")
++__xlated("4: w13 += 1")
++__xlated("5: if w13 > 0x1 goto pc+4")
++__xlated("6: if w13 == 0x0 goto pc+1")
+ __xlated("7: w2 = 0")
+ __xlated("8: w2 = -w2")
+ __xlated("9: goto pc+1")
+@@ -931,10 +931,10 @@ __arch_loongarch
+ __xlated("0: w2 = -5")
+ __xlated("1: w3 = -1")
+ __xlated("2: w4 = w2")
+-__xlated("3: r12 = r3")
+-__xlated("4: w12 += 1")
+-__xlated("5: if w12 > 0x1 goto pc+4")
+-__xlated("6: if w12 == 0x0 goto pc+1")
++__xlated("3: r13 = r3")
++__xlated("4: w13 += 1")
++__xlated("5: if w13 > 0x1 goto pc+4")
++__xlated("6: if w13 == 0x0 goto pc+1")
+ __xlated("7: w2 = 0")
+ __xlated("8: w2 = -w2")
+ __xlated("9: goto pc+1")
+@@ -1013,10 +1013,10 @@ __arch_loongarch
+ __xlated("0: r2 = 0x8000000000000000")
+ __xlated("2: r3 = -1")
+ __xlated("3: r4 = r2")
+-__xlated("4: r12 = r3")
+-__xlated("5: r12 += 1")
+-__xlated("6: if r12 > 0x1 goto pc+3")
+-__xlated("7: if r12 == 0x1 goto pc+3")
++__xlated("4: r13 = r3")
++__xlated("5: r13 += 1")
++__xlated("6: if r13 > 0x1 goto pc+3")
++__xlated("7: if r13 == 0x1 goto pc+3")
+ __xlated("8: w2 = 0")
+ __xlated("9: goto pc+1")
+ __xlated("10: r2 s%= r3")
+@@ -1044,10 +1044,10 @@ __arch_loongarch
+ __xlated("0: r2 = 5")
+ __xlated("1: r3 = -1")
+ __xlated("2: r4 = r2")
+-__xlated("3: r12 = r3")
+-__xlated("4: r12 += 1")
+-__xlated("5: if r12 > 0x1 goto pc+3")
+-__xlated("6: if r12 == 0x1 goto pc+3")
++__xlated("3: r13 = r3")
++__xlated("4: r13 += 1")
++__xlated("5: if r13 > 0x1 goto pc+3")
++__xlated("6: if r13 == 0x1 goto pc+3")
+ __xlated("7: w2 = 0")
+ __xlated("8: goto pc+1")
+ __xlated("9: r2 s%= r3")
+@@ -1121,10 +1121,10 @@ __arch_loongarch
+ __xlated("0: w2 = -2147483648")
+ __xlated("1: w3 = -1")
+ __xlated("2: w4 = w2")
+-__xlated("3: r12 = r3")
+-__xlated("4: w12 += 1")
+-__xlated("5: if w12 > 0x1 goto pc+3")
+-__xlated("6: if w12 == 0x1 goto pc+4")
++__xlated("3: r13 = r3")
++__xlated("4: w13 += 1")
++__xlated("5: if w13 > 0x1 goto pc+3")
++__xlated("6: if w13 == 0x1 goto pc+4")
+ __xlated("7: w2 = 0")
+ __xlated("8: goto pc+1")
+ __xlated("9: w2 s%= w3")
+@@ -1154,10 +1154,10 @@ __arch_loongarch
+ __xlated("0: w2 = -5")
+ __xlated("1: w3 = -1")
+ __xlated("2: w4 = w2")
+-__xlated("3: r12 = r3")
+-__xlated("4: w12 += 1")
+-__xlated("5: if w12 > 0x1 goto pc+3")
+-__xlated("6: if w12 == 0x1 goto pc+4")
++__xlated("3: r13 = r3")
++__xlated("4: w13 += 1")
++__xlated("5: if w13 > 0x1 goto pc+3")
++__xlated("6: if w13 == 0x1 goto pc+4")
+ __xlated("7: w2 = 0")
+ __xlated("8: goto pc+1")
+ __xlated("9: w2 s%= w3")
 -- 
 2.55.0
 
