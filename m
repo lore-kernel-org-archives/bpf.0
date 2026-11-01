@@ -1,65 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.7
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793525532;
-	b=souXFDdMs/OXy225xXish9rGM4Zlo9yWJHLuLUdK6PduleC97nr9maFa4YXPv4LnttRg
-	 4tDAoNVBauUMakRRStD89vys4INdh2prEFHkSVBvEk2aS7JPevE7nsSGwa35KRjt/6+6r
-	 AsP32GLUs1SkFyWDKtjQYYaRyLjEzn4ttsasr0+n3mWaIhahypQ6HHIpUmM0shxUpw+Pt
-	 i3jfrAwnkLl+KIRvy74P6fDFrs7FpNY7cRHNDrH1XPoc2XE99cILsroEKnB2sV+r+rsnd
-	 xmFx8yrUMBYAmBNvPIjn7St/1BxHXXiEb1D1LViXj/p/SKIiGNBtYLQgUbnGqmC56LA==
+	t=1793529156;
+	b=a4cu7S8HtmIPAEBDBHcpxEw0YrF9cCAuRaX27p2cC1HpegXrvdouZ+VBDbzhUWtKhSJZ
+	 9RTXmyPf4suPJjpEgJRzCfCYOORFMO5ZFd+kQdudlnzROe5xZfIlc2W1/pSUO5SFzOhIk
+	 UA/wbknv++oadziAT67LElivV+ZfygG8MDuP95NECwi89xWcykRJih1x3M9N483Qoj/Hk
+	 41YxvKV2nRAnIWDyE6HK2HJ2r3Vj7NOasDybXtt3lv7hqZdGaX4G4kqp/SLSsmzLBptEZ
+	 rTugz/w6F22Pp+thJc+szLXqwXPWwe5hq61Go4dMwogCPnsZ7mPxFKzEmTucLqIm+wQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793525532;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=BfOppHSMHd40VVAofaOH1a1+TKTbbwvAtZJDZ0+ZsUM=;
-	b=AK8FrXhem0xXNJ38N788dba2V40YuRfKLnvyPnTT3dD7llBghZp3/KFbKSOyLSmpp14f
-	 Nnr365juKwW7dg8dsnuDTxPSNUhTJ7e0Iq42/nBOiggDhZhtx70NwV6VbKCVVz1E+C+sS
-	 VsJ9AxMUYEASH+BjDnKOVMLvAdtzqCSeTCM5FFnrN4qQV3oDMVuK9+QwNmAlQMfeEYzNz
-	 arYAvZGTjC88IWuMNqaJmvthWQw6PnBv+vopWsyS1LJo8tWSbdOpBH91pieB96ZFsm5Om
-	 mwKbRS9UyU1KIpXkRvXQ6JiKlnvh/Exx2k3+dU51Q3yJXCcB4Z34nsp7u5BORq1dSjg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793529156;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=u/zxI4CzMoBvyHkNRptWT2GXXsMEz4m1n2MgjkQARrA=;
+	b=ErKqudW6IuiO6Nz91SoXlm4mYdUtpYMC8XI37uhF+PRMOv7mH3gDrcPvrTuOgskMO9+q
+	 M6ivOExzcDCiiY747S8N2cQvrLevHSRKtQ1HxENUE9BCEoQQmnCTSlb9y0faBJpYidagU
+	 TwGbowCoPHrjhtLaWn4fglMLXOZQZk8M6MPsef9WeBkzz778Jy3veF4fhGrbKqqSW7dZ7
+	 VO6IsF9/ysvKARJaGbZA5E6qBWffukL0K6zv+dlxVIrgEZRRW5fBzt/xtZN/A0Sgcu8pP
+	 JIZrWg0KDqbRTG/ZVOOJmpZZBdsOFcsJjjum+tp6/zUXK5FiTYLPJGIkOI7LmI579+A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mG8ODZgs;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=udrTcaAh;
+	arc=none smtp.remote-ip=74.125.229.7
+Received: from mail-dy2-f7.google.com (mail-dy2-f7.google.com [74.125.229.7])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B77606A324;
-	Sun,  1 Nov 2026 09:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DA0606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 10:32:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77DA0606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mG8ODZgs
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 026801F000C1;
-	Sun,  1 Nov 2026 09:32:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793525531;
-	bh=BfOppHSMHd40VVAofaOH1a1+TKTbbwvAtZJDZ0+ZsUM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=mG8ODZgsfE09gOUhcnav6h9O3t75df9ocm+xFngMd3fiWI49HTol93aCLvr+dMToe
-	 TRdncPb83nzQ9OCXzKVqRAgvaaf57+gj50phV4BtLGVfusRObTZb5jgFGJdcWZH9y3
-	 OQA/wyMAba+iB8ybq9mMul8kAH7wfLjI3ifgkysJGhm4Bhci6H+HoI3nYNbPIgNjpK
-	 tSBaWhpovUKX+dHgx3E7Y4CCJ/RqFSgYL/fXLc/lEwVEm06l8bpDMr/YZA3BAcQfKy
-	 o0TLobjI3GDoLoJh/PqUFqhCiOjKSBvVecC3VOse0q3E3T2rFuXFlPY6ZJBOvxyens
-	 2jodF3+g7FIxw==
-Subject: Re: [PATCH net] bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
-From: netdev-bot+sashiko@kernel.org
-To: jhs@mojatatu.com
-Cc: netdev@vger.kernel.org, edumazet@kernel.org, bpf@vger.kernel.org,
- stable@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
- dsahern@gmail.com, kafai@fb.com, martin.lau@linux.dev,
- john.fastabend@gmail.com, sdf@fomichev.me, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- jiri@resnulli.us, victor@mojatatu.com
-Date: Sun, 01 Nov 2026 09:32:09 +0000
-Message-ID: <179352552950.3131.18338438529583349627@kernel.org>
-In-Reply-To:
- <bpf_redirect_neigh_short_linear.v1.r0.20261028033717-1@mojatatu.com>
-References:
- <bpf_redirect_neigh_short_linear.v1.r0.20261028033717-1@mojatatu.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=udrTcaAh
+Received: by mail-dy2-f7.google.com with SMTP id 5a478bee46e88-368c26de2e0so654856eec.1
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 02:32:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793529155; x=1794133955; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=u/zxI4CzMoBvyHkNRptWT2GXXsMEz4m1n2MgjkQARrA=;
+        b=udrTcaAhR6lTPvX6nytrMjhk3DuWqeWdJyxirvGnilvZJ6Po7seTbDjGHZSb+tTGV8
+         lRA7hBsky7Yi4F8BdF8VSbpuo4XOFddA0ePcJc5p7crrbKkktIXPbo10Wbt5Qh8a1AOG
+         IlvkjfxsaiwF7JjASnxoQhxDgLJkF1Mu8jiSrY8bz2wGuMkEyVSG/tIlfSl7ubyxpheI
+         e91DXqljQQIbTTHvzuszzdztRClpLuqpZ7/vgZC/YsGXHjYZxQrt9cGJVASw8b3vFx7D
+         XIEUDOi0sUhTkxObCds0b33AIPGsRsYCUM+NMPIs3GajcyhcnUMCsagg8FLLoJ3LkJjY
+         rVvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793529155; x=1794133955;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=u/zxI4CzMoBvyHkNRptWT2GXXsMEz4m1n2MgjkQARrA=;
+        b=GdXm6VljNc1V/Q42dO0evxdjRuUQ+/YFPEAcC/ngcdGnpHG8xNbfbpebuO9BTznBQI
+         dLWO7IVaJYLUZRcfupg18NvuwOhC2bJo0bpscBTX6e2Rrg5S8oTtDNM7TPuOk1fnv2t7
+         CCOu0JHF58ykd8WyWZcxw10jjp/HX2ybtfYnCjcL9WlVFgGEAtNTcV+4Dan9nRq0fwVa
+         pbuhNpspTHOPAtip3aJlaF/7wMjWrzfkMKM+PxxLxiT6ID3crkOwJ3cKTL4JF/VtOx9k
+         7TiQEbyGVgXnep3+IWCrODDDXYjD/1Blu76cYF1DL0biK36U0chgKnF4me6egIuQfkOu
+         GsAw==
+X-Forwarded-Encrypted: i=1; AKwUvBwj1iYHoipoBjiIanFg7UF9Gu1bL4zA7hb4IoDQ8YqjTrw95efiGra5DVYXhu/33/Lovmg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8wiQKl/5SFOyWsNrCt895jB7TVxBTXMn0bJ2lRmy3mZ9i6pJt1
+	tu02VR2WvX8pdHGZcjmajNXMWm0mOKwtSb1VwGCP/2C5VH/klh7nyx2f
+X-Gm-Gg: AYBFou1xqxAJ8vAYOXzSaFQVA4/qn6D1YVg7lJ1KFKUqgZSYPfsrpL54xSNvTdazXND
+	cGgakY1qp2CE3v5An58XwuTzLOVBjogQnnGP/UuR/P5PpUWwf/wqOLQj8KfenjGj6kYfzC803Ui
+	EnYtakSyn9YuFhhCJ5ruq8Mlk1iLLodzvST3aT6jFa3RYGLVdsjV8k08ht2nmHj0cHpU2RWz62t
+	ilRhKzPorh/Ch6VFwwtHJ9MK1aXkzJ6qYsncrLcEIJLm+k0l2wndZwbxDfUKgOssW9cJw4iYbGU
+	L2p9LheAXzQzuP/GRMfCGZjwJrB6K/iisXD4XW+AEMjFXqEHwdeccDWU+DQwBAJFxCyhOaPWm3q
+	ZgXAGTPvVFqER33DHxtRfd2UwfSQTR5K7Sixzz8Uh8X4UMr9QDjkFYZQkNEe2KUX03iMJwpUmnL
+	wKnpnM/7rq9mDnWC8GIOLFolKWs2w5pgkGhJ9lr3XlUCIXAbX+z4Xj42zgsXMR+8IC+cZHlqZpu
+	hY2k3YvqyWfBSqWYnxg3PqGG1pK5Nj950/AtaNOHvLX9w3XC6djs7jP1GP9lT7mHQ66vx0WPCqA
+	rFgmshSCBEgZ8nZHeytxu/A2IRgwn4MJUd02n518dDWKBEqvMhXki3b3
+X-Received: by 2002:a05:693c:2512:b0:369:fa7c:aee9 with SMTP id 5a478bee46e88-36a423f54a1mr10402589eec.19.1793529155071;
+        Sun, 01 Nov 2026 02:32:35 -0800 (PST)
+Received: from localhost.localdomain ([98.148.34.5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a428c17bdsm25242506eec.6.2026.11.01.02.32.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Nov 2026 02:32:34 -0800 (PST)
+From: Hungyu Lin <dennylin0707@gmail.com>
+To: ast@kernel.org,
+	bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	qmo@kernel.org,
+	daniel@iogearbox.net,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hungyu Lin <dennylin0707@gmail.com>
+Subject: [PATCH bpf-next v3 0/3] Normalize enum values in libbpf and bpftool
+Date: Sun,  1 Nov 2026 10:32:18 +0000
+Message-ID: <20261101103221.51534-1-dennylin0707@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,179 +103,83 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+This series fixes enum signedness problems in libbpf and bpftool data
+dumps using the shared btf_enum_value() helper suggested by Alexei.
+It also uses the helper when parsing enum-backed map fields, where sign
+extension can change the requested map_extra value.
 
-Critical: 0 · High: 2 · Medium: 0 · Low: 0 (1)
+Keep existing enum name matches before considering normalized values.
+This matters for eight-byte BTF_KIND_ENUM values in both dumpers and
+narrow negative enums in bpftool. libbpf already zero-extends narrow
+data without kflag; that behavior is unchanged. bpftool preserves the
+original name's priority in one scan, even if another enumerator matches
+the normalized value.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+For an eight-byte ordinary enum with kflag clear, a stored negative
+enumerator can match both its sign- and zero-extended values. This is
+a compatibility choice: identical metadata can describe either a legacy
+signed enum or an unsigned enum.
 
-- [High] The new `skb->mac_len < ETH_HLEN` test in __bpf_redirect_neigh()
-  (net/core/filter.c:2439) breaks bpf_redirect_neigh() for locally…
-- [High] The same short-L2 skb from the commit message still hits the
-  __skb_pull() BUG if the program calls bpf_redirect() instead of…
+Unknown bpftool values follow kflag. With kflag clear, numeric output is
+unsigned, including BTF sanitized by libbpf for kernels without enum64
+support. This changes unknown negative values whose original signedness
+is no longer recorded. libbpf's numeric fallback is unchanged.
 
-Pre-existing issues:
-- [Low] Concern: after pulling the Ethernet header,
-  __bpf_redirect_neigh_v4()/__bpf_redirect_neigh_v6() read…
+CO-RE is left unchanged. Clang 14 and 18 emit a zero-extended immediate
+for 0x80000000U, which the current sign-extended orig_val rejects. But
+using the helper directly would reject negative enum immediates from
+Clang 14 objects without kflag, and would zero-extend negative values
+from target BTF without kflag. Those compatibility issues need a
+separate change.
 
---
+This supersedes the pending libbpf patch [1] and bpftool data-dump v2 [2],
+as requested in [3]. The already applied bpftool type-JSON fix,
+eaae576c34d7, is in the base and is not resubmitted.
 
-bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
+Changes in v3:
+- Combine libbpf, bpftool and regression tests into one series.
+- Add btf_enum_value() and use it for enum-backed map fields and data
+  name matching.
+- Preserve existing legacy names, including eight-byte ordinary enums
+  and ambiguous narrow names, addressing the review of bpftool v2.
+- Add libbpf data-dump tests and kernel-backed bpftool map-dump tests.
 
-This patch adds a check to __bpf_redirect_neigh() that drops skbs whose
-mac_len is shorter than ETH_HLEN. It also calls pskb_may_pull() so the
-Ethernet header is linear before it is read and pulled. The goal is to
-avoid the __skb_pull() BUG that a TC program can trigger with
-bpf_skb_change_head(skb, 1, 0) after vlan pop_eth.
+Validation on ARM64, GCC 13.3.0, Clang 18.1.3, Linux 6.12.68:
+- Complete libbpf and bpftool builds pass, including the libbpf ABI
+  checks and bpftool built with -Werror.
+- With the new tests on the baseline: 38 subtests pass, 8 fail.
+- With the fixes: all 46 subtests pass, none fail or skip.
+  These are the btf_dump and bpftool_map_dump test groups. The bpftool
+  cases load BTF and maps into the kernel and check both CLI formats.
+  Run these groups with ./test_progs -t btf_dump,bpftool_map_dump.
+- map_extra parsing was checked with a separate local object-open
+  harness; this series does not include a selftest for that path.
+  Arena allocation and mmap were not tested.
 
-Link: https://lore.kernel.org/netdev/20261027082604.1485903-1-edumazet@kernel.org/
+[1] https://lore.kernel.org/bpf/20261031233219.9362-1-dennylin0707@gmail.com/
+[2] https://lore.kernel.org/bpf/20261101001024.9994-1-dennylin0707@gmail.com/
+[3] https://lore.kernel.org/bpf/DMJG1R2YIJRK.16CZLV9S5U7Z7@gmail.com/
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 70dc621672f2e..4d344ec097361 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2432,10 +2432,14 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
->  static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
->  				struct bpf_nh_params *nh)
->  {
-> -	struct ethhdr *ethh = eth_hdr(skb);
-> +	struct ethhdr *ethh;
->  
->  	if (unlikely(skb->mac_header >= skb->network_header))
->  		goto out;
-> +	if (unlikely(skb->mac_len < ETH_HLEN ||
-> +		     !pskb_may_pull(skb, ETH_HLEN)))
-> +		goto out;
+Thanks,
+Hungyu
 
-[Severity: High]
-Can this check drop valid locally generated packets when
-bpf_redirect_neigh() is called from TC egress (clsact or tcx)?
+Hungyu Lin (3):
+  libbpf: Normalize enum values according to signedness
+  bpftool: Preserve unsigned enum values in data dumps
+  selftests/bpf: Cover enum signedness and legacy name matching
 
-As far as I can tell, skb->mac_len is only set on the receive path, by
-skb_reset_mac_len() in __netif_receive_skb_core() and by a few BPF helpers.
-The transmit path never sets it. __dev_queue_xmit() only does:
+ tools/bpf/bpftool/btf_dumper.c                |  42 ++--
+ tools/lib/bpf/btf.h                           |   6 +
+ tools/lib/bpf/btf_dump.c                      |   3 +-
+ tools/lib/bpf/libbpf.c                        |   2 +-
+ .../bpf/prog_tests/bpftool_map_dump.c         | 180 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/btf_dump.c       |  84 ++++++++
+ 6 files changed, 302 insertions(+), 15 deletions(-)
 
-    skb_reset_mac_header(skb);
 
-The IPv4/IPv6 output, neighbour and eth code don't touch mac_len either.
-That means a locally created skb still has mac_len == 0 from allocation.
-Clones, such as TCP retransmit clones, inherit that 0 through C(mac_len) in
-__skb_clone().
-
-Such an skb has a valid 14 byte linear Ethernet header. With this patch it
-still takes the goto out path, gets freed, and -ENOTSUPP is returned. The
-return value is then ignored in sch_handle_egress():
-
-	case TC_ACT_REDIRECT:
-		/* No need to push/pop skb's mac_header here on egress! */
-		skb_do_redirect(skb);
-		*ret = NET_XMIT_SUCCESS;
-
-So the packet is dropped silently and the sender is told the transmit
-succeeded. Forwarded packets still pass the check because the RX path set
-mac_len to 14.
-
-Other TC code already avoids mac_len at egress. tcf_mirred_to_dev() does:
-
-		mac_len = at_ingress ? skb->mac_len :
-			  skb_network_offset(skb);
-
-and bpf_push_mac_rcsum() only reads mac_len when skb_at_tc_ingress() is
-true.
-
-skb->data == mac_header on both paths here. Would checking
-skb_network_offset(skb) < ETH_HLEN (or skb_mac_header_len(skb)) work
-instead? Another option is to use pskb_may_pull(skb, ETH_HLEN) together
-with the mac_header/network_header distance, and not use the cached
-mac_len at all.
-
-The existing selftests (test_tc_neigh*.c, test_tc_dtime.c) only call this
-helper from ingress, so they would not catch this.
-
-> +	ethh = eth_hdr(skb);
->  	bpf_push_mac_rcsum(skb);
->  	if (is_multicast_ether_addr(ethh->h_dest))
->  		goto out;
-
-[Severity: High]
-Can the same short L2 header BUG still be hit through bpf_redirect()?
-
-__bpf_redirect_common() has the same weak check that the commit message
-calls insufficient:
-
-net/core/filter.c:__bpf_redirect_common() {
-	/* Verify that a link layer header is carried */
-	if (unlikely(skb->mac_header >= skb->network_header || skb->len == 0)) {
-		kfree_skb(skb);
-		return -ERANGE;
-	}
-	...
-}
-
-Take the skb from the commit message (mac_len == 1, one linear byte,
-skb->len >= 14). If the program calls bpf_redirect(ifindex, BPF_F_INGRESS)
-in place of bpf_redirect_neigh(), the path looks like this:
-
-skb_do_redirect()
-  __bpf_redirect()
-    __bpf_redirect_common()
-      __bpf_rx_skb()
-        dev_forward_skb_nomtu()
-          __dev_forward_skb2()
-            eth_type_trans()
-              eth_skb_pull_mac()
-                skb_pull_inline(skb, ETH_HLEN)
-                  __skb_pull()  -> BUG()
-
-____dev_forward_skb() only calls skb_orphan_frags() and
-__is_skb_forwardable(), and neither of those linearizes the skb. Without
-BPF_F_INGRESS, the egress path to lo or veth reaches eth_type_trans() in
-the driver's xmit routine the same way.
-
-If the linked series from Eric already covers __bpf_redirect_common() or
-eth_type_trans(), it would handle this case. In this tree, though, neither
-__bpf_redirect_common() nor eth_skb_pull_mac() has such a guard.
-
-Should __bpf_redirect_common() get the same pskb_may_pull(skb, ETH_HLEN)
-check?
-
-[Severity: Low]
-This is a pre-existing issue and was not introduced by this patch. After
-the Ethernet pull, __bpf_redirect_neigh() dispatches on skb->protocol
-without checking how much data is left:
-
-	if (skb->protocol == htons(ETH_P_IP))
-		return __bpf_redirect_neigh_v4(skb, dev, nh);
-	else if (skb->protocol == htons(ETH_P_IPV6))
-		return __bpf_redirect_neigh_v6(skb, dev, nh);
-
-__bpf_redirect_neigh_v4() and __bpf_redirect_neigh_v6() then read header
-fields to build the flow key, without pskb_may_pull(skb,
-sizeof(struct iphdr)) or the ipv6hdr equivalent:
-
-net/core/filter.c:__bpf_redirect_neigh_v4() {
-	const struct iphdr *ip4h = ip_hdr(skb);
-	...
-		.flowi4_proto = ip4h->protocol,
-		.daddr	      = ip4h->daddr,
-		.saddr	      = ip4h->saddr,
-	...
-}
-
-If a program trims the skb down to only the L2 header, or the L3 header
-sits in frags, can these reads go past skb->tail?
-
-The reads appear to stay inside the head allocation (tailroom plus
-skb_shared_info). So the result would be a garbage route/neighbour lookup,
-not a memory safety problem.
-
-Would it make sense to add an L3 pskb_may_pull() while hardening this path?
-
+base-commit: a30c772627b2ef4bc715332b1b04938a914556cd
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/bpf_redirect_neigh_short_linear.v1.r0.20261028033717-1%40mojatatu.com
+2.43.0
+
