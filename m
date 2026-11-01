@@ -1,102 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.158
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793529161;
-	b=4/rSmWHRyjGQvxiH7Tg3u5/AD7z2MWO6BgyBCBexKp0ZimJJHH+eJMjloX8mftqAKo1P
-	 ymz5AkoBTOoCdHabSoKQIT6XFjENpk014k10EJgeH12DEPbcpUWMgeGcKZRiqmvJ/33q0
-	 Ocu4scEfgs3ubbdbXwfVrGv4OswJ5YZkXw5kSaotYFknPUbSCzck+VoVH3mKLMUY8n3D3
-	 iwQjwUb9tXAA7uV/GvIiY/iUdAbdThBQw4FjVaMHuAGZi/0TfjTeAZPKnmxYHUlDrwsBi
-	 JcIawTAiJ04WP7aRCMaWAFHi0wvUPtzI1+kbk3CPxBO8g1+URW9a0RnNd5cQgk0YfAQ==
+	t=1793531431;
+	b=wfJU1wkB8EtVLltDqwcDE1T/Xe+WC+EkbaqIx1hTsGCBGDteSwYYDpbCepw8ybcvXH1O
+	 87J1SR7V+h/LwzjwW6Afiufd3pJYjdHVfVXX6cwxM3C8ggw5EpMvjWg7n3Xhdc0zYzzSy
+	 nsVf5wLdB0ajljEOmDHO7MNNiysH1usiUKbZlU6bI7cOjn5A8TVkqd5Aze0CCj/MTBUoZ
+	 uUC+7D75C7OzZGJr9mkyTD5ZvJBXtvUvmU0SAEbLu66jjjN5/TTRJx9KIkUjrw1R7FX7k
+	 RPdzsmaB/Avbnl6l+Q7Pmx2NZvm84PHUG3Eqa+foZv59NQPasx0SA7/mGHinRnjrn2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793529161;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=7kAjnp/vmDsZxQUJrdxKe9E85NB+pqCNBKSp0Z5xRdI=;
-	b=wZd6w1ZwsnrnE6b3O1XNfFHfyHfxbz7dBuvJ5VSVTD4S5Jh+s4d3txzXSBCATxwjf0DT
-	 IAQtESbLrZ1BmZgYXvUb8FcJ2iFecgdsvTa+tvqN6OhIi8RLzMEjdsrBjOgVSLKrPVgHU
-	 Sm4sVuxnya7rxy+kmuDHtcSxx5srW+u2lolFjVj6CRahnrnZ1OPfAjuWtAn9cZOAAhz0h
-	 tu27sJdsNVnUcNpWnbjwNgmNk7NuvTOIGC7fXEfLCxScejVS8lTK8jKggROyCGBMWEYKt
-	 LeZXQ1UULK/b8d93Cs/UrNElK+dMGhfYarrJEUBlCDKoU5CY35XKZ/isOCWcekPNx/A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793531431;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=4wfpv+QTFOtinTEPJMT8d2lisDokEK4BkxqjtCTUaKw=;
+	b=5rTUW+xU2Ks/8d2BEDL4FFr83D1WmfX8GBjUgmVv3NZqppOjsziQ7losYMbhnai8IsR9
+	 vTXDnysXl5Puaej4ib1b15WIAnAKDXAfEP+IUdY94dkj+8b0bqnTiazOuWzkNb31Z/YNC
+	 RS6T1LVLd9wKRuJZdccOaaZFpAJB3YSAdWJRflUYDLT7LN1xOrtPyXg7rlnzqin1FzG0s
+	 JVrbhML9nrTM3fkvQ4a6U12hAEIpOSAbq+X+TrQLxKtYeW50GcXoU3lgWLDj2ugE0xjur
+	 0WuYzrpuNdE1h9i5w5bsISAqpqAQQrTvOhvp40WBmJriqGqe4ushi7ZwAvGaiyDLq4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IlK5FzPs;
-	arc=none smtp.remote-ip=74.125.229.8
-Received: from mail-dy2-f8.google.com (mail-dy2-f8.google.com [74.125.229.8])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=EKEgsdW1;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=YfeVPFHS;
+	arc=none smtp.remote-ip=103.168.172.158
+Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF10606A327
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 10:32:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAF10606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F97D606A329
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 11:10:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F97D606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IlK5FzPs
-Received: by mail-dy2-f8.google.com with SMTP id 5a478bee46e88-36a24f47293so1359350eec.0
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 02:32:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793529160; x=1794133960; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=7kAjnp/vmDsZxQUJrdxKe9E85NB+pqCNBKSp0Z5xRdI=;
-        b=IlK5FzPsixSL1Byca9cU74Jo7bZ13QHBvu94n4troRBKOi+zd6mAy1WvG91PIHtTY1
-         853qGyjb1FedxyVqC2CEBq+iVTKO6mcT0QfNScXTKVs1G49DUhcHmxXaydmGyCoJFEr7
-         XwQ8deS7fCd/zKD+pJCgnzOnFrsjf98Z9BVoNJ1yrIGcjhudMuvWFqBTDK7Vn5WNU583
-         bZyPxwVqZI9t9Z0nMmQzzj2lPVdUOV/crbyOLuVw9g0n5SAGiVwQEVUr42Ws4HHYiZb1
-         XGe85GajBmbSO7/aMwzj3tQvMvbXNAGLI/IpfNqtr4IX+fVtqAFcNtBCtOFnNpfoiWSw
-         c1dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793529160; x=1794133960;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7kAjnp/vmDsZxQUJrdxKe9E85NB+pqCNBKSp0Z5xRdI=;
-        b=EPWSCOiZGBTbPfaaKG+Qejd/ots93Dfwclnf+Yfk9a7hy5tESfDzNeXJW7/7D0Z3DF
-         XhjHIRQhQ4Cg20RLyWrd8VQCv5TbYVF6UZrILUgQG7UiRsEWM6EHBoDpHUeOOqJfFN/v
-         0PloiqwLs2DA7/LHm7sLEkHLN+cu6mB++1s0xtJreOYmnRfTrI+LV+WM5CGRh4mg4n/J
-         VHdYIF6nw648hRrtRcgV6vD4VNxUs+1liUC3aXA/k1FrmpdveQKHTHnFEbzgc04shfZO
-         WZlz5F1hZoIkJg6wsszKJvvgOZ+w/kXQfb+DT/1OYpy2O9rRoj/5GLn3lVeyCl/39XC7
-         DlNA==
-X-Forwarded-Encrypted: i=1; AKwUvBwAaNskTXWoChRTvWnWkWXwZWbXRs9crXs5sRNznXBm4r+QcfHFO0MBctORKhFPpZF3AVI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+qZwkkXzazKpnRUOUaMTdLi3bG2xGvzsVuqNCvb4AqFn1h4jaw
-	7vCV17aNqwKtFL2pX2Wl4u2U5tGHbi45ziDjwBdvCuc1CCuQmX1q+ggs
-X-Gm-Gg: AYBFou39VU+B1q69PWx2W+fLfflM7Rdh1waulaLca1vuLQl4/3icgy36Lc9iOs10U/l
-	G6u0gYoZhts5a819WylYdyR9B0JhOGr9ow2vVX9VH0wRS18GrIH8NG4O3udYFii41WYk9HoW21B
-	q90FZ3qIwM5mGSR4BfRDBjlKgqSp9U3ZSsmj3PPvK3XPeE6JIAfZwuIbjK0AfyX9Fs8zit2GuIs
-	gNlDVIfgCaV9NowFyky8MJCvL6tZ+Oxc3ED/+YxVbSiW3IvMdyuU2TKDPZTTCCSKJGFot8iyDwi
-	F4xkkA8i5UbQg/gsbd1mowvXchG94PA/7nv3p4iqvgbRU7Mi57mSmSLS+3zjxzrVzp6aRufcIV3
-	G2CwrIVxqg4BNNZFkHxQdLap9OyER7c7O3NVZtOa8v6dW7vsK9R/4L8HstGKPZc9mQnZ61e2ja+
-	qXwI9v/C/NvTDA5Isyzaio3CxJx1Ln7U/8JhtIvLhJffYbp8CvN+mMA9KT4cY8guffxmNkzeuBR
-	MTBZs2iBF6QbywmaNt0EDLDcoNLG4EcqU2zHQsyr6MZkzTZ798housUyLVgpncw0cCvx45dB2qz
-	5BGQW0djncLlnIldaRdHIKeo+47A+SEJMf6RmmETnNS45VAdTqZ/YyMQ
-X-Received: by 2002:a05:7300:cd90:b0:34b:4b99:24ab with SMTP id 5a478bee46e88-36a42454b8emr16281293eec.22.1793529159911;
-        Sun, 01 Nov 2026 02:32:39 -0800 (PST)
-Received: from localhost.localdomain ([98.148.34.5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a428c17bdsm25242506eec.6.2026.11.01.02.32.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 02:32:38 -0800 (PST)
-From: Hungyu Lin <dennylin0707@gmail.com>
-To: ast@kernel.org,
-	bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	qmo@kernel.org,
-	daniel@iogearbox.net,
-	yonghong.song@linux.dev,
-	eddyz87@gmail.com,
-	ihor.solodrai@linux.dev,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hungyu Lin <dennylin0707@gmail.com>
-Subject: [PATCH bpf-next v3 2/3] bpftool: Preserve unsigned enum values in data dumps
-Date: Sun,  1 Nov 2026 10:32:20 +0000
-Message-ID: <20261101103221.51534-3-dennylin0707@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261101103221.51534-1-dennylin0707@gmail.com>
-References: <20261101103221.51534-1-dennylin0707@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=EKEgsdW1;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=YfeVPFHS
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 1EF78140022F
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 06:10:30 -0500 (EST)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Sun, 01 Nov 2026 06:10:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1793531426;
+	 x=1793617826; bh=4wfpv+QTFOtinTEPJMT8d2lisDokEK4BkxqjtCTUaKw=; b=
+	EKEgsdW1SfyxgrDSqbPy62abe6+yBX+vL8a+2UTU1LI0NXk3+oTaS6avYxMslK0q
+	hD3tRCq6YVfuB8k/7VCiSZEh8QwckekW94EGnruDIdvufsRWFDTepijIPuNrCzLV
+	DVnQ3CMYpZuLAbHq5wf7HijEUnm1YbWV8SMIaVs+liNJT6U9WSi1i3G3Q5auBNIt
+	e6w7QQDPuAyjHO83x7ztImfj0rBttm8KYodZ99NyC3Upd9h9hX8qzrQ+tebUqMir
+	IMWjfaCAgAw3EN6uLyXuUVcTQE/+husMVqkdtUxz2+idrsk31Tr9MyMm8XFuVEWA
+	d8lktoXhCdH1z8uqytMqHw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793531426; x=
+	1793617826; bh=4wfpv+QTFOtinTEPJMT8d2lisDokEK4BkxqjtCTUaKw=; b=Y
+	feVPFHSXQ2Wa9yVx3P2SOgI7aWm+6qiGZoLObH40GRMXWrDCH/OP1fbDCqKQB8tM
+	m5J6WHkhcOxWe2Grnv4SlUrdMekD9yY2ArzwI43YkiBpDpijgF42Lj3fb5kACDpj
+	EaB94J+9Go38aF7zdzRbe+Gn+A1tKT1JBm5GvNBtjdVBeNkyRJJf+0e0wCE7x4em
+	NWw/2RM8uztmwbHdJyVb6lSrddIPxSNDE4a99N7/hmOj81l2NVlEW+TOfZ/QM4zg
+	JYRb+qER1rBvnOHHcypuE8Iufg5u21jWYORbdtvU6hVoYt+YorUQPt9vNHLOkG4P
+	ipkEdAvx775JkdeMQOsoQ==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793531426; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PGJwZkB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:CWAw7lYWrjp6XuPikXilEnNBhPaj7dDZJU51xXgJoEMizUm
+	NYsOwBjMTCcMr9wtzJy/3P+Q/Rsl8glWFiXEKVilkKS97Il6J2/cXYFbNrYFEbpa
+	nau3wYm2M3iqUKxB9N8LS7/kjt1o7Wu3QIn0ADjSFHcPSZHcJDpXX/XKO480AsU9
+	TkTOm75aaReapvRdfBeYFSzEorRDcUw0YAaEHRryM8F/bu+IsbqHl7mnSqnu7pjk
+	CNdLQlYd4pN/Ob3mzyat2I8zJNvtQ5kFBDm4aM1s2p0jg+uhO4WRV/mmKE0B0QRf
+	Xrl4z8+JYjeLPO1eliWQxqnnKYGwYPaCudfOCbg==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:FDA21DrBgrzqdaomdKVLZobssXJHwAfVxzSxQkSif5Y=:baVa2LtZmCenyZV/2WeRHNZ/OkEdZPERVqPYiPWE0pE=;
+X-ME-Sender: <xms:Hx7narBXHcHcMiYGvSnv_DkH6BCsOwWvL-_K9ae1w0mN7mwySCRrQg>
+    <xme:Hx7nasVJFejhn9XWQe2GeXmKbNk_wJH_bLzPzYji1RQPfqYMPpu9sx_7iKmpEB0uA
+    HqK_nnOHZUNcCdwhnaGpLK4TBD7m2eeANcUJIGVf8SS8r5qKLLYLdo>
+X-ME-Proxy-Cause: dmFkZTFysQRqxqvi0Wb9oWm4wruPAg1gWPeP99tcZEkNI3yxqU343EAQO2QcxMdNR8VWCi
+    l6cZlJq2fU2vqsUmRqQmQqGu5Z5VFEOwmSomr6ENeL9mWh7UpbltslPJNnqEhkTmMvkXHo
+    L4f4QMBZrIBi9bh0/DZ43DXc8eLec4y/7XkmT64KS3mY+3B/K4KBHcqKup+Bog3XZNARY4
+    z/WkR56BmAlS35cY7G094YUf2tjFYccIb40rkzexho6b506uXU3NHCMJdvxV/m0KmPx2YT
+    AW2ilBV6xD2RNKbgsUSEdIqOLvyVHuywb/hJ0+rptlsF7vHaqWv+g9ftHmTtcvmMGf0os8
+    95oMGI5e3yW006P3n7JB5yMeQtWYhYHfUC6N6D78xwZKqWON129r5yp28eoY1Vd5KM9hQh
+    T4PK8RjYQx+Oiacd7QceLJzWAqc65MLUu1Da90d5b4M+RcbFVhzLS8Npra/UzOzImA53Lr
+    /kXqJWS7m2TOOjyzDOwB+/j2E4NqCLxGHszuz14N+gW/JcpjqzOiZUEqZsrv2sH+isWgAz
+    e95+BKpxp1SJgdZvaDDtIbL0tlVSBYZbkN9EpcOoPK/Rp7svBFzv1tS7ckaHD+7bVvkrN+
+    0DLxmvvVA4lQ+VPwns3W5ApBLAJkDOshDhlRJH+1VRecGtZ91j3c28m0b6Ew
+X-ME-Proxy: <xmx:IB7nai-FL20ZyyPTM4c5Ty0swO0GPno4UDXOdsfQTK1txrjdz1Po5w>
+    <xmx:IB7nanqkxMXV1851nhVBB3GfPGTdSsi3tBB10ytauak_45qcrl48Mg>
+    <xmx:IB7nasTTd84biTLVWzJYJsjNndvQ5xzN2AR6lY19q8xLft5bZ5DwTw>
+    <xmx:IB7naqP4mNORn8_XLi8QuJQVOJKda2ao13bmwWB5ENn5HWNoVqV6xw>
+    <xmx:Ih7nagQrHVSJIoEpQ8YSiNcHvwobPTBrJlAH3bBifFFW3JuwThm5Tb-X>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id E53DE32A009C; Sun,  1 Nov 2026 06:10:22 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,124 +114,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: Ap4PcZ20AeuN
+Date: Sun, 01 Nov 2026 12:09:47 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Vineet Gupta" <vgupta@kernel.org>, "Sasha Levin" <sashal@kernel.org>,
+ linux-snps-arc@lists.infradead.org
+Cc: "Andrii Nakryiko" <andrii@kernel.org>,
+ "Ilya Leoshkevich" <iii@linux.ibm.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ "schuster.simon@siemens-energy.com" <schuster.simon@siemens-energy.com>
+Message-Id: <8b4688ca-db5c-4122-b616-8e3964e403f8@app.fastmail.com>
+In-Reply-To: <09db4d22-2836-4656-8c6a-a7e5377710fb@kernel.org>
+References: <20261015154044.4058618-1-sashal@kernel.org>
+ <09db4d22-2836-4656-8c6a-a7e5377710fb@kernel.org>
+Subject: Re: [PATCH] ARC: Strip libgcc debug information when generating BTF
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-btf_dumper_enum() loads ordinary enum data as signed and uses signed
-numeric output. Unsigned values with the high bit set can therefore be
-printed as negative numbers. Narrow unsigned values also fail to match
-their enumerators: an eight-bit 0xff is loaded as -1, while its named
-value is stored as 255.
+On Sun, Nov 1, 2026, at 02:04, Vineet Gupta wrote:
+> On 10/15/26 08:40, Sasha Levin wrote:
 
-btf_dumper_enum64() likewise uses signed numeric output for unmatched
-values. For example, 0x8000000000000001 is printed as
--9223372036854775807 instead of 9223372036854775809.
+>> diff --git a/arch/arc/lib/Makefile b/arch/arc/lib/Makefile
+>> index 30158ae69fd4a..2807ee24f27e6 100644
+>> --- a/arch/arc/lib/Makefile
+>> +++ b/arch/arc/lib/Makefile
+>> @@ -13,3 +13,11 @@ lib-$(CONFIG_ISA_ARCV2)		+=memcpy-archs-unaligned.o
+>>   else
+>>   lib-$(CONFIG_ISA_ARCV2)		+=memcpy-archs.o
+>>   endif
+>> +
+>> +# libgcc can contain complex floating-point debug types unsupported by BTF.
+>> +# Strip only the debug information from a local copy of the selected archive.
+>> +always-$(CONFIG_DEBUG_INFO_BTF) += libgcc.a
+>> +OBJCOPYFLAGS_libgcc.a := --strip-debug
+>> +
+>> +$(obj)/libgcc.a: $(LIBGCC) FORCE
+>> +	$(call if_changed,objcopy)
+>
+> I'm working on getting rid of libgcc linking for ARC.
+> This requires adding some GENERIC_LIB_* routines, but as part of that 
+> series I'll propose a revert of this and then the dropping the first link.
+> Don't intend to revert this per se, but revert just makes it cleaner.
 
-Load the data according to the enum's signedness, use btf_enum_value()
-for name matching, and select the numeric writer according to kflag.
+Have you seen Simon's series?
 
-Retain the original signed-width comparison and give it priority over
-new matches. This preserves names from older BTF without signedness,
-including eight-byte ordinary enums, and keeps the selected name when
-multiple enumerators could match. Remember the first normalized match
-while looking for an original match so only one scan is needed.
+https://lore.kernel.org/all/20261030-nios2-remove-usage-of-libgcc-v1-3-4e341c66082e@siemens-energy.com/
 
-For an eight-byte BTF_KIND_ENUM with kflag clear, a negative stored
-enumerator can therefore match both its sign- and zero-extended values.
-The record cannot distinguish legacy signed metadata from unsigned
-metadata with the same bits.
+I hope there is some overlap with what you need for arc in the
+lib/*.c functions. I can take both through the asm-generic tree
+to reduce the dependencies if that helps.
 
-Unmatched values are printed as unsigned when kflag is clear. This
-includes BTF read back from kernels without enum64 support, where libbpf
-clears kflag before loading. The original signedness cannot be recovered
-from that flag.
-
-Fixes: ca7e6e45d108 ("bpftool: Print the enum's name instead of value")
-Fixes: 58a53978fdf6 ("bpftool: Add btf enum64 support")
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
----
- tools/bpf/bpftool/btf_dumper.c | 42 +++++++++++++++++++++++-----------
- 1 file changed, 29 insertions(+), 13 deletions(-)
-
-diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
-index 3267163119dc..792e210cb503 100644
---- a/tools/bpf/bpftool/btf_dumper.c
-+++ b/tools/bpf/bpftool/btf_dumper.c
-@@ -148,37 +148,50 @@ static int btf_dumper_enum(const struct btf_dumper *d,
- 			    const struct btf_type *t,
- 			    const void *data)
- {
--	const struct btf_enum *enums = btf_enum(t);
--	__s64 value;
-+	const struct btf_enum *enums = btf_enum(t), *match = NULL;
-+	bool is_signed = btf_kflag(t);
-+	__s64 value, legacy_value;
- 	__u32 i;
- 
- 	switch (t->size) {
- 	case 8:
--		value = *(__s64 *)data;
-+		legacy_value = *(__s64 *)data;
-+		value = legacy_value;
- 		break;
- 	case 4:
--		value = *(__s32 *)data;
-+		legacy_value = *(__s32 *)data;
-+		value = is_signed ? legacy_value : *(__u32 *)data;
- 		break;
- 	case 2:
--		value = *(__s16 *)data;
-+		legacy_value = *(__s16 *)data;
-+		value = is_signed ? legacy_value : *(__u16 *)data;
- 		break;
- 	case 1:
--		value = *(__s8 *)data;
-+		legacy_value = *(__s8 *)data;
-+		value = is_signed ? legacy_value : *(__u8 *)data;
- 		break;
- 	default:
- 		return -EINVAL;
- 	}
- 
-+	/* Prefer existing name matches, including signed enums without kflag. */
- 	for (i = 0; i < btf_vlen(t); i++) {
--		if (value == enums[i].val) {
--			jsonw_string(d->jw,
--				     btf__name_by_offset(d->btf,
--							 enums[i].name_off));
--			return 0;
-+		if (legacy_value == enums[i].val) {
-+			match = &enums[i];
-+			break;
- 		}
-+		if (!match && value == btf_enum_value(t, &enums[i]))
-+			match = &enums[i];
-+	}
-+	if (match) {
-+		jsonw_string(d->jw, btf__name_by_offset(d->btf, match->name_off));
-+		return 0;
- 	}
- 
--	jsonw_int(d->jw, value);
-+	if (is_signed)
-+		jsonw_int(d->jw, value);
-+	else
-+		jsonw_uint(d->jw, value);
- 	return 0;
- }
- 
-@@ -204,7 +217,10 @@ static int btf_dumper_enum64(const struct btf_dumper *d,
- 		}
- 	}
- 
--	jsonw_int(d->jw, value);
-+	if (btf_kflag(t))
-+		jsonw_int(d->jw, value);
-+	else
-+		jsonw_uint(d->jw, value);
- 	return 0;
- }
- 
--- 
-2.43.0
-
+     Arnd
