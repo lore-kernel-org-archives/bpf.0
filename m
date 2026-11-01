@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793561913;
-	b=u+J3NynxatW8tsQ2dNS2FAQGoH7vVaxDeEhxbhu8HR79v0vurSOBzlgtjb6B8Rr2dRCs
-	 uDA2dcxBeficzCocwrnQJ4vCoxjaZSKhju1MKe+gTz2lw3/vL2ZbN9rabqHtwicxVooMx
-	 cTcWrAC3YQ/SXKif38h4sN6sV9/SjU4E06sPyq5XWjFVxhQqAO4O71u+qUxBO9ofqpF2E
-	 A8LOG/1fwN6DImqbd+Dy1yJhBJj3SvvjG9CKEous/V0ETJEhMZOh9rHZYCG2Pr4uUxhPO
-	 CLzlDe/f5ZX2U8EkeFf80uIIcOtqcBrNTpurTs50JLBqN+LVDCXkiq9tyXmicpaDvTA==
+	t=1793561915;
+	b=Y4czVzw9qHFI3bDMdX/aCDT2ISpOsspqyGHpFXEgiO30l4ktDR7LA+BATUnUMpzWGop2
+	 hoBX/PnNnSKF0Es7xk1q0i4BUMvGaQHznOxcHndqJgMoi/JaWlHKuArfRGNOBC/ht7O+6
+	 ZmxCOly66dguxqcyj/kZ5xxrrO5gKpBNQOGOtBDsv8uoQqd1DN3Y/Nc0EATzGWa+Z9Hxx
+	 zxpvPLdRRUKd85jGUqmHjzH+gUND45oHlbPk+ez9uMavlOXi1g/mnNX2EB7J2a5//fwyS
+	 Lxiu9P+IJ59szPnefRWSoQJrAVDDO0Y/XLK0xavOYnrqpclbvgNCEqCMzEwza4eWcXw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793561913;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793561915;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=GT6vgwTrYol4454CbnxMyJB6KODx35Q86IflyFsmnUQ=;
-	b=Dj4KRjXdACJkZoB+egQtTW1sinjxb2eFLSps+XVewIRZaJkkM85nu9rfpnBhvGCiRLxE
-	 AxMkDOCvHWZLwgGplJXJaZqtIXcaQ71hpA+si1xjPBcq0WTknMQq61oSzWyQLRqdREp5d
-	 hxHjMlBN9ANHResnbUj3/UExrHsIwB0jbi+reH7JdR33EvVjv/Hq0kRNEFCj1cxVJwUp9
-	 baVmUs6+/FgQTjomqqLx/cN++/37JAM12dVDa0bbgGsFZA3UEpP29hcVWYObtehNcwHZh
-	 B6RJMF+nwIdcQvlbBBzXkKV/WKi2c8GvHwAxjv7fpCz2dwm4F9rmJgiIB+rHwXaaQHw==
+	bh=3RbSOoy5FH/veJnMAMYNkGnr6COx79E2WynqfTJCp9c=;
+	b=1u7GKHg2crf5k8Ld0Ca61fphi3mXxbDKBzAqZOCu/LGgNnWH/W9alnlLjv7Dfnc/YKvk
+	 2ycsJCUXo7qmrTjW5drO3McEWYLhm+9M6o1Dt7siCM+aLC9yMVgaTvYOT88mnpsm40cmU
+	 LLsbQ0rEY12nHpyXBR934qwTxo9SukrRBnfofaroKASiBExdQjMzVey+q8OsWByaaybbO
+	 H6W0Nla1uoqPmeHd8B8sJGWvCZQPp4UDcJinM4Z/rF8cxkXXJemP62eYT7fBvocEVr8qI
+	 +q4ueDzb5EfRO6rF1aib//Xo0uWQ7Brl/CXZaI1rSkk5oqGW2+kkNkzUcG1LrrwhwEA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cTx1HPxM;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ESnc4Q+G;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A48606A32C
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:38:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6F6606A325
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:38:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cTx1HPxM
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE0F1F00919;
-	Sun,  1 Nov 2026 19:38:32 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ESnc4Q+G
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4019F1F00919;
+	Sun,  1 Nov 2026 19:38:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793561912;
-	bh=GT6vgwTrYol4454CbnxMyJB6KODx35Q86IflyFsmnUQ=;
+	s=k20260515; t=1793561914;
+	bh=3RbSOoy5FH/veJnMAMYNkGnr6COx79E2WynqfTJCp9c=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=cTx1HPxMvbAwEVv3Az2YKhFppwg+miSSgrcKR+dfwJzNqnRO7khpxZV3/eSbPvBwP
-	 8eHLnUz4+Wd7n29Ec8O6YJB7BtbRXhHI5Sd1JjmtPjpW50V86jh0BvoAuwg4HsbuSl
-	 bIZ/KNJ0nFJHPPMy0On7JMHwHaLiWOChhBPdIUlTeDXom7Vzqld9YkHFUMkWXxA0RV
-	 D78W/KzIXdslBV76EPrmzrVKVz5mdyZ9mxNbjCv/mojYMfNzP8+x7P8wRt0AiUGuvU
-	 R7I7bhGviSf1aJdTi/lg4PgHJsdLwDLBiC2ufB42En4F9UzwM63TrR4BuFp3eLyBa6
-	 +4puE3ifIqaEQ==
-Content-Type: multipart/mixed; boundary="===============3748507721609041167=="
+	b=ESnc4Q+GRG5AITvYFcPqXFIgol3bxSsA3Z7Kduz/Gj8DgBfsssJ4kcMIbJVXGvBtH
+	 cbwDQNTHVPqrtnhtxONhu4hoYahL/HPKNFLwbag3uLkNcjFSIWS3ApK6NDQN6rnX45
+	 2bsO/PthKdtJ5Z2rN8NB01XurvF+2PgEnCgVVWRj3OwF/UUG3BKkjonSKXalHr3lvi
+	 BpTlYCrlPPKjQLg7+iw18MUNpGdT5ur9fQk2G0NvJ+2VwEf/xPzKTn2f+EBcQOBoq3
+	 UJ4E7qnb/e4Sw2GV34+/eqmkxWcPlY16N6i1mEwZCSkjDB1i17mtBNRedvZ9P04khi
+	 ZhiTK0GxilxYw==
+Content-Type: multipart/mixed; boundary="===============8155492407224996161=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,74 +49,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <f7e09bd07e87dd8aecb42f3c8ff24e7a9f6118d8213de7d7abd2fa2461e8414d@mail.kernel.org>
-In-Reply-To: <20261101190535.1454146-8-alexei.starovoitov@gmail.com>
-References: <20261101190535.1454146-8-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 07/27] selftests/bpf: Test the length and the address of an arena mmap()
+Message-Id: <2f1f9e07591b012765b2ca2697e1aa4da38a03aef3e68122e86dc557beef0623@mail.kernel.org>
+In-Reply-To: <20261101190535.1454146-18-alexei.starovoitov@gmail.com>
+References: <20261101190535.1454146-18-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 17/27] bpf: Set a dst for test runs of lwt_in progs
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun,  1 Nov 2026 19:38:32 +0000 (UTC)
+Date: Sun,  1 Nov 2026 19:38:34 +0000 (UTC)
 
---===============3748507721609041167==
+--===============8155492407224996161==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Test the length and the address of an arena mmap()
+> bpf: Set a dst for test runs of lwt_in progs
 
-TL;DR: Test issue only: the new arena_mmap selftest may need to be
-serial_test_arena_mmap(), like other arena tests, since parallel arena
-creation under test_progs -jN can exhaust KASAN shadow memory on small CI VMs.
+TL;DR: Commit message only: the Fixes: tag may point at the wrong commit;
+cd3092c7f8db, which first let lwt_in progs call the helper in test runs, looks
+more accurate. Backport scope is the same either way.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_mmap.c b/tools/testing/selftests/bpf/prog_tests/arena_mmap.c
-> new file mode 100644
-> index 000000000000..2babc9ecf182
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_mmap.c
+> bpf: Set a dst for test runs of lwt_in progs
+>
+> When an lwt prog runs on a route, the skb always has a dst. To push an SRH,
+> bpf_lwt_push_encap() reads the device from this dst. But
+> bpf_prog_test_run_skb() sets a dst for lwt_xmit progs only. Thus the helper
+> dereferences a NULL dst in a test run of an lwt_in prog.
+>
+> Set the same dst, ip6_null_entry, for lwt_in progs. When IPv6 is disabled
+> or not built, their test run now fails with -EOPNOTSUPP too. An lwt_out
+> prog cannot call this helper.
+>
+> Fixes: fe94cc290f53 ("bpf: Add IPv6 Segment Routing helpers")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-[ ... ]
+Does the Fixes: tag point at the commit that introduced this problem?
 
-> +static void test_refused(int pages, int flags, int err)
-> +{
-> +	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
-> +	void *area;
-> +	int fd;
-> +
-> +	fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena", 0, 0, ARENA_PAGES, &opts);
+fe94cc290f53 added bpf_lwt_push_encap() and bpf_lwt_push_encap_proto, but no
+get_func_proto callback returned that proto at that point.  The only
+references to bpf_lwt_push_encap_proto in net/core/filter.c are its
+definition, so no BPF program type could call the helper, and the NULL dst
+was not reachable from a test run.
 
-[ ... ]
+The immediate child, cd3092c7f8db ("bpf: Split lwt inout verifier
+structures", same series, 2018-05-20), added lwt_in_func_proto() returning
+&bpf_lwt_push_encap_proto and a separate lwt_in_prog_ops with
+.test_run = bpf_prog_test_run_skb.  That is the commit that first let an
+lwt_in prog call the helper under BPF_PROG_TEST_RUN, where
+seg6_do_srh_encap() and seg6_do_srh_inline() dereference skb_dst(skb)->dev
+with no dst set.
 
-> +void test_arena_mmap(void)
-> +{
-> +	if (test__start_subtest("long"))
-> +		test_refused(ARENA_PAGES + 1, 0, E2BIG);
-> +	if (test__start_subtest("address_0"))
-> +		test_refused(ARENA_PAGES, MAP_FIXED, EINVAL);
-> +}
+Should this be:
 
-This isn't a regression in the mmap() checks themselves, but should this
-entry point be serial_test_arena_mmap() instead of test_arena_mmap()?
+  Fixes: cd3092c7f8db ("bpf: Split lwt inout verifier structures")
 
-Each subtest creates its own BPF_MAP_TYPE_ARENA map through
-bpf_map_create(), and arena_map_alloc() reserves KERN_VM_SZ (SZ_4G +
-GUARD_SZ) of vmalloc space for every arena with get_vm_area().
-
-The other dedicated arena tests (arena_atomics, arena_direct_value,
-arena_htab, arena_list, arena_spin_lock, arena_strsearch, arena_race,
-arena_memcg, arena_mem_usage, libarena, libarena_asan) are all defined as
-serial_test_*().  Commit a14f9ba080c1 ("selftests/bpf: Run arena tests
-serially") made them serial because several arena tests running in parallel
-add up their KASAN shadow memory and can exhaust a small CI VM during map
-creation.
-
-With the plain test_ prefix, test_arena_mmap() runs in the parallel phase of
-test_progs -jN and adds two more arena creations alongside the other arena
-tests.  Would renaming it to:
-
-void serial_test_arena_mmap(void)
-
-keep it consistent with the rest of the arena tests?
+The two commits are consecutive and ship in the same release, so the stable
+backport scope is the same either way.  fe94cc290f53 is defensible as the
+commit that added the dereferencing code.
 
 
 ---
@@ -124,4 +113,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41340841959
---===============3748507721609041167==--
+--===============8155492407224996161==--
