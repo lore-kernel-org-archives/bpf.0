@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793559951;
-	b=zkOXC88vbqGG7RA0FljBnnaBliGkxtT5FpVUqYGT7RiATHXkmpkD5gIjTjDoeakROkPw
-	 V8b1V6ZBJNwitI6Yr73a8nLkCXHlU5FDvh3MaRgoMSshXuV9hWRKRdjtRLngZNvilLGY/
-	 B9zVf0MSFgmN3eVTHIeVseuGAR5wZndYOK/SU3M9IY6vLNMwR5QDi9a8wkz6XexbMooF0
-	 0oNxWvGxcpsnVvhoYNbxfpKnXM4f25ZOqMvYLDNL4NImBeWaMaT+I2zssAu1k2TP73IXz
-	 tvmDuZJGnn3m3yrq8/QhW1ocitLu1N+LnyX0ed7PJx7DfZ0ycsPz1LHgbLVMyLD3MEw==
+	t=1793559957;
+	b=ZW90pBFBeJ+65+/9ddh01/sdCCmkwFFZ9GU6XHHywQLqZ/pl07RT6wZp8tTOQN6nrX6S
+	 DgqQI1l/b4hSi6tDtJ82oK9FY0BBV9uR8WkUhx4u6LW56kXB2+FI099Bmc8Hl/QLhy74C
+	 TcEOCNuOkvxxeSj0X/JLQQlUEtY4o6Ugqq+8ZjUlW5p1DDabpGa/MO5l6aeIT11WJvnqJ
+	 msYi2XDMfZRMUJU0zvxPvFlEItNa5MOPrH2p28vFEgRpjgapOXVkJqRjj2+t9jI8LQFTD
+	 luELms3sVNSTVDWLfufxkH8guwoc+yWxFlN2Mp65IDfrlxkwxFHfbFB76o5lU9NWCFA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793559951;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793559957;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=HMLWhk1ywvLeexRwjk39Jo89VloTz9sqFmYaSvhP/k0=;
-	b=nK6Ij8sm6FAwvAU9NT9i6vMYwZnUTsBLzG01QtE+AfZXOTtzi8ml7ATh+gnZgzBAmKJR
-	 +WNpm6VT/XkHbt52Omh9MuFIJ8Jvf6C8yk3lm1K9m4o9/uclL1fiYcjhCVN8GWB2WlNp+
-	 FywsHwOpQYbpSbsi4cvdD1fajMDvYwtZj28AhyQq//5/Rv3uReYiYBkKpT7XahXwalO7Z
-	 QpZcWp8a67NSRsfm0F1+dDadS9uOn//UdA3AVcMOBweevQi98ZID3pZzqb2IYjMDvzGox
-	 2TriSSSPrB6voATodX4z5KsjNqNkSyfXhVRmOIZNEzmDrhsWquJpcgG7YL2T4NiJrjQ==
+	bh=y0Zk/rhDArrBJkvaHRz/WJOsjJlI7NCjTFTAE2QTy2I=;
+	b=jzGoYTZzTBGgBxfWcXF6C5xQbzXuvugU3NIA6vniEut1i6s+dFP5a++aYsA5Idr2vvX6
+	 RGNigAZgwwSlrSVX86GpkXwIIX7UgCAgam8BZIE91eWusj76NyygKe1lnpuA0ebfrPmWH
+	 9FqfSnVDtRo4WezJycxsHDkSgLXNsAbxsqU7WHYASO9+DcwU1Dt5s544XXqUSv2Zid7po
+	 bASQVTjoMp288V/PPsA7v23MTvU4g5qNWl76pNmTiGXNDpVSYBgOFKIV8jIAMUB16OfM9
+	 Q5NNkNEBEg6xS6Ohf55O2xpPWs2xntq0sEffGxRHMSXzGMPrd2qaaIpjxZOxXKFIxdQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=o+wdmNnX;
-	arc=none smtp.remote-ip=209.85.214.179
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PFugIKGH;
+	arc=none smtp.remote-ip=209.85.216.43
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCF2606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:05:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8DCF2606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58768606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:05:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 58768606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=o+wdmNnX
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2e95bd1c14cso21034455ad.2
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:05:51 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PFugIKGH
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ab41538192so1929285a91.0
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:05:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793559951; x=1794164751; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793559957; x=1794164757; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HMLWhk1ywvLeexRwjk39Jo89VloTz9sqFmYaSvhP/k0=;
-        b=o+wdmNnX9Bm+8WhHrOHAgjwKBqydp77CyMBaGZFZknIGJALwUAT87N8RLOosqv2rNW
-         rLeEoyrbvBxmuYen/Kxf8XwXwGnCEH6YjufaUFOCouk9M7n2aoTf7q0TJeDpn6h2lPyz
-         DHKMidhROpftBzjR5Pj6LuFmttSK6dNI41e6lO1NJgzjTRFE+kq9aEJXP0mbpoAXH9bX
-         ccwacc2OoLBo15eDFAKyN7XokeoIw+We1FKAQiYuhiQ1xC54aj846Ud7DZZFBQKPo1KV
-         PJqaXMWbZam9qWFXbRBVjDrUjxVm8IcOmebM2Bkm/dXb5vLXKUm2ELhNyjzhAN/4xv4j
-         vuPg==
+        bh=y0Zk/rhDArrBJkvaHRz/WJOsjJlI7NCjTFTAE2QTy2I=;
+        b=PFugIKGHirjA1HsthAA6Ddt90bvaPKJIPAl8fEfNGkw761en+8bAs6BF3QNSdTVayI
+         d/mapdX9R+fAgjQPzBw3iA5OfoPmjyC1ghsARoSTRVbtaQhKf2qOLQsLKLiDPQJzpjzQ
+         wtKkmVG8DIiim6rzUByatYblx5fqT75LUrEIFwIaLEJXIwZmwDh3qyi2bFFS6we1ifWV
+         rMmZwixCRU1spkKnFE5qhzcmVrchoqP5ZgtYW0JrGvk3+rsTbQF/bxIha3Yj9euIZszL
+         jwXCBVkrpWMx/j1BjzS6wTCDi0FOKLEi0oWX+R8PDmupnhSsL1/III6L8LoFJz/hwiOm
+         Z72A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793559951; x=1794164751;
+        d=1e100.net; s=20260707; t=1793559957; x=1794164757;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HMLWhk1ywvLeexRwjk39Jo89VloTz9sqFmYaSvhP/k0=;
-        b=HctnFhvZb8qRR7UNmnLc9HZwLvK0gwS3DYPqAcbtE8rgXw0eS2Wx0zbNW6wn3mmUpu
-         +xOoDKY+YkZB1NPKzPyMaRWITKFQx0aEocYVCplTVjFaL4xgPPc8KFtbhrdj8a6e/VFC
-         VagC8igobNQV1QXsDGOzpxiZW/djyPKgKUp8kkyTbA9HOU3CrAOG7J8aUP1JRuVXrj1U
-         xvqbGZ2FCofQ5pZvmpVAcEBdUeQMWi+OkyMLqjwhi6ebA2zpwn/WaI8JvegAH37xBtzM
-         qEFQnHf43hcc4JhxamEJyOPksO89y6kTy3u4aS09/kgPYRfoZDt3gKgtTzwQUw0wHkhO
-         41qA==
-X-Gm-Message-State: APuU4Z9dBDlHSbv950ys1BpXcyw7kFZGRToHfxnTRBjiNJBPcAO7K9Lh
-	j5QunlOGc8bfXmDQuVjy1mGfULTuEGApxPCWAZ1JYHwSKzjYM3NusCPswRiLVw==
-X-Gm-Gg: AYBFou33kEYYgr32/CDBfgtqHuonAhYQ1qMa7xnAiOgUgkibffaHZLTyFEelNJnxlDX
-	G4woarKBJW1JN9GLQgf/ppQrt+kHaGSdi601eZtk2F/qWds1jy0u8WnNB+STv1xD4cSxq+v3msE
-	bXB+xXq9/4ARITiYf5xEgLuQxq8UduEwXRIhLWvceYlajYBkRrnhNPrKvXgCZgfxnQ9iiClkGJF
-	jILaf0sVj6uI0/U4ikk6FhAV4mJLb99mPXMwnPl/G/oTaKm3m4npxhHxsxZgoW2SE8aT9ki49l6
-	mqxh2IyyHL01ijSmqAU2VanJpmHQxdWPkellSAmImSeZK0dx25C8B7igCnefyrjZYh52O6acba6
-	IQlxxYCo5//y4NQDzEDe3QQ4ZrwpVqUbwn13s0j0xJ/JgK8Ah0W+QNUg5+CCbjGEYNCiuiMM6cB
-	ZVCdO7ipw8K1lqteMEc3DYXGAaqG1wOZmWUO5aXoOpeS+PEfzJFHjMQlhrEi7uvKRzbNumt07qb
-	wppDmmM5JeL5ez8BB9b/WjLEnTgIXd8sHknad5Ni+OHP2QPbeh3rOBn3/nwNX2VtaacDyIBzgqD
-	RPSK/7WsMJW0KRZMRLIUlfOZcRkcNkGj9OvrMvxzDweska+FzZt1t3Qp/dVxhM1VkorhBNnpnNp
-	bkaJSJwQENrtIFEyb84NP0GYc5g6WjKpn6biXXkoVH87sKVZl7vuAtKksBMnBozgfR4hJ3ZVc/Q
-	==
-X-Received: by 2002:a17:902:f642:b0:2e9:970c:2c2 with SMTP id d9443c01a7336-2eb364f3544mr79647285ad.48.1793559950623;
-        Sun, 01 Nov 2026 11:05:50 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb3927ff6bsm19355555ad.52.2026.11.01.11.05.50
+        bh=y0Zk/rhDArrBJkvaHRz/WJOsjJlI7NCjTFTAE2QTy2I=;
+        b=FUfRdzkOFYsw+W5g6FV5SVOEU3GvmkyMHOod11/68RV0hDJ4nxAdGp3K+1NLDW+J9s
+         R7JdCbfJTMXx6yEkusE117NrO4gdCqoGTtZjf89WrjiKV34CxdWMegOMFn2RMMj5xRj0
+         WOml/2SJ5Ie4eUKZ/fvTSHyyL4yUz2xVw/sA/bZ8WXxoYBRVi54pUEGwNODC+f2x1yO8
+         FJoHr16HJw8qO9USydR/WDF5IRroQo/fEou2I2tOntTHU0cyk+DdCCchQd49c55MxOAf
+         nNxh6JCy80ewF7NmCGCyKewYEoEvgUpixNIKl+u3NUgpwX2NV0UkcYujjPX59F+oK1ee
+         f3yw==
+X-Gm-Message-State: APuU4Z8dC7jNhCpuV7nmkXGjxZeBGv3Z1LWoCnguHUBKQexVIMi52seD
+	GY6/Lr2tM6Fqbn/B3N5/9MCRZra5xJsI0AaHG57zfVOMw0pi7ajEOtfjq/b0+Q==
+X-Gm-Gg: AYBFou1ysBVWkt6x0JfmWqbQoAIEc431dH0mr1vLQo/8ENWg1z1xFBMwg0DO8gYwF87
+	tqOBlBES30aZcoEQA1IdaM6QxWFkvePUr2lqUaYqO1D/ENSbrCH3MKF9qoyUrFZAvOzj4NosW2E
+	btYePjo6G6k8xRMDRQ4z8mI5qgbhbhu6UiGcliBbSvKrAKOCLGaj66i1FP3rKpPjXSJ1QEnRt0X
+	yeCuDbQeKW0Y2vnGmQKJuu2Wlmgt0pooVL23wui9WS5oVCVhUnoLdXW6H7MDeC7gVjghLPcfXL6
+	v80cpJ/SitRF44soCp1/rR9HS/5wnDq6HGYXZG5KAMQDrKABg0cP4SttvClAn3EMR6bh7qdm4St
+	vvmjkSqZZTJTS9/6lEFq9mkDI6BYTtm7qS05WWPgY2zLrTbsyz8OAlsOwOdldNr74lLTGT+kHUB
+	NBhOstUaUoOx0z3voKDVwU9yxIJqWDCwvD6gdFFSjzMd70+ScNYThIdLzzZeAx50eULBaQjmyC1
+	kV/PNBYe5yKoT9H9J3hG6+/VIPzUnti8H3Mwhsi2aAPQgIcX/mFm3aoGCwRa7Jf0kfG5Z/IhGGM
+	jH22fnV83n0DWEfNO7UqgVQWBrfVWD/mw0e67Expml3/OCM7W0Fp9vWUQrQj3uqGz5pVRH7UAGY
+	0Z3jyToGiO/Z5zByFbHNLfoneAmYd9tTMIwSILcLtsOZN33d+dKDLah0s1cPnzAamswO0ilAIsL
+	U=
+X-Received: by 2002:a17:90a:e7d2:b0:3ac:4e18:2390 with SMTP id 98e67ed59e1d1-3ae895743d0mr7302454a91.7.1793559956655;
+        Sun, 01 Nov 2026 11:05:56 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e8fb2c5sm15364570a91.3.2026.11.01.11.05.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:05:50 -0800 (PST)
+        Sun, 01 Nov 2026 11:05:56 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -87,9 +87,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf 02/27] bpf: Clamp the trace length before the skip test in stackid_init()
-Date: Sun,  1 Nov 2026 19:05:10 +0000
-Message-ID: <20261101190535.1454146-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 03/27] bpf: Refuse to map an arena at address 0
+Date: Sun,  1 Nov 2026 19:05:11 +0000
+Message-ID: <20261101190535.1454146-4-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
 References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
@@ -106,57 +106,38 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-stackid_init() gives a bucket of the stack map
-min(trace_nr - skip, max_depth - skip) trace entries. Here max_depth is the
-size of a bucket plus skip, but at most perf_event_max_stack. Context
-markers can make trace_nr larger than that, so the skip test can pass when
-max_depth < skip. Then 'max_depth - skip' wraps, and the kernel can write
-after the bucket.
+The first mmap() of an arena sets user_vm_start and user_vm_end. Each
+subsequent mmap() must use the same range. The value 0 in user_vm_start
+means that the range is not set, but a mapping can start at address 0. Then
+arena_map_mmap() does not check vm_start and sets user_vm_start again. The
+range tree counts pages from user_vm_start. With a new user_vm_start it
+reports allocated pages as free, and apply_range_set_cb() fails with
+-EBUSY.
 
-Clamp trace_nr to max_depth before the skip test, as __bpf_get_stack_pe()
-does. The result changes only when skip >= max_depth. Then it is -EFAULT.
-Until now skip == max_depth could give the id of an empty trace.
+An arena at address 0 is not useful, because the verifier rejects all progs
+that refer to it. Return -EINVAL from arena_get_unmapped_area(). It runs
+before mmap() removes the old mappings in the range.
 
-get_perf_callchain() releases the trace, so an NMI can change trace->nr.
-Use READ_ONCE() in bpf_get_stackid(), so the compiler reads it one time.
-
-Fixes: 23f852daa4ba ("bpf: Fix stackmap overflow check in __bpf_get_stackid()")
+Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/stackmap.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ kernel/bpf/arena.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 7d90891cce0a..a19126f5db02 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -522,12 +522,14 @@ static int stackid_init(struct stackid *stackid, struct bpf_map *map,
- 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
- 	u32 max_depth;
- 
-+	max_depth = stack_map_calculate_max_depth(map->value_size, stack_map_data_size(map), flags);
-+	/* trace_nr can be above max_depth and max_depth below skip: clamp first */
-+	trace_nr = min_t(u32, trace_nr, max_depth);
- 	if (trace_nr <= skip)
- 		/* skipping more than usable stack trace */
- 		return -EFAULT;
- 
--	max_depth = stack_map_calculate_max_depth(map->value_size, stack_map_data_size(map), flags);
--	stackid->nr = min_t(u32, trace_nr - skip, max_depth - skip);
-+	stackid->nr = trace_nr - skip;
- 	stackid->len = stackid->nr * sizeof(u64);
- 	stackid->ips = trace->ip + skip;
- 	stackid->hash = jhash2((const u32 *)stackid->ips, stackid->len / sizeof(u32), 0);
-@@ -642,7 +644,8 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
- 			/* couldn't fetch the stack trace */
- 			return -EFAULT;
- 
--		err = stackid_fastpath(&stackid, map, trace, trace->nr, flags);
-+		/* the entry is released already, an NMI can change trace->nr */
-+		err = stackid_fastpath(&stackid, map, trace, READ_ONCE(trace->nr), flags);
- 		if (err != -ENOENT)
- 			return err;
- 
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index 3c61c181a6fa..ad8aab551093 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -650,6 +650,9 @@ static unsigned long arena_get_unmapped_area(struct file *filp, unsigned long ad
+ 	ret = mm_get_unmapped_area(filp, addr, len * 2, 0, flags);
+ 	if (IS_ERR_VALUE(ret))
+ 		return ret;
++	if (!ret)
++		/* user_vm_start == 0 means that the user range is not set yet */
++		return -EINVAL;
+ 	if ((ret >> 32) == ((ret + len - 1) >> 32))
+ 		return ret;
+ 	if (WARN_ON_ONCE(arena->user_vm_start))
 -- 
 2.55.0
 
