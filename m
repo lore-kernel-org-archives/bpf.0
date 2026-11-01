@@ -1,47 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793495043;
-	b=eF1OQu9VPTR35Ch3Jmd5jSKSBOtHpp2aeA05a97lTelHGjmGULnnq4Ayw4JgCtdxJXSF
-	 v8B7A15sJ/hH9b8ZYuWmnSD8AJ/vfcVTUBkNTiCkoYw1TbAysfFkNJj+J0700TqUJjoyZ
-	 SDhi1Dwc4XS6R+etfFtwjy4oVDAhe6khJfJ01DQiJSgFmFX4BGbidSj/i5wqlNUfaVj10
-	 CgQmCmR+Z0Z2Q7SAssPV/DTrWxK7agTWcZo+dZknfR23l4V0aVQXKRAmD9bPRAk9/kqAj
-	 s/28O5zfR2SBfOVOv7DZ/eXQYJluz13P4un/UvWKEGEWSN6BqLmrz3NmiunCBsc/hdw==
+	t=1793495332;
+	b=xQ12h9C4rBe3CnT1EC8PYy7SvvoULFl4tQtHqeGcSp2ndnukgSnxXYAvu7u5vezFhX4r
+	 BVzLxFO17DPmVJMDMjrTBNg+YJV1+RS3YwtqYJ/oHiyGYwPLOD4W8D3igxZGSJsIKyEFP
+	 cTAKdDW+/69GMYtAMkWtgpaxLRr4/cecHauRQ6cKydZMZxrovmUn3aq8W26fbKfUAo0dK
+	 n5Ptvb7nmuNbaB/MXVU2aXAftKGi+leBpz+4sU7viutKBS0b0czn7/kzxXmmiKDeDztuI
+	 YWewMGcXmiOjssHaKvlHmkQaL8hE81eKpPS/pHD7xTebfa3ZhHUaE8PbRDYELqLesbg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793495043;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=VYTTSTczGEfRjwG36VgyHOdbxUJfLIKC4RqA43YT4FI=;
-	b=T3+wrxOpIOhth9kdgbIyz4fMgAVM/5v0Gn+NgFXOnrCXJhUzZy97CQD5hj4C5eMib9EB
-	 0ZNr85b4nbrb842MS0ehSgN8CK8yQMQKdVOuAj1dWDirHRA2l/jQGOkjmapuqQzgNhzX2
-	 DO3m76TcVSUS5oWCJjuVXy5gUKE9NCkb9rOM670iu3RAL4wZbNKfsFSm6vEmHeepDENNF
-	 Oy677l0PbYQwHvlB97why0rNFSSZpfSOmBVvNifKYemDZDO4pgBck1GUv5fAO0F2Gi5JV
-	 kGnGVJG3rFm0M9jhB5Y7C9w50XwcACy0LrhWZnP5NeVkH8bLtkqNq5BJL9yxNhvAxIQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793495332;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:From:To:Cc:Subject:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=uv9lU22wY5Li5XWaCJ5Mf/m4BXD9e1KZu/Goj17mV78=;
+	b=fx/5Ii5KZwmPl15m8RZkqssTh6xhXpoZyl2vX+zXWe0AilNjGP3q0im+HX1uP/DvGu2d
+	 vLKBnuvVbZ9LZp3NPWHb6PrdLNgHepv4STJOYa4/U+R7K+U+PpoqGNPRh4hpu43W2Cmk6
+	 T8ckB0TgZbk4d2xaKz+KD/0bm/TksDyF5jvA1FH6Mo/aJqsNEeT0wJ4Tn56hcLKE0IUfr
+	 +ViIcJLD/fh7iP2/cz0B29S5PPi1c0DkvoBTQiG5dHi4gl5SXHTVMgD1yrkItnGmejheg
+	 QnpHq7BW1dlhSKlYvhdC/g1b2h1iJnIy0t7oKENJquDTajIHQ1uy1bgxy5HoNA7bFUw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dMaUfqfF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aSy124s6;
+	arc=none smtp.remote-ip=209.85.215.177
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A277606A31A;
-	Sun,  1 Nov 2026 01:04:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80014606A31C
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 01:08:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 80014606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dMaUfqfF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CCF61F000C1;
-	Sun,  1 Nov 2026 01:04:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793495042;
-	bh=VYTTSTczGEfRjwG36VgyHOdbxUJfLIKC4RqA43YT4FI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=dMaUfqfFCmP2M/5asa9VfGfocDpvlcu6SRHwzVzXC/BL3wHIIK9hgIYeXm3GJDlbs
-	 c0K9bYDs8skteMMZqjB2cdoaVGNOUxRIjTXG1syF3zZkjwZTV4HaPQ6zslX/CmdJHW
-	 AJA9AkEhlxfRVwznhCnU4GgFT8zLcccntfgH0CFE0zdZNMjoZaZxTHHVAW8ydsMq4V
-	 Kb2WLbEN2wbuPO09oS26AsJzF5r9RtsmfiTMPobH9QBcUU1T1PR3Cstk1/BLgnkruE
-	 LKlyULpBXK7nNBvRkGEkZFZb1QOBWT+rDnc+QlnFqPSJ9aGAzyMondqeZri+E3VGr7
-	 sm3ZllZ4g44JA==
-Message-ID: <09db4d22-2836-4656-8c6a-a7e5377710fb@kernel.org>
-Date: Sat, 31 Oct 2026 18:04:01 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aSy124s6
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cc4be0e5351so723162a12.0
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 18:08:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793495332; x=1794100132; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=uv9lU22wY5Li5XWaCJ5Mf/m4BXD9e1KZu/Goj17mV78=;
+        b=aSy124s6ewkwhPx5n4VnBBEYmGR2oVcg+ff/bSdlZVi3O4jIuNhZTE1+OUK3mUs/Mm
+         tKYmabGfoY+kOkSUsLhGPTWiHGaB+YNtInEZzMQXFkdvynVe+E/C/SvLq/RkajE3ciun
+         OUIDrIZVpj5eHH3swWbEI5+3ZxatucCevLvFsfC0j08/JzveIZmWJMWvMHdiC9mq/gdQ
+         3KTC21ZcgX4gJwHQPrSergjyipfMzc9R5ZcwbAzbk5b0Z/KK7EcUaGGRuVpGNHxEjwGI
+         xEYZw0y/Fuc4zj45ZOp8rpGFhwrSTz5GI8bQIT5bOD86b9mCzPz8M9xoKzXjnTmOw+Sl
+         j1kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793495332; x=1794100132;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uv9lU22wY5Li5XWaCJ5Mf/m4BXD9e1KZu/Goj17mV78=;
+        b=jBJxlMdRDJ+5wIl3kcAobTBNy0IjUuazVGKVt7/oJ/E50518ncVcje4zUvfSLH+3QU
+         6nNH16fG3vV0rlM6ZjGiyHjMmj0UXm49xaoh2Sm52M3i+xnmuGLKmOuw5NGfdDkTzSvP
+         d1DYvhi0VRsRZloLfI4l9Uh1U8Yt4SlfReIKd4onSt2D07kgIJoIyGTKEezOV6ujQF0w
+         U1ELVR8H2mCbvpInS8M3m9TmFfT+ewxYyxDaKCjrnmTCRBWuxFmi7vgwFpUd3+b8yQyO
+         a7xLJi66p35IM921FhgqIMT5Asj95IWzyUk0oFVSJq1mEYAosD6SrMhOMbxQjswmJXrW
+         cAlg==
+X-Gm-Message-State: APuU4Z/xkQMa0sieNm9JWYixpfTji4LdkiGTRxHms0NtWlANyVRvImzn
+	hW2kEQzQxuLrdFy5WFbLI88u4txOCbgFx5jKHGCb4UX+AOSQjl12g297
+X-Gm-Gg: AYBFou0hBzcZ/ZH+um5c5o9u0zkxnh5aub65m1yTUnPpPyrGIXimnicVQbsoBTuapBv
+	xwrUE/1m9HzrIyID1ZqdhR/zhxMara3VhlQi5dPcY3fifBawlVbP45CW1YuaZmVMBeYr+ufFDzl
+	sqYDthDRXxKXsbmQHCPeO2qUy6Dx8RnxMcNuqHTqO8AsibmEaaRvCRliRXk5Q6n7AWYiUySHENC
+	mk6ET0JV79cCYCGYR5DwjtD/8uwL1J6x2HYyUL5dTJ7KmSy2L+JxGNpc6DA748H4MT8gwezDF2F
+	avOs509PmsF5xFWpeLwnlsW2SlwxUVz3EaYMnfm9Aa4ZRNKz7QSSWQra0bGtMmU5o0/FBXUsAQt
+	JcDtBg2+A/MLTXpVhf08Z0N8wbWNE1pxqozGrp6j87nmTU97kFTBOj8g9gUMlviuAoZ5zG0SlX2
+	/0KiQHH0d5iBnmFbRmMu9ReKRwiVP7ITO+J2uZ7oPhUfrnyYHiLDc0cI5Dxjg3BgdyRX2Ds/s8Z
+	f/bG8RVwOu163EXlWopsVaEd7/4LmSoTQ7t/hzE2w5stLuyNVK3wqUu+bJMcmPh7DZ13Pk2KI5l
+	k59sWdhgB0WBSzM3URK/+cNxcBLB1GqWPxL8f624bc8UWy5h8drbJTYjvMBrXjvaAF9UOpcWDiR
+	NnkJeoK+Ho56TcPSMfZo5KnR/m19PCWzUCg==
+X-Received: by 2002:a17:90b:3b51:b0:39e:6795:f7da with SMTP id 98e67ed59e1d1-3ae897c7d22mr5481949a91.19.1793495331839;
+        Sat, 31 Oct 2026 18:08:51 -0700 (PDT)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e8fba61sm13130591a91.6.2026.10.31.18.08.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 31 Oct 2026 18:08:51 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 01 Nov 2026 01:08:50 +0000
+Message-Id: <DMJH18O0LW66.2X5ZLK1R332QH@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Henry Martin" <bsdhenrymartin@gmail.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] bpf: fix out-of-bounds frame access for async
+ callback stack args
+In-Reply-To: <20261027154553.1043567-1-bsdhenrymartin@gmail.com>
+References: <20261027154553.1043567-1-bsdhenrymartin@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,106 +106,14 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] ARC: Strip libgcc debug information when generating BTF
-To: Sasha Levin <sashal@kernel.org>, Vineet Gupta <vgupta@kernel.org>,
- linux-snps-arc@lists.infradead.org
-Cc: Andrii Nakryiko <andrii@kernel.org>, Ilya Leoshkevich
- <iii@linux.ibm.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- Arnd Bergmann <arnd@arndb.de>
-References: <20261015154044.4058618-1-sashal@kernel.org>
-From: Vineet Gupta <vgupta@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20261015154044.4058618-1-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+On Tue, Oct 27, 2026 at 08:45 AM Henry Martin <bsdhenrymartin@gmail.com> wrote:
+> Kernel helpers pass at most five callback arguments, all in
+> registers, so an incoming stack argument load can never be valid in
+> a callback frame.  Reject such loads when the current frame has no
+> caller (curframe == 0) or is a callback frame (state->in_callback_fn).
 
+It's fixed already.
+commit 90aedf8854c0 ("bpf: Validate stack arg reads against caller state")
 
-On 10/15/26 08:40, Sasha Levin wrote:
-> ARC links against the compiler's libgcc archive. The ARC GNU 2023.03
-> toolchain ships this library with debug information, including complex
-> floating-point types in integer arithmetic helpers such as __udivdi3.
-> These types reach vmlinux even though the kernel does not use complex
-> floating-point arithmetic.
->
-> When floating-point BTF encoding is enabled, pahole rejects those types:
->
->    Complex, interval and imaginary float types are not supported
->    Error while encoding BTF.
->    FAILED: load BTF from .tmp_vmlinux1.BTF.1: No such file or directory
->
-> KernelCI's upgrade to pahole 1.31 exposed this long-standing problem as
-> failed ARC builds. As of 1.32, pahole still rejects these types, and
-> older versions will stay in use, so the kernel build has to keep them
-> out of vmlinux. Commit f122668ddcce ("ARC: Add eBPF JIT support")
-> documented the same failure along with a workaround of disabling
-> floating-point BTF encoding, but that also discards supported
-> floating-point types from kernel BTF.
->
-> For CONFIG_DEBUG_INFO_BTF, generate a debug-stripped copy of the selected
-> libgcc archive in the output tree and link that copy. Preserve the archive
-> structure so that only needed helpers are linked, and use the normal
-> Kbuild objcopy rule to track input and command changes. The trade-off is
-> that vmlinux in BTF-enabled builds no longer carries DWARF for the libgcc
-> helpers. Debug information for kernel code, the installed toolchain and
-> non-BTF builds stay unchanged.
->
-> Reproduced and tested with ARC GCC 12.2.1 and pahole 1.31 and 1.32 using
-> an ARCv2 tinyconfig with BPF_SYSCALL and DWARF4/BTF enabled. Before and
-> after vmlinux.o files are identical after stripping debug information.
->
-> Fixes: db16c1fe92d7 ("bpf: Generate BTF_KIND_FLOAT when linking vmlinux")
-> Link: https://github.com/kernelci/kernelci-core/commit/e71b8c9f42253180596e734c18965a5aad80c8c5
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   arch/arc/Makefile     | 9 ++++++++-
->   arch/arc/lib/Makefile | 8 ++++++++
->   2 files changed, 16 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/arc/Makefile b/arch/arc/Makefile
-> index 868805ffcfeab..4ea705a331c7c 100644
-> --- a/arch/arc/Makefile
-> +++ b/arch/arc/Makefile
-> @@ -86,7 +86,14 @@ core-$(CONFIG_ARC_PLAT_TB10X)	+= arch/arc/plat-tb10x/
->   core-$(CONFIG_ARC_PLAT_AXS10X)	+= arch/arc/plat-axs10x/
->   core-$(CONFIG_ARC_SOC_HSDK)	+= arch/arc/plat-hsdk/
->   
-> -libs-y		+= arch/arc/lib/ $(LIBGCC)
-> +libs-y		+= arch/arc/lib/
-> +
-> +ifdef CONFIG_DEBUG_INFO_BTF
-> +export LIBGCC := $(LIBGCC)
-> +libs-y		+= arch/arc/lib/libgcc.a
-> +else
-> +libs-y		+= $(LIBGCC)
-> +endif
->   
->   boot		:= arch/arc/boot
->   
-> diff --git a/arch/arc/lib/Makefile b/arch/arc/lib/Makefile
-> index 30158ae69fd4a..2807ee24f27e6 100644
-> --- a/arch/arc/lib/Makefile
-> +++ b/arch/arc/lib/Makefile
-> @@ -13,3 +13,11 @@ lib-$(CONFIG_ISA_ARCV2)		+=memcpy-archs-unaligned.o
->   else
->   lib-$(CONFIG_ISA_ARCV2)		+=memcpy-archs.o
->   endif
-> +
-> +# libgcc can contain complex floating-point debug types unsupported by BTF.
-> +# Strip only the debug information from a local copy of the selected archive.
-> +always-$(CONFIG_DEBUG_INFO_BTF) += libgcc.a
-> +OBJCOPYFLAGS_libgcc.a := --strip-debug
-> +
-> +$(obj)/libgcc.a: $(LIBGCC) FORCE
-> +	$(call if_changed,objcopy)
-
-I'm working on getting rid of libgcc linking for ARC.
-This requires adding some GENERIC_LIB_* routines, but as part of that 
-series I'll propose a revert of this and then the dropping the first link.
-Don't intend to revert this per se, but revert just makes it cleaner.
-
-Just FYI.
-
-Thx,
--Vineet
+pw-bot: cr
