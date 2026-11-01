@@ -1,45 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793494099;
-	b=POp/SNtLzMUVebeRMQKiB3WeUXQ+I7H2RYKi7qNGOAzJsxLVjTrLOwT+BCJ8si3vefL7
-	 hkqXZLXZo0AtdBjMxhTaU3ZAEKCNH5zNTLh53Xaksby6Zva+W2TlSPYTI1qB+VMuIrHj0
-	 Uy3p3YvbWLHChMNzzEGnKWf9RdqYQW+5X0U6xP4aVINWJdnzpHPfHBveTIsLwIkV1016m
-	 +FGYhzZk7BDotSnRhC6UFUfIK8U2BAdTRR5CbQP1pj2lhKxyzh1Z9QOJjjdDMmrDFXYgq
-	 ud0XxmnHNwSp03epAqTbt49Pp3zvefHfcej9LoZgnSdkKhH/s2lukraIbIjmqUltN/A==
+	t=1793494601;
+	b=rEeF40d58FKuEnK/qat8BHlqe5Z8LujcR0MEfK8c/yug3qFhKk03r7QJaf2r++S85CvL
+	 +w1pLM8vHCUofba+AgN3ww/OR2RLKc44oy8mDDxeX+4kIB0GTKKH7aK4dvkO4lOzNnmcQ
+	 qfK4izGDn6f/PxudkK+OpNIze4nQOxBL3t0rvU2AhPrXq5tHDVa9ZqWkGypzXtrfjgatb
+	 ugdslc7HuxvkAyyhSC1wc4dUVrbhGWyKE4LG0dnWLhGBCtWoB1sQNzOCv22edkwA4tHFe
+	 Q1/HyH10Ixz3YAom7aoBxHu9504enmLDhjBSEKRanXCNBVvTiHbywOPtTU3RQrKwSow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793494099;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=qiBXgiJ9Ba/bNGwnar9WXOyZXhMwdXUsGURoDBNNhxM=;
-	b=SP+RKjBQpuTYeKwfD2cvOb7ifrpeoF/rM0GaGUas1MwEJxJnyUlxBxaBAZZ8jglF54ff
-	 uQ6ZO8g/PEc0fzU2KaQJ4/VXt5rFuyzqJxy/ALU61s1nv40qX1hN72QFll8gsRwrOMzxs
-	 G4sw5FuHLwU8Dg9+kTWC12VLS3XHpZ2ZMc8D+Kv8l45Mjfm6gUGHha3bDg6Nz2y2LTZDZ
-	 z/fHMDK3+bp43IJZPz1XizcmgIsnvWD+wVnJDtqQdHZMOdahRRkbxFgikwMfW6j6hnEkD
-	 1kTVecsopjIxsJFgMqmIG0aQog4MdIL2L/qtHzJiI6vI/E7HM1wkaifrHtfoPfEHaDA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793494601;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=WpPmlyynvDUMe1He5kADoWQv2vMHrwCbBfff4xiiiVY=;
+	b=IcI4syBotZ7445tOu31CIRtTN0uxcPiasIbuNZXcxbzreHK83Ypapi9vx29oJea3jyO1
+	 EH266pUvKCDvkyBUV1m0WDEuWl25V/tUT8Ah1BbbxLq0NrEE4ANyuf5BRJu2Yf7MmTIjl
+	 t33oiH9plBnAaaZtpM6+pB/r02fX7nQo7lAqxOyFRBTqZRNpGahIRlsBjLOQ5Roreajuz
+	 8IBPn4D3yW+TSrGLNOVq/wjQmFGlwRi6bf01idwXGSqoZDxZy688+3nYbMqgiYNSTbyiL
+	 BtEYu53F/zWtCTCP5vDTfqs3gQeyfxIlfrW4uZe6IcTU6uQWtzqhOZpyi+sFGh+/BFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BSJh+GzC;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Xxu/mCu/";
+	arc=none smtp.remote-ip=209.85.216.49
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB5C606A31C;
-	Sun,  1 Nov 2026 00:48:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66AA606A31C
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 00:56:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C66AA606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BSJh+GzC
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AEB81F000C1;
-	Sun,  1 Nov 2026 00:48:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793494098;
-	bh=qiBXgiJ9Ba/bNGwnar9WXOyZXhMwdXUsGURoDBNNhxM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BSJh+GzCX9mk5P3FNT7SjonJ8t+ZGYLLvRzGJDR4YNY1uEaWO1Y7KDdnFA1sgGekM
-	 xgIETOzGAfMeDXuZ0SWEt31cZ4Q+0Cuf/MaoTZA8IbgNrey1PEdxe9/bkrFhvUo9jF
-	 QxrPveNMbjNY+YybcxpUOEzaUmm4XRk6lmX2W0Vowmfj6KUiNRRPt7w/wV5PFPX83l
-	 05aExwVHbnSSBX4ERZDsHyTG+tjdQiXhfmFgpLM557Nfc59LRfjw0wA2QYxxXTUsjM
-	 IvbbIpKNfoWeQ77fzVY/ltvGgdbFfHh/6XGmwcIwCqnalG+1AbLGxTFX3OvovpcdG6
-	 ISoZNM0dwQq9w==
-Content-Type: multipart/mixed; boundary="===============2802907230478521436=="
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Xxu/mCu/
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3ada8bc2380so839760a91.3
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 17:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793494600; x=1794099400; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=WpPmlyynvDUMe1He5kADoWQv2vMHrwCbBfff4xiiiVY=;
+        b=Xxu/mCu/OESL41DxQmT3WfQHPJJsrR4xVMtYEYQ0t0SplR5AaE0nB+FFeycO0fv99G
+         QeV5kqJw04aM2yv9L3RVq5xoMMqAxapcIBkPRdAxn4DqZaRM70kQGAtH87eaPHFBlxXg
+         KeTyW3gHRaeVi+c0weAHStWKQVFttPKKXaOF/Gx98HGGhQDaRfwUvSqaJM4Nn/AWqIpC
+         FasfEij4IBss6TEkUYjnsce476QMHqGpg95S8rZkdABCJ1GjDvA6NrXs5Ak97uRsWPnr
+         6n4ehoRWkGKA0mXUJN5owRgKTLJoeCtKQZmyoeU3WiFELnTJv0E9dvggRpgqP8SHFVTt
+         udWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793494600; x=1794099400;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WpPmlyynvDUMe1He5kADoWQv2vMHrwCbBfff4xiiiVY=;
+        b=N6F7bYfUdRDuTGQ0W8aXLPHnLcvmSLUfAnxlZfjVjeIU47a07xJL2LTZcKpIQqJSwR
+         JDxEcBekRMJjn/5QuQYj/kWuNCMGmM2KTYkuMbsldFsBZQsAwxo7G0ghJfKoXZ1T5Bl8
+         LdBRUlvJCq9h8Bd4zeRuOspYp8aMsa9tFUkyEH+x/EXZas6Rv3AbE1eXIEtQ3eQmn5rH
+         Rg4URQ7IXIRAT4ClA563hlcWQMkQgwqQkNadUN2SO9WhGqPfNKOb/oaR80+dYr4gwafg
+         Fl9nkYcB0wjMY3GMCb+369fiaYGV9XYmXxqyEBT5fCM+iPRk4Kzjymo90CrHXSc8nXcI
+         JbXg==
+X-Forwarded-Encrypted: i=1; AKwUvByDXasNSUxq0oIpLMGdW1N/rCIc07aQHJZec8FRwI6KGYJMl48N/STPg7Es25hPivAqS94=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/TzeNCNNeBP5q0SsUf8Pdc6wrR7lCViXlGtfyhblLaf/6sJ9ne
+	TBb+PYreDsdwqX4jADl1SvJgYpWYo1vF2609pjnWyGrO0zq/BCvyTEZs
+X-Gm-Gg: AYBFou3w5HcygbRbE/3mtI0xNgEhL2JhpfSjNiHTr1goazZQq/81fU2pJODcLH0J+mj
+	SFb6I8RuHxowYVQt0UElhealB6tWPbBE23vmAjBnvPxdzJ6hkOGELGHKeHJaMIwWNInhbZn7kTj
+	kile6B+Q82OFQv9zW5py5eBlTr2DHvZRhtMBNo9qrNb2RxCW4GwD0H8ag26hyT1PFwjmUOOGKpt
+	fR/Vzi5CQPa+OoTFvC0tVkSkU28IO+o+Qsif3eXNRwyO7YheYftJpJUGJsUdaqlhz3JnzSSo5E4
+	mU5YOn5enOxbZxgvLc6UIhLtpM9DTzlBG7v1FnM32DYJLolHGfKT4szXHEBvQaCmqfrYNT7lfE5
+	JHAC7amw4YaOCDCm1PjpkvkBS5G+AI1YXN2aRDBoT6OMAytPmax4LAbu7pZgm6gQks+KBFdRHww
+	Vo7vuEjrgcMg8lvbuZmEg84uPsHRZz0XCWgMjmge7iQ2FAb+0hXkHutaRX7PfdNI/Pb9DfeYZb3
+	lETupfnmGGxLB10ezSE6u0lteqz+LAxP60w/SJxvote/AfRM7INCPDgLqMcrH5NS9YmO4L+0gOQ
+	zf+jPqpLFZ/iC2CU7J8Bxa7wiEJjfg37tDl47D2xVGOZxEYb48fuZ5BqOOgHdRhA1bus5LdCozB
+	xJ1GKqMNDFw4/zZcc2IEtO24F4QSioTGTVBCGGRq5O1nRQQc6yDu9eV0=
+X-Received: by 2002:a17:90b:1644:b0:3ac:17c:6e85 with SMTP id 98e67ed59e1d1-3ae897c94ddmr5486226a91.47.1793494600050;
+        Sat, 31 Oct 2026 17:56:40 -0700 (PDT)
+Received: from localhost ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae880a46f1sm3921333a91.3.2026.10.31.17.56.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 31 Oct 2026 17:56:39 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 01 Nov 2026 00:56:38 +0000
+Message-Id: <DMJGRWDYEWL1.3FPGI4KTRWAPW@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Anastasios Papagiannis" <tasos.papagiannnis@gmail.com>,
+ <bpf@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+ <jack@suse.cz>
+Subject: Re: [PATCH bpf-next 0/3] bpf: Add bpf_path_getattr()
+In-Reply-To: <20261029095952.44833-1-tasos.papagiannnis@gmail.com>
+References: <20261029095952.44833-1-tasos.papagiannnis@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,115 +103,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <70bafc49483a4282dc63ce31809672c2c86426b96f0c981fcd8f041468b46702@mail.kernel.org>
-In-Reply-To: <20261101001024.9994-1-dennylin0707@gmail.com>
-References: <20261101001024.9994-1-dennylin0707@gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpftool: Preserve unsigned enum values in data dumps
-From: bot+bpf-ci@kernel.org
-To: dennylin0707@gmail.com,qmo@kernel.org,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,yonghong.song@linux.dev,linux-kernel@vger.kernel.org,dennylin0707@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun,  1 Nov 2026 00:48:18 +0000 (UTC)
 
---===============2802907230478521436==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, Oct 29, 2026 at 02:59 AM Anastasios Papagiannis <tasos.papagiannnis@gmail.com> wrote:
+> The kfunc returns a 64-byte bpf_file_stat. We avoid using struct kstat
+> directly as this is an internal structure and this can lead to changing
+> the user API. Inode and device identity follow the filesystem's getattr
 
-> bpftool: Preserve unsigned enum values in data dumps
+kfuncs are not uapi. See "kfunc lifecycle expectations" in
+Documentation/bpf/kfuncs.rst.
+The prog reads struct kstat with CO-RE like any other kernel struct.
+No need for bpf_file_stat.
 
-TL;DR: bpftool enum dump may regress on BTF without kind_flag (older
-kernels/LLVM): small negative enumerators like -1 in 1- or 2-byte enums may
-print as numbers instead of names; not a crash.
+> operation, and the device number uses stat(2) encoding. Mount IDs,
+> mount-root attributes and ownership translation follow statx(), including
+> mount idmapping and translation into the current task's user namespace.
 
-> diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
-> --- a/tools/bpf/bpftool/btf_dumper.c
-> +++ b/tools/bpf/bpftool/btf_dumper.c
-> @@ -149,7 +149,8 @@ static int btf_dumper_enum(const struct btf_dumper *d,
->  			    const void *data)
->  {
->  	const struct btf_enum *enums = btf_enum(t);
-> -	__s64 value;
-> +	bool is_signed = btf_kflag(t);
-> +	__s64 value, val;
->  	__u32 i;
->
->  	switch (t->size) {
+bpf_path_d_path(), bpf_real_data_inode(), bpf_get_task_exe_file() are
+thin wrappers of vfs functions.
+Lets do the same with vfs_getattr_nosec().
+like:
 
-[ ... ]
+diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+--- a/fs/bpf_fs_kfuncs.c
++++ b/fs/bpf_fs_kfuncs.c
+@@ -96,6 +96,37 @@ __bpf_kfunc int bpf_path_d_path(const struct path *path, char *buf, size_t buf__
+ 	return len;
+ }
+ 
++/**
++ * bpf_path_getattr - get the attributes of the supplied path
++ * @path: path to get the attributes of
++ * @request_mask: STATX_* flags of the attributes that the caller wants
++ * @query_flags: AT_STATX_SYNC_AS_STAT, AT_STATX_FORCE_SYNC or AT_STATX_DONT_SYNC
++ * @stat__uninit: buffer to return the attributes in
++ * @stat__sz: size of the supplied buffer
++ *
++ * Ask the filesystem for the attributes of *path*. This is vfs_getattr()
++ * without the call into security_inode_getattr().
++ *
++ * This BPF kfunc may only be called from sleepable BPF LSM programs.
++ *
++ * Return: 0 on success, a negative value on error.
++ */
++__bpf_kfunc int bpf_path_getattr(const struct path *path, u32 request_mask,
++				 u32 query_flags, struct kstat *stat__uninit,
++				 size_t stat__sz)
++{
++	struct kstat stat;
++	int ret;
++
++	ret = vfs_getattr_nosec(path, &stat, request_mask, query_flags);
++	if (ret)
++		return ret;
++
++	/* struct kstat in the prog's vmlinux.h can be smaller or larger */
++	memcpy(stat__uninit, &stat, min(stat__sz, sizeof(stat)));
++	return 0;
++}
++
+ static bool match_security_bpf_prefix(const char *name__str)
+ {
+ 	return !strncmp(name__str, XATTR_NAME_BPF_LSM, XATTR_NAME_BPF_LSM_LEN);
+@@ -504,6 +535,7 @@ BTF_KFUNCS_START(bpf_fs_kfunc_set_ids)
+ BTF_ID_FLAGS(func, bpf_get_task_exe_file, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_put_file, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_path_d_path)
++BTF_ID_FLAGS(func, bpf_path_getattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_get_dentry_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_set_dentry_xattr, KF_SLEEPABLE)
+@@ -515,8 +547,9 @@ BTF_ID_FLAGS(func, bpf_sock_read_xattr, KF_RCU)
+ #endif
+ BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
+ 
+-/* Side-effecting kfuncs that stay exclusive to LSM programs. */
++/* Kfuncs that stay exclusive to LSM programs. */
+ BTF_SET_START(bpf_fs_kfunc_lsm_only_ids)
++BTF_ID(func, bpf_path_getattr)
+ BTF_ID(func, bpf_set_dentry_xattr)
+ BTF_ID(func, bpf_remove_dentry_xattr)
+ BTF_SET_END(bpf_fs_kfunc_lsm_only_ids)
 
-> @@ -157,20 +158,21 @@ static int btf_dumper_enum(const struct btf_dumper *d,
->  		value = *(__s64 *)data;
->  		break;
->  	case 4:
-> -		value = *(__s32 *)data;
-> +		value = is_signed ? (__s64)*(__s32 *)data : *(__u32 *)data;
->  		break;
->  	case 2:
-> -		value = *(__s16 *)data;
-> +		value = is_signed ? *(__s16 *)data : *(__u16 *)data;
->  		break;
->  	case 1:
-> -		value = *(__s8 *)data;
-> +		value = is_signed ? *(__s8 *)data : *(__u8 *)data;
->  		break;
->  	default:
->  		return -EINVAL;
->  	}
->
->  	for (i = 0; i < btf_vlen(t); i++) {
-> -		if (value == enums[i].val) {
-> +		val = is_signed ? (__s64)enums[i].val : (__u32)enums[i].val;
-> +		if (value == val) {
->  			jsonw_string(d->jw,
->  				     btf__name_by_offset(d->btf,
->  							 enums[i].name_off));
-
-Does treating a clear kind_flag as "unsigned" break name matching for BTF
-that carries no signedness information?
-
-A BTF_KIND_ENUM with kflag == 0 and a negative enumerator is common in the
-BTF that bpftool reads:
-
-  - kernels before 6.0 reject kind_flag on enums in btf_enum_check_meta()
-  - libbpf's bpf_object__sanitize_btf() clears the flag when the kernel
-    lacks enum64 support
-  - LLVM before 15 never sets the bit
-
-bpftool map dump reads this BTF back from the kernel, so the path is
-do_dump_btf() -> btf_dumper_type() -> btf_dumper_do_type() ->
-btf_dumper_enum().
-
-For example, with a one byte enum:
-
-  enum __attribute__((packed)) e { NEG = -1, POS = 1 };
-
-where NEG is stored in btf_enum.val as the __s32 -1, kflag is 0, and the map
-value byte is 0xff:
-
-  before: value = *(__s8 *)data = -1; enums[i].val = -1, so it matches
-          and prints "NEG"
-
-  after:  is_signed = false; value = *(__u8 *)data = 255;
-          val = (__u32)enums[i].val = 4294967295, so there is no match
-          and it prints 255
-
-For four byte enums the name still matches because both sides are zero
-extended the same way.  A negative value that is not an enumerator (for
-example -22) is now printed as 4294967274 rather than -22.
-
-Would comparing at the enum's own width in the !is_signed case work for both
-encodings and still fix the reported unsigned case?  For instance, comparing
-the data against the enumerator truncated to t->size bytes, where
-(__u8)255 == 255 and (__u8)-1 == 255 both match a data byte of 0xff.
-
-libbpf's btf_dump_enum_data() makes the same kflag assumption, so this isn't
-a crash, but it is a visible change from the earlier bpftool output on older
-kernels that bpftool still supports.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41256964100
---===============2802907230478521436==--
+pw-bot: cr
