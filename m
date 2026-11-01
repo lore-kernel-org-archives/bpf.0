@@ -1,96 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793494034;
-	b=ZzffSSRn8aRJEfbqm5LyDQiCjFh8KC1d7R4ko3ZDGhpmVlgu++9OfNPE1IX2I1sK7HdL
-	 7AstANfVCFgwC6Bng5foAH67dDUEXvmgeaKr/wvY2tq83y0UyGSOqSrrZpYP0CsYuOdoA
-	 VAhYChAP4oubS6wrRXC/+lYkC41I6zTxxeH2hjRcFcwh6luzUg3n6DmbUefq+7fwb/5cX
-	 9GFN+vgnKvZmPFUv19sOtxgmZg2eMn35MXNXUIcxJ7Hwo0gFvzNYXnriP9I4+qLx/cALW
-	 A+uZKy8hTrmsgpm+JtZdRHxGY+F4xKdDJVW46qlMRQGRqpciLNZMxYoRtwjRZyC8ojg==
+	t=1793494099;
+	b=POp/SNtLzMUVebeRMQKiB3WeUXQ+I7H2RYKi7qNGOAzJsxLVjTrLOwT+BCJ8si3vefL7
+	 hkqXZLXZo0AtdBjMxhTaU3ZAEKCNH5zNTLh53Xaksby6Zva+W2TlSPYTI1qB+VMuIrHj0
+	 Uy3p3YvbWLHChMNzzEGnKWf9RdqYQW+5X0U6xP4aVINWJdnzpHPfHBveTIsLwIkV1016m
+	 +FGYhzZk7BDotSnRhC6UFUfIK8U2BAdTRR5CbQP1pj2lhKxyzh1Z9QOJjjdDMmrDFXYgq
+	 ud0XxmnHNwSp03epAqTbt49Pp3zvefHfcej9LoZgnSdkKhH/s2lukraIbIjmqUltN/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793494034;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=EvABP5HmRpAFtlptkIT9RhfhkdzvHFpexkpFablsesc=;
-	b=WVl335IQDk7ytaxOn/rlrGktepM/AUrZnSGqN+x6KNn371cYZ6eYlURt5fUmeEYHR+ez
-	 Og+lof9S/09R4R+2tCjJ7wm/vS+QSeMMl0M7EJAd/h+yZThSwxPo0Edqw6niJQBukhQrR
-	 9Olj+urw5GgZlyrKVP48oY6HsdM0NsxbdNul1Zuthe/oBGyhx7afVBJ7BCqGcEjFtn6Sd
-	 94OJQ0bIC0T9eHv4QxK/EiyXiDcA5LBZqjFSa73geGfJqLok2e7W5PzJ8xxxZs8SAtMt1
-	 L2HFq7wjv0xJoy8LuYyA5Y80YPqLFnqBH2AeZisP25H/vznLsN4CutK9W33mKbnFEIA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793494099;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=qiBXgiJ9Ba/bNGwnar9WXOyZXhMwdXUsGURoDBNNhxM=;
+	b=SP+RKjBQpuTYeKwfD2cvOb7ifrpeoF/rM0GaGUas1MwEJxJnyUlxBxaBAZZ8jglF54ff
+	 uQ6ZO8g/PEc0fzU2KaQJ4/VXt5rFuyzqJxy/ALU61s1nv40qX1hN72QFll8gsRwrOMzxs
+	 G4sw5FuHLwU8Dg9+kTWC12VLS3XHpZ2ZMc8D+Kv8l45Mjfm6gUGHha3bDg6Nz2y2LTZDZ
+	 z/fHMDK3+bp43IJZPz1XizcmgIsnvWD+wVnJDtqQdHZMOdahRRkbxFgikwMfW6j6hnEkD
+	 1kTVecsopjIxsJFgMqmIG0aQog4MdIL2L/qtHzJiI6vI/E7HM1wkaifrHtfoPfEHaDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DdEaOeC4;
-	arc=none smtp.remote-ip=209.85.214.176
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BSJh+GzC;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62645606A31C
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 00:47:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62645606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB5C606A31C;
+	Sun,  1 Nov 2026 00:48:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DdEaOeC4
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2e8f2c3ad6bso11601875ad.1
-        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 17:47:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793494034; x=1794098834; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=EvABP5HmRpAFtlptkIT9RhfhkdzvHFpexkpFablsesc=;
-        b=DdEaOeC4sDzA2LKdcBG8daUcSdeKDi5i1p/ZasgGi5lI935IM+Bl6hnV+5eEnAri6S
-         cAslIs/Qdp3WMnn3dp4AYl1LI7UJoZ2ViHDlOU9k70XpdnXzIS63WZu2WeOsxrIP2pgX
-         /P3Wyn+JZUtzRADU8HJaLuULhoX+M5q3ZG73IOatd+UgFgK70GifDpFd5msyjRL7weFS
-         JIdVVHvfG7dOISc39vDhoyGcMKuyU8f/qVBo+J5kF7W7ZRmtoYeC1KsRoJM+VLP+iG8k
-         GEu7z7iwBDAYdld5yU7xDBU8Zd+2exMNRT4ldC0aiNx+gT/kxpLLx4WoD0oOtTfy3wbf
-         urbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793494034; x=1794098834;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=EvABP5HmRpAFtlptkIT9RhfhkdzvHFpexkpFablsesc=;
-        b=TA78Zj3+Q7BI8pUW1NQIJ82hBKmeERkLOUOV5nSyIxSXD2EchgCJ/+YDH8YgFjIubX
-         k8AXEJhkDrDTUwp5ON3S1OFe4+xOQrr5/cszUzILIUAEQCBwabhRhF9jXQaWl0vtkueo
-         PTE+k8K39SzsyDZIDSBHJNRYuf6c+wWZrJ/ZAdPRiCNX7E0a8w4uJpuC52d4OKF4jjm8
-         6OSk5TNjs7Tw3vxGqbntpEpRNFwsCqklJuzoLNqTzcMr4KZhSD0N4EoQKbFUHXF1JmAn
-         qlLPkvTCTRfnb89gxMmXfKKKBbxV5/6ZjDZcnHcM2Iz/MmoQrVZ65VDxjGUN6OMRroVY
-         e4Sw==
-X-Gm-Message-State: AFq9FYLAsQK4rDwxRIscGYFLcYOXLd2enIqGsphmXsiuwePwhTwaagmU
-	92G+HVBGNeXB4yRnhufu30JKIcM1xZJ7v3+CKjkQkP1zJ7Zr2hwPgilmVtZg7g==
-X-Gm-Gg: AYBFou0qg5mOF23YhbEmH5BsJ/QyEJNi45P6oeFn4jBL6yEmjITgOih6jufgl42UhqY
-	YEDtfXWRZF9vpqbQQTQaH7fFiLxzKMs77N40Gd4YNPAXSoTrdRBuPQlLHCP4jlJNKZVX3UMeVWM
-	/7OGNn4Pu0LtqBoi3paY2/h46vPi+btQVR4wSSiu+tiG6CtAajEx20BRz77B9LjOckyr0zNr75A
-	GxAriw3+hTS0NMCsLM09hR/zz/3u7cAzXjMYFcGo0wHQ39wKSA1BrC6isqaT+h8YkRQiR0cJlRl
-	BxSgk0MJSN/UwQ7UrIHsEzj4MLlk4dT0WlXDopLM5od6ttqrPgEM+UZJiUo29ozoesHicACE2V6
-	Vl5H7Ye00oZYCxq+JIZUNaVDCHGGQMkt3+RtmZKK90KuGFZ9lmb9sciY+6a8MntiFAHhh2MRtGx
-	3++3AC4Izc5Dmnd2eGkS+rsO4Yb3NxNOZyu8Evsr8Wn4/OIsooRoH5G/EWOnpOINzMZhp/zqEPC
-	JMjU1yjsTawDIFHcfPaOnbksFGFK+ZYwuiusAihVrgeNMQGVGhD1NARKGDjz0/OSdwNpjg2o0h1
-	FDNINueZOuMHfoNm8uVFyHoOwQ9Kmc5LDgLqb/Hqy7PnIrqZcZvwPy0I+QJ5v1MtjMjOPEUbxXr
-	eUgJI4SGBSgWaALCza+3Jo5xTd2/HoYZAQ4XQdZjgMV77XMV8wInr27eta+vXAnF0jMCbYTzpZL
-	RjldNBr/7CovkTO1I/vGM=
-X-Received: by 2002:a05:6a21:8cc3:b0:3e1:bfb9:55f1 with SMTP id adf61e73a8af0-3e928dd8d5fmr5420785637.53.1793494033386;
-        Sat, 31 Oct 2026 17:47:13 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb09814cb9sm1876265a12.24.2026.10.31.17.47.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2026 17:47:13 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test a callee that overwrites a spilled pointer of its caller
-Date: Sun,  1 Nov 2026 00:46:56 +0000
-Message-ID: <20261101004657.3406576-3-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261101004657.3406576-1-alexei.starovoitov@gmail.com>
-References: <20261101004657.3406576-1-alexei.starovoitov@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BSJh+GzC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AEB81F000C1;
+	Sun,  1 Nov 2026 00:48:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793494098;
+	bh=qiBXgiJ9Ba/bNGwnar9WXOyZXhMwdXUsGURoDBNNhxM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=BSJh+GzCX9mk5P3FNT7SjonJ8t+ZGYLLvRzGJDR4YNY1uEaWO1Y7KDdnFA1sgGekM
+	 xgIETOzGAfMeDXuZ0SWEt31cZ4Q+0Cuf/MaoTZA8IbgNrey1PEdxe9/bkrFhvUo9jF
+	 QxrPveNMbjNY+YybcxpUOEzaUmm4XRk6lmX2W0Vowmfj6KUiNRRPt7w/wV5PFPX83l
+	 05aExwVHbnSSBX4ERZDsHyTG+tjdQiXhfmFgpLM557Nfc59LRfjw0wA2QYxxXTUsjM
+	 IvbbIpKNfoWeQ77fzVY/ltvGgdbFfHh/6XGmwcIwCqnalG+1AbLGxTFX3OvovpcdG6
+	 ISoZNM0dwQq9w==
+Content-Type: multipart/mixed; boundary="===============2802907230478521436=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,347 +49,115 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <70bafc49483a4282dc63ce31809672c2c86426b96f0c981fcd8f041468b46702@mail.kernel.org>
+In-Reply-To: <20261101001024.9994-1-dennylin0707@gmail.com>
+References: <20261101001024.9994-1-dennylin0707@gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpftool: Preserve unsigned enum values in data dumps
+From: bot+bpf-ci@kernel.org
+To: dennylin0707@gmail.com,qmo@kernel.org,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,yonghong.song@linux.dev,linux-kernel@vger.kernel.org,dennylin0707@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun,  1 Nov 2026 00:48:18 +0000 (UTC)
 
-From: Alexei Starovoitov <ast@kernel.org>
+--===============2802907230478521436==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The caller spills &fp[-8] to fp-16 and passes a pointer to its frame to
-a callee, which can store a pointer to a map value to fp-16. The caller
-fills fp-16 and stores through it. That store is not a certain write to
-fp-8.
+> bpftool: Preserve unsigned enum values in data dumps
 
-Five valid progs read fp-8 after the store. The callee is a static subprog,
-a static subprog that gets a pointer to another slot, a callback of
-bpf_loop(), the target of callx, and a function in C that moves a cursor.
-Without the fix they fail with:
+TL;DR: bpftool enum dump may regress on BTF without kind_flag (older
+kernels/LLVM): small negative enumerators like -1 in 1- or 2-byte enums may
+print as numbers instead of names; not a crash.
 
-  reading from stack off -8+0 size 8, slot poisoned by dead code elimination
+> diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
+> --- a/tools/bpf/bpftool/btf_dumper.c
+> +++ b/tools/bpf/bpftool/btf_dumper.c
+> @@ -149,7 +149,8 @@ static int btf_dumper_enum(const struct btf_dumper *d,
+>  			    const void *data)
+>  {
+>  	const struct btf_enum *enums = btf_enum(t);
+> -	__s64 value;
+> +	bool is_signed = btf_kflag(t);
+> +	__s64 value, val;
+>  	__u32 i;
+>
+>  	switch (t->size) {
 
-In callee_overwrites_spilled_fp_hidden_store the store hides a write to the
-counter of a loop. Without the fix the prog loads, and it accesses a map
-value out of bounds.
+[ ... ]
 
-one_fp_clear_stack_threshold and two_fp_clear_stack_threshold expect the
-fake offset fp+0 in the log now.
+> @@ -157,20 +158,21 @@ static int btf_dumper_enum(const struct btf_dumper *d,
+>  		value = *(__s64 *)data;
+>  		break;
+>  	case 4:
+> -		value = *(__s32 *)data;
+> +		value = is_signed ? (__s64)*(__s32 *)data : *(__u32 *)data;
+>  		break;
+>  	case 2:
+> -		value = *(__s16 *)data;
+> +		value = is_signed ? *(__s16 *)data : *(__u16 *)data;
+>  		break;
+>  	case 1:
+> -		value = *(__s8 *)data;
+> +		value = is_signed ? *(__s8 *)data : *(__u8 *)data;
+>  		break;
+>  	default:
+>  		return -EINVAL;
+>  	}
+>
+>  	for (i = 0; i < btf_vlen(t); i++) {
+> -		if (value == enums[i].val) {
+> +		val = is_signed ? (__s64)enums[i].val : (__u32)enums[i].val;
+> +		if (value == val) {
+>  			jsonw_string(d->jw,
+>  				     btf__name_by_offset(d->btf,
+>  							 enums[i].name_off));
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Does treating a clear kind_flag as "unsigned" break name matching for BTF
+that carries no signedness information?
+
+A BTF_KIND_ENUM with kflag == 0 and a negative enumerator is common in the
+BTF that bpftool reads:
+
+  - kernels before 6.0 reject kind_flag on enums in btf_enum_check_meta()
+  - libbpf's bpf_object__sanitize_btf() clears the flag when the kernel
+    lacks enum64 support
+  - LLVM before 15 never sets the bit
+
+bpftool map dump reads this BTF back from the kernel, so the path is
+do_dump_btf() -> btf_dumper_type() -> btf_dumper_do_type() ->
+btf_dumper_enum().
+
+For example, with a one byte enum:
+
+  enum __attribute__((packed)) e { NEG = -1, POS = 1 };
+
+where NEG is stored in btf_enum.val as the __s32 -1, kflag is 0, and the map
+value byte is 0xff:
+
+  before: value = *(__s8 *)data = -1; enums[i].val = -1, so it matches
+          and prints "NEG"
+
+  after:  is_signed = false; value = *(__u8 *)data = 255;
+          val = (__u32)enums[i].val = 4294967295, so there is no match
+          and it prints 255
+
+For four byte enums the name still matches because both sides are zero
+extended the same way.  A negative value that is not an enumerator (for
+example -22) is now printed as 4294967274 rather than -22.
+
+Would comparing at the enum's own width in the !is_signed case work for both
+encodings and still fix the reported unsigned case?  For instance, comparing
+the data against the enumerator truncated to t->size bytes, where
+(__u8)255 == 255 and (__u8)-1 == 255 both match a data byte of 0xff.
+
+libbpf's btf_dump_enum_data() makes the same kflag assumption, so this isn't
+a crash, but it is a visible change from the earlier bpftool output on older
+kernels that bpftool still supports.
+
+
 ---
- .../selftests/bpf/progs/verifier_callx.c      |  46 ++++
- .../selftests/bpf/progs/verifier_live_stack.c | 230 +++++++++++++++++-
- 2 files changed, 272 insertions(+), 4 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
-index 7e59188d9fca..b2d7659207ae 100644
---- a/tools/testing/selftests/bpf/progs/verifier_callx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
-@@ -289,6 +289,52 @@ __naked void callx_callee_writes_caller_stack(void)
- 		: __clobber_all);
- }
- 
-+__naked __noinline __used
-+static unsigned long store_second_param(void)
-+{
-+	asm volatile (
-+		"*(u64 *)(r1 + 0) = r2;"
-+		"r0 = 0;"
-+		"exit;"
-+	);
-+}
-+
-+/*
-+ * fp-16 holds &fp[-8], and the callee stores a pointer to map value over it. The store through
-+ * the filled pointer is not a certain write to fp-8: fp-8 is live in front of the store.
-+ */
-+SEC("socket")
-+__success __retval(0)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void callx_callee_overwrites_spilled_fp(void)
-+{
-+	asm volatile (
-+		"*(u64 *)(r10 - 8) = 0;"
-+		"r1 = %[map_array] ll;"
-+		"r2 = r10;"
-+		"r2 += -8;"
-+		"call %[bpf_map_lookup_elem];"
-+		"if r0 == 0 goto 1f;"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"*(u64 *)(r10 - 16) = r1;"
-+		"r1 = r10;"
-+		"r1 += -16;"
-+		"r2 = r0;"
-+		"r3 = %[store_second_param] ll;"
-+		"callx r3;"
-+		"r1 = *(u64 *)(r10 - 16);"
-+		"*(u64 *)(r1 + 0) = 42;"
-+		"r0 = *(u64 *)(r10 - 8);"
-+	"1:"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm_addr(map_array),
-+		  __imm_addr(store_second_param)
-+		: __clobber_all);
-+}
-+
- SEC("socket")
- __failure __msg("R1 has type scalar, expected func")
- __naked void callx_scalar(void)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-index 1fc9984e8e22..ff7c723820a5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-@@ -1972,11 +1972,15 @@ static __used __naked void grandchild_deref(void)
- 	::: __clobber_all);
- }
- 
-+/*
-+ * The callee gets a pointer to the frame that holds the spills. It can store a pointer
-+ * that is not FP-derived over them: after the call each of them is "fp-N or not FP-derived".
-+ */
- SEC("socket")
- __log_level(2)
- __success
--__msg("14: (79) r1 = *(u64 *)(r10 -8) // r6=fp0-8 r7=fp1-16 fp-8=fp1-16 fp-16=fp0-8")
--__msg("15: (79) r0 = *(u64 *)(r1 +0) // r1=fp1-16 r6=fp0-8 r7=fp1-16 fp-8=fp1-16 fp-16=fp0-8")
-+__msg("14: (79) r1 = *(u64 *)(r10 -8) // r6=fp0-8 r7=fp1-16 fp-8=fp1-16|fp1+0 fp-16=fp0-8|fp0+0")
-+__msg("15: (79) r0 = *(u64 *)(r1 +0) // r1=fp1-16|fp1+0 r6=fp0-8 r7=fp1-16 fp-8=fp1-16|fp1+0")
- __msg("stack use/def subprog#1 mid_two_fp_threshold (d1,cs2):")
- __msg("14: (79) r1 = *(u64 *)(r10 -8)        ; use: fp1-8")
- __msg("15: (79) r0 = *(u64 *)(r1 +0)         ; use: fp1-16")
-@@ -2021,8 +2025,8 @@ static __used __naked void inner_nop_fptest(void)
- SEC("socket")
- __log_level(2)
- __success
--__msg("13: (79) r1 = *(u64 *)(r10 -8) // r6=fp0-8 r7=fp1-16 fp-8=fp1-16 fp-16=fp0-8")
--__msg("14: (79) r0 = *(u64 *)(r1 +0) // r1=fp1-16 r6=fp0-8 r7=fp1-16 fp-8=fp1-16 fp-16=fp0-8")
-+__msg("13: (79) r1 = *(u64 *)(r10 -8) // r6=fp0-8 r7=fp1-16 fp-8=fp1-16|fp1+0 fp-16=fp0-8|fp0+0")
-+__msg("14: (79) r0 = *(u64 *)(r1 +0) // r1=fp1-16|fp1+0 r6=fp0-8 r7=fp1-16 fp-8=fp1-16|fp1+0")
- __msg("stack use/def subprog#1 mid_one_fp_threshold (d1,cs2):")
- __msg("13: (79) r1 = *(u64 *)(r10 -8)        ; use: fp1-8")
- __msg("14: (79) r0 = *(u64 *)(r1 +0)         ; use: fp1-16")
-@@ -3473,3 +3477,221 @@ __naked void helper_bloom_peek_input(void)
- 	:: __imm_addr(bloom_8b), __imm(bpf_map_peek_elem)
- 	: __clobber_all);
- }
-+
-+static __used __naked void store_second_param(void)
-+{
-+	asm volatile (
-+	"*(u64 *)(r1 + 0) = r2;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/*
-+ * fp-16 holds &fp[-8], and the callee stores a pointer to map value over it. The store through
-+ * the filled pointer goes to the map value. It is not a certain write to fp-8: fp-8 is live
-+ * in front of the store.
-+ */
-+SEC("socket")
-+__success __retval(0)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__log_level(2)
-+__msg("r1 = *(u64 *)(r10 -16) // fp-16=fp0-8|fp0+0")
-+__msg("*(u64 *)(r1 +0) = 42{{ +}}; may_def: fp0-8")
-+__naked void callee_overwrites_spilled_fp(void)
-+{
-+	asm volatile (
-+	"*(u64 *)(r10 - 8) = 0;"
-+	"r1 = %[array_map_8b] ll;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"call %[bpf_map_lookup_elem];"
-+	"if r0 == 0 goto 1f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"*(u64 *)(r10 - 16) = r1;"
-+	"r1 = r10;"
-+	"r1 += -16;"
-+	"r2 = r0;"
-+	"call store_second_param;"
-+	"r1 = *(u64 *)(r10 - 16);"
-+	"*(u64 *)(r1 + 0) = 42;"
-+	"r0 = *(u64 *)(r10 - 8);"
-+"1:"
-+	"exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(array_map_8b)
-+	: __clobber_all);
-+}
-+
-+static __used __naked void store_second_param_at_16(void)
-+{
-+	asm volatile (
-+	"*(u64 *)(r1 + 16) = r2;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* The same, but the callee gets &fp[-32] and reaches fp-16 from it. */
-+SEC("socket")
-+__success __retval(0)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void callee_overwrites_spilled_fp_in_other_slot(void)
-+{
-+	asm volatile (
-+	"*(u64 *)(r10 - 8) = 0;"
-+	"r1 = %[array_map_8b] ll;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"call %[bpf_map_lookup_elem];"
-+	"if r0 == 0 goto 1f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"*(u64 *)(r10 - 16) = r1;"
-+	"r1 = r10;"
-+	"r1 += -32;"
-+	"r2 = r0;"
-+	"call store_second_param_at_16;"
-+	"r1 = *(u64 *)(r10 - 16);"
-+	"*(u64 *)(r1 + 0) = 42;"
-+	"r0 = *(u64 *)(r10 - 8);"
-+"1:"
-+	"exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(array_map_8b)
-+	: __clobber_all);
-+}
-+
-+/* ctx[1] = ctx[0] */
-+static __used __naked void cb_copy_first_to_second(void)
-+{
-+	asm volatile (
-+	"r1 = *(u64 *)(r2 + 0);"
-+	"*(u64 *)(r2 + 8) = r1;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* The same, but a callback of bpf_loop() overwrites fp-16. */
-+SEC("socket")
-+__success __retval(0)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void callback_overwrites_spilled_fp(void)
-+{
-+	asm volatile (
-+	"*(u64 *)(r10 - 8) = 0;"
-+	"r1 = %[array_map_8b] ll;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"call %[bpf_map_lookup_elem];"
-+	"if r0 == 0 goto 1f;"
-+	"*(u64 *)(r10 - 24) = r0;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"*(u64 *)(r10 - 16) = r1;"
-+	"r1 = 1;"
-+	"r2 = %[cb_copy_first_to_second] ll;"
-+	"r3 = r10;"
-+	"r3 += -24;"
-+	"r4 = 0;"
-+	"call %[bpf_loop];"
-+	"r1 = *(u64 *)(r10 - 16);"
-+	"*(u64 *)(r1 + 0) = 42;"
-+	"r0 = *(u64 *)(r10 - 8);"
-+"1:"
-+	"exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm(bpf_loop),
-+	  __imm_addr(array_map_8b),
-+	  __imm_addr(cb_copy_first_to_second)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * r7 is a pointer to map value, as above. The store through r7 doesn't overwrite fp-8:
-+ * fp-8 still holds &fp[-24], and the store through r8 changes the counter of the loop.
-+ */
-+SEC("socket")
-+__failure __msg("invalid access to map value, value_size=8 off=4096 size=1")
-+__naked void callee_overwrites_spilled_fp_hidden_store(void)
-+{
-+	asm volatile (
-+	"*(u64 *)(r10 - 8) = 0;"
-+	"r1 = %[array_map_8b] ll;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"call %[bpf_map_lookup_elem];"
-+	"if r0 == 0 goto 2f;"
-+	"r9 = r0;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"*(u64 *)(r10 - 16) = r1;"
-+	"r1 = r10;"
-+	"r1 += -16;"
-+	"r2 = r9;"
-+	"call store_second_param;"
-+	"r7 = *(u64 *)(r10 - 16);"
-+	"r1 = r10;"
-+	"r1 += -24;"
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"r0 = 0;"
-+	"*(u64 *)(r7 + 0) = r0;"
-+	"r8 = *(u64 *)(r10 - 8);"
-+	"r1 = 0;"
-+	"*(u64 *)(r10 - 24) = r1;"
-+	"r6 = 0;"
-+"1:"
-+	"r1 = *(u64 *)(r10 - 24);"
-+	"r2 = r9;"
-+	"r2 += r1;"
-+	"r0 = *(u8 *)(r2 + 0);"
-+	"r1 += 1;"
-+	"*(u64 *)(r10 - 24) = r1;"
-+	"r3 = 4096;"
-+	"*(u64 *)(r8 + 0) = r3;"
-+	"r6 += 1;"
-+	"if r6 < 8 goto 1b;"
-+"2:"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(array_map_8b)
-+	: __clobber_all);
-+}
-+
-+struct cursor {
-+	__u64 *pos;
-+};
-+
-+__u64 cursor_seed;
-+
-+static __noinline int move_cursor(struct cursor *c, __u64 *to)
-+{
-+	if (cursor_seed & 8)
-+		c->pos = to;
-+	return 0;
-+}
-+
-+/* The same in C: a cursor starts at a local variable, and the callee can move it to a map value. */
-+SEC("socket")
-+__success __retval(1)
-+int callee_moves_cursor(void *ctx)
-+{
-+	__u64 x = cursor_seed & 7;
-+	struct cursor c = { .pos = &x };
-+	__u32 key = 0;
-+	__u64 *val;
-+
-+	val = bpf_map_lookup_elem(&array_map_8b, &key);
-+	if (!val)
-+		return 0;
-+	move_cursor(&c, val);
-+	*c.pos = 1;
-+	return x;
-+}
--- 
-2.55.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41256964100
+--===============2802907230478521436==--
