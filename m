@@ -1,72 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793562912;
-	b=1OoLmwosMfFdU7LgtWP9t7fvBgYaqc2bdc7DdHi2zNlaapFZMCBXfvgIsdHXNAD2S005
-	 SGUV5l7XbTYMQgC4cMMgl5QXBnjn4exFa2dysSsQyvqyAs9j34D76RXbP7e2AlucU5s/5
-	 h7oHTJF8wGxKgIFx8nsekSMU+oZvzXGqd5DpiePxz4eeEjgB6c/o6YlaZQm8mu4BTlGYX
-	 Ptns0121g62e0KxZmuxB5n/zZ1YN2i4f8GztIcHHLP6Dwa2Ldd+O1c1C0wccN/AdL8n92
-	 G9XMU9QSX6lokSU/ZE7IeMcffI9zrHUy8624bvFQE78KktwXHDyfwTBXoneywc+W6Kg==
+	t=1793563050;
+	b=YMRkjKgtdDn6Hl5BQumqVDMs2oMzZwS4Mixf3Fj+b+BMHAnSgBXxgSBplR+VvXi8PrBZ
+	 C62k0R8r36yRomr2JkG84GPbIaxk82OuYLLgwCa+G5+H74bTRnDmLGRYBpuewWqjgT3Bu
+	 oaVZsrIbyNCJSexfaxOLXEOXSWtXi0vMXLjJDfS09fAFSERIdURGDgi4RXhGydRkWq6/p
+	 tVJEgfArAowa3m0OmJ63W4bNKYJDXl1tr2y3YQR2490uKqcH4UeHRoRMG7Z3pI0zH1Mn1
+	 FBEMv/TuC9Nr+/pnqCiNuIak0vH0X3MOcWqygQXR5+zlO58xtJkFGQ34oVyZpHWNn9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793562912;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy:X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:X-Authority-Analysis:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=Ce85114mDFvfbWuL1jNqa1Zhgt6aBo11Zg/QhuctFtQ=;
-	b=MZHqS6CDbCwT1b5cNUfiapCEph1OXGxQ6+9UFr8pvvtS0ckK/CaT9p7SVeRFmJu5MRqh
-	 QaGNhkaa7gMkOVwk5mF9RmHTFSp1B6mtb2mPGZ/sWbhyyMv5FisTu+4r4bkZiUj7ruNEH
-	 38NkZifyEf4GlT6I6B3miS4mwZ3TWjCI+jzryLJITBdvzVaTZPwgmN5DzXOO71Ixer86q
-	 7WdpMBSgMhoC/8qLTl120OOwmywjbYVDZImJGT+q9EpWrjq1gU4D85BNNSpdcr9eEdmZi
-	 0DW0unQHqW9XL1pyVqmqodHbbSSHPRJ7/+EV1jOukhci6XoX/Np1G6b9ZDgot6eV0RQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793563050;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=yJU0ZfUbFfL3NrMI1HZemQjeG1PrpLxJjKkcTMc8nn0=;
+	b=dNZ4SqSCJkLreRjmqHUzxb67NFRBGXhP+YrDCxG0VhvE3Y51ivLnlojUgKQw9wpyHfL0
+	 LMDfHRQaWEY6A9zZz20UoZSCOw/xgjFex1x1pVZtihY3viU3uyG6NCPApx61GOCbdO/zw
+	 DpgFXHq357tFURI52GtNEpU/MXxhDf5N32SKpBFp6IYhUld8YQ04oEHDVXjY9oabB2Pna
+	 dMR9gIaFpshaX3ukLFrsb2zJcx16uA+1P/mAfdMPCmRgc4k8SjX2BsetGezwgF+vlRgyY
+	 uaSA+9LHEbpw35fLJUpEQQpBnErkeWjWeiPMN3tHw3HzTjg3NY+TWB0J0WHd0Vxz2YQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=crowdstrike.com;
-	spf=pass smtp.mailfrom=crowdstrike.com;
-	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=rUAEZgFZ;
-	arc=none smtp.remote-ip=148.163.148.77
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HgWXNkAE;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549D6606A338
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:55:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 549D6606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30287606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:57:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=rUAEZgFZ
-Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A1F06rn3901218;
-	Sun, 1 Nov 2026 19:54:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=Ce85114mDFvfbWuL1jNqa1Zhgt6aBo11Zg/QhuctFtQ=; b=rUAE
-	ZgFZV/h8aXJk9Rian/T2ql/GVCn6W0FW/rc8mW6p30Ka916zDTmugkB5XtqElKWZ
-	iEIwgSUxr+kG4PIMq2x6KCUC4lDH78JLCuceKeOMlw0aF18liybAptj06pmlJf7E
-	/jx7aCDoVWwow3rLOW0IaxhWG5bgAoCryeiPSxlIe7r8RSmf5UK74+7D+fQ7EQAc
-	JB7J0TPQYOoq3TlRTRCuNZlW+zNwgltmOUhJcF0Xr/sxET8c1p8PLxlR/n/N7IDd
-	2uy64c1vaNwOpzJNE4jE1+SIGvUNx5HMi4TpbxrcxcJOu6rL3MThIE4JPLOW3MeF
-	E4NOv+bXUfHpMX7hxQ==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4hnuk01p9d-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 01 Nov 2026 19:54:58 +0000 (GMT)
-Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.53; Sun, 1 Nov 2026 19:54:57 +0000
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-To: <bpf@vger.kernel.org>
-CC: <andrii@kernel.org>, <martin.kelly@crowdstrike.com>,
-        <slava.imameev@crowdstrike.com>
-Subject: [PATCH bpf-next 3/3] libbpf: Clean up BPF program manual loading
-Date: Sun, 1 Nov 2026 14:54:53 -0500
-Message-ID: <20261101195453.3859308-4-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261101195453.3859308-1-andrey.grodzovsky@crowdstrike.com>
-References: <20261101195453.3859308-1-andrey.grodzovsky@crowdstrike.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HgWXNkAE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 970BF1F000C1;
+	Sun,  1 Nov 2026 19:57:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793563049;
+	bh=yJU0ZfUbFfL3NrMI1HZemQjeG1PrpLxJjKkcTMc8nn0=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=HgWXNkAEsWaA5c13de1036bGPl35ZsNxb0PKeMl0S2nOHllvd+CKUlm7hZ4ubPdfc
+	 JjKrsY/88Ea2W9OI0lgtWjzOVaoy68aDmMHpUAfANo+pml62OAHVBcXbhMr15vWACx
+	 7fwVcy9OXdVgG1E8TkYcreoWRBi76v5G7iAJv7xlWTMhTrJ59Ki1HC4M7trOWFm3JS
+	 MPffk87kRDkmimdADBnySPu5Fx4eC5j6pb6huoXCmqSjQUc5kI7CKD1RCJoXp6E+3P
+	 8Oak51+PL3vNLZq745leyDucOeoty/y8DNjiEx9N71DRBNKcUD32C8On32ou2bsD6C
+	 occEM1r6lRqKw==
+Message-ID: <sashiko-outbox-192641@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 26/27] bpf: Use the inner transport header after a
+ decap
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261101190535.1454146-27-alexei.starovoitov@gmail.com>
+References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
+ <20261101190535.1454146-27-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 01 Nov 2026 19:57:29 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -75,126 +59,136 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH006.crowdstrike.sys (10.100.11.70) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAxMDA3OSBTYWx0ZWRfX93n/Rac8HnR+
- UpF7AcCyLN1lxWbY59iSOLWK43ki8/X+uHT43sZaf+CSNINhqOTgcBSvmA8Opj4AOoxl4eeonSB
- 9XLuWvsy9yNquC+MDskDTozJJpFy288Zu9daI7WQqcWCcwsBx5M5
-X-Proofpoint-ORIG-GUID: EzwJn6sTorNuoGQJUQxlT-h4mET7XJqt
-X-Proofpoint-GUID: EzwJn6sTorNuoGQJUQxlT-h4mET7XJqt
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAxMDA3OSBTYWx0ZWRfX796i7eSry7Zi
- elSLmOk0nhEWHZDr4/5sN/lNxE04OL9jw7AQ4uXEGXqOfi6L8D39CdrFauVuWJ0vqqiJLJE/jtF
- k1JJ7GXK8EVsLJwaOpoNMKXb7B/G9NvYXQ5u/vq06sYUlELY94OjCuOf9MkzjjIOYy9Q782TOb7
- yevGXg7FC4NzcpbiRQANvGPy6D5kLWm+taxSqPnflsWeaEyFTHV+zktzrIXC6PRDf4ki8EvE8lT
- hFO4tkerz1WVOHWoT+2RgaSBPmlEIM11l40NeQ5jN6IM2IWGTTRHil+FHPqOsM9aOTQzmvFZlOi
- MYyTqUfe5uC7Xic8Ojainx0n0Ec/VZWE8iIcMrYOohlZFYe3u04lT4p4MrWWvf8uZ/3s/Iij4nK
- yTfpWvuHvjNTB9B3E+KyWV42+kfWjbXIu2muxY+rwx5z5LeLLqLkljyDzSd9SAosDxWtwIvV9U9
- rjE2tmqEcnR4cLaiMWA==
-X-Authority-Analysis: v=2.4 cv=OaINnRTY c=1 sm=1 tr=0 ts=6ae79912 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22 a=VwQbUJbxAAAA:8
- a=pl6vuDidAAAA:8 a=Sske_ziaJ7fd_or9XTcA:9
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11953
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
- impostorscore=0 clxscore=1015 malwarescore=0 bulkscore=0 phishscore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2610300000
- definitions=main-2611010079
 
-Follow-up cleanups to the manual loading series, just
-some extra documentation to the API headers, reject
-subprograms in bpf_program__set_load_strategy() for every
-strategy and a few more NITs.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: mishandled unset ~0U transport header in bpf_skb_clear_encap()
+--
 
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
----
- tools/lib/bpf/libbpf.c | 15 ++++++---------
- tools/lib/bpf/libbpf.h | 14 +++++++++++++-
- 2 files changed, 19 insertions(+), 10 deletions(-)
+commit 907dfd6423a9766152f03a831bcc864117a68b99
+Author: Chris Mason <mason@kernel.org>
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 02e75b183ed0..446b947c48f3 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9844,7 +9844,7 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
- 			err = bpf_gen__finish(obj->gen_loader, obj->nr_programs, obj->nr_maps);
- 	}
- 
--	bpf_object_post_load_cleanup(obj, false);
-+	bpf_object_post_load_cleanup(obj, false /* !force */);
- 	obj->state = OBJ_LOADED; /* doesn't matter if successfully or not */
- 
- 	if (err) {
-@@ -16013,16 +16013,14 @@ int bpf_program__set_load_strategy(struct bpf_program *prog, enum bpf_prog_load_
- 	if (obj->state >= OBJ_PREPARED)
- 		return libbpf_err(-EINVAL);
- 
-+	if (prog_is_subprog(obj, prog))
-+		return libbpf_err(-EINVAL);
-+
- 	switch (strategy) {
- 	case BPF_PROG_LOAD_STRATEGY_DISABLED:
- 	case BPF_PROG_LOAD_STRATEGY_AUTO:
--		prog->load_strategy = strategy;
--		break;
- 	case BPF_PROG_LOAD_STRATEGY_MANUAL:
--		if (prog_is_subprog(obj, prog))
--			return libbpf_err(-EINVAL);
--
--		prog->load_strategy = BPF_PROG_LOAD_STRATEGY_MANUAL;
-+		prog->load_strategy = strategy;
- 		break;
- 	default:
- 		return libbpf_err(-EINVAL);
-@@ -16036,8 +16034,7 @@ enum bpf_prog_load_strategy bpf_program__load_strategy(const struct bpf_program
- 	return prog->load_strategy;
- }
- 
--int
--bpf_program__load(struct bpf_program *prog)
-+int bpf_program__load(struct bpf_program *prog)
- {
- 	int err;
- 	struct bpf_object *obj = prog->obj;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 22204a544b23..a8a23c135c17 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -390,6 +390,17 @@ LIBBPF_API void bpf_program__set_ifindex(struct bpf_program *prog,
- LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
- LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
- LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
-+
-+/**
-+ * @brief **bpf_program__set_autoload()** sets whether a BPF program is
-+ * loaded automatically when its bpf_object is loaded.
-+ *
-+ * @param prog BPF program to update
-+ * @param autoload true to load the program automatically, false to disable
-+ * its loading
-+ * @return 0 on success; -EINVAL if the object was already prepared or if the
-+ * program is a subprogram
-+ */
- LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
- LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
- LIBBPF_API void bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach);
-@@ -2177,7 +2188,8 @@ enum bpf_prog_load_strategy {
-  *
-  * @param prog BPF program to update
-  * @param strategy new load strategy for the program
-- * @return 0 on success; negative error code if the object was already prepared
-+ * @return 0 on success; -EINVAL if the object was already prepared, if the
-+ * strategy is not a valid one, or if the program is a subprogram
-  */
- LIBBPF_API int bpf_program__set_load_strategy(struct bpf_program *prog,
- 					      enum bpf_prog_load_strategy strategy);
--- 
-2.34.1
+bpf: Use the inner transport header after a decap
 
+This commit adds bpf_skb_clear_encap() to update skb->transport_header from
+skb->inner_transport_header when decapsulation in bpf_skb_net_shrink() clea=
+rs
+skb->encapsulation.
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index b5534dac9e6dc..21fcdc7cd950d 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -3769,6 +3769,25 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u=
+32 off, u32 len_diff,
+>  	return 0;
+>  }
+> =20
+> +/*
+> + * Code that went by the inner transport header while skb->encapsulation=
+ was set
+> + * goes by the transport header from now on. So take the inner one over,=
+ unless
+> + * it is the smaller one, as it is if nobody has set it. Do not leave th=
+e result
+> + * in front of @off, where the bytes were removed.
+> + */
+> +static void bpf_skb_clear_encap(struct sk_buff *skb, u32 off)
+> +{
+> +	int thoff;
+> +
+> +	if (!skb->encapsulation)
+> +		return;
+> +
+> +	thoff =3D max(skb->inner_transport_header, skb->transport_header) -
+> +		skb_headroom(skb);
+> +	skb_set_transport_header(skb, max_t(int, thoff, off));
+> +	skb->encapsulation =3D 0;
+> +}
+
+[Severity: High]
+Can max(skb->inner_transport_header, skb->transport_header) in
+bpf_skb_clear_encap() in net/core/filter.c select the unset sentinel (~0U)
+instead of a valid transport header offset?
+
+In include/linux/skbuff.h, an unset transport header is represented by
+(__u16)~0U (0xffff):
+
+include/linux/skbuff.h:skb_transport_header_was_set() {
+	return skb->transport_header !=3D (typeof(skb->transport_header))~0U;
+}
+
+Because 0xffff is the largest possible __u16 value rather than the smallest,
+taking max(skb->inner_transport_header, skb->transport_header) will pick
+0xffff whenever either field holds the unset sentinel:
+
+1. If skb->transport_header is unset (0xffff) while
+   skb->inner_transport_header holds a valid offset (for example, after
+   gro_cells_receive() calls skb_unset_transport_header(), or after
+   encapsulating via bpf_skb_net_grow() with BPF_F_ADJ_ROOM_ENCAP_L3_IPV4/I=
+PV6
+   without L4 flags), max() chooses 0xffff and overwrites
+   skb->transport_header with 0xffff instead of copying
+   skb->inner_transport_header.
+
+2. If an skb starts with skb->transport_header unset (0xffff) and is
+   encapsulated with BPF_F_ADJ_ROOM_ENCAP_L4_GRE or
+   BPF_F_ADJ_ROOM_ENCAP_L4_UDP, bpf_skb_net_grow() copies 0xffff into
+   skb->inner_transport_header while setting skb->transport_header to the
+   outer L4 header:
+
+net/core/filter.c:bpf_skb_net_grow() {
+	if (encap) {
+		...
+		inner_trans =3D skb->transport_header;
+	}
+	...
+	if (encap) {
+		...
+		skb->inner_transport_header =3D inner_trans;
+		...
+		if (flags & BPF_F_ADJ_ROOM_ENCAP_L4_GRE ||
+		    flags & BPF_F_ADJ_ROOM_ENCAP_L4_UDP) {
+			...
+			skb_set_transport_header(skb, mac_len + nh_len);
+		}
+}
+
+   When that packet is later decapsulated in bpf_skb_net_shrink(),
+   bpf_skb_net_hdr_pop() clamps the outer skb->transport_header to off, whi=
+le
+   skb_inner_transport_offset(skb) is 0xffff - skb_headroom(skb) >=3D (int)=
+off
+   so skb->inner_transport_header stays 0xffff:
+
+net/core/filter.c:bpf_skb_net_hdr_pop() {
+		} else if (skb_transport_header_was_set(skb) &&
+			   skb_transport_offset(skb) < (int)off) {
+			/* It was in the removed bytes or before skb->data. */
+			skb_set_transport_header(skb, off);
+		}
+		/* Do not leave the inner transport header in front of @off. */
+		if (skb->encapsulation &&
+		    skb_inner_transport_offset(skb) < (int)off)
+			skb_set_inner_transport_header(skb, off);
+}
+
+   Then bpf_skb_clear_encap() evaluates max(0xffff, skb->transport_header) =
+and
+   sets skb->transport_header back to 0xffff.
+
+For a GSO packet where bpf_skb_net_shrink() sets SKB_GSO_DODGY, resets
+gso_segs =3D 0, and clears skb->encapsulation, leaving skb->transport_heade=
+r at
+0xffff causes qdisc_pkt_len_segs_init() to skip GSO segment calculation and
+causes skb_gso_validate_mac_len() -> skb_gso_transport_seglen() ->
+tcp_hdrlen() -> skb_transport_header() to trigger
+DEBUG_NET_WARN_ON_ONCE(!skb_transport_header_was_set(skb)) and read from
+skb->head + 0xffff.
+
+Should bpf_skb_clear_encap() check whether the transport headers are set
+(or ignore values equal to (__u16)~0U) before comparing them?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261101190535.1454=
+146-1-alexei.starovoitov@gmail.com?part=3D26
