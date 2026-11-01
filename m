@@ -1,107 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.148.174
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793538581;
-	b=gN6gNyAGjmwcuS601bwKAOUJs+35q9jh5AYaM4s21wtWgMYLgJS5eYcrCxq7zyBc7K18
-	 VEjlGWAKJSndcs+gfYUTwGmILcD1GsUCVTLSPiBAgqdClFvJgNwkgt+6uVmgiyAg0BSdl
-	 T6+lqFMWrYhhsIsVhDaKWLou2McTAjsrkFrnDaV9MzXl232ZHY+nwU7S5wJbFMFFV9qVY
-	 nzQPxge6Bh6RfL2HLavak3A3QBYgRV/gBnE4rUi/MCZZYE7zzBrBLurBA5PO5T80/O2QC
-	 syG7Z41Y/M6YpEX22O8rhMmRhZIkCZJi+TUT0WTN+7V7TT4fXInWu0fAtykAYuoR5NA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793538581;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-GUID:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Virus-Version;
-	bh=POsgNR6eNljnTfEYpS6eyYrflzHZ116+kioTHKvudNs=;
-	b=E15rr28S/svwtqxdjT4nHKKn/eNLP9iyDZpJdA+3cgEBbiUwGhhbCZiktcCgI4wJzGA4
-	 XnoGS6TerxjGi6pbT8evoygG5YFkVdpELueigj0Wl5LYnorLy9uqGNfwTJ7Xq4mDLpm6B
-	 GKEXu54p4ag1sZM39Rp4dIJneSFefTHZ0Nlx7DY/9MLiqeUi3s+j9okS/RLcj9Rh4o0IL
-	 mSy0FTQD5Qe5Yx5x6hbMyem+wK7fgShxqHG4FMvJ5yQt3bnhAvq8VvLxwn6hcr2Rj7yMJ
-	 5lTjudYeJPrS19ElPAlOuboR8T1Ukwc6YekIgB96giNEiWJ66T6xZ6oVCTqFeYq2+hg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=marvell.com;
-	spf=pass smtp.mailfrom=marvell.com;
-	dkim=pass header.d=marvell.com header.i=@marvell.com header.a=rsa-sha256 header.s=pfpt0220 header.b=jGZbdmzX;
-	arc=none smtp.remote-ip=67.231.148.174
-Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.228.73
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793541447;
+	b=Fj+0wrluT95DYjSWVzc5MGMTw4qj4ouIFSvBQPMDg50peEiTo5H6zcaW3b3M6qM6fRUi
+	 dXJti25GowTUbR+7kp+qbiTJIcQxGiUB6LYfTZ1XNGbxyX6dew+2uuUrsVzSfSteXuHfk
+	 gfejynVJlBy6svDAbnTjyhCo+hcHPY7YrAD8KiFmGsaJ0IiWXVCU3Ka8aZYFTAXzTrw0F
+	 EGUzhU/hbX7mxRBbmxy5W5mk8pYWIU2UPzIdyi8fG+hFzaW07/lp0e33Skx7UJ368t0cA
+	 WDbmKlhJTvgrB6iUeStsx/k+n1U6KjuFuMsfK9sBKEk9njLNaoEpr1xJTfaLgofuKDA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793541447;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=Uzn2cQrdHx8KtdifFYHzLFN48FBFi3ukVc3HuIUKO1M=;
+	b=gjHD9pK6c3ERiFHv3Jhd4Rh/qDVsXQK/WUM5XZ1ebr86N1vuZ4q0b/eA9jXRwTfxoZO0
+	 PguR6dWEZQswNV3n56iyamONDhWOk3v+sqb1CD+ExLHeu+5yYu49ekLz97n200FJTdHgP
+	 v+pYyl1q0B+JP40imthEtWGwHR8VegIJvTvzvGj0gWMdTxrPM5eENnEjkU/Fk/P9jBXCF
+	 1yWkr4h/ne9YyTm5atanWgTgRhu8foEBr8ATsLBvjGT4QLzO3QuYJmFKths+1Mc/bWeSN
+	 Upw4FJCe9fPa9hmC12ztzxMY3cU6fX201iSqusm21um45ZtXwp+G5EOW3XwUWY7KzWQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eIu6uFQD;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.228.73
+Received: from mail-ed2-f9.google.com (mail-ed2-f9.google.com [74.125.228.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61371606A324;
-	Sun,  1 Nov 2026 13:09:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 61371606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA65B606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 13:57:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA65B606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=marvell.com header.i=@marvell.com header.a=rsa-sha256 header.s=pfpt0220 header.b=jGZbdmzX
-Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A1CTBgR2419686;
-	Sun, 1 Nov 2026 05:08:57 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pfpt0220; bh=POsgNR6eNljnTfEYpS6eyYrfl
-	zHZ116+kioTHKvudNs=; b=jGZbdmzX08kECHd275c1FrgBm/rHizlZK6z3DGlMs
-	prXixOYl4te5j+sDBjwiJzvo9SjwKoCFOOkwY9sfCyjHdYcwwwLeDcTjwkZhd4jM
-	++R+ChYvplnIu8JQxRkObni82oH4uBT4IIYWV8Y0rywEyDE8hoiI79Na7kA2cN6G
-	zJq4Asqw3VN1WwyGG0dZwohqBNNKrFdtVnOLSSmpYmLWjyjTppnbZ0bU4k+XUrKK
-	pztCsAZbWkvYKhcGnwx1H+F4sCGncVzW2Z692akCCtTFtbyus6PrRwMTmb0Bh7gI
-	d3AqrjOE3DixEpWfFsyHFvv50G/sHr80Gb2166ArjWR/w==
-Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4hp5fd020x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 01 Nov 2026 05:08:57 -0800 (PST)
-Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
- DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Sun, 1 Nov 2026 05:08:56 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
- (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Sun, 1 Nov 2026 05:08:55 -0800
-Received: from nitinsj-apex-workbox (unknown [10.28.40.177])
-	by maili.marvell.com (Postfix) with SMTP id 4C4C93F7075;
-	Sun,  1 Nov 2026 05:08:48 -0800 (PST)
-Date: Sun, 1 Nov 2026 18:38:53 +0530
-From: Nitin Shetty J <nshettyj@marvell.com>
-To: Marcin Knap <marcin.knap@vecima.com>
-CC: Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Przemek Kitszel
-	<przemyslaw.kitszel@intel.com>,
-        Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David
- S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@kernel.org>,
-        "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Magnus Karlsson
-	<magnus.karlsson@intel.com>,
-        Maciej Fijalkowski
-	<maciej.fijalkowski@intel.com>,
-        Stanislav Fomichev <sdf@fomichev.me>,
-        "Simon
- Horman" <horms@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Daniel
- Borkmann" <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>, <jtollet@cisco.com>,
-        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        Joshua Washington
-	<joshwash@google.com>,
-        Harshitha Ramamurthy <hramamurthy@google.com>,
-        "Sunil
- Goutham" <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Ratheesh Kannoth <rkannoth@marvell.com>,
-        Subbaraya Sundeep
-	<sbhatta@marvell.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>
-Subject: Re: [PATCH bpf v2] xsk: Do not free ZC Rx buffer when the Rx ring is
- full
-Message-ID: <auc55SPJVtJNhpNn@nitinsj-apex-workbox>
-References: <20261030-xsk-zc-rx-double-free-v2-1-cf01d4a9f3f7@vecima.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eIu6uFQD
+Received: by mail-ed2-f9.google.com with SMTP id 4fb4d7f45d1cf-6b4c466f6easo1576174a12.1
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 05:57:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793541445; cv=none;
+        d=google.com; s=arc-20260327;
+        b=cW4JoG+Cd4qL1ulJcGosLzn1alfECplO5S4UQHoXafCbrEoLO7QwDJpB8NVUVuWiU9
+         eDT6A5S9+AY2TMR0ZaovukRA13kRYSdM3Zo1553FyoAVGOr22lTysRMNfRR/4SaYhiD4
+         zEPnTYfndKWbLqL4D3ImltjnU6PVvuQQjDsgO3sKyGIJYcqjS/eHdiYGdb3cJ18jZxZu
+         0LyRY8m26o1MmFqYZlUW9GZukn4sp9ilKfUkXF6ijiO4SrGUmTprIo9xW/7M/uZ1G7WI
+         n1/vQUhxUv09pXpT6uDF+szDO6ppjAoIW7s3dyJ7YwTz9kSufXHLedCq39A7GYhSZ3pQ
+         NkZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Uzn2cQrdHx8KtdifFYHzLFN48FBFi3ukVc3HuIUKO1M=;
+        fh=reXLPDvBV9anBk2vQXHDTBPjbIlXjLlO8spXMJ5OuJY=;
+        b=SwDOTWpXI1xubzeJHAe4RG9+hxBglZuoIp9V7iVBAAX18HFuCRKcLDgOgcnX1USicJ
+         +TncbubvSdvUfx/022h8E5S0SHeZIg8qCfaLn9h2g8ZE1NKVMXnyd6rRjADrlAivsYpz
+         o3B3miIeHR4ere2DtMofFSER9HpN+x/I6mKNcROtppCEDao4/Z3TP0uEWQAN965mWjYD
+         bMc/0v4nwiy3khFI8tYqcg2s6F+NZ/phb2UZ1NeQaPAcn4k1+/EcAlPTf5MJfUs3xykI
+         WYIAJKCVUKjQ7tYGPuhhG1AIN9lx0DObo0j1gi2BOpnoly6bde+LwdCGUz9KQDXJqMRm
+         WNGQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793541445; x=1794146245; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Uzn2cQrdHx8KtdifFYHzLFN48FBFi3ukVc3HuIUKO1M=;
+        b=eIu6uFQDRNE91zJlIPShp6hrEb8jruNpJNccy3uL/bUTVjUDVBGp9AEcmMo28VDnMZ
+         1wYp9Q9MnlHBq5fe6XtgqgRMwCT7gkjbvR+PPAB4KXOiE9ndlG2MyC0Htet9lty/TLM1
+         t0rssJXXZqFNiTwiHw2SL1r/Bg0+Y4ZoiuSq5mjvnPUpyHLDmjArO4AKbsaycsvO97B2
+         EobNke7mFCrsvKqCtlwIJQNIt3obMVt6PvsdcFWiVF9s2x6ILH0+xrWcTO12V+ZW1pR8
+         w3AJ4T7Nemsnv0Jp7tEKB7tMK8BlHl/OJCxlL3yqaT3dGwOSc5B8q6HL0hzrf+CFvp6B
+         6QWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793541445; x=1794146245;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Uzn2cQrdHx8KtdifFYHzLFN48FBFi3ukVc3HuIUKO1M=;
+        b=2LKMbsPKvaTNMv/yeNs1B7/r2TcybDDAUmXF4Ox9y5/xqNxPYdVAOTFth0P+vcB5lj
+         6s9/HEjwK7jcck7twhU2/WadtVULSGHjkUJNLiOxzSPacsZdI2V3oMGEM8Jgr/tI/wuq
+         WjL9Mef2jZ95H/pBYrvrX1Il7EBAASuD/UJyOa8BzA4h+RPKhZ+th3kM7MPlrpk9Pf9K
+         euDH125tfLv74njgJjE3pulNedHqAh5q3TVwn2PPlKdCqYShx+X97Rb7TKJZWfd85YiW
+         dZcZymfiE/Fnb/sBsKbliobYkHYGxFZMFev+xqQFB4Da0SHgYzJA3Su1WDOMCP2BM4nC
+         HyHw==
+X-Gm-Message-State: APuU4Z8f/60mZbdwjD3d0m/+OAjKyi8q3Kw1psgFsaaElh4I6PUu/2jp
+	iPmjN5oPKi0GfevufHL1zAUWtLNfA89pT8PdcTmlnTX60Q0NMkfNQX44+NP1zG7dzMXbLDUnaAj
+	/cOnL7G5lXqYNfy3JCToXya9q0SSADQw=
+X-Gm-Gg: AYBFou1OWtbEjKtnDFq2zTloo4piBwrnw/jI9UEALsp5gANiAeTkPDBLlEGFaWkG58d
+	gf061A49Rkjh0uVHNVUviyXTjiRmQD6dMX1bCiMqbIASyWsrQPTRs94/uIPE1mL4xNeCaUhrpqq
+	3hsGjOqs6l2nWLZkDKX017zIY40DsvBGYj/8Xtamuk8H0l6QQ646xi9/SJsM0LqeVFk7dtHN8v9
+	RaaeHDqZSYoUgI7HmrWweZD2NnfjaSu+4L/06oXgkB8QopsHd7p1DzA9he7i/RSacw+JWTlurGJ
+	qFWp9xf+2wCx8lMgETmH/6pMTDbsD+3vZGmY7NpVrA6tgzuyiPiaS7BG+tguYc0BuGPleKrdskF
+	JL/UgsVywGXXS5hIYO/hPAVJ17AMQfaM9XxqhE0wpcu7l//RrcV8bpoc4DXAi1We7Dok4HFnn0a
+	RQFGxbjvkdV44U
+X-Received: by 2002:aa7:c693:0:b0:6b1:abe7:8276 with SMTP id
+ 4fb4d7f45d1cf-6b4d33ab545mr3617805a12.2.1793541444897; Sun, 01 Nov 2026
+ 05:57:24 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -111,48 +104,156 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20261030-xsk-zc-rx-double-free-v2-1-cf01d4a9f3f7@vecima.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAxMDA1MiBTYWx0ZWRfXzkctue3SCKIW
- 7Cn0Jhc1bFPBR88rY6odabuL0zLvhgmEYMrgFITbXg+WGkw3beESsB7hrOxqC9rw1Bq49Ilb+0X
- sZGKlD8WNnSS6cbySPpl0mern8MBVxjs+CHFP0FDop7KTMdd0IYPsv9eBxZxIyecXKQr9X3VWSv
- JJ5/xthcQHwMytKoNdu1Sm4LGjU9GEJsjPN7Ltpzk+3epb3sRBsFKhZKLq/KKYQqXck6P80xTpP
- Bv+DvoT7CJxfVltpKHE9coVZMc4hKXtxBucRGiDr6oQzplrZeBZD0zIkLBSJRlzqpYM/8JccN1c
- 2YMKNJ/JCwYlYLvashe0KHt+9LP7BmLVDCMgoXGFMuxG0PSXjEupLA5tEwyxI+M4VimO1dK772x
- 32Zdx/vZ77OsW2aPaFL+gB7FsCVd0cGBltPsEkwRLb52CSTgI7EcaykyklzviPRGgi6IZAdAaTt
- zJG2bvJvbM3B485IlHg==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAxMDA1MiBTYWx0ZWRfX8RCS6d08dSYW
- //vMIMPZS+4FF8csNIIXxJCQdYCUVYaI1fKKWXFhO3FLcwnvKCYbHWsr+dDME5UM8r4ya1VVlM5
- UIFJIc9C6idBG3y7w/se0FmWoFoa1e8=
-X-Proofpoint-GUID: uFRGXjxDV5PgyjAoYMCm7Ia5Fkyxo_3i
-X-Authority-Analysis: v=2.4 cv=bszZl0ai c=1 sm=1 tr=0 ts=6ae739e9 cx=c_pps
- a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
- a=eRKzQBkOje3ih_7c:21 a=kj9zAlcOel0A:10 a=zJRp6_cAMcgA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22 a=TtqV-g6YmW1Jfm2GSLaY:22
- a=VbtP2V50AAAA:8 a=M5GUcnROAAAA:8 a=HB_4VZhdTIFFo8uudmsA:9 a=CjuIK1q_8ugA:10
- a=khSs6UnhJ5OSbz3Ji1I1:22 a=OBjm3rFKGHvpk9ecZwUJ:22 a=Qh0BGDiy-lhdOgvBjkqA:22
-X-Proofpoint-ORIG-GUID: uFRGXjxDV5PgyjAoYMCm7Ia5Fkyxo_3i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-01_04,2026-10-21_02,2025-10-01_01
+References: <CAPig4swEOLsU0K=Xskyh1p2nQALRfSojSW82g5LdsQd6nSetMA@mail.gmail.com>
+ <455f7257-25b9-4070-8313-42af8005b948@linux.dev>
+In-Reply-To: <455f7257-25b9-4070-8313-42af8005b948@linux.dev>
+From: =?UTF-8?B?5rSb?= <wanghai8081@gmail.com>
+Date: Sun, 1 Nov 2026 21:57:12 +0800
+X-Gm-Features: AclHuK_WqRetwnxTEAHFqamKJ34lcqIq9vge6V1HAILSLipHaYfa6xMfDjydZv0
+Message-ID: <CAPig4sz=1FAJSRcpyGGN_dsdgUfj9Asnujiyd7VnyWu+h4McSQ@mail.gmail.com>
+Subject: Re: [BUG] libbpf: btf__raw_data() returns stale data after btf__relocate()
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-10-30 at 13:44:17, Marcin Knap (marcin.knap@vecima.com) wrote:
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> index 90af9b9044aa..6d10c132f61c 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> @@ -1555,7 +1555,8 @@ static bool otx2_xdp_rcv_pkt_handler(struct otx2_nic *pfvf,
->  				*need_xdp_flush = true;
->  				return true;
->  			}
-> -			return false;
-> +			xsk_buff_free(xsk_buff);
-> +			return true;
->  		}
->  
->  		err = xdp_do_redirect(pfvf->netdev, &xdp, prog);
+Hi Jiayuan,
 
-the Octeontx2 changes look good.Thanks.
+Thanks for confirming and offering to fix it.
 
-Reviewed-by: Nitin Shetty J <nshettyj@marvell.com>
+I found this while reviewing and testing the BTF APIs. I don't
+have a production case to point to.
+
+Thinking about how this might come up in a build workflow, a tool
+could use btf__distill_base() and save the resulting base and split
+BTF as reusable metadata. It could then keep the same split BTF
+object in memory, relocate it against a compatible target kernel's
+BTF, and write out a version for that target.
+
+In that case, the first btf__raw_data() call would be for saving
+the reusable copy, and the second would be for writing the
+relocated output. That's one possible use case I can imagine,
+though I haven't used this workflow in practice.
+
+Thanks.
+
+Jiayuan Chen <jiayuan.chen@linux.dev> =E4=BA=8E2026=E5=B9=B411=E6=9C=881=E6=
+=97=A5=E5=91=A8=E6=97=A5 16:59=E5=86=99=E9=81=93=EF=BC=9A
+>
+>
+> On 11/1/26 1:53 PM, =E6=B4=9B wrote:
+> > Hi,
+> >
+> > I found a case where btf__raw_data() returns stale data after a
+> > successful btf__relocate(). The type references in memory are updated,
+> > but the serialized data still contains the old references.
+> >
+> > I reproduced this with libbpf commit
+> > 85c0d575a447651bbeb8e2376eacd64c30dce9a6 on Ubuntu 22.04, x86_64,
+> > running kernel 6.8.0-138-generic.
+> >
+> > The reproducer creates a split BTF with a pointer to an int in the
+> > base BTF, then calls btf__raw_data() to populate the cache. It relocate=
+s
+> > the split BTF to a new base where the int has a different type ID.
+> > After relocation, the live pointer has the correct target, but
+> > serializing and parsing it again gives the old target.
+> >
+> > Save the following as repro_cache.c in the libbpf source root:
+> >
+> > #include <assert.h>
+> > #include <stdio.h>
+> > #include "btf.h"
+> >
+> > int main(void)
+> > {
+> >      struct btf *old =3D btf__new_empty();
+> >      struct btf *target =3D btf__new_empty();
+> >      struct btf *split, *roundtrip;
+> >      const void *raw;
+> >      unsigned int size;
+> >      unsigned int live_id, serialized_id;
+> >
+> >      assert(old && target);
+> >      assert(btf__add_int(old, "int", 4, BTF_INT_SIGNED) =3D=3D 1);
+> >      split =3D btf__new_empty_split(old);
+> >      assert(split && btf__add_ptr(split, 1) =3D=3D 2);
+> >
+> >      /* Populate the serialization cache before relocation. */
+> >      assert(btf__raw_data(split, &size));
+> >
+> >      assert(btf__add_int(target, "padding", 4, BTF_INT_SIGNED) =3D=3D 1=
+);
+> >      assert(btf__add_int(target, "int", 4, BTF_INT_SIGNED) =3D=3D 2);
+> >      assert(btf__relocate(split, target) =3D=3D 0);
+> >
+> >      /* The pointer has ID 3 with the new base. */
+> >      live_id =3D btf__type_by_id(split, 3)->type;
+> >      raw =3D btf__raw_data(split, &size);
+> >      assert(raw);
+> >      roundtrip =3D btf__new_split(raw, size, target);
+> >      assert(roundtrip);
+> >      serialized_id =3D btf__type_by_id(roundtrip, 3)->type;
+> >
+> >      printf("live_target=3D%u serialized_target=3D%u expected=3D2\n",
+> >             live_id, serialized_id);
+> >
+> >      btf__free(roundtrip);
+> >      btf__free(split);
+> >      btf__free(old);
+> >      btf__free(target);
+> >      return live_id =3D=3D 2 && serialized_id =3D=3D 2 ? 0 : 1;
+> > }
+> >
+> > Build and run with GCC and the libelf/zlib development packages
+> > installed:
+> >
+> >    make -C src -j2
+> >    gcc -g -O0 -UNDEBUG -Isrc -Iinclude -Iinclude/uapi \
+> >        repro_cache.c src/libbpf.a -lelf -lz -o repro_cache
+> >    ./repro_cache
+> >
+> > No root privileges are needed. Keep assertions enabled, since some
+> > API calls in this reproducer are inside assert().
+> >
+> > Actual output, with exit status 1:
+> >
+> >    live_target=3D2 serialized_target=3D1 expected=3D2
+> >
+> > Expected output, with exit status 0:
+> >
+> >    live_target=3D2 serialized_target=3D2 expected=3D2
+> >
+> > In the new base, ID 1 is padding and ID 2 is int, so the serialized
+> > pointer ends up referring to the wrong type.
+> >
+> > It looks like btf_relocate() updates the types and string offsets
+> > without invalidating the raw-data caches. A later btf__raw_data()
+> > call then returns the cached data through btf_get_raw_data().
+> >
+> > I tried calling btf_ensure_modifiable(btf), checking its return value,
+> > and then calling btf_relocate() in btf__relocate(). With that change,
+> > the reproducer produces the expected output. Checks for both
+> > endianness caches, file round-trips, and repeated relocation also
+> > pass with the change.
+> >
+> > I also added a regression test to the Linux 6.8 BPF selftests. It
+> > fails before the change and passes after it in both test_progs and
+> > test_progs-no_alu32. The broader selftests run needed compatibility
+> > adjustments for libbpf 1.8 and had other failures and skips, so I
+> > don't have a clean full-suite pass.
+> >
+> > Would btf_ensure_modifiable() in btf__relocate() be the right way to
+> > handle this? I couldn't find an existing report; please point me
+> > to it if this is already being discussed.
+> >
+> > Thanks.
+>
+>
+> Thanks for the report. Yes, btf__relocate() misses invalidating the
+> cached raw_data, and btf_ensure_modifiable() is the right fix, same
+> as btf__permute() does. I can fix it.
+>
+> BTW, how did you run into this? Is there a real use case
+> that calls btf__raw_data() before and after btf__relocate().
+>
