@@ -1,45 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793496680;
-	b=q9/rzvm52nngq554bSXhl4Q1XzXKtphpV/fLtbe/ZrI8NqKJtKR6E9GM0lc1E6uB1qIo
-	 f+k+WJ1uuV8Sp/LFVN/KqX+I5roUjNI/iYzhHFo48vtFcgRwUUrTxSFipPDiEgBixReJl
-	 UB7F4A/yaMYVWFQ/4qR5adaDqtBy8BT2WZ/ACcgTDfsIm3VZbFjeSro+eCY+j0Y19YhoH
-	 iGBn3J2B96RxiTj84yBMX5hj7DH+A3FeFKNwZaZq9z3g9v01tLFPJHV1LpGA2cQ9sgHTi
-	 uKS1mu1ugoREI269yOQqZdBVTFN8AK62ayso8qGDe76NpYIp40P9EBHbzKUlf3rmpIg==
+	t=1793496826;
+	b=rCcpooX+Z1zB1I9vZkOoxYt5kmQHMgbp1pLb1DXCmikFP/glfq/JgprSdNvYkswwxw+2
+	 VtSWtopBsALqddQpGrpDNKw1NgaBHF8+IZN/TDJcxRxpTsNDnSzx0O/szQNhChoacUhY2
+	 skxkgC2/djXmVh19qJT4Pta4gtTEqw5oYTdfw5d/GKTgjP5IMy6MMlgg9804fHL+gmusF
+	 DLD8MbxL7F5paXSPXKcaQ/5UxzKt/1y/iyCR7jg8nyYYVbJ81fwwWctsWCYDXFyj99LJC
+	 moT6bXg4yfbm6fHus2XWh6hyXPQIFMmseZM1TX64C5e+2+6KtrpYf+ul4Y8vlzpIIYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793496680;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=QgdEOgj5DO6aO92lXMWuugu+LCn/lcYayg1XM5OwHcY=;
-	b=oaaNaRkM73JW/JYCuNnCmzpjk7GYQF+nSTR82UlV5rdcAZmv3RW6e7KMHloGjbSSrjpI
-	 DQhqEeXQl8i1RVnEjNKdB0WoqlAvh7ZEd08T9gcAqQtXwwea/+NxO13RhEjg4WthcqqPm
-	 WaVjR3/9QJo9yuc8K1/LDbe0OAj84x3cRGw18fpQAOWN7BQNusaaxy++MkW7+U6AemASh
-	 EKoZYwoHjVQE3BJGjwQxctmGMk4WAVAauKvUZ78iA1fovCjyeRbRng4mu3lydUl7Wyag9
-	 g4Q2944I9seOzuVISdRauAuBumiZtFxfZuQ+kxTM4HaBsQBeKcyA+UZktlBcfP7xNDA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793496826;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Mime-Version:
+	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
+	 From:To:X-Mailer:References:In-Reply-To;
+	bh=9qmswLH21yWexoxlEZCEupc56x/5bBhiTvUoCvyFlBQ=;
+	b=AQqNekGfB/H9367oF23DWolfHdy8Hn3ZCiruTcr1U7uJzR+rEH1vsgxR6JMzG1MWiT8y
+	 EIHTsf8oABFZpUAnjH6jMlJLTiwAGGBh/XJ/Csc92/oWSjiuO6u+mQGlknDay3HLsW3II
+	 xuWQzmzjDsHS5Qbio0Qu9InLzmVlKz2MsFGHmpgVXHZ6gdA1Sn+7DCfZVo25YGamnFuXi
+	 nXuIx7ZAY94JxPYoCL14ulNuIc4LvSt/AzGZvXE9rcn0UNKf+bpKjLiB1f/XuUI9/Jgl3
+	 Gf8FEfwewdd1tuc90qYLtuaVMJr/t9EYurcUEYSewo0FjFw9TZal7SBIAqeqJt7AcSA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kKvJIUbW;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b7JindIJ;
+	arc=none smtp.remote-ip=209.85.215.169
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4833B606A31A
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 01:31:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245CF606A31A
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 01:33:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 245CF606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kKvJIUbW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93A5D1F000C1;
-	Sun,  1 Nov 2026 01:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793496679;
-	bh=QgdEOgj5DO6aO92lXMWuugu+LCn/lcYayg1XM5OwHcY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=kKvJIUbWr3H5WDMm27L+KudNgjAE3F6mB9TOYTnn0UzivvuKBQGC7PuSo4mt9Em1R
-	 n5NfO0BTAkld3sol2iGGsHTQ8do7Pvs1BaQpI7j2HdtRBfdf7uGAd9rKTJFLqktoAt
-	 2VJbkCM4uQbHDeDGRw+Un12RvarscH8VB9CB5h0Kqnk/qoxV6L9tkcoU1VmshwDB5C
-	 YIjDsmi80osqjjVFyUyB1IOQiGfHIGlSHsoxSAl8Ro0wq+TNe/KunzUGO9J8foTOiJ
-	 6qH7MZDQHqi+nbMWptHf02oK1RXWttwnxVU3az4gPktsWMbKTj6QShsoxfPGNOAw9G
-	 TyejjbgfMFMfA==
-Content-Type: multipart/mixed; boundary="===============6958672853171962060=="
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b7JindIJ
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cc147d86bebso1254327a12.0
+        for <bpf@vger.kernel.org>; Sat, 31 Oct 2026 18:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793496825; x=1794101625; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=9qmswLH21yWexoxlEZCEupc56x/5bBhiTvUoCvyFlBQ=;
+        b=b7JindIJMrq8AsKTSd20D7mzxt9d4W4iEoP6rJb6KsKokrp3zrFoglujvfJJ0wKEHc
+         ZnLvTiez60x1xEVGVNkIiCmYaW+e6Y649RbBPsQpsZ4GwfoTPF+QzjPDY1Uypr9aoNLS
+         170JyA+83ftXV7nvtatMYP4H+0g0IXBBP+RNwQUix1NSnGH7fG2Cy1ZFRy+6/fy7UmjB
+         4p1SAKlfiG1QPB/eBd2z4NSKVODVeJC+uPT6Ocf+o5uxQaX5b0dZk5fTRKNxHHB1OxDA
+         BR0Ot7mYxy0LWiLxVYfHGMc4rYPjvzr7z5BEYbrf1QXGNmSntEantTl3nxIzYj1ro3hS
+         t7Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793496825; x=1794101625;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9qmswLH21yWexoxlEZCEupc56x/5bBhiTvUoCvyFlBQ=;
+        b=exdhw++wrajxngzmxYY4GIWeNEHbn5nXAkBQNVdxR1LEZK6HnLEVST4vX72tEQLPvT
+         JL7gV/ofUgqOY6oEXikEd6U5LUx8/IX2xAQtyFIF2EV7HTtZ+N4qslxQcRXj/6VAMMNU
+         e8e6xxH5wF74o/P8nVNqEnIQ45B6N6qIqVHM5jdyqwKxwwS9Px3oYKG6qKcjvQRSjAZ5
+         jRaMLu/DP6zEP2/MzgfGGMKRb2t08k+h84k4XrfS7g7UWFeh6712DE9CSkyi2D9Iz8k2
+         jmU1pC7AprjHnIvL1nahRBSU5Cu8mCNVgnx0dnvlugH1i6DyfqBC7G5HDIIAtcQFjYdf
+         E/5w==
+X-Gm-Message-State: APuU4Z80fJVZqLQE94qu4XGpEaLmtSF3QR2UX8xjMicVZHZ8jyDFLub+
+	2NGtr6K2Vons5pItuzR4KZo+chcJQNcVp5kzYMxfBBje/NQoHdcLZx+rH8jHTg==
+X-Gm-Gg: AYBFou0huthSWM02EfWqtEh1jSQU558IcvY2+1bRhFcU2JeO/q9h321CMUSGDiUa6PJ
+	w/DWCpG7xRV75Q1rJdvnetSJgYD09V4xp37YIJswRm8AIVFiEPuz52iI60UF+wk/E4FA/7H0lLv
+	aMHlhoXMlOwXMKnc7W1u1mdxaYi1xVKfvwJhrQ0eRejAX7OraGwdQ+/BmgUt9Min39b9p2WQhZ2
+	HqfPVrSpeoBRCm/ihwggaiOfXF2MhCFcYtg8NFdsnQAAOD+LezuncKzT6V3LN07z4rF0QZL1kmr
+	rjjD/OhmOoX336zL7qnVao7Lehoum3BdseZoRb8hSo3y/T1qvlZ1YgDpYNUTd03jxX8g//w9ldK
+	AG2wDoDKYrj+IxrUcMgCpU9ivjbVEG1AQofNL0/9F0nXRsrRnbsfTBF2ZUR5BMnTQ8NqILjvwdH
+	iOE4EjJOeK/L4Ef8eSCBgjKY/98NuI28AGUDf71cXJtIUBcIX1eG7K5WUt6A7sdnghFUzv+e12q
+	I7+PGScGR1/RiNPYFwTCXv6o+4c1R+gXKKuAP1KlBBp60Ujr27ELb62yQgcVXOsaYG3RENRplTy
+	zSD+mOGx+2ImT9U6/CClgWOlQ3EQNHCS5za/AnIE95Xuzw+fWlC9YSOJhzrmjhDA9TFLkK+4Yfm
+	ztIEO3rKCwKBiAjUZHCU9P24AxcYGIznd3A==
+X-Received: by 2002:a17:90b:184c:b0:3ae:3b3d:c617 with SMTP id 98e67ed59e1d1-3ae89778667mr3393102a91.29.1793496825428;
+        Sat, 31 Oct 2026 18:33:45 -0700 (PDT)
+Received: from localhost ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e7d5b8csm13866214a91.1.2026.10.31.18.33.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 31 Oct 2026 18:33:44 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,106 +87,40 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <b1947ab81fda5aa875d2c81e9df76bc2e7746a30a9941997635709e48e5f7e34@mail.kernel.org>
-In-Reply-To: <20261101004657.3406576-2-alexei.starovoitov@gmail.com>
-References: <20261101004657.3406576-2-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Don't trust pointers spilled in slots that a callee can write
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun,  1 Nov 2026 01:31:19 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 01 Nov 2026 01:33:43 +0000
+Message-Id: <DMJHKAHV1KRA.OV1LITSNYP3D@gmail.com>
+Cc: "bpf" <bpf@vger.kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Eduard" <eddyz87@gmail.com>, "Anton Protopopov"
+ <a.s.protopopov@gmail.com>, "Greg KH" <gregkh@linuxfoundation.org>
+Subject: Re: gotox/INSN_ARRAY cross-subprog fixes: request vuln-fix
+ designation and stable tags
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "James Burton" <jamesburton@meta.com>
+X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
+References: <CAJgm7qNx6NBzfxQbwF0ZoMLoULquNpsnrYSL1F3EFf2tztES7Q@mail.gmail.com> <2026103022-epilogue-coeditor-0029@gregkh> <CAJgm7qMWGF3zWOR=5qO8RWmufGud6fcNBQQxTsVgx=CgvRz3Qg@mail.gmail.com> <CAADnVQ+spWODbcC25SwVFXUv+ksPNuVkQgxtq4PwLHdDDsSZCA@mail.gmail.com> <CAJgm7qMEz-O1+L2MJz+qqH6-pz_ELaQNG0QQkgMbHOoDi69R4Q@mail.gmail.com>
+In-Reply-To: <CAJgm7qMEz-O1+L2MJz+qqH6-pz_ELaQNG0QQkgMbHOoDi69R4Q@mail.gmail.com>
 
---===============6958672853171962060==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Sat Oct 31, 2026 at 11:07 PM UTC, James Burton wrote:
+> Daniel, Alexei,
+>
+> Fair enough on searching lore first. I did, and that's actually what
+> prompted the question.
+>
+> The same gotox/insn_array feature already has three fixes that only
+> needed CAP_BPF and still got CVEs and stable backports:
+>
+> - CVE-2026-43321, mark live registers for indirect jumps, in 6.19.6 and 7=
+.0
+> - CVE-2026-93043, interpreter fallback BUG_ON for gotox, in 7.2.6 and 7.3
+> - CVE-2026-45967, wrong address for insn array offsets, in 6.19.4 and 7.0
+>
+> The two I reported, 19581372dd81 and c48a91c049fd, look like the same
+> kind of bug on that feature and sit behind the same CAP_BPF gate, but
+> they're mainline only, so 6.19 through 7.3 still carry them. The first
+> one has a deterministic reproducer that goes from CAP_BPF to root.
 
-> bpf: Don't trust pointers spilled in slots that a callee can write
-
-TL;DR: The new join may leave a spilled r10 (fp+0) slot unchanged, since the
-fp+0 join fix isn't in the tree. A valid program may be rejected, or an
-out-of-bounds map access missed. Needs the fix first or folded in?
-
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-
-[ ... ]
-
-> @@ -1443,21 +1466,22 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  		*dst = none;
->  	} else if (class == BPF_JMP && code == BPF_CALL) {
->  		/*
-
-[ ... ]
-
-> +		 * Static subprogs and callbacks can't store an FP-derived pointer into the frame of
-> +		 * the caller, but they can store any other pointer there. The caller can fill it
-> +		 * and store through it. With the stale spill that store would be a definite write
-> +		 * to a stack slot, and it doesn't touch the stack. Callees are analyzed after the
-> +		 * caller, and they reach the whole frame from one pointer to it. So after the call
-> +		 * every slot holds what it held before or a value that is not FP-derived.
->  		 */
-> +		if (subprog_gets_local_fp(env, insn, insn_idx, at_out, depth))
-> +			for (slot = 0; slot < nslots; slot++)
-> +				at_stack_out[slot] = __arg_track_join(at_stack_out[slot], none);
->  		for (r = BPF_REG_0; r <= BPF_REG_5; r++)
->  			at_out[r] = none;
->  	} else if (class == BPF_LDX) {
-
-Does this join leave a spilled copy of r10 unchanged?
-
-In __arg_track_join(), a slot holding fp+0 joined with ARG_NONE takes this
-path:
-
-    if (a.frame >= 0 && b.frame == ARG_NONE) {
-        if (a.off_cnt == 1)
-            return arg_merge_offsets(a, arg_single(a.frame, 0));
-        return a;
-    }
-
-arg_merge_offsets() dedups {fp+0} with {fp+0}, so the result is still
-{fp+0} with off_cnt == 1, and at_stack_out[slot] comes out of the call
-unchanged.
-
-The commit message says "For a spilled copy of r10 this needs 'bpf: Fix the
-join of fp+0 with a value that is not a pointer to stack'", but that
-commit is not in the base tree, and the series range
-753751ee76c8..82224cfc9354 contains only this patch and the selftest.
-
-With only this series applied, a sequence like this still goes wrong:
-
-    *(u64 *)(r10 - 16) = r10        ; fp-16 = fp0+0
-    r1 = r10; r1 += -16; r2 = map_value; r2 += 8
-    call sub                        ; *(u64 *)(r1 + 0) = r2
-    r7 = *(u64 *)(r10 - 16)         ; verifier: map_value+8, arg_track: fp0+0
-    *(u64 *)(r7 - 8) = 0            ; off_cnt == 1 -> must_write fp-8
-
-sub stores a PTR_TO_MAP_VALUE, so the "cannot spill pointers to stack into
-stack frame of the caller" check in check_stack_write_fixed_off() does not
-fire, and r7 - 8 is map_value+0.
-
-Two outcomes follow from arg_track still seeing fp-8 as a certain write.
-A later read of fp-8 can fail with "slot poisoned by dead code elimination",
-which rejects a valid program.  And with the hidden-store pattern from the
-commit message, spill_to_stack() with cnt == 1 overwrites fp-8 with
-ARG_NONE, so a later store through a pointer filled from fp-8 drops out of
-the may_write mask.  reset_scevs_at_indirect_writes() then misses it, which
-is the out-of-bounds map access this patch is meant to close.
-
-The new comment says "So after the call every slot holds what it held before
-or a value that is not FP-derived", but the join does not encode that for
-fp+0 slots.
-
-This is not a new regression, since the r10 case behaved the same before
-the patch.  Should the fp+0 join fix be applied before this patch, or
-folded into it?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41259422626
---===============6958672853171962060==--
+Are you after cve scorecard or you want to truly improve kernel security?
+If later then please skip all bugs that need cap_*.
