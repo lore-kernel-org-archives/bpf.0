@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793562692;
-	b=Q/ON6r/JlmD77s3IBT76NSxQfMpXw33OuszcugY1pCS+/ZRWBKUKOhRHRUkosRfrpp9S
-	 Jn2ZlmMkEyUc2nT++i4yeWRLjWzh8fJVQt532u2LzTF3PI3I3iFr3wwqeqpDcgBYLEpHR
-	 iwTmWZP6qILjiaz0PsxDJk7zQrqKYAdgb/Q/o91SkMKYE3TM0MagyZnrWSbKhizmYD+JH
-	 ogYMy7Rc/8oN/jV6hPq49kZbY5tqx5xMgwiF6hJ9i4kgkjU7PJrf/rpj/AynAiwTTdiMF
-	 +eYjStfPPJvshXJv5G6y7aP+yQwr/T+dKGzqFh7TM9e7GIRdmjWMOPDyEjkQiiOBIsA==
+	t=1793562714;
+	b=Z61fMet8IrivtXK//rgDTN6mp6RrzFujVEPBs6Gvb8X7mzWrqClWeLoO73p2aAL4F4fx
+	 tgn3EBXtQg+dicknKdEngZ1vEUBmkWoV9acyXgOLmp/q+/zDB+cIpKPY4PtKVmHu0QpkP
+	 6uBSKoFgQ+FjXQrFWHnK2FobrM4jY5kKv4dnbzCFDCZlsCniVvxsG0yMP8EIMhMfkK3HF
+	 UWIs+TgvMiW/tOLuqRdm66tJRHRfhd1SlQvdDNO39xfHBwzMwiqLEaPGIdpmuXvyqTa1Y
+	 ZnWKV2A2StjAatv4sr6rQe3Vplea0Fa9Qe+6YVU7envLEoPjtuHx2+qnXM/zhL/gOrA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793562692;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793562714;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Wd6vdJoJoTdbsx9YgvO2Dw0fkTJlHg8nzwaqaLBiMuc=;
-	b=CKkTgnzl/r8pRY3vL2HXeIj8hcUtA1Yq1HqY+1TyYzpwFmJcWlzyA3E5+yylZYPfecy9
-	 FlNXIsHQU9NAdIRX1C87eftMEp7N/+Sl1jUpv7ABGk/N7DwgCvZelBX0wYG2bWIhO38+P
-	 z3iOHFnlBp7uDjyya3l5efnPhHokKxoTPCfzoo5nwkUu6PYkXeF/5Nat+BlAKFY6tXHsZ
-	 Z+wHnPazfdsrcVBzEIPOmCfiMX0pMLOIEOgj1Ku2RGKpDi0O7GeQaABkPQu04Gwtx5jVC
-	 kxJq34FRf4sOLbQJnh0N+ZPqIiWKhzF4OOxZAe7PT6GpMXQgJlULcHw3ZgRFjn+L4MQ==
+	bh=JRQPHetbw5+WOki81nKrBIUanmE3LLEBtaZZpMsw2oQ=;
+	b=sXXCgIgI8jotfIXOXy5umUIAncs05Z09TPcgSnEHOp3rLgHQRNsNu1+FmTmR3bBAoLci
+	 YYfitHyAgQZ0ArUZbDskVKFclEg+8wZbZXxcIicCXUvrYFCJ152U3NjVnyy3u9a8VUxTg
+	 pm6HHs9Hhfl18+3/Ktkv2ma4MZ+qBha4wKEtP/lOIa1EDzftf6hrgpPM1zXO5GSJB3BZa
+	 9Jv9FeDEqUOOrOd+0i5kZsNhq5Ab/y3S5tJ3gbPTRzY1QlwEzr3zfpVjBwYCm25Wj9LFF
+	 X2K0DT+5OSHJFyZXEXmtHrTmLVFQG9P41nk2ggn2nyIBA10xoWGrTWdsR6knyqX6eOQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vj3KiK4a;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LW72ei0+;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A146606A329;
-	Sun,  1 Nov 2026 19:51:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD28606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:51:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vj3KiK4a
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F521F000C1;
-	Sun,  1 Nov 2026 19:51:31 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LW72ei0+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 169521F000C1;
+	Sun,  1 Nov 2026 19:51:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793562692;
-	bh=Wd6vdJoJoTdbsx9YgvO2Dw0fkTJlHg8nzwaqaLBiMuc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Vj3KiK4aVkIT+1M/IqUJ7SR+olwBs07b3DA3Mi/gFKi0ED1rFyJ+TFL2O6+7F1+Yz
-	 SGJUQe9hRai+X1yYZeBNl6FUlGfJSgn6/MWM+gLjJdHi8B6hJ0JlfWBjS2OqCzwk52
-	 OOReFjrHKoWbLH/+ryfvDrVhVGB6gNZBMhcgNVTxJFLDzdZyV0oWKioCpUtFWm9q1C
-	 sbakRwife1BwiRAGpO3D+GxhNJzCbLxj3C7cX4kHtqsM+BQKPdTofQTTIDJKlmNkxR
-	 w9JyAKOU+Z1iqFzjCr8MJQejnbYt6EHS7y/yKH61hlo9qLo5FnmGQuoovCXPLz+RQV
-	 eSeuMyk+RqSMg==
-Message-ID: <sashiko-outbox-192637@kernel.org>
+	s=k20260515; t=1793562714;
+	bh=JRQPHetbw5+WOki81nKrBIUanmE3LLEBtaZZpMsw2oQ=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=LW72ei0+wpio3uruTwiREVWrO8HxmTcJGP7n+Q3B9RrN/838EX89ChXvOs64WvoS4
+	 37n6IfAAJ8m+pPTyxsYwbcfDQ4+idQQBtiNOVqfNRS8H6cl5zUfCe7p3HnF2YcGypQ
+	 evdVvjAThqEq5HdeQTXlxHPEOVqAEnk98eVQ//gCbLfcYLnxQvqUXeX2LHVai52dbR
+	 jy68NMNOJ5udfNBdjwblHmh3LpIL17vvc7QNzlMaJP9P+XIdPP3OAs+dcwan5QlygP
+	 gRga94EpOAFPuXPxn+Rfd/IMPRmWxlXfzS2XDmVeXsHhY08l6qvWnyd2xahg6I8Ur+
+	 HVKoLa2ORfzqg==
+Message-ID: <sashiko-outbox-192638@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 06/15] bpf, sockmap: Give no progs to a TCP listener
+Subject: Re: [PATCH bpf 22/27] bpf: Reset skb->cb after an lwt prog pushes
+ an IP header
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: mptcp@lists.linux.dev
-In-Reply-To: <20261101192057.2296489-7-alexei.starovoitov@gmail.com>
-References: <20261101192057.2296489-1-alexei.starovoitov@gmail.com>
- <20261101192057.2296489-7-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261101190535.1454146-23-alexei.starovoitov@gmail.com>
+References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
+ <20261101190535.1454146-23-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 01 Nov 2026 19:51:31 +0000
+Date: Sun, 01 Nov 2026 19:51:52 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,207 +60,145 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] bpf, sockmap: race in tcp_bpf_clone() skips resetting psock ca=
-llbacks
-- [High] bpf, sockmap: listener keeps psock sk_data_ready after tcp_disconn=
-ect()
-- [High] bpf, sockmap: sock_map_del_link() stops active progs after goto no=
-_progs
-- [Medium] bpf, sockmap: TOCTOU race on sk->sk_state in sock_map_link()
+- [Critical] bpf: incomplete skb->cb reset and VRF flag loss in bpf_lwt_res=
+et_cb()
 --
 
-commit 839857a435a21d698e4cce3b7a94e6c18f688106
-Author: Chris Mason <mason@kernel.org>
+commit 40c1b82f0bd0c6a0826ad31c22402c9c073712bd
+Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf, sockmap: Give no progs to a TCP listener
+bpf: Reset skb->cb after an lwt prog pushes an IP header
 
-This commit skips attaching sockmap BPF programs to TCP sockets in the
-TCP_LISTEN state during sock_map_link() so listeners keep their default
-callbacks, and resets sk_data_ready and sk_write_space on cloned child
-sockets in tcp_bpf_clone().
+This commit adds bpf_lwt_reset_cb() to reset skb->cb in bpf_input() after
+an lwt program pushes an encapsulation header and in bpf_xmit() before
+rerouting. This avoids interpreting stale inner IP option offsets or
+cross-family control block fields against the outer header.
 
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index efe49551caba9..282c6a4b2b05f 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -228,6 +228,14 @@ static int sock_map_link(struct bpf_map *map, struct=
- sock *sk)
->  	struct sk_psock *psock;
->  	int ret;
+> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+> index b9270a08cc6d1..3a946e8709b16 100644
+> --- a/net/core/lwt_bpf.c
+> +++ b/net/core/lwt_bpf.c
+> @@ -85,6 +85,32 @@ static int run_lwt_bpf(struct sk_buff *skb, struct bpf=
+_lwt_prog *lwt,
+>  	return ret;
+>  }
 > =20
-> +	/*
-> +	 * A listener receives no data. With the callbacks of a verdict program
-> +	 * or a parser it would no longer wake accept(), and its children would
-> +	 * copy them.
-> +	 */
-> +	if (sk_is_tcp(sk) && sk->sk_state =3D=3D TCP_LISTEN)
-> +		goto no_progs;
-
-[Severity: High]
-What happens in sock_map_del_link() when a socket linked into a map via
-this no_progs path is later removed from that map while also present in
-another map that did attach programs?
-
-Because goto no_progs leaves stream_verdict, stream_parser, skb_verdict,
-and msg_parser NULL, sock_map_link() skips the -EBUSY conflict check and
-still adds a link to the map on psock->link. If a socket inherits active
-programs from Map A while in TCP_ESTABLISHED and is also linked into Map B
-(which has its own programs) while in TCP_LISTEN, deleting the socket from
-Map B calls sock_map_unref() -> sock_map_del_link():
-
-net/core/sock_map.c:sock_map_del_link() {
-    ...
-			if (progs->stream_parser)
-				strp_stop =3D true;
-			if (progs->stream_verdict)
-				verdict_stop =3D true;
-			if (progs->skb_verdict)
-				verdict_stop =3D true;
-    ...
-		if (strp_stop)
-			sk_psock_stop_strp(sk, psock);
-		if (verdict_stop)
-			sk_psock_stop_verdict(sk, psock);
-    ...
-}
-
-Because sock_map_del_link() checks the unlinked map's progs rather than
-whether that map actually installed programs on psock, won't removing the
-socket from Map B stop Map A's active verdict or parser callbacks (and
-potentially call sk_psock_stop_strp() on an uninitialized strparser if
-Map B had a stream_parser while Map A only had a verdict program)?
-
-[Severity: Medium]
-Could sk->sk_state change between sock_map_sk_state_allowed() and this
-check in sock_map_link()?
-
-In sock_map_update_elem() (reachable from BPF iterator, reuseport, and
-sk_lookup programs), only bh_lock_sock(sk) is held without checking
-sock_owned_by_user(sk):
-
-net/core/sock_map.c:sock_map_update_elem() {
-    ...
-	bh_lock_sock(sk);
-	if (!sock_map_sk_state_allowed(sk))
-		ret =3D -EOPNOTSUPP;
-	else if (map->map_type =3D=3D BPF_MAP_TYPE_SOCKMAP)
-		ret =3D sock_map_update_common(map, *(u32 *)key, sk, flags);
-    ...
-}
-
-If a process-context caller holds lock_sock(sk) (where sk->sk_lock.owned
-is set and sk->sk_lock.slock is released), sk->sk_state can be observed as
-TCP_LISTEN by sock_map_sk_state_allowed() and then transition to TCP_CLOSE
-via tcp_disconnect() or the error rollback in inet_csk_listen_start()
-before sock_map_link() tests sk->sk_state =3D=3D TCP_LISTEN.
-
-Wouldn't sock_map_link() then see TCP_CLOSE instead of TCP_LISTEN, skip
-the goto no_progs branch, and attach the map's programs and callbacks to a
-socket that can subsequently re-enter TCP_LISTEN?
-
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index b9761af139892..aa904ded816f8 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-> @@ -777,7 +777,18 @@ void tcp_bpf_clone(const struct sock *sk, struct soc=
-k *newsk)
->  {
->  	struct proto *prot =3D newsk->sk_prot;
-> =20
-> -	if (is_insidevar(prot, tcp_bpf_prots))
-> -		newsk->sk_prot =3D sk->sk_prot_creator;
-> +	if (!is_insidevar(prot, tcp_bpf_prots))
-> +		return;
+> +/*
+> + * skb->cb still describes the IP header that was the first one before t=
+he
+> + * prog ran. The option offsets in IPCB(skb)->opt are wrong for a pushed
+> + * header, and a header of the other family needs the other layout. iif
+> + * stays: behind a VRF skb->skb_iif is the L3 master and not the port.
+> + * bpf_lwt_push_encap() cannot do this, because bpf_prog_run_save_cb() c=
+an
+> + * restore skb->cb after the prog.
+> + */
+> +static void bpf_lwt_reset_cb(struct sk_buff *skb, __be16 proto)
+> +{
+> +	int iif;
+> +
+> +	if (skb->protocol =3D=3D proto) {
+> +		if (proto =3D=3D htons(ETH_P_IP))
+> +			memset(&IPCB(skb)->opt, 0, sizeof(IPCB(skb)->opt));
+> +	} else if (skb->protocol =3D=3D htons(ETH_P_IP)) {
+> +		iif =3D IP6CB(skb)->iif;
+> +		memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
+> +		IPCB(skb)->iif =3D iif;
+> +	} else {
+> +		iif =3D IPCB(skb)->iif;
+> +		memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
+> +		IP6CB(skb)->iif =3D iif;
+> +	}
+> +}
 
 [Severity: Critical]
-Is gating the callback reset on is_insidevar(prot, tcp_bpf_prots) safe
-against a concurrent sk_psock_drop() on the listening socket?
+Does bpf_lwt_reset_cb() leave several fields in IPCB(skb) and IP6CB(skb) in
+an inconsistent state after encapsulation or rerouting?
 
-When an incoming connection clones the listener via
-tcp_create_openreq_child() -> inet_csk_clone_lock() -> sk_clone_lock() ->
-sock_copy(), neither the listener's socket lock nor sk_callback_lock is
-held. In sock_copy(), sk_prot (before sk_dontcopy_begin) is copied in the
-first memcpy(), while sk_data_ready and sk_write_space (after
-sk_dontcopy_end) are copied in the second memcpy():
+1. When transitioning from IPv4 to IPv6, memset(IP6CB(skb), 0, ...) leaves
+IP6CB(skb)->nhoff as 0 instead of offsetof(struct ipv6hdr, nexthdr). If
+bpf_lwt_input_reroute() routes the encapsulated IPv6 packet to local
+delivery, ip6_input() -> ip6_protocol_deliver_rcu() reads:
 
-net/core/sock.c:sock_copy() {
-    ...
-	memcpy(nsk, osk, offsetof(struct sock, sk_dontcopy_begin));
-
-	unsafe_memcpy(&nsk->sk_dontcopy_end, &osk->sk_dontcopy_end,
-		      prot->obj_size - offsetof(struct sock, sk_dontcopy_end),
-		      /* alloc is larger than struct, see sk_prot_alloc() */);
-    ...
+net/ipv6/ip6_input.c:ip6_protocol_deliver_rcu() {
+	...
+	nhoff =3D IP6CB(skb)->nhoff;
+	if (!have_final) {
+		if (!pskb_pull(skb, skb_transport_offset(skb)))
+			goto discard;
+		nexthdr =3D skb_network_header(skb)[nhoff];
+	}
 }
 
-Concurrently, if the listener is removed from the sockmap, sk_psock_drop()
-restores sk->sk_prot before restoring sk->sk_data_ready and
-sk->sk_write_space:
+With nhoff =3D=3D 0, this reads byte 0 of struct ipv6hdr (version and traff=
+ic
+class) as the next header protocol instead of ipv6_hdr(skb)->nexthdr.
 
-net/core/skmsg.c:sk_psock_drop() {
-    ...
-	write_lock_bh(&sk->sk_callback_lock);
-	sk_psock_restore_proto(sk, psock);
-	rcu_assign_sk_user_data(sk, NULL);
-	if (psock->progs.stream_parser)
-		sk_psock_stop_strp(sk, psock);
-	else if (psock->progs.stream_verdict || psock->progs.skb_verdict)
-		sk_psock_stop_verdict(sk, psock);
-	write_unlock_bh(&sk->sk_callback_lock);
-    ...
+2. For IPv6-in-IPv6 encapsulation or rerouting (skb->protocol =3D=3D proto =
+=3D=3D
+htons(ETH_P_IPV6)), bpf_lwt_reset_cb() does nothing. However, IP6CB(skb)
+holds extension header offsets relative to skb_network_header(skb) (ra,
+dst0, srcrt, dst1, lastopt, nhoff, dsthao, srhoff) as well as flags
+(IP6SKB_HOPBYHOP, IP6SKB_ROUTERALERT, IP6SKB_FRAGMENTED) and frag_max_size
+parsed from the inner IPv6 packet before bpf_input() or bpf_xmit() ran.
+
+After bpf_lwt_push_ip_encap() moves skb->network_header to the newly pushed
+outer IPv6 header (or an lwt_xmit program modifies headers and returns
+BPF_LWT_REROUTE):
+
+- With CONFIG_IPV6_MIP6, if icmpv6_send() is triggered on the outer packet,
+  mip6_addr_swap() uses the stale IP6CB(skb)->dsthao offset relative to the
+  new outer network header:
+
+  net/ipv6/icmp.c:mip6_addr_swap() {
+	...
+	if (opt->dsthao) {
+		off =3D ipv6_find_tlv(skb, opt->dsthao, IPV6_TLV_HAO);
+		if (likely(off >=3D 0)) {
+			hao =3D (struct ipv6_destopt_hao *)
+					(skb_network_header(skb) + off);
+			swap(iph->saddr, hao->addr);
+		}
+	}
+  }
+
+  Can this corrupt the packet or swap 16 bytes out of bounds?
+
+- On local delivery via ip6_protocol_deliver_rcu() or
+  ip6_datagram_recv_specific_ctl(), the stack will index from the new
+  network header using the inner packet's nhoff, lastopt, dst0, dst1, and
+  srcrt offsets.
+
+- In ip6_forward() and __ip6_finish_output(), stale IP6SKB_ROUTERALERT or
+  frag_max_size from the inner packet will divert or fragment the outer
+  packet.
+
+3. When a packet arrives on a port enslaved to a VRF device, vrf_ip_rcv()
+and vrf_ip6_rcv() set IPSKB_L3SLAVE or IP6SKB_L3SLAVE in cb->flags while
+keeping the slave port ifindex in cb->iif and setting skb->skb_iif to the
+VRF master ifindex. Because bpf_lwt_reset_cb() clears flags without
+translating IPSKB_L3SLAVE and IP6SKB_L3SLAVE across family transitions,
+inet6_iif() and inet_sdif() lose the VRF association:
+
+include/linux/ipv6.h:inet6_iif() {
+	bool l3_slave =3D ipv6_l3mdev_skb(IP6CB(skb)->flags);
+
+	return l3_slave ? skb->skb_iif : IP6CB(skb)->iif;
 }
 
-If sock_copy() copies the already-restored sk_prot alongside the
-not-yet-restored sk_data_ready or sk_write_space, won't
-is_insidevar(prot, tcp_bpf_prots) evaluate to false in tcp_bpf_clone(),
-leaving the child socket with the psock callbacks and allowing the same
-unbounded self-recursion if the child is later added to a sockmap?
+4. For IPv4-in-IPv4, only IPCB(skb)->opt is zeroed, leaving
+IPCB(skb)->frag_max_size and non-VRF flags from the inner packet set, which
+causes __ip_finish_output() to fragment the outer packet to the inner
+packet's reassembled fragment size.
 
-> +
-> +	newsk->sk_prot =3D sk->sk_prot_creator;
-> +	/*
-> +	 * sock_map_link() gives a listener no programs, but a socket which got
-> +	 * them in another state and listens now has the psock's sk_data_ready
-> +	 * and sk_write_space, and sock_copy() has copied them.
-> +	 * sk_psock_init() refuses a socket that has sk_user_data or a ULP, so
-> +	 * what the psock replaced were the defaults of a TCP socket.
-> +	 */
-> +	newsk->sk_data_ready =3D sock_def_readable;
-> +	newsk->sk_write_space =3D sk_stream_write_space;
-
-[Severity: High]
-In the scenario described by this comment=E2=80=94where a socket got psock
-programs and callbacks in TCP_ESTABLISHED, disconnected via
-tcp_disconnect(), and then entered TCP_LISTEN via inet_listen()=E2=80=94doe=
-sn't
-the listening socket itself still have sk_psock_verdict_data_ready or
-sk_psock_strp_data_ready installed as sk->sk_data_ready?
-
-While tcp_bpf_clone() restores the callbacks on newsk, the parent listener
-sk retains the psock sk_data_ready callback. When a child connection
-completes the handshake in tcp_child_process(), the stack notifies the
-parent listener without holding the parent's socket lock:
-
-net/ipv4/tcp_minisocks.c:tcp_child_process() {
-    ...
-		/* Wakeup parent, send SIGIO */
-		if (state =3D=3D TCP_SYN_RECV && child->sk_state !=3D state)
-			READ_ONCE(parent->sk_data_ready)(parent);
-    ...
-}
-
-If parent->sk_data_ready is sk_psock_verdict_data_ready(), tcp_read_skb()
-sees TCP_LISTEN and returns -ENOTCONN without calling
-psock->saved_data_ready, so accept() is never woken. If
-parent->sk_data_ready is sk_psock_strp_data_ready(), it also fails to wake
-accept() and calls strp_data_ready(&psock->strp) without holding parent's
-socket lock, violating sk_psock_strp_data_ready()'s locking requirement.
-
-How does a socket that transitions from TCP_ESTABLISHED to TCP_LISTEN while
-remaining in a sockmap wake up accept() when new connections arrive?
+Should bpf_lwt_reset_cb() reset the full control block for both families
+ while preserving iif, translating IPSKB_L3SLAVE / IP6SKB_L3SLAVE, and
+initializing IP6CB(skb)->nhoff =3D offsetof(struct ipv6hdr, nexthdr), simil=
+ar
+to decap_and_validate() in net/ipv6/seg6_local.c?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261101192057.2296=
-489-1-alexei.starovoitov@gmail.com?part=3D6
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261101190535.1454=
+146-1-alexei.starovoitov@gmail.com?part=3D22
