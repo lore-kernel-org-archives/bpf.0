@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793559957;
-	b=ZW90pBFBeJ+65+/9ddh01/sdCCmkwFFZ9GU6XHHywQLqZ/pl07RT6wZp8tTOQN6nrX6S
-	 DgqQI1l/b4hSi6tDtJ82oK9FY0BBV9uR8WkUhx4u6LW56kXB2+FI099Bmc8Hl/QLhy74C
-	 TcEOCNuOkvxxeSj0X/JLQQlUEtY4o6Ugqq+8ZjUlW5p1DDabpGa/MO5l6aeIT11WJvnqJ
-	 msYi2XDMfZRMUJU0zvxPvFlEItNa5MOPrH2p28vFEgRpjgapOXVkJqRjj2+t9jI8LQFTD
-	 luELms3sVNSTVDWLfufxkH8guwoc+yWxFlN2Mp65IDfrlxkwxFHfbFB76o5lU9NWCFA==
+	t=1793559964;
+	b=BvLjqPStjAT1gJOrp8jgCGXNbzJQcVzpmhY/ByzgSxMFm0UpZIph/U+jBmJcUy6hX66K
+	 cge+w603dnKOw/g/38Q+b0Vi2HSdjxGDrwTWQZgGA320XF/i9l3dsatWjNEajwyfCMWJF
+	 Am6WtWiKPM0HWx+Vv7t5L/EIZu6voplDPLphQ9VeryAZI5fo/r90FdVkCD8hefGshDL4g
+	 ks/Ovgy5XzWNuCPI+O5WaMvtfw9TkO5Nbbjb4FwuZ4rzUUaUqmotN6dPy/Wyx4qD4Hhxb
+	 OvRg/zpN9TZ5jayODGWXKl5IIX4Od+AMcgz5+0EIF7fWaWOF1vohYpOHq/BYmfCzfhA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793559957;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793559964;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=y0Zk/rhDArrBJkvaHRz/WJOsjJlI7NCjTFTAE2QTy2I=;
-	b=jzGoYTZzTBGgBxfWcXF6C5xQbzXuvugU3NIA6vniEut1i6s+dFP5a++aYsA5Idr2vvX6
-	 RGNigAZgwwSlrSVX86GpkXwIIX7UgCAgam8BZIE91eWusj76NyygKe1lnpuA0ebfrPmWH
-	 9FqfSnVDtRo4WezJycxsHDkSgLXNsAbxsqU7WHYASO9+DcwU1Dt5s544XXqUSv2Zid7po
-	 bASQVTjoMp288V/PPsA7v23MTvU4g5qNWl76pNmTiGXNDpVSYBgOFKIV8jIAMUB16OfM9
-	 Q5NNkNEBEg6xS6Ohf55O2xpPWs2xntq0sEffGxRHMSXzGMPrd2qaaIpjxZOxXKFIxdQ==
+	bh=GIOCiVSkD3l77kCSmpSfV2QUFKpiHxl/71iiH+OiWms=;
+	b=AL3R1DCOVPnRXNXHViUL4nq9gX1WkQgXjCZWBt2MLaIukh5/t6S0X63ecwboC5ChHyGT
+	 MG8S0tlzBKnR2dHT01nlxxo14VdQFIoRKTmxw9BQOfd9tRWVRXAF6yRP4shQFHxhCANhu
+	 EsAd0O6Ej6tuHDUpra/+bkxrBm/iG4pu/DBHdmj04rTkXOA4+qLvJ7V/CbG4aIdfU+fjI
+	 ucKvGvUWKai8vEUYfUkkn6k23XzHhS/jjc5RjRTgmwxSulvtEJ1FBzKl+qld2s8EQH2N8
+	 /vMqWshr6jYGJsK3NbBgntG0d/wUEKbhnfOSEXzQbgrWxVceneocILEY4bcuHR6V4qg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PFugIKGH;
-	arc=none smtp.remote-ip=209.85.216.43
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=niKItIjC;
+	arc=none smtp.remote-ip=209.85.210.169
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58768606A324
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:05:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 58768606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B50606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:06:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2B50606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PFugIKGH
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ab41538192so1929285a91.0
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:05:57 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=niKItIjC
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8a9f9473029so1564035b3a.2
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:06:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793559957; x=1794164757; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793559963; x=1794164763; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=y0Zk/rhDArrBJkvaHRz/WJOsjJlI7NCjTFTAE2QTy2I=;
-        b=PFugIKGHirjA1HsthAA6Ddt90bvaPKJIPAl8fEfNGkw761en+8bAs6BF3QNSdTVayI
-         d/mapdX9R+fAgjQPzBw3iA5OfoPmjyC1ghsARoSTRVbtaQhKf2qOLQsLKLiDPQJzpjzQ
-         wtKkmVG8DIiim6rzUByatYblx5fqT75LUrEIFwIaLEJXIwZmwDh3qyi2bFFS6we1ifWV
-         rMmZwixCRU1spkKnFE5qhzcmVrchoqP5ZgtYW0JrGvk3+rsTbQF/bxIha3Yj9euIZszL
-         jwXCBVkrpWMx/j1BjzS6wTCDi0FOKLEi0oWX+R8PDmupnhSsL1/III6L8LoFJz/hwiOm
-         Z72A==
+        bh=GIOCiVSkD3l77kCSmpSfV2QUFKpiHxl/71iiH+OiWms=;
+        b=niKItIjCeig05VwUP9Mhg0zri08ENYlL1mMdmaTrJ4mWMrna3yfXLhMhgqWyP1miau
+         sZWHGFAnZ9jM7UNkIMak5PEBePwzHwwvVEOGnAHuDAl+Yw5sTUGKs1vHcNWjssXTew+z
+         UqZRryp4FsOGthxBiOj3yQmOy9tdQs8DFfovJpW09QpqUHmN/GxP0Mc/WAdDaxy98sZk
+         p2iFJT4chx7icf4jOw4DeXvkx8cJYV/zdsKZJkyo9sh+GvLtPrL1BZRxViBymUI4CnOJ
+         gw1KsAzzQhQo7f9pvCEhK2Qt6Pwqvsb1VOvqbLGi08GKZck8udFeGZqZC3yVfRe8058W
+         bkWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793559957; x=1794164757;
+        d=1e100.net; s=20260707; t=1793559963; x=1794164763;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=y0Zk/rhDArrBJkvaHRz/WJOsjJlI7NCjTFTAE2QTy2I=;
-        b=FUfRdzkOFYsw+W5g6FV5SVOEU3GvmkyMHOod11/68RV0hDJ4nxAdGp3K+1NLDW+J9s
-         R7JdCbfJTMXx6yEkusE117NrO4gdCqoGTtZjf89WrjiKV34CxdWMegOMFn2RMMj5xRj0
-         WOml/2SJ5Ie4eUKZ/fvTSHyyL4yUz2xVw/sA/bZ8WXxoYBRVi54pUEGwNODC+f2x1yO8
-         FJoHr16HJw8qO9USydR/WDF5IRroQo/fEou2I2tOntTHU0cyk+DdCCchQd49c55MxOAf
-         nNxh6JCy80ewF7NmCGCyKewYEoEvgUpixNIKl+u3NUgpwX2NV0UkcYujjPX59F+oK1ee
-         f3yw==
-X-Gm-Message-State: APuU4Z8dC7jNhCpuV7nmkXGjxZeBGv3Z1LWoCnguHUBKQexVIMi52seD
-	GY6/Lr2tM6Fqbn/B3N5/9MCRZra5xJsI0AaHG57zfVOMw0pi7ajEOtfjq/b0+Q==
-X-Gm-Gg: AYBFou1ysBVWkt6x0JfmWqbQoAIEc431dH0mr1vLQo/8ENWg1z1xFBMwg0DO8gYwF87
-	tqOBlBES30aZcoEQA1IdaM6QxWFkvePUr2lqUaYqO1D/ENSbrCH3MKF9qoyUrFZAvOzj4NosW2E
-	btYePjo6G6k8xRMDRQ4z8mI5qgbhbhu6UiGcliBbSvKrAKOCLGaj66i1FP3rKpPjXSJ1QEnRt0X
-	yeCuDbQeKW0Y2vnGmQKJuu2Wlmgt0pooVL23wui9WS5oVCVhUnoLdXW6H7MDeC7gVjghLPcfXL6
-	v80cpJ/SitRF44soCp1/rR9HS/5wnDq6HGYXZG5KAMQDrKABg0cP4SttvClAn3EMR6bh7qdm4St
-	vvmjkSqZZTJTS9/6lEFq9mkDI6BYTtm7qS05WWPgY2zLrTbsyz8OAlsOwOdldNr74lLTGT+kHUB
-	NBhOstUaUoOx0z3voKDVwU9yxIJqWDCwvD6gdFFSjzMd70+ScNYThIdLzzZeAx50eULBaQjmyC1
-	kV/PNBYe5yKoT9H9J3hG6+/VIPzUnti8H3Mwhsi2aAPQgIcX/mFm3aoGCwRa7Jf0kfG5Z/IhGGM
-	jH22fnV83n0DWEfNO7UqgVQWBrfVWD/mw0e67Expml3/OCM7W0Fp9vWUQrQj3uqGz5pVRH7UAGY
-	0Z3jyToGiO/Z5zByFbHNLfoneAmYd9tTMIwSILcLtsOZN33d+dKDLah0s1cPnzAamswO0ilAIsL
-	U=
-X-Received: by 2002:a17:90a:e7d2:b0:3ac:4e18:2390 with SMTP id 98e67ed59e1d1-3ae895743d0mr7302454a91.7.1793559956655;
-        Sun, 01 Nov 2026 11:05:56 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e8fb2c5sm15364570a91.3.2026.11.01.11.05.56
+        bh=GIOCiVSkD3l77kCSmpSfV2QUFKpiHxl/71iiH+OiWms=;
+        b=dCnLuLPsFuES9nYBDvfwTG3SRl/r5RiiO/o0Sf3SdvmS/aSi9GsClAPRviWjD5Lhmy
+         0oI2RBtyJUdgMX4GajqMYnCQ87/m/YOdPc2c9gGLoiLAfhoupTncq9fP5HXPQHSNbH1t
+         MuSsu1CNQhse0H6NX/pGcIU7oIW6ehECW6i+b9d2KVvp3Znsdk9tHZmJ1o1ahd/uyCdJ
+         4uGImJK1CkUayumWLWjBJpOhyvk5bJpuRGEgC1HWOmeVbwBBfCzeA7zs+yL7aIZ/4m0D
+         EJYUZz9MmDNn3te87gkCS86t2cNESoImntW2oUZLuVZHlN/qIcwPX/XvsPviE86NaGiP
+         MZoQ==
+X-Gm-Message-State: AFq9FYKXX5vZ2vRrg+a3L101eTH7Ex26jnmuts5kzAKHeFmF/xCkIobN
+	+pPpDptMyh5ach/mnJuH9HVfzzjtz60I46PY9kex9VbPGnv+FWl0FE6U558pew==
+X-Gm-Gg: AYBFou3LmDiKPToR/pfAPfaKbFiWil0dxa33sNicIAqP0zyJjHPZGICbqZbeeu5GdjU
+	NRGUDP/Y1oCdpJ9OLsWjlBf+tOfu0w/qBrgOEdnmiBeySI36rAIIkGnF3NJenK4ELVQFbIDrhOm
+	gK7bgOiTxt28arrs9okM0eH/ZVJz5ucOaBJF9ehe6fCqQXWNz95lrH/CPGj+Vej/annv3ocYBDU
+	MbxaAL/EVFvGOV3kO5m8fMsXhWUO/jJDayNRK8PqgjTNHwgpCEqMD4LGEh5tGZ3/IDQUOP6ifui
+	87CGC6FF9DlukubyILpHM2ByJ2mWNGIzeWfHwompeFgCHFTSIZuHJqGhK3qyVDzSVT1ZXkU869i
+	BY+6z62wXEMQC0KYp4UvEvCFkeRIRECXDSTLhBfbMoYduTtqvHjXe7vziJhpqmnQNZFBo3NumiH
+	fr2yV99ZlnZw3ikPbjIK18FuGfvPlwsVnyI2E1t+HVW2fkSmgSTT69XQs0ogcWH5kkEa0IPm+mz
+	Gti7JcpGvoUzQpFYIwS2juwMw1pRjBrbH/+u7S4QCfaXbH3UUb3OZDHZ7h7plVlW6I4FONLurHU
+	5sHHNMM5JZPIb/zF3elwbRNcAEEpRnn+qqsyO0UDD+wyl8OFo+yw1G9XXqmhJYYv4Q/GZkZ/Q5y
+	3U2gIKzhS54VotJg44mHhmQXcV6Q72SS7EPVRDqYOFmlLEyF74GccyNvUXGvRFmu1PeScnwFZdA
+	==
+X-Received: by 2002:a05:6a00:b45:b0:892:a8f1:c53d with SMTP id d2e1a72fcca58-8a9bdad9e9fmr6444509b3a.22.1793559962893;
+        Sun, 01 Nov 2026 11:06:02 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aad7801a53sm1277435b3a.2.2026.11.01.11.06.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:05:56 -0800 (PST)
+        Sun, 01 Nov 2026 11:06:02 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -87,9 +87,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf 03/27] bpf: Refuse to map an arena at address 0
-Date: Sun,  1 Nov 2026 19:05:11 +0000
-Message-ID: <20261101190535.1454146-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 04/27] bpf: Don't let bpf_arena_free_pages() see a half-set user range
+Date: Sun,  1 Nov 2026 19:05:12 +0000
+Message-ID: <20261101190535.1454146-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
 References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
@@ -106,38 +106,50 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The first mmap() of an arena sets user_vm_start and user_vm_end. Each
-subsequent mmap() must use the same range. The value 0 in user_vm_start
-means that the range is not set, but a mapping can start at address 0. Then
-arena_map_mmap() does not check vm_start and sets user_vm_start again. The
-range tree counts pages from user_vm_start. With a new user_vm_start it
-reports allocated pages as free, and apply_range_set_cb() fails with
--EBUSY.
+If map_extra is 0, the first arena_map_mmap() sets user_vm_start and
+user_vm_end. It holds arena->lock, but bpf_arena_free_pages() reads both
+fields without this mutex. The kfunc relies on the verifier, which rejects
+a prog if user_vm_start of its arena is 0. But this check covers only the
+maps in used_maps. The kfunc accepts any trusted pointer to struct bpf_map.
 
-An arena at address 0 is not useful, because the verifier rejects all progs
-that refer to it. Return -EINVAL from arena_get_unmapped_area(). It runs
-before mmap() removes the old mappings in the range.
+Thus the kfunc can run during arena_map_mmap() and read user_vm_start as 0
+and user_vm_end as vma->vm_end. Then min() does not limit page_cnt to the
+arena. arena_free_range() unmaps and frees pages of other vmalloc areas.
+
+Read user_vm_start one time and return if it is 0. This value means that no
+range is set, because arena_get_unmapped_area() rejects address 0. If only
+user_vm_end is still 0, uaddr_end is 0 and the kfunc returns, as today.
 
 Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/arena.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/bpf/arena.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 3c61c181a6fa..ad8aab551093 100644
+index ad8aab551093..e331130662be 100644
 --- a/kernel/bpf/arena.c
 +++ b/kernel/bpf/arena.c
-@@ -650,6 +650,9 @@ static unsigned long arena_get_unmapped_area(struct file *filp, unsigned long ad
- 	ret = mm_get_unmapped_area(filp, addr, len * 2, 0, flags);
- 	if (IS_ERR_VALUE(ret))
- 		return ret;
-+	if (!ret)
-+		/* user_vm_start == 0 means that the user range is not set yet */
-+		return -EINVAL;
- 	if ((ret >> 32) == ((ret + len - 1) >> 32))
- 		return ret;
- 	if (WARN_ON_ONCE(arena->user_vm_start))
+@@ -991,6 +991,8 @@ static int arena_free_range(struct bpf_arena *arena, long uaddr, long page_cnt)
+ 
+ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt, bool sleepable)
+ {
++	/* The first mmap() may be setting the user range right now */
++	u64 user_vm_start = READ_ONCE(arena->user_vm_start);
+ 	struct mem_cgroup *new_memcg, *old_memcg;
+ 	u64 full_uaddr, uaddr_end;
+ 	struct arena_free_span *s;
+@@ -998,8 +1000,8 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
+ 	/* only aligned lower 32-bit are relevant */
+ 	uaddr = (u32)uaddr;
+ 	uaddr &= PAGE_MASK;
+-	full_uaddr = clear_lo32(arena->user_vm_start) + uaddr;
+-	if (full_uaddr < arena->user_vm_start)
++	full_uaddr = clear_lo32(user_vm_start) + uaddr;
++	if (!user_vm_start || full_uaddr < user_vm_start)
+ 		return;
+ 	uaddr_end = min(arena->user_vm_end, full_uaddr + (page_cnt << PAGE_SHIFT));
+ 	if (full_uaddr >= uaddr_end)
 -- 
 2.55.0
 
