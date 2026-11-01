@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793560058;
-	b=a5xr0QAUUu/K6lE3yVkpmJkHSX6BuUMyFdTeqRmFGs0jK+tjq9yulwWbP7aKDlhschlv
-	 EPVFtfSxlN4Uq4v3aVNSP1Op2YjnYPHRRsESc6fuQjBlY5W+WNtIfjbCS/XpE0etnBzce
-	 cXasxuhpISzAHUJSYu5qt0BakeI7xuRxYZYs9SrBlC8VfD9yPv65wo/LlJsA/VymFWrw/
-	 XA52xXQQM1ohDt3Y9Cei76PGKcXTl+OQY4BCr1EmelvFd+eoF0e+3Td2ijXqRaayDwdu8
-	 r/01FTXCB1dv2lceznRgwNBQ3pyu/lYKuu4RDkBiUF+4D2NCWAHYCezG1CND8kQDA7g==
+	t=1793560064;
+	b=sWhAeDbLS3ZTf9IREQhKUir2c08GUS9yoYC+WwgNzfsLetHSYxZzV/rxEHHrtYD2NUBR
+	 xaqjx+86bXWr/GFUl586f7rhqv5z1PG0ek07/H1o3tx9ovVvdBnhhqtmy9+MTGc2YbRkq
+	 DPh66ZPkfXHIYt0usNoqNXDiOXU5jG037GMPaklp4w3uyYogzce73g92LZuE/7Wh5lJg9
+	 eSOxdh4zcK9yIX2kSt+JbSEQ3wFhnRh/pihuUjP4oR3cvwIUKHv9iZF9lWQOUtRBN+H2F
+	 qz48iXkO44KGpN1WtOXAgJHmpmG/oqcPEPN1cf3KS8g+ZnlFrGe6McY+JQkf0g94EWw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793560058;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793560064;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=7n8cUaqxFhQWXQkEgvZFG+kad+FLs0qFtiPFQN8FGS4=;
-	b=R9DAOauo9dzs3o9n4ZGi6mVJ9ZvmUE+0wuVGu2/hFkXE1b3wwqnLCTkrpTUfZj895Hl4
-	 InbwYsi1EBUlCBBBTH2ZiWh+ZmXInYNZ51EHqwWKi3SzBN+cVpObURX6RBRmwtcHt0796
-	 YxfjMRVEPmmMk1RKqP0XTrz1Eamd369PFJeNiwjhbWRFuZ+cLJbvCwSAdwcZSkcaWmAZO
-	 7qXnOTVnKTEjY7CzRePZUUV09IffsvK/LpMckmIq+hJZzK3o8L2yQ5AxpeHgpqUSHruow
-	 j5AcdKPPHc/bMq2T37zv7uEquJ7EkX3Jdlmn3gdD2oob0H44/83rRoKhwDyGs3VwjfA==
+	bh=ZgZmF6ifIE+ZtaYXSxZjzkmrnsEmQscLQoq/49MFZJI=;
+	b=BTnihjMEqR/5wcCcogKVJjA6DoGIA9HOUUdxhDEVx05alH4fPrSvxmmGxp3lrXBEu6kl
+	 PMesRFVuC2m329OkX12eeYI3VD0/zbvKD8+ZDcDQ2nxTM+c9GISTqbz6YRgIC0wqC8vbq
+	 FpQBfFJ8J/4LXPo1Qkr3wy1G4sGLpUK3hGbUkIGGkWj3qKkvR4m9s/FSklxsM+ESJeEi6
+	 o8KkI5P9NEyNT5p6Nve3ExDfUjXu7vuKMZcTmln/IBCO7aFcywhRqmJJ32aL5iCXnnm6D
+	 JmV34av9aCbQBuDqfhh21JUOW4RNfXN5rRQ7LDQ84nC56etSx39XkjY6fRg0aP6b52g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=E1YvriMw;
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BRi1UBCF;
+	arc=none smtp.remote-ip=209.85.216.41
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBCF3606A32E
-	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:07:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DBCF3606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABAA2606A324
+	for <bpf@vger.kernel.org>; Sun,  1 Nov 2026 19:07:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ABAA2606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=E1YvriMw
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3ae6b4c669fso2004373a91.0
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:07:37 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BRi1UBCF
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ac77270fbfso1051347a91.2
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 11:07:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793560057; x=1794164857; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793560063; x=1794164863; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7n8cUaqxFhQWXQkEgvZFG+kad+FLs0qFtiPFQN8FGS4=;
-        b=E1YvriMwk7EJTn53X6lsRhsV7aCFxJMJVBOcJvk3YMFWZr52fCrTUqE0j7pGvW0Huu
-         egtw/Oy6j6IFha95Pzx9y2JvLrK3Oc9Kn1WQ5Ki+8wsX/CNmjeJ97ZkHi2yNiVYSfoZb
-         +PMI6ChC4QJRabYC7xEXfaQRDQ9VT5M8YiIsAUyJiGXW7/E2b+Jz+hSwzXDlhvV0pIrc
-         vwhWb/dFdjk7h1sDdpiuJbgc4E1g8tB1xGuP6GHI2GucArI4n2tYtYgusH52EYqrvTJ+
-         H/y13pr4k7hsShVILiC1vtlZjrsfbVPxCBwYAZemkvTz80oRkkdrhDm0kfVZz1M33dmb
-         YlXg==
+        bh=ZgZmF6ifIE+ZtaYXSxZjzkmrnsEmQscLQoq/49MFZJI=;
+        b=BRi1UBCFrDcjvb2wc6EK5Ls3JHlXdmWWLJwhRMbJOz7WLvUojOFM9FtRxrXNERcmkA
+         UP+IlF1MrVOcnwrUTP8L2+hO63c/tvGj/xUOMgu+KeDc9xDFQzDxYAK2ahr6kTjHRLkJ
+         dpaCmFwZNaUqS6oYMUW2m714dJ4aaiMHoiNHLBrsBdkkyz+9yBZ2Enc+FSksGvTgMTJb
+         NmN9LVRjFvWakaYdlDzxCKGoHIB8ia6NlqMJ7Xr02pKXuu3gUJZATydiFnoFXXE3Xs7D
+         PXYDAmI7+XUDRvOL81V0f4xtcD3Q8lX9jgtbGK7/7nYURUlZYLtsAKQS13Vk6U8r9Jup
+         zWoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793560057; x=1794164857;
+        d=1e100.net; s=20260707; t=1793560063; x=1794164863;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7n8cUaqxFhQWXQkEgvZFG+kad+FLs0qFtiPFQN8FGS4=;
-        b=ZUsK2SxMwKyrZwnaOfxUIYS7faCyFNo3OQ+y5jUWFxNujUPU+B67zxKVD0zibabQm9
-         EaxLDLQ4XI+nZHKdRCROq1jdSHU54oUYjg7K8qS+ZjBMAPOYxg7TQ6qbNVVGbLiABLAv
-         PYcSW2wuK1h8l0UHcL1dLAnPCC3CvIRPeOd9gE7I+K/UIiME5FjwdWLcO/RQxBzDb6NB
-         mU8XT8wI2bs97ZC34vjwIctim8O3alSLePSZrmx4D3X1lB/q3MmibB8rDhWiZu7R4+Wl
-         0QBMwAwT28A2Uml9d8P/B83fshw+QcJ09nasjj5i93spzHFZHhmKJxLjTu1KRglpJY/K
-         Crkw==
-X-Gm-Message-State: APuU4Z+cD/4vpD15uE01PCb7cvTJk2FzRbPp24R8EK5Y3ZYTahV6/X0w
-	nwCirYNnYfJACKuZOslz6mg+aUz6POxu3Ug1mfMApGlIJxdBCfbVc9MJHxaHnw==
-X-Gm-Gg: AYBFou0iCNuGpKXiyCswvwXBn0QwQOXmRDNYaloHR1/116Vst4a0KaO1kvXHss6NMte
-	UEgkr4jjl50gcfOvYR8Lr44rPJRBvXpXelVyh6rMSV346jjb7A7k7GkOLVPOpcyVFz3tB/QwIyM
-	nvTRjEN0DW7V3cZUAI2iJYtxO3wSa/vX+xWgJEx0s8TGc61WS1nOwSXSfKdobUpDpUzIBLLiqOw
-	2G9H0Tlc3wKOjge/uHNObqoTtFUben+DUeyxBxLj4eaWq/dbcu4Bs2AXHj1dZ7mlJeEVGamu4st
-	gP4cg48CyaK8AEdSgqxjZknezZy08WaoF20ASgT4miwaXVNqYTL8O96p4e3SlMDy/NXU7tX45G0
-	eh9Bj8BykqBS4mdT/jbVtiC1oVh21e1MzhopbcCuwGu0Cvx6zLyFeNm0irQ17oA1xUBouK6bRL/
-	lg8qFVykcRQKhX7KckN9t3Ef70OBT4AUDbnQTklzvMsG0J+BdPWwtVWMshP7izdh66R1q41l4pM
-	tOkR/Opvaz4HirRxyc8DGNZWc+lT07PXDIn3L+iuylOsbv8AxjVZCjeOeh0eptKUsccvMARdzAe
-	09+XSDvAL0pwmYRmyw1p/BnymF4PjB5Q7wo8EJeBvWneguY3CF94YVgGUat8EYfC9tZJ4IGw2WX
-	cNOK7Y3bhUg4PWbQmSuoGoSK717/GpWrQMnKd/4S1tP8ZqPNxoap7Mv9MapJcYuNo028PJCb0m0
-	PZ4W1Tg5+xQ7y+YmW++9M=
-X-Received: by 2002:a17:90b:3ec7:b0:3ac:7406:b49 with SMTP id 98e67ed59e1d1-3ae896d7a1cmr4261108a91.15.1793560057197;
-        Sun, 01 Nov 2026 11:07:37 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e944ba9sm15312573a91.8.2026.11.01.11.07.36
+        bh=ZgZmF6ifIE+ZtaYXSxZjzkmrnsEmQscLQoq/49MFZJI=;
+        b=G3Q3ROxXHNZ2qDBUhHmRDbzXF5fi9pZmxZm43QfipKxpjKrgTBLRFllPvdrNE3q7gz
+         9O0EGUKGR2szrgazyZHVgfhqDcgFl5zm02xyKksE7BYzTbh/LEY/GM2vEbdbbzoKZHsn
+         uKBOfNd9CcmwR+Fhv4Gb0qr08A5vKT3iShDH4REy92+yOa4NGfYAB16opJRuSdPn7Zw2
+         bkHkZhzkxOloWaUi+xKgMcMOihQ0xLqB+b9pY2pYlC4dngBWWOwCoWMW255Dc6d2+kTP
+         chfWnmIFwNPAE3Bx7txPSbTvuZeKMDYt42p+rkIOn1qGVIcFd0cEo0VYQ0oL4jirZrVG
+         QvuA==
+X-Gm-Message-State: APuU4Z/Bx1uUBNWd1J8f58bqYWvGbIKfyEDVc22MgBQ0wWQTYjpvR0Uj
+	v3IOn76QznXRBGQWKnxn2sjLL4d91mHSh9IAv8issxh0r0Tshoxc9/+CzluVPQ==
+X-Gm-Gg: AYBFou28PaVFXXvndrQ5fZRd1EpGCbpNdSkbuOX9qQdcF2UU35sWgy33fyyUHtJ7QSh
+	8LzysXq3d8bJBzv3DhfXAK/t17/AB49Fwy6XV4OPErYjDsV8aOAlO8A7lV3l5KuVAfxFexeh5H8
+	8HPKVgxzCPJXLGeRjK6DAVHrrkzKq66YJGW6eIjJyT/OPD3wEZpt+bDSiADXtXaOejSG/7DsT4p
+	AwYdqv/daZKv4tH/Ar6kREot4jRjmI9QSOyGk3/SHSMRecdj4eqcf3ywNCWeJgkoh0oUvD9IB6m
+	Kgv+khn5JKH/AKwjxYNdcbTLgm34EIpi40h8Q7yDIqXPCPYy0r9wT68sVLYklgMFIXsBQzIERkC
+	GAjoK2UxXfcMUOxgxfmD1wUxj2kwQcro8TEZnjMZlVdMEkO+h/Z3K+ShMPRNTDw9xiSMgZR6QK7
+	ZTQdsrEdo8ColNGYcuPiYA4wC5uYmN5fVnDx/y4zx/4EZagtpUcPeK76QHwpW0AYT5qDtsQohRe
+	20KSb+atf9WTFXbccPu7QKnZa2dAQ2uccXv3f+8uIfDFl/S0py41D0dcJjIl56c8KjWaA36xcN3
+	RGAaN6ALcup7jy+ig+8mbNlTTnGkdjCY99uwyiu7PqFcF/5AXSy1k3ymr9RS3mwnmsfN5FLCVJb
+	EIBEJM36yLAM06qv9/1SyNbV2sdLr9c42A/VC5QJ0y9ztjdbMan2RCP7ZZpQBe67/qaPV92ZcW5
+	bcrMs7CqHCrXqW06h8EC+6
+X-Received: by 2002:a17:90a:e7c7:b0:3ab:c674:d83c with SMTP id 98e67ed59e1d1-3ae897b6956mr5882172a91.27.1793560063074;
+        Sun, 01 Nov 2026 11:07:43 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae845aa27esm10389402a91.11.2026.11.01.11.07.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 11:07:36 -0800 (PST)
+        Sun, 01 Nov 2026 11:07:42 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -87,9 +87,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf 20/27] bpf: Move the MAC header in bpf_lwt_seg6_adjust_srh()
-Date: Sun,  1 Nov 2026 19:05:28 +0000
-Message-ID: <20261101190535.1454146-21-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 21/27] bpf: Don't leave a stale MAC header in bpf_lwt_push_ip_encap()
+Date: Sun,  1 Nov 2026 19:05:29 +0000
+Message-ID: <20261101190535.1454146-22-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
 References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
@@ -104,88 +104,53 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Chris Mason <mason@kernel.org>
+From: Alexei Starovoitov <ast@kernel.org>
 
-bpf_skb_net_hdr_push() and bpf_skb_net_hdr_pop() change skb->data and
-skb->mac_header by len. That is correct in a tc prog, where skb->data is
-the MAC header. But bpf_lwt_seg6_adjust_srh() calls them in an End.BPF
-prog, where skb->data is the network header. The MAC header does not move:
+With BPF_LWT_ENCAP_IP, bpf_lwt_push_encap() pushes a new IP header. The new
+header overwrites the MAC header of a received skb. But skb->mac_header
+continues to point to the same bytes. Code that reads the MAC header after
+the push, for example netfilter, gets bytes of the new header.
 
-  before push  |       free       | MAC header   | IPv6 | SRH | payload
-               ^ head             ^ mac_header   ^ data
-  today        |       free       | MAC h| IPv6 | SRH   + len | payload
-               ^ head     ^ mac_header   ^ data
-  this patch   |   free   | MAC header   | IPv6 | SRH   + len | payload
-               ^ head     ^ mac_header   ^ data
+  before the push                        | MAC header  | old IP | payload
+                                         ^ mac_header  ^ network_header
+  today                            | new header        | old IP | payload
+                    network_header ^     ^ mac_header
+  this patch, lwt_in | MAC header  | new header        | old IP | payload
+                     ^ mac_header  ^ network_header
+  this patch, lwt_xmit             | new header        | old IP | payload
+                    network_header ^     mac_header is not set
 
-Users of skb_mac_header() get incorrect bytes until __dev_queue_xmit() sets
-skb->mac_header again. skb_cow_head() reserves only len bytes. Thus the
-16-bit offset skb->mac_header can wrap. A push also changes the "not set"
-value. In both cases skb_mac_header() points after the skb.
+For lwt_in, move the MAC header in front of the new header before the
+memcpy(), as __seg6_do_srh_encap() does. skb_cow_head() already reserves
+len + skb->mac_len bytes.
 
-Move the MAC header too. Pass len + skb->mac_len to skb_cow_head(). Keep
-the "not set" value. The second Fixes tag is for this case. Since that
-commit an End.BPF prog can get an skb with skb->mac_header not set.
+For lwt_xmit, the output path makes a new MAC header. Thus mark
+skb->mac_header as not set. This is the state of a locally generated skb.
 
-Fixes: fe94cc290f53 ("bpf: Add IPv6 Segment Routing helpers")
-Fixes: 20a081b7984c ("seg6: add VRF support for SRv6 End.DT6 behavior")
-Signed-off-by: Chris Mason <mason@kernel.org>
+Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/filter.c | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+ net/core/lwt_bpf.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index d634850a38c7..482f8132d9ca 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -7159,6 +7159,7 @@ BPF_CALL_3(bpf_lwt_seg6_adjust_srh, struct sk_buff *, skb, u32, offset,
- {
- 	struct seg6_bpf_srh_state *srh_state =
- 		this_cpu_ptr(&seg6_bpf_srh_states);
-+	bool mac_set = skb_mac_header_was_set(skb);
- 	struct ipv6_sr_hdr *srh = srh_state->srh;
- 	void *srh_end, *srh_tlvs, *ptr;
- 	struct ipv6hdr *hdr;
-@@ -7184,20 +7185,38 @@ BPF_CALL_3(bpf_lwt_seg6_adjust_srh, struct sk_buff *, skb, u32, offset,
- 	if (unlikely(len > (U8_MAX << 3) - srh_state->hdrlen))
- 		return -EFAULT;
- 
+diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+index da49364ec63d..b9270a08cc6d 100644
+--- a/net/core/lwt_bpf.c
++++ b/net/core/lwt_bpf.c
+@@ -649,6 +649,14 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+ 	if (ingress)
+ 		skb_postpush_rcsum(skb, iph, len);
+ 	skb_reset_network_header(skb);
 +	/*
-+	 * skb->data is the network header here. The MAC header is in front of
-+	 * it, so bpf_skb_net_hdr_push() and bpf_skb_net_hdr_pop() do not move
-+	 * it with the other headers.
++	 * The new header goes over the MAC header. On ingress move it first.
++	 * On egress the packet gets a new one, so forget the old one.
 +	 */
- 	if (len > 0) {
--		ret = skb_cow_head(skb, len);
-+		ret = skb_cow_head(skb, len + skb->mac_len);
- 		if (unlikely(ret < 0))
- 			return ret;
- 
-+		/* The push can write over the MAC header, so move it first. */
-+		if (mac_set)
-+			memmove(skb->data - len - skb->mac_len,
-+				skb_mac_header(skb), skb->mac_len);
- 		ret = bpf_skb_net_hdr_push(skb, offset, len);
- 	} else {
- 		ret = bpf_skb_net_hdr_pop(skb, offset, -1 * len);
-+		/* The pop has added -len to skb->mac_header. */
-+		if (likely(!ret) && mac_set)
-+			memmove(skb->data - skb->mac_len,
-+				skb_mac_header(skb) + len, skb->mac_len);
- 	}
- 
- 	bpf_compute_data_pointers(skb);
- 	if (unlikely(ret < 0))
- 		return ret;
- 
-+	if (mac_set)
-+		skb_set_mac_header(skb, -skb->mac_len);
++	if (ingress)
++		skb_mac_header_rebuild(skb);
 +	else
 +		skb_unset_mac_header(skb);
-+
- 	hdr = (struct ipv6hdr *)skb->data;
- 	hdr->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
+ 	if (is_udp_tunnel) {
+ 		size_t iph_sz = ipv4 ? iph->ihl * 4 : sizeof(struct ipv6hdr);
  
 -- 
 2.55.0
