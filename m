@@ -1,54 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.165
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793632518;
-	b=aX1pdMCjjIYwuJFh7pUduUI1qNS7m7dWHh/EwImAKurW48G4AcMe3bFsRSxBgkZsA0Q0
-	 U4PKYjaWyOis3rGmulo19s0ZO5j8fszJOWkkutLg50pJszVKgSphEuZvB7it6xKYepYGS
-	 b+GyAOD+v/0Q37OMFXrX9L+o5g3qiEv+PR2Qsu1bqK8n5yVQsSDY/u7pxPPbbosQkGSCh
-	 cE7nokkP7o0un/ZDoB0s8+lOY1d0hDZgVG5tuD0ZiYZC4vX6qqWudkXPsynDPUf66YMU8
-	 ZvUzv2df409Yfcr6woskq5uXv+hg9QJ2fyDITHzGvoRCo4MZ4//vrlDchJA0VzWAzvQ==
+	t=1793633305;
+	b=yRWIUvSexdp5FtiprssdDseUQkvmHtScgRaCuBie4f1UuqR5j4o58jelphTVa1Zwy/HI
+	 gDNvkKSA7tuwhFW5UkZL2/A9iv7wG8fXt5t0YV7dnzmRvug24JiOh68jqy8QlgizJUb40
+	 A1V4Z1zEPZvPd2Aj/DnkdMO7pvgH19BttTby/ZUAW676HNvbUd+KB1HTjhSFyMFPmkSNz
+	 1mPjHxQbq5NycNeDWdX6Ar/EWE5LO9Ocuvt2CAvz4CD5vNt/jYPIhDj2oZgbeJeuE8kb6
+	 6qeeLTdTYbkYIMT2YUgk+o42aspjtscvHKHOu2DcMHS48MV/udWbbq4BKXMXwE3CRxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793632518;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=kwKzSEXHVuEjJqvTeRRPA4mrqN9EE7qy4XgSv3TiNWc=;
-	b=RQMffGCqpNnF0f7x9iw4sPjUNxZvXTUz+DY6IiBAsGQ1Q3IKlCpsxkCKW10cfDw0fdWx
-	 FsPXpjAocoUi9kbFGMWuTdCo/aGHThV+gbQ4ZNRk+vpLhbKAWuygH9Rk+6OoQ8mX9UkUB
-	 ph+yz53jT32wh10CshWd9bwLbiMqHyAfDAwpyL49Vq7xGH5WqQEfSXmumjH7kqXDkUkC8
-	 VoqNYxINa54dEuEN9x+ppabLaX9Lv9LiQK2uxEX777EKPdFsnVuZHYG70xfMZtTK4jwOY
-	 rnb1NHxx4liHzK6AFkF6R1GLAySZWQVXjidOo1bPEVAWOZdwR7rMWOJJenip5KDnuaA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793633305;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=6WkRFhtCLZVCf9MxkWKrZd3TCBlxLoJ2vUik3IvzDyQ=;
+	b=yPEe3bXICfTuX/G97TmLgvmpHoBD0bhDb1sbp1js0ErrvkrNG/eVjFzxCASCsXv7eYc+
+	 onT7FDyM9lvrXbF6f2Z+SrZPnBHBCq7PFher3N1jq413DCPIMAZ4+GTak8xZpOdiSS85k
+	 ZQjJxpLuDM2JVyvyuWecNXfpTxdaUo6DjzBRm93l7jLa8r1oQNVSrY/SlrO7ycazyZri0
+	 f5uLZwLEdUr2ojHvprUkAK3bT9WoultfsHT0W6Nr3NiX8SYzsITLZeWBax8vCtzc8/Hu7
+	 HL6ipjT9PV+KSQx92OEH8Qg7PczVcqcECJelfeWFhu1UoSevnwv3tUG3h98RCpIg0Kw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lXGnMHan;
-	arc=none smtp.remote-ip=95.215.58.165
-Received: from mta1.migadu.com (out-165.mta1.migadu.com [95.215.58.165])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="m/zWX2XG";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6382D607A8A4
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 15:15:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6382D607A8A4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5806070C91;
+	Mon,  2 Nov 2026 15:28:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lXGnMHan
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=mD1ETE2e7HukgmRWNL4DzC5n+RUd7grBANDiKh/A4zE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793632515; v=1; x=1794237315;
- b=lXGnMHanafhZqGg5hSi5b0aHqHNEOt+95p8arodvEZyTN6I2DAeOz2rSfSbSa6SPX4rdFcJM
- v+2b+brBN2z05VkWQn/evpTSMbcUbxEPoBCEFhLdC53ue8MiUln9BObndAF0uXXQV2kQgbluKiW
- V8q3BX5VhBkSM0WWuKltgTBc=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id c5af6c99b6d8b8d8;
-	Mon, 02 Nov 2026 15:15:14 +0000
-X-Mizu-Trace-ID: c5af6c99b6d8b8d8
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <ae49619c-d2de-4189-b6ac-2a70f8ef1891@linux.dev>
-Date: Mon, 2 Nov 2026 23:15:03 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m/zWX2XG
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 785021F00A1C;
+	Mon,  2 Nov 2026 15:28:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793633305;
+	bh=6WkRFhtCLZVCf9MxkWKrZd3TCBlxLoJ2vUik3IvzDyQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=m/zWX2XG/rSKuFdLED6Lda9izVUMAc9bvJUaKiwtDcsBszEDY7kYNcNCluie4aRZa
+	 Ijl/ivjA5oZsQiXZ0my2GvOtkz4c7/BveYGfnizFFLZTRCpSGLQaVzIlwaPlvsqfEp
+	 2ceCxjfj8oHEpAbG3Pw6dRiBLofIdbxSd9KCnwVA4VUwtErT8ukxVS7E9+fNHNGuJC
+	 WNZ6KoFU1573tc5xzNcN0dqKWn9Hsqs79KfgF7HbvtsWrUFJA0gWxt1aZ0AlvpWBHE
+	 gBWdXhcjctqiqp5g58DwwvqTHYLDrIwHOkALqFDbeBC8IakzJ9RsBrfKw4ZTpoC7F0
+	 OJ/+QcHVpW8Sw==
+Message-ID: <0d7672ae-a856-4f0e-9aa8-52e897bcd4da@kernel.org>
+Date: Mon, 2 Nov 2026 16:28:23 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,102 +52,36 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 09/15] bpf, sockmap: Check the TCP state in
- recvmsg()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, john.fastabend@gmail.com, jakub@cloudflare.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
- matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org,
- josef@toxicpanda.com
-References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
- <20261102072112.4160195-10-alexei.starovoitov@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261102072112.4160195-10-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: Cover enum signedness and
+ legacy name matching
+To: Hungyu Lin <dennylin0707@gmail.com>, ast@kernel.org, bpf@vger.kernel.org
+Cc: andrii@kernel.org, daniel@iogearbox.net, yonghong.song@linux.dev,
+ eddyz87@gmail.com, ihor.solodrai@linux.dev, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261101103221.51534-1-dennylin0707@gmail.com>
+ <20261101103221.51534-4-dennylin0707@gmail.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20261101103221.51534-4-dennylin0707@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
+On 01/11/2026 11:32, Hungyu Lin wrote:
+> Exercise unsigned enum values with their high bit set and signed
+> controls through libbpf's data dumper. Include ordinary enums stored in
+> eight bytes and legacy BTF with kflag clear so normalization does not
+> lose existing names or match only the low 32 bits of wider data.
+> 
+> Extend bpftool_map_dump with BTF-backed array maps and check both JSON
+> and plain output. Cover narrow unsigned names, signed and unsigned
+> numeric fallbacks, legacy enum names, both enumerator orders for
+> ambiguous narrow names, and unmatched ENUM64 values.
+> 
+> Build legacy enum records through the public BTF API and load them into
+> the kernel before invoking bpftool. Initialize map data at its actual
+> width so the tests also work on big-endian hosts.
+> 
+> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+> Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
 
-On 11/2/26 3:21 PM, Alexei Starovoitov wrote:
-> From: Chris Mason <mason@kernel.org>
->
-> With an sk_skb verdict prog, tcp_bpf_recvmsg_parser() copies data from the
-> psock. Then it calls __tcp_cleanup_rbuf() to calculate the receive window
-> and to send an ACK. The window and the ACK need a connection on the socket.
-> But tcp_disconnect() keeps the socket in the sockmap and the data on the
-> psock. For a TCP socket sock_map_redirect_allowed() rejects only
-> TCP_LISTEN. Thus the psock can also get data after tcp_disconnect().
->
-> __tcp_select_window() divides by icsk_ack.rcv_mss, which can be 0 in
-> TCP_CLOSE. In TCP_SYN_SENT the new peer can get an ACK with the sequence
-> numbers of the old connection.
->
-> Call __tcp_cleanup_rbuf() only when tcp_can_send_ack() returns true.
-> recvmsg() returns the data as before. Move tcp_can_send_ack() from MPTCP to
-> tcp.h. It also returns false for a fastopen child in TCP_SYN_RECV. From its
-> peer the child has only the SYN data, and the SYN-ACK acknowledges it.
->
-> Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
-> Signed-off-by: Chris Mason <mason@kernel.org>
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-
-
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
-
-> ---
->  include/net/tcp.h    | 6 ++++++
->  net/ipv4/tcp_bpf.c   | 3 ++-
->  net/mptcp/protocol.c | 6 ------
->  3 files changed, 8 insertions(+), 7 deletions(-)
->
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 3560adddf821..23a22d70718e 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -1845,6 +1845,12 @@ static inline void tcp_adjust_rcv_ssthresh(struct sock *sk)
->  void tcp_cleanup_rbuf(struct sock *sk, int copied);
->  void __tcp_cleanup_rbuf(struct sock *sk, int copied);
->  
-> +/* Is the socket in a state in which TCP may send an ACK? */
-> +static inline bool tcp_can_send_ack(const struct sock *sk)
-> +{
-> +	return !((1 << inet_sk_state_load(sk)) &
-> +	       (TCPF_SYN_SENT | TCPF_SYN_RECV | TCPF_TIME_WAIT | TCPF_CLOSE | TCPF_LISTEN));
-> +}
->  
->  /* We provision sk_rcvbuf around 200% of sk_rcvlowat.
->   * If 87.5 % (7/8) of the space has been consumed, we want to override
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index ef2e15de0fe3..3d703f1517d8 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-> @@ -343,7 +343,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
->  	if (!peek)
->  		WRITE_ONCE(tcp->copied_seq, seq);
->  	tcp_rcv_space_adjust(sk);
-> -	if (copied > 0)
-> +	/* Data on the psock outlives the connection that it came in on */
-> +	if (copied > 0 && tcp_can_send_ack(sk))
->  		__tcp_cleanup_rbuf(sk, copied);
->  
->  unlock:
-> diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-> index 7a22e9388e0e..d62cfbf2d490 100644
-> --- a/net/mptcp/protocol.c
-> +++ b/net/mptcp/protocol.c
-> @@ -619,12 +619,6 @@ static void mptcp_set_timeout(struct sock *sk)
->  	__mptcp_set_timeout(sk, tout);
->  }
->  
-> -static inline bool tcp_can_send_ack(const struct sock *ssk)
-> -{
-> -	return !((1 << inet_sk_state_load(ssk)) &
-> -	       (TCPF_SYN_SENT | TCPF_SYN_RECV | TCPF_TIME_WAIT | TCPF_CLOSE | TCPF_LISTEN));
-> -}
-> -
->  void __mptcp_subflow_send_ack(struct sock *ssk)
->  {
->  	if (tcp_can_send_ack(ssk))
+Acked-by: Quentin Monnet <qmo@kernel.org>
