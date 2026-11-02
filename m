@@ -1,49 +1,53 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=51.159.188.251
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793658609;
-	b=BaHCOTBbd2kMmk62XODJNj6/vkbYU4vf8eAsFxW3SyCF55y5KwyHWBn6joYsFOc2obiH
-	 FqxYWW7e81Vp22z61NwBu/CUTIIOg8rG6U5FSe3UZO36rzSz4Ss3IPo9Ww2Fmjn28ggqT
-	 sx9QnSi9fHDDTocnS7WQaoduKNQbGUouSxKbavK6Ka6umYl1LYtcwPTzh2K8jeKpfkcGY
-	 sh3cF8RvBCg6DBEM1w9uMI3hcoEDYao1nhyf9JJXlDq2vayEcO/+3CfEn2nsmbSD+PT2c
-	 3jvQtCJtuk/jD6W0h4Rw4eweNK0mHDATOvUCBshh7s74p7rUlhldUKAJqQPPHRJGIpQ==
+	t=1793658907;
+	b=iK7/mPKLEc3yWZVfp5WlhcXze7vNW6+voAPC13pZpyVMxs7a1q+/uOnVPEfIlRKJTxN5
+	 ZUoGNlS7RjZBYhUcee9Da85sf0FvIxSw4eCoFQrMQsdP8+mqg3cAY72+2/1K5MLvvmrrV
+	 3mZ6ZJVAKxxahpNu8vA74/Jj15aA0z2lTEHiSbVtsRb6skGg64ASn9k2urP4Hn4VonzVt
+	 kieROLULVNjyEZ6QRZc0/kNLJ5LqzHuiFmRYtNWdEqqZOzOgdNqtM39Nt00CxDtaopqVu
+	 QQSSlpS3FgjxS6MVjk2oYB1lWKmz/FkfvQahuTpBZxZYYgi/wTsSWOMUj1Uuemj087Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793658609;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=rs6qEtPItRTMHZX9exXJZ0Mx0TZWRTUeJUcsB2lFl1g=;
-	b=AQ3xtfrPYzab4J6G6kIaFQvzM07wb5ZILeS0ufQCb1tEQog9S0/IDNbJ2gI8fWwVmEIx
-	 98eBB+MJHzgmNuS8+GXUpUYeh2aPE+HZX9D5S4VGsX4SLEPPb8azUlr3Vh7vCj5p8lwXE
-	 q9o9BLzd9eJfAtR0iFhKUS7+kLSXWhEpjwrM+T9R2HmO/IzidFBVxkJuZN4OO0AZRVPa/
-	 567KKeLZWGixcJ7jC+uhoEF8TbXwekmykVA2pC8KDFWLSw2dyE53OOXUO0Aljh0+jiarx
-	 dHPuTUYfFoq2LMTAl3nL4wYIwHW3VgCh6UR0msOt7+WzdyHqKOUtqVqfukVGoM59thA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793658907;
+	h=DMARC-Filter:DKIM-Signature:Received:MIME-Version:Date:From:To:Cc:
+	 Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+	 Content-Type:Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-Get-Message-Sender-Via:
+	 X-Authenticated-Sender:X-Source:X-Source-Args:X-Source-Dir;
+	bh=nySh5y0liynVsY0bHng3Wlzu90DnKeR+CEn9IJgSdwE=;
+	b=f0Hs9EjAYPFnrAACDCIfewDMxOBxODngahWUadtPOVBOzTyB3uXfPBKGSvlyLebn92Kb
+	 N8O/v/WD8NZV+/wQZ/SsBTurFLONHorjvNzrjQl3yh2YE0n0z2fE1G53olnPIF9gWr0iJ
+	 GnsHQvVmMe4Bcx0ljkHZv5Keh8P78UP6bDworETdiaI3pndfckyu/eJ17mUVFSgCFfZPl
+	 SGCzhzd0rc/4CPHdMDxMomYaMMIy85OiT3bjs1ntM7vIHnPRLgfDFtwaRtvT1JGtkZBiU
+	 +yu1QxBbkNJHBNWOTV4o7yDt3wACD3KprWSQqRxbgrIURGqdk77LBeOqCpPqQC4ygSg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UkrsvoVu;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=oss.cyber.gouv.fr;
+	spf=pass smtp.mailfrom=oss.cyber.gouv.fr;
+	arc=none smtp.remote-ip=51.159.188.251
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B0D8606A329
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 22:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UkrsvoVu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD601F00A16;
-	Mon,  2 Nov 2026 22:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793658609;
-	bh=rs6qEtPItRTMHZX9exXJZ0Mx0TZWRTUeJUcsB2lFl1g=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=UkrsvoVu1xKSdnxNwIE6RvxrqPCfjwWfMGHV7Jhw/MoOC65eHGwF/vQvnLpZd/7Z1
-	 6TXJEc7jjTGWNw1j2xeEYHpii2cH6WPqTXf8IyL9n+/STStxdULPYSG7nEppVzdD6j
-	 Qd3zY0P7yRLH9LotDsQkalKSIhFyCDLppt6/KBNwJcpwPw3iuCQ/57FdOVBjm4CgLU
-	 QnGw1j0nQT+bs0u8PzTpP7S7kmewB35Viqic9nKhB2ZksM+e13LpSabseAZfDgVj8E
-	 xV4YuQy9RwpBa30jQJvm8jTo3JsNcJxPV571lrJM3hJ4HPi5Penc8rhPmvnOud6umU
-	 ZkuSb71Jf7DaA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 0318D380821F;
-	Mon,  2 Nov 2026 22:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B477C606D822;
+	Mon,  2 Nov 2026 22:35:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B477C606D822
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
+	Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:
+	Reply-To:Sender:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=nySh5y0liynVsY0bHng3Wlzu90DnKeR+CEn9IJgSdwE=; b=onnHTcC35wt01xG4RX2AX4bQQC
+	56Az6rX3rN2FWWbLOZW58qtZRPZxmtopQI+lSPbUQud4ct7syXI1X4xZnmIPn0uIcIlFwd1JL/iTb
+	lButy6YaMp7TOzBy6HIDtIGxVIxE0qPy5H39La4m+vP83MqJasCtXb34rbYP4iBLt6rh0pirzoOmC
+	cDrNp+FD6mAjFyS8NT8iezeO1h0TXDNJIDq93JxvK6L+1qC/JbZPqoisNllG0u7frytwEa/dOlmN3
+	+6KtA5xcSYiEwAWovoabfAiXuJdyj8NiY6MxON0aU+ZM+dXhk74d6GK2rTZVkXq6+7TB6KOSmUiz/
+	qjohC9Bg==;
+Received: from [::1] (port=53530 helo=pf-012.whm.fr-par.scw.cloud)
+	by pf-012.whm.fr-par.scw.cloud with esmtpa (Exim 4.100.1)
+	(envelope-from <jeremy.jean@oss.cyber.gouv.fr>)
+	id 1xO0cJ-00000009Lic-40Sh;
+	Mon, 02 Nov 2026 23:35:03 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,58 +57,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 0/9] bpf: One may_goto time slice per prog
- invocation
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179365860780.698908.5907895296789824296.git-patchwork-notify@kernel.org>
-Date: Mon, 02 Nov 2026 22:30:07 +0000
-References: <20261031215543.682284-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261031215543.682284-1-alexei.starovoitov@gmail.com>
+Date: Mon, 02 Nov 2026 23:35:03 +0100
+From: =?UTF-8?Q?J=C3=A9r=C3=A9my_Jean?= <jeremy.jean@oss.cyber.gouv.fr>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
+ Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] bpf: netns: require CAP_NET_ADMIN for link targets
+In-Reply-To: <DML2GFI6LWXU.3ODKDXNQDBYYA@gmail.com>
+References: <20261102202922.2515317-2-Jeremy.Jean@oss.cyber.gouv.fr>
+ <DML2GFI6LWXU.3ODKDXNQDBYYA@gmail.com>
+User-Agent: Roundcube Webmail/1.6.20
+Message-ID: <d984ed03fbd7b6c12b88f1a18d7762f6@oss.cyber.gouv.fr>
+X-Sender: jeremy.jean@oss.cyber.gouv.fr
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-Hello:
-
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Sat, 31 Oct 2026 21:55:34 +0000 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
+On 2026-11-02 23:08, Alexei Starovoitov wrote:
+> On Mon, Nov 02, 2026 at 12:29 PM Jérémy Jean 
+> <Jeremy.Jean@oss.cyber.gouv.fr> wrote:
+>> BPF tokens allow a process to load BPF programs using CAP_NET_ADMIN in
+>> a userns, however, netns_bpf_link_create() does not check for
+>> CAP_NET_ADMIN in the target netns. Consequently, a token can be used
+>> to attach a BPF program to a netns it does not control.
 > 
-> may_goto stops a loop that the verifier cannot bound: after 250 ms the loop
-> must exit. The count and the timestamp are in the stack frame of the
-> function that contains the loop. So the limit is for one call of a subprog,
-> not for one invocation of a prog. Loops that nest across calls multiply it,
-> and 9 insns lock up a cpu:
+> That's not a gap. The prog FD and the netns FD are the permission.
 > 
-> [...]
+> pw-bot: cr
 
-Here is the summary with links:
-  - [bpf,v2,1/9] bpf: Emit timed may_goto for JITed progs only
-    https://git.kernel.org/bpf/bpf/c/1ddffb57b362
-  - [bpf,v2,2/9] selftests/bpf: Don't cast a pointer to .bss in arena_htab_asm
-    https://git.kernel.org/bpf/bpf/c/fcda8096dc5d
-  - [bpf,v2,3/9] selftests/bpf: Give the first loop of cond_break5 an end
-    https://git.kernel.org/bpf/bpf/c/40a3a2e686f8
-  - [bpf,v2,4/9] selftests/bpf: End the loop of parallel_test_bitmap after 50 ms
-    https://git.kernel.org/bpf/bpf/c/5eced83779fd
-  - [bpf,v2,5/9] s390/bpf: Support internal-only MOV instruction to resolve per-CPU addrs
-    https://git.kernel.org/bpf/bpf/c/85b6a11252ba
-  - [bpf,v2,6/9] bpf: Pass a pointer to arch_bpf_timed_may_goto()
-    https://git.kernel.org/bpf/bpf/c/78821f4d8d18
-  - [bpf,v2,7/9] bpf: One may_goto time slice per prog invocation
-    https://git.kernel.org/bpf/bpf/c/ec274bb4665c
-  - [bpf,v2,8/9] bpf: End bpf_loop() when the time of may_goto is up
-    https://git.kernel.org/bpf/bpf/c/c16c6c4683cc
-  - [bpf,v2,9/9] selftests/bpf: Test one may_goto time slice per prog invocation
-    https://git.kernel.org/bpf/bpf/c/9d8affd7b6f5
+Thanks for the reply, yet I feel that I misunderstood something.
+At first, it seemed to me that there was a security boundary issue,
+but digging more with your feedback and Sashiko's one, I believe I was 
+wrong,
+that there is no issue and that this patch should instead simply be 
+dropped.
+Am I right? Or do you believe that there are still things to fix?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Regards,
+Jérémy
