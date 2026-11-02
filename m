@@ -1,57 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793617395;
-	b=CMXajPzKJWnwPy6mg8UInoJ5jLkeV/XluGDHZHTq4THJhTNEL47KVqPQ2QYagh6GrC+B
-	 tNJmY4ABM8G28eF5Pcml6foVqayBRLecx59JUSDr0ortV+5Q5giPDrqJDy3rqxlznI+lA
-	 95Gwh81Zf17LWSMKulBA25Md3LccuzTFCm/VDiLo1vIz8OmREbacrwRPt2UU9B3743w9i
-	 0YK6RsY6/BeiXhM7qr0GWnCOifLzV9uKYdEoZDtBjK39hdURKWzWj+4ePyln3A/vYiYe7
-	 uZgExhbUGWab0s/v0D8iV0O2t9vzJTQWqw/07y7dNcTEijmVur0cZjnlCWwZkHWiO3w==
+	t=1793618127;
+	b=WpeVzEYvHQoUkZU8yODr7hSLFCJrhvzhtvXjPPHJkI157V9B2HqgriiL3o2VXTSbngxC
+	 JZEpAvx4zQ4Jl7t/R31BTxGjYEjzYovf3n256ybW6h9631SeUSMx/km023zsqBobTCxd+
+	 /rlkbyUgqSqU7GerE4z76KYOgul/CfxfkbrJowTSsVKB5hIdCor+vuQDUqnShkRKPskNw
+	 u5pgc8bEsyOSIvMylUmpbBGhTZ+1Xxx/DW3ZDuM/7Pt2yvuV932G1sTPt3AAhCEHpzzlH
+	 BzzUJzG4EqK20HI820SaSnBqxmrtdZcUobhqJKG3hJu977xXVTJCzKOtTFV/O9y8arA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793617395;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=gGvv1D3kz4yGFblt5aou1uFyOV+OwrUqmg2/eTEKzUM=;
-	b=rcbC6GbqkhsHsl5DNv9g4vrNNt6+uC3dWhkR/kChOiZrR9+tTuA/EB/mR8y3ZPWrr5Pu
-	 5jwfC9T9KokhcgOkV2V30qVr31rTWnX7DNyBPzkb1ixfbxHNMi1KuzMSoLaBTu6JYa4O+
-	 0UtftP2DntY1IYTT5QjLECRQETATBD3eE8oBvtaaVDzEzrYRLdrXbwx0wDcKNacLEMJ9W
-	 hyHL0EWauGAx/1g5tk01hP3jfKuj+cva2s5GX7uUTRK6ezv2zj1j7C2belykA4hS537AP
-	 Db8l8kD3HIf7eDqkrsaliCO0b2ogBJLNunJ4Lk8Lmxj0QEIf6i4uf+0xVf7nz+kdu2Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793618127;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
+	bh=6SzHi6q98Zf0qdkiRBybrf+muUBlPpBVfDjgB0DMVkw=;
+	b=YwzPZmi1aYru0g+/gUIZxqZdvgZh4Z1I5Ct1KFHBSfrqJLig5s9BzeQ6aZYrl5hVcyYn
+	 pfm2RK53v35SOKIzZaxUQPiQ522j5X+J5TuPko9K9JGi7+tkWXkrUiGSyLYg2ec95ZNtG
+	 JJvxPSqGBK91qpSNX9NEEgPM2aPBrXU0bm7amAhBqaJGkicrqXzd5qA4WCVpWmZm60elf
+	 xIgK7nLIfwr+348rUrR5nfcWDuHf7GfkeZ/DOy4S3i5Zffln6Sdg3Vnony3fVScStq40y
+	 FGLAmTuWC2l1iq0h3dXkHXl7uhvdbThjJPNuplq3iSAXfMniRJ5CUdYJULEqef3tUVA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ok2+IPXy;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=baylibre.com;
+	spf=pass smtp.mailfrom=baylibre.com;
+	dkim=pass header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=HCdkd8N1;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF602606A324
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 11:03:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970F5606A333
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 11:15:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 970F5606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ok2+IPXy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE821F00A17;
-	Mon,  2 Nov 2026 11:03:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793617393;
-	bh=gGvv1D3kz4yGFblt5aou1uFyOV+OwrUqmg2/eTEKzUM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ok2+IPXyCupsnggF+YM/vJ1QwMXG9zOzcNPj6OQmuEufbaSjvyZTzz1i8AyX398yg
-	 m8t/usUKXZJ2c87EpzD1i8HiFK2534y9sNpDpiZFvQpVZpXQdx86Tguyx/nSTJO64J
-	 I/6dfTlY+7zqDmv1k8JwbBl6nPEGxPh20dDsJMwNE50C0YKgNHOWuzoZSowuIYBJK1
-	 BanaUJrr7xT/b596G+sI/yKI4r+IQDvFYAlv7T7zltXZVwx2lEsoHTobOJOAhw0NRi
-	 9SPtMTSc4H9XH1RowP9JU9elcRlBm51sfTSBJ+UzjRbTmu+V77kLdmpLM0JddFPj6h
-	 QU4sQZI4gajmg==
-Message-ID: <sashiko-outbox-193310@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH vfs-7.5.bpf v2 3/3] selftests/bpf: Test
- bpf_path_getattr()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Anastasios Papagiannis" <tasos.papagiannnis@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261102104655.70901-4-tasos.papagiannnis@gmail.com>
-References: <20261102104655.70901-1-tasos.papagiannnis@gmail.com>
- <20261102104655.70901-4-tasos.papagiannnis@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 02 Nov 2026 11:03:13 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=HCdkd8N1
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a208d93758so30488525e9.3
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 03:15:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1793618124; x=1794222924; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=6SzHi6q98Zf0qdkiRBybrf+muUBlPpBVfDjgB0DMVkw=;
+        b=HCdkd8N14dhw0wD76Fi6xYluJmi7zfqdDU+bd4lCW+LOcHyVT31OkC/sUlkbmCxyTP
+         kiMh3d6FVUO2vjKqGXQYbYDxLXk9Dr5zhOZRqZGtz7ZgX/D2ClpXVpbyJTADnv8ViCDw
+         cvziZAbTssbrRwJZCoJMzs8zs97k2K6y9BdwH2c179M2jN+GaYkvNa5k8D4Ck9WtjiUC
+         kk9PaluE9YxpkJu/sXQSpR1DJVn04nCjWcNJUtKIw56sFYVq2BHujRXerBK1NVk93Ju2
+         iW8Yk66kGYFAfzGJsABvDfOvp9/gwq6gFysjcQa3bfOBstgYPj2tUAalMbZx0pWrXg4L
+         rVyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793618124; x=1794222924;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=6SzHi6q98Zf0qdkiRBybrf+muUBlPpBVfDjgB0DMVkw=;
+        b=Jxav3KwybMc/zr70AxWYBHXfgWp26e37ZZDt1XVuLA3f58KhmIUwNXovuxkw7h0hDY
+         AI+/X/iIAhzbakLC0wPC3y0h2EoJSDYHrn+l0U1punJer6b14j0Rcj8DDFYRMFql+//D
+         BG/0p9ZXr6R57/HNx+4EN4XaCE6x983frJV0cnzX+hRb8X5+GcPOQm3EF48MlZg6rGvd
+         9tjkBlks5o4iCoU3V1cTvpu2/Eoy5UvHqpBo9OW4fvTvcxTqAenPGx0+uLpNgSym2Pxe
+         88PApHZY2fhZs6X6b4hsnTA6ik5s9dPs8yPIJAuTLRFWKWJg8RG0mHMl6YyaSUKo2LiL
+         j0YA==
+X-Forwarded-Encrypted: i=1; AKwUvBwC6aJ3UEskPjdUiKX2qIVB3/Wi+RTLyZYyUYGa6Vtj0BwDSy/GN6mjtTKseVIVe333yoA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK7varS0DN7/cNtD6fUZabwm/31WuqGlr60cH5C9m3BGIZfVCL5
+	6m6X20ergv4W1h+9V+B86Lld2byBTmARcd7btf7LwPPyca0FXsAMnyPrngsksfGf9kk=
+X-Gm-Gg: AYBFou1lbp/M4Vb2UTB7j2yO/jfVoeQHH/3iT8Q6LV0VGJdlOPXFdyHSDR89O6sddYl
+	GTCjU0JLZO2+6c/vvwtD60ffl6oU5rwv58gl4UHfoxFHz5QwmOrM982N17SzgLS18NcJmM90Csp
+	Y9/O1c+lAUPbJj64NE4TE7d7xVWLGQOmj8jzGxAdiDbhziZ3gXiIB8zYRkLV1uTiOteRGlRMCTw
+	tkSb9aJXP8Jr9pBl4THcgEXzbP5BvawvPfm1pV7akVS0TaXuRg4kiS0uN1SSe9EvIUYAq1Njkie
+	uoKTNCqv8/8uPS08hPMSBT9n0OjWpOSciEeSjTgCbWtr/q2FBrFaAOaeskCpXkGFtyfRfUG0MxQ
+	NkwnDBiSe6hdBdllC9mY2oKFIPQyfCzG/vEbtB3OeZc2fHMe2bDOK3VFRwKacea9c+WOtx8gCBW
+	IYwYvaPM/8rPLS30UOB0sZDAW/1h2IVlz7HeKqCqPuYdaGaV+clrQbV6eN3eRki1bjttYPCHbKA
+	s697HoUEKa//CVI6hOsapJkk9hS5fI/tW2qtT/s+fat5wtKUbFZv2RLtBFrK4JXwR2IMNknkNrw
+	3vftLBawyHfFZdmIAbu9BVXlJo3/2WzC376nFyrir2UHJvY1RU/Dpfg0tG0wOILt3hX8XdNaO6b
+	lxhb9
+X-Received: by 2002:a05:600c:1907:b0:4a2:1a:a116 with SMTP id 5b1f17b1804b1-4ac16fa15edmr223689725e9.0.1793618123741;
+        Mon, 02 Nov 2026 03:15:23 -0800 (PST)
+Received: from localhost (dynamic-002-212-042-085.2.212.pool.telefonica.de. [2.212.42.85])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-48e71ba4ac6sm20690038f8f.52.2026.11.02.03.15.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 03:15:23 -0800 (PST)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	bpf@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: Use "new" URL to show if net-next is open
+Date: Mon,  2 Nov 2026 12:15:09 +0100
+Message-ID: <20261102111509.357269-2-u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,116 +109,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1437; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=kpOfJ1TrfdZHVkYvKgtWh+AXcSeppGLvncABlZecPo8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBq6HC93TXUT0SXrPrMSnYvXjPvFbwfwFOJYXn43 P33eb25CKiJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCauhwvQAKCRCPgPtYfRL+ TgMvB/4pUxHXRzHQ8AGPJ4+Lp/xNQIHb0Cs4nPBQ+/e8+9kS1mMWqvZKaCxJDgfo4Uyc3LNOhBU Q5SFNd+oAZ9AG7cN+tLK2kRrPXtGCXT/rRswzZC4bwIcv/60jCJyLww9H2dFvrOJb1oBqifNyHd 8evI3/4wUM/7Rqqgp5xCQgK9vo9ASpmp2pDTVHkF1NJRLu1OiwX4cf6Ttjl+72IVtue3osS3P/d X/uRWPVKGlbCxK/QsON3JyWBIj9VAsHBmkpdxQ5fFrcxU54ZJktd476W0vlmXC/zREfTjKON7kr 7BdmWpKHO5d+vbXEzSrvvj+j28aEiTxDTfHoCx7sgJydJGQS
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] selftests/bpf: missing CONFIG_OVERLAY_FS=3Dy in config for test_=
-overlay()
-- [Low] selftests/bpf: missing bpf_path_getattr() prototype in bpf_kfuncs.h
---
+Documentation/process/maintainer-netdev.rst was adapted in commit
+524500873802 ("docs: netdev: update the netdev infra URLs") to use
+netdev.bots.linux.dev as base for (among others) the "is net-next open?"
+tracker. Adapt the bpf documentation accordingly.
 
-commit 17972af984223b5b9a2708744af62ce15fa7e1b6
-Author: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+---
+Hello,
 
-selftests/bpf: Test bpf_path_getattr()
+I was unsure if I should delay sending out that patch, because it might
+be considered a fix and I could have talked me out of sending during the
+merge window by claiming that the (old) URL didn't tell me to delay :-)
 
-This commit adds BPF selftests for the bpf_path_getattr() kfunc, comparing
-its returned attributes with statx() across tmpfs and overlayfs and verifyi=
-ng
-its BPF verifier restrictions.
+Anyhow, it's not very urgent (I think), so I waited until -rc1.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/path_getattr.c b/tool=
-s/testing/selftests/bpf/prog_tests/path_getattr.c
-> new file mode 100644
-> index 0000000000000..6d8cabfd24c65
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/path_getattr.c
-> @@ -0,0 +1,162 @@
+Best regards
+Uwe
 
-[ ... ]
+ Documentation/bpf/bpf_devel_QA.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +static void test_overlay(struct path_getattr *skel, const char *root)
-> +{
+diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
+index 4729efd657c3..7f1531f0848c 100644
+--- a/Documentation/bpf/bpf_devel_QA.rst
++++ b/Documentation/bpf/bpf_devel_QA.rst
+@@ -243,7 +243,7 @@ a ``v*-rc1`` after the merge window, we continue processing of bpf-next.
+ For non-subscribers to kernel mailing lists, there is also a status
+ page run by David S. Miller on net-next that provides guidance:
+ 
+-  http://vger.kernel.org/~davem/net-next.html
++  https://netdev.bots.linux.dev/net-next.html
+ 
+ Q: Verifier changes and test cases
+ ----------------------------------
 
-[ ... ]
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+-- 
+2.56.0.rc1
 
-> +	snprintf(opts, sizeof(opts), "lowerdir=3D%s,upperdir=3D%s,workdir=3D%s,=
-xino=3Doff",
-> +		 lower, upper, work);
-> +	if (mount("overlay", merged, "overlay", 0, opts)) {
-> +		if (errno =3D=3D ENODEV || errno =3D=3D EOPNOTSUPP) {
-> +			printf("%s:SKIP: overlayfs unavailable: %s\n",
-> +			       __func__, strerror(errno));
-> +			test__skip();
-> +			goto out_lower;
-> +		}
-
-[Severity: Medium]
-Should CONFIG_OVERLAY_FS=3Dy be added to tools/testing/selftests/bpf/config
-so the overlay subtest in test_path_getattr() -> test_overlay() is not
-skipped on standard BPF selftest kernels?
-
-The shared tools/testing/selftests/bpf/config enables CONFIG_TMPFS=3Dy and
-CONFIG_FS_VERITY=3Dy for filesystem kfunc tests, while CONFIG_OVERLAY_FS=3D=
-y is
-only present in tools/testing/selftests/bpf/config.aarch64. When running on
-kernels built from the BPF selftest config on x86_64, s390x, riscv64, or
-ppc64el, mount("overlay", ...) fails with ENODEV and skips test_overlay().
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/path_getattr.c b/tools/tes=
-ting/selftests/bpf/progs/path_getattr.c
-> new file mode 100644
-> index 0000000000000..509cf13a00479
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/path_getattr.c
-> @@ -0,0 +1,42 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include "bpf_kfuncs.h"
-
-[ ... ]
-
-> +SEC("lsm.s/inode_getattr")
-> +int BPF_PROG(path_getattr, const struct path *path, int ret)
-> +{
-> +	struct kstat stat =3D {};
-> +
-> +	if (ret || (__u32)bpf_get_current_pid_tgid() !=3D monitored_tid || call=
-s)
-> +		return ret;
-> +	calls++;
-> +	getattr_ret =3D bpf_path_getattr(path, request_mask, 0, &stat, sizeof(s=
-tat));
-
-[Severity: Low]
-Both tools/testing/selftests/bpf/progs/path_getattr.c and
-tools/testing/selftests/bpf/progs/verifier_path_getattr.c include
-bpf_kfuncs.h and call bpf_path_getattr(), which is only built into the
-kernel when CONFIG_BPF_LSM=3Dy.
-
-All other filesystem kfuncs from fs/bpf_fs_kfuncs.c are declared with
-__ksym __weak in tools/testing/selftests/bpf/bpf_kfuncs.h:
-
-    extern int bpf_get_dentry_xattr(struct dentry *dentry, const char *name=
-__str,
-                                    struct bpf_dynptr *value_p) __ksym __we=
-ak;
-    ...
-    extern int bpf_inode_init_xattr(struct xattr *xattrs, int *xattr_count,
-                                    const char *name__str,
-                                    const struct bpf_dynptr *value_p) __ksy=
-m __weak;
-
-Should bpf_path_getattr() also be declared in
-tools/testing/selftests/bpf/bpf_kfuncs.h so compilation does not fail when
-vmlinux.h is generated without CONFIG_BPF_LSM=3Dy or compiled with
-BPF_NO_KFUNC_PROTOTYPES?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102104655.7090=
-1-1-tasos.papagiannnis@gmail.com?part=3D3
