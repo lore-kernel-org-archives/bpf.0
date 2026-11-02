@@ -1,63 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793582302;
-	b=lmp0vH6cuHonB3wxwWZjfzWsaVEKiDCFdzjzGGuSiKLnpmBt/VM3zaBrwJyO4Ob5tudo
-	 vZ/sKYJ9/YJ3B/4+F5LGQ8cD9WhhCWGwWW0lZrX0j8aAbRtAMz43iyDE+9Ku9skgw3pY9
-	 PgSSifculq21j+Nggtk200neYKKs3CRy1I8tQUYZICiLFXtwTn/dL7TaOJGq+lqs3wd38
-	 59ZuumrSkEWAw/33B3YUDqh0cFyIfD++mXh+OLl6wc8Ts6ySYG9k+sGZ3PxNW/7TdQkgy
-	 Uj78BIVD4+7uTPpVrNVmKqdDO8CncQPibWntvLG7m+wMwT647BzGRwA9VVm7F+6tkPA==
+	b=xstvkCHepVTEQClq2Yqjpf4GXVICDnYQ1ffi0Ev/hhsPyE2FJmXxFI2RYWRJwbn/KwRN
+	 oEVyPMWcIDSllNIPSLoSnHxZhIcDvN+4WrvwkGnchLfxSgHtWXEw3QsqsHHxODD7AlzUw
+	 G3Z0x2a9API4zcJCU9xdqHfSKZ2OiL2iRSkumr09xQt7PzGeD+5ssqiryfRRkr4gxNw1A
+	 h+B+sJaUDDvbsDl4WLyQK47AIEWUJ+fxPMAihbt300Ucm9hj7FdRVoxfZoT5WUBiX3zLL
+	 MJKfimjUGiD0M8UgTS2TurZD5Uz0Oi9nFogNc5ZikxW66S506xeQj/SIz9hz8kUgGTw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793582302;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=abDysjfJOJSeYcrksOHfSG7PBUExgzQghoPikxkeJYw=;
-	b=NPkwBRlsJMT5/GMBckrhgJaJIpvZXo650xqgP8vsj/wiZqjRGwBAZQ+KGDP3kahFSaOk
-	 6QtEGNVzgIxOXhSS4Aa6e3h5W/GpUV/VX5tdNIZnas5Hkz4sGtxKoK7c/9BrbUFBWtzDE
-	 TDpDoqKvyrKNG2K51Gbr2nd24CWZqqKic2ZRchKO42ctdfJRx0fvjEJPt8RR69Z7VTYNK
-	 +D3HxFBi5GS3548A7Pk2YCnVvfhu/f65YNF/qPIoOXn5itrr/HJZh65FzdhHc43n1BSob
-	 ogjxNOAYEksQp/C8jk+SipEYzwm4rw4GWUYQJczkdQ6kL3FBHtbEfUQ9dzy7sa2vJzw==
+	bh=+cJ3MC7LUXBbC4N5bF/0Djg1Hg9lFmBTuLmxj+Rq3SI=;
+	b=HTU8uXGPzULwydIERqOxuMrYUR3dYIDKaC++HQEvMzNj8GnX14fUpQtYTSxluoiZsZEJ
+	 CrPK3oHM8XIN+O+bpXyBlXW8BkkKNkkB/g1nrF+7b0w/e77t15KO7+Dy8G1faIXbITwo5
+	 C8GdOgeT4F7ucuHgvP+HlYWz9wJfprfnAkGPxOgG+mrbImWiS82FHth92huHfIAw3q7WF
+	 EdZiUkC7r1LzIVqpJA5PBFOrAgX1udbTy5vRlHb7Dwe/NTV1YW2G235Qo1lMlF+DnmpmK
+	 WeBOn4U8WdarEtpqGPutcnPXwiCY3szi1Tkwo7VVwXJCe4DbzZNkIOR0W+jSopGq+qQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=rbox.co;
 	spf=pass smtp.mailfrom=rbox.co;
-	dkim=pass header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=QEP3kDFT;
-	arc=none smtp.remote-ip=185.226.149.38
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	dkim=pass header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=c2PXHs8K;
+	arc=none smtp.remote-ip=185.226.149.37
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB599606A32E;
-	Mon,  2 Nov 2026 01:18:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB599606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA1D606A324;
+	Mon,  2 Nov 2026 01:18:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1FA1D606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=QEP3kDFT
+	dkim=pass (2048-bit key, unprotected) header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=c2PXHs8K
 Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1xNggX-00AGXd-7L; Mon, 02 Nov 2026 02:18:05 +0100
+	id 1xNggX-008AQq-Bd; Mon, 02 Nov 2026 02:18:05 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=abDysjfJOJSeYcrksOHfSG7PBUExgzQghoPikxkeJYw=; b=QEP3kDFToa87gPnr8gtagi/Agu
-	7v3wk+Nv+ov+Aix46JRYvBB+goLTUmhDPZCxbYHbh7h4DS2RLiIfLmfSvDSrrPqEcTGMsq/tFKDCA
-	5ptVRBQRWQFyHr1UgsBYZDvJJoRWvoFSAvyRbhPLxI4PjLBEhp/I2ALMvP3Z2XYHykR/PNggQCqYo
-	FWIjrq/b9My0Rf1RzwXBVzxt8d36QiPNBL1qbALQbo5Y/cc5giD0kGtsNIsku9YljuKjBhexJ/PEY
-	zc0J1d5Fg38QvVZ3KtJ4aS5Ir4qXOKFoHZ4hkYYIZI/pBciCpuh6vtZF2Ayvz+cWQPBuHxdfbSZvr
-	DCaX7WUw==;
+	bh=+cJ3MC7LUXBbC4N5bF/0Djg1Hg9lFmBTuLmxj+Rq3SI=; b=c2PXHs8KRsgW9UWcr2KfQHUaQE
+	NNuvf3fwHRDgFlsPa01PTWBxCE9iCcqTLOjl5pGwfKFCufXOtSMCcu+ZUbGAX5bET2OkvXaQMFJAf
+	NpU+jSHm5V2jwdapglOjf/F3mM3N1sUFbgOTi2raWCk3W+VryXuMz+XjvgCdGr4tuaeZo4t/wigaX
+	PG7tm/p2XKpb1NvH/9oGvtM3Ux8wO4nbDpXNBcy41tMtKICFKvHapzDaGO2+gs5tbCxrnBd94aI3u
+	vZ3ugY739fK39fwMGQN7bG5uvHfk9U4hGiWazMVNDTvT/NqL2djYvYzWO13CGWKe3KtatmxIMRAB9
+	dhcXKSjA==;
 Received: from [10.9.9.72] (helo=submission01.runbox)
 	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1xNggR-0005sF-OW; Mon, 02 Nov 2026 02:17:59 +0100
+	id 1xNggR-0005s7-B4; Mon, 02 Nov 2026 02:17:59 +0100
 Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1xNggM-008JiF-Qe;
-	Mon, 02 Nov 2026 02:17:54 +0100
+	id 1xNggL-008JiF-Id;
+	Mon, 02 Nov 2026 02:17:53 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Date: Mon, 02 Nov 2026 02:16:01 +0100
-Subject: [PATCH RFC v2 4/4] bpf: Mark bpf_iter__sockmap::sk as PTR_TRUSTED
+Date: Mon, 02 Nov 2026 02:16:00 +0100
+Subject: [PATCH RFC v2 3/4] selftests/bpf: Add negative test for sockmap
+ update from non-sockmap iter
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,7 +70,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261102-sockmap-update-limit-iter-v2-4-e96a63c43b39@rbox.co>
+Message-Id: <20261102-sockmap-update-limit-iter-v2-3-e96a63c43b39@rbox.co>
 References: <20261102-sockmap-update-limit-iter-v2-0-e96a63c43b39@rbox.co>
 In-Reply-To: <20261102-sockmap-update-limit-iter-v2-0-e96a63c43b39@rbox.co>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -93,29 +94,46 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  netdev@vger.kernel.org
 X-Mailer: b4 0.15.2
 
-In preparation for plain-PTR_TO_BTF_ID removal: allow calling bpf helpers
-with sk provided by iter/sockmap.
+Iterator-context sockmap updates are now restricted to iter/sockmap. Add a
+test that attempts an update from iter/unix and expects it to fail.
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://msgid.link/DM92JCFA4X4U.30MTDH0KCPTJ@gmail.com
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/core/sock_map.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../testing/selftests/bpf/progs/verifier_sockmap_mutate.c  | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 057e2f3c0265..2a2a07372818 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -1989,7 +1989,7 @@ static struct bpf_iter_reg sock_map_iter_reg = {
- 		{ offsetof(struct bpf_iter__sockmap, key),
- 		  PTR_TO_BUF | PTR_MAYBE_NULL | MEM_RDONLY },
- 		{ offsetof(struct bpf_iter__sockmap, sk),
--		  PTR_TO_BTF_ID_OR_NULL },
-+		  PTR_TO_BTF_ID_OR_NULL | PTR_TRUSTED },
- 	},
- };
+diff --git a/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c b/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
+index 20332a731d4e..1516fe1524bb 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
++++ b/tools/testing/selftests/bpf/progs/verifier_sockmap_mutate.c
+@@ -19,6 +19,12 @@ struct bpf_iter__sockmap {
+ 	};
+ } __attribute__((preserve_access_index));
  
++struct bpf_iter__unix {
++	union {
++		struct sock *unix_sk;
++	};
++} __attribute__((preserve_access_index));
++
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_SOCKHASH);
+ 	__uint(max_entries, 1);
+@@ -113,6 +119,14 @@ int test_trace_iter(struct bpf_iter__sockmap *ctx)
+ 	return 0;
+ }
+ 
++SEC("iter/unix")
++__failure __msg("cannot update sockmap in this context")
++int test_trace_iter_unix(struct bpf_iter__unix *ctx)
++{
++	test_sockmap_mutate(ctx->unix_sk);
++	return 0;
++}
++
+ SEC("raw_tp/kfree")
+ __failure __msg("cannot update sockmap in this context")
+ int test_raw_tp_delete(const void *ctx __always_unused)
 
 -- 
 2.56.0
