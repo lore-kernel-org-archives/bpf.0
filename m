@@ -1,98 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793602171;
-	b=kVoExXydti8yctED7tgrQP39gJNtbCbztbuTp9fxp1R1WWOL1gHwCpvPApDgQNH/GX6k
-	 8E2/N40SMI+rBRMr/9LrePGvunEM90glQPPh6hdGFZM59ZXqa9iNgSWRpwUesCsRu37nq
-	 PfTYAF5rywVZnOQN3dPFwRs3WOoSDALqNSDikR6lsbBEuFWIAHqfpsh7L9NiZmC1WawR9
-	 q7TLLSdRoklyCbo089fpyBW3WjYK5fFhTId3KGWeE9J0OroJRatfLX8P7eUAVVg6S6miW
-	 YptWVIj/SAUxcXRFooqFLDcuw0xNb5lkyPr0YuetuOXhMd3bZLcqU/TBETruTPW5RBA==
+	t=1793602419;
+	b=5J/FMAANVdu6qvZBxTGFLzcbGPWFP20fiSU595+nd1DNQcr8lr8AG2UIGuHVsZ07L0sQ
+	 vy4z8qd1hrp/IceFF8kHlmd9DqO/wtzi1QDkkB1Lnbja//f7ptet6DG54Q7z0TTqZ6RzK
+	 xP8XAvUKKjwp0tgPm3B7lduYHRZb5WhueJuTxVgnadEkUpgen+jbLbOvdg5HUcyWxUgdN
+	 3P9bfxHR412GmwMtngeDRnqlltTVvCxYopaFZpNkksQuuZ40w//pX9Z5m9jIfEuu9eb0K
+	 RzlWgP610YpEeryD0gukEb8OBlk8ZkEuwse5qSCI7nXyC1d1kugv1br4cC9+Hs+vlCg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793602171;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=6VjuU2aTLmacVA9KDoSsRlNxzT6VBc/2/KWdoZzBwEw=;
-	b=wm8BC+fcbUGJ970enR3tEcxDtA7sXpmUgaa82U3d3AdrBRK/qOEx06gPUqTwwXkV4HNA
-	 KDNe0bTESPDV2IVRoiycchQIdhI3A3zVKCJvoXf279m9y9WxRM6LwLTP8/RqXZqB8VxPO
-	 Ra1e6EDONYti/oww7E6sHVKdlWczE0BSVl0aKD2zQ0tenoWb6/tkV3p8Y6VdMZgJ7PNr2
-	 Hgd2PQ4YyTLNYmu5oBFduI+cEvgQmIzQVEYQqkSwlcPCKv0raZAI06QpYlAZZHzGoMVOS
-	 VvYctTDFmDmqqXgW/tVEyt1J8z0MRkEorpvRATZShDpE2ud9NcjP5agVW0D+CgMZmRQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793602419;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 In-Reply-To:References:Auto-Submitted:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=Z9zRtXHe/J1k/4/9wAeq1n+PwAt+ioXmV3zyjSNrjDw=;
+	b=DQFBpfIuZAOPErOT1+mfJ2r1j1dUaVfapvVbsc/r20dF73f3yOP6eYogP/mfHqWIuNHt
+	 GggtgzHyxUpRSZk3Xn4BLS4ly3j6fz++3mR3WMKI391zpCDer7mOQYd/kQnVl+NZVAcTp
+	 UeCfZKCy8tKxUAzGl2IClUreR9eqNsBVbp87hLDQb1X1PGmdWSwnVjCcSMdKrfdaMTg1S
+	 bkdN7lPXXoDtGnnrXlBjP8Gfhdn24FKNVVMAn8CT3FC4Se8NfC7Eofqbf53B/5Gf99B4R
+	 crXrTqbmuG6XkP6ud7ElRntK29yhr2lKvzUOt8xk0rqkCHoeEY0p2UrLi570DrZFg6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Rfka8TN9;
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fvUJaBs7;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE01606A324
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 06:49:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0DE01606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7CE606A324;
+	Mon,  2 Nov 2026 06:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Rfka8TN9
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e977109392so17634595ad.0
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 22:49:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793602170; x=1794206970; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6VjuU2aTLmacVA9KDoSsRlNxzT6VBc/2/KWdoZzBwEw=;
-        b=Rfka8TN97vWvPfkaIIflW761ov3ZlJdPvWet7UmMNTF4AoSczsdojaq8RakwlCbphK
-         OGgDQN7jTBLf8q66kN6g9Nss6Vp250lTk7KP4s7LMhNybbEz5bONT15VMHmd3y/gkPaP
-         JLmJ433k2CXcmo0liiOF55wXza2eAQqizr2tT0Sg3hXKq3zRklBKbOKcZDq7z7fwZj4w
-         xNh8xdBtAlmPMUejQeQlpe3nDQA+aMbdO1MbU0DcFAt4mKB9kYxVd1TaP82pW2RW0wwb
-         69clgU2OkKzwFMWxbkBAxjMo/QqiYPZmkBDr+8rSwd1rNXYqVnbOLpgFheNb+q0qfoYm
-         Xciw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793602170; x=1794206970;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6VjuU2aTLmacVA9KDoSsRlNxzT6VBc/2/KWdoZzBwEw=;
-        b=oSY7wFPfGnZaqDGh+TFCCQ50Ly3MW3dQwYgDZxEgQvt7t4S6o+nJSY0P+042LnOuur
-         hHdbv6cFshR/0G1R6dnV030beskOKSqPN7EI4icreah+n36EIPbDD9dFC1exqlURmCIH
-         TSiUWW87edoI9SBzDaBhS56/oe6Gi7bWgnBbhSc0FCg4/D31zj63BkKrx64DlBX3HLCq
-         KSx4ezsfgDx83WcA/jtM8c5ZRTYa1qIfxpPV1t/v2s3B72dpgXtZLcbDC3ii5SUyqmuB
-         pxeUwy4QoDpYR3RZCSF3MLrFIDMu1pSdOonMcsMqvtalsUxPxSgFgqDu6Jqq7bziQ0U7
-         /PbA==
-X-Forwarded-Encrypted: i=1; AKwUvBz22NRC3/iGSif3t3UylyXyBjxIIcUQW9IdcW876Rg8tu6zcVzvarX+HQMcAwUkcbYItPg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z97AG61PtY6Ph6DbUh5L64jYPXVX2qeGq0YJ/8ggFUmgoCHqiHG
-	FcvcGbDHh1ZhPgztIyG0XMwnIeSwZhacIoqSFmaq/YpiKFvtFz+V3OU8
-X-Gm-Gg: AYBFou3Qbk39TKoEP38UvobkxYQsbLlJR0LXbGiQg4jREHDce2ZKaC6yO+KYh8zNdMJ
-	4Nrni2PgucZErRDGkAeoFdTaGmP1T78iUWVPIfq1SJ8nCCL/yP5ry3OD36CQXxkiyrpPA3IPk3L
-	h9soJM1XEnVtLNcCHT9/8n3MEtMV1ysQjJWgAA2URjC14KwffDHxwn04LW2ZTDyYbNfWFoeL13T
-	edJ432W6Y/r3F3cMxnymxdVO9Ce4dkXrpNcf9lhjy1Yd/cl2RJ/KGqc9ii28mJs+Vt98Xw5Yz6g
-	jiY5M1ZRa3MQITVW/mEB8lNsSNDsbS7VdHL0oqM9WFGWGVT3CNEkeld9pylHHTxbjL6bydWUd5k
-	DMSmOI18x1kvHvCKXtswPQ/q/PKEl2XOm7z/giY39vxY5o1f2at8Y4o2p0PFJiwgDYXyqHmi4fF
-	EDSaxDW5WcpkutQJOAgIQDxvidgsFGg8398CQZQ63Irgz5O6i97qODBLYBf87QQ+fE/Y6miqvD9
-	njKBuSs9WjZ+UQE3Kxpkjt/UXghrV1p9FO1SaZ7S+5ri/3fMdDpcNS1whIoop0AyN+icyw/KVli
-	aLnU2sLn7zyAaeu0m/NRWQmkOGwQebhWZ9cF1vnaAq8Bmf86UDnMNiwyPtT9SrO/lcMUZDtHe3N
-	Qu5+RVhETgC6U5Uh6dfWPRF/CeknyggWQ/gVNaQdy2m/XMLSHZ96XpryZkIVtDSupGNll6kaJ8A
-	==
-X-Received: by 2002:a17:902:ef08:b0:2e5:ee16:2f8c with SMTP id d9443c01a7336-2eb36426e30mr90562695ad.16.1793602170134;
-        Sun, 01 Nov 2026 22:49:30 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb392965fesm23212825ad.59.2026.11.01.22.49.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 22:49:29 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	dsahern@kernel.org,
-	idosch@nvidia.com,
-	bpf@vger.kernel.org
-Subject: [PATCH net] ipv6: Check the Home Address option again before its address is used
-Date: Mon,  2 Nov 2026 06:49:22 +0000
-Message-ID: <20261102064922.2636027-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fvUJaBs7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B6C1F000C1;
+	Mon,  2 Nov 2026 06:53:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793602418;
+	bh=Z9zRtXHe/J1k/4/9wAeq1n+PwAt+ioXmV3zyjSNrjDw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=fvUJaBs7lfPCACkKBdxWR0Fg5hsNAIRzZ3UcW7g4zZ1cSgwb1CxfWNpRFUDuoToYt
+	 P3h9Zrg1QIZktv2LzyayhTIeQJgKtks6pcvNQZskksNaXUFUcHaPsuMcjth+7gcrsO
+	 f2b+WncZnOO8YtnbAL7543GfW5X3/8Jvb/UVWgYfKdck2TCyqkS+qip+TbZyDZPhKM
+	 l+kFJxCE+NqSq304jpvmOe0krHl7RHez4xF4spAFugoLCGo0N8X+e4X1Z5jrLhhrM1
+	 MeXCStAre2ja9hBn1ZqFPOcra3eAaS2r0X9VKO4OOUisp2XXDf/E1lnaoKKQeXU4W2
+	 afCds6Fcgkzfw==
+From: netdev-bot+sinfo@kernel.org
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, dsahern@kernel.org,
+ idosch@nvidia.com, bpf@vger.kernel.org
+Subject: Re: [PATCH net] ipv6: Check the Home Address option again before its
+ address is used
+Date: Mon, 02 Nov 2026 06:53:37 +0000
+Message-ID: <179360241747.3286.1195676536832321611@kernel.org>
+In-Reply-To: <20261102064922.2636027-1-alexei.starovoitov@gmail.com>
+References: <20261102064922.2636027-1-alexei.starovoitov@gmail.com>
+Auto-Submitted: auto-generated
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,122 +63,25 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+Hi!
 
-ipv6_dest_hao() checks the Home Address option and sets IP6CB(skb)->dsthao
-to the offset of the destination options header. Later mip6_addr_swap() and
-mip6_destopt_reject() call ipv6_find_tlv() with that offset and use the 16
-address bytes. They assume that the same header is still there.
+This is an automated message. This series looks like a fix, but its
+commit messages seem to be missing some information:
 
-But the seg6 and ioam6 lwtunnels, the End.B6 actions, ipv6_rpl_srh_rcv()
-and BPF lwt progs move or rewrite the IPv6 headers and keep IP6CB(skb).
-Then ipv6_find_tlv() parses other bytes. It returns when the type matches,
-before it checks that the option is inside the header. Nobody checks the
-length of the option again. Thus mip6_addr_swap() can write after the data
-of the skb. mip6_destopt_reject() can copy that memory to an xfrm report.
+ - How the issue was discovered, e.g. hit in production, hit during
+   development, syzbot report, manual code inspection, LLM or static
+   analysis tool scan.
 
-In ipv6_find_tlv(), check the length of an option before its type. The
-returned option is then inside the header, and the header is inside the
-linear data. In both callers, ignore an option with a length other than 16,
-as if ipv6_find_tlv() found none. Then the ICMPv6 error goes to the source
-address of the IPv6 header, and the xfrm report has no XFRMA_COADDR
-attribute. Nothing changes for a header that ip6_parse_tlv() accepted and
-that is still in its place. For the other callers an incomplete option is
-now absent:
+ - Whether the issue was actually triggered, or is only theoretical
+   (e.g. found by code inspection). If it was triggered please include
+   the symptoms, like the stack trace or error messages.
 
- - ip6_find_1stfragopt() and mip6_rthdr_offset() can return another offset
-   for the fragment header or the xfrm header, also in a forwarded packet.
- - calipso_skbuff_optptr() returns NULL. netlbl_skbuff_getattr() and
-   netlbl_cache_add() then see no option. calipso_skbuff_delattr() returns
-   0 and the packet continues unchanged. Today it returns -EINVAL and
-   SELinux drops the packet. It already returns 0 when an earlier option is
-   incomplete. The receiver drops such a header in ip6_parse_tlv().
+Please do not repost the series just to address the above. Instead,
+reply to this email with the missing information, so that reviewers
+can take it into account. If the series needs another revision for
+other reasons, please include the information in the commit messages
+then.
 
-The code that moves the headers still does not reset the offset or the
-other fields of IP6CB(skb). If the bytes there look like a header with a
-Home Address option of length 16, both callers still use its address.
-
-The first tag also covers ipv6_find_tlv(), because its early return did no
-harm before mip6_addr_swap(). The second tag is for mip6_destopt_reject().
-
-Fixes: 793832361fe7 ("[IPV6] MIP6: Revert address to send ICMPv6 error.")
-Fixes: 70182ed23d25 ("[IPV6] MIP6: Report to user-space when home address option is rejected.")
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- net/ipv6/exthdrs_core.c | 7 ++++---
- net/ipv6/icmp.c         | 7 ++++++-
- net/ipv6/mip6.c         | 9 ++++++++-
- 3 files changed, 18 insertions(+), 5 deletions(-)
-
-diff --git a/net/ipv6/exthdrs_core.c b/net/ipv6/exthdrs_core.c
-index 4a9748338cf4..764c694fb417 100644
---- a/net/ipv6/exthdrs_core.c
-+++ b/net/ipv6/exthdrs_core.c
-@@ -138,9 +138,6 @@ int ipv6_find_tlv(const struct sk_buff *skb, int offset, int type)
- 		int opttype = nh[offset];
- 		int optlen;
- 
--		if (opttype == type)
--			return offset;
--
- 		switch (opttype) {
- 		case IPV6_TLV_PAD1:
- 			optlen = 1;
-@@ -153,6 +150,10 @@ int ipv6_find_tlv(const struct sk_buff *skb, int offset, int type)
- 				goto bad;
- 			break;
- 		}
-+		/* Some callers read the option, so it must be in the header. */
-+		if (opttype == type)
-+			return offset;
-+
- 		offset += optlen;
- 		len -= optlen;
- 	}
-diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
-index a95b0351824f..d8203ebad882 100644
---- a/net/ipv6/icmp.c
-+++ b/net/ipv6/icmp.c
-@@ -343,7 +343,12 @@ static void mip6_addr_swap(struct sk_buff *skb, const struct inet6_skb_parm *opt
- 		if (likely(off >= 0)) {
- 			hao = (struct ipv6_destopt_hao *)
- 					(skb_network_header(skb) + off);
--			swap(iph->saddr, hao->addr);
-+			/*
-+			 * The header can have moved or changed after
-+			 * ipv6_dest_hao() checked the length.
-+			 */
-+			if (hao->length == 16)
-+				swap(iph->saddr, hao->addr);
- 		}
- 	}
- }
-diff --git a/net/ipv6/mip6.c b/net/ipv6/mip6.c
-index 6a16a5bd0d91..961567972411 100644
---- a/net/ipv6/mip6.c
-+++ b/net/ipv6/mip6.c
-@@ -211,9 +211,16 @@ static int mip6_destopt_reject(struct xfrm_state *x, struct sk_buff *skb,
- 
- 	if (likely(opt->dsthao)) {
- 		offset = ipv6_find_tlv(skb, opt->dsthao, IPV6_TLV_HAO);
--		if (likely(offset >= 0))
-+		if (likely(offset >= 0)) {
- 			hao = (struct ipv6_destopt_hao *)
- 					(skb_network_header(skb) + offset);
-+			/*
-+			 * The header can have moved or changed after
-+			 * ipv6_dest_hao() checked the length.
-+			 */
-+			if (hao->length != 16)
-+				hao = NULL;
-+		}
- 	}
- 
- 	stamp = skb_get_ktime(skb);
-
-base-commit: 714b7112017fc7f8b2afabccf562acdb12d2ea7d
--- 
-2.55.0
-
+The evaluation is done by an LLM so it may be wrong, if you think
+that is the case please reply and explain.
