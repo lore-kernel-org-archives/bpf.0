@@ -1,80 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793578003;
-	b=YfX3AOVHvqRjETMF6Li/xVlREa3CS/OTYNex7k5l7bC0iGJQe59DPKQ0dYHYVe0ZUE7L
-	 5sQ+tSWwwvItL4edX+lIfAqwn3DeXdw7P0I2mwWls35dyxnZmGNnP7BRDwbAxf1TwcAyG
-	 7ix5yM7eMkYE7sIVdVh7KI0EkwIOUB+OZhDavZqQ1RdX8pQrqO7baxDPb5CB7XwVWeI6Q
-	 cHSEvCjP1N3aUSvsyC4xKwcvj8A01DMahTFfEW01ma8QhBjLld0bfX54APYODWX8ndW/J
-	 jtzfV0jxmJAsObier8UrccptXOUSJXCpJH0sRLWqjqQlfTyBYV7YjoeCd2fzeEww+zA==
+	t=1793578208;
+	b=5iRN1Lk3SrLTytuKT/e7Ju8EYxUZtY1iosPBezMXQEI/+kEFViNPhK2weK9jrnjHVLxV
+	 HlEMf8WLb+yDGTfGLqxjS1rajRN+6mfx5joqmwJ3ONEPr6P/jRhUkAWj1C17kSJVJopB9
+	 jrz13QleYNEpbXqCdSRrNsZewPf/PtlRZ11QkOP7kmlDJlr6mH7aTT7y2dV9Z1XkXx1if
+	 NZXI05LJJ35cxLJHrxwyNEHJ0jVFrGL73Zumtbh94fsxxmihoQ65m55lkVsPRzft5/znW
+	 wxVdQS6UHAeLkWQvDhU5fzn0W4mK0BSB+tFKC57yWowzsdW1urL6nzi8lz1Za288gzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793578003;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=+SJEXO4zB7JFbzlAkf228If7IMH2rNzMGxDZgs6nB/Q=;
-	b=JvhKY2uqXNCfgMva71xOKkgbJW2JaJ3gr4Z/KBMSvjB1+j2aOnuktJ6cspkIdyQZ1oyZ
-	 ifE0F1s4zqWBCMZyBiZeEpsVzdvbfYbykr9xOUAXlzNINdgPWBL6rzLI5AQAN+BjovQcA
-	 w5s1m0CMHtNgiYvOta1GOCZmZGY2DYogsm6zPnF6UCd5XF31YByiIWgUGqiFWfTRAK+KQ
-	 ZlaCfFuUsRkbFDs3jUhCMkjtfXEjvy45Db0y4hn+n2+o0+S/7Q7JmFs+XpjdVUNvy2bZJ
-	 ngYdiRmw19C+3H23UesY6PE8z+NHK/p80kFIRCgyTH5qmYbx2bQdT6mB+I3l5rlz4jg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793578208;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=QKFaYGJVr56G1QVqb3i2JANs8NYB+sHXNhlWziD3p0Q=;
+	b=Z4ifuKTdz/6uTd6NaGPYrXdQ6G54558VzZUPQ4o+kPR9aXx8uttg6BTSddXAvWSUxyKh
+	 eCgWmG+phmnSWtMeNmY8x653o4FCkX2N1TlwjCAqMBgZ5pMTcaDPg3MOdOT52mipxJb3n
+	 uaOS5gc6YVLHzhq84HrBb99BLL9Bllsy4GHA4r+3NCA/QQausfo6584ZkalsgmT6Z6Hif
+	 oFe64i77gHFQNI+DJgS8IvU7vffNHNO4u9XSalRskh8INvZhS5qPLEtTnkhHX/4R+SN5+
+	 dsHV0WCMk1x2pRoIQH9WUz730PcGhkKsZihHW+DN5PiDUfmicoDDMKE39vp/d1OvEyg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=liqClC9W;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GPxipRIe;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id E0BAC606A324;
-	Mon,  2 Nov 2026 00:06:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0794606A326
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 00:10:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=liqClC9W
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id D32841F000C1;
-	Mon,  2 Nov 2026 00:06:41 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GPxipRIe
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 853791F000C1;
+	Mon,  2 Nov 2026 00:10:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793578002;
-	bh=+SJEXO4zB7JFbzlAkf228If7IMH2rNzMGxDZgs6nB/Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=liqClC9WWVGhUyktqyf5AnN22RgTBsT9tvLzLP54vGzkPCm0Mgi9EBUmEIzFo/0Qd
-	 MnFohsjcxSRNP6ihrSlouq+TL92bQhXxANAH2lqBb3Qt+fzgNWjcisSmSrOvvEnwi5
-	 g+BAF58QBCbxo5746rapXy+ndlJ3dLymq5k2DOfE+I2hPqq6Wg/B40EuhpD6XRer2C
-	 /gogYorKDzvAC38OmYz9twt/tbyN9UQmOANe64JAzyMDCHsqvwywG9BryzVvAupd6e
-	 mFwLHKk1m/hqihR9GI3BFNesiAceAaB7ui64sbvF8VQTNePKXFhY4/XfP8LHbIAyhW
-	 DrfAN0zGzmKCg==
-Date: Mon, 2 Nov 2026 02:06:39 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-	Lukas Wunner <lukas@wunner.de>, Ignat Korchagin <ignat@linux.win>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	"open list:ASYMMETRIC KEYS" <linux-crypto@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:DEVICE-MAPPER  (LVM)" <dm-devel@lists.linux.dev>,
-	"open list:FSVERITY: READ-ONLY FILE-BASED AUTHENTICITY PRO..." <fsverity@lists.linux.dev>,
-	"open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>,
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 1/3] KEYS: Introduce keyring_is_empty()
-Message-ID: <aufUDyCKIBHnQtfR@kernel.org>
-References: <20261029232437.2581640-1-jarkko@kernel.org>
- <20261029232437.2581640-2-jarkko@kernel.org>
- <20261101232213.GD2689@quark>
+	s=k20260515; t=1793578207;
+	bh=QKFaYGJVr56G1QVqb3i2JANs8NYB+sHXNhlWziD3p0Q=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=GPxipRIeV+D4shLRl2qv89D8CLrqZvpeKGmh1isPyYUH7pN92N7qDNuPzPZZl0Kgd
+	 YNP8Jm1BUABiUglxX/LuBRhJuyFHh6iHhqQ/H4hB3Wgt4uV+fMxktCshv14OvelelW
+	 zRI0z8FM5pDY4R/yZq51MRrLwxPao73C3HlNgPwS3pwTOkNvR2ZG7detnqTa/duCQJ
+	 dOr0j6aaQ3GR7Zfcv3uJ3MAOxwpFPLQXhBGaNwu41RjgdTNctWICnVdg2LXIMnu40F
+	 PqkcRwRuNEAy/OSe8wFqyygbYNwUlrZmxJPe7RZ+W5YvX3YG2zrcwekchpKr+xPe+2
+	 rur5P93t1XpeA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D11F391AFE5;
+	Mon,  2 Nov 2026 00:10:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,22 +53,43 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261101232213.GD2689@quark>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf 0/2] bpf,
+ x86: Fix bpf_throw() in a prog with a private stack
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179357820630.3679073.7807830194038168117.git-patchwork-notify@kernel.org>
+Date: Mon, 02 Nov 2026 00:10:06 +0000
+References: <20261031050558.2410721-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261031050558.2410721-1-alexei.starovoitov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com
 
-On Sun, Nov 01, 2026 at 03:22:13PM -0800, Eric Biggers wrote:
-> On Fri, Oct 30, 2026 at 01:24:09AM +0200, Jarkko Sakkinen wrote:
-> > Introduce keyring_is_empty() in order to decouple for BPF, dm-verity and
-> > fs-verity how keyring internally manages the keys.
-> > 
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Hello:
+
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Sat, 31 Oct 2026 05:05:56 +0000 you wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
 > 
-> Reviewed-by: Eric Biggers <ebiggers@kernel.org>
-
-Thanks!
-
+> On x86-64 a prog whose main prog has a private stack and that calls
+> bpf_throw() returns to the kernel with wrong callee saved registers. The
+> kernel crashes. A tracepoint prog or an fentry prog with more than 48 bytes
+> of stack is sufficient.
 > 
-> - Eric
+> [...]
 
-Br, Jarkko
+Here is the summary with links:
+  - [bpf,1/2] bpf, x86: Fix bpf_throw() in a prog with a private stack
+    https://git.kernel.org/bpf/bpf/c/91068ed2d3ee
+  - [bpf,2/2] selftests/bpf: Test bpf_throw() in a prog with a private stack
+    https://git.kernel.org/bpf/bpf/c/6cc0cf0a6fb0
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
