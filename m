@@ -1,63 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.38.64.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793645924;
-	b=JYMfDjik139VzuOx1g6QIqLDojiGVaFxQ8rtuhCHi8MTKd0/mN/pioy5Gfj0B/qhWQYC
-	 aXIclxu5lX3o7N/vR02x88kS237FEDQAGnBh1SUYNFCcgewZVKn/ueHEtfd94iJIYKdce
-	 OA527Gc+6UxlBFPXlwzsYMGZ8Zt6AZUCLw0uLytukyqxTJTQR0sU+ZANdRIlWkwNnMqOR
-	 izM3k6P8wDaeUexRHGT9SPofl3Q6mqV2LS5ueidH4XETHPIt+0q9LIJx4A6EkxCM7z3CL
-	 thf26BrkLKI6FH965S/RBapfPqsGEdm/vENvgeC+D3SHaCtRKrJww6PKNrXGEUKLgzQ==
+	t=1793646244;
+	b=ol86P38o/HPPEL1xV6a1qVd5zuFx3TnENX0w2uCC67sd6WOrcW6ZZk9wd14zS2bbUyMb
+	 0NDl+Kj4GDibtq3WCvB8x82ioiTIAath+9lj9ejO5mvgpzmqLGZriK+qxpfTFWkMqIyq2
+	 uFPyL5fqQoD14ijwupWL07ljwz+IwniQYSplkMYci31ZC5wUyGKrAkncVu4OI1ePkdU5O
+	 MWIzY4McfBV2Ei4RIaT0+97kjE7wCQWEXKxIBC5/BgUvP27jqv4x5LmhDRu/oVYVqFfRs
+	 fu0/s5N0VZaUwBO/hFMeYBbg1LFpumI+fYG0nknD8R4acV1eKiz7lal82Omtxx4iT6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793645924;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=am9gbO9t1laaBz+RQEep0XjQMIvSeDCOgIen9Lu53BI=;
-	b=olTKl7DDMFssWONXNAotU/n+E5qOgCK1p+QX57mz2Kxryj011D/cQW7v1zL4/mn0Z2qK
-	 4pDFNbRmwxEt9/WH4e77HpV3FcA2pB5bECncRUn6Tmd93luWXqSVAeUALZmBEr6TrCzEE
-	 7V2Yqsghuy0AUUWVf23OSit2z1jhr3E+6H9xiHwaSHIvHt/Oo4HKr0u0ZFIrgXP3Jbws3
-	 9aXWDOkF2tFhMJPPsbHRfrxfv0Q8O2ykbKm94lua4n/gafB88fGYh+PQskshEhR6qJ+jb
-	 TFa68gohBESG70K7Qtk6zkJX34p5r2esofOc7Fp7PFawKa5zGuCZhO7Rg9cw0BtjQdw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793646244;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=dDvsp6aJlGEKeDcATsJhzvMBBTR1XxWiEUqe9sFTARk=;
+	b=lSlW8nVgAMzyFQRZzOvtKzrgAQUe87LLp5mUKroMxPpN1v4y6gpCys6OskjekXQA9QRs
+	 G/z/zxf1eKUXL3zqVmxpRd97NMqA3DhpO8zNUywH1X0BTHgWCXDDJ9cvolRLwK3PETLxF
+	 rz1P28YRa+40A+u97YM/Qafv+QInzy0O0omUoaqHjqVFzwoa7oFPNLko6srNxxShl+014
+	 XPaWAY5N39SsfA2INxcx/fBYUuXQTjYxCo9nxzvbHhG1qLCj9WO3jX+bcNyynotRMGo5u
+	 QW4DDiVOnOxYGeGnXc8/7AJ6o8VepHoEkLWjg/Lor4BtNnDQVWRjiWHow5gmbMVJS6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oB8Wzw8i;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1158606A326
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 18:58:44 +0000 (UTC)
+	dmarc=pass header.from=mail.ustc.edu.cn;
+	spf=pass smtp.mailfrom=mail.ustc.edu.cn;
+	dkim=pass header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=nAEtmD4v;
+	arc=none smtp.remote-ip=202.38.64.46
+Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E51BB606A326
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 19:04:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E51BB606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oB8Wzw8i
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 257EF1F00A16;
-	Mon,  2 Nov 2026 18:58:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793645924;
-	bh=am9gbO9t1laaBz+RQEep0XjQMIvSeDCOgIen9Lu53BI=;
-	h=From:To:Cc:Subject:Date;
-	b=oB8Wzw8iIbN1dm4VbSQBAL9WqstKscMDnzrGEgEdDJDCXNC3gGCILel8TTZkayCgF
-	 RI1K9xCbavMq7baEU/GKZMDmSSTLdPGZF5SMG6FCBBOW4tK6cZG4KLekDO/dQZB9Z+
-	 hPiqYpiTd9Uj96jGxFhCExYCqsu3JWKBwG+nmTqXKfaUG1CuHC/ea/EXYPG55gWSpX
-	 6YnnoOXbZIgVvebBE2bXpZBjWEMC23dCy8CuqPgns3gUp+gEMJ944UOt9IZceh4Ury
-	 WVRv8AdL41oofcTd1jX+kTjvKqoBhljo+5EJDOvPv2j5qlG7MAzYy28ze6mratx/of
-	 3urqYGgLNZWmQ==
-From: Alan Maguire <almagui@kernel.org>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	bpf@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Alan Maguire <almagui@kernel.org>
-Subject: [PATCH bpf] libbpf: Fix use-after-free in btf__add_type
-Date: Mon,  2 Nov 2026 18:58:39 +0000
-Message-ID: <20261102185839.1190122-1-almagui@kernel.org>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (1024-bit key, unprotected) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=nAEtmD4v
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+	Message-ID:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=dDvsp6aJlGEKeDcATsJhzvMBBTR1XxWiEU
+	qe9sFTARk=; b=nAEtmD4vui31bBk3Bf6NwEby375p+K1n3YGwCe/KzKVbI9R0yb
+	OpKv2zYGSdoAkGV5+EiEBaTyP4o1vV3xfzECzCTjxomUuWX0aKOKfv99VuOtcIou
+	ahrgtaAczxzz21vi8nlVKcCvH8iTetjEiJAPv4BWc3iWFPANZM4KEn1GI=
+Received: from localhost (unknown [222.195.81.114])
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgBHzECd3uhqVMx4AA--.1452S2;
+	Tue, 03 Nov 2026 03:03:57 +0800 (CST)
+From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf v2 1/2] bpf: Propagate scalar precision through stack arguments
+Date: Tue,  3 Nov 2026 03:03:49 +0800
+Message-ID: <20261102190350.788433-2-xyx2021@mail.ustc.edu.cn>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261102190350.788433-1-xyx2021@mail.ustc.edu.cn>
+References: <20261102190350.788433-1-xyx2021@mail.ustc.edu.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,65 +66,96 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:3pYKCgBHzECd3uhqVMx4AA--.1452S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr13Xw4UZFy8WF1xAw4fZrb_yoW5Wr4fpa
+	s7GFnIqw48JFW7uwnxAF48AFW5Wan5Ar1UGFWxAFyIqF1jqryY9F4UtFyayF47trWkX3yY
+	vFn0vrZ0va1kXFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9qb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+	C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq
+	07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r
+	15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vI
+	r41lc7CjxVAaw2AFwI0_JF0_Jw1lc2xSY4AK67AK6rWl42xK82IYc2Ij64vIr41l4I8I3I
+	0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+	GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+	0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0
+	rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJbIYCTnIWIevJa73UjIFyTuYvjxUxcdjDUUUU
+X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-From: Alexei Starovoitov <ast@kernel.org>
+Outgoing stack arguments retain scalar verifier state separately from
+registers and ordinary spills. State comparison uses their precision
+marks, but propagate_precision() does not carry those dependencies from
+a reused state to the current path's ancestors. A path can consequently
+reuse a state without making earlier checkpoints distinguish scalar
+values that will later be used as memory offsets.
 
-For every string btf_rewrite_str() does:
+Seed the existing backtracking batch with precise scalar argument slots
+from every frame. Incoming arguments live in the caller's outgoing
+slots, so include caller frames as well as the current frame.
 
-  off = btf__add_str(p->dst, btf__str_by_offset(p->src, *str_off));
+Also cover scalar argument slots in bpf_mark_all_scalars_precise(), so
+conservative fallback preserves the same invariant. Keep its existing
+ancestor-only traversal and leave pointer and uninitialized slots alone.
 
-When the string belongs to the base, the pointer goes into the raw data
-of the base. btf__add_str() looks the string up in the base first,
-btf__find_str() calls btf_ensure_modifiable() on the base, and that
-frees the raw data. Then strset__find_str() reads the freed string.
+AI assistance was used in preparing this patch.
 
-Make all the bases of dst modifiable before the pointer is taken.
-
-This bug is triggered by the sharing of BTF bases between src
-and dst, as introduced by the resolve_btfids changes to build
-inline BTF.
-
-Fixes: cf91a7db92c6 ("resolve_btfids: Build separate main and inline BTF objects")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Alan Maguire <almagui@kernel.org>
-Tested-by: Alan Maguire <almagui@kernel.org>
+Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
+Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 ---
- tools/lib/bpf/btf.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ kernel/bpf/backtrack.c | 11 +++++++++++
+ kernel/bpf/states.c    | 14 ++++++++++++++
+ 2 files changed, 25 insertions(+)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index d2ff6f5d6d5b..95c31803e722 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -2222,6 +2222,7 @@ struct btf_pipe {
- 
- static int btf_rewrite_str(struct btf_pipe *p, __u32 *str_off)
- {
-+	struct btf *base;
- 	long mapped_off;
- 	int off, err;
- 
-@@ -2234,6 +2235,19 @@ static int btf_rewrite_str(struct btf_pipe *p, __u32 *str_off)
- 		return 0;
+diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+index 43d5740034c0fdd53daf6ef572a56dce2eb78083..2d6535f271a67226ae972305033b0f7f19f58520 100644
+--- a/kernel/bpf/backtrack.c
++++ b/kernel/bpf/backtrack.c
+@@ -746,6 +746,17 @@ void bpf_mark_all_scalars_precise(struct bpf_verifier_env *env,
+ 						i, -(j + 1) * 8);
+ 				}
+ 			}
++			for (j = 0; j < func->out_stack_arg_cnt; j++) {
++				reg = &func->stack_arg_regs[j];
++				if (reg->type != SCALAR_VALUE || reg->precise)
++					continue;
++				reg->precise = true;
++				if (env->log.level & BPF_LOG_LEVEL2) {
++					verbose(env,
++						"force_precise: frame%d: forcing r11%d to be precise\n",
++						i, -(j + 1) * BPF_REG_SIZE);
++				}
++			}
+ 		}
  	}
- 
-+	/*
-+	 * btf__add_str() first looks the string up in the base BTFs of dst,
-+	 * which makes each of them modifiable and frees its raw data. If src
-+	 * shares a base with dst and the string lives in that base, the
-+	 * pointer taken below would be left dangling. So make the bases
-+	 * modifiable before the pointer is taken.
-+	 */
-+	for (base = p->dst->base_btf; base; base = base->base_btf) {
-+		err = btf_ensure_modifiable(base);
-+		if (err)
-+			return err;
-+	}
-+
- 	off = btf__add_str(p->dst, btf__str_by_offset(p->src, *str_off));
- 	if (off < 0)
- 		return off;
--- 
-2.56.0
+ }
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index a6ae86f973e359da688d51a3b3872f60c2ffa27c..50480c42bcad1e88fcb03146a9a876e06786bd9f 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -1116,6 +1116,20 @@ static int propagate_precision(struct bpf_verifier_env *env,
+ 			bpf_bt_set_frame_slot(&env->bt, fr, i);
+ 			first = false;
+ 		}
++		for (i = 0; i < state->out_stack_arg_cnt; i++) {
++			state_reg = &state->stack_arg_regs[i];
++			if (state_reg->type != SCALAR_VALUE || !state_reg->precise)
++				continue;
++			if (env->log.level & BPF_LOG_LEVEL2) {
++				if (first)
++					verbose(env, "frame %d: propagating r11%d",
++						fr, -(i + 1) * BPF_REG_SIZE);
++				else
++					verbose(env, ",r11%d", -(i + 1) * BPF_REG_SIZE);
++			}
++			bt_set_frame_stack_arg_slot(&env->bt, fr, i);
++			first = false;
++		}
+ 		if (!first && (env->log.level & BPF_LOG_LEVEL2))
+ 			verbose(env, "\n");
+ 	}
+
+base-commit: 03b013897454064e0a2d84a8ba9a24753eb02f2b
 
