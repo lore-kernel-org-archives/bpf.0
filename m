@@ -1,99 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.79.88.28
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793636468;
-	b=qEafUjKtP4ewWeHNFWoAawENMEnlW98lXRst7CnOFyWRXV4Q2i/Ux+S+Q9cirl4zV5ig
-	 +QJQZqFDkCv7UPw/lf2BaMGX1eAuQtJPbLhA2m9OfyGnHVAoqS1RRDksbQsAPueXxd0sD
-	 vLnQ3xMldY+24xt4Tm8GmspM3Jz3FzSZu8E1CnEwXbsgF7XZKP1mk2KwpE/3gU1JHGzak
-	 5o90P5rEFz3UDKOhWU7T31UH4NhGLPuDJlFsg9bXKwT8mcdqwaFmPKSsLSuB+FYaV7yqj
-	 PpzEDJbfrO6O4zXKtwTf0+flJ8c7GOgKUY3NtOWbOKeufQsXoMKbOWbAzsrxlUMjA9Q==
+	t=1793636470;
+	b=zePnik80oXEs9H1MuJXg03ZJRCwZRHcn19S14M4dJT/M9bp0hzpnlLndnePPzuyPR9BC
+	 NxhdcpbbwE878NpD08NkuQlhG35vNrXhPSM5k3HH7ay679JTW6WnVaGCg7Vwb4E2ZSfO9
+	 qXmuIr8tZswSvKddvy7paQ99lM1UJB9ZiONmgyvWlIW8WlmLPaXVXU8Xp8+Cz017ykvzo
+	 OIuBo27zAW9rIVdurJ/p6KCGxrgWccxVEfJvaIsoAZd3mlI1+fWV0ZkI1aw3IqduNml0z
+	 gMvtFWh4xFovsIBTR/5BAh8f+VkEQfdoZjYTeuUnDyFwpfmzTSWSJ91wB9FIY+GshCA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793636468;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=5mo//5iszunT69Ntkv8F5KhrsTxnizkW5ppwaMrOTwU=;
-	b=V0RUNVlYYMKJMzVwdsPW35+OezDYnKOEpc+FL7t2sIwHBsPsLPFvqd+1vpwdCgSYVvTw
-	 bOYiHJrCKQ4z/rDnz3GUtjJEeBEB6tVr4OgcBDvMN1hCjCWE4K4iDbsDKrwRHwBc+8aum
-	 ggMu/FLUROBP7VOldKwV2nCYNVoJamGmfM2dYjQp3eSKKKJjXSBZSSqyn3LwRnx4vb/lj
-	 D43R/i2qA0NUljXEIB1XBDffJ6oIkFxXD6Az19D64DXRj/eH6B10PCaN03v29aotHjzJG
-	 fZyGRU8upkz/jeNlr+HhmW5Ge5HbZWq0tjj03uyzdbyBDocn/Ij9/0+w+/60h7+J4kw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793636470;
+	h=DMARC-Filter:DKIM-Filter:DKIM-Signature:Received:From:To:Cc:Subject:
+	 In-Reply-To:References:Date:Message-ID:MIME-Version:Content-Type;
+	bh=pieKe5GiYH0kpv6II+hMND4COk8Q1hrQzu0fIwGjl0w=;
+	b=dwYTY2ja9NCRZ6NowWBspy513o1weD9+LR0vTYu20FE10YfHh85HXbbuWHKc3+qEJxjq
+	 kUIQ86W6Z1pNnkse+8QLgOtm0ZVf4g19HGquHOxiUaaST362lcyn8doa81a6KTMXuJZ0K
+	 9VA1mtzPoBdn5hpwtj9cc1APEd/KDBRC4djXIdsqgxveCtoWPDTgJgfbzFSa4GqNPYAl/
+	 EYZeD1CuA2m2l3Kpwaa1hGOrUyDiC9VbTQI5tDWFF1yQoxctNfbb+9jfWiYESz/4K6a7R
+	 9N+fNknKs6pN9pFzgVmxrx8KLFm65uoKPc7g62smRDku88zjN60gkFW+ijw2k9OwyoQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hlWMI7ef;
-	arc=none smtp.remote-ip=209.85.216.54
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=lwn.net;
+	spf=pass smtp.mailfrom=lwn.net;
+	dkim=pass header.d=lwn.net header.i=@lwn.net header.a=rsa-sha256 header.s=20201203 header.b=kczmzPau;
+	arc=none smtp.remote-ip=45.79.88.28
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9427E60703BC
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 16:21:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9427E60703BC
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8357A608440D;
+	Mon,  2 Nov 2026 16:21:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8357A608440D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hlWMI7ef
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ac7842c17dso1900191a91.3
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 08:21:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793636468; x=1794241268; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=5mo//5iszunT69Ntkv8F5KhrsTxnizkW5ppwaMrOTwU=;
-        b=hlWMI7eftQ8W/OE8uU3ILgMYzQHry+3zhXjvPuTaEaRJcpSsrbQHF4OF/9RCyzKcre
-         QbfN+fMOFcIfH1vIe2QYShyHlsMrQiqkP/r1JJMP9WnuYgzGkX7uhuqNqgaEA3lVj5Q3
-         1lgjCB2OOCjtZ4r99ogWkCgzewD6Tc20aV/ryg2L8mGEHZHgI14mfOJulrzLihKlJNP7
-         y0+CN5VBHjwRNaCRq/KSaBZnxNv8EDfuXZWlhKgguoaWKaLwXH/uYDZbG+J6SoXlWDdD
-         VdncapUpaMiXFOBDItiBK9S+SvjdzRrkYUSWMNSo0DYaTzKOHPuxb1nzrf2Jw60WPQy1
-         oRyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793636468; x=1794241268;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5mo//5iszunT69Ntkv8F5KhrsTxnizkW5ppwaMrOTwU=;
-        b=n0Hq+wTfuNLWXFLVEk/YrHU6+EwNyf82+czMnr7oOCD75HJS6TDUyoxtWcXOoyTtv0
-         lihT9XiDbPfXi/UeQe7Yff4yvEmWpLWBbcTdiT/uLSe8+d/FX7DipMutnHnXEcaVmAYd
-         t0tqcVlYrxFduQmM4S3bpslW5HdzkvSRery+tzEOFSo5gliknM4iCCemjcclRjzmh/6i
-         thu0HhpRnYxTpNhv0l0cRrX8T9SciJbvLiuVumYMwrJ5GVs1lAx7x2Eo9Fs8yrk97+iT
-         nWycscEssvk5uExtAK4zcXHzEeA6CVk7sbO7G2+FlclJvaGT4K2H1X+lxM4MwnK7pVam
-         MfHA==
-X-Forwarded-Encrypted: i=1; AKwUvByWGvHVrLfAKZXTd5eCvaLpCA6xV68Ri8PVXPsd++p9xYBCstQM8shwRcC4IVeOrL56Y2Y=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+5Qz2uzF9ySV58alsu2WX4bpuZMCmAPQnBv8qlW9mdU1OU2C1F
-	zSKEYC1L6uKYiq1jPLmjsEhlWcSBc02DGa0+IxDcHPUV3GGqgAePSmqB9/X+pA==
-X-Gm-Gg: AYBFou1JT0OpRLKbuNXczGkAuLH57y1IK1hD1JTFdKii+3vzEPS2uvSWUJXHr5svPsa
-	13XQEuuGjurPKt5Ospq883EtlqMWLS1SsMCk1uR6w+IGgGh8wmlHwq1/m2KwRKp13wcS5Hek5eJ
-	a4HcB2jAfJvNupC3yDrDz1Y5LE+lnDbnlbv8p3uVgxAqL0XveeC85wujSlPurwQrvd+zEghvbvM
-	y7vr4kaebTPsdPcCf2Z+rL+9C5A++TVR9H/sPOtXkTiZ2/DV6FxDkiPRa5C/9UC5vvG80aHhMUj
-	24AYxliFCF4+HErPplCqJYZmf6KGsgli3C4FmoAw4zjiw0ihdWzcvShe28MgX4RJ2mGQmJIwor7
-	U8zNAOHDOvbzIwnwq9tXClweUf8kLbwPUpukVl9iWClB6Fi+Z0Jpn34cT2CL0KyhhjWWj0KAusR
-	tTynrRbGeWtDcEq0IO4e1zLcg7l1eH8S1lBVX8WUdB7iLtQ04FxtguvieOoCO8hS9LPuBrjeaKi
-	tNR3Ogmvw2ed1OTLGLtOBGhShXIgA/7z0G/mTwat/+Tu7W8U6glNnLXyL+SeP4e5Gt4m6VE4f5G
-	/N54dfuWlEk15GKosUfon0Yk5rzeb5EG6/EivmmgCU0gg2iN7CR78p3NbNKv1jYLf/vZc4gF4u3
-	pVJJ/kwNOE2+sjIpouSt2Fw/cpmFTU5arOg==
-X-Received: by 2002:a17:90b:4b8a:b0:3ac:9259:122c with SMTP id 98e67ed59e1d1-3ae8977737emr7944503a91.40.1793636467693;
-        Mon, 02 Nov 2026 08:21:07 -0800 (PST)
-Received: from localhost ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e7d5b8csm19939285a91.1.2026.11.02.08.21.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 08:21:06 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 02 Nov 2026 16:21:06 +0000
-Message-Id: <DMKV29CMKFZB.11MEZ8S0HXFE4@gmail.com>
-Subject: Re: [PATCH 1/2] HID: bpf: serialize hardware operations with device
- destruction
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yifan Zhang" <yfzhang23@stu.pku.edu.cn>, "Jiri Kosina"
- <jikos@kernel.org>, "Benjamin Tissoires" <bentiss@kernel.org>,
- <linux-input@vger.kernel.org>
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <179362071770.29269.481376767482231629@stu.pku.edu.cn>
-References: <179362071770.29269.16022650793604369465@stu.pku.edu.cn> <179362071770.29269.481376767482231629@stu.pku.edu.cn>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=lwn.net header.i=@lwn.net header.a=rsa-sha256 header.s=20201203 header.b=kczmzPau
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A572240430
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1793636469; bh=pieKe5GiYH0kpv6II+hMND4COk8Q1hrQzu0fIwGjl0w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=kczmzPauziu1bkmTcGHrvTNYebY2GJg/E/hfOUZGjBMhcHjCAIn/SZ9y8V4tiJawY
+	 5ybJf68LIw7PPf1oP6xZNB1JVjIw/WpZExYWQJfzprvJsRJ54V1++jVFEoiJ5vUnMX
+	 1AmvXNXekCbTNrrNr/myXOnc+BAFwy2pQitwJVfKS5SwKngqTBG+e9+VznbfoPGPAD
+	 3hV8v7ZIZh5/oYRKrHklrgLuocl1VqoXhZb5s342SFkRnswNEQmobMqMn+4wm2EZGF
+	 ncCHvWJCKAg9FOy0uZB8FYSemm6PtLwiO+6zeNeQphMTWuH3P2gmjEGDCoCpXa5anI
+	 gVG0cihvsCZzQ==
+Received: from localhost (mdns.lwn.net [45.79.72.68])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id A572240430;
+	Mon,  2 Nov 2026 16:21:09 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Mark Severson <gr3yf0x87@skyn3tlab.com>, Federico Vaga
+ <federico.vaga@vaga.pv.it>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, workflows@vger.kernel.org,
+ linux-doc@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] docs: changes.rst: set the pahole minimum back to 1.22
+In-Reply-To: <20261022014811.2803450-1-gr3yf0x87@skyn3tlab.com>
+References: <20261022013432.2638010-1-gr3yf0x87@skyn3tlab.com>
+ <20261022014811.2803450-1-gr3yf0x87@skyn3tlab.com>
+Date: Mon, 02 Nov 2026 09:21:08 -0700
+Message-ID: <87pkwncih7.fsf@trenco.lwn.net>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,13 +71,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain
 
-On Mon, Nov 02, 2026 at 03:58 AM Yifan Zhang <yfzhang23@stu.pku.edu.cn> wrote:
-> Hold prog_list_lock across HID-BPF hardware operations.  Device destruction
-> sets destroyed while holding the same lock, so it waits for an operation
-> that has already started.  Later operations return -ENODEV before reaching
-> the low-level driver.  Apply the same lifetime rule to output reports.
+Mark Severson <gr3yf0x87@skyn3tlab.com> writes:
 
-sashiko is right. This will deadlock.
+> Commit fd5425b67355 ("docs, resolve_btfids: Document kfunc BTF
+> annotation emission") removed the paragraph saying that kfuncs annotated
+> with KF_IMPLICIT_ARGS need pahole v1.26, because resolve_btfids now
+> emits the kfunc BTF annotations that pahole used to produce. That
+> paragraph was the reason the requirements table lists pahole 1.26, and
+> the table was left unchanged. The text below the table and
+> lib/Kconfig.debug (DEBUG_INFO_BTF depends on PAHOLE_VERSION >= 122)
+> both still say 1.22.
+>
+> Set the table back to 1.22, in the English document and in the Italian
+> translation, which carries the same table, and remove the Italian
+> translation's copy of the paragraph that the English document no longer
+> has.
+>
+> Checked by building linux-next 20261021 with pahole v1.25 and
+> CONFIG_DEBUG_INFO_BTF=y: in the vmlinux BTF,
+> bpf_task_work_schedule_signal has four arguments and the bpf_kfunc decl
+> tag, and bpf_task_work_schedule_signal_impl keeps the
+> struct bpf_prog_aux * argument, as Documentation/bpf/kfuncs.rst
+> describes for KF_IMPLICIT_ARGS.
 
-pw-bot: cr
+I've applied this patch, but removed that last paragraph, which doesn't
+really belong in the permanent changelog.
+
+> Fixes: fd5425b67355 ("docs, resolve_btfids: Document kfunc BTF annotation emission")
+> Assisted-by: Claude
+
+This line is no longer required, so I took it out as well.
+
+> Signed-off-by: Mark Severson <gr3yf0x87@skyn3tlab.com>
+
+Thanks,
+
+jon
