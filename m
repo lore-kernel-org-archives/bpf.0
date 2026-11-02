@@ -1,57 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793624094;
-	b=sgDkvzjtJCLgdclrvaCNymYKbnVsGP8EFGXn1D4DAAVF1SPlTCV1g/c6xhtj+qlStC7S
-	 cu7yEMVRX1ndmh2I6JGana/40iMbhUoC9IQYVhrNAC5Se+hv/6hrsBdAnQTE5pMxamb90
-	 ObvhuioRZ14sjHE2MP73qrV6pwniei741AnzD3wqp9NjzzColpsh1V8XjEo6NDd7iCVC9
-	 +6kyIleKVbwF+FHgyJh+PLW2XvJXy7GmXfC6GITKAlHvQ3LIjl6Vkk9fUOsDlpQVb3TpB
-	 TIYJRxfb9+lmqj9r7laNguE93UQ7F2gpEPsOMQ/9f6yjrCNWQPEQs4p2eXHilB7UaWQ==
+	t=1793625409;
+	b=lM6C1JeQrzxIwy1jgODB94GmIH4f2gz+rFjz8ytITywlTpwWdyqPNAhrVOWrek7MQOk2
+	 /iQXOUejUOSA2dIRHZD9ipDZ2QXGwO2tbYELMez916kb0v0IXQ7t+u+f/iJ5A0yipBIFy
+	 77POgPKDH7VG44HSFWyC21Vu/QynkpMMUPEilZkuCLt2C+Lr+goB/VCgOuNktcbeegtc3
+	 44Ia+0M7lDjqHaPplFIZmouI2MU62ft6qvSsmp2DBHcz9pVPuSsQG4PVuNcFUBlEKm8TM
+	 HRFSUXmIp3t0qU6FOfEu8sRpDwpylIG9SKL8jl9/x0M/Qv0zJovwtdwgTCPMtDgakag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793624094;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=rhCR3GMcoFaPhbJWeqssm+oshTEDc/Z1DTzgGJ6PpLc=;
-	b=FWZmgVYNW088zEzosZNKP/EkELgQdc3/9Vy3kRe0NATNvaoYhEw1aPb4p0Oho8aAYCD1
-	 yMY2f4O9j+I3Dc2qiHXe85Z9LvUkD5RPCJxLM0iEisI93tXfwv+jK956ioMDTyQiSRvdT
-	 +hkZM6FXYKQ2LdHvCe6I09Ley6QAE/xJI3cK2DZz9G4ggussCwg2lGhPUpvhAqyAea7Al
-	 vR3S3IGmau1t1xsUNdaM8o6MwP16J5UEPndhXrs00flwCMaUsxBV9zDHPuO8DKjDerJe2
-	 suDaRzV6O6UhUFYec7fa2t7VBtN3/KAeKZM2b0yGMMwWTxd7vgR1xqSr7CkIFSE4TYw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793625409;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=NTGss7nnEBqzeWJCl9cFJRFgTFm2OzdJpRqK90NLg+Q=;
+	b=hYOHiZPql1+oGeV3NFiJacAB6wjkTukhUC2aTlLWAL/VLg0ICLy9FeRHXWev4IeOgTVw
+	 Q0uMSPjqtlLXaSrihZ6j3a6K392iyp6jBfrTarBP0zv8whfY970l9sQc4ysB3ys1PUVp9
+	 EK7YajW/ml1LG/MXPY+mCuE5JYVmZS9IiOAuQSrxVVU6RtMECCd0L7f4VxOzzKsaTkBcD
+	 po+i4+9uwaPLlRmOoPd/mK9Z/JgIZUKda6c0a2tsprdTdQaeB6eW5E4hZUIglUO9vLhhO
+	 bppp5utBnf4/owuHRNOJdxDC4W/Aaw+NBh8LJD8LnUkpRPtCpguo1/XXNTfb5fneVAw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SCtL+5y+;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C88606A32D
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 12:54:53 +0000 (UTC)
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=RBL4VMAQ;
+	arc=none smtp.remote-ip=111.22.67.137
+Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E2F606A32C
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 13:16:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51E2F606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SCtL+5y+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20AE91F00A16;
-	Mon,  2 Nov 2026 12:54:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793624093;
-	bh=rhCR3GMcoFaPhbJWeqssm+oshTEDc/Z1DTzgGJ6PpLc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SCtL+5y+2tnT4d6vfGdqbn1deSagDHuucmwjYl8o9FXv91AaaO56RKOwhUD1x7PB2
-	 I2pjIsZMuZb2Y3jGFL/RhwI4O+181TCW3dT62e1EjiDcg7YYrBDMqZtRS3xhzkpwhX
-	 yHViVXN/VRq1nKwi0Rxzpd2DYVJH9ENrVLgGBJSOZ0nBEgm05yxjtFArDU50/Zvf5D
-	 +53iMwZ7bDPJ81AYW4fgWyP2dB8zdAGzTspWDMUwBBG3ypbAJ3fCLw6utatBZb4AXw
-	 /ui6+x2joPulOJyrB4cPnqOW9eg1EaNcH0aDsBfwdn/+d/8XlTmZeqH//zc9gVygnQ
-	 nsYbkyQPl7dAw==
-Message-ID: <sashiko-outbox-193449@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 2/2] bpftool: Make the LLVM disassembler an
- optional runtime dependency
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mark Korenberg" <socketpair@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261102-bpftool-plugin-v4-2-5a853e973db9@gmail.com>
-References: <20261102-bpftool-plugin-v4-0-5a853e973db9@gmail.com>
- <20261102-bpftool-plugin-v4-2-5a853e973db9@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 02 Nov 2026 12:54:52 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=RBL4VMAQ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=RBL4VMAQ9JQmgGWX5pDJAcexw5vyXICem7DnyVCcdwTGA2NEcAp5UYVf8oNDvMA1+wOhx0OCaD9OV
+	 WMYkGR5uCBHax4WE6IM80u3XUPAtXOaD+o2pNNaieAX9E4Qvld9xmCNYg1C1UslQ1PRuuaGg2cnE91
+	 opwn339Z/c7Iqjtw=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee46ae88d37561-29e7d;
+	Mon, 02 Nov 2026 21:16:44 +0800 (CST)
+X-RM-TRANSID:2ee46ae88d37561-29e7d
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from FHB-W5100250 (unknown[36.137.216.21])
+	by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee26ae88d31524-d2f35;
+	Mon, 02 Nov 2026 21:16:44 +0800 (CST)
+X-RM-TRANSID:2ee26ae88d31524-d2f35
+From: Gu Bin <gubin@cmss.chinamobile.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	alan.maguire@oracle.com
+Subject: [PATCH v2] libbpf: Fix ENODATA comparison and unbounded zero-scan in btf_dump
+Date: Mon,  2 Nov 2026 21:16:31 +0800
+Message-ID: <20261102131632.1124-1-gubin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.50.1.windows.1
+In-Reply-To: <20261102085122.916-1-gubin@cmss.chinamobile.com>
+References: <20261102085122.916-1-gubin@cmss.chinamobile.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,86 +70,92 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpftool: resolving LIBLLVM_SO with realpath breaks dlopen() in d=
-isasm_init()
---
+In btf_dump_type_data_check_zero(), the BTF_KIND_STRUCT/UNION branch
+compares the per-member result with ENODATA (no minus sign), unlike
+every other branch which uses -ENODATA.  The function returns
+-ENODATA, 0, or propagated errors such as -EINVAL and -E2BIG; it never
+returns the positive ENODATA, so the comparison is always true and the
+loop bails out on the first member: a struct whose later members are
+non-zero is reported as empty and skipped by the dumper.
 
-commit 97021edb72f7e0a08dad16e3c0be0bb0e347592d
-Author: Mark Korenberg <socketpair@gmail.com>
+Separately, the zero-scan loops over struct/union members and array
+elements do not check for overflow: btf_dump_type_data_check_overflow()
+only validates base types, while the scan recurses into aggregates and
+reads member data without bounds checks.  The library explicitly
+supports a data_sz smaller than the type size, so the scan can read
+past the caller's buffer, similar to the OOB read fixed by commit
+5714ca8cba5e ("libbpf: Fix OOB read in btf_dump_get_bitfield_value").
 
-bpftool: Make the LLVM disassembler an optional runtime dependency
+Fix the comparison to use -ENODATA, so the zero-scan visits every
+member and a nested struct or union whose leading members are zero is
+dumped when a later member is non-zero.  Also bound the zero-scan:
+call btf_dump_type_data_check_overflow() on each struct/union member
+and array element before the check_zero() recursion, mirroring what
+the dump path does before reading a value.
 
-This commit avoids linking bpftool directly against shared libLLVM.so at
-build time and instead loads it dynamically with dlopen() and dlsym() in
-disasm_init() when running "bpftool prog dump jited".
+Fixes: 920d16af9b42 ("libbpf: BTF dumper support for typed data")
+Signed-off-by: Gu Bin <gubin@cmss.chinamobile.com>
+---
+Changes in v2 (addressing the bpf-ci review of v1):
 
-Link: https://github.com/libbpf/bpftool/issues/262
+- v1's commit message claimed check_zero() "only ever returns
+  -ENODATA"; it actually returns 0, -ENODATA, or propagated errors
+  (-EINVAL, -E2BIG), and never the positive ENODATA, which is what
+  makes the comparison always true.  Reworded.
 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index b0f7168e79432..876bf3cf93e3b 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -186,10 +186,18 @@ ifeq ($(HAS_LLVM),1)
->    # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
->    # compilation error due to redefinition. Let's filter it out here.
->    CFLAGS  +=3D $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflag=
-s))
-> -  LIBS    +=3D $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENT=
-S))
-> +  LIBLLVM_SO :=3D $(shell $(LLVM_CONFIG) --libfiles $(LLVM_CONFIG_LIB_CO=
-MPONENTS))
->    ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
-> +    LIBS +=3D $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS=
-))
->      LIBS +=3D $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COM=
-PONENTS))
->      LIBS +=3D -lstdc++
-> +  else ifeq ($(words $(LIBLLVM_SO)),1)
-> +    # Don't link with libLLVM.so. "prog dump jited" loads it with dlopen=
-().
-> +    CFLAGS +=3D -DLIBLLVM_SO=3D'"$(notdir $(realpath $(LIBLLVM_SO)))"'
+- v1 fixed only the sign.  That made the struct/union zero-scan walk
+  past the first member for the first time, making an existing
+  unbounded-scan OOB reachable on that path (the array branch already
+  had the same unbounded scan, it just was not triggered by the sign
+  bug).  v2 bounds both loops by running check_overflow() on each
+  member/element before the check_zero() recursion.
 
-[Severity: Medium]
-Will resolving LIBLLVM_SO with $(notdir $(realpath $(LIBLLVM_SO))) cause
-dlopen(LIBLLVM_SO, RTLD_NOW) in disasm_init() to fail on distributions such
-as Debian and Ubuntu, or across point-release upgrades?
+- The message now also states the behaviour change: nested
+  structs/unions whose leading members are zero are no longer
+  reported as empty when a later member is non-zero.
+---
+ tools/lib/bpf/btf_dump.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-Because $(notdir ...) strips the directory path and LDFLAGS only receives
-llvm-config --ldflags without an rpath, dlopen() in
-do_dump()->disasm_init() searches only the default runtime dynamic loader
-paths:
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 7dedd3975c39..113d89ef1cd9 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -2533,6 +2533,12 @@ static int btf_dump_type_data_check_zero(struct btf_dump *d,
+ 		 * non-zero because the string is terminated.
+ 		 */
+ 		for (i = 0; i < array->nelems; i++) {
++			/* Check overflow first, as the dump path does. */
++			err = btf_dump_type_data_check_overflow(d, elem_type,
++				elem_type_id, data + (i * elem_size),
++				bits_offset, 0);
++			if (err < 0)
++				return err;
+ 			if (i == 0 && ischar && *(char *)data == 0)
+ 				return -ENODATA;
+ 			err = btf_dump_type_data_check_zero(d, elem_type,
+@@ -2565,9 +2571,15 @@ static int btf_dump_type_data_check_zero(struct btf_dump *d,
+ 			 * of member can retrieve it.
+ 			 */
+ 			bit_sz = btf_member_bitfield_size(t, i);
++			/* Check overflow first, as the dump path does. */
++			err = btf_dump_type_data_check_overflow(d, mtype, m->type,
++							       data + moffset / 8,
++							       moffset % 8, bit_sz);
++			if (err < 0)
++				return err;
+ 			err = btf_dump_type_data_check_zero(d, mtype, m->type, data + moffset / 8,
+ 							    moffset % 8, bit_sz);
+-			if (err != ENODATA)
++			if (err != -ENODATA)
+ 				return err;
+ 		}
+ 		return -ENODATA;
+-- 
+2.55.0.windows.3
 
-tools/bpf/bpftool/jit_disasm.c:disasm_init() {
-	...
-	lib =3D dlopen(LIBLLVM_SO, RTLD_NOW);
-	if (!lib) {
-		p_err("failed to load %s: %s", LIBLLVM_SO,
-		      dlerror() ?: "unknown error");
-		return -1;
-	}
-	...
-}
 
-On Debian and Ubuntu, the runtime package installs the actual shared object
-at /usr/lib/llvm-X/lib/libLLVM.so.1 (a private directory not in the default
-ld.so search path) and exposes it in /usr/lib/<multiarch>/ only through
-symlinks named after the ELF soname (such as libLLVM.so.19.1 or
-libLLVM-19.so.1). Applying realpath resolves the symlink back to
-/usr/lib/llvm-X/lib/libLLVM.so.1, and notdir turns that into "libLLVM.so.1",
-which does not exist in /usr/lib/<multiarch>/.
 
-Similarly, on builds where libLLVM.so is a symlink chain through the soname
-(for example libLLVM.so.20.1) to a full point-release filename (for example
-libLLVM.so.20.1.8), realpath bypasses the soname symlink and embeds the
-exact point-release filename, which breaks dlopen() after a point-release
-update of the runtime package.
-
-Would it be better to extract the ELF soname from $(LIBLLVM_SO) (for example
-with readelf or objdump) instead of using realpath?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102-bpftool-pl=
-ugin-v4-0-5a853e973db9@gmail.com?part=3D2
