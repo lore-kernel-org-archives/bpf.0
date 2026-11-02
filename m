@@ -1,67 +1,128 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793625409;
-	b=lM6C1JeQrzxIwy1jgODB94GmIH4f2gz+rFjz8ytITywlTpwWdyqPNAhrVOWrek7MQOk2
-	 /iQXOUejUOSA2dIRHZD9ipDZ2QXGwO2tbYELMez916kb0v0IXQ7t+u+f/iJ5A0yipBIFy
-	 77POgPKDH7VG44HSFWyC21Vu/QynkpMMUPEilZkuCLt2C+Lr+goB/VCgOuNktcbeegtc3
-	 44Ia+0M7lDjqHaPplFIZmouI2MU62ft6qvSsmp2DBHcz9pVPuSsQG4PVuNcFUBlEKm8TM
-	 HRFSUXmIp3t0qU6FOfEu8sRpDwpylIG9SKL8jl9/x0M/Qv0zJovwtdwgTCPMtDgakag==
+	t=1793625648;
+	b=CxXsafqML2nrZC39qsI9iVngNqWalBeRXPGVE2tZEUprjVbplxCxTyQ56ceu8RvLgNHV
+	 Dj4SOF5gHpWIdTOQI3NpFs7HD6hiRoDmDnQ6zqnVPXNB6gRu4Xfc1rlpBCFJJxbzcj2vK
+	 WZhoydmF4lY9pBeG0XkkxBw8J2fuy/TZ5b4WgDmrD2ECea71Yu1kMu/uZ73eOhXecOfjI
+	 n5Zavrg8+w+xRaK5tUKtkq7RWBvkKKeLwZM9PJDagZYOaOtMEZYP0AOp+Cdp7xX0TfWus
+	 mHdTN5RhBOm1BjnUF/35aqBMBP9Ory/CVj21zH+syCs0NCYQ6dWqd9cL7E2pFbMMGvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793625409;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=NTGss7nnEBqzeWJCl9cFJRFgTFm2OzdJpRqK90NLg+Q=;
-	b=hYOHiZPql1+oGeV3NFiJacAB6wjkTukhUC2aTlLWAL/VLg0ICLy9FeRHXWev4IeOgTVw
-	 Q0uMSPjqtlLXaSrihZ6j3a6K392iyp6jBfrTarBP0zv8whfY970l9sQc4ysB3ys1PUVp9
-	 EK7YajW/ml1LG/MXPY+mCuE5JYVmZS9IiOAuQSrxVVU6RtMECCd0L7f4VxOzzKsaTkBcD
-	 po+i4+9uwaPLlRmOoPd/mK9Z/JgIZUKda6c0a2tsprdTdQaeB6eW5E4hZUIglUO9vLhhO
-	 bppp5utBnf4/owuHRNOJdxDC4W/Aaw+NBh8LJD8LnUkpRPtCpguo1/XXNTfb5fneVAw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793625648;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Date:From:
+	 To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To:X-Proofpoint-GUID:
+	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=KlXD+aOR63c/FOljEMI3DnU5RwdrA1mGi00aGRNoEI0=;
+	b=otQ8hWVu4CJLY5SPlx1qoz4h8DkFQj21PuYJJe27PdP1lckoxI3t7mNb6TZw68t0/sgi
+	 INGCMbKM96CXfjp64eS+irTyrM37zK7REQg0k8g53sUrnD2sAzUk11fHw0BA5rggCn4yy
+	 osANOebiGGh0P5o/fN5Z30aEsiHdLh1cf275ZBCZfioxNsE25Ys0gA4ykjC+NLYceKJCA
+	 zataTUVBQq1V6ueOHKFHIKv7YnLqqViQfC7saQWveC4QEod3LjI4Tsm1PcsedOXsuW44c
+	 u+tDyv4pO3fAzj+/j4cpY8lwZ8thd0s2plhVu5FupOqd3cMCvtsP19pQjdWRGh0USvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=RBL4VMAQ;
-	arc=none smtp.remote-ip=111.22.67.137
-Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E2F606A32C
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 13:16:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51E2F606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	dmarc=pass header.from=oss.qualcomm.com;
+	spf=pass smtp.mailfrom=oss.qualcomm.com;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Hp39N+GV;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=Z4jJayBe;
+	arc=none smtp.remote-ip=205.220.180.131
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F60606A326
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 13:20:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 94F60606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=RBL4VMAQ
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Hp39N+GV;
+	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=Z4jJayBe
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A2DALfn388214
+	for <bpf@vger.kernel.org>; Mon, 2 Nov 2026 13:20:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=KlXD+aOR63c/FOljEMI3DnU5
+	RwdrA1mGi00aGRNoEI0=; b=Hp39N+GV8u/o8iM+5Myo10stt656PODJcvKDZxE7
+	JWSrdiOFqnM0taNmJ2WLDI1yBnsflmLiOqu5nWXXPBDNljgh4vDtt99cTfWdclj2
+	iRjf2t3wUk6r0FCP+gHLTJy3CtwADEjbnsFO8SCW7Mnw3p2odyJiHX21Kdv/dl0V
+	Q9ri2/YP9yBaUSsFeRifCzBsYyu1IP4GVpq1U0WXmdKRdKWesfrPKami20fCdIcB
+	br5iLA/1ICURZPPV8hnL/8P3yadRhZlhktl3bRn/SgDx/5fqBJ27PUwJuZjOdDFo
+	Ld47SFfCV8Jh2kQeuc7CPRxuc1n+DwpZikCIhzMMZb8DtQ==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hpph1993w-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 13:20:46 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-93f322ef7d3so564694685a.0
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 05:20:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=RBL4VMAQ9JQmgGWX5pDJAcexw5vyXICem7DnyVCcdwTGA2NEcAp5UYVf8oNDvMA1+wOhx0OCaD9OV
-	 WMYkGR5uCBHax4WE6IM80u3XUPAtXOaD+o2pNNaieAX9E4Qvld9xmCNYg1C1UslQ1PRuuaGg2cnE91
-	 opwn339Z/c7Iqjtw=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee46ae88d37561-29e7d;
-	Mon, 02 Nov 2026 21:16:44 +0800 (CST)
-X-RM-TRANSID:2ee46ae88d37561-29e7d
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from FHB-W5100250 (unknown[36.137.216.21])
-	by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee26ae88d31524-d2f35;
-	Mon, 02 Nov 2026 21:16:44 +0800 (CST)
-X-RM-TRANSID:2ee26ae88d31524-d2f35
-From: Gu Bin <gubin@cmss.chinamobile.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	alan.maguire@oracle.com
-Subject: [PATCH v2] libbpf: Fix ENODATA comparison and unbounded zero-scan in btf_dump
-Date: Mon,  2 Nov 2026 21:16:31 +0800
-Message-ID: <20261102131632.1124-1-gubin@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.50.1.windows.1
-In-Reply-To: <20261102085122.916-1-gubin@cmss.chinamobile.com>
-References: <20261102085122.916-1-gubin@cmss.chinamobile.com>
+        d=oss.qualcomm.com; s=google; t=1793625646; x=1794230446; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=KlXD+aOR63c/FOljEMI3DnU5RwdrA1mGi00aGRNoEI0=;
+        b=Z4jJayBeCpCOB+DmqGIDXTa4403oNvghHKRFf76XUf8NcpmUFf6ZAbYsFZKp2znIuN
+         o96Fn/3w7hgNu9mFt5qgmmo8T0loybUO20sGVRlL0b+oi+A3yhMLAKmqQVzHXlcLcw/w
+         X3SlBuOckpLC8LRqkeqcxoWxE/8zG6PSaAk68Bt8MlpsnBqxLrKT31tc+uExT8grpRzB
+         UignzlsJi6Jc2Vi6sK7cLJtFPEdM9mkDu/dzC9zytHpbzjKRMcKONQtVMCEsL8nPO7Hy
+         XhakxN5p/12h9xroDwnk+IdUlT9ufEgn89saA0HDy+Mxwmi4qhJr9M+TEPEYHXxEmvDw
+         BLrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793625646; x=1794230446;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KlXD+aOR63c/FOljEMI3DnU5RwdrA1mGi00aGRNoEI0=;
+        b=PjViQw+1CbRlf7JxMXSvHWXgv1PZdZaz1ZcwzL8ZO40JYaYtzMMjC0tU0ryJBptEJs
+         aZawn9NtzDryxTHutCex0T3VuptmCZ/QM27xltFIUgR8LVUphpy41aZFTmTvB6j/tRxH
+         jWAju5dVDYfh88h4ZVlZQx7l7hWnwWTlIgDQJHd/mExtT0tb8VnV9QlMefx6ARkA7e5Q
+         dNIBdlA2Kp4jU+3m8Acf/mVC4r0ftQa1rUkSOYHUO0lmFUAr1Xe2dQhkwR9hhK0AwkDy
+         cHqpBbG0mdmsrIyQ+JoTHLKiGuuw3tlAUwTGY+d4YwcRNrN6BDJsLCwikO6F/GACRibC
+         M0sg==
+X-Forwarded-Encrypted: i=1; AKwUvBwjl4tN0v3S1buaqWSzaa2P+DqwOXy4NMhvLiAAel5+AM7Lr8niDR8/E9eGATVP6E+SiW8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJyR1lh2/NuGxkWoSm/lm8JZmOTFV3Quymw9B7wgk0mA5JZiHNH
+	TE6w54SwyC/h5Vd3TA4ywKL2fbLv69rUoLjRnfXLY7jfT+RB/O/T8OHT0ROY3CuK8eSv1JK/bVk
+	3W0tTtv9EVhg+fEdVpCDVPpCXtpoN/kVOa7qu+bOYsTlbqzKMne2psPY=
+X-Gm-Gg: AYBFou2FnyzeqCa9yYNrwSMKON4UhOShoLjaDmGQvhyDuUI3NiqINZQ5cuKOzsDhPhI
+	HCe+0ex5LzC5TOUu+GEllKVTkt9hgEfH+M1MpkZ3rZbY4U5NYXgp2mHfI8ahQtvjwR0uA1l5IIF
+	Y0FU7Xei3sDchSUZCwqh8JzMXFvxrXuf/vtVZLzwsxfi35yzKo8zi0d55+YHY1KNTlkkDkL87kT
+	4D8PvD69pBbVXeTba8zxCqiwt4tW8PbdfnV1964fEMKk4IAlWdRK49g8LX36OCFPtU/IS4ESWUV
+	1OIzMNQMh0wpkMlSleK5sa5f4BosAHSMOM56xZfO6PaLPOZGYHOHfR9vxI0ZnQ/7DUX2o6DLQ3p
+	mKLUrZAfsdvyVk0Tu1wQeun2VD6UMBN9rU4Vbn3e05OjyMIh3zd10I1/EZnRkyg==
+X-Received: by 2002:a05:620a:618e:b0:93c:6e1d:96b4 with SMTP id af79cd13be357-944217b4de9mr1533408885a.62.1793625645507;
+        Mon, 02 Nov 2026 05:20:45 -0800 (PST)
+X-Received: by 2002:a05:620a:618e:b0:93c:6e1d:96b4 with SMTP id af79cd13be357-944217b4de9mr1533404985a.62.1793625644858;
+        Mon, 02 Nov 2026 05:20:44 -0800 (PST)
+Received: from localhost ([93.66.104.131])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ad414e298bsm125215315e9.2.2026.11.02.05.20.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 05:20:43 -0800 (PST)
+Date: Mon, 2 Nov 2026 14:20:43 +0100
+From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+To: netdev-bot+sinfo@kernel.org
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>,
+        Song Yoong Siang <yoong.siang.song@intel.com>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net] net: stmmac: set XDP metadata length on the
+ page_pool RX path
+Message-ID: <auiOKxu4PY2lGgkP@lore-desk>
+References: <20261102-stmmac_meatada_pp_path-v1-1-d93cc4f9a864@oss.qualcomm.com>
+ <179362019361.3286.8732260602904932373@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -71,91 +132,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hEQCQpva2igBtHcT"
+Content-Disposition: inline
+In-Reply-To: <179362019361.3286.8732260602904932373@kernel.org>
+X-Proofpoint-GUID: KZbsalTkr1ueXha6qpodORQX-L_VBvBv
+X-Authority-Analysis: v=2.4 cv=IruL47/g c=1 sm=1 tr=0 ts=6ae88e2e cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=cAAIdyqZgEis9HJxay2Blw==:17
+ a=zJRp6_cAMcgA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22 a=jeKYxtEjmYGD5WCmXysA:9
+ a=CjuIK1q_8ugA:10 a=Go-FRpC6VwjTotnDkukA:9 a=NFOGd7dJGGMPyQGDc5-O:22
+X-Proofpoint-ORIG-GUID: KZbsalTkr1ueXha6qpodORQX-L_VBvBv
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTAyMDA1MyBTYWx0ZWRfXzDOaai6aeFew
+ rCNy2XHSUo5Rswgvp5V+X0aAmvsQdS/n2gI6pYtqENid6iXaHFz7OAjl0eJo7WSxCyKOqunM+6i
+ uPVZpz807B1Tkr8npLmbytxMIR58NV+ND9JLeN5Db4R0R9WLpeFh3wBjwuXh82F5phcsgXwiDI4
+ faQ1K9EOb6j/mcgwub7ib2sRd2MS3uXXZgVyvKb8VMcYy6+1nI4rA1J7sEsgF1Fdc6PThhoHY1R
+ cRBNk4J22ETY8wh41gpwJDnICT4cOlrYfVg/WZNEKDaN5u18skZgLSg//WyLzZHxbiQe0CPuMUP
+ SWrRcI55BBQcXfGViy0TsYZN4XzgObH686iJgNw8DuEjbsNC20cEVKNA4lqJBMqX8/0XDHJ/ymL
+ zzZDoMtb/SQgpbN7O0l/3XNU4cVDYl8Qlhfyja8lTS4THmfl1duEYBzZnYopOu+bhLE2DJpXTVR
+ HTI1RoU1dVqH4ascGEQ==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTAyMDA1MyBTYWx0ZWRfX8c6uKJtGCfG9
+ t63RekseXKUmuhzGEUPW9fZjN9PJQtoiKu9iofpnwLTSLbv/d0aHNMqoaCINKPZMK5TnXBCMWTk
+ dngPLz2L2iafgVdnXIoG6187g8zGL00=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-02_03,2026-11-02_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 adultscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0
+ spamscore=0 impostorscore=0 clxscore=1015 bulkscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610300000 definitions=main-2611020053
 
-In btf_dump_type_data_check_zero(), the BTF_KIND_STRUCT/UNION branch
-compares the per-member result with ENODATA (no minus sign), unlike
-every other branch which uses -ENODATA.  The function returns
--ENODATA, 0, or propagated errors such as -EINVAL and -E2BIG; it never
-returns the positive ENODATA, so the comparison is always true and the
-loop bails out on the first member: a struct whose later members are
-non-zero is reported as empty and skipped by the dumper.
+--hEQCQpva2igBtHcT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Separately, the zero-scan loops over struct/union members and array
-elements do not check for overflow: btf_dump_type_data_check_overflow()
-only validates base types, while the scan recurses into aggregates and
-reads member data without bounds checks.  The library explicitly
-supports a data_sz smaller than the type size, so the scan can read
-past the caller's buffer, similar to the OOB read fixed by commit
-5714ca8cba5e ("libbpf: Fix OOB read in btf_dump_get_bitfield_value").
+> Hi!
+>=20
+> This is an automated message. This series looks like a fix, but its
+> commit messages seem to be missing some information:
+>=20
+>  - How the issue was discovered, e.g. hit in production, hit during
+>    development, syzbot report, manual code inspection, LLM or static
+>    analysis tool scan.
 
-Fix the comparison to use -ENODATA, so the zero-scan visits every
-member and a nested struct or union whose leading members are zero is
-dumped when a later member is non-zero.  Also bound the zero-scan:
-call btf_dump_type_data_check_overflow() on each struct/union member
-and array element before the check_zero() recursion, mirroring what
-the dump path does before reading a value.
+The issue has been reported by sashiko
 
-Fixes: 920d16af9b42 ("libbpf: BTF dumper support for typed data")
-Signed-off-by: Gu Bin <gubin@cmss.chinamobile.com>
----
-Changes in v2 (addressing the bpf-ci review of v1):
+>=20
+>  - Whether the issue was actually triggered, or is only theoretical
+>    (e.g. found by code inspection). If it was triggered please include
+>    the symptoms, like the stack trace or error messages.
 
-- v1's commit message claimed check_zero() "only ever returns
-  -ENODATA"; it actually returns 0, -ENODATA, or propagated errors
-  (-EINVAL, -E2BIG), and never the positive ENODATA, which is what
-  makes the comparison always true.  Reworded.
+This is a real issue found by sashiko
 
-- v1 fixed only the sign.  That made the struct/union zero-scan walk
-  past the first member for the first time, making an existing
-  unbounded-scan OOB reachable on that path (the array branch already
-  had the same unbounded scan, it just was not triggered by the sign
-  bug).  v2 bounds both loops by running check_overflow() on each
-  member/element before the check_zero() recursion.
+>=20
+>  - What hardware the change was tested on. For driver fixes please
+>    mention the device (and if relevant firmware version) used for
+>    testing, or say that the change was not tested on real hardware.
 
-- The message now also states the behaviour change: nested
-  structs/unions whose leading members are zero are no longer
-  reported as empty when a later member is non-zero.
----
- tools/lib/bpf/btf_dump.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+I tested the patch on Qualcomm rb3-gen2 board
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 7dedd3975c39..113d89ef1cd9 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -2533,6 +2533,12 @@ static int btf_dump_type_data_check_zero(struct btf_dump *d,
- 		 * non-zero because the string is terminated.
- 		 */
- 		for (i = 0; i < array->nelems; i++) {
-+			/* Check overflow first, as the dump path does. */
-+			err = btf_dump_type_data_check_overflow(d, elem_type,
-+				elem_type_id, data + (i * elem_size),
-+				bits_offset, 0);
-+			if (err < 0)
-+				return err;
- 			if (i == 0 && ischar && *(char *)data == 0)
- 				return -ENODATA;
- 			err = btf_dump_type_data_check_zero(d, elem_type,
-@@ -2565,9 +2571,15 @@ static int btf_dump_type_data_check_zero(struct btf_dump *d,
- 			 * of member can retrieve it.
- 			 */
- 			bit_sz = btf_member_bitfield_size(t, i);
-+			/* Check overflow first, as the dump path does. */
-+			err = btf_dump_type_data_check_overflow(d, mtype, m->type,
-+							       data + moffset / 8,
-+							       moffset % 8, bit_sz);
-+			if (err < 0)
-+				return err;
- 			err = btf_dump_type_data_check_zero(d, mtype, m->type, data + moffset / 8,
- 							    moffset % 8, bit_sz);
--			if (err != ENODATA)
-+			if (err != -ENODATA)
- 				return err;
- 		}
- 		return -ENODATA;
--- 
-2.55.0.windows.3
+Regards,
+Lorenzo
 
+>=20
+> Please do not repost the series just to address the above. Instead,
+> reply to this email with the missing information, so that reviewers
+> can take it into account. If the series needs another revision for
+> other reasons, please include the information in the commit messages
+> then.
+>=20
+> The evaluation is done by an LLM so it may be wrong, if you think
+> that is the case please reply and explain.
 
+--hEQCQpva2igBtHcT
+Content-Type: application/pgp-signature; name=signature.asc
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCauiOKwAKCRA6cBh0uS2t
+rHRdAQD/v8Dhm8FIwTs3wowVw2wCikCGentLt6uK5GTW5atbhQEAz8EIXwAcWJPJ
+sqI3crlBL10HzgL1B2U0IkCcfwTQngA=
+=Z4aK
+-----END PGP SIGNATURE-----
+
+--hEQCQpva2igBtHcT--
