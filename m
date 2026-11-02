@@ -1,52 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793597560;
-	b=JgITCEmNToK8iW9Sk/qT53qDadYmyZ9ZbQsJbgPyxYztTXd45tzlpBqXiL8JN4aMXVPh
-	 0FkTMeqbtgSaEC1jty2vCKyC6HwgA3pslb7pns5Nt+K3CrvPFZFpwZE35YXXGo+G+Ehzy
-	 NBgoREv2I8YKYDk1WWc1I/guFmN+bQiMa+qmXcNSf+HI/jv0+D9q0E9XLZbK+7VjPGbLW
-	 37FiR1LIwF4OnzlCg5kTxwMj26V3zIu3e99v95wjp8A2FtSKtp4EwgwJfyCVsG7wfsmWi
-	 eg1eoHQv8TxREAm49cijdSLC+yN20//f7+e9eiRl3iDCw7+eCvbJr66quuyWYYzOrtQ==
+	t=1793598946;
+	b=mVHm+y34fvBMs7wfKBmbpi0r/vQFPvTEHoYPBHyLPiFcNX3LfiML5Zobd2S365cOiyBR
+	 Gv26CrAw2g12PiYV8eIt7M1yp7dNmO7J9xYSTJRFYJZLLFwIgeudAw+XuE7fzNjrprjS9
+	 GyDnN8toT/h9VL8OGoBogUeZdIhN3ihvxxUDV9CikcX3STcKRUKlPxYF12yv8okcLjxnR
+	 LVItSXIeJvQM3hU6ZhtqD6IbP/5yxQ29vGXEVIkKPnM/VIdvMtIDyKmH1spIicobJzo87
+	 DpsXjR7xr1ZiPrK+Iv5qmRK4xOytnPTogzs6XhDe0lLOn88iIuYAemG4vBnby/gROaQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793597560;
-	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=X5B0jYi4hYyR/YrLd/KRabGeGLqUPq4FlZEL3f9eI3w=;
-	b=RTiLiesT+xfCsnJloQy6AY4TttzN0Pb8Y6lATmCRuTu/GN9ANYh06ynUkiWRqg1HtzYM
-	 8xVD5NTo3FjC1XgMiLIJz8hNb0/3EAoIBDdVPTW63/zjc9RMSvUjh3cVsyvHh4v9xDlCE
-	 WWIwyxxcvB6B/PNOPu6IMKoFZbXoPQEU9Gm7cVatTmgrmm72Rawad4LbfFVrKrEJtURIi
-	 I8pKUImWS0uQY80ieX0CaWamVl6R4bqmx0/A18rc3fJYH0O4FT/Mo4LDHaJTlZFR2PtfA
-	 QvBXtpubNpZmE2E9X+mSNzim+bQm1eg8B+QC/vjUFiLnQ3kKi5TfTqmdJiMoM1NhcvQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793598946;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=TQVGDJ7DbU54rgq1tI+uCAfdrRSrsAKVN4CLgr24J1s=;
+	b=uXw+VDCKaJn2KcFT9ziSy840kavXHJXe8mXhG/JUQ8lCsy+NXUTQkecu/UbBkE4i1czy
+	 N4YvT5WamlpCIF3A5kIYqHRzq81x/wQFXuaCMxC/yrsns59Hs3xKe4ZuzeQSWEP+9fxcU
+	 yM/LPZYK0A48/ufk84xL86ZuiqyWwnQqVE6mhuzJArZf8iJnNPRQ5kTughl1/FEQZX9iz
+	 jHn38sWpZyOZz2Kg3zemvTdzM45gHCKmqMe7murzS5unXo2J/Q9Rqz1S5WjyWWPsmoiZU
+	 5ilLmahIiOq6GXmhIsGol8gFfEyi/joI3nofhnqo31CasiZ9zv/cDAI1oDTWE0SXepQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gentwo.org;
-	spf=pass smtp.mailfrom=gentwo.org;
-	dkim=pass header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=ftNWmQxB;
-	arc=none smtp.remote-ip=62.72.0.81
-Received: from gentwo.org (gentwo.org [62.72.0.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=A6zYjceb;
+	arc=none smtp.remote-ip=209.85.216.51
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B739C606A326;
-	Mon,  2 Nov 2026 05:32:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B739C606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5BD8606A326
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 05:55:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5BD8606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=gentwo.org header.i=@gentwo.org header.a=rsa-sha256 header.s=default header.b=ftNWmQxB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1793595619;
-	bh=dM7ktu0uO/zYaO33T/SNIPFkYf8MtY78bXeNc3UjLlg=;
-	h=From:Date:Subject:To:Cc:From;
-	b=ftNWmQxB7ewdoqNJk07gC8EfRGBDRIxHfG+Ky7OcWo0vPuOV3Y73lskv67zizLP6w
-	 xxd8KC9fl7q3tEw6A6IYilophzvh2n6xgZsfoNHv8uqvz+N6G9CD61V41lYVsNYU7Y
-	 7Cc3t5uObdIi5EeQazpKKBhspE1dJli3O38fknh8=
-Received: from sut02sys-r112.scc-lab.amperecomputing.com (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTPS id 56724406D0;
-	Sun, 01 Nov 2026 21:00:19 -0800 (PST)
-From: "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
-Date: Sun, 01 Nov 2026 21:00:12 -0800
-Subject: [PATCH] sched_ext: Reject scx_bpf_destroy_dsq() in tracing
- programs
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=A6zYjceb
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3ae486f8a27so1444208a91.0
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 21:55:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793598945; x=1794203745; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=TQVGDJ7DbU54rgq1tI+uCAfdrRSrsAKVN4CLgr24J1s=;
+        b=A6zYjceb+1Bn2eNSgSyCo12VQSq5YDNsfVWRxfz3UGPvBTs+04Hn9H3gfLNoJZgzz5
+         he8fNWQpM8gTv3gEsqis6xgmOaisSNZYuESgW9DVQBQEj5ZiKT1e1Klz/Nb/Ib43d7uP
+         01saqdGxdjOzzdoidrrSm9U1xa2/YQMlRiwv0h8QKzJQyhifLL5iuGL1r0AUKdue1AWF
+         F2h+zHK2pHSZJiGaPkpLPYanfToRv1gDFAyxKURs5F0PURgv9ubhswSvCeLguiJqvH6M
+         USe2IgILJG1N+D88pebMAyS6kpNavVfXovbszCdpZee0k+wKa/pyWl7r/0jeTqkjdHL+
+         YcEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793598945; x=1794203745;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=TQVGDJ7DbU54rgq1tI+uCAfdrRSrsAKVN4CLgr24J1s=;
+        b=ZGaZWxcQ8MoI2c6WomzVsXYwaWznUKwi+pphKAHaTEdi26ZqLzFkbkhh/SSCLvgsIo
+         /MDBfXxvKfodf4B7VyL1WfmveUa52TPfgJHkTv/te0G+KDD1B+6jGP1v9eJ3fsHRqCAu
+         CbHyJaWBFDdZ84B0rp0j0XiITPVZkQ5tR6NA+Z3s1pz7SiDhRghCFj+H41p3jjfEWz7x
+         2zL/MftRyD3DQF0YkKbNCB8kk+NRw6OrRA8kSdzVPwb5+K2qPIIoStxnXBVDEm8YkRWg
+         lqMqMFLymTHI/TCPjA6/wh1cGjhIFr0viblaRVJ+2Iu8rNwKUMrxR5vQ2DeoxPzxCUOW
+         VuSg==
+X-Gm-Message-State: APuU4Z99M4fVLYNTuD3KH+SnjcgtJgRRr3Sh7YUfnt+0P4h7L5l/yOh+
+	W5gHMrSq2WbReiLExbYCr4bq9mUSk8wzegIbsvJwMN2+YwYTT90LeCYEsoS//w==
+X-Gm-Gg: AYBFou2QPNV511M07K+e5A1SYluyvfImmv9nBzCZO+dUYleY7XG37IRVG8TyXwE5AKZ
+	EhyoVl0A9HyRh/pVUa3RNkSmeHiGRH71LX7LuBTRagXg2sAwOoz9+96Gw43XahRHxvWTwMbIf7r
+	ZfsGZJ4Yi3FhqpgMD59OphXxDmndlkuaoFAquBeHUDWghZZ4/fRL/GMXI7ie//c/9k4phxswcih
+	BFVNvohPkR319mVsiRp48c8UlRWmwnKsPHuHo5C3gMahDRdVrJ42BnO+IOgvm6dTIA9fINkzKWr
+	3Ur5Rok26QdrtwS6E+Q6u+/3+qqIHvL4xHWxeLlbDdH796vTGLHAAdyYGkrVI62K+zOivm326vd
+	bMUVHEVJ8ILVqY8n98goKdQC+RvBlhLeXt8V2XVcJ/dRhtl5VkDSuIWLjEYn7ArDOtmepUSk6q5
+	79vx/JRGifWyVL5OxV9hzAOj+w7ODWN6rZg551kDI4ZfjphozBAxY6Emwlgk1uQVonocK7AWMeh
+	iqPR1fOrEmATj4T9NXNY7PmKJxMMFnb5RZIa7EpWAtICYDgHP01rSiQXsQcaxL+jW3w6aM9LmTu
+	UyjD/lKFC7dm6bixsEmWMsaheNkeKSjnYaShJE6o0N5ElZlupGIrpqLGoV1RU0RSkvuBVTW0ZEt
+	C48bv94/9itkxzBbVTEXxr0XZ/74+s0xweBfmXVtu+MHZx0Go8ImZqcbfSAPNGh2o5bBFsTUyts
+	k=
+X-Received: by 2002:a17:90b:1b12:b0:39e:3713:c2e4 with SMTP id 98e67ed59e1d1-3ae896f51e5mr8063296a91.14.1793598944959;
+        Sun, 01 Nov 2026 21:55:44 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e9b1506sm16754654a91.15.2026.11.01.21.55.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Nov 2026 21:55:44 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf 0/2] bpf: Fix the stack buffer that bpf_dynptr_slice_rdwr() returns
+Date: Mon,  2 Nov 2026 05:55:41 +0000
+Message-ID: <20261102055543.3584718-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -56,102 +96,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261101-scx-destroy-dsq-tracing-v1-1-987a7f2f5bec@gentwo.org>
-X-B4-Tracking: v=1; b=H4sIANsY6GoC/x3MMQ6DMAxA0asgz7UUU8LQq1QdkGPAS0JtVIFQ7
- t6I8Q3/X+BiKg6v7gKTn7qW3ECPDnid8iKoqRn60I9EgdD5wCS+Wzkx+Rd3m1jzgvHJgeNATDF
- CqzeTWY/7/P7U+geoj1MUaQAAAA==
-X-Change-ID: 20261101-scx-destroy-dsq-tracing-53c0c541c155
-To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, 
- Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- K Prateek Nayak <kprateek.nayak@amd.com>, Josh Don <joshdon@google.com>, 
- Hao Luo <haoluo@google.com>, Barret Rhoden <brho@google.com>, 
- Shubhang Kaushik <shubhang@os.amperecomputing.com>, 
- "Christopher Lameter (Ampere)" <cl@gentwo.org>
-Cc: sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, "Shubhang Kaushik (Ampere)" <sh@gentwo.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793595619; l=2923;
- i=sh@gentwo.org; s=20251010; h=from:subject:message-id;
- bh=dM7ktu0uO/zYaO33T/SNIPFkYf8MtY78bXeNc3UjLlg=;
- b=2H123ZAEiiB7IjGsDVOEn/WHTBM5f5yDUDd53vFqt6zxH71jaDvfwbJ+aFKLLnClCH/qgi53h
- SZSPYbqgnmOBrLmY4wb0U4WOl62ROoQ3rDRF/FmK8somN1MUTBWbQ5s
-X-Developer-Key: i=sh@gentwo.org; a=ed25519;
- pk=jc8YIRvxPSyJaBRe5y+a4N0RXKBUEcAh8+OFhlROXPY=
+Content-Transfer-Encoding: 8bit
 
-scx_bpf_destroy_dsq() takes the target user DSQ's raw spinlock. However,
-it is in scx_kfunc_ids_any, which is also registered for
-BPF_PROG_TYPE_TRACING.
+From: Alexei Starovoitov <ast@kernel.org>
 
-For an active root scheduler without ops.sub_attach, the compatibility
-path in scx_prog_sched() lets an unassociated tracing program resolve to
-that scheduler. The tracing program can then call
-scx_bpf_destroy_dsq() while the target DSQ lock is already held.
+bpf_dynptr_slice_rdwr() can return its buffer. When the buffer is on the
+stack, the prog has two pointers to the same stack slot, and the verifier
+knows only one of them. A store through the slice changes data that the
+verifier tracks in the slot: a known scalar, a spilled pointer, a dynptr,
+an iterator. Such a prog loads today and can crash the kernel.
 
-For example, a scheduler which mixes FIFO and priority-queue insertions
-into a user DSQ triggers scx_error() from scx_dispatch_enqueue() while
-holding that DSQ's lock. scx_claim_exit() emits sched_ext_exit before
-the lock is released:
+Patch 1 invalidates the slice when the prog stores to the buffer, or when
+the frame of the buffer returns. Patch 2 has the tests.
 
-  scx_dispatch_enqueue()
-    raw_spin_lock(&dsq->lock)
-    scx_error()
-      scx_claim_exit()
-        trace_sched_ext_exit()
-          tracing BPF program
-            scx_bpf_destroy_dsq(dsq_id)
-              destroy_dsq()
-                raw_spin_lock_irqsave(&dsq->lock)
+The selftests that pass a stack buffer to the kfunc only read the buffer
+after the call. They load as before, with the same number of processed
+insns. Cilium and sched-ext/scx do not use the kfunc. test_progs and
+test_verifier have no new failure.
 
-The tracing program recursively acquires the same raw spinlock and locks
-up the CPU. Because the tracepoint runs before scx_finish_exit(),
-disable_irq_work is not queued and the scheduler cannot enter its normal
-disable path.
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-Reject scx_bpf_destroy_dsq() from tracing programs at verification time.
-The kfunc remains available to SCX struct_ops and syscall programs.
+Alexei Starovoitov (2):
+  bpf: Invalidate a dynptr slice when its stack buffer is written
+  selftests/bpf: Test writes to the buffer of bpf_dynptr_slice_rdwr()
 
-Fixes: f0e1a0643a59 ("sched_ext: Implement BPF extensible scheduler class")
-Signed-off-by: Shubhang Kaushik (Ampere) <sh@gentwo.org>
----
- kernel/sched/ext/ext.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ include/linux/bpf_verifier.h                  |  17 ++
+ kernel/bpf/diagnostics.c                      |   6 +-
+ kernel/bpf/diagnostics.h                      |   1 +
+ kernel/bpf/helpers.c                          |   6 +
+ kernel/bpf/log.c                              |   2 +
+ kernel/bpf/scev.c                             |   6 +-
+ kernel/bpf/verifier.c                         |  64 ++++-
+ .../testing/selftests/bpf/prog_tests/dynptr.c |   1 +
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 258 ++++++++++++++++++
+ .../selftests/bpf/progs/dynptr_success.c      |  38 +++
+ 10 files changed, 394 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-index f74ffb3b1aca6ee325ba583e8272be2afb0f1ecf..3ae21991b64ae51f61fe3c22f241b8c215fb4fd1 100644
---- a/kernel/sched/ext/ext.c
-+++ b/kernel/sched/ext/ext.c
-@@ -12134,6 +12134,9 @@ static const struct btf_kfunc_id_set scx_kfunc_set_any = {
-  * when scx_locked_rq() returns NULL. Taking it while the context already holds
-  * an rq lock, the same one or another cpu's, can deadlock.
-  *
-+ * scx_bpf_destroy_dsq() takes a user DSQ lock. A tracing program can run while
-+ * that lock is already held and recursively acquire it.
-+ *
-  * Before returning, scx_bpf_sub_grant() and scx_bpf_sub_revoke() invoke
-  * ops.sub_caps_updated() of the sub-schedulers whose caps changed, so those ops
-  * run in the tracing program's context. No SCX op expects to run from an
-@@ -12148,6 +12151,7 @@ BTF_ID_FLAGS(func, scx_bpf_cpuperf_set, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, scx_bpf_cidperf_set, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, scx_bpf_sub_grant, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, scx_bpf_sub_revoke, KF_IMPLICIT_ARGS)
-+BTF_ID_FLAGS(func, scx_bpf_destroy_dsq, KF_IMPLICIT_ARGS)
- BTF_KFUNCS_END(scx_kfunc_ids_no_tracing)
- 
- /*
 
----
-base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
-change-id: 20261101-scx-destroy-dsq-tracing-53c0c541c155
-
-Best regards,
+base-commit: 714b7112017fc7f8b2afabccf562acdb12d2ea7d
 -- 
-Shubhang Kaushik (Ampere) <sh@gentwo.org>
+2.55.0
 
