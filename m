@@ -1,47 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793636446;
-	b=319J75mxZ5jipGZl13RE0zB7ngNHDEoLkGQwnhive2tCiJ2qYmj9ysN/bXbL1PmFrjmw
-	 fB0yaOPiH05AV2fdIZkhT2Uo6Qi5g+QKeJsgE/eMtpUEa53jA+G0DyrD32ocmIcQv8V+/
-	 S6w+AEijnjz5HChvuxNeomWKPp8Hcp8mpJLEo1maL6Y5foLzvrKxdqrtgPLfLsfDYV9+1
-	 09KjV25K5z8W4Uhtw4Gt0K76hnkOm+ipmAgHWEwunHh2fbfe0T4pmsY3sQtEelybkZQ2l
-	 VufQ15OijN3ktYnPleI/LQLotvEgbuo3faJH2VkS3DgfQGlG20qoHPkF61Lsy74sb2Q==
+	t=1793636468;
+	b=qEafUjKtP4ewWeHNFWoAawENMEnlW98lXRst7CnOFyWRXV4Q2i/Ux+S+Q9cirl4zV5ig
+	 +QJQZqFDkCv7UPw/lf2BaMGX1eAuQtJPbLhA2m9OfyGnHVAoqS1RRDksbQsAPueXxd0sD
+	 vLnQ3xMldY+24xt4Tm8GmspM3Jz3FzSZu8E1CnEwXbsgF7XZKP1mk2KwpE/3gU1JHGzak
+	 5o90P5rEFz3UDKOhWU7T31UH4NhGLPuDJlFsg9bXKwT8mcdqwaFmPKSsLSuB+FYaV7yqj
+	 PpzEDJbfrO6O4zXKtwTf0+flJ8c7GOgKUY3NtOWbOKeufQsXoMKbOWbAzsrxlUMjA9Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793636446;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=+JNoTlSwRmyB40Pne6BVDBz4S/O3EIyiOba9uuaE8eg=;
-	b=WgNZ62hx6kZeXyW5pcxybht+c4xUqa8r3Nf3stLv/6Fj945TJYxa0Z6uGVvvO9l6pwKE
-	 GVvVyRlY/g8qTNzSowQX6w3S/WS1v2wmNUSFvDFyXK6d92mls18dfwIGHQWIwja1RVDkz
-	 Wb0XZIvhJFJZQiNAaXMDKHUi4BhIfeUcD2MOLtrI49u5IKKkf7LVPUtmW8ICkUHyP2r8p
-	 GjsVvow59jYjZ94NZQa+w9YvKorbJytBYXvCBiYUh9Cazn2ke5e1wuve7ETZsOB0/2pB+
-	 w0/pA/XEI4AhqCz+Mc2TmNrQC+3c91khcTUSO5KkS9clDWJgC1DvEDVmRy5zhlv6bsw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793636468;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=5mo//5iszunT69Ntkv8F5KhrsTxnizkW5ppwaMrOTwU=;
+	b=V0RUNVlYYMKJMzVwdsPW35+OezDYnKOEpc+FL7t2sIwHBsPsLPFvqd+1vpwdCgSYVvTw
+	 bOYiHJrCKQ4z/rDnz3GUtjJEeBEB6tVr4OgcBDvMN1hCjCWE4K4iDbsDKrwRHwBc+8aum
+	 ggMu/FLUROBP7VOldKwV2nCYNVoJamGmfM2dYjQp3eSKKKJjXSBZSSqyn3LwRnx4vb/lj
+	 D43R/i2qA0NUljXEIB1XBDffJ6oIkFxXD6Az19D64DXRj/eH6B10PCaN03v29aotHjzJG
+	 fZyGRU8upkz/jeNlr+HhmW5Ge5HbZWq0tjj03uyzdbyBDocn/Ij9/0+w+/60h7+J4kw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="BuqU/xlQ";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hlWMI7ef;
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB6B6083637;
-	Mon,  2 Nov 2026 16:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9427E60703BC
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 16:21:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9427E60703BC
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BuqU/xlQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BA231F00A1A;
-	Mon,  2 Nov 2026 16:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793636445;
-	bh=+JNoTlSwRmyB40Pne6BVDBz4S/O3EIyiOba9uuaE8eg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=BuqU/xlQqdjOdE9xy4RoKknDtjJCSLBNlyN7yRFZsW3JrejOCr+6Tam0LF7FDzivQ
-	 MT+3IY9FX5W3FF4Gv6oVx5UxLrmqmIH9/sbacwEk6RCrdXUXwA1bBz+iYTDWKmhshv
-	 AnjtoBC9S4/e/wBp84/5XlRAWodC1LlKrqqhFwHxtqXs9DQVGyVr0+3to1FpO1u+EO
-	 3JJ21l2KS6jiUmgMtxbdkPnxAiVstTHqVU2G7Nk5goJ22/y/fwVV0wWd5FVhnsExm6
-	 PXGlU0b9Wl/ysC2IO5zl8P80MqWJmxxo1PvXF1mT6J2Vx+R3CIEia1JIBCsGcWA183
-	 0rgiT9B2mpzlQ==
-Message-ID: <25216bda-7e36-4bad-ba7c-1984dbb9dfda@kernel.org>
-Date: Mon, 2 Nov 2026 17:20:40 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hlWMI7ef
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ac7842c17dso1900191a91.3
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 08:21:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793636468; x=1794241268; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=5mo//5iszunT69Ntkv8F5KhrsTxnizkW5ppwaMrOTwU=;
+        b=hlWMI7eftQ8W/OE8uU3ILgMYzQHry+3zhXjvPuTaEaRJcpSsrbQHF4OF/9RCyzKcre
+         QbfN+fMOFcIfH1vIe2QYShyHlsMrQiqkP/r1JJMP9WnuYgzGkX7uhuqNqgaEA3lVj5Q3
+         1lgjCB2OOCjtZ4r99ogWkCgzewD6Tc20aV/ryg2L8mGEHZHgI14mfOJulrzLihKlJNP7
+         y0+CN5VBHjwRNaCRq/KSaBZnxNv8EDfuXZWlhKgguoaWKaLwXH/uYDZbG+J6SoXlWDdD
+         VdncapUpaMiXFOBDItiBK9S+SvjdzRrkYUSWMNSo0DYaTzKOHPuxb1nzrf2Jw60WPQy1
+         oRyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793636468; x=1794241268;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5mo//5iszunT69Ntkv8F5KhrsTxnizkW5ppwaMrOTwU=;
+        b=n0Hq+wTfuNLWXFLVEk/YrHU6+EwNyf82+czMnr7oOCD75HJS6TDUyoxtWcXOoyTtv0
+         lihT9XiDbPfXi/UeQe7Yff4yvEmWpLWBbcTdiT/uLSe8+d/FX7DipMutnHnXEcaVmAYd
+         t0tqcVlYrxFduQmM4S3bpslW5HdzkvSRery+tzEOFSo5gliknM4iCCemjcclRjzmh/6i
+         thu0HhpRnYxTpNhv0l0cRrX8T9SciJbvLiuVumYMwrJ5GVs1lAx7x2Eo9Fs8yrk97+iT
+         nWycscEssvk5uExtAK4zcXHzEeA6CVk7sbO7G2+FlclJvaGT4K2H1X+lxM4MwnK7pVam
+         MfHA==
+X-Forwarded-Encrypted: i=1; AKwUvByWGvHVrLfAKZXTd5eCvaLpCA6xV68Ri8PVXPsd++p9xYBCstQM8shwRcC4IVeOrL56Y2Y=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+5Qz2uzF9ySV58alsu2WX4bpuZMCmAPQnBv8qlW9mdU1OU2C1F
+	zSKEYC1L6uKYiq1jPLmjsEhlWcSBc02DGa0+IxDcHPUV3GGqgAePSmqB9/X+pA==
+X-Gm-Gg: AYBFou1JT0OpRLKbuNXczGkAuLH57y1IK1hD1JTFdKii+3vzEPS2uvSWUJXHr5svPsa
+	13XQEuuGjurPKt5Ospq883EtlqMWLS1SsMCk1uR6w+IGgGh8wmlHwq1/m2KwRKp13wcS5Hek5eJ
+	a4HcB2jAfJvNupC3yDrDz1Y5LE+lnDbnlbv8p3uVgxAqL0XveeC85wujSlPurwQrvd+zEghvbvM
+	y7vr4kaebTPsdPcCf2Z+rL+9C5A++TVR9H/sPOtXkTiZ2/DV6FxDkiPRa5C/9UC5vvG80aHhMUj
+	24AYxliFCF4+HErPplCqJYZmf6KGsgli3C4FmoAw4zjiw0ihdWzcvShe28MgX4RJ2mGQmJIwor7
+	U8zNAOHDOvbzIwnwq9tXClweUf8kLbwPUpukVl9iWClB6Fi+Z0Jpn34cT2CL0KyhhjWWj0KAusR
+	tTynrRbGeWtDcEq0IO4e1zLcg7l1eH8S1lBVX8WUdB7iLtQ04FxtguvieOoCO8hS9LPuBrjeaKi
+	tNR3Ogmvw2ed1OTLGLtOBGhShXIgA/7z0G/mTwat/+Tu7W8U6glNnLXyL+SeP4e5Gt4m6VE4f5G
+	/N54dfuWlEk15GKosUfon0Yk5rzeb5EG6/EivmmgCU0gg2iN7CR78p3NbNKv1jYLf/vZc4gF4u3
+	pVJJ/kwNOE2+sjIpouSt2Fw/cpmFTU5arOg==
+X-Received: by 2002:a17:90b:4b8a:b0:3ac:9259:122c with SMTP id 98e67ed59e1d1-3ae8977737emr7944503a91.40.1793636467693;
+        Mon, 02 Nov 2026 08:21:07 -0800 (PST)
+Received: from localhost ([153.61.198.246])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e7d5b8csm19939285a91.1.2026.11.02.08.21.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 08:21:06 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 02 Nov 2026 16:21:06 +0000
+Message-Id: <DMKV29CMKFZB.11MEZ8S0HXFE4@gmail.com>
+Subject: Re: [PATCH 1/2] HID: bpf: serialize hardware operations with device
+ destruction
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yifan Zhang" <yfzhang23@stu.pku.edu.cn>, "Jiri Kosina"
+ <jikos@kernel.org>, "Benjamin Tissoires" <bentiss@kernel.org>,
+ <linux-input@vger.kernel.org>
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <179362071770.29269.481376767482231629@stu.pku.edu.cn>
+References: <179362071770.29269.16022650793604369465@stu.pku.edu.cn> <179362071770.29269.481376767482231629@stu.pku.edu.cn>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,102 +103,13 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 3/3] bpftool: Prefer zlib-rs over zlib when
- available
-To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
- Adrian Hunter <adrian.hunter@intel.com>, Miguel Ojeda <ojeda@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
-Cc: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20261030202710.3863806-1-irogers@google.com>
- <20261030202710.3863806-4-irogers@google.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20261030202710.3863806-4-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-Hi Ian, thanks for the v2,
+On Mon, Nov 02, 2026 at 03:58 AM Yifan Zhang <yfzhang23@stu.pku.edu.cn> wrote:
+> Hold prog_list_lock across HID-BPF hardware operations.  Device destruction
+> sets destroyed while holding the same lock, so it waits for an operation
+> that has already started.  Later operations return -ENODEV before reaching
+> the low-level driver.  Apply the same lifetime rule to output reports.
 
+sashiko is right. This will deadlock.
 
-2026-10-30 13:27 UTC-0700 ~ Ian Rogers <irogers@google.com>
-> Add zlib-rs and zlib to FEATURE_TESTS and FEATURE_DISPLAY in
-> tools/bpf/bpftool/Makefile and use feature_rust_lib to configure
-> ZLIB_CFLAGS and ZLIB_LIBS when zlib-rs is detected (unless disabled with
-> NO_ZLIB_RS=1), falling back to -lz.
-> 
-> Decompression of kernel configuration (/proc/config.gz) and compressed
-> ELF/BTF sections (via libbpf, libelf, and libbfd) processes data that
-
-
-Is there any mechanism in place that prevents libbpf, libelf, and libbfd
-to link to different versions of zlib (zlib vs zlib-rs, I mean)? I
-imagine you could have bpftool linking against zlib-rs, but the libs
-installed on the system linking against zlib? Also I think the static
-build with the LLVM disassembler [0] passes -lz -lzstd in LIBS and I'm
-not sure how it would combine with the change, I need to take a closer look.
-
-
-> benefits from a memory-safe implementation. Preferring zlib-rs over C
-> zlib provides memory safety and improved decompression performance while
-> keeping bpftool aligned with tools/perf (including sharing libz_rs.a
-> when building bootstrap bpftool for perf BPF skeletons).
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-
-Recalling our discussion from v1:
-
->> Hi Ian, bpftool doesn't make an intensive use of zlib (mostly, it's a
->> requirement from other dependencies; we may also use it to unzip the
->> kernel config on the host if necessary for probing BPF features on the
->> system, but only on some distributions). So I'm struggling to understand
->> the motivation for your proposal, what do we gain by switching to
->> zlib-rs when available? I understand this implementation is in Rust, but
->> I'm not sure the added complexity and feature probing in the build
->> system is worth it.
-> 
-> Hi Quentin,
-> 
-> At my workplace, we are transitioning from zlib to zlib-rs for both
-> security and performance reasons. I'd like to keep upstream tools
-> aligned but they don't have to be, it just seems nice. I agree zlib is
-> of a lower priority to users than, say, zstd. For attackers, like with
-> brotli, it is probably an area of interest. Knowing the implementation
-> is memory safe is at least something in favor of zlib-rs. I sent this
-> series out as an RFC because I obviously have no way to mandate what
-> upstream should or shouldn't be doing. There are things that can make
-> life a little nicer and easier, and this patch series, for me, is one
-> of them.
-I understand you're transitioning to zlib-rs, but the current patch is
-not a full transition, in the sense that it doesn't replace zlib with
-zlib-rs but allows any of the two options; and I don't see support for
-the standard zlib being removed from bpftool anytime soon, which means
-that in practice, we've got to maintain compatibility with the two
-versions going forward. Others may want to chime in, but I'm still not
-convinced this is worth the burden.
-
-You also mention zstd, do you plan to add support for a zstd alternative
-as well in perf and bpftool in the future?
-
-(By the way, if you allow me a short digression, you had a patch related
-to the zstd probing for perf and bpftool [0] and I don't see in the
-tree, do you know if it was ever merged?)
-
-Best regards,
-Quentin
-
-
-[0]
-https://github.com/libbpf/bpftool/blob/main/.github/workflows/static-build.yaml
-[1] https://lore.kernel.org/all/20260909204122.1993010-4-irogers@google.com/
+pw-bot: cr
