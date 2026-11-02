@@ -1,57 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.203
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793583234;
-	b=pgGdqBWOy4/n5ZCUSNtw3A/gmp15bnuxED3nexgvMxCwZ9Q6VgJcr54rkAt5FXaWHdea
-	 77vl/1z7sDHg5m1TnEwDrhNwgCzX8hpJ8apmf/cbEcxBOApvY4QNa3rtzVhwYdqHzzNDx
-	 Hq/02w7NuPJmn1joVHJfKxQDBbrSe9CIns6YaooUuiSVcE+13vauF0pAYl8pBCENnBIgR
-	 Xr+uy3Bp2aze6XU4W3OuuvZ+v9/UqtpMtEzhfX81GKWUa1o/KcZZq3zevyFFOaSogHbNQ
-	 KMMXrDs3tgiPqAsBI/V/Wz0eqO52J9/Pcpd1ChRWsG1vAau365PagPF4I/FggyGO7Ew==
+	t=1793583432;
+	b=xh3lcAjITGXpXaVLgwYfj008puBY9pCXQeuzxna39osYsjEJYoM2yUsZJJAbR5gAHAzW
+	 BBMk2Uzd2NbXSMu1V/qQVvgw4+TWRpk/THaHczbp6+Rq00JhcLbqd8UhFcsk+5ymUmlcW
+	 FvGq54m0FFn8Sh5tM5q9Vwcy/tXIyGp8ySId6l1VA8tRiW4Z7qwEG1gL5O5Un3gEROWmM
+	 VISAyWyc6YzRcq7a6W1V5NJDxv3JO5H3sHZHcAF3GBzkhCxN3HOMmkYqChR4ZIaOn3ZTu
+	 51INws0txBnH6E6PH6R1z15U+NMcaLnoBpXIE7iBQN70urmvOiQJbR7mqkLeudNyTfg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793583234;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=IdDgTKCxpf1nuZkRqrogBGqvSxTe75AAA2ASqP0X8XQ=;
-	b=fqbMOxuFWzqxT55S0UEfAGqIcfTNRd5niyZ8P1+i7dHdrUZPoKgxMqNz3FR1ygRlRVr2
-	 TQAiu7/xob7Jgikr8iEgJR/j8Tr2XI7nPLeGb4Wf0V6Pk/ug66K57RdmJ7X3wdcVFgxde
-	 PXUTlJ3fvYmOCkslQsnRo4AAWILmMlgVCwCxRqP4LZTfmy9vNX++aAY5oEANa6VVho39p
-	 J3j9mAxj7Y6Ue+xQYYrL8LJadzk+bCLI7xElnCVfUlKp5E2OWxJFEEGq6YmT14dVUinvB
-	 02osmU5Qxip/2TiuCE5LFFr/H0gmm+yegQeyeTuQ8gsEKWWmdHucuFMXyZDD8ePwbfg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793583432;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=60rYsd/AjRckt1lyvYj4vtHp2+NMHTUyTXpQRwJ1gH8=;
+	b=LeJ+ObmSP8x6v/O0k4TJ1oh7iwIRTk5biDBAxk7nXqC7URcW0JTZcQWaJaOd4lDxQmtq
+	 tiVo3UFBKDxlW/eJsMqIfgpWWpsPszOkT/CHiNuq018XW2wx67aD5qxeDaMlta6sXYjPl
+	 dRGpGwGpeQ1IM6m8WNyONXyUO8qSQB1MBivuq6zKmWFAW8ouXeTUGCE1CYS5qEWUUem10
+	 Qta4fGi9e+x+aE1v3buF8VAfpq1vnLTnDWYqa875XAnK8TIoWZ/jRFoXy+fMv6Lfb3F0I
+	 sDpsq1bV+r72gYlsSZFcJz27IXBXHuTS7Ev4K/0/DWsYcBKxmydvHMTuZLwkalNG1OQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hRO4uprZ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EIUPFzWs;
+	arc=none smtp.remote-ip=95.215.58.203
+Received: from mta1.migadu.com (out-203.mta1.migadu.com [95.215.58.203])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E369606A324
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 01:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6C7606A329
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 01:37:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AF6C7606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hRO4uprZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB2871F000C1;
-	Mon,  2 Nov 2026 01:33:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793583233;
-	bh=IdDgTKCxpf1nuZkRqrogBGqvSxTe75AAA2ASqP0X8XQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hRO4uprZv08uflDv3zp0ZwIBxCkCgou0XCJZgeWxaYO8qIJcIccvrYBr8w/2E8CnQ
-	 NY4XAzL434Uqg4zmn/oHvPeHpOuvpAwvj9p9yx3W5cYXoIBMYK69f8hU+NIne4CFVY
-	 RRwXUj4UOtwGWCz3IUZ8581DSH6AnVi7V06jMdO7ZfJIMnAxc893r0d8yD6My4OPMM
-	 OTVjDMGpvwoUXCCgVkT3f8aJYP2WZ5hwQ7n2Uw54UHjK22tKLSQu6Lygf8jYu0aYiU
-	 sFlzh3r9Ps9KRCwR/mExGq43G39W+KGogMTm0yG0ZXGnMx8UjAdFt/PFj6fxUxnjrb
-	 SCy5Bjrh84FNA==
-Message-ID: <sashiko-outbox-192806@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC v2 4/4] bpf: Mark bpf_iter__sockmap::sk as
- PTR_TRUSTED
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Michal Luczaj" <mhal@rbox.co>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261102-sockmap-update-limit-iter-v2-4-e96a63c43b39@rbox.co>
-References: <20261102-sockmap-update-limit-iter-v2-0-e96a63c43b39@rbox.co>
- <20261102-sockmap-update-limit-iter-v2-4-e96a63c43b39@rbox.co>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 02 Nov 2026 01:33:53 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EIUPFzWs
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=mF5HCW1rYzYU+/byn7lpiTMdUmKESV7ryiW//mc/fP0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793583429; v=1; x=1794188229;
+ b=EIUPFzWsp6gKLfS2+RhRYiXCqrdqUabhe/sOw3lewqSPsFfLEKGo9dyTZGA7Fc4FdWkDngVW
+ uOkrdFdJBaFlmqIFKOqBFznjvBuCiH2Cw7P/jUJ9wqaqdfkQFktp6gO2FhQKyvT23ovTOEAd0zB
+ cctPkGPMsGXw39Hy7JgaCc8I=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 7b95e43db45818e8;
+	Mon, 02 Nov 2026 01:37:09 +0000
+X-Mizu-Trace-ID: 7b95e43db45818e8
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 2 Nov 2026 09:37:05 +0800
+From: Baoquan He <baoquan.he@linux.dev>
+To: Ridong Chen <ridong.chen@linux.dev>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Dave Chinner <david@fromorbit.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Muchun Song <muchun.song@linux.dev>, Qi Zheng <qi.zheng@linux.dev>,
+	Kairui Song <kasong@tencent.com>, Barry Song <baohua@kernel.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org,
+	"open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" <cgroups@vger.kernel.org>,
+	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>,
+	Ridong Chen <chenridong@xiaomi.com>
+Subject: Re: [PATCH v5 2/6] mm/vmscan: move vmscan tracepoints to a local
+ header
+Message-ID: <aufpQS0XL-CD9YW_@bogon>
+References: <20261031090041.58574-1-ridong.chen@linux.dev>
+ <20261031090041.58574-3-ridong.chen@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,109 +82,125 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261031090041.58574-3-ridong.chen@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] bpf: unlocked socket destroy via bpf_sock_destroy() in iter/so=
-ckmap
---
+On 10/31/26 at 05:00pm, Ridong Chen wrote:
+> From: Ridong Chen <chenridong@xiaomi.com>
+> 
+> Move include/trace/events/vmscan.h to mm/trace_vmscan.h so that the
+> tracepoints can be extended to reference vmscan-internal structures such
+> as struct scan_control, which is not visible outside mm/.  This mirrors
+> what several other subsystems already do with their trace headers (e.g.
+> fs/fuse/fuse_trace.h, fs/gfs2/trace_gfs2.h, fs/lockd/trace.h).  As they
+> do, set TRACE_INCLUDE_PATH to "." and add mm/ to the include path of
+> vmscan.o, the only user that defines CREATE_TRACE_POINTS.
+> 
+> No functional change.
+> 
+> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+> Reviewed-by: Barry Song <baohua@kernel.org>
+> ---
+>  MAINTAINERS                                        | 2 ++
+>  mm/Makefile                                        | 1 +
+>  mm/shrinker.c                                      | 2 +-
+>  include/trace/events/vmscan.h => mm/trace_vmscan.h | 4 ++++
+>  mm/vmscan.c                                        | 2 +-
+>  5 files changed, 9 insertions(+), 2 deletions(-)
+>  rename include/trace/events/vmscan.h => mm/trace_vmscan.h (99%)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index aaf2825ac945..2ad01107fa05 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17653,6 +17653,7 @@ F:	Documentation/admin-guide/mm/multigen_lru.rst
+>  F:	Documentation/mm/multigen_lru.rst
+>  F:	include/linux/mm_inline.h
+>  F:	include/linux/mmzone.h
+> +F:	mm/trace_vmscan.h
+>  F:	mm/vmscan.c
+>  F:	mm/workingset.c
+>  
+> @@ -17802,6 +17803,7 @@ R:	Shakeel Butt <shakeel.butt@linux.dev>
+>  R:	Lorenzo Stoakes <ljs@kernel.org>
+>  L:	linux-mm@kvack.org
+>  S:	Maintained
+> +F:	mm/trace_vmscan.h
+>  F:	mm/vmscan.c
+>  F:	mm/workingset.c
+>  
+> diff --git a/mm/Makefile b/mm/Makefile
+> index 2a3ec53d62ee..277b97f7f8d7 100644
+> --- a/mm/Makefile
+> +++ b/mm/Makefile
+> @@ -32,6 +32,7 @@ KCOV_INSTRUMENT_vmstat.o := n
+>  KCOV_INSTRUMENT_failslab.o := n
+>  
+>  CFLAGS_init-mm.o += -Wno-override-init
+> +CFLAGS_vmscan.o += -I$(src)
 
-commit 97a776f78529c30ceec62254569454f51205e10f
-Author: Michal Luczaj <mhal@rbox.co>
+One nit:
 
-bpf: Mark bpf_iter__sockmap::sk as PTR_TRUSTED
+Does it really need the above line? It affects mm/shrinker.c too, did your
+shrinker.o building fail?
 
-This commit marks the sk field in struct bpf_iter__sockmap as PTR_TRUSTED so
-BPF helpers and kfuncs can accept the socket pointer provided by iter/sockm=
-ap
-programs.
+Seems it's redundant because kbuild adds -I$(src) -I$(obj) for every object
+in the directory since commit cdd750bfb1f7 ("kbuild: remove 'addtree' and
+'flags' magic for header search paths"). Please correct me if I am
+wrong.
 
-Link: https://msgid.link/DM92JCFA4X4U.30MTDH0KCPTJ@gmail.com
+Other than the nit, this patch looks good to me,
 
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 057e2f3c0265e..2a2a073728189 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -1989,7 +1989,7 @@ static struct bpf_iter_reg sock_map_iter_reg =3D {
->  		{ offsetof(struct bpf_iter__sockmap, key),
->  		  PTR_TO_BUF | PTR_MAYBE_NULL | MEM_RDONLY },
->  		{ offsetof(struct bpf_iter__sockmap, sk),
-> -		  PTR_TO_BTF_ID_OR_NULL },
-> +		  PTR_TO_BTF_ID_OR_NULL | PTR_TRUSTED },
+Reviewed-by: Baoquan He <baoquan.he@linux.dev>
 
-[Severity: Critical]
-Does marking bpf_iter__sockmap::sk with PTR_TRUSTED allow iter/sockmap
-programs to call bpf_sock_destroy() on an unlocked socket?
-
-In net/core/filter.c, tracing_iter_filter() permits bpf_sock_destroy() for
-any BPF_TRACE_ITER program as long as the caller supplies a trusted
-struct sock_common pointer:
-
-net/core/filter.c:tracing_iter_filter() {
-	if (btf_id_set8_contains(&bpf_sk_iter_kfunc_ids, kfunc_id) &&
-	    prog->expected_attach_type !=3D BPF_TRACE_ITER)
-		return -EACCES;
-	return 0;
-}
-
-With ctx->sk marked as PTR_TRUSTED in sock_map_iter_reg, a NULL check on
-ctx->sk yields a trusted struct sock pointer, which matches struct sock_com=
-mon
-at offset zero and is accepted by the verifier for bpf_sock_destroy().
-
-However, unlike bpf_iter_tcp_seq_show() and bpf_iter_udp_seq_show() which
-acquire lock_sock(sk) before running the BPF program, sock_map_seq_show() a=
-nd
-sock_hash_seq_show() in net/core/sock_map.c only hold rcu_read_lock():
-
-sock_map_seq_show() / sock_hash_seq_show()
-  -> bpf_iter_run_prog()
-       -> bpf_sock_destroy()
-            -> sk->sk_prot->diag_destroy(sk, ECONNABORTED)
-                 -> tcp_abort() / udp_abort()
-
-Because bpf_iter_run_prog() sets current->bpf_ctx, has_current_bpf_ctx()
-returns true inside tcp_abort() and udp_abort(), causing both functions to
-skip lock_sock(sk) under the assumption that the BPF context already holds =
-the
-socket lock:
-
-net/ipv4/tcp.c:tcp_abort() {
-	if (!has_current_bpf_ctx())
-		lock_sock(sk);
-	...
-}
-
-net/ipv4/udp.c:udp_abort() {
-	if (!has_current_bpf_ctx())
-		lock_sock(sk);
-	...
-}
-
-For UDP sockets in a sockmap or sockhash, udp_abort() will run
-__udp_disconnect() and sk->sk_prot->rehash(sk) with no socket lock held at
-all.
-
-For TCP_LISTEN sockets in a sockmap or sockhash, tcp_abort() will execute
-tcp_set_state(sk, TCP_CLOSE) -> inet_put_port(sk) and inet_csk_listen_stop(=
-sk)
-before bh_lock_sock(sk) without holding lock_sock(sk), racing with concurre=
-nt
-close() or abort paths.
-
-For established TCP sockets, tcp_abort() will only take bh_lock_sock(sk)
-without checking sock_owned_by_user(sk), running tcp_write_queue_purge(sk) =
-and
-tcp_done(sk) concurrently with process-context holders of lock_sock(sk). If
-this races with __tcp_close() after sock_orphan(sk) sets SOCK_DEAD, both
-tcp_done() and __tcp_close() can call inet_csk_destroy_sock(sk), leading to=
- a
-double sock_put(sk) and use-after-free.
-
-Should sock_map_seq_show() and sock_hash_seq_show() acquire lock_sock(sk), =
-or
-should bpf_sock_destroy() be restricted from running in iter/sockmap?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102-sockmap-up=
-date-limit-iter-v2-0-e96a63c43b39@rbox.co?part=3D4
+Thanks.
+>  
+>  mmu-y			:= nommu.o
+>  mmu-$(CONFIG_MMU)	:= highmem.o memory.o mincore.o \
+> diff --git a/mm/shrinker.c b/mm/shrinker.c
+> index 4fb424e721bc..4fbdade6d2f6 100644
+> --- a/mm/shrinker.c
+> +++ b/mm/shrinker.c
+> @@ -3,7 +3,7 @@
+>  #include <linux/rwsem.h>
+>  #include <linux/shrinker.h>
+>  #include <linux/rculist.h>
+> -#include <trace/events/vmscan.h>
+> +#include "trace_vmscan.h"
+>  
+>  #include "internal.h"
+>  
+> diff --git a/include/trace/events/vmscan.h b/mm/trace_vmscan.h
+> similarity index 99%
+> rename from include/trace/events/vmscan.h
+> rename to mm/trace_vmscan.h
+> index 8a872990b4be..ad90f0e9bf2e 100644
+> --- a/include/trace/events/vmscan.h
+> +++ b/mm/trace_vmscan.h
+> @@ -648,4 +648,8 @@ TRACE_EVENT(mm_vmscan_kswapd_clear_hopeless,
+>  #endif /* _TRACE_VMSCAN_H */
+>  
+>  /* This part must be outside protection */
+> +#undef TRACE_INCLUDE_FILE
+> +#undef TRACE_INCLUDE_PATH
+> +#define TRACE_INCLUDE_PATH .
+> +#define TRACE_INCLUDE_FILE trace_vmscan
+>  #include <trace/define_trace.h>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 9959ca158ce8..79d2d614afd0 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -71,7 +71,7 @@
+>  #include "swap.h"
+>  
+>  #define CREATE_TRACE_POINTS
+> -#include <trace/events/vmscan.h>
+> +#include "trace_vmscan.h"
+>  
+>  struct scan_control {
+>  	/* How many pages shrink_list() should reclaim */
+> -- 
+> 2.43.0
+> 
