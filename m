@@ -1,86 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793622738;
-	b=IEIqBNko7TO/2mvpbzaVK6Sssu+vn2rO7ngS8YjNzumKIietPe8AZX4I/BS4ImGgtet3
-	 K8sy529ywb5VdtWWxyl7pi+uPhpu7XiiUghTe4AVcM9Lozz1Qm7nP8eL8pb7XHxJyyGw6
-	 J/kD9fyEab1WLRgtL6BmFkUu6cR2S36z7ajvylr4RD7VyVqCtGwtlOXJJaIeoE+/fRnl8
-	 7AKBqsporgxKakTF71/k8p4G6Av6CCZsCww/z9kKQNdw/zOG8mt6mCI4wmPkd75YHa3qC
-	 j1j0XrptPtB6GKte5fOhE4sinYqPKUkc1LlQv5nGbbdemDx07erA5y9jrlvb3fyYWAg==
+	t=1793622743;
+	b=qCFM1tkWztFOIYvqmJMzyCO1UTt20I/cRSpaXXf8PuKup8puFi+lgRfs26nfYq3I/v6V
+	 uAE97GUiFonaDGV7tFfukMDmMotmiMCXPiowGVeQZsZSWOMrSlCbV95dP3tmf9SbQV9YW
+	 T+v0NFJ0PLzRjHuyXuwBhIHIw6gRJvgqH+JwkTXTsTUS2VcSCEDgp7bgR9GU/wn9G8HT6
+	 cZVK5pSLZDTn1Wan8TS+O1Fhba1VkI9aiDfc+KE4I4y78iOAtMTwx3cA9Oxp3mejFxLV/
+	 UfBXI4P6xTmR5fmgVShoqYRhiCzNcXmMrYB/Kghap3IwNY1e1Z1cAVHCIwWzqlg9Esg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793622738;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793622743;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Subject:Date:
-	 Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-B4-Tracking:To:Cc:X-Mailer;
-	bh=lfTEZtUhCcU2T3URSEVjIEX2SBlCGYIkFNQ2td3t68s=;
-	b=UkXsCKwPKDKn8CcGtMacknyIXgM5IS8+8f+uu9c6MfmkvUXSuC8vCHMgYC6m8/8AqKQQ
-	 jCynMdYNuZZFV/Uc9fpKfDXiqhPQtkGGAa4PKNRHa8eq13XWplccDeSVSnX0LsCfcP0om
-	 +sElfXlPVAIXntqw6Z4rRNjAJd/xtaaa0dnFQJu8/ECouvKUasNJzHzDFLIstwWvHCok2
-	 ngKcmRqaq7x9+YXAM3y2sSIYCJtQ0jBFoaav0ONzu+4LZdwTVNh/oo2XquZRw0xreO5pG
-	 766b43Of2PCniCHyob4a3XsdIG8+m6/bdfrfi7OCAmXT2p65/9vYWgk0MoOhrFokDYA==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	 References:In-Reply-To:To:Cc:X-Mailer;
+	bh=kqe+LXyHbZNd2DifYRp5LCbdDXkt1yMBwCvDevw6riM=;
+	b=2qvv0cG/nmByalptN6NWN8bjsyQUuS64nAuT5N5Lt/eiBcunRQCmYu5mhikTlwCLzhX+
+	 7lPF+Au2ou+QdVCyn46S/g6W6uKRs/fQmHzu8pZaaMuEY4DXBmsZ904A/pX/12OpRkyr8
+	 ZLIAnMuhvLtI0apXc4CREzgo9ZpsSUm0oG91bWa3L+DT18pu8z8WIB9FcnWoPW6uqnbdV
+	 9Y3m9D/IndF7xY4KQbaTbXZ6z5NjbP0ByVkMUV7GyucJ7FyIWlBstwsfMl9n4AYHfHFh0
+	 LokdQDlFlXZtkUtNNrE8205B257D11t7iPvbhIEu+03kBPGCTr2vxNPgGZ3K0uJd38g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IXPnlnEf;
-	arc=none smtp.remote-ip=74.125.82.49
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qQ8qwhmO;
+	arc=none smtp.remote-ip=74.125.82.54
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96BD606A32C
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 12:32:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C96BD606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB54606A32C
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 12:32:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6EB54606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IXPnlnEf
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1931ff67a29so5386697c88.1
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 04:32:17 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qQ8qwhmO
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-14fc585291cso2259099c88.1
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 04:32:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793622737; x=1794227537; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=lfTEZtUhCcU2T3URSEVjIEX2SBlCGYIkFNQ2td3t68s=;
-        b=IXPnlnEf1jbwltyqwb/bMrMK51l6iyIhrrQ2fg5JpDukS+CGDClt7341hvbF5LgmoZ
-         lDtIXS3hLWs85Dg+lsrWh8miuMxZNQQS1X33IKqRQzG+Iqc1uUlLHJfRn+NEnpfpOkZh
-         pjjn/y8s7Jpgswe6EtcawE0iWbKlupkm3mD8iMTbGCNacQe6IvFvCIbyofBbMJ0gvNvh
-         KD4xEXocV+m8rLK23MliT6D3sXPLe4KKybWp0FW9gJaSHwAMf0StDJ/ZmLIoDg9ELzzr
-         JF8VGiBv5TGe9DFbIpvL60shkoXNgSBo0XqF9V2ABii8GCzN9u3Y9xw/QuF0KJb/Ez93
-         y4lg==
+        d=gmail.com; s=20260707; t=1793622741; x=1794227541; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=kqe+LXyHbZNd2DifYRp5LCbdDXkt1yMBwCvDevw6riM=;
+        b=qQ8qwhmOjvVw3NxAyTtnjTEdrS2eP/EsR8KQSskMSXBx+DGMIKnfYohOrc1ePhdiVn
+         WZ19xRNBaQQqtyQxCAwsKXldt5GSiCR+uVXS6y3ISfH9mZD+rbeHKGt+CLH0lEJp1zdv
+         R8f5ElFcDXulW/K7LYsZwCm/YnMwaDFYvxP7Nh/RlgmGCDq3xgqF1gTBpibmsc5E583Z
+         auRqXYDNWMFVGb2lA/Su9toXoEKocSHRcOdwMNYKSHP4HNbFdkjSb4n1DgxM/pNiP9N9
+         SZwCv66ItecoykQIC8yF6Z/Egq0ydCksMvx7bUUItvE2trHbszoS7hFexQt5P5yEfWpd
+         hFpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793622737; x=1794227537;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=lfTEZtUhCcU2T3URSEVjIEX2SBlCGYIkFNQ2td3t68s=;
-        b=iPgV0mYPyP8YYe7taP3UCSw62ceVwnhD3ZMyacT+uOGOkU92qBjlQPTdAim5iFRYUK
-         qV3nqq+EDSnmKMZN8o1s1eDEdBNpV/aBcQw8PIKF0JI+xgX3aOd5fw6u+9mP81RhcDkl
-         iQXccHew6tRWqLluV+AocloxJESS5CYL2IYsV/dZ6LSqoQUbNVD3BJqwcAKuJUs3lPLn
-         MY8ueo+k3iNffF0Qmyg1c7xr08WT2L08fda6++d3QNsPH+5OnX8Wt++erG6Pt5FGBtw1
-         hMTZ+H4J4EdobvJBUrAyDlBX0AVCvKFeeS+URjfyrEVkOBZgCMmdLUu3uW137Kv28pYw
-         ecwg==
-X-Gm-Message-State: AFq9FYKJjlNDW22skrmxZr3skzV4h9bL2GdUNb4M9pP/xrDW/hxanBt7
-	qmoOGP6nR3rNQeit1H9x0EoV6Tas/8nuvxw8wkKCImA2+F3C9fhAhB+b
-X-Gm-Gg: AYBFou3GbhuKG7BfuNpwTsnHOoCe3PrhOfsXgwX8/im+MzKJIJZTQM1Fe6KaLabcNtH
-	Ev7BTOdPpYkyOE0dw5nqGczqM4TMu9YYwDRT5efvegfLAZlCfYgGZulzLha72klgzZNF9o0v+60
-	AM4y+QRPlBqGWmOtbEk0tZXmmP0OvTDt/hMiu/LLvoGb/E2l49cRaJBtLRDdvrX9wiBPFEqKFQS
-	ob7Fg5X19kw6P3/XakqUEq8kOVMBDomAo81WK8WY+YbsSpGYjt+u3afk6jH7gZt9W+oX4G/Naj6
-	gtQ898i0uaBYG1ZaBOxOqRtOMmQ9D2UzOaiOtMsFLanIO1Gzxw13mCR+2SnJp6vqPFrppb0Fyhe
-	MiE1nSk+vPtQrS52y3Sk+/67fvwFvRe8XzT3E0kw8aNwcuvVKlzTR1mNuBmpqm+2sB3huIpO1jN
-	uFrLD0EIcVikVOYB8CPaJv5xAnFtdhuXbRtpsAfVpPTgUQJXkaWQ+Z5JqzXmHNrDTUldTQQGw90
-	RYoLN1HmdJknxcQ7j2kA0BkSNPkbbFtpH9htJA7Hh0X//2OFJzFm9Xj+fNBzgiIQhyxVsD9rkk1
-	js04sicw7dlobBF7b5GHxJZ/
-X-Received: by 2002:a05:7022:eb50:10b0:14d:baf5:c415 with SMTP id a92af1059eb24-1ac5a0b4324mr16360361c88.7.1793622736733;
-        Mon, 02 Nov 2026 04:32:16 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793622741; x=1794227541;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kqe+LXyHbZNd2DifYRp5LCbdDXkt1yMBwCvDevw6riM=;
+        b=WSZhMQ0xwUO9FqO3VtXC7KtXyE+3DZMF+Vnbt0fsUO/tj9eTvsePmVcTd2Owsh9/tN
+         s3L9WqbbaGevi9sBQDxOdpZWSBmfbgQh/FNuQylxVPSxWUdUhJBtAZ9sdIX3Mkxsm9nF
+         RILKw7KGRlVWuuf1NldwSbJUSpOQ+9n603mIwvZ4Y7iA7o+zvCr2JD1S/mwyU2PgMvwj
+         PY4S5rNt3f42KFV5lCh1hAoC3t0vhI8CDNMkQSrW1jniECx5QQ/SJ0wecddLZRb94zxN
+         06RUCLoZ/TJAcocwjuiIGpWYZj2/YoY35g2lSGbbUf1lQJQL0j9wQhLxWE+2gJ1Vnl5h
+         gaUw==
+X-Gm-Message-State: AFq9FYLinaY/uXMXQjuV3IRcIgZAiVnY9ZcXOrT68MQeUgEJsCbqw3Xs
+	RKrH2nP0SfWPBsNkR+qSIHRDScPGJPVWwXZ1AplkIP6SoTm5qq3MpFBH
+X-Gm-Gg: AYBFou09adhNdxNPri6/f+vpPF+Bp4uBKXBTBx4xPVruQ9RSG0N/XcmEeRZhIQafzh+
+	OSxU9QZy812DuOkcPCyYH0C0n6sak+9To8U0QfT4yL12ZA5CfKSl+KaqFK69uOvq+AseKDFgKkK
+	gjgEwuYceBWcz4tQdCEnXBT6z45cyVU3yQDJ8umZWOSru1xNbDKIGnUuFlmIz/yihmg+kBf9i/W
+	kBUreABqtUdPtM61uXd1k9ZRVL+3pDrn/L6GZr7PGZR4Iqgv02AuaYHJca0eivJOmQsFuOlSrA/
+	peKdPGvpVD7Enbx2YWgBs6Rb6VoOpPTWCJrUTPV3wXAD3tQLZ9qYLKwPZrTg+shK9LQg3heh061
+	sJPgK13lICbDTb561gZfGtu4R0jz9ZlfNm4kn/kZGpdUeHZ/Q707qYBrBQewEvfsnM9PQ9kXgPT
+	CK1rIkmnVmeMCcOf7cjnTB7g8WRyrhbQCGzNssAJkRBBaQStIMswbKV+qU78Agm5N+iuxks7utQ
+	MFw9xlyoaAKIQmHh33v6YQREtS8K7d3R+tOn8mWtX7/Qkwh8dDm9T6CTKgR3jsUW+xw5ZIRzEeM
+	So5xDZV8GnpBT5goBWLvcpDv
+X-Received: by 2002:a05:7022:7f13:b0:144:eab0:9cbc with SMTP id a92af1059eb24-1ac5e8dea62mr13878426c88.37.1793622741463;
+        Mon, 02 Nov 2026 04:32:21 -0800 (PST)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b2360d2066sm4950951c88.11.2026.11.02.04.32.12
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b2360d2066sm4950951c88.11.2026.11.02.04.32.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 04:32:16 -0800 (PST)
+        Mon, 02 Nov 2026 04:32:21 -0800 (PST)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Subject: [PATCH bpf-next 0/4] bpf: Follow up on the patch list
-Date: Mon, 02 Nov 2026 07:32:10 -0500
-Message-Id: <20261102-bpf-patch-list-followups-v1-0-ddc8ccf40f43@gmail.com>
+Date: Mon, 02 Nov 2026 07:32:11 -0500
+Subject: [PATCH bpf-next 1/4] bpf: Document the aux data rules of patched
+ instructions
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -92,9 +93,9 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAMqC6GoC/x3MTQqDMBBA4avIrDuQHwjVq5QubJzUgZCETGoF8
- e6mXb7F9w4QqkwC03BApY2Fc+qhbwP4dU5vQl56g1HGaa0MvkrAMje/YmRpGHKM+fspguScvSu
- r/KgtdF4qBd7/6wf8VKK9wfM8LySpHKB0AAAA
+Message-Id: <20261102-bpf-patch-list-followups-v1-1-ddc8ccf40f43@gmail.com>
+References: <20261102-bpf-patch-list-followups-v1-0-ddc8ccf40f43@gmail.com>
+In-Reply-To: <20261102-bpf-patch-list-followups-v1-0-ddc8ccf40f43@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -107,45 +108,76 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-Alexei listed what the patch list series [1] still needed when he
-applied it [2]. This series covers items 1, 2, 3 and 5 of that list:
+The aux data of a patch derives from the aux data of the insn that it
+replaces: zext_dst is always recomputed, the new insns inherit the seen
+count, and a memory accessing insn that is not a copy of the patched
+one is marked for non-stack access.
 
-  item  problem                                           patch
-  1     the tests break with bpf_jit_harden at 2          2
-  2     the out-of-range test ignores the insn number     3
-  3     the comments on the aux data rules are gone       1
-  5     no test has a second patch with a jump            4
+patch_list_adj_aux() and the in-place path of bpf_patch_list_add()
+implement these rules without a word about them. The comments that
+explained them went away with adjust_insn_aux_data().
 
-Item 4 is about a commit log that is already in the tree. Items 10-12,
-bugs that were there before the series, come as separate fixes.
+Add the comments back next to the code that implements the rules.
 
-With net.core.bpf_jit_harden at 0 and at 2 before the run,
-verifier_patch_list and patch_list pass and leave the sysctl as it
-was. Without patch 2 and with the sysctl at 2, 8 verifier_patch_list
-tests and patch_list/line_and_func_info fail. test_verifier and
-test_progs show no new failures.
-
-[1] https://lore.kernel.org/r/20261102012940.1756142-1-alexei.starovoitov@gmail.com
-[2] https://lore.kernel.org/bpf/DMKHZS5B5CNO.186F6YH1T6YU4@gmail.com/
-
+Reported-by: Alexei Starovoitov <ast@kernel.org>
+Closes: https://lore.kernel.org/bpf/DMKHZS5B5CNO.186F6YH1T6YU4@gmail.com/
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
-Qiliang Yuan (4):
-      bpf: Document the aux data rules of patched instructions
-      selftests/bpf: Run the patch list tests with bpf_jit_harden off
-      selftests/bpf: Match the insn number of the out-of-range message
-      selftests/bpf: Cover a second patch with a jump behind a barrier
+ kernel/bpf/fixups.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
- kernel/bpf/fixups.c                                | 18 +++++++++-
- .../testing/selftests/bpf/prog_tests/patch_list.c  | 10 +++++-
- tools/testing/selftests/bpf/prog_tests/verifier.c  | 17 +++++++--
- .../selftests/bpf/progs/verifier_patch_list.c      | 41 +++++++++++++++++++++-
- 4 files changed, 81 insertions(+), 5 deletions(-)
----
-base-commit: cd5bc55288d4fd999595c8f2af6a5408cbe92a52
-change-id: 20261102-bpf-patch-list-followups-e6638030c913
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index ead78713e04f4..6d186a096634c 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -203,7 +203,11 @@ struct bpf_insn *bpf_patch_list_add(struct bpf_verifier_env *env, u32 off,
+ 
+ 		*insn = *patch;
+ 		env->insn_aux_data[off].zext_dst = bpf_insn_def32(env->prog, insn) >= 0;
+-		/* a new insn may access memory, systematically mark it non-stack */
++		/*
++		 * A non-memory accessing insn could have been replaced by a
++		 * memory accessing insn, systematically mark it for non-stack
++		 * access.
++		 */
+ 		env->insn_aux_data[off].non_stack_access = bpf_is_mem_insn(insn);
+ 		return insn;
+ 	}
+@@ -270,14 +274,21 @@ static void patch_list_adj_aux(struct bpf_prog *prog, struct bpf_insn_patch *p,
+ 	u32 i;
+ 
+ 	*last = *old;
++	/* Recompute zext_dst: the last insn of the patch need not be the patched one. */
+ 	last->zext_dst = bpf_insn_def32(prog, &patch[p->len - 1]) >= 0;
+ 	memset(slot, 0, sizeof(*slot) * (p->len - 1));
+ 
+ 	for (i = 0; i < p->len - 1; i++) {
++		/* Expand the seen count of the patched insn to the patch. */
+ 		slot[i].seen = last->seen;
+ 		/* messages name the insn of the original program */
+ 		slot[i].orig_idx = last->orig_idx;
+ 		slot[i].zext_dst = bpf_insn_def32(prog, &patch[i]) >= 0;
++		/*
++		 * A copy of the patched insn keeps its marking. Any other
++		 * memory accessing insn is new, systematically mark it for
++		 * non-stack access.
++		 */
+ 		if (i >= p->target && !memcmp(&patch[i], orig, sizeof(*orig))) {
+ 			slot[i].non_stack_access = last->non_stack_access;
+ 			last->non_stack_access = false;
+@@ -286,6 +297,11 @@ static void patch_list_adj_aux(struct bpf_prog *prog, struct bpf_insn_patch *p,
+ 		}
+ 	}
+ 
++	/*
++	 * The last insn could be a newly generated BPF_ST/BPF_LDX/BPF_STX,
++	 * systematically mark it for non-stack access if it is not the patched
++	 * insn, otherwise keep the original marking.
++	 */
+ 	if (bpf_is_mem_insn(&patch[p->len - 1]) &&
+ 	    memcmp(&patch[p->len - 1], orig, sizeof(*orig)))
+ 		last->non_stack_access = true;
 
-Best regards,
 -- 
-Qiliang Yuan <odys.yuan@gmail.com>
+2.43.0
 
