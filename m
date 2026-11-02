@@ -1,47 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793638642;
-	b=nTxhICA7fSi0U8Br65vOb7ijBZeiWcppUoEF9RsqtqnYiBX4uDux7BN10ICNdI2HHbJV
-	 Kkew8t1BC2czncocgm1xshNKwGja97F7pYOSgHNDxq8iIJqEKFeqCrInx9HlJF+1uOaY/
-	 dzqbnRvWqdOY4kcpQPWvrvJBlGf1lFgjwPieZ3SylQOtPYmMOlKc8+mcqLRORbCDJtpbl
-	 lVmcKY6vyKuuOxDFMIL63NIoamwPwuimuHr/arojqcd+5mucARECvCvOh60ifv1dTYUim
-	 CqKO6FaVoQRj43ZgPAUgJkEh3/I9gy6FGdludKYcN8DirMHVJ/tPWsk+TLpXQU1Bh6Q==
+	t=1793639401;
+	b=ge3iX1MAKrLF+qxYqMOhWYS1yvLo6bQBxwR6pfBEBe1OfS4KQX7sOUP2Yw/uxe9SGYMb
+	 iy+iEVDzfliCUfVbCYi0PZT37HHbITDbwUOi0jhkBNDeyKIYX5aOn3J8uZypJQrqUtXSK
+	 oKSI9fdhXffIXdJbQ9ulzTVPzOJm8O+73Cd2AmweFHOS2/Dc0lGyQUSIOeVU2tn9UuvLU
+	 5aumuklCFe8NVHSGHgQErxjJsaAjxnaq8VE3NqYujXFMtZZwfbiNbi5L7aMWkqd7LANSC
+	 Ea/82yggX7t0Qtup/Ns3x4AojoKXSQ9ebQyaNNKudZpivuKAN1WcKc6q6qPcU5gTMWw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793638642;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:Content-Language:To:Cc:References:From:Autocrypt:Organization:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=+O6Iy0v5LIlh9LxTg5ei7m9/hyPO3svpQLvT7K7vZn4=;
-	b=dFWCZBx51/ohfQK6Uqum7SWfSWuECtVu/wocfQ8pxkMjPvbEHJ7RkGVaVEWNWPdpnWm6
-	 7KsYzNBg1aXPwZiJ1S/bdXpi4Bj4X5LAEJHzuhpN8xwPyaO7hQtJZb+9ct4JduUKESrKr
-	 ZiQX4GnGQRocEIGXE9fxzRP5eQJflOTDMG04vOy7JtK4ru/VTpZrcJKJp1btLew65fIHl
-	 guMUCJiES3l0o5YpgIaaIUJOPtOfcFV1jo2VoyxKrOwZ39XHhE6RVPE5ub8fNn/ydYULx
-	 MGsTxTi38f1nnNnjSlaNW/763kILMOPpRYzDjLkUpLUc5EZ8TDgz8lOFzG9WWQ84IJA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793639401;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=ObarEpSKwjlTTcOOrkpmxkzT/Cr/R/c/+rKemdGTWno=;
+	b=HBQ/xhghSZyAgV9jWItPCsBTHxR+OSZE4HLs2GiBmbFq1OZPQ4ph3U6+SO5jPYTIbYiK
+	 cVPcZ2jHzNWN+KmJlXqJ+2kCv19O3lcTpjZMsJiMcNcNnV9HCU14u7c1eerZq2qsiX55m
+	 0Mabycv/ZRyVNVfY8coNQg70es27BbLSvCe2ET1QZMWsgKxksUcDvyryghEaygZISCKoD
+	 Vu1yBPaO7L6Zn5B/RU1MAvdrE1/mfwhismaygJrT3cFJ//8uWdAMknyOWB0nk1Ezqbclg
+	 5x3eKfil/bZ/i77XQ8az+v6LMCHfDjerZZ/hLPV1AOj0/fHqjzGjHvGubrhVtVrZJ8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=W+YvMTEt;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UXEBTi+F;
+	arc=none smtp.remote-ip=209.85.215.173
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E65607B421;
-	Mon,  2 Nov 2026 16:57:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7074C606A91A
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 17:10:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7074C606A91A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=W+YvMTEt
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ACF71F00A16;
-	Mon,  2 Nov 2026 16:57:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793638641;
-	bh=+O6Iy0v5LIlh9LxTg5ei7m9/hyPO3svpQLvT7K7vZn4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=W+YvMTEt1D1G5HRvKYZ4cXex2SOu+GwwhlHaH5l4H3Kq2he+dq1DF2nG31bCxInXp
-	 3jz5zkrA467S2Fn3oOv0kxXoDm9Yk2uRKT+KUGvQG1ScOUuxQPFp8sZmk4aPJT4Hed
-	 hubU7cmja5puMMNREDrbl3/yVHAgFw+oWGa4ZFYR0EpuyDIRGxkRfOKcb3WiOcA+Et
-	 fPV0Hz9bdgXG0TfLHP91kuv7ernbYa1NKUZIptSqaT9Y863SBVSZqMyW6+lVEXjgor
-	 Hr26IkrZgB1xsiWXgCvBXdYxdah130vRdBeL8iy08sB1VPjPVLYHs1twbGtYgXy2fQ
-	 wAHWredSeEgfg==
-Message-ID: <c1118f2b-46d4-4ed1-98b2-ff1c5cb00fc2@kernel.org>
-Date: Mon, 2 Nov 2026 17:57:13 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UXEBTi+F
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cdb2893531bso742126a12.1
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 09:10:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793639401; x=1794244201; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ObarEpSKwjlTTcOOrkpmxkzT/Cr/R/c/+rKemdGTWno=;
+        b=UXEBTi+Fz8w9gh/USvecAdbwxHWNA5mSkfmgzRz/oQg2BHFB9zQq3YAVHRDut5k2zx
+         XO30mqGjkrhFIG/CQkxFwe5dAW1zp0goNOLu6EkROW/Khxc+HYL7Z45yvJiFqZaSODOi
+         3LkyU+hnyyWIisxP2RFppO1yirvRXQCWUIgSVsW4Dj6gg1IC9u9n9NBvu0XDZ1QSbbER
+         1a8uGWK1joSl3rR/aEIGrr/N6I4Yn3aSovcgtgyKrOTPJeQwRKqu2dwNqUBmJ84AzpKp
+         LdM7oYISZ+SKbvDUZqY+8b3Wds+XZgzoqaox6h4mrl8OG3gAypN0R9jk2MijqkNuLDi7
+         9NWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793639401; x=1794244201;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ObarEpSKwjlTTcOOrkpmxkzT/Cr/R/c/+rKemdGTWno=;
+        b=eeFPm0i6YsoM4eThpphPKRD+orm5HopGaxWPBMP8rAAN2RUnWWy9PD1NACe18p9KZ+
+         Tx1v3C3l9DKvUJEjlzp8R8wgXoX9OvufeqmhH1qbajkNGKn0sB23nhGBcyGnS542tntO
+         P7/0IaYBlezPElivGbrXnSF1Ue+rIh1Fji0YFEOsZQXpZBfVQbISW8varFuB3egdHqAJ
+         OLpxLTft7gWUlzcTl69/rr99nfbFPgr/ft/Q37NSnmRH5F7E+wel8M3mjgaLst0qL5qA
+         vL/M4jmmgF0bXhKZDcxvJRp0g3OTGRRfPxtClm52iWgqgiqHy7PHtVdKC+9Mzf+O9aLn
+         oj9w==
+X-Gm-Message-State: APuU4Z+DvgE0lB+J7TE0FkazqSUhzbQsRORd0EXbCzC2e2m1dYkAk4UT
+	SY0z0NQQrVqVk3rGMY+bHhSkIQOVwVUBMevdI8a5kR3RDpUlu8xPENWsFTQ4Qw==
+X-Gm-Gg: AYBFou3/iAw4aPxj9MzTRe2SSF/ygZ4kCQYpA0Ig84qIFx96dkPraHpUma0Wdqhkf3y
+	CL6X3Xspr1ix2G+wYt5VVvSSBJTVpgLHqXdmhYWeBlIWPh9ebXWIurk5M7zirfemG9QM8y/wv58
+	H/8A7xZJ+/Xqzh2DzJQSXklKWzHmFTp/V9ZRes7kVDKYh51vu3IDWD0l3iQzS3hYeCAFA6CzrMu
+	HBBHL6XBGVWzAW2W4B/R/AuEcqMKdpySMblvvwh7/vE/QGJ3efnewhoiaFGcD4Pyrg0S+Bbt6Oo
+	0oRSlLnEEue7ehgSAD/DyRl8CDf+lTNoXgv9HwNrD/BJwQSWtv+CucMqKfvaPlF0/oR+0HJhRw1
+	k9M1S4fzNsKWEqV90u29ZcfsVqrCAsxMAAAMLBn4e+PdBU/Anmd9W18HX34M+M2rnp3SwNchWir
+	vRJIY/Q8rhDG3DS4WnYIWg19P/6uApUnoBNGkgO0k3lXlByZo3SgvOXClKMdfLnNF0eY9RCX98q
+	kmbRmVmok9z67BpXnmZknGYAlbhZpDPL9BmMHTwfXStszJFgUgrVCzzhHQm9cFE6u4TCJUyAMIy
+	83JVqgtX5hBVxF4+FBh85Ec1urnFMtYUVggfnhckNkRbk+gCTAWHXcnnBAAfSTYS53O+0iHbX+K
+	jhuOXkyoU+m4mjZoXqmV3M+S6UITyEdhuxG6trW+l40tshXAG/JCJeJ2LW4coDzBTquz9Lvok4A
+	==
+X-Received: by 2002:a17:90b:1b02:b0:3ac:929d:ba5c with SMTP id 98e67ed59e1d1-3ae89847b50mr8240488a91.45.1793639400659;
+        Mon, 02 Nov 2026 09:10:00 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c896cc6sm11067a91.9.2026.11.02.09.09.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 09:09:59 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf v2 0/2] bpf: Fix the stack buffer that bpf_dynptr_slice_rdwr() returns
+Date: Mon,  2 Nov 2026 17:09:56 +0000
+Message-ID: <20261102170958.3586893-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,96 +96,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf v2 09/15] bpf, sockmap: Check the TCP state in
- recvmsg()
-Content-Language: fr
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, mason@kernel.org
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
- mptcp@lists.linux.dev, josef@toxicpanda.com
-References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
- <20261102072112.4160195-10-alexei.starovoitov@gmail.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20261102072112.4160195-10-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Alexei, Chris,
+From: Alexei Starovoitov <ast@kernel.org>
 
-Thank you for the fix!
+bpf_dynptr_slice_rdwr() and bpf_dynptr_slice() can return the buffer. When
+the buffer is on the stack, the prog has two pointers to the same stack
+slot, and the verifier knows only one of them. A store through the slice
+changes data that the verifier tracks in the slot: a known scalar, a
+spilled pointer, a dynptr, an iterator. Such a prog loads today and can
+crash the kernel. A load through the slice reads such data as a scalar.
 
-On 02/11/2026 08:21, Alexei Starovoitov wrote:
-> From: Chris Mason <mason@kernel.org>
-> 
-> With an sk_skb verdict prog, tcp_bpf_recvmsg_parser() copies data from the
-> psock. Then it calls __tcp_cleanup_rbuf() to calculate the receive window
-> and to send an ACK. The window and the ACK need a connection on the socket.
-> But tcp_disconnect() keeps the socket in the sockmap and the data on the
-> psock. For a TCP socket sock_map_redirect_allowed() rejects only
-> TCP_LISTEN. Thus the psock can also get data after tcp_disconnect().
-> 
-> __tcp_select_window() divides by icsk_ack.rcv_mss, which can be 0 in
-> TCP_CLOSE. In TCP_SYN_SENT the new peer can get an ACK with the sequence
-> numbers of the old connection.
-> 
-> Call __tcp_cleanup_rbuf() only when tcp_can_send_ack() returns true.
-> recvmsg() returns the data as before. Move tcp_can_send_ack() from MPTCP to
-> tcp.h.
+Patch 1 invalidates the slice when the prog stores to the buffer, or when
+the frame of the buffer returns. Patch 2 has the tests.
 
-Good idea!
+The selftests that pass a stack buffer to the kfuncs only read the buffer
+after the call. They load as before, with the same number of processed
+insns. Cilium and sched-ext/scx do not use the kfuncs. test_progs and
+test_verifier have no new failure.
 
-Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+v1 -> v2:
+ - Read-only slices of bpf_dynptr_slice() follow the same rule (Sashiko).
+ - Tests for read-only slices, one of them with a file dynptr. The progs
+   end with a load through the slice.
+ - Shorter tests: a macro for the callees, less in the run-time test.
 
-Cheers,
-Matt
+v1: https://lore.kernel.org/bpf/20261102055543.3584718-1-alexei.starovoitov@gmail.com/
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+
+Alexei Starovoitov (2):
+  bpf: Invalidate a dynptr slice when its stack buffer is written
+  selftests/bpf: Test writes to the buffer of bpf_dynptr_slice_rdwr()
+
+ include/linux/bpf_verifier.h                  |  17 ++
+ kernel/bpf/diagnostics.c                      |   6 +-
+ kernel/bpf/diagnostics.h                      |   1 +
+ kernel/bpf/helpers.c                          |  10 +
+ kernel/bpf/log.c                              |   2 +
+ kernel/bpf/scev.c                             |   6 +-
+ kernel/bpf/verifier.c                         |  65 ++++-
+ .../testing/selftests/bpf/prog_tests/dynptr.c |   1 +
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 264 ++++++++++++++++++
+ .../selftests/bpf/progs/dynptr_success.c      |  34 +++
+ 10 files changed, 401 insertions(+), 5 deletions(-)
+
+
+base-commit: 714b7112017fc7f8b2afabccf562acdb12d2ea7d
 -- 
-Sponsored by the NGI0 Core fund.
+2.55.0
 
