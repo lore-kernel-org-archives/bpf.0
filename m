@@ -1,87 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.172
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793623054;
-	b=0r0VVS2eZwQaxOpZtrHhbJofWXwDtlSrwDWdnGsGrtv7V1/4mf3LHI7wUb8FIFg+1JLS
-	 gJzmY1BW/ibTrmF3epocroGRcR2Pf7FtTFdd4pevLmv73RLAkPbbxFxn9ozfdTU2rzIMA
-	 G/8Tc90l17+VPiJ3fydFAxvYvi4lSnKj3o6PiY3CmepIzCDxuSw1eSHzWgSSHuU7hnEgv
-	 yC64DRAR98YrVhU7e5e9vWrsVQh9MAgn00WW4ph4cIEreF0aUu0wWu6LzXfdcei5EXfcy
-	 t6p97wC0i8XHfkt2HHq+WtJKziNZZHsE10GBMnr2jGD9D7ARhSKZCCnjrIGLwLsB6zA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793623054;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	 References:In-Reply-To:To:Cc:X-Mailer;
-	bh=UJnsc6rPzhRrohHVm6N1G/brkkNL5aN56fn34HSgfWU=;
-	b=y67Xnf0JKOuoSCQ6BbMhlu0Br9cRqp0Lus8514cbsh4FEZ7ktfwiVtCUC0kNLX4ErZFz
-	 T96v/c8B5Whbf6bsGupabnB8DCQfIzTxM2LiqGL51djqYOwt3OgQ8fy1mhbzUo3TmqN99
-	 KIMXZMs1vJj3H/9YAvjCWTTlh+VZiuilALeS4NfOGuxheXYFyiwkeqDTWzuKq39oDMsWC
-	 +5EnoZKg+I9KhNaeA1Zgx2NLFhKC/OiUWj42iTwOsFB/+NWb/X0ohEdb4vAKFysFcDPuP
-	 M+nQbz/58wnT5K4a5TRsuutOg9scAuFykmoDQy1mR9mVMjEXNqUKPyU4XqpMRo+wENQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="I+iB/xDh";
-	arc=none smtp.remote-ip=74.125.82.172
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793623455;
+	b=DDiV6Ir8L/VYe0TGFEy44+jxxZfaJpWy9VoOSrPDvogpfQ8+rXtm6nBPYaHshyAi9J2T
+	 Vuy0vmeGVgMthsmYDck1e/HICJlkZVnBgR4WgeMe8dQDsuXqibs1n0KoC/YJT2EwDYBAH
+	 ObvJi7NexVAW2nvX2YKMwH84Q9pQ8fJPy119kEMC2Gg74/FSqhJyDGBV7HbtpVjBlzzNo
+	 Upr9SFHXTGosvjcCfzgP4ycNyjW+6BQxDf3bQj5ibmhzHIWOfuV0sX5KEynwnPvNxk7B4
+	 oTAdLB34QRflsnwj5xnFXxBAf7t6gy5y6kbZigjHvXobCs3crbdOJvW+eQTfKODsA7w==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793623455;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=NGGMAMhFrzKmynmWR15heKv/jXN7yXxWkpWk0IctRQk=;
+	b=jil3dbA72tnv4ZacggElmq/dd1YX0uJLuy3pgHSIOiuvKciXs9szbW04ebepsTlnfxkN
+	 sOPe4AEH3OBYM+z0JTSBczecmvCAWY0F1xIdYVDrX1mDjeSuBUmw7vWD4/mHVuYaKq1JC
+	 TTGm8yu0tj5QfM9vb9GkNBcIwCa4eJ45NhxfnyAGWBMWdoEdE7pkfNp3mYXA+BKg7TekD
+	 24fStRoGVCVZB2wTmgx9tz/DyxlOgHP/UPLwoZ7CPqvrL0xYBJqDbdhE5IHX/GHCZGC1s
+	 DJIiNDtUe4YYJbTmb0q1LH30FPW8T45bdab22KrZxoftqqvo3apyd8FgA2wbKJ8aKuA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AaP3jgKf;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD8F60A2607;
+	Mon,  2 Nov 2026 12:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AaP3jgKf
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793623454;
+	b=abA5Nl+cX/3BsH9/o3z7d6Dw+OHqPcbRSSJ9mK/m80D4D+yeScszjUa6rC69/H9/Tkte
+	 KKMFHYSMdac4LhmA6SgjWzvJ2hvOT/Fzw+Q/rUTZY7eVzxAd88QyxYnlKh22RxfsMJJxG
+	 PeOq6RW+4P/Z+ufvhc4MxKHM0gDtP+lZ93ov+iRvQLic9F8fgM8DWgDYuAIdiVr8ygdQJ
+	 HgJeV7J8Tkh84dcX+SwyYvlw8DjGZUB58BimySJIJ+GrGFF/hbs9/3dXAZGYjpnH/mYR+
+	 e3wN7zKn9/LSp6e0aEUhbgHqcJ3ZLNnNxIX0umkyHUDRKORdi1vTNltC9Mc2jSMB5uA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793623454;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=NGGMAMhFrzKmynmWR15heKv/jXN7yXxWkpWk0IctRQk=;
+	b=nB15c2GfPUOb8bJJ1b5h1wOcC6d4Ch6PKCaIX9xwR0KSDNzCjNrVWDpkFcRiigAAGaWB
+	 H4u2pfm6mZ4t88CzJJTZODmKMQ9oYYkMRTzVbna3Jp+KaWA94CXc7Ae+1HCjFE/rUmJU6
+	 KMD1e6UmlWgXdZMH0TKjKhhvFYFTMTU+pWtbVW+0mN+Km+mwJqST/TElz4qN9jBaoaLOs
+	 pjr715oiV42S6/vvNL+oqRJiFbTXr78K3SXXolgTCoFfO18UWpQ40rcxAYOI3+ImLNLcQ
+	 lcamGXT8uFQuL59Fl+pMLqgD3lEDwcW+Ge6RqtYt7CBGx1XmozP3THyDV2YMnadA3BA==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B1B60A2604
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 12:37:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76B1B60A2604
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I+iB/xDh
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-353804b591eso5202836eec.0
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 04:37:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793623054; x=1794227854; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UJnsc6rPzhRrohHVm6N1G/brkkNL5aN56fn34HSgfWU=;
-        b=I+iB/xDhOLEUFnfAxghqnoWsj2cnfBUPzJ4P/6rflkIGlsnJiibyRWCx5skLYgX2ai
-         0tCVXdwrHAVqMmbqTSs1YMv2aLQIBmPIzxAGvnlftxsTGBo6SXHDI+PZ3PgKW96D6YgX
-         Q/ZpsHH0SXYQd7gODeYqLgPcRH03uO/DA3G+ew7XpMshOGjQohxzjbBuQj6lUTyx/qYf
-         eSKUJ/Mh9VIxzIZb0SliQzlYzB1DhM9M1D/qLSHlCDc0nzc9vDgLc/EvpvDzxXKcSx01
-         I39ZhHIQQZISagWDZhnAPMAQ5FLTiSVIhuM6mbO+I+eZJK12ThlMlVyy6KQPKL/9cHU0
-         Q6bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793623054; x=1794227854;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UJnsc6rPzhRrohHVm6N1G/brkkNL5aN56fn34HSgfWU=;
-        b=tKp7oH8qI5GqBR9UDbsDnBZXoYZNP7f5iemjAMmWjiTk1+MQXB8UtyqKIbWdNTvBRa
-         5bOq6iODSFeQJ941XQL/NBawC5ginYOxZdIJjigQ0Fj2fXCWUtwZAh70dGTQ0AmKXGmq
-         ErLV6UVBFl3BcnvaTguVP8K5jHAcm2ZvqeL0WRoO2CxjgaSgIr3I7/kK/Qcw5rrQPB5i
-         BFVteACZUq5iAlKXv1f6RxEgH63bM1VtLyQplo3Ct/ln4jsaRaYLcw4R/34t3FxAO+Nh
-         TbDiVAUcu1tJ+dDbd8ONBQa+GGc3pWotbGklwr9D+Tltc2Rl7EfTKTPrH5zhPVq2JdkL
-         Msjg==
-X-Gm-Message-State: APuU4Z+EiB0El9MbrEDgkKogEBU5qhKago7CPLjBWyDgAxe/wlIoVTCY
-	GrFiGOmMrZgm8t4seaGXVm1+hSEO1xWD9CcSoiZ8c4cNfC1SnA2TDDRj
-X-Gm-Gg: AYBFou33uBGltjcm1zRb4xwDEMHCDlHmnYM7hhe4NOF1VwzudqZrWD5QVS3/MAlyNik
-	Xwa4MNsHh4edycQQQVwjWhEnJgIxxK4D9Gd09oZYijloR5tKZ8cCsmb8N0iiPi/Vh8syJ2OABSt
-	SZ5RfmGyNOnZNCN95ztgenlQVXMZYOknqPZ5qp86bU0hU50Q2Z7RGV+7VIb7WoCX69+pgJfNHhK
-	c6c/ol2WQCNosLMdI7wOG0DNi+4IZhzulXWXs3hrwm2WSUTGUHpzucob3oLuM5uJMK4px8sS3v9
-	+Y6x0K4j1yyyod5CO0OlYUk/huHvcjJVm07BVIpVa9mGkCtZ5aHBoRs42c5QzmPI6C17aYo4SRy
-	O4TDBL4LWmnjQifSRV+A71ALzCQLe8B8K9WSdV1CD5SbPivjJ34MTNbfM+KT558NS0/lSxtXu65
-	nIg2ClnyLjZdX+jy5OcBNiAXHqkwzC29u700CzuHEkAr0koxMKm9oUNykwc5tgFh3xLXO6gA389
-	GvAtaLVnGyzCyUKxVKrnoGL8lzpRGr+HmrkUtfFcBmPweoIb8e5L4jQxOoz9B5sqCxQWmcl/MGZ
-	/ZZZu3nKqnj2eDb4GJj0qacb
-X-Received: by 2002:a05:693c:83dc:10b0:365:d42a:f415 with SMTP id 5a478bee46e88-36a423454b2mr17231783eec.12.1793623053582;
-        Mon, 02 Nov 2026 04:37:33 -0800 (PST)
-Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a428c17bdsm36326095eec.6.2026.11.02.04.37.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 04:37:33 -0800 (PST)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Mon, 02 Nov 2026 07:37:05 -0500
-Subject: [PATCH bpf-next 5/5] selftests/bpf: Test log_true_size with an
- error from blinding
+	by smtp.kernel.org (Postfix) with ESMTPS id 37B6D1F00A16;
+	Mon,  2 Nov 2026 12:44:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793623454;
+	bh=NGGMAMhFrzKmynmWR15heKv/jXN7yXxWkpWk0IctRQk=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=AaP3jgKf+YUr8MpLjY0dYT3FQDt/31c9LpPO/RCkjfDMYlFNLoR9Fh04gxPOkkv7I
+	 /5I23qCu4xV5jpPOc/PITqVq5rfQPG24zzm1+Shr+OMOf/Wt/zod8qsXJkbV49Mb8d
+	 ITwszn0Y6aEjyEPeOkec1REvrh4IEtEmpXoVulyMthIPEQ8FQPH+gUQ63ifOcZcsCn
+	 mdFjctVOq5yjXwFiGwZpD8VzIUxLDyzyXsfvfT4uAkzlntQLWW8vtqrpKY9ipvv3t0
+	 nTz0Kkb81+kf9evHzPbqSIpAXJoQ95AN6nUn0YV4p+RWGaFKDsKwjNNvFPFhC6XQIi
+	 t4FcUBQc5TlRw==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 8CA46464DD;
+	Mon,  2 Nov 2026 12:44:12 +0000 (UTC)
+From: Mark Korenberg via B4 Relay <devnull+socketpair.gmail.com@kernel.org>
+Subject: [PATCH bpf-next v4 0/2] bpftool: Make the LLVM disassembler an
+ optional runtime dependency
+Date: Mon, 02 Nov 2026 17:44:10 +0500
+Message-Id: <20261102-bpftool-plugin-v4-0-5a853e973db9@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -93,109 +86,100 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261102-bpf-blind-nops-fixes-v1-5-844300e42cdb@gmail.com>
-References: <20261102-bpf-blind-nops-fixes-v1-0-844300e42cdb@gmail.com>
-In-Reply-To: <20261102-bpf-blind-nops-fixes-v1-0-844300e42cdb@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33NTQ6CMBAF4KuQrh0z/RGoK+9hXLSlQBOgBLDBE
+ O5u04UxGl2+vPnebGS2k7MzOWcbmWxws/NDDOKQEdOqobHgqpgJQ5Zjjhz0WC/edzB298YNYKQ
+ U2nCLueAkonGytVvT4JXEWxjsupBbbFo3L356pE+Bpv7XaKBAIS8NKiNpfVL80vTKdUfj+zQV2
+ ItTZPKLM0CgShSacUk16k/O/3MeeVmoupCyUgLVO9/3/QmVAESRNAEAAA==
+X-Change-ID: 20260603-bpftool-plugin-c994bc3e0643
+To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
+ Justin Stitt <justinstitt@google.com>, 
  Emil Tsalapatis <emil@etsalapatis.com>, 
  Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Luis Gerhorst <luis.gerhorst@fau.de>, 
- Henriette Herzog <henriette.herzog@rub.de>, 
- Anton Protopopov <a.s.protopopov@gmail.com>, 
- Xu Kuohai <xukuohai@huawei.com>, Hengqi Chen <hengqi.chen@gmail.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
-X-Mailer: b4 0.13.0
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
+ Mark Korenberg <socketpair@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793623450; l=3058;
+ i=socketpair@gmail.com; s=20260603; h=from:subject:message-id;
+ bh=s1BbFMwahYj2EEmbxI8ooWySbm8Sdb/tUQr9mxtP7uY=;
+ b=r9H0AK2by86Kthvuqg88ineEV295m+sPSFKixzmZg8wXsojAwENyTtUt1ZTcbRZiRf6j03FZJ
+ SbaWivmTQbeC96PvwLJQCz7cUFjb4bHPoTuUNqSyTyq8zT68ipaJrPT
+X-Developer-Key: i=socketpair@gmail.com; a=ed25519;
+ pk=2iAMjWhs7kA9X8ccetT2YVX8dvniXua2okQogw3Don8=
+X-Endpoint-Received: by B4 Relay for socketpair@gmail.com/20260603 with
+ auth_id=806
+X-Original-From: Mark Korenberg <socketpair@gmail.com>
+Reply-To: socketpair@gmail.com
 
-A prog of one function gets its constants blinded when its runtime is
-selected, which can log an error.
+libLLVM (~140 MiB on Fedora) is a hard dependency of bpftool, although it
+is only used by "bpftool prog dump jited". With this series, bpftool is
+no longer linked with libLLVM.so but loads it with dlopen() when it needs
+to disassemble JITed programs, so that distributions can make it optional.
+Patch 1 fixes a leak found on the way.
 
-No test checks that log_true_size counts such an error.
+Changes in v4:
+- Drop the plugin, load libLLVM.so with dlopen() instead, as suggested by
+  Alexei. This also makes "prog dump jited" work with the bpftool built by
+  selftests.
+- Keep "llvm" in "bpftool version" a build time feature (Alexei)
+- Unlike the suggested diff, still link with LLVM built with
+  BUILD_SHARED_LIBS=ON, rather than failing to build
+- Link to v3: https://lore.kernel.org/r/20261029-bpftool-plugin-v3-0-87af799da40a@gmail.com
 
-Load a prog whose jump goes over 11000 constants with bpf_jit_harden=2.
-Blinding pushes the jump out of its 16-bit range, and the message must
-be in the log and in log_true_size.
+Changes in v3:
+- Look for the plugin next to the bpftool binary before its install
+  directory, so that bpftool run from its build directory does not pick
+  an older installed plugin (Sashiko)
+- Link to v2: https://lore.kernel.org/r/20261029-bpftool-plugin-v2-0-1a47b2391b0b@gmail.com
 
-Reported-by: Alexei Starovoitov <ast@kernel.org>
-Closes: https://lore.kernel.org/bpf/DMKHZS5B5CNO.186F6YH1T6YU4@gmail.com/
-Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+Changes in v2:
+- Move the LLVMDisasmDispose() fix to a separate patch (Quentin)
+- Look for the plugin next to the bpftool binary when it is not installed,
+  so that bpftool works from its build directory (Quentin, Sashiko). Not in
+  the current directory: bpftool usually runs as root.
+- Export a single versioned structure of callbacks from the plugin (Quentin)
+- Only report "llvm" in "bpftool version" if the plugin loads (Quentin)
+- Handle dlerror() returning NULL (Quentin)
+- Rebuild jit_disasm.o if libdir changes between "make" and
+  "make install" (Quentin)
+- uninstall: use QUIET_UNINST, remove $(libdir)/bpftool (Quentin)
+- With a static libLLVM, which a static bpftool requires, link the
+  disassembler into bpftool as before (Sashiko). This drops
+  LLVM_LINK_STATIC: static LLVM archives are never linked into a shared
+  object.
+- Commit log and comment fixes (Quentin, Sashiko)
+- Rebase on bpf-next
+- Link to v1: https://lore.kernel.org/r/20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com
+
+Tested on Fedora 44 x86_64, LLVM 22: builds with shared, static and
+per-component LLVM, and with SKIP_LLVM; "prog dump jited" (plain and
+JSON) on live programs; bpftool, also when installed as selftests do,
+loads libLLVM.so only for "prog dump jited" and reports an error if it is
+missing.
+
+The changes since v1 were written with the help of an AI assistant
+(Claude), from the review comments; I reviewed and tested them.
+
 ---
- .../selftests/bpf/prog_tests/blinding_log.c        | 59 ++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+Mark Korenberg (2):
+      bpftool: Fix disposal of the LLVM disassembler context
+      bpftool: Make the LLVM disassembler an optional runtime dependency
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/blinding_log.c b/tools/testing/selftests/bpf/prog_tests/blinding_log.c
-new file mode 100644
-index 0000000000000..658a8494dae5b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/blinding_log.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* The verifier log of a prog whose constants are blinded */
-+
-+#include <test_progs.h>
-+#include <linux/filter.h>
-+#include "sysctl_helpers.h"
-+
-+#define NR_CONSTS 11000
-+#define LOG_SIZE 65536
-+
-+/*
-+ * A prog of one function gets its constants blinded when its runtime is
-+ * selected. Each 'r0 += 1' becomes 3 insns, which pushes the jump over them
-+ * out of its 16-bit range. Serial, because it sets bpf_jit_harden.
-+ */
-+void serial_test_blinding_log(void)
-+{
-+	const char *harden = "/proc/sys/net/core/bpf_jit_harden";
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts);
-+	struct bpf_insn *insns;
-+	char old[16] = {}, *log;
-+	int i, cnt = 0, fd;
-+
-+	if (!is_jit_enabled()) {
-+		printf("%s:SKIP:JIT is disabled\n", __func__);
-+		test__skip();
-+		return;
-+	}
-+
-+	insns = calloc(NR_CONSTS + 3, sizeof(*insns));
-+	log = calloc(1, LOG_SIZE);
-+	if (!ASSERT_OK_PTR(insns, "insns") || !ASSERT_OK_PTR(log, "log"))
-+		goto out;
-+
-+	insns[cnt++] = BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32);
-+	insns[cnt++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, NR_CONSTS);
-+	for (i = 0; i < NR_CONSTS; i++)
-+		insns[cnt++] = BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1);
-+	insns[cnt++] = BPF_EXIT_INSN();
-+
-+	opts.log_buf = log;
-+	opts.log_size = LOG_SIZE;
-+	/* log stats only: level 1 logs each insn, which wraps the buffer */
-+	opts.log_level = 4;
-+	if (sysctl_set_or_fail(harden, old, "2"))
-+		goto out;
-+	fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, cnt, &opts);
-+	sysctl_set_or_fail(harden, NULL, old);
-+	/* don't mind whether the interpreter takes the prog or the load fails */
-+	if (fd >= 0)
-+		close(fd);
-+
-+	/* expect the message about the jump in the log and in log_true_size */
-+	ASSERT_HAS_SUBSTR(log, "cannot be patched due to 16-bit range", "log");
-+	ASSERT_EQ(opts.log_true_size, strlen(log) + 1, "log_true_size");
-+out:
-+	free(insns);
-+	free(log);
-+}
+ tools/bpf/bpftool/Makefile     | 10 ++++-
+ tools/bpf/bpftool/jit_disasm.c | 88 +++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 96 insertions(+), 2 deletions(-)
+---
+base-commit: cd5bc55288d4fd999595c8f2af6a5408cbe92a52
+change-id: 20260603-bpftool-plugin-c994bc3e0643
 
+Best regards,
 -- 
-2.43.0
+Mark Korenberg <socketpair@gmail.com>
+
 
