@@ -1,95 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793578675;
-	b=e2m56Rvxvs4JSUzFWP0g9euaQpMbersn5MXcMfVnJcg6CjJ2CTqsi8V4Nnh5AcVQG2eS
-	 GoCN3zAhtYLGaKd1WICpsGa6Gy94oM/qxphxV9VmmwBMy9zTzKh8WXCdfZ9NZnwO8zYRq
-	 rIRjZwqeSwrmQPYFKj8j/HeUFR0Qq/1WGo/FxvPSJKZSAAXQ85EvoE9b6peD5WLAAa+O0
-	 lFX38320piWgfe/32Rhlh7H0S+frwe1q0A/LZH7LggcTHlxjoXR1HKM7NEB9kOCBPAMgz
-	 2sGLCnxX8aEQBi1U73cDtaK10mPZL5QborGYsU+Ervb7e+c0ML25bV4YpkpRR9WjJVA==
+	t=1793578822;
+	b=hxNPl57Tp9GlldurRRuLUzqybleGgT/+V/z62Kz+msa/UMYOsVB/bA/I7xl/tW0pNZYS
+	 offU7TMHWkCM8K6pyEmDwOWiiTiizLMANeEQnd2CHIG2f4RnV07UXDx1ZxcvA5uoH6GMv
+	 OFZGn/JGQedbKq2Z/OEoioFjn66rZugsv6+ehTkBloX+DPbjZnLRBXRgcul/MYpIel3nE
+	 JqScb20P3KafKA/Fw/HdYbwLWhWxh/wLc75TIY5CWtnzEM+dc6M4BJkiy/YzGc2g7QGPK
+	 TLJ84ojDs6GftaUfj/xEBu38fgfPtvp8iUPDSzUyRhD2EMaSChi8Ol6ZT1kYE7060Yw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793578675;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=OwpIzVCkDZcH3jbzH5HRsFx6n0SAUwWodTFAghsx2FQ=;
-	b=EA70b9xj8M4R2PhvU6MxkiiqWJEEdWRwWHf8D8lHQCw4JpX9//FD4mOHCmbiRVB7l1/8
-	 0NwrTM8PCbD/XwVO4rHSaIpKJfgI98bSkN+pFsr35jeWkmId9ps1HiQg7QMeUspwDXFwB
-	 +SJPXUBrG7mWCyP9qnP98UeHbYRKXj986ugyIp2i7zb3sXAxIg06+JN4rrfybHyWkcfps
-	 4/psSWwig9zmTAUgNC4c4PQAWSmQQyzZ2s8AmQ3H9R3FW0sONoQEQZ45Bwyr35Gi/hRvl
-	 VbzEsCN5p9ccgmbS86qGGaHdaoxtOVWCGKJdR3lTDaaiqWW3r6ZtVkwSDYCGky1x4/g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793578822;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=jwUeZDWBCFAKgh9iPvXir7dyVOHi1Jj6ovu4halCxaE=;
+	b=Qf1jT5I3EH+fEv57+cUkLM/x+Ai1nfiJ/a2lFl2gbThme7DZ4prsXx4+RAUdyycDmzZk
+	 qCtSQ0bsXhtwKbdq6bDpPO6dO6qhNPYeKjvIjny1wkLQ/wE/dXWk/H+9/tjy+EozgZTyE
+	 /3JgabvdRgZaEZ9KaLbhSeTNWuZDnYA11WS0v/g0V/etsH+9vK3JTgYFtAm5yvwEVA00J
+	 0P6v9+j570M6+LK+QOD9AhknAJ+iNZsf3rUM6kcenF9+k3tgAQlwFYO6HjNYhCX/qC1Uk
+	 v6O/esYlXc7Fp9SH9ZoDHODvs9cX+gyo5EPP4vQijGJluhjXioUp2tcewX5G2IMm05w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b8Xmal1p;
-	arc=none smtp.remote-ip=209.85.216.51
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ppn2LAFs;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7ACB606A324
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 00:17:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C7ACB606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9CA606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 00:20:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b8Xmal1p
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3ae1da332bcso1091202a91.2
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 16:17:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793578674; x=1794183474; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=OwpIzVCkDZcH3jbzH5HRsFx6n0SAUwWodTFAghsx2FQ=;
-        b=b8Xmal1pZmsWfudZnj13+issMjbPJd4AeE7jcfiwg2O3yS97AHIeoAUC3UcwTaI/GD
-         5Gt98DAQ/aF8ml4hX1nz/2/8b1a8penArOUEg1/HpEWqCTAAs+6jDGqm6/2tdt7IwyEF
-         H1HUCypPkQq/Wg5+oGXOUDVMrFhAsSLffJRyzxk+k3N4ysE3WytCOTFMi6G6SBdzltK9
-         Orexaaj729fLGoUw2SG6XCWUbEVOyRP2GXXYNnC9+a7VonNqYl4nGYLX0eWG1CtUjTOJ
-         s050ViSM5ka4YpuI3/J+0DtwljuWLw7qBLaChDRrps0jTIP455gfuoRR70PnyFDrnXLU
-         IMfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793578674; x=1794183474;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OwpIzVCkDZcH3jbzH5HRsFx6n0SAUwWodTFAghsx2FQ=;
-        b=sqXvT/U85BWkNi8tEp/PwqUMVcbcsKVnOi/oexSrUCAkS2MczAeM6DwtHEmnOf183Z
-         t5b09z86bmuGsyoTaXKBRMi4s9lfdpdes6yo7xaRPO65Hgy7LQovJJtBVjpAx1B0bt3v
-         wGUNdYyg2+o5SD7MY1QiSCsO5GLRo9rPp+uCzLWfo4onjIBvycR/PR7pnD5qGgBy96L9
-         fxAcNT0Gu1tapo7dNYc6xgp3omfUv6QXetU33fTKIi960W06ZOl0fNwYgfyzmJjVmI+I
-         MRnRlkqmC+36IZomQGNm67HzYFSqoVk4Nad0L9ulOW0Yon5mRzcLCy5S140v/9psSjOy
-         h0Pg==
-X-Forwarded-Encrypted: i=1; AKwUvBwbRJ6glSt5ZWktoXVPGgUCLZ3YiXyN/3b/MIKxBi03FW6RXztq/VokDAdxzTer+3RtOAc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/6wQQB4rij5gXb9vxSKGsqKZJHqkQ2MXNMDo9mOniU64FTyYaV
-	yYuYCWYXUHTvqgGIk0j70RMMhCq8lcNKBCje92M0mAaTDDmCkdQNGR0z
-X-Gm-Gg: AYBFou32ScN55+rvkn2rq5Fbt+CdV4DPelrcdYGkg7vvrhx5zVs4Oo1yQE714twOUja
-	KFM8Xco1bkHczUGUDIieBk5eZSsTj3vKq2iFwZOqyiZ9pzRqIoM6XeFzLlGsPb8MyIk0bt4I3TM
-	g9NXtd5OkSzIAgdhBYse6QnsxgbFtcP6OXuCpS5CtgHJeZuBLJHDFyzoFPNgZ7GnvF3kdzPkDfB
-	27lZjmTSTtf04+F19cJVFe/AIglX3A/ZVGdb3IqQflrYts9LJ96eNQmdifiVdYYt/s2CTqofwgR
-	BMAOoT4gAoiuIonzvrvMoG5z13eTf3j7QPi3mF5U6WU8q//MZ0eldoXhAZWGqw1ci/paHTGs2Wr
-	QUQnMQX6qFt1NNMaSFgC0F44bCkPSDGqHC5sUG67xa+EQG50x89yWKDeHF+2wYLZ8+VBFgBECO2
-	HrtqgSCu62NFROUY/DxCPGKRYEoWh5reG2dgqEI5gUwNnuLwal47qWehD7FUkkm0lTNcebI9LzK
-	7bMm3RRdmOWQqYIRXU3J9plJoWBYp9/WpWAkAINasjdnu4D1Vbxy+0PQL9eLc8AfMvpSlDyUyjw
-	NsfCQCPA6ntT+5FU4HmpSiaUxVHe0TK5sT1Hegxbd+oD85SIqy8Znl9YBbQG2lfYpp9SX5tYikT
-	EQkAnBaf08McXccyV41QmiA3zjvwKGWgC+fHcuzhE9tuB1gAY6Wzidrc=
-X-Received: by 2002:a17:90b:52cd:b0:3ab:b764:826c with SMTP id 98e67ed59e1d1-3ae897ccacemr6470813a91.12.1793578674003;
-        Sun, 01 Nov 2026 16:17:54 -0800 (PST)
-Received: from localhost ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e949077sm15965674a91.9.2026.11.01.16.17.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Nov 2026 16:17:53 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 02 Nov 2026 00:17:53 +0000
-Message-Id: <DMKAKRM51QKN.34OI7DN57OAV7@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, <bpf@vger.kernel.org>
-Cc: <mptcp@lists.linux.dev>
-Subject: Re: [PATCH bpf 06/15] bpf, sockmap: Give no progs to a TCP listener
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <sashiko-outbox-192637@kernel.org>
-References: <20261101192057.2296489-1-alexei.starovoitov@gmail.com> <20261101192057.2296489-7-alexei.starovoitov@gmail.com> <sashiko-outbox-192637@kernel.org>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ppn2LAFs
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA65A1F000C1;
+	Mon,  2 Nov 2026 00:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793578821;
+	bh=jwUeZDWBCFAKgh9iPvXir7dyVOHi1Jj6ovu4halCxaE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Ppn2LAFs3JEbFzendhlMDahFjPEwYDcU9RvVcerwo7rqf/q1FwHTNZ0tBHPDswHcF
+	 2LBrnESUOxxTdH4eDucHGRNxkSmu5rdCirJfZC67eOHAsuRiIfbqRjSIyYydb+EPVW
+	 39BELgkECmDNm/s7oJecjL5lyhcsBGO5SsJsk+7igm/JlcboREeGhbXYquhAVcI87n
+	 H0k5QOpfnLLl3iNcsQpdt1sDY/UX9fpvb1gCirtTrAS+44HjXB50BTZ8NBrzf5OsZl
+	 vonBFOSePFMvKS7WX/KH0ufV7ZPE/GfCDz1VKzKsC1x9DIjDpcSGXdMJXvvWQPDgKy
+	 O9NdBDS+Djckg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA3E6391AFE5;
+	Mon,  2 Nov 2026 00:20:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,42 +53,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf 00/27] bpf: Fixes for the verifier, arena,
+ skb and lwt helpers
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179357882029.3683510.4838737790692968847.git-patchwork-notify@kernel.org>
+Date: Mon, 02 Nov 2026 00:20:20 +0000
+References: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261101190535.1454146-1-alexei.starovoitov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, josef@toxicpanda.com, mason@kernel.org
 
-On Sun, Nov 01, 2026 at 11:51 AM sashiko-bot@kernel.org <sashiko-bot@kernel.org> wrote:
->> +	if (sk_is_tcp(sk) && sk->sk_state == TCP_LISTEN)
->> +		goto no_progs;
->
-> Because sock_map_del_link() checks the unlinked map's progs rather than
-> whether that map actually installed programs on psock, won't removing the
-> socket from Map B stop Map A's active verdict or parser callbacks (and
-> potentially call sk_psock_stop_strp() on an uninitialized strparser if
-> Map B had a stream_parser while Map A only had a verdict program)?
+Hello:
 
-Not from this patch. sock_map_del_link() looks at the progs that the map
-has at the time of the delete. Add a socket to map B, attach a prog to
-map B, delete the socket. That stops the progs of map A today.
-strp_stop() only sets a flag, and sk_psock_done_strp() checks
-SK_PSOCK_RX_STRP_ENABLED.
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> Wouldn't sock_map_link() then see TCP_CLOSE instead of TCP_LISTEN, skip
-> the goto no_progs branch, and attach the map's programs and callbacks to a
-> socket that can subsequently re-enter TCP_LISTEN?
+On Sun,  1 Nov 2026 19:05:08 +0000 you wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> These patches fix bugs in BPF:
+> 
+>   patches  area
+>   -------  ----------------------------------------------------------------
+>   01-02    stack traces: the limit of the trace length
+>   03-07    arena: the range of mmap() and of bpf_arena_free_pages()
+>   08-12    arguments of kfuncs and of extension progs
+>   13       cgroup detach: the permission check
+>   14       cgroup skb progs: the network offset
+>   15       bpf_skb_adjust_room(): the limit of gso_size
+>   16-24    lwt and seg6local End.BPF progs: pushed headers, skb->cb, dst
+>   25-27    skb offsets when a helper adds or removes room
+> 
+> [...]
 
-It doesn't matter. connect(), connect(AF_UNSPEC), listen() gets to the
-same state without a race. The tcp_bpf_clone() hunk is for such sockets.
+Here is the summary with links:
+  - [bpf,01/27] bpf: Clamp the trace length in __bpf_get_stack() again
+    https://git.kernel.org/bpf/bpf/c/007fd460798b
+  - [bpf,02/27] bpf: Clamp the trace length before the skip test in stackid_init()
+    https://git.kernel.org/bpf/bpf/c/a08ba2ab79df
+  - [bpf,03/27] bpf: Refuse to map an arena at address 0
+    https://git.kernel.org/bpf/bpf/c/ca580b034380
+  - [bpf,04/27] bpf: Don't let bpf_arena_free_pages() see a half-set user range
+    https://git.kernel.org/bpf/bpf/c/52498f14c2d2
+  - [bpf,05/27] bpf: Refuse an arena mmap() longer than max_entries pages
+    https://git.kernel.org/bpf/bpf/c/1e01345b87f1
+  - [bpf,06/27] bpf: Remove the WARN from arena_get_unmapped_area()
+    https://git.kernel.org/bpf/bpf/c/15dedd4b2592
+  - [bpf,07/27] selftests/bpf: Test the length and the address of an arena mmap()
+    https://git.kernel.org/bpf/bpf/c/14d3e5bf9ffe
+  - [bpf,08/27] bpf: Reject memory for kfunc projection type args
+    https://git.kernel.org/bpf/bpf/c/f89ebf07496b
+  - [bpf,09/27] bpf: Don't turn struct arguments of KF_ACQUIRE kfuncs into memory
+    https://git.kernel.org/bpf/bpf/c/07684726d39e
+  - [bpf,10/27] bpf: Don't turn kfunc arguments of an empty struct type into memory
+    https://git.kernel.org/bpf/bpf/c/ed02b9cc1d37
+  - [bpf,11/27] bpf: Compare the arguments of an extension with those of its target
+    https://git.kernel.org/bpf/bpf/c/faea3cda41d3
+  - [bpf,12/27] selftests/bpf: Test the arguments of an extension prog
+    https://git.kernel.org/bpf/bpf/c/9abda4d8fc0e
+  - [bpf,13/27] bpf: Require prog fd or capability for cgroup detach
+    https://git.kernel.org/bpf/bpf/c/2962329f7c86
+  - [bpf,14/27] bpf, cgroup: Keep the skb network offset signed
+    https://git.kernel.org/bpf/bpf/c/3f9780d62dd1
+  - [bpf,15/27] bpf: Don't let bpf_skb_adjust_room() raise gso_size to GSO_BY_FRAGS
+    https://git.kernel.org/bpf/bpf/c/6d8118937ba4
+  - [bpf,16/27] bpf: Reject non-IPv6 packets in BPF_LWT_ENCAP_SEG6
+    https://git.kernel.org/bpf/bpf/c/58e39f8d58b1
+  - [bpf,17/27] bpf: Set a dst for test runs of lwt_in progs
+    https://git.kernel.org/bpf/bpf/c/c1ca06e48e88
+  - [bpf,18/27] bpf: Limit the SRH length in bpf_lwt_seg6_adjust_srh()
+    https://git.kernel.org/bpf/bpf/c/ac159f39b252
+  - [bpf,19/27] bpf: Don't look for the SRH again in the End.BPF helpers
+    https://git.kernel.org/bpf/bpf/c/45bcc58d5767
+  - [bpf,20/27] bpf: Move the MAC header in bpf_lwt_seg6_adjust_srh()
+    https://git.kernel.org/bpf/bpf/c/0fcb3f11a93d
+  - [bpf,21/27] bpf: Don't leave a stale MAC header in bpf_lwt_push_ip_encap()
+    https://git.kernel.org/bpf/bpf/c/701ffd202b9e
+  - [bpf,22/27] bpf: Reset skb->cb after an lwt prog pushes an IP header
+    https://git.kernel.org/bpf/bpf/c/b3ad42f61832
+  - [bpf,23/27] bpf: Require BPF_LWT_REROUTE when an lwt_in prog changes the protocol
+    https://git.kernel.org/bpf/bpf/c/d9618a619695
+  - [bpf,24/27] bpf: Don't let lwt_in progs call into IPv6 when it is disabled
+    https://git.kernel.org/bpf/bpf/c/95f1d5e4abb7
+  - [bpf,25/27] bpf: Move the transport header with the moved headers
+    https://git.kernel.org/bpf/bpf/c/a9d08fe60fa7
+  - [bpf,26/27] bpf: Use the inner transport header after a decap
+    https://git.kernel.org/bpf/bpf/c/33be492c2e23
+  - [bpf,27/27] bpf: Check the offset in bpf_skb_generic_{push,pop}()
+    https://git.kernel.org/bpf/bpf/c/ee36c9aa44ef
 
->> +	if (!is_insidevar(prot, tcp_bpf_prots))
->> +		return;
->
-> If sock_copy() copies the already-restored sk_prot alongside the
-> not-yet-restored sk_data_ready or sk_write_space, won't
-> is_insidevar(prot, tcp_bpf_prots) evaluate to false in tcp_bpf_clone(),
-> leaving the child socket with the psock callbacks and allowing the same
-> unbounded self-recursion if the child is later added to a sockmap?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-The window is there, but it's tiny and it's not from this patch.
 
-> How does a socket that transitions from TCP_ESTABLISHED to TCP_LISTEN while
-> remaining in a sockmap wake up accept() when new connections arrive?
-
-It doesn't. It's an old bug, not from this patch.
