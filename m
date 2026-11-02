@@ -1,85 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793642078;
-	b=DQegNq/PyapvTLbKxS77SlgkIpdMsy0qXDLxBZ1i2rQGn79gN7dqGoqZbmrQXFhB81vb
-	 FQKlbTITg+Buzgz5DuYRdH30YKE4e9vjD6oBm8OilL/aLhdAA+PekOpjniFgeYAN5QrT2
-	 GmCVYBpVoSUF6OoerZGaBXTfNZIlpx+E+9zqnE3y03K6TRY7pE1k1n7uQYiR0aMNtec9x
-	 vrHUEC9EHdQg8Hs/9qZPMzmvjvedaECCqKSCB04hryFH1oXW32ZGlDkHtxHawqaKmCf55
-	 H06U5Gxas4IBUSPEMmgSNT6puDR6XeIPd8uw9oCiU6++VYt332yieO0iA2rrO+GVNzA==
+	t=1793642143;
+	b=Pu8ag3XsrDg0M/x6C+30cntFLmRa9MGw59NsoQ1ilAs7Yobm/fwc8q3XOiyjPwuU029h
+	 t3013mlhMhlYTnynFqK2huaZCkbHe8hcKlau75jFkgFGnx5URqQ+Uevi6poTOb1JQPfde
+	 +drwNUkLY2tDTWMTqlTjqnIZembXqiSOcbc4/GhQvOO3Pr0YphrHkdVwy//AEC55TngVH
+	 jpgu+n9w0ldJsZxjknz8JsVyuSiZpXTGO+eubAPM33kznuS2c1xe9fhk5bQC2P3Cf3xeL
+	 SJnqSwdyNhGTtpHZ1CuvqOClc4N7Dvcgu01m1yir6YnFuay67Q3TID9TgY+Ym3rh1oA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793642078;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793642143;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 To:Cc:Subject:From:X-Mailer:References:In-Reply-To;
-	bh=scZeb17XXKm1k29PX4odbDUwJgulUaI/xTz9Vkg+cZk=;
-	b=oTpWyox0KfA0YXYRPrPuwLt/NUiCOydI42QCclQbZAVHNNx7HbexP+b93bHkuXEvKRcv
-	 v7fRdxwAeJ31o3cQPya3SxC2ubSWw86/XsB6X4b3sTY6e1+hjYbXO7W0nXT1b9Q+oE4Lj
-	 tz1JxY9uu4zVDlqNdYX7bm2E0rE/cVOrUo0hqxDF0hQZa5/NO8DRXhqajq5qOcfnR0k/j
-	 HQrgUa3l0O9Z0y9qOiglLKy2tvyy3zl9w9F2yqpDL49DQfxl6Yvn8sz2NJGqNemkshs2d
-	 a/ukU0Se3NDuNnxRuXrF7HXANYzjMt+kJfR0wBPSDnM2m9THmq55Ej5aPF7/wKFxiyw==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Mime-Version:
+	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:To:Cc:Subject:
+	 From:X-Mailer:References:In-Reply-To;
+	bh=2WTgLxU/cT4wIbyRNLveIp7uJXijLoRr40GvNqXPiVA=;
+	b=oTWXOJ5Vb12dd25iJYGy08UtlBC0QSWPcpIszG6feaWOMDXedJd8otQ5MBbrUPNCfID3
+	 MCihLRylBQktIFAQ3O2FYzaOKCUJnH3+5LMnkA06NFw5yvxR6GQS1y+YS/u/z8JyYoXMM
+	 oWMb3qBKqmg9p3/aED6b9tEHBCgj9bkAeh5CGpq2/J9xxC1kCX0xYFtpBU9Yoe7F4urJL
+	 QKbO7jzOkfu8e7scxkKntNoBGNyluP4AsKucMfAiFoCAHW620gc1cgvgilFlfaqyuzi7I
+	 yN23le6MHIST7LfrLNLsx2I7ykBinVLj6fk3vxRtNYrTZVtEGKo/3ufdNbewN0EDR3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gUUKJZ6i;
-	arc=none smtp.remote-ip=209.85.215.182
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0wUg3TlL;
+	arc=none smtp.remote-ip=209.85.214.169
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7885606A335
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 17:54:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C7885606A335
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E65C606D804
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 17:55:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E65C606D804
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gUUKJZ6i
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd61cef87f1so1300164a12.0
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 09:54:37 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0wUg3TlL
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e8fe8e343fso22405735ad.2
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 09:55:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793642077; x=1794246877; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793642143; x=1794246943; darn=vger.kernel.org;
         h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=scZeb17XXKm1k29PX4odbDUwJgulUaI/xTz9Vkg+cZk=;
-        b=gUUKJZ6iE6kMeJX2wngFOmJfdj34tHNdukYJ2763/cO78pWzbLpFiKwzNJXe3kied2
-         6kOgIXV1pK+gXNCLw7PW7dyddapp/S+ZcVxmvmI8KmVa0VoZ4G5IHs5nppxRYhKPGT7Y
-         CXLAw5MZ/pUJt6atuEm+Ut8tbfdqBO8uutAUQDoZnwmkmueSobeQS8dX5HM8wTn402vr
-         3wS6ZRFTtpf0Gb3m6ojljLsWlt9sPRQFXyDhejy0lUVPBqlO0SD1ofi3XKsNk3TfQJWy
-         TpJPR76fGTxghSMr+8VmSiaWD7DKO/AYuW3IK0YYGNoTMz8CzEs3U9466f6bOQmwQYZm
-         GWVA==
+        bh=2WTgLxU/cT4wIbyRNLveIp7uJXijLoRr40GvNqXPiVA=;
+        b=0wUg3TlLt45tO35LvguqoavmVCea8liQsxVmAwyyKA2nLXrg1WBQSgCILRKMHkxqcU
+         uMQsWRikgmtbno9wr1pSfpRSlMiZpAoTUimIiMNqQl+QsWL+4jSBFi3+Dg8cMxeuLPtK
+         3wIE6hT25m0uxhHTkXWhRraJpDwQjJPChXANTbZLmO87BMrpOuEsq2Gg5x1o/fi9lbRh
+         ATEdtjZ0fWyNjEhzYcYXN9Ml92YK6L+vQ7IRh39UT2drOzZ13LuRXzumBZwW/Ztz8fjG
+         R99HguCymOya2HGlgDhka2TgyDLKEKQrxCPYdChGy/nXT7aRy/fsGOaT/MXtInhkmFAE
+         QNlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793642077; x=1794246877;
+        d=1e100.net; s=20260707; t=1793642143; x=1794246943;
         h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=scZeb17XXKm1k29PX4odbDUwJgulUaI/xTz9Vkg+cZk=;
-        b=JOAgWFtQzE9b2kIWeB3++2C18CUgkEMs8So62A6g30pHPsOPFS8HgqjbMpXR2DG4Hj
-         +S4yi8T1z0z73ZreSHIeVMVeJaXXDBMRaz6FSDyuqfvKPZinlDV0ZLQon9BMojYrL70l
-         z4eMCTtrlCP+QptyX4dxmWjyFr1XuMbcVnSXpEn/9+lgcK8JTDX4Ap4uOWsf9VxBf8kW
-         9yEvC1JMNaFFZSnXXsbNQkeu5GsAppUqnh95/AqiuZ/DeiI5zgeysAPNRz5D070EjhiN
-         FTlUOKZNqcxQQjR2uwBX0LWQh2SH5scVGD/Cp7iXxM4+qyjBHjQgrF0rVMlOb5H9ccVa
-         Kydg==
-X-Forwarded-Encrypted: i=1; AKwUvByZAFCFFGdbLNLTSDQX+xjAjNztO/2sWnYyyki1NxAk16g1l5FoyJGgJB7LSjdPqf7xfm4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/JmqaJxZArbLfTM3Id4PpdZahnChzX6+91mH118JZXU8MqfDew
-	XQ4KM8mJE6X6vrNbvJv6sK6zNlSTirF32zNHqc4rVqnLNNsZp7YdrGMF
-X-Gm-Gg: AYBFou1nmg7N3t8nKVWPg86DWG47iQXCcyJlyEhk9hNiI37QnuQM2i0/RLH6lVJTXO1
-	EDEKxhLu35qGRo0PR+JJXEKvmo7LNktBzrLB4Qft7eSZWByvbG1uJz/sMVWpXxC9YjuTyEef70K
-	u8uaHMHcRFH9XzhDd+KoiUC4br8PaFJJKmcCK8KzKqMAl8XwzWgY1s/7SuAUsQXiaZug4aUZJ9P
-	KY5YJvj1UuVm+UK4OC34PxVJgM5nbJfrphIry54hViMshgsFTlGNzRNV+qZ5p66mXNC8QNNVpiA
-	Tm9CAWQ7My0pHpiJ4vBBjJZFMzpuQXS88sFsBTnriLFJrVKT3AhNTYoWDIiUa5pSJ7wQLindRSM
-	oDZij2bEgRO4r0UXJgi9BlAT1hLHEvSEzVFHGoYPnFVKLpPJeX911FRqWWysbAJzJDO7KEnHf60
-	qD0PJns7HGgX8o8WP8c1EzB5ycmIDXBOQK/nl2pnovyOxqL344YfqBTwkTtaUUKls2rEBypPWiU
-	+5WAeJesXkJi3jM9B6ao4a6wFvg1USWIbj90XJXScCOffBvwluZl6JT6+ny+BC7asueo7qmjp6y
-	wPFVsS5o7cA0ZWKge+HLYJ/mYNZWyvExs/XOJd418fXv+wM6tlDbQrTmtlKIXzF3wY1P79mKvyT
-	xcwg/QUrqSo/GJa6iiEF2tflOKw1bsf09+g==
-X-Received: by 2002:a17:90b:2e90:b0:3ac:86a0:5764 with SMTP id 98e67ed59e1d1-3ae898311b8mr7938750a91.64.1793642076815;
-        Mon, 02 Nov 2026 09:54:36 -0800 (PST)
-Received: from localhost ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae8826a769sm7170534a91.4.2026.11.02.09.54.35
+        bh=2WTgLxU/cT4wIbyRNLveIp7uJXijLoRr40GvNqXPiVA=;
+        b=SGh+YxwbIS9Fa7ZX81eM7dTH78YcG/GHnfLmRldXT9ahqwphsKzBn2ZnSjp285My5n
+         WHwve1IhJVxGLW8nTQb5xSGHakxkU6JrvsEQ2V2bpTPh2GxXGvO2LKG2n88JpupaJHx+
+         SssK07Fv9YZaE9g/43Cama30V0t1+6IdjVJo0MxoW4tsIiJlR9hnLrKzPH+wHO3nlzAJ
+         hV9saGD8rRUJR17U9x62ND5MPETTzj4D/ftD1uuE8kao471JxWcEp8tTcXJloQlqzsQE
+         kMYIWV9FJ68gyYKexOGLd0tHiDDoBAkqzr3OOdJqs5ozOC9yIrEZMDnBrEpWtaKGAnO7
+         /30Q==
+X-Gm-Message-State: APuU4Z8BeItr907xwrO8+1HWDke85ceGXe9UUeBsZJhjL68V8Y19ukRi
+	+w775DaVFrBj8vAuecq4CJZW5vQRkgoeQu15M5r86LkCssaiKHAo4s1A
+X-Gm-Gg: AYBFou023R4rXubvXBhVs8aNwMZigUXyJLh5xOEJPz6SqalsUk/m2TIf+RzlasYYu+o
+	jhkCmNkII1Fm/tlZlSTFtwPL4re/blIWVt0mnfEeP9dWr2OufQhlRso/ezZH1Qs/buTnAb4MZEf
+	N+7Lso4VLqAyIfwrmQ2djZfP7Mz1sZnzDYlj38m0J1drynstulOp4jgliHQwWIsvlxxfqCQS2qX
+	jeov1zKWFat40wUpuC2MsMtIhOBqmz6gDOKl1axBThDoYqLhbwhXoelldod4OZF+hYivBCYx/fX
+	HTwSb2GQh/1uzlCAdMubf8BUx+jgFX6V48c3gF+zf4+J+0XQq3DIMOPKlVfElrTYoRjXivP1lvh
+	o9E6ORjBRK6hj4W6xWXjtAJN+e02wUKVjQaS9g4K9il6CpcOKQkmqaHQjLbXEyCYy32bKJV7TXl
+	ayoK7YqEp9uOhCovozChjQjwMmLhhjYPFc9l+PMxtgvsKTeF/QTSJtvQ5mU+qfVdiadK4p0gEQm
+	i/UVs5XhrQqXgHCI0BwD4COrdC/5FuRkWIhZadgDyKoYywqkCXZuoaD6iCxFfDq5z/C7tMOSLED
+	7IlLekKeCsXCsJ9F/q1dBOVLYfrt6CI3maGuJypJoCDzffnI4zZnpHkRj8pn+VLlL3oBh7Gp5ze
+	ICR7mOuyftWwRHzcVIg9OkDw8Qd+D3ZoRLVQ+Lx/wZUV0hBN4Pf5Ahvo=
+X-Received: by 2002:a17:903:19c8:b0:2dd:c0ff:e72c with SMTP id d9443c01a7336-2eb3648766dmr91684985ad.62.1793642142679;
+        Mon, 02 Nov 2026 09:55:42 -0800 (PST)
+Received: from localhost ([153.61.198.246])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb392ae011sm29914295ad.69.2026.11.02.09.55.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 09:54:35 -0800 (PST)
+        Mon, 02 Nov 2026 09:55:41 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -91,66 +90,60 @@ Precedence: list
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 02 Nov 2026 17:54:34 +0000
-Message-Id: <DMKX1TT24BEL.328L6X0AO3CDS@gmail.com>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Jonathan Corbet" <corbet@lwn.net>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy
- Dunlap" <rdunlap@infradead.org>, <bpf@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] bpf: Use "new" URL to show if net-next is open
+Date: Mon, 02 Nov 2026 17:55:41 +0000
+Message-Id: <DMKX2OGTCFW1.3K140NUR106DC@gmail.com>
+To: "Alan Maguire" <almagui@kernel.org>, "Nathan Chancellor"
+ <nathan@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Alan Maguire"
+ <alan.maguire@oracle.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: resolve_btfids segmentation fault with
+ CONFIG_DEBUG_INFO_BTF_INLINE
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 X-Mailer: aerc 0.20.1-355-gf870624f6c37
-References: <20261102111509.357269-2-u.kleine-koenig@baylibre.com>
- <DMKVOUX2GDZN.2Y8MKLR367NU8@gmail.com> <aujNf7TVDcwMYeLC@monoceros>
-In-Reply-To: <aujNf7TVDcwMYeLC@monoceros>
+References: <20261031040305.GA2789538@ax162>
+ <DMJB936DLIAX.3166HNLTM50U4@gmail.com>
+ <b32cb1d9-3ab7-4c2b-b18c-c8d1989637fd@kernel.org>
+In-Reply-To: <b32cb1d9-3ab7-4c2b-b18c-c8d1989637fd@kernel.org>
 
-On Mon Nov 2, 2026 at 5:51 PM UTC, Uwe Kleine-K=C3=B6nig wrote:
-> Hello,
+On Mon Nov 2, 2026 at 5:47 PM UTC, Alan Maguire wrote:
+> On 10/31/26 8:36 PM, Alexei Starovoitov wrote:
+>> Thanks for the report.
+>>=20
+>> It's a use-after-free in libbpf that resolve_btfids --inline runs into
+>> on a module whose BTF has no strings of its own.
+>>=20
+>> With the patch below that module builds and ASAN is quiet. The output of
+>> resolve_btfids for vmlinux and for the modules of my other test builds
+>> is the same byte for byte with and without the patch.
+>>=20
+>> Please give it a try.
+>>=20
+>> [PATCH bpf] libbpf: Fix use-after-free in btf__add_type()
+>>=20
+>> For every string btf_rewrite_str() does:
+>>=20
+>>   off =3D btf__add_str(p->dst, btf__str_by_offset(p->src, *str_off));
+>>=20
+>> When the string belongs to the base, the pointer goes into the raw data
+>> of the base. btf__add_str() looks the string up in the base first,
+>> btf__find_str() calls btf_ensure_modifiable() on the base, and that
+>> frees the raw data. Then strset__find_str() reads the freed string.
+>>=20
+>> Make all the bases of dst modifiable before the pointer is taken.=20
+>>=20
+>> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 >
-> On Mon, Nov 02, 2026 at 04:50:37PM +0000, Alexei Starovoitov wrote:
->> On Mon, Nov 02, 2026 at 03:15 AM Uwe Kleine-K=C3=B6nig <u.kleine-koenig@=
-baylibre.com> wrote:
->> >  For non-subscribers to kernel mailing lists, there is also a status
->> >  page run by David S. Miller on net-next that provides guidance:
->> >
->> > -  http://vger.kernel.org/~davem/net-next.html
->> > +  https://netdev.bots.linux.dev/net-next.html
->>=20
->> The link is not the only stale part. The whole paragraph is wrong.
->> We apply patches during the merge window too.
->>=20
->> diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_=
-devel_QA.rst
->> index 4729efd..f6b9533 100644
->> --- a/Documentation/bpf/bpf_devel_QA.rst
->> +++ b/Documentation/bpf/bpf_devel_QA.rst
->> @@ -231,19 +231,9 @@ load or urgency.
->>=20
->>  Q: Are patches applied to bpf-next when the merge window is open?
->>  -----------------------------------------------------------------
->> -A: For the time when the merge window is open, bpf-next will not be
->> -processed. This is roughly analogous to net-next patch processing,
->> -so feel free to read up on the netdev docs at
->> -Documentation/process/maintainer-netdev.rst about further details.
->> -
->> -During those two weeks of merge window, we might ask you to resend
->> -your patch series once bpf-next is open again. Once Linus released
->> -a ``v*-rc1`` after the merge window, we continue processing of bpf-next=
-.
->> -
->> -For non-subscribers to kernel mailing lists, there is also a status
->> -page run by David S. Miller on net-next that provides guidance:
->> -
->> -  http://vger.kernel.org/~davem/net-next.html
->> +A: Yes.
 >
-> Even better. Do you care to get this change in then?
+> Thanks for the report and the proposed fix! I've reproduced the
+> failure with Nathan's config + latest LLVM 24, and can confirm
+> that the suggested fix works. So feel free to add
+>
+> Tested-by: Alan Maguire <almagui@kernel.org>
+>
+> I'll try and come up with a test that exercises the failure path.
+> Thanks again!
 
-Pls send a patch.
+Could you pls commandeer it and send a patch?
 
