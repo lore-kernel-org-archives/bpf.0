@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793583014;
-	b=tD3QBfr9ndAAH4TDEVmaAHf6OJiU5IRFB10D0fw/+CeIOzD6UORCk+CoPjecd9565U10
-	 oFWpegp3RrD0ipSVA5kWOtb9iLjGeR3drLVr4LwhL3qjN9Hv9R0DYQFRo32mEuLNhZcxk
-	 LCuwSWV3m2EvwjVA5HBqVFMK8m27hDNL06KUAZFX7Ua/t62RZHYRS4WPztAo+My3TH/6q
-	 fv0NWrlL6oiFc1SxT7z0q0mEc6PWRJ4BUyq+yTT2vzxiwg/itnjAmAfnsimloPIGGyEhO
-	 ro8RvYrWB0Z9U07oaGsz1WFOvJzO5XDD1mY6BBAezuCwADVBEC2J4MVCAaIF2ngwGMQ==
+	t=1793583019;
+	b=AQ+MZHecaBXzQLRsGjOwbROe55vKhoTxLYT03wsRT38NWO0coWmse3Eghx0onOguX0ly
+	 fzujfP9JKcwQ07Fh/abGFrE9YOgnlrJIXYMAhygQtxKeZEqdwM9VaqE1BJI6fhW8YLY3W
+	 DHUJq1Bn5qUqJ9QEENSANxfHkceIzFJ+jD99opJZ57vh4VQl/vrcnhZJdxRwm29zhmVZg
+	 w0RI4fyZEo/r7aZt4p5rczstj3A9I5L+BwqQDatEHVL1PZCvStmoqGwGaySNzqnx7C5z8
+	 JFo3av7GzlDuCVaT6abLfgoQ/mI5Jccbb2XtNPGjMGlDP6CfV6ZmZDDY5FVLEIBh3aw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793583014;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793583019;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=KVRXwTJ3NwzbSKLzfrIsWpjEomu/QVH/AfgMH7jRxtU=;
-	b=MekdILg2mEdAygQmJIDYajlV/5HK63E1HrIyNjqDQtjRQRpA+TD4GAAFfF0lrSZd1RB+
-	 P6ij/AGA30Qb/YIY9Ma1Nghu+FpP+A3Ui42bg1Z42pKU9MmUzbPY4HndV4jyYcq2Retvb
-	 MptJ28aCdhd4jFvlkH4oQRxIA4R6KcJgGSWAXazEYVH42h9x2eToDaVXjxSbLBfA8EKIz
-	 0Cv3Rq+d1X2ECs5kGQ8w6NCLeRFF+6d1t0MaJS4YYbnM/h0wmbyz+T5cr2TZrxBkejE+B
-	 Pw4rh5B93rhkxqyF3yOoafliW9MGQt6oTibEpNTfzB6k5HCLR8aPi0+fMreS+YeyuiA==
+	bh=riyfKVnlEe7swalaxxD/lIqAVeRQDKnxbYtGxOPrQ4w=;
+	b=dF7axkah1za+TqZw6lpm4pUWuVkQwaZ9y9yisF/SdSA+mMkLXB5Q9cRIdBi6rXTOTL0L
+	 rnFpbkgMRguORWIanhpEN+5Vf2MZqLMeYuGOX5RZ+XY3+qaw9jX9WkO9R8jd6nUlxpSOF
+	 Wu2q5d//H5vjqKKO9nqMpu66nb08TuwcNogKoQ5fJhIpNgT8MwBxXF1bndlMFAe0zGG1E
+	 f+q+R0LmS1ucn6AaE9rMMwaWIdJkuPIHnT93RkhIgnD7k56jC4DfgEtzqtvb9myZmM3D/
+	 Ef85RibSyyvuTqvJNiP0CTgLYjcv27b3zwuMd04zndnCfR1Yede0qUE+gOJCI/1WotA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Og7/5P0O";
-	arc=none smtp.remote-ip=209.85.214.176
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ou1EavRP;
+	arc=none smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A437C606A327
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 01:30:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A437C606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6759C606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 01:30:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6759C606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Og7/5P0O
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2e9eb579c0eso12232085ad.3
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 17:30:13 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ou1EavRP
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3ac77270fbfso1103738a91.2
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 17:30:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793583013; x=1794187813; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793583019; x=1794187819; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=KVRXwTJ3NwzbSKLzfrIsWpjEomu/QVH/AfgMH7jRxtU=;
-        b=Og7/5P0OnDRnL7AtC4/fcZdVAcnDwElrP9K4RWE2Xts2HfX3q/SKIKqtxzygotJruK
-         Wviua8k3iPFiSNgJ/ug1yAU1uM6s2k4PN1UTLFgsX8pJclTkPmR54SKS8d2HZScZE0lg
-         Yd6uXBZ5ujHv4AZcUCPUBDVcVFjCEtl3R+8Ce6IiiXeO6SXEVm5nEr+oxnNiUhWG6JAt
-         pqKg65PththHReESZ0Z42HJIzPHKMiY4CeUoSygZDRDSoilzu4aCADcyn5svurMuw9qZ
-         2Le6uAxwy8bWxL00x0yCz0m64zz+/80n7Gx795XrGyhuJoIzRIZnvWD+ayv0JpufvLPZ
-         serw==
+        bh=riyfKVnlEe7swalaxxD/lIqAVeRQDKnxbYtGxOPrQ4w=;
+        b=ou1EavRPdfVXryGCi17pjKz+0f/n/7naIUIBHpXJKemgEOCCr2VfRVnqKbD4MV8bvH
+         6BJjaQNegqCOvQl2cXh+WI7W1CWG4XIAqq1+vqyBtgnt/uJ7+JyPlUgAWJAqhEbOyah8
+         5DTCWtrlfwUDFmvNuYbntkKXLQ/og4EfJRymunFVeKlr3GdEfnDqBtVfAJxkoQcJE0ZU
+         PhK1XuXjzUs7HK28TQ8vVhQwsbW52OT5b+iw9/9FfIB18LtcHZfeHCeHtCdCygl/NxmL
+         L99yqwlu+fBnnP/jq6s8ARBv4Q/KD6uYk5ZQdP1UftwWcdpuTQZAjKu6AF38dpc2g1wW
+         gAnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793583013; x=1794187813;
+        d=1e100.net; s=20260707; t=1793583019; x=1794187819;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KVRXwTJ3NwzbSKLzfrIsWpjEomu/QVH/AfgMH7jRxtU=;
-        b=elEWwzl7RVR7tTPcw9CifPl6WwlRXnJLxMmx9VLuUsA6wrVSyOD4FWxzlaZDVmj6/6
-         Jyg32WZc8etBW3KVfUMufnDLnP4B0HY1E5+VSnRI76KnG045nxTyWqSCdaNZKj8kRsbV
-         7Nddh2xLiHDBF5NcfdwM/KEhzp3iqkRqMO062L00wplbA/mYnCFdWPY3m7ld5y+EPPV7
-         E1H/iWtXRZQFdZkjXGeJEDg61b0fhINwB0a3iH1KoybOUF9TdGWIuiLwFELj23WKDyGT
-         yKjwqVsV3kLPLSNWgxE5ozUmN3BaGvuIb3Q1i4cYQo90Tm1rsg70EXp1SZhzwit1Z2zX
-         QZPw==
-X-Gm-Message-State: APuU4Z/57ByzQFvLxLaebmjH09p3alnpgVsp49Rb76ojl71N555Op1KT
-	AJlW/YQjvtsU72PAUPlAG4zMVKtw+b+rcStYGd5oXEELY5pnvJd0dZ2rLWmS6A==
-X-Gm-Gg: AYBFou1bJuZL9bghOz/cgyJRlRczLO7vufzD4+XrpBP8/f7mxuSrnj5i/LDkL/S9qgq
-	VcP2RMtF6W1y+W50BkLc2s0Bu306racyy1oTqdEsa2ZqivAPJ76Z4oQR3pLzm9S1I2UV23uurDf
-	/i/twfVluhCTyptPVaH7n4Yk8Oq0LlOrytYvW4skuCu+SFHZAG7CKa6CSNUxdGzo1QFKoAa5lsP
-	rZgB/Wl/uh5wkAwNG9hDmyFe+auZOX/sTtGmj9DqnYiiBCz3cMQOw5nW/aYxEYONc9/YHn1WoL1
-	/13OkSnP7+hZ28EGBzLqHlF4XFT4Dxs9Yc0l8dHVPlggbixlt17MMXih7hTX2PoiyEcTlFGWXAt
-	zDjXio1AMhA4JPhflyqd1iquKtWX6FmChIJ+3G6Mg6C9g7Ts/Qn7dKWtbG4RveytDzxt9apVw6h
-	B2j0Z7EqSJS3KtQ922WKAPlqKVQdiip2BGAsTVqjGZns0MbtDrkjab2t2ZBlA+bz/xYEt73+DIJ
-	QONiXIdLxYOegBmjytnYh/cBucvHdaHsNA0wGWy/68oM4UN1A0aJfJbpTrnf63W3CXIvsFbYn5I
-	OQ0N39zJS9se4oCAKMXvxlgvO68a1KOYyeDGZ1uLChTGsUfjlTcVODJ/6UI1kz2uQvD85ZT6I3i
-	EpulxRp0GSNTA92jmoZ7STfkZ/zbM5E6Qs/9sYUza5QgJOwnipys9aeJmrUvwaEaxv1s3Sn1apQ
-	YYiLaUkJLR+zWiNc4f8+E=
-X-Received: by 2002:a17:903:388b:b0:2e9:3dd0:c7d with SMTP id d9443c01a7336-2eb364301b0mr68878855ad.20.1793583012567;
-        Sun, 01 Nov 2026 17:30:12 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb3922f56bsm20745605ad.16.2026.11.01.17.30.11
+        bh=riyfKVnlEe7swalaxxD/lIqAVeRQDKnxbYtGxOPrQ4w=;
+        b=NhmVPeEaDRb5/4DiUW+PcFTDn7+0F1RYoIveOIgvH4wuLOtElkZxy20TFkZ4VL0uZS
+         NojezRg0BP0hIZV8fW38bdw5XmNjJLvgKXj90crq+eGRckkb/TO+Y0oq/avYVlVoOVGF
+         nFVTS8qcp8KY4yfBBCjyqdYcBGNFArzyjdd+7NlS7/knVdMesbn+Bnvt5uLF8DxymHnu
+         xmDJ9oNUo3H9YGl4Lehzg9EqkfMomge5DVoRNBeCZpF0AGQM7IYy3TDzh4tWov1J3vao
+         VxNL8WByhBMDT/D8wum5R4QCNZCj3HWz0kCDSUYk9QO1zF8ufvtxPT+a0twtpzpivJ2F
+         po+Q==
+X-Gm-Message-State: APuU4Z/Gk2oNLIEyYYFdreck3xN7ans10Mdx3ntFGe9p6D5AySwrrZvX
+	iXU7vx1CkfZDPWNwm3gWqgWLXfYz0/HTDMQ6x5DtbYHhXEJxvstkG2x4aJf9YQ==
+X-Gm-Gg: AYBFou2X0dGhGhmBLIXdWviO52KaC0jwe5W0Ll8ILwxYOnQ/iUfxVknazJK4tOt07Ol
+	j/DMwfVBOY4OWvfI9EubXlEesiSfkcky1+MCxI6sB1dwyObvfEpe95bmPY0iNMLJfOqwk5kxvFQ
+	aevygpG5IDQ8y8fWa4yIoDeb3uT35MAKbbUCPNxOM8jhPybPhT/1B1JxAXdKHZOCzMeoDRmDz26
+	M8djBoZj+0pG8j+HzucOFk3rpoUXN/4H3VoWID9gyJDKeXjHUsfzS27PFZA8xWNzrkwGjIpbAH3
+	T6Kn7nRWr94H+WgtaXX4xT5H5CWQ+kJDWjhkv3e6F8ezDhko1vVH7MMb3WNb5/+HuF3B+FZo2Sh
+	Hu35wCLlv6LaTER4uYWUsyWjdsCpOY8Gw6hTEhxHW81yOVBymklBZNOpfc+CjfqTeoZLZpFNOUR
+	Lv3bPkh2nl8/ByoIXzdlJ5pEHE66J0MyBHnzzUJ7RClTH7YHsPOVIAyzSSPOFv8iHFD1ce6gnbl
+	QpqZCPY6rgkjmeRtHdaLGyT48/mhUDOg4FXxqPokA/n3YqpXD8OP/dcc532TMCPMnOvfQomxASb
+	BJMjYRnhgKUCDPdC3Xrir53W6I6SL+qgx/jDdM/87icx3Nauf+T124VjWpYaSuW4Ynd+Z4nIsjX
+	aOQLPkwx0CVNNO/UpLPZSYvtIRWczhJ1v3azSPfOQ0otXs9NEuVbD1xrUhHO2n5YKu8sMztYBSw
+	==
+X-Received: by 2002:a17:90b:2fd0:b0:3ac:af8b:6f3 with SMTP id 98e67ed59e1d1-3ae898149e2mr6552618a91.52.1793583018416;
+        Sun, 01 Nov 2026 17:30:18 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae8441a6f0sm11635649a91.1.2026.11.01.17.30.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 17:30:11 -0800 (PST)
+        Sun, 01 Nov 2026 17:30:18 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -86,9 +86,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	odys.yuan@gmail.com
-Subject: [PATCH bpf-next v3 05/13] bpf: Move the bpf_opt_*() passes to the patch list
-Date: Mon,  2 Nov 2026 01:29:32 +0000
-Message-ID: <20261102012940.1756142-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 06/13] bpf: Allow patching an instruction twice through the patch list
+Date: Mon,  2 Nov 2026 01:29:33 +0000
+Message-ID: <20261102012940.1756142-7-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261102012940.1756142-1-alexei.starovoitov@gmail.com>
 References: <20261102012940.1756142-1-alexei.starovoitov@gmail.com>
@@ -105,407 +105,177 @@ Content-Transfer-Encoding: 8bit
 
 From: Qiliang Yuan <odys.yuan@gmail.com>
 
-bpf_opt_remove_dead_code() and bpf_opt_remove_nops() call
-verifier_remove_insns() for each range that they remove.
-bpf_opt_subreg_zext_lo32_rnd_hi32() calls bpf_patch_insn_data() for each
-32-bit result whose upper half it sets: 4605 times in pyperf180 with
-BPF_F_TEST_RND_HI32. Each call costs O(N) in a prog of N insns.
+bpf_convert_ctx_accesses() can patch one insn two times. The first patch
+puts a barrier ('nospec') in front of the insn. The second patch replaces
+the insn, for example a ctx access. bpf_patch_insn_data() moves the insn
+immediately, and the second call gets its new index. The patch list only
+queues a patch, and no insn moves before the commit. Thus a queued insn has
+no index, and bpf_patch_list_add() accepts only one patch for each insn.
 
-Queue the changes in the patch list, and commit one time at the end of each
-pass. A commit costs O(N + inserted insns). Then verifier_remove_insns()
-and its static helpers have no users. Remove them. Only
-bpf_opt_remove_nops() is not mechanical.
+Let a second bpf_patch_list_add() for the same insn replace the last insn
+of the queued patch. That is where the first patch puts the insn. The
+result is one patch. Here insn i reads skb->ifindex:
 
-The removal of a nop can make the jump in front of it a nop. The pass
-cannot see that in the offset, because no insn moves before the commit.
-Only a forward jump can become a nop. Thus walk from the end: at insn i the
-walk knows which insns behind i stay. 'next' is the first of them. A 'goto'
-or a may_goto is a nop when its target is behind i and not behind 'next'.
+  queued patch of insn i    after the second bpf_patch_list_add()
+  nospec                    nospec
+  r0 = *(u32 *)(r1 + 40)    r0 = *(u64 *)(r1 + 16)
+                            if r0 == 0 goto +1
+                            r0 = *(u32 *)(r0 + 224)
 
-  old image        next  target  patch list
-  0: r0 = 0        4
-  1: goto +2       4     4       removal
-  2: may_goto +1   4     4       removal
-  3: may_goto +0   4     4       removal
-  4: exit          5                          the walk starts here
-
-The list takes insns in their order. Thus the walk marks the nops in a
-bitmap, and a second walk queues the removals.
-
-What users can see: bpf_opt_remove_nops() also removes a 'goto' or a
-may_goto over 'goto +0' only. Before this patch 'goto +1; goto +0' becomes
-'goto +0'. In bpf_opt_subreg_zext_lo32_rnd_hi32() a jump that gets out of
-range gives -ERANGE, and the message names the jump. Before this patch the
-pass returns -ENOMEM, and the message names the patched insn.
-
-Load times in an x86_64 VM with 8 vCPUs, before and after this patch.
-BPF_PROG_LOAD of a prog with n 'goto +0', mean of 3 runs:
-
-              before     after
-  n = 32768    2.040 s   0.060 s
-  n = 131072  33.333 s   0.244 s
-
-Wall time of 'veristat -q <obj>' with BPF_F_TEST_RND_HI32, mean of 10 runs:
-
-              before     after
-  pyperf180   0.549 s    0.087 s
-  pyperf600   1.625 s    0.221 s
+ - The pass writes the second patch as if it was the only patch of insn i.
+   But in the list its insns are behind the barrier. Thus a backward jump
+   or call that leaves the patch gets longer by the number of insns in
+   front: 'gotol -5' becomes 'gotol -6'. A forward jump, as the
+   'if r0 == 0 goto +1' above, does not change.
+ - In this pass only the 'gotol' from an 'exit' back to the first epilogue
+   is such a backward jump. No prog has it behind a barrier. A prog with an
+   epilogue needs CAP_PERFMON, and then the verifier adds no barrier. The
+   list adjusts the jump all the same, because bpf_patch_list_add() must
+   not depend on what its callers queue.
+ - The second patch changes the length of the queued patch. Thus the insns
+   in front of the last insn must not jump behind the patch. A barrier does
+   not jump. For such a jump bpf_patch_list_add() returns -EFAULT with a
+   WARN.
+ - A second patch of 1 insn goes to the list. It is not written in place,
+   because the commit takes the insn from the list.
 
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/fixups.c | 266 +++++++++-----------------------------------
- 1 file changed, 52 insertions(+), 214 deletions(-)
+ kernel/bpf/core.c   | 64 +++++++++++++++++++++++++++++++++++++++++++--
+ kernel/bpf/fixups.c |  9 ++++---
+ 2 files changed, 68 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 588a3a3b6615..6fe47e400bc2 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -273,14 +273,6 @@ static void adjust_insn_arrays(struct bpf_verifier_env *env, u32 first, u32 len)
- 		bpf_insn_array_adjust(env->insn_array_maps[i], first, len);
- }
- 
--static void adjust_insn_arrays_after_remove(struct bpf_verifier_env *env, u32 off, u32 len)
--{
--	int i;
--
--	for (i = 0; i < env->insn_array_map_cnt; i++)
--		bpf_insn_array_adjust_after_remove(env->insn_array_maps[i], off, len);
--}
--
- static void adjust_poke_descs(struct bpf_prog *prog, u32 first, u32 len)
- {
- 	struct bpf_jit_poke_descriptor *tab = prog->aux->poke_tab;
-@@ -754,133 +746,6 @@ static int adjust_jmp_off(struct bpf_prog *prog, u32 tgt_idx, u32 delta)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index e96de7a2c786..633728a5f0ea 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -602,6 +602,46 @@ static int insn_set_rel(struct bpf_insn *insn, s64 rel, bool is_imm)
  	return 0;
  }
  
--static int adjust_subprog_starts_after_remove(struct bpf_verifier_env *env,
--					      u32 off, u32 cnt)
--{
--	int i, j;
--
--	/* find first prog starting at or after off (first to remove) */
--	for (i = 0; i < env->subprog_cnt; i++)
--		if (env->subprog_info[i].start >= off)
--			break;
--	/* find first prog starting at or after off + cnt (first to stay) */
--	for (j = i; j < env->subprog_cnt; j++)
--		if (env->subprog_info[j].start >= off + cnt)
--			break;
--	/* if j doesn't start exactly at off + cnt, we are just removing
--	 * the front of previous prog
--	 */
--	if (env->subprog_info[j].start != off + cnt)
--		j--;
--
--	if (j > i) {
--		struct bpf_prog_aux *aux = env->prog->aux;
--		int move;
--
--		/* move fake 'exit' subprog as well */
--		move = env->subprog_cnt + 1 - j;
--
--		memmove(env->subprog_info + i,
--			env->subprog_info + j,
--			sizeof(*env->subprog_info) * move);
--		env->subprog_cnt -= j - i;
--
--		/* remove func_info and its aux */
--		if (aux->func_info) {
--			move = aux->func_info_cnt - j;
--
--			memmove(aux->func_info + i,
--				aux->func_info + j,
--				sizeof(*aux->func_info) * move);
--			if (aux->func_info_aux)
--				memmove(aux->func_info_aux + i,
--					aux->func_info_aux + j,
--					sizeof(*aux->func_info_aux) * move);
--			aux->func_info_cnt -= j - i;
--			/* func_info->insn_off is set after all code rewrites,
--			 * in adjust_btf_func() - no need to adjust
--			 */
--		}
--		/* The exception callback is live, so it cannot sit inside the removed range. */
--		if (env->exception_callback_subprog >= j)
--			env->exception_callback_subprog -= j - i;
--	} else {
--		/* convert i from "first prog to remove" to "first to adjust" */
--		if (env->subprog_info[i].start == off)
--			i++;
--	}
--
--	/* update fake 'exit' subprog as well */
--	for (; i <= env->subprog_cnt; i++)
--		env->subprog_info[i].start -= cnt;
--
--	return 0;
--}
--
--static int bpf_adj_linfo_after_remove(struct bpf_verifier_env *env, u32 off,
--				      u32 cnt)
--{
--	struct bpf_prog *prog = env->prog;
--	u32 i, l_off, l_cnt, nr_linfo;
--	struct bpf_line_info *linfo;
--
--	nr_linfo = prog->aux->nr_linfo;
--	if (!nr_linfo)
--		return 0;
--
--	linfo = prog->aux->linfo;
--
--	/* find first line info to remove, count lines to be removed */
--	for (i = 0; i < nr_linfo; i++)
--		if (linfo[i].insn_off >= off)
--			break;
--
--	l_off = i;
--	l_cnt = 0;
--	for (; i < nr_linfo; i++)
--		if (linfo[i].insn_off < off + cnt)
--			l_cnt++;
--		else
--			break;
--
--	/* First live insn doesn't match first live linfo, it needs to "inherit"
--	 * last removed linfo.  prog is already modified, so prog->len == off
--	 * means no live instructions after (tail of the program was removed).
--	 */
--	if (prog->len != off && l_cnt &&
--	    (i == nr_linfo || linfo[i].insn_off != off + cnt)) {
--		l_cnt--;
--		linfo[--i].insn_off = off + cnt;
--	}
--
--	/* remove the line info which refer to the removed instructions */
--	if (l_cnt) {
--		memmove(linfo + l_off, linfo + i,
--			sizeof(*linfo) * (nr_linfo - i));
--
--		prog->aux->nr_linfo -= l_cnt;
--		nr_linfo = prog->aux->nr_linfo;
--	}
--
--	/* pull all linfo[i].insn_off >= off + cnt in by cnt */
--	for (i = l_off; i < nr_linfo; i++)
--		linfo[i].insn_off -= cnt;
--
--	/* fix up all subprogs (incl. 'exit') which start >= off */
--	for (i = 0; i <= env->subprog_cnt; i++)
--		if (env->subprog_info[i].linfo_idx > l_off) {
--			/* program may have started in the removed region but
--			 * may not be fully removed
--			 */
--			if (env->subprog_info[i].linfo_idx >= l_off + l_cnt)
--				env->subprog_info[i].linfo_idx -= l_cnt;
--			else
--				env->subprog_info[i].linfo_idx = l_off;
--		}
--
--	return 0;
--}
--
- /* Clean up dynamically allocated fields of aux data for instructions [start, ...] */
- void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
- {
-@@ -897,44 +762,6 @@ void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
- 	}
- }
- 
--static int verifier_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
--{
--	struct bpf_insn_aux_data *aux_data = env->insn_aux_data;
--	unsigned int orig_prog_len = env->prog->len;
--	int err;
--
--	if (bpf_rewrite_must_abort())
--		return -EINTR;
--
--	if (bpf_prog_is_offloaded(env->prog->aux))
--		bpf_prog_offload_remove_insns(env, off, cnt);
--
--	bpf_clear_insn_aux_data(env, off, cnt);
--
--	err = bpf_remove_insns(env->prog, off, cnt);
--	if (err)
--		return err;
--
--	/* before subprogs are adjusted, since it looks at them */
--	bpf_adjust_func_ptrs_after_remove(env, off, cnt);
--
--	err = adjust_subprog_starts_after_remove(env, off, cnt);
--	if (err)
--		return err;
--
--	err = bpf_adj_linfo_after_remove(env, off, cnt);
--	if (err)
--		return err;
--
--	adjust_insn_arrays_after_remove(env, off, cnt);
--
--	memmove(aux_data + off,	aux_data + off + cnt,
--		sizeof(*aux_data) * (orig_prog_len - off - cnt));
--	env->insn_aux_data_len -= cnt;
--
--	return 0;
--}
--
- static const struct bpf_insn NOP = BPF_JMP_IMM(BPF_JA, 0, 0, 0);
- static const struct bpf_insn MAY_GOTO_0 = BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 0, 0);
- 
-@@ -1029,49 +856,66 @@ int bpf_opt_remove_dead_code(struct bpf_verifier_env *env)
- 	keep_funcs_with_addr_taken(env);
- 
- 	for (i = 0; i < insn_cnt; i++) {
--		int j;
--
--		j = 0;
--		while (i + j < insn_cnt && !aux_data[i + j].seen)
--			j++;
--		if (!j)
-+		if (aux_data[i].seen)
- 			continue;
--
--		err = verifier_remove_insns(env, i, j);
-+		err = bpf_patch_list_del(env, i);
- 		if (err)
- 			return err;
--		insn_cnt = env->prog->len;
- 	}
- 
--	return 0;
-+	return bpf_patch_list_commit(env);
++/* Whether one of the 'len' insns of a patch in front of the last one jumps past it. */
++static bool patch_list_jumps_past(const struct bpf_insn *insns, u32 len)
++{
++	bool is_imm;
++	s64 rel;
++	u32 k;
++
++	for (k = 0; k + 1 < len; k++)
++		if (insn_get_rel(&insns[k], &rel, &is_imm) && (s64)k + rel + 1 >= len)
++			return true;
++	return false;
 +}
 +
 +/*
-+ * Whether insn i is a nop once the insns between it and 'next' are gone: "ja"
-+ * or may_goto that goes to 'next' at most.
++ * The 'len' insns of a patch were moved down by 'by' insns inside it. Keep
++ * what they referred to in front of the patch, the same way as
++ * bpf_adj_moved_insn() does: a call to the start of the patch, the old start
++ * of a subprog, stays there, a jump to itself doesn't.
 + */
-+static bool insn_is_nop(struct bpf_verifier_env *env, int i, int next)
++static int patch_list_move_down(struct bpf_insn *insns, u32 len, u32 by)
 +{
-+	struct bpf_insn insn = env->prog->insnsi[i];
++	bool is_imm, call;
++	s64 rel, tgt;
++	u32 k;
++	int err;
 +
-+	if (env->insn_aux_data[i].indirect_target)
-+		return false;
-+	if (insn.off < 0 || i + 1 + insn.off > next)
-+		return false;
-+	insn.off = 0;
-+
-+	return !memcmp(&insn, &NOP, sizeof(NOP)) ||
-+	       !memcmp(&insn, &MAY_GOTO_0, sizeof(MAY_GOTO_0));
- }
- 
- int bpf_opt_remove_nops(struct bpf_verifier_env *env)
- {
--	struct bpf_insn_aux_data *aux = env->insn_aux_data;
--	struct bpf_insn *insn = env->prog->insnsi;
- 	int insn_cnt = env->prog->len;
--	bool is_may_goto_0, is_ja;
--	int i, err;
-+	unsigned long *removed;
-+	int i, next, err = 0;
- 
--	for (i = 0; i < insn_cnt; i++) {
--		is_may_goto_0 = !memcmp(&insn[i], &MAY_GOTO_0, sizeof(MAY_GOTO_0));
--		is_ja = !memcmp(&insn[i], &NOP, sizeof(NOP));
-+	removed = kvcalloc(BITS_TO_LONGS(insn_cnt), sizeof(long), GFP_KERNEL_ACCOUNT);
-+	if (!removed)
-+		return -ENOMEM;
- 
--		if (!is_may_goto_0 && !is_ja)
--			continue;
--		if (aux[i].indirect_target)
--			continue;
-+	/*
-+	 * Removing may_goto +0 turns the may_goto +1 in front of it into
-+	 * another one. Only a forward jump can turn into a nop, so walk from
-+	 * the end: all that insn i jumps over is decided when the walk gets to
-+	 * it. 'next' is the first insn behind i that stays. For a forward jump
-+	 * it is in the subprog of i, because a subprog doesn't end with one.
-+	 */
-+	for (i = insn_cnt - 1, next = insn_cnt; i >= 0; i--) {
-+		if (insn_is_nop(env, i, next))
-+			__set_bit(i, removed);
-+		else
-+			next = i;
++	for (k = 0; k < len; k++) {
++		if (!insn_get_rel(&insns[k], &rel, &is_imm))
++			continue;
++		call = bpf_pseudo_func(&insns[k]) || bpf_pseudo_call(&insns[k]);
++		tgt = (s64)k + rel + 1;
++		if (tgt > 0 || (tgt == 0 && !call))
++			continue;
++		err = insn_set_rel(&insns[k], rel - by, is_imm);
++		if (err)
++			return err;
 +	}
- 
--		err = verifier_remove_insns(env, i, 1);
-+	for_each_set_bit(i, removed, insn_cnt) {
-+		err = bpf_patch_list_del(env, i);
- 		if (err)
--			return err;
--		insn_cnt--;
--		/* Go back one insn to catch may_goto +1; may_goto +0 sequence */
--		i -= (is_may_goto_0 && i > 0) ? 2 : 1;
-+			break;
- 	}
-+	kvfree(removed);
- 
--	return 0;
-+	return err ?: bpf_patch_list_commit(env);
- }
- 
- int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
-@@ -1082,9 +926,8 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
- 	struct bpf_insn *zext_patch = env->insn_buf;
- 	struct bpf_insn *rnd_hi32_patch = &env->insn_buf[2];
- 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
--	int i, patch_len, delta = 0, len = env->prog->len;
-+	int i, patch_len, len = env->prog->len;
- 	struct bpf_insn *insns = env->prog->insnsi;
--	struct bpf_prog *new_prog;
- 	bool rnd_hi32;
- 
- 	rnd_hi32 = attr->prog_flags & BPF_F_TEST_RND_HI32;
-@@ -1093,13 +936,12 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
- 	rnd_hi32_patch[2] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_AX, 32);
- 	rnd_hi32_patch[3] = BPF_ALU64_REG(BPF_OR, 0, BPF_REG_AX);
- 	for (i = 0; i < len; i++) {
--		int adj_idx = i + delta;
- 		struct bpf_insn insn;
- 		int load_reg;
- 
--		insn = insns[adj_idx];
-+		insn = insns[i];
- 		load_reg = insn_def_regno(&insn);
--		if (!aux[adj_idx].zext_dst) {
-+		if (!aux[i].zext_dst) {
- 			u8 code, class;
- 			u32 imm_rnd;
- 
-@@ -1120,7 +962,7 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
- 
- 			/* ctx load could be transformed into wider load. */
- 			if (class == BPF_LDX &&
--			    aux[adj_idx].ptr_type == PTR_TO_CTX)
-+			    aux[i].ptr_type == PTR_TO_CTX)
- 				continue;
- 
- 			imm_rnd = get_random_u32();
-@@ -1159,16 +1001,12 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
- 		patch = zext_patch;
- 		patch_len = 2;
- apply_patch_buffer:
--		new_prog = bpf_patch_insn_data(env, adj_idx, patch, patch_len);
--		if (!new_prog)
--			return -ENOMEM;
--		env->prog = new_prog;
--		insns = new_prog->insnsi;
--		aux = env->insn_aux_data;
--		delta += patch_len - 1;
-+		patch = bpf_patch_list_add(env, i, patch, patch_len);
-+		if (IS_ERR(patch))
-+			return PTR_ERR(patch);
- 	}
- 
--	return 0;
-+	return bpf_patch_list_commit(env);
- }
- 
++	return 0;
++}
++
  /*
+  * insn is number 'idx' of the 'len' insns that replace insn 'off' of the old
+  * image (an insn that isn't patched is its own patch of length 1). It lands
+@@ -634,7 +674,10 @@ static int patch_list_adj_insn(struct bpf_insn *insn, const u32 *new_off,
+  * Queue the replacement of insn 'off' of 'prog' by 'patch[0..len)'. Patches
+  * are queued in increasing order of 'off' and applied together, so a pass
+  * keeps addressing insns by their index in 'prog'. Jumps in the patch that
+- * leave it are relative to the patch placed at 'off'.
++ * leave it are relative to the patch placed at 'off'. Patching 'off' again
++ * replaces the last insn of its patch, where the insn being patched went, and
++ * the insns in front of it must not jump past it. Jumps of the new insns that
++ * leave the patch are relative to the first of them, as for a first patch.
+  *
+  * Return the copy of the last insn of the patch, which stays valid until the
+  * next call.
+@@ -645,9 +688,26 @@ struct bpf_insn *__bpf_patch_list_add(struct bpf_patch_list *pl,
+ 				      const struct bpf_prog *prog, u32 off,
+ 				      const struct bpf_insn *patch, u32 len)
+ {
+-	struct bpf_insn_patch *p;
++	struct bpf_insn_patch *p = pl->cnt ? &pl->patches[pl->cnt - 1] : NULL;
+ 	int err;
+ 
++	if (p && off == p->off) {
++		if (WARN_ON_ONCE(patch_list_jumps_past(pl->insns + p->start, p->len)))
++			return ERR_PTR(-EFAULT);
++		err = patch_list_reserve_insns(pl, len - 1);
++		if (err)
++			return ERR_PTR(err);
++		/* the last patch is at the end of pl->insns */
++		memcpy(pl->insns + p->start + p->len - 1, patch, len * sizeof(*patch));
++		err = patch_list_move_down(pl->insns + p->start + p->len - 1, len,
++					   p->len - 1);
++		if (err)
++			return ERR_PTR(err);
++		p->len += len - 1;
++		pl->insn_cnt += len - 1;
++		return &pl->insns[p->start + p->len - 1];
++	}
++
+ 	err = patch_list_reserve_patch(pl) ?: patch_list_reserve_insns(pl, len);
+ 	if (err)
+ 		return ERR_PTR(err);
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 6fe47e400bc2..7f8d51617b2e 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -350,28 +350,31 @@ struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 off,
+ /*
+  * Queue the replacement of insn 'off' by 'patch[0..len)' until
+  * bpf_patch_list_commit(), see __bpf_patch_list_add(). Replacing one insn by
+- * one moves nothing and is done right away.
++ * one moves nothing and is done right away in the program, unless 'off' has a
++ * queued patch: the commit takes the insn from there.
+  */
+ struct bpf_insn *bpf_patch_list_add(struct bpf_verifier_env *env, u32 off,
+ 				    const struct bpf_insn *patch, u32 len)
+ {
+ 	struct bpf_patch_list *pl = &env->patch_list;
++	struct bpf_insn_patch *p = pl->cnt ? &pl->patches[pl->cnt - 1] : NULL;
+ 
+ 	if (bpf_rewrite_must_abort())
+ 		return ERR_PTR(-EINTR);
+ 
+ 	if (verifier_bug_if(!len || off >= env->prog->len ||
+-			    (pl->cnt && off <= pl->patches[pl->cnt - 1].off),
++			    (p && (off < p->off || (off == p->off && !p->len))),
+ 			    env, "insn %u patched out of order", off))
+ 		return ERR_PTR(-EFAULT);
+ 
+-	if (len == 1) {
++	if (len == 1 && (!p || off != p->off)) {
+ 		env->prog->insnsi[off] = *patch;
+ 		adjust_insn_aux_data(env, env->prog, off, 1, NULL,
+ 				     BPF_PATCH_KEEP_TARGET);
+ 		return &env->prog->insnsi[off];
+ 	}
+ 
++	/* -ERANGE takes a second patch with a 16-bit jump back out of it: no pass has one */
+ 	return __bpf_patch_list_add(pl, env->prog, off, patch, len);
+ }
+ 
 -- 
 2.55.0
 
