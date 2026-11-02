@@ -1,47 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=69.171.232.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793647664;
-	b=v0a+FGfA0Gq3YKGc8hUbfgsgUhf5gg6Lfm4fm7ya9nRHVRIhNzaSS31vx9zESd0Nr2zE
-	 34MLWsX9KqkOWuaby4xpBULR0qUCfW6e3jPbd9IEa1+9aAovkvJW+gEH2u5P+4bA6aGWv
-	 k/KMr99KkeZ9T7dUb2cZyuqivfl6PFF4cplnoQfKQB1hGRmWN9v2KuCkQlHrMDl59zH4q
-	 tbOSP4xl1l7iX0/GrKvkLeQ1g7G4nRxN9Fz+FEESo90MmKle+zL9UdkRhr2jsnGf5YiQi
-	 X6HF4GZhSfmmCI27XjCB77AhH8IOpfaipd3pk7xJx0mbm8VrOM9KAIcdGKW7CmqR4RA==
+	t=1793647910;
+	b=rZ96aiDlkxRLMb+iMPoOr4Fh6UjiG4F6WzRVLioESLh3u9EmljfIHPcV8gqKpbUgJ9iD
+	 kqSqLrc1Qfkhdkff4AzsinwVbEXg+6ublw26Y7s55h93pKqc1bm1FLGGlVjO6S2Eomhla
+	 hxm6nsvkuB6nTF5VbfkGRMGKSzXs6LDod9MjJ8BZd06fx8TGThguCgljgKSLux9zadPJY
+	 VyjmF8d9WH9Onx2KEHqrgOVkL3m35S97Ac9YKGOHXiA0GxHwI88G6ah+UvxSD5lVC8k78
+	 YUb8xFyJPxQZ16+Kpcct4hbW6BREuDwgjApFeLtF/y6dcps0GSMnwGT2gB1mem/cCIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793647664;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=RcWFfCxdcWGLHrB1Tv7j2okAoPFpeweZuQByRw5irUY=;
-	b=nCHRLofJPou8Hi/tH50GSgX1WwizV6og2qXZKQqELc2kz1jdqF9EEpl3Dmy/qLOkoHzE
-	 qOxtJ4Uly2BHStsFTNrATrD0LEmrsHPiWN7njS7Am56+ks4x+LZB10xEZIv1zOaiPhC5/
-	 6IG9PntW7+d2i8sdIaY61evgTYl2n6zEz9e2L/fiplzvZ77BALUrMLsrSkDSqeFhGa6Co
-	 FR6hvN3qjFvoHmLTVtrGl/JdeMzscJSH2HOoupw4L5A7tsKkmB6ibkdUhSq3eeIItDsuM
-	 fKyvMf54kc5Ka6G0t9QHaSN7TMgMTlxWioke4N0VuJnloUSYLREGN0bj+rwjK3BnQdQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793647910;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:User-Agent:References:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type;
+	bh=17T5xkmwSXx3rxRgsFuuietPjSf4dCY3suvqmMRm7Q8=;
+	b=wXlphf3yTVpsBCx9kk64CjV+qJy1GE7RofXEGFoBgIDRKDGaCqPAih8dqxB//Dzz31FN
+	 oLf9SYbnkixIQrr786Bp4BROP31X2jeP7WtVl9Y9JL/gEKWv3T3eqOtHAtW2EIUwa6teq
+	 awdhPclgomd8lwqhPIXDtvoU6aS8sCiNPnbTFMWYuPJadj6q2YBlFZ5T7jehHzCSaSHrQ
+	 sqqzAFWe4fRZFxtBWH2Gi+fU3AoqEmQOrIHHgs21WRSBaiRe8plPdynH12gaSrhqTHPTk
+	 HLrO/0uCyKr3Trurau4eo9SwTEuhU565kGw6uBj6pnI0aXiedgmh8aWsJywi3Ueqh+A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=linux.dev;
-	spf=fail smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=69.171.232.181
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GdHSYviw;
+	arc=none smtp.remote-ip=209.85.216.52
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105FD606A327
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 19:27:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 105FD606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm50310.atn0.facebook.com (Postfix, from userid 128203)
-	id 5C080564FCB4F; Mon,  2 Nov 2026 11:27:27 -0800 (PST)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next] selftests/bpf: Fix callback recursion test with noipa global func
-Date: Mon,  2 Nov 2026 11:27:27 -0800
-Message-ID: <20261102192727.762933-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19849606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 19:31:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19849606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GdHSYviw
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3ab752f6244so3823428a91.2
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 11:31:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793647909; x=1794252709; darn=vger.kernel.org;
+        h=content-type:content-transfer-encoding:mime-version:message-id
+         :in-reply-to:references:user-agent:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=17T5xkmwSXx3rxRgsFuuietPjSf4dCY3suvqmMRm7Q8=;
+        b=GdHSYviwd1X+v6uswMpn2cvWX+0O3yEy0F0a3vUT4TyQr3cNjOa4dGxmA9qY01O+nM
+         fcBPAFXhQdCYYQWMVp0smvus0XCiB22mj41VippG/7buLqH4o6Dg1vOduypdzOxHMxII
+         aLdrUCZXth4A6wBn6bjsJ9ER9nwTnIkx8Ic77MtpHrII2fGdzdQ+1hCwQwOvJy7T8A6T
+         OGoYbFdx5jF6Z0N77KzK+bEAyaXq6CUB4O23umbcjg4mbFy1a4dDQ4EU/t51L0I/Dxnm
+         xF4IkD7t/TiA52979g9R6Mfvqy5v29es/RYZOZMa8V1k19nZ7o+Vu53ExjNw/BxcR+h8
+         LT7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793647909; x=1794252709;
+        h=content-type:content-transfer-encoding:mime-version:message-id
+         :in-reply-to:references:user-agent:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=17T5xkmwSXx3rxRgsFuuietPjSf4dCY3suvqmMRm7Q8=;
+        b=oLdxekWMOc7vP4JqhRSB5AWtwaACIwqsOESithJ8l0El72WulKRIUnL39HWj4/G2yt
+         dmBxkeQ+6/8fCBmIIcbjIGnSo1YMBJwa55EcIN+knD9TqIs1eN6mqf8Lp05ORxHonuq9
+         4rBDBN154lw9Pb61wTdBQOatzXNSm8tnbazu+0XthNKrcEJgVcN0POSvN+8k9UIGw8O7
+         SAwKLsJymUV22HHCq61+GNSC8UHZE3lrArbfdbz0Uygc/bFK/tYoTXqxcF1o2qkLcDvQ
+         IS7qN4524Idd8N4jx3p0NSY5vPHDgdkodxETjWqoRhINgBFEtMUXkk7MXhgo4d0SmdJl
+         YZEQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz4khIJrCu9ngLvKQGG/wTCPtKYJJwKeDQO/o1Re1tbM2Xgkih1frZLH8oprxqsWOPEALM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9tkFKRwdazrVGXOlDXzKS0wde9D3kchs1VnL8G9vTRlwq434QW
+	3sgGGuGlAaTtmOCL2S5FDP1TdZQulbkJL/6i4U5YM96+1h3+M3pbdZz7
+X-Gm-Gg: AYBFou1SdEC46TmMB0LRdmnBxji9sEr8SnbIxDmSUyj6uj3x8vlUxs4oAsdVmYkDV15
+	zWT+BvSFnS8UFx+6NrGJFOFwdM4oGimL8RcLnzny6BffSe/klzj6XjZKiEuZhwKXQ2E1naly5+0
+	ZiK8/lx7rsVP3JCnq+B6a0OJMiLY+iZnUH94KeWxKzerA2UGIxdtCnG6VpFJ85NykuLhbcgzr8l
+	onPQWpq7iE9r19Iq1yvQ7rYG+W6n6XHi8LWEV37UPqFu5uGPIh4lsTIQdEN+BVQucKdzeGWZQi5
+	b0jWxydvdgPwkr2+7Hogg87w+A+GwnCZ+EIVzta3xljD6zvVEXOmER9Y5gRBy93WYPOHQTMhOFF
+	+eU7QydJl4rIvRezePNHNW5laA+7IMtdwv8hdijreT+MgmZu9jPiauF7ZNK3B4DJxdYYx6Uu2uO
+	5dDllxVmWZMLjTVhCMzz+Fpn9q9q0ehLTPgBuvQ406xAz2Mp2OUEZi8SLZLTE7W7MHXtvvjJ1eK
+	AQ19kkmJijxaa4wc5CODf0PchTozDBY7C7hE/Z9HNRZjmQj+kXTwnd+tShrNfavOhRBWh+wUnrz
+	mSuxGaORukGpVWxgm9tN+j84PERCrshlzsdS4QUuhzknwbZHnbGNiQz3nqTQpQJePali
+X-Received: by 2002:a17:90b:3c08:b0:3a8:bd51:205b with SMTP id 98e67ed59e1d1-3ae89812f18mr9476854a91.37.1793647909469;
+        Mon, 02 Nov 2026 11:31:49 -0800 (PST)
+Received: from meli-email.org ([98.97.42.147])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c9928d1sm510981a91.14.2026.11.02.11.31.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 11:31:49 -0800 (PST)
+Date: Mon, 02 Nov 2026 12:31:17 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: mptcp@lists.linux.dev, Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com, matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org, josef@toxicpanda.com
+Subject: Re: [PATCH bpf v2 06/15] bpf, sockmap: Give no progs to a TCP listener
+User-Agent: meli/0.9.0
+References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com> <20261102072112.4160195-7-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261102072112.4160195-7-alexei.starovoitov@gmail.com>
+Message-ID: <tnw3l0.2z8ao1ckh4em1@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,90 +97,36 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
 
-With llvm24 after commit 28b4a2032f97 ("[BPF] Mark global functions
-noipa"), the test recursion_via_global_func_and_callback fails:
+On Mon, 02 Nov 2026 00:21, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+>From: Chris Mason <mason@kernel.org>
+>
+>A psock with a verdict prog replaces sk_data_ready and sk_write_space of
+>its socket. It saves the old callbacks, and the new callbacks call them.
+>sock_map_link() does this to a TCP listener too. Its new sk_data_ready
+>cannot read and does not call the old one. Thus it does not wake accept().
+>
+>sk_clone() copies the new callbacks to each child, but not the psock.
+>tcp_bpf_clone() restores only sk_prot. Without a psock the child loses data
+>or does not wake its reader. If it gets a psock, the psock saves the copies
+>as the old callbacks. Then sk_psock_verdict_data_ready() calls itself until
+>the stack overflows. sk_psock_write_space() calls itself too, without end.
+>
+>Give no progs to a TCP listener, as before the first commit below. A
+>listener receives and sends no data. It stays in the map and keeps its own
+>callbacks. Add this exception to map_sockmap.rst. A listener no longer gets
+>-EBUSY from a second map with progs of the same kind.
+>
+>Since the second commit below, a socket keeps its psock when TCP unhashes
+>it. sock_map_link() does not see the state that the socket gets later. Do
+>not depend on TCP to keep such a socket out of TCP_LISTEN. Set both
+>callbacks in tcp_bpf_clone() to the TCP defaults.
+>
+>Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for datagram sockets")
+>Fixes: b8b8315e39ff ("bpf, sockmap: Remove unhash handler for BPF sockmap usage")
+>Signed-off-by: Chris Mason <mason@kernel.org>
+>Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-  13: (85) call bpf_loop#181 4: frame1: R1=3Dscalar() R10=3Dfp0 cb
-  ; return static_calls_global(i); @ verifier_global_subprogs.c:548
-  4: (85) call pc+1
-  ...
-  ; return global_calls_loop(x); @ verifier_global_subprogs.c:543
-  6: (85) call pc+1
-  Func#3 ('global_calls_loop') is global and assumed valid.
-  7: frame2: R0=3Dscalar()
-  7: (95) exit
-  ...
-  ; return static_calls_global(i); @ verifier_global_subprogs.c:548
-  5: (95) exit
-  At callback return the register R0 has unknown scalar value should have=
- been in [0, 1]
-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-  EXPECTED   SUBSTR: 'recursive call from global_calls_loop() to loop_cb_=
-calls_static()'
-   #669/9   verifier_global_subprogs/recursion_via_global_func_and_callba=
-ck:FAIL
-
-The callback loop_cb_calls_static() returns the result of
-static_calls_global(), which in turn returns the result of the global
-function global_calls_loop().
-
-Before the above llvm24 commit, IPSCCP (interprocedural sparse
-conditional constant propagation) could fold the return value of
-global_calls_loop() into its callers. global_calls_loop() is not
-static, but it has a non-weak definition in the same compilation unit,
-so IPSCCP may assume that definition is the one called. It found that
-global_calls_loop() always returns 0 and replaced the uses of the call
-result with 0, which made static_calls_global() and then
-loop_cb_calls_static() return a constant 0 as well. The calls stay, only
-their return values are replaced. So the callback set R0 to 0 itself,
-passed the bpf_loop callback return range check, and verification went
-on to report the expected recursion.
-
-The llvm24 commit marks global functions noipa, since the verifier
-checks a global function only against its BTF prototype and freplace
-can replace it. With noipa, IPSCCP no longer propagates the return
-value of global_calls_loop() to callers. The verifier does not look
-into a global function either, so R0 after the call is an unknown
-scalar, and the callback return check fails before the recursion is
-detected.
-
-Make static_calls_global() return void and let loop_cb_calls_static()
-return 0 explicitly. The call chain the test is about stays the same,
-and the test passes with both llvm24 and earlier versions (e.g. llvm21
-to llvm23).
-
-Link: https://github.com/llvm/llvm-project/pull/237690
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../testing/selftests/bpf/progs/verifier_global_subprogs.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c=
- b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index 574b26b5a7df..5e8461b2167d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -538,14 +538,15 @@ int return_from_void_global(struct __sk_buff *skb)
-=20
- int global_calls_loop(int x);
-=20
--static __noinline int static_calls_global(int x)
-+static __noinline void static_calls_global(int x)
- {
--	return global_calls_loop(x);
-+	global_calls_loop(x);
- }
-=20
- static __noinline int loop_cb_calls_static(u32 i, void *ctx)
- {
--	return static_calls_global(i);
-+	static_calls_global(i);
-+	return 0;
- }
-=20
- __noinline int global_calls_loop(int x)
---=20
-2.53.0-Meta
-
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
