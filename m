@@ -1,46 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.38.64.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793646246;
-	b=fVP3vwKVx/1285H2gxod1JIDah5rDjVzY58ge6dmf54KnK/JXPhnxqJxPXcXEhaNhuLB
-	 ZbYvzUyvKQfch5Se7XoYk3/c4TxKPQNsR6NNorQeD0Ix5RD17BODwoCaGy0MxyuRB+cj+
-	 R/73XiL5Y1U4oJ6QKjpEdYBUpg0h49rZzeTQORz9Cj8KyuSv2Amo+KVIUw3RVldNO64yG
-	 NEx5GroZc1kNV34XLxmjHSTzB3HXvAGAwxfE95JSmEM5wKBIZ8kk0g/xPKnJKfDzZhOID
-	 yFJAQ1r6cLdqKeiUnjmNFyxYUwVyEOP7Z4TcftrAkV1TnGEaFVn6s/hqQFKEXRbbBnw==
+	t=1793646244;
+	b=d+WDIRUcHvDowSMMvWUwgsjoxdFuSq7UziCugu7ygY8qP6zhAi47n4FRpT5KFUaHDqf6
+	 91gJjol8D69VSBT6+c4ryaOVSCX98qOGq3cZhgKc+dNMqBl5U2p2x2X7eGDxo+CRZaUSz
+	 Y2Qe9qBTPE9YObUhTyrqYGJD27vW6uEpk7/XNnrhtvFqykMkxCS3P5RVDn21kO7LfVIsF
+	 cnboQ0nR5hE7gyVZ22EXHAF5ZARWizSyT5P52HtrvzAHlCnYaEFtBoz3NYk/azMfun5ki
+	 EY+5j5E4MfUz2pNh2vzgEfGDk7rC+P+Kde8m9v8KEAKcjkgfawtb5iwJfi+9LgvUOAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793646246;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793646244;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
-	 X-CM-SenderInfo;
-	bh=Iaya+ea8Qjie8Rj4WRSUiis2uYCCVvbvbwG2XvI6duk=;
-	b=TZcptImU62VDPHONjX3kp7lX/uA9XgdIZ8c3OFwADbTOhzF5CjfGHIL/xLfX42LxRgEd
-	 AhlSBFO/4Etw0Q6qYufUndOyc77C1HQOjV632o3lUPGl2sXUXRC3vmETeaCv/7XQXHUrO
-	 O4h1ZhuXzcHtMpwlP8DWgx2gInfWC1C257wPLh4kCbnj4WTfk+UYQDCNcge48D7KXO4pZ
-	 5IOXJH709Ui+7gLVZhzWbwSCK0UCKli+eMBp5T8VGcGTl0SzDC737CDSIY3mCY2c53ftM
-	 xXtNq3Xei5peUhanVVMk/4a/sn968By1xiBng5nWu57i3jONj32oqVhn53km5zihGUg==
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=JHptizFxoa6u8AVcaBQ6Vo5m007YfkupU48z11B9r+4=;
+	b=18ywqKYLWcPZ6DguJXJBj0RfR2XnmsU8oPScWW2WsXIwYAZOAoOnBSmETODICPAdjGXe
+	 r0fplHOYNpDiEcl1FTq7q1g5lr+OBxudbYTt4Gtpc+7KC6PylRvob8NAlqZh2hxDrKCkd
+	 XSAgo+YOw3V3T0wC2GJN/0Z5XEdLCwf4/BSqf2+b/oYva+5bl03Y4cgNHHyzhoiibLyBz
+	 VbUFZqvhuzYidl8Qx4p1xnP2txzpczJBfJX9ZNfDJd6QxPhP8zCaAb04IHa96ghH9v3zj
+	 ff5gAsOdML8Yl/XLUpGlLMk7dFOiwCPafFqrNkFQa3ODHQK4Sf+qLO+zs0UD0277Xog==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=mail.ustc.edu.cn;
 	spf=pass smtp.mailfrom=mail.ustc.edu.cn;
-	dkim=pass header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=s4UtKbka;
+	dkim=pass header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=UDx2XaPU;
 	arc=none smtp.remote-ip=202.38.64.46
 Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2F63606A32E
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 19:04:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E2F63606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C83606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 19:04:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6C83606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=s4UtKbka
+	dkim=pass (1024-bit key, unprotected) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=UDx2XaPU
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-	Message-ID:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=Iaya+ea8Qjie8Rj4WRSUiis2uYCCVvbvbw
-	G2XvI6duk=; b=s4UtKbkaeTMcucyRDM8cif1fWcFX6QeGAqOUxnWTg2UYmfdbc8
-	/dnCZP+CHnPoiEuHVBLTlz6l3ijTea/j0jKmTobUTP84MTrFga4/UBooOzPPbtzI
-	lDMfLOZ3YFQ2eHAWQjKPcRj8CRZwwuG+Q4/z+2PydBy4elcs8C9yZYc9M=
+	Message-ID:MIME-Version:Content-Transfer-Encoding; bh=JHptizFxoa
+	6u8AVcaBQ6Vo5m007YfkupU48z11B9r+4=; b=UDx2XaPUiJmD1D0iz0xbwavNuu
+	6mYpjhOU+QoAN1FXgOCuUwls4/pVG8evlpJNtfsPaOVkXDJCvqzvKMmOzoZXDu2s
+	Fipwcq1h0c+1Az8IIHri8imfyc9H3CZ5vcb+sYoS24NdwIw+rE2WoGYrX9/uzA81
+	gwAHaXKllES5eSkqg=
 Received: from localhost (unknown [222.195.81.114])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgD3ej+g3uhqYcx4AA--.1473S2;
-	Tue, 03 Nov 2026 03:04:00 +0800 (CST)
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgBn6z+Z3uhqRsx4AA--.1463S2;
+	Tue, 03 Nov 2026 03:03:53 +0800 (CST)
 From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -50,12 +49,10 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Exercise stack argument precision on state reuse
-Date: Tue,  3 Nov 2026 03:03:50 +0800
-Message-ID: <20261102190350.788433-3-xyx2021@mail.ustc.edu.cn>
+Subject: [PATCH bpf v2 0/2] bpf: Fix stack argument precision propagation
+Date: Tue,  3 Nov 2026 03:03:48 +0800
+Message-ID: <20261102190350.788433-1-xyx2021@mail.ustc.edu.cn>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261102190350.788433-1-xyx2021@mail.ustc.edu.cn>
-References: <20261102190350.788433-1-xyx2021@mail.ustc.edu.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,176 +63,81 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgD3ej+g3uhqYcx4AA--.1473S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJFyDGr15Zr1ktr4kXr4xWFg_yoWrCF1xpa
-	97Ja4agFWkAFWqv3yxZ3yDCFWrGFn5ZrW5JrZ7tFy0yF4jgr47KF40kFsFqr1DJr17u3yY
-	yFyjyasxGFyDZ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9qb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+X-CM-TRANSID:3pYKCgBn6z+Z3uhqRsx4AA--.1463S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJFW8uw18uryrWryUAFyDAwb_yoW5WF1Dpa
+	ykW3Wag3WkZ3Z7CanxZ3W8WFy3W3Z5Ar4UW3WfJa48ZF1Utr18trWYgF1avFsxAr1Dt34Y
+	qr4YqwnrGa1jyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Sb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
 	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
 	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
 	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
 	C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq
-	07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r
-	17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vI
+	07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r
+	18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vI
 	r41lc7CjxVAaw2AFwI0_JF0_Jw1lc2xSY4AK67AK6rWl42xK82IYc2Ij64vIr41l4I8I3I
 	0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
 	GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
-	0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0
-	rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
-	4UJbIYCTnIWIevJa73UjIFyTuYvjxUyuHgUUUUU
+	0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
+	rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r
+	4UYxBIdaVFxhVjvjDU0xZFpf9x07b7oGdUUUUU=
 X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-Add two asm regressions for the precision of the sixth argument, which
-is passed in a stack argument slot and used as a map value offset.
+Outgoing stack arguments retain scalar state separately from registers
+and ordinary spills. Their precision dependencies must reach ancestor
+states when verification reuses a state or falls back to marking all
+scalars precise. Otherwise, an out-of-bounds map access can reuse a state
+validated for an in-bounds argument.
 
-The first test reuses a safe state after storing arg6 from a register.
-Precision must propagate from that slot to the register at an earlier
-checkpoint, so a later out-of-bounds path cannot reuse that checkpoint.
+Patch 1 covers outgoing scalar argument slots in both precision paths.
+Patch 2 adds two load-only asm regressions in verifier_stack_arg.c, based
+on Alexei's examples.
 
-The second test triggers conservative precision fallback by backtracking
-across a store through a register that later becomes a scalar through
-pointer subtraction. The caller's argument slot must become precise so
-an out-of-bounds argument cannot reuse the safe state.
+Changes in v2:
+- Keep the patch 1 fix and explanation unchanged; rebase onto bpf/master
+  at 03b013897454064e0a2d84a8ba9a24753eb02f2b.
+- Replace the standalone instruction/BTF test builder with two asm tests
+  in the existing verifier_stack_arg.c, as requested by Alexei.
+- Reuse that file's compiler capability and architecture guards, which
+  already cover x86-64, arm64 and RV64. Drop the separate host-side guard.
+- Rewrite patch 2's explanation for the two replacement tests.
 
-Both programs are load-only rejection tests and use the existing stack
-argument compiler and architecture guards.
+v1:
+https://lore.kernel.org/bpf/20261027061303.1754535-1-xyx2021@mail.ustc.edu.cn/
+Review:
+https://lore.kernel.org/bpf/DMJI3GWXQOC9.UA3K9X139AR@gmail.com/
 
-The two test programs were supplied by Alexei Starovoitov during review
-and are included unchanged.
+Validation on x86-64 with Clang 23.1.4, JIT enabled and panic_on_warn=1:
+- Built all four kernel variants and their BPF test modules, plus the
+  complete test_progs runner with BPF_STRICT_BUILD=1.
+- The two new tests distinguish the two precision paths:
 
-AI assistance was used in preparing this patch.
+                         State reuse       Fallback
+  Unmodified baseline    wrongly accepts   wrongly accepts
+  Propagation fix only   rejects           wrongly accepts
+  Fallback fix only      wrongly accepts   rejects
+  Complete fix           rejects           rejects
 
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Link: https://lore.kernel.org/bpf/DMJI3GWXQOC9.UA3K9X139AR@gmail.com/
-Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
----
- .../selftests/bpf/progs/verifier_stack_arg.c  | 115 ++++++++++++++++++
- 1 file changed, 115 insertions(+)
+  Rejections report the intended map-value bounds violation. The two
+  corresponding in-bounds controls load successfully on all four kernels.
+  These programs are never attached or executed.
+- All 274 subtests passed, with no skips, across verifier_precision,
+  verifier_spill_fill, verifier_subprog_precision, verifier_scalar_ids,
+  stack_arg_precision, verifier_stack_arg, verifier_stack_arg_order and
+  iters on the complete candidate. No kernel WARN/Oops or panic occurred.
+- Compiled the test object under x86-64, arm64 and RV64 guard definitions;
+  Clang 20 correctly selects the existing unsupported-compiler dummy.
+  Runtime testing was x86-64 only, and the unfiltered suite was not run.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-index 15a12497e07434a587c43e04c4ee90541676e3b2..abf319cb8514102e75dc0d9b98c721e2eacea0b6 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -552,6 +552,121 @@ __naked void stack_arg_may_goto_in_caller(void)
- 	);
- }
- 
-+/* arg6 is an offset into the value of map_hash_8b. 0-7 are in bounds. */
-+__naked __noinline __used
-+static long arg6_is_map_value_off(long a, long b, long c, long d, long e, long off)
-+{
-+	asm volatile (
-+		"r6 = *(u64 *)(r11 + 8);"
-+		"r1 = 0;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+		"r2 = r10;"
-+		"r2 += -8;"
-+		"r1 = %[map_hash_8b] ll;"
-+		"call %[bpf_map_lookup_elem];"
-+		"if r0 == 0 goto l0_%=;"
-+		"r0 += r6;"
-+		"r0 = *(u8 *)(r0 + 0);"
-+	"l0_%=:"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm_addr(map_hash_8b)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: a pruned state propagates precision of arg6")
-+__failure __msg("invalid access to map value")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void stack_arg_precision_pruned_state(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 != 0 goto l0_%=;"
-+		/* Path 1: arg6 = 0. It makes arg6 precise at l3. */
-+		"*(u64 *)(r11 - 8) = 0;"
-+		"goto l3_%=;"
-+	"l0_%=:"
-+		"if r0 == 1 goto l1_%=;"
-+		/* Path 2: arg6 = r6 = 0. Pruned at l3. It has to make r6 precise at l2. */
-+		"r6 = 0;"
-+		"goto l2_%=;"
-+	"l1_%=:"
-+		/* Path 3: arg6 = r6 = 8. Out of bounds. */
-+		"r6 = 8;"
-+	"l2_%=:"
-+		"*(u64 *)(r11 - 8) = r6;"
-+	"l3_%=:"
-+		"r1 = 0;"
-+		"r2 = 0;"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"r5 = 0;"
-+		"call arg6_is_map_value_off;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+/* The same, but backtracking of r1 sees a store through r1 and marks all scalars precise. */
-+__naked __noinline __used
-+static long arg6_is_map_value_off_fallback(long a, long b, long c, long d, long e, long off)
-+{
-+	asm volatile (
-+		"r6 = *(u64 *)(r11 + 8);"
-+		"r1 = 0;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+		"r2 = r10;"
-+		"r2 += -8;"
-+		"r1 = %[map_hash_8b] ll;"
-+		"call %[bpf_map_lookup_elem];"
-+		"if r0 == 0 goto l0_%=;"
-+		"r1 = r0;"
-+		"*(u8 *)(r1 + 0) = 0;"
-+		"r1 -= r0;"
-+		"r1 &= 0;"
-+		"r1 += r6;"
-+		"r0 += r1;"
-+		"r0 = *(u8 *)(r0 + 0);"
-+	"l0_%=:"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm_addr(map_hash_8b)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: forcing all scalars precise covers arg6")
-+__failure __msg("invalid access to map value")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void stack_arg_precision_fallback(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 != 0 goto l0_%=;"
-+		"*(u64 *)(r11 - 8) = 0;"
-+		"goto l1_%=;"
-+	"l0_%=:"
-+		/* Out of bounds. Must not be pruned at l1. */
-+		"*(u64 *)(r11 - 8) = 8;"
-+	"l1_%=:"
-+		"r1 = 0;"
-+		"r2 = 0;"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"r5 = 0;"
-+		"call arg6_is_map_value_off_fallback;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
- #else
- 
- SEC("socket")
+Codex assisted with implementation, test integration, commit messages
+and validation. The v2 test code was supplied by Alexei and is used
+unchanged.
+
+Xu Yunxiang (2):
+  bpf: Propagate scalar precision through stack arguments
+  selftests/bpf: Exercise stack argument precision on state reuse
+
+ kernel/bpf/backtrack.c                             |  11 ++
+ kernel/bpf/states.c                                |  14 +++
+ .../selftests/bpf/progs/verifier_stack_arg.c       | 115 +++++++++++++++++++++
+ 3 files changed, 140 insertions(+)
 
