@@ -1,54 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.220
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793619640;
-	b=yahuihwpjevZkkRhHga9TrdPv8Slu50ej+X+Ydu3Vz12wjn2fjiQR5zSJLnIX5eWDNpZ
-	 2qxWCrqeo9Mnsxx1QSEUrQwJKUBoFTGahnHNXcA/v8Ac64M3YyEGE8Hl50RU8xJTjn8XA
-	 Y9lgcp4VqaLBU85mIg1blW1FRYe+ojKHur/YBDZH1JS/JeAp4qISN7UiBYjcVwGUB3m0U
-	 0x3Fk1/TeSHQrmsctV1g57Dzjr8zBMnkoSk4qS5plSGCZX9Uhm+2HbkZYw9M4VFXGZm8c
-	 dmDQK6ze3DPsyTVqO0/bAwOuzK89YpQwu34nl1b61za7ricnX78d6e0cCfr3Y4ldjxw==
+	t=1793619701;
+	b=nHapjpNFovuxvoE6v0OnMW6L2HG+yOC5zAVdNERwkRVkirV3q1yHhsK91/c/bN+kb+pi
+	 XftnbMlJ75q/e4JgBT8HY6k6mvS8rAuCeO7B5AcdykH82k3O5xbNKckobs6on+IjR+yLu
+	 qpDctR779XNmfxygv24uXKRPL0UYUhaoGE2D3X7GmXjvIZ5F2v04SS5oV/ey4WlglfZ0R
+	 fV5PgCcAeh8XPvLjNBCxtp7KmKiHAjTaN5RB4UVclf3cFbpKkBW/SGxF+yED/ulm+Gfz2
+	 hoYhavV9WmQQskce9OnbhDNPp68oRDapQNnggNOWLJ6TmzyKMsUDZlYTwpQw4SW9N2w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793619640;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=nZUpp2hJQkWCrqySp0A90JTwPZ/iUSnZg01sx3a4r5Q=;
-	b=O4rtOrAvmIofhk6RG1qXM8A6OG1N17Sg39Hy4ZtSClckzXE/7ayrCfrCrApO/7endXxk
-	 3Z2QXkJg+6v2aAS1CuvH6LktzINuJHHbS82Xgr/QkenWEZhSAV4g5UenZzNOemZ0zjgPW
-	 OpHrvkxvqIQle78vp7+0rOHwiv0sIqclqSXgrRMinzc24hxTfOu/giY0IdC1PN5dpSVFL
-	 c66reYgomQGrbUOynZfxfxcG9XuzOfKazuh1+C56V6+If8dd2z374XfGYXi2yoWG7uCoQ
-	 W7x7k6sSuutwhjP+pHY67Zttg3tQu45pBe6jHwlbA0tpCXiR7kIFi3pwqBRB6SNzSZw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793619701;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=D7JmBEmGxLSymZEgdcnCU2t6UAxvf8KOZhQUE4OtCSk=;
+	b=u7lKxjABSe2bszkzvGupZN8nO8k3PO1IP3kdDlYgeCJ4h1OEBUUbGjGRGeRkAcNYGeRC
+	 5Ja6/ZWYbeI4a1W30DDchBiRA4TehFB1ssYaxFRTlUG0E+5TJnTM2gQeFkSQ7+HzwZ3ho
+	 fSEumGJUuabe2+Z9I5zlPaH76igomLPT7hcvIDb/vtoZ/lS/3FwlKg3G1kkiFK3LvaQIk
+	 jdd9colG0fOnEY2XJ+tcdU9nLQyhb5AB0AXA4aJSU5cnmuUHtmktlKIKjE7u85O18KCFH
+	 ExjRqr1Pts3JsD/3YooRBBZNnTnfAIGOaTXhMmQMlRJrd3q2W3/H+iCX1UHw/LwyV2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="P/ol9UUp";
-	arc=none smtp.remote-ip=95.215.58.220
-Received: from mta1.migadu.com (out-220.mta1.migadu.com [95.215.58.220])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xtt5IeDR;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82AFE60A260D
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 11:40:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82AFE60A260D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF30606A32C;
+	Mon,  2 Nov 2026 11:41:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=P/ol9UUp
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=z1ZM5tFFhllBjxmb1sXO2yzQnSQGhBe8JrM4BxDb5r8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793619637; v=1; x=1794224437;
- b=P/ol9UUpvgEJAW8jW+wq58bld8ShPF3/nav8imyyBGXLKtMui7r/ul2zHG02JF5vI/EyfSj5
- fgGfTqPOCrsX4cXqAeHiYiDpOH+AqpuFjGH6w8Vcfa1dDVBmYJnqaHS7i/KkybYeWv3QEiTXOOJ
- pXhWAt+Xo+P6dzMhzw5AZQnk=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1443bbc0a505c443;
-	Mon, 02 Nov 2026 11:40:33 +0000
-X-Mizu-Trace-ID: 1443bbc0a505c443
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <9d399d69-1dfd-4848-bd55-be099b6dd792@linux.dev>
-Date: Mon, 2 Nov 2026 19:40:22 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xtt5IeDR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 102AB1F00A17;
+	Mon,  2 Nov 2026 11:41:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793619701;
+	bh=D7JmBEmGxLSymZEgdcnCU2t6UAxvf8KOZhQUE4OtCSk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Xtt5IeDR89+p0IFG3i/oji1M7Ob6cWmPDAL2Bqsm52BigcI4+W4gfzBSBhkvWa3Ll
+	 bp9Qi5GCpO7jnE8RomT7sZbhYkAZpnUdGGsUU8e5ap9rb7v3vYvzjb86vXpZAEehS3
+	 YstXcs5mQmqtQZx1iGVq0adDtIP0/ySLSRk+oiZq/VkdN8FL0ZZCQsREEtAZAAVlqy
+	 ks7nWXXmH0TtZJ2jJwXlIJk8dqjLfV6zY05pO1Om4obASa68/LM4Cjs2Jf8rsiqtVI
+	 N0YJ8TR8j3B6e2Rq8iKed6uPT7RblHrU+A9yyCIu3bGYlk2kqYCpksuntO3bJHMhyk
+	 1RKitP+UOGEtg==
+Date: Mon, 2 Nov 2026 11:41:35 +0000
+From: Simon Horman <horms@kernel.org>
+To: Daniel Machon <daniel.machon@microchip.com>
+Cc: netdev-bot+sashiko@kernel.org, horatiu.vultur@microchip.com,
+	UNGLinuxDriver@microchip.com, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+	pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH net] net: lan966x: don't free XDP buffers in fdma tx
+ clear with budget 0
+Message-ID: <20261102114135.GZ257209@horms.kernel.org>
+References: <20261029-lan966x-fdma-tx-clear-budget-v1-1-38c52d7aab8c@microchip.com>
+ <179339596952.3131.4206946876532380801@kernel.org>
+ <20261102085339.ixdqujaly75yldp7@DEN-DL-M70577.microsemi.net>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,69 +64,87 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 05/15] bpf, sockmap: Clear the resume state of a
- stopped psock
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, john.fastabend@gmail.com, jakub@cloudflare.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
- matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org,
- josef@toxicpanda.com
-References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
- <20261102072112.4160195-6-alexei.starovoitov@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261102072112.4160195-6-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102085339.ixdqujaly75yldp7@DEN-DL-M70577.microsemi.net>
 
+On Mon, Nov 02, 2026 at 09:53:39AM +0100, Daniel Machon wrote:
 
-On 11/2/26 3:21 PM, Alexei Starovoitov wrote:
-> From: Josef Bacik <josef@toxicpanda.com>
->
-> sk_psock_backlog() passes the skbs of psock->ingress_skb to the socket of
-> the psock. When the socket has no room, the function saves the length and
-> offset of the remaining data in psock->work_state. A later run continues at
-> this offset and clears the state when the skb is complete.
->
-> sk_psock_skb_state() saves and clears the state, but only while
-> SK_PSOCK_TX_ENABLED is set. sk_psock_backlog() does not test this flag for
-> each skb. If the socket closes during the loop, sk_psock_stop() clears the
-> flag. The loop continues, but the state of the completed skb stays. The
-> loop uses this state for all subsequent skbs and sends only part of their
-> data. A closing socket may lose the end of a stream, but not the middle.
->
-> The state belongs to the skb at the head of ingress_skb. Always clear the
-> state when this skb is complete. A stopped psock still saves no new state.
->
-> Fixes: 3b4f14b79428 ("bpf, sockmap: fix duplicated data transmission")
-> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->  net/core/skmsg.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index f03519468ad1..a5d498982848 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -664,7 +664,8 @@ static void sk_psock_skb_state(struct sk_psock *psock,
->  			       int len, int off)
->  {
->  	spin_lock_bh(&psock->ingress_lock);
-> -	if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
-> +	/* No new state once the psock is stopped, but never keep an old one */
-> +	if (!len || sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
->  		state->len = len;
->  		state->off = off;
->  	}
+...
 
+> > net: lan966x: don't free XDP buffers in fdma tx clear with budget 0
+> > 
+> > This patch makes lan966x_fdma_tx_clear_buf() skip completed XDP_TX and
+> > ndo_xdp_xmit DCBs when netpoll calls it with a budget of 0. That way the
+> > page pool and XDP return APIs are not called with hardirqs disabled. The
+> > skipped buffers are left for the next NAPI poll, and skbs are still freed
+> > via napi_consume_skb().
+> > 
+> > > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > > index 21668bbcc9063..1fbe910c5ec38 100644
+> > > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > > @@ -353,6 +353,12 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
+> > >               if (!fdma_db_is_done(db))
+> > >                       continue;
+> > >
+> > > +             /* XDP and page pool APIs can't be used with a budget of 0.
+> > > +              * Leave these buffers for the next NAPI poll.
+> > > +              */
+> > > +             if (!weight && !dcb_buf->use_skb)
+> > > +                     continue;
+> > 
+> > [Severity: Medium]
+> > Can this starve netconsole transmits on the port that owns the FDMA NAPI?
+> > 
+> > skbs and XDP frames get slots from the same ring through
+> > lan966x_fdma_get_next_dcb(), which only checks the used bit:
+> > 
+> > lan966x_fdma_get_next_dcb() {
+> >         ...
+> >                 if (!dcb_buf->used &&
+> >                     !fdma_is_last(&tx->fdma, &tx->fdma.dcbs[i]))
+> >                         return i;
+> >         ...
+> > }
+> > 
+> > If heavy XDP_TX or ndo_xdp_xmit traffic fills every usable slot, a
+> > netpoll skb ends up here in lan966x_fdma_xmit():
+> > 
+> >         next_to_use = lan966x_fdma_get_next_dcb(tx);
+> >         if (next_to_use < 0) {
+> >                 netif_stop_queue(dev);
+> >                 return NETDEV_TX_BUSY;
+> >         }
+> > 
+> > __netpoll_send_skb() then polls between retries:
+> > 
+> > netpoll_poll_dev()->poll_one_napi()->napi->poll(napi, 0)
+> >   ->lan966x_fdma_tx_clear_buf(lan966x, 0)
+> > 
+> > With the new check, every completed XDP DCB is skipped. No slot is freed,
+> > clear stays false, and lan966x_fdma_wakeup_netdev() is never called.
+> > 
+> > Once the retries run out, the skb is put on npinfo->txq and handed to
+> > delayed work, and later messages queue behind it. In normal operation a
+> > later IRQ-driven NAPI poll frees the DCBs and output only comes late.
+> > 
+> > During a panic, with the other CPUs stopped and hardirqs off, would that
+> > work ever run? If not, the netconsole output is lost.
+> > 
+> > Before this patch, the budget-0 poll freed those slots, so netpoll could
+> > make progress.
+> 
+> Seems right, however, AFAICT, this is only an issue if the panic hits while the
+> ring is completely full of finished XDP frames. Freeing those frames from
+> netpoll is what napi.rst forbids: with a budget of 0 the driver cannot call any
+> XDP or page pool APIs, and doing so is the splat this patch fixes.
+> 
+> The only other way I see is to give XDP its own FDMA injection channel, so XDP
+> frames can never take the slots netpoll needs. lan966x has free injection
+> channels for that, but it is a rework for net-next, not a fix for net.
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Yes, agreed.
 
-
-The 'state' should be clear unconditionally.
-
+Reviewed-by: Simon Horman <horms@kernel.org>
 
