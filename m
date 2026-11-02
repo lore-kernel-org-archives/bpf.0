@@ -1,49 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793600406;
-	b=pMA7haJwmScKKpqqOL8ew6AfoUyIyJY/wFFW75UIpn/WlkPJuWWuXsXO86VK9avNRZSP
-	 eP+c4BCMbQu9TSbeY93sk+cD2MThYaDB9IBSFRjTvNh1c5LIYJyzb8BhSxmTi0ft9St82
-	 AnSiy+5vgQBZA1iWul0NsSrGpubehE6KpYcUd2/mD8+fd5Pn8wSmOtqzp4Uh6Zv+ASbij
-	 9P/Dlf6bUOYjZC0yxK8aqhFozJX5vaKON+212+vFI6+cnPqhfOQIGEsujEHGCfKqlhUOu
-	 duPk2NKw1D9rCi2U+cYSWffYydfsxy606bIFm9CGlNwlmagDBd5TDqNy/dxIK2vOFzQ==
+	t=1793601022;
+	b=FV7uZNCEsSEk9K2/Li/OFKlRBh1jKiSkBjZ23qSi2eQV+p6VuMMm9+cUo2r70Qu84vKA
+	 GjkPOsna8FFZsqn6TsiD+/okxX3VccGv38i8FsceViz2Hg/FznY45GnjvUASHj8hoL4W0
+	 FprRxmw1VqVjAdKi/U3L04KcsA2BA+ASrG7coRQcEHMGK0L+pjbHwuQVMoWKoyEuIhRus
+	 lU0OtfnGt9TCD/5zMIUc5JQPU2g0CxoGZ67g9yOGR5v8kZ55McmOVsh+tbncRz4quHAtv
+	 JzLY/nzusworebQX888kLzU7LdncyrZinqPijW0E/ELxf6yovN+Dp/DwFHLAWmK/ySA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793600406;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=LXyWg33upMW65/HmtZ46qnH2orkC6Dp4INq2qjqF2WE=;
-	b=Ym2sdA6eXGwdNOV/8OQH0PX0FcEDC5A3uw2K6yfvvGZFnol7E/XfqjReC88kqa+ekNGt
-	 nEWMwtyVuRoXtCbqJBfD9GBqPqL7X9temGuQ7w40Ok40cAB0QaV0Pklx+k6eZsNg6BWXX
-	 YwMfESMjsjimgMfO/1rN87pwEb3UHTvvVp0D9GBq6+I/ChPH3RCzY5x3mFQaWwSthexiC
-	 DMMUfYmrQVj5gAmLNeedhtpDsUoCZW7e+UeYz7pI7rchkG9lVWXhy4XUg2YumOkuEwsvF
-	 sCh6oY1pS7rzqCvSKlwpOfr61zW9OWVPBaG2qiohV87UToc/F9+QzvaWwZxfsssLqiw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793601022;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=STRnokDyjyJklBkiN53/AF1VqBxhvGhrRQx2b7R49oY=;
+	b=JGgCmFTFzkdU0uxmAMcJ146FWRJWo8Qvv7lYIyBmJi9Eew5HM6WKjNGchFUTEZVX7w3v
+	 qgkCPcb8x3i2jSoetgqiumDTidiTl752bu3DUmzJo+p6dbmuTEn9uLuBrClvowz7SFCpg
+	 3fyvhnlYYHrRxrwLoW0JIlgPdw9uPyGoM+0pXRq10WLxyvNJSSOcgxeB3+zcBkjkrwKvT
+	 jJ/Xi+1EJgi8b8wpAfTTwl+13XOn5YAb0t5xcnAEgugLpQZ9HN4GTsANm8C6iLxII5aur
+	 o1zJSDtAo47+nTzi+QKjwGC3rTiGsr2TZbNv2EfoaJd2Xb6005zEMctZif6WTE8irlw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CopKWGU2;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xyMNZnt5;
+	arc=none smtp.remote-ip=74.125.82.45
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18699606A32D;
-	Mon,  2 Nov 2026 06:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6996606A329
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 06:30:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6996606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CopKWGU2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88FF01F0093A;
-	Mon,  2 Nov 2026 06:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793600405;
-	bh=LXyWg33upMW65/HmtZ46qnH2orkC6Dp4INq2qjqF2WE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=CopKWGU2zYFWcKIPDV/S/gqmkRilp1iyux9ZshWqTS7AYJ2MDlz5PjVjV7rjip/nb
-	 OFTwQ/XHuF0MDX5jrVYw0Ow99L0GGOEqjaqQXxVSyNZlGtmHgamWXcXdhQYHgliozr
-	 WBiilr9JrL94vhRtR7xA+aA/EFw69yMKpXA0PDYTXrURmikd3+DgDnovpmyNMFp9+W
-	 fQtRfNUQIkULbFXTktpcvcK6gtj9HNqeNLU7GXHyDZwa1Ja8tlE2H8YYBM/V+TMCpJ
-	 ot4cwNj6WougQqXxVE1OgrBGZaB2mk1vrODZgfb8WpRHoh4hVy/cXHuZktP2UaEQeE
-	 dyq3aiTI7032Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D1EF391AFF2;
-	Mon,  2 Nov 2026 06:20:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xyMNZnt5
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-15dd124bbe7so3177483c88.1
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 22:30:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793601021; x=1794205821; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=STRnokDyjyJklBkiN53/AF1VqBxhvGhrRQx2b7R49oY=;
+        b=xyMNZnt5u0YytRQlnzaKTjiCr/09K50dt9hOgktZW+9ojfGr6coR1cX+ENtOpCcjV+
+         vhTvCLPvO43BtOEVmlAeuQMJd76QBU6HhnuG7z6fkXF0OHa+ieCeMY8jsYN3SjyDWnHO
+         6yl8JseUIWsEE2ziPTlyR1m+3/DD/pNp3roTLPEuueGWgJ59RUqiLyLSeFbd9tuaVHSB
+         +285jTKrp2WnBGL4hKeU4i02r6MVWdw5DJgZqP2UMjM3bb5DD8UMu9SdVDWwOnA/IF17
+         o1pSO3EHfGo/8dDJMxeCX3ygEsAb4okENz8sjqRTU470/nG63rvqhaLEo4Aaug3dJ8qO
+         1opw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793601021; x=1794205821;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=STRnokDyjyJklBkiN53/AF1VqBxhvGhrRQx2b7R49oY=;
+        b=JKG8UwmMmqFlxiplKtZH1VLYY0g3WyRf4E7d42n581CFxlx5K5pyZsuFbZp/i1gbKD
+         BJvexHjMKAtzvXMFmMjesamwB/LviJpvEcFTphikh6AvPzPx30EJmSCaEiMEdnc8ltbi
+         h/AK4Ki7zc4eXi0W92dXqANzYcG5KR+j/+mpblQmilU8Csh3evmCTaNDI4Z2TJVGKE1O
+         8MKTQGScXJ1Pv2NiPTNXf2B3pzZKsJ3FM0w3R5r0zlP3XzFkw+PYxspc31z4btfMZbGS
+         t4ozXBRSrkrXT9IPjmxXQ/AAWXNNZ+t5CiS93JtmsGgp2NJxE6Ag8OOqJO0uiaQc2dkW
+         CF7A==
+X-Gm-Message-State: AFq9FYJeUW+8eHRHUuz+SxciPr/z3GupJfNklsSTPtPjchWmCRQ5+prP
+	eS9+H218A6279YgIm9ep3cwP0uuGCUOOg7VDEjLqub/Hm4VS8YzxAwTD
+X-Gm-Gg: AYBFou2fFYgXzU8YaTnJ6bEmoyO2WIPMHhucRuwMIoFvTQXLF5PNE4TLdO8FeJ4nxep
+	ZUz2znnZ5r6IyciqyJF8YgCoN5clyIfBxdlZ2m23U81ccAKKZHCzhCo0tKkc7PofU7dhpfSw+/+
+	R+fxy9slU1oxXyHEUojXhP1pEsRYQeOLQ23L/KoJjs1WHs77A14bj/kpJUtUysXpt54kok2qDkd
+	73bQ9bMG+BLfBzOFPPu+jknCjOAu+psYelHw2gxzU2pnnYm1YUdoZIo76rsBI9vV4KPBWps4DRC
+	DG7UCjcDIu09N7gh0mcq+ZgROq+5jJjQKCz8V+krpj8CT/yc53uirBQe73JVMvNd/LzywS91Euk
+	E5irg75IYuIvYyNcurSkd+pVdtbWyKie9GGEzQsq6QQVXPcNMxPXKPhDHHgd7K0osExxNN59a5S
+	fcwiQECZb5I5lCT1IOPk3WQW2xohvJyEpTUUaiLqs86s9ZESmde+bwP+eH+KwmMC5PLb7II1B9w
+	t3Z6ZriwmciC2BhASUy1IOR5HltY2brtSDZMPY4rJW4QUCymI2a1Pu3V2oIpz9tWeld7qQGcFCs
+	lxwyfbTPyNAkw9NYXO9O
+X-Received: by 2002:a05:701b:47ac:b0:151:d6e5:596b with SMTP id a92af1059eb24-1ac59dd35a2mr16118104c88.9.1793601020501;
+        Sun, 01 Nov 2026 22:30:20 -0800 (PST)
+Received: from ubuntu.. ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1abcf67csm31314190c88.21.2026.11.01.22.30.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Nov 2026 22:30:20 -0800 (PST)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: Re: [PATCH bpf-next v3 00/13] bpf: Replace bpf_patch_insn_data() with a list of deferred patches
+Date: Mon,  2 Nov 2026 01:30:16 -0500
+Message-ID: <20261102063016.652958-1-odys.yuan@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <DMKHZS5B5CNO.186F6YH1T6YU4@gmail.com>
+References: <20261102012940.1756142-1-alexei.starovoitov@gmail.com> <DMKHZS5B5CNO.186F6YH1T6YU4@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,45 +100,28 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] bpf: lwt: Free the skb when bpf_xmit() fails to
- expand
- the headroom
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179360040431.3799098.11662321290376218283.git-patchwork-notify@kernel.org>
-Date: Mon, 02 Nov 2026 06:20:04 +0000
-References: <20261101182343.17991-1-izaiahsun@gmail.com>
-In-Reply-To: <20261101182343.17991-1-izaiahsun@gmail.com>
-To: Yuqiang Sun <izaiahsun@gmail.com>
-Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, ast@kernel.org, tgraf@suug.ch, zirajs7@gmail.com,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
 
-Hello:
+On Mon, Nov 02, 2026 at 06:06 AM Alexei Starovoitov wrote:
+> Heh. CI is as green as it gets.
 
-This patch was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Thanks a lot for picking the series up and for the thorough review.
+It has been a pleasure working on this with you.
 
-On Mon,  2 Nov 2026 02:23:43 +0800 you wrote:
-> When an LWT xmit program returns BPF_OK, bpf_xmit() makes sure that
-> the skb still has room for the link layer header. If
-> pskb_expand_head() fails there, bpf_xmit() returns -ENOMEM without
-> freeing the skb. Its callers, lwtunnel_xmit() and then
-> ip_finish_output2() or ip6_finish_output2(), take any return value
-> other than LWTUNNEL_XMIT_CONTINUE to mean that the skb has been
-> consumed, so nothing frees it.
-> 
-> [...]
+> 1. Patches 12, 13: the tests need net.core.bpf_jit_harden != 2 at the
+>    start.
+[...]
+> 5. Patch 6: no test has a second patch with a jump in it.
 
-Here is the summary with links:
-  - [net] bpf: lwt: Free the skb when bpf_xmit() fails to expand the headroom
-    https://git.kernel.org/bpf/bpf/c/5e96760b25fd
+By the way, I was almost done with my own v3 this morning when yours
+arrived, so I held mine back to avoid two v3s on the list. To avoid
+the same with v4: would you like me to send a v4 on top of your v3
+that fixes 1-5, or will you send it yourself? Either works for me.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> In the tree today.
+> Pre-existing bugs... pick me. pick me.
 
+I'll take 10-12 and send the fixes as separate patches once the series
+lands.
 
+Thanks,
+Qiliang
