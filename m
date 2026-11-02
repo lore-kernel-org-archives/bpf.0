@@ -1,78 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.28
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793583900;
-	b=E5gFMgN3Lqv6x8zPlDZHGD5DSU/9XS2wdUgIrKK6uKnjvTHm8ef3mXh8YvljeJKbTsO2
-	 JqUFDEVl0phVWriKKH09oaATH2aI7hw8eevBkmdwinYy4dfkYXXMlqFt6Wz3damU/S4jC
-	 HRzETKzyMzqEg4DweScmD2SJzL2tBxrSnDuzbfNVAnhsemdiC0abELHAgeXKq9tA8aRAG
-	 +zU8GNVPBU4CiiMI7CcrstoZmJh1OFvOiZTuxUauBQyEMXoZZ7cxyR5YBrDhHUg4U1JpF
-	 sOP1XKP4wE0Pg/OXxbm2Cq27qj5dIZYI000VGIK8Yl/iye3/50m4ZeRAE09StCUuniQ==
+	t=1793584494;
+	b=4Vmzq+htWgbpz6UQusk9nn7Ej7suCjBN0pMHO4+hQHN6/sqXuyKcCkOuqygsY30/KZUe
+	 HpmJTodc67jtGVxXHna7AtcltCJ8xlSynk+yBYqG+aQbFQega8ADiP1Dy/PXO55yws3dQ
+	 v0nocmilOweLFrGU4Am2oUf8XFg/4ZuyDbD/4Ihzv+f8bOmSf0MjaTyCsMajyKU1hxloP
+	 POQPquNdXTI1HgbJ4cynJlTa5mqcKydeyAvgFZIcGC0pLmdgSghX2xNoT60IXym+NJksL
+	 +E3bDpK1OsSb0jFOjtrxccZeS8AbZK3Dqmt3hV4GtFE02fDcd1rjZtMFcRY1e4vKRgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793583900;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=OEkd9ETEU1H1/cSly+n00AuAS0WaAgvozTBt/yDaZw8=;
-	b=0WQcvq2j2uURNCZMYIP0dzedRVNG8ooYQzyt29tN6yeriqRfR4yYcqlsuXEH7HjoaQSR
-	 Yv8Zdi/3R449sIfTyAmOtdz8yvN1rQtX1sS4/gXkqQR4tqAzh7DWSM/MOCKxQVyTEsTYk
-	 a87a4fDU83+U27NLH38o6FXWQluZNfeJoUT3rF3BiLyWg/ZU6ib8EHwan1CxteGy0CRbv
-	 0BHtSee4xdnUsx+6F/7ZOPejPrm4xn57cg/tX7sPbXVdtEijrYdx87ps33S4NwPr1UFJU
-	 gIti6Ou0D3+M2kz0Xrt1VLcXnWr/1JiS4JptmNWIIR+TsWwkP+g0vG7Tvm+uXiwpnWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793584494;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=FkNyargHG2bEuZUpFFoq++5LOK0pA8Se5x5WD9zD53k=;
+	b=W6ZOCnrhuLFKgj0ZX9xMVu2tbEmE0LERo0kpAyruh+1SxOnEmpikUfGY3xZ6N6r4MDs7
+	 5FcxPrJ2glOJIj6IEEgsTW2M4sYzPgJO6NJEiWUOKL5z3f5HuWmuJEyrRXXSkz3q5vtQT
+	 R80EwdjSWc5c7dJqT518i2PYZtL9RSGKzsXp5nSFankcjwq0IThLaUdaLcEajNRYK+qI0
+	 wHWEmpenUgxJJB+9G/WNksOmcuTF1bzM8cRcBGan6Dp8Hc9yDJHUNipHMqBv8Ui0PQOfl
+	 tERI9bx5upj3/bhgbSYWmC2jSJc5uWvsFTn5Gw5DgcnoJGOPYIuGVVYiroHnUpR/XlA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IfBo6+HP;
-	arc=none smtp.remote-ip=95.215.58.28
-Received: from mta1.migadu.com (out-28.mta1.migadu.com [95.215.58.28])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jisQ0P2s;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D786606A327
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 01:44:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D786606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA9B606A324;
+	Mon,  2 Nov 2026 01:54:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IfBo6+HP
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=LDCglTFD9JJRIRS4upbDvcHxcWE5gfnfo+qT8Q0O0nI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793583897; v=1; x=1794188697;
- b=IfBo6+HPGHoCqWTW9d7FL3Mpzw7lVFltwm4e1CNHpRdpYX1/oO7kbHAbyScuoA30S2BusA2W
- cd8BbN3JXJ9mplCKX4Bc6UCX3qNxMIB68maKTGcggwzBi15S5TEKnwqE/7so3LsMq+EmyPo/kcI
- Qg0dC8Bj3teYPVCcfsZ650SE=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 672eb1f5ae80b659;
-	Mon, 02 Nov 2026 01:44:57 +0000
-X-Mizu-Trace-ID: 672eb1f5ae80b659
-X-Migadu-Flow: FLOW_OUT
-Date: Mon, 2 Nov 2026 09:44:53 +0800
-From: Baoquan He <baoquan.he@linux.dev>
-To: Ridong Chen <ridong.chen@linux.dev>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Dave Chinner <david@fromorbit.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Muchun Song <muchun.song@linux.dev>, Qi Zheng <qi.zheng@linux.dev>,
-	Kairui Song <kasong@tencent.com>, Barry Song <baohua@kernel.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org,
-	"open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" <cgroups@vger.kernel.org>,
-	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>,
-	Ridong Chen <chenridong@xiaomi.com>
-Subject: Re: [PATCH v5 5/6] mm/mglru: add tracepoint for scan_folios()
-Message-ID: <aufrFRiP-PyWsCzs@bogon>
-References: <20261031090041.58574-1-ridong.chen@linux.dev>
- <20261031090041.58574-6-ridong.chen@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jisQ0P2s
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA6F1F000C1;
+	Mon,  2 Nov 2026 01:54:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793584493;
+	bh=FkNyargHG2bEuZUpFFoq++5LOK0pA8Se5x5WD9zD53k=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=jisQ0P2s/H+apHIs28vCm0eAQgc052oliY6lplQs1zJrWCJj7e4Z+3tLAxhsXXjFG
+	 ZYOzxpCP4aIobqVbUjNog1/1tAj8PNPwhu5slE7UOiuE2yA0MJELdPbvLsS1bESWhS
+	 G0p0m6EOTML7esLYVoVMMpe17KqDB6/KRVbvGGbZfHXzNDU1Bb700P6P/uOUhmh269
+	 od+/SEOc25cLc0vYfsLmEvopWoCzGZg26THuY9TYK+5wtuKlQp9+wV4hNf/eP6CnN/
+	 cdhd42KUHZ/0xL8qeRZ9th8Mnuyr39M+wcnGnCIvAEZcxTmd0oYKXmIP15LlQLUl8l
+	 T2KKpwePRUEgQ==
+Content-Type: multipart/mixed; boundary="===============7763485647564090835=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -82,140 +49,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261031090041.58574-6-ridong.chen@linux.dev>
+Message-Id: <9acb1683771c3b7bf443773e66599273156e155d25fbabd78596bcf2ca8eda18@mail.kernel.org>
+In-Reply-To: <20261102-sockmap-update-limit-iter-v2-2-e96a63c43b39@rbox.co>
+References: <20261102-sockmap-update-limit-iter-v2-2-e96a63c43b39@rbox.co>
+Subject: Re: [PATCH RFC v2 2/4] bpf, sockmap: Restrict iter-context sockmap updates to iter/sockmap
+From: bot+bpf-ci@kernel.org
+To: mhal@rbox.co,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,john.fastabend@gmail.com,lmb@cloudflare.com,edumazet@kernel.org,kuniyu@google.com,pabeni@redhat.com,willemb@google.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,davem@davemloft.net,kuba@kernel.org,horms@kernel.org
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,mhal@rbox.co,netdev@vger.kernel.org,sashiko-bot@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon,  2 Nov 2026 01:54:53 +0000 (UTC)
 
-On 10/31/26 at 05:00pm, Ridong Chen wrote:
-> From: Ridong Chen <chenridong@xiaomi.com>
-> 
-> MGLRU's scan_folios() emits the classic-LRU tracepoint
-> trace_mm_vmscan_lru_isolate(), which predates MGLRU. It reports the
-> scan/isolate counts and the LRU type, but carries no generation or
-> memcg context, so a trace of an MGLRU run cannot tell which memcg a
-> given scan belongs to, nor how far reclaim has progressed through the
-> generations.
-> 
-> Add mm_mglru_scan_folios next to it, reporting the same counters plus
-> nr_sorted (folios moved to a younger generation by sort_folio()) and
-> the context the classic tracepoint lacks: the node id and memcg id of
-> the lruvec, and the max_seq, tier and min_seq of the type being
-> scanned.
-> 
-> Now that struct scan_control is visible to the trace header, pass sc,
-> lruvec, type and tier straight in and derive everything else in
-> TP_fast_assign(), so nothing is computed at the call site when the
-> event is disabled. The int fields are grouped at the end of the entry
-> to avoid padding on 64-bit.
-> 
-> scan_folios() is the MGLRU-specific layer where folios are actually
-> scanned, so it has no classic-LRU counterpart. The existing tracepoint
-> is left unchanged.
-> 
-> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
-> ---
->  mm/trace_vmscan.h | 66 +++++++++++++++++++++++++++++++++++++++++++++++
->  mm/vmscan.c       |  2 ++
->  2 files changed, 68 insertions(+)
-> 
-> diff --git a/mm/trace_vmscan.h b/mm/trace_vmscan.h
-> index b2ad83e5f25e..8148b8224422 100644
-> --- a/mm/trace_vmscan.h
-> +++ b/mm/trace_vmscan.h
-> @@ -392,6 +392,72 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
->  		__print_symbolic(__entry->lru, LRU_NAMES))
->  );
->  
-> +#ifdef CONFIG_LRU_GEN
-> +TRACE_EVENT(mm_mglru_scan_folios,
-> +
-> +	TP_PROTO(struct lruvec *lruvec,
-> +		 struct scan_control *sc,
-> +		 unsigned long nr_requested,
-> +		 unsigned long nr_scanned,
-> +		 unsigned long nr_sorted,
-> +		 unsigned long nr_skipped,
-> +		 unsigned long nr_taken,
-> +		 int type,
-> +		 int tier),
-> +
-> +	TP_ARGS(lruvec, sc, nr_requested, nr_scanned, nr_sorted, nr_skipped,
-> +		nr_taken, type, tier),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(u64, memcg_id)
-> +		__field(unsigned long, nr_requested)
-> +		__field(unsigned long, nr_scanned)
-> +		__field(unsigned long, nr_sorted)
-> +		__field(unsigned long, nr_skipped)
-> +		__field(unsigned long, nr_taken)
-> +		__field(unsigned long, max_seq)
-> +		__field(unsigned long, min_seq)
-> +		__field(int, nid)
+--===============7763485647564090835==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Now it has nid printed out, it's cool. 
+> bpf, sockmap: Restrict iter-context sockmap updates to iter/sockmap
 
-This patch looks good to me, thanks.
+TL;DR: Unresolved question: tracing_iter_filter() still allows
+bpf_sock_destroy() from iter/sockmap, so tcp_abort() may run on a socket whose
+lock isn't held. Should it be limited to iter/tcp and iter/udp?
 
-Reviewed-by: Baoquan He <baoquan.he@linux.dev>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1b6c0674ff6a..4dadfe9505a2 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -10497,7 +10498,8 @@ static bool may_update_sockmap(struct bpf_verifier_env *env, int func_id)
+>  	 */
+>  	switch (type) {
+>  	case BPF_PROG_TYPE_TRACING:
+> -		if (eatype == BPF_TRACE_ITER)
+> +		if (eatype == BPF_TRACE_ITER &&
+> +		    !strcmp(afname + strlen(BPF_ITER_FUNC_PREFIX), "sockmap"))
+>  			return true;
+>  		break;
+>  	case BPF_PROG_TYPE_SOCK_OPS:
+
+Was the request to also restrict tracing_iter_filter() to iter/tcp and
+iter/udp ever resolved?
+
+In the v1 thread Alexei Starovoitov wrote:
+
+  Pls send the PTR_TRUSTED part in v2. I'd also limit tracing_iter_filter()
+  to iter/tcp and iter/udp.
+
+The reply to that was that once bpf_iter__sockmap::sk is PTR_TRUSTED,
+iter/sockmap could call bpf_sock_destroy() on an unlocked sk.  The v2 series
+adds the PTR_TRUSTED marking but does not touch tracing_iter_filter(), and I
+could not find a follow-up on the v2 thread:
+
+net/core/filter.c:tracing_iter_filter() {
+	if (btf_id_set8_contains(&bpf_sk_iter_kfunc_ids, kfunc_id) &&
+	    prog->expected_attach_type != BPF_TRACE_ITER)
+		return -EACCES;
+	...
+}
+
+This still allows bpf_sock_destroy() from any BPF_TRACE_ITER program,
+including iter/sockmap.
+
+sock_map_seq_show() holds only the RCU read lock, and tcp_abort() skips
+lock_sock() when called from a BPF context.  Can an iter/sockmap program
+now reach tcp_abort() through bpf_sock_destroy() on a socket whose lock is
+not held?
+
+If so, should tracing_iter_filter() be limited to iter/tcp and iter/udp as
+requested, or is there a reason it can stay as it is?
 
 
-> +		__field(int, highest_zoneidx)
-> +		__field(int, order)
-> +		__field(int, lru)
-> +		__field(int, tier)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->memcg_id = mem_cgroup_id(lruvec_memcg(lruvec));
-> +		__entry->nr_requested = nr_requested;
-> +		__entry->nr_scanned = nr_scanned;
-> +		__entry->nr_sorted = nr_sorted;
-> +		__entry->nr_skipped = nr_skipped;
-> +		__entry->nr_taken = nr_taken;
-> +		__entry->max_seq = lruvec->lrugen.max_seq;
-> +		__entry->min_seq = lruvec->lrugen.min_seq[type];
-> +		__entry->nid = lruvec_pgdat(lruvec)->node_id;
-> +		__entry->highest_zoneidx = sc->reclaim_idx;
-> +		__entry->order = sc->order;
-> +		__entry->lru = type ? LRU_INACTIVE_FILE : LRU_INACTIVE_ANON;
-> +		__entry->tier = tier;
-> +	),
-> +
-> +	TP_printk("nid=%d memcg_id=%llu classzone=%d order=%d nr_requested=%lu nr_scanned=%lu nr_sorted=%lu nr_skipped=%lu nr_taken=%lu lru=%s max_seq=%lu tier=%d min_seq=%lu",
-> +		__entry->nid,
-> +		__entry->memcg_id,
-> +		__entry->highest_zoneidx,
-> +		__entry->order,
-> +		__entry->nr_requested,
-> +		__entry->nr_scanned,
-> +		__entry->nr_sorted,
-> +		__entry->nr_skipped,
-> +		__entry->nr_taken,
-> +		__print_symbolic(__entry->lru, LRU_NAMES),
-> +		__entry->max_seq,
-> +		__entry->tier,
-> +		__entry->min_seq)
-> +);
-> +
-> +#endif /* CONFIG_LRU_GEN */
-> +
->  TRACE_EVENT(mm_vmscan_write_folio,
->  
->  	TP_PROTO(struct folio *folio),
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 15e9184a580a..ff51fee872f8 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -4852,6 +4852,8 @@ static int scan_folios(unsigned long nr_to_scan, struct lruvec *lruvec,
->  	trace_mm_vmscan_lru_isolate(sc, nr_to_scan,
->  				    scanned, skipped, isolated,
->  				    type ? LRU_INACTIVE_FILE : LRU_INACTIVE_ANON);
-> +	trace_mm_mglru_scan_folios(lruvec, sc, nr_to_scan, scanned, sorted,
-> +				   skipped, isolated, type, tier);
->  
->  	*isolatedp = isolated;
->  	return scanned;
-> -- 
-> 2.43.0
-> 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41373332573
+--===============7763485647564090835==--
