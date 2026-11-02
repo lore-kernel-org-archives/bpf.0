@@ -1,54 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793607160;
-	b=RwzbiCAC8FZFhb0uDpcpttrTKFv7LeVj1y1+YHVqPzFSv2v+SuvOzMpzk6WI00509TZo
-	 AnkzXvpzA8wRIG1xVnFmxu1JaLu7rRJPnx8iER/pcYFFTGMEaecVGKR0l5uInn3braCBC
-	 LCdFZ5f2xRV36XmQzgJII8cHjaAOQWxnByXVAj2s2PgDuRYwjS2/VOi+ijRGIS5/hvJfC
-	 Hs7Emrpg2XmaHbQRgrUUydvw/PBsm+1Th+qXl7PmMjRLzmVE4I0Qt74LHo1FF4VeV1z3l
-	 hk68565ZuwuzyH3M9sDrzSk0eNq6jhhChuJif6ambrT747azCF7Ensp6WVLW+x4cdYA==
+	t=1793607270;
+	b=peXb7ky64sYsV54kXHRh2WWyHZt5vx+h45Q4KwesbtrIV5qdMw5EocCaBbo8/sjz4QmY
+	 Y+c6hw5ZJhsYqZ3fYHH8OLBBvMJPYz6qytlPpaj7AE596NRBEIisVNC9nzNBI5JSR1LVg
+	 fuDcZJQa4yyxVkFOUVpLcpdhPnSQdyu9769KTDfNqjNDiuKq2uQoBxhBASso7OUDf7mTP
+	 ilITs9/D8ZAbWe24iJb/cWWWqvL3E/lR915ZviLxYayM3AbKdsyzFKKd3j95HQ6aMI7w7
+	 D0aVoU5/RtxJsWnh1TtwRBelv86SImT16TAdcf8ATpYPzIPNmItPYnwhhypdSPH41/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793607160;
-	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
-	 X-Coremail-Antispam;
-	bh=0XFyu5ohozRsphsglreF2QooKn6bFRpdsO1k5OqAHm8=;
-	b=RF0CMd8PKQB5t6ZRApmMlJhjh8u55PXfklijEF6KK2bq/Rdqq0EfkwWMELw+XpDKODXX
-	 HRndBrL9aLMMjW2+0dCMfSriWgssUShJJeng+kblkgquBL419DUV71DT705GRbk4DSn3A
-	 7RamFV9s4JPC4WKYfWEJStNIry/dBCwoRJP7wRf1o3qqewgiLfU/Tu3ZTdBKADy6Yd88C
-	 aX9cSGWmsf3DPMpSG2MXKvR8DhpiNX20fGGlxFMayNqiNr2x6C/5Msa1jHxacJQ5ZPi9w
-	 +EedZ6D66zqpU8hmv6htO2ZReZvObQ1YOdgZkBl07aDxyDxpaE9V2qNnv2bpTaPHKnQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793607270;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=7PkmO9E34XxgGmqqHlDqmaQi7tYcgKQvhGHds/lDuHw=;
+	b=jIu2DCU9alqRxRU9TApHbROXKggDpGsviMgkPYLf7G0SsBV7H3fO2kfZxeBVJqeqelQc
+	 I5MIERjucGm3yuE+W6VkTwCI1VLGrdhcTQrjEjU1NKRHLa9V2S19Ytgvw9GfnnuTiNAmp
+	 8rQU3rVfaWjCnElOWNC8vOEtou4ljf4mXiT/WiJ6pYu6G/roIRS+Kgi1EDc0WWOEdRBAd
+	 AcUtwF5qilpKw8yDitpL1e2chxspADla4CrUdkTWaSExwcrR5Z0ptmbAY742rLd7hSUII
+	 lfRzg6jdA6ZYkacPzRWiUm5qHr+qvK+FeO4BS1ic+xEKs3iwNOX21XdWLuDPOZJxj8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6CA606A329;
-	Mon,  2 Nov 2026 08:12:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB6CA606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8CxPtPzRehqU3gbAA--.13915S3;
-	Mon, 02 Nov 2026 16:12:35 +0800 (CST)
-Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAx3c7vRehq5cwxAA--.37701S4;
-	Mon, 02 Nov 2026 16:12:34 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Handle unaligned access failure in fexit_bpf2bpf
-Date: Mon,  2 Nov 2026 16:12:30 +0800
-Message-ID: <20261102081230.7063-3-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20261102081230.7063-1-yangtiezhu@loongson.cn>
-References: <20261102081230.7063-1-yangtiezhu@loongson.cn>
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Kyv+Kegm;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B24606A324;
+	Mon,  2 Nov 2026 08:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Kyv+Kegm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5CC51F000C1;
+	Mon,  2 Nov 2026 08:14:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793607269;
+	bh=7PkmO9E34XxgGmqqHlDqmaQi7tYcgKQvhGHds/lDuHw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Kyv+KegmEwkrYjNsBtVg/aMcQLzrp+vI3wBreAHBi+WCwd5alF2epD+StN7Wx8T4P
+	 uKmmC7RvjI76aGmGqeWf463Sc3DxcXcoZ+2a3oesuYnlx1Z9A3HSRaJTNqwqnZyQlB
+	 huxK7pMjONlpm+mgvGNBNQ5Y3TsRoVVD7I6mqKl+8Q8tJkMrRNlfV1zKKnbjn7YqiU
+	 gCda/R+G6vObDr+wGt3g2x6hMSMHDI0dlbfXhnuGLNwN9cmmrhDbPWG2XBgUd1dO7J
+	 i/XBmBu2ZGA4oYREMfmmpZFn5vMGbGrl32ZzSVJ8QRcSOA5txIt77zx3OC8sjhCAsX
+	 gvhU/5vRPVkfw==
+Content-Type: multipart/mixed; boundary="===============7351402555586448473=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,117 +49,113 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAx3c7vRehq5cwxAA--.37701S4
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxAr1kWF18KF4DCFy5tw1rZrc_yoW5Kryxpa
-	s5Aw1jkryfZFySqw1UJa92gFZ5trWkJr1YkF1Ig398ZwsrArn7Xr1xKFW5WF98WrZYvws5
-	Z3yIkF9xur4UZagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-	AKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
-	6r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF
-	0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-	AIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
-	KfnxnUUI43ZEXa7IU8XyCJUUUUU==
+Message-Id: <2bc16926af0fdbbc1063e023a8f2b750a6f415d40578dbd79717372b99324c53@mail.kernel.org>
+In-Reply-To: <20261102073714.1103088-1-yangfeng59949@163.com>
+References: <20261102073714.1103088-1-yangfeng59949@163.com>
+Subject: Re: [PATCH v2 bpf-next] bpf: Fix suspicious RCU usage for sleepable bpf_get_stack()
+From: bot+bpf-ci@kernel.org
+To: yangfeng59949@163.com,song@kernel.org,jolsa@kernel.org,ihor.solodrai@linux.dev,kpsingh@kernel.org,matt@bobrowski.net,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,emil@etsalapatis.com,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com
+Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon,  2 Nov 2026 08:14:28 +0000 (UTC)
 
-When executing "./test_progs -t fexit_bpf2bpf", there are 5 failures
-with the same log:
+--===============7351402555586448473==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-  ; tcp->check++; @ test_pkt_access.c:98
-  226: (69) r1 = *(u16 *)(r2 +16)
-  misaligned packet access off 2+(0x0; 0x3f)+16 size 2
-  ...
-  libbpf: prog 'test_pkt_access': failed to load: -EACCES
-  libbpf: failed to load object './test_pkt_access.bpf.o'
+> bpf: Fix suspicious RCU usage for sleepable bpf_get_stack()
 
-This is because CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS is not set
-on certain processors that lack hardware unaligned access support.
-In this case, the affected tests should be skipped.
+TL;DR: Commit message only: it understates scope. Sleepable LSM and SYSCALL
+programs also get the might_sleep bpf_get_stack(), so calls in
+preempt/IRQ-disabled or lock regions are rejected too. Code matches existing
+policy.
 
-Add a get_unaligned_access_enabled() helper and use it to skip the
-tests gracefully if the program fails to load with -EACCES.
+> bpf: Fix suspicious RCU usage for sleepable bpf_get_stack()
+>
+> Sleepable BPF programs run under rcu_read_lock_trace(), not classic RCU.
+> bpf_get_stack() relies on the caller holding a classic RCU read lock:
+> get_perf_callchain() -> get_callchain_entry() dereferences
+> callchain_cpus_entries, and the returned entry is read until
+> callchain_store().  __bpf_get_stack() takes that lock only for the
+> sleepable variant, i.e. when may_fault is true.
+>
+> The sleepable variant was added by commit d4dd9775ec24 ("bpf: wire up
+> sleepable bpf_get_stack() and bpf_get_task_stack() helpers") but only
+> wired up for kprobe/uprobe.  All other program types that can be
+> sleepable still get the non-sleepable variant:
+>
+>  - tracing_prog_func_proto() serves BPF_TRACE_ITER, fentry/fexit/fmod_ret
+>    and BPF_TRACE_RAW_TP programs, and falls back to
+>    raw_tp_prog_func_proto() for BPF_FUNC_get_stack, which always returns
+>    bpf_get_stack_proto_raw_tp.  Sleepable iterators have been allowed
+>    since commit cf83b2d2e2b6 ("bpf: Permit cond_resched for some
+>    iterators"), e.g. for the task_file target.
+>
+>  - tp_prog_func_proto() serves BPF_PROG_TYPE_TRACEPOINT programs and
+>    always returns bpf_get_stack_proto_tp.  Sleepable programs of that
+>    type are allowed on syscall tracepoints since commit 8cfb77d30920
+>    ("bpf: Verifier support for sleepable tracepoint programs"); they run
+>    through trace_call_bpf_faultable() and bpf_prog_run_array_sleepable(),
+>    which hold rcu_tasks_trace but no classic RCU read lock.
+>
+> So a sleepable program calling bpf_get_stack() triggers:
+>
+>   WARNING: suspicious RCU usage
+>   suspicious rcu_dereference_check() usage!
+>
+> Route these paths to bpf_get_stack_sleepable() and mark the new protos
+> might_sleep, since build_id_parse() may fault in file data for
+> BPF_F_USER_STACK | BPF_F_USER_BUILD_ID.  Sleepable programs that call
+> bpf_get_stack() from inside a bpf_rcu_read_lock() region are now rejected
+> by the verifier, which is the correct behavior for a helper that can
+> sleep.
+>
+> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> Closes: https://lore.kernel.org/all/41ce77bf.17656.1a17b3fcb04.Coremail.kaiyanm@hust.edu.cn/
+> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
 
-Before:
-  $ sudo ./test_progs -t fexit_bpf2bpf | tail -1
-  Summary: 0/10 PASSED, 1 SKIPPED, 1/5 FAILED
+The commit message lists tracing_prog_func_proto() (iterators,
+fentry/fexit/fmod_ret, BPF_TRACE_RAW_TP) and BPF_PROG_TYPE_TRACEPOINT as the
+affected paths, and says only that calls from inside a bpf_rcu_read_lock()
+region are now rejected.  Is that the full scope of the behaviour change?
 
-After:
-  $ sudo ./test_progs -t fexit_bpf2bpf | tail -1
-  Summary: 1/10 PASSED, 6 SKIPPED, 0/0 FAILED
+The raw_tp_prog_func_proto() change reaches more program types than that:
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+  - BPF_PROG_TYPE_RAW_TRACEPOINT uses it directly, via
+    raw_tracepoint_verifier_ops.get_func_proto.
+
+  - BPF_PROG_TYPE_LSM reaches it through the default case of
+    bpf_lsm_func_proto() -> tracing_prog_func_proto().
+
+  - BPF_PROG_TYPE_SYSCALL, which is always sleepable, reaches it through the
+    default case of syscall_prog_func_proto() -> tracing_prog_func_proto().
+
+For each of these, a sleepable program's BPF_FUNC_get_stack now resolves to
+bpf_get_stack_proto_raw_tp_sleepable, which has .might_sleep = true.
+check_helper_call() will then reject the call wherever in_sleepable_context()
+is false:
+
+  sleepable helper bpf_get_stack#67 in rcu_read_lock region
+
+or the equivalent non-preemptible, IRQ-disabled or lock region variants.
+Before the patch these programs loaded and ran, since the old helper never
+slept.
+
+The code change itself matches the policy already applied to uprobe programs
+and bpf_get_task_stack() by commit 9d02927fdf4e ("bpf: Mark faultable stack
+helpers as sleepable"), so only the description of the user-visible scope
+looks incomplete.
+
+Could the commit message mention that sleepable LSM and BPF_PROG_TYPE_SYSCALL
+programs are affected as well, and that calls from preempt-disabled,
+IRQ-disabled and lock-held regions are rejected too, not only calls inside a
+bpf_rcu_read_lock() region?
+
+
 ---
- .../testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 11 +++++++++++
- tools/testing/selftests/bpf/unpriv_helpers.c          |  5 +++++
- tools/testing/selftests/bpf/unpriv_helpers.h          |  1 +
- 3 files changed, 17 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-index d2f2dcc0f2e1..1c0e93dcb3ce 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-@@ -3,6 +3,7 @@
- #include <test_progs.h>
- #include <network_helpers.h>
- #include <bpf/btf.h>
-+#include <unpriv_helpers.h>
- #include "bind4_prog.skel.h"
- #include "freplace_progmap.skel.h"
- #include "fentry_sleepable.skel.h"
-@@ -76,6 +77,11 @@ static void test_fexit_bpf2bpf_common(const char *obj_file,
- 
- 	err = bpf_prog_test_load(target_obj_file, BPF_PROG_TYPE_UNSPEC,
- 			    &tgt_obj, &tgt_fd);
-+	if (err < 0 && errno == EACCES && !get_unaligned_access_enabled()) {
-+		test__skip();
-+		return;
-+	}
-+
- 	if (!ASSERT_OK(err, "tgt_prog_load"))
- 		return;
- 
-@@ -297,6 +303,11 @@ static void test_fmod_ret_freplace(void)
- 
- 	err = bpf_prog_test_load(tgt_name, BPF_PROG_TYPE_UNSPEC,
- 			    &pkt_obj, &pkt_fd);
-+	if (err < 0 && errno == EACCES && !get_unaligned_access_enabled()) {
-+		test__skip();
-+		return;
-+	}
-+
- 	/* the target prog should load fine */
- 	if (CHECK(err, "tgt_prog_load", "file %s err %d errno %d\n",
- 		  tgt_name, err, errno))
-diff --git a/tools/testing/selftests/bpf/unpriv_helpers.c b/tools/testing/selftests/bpf/unpriv_helpers.c
-index c8dd5d848584..54ce342b3fe4 100644
---- a/tools/testing/selftests/bpf/unpriv_helpers.c
-+++ b/tools/testing/selftests/bpf/unpriv_helpers.c
-@@ -161,3 +161,8 @@ bool get_kasan_multi_shot_enabled(void)
- {
- 	return cmdline_contains("kasan_multi_shot");
- }
-+
-+bool get_unaligned_access_enabled(void)
-+{
-+	return config_contains("CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y") == 1;
-+}
-diff --git a/tools/testing/selftests/bpf/unpriv_helpers.h b/tools/testing/selftests/bpf/unpriv_helpers.h
-index c24d53e14f3a..6e3ad636ea83 100644
---- a/tools/testing/selftests/bpf/unpriv_helpers.h
-+++ b/tools/testing/selftests/bpf/unpriv_helpers.h
-@@ -9,3 +9,4 @@ bool get_unpriv_sysctl_disabled(void);
- bool get_unpriv_mitigations_disabled(void);
- bool get_kasan_jit_enabled(void);
- bool get_kasan_multi_shot_enabled(void);
-+bool get_unaligned_access_enabled(void);
--- 
-2.42.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41409077371
+--===============7351402555586448473==--
