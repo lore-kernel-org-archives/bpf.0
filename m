@@ -1,101 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793659500;
-	b=gMjHWM7Gab0fiW2DInIfeWq+9WOXHqZlfhiYgHW0eykr31jqr2rgmcvrzUuHB+wvUlc9
-	 TK5U6komq1SMDWdcLH3JUyjSLEpM8MzjPkOMlhENf0d78U6QFaWNHyhSW9px41GHa2bKy
-	 AqxwdHta3Nwn4mLvFlqqKX45pG7rg6A/FlVV0mL4G5q/K1+Ou33XHG9HvgVt6hgEo6tZZ
-	 NKHxMXNVJtrc8X6t/xbGhtUXTJZsBbRjqir0k2UciMwFWEOzOAJDf8ylidIX+cPmnKTnH
-	 EwQ6d55KlQz09dGN3sOmWOAtPg7ae85ZJal4CIIaZgz3O4MaQzuxEANwkm1pGEZDQSA==
+	t=1793659621;
+	b=U6oJF29qduKNNwkaxGAZsBAmI9FQpFjU4P/IgxOQDScdpk2p2bQYOAOrz5uMeNs9Zk3W
+	 YpcxRj0lHyT4g/7dC2vpTlULTrjLgBf7u2KiWll24dfrYUk7msB+bPMphck3p07HzzprB
+	 celcEvhZpOEPfj27LPviaPFLCQZORJPvI2GV9a9l7iVJ1o42pjlOGK1R1LmgBUMxrF2+o
+	 8GK0Y9/WljsDVxKH/mcjg+8Oh+4/2sqS3z5cFVk4FQu1h1HSrWwzqoO80X1elGpmuIvtL
+	 cMsBOl2nQG3aFuYE2o7tu713AnrnfRuOtZxjvJbUvMBkbwpikS4rb85jXHSLj26HZig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793659500;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793659621;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=3QmP7DYfeKMX6W+XMxlm7nFN+GTZmZT7AU7by44PL8A=;
-	b=LQUzewAkm0XCElLGyr1EZ2OZs0ShJOkeqXC1hGhTQJ4JxSxeSvUsQmM4eO997DHFIyqZ
-	 nEvQhpO9Sr0TtjdCqWi0l+toLsenO7KPR1HJzrpT1i5rbBXWOx099Uom6+eDSMTViBkDs
-	 KjMnkZaM/aUAinZiEsds5toklQ5YQnr10fSwXSkx0lUARVJppiEzEH5V/z2YIATAgns6B
-	 /c/j+e8MiaVW+ljgt3iJtqG7uDCwuokuEk9GcudbCGCryyfVnLKlZCtiicGrh+UrWBF/+
-	 /t8V1ewN5zbxH3nJvvM7Uc4XK+cQ3DNdaxkyRTPX3bcfQOviSqmlH5w+R3KWzbPPnSg==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=vXkfhgcH6rL/dKIELLPsFfXbm/yMJGywtKtor6k+GYY=;
+	b=X+kXGdzH01kscQc/Z/xSgLmgxuXaAlY8eIXMFRKv/KOAmNrPi2tWgBPLpIGAgV0MDuKW
+	 mxcYLa7MdoBxMlN2unNaHdgfCLNEJxeKNegwbO0gdY0hPrB91Zvjzu9tPnifc0y5rd3tq
+	 AMSNRF4w8/uYn0FbEucOwNU00TVA9pHlyHL5biwCA27gmY8HcgLXUHrLsb2nYIuKesrkM
+	 U78C5Oa01sn06QVJv4UmisDPk7jlqN28ckVZpTQJEpR9XQAqC/3Cg+j3kr2KqzENVzM89
+	 +XI3Yc0FIzVYVu9kTGo/bso6031FWCV9GQuw43+URjRqRicGpHfLKWCI0kYd092yAJw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EWAypKS6;
-	arc=none smtp.remote-ip=209.85.210.171
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=z+MbB4xi;
+	arc=none smtp.remote-ip=209.85.216.51
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15694606A327
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 22:44:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 15694606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DFD606A327
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 22:47:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32DFD606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EWAypKS6
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8a06454116eso1468138b3a.1
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 14:44:59 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=z+MbB4xi
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3ad2b3b1c02so1895932a91.1
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 14:47:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793659499; x=1794264299; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793659620; x=1794264420; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=3QmP7DYfeKMX6W+XMxlm7nFN+GTZmZT7AU7by44PL8A=;
-        b=EWAypKS64YSe7zbnDh2J2Xks8FwquEFEljlLq3SM457UPvkpQJLTIgVbbNAC5o1XOE
-         uYqQG4XUmfrn/dSMbrMMQWG9VHqCk9ZUBKsLAsT6/7IegjdogQn9+08isn8wdHKPwmr3
-         GCLs61bvRp6JZ4LBsRoXg09pRaWFGxG5tLh4CGGQ2BdTKZcwuPKrxsak0QtikRuQjuc3
-         tGCxDW17YfGsPj/E6D/nZtivGr5y8Ln8PlnH+GnHAVIJa8B2Cvb5U9lZBmYPn14O2l0r
-         z12TqYW8cN/sHS0dgE/TaLdvHT6/sYu0ke0AnkKalTBGKLe9r+trF7HqdbXcyZKAuIbM
-         yF+g==
+        bh=vXkfhgcH6rL/dKIELLPsFfXbm/yMJGywtKtor6k+GYY=;
+        b=z+MbB4xi3xkJ3ve8hOeP7OMN9bucgGpLOFhoPFfVeQe0jAvg9UUM6sifEU6892jqBa
+         cO+xR5cCTbayMIpotvPVvNp+kRnbf1Nu70+Kyz/HSVeHNxWhQIK+TZiVkgUBR2Ti4BX+
+         9SvrCoz7yTYiSB1NwCWi6yE6neuWRf5ZmOCu2euKxPIKZ+wwL/D9e1eJRH7GdQyyLpe5
+         tK/hINW2Cwb7+kZBrVDsQXvmlRyfbGlQjio9f9cWMHDN21cBNdl/24Wc+4DZnEQtNEaY
+         A2a/esaQEVjxzBmj5iJUivzAiYyF7uyiLo5XWCN4j5ADUCS0EPOhcmpt7jCRozKUVYvc
+         3DEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793659499; x=1794264299;
+        d=1e100.net; s=20260707; t=1793659620; x=1794264420;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3QmP7DYfeKMX6W+XMxlm7nFN+GTZmZT7AU7by44PL8A=;
-        b=QnWWNdsMPqXVJ4yZI2oeXlfaA0d9vrzeIUpvByM3vovPdXtXoJTXx3EEtR7MnpAt2a
-         fF2DNAq8dv8OcW4h5TWcb5uovdNpyKhOSGCdnTZhKybXTlq7ErldaN3AfG4z4OzAHLaM
-         213eD8Qel2uP6/ceW1u0wO2vtivX3WSXxPqAY544hDq493HgPt71Z8DkaUNVPPvZxAyZ
-         SWiBl8tJJ9RU/7iGc+bmk8WvoFK33lqhSnku28VXokcar24JkmHCr2/EBewi9LsjMbrH
-         I6IZtn86g4C0tviw4/EgEPm+RlxNKXsVTT8NtgjR+pDNOE0wcvyNYdUYh8f1Q4Amk+6j
-         tYlg==
-X-Forwarded-Encrypted: i=1; AKwUvBxEqBGBlnQiVs1PodYfjU1fEUo3tj+qblkSQo/sRqnB16YuliEIxzOeHMcUtxz7bmEmJ+g=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLzY5ZVxo3QJ6lWb7rWOkGAVbusLcqj3qi5J6tMKZgp0tzNRcWQ
-	4O7Bi3Nt1wsaK+ri3dBJstFpm11iQ7jSlNfWRT2nn0iACpEyyq+I8uio
-X-Gm-Gg: AYBFou3ZEvHVIMsblwR4zorMY/y+7TJMxwFI2Q5aTh2R+atSOKmIdRfnR7d5Y223j9/
-	7MIBxtFqYX1h/J1el6C1f7A/j+9v/131viMzQn/X3Um5Yt1VBscac7B4WwUuCiX2iKdOTviPHVw
-	UJojhfsqrnIxW7PXUEmkrP8rTM9Q92hVKxQ+Z1jYJiyukPmij/2+5uPdWmuYTgr13LzL0ie2nAp
-	Mq3gt37DqyuhB9VgwrFXODozFQcziz2xA3y0r5SRvEx2bYdO6VOsTc4ruz/ZWZoUxp20fVjlPXl
-	IDhnZIP9pVVNXIr+Yjm0yoYzZ5UEM2xII0egzRz1pVtCKKdVMrLzTKJh3w2JoJSdwoy4IHxcLhI
-	YniJu8TaghylkBUJ26K55xAAMm/3U8fT7KkDF9Tme5AVsw/tO8A+Ow2mLRArNnAeHSS1YMhZZw6
-	pCY/0EeEx+ziT2/5Aw0/N/ksFe1hmuBzrCsYDXX9LyI7aIYyl60A2PrTvC/IhbWNXakr4uCcmYF
-	5Tzx4un7vGpW1F11EsnR+wtjcAhK6k+bYyWsdyaR7dc7B3Li3cyeBgf3fNN1XJaNqDJcgTRbfAI
-	KgOIwc+dHcBSoC8kQF0vGgz3dgN8/y/SSHc9IR/6n3MZUtIBpiFa/l9CSe+BM/W0/1xGZevLlBL
-	w7oG5n4SB70oL5lR1+iEZzxmYabATfrQxKg==
-X-Received: by 2002:a05:6a21:4e03:b0:3de:79fe:13f with SMTP id adf61e73a8af0-3e928d4d2bdmr9749200637.38.1793659499362;
-        Mon, 02 Nov 2026 14:44:59 -0800 (PST)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb364cb821sm358389a12.29.2026.11.02.14.44.58
+        bh=vXkfhgcH6rL/dKIELLPsFfXbm/yMJGywtKtor6k+GYY=;
+        b=QNhgl/drCNmUCifERhC3LO6t5wbx5NGNyKOSJPJRdlAxEvDhm9W6VAHCVxNdlzVwr8
+         OiFd7tL8rIm2tAPKsdMBHW+VA7kdcCI3tFYAv1uWwkpkGSmoPGTW7RU60JwUY+cyMgmU
+         rLv+BCdg4r0XHB+n1gc24DunZ0gKUwmCzJSS3kqRbToJp9RMnwv4FDWZ5pli5F1OTcYO
+         Zga9AcysU0Ki/ZKuwdMxFvZi674oViwbUTr35roq2FtHbsV1JmqsgFVqNSYYhpHS7qg1
+         TMRCY7HcD3RxG6xcp4a1h79/oL7X9JK0GJm73L44FyMXETmv/2WfiaVbZ/iXn8sD6Zrs
+         IoQg==
+X-Gm-Message-State: APuU4Z+j1pW47XtXQa1kCNkK3EnglgVs74jbWzCHKG2I4xT30Cw1VFRd
+	wgBIUxdytL5nE4EKSYU6WfP4wOJ71rM595Fm8SaAzP8lrkr5QoildUI7
+X-Gm-Gg: AYBFou2cUqJNMTMzHvGoz4kcq4ZLKK9KLMWi5l6Q8rUn7pwAKHZGoWOHOHDSfkapYB8
+	+avziaIoUCkqUoHSoDK3Q6RPrJ2wvQENPYzwGIuujqfKUa4h3N3Rx7FztvUQkn8uMqcGHholslX
+	VmYra+knjeKyPOnzmm1O1y/65R9O+LsnOHhkY0cjsaDxB+wFp09e0Mf1e3gV6+El/OUXJVn/Xzf
+	rpHi+u1FXeCHZGSW4q4AgPpex8AXm0m8jJiY23hkjEpdZ2D7Zdp4tkzAYWBYwRE9VUhHiViILLb
+	nJu+l/fcpfpb2nkvfYuL2BLCMSfxbYVTAvMa7mXGgcCM46cGNja2T/qJFIwxvyC7r7pXG5fKy5T
+	ubOsGRA26pqB8lPegaj9LTGwdje2jE2ZHC+KzmRuxtYN5bvVltNH1lNj6xAqLlJNZsWhOrGtC7m
+	9Nh9bm+ttjjatoPoF/TFo5obGhbuxLtaxiy1BRvAMCPd9FDyB2pVXdisG5NCGZ7Jxux9H6lqjDy
+	fG2B7U3LM0REZnn+mpYCnelAQUJZw52Dap/tm43aswmDOvhkMbHQa/j/9u2kYNwzGGZJzaEkfyO
+	iEqFjKgy/qX+nK3CNLQAynWHd5xBcHTtfwCD/z6oVXLoc9SQ92zawb+Nf4Pa17sq2OI5Pk/Wo1T
+	NIKq8faD7hE+jcOfXGQDOqkWULNrpSjDk1Q==
+X-Received: by 2002:a17:90b:28c7:b0:3ac:83c1:2bd with SMTP id 98e67ed59e1d1-3ae897f33cemr8956221a91.28.1793659620222;
+        Mon, 02 Nov 2026 14:47:00 -0800 (PST)
+Received: from localhost ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae8805ebc8sm9308679a91.3.2026.11.02.14.46.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 14:44:59 -0800 (PST)
+        Mon, 02 Nov 2026 14:46:59 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 02 Nov 2026 22:44:58 +0000
-Message-Id: <DML3865PENEX.2KBDIHWGWBJ7N@gmail.com>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <jakub@cloudflare.com>, <jiayuan.chen@linux.dev>,
- <davem@davemloft.net>, <edumazet@kernel.org>, <kuba@kernel.org>,
- <pabeni@redhat.com>, <horms@kernel.org>, <kuniyu@google.com>,
- <willemb@google.com>, <matttbe@kernel.org>, <mason@kernel.org>,
- <josef@toxicpanda.com>
-Subject: Re: [PATCH bpf v2 03/15] bpf, sockmap: Don't let an SK_PASS verdict
- cover the next message
+Date: Mon, 02 Nov 2026 22:46:59 +0000
+Message-Id: <DML39PMNWP8Q.7K2P5T3AG8LP@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH net] net: reject a negative TCP header offset in
+ qdisc_pkt_len_segs_init()
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "John Fastabend" <john.fastabend@gmail.com>, <mptcp@lists.linux.dev>,
- <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-In-Reply-To: <tnw1v9.qyjuvdc9kq45@gmail.com>
-References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com> <20261102072112.4160195-4-alexei.starovoitov@gmail.com> <tnw1v9.qyjuvdc9kq45@gmail.com>
+To: <sashiko-reviews@lists.linux.dev>
+In-Reply-To: <sashiko-outbox-194018@kernel.org>
+References: <20261101194433.2637113-1-alexei.starovoitov@gmail.com> <sashiko-outbox-194018@kernel.org>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -107,18 +100,40 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Mon, Nov 02, 2026 at 10:51 AM John Fastabend <john.fastabend@gmail.com> wrote:
->>+			/* A part of it may have gone out */
->>+			sk_msg_apply_bytes(psock, origsize - msg->sg.size);
->>+			/* Another sender can use up the rest during the push */
+On Mon, Nov 02, 2026 at 11:44 AM sashiko-bot@kernel.org <sashiko-bot@kernel.org> wrote:
+>> +		/* A header in front of skb->data gives a negative offset. */
+>> +		if ((int)hdr_len < 0 ||
+>> +		    !pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
+>>  			return SKB_DROP_REASON_SKB_BAD_GSO;
 >
-> Interesting. We've never hit this with http parsers. We do use this to
-> skip payloads some times.
+> [Severity: High]
+> Should the (int)hdr_len < 0 check be placed immediately after hdr_len is
+> computed rather than only inside the SKB_GSO_TCPV4 | SKB_GSO_TCPV6 branch?
 
-That one needs two senders on one socket.
-With one sender per socket you can't hit it.
-A non-blocking send() fills sndbuf in the middle of the push.
-N bytes go out and tcp_bpf_push() returns -EAGAIN.
-Today apply_bytes still includes these N bytes.
-Then the prog doesn't see the first N bytes after the payload.
-There is no error and no splat, so it's easy to miss.
+No. It's already explained in the commit log.
+
+> When (int)hdr_len < -8, hdr_len + sizeof(struct udphdr) wraps to an
+> unsigned int in [0x80000008, 0xffffffff] (> INT_MAX), which triggers
+> DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in
+> include/linux/skbuff.h:pskb_may_pull_reason() before returning
+> SKB_DROP_REASON_SKB_BAD_GSO.
+
+Not a bug. That's CONFIG_DEBUG_NET only and the warn is right:
+the header is stale.
+
+> Can this write uh->len (and uh->check in bnxt_sw_udp_gso_xmit() and
+> enetc_tso_hdr_csum()) before the start of the header buffer when
+> skb_transport_offset(skb) < -4?
+
+No. The driver doesn't see this offset.
+
+> Third, for other GSO types (such as SKB_GSO_FRAGLIST, SKB_GSO_UDP,
+> SKB_GSO_SCTP, or SKB_GSO_ESP), hdr_len remains 2^32 - |offset| at the end
+> of qdisc_pkt_len_segs_init():
+>
+> When (gso_segs - 1) * |offset| > skb->len, can qdisc_skb_cb(skb)->pkt_len
+> underflow in 32-bit unsigned arithmetic to ~4.29 GiB (exceeding
+> QDISC_PKT_LEN_MAX), causing deficit-based schedulers such as drr_dequeue()
+> and ets_dequeue() to spin in their deficit-refill loops?
+
+No.
