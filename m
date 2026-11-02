@@ -1,103 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793638240;
-	b=nTL9G9VP5+dqD77B1JgupU4mDmRm8y7q8otBWbsiwfGIhwXsOdah4w6k+Ij3tI5XKWlW
-	 RBwGfNaceggoOpNIPt6X74oP1HNHAlM+pIMb7Mzv5hqZYoDQUBiBzLbUV8FC9zekKbgn/
-	 r3kfso5ajPcSGkNbTB6DWfcDy4CCcyOTtjshQif/pzC/TqK8fml/oQqRVOhqiyDd6Dp1Y
-	 yBJkYMnFxhFx+VKkGtghyqoMM1n9UeLm5sYRkGVuW7J+Y4aZamEAQA/X1W53mYiRVILEU
-	 cL+Ao9ZZDR9AF++s7+uQZ3tkdrnK5Qrul/Sp8uFyv/ACdmqXPSVjwDtO91AoAgweqjw==
+	t=1793638397;
+	b=QBYxoOdXkub88R4TAkcM9KxemccS6hJbuDCTZqw+Plon3S3CgTnNhGAQEKL5OtJWcOSs
+	 uxOFsyMJWA6qP8exz4MMoozl5eBYE7WL/v9XfLvQSEp1kNCtTMwptKkYUi2s8KZQnowr/
+	 NONGxLtbK61B5mbxWgZLd6ik88repJS6IqBR6ywDGxKCcvrjerVhUmQxZMQslnbT/qMZW
+	 6EUhmTFpe+e6lM0Fi5AlZvxoYFEb9G0UzjRQE2K1e3OH6cuNi37IGjmaCYs6sB0rJkCni
+	 LHoA7taARVzzjGnuVTAucpzM9ehhfHxUOOUJzjJuQYp33GRol2x0MNiOEAnbjiTK7cg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793638240;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=I+MJWuTHvHgN/FhY5omphd4Ba1tdxtV5zHdjWOwg5V0=;
-	b=yal2HjekncO/Vv8O78MsdCv/f67TQXSw50P+WoA+a6miwnccGoPXcLoDhdJ7T4Vby/BL
-	 5OcWJIEYJQJPkIZBpabCLrLvGDGolDl9neSj6u1XQQAulkrWGgscZeMJb0NJ0TbSusnd5
-	 DL+QNWQtrHgnoqZBu0P7ZuzlTzOHBtzwMKEgHfZQmfQ+diNSlIqA3J1pnSpxgv3y71y2d
-	 c0VgHcVefGhPe4zZmupQNATytL9AGC66Ce4/sgaLSHkB9HCP5wQMCBlUxO84UpjtokMdA
-	 D4Mf1oAGzZMbKeVldNVXQeXrl5KJ7FVwMAs3P54ZZXgQA5cZB8pUy7L0zJKFOUAhSiw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793638397;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=0S6zeVQB6JXDivuIwwZkxYqZ6mbJYmib3ujqs9acEWI=;
+	b=zWtcDMEVZKthpWInHNM0NlbTyg6ZVwK6yN8rY1ntQr28qIE/faGwXWKq+b32faUjVQsD
+	 EsK8LVjdgiEmElMYfdCfpJpNN6mQTFTjfQe5yCdZagxx3MrJOchoV3Bzf47NURpVE8oJW
+	 vCQ//EfTXcPMw0fsCOIIkDJvgZ0cQJiwJNxrDuAn7GcTO6MFUwC/gHGO6GdXIrBwwmomv
+	 u+Bx/FcEF3nuRSqheYpw0nzSw8SKx3e7TI0HUS2uRiOMKXWETOKw9opszvgvvYD8yAdGX
+	 1nhPGoedyoGiB/CQ6W6aR/0daNDY7SwQUAcXxb/p1yLyNe2G26oiA9hd5M/wpxjUUqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bS16b14r;
-	arc=none smtp.remote-ip=209.85.216.41
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="izG/P3oc";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BA16074647
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 16:50:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1BA16074647
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E5A6078267
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 16:53:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bS16b14r
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ae1da332bcso1455397a91.2
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 08:50:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793638239; x=1794243039; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=I+MJWuTHvHgN/FhY5omphd4Ba1tdxtV5zHdjWOwg5V0=;
-        b=bS16b14rPOrL3wo4ue5Txv+qnV3i3hmCoMiwjUFcZ2NO+0DnPvtzWW4UzXlRcRDmED
-         8lghrxfcDBb/NrgVeaPkPP1AMRPtPXwrMCqbr7q1u02svA+63NbtsPLtZX6YsFyMlxba
-         LjmHqJnMdbwsoPeLBe0PgE1EE779Fx7MslOYPUxveDssom+iac/04doEZuQmrlrb0+w6
-         nI5Arqpu3To6Pq7TUFHDlMe1+k/YUumGYmRgLvI8M8orbsAMeNRrIvyRXUYYuHT3FLuu
-         s4/65OwiQ6Q+KBGInUl7DEEJofV2FMe8Tc0iEFliJ5Y+JTHyL3RTfcFqHzYdZcS+jAE4
-         Ix7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793638239; x=1794243039;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=I+MJWuTHvHgN/FhY5omphd4Ba1tdxtV5zHdjWOwg5V0=;
-        b=KMslGWh2IQJ6gzjzTlOhSoQLTnXXYLgJSFOtfIe48lkWBsiDvf0HqIGLfs22A5pa0Y
-         fHnsGTE+6F/Us2gNnoYQSsulxQBR/YkzAfJIbc3xZgZwXbrHJxE9KOU2Tn3WFUGRlxvh
-         U6jOnDfqO2nmyq6rqKqlNyHjwPaUls3AIMoyoPDulyqgm4LEIzbVDQ0jXCbAQUZu5Tgf
-         a9yfqb55qUcDdPLnce40KaqmlbWKsvvFSQSC+aXimOPhHFhEw/blDR6p8Qt1lzffeSb0
-         wbU8yMUpXl2PjxiIJlgyf9HiX31eddCIqL3vL2hxou7p4d8ZjoNBITw3geDspB2WYAMu
-         FTWg==
-X-Forwarded-Encrypted: i=1; AKwUvBzIPjigFTctq36ljUm/ENuUWyz9gEuVYpzMXG8JwsVoQIDZJnsJoIRCs1i+LywIVTevAcE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8iQtI+sZrprgHYETpWrasd5UppQix7+LuvF42mDMjTCddv2QXV
-	5iUFHZ4JntqAlR3uNbLmklO6wTCoKJFGAT7R0Y4uFULfDwhquII0lY4w
-X-Gm-Gg: AYBFou1hawPGHsomj45QV/cSCce0ePz9EMkKakI3fYtzOOHIsB+2cpqa78H6FmfsJY3
-	xJvIeORJU5NWotJfN4XhU+MJoEVWEORMCH9JJLcXGXzcPAOFwx2SHJmAmv3Fntg67Ulzs49U3hK
-	44y0Gjj1JQgCFqfiyjqFpAYNDQRlhYln3JnjhewSd15x2aT7C6s1OHEoxgWEkBmY13xLWs/Dt3C
-	LjoIBheQwlsx3c84vosFZ1Yf3d79CltX1sp1R/lNBeZS7ZZrGNNTahtzMNcdinaDPXggcwfI/i6
-	oKlVAfFH5ESa3i6djAHcey1XE5lBv3PjgHhNSQ7VGRXgmsa40rEqpbeyAK/sA/aTZH5ZrKwW/4m
-	4iSUsA46901N5jcOiX8TMyAYnePCMcftui6/an/RKMhk9nWu+PodjeoxBjYBZDnz19Dmxm9lxAq
-	960w4+p1SwIh5W1+UZMpXWaZujqL6hFm6TITarf9nZhRnc/Nul6pFFYh37M2LS7VO8he9ZRGwas
-	WaCAup9avF1e7nTV77qaWOx3X1k2hcPfmYpSolBChGezneIG3N0Dq1daJToyutjjzrU7HlZ+2RM
-	Tuxb/fL20Poas5V+fZc7X+Wg8/abJgNod6ONaCpUCUPtia5OLV3F0ytFXWRMAgpEL2KcJEs4DGz
-	JQEkfHyy6A5Zy1vmkcPVzPCan/3zxvkC39A==
-X-Received: by 2002:a17:90b:2d90:b0:3ac:9e76:aa9b with SMTP id 98e67ed59e1d1-3ae8957cca9mr8105797a91.7.1793638238825;
-        Mon, 02 Nov 2026 08:50:38 -0800 (PST)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae84542a13sm14956309a91.5.2026.11.02.08.50.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 08:50:37 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 02 Nov 2026 16:50:37 +0000
-Message-Id: <DMKVOUX2GDZN.2Y8MKLR367NU8@gmail.com>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Jonathan Corbet" <corbet@lwn.net>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy
- Dunlap" <rdunlap@infradead.org>, <bpf@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] bpf: Use "new" URL to show if net-next is open
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20261102111509.357269-2-u.kleine-koenig@baylibre.com>
-References: <20261102111509.357269-2-u.kleine-koenig@baylibre.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=izG/P3oc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D4A91F0180E;
+	Mon,  2 Nov 2026 16:53:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793638396;
+	bh=0S6zeVQB6JXDivuIwwZkxYqZ6mbJYmib3ujqs9acEWI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=izG/P3ocmODvrrYJzx5kyn1JwcrWCMRRqFDW0ONajnG/ohNIFWMcHH/4y1uz3N3pm
+	 +Tl4tZRzUMyxzMq/gPUTEY8MoVWhfjlf0kZIT1mhAeUvubNBBDOuMZdSy3goHettLS
+	 2zJQtoSwlFsWodta0DRXCWmuIYjhUsIvHjdF5D9JkQlzoiHqlLiQ0TLAgFJ45OY6vX
+	 w6as/KE5l5ISA619w2UsgpA0mx93y0RD8xiKU3mn2ODI/IJaCT4nf2/6LxQIF6T3jU
+	 Ro2NEiJoSZnr9u5UOePfczMbFwgCXIlji5hViRCGTO2EeNi9jE79ow0VC1Yq3Gr5cn
+	 y3t0htafvEcuw==
+Message-ID: <9744e311-92ff-40a3-9a66-de5654074bb6@kernel.org>
+Date: Mon, 2 Nov 2026 17:53:13 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,38 +51,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 13/13] bpftool: Document __bpf_relocatable and
+ __bpf_static_offset
+To: Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+ Cupertino Miranda <cupertino.miranda@oracle.com>,
+ David Faust <david.faust@oss.qualcomm.com>, Ian Rogers <irogers@google.com>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+ Vineet Gupta <vineet.gupta@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>
+References: <20261030233355.1836749-1-ihor.solodrai@linux.dev>
+ <20261030233355.1836749-14-ihor.solodrai@linux.dev>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20261030233355.1836749-14-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 02, 2026 at 03:15 AM Uwe Kleine-König <u.kleine-koenig@baylibre.com> wrote:
->  For non-subscribers to kernel mailing lists, there is also a status
->  page run by David S. Miller on net-next that provides guidance:
->
-> -  http://vger.kernel.org/~davem/net-next.html
-> +  https://netdev.bots.linux.dev/net-next.html
+2026-10-30 16:33 UTC-0700 ~ Ihor Solodrai <ihor.solodrai@linux.dev>
+> The C dump annotates record definitions with the __bpf_relocatable and
+> __bpf_static_offset macros. Programs control the attributes through
+> these macros and BPF_NO_PRESERVE_ACCESS_INDEX, which disables only
+> __bpf_relocatable.
+> 
+> Both macros expand to complete attribute specifiers and can be
+> pre-defined by the user.
+> 
+> Update bpftool documentation to explain both macros, and how to avoid
+> the Clang crash on CO-RE field-info builtins over __bpf_static_offset
+> types.
+> 
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> ---
+>  .../bpf/bpftool/Documentation/bpftool-btf.rst | 26 +++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+> index c6dc445cd4a1..6840d5d3c39d 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+> @@ -70,6 +70,32 @@ bpftool btf dump *BTF_SRC* [format *FORMAT*] [root_id *ROOT_ID*]
+>      formatting, the output is sorted by default. Use the **unsorted** option
+>      to avoid sorting the output.
+>  
+> +    C output annotates struct and union definitions individually, with or
+> +    without **unsorted**. Most records carry ``__bpf_relocatable``. The
+> +    generated header defines it as
+> +    ``__attribute__((preserve_access_index))`` where supported, or as empty
+> +    when **BPF_NO_PRESERVE_ACCESS_INDEX** is defined or the compiler lacks
+> +    the attribute. GCC-BPF can apply CO-RE through these attributes.
+> +
+> +    Context and socket types whose field accesses the verifier rewrites
+> +    carry ``__bpf_static_offset`` instead, and their nested anonymous
+> +    records carry no attribute. Where supported (Clang 18 and later),
+> +    ``__bpf_static_offset`` expands to
+> +    ``__attribute__((preserve_static_offset))``. It is empty otherwise.
+> +    The attribute keeps static field offsets in load and store instruction
+> +    immediates. **BPF_NO_PRESERVE_ACCESS_INDEX** does not affect
+> +    ``__bpf_static_offset``.
+> +
+> +    Either macro may be pre-defined as a complete annotation, such as
+> +    ``__attribute__((preserve_access_index))``, or as empty to override
+> +    the policy.
+> +
+> +    Clang 18 through 23 crash when ``__builtin_preserve_field_info`` is used
+> +    on a type marked ``__bpf_static_offset``, including through
+> +    ``bpf_core_field_*`` and the CO-RE bitfield helpers. Compile with
+> +    ``-D__bpf_static_offset=`` to use these helpers with an affected
+> +    compiler.
+> +
+>      **root_id** option can be used to filter a dump to a single type and all
+>      its dependent types. It cannot be used with any other types of filtering
+>      (such as the "key", "value", or "kv" arguments when dumping BTF for a map).
 
-The link is not the only stale part. The whole paragraph is wrong.
-We apply patches during the merge window too.
 
-diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
-index 4729efd..f6b9533 100644
---- a/Documentation/bpf/bpf_devel_QA.rst
-+++ b/Documentation/bpf/bpf_devel_QA.rst
-@@ -231,19 +231,9 @@ load or urgency.
+Hi Ihor, thanks for this work. I don't have much to say in addition to
+what Alexei reported, but when you respin, could you please move these
+paragraphs to a dedicated section in the doc? Maybe "GENERATED HEADERS"
+between OPTIONS and EXAMPLES (just keep one line here to refer to that
+new section).
 
- Q: Are patches applied to bpf-next when the merge window is open?
- -----------------------------------------------------------------
--A: For the time when the merge window is open, bpf-next will not be
--processed. This is roughly analogous to net-next patch processing,
--so feel free to read up on the netdev docs at
--Documentation/process/maintainer-netdev.rst about further details.
--
--During those two weeks of merge window, we might ask you to resend
--your patch series once bpf-next is open again. Once Linus released
--a ``v*-rc1`` after the merge window, we continue processing of bpf-next.
--
--For non-subscribers to kernel mailing lists, there is also a status
--page run by David S. Miller on net-next that provides guidance:
--
--  http://vger.kernel.org/~davem/net-next.html
-+A: Yes.
+You could even (but don't have to) add a new EXAMPLES entry, something
+like "$ bpftool btf dump file /sys/kernel/btf/vmlinux format c >
+vmlinux.h", then "$ cat vmlinux.h" and show some truncated output with
+some visible __bpf_relocatable and __bpf_static_offset annotations.
 
-pw-bot: cr
+Thanks,
+Quentin
