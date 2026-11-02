@@ -1,93 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.14
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793647910;
-	b=rZ96aiDlkxRLMb+iMPoOr4Fh6UjiG4F6WzRVLioESLh3u9EmljfIHPcV8gqKpbUgJ9iD
-	 kqSqLrc1Qfkhdkff4AzsinwVbEXg+6ublw26Y7s55h93pKqc1bm1FLGGlVjO6S2Eomhla
-	 hxm6nsvkuB6nTF5VbfkGRMGKSzXs6LDod9MjJ8BZd06fx8TGThguCgljgKSLux9zadPJY
-	 VyjmF8d9WH9Onx2KEHqrgOVkL3m35S97Ac9YKGOHXiA0GxHwI88G6ah+UvxSD5lVC8k78
-	 YUb8xFyJPxQZ16+Kpcct4hbW6BREuDwgjApFeLtF/y6dcps0GSMnwGT2gB1mem/cCIg==
+	t=1793647928;
+	b=uQBEVpH1LjZLl+A6hUvRQ3aI3oSCa8aTPHywnf6HYH/F5qMvtwaY/BydLCYZgntshM2I
+	 TK9d/DcZ9Nu981egbbvdXZV1URUTNlfo9E/vxZ6rbaGf7epypPuhEyCgukY5F5DKhVmBL
+	 M2NlEvhvkuHrygpsbImvTcZ3XLR2Ste7lmc3TO42wjTs1EtVITkEMsAgAYzyLcpl/MFGP
+	 80k4ss34a8hN4ULk93VFHbGpDYuA5EWfuIz2MynanRM/fc//k81Sjgn3K2mJ4lV6pvj/z
+	 eF9oKkFkdO8Qkd+Dzu+oXoQrdsvCicLLB13O9zRzJyJKMCdExGImm772ZFx56IXj55Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793647910;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:User-Agent:References:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type;
-	bh=17T5xkmwSXx3rxRgsFuuietPjSf4dCY3suvqmMRm7Q8=;
-	b=wXlphf3yTVpsBCx9kk64CjV+qJy1GE7RofXEGFoBgIDRKDGaCqPAih8dqxB//Dzz31FN
-	 oLf9SYbnkixIQrr786Bp4BROP31X2jeP7WtVl9Y9JL/gEKWv3T3eqOtHAtW2EIUwa6teq
-	 awdhPclgomd8lwqhPIXDtvoU6aS8sCiNPnbTFMWYuPJadj6q2YBlFZ5T7jehHzCSaSHrQ
-	 sqqzAFWe4fRZFxtBWH2Gi+fU3AoqEmQOrIHHgs21WRSBaiRe8plPdynH12gaSrhqTHPTk
-	 HLrO/0uCyKr3Trurau4eo9SwTEuhU565kGw6uBj6pnI0aXiedgmh8aWsJywi3Ueqh+A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793647928;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=HmS255ceBEF6kch7cTBpJwV56V5cGRor24skezv76QY=;
+	b=hdkpKlPjF158R24sFVyzrsQwUNGdw3Vd9gHht5tDKwZv1N5ULOx2qW3Gr+OjNu7TF0XH
+	 T3TdT+KvcuiZP0HfjLy19Hob2YAzVj2tOB4D7wpBNE82SjWqovczajFwc8mJDcWUqqIgY
+	 K0YyBoMMns9wkCkknVhKjrQ8NogcHEqfpZKgiyET6T6N+Y8o07LwHZqGCcALGY+gF2ipB
+	 bxW8fMDoZ8t7IYHDp9SifK61migd4CgWr5XJMV3JvSqtx+oLM6/Nv9OvE6PBJDnjheDfZ
+	 cI28yK+mR6/Exj56ZI8tozAFU7ygrUDvCvy9+REgZ+edgUYKKAIvEWDie25+Nw8U8YA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GdHSYviw;
-	arc=none smtp.remote-ip=209.85.216.52
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=F9RjzoYK;
+	arc=none smtp.remote-ip=192.198.163.14
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19849606A324
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 19:31:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19849606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE0B606A330;
+	Mon,  2 Nov 2026 19:32:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2EE0B606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GdHSYviw
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3ab752f6244so3823428a91.2
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 11:31:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793647909; x=1794252709; darn=vger.kernel.org;
-        h=content-type:content-transfer-encoding:mime-version:message-id
-         :in-reply-to:references:user-agent:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=17T5xkmwSXx3rxRgsFuuietPjSf4dCY3suvqmMRm7Q8=;
-        b=GdHSYviwd1X+v6uswMpn2cvWX+0O3yEy0F0a3vUT4TyQr3cNjOa4dGxmA9qY01O+nM
-         fcBPAFXhQdCYYQWMVp0smvus0XCiB22mj41VippG/7buLqH4o6Dg1vOduypdzOxHMxII
-         aLdrUCZXth4A6wBn6bjsJ9ER9nwTnIkx8Ic77MtpHrII2fGdzdQ+1hCwQwOvJy7T8A6T
-         OGoYbFdx5jF6Z0N77KzK+bEAyaXq6CUB4O23umbcjg4mbFy1a4dDQ4EU/t51L0I/Dxnm
-         xF4IkD7t/TiA52979g9R6Mfvqy5v29es/RYZOZMa8V1k19nZ7o+Vu53ExjNw/BxcR+h8
-         LT7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793647909; x=1794252709;
-        h=content-type:content-transfer-encoding:mime-version:message-id
-         :in-reply-to:references:user-agent:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=17T5xkmwSXx3rxRgsFuuietPjSf4dCY3suvqmMRm7Q8=;
-        b=oLdxekWMOc7vP4JqhRSB5AWtwaACIwqsOESithJ8l0El72WulKRIUnL39HWj4/G2yt
-         dmBxkeQ+6/8fCBmIIcbjIGnSo1YMBJwa55EcIN+knD9TqIs1eN6mqf8Lp05ORxHonuq9
-         4rBDBN154lw9Pb61wTdBQOatzXNSm8tnbazu+0XthNKrcEJgVcN0POSvN+8k9UIGw8O7
-         SAwKLsJymUV22HHCq61+GNSC8UHZE3lrArbfdbz0Uygc/bFK/tYoTXqxcF1o2qkLcDvQ
-         IS7qN4524Idd8N4jx3p0NSY5vPHDgdkodxETjWqoRhINgBFEtMUXkk7MXhgo4d0SmdJl
-         YZEQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz4khIJrCu9ngLvKQGG/wTCPtKYJJwKeDQO/o1Re1tbM2Xgkih1frZLH8oprxqsWOPEALM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9tkFKRwdazrVGXOlDXzKS0wde9D3kchs1VnL8G9vTRlwq434QW
-	3sgGGuGlAaTtmOCL2S5FDP1TdZQulbkJL/6i4U5YM96+1h3+M3pbdZz7
-X-Gm-Gg: AYBFou1SdEC46TmMB0LRdmnBxji9sEr8SnbIxDmSUyj6uj3x8vlUxs4oAsdVmYkDV15
-	zWT+BvSFnS8UFx+6NrGJFOFwdM4oGimL8RcLnzny6BffSe/klzj6XjZKiEuZhwKXQ2E1naly5+0
-	ZiK8/lx7rsVP3JCnq+B6a0OJMiLY+iZnUH94KeWxKzerA2UGIxdtCnG6VpFJ85NykuLhbcgzr8l
-	onPQWpq7iE9r19Iq1yvQ7rYG+W6n6XHi8LWEV37UPqFu5uGPIh4lsTIQdEN+BVQucKdzeGWZQi5
-	b0jWxydvdgPwkr2+7Hogg87w+A+GwnCZ+EIVzta3xljD6zvVEXOmER9Y5gRBy93WYPOHQTMhOFF
-	+eU7QydJl4rIvRezePNHNW5laA+7IMtdwv8hdijreT+MgmZu9jPiauF7ZNK3B4DJxdYYx6Uu2uO
-	5dDllxVmWZMLjTVhCMzz+Fpn9q9q0ehLTPgBuvQ406xAz2Mp2OUEZi8SLZLTE7W7MHXtvvjJ1eK
-	AQ19kkmJijxaa4wc5CODf0PchTozDBY7C7hE/Z9HNRZjmQj+kXTwnd+tShrNfavOhRBWh+wUnrz
-	mSuxGaORukGpVWxgm9tN+j84PERCrshlzsdS4QUuhzknwbZHnbGNiQz3nqTQpQJePali
-X-Received: by 2002:a17:90b:3c08:b0:3a8:bd51:205b with SMTP id 98e67ed59e1d1-3ae89812f18mr9476854a91.37.1793647909469;
-        Mon, 02 Nov 2026 11:31:49 -0800 (PST)
-Received: from meli-email.org ([98.97.42.147])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c9928d1sm510981a91.14.2026.11.02.11.31.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 11:31:49 -0800 (PST)
-Date: Mon, 02 Nov 2026 12:31:17 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: mptcp@lists.linux.dev, Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com, matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org, josef@toxicpanda.com
-Subject: Re: [PATCH bpf v2 06/15] bpf, sockmap: Give no progs to a TCP listener
-User-Agent: meli/0.9.0
-References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com> <20261102072112.4160195-7-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261102072112.4160195-7-alexei.starovoitov@gmail.com>
-Message-ID: <tnw3l0.2z8ao1ckh4em1@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=F9RjzoYK
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793647927; x=1825183927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sY9pnK0BK2rUKtlv8LzoQMe8VTz4cJFaZ6oRCiRB2Dw=;
+  b=F9RjzoYK2tUZ2YF7aSbLm5cRQpueJ/NlS/ewtLdgULpkHZ7pVhf2HGt8
+   5anUHLtLC8WvCIvpz/iyOddPXswH4YO3SBNFDnUaQqPd5wVYoMOOhbvl2
+   l2YCS/PkQ5xUWerFMAOUIVPzgIeE3TLgIZ17gqxWSUZTI6nD1Dr/0ixsM
+   9Arm/fmHjyBskMolOVeQg4/0HI+5cDbDE20bTxd4lDteFb7coO9ua3G5m
+   GQF2ZjjQFNaPvkyi1F7HBPPL/SkQOOuHc/zITyYxlccxfc6I2Lj+iM1qU
+   0/94oxMauEGwrzn68hvATJocnxAbwFBjYQgd7P3WbEa6hBL3l0anp6XLL
+   g==;
+X-CSE-ConnectionGUID: t7+iGARGQg6EKzjZO6L/IQ==
+X-CSE-MsgGUID: +9Tr9NjrRxK0xhbCM4W76w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11954"; a="2385755"
+X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
+   d="scan'208";a="2385755"
+Received: from fmviesa012.fm.intel.com ([10.60.135.152])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 11:32:06 -0800
+X-CSE-ConnectionGUID: LKdoUus/QXSziw5XSMY/gA==
+X-CSE-MsgGUID: wD1IGcNCS5mSmu4XFLR2xA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,191,1787036400"; 
+   d="scan'208";a="7983893"
+Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2026 11:32:07 -0800
+Date: Mon, 2 Nov 2026 11:31:55 -0800
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Chengfeng Lin <lin2530632123@gmail.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, x86@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [linus:master] [x86/bugs] a3af84b0fa:
+ stress-ng.seccomp.ops_per_sec 95.7% regression
+Message-ID: <yilzadgbu3w66oydn6gugvxcaxyncxq74evyfnknbpcka5vhns@crxojxq7dm76>
+References: <202608191340.98574fe2-lkp@intel.com>
+ <4h7zrdfpu3ailx5ajkyqohmcfuxgrk3tn7i7n3dkp3ksy5xehk@xqg5j6pqzocv>
+ <179361623876.3.16264907931792312619.redis-ibpb-report@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -97,36 +82,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <179361623876.3.16264907931792312619.redis-ibpb-report@gmail.com>
 
-On Mon, 02 Nov 2026 00:21, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->From: Chris Mason <mason@kernel.org>
->
->A psock with a verdict prog replaces sk_data_ready and sk_write_space of
->its socket. It saves the old callbacks, and the new callbacks call them.
->sock_map_link() does this to a TCP listener too. Its new sk_data_ready
->cannot read and does not call the old one. Thus it does not wake accept().
->
->sk_clone() copies the new callbacks to each child, but not the psock.
->tcp_bpf_clone() restores only sk_prot. Without a psock the child loses data
->or does not wake its reader. If it gets a psock, the psock saves the copies
->as the old callbacks. Then sk_psock_verdict_data_ready() calls itself until
->the stack overflows. sk_psock_write_space() calls itself too, without end.
->
->Give no progs to a TCP listener, as before the first commit below. A
->listener receives and sends no data. It stays in the map and keeps its own
->callbacks. Add this exception to map_sockmap.rst. A listener no longer gets
->-EBUSY from a second map with progs of the same kind.
->
->Since the second commit below, a socket keeps its psock when TCP unhashes
->it. sock_map_link() does not see the state that the socket gets later. Do
->not depend on TCP to keep such a socket out of TCP_LISTEN. Set both
->callbacks in tcp_bpf_clone() to the TCP defaults.
->
->Fixes: 0c48eefae712 ("sock_map: Lift socket state restriction for datagram sockets")
->Fixes: b8b8315e39ff ("bpf, sockmap: Remove unhash handler for BPF sockmap usage")
->Signed-off-by: Chris Mason <mason@kernel.org>
->Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+On Mon, Nov 02, 2026 at 06:43:58PM +0800, Chengfeng Lin wrote:
+> Hi Pawan, Dave and Daniel,
+> 
+> I found another workload affected by a3af84b0fa00 while running MMTests:
+> Redis ZPOPMIN throughput on v7.3 is about 13% lower than on v7.1.3.
+> Unlike the repeated filter loading discussed here, the slowdown remains
+> after the tasks that triggered the predictor flush (IBPB) have exited.
+> Can this cost be reduced while preserving the security protection?
+> 
+> The machine is an i7-12700KF with 32 GiB RAM. All runs used CPU microcode
+> 0x3e, and I did not disable any security mitigations. The test uses
+> unmodified Redis 6.2.6 and MMTests' redis-benchmark-small recipe:
+> 
+>   redis-benchmark --csv -c 1 -r 50000 -n 100000 -P 256
+> 
+> There is one client, no CPU pinning, and all 20 logical CPUs are available.
+> After each boot, I ran the full MMTests recipe nine times. Each run kept
+> all 20 commands, including ZADD before ZPOPMIN, and the recipe's five
+> internal repetitions:
+> 
+>                            v7.1.3 first       v7.3      v7.1.3 return
+>   ZPOPMIN (requests/s)        999,366         871,397      1,000,947
+>   GET (requests/s)          3,548,521       3,551,132      3,547,933
+>   Complete test time (s)       61.396          61.704         61.301
+> 
+> ZPOPMIN is down 12.87% relative to the mean of the two v7.1.3 baselines.
+> Within each boot, its coefficient of variation is below 0.75%; the two
+> baselines differ by 0.16%.
+> GET is essentially unchanged (+0.08%). The complete test, including
+> startup and cleanup, takes 0.58% longer. The ZPOPMIN sequence drains the
+> set without refilling it, so its request rate includes empty results,
+> not just successful member removals.
+> 
+> Bisection identified a3af84b0fa00. To test the effect of a flush without
+> changing kernel code, I used its parent, 96cce16e26dd, where Redis was
+> still fast. On each CPU in turn, a short-lived helper enabled
+> indirect-branch protection for itself using:
+> 
+>   prctl(PR_SET_SPECULATION_CTRL, PR_SPEC_INDIRECT_BRANCH,
+>         PR_SPEC_FORCE_DISABLE, 0L, 0L)
+> 
+> After all helpers exited, I started Redis from a controller whose
+> protection setting was unchanged. Redis did not inherit the helpers'
+> setting.
+> 
+> ZPOPMIN throughput fell by 11.06% and 11.69% on two separate boots.
+> After another reboot, I ran the same helpers without changing their
+> protection settings. Throughput returned to baseline (a 1.33% difference).
 
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+So am I understanding it correctly that with the same kernel(without BPF
+JIT mitigation) and same workload configuration produced different
+performance results accross boots?
+
+Is it possible for you to repeat the test with a different microcode? If
+the microcode is late-loaded in your setup you can use dis_ucode_ldr kernel
+parameter to skip loading the microcode.
