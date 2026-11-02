@@ -1,59 +1,63 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793645787;
-	b=jXsJIe4bU0EREkbb8EhifoEJWsTdN5UwJm32QvI9Ha5n4QIm1QbIjgFneDGf9yq0TdZV
-	 KWu8ilx6GOZ45OqP6I44wlUE52i6oMJ97nv84M4/m/jUhbry4GgjBNdoza+qM7mDd7+MP
-	 r8MfbFtRCFF15ira3lgoKI/dM0UUlgOEk5FiW/jggG4BAnvqj+XJk4iDci743JrUBgoIA
-	 O79C4ojry+Q3RhuOSkv6eN/oLcHYFqRHfRVbiyLaAtlxBEvaWDroIHnBMG3IrRL8K/+EO
-	 YF6hCmXGfvSYag8w4aAHF2aweALmF9Ifg4tmDSdHlMsHvT1SK2+s1SzFqtbzjvD823Q==
+	t=1793645924;
+	b=JYMfDjik139VzuOx1g6QIqLDojiGVaFxQ8rtuhCHi8MTKd0/mN/pioy5Gfj0B/qhWQYC
+	 aXIclxu5lX3o7N/vR02x88kS237FEDQAGnBh1SUYNFCcgewZVKn/ueHEtfd94iJIYKdce
+	 OA527Gc+6UxlBFPXlwzsYMGZ8Zt6AZUCLw0uLytukyqxTJTQR0sU+ZANdRIlWkwNnMqOR
+	 izM3k6P8wDaeUexRHGT9SPofl3Q6mqV2LS5ueidH4XETHPIt+0q9LIJx4A6EkxCM7z3CL
+	 thf26BrkLKI6FH965S/RBapfPqsGEdm/vENvgeC+D3SHaCtRKrJww6PKNrXGEUKLgzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793645787;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=ZX4k6fkZrVQQn6jS19mXwG/IPZoY3/VLudiPBAdYq7Q=;
-	b=oRn53PS6cQgQBSwYVtdSNC/1qDTf+7mzAwNGfKYYx24J8UWB0Y21/uylznARjhAdg6qK
-	 DrfN98aTMNpaJNLi44C+xvo20q4nmjyTRWkSwm4fOxEMq2lgt2lEPEdccmN3tnrGwd6pF
-	 LskK70T5pubvkHhlrBK4Th5iFWqWNSCjTG/oOpHEkLXlJjMxvrgTfjCWA1Q6SfgbihuMG
-	 BWn+2w9Qfo98dN0cmnb1Tk1zDb5hP6B8RZNDocVr/4IgkcLiAROHZJGsNd1cHZmj0KmWP
-	 TQdqchiN/9Oo6eoj2rBLlF31cqAolKZnL5IGwRIz0WePR7evgK6buCi9pLLMbEh7jPg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793645924;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=am9gbO9t1laaBz+RQEep0XjQMIvSeDCOgIen9Lu53BI=;
+	b=olTKl7DDMFssWONXNAotU/n+E5qOgCK1p+QX57mz2Kxryj011D/cQW7v1zL4/mn0Z2qK
+	 4pDFNbRmwxEt9/WH4e77HpV3FcA2pB5bECncRUn6Tmd93luWXqSVAeUALZmBEr6TrCzEE
+	 7V2Yqsghuy0AUUWVf23OSit2z1jhr3E+6H9xiHwaSHIvHt/Oo4HKr0u0ZFIrgXP3Jbws3
+	 9aXWDOkF2tFhMJPPsbHRfrxfv0Q8O2ykbKm94lua4n/gafB88fGYh+PQskshEhR6qJ+jb
+	 TFa68gohBESG70K7Qtk6zkJX34p5r2esofOc7Fp7PFawKa5zGuCZhO7Rg9cw0BtjQdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wf9KLsKc;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oB8Wzw8i;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9B9606A324
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 18:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1158606A326
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 18:58:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wf9KLsKc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE761F00A17;
-	Mon,  2 Nov 2026 18:56:24 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oB8Wzw8i
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 257EF1F00A16;
+	Mon,  2 Nov 2026 18:58:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793645786;
-	bh=ZX4k6fkZrVQQn6jS19mXwG/IPZoY3/VLudiPBAdYq7Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Wf9KLsKccjqDRnXd+4gKWedjKAJdW2/JlII7e6vk+QfdzN4rKEB01BfhMfj7nwB3K
-	 dw1uDExC1MvUhMf4qww55iUwWJMZq9QU7AnR8rV7d5PFS14O9Wfpd18CE9Fk4JqGzu
-	 h4T1OHIbN25ofbXXPo6nj2qTpEYoVrJCCxvhYI+5AczeeMvOb4jlCOQ3CZch4/LGf7
-	 IV5t5c85nsV5EEgYueGdSGzByCKyQcNipNsiNury7RweUyDp8R4uxDsArl/CR3P4Fq
-	 eqxj8TGPddwZnHNlHLXb2YCZy5RMSH2jvJqdHdT5vaZ3zxZjGsvsxAQRjpYMnCIC5S
-	 nekgs8crJC2sw==
-Date: Mon, 2 Nov 2026 11:56:22 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alan Maguire <almagui@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Alan Maguire <alan.maguire@oracle.com>, bpf@vger.kernel.org
-Subject: Re: resolve_btfids segmentation fault with
- CONFIG_DEBUG_INFO_BTF_INLINE
-Message-ID: <20261102185622.GB1177738@ax162>
-References: <20261031040305.GA2789538@ax162>
- <DMJB936DLIAX.3166HNLTM50U4@gmail.com>
- <b32cb1d9-3ab7-4c2b-b18c-c8d1989637fd@kernel.org>
+	s=k20260515; t=1793645924;
+	bh=am9gbO9t1laaBz+RQEep0XjQMIvSeDCOgIen9Lu53BI=;
+	h=From:To:Cc:Subject:Date;
+	b=oB8Wzw8iIbN1dm4VbSQBAL9WqstKscMDnzrGEgEdDJDCXNC3gGCILel8TTZkayCgF
+	 RI1K9xCbavMq7baEU/GKZMDmSSTLdPGZF5SMG6FCBBOW4tK6cZG4KLekDO/dQZB9Z+
+	 hPiqYpiTd9Uj96jGxFhCExYCqsu3JWKBwG+nmTqXKfaUG1CuHC/ea/EXYPG55gWSpX
+	 6YnnoOXbZIgVvebBE2bXpZBjWEMC23dCy8CuqPgns3gUp+gEMJ944UOt9IZceh4Ury
+	 WVRv8AdL41oofcTd1jX+kTjvKqoBhljo+5EJDOvPv2j5qlG7MAzYy28ze6mratx/of
+	 3urqYGgLNZWmQ==
+From: Alan Maguire <almagui@kernel.org>
+To: ast@kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	bpf@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Alan Maguire <almagui@kernel.org>
+Subject: [PATCH bpf] libbpf: Fix use-after-free in btf__add_type
+Date: Mon,  2 Nov 2026 18:58:39 +0000
+Message-ID: <20261102185839.1190122-1-almagui@kernel.org>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,51 +67,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b32cb1d9-3ab7-4c2b-b18c-c8d1989637fd@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 02, 2026 at 05:47:05PM +0000, Alan Maguire wrote:
-> On 10/31/26 8:36 PM, Alexei Starovoitov wrote:
-> > Thanks for the report.
-> > 
-> > It's a use-after-free in libbpf that resolve_btfids --inline runs into
-> > on a module whose BTF has no strings of its own.
-> > 
-> > With the patch below that module builds and ASAN is quiet. The output of
-> > resolve_btfids for vmlinux and for the modules of my other test builds
-> > is the same byte for byte with and without the patch.
-> > 
-> > Please give it a try.
-> > 
-> > [PATCH bpf] libbpf: Fix use-after-free in btf__add_type()
-> > 
-> > For every string btf_rewrite_str() does:
-> > 
-> >   off = btf__add_str(p->dst, btf__str_by_offset(p->src, *str_off));
-> > 
-> > When the string belongs to the base, the pointer goes into the raw data
-> > of the base. btf__add_str() looks the string up in the base first,
-> > btf__find_str() calls btf_ensure_modifiable() on the base, and that
-> > frees the raw data. Then strset__find_str() reads the freed string.
-> > 
-> > Make all the bases of dst modifiable before the pointer is taken. 
-> > 
-> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> 
-> 
-> Thanks for the report and the proposed fix! I've reproduced the
-> failure with Nathan's config + latest LLVM 24, and can confirm
-> that the suggested fix works. So feel free to add
-> 
-> Tested-by: Alan Maguire <almagui@kernel.org>
+From: Alexei Starovoitov <ast@kernel.org>
 
-Can confirm. Please include:
+For every string btf_rewrite_str() does:
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+  off = btf__add_str(p->dst, btf__str_by_offset(p->src, *str_off));
 
-Thanks a lot for the quick fix!
+When the string belongs to the base, the pointer goes into the raw data
+of the base. btf__add_str() looks the string up in the base first,
+btf__find_str() calls btf_ensure_modifiable() on the base, and that
+frees the raw data. Then strset__find_str() reads the freed string.
 
+Make all the bases of dst modifiable before the pointer is taken.
+
+This bug is triggered by the sharing of BTF bases between src
+and dst, as introduced by the resolve_btfids changes to build
+inline BTF.
+
+Fixes: cf91a7db92c6 ("resolve_btfids: Build separate main and inline BTF objects")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Alan Maguire <almagui@kernel.org>
+Tested-by: Alan Maguire <almagui@kernel.org>
+---
+ tools/lib/bpf/btf.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index d2ff6f5d6d5b..95c31803e722 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -2222,6 +2222,7 @@ struct btf_pipe {
+ 
+ static int btf_rewrite_str(struct btf_pipe *p, __u32 *str_off)
+ {
++	struct btf *base;
+ 	long mapped_off;
+ 	int off, err;
+ 
+@@ -2234,6 +2235,19 @@ static int btf_rewrite_str(struct btf_pipe *p, __u32 *str_off)
+ 		return 0;
+ 	}
+ 
++	/*
++	 * btf__add_str() first looks the string up in the base BTFs of dst,
++	 * which makes each of them modifiable and frees its raw data. If src
++	 * shares a base with dst and the string lives in that base, the
++	 * pointer taken below would be left dangling. So make the bases
++	 * modifiable before the pointer is taken.
++	 */
++	for (base = p->dst->base_btf; base; base = base->base_btf) {
++		err = btf_ensure_modifiable(base);
++		if (err)
++			return err;
++	}
++
+ 	off = btf__add_str(p->dst, btf__str_by_offset(p->src, *str_off));
+ 	if (off < 0)
+ 		return off;
 -- 
-Cheers,
-Nathan
+2.56.0
+
