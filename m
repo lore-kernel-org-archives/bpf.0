@@ -1,69 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.254.49.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793620195;
-	b=Z6KKA7woCsReFuclkJ1J9Pm9Qji3mkwXJJhWY8+xWPXvtbBGsOv9OWe4nw+1DoiRf/B6
-	 xSF/PSRC5GwExjDe039hhPVU1om6DYX2SvpF0mOQlPV2xsc6fM6ISMzw8U14PGH/sq8+9
-	 3hvdAhWn+tF3BAlfGItcrTShjOXwK1HUdvavRRfeYbwxvzY6yCLNJ4bqKNalCYp/Q/Byl
-	 fTS5b4gobvkDeBnIoWeMjg5k0dfEfr1kaIrVT2pF0T8Cm6R8LASfNICnscAurSe19Nwsf
-	 mxX/kdduufG4L/OrT7v0JavaxOwwQdacGUvNssMZfF1U4fQBqlIuxEOVGINT2OSp1Ug==
+	t=1793620731;
+	b=NhHnGTf/lOmN9EcRxRAtX5ZFPz5Ice8vxwZtQzkZOI5m0kNlSLkfnSutMBi2+PidxizX
+	 s6NRYA2bI3SFaeUiodA6GVLnpDYrxaMU2fqYc+ySVBese1yzNQsejxse5b6uTSzErjQWA
+	 ILndi4e09CBjbcy056XBlBYcWS6y1/YOEuUjnWG5df69BsN8qDVE6AedsLQRdycj1CkYP
+	 WEzfqPuhNl1IS4OWHd295vNQVz4jSOttydY+IZN0KUNmrKk0sZaQrknJl5MNd6HFol+1j
+	 mrndHQIhFCEFgh9QSOMmSfS/JwEEOtzydJibykdAuEx/9UZDOqgFLiqpP3aVosQTYLQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793620195;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:Auto-Submitted:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=URC7r36kokGjXCV5G6Ei8oKV54JoMbconYpCKkPt2AY=;
-	b=xZ8R/0zL0WnVnApWQF0YiVgUe4Ls1tYHcgi2ZrmQ/kddJeO3wKq4SKGsbFKPAMYc46Uc
-	 VTjJJKixAR0JUJlXziR1Uo6H2H3lJcpvoW5WwqSTKvscuvpqKBs6CH8YAlOj4F2gFdLAX
-	 S1kZ3oZbp3PXae4578OyxNkUNSGgC1iykzQG2fhOen+TNJjepewBv89ehPqqLq67K8wrH
-	 7iS8jJHdc0Cd67N8ZaJFOzaZHiZomjxnMn7tyKu3p7tWzex6+xvYBBGtRqPM3pNnCoMWa
-	 EKs4BTRf5EeHIuL8NOiEblrEFfiq7gl2YU7QpNANouAL8ZHcKI+M8T07gB9yAQMalPw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793620731;
+	h=DMARC-Filter:Received:From:To:Cc:Date:Message-ID:Subject:In-Reply-To:
+	 References:Content-Type:Content-Transfer-Encoding:MIME-Version:
+	 X-HM-Tid:X-HM-MType:X-HM-Spam-Status:DKIM-Signature;
+	bh=zfEvyvDZECbBv8i8o1bSrP5c9YfsZo7IfPIWqPxmVzI=;
+	b=VaH7oBywnGhO+FqzlTmIuTTXGnlG/HAQkws2kh49VdY5zZuuBwtbHINmBG7LZjjZ2KYE
+	 vXc36uRAg/w8crkY97XpVvyPXH2n0W3P7W/LjnUxlbyZPQWwRpCWOFlOq0QgFiyZXeRIb
+	 /9ka1+L/62ydF+4ldaokLqMSfZlITsNLjLKJkdJeoAdhM6b26Kj7fttJMLDftItw4UOWq
+	 LL1tAulBcBcMzy9RRAmx9migM5oG5/oGtX5ZKVdvA3b5RkDirAMNWgNV7Eo7KkXmMp3Sz
+	 nX5uz7SCzzp2gY0qf9qrN3R34IIg3D+ZpuYimM6BvF8QB7GOs+cBqRMAS98mgWLzbpA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DVE81PL1;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=stu.pku.edu.cn;
+	spf=pass smtp.mailfrom=stu.pku.edu.cn;
+	dkim=pass header.d=stu.pku.edu.cn header.i=@stu.pku.edu.cn header.a=rsa-sha256 header.s=default header.b=NVOkS0ro;
+	arc=none smtp.remote-ip=45.254.49.198
+Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA94606A32C;
-	Mon,  2 Nov 2026 11:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C685460A2635;
+	Mon,  2 Nov 2026 11:58:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C685460A2635
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=stu.pku.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stu.pku.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DVE81PL1
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 149C01F00A16;
-	Mon,  2 Nov 2026 11:49:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793620195;
-	bh=URC7r36kokGjXCV5G6Ei8oKV54JoMbconYpCKkPt2AY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=DVE81PL1ATw+J0OiuNGT5mE5qhBBIYma1qfdt7eQ9xpWGP2doo74uPoAaqxYY8j5u
-	 Lz/nQe/YfRA0awxr8L9eQE2AXVesp/+4BqB3M44OEhTEqCuFuwQdw0B+6+0mz0uytM
-	 OeCKjRj1VM6LRiwA39LunC0fQp+cHFiLMw1rC9EWlgy9/j3eZs0nCE8K5Fe5xTb5+h
-	 iKfKUqhnrLDHDBfLEboNRlG20SjtwnUPf9Vw8FlyF/Cvud/WLCpmPeVOjYKv7Fj9qb
-	 UgnphdUOW5Jwx5efO5oE2yAuH0I14PYCskFHNVZkId8Yx/bXtEFSdUHbyPIvf8yNqL
-	 9kJVfgS17cL6Q==
-From: netdev-bot+sinfo@kernel.org
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>,
- Song Yoong Siang <yoong.siang.song@intel.com>, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Subject: 
- Re: [PATCH net] net: stmmac: set XDP metadata length on the page_pool RX path
-Date: Mon, 02 Nov 2026 11:49:53 +0000
-Message-ID: <179362019361.3286.8732260602904932373@kernel.org>
-In-Reply-To: 
- <20261102-stmmac_meatada_pp_path-v1-1-d93cc4f9a864@oss.qualcomm.com>
-References: 
- <20261102-stmmac_meatada_pp_path-v1-1-d93cc4f9a864@oss.qualcomm.com>
-Auto-Submitted: auto-generated
+	dkim=pass (1024-bit key, unprotected) header.d=stu.pku.edu.cn header.i=@stu.pku.edu.cn header.a=rsa-sha256 header.s=default header.b=NVOkS0ro
+Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa (unknown [1.202.162.49])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 5330b234b;
+	Mon, 2 Nov 2026 19:58:41 +0800 (GMT+08:00)
+From: Yifan Zhang <yfzhang23@stu.pku.edu.cn>
+To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+ linux-input@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Mon, 02 Nov 2026 19:58:37 +0800
+Message-ID: <179362071770.29269.481376767482231629@stu.pku.edu.cn>
+Subject:
+ [PATCH 1/2] HID: bpf: serialize hardware operations with device destruction
+In-Reply-To: <179362071770.29269.16022650793604369465@stu.pku.edu.cn>
+References: <179362071770.29269.16022650793604369465@stu.pku.edu.cn>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,29 +59,112 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+X-HM-Tid: 0aa19c203fd003a2kunmab045f0fe84de
+X-HM-MType: 10
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaSUtNVkoYTkxOQktLGktJGlYeHw
+	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlKVUlLSVVKTUlVT0JZV1kWGg8SFR0UWUFZT0tIVUpLSUJDQ0
+	xVSktLVUtZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=NVOkS0roELjGOimIBWoWlHXifvXztJYmgxWR49LN0qK6PQ6hLPxiJL17uxSClWsU3f015oxbksS5tvN2DhOlz/FY5rej47P7WnGJwwpliurNF23PvOvXFbTh6UOxmR70VknZlPGgGoF1WxuOfDVf2F1QkMYXdMMWE7D607jRK5w=; s=default; c=relaxed/relaxed; d=stu.pku.edu.cn; v=1;
+	bh=zfEvyvDZECbBv8i8o1bSrP5c9YfsZo7IfPIWqPxmVzI=;
+	h=date:mime-version:subject:message-id:from;
 
-Hi!
+A HID-BPF syscall context pins struct hid_device, but it does not pin the
+transport-private data referenced by the low-level driver.  A hardware
+request can therefore sleep in the UHID report-wait path while closing the
+UHID file destroys the HID device, wakes the waiter, and frees struct
+uhid_device.  The awakened request then accesses the freed object.
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
+KASAN reports:
 
- - How the issue was discovered, e.g. hit in production, hit during
-   development, syzbot report, manual code inspection, LLM or static
-   analysis tool scan.
+  BUG: KASAN: use-after-free in __uhid_report_queue_and_wait
+  Read of size 1
+  uhid_hid_raw_request
+  __hid_hw_raw_request
+  hid_bpf_hw_request
+  bpf_prog_test_run_syscall
 
- - Whether the issue was actually triggered, or is only theoretical
-   (e.g. found by code inspection). If it was triggered please include
-   the symptoms, like the stack trace or error messages.
+Hold prog_list_lock across HID-BPF hardware operations.  Device destruction
+sets destroyed while holding the same lock, so it waits for an operation
+that has already started.  Later operations return -ENODEV before reaching
+the low-level driver.  Apply the same lifetime rule to output reports.
 
- - What hardware the change was tested on. For driver fixes please
-   mention the device (and if relevant firmware version) used for
-   testing, or say that the change was not tested on real hardware.
+The reproducer completed 100 close-versus-request trials without a KASAN
+report with this change.
 
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account. If the series needs another revision for
-other reasons, please include the information in the commit messages
-then.
+Fixes: 91a7f802d185 ("HID: bpf: introduce hid_hw_request()")
+Closes: https://lore.kernel.org/linux-input/179317460423.87432.14516723323625=
+41157@stu.pku.edu.cn/
+Signed-off-by: Yifan Zhang <yfzhang23@stu.pku.edu.cn>
+---
+ drivers/hid/bpf/hid_bpf_dispatch.c | 36 +++++++++++++++++++++---------
+ 1 file changed, 25 insertions(+), 11 deletions(-)
 
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
+diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dis=
+patch.c
+index 6b467c74601cb..4fea42dd2f392 100644
+--- a/drivers/hid/bpf/hid_bpf_dispatch.c
++++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+@@ -444,14 +444,20 @@ hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, =
+size_t buf__sz,
+ 	if (!dma_data)
+ 		return -ENOMEM;
+=20
+-	ret =3D hid_ops->hid_hw_raw_request(ctx->hid,
+-					      dma_data[0],
+-					      dma_data,
+-					      size,
+-					      rtype,
+-					      reqtype,
+-					      (u64)(long)ctx,
+-					      true); /* prevent infinite recursions */
++	mutex_lock(&ctx->hid->bpf.prog_list_lock);
++	if (READ_ONCE(ctx->hid->bpf.destroyed)) {
++		ret =3D -ENODEV;
++	} else {
++		ret =3D hid_ops->hid_hw_raw_request(ctx->hid,
++						  dma_data[0],
++						  dma_data,
++						  size,
++						  rtype,
++						  reqtype,
++						  (u64)(long)ctx,
++						  true); /* prevent infinite recursions */
++	}
++	mutex_unlock(&ctx->hid->bpf.prog_list_lock);
+=20
+ 	if (ret > (ssize_t)size)
+ 		ret =3D size;
+@@ -492,7 +498,13 @@ hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx, __u8 *=
+buf, size_t buf__sz)
+ 	if (!dma_data)
+ 		return -ENOMEM;
+=20
+-	ret =3D hid_ops->hid_hw_output_report(ctx->hid, dma_data, size, (u64)(long)=
+ctx, true);
++	mutex_lock(&ctx->hid->bpf.prog_list_lock);
++	if (READ_ONCE(ctx->hid->bpf.destroyed))
++		ret =3D -ENODEV;
++	else
++		ret =3D hid_ops->hid_hw_output_report(ctx->hid, dma_data, size,
++						    (u64)(long)ctx, true);
++	mutex_unlock(&ctx->hid->bpf.prog_list_lock);
+=20
+ 	kfree(dma_data);
+ 	return ret;
+@@ -641,8 +653,10 @@ void hid_bpf_destroy_device(struct hid_device *hdev)
+ 	if (!hdev)
+ 		return;
+=20
+-	/* mark the device as destroyed in bpf so we don't reattach it */
+-	hdev->bpf.destroyed =3D true;
++	/* Block new BPF hardware operations before transport teardown. */
++	mutex_lock(&hdev->bpf.prog_list_lock);
++	WRITE_ONCE(hdev->bpf.destroyed, true);
++	mutex_unlock(&hdev->bpf.prog_list_lock);
+=20
+ 	__hid_bpf_ops_destroy_device(hdev);
+=20
+--=20
+2.39.5 (Apple Git-154)
