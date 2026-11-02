@@ -1,57 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.102
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793623516;
-	b=X/7JPXK8ebw8CKM79GHh58MPD/XbhNYU9JzRqixP3Ay2zgGgmlKwhobjknnYa5To+3eP
-	 4E5hEV4hiaY71/XFgOQzJGZf8x2WmnzYcIS1ZPlCxDPMwKZ5VovDaMnrSqQu5+P9IBpql
-	 P5ZhiSie1cGbVVafW4awPKclf/bdvS+EuLw2ozwe1EQ1+/l6rI+YPNjbhQLIS8wqGESzR
-	 V2oUKsHVt+93yeZy/HuSoMtY1Oi8gro61TKJCF/l/J5NNAnIPiVRyFI0DNFFnFSqwhmMG
-	 Ky9uSX3gIjaVeXykUZCCiW+7mfntOE8wicbWN7nQjYMa+eT0jzOnMsKjfFqmKXZQuMw==
+	t=1793624074;
+	b=BGHFtgO9BXAcUrzLd0fiojXSBDCYp/yZL6HtMTtd5ipQfnks932GVE1441cZFYhZWGsn
+	 wiAY6yVwNjgly0ZL6ZcE6Q+szTm3DeNY0ru9wpBR0uWSMKy1ReJEIVTknIru7DOefJx6i
+	 kOdhoQhhNpdEUFGvTc9OrRZ9gjvwxvKwdocivPjk/yB+vbcO/sMx9wDpTqgXDatyTmgsn
+	 b/8yl2BtG5C1GYNDUhf0SBT0zMpdeeqkiNg9L5zhwK7MtA6PrHv8HMG9z93LqJkqsPnWK
+	 5MbkXXiFfSZ2OdkDnR9h5ehq+Vcmml2ZCO3npbpMZo5qsFEQsCg7Bi8pazju4C3S/aw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793623516;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=VUqu6sfLfbMcBDlYqJq7ZjiGJIZyLCH5NptoKl+iaKk=;
-	b=wF6VXTG6cxb13LYPAlE1rcanwbeM9nFkgQ/wa+vQys4cpYwHgFmqBfSndYt5BlOLyW6u
-	 IyueEtMw5q7+QM0WBwltg6zpavIrEY3609Rz4rmqcfdMLKKDbKVEMRpM77aUIUNpEebnH
-	 Dva9Dd4AvWpVsrmmkkQWr3aFMB+dlMNbdZ2YRVZTzBh+JvbkZGONlYdccO4H9oGlg48d1
-	 0tI+eByoXTlbrvuRjk2QB9Mm4XhrJPkL4fOqIQ05u+RUzJ1B1oRYmMeEFy3gKcexeJnNm
-	 VYqp3P7EkeU4UCReBUXwGlou7RcM4T2KwaONDc6h+uy2lVdb1clGgFrzYulVNfH4ibA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793624074;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=T1YaZ5CVMpRh5cBJyHT2XXxbUm0f+Lg1DdVX03Xf44w=;
+	b=HAn4OC3mjbCsg5Zg/m5rsWuMmu+Gx64CYvy8vBZZNVmWGglStKnwmmUvB+9Z2m/F4ttX
+	 JcBM/QMaY9JyuXHPfvcV9MqM5WNXBUJ3zy60Dnr+WmAr4neTwVIaW0xksJumLlVR2A9oM
+	 rHt26kmivVPQ1XF4F5e4Mnyen2/PU/f1WuyU+hs/vYDCts5I68y5p8dhsEpzmJr2MJO+B
+	 vHe4apCAooEBp/GIBS+8ptKm0Zo32WPX+LEthtyAvpkGhlK7qdvOt1u8/lvxPBTkLOKRU
+	 Z3Gn8+bMaCADVxV7jeDffSV3/ZTtgKyqUE5gGESavaRLk/9Jg5xoXcEGH3PBfrKr4ZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lXS1Y58E;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="CBoNTm/0";
+	arc=none smtp.remote-ip=91.218.175.102
+Received: from mta0.migadu.com (out-102.mta0.migadu.com [91.218.175.102])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A32A60A2603
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 12:45:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89261606A329
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 12:54:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89261606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lXS1Y58E
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5ABC1F00A16;
-	Mon,  2 Nov 2026 12:45:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793623516;
-	bh=VUqu6sfLfbMcBDlYqJq7ZjiGJIZyLCH5NptoKl+iaKk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lXS1Y58EHn39rEK70Ir6Sr7fBz0Ra0xXueOniTylDNQd1MUzSQ+wuX3jpID6mrvuq
-	 A/V1IB0h8H+w1Gp07FXKJgExLMxxEAT9boTJNZy5EE1KLi+FEa/uFrn0ealdLJxney
-	 Y9xEvYwIuFOJxyU0ASeNzkUOfdEQBcyoCD2vcQAKpnzy39Rd0b3VDyvOF+fD2wZlXu
-	 jVhMM4lXBptisQwFqiEm8p+LRPF3B7bTjfBDITp24ZkpQ75C3zMBrEQEEpibApWZIJ
-	 wdW1r62/47K5KKTcpyOQ3K0Q9IavmyT1jsLaCUmt9OzYX9f/eDMYhQEH3HW+pgPCbW
-	 kKq+ZDA9KZ/Vw==
-Message-ID: <sashiko-outbox-193441@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 5/5] selftests/bpf: Test log_true_size with an
- error from blinding
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Qiliang Yuan" <odys.yuan@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261102-bpf-blind-nops-fixes-v1-5-844300e42cdb@gmail.com>
-References: <20261102-bpf-blind-nops-fixes-v1-0-844300e42cdb@gmail.com>
- <20261102-bpf-blind-nops-fixes-v1-5-844300e42cdb@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 02 Nov 2026 12:45:15 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CBoNTm/0
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=f8NRbaKzFnIAovB9R1DkWIJvuMxfGpSyRGnC9JEfYgA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793624069; v=1; x=1794228869;
+ b=CBoNTm/0wYY66KVTGoqmZEpP+CTkY4BxVtiIhtgXQVmBFuRHyyupdrgR6r+BvDDOtRzq1nff
+ vIBLw3x71ZY8x8fhag4zHDEZM9C60Jr+fhgE6A/pN9Rv5hrEyCN2H2gUzRHjRkmLzU2ZKuxMFQU
+ 9e8Yf2Q9Ik+cBqOR7Z12mTEE=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id d66616fbbe63938d;
+	Mon, 02 Nov 2026 12:54:29 +0000
+X-Mizu-Trace-ID: d66616fbbe63938d
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <40d46734-8195-421f-b14c-b4b07adf3380@linux.dev>
+Date: Mon, 2 Nov 2026 20:54:21 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,71 +57,71 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2 08/15] net: Leave sk_stream_wait_memory() once the
+ socket is dead
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, john.fastabend@gmail.com, jakub@cloudflare.com,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
+ matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org,
+ josef@toxicpanda.com
+References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
+ <20261102072112.4160195-9-alexei.starovoitov@gmail.com>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20261102072112.4160195-9-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] selftests/bpf: standalone blinding_log.c added for single narrow te=
-st case
---
 
-commit 34995a62836807ba96cd4bc1543b3812e415d382
-Author: Qiliang Yuan <odys.yuan@gmail.com>
+On 11/2/26 3:21 PM, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> When an sk_msg prog redirects data to the egress of another socket, the
+> sender calls tcp_sendmsg_locked() on that socket. The sender holds a
+> reference to the sock, but not to its file. Thus __tcp_close() can call
+> sock_orphan() while the sender sleeps in sk_stream_wait_memory().
+> sock_orphan() sets SOCK_DEAD and sets sk_wq to NULL.
+>
+> After the sleep the loop continues and does not test SOCK_DEAD. The
+> subsequent sk_set_bit() can dereference the NULL sk_wq. The tests of sk_err
+> and sk_shutdown do not always stop the sender. sock_error() clears sk_err,
+> and __tcp_close() can call tcp_disconnect(), which clears sk_shutdown. The
+> sender then adds data to the write queue of the dead socket, and
+> inet_sock_destruct() warns.
+>
+> Leave the loop with -EPIPE when the socket is dead after the sleep. The
+> function already tests SOCK_DEAD before remove_wait_queue() for the same
+> reason. A caller that has the socket open never sees SOCK_DEAD.
+>
+> Fixes: 4f738adba30a ("bpf: create tcp_bpf_ulp allowing BPF to monitor socket TX/RX data")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-selftests/bpf: Test log_true_size with an error from blinding
 
-This commit adds a BPF selftest checking that log_true_size includes the
-error message emitted when constant blinding with bpf_jit_harden=3D2 pushes=
- a
-jump out of its 16-bit range.
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/blinding_log.c b/tool=
-s/testing/selftests/bpf/prog_tests/blinding_log.c
-> new file mode 100644
-> index 0000000000000..658a8494dae5b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/blinding_log.c
-> @@ -0,0 +1,59 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* The verifier log of a prog whose constants are blinded */
-> +
-> +#include <test_progs.h>
-> +#include <linux/filter.h>
-> +#include "sysctl_helpers.h"
-> +
-> +#define NR_CONSTS 11000
-> +#define LOG_SIZE 65536
-> +
-> +/*
-> + * A prog of one function gets its constants blinded when its runtime is
-> + * selected. Each 'r0 +=3D 1' becomes 3 insns, which pushes the jump ove=
-r them
-> + * out of its 16-bit range. Serial, because it sets bpf_jit_harden.
-> + */
-> +void serial_test_blinding_log(void)
 
-[Severity: Low]
-This isn't a bug, but tools/testing/selftests/bpf/prog_tests/patch_list.c
-already defines serial_test_patch_list() in the same directory to test
-patch-list constant blinding while toggling /proc/sys/net/core/bpf_jit_hard=
-en
-to 2 via sysctl_set_or_fail() and checking is_jit_enabled():
-
-tools/testing/selftests/bpf/prog_tests/patch_list.c:
-void serial_test_patch_list(void)
-{
-	if (test__start_subtest("line_and_func_info"))
-		test_line_and_func_info();
-	if (test__start_subtest("poke_descriptor"))
-		test_poke_descriptor();
-	if (test__start_subtest("classic_filter"))
-		test_classic_filter();
-}
-
-Could this test case be added as a subtest inside serial_test_patch_list() =
-in
-tools/testing/selftests/bpf/prog_tests/patch_list.c instead of adding a
-separate standalone file for a single test?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102-bpf-blind-=
-nops-fixes-v1-0-844300e42cdb@gmail.com?part=3D5
+> ---
+>  net/core/stream.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/core/stream.c b/net/core/stream.c
+> index cb255e2a3a5d..334124d683a7 100644
+> --- a/net/core/stream.c
+> +++ b/net/core/stream.c
+> @@ -150,7 +150,11 @@ int sk_stream_wait_memory(struct sock *sk, long *timeo_p)
+>  				    (sk_stream_memory_free(sk) && !vm_wait),
+>  				    &wait);
+>  		sk->sk_write_pending--;
+> -		if (ret < 0)
+> +		/*
+> +		 * A sender which sockmap has redirected to sk does not keep it
+> +		 * open. A dead socket has no sk_wq.
+> +		 */
+> +		if (ret < 0 || sock_flag(sk, SOCK_DEAD))
+>  			goto do_error;
+>  
+>  		if (vm_wait) {
