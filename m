@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793652358;
-	b=E0cFqOxOjTJZQamiCSVQbg9LBmclTFDH7Vng6m7/JjneaiTK9CZQFEZ4KS2YfP6tR5Qq
-	 YFK6ArH/Y0uW+4gnK2RiJUd0H7n6r0iYyqOrPWLjcJ4mMzkZLpdVrRSSgu5ojIzNCOpT3
-	 Fhlq67Iqv0BdsQfgqtO/hcWmnftqyqV3SugvoUshVYDtapcmhwRBBUhYFUvkcKCLXUqEX
-	 +j/mogNMD1rJfouKPg0TXNnSdWTGqVK8JeNKo1M2/5CfEREt9Y+z5jrwbusOwr7lAQe2o
-	 RFIWXS2ILrSYdMEQQUHJm0n76I99NCycUzkIWU/SmkZjEv/9WxE8gRhfHFoGnmw/9xQ==
+	t=1793652825;
+	b=JA1FYN0Q6W0lw0VGRIxwDkiuSgYm57AbShTdkr6yVyFxmDYi/cPWRajm63eHK5WXgqly
+	 PTaTUbK6+Qk1PE/JEKIQkSb541k1uXWY+EZoMj5bb6kj3LE0LR+ZwqQFtG13eaBHsdrGa
+	 h/Pgnh5RdDThRGCNQ5oMwiyyMV3THOi/X7NX8M9STdZ3u62P0dABa3/AdSVkAdyixMmsq
+	 iKrjn2/m//EMkQagwRV+T5OdD9PpE+M7iA7pnRd4qrEvGOXoKqB9LzchSNJQ/LZ9pvhip
+	 ItHzQgBibY2PBNgk6cf7qrwd3v3S6Ep8ILWHIeMpex+x9/d5DYeVqfB+tom/LoIIOiA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793652358;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793652825;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=QkdyNHg04PdgtDZN025BsbPuS1BoVbcEcI259SLB2e0=;
-	b=sAbnALV0y4x77Gz25kLe3XIeCD6p6/pgtx6yJ/R1yqs1q+ERk/fLI0RV8HtOBNvI/JST
-	 ARGsP6s1DX5v0nsAItjBXCbAD/tSQEBtTkNhnJh1uQxsgLazpS2LgYgnYek05iEcJn/hB
-	 C8cEtQiDm89Xr+e36itlypnMcutEQw156K5UvzvLbWYTIsd2EWsujXuFITZO0euoxq4s7
-	 L0UASSxb4bADG+ijmA1JvfE2gElDSBtDDp0QDQYhi1VHAaV4q/eu3md998tsrBIrf8+/5
-	 tJb2maH/rDSUbBSeHC/lZl9kjE6AVJ8OBvXs0Y25g2VTJIJVFjcr5VfyxdWg53BpVFg==
+	bh=Ur3NviQueuDZp/pCVj/27L9uAAV8y8uuySZxoytmQug=;
+	b=VsiF64sgMSa/KDkD04PIJN0HzytX06zrhe6yGJL6RIMaCQ2vN4i7fa77S9VA8T5nLDPw
+	 cFmZUPLxvjsO3dhwB49lEPdqx5AaZc3LC4n5TKH7LBTJIynWWVOT/kOnk6B3NxK8v6BVQ
+	 dSRTt3GKq05Mgd98w3+Y/zDGkzmJv/vtH8u6hb9T3X/bVfvb4Z3gKMccXQvFvzDhAhX1p
+	 eFE5CR0763J2LXZTUuNlbZgS0Bs2chuxZFJX7gzUcuMJTgl8ZqlP2AnrBIRxazmzQep/U
+	 Y1dSFzDdCzCBi9lp3UWDXWPtSbWnN9b9+ZsqfvJf/ztC43cMXDq+l2puscsuoasg3GA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bf2oltEk;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YawTYY8D;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0EC606A332;
-	Mon,  2 Nov 2026 20:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659A4606A324;
+	Mon,  2 Nov 2026 20:53:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bf2oltEk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 519FB1F00A18;
-	Mon,  2 Nov 2026 20:45:57 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YawTYY8D
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C93BD1F00A17;
+	Mon,  2 Nov 2026 20:53:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793652357;
-	bh=QkdyNHg04PdgtDZN025BsbPuS1BoVbcEcI259SLB2e0=;
+	s=k20260515; t=1793652825;
+	bh=Ur3NviQueuDZp/pCVj/27L9uAAV8y8uuySZxoytmQug=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Bf2oltEkOnr79Jo6LB4R74wBRhRXNQpGwNAzG0BoDPJkqUwaMwM3NMEUNj0BmjBfg
-	 g2HFPcQeyO9G8Se1plADPwPA56KT9PvuzIMOsqJPAmtWQpBBCDhM5jZMqiS+ejBTI8
-	 MW69njMJ7xcqn7Pg2A5twkXGmi5GkQAV4Kls56d0WmgXMNQdQZ0nS2TKfdbHfu2fGH
-	 ppL5e56v8ponxhNGin2BxXBGK2+HAJ/ORhK6OD9TybCiSwmwcNTHsXAa7W2ROyzDjh
-	 K/7MYT/prlPhLJAFMMUaxnF0PYLRWOQ1k9Oghpjrxn4u2U+bpiZiib9MDZ65PAGmGN
-	 j5i/nAJa2zUWw==
-Content-Type: multipart/mixed; boundary="===============8048107970388410369=="
+	b=YawTYY8D5b3yE1kRxar+UxdPKKLK7m2Qlq2UkleFubA5YRIVyrbF3vaqOhSO1rVrY
+	 YmsE2hYf7jBbo8z9M+zJyurDskyyAhMTQIMsQQrPFFdFKOKYV0OMexg0GMcJ5oCFuY
+	 3wDB2mtzXXgvYDj+NbzYOoA7QyqHJ7JBE0+DHpKmWBufGY7ohTRFIwr7c8T621NmUf
+	 gbNoIpOUveaN9TQMwdj54OeDdzLNq2Moy58f/3LEmHEjcvEacS4bMPDtArP6o7SnNf
+	 3ASkCrGzZ7mJC1thuM62j+IJ102VKjk7ZFTaS66m4oWu5wvGT4dwEmMY2ujZ3o6bYQ
+	 0m5FmmN5DTZOQ==
+Content-Type: multipart/mixed; boundary="===============0323927478722233340=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,78 +49,110 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <c013a7069c06d1120f89eb75e9418938b9e4e71cc81043f41f11cb06d75ca634@mail.kernel.org>
-In-Reply-To: <20261102201356.5798-2-mahe.tardy@gmail.com>
-References: <20261102201356.5798-2-mahe.tardy@gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/5] libbpf: Count entry programs for bpf_gen__init()
+Message-Id: <a6b2025486dd16d90b6f292f136f07d3ffa73cb194a07ef5687e583275594b48@mail.kernel.org>
+In-Reply-To: <20261102202922.2515317-2-Jeremy.Jean@oss.cyber.gouv.fr>
+References: <20261102202922.2515317-2-Jeremy.Jean@oss.cyber.gouv.fr>
+Subject: Re: [PATCH] bpf: netns: require CAP_NET_ADMIN for link targets
 From: bot+bpf-ci@kernel.org
-To: mahe.tardy@gmail.com,bpf@vger.kernel.org
-Cc: qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,mahe.tardy@gmail.com,hi@tychen.cc,gyutae.bae@navercorp.com,sh_def@163.com,josef@toxicpanda.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  2 Nov 2026 20:45:57 +0000 (UTC)
+To: Jeremy.Jean@oss.cyber.gouv.fr,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,Jeremy.Jean@oss.cyber.gouv.fr,stable@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon,  2 Nov 2026 20:53:44 +0000 (UTC)
 
---===============8048107970388410369==
+--===============0323927478722233340==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> libbpf: Count entry programs for bpf_gen__init()
+> bpf: netns: require CAP_NET_ADMIN for link targets
 
-TL;DR: Nit only: the comment in bpf_gen__init() in gen_loader.c still says
-nr_progs includes subprogs, which is now stale after this change. Suggests
-updating it.
+TL;DR:
+- Flow dissector BPF_PROG_ATTACH may still bypass the new netns capability
+  check, unverified
+- Check may wrongly reject CAP_SYS_ADMIN-only and sk_lookup users; the commit
+  message doesn't say so
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+> diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
+> index 81006a242618..0ca29c20ba85 100644
+> --- a/kernel/bpf/net_namespace.c
+> +++ b/kernel/bpf/net_namespace.c
 
 [ ... ]
 
-> @@ -9815,13 +9815,16 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
->  			if (prog_is_subprog(obj, &obj->programs[i]) &&
->  			    prog_has_callx(&obj->programs[i]))
->  				text_has_callx = true;
-> -		for (i = 0; i < obj->nr_programs; i++)
-> +		for (i = 0; i < obj->nr_programs; i++) {
-> +			if (prog_is_subprog(obj, &obj->programs[i]))
-> +				continue;
-> +			nr_obj_progs++;
->  			if (obj->programs[i].load_strategy != BPF_PROG_LOAD_STRATEGY_DISABLED &&
-> -			    !prog_is_subprog(obj, &obj->programs[i]) &&
->  			    (text_has_callx || prog_has_callx(&obj->programs[i])))
->  				nr_progs++;
-> +		}
->  		bpf_gen__init(obj->gen_loader, obj->log_level | extra_log_level,
-> -			      obj->nr_programs, obj->nr_maps, nr_func_ptr_maps * nr_progs);
-> +			      nr_obj_progs, obj->nr_maps, nr_func_ptr_maps * nr_progs);
+> @@ -488,6 +489,10 @@ int netns_bpf_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
+>  	net = get_net_ns_by_fd(attr->link_create.target_fd);
+>  	if (IS_ERR(net))
+>  		return PTR_ERR(net);
+> +	if (!ns_capable(net->user_ns, CAP_NET_ADMIN)) {
+> +		err = -EPERM;
+> +		goto out_put_net;
+> +	}
+>
+>  	net_link = kzalloc_obj(*net_link, GFP_USER);
+>  	if (!net_link) {
 
-This isn't a bug, but the comment in bpf_gen__init() now looks stale:
+Does this close the token-versus-netns hole for BPF_PROG_TYPE_FLOW_DISSECTOR?
 
-tools/lib/bpf/gen_loader.c:bpf_gen__init() {
+Flow dissector programs can be attached through both BPF_LINK_CREATE and
+BPF_PROG_ATTACH, and the BPF_PROG_ATTACH path does not go through this
+function:
+
+bpf_prog_attach()
+  netns_bpf_prog_attach()
+    net = current->nsproxy->net_ns;
     ...
-	/* nr_progs includes subprogs and progs that are not loaded */
-	nr_progs = min(nr_progs, MAX_USED_PROGS);
-    ...
+
+bpf_prog_attach_check_attach_type() has no FLOW_DISSECTOR case, and
+netns_bpf_prog_attach() and netns_bpf_prog_detach() have no ns_capable()
+check on net->user_ns.
+
+A task that is root in a userns, and so passes bpf_token_capable(token,
+CAP_NET_ADMIN) at BPF_PROG_LOAD time through a delegated token, but is still
+a member of a netns owned by a different userns (for example init_net after
+unshare -U), could load a flow dissector program with the token and call
+BPF_PROG_ATTACH(BPF_FLOW_DISSECTOR).  That appears to succeed without
+CAP_NET_ADMIN over that netns, which is the outcome the commit message says
+this patch prevents:
+
+> a token can be used to attach a BPF program to a netns it does not
+> control.
+
+This is pre-existing code rather than something this patch breaks, but given
+the Fixes: and Cc: stable framing, should the userns check live in a shared
+helper that netns_bpf_prog_attach() and netns_bpf_prog_detach() also use, or
+should the changelog state that limitation?  (SK_LOOKUP is link-only and is
+covered by this check.)
+
+Also, should this check mirror bpf_ns_capable()?
+
+The new check is a bare ns_capable(net->user_ns, CAP_NET_ADMIN), but the
+token code treats CAP_SYS_ADMIN as satisfying a CAP_NET_ADMIN requirement:
+
+kernel/bpf/token.c:bpf_ns_capable() {
+	return ns_capable(ns, cap) || (cap != CAP_SYS_ADMIN && ns_capable(ns, CAP_SYS_ADMIN));
 }
 
-With this change, the nr_progs argument no longer includes subprogs.  It is
-the number of entry programs, which is the same count that
-bpf_object__for_each_program() and the skeleton expose, and it still
-includes entry programs that are not loaded.  The comment came from
-259172bb6514 ("libbpf: Fix gen_loader assumption on number of programs."),
-which the commit message cites.
+and other attach-time checks use that convention, for example in
+bpf_prog_attach_check_attach_type():
 
-None of the later patches in the series (276212ecac70, 28aa06d2c9ca,
-c9412c70e104, 5b9c2e5eed2a) update it.  276212ecac70 ("libbpf: Track
-generated loader link FDs") also sizes link_fds from this same nr_progs
-value, so the comment now misdescribes a value that later code depends on.
+	if (!bpf_token_capable(prog->aux->token, CAP_NET_ADMIN))
+		return -EPERM;
 
-Should the comment be changed to something like "nr_progs includes progs
-that are not loaded, but not subprogs"?
+With the patch, a caller that has CAP_SYS_ADMIN but not CAP_NET_ADMIN can
+still BPF_PROG_LOAD a flow dissector program, but BPF_LINK_CREATE now fails
+with -EPERM, while BPF_PROG_ATTACH of a flow dissector still works for the
+same caller.  The same applies to a CAP_BPF-only caller loading an sk_lookup
+program, since BPF_PROG_TYPE_SK_LOOKUP is not in is_net_admin_prog_type().
+
+The commit message does not mention this user-visible narrowing, and the
+patch is tagged Cc: stable.  If the change for CAP_BPF-only sk_lookup users
+is intended, could the commit message say so?  For the CAP_SYS_ADMIN case,
+would falling back to CAP_SYS_ADMIN in net->user_ns keep the permission
+model consistent with load time?
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41519963115
---===============8048107970388410369==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41521741043
+--===============0323927478722233340==--
