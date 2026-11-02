@@ -1,54 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.151
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793622758;
-	b=JwsPjpsDNtPKwaO1bxja2hj9NcKuvxRDykRbU60V/o7bev0j+fOD1pn2QJ6bjfVWT+lJ
-	 ChM+uZ1QOXUKLF0aN5TNZkdRyXLfIFa7k7n0/470AAlJsOcnONfaQET82O+0/DyuB3qmN
-	 WZJ2BnEiCUX1flXgeqDzyRn5MZyKW6CLN9YY64GHKpQ6Td54kJPb/J+eiFfpT8ibpr9wu
-	 VH3mLueAnsq+jUMGe9gZeo5ut676cIsgBz3r24Dot+0fUQDexyIGOLPhF6ZjTfHfkkVOY
-	 eOHTmqc+EBFq6SqkVaXBTYk/wweUh+2oQo6Ca9QWUAZWVv7t10KpA/4gvY0BNOaMwqw==
+	t=1793623029;
+	b=tsz9WJ/pU+xW2pJ/6W7s1WiI3FDC1T3wzczA6JN1xjtRmrAhKMjlGNj/iD9bit35XlsI
+	 6edcaruTsXN7DAecXdXn0TMgp7HRj2GjU/2efsf5VCdvg1qEMtsm8d+sIBb17jghWYH98
+	 hDQXb4GYliaOwxFAspHevHwFw0i5UoZBw71pnB4pqo2mqyUTX2d3ES+/V1sQGuEd2i5D0
+	 DP+6yZspKe2+u6Oiz3CLPfOtMnj3VOuvTTxGyLqexLpd5pAVvbCpjBkja+gxqadmpnyl0
+	 6LRoyDifDNueu18d2yHTQxkprO6RS0eE8ouCAFGtMD76BtBmvzjpfmMAIYM2ajjbRlQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793622758;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=w6jqiUBD5ibgJFs0ugALEEDB7b768frs2A7MQ2xTHQM=;
-	b=XSp8A0K2MjFRcAtahp3uPZN78pfEu8wT5tx9y37++zJoPpUyGW0uX+8VHm8STHZjWzKj
-	 mWOdtSlCBNgr6GU66i0bOEcOPbGC0DrvfV1GsBNHyzwYQd4iCyNgTAuEInM4f6okb+OtU
-	 ACBiOkmtIX0Jq88qFT3O/ZnKD4T6OeTkdWJf/76PO5RbKzwlxdwH+nz1Ts2GnrdQAGelP
-	 4c5kUuIbT16gGsGfO+PTqxeiEUb/J4jRgYKcUJDL38lQBBIPgh3AimJs5pvfCS+KSMd4F
-	 phLma02/PN+lq3AGIe62YHKxpT+GUzbabXMa7+UeV2vOGBhfUx58Dx7NgCV3GjqG+9g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793623029;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Subject:Date:
+	 Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-B4-Tracking:To:Cc:X-Mailer;
+	bh=jiUaz4f9o+mDn4Avtd7lFhAHvXfThjVzdbQTeYRRX+0=;
+	b=Y9kIURmS1xhcrDZRQm37iRC8G7AZJ2U4vOAOFcJSD77zNEcOC7as9Kck8MDK3L2FB12V
+	 xBWYVBcHpih+MWM31J6PUie9IAgHkzD/gNU7oC9Oa1a8zr9tzIVYeWGPwe8oz0p3cNhvH
+	 otTJGpOHQ32uGiHaK3PjVHudC+cEupaONtySAw7dQL3RlkfgvwJ96yAIkQ/d+PRdQSFNT
+	 y89ubnz99acsmp5Q35Q4CbGy8ud+Wf/0qe8G136qE2xXbmrkxg0Le1qisAA1QfAQtgKav
+	 i6/u8fe3ka7J9UyHr/aj2vGXqpxICLNrbdwtviodPuIhDK09AA5MMpCzsjkPV2p1ByQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cL9ESvBY;
-	arc=none smtp.remote-ip=95.215.58.151
-Received: from mta1.migadu.com (out-151.mta1.migadu.com [95.215.58.151])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UvfS7rY5;
+	arc=none smtp.remote-ip=74.125.82.172
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76568606A339
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 12:32:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76568606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78DC606A335
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 12:37:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E78DC606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cL9ESvBY
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SiiP3R6iGc96rRdu87RGjK9ajivgC01xWOp9SC3ZPUw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793622754; v=1; x=1794227554;
- b=cL9ESvBYAL63kpZebLoC7cMqDXiUTe+XViIZ37bDaSZ1Q0a0JYe1iNSmZibWd9qWMknh82ox
- +sJiP+jk4U4LQOo4MKjH4kFkR/e3J8KhK1a8fMaCfur/n4+t6U8TYvgWeqAbtbaXIgi/RG7n2Nn
- IgCgEQpNcYUnpO4gLchGeCIA=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b39a93dc725c8c73;
-	Mon, 02 Nov 2026 12:32:34 +0000
-X-Mizu-Trace-ID: b39a93dc725c8c73
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <69e66c9c-f2ab-41a7-972d-d1562a6387b8@linux.dev>
-Date: Mon, 2 Nov 2026 20:32:24 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UvfS7rY5
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-36a0f27c9f4so5521611eec.1
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 04:37:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793623028; x=1794227828; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=jiUaz4f9o+mDn4Avtd7lFhAHvXfThjVzdbQTeYRRX+0=;
+        b=UvfS7rY5xoMCyzIjp8URThf1WnyL9SRo3oRA9q6a4+i6rBO3La1sR1ZLXpsw16dUtG
+         GQ7dv4C25qefwMqVETPIyu7hwbbUxrBICSY+fcT4RF32ADFhrzO6ORqoBa1hZhS8W1zU
+         wtp+bb84P5Q4RZPpp/DjQEDrvQiXExSMtaCypR7TzKBcggo+wnXWRyAkBo8CtnJiCvTy
+         i0Dk/8C6JkxYz7ND5HvqrJoa0AFFPda7JEw+iggns4Lp1HL+zxX5ZpRZaUDQx/oRgf1j
+         zR8lYCMDavas7noWIIgsKpxiGty8ygKH5ygr6B1aBoFkb8cm87pqbArjWSniQm/G//mg
+         PQEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793623028; x=1794227828;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=jiUaz4f9o+mDn4Avtd7lFhAHvXfThjVzdbQTeYRRX+0=;
+        b=ZbS5rYYqtEcMrDFgYM9NilOxNuBo7mtqGxRlxmfAVA0LVuPYMA34HLCcngVRwtseGp
+         azGepxdM6xIZ4CkCiIa51wVB/I44O56N9pUgx9h01ytdyeU/+oFWeiDfk5UQFQexpXA9
+         fLFFRiIdCLfT5n5ZC5XkJpzwCDCRYK9XEpYMHCtd8wFekJSSw/G/zwQ/uC6wvcNPDZbb
+         u1aTU3kBqK8DaLiX64ihImQwceGElJnJDfc9kJQuqWZOImBis+gO/3V4Rw6Ks6FS+v9k
+         1q5kQm+2DJ9z1jW5W5jhs/FYm+CnCL27m7NDqGAYTQQgS/0lgFDGkP9rPFOxJHV0+8Vv
+         4xlw==
+X-Gm-Message-State: APuU4Z/LqsqHN06jg66FcZEbOteLnLQ2LWT4dVWBKqBB6CFFVU6bNv/c
+	Htb1Uuusn/LMDB2Wk2x0ZzYaMl0ByrgklFGs35KES6e1epS1cqjZDCUw
+X-Gm-Gg: AYBFou3EL9FtJa6UwfiuIyxXN2L6my+q8KyB5qClyFSWmdlAXdXETSCraFpmikGYZZO
+	U7aWEVXrYa1ef25JK8xSu3CpPX5gULvxoVcPyBm47IJJfAG32gbloGU0JbWHHeQFbWJeWiuqFoq
+	DKpaG3txL95enu9VwWkX0oqBzn+CCjLsjkPmjSOnJrGgiaPEvSmv8N5IScg3/1cXkn2sJjKCS7Z
+	BPpt/K+ZYg6SIklMKhFXE565EAQUnKOEhg+r2pugh8BD0pdHFxJUaOIYwGhPRXZp7LEk4H0MDHM
+	r+ZLN9hIk7Y3P4UO4Bo7FglbY0ZLvAB9hyg6uSDDrBGm+5Vfed0MK63Yrt3oQDLOnxsvWJYB52J
+	QO00dTJpW5aBz4+RvW4mtr6AptZ/H7yqWD282/GPgiiS5NSfMCyz6SluIWiPQ1kgNLn0NIULbuW
+	qe6N2tYpC/e9tblhcYwYZ6A/4uyFLw9iBh6KMJ//PMN6atDE7xdfQMYLUm9c6g/IKoO/fqOJ+G4
+	LwQkuDLhHNbgxPHcD3BNnsQrNUWPzJCBzvxtLuyC7aYS3lr5BsqD6ohyFcOUtXZ7GsIe2186oVc
+	PBrEy2tw75yJrozkdc/khcbt
+X-Received: by 2002:a05:7300:c8c2:b0:36a:117:522a with SMTP id 5a478bee46e88-36a423bf71cmr15537738eec.22.1793623027994;
+        Mon, 02 Nov 2026 04:37:07 -0800 (PST)
+Received: from [127.0.1.1] ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a428c17bdsm36326095eec.6.2026.11.02.04.37.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 04:37:07 -0800 (PST)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+Subject: [PATCH bpf-next 0/5] bpf: Fix three bugs around constant blinding
+ and nop removal
+Date: Mon, 02 Nov 2026 07:37:00 -0500
+Message-Id: <20261102-bpf-blind-nops-fixes-v1-0-844300e42cdb@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,121 +91,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 07/15] bpf, sockmap: Check the target of an egress
- redirect before each send
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, john.fastabend@gmail.com, jakub@cloudflare.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
- matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org,
- josef@toxicpanda.com
-References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
- <20261102072112.4160195-8-alexei.starovoitov@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261102072112.4160195-8-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOyD6GoC/x3LQQqDMBBG4avIrB0wobHoVYqLan51oIwhU4og3
+ r3R5ePxHWTIAqO+OijjJyablnB1RdP61gUssTT5xrfONZ7HNPP4EY2sWzKeZYcxHgGdi22YnoE
+ KTRn3KPJFl1DsXxrO8w9Md1K1cAAAAA==
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Luis Gerhorst <luis.gerhorst@fau.de>, 
+ Henriette Herzog <henriette.herzog@rub.de>, 
+ Anton Protopopov <a.s.protopopov@gmail.com>, 
+ Xu Kuohai <xukuohai@huawei.com>, Hengqi Chen <hengqi.chen@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.13.0
 
+Alexei listed three bugs that were in the tree before the patch list
+series [1]. Each patch fixes one, the last two add tests:
 
-On 11/2/26 3:21 PM, Alexei Starovoitov wrote:
-> From: Chris Mason <mason@kernel.org>
->
-> tcp_sendmsg_locked() expects a caller that has the socket open. It uses
-> sk->sk_socket and the wait queue sk->sk_wq. For an egress redirect of an
-> sk_msg prog the sender calls it on the target without a reference to the
-> target's file. Both pointers are NULL before accept() and after close().
-> close() can occur while the sender sleeps. Then the kernel crashes.
->
-> Fail the redirect when the target has no struct socket, or when the sender
-> has to wait for the connection. The error is EINVAL. After close() it is
-> EPIPE, as today. sk_stream_wait_connect() calls remove_wait_queue() without
-> a test of SOCK_DEAD. sk_stream_wait_memory() has this test, but it can
-> still use sk_wq after the sleep. This patch does not change that. The
-> target can change while the sender sleeps there. Thus do both checks before
-> each call of tcp_sendmsg_locked(). Clear MSG_FASTOPEN, so that the sender
-> does not call the connect code of the target, which uses both pointers.
->
-> Today the sender can send before accept() and waits in SYN_SENT. send()
-> with MSG_FASTOPEN sends the data. Today it fails with EISCONN. When the
-> redirect of a cork fails, send() returns success and the kernel drops the
-> data, as today.
->
-> The Fixes tags are for the two checks and for MSG_FASTOPEN, in this order.
->
-> Fixes: 4f738adba30a ("bpf: create tcp_bpf_ulp allowing BPF to monitor socket TX/RX data")
-> Fixes: b8b8315e39ff ("bpf, sockmap: Remove unhash handler for BPF sockmap usage")
-> Fixes: c5c37af6ecad ("tcp: Convert do_tcp_sendpages() to use MSG_SPLICE_PAGES")
-> Signed-off-by: Chris Mason <mason@kernel.org>
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->  net/ipv4/tcp_bpf.c | 24 +++++++++++++++++++++++-
->  1 file changed, 23 insertions(+), 1 deletion(-)
->
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index fd443350f9b8..ef2e15de0fe3 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-> @@ -88,6 +88,24 @@ static int bpf_tcp_ingress(struct sock *sk, struct sk_psock *psock,
->  	return ret;
->  }
->  
-> +/*
-> + * The target of a redirect belongs to somebody else. A child that nobody has
-> + * accepted yet, and an orphan, have no struct socket and no wait queue.
-> + * tcp_sendmsg_locked() needs both. See sendmsg_locked() in skbuff.c.
-> + * The sender holds no reference to the file of the target, which can be closed
-> + * whenever tcp_sendmsg_locked() sleeps. sk_stream_wait_connect() and
-> + * inet_wait_for_connect() go back to the wait queue when they wake up, so the
-> + * sender must not wait for a connect.
-> + */
-> +static bool tcp_bpf_redir_allowed(const struct sock *sk)
-> +{
-> +	if (!sk->sk_socket)
-> +		return false;
-> +	if ((1 << sk->sk_state) & (TCPF_SYN_SENT | TCPF_SYN_RECV))
-> +		return tcp_passive_fastopen(sk);
-> +	return true;
-> +}
-> +
->  static int tcp_bpf_push(struct sock *sk, struct sk_msg *msg, u32 apply_bytes,
->  			int flags, bool uncharge)
->  {
-> @@ -109,6 +127,10 @@ static int tcp_bpf_push(struct sock *sk, struct sk_msg *msg, u32 apply_bytes,
->  		page = sg_page(sge);
->  
->  retry:
-> +		/* Only a redirect sends data which is not charged to sk */
-> +		if (!uncharge && unlikely(!tcp_bpf_redir_allowed(sk)))
-> +			return sock_flag(sk, SOCK_DEAD) ? -EPIPE : -EINVAL;
-> +
+  bug                                                  fix   test
+  line info stays blinded when the JIT falls back      1     -
+  removing a nospec jump as a nop drops its barrier    2     4
+  log_true_size misses an error from blinding          3     5
 
+Patch 1 needs a JIT failure behind blinding with
+CONFIG_BPF_JIT_ALWAYS_ON=n, which a selftest can't cause, so its log
+shows a run with fail-nth instead. Each bug shows up on bpf-next and is
+gone with its fix. test_verifier and test_progs show no new failures.
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+[1] https://lore.kernel.org/bpf/DMKHZS5B5CNO.186F6YH1T6YU4@gmail.com/
 
-I can trigger it by redirecting data to a non-accept sk.
+Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+---
+Qiliang Yuan (5):
+      bpf: Put the line info back when the JIT falls back after blinding
+      bpf: Keep the barrier of a nospec insn when removing nops
+      bpf: Finalize the verifier log after the runtime is selected
+      selftests/bpf: Cover a nospec jump that becomes a nop
+      selftests/bpf: Test log_true_size with an error from blinding
 
-==================================================================
-BUG: KASAN: null-ptr-deref in tcp_sendmsg_locked+0xfb8/0x4550
-Write of size 8 at addr 0000000000000008 by task repro/488
-Tainted: [W]=WARN
-Call Trace:
- <TASK>
- dump_stack_lvl+0x91/0xf0
- print_report+0x442/0x630
- kasan_report+0xf3/0x130
- kasan_check_range+0x11c/0x200
- __kasan_check_write+0x14/0x30
- tcp_sendmsg_locked+0xfb8/0x4550
- tcp_bpf_push+0x3d0/0xbc0
- tcp_bpf_sendmsg_redir+0x639/0x1050
- tcp_bpf_sendmsg+0xa32/0x1b90
- inet_sendmsg+0xdf/0x100
- __sys_sendto+0x3ed/0x4f0
- __x64_sys_sendto+0xe0/0x1b0
- x64_sys_call+0x1375/0x27e0
- do_syscall_64+0xe5/0x610
+ include/linux/bpf.h                                |  6 +++
+ kernel/bpf/core.c                                  | 29 ++++++++++-
+ kernel/bpf/fixups.c                                |  3 +-
+ kernel/bpf/verifier.c                              | 13 +++--
+ .../selftests/bpf/prog_tests/blinding_log.c        | 59 ++++++++++++++++++++++
+ .../testing/selftests/bpf/progs/verifier_unpriv.c  | 35 +++++++++++++
+ 6 files changed, 138 insertions(+), 7 deletions(-)
+---
+base-commit: cd5bc55288d4fd999595c8f2af6a5408cbe92a52
+change-id: 20261102-bpf-blind-nops-fixes-e45e91d65c75
 
+Best regards,
+-- 
+Qiliang Yuan <odys.yuan@gmail.com>
 
