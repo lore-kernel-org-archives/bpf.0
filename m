@@ -1,66 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.168
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793613147;
-	b=ljo0Yag96jeFrtigak+fvxFQKJw3RzSjstH6QXPjQaxACxGt/W2siz7hv0Lk+u/SfcWU
-	 igQYUGbvV7mVQ7lmiqWbBOYoy0jrnTpgevIq28J+re2F+y/j9DWxDVRELo0rvjK63bm3+
-	 ahrHIXnSblcr0z17XDUV9vTX9lXptIxsam6Nrg+BHF/GUfp6dFanktwEJxyHvwf5qL+Yi
-	 owEpcXHUdNA7vZQb7wTD5Gq6Lk4epC4BbNbNl38S3t0grgmGVvT9DzYH2Y08rG1oGQZ32
-	 gaCTAHVvqIrqu8mWygDBiDsRn38PU0HrkU7a9ORvyJ2CW1M9u8doieZqKjDETQZ20hQ==
+	t=1793616376;
+	b=3OFuhCr+SAIXFfIEvd7giyFpOdJ/mdoHmmj0gShTvF08Y15C27aTuwprUbZPxpl/CHZE
+	 TtLnrHfwMT8IgDTQAe75XifYeynaR6JwXGLudh0pnmhha34gQdabvdnDs+H3MalU8KqIx
+	 dwvV5Uc8cv2G0KQPDo90nXR+nAYI0IPHQYPgtiV0+IB0pN8iSxozpe3wDB7CfTKNAW22c
+	 1+/E2W98pFxx5sznbpZ8C86YYF21rzpMjSV3CWdyxYBaXy9/GgLRzT7Lv8efKsDtf6Chc
+	 LvEnvuiccETbGUIFYPxyXjcM9NNtvXIpoAcLVs12v3/nIjcjM+f7VpzEkA/N4YMJ/ig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793613147;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=0J0BmS8+dLS8Lnfxixm46w2lRSFsoL6zql/BE+pRkys=;
-	b=nUDYbSzWxy4HD81yhjRm7XzqtEl1Ru0hQ/qFaEpXB5NEYN5qcEJdjMq3avtYVk2NwQT8
-	 52ojbtq5giQHJCV/5kP4hsdpEMX59UjiCBXDoS37DMUjUiB/89tOFLfDXDy7BnInH2b9+
-	 IisDfhi8cPLyCmlugISf2RawZQp3A9OFL5qWJ3BuehmG4pt1G8cS5Pcr/O7izYpMwCGrV
-	 ny4zEXoS4QpcH3u8KaOLj/hkiPL0ySk3v1i/IQjwiiYrpljZ6Kp757oUm5M43qGDsYQw7
-	 k1U0z/IctAfhAhECLU63Wtmqk8fMmjC3oVerjGnyuHbBGgwUUK4ZaNY2ZxLdp9t9wWg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793616376;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=lxWH9yX4Vl4mKtXKvGkvQaa05rH5ZKTvpkSa847Tggg=;
+	b=4At02ysBpogeBVYA2We5QwElq7gvDbhbPsIBZ496xpgItVNtwNr5hcFpNPrT8Z/58wfv
+	 m98SFqffgdKvkKgd+n8MR78fjPuOiv7WWRwlYOiooov7fm6iRwb6OA/YzQzKc0KQ18UV5
+	 mnKNIPrAfZoryCBnV2pmXG3Dd9RFdbyMMMXiEOISZl31X2ZNKpMUn+al+yGJvz52RJe1F
+	 F0H1KckVsNegP6AU8aiayulpV9PsnxLR3EiVJNl1ZPh62I0sqnH7S9zYnYYHQK2WT6nnO
+	 3LBrR+h+c7b7ztRubbCyC9fL4ChfN1FHk7nMsc9IKeoI5k1I4yMQXK+x0TduDWYvBbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fBzi8KrU;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=QYtjFkK8;
+	arc=none smtp.remote-ip=95.215.58.168
+Received: from mta1.migadu.com (out-168.mta1.migadu.com [95.215.58.168])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F6C606A329;
-	Mon,  2 Nov 2026 09:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77163606A33F
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 10:46:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77163606A33F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fBzi8KrU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF2F31F000C1;
-	Mon,  2 Nov 2026 09:52:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793613146;
-	bh=0J0BmS8+dLS8Lnfxixm46w2lRSFsoL6zql/BE+pRkys=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=fBzi8KrUITMMy/FxZ//4IX3xaa7J4BrBosrQDqYydu5b3QpyBV7XxvUVgYG2jH1kM
-	 vdkb8jj1+YPi1tX4nep3zJIWBXYu562KFQpFWBXDQB5yn7RZbwFbPLSgcjVrpJuBIn
-	 bu3snGE6mWq0oQOHlVwfbpUaKGj7CksNuW8S4ql0b+E8T1xO7cYrUldJPpIvE5q3Bi
-	 E6l0KO/EeUHDNsAokeSzu6nEi0iETqU1q8l410eOMLHIZz0qP1Q1AImeCXojDk4Ghs
-	 TRfVKR1ZXEtz4UsP8nlAdKDVUQIBJXHpzsFh/xLGUrij5yWqGnjOOmsyzubjjy6pq7
-	 lnOjSSuVRIlxA==
-Subject: Re: [PATCH net v2] bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
-From: netdev-bot+sashiko@kernel.org
-To: jhs@mojatatu.com
-Cc: netdev@vger.kernel.org, edumazet@kernel.org, bpf@vger.kernel.org,
- bot+bpf-ci@kernel.org, daniel@iogearbox.net, ast@kernel.org,
- dsahern@gmail.com, kafai@fb.com, martin.lau@linux.dev,
- john.fastabend@gmail.com, sdf@fomichev.me, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- jiri@resnulli.us, victor@mojatatu.com, linux-kselftest@vger.kernel.org,
- shuah@kernel.org, stable@vger.kernel.org
-Date: Mon, 02 Nov 2026 09:52:24 +0000
-Message-ID: <179361314430.3131.5109011406127069679@kernel.org>
-In-Reply-To:
- <bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1@mojatatu.com>
-References:
- <bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1@mojatatu.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=QYtjFkK8
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JxbpZPWbvfuRPXcn2jrt5kFSz35KdLS4+oLLTN6f2mY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793616373; v=1; x=1794221173;
+ b=QYtjFkK8hdk8uOiuA9MT2L7rULzj6PvZ/woEcPBaMxFOK9IyGKXj46if9X4hA8tRUNGFiCjg
+ C7HPhZDSQMLBvF21fWEp+ecXXpS1KL5mc/FMg6wEgebAVov0Exmd0UzZGDodA18lK0sjro9d8Eg
+ Qor1mDKFyw2GLZhqJ7x4CPwc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 92e7062bea360beb;
+	Mon, 02 Nov 2026 10:46:13 +0000
+X-Mizu-Trace-ID: 92e7062bea360beb
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <2f272a9b-ea83-4157-8968-0081990cb709@linux.dev>
+Date: Mon, 2 Nov 2026 18:46:00 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,255 +58,200 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/6] mm/vmscan: move vmscan tracepoints to a local
+ header
+To: Baoquan He <baoquan.he@linux.dev>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Dave Chinner <david@fromorbit.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Muchun Song <muchun.song@linux.dev>, Qi Zheng <qi.zheng@linux.dev>,
+ Kairui Song <kasong@tencent.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-mm@kvack.org,
+ "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)"
+ <cgroups@vger.kernel.org>,
+ "open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>,
+ Ridong Chen <chenridong@xiaomi.com>
+References: <20261031090041.58574-1-ridong.chen@linux.dev>
+ <20261031090041.58574-3-ridong.chen@linux.dev> <aufpQS0XL-CD9YW_@bogon>
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <aufpQS0XL-CD9YW_@bogon>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
 
-Critical: 0 · High: 0 (1) · Medium: 1 (1) · Low: 1
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+On 11/2/2026 9:37 AM, Baoquan He wrote:
+> On 10/31/26 at 05:00pm, Ridong Chen wrote:
+>> From: Ridong Chen <chenridong@xiaomi.com>
+>>
+>> Move include/trace/events/vmscan.h to mm/trace_vmscan.h so that the
+>> tracepoints can be extended to reference vmscan-internal structures such
+>> as struct scan_control, which is not visible outside mm/.  This mirrors
+>> what several other subsystems already do with their trace headers (e.g.
+>> fs/fuse/fuse_trace.h, fs/gfs2/trace_gfs2.h, fs/lockd/trace.h).  As they
+>> do, set TRACE_INCLUDE_PATH to "." and add mm/ to the include path of
+>> vmscan.o, the only user that defines CREATE_TRACE_POINTS.
+>>
+>> No functional change.
+>>
+>> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+>> Reviewed-by: Barry Song <baohua@kernel.org>
+>> ---
+>>   MAINTAINERS                                        | 2 ++
+>>   mm/Makefile                                        | 1 +
+>>   mm/shrinker.c                                      | 2 +-
+>>   include/trace/events/vmscan.h => mm/trace_vmscan.h | 4 ++++
+>>   mm/vmscan.c                                        | 2 +-
+>>   5 files changed, 9 insertions(+), 2 deletions(-)
+>>   rename include/trace/events/vmscan.h => mm/trace_vmscan.h (99%)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index aaf2825ac945..2ad01107fa05 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -17653,6 +17653,7 @@ F:	Documentation/admin-guide/mm/multigen_lru.rst
+>>   F:	Documentation/mm/multigen_lru.rst
+>>   F:	include/linux/mm_inline.h
+>>   F:	include/linux/mmzone.h
+>> +F:	mm/trace_vmscan.h
+>>   F:	mm/vmscan.c
+>>   F:	mm/workingset.c
+>>   
+>> @@ -17802,6 +17803,7 @@ R:	Shakeel Butt <shakeel.butt@linux.dev>
+>>   R:	Lorenzo Stoakes <ljs@kernel.org>
+>>   L:	linux-mm@kvack.org
+>>   S:	Maintained
+>> +F:	mm/trace_vmscan.h
+>>   F:	mm/vmscan.c
+>>   F:	mm/workingset.c
+>>   
+>> diff --git a/mm/Makefile b/mm/Makefile
+>> index 2a3ec53d62ee..277b97f7f8d7 100644
+>> --- a/mm/Makefile
+>> +++ b/mm/Makefile
+>> @@ -32,6 +32,7 @@ KCOV_INSTRUMENT_vmstat.o := n
+>>   KCOV_INSTRUMENT_failslab.o := n
+>>   
+>>   CFLAGS_init-mm.o += -Wno-override-init
+>> +CFLAGS_vmscan.o += -I$(src)
+> 
+> One nit:
+> 
+> Does it really need the above line? It affects mm/shrinker.c too, did your
+> shrinker.o building fail?
+> 
+> Seems it's redundant because kbuild adds -I$(src) -I$(obj) for every object
+> in the directory since commit cdd750bfb1f7 ("kbuild: remove 'addtree' and
+> 'flags' magic for header search paths"). Please correct me if I am
+> wrong.
+> 
 
-- [Medium] The new netns_load_egress_bpf() calls inside
-  test_tc_redirect_neigh() leave the test thread in the test runner's…
-- [Low] No selftest runs the new rejection branch in
-  __bpf_redirect_neigh() (skb_mac_header_len(skb) < ETH_HLEN ||…
+Hi Baoquan,
 
-Pre-existing issues:
-- [High] The patch closes the ETH_HLEN pull BUG only in
-  __bpf_redirect_neigh().
-- [Medium] __bpf_redirect_neigh() now linearizes only ETH_HLEN bytes,
-  then does skb_pull(ETH_HLEN) and skb_reset_network_header(), and…
+Thanks for the review.
 
---
+The line is needed for vmscan.o, and mm/shrinker.c is fine without it,
+because the two files include trace_vmscan.h in different ways.
 
-bpf: Fix skb_pull() BUG in __bpf_redirect_neigh()
+mm/shrinker.c only does a plain #include "trace_vmscan.h". The lookup
+starts from mm/, where the header lives, so no -I is needed.
 
-This commit hardens __bpf_redirect_neigh() before it reads and pulls the
-Ethernet header. The MAC header length (network_header - mac_header) must
-now be at least ETH_HLEN, and pskb_may_pull() must make the header linear.
-It also adds tc egress coverage to the tc_redirect_neigh selftest.
+mm/vmscan.c defines CREATE_TRACE_POINTS before including the header.
+In that case <trace/define_trace.h>, included at the end of
+trace_vmscan.h, includes the header again to generate the tracepoint
+definitions:
 
-Link: https://lore.kernel.org/all/2a0f5ff1d8db81b07fc4b344b8e68e3505fcbf36f72a471d1678b2f1cecd881b@mail.kernel.org/
-Link: https://lore.kernel.org/netdev/20261027082604.1485903-1-edumazet@kernel.org/
+#include TRACE_INCLUDE(TRACE_INCLUDE_FILE)  /* -> "./trace_vmscan.h" */
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 70dc621672f2e..4925f3e355d46 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2432,10 +2432,14 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
->  static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev,
->  				struct bpf_nh_params *nh)
->  {
-> -	struct ethhdr *ethh = eth_hdr(skb);
-> +	struct ethhdr *ethh;
->  
->  	if (unlikely(skb->mac_header >= skb->network_header))
->  		goto out;
-> +	if (unlikely(skb_mac_header_len(skb) < ETH_HLEN ||
-> +		     !pskb_may_pull(skb, ETH_HLEN)))
-> +		goto out;
+This #include is in include/trace/define_trace.h, so the lookup starts
+from include/trace/ and only finds the header through -I. Without the
+flag, vmscan.o fails to build:
 
-[Severity: High]
-This is a pre-existing issue and was not introduced by this patch. Still,
-the skb from the commit message's own reproducer looks like it can BUG
-through the sibling redirect paths. Is that expected?
+./include/trace/define_trace.h:118:42: fatal error: ./trace_vmscan.h: No such 
+file or directory
 
-After vlan pop_eth and bpf_skb_change_head(skb, 1, 0) on the nonlinear
-AF_PACKET skb, len is 8193, data_len is 8192, and one L2 byte is linear.
-__bpf_redirect_common() only checks:
+As for cdd750bfb1f7, it doesn't add -I$(src) for every build. kbuild
+only adds -I$(src) -I$(obj) automatically when building with O=
+(see "ifdef building_out_of_srctree" in scripts/Makefile.lib). So
+with O= the line is indeed redundant and vmscan.o builds fine without
+it, but a plain in-tree "make" fails with the error above. The
+explicit flag keeps both working.
 
-net/core/filter.c:__bpf_redirect_common() {
-    ...
-	if (unlikely(skb->mac_header >= skb->network_header || skb->len == 0)) {
-    ...
-}
+To be honest, I had the same worry at first: I thought every .c file
+that includes the header would need a Makefile change. That's why v3
+used a relative TRACE_INCLUDE_PATH (../../mm) instead. Steven corrected
+me and pointed out that the proper way is TRACE_INCLUDE_PATH "." plus
+-I$(src) for the one object that defines CREATE_TRACE_POINTS [1]. That
+turned out to need only this one line. Thanks again to Steven for
+that.
 
-so the 1-byte MAC header gets through there. With BPF_F_INGRESS:
+[1] https://lore.kernel.org/all/20261014124914.21c21559@gandalf.local.home/
 
-bpf_redirect(BPF_F_INGRESS)
-  __bpf_rx_skb()
-    dev_forward_skb_nomtu()
-      __dev_forward_skb2()
-        eth_type_trans()
-          eth_skb_pull_mac()
-            skb_pull_inline(skb, ETH_HLEN)
-              __skb_pull() -> BUG()
 
-Without BPF_F_INGRESS the path is:
-
-__bpf_tx_skb()
-  dev_queue_xmit(lo)
-    loopback_xmit()
-      eth_type_trans()
-
-veth goes through __dev_forward_skb() and ends the same way.
-bpf_clone_redirect() takes the same __bpf_redirect() path. On lo, a plain
-TC_ACT_OK instead of bpf_redirect_neigh() also reaches
-loopback_xmit()->eth_type_trans().
-
-In each case the 14 <= 8193 length check passes. __skb_pull() then leaves
-len at 8179, which is below data_len (8192), and hits BUG().
-
-The commit message calls this a follow-up to Eric's short link-layer
-header fixes. This tree has no pskb_may_pull() in eth_type_trans() or
-eth_skb_pull_mac(), and bpf_skb_change_head() still accepts a header
-shorter than ETH_HLEN.
-
-Should one of those two places be hardened as well? Otherwise stable
-backporters may assume this change fully closes the reproducer.
-
-> +	ethh = eth_hdr(skb);
->  	bpf_push_mac_rcsum(skb);
->  	if (is_multicast_ether_addr(ethh->h_dest))
->  		goto out;
-
-[Severity: Medium]
-This isn't a bug introduced by this patch, but only ETH_HLEN bytes are
-made linear here. After skb_pull(skb, sizeof(*ethh)) and
-skb_reset_network_header(), can the L3 header sit entirely in frags?
-
-__bpf_redirect_neigh_v4() reads the header directly from skb->data:
-
-net/core/filter.c:__bpf_redirect_neigh_v4() {
-	const struct iphdr *ip4h = ip_hdr(skb);
-    ...
-			.flowi4_dscp  = ip4h_dscp(ip4h),
-			.flowi4_oif   = dev->ifindex,
-			.flowi4_proto = ip4h->protocol,
-			.daddr	      = ip4h->daddr,
-			.saddr	      = ip4h->saddr,
-    ...
-}
-
-__bpf_redirect_neigh_v6() does the same with ipv6_hdr(skb) for flowinfo,
-nexthdr, saddr and daddr. When the route has no gateway,
-bpf_out_neigh_v4()->ip_neigh_for_gw() reads ip_hdr(skb)->daddr again.
-
-Take an AF_PACKET SOCK_RAW frame where prepad + len >= PAGE_SIZE.
-packet_snd() and packet_alloc_skb() make only hard_header_len (14) bytes
-linear. The frame passes both new checks, and skb_pull(14) leaves
-skb_headlen() == 0.
-
-Wouldn't the 20 or 40 byte L3 reads then come from past skb->tail, from
-the tailroom or skb_shared_info? Those bytes would become the flowi4 or
-flowi6 keys and drive the neighbour lookup. No pop_eth or change_head is
-needed, just bpf_redirect_neigh() on such a packet.
-
-Would a pskb_may_pull() of sizeof(struct iphdr) or sizeof(struct ipv6hdr)
-before calling the v4/v6 helpers be appropriate?
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-> index af8968b89ad7c..829f84fb64a30 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-> @@ -407,6 +407,26 @@ static int netns_load_bpf(const struct bpf_program *src_prog,
->  	return -1;
->  }
->  
-> +static int netns_load_egress_bpf(const struct bpf_program *prog,
-> +				 const char *ns, int ifindex)
-> +{
-> +	LIBBPF_OPTS(bpf_tc_hook, qdisc);
-> +	struct nstoken *nstoken;
-> +	int err;
-> +
-> +	nstoken = open_netns(ns);
-> +	if (!ASSERT_OK_PTR(nstoken, "setns egress"))
-> +		return -1;
-> +
-> +	QDISC_CLSACT_CREATE(&qdisc, ifindex);
-> +	XGRESS_FILTER_ADD(&qdisc, BPF_TC_EGRESS, prog, 0);
-> +	close_netns(nstoken);
-> +	return 0;
-
-[ ... ]
-
-> @@ -1055,6 +1075,12 @@ static void test_tc_redirect_neigh(struct netns_setup_result *setup_result)
->  			   skel->progs.tc_chk, setup_result))
->  		goto done;
->  
-> +	if (netns_load_egress_bpf(skel->progs.tc_egress, NS_SRC,
-> +				  setup_result->ifindex_src) ||
-> +	    netns_load_egress_bpf(skel->progs.tc_egress, NS_DST,
-> +				  setup_result->ifindex_dst))
-> +		goto done;
-> +
->  	if (!ASSERT_OK(set_forwarding(false), "disable forwarding"))
->  		goto done;
-
-[Severity: Medium]
-Is the test thread still in NS_FWD when set_forwarding(false) runs here?
-
-test_tc_redirect() runs the tests in a separate pthread. open_netns()
-saves the original namespace with:
-
-tools/testing/selftests/bpf/network_helpers.c:open_netns() {
-    ...
-	token->orig_netns_fd = open("/proc/self/ns/net", O_RDONLY);
-    ...
-}
-
-/proc/self resolves to the thread-group leader. So the saved fd points to
-the runner's root netns, not NS_FWD, which the worker entered at the top
-of test_tc_redirect_neigh().
-
-The close_netns() calls in netns_load_egress_bpf() therefore setns() the
-worker back into the root netns. set_forwarding(false) then writes the
-ipv4 and ipv6 forwarding sysctls, and those resolve through
-current->nsproxy->net_ns.
-
-Would this turn off forwarding in the host namespace and leave NS_FWD
-unchanged? Nothing restores the setting afterwards. The test would also no
-longer check redirect_neigh with forwarding disabled in NS_FWD.
-
-test_tc_redirect_peer_ing() already has the same pattern via
-netns_attach_nk(). Any of these would avoid it:
-
-- attach the egress programs before entering NS_FWD
-- re-enter NS_FWD before calling set_forwarding()
-- have open_netns() save /proc/thread-self/ns/net
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_tc_neigh.c b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-> index de15155f2609f..e0b6c14a3935e 100644
-> --- a/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-> @@ -133,4 +133,14 @@ int tc_src(struct __sk_buff *skb)
->  	return bpf_redirect_neigh(IFINDEX_DST, NULL, 0, 0);
->  }
->  
-> +SEC("tc")
-> +int tc_egress(struct __sk_buff *skb)
-> +{
-> +	if (skb->mark)
-> +		return TC_ACT_OK;
-> +
-> +	skb->mark = 1;
-> +	return bpf_redirect_neigh(skb->ifindex, NULL, 0, 0);
-> +}
-
-[Severity: Low]
-This isn't a bug, but does any packet in this test reach the new rejection
-branch in __bpf_redirect_neigh()?
-
-This program sees ordinary locally generated TCP/ICMP packets at veth
-egress. __dev_queue_xmit() has already reset mac_header there, so
-skb_mac_header_len() is 14 and the header is linear. These packets pass
-both the old and the new checks, so removing the new check would go
-unnoticed.
-
-tc_redirect_neigh is also registered only for veth:
-
-	RUN_TEST(tc_redirect_neigh, MODE_VETH);
-
-so the netkit case mentioned in the changelog is not exercised.
-
-Would a negative test be worth adding? For example,
-bpf_skb_change_head(skb, 1, 0) on a nonlinear skb followed by
-bpf_redirect_neigh(), expecting a drop.
+> Other than the nit, this patch looks good to me,
+> 
+> Reviewed-by: Baoquan He <baoquan.he@linux.dev>
+> 
+> Thanks.
+>>   
+>>   mmu-y			:= nommu.o
+>>   mmu-$(CONFIG_MMU)	:= highmem.o memory.o mincore.o \
+>> diff --git a/mm/shrinker.c b/mm/shrinker.c
+>> index 4fb424e721bc..4fbdade6d2f6 100644
+>> --- a/mm/shrinker.c
+>> +++ b/mm/shrinker.c
+>> @@ -3,7 +3,7 @@
+>>   #include <linux/rwsem.h>
+>>   #include <linux/shrinker.h>
+>>   #include <linux/rculist.h>
+>> -#include <trace/events/vmscan.h>
+>> +#include "trace_vmscan.h"
+>>   
+>>   #include "internal.h"
+>>   
+>> diff --git a/include/trace/events/vmscan.h b/mm/trace_vmscan.h
+>> similarity index 99%
+>> rename from include/trace/events/vmscan.h
+>> rename to mm/trace_vmscan.h
+>> index 8a872990b4be..ad90f0e9bf2e 100644
+>> --- a/include/trace/events/vmscan.h
+>> +++ b/mm/trace_vmscan.h
+>> @@ -648,4 +648,8 @@ TRACE_EVENT(mm_vmscan_kswapd_clear_hopeless,
+>>   #endif /* _TRACE_VMSCAN_H */
+>>   
+>>   /* This part must be outside protection */
+>> +#undef TRACE_INCLUDE_FILE
+>> +#undef TRACE_INCLUDE_PATH
+>> +#define TRACE_INCLUDE_PATH .
+>> +#define TRACE_INCLUDE_FILE trace_vmscan
+>>   #include <trace/define_trace.h>
+>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>> index 9959ca158ce8..79d2d614afd0 100644
+>> --- a/mm/vmscan.c
+>> +++ b/mm/vmscan.c
+>> @@ -71,7 +71,7 @@
+>>   #include "swap.h"
+>>   
+>>   #define CREATE_TRACE_POINTS
+>> -#include <trace/events/vmscan.h>
+>> +#include "trace_vmscan.h"
+>>   
+>>   struct scan_control {
+>>   	/* How many pages shrink_list() should reclaim */
+>> -- 
+>> 2.43.0
+>>
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/bpf_redirect_neigh_short_linear.v2.r0.20261028080316-1%40mojatatu.com
+Best regards
+Ridong
+
