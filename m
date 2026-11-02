@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793601763;
-	b=NF+sy16k1YB5tSN3D09yJW7ccjOGluQk7SOJG/MHNojjZXn+6GaevcnKJyNYjFqWdjBA
-	 QodiGtlnMBebhzANkKlO5gU2BaZr9GOEeutlsuKV9irnqsFnmKObq8SGaK/TxoxfanXZN
-	 P+LqcT6Mo2/chn2WNO3WTcq9mX5wReW6Cp9TZwPnKigLOcHjDdCWt8BOsgnu/+6NHQWe0
-	 WB8mwUfH7sjfFrOXwh3Fo0Xx2Xb3x+tB/LBylW1ejKf5DxQ8vOg+Vb9xZHPUoFzticPIF
-	 I3C/4uiRltDwbh+ioP28PgFtrtHosxrc8nOEOQNJov+SPunh4aEiIp52TfB2i4LazBw==
+	t=1793601770;
+	b=Xn6ek9PVNqpGbmCUhYI/DT3LuEa3Az0jtDnw3v7NIzWST6B2XI9p6M+x9dXs3PT96Lg0
+	 FyjBayNt8X1pa7pr+WsPIJPxcNnfQCHjYdaA7xXFOO3G5ptL/+IaJBL9gAwr9qavh23lX
+	 kYtJ3iZV/jMF8vTamjkf1MQf81LA+upvAisnQczYaE84aP7bWvcbw3xVQx4ZGoxVPtd5c
+	 rUSYkuKZPcznERotw8JoxXzdj39jBvX3OPfLUnqDn9c8lM9geWx7/DeJsRNJJGkhW7yJI
+	 9c2t6VZsRbf9vKcpL4auikq/7oIeFefRQ8+T36wXxPGZQpHhpPvYSN02LGuisufnU3g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793601763;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793601770;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=QoMI/FZCQa4u5nLEyUZ1q2lXAGyIWuDungF213DoDi0=;
-	b=RyZ5vFg2fmiW6GrTOymmIuDZm+OEjAxDLUUizgd0LlamFiNgiWncDDdlkYb/79t9D7pD
-	 W6Ic0oFBpkMpz5drNdLmahP2vcJwqPfdWMNIvLIH4/Fkhk+SGov/hIqMeA9wSsQRNAHck
-	 5hGP5e3XERao3dSJj3c9qZ383QfqHLpeA1wa6QZwRPT6F4D7KScEuZhtiP69w2Ef5W97i
-	 CZEdoa2VuW3rii/FDMgid2Ew4LzuSVjpVaA5lNK28kuxrRrXc9jSg0+x2DH2SdIrnvnOn
-	 mBA527/M0ZeovuPXi5t0l2YGoZN0Q9o4accBsXQ9D2Lw0JnQzY1sCP11ZfAtwTno4Ig==
+	bh=e4jmZWky7hVm1k8FDlf/p1uedI0muHl4WyEIYXBo6YQ=;
+	b=hEg3v066IkjOVT6elUYw+npQAMjC3SZTK4CJ6GTe2iL8Up024nUU3aIELFWQnJg8tkvI
+	 bl9xkoJeOC2BxJculF6NgbvbNIh6nJ4nPcTlJXWpuiLnbr5YeJ9dC+nuH2171A/By2Udw
+	 vX++WoPthe9P1HfAYYcOr3LAJMgfShiq0wtPcCxRiBsG55dXNnZ8gUulHTz2VhoYC3sUK
+	 VEfzzNJ2VCFqhSdZ3M4ZF61FHj75TU751TzlLq/yqk3R7f5Z9HzS3Asuq8of2cx4XpOBc
+	 UPKDdfvEDwEqjeWLPlfywj/1GmhbQX+5O12Pxw94XzS31kDbhlicJ+ZgDMsfdwj71Bw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VdlzR44r;
-	arc=none smtp.remote-ip=209.85.214.179
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="q/Z0MBoO";
+	arc=none smtp.remote-ip=209.85.214.171
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C859B606A326
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 06:42:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C859B606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E981D606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 06:42:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E981D606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VdlzR44r
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2e812e2b31bso15146585ad.3
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 22:42:42 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q/Z0MBoO
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e8da6ef7ddso14684145ad.3
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 22:42:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793601762; x=1794206562; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793601769; x=1794206569; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=QoMI/FZCQa4u5nLEyUZ1q2lXAGyIWuDungF213DoDi0=;
-        b=VdlzR44ru3qY4hbviz5lFTzRLBOHK5oUb5cvoOFdqOTXbPXSNMyz6K/KAOyHPbXfik
-         SB3gpYUQ2AUJtHJ6CxY4g76HkLJd/ur8nUNcYFeYXLKIqCht/MOcI0p3liqMwgW6Ijeu
-         2vggItjzQVcCG+c1umrduULieHb4ovNK/uU9JT37+UcnWeDZmVK3cjT9Vd9oyK9tKBPv
-         lbNFqHiFsW3GyJi5utMu02V4AlXOiVEwJXw3He5clT2uMQJkqe968ViJSwdO0cXtI6b3
-         zY9XyR6vc7JKgvNnWd4h5wWaDD0hhrspTlMQ+sU/Ukl7qC1f6z7xUiJOgKus82pqPwdv
-         ydng==
+        bh=e4jmZWky7hVm1k8FDlf/p1uedI0muHl4WyEIYXBo6YQ=;
+        b=q/Z0MBoOiQ0BWd57rz3HG5qyBBeRUyU8TAHiqwbf28zQCgBrWUCZrLxlA2YC8MLZu7
+         sTRtfYMRcAud+lvX+VnDqoAOppKHYyhb9ME6saYSEi3/pwBPpwcgvTJq8Sbo5Tl/29MX
+         XBM70BoL37rwBjfRsZlreopHZLPWy2VBA023y4Bq3WiFGJTk8RVhVtrjX3vsh+S0JKrg
+         oUNzcr+Xbh4JFOSvwIv/2UAIeej6hJRlBF1Ni8dSLG/cMzl406sJn77dy1alocm6ptWl
+         JpkTaPEJequMERuVByKWtY184eDl10hoZryTVJxBB/xWLYhrUWVc9yRrr1akH1iG8KQa
+         Ae3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793601762; x=1794206562;
+        d=1e100.net; s=20260707; t=1793601769; x=1794206569;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QoMI/FZCQa4u5nLEyUZ1q2lXAGyIWuDungF213DoDi0=;
-        b=Vimru8VDs/8HoYdkSEsiVDcmVWRLYIgouVmS5kHC1Hl4JZ/Lta8Cjw4NgaMFyQeS3y
-         h7h8+lbKUL8WWBvpPkHI7qjOoW34ox8J44k4+H95yOL8Y85/SQH32RXOrwaEpDH0s70M
-         7uacCcYzQyVSWmzQ5BZmaN+Br5m3JIWbmWwFoINH2gqVk0nRkUNodR6jvh44USIM+NA5
-         IKMk/MaiEuATmYADRku1g5w35ZS1SkWEbQTQg/fcYFklDkd6+pA5dKPmb7BVeK658fno
-         45PgA0N9qM5yBXrjOCw01sB70913jaoutUTR3ZrWSq9xxIRqRvpzBZH5kx04Hm0m71l+
-         /idA==
-X-Gm-Message-State: APuU4Z9snA6jUj+YdGsaOA7SJHFQrKOd72zK3IzrYbnEyIahY3i0oq+c
-	YLjpBihROlAVIU6mKGE42k9CMP2nnH2ezXxgoML6Qa6a6UbAjS1QdSIicgZmwQ==
-X-Gm-Gg: AYBFou1tmo8AlJOE9ByljTAlBwCz2NdNevVSeyvbDIIij5bOWOb48CvmT9+sJ0BwS6t
-	0P5tAy2ffpuSxNiw0Vr4nSKdeExPNirrBlYnoSfLkQVtZc9lblk8GhxbqEL1yBon9li7zmYlOAF
-	hllQBg8xQEkcC20rTw6w+u5iWvmLYnZqTr5zbBeFeRV0T2v/xDb1wU8iOHv3jwiVVuI9ejnPqKO
-	zVJl05l8j2qnQHZf+SJrfisW/Ro9nGrQI3s5t/jhS4evtA+aE+HXSALshV3ZcpOT6zGFk1EBWfp
-	CfLpFsrQD8agHSgx9irbW8lW9VVKONp/t6T41KXt4xvbTR2TqAg1KeF3iahe4ATrvXXewbSLjVq
-	m8F/wAHX2j0AVC/9tw34ZQTJtpQz7hzgOYh9z9SE+ixNrbkcG2UzRNJ+OkHzvN1DVAD6OXHwqu4
-	iojlYqjBkFvV3s3gsQjoOOFfhGBnbbxFslpmB07TqOoyOf0+SA1Ywh5kMiLwpibb9hh4Y5QCLlB
-	DK2bMMYqSZJsidSvhRaCR8A/nR99EnOKeo5Kt0pNbk+OGIvxSAhYQYxNJVRLyf6PckAvO19TD3p
-	I+dmQmYN9V77CfhD151r9MlGJz57HcOx40BlRkCf1SYj3B2rqlJELF5sMFkbloGdhQiYzKhcMFk
-	gMlY5RrXs/ehQKBXxGhGkELMUbTr+3eUPuGfHhoSlIdCxxiBZJy/JmssYVEYbT4knRu6wzi9x7A
+        bh=e4jmZWky7hVm1k8FDlf/p1uedI0muHl4WyEIYXBo6YQ=;
+        b=HGv4SN2gtkxZP5u0ZMe0MwDZxEBFeJUvR6lq+TRyl54ntkdqBtCRfXFdrn720BJj0V
+         Ty1jUDJSKpgownITZC3VX9XW90ZgmNh4ar1FV9xefJ3yMyk1+BsEhlhLrjhC6scrtDS1
+         mrcD5WO6ldR+128Et+mU7u2m6lbJUS50G1QVZxpfeV58X36ET/m0iwiI/8ac10Po9pfm
+         seeXth6H2ILKPfkxGpgi+AzpGeRlKv5sYXNyWfI857buuDj6AYdrorpyO97zuCivdvlC
+         6HROy3qocKC0iUeoA+nZ/SrRCw11oR6N3H5HOY3HB7JjvZc6FK9phAcPk2xIN2HlEYyZ
+         Rg8g==
+X-Gm-Message-State: APuU4Z+d//1oXyGDrhZ6LKtyTkw0e7Xi9YEVgFKqb3h2b1ghaZhvhh8j
+	FUvlxLtSjgcrtXBgoGLXvpuDx2LcvhtCZgYTZBpUJBfHVd7dCsQCNtVwSmhHVg==
+X-Gm-Gg: AYBFou2FVEa8DJXTM+goXFrrGQSVfp3x+LkSHQI11W1RzNN4ZjU+Sv0OkXE8BIfRQZC
+	S2b1gTtkkFT6q3o8LLltEvon1z8X3bM8nA2cuZBe6raE25T1fuuZeLBJgng83GuE8Z5D1MV26iH
+	YC5Xe/6CFaizoA9lJtfLZ6eZ7nDZncjEVaaUaQqMhqNUAZVoNMMYPU4Ed9VxsRsevZHg6Ah7H0E
+	7Uw4+LiwpP//P3S+AgbHWMUADK0frxZL6J545wj810DsG4vKdS7fh1dHmSV5JQTg00ifPBDBHCr
+	GmY20WHpXiVFWaiPfxOAWahil1sFCQHyaZIlfBycP6hHxGemYmqB2j7SOoslFW8umL+tTTSqYMt
+	oWdIbJBISoAGfVZjkaBoXjazWR+LNYc/mR1R3RxrBXZ+QzDkDUqCMw777rcWDFNZJqhez0r0r3c
+	46ayrpzhc06tnJM1pDlNPGhifwA+qNHMvD2gheZaqUOhjUXNSzAW3+WV4w0pAz5spbcmuZli0BW
+	xafO56IAxzOhOc5/ufgVp/BVNcM5FCmru0cKfkWUbNePsL5SzLXluCs7Q3KEPzuoUW8f+S4phHI
+	ffWTQe2DYtfN1zQEo2A/qzp8DxCZ0MMLl6FfLI9wTeEswHXzwARV6uI7Vuq7+K5zv+wkih5pEXh
+	pCggF02X3KK+8GUTx+xFhBrNotoMuD4IOZWP0mqDR8HYhmmQGHDKL5mrtPZeNsasZ5Z+bx71n5w
 	==
-X-Received: by 2002:a17:902:db0f:b0:2e9:87a1:98b5 with SMTP id d9443c01a7336-2eb3649b22amr89248675ad.14.1793601761891;
-        Sun, 01 Nov 2026 22:42:41 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb392b15f0sm23755825ad.73.2026.11.01.22.42.40
+X-Received: by 2002:a17:902:ea03:b0:2e6:943:39de with SMTP id d9443c01a7336-2eb3643ef53mr93249365ad.30.1793601769121;
+        Sun, 01 Nov 2026 22:42:49 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb39052d7csm22450005ad.8.2026.11.01.22.42.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 22:42:41 -0800 (PST)
+        Sun, 01 Nov 2026 22:42:47 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 1/2] bpf: Don't move a MAP_FIXED address in arena_get_unmapped_area()
-Date: Mon,  2 Nov 2026 06:42:30 +0000
-Message-ID: <20261102064231.2153879-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: Run arena_mmap serially and test MAP_FIXED addresses
+Date: Mon,  2 Nov 2026 06:42:31 +0000
+Message-ID: <20261102064231.2153879-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261102064231.2153879-1-alexei.starovoitov@gmail.com>
 References: <20261102064231.2153879-1-alexei.starovoitov@gmail.com>
@@ -104,96 +104,101 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The user range of an arena must not cross a 4 GiB boundary. Thus
-arena_get_unmapped_area() asks the mm for 2 * len bytes and rounds the
-result up if necessary. This is correct only if the mm finds a free range.
-With MAP_FIXED the mm does no search and returns addr. For
-MAP_FIXED_NOREPLACE, do_mmap() also sets MAP_FIXED.
+Each arena reserves 4 GiB of vmalloc space. The KASAN shadow of arenas from
+parallel tests can exhaust the memory of a CI VM. Thus commit a14f9ba080c1
+("selftests/bpf: Run arena tests serially") made arena_* and libarena*
+serial. Do the same for arena_mmap, which the commit below added later.
 
-With MAP_FIXED the arena is not at addr after round_up(). Thus mmap()
-removes mappings outside the range from addr to addr + len. It keeps a part
-of those in this range. Also, round_up() can wrap to address 0, and the
-test for address 0 is before it.
+Add four subtests for "bpf: Don't move a MAP_FIXED address in
+arena_get_unmapped_area()". Test that mmap() with MAP_FIXED or
+MAP_FIXED_NOREPLACE fails with EINVAL if the range crosses a 4 GiB
+boundary. Test that mmap() with MAP_FIXED also fails for a range that wraps
+and for a map_extra range that ends above TASK_SIZE. Today
+arena_map_alloc() accepts such a map_extra. map_extra_last_pages also
+passes if the kernel refuses the map, because no task can map this range.
 
-The arch code gets twice the length of the mapping. Thus it can refuse a
-valid MAP_FIXED range. On s390 the arch code also grows the page table for
-the range. With the double length it can omit this step for a valid range.
+The arch code gets a range before the arena code tests it for a crossing.
+For the last two ranges LoongArch returns -EINVAL, and powerpc with the
+hash MMU returns -ENOMEM. There the two subtests do not reach that test. On
+the other architectures with arenas, the arena code returns -EINVAL or
+__get_unmapped_area() returns -ENOMEM. Thus the two subtests accept both
+errnos. All these errors occur before mmap() changes a mapping.
 
-The test for a crossing is not exact. Because ret is a long, ret >> 32
-extends the sign, but the other side is unsigned. The sides are never equal
-for an address with bit 63 set, and round_up() always runs. Such user
-addresses exist on s390. arena_map_alloc() does the same test with a u64.
+Two other changes of that patch have no subtest. With MAP_FIXED the arch
+code gets len and not 2 * len. A 64-bit task on x86, arm64 or riscv does
+not see this. LoongArch, s390 and powerpc with the hash MMU compare the end
+of the range with different limits. In arena_mmap the unsigned ret changes
+only the errno of map_extra_last_pages, which accepts both.
 
-With MAP_FIXED, pass len to the mm. Return -EINVAL if the range crosses a
-boundary, as for address 0. Make ret unsigned, so that only these ranges
-get the error. On x86-64, if round_up() gives address 0 today, mmap() now
-fails with -EINVAL or with -ENOMEM from the mm. Today mmap() can also fail
-for the address after round_up(), for example with -ENOMEM, -EEXIST, -EPERM
-or -EBUSY.
-
-Without MAP_FIXED the mm must still find a free range of 2 * len bytes
-inside the address space of the task. The range after round_up() is inside
-it, and round_up() cannot wrap. An address with bit 63 set now moves only
-if its range crosses a boundary.
-
-For an arena, libbpf uses MAP_FIXED only with map_extra, and
-arena_map_alloc() refuses a map_extra range that crosses a boundary. A
-subsequent mmap() must use the range of the first mmap(). For mmap() of the
-map fd, this range comes from arena_get_unmapped_area(), thus it crosses no
-boundary. arena_map_alloc() still accepts a map_extra above TASK_SIZE, and
-mmap() of such an arena fails.
-
-Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
+Fixes: 14d3e5bf9ffe ("selftests/bpf: Test the length and the address of an arena mmap()")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/arena.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/arena_mmap.c     | 36 +++++++++++++------
+ 1 file changed, 26 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 0b1ec3306ea4..ec2bda1a6ebf 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -7,6 +7,7 @@
- #include <linux/irq_work.h>
- #include "linux/filter.h"
- #include <linux/llist.h>
-+#include <linux/mman.h>
- #include <linux/btf_ids.h>
- #include <linux/vmalloc.h>
- #include <linux/pagemap.h>
-@@ -630,7 +631,7 @@ static unsigned long arena_get_unmapped_area(struct file *filp, unsigned long ad
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_mmap.c b/tools/testing/selftests/bpf/prog_tests/arena_mmap.c
+index 2babc9ecf182..f55d950720f1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_mmap.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_mmap.c
+@@ -5,9 +5,12 @@
+ 
+ #define ARENA_PAGES 8
+ 
+-static void test_refused(int pages, int flags, int err)
++/* err == 0: the range ends above TASK_SIZE. EINVAL or ENOMEM, this depends on the arch */
++static void test_refused(__u64 map_extra, __u64 addr, int pages, int flags, int err)
  {
- 	struct bpf_map *map = filp->private_data;
- 	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
--	long ret;
-+	unsigned long ret;
+-	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .map_flags = BPF_F_MMAPABLE,
++		    .map_extra = map_extra);
+ 	void *area;
+ 	int fd;
  
- 	if (pgoff)
- 		return -EINVAL;
-@@ -647,7 +648,13 @@ static unsigned long arena_get_unmapped_area(struct file *filp, unsigned long ad
- 			return -EINVAL;
+@@ -16,22 +19,35 @@ static void test_refused(int pages, int flags, int err)
+ 		test__skip();
+ 		return;
  	}
++	/* No task can map this range, so the kernel can also refuse the map. */
++	if (fd < 0 && map_extra)
++		return;
+ 	if (!ASSERT_GE(fd, 0, "bpf_map_create"))
+ 		return;
  
--	ret = mm_get_unmapped_area(filp, addr, len * 2, 0, flags);
-+	/*
-+	 * Without MAP_FIXED the mm finds a free range. Ask for twice the
-+	 * length, so that there is room for round_up(). With MAP_FIXED the mm
-+	 * does no search, and the caller wants this address. Thus the range
-+	 * cannot move.
-+	 */
-+	ret = mm_get_unmapped_area(filp, addr, flags & MAP_FIXED ? len : len * 2, 0, flags);
- 	if (IS_ERR_VALUE(ret))
- 		return ret;
- 	if (!ret)
-@@ -655,6 +662,8 @@ static unsigned long arena_get_unmapped_area(struct file *filp, unsigned long ad
- 		return -EINVAL;
- 	if ((ret >> 32) == ((ret + len - 1) >> 32))
- 		return ret;
-+	if (flags & MAP_FIXED)
-+		return -EINVAL;
- 	return round_up(ret, SZ_4G);
+-	area = mmap(NULL, pages * getpagesize(), PROT_READ | PROT_WRITE,
+-		    MAP_SHARED | flags, fd, 0);
+-	if (ASSERT_EQ(area, MAP_FAILED, "mmap"))
+-		ASSERT_EQ(errno, err, "errno");
+-	else
++	area = mmap((void *)(unsigned long)addr, pages * getpagesize(),
++		    PROT_READ | PROT_WRITE, MAP_SHARED | flags, fd, 0);
++	if (!ASSERT_EQ(area, MAP_FAILED, "mmap"))
+ 		munmap(area, pages * getpagesize());
++	else if (err || errno != ENOMEM)
++		ASSERT_EQ(errno, err ?: EINVAL, "errno");
+ 	close(fd);
  }
  
+-void test_arena_mmap(void)
++void serial_test_arena_mmap(void)
+ {
++	__u64 page = getpagesize(), last = -(ARENA_PAGES * page);
++
+ 	if (test__start_subtest("long"))
+-		test_refused(ARENA_PAGES + 1, 0, E2BIG);
++		test_refused(0, 0, ARENA_PAGES + 1, 0, E2BIG);
+ 	if (test__start_subtest("address_0"))
+-		test_refused(ARENA_PAGES, MAP_FIXED, EINVAL);
++		test_refused(0, 0, ARENA_PAGES, MAP_FIXED, EINVAL);
++	if (test__start_subtest("crosses_4g"))
++		test_refused(0, (1ULL << 32) - page, ARENA_PAGES, MAP_FIXED, EINVAL);
++	if (test__start_subtest("crosses_4g_noreplace"))
++		test_refused(0, (1ULL << 32) - page, ARENA_PAGES, MAP_FIXED_NOREPLACE, EINVAL);
++	if (test__start_subtest("wraps"))
++		test_refused(0, -page, ARENA_PAGES, MAP_FIXED, 0);
++	if (test__start_subtest("map_extra_last_pages"))
++		test_refused(last, last, ARENA_PAGES, MAP_FIXED, 0);
+ }
 -- 
 2.55.0
 
