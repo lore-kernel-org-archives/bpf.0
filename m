@@ -1,47 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793638397;
-	b=QBYxoOdXkub88R4TAkcM9KxemccS6hJbuDCTZqw+Plon3S3CgTnNhGAQEKL5OtJWcOSs
-	 uxOFsyMJWA6qP8exz4MMoozl5eBYE7WL/v9XfLvQSEp1kNCtTMwptKkYUi2s8KZQnowr/
-	 NONGxLtbK61B5mbxWgZLd6ik88repJS6IqBR6ywDGxKCcvrjerVhUmQxZMQslnbT/qMZW
-	 6EUhmTFpe+e6lM0Fi5AlZvxoYFEb9G0UzjRQE2K1e3OH6cuNi37IGjmaCYs6sB0rJkCni
-	 LHoA7taARVzzjGnuVTAucpzM9ehhfHxUOOUJzjJuQYp33GRol2x0MNiOEAnbjiTK7cg==
+	t=1793638598;
+	b=kpsrN2mPs7z2VChlW7ZT4X5DCikTOUYkb+mtrqy/K+sb+cBb+VTNLgFXiGgovXqFZ/kg
+	 a+KTu6hodZh8iC4RPxnqU0DkEhOlJl2i88SS8UJ62Gdc+ikKKglzKFuFJN9Fziy5HTZHx
+	 2APs8WP9Nu8hPaExsE9iBmqcc3N1XiTW2ds3biHjC59vm8avHJ5th6E6q2PgQCQhD2zXy
+	 lqRpfZIUp0C8MUbGY+zUGyBDiJfrTI6uTQYi5nm2FklzYvbrPHU6nUWISVkJ3EhVgxfdJ
+	 ffMiQv3ManT08xk0mHNb1sBtwBWMumU5CjcCzDA7eRACdkcWz6QHQ7Qpqqwl3Hizw7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793638397;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=0S6zeVQB6JXDivuIwwZkxYqZ6mbJYmib3ujqs9acEWI=;
-	b=zWtcDMEVZKthpWInHNM0NlbTyg6ZVwK6yN8rY1ntQr28qIE/faGwXWKq+b32faUjVQsD
-	 EsK8LVjdgiEmElMYfdCfpJpNN6mQTFTjfQe5yCdZagxx3MrJOchoV3Bzf47NURpVE8oJW
-	 vCQ//EfTXcPMw0fsCOIIkDJvgZ0cQJiwJNxrDuAn7GcTO6MFUwC/gHGO6GdXIrBwwmomv
-	 u+Bx/FcEF3nuRSqheYpw0nzSw8SKx3e7TI0HUS2uRiOMKXWETOKw9opszvgvvYD8yAdGX
-	 1nhPGoedyoGiB/CQ6W6aR/0daNDY7SwQUAcXxb/p1yLyNe2G26oiA9hd5M/wpxjUUqA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793638598;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=fwjIWZZN+Xku/wuznq5Djc9dY6oT6GSmRAkG+xrsrHw=;
+	b=nnKoYLS72lwXPfTn2XuRNuGyz0vj4P2Quc67gFla/QQUT4um2+mG2oe6RTm7HTOGtwK/
+	 MT3vMgqegx1YF7EaSANxLsjZPxzOOGJCaRtPUxJ1bAuk6qTRCDGTFvvgN1eL0r9lhA1ai
+	 TSDDfsE0Y2FIldzYcyOGs/GuDu2WZq7SmPeXo4CnxE+usGoz6A2iegDNSMBJ/Dmj83P3M
+	 ofoMjcEEjlAS+2fbaz67Qnw1i/8N1RRUCgvTiGQx1i0ULn/LKjQjAajUvuBSfV7p4078z
+	 N8ErdMoBlQaZCPm2ozF1y4ElE3Fbqo7bcN4UCD3ZWxYAUtJMOTCM44ewsuZynudOahQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="izG/P3oc";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gQPBCdN0;
+	arc=none smtp.remote-ip=209.85.210.176
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E5A6078267
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 16:53:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B50606A582
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 16:56:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 83B50606A582
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=izG/P3oc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D4A91F0180E;
-	Mon,  2 Nov 2026 16:53:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793638396;
-	bh=0S6zeVQB6JXDivuIwwZkxYqZ6mbJYmib3ujqs9acEWI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=izG/P3ocmODvrrYJzx5kyn1JwcrWCMRRqFDW0ONajnG/ohNIFWMcHH/4y1uz3N3pm
-	 +Tl4tZRzUMyxzMq/gPUTEY8MoVWhfjlf0kZIT1mhAeUvubNBBDOuMZdSy3goHettLS
-	 2zJQtoSwlFsWodta0DRXCWmuIYjhUsIvHjdF5D9JkQlzoiHqlLiQ0TLAgFJ45OY6vX
-	 w6as/KE5l5ISA619w2UsgpA0mx93y0RD8xiKU3mn2ODI/IJaCT4nf2/6LxQIF6T3jU
-	 Ro2NEiJoSZnr9u5UOePfczMbFwgCXIlji5hViRCGTO2EeNi9jE79ow0VC1Yq3Gr5cn
-	 y3t0htafvEcuw==
-Message-ID: <9744e311-92ff-40a3-9a66-de5654074bb6@kernel.org>
-Date: Mon, 2 Nov 2026 17:53:13 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gQPBCdN0
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8a05effaf8dso1836204b3a.2
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 08:56:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793638598; x=1794243398; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=fwjIWZZN+Xku/wuznq5Djc9dY6oT6GSmRAkG+xrsrHw=;
+        b=gQPBCdN0ky7g6NTtQ3EStf4AoqYXYe0mvkYYWBdgWkEBAAYnEd9QMLgNWRc9w4B4U0
+         K3raciejRcckVb6b/RpzthiCzmLRJPgBw7TcktVk1pzWCQYoHoTFP6nE32OkMzCJ6vW/
+         40PmJnMenMr3LD94LFviVg89uX0p51VSaHPXIOA9k+T7X9D+DaMg7AbPXuBp6WJDlUxx
+         1YjjOmDZ9I6qjaONDe7tdvrT0hRKbXGDb+zzYzRXvjGX5swDjiMeMJULBwNkBlGdL7qi
+         BHpTjztF2qgxLxOz1bO1pctvkcD/mXDaRcY9CBbEl3Kc8iSMMjDo+q7At8EfFywjycZ7
+         PJgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793638598; x=1794243398;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fwjIWZZN+Xku/wuznq5Djc9dY6oT6GSmRAkG+xrsrHw=;
+        b=Egjkw2YkhhsLwo+M1Zm9DHoBD/CssztupVIRbHcUVEgkjQ/+nyjJODDxWsuSzs2woK
+         RUGN9OI+Gop1iyPN0WSGRb9TIkXlVIRL8gfcq7K/NsLJLny9FARMSCHY78crcZy+JnyI
+         /vHw72llFck3ZexTtENFGewh1UcarPxjehR2Lj3pASnEnTgXCaSx7p0ekR+rAGe3lpQh
+         bwAsaV+XKzDPSzP3DpbYb0dUUYW7iyOMCIhBj8OWAwi2qAEiExA9P6KCnrF4qQMyNnfW
+         tQyQnQir6zPZeYhNOV1j3EPvZnV56f9SeWLQiheIQ8NrICxcw73jHs8NUsqcTZkfzyXB
+         MUcA==
+X-Forwarded-Encrypted: i=1; AKwUvBw2dVmx71sQDkan8wEZ3V7xm6EKPcgz3qYLvIZ7qBCRnfkronhSfai+6pcZuxmHnHX8qYE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLH4t87/7YjYHtv6SmFiILOBV1hOuNjFZI/rRtaPO/BnK6tPihA
+	tuFEQ0NDLKuqzDKIts3ucrrwqzib3k1X7R6qcZSakYK16lNa3gWan5Rx
+X-Gm-Gg: AYBFou3qm5BTIykf3jmWQ+dAT0MwNQiicPI0A4iKRWBoPqMMOVBrG34qIF5gvZRVJdF
+	KzA3N7MghrQpqmlCmZsR4Cz1skSKp1Dbn3053HaWN4TPsWgDFyP28XO2o+pKqycnMi5sn7Mzb2J
+	bvAUyLhjfOtTWSZuxOo1EvfJuUZAOFOXD77PdSdBLEq7M+ht466z78MKHhA+oupCPT0gemNM6EL
+	Z7SHgg6vIGdIM8A3194qkaEoatJrAFX2IbLCarjiMg+CdKYFd9GYobNpFuyIkb/pUNPuF2iSG7C
+	lxDjNlokmzLnOaC5de9Y8ajNl2rI83fe+w+ck0Fkn+Dw3hPJ1PtgeVvLHQcg2rwCtnovOwdwfu8
+	38yPFlnaZvIAdWJLE0K+rKAodRQ8FaO/3WIiABCEUisig65WIwoCb5RluQ5jweyCe5w8dSK7dTY
+	uZhlTT2ZDfyIaPW8rrJOTm+fYzKnota3UFDvUJL5N3kfhnTyclJAr6fWV0f8i7OTteB5pcz4i8a
+	Lg7AoEAoi/a8MpZHQ1io1Pvr0iVW1ti0SErqy9heDN6sy+/AFkb1xXnhnw+geCBrTfcpNPyzyIp
+	0WlQxKP7f/8hYXit9GkFaz56rwmZg2mObeoMsdaEBrCG9jBWul3RGaIwrjBwg5+2XckhtVAMOvu
+	7Ft7311tb7Pj39U0IMsqMns5B0zumpbyzuPDTpaMhQsIoY0QB36H8a01/
+X-Received: by 2002:a05:6a21:b91:b0:3e2:ea7:618 with SMTP id adf61e73a8af0-3e928c5ffd7mr9018818637.18.1793638597595;
+        Mon, 02 Nov 2026 08:56:37 -0800 (PST)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aada6c2c28sm2229529b3a.43.2026.11.02.08.56.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 08:56:34 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -50,95 +88,34 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 13/13] bpftool: Document __bpf_relocatable and
- __bpf_static_offset
-To: Ihor Solodrai <ihor.solodrai@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
- Cupertino Miranda <cupertino.miranda@oracle.com>,
- David Faust <david.faust@oss.qualcomm.com>, Ian Rogers <irogers@google.com>,
- "Jose E . Marchesi" <jose.marchesi@oracle.com>,
- Vineet Gupta <vineet.gupta@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>
-References: <20261030233355.1836749-1-ihor.solodrai@linux.dev>
- <20261030233355.1836749-14-ihor.solodrai@linux.dev>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20261030233355.1836749-14-ihor.solodrai@linux.dev>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Mon, 02 Nov 2026 16:56:33 +0000
+Message-Id: <DMKVTEMTLA43.8R6RXYD1UMWN@gmail.com>
+Cc: <linux-kernel@vger.kernel.org>, <linux-next@vger.kernel.org>
+Subject: Re: Fixes tags need work in the bpf-next tree
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Mark Brown" <broonie@kernel.org>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Eduard Zingerman" <eddyz87@gmail.com>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "bpf" <bpf@vger.kernel.org>,
+ "Networking" <netdev@vger.kernel.org>
+X-Mailer: aerc 0.20.1-355-gf870624f6c37
+References: <auiZYnNYLEgcR6TT@sirena.org.uk>
+In-Reply-To: <auiZYnNYLEgcR6TT@sirena.org.uk>
 
-2026-10-30 16:33 UTC-0700 ~ Ihor Solodrai <ihor.solodrai@linux.dev>
-> The C dump annotates record definitions with the __bpf_relocatable and
-> __bpf_static_offset macros. Programs control the attributes through
-> these macros and BPF_NO_PRESERVE_ACCESS_INDEX, which disables only
-> __bpf_relocatable.
-> 
-> Both macros expand to complete attribute specifiers and can be
-> pre-defined by the user.
-> 
-> Update bpftool documentation to explain both macros, and how to avoid
-> the Clang crash on CO-RE field-info builtins over __bpf_static_offset
-> types.
-> 
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
->  .../bpf/bpftool/Documentation/bpftool-btf.rst | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
-> 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-> index c6dc445cd4a1..6840d5d3c39d 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-> @@ -70,6 +70,32 @@ bpftool btf dump *BTF_SRC* [format *FORMAT*] [root_id *ROOT_ID*]
->      formatting, the output is sorted by default. Use the **unsorted** option
->      to avoid sorting the output.
->  
-> +    C output annotates struct and union definitions individually, with or
-> +    without **unsorted**. Most records carry ``__bpf_relocatable``. The
-> +    generated header defines it as
-> +    ``__attribute__((preserve_access_index))`` where supported, or as empty
-> +    when **BPF_NO_PRESERVE_ACCESS_INDEX** is defined or the compiler lacks
-> +    the attribute. GCC-BPF can apply CO-RE through these attributes.
-> +
-> +    Context and socket types whose field accesses the verifier rewrites
-> +    carry ``__bpf_static_offset`` instead, and their nested anonymous
-> +    records carry no attribute. Where supported (Clang 18 and later),
-> +    ``__bpf_static_offset`` expands to
-> +    ``__attribute__((preserve_static_offset))``. It is empty otherwise.
-> +    The attribute keeps static field offsets in load and store instruction
-> +    immediates. **BPF_NO_PRESERVE_ACCESS_INDEX** does not affect
-> +    ``__bpf_static_offset``.
-> +
-> +    Either macro may be pre-defined as a complete annotation, such as
-> +    ``__attribute__((preserve_access_index))``, or as empty to override
-> +    the policy.
-> +
-> +    Clang 18 through 23 crash when ``__builtin_preserve_field_info`` is used
-> +    on a type marked ``__bpf_static_offset``, including through
-> +    ``bpf_core_field_*`` and the CO-RE bitfield helpers. Compile with
-> +    ``-D__bpf_static_offset=`` to use these helpers with an affected
-> +    compiler.
-> +
->      **root_id** option can be used to filter a dump to a single type and all
->      its dependent types. It cannot be used with any other types of filtering
->      (such as the "key", "value", or "kv" arguments when dumping BTF for a map).
+On Mon Nov 2, 2026 at 2:08 PM UTC, Mark Brown wrote:
+> In commit
+>
+>   b73855c31c7be ("libbpf: Enforce program limit only for loaded programs"=
+)
+>
+> Fixes tag
+>
+>   Fixes: c9b2a0975c39 ("libbpf: Reject excessive program counts in genera=
+ted loaders")
 
+yeah. it's wrong, but it's too far behind to fix. We don't force push to ad=
+dress such mistakes.
 
-Hi Ihor, thanks for this work. I don't have much to say in addition to
-what Alexei reported, but when you respin, could you please move these
-paragraphs to a dedicated section in the doc? Maybe "GENERATED HEADERS"
-between OPTIONS and EXAMPLES (just keep one line here to refer to that
-new section).
-
-You could even (but don't have to) add a new EXAMPLES entry, something
-like "$ bpftool btf dump file /sys/kernel/btf/vmlinux format c >
-vmlinux.h", then "$ cat vmlinux.h" and show some truncated output with
-some visible __bpf_relocatable and __bpf_static_offset annotations.
-
-Thanks,
-Quentin
