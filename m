@@ -1,47 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793633301;
-	b=jg4u3CXS9VyHhRnNs7MyrFX/Bk1idHP5i7FqgjNkPcRZb07i0MxR5KRM94JFAzW63vTz
-	 V9f2Fll8FWL016MYPDUlCDes5ekqbKSJ2O4BmVrDp/DTH6eGqLeorMFWnd6vXM4psFiMF
-	 e8r8Ylyf6ljrPxiaYYVuYWQgyEc7SSXtQDhGc4xqKqeC/8MRAsEnj1Lr8+Rw6ocPndhGo
-	 vCA/ZCK/8AxHK1AkKP/VnhIrc6wlzWtuFoRqxnqL006mXB2zzJkg0H+/hOg9vTF4xp3Mz
-	 Dq9bi3YRufLUi9IFymMIG++G2m8xRnqYiCN5+J0qorb5ZvGieRN2tm5C4SHTYWZ471Q==
+	t=1793633390;
+	b=ga17rV30bf9sHexintpkl2eD5YlBNtYmKZs+kae6d2MPL3d8DI/LFPLU45xOzn+xCkZq
+	 8QHXplltfHiiH9KpcxSOcKRo2O7XJp7/QBH6zz9I7oDpe39UfUORCDBzps3EHT8dg2AIW
+	 MdrR55CAhAgeQ3pIhJM1xKn1Evnyihye/ILvgD8/dMFQrF2BQnKXhrDKkP70+YRY1uf97
+	 1ods2Eyo9vdpZQJ8p58ifnwt807C+7/ef0x+E9eqqcrfuxTb7RRZvOek3IBID9V7+51eN
+	 q9RdS0XtC3hAEzZzALiHPbdlj4GwyOYc+ps7zLnaYsIjUYdwnOuqx+1dFK9QFefMUgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793633301;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=QxPeDUrP8twWSpeKToKl8Bg8IK9ZxQf0gM28I1RQIK4=;
-	b=L3J45BqiAuWfT+ixkSiSXbndlOpjrgios0lmT/xomC/ohaJsLQ74E0yjNUM5S8O//cmw
-	 XJSX7Ur/gdYQj3oFmrI8jT4gQgDbfd9ilY3JFPXW+UoGbN2Fq6XXofUQvUl2ZfJ00QPf2
-	 DjXU12Eb14cjlKVVkpReOiZTpwbbmvbgIfNo1mgmuWJVN305JfVEuEqkd2Y+6V9utRTz/
-	 pmDGpfh7FtTuuEASnE7t3DMLCmb3WK1xpgB1DZiAwVcm8F4ey0kjp7pXiZYo7DlF0RXmh
-	 VKRoFfWSiq89gwuUgK7QClTFsahR+DuW4l0jOufe6Q9ZV4j1VrdpBA0XGnvbAEgPoAg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793633390;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=AfMnsvVTtJkxmfxbs2Yxgr4hKJCAmoy0tOEQOe4nWZ0=;
+	b=O0hva8H9nngA0tBjmdWnrGukdL5HITVZYKoGe6IA0xy5jAIMvdlly37ZjH5mw78P+0ng
+	 AKXsTivwz+DM8U4OqmHAIJDP7zr3usmNTXZKG9S3jKBEwyNm3fZ01BRYPDz8R0YQzOXXi
+	 WcGuCt4MU+y9IF2DRdqpA5QHRWg8/9hIVNw4NfWWXBYy3am3MFP8bp0fGXx6mgtBrYcF+
+	 WiOhVVtdOGgMTCNJLmLMFkpJdtnpUehdns4JlLHeeDTITCj/Ju17jJ0uFp/bezTyVg7Uw
+	 F1+6zNefqQ1Z2aN8posP0wCydoe8uL28lvt/+aDhDeCOuExxTBiqh4Mp2InNkAf7fZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Naxxyoi3;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eBu3G+7A;
+	arc=none smtp.remote-ip=209.85.218.43
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0A8608508C;
-	Mon,  2 Nov 2026 15:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B63A606ABA2
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 15:29:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B63A606ABA2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Naxxyoi3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9A181F00A17;
-	Mon,  2 Nov 2026 15:28:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793633301;
-	bh=QxPeDUrP8twWSpeKToKl8Bg8IK9ZxQf0gM28I1RQIK4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Naxxyoi3XiL4dGgz9c28bngMe7B7Vnw0UmEiKK0JYiIwa3Q35ApKb5dcOUC1lJBX2
-	 a5bIUynDN4RBFOi2CPahGwSs8+NbLxqJ4AtjkXwwS0pj/lbLDJi7o7UccvsH+ZhI1K
-	 Ankq34h0dz5BCJz3RhePJy7ZPpCdmZbxrGz/MzWvI5+ce1xli2NymlgP4654a9tPP1
-	 SrzpCDtWMXOY1Z+xy6vDn4U7yQWRUCy2a9wTsf9J6Yj/uyOuOnwHaBFNBkPmO97X3i
-	 EViV++7yeQWoDErazho7NqNwaY7YvO2doeMqosnKuFpsrdAinXS4IQchbPfZJ5ruUH
-	 wV+OINbSqaHVw==
-Message-ID: <51a8ab27-3c2a-41aa-90d7-fb9f321bea4f@kernel.org>
-Date: Mon, 2 Nov 2026 16:28:18 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eBu3G+7A
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c43373ae89aso477388666b.3
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 07:29:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793633389; x=1794238189; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=AfMnsvVTtJkxmfxbs2Yxgr4hKJCAmoy0tOEQOe4nWZ0=;
+        b=eBu3G+7Akvd7S5AmxMjgRwbGGdaOYmvss883RtWON7poOSslYNAYnjLsmkiIM2l8PH
+         0dbDdV8Gma/D/wO93QPARhoO+UU/5YGy3quG2VLJPbv/w8ekBOawD/spCsrocvs2aZWU
+         7iTioHmJ0h9mOKxJ5CkiJGoX/sR3DHwXXk1xiKe7c/2AN6qk9h+ltisuJXEC6UveCFIV
+         qSMJbPN13YzJQ7nmdTg/e8YQPAv0g1Ig/JWQ8fA6QaGw9XzFS/7zH6hDgavEFkF2eu5c
+         y1EyA2uKOFujmaUMBDkBgf+2Sl3VxhaHKdNKBAkH71qbOM5ATJyZkf9gRyRU7sdWfpuT
+         lwRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793633389; x=1794238189;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=AfMnsvVTtJkxmfxbs2Yxgr4hKJCAmoy0tOEQOe4nWZ0=;
+        b=XbNrjzFK/1KIyueDPEa0QstYGEk142wYF0qOc3B5asYh9QrEcBeY6r6Je1QDtGEsYK
+         FW4GadyHTYR4mhbuuM/GRXahQaRKygk2tyOLSTXltKYiS+6oSxvI3T82LK5klR1QG0qG
+         ODm7N1O3+PYHn5n/xznbSvrzT+VmFCeeC2qvmty11wk+AG8eORkUftIMi7kGvyMcosAF
+         /xCXJH4t//oy6kw9s2QrA3DwrCadgrbfHYXp2d/OL8GbCxfSw8cgH5LOjVvIpWcROSjj
+         H/4vp1yVXy/YUYm2/6Rrm8JlX4OSUZU5uy+qDZPpUdoT35uEwOQRJ2R186Izlqbt32tW
+         Abmw==
+X-Forwarded-Encrypted: i=1; AKwUvBxozILDBR98PlJMt5V/VBf4VGBPKutVmrOx7uLXsbslCxZE3RPZ379re9TPqTl5U/2PCxg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9Ilt/jAtc6dIvlMvZik0Enu28WgUic0Wwb8LKTEliuyNON2dfZ
+	i41xOW4areMH7jbIf/NVEvOe7OyBVJyNWSa9weDtoz0rNuuwsQKm1tuI
+X-Gm-Gg: AYBFou3Z45vCHB4Y7v9wXx0T3mMedcztUJIxat3NFPo+68hMSquo+e0mYUb4qqP8Qgi
+	WNXtAJamZm/UfpjW5+slDKTmxJMC8rXKx8Eep2COavdJkMFCLM98ZxpgHZNrxKW93oFsuJLFBpM
+	eH9iLmZHoklGJI1W2CsHYdOYiDN2qXaT+BCuX09x5sTY4O86N6bVmUlgIVhlgFkekaTvwoKxfII
+	+ZPosBApdt+fecvq4+TXuVinx0Xu3SX0jBLtEhA3MjK/kimYeKepaZZNisdiXPamUd3mu8MAutK
+	GpXE3bpqHUJXApPmdBsbl+aBpfMY39A9Kclz4Y+7XEWg6VOmgZOXpDWCf1xAm6TIs6oslJIxv33
+	GhD2/F3PYvhX6ETHgZgYvLiu3O9TTI1t3tYErxqeKh8an3Zhbdf7Swgj40pg3zOeWW7GSIV/lt+
+	claKusCEIGtfFm092lvgUlwnQnv5CUUAbPMSUr5kyU4jJ28794d9UXyAlIvFqAqAvQc/wiUeie+
+	5sLAsTJt7dnUyVZAgcbZaY94l1vKlqm+HgfY/tKWmw9pGjG+OpkoYQWzdRUtOv0DqWJSOu2jlEU
+	WsqrH2WYecEKmNQCKgZWQFUeRtc8lTWI6/Dp6bTdmgAsKSYIcn9Y0JhYwS3HcUazZOTGlGUhq/0
+	=
+X-Received: by 2002:a17:906:7314:b0:c40:5de7:33d3 with SMTP id a640c23a62f3a-c4ca7b450f4mr799928466b.35.1793633388489;
+        Mon, 02 Nov 2026 07:29:48 -0800 (PST)
+Received: from andreayoga.wind3.hub ([31.189.68.219])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b725a2sm19381692f8f.13.2026.11.02.07.29.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 07:29:47 -0800 (PST)
+From: Andrea Parri <parri.andrea@gmail.com>
+To: kpsingh@kernel.org,
+	matt@bobrowski.net,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Cc: Andrea Parri <parri.andrea@gmail.com>,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	sdf@fomichev.me,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf] bpf, lsm: Fix cgroup shim selection for socket hooks
+Date: Mon,  2 Nov 2026 16:29:12 +0100
+Message-ID: <20261102152913.366237-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,85 +109,113 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/3] bpftool: Preserve unsigned enum values in
- data dumps
-To: Hungyu Lin <dennylin0707@gmail.com>, ast@kernel.org, bpf@vger.kernel.org
-Cc: andrii@kernel.org, daniel@iogearbox.net, yonghong.song@linux.dev,
- eddyz87@gmail.com, ihor.solodrai@linux.dev, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261101103221.51534-1-dennylin0707@gmail.com>
- <20261101103221.51534-3-dennylin0707@gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20261101103221.51534-3-dennylin0707@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 01/11/2026 11:32, Hungyu Lin wrote:
-> btf_dumper_enum() loads ordinary enum data as signed and uses signed
-> numeric output. Unsigned values with the high bit set can therefore be
-> printed as negative numbers. Narrow unsigned values also fail to match
-> their enumerators: an eight-bit 0xff is loaded as -1, while its named
-> value is stored as 255.
-> 
-> btf_dumper_enum64() likewise uses signed numeric output for unmatched
-> values. For example, 0x8000000000000001 is printed as
-> -9223372036854775807 instead of 9223372036854775809.
-> 
-> Load the data according to the enum's signedness, use btf_enum_value()
-> for name matching, and select the numeric writer according to kflag.
-> 
-> Retain the original signed-width comparison and give it priority over
-> new matches. This preserves names from older BTF without signedness,
-> including eight-byte ordinary enums, and keeps the selected name when
-> multiple enumerators could match. Remember the first normalized match
-> while looking for an original match so only one scan is needed.
-> 
-> For an eight-byte BTF_KIND_ENUM with kflag clear, a negative stored
-> enumerator can therefore match both its sign- and zero-extended values.
-> The record cannot distinguish legacy signed metadata from unsigned
-> metadata with the same bits.
-> 
-> Unmatched values are printed as unsigned when kflag is clear. This
-> includes BTF read back from kernels without enum64 support, where libbpf
-> clears kflag before loading. The original signedness cannot be recovered
-> from that flag.
-> 
-> Fixes: ca7e6e45d108 ("bpftool: Print the enum's name instead of value")
-> Fixes: 58a53978fdf6 ("bpftool: Add btf enum64 support")
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
-> ---
->  tools/bpf/bpftool/btf_dumper.c | 42 +++++++++++++++++++++++-----------
->  1 file changed, 29 insertions(+), 13 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
-> index 3267163119dc..792e210cb503 100644
-> --- a/tools/bpf/bpftool/btf_dumper.c
-> +++ b/tools/bpf/bpftool/btf_dumper.c
-> @@ -148,37 +148,50 @@ static int btf_dumper_enum(const struct btf_dumper *d,
->  			    const struct btf_type *t,
->  			    const void *data)
->  {
-> -	const struct btf_enum *enums = btf_enum(t);
-> -	__s64 value;
-> +	const struct btf_enum *enums = btf_enum(t), *match = NULL;
-> +	bool is_signed = btf_kflag(t);
-> +	__s64 value, legacy_value;
->  	__u32 i;
->  
->  	switch (t->size) {
->  	case 8:
-> -		value = *(__s64 *)data;
-> +		legacy_value = *(__s64 *)data;
-> +		value = legacy_value;
+bpf_lsm_find_cgroup_shim() picks the shim that runs a BPF_LSM_CGROUP
+program from the first argument of the attached hook. It compares
+args[0].type, the BTF id of the argument's pointer type, against
+btf_sock_ids[], which holds the struct ids of struct socket and struct
+sock. A pointer id is never equal to a struct id, so neither branch is
+taken and every cgroup LSM program runs through
+__cgroup_bpf_run_lsm_current().
 
+Socket and sock hooks therefore run against task_dfl_cgroup(current)
+instead of the socket's cgroup. When a socket is used from a cgroup other
+than the one that created it, the caller's cgroup policy is applied instead
+of the socket's, and __cgroup_bpf_run_lsm_socket() and
+__cgroup_bpf_run_lsm_sock() are dead code.
 
-Not sure that's worth a respin, but "legacy_value" will lose its meaning
-in time, maybe name it "signed_value" instead?
+Resolve the argument's pointee with btf_type_resolve_ptr() and compare that
+id against btf_sock_ids[].
 
-Looks good to me otherwise:
+This makes __cgroup_bpf_run_lsm_socket() reachable for calls it cannot
+handle: ip_cmsg_recv_security() passes a NULL socket to
+socket_getpeersec_dgram, and sock_create_lite() calls socket_post_create
+before sock->sk is set. Fall back to __cgroup_bpf_run_lsm_current() in
+those cases instead of dereferencing sock->sk.
 
-Acked-by: Quentin Monnet <qmo@kernel.org>
+__cgroup_bpf_run_lsm_sock() needs no such fallback. sk_alloc_security and
+sk_free_security run while the sk has no cgroup and stay on
+bpf_lsm_current_hooks; every other hook whose first argument is a struct
+sock is called with a non-NULL sk whose cgroup is already set.
+
+Existing BPF_LSM_CGROUP users will see a behavior change. Socket and sock
+hooks now run the programs attached to the socket's cgroup, as described
+in commit 69fd337a975c ("bpf: per-cgroup lsm flavor"). Hooks that can run
+in softirq, such as socket_sock_rcv_skb, inet_conn_request and
+sk_getsecid, no longer depend on which task was interrupted.
+
+The bug was found with the help of an LLM.
+
+Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
+Cc: stable@vger.kernel.org
+Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+---
+This changes behavior for existing BPF_LSM_CGROUP users: since
+69fd337a975c, socket and sock hooks have run the programs of the current
+task's cgroup, and with this patch they run those of the socket's cgroup,
+as that commit intended. I'm sending it to bpf with Cc: stable because a
+socket used from another cgroup is currently checked against that cgroup's
+policy instead of its own. Happy to retarget bpf-next and drop the stable
+Cc if you prefer.
+
+ kernel/bpf/bpf_lsm.c | 8 ++++++--
+ kernel/bpf/cgroup.c  | 7 ++++++-
+ 2 files changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index f58dce888ff4a..9547d4f351103 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -95,6 +95,7 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
+ 			     bpf_func_t *bpf_func)
+ {
+ 	const struct btf_param *args __maybe_unused;
++	u32 type_id __maybe_unused = 0;
+ 
+ 	if (btf_type_vlen(prog->aux->attach_func_proto) < 1 ||
+ 	    btf_id_set_contains(&bpf_lsm_current_hooks,
+@@ -106,9 +107,12 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
+ #ifdef CONFIG_NET
+ 	args = btf_params(prog->aux->attach_func_proto);
+ 
+-	if (args[0].type == btf_sock_ids[BTF_SOCK_TYPE_SOCKET])
++	/* args[0] is a pointer; match the struct it points to. */
++	btf_type_resolve_ptr(prog->aux->attach_btf, args[0].type, &type_id);
++
++	if (type_id == btf_sock_ids[BTF_SOCK_TYPE_SOCKET])
+ 		*bpf_func = __cgroup_bpf_run_lsm_socket;
+-	else if (args[0].type == btf_sock_ids[BTF_SOCK_TYPE_SOCK])
++	else if (type_id == btf_sock_ids[BTF_SOCK_TYPE_SOCK])
+ 		*bpf_func = __cgroup_bpf_run_lsm_sock;
+ 	else
+ #endif
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 57a785241d42f..9100d1c4f35ff 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -171,15 +171,20 @@ unsigned int __cgroup_bpf_run_lsm_socket(const void *ctx,
+ 	const struct bpf_prog *shim_prog;
+ 	struct socket *sock;
+ 	struct cgroup *cgrp;
++	struct sock *sk;
+ 	int ret = 0;
+ 	u64 *args;
+ 
+ 	args = (u64 *)ctx;
+ 	sock = (void *)(unsigned long)args[0];
++	sk = sock ? sock->sk : NULL;
++	/* NULL from ip_cmsg_recv_security(), no sk yet in sock_create_lite() */
++	if (unlikely(!sk))
++		return __cgroup_bpf_run_lsm_current(ctx, insn);
+ 	/*shim_prog = container_of(insn, struct bpf_prog, insnsi);*/
+ 	shim_prog = (const struct bpf_prog *)((void *)insn - offsetof(struct bpf_prog, insnsi));
+ 
+-	cgrp = sock_cgroup_ptr(&sock->sk->sk_cgrp_data);
++	cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+ 	if (likely(cgrp))
+ 		ret = bpf_prog_run_array_cg(&cgrp->bpf,
+ 					    shim_prog->aux->cgroup_atype,
+-- 
+2.53.0
 
