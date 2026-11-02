@@ -1,87 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793622753;
-	b=dYmlXF0gg1pczlwPx8J2fcOjE5pm6v2yHmV8mc9LEP8/BwqutdYSkh8GHi3w2wJg+K+8
-	 lIXy4fAi90+NFBBXX0krc+HgSn0197/60i8XIBiON/nZ7x89FkPeEkjzS/3wMIq2zp1tb
-	 HSvWXXF3xldPJdeKZ7IFeQM7N8rOZ5Q/ToVuFXEPAeTzSO92o0W49JW2iJKmerDjntaWd
-	 tThC+kcMhSmpVsd4cofaHLt1igZ9xSVyvcXq3pzQFPl3HGKMxtSK1Wh5Re5XMU/MIuW+V
-	 VESaU0p92h166HctlVV7HJqucH0O87IWyuQ/f1S6JMxYxkjjEtYtvhP3gW1UX2+My5Q==
+	t=1793622756;
+	b=z2W2y4S6f2T8ShcBA+K2bLmjrKg/WZeOp8JOlXrL+CjRtSJawC0pv/sAoQ6GoDsBovDC
+	 f4f6xVAJ25kM3fhrjZkG1D5hcOd5+28lcouA2SRN+fcKGpCmenZNARfP+w7ls9cQoB8yM
+	 rwKj5vxUu1VdT94gZ78+MoQ92zWRLT5ZhM8Fyit67FIfin5RVad/fBWtJEIQQKrj1TF3i
+	 PnA5S9WEZo1Z1Fv6NqcA/MFICPSRWlqtRIHIALYalvQDUmY7vJuJEWcF9wjxM1LgLidIN
+	 H3dtlNEkHY0J4p+cIHyRH8kO+s8MKcxjkmyOcBmyINZjZZixpeV3cb9w8FLUQFhyf7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793622753;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793622756;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
 	 References:In-Reply-To:To:Cc:X-Mailer;
-	bh=X7HK95+Ejz25JT6Hfe+wCQgxilDD6LrZVyreaMFx54o=;
-	b=VZ8mrp4HdtLIunuYvgbUAifcwtAggyxDVtigzJFK+mpZoTq3URViLGnuOM45M5ZJH0TL
-	 lKVNju1MdrPIOZJDLcZ5+Gl8pgN8Up7TbOo2nz1C797RK0ke3n8abEBCRny1yxp87HXn7
-	 +8Ua5PwzvAGfEHSPH/IH/vCVkQkMp+VigWf02faq4y2LV1uem+MbpmbV/dDaRrEy98U30
-	 E5Gz/v1jaonKQADlG8TCAipoXLMoeYMcvDe8KV75USZL1zkMA9rLEc+ypbVQYdtbgkUZk
-	 UsrMGlv3EIQqUl7TVN5AKAuoedYLUT7nsYR0dTcsNry/DjHGTHD/tN/n/bNsnIRDq1A==
+	bh=jw7VoFe2BRpLE9w0NVN4ak5GlvkOVAFYOzKd+6FTP8Q=;
+	b=jFRaqJ2Dk2bHnjs2zuqatPFHp6ve65qQWYdCOs1Gzu5YEJFcl7itWPttsWAaNMB075yA
+	 QseEbz1Po7Wr3hZeGQmAwqyBPzz30fh9qIGdw7MWkkp7DUerqxUEDHDA8T5rPYRDYXYgi
+	 1hTBhFULOMOC3go+khZOv4Ff4lu2ByFJCCmN8Agzn/cz3BmviWzZSgjqAUsey+1E2R+ak
+	 KD0+YekNFCpEPULYys0UnZ9CWpRQFbozjA6Gbw/41x54o9o4XTGOc0+qpn7Qjipw0Miiq
+	 iWr1yo1vz8pVBYY7X36U9any5iI1rgMpcvhyt05eHJbMp5yJo7WIx6XwhyOdIni3K+w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="c/E9KdFk";
-	arc=none smtp.remote-ip=74.125.82.52
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=megLCsb5;
+	arc=none smtp.remote-ip=74.125.82.45
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334C4606A33A
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 12:32:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 334C4606A33A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1189160A2621
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 12:32:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1189160A2621
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=c/E9KdFk
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-1ae18eb9ad0so2671132c88.1
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 04:32:31 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=megLCsb5
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-15ea896ddc8so5000394c88.0
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 04:32:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793622751; x=1794227551; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793622755; x=1794227555; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=X7HK95+Ejz25JT6Hfe+wCQgxilDD6LrZVyreaMFx54o=;
-        b=c/E9KdFkkQYlPtAuldaJu88tZq1+LgL4K4loOdTzgo6lVjbL+9mjVIc/qHzxkWJmRM
-         qO+GfXKnyZ28hwG0cDofLMGssranDxNP1faLTCAkQntDWGo6CCnLJSQ1hiJJtd2acTaI
-         7WhzNsMj0IcHIcXkWG2Q6eDQFSM19xV6hajtlIiyqi9yLlX9ITyY5KJkXLI6fejGkNT+
-         Mk2aQPaiD7U1FOWlRH6PfG7ZsH+wOs5hx1XLUdX6MOcw80i9iaCuWKPDA+0yCwg6h/65
-         sAwBROTPU3h7mARWRVou+4/iROk3ji+SS3WfmRw3ZwYyY7n+54qkjs6UQFdOCMXKyzLk
-         J+6A==
+        bh=jw7VoFe2BRpLE9w0NVN4ak5GlvkOVAFYOzKd+6FTP8Q=;
+        b=megLCsb5PGtWqPdL+GjgU49TDv8Gv3Zr1DplU5+XiUnA384WTXsxxVAdkTk/9z5+9e
+         eHvhSDdXw1f8bt02x5tOlEpvYtYqLaDeYFqG/NqL3cGVoWzp/+1XBd10lObfFXAQ/1VY
+         XEkFy8mMEAOTT39BlcBRqmW7JIWhF5Tvsn8G1Q3fAWw9MlXghZx+VGgNcuEKSMTbA+jq
+         xFsAm7q6qk4Gclb0Ch2d3XhD6/yXd5jfOtPa5mG7RGVoeqxR3WsqFeeYRWIu/Up7pRrX
+         t98GhDutkRN8xgZyc7VPxWUnZduiFNxP00gUjzPl4Z21zT8BVXMKNGEWBP0QuNWlssdM
+         /22w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793622751; x=1794227551;
+        d=1e100.net; s=20260707; t=1793622755; x=1794227555;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=X7HK95+Ejz25JT6Hfe+wCQgxilDD6LrZVyreaMFx54o=;
-        b=kT1QvqHk2D5lMS9OQ7PDazCuiByj1d3IBMIOo5UDHNvMrFBRowTIsPbvC26t7Es06Y
-         FkSlJpNaM3SqHM+BURGq33t1RM39YyQL3+ESpMZ7hUPuUu8USavCrjyJY5yDYCFIGh9+
-         lqtrQ2QTvlnD/DMasgvz9XHtYusOOLdszIcOl5BayEUPLQiLRzNM5BS5s0LbDi6UdHMW
-         ptjOm/aEJ0A/M2mwZoldlO23nRVdtMhvtu3GRTSTU37JTGLXrrNbTsAmS9N3WTPYIQ1J
-         EkFR+PfZq0+TB2oey6qcnArD3Eh9ZwAcuRyuKiyOGfdhaeNPlSrRmQEG1Q4xSpbgeeCZ
-         lvOQ==
-X-Gm-Message-State: AFq9FYKZ3FMOZp1W/WJd4dmPpljpvulBV1G4dU3Yc2Bm2Ry/Ut8K0Ehn
-	nXo92QdJ2JdLnyrnPA1aOqwg50AVbKwM1LNsmL70ExPtHzBYPfjabXkp
-X-Gm-Gg: AYBFou34rQADGa0aht5XrE/5lC5Tcz0xpvEa/GLGL3H7RE06yu9sFvAkCm4UPUtnAHc
-	Fv9qSv1FKnhAE9xcYzlePI6maIbTUBvYIaReuzGrzWE+7+YIpA+ez92oOfMiNf0zJZn77C8vh1/
-	ZasDF7uiuDtAqiIQq6XIuioOcg6h8JgRxsJ2f9hO2GHHi9tzeWWbJLNRDe1NBvE9zE+938P6Jeg
-	Zl2YLdKoXFe36kKu92o6JxW/cSPKLh6WxmEO+YcSpB6+SWr5vz2Q0fKP7x70bqtzatrr0cghtwR
-	110TtKpn8WTiIR7sRb4pWQDXQHn+YjNBE7oEW8wnl8invgTq3iKedyMQzE6zADtWztCFrzGalXc
-	pyBZ+OY2QHq7VzX2P44NNFdLD88xOr+ubevhkdvQkdiFiMlwSbukfCfzcovr22wx2OPUCe9lDr7
-	Rqsq4uyISwR8WhaMLClF6GqhEeV3Aw31TYFfZGLLLMvX9D/ayXn0x22ctSzp9BiL5j/ePHNPqbE
-	Ca6dtJNvY6+uqbc69kwpUtj8rndCkcCnXrla/I1LbQx1qHR0sMTxLFGZ/+yNcdIgDHZ6ejLIPQe
-	sFxuHRD63Mdi5Mt+FIWvi12qff3c9qVz3T1ju1b6SHiv680=
-X-Received: by 2002:a05:7022:fc05:b0:184:992:c9ec with SMTP id a92af1059eb24-1ac5fd06166mr10389427c88.38.1793622751151;
-        Mon, 02 Nov 2026 04:32:31 -0800 (PST)
+        bh=jw7VoFe2BRpLE9w0NVN4ak5GlvkOVAFYOzKd+6FTP8Q=;
+        b=rbjn6M04OE/PHxY5+OH0tjNmB6WA4wiPnia+m6KfYVdcP7D0IXk08gZW032dKvvgUD
+         jznTgwUz9MLmLPtTkhV6o0NUmhMzaEzSiyKpxt6iYTi6qF5VX3Fu67JXXtHqAnX3hoOk
+         p34/dM6LEfkpPxGmF7fyYI6mdnfZ+VkEq2RkwCNJi7go58FjlgueobwQuhSAnR+iNEjm
+         aavTkV4QcA7nxFDiruXvepw2loM9d29YwvfyW4PNbYSWow0+9mH/XOgqnp0BevySoxFQ
+         KWvYpFMU4vqWKHZ/s82FxY5yIrElV2tpEIhm3sUoOGWzY9eYpZ+bu8Ig7UEKNsPJi3v9
+         6pUA==
+X-Gm-Message-State: AFq9FYK440DxE9nCNy11guW50OZD9SXkyFlKavdHeY+2x52U6cw4W3TA
+	AIqfKqFe4jke/0UtXd9j7IlUr9A3ygUoySDCd4KNB/siVqSAOaN7Dg7k
+X-Gm-Gg: AYBFou1IVZZidpjNTHkQE5FARlx81tT3/BWdP6nt1HGjGvZvH4cecFJhd35Ufgq9/80
+	ZShQcyrvlxja5wumNZTgnBPjoz2YcFhZqQjYfqncrFfPxDydg0Ax6Q35uLfXXLZYx/W6KSMuMSs
+	7eR+xvztBOTYqaY6i2CL8eeqLNjXqA8suv9xPeLACb+GnmAuUtGlGkLuHD92LxKfnXl2rHBtFqI
+	9cFAJV4nJLZm6rM606WkMwM5fG/1drD9Ut4WtEO/5ICNwsLLDIXR3iaw2mAa8QlP/onRRpRDz5v
+	qT+DL0t0ajU6m80VGTcrrHmHDrsgJ2iJ41pepJYaztZmfzWjAv24x4a5Rqw9OSJNbzF8NidwxMi
+	eHHc4hgl1ZXKuLoDQb52VdnVM6TyzCnHMimpcKQ3IZFyRBFUS+KL/whe5ardOX2VyhzEBfWzUXi
+	5jEENJYCdYhG74PzDL4068yLuFLhFRJdv+cSFAbxD8jiIXet7YElNxoBrcAC1PUINiMvZj4A+Vi
+	Rxl9EyOSmNgDM7gs6JRbRgTTTkLBwDAhJNWe8bxUUx9mM6OBYRgFjM7HijrSyvn7/WRQDqu70z9
+	Ahpznwmv77+nClJnAOGfl6CiePwknehXyMOuuY7BQxQnAuI=
+X-Received: by 2002:a05:701b:4348:b0:19a:9a93:c9b2 with SMTP id a92af1059eb24-1ac5a0b8872mr15780127c88.13.1793622755017;
+        Mon, 02 Nov 2026 04:32:35 -0800 (PST)
 Received: from [127.0.1.1] ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b2360d2066sm4950951c88.11.2026.11.02.04.32.26
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b2360d2066sm4950951c88.11.2026.11.02.04.32.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 04:32:30 -0800 (PST)
+        Mon, 02 Nov 2026 04:32:34 -0800 (PST)
 From: Qiliang Yuan <odys.yuan@gmail.com>
-Date: Mon, 02 Nov 2026 07:32:13 -0500
-Subject: [PATCH bpf-next 3/4] selftests/bpf: Match the insn number of the
- out-of-range message
+Date: Mon, 02 Nov 2026 07:32:14 -0500
+Subject: [PATCH bpf-next 4/4] selftests/bpf: Cover a second patch with a
+ jump behind a barrier
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -93,7 +93,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261102-bpf-patch-list-followups-v1-3-ddc8ccf40f43@gmail.com>
+Message-Id: <20261102-bpf-patch-list-followups-v1-4-ddc8ccf40f43@gmail.com>
 References: <20261102-bpf-patch-list-followups-v1-0-ddc8ccf40f43@gmail.com>
 In-Reply-To: <20261102-bpf-patch-list-followups-v1-0-ddc8ccf40f43@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -108,36 +108,75 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
 X-Mailer: b4 0.13.0
 
-"patch list: jump pushed out of range by patches" expects the load to
-fail with "insn %d cannot be patched due to 16-bit range".
+bpf_convert_ctx_accesses() can patch an insn twice: a barrier goes in
+front of it, and then its ctx access replaces the copy of the insn
+behind the barrier. bpf_patch_list_add() merges the two into one patch.
 
-It matches only the fixed part of the message. Which insn the message
-names is what the patch list decides: the jump that got out of range,
-not the insn that a patch replaced.
+No test has a second patch with a jump in it, so nothing checks that
+the jumps of the second patch survive the merge. The barrier needs a
+prog without CAP_PERFMON, and "nospec, store, nospec" in
+verifier_unpriv.c has no jump.
 
-Match the whole message, with insn 2, the jump over the divisions.
+Load skb->ifindex, which becomes a load, a jump and another load, at an
+insn that a mispredicted path reaches with a scalar instead of the ctx.
+Without CAP_PERFMON the verifier puts a barrier in front of it. Check
+that the jump still skips one insn.
 
-Fixes: 67d4d0b73c29 ("selftests/bpf: Test jumps around patched instructions")
 Reported-by: Alexei Starovoitov <ast@kernel.org>
 Closes: https://lore.kernel.org/bpf/DMKHZS5B5CNO.186F6YH1T6YU4@gmail.com/
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/verifier_patch_list.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/bpf/progs/verifier_patch_list.c      | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/progs/verifier_patch_list.c b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-index 3ba99cf16e96b..045081936d73d 100644
+index 045081936d73d..287b33e17b730 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_patch_list.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-@@ -128,7 +128,7 @@ __naked void patch_list_may_goto(void)
-  */
- SEC("raw_tp")
- __description("patch list: jump pushed out of range by patches")
--__failure __msg("cannot be patched due to 16-bit range")
-+__failure __msg("insn 2 cannot be patched due to 16-bit range")
- __naked void patch_list_jump_out_of_range(void)
- {
- 	asm volatile ("					\
+@@ -423,4 +423,43 @@ __naked void patch_list_goto_over_nop_and_insn(void)
+ 	::: __clobber_all);
+ }
+ 
++/*
++ * Load skb->ifindex where a mispredicted path through l1 has a scalar instead
++ * of the ctx, so that the verifier puts a barrier in front of the load. The
++ * load becomes a second patch of 3 insns behind the barrier, and its jump must
++ * still skip one insn. Only a prog without CAP_PERFMON gets the barrier.
++ */
++SEC("socket")
++__description("patch list: second patch with a jump behind a barrier")
++__success __success_unpriv
++__caps_unpriv(CAP_BPF)
++#ifdef SPEC_V1
++__xlated_unpriv("nospec")
++__xlated_unpriv("r0 = *(u64 *)(r2 +{{[0-9]+}})")
++__xlated_unpriv("if r0 == 0x0 goto pc+1")
++__xlated_unpriv("r0 = *(u32 *)(r0 +{{[0-9]+}})")
++__xlated_unpriv("exit")
++#endif
++__naked void patch_list_second_patch_jump(void)
++{
++	asm volatile ("					\
++	r8 = 0;						\
++	r8 ^= r8;					\
++	r9 = 0;						\
++	r9 ^= r9;					\
++	r0 = 0;						\
++	r2 = r1;					\
++	if r8 != 0 goto l1_%=;				\
++	goto l2_%=;					\
++l1_%=:	if r9 == 0 goto l3_%=;				\
++	r2 = r0;					\
++l2_%=:	r0 = *(u32 *)(r2 + %[ifindex]);			\
++	goto l4_%=;					\
++l3_%=:	r0 = 0;						\
++l4_%=:	exit;						\
++"	:
++	: __imm_const(ifindex, offsetof(struct __sk_buff, ifindex))
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 
 -- 
 2.43.0
