@@ -1,54 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.214
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793609157;
-	b=b7nF9n+KLnNQgCZ5EXDfGQQ8hnsG4+6YduhJBc+fzbEZ6RnHBpRhEStWyfKxfZfUxYnc
-	 hPgLa595KpEpaN1n6K3VLM6w43sOE1vPXDHfCT2IkPUp3KOOcXh2JtEpL6v6fe6CcmGGF
-	 GSWFFngdJrWaotyWPvFXvnVoqR02tnq/s22z34j/BGYO/MeAHaadaFhn3S3gnRL/IhTYD
-	 PZ2grJr4xM+a+OXTtVlwvCoh2lOiyooaLhucFIZVDQbNMDxMZDhCsqBKMda1u9MwXUDkl
-	 k9GTAIPRfi3eACyZF5omBPBfzl9eiDLl/h9v9LRLRlbCXzbmORa8QVfzJ6ikz7Ym3Qg==
+	t=1793609496;
+	b=cH/qAEjSrHKrpc9M5+OPaNvLLpmi5//g+yIRkf0vXWFd26u24jq8VAGJiBs7dVkl9Hph
+	 zkolXSsZW349ZXWCkwmU1Acp46dezO31uS6WzAtY8QpqHnj9zUe5lpYMgpxn/LrHPRGB3
+	 20yoXCKvFlI/+ZwqhW7vX4s9KkplRlMmA0UN+vAur4stvz2qXZnBIcNwSf83TCFP4xy76
+	 YuOxrBdBCKMly3hP7qs690Y0gNBVOPLJOreAFGE+6q5Iayn9FRIewDIljF3f9ZqK+//Bw
+	 cjW8ETcSjufSXCjCL71I/m21yV6lCVNN6SCVoNxryRkYfykZ5/jHYNq2LUEKeDnkuiw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793609157;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793609496;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=jx4qlQkPxS7DAszsO8FykZUqEui3HDCIXlBMJeUNy0Y=;
-	b=Wz7lr0DIFWZe2o0wvitMM4d4xiX6wvp7GqYWlyl4cTskPwvywN1EzICKfeqyKVJImCX9
-	 qV7i/MQ//Cearebsq1VdcCEF+mXX/0lb1zL/6hLO+WUAoGDgFjMmsfC7iPKmG0lC/lhKz
-	 uiKoRq9VMcx4u6q09b9AqBMjfhPORn+yYilCKVPG71fl4dsbgWOxW3eaYEEdqm1CzmBNo
-	 ucaFDUyeY8ZxobJCZDlhuZpn03CCejNu/3r/mCWN6MENZDj59PlABU2wCvJIy2/YWu6gx
-	 R1wTlvEcM5p8qtp7aNdsHvv+OuqjJM5cWq09QOJBjYYMSXgfPdF6lCR4PMBf7awueMg==
+	bh=dDprn+GVk/HXWFUpZUf+4qK0Drck94qd63Wb+S4GwuE=;
+	b=c+/YLd5qLW/g85tW2pqDqo2mr0krCbY8DrkQ8TEXgcONgyaovksUSTutfgCTxj8RTAok
+	 /+9nVC0tOld3dN14eCzeSibzt4d/xpxZc7Xq3wLXavFkTxA9UcvG08z7Fp76EPPVjku5h
+	 TdcEfyoWM2Y3RWDMi7nQNkFk/OyWIG1zCsG6CLkuMN5NW0gjsWZ8Y+S85RWBOQJB3H/DX
+	 jMUIH+HCdTsUJVCkxZTByM+aSAhNmloEf9CjtjGf5P30XWPevopICsP+NvSaBhPmz6C/G
+	 VG8dp7arOedh6htYP7VujtRX5/71hYbQ6Dn2hwNV7umRlFmiILBZj2YV2Gnr8gLubkA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cjHN8xey;
-	arc=none smtp.remote-ip=95.215.58.214
-Received: from mta1.migadu.com (out-214.mta1.migadu.com [95.215.58.214])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5D3606A32D
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 08:45:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD5D3606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b="x7tw/7Si";
+	arc=none smtp.remote-ip=111.22.67.137
+Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE420606A32C
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 08:51:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE420606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cjHN8xey
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=xxE5inaPrVu+F+7VswAWI/5YBh6Q8RuY05CNRqyPUa4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793609154; v=1; x=1794213954;
- b=cjHN8xeysAL5ALPxZMu2qazghWYfyhOK3oO2LxRICrgbvHbJaHbAmgL4XyWaCJGsdL+Tp2vw
- NPjjSBXOjlHy6J1rzNqwgbVnEmiwkGBgcI84XPFJTyIe+e5rRR/mXCJtGOFo3arFF94Fw1JW969
- 1LAoqiHbd/H4CLbp7oH8zysY=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2b7e906160719b9f;
-	Mon, 02 Nov 2026 08:45:53 +0000
-X-Mizu-Trace-ID: 2b7e906160719b9f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <bc3366e4-3429-4826-b04b-ca1ff20b9686@linux.dev>
-Date: Mon, 2 Nov 2026 16:45:44 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=x7tw/7Si
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=x7tw/7SiH2Ps26gGestIHsZsVWIiobWimAOC8HVrImNAA44ShcbYbhAvPOwgo89V/LvI6iPSbWUN7
+	 QirfAqhpDitgjEA1IY9IRaQrVfd4kG4nAlz83P78A07f64RRHmTRUcb15zREFg7S/OQ0jMFMm5RX10
+	 es8TmwohDN+qIeXU=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee86ae84f1437b-27f23;
+	Mon, 02 Nov 2026 16:51:32 +0800 (CST)
+X-RM-TRANSID:2ee86ae84f1437b-27f23
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from FHB-W5100250 (unknown[36.137.216.21])
+	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee76ae84f0de6d-cb943;
+	Mon, 02 Nov 2026 16:51:32 +0800 (CST)
+X-RM-TRANSID:2ee76ae84f0de6d-cb943
+From: Gu Bin <gubin@cmss.chinamobile.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	alan.maguire@oracle.com
+Subject: [PATCH] libbpf: fix missing minus sign in btf_dump struct zero-check
+Date: Mon,  2 Nov 2026 16:51:21 +0800
+Message-ID: <20261102085122.916-1-gubin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.50.1.windows.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,61 +69,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 02/15] bpf, sockmap: Don't let an SK_DROP verdict
- stick
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, john.fastabend@gmail.com, jakub@cloudflare.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
- matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org,
- josef@toxicpanda.com
-References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
- <20261102072112.4160195-3-alexei.starovoitov@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261102072112.4160195-3-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+
+btf_dump_type_data_check_zero() returns -ENODATA when a datum is all
+zero (nothing to dump). In the BTF_KIND_STRUCT case the per-member
+result is compared with ENODATA (no minus sign), unlike every other
+branch which uses -ENODATA. The function only ever returns -ENODATA,
+so the comparison `err != ENODATA` is always true and the loop bails
+out on the first all-zero member: a struct that still has non-zero
+members is reported as empty and skipped by the dumper.
+
+Use -ENODATA so non-zero members are handled correctly.
+
+Fixes: 920d16af9b42 ("libbpf: BTF dumper support for typed data")
+Signed-off-by: Gu Bin <gubin@cmss.chinamobile.com>
+---
+ tools/lib/bpf/btf_dump.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 7dedd3975c39..ea9a34db4c00 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -2567,7 +2567,7 @@ static int btf_dump_type_data_check_zero(struct btf_dump *d,
+ 			bit_sz = btf_member_bitfield_size(t, i);
+ 			err = btf_dump_type_data_check_zero(d, mtype, m->type, data + moffset / 8,
+ 							    moffset % 8, bit_sz);
+-			if (err != ENODATA)
++			if (err != -ENODATA)
+ 				return err;
+ 		}
+ 		return -ENODATA;
+-- 
+2.55.0.windows.3
 
 
-On 11/2/26 3:20 PM, Alexei Starovoitov wrote:
-> From: Josef Bacik <josef@toxicpanda.com>
->
-> The verdict of an sk_msg prog is valid for one message, or for the bytes
-> that bpf_msg_apply_bytes() requests. These bytes can come from many
-> sendmsg() calls. Thus tcp_bpf_send_verdict() keeps the verdict in
-> psock->eval and runs the prog only when psock->eval is __SK_NONE. The code
-> that resets psock->eval is after the switch statement, but the __SK_DROP
-> branch returns before that code. Then sendmsg() drops all subsequent
-> messages with -EACCES and does not run the prog.
->
-> Reset psock->eval when apply_bytes is 0, as the __SK_REDIRECT branch does.
->
-> Fixes: 4f738adba30a ("bpf: create tcp_bpf_ulp allowing BPF to monitor socket TX/RX data")
-> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
-
-> ---
->  net/ipv4/tcp_bpf.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index 8cf63a9e7fed..d90bcc911b36 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-> @@ -509,6 +509,9 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
->  	default:
->  		sk_msg_free(sk, msg);
->  		sk_msg_apply_bytes(psock, tosend);
-> +		/* The verdict holds for apply_bytes, not for ever */
-> +		if (!psock->apply_bytes)
-> +			psock->eval = __SK_NONE;
->  		*copied -= (tosend + delta);
->  		return -EACCES;
->  	}
