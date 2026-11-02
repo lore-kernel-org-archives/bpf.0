@@ -1,82 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793616457;
-	b=bKFXP9nX47JWLGnyhca9vtVybAxzKwwpqmKcepmYsUBJT7Hh2ECAuhnfbxe2OqYLjxAJ
-	 JCldL8yPkZSKxQUiJ+9zPbjqDyFZeK+X7MjaMg/Gtg6ZTsmkTWfI9c4lv5AQ9J7alVWzu
-	 ZVGZPv2FuQM3E6CfacF0m5LqhY4zZ98YFwa/B5YtH49dvOSB4v6IiJVRdWNvaO67j1dYJ
-	 kCG2IU3g2GWHDk6HnP7qXhX4HoW1YSIAoXQH+WXYeKjYzHVdECQH+XAwOmBCE+USfxSTu
-	 OVLNGXuLMYdIlhYT69etwQnXlK4GQXSMLrku3WbPXH1rfs377rAz4pdtssGPIDve6Hw==
+	t=1793616459;
+	b=bUKvEUTGdYBcYBmzScohU4DEDj82bcuZTfAOV2wVuqj4G8f3Sr0rGsiylcfXfjHwfXIO
+	 M6WH91HQHipEpmzCNL+2gF5hpzN/QMBfTWvTGJuOK/aAiOs1f93X7n34a5N5gTBgL+UXr
+	 jyhjoh8HfZ5pGtNQMOZZF4R37tdwcPOfSbRCUlSqtya5vNAvuCQYT79cRItsz2Qy11WBj
+	 euBjYQ4PhW88D5TTQV5WLBXpG3eIVbrXZU83aDt4mjMX8pbiXAMLVXEiFE2ig/Sc+u2/K
+	 pf5UoWQhYMztEOVe060bcPHksnZ5WEenfXmv9CF2bjsWs9cVidsxWyprW0Frkn2V1ng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793616457;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793616459;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=fgtT2+a9TrTITBRXB1pk27WkIgQ+nxQrQ3NB1J1hYuM=;
-	b=34LCL3HW7h2aqWu2SG6VVsD5BvaLsI9K4K6hkc/jH7GOodjLd6bqj7uJ7CdMj3VzqVVo
-	 aoEWOqll5F814NNuCwwqnCTTa7zfiKjgsQQfM4SB7vgBGF4ehvEkVv5hIU7Oeeu7rgGnB
-	 /bBrPmqE6PHU+eHNtTkfE2czRLXSmfgp5FRJKPaKrQeNjvz1qbs/IONxFTVA7GyIPsF1G
-	 EzWUkBEHN/pH5rcr3namig6RNrH1txcfidAFpbDqtTnYGBE2SzoRlF0HncTlRdGEuJ3/D
-	 od4LRikglpHId/ggQIEch30vze+Y+AaVof1U20ed4k6L//CTH3mG481zVMxAdcdzEKw==
+	bh=HyDSHSgspGUCXxBL33Pyf2fxt1FGBdRsUfgAbu0U2lg=;
+	b=EpkP8+rq8duOYexmrEke7yFsrm5xRW/g9ctDNbw5UPmprCTljsZ7GqQTAG0zjUbY2bI3
+	 geMktGxym3uLT7PIHRQOLY585XgarYAo7UYUTw+JyRCRtleyipwS7QQu2HoWjdedbaie3
+	 41fXlPABx4KXAXj32l3mFwaZYfplcmvPKFbVSLOGb0U4OYQwCrk5Vzq6ttDVIVhEEZmjH
+	 159j3eqMk80e1Uy9PT722vKVXNfHkmSNuYJyZJ70tcjyS/A2inHW6e8bvfOn7UkBuD3pp
+	 dnZHvI7oFkbjVYvsjkPkpLIsuFZ1qtJKjLDF+lnDUCoKPYG69R3iXTZTDBA4i5clLWA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="KfoU/C5V";
-	arc=none smtp.remote-ip=209.85.128.42
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dwhHSOkC;
+	arc=none smtp.remote-ip=209.85.128.46
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D66606A33D
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 10:47:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3D66606A33D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D24D606A33D
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 10:47:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D24D606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KfoU/C5V
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4a214af2076so21273145e9.0
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 02:47:36 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dwhHSOkC
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a35d5d4a20so32273365e9.2
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 02:47:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793616455; x=1794221255; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793616457; x=1794221257; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=fgtT2+a9TrTITBRXB1pk27WkIgQ+nxQrQ3NB1J1hYuM=;
-        b=KfoU/C5VTwLgglWwOGIhOu2WjOGvxbM3LY2fCfJz6lShfFpPvqzy4ezwM/iMiYgL+q
-         Tul9qsTFt++Vxvo5bj+KuUneF0k5khy7EkUtw3aga+Z2wW4RYU6YE8GJuraORD8x08S/
-         aQtEf14PxG1LdsFtNKFgAq/Lpj2k0gGfugTqfojHwT01jomsA0iz3y0RfDCao2L/qmfm
-         65mIOVntxKNAxTZzjP9b1wIthVOejEPTuUOOjULlkmuMz9/xT40F6sutVETL1s64XQqg
-         0PPGjTllaw1G2DtC88d9PLKw6sF1RjF4k0+wdB5iPssFkdXmYpzHNeklTP2rebzN2zi1
-         rHYw==
+        bh=HyDSHSgspGUCXxBL33Pyf2fxt1FGBdRsUfgAbu0U2lg=;
+        b=dwhHSOkCW0EVkEHrgtbCMeCdOHGQy01fUPv5J3FY36E/daOm4zYXJc2PleAINdu8Xi
+         Wdl12oOh7Ocfjrcfhv9V7UDNOWqqOcvLtO2rYrJUornb9Q5RBayX0fsvdmvvVrBU362m
+         PYnxt3rRIzf5HPJo2tGlNRx0vw1VHklNdGlnkaPIjWdt90K0KoipGzXWkBr3yhVQL1XB
+         XSjtERdM7KFIU182twmGoa3ORD2QAp9VipCnlapwBbsqOKbGW9Uf7qVOZtz/xf/xlkp+
+         q0zJYEbqonnd5ITGqxcZfZgJIBWH/lM9ni0/Ny9gftFWtImoJgWYGAwkhg8mKQ1lVw+m
+         r3dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793616455; x=1794221255;
+        d=1e100.net; s=20260707; t=1793616457; x=1794221257;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fgtT2+a9TrTITBRXB1pk27WkIgQ+nxQrQ3NB1J1hYuM=;
-        b=OFv0bpMYyyzsUSEUHpEEhESTYFsdfvcZzrBMKPrlM/vEP+EGTBAVcrCvBSyNNzFq8d
-         4AlAsK8sT0tYhTCkB77EHvkLXV4G+izNUpFDJKhrcxQ6UeeZ3kid7BhQjkqIsobtjrQV
-         8Uxgj9sbr5r/hs8Wf5QQSMrmE/BybGayHhiib9+f1WTw5RtofPdkjfHOfgX6GPzPdN2v
-         93eSlAae6OmGRPOTZRKDm0eoBxBmra/6zjXmqHo/lBYSxirXzr2+JxsRqO6jJYaIUq3y
-         gBPLuNYlDs4RnmiL2s8jL+gni9sUkemPF9I1oPusqxDWV7q7Vqx0prI0TXoq7r1NjjUe
-         3VpA==
-X-Gm-Message-State: AFq9FYJKhtlOVqrRdnM2PEmE2G9/Bhwc41p/oVYJDSE7vatBTXVjt517
-	NJr8Ef2TEKKQgH3PTH/Z/3GtU68+UsCHkPZYxM/jUp/4XsaqqJG18rjP
-X-Gm-Gg: AYBFou1ey+vBYJbCf1QOdEwzLA7pQgeAQzBDP2GFAf9tjUpTDkVMqSKTD05CC+K99cO
-	WH53wxPbTC5uAqp4wlmYWlqpHdkgQXqsqbRj+AG3WZvRKUUTu0sIX61oZOV11/GjBuXRYCBa8AD
-	ohF7HWV65pvbFEVe8EAZdLmbkAexlUXr4iLsnJz06Z8XvVrwihu7FMt453su9xPXeeNCQp9tlPC
-	19l2EJzWojFkJLG60i+Fqdy1PCBIlqFSypjkoWBLYtu2jvYC/TqZQxXr1Fd22kl+wWrHGdIzd89
-	d3lKKl6QMDnwm67Jr/5x/oXrLVkILaKZNbgA5kVJaE51k3qBUJknXdwmD7aWEIGeTwx0Lc8MAi5
-	RYkp1WE9iIQk5Y1oGikIu0l2lqpbZ6sJvye9BlV1T/s93aTfIekD3jcD4bOq2DlU/YwgmLhGaP/
-	O3BatmfuwNPr0g/SwG/te07Rk3Vwk5Zvcl+Qigxet9clabMX5CBmfTzpReimT8Bd6tfE+ryVjju
-	kKbCoxKmGV2BSpfJzm8RfiYMd/yw32cXeyhdwN9nUdnxSlEq/ybZ1tF8txCkxr5JUwAU852CWtk
-	eynxryiLw+hpURplzw5etX2x2IrB8OSOXxoCj8bGfCK1Qvh6uqAaKcHiXYEMm6q7
-X-Received: by 2002:a05:600c:6992:b0:4a1:a2c0:7b73 with SMTP id 5b1f17b1804b1-4ac18992c01mr220277725e9.30.1793616454928;
-        Mon, 02 Nov 2026 02:47:34 -0800 (PST)
+        bh=HyDSHSgspGUCXxBL33Pyf2fxt1FGBdRsUfgAbu0U2lg=;
+        b=cdFJu3UZIisi1bOW/HQ/UR7MWrqqeu8WKcLqrwNwZBOr1OlKID9mkP9wlHFbAykFct
+         ZnvRffveJ4U9y7F3Z2zxUGlJA7cdMk20hn4D5lwez5cGe8iR0MzLF85cTsetOL/jLvKI
+         eZ0LHSCcSPlTTzkR2T959Nxjj2PEC4PuO4DndYa1TShe869DKH7EV4CH8oTjvLMjOQlI
+         nezi20MsO+1goCP6pQA9R9svd6ZCchA8oQ7bH3xeGeb9BMbh3egF+RFCEyUM+7F+tPE2
+         Hsd6w1q2qHkDhn8tdROxKSu+nZrmzKM6s+jNXCGGX2DLZdcDpnbG7ghoo7P/HDeYdWcH
+         KxUg==
+X-Gm-Message-State: AFq9FYLAbIMpOnJuUDXe16tl0ALRW+EHrQ1n06dxFO24WbDVDm+EZyj+
+	EW0AI29cziAr6RbiNXoXqDnY+zIInwUgj7D3I/id5SnBIdrKtsqb2Bht
+X-Gm-Gg: AYBFou3bpshybly8tNPoRiu2w/VwcefUpsWfrEaDaAq8X9ovtzbyn5Zoj0np3At27dh
+	D9rX4p3nJmhvrWj1GQoj2UyWlF5KGZglwlPrBrGynqkVvc7GDTnDD14Vd/dJRBEeD+2etjRqr2g
+	GCG1rqQbhS/21mWM3DDvkcdYumI+QXlr07TY+IBOpVv3bbrRZugjxJ+y7Z7GuBmtUWD2YY3eqzf
+	AORRrXKCfYjKBDQqWNxTJM3UmkP8jHzSjG6CQDsgjhyIvOloEcamRmB9lAxvf6tyQXL0RRA0xvy
+	xC1fskRcfZI3TWbu1o3dQl/BX5Dxyqa6QlFbz1K88T9ukiUGsji2n7uA0gjXV4GId07kckyS1tr
+	g9Ju+OnahSZw9qqloieALOUPp5Jj0SSfabMhBR5O2Mag/U0oRLIq5Jj5iRpVIfO7MP8QINI98bD
+	Q0iQTD6tIRgmSO4nx1aQz/Uwlv1MuNnQHbs5hAhrMVxQvzd3Rqed1uTp7hWdAHHy3FeJSze7mP8
+	0yXviaYqea4jaotLNqDyvQOsAFhJKseX7OB73yFKhynJhkmeyJdkDs7LR38k5YO6LcmwG3NO6XO
+	gd5MKGoa9H4v4rfucsDWlFuCBZznk4leQX8lGf6uqLM=
+X-Received: by 2002:a05:600c:848c:b0:4a1:d087:f6ab with SMTP id 5b1f17b1804b1-4ac17d19e0amr220305825e9.18.1793616457546;
+        Mon, 02 Nov 2026 02:47:37 -0800 (PST)
 Received: from dell-desktop ([2a02:587:4b42:1400:8199:c552:2b9e:c33])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf6c7852esm248939695e9.11.2026.11.02.02.47.33
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf6c7852esm248939695e9.11.2026.11.02.02.47.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 02:47:34 -0800 (PST)
+        Mon, 02 Nov 2026 02:47:36 -0800 (PST)
 From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
 To: brauner@kernel.org
 Cc: bpf@vger.kernel.org,
@@ -90,9 +90,9 @@ Cc: bpf@vger.kernel.org,
 	viro@zeniv.linux.org.uk,
 	jack@suse.cz,
 	tasos.papagiannnis@gmail.com
-Subject: [PATCH vfs-7.5.bpf v2 1/3] bpf: Add bpf_path_getattr()
-Date: Mon,  2 Nov 2026 12:46:53 +0200
-Message-ID: <20261102104655.70901-2-tasos.papagiannnis@gmail.com>
+Subject: [PATCH vfs-7.5.bpf v2 2/3] docs/bpf: Document bpf_path_getattr()
+Date: Mon,  2 Nov 2026 12:46:54 +0200
+Message-ID: <20261102104655.70901-3-tasos.papagiannnis@gmail.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261102104655.70901-1-tasos.papagiannnis@gmail.com>
 References: <20261102104655.70901-1-tasos.papagiannnis@gmail.com>
@@ -107,82 +107,40 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Direct inode reads can differ from stat() and related system calls,
-especially on overlayfs.
-
-Add a sleepable LSM kfunc to query a trusted path and return struct kstat.
-Use vfs_getattr_nosec() to avoid calling security_inode_getattr() again.
-Limit the copy to the smaller of the buffer and the kernel structure.
+Describe the VFS result, output buffer, and calling requirements.
 
 Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
 ---
- fs/bpf_fs_kfuncs.c | 38 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 37 insertions(+), 1 deletion(-)
+ Documentation/bpf/fs_kfuncs.rst | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
-index 35ccd98a4de6..97afc9659f1a 100644
---- a/fs/bpf_fs_kfuncs.c
-+++ b/fs/bpf_fs_kfuncs.c
-@@ -96,6 +96,40 @@ __bpf_kfunc int bpf_path_d_path(const struct path *path, char *buf, size_t buf__
- 	return len;
- }
+diff --git a/Documentation/bpf/fs_kfuncs.rst b/Documentation/bpf/fs_kfuncs.rst
+index 8762c3233a3d..05cc9b657a42 100644
+--- a/Documentation/bpf/fs_kfuncs.rst
++++ b/Documentation/bpf/fs_kfuncs.rst
+@@ -13,9 +13,22 @@ BPF kfuncs can be used to get these data.
  
-+/**
-+ * bpf_path_getattr - get the attributes of the supplied path
-+ * @path: trusted path to get the attributes of
-+ * @request_mask: STATX_* flags of the attributes that the caller wants
-+ * @query_flags: AT_STATX_SYNC_AS_STAT, AT_STATX_FORCE_SYNC or AT_STATX_DONT_SYNC
-+ * @stat__uninit: buffer to return the attributes in
-+ * @stat__sz: size of the supplied buffer
-+ *
-+ * Ask the filesystem for the attributes of *path*. This is vfs_getattr()
-+ * without the call into security_inode_getattr().
-+ *
-+ * This BPF kfunc may only be called from sleepable BPF LSM programs.
-+ *
-+ * Copies the smaller of @stat__sz and sizeof(struct kstat). Any remaining
-+ * buffer bytes are left untouched. On error, the buffer is unchanged.
-+ *
-+ * Return: Zero on success or a negative error code.
-+ */
-+__bpf_kfunc int bpf_path_getattr(const struct path *path, u32 request_mask,
-+				 u32 query_flags, struct kstat *stat__uninit,
-+				 size_t stat__sz)
-+{
-+	struct kstat stat;
-+	int ret;
-+
-+	ret = vfs_getattr_nosec(path, &stat, request_mask, query_flags);
-+	if (ret)
-+		return ret;
-+
-+	/* struct kstat in the program's vmlinux.h may have a different size. */
-+	memcpy(stat__uninit, &stat, min(stat__sz, sizeof(stat)));
-+	return 0;
-+}
-+
- static bool match_security_bpf_prefix(const char *name__str)
- {
- 	return !strncmp(name__str, XATTR_NAME_BPF_LSM, XATTR_NAME_BPF_LSM_LEN);
-@@ -504,6 +538,7 @@ BTF_KFUNCS_START(bpf_fs_kfunc_set_ids)
- BTF_ID_FLAGS(func, bpf_get_task_exe_file, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_put_file, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_path_d_path)
-+BTF_ID_FLAGS(func, bpf_path_getattr, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_get_dentry_xattr, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_set_dentry_xattr, KF_SLEEPABLE)
-@@ -515,8 +550,9 @@ BTF_ID_FLAGS(func, bpf_sock_read_xattr, KF_RCU)
- #endif
- BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
+  * ``bpf_get_fsverity_digest()``
  
--/* Side-effecting kfuncs that stay exclusive to LSM programs. */
-+/* Kfuncs that stay exclusive to LSM programs. */
- BTF_SET_START(bpf_fs_kfunc_lsm_only_ids)
-+BTF_ID(func, bpf_path_getattr)
- BTF_ID(func, bpf_set_dentry_xattr)
- BTF_ID(func, bpf_remove_dentry_xattr)
- BTF_SET_END(bpf_fs_kfunc_lsm_only_ids)
++ * ``bpf_path_getattr()``
++
+ To avoid recursions, these kfuncs follow the following rules:
+ 
+ 1. These kfuncs are only permitted from BPF LSM function.
+ 2. These kfuncs should not call into other LSM hooks, i.e. security_*(). For
+    example, ``bpf_get_file_xattr()`` does not use ``vfs_getxattr()``, because
+    the latter calls LSM hook ``security_inode_getxattr``.
++
++File attributes
++===============
++
++``bpf_path_getattr()`` queries filesystem attributes through
++``vfs_getattr_nosec()`` and returns ``struct kstat``. Use a trusted hook
++argument, such as the path in ``lsm.s/inode_getattr`` or
++``&file->f_path`` in ``lsm.s/file_open``.
++
++.. kernel-doc:: fs/bpf_fs_kfuncs.c
++   :identifiers: bpf_path_getattr
 -- 
 2.56.0
 
