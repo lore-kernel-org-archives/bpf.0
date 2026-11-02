@@ -1,96 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793599184;
-	b=rQ/9GvmSZFXmnsZmn/HDmD9s/Vx++amRqiWg/04bOE3LFUNPchBVEHVI8tti4i6/klvY
-	 7hThcxhcjUBZ1trJsHxxIDZngIAHVNUQ8fatx60kMGQlJww4Z8BZlQp7eyq6zMx+m98w7
-	 jbCQbvlOWFPn5j+t5rHZPQBd7Eo1KhPqPxxC5YHZJ7uje7rb9hvqKPMAI27XFGqqfrVmp
-	 9UHzwgpThzYkZe2QTCs94GP1HQIxjKq6eOKNq5rcCpL/D+FAaYLEJS1jWNbPlmxHGdO+a
-	 JUEGXbiaP1Rk8Vze5JCvBG4ndceQh+mg4JvZBOHhnbejaa9fJOoaK2uS83XYEkfOYIQ==
+	t=1793599600;
+	b=vOUTTTp/pQTQI4fBdl3XfePd13i13yK2d+/Bbh4ce6bwfsoyqAPFMDBcNl673mYoNoLr
+	 zoHR9BPePztYtGm7I4Sfm069bikKSUI+2aQQI1ht8p95EnWsWKiYhrujVTCm3sdfUJdeF
+	 Uyszl+FRQSlhnaTxAbf6/IZuM/c61zBXkEksIzIxwVXHC9V2qAbnEuzfhamgZRy++AjnQ
+	 5hqxWjR/ICvs2dybHQ/xDpVOEGp0rioZ/vFZiY57MX3TA3UKqiF2wQqZxXvTkCYt0JVcL
+	 8UHVmnNSFb/Dl3arEZDLNUhWAF9bOR3+By00obRatqzjQZQyCXk5Npm0ihHBy09TIMA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793599184;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793599600;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=SbRRXgi8Dlz0ZyN3+pKrT0ekcYoq46t7RH1Zfj1vvOc=;
-	b=EtUEwUeOngyyCYVmtPdTnyGQTj8YCjWyOcqQfwOU6GBr7PHAxNqYasZS7u1pVHAW3SVL
-	 5B9O8J9DT99WnBYYm2ivPY8+ozc8H1FnQjcIEr0d2NCT8qZfwoc0Fh/dKKx+xbgOn9Fyv
-	 +J71l+hFfgWu33oK8co4cGZZ5XW8Qe92FU0kvOPiu+xsUdn5OIcnJiNByPGURx+favELE
-	 wfaUICcl/A/A3vDE17mrff/d1ursjmUzN7uNU9i52+EdvqciC95tp/gtGoDlF6G3QZzMg
-	 4sZjVu3YKkxVE+IXe1Hs/Rel91mTmoaMvtL7np+U2A7R7WZwN2wyvXxXWjQ2cM73/yQ==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=HWS8MhFAJ2J5PetrvH3US4jMd7S74sKAtV0trLDPeuY=;
+	b=dYZysjoFCAgTxHjkujilt293GUaMr8DkcqaTIkSSIwPaXNwwNLNP88FGpuVeGZyaeFSH
+	 9TiKaUvcz6y2UI7Qrr7w839wEW2orneAfh7SlyGi7F2srbmHxwHFq50QQdqemwFdOrAW7
+	 sDXC0Ji30fh9SWp8zckA0F9lLWEuTrm1boKnzzl/oyykpg41T4LQurRtiqspHWAdzsrqt
+	 l0wPX2UliE3UMA9GN5iXE2U+rbH2UFeUkXonv9BeP6f3zA6PukuOGOzKtYfAFHewjojl5
+	 ZAZ4rR7LNKW8Rv3+gjL02JcPGEQg9ertgzNDZjq0w4dC7g8nXgHSw1Ky8uEMnl5kw/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gXmOBH8y;
-	arc=none smtp.remote-ip=209.85.210.175
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YzHqBrWL;
+	arc=none smtp.remote-ip=209.85.216.51
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FF6606A327
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 05:59:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70FF6606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE57606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 06:06:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EE57606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gXmOBH8y
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8a39e5161c1so1717102b3a.3
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 21:59:44 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YzHqBrWL
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3ac6794fe45so1881802a91.0
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 22:06:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793599184; x=1794203984; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=SbRRXgi8Dlz0ZyN3+pKrT0ekcYoq46t7RH1Zfj1vvOc=;
-        b=gXmOBH8yyTu9qyDpe6mSAzrxq592wDbhiWEF6JBQmORUndHOejpH03948YimD0V5q8
-         AXFgzNeqFFeS0bL5XKvwQGH11650Q7BWtCQNLRlUqf+H7Rlw/4zQWV00sjHvhYHyQ4T0
-         6SOggcafYObtgNGeWPjEeau+z4/61apnyAAgUimfUTKMr78yVUaj6GefA9g93OPaL3wY
-         Zrvl0hqV6WpD7zyODz0LtPL+GnmAu+rkDvYEzg0ythyV+UqeouTfvDz9ybSIjAxquBS4
-         HbNSYD4bNE+x/LDWGf0PzBJcILoP+jsekPhitmqsG50H+Ag2cn3BSkbK+VwjA5rKz/K9
-         oHqA==
+        d=gmail.com; s=20260707; t=1793599599; x=1794204399; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HWS8MhFAJ2J5PetrvH3US4jMd7S74sKAtV0trLDPeuY=;
+        b=YzHqBrWLW4bCSzljXEEwztzgzgWiZZFvz0ZJOPqKhdM1A2movm+ZjJliJQPDkoecD+
+         EtwulPdNqxdMty2aBDHyTtQDHzjxiHmQFUj8hgqxRLBtkD+DTV1gg9cY935wiI5RBbFZ
+         HXIGhFLqm1UlUZJmUct64Xy48Y7foHBfFuWzh4OyBu7KXF4rmbEPZvrD55VWrhwj5qZg
+         GFvZHEBv2iXZVHF7H8lHkqoQmGentiSDCoiX+S/6elij+WT6fWzmsUq1pL91+NlKL2tH
+         TErLsXJ8V2Du1tx9bYpflZnSilK8MwWdtMR1HGtSjN9Nc7hg27QeVu9Gw4DXeWKGMMIo
+         RF7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793599184; x=1794203984;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SbRRXgi8Dlz0ZyN3+pKrT0ekcYoq46t7RH1Zfj1vvOc=;
-        b=Z/NwRzMmG6hwrCRpiE3+dSw52u0VbLZAD5mxJpefadC52x1VoUXmqspaG02MbtOiwA
-         iPVi9EXUiLCvshK23/BfLRqFkLNYDFZal2swMC4ge8wySmbHjxt49hq7M5G+Gxdw49J4
-         4kkqrs3kvDrgYacLcaa5NkdPYhMXKPS+1i+TjGAfQt/0YlX/UoRIAImwBelQxp9vM/CV
-         HL6N4e6VVe4oEkqNykjdC7aaSp3cezTvFnspjmZsn1a+MmtoVXrLkMA7LQvP256mLZjC
-         4uOTJ99GU97xXb/KW7iIsQzwPc9MiqyIIKkU0rwt1gXvrO+jGsuAwpNJvFaBypaX/N5x
-         FHRA==
-X-Gm-Message-State: APuU4Z8gyTyMcb6gSKQy+VZtkCW16pl0E8BEEt8dz+vGttEz7YqDdJem
-	ZqA4ISob6zCCrhACtQBj+Jpr3IqqLHKkrXCjPjki1t6Rm0AGs1SablFgRHDkcg==
-X-Gm-Gg: AYBFou3DjzM1qYQu0FHlgd065wbigaVuF/+8APks8EKaSRUJB49tmAntalVtaPWOZds
-	/0+6O72NWgv+eeTvuvtDVVqWpc5jSzYihkX20Zjk+RQrbPm9b7Czbqi8vEsgnxZIFeituPqPVSD
-	SOLSYqwsKRVe2sDVE6CqROA1PW30/IfN/hcNSREnOYedAKMu1pseXyjT271Jm+csYbexvQ6jf9o
-	M3hm2ZAIxuT5MbHVk9W50xBBMEsbTEQHCrg8QaXb8OfZ7ic0UZAzR+w5Z61xMq99BBg/Ws9OguT
-	E+Do2kNkMTOcQislGUajbhJ3Ncd8gVflQmocFNP9DGpXGK99btTKr0BUg0uus6e05+bbpiro8Ct
-	V7iKZtFwEV2FolTHfU+MypR2Y+Zw7pDg23MEBY7vdmBA9KUKQXmR40256YlZPbpXBVZNS9lXOYW
-	Apyw4Cq8NUvSqAK9xdQk2o7D5s21x/m/Ora8q8n7frdh/ZWQBFCx35xrmR2Efox52TuIobiC96r
-	5UM6eukmkRKJ95Vd7oKTfEHos9zbc+ZSVLVIqtEFXQFGgy+i8PFdiiubtKU465D6sjGDK0KobM8
-	dUpaHYIJ9PxA3ImX0uplxPzHUxHz75XrzJjMrb5Ef+CfUqB5rz41VWx6LrOuE0teuDjbpyY6BcH
-	VCeEnMwWd7gKXNYaRDdYbzMChapbe3W8s9CoaC6vr6gZVOWpRWPm9doYWMkJLi/D2Whjo62GCZ1
-	c=
-X-Received: by 2002:a05:6a00:410e:b0:881:4b67:ffd with SMTP id d2e1a72fcca58-8a9bc446fa2mr6858678b3a.26.1793599183481;
-        Sun, 01 Nov 2026 21:59:43 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aad9d03be0sm1489774b3a.27.2026.11.01.21.59.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 21:59:42 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf v2 4/4] selftests/bpf: Test a callee that overwrites a spilled pointer of its caller
-Date: Mon,  2 Nov 2026 05:59:13 +0000
-Message-ID: <20261102055913.3598414-5-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261102055913.3598414-1-alexei.starovoitov@gmail.com>
-References: <20261102055913.3598414-1-alexei.starovoitov@gmail.com>
+        d=1e100.net; s=20260707; t=1793599599; x=1794204399;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HWS8MhFAJ2J5PetrvH3US4jMd7S74sKAtV0trLDPeuY=;
+        b=mouwHYyNd6xcs8xWMt4zqnnM9Y5LpM8zAfzLM1L0FJ1N41IZ/vgipFyCtWJKZlfPzb
+         BFZtC4BPivn5VSLS6HEryNHwYP63tKy/X3/LOH9tb+05LzK03W5wxclZQyCoi9IxSaEr
+         UXq19NXcn3LuUksedJd3DaJVIvFIm2a2BCAt5eflzg+dIYdHEzDJ1Kmx9XfBg5mh6Mut
+         0Fu+zVcdTBQCNqM3NL7/d1hgT85vNS/Y7jveV++e54+56wlCcoHKlE5StmNCzII0JSZC
+         xZkAbrzX4EzJTnuOJM4Ks5Kd2wKjeRy4jmpDYz8IZCLMTi0IInrfJv01RzQK+zseu5FP
+         gHIA==
+X-Gm-Message-State: APuU4Z8wj5ijNSo/tveYMgLNvtFETANx3xpEbIxJUMJzLQIdMbtM2hdX
+	hB/t0Aa0RFaGpivMzOJOd/+yaJYrtbHSh1XVm0OAC7FbDLtt1z7Egilr1GDsvA==
+X-Gm-Gg: AYBFou1fzio+UKyGvXIPjuSodMvGo8JPQjTUsFty1dBzY1+G/XIKc2Bzvs0pfe9FDGy
+	UePo5IayN2VcIWwi5GEWCc91GliSfp9Y35P/Vvi21g5qAMMN2OjnYwlqPK5EgUOJ93sd5Fc2HLS
+	h4uKqzyLIuvbxSeDDgZ1a3tNoVAi+kftVwTgip6WBXp9LGmJXlXDoDhrRqcg4opDBKzClgVinmc
+	OX3DMzRKI9tnBJzkV91bPhXd4ShxnrvJsLqJVtmo5UspTQxv48/ITIQv0XGsdsPBnjKr/YJ77e3
+	U0pVi8wNCwQp3MhCbfinSyNNbFk+1C8jB/NHCFrAtBXg6Zq5tAYK1tdbvjNy5VQ7RQcSOefI4r8
+	4cOjW4HfVGWY9S5/uzZMaeQ7+3s01fcyvPwDRk3G171DwG9I5jR0T5vCFSSH3eJmpPJPLM7pRBi
+	8mZtnJXUhGkZg9IF1CYmNfFfKfF7UuuocueYThHtHtZ/8ruWZRbULdNF2e9I6FJhqkLJ+n9O94I
+	r1mlNXMcYE/Z2gXjEmAYvU22NAbXmVRzFf01W0god4G39EXOExAsGVqWfCxfGQ34CNw8zBIrzxl
+	r+USdYqLGzZ0eMpBHzUzIebDn+XOjMIEH6aqXC0pXZSdWPgZq1N3cgB0rWoVi4klKQ3VIOTKyis
+	EJW3jAZlOtJSyzrSpcNXX1iwLuX9rgLUugQ==
+X-Received: by 2002:a17:90b:51c7:b0:3a8:c0cd:57fb with SMTP id 98e67ed59e1d1-3ae89819925mr7854773a91.42.1793599599247;
+        Sun, 01 Nov 2026 22:06:39 -0800 (PST)
+Received: from localhost ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e8fb1ddsm17190680a91.5.2026.11.01.22.06.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 Nov 2026 22:06:38 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 02 Nov 2026 06:06:37 +0000
+Message-Id: <DMKHZS5B5CNO.186F6YH1T6YU4@gmail.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <odys.yuan@gmail.com>
+Subject: Re: [PATCH bpf-next v3 00/13] bpf: Replace bpf_patch_insn_data()
+ with a list of deferred patches
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: <bpf@vger.kernel.org>
+In-Reply-To: <20261102012940.1756142-1-alexei.starovoitov@gmail.com>
+References: <20261102012940.1756142-1-alexei.starovoitov@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,186 +100,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+Heh. CI is as green as it gets.
 
-The caller spills &fp[-8] to fp-16 and passes a pointer to another slot of
-its frame to a callee, which stores a pointer to a map value to fp-16. The
-caller fills fp-16 and stores through it. That store is not a certain write
-to fp-8.
+but here is what I expected bots to find out.. kinda disappointed in sashiko...
+my local sash@#$ seems smarter... ;)
 
-Three valid progs read fp-8 after the store. The callee is a static subprog
-or a callback of bpf_loop(). In callee_overwrites_spilled_r10 the slot
-holds a copy of r10. That prog also needs "bpf: Fix the join of fp+0 with
-a value that is not a pointer to stack". Without the fix they fail with:
+1. Patches 12, 13: the tests need net.core.bpf_jit_harden != 2 at the
+   start.
+   They are serial, so nobody changes the sysctl while they run.
+   But they do not set it. With 2 at the start:
+   - patch_list/line_and_func_info fails.
+   - patch_list/poke_descriptor passes, but the prog has no poke descriptor.
+   - 8 of the 12 verifier_patch_list tests fail, like every __xlated test
+     that has constants.
+   patch_list.c will set the sysctl to 0 and restore it, the way
+   classic_filter in the same file does.
 
-  reading from stack off -8+0 size 8, slot poisoned by dead code elimination
+2. Patch 12: "jump pushed out of range by patches" matches only the fixed
+   part of the message. The insn number is the part that the series
+   changes.
+   The test will match "insn 2 cannot be patched due to 16-bit range".
 
-In callee_overwrites_spilled_fp_hidden_store the store hides a write to the
-counter of a loop. Without the fix the prog loads, and it accesses a map
-value out of bounds.
+3. Patch 11 removes adjust_insn_aux_data() together with the comments that
+   explain the rules for zext_dst and non_stack_access.
+   patch_list_adj_aux() has the same rules without the explanation.
+   The comments will move there.
 
-The test for callx checks the spilled pointer in the log.
+4. Patch 5: veristat has no option for BPF_F_TEST_RND_HI32. The numbers
+   are from veristat with an LD_PRELOAD shim that sets the flag in
+   BPF_PROG_LOAD. The log has to say so.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- .../selftests/bpf/progs/verifier_callx.c      |  20 ++++
- .../selftests/bpf/progs/verifier_live_stack.c | 103 ++++++++++++++++++
- 2 files changed, 123 insertions(+)
+5. Patch 6: no test has a second patch with a jump in it. That is a barrier
+   in front of a ctx access that becomes several insns.
+   "nospec, store, nospec" in verifier_unpriv.c goes through the merge, but
+   it has no jump. The test needs a prog that is loaded without CAP_PERFMON.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
-index 7e59188d9fca..a12bc421e75c 100644
---- a/tools/testing/selftests/bpf/progs/verifier_callx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
-@@ -289,6 +289,26 @@ __naked void callx_callee_writes_caller_stack(void)
- 		: __clobber_all);
- }
- 
-+/* callee can store a pointer that is not FP-derived over a pointer spilled by the caller */
-+SEC("socket")
-+__success __log_level(2)
-+__msg("r0 = *(u64 *)(r10 -16) // fp-16=fp0-8|fp0+0")
-+__naked void callx_callee_can_overwrite_spilled_fp(void)
-+{
-+	asm volatile (
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"*(u64 *)(r10 - 16) = r1;"
-+		"r2 = %[write42] ll;"
-+		"callx r2;"
-+		"r0 = *(u64 *)(r10 - 16);"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm_addr(write42)
-+		: __clobber_all);
-+}
-+
- SEC("socket")
- __failure __msg("R1 has type scalar, expected func")
- __naked void callx_scalar(void)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-index 61833ea784d0..2ae5c60150dd 100644
---- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-@@ -2583,6 +2583,7 @@ __naked void stack_or_non_stack_write(void)
- 	"exit;"								\
- 	:								\
- 	: __imm(bpf_map_lookup_elem),					\
-+	  __imm(bpf_loop),						\
- 	  __imm_addr(array_map_8b)					\
- 	: __clobber_all)
- 
-@@ -2649,6 +2650,108 @@ __naked void join_of_r10_and_map_value_hidden_store(void)
- 	LOOP_WITH_STORE_THROUGH_R8);
- }
- 
-+/* ctx[1] = ctx[0]. ctx is the second param, as in a callback of bpf_loop(). */
-+static __used __naked void copy_first_to_second(void)
-+{
-+	asm volatile (
-+	"r1 = *(u64 *)(r2 + 0);"
-+	"*(u64 *)(r2 + 8) = r1;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/*
-+ * fp-16 holds &fp[-8]. The callee gets &fp[-24] and stores a pointer to map value to fp-16.
-+ * The store through the filled pointer is not a certain write to fp-8: fp-8 is live before it.
-+ */
-+SEC("socket")
-+__success __retval(0) __log_level(2)
-+__msg("r1 = *(u64 *)(r10 -16) // fp-16=fp0-8|fp0+0")
-+__msg("*(u64 *)(r1 +0) = 42{{ +}}; may_def: fp0-8")
-+__naked void callee_overwrites_spilled_fp(void)
-+{
-+	WITH_MAP_VALUE(
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"*(u64 *)(r10 - 16) = r1;"
-+	"*(u64 *)(r10 - 24) = r0;"
-+	"r2 = r10;"
-+	"r2 += -24;"
-+	"call copy_first_to_second;"
-+	"r1 = *(u64 *)(r10 - 16);"
-+	"*(u64 *)(r1 + 0) = 42;"
-+	"r0 = *(u64 *)(r10 - 8);");
-+}
-+
-+/* The same, but fp-16 holds a copy of r10, and the callee stores map value + 8 over it. */
-+SEC("socket")
-+__success __retval(0)
-+__naked void callee_overwrites_spilled_r10(void)
-+{
-+	WITH_MAP_VALUE(
-+	"*(u64 *)(r10 - 16) = r10;"
-+	"r0 += 8;"
-+	"*(u64 *)(r10 - 24) = r0;"
-+	"r2 = r10;"
-+	"r2 += -24;"
-+	"call copy_first_to_second;"
-+	"r1 = *(u64 *)(r10 - 16);"
-+	"*(u64 *)(r1 - 8) = 42;"
-+	"r0 = *(u64 *)(r10 - 8);");
-+}
-+
-+/* The same, but the callee is a callback. */
-+SEC("socket")
-+__success __retval(0)
-+__load_if_JITed()
-+__naked void callback_overwrites_spilled_fp(void)
-+{
-+	WITH_MAP_VALUE(
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"*(u64 *)(r10 - 16) = r1;"
-+	"*(u64 *)(r10 - 24) = r0;"
-+	"r1 = 1;"
-+	"r2 = copy_first_to_second ll;"
-+	"r3 = r10;"
-+	"r3 += -24;"
-+	"r4 = 0;"
-+	"call %[bpf_loop];"
-+	"r1 = *(u64 *)(r10 - 16);"
-+	"*(u64 *)(r1 + 0) = 42;"
-+	"r0 = *(u64 *)(r10 - 8);");
-+}
-+
-+/*
-+ * fp-16 holds &fp[-8], fp-24 holds &fp[-16], and the callee stores a pointer to map value to fp-24.
-+ * fp-16 is still known after the call, and the store through r7 is not a certain write to it:
-+ * r8 is &fp[-8], and the store through r8 changes the counter of the loop.
-+ */
-+SEC("socket")
-+__failure __msg("invalid access to map value, value_size=8 off=4096 size=1")
-+__naked void callee_overwrites_spilled_fp_hidden_store(void)
-+{
-+	WITH_MAP_VALUE(
-+	"r9 = r0;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"*(u64 *)(r10 - 16) = r1;"
-+	"r1 += -8;"
-+	"*(u64 *)(r10 - 24) = r1;"
-+	"*(u64 *)(r10 - 32) = r9;"
-+	"r2 = r10;"
-+	"r2 += -32;"
-+	"call copy_first_to_second;"
-+	/* the fill keeps fp-16 live over the call */
-+	"r1 = *(u64 *)(r10 - 16);"
-+	"*(u64 *)(r10 - 16) = r1;"
-+	"r7 = *(u64 *)(r10 - 24);"
-+	"*(u64 *)(r7 + 0) = r9;"
-+	"r8 = *(u64 *)(r10 - 16);"
-+	LOOP_WITH_STORE_THROUGH_R8);
-+}
-+
- SEC("socket")
- __log_level(2)
- __flag(BPF_F_TEST_STATE_FREQ)
--- 
-2.55.0
+Trade-offs. Not going to change.
 
+6. Patches 4, 5: offloaded progs. verifier_remove_insns() checks for
+   a fatal signal in front of each call of the driver.
+   patch_list_drop_removed() does not, because it runs behind the last step
+   of the commit that can fail. Only nfp has the callback.
+
+7. Patch 7: bpf_patch_list_insert() is correct when 'off' is the start of
+   a subprog and the list removes nothing. Both rules are comments, nothing
+   checks them. The three callers follow them.
+
+8. Patch 13: without CONFIG_BPF_JIT_ALWAYS_ON classic_filter cannot tell
+   a blinded filter from a silent fallback to the interpreter. User space
+   cannot see the image of a classic filter.
+
+9. Patches 12, 13: lists of archs.
+   - The tests that compare xlated insns run on x86-64 and arm64. A JIT that
+     needs zero extensions gets one more insn behind 'w0 ^= w0'.
+     loongarch can be added. I did not run it.
+   - poke_descriptor is x86-64 only. No other JIT reads poke descriptors.
+     It is one subtest of three, thus '#if' and not a DENYLIST.
+
+In the tree today.
+Pre-existing bugs... pick me. pick me.
+
+10. Blinding is successful, then the JIT fails, and the kernel goes back to
+    the prog that is not blinded (CONFIG_BPF_JIT_ALWAYS_ON=n). Line info
+    stays at the offsets of the blinded image. bpf_adj_linfo() does the
+    same. The series removes one case: a failure in the middle of blinding
+    does not leave the table half moved. bpf_patch_image_install() is now
+    the only writer of the table, so the fix is small.
+
+11. bpf_opt_remove_nops() does not look at aux->nospec. A jump that the
+    verifier hard wires can have it. The wider rule of patch 5 adds one more
+    shape: such a 'goto' over 'goto +0'. That matters only for CAP_BPF
+    without CAP_PERFMON. It is one line in insn_is_nop().
+
+12. A prog of one function is blinded after the verifier log is finalized.
+    "insn N cannot be patched due to 16-bit range" is then not counted in
+    log_true_size.
