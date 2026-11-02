@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793578208;
-	b=5iRN1Lk3SrLTytuKT/e7Ju8EYxUZtY1iosPBezMXQEI/+kEFViNPhK2weK9jrnjHVLxV
-	 HlEMf8WLb+yDGTfGLqxjS1rajRN+6mfx5joqmwJ3ONEPr6P/jRhUkAWj1C17kSJVJopB9
-	 jrz13QleYNEpbXqCdSRrNsZewPf/PtlRZ11QkOP7kmlDJlr6mH7aTT7y2dV9Z1XkXx1if
-	 NZXI05LJJ35cxLJHrxwyNEHJ0jVFrGL73Zumtbh94fsxxmihoQ65m55lkVsPRzft5/znW
-	 wxVdQS6UHAeLkWQvDhU5fzn0W4mK0BSB+tFKC57yWowzsdW1urL6nzi8lz1Za288gzw==
+	t=1793578209;
+	b=ToHcU7uqIL1xHVDXuC/XxOiUQXMl8vuSEyBSGsTLovvXDBvouZpE6FQ2W58RiLEI2nsT
+	 77FQg2voB0cx7+tMVuVhGICkMlX+3o4LTIBjCDQ6djWz7cEp5AF5cm76ZPLbTeH1phQme
+	 bKAT2Xu4JN50OKz9c7kMLKmmbnjKRANXZQQmQkAd2EXbUw6zW7kLn/Anx6CKU2Or/4PBU
+	 HKLzShvuvrX5dJI4mWYyJr9frzhdDWMDe+jVwN8Ru4/oC1KFX6GK3StIkZqnlMlnVfRZk
+	 iifxrQx/TDkqdX2o9mYJUKxmOt/Z7yE1ekFM/YSNAag9m7943harWW0Ky8IqOOHsxOA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793578208;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793578209;
 	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
 	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
 	 In-Reply-To:To:Cc;
-	bh=QKFaYGJVr56G1QVqb3i2JANs8NYB+sHXNhlWziD3p0Q=;
-	b=Z4ifuKTdz/6uTd6NaGPYrXdQ6G54558VzZUPQ4o+kPR9aXx8uttg6BTSddXAvWSUxyKh
-	 eCgWmG+phmnSWtMeNmY8x653o4FCkX2N1TlwjCAqMBgZ5pMTcaDPg3MOdOT52mipxJb3n
-	 uaOS5gc6YVLHzhq84HrBb99BLL9Bllsy4GHA4r+3NCA/QQausfo6584ZkalsgmT6Z6Hif
-	 oFe64i77gHFQNI+DJgS8IvU7vffNHNO4u9XSalRskh8INvZhS5qPLEtTnkhHX/4R+SN5+
-	 dsHV0WCMk1x2pRoIQH9WUz730PcGhkKsZihHW+DN5PiDUfmicoDDMKE39vp/d1OvEyg==
+	bh=rUehSYnTxwzIBOpO9MBt1mkRKF29Pb2CaAVA/4wSDVE=;
+	b=5qSpVfpt3v+S6jWyeO04+5DVxd0pgQ8b0dM/40LEjtz3iuscsOry8GknjGcWGUxhm+Gj
+	 6Q+P9djz3/KgbxukEeW5CQucq8q9dY/Sn2WsUzYWoM/aFQUwZ650h80O6JbXPXfvjIKzJ
+	 jk54TzvreSofqyL1sRIWIDvE522pkpexQWIyucYLIY+1VZiCAKWRnes0tzUvUg/8ZeuQj
+	 A6JmBgsIc/SxSgfgoLQvwMlrUKiWyaQKtFr/hMJQZPS2NGqROLBwM/wh3SniH1ahFeAPn
+	 4tCpFT+3ZD8VOiFNJZ8Qa0pdUcYQOW9RiW4hJWLxHpW0vNDQK8jRfvOn0DQsEoI68Og==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GPxipRIe;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L3lI+H7y;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0794606A326
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 00:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 306BA606A326
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 00:10:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GPxipRIe
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 853791F000C1;
-	Mon,  2 Nov 2026 00:10:07 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L3lI+H7y
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CF7B1F000C1;
+	Mon,  2 Nov 2026 00:10:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793578207;
-	bh=QKFaYGJVr56G1QVqb3i2JANs8NYB+sHXNhlWziD3p0Q=;
+	s=k20260515; t=1793578209;
+	bh=rUehSYnTxwzIBOpO9MBt1mkRKF29Pb2CaAVA/4wSDVE=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=GPxipRIeV+D4shLRl2qv89D8CLrqZvpeKGmh1isPyYUH7pN92N7qDNuPzPZZl0Kgd
-	 YNP8Jm1BUABiUglxX/LuBRhJuyFHh6iHhqQ/H4hB3Wgt4uV+fMxktCshv14OvelelW
-	 zRI0z8FM5pDY4R/yZq51MRrLwxPao73C3HlNgPwS3pwTOkNvR2ZG7detnqTa/duCQJ
-	 dOr0j6aaQ3GR7Zfcv3uJ3MAOxwpFPLQXhBGaNwu41RjgdTNctWICnVdg2LXIMnu40F
-	 PqkcRwRuNEAy/OSe8wFqyygbYNwUlrZmxJPe7RZ+W5YvX3YG2zrcwekchpKr+xPe+2
-	 rur5P93t1XpeA==
+	b=L3lI+H7y7z6lS3kpY410iEjqrRqO7QYLJE4NuziELnfw6oJsdip9Do7b7/2/3bQuB
+	 j98X+AGlMfGLyILr8twE24DIdTrHSLYcWdeVjcl5rUkY/6tWr485mNJXNhNyW0j4TV
+	 i35hw8k143SGHRSG9XEgUHvyxhR7dVXm4qgAjBDtraJprA2h79afaMfaqhRjjGbRqD
+	 E1zjECXk5Zc8AjTzNZYnnCUK9WReBGcOMn5r8/FbsylPSh2b10xLnH9q5nyyQPnGRw
+	 D9AhATVxA8fP9OSrvJQuJSX5Zx1JN5D/T1CU0Y4veQVXwegWA7Ee+k5oCQ9K49w1aO
+	 oZtvuXP9CPVFQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D11F391AFE5;
-	Mon,  2 Nov 2026 00:10:07 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 030EE391AFE5;
+	Mon,  2 Nov 2026 00:10:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,14 +54,15 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf 0/2] bpf,
- x86: Fix bpf_throw() in a prog with a private stack
+Subject: Re: [PATCH v2 bpf 0/2] bpf: Keep the valid bytes of a packet pointer
+ in
+ scalar evolution
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179357820630.3679073.7807830194038168117.git-patchwork-notify@kernel.org>
-Date: Mon, 02 Nov 2026 00:10:06 +0000
-References: <20261031050558.2410721-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261031050558.2410721-1-alexei.starovoitov@gmail.com>
+ <179357820754.3679073.4932420394944871013.git-patchwork-notify@kernel.org>
+Date: Mon, 02 Nov 2026 00:10:07 +0000
+References: <20261030210950.1904640-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261030210950.1904640-1-alexei.starovoitov@gmail.com>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
  eddyz87@gmail.com, memxor@gmail.com
@@ -71,21 +72,24 @@ Hello:
 This series was applied to bpf/bpf.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Sat, 31 Oct 2026 05:05:56 +0000 you wrote:
+On Fri, 30 Oct 2026 21:09:48 +0000 you wrote:
 > From: Alexei Starovoitov <ast@kernel.org>
 > 
-> On x86-64 a prog whose main prog has a private stack and that calls
-> bpf_throw() returns to the kernel with wrong callee saved registers. The
-> kernel crashes. A tracepoint prog or an fentry prog with more than 48 bytes
-> of stack is sufficient.
+> Sashiko found a bug in the review of [1]. It is in the tree since scalar
+> evolution widens packet pointers.
+> 
+> 'range - umax' bytes from a packet pointer are in the packet. At the head
+> of a counted loop scalar evolution sets new bounds, and reg_bounds_sync()
+> makes umax smaller: 58 becomes 56 when the step is 8. The range does not
+> change. Then the verifier accepts 2 bytes that are not in the packet.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf,1/2] bpf, x86: Fix bpf_throw() in a prog with a private stack
-    https://git.kernel.org/bpf/bpf/c/91068ed2d3ee
-  - [bpf,2/2] selftests/bpf: Test bpf_throw() in a prog with a private stack
-    https://git.kernel.org/bpf/bpf/c/6cc0cf0a6fb0
+  - [v2,bpf,1/2] bpf: Keep the valid bytes of a packet pointer in scalar evolution
+    https://git.kernel.org/bpf/bpf/c/88e2c896d859
+  - [v2,bpf,2/2] selftests/bpf: Test the valid bytes of a packet pointer in a counted loop
+    https://git.kernel.org/bpf/bpf/c/61f833f968fe
 
 You are awesome, thank you!
 -- 
