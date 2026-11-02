@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793583032;
-	b=oib0NYXUlaHAFZ/eNJXqtsvAOVkRSiuUfzrAIuydk/GPI1oPY8xEv/AKG9aDWC3DBaw+
-	 1pGbWzXJfyjSgCiHjLqHlbq73haTewTHkBBMC9nELL5q7Y57bPGxCnWylJvbYAY/5OmkJ
-	 GMw936/IG/bECDEslxb2dHN6n8Vcvus8a3lY1GfKC8aNtkKr3pIdHDoijgV4E491bXuqe
-	 QxWX5KTfIuGQfE0/43uXVJ8BwElHpdlGiWTzQXYCYOvoNO9aPmahlSy7Ls/ScXPf2Ssgt
-	 EnklDdbFUT+x6mOux6dujN8VrgkLRLiqK9w5V/MsMWO9ctzuchIUvdAsOlD8fbkzkwQ==
+	t=1793583038;
+	b=oiPVYLrCUYPMGiwaQxTUA6LZ+hCTyiSQD+6Hgm4pjCa/VtT+G+QrMjb7tefBHEs+6lnL
+	 fL1JhI3kZaEDiADil8FXgrDPWluI2D32G/+tzDgjSSq4rcjMgdP+NUCnqiX6jdiIsmVSO
+	 rOQry84F9acCG8M26nlof3/ZstJ0Th3SBQ1n4VdQY+C37jL1XmZQUGw4/X1PLQprvJv6H
+	 P54GKQvGYsnfLiCmH/IAxKbsls+QWGCYLLFDEZvJ3TSwD5InBveYamI4SgBh8lsqmAyOS
+	 Hspg5LG89trfWB6HOx++X2LUNjRCrG5KQmPcU1VTZDZ/mBOKm4SAzS9O/6RoNfpe7kQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793583032;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793583038;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=oKkxh+oCXMZObQBpyjNzLLk7fMSBA49e/1/H9whFDSg=;
-	b=knxqhiWv0E5WbfZZsCjJLRJ2Pv97osiCfZJssJAmdG6yMpmNX6kl6GT5U53x9fKedY/d
-	 q+yYbfQiOzj5dp9PBLBGxFCE9EIZrg8j2AZpOt3fw92OQ1fOsRO6R+VJzsotWS2EL3CN4
-	 2dbHeIikeGPkt+TmiMFEh9zzAb9XG0FoVdLIfvzEaDVPo2171fVDmXIWtq9o5f0vym6C4
-	 dEpcYYHWJmUslL0AJQHdLjgdLVwhN73Cnr6jmAzi7bfQ4JabmXX0omgDpjivzt5dJ7i8q
-	 5ivhW5h22orEqvkeSp8g8+5JQxzr0xVsaZ1Vv9ENslBzMmkH8fU1Y+LXmKDEAwa0vYA==
+	bh=Yme6eZ0Qmp1iHe0ra9POP2sWwXJoL20ve/O9f/VSlNE=;
+	b=SKTMTcomeDzClTFxa+i9eD8Gfl5C9qlV3FFE6ZBV/buKliesZ8N0ChpOow5YKOhSZOj4
+	 abQxpLdyocUt9JX95fTSnx+4EQ9njSHKT5sIy1yrw4PgZm08BCbH2u0QeoNM1FMf86IcT
+	 jizPtDTClJ+RgIsbRosx4vKSlA5JGBNTuJYdtBZmWewiz8obNQiQUWOJhSOLWcf4RFljF
+	 Uzgr28S3ewXLrQgfsBGWWFJTEJl++sFUoAc6YfRWrKeKIYBwD1CNj9GyNHwc0b4jvmEos
+	 nAWJTxxavDu3OeKpyNfKbucwGYdt8yhQ66vs2siT0oCk7p6ZHZMqWvnoZdyd8gXhO7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TGENWmEa;
-	arc=none smtp.remote-ip=209.85.210.181
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="COzw0/Q+";
+	arc=none smtp.remote-ip=209.85.215.177
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24ED6606A327
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 01:30:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24ED6606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF12B606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 01:30:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EF12B606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TGENWmEa
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8a06ca6e8f4so1564942b3a.1
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 17:30:32 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=COzw0/Q+
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cd67cc518a6so1708667a12.1
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 17:30:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793583031; x=1794187831; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793583037; x=1794187837; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=oKkxh+oCXMZObQBpyjNzLLk7fMSBA49e/1/H9whFDSg=;
-        b=TGENWmEakToiv2vmngSUJmXFlr8V66BG05khs+H6uIMX9ToGWcdAUanC39Bu4QDvn8
-         eJLaOUAfvSkSul3EjUXKM0pokUjiQ5+u4t7MiM3TRKncTP0gDVpVRhewjjyyQFoyT4q4
-         hh+F2jVYjhzG08Dj7VjE/wEnd9EpDcFYsd8xg12P+jRUnoW+iLqJ5yiDM306vpdEXSgT
-         bvaMQt5WomKfgXUlcPOHI6kaqwnOdLXZVTVOkM9iLGCF+EW3rGyTycpPKgvWnEl+lmOM
-         IIWpqWG9CdEyd8slEBUv67T/iVY6DRv/HI+ds4Iyi31WW/5MXqzWJDCvlrFko1VUP2vA
-         0w6A==
+        bh=Yme6eZ0Qmp1iHe0ra9POP2sWwXJoL20ve/O9f/VSlNE=;
+        b=COzw0/Q+TIxvL8fgDtUgEeDYGVmoc44sYn+37UE8wChSpdWHMdFYI4Fw22i6pjoeSD
+         eUbL2csIoeEZRNPU2iHrQySuuFNEIbUTw3fpn1fr3QIM28+Lim76uHv/gbH1UAK1tS8Y
+         47ML+xOL7lXf/PkQTzdwzlHZwHJ9isFcGYsL2dvBMDXsjZPwkkW5bEoFJQIbF6JsrHbp
+         Dt34RQLfQpSrJOpXrhmReJvEZmNR2Os1pTbAShYqDxa50BDPAt6id25SVCJSxcwRPI8L
+         wosXPi9fDbxwaS2S8eW6kH+ubtizlJWKHZpBxA5HL/bGL436wzWx9imKZ0+SEFieHHwS
+         fapQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793583031; x=1794187831;
+        d=1e100.net; s=20260707; t=1793583037; x=1794187837;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oKkxh+oCXMZObQBpyjNzLLk7fMSBA49e/1/H9whFDSg=;
-        b=dQoyIpvSQJfpNG8MAlmA3yaPUcpxPiKwU4VLPRyTnWj0GAJzH5XCYf9miVP6N19XlY
-         BZWllrRzQixsaMtpG6XBdZdwOTgtZojGlpStPylDBHWo1oP6DvxA54r0MaqKAF7acHaW
-         LTemlekRxYbpg7pweLkLimdRnbl7GlVWdWO52BSksq4fNbPK/2xtA3kB3OXi6ghzgvYv
-         jr8YAkk6Kb+bCrzBzcr24cu/Ojgeit/EJXHkdwZu32oXCZuznvMv1xPNacRBSMT6+YFU
-         +b0d6N74FVn+jZu8gbvkSOKC5fevPSTmcx8h6a7J2DlKXJuTvQYTWgabW4xefPEptxFj
-         Ej1g==
-X-Gm-Message-State: APuU4Z8zVG8XhLrCyOnTSjPso/NDyCufQaQXk2aWdxTv8dvPBPkz27fI
-	vX+K3reeWPUEXtiG42P5BiL74t/6dTUo22QBSLx7yH0apruv/jR/ggIiq4tLAA==
-X-Gm-Gg: AYBFou2OWdpoavCk9lorZI2J5By1hzFdxlOs6m8jRSM46lyqzwE+zJavcOYgFEdXI4X
-	drg/H2WiDqMoLuOysj6mVkyIg5ts16BscQ58FOUTWetPwyYBIT5lPhy/YFgm5c1BGwHA7oRju71
-	MkY0U2Cm9lxKdj/W4cJJ+A+IZglBpPSy1jdva8C0drLxY+gaZ6m4DWbkY39caW8FCIiLpFjX/kS
-	qvKtD6FCRjvW8GwO6waU7aTyjYGrwVjUS5/2Ya6ouSRLHMYdlbcmNZVIVIKiPPKAhTmm1DC1AUo
-	BjzWHOZjh1NLUqrXHNHJDl479UWEezOGjVSxs2/mex1tw5efMYGR4UMbEQfCDkrxqLrHbdRGRzx
-	Se1JNbjboaab11fdqKS7DgJJ48XWXauQ6PlNbT7Ssb7tw2hoCTi8f4fV0XQbOM00YCjdpnacOUt
-	HwJfDG2FxkKORyf9IQQMSJqXpQKJ19ESWziTdEL2vL7Zr5I3STRVuhhQExko2zHINRACzwQnH4r
-	lhBeVi0pR7ixBPYXSREAsJ5hTxKWVbeTMa/adtN84JEZEXsuCz8IMK6q+AnhLzIMl8tR15oFcTj
-	5+yw8up+sBdChb4/8kRLlRzTkXtjLh/hIXjEs89edJK/fJ2sNBCZ2RBrvtN167yc+czOexEkrlB
-	HFzU6Xnk83N0dFqsaoFlFXBS7yROryppfQzSpr+THuGamX3uP+UqBXTR5qr1bpn07ShrFz+a7kg
-	I=
-X-Received: by 2002:a05:6a00:2e8f:b0:8a0:1c79:b442 with SMTP id d2e1a72fcca58-8a9b69872fbmr7832377b3a.0.1793583031325;
-        Sun, 01 Nov 2026 17:30:31 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aad963d6acsm1318151b3a.18.2026.11.01.17.30.30
+        bh=Yme6eZ0Qmp1iHe0ra9POP2sWwXJoL20ve/O9f/VSlNE=;
+        b=22FrYMTt0CRyoP5YlZ3g9/r/TdiyTzso9B6Vr4hnYfEGIoB0OQYfcnU9f06t2hReNy
+         cJ11XcCunkzrESN53sXmcaOvnBgbJ/udW00icysHqy7++KIc7ny3IGzV8eu24RyjOSZO
+         qop1DMLNwvgXEKrBBcU0RxVtiXKG5ASjJu1uhWc3iG4M3ex/4JLHz83V7Oi6YjnFmqOD
+         YRCKMHMfDtGMMcnavYu2UR3AuzOGow86yxz65ijsTtYC+rmVoqorizs6c4uzh6EbP0kP
+         VMelrQymhqQG5D3LAq+QiHqYRFbZy0KbNG02SGpLBpMrCaS1sn9qdHBMdfrWf7MKBRqW
+         Az/Q==
+X-Gm-Message-State: APuU4Z/XTiYiIiUu3Dmw6gviT6kaGkQ6FEgwsV4fHa7sX7AGvhQNM4S2
+	evijx0jL6AZc8rV2V6Rv82/sGmZV5DHoxH+5ekmDPryPpkyv62uUJS9hXJsPnQ==
+X-Gm-Gg: AYBFou2TdYg6UgIj1D0iPazWULAo+p/WEZDT5I7zmZs2YFME+i/VgsVNF3q6NTZ4Yxc
+	YqsQ8mmbMjUXdfSuJffwC3cITg0QjnEvzE2J7OxUaa/GcIpPeNmY7UUc+BGVV8NsN3HwB0qLmPA
+	5PmuLfq4F38MhhJg/3iN2HQEE5tXQgpMaoAomt51n2trrqBTuMh35miZkjxxN7/1sHGmq03eb0m
+	yv4H6QACZZRndt2CWIaou+13ZGjURbIyWjvJpTG2Ei89doDU7YimCVa5Si2bwqnHJC8KDXMFdku
+	C7ZkiCgsZ1emreMOhSDtjYxYSOsW6dtKD2dKsKnagmiSLuOY5iWgdsNfwM2o0kvDEoqCMQ5qzxJ
+	c+bqk5fPhXjrKlrIcRLbeftSj6ruh3YmvBRDXSStwBagmJKi6TvvHs3tQe15AkqCB1ug64iAnsq
+	jNpI1/RonTe8npKkmJI/LS6arK89P57YwkI6DuJL2aO8nP/k8uOcJ02gNQuhSOYTZVxvrRC4xLP
+	P5OKAEqRs+65VzeiOk1zikT0cupHYK8ycMWpy85mZjgs85LHz3h4hCsZiX8pyLZrH279eZm4mMt
+	gAeLCmYdhMXvvNCVPA9Or9u/N+zS+/80spLfKMQ0s1fMv2FJreacuxZoI2FqnX21Bvs6OpHpHF+
+	fe6EjxrPhuT/YmmVAKBFpcLaMt39XSbUCiSO3PCnQc5agFDUaIpXjH+9quGTswse1mikmO108Jg
+	==
+X-Received: by 2002:a17:90b:1f92:b0:3ad:4a8b:c701 with SMTP id 98e67ed59e1d1-3ae897b51a8mr7087332a91.45.1793583037179;
+        Sun, 01 Nov 2026 17:30:37 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae8441a6f0sm11636670a91.1.2026.11.01.17.30.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 17:30:30 -0800 (PST)
+        Sun, 01 Nov 2026 17:30:36 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -86,9 +86,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	odys.yuan@gmail.com
-Subject: [PATCH bpf-next v3 08/13] bpf: Move bpf_convert_ctx_accesses() to the patch list
-Date: Mon,  2 Nov 2026 01:29:35 +0000
-Message-ID: <20261102012940.1756142-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 09/13] bpf: Move the remaining verifier rewrites to the patch list
+Date: Mon,  2 Nov 2026 01:29:36 +0000
+Message-ID: <20261102012940.1756142-10-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261102012940.1756142-1-alexei.starovoitov@gmail.com>
 References: <20261102012940.1756142-1-alexei.starovoitov@gmail.com>
@@ -105,308 +105,325 @@ Content-Transfer-Encoding: 8bit
 
 From: Qiliang Yuan <odys.yuan@gmail.com>
 
-bpf_convert_ctx_accesses() replaces each ctx access with insns that access
-the kernel struct. It also adds barriers, and the prologue and the epilogue
-of the prog type. It calls bpf_patch_insn_data() for each of them. Each
-call costs O(N) in a prog of N insns.
+Three passes of the verifier call bpf_patch_insn_data(), which patches one
+insn immediately. Each call costs O(N) in a prog of N insns.
 
-Queue the changes in the patch list. A commit builds the new image of the
-prog from the old image and the list. The pass needs two commits:
+Queue the changes in the patch list, and commit one time at the end of the
+pass. The commit builds the new image of the prog from the old image and
+the list. No insn moves before the commit. Thus a pass uses old indexes
+only.
 
-  insert   the store of ctx for the epilogue, in front of insn 0
-  insert   the prologue, in front of the store
-  commit
-  loop     starts behind the inserted insns
-           queue a patch: barrier, ctx access, epilogue
-           write in place: for example BPF_MEM becomes BPF_PROBE_MEM
-  commit
+  pass                     what it does, and what is not mechanical
+  -----------------------  ------------------------------------------------
+  bpf_do_misc_fixups(),    It puts 1 or 2 stores in front of each subprog
+  setup of the may_goto    that has may_goto. Use bpf_patch_list_insert().
+  count                    A call of the subprog lands on the stores, and
+                           a jump to its first insn lands on that insn.
+                           Thus adjust_jmp_off() has no users. Remove it.
+  add_hidden_subprog()     It puts the default exception callback behind
+                           the last insn. The patch is that insn and the
+                           new insns. Commit immediately, because the new
+                           prog->len gives the start of the new subprog.
+  bpf_optimize_bpf_loop()  It replaces a call of bpf_loop() with a loop of
+                           19 insns. insn_buf[12] calls the callback, and
+                           this call leaves its patch.
 
-The first commit is necessary because of the writes in place.
-bpf_patch_list_insert() puts a copy of insn 0 in the list, and the commit
-takes the copy. A write to insn 0 of the old image would be lost.
+The new start of the callback is not known before the commit. Thus
+inline_bpf_loop() writes the offset of this call as if this patch was the
+only one. The commit adjusts it for the other patches.
 
-What else is not mechanical:
- - gen_prologue() ends the prologue with a copy of the first insn of the
-   prog. bpf_patch_list_insert() makes this copy. Thus insert the prologue
-   without its last insn, after a check that it is this copy.
- - A barrier in front of an insn is a patch: 'nospec' and a copy of the
-   insn. It is not inserted, because a jump to the insn must run the
-   barrier. bpf_patch_list_add() returns the queued copy of the insn, and
-   the loop continues with the copy. A write in place goes to the copy, and
-   a second patch replaces it.
- - Only the first 'exit' of the main prog gets the epilogue. Each other
-   'exit' becomes a 'gotol' back to it. The pass calculates the offset from
-   old indexes, and the commit adjusts it.
+  callback       offset of the call, for bpf_loop() at index i
+  -------------  ---------------------------------------------
+  in front of i  old start - (i + 12) - 1
+  behind i       old start + 18 - (i + 12) - 1
+
+18 is the growth of the patch, the number of insns that it adds.
 
 What users can see:
  - A jump that gets out of range gives -ERANGE, and the message names the
-   jump. Before this patch the pass returns -ENOMEM, and the message names
+   jump. Before this patch the passes return -ENOMEM, and the message names
    the patched insn.
- - A jump back to insn 0 lands behind the inserted insns and keeps its
-   offset. Before this patch the offset first gets longer by their number,
-   and adjust_jmp_off() then restores it. Thus an offset near -32768 fails
-   the load.
+ - A jump back to the first insn of a subprog keeps its offset when the
+   stores go in front. Before this patch the offset first gets longer by
+   their number, and adjust_jmp_off() then restores it. Thus an offset near
+   -32768 fails the load.
 
 Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/fixups.c | 131 +++++++++++++++++++-------------------------
- 1 file changed, 55 insertions(+), 76 deletions(-)
+ kernel/bpf/fixups.c | 155 +++++++++++++-------------------------------
+ 1 file changed, 46 insertions(+), 109 deletions(-)
 
 diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 147fcc4d2f43..9216b19370c3 100644
+index 9216b19370c3..d0d099c34c80 100644
 --- a/kernel/bpf/fixups.c
 +++ b/kernel/bpf/fixups.c
-@@ -1098,13 +1098,11 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- {
- 	struct bpf_subprog_info *subprogs = env->subprog_info;
- 	const struct bpf_verifier_ops *ops = env->ops;
--	int i, cnt, size, ctx_field_size, ret, delta = 0, epilogue_cnt = 0;
--	const int insn_cnt = env->prog->len;
-+	int i, cnt, size, ctx_field_size, ret, epilogue_cnt = 0, first = 0;
- 	struct bpf_insn *epilogue_buf = env->epilogue_buf;
- 	struct bpf_insn *insn_buf = env->insn_buf;
- 	struct bpf_insn *insn;
- 	u32 target_size, size_default, off;
--	struct bpf_prog *new_prog;
- 	enum bpf_access_type type;
- 	bool is_narrower_load;
- 	int epilogue_idx = 0;
-@@ -1117,17 +1115,13 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 			return -EFAULT;
- 		} else if (epilogue_cnt) {
- 			/* Save the ARG_PTR_TO_CTX for the epilogue to use */
--			cnt = 0;
- 			subprogs[0].stack_depth += 8;
--			insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_1,
--						      -subprogs[0].stack_depth);
--			insn_buf[cnt++] = env->prog->insnsi[0];
--			new_prog = __bpf_patch_insn_data(env, 0, insn_buf, cnt,
--							 BPF_PATCH_MOVE_TARGET);
--			if (!new_prog)
--				return -ENOMEM;
--			env->prog = new_prog;
--			delta += cnt - 1;
-+			insn_buf[0] = BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_1,
-+						  -subprogs[0].stack_depth);
-+			ret = bpf_patch_list_insert(env, 0, insn_buf, 1);
-+			if (ret)
-+				return ret;
-+			first++;
+@@ -738,44 +738,6 @@ static int bpf_adj_moved_insn(struct bpf_insn *insn, u32 delta)
+ 	return 0;
+ }
  
- 			ret = add_kfunc_in_insns(env, epilogue_buf, epilogue_cnt - 1);
- 			if (ret < 0)
-@@ -1158,13 +1152,15 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 						   env->prog->aux->attach_btf_id))
- 				return -EINVAL;
- 			env->prog->aux->has_prologue = true;
--			new_prog = __bpf_patch_insn_data(env, 0, insn_buf, cnt,
--							 BPF_PATCH_MOVE_TARGET);
--			if (!new_prog)
--				return -ENOMEM;
+-/*
+- * For all jmp insns in a given 'prog' that point to 'tgt_idx' insn adjust the
+- * jump offset by 'delta'.
+- */
+-static int adjust_jmp_off(struct bpf_prog *prog, u32 tgt_idx, u32 delta)
+-{
+-	struct bpf_insn *insn = prog->insnsi;
+-	u32 insn_cnt = prog->len, i;
+-	s32 imm;
+-	s16 off;
 -
--			env->prog = new_prog;
--			delta += cnt - 1;
-+			/* the prologue ends with the first insn of the program */
-+			if (verifier_bug_if(memcmp(&insn_buf[cnt - 1], env->prog->insnsi,
-+						   sizeof(*insn_buf)), env,
-+					    "prologue doesn't end with the first insn"))
-+				return -EFAULT;
-+			ret = bpf_patch_list_insert(env, 0, insn_buf, cnt - 1);
-+			if (ret)
-+				return ret;
-+			first += cnt - 1;
+-	for (i = 0; i < insn_cnt; i++, insn++) {
+-		u8 code = insn->code;
+-
+-		if (tgt_idx <= i && i < tgt_idx + delta)
+-			continue;
+-
+-		if ((BPF_CLASS(code) != BPF_JMP && BPF_CLASS(code) != BPF_JMP32) ||
+-		    BPF_OP(code) == BPF_CALL || BPF_OP(code) == BPF_EXIT)
+-			continue;
+-
+-		if (insn->code == (BPF_JMP32 | BPF_JA)) {
+-			if (i + 1 + insn->imm != tgt_idx)
+-				continue;
+-			if (check_add_overflow(insn->imm, delta, &imm))
+-				return -ERANGE;
+-			insn->imm = imm;
+-		} else {
+-			if (i + 1 + insn->off != tgt_idx)
+-				continue;
+-			if (check_add_overflow(insn->off, delta, &off))
+-				return -ERANGE;
+-			insn->off = off;
+-		}
+-	}
+-	return 0;
+-}
+-
+ /* Clean up dynamically allocated fields of aux data for instructions [start, ...] */
+ void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
+ {
+@@ -1924,7 +1886,8 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *patch, int len)
+ {
+ 	struct bpf_subprog_info *info = env->subprog_info;
+-	int cnt = env->subprog_cnt;
++	int err, cnt = env->subprog_cnt;
++	struct bpf_insn *last;
+ 	struct bpf_prog *prog;
  
- 			ret = add_kfunc_in_insns(env, insn_buf, cnt - 1);
- 			if (ret < 0)
-@@ -1172,21 +1168,26 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 	/* We only reserve one slot for hidden subprogs in subprog_info. */
+@@ -1932,14 +1895,17 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
+ 		verifier_bug(env, "only one hidden subprog supported");
+ 		return -EFAULT;
+ 	}
+-	/* We're not patching any existing instruction, just appending the new
+-	 * ones for the hidden subprog. Hence all of the adjustment operations
+-	 * in bpf_patch_insn_data are no-ops.
++	/*
++	 * We're not patching any existing instruction, just appending the new
++	 * ones for the hidden subprog.
+ 	 */
+-	prog = bpf_patch_insn_data(env, env->prog->len - 1, patch, len);
+-	if (!prog)
+-		return -ENOMEM;
+-	env->prog = prog;
++	last = bpf_patch_list_add(env, env->prog->len - 1, patch, len);
++	if (IS_ERR(last))
++		return PTR_ERR(last);
++	err = bpf_patch_list_commit(env);
++	if (err)
++		return err;
++	prog = env->prog;
+ 	info[cnt + 1].start = info[cnt].start;
+ 	info[cnt].start = prog->len - len + 1;
+ 	/* The patch ends with the exit. */
+@@ -2011,7 +1977,6 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 	const struct bpf_map_ops *ops;
+ 	struct bpf_insn_aux_data *aux;
+ 	struct bpf_insn *insn_buf = env->insn_buf;
+-	struct bpf_prog *new_prog;
+ 	struct bpf_map *map_ptr;
+ 	int i, ret, cnt, cur_subprog = 0;
+ 	struct bpf_subprog_info *subprogs = env->subprog_info;
+@@ -2842,10 +2807,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 
+ 	env->prog->aux->stack_depth = subprogs[0].stack_depth;
+ 	for (i = 0; i < env->subprog_cnt; i++) {
+-		int delta = bpf_jit_supports_timed_may_goto() ? 2 : 1;
+-		int subprog_start = subprogs[i].start;
++		int slots = bpf_jit_supports_timed_may_goto() ? 2 : 1;
+ 		int stack_slots = subprogs[i].stack_extra / 8;
+-		int slots = delta, cnt = 0;
+ 
+ 		if (!stack_slots)
+ 			continue;
+@@ -2855,6 +2818,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			return -EFAULT;
  		}
+ 
++		cnt = 0;
+ 		stack_depth = subprogs[i].stack_depth;
+ 		if (bpf_jit_supports_timed_may_goto()) {
+ 			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_FP, -stack_depth,
+@@ -2865,30 +2829,17 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_FP, -stack_depth,
+ 						     BPF_MAX_LOOPS);
+ 		}
+-		/* Copy first actual insn to preserve it */
+-		insn_buf[cnt] = env->prog->insnsi[subprog_start];
+-		ret = bpf_adj_moved_insn(&insn_buf[cnt], cnt);
+-		if (ret) {
+-			verbose(env, "insn %d cannot be patched due to 16-bit range\n",
+-				env->insn_aux_data[subprog_start].orig_idx);
++		/* jumps to the first insn of the subprog skip the setup */
++		ret = bpf_patch_list_insert(env, subprogs[i].start, insn_buf, cnt);
++		if (ret)
+ 			return ret;
+-		}
+-		cnt++;
+-
+-		new_prog = __bpf_patch_insn_data(env, subprog_start, insn_buf, cnt,
+-						 BPF_PATCH_MOVE_TARGET);
+-		if (!new_prog)
+-			return -ENOMEM;
+-		env->prog = prog = new_prog;
+-		/*
+-		 * If may_goto is a first insn of a prog there could be a jmp
+-		 * insn that points to it, hence adjust all such jmps to point
+-		 * to insn after BPF_ST that inits may_goto count.
+-		 * Adjustment will succeed because bpf_patch_insn_data() didn't fail.
+-		 */
+-		WARN_ON(adjust_jmp_off(env->prog, subprog_start, delta));
  	}
  
--	if (delta)
--		WARN_ON(adjust_jmp_off(env->prog, 0, delta));
-+	/*
-+	 * The loop below rewrites some insns in place. No insn may have a queued
-+	 * patch when the loop gets to it: the list holds a copy of the insn.
-+	 */
 +	ret = bpf_patch_list_commit(env);
 +	if (ret)
 +		return ret;
- 
- 	if (bpf_prog_is_offloaded(env->prog->aux))
- 		return 0;
- 
--	insn = env->prog->insnsi + delta;
--
--	for (i = 0; i < insn_cnt; i++, insn++) {
-+	for (i = first; i < env->prog->len; i++) {
- 		bpf_convert_ctx_access_t convert_ctx_access;
- 		enum bpf_reg_type ptr_type;
- 		u8 mode;
- 
--		if (env->insn_aux_data[i + delta].nospec) {
--			WARN_ON_ONCE(env->insn_aux_data[i + delta].alu_state);
-+		insn = &env->prog->insnsi[i];
++	prog = env->prog;
 +
-+		if (env->insn_aux_data[i].nospec) {
-+			WARN_ON_ONCE(env->insn_aux_data[i].alu_state);
- 			struct bpf_insn *patch = insn_buf;
+ 	/* Since poke tab is now finalized, publish aux to tracker. */
+ 	for (i = 0; i < prog->aux->size_poke_tab; i++) {
+ 		map_ptr = prog->aux->poke_tab[i].tail_call.map;
+@@ -2909,11 +2860,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 	return 0;
+ }
  
- 			*patch++ = BPF_ST_NOSPEC();
-@@ -1194,17 +1195,13 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 			ret = bpf_adj_moved_insn(patch++, 1);
- 			if (ret) {
- 				verbose(env, "insn %d cannot be patched due to 16-bit range\n",
--					env->insn_aux_data[i + delta].orig_idx);
-+					env->insn_aux_data[i].orig_idx);
- 				return ret;
- 			}
- 			cnt = patch - insn_buf;
--			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+-static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
+-					int position,
+-					s32 stack_base,
+-					u32 callback_subprogno,
+-					u32 *total_cnt)
++static int inline_bpf_loop(struct bpf_verifier_env *env, int position,
++			   s32 stack_base, u32 callback_subprogno)
+ {
+ 	s32 r6_offset = stack_base + 0 * BPF_REG_SIZE;
+ 	s32 r7_offset = stack_base + 1 * BPF_REG_SIZE;
+@@ -2923,9 +2871,8 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
+ 	int reg_loop_ctx = BPF_REG_8;
+ 
+ 	struct bpf_insn *insn_buf = env->insn_buf;
+-	struct bpf_prog *new_prog;
+ 	u32 callback_start;
+-	u32 call_insn_offset;
++	struct bpf_insn *last;
+ 	s32 callback_offset;
+ 	u32 cnt = 0;
+ 
+@@ -2951,9 +2898,7 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
+ 	 * if reg_loop_cnt >= reg_loop_max skip the loop body
+ 	 */
+ 	insn_buf[cnt++] = BPF_JMP_REG(BPF_JGE, reg_loop_cnt, reg_loop_max, 5);
+-	/* callback call,
+-	 * correct callback offset would be set after patching
+-	 */
++	/* callback call, the offset is set below */
+ 	insn_buf[cnt++] = BPF_MOV64_REG(BPF_REG_1, reg_loop_cnt);
+ 	insn_buf[cnt++] = BPF_MOV64_REG(BPF_REG_2, reg_loop_ctx);
+ 	insn_buf[cnt++] = BPF_CALL_REL(0);
+@@ -2970,19 +2915,19 @@ static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
+ 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, r7_offset);
+ 	insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_8, BPF_REG_10, r8_offset);
+ 
+-	*total_cnt = cnt;
+-	new_prog = bpf_patch_insn_data(env, position, insn_buf, cnt);
+-	if (!new_prog)
+-		return new_prog;
+-
+-	/* callback start is known only after patching */
++	/*
++	 * Note: insn_buf[12] is the BPF_CALL_REL instruction. Jumps and calls
++	 * out of a patch are relative to the patch placed at 'position': its
++	 * 'cnt' insns push what is behind 'position' down by cnt - 1.
++	 */
+ 	callback_start = env->subprog_info[callback_subprogno].start;
+-	/* Note: insn_buf[12] is an offset of BPF_CALL_REL instruction */
+-	call_insn_offset = position + 12;
+-	callback_offset = callback_start - call_insn_offset - 1;
+-	new_prog->insnsi[call_insn_offset].imm = callback_offset;
++	callback_offset = callback_start - position;
++	if (callback_start > position)
++		callback_offset += cnt - 1;
++	insn_buf[12].imm = callback_offset - 12 - 1;
+ 
+-	return new_prog;
++	last = bpf_patch_list_add(env, position, insn_buf, cnt);
++	return PTR_ERR_OR_ZERO(last);
+ }
+ 
+ static bool is_bpf_loop_call(struct bpf_insn *insn)
+@@ -3004,7 +2949,7 @@ static bool is_bpf_loop_call(struct bpf_insn *insn)
+ int bpf_optimize_bpf_loop(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_subprog_info *subprogs = env->subprog_info;
+-	int i, cur_subprog = 0, cnt, delta = 0;
++	int i, cur_subprog = 0, err;
+ 	struct bpf_insn *insn = env->prog->insnsi;
+ 	int insn_cnt = env->prog->len;
+ 	u16 stack_depth = subprogs[cur_subprog].stack_depth;
+@@ -3013,26 +2958,18 @@ int bpf_optimize_bpf_loop(struct bpf_verifier_env *env)
+ 
+ 	for (i = 0; i < insn_cnt; i++, insn++) {
+ 		struct bpf_loop_inline_state *inline_state =
+-			&env->insn_aux_data[i + delta].loop_inline_state;
++			&env->insn_aux_data[i].loop_inline_state;
+ 
+ 		if (is_bpf_loop_call(insn) && inline_state->fit_for_inline) {
+-			struct bpf_prog *new_prog;
+-
+ 			stack_depth_extra = BPF_REG_SIZE * 3 + stack_depth_roundup;
+-			new_prog = inline_bpf_loop(env,
+-						   i + delta,
+-						   -(stack_depth + stack_depth_extra),
+-						   inline_state->callback_subprogno,
+-						   &cnt);
 -			if (!new_prog)
 -				return -ENOMEM;
 -
--			delta    += cnt - 1;
--			env->prog = new_prog;
--			insn      = new_prog->insnsi + i + delta;
-+			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
-+			if (IS_ERR(insn))
-+				return PTR_ERR(insn);
- 			/* This can not be easily merged with the
- 			 * nospec_result-case, because an insn may require a
- 			 * nospec before and after itself. Therefore also do not
-@@ -1234,32 +1231,28 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 			    insn->code == (BPF_STX | BPF_ATOMIC | BPF_H) ||
- 			    insn->code == (BPF_STX | BPF_ATOMIC | BPF_W) ||
- 			    insn->code == (BPF_STX | BPF_ATOMIC | BPF_DW)) &&
--			   env->insn_aux_data[i + delta].ptr_type == PTR_TO_ARENA) {
-+			   env->insn_aux_data[i].ptr_type == PTR_TO_ARENA) {
- 			insn->code = BPF_STX | BPF_PROBE_ATOMIC | BPF_SIZE(insn->code);
- 			env->prog->aux->num_exentries++;
- 			continue;
- 		} else if (insn->code == (BPF_STX | BPF_ATOMIC | BPF_DW) &&
- 			   insn->imm == BPF_LOAD_ACQ &&
--			   env->insn_aux_data[i + delta].arena_member) {
-+			   env->insn_aux_data[i].arena_member) {
- 			/* an acquire load of an __arena member is rewritten like a plain load */
--			cnt = arena_member_fixup(env, i + delta, insn, insn_buf);
-+			cnt = arena_member_fixup(env, i, insn, insn_buf);
- 			if (cnt < 0)
- 				return cnt;
--			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
--			if (!new_prog)
--				return -ENOMEM;
--
--			delta    += cnt - 1;
--			env->prog = new_prog;
--			insn      = new_prog->insnsi + i + delta;
-+			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
-+			if (IS_ERR(insn))
-+				return PTR_ERR(insn);
- 			continue;
- 		} else if (insn->code == (BPF_JMP | BPF_EXIT) &&
- 			   epilogue_cnt &&
--			   i + delta < subprogs[1].start) {
-+			   i < subprogs[1].start) {
- 			/* Generate epilogue for the main prog */
- 			if (epilogue_idx) {
- 				/* jump back to the earlier generated epilogue */
--				insn_buf[0] = BPF_JMP32_A(epilogue_idx - i - delta - 1);
-+				insn_buf[0] = BPF_JMP32_A(epilogue_idx - i - 1);
- 				cnt = 1;
- 			} else {
- 				memcpy(insn_buf, epilogue_buf,
-@@ -1269,7 +1262,7 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 				 * least one ctx ptr saving insn before the
- 				 * epilogue.
- 				 */
--				epilogue_idx = i + delta;
-+				epilogue_idx = i;
- 			}
- 			goto patch_insn_buf;
- 		} else {
-@@ -1277,7 +1270,7 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+-			delta     += cnt - 1;
+-			env->prog  = new_prog;
+-			insn       = new_prog->insnsi + i + delta;
++			err = inline_bpf_loop(env, i,
++					      -(stack_depth + stack_depth_extra),
++					      inline_state->callback_subprogno);
++			if (err)
++				return err;
  		}
  
- 		if (type == BPF_WRITE &&
--		    env->insn_aux_data[i + delta].nospec_result) {
-+		    env->insn_aux_data[i].nospec_result) {
- 			/* nospec_result is only used to mitigate Spectre v4 and
- 			 * to limit verification-time for Spectre v1.
- 			 */
-@@ -1286,17 +1279,13 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 			*patch++ = *insn;
- 			*patch++ = BPF_ST_NOSPEC();
- 			cnt = patch - insn_buf;
--			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
--			if (!new_prog)
--				return -ENOMEM;
--
--			delta    += cnt - 1;
--			env->prog = new_prog;
--			insn      = new_prog->insnsi + i + delta;
-+			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
-+			if (IS_ERR(insn))
-+				return PTR_ERR(insn);
- 			continue;
- 		}
+-		if (subprogs[cur_subprog + 1].start == i + delta + 1) {
++		if (subprogs[cur_subprog + 1].start == i + 1) {
+ 			subprogs[cur_subprog].stack_depth += stack_depth_extra;
+ 			cur_subprog++;
+ 			stack_depth = subprogs[cur_subprog].stack_depth;
+@@ -3043,7 +2980,7 @@ int bpf_optimize_bpf_loop(struct bpf_verifier_env *env)
  
--		ptr_type = env->insn_aux_data[i + delta].ptr_type;
-+		ptr_type = env->insn_aux_data[i].ptr_type;
- 		switch ((int)ptr_type) {
- 		case PTR_TO_CTX:
- 			if (!ops->convert_ctx_access)
-@@ -1349,22 +1338,18 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 				return -EFAULT;
- 			}
- 
--			cnt = arena_member_fixup(env, i + delta, insn, insn_buf);
-+			cnt = arena_member_fixup(env, i, insn, insn_buf);
- 			if (cnt < 0)
- 				return cnt;
- 			if (!cnt)
- 				continue;
--			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
--			if (!new_prog)
--				return -ENOMEM;
--
--			delta    += cnt - 1;
--			env->prog = new_prog;
--			insn      = new_prog->insnsi + i + delta;
-+			insn = bpf_patch_list_add(env, i, insn_buf, cnt);
-+			if (IS_ERR(insn))
-+				return PTR_ERR(insn);
- 			continue;
- 		}
- 
--		ctx_field_size = env->insn_aux_data[i + delta].ctx_field_size;
-+		ctx_field_size = env->insn_aux_data[i].ctx_field_size;
- 		size = BPF_LDST_BYTES(insn);
- 		mode = BPF_MODE(insn->code);
- 
-@@ -1432,18 +1417,12 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 						       size * 8, 0);
- 
- patch_insn_buf:
--		new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
--		if (!new_prog)
--			return -ENOMEM;
--
--		delta += cnt - 1;
--
--		/* keep walking new program and skip insns we just inserted */
--		env->prog = new_prog;
--		insn      = new_prog->insnsi + i + delta;
-+		insn = bpf_patch_list_add(env, i, insn_buf, cnt);
-+		if (IS_ERR(insn))
-+			return PTR_ERR(insn);
- 	}
+ 	env->prog->aux->stack_depth = env->subprog_info[0].stack_depth;
  
 -	return 0;
 +	return bpf_patch_list_commit(env);
  }
  
- static u32 *bpf_dup_subprog_starts(struct bpf_verifier_env *env)
+ /* Remove unnecessary spill/fill pairs, members of fastcall pattern,
 -- 
 2.55.0
 
