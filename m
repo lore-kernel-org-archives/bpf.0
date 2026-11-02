@@ -1,45 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793584494;
-	b=4Vmzq+htWgbpz6UQusk9nn7Ej7suCjBN0pMHO4+hQHN6/sqXuyKcCkOuqygsY30/KZUe
-	 HpmJTodc67jtGVxXHna7AtcltCJ8xlSynk+yBYqG+aQbFQega8ADiP1Dy/PXO55yws3dQ
-	 v0nocmilOweLFrGU4Am2oUf8XFg/4ZuyDbD/4Ihzv+f8bOmSf0MjaTyCsMajyKU1hxloP
-	 POQPquNdXTI1HgbJ4cynJlTa5mqcKydeyAvgFZIcGC0pLmdgSghX2xNoT60IXym+NJksL
-	 +E3bDpK1OsSb0jFOjtrxccZeS8AbZK3Dqmt3hV4GtFE02fDcd1rjZtMFcRY1e4vKRgw==
+	t=1793585603;
+	b=VL1IZYQlN4eo7pxxwUYuRTP1GIoTBQhM3mFSXGZc/PeWLAWWYMZxG4EFpxUgJWj/VuM5
+	 s9i2zv/BF5zebW0PJagP/AdOujt886p/qdp8z3/nGBE4yIzgxW2oSneMzUJmJFOmN7Che
+	 VfO8heAYwxT9A78UHSyn8gy35ajv+iqpta19gBLkYeHJUGy1QRSBxWx7snTHXP/9kvqEX
+	 P3MzAS4Ohu6CEqG95+XFN5/qZLhZoLuf/Lbuv3St2xZGIygpldUSN1P86HiroqSIfse1E
+	 mMcM048qLRS8P20eNpen/bbMcZZ1RvcOhi61x+74+srtaqS5Dc6y32ps5ekSoa/8eoQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793584494;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=FkNyargHG2bEuZUpFFoq++5LOK0pA8Se5x5WD9zD53k=;
-	b=W6ZOCnrhuLFKgj0ZX9xMVu2tbEmE0LERo0kpAyruh+1SxOnEmpikUfGY3xZ6N6r4MDs7
-	 5FcxPrJ2glOJIj6IEEgsTW2M4sYzPgJO6NJEiWUOKL5z3f5HuWmuJEyrRXXSkz3q5vtQT
-	 R80EwdjSWc5c7dJqT518i2PYZtL9RSGKzsXp5nSFankcjwq0IThLaUdaLcEajNRYK+qI0
-	 wHWEmpenUgxJJB+9G/WNksOmcuTF1bzM8cRcBGan6Dp8Hc9yDJHUNipHMqBv8Ui0PQOfl
-	 tERI9bx5upj3/bhgbSYWmC2jSJc5uWvsFTn5Gw5DgcnoJGOPYIuGVVYiroHnUpR/XlA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793585603;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=yvz+MvufKgYbwZrvLEKvrENqTO+kH2u2+d8MLeEiziI=;
+	b=dIuRAF5f5s16ReQ+9c2nVR6z5iaXckKECaDTUivOSmD9MgFjra5IEENlkiVN3slM9vVU
+	 H/h9qgdcrY6rEgVCo60+qwqqJV6sRIfbhMVIGPiBDMrFjPERavxr35J5GbQLgo8wFPM7N
+	 3aZRpaaHET+/MfhfcB+WNZnwvZQhBdL1LNA4DGZaKdzL1I+QGjvBVUQjn01EO7K50X8Ve
+	 NwY5krzu30ssVaewMq4hq2EhgHIp6KoHF+uzoRlsq4ALDNoMXZHekRSyUwzu3o37h706G
+	 H0ZFUan6Vj+VQaTpeHKlxTEEtuU8cHw6D/YYY1G90zbTttl4Cbzij7BxZSurvzY2IaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jisQ0P2s;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	arc=none smtp.remote-ip=95.215.58.47
+Received: from mta1.migadu.com (out-47.mta1.migadu.com [95.215.58.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA9B606A324;
-	Mon,  2 Nov 2026 01:54:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jisQ0P2s
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA6F1F000C1;
-	Mon,  2 Nov 2026 01:54:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793584493;
-	bh=FkNyargHG2bEuZUpFFoq++5LOK0pA8Se5x5WD9zD53k=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=jisQ0P2s/H+apHIs28vCm0eAQgc052oliY6lplQs1zJrWCJj7e4Z+3tLAxhsXXjFG
-	 ZYOzxpCP4aIobqVbUjNog1/1tAj8PNPwhu5slE7UOiuE2yA0MJELdPbvLsS1bESWhS
-	 G0p0m6EOTML7esLYVoVMMpe17KqDB6/KRVbvGGbZfHXzNDU1Bb700P6P/uOUhmh269
-	 od+/SEOc25cLc0vYfsLmEvopWoCzGZg26THuY9TYK+5wtuKlQp9+wV4hNf/eP6CnN/
-	 cdhd42KUHZ/0xL8qeRZ9th8Mnuyr39M+wcnGnCIvAEZcxTmd0oYKXmIP15LlQLUl8l
-	 T2KKpwePRUEgQ==
-Content-Type: multipart/mixed; boundary="===============7763485647564090835=="
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9255E606F6FF
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 02:13:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9255E606F6FF
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Kh1L9N4J0VwonxvRmIWkE389mycuzqTwy4u3dSvyNpo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793585599; v=1; x=1794190399;
+ b=Zw2xFXWLjx47d25BX2FbVziM4ibfWj7pIjYmQrxrfL95ItYGXRscMVkixzrOfWc29apRYbAG
+ Qe0VMc3L1HjzEAeb3kSSDGBUhFoJ1qGBO+Fseb/FwKQNUvXmOOfzkFZxGMd2Oa3MsbpQ+b4QsWH
+ vlE+TZJj2eiLAlHcHWshlOBo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id d3db1ab78c0e22d4;
+	Mon, 02 Nov 2026 02:13:19 +0000
+X-Mizu-Trace-ID: d3db1ab78c0e22d4
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 2 Nov 2026 10:13:12 +0800
+From: Baoquan He <baoquan.he@linux.dev>
+To: Barry Song <baohua@kernel.org>
+Cc: Ridong Chen <ridong.chen@linux.dev>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Dave Chinner <david@fromorbit.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Muchun Song <muchun.song@linux.dev>, Qi Zheng <qi.zheng@linux.dev>,
+	Kairui Song <kasong@tencent.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org,
+	"open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" <cgroups@vger.kernel.org>,
+	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>,
+	Ridong Chen <chenridong@xiaomi.com>
+Subject: Re: [PATCH v5 6/6] mm/mglru: add tracepoint for inc_max_seq()
+Message-ID: <aufxuOaKZWMYqEQi@bogon>
+References: <20261031090041.58574-1-ridong.chen@linux.dev>
+ <20261031090041.58574-7-ridong.chen@linux.dev>
+ <CAGsJ_4zUbkFXBhAesVV74-Ndga5f6xEbestK7Qinqddip8xBrw@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,79 +82,121 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <9acb1683771c3b7bf443773e66599273156e155d25fbabd78596bcf2ca8eda18@mail.kernel.org>
-In-Reply-To: <20261102-sockmap-update-limit-iter-v2-2-e96a63c43b39@rbox.co>
-References: <20261102-sockmap-update-limit-iter-v2-2-e96a63c43b39@rbox.co>
-Subject: Re: [PATCH RFC v2 2/4] bpf, sockmap: Restrict iter-context sockmap updates to iter/sockmap
-From: bot+bpf-ci@kernel.org
-To: mhal@rbox.co,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,john.fastabend@gmail.com,lmb@cloudflare.com,edumazet@kernel.org,kuniyu@google.com,pabeni@redhat.com,willemb@google.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,davem@davemloft.net,kuba@kernel.org,horms@kernel.org
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,mhal@rbox.co,netdev@vger.kernel.org,sashiko-bot@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  2 Nov 2026 01:54:53 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGsJ_4zUbkFXBhAesVV74-Ndga5f6xEbestK7Qinqddip8xBrw@mail.gmail.com>
 
---===============7763485647564090835==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 11/01/26 at 05:21am, Barry Song wrote:
+> On Sat, Oct 31, 2026 at 5:02 PM Ridong Chen <ridong.chen@linux.dev> wrote:
+> >
+> > From: Ridong Chen <chenridong@xiaomi.com>
+> >
+> > Aging in MGLRU advances max_seq via inc_max_seq(), creating a new
+> > youngest generation. There is currently no tracepoint on this path, so
+> > the moment a new generation is created, and how the min_seq of each type
+> > trails behind it, cannot be observed as it happens.
+> >
+> > Add mm_mglru_inc_max_seq, emitted right after max_seq is bumped while
+> > the lruvec lock is still held, with the node id, memcg id, the new
+> > max_seq, the anon and file min_seq, and the number of pages in each
+> > generation for both types, summed over zones and clamped to >= 0 the
+> > same way the debugfs lru_gen file reports them. The nr_anon/nr_file
+> > arrays are indexed by generation slot, so the emitted max_seq/min_seq
+> > say which slot holds which seq. They are printed with __print_array(),
+> > so the output is hex and its length follows MAX_NR_GENS automatically.
+> >
+> > Only the lruvec is passed in; all of the above is collected in
+> > TP_fast_assign(), so inc_max_seq() does no extra work when the event is
+> > disabled. Paired with mm_mglru_scan_folios it makes the full
+> > aging-to-eviction window observable per memcg.
+> >
+> > Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+> > ---
+> >  mm/trace_vmscan.h | 47 +++++++++++++++++++++++++++++++++++++++++++++++
+> >  mm/vmscan.c       |  2 ++
+> >  2 files changed, 49 insertions(+)
+> >
+> > diff --git a/mm/trace_vmscan.h b/mm/trace_vmscan.h
+> > index 8148b8224422..cddf42b5849a 100644
+> > --- a/mm/trace_vmscan.h
+> > +++ b/mm/trace_vmscan.h
+> > @@ -456,6 +456,53 @@ TRACE_EVENT(mm_mglru_scan_folios,
+> >                 __entry->min_seq)
+> >  );
+> >
+> > +TRACE_EVENT(mm_mglru_inc_max_seq,
+> > +
+> > +       TP_PROTO(struct lruvec *lruvec),
+> > +
+> > +       TP_ARGS(lruvec),
+> > +
+> > +       TP_STRUCT__entry(
+> > +               __field(u64, memcg_id)
+> > +               __field(unsigned long, max_seq)
+> > +               __field(unsigned long, anon_min_seq)
+> > +               __field(unsigned long, file_min_seq)
+> > +               __array(unsigned long, nr_anon, MAX_NR_GENS)
+> > +               __array(unsigned long, nr_file, MAX_NR_GENS)
+> > +               __field(int, nid)
+> > +       ),
+> > +
+> > +       TP_fast_assign(
+> > +               struct lru_gen_folio *lrugen = &lruvec->lrugen;
+> > +               int gen, zone;
+> > +
+> > +               __entry->memcg_id = mem_cgroup_id(lruvec_memcg(lruvec));
+> > +               __entry->max_seq = lrugen->max_seq;
+> > +               __entry->anon_min_seq = lrugen->min_seq[LRU_GEN_ANON];
+> > +               __entry->file_min_seq = lrugen->min_seq[LRU_GEN_FILE];
+> > +               /* summed over zones and clamped to >= 0, as debugfs lru_gen does */
+> > +               for (gen = 0; gen < MAX_NR_GENS; gen++) {
+> > +                       __entry->nr_anon[gen] = 0;
+> > +                       __entry->nr_file[gen] = 0;
+> > +                       for (zone = 0; zone < MAX_NR_ZONES; zone++) {
+> > +                               __entry->nr_anon[gen] +=
+> > +                                       max(lrugen->nr_pages[gen][LRU_GEN_ANON][zone], 0L);
+> > +                               __entry->nr_file[gen] +=
+> > +                                       max(lrugen->nr_pages[gen][LRU_GEN_FILE][zone], 0L);
+> > +                       }
+> > +               }
+> 
+> I feel this is wrong. Can we calculate the newest and
+> oldest generations from seq, then print them in order
+> from newest to oldest?
 
-> bpf, sockmap: Restrict iter-context sockmap updates to iter/sockmap
+Agree, from newest to oldest or oldest to newest makes it clearer.
 
-TL;DR: Unresolved question: tracing_iter_filter() still allows
-bpf_sock_destroy() from iter/sockmap, so tcp_abort() may run on a socket whose
-lock isn't held. Should it be limited to iter/tcp and iter/udp?
+Printing from lrugen->max_seq - MAX_NR_GENS + 1, or from MAX_NR_GENS,
+both looks good.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 1b6c0674ff6a..4dadfe9505a2 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -10497,7 +10498,8 @@ static bool may_update_sockmap(struct bpf_verifier_env *env, int func_id)
->  	 */
->  	switch (type) {
->  	case BPF_PROG_TYPE_TRACING:
-> -		if (eatype == BPF_TRACE_ITER)
-> +		if (eatype == BPF_TRACE_ITER &&
-> +		    !strcmp(afname + strlen(BPF_ITER_FUNC_PREFIX), "sockmap"))
->  			return true;
->  		break;
->  	case BPF_PROG_TYPE_SOCK_OPS:
-
-Was the request to also restrict tracing_iter_filter() to iter/tcp and
-iter/udp ever resolved?
-
-In the v1 thread Alexei Starovoitov wrote:
-
-  Pls send the PTR_TRUSTED part in v2. I'd also limit tracing_iter_filter()
-  to iter/tcp and iter/udp.
-
-The reply to that was that once bpf_iter__sockmap::sk is PTR_TRUSTED,
-iter/sockmap could call bpf_sock_destroy() on an unlocked sk.  The v2 series
-adds the PTR_TRUSTED marking but does not touch tracing_iter_filter(), and I
-could not find a follow-up on the v2 thread:
-
-net/core/filter.c:tracing_iter_filter() {
-	if (btf_id_set8_contains(&bpf_sk_iter_kfunc_ids, kfunc_id) &&
-	    prog->expected_attach_type != BPF_TRACE_ITER)
-		return -EACCES;
-	...
-}
-
-This still allows bpf_sock_destroy() from any BPF_TRACE_ITER program,
-including iter/sockmap.
-
-sock_map_seq_show() holds only the RCU read lock, and tcp_abort() skips
-lock_sock() when called from a BPF context.  Can an iter/sockmap program
-now reach tcp_abort() through bpf_sock_destroy() on a socket whose lock is
-not held?
-
-If so, should tracing_iter_filter() be limited to iter/tcp and iter/udp as
-requested, or is there a reason it can stay as it is?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41373332573
---===============7763485647564090835==--
+> 
+> The nr_pages[] array isn't ordered from newest to
+> oldest or vice versa, as we have:
+> 
+> static inline int lru_gen_from_seq(unsigned long seq)
+> {
+>         return seq % MAX_NR_GENS;
+> }
+> 
+> And I added a helper here:
+> https://lore.kernel.org/linux-mm/20261022220203.91911-11-baohua@kernel.org/
+> 
+> +static inline unsigned long lruvec_gen_size(struct lru_gen_folio *lrugen,
+> + int type, unsigned long seq)
+> +{
+> +     int gen = lru_gen_from_seq(seq);
+> +     unsigned long size = 0;
+> +
+> +     for (int zone = 0; zone < MAX_NR_ZONES; zone++)
+> +          size += max(READ_ONCE(lrugen->nr_pages[gen][type][zone]), 0L);
+> +     return size;
+> +}
+> 
+> Maybe you could port it here as a separate patch so it
+> can land earlier as part of your tracepoints series. We
+> could then use it in the next version of the swappiness
+> series.
+> 
+> Best,
+> Barry
