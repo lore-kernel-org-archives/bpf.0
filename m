@@ -1,56 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793648690;
-	b=WK9r27CBLZgK847XT9qGW74JY1Q/aaJedV2q9ne07bVqhrnJokvuRBClGRmrK7O8Xjtt
-	 4j0jc2CwLARyteKkKJLtndmxcyvho61bVjdCHt0XVPLJjblkf+mk46f29zwxLIT5qjijR
-	 g9zym1DxW42Cf+hn+H7MqkmwBAjdJsaEpq0yedVQpc9mKMvC/fUlT5XKK3weIP2xhimzf
-	 v2D62+D3VoiTmkPGquc0ZVIJyPL5IWYv2f4BHre0qU3LclSxPxb/Rurb7LwAgZfn7nlvo
-	 Sf1M7p/u7f5QdWlriTFEoCcZEIAx8LP53Vl+k+3UKEsdlfYcw+CUTbwlYmFOHmcqaLw==
+	t=1793650279;
+	b=f7w7yvXNZ6CeAN8to8Ln3blplyktAKMDIiz3OLXK0uDYRts9YmO0dpId8sNs7fTl5873
+	 QnBC4ZVmbdiYRgZsxRrvwH20kZ0ElK5Q3vHJBZg9RbOHbKBRpjdNOhWbKq/NVsaSoQ7Hi
+	 DsKmoaYZMlPxVbZ/JiWbJOfdlmOcwai3qO5A3cHeLCjp/fn6ujbBvfggWa9RxgvIi7ddH
+	 9NLNN04VfKne7/Rvdg0+KDnDooOUfLpfUpIbK6tqClRsY521ofFqJkPwZ0ZzlOYGew45P
+	 moYjoGgyLRrHwFNoCadL29K5hPCHarOf/J+3gzs6kY6Q3tlY16vIF/JzZoIQ6jt5k1Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793648690;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=q8lzWFcbYJouMtdLAS1/3a6jcoBfGjWkUtbKu1x5/0I=;
-	b=Pi1BOcY1sMOgFVMXivkifwS4gA7YSXf2RTByjfR1FZXNg7/rOR3M8H0Q7TotPjYyiY54
-	 tOglpqtdd5pRP4aN1WTCZAToM0IzpF7HQ8t9vKo0yhJN/o7/8y9C6pG42yxsQ5gS/9sza
-	 2+Lf5iJupuoi/dpixtEQHumDR4n9Gw2ow3x0KIYwL2384SwzVKRge5bjgqwpe9ZEX/gGu
-	 gbFsErs3R6o6jHTcvkLsktaVGKBrqF5sIPb9EqhIp4NPMezh1n7o7GUqUU312dDdCTp5o
-	 esH856gTjv2RhuNTNiI5t9sdzbeyyF+jubIemqnhEK7Hjq5yquA86xKCk36c1awJZzQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793650279;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=RcymY4D4UF/8ph33P0OPdwCWekGZodgPY8AEN9x8u9A=;
+	b=0hsfUUpqQdIrhveE+fZSCMQMeq/T7cw62EAQDheqqUuxTUBzrthajD5RO19TBHEDC98K
+	 qwYTAf6lXdxyioDKgdYZL8h5xe3H3Apwun8KCp9VdgNEIEomncG6/x0EONrP0CxzSRZ6K
+	 GDiZyhtFHY/hJpX6/tNOXJVrNmTd4l9VY3COB7aOy/Vc4fJaS7T4kq+Q43AEEim5ua99l
+	 /slO/Q4v0txqXGfDqA+M9BFH9MA1YTYlR1NCmtQHw/KNiMBtcJNmy7yo2FvvGo9QHSRCY
+	 gbMov1C2sLrk+eflF+/qXwcAHdT4zBzFTPZot26toh0EO1OLJHIiQGmofC3OllVRonA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D98j2Gna;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jQqHEnFn;
+	arc=none smtp.remote-ip=209.85.216.45
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E82606A32C
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 19:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F0C606A329
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 20:11:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A5F0C606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D98j2Gna
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C3311F00A16;
-	Mon,  2 Nov 2026 19:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793648690;
-	bh=q8lzWFcbYJouMtdLAS1/3a6jcoBfGjWkUtbKu1x5/0I=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D98j2GnaFT2Kf9lkzIV954tQEaox9BlVt32XCzD6EpxGnWiFcSqzHhmB7WAmZuuMC
-	 ij005krQIaXVewL5JBFX74xGjjyOCIJKXayRB9W54F25Lq4NjtPsAWhMkMt8Qp0y3Y
-	 0lTP2oEdi2QqissZ35UjLM5U6Bv9TYapjkx4ZzENOPHrXSA6Gn8WwtIVAKXdf7qtLJ
-	 ByKFw8BRRP6btjpbHAbM4O1QBvlH93nlHEEry2CsdIoE+jXC7fk5YNf7gCwaH9JO4X
-	 qbbR0h3/gfh0JpxGs3hOqp4ygZ8L2GkrtBwHV/azjOwLiE5wsVjBgL7AouFiKuCuTX
-	 ZW843+27G6uLA==
-Message-ID: <sashiko-outbox-194018@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net] net: reject a negative TCP header offset in
- qdisc_pkt_len_segs_init()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261101194433.2637113-1-alexei.starovoitov@gmail.com>
-References: <20261101194433.2637113-1-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 02 Nov 2026 19:44:49 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jQqHEnFn
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3adac5b29ebso2136093a91.2
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 12:11:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793650278; x=1794255078; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=RcymY4D4UF/8ph33P0OPdwCWekGZodgPY8AEN9x8u9A=;
+        b=jQqHEnFn+FXMVNfoBrs1W0djK36mh6tAQLBKKA0np19Q1lUiMt4NJL7nk+7gnZDcHa
+         puQGZPgqWkCEuwWOeI0MtPwKgP553Mens0+MZqU+Rj1oNBo68oEFeSew3Cv2ASUxq4U0
+         REbJSjunXBCew6mlmraQdA0sD3dOYhqSN2uRJrAafjPbp7rVPTI5CQl8npSMS4Nfl3ob
+         0BvbBihL+543OtXPr6alPH7jNRAFDG3zkmvzOOP8fkKzmzF2QvGWbpDu4rKzSPRzHIJd
+         yDJUU0RHvw8Njw4cV/qdGBTcoDd/p5a+w9HR8R9aoCMvAnYiKZD5aP2h4x86Pj6T+lCR
+         K/BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793650278; x=1794255078;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RcymY4D4UF/8ph33P0OPdwCWekGZodgPY8AEN9x8u9A=;
+        b=peaIULiANdZfDq8mpdvk2J0hSoNnioyAtWgpqMZrW0ei2/DNSGh/v/QC1WJDB+jZXw
+         xbB4idpLv7W2SsTmH2J0U5rMsyCGVIsiikbC0YTc1rMA03IcxDFujdnfymUpx3Zk54dS
+         HyP2mj8Vy7KjHUyxV/ZKh3liavur2ByceoF9jJJpKv3MJXBbzAdgARTpQuY+0JA4iwEO
+         fJo0OBHLA47EGasbMZNGqcEwpq6yPLV910UHqjUR3Up2TgTTpq5gqoLvvgpj50RpC3Oc
+         oM5G4zHr5mS7aavXof0epw3xxUyY7RNtnzFSacFnl3pnRNg4QUsbKhF5ZDRJz8QB96oZ
+         MugQ==
+X-Gm-Message-State: APuU4Z/Z2SD5EAX2GaOAjyebmKtaEkPA7CcBIalU8fFREhRKEE0pi1yR
+	Xvkd+Qquo8WWZhVU6qJcnxCtIPQ+eWCOZIEAJNUA23qJd5cyLaniUCJg
+X-Gm-Gg: AYBFou39ZnyOn/dSX0l0c2wA1dfdI5Luhfmcs4EYsS3gK+NoBwX5jOG6JbSCj+XgJnl
+	6t4uWDSXSypPoAWM7u2oaSqYG/yjQLm+dXgL/f7Gk6istX2FgBFFohsncsXP3kxwioxyf2Roqnx
+	GXNPrDiJQn0KXHyIuMmRyGW+zes/5tBnfJxigkWz7h3nXAJdO04wLADpK1m9dEwOJgGGJAT1vx8
+	My2pMzloabkPtP89gtcLTRBvjWtqS9wUsO3ydJ1uBZy4BDaRKI6o8g0qk843VnztrpFPfMEeiO0
+	FQPRCebxHe4Vq7nH7AC9B6fXYrm8ojZvNtiR2FPDgzAHO1jpOSV/QGnsfDY7NseCkskPpW5rQC7
+	4AEa0FxW2n7YCfrN6ohWMl0CxE8XETfc44ZTAInCpBvvfC5Ih/zUXVqn0lfLsGQ0JeBqgBQH7BF
+	MACaZrOH0p4TeFsbpYaUxlZS/skHdVYJ+As5OzjIxKzWhTnaTEL2SMxc5VlymigEwIiptHr7AR6
+	L4aAswIy7JP1J83gznzN+EN3jMP+DsktzdUzeHEkx6xhgEEL1YXQP5U9nwGhioiL/usTxVxyO6x
+	Fy4bXPDQR6eE0oqSYO9SieBtgSXn6TZudXh8X6+fKPGx/QrJrtxhgVvRSFBe//B+/yzPHznTKHJ
+	q97I=
+X-Received: by 2002:a17:90b:2742:b0:3a4:b418:94cf with SMTP id 98e67ed59e1d1-3ae897158ddmr9622591a91.14.1793650277913;
+        Mon, 02 Nov 2026 12:11:17 -0800 (PST)
+Received: from john-p8 ([98.97.42.147])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c29e619sm780797a91.0.2026.11.02.12.11.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 12:11:17 -0800 (PST)
+Date: Mon, 2 Nov 2026 12:11:15 -0800
+From: John Fastabend <john.fastabend@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, jakub@cloudflare.com, 
+	jiayuan.chen@linux.dev, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com, 
+	matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org, josef@toxicpanda.com
+Subject: Re: [PATCH bpf v2 00/15] bpf, sockmap: Fixes for verdicts,
+ redirects, corks and recvmsg()
+Message-ID: <aujuOJCs5zZyon2k@john-p8>
+References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,93 +99,29 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] net: negative hdr_len in qdisc_pkt_len_segs_init() only checked fo=
-r TCP
---
+On Mon, Nov 02, 2026 at 07:20:57AM +0000, Alexei Starovoitov wrote:
+>From: Alexei Starovoitov <ast@kernel.org>
+>
+>These patches fix bugs in sockmap:
+>
+>  patches  area
+>  -------  ----------------------------------------------------------------
+>  01       recvmsg() after a fault
+>  02-04    the verdict of an sk_msg prog and the return value of sendmsg()
+>  05       the backlog of a stopped psock
+>  06       TCP listeners
+>  07-08    the target of an egress redirect
+>  09       the TCP state in recvmsg()
+>  10-14    corks and the redirect target
+>  15       bpf_msg_push_data() and bpf_msg_pop_data()
+>
+>8 of the patches are from Chris Mason and Josef Bacik.
 
-commit dddca5a283a51c0b9bd1d1aef355eda12933179b
-Author: Alexei Starovoitov <ast@kernel.org>
+Thanks everyone lgtm. For the series.
 
-net: reject a negative TCP header offset in qdisc_pkt_len_segs_init()
-
-This commit adds a negative offset check on hdr_len inside the TCP GSO
-branch of qdisc_pkt_len_segs_init() to prevent an out-of-bounds read when
-a stale transport header points in front of skb->data.
-
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index f32353b0467cd..af948e4424035 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4320,7 +4320,9 @@ static enum skb_drop_reason qdisc_pkt_len_segs_init=
-(struct sk_buff *skb)
->  	if (likely(shinfo->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6))) {
->  		const struct tcphdr *th;
-> =20
-> -		if (!pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
-> +		/* A header in front of skb->data gives a negative offset. */
-> +		if ((int)hdr_len < 0 ||
-> +		    !pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
->  			return SKB_DROP_REASON_SKB_BAD_GSO;
-
-[Severity: High]
-Should the (int)hdr_len < 0 check be placed immediately after hdr_len is
-computed rather than only inside the SKB_GSO_TCPV4 | SKB_GSO_TCPV6 branch?
-
-In net/core/dev.c:qdisc_pkt_len_segs_init(), leaving non-TCP GSO types
-unguarded when skb_transport_offset(skb) or skb_inner_transport_offset(skb)
-is negative appears to leave three issues:
-
-First, for SKB_GSO_UDP_L4 packets:
-
-	} else if (shinfo->gso_type & SKB_GSO_UDP_L4) {
-		if (!pskb_may_pull(skb, hdr_len + sizeof(struct udphdr)))
-			return SKB_DROP_REASON_SKB_BAD_GSO;
-		hdr_len +=3D sizeof(struct udphdr);
-	}
-
-When (int)hdr_len < -8, hdr_len + sizeof(struct udphdr) wraps to an
-unsigned int in [0x80000008, 0xffffffff] (> INT_MAX), which triggers
-DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in
-include/linux/skbuff.h:pskb_may_pull_reason() before returning
-SKB_DROP_REASON_SKB_BAD_GSO.
-
-Second, when -8 <=3D (int)hdr_len < 0 on an SKB_GSO_UDP_L4 packet,
-hdr_len + sizeof(struct udphdr) wraps to 0..7. pskb_may_pull() succeeds
-without pulling the UDP header into skb->head, hdr_len wraps to 0..7, and
-qdisc_pkt_len_segs_init() returns SKB_NOT_DROPPED_YET. If the packet is
-then transmitted on a NETIF_F_GSO_UDP_L4 device whose driver uses the TSO
-helpers in net/core/tso.c (such as bnxt_sw_udp_gso_xmit(),
-enetc_map_tx_tso_buffs(), or otx2_sq_append_tso()), tso_build_hdr()
-advances hdr by the negative transport offset:
-
-	hdr +=3D skb_transport_offset(skb);
-	if (tso->tlen !=3D sizeof(struct udphdr)) {
-		...
-	} else {
-		struct udphdr *uh =3D (struct udphdr *)hdr;
-
-		/* size is after segmentation. */
-		udp_set_len_short(uh, sizeof(*uh) + size);
-	}
-
-Can this write uh->len (and uh->check in bnxt_sw_udp_gso_xmit() and
-enetc_tso_hdr_csum()) before the start of the header buffer when
-skb_transport_offset(skb) < -4?
-
-Third, for other GSO types (such as SKB_GSO_FRAGLIST, SKB_GSO_UDP,
-SKB_GSO_SCTP, or SKB_GSO_ESP), hdr_len remains 2^32 - |offset| at the end
-of qdisc_pkt_len_segs_init():
-
-	qdisc_skb_cb(skb)->pkt_len +=3D (gso_segs - 1) * hdr_len;
-
-When (gso_segs - 1) * |offset| > skb->len, can qdisc_skb_cb(skb)->pkt_len
-underflow in 32-bit unsigned arithmetic to ~4.29 GiB (exceeding
-QDISC_PKT_LEN_MAX), causing deficit-based schedulers such as drr_dequeue()
-and ets_dequeue() to spin in their deficit-refill loops?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261101194433.2637=
-113-1-alexei.starovoitov@gmail.com?part=3D1
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
