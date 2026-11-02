@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793598952;
-	b=SC0L72VQEzNsrO0NN3YF4tcfnQ7Urdoh1plcz+K1NUCfiucvSEvMf3tMezPcZnWoWn8f
-	 ACZvDOKO0Y9cpQ9vJkUsWWu08w/UM9FW26zOS+MJDTN/4PCGM/pzjekT/iVYRgGsxF16Y
-	 6WhAQdPevoxs8113IKFOy0q7zFAp9WcN7+U7f5AyridgwFv9+l7i3MZFzTT5OTlLweFlZ
-	 2wphLCB1oGl7VHXrLtJPpvCJgeHFyJFZBF4nICxjcvpb3KoI+YFnbSaLJQ2xOc+C/+279
-	 Dtnwn2eaj1viDn1jTWA74QS4EOrTbm7BMVYOIyoC8pGgeFydywM2FH3NnnSFDcut0pg==
+	t=1793598958;
+	b=hkQ91QtbNjM0tr1Sdx30D2W9PljbzlDxV5PgUECX11U806nBvNOEz0DDsxf1OGJ9Zl7g
+	 ySdJ0xqGkWGbx/cpA+nuOGGDCOKRB+0SpEusLtBXUNpRGxVr2UTd5qcNyADu0qlGpYFuL
+	 ELdqXPbdoyLI3qO3akVUf2RkRbUO0H0scCsq2E9WNmH+j42LfLTHMamwl1RZYdoG5sBxL
+	 uQhS8cscvdBKQ78gpG6IC9+sqfog5y0AhRe0EWs77360HTW4MOcSn7/xpAUEqUGQlr1iR
+	 V5mi8Fvq5SLQs0Sz/K8mJTwtHq7+NfUOUzdbCwSNxv5KUyZPIJxP+SkXjWCh/MNIO+g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793598952;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793598958;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=h3EANbHhUc/s0WfqasahYXcexzhDG/kRhHDmbtEorN0=;
-	b=eqjIWm9q55pY3NK3WcwtDHNUIVb/HZJfsp7kZEiYwRkqpN3p7NwTCBHby2JiM7jL4iC6
-	 GYPOdHkFRSKA+x8krM1eUiQiKOy0sONj07NMwlQ3oJ49+d9OGWuZ3XclAJvzorldxJ41K
-	 PrKVxg33yLQuF17OBfSkJlpaknraQVjZdJwg8XauHV79DG8a3s2bfGSK3gEv6lCsKwWri
-	 gOZkpeJolH7xGQiwmap4dyISFw4rq2m8OqH91UUq39j2A+3vuOctK9g9sBFzX2fC8YnX/
-	 6m4+dRH4ISGLdH8yjMzeUiEVJuDvdrcyd0U9M3z1BbFoc2fm4si9rqVBJvlvQdtBHLQ==
+	bh=ypxHukKMSoe73gQjgcMelJk6wgodCcSr83DF/XpC1lg=;
+	b=ZfGM0SxCZeOp0CDJvB8VKmn0AkQcv8+zUpAbyGqlwctlYW28cRVgrVUVfU8Qe0u6x7ii
+	 TOEga6ZfppMk5jfaTd1m8409WKRXIXWW+JTPOmS0F9WkufYZtqURBbU4qkik8q2lzGZzE
+	 01YSuON78nVa1WP3NskJbBQ49oTxjPARVPYPnPY4llSGyJuhNy18CjUnEbgd+n9VedqlA
+	 7eGEpupEREEG6034wEGLSXL0/cnOtkQhz77zroFHHila7y9ZawaI3RN8Of9jqGjEwuBPG
+	 b5p+37nAXoBmMNpvjF2Xpzh9m4Y2GNybgfEF0pwuVocd+kErpYRrFg404U8gJkxgEew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wgKKh8H1;
-	arc=none smtp.remote-ip=209.85.215.174
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DWj7SO75;
+	arc=none smtp.remote-ip=209.85.214.180
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA86F606A32C
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 05:55:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA86F606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC87606A329
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 05:55:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9DC87606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wgKKh8H1
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cdab8873d9dso815133a12.1
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 21:55:51 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DWj7SO75
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e99b1e5b4cso15349445ad.0
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 21:55:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793598951; x=1794203751; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793598957; x=1794203757; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=h3EANbHhUc/s0WfqasahYXcexzhDG/kRhHDmbtEorN0=;
-        b=wgKKh8H1JLPR+Hx4DiDKor6Q1xzx+q/JIsOlzqc6mzrShMATrYau+GD/I4C87xsKF3
-         R0X2j5XISHUuNX9Nb0gvj0xzSbsX1O5+1G1AKx8zDkanb5raevDazvOwhDDNznDYt5KQ
-         RGYN9K1DXkA9R7/x1IxrjyUtEtq6hr3myIZ3ecj6EUuG4+dipVZzccugwMpFybNfa2qV
-         tTG7a5CUDsv3+Wz5MFeSHC+JIxjMcJ4TjFhWK/RD5hd+YVuXXR4HQzPxLdo/8QI79EGR
-         fTlhuWzUv6uXJfkozWlG3O47s0k2Y9PNJWdsFnQGoCyM/joZy5+Xf393aUkZ0Y36Wszo
-         BqSw==
+        bh=ypxHukKMSoe73gQjgcMelJk6wgodCcSr83DF/XpC1lg=;
+        b=DWj7SO75+py7wvl/1cIxphT6QEjaATHTUglVILSnoK988buMP4Mils/d5VeT8IYcW8
+         MjVB80i2dvR4D7sAaEpKHEOJHGXLshvsflqS43LnFC6z2PGxSIDWjTU938EuweeCojtz
+         2khIwTLY03VZJoIscsQY4Uq10E0kJzgxslOLzqgvW18sMerE+SkftARbutyA6yR0J1d6
+         1AigwNlnR2KjYKekYvWopg8zhzvJs8oo52p/tCvFts1/LWluR4mmc6t8z00pOgDJqCuX
+         ZlBwxjKfh/TbWtmB33k3BgURIxEQlc66gF31IfclZgVz895JopTg7lNZAXMZy/sFj6yq
+         apPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793598951; x=1794203751;
+        d=1e100.net; s=20260707; t=1793598957; x=1794203757;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=h3EANbHhUc/s0WfqasahYXcexzhDG/kRhHDmbtEorN0=;
-        b=EWo6OEVX8DAHq7qNmxV/g1Yd8GMmV4ngN1JfS9LDgnv7BOnwvZz0wfNyXX5O8PJ6lE
-         k2WmWF38oqSvTr22QVypONtL++DOooVmvoOrPtP4b1r+92+vbeTUAEcrH6BlWq0i0doB
-         CLpGqFAHtxAmcjE0PWrCZpedmnLY7qjvSm7eLJ0xA2XvfbVq7QLPrza3Obn2U8gq5r4w
-         sRCPvTYjJV03mUt4D2j8mjFNd4sazxWqgjYCA7Wyg0ePMjEj+gvbtOFYRTBgNSjS7Emc
-         ZcATkRw7kz+ubHS2BskPhaIKPTbShPd6DIxs7xqRPEb79IKNhtSmoMo5c4ytwFtdumnQ
-         0BLA==
-X-Gm-Message-State: APuU4Z85tJ+z7Jk5AWTdKPdH/PXMlVCdErN0BnH98Aw77ol7148TSCDu
-	tvngZ2p2UTeUBxqkZx8rWjLz4s3QUwJUHYBcaw6k7+yyj+uCffDhiJ6fgFnEBg==
-X-Gm-Gg: AYBFou2NhHVYgSP5uZXysghf8R9apBwSSnBKC7kAk1HOwAbwwuoKiw0nUsXLSHDOuU8
-	gFsKDsIJBFGVgA3NkD0cCJNvH6/u0n+PE/MAB9wCbC8pnAWc5NLFyTLXNWbkJrGisGTe0sd335y
-	b4ykEc89BekjXMq83yGYO7OK5V6OkJOikOE5MXkZNmZ8T9cgYUUyY7+jPgIyRI72h+Puk18Z2I3
-	c75vZOcz87A/5W7syQNMENaysX7yfznm90FhFmWWLpKWr4gBfQJwlYA/CNuIowfGnlXAql4e5EN
-	UQxVyCCh0EVHsEm+n2rqC5keNAWu3i7k4p3nlXw1P9mZnggXGndFae6S56iwCAHgx9eheuNrPM/
-	kR6Ms14hjXkt9SfmlxEN8ilXhYeLfoOCMKxcZ2onFZR3BrmgKbuf7UqEjUAeKGeRrZSoffngwlu
-	IJ21GYbddKkKOlIuqcWa9Se1TQweJZB02zmd8LEu3lddj34NlmTIctTPRRqQDlQ7m7DTVoYCCcR
-	Zn6liSyyI/1NEaIDjVNtIFONHNcune3t1ghexNn8NwK2NSIVSzNt2pAUH5gsqvVDQhzv/t3XPcs
-	Q5asLswNiRkFWFPMj+gcam8055JkeIrdol6djR6tdeQD1RlI4OQ2Vu9+ZFnz3txITAy1//gOx/g
-	KHO5IUMeQt8bek83hqGGdLxqr91DU6/5a4WBDGnSWkPBp1PWLhhBbnr350dlJP8RdcNNHQR3MXQ
-	==
-X-Received: by 2002:a17:90b:4a45:b0:3a4:e735:b39d with SMTP id 98e67ed59e1d1-3ae897d28eemr7021001a91.64.1793598950913;
-        Sun, 01 Nov 2026 21:55:50 -0800 (PST)
+        bh=ypxHukKMSoe73gQjgcMelJk6wgodCcSr83DF/XpC1lg=;
+        b=OoPBJ9OnSkQ65mwUFRcNiWzrNfOl9ajVraK4c/EhsqF0iKudcdjcL0tP4g9LWGE2oZ
+         0YJYIpSJg5P0hE1OXh6t4ctRlioH6ZbGeZqlh5RQc3YVRHKdyafqQ3VZwTwTD499uf6l
+         RjrgVfpoqkVgVbz/Xg6vkoO2Ny4id8psLSjyAJQGYFuMQnIpBO2Tq3+blUl/pBWZWQkO
+         ynoFbkcyf7MR/7RO1qaQkq0POicb08qK4K9xqdaXmi9SGrCL2U3u2tJg0UYgtPHiRSy0
+         ww6XQdvmtnoZ7jzvpoLL3baeQiFf3IfeMGu2LzOmd233REnJHFXupnenatt68hjr2Hc+
+         tU5A==
+X-Gm-Message-State: APuU4Z8svWGIjBcp/LQHRuoy8uIs5ytVBHF7TodlpG5Gsw/f/jpTZyvi
+	spZgnDwT9YmJb/8gZ/ouq21LgZuf4BYsoRiNpeZDI0w5CGqSSJYCjf5LSaLqfQ==
+X-Gm-Gg: AYBFou23Na+WEfjxv0V5K7O4pOXrYgQSfy65FjM7BzGkr+7KR6ytbjH7QN+DwGpBK1d
+	PT6kfgkF3nskCBb9WFTN8AuhzTFlmhFT+uHyAMKDNcA1k0IHnJwYY7svYyW15BmSjXGwqHGwyH5
+	io6rqFmF+ZCyK+DgojCYOeeJhWisWd62wF4StS+GBtQw9HXoqMyRF/vUTETj/hAv8BnpHKDLg8S
+	ZYTwXKyXZMsYhE8BHJJ5N75bY6SS6n/RppZblCcqpvBxUyRvo1arkVlm5SGDfQ0Lxj29tllGP0Q
+	tW1O+5ztRn6dVgbYHMHA0Y4scVuC0e1MTjnQ906yWcjnKaxVuES9+CtnzbmVOWxUdBht+VbQUOM
+	hazgaxW0fFAR1a/hXWPxHG7v4Q+ka934FbJQJKDlHNetxNNicFumXmm5YY7wIUTI9/dtyDBXSK9
+	/lsYtjzDYOU8vrDZUNWjpY3s3EOgUNzzeEsL3x6CPLmcvcPYjBGlYf2jId7fAppJ7Bzfxc96wa/
+	ZFF7HW/JdVdMlIuKehGuARFpyeVZnyRb66vJCbVSW7NhAoO/tNUlyq2rNOKZZfwt1lK/FriLVtd
+	jXpim6chTy5V2iSL+OLjEs7CBlNxtx7EI6znuEgbwfeP6ppuKKclHeiAiy1F/3zyIEpI2WZfs0L
+	6hhAupWgxa6UyDl4a/Y101TG0i/tbAQTHWyTx0yJO9RXlSISAherD4wS2X5kkDA42n8ql7L5XNE
+	I=
+X-Received: by 2002:a17:90b:4c52:b0:3ab:1481:69e5 with SMTP id 98e67ed59e1d1-3ae897ccbfdmr7953814a91.11.1793598956729;
+        Sun, 01 Nov 2026 21:55:56 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb096b8323sm2746600a12.6.2026.11.01.21.55.50
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae85f3e087sm7491377a91.1.2026.11.01.21.55.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 21:55:50 -0800 (PST)
+        Sun, 01 Nov 2026 21:55:56 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 1/2] bpf: Invalidate a dynptr slice when its stack buffer is written
-Date: Mon,  2 Nov 2026 05:55:42 +0000
-Message-ID: <20261102055543.3584718-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: Test writes to the buffer of bpf_dynptr_slice_rdwr()
+Date: Mon,  2 Nov 2026 05:55:43 +0000
+Message-ID: <20261102055543.3584718-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261102055543.3584718-1-alexei.starovoitov@gmail.com>
 References: <20261102055543.3584718-1-alexei.starovoitov@gmail.com>
@@ -104,325 +104,356 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-bpf_dynptr_slice_rdwr(&ptr, off, buffer, size) returns a pointer to the
-data of a dynptr. When the data is not contiguous, for example in a
-non-linear skb, it copies the data to 'buffer' and returns 'buffer'.
-Usually the buffer is on the stack. For the verifier the result is plain
-memory (PTR_TO_MEM), and a store through it is not a write to the stack.
-After such a store, what the verifier tracks in the slots of the buffer is
-wrong: a known scalar, a spilled pointer, a dynptr, an iterator, irq flags.
+bpf_dynptr_slice_rdwr() can return its buffer. When the buffer is on the
+stack, a store to the buffer invalidates the slice. See "bpf: Invalidate
+a dynptr slice when its stack buffer is written".
 
-The store is not a problem while the buffer contains only unknown bytes.
-The call leaves the buffer in this condition. Thus keep this rule: the
-buffer contains no tracked data while a slice that can be the buffer
-exists. The slice remembers the frame, the offset and the size of its
-buffer. The verifier invalidates the slice at each event that breaks it:
+dynptr_fail.c gets short progs with skb and xdp dynptrs. They cover the
+events that invalidate a slice, the borders of the buffer, a copy of the
+slice on the stack and in a caller, pruning, and events that leave the
+slice valid. They end with a store through the slice and are only loaded.
 
-  event                                              slices of the buffer
-  -------------------------------------------------  --------------------
-  the prog stores to bytes of the buffer             invalid
-  a dynptr, an iterator or irq flags are made there  invalid
-  the frame of the buffer returns                    invalid
-  a helper or a kfunc fills the buffer               no change
-  a store next to the buffer, a read of the buffer   no change
+test_dynptr_skb_slice_rdwr_buffer in dynptr_success.c runs on a non-linear
+skb. It shows that the slice is the buffer, and that the pattern of the
+documentation continues to work. It passes without the fix too.
 
-Tracked data gets into a stack slot in check_stack_write(), also the bytes
-of a new dynptr, iterator or irq flags. Thus one call there, and one call
-in prepare_func_exit(), are sufficient. Each is one walk over the
-registers, only in progs that have such a slice. Helpers and kfuncs leave
-only unknown bytes: mark_raw_stack() goes around check_stack_write().
-Scalar evolution changes only slots that have a tracked value already.
-
-The range of the buffer is in the part of bpf_reg_state that the verifier
-copies with the register and compares for pruning. A slice that is the
-buffer of a second call passes its range on. Local, ringbuf and skb
-metadata dynptrs never return the buffer: no range. A dynptr argument of a
-global function counts as an skb dynptr. bpf_dynptr_slice() does not
-change: a prog cannot store through a read-only slice.
-
-The usual pattern only reads the buffer, and it continues to load:
-
-  if (p == buffer)
-          bpf_dynptr_write(&ptr, 0, buffer, sizeof(buffer), 0);
-
-A prog that stores to the buffer and then uses the old slice is rejected:
-"R7 invalid mem access 'scalar'". The diagnostics name the reason, and the
-log shows the buffer of a slice: R7=mem(sz=8,buf=fp[0]-8+8).
-
-Fixes: 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and bpf_dynptr_slice_rdwr")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h | 17 ++++++++++
- kernel/bpf/diagnostics.c     |  6 +++-
- kernel/bpf/diagnostics.h     |  1 +
- kernel/bpf/helpers.c         |  6 ++++
- kernel/bpf/log.c             |  2 ++
- kernel/bpf/scev.c            |  6 +++-
- kernel/bpf/verifier.c        | 64 ++++++++++++++++++++++++++++++++++--
- 7 files changed, 97 insertions(+), 5 deletions(-)
+ .../testing/selftests/bpf/prog_tests/dynptr.c |   1 +
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 258 ++++++++++++++++++
+ .../selftests/bpf/progs/dynptr_success.c      |  38 +++
+ 3 files changed, 297 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 33dc3d402057..630681949813 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -50,6 +50,13 @@ enum bpf_iter_state {
- 	BPF_ITER_STATE_DRAINED,
- };
- 
-+/* Bytes [off, off + size) of the stack of frame frameno. Nothing when size is 0. */
-+struct bpf_stack_range {
-+	u32 frameno;
-+	s32 off;
-+	u32 size;
-+};
-+
- struct bpf_reg_state {
- 	/* Ordering of fields matters.  See states_equal() */
- 	enum bpf_reg_type type;
-@@ -83,6 +90,12 @@ struct bpf_reg_state {
- 
- 		struct { /* for PTR_TO_MEM | PTR_TO_MEM_OR_NULL */
- 			u32 mem_size;
-+			/*
-+			 * bpf_dynptr_slice_rdwr() returns its buffer when the data
-+			 * is not contiguous: the register may point to this part
-+			 * of the stack.
-+			 */
-+			struct bpf_stack_range buf;
- 		};
- 
- 		/* For dynptr stack slots */
-@@ -1091,6 +1104,8 @@ struct bpf_verifier_env {
- 	bool bypass_spec_v1;
- 	bool bypass_spec_v4;
- 	bool seen_direct_write;
-+	/* a register may point to the stack and is not PTR_TO_STACK, see bpf_reg_state::buf */
-+	bool seen_stack_slice;
- 	/* a global function is verified for BPF_FUNC_CTX_NO_RCU_LOCK */
- 	bool no_rcu_read_lock;
- 	bool seen_exception;
-@@ -1815,6 +1830,8 @@ struct bpf_call_arg_meta {
- 	struct arg_constant_desc arg_constant;
- 	/* The type of the dynptr that the kfunc writes through */
- 	enum bpf_dynptr_type dynptr_write_type;
-+	/* The buffer of bpf_dynptr_slice_rdwr() */
-+	struct bpf_stack_range slice_buf;
- 
- 	/* arg_{btf,btf_id,owning_ref} are used by kfunc-specific handling,
- 	 * generally to pass info about user-defined local kptr types to later
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index b5204798231d..08e12714bb95 100644
---- a/kernel/bpf/diagnostics.c
-+++ b/kernel/bpf/diagnostics.c
-@@ -1561,7 +1561,8 @@ static void diag_record_mod(struct bpf_verifier_env *env, u32 insn_idx,
- 	if (origin) {
- 		event.mod.origin = *origin;
- 		event.mod.origin_valid = true;
--	} else if (diag_mod_insn_origin(env, insn_idx, &target, &event.mod.origin)) {
-+	} else if (reason != BPF_DIAG_MOD_SLICE_BUF && /* the insn writes the buffer */
-+		   diag_mod_insn_origin(env, insn_idx, &target, &event.mod.origin)) {
- 		event.mod.origin_valid = true;
- 	}
- 	if (old_reg && new_reg && reason == BPF_DIAG_MOD_WRITE &&
-@@ -2237,6 +2238,9 @@ static void diag_print_mod(struct bpf_verifier_env *env, const struct bpf_diag_h
- 	case BPF_DIAG_MOD_PKT_DATA_CHANGE:
- 		reason = "packet data may have moved";
- 		break;
-+	case BPF_DIAG_MOD_SLICE_BUF:
-+		reason = "the stack buffer of this dynptr slice was written, or its frame returned";
-+		break;
- 	case BPF_DIAG_MOD_NON_OWN_REF:
- 		reason = "leaving the protected region invalidated this borrowed pointer";
- 		break;
-diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index a4102fb049ec..490decc133f6 100644
---- a/kernel/bpf/diagnostics.h
-+++ b/kernel/bpf/diagnostics.h
-@@ -23,6 +23,7 @@ enum bpf_diag_mod_reason {
- 	BPF_DIAG_MOD_VAR_WRITE,
- 	BPF_DIAG_MOD_REF_RELEASE,
- 	BPF_DIAG_MOD_PKT_DATA_CHANGE,
-+	BPF_DIAG_MOD_SLICE_BUF,
- 	BPF_DIAG_MOD_NON_OWN_REF,
- 	BPF_DIAG_MOD_CALLER_SAVED,
- };
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 3cbee140ede8..f4936c483f6b 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -3173,6 +3173,12 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr *p, u64 offset,
-  * Please note that, as in the example above, the user must check that the
-  * returned pointer is not null before using it.
-  *
-+ * Please also note that when the buffer is on the stack, the verifier invalidates
-+ * the returned pointer when the program stores to the buffer (helpers and kfuncs
-+ * may fill it), or returns from the function that has it. Change the data through
-+ * the returned pointer, and before the comparison with the buffer, as in the
-+ * example above: after it the compiler may use one pointer in place of the other.
-+ *
-  * Please also note that in the case of skb and xdp dynptrs, bpf_dynptr_slice_rdwr
-  * does not change the underlying packet data pointers, so a call to
-  * bpf_dynptr_slice_rdwr will not invalidate any ctx->data/data_end pointers in
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index fa29d9b994e4..916408c63355 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -684,6 +684,8 @@ static void print_reg_state(struct bpf_verifier_env *env,
- 	if (base_type(t) == PTR_TO_MEM) {
- 		verbose_a("sz=");
- 		verbose_unum(env, reg->mem_size);
-+		if (reg->buf.size)
-+			verbose_a("buf=fp[%u]%d+%u", reg->buf.frameno, reg->buf.off, reg->buf.size);
- 	}
- 	if (t == CONST_PTR_TO_DYNPTR)
- 		verbose_a("type=%s",  dynptr_type_str(reg->dynptr.type));
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 1123a14e7389..06dee7e421ea 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -1831,7 +1831,11 @@ scev_reg_for_read(struct bpf_verifier_env *env, const struct bpf_func_state *st,
- 	return zero ? &env->scev->zero_reg : &env->scev->unknown_reg;
- }
- 
--/* Materialize a writable value in the current state, growing its stack if needed. */
-+/*
-+ * Materialize a writable value in the current state, growing its stack if needed.
-+ * This does not go through check_stack_write(). The callers skip is_unbound_scev_reg() slots,
-+ * thus the buffer of a live dynptr slice, see bpf_reg_state::buf, does not become a spill here.
-+ */
- static int scev_reg_for_write(struct bpf_verifier_env *env, struct bpf_func_state *st,
- 			      u32 r, struct bpf_reg_state **out)
- {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 217bcfa6ebfe..b34f7321eaaf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1010,6 +1010,13 @@ static bool dynptr_write_changes_pkt_data(enum bpf_dynptr_type type)
- 	return type == BPF_DYNPTR_TYPE_SKB || type == BPF_DYNPTR_TYPE_SKB_META;
- }
- 
-+/* The data of the other types is contiguous: bpf_dynptr_slice() does not use the buffer. */
-+static bool dynptr_slice_may_be_buffer(enum bpf_dynptr_type type)
-+{
-+	return type != BPF_DYNPTR_TYPE_LOCAL && type != BPF_DYNPTR_TYPE_RINGBUF &&
-+	       type != BPF_DYNPTR_TYPE_SKB_META;
-+}
-+
- static bool is_dynptr_type_expected(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 				    enum bpf_arg_type arg_type)
- {
-@@ -4558,6 +4565,31 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 	return err;
+diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+index cbb2cc9969be..19f38215d909 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+@@ -37,6 +37,7 @@ static struct {
+ 	{"test_skb_readonly", SETUP_SKB_PROG},
+ 	{"test_dynptr_skb_data", SETUP_SKB_PROG},
+ 	{"test_dynptr_skb_slice_non_linear", SETUP_SKB_PROG_NONLINEAR},
++	{"test_dynptr_skb_slice_rdwr_buffer", SETUP_SKB_PROG_NONLINEAR},
+ 	{"test_dynptr_skb_meta_data", SETUP_SKB_PROG},
+ 	{"test_dynptr_skb_meta_flags", SETUP_SKB_PROG},
+ 	{"test_adjust", SETUP_SYSCALL_SLEEP},
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+index c2247b38c849..ab25085dbb4c 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -1277,6 +1277,264 @@ int skb_invalid_data_slice4(struct __sk_buff *skb)
+ 	return SK_PASS;
  }
  
 +/*
-+ * A store through a slice that may be the buffer on the stack, see bpf_reg_state::buf, is
-+ * not seen as a write to the stack. That's fine as long as nothing is tracked in the buffer.
-+ * The output of helpers and kfuncs is not tracked. Here an insn stores to [min_off, max_off)
-+ * of frame @frameno, a dynptr, an iterator or irq flags are made there, or the frame is gone.
++ * bpf_dynptr_slice_rdwr() returns its buffer when the data is not contiguous.
++ * The verifier does not see a store through the slice as a write to the stack.
++ * Thus the buffer must not hold data that the verifier tracks: a store to the
++ * buffer invalidates the slice. fp-32: the dynptr, r7: the slice.
 + */
-+static void invalidate_stack_slices(struct bpf_verifier_env *env, u32 frameno,
-+				    int min_off, int max_off)
++#define SLICE_BUF_DYNPTR(new)				\
++	"r2 = 0;"					\
++	"r3 = r10;"					\
++	"r3 += -32;"					\
++	"call %[" #new "];"
++
++/* r3 is the buffer */
++#define SLICE_BUF_CALL(size)				\
++	"r1 = r10;"					\
++	"r1 += -32;"					\
++	"r2 = 0;"					\
++	"r4 = " #size ";"				\
++	"call %[bpf_dynptr_slice_rdwr];"
++
++#define SLICE_BUF_CHECK					\
++	"if r0 == 0 goto 9f;"				\
++	"r7 = r0;"
++
++#define SLICE_BUF_AT(off, size)				\
++	"r3 = r10;"					\
++	"r3 += -" #off ";"				\
++	SLICE_BUF_CALL(size)				\
++	SLICE_BUF_CHECK
++
++#define SLICE_BUF(off, size) SLICE_BUF_DYNPTR(bpf_dynptr_from_skb) SLICE_BUF_AT(off, size)
++
++/* Each prog ends with a store through the slice */
++#define SLICE_BUF_PROG(sec, name, expect, ...)		\
++SEC(sec)						\
++expect							\
++__naked int name(void)					\
++{							\
++	asm volatile (__VA_ARGS__			\
++	"*(u8 *)(r7 + 0) = 0;"				\
++"9:"							\
++	"r0 = 0;"					\
++	"exit;"						\
++	:						\
++	: __imm(bpf_dynptr_from_skb),			\
++	  __imm(bpf_dynptr_from_skb_meta),		\
++	  __imm(bpf_dynptr_from_xdp),			\
++	  __imm(bpf_dynptr_slice_rdwr),			\
++	  __imm(bpf_get_prandom_u32),			\
++	  __imm(bpf_probe_read_kernel)			\
++	: __clobber_all);				\
++}
++#define SLICE_BUF_TEST(...) SLICE_BUF_PROG("?tc", __VA_ARGS__)
++
++/* Not in the line of SLICE_BUF_TEST(): the log of the verifier has a copy of that line */
++#define SLICE_BUF_INVALID __failure __msg("R7 invalid mem access 'scalar'")
++#define SLICE_BUF_POINTER __failure __msg("invalid size of register spill")
++
++SLICE_BUF_TEST(slice_buf_first_byte, SLICE_BUF_INVALID,
++	SLICE_BUF(12, 4)
++	"*(u8 *)(r10 - 12) = 0;")
++
++SLICE_BUF_TEST(slice_buf_last_byte, SLICE_BUF_INVALID,
++	SLICE_BUF(12, 4)
++	"*(u8 *)(r10 - 9) = 0;")
++
++/* the store is at fp-16 or at fp-8 */
++SLICE_BUF_TEST(slice_buf_store_var_off, SLICE_BUF_INVALID,
++	SLICE_BUF(8, 8)
++	"call %[bpf_get_prandom_u32];"
++	"r0 &= 8;"
++	"r1 = r10;"
++	"r1 += -16;"
++	"r1 += r0;"
++	"*(u64 *)(r1 + 0) = 0;")
++
++/* the buffer is at fp-16 or at fp-8 */
++SLICE_BUF_TEST(slice_buf_var_off, SLICE_BUF_INVALID,
++	SLICE_BUF_DYNPTR(bpf_dynptr_from_skb)
++	"call %[bpf_get_prandom_u32];"
++	"r0 &= 8;"
++	"r3 = r10;"
++	"r3 += -16;"
++	"r3 += r0;"
++	SLICE_BUF_CALL(8)
++	SLICE_BUF_CHECK
++	"*(u64 *)(r10 - 8) = 0;")
++
++/* the slice is a pointer when it is stored to its buffer, and invalid after that */
++SLICE_BUF_TEST(slice_buf_narrow_spill, SLICE_BUF_POINTER,
++	SLICE_BUF(8, 8)
++	"*(u32 *)(r10 - 8) = r7;")
++
++/* the write to the buffer is the spill of the slice, not yet checked for NULL */
++SLICE_BUF_TEST(slice_buf_spilled_or_null, SLICE_BUF_INVALID,
++	SLICE_BUF_DYNPTR(bpf_dynptr_from_skb)
++	"r3 = r10;"
++	"r3 += -8;"
++	SLICE_BUF_CALL(8)
++	"*(u64 *)(r10 - 8) = r0;"
++	"r0 = *(u64 *)(r10 - 8);"
++	SLICE_BUF_CHECK)
++
++/* a slice that may be the buffer is the buffer of the next slice */
++SLICE_BUF_TEST(slice_buf_is_a_slice, SLICE_BUF_INVALID,
++	SLICE_BUF(8, 8)
++	"r3 = r7;"
++	SLICE_BUF_CALL(8)
++	SLICE_BUF_CHECK
++	"*(u64 *)(r10 - 8) = 0;")
++
++/* The paths differ only in the buffer. The safe one is first, the other must not be pruned. */
++SLICE_BUF_TEST(slice_buf_pruning, SLICE_BUF_INVALID __flag(BPF_F_TEST_STATE_FREQ),
++	SLICE_BUF_DYNPTR(bpf_dynptr_from_skb)
++	"call %[bpf_get_prandom_u32];"
++	"if r0 == 0 goto 1f;"
++	SLICE_BUF_AT(16, 8)
++	"goto 2f;"
++"1:"
++	SLICE_BUF_AT(8, 8)
++"2:"
++	"*(u64 *)(r10 - 8) = 0;")
++
++/* r1 is the dynptr of the caller. The buffer is gone when the function returns. */
++static __used __naked void slice_buf_in_callee(void)
 +{
-+	struct bpf_func_state *state;
-+	struct bpf_reg_state *reg;
-+
-+	if (!env->seen_stack_slice)
-+		return;
-+
-+	bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
-+		if (base_type(reg->type) != PTR_TO_MEM || !reg->buf.size ||
-+		    reg->buf.frameno != frameno || reg->buf.off >= max_off ||
-+		    reg->buf.off + (int)reg->buf.size <= min_off)
-+			continue;
-+		bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_SLICE_BUF);
-+		mark_reg_invalid(env, reg);
-+	}));
++	asm volatile (
++	"r2 = 0;"
++	"r3 = r10;"
++	"r3 += -8;"
++	"r4 = 8;"
++	"call %[bpf_dynptr_slice_rdwr];"
++	"exit;"
++	:
++	: __imm(bpf_dynptr_slice_rdwr)
++	: __clobber_all);
 +}
 +
- /* check_stack_write dispatches to check_stack_write_fixed_off or
-  * check_stack_write_var_off.
-  *
-@@ -4572,6 +4604,8 @@ static int check_stack_write(struct bpf_verifier_env *env,
- 			     int value_regno, int insn_idx)
- {
- 	struct bpf_func_state *state = bpf_func(env, reg);
-+	int min_off = reg_smin(reg) + off;
-+	int max_off = reg_smax(reg) + off + size;
- 	int err;
- 
- 	if (tnum_is_const(reg->var_off)) {
-@@ -4586,6 +4620,8 @@ static int check_stack_write(struct bpf_verifier_env *env,
- 						reg, off, size,
- 						value_regno, insn_idx);
- 	}
-+	/* After the write is modelled: the insn may store a slice to its own buffer. */
-+	invalidate_stack_slices(env, state->frameno, min_off, max_off);
- 	return err;
++SLICE_BUF_TEST(slice_buf_frame_returned, SLICE_BUF_INVALID,
++	SLICE_BUF_DYNPTR(bpf_dynptr_from_skb)
++	"r1 = r10;"
++	"r1 += -32;"
++	"call slice_buf_in_callee;"
++	SLICE_BUF_CHECK)
++
++/* stores to fp-12 of this frame and to r1, a pointer to the stack of the caller */
++static __used __naked void slice_buf_stores(void)
++{
++	asm volatile (
++	"*(u32 *)(r10 - 12) = 0;"
++	"*(u32 *)(r1 + 0) = 0;"
++	"r0 = 0;"
++	"exit;"
++	::: __clobber_all);
++}
++
++SLICE_BUF_TEST(slice_buf_written_by_callee, SLICE_BUF_INVALID,
++	SLICE_BUF(12, 4)
++	"r1 = r10;"
++	"r1 += -12;"
++	"call slice_buf_stores;")
++
++/* r1 is the dynptr and r2 the buffer, both in the frame of the caller */
++static __used __naked void slice_buf_of_caller(void)
++{
++	asm volatile (
++	"r3 = r2;"
++	"r2 = 0;"
++	"r4 = 4;"
++	"call %[bpf_dynptr_slice_rdwr];"
++	"exit;"
++	:
++	: __imm(bpf_dynptr_slice_rdwr)
++	: __clobber_all);
++}
++
++/* stores next to the buffer or to another frame, a return, calls that fill the buffer */
++SLICE_BUF_TEST(slice_buf_stays_valid, __success,
++	SLICE_BUF(12, 4)
++	"r8 = r7;"
++	"*(u8 *)(r10 - 13) = 0;"
++	"*(u8 *)(r10 - 8) = 0;"
++	"r1 = r10;"
++	"r1 += -16;"
++	"call slice_buf_stores;"
++	"r1 = r10;"
++	"r1 += -12;"
++	"r2 = 4;"
++	"r3 = 0;"
++	"call %[bpf_probe_read_kernel];"
++	"r1 = r10;"
++	"r1 += -32;"
++	"r2 = r10;"
++	"r2 += -12;"
++	"call slice_buf_of_caller;"
++	SLICE_BUF_CHECK
++	"*(u8 *)(r8 + 0) = 0;")
++
++SLICE_BUF_PROG("?xdp", slice_buf_xdp, SLICE_BUF_INVALID,
++	SLICE_BUF_DYNPTR(bpf_dynptr_from_xdp)
++	SLICE_BUF_AT(8, 8)
++	"*(u64 *)(r10 - 8) = 0;")
++
++/* the metadata is contiguous: the slice is never the buffer */
++SLICE_BUF_TEST(slice_buf_skb_meta, __success,
++	SLICE_BUF_DYNPTR(bpf_dynptr_from_skb_meta)
++	SLICE_BUF_AT(8, 8)
++	"*(u64 *)(r10 - 8) = 0;")
++
++extern void bpf_local_irq_save(unsigned long *) __weak __ksym;
++
++/* a dynptr, an iterator or irq flags are made in the buffer */
++#define SLICE_BUF_SPECIAL(name, type, make)				\
++SEC("?tc")								\
++__failure __msg("invalid mem access 'scalar'")				\
++int name(struct __sk_buff *skb)						\
++{									\
++	struct bpf_dynptr ptr;						\
++	type buf;							\
++	__u8 *p;							\
++									\
++	bpf_dynptr_from_skb(skb, 0, &ptr);				\
++	p = bpf_dynptr_slice_rdwr(&ptr, 0, &buf, sizeof(buf));		\
++	if (!p)								\
++		return 0;						\
++	make;								\
++	*p = 0;								\
++	return 0;							\
++}
++
++SLICE_BUF_SPECIAL(slice_buf_dynptr, struct bpf_dynptr, bpf_dynptr_from_skb(skb, 0, &buf))
++SLICE_BUF_SPECIAL(slice_buf_iter, struct bpf_iter_num, bpf_iter_num_new(&buf, 0, 1))
++SLICE_BUF_SPECIAL(slice_buf_irq_flag, unsigned long, bpf_local_irq_save(&buf))
++
++/* The type of a dynptr argument of a global function is not known: the slice may be the buffer. */
++__noinline int slice_buf_global(struct bpf_dynptr *ptr)
++{
++	__u64 buf;
++	__u8 *p;
++
++	p = bpf_dynptr_slice_rdwr(ptr, 0, &buf, sizeof(buf));
++	if (!p)
++		return 0;
++	*(volatile __u64 *)&buf = 0;
++	*p = 0;
++	return 0;
++}
++
++SEC("?tc")
++__failure __msg("invalid mem access 'scalar'")
++int slice_buf_dynptr_arg(struct __sk_buff *skb)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_skb(skb, 0, &ptr);
++	return slice_buf_global(&ptr);
++}
++
+ /* Read-only skb data slice is invalidated on write to skb metadata */
+ SEC("?tc")
+ __failure __msg("invalid mem access 'scalar'")
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
+index 56be4eafc270..1b1a9e425ccc 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_success.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+@@ -231,6 +231,44 @@ int test_dynptr_skb_slice_non_linear(struct __sk_buff *skb)
+ 	return 1;
  }
  
-@@ -10466,15 +10502,18 @@ static int mark_raw_stack(struct bpf_verifier_env *env, struct bpf_call_arg_meta
- 	 */
- 	for (slot = 0; slot < MAX_BPF_FUNC_ARGS; slot++) {
- 		struct bpf_reg_state *reg;
--		argno_t argno = argno_from_arg(slot + 1);
- 
- 		if (!meta->arg_raw_mem.size[slot])
- 			continue;
- 		reg = get_func_arg_reg(caller, cur_regs(env), slot);
- 
-+		/*
-+		 * check_stack_range_initialized() checked the range, its offset is a constant.
-+		 * Not check_stack_write(): unknown bytes in its buffer leave a dynptr slice valid.
-+		 */
- 		for (i = 0; i < meta->arg_raw_mem.size[slot]; i++) {
--			err = check_mem_access(env, insn_idx, reg, argno, i, BPF_B,
--					       BPF_WRITE, -1, false, false);
-+			err = check_stack_write_fixed_off(env, bpf_func(env, reg),
-+							  reg->var_off.value + i, 1, -1, insn_idx);
- 			if (err)
- 				return err;
- 		}
-@@ -12176,6 +12215,7 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 					     callee->allocated_stack / BPF_REG_SIZE - 1);
- 	if (err)
- 		return err;
-+	invalidate_stack_slices(env, callee->frameno, INT_MIN, 0);
- 
- 	/* for callbacks like bpf_loop or bpf_for_each_map_elem go back to callsite,
- 	 * there function call logic would reschedule callback visit. If iteration
-@@ -15411,6 +15451,9 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_call_arg
- 			return -EFAULT;
- 		}
- 		regs[BPF_REG_0].parent_id = meta->dynptr.id;
-+		regs[BPF_REG_0].buf = meta->slice_buf;
-+		if (meta->slice_buf.size)
-+			env->seen_stack_slice = true;
- 	} else {
- 		return 0;
- 	}
-@@ -15668,6 +15711,21 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		ref_convert_owning_non_owning(env, id);
- 	}
- 
-+	if (is_kfunc_call(&meta, special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) &&
-+	    dynptr_slice_may_be_buffer(meta.dynptr.type)) {
-+		struct bpf_reg_state *buf = &regs[BPF_REG_3];
++/*
++ * The tcp header is not in the linear part: the slice is the buffer. A store
++ * through the slice is seen in the buffer, and bpf_dynptr_write() puts it into
++ * the packet. As in the documentation, the stores come before the compare with
++ * the buffer: after it a compiler may use one pointer in place of the other.
++ */
++SEC("?tc")
++int test_dynptr_skb_slice_rdwr_buffer(struct __sk_buff *skb)
++{
++	struct tcphdr buffer = {}, copy = {}, *tcp;
++	struct bpf_dynptr ptr;
 +
-+		if (buf->type == PTR_TO_STACK) {
-+			meta.slice_buf.frameno = buf->frameno;
-+			meta.slice_buf.off = reg_smin(buf);
-+			meta.slice_buf.size = reg_smax(buf) - reg_smin(buf) +
-+					      meta.arg_constant.value;
-+		} else if (base_type(buf->type) == PTR_TO_MEM) {
-+			/* a slice is the buffer of the next one */
-+			meta.slice_buf = buf->buf;
-+		}
++	bpf_dynptr_from_skb(skb, 0, &ptr);
++	tcp = bpf_dynptr_slice_rdwr(&ptr, TEST_SKB_LINEAR_SIZE, &buffer, sizeof(buffer));
++	if (!tcp) {
++		err = 1;
++		return 1;
 +	}
 +
- 	if (meta.func_id == special_kfunc_list[KF_bpf_throw]) {
- 		if (!bpf_jit_supports_exceptions()) {
- 			verbose(env, "JIT does not support calling kfunc %s#%d\n",
++	tcp->source = 0x1234;
++	if (buffer.source != 0x1234) {
++		err = 2;
++		return 1;
++	}
++	/* a read of the buffer does not invalidate the slice */
++	tcp->dest = 0x5678;
++	if (tcp != &buffer)
++		err = 3;
++	else if (bpf_dynptr_write(&ptr, TEST_SKB_LINEAR_SIZE, &buffer, sizeof(buffer), 0))
++		err = 4;
++	else if (bpf_dynptr_read(&copy, sizeof(copy), &ptr, TEST_SKB_LINEAR_SIZE, 0))
++		err = 5;
++	else if (copy.source != 0x1234 || copy.dest != 0x5678)
++		err = 6;
++
++	return 1;
++}
++
+ SEC("?tc")
+ int test_dynptr_skb_meta_data(struct __sk_buff *skb)
+ {
 -- 
 2.55.0
 
