@@ -1,49 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.6
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793642408;
-	b=TYUJDVfyiTH9OaOYAL3s1b4mYYEtV53xn3lqp5QTE0RdiDUSa7/NcQeJWUT4cYpjdWr6
-	 Rizm7Tqr1Z0fmxr9RGvLJ2oXuoknaer72bACnUWqVHZcPzeVvZpCmWCjjl26t7Dl4Cvjq
-	 LXJywRo2hsiF8GNIJrxpkC5czVfC0wRTh3fPMpWmiFsssP5WQYhXQMDgxjQJ071t2dD7U
-	 15bMKlu3q/8uwQ2JRHMownOAIbKr8N5pLH0R3j+/Bm8a9BBoykCc2TdmRjixAIbXowfzQ
-	 qTEKMR5c3RxCrvwnEkFklAc+w4tWDHdfY5N3/GtK9SgH1KgFMgUVtIwfisAdToMzyFw==
+	t=1793643910;
+	b=zJRHFWTWNWbgzzALVWsgglA000v1UJL+FHgSmqebsz35pQ7iMMJx6YYgIWEnr4K2pGMx
+	 JHNE4b7rKiWaOpUKimcwqP718t279AoDrksbmUZRJf7nBa9CosisENzg3bjVbykOLA1bU
+	 XHgcoopali74A9ioUiTthYPcaudMyLORPV/Ckea5R32Uq5MWNxp7ynhroByN9AcSljKJg
+	 4dx+YiD4cNRm0EsewX9ghnWcpdvFZcaY8ApNd1nDFUYZB9+6IlOaSo/ppd6jA6x2hor8h
+	 tQ8aiHPf//R9PVvRuzOwRl5GV09tIW3XDkNpOLwuDCm5GJOBoEwkAbmRF64nkp4X6xA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793642408;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=SgQ9oZdWrnqtqnL0xkOU3hZcxzkqJ+Z0Q5LT24rPQyE=;
-	b=fA/+0kUcxqlFLyEK/voR3NLI7dlLup9ZFncURdwm0xpp2MBOFUTyvZlgifKRXQiVPb3G
-	 S9iasMpDK6GD87qq6U1VvamZSfm1RGp5FlapUl9n6cf2pgIEYc9byUVRxwHQGqiuUiDrL
-	 ieEhDst2oiwbfkjeTHsk7NnA+xRonjbn08PuJoMrbMia9dIBnwJZwza4FXADSdUMvPwLi
-	 DIfpTcUH85N1jLuwCDpIR1ujn22khlQW0DpnyXL1hI3ShTVwEU9IOD5Wlr7y7FuqaYLjh
-	 TIC2m+frk3UWmCku+sP1vtD3p28ip870Q1u2QMEPEFWBzViXWHymZqy2KcRwUE09qqw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793643910;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=Z41mKtHOm7Mi5CS6B12EWoUXhaoVqMrutmZJokfP2gM=;
+	b=bwyEWS5OJYFdp/ta/iYxVhKDXudYrYg0HG1DjljGO9NAxCYCXdiXl2lanqBPRU2nWnmi
+	 VplJ4Ilv4SWqU87UOKt6EHLmBsaClJ2o4YdNCmxFOAMippmqZbNDiFfGjs+pZd9IWDBGu
+	 /cXE0V05DpdnWcLXF6/chzp4Bco5KFOKalCPBZfgvZGSFmmWeqd7QgDoM4c/hhaZfU3XL
+	 Rz8ch4PwZpS3pf6puJUPftHQcHUvhiY5oVxhA5QcYnRO1ZWGWYtlrhhWYploqdztpAQfQ
+	 KH5x2GOer4lFFT65qNbjlAYcEX92DIMvP/Bw4ixIj1OQ7005IjUpo8vQKCe7bmGFClA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F8kFxf9f;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wRJX0RF8;
+	arc=none smtp.remote-ip=74.125.229.6
+Received: from mail-dy2-f6.google.com (mail-dy2-f6.google.com [74.125.229.6])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B788C606A5AC
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 18:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697CC606A329
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 18:25:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 697CC606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F8kFxf9f
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3FD1F00A16;
-	Mon,  2 Nov 2026 18:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793642407;
-	bh=SgQ9oZdWrnqtqnL0xkOU3hZcxzkqJ+Z0Q5LT24rPQyE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=F8kFxf9fG3vd7B2ruY/On9tG7WzCuEp/ZSWGlzOS9Qxkhpja6tGWbH2ecMlBWVIz4
-	 KETg7oeQYrL9FNDXWE0ypqHYSWdC7K2ndAUNIT/K53v98iEt0TGLf7TXJ88Evn0n29
-	 E1W1hG7lKJB4wot7IgtXuPvnQdnPyV+UI1QTT22Ifa3Cb2+oz2UiJW4ThjKlqACAWi
-	 qxBBm51+xuSXMqE6DTXnuIvQZMigYnu+42sKe94NJdUM0Y2lLvyPCQn+v8qrb85Hhx
-	 JpNdaJhx2HAg/DgdfYNgKlFsuC1lL7Yiimlbc6XJDIC6gWVZxurqIB1Qm/96Y8D/6k
-	 zTL2xml04noyw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4029B380821F;
-	Mon,  2 Nov 2026 18:00:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wRJX0RF8
+Received: by mail-dy2-f6.google.com with SMTP id 5a478bee46e88-3537f63c9e6so1350488eec.1
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 10:25:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793643909; x=1794248709; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Z41mKtHOm7Mi5CS6B12EWoUXhaoVqMrutmZJokfP2gM=;
+        b=wRJX0RF8HzOJ5vHpbUCAKfZVjV3IC026OA9dQPQiz8FmPUdyqsaFHt8LcpZ43ExlRJ
+         V131kcsJQSQmh60QT+FT7u391++5YsW/YO1DbR+WV8QL6E8eYBo3gGcPwCrAgWVG5rBl
+         xPlLnxQ9m5+fvTxjr/g4bwZc0JGUnpU3natXbNrqN3XDX/Q6L7zzd4F6iGzyKrsPQItj
+         Xqx1Ed0Gcr6oSkwDipSu2F2AE2yVj9CdZEI/GzDD2emXcMnfxaEAOEUnQ52JLAyxCcTe
+         vMadz6FaT/RD/UTS6WJ220Qt5fRzD49ZSypC9hgqQxdy3e/lboRbOgyp1bUDlnQ3/dgj
+         PATA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793643909; x=1794248709;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Z41mKtHOm7Mi5CS6B12EWoUXhaoVqMrutmZJokfP2gM=;
+        b=cs9n6lag0GSYldn9LeiiwczbtN8UGyN7wtpRmchLyFEbUCHA9tQAVO1xH6J+j2eR8h
+         8Z1qXFTHzL8TAkMmEFxlOkP7YOwpXdC01ce2TJDYK3XF3nP48VGfokQlt1K6WHbFZIsM
+         q4djaRrNKjA+hl6OqRjdaXbwQdDy4862VyzPC5K1NnNcIPYMf+EiEZ+T2cmYkinNOO18
+         cd+uacQ7rNRZ7BNVuDy0bGIGfmtlZh2Yapw23e7XA0KqI0OVqXT4VTUezh9ZjTtxPZm2
+         sxXuUV/jlNioKL9Htb9Vq+jITTK7Qrps6Sb0jeULIB0uA5LsrcIIEId02rcQS9fq3x8P
+         Bw/Q==
+X-Forwarded-Encrypted: i=1; AKwUvBx/pD6Nsd4zxWFgSQ3WaMpEQMZh2WLwv7Mdxt6g5hGO9AWA3Zgrr6NFokA28mAp7lB1Kf8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL5gUmkHYFH7SeW4NeKPLkcoa2etPvux+H391ygGDYhqkBJnJXk
+	pXY6MTNAeZNZGH1KP2XsjRb4L2YDeLKHmqkW5n+VTfrt1NIYzYxTZa4p
+X-Gm-Gg: AYBFou1Puf9ZCY5tfdgXhgBQNAVhOwCRzFCWEZEnHiyUExjD6WfdXdMKeLFOfRBpVBy
+	ZHeNtiWbPCN7RI/W9BN/OX9zTKAC6JKv8iINkqIs19tgW0s7ij10ShVS8OHj4+0EmMRw0nlYK/u
+	YxQXltWyFIBAz0CqDKfpDK7fPYpA8JQ+xH9tI+JNJ9HGAt9i7Ta+vJd5G/zGv2MVkL6jlJr91qD
+	6lEH8iT3ksuLuRHG6qUM89wDacqYioYuIX5qvfY4vRFmVcThNAFmSuGuVOHsnn7GMHy3YgYkYDO
+	U+04QCI9MvGkTrDK1DdOlXsu37cxSnuPEQ16eGl8o99gJsu2a9TUoiBN1tQ2jZ7uFTh1OX8lsJ7
+	2QqWoBLjqxPa5WD0GHG8A17uxI9z8R1gRbO1EXc4luqrtlO7ENYWdXwpvrCD0SmpOeKiDa0fpuM
+	HFKzLiSwetI51Yy+og8sTrncvpY9UNTvR0qgR/bBGJ3tAc2cxpC0On/dx8CWVU8KTzwBnRsmOnz
+	WKGGQKs6nkTi6OJA+XpxTPMvw13TT09mEAGU2wY1XMF1Gi69bRRFrT4ZJnhi7eBteh6sZeLQEPT
+	1VBcnR7jSGOkCh2+te4Kgzo=
+X-Received: by 2002:a05:7022:ef12:b0:14d:ef19:246f with SMTP id a92af1059eb24-1ac5f36d5cbmr18049891c88.45.1793643909092;
+        Mon, 02 Nov 2026 10:25:09 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:42::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1854da78sm46557054c88.6.2026.11.02.10.25.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 10:25:08 -0800 (PST)
+Date: Mon, 2 Nov 2026 10:25:04 -0800
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Rongzheng Wang <testwrzwrz@gmail.com>
+Cc: netdev@vger.kernel.org, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Jason Xing <kerneljasonxing@gmail.com>, Jesper Dangaard Brouer <hawk@kernel.org>, stable@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v4 2/2] selftests/bpf: cover AF_XDP multi-buffer TX
+ software checksum
+Message-ID: <aujU8-MBZ9LrhFMd@devvm16445.scu0.facebook.com>
+References: <20261030023248.78802-1-testwrzwrz@gmail.com>
+ <20261030023248.78802-3-testwrzwrz@gmail.com>
+ <auT51NbSPvKJwgiD@devvm16445.scu0.facebook.com>
+ <20261031013143.42509-1-testwrzwrz@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,47 +102,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 0/4] bpf: Fix two holes in the analysis of stack
- arguments
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179364240580.563634.9640036389272600045.git-patchwork-notify@kernel.org>
-Date: Mon, 02 Nov 2026 18:00:05 +0000
-References: <20261102055913.3598414-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261102055913.3598414-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261031013143.42509-1-testwrzwrz@gmail.com>
 
-Hello:
-
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Mon,  2 Nov 2026 05:59:09 +0000 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
+On 10/31, Rongzheng Wang wrote:
+> > Any reason you're not reading the real value from
+> > /proc/sys/net/core/max_skb_frags ?
 > 
-> Before the main pass, arg_track follows pointers to the stack through
-> registers and spills. For each insn it tells which slots the insn can read,
-> which slots it can write, and which slot it writes for certain. Scalar
-> evolution and the removal of dead slots rely on the answer.
+> The test wants to exercise the maximum supported number of frames, but also
+> needs to run on every build. CONFIG_MAX_SKB_FRAGS ranges from 17 to 45, so
+> using the minimum (17, i.e. 18 frames) gives the largest bound that works
+> everywhere. af_xdp.rst documents the same limit:
 > 
-> [...]
+>   "For copy mode, the maximum supported number of frames in a packet is
+>    equal to CONFIG_MAX_SKB_FRAGS + 1."
+> 
+> xsk checks MAX_SKB_FRAGS directly (net/xdp/xsk.c), not
+> net.core.max_skb_frags. I also set net.core.max_skb_frags=4 and ran
+> xdp_metadata; it still passes, which confirms xsk does not consume that
+> sysctl. Reading it in this test would not tell us the xsk limit, and would
+> only reduce coverage if it is lowered.
+> 
+> CONFIG_MAX_SKB_FRAGS is compile-time and has no userspace interface, so 18
+> frames is the portable upper bound. That is why I used 17.
 
-Here is the summary with links:
-  - [bpf,v2,1/4] bpf: Fix the join of fp+0 with a value that is not a pointer to stack
-    https://git.kernel.org/bpf/bpf/c/6185d4fc6e64
-  - [bpf,v2,2/4] selftests/bpf: Test the join of fp+0 with a value that is not a pointer to stack
-    https://git.kernel.org/bpf/bpf/c/27f0738d348c
-  - [bpf,v2,3/4] bpf: Don't trust pointers spilled in slots that a callee can write
-    https://git.kernel.org/bpf/bpf/c/cdefba74b53f
-  - [bpf,v2,4/4] selftests/bpf: Test a callee that overwrites a spilled pointer of its caller
-    https://git.kernel.org/bpf/bpf/c/c9a45b2ede01
+Sure, people can set max_skb_frags to < CONFIG_MAX_SKB_FRAGS, but I
+don't think we are gonna do it on our runners. So for the purpose of
+this test we can essentially assume CONFIG_MAX_SKB_FRAGS ==
+max_skb_frags.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I'm just trying to understand whether on the builds that have
+CONFIG_MAX_SKB_FRAGS > 17 we want to exercise all CONFIG_MAX_SKB_FRAGS
+or we are ok wit just 17.. But we probably aren't going to bump
+CONFIG_MAX_SKB_FRAGS on upstream kernels anytime soon..
 
-
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
