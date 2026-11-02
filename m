@@ -1,81 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793604889;
-	b=jR5YaZaPDWXdB/VJI3soIxZb6VxGYyw6pX675lUff0Ek0qkRLo+23wwGKaLC9HEU+Xo1
-	 eBB6h2pEc5u8bTbiwyOKclOBchpZ/bnKMbQJl1OnicS6ku2gnj5NesZ6ype/ZFqGwCcwC
-	 qmXfXOkIxJbdoeKnGEIn6OyNubAVgrxLPPu6hf6zFIPiTbqmedq541r5OCnxLT+eMSxIF
-	 dEzBMFKQsPg8vXy3oRaBjqYi+d8348vcoFviEsPAWLLM+AsCq3KX+x5Svcy+23rBHY8wK
-	 RFRyetqsALXbnsdPjYfX0wlaAa+cJ5wZA/SZSwbhWLeeT9Ad1s7geJo1H4RlflA1LPQ==
+	t=1793604894;
+	b=tpOZ+T+4hea4UKszwvgeBiUdr8CqTGdw03fcXm+H/JJRsDDRSfPMg2Ajx31kh7YAoZkH
+	 xQyB37tVVo35GuumiTygDvm2o+B8IxfJKRz0/nTGR9QevmciF9GV8QOQwr69Alwj/R8e0
+	 tK4TpNrrqZMUcnQZC4wHqy2f4BJ3XUHsfPqxvnnzsfQuqvoCRUKLuKtCcWI3lzIZ+pBOv
+	 rQU8diVgo6M5V/XqxLHKZkteIJRVF5+AlAuaXnkThp+5mTvpCmMk9ol4ojKqtYPYebwOp
+	 a95vL3S5LzX3+bZZ9NpJnXb9RbVPhDu21yidm7TP2VwGMbyMtrT6ifjTVVZ2qCaz2VA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793604889;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793604894;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=oa9L9/wib9xMUobSu6/SlahSuVEkIu0Pgujj8s0hYtA=;
-	b=qbTBculWS+KT4UhYaWew6BLjVrKeaY8YQD6kAEHQtYYI38+7l8unLJye4zP1L+it6Ggb
-	 GZ9ygfplufUazcciBLV/nPtwnYjG0icRv8Uy6YfSW3RiRcSKuSKBYwyClJsNxShZ/FD29
-	 CZGatUlN1xy/tRHkCa4qr0Xn7Y2GdLRz4NWUkCoG+kDdyp7nxERkRoZ99XL0aXYpwAk4I
-	 NRJUjjCL4lTSMUYyJvhpn1yDwgv7sQ2kvCX+Hvv4F1EeyRbQVlz6RRqFZPSDoMBruEiPE
-	 G6NzszoFcs+Ua85Iu0WLdI5od1z8z5jZVf2Xx6VsKB7rB7GPn1lLPGv9/3sD+e07l8g==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=cvcs3Th7fdtrXMaIiPKlvnkqqJ1EyrXkjLhHDnhh7Es=;
+	b=OFAanHlxYXKT/bTZnG1ChJIwicxmjSHIyjqCk11qfrb/Thls4jSQTKYL+DZv28++8WyM
+	 1r2gOVFO6dG7JNi6jTEOGfSrJqiNLnzDN2RZaS81QK44L/KCYIYCd4gTzz1pB3e1dJL5L
+	 PhdIFl/2OkO3nAmAdnPPgJ17eRpisE5FsB41ele9bU+lygkF6bbG0DIM5JrW9d7cn5Gzj
+	 QqXXnD0E0Wo0qPiVyQHRaj9qLmk6Ckp+lkVGipobwW6qlw4B8YdTVfuiOoezPeBaOPlwH
+	 gg3tL6q62sWQPvccFsNKNH8VH+IYxxqeWCwxWxbs4oDH9MwRn0+hHwDcCJgCd5A9LRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=etsalapatis.com;
 	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b="TnX5L/dB";
-	arc=none smtp.remote-ip=209.85.215.178
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=vhKtFIKt;
+	arc=none smtp.remote-ip=209.85.214.169
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E97F606A327
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 07:34:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E97F606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0C1606A326
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 07:34:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC0C1606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=TnX5L/dB
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cdaefe02d5dso1429236a12.1
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 23:34:48 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=vhKtFIKt
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e8246b13cbso22289405ad.2
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 23:34:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis.com; s=google; t=1793604888; x=1794209688; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oa9L9/wib9xMUobSu6/SlahSuVEkIu0Pgujj8s0hYtA=;
-        b=TnX5L/dBwg2JgHu7GhyBkXNKiXPHRlfThSQMlo7ItFkx7tnXuxnutvLMeq5MfDQawp
-         zH/+EZ7s3CDsdfB1mSzgt67jTnlhZ9Wuz1HF3BQWkji+xycPHfw7cp7bAeE4fzJmn1r7
-         w7PzPFGG5Xqtaj543PD1i3EkkIrX5lOB32aDYYS9Of6mD6896emGFCpAutFQvHR6VQhf
-         LetZeswQcjZR9mGsCfOs1ZHdTqBi5KRaswn1W0/AtsT3Kqlxax80hcJ2GwzQC1IBIZz9
-         60p+gjyHclDSUx8KKZreLnmVBimf+d7+dBkMNV/UCW6VjufTzIXvA51zX95tdW4WYg/B
-         KP9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793604888; x=1794209688;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis.com; s=google; t=1793604893; x=1794209693; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=oa9L9/wib9xMUobSu6/SlahSuVEkIu0Pgujj8s0hYtA=;
-        b=pmz4HGDVz3PViati8qfdI844afDQKnDajLYhev9DFNhMeTx1zDCHlsOuxD6NOnxCFh
-         1D37HzEAHc8Et03euW4lPGLWTj/5bbtSk1l1UzRwvyeIOGjwmtGBHZNshQty/V9fUfpQ
-         zgV1q3nY0js0fs/rFYPKAd5hXGtFTkooIa6+EyLeubAkWDyo8vWcgKASBsCwp4mzWuqj
-         SGp1+PMl4MuH/8BGKPDSrPtjsB6hMQ0yjaKxHOjWkxoQYqRVi30DcusnxyLwurr5kdVu
-         a5yIWCiTFevDXbtr2u51XKmi6PbiJOY02Ja5XxI79tvuaK8q6i9YTyWLVVkmkrqmT3i8
-         sw6g==
-X-Gm-Message-State: APuU4Z8W8pALwoE+Kuh1PuZRhNPMphpVio/a+5faEJRIb2CaN536uqzM
-	QRyH9Bkxx8igBRJ2QHXMawbU1zppFvSdUqgUh1ZyLgKwRGVp1E56zWSje7ypj5dsE9nXNRSPySy
-	n9zwDHsM=
-X-Gm-Gg: AYBFou3o3qXq31IFNBUnP4GylF3PLOmfsc4yWGeEM5ebNys+JilGlIguZsDMyQqDmvC
-	RpLCz1h+yX+Kn6nvXzszhekqhVZFIaBxlPSdRtDlvQ+qn+dM0ei4y4km+tIyfLBGWKsvQVE3cuS
-	DAX+5TKhVh2EzQAEiu/xkfhjrnN+GLlFdMEd/9pMhlQ3PPYf3a7BQUT9qiTbKesr6POqD0x98eK
-	Dc/ZtqOZeyswJUoeersv0Ad08kJDaXis9qLRfaBuJvrprakuO4CuruYIRL4EkpYrmkR9J4QYVRd
-	8XVJpxrVEYSG+vvNsI50OWZfqM0rTFGTtZbcDo6VeXm+WdcoN4SpNsrayYdf6xCBLsJXh8kzGBV
-	vTcMcU1QzLpiBf8ochfPmPs9lVpwKbQUFYuHrW33zesfUlxgk8J4En2TpRuDt5c1ZFDcaxbAzXp
-	X+eynPxnIOHd4Om/KxrUCamfNCN8oGl82cnm13QSxloFb30t+U8GjjzA+bHhrkWVMO2gb3Ox3YE
-	RAGkUgwyJT3PlWjKr4Z6BXP2de5r89a6iSEm4HZnY28+EedZl7TW+6GK78xgIcctcGI+ywGNlkB
-	8pm7vhZdzw2PNZOvrPM731r9AT8o0Q3g9GK4RnyQ4PlC1MGZX6b35d2P7pj/EYlAPhI=
-X-Received: by 2002:a17:90b:4f87:b0:3a7:b260:9ccc with SMTP id 98e67ed59e1d1-3ae8985d7cbmr7490605a91.65.1793604887595;
-        Sun, 01 Nov 2026 23:34:47 -0800 (PST)
+        bh=cvcs3Th7fdtrXMaIiPKlvnkqqJ1EyrXkjLhHDnhh7Es=;
+        b=vhKtFIKtadGDj2brSLwdZ4GlM05nw9FzkOcIXiQ171iha6J0COTKgafbLoV3e0b8Hi
+         MFh2BjaalQJSZ64ARY1z5yDxBAlco335BZw3WRjTUFtBdR7JId+cMUgpB4+O8e6o2Auv
+         fqbYl3TIamn1AEGMWQK0Oay0hEgWv3rKK1CZEid9XDGDiwhCO6TtBzQM0/sYadnCpA9D
+         k5fn3Sn48CcM33g5kqnochCKr2orffyY+/vJ+wMenGSNsfF4s2SkNbtfj8kWjybqV0sC
+         1xb5SoAiWFKRxsGLfM3wj7jNOOt91YojN/+0hySpr/1XJlqgHj2ipP1hXgk5uR9rwFh4
+         XMFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793604893; x=1794209693;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=cvcs3Th7fdtrXMaIiPKlvnkqqJ1EyrXkjLhHDnhh7Es=;
+        b=l+e+Koi2VyPQW28WCjIaG6AWy5hO6dP/jLGNsdByha7baZVJQVNHa3ZDNUAVvlv+2u
+         sq+BTK4/Hhk/2n4bHaKQaymzgrYMl2a0KWR6gpeKHEK3KiN17yrE0CTfAZv8SazVJDng
+         VwfqrdbLnqhbyotDiaMilqJdldZEg34wYLNCxT/FtrCC9Qys4Mrb0JRUivoYe5dO3YY0
+         ulChL29YZstmEHuZ5vUwV5U8VgwdT/GgbCymEe2gYo7jjqAj3XgOGv3QCF2TUYQwQ5m7
+         WktEH2K9ohYQYuNH9V6f+hZd1fFb6O6n7NJi+B3D/jR/q0GQ6W17S/yBQRH3BXbb6kas
+         mOvA==
+X-Gm-Message-State: APuU4Z+Jq4kn9ei9i/hhBchyGrJ7lxKq6x+Q0+GxHUaqiAIm56FP38Rz
+	6iiyp2Di+POvRPvs3NlcLg9Pp7m50rkcpvunTWfcFDIve6C//Jq77FvPVKxXpRR9T3VMKKLLa6y
+	MiU0rNOE=
+X-Gm-Gg: AYBFou13ixP+x01SCmg3p3D9A6XGPQkt0jJcMAo6xq/WRvP+ZiJYjK0OJtFwST+rpf2
+	4uBLOVgN+wO+nmdHsvowJUpg3FjfblZNIgNRGS62WPNe7MavBahTrr+XjzQhQDLEAvIzPdqcnGO
+	+Q8UAp4qNt3ZKlYs3nyiBK+Z0o3yJ1JBQgBZjuPBKggFRHXR3TGmzfosOlIxJKdJqtA9jQTvQLr
+	E9gdrxzB0qcWvKb43dsfjZjpa9MCGoa0ww5sXUEei57v6bcMp1MXkVzcJK32BWZ4RePRPmOrOCt
+	D79TgpORqzWUYsLYs/DInySOQu/VO/U7zaWwee3xwIrTcGJvWGgZfEb3JppwKmO5S8RE2SB97/S
+	obVF7kkBvLbxr7VStArBtapCilgVD2Q7vhNs65Yrnj1PptLMEVyQONP6627/nDtdFUK0OJHixnT
+	+Gam2xPEpjEO18SPJAwED2T1u0x61Qfv0P8KZxirhndBgLsZFZWXFGFHUnbof1AIs5XzVMCqYWQ
+	2k0UWoIta/ea1hKrmWJY/zs2xXYzbBj1aun+wcp1xGRKRf84sJtRoJ4aGs6ZFa+g1r/BH5csJy7
+	ljzWxCHzKVE17jV3hZK9NJYGJvKty3/qO985rBCAVISv9fftRmhIRSlyHAQOUNVHx1o=
+X-Received: by 2002:a17:90b:33ca:b0:3ac:97e3:7389 with SMTP id 98e67ed59e1d1-3ae897acbf3mr7358888a91.44.1793604892940;
+        Sun, 01 Nov 2026 23:34:52 -0800 (PST)
 Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e9db612sm17551965a91.17.2026.11.01.23.34.46
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e9db612sm17551965a91.17.2026.11.01.23.34.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 23:34:47 -0800 (PST)
+        Sun, 01 Nov 2026 23:34:52 -0800 (PST)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -84,10 +86,12 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf 0/2] bpf: Avoid workqueue deadlock when freeing programs
-Date: Mon,  2 Nov 2026 07:34:37 +0000
-Message-ID: <20261102073439.6822-1-emil@etsalapatis.com>
+Subject: [PATCH bpf 1/2] bpf: Use dedicated workqueue for freeing BPF programs
+Date: Mon,  2 Nov 2026 07:34:38 +0000
+Message-ID: <20261102073439.6822-2-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20261102073439.6822-1-emil@etsalapatis.com>
+References: <20261102073439.6822-1-emil@etsalapatis.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,76 +103,64 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-BPF program freeing currently runs from the system workqueue. With BPF
-program pack allocations, freeing the last program in a pack can take
-pack_mutex and call into execmem/vmalloc code to change page permissions.
-That path may queue a vmalloc purge helper to the same CPU and wait for it
-to finish.
+Move deferred BPF program frees to a dedicated workqueue.
 
-If enough other BPF program free workers are already active on that CPU,
-they can all block on pack_mutex and consume the system workqueue active
-slots. The worker holding pack_mutex then waits for the vmalloc purge work,
-but that purge work cannot run because the queue is full of pack_mutex
-waiters:
+BPF free workers can exhaust a CPU's system workqueue active slots while
+waiting for pack_mutex. The worker holding pack_mutex then waits for a
+vmalloc purge helper on that same queue, which cannot run until a slot
+is freed.
 
-[   24.646667] INFO: task kworker/0:4:1291 blocked for more than 10 seconds.
-[   24.646669]       Not tainted 7.3.0-00001-gdeaa120a9b25-dirty #11
-[   24.646670] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[   24.646671] task:kworker/0:4     state:D stack:0     pid:1291  tgid:1291  ppid:2      task_flags:0x4208060 flags:0x00080000
-[   24.646675] Workqueue: events bpf_prog_free_deferred
-[   24.646678] Call Trace:
-[   24.646680]  <TASK>
-[   24.646686]  __schedule+0x5bc/0x1430
-[   24.646702]  schedule+0x3f/0x100
-[   24.646706]  schedule_timeout+0x106/0x110
-[   24.646711]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646713]  ? mark_held_locks+0x49/0x80
-[   24.646720]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646723]  ? lockdep_hardirqs_on_prepare+0xdc/0x190
-[   24.646726]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646732]  __wait_for_common+0xc1/0x1d0
-[   24.646735]  ? __pfx_schedule_timeout+0x10/0x10
-[   24.646748]  ? __flush_work+0x1f8/0x550
-[   24.646751]  __flush_work+0x309/0x550
-[   24.646759]  ? __pfx_wq_barrier_func+0x10/0x10
-[   24.646783]  __purge_vmap_area_lazy+0x3e4/0x440
-[   24.646796]  _vm_unmap_aliases+0x2d5/0x330
-[   24.646810]  change_page_attr_set_clr+0xb9/0x580
-[   24.646817]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646833]  set_memory_nx+0x3b/0x50
-[   24.646838]  __execmem_cache_free+0x35/0xb0
-[   24.646848]  execmem_free+0x98/0x160
-[   24.646864]  bpf_prog_pack_free+0x152/0x190
-[   24.646871]  bpf_jit_binary_pack_free+0x17/0x90
-[   24.646876]  bpf_jit_free+0x5e/0x130
-[   24.646882]  process_one_work+0x289/0x790
-[   24.646886]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646888]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646902]  worker_thread+0x1b3/0x370
-[   24.646908]  ? __pfx_worker_thread+0x10/0x10
-[   24.646911]  kthread+0xf7/0x130
-[   24.646914]  ? __pfx_kthread+0x10/0x10
-[   24.646920]  ret_from_fork+0x293/0x300
-[   24.646923]  ? __pfx_kthread+0x10/0x10
-[   24.646927]  ret_from_fork_asm+0x1a/0x30
-[   24.646947]  </TASK>
-
-Move deferred BPF program freeing to a dedicated workqueue to avoid
-this.
-
+Fixes: 6b88aaec81db ("x86/bpf: Enable EXECMEM_ROX_CACHE for BPF allocations")
+Reported-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ kernel/bpf/core.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-Emil Tsalapatis (2):
-  bpf: Use dedicated workqueue for freeing BPF programs
-  selftests/bpf: Add a selftest for program allocation/freeing
-
- kernel/bpf/core.c                             |  19 +-
- tools/testing/selftests/bpf/.gitignore        |   1 +
- tools/testing/selftests/bpf/Makefile          |   1 +
- .../selftests/bpf/bpf_prog_free_stress.c      | 184 ++++++++++++++++++
- 4 files changed, 204 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/bpf_prog_free_stress.c
-
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 7f11555a5070..a4994438a8af 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -23,6 +23,7 @@
+ #include <linux/skbuff.h>
+ #include <linux/static_call.h>
+ #include <linux/vmalloc.h>
++#include <linux/workqueue.h>
+ #include <linux/prandom.h>
+ #include <linux/bpf.h>
+ #include <linux/btf.h>
+@@ -3073,6 +3074,17 @@ static void bpf_free_used_btfs(struct bpf_prog_aux *aux)
+ 	kfree(aux->used_btfs);
+ }
+ 
++static struct workqueue_struct *bpf_prog_free_wq __ro_after_init;
++
++static int __init bpf_prog_free_wq_init(void)
++{
++	bpf_prog_free_wq = alloc_workqueue("bpf_prog_free", WQ_UNBOUND, 0);
++	if (!bpf_prog_free_wq)
++		panic("Failed to allocate BPF program free workqueue\n");
++	return 0;
++}
++early_initcall(bpf_prog_free_wq_init);
++
+ static void bpf_prog_free_deferred(struct work_struct *work)
+ {
+ 	struct bpf_prog_aux *aux;
+@@ -3122,7 +3134,12 @@ void bpf_prog_free(struct bpf_prog *fp)
+ 		bpf_prog_put(aux->dst_prog);
+ 	bpf_token_put(aux->token);
+ 	INIT_WORK(&aux->work, bpf_prog_free_deferred);
+-	schedule_work(&aux->work);
++	/*
++	 * A pack_mutex holder may wait for vmalloc work on system_percpu_wq.
++	 * Keep program frees off that queue so mutex waiters cannot exhaust
++	 * the active slots needed by the vmalloc work.
++	 */
++	queue_work(bpf_prog_free_wq, &aux->work);
+ }
+ EXPORT_SYMBOL_GPL(bpf_prog_free);
+ 
 -- 
 2.52.0
 
