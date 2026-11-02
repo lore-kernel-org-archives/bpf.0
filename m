@@ -1,58 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.38.64.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793646244;
-	b=d+WDIRUcHvDowSMMvWUwgsjoxdFuSq7UziCugu7ygY8qP6zhAi47n4FRpT5KFUaHDqf6
-	 91gJjol8D69VSBT6+c4ryaOVSCX98qOGq3cZhgKc+dNMqBl5U2p2x2X7eGDxo+CRZaUSz
-	 Y2Qe9qBTPE9YObUhTyrqYGJD27vW6uEpk7/XNnrhtvFqykMkxCS3P5RVDn21kO7LfVIsF
-	 cnboQ0nR5hE7gyVZ22EXHAF5ZARWizSyT5P52HtrvzAHlCnYaEFtBoz3NYk/azMfun5ki
-	 EY+5j5E4MfUz2pNh2vzgEfGDk7rC+P+Kde8m9v8KEAKcjkgfawtb5iwJfi+9LgvUOAg==
+	t=1793646795;
+	b=JOqAhbcOeuWUTqsNn08+KD0yVk88iiV4lC+odsz35RsNymjDHdf5+7+Eb2UywIAY/qoy
+	 M5+tKkoGyNmWpXNRYlm+4TkWGuIRX1PzOW+OR78Dp6tSGwrGnEozuER1kF2Rq4SjZ7F/f
+	 djMiYQvVob+tvGeLdJXytOIfZBPdNxJ2Ll64LaozZU/ibhGaBv8U9cSiTG81ORS67X+1N
+	 mxlqmQofsISqM8Qcz+F4Jpay3v/qOmEU4072yRsbSvTm6v7ULRb00cBfGImREi3t7bJtS
+	 Cx4VM05J889OMc/O+zd9tTCAAWmh0yvYcM2EqAONtiIGySFxeEuP4GMgt52wE11i1MA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793646244;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=JHptizFxoa6u8AVcaBQ6Vo5m007YfkupU48z11B9r+4=;
-	b=18ywqKYLWcPZ6DguJXJBj0RfR2XnmsU8oPScWW2WsXIwYAZOAoOnBSmETODICPAdjGXe
-	 r0fplHOYNpDiEcl1FTq7q1g5lr+OBxudbYTt4Gtpc+7KC6PylRvob8NAlqZh2hxDrKCkd
-	 XSAgo+YOw3V3T0wC2GJN/0Z5XEdLCwf4/BSqf2+b/oYva+5bl03Y4cgNHHyzhoiibLyBz
-	 VbUFZqvhuzYidl8Qx4p1xnP2txzpczJBfJX9ZNfDJd6QxPhP8zCaAb04IHa96ghH9v3zj
-	 ff5gAsOdML8Yl/XLUpGlLMk7dFOiwCPafFqrNkFQa3ODHQK4Sf+qLO+zs0UD0277Xog==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793646795;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:User-Agent:References:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:Content-Type;
+	bh=qWSc3wxeA0aUeT06xpUv57ACRWiYfD6BXLwXzl7b/xU=;
+	b=JE3UsXO29D5eCzlgYcArF+aGiitT6eTzXS7a/i2TzHiT6gK42QngzuOP0e+5Qh7kEky9
+	 yNlfOphWA/ZO/EgIV0o56IWh6W5cEkfgFksFb53RtJAi/2EFfoP6r+sKt8S0GK+QbcM75
+	 8lHkoVwp1PXGSDNJyyhfv+BFT9E/+LxCGiAsJKuvcf8JNDLUXexhjTys2An/E56EW+9tX
+	 VtQ76hR4BK4e5ANMKNxKFlOnuJNWBDpcLuj/GRNUjpn8R8CT224DdKNbrsez/PAgxpNdU
+	 2OLyayIlCpgyMUlbUWFqjSHFGqh7Pdui8EKBxGHIryyEgL6adjKRsMV9FlVandl3rWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=mail.ustc.edu.cn;
-	spf=pass smtp.mailfrom=mail.ustc.edu.cn;
-	dkim=pass header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=UDx2XaPU;
-	arc=none smtp.remote-ip=202.38.64.46
-Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C83606A324
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 19:04:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6C83606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AGgIgNYv;
+	arc=none smtp.remote-ip=209.85.215.169
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2F4606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 19:13:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE2F4606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=UDx2XaPU
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AGgIgNYv
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cc758830601so2071363a12.2
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 11:13:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-	Message-ID:MIME-Version:Content-Transfer-Encoding; bh=JHptizFxoa
-	6u8AVcaBQ6Vo5m007YfkupU48z11B9r+4=; b=UDx2XaPUiJmD1D0iz0xbwavNuu
-	6mYpjhOU+QoAN1FXgOCuUwls4/pVG8evlpJNtfsPaOVkXDJCvqzvKMmOzoZXDu2s
-	Fipwcq1h0c+1Az8IIHri8imfyc9H3CZ5vcb+sYoS24NdwIw+rE2WoGYrX9/uzA81
-	gwAHaXKllES5eSkqg=
-Received: from localhost (unknown [222.195.81.114])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgBn6z+Z3uhqRsx4AA--.1463S2;
-	Tue, 03 Nov 2026 03:03:53 +0800 (CST)
-From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH bpf v2 0/2] bpf: Fix stack argument precision propagation
-Date: Tue,  3 Nov 2026 03:03:48 +0800
-Message-ID: <20261102190350.788433-1-xyx2021@mail.ustc.edu.cn>
-X-Mailer: git-send-email 2.43.0
+        d=gmail.com; s=20260707; t=1793646794; x=1794251594; darn=vger.kernel.org;
+        h=content-type:content-transfer-encoding:mime-version:message-id
+         :in-reply-to:references:user-agent:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=qWSc3wxeA0aUeT06xpUv57ACRWiYfD6BXLwXzl7b/xU=;
+        b=AGgIgNYv+1UTnvfh/F07/DULKtzMOSoD7VEwy6wFpWFPnWWmGUJBsR1uXYYRIufWr6
+         9ZwCr2EIRbWAzrBR4o1aJJhEBn3G7/KNe5lyhpFrA7DNQ8w0GlbjnI0wt9tvTJg/aSh9
+         qoaUBjGodgVKzQnV3wRlptSZ/BhltVMcRK26772justhnwVP6v4kJFKyio3x7KbAQADq
+         J0P2vUb+ruGwWzNjX0/WoycfTdBwwR01pdS6qioqjZvyiuZ49N5ojBt1UA+L0v/VS/ZY
+         Cvtoma1S7MF8t+7/ux+4RgsIky4t+L+XlBIA5ZGL/ZTkdqMHHvJhLghtVrKKm8AjkH2o
+         tv1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793646794; x=1794251594;
+        h=content-type:content-transfer-encoding:mime-version:message-id
+         :in-reply-to:references:user-agent:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qWSc3wxeA0aUeT06xpUv57ACRWiYfD6BXLwXzl7b/xU=;
+        b=CzC/MytgJnJTJcJc+Kpo57WBCebadig9JRgKY8Kq/3rTAVRPJKCqBZ1Ze7xiuagu/4
+         463bsHuJOtxbUQA5UH8CdIWGMAo9MCMm4Jv6WMtFL5JtUFd9L43X9Q832oskCVxf3Y0i
+         lUUtO+IoBbW9nxf8X663MlePw/Gz1a6pwGezTrjKWwJDwGgCp8bfvSzVgfQcwPfHFB6C
+         pmt4OFvNvr8epCI2ZIVwnqnjK/N89iiie3X4v2zdaMLkg7+mHUPlkFYwapye7YxB/QvH
+         7eqJfU8jKnIm7BSaN1euoqSh5dC0v/8pP9sEL0naKR1kos2WWg212Qgk39fknGPHxtA9
+         a7dw==
+X-Forwarded-Encrypted: i=1; AKwUvBwEyQCtc7Qs9Bw7NpFHnTqMDeLLPH6Rn314KNUoCYu/yDOhmV0hC2TjLMit6oQ72ocRMfg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Zt8h0h9U0vDyDOCK2Sd778YJa0juVBGpccHyhcrWF0bXtRd2U
+	w+N2XdzDIoQTojCUaXvcxe+6Ls32Pabm0LqDurbLXMB3nYkaU8D8PXG9
+X-Gm-Gg: AYBFou07yoWzGWc9c0jbeUgN7992sEONaOqWJoGKxN9w0T0BnDDILW5vrJFQy8MRAQv
+	/rphaZ4K68cmEPthWrtZtdXkJ/4axiBik8UH84YX9nw8GRQwBPj2KAokYlnJuxK6ezHjC+sGzr3
+	QgW3YHy60EwF+EeHWVKrv5EaKHIROBUGila4IGU9Do1H0KBeB/l4kDp7DqMApql6mdKL2tfSUyC
+	BimXmTsDKl0QDXCnEq+pLkxdzfeap8ZDk5ulk7dezK+3Qj1RAxfuHuufrzONfEBixw0KNddFY5J
+	P+7lBVs5C4IokrhIMg9IAZ8CD+bXv0KvD2aO2uTUfjf/ymw2QMB5dB1+r9tTIrjoIEGXuzFbDof
+	iWvJDxZZvcrObj2IDbo4iv04bbpnj1QWFkJ8gxY6t+Vf6rGOBIazTRf68MoTfGM7DTpef7tSK1A
+	Yg4EJkY/Pxqe4I3sqXJxx7wrmP2Gsl/0xEymxYz2GNZ+PzQpzfUvbMbKy450rSHso9soK7763Uw
+	2CQIxaBzlv+7woICHnKQ1vtG8X57XpNlnb81s5+VJaKSf8voX2i2Vi1b90Tf5S/ikTf1IDaNhU5
+	2w2dqumMmirGfV+p+4omrbkgArk2szNdl+9mYpZluHdz3HrHLv45nimwTgT2KyfCXnZt
+X-Received: by 2002:a17:90b:3d4b:b0:3ad:eb4c:26fb with SMTP id 98e67ed59e1d1-3ae897c87acmr9116933a91.23.1793646794112;
+        Mon, 02 Nov 2026 11:13:14 -0800 (PST)
+Received: from meli-email.org ([98.97.42.147])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c7dea24sm451194a91.5.2026.11.02.11.13.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 11:13:13 -0800 (PST)
+Date: Mon, 02 Nov 2026 12:12:46 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: mptcp@lists.linux.dev, Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com, matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org, josef@toxicpanda.com
+Subject: Re: [PATCH bpf v2 04/15] bpf, sockmap: Subtract all dropped bytes from the return value
+User-Agent: meli/0.9.0
+References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com> <20261102072112.4160195-5-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261102072112.4160195-5-alexei.starovoitov@gmail.com>
+Message-ID: <tnw2q0.1tgt7zq8oeb0@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,81 +98,24 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgBn6z+Z3uhqRsx4AA--.1463S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJFW8uw18uryrWryUAFyDAwb_yoW5WF1Dpa
-	ykW3Wag3WkZ3Z7CanxZ3W8WFy3W3Z5Ar4UW3WfJa48ZF1Utr18trWYgF1avFsxAr1Dt34Y
-	qr4YqwnrGa1jyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Sb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-	C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq
-	07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r
-	18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vI
-	r41lc7CjxVAaw2AFwI0_JF0_Jw1lc2xSY4AK67AK6rWl42xK82IYc2Ij64vIr41l4I8I3I
-	0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
-	GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
-	0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
-	rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r
-	4UYxBIdaVFxhVjvjDU0xZFpf9x07b7oGdUUUUU=
-X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
+Content-Type: text/plain; charset="utf-8"
 
-Outgoing stack arguments retain scalar state separately from registers
-and ordinary spills. Their precision dependencies must reach ancestor
-states when verification reuses a state or falls back to marking all
-scalars precise. Otherwise, an out-of-bounds map access can reuse a state
-validated for an in-bounds argument.
+On Mon, 02 Nov 2026 00:21, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+>From: Alexei Starovoitov <ast@kernel.org>
+>
+>When an sk_msg prog returns SK_DROP, tcp_bpf_send_verdict() frees the full
+>message. It then subtracts tosend bytes from *copied, the return value of
+>sendmsg(). But tosend is the number of bytes that the verdict applies to.
+>After bpf_msg_apply_bytes() tosend can be less than the message size. Then
+>sendmsg() reports dropped bytes as sent.
+>
+>Subtract the number of bytes that sk_msg_free() frees. After an error the
+>SK_PASS branch already does this. The SK_REDIRECT branch does the same if
+>the message is not the cork. Nothing changes when tosend is equal to the
+>message size. Otherwise sendmsg() now returns -EACCES if it sends nothing.
+>
+>Fixes: ca70b8baf2bd ("tcp_bpf: Fix the sk_mem_uncharge logic in tcp_bpf_sendmsg")
+>Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+>---
 
-Patch 1 covers outgoing scalar argument slots in both precision paths.
-Patch 2 adds two load-only asm regressions in verifier_stack_arg.c, based
-on Alexei's examples.
-
-Changes in v2:
-- Keep the patch 1 fix and explanation unchanged; rebase onto bpf/master
-  at 03b013897454064e0a2d84a8ba9a24753eb02f2b.
-- Replace the standalone instruction/BTF test builder with two asm tests
-  in the existing verifier_stack_arg.c, as requested by Alexei.
-- Reuse that file's compiler capability and architecture guards, which
-  already cover x86-64, arm64 and RV64. Drop the separate host-side guard.
-- Rewrite patch 2's explanation for the two replacement tests.
-
-v1:
-https://lore.kernel.org/bpf/20261027061303.1754535-1-xyx2021@mail.ustc.edu.cn/
-Review:
-https://lore.kernel.org/bpf/DMJI3GWXQOC9.UA3K9X139AR@gmail.com/
-
-Validation on x86-64 with Clang 23.1.4, JIT enabled and panic_on_warn=1:
-- Built all four kernel variants and their BPF test modules, plus the
-  complete test_progs runner with BPF_STRICT_BUILD=1.
-- The two new tests distinguish the two precision paths:
-
-                         State reuse       Fallback
-  Unmodified baseline    wrongly accepts   wrongly accepts
-  Propagation fix only   rejects           wrongly accepts
-  Fallback fix only      wrongly accepts   rejects
-  Complete fix           rejects           rejects
-
-  Rejections report the intended map-value bounds violation. The two
-  corresponding in-bounds controls load successfully on all four kernels.
-  These programs are never attached or executed.
-- All 274 subtests passed, with no skips, across verifier_precision,
-  verifier_spill_fill, verifier_subprog_precision, verifier_scalar_ids,
-  stack_arg_precision, verifier_stack_arg, verifier_stack_arg_order and
-  iters on the complete candidate. No kernel WARN/Oops or panic occurred.
-- Compiled the test object under x86-64, arm64 and RV64 guard definitions;
-  Clang 20 correctly selects the existing unsupported-compiler dummy.
-  Runtime testing was x86-64 only, and the unfiltered suite was not run.
-
-Codex assisted with implementation, test integration, commit messages
-and validation. The v2 test code was supplied by Alexei and is used
-unchanged.
-
-Xu Yunxiang (2):
-  bpf: Propagate scalar precision through stack arguments
-  selftests/bpf: Exercise stack argument precision on state reuse
-
- kernel/bpf/backtrack.c                             |  11 ++
- kernel/bpf/states.c                                |  14 +++
- .../selftests/bpf/progs/verifier_stack_arg.c       | 115 +++++++++++++++++++++
- 3 files changed, 140 insertions(+)
-
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
