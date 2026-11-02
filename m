@@ -1,57 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.81
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793608122;
-	b=jWpVwNLbHcsenuHDoJD9wy3tWvMNH6kyWrB2X7op9+xo+xdlcoRM0mouFI+VhGerlnuI
-	 pLxWw8QyXl5o6AuVeV3IRNPgGd7iYVEKCCpEeZjDUQUxzzNptw5IHICi4S8xse+uKmLAZ
-	 YURZ8glPTYE+MjwOSurdvrwUFwT3gs+xBMQxBPbooVNhf0imGH9GMjMgsLim8bsL/5+WW
-	 +zr0179Akkm74RvhyD0fNxIDb1sJDm4gZ7NEjlAoVu+4t+H473GOV2t0OFO13wA+2T6Em
-	 oX4rjCOrkPaOG9phwXw/ukHk8aJvI7sT+cQByve+okr5/oJMgCATgZ7nyR9ESsmWX2w==
+	t=1793608338;
+	b=lrPxLB6hFVmUWo6cm6WbnB1RdsS/DYXiw6SA50DDaxNnddeccAowSPtFBE2Y5FgwR2tm
+	 D83tZo2mkPz4r2Q3e6QltOmPWnEsv4YiSS4uGR01/YgXmv54cVb5aUCp8B739LyTx1NOh
+	 b4kqwEM/hEXyiBHeeMiW0x55wUudsZZ4NXnXYy7KOkBoIKgHoQxOw069cxvjzWajb9RLI
+	 1ZuKabq2QeH3aT4rQ9IyFaf00i72qiWSZ9XABdRZfeBPSJP8TcqIAJ4QwpFd4EzO//mn/
+	 hW2B40jXuDpSYypU6GidHTE/1BsOb27fs0t8uvZCEVyTQvRRtze2pj/0cQy0WEc4+YA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793608122;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=HVDKHlisotpga7i3OCTRmdVxylQw8ERqkGZPSy066rA=;
-	b=5fzhscUWkJlfdIUhcJa8StjC6/omrbYQsJNxp+X6UEY0neT1UMdfAJX5mOVo9xhEfYzi
-	 bS1K+yTqsbTD4K1WQqSPKq6j2AThgEXyqohKozTXsxl8jwizHSdyijog0rlMwpoz60mU6
-	 xOfXq10oVqLgzsmIbVcahJFgYadrUES53ULK/RFkl1Em4DdoTBKgOgfPObVMV8wyAeJ0q
-	 lRT8qWa8dUU2k5A5NA7ZRot4L7iWeGVzYA0SKCQCNDJ5EKt0QWQi53BBaQDHHr6sCHkPV
-	 WPDGvXIixXUc/0G5JALHL07Q6+/pH3orOOVblvGEYNboBLXsXsmY7H54Y3MFdFtQu1w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793608338;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=IYreqHUz2HQR2AUBnBbZcSxaTUlKTzbRYKcUs5sJV1I=;
+	b=0NtpRVTcBO/0a5N78s2U5fZMcRdJCftHutllJHGckoRtNcM2wGPchH5dOqaw1NZdk5la
+	 +Y5rsG7kHH78W5cnisp4B8PKy122+ziGddfotULDd/MD9kzzBxvsQZcMApAOVF2fPWlyY
+	 3GyoX52pu5Zf0lYOuh3F7hlz5H6XdwH/QqSN4zgrBJR4o535k2f/DQziTceKntTVtEp4b
+	 fmXh+OSpu5h3eoOynsoda+WaecUN5HZZ59GbDgHT6J3VzfqItnqOiEUX/M76N4Dzrbp/m
+	 wRUsWoEon+rUs4YSrM8SWWWyEvtAWjDn838UzpFDbAyJtdGqRuF3hd5zKDrsWXk/yYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iMbCTaYd;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ds6Fln3l;
+	arc=none smtp.remote-ip=95.215.58.81
+Received: from mta1.migadu.com (out-81.mta1.migadu.com [95.215.58.81])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390F4606A324
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 08:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B17606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 08:32:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B5B17606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iMbCTaYd
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB381F000C1;
-	Mon,  2 Nov 2026 08:28:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793608121;
-	bh=HVDKHlisotpga7i3OCTRmdVxylQw8ERqkGZPSy066rA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iMbCTaYdoh2Sv0GJzSLBBSFmiJRUoW+rpYmf5p5fOqKyiOQyWCt71dMFS1AVpGMbi
-	 CbXwGQJODC5oA3q8zILJWKA4FPUDPn/ZqgIlWUTXdqs/qnCnVL4jy18tWgLa7WL8F2
-	 V/OJOaQhM4YA0kspLyJThuJWhSqHk2sHIKm4vVjhudz+d/Gz3KFJp9ye3rPR/YC3b4
-	 5uLZaIkV4FlSlPPhUZga7djlWMDycAu1UjgLjxkoxe+z9FVPElqTd5V3CaFQmYefp6
-	 qflBGaCnoqCsXqBAQRz/gLmkeOLD57sVIQ9wGNV4kPXQ2hMfLqsQI2j5PorPbt8KFg
-	 Qr5Rg9wmUXhWQ==
-Message-ID: <sashiko-outbox-193107@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 1/2] selftests/bpf: Handle EOPNOTSUPP
- gracefully in test_loader
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261102081230.7063-2-yangtiezhu@loongson.cn>
-References: <20261102081230.7063-1-yangtiezhu@loongson.cn>
- <20261102081230.7063-2-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 02 Nov 2026 08:28:41 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ds6Fln3l
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=2P3ROvsM82yhJ2gGF+tSdLtq7UlfUDARI+FzX4vCWJI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793608335; v=1; x=1794213135;
+ b=ds6Fln3lPjT2pVFkMVnpUW34VbSJu7/oKSYKMxWcrvJaNQo76xr+hiufxkXcSqUoTUEkMj8O
+ ro0gdx7xJwPcmy9yAEmjqY2USKm8t0zf0IsIg4uTgtFu1jBg7/ScKiPTaD6og7gW1ZUZ70KwqwA
+ IgpXOTJSHz7jNKictxCdyGtg=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 884a5ea4713e1463;
+	Mon, 02 Nov 2026 08:32:15 +0000
+X-Mizu-Trace-ID: 884a5ea4713e1463
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <1d0cce30-28d8-43ee-b6b9-12e2660d4992@linux.dev>
+Date: Mon, 2 Nov 2026 16:32:07 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,108 +57,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2 01/15] bpf, sockmap: Write sg.start when recvmsg()
+ faults
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, john.fastabend@gmail.com, jakub@cloudflare.com,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
+ matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org,
+ josef@toxicpanda.com
+References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
+ <20261102072112.4160195-2-alexei.starovoitov@gmail.com>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20261102072112.4160195-2-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] selftests/bpf: indiscriminate EOPNOTSUPP skip in run_subtest()
---
 
-commit 4fea47634d9e4204dd230efbc533c57d0013c98f
-Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+On 11/2/26 3:20 PM, Alexei Starovoitov wrote:
+> From: Josef Bacik <josef@toxicpanda.com>
+>
+> __sk_msg_recvmsg() copies an sk_msg to the user buffer and starts at
+> sg.start. After a full copy of an element it calls put_page(), unless an
+> skb owns the page. It handles 0 copied bytes as a fault. It writes the new
+> sg.start after the loop, but not when copy_page_to_iter() faults.
+>
+>   element    0: length 0, put_page()   1: fault here   2: not copied
+>   sg.start   ^ today                   ^ this patch
+>
+> Each subsequent call copies 0 bytes from element 0 and returns -EFAULT. The
+> user cannot read the rest of the data. sk_msg_free() starts at sg.start
+> too. It calls put_page() for element 0 again and can free a page in use.
+>
+> Write sg.start in the fault path too. The commit in the Fixes tag removed
+> this write. Do not write it for MSG_PEEK, which changes no element.
+>
+> Fixes: c9c89dcd872e ("bpf, sockmap: Fix partial copy_page_to_iter so progress can still be made")
+> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-selftests/bpf: Handle EOPNOTSUPP gracefully in test_loader
 
-This commit updates run_subtest() in test_loader to call test__skip() when
-bpf_object__load() fails with errno =3D=3D EOPNOTSUPP in the
-!subspec->expect_failure path.
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/se=
-lftests/bpf/test_loader.c
-> index d24e4fedae46f..021818afbd3bf 100644
-> --- a/tools/testing/selftests/bpf/test_loader.c
-> +++ b/tools/testing/selftests/bpf/test_loader.c
-> @@ -1474,6 +1474,10 @@ void run_subtest(struct test_loader *tester,
->  			goto tobj_cleanup;
->  		}
->  	} else {
-> +		if (err < 0 && errno =3D=3D EOPNOTSUPP) {
-> +			test__skip();
-> +			goto tobj_cleanup;
-> +		}
-
-[Severity: Medium]
-Does checking errno =3D=3D EOPNOTSUPP after bpf_object__load() in the
-!subspec->expect_failure branch mask real verifier, BTF, CO-RE, and JIT
-regressions while still leaving __failure and __prepare_priv subtests
-broken when BPF_MAP_TYPE_ARENA is unsupported?
-
-In tools/lib/bpf/libbpf.c, bpf_object__load() executes both
-bpf_object_prepare() (BTF loading, CO-RE relocations, and
-bpf_object__create_maps()) and bpf_object__load_progs() (program
-verification and JIT compilation). During these steps, -EOPNOTSUPP is
-returned for many conditions unrelated to missing platform hardware
-extensions, such as add_kfunc_call(), require_callx_jit(),
-process_timer_func(), sanitize_check_bounds(), check_hmul_jit(), and
-check_attach_btf_id() in kernel/bpf/verifier.c, convert_ctx_accesses() in
-kernel/bpf/fixups.c, btf_validate_return_type() and btf_scan_decl_tags()
-in kernel/bpf/btf.c, check_struct_ops_btf_id() in
-kernel/bpf/bpf_struct_ops.c, and bpf_core_apply_relo_insn() in
-tools/lib/bpf/relo_core.c. Skipping any !subspec->expect_failure subtest
-on EOPNOTSUPP will cause regressions in those paths to be silently skipped
-instead of failing.
-
-At the same time, when BPF_MAP_TYPE_ARENA is unsupported on the platform,
-arena_map_alloc() in kernel/bpf/arena.c returns -EOPNOTSUPP during
-bpf_object_prepare() -> bpf_object__create_maps(), so bpf_object__load()
-aborts before bpf_object__load_progs() is called and leaves
-tester->log_buf empty. For __failure subtests in objects declaring an
-arena map (such as access_through_number in
-tools/testing/selftests/bpf/progs/verifier_arena.c or arena_arg_bad_reg in
-tools/testing/selftests/bpf/progs/arena_kfunc.c), run_subtest() takes the
-subspec->expect_failure branch:
-
-tools/testing/selftests/bpf/test_loader.c:run_subtest() {
-	...
-	if (subspec->expect_failure) {
-		if (!ASSERT_ERR(err, "unexpected_load_success")) {
-			emit_verifier_log(tester->log_buf, false /*force*/);
-			goto tobj_cleanup;
-		}
-	}
-	...
-	err =3D validate_msgs(tester->log_buf, &subspec->expect_msgs,
-			    emit_verifier_log);
-}
-
-Here ASSERT_ERR() succeeds on the map creation error, and validate_msgs()
-then fails because the verifier never ran and tester->log_buf is empty.
-Similarly, if unpriv && spec->prepare_priv is set, bpf_object__prepare()
-in run_subtest() fails at ASSERT_OK(err, "obj_prepare") before reaching
-bpf_object__load():
-
-tools/testing/selftests/bpf/test_loader.c:run_subtest() {
-	...
-	if (unpriv && spec->prepare_priv) {
-		err =3D bpf_object__prepare(tobj);
-		if (!ASSERT_OK(err, "obj_prepare"))
-			goto tobj_cleanup;
-	...
-}
-
-In addition, because run_subtest() enables map autocreation for all maps
-in tobj in privileged mode, any object declaring an arena map alongside
-unrelated non-arena subtests (such as compute_live_registers.c,
-verifier_zext.c, and verifier_ldsx.c) will fail map creation in
-bpf_object_prepare() and skip all non-arena subtests in that object when
-BPF_MAP_TYPE_ARENA is unsupported.
-
-Would it be better to explicitly probe for BPF_MAP_TYPE_ARENA support
-(similar to libbpf_probe_bpf_map_type(BPF_MAP_TYPE_ARENA, NULL) in
-test_verifier_hmul_arena() in
-tools/testing/selftests/bpf/prog_tests/verifier_hmul_arena.c) or handle
-unsupported map creation specifically, rather than catching all EOPNOTSUPP
-errors from bpf_object__load()?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102081230.7063=
--1-yangtiezhu@loongson.cn?part=3D1
