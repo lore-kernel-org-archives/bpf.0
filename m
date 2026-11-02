@@ -1,49 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793617208;
-	b=PH4r/gELq/6KBKKavZ63kbi3TB8NfLTLR6/iYMK7bcog1GwZ2NLMs0H14v3J57/jAv1w
-	 f2CuBwwzgMeUQ1yBBVCcCnRhFtVFu6cWAqJ9NF1HtDt0co7mHfLwMPw+rr9/5y4355+cc
-	 aOaBO6CL+zIEYi0wmkqBcCKofKZKR1SR6e1MF+bR1vrcuQBR7NGTNSnLgds9+c0ojUzXs
-	 ilq8eEpis8LZ48srdSN8eW4GS0LHVAQ6U9JoDBC/BFT9t9cydcHd+P6/MmDn0m8ojo//v
-	 A5gZaHwoR6fXh2cBDZO+alqBWXWsBJ0Cx3sUMixTMqJf8TcHDEBTy+UtmwyS7UFlegw==
+	t=1793617395;
+	b=CMXajPzKJWnwPy6mg8UInoJ5jLkeV/XluGDHZHTq4THJhTNEL47KVqPQ2QYagh6GrC+B
+	 tNJmY4ABM8G28eF5Pcml6foVqayBRLecx59JUSDr0ortV+5Q5giPDrqJDy3rqxlznI+lA
+	 95Gwh81Zf17LWSMKulBA25Md3LccuzTFCm/VDiLo1vIz8OmREbacrwRPt2UU9B3743w9i
+	 0YK6RsY6/BeiXhM7qr0GWnCOifLzV9uKYdEoZDtBjK39hdURKWzWj+4ePyln3A/vYiYe7
+	 uZgExhbUGWab0s/v0D8iV0O2t9vzJTQWqw/07y7dNcTEijmVur0cZjnlCWwZkHWiO3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793617208;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=5iQnN8C63bWH6bekwH74CSDmUU2uCzmKfmamRH3PQoo=;
-	b=xfHc6qHVMC+8nPreHrEPpr5x5jFMfriNN+aik1B+PeTZzRo/KHZWVs9oheijSsk223b/
-	 OXL2318MZW6jDrEw+8NzhgrWjaa6wnnsQwSxG81tc9MBRuR/UI1N0ZLNZ2+7NKycj7WmK
-	 6OPgRvylsyjWh1ygOYPaxy8OCKWV9jCHnJlmz/LkOQsNM6aLEy20Ln1qwfaaEoIxeU9B4
-	 pct65EVpXSyLhHVJu2cHIUdi06XTCHDCzOdp72WwhYn/D7TT2HMvfhiHF3lBdPpCqnXQN
-	 5n3/s0aqZ5RqTMy2/ZOC8yCwcw6jrNE1XUe4gZ+YEkbD7Ag4+HWrbZWc6LBEhYTOamA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793617395;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=gGvv1D3kz4yGFblt5aou1uFyOV+OwrUqmg2/eTEKzUM=;
+	b=rcbC6GbqkhsHsl5DNv9g4vrNNt6+uC3dWhkR/kChOiZrR9+tTuA/EB/mR8y3ZPWrr5Pu
+	 5jwfC9T9KokhcgOkV2V30qVr31rTWnX7DNyBPzkb1ixfbxHNMi1KuzMSoLaBTu6JYa4O+
+	 0UtftP2DntY1IYTT5QjLECRQETATBD3eE8oBvtaaVDzEzrYRLdrXbwx0wDcKNacLEMJ9W
+	 hyHL0EWauGAx/1g5tk01hP3jfKuj+cva2s5GX7uUTRK6ezv2zj1j7C2belykA4hS537AP
+	 Db8l8kD3HIf7eDqkrsaliCO0b2ogBJLNunJ4Lk8Lmxj0QEIf6i4uf+0xVf7nz+kdu2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B+sUANhi;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ok2+IPXy;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 411A0606A32F;
-	Mon,  2 Nov 2026 11:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF602606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 11:03:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B+sUANhi
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD1A1F00A1A;
-	Mon,  2 Nov 2026 11:00:08 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ok2+IPXy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE821F00A17;
+	Mon,  2 Nov 2026 11:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793617208;
-	bh=5iQnN8C63bWH6bekwH74CSDmUU2uCzmKfmamRH3PQoo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=B+sUANhi1MCbeOc9OJhw+ITLJ+WMmIZV42HIb1sLDzJnu6nzPvXPJQi5Q8M4zkiM+
-	 uy2dYdNZ8xnwoMfrE864BxdsPHP4FRKK3Sut55ddiCKmYU/8AX4EkXyWQ7FBn2+8in
-	 7Jtn1hvRdyIc30GbqS9H+Ff4xPRVsOPfo9iZpYxErpn6V1tcYMTvEKGr+VrNYO3HOf
-	 hbsa8hQMK3SDdUX3Z0nk8vM55S1nV8L6UP9IWjz/sxHgdS39pvSogRKuZ5Hd05ERTm
-	 DhmJRY8JUkh9UP4pJLdAdriKG0ALBt341dd+uKGizBmxi0EhhhcUUFNYKv9AwHdUG3
-	 wuDUpkVNdazUA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02FD2380821F;
-	Mon,  2 Nov 2026 11:00:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1793617393;
+	bh=gGvv1D3kz4yGFblt5aou1uFyOV+OwrUqmg2/eTEKzUM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ok2+IPXyCupsnggF+YM/vJ1QwMXG9zOzcNPj6OQmuEufbaSjvyZTzz1i8AyX398yg
+	 m8t/usUKXZJ2c87EpzD1i8HiFK2534y9sNpDpiZFvQpVZpXQdx86Tguyx/nSTJO64J
+	 I/6dfTlY+7zqDmv1k8JwbBl6nPEGxPh20dDsJMwNE50C0YKgNHOWuzoZSowuIYBJK1
+	 BanaUJrr7xT/b596G+sI/yKI4r+IQDvFYAlv7T7zltXZVwx2lEsoHTobOJOAhw0NRi
+	 9SPtMTSc4H9XH1RowP9JU9elcRlBm51sfTSBJ+UzjRbTmu+V77kLdmpLM0JddFPj6h
+	 QU4sQZI4gajmg==
+Message-ID: <sashiko-outbox-193310@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH vfs-7.5.bpf v2 3/3] selftests/bpf: Test
+ bpf_path_getattr()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Anastasios Papagiannis" <tasos.papagiannnis@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261102104655.70901-4-tasos.papagiannnis@gmail.com>
+References: <20261102104655.70901-1-tasos.papagiannnis@gmail.com>
+ <20261102104655.70901-4-tasos.papagiannnis@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 02 Nov 2026 11:03:13 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -52,61 +60,116 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 0/6] net: stmmac: XDP path fixes
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179361720655.3945611.14288786310433074072.git-patchwork-notify@kernel.org>
-Date: Mon, 02 Nov 2026 11:00:06 +0000
-References: <20261027-stmmac-xdp-fixes-v2-0-10eae8a093a8@oss.qualcomm.com>
-In-Reply-To: <20261027-stmmac-xdp-fixes-v2-0-10eae8a093a8@oss.qualcomm.com>
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
- o.rempel@pengutronix.de, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
- james.hilliard1@gmail.com, nb@tipi-net.de
 
-Hello:
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: missing CONFIG_OVERLAY_FS=3Dy in config for test_=
+overlay()
+- [Low] selftests/bpf: missing bpf_path_getattr() prototype in bpf_kfuncs.h
+--
 
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+commit 17972af984223b5b9a2708744af62ce15fa7e1b6
+Author: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
 
-On Tue, 27 Oct 2026 14:48:35 +0100 you wrote:
-> This series adds some stmmac XDP preliminary fixes needed to introduce XDP
-> RX multi-buff support.
-> 
-> ---
-> Changes in v2:
-> - Rebase on top of net main branch
-> - Fix commit messages
-> - In order to avoid possible dirty cache overwrites, sync the full page
->   dropping the xdp_buff in stmmac_rx().
-> - Link to v1: https://lore.kernel.org/r/20261023-stmmac-xdp-fixes-v1-0-efb37e19f5bd@oss.qualcomm.com
-> 
-> [...]
+selftests/bpf: Test bpf_path_getattr()
 
-Here is the summary with links:
-  - [net,v2,1/6] net: stmmac: take ownership of saved RX state at poll entry
-    https://git.kernel.org/netdev/net/c/26219e9402c2
-  - [net,v2,2/6] net: stmmac: drop split frames on AF_XDP zero-copy RX
-    https://git.kernel.org/netdev/net/c/834ec9530832
-  - [net,v2,3/6] net: stmmac: drop multi-buffer frames in XDP mode
-    https://git.kernel.org/netdev/net/c/52ffd771e002
-  - [net,v2,4/6] net: stmmac: copy XDP metadata in AF_XDP zero-copy RX
-    https://git.kernel.org/netdev/net/c/41d78e9ac098
-  - [net,v2,5/6] net: stmmac: fix VLAN tag stripping on short and non-linear RX frames
-    https://git.kernel.org/netdev/net/c/68bdbffcae08
-  - [net,v2,6/6] net: stmmac: fix XDP RX buffer DMA sync length
-    https://git.kernel.org/netdev/net/c/363ff816277d
+This commit adds BPF selftests for the bpf_path_getattr() kfunc, comparing
+its returned attributes with statx() across tmpfs and overlayfs and verifyi=
+ng
+its BPF verifier restrictions.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> diff --git a/tools/testing/selftests/bpf/prog_tests/path_getattr.c b/tool=
+s/testing/selftests/bpf/prog_tests/path_getattr.c
+> new file mode 100644
+> index 0000000000000..6d8cabfd24c65
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/path_getattr.c
+> @@ -0,0 +1,162 @@
 
+[ ... ]
 
+> +static void test_overlay(struct path_getattr *skel, const char *root)
+> +{
+
+[ ... ]
+
+> +	snprintf(opts, sizeof(opts), "lowerdir=3D%s,upperdir=3D%s,workdir=3D%s,=
+xino=3Doff",
+> +		 lower, upper, work);
+> +	if (mount("overlay", merged, "overlay", 0, opts)) {
+> +		if (errno =3D=3D ENODEV || errno =3D=3D EOPNOTSUPP) {
+> +			printf("%s:SKIP: overlayfs unavailable: %s\n",
+> +			       __func__, strerror(errno));
+> +			test__skip();
+> +			goto out_lower;
+> +		}
+
+[Severity: Medium]
+Should CONFIG_OVERLAY_FS=3Dy be added to tools/testing/selftests/bpf/config
+so the overlay subtest in test_path_getattr() -> test_overlay() is not
+skipped on standard BPF selftest kernels?
+
+The shared tools/testing/selftests/bpf/config enables CONFIG_TMPFS=3Dy and
+CONFIG_FS_VERITY=3Dy for filesystem kfunc tests, while CONFIG_OVERLAY_FS=3D=
+y is
+only present in tools/testing/selftests/bpf/config.aarch64. When running on
+kernels built from the BPF selftest config on x86_64, s390x, riscv64, or
+ppc64el, mount("overlay", ...) fails with ENODEV and skips test_overlay().
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/path_getattr.c b/tools/tes=
+ting/selftests/bpf/progs/path_getattr.c
+> new file mode 100644
+> index 0000000000000..509cf13a00479
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/path_getattr.c
+> @@ -0,0 +1,42 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include "bpf_kfuncs.h"
+
+[ ... ]
+
+> +SEC("lsm.s/inode_getattr")
+> +int BPF_PROG(path_getattr, const struct path *path, int ret)
+> +{
+> +	struct kstat stat =3D {};
+> +
+> +	if (ret || (__u32)bpf_get_current_pid_tgid() !=3D monitored_tid || call=
+s)
+> +		return ret;
+> +	calls++;
+> +	getattr_ret =3D bpf_path_getattr(path, request_mask, 0, &stat, sizeof(s=
+tat));
+
+[Severity: Low]
+Both tools/testing/selftests/bpf/progs/path_getattr.c and
+tools/testing/selftests/bpf/progs/verifier_path_getattr.c include
+bpf_kfuncs.h and call bpf_path_getattr(), which is only built into the
+kernel when CONFIG_BPF_LSM=3Dy.
+
+All other filesystem kfuncs from fs/bpf_fs_kfuncs.c are declared with
+__ksym __weak in tools/testing/selftests/bpf/bpf_kfuncs.h:
+
+    extern int bpf_get_dentry_xattr(struct dentry *dentry, const char *name=
+__str,
+                                    struct bpf_dynptr *value_p) __ksym __we=
+ak;
+    ...
+    extern int bpf_inode_init_xattr(struct xattr *xattrs, int *xattr_count,
+                                    const char *name__str,
+                                    const struct bpf_dynptr *value_p) __ksy=
+m __weak;
+
+Should bpf_path_getattr() also be declared in
+tools/testing/selftests/bpf/bpf_kfuncs.h so compilation does not fail when
+vmlinux.h is generated without CONFIG_BPF_LSM=3Dy or compiled with
+BPF_NO_KFUNC_PROTOTYPES?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102104655.7090=
+1-1-tasos.papagiannnis@gmail.com?part=3D3
