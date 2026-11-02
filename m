@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793575337;
-	b=bCPgwsMnjpwNlfMZW6ZiCS4CTShso515RRPM0jdWJE3PRTXyv8A0acAGyyvA0mNQu+NZ
-	 6OtgPVwJuwhtlSf5oEAobix1Vt4KzeN31NXc4VFo22ETbdTN6H86XTdWxLlJFpJ0O1PUA
-	 5P5BHBn8vieHDVGsFhwnVzwyTd6IeyklCFOkVIfwqs/KiLR9xXi+weaNpD9OdRgkilO4a
-	 WO77ZzeBSpVXu9XIFi9ENEUC/hcxbgYaS4Cb38tVSkbH4WXp4RcMbJmzZ7Q3N62yz5TKW
-	 7bZqpdZ84LhEFpiR9Zx6c+CkL42Q2tbZy4fuzY9JCxAfobkkvCJaXtwEEptWTkyCemQ==
+	t=1793578003;
+	b=YfX3AOVHvqRjETMF6Li/xVlREa3CS/OTYNex7k5l7bC0iGJQe59DPKQ0dYHYVe0ZUE7L
+	 5sQ+tSWwwvItL4edX+lIfAqwn3DeXdw7P0I2mwWls35dyxnZmGNnP7BRDwbAxf1TwcAyG
+	 7ix5yM7eMkYE7sIVdVh7KI0EkwIOUB+OZhDavZqQ1RdX8pQrqO7baxDPb5CB7XwVWeI6Q
+	 cHSEvCjP1N3aUSvsyC4xKwcvj8A01DMahTFfEW01ma8QhBjLld0bfX54APYODWX8ndW/J
+	 jtzfV0jxmJAsObier8UrccptXOUSJXCpJH0sRLWqjqQlfTyBYV7YjoeCd2fzeEww+zA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793575337;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793578003;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=cgbnb2lThgPEeB3edRcUUe9u+jXneAUVV1o/2RJjGUg=;
-	b=BfXEBh/oyd6dh3kAWyq6q/ln2VlhGpboujyhQnusoMk4kyt72y4Cpdbu4UCmGa4ctao7
-	 pkhSevidpW5bpTp94N/aPw9sFlNXswgmAW5fh/8GX6dq9Ez40kOc1CakcuVf7bUnTbWM3
-	 fNOmWa9d8NqvsykANvi47WD5TzGipJ+iBIeVdJZaySuDyMn+OwSLV0sui4Cv/LVU6Y55/
-	 f+gywoEjWaBNEj6zgl/pe71ZZiFqv2/dgX50ELS8ZQZmYCKxMF6prAQBskVML7WnXjHyZ
-	 SxGL1mx/o9l3itkqgWrDlqXX6ON2AffYkgvBhnSwGPSbER2vpBZTrPXStSfqEaWM21A==
+	bh=+SJEXO4zB7JFbzlAkf228If7IMH2rNzMGxDZgs6nB/Q=;
+	b=JvhKY2uqXNCfgMva71xOKkgbJW2JaJ3gr4Z/KBMSvjB1+j2aOnuktJ6cspkIdyQZ1oyZ
+	 ifE0F1s4zqWBCMZyBiZeEpsVzdvbfYbykr9xOUAXlzNINdgPWBL6rzLI5AQAN+BjovQcA
+	 w5s1m0CMHtNgiYvOta1GOCZmZGY2DYogsm6zPnF6UCd5XF31YByiIWgUGqiFWfTRAK+KQ
+	 ZlaCfFuUsRkbFDs3jUhCMkjtfXEjvy45Db0y4hn+n2+o0+S/7Q7JmFs+XpjdVUNvy2bZJ
+	 ngYdiRmw19C+3H23UesY6PE8z+NHK/p80kFIRCgyTH5qmYbx2bQdT6mB+I3l5rlz4jg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V+WwBx1l;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=liqClC9W;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7437F606A331;
-	Sun,  1 Nov 2026 23:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id E0BAC606A324;
+	Mon,  2 Nov 2026 00:06:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V+WwBx1l
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 060141F00A1A;
-	Sun,  1 Nov 2026 23:22:14 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=liqClC9W
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id D32841F000C1;
+	Mon,  2 Nov 2026 00:06:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793575337;
-	bh=cgbnb2lThgPEeB3edRcUUe9u+jXneAUVV1o/2RJjGUg=;
+	s=k20260515; t=1793578002;
+	bh=+SJEXO4zB7JFbzlAkf228If7IMH2rNzMGxDZgs6nB/Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=V+WwBx1lCytCK5su6Mvuld4oik/2OI6WSVKfvjxF/44A1b/ncXlrxAh/K7++VF73S
-	 STxStuqPRr37PS+KOuwiF/8LuLNN1ne+Srxl2kWLU3ssYzMdxfMh9itPCjitJI9+G2
-	 mCOGWQ1thuvOi3rsuEMIam4Hri53NDY3G7L19Eu6Seb+BklJmRIF0t9dqNfAV5m4Yg
-	 m46vy5Fk2IOmmGF0bpNwMYnXltKHU8WpncAJQsOsS2HdsW1x05SocT0/Re8dsTskJp
-	 uL7w4F7kBxxydMy6Sy0+c/XP3kx9g++Pz0Q5Yi95GmW9lZHPLQhwpke+fDpij78ocs
-	 mThJs245ojHMQ==
-Date: Sun, 1 Nov 2026 15:22:13 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>
+	b=liqClC9WWVGhUyktqyf5AnN22RgTBsT9tvLzLP54vGzkPCm0Mgi9EBUmEIzFo/0Qd
+	 MnFohsjcxSRNP6ihrSlouq+TL92bQhXxANAH2lqBb3Qt+fzgNWjcisSmSrOvvEnwi5
+	 g+BAF58QBCbxo5746rapXy+ndlJ3dLymq5k2DOfE+I2hPqq6Wg/B40EuhpD6XRer2C
+	 /gogYorKDzvAC38OmYz9twt/tbyN9UQmOANe64JAzyMDCHsqvwywG9BryzVvAupd6e
+	 mFwLHKk1m/hqihR9GI3BFNesiAceAaB7ui64sbvF8VQTNePKXFhY4/XfP8LHbIAyhW
+	 DrfAN0zGzmKCg==
+Date: Mon, 2 Nov 2026 02:06:39 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Eric Biggers <ebiggers@kernel.org>
 Cc: David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
 	Lukas Wunner <lukas@wunner.de>, Ignat Korchagin <ignat@linux.win>,
 	Herbert Xu <herbert@gondor.apana.org.au>,
@@ -71,9 +71,10 @@ Cc: David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
 	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
 	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Subject: Re: [PATCH v4 1/3] KEYS: Introduce keyring_is_empty()
-Message-ID: <20261101232213.GD2689@quark>
+Message-ID: <aufUDyCKIBHnQtfR@kernel.org>
 References: <20261029232437.2581640-1-jarkko@kernel.org>
  <20261029232437.2581640-2-jarkko@kernel.org>
+ <20261101232213.GD2689@quark>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,14 +86,20 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261029232437.2581640-2-jarkko@kernel.org>
+In-Reply-To: <20261101232213.GD2689@quark>
 
-On Fri, Oct 30, 2026 at 01:24:09AM +0200, Jarkko Sakkinen wrote:
-> Introduce keyring_is_empty() in order to decouple for BPF, dm-verity and
-> fs-verity how keyring internally manages the keys.
+On Sun, Nov 01, 2026 at 03:22:13PM -0800, Eric Biggers wrote:
+> On Fri, Oct 30, 2026 at 01:24:09AM +0200, Jarkko Sakkinen wrote:
+> > Introduce keyring_is_empty() in order to decouple for BPF, dm-verity and
+> > fs-verity how keyring internally manages the keys.
+> > 
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 > 
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Reviewed-by: Eric Biggers <ebiggers@kernel.org>
 
-Reviewed-by: Eric Biggers <ebiggers@kernel.org>
+Thanks!
 
-- Eric
+> 
+> - Eric
+
+Br, Jarkko
