@@ -1,103 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793600115;
-	b=rqdkMMogaW+SdBJY7CUK5fp4GoJP5GzBy02I4HiVwY6lJFbjvlMnYa02aq79aLYU1UUC
-	 MQvLJgzgoOe9XBXiUDC4gLgbynYgM6QP0KHzxUxBBxoLS/4xBioGJYU1Epxg2uXRFB1zY
-	 gE6f+Ppi5uLwC+qLvMMw7sSGZZ/bIo4iKf2VO3dkE+NVGamzqiHB5TmCqUcBCoBdRB6EV
-	 WovYXevhFHuoTXI/noAVqWVBAMVsCVpSfVD8KKkXx6ZwFnZiQUVcL47yBg8L6mujpnJ2G
-	 c89r7yC+APm5fR55s5KUO0mSuuzsTrlqgA2WRy9rb8rBc0ThF7xAVL8nhfx16KzRijw==
+	t=1793600391;
+	b=EOFDUZY7cg8bpGqdLUCX9b5tBLFgScdHVzz6h91mHj1RagHCt1iXq/Gf5g2ioMk2rZIv
+	 4tuqIwc4cv1ch6WO7clSk/wydsMKenu4csOJSX/HcTB7pUbjatKFQtyQeXT2Ff4Oud6ma
+	 Q3b+v/YQBgKf1163d/2O1V28oC7MUix02zfOv4nsQ65IRzAgZBa2ADBtMiRUhgt+vCt63
+	 M9c0SMGiPGVs1zAZGsdTbdu83kfeM1B27VUXD/vqIRAU/u/kxYEF68CwAwKX9m+t0OHh1
+	 EIRni//ahRqG5lEUkeEXT7uIAZQlqBAYMO+dJvCHsgZxFnsTSI42WFMYLhyAOtQqdtw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793600115;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=N9p8p2HdUkdNstArIXEZ6d9TeiYQDnJxf1m9IIs2SIs=;
-	b=oytBdNQ5cXsJeOYpVWBWNwcyeaEZHB2R4oEK8CzxTjR1JUOQgHmfbW+5s/wmHSUIdeyw
-	 SCAl4MhnpoVGkPHrSIXI6V0r7MM8wXlFwGxM61ejmXMj163YE3/97wfZvbES/R98kanSQ
-	 //h94TwimkejH6da38OClsd+LI3GZVIUCnyaFpejmqmDXkTrj/l78z7VAjivhkxHXOsK6
-	 zjcVnfWN2mA23rApq54sDjyu++62TZnZ88XpYeUV3J9s4yOfLg6WCR4P47bCUYbygj/9P
-	 WAUycyOj/F3NLbR4bkbnjRpSAQjhyaOORkiEGyJ8MDeEwpM8Fek46Na8zCYBdc3ILjA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793600391;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=k9Vlu1WKqqVGS7123Fh5ZK3C7t3HNDbPS7lduIMBT78=;
+	b=SXXtZhCION1RF5UYwZ72lXM61j2p14SKeMy+SjlvbQHxVuKK3ouQrI9C1I7lbrr3gADW
+	 l/cnDrES7ImRX1AVrhqLe7KQzEK+7XXFFcPOrFIIskJeFIzN4LAiv4K1EIevyUas7ZJ1X
+	 +8l+zaaJVuCBGcE1RH0yjg4CrRi1NND3CLh7Mx3rxv9IZPHH59u+3QlrTT7c4qahtd18X
+	 YPXhK2CvAWvqQT2v4ImryNYLdPuC5URumY0ePXFGkddTOH3r0CZsrFoJji2nb8bV2IxAD
+	 4n+zBOIl/948Eb+TSA+6BoZYxWTSLdxSq5LRS+PZV3h5Boj8KQKNYmNiqRVXJq80QjA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f4zjSubf;
-	arc=none smtp.remote-ip=209.85.215.179
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="oEUa/CJJ";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF47606A32D
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 06:15:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9CF47606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1298606A335
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 06:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f4zjSubf
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cc4dbda1e5dso731675a12.2
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 22:15:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793600114; x=1794204914; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=N9p8p2HdUkdNstArIXEZ6d9TeiYQDnJxf1m9IIs2SIs=;
-        b=f4zjSubff7t65yc9TzSFbWKzjEAU6ddyIxf7Rl1tmnjRJRePp4qnIdD6CFk1rIzsf9
-         RKB8I39qlVFwEAJ2BouHPHj5aImJHb2nRDs/6Z1bqSTKoflIHa/vXKhQIQe4FdUVOMr9
-         dwCaKBwj6Dx8Cm5Q85FpOHauS9FTuxWOs748MtKdp4H7SKrtrV7wPHk6vIOOEhSo+ArD
-         GsmT4WQ8X3l9VGF7paEw2Dz762JpqwtLjzZyPl2/yyP8AhwYX0t6+1Sps3UbQgLEM3Z1
-         C8fN8KrfjH+6Tafp/j/Hy7W4O1OIUVxT92pNORqRWsX+KFeYR1aIiEV445G4AtfYj34P
-         fm1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793600114; x=1794204914;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=N9p8p2HdUkdNstArIXEZ6d9TeiYQDnJxf1m9IIs2SIs=;
-        b=XTVs20F9dKA+Bv1ZyGUWIG1sjpU/+a6jjXPqEwd5S6h+Xpm1vHo8B/dBp5Mlw3OZkB
-         lPeSduN7TvN9RS+WFaoH+XWezFYH0WRFnldr8jrFfgwFWUB6O6ZYafjspblopqdsuzE3
-         TuCrGj8XB4+7hgsFdw0Rel4N4mpFkDZDHTYdg/S8uzeutnJkpidqjOlgEla/EZJGoRNt
-         nowOTVFp5UOJT3QCxDF2C5EMH+rRDmCWs1qp5TS/gfT80Zlq6AzaQ1nXQIShVVXvg1Gf
-         nz5FO7OnD9o8bTa0BJbeMfbdf/BePsi6nFhph72j/WukQ8V936bvOE7X5m/Ghs1hxk8r
-         hQfQ==
-X-Gm-Message-State: APuU4Z/uYWHuokVDhCSFmjj1WmY3uor0HJ54Aojei4lexDhE5MFFUNmU
-	6nWC4cIboYe4WeZyVbmQ5HIQKVa9qImztqIzetqX8nk7IOotvXyfbpNk
-X-Gm-Gg: AYBFou1++JuC38RC9EHB7VpGUhX2xvRqHt56nyeJen0kSPd4h4GdyXz6F56R1ZYufLZ
-	aX7PFuagyr0KoMOfcd+VlkewfV/UUz+6WLrCFwuRsjACPnB4Hrqg4ivoruB8/kLiXuD21zJR55F
-	jtn74WkkhNhKJ6mxQWqtAssRwXO85FfNHHVX96k7KAluvdWUJmQTtN1/6Cpqqdvxied0YIfavsr
-	LUUTZB2ISFMZ9/YBC5SHePqfkfAl5X42x7Z2N0lh4Q3TSxtz9pkc2Px9XAaD9ppoLnnsHGt923Y
-	xF/ERU8+e9Hr/VN5ZN48IKk8eg09DMZSoaE866Gdl/eitxVGKKDGCSaxxxcyyAR3PJNZkdUIgbA
-	aCD15Jt4bpE8bZUTXJGhr3Ohs+DSlgw6Yk1Ww69NIcUbn6fVgHA9igsWfJxgJQ3+A2vHhFYkIeY
-	HQ3a0RrfLcwqUtPeGGD6JGKay7UI1PfLl4wb+szNRyW8UjjZJmAUDcLMZqx1ekcYXwFpzV2NtxE
-	3opIwhRJMscJtYQ92s08zaE4y1q4vCpLya2dxU6eQWK/mh7D2vgnlF8Z3GRyNrhQRW9CpRmNpv/
-	rX8w6de6QV27sgZLzI3PZNzyfwin4e15W3W35SIcswE4XPqkSPGbsXqb5dwzoLqZUKuuLmiTeeY
-	6NxBTWaqdlyuOPF9svu/crdXymv6zsHcuzw==
-X-Received: by 2002:a17:90b:1b11:b0:3ad:4bfc:1e77 with SMTP id 98e67ed59e1d1-3ae897dd40fmr7444865a91.66.1793600113727;
-        Sun, 01 Nov 2026 22:15:13 -0800 (PST)
-Received: from localhost ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e98f888sm17118903a91.13.2026.11.01.22.15.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Nov 2026 22:15:12 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 02 Nov 2026 06:15:11 +0000
-Message-Id: <DMKI6C7FPCCV.2Y4YLRGWNSKW1@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Mykyta Yatsenko" <yatsenko@meta.com>,
- <qikeyu2017@gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Wait for wq callback before
- checking ok_sleepable
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <thamrinjonathan@gmail.com>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>
-In-Reply-To: <20261102-wq-poll-fix-v2-1-48b7d12815b8@gmail.com>
-References: <20261102-wq-poll-fix-v2-1-48b7d12815b8@gmail.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oEUa/CJJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B4CD1F00919;
+	Mon,  2 Nov 2026 06:19:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793600390;
+	bh=k9Vlu1WKqqVGS7123Fh5ZK3C7t3HNDbPS7lduIMBT78=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=oEUa/CJJVO5nLQzl4+Co5WQjmRWrkqUA8vP7dJv0//eJZteDOezmQkWbOWKmeseUk
+	 Dw0B1BqT8z6oeHEO6ZNSKO6381Nu5xGmansDUfo8gEV/YYjG238adTReZB5Izzw88U
+	 uSwVAsQChJNkL4MNcK0Ww3sdiEd1APowYzvOvC4g8nCY6Rh4VBZ+QtUr6wjPqX7s+h
+	 aEtX6hYXY9Vo0wWb3teMktjSWPN70aBNZKGhbopdx3mRwYRBccUFhdxb5c4iyqoovi
+	 +pFGnFS2HDCb0jEw5xJPYyXCwoYDKMyMNOYFPJxvHymjhr5SldBXMsqrnW6MWX9P47
+	 sP45VfOL9pccg==
+Message-ID: <sashiko-outbox-192948@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 1/2] bpf: Invalidate a dynptr slice when its stack
+ buffer is written
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261102055543.3584718-2-alexei.starovoitov@gmail.com>
+References: <20261102055543.3584718-1-alexei.starovoitov@gmail.com>
+ <20261102055543.3584718-2-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 02 Nov 2026 06:19:49 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,68 +59,92 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
 
-On Sun, Nov 01, 2026 at 06:36 PM Jonathan Bastari Thamrin via B4 Relay <devnull+thamrinjonathan.gmail.com@kernel.org> wrote:
->  	ASSERT_OK(err, "test_run");
->  	ASSERT_EQ(topts.retval, 0, "test_run");
->
-> -	usleep(50); /* 10 usecs should be enough, but give it extra */
-> -
-> +	/* wait for wq callback to finish */
-> +	while (!READ_ONCE(wq_skel->bss->wq_cb_run))
-> +		sched_yield();
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: missing slice_buf tracking for bpf_dynptr_slice() in check_kf=
+unc_call()
+--
 
-This loop can spin forever.
-The two ASSERTs above it don't stop the test. When retval != 0 nothing
-starts the wq and wq_cb_run stays 0.
+commit ccd22f0a6c418f0e43056579c44af476a64ac756
+Author: Alexei Starovoitov <ast@kernel.org>
 
-  what goes wrong                  today   with the patch
-  -------------------------------  ------  --------------
-  test_run fails or retval != 0    FAIL    hang
-  the callback doesn't run         FAIL    hang
-  the callback gets a wrong key    FAIL    FAIL
+bpf: Invalidate a dynptr slice when its stack buffer is written
 
-The second row is what this test is for.
-The watchdog doesn't help. watchdog_timer_func() sends one SIGSEGV.
-crash_handler() prints the stack and returns. The loop goes on.
+This commit tracks the stack buffer range of writable dynptr slices in
+bpf_reg_state::buf and invalidates those slices when the underlying stack
+buffer is written to, overwritten by a special stack object, or when its st=
+ack
+frame returns.
 
-Waiting for the callback is right. Waiting forever is not.
-Keep the loop bounded, like prog_tests/ksock_wq.c.
-Then there is no need for wq_cb_run and for the changes in progs/wq.c.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 217bcfa6ebfee..b34f7321eaafc 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -15668,6 +15711,21 @@ static int check_kfunc_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+>  		ref_convert_owning_non_owning(env, id);
+>  	}
+> =20
+> +	if (is_kfunc_call(&meta, special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) =
+&&
+> +	    dynptr_slice_may_be_buffer(meta.dynptr.type)) {
+> +		struct bpf_reg_state *buf =3D &regs[BPF_REG_3];
+> +
+> +		if (buf->type =3D=3D PTR_TO_STACK) {
+> +			meta.slice_buf.frameno =3D buf->frameno;
+> +			meta.slice_buf.off =3D reg_smin(buf);
+> +			meta.slice_buf.size =3D reg_smax(buf) - reg_smin(buf) +
+> +					      meta.arg_constant.value;
+> +		} else if (base_type(buf->type) =3D=3D PTR_TO_MEM) {
+> +			/* a slice is the buffer of the next one */
+> +			meta.slice_buf =3D buf->buf;
+> +		}
+> +	}
 
-Something like this (not even compile tested):
+[Severity: High]
+Should check_kfunc_call() also populate meta.slice_buf for
+KF_bpf_dynptr_slice?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
-index 97926e3..c4de70b 100644
---- a/tools/testing/selftests/bpf/prog_tests/wq.c
-+++ b/tools/testing/selftests/bpf/prog_tests/wq.c
-@@ -7,7 +7,7 @@
- void serial_test_wq(void)
- {
- 	struct wq *wq_skel = NULL;
--	int err, prog_fd;
-+	int err, prog_fd, i;
+At runtime, bpf_dynptr_slice() copies non-contiguous skb or xdp data (or fi=
+le
+dynptr data) into buffer__nullable and returns that buffer as PTR_TO_MEM |
+MEM_RDONLY. Because meta.slice_buf is only populated for
+KF_bpf_dynptr_slice_rdwr, slices returned by bpf_dynptr_slice() have
+reg->buf.size =3D=3D 0 and are skipped by invalidate_stack_slices().
 
- 	LIBBPF_OPTS(bpf_test_run_opts, topts);
+Although the program cannot store through a read-only slice, leaving
+reg->buf.size as 0 appears to allow two issues:
 
-@@ -25,11 +25,13 @@ void serial_test_wq(void)
+1. If a subprogram takes a dynptr from a caller frame (or a
+CONST_PTR_TO_DYNPTR), calls bpf_dynptr_slice() with a buffer on the
+subprogram's own stack frame, and returns the resulting PTR_TO_MEM |
+MEM_RDONLY slice in R0, prepare_func_exit() allows R0 because its type is
+PTR_TO_MEM rather than PTR_TO_STACK:
 
- 	prog_fd = bpf_program__fd(wq_skel->progs.test_syscall_array_sleepable);
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "test_run");
--	ASSERT_EQ(topts.retval, 0, "test_run");
--
--	usleep(50); /* 10 usecs should be enough, but give it extra */
-+	if (!ASSERT_OK(err, "test_run") ||
-+	    !ASSERT_EQ(topts.retval, 0, "test_run"))
-+		goto clean_up;
+kernel/bpf/verifier.c:prepare_func_exit()
+    err =3D destroy_dynptrs_in_stack_slots(env, callee, 0,
+                                         callee->allocated_stack / BPF_REG_=
+SIZE - 1);
+    if (err)
+        return err;
+    invalidate_stack_slices(env, callee->frameno, INT_MIN, 0);
 
-+	/* The callback runs in a kworker. Fail instead of a hang if it doesn't. */
-+	for (i = 0; i < 10000 && !READ_ONCE(wq_skel->bss->ok_sleepable); i++)
-+		usleep(1000);
- 	ASSERT_EQ(wq_skel->bss->ok_sleepable, (1 << 1), "ok_sleepable");
- clean_up:
- 	wq__destroy(wq_skel);
+destroy_dynptrs_in_stack_slots() only destroys dynptrs in the callee's stack
+slots, and invalidate_stack_slices() skips R0 because R0->buf.size is 0,
+leaving the caller with a live pointer to the popped stack frame.
 
-pw-bot: cr
+2. Within the same frame, if the program calls bpf_dynptr_slice() with a st=
+ack
+buffer and later spills a pointer into that buffer (when
+!env->allow_ptr_leaks) or initializes a dynptr, iterator, or irq flag slot =
+in
+that buffer, check_stack_write() -> invalidate_stack_slices() will not
+invalidate the read-only slice. Subsequent loads through the PTR_TO_MEM |
+MEM_RDONLY slice are treated as plain memory reads returning SCALAR_VALUE,
+which can read the raw bytes of the spilled pointer or special stack slot.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102055543.3584=
+718-1-alexei.starovoitov@gmail.com?part=3D1
