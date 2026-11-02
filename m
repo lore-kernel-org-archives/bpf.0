@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793640066;
-	b=PkEbv00YJ5GYhfWCx2A8wGnmGIAor7YTx6RnyilDPdEDj4Hn4gJKQ4bSBb1bB+XRS05X
-	 xp2JSuMUoDrmg6W2h1jw7medfpLpeY37XT/UviGkNz5dFmnY4FiJWbdCdHgyuP9IoGpH/
-	 Vsp5gHSW9hWj8RoSLaBeC1Q6BlUKs3oSC8KTLw3P82FVGnStTPbNNU2U7SURlVtSMIHTE
-	 sNi9waz2vlQFn+WGQYyBJ101g2IWEEU5xoF0eQlcakIvRb7ZH08/s6xIrZm07SvQ22mox
-	 xRFkToglzRXwCv+S+Hc8e54smoaooD5FxqjCTqSxhGvAJkNZSIIjYkh92I/ZzOoasdA==
+	t=1793640068;
+	b=dEWexoSAwdpbe2C9R2i8EiZYNTiTRPdhgKkyVfwKd3LKit53xXsRFRPoCo4jeRF+vbTL
+	 kQM7+X4RMHzL0UNmejhzqhk6d+eCJ74zKo5eEpJTddTn2G5ZhMqaQqEe9m1GJ40S/GMSW
+	 My1D702yT+nLpSSpDQ8JUJ9n6BURBdLpcPftczomdrWAQ6Pxx6/PtfWcEu7oOLM8V9x8t
+	 /i+ZOR1TfoGIkabfAtnwB+rM9pi+9FkXr+dDc6qpln8xV2sJfcwf2U4dYRtFnNk4G929H
+	 29JOFje78SB3rJq8hNtFUZcZI4zZ0EH1nLqBksK3biXpyg36CLszyYPXywk2uG1AFxg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793640066;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793640068;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=/pFPFJHaHSGvC04TAAFnHJVXri/6byTcIoteC2lWvuc=;
-	b=fPFfC1JOnaXNtnlUQRUOq2wNtw7koExE3k6EuTb2uw9bsVWFXKpHAonQ4Hh6DrcRAZjg
-	 eTgbUHLXCQ6EgHPBru3AKK6aornjL25c9xFU0sJ2QEnQvCFZikrs00oBPURCYA2SjtVUy
-	 RteAY722mFybrSK2g5mCE7kQ3R7vmO59YpUakKsW2Ywz0cOO8MCKsK42dV34YUhPrwIRT
-	 6OQ/TalXFXhYAmK8MpBZNGrUK9uphBaFLrS5jhprQUD8NX5kJnrKB6LwNUvexiAbXQwuQ
-	 jpAjYYWaPlCPDnglX1B5PCLRjKKTeguKNT4qS8jteAI/WCWNdHYams9vkvzDyfjAUHQ==
+	bh=/lWgmRBYReWyxqE08PCl0qgxEEc+BavdsDtI0OpBtE4=;
+	b=KXSotevc9ciAGyW7Ig/JmPC8tXDTuo5HkYKxeMvhIUeEIOtfgpJ0x9wPZrwQNfLcnCDd
+	 C/Doo8JKd4kq7HyYxJvI087omGSd+LJpe96xWvw9yJPJpsXpQtjOURZWhh1CeeHDcYli7
+	 pNns6yNAFrpoCuIRRYZ4niL9BaNmndqZj8nRdhHKZ1dcdkdJtspxrMZJNUzWSHIkazmh5
+	 4LDygsubB5xbK182mNqTYfXtTNNbbESSu4rlzx3cW8kHehu4a5VeJ1FD+qcaz1vQuefHE
+	 RZDPo4EKBxhzClrp0Wn1ql/fdCs959MxJBRseipW7NM86Rkqylt2A+0fDpIGsU0DW1w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hZ9+gCl8;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=St1z4A6r;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFF760A34EB;
-	Mon,  2 Nov 2026 17:21:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F6160A3801;
+	Mon,  2 Nov 2026 17:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hZ9+gCl8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBEEF1F00A16;
-	Mon,  2 Nov 2026 17:21:03 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=St1z4A6r
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E49B91F00A1A;
+	Mon,  2 Nov 2026 17:21:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793640065;
-	bh=/pFPFJHaHSGvC04TAAFnHJVXri/6byTcIoteC2lWvuc=;
+	s=k20260515; t=1793640067;
+	bh=/lWgmRBYReWyxqE08PCl0qgxEEc+BavdsDtI0OpBtE4=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=hZ9+gCl8bIhiQf8qfLRJRScAEGXiDYTUEipY2YRbT7ImrU8XyhnK29u9xyGGSvUmF
-	 fnt/19NEUP2In078KjMoqO8xgtJnPLqCU4Fp0CBqLxbvASrC4ZwJobP2CpBaQAeBX3
-	 Rd4av9fjy0MScmvzqmjdmZUkM7UEVrroZ9JaDXSmMRMEQVyzfGGz/8I3Rh+FIQPaQf
-	 AYTDFrl8XxdBZq9pBX2eIzwSm+zfuPv46U+ZH+4AXRkkZRRG5priEBGeFBJqVhK+4E
-	 J6vQyilc1UOnk4kjor/rkMifI+MD7zcSw+mAdavnLFvVwBCzwiiKI70n2ddOzOkpD8
-	 5q8GdUOx2o/2g==
-Subject: Re: [PATCH net 1/2] net: keep the TCP fixed-ID flags on the header
- they describe
+	b=St1z4A6rh6NLYmsVZPX6tGvq0QNw9pVzbqQRnIuhmqJh0HO8TrJuJ+L4ld45OKarB
+	 ozIfXu0FO4c6Sq8aVSvZdkkwNpQhzzKzmdw9YExNJ9RzhXMrWG1/r2IyyabVdUZQXS
+	 joORhYBXbKREbsS4Q6c/uobj2OOx8WcOYgwwsZ1JQS3DXFxzWG/yj3jxTXYUCS7cmo
+	 ZxQeAb6YTdPiVnWq5rKvdHAB3krsqqZ81F67DZxLUyMqyGG2NTSBBZvKa3lCE5Lps5
+	 WP8sQ8xtq2Kc/gzcenufc92h3pyCRGpVL6DBfwUw1Zzt4nGlZGr+OyVR64J+RBBGai
+	 WNl9cjCKyZrXQ==
+Subject: Re: [PATCH net 2/2] selftests: net: check TCP IP IDs across tunnels
+ after GRO and GSO
 From: netdev-bot+sashiko@kernel.org
 To: julius@bairaktaris.de
 Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
@@ -53,13 +53,13 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
  jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
  shuah@kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Mon, 02 Nov 2026 17:21:03 +0000
-Message-ID: <179364006336.3131.6485270170756612370@kernel.org>
-In-Reply-To: =?utf-8?q?=3Cf689def2f03965d7e4c48455c3926d7475044910=2E1792857?=
+Date: Mon, 02 Nov 2026 17:21:05 +0000
+Message-ID: <179364006548.3131.13475531493993778101@kernel.org>
+In-Reply-To: =?utf-8?q?=3C741cdd984b05c2e8bccfe6af5c2596f17b3dcccc=2E1792857?=
  =?utf-8?q?378=2Egit=2Ejulius=40bairaktaris=2Ede=3E?=
-References: =?utf-8?q?=3Cf689def2f03965d7e4c48455c3926d7475044910=2E17928573?=
+References: =?utf-8?q?=3C741cdd984b05c2e8bccfe6af5c2596f17b3dcccc=2E17928573?=
  =?utf-8?q?78=2Egit=2Ejulius=40bairaktaris=2Ede=3E?=
-X-sashiko-severity: High
+X-sashiko-severity: Critical
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -72,10 +72,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 6 potential
+Thank you for your contribution! Sashiko AI review found 8 potential
 issue(s) to consider.
 
-Critical: 0 · High: 2 · Medium: 4 (1) · Low: 0 (1)
+Critical: 1 · High: 0 · Medium: 2 · Low: 5
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -83,426 +83,582 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] Use-after-free read in ipv6_srh_rcv() (net/ipv6/exthdrs.c).
-- [High] One encapsulation site was missed: IPsec tunnel mode with device
-  ESP offload.
-- [Medium] The patch removes `SKB_GSO_CB(skb)->encap_level = 0;` from
-  __skb_udp_tunnel_segment() (and gre_gso_segment()).
-- [Medium] iptunnel_handle_offloads() (net/ipv4/ip_tunnel_core.c) moves
-  the fixed-ID flag only on the 0 -> 1 transition of skb->encapsulation…
-- [Medium] BPF L3-only decapsulation now loses fixed IDs on a round trip
-  that worked before.
-- [Medium] net: geneve_post_decap_hint() leaves fixed-ID flag on outer
-  header after decap
-
-Pre-existing issues:
-- [Medium] This problem wasn't introduced by this patch, but
-  handle_gso_encap() (net/core/lwt_bpf.c) matches `case IPPROTO_IP:` (0)…
-- [Low] This problem wasn't introduced by this patch, but
-  bpf_lwt_seg6_action() SEG6_LOCAL_ACTION_END_DT6 (net/core/filter.c)…
+- [Critical] ipv6: seg6: use-after-free of hdr in ipv6_srh_rcv() after
+  iptunnel_pull_offloads()
+- [Medium] The test says it checks that "the inner IDs must come out as
+  they went in" (tcp_fixedid.sh header, lines 16-18, and the commit…
+- [Medium] udp: gso: inner hw_enc_features re-masking clobbers remcsum
+  NETIF_F_HW_CSUM
+- [Low] In tools/testing/selftests/net/Makefile, the patch adds
+  tcp_fixedid.sh to TEST_PROGS at line 109, between tcp_ecmp_failover.sh…
+- [Low] The "GRO did not merge" skip in check() (tcp_fixedid.sh lines
+  154-156) uses the change in tun0's statistics/tx_packets as its input.
+- [Low] run_decap() in tcp_fixedid.sh ignores the return value of `tunnel
+  "$NRTR" tun0 ipip 4 10.2.0.1 10.2.0.2` (line 212).
+- [Low] tcp_fixedid.sh creates a temporary file with `RESULT=$(mktemp)`
+  (line 276).
+- [Low] capture() in tcp_fixedid.sh (lines 162-172) starts the receiver
+  in the background and polls RESULT for "ready" up to 100 times at 0.1…
 
 --
 
-net: keep the TCP fixed-ID flags on the header they describe
+selftests: net: check TCP IP IDs across tunnels after GRO and GSO
 
-This patch adds skb_gso_fixedid_encap() and skb_gso_fixedid_decap(). They
-move SKB_GSO_TCP_FIXEDID between the outer and inner bit when a GSO packet
-gains or loses an outer header, and the IP tunnel, BPF and segment routing
-encap/decap paths now call them. The patch also stops gre_gso_segment()
-and __skb_udp_tunnel_segment() from resetting SKB_GSO_CB(skb)->encap_level.
+This adds a selftest that sends TCP segments with fixed or incrementing
+IPv4 IDs onto a veth with GRO enabled. The merged packets are forwarded
+through IPIP, GRE and VXLAN tunnels with software segmentation, and the
+inner and outer IP IDs are checked. It also covers VXLAN decapsulation into
+IPIP, and a tunnel that is decapsulated without segmentation before
+forwarding.
 
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index 6787fcf6ac3e4..00df57cbc05c2 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -5337,6 +5337,36 @@ static inline void skb_decrease_gso_size(struct skb_shared_info *shinfo,
->  	shinfo->gso_size -= decrement;
->  }
->  
-> +/**
-> + * skb_gso_fixedid_encap - move the TCP fixed-ID flag to the inner header
-> + * @shinfo: shared info of a GSO packet that becomes encapsulated
-> + *
-> + * The IPv4 header that SKB_GSO_TCP_FIXEDID describes becomes the inner one,
-> + * and the new outer header gets an incrementing ID.
-> + */
-> +static inline void skb_gso_fixedid_encap(struct skb_shared_info *shinfo)
-> +{
-> +	unsigned int fixedid = shinfo->gso_type & SKB_GSO_TCP_FIXEDID;
-> +
-> +	shinfo->gso_type &= ~(SKB_GSO_TCP_FIXEDID | SKB_GSO_TCP_FIXEDID_INNER);
-> +	shinfo->gso_type |= fixedid << 1;
-> +}
-
-[Severity: High]
-Does one more encapsulation site need this helper? IPsec tunnel mode with
-ESP device offload seems to make a GSO packet encapsulated without moving
-the flag.
-
-In xfrm_output(), when xfrm_dev_offload_ok() succeeds for a GSO skb
-without inner_protocol:
-
-net/xfrm/xfrm_output.c:xfrm_output() {
-    ...
-	skb->encapsulation = 1;
-
-	if (skb_is_gso(skb)) {
-		if (skb->inner_protocol && x->props.mode == XFRM_MODE_TUNNEL)
-			return xfrm_output_gso(net, sk, skb);
-
-		skb_shinfo(skb)->gso_type |= SKB_GSO_ESP;
-		goto out;
-	}
-    ...
-}
-
-xfrm4_tunnel_encap_add() then turns the original IPv4 header into the
-inner one and builds a new outer header:
-
-net/xfrm/xfrm_output.c:xfrm4_tunnel_encap_add() {
-    ...
-	top_iph->frag_off = (flags & XFRM_STATE_NOPMTUDISC) || small_ipv6 ?
-		0 : (XFRM_MODE_SKB_CB(skb)->frag_off & htons(IP_DF));
-    ...
-	ip_select_ident(dev_net(dst->dev), skb, NULL);
-    ...
-}
-
-Neither function calls skb_gso_fixedid_encap(), so SKB_GSO_TCP_FIXEDID
-still describes the old header. With software segmentation, the outer
-inet_gso_segment() pass runs with encap_level == 0 and reads:
-
-	fixedid = !!(skb_shinfo(skb)->gso_type & (SKB_GSO_TCP_FIXEDID << encap));
-
-Every segment would then get the same outer ID, possibly with DF clear.
-
-The inner pass goes through
-esp4_gso_segment()->xfrm4_tunnel_gso_segment()->skb_eth_gso_segment()
-with encap_level > 0. It finds FIXEDID_INNER clear, so the inner IDs
-increment.
-
-The commit message describes this same result for
-iptunnel_handle_offloads(). Should the xfrm tunnel output path also call
-skb_gso_fixedid_encap()?
-
-[ ... ]
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 09c60a58c82ab..4f87a827b25be 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -3718,6 +3718,9 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
->  	if (skb_is_gso(skb)) {
->  		struct skb_shared_info *shinfo = skb_shinfo(skb);
->  
-> +		if (encap)
-> +			skb_gso_fixedid_encap(shinfo);
-> +
->  		/* Header must be checked, and gso_segs recomputed. */
->  		shinfo->gso_type |= gso_type;
->  		shinfo->gso_segs = 0;
-> @@ -3809,9 +3812,11 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
->  						  SKB_GSO_GRE_CSUM |
->  						  SKB_GSO_IPXIP4 |
->  						  SKB_GSO_IPXIP6 |
-> -						  SKB_GSO_ESP)))
-> -				if (skb->encapsulation)
-> -					skb->encapsulation = 0;
-> +						  SKB_GSO_ESP)) &&
-> +			    skb->encapsulation) {
-> +				skb_gso_fixedid_decap(shinfo);
-> +				skb->encapsulation = 0;
-> +			}
->  		}
-
-[Severity: Medium]
-Can a BPF encap/decap round trip now lose fixed IDs?
-
-bpf_skb_net_grow() moves the flag to SKB_GSO_TCP_FIXEDID_INNER for any L3
-encap. That includes BPF_F_ADJ_ROOM_ENCAP_L3_IPV6 or _IPV4 with no L4
-flag.
-
-In bpf_skb_net_shrink(), the flag is only moved back inside:
-
-	if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-		     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
-
-bpf_skb_adjust_room() still accepts a shrink with only
-BPF_F_ADJ_ROOM_DECAP_L3_IPV4/IPV6 set, or with no decap flags at all.
-Programs written before the L4/IPXIP decap flags existed do this.
-
-After such a decap the bit stays in FIXEDID_INNER. The top-level
-inet_gso_segment() then sees SKB_GSO_TCP_FIXEDID clear, and the segments
-get incrementing IDs.
-
-Before this patch, grow left SKB_GSO_TCP_FIXEDID where it was, so the
-round trip kept fixed IDs. The commit message says the change avoids
-losing fixed IDs for "a packet encapsulated and decapsulated again without
-segmentation".
-
-Should the fixed-ID move in bpf_skb_net_shrink() also cover L3-only
-decaps?
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> index 9180b9bec5155..dd402814bc748 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -106,6 +106,7 @@ TEST_PROGS := \
+>  	srv6_iptunnel_cache.sh \
+>  	stress_reuseport_listen.sh \
+>  	tcp_ecmp_failover.sh \
+> +	tcp_fixedid.sh \
+>  	tcp_fastopen_backup_key.sh \
 
 [Severity: Low]
-This isn't a bug introduced by this patch. The segment routing paths in
-exthdrs.c are converted to iptunnel_pull_offloads(), but the
-SEG6_LOCAL_ACTION_END_DT6 case in bpf_lwt_seg6_action() still
-decapsulates IPv6-in-IPv6 by hand:
-
-net/core/filter.c:bpf_lwt_seg6_action() {
-    ...
-		__skb_pull(skb, hdroff);
-		skb_postpull_rcsum(skb, skb_network_header(skb), hdroff);
-		skb_reset_network_header(skb);
-		skb_reset_transport_header(skb);
-		skb->encapsulation = 0;
-    ...
-}
-
-Tunnel GSO types such as SKB_GSO_IPXIP6 stay set on a packet that is no
-longer encapsulated. Both headers are IPv6, so the fixed-ID bits don't
-matter here.
-
-Could the leftover gso_type force software GSO on devices without
-GSO_IPXIP6? Would iptunnel_pull_offloads() fit here as well?
-
-> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-> index da49364ec63de..4d9faf2cc5de5 100644
-> --- a/net/core/lwt_bpf.c
-> +++ b/net/core/lwt_bpf.c
-> @@ -539,6 +539,7 @@ static int handle_gso_type(struct sk_buff *skb, unsigned int gso_type,
->  {
->  	struct skb_shared_info *shinfo = skb_shinfo(skb);
->  
-> +	skb_gso_fixedid_encap(shinfo);
->  	gso_type |= SKB_GSO_DODGY;
->  	shinfo->gso_type |= gso_type;
->  	skb_decrease_gso_size(shinfo, encap_len);
-
-[Severity: Medium]
-This is a pre-existing issue, not one introduced by this patch.
-handle_gso_encap() matches IPPROTO_IP (0) instead of IPPROTO_IPIP (4):
-
-net/core/lwt_bpf.c:handle_gso_encap() {
-    ...
-	case IPPROTO_IP:
-	case IPPROTO_IPV6:
-		if (ipv4)
-			return handle_gso_type(skb, SKB_GSO_IPXIP4, encap_len);
-    ...
-}
-
-Take a TCP GSO packet pushed by bpf_lwt_push_ip_encap() with an outer IPv4
-header whose protocol is IPPROTO_IPIP. Does it fall through to the default
-case and fail with -EPROTONOSUPPORT, even though the same header works for
-non-GSO packets?
-
-Should this be case IPPROTO_IPIP?
+This isn't a bug, but tcp_fixedid.sh is out of alphabetical order here. It
+should come after tcp_fastopen_backup_key.sh. The TEST_GEN_FILES and
+.gitignore entries in this patch are in the right place.
 
 [ ... ]
 
-> diff --git a/net/ipv4/ip_tunnel_core.c b/net/ipv4/ip_tunnel_core.c
-> index 6c2855adff289..59050229e3499 100644
-> --- a/net/ipv4/ip_tunnel_core.c
-> +++ b/net/ipv4/ip_tunnel_core.c
-> @@ -182,9 +182,10 @@ EXPORT_SYMBOL_GPL(iptunnel_metadata_reply);
->  int iptunnel_handle_offloads(struct sk_buff *skb,
->  			     int gso_type_mask)
->  {
-> +	bool encap = !skb->encapsulation;
->  	int err;
->  
-> -	if (likely(!skb->encapsulation)) {
-> +	if (likely(encap)) {
->  		skb_reset_inner_headers(skb);
->  		skb->encapsulation = 1;
->  	}
-> @@ -193,6 +194,8 @@ int iptunnel_handle_offloads(struct sk_buff *skb,
->  		err = skb_header_unclone(skb, GFP_ATOMIC);
->  		if (unlikely(err))
->  			return err;
-> +		if (encap)
-> +			skb_gso_fixedid_encap(skb_shinfo(skb));
->  		skb_shinfo(skb)->gso_type |= gso_type_mask;
->  		return 0;
->  	}
-
-[Severity: Medium]
-What happens here when the GSO skb is already encapsulated?
-
-Forwarded GRE or IPIP traffic merged by gre_gro_complete() or
-ipip_gro_complete() arrives with skb->encapsulation = 1. Its
-SKB_GSO_TCP_FIXEDID describes its outer header.
-
-Suppose a router sends it into another IPv4 tunnel, for example through
-ipip_tunnel_xmit(). Then encap is false here and the flag stays where it
-is.
-
-The new outermost header is segmented by inet_gso_segment() with
-encap_level == 0, which reads the stale SKB_GSO_TCP_FIXEDID. Every segment
-then gets the single ID from ip_select_ident(), possibly with DF clear.
-
-That is the wire behaviour the commit message lists as fixed: "forwarded
-into a tunnel gets one outer ID for all segments, also with DF clear".
-
-Two bits can't describe three headers. Would clearing SKB_GSO_TCP_FIXEDID
-for the newly pushed outer header in the nested case avoid this? If not,
-could the commit message mention the limitation?
-
-> diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
-> index cf07c3c6611a2..edcabe1115a60 100644
-> --- a/net/ipv4/udp_offload.c
-> +++ b/net/ipv4/udp_offload.c
-> @@ -205,7 +205,6 @@ static struct sk_buff *__skb_udp_tunnel_segment(struct sk_buff *skb,
->  
->  	/* setup inner skb. */
->  	skb->encapsulation = 0;
-> -	SKB_GSO_CB(skb)->encap_level = 0;
->  	__skb_pull(skb, tnl_hlen);
->  	skb_reset_mac_header(skb);
->  	skb_set_network_header(skb, skb_inner_network_offset(skb));
-
-[Severity: Medium]
-Does keeping encap_level here undo the feature override for remote
-checksum offload?
-
-With SKB_GSO_TUNNEL_REMCSUM, __skb_udp_tunnel_segment() masks with
-hw_enc_features and then adds NETIF_F_HW_CSUM on purpose for the inner
-pass:
-
-	features &= skb->dev->hw_enc_features;
-	...
-	if (remcsum) {
-		features &= ~NETIF_F_CSUM_MASK;
-		if (!need_csum || offload_csum)
-			features |= NETIF_F_HW_CSUM;
-	}
-
-encap_level is no longer reset, so the inner inet_gso_segment() (and
-ipv6_gso_segment()) masks a second time:
-
-	encap = SKB_GSO_CB(skb)->encap_level > 0;
-	if (encap)
-		features &= skb->dev->hw_enc_features;
-
-The second mask removes NETIF_F_HW_CSUM whenever hw_enc_features lacks
-it. Examples are the register_netdevice() default and NICs that only
-advertise IP_CSUM or IPV6_CSUM.
-
-skb_segment() then runs with csum == false, which has three effects:
-
-- It skips the GSO_PARTIAL path.
-- It linearizes every segment with shared frags. If __skb_linearize()
-  fails, the whole GSO packet is dropped.
-- It computes a software checksum per segment. remcsum_offload keeps
-  CHECKSUM_PARTIAL, so tcp_gso_segment() throws that checksum away in
-  gso_reset_checksum().
-
-The commit message says "the inner pass then also masks the features with
-hw_enc_features, which the tunnel handlers have done already". Does that
-still hold in the remcsum case?
-
-> diff --git a/net/ipv6/exthdrs.c b/net/ipv6/exthdrs.c
-> index 96c8402a27a54..126058772bc5a 100644
-> --- a/net/ipv6/exthdrs.c
-> +++ b/net/ipv6/exthdrs.c
+> diff --git a/tools/testing/selftests/net/tcp_fixedid.sh b/tools/testing/selftests/net/tcp_fixedid.sh
+> new file mode 100755
+> index 0000000000000..88f9298174077
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/tcp_fixedid.sh
+> @@ -0,0 +1,291 @@
 
 [ ... ]
 
-> @@ -406,7 +407,10 @@ static int ipv6_srh_rcv(struct sk_buff *skb, struct inet6_dev *idev)
->  
->  			skb_reset_network_header(skb);
->  			skb_reset_transport_header(skb);
-> -			skb->encapsulation = 0;
-> +			if (iptunnel_pull_offloads(skb)) {
-> +				kfree_skb(skb);
-> +				return -1;
-> +			}
->  			if (hdr->nexthdr == NEXTHDR_IPV4)
-                            ^^^^^^^^^^^^
+> +cleanup() {
+> +	cleanup_all_ns
+> +}
+> +
+> +trap cleanup EXIT
 
-[Severity: High]
-Can hdr be stale at this point? It is set at the top of ipv6_srh_rcv():
+[Severity: Low]
+Should cleanup() also remove "$RESULT"?
 
-	hdr = (struct ipv6_sr_hdr *)skb_transport_header(skb);
+The file is created with RESULT=$(mktemp) near the end of the script. It is
+only removed by the rm -f "$RESULT" on the normal exit path.
 
-For a GSO skb, iptunnel_pull_offloads() calls skb_unclone(). If
-skb_cloned() is true, that reaches pskb_expand_head(), which allocates a
-new head, drops this skb's reference on the old one and switches
-skb->head:
-
-iptunnel_pull_offloads()
-  skb_unclone(skb, GFP_ATOMIC)
-    pskb_expand_head()
-      skb_release_data(skb, SKB_CONSUMED)
-      skb->head = data
-
-After that, hdr->nexthdr reads a buffer that only the other clone holder
-still references. For example, when a packet tap is active, an AF_PACKET
-socket on another CPU may already have freed it.
-
-The segments_left != 0 path in this function already reloads hdr after its
-own pskb_expand_head().
-
-Should hdr->nexthdr be saved before the iptunnel_pull_offloads() call, or
-hdr reloaded after it? ipv6_rpl_srh_rcv() doesn't use hdr after the new
-call, so it looks unaffected.
+If the script is interrupted, for example by Ctrl-C or a kselftest runner
+timeout, the EXIT trap only calls cleanup_all_ns. The temp file is then left
+in $TMPDIR.
 
 [ ... ]
 
-> diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
-> --- a/include/net/ip_tunnels.h
-> +++ b/include/net/ip_tunnels.h
-> @@ -665,6 +665,8 @@ static inline int iptunnel_pull_offloads(struct sk_buff *skb)
->  		err = skb_unclone(skb, GFP_ATOMIC);
->  		if (unlikely(err))
->  			return err;
-> +		if (skb->encapsulation)
-> +			skb_gso_fixedid_decap(skb_shinfo(skb));
->  		skb_shinfo(skb)->gso_type &= ~(NETIF_F_GSO_ENCAP_ALL >>
->  					       NETIF_F_GSO_SHIFT);
->  	}
+> +# check <name> <result> <want: fixed|incr> <outer: 0|1> <merged-into-dev>
+> +check() {
+> +	local name=$1 res=$2 want=$3 outer=$4 sent=$5
+> +	local frames outer_ids inner_ids
+> +
+> +	read -r _ frames _ _ _ outer_ids _ inner_ids <<< "$res"
+> +	RET=0
+> +	check_err $((frames != TOTAL)) "$frames of $TOTAL segments received"
+> +	if [ "$want" = fixed ]; then
+> +		check_err $((inner_ids != 1)) "$inner_ids inner IDs, want 1"
+> +	else
+> +		check_err $((inner_ids != TOTAL)) \
+> +			"$inner_ids inner IDs, want $TOTAL"
+> +	fi
 
 [Severity: Medium]
-Does the Geneve GRO hint path need a matching skb_gso_fixedid_encap()?
+The header comment and the commit message say "The inner IDs must come out
+as they went in". Does anything compare the received IDs with the values
+that were sent?
 
-geneve_udp_encap_recv() calls iptunnel_pull_header() and then
-geneve_post_decap_hint(). Take a GRO-merged packet that carries a GRO
-hint for a nested UDP tunnel. GRO completed the innermost TCP/IPv4
-header with encap_mark set, so that header's fixed-ID state sits in
-SKB_GSO_TCP_FIXEDID_INNER.
+do_tx() in tcp_fixedid.c writes known values:
 
-With this patch, iptunnel_pull_offloads() sees skb->encapsulation set
-and calls skb_gso_fixedid_decap(), which moves the bit down to
-SKB_GSO_TCP_FIXEDID. geneve_post_decap_hint() then does two things:
+    uint16_t id = fixed_id ? FIXED_ID : 0x1000 + i;
 
-- It sets skb->encapsulation = 1 again.
-- It adds SKB_GSO_UDP_TUNNEL or SKB_GSO_UDP_TUNNEL_CSUM for the nested
-  tunnel.
+do_rx(), though, only records each received ID in a bitmap through
+count_id() and prints how many distinct values it saw. check() then only
+compares that count with 1 or TOTAL.
 
-skb->inner_network_header still points at the innermost IPv4 header,
-and nothing moves the bit back to SKB_GSO_TCP_FIXEDID_INNER.
+A regression that changed every fixed 0x1234 inner ID to some other
+constant, such as 0, would still give inner_ids == 1 and pass. The same is
+true for a regression that replaced the 0x1000..0x1000+TOTAL-1 sequence with
+any other set of TOTAL unique values.
 
-When the packet is segmented, the top-level inet_gso_segment() pass
-runs with encap_level == 0 on the nested tunnel's outer IPv4 header.
-It reads SKB_GSO_TCP_FIXEDID, which really describes the innermost
-header. If that outer header has DF set, all segments get the same
-ID. If DF is clear, the fixed-ID check in inet_gso_segment() fails the
-segmentation and the packet is dropped.
+Could the receiver check the actual values instead? For example, fixed IDs
+could be required to equal FIXED_ID, and incrementing IDs to fall in the
+range the sender used.
 
-The inner pass then finds SKB_GSO_TCP_FIXEDID_INNER clear. The
-innermost IDs that GRO saw as fixed come out incrementing.
+> +	if [ "$outer" = 1 ]; then
+> +		check_err $((outer_ids != frames)) \
+> +			"$outer_ids outer IDs for $frames segments"
+> +	fi
+> +	if [ "$RET" -eq 0 ] && [ "$sent" -ge "$TOTAL" ]; then
+> +		ret_set_ksft_status "$ksft_skip" "GRO did not merge"
+> +	fi
 
-If the nested tunnel is decapsulated later instead, the next
-iptunnel_pull_offloads() shifts the now clear
-SKB_GSO_TCP_FIXEDID_INNER down. The fixed-ID state of the innermost
-header is then lost.
+[Severity: Low]
+The skip decision uses the change in tun0's statistics/tx_packets, which the
+comment above calls <merged-into-dev>. Doesn't tx_packets count every skb
+sent through tun0, not just the forwarded test stream?
 
-Should geneve_post_decap_hint() call skb_gso_fixedid_encap() where it
-restores skb->encapsulation? That would put the bit back on the
-innermost header and give the nested outer header incrementing IDs.
-Or would you rather keep iptunnel_pull_offloads() from moving the flag
-when a GRO hint is present?
+gre, ip6gre and vxlan devices get an IPv6 link-local address from addrconf.
+That means MLD reports, router solicitations and, for vxlan, DAD neighbour
+solicitations can go out through tun0 between the t0 read and the final
+tx_packets read.
+
+If GRO merged only a few segments, this extra traffic could push sent to
+TOTAL or above. A run that did merge would then be reported as SKIP. This
+can only happen when GRO barely merged anything, and it cannot cause a false
+PASS.
+
+The header comment also says "Packets that GRO did not merge are not
+tested". In practice the receiver counts every frame and check() looks at
+all of them. The only related rule skips the whole run when sent >= TOTAL.
+Could the comment be reworded to match what the code does?
+
+> +	log_test "$name"
+> +}
+> +
+> +# capture <ns> <dev>: start the receiver in the background, pid in CAP_PID,
+> +# and wait until it is bound
+> +capture() {
+> +	local i
+> +
+> +	: > "$RESULT"
+> +	ip netns exec "$1" "$TX" -R -i "$2" -c "$TOTAL" -w 3000 > "$RESULT" &
+> +	CAP_PID=$!
+> +	for i in $(seq 100); do
+> +		grep -q ready "$RESULT" && return
+> +		sleep 0.1
+> +	done
+> +}
+
+[Severity: Low]
+What happens if the receiver never prints "ready"? After 100 iterations the
+loop falls through, and capture() returns success without checking whether
+CAP_PID is still running.
+
+The callers start the sender right away and ignore the exit status of:
+
+    wait "$CAP_PID"
+
+Suppose the receiver failed in main() at socket(), if_nametoindex() or
+bind(), or took more than 10 seconds to start. Then RESULT has no result
+line, and check() reports something like " of 400 segments received" with
+empty counts instead of a setup error.
+
+Could capture() fail, or the test skip, when "ready" never appears or the
+receiver has already exited?
+
+[ ... ]
+
+> +# run_decap <fixed: inner|outer>: VXLAN from NSRC, decapsulated in NRTR
+> +run_decap() {
+> +	local fixed=$1 want=incr flags=-F
+> +	local r0mac t0
+> +
+> +	setup || { log_test_skip "decap"; return; }
+> +	ip -n "$NRTR" link add vx0 address "$VX_MAC" type vxlan id 42 \
+> +		dstport 4789 local 10.1.0.2 nolearning ||
+> +		{ log_test_skip "decap"; cleanup_all_ns; return; }
+> +	ip -n "$NRTR" addr add 10.3.0.2/24 dev vx0
+> +	ip -n "$NRTR" link set vx0 up
+> +	tunnel "$NRTR" tun0 ipip 4 10.2.0.1 10.2.0.2
+> +	route_into "$NRTR" tun0
+
+[Severity: Low]
+Should the return value of tunnel() be checked here, as run_encap() and
+run_encap_decap() do?
+
+If the ipip link can't be created, the route add in route_into() fails, but
+the function still returns success:
+
+    route_into() {
+        ip -n "$1" route add "$INNER_DST/32" dev "$2"
+        ...
+        return 0
+    }
+
+Nothing then reaches m1. The receiver waits 10 * 3000 ms for a first frame
+and prints frames 0, and check() reports a FAIL instead of a SKIP.
+
+On such a kernel the ipip encap cases SKIP, while both decap cases FAIL
+after about 30 seconds each. The standard selftests config sets
+CONFIG_NET_IPIP=y, so this only shows up with other configs.
+
+[ ... ]
+
+> @@ -0,0 +1,291 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Check the IPv4 IDs of a TCP stream that GRO merged and software
+> +# segmentation split again across a tunnel. A sender in NSRC writes
+> +# segments with fixed or incrementing IDs onto a veth with GRO on in
+> +# NRTR, which forwards the merged packets:
+> +#
+> +#  encap:       into an IPIP, GRE or VXLAN tunnel over IPv4 or IPv6,
+> +#               segmented on the underlay towards NMID
+> +#  decap:       out of VXLAN, received from NSRC with one header fixed and
+> +#               the other incrementing, into an IPIP tunnel towards NMID
+> +#  encap+decap: into a tunnel that NMID ends without segmenting, and on
+> +#               to NDST, segmented there
+> +#
+> +# The inner IDs must come out as they went in, and the IDs of a new outer
+> +# IPv4 header must be unique. Packets that GRO did not merge are not
+> +# tested, so a run where nothing was merged is skipped.
+> +
+> +source lib.sh
+> +
+> +NSRC=""
+> +NRTR=""
+> +NMID=""
+> +NDST=""
+> +
+> +SEGS=40
+> +BURSTS=10
+> +TOTAL=$((SEGS * BURSTS))
+> +INNER_SRC=10.1.0.1
+> +INNER_DST=10.9.0.2
+> +VX_MAC=02:00:00:00:00:42
+> +TUN_MAC=02:00:00:00:00:99
+> +MID_MAC=02:00:00:00:00:98
+> +TX=./tcp_fixedid
+> +
+> +NOSEG="tso gso tx-gre-segmentation tx-gre-csum-segmentation
+> +       tx-ipxip4-segmentation tx-ipxip6-segmentation
+> +       tx-udp_tnl-segmentation tx-udp_tnl-csum-segmentation"
+
+[Severity: Medium]
+Also outside this patch, but on the software UDP tunnel segmentation
+path that NOSEG forces. With SKB_GSO_CB(skb)->encap_level = 0 removed
+from __skb_udp_tunnel_segment(), the inner IP GSO handler now sees
+encap_level > 0. That undoes the checksum setup for remote checksum
+offload.
+
+__skb_udp_tunnel_segment() masks features with
+skb->dev->hw_enc_features. For SKB_GSO_TUNNEL_REMCSUM it then clears
+NETIF_F_CSUM_MASK. It sets NETIF_F_HW_CSUM if the outer checksum is
+not needed or can be offloaded. That way the inner segmentation does
+not compute checksums that remcsum replaces anyway.
+
+gso_inner_segment() then calls inet_gso_segment() or
+ipv6_gso_segment(). Both of them do:
+
+    encap = SKB_GSO_CB(skb)->encap_level > 0;
+    if (encap)
+        features &= skb->dev->hw_enc_features;
+
+This used to be skipped for the inner header. Now features is masked a
+second time, after the remcsum adjustment, so NETIF_F_HW_CSUM only
+survives if hw_enc_features contains it.
+
+Some devices have hw_enc_features of 0. Others only advertise
+NETIF_F_IP_CSUM and NETIF_F_IPV6_CSUM, which remcsum already cleared.
+On either kind of device no checksum bit is left, and skb_segment()
+takes the !csum path. It then computes a software checksum for every
+segment and linearizes segments with shared frags. It also can no
+longer use GSO_PARTIAL or frag_list splitting.
+
+As far as I can see the packets are still correct. But this is a
+performance regression for remcsum users, and the series does not
+mention it.
+
+Was the second mask intended? If the goal is only to tell the inner
+header that it is encapsulated, for the IP ID handling, could that be
+signalled some other way? Or could the remcsum features be preserved
+across the inner mask?
+
+The vxlan cases in this test do not enable remcsumtx, so the test
+would not notice this.
+
+> +
+> +cleanup() {
+> +	cleanup_all_ns
+> +}
+> +
+> +trap cleanup EXIT
+> +
+> +# NSRC s0 - r0 NRTR r1 - m1 NMID m2 - d2 NDST
+> +setup() {
+> +	setup_ns NSRC NRTR NMID NDST || return "$ksft_skip"
+> +
+> +	ip link add s0 netns "$NSRC" type veth peer name r0 netns "$NRTR"
+> +	ip link add r1 netns "$NRTR" type veth peer name m1 netns "$NMID"
+> +	ip link add m2 netns "$NMID" type veth peer name d2 netns "$NDST"
+> +
+> +	ip -n "$NRTR" addr add 10.1.0.2/24 dev r0
+> +	ip -n "$NRTR" addr add 10.2.0.1/24 dev r1
+> +	ip -n "$NRTR" addr add fd02::1/64 dev r1 nodad
+> +	ip -n "$NMID" addr add 10.2.0.2/24 dev m1
+> +	ip -n "$NMID" addr add fd02::2/64 dev m1 nodad
+> +	ip -n "$NMID" addr add 10.4.0.1/24 dev m2
+> +	ip -n "$NDST" addr add 10.4.0.2/24 dev d2
+> +	ip -n "$NSRC" link set s0 up
+> +	ip -n "$NRTR" link set r0 up
+> +	ip -n "$NRTR" link set r1 up
+> +	ip -n "$NMID" link set m1 up
+> +	ip -n "$NMID" link set m2 up
+> +	ip -n "$NDST" link set d2 up
+> +
+> +	ip netns exec "$NRTR" sysctl -qw net.ipv4.ip_forward=1
+> +	ip netns exec "$NMID" sysctl -qw net.ipv4.ip_forward=1
+> +	for ns in "$NRTR" "$NMID"; do
+> +		ip netns exec "$ns" sysctl -qw net.ipv4.conf.all.rp_filter=0 \
+> +			net.ipv4.conf.default.rp_filter=0
+> +	done
+> +
+> +	# veth passes packets to GRO only if the sender does not do TSO
+> +	ip netns exec "$NRTR" ethtool -K r0 gro on >/dev/null ||
+> +		return "$ksft_skip"
+> +	ip netns exec "$NSRC" ethtool -K s0 tso off >/dev/null ||
+> +		return "$ksft_skip"
+> +	# release the sender's segments in bursts for GRO to merge
+> +	tc -n "$NSRC" qdisc add dev s0 root netem slot 20ms 20ms \
+> +		packets "$SEGS" || return "$ksft_skip"
+> +}
+> +
+> +# tunnel <ns> <name> <type> <family> <local> <remote>
+> +tunnel() {
+> +	local ns=$1 name=$2 type=$3 family=$4 local=$5 remote=$6
+> +
+> +	case "$type" in
+> +	ipip)
+> +		if [ "$family" = 4 ]; then
+> +			ip -n "$ns" link add "$name" type ipip \
+> +				local "$local" remote "$remote"
+> +		else
+> +			ip -n "$ns" link add "$name" type ip6tnl mode ipip6 \
+> +				local "$local" remote "$remote" encaplimit none
+> +		fi ;;
+> +	gre)
+> +		if [ "$family" = 4 ]; then
+> +			ip -n "$ns" link add "$name" type gre \
+> +				local "$local" remote "$remote"
+> +		else
+> +			ip -n "$ns" link add "$name" type ip6gre \
+> +				local "$local" remote "$remote" encaplimit none
+> +		fi ;;
+> +	vxlan)
+> +		ip -n "$ns" link add "$name" address "$TUN_MAC" type vxlan \
+> +			id 7 dstport 4789 local "$local" remote "$remote" \
+> +			nolearning ;;
+> +	esac || return 1
+> +	ip -n "$ns" link set "$name" up
+> +}
+> +
+> +# route_into <ns> <dev>: send INNER_DST into <dev>
+> +route_into() {
+> +	ip -n "$1" route add "$INNER_DST/32" dev "$2"
+> +	ip -n "$1" neigh add "$INNER_DST" lladdr "$TUN_MAC" dev "$2" \
+> +		2>/dev/null
+> +	return 0
+> +}
+> +
+> +# noseg <ns> <dev>: segment everything in software before <dev>
+> +noseg() {
+> +	local f
+> +
+> +	for f in $NOSEG; do
+> +		ip netns exec "$1" ethtool -K "$2" "$f" off >/dev/null 2>&1
+> +	done
+> +}
+> +
+> +tx_packets() {
+> +	ip netns exec "$1" cat "/sys/class/net/$2/statistics/tx_packets"
+> +}
+> +
+> +# check <name> <result> <want: fixed|incr> <outer: 0|1> <merged-into-dev>
+> +check() {
+> +	local name=$1 res=$2 want=$3 outer=$4 sent=$5
+> +	local frames outer_ids inner_ids
+> +
+> +	read -r _ frames _ _ _ outer_ids _ inner_ids <<< "$res"
+> +	RET=0
+> +	check_err $((frames != TOTAL)) "$frames of $TOTAL segments received"
+> +	if [ "$want" = fixed ]; then
+> +		check_err $((inner_ids != 1)) "$inner_ids inner IDs, want 1"
+> +	else
+> +		check_err $((inner_ids != TOTAL)) \
+> +			"$inner_ids inner IDs, want $TOTAL"
+> +	fi
+> +	if [ "$outer" = 1 ]; then
+> +		check_err $((outer_ids != frames)) \
+> +			"$outer_ids outer IDs for $frames segments"
+> +	fi
+> +	if [ "$RET" -eq 0 ] && [ "$sent" -ge "$TOTAL" ]; then
+> +		ret_set_ksft_status "$ksft_skip" "GRO did not merge"
+> +	fi
+> +	log_test "$name"
+> +}
+> +
+> +# capture <ns> <dev>: start the receiver in the background, pid in CAP_PID,
+> +# and wait until it is bound
+> +capture() {
+> +	local i
+> +
+> +	: > "$RESULT"
+> +	ip netns exec "$1" "$TX" -R -i "$2" -c "$TOTAL" -w 3000 > "$RESULT" &
+> +	CAP_PID=$!
+> +	for i in $(seq 100); do
+> +		grep -q ready "$RESULT" && return
+> +		sleep 0.1
+> +	done
+> +}
+> +
+> +run_encap() {
+> +	local type=$1 family=$2 want=$3
+> +	local r0mac t0 laddr=10.2.0.1 raddr=10.2.0.2
+> +	local f=""
+> +
+> +	setup || { log_test_skip "encap $type IPv$family"; return; }
+> +	if [ "$family" = 6 ]; then
+> +		laddr=fd02::1
+> +		raddr=fd02::2
+> +	fi
+> +	tunnel "$NRTR" tun0 "$type" "$family" "$laddr" "$raddr" ||
+> +		{ log_test_skip "encap $type IPv$family"; cleanup_all_ns; return; }
+> +	route_into "$NRTR" tun0
+> +	noseg "$NRTR" r1
+> +
+> +	r0mac=$(ip -n "$NRTR" -br link show r0 | awk '{ print $3 }')
+> +	capture "$NMID" m1
+> +	t0=$(tx_packets "$NRTR" tun0)
+> +	[ "$want" = fixed ] && f=-f
+> +	ip netns exec "$NSRC" "$TX" -T -i s0 -M "$r0mac" -s "$INNER_SRC" \
+> +		-d "$INNER_DST" -n "$SEGS" -b "$BURSTS" $f
+> +	wait "$CAP_PID"
+> +	check "encap $type IPv$family, $want inner IDs" "$(tail -n 1 "$RESULT")" \
+> +		"$want" $((family == 4)) $(($(tx_packets "$NRTR" tun0) - t0))
+> +	cleanup_all_ns
+> +}
+> +
+> +# run_decap <fixed: inner|outer>: VXLAN from NSRC, decapsulated in NRTR
+> +run_decap() {
+> +	local fixed=$1 want=incr flags=-F
+> +	local r0mac t0
+> +
+> +	setup || { log_test_skip "decap"; return; }
+> +	ip -n "$NRTR" link add vx0 address "$VX_MAC" type vxlan id 42 \
+> +		dstport 4789 local 10.1.0.2 nolearning ||
+> +		{ log_test_skip "decap"; cleanup_all_ns; return; }
+> +	ip -n "$NRTR" addr add 10.3.0.2/24 dev vx0
+> +	ip -n "$NRTR" link set vx0 up
+> +	tunnel "$NRTR" tun0 ipip 4 10.2.0.1 10.2.0.2
+> +	route_into "$NRTR" tun0
+> +	noseg "$NRTR" r1
+> +
+> +	if [ "$fixed" = inner ]; then
+> +		want=fixed
+> +		flags=-f
+> +	fi
+> +	r0mac=$(ip -n "$NRTR" -br link show r0 | awk '{ print $3 }')
+> +	capture "$NMID" m1
+> +	t0=$(tx_packets "$NRTR" tun0)
+> +	ip netns exec "$NSRC" "$TX" -T -i s0 -M "$r0mac" -s 10.3.0.1 \
+> +		-d "$INNER_DST" -n "$SEGS" -b "$BURSTS" \
+> +		-V 10.1.0.1,10.1.0.2 -m "$VX_MAC" $flags
+> +	wait "$CAP_PID"
+> +	check "decap VXLAN with fixed $fixed IDs, into IPIP" \
+> +		"$(tail -n 1 "$RESULT")" "$want" 1 \
+> +		$(($(tx_packets "$NRTR" tun0) - t0))
+> +	cleanup_all_ns
+> +}
+> +
+> +# run_encap_decap <type>: NRTR encapsulates, NMID decapsulates the GSO
+> +# packet without segmenting it and forwards it to NDST
+> +run_encap_decap() {
+> +	local type=$1
+> +	local r0mac t0
+> +
+> +	setup || { log_test_skip "encap+decap $type"; return; }
+> +	if ! tunnel "$NRTR" tun0 "$type" 4 10.2.0.1 10.2.0.2 ||
+> +	   ! tunnel "$NMID" tun0 "$type" 4 10.2.0.2 10.2.0.1; then
+> +		log_test_skip "encap+decap $type"
+> +		cleanup_all_ns
+> +		return
+> +	fi
+> +	route_into "$NRTR" tun0
+> +	# VXLAN drops frames from its own address as loops
+> +	if [ "$type" = vxlan ]; then
+> +		ip -n "$NMID" link set tun0 address "$MID_MAC"
+> +		ip -n "$NRTR" neigh replace "$INNER_DST" lladdr "$MID_MAC" \
+> +			dev tun0
+> +	fi
+> +	ip -n "$NMID" route add "$INNER_DST/32" via 10.4.0.2
+> +	ip -n "$NDST" addr add "$INNER_DST/32" dev d2
+> +	noseg "$NMID" m2
+> +
+> +	r0mac=$(ip -n "$NRTR" -br link show r0 | awk '{ print $3 }')
+> +	capture "$NDST" d2
+> +	t0=$(tx_packets "$NRTR" tun0)
+> +	ip netns exec "$NSRC" "$TX" -T -i s0 -M "$r0mac" -s "$INNER_SRC" \
+> +		-d "$INNER_DST" -n "$SEGS" -b "$BURSTS" -f
+> +	wait "$CAP_PID"
+> +	check "encap+decap $type, fixed inner IDs" "$(tail -n 1 "$RESULT")" fixed 0 \
+> +		$(($(tx_packets "$NRTR" tun0) - t0))
+> +	cleanup_all_ns
+> +}
+> +
+> +require_command ethtool
+> +require_command tc
+> +
+> +if [ ! -x "$TX" ]; then
+> +	echo "SKIP: $TX not built"
+> +	exit "$ksft_skip"
+> +fi
+> +
+> +RESULT=$(mktemp)
+> +
+> +for type in ipip gre vxlan; do
+> +	for family in 4 6; do
+> +		run_encap "$type" "$family" fixed
+> +		run_encap "$type" "$family" incr
+> +	done
+> +done
+> +run_decap inner
+> +run_decap outer
+> +for type in ipip gre vxlan; do
+> +	run_encap_decap "$type"
+> +done
+> +
+> +rm -f "$RESULT"
+> +exit "$EXIT_STATUS"
+
+[Severity: Critical]
+This is outside this patch, but the GSO decap path these tests are
+about has a use-after-free in ipv6_srh_rcv() in net/ipv6/exthdrs.c,
+now that it calls iptunnel_pull_offloads().
+
+hdr is set from skb_transport_header(skb) at the top of the function,
+so it points into skb->head. The segments_left == 0 branch handles an
+IPv6 or IPv4 next header. It pulls the outer IPv6 header and the SRH,
+resets the network and transport headers, and then calls
+iptunnel_pull_offloads(skb). After that call, it still reads
+hdr->nexthdr to decide whether skb->protocol becomes ETH_P_IP.
+
+For a GSO skb, iptunnel_pull_offloads() calls skb_unclone(). Suppose
+the skb is cloned, for example because a packet tap holds another
+reference. Then pskb_expand_head() moves the data to a new head and
+drops its reference on the old one. If the other clone has already
+been consumed, the old head is freed, and the hdr->nexthdr read is a
+use-after-free. That can crash, show up as a KASAN report, or give the
+decapsulated packet the wrong inner protocol.
+
+The skb_cloned() check later in ipv6_srh_rcv() only runs when
+segments_left is non-zero. Nothing on this path makes sure the skb is
+unshared first.
+
+Could hdr->nexthdr be saved in a local before the pull? Or could
+skb->protocol be set before iptunnel_pull_offloads() is called?
+
+None of the cases in this selftest use SRv6, so it would not catch
+this. Would a seg6 decap case be worth adding?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/cover.1792857378.git.julius%40bairaktaris.de
