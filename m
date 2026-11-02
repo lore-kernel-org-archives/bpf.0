@@ -1,70 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.155
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793605116;
-	b=LhHHmE3/olS5HX63R9jOogoL6FSh2w0YwrS8zq3D0YcZQGtYkILdmEwuzFdE8j0vtjBL
-	 dbiu4LUYXjcRbpzYTUYaY2c36oc3SGJYCyWpe6dCAH4JwxIns8H078ZqW7R5A0Bt+Jprd
-	 05dr3Kv21+rijJRfz+ARJuqMVqB6BZ0BgvedbQ5JG1OS+nI9kg8zkM1BjH26lazBjxCeC
-	 pQgYZyOFszHU75l3EjEl5yfJjZzDr1ay4gdmuooJR0Ut5cdrR48RG5esVwECWmci+KDtr
-	 ECsviziuln5504uywUxCYczChuHuaMo/5vaJjwOXMkCsgUer+7BNlceCh403crCaDJw==
+	t=1793605451;
+	b=Byect/4UdJH5M3DjqPcGwydFdhrSufXYeJzRZ6ivuoE8K9HwE+WVxciUNSerZkMcMa4u
+	 fXzi8jfKZ6KVf1m6OyaRksc4UaShx3i2gH6gAec8yvbkMMppkkIrmLcitaBS/AVsj94Nf
+	 XroJr4FaPYcGmcc4x7zUept3GtvGprOH5gdW5AU6VtPPvDDj8x0xH0YrCDxn8OyvQxcBR
+	 /F0/b6g2QQLUGJ7h+VRlMI+j+sbZba5VChp0L2Yl4vIBYFTC8efuPZHOu5IrJRp3obq04
+	 puspYzxkFlrJsXP4pyTmYMfd1m648Eb0xALypPN9pmJ1EmeJe03oQ13z9o3Ivzti7bQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793605116;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=isXip+ZB1lz/H4oUg4omzPajv469TeSHQ/s6189cpTY=;
-	b=Ry5R8cw6YfJxHaw03fCkmeYfuhadhqnzB3iaLIIW/ee6DkGPEFCNbs2qP0mDMDSjEbuL
-	 uSmvoJQSwBNxPQVPoc+hS1pGou4ZOjq/aTsUn+rnFvR6DwkEkPBnrYdsHqnIVtttqEKsP
-	 Z0DBQ8xxyTTBrVqjVE3t8v9bHkA9h6LbCfvvgBT+AHL8gX7UP1C2SAeuGsDBPg5BNBOFI
-	 0cmRr4YV0WmZ3f1W2/fiWyJK06UIn0Dl12QvNVb6t8mHVT5V/Px0T5nEBtB+lSUCpogza
-	 JcC2r+tFNuQNWj8uAHFg9is8jjy1xgQNI5BzrbsExRY7u5AyV61VI4IXLTJ0nEmZSUQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793605451;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=QSq2zUSBAe25DJ1CQ4JwTljk83h0fiOl1nj+uTNbBIU=;
+	b=n7UtLILAAMJYaCJBwFjrfYDlcmAXQz24oRsig+63jz5Agc/TWU5+O3pARPI/Hfa/L2Wt
+	 uxzcLgWiatiUFEYpjkmqNfM0ReUul3YmFZfGxxHBtfKiuRGlH/R2erRwzLIkKrC0LyqKu
+	 PBYNazijQbRmrS5ZrDkQXnyrSaerN+eIibwHG1MsQ7jJ4k4KPIjaYXL8zbUs6ve0x3iJj
+	 WiL0kyz1Ii+ZJM7CwpHwutSIpL+njTFeyuT8vVUkp5R//aOmN7dKd8pufPEq1wWIULxqs
+	 r3b7LKFdEV/kDpsqG5X4Bx6ufzdhUprE8ttMf097LKWCk24UyGwT8X6a5YIb2QNCYCA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=YJ5h3oZx;
-	arc=none smtp.remote-ip=220.197.31.3
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=SzB4Apdm;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=VyzJzC0A;
+	arc=none smtp.remote-ip=103.168.172.155
+Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A659606A324;
-	Mon,  2 Nov 2026 07:38:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A659606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C88606A326
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 07:44:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60C88606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=YJ5h3oZx
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=is
-	Xip+ZB1lz/H4oUg4omzPajv469TeSHQ/s6189cpTY=; b=YJ5h3oZxkGU8jYmMcv
-	5umJT1xuMnkfsTyww6bDtcUrircRHKag1Kw8q7FRWlm8HYuc0OxNHNe0FHWa5Vj2
-	om1OjTQ6TeBsxGdIvCbVx8isX69ZHp5SwYmnLofE5GNh1XkAAIbwCqNPBRCeyle3
-	5ESes8JdUsTMAJHSe6V+QSqLI=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgDH4BaqPehqAiEvDQ--.19338S2;
-	Mon, 02 Nov 2026 15:37:16 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: song@kernel.org,
-	jolsa@kernel.org,
-	ihor.solodrai@linux.dev,
-	kpsingh@kernel.org,
-	matt@bobrowski.net,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	yonghong.song@linux.dev,
-	emil@etsalapatis.com,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com
-Cc: bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH v2 bpf-next] bpf: Fix suspicious RCU usage for sleepable bpf_get_stack()
-Date: Mon,  2 Nov 2026 15:37:14 +0800
-Message-Id: <20261102073714.1103088-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=SzB4Apdm;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=VyzJzC0A
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 575331400104
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 02:44:10 -0500 (EST)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Mon, 02 Nov 2026 02:44:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1793605447;
+	 x=1793691847; bh=QSq2zUSBAe25DJ1CQ4JwTljk83h0fiOl1nj+uTNbBIU=; b=
+	SzB4ApdmBMVQWllNlx9JKhvvHVXEfhUIw4KlgUtBRmIKcrdt19Oytd7Lgje4sWQK
+	5YjRcT2SQ8zucciWXF2L6iIa2dHbqyAM66EJIJMUgl2bhssJOdQrlRm/T9ltYJV5
+	SeOfs4wvCYkziIVd54uI5ayOkGKXYQaFp709329E4tk4jn9IPQ/cHLWEwOL+VTnZ
+	jflBwfpd+x+Uos3R7CBhWMs6K7zjP8DNGlSdIVHT8uDkNwVt0XfSUXN5i2U45WFL
+	VnmjGKI8uBjfsmKzJQLx7aO7h26mOLTQeMshGwXyQ0LyhN2Hkjfq9pTnuDJjlxqn
+	qM8rDf17DMba0kKUZ3VvoQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793605447; x=
+	1793691847; bh=QSq2zUSBAe25DJ1CQ4JwTljk83h0fiOl1nj+uTNbBIU=; b=V
+	yzJzC0ANGJAQWvVPZuFLG7q4yX9lXW9Y86jz1idVjys8mOeu9HueTrX6TBmVLE+/
+	IK6DOK5kKsHwCaMtAJmVoCXLH+HfaA6E0pqFtlh1nV2azY1x/gXuGu6R+f7Wdufc
+	Ci5kxbFK+8DhepcQtRkmTkiU1WwK+UDFEHUHIY15sDnMp1423JFS1pErYDpm2q8p
+	oGv1fIW5dlx0LTIPTkMe2hv6uFvo1I0phJU70ZW39PoMcqFG1CGf9dB6FdCIMseE
+	/BSsrLBNoV+pS4QQgq1YcGjFNU7dqAlyfVqM+9p3tXJGT9ovehwYhwLFxrZKPNtR
+	S9QoxNYtL7eGD6yfw2TJg==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793605447; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PGJwZkB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:TM+k/7wnajWrdL+ucZVGgbne0H0qTQlH2h7G4KYhtSOUDtN
+	JQFEYZMCJdkWhHWQNFpk7IpxXE7oBRSV1OYuodC+VQ2mzDLCs2tjilwnmqWGIamY
+	uUEP/zlzo94jtPp2jWS9a9voz27FzwO5AlLDScCyE4XrMN0MjycyWMA8SMqK1h4j
+	AjkZwd9lFdEAQQUy3Zh1A7XEnZfRHUHxdrJGWJhF0mB7MOid1utBYX8cM336rw3G
+	gxT/3+szb3jdcZ+zB9MVynN+xMMaK5sIfqKg5X8WgpMfdSiy+JmLhxKqnUuU7qzJ
+	Xc8fkksSKbhFhZv6NBCHjSMMC9O2Dny8Hxbvi+Q==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:dmIzeiTs0DqkuSLEQEyoJjgXQ2WYfZ01bAint03Xmyc=:KShiaSrgYzK8/huxNXaRRR1g1oaXj+tTHFTN16oa/3I=;
+X-ME-Sender: <xms:Qz_oanXCJ5Dgyw3csXJ4DbVTbK8Shcbvx-dKy8epw8BEyZKl255ZYA>
+    <xme:Qz_oaqa9Da_mpeofh-eBg75Cq_j58cklgkL_ajkjU-v0nuzHOtkj6pg5AQrZlYmY_
+    57gWnk4fjx_yPaDpZK4Cs-WCmYMu1aDAC_1omkXN9-sfFDLEpY3umwX2Q>
+X-ME-Proxy-Cause: dmFkZTGw+bxoxxv+lsou7CmeY8askFOJekejYVyepG+81y0oeesf9IrEYZrlDsfhG67gpE
+    WHPduLzP+U0hlC86mM7gKaTBPVorPs2iVVudMrCvWmvesYIeASPs5IdIU0WuU2gUddCPHx
+    i9I8ujWWJDG2uKnPlfS9OORUKmYmcgze2KbmvZnYqyPLuo6h+igC3LbdRPnzYDujPYswPI
+    c4c2+jYXSerz7J/ihlGrET0zFvc9HC9/ZFTXP462Uu0AkeRm0V5BilbHJKPKXONd3OZ7KL
+    wuI0t4RHXFd9Lslj+aPa0/cr9Ii8pFeHtPhP3kYfgBbw/rdWYi2hdX5CToNP2pLzd8vGU6
+    j9gO+AjdIAGdgaAwfbl4vzSMqzSv1lyUSIKlYEpwbUVi9aUTfN2bv+WQcswKo0Unr9Jcxi
+    oqzQ4ZVX5EW1M+1+r/nMNeytcgqUyrvkNWrhr0mXiRv2EqPB7UVW6bdYke8+z/RfuK9/WK
+    bV+gwkfmEyi/EtYbom9IKu8uFxJFNS1tW+BRQhaNDIeiCVA4ff7FMA+dJ+/kJEjoCI+Kly
+    FVBPNq+QaVwwGZSxtDmZnzAuJcrycdasfmsWZxFwTFnlCVSl3WdFzychaH/O1LqIDFPNoo
+    HOvdaWKKihvFijWfi7rjnHCKktnCUQuLHteHI3B1TDu/Zb/VW0mxhJVTKkQg
+X-ME-Proxy: <xmx:RT_oalz-Q1MXHhdP1D9ovAsxbkcRNxVO49fKqF56rkDTvQUDSQzPpg>
+    <xmx:RT_oaqOq1twtDte-bn5R58Sovc0Wm8pFETDnvfeoquJHLkuUpJwp3g>
+    <xmx:RT_oajlJeQ5gCil-C1spln89-vStWrDgtNw3KJaW7FskRwnX06gjyA>
+    <xmx:RT_oanQZmyFcn6qGzf-6xBFCNzw7kaj6BFOMiluIpuYJw7Vbn6Rd1Q>
+    <xmx:Rz_oam0e3KHNlaRmNwIVU5UZs8N5Nt37fwZg1S_34A_J04rxQhMmmPGH>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id AB4A332A0093; Mon,  2 Nov 2026 02:44:03 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -74,159 +114,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgDH4BaqPehqAiEvDQ--.19338S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3GFW7KFWfJFyDtr1UKFWUXFb_yoWxJF18pF
-	9IyFy2yrs5X3ySq39xKw1qqFy5u3ykX3y7KFyfCryY9r1UZr18KFy7KF4agF1rZr97G342
-	vry0qrsFkw4Iva7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07ja4E_UUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8g1Px2roPa3TTAAA36
+X-ThreadId: Ap4PcZ20AeuN
+Date: Mon, 02 Nov 2026 08:43:43 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Vineet Gupta" <vgupta@kernel.org>, "Sasha Levin" <sashal@kernel.org>,
+ linux-snps-arc@lists.infradead.org
+Cc: "Andrii Nakryiko" <andrii@kernel.org>,
+ "Ilya Leoshkevich" <iii@linux.ibm.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ "schuster.simon@siemens-energy.com" <schuster.simon@siemens-energy.com>
+Message-Id: <9502ed84-cb6c-448c-95bd-03c0bfab4e03@app.fastmail.com>
+In-Reply-To: <adeb8dc8-1cc9-4297-8d34-3f4b0e2f4e8e@kernel.org>
+References: <20261015154044.4058618-1-sashal@kernel.org>
+ <09db4d22-2836-4656-8c6a-a7e5377710fb@kernel.org>
+ <8b4688ca-db5c-4122-b616-8e3964e403f8@app.fastmail.com>
+ <7de128f0-4f17-4a33-9a7a-14d5bbf62e64@kernel.org>
+ <ca697a3c-fee0-40a9-98e6-12e24febb3b7@app.fastmail.com>
+ <adeb8dc8-1cc9-4297-8d34-3f4b0e2f4e8e@kernel.org>
+Subject: Re: [PATCH] ARC: Strip libgcc debug information when generating BTF
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-From: Feng Yang <yangfeng@kylinos.cn>
+On Mon, Nov 2, 2026, at 03:46, Vineet Gupta wrote:
+> On 11/1/26 11:45, Arnd Bergmann wrote:
 
-Sleepable BPF programs run under rcu_read_lock_trace(), not classic RCU.
-bpf_get_stack() relies on the caller holding a classic RCU read lock:
-get_perf_callchain() -> get_callchain_entry() dereferences
-callchain_cpus_entries, and the returned entry is read until
-callchain_store().  __bpf_get_stack() takes that lock only for the
-sleepable variant, i.e. when may_fault is true.
+>> If you need this to fix the regression, I think it's fine to merge
+>> the shared lib/*.c files for for 7.4 along with whatever you need on
+>> top. I suspect though based on Sasha's patch, the only thing we
+>> actually need is to stop exporting the floating point functions
+>> so the types don't leak into btf. If you can verify that this
+>> is the case, I would do the full conversion for both nios2
+>> and arc in 7.5.
+>
+> Yeah Sasha's fix works w/o eliding the FP routines (there's an unrelated 
+> issue which I send a fix for [1])
+>
+> As of 7.4-rc1, I have 2 ARC only changes to
+> 1. Switch to existing in-tree GENERIC_LIB*
+> 2. Dropping FP symbols
+>
+> I can post them now. Once Simon's changes land, lefover ARC conversion 
+> and and removal of libgcc can all go together via your tree if that's OK 
+> with you.
 
-The sleepable variant was added by commit d4dd9775ec24 ("bpf: wire up
-sleepable bpf_get_stack() and bpf_get_task_stack() helpers") but only
-wired up for kprobe/uprobe.  All other program types that can be
-sleepable still get the non-sleepable variant:
+Sounds good to me,
 
- - tracing_prog_func_proto() serves BPF_TRACE_ITER, fentry/fexit/fmod_ret
-   and BPF_TRACE_RAW_TP programs, and falls back to
-   raw_tp_prog_func_proto() for BPF_FUNC_get_stack, which always returns
-   bpf_get_stack_proto_raw_tp.  Sleepable iterators have been allowed
-   since commit cf83b2d2e2b6 ("bpf: Permit cond_resched for some
-   iterators"), e.g. for the task_file target.
-
- - tp_prog_func_proto() serves BPF_PROG_TYPE_TRACEPOINT programs and
-   always returns bpf_get_stack_proto_tp.  Sleepable programs of that
-   type are allowed on syscall tracepoints since commit 8cfb77d30920
-   ("bpf: Verifier support for sleepable tracepoint programs"); they run
-   through trace_call_bpf_faultable() and bpf_prog_run_array_sleepable(),
-   which hold rcu_tasks_trace but no classic RCU read lock.
-
-So a sleepable program calling bpf_get_stack() triggers:
-
-  WARNING: suspicious RCU usage
-  suspicious rcu_dereference_check() usage!
-
-Route these paths to bpf_get_stack_sleepable() and mark the new protos
-might_sleep, since build_id_parse() may fault in file data for
-BPF_F_USER_STACK | BPF_F_USER_BUILD_ID.  Sleepable programs that call
-bpf_get_stack() from inside a bpf_rcu_read_lock() region are now rejected
-by the verifier, which is the correct behavior for a helper that can
-sleep.
-
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Closes: https://lore.kernel.org/all/41ce77bf.17656.1a17b3fcb04.Coremail.kaiyanm@hust.edu.cn/
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
-v2: Move regs onto the stack.
-
-v1: https://lore.kernel.org/all/20261028093548.790977-1-yangfeng59949@163.com/
----
- kernel/trace/bpf_trace.c | 54 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 52 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 14adfb85fdb2..7d8414d85737 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -84,6 +84,7 @@ static struct bpf_raw_event_map *bpf_get_raw_tracepoint_module(const char *name)
- 
- u64 bpf_get_stackid(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- u64 bpf_get_stack(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
-+u64 bpf_get_stack_sleepable(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- 
- static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
- 				  u64 flags, const struct btf **btf,
-@@ -1466,6 +1467,26 @@ static const struct bpf_func_proto bpf_get_stack_proto_tp = {
- 	.arg4_type	= ARG_ANYTHING,
- };
- 
-+BPF_CALL_4(bpf_get_stack_tp_sleepable, void *, tp_buff, void *, buf, u32, size,
-+	   u64, flags)
-+{
-+	struct pt_regs *regs = *(struct pt_regs **)tp_buff;
-+
-+	return bpf_get_stack_sleepable((unsigned long) regs, (unsigned long) buf,
-+				       (unsigned long) size, flags, 0);
-+}
-+
-+static const struct bpf_func_proto bpf_get_stack_proto_tp_sleepable = {
-+	.func		= bpf_get_stack_tp_sleepable,
-+	.gpl_only	= true,
-+	.might_sleep	= true,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_CTX,
-+	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
-+	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
-+	.arg4_type	= ARG_ANYTHING,
-+};
-+
- static const struct bpf_func_proto *
- tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -1475,7 +1496,8 @@ tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	case BPF_FUNC_get_stackid:
- 		return &bpf_get_stackid_proto_tp;
- 	case BPF_FUNC_get_stack:
--		return &bpf_get_stack_proto_tp;
-+		return prog->sleepable ? &bpf_get_stack_proto_tp_sleepable
-+				       : &bpf_get_stack_proto_tp;
- 	case BPF_FUNC_get_attach_cookie:
- 		return &bpf_get_attach_cookie_proto_trace;
- 	default:
-@@ -1705,6 +1727,33 @@ static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
- 	.arg4_type	= ARG_ANYTHING,
- };
- 
-+BPF_CALL_4(bpf_get_stack_raw_tp_sleepable, struct bpf_raw_tracepoint_args *, args,
-+	   void *, buf, u32, size, u64, flags)
-+{
-+	/*
-+	 * Don't take a per-CPU bpf_raw_tp_regs slot here: those slots are a
-+	 * LIFO nest counter and cannot be held across the sleep that
-+	 * build_id_parse() may take.  Sleepable programs never run in
-+	 * IRQ/NMI context, so a stack copy is sufficient.
-+	 */
-+	struct pt_regs regs = {};
-+
-+	perf_fetch_caller_regs(&regs);
-+	return bpf_get_stack_sleepable((unsigned long) &regs, (unsigned long) buf,
-+				       (unsigned long) size, flags, 0);
-+}
-+
-+static const struct bpf_func_proto bpf_get_stack_proto_raw_tp_sleepable = {
-+	.func		= bpf_get_stack_raw_tp_sleepable,
-+	.gpl_only	= true,
-+	.might_sleep	= true,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_CTX,
-+	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
-+	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
-+	.arg4_type	= ARG_ANYTHING,
-+};
-+
- static const struct bpf_func_proto *
- raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -1714,7 +1763,8 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	case BPF_FUNC_get_stackid:
- 		return &bpf_get_stackid_proto_raw_tp;
- 	case BPF_FUNC_get_stack:
--		return &bpf_get_stack_proto_raw_tp;
-+		return prog->sleepable ? &bpf_get_stack_proto_raw_tp_sleepable
-+				       : &bpf_get_stack_proto_raw_tp;
- 	case BPF_FUNC_get_attach_cookie:
- 		return &bpf_get_attach_cookie_proto_tracing;
- 	default:
--- 
-2.25.1
-
+    Arnd
