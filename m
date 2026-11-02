@@ -1,64 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793650336;
-	b=2rf0Ws0jGdUqz2KTNj1XK+C4pH0XW1T3Mr7tqLYAtOd+VWere0ZR5l5yN5+y4FDVYfV3
-	 LUdjrAXLMMp53lPFys6F74zsu8TJ5cClGOQMyQJvfeSs4kWzaphohtJOfq60sF6B1H1Xf
-	 PF8HLF8sXox9lnxv2YPqFhWn1o1SrLvaLXTzzBf9fF9RaduMficgLKl528rvXT9fKMWn5
-	 uVBEGi8zdjVxfGFcWRvCaE84w+b6ySzmAfrGXpr0Ok9B7cY5krsyPwLL8mwGX/WgLc6z9
-	 InjZPznUMCla42uyCp3joUrqXsTHK9o4IIXHKlfVqJKQSdrYYB2upwMwO9khPGg0p7A==
+	t=1793650444;
+	b=4aYM6k/UsgDgLDAU4m6ear51xNUyt0QDiQ9bW7uE0IJi+6wIEEpkuGyS4Rzg5I616Cve
+	 OKPOwMDfxOKz/OYC7hAdrywyB1iJBnxmgtMAvkeMDSzIBmgVWx8xZhItd3XzWyoVt6OTN
+	 qsEFjofl56riExC7mVXkOPLhRcQxlYx01rsm0ncNKmlOeStcJqg2Ar1zqyvw0icNdz4hg
+	 kC2K46D25J5xN4Ajc/eVKXudPDBrgILjmtwWS/z9iG3jdjU0kh5W6CH2IJ2MrJbEc5hik
+	 CqFuAmiOR18if6xtivpiMBHYE9NzZW/KOfJqdUim4c88lTlqo73H3Hy0OJufiNXwO9A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793650336;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=35huFANGVg4RT6AeDQ1nJ0dNPSmmlMv3374wgFMWx8c=;
-	b=ET99jebaSlO066lphUJtuAP7jhOhGT/EEZlR9tGG8kjH5qDM9guAi73BkshJ/EipPRUs
-	 kXSqsMFifAfu6fkyAzGQY05dMwtpIYuFW+VkAvk1hJ8M9UHvSPOSCQMoqldm8krJNlqzh
-	 Wy6r/H9lLztq4IU2fhzbXGXfuXYtmqrIBnrvsuipY/PqqIzuL5MyFw/ja5F6U0/pTvIJB
-	 7IQRbrBIadrWjWRLrJD9dz9pN9q62EDNMDCKzqgDu2ZJyNXvgGuD/RtodJBWceEe8gMVC
-	 3jJxx79WZtNhrZAnRAtiNbEoki0K7txYh7MjZCnxf1LvrzwmW2Lk30+OxvxsZZov0BQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793650444;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=tGanUMfayq3PdyLOv1Doxlx1VPFFMeHl/eaWWctPQ0U=;
+	b=Z2hcW+InKp3uiL4/Bl9h7O51IqTFEmQOfCm4k21Yok2w40hhqXhgahbci8iHdAR/THd3
+	 0HrMzQHkF23lHnqIe2UuvT9H+nubDvOYxU5Q6CrVZPeDCXbBmbwaZkmbzn2VYqs6s2irI
+	 GUooFyw98hNwLim9bMqGwiD/Bi8XHtsQI3RfaewvI+YZkV0WnDonRL4KF+mRW2R+ctrpX
+	 KXtz4KF7scdAjD/dXQQAHIuQpS0xRc3zzMS2rQg4So7ER+dRcJbp8rw4sI0Wq45LeJ/3P
+	 y3odR9R+o4YSKr4cviU206wu56lKpaYDrb71Caq3y+OLiw2DwuFIlEprBx9cGsVnFHw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Kl9uytlD;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zixO318e;
+	arc=none smtp.remote-ip=209.85.221.47
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA8A606A329;
-	Mon,  2 Nov 2026 20:12:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3559606A326
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 20:14:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F3559606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Kl9uytlD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24EBB1F00A16;
-	Mon,  2 Nov 2026 20:12:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793650336;
-	bh=35huFANGVg4RT6AeDQ1nJ0dNPSmmlMv3374wgFMWx8c=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Kl9uytlDZhW8RhoEg4o+yb1fuh9I16AOtEhcs5v+o3fRyWsFug/1MJAuB7eFLYSPu
-	 xGQeX0f8yxkntDGREQf22bSfGNbUAG8kPJWikr7/Qxg214f5D+gcnpD5tBEQ2K1K6W
-	 f9AnvygYFwfYc6Ot7SQ2CQPrvCFs5yaaYMEJmCJEk0hzEzuMbjvbMh6QHytDyn7G8L
-	 mOmjnglfLCLEJHVbDm7EEHg+0zfsJr8ajNywum/+LM4fIMIqN9wkt/tuDk6oFDsxwG
-	 eUL4XlwEYyRhiHYfRkl7JyDbDjehnrtiXwOE+FfRqQgWrFog3vdEB00mJwuPdx90kR
-	 QmFhWtIek7hug==
-Subject:
- Re: [PATCH net] octeontx2-pf: fix XDP frames freed as skbs on interface down
-From: netdev-bot+sashiko@kernel.org
-To: nb@tipi-net.de
-Cc: sgoutham@marvell.com, gakula@marvell.com, rkannoth@marvell.com,
- sbhatta@marvell.com, bbhushan2@marvell.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, sumang@marvell.com,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Mon, 02 Nov 2026 20:12:14 +0000
-Message-ID: <179365033465.3131.17188664588787330051@kernel.org>
-In-Reply-To:
- <20261030-nb-otx2-xdp-cqe-cleanup-net-v1-1-710635c0f504@tipi-net.de>
-References:
- <20261030-nb-otx2-xdp-cqe-cleanup-net-v1-1-710635c0f504@tipi-net.de>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zixO318e
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48c4649b35bso3280995f8f.3
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 12:14:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793650442; x=1794255242; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=tGanUMfayq3PdyLOv1Doxlx1VPFFMeHl/eaWWctPQ0U=;
+        b=zixO318eJYLfhb+XNiTcj4Wd8KTuj8oKOfOp7Fqp8NvJFc/1JZBHI6keegIn+u7btr
+         CKKm0WeJ7v4EhvVDWDguBbTah0n7jssE4aJOXj/5z27tjK+6U5lClhma48jfdLpNYWJp
+         Wi2T5jaYdn/ArobqwxviNhfr4U0CAmYzvuhyX+4yYNYUCwhmQ05bBgyI6F6aICXxcz75
+         +4VHeU7duOBeddPuirmFB5z8bWKFF21FZEDwXEGu0ADxleF3gJboUmDE/aGw2unc33L4
+         MvNohpwynI346AQ0mB/RMr0S98P5cuSOcOranZBcOrgxmz0XnaSWkLTNSoHMOvZosjWI
+         g3Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793650442; x=1794255242;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=tGanUMfayq3PdyLOv1Doxlx1VPFFMeHl/eaWWctPQ0U=;
+        b=F4fQUurBetk6CxtmBOymxy4P4wk2yZmQVe81wIBNIgqTSeVJd1YfXKn91s4VvbePc3
+         gaKsvR738SmYRNYKfxtkZ/4TIKJEklAKlZJoUkB8G1RjPYR7ybwWP9Y3olPgtNf+9bpR
+         UYACOJ4fueMd/1A3QV5G/cgGa47CLSN/kBuGfCvt2hgln585+72Q8TRK8WSg7bsJmwqm
+         s/WTlpeX6261a5LUasAtG2yUqoSd8EZalBq0jW77JMOHyPQxFOE7TA9fENCeUKKyyXCM
+         tELolwuIScn1iKPTVkbTiRn4XGwyxcGpHC6VZB610Ejj9Q6A9/HqmacKZttiQ0Md4ODk
+         zpCQ==
+X-Gm-Message-State: AFq9FYJaKTwitq4jZqF3ZHwjhCCJc+4W9OHMSKLbPaKElS9Ecb06DVIR
+	S1Nmcxrh3a1WrDlFIolO7ClhK5ikkyHJoKlC+2+5Rzu2+D5z12LfuRoRH2ibYhsk99Cs5Q==
+X-Gm-Gg: AYBFou0Pybvnk7yFwQRYKgkYO+DKAKZfoYFwsSKeOX/qwoBddytYPCKONqwHHkGnPTO
+	r2S+npEEkatXoDfDj0ixjg9wCj9HVFQ2D9bo1fmexkOhl1++zN/z8modnObKTKuJVr0HaFLQ/Ab
+	QLJxw9xg/EwMPY2eyYWrn2s1ugLeUN7lbSclfHp7IDUlu8dSPcitU2rwA6fqCKYIQJAhQGF7vTY
+	KU5o1yaWxfcNuRMb6RwvP7wa6YEjN4rhmmMXhFz3K3aCyRcgYcBbMqGmN+W5oSP7kyE/vGux/Cd
+	MsjjPbrrMCz+BTITSfajiiZlWUx09jbwUVbIQAzE2/59gAw7Uo7r15v0KqgsYHdqZX1D3rZ+eyi
+	s3m/KT1LlhkzurJ/wH7HCfmq69Oj47xD0VRpore+YWRViXGdjGqVNNc+c28NiT5mg1iJDlcS3VE
+	BXHNcFzv209nRdSDtCAaWnkiZCb/CJKaf2cv2Jai9JLndfbINtDxJAnkhiRE9pCCzkW3Z4TtGWk
+	NqKfsYzLoHgLeJTvduJOmQFDy8AbAj8/3dUE+UZN0S6F7cqWDdQICJ0qYx6w78/16hP/CG7kEin
+	KdVQXWoJcJlpbRD5rK0ZU/Hx7SyQIUKklyMi3QHe+TjpFrKsI+b2fVxTNe8xAu1KRYRYw5Mv+yi
+	2
+X-Received: by 2002:a05:600c:34d1:b0:4a2:133:45e1 with SMTP id 5b1f17b1804b1-4ac183d136dmr250002875e9.24.1793650442391;
+        Mon, 02 Nov 2026 12:14:02 -0800 (PST)
+Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-48e71b8c6e9sm21471805f8f.43.2026.11.02.12.14.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 12:14:01 -0800 (PST)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Quentin Monnet <qmo@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Mahe Tardy <mahe.tardy@gmail.com>,
+	Tianyi Chen <hi@tychen.cc>,
+	Gyutae Bae <gyutae.bae@navercorp.com>,
+	Hui Su <sh_def@163.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/5] libbpf: Support gen loader attach
+Date: Mon,  2 Nov 2026 20:13:51 +0000
+Message-ID: <20261102201356.5798-1-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,269 +111,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Hey,
 
-Critical: 0 · High: 0 (3) · Medium: 2 (1) · Low: 0
+I've been working on this in the context of Shirudo[^1]. The current
+limitations we face is that gen_loader cannot attach the program it
+loads so we still need a userspace component to be allowed to
+BPF_LINK_CREATE and we'd like to gradually remove the allowed operations
+done in userspace to solely rely on the signed program.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Note that there's no kernel modification in this series, it adds the
+gen_attach options and code generation to libbpf and do the wiring from
+bpftool. The kernel side was already allowed thanks to 'b1d18a7574d0
+("bpf: Extend sys_bpf commands for bpf_syscall programs.")'.
 
-- [Medium] The new CQ_XDP branch in otx2_cleanup_tx_cqes()
-  (otx2_txrx.c:1352-1355) sends XDP CQEs to…
-- [Medium] octeontx2-pf: missing xsk_tx_completed() call in
-  otx2_cleanup_tx_cqes()
+Also note that I did some analyzis with Sashiko and it's been
+complaining because I've followed the approach with the prog fds being
+initialized to 0 (and not fixing the two fds to init to -1 sentinel
+value), so maybe we should pre-patch this.
 
-Pre-existing issues:
-- [High] Nothing fences otx2_xdp_xmit() (ndo_xdp_xmit) off from XDP SQ
-  teardown on the 'XDP program is replaced' path the commit message…
-- [High] otx2_stop() calls only napi_synchronize() for each CINT
-  (otx2_pf.c:2267) before otx2_free_hw_resources() (line 2277).
-- [High] In AF_XDP zero-copy mode, otx2_xdp_rcv_pkt_handler()
-  (otx2_txrx.c:1520-1527) runs the BPF program on xsk_buff and does…
-- [Medium] otx2_free_pending_sqe() (otx2_txrx.c:1408) only walks `sq_idx
-  < pfvf->hw.tx_queues`.
+Lastly, I don't know much about bpftool so unsure if the way I've added
+it is the most appropriate way for the lskel attach option.
+
+v3 updates:
+- rebased again because I had a debug commit in between master and my
+  patches that somehow surprisingly conflicted... sorry for the spam!
+
+v2 updates:
+- rebased to includes changes from the 'libbpf: BPF program manual
+  loading'[^2] patch series that conflicts with that series.
+
+[^1]: https://lpc.events/event/20/contributions/2437/
+[^2]: https://lore.kernel.org/bpf/20261029223348.3730738-1-andrey.grodzovsky@crowdstrike.com/
+
+Mahe Tardy (5):
+  libbpf: Count entry programs for bpf_gen__init()
+  libbpf: Track generated loader link FDs
+  libbpf: Emit BPF_LINK_CREATE calls in generated loaders
+  bpftool: Add attach option for light skeleton generation
+  selftests/bpf: Test gen loader attach
+
+ .../bpf/bpftool/Documentation/bpftool-gen.rst |  11 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |   2 +-
+ tools/bpf/bpftool/gen.c                       |  67 +++--
+ tools/lib/bpf/bpf_gen_internal.h              |   7 +
+ tools/lib/bpf/gen_loader.c                    |  41 +++-
+ tools/lib/bpf/libbpf.c                        |  55 ++++-
+ tools/lib/bpf/libbpf.h                        |   3 +-
+ tools/lib/bpf/skel_internal.h                 |   4 +
+ .../bpf/prog_tests/gen_loader_attach.c        | 229 ++++++++++++++++++
+ .../selftests/bpf/progs/gen_loader_attach.c   |  48 ++++
+ 10 files changed, 435 insertions(+), 32 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/gen_loader_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/gen_loader_attach.c
 
 --
+2.43.0
 
-octeontx2-pf: fix XDP frames freed as skbs on interface down
-
-With this patch, otx2_cleanup_tx_cqes() passes CQEs from XDP completion
-queues to otx2_xdp_snd_pkt_handler() instead of treating sg->skb as an
-sk_buff. Before this, pending xdp_frames on XDP queues were freed with
-dev_kfree_skb_any() on ifdown or XDP program replacement, which corrupted
-page pool memory.
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> index 90af9b9044aa0..e3b07e5335fb8 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> @@ -1332,6 +1332,7 @@ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
->  	struct nix_cqe_tx_s *cqe;
->  	struct netdev_queue *txq;
->  	int processed_cqe = 0;
-> +	int xsk_frames = 0;
->  	struct sg_list *sg;
->  	int qidx;
->  
-> @@ -1348,6 +1349,10 @@ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
->  
->  		if (!cqe)
->  			continue;
-> +		if (cq->cq_type == CQ_XDP) {
-> +			otx2_xdp_snd_pkt_handler(pfvf, sq, cqe, &xsk_frames);
-> +			continue;
-> +		}
-
-[Severity: Medium]
-The new CQ_XDP branch fills in xsk_frames, but is it ever used after
-the loop?
-
-For entries flagged OTX2_AF_XDP_FRAME, otx2_xdp_snd_pkt_handler() only
-bumps the counter and returns. It leaves it to the caller to publish
-the completions. On the NAPI path, otx2_tx_napi_handler() hands the
-count to otx2_zc_submit_pkts(), which calls xsk_tx_completed().
-
-otx2_cleanup_tx_cqes() never reads xsk_frames and never calls
-xsk_tx_completed(). It still rings NIX_LF_CQ_OP_DOOR for those CQEs,
-so the hardware considers them consumed.
-
-When otx2_zc_napi_handler() queued these frames,
-xsk_tx_peek_release_desc_batch() had already consumed the TX ring
-descriptors and reserved completion ring entries for them. Consider
-an AF_XDP zero-copy socket that is transmitting while the interface
-goes down or the XDP program is replaced:
-
-otx2_xdp_setup()->otx2_stop()->otx2_free_hw_resources()->
-    otx2_cleanup_tx_cqes()
-
-Do the completions reaped here then never reach the XSK completion
-ring? If so, userspace would never get those UMEM frames back. The
-reserved completion ring slots would also stay reserved across the
-down/up cycle.
-
-sq->xsk_pool is still attached at this point. It is only cleared in
-otx2_xsk_pool_disable(). Would calling
-xsk_tx_completed(sq->xsk_pool, xsk_frames) after the loop, when
-sq->xsk_pool is set and xsk_frames is non-zero, be the right fix?
-otx2_zc_submit_pkts() itself doesn't fit here, since it also submits
-new TX descriptors.
-
-[Severity: Medium]
-Should xsk_frames be reported back to the XSK pool after this loop?
-
-For AF_XDP zero-copy entries, otx2_xdp_snd_pkt_handler() only counts
-them:
-
-	if (sg->flags & OTX2_AF_XDP_FRAME) {
-		(*xsk_frames)++;
-		return;
-	}
-
-In the NAPI path, otx2_tx_napi_handler() passes the count to
-otx2_zc_submit_pkts(), which does:
-
-	if (*xsk_frames)
-		xsk_tx_completed(xsk_pool, *xsk_frames);
-
-otx2_cleanup_tx_cqes() fills xsk_frames but never reads it. It then rings
-NIX_LF_CQ_OP_DOOR for those CQEs anyway.
-
-Take an AF_XDP ZC socket that is transmitting while the interface goes
-down or the XDP program is swapped:
-
-otx2_xdp_setup()->otx2_stop()->otx2_free_hw_resources()->
-    otx2_cleanup_tx_cqes()
-
-Do the completed descriptors then never reach the xsk completion ring? If
-so, userspace never gets those UMEM frames back. The completion ring slots
-reserved by xsk_tx_peek_release_desc_batch() would also stay reserved
-across down/up cycles.
-
-sq->xsk_pool is still attached at this point. It is only cleared in
-otx2_xsk_pool_disable(). Would adding something like this after the loop
-work?
-
-	if (sq->xsk_pool && xsk_frames)
-		xsk_tx_completed(sq->xsk_pool, xsk_frames);
-
-otx2_zc_submit_pkts() itself does not fit here, because it also submits
-new TX packets.
-
-[Severity: Medium]
-This is a pre-existing issue, but it is on the same XDP teardown path.
-otx2_free_pending_sqe() only walks the regular TX SQs:
-
-	for (sq_idx = 0; sq_idx < pfvf->hw.tx_queues; sq_idx++) {
-
-So nothing checks the XDP SQs for SQEs the NIC never completed.
-otx2_sqb_flush() does not wait for the queue to drain. It sleeps once per
-non-empty SQ:
-
-	if (sqe_head != sqe_tail)
-		usleep_range(50, 60);
-
-XDP SQEs with no CQE can therefore still be there after
-otx2_txschq_stop(), for example under PFC pause or link loss.
-
-Is the xdp_frame in sg->skb ever returned for those entries? For
-OTX2_XDP_REDIRECT entries, is the DMA_TO_DEVICE mapping created in
-otx2_xdp_xmit_tx() ever unmapped before otx2_free_sq_res() frees sq->sg?
-
-Widening the loop would not work as-is, because it uses
-dev_kfree_skb_any(). The XDP SQs need an XDP-aware release.
-
-[Severity: High]
-This isn't a bug introduced by this patch. The commit message mentions
-"when the XDP program is replaced". On that path, is ndo_xdp_xmit kept
-away from the XDP SQ teardown?
-
-otx2_xdp_setup() calls otx2_stop() directly and swaps the program only
-afterwards:
-
-	if (if_up)
-		otx2_stop(pf->netdev);
-
-	old_prog = xchg(&pf->xdp_prog, prog);
-
-So during teardown netif_running() is still true and pf->xdp_prog is still
-set. Those are the only two things otx2_xdp_xmit() checks:
-
-	if (!netif_running(netdev))
-		return -ENETDOWN;
-
-	qidx += pf->hw.tx_queues;
-	sq = pf->xdp_prog ? &pf->qset.sq[qidx] : NULL;
-
-There is no OTX2_FLAG_INTF_DOWN check and no lock.
-otx2_xdp_sq_append_pkt() also writes sq->sqe_base and sq->sg[] without
-locking.
-
-Suppose another device redirects into this one through a devmap
-(xdp_do_flush()->bq_xmit_all()->ndo_xdp_xmit()) while otx2_stop() runs:
-
-otx2_free_hw_resources()
-    otx2_cleanup_tx_cqes()
-    otx2_free_sq_res()      /* kfree(sq->sg), qmem_free(sq->sqe) */
-otx2_free_queue_mem()       /* kfree(qset->sq); qset->sq = NULL */
-
-Can the redirect path then write into freed sq->sg or SQE memory, or
-dereference the NULL qset->sq?
-
-otx2_stop() only synchronizes this device's IRQs and NAPIs, and there is
-no synchronize_net(). Frames appended during teardown would also leak
-their xdp_frame and DMA mapping.
-
-[Severity: High]
-This is a pre-existing issue, but can NAPI run at the same time as this
-cleanup loop? otx2_stop() does:
-
-	cq_poll = &qset->napi[qidx];
-	napi_synchronize(&cq_poll->napi);
-	...
-	otx2_free_hw_resources(pf);
-	otx2_free_cints(pf, pf->hw.cint_cnt);
-	otx2_disable_napi(pf);
-
-napi_synchronize() only waits for a poll that is already running. The
-NAPI is still enabled, so socket or AF_XDP busy polling (napi_busy_loop())
-can claim it again. It then processes the same XDP CQ:
-
-otx2_napi_handler()
-    otx2_tx_napi_handler()
-        otx2_xdp_snd_pkt_handler()
-
-This loop and the NAPI path both update cq->cq_head and cq->pend_cqe
-without a lock. Could both pick up the same CQE and call
-xdp_return_frame() twice on the same sg->skb? Or could one call
-xdp_return_frame(NULL) after the other has cleared it?
-
-There is a second window later in otx2_free_hw_resources():
-otx2_free_cq_res() frees the CQE memory while busy poll can still run the
-handler.
-
-The same race existed before this patch for both the skb and XDP CQs.
-
-[Severity: High]
-This isn't a bug introduced by this patch. However, the new branch adds
-another consumer of sg->skb values that may be bogus in AF_XDP zero-copy
-mode.
-
-In otx2_xdp_rcv_pkt_handler(), the ZC branch jumps past the
-initialization of the local xdp_buff:
-
-	if (pool->xsk_pool) {
-		xsk_buff = pool->xdp[--cq->rbpool->xdp_top];
-		...
-		act = bpf_prog_run_xdp(prog, xsk_buff);
-		goto handle_xdp_verdict;
-	}
-
-The XDP_TX case then uses &xdp rather than xsk_buff:
-
-	case XDP_TX:
-		...
-		xdpf = xdp_convert_buff_to_frame(&xdp);
-		return otx2_xdp_sq_append_pkt(pfvf, xdpf,
-
-xdp_convert_buff_to_frame() reads xdp->rxq->mem.type and writes the frame
-header at xdp->data_hard_start.
-
-Doesn't this dereference uninitialized stack data on every XDP_TX verdict
-in ZC mode?
-
-The resulting pointer is stored in sq->sg[].skb with OTX2_XDP_TX. Both the
-NAPI completion path and the new CQ_XDP branch later pass it to
-xdp_return_frame().
-
-The XDP_PASS case has a similar problem in ZC mode:
-
-	case XDP_PASS:
-		*metasize = xdp.data - xdp.data_meta;
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261030-nb-otx2-xdp-cqe-cleanup-net-v1-1-710635c0f504%40tipi-net.de
