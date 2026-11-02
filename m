@@ -1,67 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793636470;
-	b=zePnik80oXEs9H1MuJXg03ZJRCwZRHcn19S14M4dJT/M9bp0hzpnlLndnePPzuyPR9BC
-	 NxhdcpbbwE878NpD08NkuQlhG35vNrXhPSM5k3HH7ay679JTW6WnVaGCg7Vwb4E2ZSfO9
-	 qXmuIr8tZswSvKddvy7paQ99lM1UJB9ZiONmgyvWlIW8WlmLPaXVXU8Xp8+Cz017ykvzo
-	 OIuBo27zAW9rIVdurJ/p6KCGxrgWccxVEfJvaIsoAZd3mlI1+fWV0ZkI1aw3IqduNml0z
-	 gMvtFWh4xFovsIBTR/5BAh8f+VkEQfdoZjYTeuUnDyFwpfmzTSWSJ91wB9FIY+GshCA==
+	t=1793636655;
+	b=27K0uIgKBosyqANyOqdjOtoXyEPPDCaxQZBbvMR1A4eMyqTdbtJLY62VZ8YUiMeo3CQC
+	 ix4xVpczbnRUsY8jNRwri3YMVcJ8HUj27v6onD4aFx4q++OrgueGOBFH/BZOP9V+qaZ2j
+	 y+ZvgaFmn9zbFu3kvdh3LcRICCGAv7Nk56HmrdIaapKoSG4nLCYpK2isczWgFUZ0cNmNQ
+	 DyUMfU6JZf3xl2Cgr+fVN/jo8KGcGpX+WI0IrtTxESBMoxIcBGBC4Y8to4H9moIBtgBzj
+	 +av+hL+i8H9WtgFz3ROT35Z4kq433sFaCBh45UM/KuaJus1Z/8LNyCV4kLTxCcu9aQQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793636470;
-	h=DMARC-Filter:DKIM-Filter:DKIM-Signature:Received:From:To:Cc:Subject:
-	 In-Reply-To:References:Date:Message-ID:MIME-Version:Content-Type;
-	bh=pieKe5GiYH0kpv6II+hMND4COk8Q1hrQzu0fIwGjl0w=;
-	b=dwYTY2ja9NCRZ6NowWBspy513o1weD9+LR0vTYu20FE10YfHh85HXbbuWHKc3+qEJxjq
-	 kUIQ86W6Z1pNnkse+8QLgOtm0ZVf4g19HGquHOxiUaaST362lcyn8doa81a6KTMXuJZ0K
-	 9VA1mtzPoBdn5hpwtj9cc1APEd/KDBRC4djXIdsqgxveCtoWPDTgJgfbzFSa4GqNPYAl/
-	 EYZeD1CuA2m2l3Kpwaa1hGOrUyDiC9VbTQI5tDWFF1yQoxctNfbb+9jfWiYESz/4K6a7R
-	 9N+fNknKs6pN9pFzgVmxrx8KLFm65uoKPc7g62smRDku88zjN60gkFW+ijw2k9OwyoQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793636655;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type;
+	bh=+kWAEYe9lv2joOurQeqZinEGPKNoqeTC8nO4PNwrr5g=;
+	b=fAN24sm74HMa6xlRMTbJP+PkMv50D7JZj260S+d50QmL1jtS9ocnRQ7I1vQYNXCySRPV
+	 +lsVoIUYaTXpkqEVHnWVcZBEaAyPo7nB7M+WataVAC4zI/BrCk5XDy2qsZZR+aXoqYiDL
+	 yHaxwqrYUq/wMFAyzveG75TlICMwFdNfs32frpKO/AGpSITNG73MU15e4yNxQYC/o6q6e
+	 wrhehjfszKtMfo05oznmuw3nfJdJj+JWYaXeSkztThWxcqWbeEaG8YCK+YoBuZASA8Ja3
+	 pEVJ0UlPkor2wBO/foFefD5Qi3hU9xUcxRBysg5SZ1l9a2NY7QeQtvsETidRAj07KVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=lwn.net;
-	spf=pass smtp.mailfrom=lwn.net;
-	dkim=pass header.d=lwn.net header.i=@lwn.net header.a=rsa-sha256 header.s=20201203 header.b=kczmzPau;
-	arc=none smtp.remote-ip=45.79.88.28
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Q2/NjgWd";
+	arc=none smtp.remote-ip=74.125.82.52
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8357A608440D;
-	Mon,  2 Nov 2026 16:21:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8357A608440D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21D9608361D
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 16:24:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A21D9608361D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=lwn.net header.i=@lwn.net header.a=rsa-sha256 header.s=20201203 header.b=kczmzPau
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A572240430
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1793636469; bh=pieKe5GiYH0kpv6II+hMND4COk8Q1hrQzu0fIwGjl0w=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=kczmzPauziu1bkmTcGHrvTNYebY2GJg/E/hfOUZGjBMhcHjCAIn/SZ9y8V4tiJawY
-	 5ybJf68LIw7PPf1oP6xZNB1JVjIw/WpZExYWQJfzprvJsRJ54V1++jVFEoiJ5vUnMX
-	 1AmvXNXekCbTNrrNr/myXOnc+BAFwy2pQitwJVfKS5SwKngqTBG+e9+VznbfoPGPAD
-	 3hV8v7ZIZh5/oYRKrHklrgLuocl1VqoXhZb5s342SFkRnswNEQmobMqMn+4wm2EZGF
-	 ncCHvWJCKAg9FOy0uZB8FYSemm6PtLwiO+6zeNeQphMTWuH3P2gmjEGDCoCpXa5anI
-	 gVG0cihvsCZzQ==
-Received: from localhost (mdns.lwn.net [45.79.72.68])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id A572240430;
-	Mon,  2 Nov 2026 16:21:09 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Mark Severson <gr3yf0x87@skyn3tlab.com>, Federico Vaga
- <federico.vaga@vaga.pv.it>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, workflows@vger.kernel.org,
- linux-doc@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] docs: changes.rst: set the pahole minimum back to 1.22
-In-Reply-To: <20261022014811.2803450-1-gr3yf0x87@skyn3tlab.com>
-References: <20261022013432.2638010-1-gr3yf0x87@skyn3tlab.com>
- <20261022014811.2803450-1-gr3yf0x87@skyn3tlab.com>
-Date: Mon, 02 Nov 2026 09:21:08 -0700
-Message-ID: <87pkwncih7.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q2/NjgWd
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-1b1ce85287aso1143412c88.0
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 08:24:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793636654; x=1794241454; darn=vger.kernel.org;
+        h=content-type:mime-version:message-id:date:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+kWAEYe9lv2joOurQeqZinEGPKNoqeTC8nO4PNwrr5g=;
+        b=Q2/NjgWdlD9XDuxjTwBJdSGHeUMH4vJNVwZ3pQurqPJgQzoRwghrRen6IdHP9wHEIj
+         eMaL9CzWiZT09XIay2pWM32E6XKTT/X/GDXV6evq2CuqwWfUp8oXoM5VprBW25FVMvs2
+         rNsizp3AjzcZnsCh5T9rHYnq8KxjwUAUm6gtswGrfRg5L4Qxb0gD2BmIGXtEaGRcGAxS
+         s4NlbeOt6fPt/OaEqcnmVGCJr+M2RMoUaMjhSn3BeQLh/ThXaZ57RYa4QCnmMmPMXd/g
+         S87K4aab4+ViH0p0mYK6UMKo6W7YQmT3vfr0OxRF+GH6wzqLMY8IwU3uqHPA+0mSGj2M
+         FRlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793636654; x=1794241454;
+        h=content-type:mime-version:message-id:date:references:in-reply-to
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+kWAEYe9lv2joOurQeqZinEGPKNoqeTC8nO4PNwrr5g=;
+        b=ucuyhE4X6OfdtZrP8G3iEQrjfwnOswZPfLMuXt3qQQ3wrho3pquuBU/rWXBdGQ5F/X
+         zsxQR87BAYbKU+b3FT4yjAvRrqHoKrNE+P7OZT+QI06tZbTarZotr/FG8l7Wrdey0daA
+         oBZjnLLdvBodZL9zDdkG6XfmAy6BQNgMvdntglNceR7U4LGycAH27lpa7fZhCKclt2N3
+         AL5ih8Q6G2HQpkI2h3GejJEvv6Jlasq8oEQozrloPLYleWUAUpEoTNK7UkFBPH2mCnIS
+         DHK//WL7FzHM0nRf4fXbE7eTLHvFWLq7pmoQXxAAT3pZGuNmv93I9obJnioVzBDnQtKb
+         eYsg==
+X-Forwarded-Encrypted: i=1; AKwUvBwsyNRVTtcLECHOgewSwAJZCqkz3KnYtdtMh6NT3AJrtVsvcfmAH5AHT+tTrqxHDXhzg68=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIkzBYS6r/puOYcwFaKXD/jk0xjUKgHjCL4+WbPpMjIXf70RXS/
+	OQp9w6QOr6K+6Px91vHPQ6lKKDNTm1KOav7EZ+ynF+VZlDSp69odAVBn
+X-Gm-Gg: AYBFou0mXm+5S0rdgiqyG/8qdLr55JQCgAJh7obkAoyBQJ3KijAlv4iyX43mHJJ9u6M
+	E2JR4rl3WalXhNWv9NO14xxSSJi07HKOjiCDEFsoR/BFCoCpLEK3vQFnmZQk4B0mIWxdxqdUaM0
+	XS802lhDu5XpDCU8oz4tjt3HiW6gzaxTo9UnFq89EUwSJ6voQIOYFBx1BqNTPZNn4wQ1lPmitKu
+	xJQc1nohm/Xj9j01h3ZyaNyhZ7JWZJPANL3wF53NjcQUjHSvZZu87joUIizavQNd+ccQavB7R47
+	OQ2X1oSZzJ9II7NHbfLjiPpdybWAkZTHfH9V2M0OhOJUJSmfPt9IVGzkVAcJLyfGnZcLxTfQ+Vq
+	YuIJ4w0H9VO+EU8CY8ogFJt8KmK0Brt5h4NWrPnL2MRj2N+xEcKnb75ThCtqttEzAhJN2648vEQ
+	7YBBNeZ4qecGy4ikegI1FYJZFoQY0hPsWcixMjIx/mpkWCSRdlhlRW55wS4yzEegiyF9dg4/km5
+	PLxGv5zajzfwFdosjLSlPBolJQlRI7vQaILoNwJsPfmzG1VVeO76BvZwL2o1uksIdWi/Oro96+f
+	NYqsCVA4bRpHcrH4MoPu+x/c7Pe/MTp9/3Ki9Bd1Hf4aiAT6QYVoyVAlqLkKWVjU2kMPhjrpgOM
+	pdHC/BmrMYA==
+X-Received: by 2002:a05:7022:ec4:b0:14f:8d59:edcc with SMTP id a92af1059eb24-1ac5c369adfmr17454547c88.12.1793636652369;
+        Mon, 02 Nov 2026 08:24:12 -0800 (PST)
+Received: from 0001-report.eml ([117.28.251.181])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1ac1854d925sm60990010c88.7.2026.11.02.08.24.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 08:24:10 -0800 (PST)
+From: Chengfeng Lin <lin2530632123@gmail.com>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: x86@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [linus:master] [x86/bugs] a3af84b0fa:
+ stress-ng.seccomp.ops_per_sec 95.7% regression
+In-Reply-To: <4h7zrdfpu3ailx5ajkyqohmcfuxgrk3tn7i7n3dkp3ksy5xehk@xqg5j6pqzocv>
+References: <202608191340.98574fe2-lkp@intel.com>
+ <4h7zrdfpu3ailx5ajkyqohmcfuxgrk3tn7i7n3dkp3ksy5xehk@xqg5j6pqzocv>
+Date: Mon, 02 Nov 2026 18:43:58 +0800
+Message-ID: <179361623876.3.16264907931792312619.redis-ibpb-report@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -71,41 +100,140 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/mixed; boundary="===============2083262864964411293=="
 
-Mark Severson <gr3yf0x87@skyn3tlab.com> writes:
+--===============2083262864964411293==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 
-> Commit fd5425b67355 ("docs, resolve_btfids: Document kfunc BTF
-> annotation emission") removed the paragraph saying that kfuncs annotated
-> with KF_IMPLICIT_ARGS need pahole v1.26, because resolve_btfids now
-> emits the kfunc BTF annotations that pahole used to produce. That
-> paragraph was the reason the requirements table lists pahole 1.26, and
-> the table was left unchanged. The text below the table and
-> lib/Kconfig.debug (DEBUG_INFO_BTF depends on PAHOLE_VERSION >= 122)
-> both still say 1.22.
->
-> Set the table back to 1.22, in the English document and in the Italian
-> translation, which carries the same table, and remove the Italian
-> translation's copy of the paragraph that the English document no longer
-> has.
->
-> Checked by building linux-next 20261021 with pahole v1.25 and
-> CONFIG_DEBUG_INFO_BTF=y: in the vmlinux BTF,
-> bpf_task_work_schedule_signal has four arguments and the bpf_kfunc decl
-> tag, and bpf_task_work_schedule_signal_impl keeps the
-> struct bpf_prog_aux * argument, as Documentation/bpf/kfuncs.rst
-> describes for KF_IMPLICIT_ARGS.
+Hi Pawan, Dave and Daniel,
 
-I've applied this patch, but removed that last paragraph, which doesn't
-really belong in the permanent changelog.
+I found another workload affected by a3af84b0fa00 while running MMTests:
+Redis ZPOPMIN throughput on v7.3 is about 13% lower than on v7.1.3.
+Unlike the repeated filter loading discussed here, the slowdown remains
+after the tasks that triggered the predictor flush (IBPB) have exited.
+Can this cost be reduced while preserving the security protection?
 
-> Fixes: fd5425b67355 ("docs, resolve_btfids: Document kfunc BTF annotation emission")
-> Assisted-by: Claude
+The machine is an i7-12700KF with 32 GiB RAM. All runs used CPU microcode
+0x3e, and I did not disable any security mitigations. The test uses
+unmodified Redis 6.2.6 and MMTests' redis-benchmark-small recipe:
 
-This line is no longer required, so I took it out as well.
+  redis-benchmark --csv -c 1 -r 50000 -n 100000 -P 256
 
-> Signed-off-by: Mark Severson <gr3yf0x87@skyn3tlab.com>
+There is one client, no CPU pinning, and all 20 logical CPUs are available.
+After each boot, I ran the full MMTests recipe nine times. Each run kept
+all 20 commands, including ZADD before ZPOPMIN, and the recipe's five
+internal repetitions:
+
+                           v7.1.3 first       v7.3      v7.1.3 return
+  ZPOPMIN (requests/s)        999,366         871,397      1,000,947
+  GET (requests/s)          3,548,521       3,551,132      3,547,933
+  Complete test time (s)       61.396          61.704         61.301
+
+ZPOPMIN is down 12.87% relative to the mean of the two v7.1.3 baselines.
+Within each boot, its coefficient of variation is below 0.75%; the two
+baselines differ by 0.16%.
+GET is essentially unchanged (+0.08%). The complete test, including
+startup and cleanup, takes 0.58% longer. The ZPOPMIN sequence drains the
+set without refilling it, so its request rate includes empty results,
+not just successful member removals.
+
+Bisection identified a3af84b0fa00. To test the effect of a flush without
+changing kernel code, I used its parent, 96cce16e26dd, where Redis was
+still fast. On each CPU in turn, a short-lived helper enabled
+indirect-branch protection for itself using:
+
+  prctl(PR_SET_SPECULATION_CTRL, PR_SPEC_INDIRECT_BRANCH,
+        PR_SPEC_FORCE_DISABLE, 0L, 0L)
+
+After all helpers exited, I started Redis from a controller whose
+protection setting was unchanged. Redis did not inherit the helpers'
+setting.
+
+ZPOPMIN throughput fell by 11.06% and 11.69% on two separate boots.
+After another reboot, I ran the same helpers without changing their
+protection settings. Throughput returned to baseline (a 1.33% difference).
+Separate diagnostic runs found no BPF JIT allocations or associated IBPB
+calls during the Redis test. They did show more samples of mispredicted
+returns in kernel code, as on the slow kernel.
+
+The tested v7.3 already includes a9b1f19a6a67, which reduces how often
+BPF code allocation triggers an IBPB. This result concerns the cost
+after an IBPB, rather than repeatedly loading filters during the
+benchmark. I have not determined why the return-prediction penalty
+persists after the helpers exit.
+
+The helper used in these tests is attached as ibpb-pulse.c. On a dedicated
+test machine, build it before rebooting:
+
+  cc -O2 -Wall -Wextra -o ibpb-pulse ibpb-pulse.c
+
+Boot the parent kernel, 96cce16e26dd, then run as a non-root user:
+
+  for cpu in $(seq 0 19); do ./ibpb-pulse "$cpu" protect || exit 1; done
+
+Then run the Redis test above against a fresh, dedicated Redis instance.
+For the control, reboot into the same kernel and replace protect with
+sham. The separate boot avoids carrying over the effect of the protect run.
+The helper is limited to CPUs 0-19 and checks the initial protection state.
+I would be happy to test changes that preserve the security protection.
 
 Thanks,
+Chengfeng
 
-jon
+--===============2083262864964411293==
+Content-Type: text/x-csrc; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="ibpb-pulse.c"
+MIME-Version: 1.0
+
+#define _GNU_SOURCE
+#include <errno.h>
+#include <sched.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/prctl.h>
+#include <unistd.h>
+
+/* Opt IN to protection for this disposable process only. Never enable
+ * speculation, touch an MSR, change a system setting or run a benchmark. */
+int main(int argc, char **argv)
+{
+    char *end;
+    cpu_set_t mask, actual;
+    if (argc != 3 || (strcmp(argv[2], "sham") && strcmp(argv[2], "protect")) ||
+        getuid() == 0)
+        return 2;
+    errno = 0;
+    long cpu = strtol(argv[1], &end, 10);
+    if (errno || *end || cpu < 0 || cpu >= 20)
+        return 3;
+    CPU_ZERO(&mask);
+    CPU_SET(cpu, &mask);
+    if (sched_setaffinity(0, sizeof(mask), &mask) ||
+        sched_getaffinity(0, sizeof(actual), &actual) ||
+        CPU_COUNT(&actual) != 1 || !CPU_ISSET(cpu, &actual) || sched_getcpu() != cpu)
+        return 4;
+    int before = prctl(PR_GET_SPECULATION_CTRL, PR_SPEC_INDIRECT_BRANCH, 0L, 0L, 0L);
+    if (before != (PR_SPEC_PRCTL | PR_SPEC_ENABLE)) {
+        fprintf(stderr, "unexpected initial speculation mask %d errno %d\n", before, errno);
+        return 5;
+    }
+    int protect = !strcmp(argv[2], "protect");
+    if (protect && prctl(PR_SET_SPECULATION_CTRL, PR_SPEC_INDIRECT_BRANCH,
+                         PR_SPEC_FORCE_DISABLE, 0L, 0L)) {
+        perror("protection opt-in");
+        return 6;
+    }
+    int after = prctl(PR_GET_SPECULATION_CTRL, PR_SPEC_INDIRECT_BRANCH, 0L, 0L, 0L);
+    if (after != (protect ? (int)(PR_SPEC_PRCTL | PR_SPEC_FORCE_DISABLE) : before) ||
+        sched_getcpu() != cpu)
+        return 7;
+    printf("{\"cpu\":%ld,\"pid\":%ld,\"uid\":%ld,\"mode\":\"%s\","
+           "\"before\":%d,\"after\":%d}\n",
+           cpu, (long)getpid(), (long)getuid(), argv[2], before, after);
+    return 0;
+}
+
+--===============2083262864964411293==--
