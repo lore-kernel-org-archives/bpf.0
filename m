@@ -1,39 +1,39 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793607160;
-	b=TSi0tNhUrWGoH4kpGxpkXI2+PxbN6NrS1azS3liaasePmTTvrJ/ha6T15zTXDdByyU+Z
-	 AK2kIARCvo308+QA4eCVn/4kF8rNZlrIaK/9NmpEVyJ9+Ok3rHw0k49GszykHjgrFA1TW
-	 QIOXPbsmWRUg/FbAXFHATCvniN22sApjqBpeWoWwtzpC2UQ5uItyvAC5wk6rRd3LFTqUT
-	 jg0p8MqsPtOvj1NQ5+qJAgxZKMQ/+nASCVnHC75ELPX/JnB82F3nN9v40Ll8JrSX++nu9
-	 basz4HEmfgWgmUSGN4zBZcoK2evy+FyBDdUNpggTxf7g5Wm2gDL/7dO/Ep4niNoRWQQ==
+	b=RwzbiCAC8FZFhb0uDpcpttrTKFv7LeVj1y1+YHVqPzFSv2v+SuvOzMpzk6WI00509TZo
+	 AnkzXvpzA8wRIG1xVnFmxu1JaLu7rRJPnx8iER/pcYFFTGMEaecVGKR0l5uInn3braCBC
+	 LCdFZ5f2xRV36XmQzgJII8cHjaAOQWxnByXVAj2s2PgDuRYwjS2/VOi+ijRGIS5/hvJfC
+	 Hs7Emrpg2XmaHbQRgrUUydvw/PBsm+1Th+qXl7PmMjRLzmVE4I0Qt74LHo1FF4VeV1z3l
+	 hk68565ZuwuzyH3M9sDrzSk0eNq6jhhChuJif6ambrT747azCF7Ensp6WVLW+x4cdYA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793607160;
 	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
 	 X-Coremail-Antispam;
-	bh=rgA3jQowehsD4IDuk6EokEntcsXv8fWxLKITDX8CbVQ=;
-	b=EckocJhaPLREmVcC/U0Tb1nyvDXJ17iwjA8cAq11BBCBD1Xp7KUQCZW5NH7VxzMEYZpP
-	 ALNr7q2ngYNv4bj0kfSbpK5sPO30EGm9REAJt9a5w8ZakVATMnrGkQiBkk/Fo8ws2X3g/
-	 6YJkiLvRncnKbTbHHfSyqUBaGj6RMODUb0S1TvDRHUPz400ZOg6zsT8YOjKKeAqfVLCzs
-	 YcGr8j1o9NkwudwO6GfJ3yAQFlqCeUh2bTfzBRt1pm4v4F8xAQpsCq2j6EXIzGzuansqW
-	 MgNvm3KSuGqAAApAJB7kS6Fvk5twx1tdltLTvPkSXM9wWhSK1zSIMsEzMLRBMgoYjuw==
+	bh=0XFyu5ohozRsphsglreF2QooKn6bFRpdsO1k5OqAHm8=;
+	b=RF0CMd8PKQB5t6ZRApmMlJhjh8u55PXfklijEF6KK2bq/Rdqq0EfkwWMELw+XpDKODXX
+	 HRndBrL9aLMMjW2+0dCMfSriWgssUShJJeng+kblkgquBL419DUV71DT705GRbk4DSn3A
+	 7RamFV9s4JPC4WKYfWEJStNIry/dBCwoRJP7wRf1o3qqewgiLfU/Tu3ZTdBKADy6Yd88C
+	 aX9cSGWmsf3DPMpSG2MXKvR8DhpiNX20fGGlxFMayNqiNr2x6C/5Msa1jHxacJQ5ZPi9w
+	 +EedZ6D66zqpU8hmv6htO2ZReZvObQ1YOdgZkBl07aDxyDxpaE9V2qNnv2bpTaPHKnQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=loongson.cn;
 	spf=pass smtp.mailfrom=loongson.cn;
 	arc=none smtp.remote-ip=114.242.206.163
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB80B606A32E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6CA606A329;
 	Mon,  2 Nov 2026 08:12:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB80B606A32E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB6CA606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8DxD9PyRehqTngbAA--.13991S3;
-	Mon, 02 Nov 2026 16:12:34 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8CxPtPzRehqU3gbAA--.13915S3;
+	Mon, 02 Nov 2026 16:12:35 +0800 (CST)
 Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAx3c7vRehq5cwxAA--.37701S3;
-	Mon, 02 Nov 2026 16:12:33 +0800 (CST)
+	by front1 (Coremail) with SMTP id qMiowJAx3c7vRehq5cwxAA--.37701S4;
+	Mon, 02 Nov 2026 16:12:34 +0800 (CST)
 From: Tiezhu Yang <yangtiezhu@loongson.cn>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -43,9 +43,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org,
 	loongarch@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v1 1/2] selftests/bpf: Handle EOPNOTSUPP gracefully in test_loader
-Date: Mon,  2 Nov 2026 16:12:29 +0800
-Message-ID: <20261102081230.7063-2-yangtiezhu@loongson.cn>
+Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Handle unaligned access failure in fexit_bpf2bpf
+Date: Mon,  2 Nov 2026 16:12:30 +0800
+Message-ID: <20261102081230.7063-3-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20261102081230.7063-1-yangtiezhu@loongson.cn>
 References: <20261102081230.7063-1-yangtiezhu@loongson.cn>
@@ -59,11 +59,11 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAx3c7vRehq5cwxAA--.37701S3
+X-CM-TRANSID:qMiowJAx3c7vRehq5cwxAA--.37701S4
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7KFW3Aw4DXr1rtr4xJFy7Jwc_yoW8ury7pa
-	92gF4jkrZ2q3WS9a1UXa1DGFWFyF4kGFy3Kr1rWrs5Ars8JFn3tr1fta4agFn5GFZ3Z3Wr
-	uasFyF4rZF17JFcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+X-Coremail-Antispam: 1Uk129KBj93XoWxAr1kWF18KF4DCFy5tw1rZrc_yoW5Kryxpa
+	s5Aw1jkryfZFySqw1UJa92gFZ5trWkJr1YkF1Ig398ZwsrArn7Xr1xKFW5WF98WrZYvws5
+	Z3yIkF9xur4UZagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
 	0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
 	IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
@@ -74,62 +74,101 @@ X-Coremail-Antispam: 1Uk129KBj93XoW7KFW3Aw4DXr1rtr4xJFy7Jwc_yoW8ury7pa
 	tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
 	AKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
 	6r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF
+	CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF
 	0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
 	AIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
 	KfnxnUUI43ZEXa7IU8XyCJUUUUU==
 
-When loading a BPF skeleton program via test_loader, certain test cases
-such as jit_insns/cast_to_user may fail if the underlying hardware lacks
-specific execution extensions required by newer features like BPF Arena.
+When executing "./test_progs -t fexit_bpf2bpf", there are 5 failures
+with the same log:
 
-Now that arch-specific JIT backends can dynamically report these missing
-hardware extensions by returning -EOPNOTSUPP during object loading, the
-user-space testing should handle this gracefully rather than treating it
-as a generic loading failure.
+  ; tcp->check++; @ test_pkt_access.c:98
+  226: (69) r1 = *(u16 *)(r2 +16)
+  misaligned packet access off 2+(0x0; 0x3f)+16 size 2
+  ...
+  libbpf: prog 'test_pkt_access': failed to load: -EACCES
+  libbpf: failed to load object './test_pkt_access.bpf.o'
 
-Check the errno of bpf_object__load() to evaluate whether a load failure
-originates from an unsupported platform capability (errno == EOPNOTSUPP).
-If true, cleanly detour execution via test__skip() and branch to cleanup.
-This allows test_progs to mark the test status as SKIPPED rather than
-logging a false-alarm failure if the feature is not supported.
+This is because CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS is not set
+on certain processors that lack hardware unaligned access support.
+In this case, the affected tests should be skipped.
+
+Add a get_unaligned_access_enabled() helper and use it to skip the
+tests gracefully if the program fails to load with -EACCES.
 
 Before:
-  $ sudo ./test_progs -a jit_insns/cast_to_user
-  ...
-  libbpf: map 'arena': failed to create: -EOPNOTSUPP
-  run_subtest:FAIL:unexpected_load_failure unexpected error: -95 (errno 95)
-  ...
-  #193/2   jit_insns/cast_to_user:FAIL
-  #193     jit_insns:FAIL
-  Summary: 0/0 PASSED, 0 SKIPPED, 1/1 FAILED
+  $ sudo ./test_progs -t fexit_bpf2bpf | tail -1
+  Summary: 0/10 PASSED, 1 SKIPPED, 1/5 FAILED
 
 After:
-  $ sudo ./test_progs -a jit_insns/cast_to_user
-  #193/2   jit_insns/cast_to_user:SKIP
-  #193     jit_insns:OK (SKIP: 1/33)
-  Summary: 1/0 PASSED, 1 SKIPPED, 0/0 FAILED
+  $ sudo ./test_progs -t fexit_bpf2bpf | tail -1
+  Summary: 1/10 PASSED, 6 SKIPPED, 0/0 FAILED
 
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- tools/testing/selftests/bpf/test_loader.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 11 +++++++++++
+ tools/testing/selftests/bpf/unpriv_helpers.c          |  5 +++++
+ tools/testing/selftests/bpf/unpriv_helpers.h          |  1 +
+ 3 files changed, 17 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index d24e4fedae46..021818afbd3b 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -1474,6 +1474,10 @@ void run_subtest(struct test_loader *tester,
- 			goto tobj_cleanup;
- 		}
- 	} else {
-+		if (err < 0 && errno == EOPNOTSUPP) {
-+			test__skip();
-+			goto tobj_cleanup;
-+		}
- 		if (!ASSERT_OK(err, "unexpected_load_failure")) {
- 			emit_verifier_log(tester->log_buf, true /*force*/);
- 			goto tobj_cleanup;
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+index d2f2dcc0f2e1..1c0e93dcb3ce 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+@@ -3,6 +3,7 @@
+ #include <test_progs.h>
+ #include <network_helpers.h>
+ #include <bpf/btf.h>
++#include <unpriv_helpers.h>
+ #include "bind4_prog.skel.h"
+ #include "freplace_progmap.skel.h"
+ #include "fentry_sleepable.skel.h"
+@@ -76,6 +77,11 @@ static void test_fexit_bpf2bpf_common(const char *obj_file,
+ 
+ 	err = bpf_prog_test_load(target_obj_file, BPF_PROG_TYPE_UNSPEC,
+ 			    &tgt_obj, &tgt_fd);
++	if (err < 0 && errno == EACCES && !get_unaligned_access_enabled()) {
++		test__skip();
++		return;
++	}
++
+ 	if (!ASSERT_OK(err, "tgt_prog_load"))
+ 		return;
+ 
+@@ -297,6 +303,11 @@ static void test_fmod_ret_freplace(void)
+ 
+ 	err = bpf_prog_test_load(tgt_name, BPF_PROG_TYPE_UNSPEC,
+ 			    &pkt_obj, &pkt_fd);
++	if (err < 0 && errno == EACCES && !get_unaligned_access_enabled()) {
++		test__skip();
++		return;
++	}
++
+ 	/* the target prog should load fine */
+ 	if (CHECK(err, "tgt_prog_load", "file %s err %d errno %d\n",
+ 		  tgt_name, err, errno))
+diff --git a/tools/testing/selftests/bpf/unpriv_helpers.c b/tools/testing/selftests/bpf/unpriv_helpers.c
+index c8dd5d848584..54ce342b3fe4 100644
+--- a/tools/testing/selftests/bpf/unpriv_helpers.c
++++ b/tools/testing/selftests/bpf/unpriv_helpers.c
+@@ -161,3 +161,8 @@ bool get_kasan_multi_shot_enabled(void)
+ {
+ 	return cmdline_contains("kasan_multi_shot");
+ }
++
++bool get_unaligned_access_enabled(void)
++{
++	return config_contains("CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y") == 1;
++}
+diff --git a/tools/testing/selftests/bpf/unpriv_helpers.h b/tools/testing/selftests/bpf/unpriv_helpers.h
+index c24d53e14f3a..6e3ad636ea83 100644
+--- a/tools/testing/selftests/bpf/unpriv_helpers.h
++++ b/tools/testing/selftests/bpf/unpriv_helpers.h
+@@ -9,3 +9,4 @@ bool get_unpriv_sysctl_disabled(void);
+ bool get_unpriv_mitigations_disabled(void);
+ bool get_kasan_jit_enabled(void);
+ bool get_kasan_multi_shot_enabled(void);
++bool get_unaligned_access_enabled(void);
 -- 
 2.42.0
 
