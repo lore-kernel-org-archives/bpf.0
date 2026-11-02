@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793587022;
-	b=Ck4aicSJlATFrhWFbXL5+iK3sIkDyIjWbtIx9v6vu5dhUIq4W9z1nVauGwhXvhKSk6tC
-	 XreaqWbKZumAOh4x48kBLmP4L+RTWMH0q0wzPQmfwGZzR4hNsA6vKxO8atshXjYgJ1MWZ
-	 4Mbed/GdzB1lQW57fYFdsOdE288qkOcjCP0tFAZurLF+pyel9KtLMzrWIuAbhfbc1wvOf
-	 AfLHU115A+EOx7BuKfzi1Q3XF/OhRSbk+7J7SjPivo5bChJlReZgFzgQiyE3j+63LbLhy
-	 i2sHBhYFmTai5vGJYixYzMlInoAusJI2Eb/+snbfZNkI3gNrPblU6JrALTM2H6WQ9vg==
+	t=1793587482;
+	b=xI26ttQyx1M/r0nEMpWXojf2zGZtMg5xMbobavvnYWeadSGstdMLIZb9RuP+Gu6UIQh7
+	 hfhFQwhKMK5ZKU64PCepcltqvr3jv7ciy0vsxV+6n8NFGYkrVCWPI7zN4l3+wzTK1rZC2
+	 GsAVXcsl7eD6fS+VLRzH942Eff2gI6WSGqAJX7UBMl+ls48E4EUfgqI5sFW3zkSr6uCyb
+	 q/tMY8/uHKhcIGhSECgHe7jn3/2y2GLsvHrfLI2w/yxvTK/EUO2KSeCIJ+k06mmUzhjZB
+	 cIzX5b0NIWp+0vvsr2gePC0B6whwsjcefRKPL6sTqiBoQ5J0/V1eaxmceDJ7dN+vgTw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793587022;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=MxQRI3Kt0yUFkvg8lt4ycJwOdj1jWMLnHkDm0fz34to=;
-	b=UOs3IvPj+81tRObUZLx5RSqa7fw8z63vSAJMMEhs8ReGnezn+NgYWZDNDjJs6utgjofF
-	 BxjWJ8i2B0v1HemFeF6TYXtUMpUbP+2u0mZYYMc5tvXnUEIfAG8vnR4dyupyEcKI9My/i
-	 vF63FasgWkUj0yezu+Mpv4HwnphRtkoCi2/s2/vPC5G8Lagf9xik7j1jQWNgDw5heRXrq
-	 MNV5p72T8dnxUN9L0h5HxUovUoA/64VVeVID9DQ4nafZgNQ34F7BUnkoMnDsHoOqMrXKv
-	 fDMTr2wdJttecQ9u2tTQJKo+PCx+CejJ8tYstSk1nEabxcrY87XPynK1VKE+iRhel/Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793587482;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=TNgDNizRPpt3SatVCM2Ul5Nl7OsXMoWz+P3HPILo438=;
+	b=B5oa6Am+9aLfrGYgVBOj4DdCxrpvf7XmRTI8jzPaacRJIFqsYSUPhCn04uW2J9K46e/8
+	 QiQ6u1mvSXksLK9CLZ8NkSnE63+zN1QW3kDxkNR2OPPPgh8HBVkjyrpXWcoTAFHctD8+W
+	 dtZEvp2vAEYenWSsE73hSG8e9BCH4C4NAI8BnoYHaMMMfoDhAY8tZgRYf1XvZJPEmX/zW
+	 12Xg70MWaJEPVw9qnNER6Pfp++Wh5/SxYeAOgbINYlVMBy0t9pm4tF/Tq10S0MsZeegmX
+	 klxknBiyvfYXawCP1ByclPcFjCfw3d4bWJERDygR+eaCEwmhNv2wQ5qI2FC7xvhPl4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ut8vxLgG;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=emUChDjf;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90F1606A331;
-	Mon,  2 Nov 2026 02:37:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A215606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 02:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ut8vxLgG
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34F651F0093A;
-	Mon,  2 Nov 2026 02:37:01 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=emUChDjf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B6F1F000C1;
+	Mon,  2 Nov 2026 02:44:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793587021;
-	bh=MxQRI3Kt0yUFkvg8lt4ycJwOdj1jWMLnHkDm0fz34to=;
-	h=From:To:Cc:Subject:Date;
-	b=Ut8vxLgGG1cbXn9k8x0yxABLoptmCMR0jMkR+1bYJ4bGbU7P+GIQ4ArZFZ9M3aGtf
-	 9gKcmGLcHLWjxBdeXDf90lfHbcC/yHs65MIfbI3SOXeS6x/cVYFVFrX98XbyCgjXat
-	 kb2Wu2dhUVmSNCXTCFhE1GxnGWKnJVgzermLT3nyBzOp+LqVoGVq0AXh7Aj/tOwOwd
-	 SJ2QWrSwk6FTE+m2sgachVctyP4y0+0QlL/0UG2OXfeSLy3IhJHSDsQwgXCEuAIGQn
-	 TnQbCV2rbdiAd1/WPAg+zenDtPKZg8pbiao7NHNw35tEZc9dwq4XKlDnfXu7pUFcmZ
-	 rKQnaGgZ19inA==
-From: Vineet Gupta <vgupta@kernel.org>
-To: bpf@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Sasha Levin <sashal@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Vineet Gupta <vgupta@kernel.org>
-Subject: [PATCH] lib/Kconfig.debug: disable CONFIG_DEBUG_INFO_BTF for ARCompact
-Date: Sun,  1 Nov 2026 18:36:37 -0800
-Message-ID: <20261102023638.1621622-1-vgupta@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=k20260515; t=1793587482;
+	bh=TNgDNizRPpt3SatVCM2Ul5Nl7OsXMoWz+P3HPILo438=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=emUChDjfiBEj/e/9g3kz1kx2bEtetHtQ4dkUC+35XR8cIUybTGiAmeSnrX8de4bEh
+	 hT1+0H0z9O4gdst3K51kqpZNRNDYtat71PDQW+6zEaUUOOY8ltEt4FthGRSYmg3s0u
+	 OCdlEJ5xPTCboUsWDL798uMHaDV7mgz1s/79D8McP2jgI8SnkAwIC/yAOhJzHlzuUA
+	 q8uoMvZG4XzQSNCQyszKEcZeMoJnXQmjA5Hmv6yLGwPxzR6jeGiArrZsDlTfl9z/ha
+	 xbR7+hXA5vHvBzIFGVw9RjrvdDsZisrdiXBoURVeP9Cl9CyJ84G/FwnzTk7Mm9xB5x
+	 k1cl+A8bh3SMQ==
+Message-ID: <sashiko-outbox-192845@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Wait for wq callback before
+ checking ok_sleepable
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jonathan Bastari Thamrin" <thamrinjonathan@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261102-wq-poll-fix-v2-1-48b7d12815b8@gmail.com>
+References: <20261102-wq-poll-fix-v2-1-48b7d12815b8@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 02 Nov 2026 02:44:41 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,49 +59,57 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-When testing Sasha's commit ca201ad6e92a "(ARC: Strip libgcc debug
-information when generating BTF)" ran into build failure for ARCompact
-builds.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: missing error jump before spin loop in serial_tes=
+t_wq()
+--
 
-pahole, uses elfutils to read DWARF for generating BTF for kernel
-modules. These are relocatable files so elfutils has to apply the
-relocations in their .debug sections and it turns out it only handles
-EM_ARCV2 (so ARCv2 relocations), not EM_ARC_COMPACT (ARC700) which is
-silently ignored to produce bogus module binaries which can ultimately
-lead to following errors:
+commit b67542c75142d5bd693ad5ed6fa8a0252549f42f
+Author: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
 
-  Complex, interval and imaginary float types are not supported
-  Error while encoding BTF.
-  FAILED: load BTF from drivers/gpu/drm/drm_panel_orientation_quirks.ko.BTF.1: No such file or directory
+selftests/bpf: Wait for wq callback before checking ok_sleepable
 
-As for Hexagon in commit aaa2c9a97c22 ("lib/Kconfig.debug: disable
-CONFIG_DEBUG_INFO_BTF for Hexagon"), don't allow DEBUG_INFO_BTF on
-ARCompact. BTF is unlikely to be wanted on these older cores anyway.
+This commit replaces the 50us sleep in serial_test_wq() with a spin loop
+waiting for a wq_cb_run counter to be incremented by wq_cb_sleepable()
+before checking ok_sleepable.
 
-Tested with elfutils 0.194 and pahole 1.31.
+Link: https://github.com/kernel-patches/vmtest/issues/455
 
-Signed-off-by: Vineet Gupta <vgupta@kernel.org>
-Assisted-by: Claude:claude-opus-5
----
- lib/Kconfig.debug | 2 ++
- 1 file changed, 2 insertions(+)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/=
+selftests/bpf/prog_tests/wq.c
+> index 97926e35aaf26..95ed4b69c0f50 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/wq.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/wq.c
+> @@ -28,8 +28,9 @@ void serial_test_wq(void)
+>  	ASSERT_OK(err, "test_run");
+>  	ASSERT_EQ(topts.retval, 0, "test_run");
+> =20
+> -	usleep(50); /* 10 usecs should be enough, but give it extra */
+> -
+> +	/* wait for wq callback to finish */
+> +	while (!READ_ONCE(wq_skel->bss->wq_cb_run))
+> +		sched_yield();
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 2d22638ec13a..5331c3649228 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -403,6 +403,8 @@ config DEBUG_INFO_BTF
- 	depends on PAHOLE_VERSION >= 122
- 	# pahole uses elfutils, which does not have support for Hexagon relocations
- 	depends on !HEXAGON
-+	# elfutils only handles ARCv2 relocations, not ARCompact ones
-+	depends on !ISA_ARCOMPACT
- 	help
- 	  Generate deduplicated BTF type information from DWARF debug info.
- 	  Turning this on requires pahole v1.22 or later, which will convert
--- 
-2.53.0
+[Severity: Medium]
+Can serial_test_wq() hang indefinitely here if bpf_prog_test_run_opts()
+fails or if test_syscall_array_sleepable() -> test_elem_callback() in
+tools/testing/selftests/bpf/progs/wq.c returns a non-zero error in
+topts.retval before bpf_wq_start() schedules wq_cb_sleepable()?
 
+Since ASSERT_OK() and ASSERT_EQ() only record the failure and evaluate to
+false without returning or jumping to clean_up, execution falls through
+into the while (!READ_ONCE(wq_skel->bss->wq_cb_run)) loop even when
+wq_cb_sleepable() was never queued.
+
+Should the assertions jump to clean_up on failure before entering the wait
+loop, for example:
+
+	if (!ASSERT_OK(err, "test_run") ||
+	    !ASSERT_EQ(topts.retval, 0, "test_run"))
+		goto clean_up;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261102-wq-poll-fi=
+x-v2-1-48b7d12815b8@gmail.com?part=3D1
