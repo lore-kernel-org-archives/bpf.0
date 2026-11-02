@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793599165;
-	b=0Z7PcOuyQs1SnY6+6TGySTH2+KSwNSPPD+Ifss0/WAqlWiJnP8QmHMKbAt7bLrdTDMiW
-	 YOHGE7gTIIiMXrphoHGhr2Mf0ymNgPDg8FxSHx5rKt/S76yTuN7t5U1fRg5rqH9+WXmLn
-	 +q9Xnm5/NX5RkoejgOzdO+3HxI69FRJuUJMFFnmEFRJzb7jM8XfB+jiyErVYDEx0L8cRW
-	 6pDhvjDgBhpznmVFRylZBdJ7YQEHaro5OxrKCSNSm8aaJcWFB2Xx9FJwgCEE5jSB2vwSX
-	 hqzltyKcNxQglvhdXloIFh986LbOM9k4cn9o+TKKdQ2PrtRM1jJJo6BSrIAlnG16M2A==
+	t=1793599172;
+	b=WcOv7DcQd/vziglYH5jFzLyeIemJqRA6A148eYrzBSzEoZiKkofKafqpjw5crltEP1L7
+	 OIG5Yegfbe+j9dG9LgNwx2IJ/ngQ/2OkL1PGi19XXcL5lmId42NJEHiNWfq4dYF2FeEAy
+	 w5s6ZSpSWqreUExfWYHRd6bdNn5aAhRbsotzLEcx5GzFsxiyXdZV6U1lim5vPv0NlfQw1
+	 VtMGonK+IxPlzdLVi9ZpD6UgcpkBoevXWxPQbwdQ4nfZfDLNhoHb1Bug9PWeRRA5vL8Tt
+	 GmT9gW4bGmj1A86sOk1MnLQs+OsoQwrCJQqjyo/65iWeT2HkNIx4lxqwHWiGVstBoKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793599165;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793599172;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=capoWtlmSa27SslU2P9s8mNwAxpjLHmi0n79esbXy2w=;
-	b=mHpAywfFwye6pZflOOKVLPQMWV4BUHQEpy82r2/OH7eLNSzY+4IaIUj5pFHZbqGNF2ZR
-	 1m5yDUGjRkGG0zQaO60M6A5c7hdsrjyMWSk5zN8F7rsYe/JSd32nImCAZPtVmPXhKwOZH
-	 PbvWr9OA9Ds5TdmCMvk+dFZScHmhrtAURPwSBbNINd/MTR0E92fqE5gwgkroytcl0Y3Pg
-	 LJYfWWJ81JT/uGxeoA5rZXtk/30OdvxLjhUtlaJuwfpNch1+SbGceK2VQWC4J4S1+f/Eu
-	 mGYeHYTz6NXQ853JBk7oCXd8hrkdrNozD9puQS/ppfOtlymRGkXHy8UcHm2kkJIVuDg==
+	bh=uEG4y+uDdeatRYNX0XhH9I87Gd5zifsbDCdQuU96RRk=;
+	b=BdIb3EUGpR8ZF/JL9kF7skcVKXX/qU2GA0h6o9q4e0i/A55oAN/I41x682tlzBAw64hU
+	 HdXHZWm+f+4c/G+2MfS9oVJlfmWZ2Vk2ikXT9BsvOHhoDYgfFjI9YOpIJKGdsAb1zGD0y
+	 hmacSuuQfKCJx1PFq8KMmvlx6QWl8AZZDH5a5T+J6m7gfmW+OVR/po2XNvdYf6uSGCGQd
+	 3scfoaNiIUewPQvyCzXNpbgxoPj+Aw7IukvsSpWTzjh7kkEAANev7GK41Nt7B+mHJmQna
+	 /v6Z2Oa/NQrEv68tNL/LLvfaWwUYq2oPAqJP0RE6ZVaqpLtANqNQvweOCyn5cfaqoDQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FjLxz08s;
-	arc=none smtp.remote-ip=209.85.216.48
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NjHW9y3Y;
+	arc=none smtp.remote-ip=209.85.215.171
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2F1606A324
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 05:59:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4B2F1606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE59606A324
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 05:59:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDE59606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FjLxz08s
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3ab41538192so2136263a91.0
-        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 21:59:25 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NjHW9y3Y
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cc758830601so1537545a12.2
+        for <bpf@vger.kernel.org>; Sun, 01 Nov 2026 21:59:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793599164; x=1794203964; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793599171; x=1794203971; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=capoWtlmSa27SslU2P9s8mNwAxpjLHmi0n79esbXy2w=;
-        b=FjLxz08shyVKo3ie0Am6kPXgDg5EHyIKEuA/NhSCGZFpnPO3stIr/a/PFcN65GnfN2
-         7X8pgIUAYS5pGB+GGVKseH3iUnMF/HS2dBafQM2+mLegckkJD241TZtYnfcMD7J68VBG
-         PBU57qS28Rf9Uit8rvr+TLFcYfJlAz407xn9Ib8odJ4ZLhyDIpSEJjIeiwLdaWsweD+6
-         z1fbqMeQn6yfyXEdkoDOIGoELKcbHCj4Yt1SOoFjlfVbXNAAFIn0539J09nnbfBtWMdo
-         po7j8/Guf0yyf5/kLUmCAPCRNv+8i3uTfkBG8/JtyI4krHqa9EHpjr9fR9ePY3QGmwUQ
-         KRqw==
+        bh=uEG4y+uDdeatRYNX0XhH9I87Gd5zifsbDCdQuU96RRk=;
+        b=NjHW9y3YZkHp+p8V7rnZcwHqO5I0+EL9L+eXfiBk3+kTS30HnnYKu795pWUkwmvvQi
+         ltjV/0RvJYAFmwpeU25xblBvrpiaEplnyz2dzKav1j0CPJ0G0K0w4DXvQH8MYfcE7L97
+         gtJcKeBNPnTBhjBMZFh2A6RzAyTuNCDfHaDPNkQY5pCiavvtjtR6VPDVebe2Msc3dBVX
+         KGCS9n9l85CbPJzZ6jGw2IOdLyDUllwhvRnXg8U2Oa7ZYpUdUw+HwobkWZ9VqmlmtJaL
+         emqAI5W8hvCMRMKDTuvFct/aEQvS8M3OwUU9hopU91OWtRIxxk5/f6T85n5U6bUXoMW2
+         JBFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793599164; x=1794203964;
+        d=1e100.net; s=20260707; t=1793599171; x=1794203971;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=capoWtlmSa27SslU2P9s8mNwAxpjLHmi0n79esbXy2w=;
-        b=mPWwfsurHZndpGMAyYY6VojwbOYf8K0CSbRfFFdxW/VQCzsBJzxtIrx+nZ0sfb3n3e
-         gHrlyh4WW1a3APhW8iFkOChhJsGbe5XlWz8clGVzBBbAwNKmSRX0XxY2XL24RM7BnEVG
-         iMoiOgMkonG/whMiq2Dtrqb7PdFzAdreOF0wo7HDzO2uIRBcIe5bukfXNQqoz+Rmttk0
-         jU9blnV1mN+jiSUfILH8i+zOPwpNsgWE/mxzVa6ZVBnyf1IdCyN98H3z5jnF/sWpax1o
-         2tK9OZlkUF5yk27PpmJQDP+QA2b293sENaMzikb8jPycc3fIwqkaz7GWuvk+dn5CAxa1
-         wX3w==
-X-Gm-Message-State: APuU4Z+fcjDRcwoNd/SFQbcfTIlBeOzYFIBSXETOLaCMUzi8dHwG+QYx
-	AODHyjLgWiwYV/0re3ojhATBbCGCaGu7Ij4/qbt1JbPNzgocvDIei7LvfiZhGg==
-X-Gm-Gg: AYBFou0fO9eRowehq94BXsXv1oGcW4KYRlXRo3Z+3jshdWqKPP5HJdJPmG1BA3np9DZ
-	v1f+k4z5NuEGoGq03LHFQyHu2ZMzKDPT5DmgIjZgtguZz17nxcyqE1nDmWJ0oiedLSjRO6SHCRP
-	qnW/TMnpdJtkOtDazs5Yi3DdbL/n21dKc1Dpn5KIwnjDqse5PSFhsrFDkaRdYMynD4U/vhLGDeB
-	SjMsac+62IThu+bvoqP+A5gFiLg+S/J1edS6y6IEZqXBUpC/SlDIKjzSbLuzNIbC1JxtF0JaNiT
-	cR5tVWsd7q/ATtpOLnmEUzQlNlKPKXJlqd/NR6o1SyniMv3SzT9mz+rEu8k9BkENdojR7tdzcHa
-	JHEX5bRiRV+3QAhaozxzhuRt7aozKHAkcNaIIvu329JdtgQ94achsCQA84HSLfjJ1+9dril+mA3
-	ym76U347egN0XSUpNO56fTgfi8rNE08DuZnTk609nCAFGn5JGZKkM6rSS+heoGCML6k0pXYKYLR
-	X5h3vV1QcdYFfpYgWx/bHDcPD0XSlvG2Qhkp37gkfkaLoHDpi+B4oy2Eftoner/yoj07T2miLOm
-	oz92GTt4TsS7910thz5AYP052SAENUxSGIpbJev+S0k1UsIc0/WABzhUwxnlrCrLIyOpZEIU34P
-	7wAjCmV+mzd8ZVQspy8oc+d3wTogyXyA1xS54kbi+h7hEEDRGsNK3gOOc95YxGXS5exPhFet11c
-	dp
-X-Received: by 2002:a17:90b:33ca:b0:3ac:97e3:7389 with SMTP id 98e67ed59e1d1-3ae897acbf3mr7239697a91.44.1793599164472;
-        Sun, 01 Nov 2026 21:59:24 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae845ecaf5sm12502039a91.16.2026.11.01.21.59.23
+        bh=uEG4y+uDdeatRYNX0XhH9I87Gd5zifsbDCdQuU96RRk=;
+        b=dkdcVAUkasJhmOxd0m/djbJgGwUN6z1X3M7xW5aDwJ211W2Dv33Fqfazsh3jgZynko
+         +khKwu2gkDEdH2Qy2wUYmS6MRXvER/zn93VfIOTWJcmwDgv62ssC8uvcQGIG2cH/x/ge
+         xqf2e7xuCIxHquucYdGDMXfjRmd1wNMgZtY1pzMo0eWd96oyb1ZTpagCKL/75A0QPhBd
+         A7b1CrtjcDW7m5FllT07kfhjso+pUSe/s+xaPz0eHPXfNAN57UeYv3BIpJ4t17KBzZJI
+         Vmk+YL393hAuTq+9+76BWDSyTHmljx6Sp5p6HQe3kJStS+QOAjud8/HV2zKjtCMeDsZp
+         qZkQ==
+X-Gm-Message-State: APuU4Z9odD370pEmHNMOyPscdsEknJ+UXtSOMx3uZyYf75NIXbl3sYBc
+	m1tpc+iyYVbbUEFVswnTnX1Fe1lN9LaQsX2p+vKuUkumEtUb98DgtZ0yJlC7Tg==
+X-Gm-Gg: AYBFou2FQc0nEbAcP4a+qtyJnxS0ZrBHmYJU6++vFAKPO5XMxczHy9jh4FmzzKevZ58
+	qiI+RaS4ZlT09UDvgVV+tRGU7ZsC3nLjvzIJoLo3nA+2bGE1TYt1S8Liy6TroK3GBmUTGVzrZbJ
+	tC7JM9FIQf237c7uxeB134DDqB3+oIYDAamGtBz3RkV57KdJlQxdMK+kxepYtiVEG1N2ro+eZ8C
+	RZfh4E26aIjaJhOl9KbV05NK+TDKt0HbI4USyzFc5vaBuCTIjV4Ha/n6+KVOUDC/hPoT1iYHz87
+	1SzFJpWeuYKV0UMJeuM+jwkNl72D3d44iZXKz2FSpGULhSt/46xTkQx2nVJvtqLXD6LREwhZska
+	7MqgaPenICdXc62I8M/MlEqn+j1YWOtuS7JHnigJTVYxw+1kX0/bbEXV6TWaXPb+9iJbIyMWwad
+	AuQxM/QMHRHXqmBKJPLbZ6S9uH/6BRW+eOCRnoVPAqeIkwgXhVVRJ2xGJsoK4L1rLLIdGQDmOwX
+	TPs9ub79/laKVf/ksPUdV9RiL+fIE7QesBEDGau1KawZu9b7ceITkzDz+BRVIOoqjmyWTngHKlH
+	zBNY72msPXEIeBQUBgsH9L8ctfPLbuAMMh7ogCOY2K3UJoDxksoj4u+cgL1xVogNzIU+HZuz6CH
+	GU9fdc+QDrnVnk/Skaw0nYFmNsnJ96BeMbs19TiYExPg+QXG5Z5VL3ImDM0NjgwEuP0PNezW/UA
+	==
+X-Received: by 2002:a17:90a:ec90:b0:3a8:10e2:ad08 with SMTP id 98e67ed59e1d1-3ae8982cdc6mr7802764a91.48.1793599171143;
+        Sun, 01 Nov 2026 21:59:31 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3aec233ba08sm2893979a91.0.2026.11.01.21.59.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2026 21:59:23 -0800 (PST)
+        Sun, 01 Nov 2026 21:59:30 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf v2 1/4] bpf: Fix the join of fp+0 with a value that is not a pointer to stack
-Date: Mon,  2 Nov 2026 05:59:10 +0000
-Message-ID: <20261102055913.3598414-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf v2 2/4] selftests/bpf: Test the join of fp+0 with a value that is not a pointer to stack
+Date: Mon,  2 Nov 2026 05:59:11 +0000
+Message-ID: <20261102055913.3598414-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261102055913.3598414-1-alexei.starovoitov@gmail.com>
 References: <20261102055913.3598414-1-alexei.starovoitov@gmail.com>
@@ -104,97 +104,119 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-arg_track follows pointers to the stack through registers and spills.
-Scalar evolution and the removal of dead slots rely on it to know which
-slots an insn reads and writes.
+A register is r10 on one path and a pointer to a map value on the other
+path. A store through it is not a certain write to the stack.
 
-Where two paths meet, a register can be fp-N on one path and not a pointer
-to the stack on the other path. There is no value for that. The join adds
-a fake second offset, fp+0: with two offsets no store through the register
-is a certain write. But for fp+0 the fake offset is the offset itself:
+join_of_r10_and_map_value is a valid prog. It reads the slots after the
+stores. The join has one branch for "pointer to stack joins other value"
+and one branch for the reverse order. The prog has one register for each
+order, and it checks in the log that it takes both branches. Without the
+fix the slots are dead in front of the stores, and the verifier rejects
+the read:
 
-  join(fp-8, none) = {fp-8, fp+0}    two offsets
-  join(fp+0, none) = {fp+0}          one offset: "exactly fp+0"
+  reading from stack off -8+0 size 8, slot poisoned by dead code elimination
 
-Then a store counts as a certain write to the stack, but at run time it can
-go to other memory:
+In join_of_r10_and_map_value_hidden_store the slot holds a pointer to the
+counter of a loop. Without the fix the pointer is lost, and scalar
+evolution does not see the store through it. The prog loads, and it
+accesses a map value out of bounds.
 
-  r7 = r10, or r7 = map_value + 8 ; arg_track: exactly fp+0
-  *(u64 *)(r10 - 8) = fp-24
-  *(u64 *)(r7 - 8) = map_value    ; arg_track: fp-8 is overwritten
-  r8 = *(u64 *)(r10 - 8)          ; fp-24 or map_value. arg_track: none
-  loop:
-    r1 = *(u64 *)(r10 - 24)       ; the counter of the loop
-    ...
-    *(u64 *)(r8 + 0) = 4096       ; arg_track: not a write to fp-24
-
-Scalar evolution does not see the last store. It gives the counter the
-range of a loop that only increments it. The prog loads, and it accesses
-a map value out of bounds.
-
-Valid progs are rejected as well. The store through r7 makes fp-8 dead, and
-a later read of fp-8 fails with "slot poisoned by dead code elimination".
-
-When the single offset is 0, drop the offsets. The result is a pointer to
-an unknown slot of the frame, and all updates through it are weak.
-
-Veristat sees no difference in selftests, Cilium and sched_ext.
-
-Fixes: bf0c571f7feb ("bpf: introduce forward arg-tracking dataflow analysis")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/liveness.c | 31 +++++++++++++++++--------------
- 1 file changed, 17 insertions(+), 14 deletions(-)
+ .../selftests/bpf/progs/verifier_live_stack.c | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
 
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index e657e6d95408..db01aecdffba 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -976,6 +976,19 @@ static struct arg_track arg_join_imprecise(struct arg_track a, struct arg_track
- 	return (struct arg_track){ .mask = m, .frame = ARG_IMPRECISE };
+diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+index 5f9b11a81260..b5ae4f0d4dc5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+@@ -2565,6 +2565,86 @@ __naked void stack_or_non_stack_write(void)
+ 	: __clobber_all);
  }
  
++/* @insns start with fp-8 = 0 and r0 = pointer to map value */
++#define WITH_MAP_VALUE(insns)						\
++	asm volatile (							\
++	"*(u64 *)(r10 - 8) = 0;"					\
++	"r1 = %[array_map_8b] ll;"					\
++	"r2 = r10;"							\
++	"r2 += -8;"							\
++	"call %[bpf_map_lookup_elem];"					\
++	"if r0 == 0 goto 9f;"						\
++	insns								\
++"9:"									\
++	"exit;"								\
++	:								\
++	: __imm(bpf_map_lookup_elem),					\
++	  __imm_addr(array_map_8b)					\
++	: __clobber_all)
++
 +/*
-+ * 'a' or a value that is not a pointer to stack. A single fp-N gets a fake fp+0,
-+ * to keep stack_use and prevent stack_def. fp+0 itself would stay a single offset.
++ * r1 and r2 are r10 or a pointer to map value, joined in both orders. The stores through them
++ * are not certain writes to fp-8 and fp-16: both slots are live before the stores.
 + */
-+static struct arg_track arg_or_none(struct arg_track a)
++SEC("socket")
++__success __log_level(2)
++__msg("r1: fp0+0 + _ => fp0 ?")
++__msg("r2: _ + fp0+0 => fp0 ?")
++__naked void join_of_r10_and_map_value(void)
 +{
-+	if (a.off_cnt != 1)
-+		return a;
-+	if (!a.off[0])
-+		return (struct arg_track){ .frame = a.frame };
-+	return arg_merge_offsets(a, arg_single(a.frame, 0));
++	WITH_MAP_VALUE(
++	"*(u64 *)(r10 - 16) = 0;"
++	"r1 = r10;"
++	"r2 = r0;"
++	"r2 += 16;"
++	"r3 = *(u64 *)(r0 + 0);"
++	"if r3 == 0 goto 1f;"
++	"r1 = r0;"
++	"r1 += 8;"
++	"r2 = r10;"
++"1:"
++	"*(u64 *)(r1 - 8) = 42;"
++	"*(u64 *)(r2 - 16) = 42;"
++	"r0 = *(u64 *)(r10 - 8);"
++	"r1 = *(u64 *)(r10 - 16);");
 +}
 +
- /* Join two arg_track values at merge points */
- static struct arg_track __arg_track_join(struct arg_track a, struct arg_track b)
- {
-@@ -1000,20 +1013,10 @@ static struct arg_track __arg_track_join(struct arg_track a, struct arg_track b)
- 	 */
- 	if (a.frame == ARG_NONE && b.frame == ARG_NONE)
- 		return a;
--	if (a.frame >= 0 && b.frame == ARG_NONE) {
--		/*
--		 * When joining single fp-N add fake fp+0 to
--		 * keep stack_use and prevent stack_def
--		 */
--		if (a.off_cnt == 1)
--			return arg_merge_offsets(a, arg_single(a.frame, 0));
--		return a;
--	}
--	if (b.frame >= 0 && a.frame == ARG_NONE) {
--		if (b.off_cnt == 1)
--			return arg_merge_offsets(b, arg_single(b.frame, 0));
--		return b;
--	}
-+	if (a.frame >= 0 && b.frame == ARG_NONE)
-+		return arg_or_none(a);
-+	if (b.frame >= 0 && a.frame == ARG_NONE)
-+		return arg_or_none(b);
- 
- 	return arg_join_imprecise(a, b);
- }
++/* The counter in fp-8 is the offset in the map value r9. The store through r8 can change it. */
++#define LOOP_WITH_STORE_THROUGH_R8					\
++"8:"									\
++	"r1 = *(u64 *)(r10 - 8);"					\
++	"r2 = r9;"							\
++	"r2 += r1;"							\
++	"r0 = *(u8 *)(r2 + 0);"						\
++	"r1 += 1;"							\
++	"*(u64 *)(r10 - 8) = r1;"					\
++	"*(u64 *)(r8 + 0) = 4096;"					\
++	"if r1 < 8 goto 8b;"
++
++/*
++ * r7 is r10 or a pointer to map value. The store through r7 is not a certain write to fp-16:
++ * fp-16 can still hold &fp[-8], and then the store through r8 changes the counter of the loop.
++ */
++SEC("socket")
++__failure __msg("invalid access to map value, value_size=8 off=4096 size=1")
++__naked void join_of_r10_and_map_value_hidden_store(void)
++{
++	WITH_MAP_VALUE(
++	"r9 = r0;"
++	"r7 = r10;"
++	"r1 = *(u64 *)(r9 + 0);"
++	"if r1 == 0 goto 1f;"
++	"r7 = r9;"
++	"r7 += 16;"
++"1:"
++	"r1 = r10;"
++	"r1 += -8;"
++	"*(u64 *)(r10 - 16) = r1;"
++	"*(u64 *)(r7 - 16) = r9;"
++	"r8 = *(u64 *)(r10 - 16);"
++	LOOP_WITH_STORE_THROUGH_R8);
++}
++
+ SEC("socket")
+ __log_level(2)
+ __flag(BPF_F_TEST_STATE_FREQ)
 -- 
 2.55.0
 
