@@ -1,45 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793648611;
-	b=Z8MgwXOx6Cwmi+qc80Y/V6ZD4ysLhhlbdGEKWV4yq8tdeGymXlkSxpNpXR1wnsfUqaLF
-	 C9CWM/Dr4/GVT1Mds8siXJDA5UjO+1nuPW/SV1QOfUcBl3cgTT2IQx3eFUKq/7Y9O76Fv
-	 cCNk5rxmd8jr0HuHaR7rGD29A5mwlySTqAhqtx2Aa7hwtnK9zUF6QZAlbUlrb5YuxmpVD
-	 YKqmBciIZ3KL84CsblJHVRIzjbSDkqdhJUjFkLbKZrI9D5eofmv2dbMvK+8+s/XB084Bs
-	 Dvrm1r9ynWzgyYZsx+UEOmuIrvNL1tRJNc/DZ6/KKwGsnLaIKES22k5GsZyLNmRyzzg==
+	t=1793648690;
+	b=WK9r27CBLZgK847XT9qGW74JY1Q/aaJedV2q9ne07bVqhrnJokvuRBClGRmrK7O8Xjtt
+	 4j0jc2CwLARyteKkKJLtndmxcyvho61bVjdCHt0XVPLJjblkf+mk46f29zwxLIT5qjijR
+	 g9zym1DxW42Cf+hn+H7MqkmwBAjdJsaEpq0yedVQpc9mKMvC/fUlT5XKK3weIP2xhimzf
+	 v2D62+D3VoiTmkPGquc0ZVIJyPL5IWYv2f4BHre0qU3LclSxPxb/Rurb7LwAgZfn7nlvo
+	 Sf1M7p/u7f5QdWlriTFEoCcZEIAx8LP53Vl+k+3UKEsdlfYcw+CUTbwlYmFOHmcqaLw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793648611;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=PdfuVFZQBi+gz3CMjRmb5bBdnqM+6OAsgMlYJGzQPIg=;
-	b=IVPy/CbHNBKZyQ2xZfv3CBTn7IjK4sw5iSSJIymIr5ZysGhoaPd/6GskZpzKEI3SQWNi
-	 mQgOSJgQB0QJtcKuR8dAB2r7POQbOMvT/GTQRBLq+mrQJrarbcl6DAkBVNvu/m8CM//R+
-	 Z3ik9trKZfgP04+Mo0X35D0uMmyTsBlboC0MrqYMLEUSSGHYXe0tsOIylOnCzlgGT5Ric
-	 iZxkUTx5/5CLlCwFTq/sIpvlJwGvNAazM6mDsJNTvdpDhNWfGxR855NFCrhFCd9dKRirL
-	 naWCzCHziq//dEleCd+JZ2q1pTejSBpZEPMZH2PxnaFwQmeRvxF7nQ40nzUOZlgnV2A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793648690;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=q8lzWFcbYJouMtdLAS1/3a6jcoBfGjWkUtbKu1x5/0I=;
+	b=Pi1BOcY1sMOgFVMXivkifwS4gA7YSXf2RTByjfR1FZXNg7/rOR3M8H0Q7TotPjYyiY54
+	 tOglpqtdd5pRP4aN1WTCZAToM0IzpF7HQ8t9vKo0yhJN/o7/8y9C6pG42yxsQ5gS/9sza
+	 2+Lf5iJupuoi/dpixtEQHumDR4n9Gw2ow3x0KIYwL2384SwzVKRge5bjgqwpe9ZEX/gGu
+	 gbFsErs3R6o6jHTcvkLsktaVGKBrqF5sIPb9EqhIp4NPMezh1n7o7GUqUU312dDdCTp5o
+	 esH856gTjv2RhuNTNiI5t9sdzbeyyF+jubIemqnhEK7Hjq5yquA86xKCk36c1awJZzQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qe3xRbq6;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D98j2Gna;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1385B606A324
-	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 19:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E82606A32C
+	for <bpf@vger.kernel.org>; Mon,  2 Nov 2026 19:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qe3xRbq6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45AC51F00A16;
-	Mon,  2 Nov 2026 19:43:30 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D98j2Gna
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C3311F00A16;
+	Mon,  2 Nov 2026 19:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793648610;
-	bh=PdfuVFZQBi+gz3CMjRmb5bBdnqM+6OAsgMlYJGzQPIg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Qe3xRbq6IGFtm5qhp2dDsQZB9fECSO0h0UiyCduVjleJULPd+41ZC9zq8YG3DYmib
-	 JKP7lih9mk+qWCYYUN3F3kjoLLShT/1cYnqw+MbKc1e6VswxLikxA4dak5B6xTwGTI
-	 KB6knsdBFw5hYrmmLxnVM/oar+qRrPjsnXBq/+awDtdX4II7f6aUtunVrbR5onsCjE
-	 UedJR3IN0jM/3lTlz1GlpZe7nGe+TNYWhE4TiQ5MrIJMKeZrmOY4ypMGDP/KwnbmfU
-	 wBmaC/ehKgwkGEoBSsZuXVP10P6FI/XKD0gevPHPgCTscfHLFeyQb70hj54rjHFvf4
-	 R32nCxXsS+iBA==
-Content-Type: multipart/mixed; boundary="===============4737113313488353722=="
+	s=k20260515; t=1793648690;
+	bh=q8lzWFcbYJouMtdLAS1/3a6jcoBfGjWkUtbKu1x5/0I=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=D98j2GnaFT2Kf9lkzIV954tQEaox9BlVt32XCzD6EpxGnWiFcSqzHhmB7WAmZuuMC
+	 ij005krQIaXVewL5JBFX74xGjjyOCIJKXayRB9W54F25Lq4NjtPsAWhMkMt8Qp0y3Y
+	 0lTP2oEdi2QqissZ35UjLM5U6Bv9TYapjkx4ZzENOPHrXSA6Gn8WwtIVAKXdf7qtLJ
+	 ByKFw8BRRP6btjpbHAbM4O1QBvlH93nlHEEry2CsdIoE+jXC7fk5YNf7gCwaH9JO4X
+	 qbbR0h3/gfh0JpxGs3hOqp4ygZ8L2GkrtBwHV/azjOwLiE5wsVjBgL7AouFiKuCuTX
+	 ZW843+27G6uLA==
+Message-ID: <sashiko-outbox-194018@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net] net: reject a negative TCP header offset in
+ qdisc_pkt_len_segs_init()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261101194433.2637113-1-alexei.starovoitov@gmail.com>
+References: <20261101194433.2637113-1-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 02 Nov 2026 19:44:49 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,106 +59,93 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <c496611f0e1f8a3b57ebe5e47a2e160238055853528f72930533721d9a8ffa81@mail.kernel.org>
-In-Reply-To: <20261102185839.1190122-1-almagui@kernel.org>
-References: <20261102185839.1190122-1-almagui@kernel.org>
-Subject: Re: [PATCH bpf] libbpf: Fix use-after-free in btf__add_type
-From: bot+bpf-ci@kernel.org
-To: almagui@kernel.org,ast@kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,bpf@vger.kernel.org,nathan@kernel.org,almagui@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  2 Nov 2026 19:43:30 +0000 (UTC)
 
---===============4737113313488353722==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] net: negative hdr_len in qdisc_pkt_len_segs_init() only checked fo=
+r TCP
+--
 
-> libbpf: Fix use-after-free in btf__add_type
+commit dddca5a283a51c0b9bd1d1aef355eda12933179b
+Author: Alexei Starovoitov <ast@kernel.org>
 
-TL;DR: The fix in btf_rewrite_str() may still leave a dangling string pointer
-(use-after-free) in btf__add_str() for mid-string offsets in a shared base
-BTF; likely not hit by in-tree BTF, so a gap in the fix.
+net: reject a negative TCP header offset in qdisc_pkt_len_segs_init()
 
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index d2ff6f5d6d5b..95c31803e722 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
+This commit adds a negative offset check on hdr_len inside the TCP GSO
+branch of qdisc_pkt_len_segs_init() to prevent an out-of-bounds read when
+a stale transport header points in front of skb->data.
 
-[ ... ]
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index f32353b0467cd..af948e4424035 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -4320,7 +4320,9 @@ static enum skb_drop_reason qdisc_pkt_len_segs_init=
+(struct sk_buff *skb)
+>  	if (likely(shinfo->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6))) {
+>  		const struct tcphdr *th;
+> =20
+> -		if (!pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
+> +		/* A header in front of skb->data gives a negative offset. */
+> +		if ((int)hdr_len < 0 ||
+> +		    !pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
+>  			return SKB_DROP_REASON_SKB_BAD_GSO;
 
-> @@ -2234,6 +2235,19 @@ static int btf_rewrite_str(struct btf_pipe *p, __u32 *str_off)
->  		return 0;
->  	}
->
-> +	/*
-> +	 * btf__add_str() first looks the string up in the base BTFs of dst,
-> +	 * which makes each of them modifiable and frees its raw data. If src
-> +	 * shares a base with dst and the string lives in that base, the
-> +	 * pointer taken below would be left dangling. So make the bases
-> +	 * modifiable before the pointer is taken.
-> +	 */
-> +	for (base = p->dst->base_btf; base; base = base->base_btf) {
-> +		err = btf_ensure_modifiable(base);
-> +		if (err)
-> +			return err;
-> +	}
-> +
->  	off = btf__add_str(p->dst, btf__str_by_offset(p->src, *str_off));
+[Severity: High]
+Should the (int)hdr_len < 0 check be placed immediately after hdr_len is
+computed rather than only inside the SKB_GSO_TCPV4 | SKB_GSO_TCPV6 branch?
 
-Can the pointer passed to btf__add_str() here still end up dangling when
-*str_off points into the middle of a string in the shared base (a suffix
-such as "bar" in "foobar")?
+In net/core/dev.c:qdisc_pkt_len_segs_init(), leaving non-TCP GSO types
+unguarded when skb_transport_offset(skb) or skb_inner_transport_offset(skb)
+is negative appears to leave three issues:
 
-A base that was not modifiable before the loop gets its strset built by
-strset__new(), which sets strs_data_cap equal to strs_data_len.  The first
-lookup in that set therefore reallocs the buffer:
+First, for SKB_GSO_UDP_L4 packets:
 
-  btf__add_str(dst, s)
-    btf__find_str(base, s)
-      strset__find_str(base->strs_set, s)
-        strset_str_append()
-          strset_add_str_mem() -> libbpf_add_mem() -> realloc(strs_data)
+	} else if (shinfo->gso_type & SKB_GSO_UDP_L4) {
+		if (!pskb_may_pull(skb, hdr_len + sizeof(struct udphdr)))
+			return SKB_DROP_REASON_SKB_BAD_GSO;
+		hdr_len +=3D sizeof(struct udphdr);
+	}
 
-strset_str_append() fixes up its own local copy of s, but the s held by
-btf__add_str() is not updated.
+When (int)hdr_len < -8, hdr_len + sizeof(struct udphdr) wraps to an
+unsigned int in [0x80000008, 0xffffffff] (> INT_MAX), which triggers
+DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in
+include/linux/skbuff.h:pskb_may_pull_reason() before returning
+SKB_DROP_REASON_SKB_BAD_GSO.
 
-Only string starts are hashed in the base, so a suffix offset can miss.  In
-that case btf__find_str() returns -ENOENT and btf__add_str() carries on with
-the original, now stale, pointer:
+Second, when -8 <=3D (int)hdr_len < 0 on an SKB_GSO_UDP_L4 packet,
+hdr_len + sizeof(struct udphdr) wraps to 0..7. pskb_may_pull() succeeds
+without pulling the UDP header into skb->head, hdr_len wraps to 0..7, and
+qdisc_pkt_len_segs_init() returns SKB_NOT_DROPPED_YET. If the packet is
+then transmitted on a NETIF_F_GSO_UDP_L4 device whose driver uses the TSO
+helpers in net/core/tso.c (such as bnxt_sw_udp_gso_xmit(),
+enetc_map_tx_tso_buffs(), or otx2_sq_append_tso()), tso_build_hdr()
+advances hdr by the negative transport offset:
 
-  if (btf->base_btf) {
-          off = btf__find_str(btf->base_btf, s);
-          if (off != -ENOENT)
-                  return off;
-  }
-  ...
-  off = strset__add_str(btf->strs_set, s);
+	hdr +=3D skb_transport_offset(skb);
+	if (tso->tlen !=3D sizeof(struct udphdr)) {
+		...
+	} else {
+		struct udphdr *uh =3D (struct udphdr *)hdr;
 
-strset__add_str() -> strset_str_append() then does strlen(s) and memcpy()
-from the freed buffer.  The relocation check in strset_str_append() does not
-help there, since s is not inside dst's buffer.
+		/* size is after segmentation. */
+		udp_set_len_short(uh, sizeof(*uh) + size);
+	}
 
-btf_validate_str() only checks that btf__str_by_offset() is non-NULL, so such
-offsets are accepted.  This needs src and dst to share a base (or src to be a
-base of dst), a base that was not modifiable yet, a first lookup on it with
-a mid-string offset, and a realloc that moves the block.
+Can this write uh->len (and uh->check in bnxt_sw_udp_gso_xmit() and
+enetc_tso_hdr_csum()) before the start of the header buffer when
+skb_transport_offset(skb) < -4?
 
-BTF from pahole, LLVM and btf__dedup() does not use suffix offsets, so the
-in-tree resolve_btfids flow is probably not affected, and the code before
-this patch crashed on the same input.  This looks like a gap left by the fix
-rather than new breakage.
+Third, for other GSO types (such as SKB_GSO_FRAGLIST, SKB_GSO_UDP,
+SKB_GSO_SCTP, or SKB_GSO_ESP), hdr_len remains 2^32 - |offset| at the end
+of qdisc_pkt_len_segs_init():
 
-Would it be more robust to leave *str_off unchanged for offsets that fall
-inside a base shared by src and dst, the way btf__add_btf() does with its
-"*str_off < src_btf->start_str_off" check ("don't remap strings from shared
-base BTF")?  The offset is already valid in dst, and no pointer into the base
-would be taken at all.
+	qdisc_skb_cb(skb)->pkt_len +=3D (gso_segs - 1) * hdr_len;
 
+When (gso_segs - 1) * |offset| > skb->len, can qdisc_skb_cb(skb)->pkt_len
+underflow in 32-bit unsigned arithmetic to ~4.29 GiB (exceeding
+QDISC_PKT_LEN_MAX), causing deficit-based schedulers such as drr_dequeue()
+and ets_dequeue() to spin in their deficit-refill loops?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41508558529
---===============4737113313488353722==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261101194433.2637=
+113-1-alexei.starovoitov@gmail.com?part=3D1
