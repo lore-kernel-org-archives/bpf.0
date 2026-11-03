@@ -1,74 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.201
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793685236;
-	b=PrGfv5Jrci9m8IUEhOSsxVO89oioenz/7KHleIAig5BPIEG0S4YCbMkbSNRh29ojWynR
-	 wARhDdBgHrZhJehkdMxtOG7PejbEzpiCNRJHtzbDSY207Yuk1ZXuFuTA41Br0rxSNjnJW
-	 7XDxxq0G3qLQgT1DxS03gqKsiReBVs8oe5rKXODEyPr22bnqmmfsQYwKPG6tuuXH0KPz5
-	 BOkN3oqyTD9WPHsBut/X8hFPEl4dcKQAyKvv2g+NkNh9O+aVUTNHE87Onap0SeAy6qjMA
-	 GysZD27iV1CNuCn2CRV4sIaSVXRac3jNPRYWbkgCYXFy1zQih8/2nLUxExZroj7OHwg==
+	t=1793685258;
+	b=n3Mbgz67ArS6OAEPtubnyHwGtNQ21LZmxiJ8qw6fmUhDDqk46D76UDGBc6mh2y6nC5Ci
+	 eW5UyZ3xex8DYPJYgeQDaZ0jVEaYb3vcP+sbLTeg7AoBlmgFFFNVDXrAkPoY0+OCVvOR7
+	 1vx6jSQmI1OKiPm28MFfjEry7GEekgakirKrDVmpRh9UA5Oh549ayiQlPUq+tsC7nAqGj
+	 R+bQ22IZY0pITFJGnyhKIvQIYfqQQX4ZvQxzfZ3F/N9WXoL9h/3XZjeyAAwNYfDHUihiW
+	 pYtQkktQfhQZwNMghKg1SLCMXZf63M4YuQ8C36DHZUnR0CdXACWmjLZQvQ6EXW4E8gQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793685236;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=LQOSfvYjsc0pne7U/QqZbr4f9DH/Fqk28lPhlIhBOEA=;
-	b=AGvV5df8YWCVLfjYm/ZKtXtNRhrVQeRBMMvt8QTjPewICo1fBXs6+qWzxnMrfZN+zSV2
-	 rvjUs+Z611IyhUtHrPFvoC+CurUKCd0p+aGdgNknmmpGGPsd1xCfkhkTx8G5GYvHlIOj2
-	 O7e1zIy5fZe6xDR4Efu3QrO87lxylUku2RJGA7su0ZMW+HWbFe1UNcbMvz1SZiG+BvsXV
-	 2bS5WCGlmdr0b9FIQsXBV3E42dzFUpfL22f02mD4zMfEyXpn9pkK60XbHW/uyt8MRF//k
-	 N1YFdr5uBjHhCR6TSZmRtw16fy2WrHYYMTwS9qJb4w1aKaIoof9Bx12CFcbfSxlkY9w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793685258;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=f6tohwCPgHiuZF8eRH66ZKcFUC+TlKOu4ZWfBkxIU9w=;
+	b=TQAHJT3su8kDW+odpkIa9pxg4OcSIk1SxwpEjVf30VCv5g3Dyt6LR03lKkCTbfFRbdqn
+	 6XRpOCNr2oWh9S6LcLjm2OFfycfWOEYuw6SJeZ24iyDRoAIQcbRkHH9qaHafk3sNoDTwJ
+	 xX/h7qm42dc3LnMkCIlGtJbaElBabwoDZewoRn858aRREgROd3uoUrDhOCUL651mJnU28
+	 24Lp80DKSe+lHgui0WR95I1lR19JbhnnSt+fmmzGBAaS5zv7mePWLX5ZMyU3pt+V93me5
+	 HmSwK4/3b7YjcUqbvhkwCpJZmrG6PyzfA38uIX+mpxXVo0WiJu4acvqpLeyM3A6ziCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=StFthbsA;
-	arc=none smtp.remote-ip=209.85.215.198
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="PU6M/JuI";
+	arc=none smtp.remote-ip=91.218.175.201
+Received: from mta0.migadu.com (out-201.mta0.migadu.com [91.218.175.201])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF21606A32D
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 05:53:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0AF21606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 713C2606A324
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 05:54:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 713C2606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=StFthbsA
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cd67466211bso2046656a12.1
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 21:53:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793685235; x=1794290035; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LQOSfvYjsc0pne7U/QqZbr4f9DH/Fqk28lPhlIhBOEA=;
-        b=StFthbsAOp6jdyLITZCeesv53uxGdx7tmGtLXJFplgrKgU6dRrKMf31aKh5NByS080
-         ZOxD6LKwIZiR5Fk42GJDFakkKnrBJZAWMGjtRT2y+xdNvyAUiHjcENxUIk4LM/GrR/1l
-         chTPZSNddCb07kj3GMXweJSzTRLUzlQRt6I19JPyha71MOsj3hAnhvMT0yLOKGNSFdRW
-         S1mqRoQrXlfpI+3YE+odNwJHwKsb8IwbjujPeAs4Qk+RXB6r/XmUNwBYD9H8dDoUsiDc
-         D6tOZ+xc1vtUEIQEuTP3Ap2xUIq9vUAp8iPPcuQeO5YORSsE8Gnfaz4+GZXoE2dn2IuD
-         M6Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793685235; x=1794290035;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=LQOSfvYjsc0pne7U/QqZbr4f9DH/Fqk28lPhlIhBOEA=;
-        b=Lv/hkpUo/GbndqaFhzl1rZ9YYg4d8V5AhG/tckskFXIBn13cy9LZBwnk0vsIrcvUsN
-         uzD/+0JrTF3m4iUMxwygsBshlm0N4zwgo7qDq0DpZJQqwqp2bClavEhpGBQpqxvOykcu
-         EajMq2G+PR315OzpalCk/98xT7noIrgz40OLOqaQNmsOyWy2KgHwF8ioPVmVHpQmSoa1
-         8cF5130/sD3WmElK+DRduG9L3M/beTVWAFSozj7pYEgwmrBvsNseoTvz/F612iqBexbX
-         2+kecp6irmb2OEu/u5yK+ZPCO7Az4o5mqYDPj1o0T/0eB9UvXRLJvM+8ncnXbuu/8CSp
-         FJGA==
-X-Forwarded-Encrypted: i=1; AKwUvByr3DN+huu0reAW6tJ72BjhjsrYnJoAX7U7hGh8Q0k34QoIkqBIsZzMS855pjqhnu+GOv4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+dL9IlP1/bgy5r9LLaPpwLyz7YhbX5Zh/Nsg96QXTei3pWtG6m
-	47h28NnG6P87pASjv13haU/i9rJXPQQtqwIwAJrM5unUlfX3dTmL6BxXplR01HPAgNBATs+/Vck
-	ihjw/Zg==
-X-Received: from plbmv11.prod.google.com ([2002:a17:903:b8b:b0:2e9:4bb7:2719])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1251:b0:2df:9497:3c89
- with SMTP id d9443c01a7336-2eb36526a09mr102814215ad.59.1793685235115; Mon, 02
- Nov 2026 21:53:55 -0800 (PST)
-Date: Tue, 3 Nov 2026 05:53:54 +0000
-In-Reply-To: <34f32e63b803f9f7faf0b0a5754219e48a986136.1793616950.git.x-professor@outlook.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PU6M/JuI
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=0iTU/obU9AJ9W0pesgfQNaEftQkREMOsnsvVS/OmldY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793685254; v=1; x=1794290054;
+ b=PU6M/JuIkSLzUXuS6JZKKUvE//74A4tu1nNGmYcFb/OMTL0YL2iWlmVRngQpvLppWY+UhK4L
+ kOzLqJsPN0sy3ZFQ/p/WeBzIG0EjJn/+UE88cigpF9T1Kfjp+xeur+8O/wE60EIjkouagxq2puf
+ 25tElufqBKwzf+kZFylFCdkE=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 4e3eec371c58ba17;
+	Tue, 03 Nov 2026 05:54:14 +0000
+X-Mizu-Trace-ID: 4e3eec371c58ba17
+X-Migadu-Flow: FLOW_OUT
+Date: Tue, 3 Nov 2026 13:54:07 +0800
+From: Baoquan He <baoquan.he@linux.dev>
+To: Ridong Chen <ridong.chen@linux.dev>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Dave Chinner <david@fromorbit.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Muchun Song <muchun.song@linux.dev>, Qi Zheng <qi.zheng@linux.dev>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, Kairui Song <kasong@tencent.com>,
+	Barry Song <baohua@kernel.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-mm@kvack.org, cgroups@vger.kernel.org,
+	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>,
+	Ridong Chen <chenridong@xiaomi.com>
+Subject: Re: [PATCH v6 6/7] mm/mglru: add lruvec_gen_size() helper
+Message-ID: <aul2_8m90FuzSnqv@fedora>
+References: <20261103025610.3738894-1-ridong.chen@linux.dev>
+ <20261103025610.3738894-7-ridong.chen@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -77,67 +81,121 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <34f32e63b803f9f7faf0b0a5754219e48a986136.1793616950.git.x-professor@outlook.com>
-Message-ID: <aulzHJaoSQOWbw_l@google.com>
-Subject: Re: [PATCH net] tcp: free saved_syn after an RCU grace period
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Yingjie Wang <x-professor@outlook.com>
-Cc: Eric Dumazet <edumazet@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
-	"David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261103025610.3738894-7-ridong.chen@linux.dev>
 
-On Mon, 02 Nov 2026 10:55:58 +0000, Yingjie Wang wrote:
-> tcp_reqsk_record_syn() allocates saved_syn separately from its request
-> socket.  bpf_sock_ops_get_syn() can load that pointer while processing a
-> retransmitted SYN under RCU.
+On 11/03/26 at 10:56am, Ridong Chen wrote:
+> From: Ridong Chen <chenridong@xiaomi.com>
 > 
-> There are two ownership transfers which can let another CPU reclaim the
-> allocation while such a reader is still using it.
+> The number of pages of a given type in a generation is computed by
+> summing lrugen->nr_pages[gen][type][] over all zones and clamping each
+> per-zone counter to >= 0, since the counters are updated locklessly and
+> can transiently go negative. This loop is open-coded in
+> lruvec_evictable_size() and in the debugfs lru_gen output.
 > 
-> First, tcp_move_syn() transfers req->saved_syn to a newly created child
-> socket.  The child can be closed and tcp_saved_syn_free() can reclaim the
-> allocation before a reader of the old request finishes.
+> Add lruvec_gen_size() to compute it from a seq, and convert both users.
+> Put it in mm/vmscan.h so that the vmscan tracepoints, which include that
+> header, can use it as well.
+> An upcoming tracepoint and the MGLRU swappiness rework will also use it.
 > 
-> Second, inet_reqsk_clone() shallow-copies request_sock during request
-> migration.  The migrated clone becomes the owner after
-> reqsk_migrate_reset() clears the old request's pointer, but a reader which
-> already loaded the pointer from the old request can still be using it when
-> the clone is released.
+> No functional change.
 > 
-> Both request and full TCP sockets currently free saved_syn with plain
-> kfree().  Embed an rcu_head in struct saved_syn and use kfree_rcu() for
-> both teardown paths.
+> Suggested-by: Barry Song <baohua@kernel.org>
+> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+> ---
+>  mm/vmscan.c | 18 ++++++------------
+>  mm/vmscan.h | 16 ++++++++++++++++
+>  2 files changed, 22 insertions(+), 12 deletions(-)
 
-Please add rcu_dereference() in bpf_sock_ops_get_syn()
-and RCU_INIT_POINTER() on the writer side.
+LGTM,
 
+Reviewed-by: Baoquan He <baoquan.he@linux.dev>
 
-
-> This follows commit e3f33b0a1d89 ("ipv4: free
-> inet_opt and ireq_opt after an RCU grace period"), which fixed the same
-> ownership-transfer pattern for IPv4 options.
 > 
-> The issue was confirmed with KASAN on v7.3-16007-g36aad21d50d1 using
-> temporary kernel instrumentation to widen the reader and request-migration
-> window.  KASAN reported a slab-use-after-free read in
-> bpf_sock_ops_get_syn(), with the allocation freed by __reqsk_free() from
-> reqsk_timer_handler().  The same explicit migration test completed without
-> a report with this change.  A patched kernel without the delay
-> instrumentation also completed a successful migration and seven saved-SYN
-> reads without a KASAN report.
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 3054175717ab..1581b73aec56 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -4207,18 +4207,15 @@ static void set_initial_priority(struct pglist_data *pgdat, struct scan_control
+>  
+>  static unsigned long lruvec_evictable_size(struct lruvec *lruvec, int swappiness)
+>  {
+> -	int gen, type, zone;
+> +	int type;
+>  	unsigned long seq, total = 0;
+>  	struct lru_gen_folio *lrugen = &lruvec->lrugen;
+>  	DEFINE_MAX_SEQ(lruvec);
+>  	DEFINE_MIN_SEQ(lruvec);
+>  
+>  	for_each_evictable_type(type, swappiness) {
+> -		for (seq = min_seq[type]; seq <= max_seq; seq++) {
+> -			gen = lru_gen_from_seq(seq);
+> -			for (zone = 0; zone < MAX_NR_ZONES; zone++)
+> -				total += max(READ_ONCE(lrugen->nr_pages[gen][type][zone]), 0L);
+> -		}
+> +		for (seq = min_seq[type]; seq <= max_seq; seq++)
+> +			total += lruvec_gen_size(lrugen, type, seq);
+>  	}
+>  
+>  	return total;
+> @@ -5723,20 +5720,17 @@ static int lru_gen_seq_show(struct seq_file *m, void *v)
+>  		seq = 0;
+>  
+>  	for (; seq <= max_seq; seq++) {
+> -		int type, zone;
+> +		int type;
+>  		int gen = lru_gen_from_seq(seq);
+>  		unsigned long birth = READ_ONCE(lruvec->lrugen.timestamps[gen]);
+>  
+>  		seq_printf(m, " %10lu %10u", seq, jiffies_to_msecs(jiffies - birth));
+>  
+>  		for (type = 0; type < ANON_AND_FILE; type++) {
+> -			unsigned long size = 0;
+>  			char mark = full && seq < min_seq[type] ? 'x' : ' ';
+>  
+> -			for (zone = 0; zone < MAX_NR_ZONES; zone++)
+> -				size += max(READ_ONCE(lrugen->nr_pages[gen][type][zone]), 0L);
+> -
+> -			seq_printf(m, " %10lu%c", size, mark);
+> +			seq_printf(m, " %10lu%c",
+> +				   lruvec_gen_size(lrugen, type, seq), mark);
+>  		}
+>  
+>  		seq_putc(m, '\n');
+> diff --git a/mm/vmscan.h b/mm/vmscan.h
+> index adb22e80d760..c6b583fc7493 100644
+> --- a/mm/vmscan.h
+> +++ b/mm/vmscan.h
+> @@ -3,6 +3,7 @@
+>  #define _MM_VMSCAN_H
+>  
+>  #include <linux/gfp_types.h>
+> +#include <linux/mm_inline.h>
+>  #include <linux/nodemask.h>
+>  #include <linux/swap.h>
+>  #include <linux/types.h>
+> @@ -115,4 +116,19 @@ struct scan_control {
+>  	struct reclaim_state reclaim_state;
+>  };
+>  
+> +#ifdef CONFIG_LRU_GEN
+> +/* The number of pages of @type in the generation @seq, summed over all zones */
+> +static inline unsigned long lruvec_gen_size(struct lru_gen_folio *lrugen,
+> +					    int type, unsigned long seq)
+> +{
+> +	int gen = lru_gen_from_seq(seq);
+> +	unsigned long size = 0;
+> +
+> +	for (int zone = 0; zone < MAX_NR_ZONES; zone++)
+> +		size += max(READ_ONCE(lrugen->nr_pages[gen][type][zone]), 0L);
+> +
+> +	return size;
+> +}
+> +#endif /* CONFIG_LRU_GEN */
+> +
+>  #endif /* _MM_VMSCAN_H */
+> -- 
+> 2.34.1
 > 
-> Full allmodconfig and allyesconfig builds completed with W=1.  Existing
-> warnings outside the modified files were made non-fatal with
-> KCFLAGS=-Wno-error; the modified files emitted none.
-
-I'd drop this paragraph or move after --- since it does not
-add any value after review.
-
----
-pw-bot: cr
