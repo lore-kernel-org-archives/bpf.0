@@ -1,99 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793676978;
-	b=xN2qeG9zRgfN0ZBrsKTGpNbkXji9rcOXBx+GKsoxryT5ENyiNVjhixqKTgjcYpLzeJZX
-	 JQMzqpOpa9xv/TYbIjoJ5ulLT4C2/vWlES0RweqEnJNTesInspRmbcyxuC+rrIwA3NUXY
-	 0prsj5oc/voTx58eyisNN08/PycO4j23ftqJ+kJ2b9R/0VEXcwqB1pp69tD7ev7d2AB90
-	 HDaq3bY6zB2GlPLo3fgV7aPJU8CA0v28ho/HWTng37GhhOl8wn0dvV65R4Bs077ap3K1y
-	 +bFo2xw3uTfH9joiGbG7D6qI2lvQkOsjGDz4wEtjalEM3X1ZIu/90XvH9Gcr8AzROBQ==
+	t=1793680222;
+	b=Mf52GvgzbpUKepfjCdICzO+Tu8wuvNuVtYK0gBK3pTfRmXZxFFT863J28taEVpX0pP5L
+	 I7vM+NEBKvv6VMz7d9VOUiErEa1mSD94dAaBbe8vZ2uwX1FcLldhRBIA1nshUWFFZxdyp
+	 1XkRvUs2aseb1FAk3+1EvIWzWWcuRw3YH1iKl/gicttTgWnzn0t2MQ/7ZpZuaiTj5sYD3
+	 ky/5wWFZlPZxz6nvPokf6crUCO+/U83h0Ieinaz41iIcEGD59JwJmah0aAcMv4JuJMuGS
+	 NTAHX1iKD8JMfUvFKeDc/OlhMUVzKpNiyegQUd34GNqobCksaLGUiXWcMU+2J9j3aVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793676978;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793680222;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=Wsw4x3FfCJ+pN/2oal8RH+4qQ7zCjiSz9UZAU4n7+7g=;
-	b=4BQ4D28PVWnj7p8Hd3AFuh9VJvskkrRr+pUSJvbWhhGgJO4NsSJOaHKxeN51NOtDLJHJ
-	 VRz0rMnsogO49JrInEomrs94V6Rfdsi9D+vau0ipJ4YHliyKwfmCTfsytydt4IUMpj53B
-	 9kpAQlciIgNQpdzIrQGaCksB0afvw1LO1q80MIA15NVbowrQVggaDZ8A5KTw8OWLRY4Oi
-	 UVxQrrpcCuGe+lRuqbh+C6wC5Mn6hV7OF4C5bLk3nuwjNm5liv5nEoG6UgW/x6i8A+vkv
-	 cXMh/FsUope6/l4wzz8VkzU4j5WXcpaQX2kiSI5E3t0FZclxqvbk1JhnpLu4j16MGNg==
+	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=KDoBl2NAvYizhN3jBPxIhzmzFKqRpbc+ypo3NQMf9kk=;
+	b=SC6ZAfXUhwHFcL7HdFIpru94hIoxCmyIBc5ov/WvyQiouoV5b1sHjwIm4mm78/QhcBZG
+	 IgLzNxjzhEugvoPFqzGsfyW+HRWUq7ng9uukZlxwuuPc736TlxSHzF3/xRaDwZnuTUFfN
+	 +U6mlH9WW5toKkRKbqaq7cWGAGcsfef6ScsXBM5ddWugCiz3rIiFRkcgxRKHWT24iYryk
+	 Ehu/U5pC3QsTXuHbbsamw6Uh90LCo4praGhivnqHu016osIM/l9YR4/BsJsEeoNmSB2Zg
+	 WKVdNe5y7NxDJxxfiZ4C8nuJDqjZwv/ZFPaLVGE/+TGXYDLjv69+i5ugGHHcVMRKOUQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Sc76JSK4;
-	arc=none smtp.remote-ip=209.85.222.50
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=usPcCJwa;
+	arc=none smtp.remote-ip=209.85.214.169
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4364606A326
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 03:36:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4364606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B17C606A327
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 04:30:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B17C606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Sc76JSK4
-Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-9912c61b8b8so1879496241.2
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 19:36:17 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=usPcCJwa
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e8246b13cbso31767375ad.2
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 20:30:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793676977; x=1794281777; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Wsw4x3FfCJ+pN/2oal8RH+4qQ7zCjiSz9UZAU4n7+7g=;
-        b=Sc76JSK4zjl2ETNUSMOYa1pklyS18Uew1akrbZZzlCb8K9hW1lB/uHYD3GcM4cGgZn
-         KqLZKHrW+2IFnD9oKBqzpbRSWOhzv9P8gEph0+Blr1rHNpOETEpr40sAzBAnHwFNnWfT
-         pVsT7EegLiqt0IG2riv/99Kmj2ZTvz4BaxAYn7mWlhSn7WIbZpH4CaGW1ctemEG0OEnD
-         NqEFyYQ3XWkWeOs/yCb/LLwF4Kdjx3XsGBcHWeUbeJX96g0Ff/0w3HG8D1CF8erJw0MU
-         4JsSM9N5ZUfmZw+Y4nRms01IA+F1ODehxAhukDzZqmS3sYSK60+J66gaZF6604toETdF
-         3L4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793676977; x=1794281777;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793680221; x=1794285021; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Wsw4x3FfCJ+pN/2oal8RH+4qQ7zCjiSz9UZAU4n7+7g=;
-        b=jVGv9xeqRwIhDrJ+fQFawAhOM9sBS6kUisx3xEjELY6z0j+bC2eqv8lQmCrZ9D5mFX
-         kh8SYpE9uFDQ+MDbGu0vL40Av4MAFZXzGV5jteMf4oYltYhGH0sSgfk7ZbZw02QxpTAJ
-         Q+JX/dqM5AJevwVugeCeE92ssCegsPVgFHU3KEguN9ZxRQ7WyJfpjlnaEvxRjT0Xd0RX
-         A8xCl5yfVN/1+EBIO9Dv32aLkJIqwwBowPkK/hzvhX3c8eSMEUc4y2SklhfrROqtbhvL
-         91Rq2Y0cfFvR3K8VslX1NKWFwem2OKPgopNipYv3wR/3PZ1tLyaOcmCem4Fko+EKo+B9
-         PYmQ==
-X-Forwarded-Encrypted: i=1; AKwUvBw5I4IkZqnzVyI3v4uQ/lexue2/FygtTw6Wwfmz5dM4HkFxL484TAQkQaMe3Ms5qV/vmaI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8I0uzXxlKXAMiPhUdCKps9Zt/1RaCbdPEHk+KoQnplwjUZ/GO0
-	JSvNfj/0joVx+aPufeoc685daAihm6MZkVU351b+CP2Up6KauTLvA9NO
-X-Gm-Gg: AYBFou3+BB8kjHh2DON1tLoN8H593qMbGiYjnKHSun9hJ9Fg3Bl0WapXD5+uOMFwcnL
-	qOE3mEKyYZfY74iXt8IMjcJNet5g2EUgzWerSOuHNKv1gDWm5LEMUArXkMx+Fl05LMCbw2x50pp
-	aogwOox/8yoaGUajhvhTZoNOk3kMlfombYQ+5DdVdaI0Qk1X58OM22s0OTUV4YJU6wIQMg/58Z+
-	WCFFlmfswmxf2XnQ3SsAcp+WfmZh0cRgTvkx9+Pxmq3i2/PhXFU8zUyrpVFdKKLuUlR0tmsdL42
-	C97+3fGpF2GPqjn60o3s1j8itUSu68MFhFeQCFbvTQyFtSt/al0XJK/4VqJDH7dbVf6hr8K1QxS
-	OWKp0NS0BfqZSDeCawBU0qy3HK1JUehSaLuSrp/fwbSabzX810kYJ0IV7S5GSeI8OwwK4jgNEya
-	6gO/roV73GVnCYSNqKK391tTo8Tg3I+6AuevK550S2bdlvLSOI0SMuU3McAFCjbP6AK4fivdgSi
-	vKZqD++X/NPRSI6FogjqinxMnADYj587GvP/V5tE7HzQE7jije9j5u988uCw87G4TMwy29Xe7ly
-	hHWI65KLqQzHFeyDZrcm0L2thGSr1G925DffW5z9gQb4FfH3QdGp6xGVgpus3Uoar+5eiDqWUxJ
-	vhjgrU/2niFJlKbBoafVQuwh0j9Jac2OFNTG0iu/ofmrCXUwcCT3Z9wWIjqFvZvnT2ot29URICR
-	f22+a2RkRe4R2dq8LyOw==
-X-Received: by 2002:a05:6102:6058:b0:7a4:da60:acfb with SMTP id ada2fe7eead31-7d072bb37b9mr3882342137.8.1793676976764;
-        Mon, 02 Nov 2026 19:36:16 -0800 (PST)
-Received: from willemb.c.googlers.com.com (223.230.150.34.bc.googleusercontent.com. [34.150.230.223])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-992ee1d1b35sm13341793241.1.2026.11.02.19.36.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2026 19:36:15 -0800 (PST)
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	bpf@vger.kernel.org,
-	stephen@networkplumber.org,
-	dsahern@kernel.org,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net-next] docs: netdev: fix iproute2 process documentation
-Date: Mon,  2 Nov 2026 22:35:56 -0500
-Message-ID: <20261103033611.949104-1-willemdebruijn.kernel@gmail.com>
-X-Mailer: git-send-email 2.56.0.385.gac671c819a-goog
+        bh=KDoBl2NAvYizhN3jBPxIhzmzFKqRpbc+ypo3NQMf9kk=;
+        b=usPcCJwa06DZT1k02oSX2KalgvW9MUymY7Xv/igUSbrU94lm8ArzhsmOW6jQLmYfzb
+         7sYDr+QUr00ec3PpGQxgw7vYlznc4XudZ9okEiGoD1QKjximiXs8klvcvnEj4+8ZYE8K
+         BPYfAJITpmRgOC1LBxBzwPq8JkuYf5xJjkuWPlRBZKViDUp0vNQq2NAglAi7J0iTWszK
+         EiUcpGrj0JXSSAgyUnnm4aADI8uU6c9RFSPPN/jYKEl6Ecu78QJ3qS+W279VoipNFJaJ
+         wIQd+FCnOJLVr7TW1V1H49rtvRksUYi3Jd6GcUNFgawEjBZWJO3wF0wFJxUkNL4g++SO
+         8reA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793680221; x=1794285021;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KDoBl2NAvYizhN3jBPxIhzmzFKqRpbc+ypo3NQMf9kk=;
+        b=V0DYrpL9zKlHpv0mtuIbamCT/Wg2vhJDuA+pnBfKz7ppCCk7tUpxVAGLOQT519jz75
+         jVQJoGfw8AlTC0rI8BiBtEwgdZu31kq6FAmUPKLha+GIFXWlRplLym3AhVO8K6KkDJ4B
+         /ozfUUA0B8/dmydeGVKj+MMpap4ExNU6bBuzen6DMpzPyoe5QbgtNnsYQMHnMDAxQbff
+         tX1gQbXhkd6Ms2iYD0BgkWpZLTx8SL3cO8zq7Rys9ORfl/qEKJzpjsth0w64OoQOE/wY
+         wlzz1K+Ct16EBlELgJuQxQYtIowf3T9VYr+M3o4lv4Lu0DSd+1ec7M3WHgyv586S3tmz
+         EXLg==
+X-Forwarded-Encrypted: i=1; AKwUvBw2lnBv4Qeq64sEIg/Jwm0J/1KPF3iyC+9CwU/JspOjhW8Lr0OhSkNiieHn6L9sLTGKqVE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+lJjWx3cVHmNt/7I+mjccn+rrl6I6gjI3eWw96paDCza0I/ibE
+	OGky0fARZk6Lg5rQn63RY4yQ954rziVInJK3yjl0zlrXQtGfzX56M62f
+X-Gm-Gg: AYBFou12D4KdDQztHKMlnDDIldp9IZXrn6dArUtpVmpsQkx5Sx4Md0VarJt6lgcrFy1
+	QAXDBqXu1B8pb8scN+Vj/YIZLTD1SKezUygOxstJ5cSrWC0HaDspuLggczyVakC4wQZaCotl5t2
+	oXZrXTff1uVbBcwGWjNjfAO0O3/QjNtosGXyQbhbQMvCaXe9g0IBW90zKyMkZKY+RLWUcHCt5rX
+	bplSCSXzp7I7z1c04NG3cfUmmoBdKJ09yY23zgasANq1wGR/dal8JhYKxecdkemq0wj4zaK5zTU
+	Ub0Nfyvi1tNj4ehCdVIow8JHS2tC5XIPnz8cKBaxMaON9q3bVMCDLRB7HdZ3S5TqjE3VTEwtQYy
+	pWNaAz3Nx0evUy7Yvq1/gauoAaDS0JWc6u/QeGF5a5Miy5Op34z+yNRMZKG7hONMERQQdhOpS+n
+	2nGAUXJiQaq52qof1A4ZS3RbnIw+h+7GG059FIeMgKR40TAR3DUj0+pfs7GRIl9sjc0uAIqzNQe
+	VbHVSbZk9gU+qvJoTzz2Mi3CUMpRSIVPU9w5ptI09mahQU53C7j5k/2SxXciZxYYr0ePoh7IhFG
+	T+Ae4At0UcgcDBiyw4SaH6/s1WSF509jXNKNsxIwVA3K8FeANnbTyiOnnyhXpxNsVtMHSPI6WUq
+	pK1phcgw076ScjBaq/5nKnAakUWSuECJaWQ==
+X-Received: by 2002:a17:902:db0f:b0:2e8:4066:d247 with SMTP id d9443c01a7336-2eb364cb13emr109056275ad.33.1793680221197;
+        Mon, 02 Nov 2026 20:30:21 -0800 (PST)
+Received: from localhost ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb3927e856sm33499995ad.50.2026.11.02.20.30.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 20:30:20 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 03 Nov 2026 04:30:20 +0000
+Message-Id: <DMLAKLO9AB4T.X5JCIISSONLF@gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add overflow test for
+ BTF dump zero-scan
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Gu Bin" <gubin@cmss.chinamobile.com>, <bpf@vger.kernel.org>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <alan.maguire@oracle.com>
+In-Reply-To: <20261103032619.1378-3-gubin@cmss.chinamobile.com>
+References: <20261102131632.1124-1-gubin@cmss.chinamobile.com> <20261103032619.1378-1-gubin@cmss.chinamobile.com> <20261103032619.1378-3-gubin@cmss.chinamobile.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,115 +100,13 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Willem de Bruijn <willemb@google.com>
+On Mon, Nov 02, 2026 at 07:26 PM Gu Bin <gubin@cmss.chinamobile.com> wrote:
+> +	TEST_BTF_DUMP_DATA_OVER(btf, d, "union", str, union bpf_iter_link_info,
+> +				sizeof(union bpf_iter_link_info) - 1, "", {});
 
-The instructions on sending patches to iproute2 span both netdev and
-bpf docs, contain outdated references and miss some instructions.
-Address this:
+sashiko is right. This test fails.
 
-- Move all info to maintainer-netdev
-- Add a link in bpf_devel_QA to this location
-- Update URLs to git repositories
-- Update URL to patchwork instance
-- Update subject prefix rules
-- Add suggestion to Cc: maintainers
-- Add pointer to iproute2 MAINTAINERS
-- Add pointer to iproute2 README.devel
+Pls run the test before sending v4.
 
-Signed-off-by: Willem de Bruijn <willemb@google.com>
----
- Documentation/bpf/bpf_devel_QA.rst          | 30 ++++---------------
- Documentation/process/maintainer-netdev.rst | 33 +++++++++++++++++++++
- 2 files changed, 39 insertions(+), 24 deletions(-)
-
-diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
-index 4729efd657c3..888b29599761 100644
---- a/Documentation/bpf/bpf_devel_QA.rst
-+++ b/Documentation/bpf/bpf_devel_QA.rst
-@@ -304,31 +304,13 @@ downstream distributions.
- 
- Q: Do you accept patches as well for iproute2's BPF loader?
- -----------------------------------------------------------
--A: Patches for the iproute2's BPF loader have to be sent to:
-+A: Patches for iproute2, including its BPF loader, are sent to
-+netdev@vger.kernel.org. For details on iproute2 patch submission, see
-+"Co-posting iproute2 patches" in Documentation/process/maintainer-netdev.rst.
- 
--  netdev@vger.kernel.org
--
--While those patches are not processed by the BPF kernel maintainers,
--please keep them in Cc as well, so they can be reviewed.
--
--The official git repository for iproute2 is run by Stephen Hemminger
--and can be found at:
--
--  https://git.kernel.org/pub/scm/linux/kernel/git/shemminger/iproute2.git/
--
--The patches need to have a subject prefix of '``[PATCH iproute2
--master]``' or '``[PATCH iproute2 net-next]``'. '``master``' or
--'``net-next``' describes the target branch where the patch should be
--applied to. Meaning, if kernel changes went into the net-next kernel
--tree, then the related iproute2 changes need to go into the iproute2
--net-next branch, otherwise they can be targeted at master branch. The
--iproute2 net-next branch will get merged into the master branch after
--the current iproute2 version from master has been released.
--
--Like BPF, the patches end up in patchwork under the netdev project and
--are delegated to 'shemminger' for further processing:
--
--  http://patchwork.ozlabs.org/project/netdev/list/?delegate=389
-+While iproute2 BPF loader patches are not processed by the BPF kernel
-+maintainers, please Cc bpf@vger.kernel.org and the BPF maintainers for
-+review.
- 
- Q: What is the minimum requirement before I submit my BPF patches?
- ------------------------------------------------------------------
-diff --git a/Documentation/process/maintainer-netdev.rst b/Documentation/process/maintainer-netdev.rst
-index df220a965438..51669d66c272 100644
---- a/Documentation/process/maintainer-netdev.rst
-+++ b/Documentation/process/maintainer-netdev.rst
-@@ -363,6 +363,39 @@ to the mailing list, e.g.::
- Posting as one thread is discouraged because it confuses patchwork
- (as of patchwork 2.2.2).
- 
-+Co-posting iproute2 patches
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+The official git repositories for iproute2 are:
-+
-+- iproute2: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git
-+- iproute2-next: https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git
-+
-+Patches for iproute2 must have a subject prefix of ``[PATCH iproute2]``
-+or ``[PATCH iproute2-next]`` to indicate the target repository where the
-+patch should be applied. If kernel changes target net-next or bpf-next,
-+then the related iproute2 changes need to target iproute2-next, else they
-+must target iproute2. The iproute2-next tree will be merged into the
-+iproute2 tree after the current iproute2 version has been released.
-+
-+Patches are tracked in patchwork under the netdevbpf project and delegated
-+to 'shemminger' for further processing:
-+
-+  https://patchwork.kernel.org/project/netdevbpf/list/?delegate=7961&state=*
-+
-+Send patches to netdev@vger.kernel.org and always include the iproute2
-+maintainers in the email Cc: list. See the MAINTAINERS file in the
-+repository for email addresses and other details:
-+
-+  https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/MAINTAINERS
-+
-+For patches that target iproute2's BPF loader, also include
-+bpf@vger.kernel.org and the BPF maintainers.
-+
-+For more information, see also README.devel in the repository:
-+
-+  https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/README.devel
-+
- Co-posting selftests
- ~~~~~~~~~~~~~~~~~~~~
- 
--- 
-2.56.0.385.gac671c819a-goog
-
+pw-bot: cr
