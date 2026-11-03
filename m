@@ -1,100 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.180
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793674991;
-	b=NlseLiFQyOKqtdbatPjv9VySDVik5Qcpmj6uTpYwRsJSCS3RgWsy6yITT2aW3mUMG2ry
-	 M3P5GPe6KMggUsT/2abV+HnphHmpDMLrumWBk3/Rr8mmumg/biKYCRha7UwM/W70LnZXK
-	 z5/55jwDCwwgJRc+yGTebSCls9HM7+cR5hTlcKBctgK3493BAL3yIzbqGijDFB9xaCoyR
-	 P31vE81Pqo3fOfOO0pm4J74c5nDo+nsuHf+fr7hBq/MkaeLdhUmHnHdjnUbEYwRnT28ew
-	 +mexPRBw7+ZxzHdrcMn4yWEr5MRv41VkEgXdqFNNuX7f21BK0l5GWsssYUJU0MFKKWA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793674991;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=dIm7BgetdBymH26dv/zJcRvTygJQqs7GO+6HflsoA4U=;
-	b=ns5MwCmeK1OGqOmJxr7LB4yO/AdesppIGGTmEJ0BD7dfhaEQCEnMD2M9Fmqwhp+28m5v
-	 cNykJ40n2XtA/MbSOkhvQMNiNjTh680UaAS3Qc7ORiwdB6gfTIXWEhhZa0XsKxEgQUhyz
-	 5+ww2aZ4iwOFUy0HPd5jSDdLy7PA1qvWZzNxoSmlmIvBEllVJOLd76PuuelfO5yQ7utJo
-	 hLiSu77DtbYjtiSacHuElYO/Cn0a68NhQlasEmrRlM6e9OxLekh1OzK/2TdwZG6bDX1bH
-	 VCZjg0lJf2dwOq5X3EvkhJg0FoAgJK5NUIfFToZfxQC2ssbKd3mYcUqTqCKCBo0kHKA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=To4ZOhDA;
-	arc=none smtp.remote-ip=209.85.215.180
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793676110;
+	b=rYavH3+n0tBH5lGtd59Du55lT7AlCKKlRFpkzRFfnVUvcX1KWWO2fxOrHWsY3g/4zX5p
+	 GMHHadpG40f/gOg5gp9AKcl9jJy3/MXl463R8aAa6ZKfkKTQAcqB9mUJ90eR/CAKU2YHv
+	 qxcixMFep4rl7Z1AVmq4obvSX9CMVtGT2lJA7wTwu702Fmdea73I5PHk/1ARNgnPAKaRZ
+	 s9VWjdeaYorm52iZdr+fSXCiZW3XiMyHm0eCRnBw0qmm373ewYNqORyuiU33uKWi8eJmu
+	 VqZZ/sYY7H6KfVASmv1sBBezPtgrOlqATYsqHQxSdiyuVycOubrc7KThmf/olpY1Wrw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793676110;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=3Bqa70HFsTlC3jpdiRmNrdcuuivYTvNPkgmkmv1vsBA=;
+	b=YNTm4zbBK9vw9gv+pCH9GjqfZxYjQmSVi5UbOrd0A+jtobIjpIKU46y+1I8qU7UGXJMx
+	 zVnS4upFrbPt3VPz0hCJDE17cCN0hm3otZsWdKq01kPsdKBvrTbFqHh7LIVHhqHpOPUSG
+	 PbRaNJ62X4DkmYoV4RRqskdhFdezyoNQNqRc9GrRJChLHcU4H3xgbW1w18jEGct0Ie0h/
+	 qIjc1XB2uI8Pekzus+mk/LWZ//wMm59uU/ljFXyI01zshoC/6ik7hkuLQnUZsQ4JBvZSD
+	 cuKzxB4YWkOVCYujfdOJtwgdOhdJQXEtzmo/djxlz1EX1IoIBODpJ2Gjjhq+On3iKqA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Bz/wQ1yL";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD15606A324;
+	Tue,  3 Nov 2026 03:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bz/wQ1yL
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793676109;
+	b=qqMgS3Dlq+2NrZK43voZHtsd7+qnsGnJ3fHcy2vuQaGd9z5qzCHSXTuvmL/5CcpsMFI3
+	 oD59hXTbfhdy6k1Nol3hct5ofCVz+55LLUOkmLJ5OSxcLaBRPMV0cgpt5sXxg0AT22VIq
+	 ITXeE0g9W4ZiRRnEs2Bv+dDAN35xesmqd8wPJXn4dGiaigpdVERh6Gw16V+gM4mJai7nM
+	 lehTUhRZeaFwDfzDmB9IxkqSJHbEqTag1P23PFjVpsSg7rWfWhaDL6VIuhDfeqIF/65jE
+	 E4S50bPb4u5x6Ww8hoNBNJVbuKoK7D0QMmSvOSqnasv6mcQBA8g3MSMXnpAcsbeyQIA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793676109;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=3Bqa70HFsTlC3jpdiRmNrdcuuivYTvNPkgmkmv1vsBA=;
+	b=Sc1YID6Ut4xksXpub5ntZHGv/Yc1pry0ZquLVA6Aca9wxzhOMlY+ZJ4VGORmlQSYifT1
+	 8FPKveN1LPpz6BVPWiMVsHLA1y0wwECpZY5ipyJO7GXJjcjvIhaIyY+Cs92L5XxBnLh++
+	 5IvYKPsvzMs/UuZOubDCLGE55cXrq3SpzWxLCB1tXnaShFvGMLnh49YqfCOVQIANX/pA2
+	 137WTUUauKXqOh1sKdl4vplAbpvTUmmhsC9BBjgqbfFXviMdeAYQW1jieN1TV9AExsWzU
+	 WbTEQ6fMU6YiZiXjHzI4TFv04pAUDUtYDWKPIY9axgOxIq2r3/8Vgno7CB22L4cWE0A==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F4B606D830
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 03:03:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E6F4B606D830
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=To4ZOhDA
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cd6a7e1f4e4so1533811a12.2
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 19:03:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793674985; x=1794279785; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=dIm7BgetdBymH26dv/zJcRvTygJQqs7GO+6HflsoA4U=;
-        b=To4ZOhDA7x492QcabmC8OMVUVMEgqW90desb9Fh/7TmwUxnsh2AC7KpqeVaJ40UKpU
-         Rjqd+rjWUymn7Hab6mAJ/HIP17ubpbpmvILQamUZ1N3BdtF0taw/jdJpfCEUpGxW0H4t
-         MGyfuywPRTASGKs6QBbfhfrijOqvyn88GBIrU3sijpUTTE4t5NcQh8lnJQQU/ViGxZFR
-         a185B2efLhVvjAivY5zNl2KFSDOoeKMEEyRwpjujNk91KVwcpfVRO+6RWNj9n0xmYuH3
-         ZLYymj/ntwgkHsQAEQ11vYJ99KKS+rrFfRFjE6G2FCpOlTkwKZQEvYJkmSUPRZ7jCCmn
-         CvvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793674985; x=1794279785;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dIm7BgetdBymH26dv/zJcRvTygJQqs7GO+6HflsoA4U=;
-        b=K1qeelz8PKx29f/88ojjz6q3hGZH5994ZOBhlWsaAC8K/ygnjmeOnHyYjSlgRaRfVU
-         EXPcAOrMp1rnxhXvsuNMpD9tTklz2vkxuEjTVlyutscHrFd32BGgFiQKIVhg2j0GxiH2
-         NwO3DFy8b394aAp1skZH4KnWiKgj9FXUCyuxvXFd3GvkwDERc2KFN6HSxncF0M+SNQpL
-         N/lH8na+1NGyocomNDbpPsyi9J7gHKP5DPpVc2Nt3FGBJLCe8jqY+4ePwb/zdjGs4sIz
-         cHgfKu3qkUwbeqAJj78+u9OUCx9CFdgjRWtugDpcTnOI/68Eat5pbq5HiPfoSkZfDxsj
-         9S1Q==
-X-Gm-Message-State: APuU4Z/uPHIQg9xdA6MYGF+7xJbXmRi2RK0GhtN0AOUpD1aeG9cX6nqm
-	RbTNxIEwVqe1J0mFaLudQ9N6lfZX36yYnMYJBN5pM+VNTH2YkFoNaGiV
-X-Gm-Gg: AYBFou2bF9yLKAd1iGw/2j+8DzBsOnEnfSHXaWOrSJd6fINlOdAzWC9q6jIRi4xJL+d
-	HL6giRNta1yIkcH73TkAq4l2rCOSITcM5JWZxKgiswrhNl/pg8U8HdOZDfrCfTQEbfjJDXSVhp2
-	A/y2VOeCHCyXGGBTlic+IqqLKrga0VyKU8Umas9QnOt8uikNhu6DfpS244XcwU7zA64QfGNLPy6
-	hcMhs7rlLUYGJ67A4AzkS9vlvyJlhYZjCiKjar21cwCbYani+zwwBh+Im+OMnyOhhUfe7+YOQqD
-	hSBWOPjoc0uGlOUIuydx3Lvf8FPZJI4lIRI496Ex1V/FPEzymXYevzMfg0wkcbJ82uUShGDrpHx
-	/uaqj8W0OnCkMg0n0ao+/cUk0Mse1/2IEvFcVoc6Jd1vNGHR14xAVLTnDGmbuUbYBOeBRSCEMfH
-	Ef8xppmjWaAjMZU3e6PSeRlhRg811y6+4wyfgyWEfZZLP0sG0jDrQ+ugnRh1q1ekSYqNG0K54CG
-	TgehZYcy2GAyDXkbfHm5C0Nn7Z8vysT2IFR6JHlr6WY2iDqJBsiOQe/F2LhvSk5dWUEMVG81GhX
-	s6gQpg6GpCA97iuyrWluQzbs8Z3VjFBCe0phUFEC4OgMEaNKhSQr6um2PGFaSxUggjtZP/uf5Rg
-	+HihrHdVSt16FHOPIyECIQ7aEuWqAx21/qNMsTs+hPV1Gl6c4BWyoiK0=
-X-Received: by 2002:a17:90b:2751:b0:3a4:b3ac:904c with SMTP id 98e67ed59e1d1-3ae8984ec60mr9411922a91.51.1793674985074;
-        Mon, 02 Nov 2026 19:03:05 -0800 (PST)
-Received: from localhost ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb36468bfesm514332a12.11.2026.11.02.19.03.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Nov 2026 19:03:03 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 03 Nov 2026 03:03:02 +0000
-Message-Id: <DML8PRKSQ4ZX.2A8Q5SC26RO6Q@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next] bpf: Fix suspicious RCU usage for sleepable
- bpf_get_stack()
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Feng Yang" <yangfeng59949@163.com>, <song@kernel.org>,
- <jolsa@kernel.org>, <ihor.solodrai@linux.dev>, <kpsingh@kernel.org>,
- <matt@bobrowski.net>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <memxor@gmail.com>, <martin.lau@linux.dev>,
- <yonghong.song@linux.dev>, <emil@etsalapatis.com>, <rostedt@goodmis.org>,
- <mhiramat@kernel.org>, <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20261102073714.1103088-1-yangfeng59949@163.com>
-References: <20261102073714.1103088-1-yangfeng59949@163.com>
-Content-Transfer-Encoding: 8bit
+	by smtp.kernel.org (Postfix) with ESMTPS id 4F3421F000C1;
+	Tue,  3 Nov 2026 03:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793676109;
+	bh=3Bqa70HFsTlC3jpdiRmNrdcuuivYTvNPkgmkmv1vsBA=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=Bz/wQ1yLAk84kP9CS2jCqmWv7GDwx9GXkf2aZeN3hb3z7shuakacLgmDNEtxyWJfP
+	 c/Ot3jR/DPEj3d98G3qloSxn6sr8Vpirt4DPo1EeMz7hbfUQ/3OOcoohftpLJsLacl
+	 Cw1kmP+SDf6hWtS4dZAJcSRZemC/S7oX9Zk7zhylG8Hf+TzvMIVENAy5eK7IITWTBG
+	 Vi3PJ14fg8eiNZz1HP2orM147bajBLFUrlYc0p/vbRKY2of+iZbjjpYsDfy02RSGK+
+	 cvwdUOP6TXXXa+mdR2ua0lyNuSFxtpWHVFtNvvhad3S4/TZeILZ6SvGAlupWGcNdSQ
+	 a48+e7znRlWoQ==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id A790A46774;
+	Tue,  3 Nov 2026 03:21:48 +0000 (UTC)
+From: Jonathan Bastari Thamrin via B4 Relay <devnull+thamrinjonathan.gmail.com@kernel.org>
+Date: Tue, 03 Nov 2026 10:21:38 +0700
+Subject: [PATCH bpf-next v3] selftests/bpf: Wait for wq callback before
+ checking ok_sleepable
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,41 +83,118 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261103-wq-poll-fix-v3-1-8e7b38f5e71f@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3WMyw6CMBBFf4XM2jF0eIis/A/jopQpNKEPW4Ikh
+ H+3ce/y3JtzDkgcDSfoiwMibyYZ7zJUlwLULN3EaMbMQCW1QpSEnzcGvyyozY5c3UvSddsIUpC
+ NEDnPv9oThqDR8b7CKz86eovrHFn+r22EAutuuI2COtEM3WOy0ixX5S2c5xdF++irqgAAAA==
+X-Change-ID: 20261102-wq-poll-fix-e3902f46512c
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mykyta Yatsenko <yatsenko@meta.com>, 
+ qikeyu2017@gmail.com, Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793676107; l=2995;
+ i=thamrinjonathan@gmail.com; s=20261102; h=from:subject:message-id;
+ bh=gdSS2Zn2Y724+t41UF0QYn1E1bwWRv+MZqExp9d0kLM=;
+ b=QzNXJ7/3tjFJT5uXYRsgG7/N2lQpdIxxXgJv9b0ADpCMIAvmXMqkrG42t3cHQktY4J/fsTYVt
+ 5n6orF1dTy2DiuipA0JGB0f3bFXXaB5keaFRN1GBXIoxOlG7SWuYXZL
+X-Developer-Key: i=thamrinjonathan@gmail.com; a=ed25519;
+ pk=mr0q5PZVaUIrv8WvTxIfK7QVcAiRSYI8hOByBQL1ZRo=
+X-Endpoint-Received: by B4 Relay for thamrinjonathan@gmail.com/20261102
+ with auth_id=1383
+X-Original-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+Reply-To: thamrinjonathan@gmail.com
+Content-Transfer-Encoding: 7bit
 
-On Sun, Nov 01, 2026 at 11:37 PM Feng Yang <yangfeng59949@163.com> wrote:
-> Route these paths to bpf_get_stack_sleepable() and mark the new protos
-> might_sleep, since build_id_parse() may fault in file data for
-> BPF_F_USER_STACK | BPF_F_USER_BUILD_ID.  Sleepable programs that call
-> bpf_get_stack() from inside a bpf_rcu_read_lock() region are now rejected
-> by the verifier, which is the correct behavior for a helper that can
-> sleep.
+From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
 
-That's a new feature. It's not a fix for the splat.
-Andrii's point in v1 is about build IDs. That's a good reason for this
-patch, but the splat needs Songsen's patch anyway:
-https://lore.kernel.org/bpf/20261028121859.994-1-yangsongsen@insta360.com/
+wq test fails with ok_sleepable reading 0 instead of 2 as workqueue
+callback hasn't executed before check.
 
-                                        Songsen's patch  this patch
-  ------------------------------------  ---------------  -------------
-  splat in sleepable progs              fixed            fixed
-  splat in bpf_wq, task_work callbacks  fixed            still there
-  build ID when the page is paged out   no               yes
-  progs that load today                 all load         some rejected
+This happens as callback runs later on a kworker and 50us isn't always
+enough.
 
-Row 2: the callback is sleepable, but its prog is not.
+Change from 50us sleep to waiting for callback by polling
+ok_sleepable every 1ms for up to 10s. If the callback never runs, the
+test fails instead of hanging, similar to ksock_wq.c. If test_run
+fails, it skips the wait and goes to clean_up since the callback
+was never queued.
 
-  bpf_wq_work()                    rcu_read_lock_trace() only
-    callback_fn()                  prog->sleepable == false
-      bpf_get_task_stack()         may_fault == false
-        __bpf_get_stack()          no rcu_read_lock()
-          get_callchain_entry()    rcu_dereference(): splat
+Before (usleep(50)): 3 fails out of 5000 runs
+Diagnosing issue (usleep(0)): 23 out of 100 runs
+After: 0 out of 2000 runs
+Tested using vmtest on x86_64, test pinned to one CPU with `yes` load
 
-Row 4: sleepable fentry, lsm, iter, syscall and tracepoint progs that
-call bpf_get_stack() under bpf_rcu_read_lock() or bpf_preempt_disable()
-load fine today. With this patch the verifier rejects them.
-It does so even when flags don't have BPF_F_USER_BUILD_ID.
+Link: https://github.com/kernel-patches/vmtest/issues/455
+Signed-off-by: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+---
+Changes in v3:
+- Go back to bounded polling on ok_sleepable, similar to
+  ksock_wq.c, as unbounded wait in v2 can hang if callback never
+  runs (Alexei)
+- Skip the wait if test_run fails, and raise limit to 10s (Alexei)
+- Drop the wq_cb_run flag and the progs/wq.c changes
+- Link to v2: https://lore.kernel.org/r/20261102-wq-poll-fix-v2-1-48b7d12815b8@gmail.com
 
-Pls respin it as a feature, with a new subject and commit log
-and a selftest.
+Changes in v2:
+- Wait for callback via a wq_cb_run flag instead of polling with a
+  timeout, similar to test_struct_ops_assoc.c (Kumar)
+- Link to v1: https://lore.kernel.org/r/20261005-wq-poll-fix-v1-1-99ce4bac59f4@gmail.com
+---
+ tools/testing/selftests/bpf/prog_tests/wq.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-pw-bot: cr
+diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
+index 97926e35aaf2..a4f71bc34fa6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/wq.c
++++ b/tools/testing/selftests/bpf/prog_tests/wq.c
+@@ -4,10 +4,13 @@
+ #include "wq.skel.h"
+ #include "wq_failures.skel.h"
+ 
++#define CALLBACK_WAIT_RETRIES 10000
++#define CALLBACK_WAIT_US 1000
++
+ void serial_test_wq(void)
+ {
+ 	struct wq *wq_skel = NULL;
+-	int err, prog_fd;
++	int err, prog_fd, i;
+ 
+ 	LIBBPF_OPTS(bpf_test_run_opts, topts);
+ 
+@@ -25,11 +28,12 @@ void serial_test_wq(void)
+ 
+ 	prog_fd = bpf_program__fd(wq_skel->progs.test_syscall_array_sleepable);
+ 	err = bpf_prog_test_run_opts(prog_fd, &topts);
+-	ASSERT_OK(err, "test_run");
+-	ASSERT_EQ(topts.retval, 0, "test_run");
+-
+-	usleep(50); /* 10 usecs should be enough, but give it extra */
++	if (!ASSERT_OK(err, "test_run") || !ASSERT_EQ(topts.retval, 0, "test_run"))
++		goto clean_up;
+ 
++	/* wait for wq callback to finish and fail instead of hanging if it never runs */
++	for (i = 0; i < CALLBACK_WAIT_RETRIES && !READ_ONCE(wq_skel->bss->ok_sleepable); i++)
++		usleep(CALLBACK_WAIT_US);
+ 	ASSERT_EQ(wq_skel->bss->ok_sleepable, (1 << 1), "ok_sleepable");
+ clean_up:
+ 	wq__destroy(wq_skel);
+
+---
+base-commit: cd5bc55288d4fd999595c8f2af6a5408cbe92a52
+change-id: 20261102-wq-poll-fix-e3902f46512c
+
+Best regards,
+-- 
+Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+
+
