@@ -1,55 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793697221;
-	b=bqtb7LlJjAM3oGv5ZMxjhZBWqBvT/sBX1GpxBrI5l/il7v+0YZgGQIjVFzIo+EuXaX8x
-	 276xqlTS/7TyC/vnA5L/zFBAiQhcVLmpa5GnJcVXNQCZqlqOYJjeQp3ZE1DuJfRF6VBlL
-	 jd1XyS4MR2fv/9sYBuiN73OpWMW74TO494x52SUK7Qc3GCm6QnqvVWQi0cqW/ClypQVZm
-	 Hwspf0LY16+KOhSI1uK5QX69OKIoCHF8B04qdSJpHxVpffymYWUAbT7A2gryBD2uOzunL
-	 WxZRGmV2fH/ZnO1QQlwvbZAi9QkL0dZng8aeqcUnkZ9QLrcdBbgXEul67kxiWT9jPWA==
+	t=1793698447;
+	b=owoB2DAUQPFbr5tQ4+87rYniS3rQwwxQUr9qLAmOY24p4DWdsSbpTb6bAFmWUdqasHVo
+	 kq5d33Ep0rOPxCmfh7XPgFY6m6lQiEm19WYyoiTfJ2HLQv0KoLIUFPdt+E7QpYhXKekQQ
+	 mT7MyygoVz8AgjsG8Skhd1RmFwJkO9RmqIxJFv+NWwPmoCELnJOnI1bWOrgkwaZld+QlT
+	 2DRlFf7HogatpD2ZtgtNbE0TCjtSFZY1hlrtHJAdqjxePwpbBKjiji/AxHaTgN+xENz/+
+	 B17CyD5aaLLspsjX2lDVXmlpZdZ2zr23+uMPX/6m02M0bI7JI+Hv++ykklo4mNAeEog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793697221;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Mime-Version:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Subject:Cc:
-	 From:To:X-Mailer:References:In-Reply-To:X-Last-TLS-Session-Version;
-	bh=vtVAKn63hZjF/xRzAIkMWt9nMX0J7jxb6ymkgZ0SCsU=;
-	b=vSVpI6yKqQ8K9ycfWOM0ymj7xfg9p3/L6xuwJ/SeiMaBahzn0F+yk7zAq7Oz3HHt6pfP
-	 oahcJ9lKspKWHX6AnEI4lLWS5/RNL9+PHETYfCo5Rj/mXfBuWMkllLAuwVh4SNE6GzVMq
-	 LJBXTlp6RIcIY9EsgV0hZ1MSEohcR/XvRGt35wwMDpJhwOMu8V7IdtdPcHPSSLtEUD7JX
-	 kgQ/KJBAGvwEmSNR+UqZUP44p7/7MDPjuCe/dbvQr8U6ZpYjmyb0Qa9JyW3GIFCXdWdUQ
-	 It2vqz3d+EOzJyLO4KNOhbrcCKnJ/Rb4Ispw/8eNNN5y40HMTqVbqxUHz0QXbsW1haQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793698447;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=tKeRMaARI266dkZvEtgJ4R9QgctSM3JHKtwlfdDcKcA=;
+	b=RGIXXeekR9h0kiFsJYO6c2gKlRVfn11T9PwWQd4iUgsjwamOM0ZN+oN25bt9r0F6asl8
+	 eHjYJEb7iuB8fHltiChrRPE2lt6s037ew28VdjMv5cqTUPY+OOqlbUwKbHRtO+bj7okcd
+	 yzseTLTsCsCTqlb9y4mO/UuowLeDm1P0y7DTKG6/KmvpGIoCysFenvdv48XnWIVfzlXJY
+	 e5vSsNVWtJMzrdQ4oIXHQX5XRMhGGWoIFmkiJeEJEf7CtTR/a/Ya6JbwrgkSUoWukY2oM
+	 WWBWzJK4waL+bs9mhvwC8/Ua1pSBK+Z2xgiGrOzqRAGHYAF8HUgZ+qhIyfDWHk0taAw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=cPq5+JP3;
-	arc=none smtp.remote-ip=185.246.85.4
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kqZzr+5v;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E803606A324;
-	Tue,  3 Nov 2026 09:13:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4E803606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C15606A324
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 09:34:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=cPq5+JP3
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id C2A0D4E413DE;
-	Tue,  3 Nov 2026 09:13:31 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 8E1316046C;
-	Tue,  3 Nov 2026 09:13:31 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DD7FA103291A7;
-	Tue,  3 Nov 2026 10:13:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1793697210; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=vtVAKn63hZjF/xRzAIkMWt9nMX0J7jxb6ymkgZ0SCsU=;
-	b=cPq5+JP3kobZDqlYo39DZ+3Paj1cwtc/pvNC0LuBXLgLwwnSpM2mp6IUEDwhutPm1t8hqv
-	n44j+7fSOB6IObByAy0qi5dP1QLN/hrCpek0/uV9rUhpBb5SP1likytMenSrorpctG28PS
-	yoIwswHOY2tgefkrBvnwAElPtFDg3/CddFj5r4hL9DZphSne4tPmXX6qufxcGByRBoR4Kz
-	ZVn7HI5Fjy1nn17IwfcwPdrtHS8m7C5rnxJSKFLAWAMbNLik0GATdnVf0nGsQm+TiKlKc8
-	uVffO7L9pjgZM1IjeE5jfcryXlLKf9umc06Bh3mgGh+dj2k12v2Px/DfieIgKQ==
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kqZzr+5v
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7997C1F000C1;
+	Tue,  3 Nov 2026 09:34:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793698447;
+	bh=tKeRMaARI266dkZvEtgJ4R9QgctSM3JHKtwlfdDcKcA=;
+	h=From:To:Cc:Subject:Date;
+	b=kqZzr+5vYqZOx71JMq8yJpHOOL2LFtdL8ERas9uT2a88Bc2WEYDCd0NdyrfBQF5KT
+	 tyS57jdmfLGvjkLBvvRYxu164HJ4nydfp1ANgBkD3OwuAIfuP98RZ/2CgTAKISmlIs
+	 0wFgH/O2SXQaMz5yedIxK13XUt8vve+blmUzOr3T8ERHifzlWLKLjGhRmj1vugoMe/
+	 pA8VsaDHk6nX8SBj3PCesQjxR0NU/A4nnc8F1b7uwRI294neukRCM7c3B/RN1kH0/l
+	 qAGGLgTIosYATGHUIxr55ROiXV5OT22gxacc4ol3xYvnxRaq29/GCjBp3pU7IAjDwH
+	 jFJQ/eWkal1CA==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	HyeongJun An <sammiee5311@gmail.com>,
+	Christian Simon <simon@swine.de>
+Subject: [PATCH bpf-next 0/4] bpf: Disable private stacks for uprobe programs
+Date: Tue,  3 Nov 2026 10:33:56 +0100
+Message-ID: <20261103093400.112178-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,118 +62,58 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 03 Nov 2026 10:13:25 +0100
-Message-Id: <DMLGLCFQW48J.334XR00MX6V0T@bootlin.com>
-Subject: Re: [PATCH bpf-next 0/2] selftests/bpf: port test_ftrace.sh into
- test_progs
-Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Daniel Borkmann" <daniel@iogearbox.net>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>
-X-Mailer: aerc 0.22.0-0-gc2f86b7abde3
-References: <20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com>
- <DMJE6776F9F0.1O5A9ZMKWYEUP@gmail.com>
-In-Reply-To: <DMJE6776F9F0.1O5A9ZMKWYEUP@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Alexei,
+hi,
+uprobe programs can be preempted and re-entered on the same CPU. Since
+the private stack is shared per program and CPU, a nested invocation can
+overwrite the preempted invocation's stack.
 
-On Sat Oct 31, 2026 at 11:54 PM CET, Alexei Starovoitov wrote:
-> On Fri, Oct 30, 2026 at 11:50 AM Alexis Lothor=C3=A9 (eBPF Foundation) <a=
-lexis.lothore@bootlin.com> wrote:
->> - commit 1 brings a few new helpers to manipulate ftrace from test_progs
->> - commit 2 performs the actual porting
-> [...]
->>  5 files changed, 412 insertions(+), 46 deletions(-)
->
-> This is quite heavy for a port of a 44 line script.
->
-> Lets use a tracing instance. function_graph works in instances.
-> An instance has its own set_ftrace_filter, current_tracer and ring
-> buffer. rmdir undoes all of it.
+Uprobe multi and session programs have attach types that let the kernel
+identify them, so this series disables their private stacks.
 
-I initially went with a ftrace instance, but I came back to global
-ftrace because graph function filters (set_graph_function,
-set_graph_notrace) are not handled at instance level, only at global
-level. But maybe setting only set_ftrace_filter and set_ftrace_notrace
-is enough for this test ? That would indeed simplify a lot the setup.
+As discussed in [1], there seems to be no known compatible fix for
+private stack corruption in standard uprobes. This series leaves that
+issue unchanged and adds the BPF_TRACE_UPROBE attach type for new
+standard uprobe programs, allowing the kernel to identify them and
+disable their private stacks.
 
-> What goes away:
->
->   series                          tracing instance
->   ------------------------------  ------------------------------
->   global tracefs files            files of the instance
->   save and restore, patch 1       rmdir
->   serial_                         not needed
->   all functions are patched       only the filtered functions
+Other possible fixes for standard uprobes include:
 
-Are all functions really patched with the current series ? It is still
-applying filters.
+- disable private stacks for all KPROBE programs: protects uprobes,
+  but may reject existing kprobe programs that rely on private stacks.
 
->   new progs                       progs/modify_return.c as is
->
-> modify_return has fentry, fmod_ret and fexit on the same function
-> and checks the return values.
->
-> The removal of test_ftrace.sh stays.
->
-> Instead of patches 1 and 2:
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/modify_return.c b/too=
-ls/testing/selftests/bpf/prog_tests/modify_return.c
-> --- a/tools/testing/selftests/bpf/prog_tests/modify_return.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-> @@ -61,3 +61,28 @@ void test_modify_return(void)
->  		 0 /* want_side_effect */,
->  		 -EINVAL * 2 /* want_ret */);
->  }
-> +
-> +/*
-> + * The same test while function_graph traces the same functions.
-> + * A tracing instance has its own filter, tracer and ring buffer.
-> + * rmdir() undoes all of it.
-> + */
-> +void test_modify_return_fgraph(void)
-> +{
-> +	char dir[128];
-> +
-> +	snprintf(dir, sizeof(dir), "%s/instances/bpf-XXXXXX",
-> +		 access("/sys/kernel/tracing/trace", F_OK) ?
-> +		 "/sys/kernel/debug/tracing" : "/sys/kernel/tracing");
-> +	if (!ASSERT_OK_PTR(mkdtemp(dir), "mkdtemp"))
-> +		return;
-> +
-> +	SYS(out, "echo 'bpf_modify_return_test*' > %s/set_ftrace_filter", dir);
-> +	SYS(out, "echo function_graph > %s/current_tracer", dir);
-> +
-> +	test_modify_return();
-> +
-> +	SYS(out, "grep -q bpf_modify_return_test2 %s/trace", dir);
-> +out:
-> +	ASSERT_OK(rmdir(dir), "rmdir");
-> +}
->
-> pw-bot: cr
+- reject untagged programs on uprobe events: protects uprobes, but
+  breaks legacy loaders that attach standard uprobes without the new
+  attach type.
+
+- disable preemption while the uprobe program runs: may prevent overlapping
+  invocations on the same CPU, but cannot be used for sleepable uprobe
+  programs and may increase latency
+
+We can pick the uprobe-multi fix and keep discussing standard uprobes fix,
+I'm open to other suggestions.
+
+thanks,
+jirka
 
 
+[1] https://lore.kernel.org/bpf/20260822225444.2774461-1-simon@swine.de/
+---
+Jiri Olsa (4):
+      bpf: Disable private stack for uprobe programs
+      bpf: Add BPF_TRACE_UPROBE attach type
+      libbpf: Detect BPF_TRACE_UPROBE support
+      selftests/bpf: Verify classic uprobe attach types
 
-
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+ Documentation/bpf/libbpf/program_types.rst      |  8 +++++---
+ include/uapi/linux/bpf.h                        |  1 +
+ kernel/bpf/verifier.c                           |  6 ++++++
+ kernel/events/core.c                            |  3 +++
+ tools/include/uapi/linux/bpf.h                  |  1 +
+ tools/lib/bpf/features.c                        | 22 ++++++++++++++++++++++
+ tools/lib/bpf/libbpf.c                          | 21 +++++++++++++++------
+ tools/lib/bpf/libbpf_internal.h                 |  2 ++
+ tools/testing/selftests/bpf/prog_tests/uprobe.c |  4 ++++
+ 9 files changed, 59 insertions(+), 9 deletions(-)
