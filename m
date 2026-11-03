@@ -1,60 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793693995;
-	b=qQaTVujv6kySAeRDBOplM4oAJ6yYaM5REKPpBbA1B6BdYNQD1GEczeQ1EZlWiyvL4VnR
-	 fLdJERf3kF8Waap792UmZUt9lIfkInKr6EBjDsvD3eCBYOuN3Zf8rlCnevWxhh81MGek9
-	 zLOUrOAeeyiXT0BQQp/8OHsxw4jCg3WiCNtWaSWwMRdYFrvAE11wpnSd8sy2rMkfiDUm8
-	 cI7LBM9sekXyVUVZQF5IdGYeYbn+aLBUJ50/pPRzp5DiRNZ9YsTyBmCI+R7IeFJoITQvJ
-	 Srhn1rwjnvLInjIyWT+AUCZDV4qnQh4tDhTTFhw4ImVi5oRrFkcpkWfLtBLQ6gq3qgQ==
+	t=1793694151;
+	b=mBIz2TJxsvBBSOWsM4NnHqD6BVNIyqi+T4edY818e02nv20fcXkrm22zpz93JJAfQPUS
+	 8hdO3xtxVzjox5IGaY3qbnlA3JopRA+9sA2kBkS5emtE4Bd37BArY9owZw5uQoiDvKcIL
+	 z9IcVrv4wK+gkNGaG9WuS53//IBtEJP85B72ep9Jhd1m6owfi0fyB6gp5SNuGODIYzKv3
+	 Ldyod94FCx0S9OrIDL6xsDaLNHRABSN0tqM5m+T2ZQKvTPoFLEIcKHTUZcDnylKgLYk28
+	 tfsGRM4XFoWhPWU7JZfq6V7SAaqS1e1EcgsT1Z05mVr+unSk+bCpX/mlscJujMc/0Ng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793693995;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=QV8OQbqEgAbxmMI7EXk6eiYDzzCN82f0lLhovGPvCRE=;
-	b=S61Mzo5R+1oP8MXW4hWjnXITQSY22UMdbF9zo8pQoJUdXE0v9VNk1Bw8HjZl1Em6yN95
-	 WVTJTuOVmTkADP7ZrwsBV9tj+g0M/xPAA6x/T47BTazjztPTEsTX4s/pmbPHTGCOWtLDB
-	 zUJ0vDmoKxNgjLhjx9P7lBeBr61RmjCbLMqO6nqgk9ADE8qICo8Tw5CZBQJ4Pph7beMpi
-	 P1JlYByA01krfu4JQqQmIAkTPeLZx+UEsWxlWrm4l+Qy1eY8oDNV86bzGSvGG/ZShFD7c
-	 DMstviLXfOFsmJJgJqy10S893L74nW1vfaHQ3mzLhu3DKmjlly9qPUblklph8dh9nDA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793694151;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=ywEpiDPK4X4lwtwqfGUxqJF97k3enH7AorttNznK9fM=;
+	b=CcDZCcxcSQze2sLr/BnGbMmsVKDgvl6dYxcKT1CmV+2elLQDv7Oz1oj82FI895HJ1NhN
+	 DVGlUVCko4vtpo5v/8b6zdJMn/1BVY+hdEi07avfPQlEbFj0JWcSbeB+4rg3gn2kebpjG
+	 0p3wvns4SVRrc5tLFqJKCfj1WJGupGAryDWMGqXRIevBPnhHAfqBH1TTpqG20pLJ1hNwB
+	 l5QCzrmrfsHdytfdXhNSbtt7h0Cizch3Nwheqz3ALtfHbAY/OauN4vOjtDbDORoi7/BOX
+	 SbnAmmmILzFoeOY1y/iCj06YiXwDLOtzkFs6ppwWAaCbL4m5MvYrwvNmZgmSE7AztmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kwvsNrut;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=networkplumber.org;
+	spf=pass smtp.mailfrom=networkplumber.org;
+	dkim=pass header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=Vb+RDi0Z;
+	arc=none smtp.remote-ip=209.85.221.53
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E71606A324
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 08:19:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41956606A324
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 08:22:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41956606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kwvsNrut
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A628D1F000C1;
-	Tue,  3 Nov 2026 08:19:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793693995;
-	bh=QV8OQbqEgAbxmMI7EXk6eiYDzzCN82f0lLhovGPvCRE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kwvsNrutpfuguMNeSWIfyUqAD6nD8ZT9TCHfXU8MutBmcDYL52Gx9TFwpiQDeupjL
-	 K0m0fV2+WdZtu9vmW3bmnlagk02Yei7S0mswVuuLWC60pb5yw36MyhFyofDH76wGxW
-	 x+uJ1t61RO8ODByH58EpcoSGcVAP005yfKsyup6lmrJlxsgfT8Ttd++O6b1K8QS/4i
-	 etvXnQfakTB4/uEf/tvpFktS2Kfk8G8bwsha9Uvf8NSX1VJp0G8lma61PJcM+KrVKk
-	 pY6IWZiBUfgt3hH1NmEP1WE7WEob2sknt0Nlq150u24xhYzstaQhkr/Dwnx/iEOone
-	 YhoJ/JH6gZvTA==
-Message-ID: <sashiko-outbox-194818@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv2 bpf-next 2/8] bpf: Add user memory kfuncs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org, linux-mm@kvack.org, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Lorenzo
- Stoakes" <ljs@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>, "Federico
- Di Pierro" <nierro92@gmail.com>
-In-Reply-To: <20261103075916.100050-3-jolsa@kernel.org>
-References: <20261103075916.100050-1-jolsa@kernel.org>
- <20261103075916.100050-3-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 03 Nov 2026 08:19:54 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=Vb+RDi0Z
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-48b060ec084so2259984f8f.0
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 00:22:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20260707.gappssmtp.com; s=20260707; t=1793694149; x=1794298949; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ywEpiDPK4X4lwtwqfGUxqJF97k3enH7AorttNznK9fM=;
+        b=Vb+RDi0ZvJcLQv+YaQuOnDH/hs+afajV0HP9eGbv8wEvjgVDVTEv3v2q6L9+2fjW5i
+         temELTC+iAKXODYvGzIstOgV5u+HWtOy423elq1hrjb5JF5lkma4HToNgh9q5cBHe+Xl
+         CK/3u0l4cl5m9m+d970COeXBSq5CRBcFxhKwSr0JWwZh2VH1sf1UysBi5ReGYIEA7qDA
+         lCcQXbHaSPlQd9Ni3Ch/Q7isklgnAWb9atdpyMWXk1UjCdqB+jwH3sQOJpt2FIE5tffP
+         t2JEHtfuRee6qbIcPeWidsLgHDhn8ZmRruheumVreNsdwBoQwIc1rrY+PWfXzGhbCy75
+         WG5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793694149; x=1794298949;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ywEpiDPK4X4lwtwqfGUxqJF97k3enH7AorttNznK9fM=;
+        b=fWSKljvEfVLNRUvk6zE702XjMKT48mYSd22oOBjIF6IdgpuUJiKV220UAtxBq3COMD
+         Ra8nKwQh6FjR5FSd+Qv2R3KOo5vqbzAuanYukco5VBxynuwkZ58gsYymR3RewaYNn696
+         8JTsKcnahtcDVCsmXkwitgx5G8wBP1smju4bdSpLDAZQ2UVTRn5OVjwboSdqwBhAkLli
+         kWfu8MHBUB8qFSpCKeiJSlbPUSzjynB5Oa/Zr2wevmbMw6uSA2niZr4MBK6HI69qH1D6
+         /AGwMyLn03bhwWBayxkjtmO1U/qlS1yzBL81vrHK/IrC0tgzIU2l7NCHigHHeOw6CT0j
+         LXOw==
+X-Forwarded-Encrypted: i=1; AKwUvByO6DEylGkpsR9KSiiXRKONFhLZPP7U8smjPEOwy8s/+VYdwyk6C33O8MCoZ53pmZzunzQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/cKRyQhmbM5Iy9yXJEJok4YiK/wuVPhJXF2C1YUfZUStF3Y2a2
+	ih8pF9bffoaL6ZWygwYiVbwpgJ10SW2nYfa9O2Tq0DDXTRsP9XZjur11Ry+v3djdLn0=
+X-Gm-Gg: AYBFou1eDM18tmg2c7VQo3R4LWt2Ck3J9xRrl9FvjhE0Sn9MGQemkdQH/6265Ighqsn
+	njEWwHe1241DQCqbBffzMYhz0G1KrLClIIshIZ012SSxnIP2/PQuzRsCyDCP7eANnSTTa70viB+
+	C5pJmLPogkgKbOVTxUXoJkt5IWnb98eMMV70qDYmoh0PBP0V2oGVgbc77/jPPZ6VQwS/KvNSm43
+	GAYjLnvo09L1/XZk9f2WdDIJcTjAEJ24LzPO1fudyey2oVOaHQVvC3Zq61YwjCdc0iF5eXHjLIu
+	RAnUzGy2J3zai17FJEbmNGQpMerMNTZsrVISt705vXWIzDnys9sH6XjUDmcsKldC4c3qV1ZGddN
+	jK157p8GDznrnNQe+r3MLBvBwHPs8ykxOpnu0tSd79e2Bf0hRF6dBchkhZgKJ4m27NmVQKd5RiS
+	JNhKZfWlbrY26nBxsvMg4bTfM6ZOmsLrXw/OEpz8GJI3VNStWi8mRYuJB/I2KEdq9bYvG8LKZpi
+	ea0G34iYlVtjUM8o7YJBdXyZf4dfsrOZqODsSMDrkK8Z5p5IHhVNHKB/gcUyy04940ULEDWg8VV
+	ZYrRWOP/+3o0Jt2A9PpEkgru/SnsI49tlTj7gyEIZSAEAmFGc9UyT350c65CIe3ZHq+Byh1QweP
+	aaBgg6hifTcPiFeg=
+X-Received: by 2002:a05:6000:4312:b0:48d:f36e:fbcb with SMTP id ffacd0b85a97d-48e6e2eb205mr29662965f8f.14.1793694149346;
+        Tue, 03 Nov 2026 00:22:29 -0800 (PST)
+Received: from stephen-xps.local (93.224-78-194.adsl-static.isp.belgacom.be. [194.78.224.93])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b7270asm23867730f8f.11.2026.11.03.00.22.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2026 00:22:29 -0800 (PST)
+Date: Tue, 3 Nov 2026 09:22:26 +0100
+From: Stephen Hemminger <stephen@networkplumber.org>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
+ bpf@vger.kernel.org, dsahern@kernel.org, Willem de Bruijn
+ <willemb@google.com>
+Subject: Re: [PATCH net-next] docs: netdev: fix iproute2 process
+ documentation
+Message-ID: <20261103092226.2e8ab229@stephen-xps.local>
+In-Reply-To: <20261103033611.949104-1-willemdebruijn.kernel@gmail.com>
+References: <20261103033611.949104-1-willemdebruijn.kernel@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,121 +100,17 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] bpf: bpf_user_vm_mmap() clears active TS_COMPAT on TIF_ADDR32 ta=
-sks
-- [Medium] bpf: bpf_user_vm_mmap() triggers false in_32bit_syscall() on x86=
-_64
---
+On Mon,  2 Nov 2026 22:35:56 -0500
+Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
 
-commit f91c9a5c8eeb0a10c48d0c7030bd2cd248f6d3fd
-Author: Jiri Olsa <jolsa@kernel.org>
-
-bpf: Add user memory kfuncs
-
-This commit adds the sleepable kfuncs bpf_copy_to_user(),
-bpf_user_anon_mmap(), and bpf_user_munmap() for KPROBE BPF programs to
-modify a user task's address space and manage private anonymous mappings.
-
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 58e357302850e..ae7dfa58ae95c 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-
-[ ... ]
-
-> @@ -3741,6 +3747,110 @@ __bpf_kfunc int bpf_copy_from_user_mm(void *dst, =
-u32 dst__sz,
-
-[ ... ]
-
-> +/* bpf_wq and bpf_task_work callbacks can run without a usable mm. */
-> +static bool bpf_user_mm_ok(void)
-> +{
-> +	return current->mm && !(current->flags & (PF_KTHREAD | PF_EXITING));
-> +}
 > +
-> +#ifdef CONFIG_IA32_EMULATION
-> +static unsigned long bpf_user_vm_mmap(unsigned long len, unsigned long p=
-rot)
-> +{
-> +	struct thread_info *ti =3D current_thread_info();
-> +	bool compat =3D test_thread_flag(TIF_ADDR32);
-> +	unsigned long addr;
+> +Patches are tracked in patchwork under the netdevbpf project and delegated
+> +to 'shemminger' for further processing:
 > +
-> +	/*
-> +	 * We are not in a syscall, but x86 get_unmapped_area() paths
-> +	 * ignore TIF_ADDR32 and rely on in_32bit_syscall().
-> +	 */
-> +	if (compat)
-> +		ti->status |=3D TS_COMPAT;
-> +	addr =3D vm_mmap(NULL, 0, len, prot, MAP_PRIVATE | MAP_ANONYMOUS, 0);
 
-[Severity: Medium]
-As reported by bot+bpf-ci@kernel.org on v1 [1], on x86_64 kernels with
-CONFIG_X86_X32_ABI=3Dy, will calling bpf_user_anon_mmap() from a sleepable
-uprobe in a native 64-bit process falsely trigger in_32bit_syscall() and
-restrict mappings to the 32-bit compat range below 4 GiB?
-
-When a 64-bit task enters a uprobe breakpoint exception (or sys_uprobe /
-sys_uretprobe), task_pt_regs(current)->orig_ax is -1. Under
-CONFIG_X86_X32_ABI=3Dy, in_32bit_syscall() checks in_x32_syscall():
-
-arch/x86/include/asm/compat.h:in_x32_syscall() {
-#ifdef CONFIG_X86_X32_ABI
-	if (task_pt_regs(current)->orig_ax & __X32_SYSCALL_BIT)
-		return true;
-#endif
-	return false;
-}
-
-Because bpf_user_vm_mmap() passes addr =3D 0 to vm_mmap(),
-arch_get_unmapped_area_topdown() and arch_get_unmapped_area() call
-get_mmap_base() and find_start_end(), which both check in_32bit_syscall()
-and select mm->mmap_compat_base and task_size_32bit() instead of the 64-bit
-address space.
-
-> +	if (compat)
-> +		ti->status &=3D ~TS_COMPAT;
-
-[Severity: Medium]
-Could clearing TS_COMPAT unconditionally whenever TIF_ADDR32 is set clobber
-an active 32-bit syscall's TS_COMPAT state?
-
-When a 32-bit IA32 task enters a syscall via syscall_32_enter(), TS_COMPAT
-is set in current_thread_info()->status and must remain set until
-arch_exit_to_user_mode_prepare() clears it after signal handling and
-syscall restart fixups:
-
-arch/x86/include/asm/entry-common.h:arch_exit_to_user_mode_prepare() {
-	...
-	/*
-	 * Compat syscalls set TS_COMPAT.  Make sure we clear it before
-	 * returning to user mode.  We need to clear it *after* signal
-	 * handling, because syscall restart has a fixup for compat
-	 * syscalls.  The fixup is exercised by the ptrace_syscall_32
-	 * selftest.
-	...
-	 */
-	current_thread_info()->status &=3D ~(TS_COMPAT | TS_I386_REGS_POKED);
-}
-
-If a kprobe schedules a sleepable bpf_task_work callback that runs during
-syscall exit (for example via task_work_run() inside get_signal() or
-ptrace_notify()) and calls bpf_user_anon_mmap() -> bpf_user_vm_mmap(),
-ti->status &=3D ~TS_COMPAT will clear TS_COMPAT before signal handling
-finishes. Subsequent calls to syscall_get_error(), in_ia32_syscall(), and
-in_compat_syscall() will then treat the active 32-bit syscall as a 64-bit
-syscall.
-
-Should bpf_user_vm_mmap() only set and clear TS_COMPAT when
-!(ti->status & TS_COMPAT)?
-
-[1] https://lore.kernel.org/r/571f32a410a85199bc9bcecfe07a9a9b6ef425b205264=
-3e64031dd246c13691e@mail.kernel.org
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103075916.1000=
-50-1-jolsa@kernel.org?part=3D1
+Minor nit. David Ahern (dsa) handles the iproute-next patches.
+I stick to only iproute. 
