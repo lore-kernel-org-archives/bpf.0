@@ -1,52 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793700037;
-	b=P7Qy+21ErxuIBVOE44Y6kG3Xv/QdGj9kuwWg5EWRZqlf/RL57Fcwd/mE9VEmNuGC0I7W
-	 OTuQx//TvqcdYFPMgaUx1r4uBesDZXg9CckFba3Nb6FNCSaJxPOQoHltaHT8wYlsRq/M8
-	 q4VvQigkptsWvGAdSunnjux44KV9UMAgchYmX5hd6AVtrrTqo0JnvxeZ0xP0P0OTXYzQN
-	 OL/QWkjQllpkOvJCPUBuGdiCVQR5wdGBa3J/5RG7MBaENJ/3bJY4vWS6ImQkmd06eu2h8
-	 699EUUbP2peUzTqS9avgN/yUP4BDJAEWGcMH4YtHfM89NJsh78I2TBec9pfDk7BMfBQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793700037;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=5eBsKnOAtib/53cPHq4YDPTfnBHbrb23tyc46Pd1NRs=;
-	b=lXucKrfkNUTgAvF0edJsxSOzlqwVWsYKUlxZCbrUe6dksclgQyKVxWNr9jslA3Y3KJs1
-	 upVkSe6d+R0vjtdNXhuZUCHWQir76NxOi2RaWLRgSF89cRl8N2ybxVALiwhY25Zlwprw9
-	 M5J7wWxW9PHY767gVgH9oQcUYcuucI6VZWlqeRJ4GoqWDLqnS93Pcl4bQwV2SbdCYGKfh
-	 yUBy8bfvBG5njwZwCV4cD8Yq3uqh0NYSD6rilns+FVe++7TCHUIk3rXWPl4D5Tw6F5nMu
-	 uAlYs9r32xduB/FnvjLqK929ns7YHC+mD/8t+FW7nbgq7hxEvJzV7pqtRs3U/ZNys0w==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD86D606A836
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 10:00:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 165F71F0093A
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 10:00:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793700026;
-	bh=5eBsKnOAtib/53cPHq4YDPTfnBHbrb23tyc46Pd1NRs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=eiSil1mqSE0j2PYtwUbO9UfsvsIc5feXXEeOV0FGZxcqNNvxcFFzgkmJz2YYlj5KA
-	 W4xh6ZLH6hqIBcKHCrN/zbE+Nyix2wwVQh2jGgY9APgvDVsvgLjOBTOyyClHwvO/au
-	 xbLkvvIHhYgbqAR0qXbZwlp0ztXzvvK1lTFj6O5wjuZOXUwx8tkp4fSciwzsrUhAQ2
-	 Bh5v+AZ5LNxws7W1zrbh6S7jUGTtlLIsIA3WPGQLMQtgFidT76LzNqYUg8xD1uKKcS
-	 olKLS5u8FGkqrefsr146rJBCUIXSysi3dMug3YD64IteAWnOz21nM6rO9eDwY5o2oN
-	 MDpFozkxNK7jg==
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-93cc1ab5f6cso477981985a.0
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 02:00:25 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvBwHaYxXT+3NL41GALBdxFI2sRv/7VK1lPFsH9BoFJhkqLyx2MQqWSiPGF0xjddq146ryDI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9uq7ItFhiGsWZB/LqeIt5kYePX1gZtMt2OkNOB+J8IS9lAxijZ
-	m7INPp0Wnh6sim6sB4PQYGnaOfaK15GAqAo8YIfehVVNLhVu+YvWxwcKIeYjz5aO1584I2OEO5f
-	YWCnMVApVpoNQDx5Zj4Pdnby9dY8/hDw=
-X-Received: by 2002:a05:620a:7303:10b0:945:b101:67c1 with SMTP id
- af79cd13be357-945b10169d1mr751687785a.24.1793700025088; Tue, 03 Nov 2026
- 02:00:25 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1739760A5BE9
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 10:14:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1739760A5BE9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=HVuGw24O
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6b2237b596cso2945496a12.0
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 02:14:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1793700898; x=1794305698; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=tKdtG2s6IZ3j7IH/DuwyQ1OpXzzjxl5BXBKUm8dGf6U=;
+        b=HVuGw24OF5tV7lS/rJdR15vv8N8owU7Y6aySKXgwyKVOX0chnZXa1Em8+abbAgaekg
+         QRGVIf3yUhXI1k6qsWBCyUPwQvq0uVayHZQctHuBqxMcxaTgyfS7odtiM0wb1FrMaxjl
+         d29hktLGSKd+nCBvW8Ec60IlmX3fhev7eMo7F2Kkea1rquHKqmI374G7WX58q3xVO+A2
+         XZsrA6urKO6PZFd56Sdksv3Ma7JhQYqt/WvxLbVDVotWE5IMvZ1BITOlIcSh0AXfX7lN
+         khcexoOY4YghEzIuLoeevP+ARZxwpdanTTYqLgRtMua7EgfPxK8eQKJVJbEvqy1SYsHu
+         WkQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793700898; x=1794305698;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=tKdtG2s6IZ3j7IH/DuwyQ1OpXzzjxl5BXBKUm8dGf6U=;
+        b=nLMPOIe7ZUqcBnZzRWlEn3p7zMaEYN7Af8+Oxq38wabL1tGz64M7sRm3gYZ895wC6w
+         dkTfX+OmPMkaeuNp4AqdzliPxvjyigF/xjVCVCITqBFm8S8tFen3+rzKhv1fwGvcxWej
+         hEce+zUzjKchgxYKT17Hhyz79rQ+puACR8cOHhKzpDaylg4LLev6UhufnmCiJ3zWpvTL
+         WB7VK9ZvIRrSKDE7O0818nSUK50DbXnNOSE487Y994cF28jhbpt5mx1gbLA7nKtKFBeA
+         TU7MJskXWHswoh5oAMpN1BbXzgMM/XsYBZPEgG8zrA9TO5uDE2MLKI5+jM9V8e64aHbY
+         crjg==
+X-Forwarded-Encrypted: i=1; AKwUvBwv+bo8CjGcIF9ypZiTPfj3EgGAmcHtZDiod5yxA1jNGNrRnEB0V8n5WiuKFIHpOAmUiA8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+NjDW/810RJ1dwCGKM+XIXnAiD6CgxE0BVi5YFmhaEujPKdsrx
+	ddBxsgqUSzbXnDAutc415ciWxvTANuCnvgUvfc2lIJ+8VDeb8Y92a+DtKUAJo3Y/9kpb
+X-Gm-Gg: AYBFou1X610YtQ5eNdUXdlm3YLosyNcSjY85VI9NHcWYfQYP61VH6cejI4fvUY0ituL
+	VAhW4Fw0MpnHr5NDZ0uRMykW5QSlrKQc4we9+DpjSt+NwveRHDnTWNInKcfR3kH4TNj7YhFEN3Y
+	ZzdYNwxQq2xlBhmnWDEy2trAIJpIkLvAONLrXVfbHehvdjoWXS63SJjB/cQrz/Kf3mJfE+22/sB
+	3jLZ6emyToZBDXlCCrdncc1ussaEtApHH+VoPmh+V58aKNork/5OpWX5almBSk3Lp68lj5ZUxVt
+	baggMkOQAz9glggsLhjocSUhkNjdOi0M3LPZgxqbCUgkN1OpdTWjkdfiPUG9QvymC+tYOCGvYhY
+	oPPxTMiRwammhr59xXH7fc61as82EQnEQn5ZD6G3Ryt+8mXIbkYnifRfW6Nv+I+aCCQv3eDyYnt
+	OJy5AO1oe6PM63OybOrPvA7PdzUqTyUW36wVM1rDhCCSOsbTZQ0UwuaFSIPcl/9eBwGv3t0afNi
+	lyn+t8+rEcZFtNLbNPFY27tjrPpFVR9qzrzPKJRsgUe2lEU4hWduV8F0QgShcq/BHNavbgkjR12
+	O7EVryXWcIcfsHLoAQd7rGWdQaCGWHIcqs0OVUqp3zbsJtqjst23eGHMK8JP8EZ+YQBlV9YRm7r
+	ov6kuPCAx7qTpVhbV//wV
+X-Received: by 2002:a17:907:3f88:b0:c48:1977:e1c3 with SMTP id a640c23a62f3a-c4ca7a4e638mr1198543066b.21.1793700898407;
+        Tue, 03 Nov 2026 02:14:58 -0800 (PST)
+Received: from alex-t14g7.localdomain (tmo-086-54.customers.d1-online.com. [80.187.86.54])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c4cec189195sm69976366b.86.2026.11.03.02.14.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2026 02:14:57 -0800 (PST)
+From: Alexander Mikhalitsyn <alex@amutable.com>
+To: ast@kernel.org
+Cc: brauner@kernel.org,
+	jlayton@kernel.org,
+	Alexander Mikhalitsyn <alex@amutable.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: use FS_USERNS_DELEGATABLE for bpffs
+Date: Tue,  3 Nov 2026 11:14:05 +0100
+Message-ID: <20261103101405.70180-1-alex@amutable.com>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -56,146 +83,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261103025610.3738894-1-ridong.chen@linux.dev>
- <20261103025610.3738894-8-ridong.chen@linux.dev> <CAGsJ_4xCTSctcPcC7X6Dx4zYaOycaPqs0DG7AaxB55wx1Afwpg@mail.gmail.com>
- <9cabcddf-d807-4a36-84f1-5bb06ea72aac@linux.dev>
-In-Reply-To: <9cabcddf-d807-4a36-84f1-5bb06ea72aac@linux.dev>
-From: Barry Song <baohua@kernel.org>
-Date: Tue, 3 Nov 2026 18:00:13 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4xXDZjhN+NkvtN+vAp8Bokack_JdNgP=nGPQtHUX8_rqg@mail.gmail.com>
-X-Gm-Features: AclHuK-l8OdgfBebeJ7I2lXBHNEFb91IlwAm3Z2gmv4eIjSIYhVp7xL_4GoZss8
-Message-ID: <CAGsJ_4xXDZjhN+NkvtN+vAp8Bokack_JdNgP=nGPQtHUX8_rqg@mail.gmail.com>
-Subject: Re: [PATCH v6 7/7] mm/mglru: add tracepoint for inc_max_seq()
-To: Ridong Chen <ridong.chen@linux.dev>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Dave Chinner <david@fromorbit.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Muchun Song <muchun.song@linux.dev>, 
-	Qi Zheng <qi.zheng@linux.dev>, David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Baoquan He <baoquan.he@linux.dev>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, cgroups@vger.kernel.org, 
-	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>, Ridong Chen <chenridong@xiaomi.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 3, 2026 at 4:39=E2=80=AFPM Ridong Chen <ridong.chen@linux.dev> =
-wrote:
->
->
->
-> On 11/3/2026 2:48 PM, Barry Song wrote:
-> > On Tue, Nov 3, 2026 at 10:58=E2=80=AFAM Ridong Chen <ridong.chen@linux.=
-dev> wrote:
-> >>
-> >> From: Ridong Chen <chenridong@xiaomi.com>
-> >>
-> >> Aging in MGLRU advances max_seq via inc_max_seq(), creating a new
-> >> youngest generation. There is currently no tracepoint on this path, so
-> >> the moment a new generation is created, and how the min_seq of each ty=
-pe
-> >> trails behind it, cannot be observed as it happens.
-> >
-> > We might be more interested in why aging is triggered rather
-> > than the exact moment when max_seq is advanced.
-> >
-> > With your patch, we get:
-> >
-> > ~ # cat /sys/kernel/tracing/trace | grep mglru_inc_max_seq
-> >             a.out-93      [001] d..1.   278.276539:
-> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D4 anon_min_seq=3D2
-> > file_min_seq=3D1 nr_anon=3D{0x0,0xf016,0x12,0x0}
-> > nr_file=3D{0x1886,0xb,0x4c,0x0}
-> >           kswapd0-50      [000] d..1.   278.422400:
-> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D5 anon_min_seq=3D2
-> > file_min_seq=3D2 nr_anon=3D{0x5,0xccb6,0x3439,0x0}
-> > nr_file=3D{0x4ae,0x4f,0x55,0x0}
-> >           kswapd0-50      [000] d..1.   278.508003:
-> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D6 anon_min_seq=3D3
-> > file_min_seq=3D4 nr_anon=3D{0xccb6,0x3d29,0x1,0x0}
-> > nr_file=3D{0x0,0x59,0x7,0x0}
-> >           kswapd0-50      [000] d..1.   280.046056:
-> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D7 anon_min_seq=3D4
-> > file_min_seq=3D5 nr_anon=3D{0x3bf3,0xcbbd,0x23e,0x0}
-> > nr_file=3D{0x0,0xb,0x1,0x0}
-> >           kswapd0-50      [000] d..1.   280.124876:
-> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D8 anon_min_seq=3D5
-> > file_min_seq=3D6 nr_anon=3D{0xcafd,0x3e31,0x0,0x0}
-> > nr_file=3D{0x0,0x5,0x7,0x0}
-> >             a.out-96      [001] d..1.   290.629014:
-> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D9 anon_min_seq=3D7
-> > file_min_seq=3D6 nr_anon=3D{0x0,0x10615,0xb,0x0}
-> > nr_file=3D{0x331,0xb,0x9a,0x0}
-> >           kswapd0-50      [000] d..1.   290.653098:
-> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D10 anon_min_seq=3D=
-7
-> > file_min_seq=3D7 nr_anon=3D{0x15,0xef23,0x18c4,0x0}
-> > nr_file=3D{0xb,0xb8,0x55,0x0}
-> >             a.out-96      [001] d..1.   290.684875:
-> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D11 anon_min_seq=3D=
-8
-> > file_min_seq=3D9 nr_anon=3D{0xeee3,0x1afb,0x2,0x0}
-> > nr_file=3D{0x0,0x76,0x4,0x0}
-> >
-> > You can see that the youngest generation is always zero,
-> > because you're just getting the newly added youngest
-> > generation :-)
-> >
->
-> Hi Barry,
->
-> Thank you very much for testing and reviewing.
->
-> > This somehow suggests that the information is redundant, as
-> > there is always a zero there.
-> >
-> > I suspect we'll need an additional tracepoint to show why
-> > aging is triggered and at what sc->priority it happens.
-> >
-> > But do you know why you trace the moment just after aging
-> > is completed, rather than the reason why aging is needed?
-> >
-> My original goal was to pair it with mm_mglru_scan_folios, to see how
-> the aging window of each memcg moves. The per-generation anon/file
-> nr_pages were added following your suggestion on v1. I put it at the
-> end of inc_max_seq() because of the restart there, as max_seq and
-> min_seq are only final after that.
+Instead of FS_USERNS_MOUNT we should use recently introduced [1]
+FS_USERNS_DELEGATABLE cause it better expresses what we
+really want to get there. Filesystem should not be allowed
+to be mounted by an unprivileged user, but at the same time
+we want to have sb->s_user_ns to point to the container's
+user namespace, at the same time superblock should be allowed
+be created only if capable(CAP_SYS_ADMIN) check is successful.
 
-The per-generation anon/file nr_pages are perfectly good, as
-they can also help explain why aging is needed, especially
-now that we're introducing new code for imbalance-based
-aging.
+Tested and no regressions noticed.
 
->
-> You make a very good point that the reason for aging is also
-> important. So I'd like to discuss which way is better:
->
-> 1) Keep mm_mglru_inc_max_seq, and add another tracepoint at the aging
->   decision in try_to_shrink_lruvec(), reporting why aging is needed
->   and at what sc->priority.
->
-> 2) Replace mm_mglru_inc_max_seq with a single tracepoint in
->   try_to_shrink_lruvec(), right before try_to_inc_max_seq(), reporting
->   the reason, sc->priority, swappiness, max_seq/min_seq and the
->   per-generation nr_pages before aging. The youngest generation is
->   not empty at that point, and the new window after aging can still
->   be seen from the following mm_mglru_scan_folios.
->
-> Which one do you prefer?
+No functional change intended.
 
-Maybe we should keep option 2 for now. Understanding why
-we are aging and at what priority is much more important,
-especially since we're still introducing some
-imbalance-based aging code.
+Link: https://lore.kernel.org/all/20260129-twmount-v1-1-4874ed2a15c4@kernel.org/ [1]
+Signed-off-by: Alexander Mikhalitsyn <alex@amutable.com>
+---
+ kernel/bpf/inode.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-It should be quite simple, just a matter of moving the code
-around a little.
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index c6f328e4752e..e8ec41f095fd 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -1188,10 +1188,6 @@ static int bpf_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	struct bpf_mount_opts *opts = sb->s_fs_info;
+ 	struct inode *inode;
+ 
+-	/* Mounting an instance of BPF FS requires privileges */
+-	if (fc->user_ns != &init_user_ns && !capable(CAP_SYS_ADMIN))
+-		return -EPERM;
+-
+ 	sb->s_blocksize = PAGE_SIZE;
+ 	sb->s_blocksize_bits = PAGE_SHIFT;
+ 	sb->s_magic = BPF_FS_MAGIC;
+@@ -1280,7 +1276,7 @@ static struct file_system_type bpf_fs_type = {
+ 	.init_fs_context = bpf_init_fs_context,
+ 	.parameters	= bpf_fs_parameters,
+ 	.kill_sb	= bpf_kill_super,
+-	.fs_flags	= FS_USERNS_MOUNT,
++	.fs_flags	= FS_USERNS_DELEGATABLE,
+ };
+ 
+ static void bpf_fs_inode_init_once(void *foo)
+-- 
+2.47.3
 
-If we later find a good reason to have option 1, we can
-always add it, right?
-
-Best,
-Barry
