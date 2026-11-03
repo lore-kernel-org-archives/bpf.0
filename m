@@ -1,72 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.26
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.254.49.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793673480;
-	b=LrKMtzbxFpMrEc7v580Rsv3zFGlv4zRx94J85vSfz0Oq3xjsJqX+logXt3h7i/QzTS4/
-	 +3NfeD4VquOk0ukTjvpekKznEiknFhCZ/lRrgExkm070N1BB284W8/LctC4qnoZ66bJMX
-	 CTjXv6bUF5kxJi5WYisfsEswJ8qQZ66H7ztI3C9+KCZk3YtbO3y5X3d4Q4Firz6CXl5r3
-	 tzKblmSNVpkt1BugZOn4jDjkGWgNYcDKr74gC/1SByih2dqvug7P3LErfhGdgKlvsoW9J
-	 yUaB31cYu5j0Fh4CBlIXV+NxL6IZZXwKuK4CQAiemuMIX3bpaNC9PJ9REuPaB/WczpQ==
+	t=1793673927;
+	b=cX878DTHsUKrrXTE9GVwKBJNKS4/y33F6bRT5xnvWYVTXaxWrDOmfx+dsGzfL8MJUel9
+	 2gvm6QNEteTuk8b6Oms/wXIwal2FbkC7I62mhKrHvwQ4cDWXXTIar/uJl/YHFN51J1sGP
+	 1tjG2JHyWyMc6gOpKX0p77XEZRXNiYizxsMWRO7cNhZtwQXn8tT5NjeRju1gsgyMdjB+/
+	 DHWvGCMGF7jsWB5oyRF2nzuni8IughSeFqwaVtlNLkAbHAUvPB2/7ilB+qyQ6mtwbqlu6
+	 iy74Oa/m54C62Dz6v4M+K0L0WlmZpvlwJy/mZLGjgW3qye9lOt/WX1kHdrCokfUTsjQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793673480;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=0sRD0l57hfFVgwi/g0tAS1yR0jpVl0PruXeq1WJE2ek=;
-	b=oLmEyilf7cwwAbfK1VOMRghJAomf7K3cVjahmCDaz05XtzAZF7il1GxHKf7NeSlnV5G/
-	 wq/UCgVfYL9phhjGGb+6rJg+PT+3+TikduKVzfgFnPFx/rIzJjCN5zM+exlRyM5ToD4K+
-	 zE5J3Y2bcbunywbNv0cahoDr97jqkhNCOeZ+xCk1UwNO2ErBPiYf/QS/l4ljbqgQWn+2/
-	 mtcCTCYymVwD5mK/wid8atDVu4r1rjeyCCyJC+d4V4LcUwEP7wyJjMcx9UirwuKquAqBK
-	 2bmd1UJ/azUi604CpX3OZdOft4GUmcukBpSqoKp+ojabnv7NyaIWPC7cBT/AcsNTqpA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793673927;
+	h=DMARC-Filter:Received:From:To:Cc:Date:Message-ID:Subject:In-Reply-To:
+	 References:Content-Type:Content-Transfer-Encoding:MIME-Version:
+	 X-HM-Tid:X-HM-MType:X-HM-Spam-Status:DKIM-Signature;
+	bh=j2KD9GvfPeXoDg285IZexB8Z8vN8Y20a8MOwOXjwlFc=;
+	b=xKS6K5AB6Bh1OxrskOtqpQNr4KnyGb0hknYs0a577OhLJckLiDabpauTPFd1JRZjSDld
+	 jTYp//H4zMRusT/dyxITiCAKjdTb2WhH7GHOzeAg75sPhuoatUV7UYDkS1SanuGyGlE5i
+	 6JsneffStDbuI+Yu5M3xXFMqWmjO2Gn6DnW+0JccJPQ1JZ3ioZGotrOcct2dj0TztJHPx
+	 1yerKJdhrpAxUuShGhCuauDdCFTldLApos4jIUQ6LSVxx8EQKuwa1zbVrxAT/hlPmnpcT
+	 ptyOT6XeJFyK2Lrcwz6Q12nY34tHUog613EWZ6a5qZ+oJgNwBm+PkbBBWwWeVyBGaGw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=BPouTgqF;
-	arc=none smtp.remote-ip=91.218.175.26
-Received: from mta0.migadu.com (out-26.mta0.migadu.com [91.218.175.26])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=stu.pku.edu.cn;
+	spf=pass smtp.mailfrom=stu.pku.edu.cn;
+	dkim=pass header.d=stu.pku.edu.cn header.i=@stu.pku.edu.cn header.a=rsa-sha256 header.s=default header.b=OwrRybO2;
+	arc=none smtp.remote-ip=45.254.49.197
+Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30DC606A33B
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 02:37:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B30DC606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC861606A327;
+	Tue,  3 Nov 2026 02:45:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CC861606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=stu.pku.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stu.pku.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=BPouTgqF
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=YB1TgEsc5rIC0KVTq3a2dIhsapr6DQo3zVEdWup7xnE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793673476; v=1; x=1794278276;
- b=BPouTgqFgshjAvhj6sxurvqh1w/QHAmPKM+joIfs4B3j7ii59pHmukgTYDqDVQ/2GHfqzxAO
- qS3cX3U0tkj3jplgCBeU42e+Z7ekg+mAPd2hm8c/SKoaC3ikbaNc5mbpeRJDhq3XFJCyWkYrtZa
- +UnphlWtrr6ojt2ZNHRm6w+4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 35c4c235a93bf988;
-	Tue, 03 Nov 2026 02:37:56 +0000
-X-Mizu-Trace-ID: 35c4c235a93bf988
-X-Migadu-Flow: FLOW_OUT
-Date: Tue, 3 Nov 2026 10:37:34 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-	David Lebrun <david.lebrun@uclouvain.be>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Mathieu Xhonneux <m.xhonneux@gmail.com>,
-	David Lebrun <dlebrun@google.com>,
-	Stefano Salsano <stefano.salsano@uniroma2.it>,
-	Andrea Mayer <andrea@common-net.org>
-Subject: Re: [PATCH net 5/6] seg6: account for the MAC header in skb checksum
- on L2 encapsulation
-Message-ID: <aulI7pl1oWRKzXgt@fedora>
-References: <20261031225033.64-1-andrea.mayer@uniroma2.it>
- <20261031225033.64-6-andrea.mayer@uniroma2.it>
+	dkim=pass (1024-bit key, unprotected) header.d=stu.pku.edu.cn header.i=@stu.pku.edu.cn header.a=rsa-sha256 header.s=default header.b=OwrRybO2
+Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa (unknown [IPV6:2409:8a00:3c11:dbc0:2581:8e:ca0f:59ab])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 534316a3a;
+	Tue, 3 Nov 2026 10:45:21 +0800 (GMT+08:00)
+From: Yifan Zhang <yfzhang23@stu.pku.edu.cn>
+To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+ linux-input@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Tue, 03 Nov 2026 10:45:19 +0800
+Message-ID: <179367391951.8187.16512492575149308999@stu.pku.edu.cn>
+Subject: [PATCH v2 2/2] HID: bpf: reject struct_ops registration during device
+ destruction
+In-Reply-To: <179367391951.8187.14164894863012056170@stu.pku.edu.cn>
+References: <179367391951.8187.14164894863012056170@stu.pku.edu.cn>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,60 +59,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261031225033.64-6-andrea.mayer@uniroma2.it>
+X-HM-Tid: 0aa19f4c04d503a2kunm153cdd6b10a857
+X-HM-MType: 10
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkZTxgfVh5DQh4YS08dS0odHVYeHw
+	5VEwETFhoSFyQUDg9ZV1kYEgtZQVlJT0tCQUMaS0tBSBhKSkEfGRhLQUlOQ0pBQx5BGBpLHUFOQh
+	oZWVdZFhoPEhUdFFlBWU9LSFVKS0lITkNDVUpLS1VLWQY+
+DKIM-Signature: a=rsa-sha256;
+	b=OwrRybO2Wuj46VFCa7BjnOIRVok+fuhiqXMbFkMrRpJfJeEQbNTlFum9N1FfyioxyppCZOYNFgl9KuOGs8RawkSExt6Kftn+ZhswJM1Dal0YZeqK0y6XnT2RvBllj6mAnSYtWAbGWB1DHtmKStYXlDCQcn2pxjkcZYj1ow9NzVY=; s=default; c=relaxed/relaxed; d=stu.pku.edu.cn; v=1;
+	bh=j2KD9GvfPeXoDg285IZexB8Z8vN8Y20a8MOwOXjwlFc=;
+	h=date:mime-version:subject:message-id:from;
 
-Hi Andrea,
-On Sat, Oct 31, 2026 at 11:50:32PM +0100, Andrea Mayer wrote:
-> In L2ENCAP and L2ENCAP_RED mode, seg6_do_srh() puts the MAC header back
-> in front of the frame with skb_push(), without adding it to skb->csum.
-> The encapsulation then calls skb_postpush_rcsum() only for the outer
-> headers. With CHECKSUM_COMPLETE the MAC header is missing from
-> skb->csum, which no longer covers the whole packet as required.
-> 
-> For a forwarded packet, ip6_forward() sets ip_summed to CHECKSUM_NONE with
-> skb_forward_csum(), and End.DX2 does the same before sending the frame.
-> When the packet is delivered on the same node, a raw socket with
-> IPV6_CHECKSUM still reads skb->csum. With skb->csum computed by the device,
-> the kernel can then log a "hw csum failure", as if the device had computed
-> a wrong skb->csum.
-> 
-> Use skb_push_rcsum(), which also calls skb_postpush_rcsum() for the MAC
-> header.
-> 
-> Found by manual code inspection of the skb->csum updates in the SRv6 code,
-> and observed in a VM without kernel changes or error injection: with
-> skb->csum computed by a tc ct action, a BPF tracing program on
-> ip6_forward() shows skb->csum missing the MAC header. With this patch,
-> skb->csum covers it. Also tested against the srv6 selftests, and with a
-> ConnectX-6 Lx NIC (mlx5) that provides CHECKSUM_COMPLETE.
-> 
-> Fixes: 38ee7f2d4756 ("ipv6: sr: add support for encapsulation of L2 frames")
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> ---
->  net/ipv6/seg6_iptunnel.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
-> index 0d39a38a5dd2..3821d8e1409e 100644
-> --- a/net/ipv6/seg6_iptunnel.c
-> +++ b/net/ipv6/seg6_iptunnel.c
-> @@ -456,7 +456,7 @@ static int seg6_do_srh(struct sk_buff *skb, struct dst_entry *cache_dst)
->  			return err;
->  
->  		skb_mac_header_rebuild(skb);
-> -		skb_push(skb, skb->mac_len);
-> +		skb_push_rcsum(skb, skb->mac_len);
->  
->  		if (tinfo->mode == SEG6_IPTUN_MODE_L2ENCAP)
->  			err = __seg6_do_srh_encap(skb, tinfo->srh,
-> -- 
-> 2.43.0
-> 
+hid_bpf_reg() can obtain a device reference before hid_destroy_device()
+removes the device from the bus, then block on prog_list_lock while HID-BPF
+destruction cleans the device's SRCU state.  The registration path does not
+check the destroyed flag after taking the lock, so it can publish a new
+struct_ops entry and call synchronize_srcu() on the cleaned SRCU object.
 
-Should we put the skb_push_rcsum() inside of __seg6_do_srh_encap() and
-seg6_do_srh_encap_red()? They all do skb_mac_header_rebuild() again.
+KASAN reports:
 
-Thanks
-Hangbin
+  BUG: KASAN: slab-use-after-free in check_init_srcu_struct
+  Read of size 8
+  check_init_srcu_struct
+  synchronize_srcu
+  hid_bpf_reg
+  bpf_struct_ops_link_create
+
+Check destroyed while holding prog_list_lock.  Device destruction sets the
+flag while holding the same lock, so a registration either completes before
+destruction starts or fails with -ENODEV without accessing the SRCU state.
+
+Also clear ops->hdev on every registration error before dropping the device
+reference.  This keeps a failed struct_ops instance reusable and prevents a
+dangling device pointer from reaching a later unregister operation.
+
+Fixes: ebc0d8093e8c ("HID: bpf: implement HID-BPF through bpf_struct_ops")
+Closes: https://lore.kernel.org/linux-input/179317460937.87455.1799017093083467190@stu.pku.edu.cn/
+Signed-off-by: Yifan Zhang <yfzhang23@stu.pku.edu.cn>
+---
+ drivers/hid/bpf/hid_bpf_struct_ops.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hid/bpf/hid_bpf_struct_ops.c b/drivers/hid/bpf/hid_bpf_struct_ops.c
+index c90b68956cb3b..31e2cb146b92c 100644
+--- a/drivers/hid/bpf/hid_bpf_struct_ops.c
++++ b/drivers/hid/bpf/hid_bpf_struct_ops.c
+@@ -201,6 +201,11 @@ static int hid_bpf_reg(void *kdata, struct bpf_link *link)
+ 
+ 	mutex_lock(&hdev->bpf.prog_list_lock);
+ 
++	if (READ_ONCE(hdev->bpf.destroyed)) {
++		err = -ENODEV;
++		goto out_unlock;
++	}
++
+ 	count = list_count_nodes(&hdev->bpf.prog_list);
+ 	if (count >= HID_BPF_MAX_PROGS_PER_DEV) {
+ 		err = -E2BIG;
+@@ -229,11 +234,14 @@ static int hid_bpf_reg(void *kdata, struct bpf_link *link)
+ 	synchronize_srcu(&hdev->bpf.srcu);
+ 
+ out_unlock:
+-	mutex_unlock(&hdev->bpf.prog_list_lock);
+-
+ 	if (err) {
+ 		if (hdev->bpf.rdesc_ops == ops)
+ 			hdev->bpf.rdesc_ops = NULL;
++		ops->hdev = NULL;
++	}
++	mutex_unlock(&hdev->bpf.prog_list_lock);
++
++	if (err) {
+ 		hid_put_device(hdev);
+ 	} else if (ops->hid_rdesc_fixup) {
+ 		hid_bpf_reconnect(hdev);
+-- 
+2.39.5 (Apple Git-154)
