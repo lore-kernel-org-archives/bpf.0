@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793749327;
-	b=Pt2kvSmi5BRBblclc0M6hn9HPiQmPrLA5g3SIQagsp3TTazOlYf+WoQVS0gM0Q2BOB8v
-	 ycpaop5iOf3MW14LlcyOPq7EYC0oCdYBH8hSUQWL9St5Kw7oR3Z9rYA5Cz59UecDV22Qw
-	 Hkbg2N7wz0tgZMBKOxd2XM0uF8GOwroZEErnIQJtviPDJp5Q8+ruPMMwssE6qRAzMt/o/
-	 dmlg9qmT7kZk/WHbVLeYQHYB7FZmhVZgUOI6kFJSVXn4n/j2RCU4xAaUKsDP664C3pewt
-	 rB3v2ES4c7gNER9kikLl+Pvj4oZ8x4DD97AHFv4XT17kQno6Zij3U7wzNm0I6BnJu6w==
+	t=1793749333;
+	b=FRN9ezN0VW28+b9658hnZNLLYwr9O1gEnmmNqJ5zlTyPacFJkRModRefKn4VYDL7x5NX
+	 A+PGtFeIrp8/w209P2tcFTSPVPA26CCPpvPMirMy7BuPUebFa6K8saS1+Fc8SZvwDFFoP
+	 PWE7bQX+W1PmWC0VZu3CtRDzIjkkrBIjs3yYl0ZmztCcepqqIHVBPQYJSqNzW8IRsPVAk
+	 3cFmrVGoxB6LFXWy9stWGYk1YknigzZbkPrIGy+klETEQiUPO62zWfN5YvN9nwzgxB3og
+	 0CESAsjCceO+pt7/l1HOJ62fVTe5psNHYEYDuK3qMw0yxY9aRE6NPsd7/q8iY3pPtvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793749327;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793749333;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=kjNtHfENLhN8j55D29hFtXks1l/c+bLf6udUiW5oZBI=;
-	b=H5WrGGaCV3ZAr+47wQ+Qu+VI/2qBVZj1rj8B0gnSLlv2YmPxlapEyRNKfzBjIKgfON5X
-	 aZRBcwgqlOazsZONs7dFBeDuIjrxECA0VfeaJULUniFSu+eSQbDmz/SdDT/FytPvBNKjf
-	 c9EbdcQzO2FSfRszPuC+1rvulxGisJmmYueUaerKNb8o7wcli+kXoISbvpuRLlzdc0V7j
-	 maBimuf370XwsBv1DbCR5eVVfH22VZlaRRGpMq3s8Pfl4nHX1p2WGV2JOyKsLuidifM3d
-	 E8E8aWoJDnoiqCOPlNCi1wJk/qiOVg/M+bvAnEhwvPgeNzmQFnmNj/qv+yjVfm++3JA==
+	bh=HOWF1VGfJkUZrxL/o2DrHx8r84QWo5PJ6X8ahPt9owM=;
+	b=kYMt2Gqfj01JGMWU0yhEK9RX8moZLCflf9SxlbQifE8gkYiFXKjz8avyNOpp3we6QFY8
+	 gubH+Sq24Doh1YwIhXX9nt392yX00FOFwnv/T5szVy2XXKpYWPQJrsM2VpH4eY2hUW49M
+	 zFueUtJoILMPivRGUhrmVSDXdarkDKrxzK9z+EfvxNL6ddeJRLqBlI1C8wjwqrtpSFqLN
+	 ISkVckFU8//JoOs/OYWkw1LvXStomWvM3bn4J+HtUqcaWkKKnBnz1d7nJaiUnNYBimFa1
+	 ge8EkPOB9UFb8mkSuSuKZwGHyn6sgV51/pnGTI3QuOtjtr3MpOkqb+9UFw2urpViBzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Vp48r+pt;
-	arc=none smtp.remote-ip=209.85.216.41
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ft9S6Lc4;
+	arc=none smtp.remote-ip=209.85.210.170
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC136606A324
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:42:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC136606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17AE606A32F
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:42:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F17AE606A32F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Vp48r+pt
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ac9f49b984so22268a91.1
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:42:06 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ft9S6Lc4
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-89f85edd210so76933b3a.2
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:42:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793749326; x=1794354126; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793749332; x=1794354132; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=kjNtHfENLhN8j55D29hFtXks1l/c+bLf6udUiW5oZBI=;
-        b=Vp48r+ptIiC1cy5O0eTCbS3xOUp0lj6/i6CIS9kQTsJpV9FuJy28mDtK0m7cukynZk
-         sdSX3WNKWT6fvOrimDiymgvKWWOTC/MzJRwwHm44N0uJ3gwG4ttxaq++AEgUzxfif3b/
-         TtovQChTG6pjjhEpRZXIjPtRUhVebGok7UK/kjcVXn9UbuhWch+ZeUWacQrDgV/UPTUX
-         uIuL7h1gkesij/q5hewMKtNT3nSBZNmTcNKJ+3aaQ8QZB7l+4y9eVlBgrG9oYNlpilP3
-         qe7Kc3FCOga6pOfOL5T2VQYTkftOQlkdGQe7ZkK/nwlpU3sVROMj1un0Z8Lhp4eUDXns
-         53Sg==
+        bh=HOWF1VGfJkUZrxL/o2DrHx8r84QWo5PJ6X8ahPt9owM=;
+        b=ft9S6Lc43XRI4Je5KhAGBQCVggfNLH6oHHWCXM41JZ06Gb/ChNQFitezgJnA4YqUjG
+         HqWvKJ+Jsf9MhQxvnWO9XKMYgNkPf2/okbQKqLKCKpQgn7Ya6Nne3jokRZKot+6ouj74
+         CoqA6i9HzrgLUk4IWVTJLldcMlj0XPCovfTUotiy0hfmP/Y2pRXm5HsLG+rX0ojG5XCO
+         nU3DaSdI4ZtfDrH5lGM1ap15apUf5m096OOsY8c3B0vQqWGrRVLmAWO57Rm+w6EpcHOI
+         XC2NpLmYP24s7mCbcMX6teVDoKCr+/i3GoFLrgYVPprm8TS2rkfOJ7SvpZqA9oXrF978
+         OY6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793749326; x=1794354126;
+        d=1e100.net; s=20260707; t=1793749332; x=1794354132;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kjNtHfENLhN8j55D29hFtXks1l/c+bLf6udUiW5oZBI=;
-        b=DYklLigvslnlLBUiUgeFVO16GAI7JcRWB3p9RhxtT9pF6em+3nO4z2fVcsdaXo8CE3
-         mLwp2Kam490IspoYUQ165+QbHuF0j8SRRqwiYfTTgKcvigzLW4G44XTCQt4O4OnKrXCf
-         3a16kbdmKUkdr0iJi3baB3udhXraonPwSYK39uYHjML7L+7JI2Y+TmblcJCoUhVv82Of
-         vyxd74dDCF2AOnrZvxz5P6Y1yU1U0w4BjJd5JG8/xqxmaB7dh9+WIiK2LsE0ReKgRblO
-         V4s9lRHI38oneI0s/VcPbto/sJG2B65D7ARBniGUgL+LZCCq2FMKKeJ5aMOme8IwdEom
-         1vLg==
-X-Gm-Message-State: APuU4Z/omjghfJHJ559kCYYVbeJ9CT7K5GdMKeekr3TaePfSy5KNpuEj
-	sXQpO/iY3802abmnzH1bafAJtFFrn4+4GJJEx/AMM1MpYkCFfnQBpNOzeOJy1g==
-X-Gm-Gg: AYBFou04UpYbs+vA5P1IURu4B7neM2LnFmnMfrgKjJtOi+ddUf/X4mzew3X6ZgGRVgV
-	5MDXRZ9za6z6BEPFjnYx3mgRANiu5ZmP/KtFh1rfpj4phjF1SS8IxLImx7XCLPfE7C6hC/qFlhE
-	NjA3ydqWcuzUbQTlW5BM57K6OSqCp95G0YzibGxAijfoIM6w7l4fSJiA0b1linm9yK4a/zKj3x7
-	JXRxFMmQHMvwqTrhBx0fsVnIworH0Tc9pWw8Gth6k8uM2vFWepaourWQNMvOSwropVQEKfdUjhN
-	HNw2fY1JgVUuOcLl/wOAgrEdPGBmNZB+ORwY4TbZSDwFRJVeYubgKoO/JDjOMmPLSHlnejixWzr
-	J8Na5q8yD06gwdCTkNZpiX3MkStNWSRz5wnZMNS21wYV2n4zOD40CwJGv3ARee8FISac1clCwVu
-	yCiDYoDjxpIWoBVApc3TJlnP205Uh2AhxlVhpqMtd0lX4eeQtP7MsNpsA3TbK0tMEb+uhwYD3R8
-	iTzxrCTedgvXZDm9icPCVh81CFlUVuI4GB/bhY8eIn5hn/ukt66fFOagk+3x0GTZP24ydnp5oVQ
-	cEMRgq3cNUFIQ2GFbo5stegZga1PTM4s0CEnHi7sZ8z88ZuMmSW+TVAdcOnjd/dlql77TfWxhRo
-	dsXYgjcM1uvg8lh7vir2S1CeGGpU32mOgGnqAslJS9l5Ko2lhLVGJQB1VsTx5+2tngso7B4/3Ub
-	Q=
-X-Received: by 2002:a17:90b:3c44:b0:3ad:ba54:c3d6 with SMTP id 98e67ed59e1d1-3ae89559f53mr7194970a91.1.1793749326195;
-        Tue, 03 Nov 2026 15:42:06 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b09445f7b3sm1043820a91.5.2026.11.03.15.42.05
+        bh=HOWF1VGfJkUZrxL/o2DrHx8r84QWo5PJ6X8ahPt9owM=;
+        b=tU0hNU359VLYE7cAnyvU0s1eV+ewTHX+tQJlxUYvEkPZ8Ix3lgRgy74N+MOLHVwWW1
+         17niHY7HDTnwv+xvKbd1gUs7GVWaqZj5UonpT+iUSlvyp5TKCsP+5zwAaWRuH2lCKI+0
+         MXrb1BQAopJzFoT2iefuJCusaxucIV2NcwLndhk+UmA71ANPz/harEu+dRR/WbdjC/Kg
+         0KCAMarRQY4JB/jLAsRu75LX+nn7fAG0ALmCmor1tL6PCOuB9t44kF0zW+rpQaNS4dxu
+         mXpJVbvmmLd8b10jZ3ivzdvGcF2mu4CY+Z7HP7+3ArYiiP40i2lA1X2XL1b1pUGsUqBD
+         FMEA==
+X-Gm-Message-State: APuU4Z+0hqZE4s65gwen0qBJIO+rnXWU41WaNTs8bVwRL0q/rVe2yj5x
+	gA/YXItyXQUYTEpBxaMy3kPTZa6w59t17WvXIzG/EeRe1KWZeyy+woFk5G+b3Q==
+X-Gm-Gg: AYBFou2HfZjhWMc48ejLXNDDCoRnHp8XXMFaMGquzcSRxpeiW+7oSjMdSTiX2HkUMb3
+	BSH0MbNjrlX/Z7rGxJNJMjeuMlw/ODkvs4rjo8Dr+9Xz6sNWnVMfqmSGy2kGwOyyp2uKE1WM5Gp
+	fcmD1asA5wRulTuY3RVF9JDhLnHi+1vEGthFr2BctSIiW9A6CRR+/7Cm0480y3lmCJZYSeEuuWU
+	QrGvwXoLcATdkgxo4zQqOvGKArVl7P2nU4/wh4L4rZTKH/PzqsbpTL9g2G3jYHTMNgZj0QKCTAN
+	Mts6iGPpvm3pVQSvzpYQsaxB2ILT5DAS9C/4WB0m42HSmBn//tNZrOE0l8k+ahA5s382Chbgrav
+	2Y0If7GD91UqXj0OqJHgBxeEj2j6F/ZhS9MCnKKCUuA1olOjRQb1nsAdYyiwZTPN2+XqI4mw4Mv
+	fPHqPYLUW1SiWR0klU8u1BM6l0VRAvEt1bR/LamSQoIBJmeuqZGx7IZHaLCbQt7YXHphp3sKHNn
+	1rh19m5QhmoKBU5bZyvMxURAHcEr4KBoH7KFD56ID81/CEYEOhQb19m5ttazErd6FunrNi5MOwU
+	kqY9UkkVKx9nhYiUQabrHmHW0Z2B97oB9yjSqcAcQSuA3h6oh7tmzju+gVcLPeT/3tD7zAgNiMR
+	wzJ2M9hpDT1NCSDHe/8IKoWiR7j/fqzEWuWpmT3+lrjlkiYwV7OXpfQQWGbsFmoMbKUlL7x+fXq
+	czxa8Xy9S7vGuzOms6ILde
+X-Received: by 2002:a05:6a00:a245:b0:89f:9ea6:1dd9 with SMTP id d2e1a72fcca58-8a9bddbda77mr11544244b3a.38.1793749332007;
+        Tue, 03 Nov 2026 15:42:12 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b097fdf387sm167049b3a.5.2026.11.03.15.42.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 15:42:05 -0800 (PST)
+        Tue, 03 Nov 2026 15:42:11 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 10/37] bpf: Let scalar evolution see loads from read-only maps
-Date: Tue,  3 Nov 2026 23:40:35 +0000
-Message-ID: <20261103234104.208239-11-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 11/37] selftests/bpf: Test scalar evolution with a loop bound in .rodata
+Date: Tue,  3 Nov 2026 23:40:36 +0000
+Message-ID: <20261103234104.208239-12-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
 References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
@@ -104,64 +104,59 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-User space often sets the bound of a loop in .rodata before it loads the
-prog. The variable is volatile, thus the prog loads it in each iteration:
+The prog loads the bound of the loop in each iteration, as clang does for a
+'const volatile' variable. A second jump limits the loop to 16 iterations.
+ - The bound is 10 and in .rodata. It gives the count:
 
-  const volatile int nr_cpus;
-  for (i = 0; i < nr_cpus; i++)
+     loop header at 3, header_count is [0..10]
 
-Scalar evolution calculates how many times a loop runs. Then the verifier
-does not have to verify the loop one iteration at a time. But scalar
-evolution does not examine maps. For it the result of the load is unknown,
-and it cannot calculate the number of iterations:
-
-  loop header at 3, non-linear latch at 5
-
-The map is read-only, thus the load always gives the same constant.
-bpf_compute_const_regs() runs before scalar evolution and already knows
-this constant. Use it. insn_aux_data of an insn describes the registers
-before this insn. Thus the result of the load is in insn_aux_data of the
-next insn.
-
-  loop header at 3, header_count is 10
-
-A loop with a large bound in .rodata reached the limit of 1M insns. Now it
-loads, as it does with the same bound in a register.
-
-A counted loop is verified with ranges, and there is no way back to one
-iteration at a time: a prog that needs the exact counter in each iteration
-(an offset into ctx, two counters with a constant sum) is rejected now, as
-it is with the same bound in the insn.
-
-7 loops of scx_cake get a count. Each of them changes one more register
-that has no formula, thus the verifier still unrolls them. No prog of
-Cilium, scx, the selftests or the public progs of Meta changes.
+ - The bound is in .data. The prog and user space can write to this map,
+   thus the bound must not count: the second jump does.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/scev.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../selftests/bpf/progs/verifier_scev.c       | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 0f46a85f7648..8521c34899b0 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -770,6 +770,15 @@ static int transfer(struct bpf_verifier_env *env, struct env *e, int idx)
- 		switch (mode) {
- 		case BPF_MEM:
- 		case BPF_MEMSX:
-+			/*
-+			 * for (i = 0; i < nr_cpus; i++) with "const volatile int nr_cpus":
-+			 * bpf_compute_const_regs() knows what is loaded from a read-only map.
-+			 */
-+			if (insn->src_reg != BPF_REG_FP && idx + 1 < env->prog->len &&
-+			    (env->insn_aux_data[idx + 1].const_reg_mask & BIT(dst))) {
-+				imm = env->insn_aux_data[idx + 1].const_reg_vals[dst];
-+				return replace_reg(scev, e, dst, imm_expr(scev, imm));
-+			}
- 			return maybe_load_fp(scev, e, insn);
- 		default:
- 			goto mark_dst_unknown;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index 682f22d5fe1f..f33e5b51f7e9 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -1528,6 +1528,34 @@ __naked void eval_expr_unallocated_stack_bound(void)
+ "	::: __clobber_all);
+ }
+ 
++const volatile __u32 rodata_bound = 10;
++volatile __u32 data_bound = 10;
++
++/*
++ * for (i = 0; i < bound; i++): the bound is loaded in each iteration. It gives the count when the
++ * map is read-only. If not, the second jump does.
++ */
++#define BOUND_IN_MAP_TEST(name, bound, count)					\
++SEC("socket")									\
++__success __retval(10) __log_level(2)						\
++__msg("loop header at 3, header_count is [0.." #count "]")			\
++__naked void name(void)								\
++{										\
++	asm volatile (								\
++	"r6 = 0;"								\
++	"r7 = %[" #bound "] ll;"						\
++"1:	r6 += 1;"								\
++	"r1 = *(u32 *)(r7 + 0);"						\
++	"if r6 >= r1 goto 2f;"							\
++	"if r6 < 16 goto 1b;"							\
++"2:	r0 = r6;"								\
++	"exit;"									\
++	:: __imm_addr(bound) : __clobber_all);					\
++}
++
++BOUND_IN_MAP_TEST(bound_in_rodata, rodata_bound, 10)
++BOUND_IN_MAP_TEST(bound_in_data, data_bound, 16)
++
+ SEC("xdp")
+ __success
+ __log_level(2)
 -- 
 2.55.0
 
