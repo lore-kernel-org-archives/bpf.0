@@ -1,59 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793704039;
-	b=hQEBHs9P8paut+KTC0Yp1ItaLEQoPAUbAmT6ZMSMPzbW2tzAOVSMuUD89HMjG3YEmww1
-	 uIVjl4z09mpKyO8kmIhBCdbbOvSblOcFeBehAcbgZ01imiAQ1spVxBs9jlQ64h5wT0X+v
-	 JiacxESGh+L3U0jzflCrOBKMXkUmXX6hHpFhtAHSDFKh3Vai5St41Kv6grZYAFK5PtbfB
-	 NQKAtZAGGiJl5n03IWVuZ86gFGbpzB7Mg8CHAkgXPpgjK6/+j+9KaQ+ELhOSTYQiBP285
-	 Kt3ZG0usTdnGXCrgkfC/kHVj3Bc77Mm8ZHNWx7OBYdmIMxEX843EYuCOqVUAGSz/bBg==
+	t=1793704584;
+	b=e6B/u7LR6LLNFj5AcsNtSrqzu+KL0cdenya6d2uM9kiFKNhcHtEbbRsEyDOgGTKg3cLI
+	 qowh6az0HwZ/AQ6XeOpO97ert35TmZ7FqdDCfhZ/GvSyt8wjHBYhglPoLm3hLZHYODVrO
+	 3plzaWKVlfudS28FAc6a/u8fbTBFZ/j25sdYfqFhRViYliAe+GXQHY+UGyrhEYL60H4tI
+	 fexq5CKB+nAyqyF/u8SYBGZL0m9kOSKz02+0Z1y7MTpSmYvnKSIoMZdZkkLoPah2PoqoI
+	 CgsAjFpMyGqeuCCJn8K6Ekyl/u/Uq+BQblnUUzMcXAYmiqO4wlHPLMLMJeKg02UAFZA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793704039;
-	h=DMARC-Filter:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Debian-User;
-	bh=sUGQUZ32jParOvnwDMoBtI99f85BW6ba9gLM9CHewyY=;
-	b=CS+wCHb3UuE8TVm93XwQWUWw3KycL2BE6pKw7K/iNkl0SfG2txX6pQP1OdIuLOLSb2ZL
-	 fuQ9821MkxjrmMbQq9Pj0RUlaBHCb5xqKzr+p9Yj783nmTpXKoxAijx/G5s2/xUeEwFYO
-	 iEnzAHu1MuJkzr/5/wgehJwpEF9eiuptCr3JAf3TqhkidWl8XjypqWNsZ3mzuxY80ipWT
-	 YGxgkSUO4Zz8hIDo/aHdLlPvqCZWOP6DUu3zDPSfi0yfif5PMTIgYM5NNTG4cWrHIbrOs
-	 PDJchBCyeAPSSxB50QgpIce1iDPSjp2/fRnEWofpFW17hlvtbl2VTBMNGqFZUs6S8xA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793704584;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=C2TR7Jw91Qq5XSj/O2fms0EOmgomU15DFV/Paiflvfg=;
+	b=egkx+j5tPg9FlAAqyJ6HkKz6OXr3oHskmuyntWH5ItmqpVCUAHladoNR+eob3uqb26jZ
+	 Y5Ymhn3M5P8j1/kL/E68/qGj7dkYo9MlvWquaKz+TkEQcRDdzJOQE1U3l65AlJlVLzf2H
+	 VdqlQrBvucew7UShnLqi8+n6i6dwQnTdkJrpoG4qxs7urDgqkpGTOVP7umOAicoZ72+K9
+	 LBpWKThH8EPku5GfJTplF7VIjvu3QK1/mIMkV/ENtf+KubpHgFtRZ/GHQmHeyDE7iPNkV
+	 7rfK383sqf1Axt9xCh6PjLOhHNGnkrueynl29CuZLqGdrcAo0rfAGRBegUsclQ4uCpQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=debian.org;
-	spf=pass smtp.mailfrom=debian.org;
-	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=fP0Fb8gO;
-	arc=none smtp.remote-ip=82.195.75.108
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cL7DP2F0;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EE0608508A;
-	Tue,  3 Nov 2026 11:07:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73EE0608508A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D3CE606B11A;
+	Tue,  3 Nov 2026 11:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=fP0Fb8gO
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=sUGQUZ32jParOvnwDMoBtI99f85BW6ba9gLM9CHewyY=; b=fP0Fb8gOYeSG1TwzthIzvbHkqz
-	1bzAvi6/zfTW1wnfHYzPUBZB6rY0uhpizOS8L4ZrnlA91DVVVAMLjw87KxHJiFkHtmIw5FnlAeawy
-	0eHwKp0DZkud5jcs6NWfTx/0dBzD8n3OUX2A0hW0skf2f8fDZE8NHWI3JNFLmk5RccpaqocJTqm4Q
-	PovV2knSv96Ol0Xi/t4dy7nAYJoLzXhTdPNKk2dm7zxwKgk0Qu7LFd+XqE3+v/e4lO0IyxGZng6IS
-	qYKvvorizZwonEb3NavdD7LvJywXusnv32ox6vZVXwXd/G1nKq0ze8kwW8tZRF0PoTZWqMPbbSven
-	NZ3H8BGQ==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1xOCME-006tE9-0B;
-	Tue, 03 Nov 2026 11:07:14 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Tue, 03 Nov 2026 03:01:06 -0800
-Subject: [PATCH net-next v4 7/7] selftests: net: getsockopt_iter: cover ip
- and ipv6
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cL7DP2F0
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C7621F000C1;
+	Tue,  3 Nov 2026 11:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793704584;
+	bh=C2TR7Jw91Qq5XSj/O2fms0EOmgomU15DFV/Paiflvfg=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=cL7DP2F0E3uOhkz0spmctbkp/n4c79EyHpNVyepkRcIjHfOG90056AfVm7vMwuK16
+	 mO55tB54q26IXxF966GdC50RQRJZeTKHDTUFPI9rHGveY88W4SG4o9cppm/ZuL0Ppc
+	 VAdO21lA2tI9L3b48rFbmVjtfjKKQGAcVUFlQyww8Fv92xBQGvU3Sfe8ASaunX3wXC
+	 qZ43a6znNSG5E+DhCMDywD87PsuG2Mi+elfN4G/E2I980WH0PlHJcufpXQ3fz4NlyE
+	 YtCdKiaFHrMr7AziO+44J1Pn6SleZweDSFJFJcgchi6WEDtScpltXMqzHFD7pKm0N2
+	 jc753bRmrf3qA==
+Subject: Re: [PATCH net v4 1/2] igb: do not let XDP frames span more than one
+ Rx buffer
+From: netdev-bot+sashiko@kernel.org
+To: tkusters@aweta.nl
+Cc: anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ sven.auhagen@voleatech.de, richardcochran@gmail.com, kurt@linutronix.de,
+ intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ maciej.fijalkowski@intel.com, p@1g4.org, stable@vger.kernel.org,
+ piotr.kwapulinski@intel.com, aleksandr.loktionov@intel.com,
+ alexander.nowlin@intel.com
+Date: Tue, 03 Nov 2026 11:16:21 +0000
+Message-ID: <179370458190.488856.17697539789438631896@kernel.org>
+In-Reply-To: <20261102-igb-rx-ts-fix-v4-1-8785124c5d23@aweta.nl>
+References: <20261102-igb-rx-ts-fix-v4-1-8785124c5d23@aweta.nl>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,487 +70,339 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261103-sockopt_expand_out_v2-v4-7-2d36da923578@debian.org>
-References: <20261103-sockopt_expand_out_v2-v4-0-2d36da923578@debian.org>
-In-Reply-To: <20261103-sockopt_expand_out_v2-v4-0-2d36da923578@debian.org>
-To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>, 
- Eric Dumazet <edumazet@kernel.org>, Eric Dumazet <edumazet@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- david.laight.linux@gmail.com, Breno Leitao <leitao@debian.org>, 
- kernel-team@meta.com
-X-Mailer: b4 0.17-dev-ce4c1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12055; i=leitao@debian.org;
- h=from:subject:message-id; bh=CkMTiEmNzovOQ0GgtPHD9ZU8il55r/o+VSXapnTkXcw=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBq6cAv79nl2VAhCS00JEFp2ylXzwA+9zLdhGbhz
- EGWeVXDJBOJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaunALwAKCRA1o5Of/Hh3
- bUBhD/92Npl1oEo2TcI27U8lfm6kvNBuZ2dgS5Yg6isfMKXYXVWWumyaguQ4/OdNTLYBzTdSxEn
- YbMfKkFXRN48XGauYdG4+4zcXuKB6vC/Ea/KhEX3SAGLkmUl1c/MQYBrXqrxMGJzKeTQfBFGB91
- X56GyZ+cg9YZXoksFJ5X6P4X/jRAhHst0JoHjp7ojczyOm+16v5PuN1fikYXsUMLpfuyHXzke7e
- lT4ESK2/KOKj8GG4aspzIQbxd/mKVFtLXThqNnjtvi4JbQOkX7yscXvckOCFjvk+SsWrreF1yHU
- yXLMLGVrPU6CA+YwlzgDzjusaB4mQAh56CJhXySaEJLFy+JdpRRzS9q+crmyTAEbm8mpZw0hvfz
- kCzbxHvftrzCB9yL8aFIQK77TaVEiMMI2OSTpMOrVTNH324wFeB5OfluNeWCw728LqQxDVVjxV5
- CbtnEpkPeBXbn792/ex3jdRlINqliSsGFktGXyASsXI0o3Exk3hBmAIwb8Xani8k7SwsPEEOHBi
- l/XrZrJzlpZ1d4Z5oOWRnNqqsNHX664LLgJkt7jSV/UE6/8RCU3+9uj02OIXUyzxFs0GXBDzxz6
- HoFUUbR4+RIlC2pSkhh91xeOjcsWwwika8tD4N9w3ZKygVXteKcNWeSDVraqcwrpyUZBjVcIfiW
- ROnBYTKdJqlxcdQ==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
 
-Add an ip and an ipv6 fixture, pinning the returned length and errno
-across buffer sizes, the branches that answer empty, an unknown
-optname and the options dispatched before the switch. The clamp tests
-also compare the bytes copied back, not just the length.
+Thank you for your contribution! Sashiko AI review found 6 potential
+issue(s) to consider.
 
-SOL_IP answers a sub-int buffer with one byte where SOL_IPV6 clamps the
-int. IP_PKTOPTIONS and IPV6_2292PKTOPTIONS want a stream socket;
-MRT_*/MRT6_* want a raw one.
+Critical: 0 · High: 4 (1) · Medium: 2 · Low: 0
 
-ipv6.pathmtu_negative_optlen pins the clamp of a negative optlen: taken
-as 4, it is too short for IPV6_PATHMTU and fails with -EINVAL, where it
-used to pass the length check and fail with -ENOTCONN.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Only the two hop-by-hop tests set IPV6_HOPOPTS, which needs
-CAP_NET_RAW, so the other ipv6 tests run unprivileged.
+- [High] This patch breaks XDP at the default MTU of 1500 on 4K-page
+  systems, and can leave a program that cannot be removed.
+- [High] The fix misses AF_XDP zero-copy rings.
+- [High] Turning on the legacy-rx private flag while XDP is attached
+  brings back multi-buffer XDP frames.
+- [High] With rx-all enabled, RCTL.SBP defeats the new hardware length
+  limit.
+- [Medium] During XDP detach, the hardware limit can be dropped while the
+  rings still run the old program.
+- [Medium] Lowering the MTU gets around the new timestamp-aware check in
+  igb_change_mtu(), which validates the new max_frame against the ring…
 
-The MRT_*/MRT6_* tests skip on a missing /proc/net/ip_mr_vif or
-ip6_mr_vif, rather than on the ENOPROTOOPT the switch also answers for
-an unrelated regression. A kernel with CONFIG_IP_MROUTE or
-CONFIG_IPV6_MROUTE built in no longer hides that regression behind a
-skip.
+Pre-existing issues:
+- [High] This problem wasn't introduced by this patch, but a malicious VF
+  can set arbitrary VMOLR bits for its own pool.
 
-The config fragment only had CONFIG_IPV6_MROUTE=y, so add
-CONFIG_IP_MROUTE=y for the ip test, and CONFIG_IP_MULTICAST=y, which
-IP_MROUTE depends on.
+--
 
-MRT_VERSION and MRT6_VERSION are spelled out; linux/mroute.h does not
-coexist with netinet/in.h here.
+igb: do not let XDP frames span more than one Rx buffer
 
-Acked-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/net/config            |   2 +
- tools/testing/selftests/net/getsockopt_iter.c | 372 ++++++++++++++++++++++++++
- 2 files changed, 374 insertions(+)
+While XDP is attached, this patch caps the maximum receive length at
+max_frame_size. The cap goes in RLPML when no VFs are allocated, and in
+the PF pool's VMOLR otherwise, so the MAC drops frames that would span
+several descriptors. It also adds IGB_TS_HDR_LEN to the one-buffer
+checks in igb_xdp_setup() and igb_change_mtu().
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index d4416f8bdcfd1d..7c8bf84eaa6dfc 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -29,6 +29,8 @@ CONFIG_IP6_NF_MATCH_RPFILTER=m
- CONFIG_IP6_NF_NAT=m
- CONFIG_IP6_NF_RAW=m
- CONFIG_IP6_NF_TARGET_REJECT=m
-+CONFIG_IP_MROUTE=y
-+CONFIG_IP_MULTICAST=y
- CONFIG_IP_NF_FILTER=m
- CONFIG_IP_NF_IPTABLES=m
- CONFIG_IP_NF_IPTABLES_LEGACY=m
-diff --git a/tools/testing/selftests/net/getsockopt_iter.c b/tools/testing/selftests/net/getsockopt_iter.c
-index 6c2408df461232..2367fce226d4cc 100644
---- a/tools/testing/selftests/net/getsockopt_iter.c
-+++ b/tools/testing/selftests/net/getsockopt_iter.c
-@@ -55,6 +55,13 @@
- #ifndef TCP_ULP
- #define TCP_ULP 31
- #endif
-+/* linux/mroute.h does not coexist with netinet/in.h here. */
-+#ifndef MRT_VERSION
-+#define MRT_VERSION 206
-+#endif
-+#ifndef MRT6_VERSION
-+#define MRT6_VERSION 206
-+#endif
- 
- /* ---------- netlink ---------- */
- 
-@@ -492,6 +499,371 @@ TEST_F(rawv6, bad_optname)
- 	ASSERT_EQ(sizeof(val), optlen);
- }
- 
-+/* ---------- ip (SOL_IP) ---------- */
-+
-+FIXTURE(ip)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(ip)
-+{
-+	/* a router alert option, so IP_OPTIONS has something to answer with */
-+	static const unsigned char ipopts[4] = { 0x94, 0x04, 0x00, 0x00 };
-+	int ttl = 42;
-+
-+	self->fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_INET dgram socket: %s", strerror(errno));
-+
-+	if (setsockopt(self->fd, SOL_IP, IP_TTL, &ttl, sizeof(ttl)) < 0)
-+		SKIP(return, "set IP_TTL: %s", strerror(errno));
-+
-+	if (setsockopt(self->fd, SOL_IP, IP_OPTIONS, ipopts,
-+		       sizeof(ipopts)) < 0)
-+		SKIP(return, "set IP_OPTIONS: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(ip)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(ip, ttl_exact)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_TTL, &val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_EQ(42, val);
-+}
-+
-+TEST_F(ip, ttl_oversize_clamped)
-+{
-+	socklen_t optlen = 64;
-+	int buf[16] = {};
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_TTL, buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_EQ(42, buf[0]);
-+}
-+
-+/* SOL_IP answers a sub-int buffer with a single byte when the value fits
-+ * in one, rather than clamping the int down.
-+ */
-+TEST_F(ip, ttl_single_byte)
-+{
-+	unsigned char buf[3] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_TTL, buf, &optlen));
-+	ASSERT_EQ(1, optlen);
-+	ASSERT_EQ(42, buf[0]);
-+}
-+
-+TEST_F(ip, ttl_zero_len)
-+{
-+	socklen_t optlen = 0;
-+	int val;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_TTL, &val, &optlen));
-+	ASSERT_EQ(0, optlen);
-+}
-+
-+TEST_F(ip, negative_optlen)
-+{
-+	socklen_t optlen = (socklen_t)-1;
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IP, IP_TTL, &val, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+TEST_F(ip, options_roundtrip)
-+{
-+	static const unsigned char ipopts[4] = { 0x94, 0x04, 0x00, 0x00 };
-+	unsigned char buf[40] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_OPTIONS, buf, &optlen));
-+	ASSERT_EQ(sizeof(ipopts), optlen);
-+	ASSERT_EQ(0, memcmp(buf, ipopts, sizeof(ipopts)));
-+}
-+
-+TEST_F(ip, options_undersize_clamped)
-+{
-+	static const unsigned char ipopts[2] = { 0x94, 0x04 };
-+	unsigned char buf[2] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_OPTIONS, buf, &optlen));
-+	ASSERT_EQ(sizeof(buf), optlen);
-+	ASSERT_EQ(0, memcmp(buf, ipopts, sizeof(buf)));
-+}
-+
-+/* With no option set the reply is empty and the call still succeeds. */
-+TEST_F(ip, options_absent)
-+{
-+	unsigned char buf[40] = {};
-+	socklen_t optlen = sizeof(buf);
-+	int fd;
-+
-+	fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (fd < 0)
-+		SKIP(return, "AF_INET dgram socket: %s", strerror(errno));
-+
-+	ASSERT_EQ(0, getsockopt(fd, SOL_IP, IP_OPTIONS, buf, &optlen));
-+	ASSERT_EQ(0, optlen);
-+	close(fd);
-+}
-+
-+TEST_F(ip, multicast_if_oversize_clamped)
-+{
-+	struct in_addr any = { .s_addr = INADDR_ANY };
-+	socklen_t optlen = 64;
-+	unsigned char buf[64];
-+
-+	memset(buf, 0xaa, sizeof(buf));
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IP, IP_MULTICAST_IF, buf,
-+				&optlen));
-+	ASSERT_EQ(sizeof(struct in_addr), optlen);
-+	ASSERT_EQ(0, memcmp(buf, &any, sizeof(any)));
-+	ASSERT_EQ(0xaa, buf[sizeof(any)]);
-+}
-+
-+/* IP_PKTOPTIONS only answers on a stream socket. */
-+TEST_F(ip, pktoptions_wrong_type)
-+{
-+	socklen_t optlen = 64;
-+	char buf[64];
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IP, IP_PKTOPTIONS, buf,
-+				 &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+}
-+
-+/* The MRT_* options are dispatched ahead of the rest of the switch and
-+ * want a raw IGMP socket. Without CONFIG_IP_MROUTE they are not
-+ * dispatched at all and the switch also answers ENOPROTOOPT, so the
-+ * config check has to come from somewhere other than this errno.
-+ */
-+TEST_F(ip, mroute_wrong_type)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	if (access("/proc/net/ip_mr_vif", F_OK))
-+		SKIP(return, "CONFIG_IP_MROUTE disabled");
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IP, MRT_VERSION, &val,
-+				 &optlen));
-+	ASSERT_EQ(EOPNOTSUPP, errno);
-+}
-+
-+TEST_F(ip, bad_optname)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IP, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+/* ---------- ipv6 (SOL_IPV6) ---------- */
-+
-+/* an 8 byte hop-by-hop header, so the sticky options answer */
-+static const unsigned char hopopt[8] = { 0, 0, 1, 4, 0, 0, 0, 0 };
-+
-+FIXTURE(ipv6)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(ipv6)
-+{
-+	int hops = 42;
-+
-+	self->fd = socket(AF_INET6, SOCK_DGRAM, 0);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_INET6 dgram socket: %s", strerror(errno));
-+
-+	if (setsockopt(self->fd, SOL_IPV6, IPV6_UNICAST_HOPS, &hops,
-+		       sizeof(hops)) < 0)
-+		SKIP(return, "set IPV6_UNICAST_HOPS: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(ipv6)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(ipv6, hops_exact)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IPV6, IPV6_UNICAST_HOPS, &val,
-+				&optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_EQ(42, val);
-+}
-+
-+TEST_F(ipv6, hops_oversize_clamped)
-+{
-+	socklen_t optlen = 64;
-+	int buf[16] = {};
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IPV6, IPV6_UNICAST_HOPS, buf,
-+				&optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_EQ(42, buf[0]);
-+}
-+
-+/* Unlike SOL_IP, SOL_IPV6 clamps a sub-int buffer down to what fits
-+ * rather than answering a single byte.
-+ */
-+TEST_F(ipv6, hops_sub_int)
-+{
-+	unsigned char buf[3];
-+	socklen_t optlen = sizeof(buf);
-+	int hops = 42;
-+
-+	memset(buf, 0xaa, sizeof(buf));
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IPV6, IPV6_UNICAST_HOPS, buf,
-+				&optlen));
-+	ASSERT_EQ(sizeof(buf), optlen);
-+	ASSERT_EQ(0, memcmp(buf, &hops, sizeof(buf)));
-+}
-+
-+TEST_F(ipv6, hops_zero_len)
-+{
-+	socklen_t optlen = 0;
-+	int val;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IPV6, IPV6_UNICAST_HOPS, &val,
-+				&optlen));
-+	ASSERT_EQ(0, optlen);
-+}
-+
-+/* Unlike SOL_IP, a negative optlen is taken as 4 here, as the int options
-+ * always did.
-+ */
-+TEST_F(ipv6, negative_optlen)
-+{
-+	socklen_t optlen = (socklen_t)-1;
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IPV6, IPV6_UNICAST_HOPS, &val,
-+				&optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_EQ(42, val);
-+}
-+
-+TEST_F(ipv6, hopopts_roundtrip)
-+{
-+	unsigned char buf[64] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	if (setsockopt(self->fd, SOL_IPV6, IPV6_HOPOPTS, hopopt,
-+		       sizeof(hopopt)) < 0)
-+		SKIP(return, "set IPV6_HOPOPTS: %s", strerror(errno));
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IPV6, IPV6_HOPOPTS, buf,
-+				&optlen));
-+	ASSERT_EQ(sizeof(hopopt), optlen);
-+	ASSERT_EQ(0, memcmp(buf, hopopt, sizeof(hopopt)));
-+}
-+
-+TEST_F(ipv6, hopopts_undersize_clamped)
-+{
-+	unsigned char buf[4] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	if (setsockopt(self->fd, SOL_IPV6, IPV6_HOPOPTS, hopopt,
-+		       sizeof(hopopt)) < 0)
-+		SKIP(return, "set IPV6_HOPOPTS: %s", strerror(errno));
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IPV6, IPV6_HOPOPTS, buf,
-+				&optlen));
-+	ASSERT_EQ(sizeof(buf), optlen);
-+	ASSERT_EQ(0, memcmp(buf, hopopt, sizeof(buf)));
-+}
-+
-+/* With no header set the reply is empty and the call still succeeds. */
-+TEST_F(ipv6, hopopts_absent)
-+{
-+	unsigned char buf[64] = {};
-+	socklen_t optlen = sizeof(buf);
-+	int fd;
-+
-+	fd = socket(AF_INET6, SOCK_DGRAM, 0);
-+	if (fd < 0)
-+		SKIP(return, "AF_INET6 dgram socket: %s", strerror(errno));
-+
-+	ASSERT_EQ(0, getsockopt(fd, SOL_IPV6, IPV6_HOPOPTS, buf, &optlen));
-+	ASSERT_EQ(0, optlen);
-+	close(fd);
-+}
-+
-+/* IPV6_PATHMTU wants room for the whole struct ip6_mtuinfo. */
-+TEST_F(ipv6, pathmtu_undersize)
-+{
-+	socklen_t optlen = 8;
-+	char buf[8];
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IPV6, IPV6_PATHMTU, buf,
-+				 &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+/* A negative optlen is taken as 4, which is undersize for IPV6_PATHMTU. */
-+TEST_F(ipv6, pathmtu_negative_optlen)
-+{
-+	socklen_t optlen = (socklen_t)-1;
-+	char buf[64];
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IPV6, IPV6_PATHMTU, buf,
-+				 &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+TEST_F(ipv6, pktoptions_wrong_type)
-+{
-+	socklen_t optlen = 64;
-+	char buf[64];
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IPV6, IPV6_2292PKTOPTIONS, buf,
-+				 &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+}
-+
-+TEST_F(ipv6, mroute_wrong_type)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	if (access("/proc/net/ip6_mr_vif", F_OK))
-+		SKIP(return, "CONFIG_IPV6_MROUTE disabled");
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IPV6, MRT6_VERSION, &val,
-+				 &optlen));
-+	ASSERT_EQ(EOPNOTSUPP, errno);
-+}
-+
-+TEST_F(ipv6, bad_optname)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IPV6, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
- /* ---------- tls ---------- */
- 
- FIXTURE(tls)
+Link: https://lore.kernel.org/all/20261028083344.3047350-3-p@1g4.org/
+
+> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+> index ce91dda00ec0e..5bf489cd7b066 100644
+> --- a/drivers/net/ethernet/intel/igb/igb_main.c
+> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
+> @@ -2894,11 +2894,13 @@ static int igb_xdp_setup(struct net_device *dev, struct netdev_bpf *bpf)
+>  	bool running = netif_running(dev);
+>  	bool need_reset;
+>  
+> -	/* verify igb ring attributes are sufficient for XDP */
+> +	/* verify igb ring attributes are sufficient for XDP, leaving room
+> +	 * for the inline Rx timestamp header
+> +	 */
+>  	for (i = 0; i < adapter->num_rx_queues; i++) {
+>  		struct igb_ring *ring = adapter->rx_ring[i];
+>  
+> -		if (frame_size > igb_rx_bufsz(ring)) {
+> +		if (frame_size + IGB_TS_HDR_LEN > igb_rx_bufsz(ring)) {
+
+[Severity: High]
+Does this refuse XDP at the default MTU of 1500 on 4K page systems?
+
+At MTU 1500, max_frame_size is 1500 + IGB_ETH_PKT_HDR_PAD = 1526. That
+is <= IGB_MAX_FRAME_BUILD_SKB, so igb_set_rx_buffer_len() sets up
+build_skb rings without large buffers. igb_rx_bufsz() then returns
+IGB_MAX_FRAME_BUILD_SKB (1536 - NET_IP_ALIGN):
+
+igb_rx_bufsz() {
+	...
+	if (ring_uses_build_skb(ring))
+		return IGB_MAX_FRAME_BUILD_SKB;
+	...
+}
+
+The new check is 1526 + 16 = 1542 > 1536. So attaching XDP to an
+interface that has been opened now fails with -EINVAL, where it passed
+before. This seems to affect every MTU from about 1495 to 1510.
+igb_change_mtu() also refuses those MTUs while XDP is attached.
+
+The check also runs before the xchg() when bpf->prog is NULL. Can a
+program get stuck attached? There are two ways to get there:
+
+  - attach while the interface has never been opened (the ring flags
+    are clear, so the 2048 check passes), then bring it up
+
+  - attach at MTU 3000 on 3072 rings, then set MTU 1500.
+    igb_change_mtu() checks against the old 3072 rings, and igb_up()
+    then switches them to 1536 build_skb rings
+
+After that, "ip link set xdp off" fails. On unregister,
+dev_xdp_uninstall() hits:
+
+	WARN_ON(dev_xdp_install(dev, mode, bpf_op, NULL, 0, NULL));
+
+and the reference held in adapter->xdp_prog is never dropped.
+
+The extra 16 bytes do seem to be needed for the skb layout:
+igb_skb_pad() gives all the slack to headroom, which leaves exactly
+1536 bytes before skb_shared_info.
+
+Could igb_set_rx_buffer_len() instead pick a layout with room for the
+timestamp, rather than refusing the default configuration and blocking
+removal? For example, it could use 3K buffers when XDP is attached and
+max_frame_size + IGB_TS_HDR_LEN > IGB_MAX_FRAME_BUILD_SKB.
+
+The commit message only mentions a 16-byte reduction on 3 KiB buffers,
+and none of the tests described ran at MTU 1500.
+
+>  			NL_SET_ERR_MSG_MOD(bpf->extack,
+>  					   "The RX buffer size is too small for the frame size");
+>  			netdev_warn(dev, "XDP RX buffer size %d is too small for the frame size %d\n",
+
+[ ... ]
+
+> @@ -5386,6 +5389,12 @@ static void igb_set_rx_mode(struct net_device *netdev)
+>  			rlpml = IGB_MAX_FRAME_BUILD_SKB;
+>  	}
+>  #endif
+> +	/* XDP does not support frames that span more than one Rx buffer.
+> +	 * With VFs the global limit stays large and the PF pool is limited
+> +	 * through VMOLR below.
+> +	 */
+> +	if (!adapter->vfs_allocated_count && igb_xdp_is_enabled(adapter))
+> +		rlpml = min_t(u32, rlpml, adapter->max_frame_size);
+
+[Severity: High]
+Are AF_XDP zero-copy rings covered by this limit?
+
+For a ring with an XSK pool, igb_setup_srrctl() programs the pool frame
+size rounded down to whole KiB:
+
+	srrctl |= buf_size >> E1000_SRRCTL_BSIZEPKT_SHIFT;
+
+With 2048-byte UMEM chunks, the frame size is
+2048 - XDP_PACKET_HEADROOM = 1792, which gives a 1 KiB hardware buffer.
+xp_assign_dev() accepts that pool at MTU 1500, and
+igb_xsk_pool_enable() does no size check.
+
+The limit here is max_frame_size (1526), so frames from 1025 to 1526
+bytes still span two descriptors. igb_rx_bufsz() has no xsk_pool case,
+so the checks in igb_xdp_setup() and igb_change_mtu() don't see that
+buffer size either.
+
+igb_clean_rx_irq_zc() never checks E1000_RXD_STAT_EOP. It runs
+igb_run_xdp_zc() on each descriptor as if it were a full frame. On
+XDP_PASS it builds an skb from the continuation buffer with
+igb_construct_skb_zc(), or it redirects that buffer to the socket.
+
+Doesn't that leave the bogus-frame problem from the commit title in
+place for zero-copy?
+
+[Severity: High]
+What happens if the legacy-rx private flag is turned on while XDP is
+attached?
+
+igb_set_priv_flags() sets IGB_FLAG_RX_LEGACY and calls
+igb_reinit_locked() without checking XDP or the MTU.
+igb_set_rx_buffer_len() then returns early, which leaves 2048-byte
+buffers:
+
+	if (adapter->flags & IGB_FLAG_RX_LEGACY)
+		return;
+
+RLPML here, or the PF VMOLR, is still min(..., max_frame_size). For
+example, attach XDP at MTU 3000 on 3072 rings (3026 + 16 <= 3072
+passes), then run:
+
+  ethtool --set-priv-flags ethX legacy-rx on
+
+RLPML is now 3026 while the buffers are 2048, so a 3026-byte frame
+takes two descriptors. In igb_clean_rx_irq(), if the first buffer gets
+a non-PASS verdict, the second buffer is handled as a new frame.
+
+The same happens if legacy-rx is turned on while the interface is down,
+after it ran with 3K buffers. igb_xdp_setup() checks against the stale
+large-buffer flag and passes, and igb_open() then builds 2048-byte
+legacy rings.
+
+Should the limit follow the buffer size the rings actually use? Or
+should legacy-rx be refused while XDP is attached?
+
+[Severity: High]
+Does rx-all get around this limit?
+
+When NETIF_F_RXALL is set, igb_setup_rctl() sets E1000_RCTL_SBP:
+
+	rctl |= (E1000_RCTL_SBP | /* Receive bad packets */
+
+With SBP set, the MAC stores frames longer than RLPML instead of
+dropping them. Commit bb5ed01cd242 ("igb: set max size RX buffer when
+store bad packet is enabled") already notes this, and
+igb_set_rx_buffer_len() forces 3K buffers for that reason. Nothing
+stops RXALL and XDP from being enabled together.
+
+Frames larger than 3072 bytes then span several descriptors. In
+igb_clean_rx_irq(), igb_run_xdp() runs on the first buffer before
+igb_is_non_eop() and igb_cleanup_headers() are reached. On a non-PASS
+verdict, the continuation buffer is handled as a new frame.
+
+Would it make sense to refuse XDP while RXALL is on, to clear SBP while
+XDP is attached, or to drop buffers until EOP after a non-PASS verdict?
+
+>  	wr32(E1000_RLPML, rlpml);
+>  
+>  	/* In order to support SR-IOV and eventually VMDq it is necessary to set
+> @@ -5402,15 +5411,18 @@ static void igb_set_rx_mode(struct net_device *netdev)
+>  	vmolr |= rd32(E1000_VMOLR(vfn)) &
+>  		 ~(E1000_VMOLR_ROPE | E1000_VMOLR_MPME | E1000_VMOLR_ROMPE);
+>  
+> -	/* enable Rx jumbo frames, restrict as needed to support build_skb */
+> -	vmolr &= ~E1000_VMOLR_RLPML_MASK;
+> +	/* enable Rx jumbo frames, restrict as needed to support build_skb
+> +	 * and XDP
+> +	 */
+> +	pool_rlpml = MAX_JUMBO_FRAME_SIZE;
+>  #if (PAGE_SIZE < 8192)
+>  	if (adapter->max_frame_size <= IGB_MAX_FRAME_BUILD_SKB)
+> -		vmolr |= IGB_MAX_FRAME_BUILD_SKB;
+> -	else
+> +		pool_rlpml = IGB_MAX_FRAME_BUILD_SKB;
+>  #endif
+> -		vmolr |= MAX_JUMBO_FRAME_SIZE;
+> -	vmolr |= E1000_VMOLR_LPE;
+> +	if (igb_xdp_is_enabled(adapter))
+> +		pool_rlpml = min_t(u32, pool_rlpml, adapter->max_frame_size);
+
+[Severity: Medium]
+Can the limit be lifted during XDP detach while the rings are still
+running the old program?
+
+This check and the RLPML one above read adapter->xdp_prog. The Rx path
+runs rx_ring->xdp_prog, which is only refreshed on open. igb_xdp_setup()
+publishes NULL before igb_close() stops Rx:
+
+	old_prog = xchg(&adapter->xdp_prog, prog);
+	...
+	if (need_reset && running) {
+		igb_close(dev);
+
+igb_set_rx_mode() can also be called without RTNL. One path is the VF
+mailbox:
+
+igb_msix_other()
+  igb_msg_task()
+    igb_rcv_msg_from_vf()
+      igb_set_vf_multicasts() or igb_vf_reset_event()
+        igb_set_rx_mode()
+
+Another is __dev_set_rx_mode(), from callers such as MLD that hold
+mc_lock rather than RTNL.
+
+Suppose one of these runs between the xchg() and the point where
+igb_down() clears E1000_RCTL_EN. RLPML (no VFs) or the PF VMOLR (with
+VFs) is then written as MAX_JUMBO_FRAME_SIZE while the old program is
+still running, and oversized frames arriving in that window would be
+split the same way. The window is small and only opens during a detach.
+
+> +	vmolr &= ~E1000_VMOLR_RLPML_MASK;
+> +	vmolr |= pool_rlpml | E1000_VMOLR_LPE;
+
+[Severity: High]
+This isn't a bug introduced by this patch, but it involves the same
+VMOLR RLPML field. Can a VF set arbitrary VMOLR bits for its own pool
+through igb_set_vf_rlpml()?
+
+igb_rcv_msg_from_vf() passes the mailbox word, which the VF controls,
+straight through:
+
+	case E1000_VF_SET_LPE:
+		retval = igb_set_vf_rlpml(adapter, msgbuf[1], vf);
+
+igb_set_vf_rlpml() takes it as int size, clamps it with a signed
+compare, and ORs it in without masking:
+
+	if (size > MAX_JUMBO_FRAME_SIZE)
+		size = MAX_JUMBO_FRAME_SIZE;
+
+	vmolr = rd32(E1000_VMOLR(vfn));
+	vmolr &= ~E1000_VMOLR_RLPML_MASK;
+	vmolr |= size | E1000_VMOLR_LPE;
+
+A value with bit 31 set, such as 0x81000000, is negative and passes the
+clamp. Its upper bits then land in VMOLR: AUPE, ROMPE, ROPE, BAM, MPME
+and STRVLAN.
+
+Take a VF with a port VLAN assigned by the PF, where igb_set_vmolr()
+clears AUPE to enforce tagged-only receive. That VF could set AUPE
+again and receive untagged traffic from outside its VLAN. It could also
+set ROPE, even though igb_set_vf_promisc() only offers multicast
+promiscuous mode to VFs.
+
+Should size be checked as unsigned, or masked with
+E1000_VMOLR_RLPML_MASK, before it is ORed in?
+
+>  
+>  	wr32(E1000_VMOLR(vfn), vmolr);
+>  
+> @@ -6713,7 +6725,7 @@ static int igb_change_mtu(struct net_device *netdev, int new_mtu)
+>  		for (i = 0; i < adapter->num_rx_queues; i++) {
+>  			struct igb_ring *ring = adapter->rx_ring[i];
+>  
+> -			if (max_frame > igb_rx_bufsz(ring)) {
+> +			if (max_frame + IGB_TS_HDR_LEN > igb_rx_bufsz(ring)) {
+
+[Severity: Medium]
+Is this check run against the ring layout from before the MTU change?
+
+Suppose XDP is attached at MTU 3000 (3072 rings) and the MTU is then
+set to 1500. The check passes (1542 <= 3072). Then
+igb_up()->igb_configure()->igb_set_rx_buffer_len() picks 1536 build_skb
+rings, because that selection doesn't account for IGB_TS_HDR_LEN.
+
+On those rings, igb_skb_pad() gives all the slack to headroom, which
+leaves exactly IGB_MAX_FRAME_BUILD_SKB bytes before skb_shared_info.
+With inline Rx timestamps on, take a frame accepted by the new RLPML of
+1526 (1522 bytes stored after CRC stripping). With the 16-byte
+timestamp that is 1538 bytes.
+
+igb_build_skb() then does:
+
+	skb_reserve(skb, xdp->data - xdp->data_hard_start);
+	__skb_put(skb, xdp->data_end - xdp->data);
+
+Can skb->tail end up about 2 bytes past skb->end here, overlapping
+skb_shared_info?
+
+The same overlap, up to 12 bytes at RLPML 1536, appears to exist
+without XDP on build_skb rings with timestamping. So the layout problem
+itself predates this patch. Still, this path lets frame plus timestamp
+exceed the buffer, which the new check is meant to prevent.
+
+>  				netdev_warn(adapter->netdev,
+>  					    "Requested MTU size is not supported with XDP. Max frame size is %d\n",
+>  					    max_frame);
 
 -- 
-2.53.0-Meta
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261102-igb-rx-ts-fix-v4-0-8785124c5d23%40aweta.nl
