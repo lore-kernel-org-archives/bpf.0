@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793749285;
-	b=t6oB3XjDLxr6MsZjvLy0RCchRml8jLod7M1tJ4dYASCD6q+ZF2sZr0oZayduvGlEkuz0
-	 Y/3KllDblkW4anzGr0CGHqmg/6qPS4TdjiuEDLURE0hGFelkTJF+I2BoUJAm/A/XI129J
-	 Pz0xC1Rq1VIs5gg3sgrkJQV3T5IDt7MI7M5q21WBDDd2wi6KMn0Jj93u+d+VXy7SmCBbA
-	 bLlq98nkSTFWbBolF+wNezUzr0e2PBPSp8Nt+RUsLXjvXrlMZKUH3/5nwvI2DekEmtgsH
-	 yEh14g/tpO5PDljknvkgF3/8yNE2QyPUJezC4HW2LxYu2zphJq2OLp2/+QxtUrVMyGA==
+	t=1793749292;
+	b=gmJ/rz7XYCqS8Ka+AsGB7ndDrxsEm58VQ4p2tNhis18yOVKy0a8c9oYWK3+xTKFOu6I0
+	 XCFE092etiqxBpDMct3A1eb2rxcMxWASPdJ+yr4dip1eCdlvrlYNNjsNNOsbxxwrSjkce
+	 rq9OcNOXdnWJlhfasXN7dWGRSHhDXek40i6Fx8BXkQdxsfMp7cnP3wY6Vt2VZaTFDXhNS
+	 XD80c45GWSVXalIDfLfx7QxgmCk1u+O0l0py8Shpare45dh0iry/TuSD1wjnIjttwFtXT
+	 91SCQUgnkzXXW3bgNg+dOSgRFvWMTfFN5a6BHbpXqtTAyHQaSFin25+O3HFxuwAaRhA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793749285;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793749292;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=u3L2S2dQLaRCrq9IeSiGqbB7Pc7SQTltDFZtBP0uSGE=;
-	b=X+nyPP7Qb4hGK84GBT1L7ABfR0N7vr+kCMggwn7lYCb3YgJQCHJq7O7bCnmrv9/QcaM3
-	 3vl+drWY9qNM+o6+Z6yxbuGjtoBtJkLrapqBzcihR6m1r4RQeZbhQomhF7lSKzBFA1D8i
-	 6Xf9S7ODE90R7X0hkfTukEcIkZHzaArQEtHmRUh1BnJ3zK6/Y3pz08PVJrgFLbVWC29II
-	 XRUJJ+0N4X5HTds/XJoc0ZEN7Bm8uTJ4JitMH6E/50ofHgpj/dcoZ3yRscPjvexrMkW2K
-	 HoEthDaswpKZEv4hsNIB5vNKja1IpBkOGFgvqZslaf+mEIYNj9OYoP1Pq/MpEZw5lmA==
+	bh=tBdJDIYNq0yh2yirDO1LcyjNGf5PBxMQXmdlNg08he8=;
+	b=MIhy8J/lYO6kB+L6xSLrRCkOAe9gqSBkh+SfTxS6KTUl//1SBTQzT0IhdTz8Dylo+r6b
+	 4a+VkUrQ4yW1YZGosFZ2QGzR9a1tv0CJIO/qcOXR3qjprUsDJnhx0NPfV9vBnNKWk33hy
+	 xzLeD9i53FIZ0tVG4ufb5mNwi0Mhnfpu2AezRCa9tR+L/FhZOMuu1oIgpct9eOFn3nFCj
+	 Fh5iqEoi0yYW8hSeAhvlKCD3jNHcCww2Fhw851NWKL6TraURXJyal5hqGqqWwh8NxL6IN
+	 02nJyfiY7aH4Nmq8M1fGXNW4jJH3dTyB85+gqSJfiRa1En3oPkfO3DAt9W+DTDsnx1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y1Osbg+B;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=V5MUlHbp;
+	arc=none smtp.remote-ip=209.85.210.171
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC65606A32C
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:41:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7DC65606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0437606A31B
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:41:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0437606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y1Osbg+B
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cdab8873d9dso64406a12.1
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:41:25 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=V5MUlHbp
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8a06210b29fso82096b3a.1
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:41:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793749285; x=1794354085; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793749291; x=1794354091; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=u3L2S2dQLaRCrq9IeSiGqbB7Pc7SQTltDFZtBP0uSGE=;
-        b=Y1Osbg+BKAxAopud41gcN4hk/kB27Yl21XPU/pSiz2jf3YQuF203KxUC+tpHjM/apz
-         PCpdxBvRg+OtYQ7gquWbWTCjX54hk4FCutmqEUawkjqnhH9m1Bg/LFf4e1c9JJaDEcZq
-         DCyoVkH+OVwWwwvoWIgQT+UazYqZS8zvvht/Yn+RUdJTmaXUyyTqYJHRklHK7fOQauz0
-         wWXFdGq5ceBbzTXgpt5Li+3cvWUtOM+YiSvQtTYcgag1OAKlDQ37gukhMrfKv83JLpH0
-         clo26EsfqxhSOV7mATqgnkZa5D8fyuYpuMh+XetI0/Vx+JJ+oSFOtVV20Q3Wl5pPlPul
-         mrSg==
+        bh=tBdJDIYNq0yh2yirDO1LcyjNGf5PBxMQXmdlNg08he8=;
+        b=V5MUlHbpJTRl/z7vTtLTIyzxy+3A4W5Z1j1VmSNKLzTHr5b9+252QV3M5UmSvjQdVc
+         QYedbDUR96AzPZlupjV9TDaWKJHztAdVHsuJCJpfCOlRYwn+t6xpeIjzI092XpxVVoQR
+         gSq8X5zDv4kwMydwyXJA5934Yz2MHOF1IKpGM1r90I0xidwGxkfZeX9wjaDVu4dWYRAJ
+         q4aOmkenpsUv20CjsvGZqYXi4eEY//Otp5tJFzDF2tz0mmY5omfr7pqa2MTIXgV/JazH
+         6WfS7rReYX6NLAqKhRKVULO8W1pq3zRuVnCqGpoXjGegkUisQL5WiRTMdLUggKohH9mJ
+         7o9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793749285; x=1794354085;
+        d=1e100.net; s=20260707; t=1793749291; x=1794354091;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=u3L2S2dQLaRCrq9IeSiGqbB7Pc7SQTltDFZtBP0uSGE=;
-        b=sbQ2BtIxX0FElAs3mktu/UrTpSzTzTDG7dkLK9Ul7IVSF3mIm251DUN+HmiIyIaQjB
-         Drge85hFCJddEj1OjQWVl7KkOIXPLHQPAWQFA3G7FIeBJzrgloK8lmKugflz6IQ6Uyj1
-         WZ0wNWwsAxwuhUsX2Ie0yQ8Kv7+AgYsXqiHJBFSITeJw+gr060c3Gz4F16VC2DOflpuw
-         pAwacIQEIt+WyNRpMw9sPcuHWmkiVsCMsv7gyiHnS7Ymunq6NEpHULIb5fRfWMXWb3l3
-         ZgGdCrahN5gSmmdkYmcj+hQhzbNwq5OUSpO2CpIdTqiCoyuvYVhUfRMvZ1NmGNpXVw0b
-         Lpug==
-X-Gm-Message-State: APuU4Z/0/b1gNIFvAj5kREkVcQE/Eagex8x91xQcMnVrPsUbFbYLh8GQ
-	+tztW5LHj2RknCmlzbjfPVolRV/CM+7887xvME2TQUALNrTkt2j1c3Ub7z5sMg==
-X-Gm-Gg: AYBFou3sLNoHqy1UR3PCWKgBjI4Xa4kwxcmiF0tz6A3Wh7F9VrhRHZ12reT2KZJ/yMw
-	ynuYBquDO65RDXmJv4tRDsUPMpRoZ15905+Csixj+8+bA6ueSKrHDB53Q9pZsa1cbT+lznNihUg
-	JRHDNNV9ajbry1ZyNoWvr73OA+idwi/xahQf/BrXZjplTax2mntgcn3ezlebNy8z28HMUTbhKje
-	ssH3eQOG4mlOHU28ZOfRANkMT2Di/P6m5L3cHGhuBmlIoOSiqh9U/kVHac8JRJOLV1R1d8ZvrgB
-	6DQ9SrAXupUcJBYLI8IlSJT+ul5Z4rLfQ72j149MN2mHoxH+Auqn7TdWsv6/9MFfMsAtUpL0DW1
-	FpYfB7i7mPGl+wTwdgajlpk0kAAJ5MNMkIH1irdKvOomZ85k/XeLLHtKs6C2Idc+pWlXeG/jQgr
-	RNKipPTf7GHU9yu/jlgEMQw0v3GdUmLG3ziy8cQB/1e40SH9iVUZPhvD7FRpR/5xQEDdMlvgF7B
-	hh03tYF2JLBOW6oPETrYPO2ARtGnSYDx4f86SRYupjAHUkzKL8yxG9drwdleOwsoc7MsIoSSMoC
-	X7xTDIrqw+ET2a0zhYZoPhdVJSJIGz6VK8GwlQwvHw3Delf8jAjNivfV7MQ6ImmAkmmjr2wltjb
-	MVaqMU5G+AvKNg49aYoUFVzX7izOEDFYQerJ0cLL5C/L5CaGYAsKAlIXIQssV5MeXc+FoB5Z8tw
+        bh=tBdJDIYNq0yh2yirDO1LcyjNGf5PBxMQXmdlNg08he8=;
+        b=oxn6aVJQfsT+nxbwM1xwrO0HXEVgMqJBITNN6YgGdfugq9Yd1ObVgBNmSmVl9mRTvL
+         ScMv2S5u3LI7STl6ao/8rc224PlzSaTfImz10bCquKp7RfOYRXOk3VUC0CyF9YL7GJEl
+         QOBbT270yyTU347yodinn8BTmF0u2QFjfP1DMV0mc9ne3nTLlKKepOL7UKxoHUQqua3s
+         wIYjym1YKbCj7zwo60dOh41eyszUOeQuucP2vgpSwzpDVNA6oidERat0LT/32KOTFu5O
+         vVyRH7glOOYN1ahyQ2FG7ejHmXB9jwLMq2m5Z/U4kNgWjCXOJI4nd6KEE2NmZAbfh5Aq
+         UyFQ==
+X-Gm-Message-State: APuU4Z+aH4eMLN44aKos23elUDuSf9yeG7DJ8a9NH6IrgjxWX4tn3uZO
+	mQihNXG3iRu3McCFXJTGiPfqXPMnPLwE6kHz8BV41HK3bO7C4NW9cUHVtliydg==
+X-Gm-Gg: AYBFou20mqpu2mXoOIl2aluR54vTCsk4D3ZBZVef/TqGLP3jv90gC1dBBygF6y++Mm7
+	hTuWMZMXwZ9pwtVc8UQy+rSw+ufCITp5Z1dusRZa8jvI8K29NjxKExyEQgnmcPo2ph0U1Va1dF6
+	Cy+4u6Zan8poQB0W+YUkYOlNxK0J/5HnL+4UwMiS+GQIXF3hkTUrELgwo2XDsudGMi7eNlO6F7U
+	tWl4gL/xnnd5ZnumHUktm9Eif6Zy21AhImRxUMCuOTWerrfPNwV2CbYTIC7k7OAAP8w2Ef+HSvA
+	hJmSCMT/6TDaxN/KyKj/ezfTk+q6kG2b8TK5CMLHtBOl/Fcqnr6oH+2QgsB59AFOBGyDO5OIWeh
+	+fCr7m50Dw27O+wBvDrArpsSyqziBafC2ElVAiF7C06+0NKWb6Hs5jEdWSotPUIK6em0wycc20c
+	J3Lg5TBpMp+A882kbL8bgceTTW88GegHRYgoNiT65oLQYQjYipzzpR90gI+tmxGMRYmqpoe8pkF
+	XbOGDJun6bTd07r6bTrrrT3MqFtlar9tmyyFx/UlaInOx1ELB7at6sUEpfWZQoPh1o9MncBbJcd
+	h1El2De/E+oOt+2ObjI6b/qBgOfzyxkJjyipddcYV7DV/gO26CDgr29YMAkSs4C4N1aeDtGAyvA
+	sCvoZ0K5tGfz/htuejG13RwFcGcuhkXe/wko57fKzUDF+m94btnr4tZLd2W/7EeIiOCnXPtr3rg
 	==
-X-Received: by 2002:a17:90a:d702:b0:3b0:934c:5e41 with SMTP id 98e67ed59e1d1-3b0934c6917mr555024a91.29.1793749284547;
-        Tue, 03 Nov 2026 15:41:24 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b09311866fsm1191085a91.17.2026.11.03.15.41.24
+X-Received: by 2002:a05:6a20:a126:b0:3e1:c716:3a00 with SMTP id adf61e73a8af0-3e928dc7a79mr13996278637.53.1793749290627;
+        Tue, 03 Nov 2026 15:41:30 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb4ba7d488sm21837a12.15.2026.11.03.15.41.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 15:41:24 -0800 (PST)
+        Tue, 03 Nov 2026 15:41:30 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 03/37] bpf: Refuse fexit on an unreliable static subprog that returns in R0:R2
-Date: Tue,  3 Nov 2026 23:40:28 +0000
-Message-ID: <20261103234104.208239-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 04/37] bpf: Don't trust BTF of a static subprog that reads more registers
+Date: Tue,  3 Nov 2026 23:40:29 +0000
+Message-ID: <20261103234104.208239-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
 References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
@@ -104,65 +104,87 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A trampoline keeps only R0 of the value that its target returns. Thus
-fexit, fmod_ret and fsession cannot attach to a function that returns more
-than 8 bytes. The check reads the size from the function model.
+A trampoline saves and restores the argument registers that the BTF
+prototype of its target has. The prog that is attached can clobber all
+other registers.
 
-When BTF of a static subprog is unreliable, the model is not made from BTF.
-It has 5 u64 arguments and a u64 return value. The check passes, and the
-caller of the subprog gets R2 as the trampoline left it, where the verifier
-saw the upper half of the result.
+BTF of a static subprog describes the source. It does not describe what the
+compiler passes: the code can take more arguments than the prototype has
+parameters. rustc, for example, adds a hidden pointer to the result.
 
-BTF is unreliable because of the arguments. The verifier still takes the
-return type from BTF, and it verifies the subprog and its callers with a
-result in R0:R2. Keep that decision in bpf_func_info_aux, and refuse the
-attach when it is set.
+Thus the verifier compares BTF with the registers at each call of a static
+subprog. When they disagree it marks BTF as unreliable, and a trampoline
+keeps all of r1-r5. But the verifier examines only the registers that BTF
+has. A subprog that reads more of r1-r5 keeps reliable BTF:
 
-fentry does not touch the result. It can still attach.
+  BTF:  f(a)                  the trampoline keeps r1
+  code: reads r1 and r2       the caller's r2 is lost
 
-Fixes: 0630ad00d96d ("bpf: Add verifier support for 16-byte returns in R0: R2")
+With fentry, fexit or fsession attached, the subprog runs with a value in
+r2 that the verifier did not see.
+
+Compare in the other direction too: BTF is unreliable when a register of
+r1-r5 that BTF does not have is live at the entry of the subprog. A prog
+can still attach. It gets 5 u64 arguments instead of the arguments of BTF,
+and fexit gets the result behind them.
+
+Liveness errs on the safe side. One static function of the C schedulers in
+sched-ext/scx gets unreliable BTF though its BTF is right: a call of a
+helper that the kernel does not have counts as a read of r1-r5.
+
+There is one exception. Liveness misses r3-r5 of bpf_trace_printk() and the
+flags of bpf_get_branch_snapshot(), which their protos do not declare. A
+subprog that takes them from its caller keeps reliable BTF, and it prints
+or passes a wrong number under a tracer. The helpers are safe with any
+value there: the verifier never checks these registers.
+
+Fixes: 8c1b6e69dcc1 ("bpf: Compare BTF types of functions arguments with actual types")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h   | 2 ++
- kernel/bpf/verifier.c | 5 ++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 5413fa5d2b2b..ef94a168c902 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1763,6 +1763,8 @@ struct bpf_subprog_arg_info {
- struct bpf_func_info_aux {
- 	u16 linkage;
- 	bool unreliable;
-+	/* The function returns in R0:R2 */
-+	bool ret_reg_pair;
- 	bool called[BPF_FUNC_CTX_CNT];
- 	bool verified[BPF_FUNC_CTX_CNT];
- 	bool called_with_pkt_ptrs;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fa53ee735762..dcfced2573ee 100644
+index dcfced2573ee..d95f86b62e99 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -465,6 +465,7 @@ static int bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
- 			return -EFAULT;
- 		if (ret_regs_cnt(size) > 1) {
- 			subprog_info(env, subprog)->ret_reg_pair = true;
-+			subprog_aux(env, subprog)->ret_reg_pair = true;
- 			env->prog->jit_required = 1;
- 		}
+@@ -11325,6 +11325,20 @@ static void gen_subprog_arg_proto(const struct bpf_subprog_info *sub, const stru
  	}
-@@ -22990,7 +22991,9 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 				return ret;
- 		}
+ }
  
--		if (tgt_info->fmodel.ret_size > 8 &&
-+		/* The model for unreliable BTF has a u64. The function still returns R0:R2. */
-+		if ((tgt_info->fmodel.ret_size > 8 ||
-+		     (tgt_prog && tgt_prog->aux->func_info_aux[subprog].ret_reg_pair)) &&
- 		    attach_uses_trampoline_retval(prog->expected_attach_type)) {
- 			bpf_log(log,
- 				"Attach to function %s with a >8 byte return value is not supported for this attach type\n",
++/*
++ * The argument slots that the code of a static subprog takes, whatever its BTF says.
++ * Liveness errs on the safe side: a callx in the subprog counts as a read of r1-r5.
++ * But it misses r3-r5 of bpf_trace_printk() and the flags of bpf_get_branch_snapshot(), which
++ * their protos do not declare. Such a subprog prints or passes a wrong number under a tracer.
++ * The helpers are safe with any value there: the verifier never checks these registers.
++ */
++static u32 code_arg_slots(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
++{
++	u32 live_regs = env->insn_aux_data[sub->start].live_regs_before;
++
++	return fls((live_regs & GENMASK(BPF_REG_5, BPF_REG_1)) >> BPF_REG_1);
++}
++
+ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog, struct btf *btf)
+ {
+ 	struct bpf_subprog_info *sub = subprog_info(env, subprog);
+@@ -11361,10 +11375,13 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog, s
+ 	meta.func_proto = func_proto;
+ 
+ 	/*
+-	 * Check if all register arguments declared in BTF are initialized.
+-	 * If they aren't the BTF is unreliable.
++	 * Check if all register arguments declared in BTF are initialized,
++	 * and if the code takes no other arguments: a trampoline keeps only
++	 * what BTF declares. If not, the BTF is unreliable.
+ 	 */
+ 	if (!bpf_subprog_is_global(env, subprog)) {
++		if (code_arg_slots(env, sub) > sub->arg_slot_cnt)
++			return -EINVAL;
+ 		for (i = 0; i < min_t(u32, sub->arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS); i++)
+ 			if (caller->regs[BPF_REG_1 + i].type == NOT_INIT)
+ 				return -EINVAL;
 -- 
 2.55.0
 
