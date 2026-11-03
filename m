@@ -1,93 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793749429;
-	b=jkwxnnioluxanes17yfNfR9Dx8E+/8kfOSsC4l9/y1FZGCfdLoKciuQiOdnDMfjXKiiQ
-	 nzGE+luHhFMIRsh06TLlVyEiPr0yZgcghxvlOPkc3hpkndggGFo2K1TcxjmliZOgV7ISK
-	 XCJOTO/aGmVWfEPMXC4fGYrkvoa/8p7EKJHCWN3NFCR/di8ZBQzh4l3osjEbyb0iEV2PT
-	 /QU2AP2J7JCty2f8JzIduaJWo/w+OmCDZg+Z9efoBPXBouChAbc0oO72e2uffQV/cLfzW
-	 XQAryFSVKf1qzl4g6RpP1xICs4D/p40KnGoRtzT7+zKxes+b955D7oFyfmypuhllfDg==
+	t=1793749435;
+	b=DBKnEo7xvGunOpvA1BIk4cgvSYeA59yXqjDWakhZLrrfmC8IPZ3FkxzcUL+F8Yw5pdsf
+	 VQV8+XGSMVrMrGYZGYFsihjbZ1tKC2Qwwi9HZHVpKVr0PIz6iSvU5R3SS5kdvMtMyTyDP
+	 m1VvViVjDyH+4yFypipyuNw6RdtZ3RmwshiwTY2iDQtOwyWEF8+kTyUsWSLpuXp0Y15Bn
+	 AyfztNthzcU6poA2Ce4JFqto/7QFeaOK5rtx9+CBCfZNZSz5Ve4x3DH0f9J+4h+4UlpxC
+	 1bCoD97Hm73Hyoj3dZe7yhlRSs74glpeHkI2aDc4aBVcPkuHhkLfsAgep390X85clfg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793749429;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793749435;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=UmmQRlWiThWPUsUUM4dLjM9FgilSc8m9c1F/r1sfyVs=;
-	b=yf4XGQCLaOAHK7S/LHNo5bQFclCKjhfz7osYHEv+r1A5IF/0UMaUUxTMGo8kWfLbNJqR
-	 d0pAnjcY32Bxjwg4uu31qcv7EggJrzoPoVU2njQC0lsXmBGc08OF2jt/bI+cLfw0Zz63P
-	 es1GadWWJeB0cbowiFmf7dm/wrVXQNi44DRwPI8nEBxsCbJU4H9l829I4G6wTC2xoCd9N
-	 /D5xa5WdDy1rJqkE+MPdXE/bqpU8X0MNlnuHp8j3xNF+NhVdLjV3Rq3hSaWlCjN36m2Rr
-	 Ge8c86CZWIW+69GyEzhEWTggifPVbw2YTmTIBh+yQ5A2KlsZlFyxi/1PdVtHSONjPhw==
+	 Content-Type:Content-Transfer-Encoding;
+	bh=MK3wNyVXh+D7X7YilPVs9vfkKW6Y1TBe7vLztP9t6gE=;
+	b=lp/x8Cs7wNWsZGhsNAyijxWkapmlmfkI3BPO0SS7Gnmcj52HIclY8QqBfiHZSIaJTjd/
+	 bYJvkddTTnyghkMS4w1hPYUtlNOXV7NZAw/+LxAMNn+QSrPvWuRMPnLwjfkgUw5DQpo7Y
+	 iq98Q4yrwDoJWht34ZU02rovR0fbqOUKPxrL0+ousgdXjz3d36Twx9d9u9M/kQI447GFv
+	 WsFpUJf6e7ZraWb4A169Ij2Uuc8gZeQ9jVeIK4Yqad+1av3Xl5CSCV/ntnwRvZ9qN1qCP
+	 TMajDxayr9KnpTZf5OXbW7A14xA/Y8jZWaJKuJzC3pUhXbg6TKuU/5uhfQXVSWneYiw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="yp/L3oGn";
-	arc=none smtp.remote-ip=209.85.216.43
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uMNqcpom;
+	arc=none smtp.remote-ip=209.85.216.50
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D2F606A31B
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:43:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04D2F606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985A2606A31B
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:43:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 985A2606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yp/L3oGn
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ada8bc2380so78771a91.3
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:43:48 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=uMNqcpom
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3ac9f49b984so22779a91.1
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:43:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793749428; x=1794354228; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UmmQRlWiThWPUsUUM4dLjM9FgilSc8m9c1F/r1sfyVs=;
-        b=yp/L3oGnmfy7WioKhETAfrJcVdk45gHLtTLLzugdpl2jFGBk4k6NXUVnY/iiBw45nk
-         DfmLzS3yGB7kHWa3AOeb2aQf07As3ETNBo7CuVWUwH8q72O+Q4JPj14JDyjwJ8v+MrJs
-         Ok7hMkRcKYBUhMxvhwRDuKt4W/t7SY+D2GS2rK6PICNgj6BpqSFNHeejKtBf5WjfG3Pi
-         HaXyyLE2IIUnK/FhbSlYvyXbt8Hrti0MF/rKD0YxjoA4IpB7sDzPl/dB7QonB99quBZo
-         /Qxgr/WcsuT8tvkLLirYoWDTIjToJ6gSRKMtPyHBVGNMGQqdBDkMK+q8pHvJV9ATgU2S
-         oz8g==
+        d=gmail.com; s=20260707; t=1793749434; x=1794354234; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=MK3wNyVXh+D7X7YilPVs9vfkKW6Y1TBe7vLztP9t6gE=;
+        b=uMNqcpomPfLrQm3Nsj500k25KefGMORKZ4zR+IuzVjyPiAitZFnPeg3xtsC09nNWAe
+         R1kpJ+VLm1VZqw3dg/psWzA6yQSoK6oZLU2vqIzN/9SQNKrdPABwUm0gWPiNRIVpbAx7
+         qkwrFduKWDYqloN5yJ2Rg9Rs2+h55CHerfAP902kJXuLm77akc2elvmkLT65QlXRtxjw
+         pouYrELlD7wkAnSHQqnN71H9uUvBUhlYie5UDsmfS/LE1BHGDPpAgylgmZcISILqKEwr
+         f+xRQBFI33J0yeO+h/yPLSVpRDbsQXocH0TVfnyWX8yJy5z8aonqkqFD74EMOUQ5VzR7
+         ZcWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793749428; x=1794354228;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UmmQRlWiThWPUsUUM4dLjM9FgilSc8m9c1F/r1sfyVs=;
-        b=cKPvB2SnrEf8Bljd/5CMLhUTVJn/ZrM1qq7YOaliZMhTLnNNnXrE3F+lKax3uFyQDV
-         5ClwGfQ7SHsxz8jamrIHIbqBiBKd4r2rOSaNdOOCglkHDlzNsVqCM3LWLHsegjb4pcyg
-         tGzrRWCTGrq/FQJUDtOV/SWqVVILBoUMxxIvgJQDtg7NCw5Ejt5+6wFOLqGaEgdK6s8w
-         ODkSs9RKazzrCPSFLp4bbiYP8wL9SXVoZ3LjLInxn4oHxmBLgguHZOWeRZnrXUMW2870
-         8EoiXNYIsiIZSkrEF5FzhYn/3Lm5BWcDJ95N1dc8DPRpkGvhkMhwxgG+yvbnlvamCKoO
-         RDhw==
-X-Gm-Message-State: APuU4Z9fDKDDy3xiZb5jIXFm/qdv7f26Llz8ttvmPKo1kyJ3DEsZwpQ3
-	R5B9d/6NjUbepfS5MNaSQbfUTrKO4u5T1e0RRey/RNuf6q4rE5W5SoHgR9G+1g==
-X-Gm-Gg: AYBFou1C0P0EICsoDI2tT9QK5ZvAhemFu+ai+CeSDOlqdnDSrPe4XDE4EG4xgwuGU2i
-	P8Wp6/cXEfUghunSBVPArJ5FbqUfz9ivUFvJqQzZQ4iFWRjrJ/yeP8yDV3vvMdgcp0gdgOlxd5T
-	yCroZ/PO89/aP53RsXhWDRHnAjkQZylakMbkUZnPfadN+402ha2iqvHIULSbCaSoMluOt96kvR/
-	u89B9qnKGaB8t/W7xJ+GFYBcm4eq5WtzQt50qsgjzNRZ9dVm3JkKYAbgIP71BqVtOf91iOrbq8a
-	5edmcnPvYq3RURVycEzBesuLRPu2mBS0bbJLNNXudEeeQsZDXRmiXuinbha1xhG+mFGwHFi3vP0
-	Zz2cSKApyKZ7HRJrbX3ROYipe2nkiXx9R6XrYmlbD0VPvZYQEuEFmPJGtz8zX+KnuI4jT4uvUg0
-	ypAJvjp0s1ZXAybn7qDfUYaAAH96zB7D5oUpp//p12xyXVdL3R3Q3T1xXADSTY99DoKhyUp03zr
-	TkTqbC95R8tSPbY0bz3ZD58hjdK6VI8SMxsEY2mwipIeYOZNm5VSi9JDWSR36H+8oCqDtl/uGya
-	eM/nbS4kH/uWYDAlb878Pm8pTCW3KCNQr+nj77KOHv0WjuO/iVyi33Bizpv59Jj0LBKY48ZgPq7
-	57cxA60q7cot1TyDpZA+qzsUJYM5sI2faHD+h5eu+sC9LHzWDosNsy8Sl4lwjAe0/z+3r/6Vv11
-	s=
-X-Received: by 2002:a17:90b:4a11:b0:3a8:c0cd:57f3 with SMTP id 98e67ed59e1d1-3ae896f8539mr11194915a91.18.1793749427943;
-        Tue, 03 Nov 2026 15:43:47 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0969eeacdsm320026a91.4.2026.11.03.15.43.47
+        d=1e100.net; s=20260707; t=1793749434; x=1794354234;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=MK3wNyVXh+D7X7YilPVs9vfkKW6Y1TBe7vLztP9t6gE=;
+        b=BEnezIzVrMFSq7ZdqX5c8pXcrFWn4IIJDEwAmH4mzezoi/l5PTv4Fz+4A9POz6kHc2
+         FxMFPtHFzAo/qApmpqM+CIU1R7yaCwe8JfOFoDuVGmwVsFMgz27j/RcfQtD6EBfaRGGG
+         M0OcZRrFp+C/o4nAh8gNKrOQKFsZ020MGQpzRXD/Z6xC4EJgSiHI2I6OqIiaX17mTJRA
+         VHSAeAGafSTy+qM63cBr+jTMZHs+6asDKDiZ9uvHLxlNXX/chW+6QSkwrD6xJQqSbH6l
+         8bAlYL90xPMd4ESbYjLvK18ZCRMrwyOLeSTtcZtg3XppkR+fxBHFt5rgTFiQOX5eqakh
+         D6ig==
+X-Gm-Message-State: APuU4Z8RuN9zg/r08tSGuOvInJLmJY6HYGiws9wvsowsBzG/f/P+ex9E
+	xky/wemCT9BxFj10+SrgQ1faEnJrwOs/CqI72IEpMBx1+jzdOTy+zSCic2P3Dg==
+X-Gm-Gg: AYBFou0HVU3SagpL8Zm9rZl3wmeYemTTwaUhxtTbXQ6tvgveSU8e63o5x/ITYDFMQHk
+	LF4HEtiiX6GXKTXFfnpJvmBpp2eP8IFEAFhl3H/Sr9sNOJ58lhs/Fo/hePxzbW2uCOy5BO/q1zn
+	QFFb2/aMk4e3CfLeNg+GH9Cn8Wu7L/nvAEQVqxrb6OFTmUGQKzJD1FBrE+KsfDh9rzUfCJJjHSI
+	wzACALNmcmO/wvDlRwaZm2WhA7m1Cr/6IitGz6lCYjsAlO3ZKlFc8vgE6IIA06xSyOgpvenbaUG
+	LSgtmXOyeZldARQTfCp/HKajP/TCSGm6DlWgqkqeSNi+2/TXNPbn6VMdRFo7LMp9zQkvFfVpvo2
+	5TIy3qgm4X65VZyjDqIH4wPruhQC39j5gbNKEvGNtwyqhewJRbhTys5b/M4L3PgafPmauGBVyI5
+	aAWaV5fcFHpOsSBMBp3mmBFGvUTJ2/cElKL4RZxmoM9fXwWZClwLuuGqLsa1W4JXiWmwKK7VeAb
+	jUmr3hrRl9Mt7fn5Ub9ymmiwmcvx/dGr6G+nAcLw+mFrzhu4gi6tHNxq18hXsZazTFsbsi9yefE
+	ptCqnUrjN50P5e8YFtbXl9MVPsawbXH8qHvCfLnFq1m4a10nKrwwHdjjXtrbDRdGEY6sSfxxENM
+	M9ki2jccryFAqJa74N08glb5zFQxd6hPeRlq282Wg/rIC//vrQl+90x9k3Fw1BN3FmrttpFxmuI
+	I=
+X-Received: by 2002:a17:90b:5250:b0:3a8:786a:cfed with SMTP id 98e67ed59e1d1-3ae897bfdd8mr7663464a91.37.1793749433796;
+        Tue, 03 Nov 2026 15:43:53 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0944a0ff7sm1024218a91.10.2026.11.03.15.43.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 15:43:47 -0800 (PST)
+        Tue, 03 Nov 2026 15:43:53 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 27/37] selftests/bpf: Test a shift, a division and a remainder by a range
-Date: Tue,  3 Nov 2026 23:40:52 +0000
-Message-ID: <20261103234104.208239-28-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 28/37] bpf: Count a loop whose latch is false in the first iteration
+Date: Tue,  3 Nov 2026 23:40:53 +0000
+Message-ID: <20261103234104.208239-29-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
 References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
@@ -100,217 +101,286 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-For each op one prog needs both bounds of the result, in 64 and in 32 bits,
-and expects the register as the log has it. Next to it are progs that get
-to a bad read at run time if a bound is off by one, a bit is shifted out,
-or the divisor is 0. The verifier must reject them. One prog has what stays
-unknown: a count of 64 or 32, a signed division.
+  for (i = first; i < 64; i++) {
+          if (i >= n)
+                  break;
+          sum += a[i];
+  }
+
+With first = 63 the latch 'i + 1 < 64' is false in the first iteration.
+compute_backedge_taken_count() has no count for that: "the main pass would
+do a single iteration anyway". That was true while the latch was the only
+jump with a count. Now scalar evolution asks each jump that leaves the loop
+and dominates the back edge, and the smallest count wins. Here only
+'i >= n' is left, and n is not known: 4 billion iterations. The pointer
+that moves with i leaves the array, and the verifier rejects the prog.
+
+The back edge is not taken. That is a count of 0: for constants, and for
+ranges in which no first value gets through the latch.
+
+ - The operands of the latch can be pointers. Then the numbers are offsets
+   from one base, and addresses have the order of signed offsets: one byte
+   in front of a map value is below a byte in it. latch_false_at_once()
+   uses this order. The formulas for constants still compare unsigned
+   offsets. They have no count for an offset that gets to the other side of
+   0.
+ - A loop with several back edges can go on through a different back edge
+   and get to this latch again. A latch that is false at once can move
+   towards the values for which it is true: 'i < 10' with i that goes down
+   from 20. Thus it counts as false in the first iteration only, and
+   latch_false_until() is not asked.
+
+The 9 tests of verifier_scev.c with a latch that is false at once expect a
+count of 1 now.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_alu_range.c  | 168 ++++++++++++++++++
- 2 files changed, 170 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_alu_range.c
+ kernel/bpf/scev.c                             | 84 ++++++++++++++-----
+ .../selftests/bpf/progs/verifier_scev.c       | 18 ++--
+ 2 files changed, 72 insertions(+), 30 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 99f0551c8b59..a771dfbaeb3f 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -9,6 +9,7 @@
- #include "cb_refs.skel.h"
- #include "verifier_aggregate_arg.skel.h"
- #include "verifier_aggregate_ret.skel.h"
-+#include "verifier_alu_range.skel.h"
- #include "verifier_align.skel.h"
- #include "verifier_and.skel.h"
- #include "verifier_arena.skel.h"
-@@ -204,6 +205,7 @@ void test_cb_refs(void)                       { RUN_TESTS(cb_refs); }
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index fd6abc41b946..9ddaae03ac35 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -2274,11 +2274,49 @@ static bool is_signed_op(u8 op)
+ 	}
+ }
  
- void test_verifier_aggregate_arg(void)        { RUN_TESTS(verifier_aggregate_arg); }
- void test_verifier_aggregate_ret(void)        { RUN_TESTS(verifier_aggregate_ret); }
-+void test_verifier_alu_range(void)            { RUN(verifier_alu_range); }
- void test_verifier_align(void)                { RUN(verifier_align); }
- void test_verifier_and(void)                  { RUN(verifier_and); }
- void test_verifier_arena(void)                { RUN(verifier_arena); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_alu_range.c b/tools/testing/selftests/bpf/progs/verifier_alu_range.c
-new file mode 100644
-index 000000000000..7bd13812941c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_alu_range.c
-@@ -0,0 +1,168 @@
-+// SPDX-License-Identifier: GPL-2.0
+-static bool compute_backedge_taken_count(u8 op, u64 initial, u64 step, u64 bound, u64 *result)
 +/*
-+ * The count of a shift, or a divisor, is a range and not a constant:
-+ *	x >> [a, b]	[xmin >> b, xmax >> a]
-+ *	x << [a, b]	[xmin << a, xmax << b], if no bit is shifted out
-+ *	x s>> [a, b]	a larger count brings x closer to 0, or to -1
-+ *	x / [a, b]	[xmin / b, xmax / a], and x / 0 = 0
-+ *	x % [a, b]	[0, b - 1], x if it is below a, and x % 0 = x
-+ * Each program that has to be rejected gets to the bad read at run time.
++ * Is the latch false in the first iteration, whatever the first value and the bound are in
++ * their ranges? For a signed comparison the sign bit is flipped, see struct latch_domain.
 + */
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+#define OK(text)	SEC("socket") __description("alu range: " text) __success __log_level(2)
-+#define BAD(text)	SEC("socket") __description("alu range: " text) __failure \
-+			__msg("invalid read from stack")
-+
-+/* @reg is lo .. lo + mask */
-+#define RANGE(reg, lo, mask)						\
-+	"call %[bpf_get_prandom_u32];"					\
-+	#reg " = r0;"							\
-+	#reg " &= " #mask ";"						\
-+	#reg " += " #lo ";"
-+
-+/* The read is not allowed */
-+#define UNLESS(cond)	"if " cond " goto +1; r0 = *(u64 *)(r10 + 8);"
-+
-+/* r6 is the second operand. r7 and r8 are x. */
-+#define ALU(src_lo, src_mask, x_lo, x_mask, insns)			\
-+	asm volatile (							\
-+	RANGE(r6, src_lo, src_mask)					\
-+	RANGE(r7, x_lo, x_mask)						\
-+	"r8 = r7;"							\
-+	insns								\
-+	"r0 = 0;"							\
-+	"exit;"								\
-+	:: __imm(bpf_get_prandom_u32) : __clobber_all)
-+
-+OK("[128, 255] >> [2, 5]")
-+__msg("r7 >>= r6 {{.*}} R7=scalar(smin=umin=smin32=umin32=4,smax=umax=smax32=umax32=63,var_off=(0x0; 0x3f))")
-+__msg("w8 >>= w6 {{.*}} R8=scalar(smin=umin=smin32=umin32=4,smax=umax=smax32=umax32=63,var_off=(0x0; 0x3f))")
-+__naked void rsh(void)
++static bool latch_false_at_once(u8 op, u64 imin, u64 imax, u64 bmin, u64 bmax)
 +{
-+	ALU(2, 3, 128, 127, "r7 >>= r6; w8 >>= w6;"
-+	    UNLESS("r7 >= 4") UNLESS("r7 <= 63") UNLESS("w8 >= 4") UNLESS("w8 <= 63"));
++	switch (op) {
++	case BPF_JLT:
++	case BPF_JSLT:
++		return imin >= bmax;
++	case BPF_JLE:
++	case BPF_JSLE:
++		return imin > bmax;
++	case BPF_JGT:
++	case BPF_JSGT:
++		return imax <= bmin;
++	case BPF_JGE:
++	case BPF_JSGE:
++		return imax < bmin;
++	case BPF_JNE:
++		return imin == bmax && imax == bmin;
++	default:
++		return false;
++	}
 +}
 +
-+BAD("255 >> 2 is 63")
-+__naked void rsh_max(void)
-+{
-+	ALU(2, 3, 128, 127, "r7 >>= r6;" UNLESS("r7 <= 62"));
-+}
-+
-+OK("[3, 10] << [1, 4]")
-+__msg("r7 <<= r6 {{.*}} R7=scalar(smin=umin=smin32=umin32=6,smax=umax=smax32=umax32=160,var_off=(0x0; 0xfe))")
-+__msg("w8 <<= w6 {{.*}} R8=scalar(smin=umin=smin32=umin32=6,smax=umax=smax32=umax32=160,var_off=(0x0; 0xfe))")
-+__naked void lsh(void)
-+{
-+	ALU(1, 3, 3, 7, "r7 <<= r6; w8 <<= w6;"
-+	    UNLESS("r7 >= 6") UNLESS("r7 <= 160") UNLESS("w8 >= 6") UNLESS("w8 <= 160"));
-+}
-+
-+BAD("10 << 4 is 160, 32 bits")
-+__naked void lsh32_max(void)
-+{
-+	ALU(1, 3, 3, 7, "w7 <<= w6;" UNLESS("w7 <= 159"));
-+}
-+
-+BAD("4 << 62 is 0")
-+__naked void lsh_overflow(void)
-+{
-+	ALU(59, 3, 4, 1, "r7 <<= r6;" UNLESS("r7 != 0"));
-+}
-+
-+BAD("4 << 30 is 0, 32 bits")
-+__naked void lsh32_overflow(void)
-+{
-+	ALU(27, 3, 4, 1, "w7 <<= w6;" UNLESS("w7 != 0"));
-+}
-+
-+OK("[-128, -65] s>> [2, 5], [-128, 127] s>> [2, 5]")
-+__msg("r7 s>>= r6 {{.*}} R7=scalar(smin=smin32=-32,smax=smax32=-3,")
-+__msg("w8 s>>= w6 {{.*}} R8=scalar(smin=0,smax=umax=0xffffffff,smin32=-32,smax32=31,")
-+__naked void arsh(void)
-+{
-+	ALU(2, 3, -128, 63, "r7 s>>= r6;" UNLESS("r7 s>= -32") UNLESS("r7 s<= -3")
-+	    RANGE(r8, -128, 255) "w8 s>>= w6;" UNLESS("w8 s>= -32") UNLESS("w8 s<= 31"));
-+}
-+
-+BAD("-65 s>> 5 is -3")
-+__naked void arsh_max(void)
-+{
-+	ALU(2, 3, -128, 63, "r7 s>>= r6;" UNLESS("r7 s<= -4"));
-+}
-+
-+OK("[128, 255] / [2, 5], [128, 255] / [0, 3]")
-+__msg("r7 /= r6 {{.*}} R7=scalar(smin=umin=smin32=umin32=25,smax=umax=smax32=umax32=127,var_off=(0x0; 0x7f))")
-+__msg("w8 /= w6 {{.*}} R8=scalar(smin=umin=smin32=umin32=25,smax=umax=smax32=umax32=127,var_off=(0x0; 0x7f))")
-+__msg("r9 /= r6 {{.*}} R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=255,var_off=(0x0; 0xff))")
-+__naked void div(void)
-+{
-+	ALU(2, 3, 128, 127, "r9 = r7; r7 /= r6; w8 /= w6;"
-+	    UNLESS("r7 >= 25") UNLESS("r7 <= 127") UNLESS("w8 >= 25") UNLESS("w8 <= 127")
-+	    "r6 += -2; r9 /= r6;" UNLESS("r9 <= 255"));
-+}
-+
-+BAD("128 / 5 is 25, 32 bits")
-+__naked void div32_min(void)
-+{
-+	ALU(2, 3, 128, 127, "w7 /= w6;" UNLESS("w7 >= 26"));
-+}
-+
-+BAD("x / 0 is 0")
-+__naked void div_by_zero(void)
-+{
-+	ALU(0, 3, 128, 127, "r7 /= r6;" UNLESS("r7 >= 42"));
-+}
-+
-+OK("[128, 255] % [2, 5], [128, 255] % [256, 259], [128, 255] % [0, 3]")
-+__msg("r7 %= r6 {{.*}} R7=scalar(smin=smin32=0,smax=umax=smax32=umax32=4,var_off=(0x0; 0x7))")
-+__msg("w8 %= w6 {{.*}} R8=scalar(smin=smin32=0,smax=umax=smax32=umax32=4,var_off=(0x0; 0x7))")
-+__msg("r9 %= r6 {{.*}} R9=scalar(smin=umin=smin32=umin32=128,smax=umax=smax32=umax32=255,var_off=(0x80; 0x7f))")
-+__msg("w9 %= w6 {{.*}} R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=255,var_off=(0x0; 0xff))")
-+__naked void mod(void)
-+{
-+	ALU(2, 3, 128, 127, "r9 = r7; r7 %%= r6; w8 %%= w6;" UNLESS("r7 <= 4") UNLESS("w8 <= 4")
-+	    "r6 += 254; r9 %%= r6;" UNLESS("r9 >= 128") UNLESS("r9 <= 255")
-+	    "r6 += -256; w9 %%= w6;" UNLESS("w9 <= 255"));
-+}
-+
-+BAD("129 % 5 is 4")
-+__naked void mod_max(void)
-+{
-+	ALU(2, 3, 128, 127, "r7 %%= r6;" UNLESS("r7 <= 3"));
-+}
-+
-+BAD("255 % 255 is 0")
-+__naked void mod_same(void)
-+{
-+	ALU(255, 3, 128, 127, "r7 %%= r6;" UNLESS("r7 >= 128"));
-+}
-+
-+BAD("x % 0 is x, 32 bits")
-+__naked void mod32_by_zero(void)
-+{
-+	ALU(0, 3, 128, 127, "w7 %%= w6;" UNLESS("w7 <= 2"));
-+}
-+
-+/* The cpu takes the count modulo 64 or 32, and a signed division can change the sign */
-+OK("not known: a count of 64 or 32, a signed division")
-+__msg("r7 >>= r6 {{.*}} R7=scalar()")
-+__msg("w8 >>= w6 {{.*}} R8=scalar()")
-+__msg("r7 s/= r6 {{.*}} R7=scalar()")
-+__msg("w8 s%= w6 {{.*}} R8=scalar()")
-+__naked void not_known(void)
-+{
-+	ALU(63, 1, 128, 127, "r7 >>= r6; r6 += -32; w8 >>= w6;"
-+	    RANGE(r7, 128, 127) "r8 = r7; r7 s/= r6; w8 s%%= w6;");
-+}
-+
-+BAD("x >> 64 is x")
-+__naked void rsh_64(void)
-+{
-+	ALU(63, 1, 128, 127, "r7 >>= r6;" UNLESS("r7 == 0"));
-+}
-+
-+char _license[] SEC("license") = "GPL";
++static bool compute_backedge_taken_count(u8 op, bool ptrs, u64 initial, u64 step, u64 bound,
++					 u64 *result)
+ {
+-	u64 rem, diff, backedge_taken_count;
++	u64 rem, diff, backedge_taken_count, bias = is_signed_op(op) || ptrs ? 1ULL << 63 : 0;
+ 	bool up, down;
+ 
++	/*
++	 * The back edge is not taken. That is a count, and a better one than that of
++	 * another exit, which may be true for a long time.
++	 * @ptrs: the numbers are offsets from one base. Addresses have the order of signed
++	 * offsets, see compute_backedge_taken_max(). The formulas below give up on an offset
++	 * that gets to the other side of 0.
++	 */
++	if (latch_false_at_once(op, initial ^ bias, initial ^ bias, bound ^ bias, bound ^ bias)) {
++		*result = 0;
++		return true;
++	}
+ 	if (step == 0)
+ 		return false;
+ 	down = (s64)step < 0;
+@@ -2293,13 +2331,10 @@ static bool compute_backedge_taken_count(u8 op, u64 initial, u64 step, u64 bound
+ 		 * The backedge_taken_count is the size of this set.
+ 		 */
+ 		if (/*
+-		     * If the condition is initially true, decreasing values won't
+-		     * change that without underflow. If the condition is initially false,
+-		     * the main pass would do a single iteration anyway.
++		     * The condition is initially true, decreasing values won't
++		     * change that without underflow.
+ 		     */
+ 		    down ||
+-		    /* Is the latch condition false on the first iteration? */
+-		    initial >= bound ||
+ 		    /* Count iterations satisfying the strict inequality, including i=0. */
+ 		    check_add_overflow(div64_u64(diff - 1, step), 1, &backedge_taken_count) ||
+ 		    /*
+@@ -2311,7 +2346,7 @@ static bool compute_backedge_taken_count(u8 op, u64 initial, u64 step, u64 bound
+ 		break;
+ 	case BPF_JLE:
+ 		/* E.g.: 3 + 2*i ≤ 7 ⇔ 2*i ≤ 4 ⇔ i ∈ [0,1,2]. */
+-		if (down || initial > bound ||
++		if (down ||
+ 		    /* Count iterations satisfying the non-strict inequality. */
+ 		    check_add_overflow(div64_u64(diff, step), 1, &backedge_taken_count) ||
+ 		    backedge_taken_count > div64_u64(U64_MAX - initial, step))
+@@ -2319,7 +2354,7 @@ static bool compute_backedge_taken_count(u8 op, u64 initial, u64 step, u64 bound
+ 		break;
+ 	case BPF_JGT:
+ 		/* E.g.: 7 - 2*i > 3 ⇔ 2*i < 4 ⇔ i ∈ [0,1]. */
+-		if (up || initial <= bound ||
++		if (up ||
+ 		    check_add_overflow(div64_u64(-diff - 1, -step), 1, &backedge_taken_count) ||
+ 		    /*
+ 		     * The last iteration underflows the counter if:
+@@ -2333,13 +2368,13 @@ static bool compute_backedge_taken_count(u8 op, u64 initial, u64 step, u64 bound
+ 		break;
+ 	case BPF_JGE:
+ 		/* E.g.: 7 - 2*i ≥ 3 ⇔ 2*i ≤ 4 ⇔ i ∈ [0,1,2]. */
+-		if (up || initial < bound ||
++		if (up ||
+ 		    check_add_overflow(div64_u64(-diff, -step), 1, &backedge_taken_count) ||
+ 		    backedge_taken_count > div64_u64(initial, -step))
+ 			return false;
+ 		break;
+ 	case BPF_JSLT:
+-		if (down || (s64)initial >= (s64)bound ||
++		if (down ||
+ 		    check_add_overflow(div64_u64(diff - 1, step), 1, &backedge_taken_count) ||
+ 		    /*
+ 		     * Check if the last iteration overflows the signed counter:
+@@ -2349,13 +2384,13 @@ static bool compute_backedge_taken_count(u8 op, u64 initial, u64 step, u64 bound
+ 			return false;
+ 		break;
+ 	case BPF_JSLE:
+-		if (down || (s64)initial > (s64)bound ||
++		if (down ||
+ 		    check_add_overflow(div64_u64(diff, step), 1, &backedge_taken_count) ||
+ 		    backedge_taken_count > div64_u64((u64)S64_MAX - initial, step))
+ 			return false;
+ 		break;
+ 	case BPF_JSGT:
+-		if (up || (s64)initial <= (s64)bound ||
++		if (up ||
+ 		    check_add_overflow(div64_u64(-diff - 1, -step), 1, &backedge_taken_count) ||
+ 		    /*
+ 		     * The last iteration underflows the signed counter if:
+@@ -2368,7 +2403,7 @@ static bool compute_backedge_taken_count(u8 op, u64 initial, u64 step, u64 bound
+ 			return false;
+ 		break;
+ 	case BPF_JSGE:
+-		if (up || (s64)initial < (s64)bound ||
++		if (up ||
+ 		    check_add_overflow(div64_u64(-diff, -step), 1, &backedge_taken_count) ||
+ 		    backedge_taken_count > div64_u64(initial - (u64)S64_MIN, -step))
+ 			return false;
+@@ -2381,7 +2416,7 @@ static bool compute_backedge_taken_count(u8 op, u64 initial, u64 step, u64 bound
+ 		diff = down ? -diff : diff;
+ 		step = down ? -step : step;
+ 		backedge_taken_count = div64_u64_rem(diff, step, &rem);
+-		if (diff == 0 || rem != 0)
++		if (rem != 0)
+ 			return false;
+ 		break;
+ 	default:
+@@ -2573,6 +2608,10 @@ static bool compute_backedge_taken_max(struct bpf_verifier_env *env, struct bpf_
+ 	if (initial->ptr_reg >= 0 &&
+ 	    (d.imin < d.lo || d.imax > d.hi || d.bmin < d.lo || d.bmax > d.hi))
+ 		return false;
++	if (latch_false_at_once(latch->op, d.imin, d.imax, d.bmin, d.bmax)) {
++		*result = 0;
++		return true;
++	}
+ 
+ 	/*
+ 	 * The value that ends the loop must not wrap around. It is less than a step
+@@ -2581,7 +2620,7 @@ static bool compute_backedge_taken_max(struct bpf_verifier_env *env, struct bpf_
+ 	switch (latch->op) {
+ 	case BPF_JLT:
+ 	case BPF_JSLT:
+-		if (down || d.imin >= d.bmax ||
++		if (down ||
+ 		    check_add_overflow(div64_u64(d.bmax - d.imin - 1, step), 1, &cnt) ||
+ 		    d.bmax > d.hi || step - 1 > d.hi - d.bmax)
+ 			return false;
+@@ -2589,7 +2628,7 @@ static bool compute_backedge_taken_max(struct bpf_verifier_env *env, struct bpf_
+ 		break;
+ 	case BPF_JLE:
+ 	case BPF_JSLE:
+-		if (down || d.imin > d.bmax ||
++		if (down ||
+ 		    check_add_overflow(div64_u64(d.bmax - d.imin, step), 1, &cnt) ||
+ 		    d.bmax > d.hi || step > d.hi - d.bmax)
+ 			return false;
+@@ -2597,7 +2636,7 @@ static bool compute_backedge_taken_max(struct bpf_verifier_env *env, struct bpf_
+ 		break;
+ 	case BPF_JGT:
+ 	case BPF_JSGT:
+-		if (!down || d.imax <= d.bmin ||
++		if (!down ||
+ 		    check_add_overflow(div64_u64(d.imax - d.bmin - 1, step), 1, &cnt) ||
+ 		    d.bmin < d.lo || step - 1 > d.bmin - d.lo)
+ 			return false;
+@@ -2605,7 +2644,7 @@ static bool compute_backedge_taken_max(struct bpf_verifier_env *env, struct bpf_
+ 		break;
+ 	case BPF_JGE:
+ 	case BPF_JSGE:
+-		if (!down || d.imax < d.bmin ||
++		if (!down ||
+ 		    check_add_overflow(div64_u64(d.imax - d.bmin, step), 1, &cnt) ||
+ 		    d.bmin < d.lo || step > d.bmin - d.lo)
+ 			return false;
+@@ -2766,7 +2805,8 @@ static bool compute_max_iters(struct bpf_verifier_env *env,
+ 	}
+ 
+ 
+-	if (!compute_backedge_taken_count(op, initial, step, bound, &backedge_taken_count))
++	if (!compute_backedge_taken_count(op, initial_val.ptr_reg >= 0, initial, step, bound,
++					  &backedge_taken_count))
+ 		return false;
+ 
+ 	/*
+@@ -2789,7 +2829,9 @@ static bool compute_max_iters(struct bpf_verifier_env *env,
+ 	}
+ 
+ counted:
+-	*false_until = latch_false_until(latch, &initial_val, &step_val, &bound_val,
++	/* A latch that is false at once may be on its way to the values for which it's true. */
++	*false_until = !backedge_taken_count ? 0 :
++		       latch_false_until(latch, &initial_val, &step_val, &bound_val,
+ 					 backedge_taken_count);
+ 	/* The header executes once on entry and once for each taken backedge, hence +1. */
+ 	iters->max_header_count = backedge_taken_count + 1;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index f3908f37ca74..790cbfe1f2e4 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -858,15 +858,15 @@ PRE__COND_TEST (pre_gt_sign,       "<=",  ITER_S64_MIN + 1,           -1, ITER_S
+  *        r6 += 2;                   // unreachable
+  *    }
+  */
+-PRE__COND_TEST (pre_lt_false,      ">=",                 7,            2,                7, "can't compute iterations count")
+-PRE__COND_TEST (pre_le_false,      ">",                  8,            2,                7, "can't compute iterations count")
+-PRE__COND_TEST (pre_gt_false,      "<=",                 3,           -2,                3, "can't compute iterations count")
+-PRE__COND_TEST (pre_ge_false,      "<",                  2,           -2,                3, "can't compute iterations count")
+-PRE__COND_TEST (pre_slt_false,     "s>=",                1,            2,                1, "can't compute iterations count")
+-PRE__COND_TEST (pre_sle_false,     "s>",                 2,            2,                1, "can't compute iterations count")
+-PRE__COND_TEST (pre_sgt_false,     "s<=",               -1,           -2,               -1, "can't compute iterations count")
+-PRE__COND_TEST (pre_sge_false,     "s<",                -2,           -2,               -1, "can't compute iterations count")
+-PRE__COND_TEST (pre_ne_false,      "==",                 7,            2,                7, "can't compute iterations count")
++PRE__COND_TEST (pre_lt_false,      ">=",                 7,            2,                7, "header_count is 1 ")
++PRE__COND_TEST (pre_le_false,      ">",                  8,            2,                7, "header_count is 1 ")
++PRE__COND_TEST (pre_gt_false,      "<=",                 3,           -2,                3, "header_count is 1 ")
++PRE__COND_TEST (pre_ge_false,      "<",                  2,           -2,                3, "header_count is 1 ")
++PRE__COND_TEST (pre_slt_false,     "s>=",                1,            2,                1, "header_count is 1 ")
++PRE__COND_TEST (pre_sle_false,     "s>",                 2,            2,                1, "header_count is 1 ")
++PRE__COND_TEST (pre_sgt_false,     "s<=",               -1,           -2,               -1, "header_count is 1 ")
++PRE__COND_TEST (pre_sge_false,     "s<",                -2,           -2,               -1, "header_count is 1 ")
++PRE__COND_TEST (pre_ne_false,      "==",                 7,            2,                7, "header_count is 1 ")
+ 
+ /*
+  * The counter moves away from the exit; bound fallback verification.
 -- 
 2.55.0
 
