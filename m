@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793749374;
-	b=bR++gmf3MSoMI84DfUEaSCwq48XaXzcoCL5bNenBKunq4hlhvl5ZCaSE1Epgo9L/ykpK
-	 0XuehdaJC2uyaYezv5VXLb/kxJ5FtIMzsvZxGKFSTRi47p9fopcKkZalgy+u2KEIqEWaS
-	 j4eoHgGRd7q6vN56YEMzI9tYsWmzFUaIZLNNO2ugcfAxCArwM/FdVXV8vLGRZ4Rqy24Ql
-	 XMELdBGxnZcyxohLWFULOvJdBMlvlJBXAmgqz3HgjLVExFWQFUrC6pO9tC7gW5jJ+uzyi
-	 2JWqjokfTk1f5raj7n+Tb1gqt1nRCPZeOOaqtKlS2SHdrWPDoFgWEFZogprR1uhUQsg==
+	t=1793749380;
+	b=4Ddz/oVh+ceOkHN4W/7SMV3aOSWl4Oa3cWLlluHzqfF45hTFnaWOu18opA4C5c1ldwBL
+	 zNvK4Er0SQr3uvk4MakCK6Y8DGNK3Vse4GpjdBecevUfq45zwSUJs4frBuw1MDtoV5LIL
+	 ZuQl6msDsS/Je7FfmIQ/NIwzephue2qOCGBIMGFqgifgbXRSL5tJKzByAGMnTpTV2D4vQ
+	 tL7dYUgFCDw3kqIJUbRZkCa/uHJx1VCMBSyMdC5LeZbcQ2MQKr7tPni+m20qQle3xJhkq
+	 /pfSFnWmWpRRfzeizgMO4JEcPxittTGvvQvsmPHpdu9xpSJfgyV1uCF7KfbyMRZMqHg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793749374;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793749380;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=FWqguGXrCzd+bdEotQm4bGQyWeyURmq2gZrFKsGS6Qo=;
-	b=BFlfVPCLiVOBdINPL0bee4uMlpfclNYTkg0XJTFMxMxXs81fnJZpuLp2YvrtJDgT+hX+
-	 EwC8BV20C7pFNFSU8rgSFA9z5AYlbQzzD1yYfrg3FRlcZSsATy11BjHzo0egbZYx20XD+
-	 Miq/8oSvayui951BrMMDC4cHbhKrXRURaZ1bvxJ3IDttXheZ6FdAjyPlKmI8ij3Eg7M1g
-	 IlEuzmx2ychubJygxTgv0lpFxiwkM3+eNgVRYaytqHD1kPo1kSXBqY5V+5n3ftHsFPSlu
-	 rV3L46vhH6xiKuTzFaa8F4SRsY1CP3VpQPScgLSFoo6GxbTx+QLeQW3QJXMpIWogQEg==
+	bh=SZjEiQxeTvCyqVs4lqpLDdXSx+8OZ+IaNsl76w2rqtU=;
+	b=Z63SUQpjaUFfxusA/Y0ggfmNYKbOu6N+YkZi/pCao/crPKQFlwGqxZv8rTdubaDPJdwl
+	 BXN012KPDeeGssnvJ/z/HeI9aStYjFwKmmiKwhwjEZxRjkrYcJfISk6mg1LiGAjY3wM8d
+	 OFpoNIoESQed5nrIKf4ZU2531CBoVRjhlgpq7UNRRo2IQqlv1uJiXdsadTsmgOT4+veoi
+	 7BkdUBM6tku4uLGTcswhanVBpqUJVfFt+ZfKpoeYXXaYcm1tyfsYQzyOwgTc75ucFY3ON
+	 wc2iRqIzB2xeWoDOTLj+W23MsiwrEvgwOjd5iONdtcnS6pAtqOxXSknRAsPL4NtLj3g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RcTY3qE3;
-	arc=none smtp.remote-ip=209.85.210.176
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UGnHOXCy;
+	arc=none smtp.remote-ip=209.85.215.178
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3A2606A31B
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:42:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E3A2606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A76A606A31B
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:42:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0A76A606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RcTY3qE3
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8a06e79e152so113526b3a.0
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:42:53 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UGnHOXCy
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cd60c5da24cso102145a12.0
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:42:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793749373; x=1794354173; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793749379; x=1794354179; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=FWqguGXrCzd+bdEotQm4bGQyWeyURmq2gZrFKsGS6Qo=;
-        b=RcTY3qE3V3rDdi8CSrn2imUt1TDUp+AyQJmwrrVd5mKcHkOtDMEhTSZZPqQeN9ooxl
-         Y1Bw2PIra1qgh59j2BP28P6NSArb84D/3JapofvvXJC087mtd9SAZpqNKOvthwebHusw
-         mav9zDSMc4fRnVtIkEKDUNwZVavzUKr5K4JAoKNQjoLXUaa7oy5K5uoypwc0PoRo5p86
-         ujp48rxAoWLfGpiKMGQipT+ozunh2Yz6ZNShaEWq20l0XUAfkmTyVEbjhMTj1iG4IHfE
-         MCcCcLRlnM2D974H+udT3UlzZdilOEPqp6FdqnwRw5+1o9fmHOtJvpr6laLsBvTVbq7I
-         yhYQ==
+        bh=SZjEiQxeTvCyqVs4lqpLDdXSx+8OZ+IaNsl76w2rqtU=;
+        b=UGnHOXCyW6VRdbfykp5B+u3Wsj07sghPQ+qWLRb+DCemErl7DbNNfJ5aTw/dih0Hm7
+         WSgtXQGfuY9SEMdeXTxbpBG5LWxcPq4KR98HYjVSrcCbTwDTdaGePNm73LmKusDfS1Kt
+         hY36wK+JbHxteC5fVgTg6tJgFoaQx8HckaeOghLpP7o3zmLyZ5g1O+gyZnu40lMraNKM
+         ci8RF6QSa0t2prXQtkX9zhqVpG1GplOyMXXKTpsdto1F3fiA8ZQ7YZNsTQxDs/j5NGYn
+         WUYVt4DXF9/ZodlRU53E5yH8ZG2Kv4/B7rTjckooakx1CtjmQmqPhO0vSAaL+BPOuF2/
+         0paw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793749373; x=1794354173;
+        d=1e100.net; s=20260707; t=1793749379; x=1794354179;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=FWqguGXrCzd+bdEotQm4bGQyWeyURmq2gZrFKsGS6Qo=;
-        b=rDHJI6a/Bj9BxBLtwk97VIND7cQBROWGDA2ljPl9xVtCnoiEpIFUHbO4sHDW2Lf9A3
-         r1+nnt3QRKwohy7gqVwHC6O4bnJV84djZjDL2yZG9qvvn+MBnaCroAc1R74Uw3M6Igkv
-         PDf2F5aSHffW0mYgg95zM4G87KODDvfocrB8PoOCMbax9YvfT9BaWQrXw2tvuUTiZGn8
-         ajiKOrWf8d8hrxRgT5Be1v5b+W46Ou5uns3Frb8JkqcrPVnHjIcCir61gVP77OgKITCV
-         maSYUF1COAQ/z7fo4a+xao9sgjk9EMNmym3mI4Fqu76+exfClBmmC8I4rtY4PIybdZD3
-         JYqQ==
-X-Gm-Message-State: APuU4Z9qeAcU4Sdix6ZZjADtJjcKeau8sauQiV0JkFtyqHKqIPTlK900
-	pxOeqpTwWNwIWwlgP7Kda8gyefBqvZE2dK6/tzMkyqth3KXCLhsbreQX/yEQzQ==
-X-Gm-Gg: AYBFou2wTWtvPe6vansgsN6mwNG6xdnsOQ1DHobFkJbK31CMG+o+wRsitq9Zt9DFoMV
-	yFV4oj/Xujay5hqPDJqhqllcp+mxHzfpitVM1wUn0Ul6f9IhZF58tSS04YfD8wZn4SM38SqSHGF
-	9ELDHCpPpGFYNeW9KA37SghJccyIPzT5jPgYyjUU8FDyeTthYn01iyuCDpv/dERRr/HjeXWpEWK
-	bNYyg2t+vHiUseeubYxzteIvRk42tYss3v7r6Kkwg5RL7BXx0SHITqeL+SewISiP3YeH9QUBKd7
-	fhEQ9oJHSwqzvcOtrvClgbkdjXL2u6a7mHmysxz91ohHAcbN5qhTEvXQMepC9MEnrNCs47o7vmQ
-	tc3WBoPVkruvYDvdCqYGN3ShrWU70j4LJ1wYwxVP688xbkTicPYRxB4OgnEvR4uoctp7SJ39viR
-	gfMkL1sjQN1vLarE2vTGBAht1y2vpQ+G4DFYPLnBc8SXi4ymWqqynmigB6rMqtr47XlLFMq7P7M
-	bIeMbMy5s5yXMwOU/CS5Z6YvyoP2mJQGBjL6rPddQa4jB4rfGhKexSd9ZAPTznKJQB2ZK5uhi35
-	gSO2cWfehc6BM1Xq98/x5OGO+3zOV7DYaiq+pNgL5VTDSjxq6yqyZeCj8r8I3T/IxSTE545sdMK
-	GC3USNrkkT1mGQfItChqMOGJp13r7bh/9V4e7+qKKQOWB856f5haqY4u3UC90JJGusnGM39pkSA
+        bh=SZjEiQxeTvCyqVs4lqpLDdXSx+8OZ+IaNsl76w2rqtU=;
+        b=IXoLalcAnZ5IRCzs9e+vZ9M98jbEhBtHHtithLWNJpIgG+PhBrvvn3B44e+/wybFkV
+         Bgz1A993NsuW/CubEl6iN1rAwLPh/pzFA8F1EQmU5WeU2Oni6G+mxmzAkKibQnGUeUUS
+         4DL1a5DUmDZByRKeaCfl7L26EpKEHimGywPhY2Hc0CE0kVgcv7zAFgkk7vZnwmoA4wka
+         HDxzyZr726zQJUXFhXHXCV6n6yERQ1WlEYuYExPBvYx+PiuXoizjPVOmj571qn5rcm4y
+         wHZxYlklycL7JNV9rGOTaAQuvX3rLUstp46aP1AR6Zc63Cv/TGYIGIDjAW1wPNdBJAHH
+         mb9g==
+X-Gm-Message-State: APuU4Z8ZwVpQw/XIH9ekDOmu+ET2FULX1em7LGUG7pX8VDygxH3Sa2cd
+	FJkOzp7lZhR87+6fR8Id7tzCOXZ+GiaB6SQCFkRF89m1VIh06buQgSU9Tkfr8A==
+X-Gm-Gg: AYBFou3P++pvgCG0JtmtHIsVJH+RrhODzJS7N0gWqq1KZNQGWQdyAIx0vkHrzKzvxfG
+	UCYput4IJdCZLOtvNqsD8UEVEClQK1HcDqlEmIa/h0+DRWxLdSP9ZOwcJnanJvhZlSaI2hK2RE8
+	9M0X/lDruVWB5zvxZPbMXnC5oCFN46F5tv7LtEB8odxV0HL4gmcLP2NefcsIstMASHM07w7/F2C
+	Pom3kWi4o6BqNw323OP9tONrycYkTroZvGnzdwYR8BNo6ODA6DWVT5+z103i9JFT4n8rExqbBYo
+	iTgKX+FLuLXpA9OIPyNs+7pwV5Tp+4GMFoOOqMLE9BuidLUpygmtZ6W2nxfEvd7XAi5kuMJ2d6+
+	NOqrTnUmKa5AA/xxcZ/wkMGCK9KYVwNqdRTJ6Uq3THQTAR4qvHCVVhpgaTMITFOs0VRK0MmyoR2
+	M2eylYmq3trHLgmkVV/wRJqBcpFat5UoGvUdFZfJO9izthP9p7MUFm3gFfTl2AT97wCUdfIEafM
+	UrVv5nDZecL8Kgut2b6sxJE+EsmbMk+vXee/PmLoD90ahFAM+IWbRFu9qr+CvItoiujucmn41Kn
+	KOE/yl4/NDl7wYsiPNetappMANn0k368KM147P2d/RFhSLP+yVaLrSRSauzqdgiZIYXIgbpyMSw
+	bi0agTtFHO7BMezrsNScv2SJpuiwb1bYzfr11+1whFi9m5ExgN4v9tU331Xz6KNlG45dMaaPtBQ
 	==
-X-Received: by 2002:a05:6a20:6a10:b0:3e0:da23:873b with SMTP id adf61e73a8af0-3e928a63d45mr11676624637.59.1793749373166;
-        Tue, 03 Nov 2026 15:42:53 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb46940d0dsm266739a12.19.2026.11.03.15.42.52
+X-Received: by 2002:a17:90b:2f8f:b0:3ab:b39f:41b9 with SMTP id 98e67ed59e1d1-3ae897f8c61mr11731815a91.61.1793749379210;
+        Tue, 03 Nov 2026 15:42:59 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c9928d1sm6549399a91.14.2026.11.03.15.42.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 15:42:52 -0800 (PST)
+        Tue, 03 Nov 2026 15:42:58 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 18/37] bpf: Describe more registers of a counted loop
-Date: Tue,  3 Nov 2026 23:40:43 +0000
-Message-ID: <20261103234104.208239-19-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 19/37] selftests/bpf: Test more registers of a counted loop
+Date: Tue,  3 Nov 2026 23:40:44 +0000
+Message-ID: <20261103234104.208239-20-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
 References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
@@ -104,292 +104,116 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The verifier verifies the body of a counted loop one time only if scalar
-evolution has a formula for each live register that the loop changes. One
-register without a formula makes the verifier unroll the loop.
-
-       what the loop does with a live register     the register at the head
-  ---  ------------------------------------------  ------------------------
-       adds a constant                             range from the count
-       sets it to one of a few invariant values    union of the values
-  new  only clears bits of [0, max]:               no change
-       'idx &= ~(1 << order)', zero extension
-  new  moves a pointer to arena                    no change
-  new  sets it to the same constant each time      no change
-       something else                              no formula
-
-In the new rows the state that enters the loop covers all iterations:
- - A number that loses bits does not grow, and a bit that is 0 stays 0. The
-   rule is only for the range [0, max]: 64 or [64, 127] can become 0. The
-   register is not equal to its copies any more, thus it loses its id.
- - The verifier does not track the offset of a pointer to arena. So
-   bpf_clamp_scev_regs() must not give it a range at the back edge: it now
-   sets a range only for the types that get one at the entry.
- - bpf_compute_const_regs() knows the registers that have one constant at
-   an insn on all paths: 'r7 &= 31' with 17 in r7. It recorded constants
-   that fit in 32 bits. Record that there is a constant for the others too.
-
-The verifier does not rely on the new rows. It compares the state that
-returns to the loop head with the state at the head. If they do not agree
-it verifies the body again from the state that returned. The counter has
-its range then: a loop that makes a number of a pointer to arena and
-changes that number in each iteration no longer loads.
-
-'x >> e', 'x / e' and 'x % e' get no rule: iterations one by one tell more
-about a number that is halved 8 times. That is true for '&' too: a prog
-that needs 'x &= 15' to be below 16 from the second iteration on is
-rejected now. But '&' is what the loops in real progs do.
-
-The verifier processes about 2 % fewer insns for the selftests. The progs
-that change use arena: big_alloc2 goes from 2956 to 216, some get more
-insns, at most 270. 3 progs of bpfjailer need 17 % fewer insns. No prog of
-Cilium, scx, the selftests or the public progs of Meta is lost.
+ - A register in [0, max] loses bits: '&' with the register on the left and
+   on the right, a zero extension on one of two paths, a register that is 0
+   or 64. The tests expect 'it loses bits only'.
+ - No rule, the verifier unrolls the loop: a register that enters the loop
+   as [64, 127], shifts to the right and to the left.
+ - A register has the same constant in each iteration, in 32 or in 64 bits.
+ - A pointer to arena moves in a loop with 100 iterations.
+ - The loop makes a number of a pointer to arena. The prog must not load.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |   4 ++
- kernel/bpf/const_fold.c      |  11 ++--
- kernel/bpf/scev.c            | 109 ++++++++++++++++++++++++++++++++++-
- 3 files changed, 119 insertions(+), 5 deletions(-)
+ .../selftests/bpf/progs/verifier_scev.c       | 85 +++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 7825a3bc0205..724f3b60130f 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -348,6 +348,8 @@ struct bpf_loop_iters {
- 	u32 min_header_count;   /* min number of times header is executed */
- 	u32 max_header_count;   /* max number of times header is executed */
- 	unsigned long precise_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
-+	/* [0, max] at the entry, and the loop only clears bits */
-+	unsigned long mask_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
- 	/*
- 	 * The variable that the latch tests, or -1, and what it can be at the
- 	 * loop header: what it is at the entry or what the latch lets through.
-@@ -851,12 +853,14 @@ struct bpf_insn_aux_data {
- 	/*
- 	 * Bitmask of R0-R9 that hold known values at this instruction.
- 	 * const_reg_mask: scalar constants that fit in 32 bits.
-+	 * const_reg_wide_mask: scalar constants that don't, there is no val.
- 	 * const_reg_map_mask: map pointers, val is map_index into used_maps[].
- 	 * const_reg_subprog_mask: subprog pointers, val is subprog number.
- 	 * const_reg_vals[i] holds the 32-bit value for register i.
- 	 * Populated by compute_const_regs() pre-pass.
- 	 */
- 	u16 const_reg_mask;
-+	u16 const_reg_wide_mask;
- 	u16 const_reg_map_mask;
- 	u16 const_reg_subprog_mask;
- 	u32 const_reg_vals[10];
-diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
-index f9edfde965dc..ce1bd72cb6c8 100644
---- a/kernel/bpf/const_fold.c
-+++ b/kernel/bpf/const_fold.c
-@@ -8,7 +8,7 @@
-  * instruction. Tracks 64-bit constant values in R0-R9 through the program,
-  * using a fixed-point iteration in reverse postorder. Records which registers
-  * hold known constants and their values in
-- * env->insn_aux_data[].{const_reg_mask, const_reg_vals}.
-+ * env->insn_aux_data[].{const_reg_mask, const_reg_wide_mask, const_reg_vals}.
-  */
- 
- enum const_arg_state {
-@@ -276,9 +276,9 @@ int bpf_compute_const_regs(struct bpf_verifier_env *env)
- 	if (changed)
- 		goto redo;
- 
--	/* Save computed constants into insn_aux[] if they fit into 32-bit */
-+	/* Save computed constants into insn_aux[]: the value if it fits into 32-bit */
- 	for (i = 0; i < insn_cnt; i++) {
--		u16 mask = 0, map_mask = 0, subprog_mask = 0;
-+		u16 mask = 0, wide_mask = 0, map_mask = 0, subprog_mask = 0;
- 		struct bpf_insn_aux_data *aux = &insn_aux[i];
- 		struct const_arg_info *ci = ci_in[i];
- 
-@@ -289,8 +289,10 @@ int bpf_compute_const_regs(struct bpf_verifier_env *env)
- 			case CONST_ARG_CONST: {
- 				u64 val = c->val;
- 
--				if (val != (u32)val)
-+				if (val != (u32)val) {
-+					wide_mask |= BIT(r);
- 					break;
-+				}
- 				mask |= BIT(r);
- 				aux->const_reg_vals[r] = val;
- 				break;
-@@ -308,6 +310,7 @@ int bpf_compute_const_regs(struct bpf_verifier_env *env)
- 			}
- 		}
- 		aux->const_reg_mask = mask;
-+		aux->const_reg_wide_mask = wide_mask;
- 		aux->const_reg_map_mask = map_mask;
- 		aux->const_reg_subprog_mask = subprog_mask;
- 	}
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index eac792dc7b10..0d49c9021e30 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -2754,6 +2754,21 @@ static bool made_from_partial_spill(struct scev *scev, const struct bpf_func_sta
- 	return false;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index 6777d545ec1d..c91d178a1aed 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -3063,6 +3063,91 @@ __naked void conditional_scalar_assignment_gcd(void)
+ 	: __clobber_all);
  }
  
 +/*
-+ * bpf_compute_const_regs() has @r as a constant at @insn_idx, the head of a loop: it's the same in
-+ * every iteration. do_check() takes a value that a range adds to it, or to what is computed
-+ * from it, for a bug.
-+ * That pass knows no types: arithmetic on a pointer to arena runs in 32 bits, and a pointer and a
-+ * number can have one constant. As for a pointer to arena below, this is not relied on.
++ * Registers that have no linear formula, and the state that enters the loop stands for all
++ * iterations all the same. r7 is what @init makes of an unknown number, r8 is unknown.
 + */
-+static bool is_const_scev_reg(struct bpf_verifier_env *env, int insn_idx, u32 r)
-+{
-+	struct bpf_insn_aux_data *aux = &env->insn_aux_data[insn_idx];
-+
-+	return r < ARRAY_SIZE(aux->const_reg_vals) &&
-+	       ((aux->const_reg_mask | aux->const_reg_wide_mask) & BIT(r));
++#define NOT_LINEAR_TEST(name, init, op, expect)					\
++SEC("socket")									\
++__success __log_level(2)							\
++expect										\
++__naked void name(void)								\
++{										\
++	asm volatile (								\
++	"call %[bpf_get_prandom_u32];"						\
++	"r8 = r0;"								\
++	"call %[bpf_get_prandom_u32];"						\
++	"r7 = r0;"								\
++	init									\
++	"r6 = 0;"								\
++"1:"	op									\
++	"r6 += 1;"								\
++	"if r6 < 8 goto 1b;"							\
++	"r0 = r7;"								\
++	"r0 &= 1;"								\
++	"exit;"									\
++	:: __imm(bpf_get_prandom_u32) : __clobber_all);				\
 +}
 +
- /* Main logic in verifier.c forbids varying offsets for certain register types. */
- static bool is_widenable_reg_type(const struct bpf_reg_state *reg)
- {
-@@ -2967,6 +2982,45 @@ static int mark_expr_precise(struct bpf_verifier_env *env, struct bpf_func_state
- 	return 0;
- }
- 
-+/*
-+ * Does @id have no bit that register @r doesn't have at the head of the loop? 'x & e' and the
-+ * low bits of x lose bits only. 'x >> e', 'x / e' and 'x % e' are not greater than x as well, but
-+ * iterations one by one tell more about them: a number that is halved 8 times.
-+ */
-+static bool expr_loses_bits_only(struct scev *scev, u32 id, u32 r, int depth)
-+{
-+	struct expr *e = &scev->exprs[id];
-+	u32 regno;
++/* [0, max] that loses bits is in [0, max], and a bit that is 0 stays 0 */
++#define LOSES_BITS(max)	__msg("r7 stays in 0.." #max ", it loses bits only")
++#define UNROLLED(expr)	__msg("can't widen r7, expr is " expr) __not_msg("it loses bits only")
 +
-+	if (is_reg(scev, id, &regno))
-+		return regno == r;
-+	if (depth > 8)
-+		return false;
-+	switch (e->op) {
-+	case BPF_AND:
-+		return expr_loses_bits_only(scev, e->params[0], r, depth + 1) ||
-+		       expr_loses_bits_only(scev, e->params[1], r, depth + 1);
-+	case ANY:
-+		return expr_loses_bits_only(scev, e->params[0], r, depth + 1) &&
-+		       expr_loses_bits_only(scev, e->params[1], r, depth + 1);
-+	case ZEXT8:
-+	case ZEXT16:
-+	case ZEXT32:
-+		return expr_loses_bits_only(scev, e->params[0], r, depth + 1);
-+	default:
-+		return false;
-+	}
++NOT_LINEAR_TEST(and_clears_a_bit, "r7 &= 255;", "r1 = 1; r1 <<= r6; r1 ^= -1; r7 &= r1;",
++		LOSES_BITS(255))
++NOT_LINEAR_TEST(and_on_the_right, "r7 &= 255;", "r1 = r8; r1 &= r7; r7 = r1;", LOSES_BITS(255))
++NOT_LINEAR_TEST(and_0_or_64, "r7 &= 64;", "r7 &= r8;", LOSES_BITS(64))
++NOT_LINEAR_TEST(zext32_or_nothing, "r7 >>= 8;", "if r8 == 0 goto +1; w7 = w7;",
++		LOSES_BITS(72057594037927935))
++/* 64..127 can become 0 */
++NOT_LINEAR_TEST(and_64_to_127, "r7 &= 63; r7 |= 64;", "r7 &= 127;", UNROLLED("(& r7 127)"))
++/* '>>' does not make a number greater, but iterations one by one tell more: 0 after 8 shifts */
++NOT_LINEAR_TEST(rsh_on_one_path, "r7 &= 255;", "if r8 == 0 goto +1; r7 >>= 1;",
++		UNROLLED("(any r7 (>> r7 1))"))
++NOT_LINEAR_TEST(rsh_then_and, "r7 &= 255;", "r7 >>= 1; r7 &= r8;", UNROLLED("(& (>> r7 1) r8)"))
++NOT_LINEAR_TEST(lsh_grows, "r7 &= 15;", "r7 <<= 1;", UNROLLED("(<< r7 1)"))
++
++/* bpf_compute_const_regs() knows that r7 is the same constant in each iteration */
++#define NOT_CHANGED	__msg("widening r6 to 0..7")
++NOT_LINEAR_TEST(same_constant, "r7 = 17;", "r7 &= 31;", NOT_CHANGED)
++NOT_LINEAR_TEST(same_wide_constant, "r7 = 0xffffffff00000011 ll;", "r7 &= -239;", NOT_CHANGED)
++
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 1);
++} arena SEC(".maps");
++
++/* The offset of a pointer to arena is not tracked */
++#define ARENA_TEST(name, op, expect)						\
++SEC("syscall")									\
++__log_level(2)									\
++expect										\
++__naked void name(void)								\
++{										\
++	asm volatile (								\
++	"r1 = %[arena] ll;"							\
++	"r6 = 0;"								\
++	"r6 = addr_space_cast(r6, 0, 1);"					\
++	"r7 = 0;"								\
++"1:	*(u64 *)(r6 + 0) = r7;"							\
++	op									\
++	"r7 += 1;"								\
++	"if r7 < 100 goto 1b;"							\
++	"r0 = 0;"								\
++	"exit;"									\
++	:: __imm_addr(arena) : __clobber_all);					\
 +}
 +
-+/* The ranges of @reg are [0, max]. So no bit is known to be 1. */
-+static bool reg_is_zero_to_max(const struct bpf_reg_state *reg)
-+{
-+	struct cnum64 r64 = cnum64_from_urange(0, reg_umax(reg));
++#define NOT_UNROLLED100	__msg("loop header at 5, widening r7 to 0..99 step 1")
++/* A loop that moves the pointer is not unrolled */
++ARENA_TEST(arena_pointer_moves, "r6 += 8;", __success NOT_UNROLLED100)
++/* The loop makes a number of it: the state that returns to the loop header tells */
++ARENA_TEST(arena_pointer_becomes_a_number, "if r7 != 5 goto +1; r6 = 4096;",
++	   __failure NOT_UNROLLED100 __msg("R6 invalid mem access 'scalar'"))
++#endif
 +
-+	return cnum64_is_subset(reg->r64, r64) &&
-+	       cnum32_is_subset(reg->r32, cnum32_from_cnum64(r64)) && reg->step <= 1;
-+}
-+
- int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
- 			   struct bpf_loop_iters *iters)
- {
-@@ -3077,6 +3131,7 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
- 	if (err)
- 		return err;
- 
-+	bitmap_zero(iters->mask_regs, REGS_NUM);
- 	header_env = find_header_env(scev, insn_idx);
- 	for (r = 0; r < REGS_NUM; r++) {
- 		struct bpf_reg_state *reg;
-@@ -3110,8 +3165,19 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
- 			continue;
- 		}
- 
-+		if (is_const_scev_reg(env, insn_idx, r))
-+			continue;
-+
- 		r_scev = header_env->reg2scev[r];
- 		reg = scev_reg_for_linear(cur_func, r);
-+		/*
-+		 * The offset of a pointer to arena is not tracked: what enters the loop stands
-+		 * for all iterations. If the loop makes something else of it the state that
-+		 * returns to the head is not covered by the state at the head, and the body is
-+		 * verified again from that state.
-+		 */
-+		if (reg && reg->type == PTR_TO_ARENA)
-+			continue;
- 		/* If SCEV for r is (linear <reg> <slope>) */
- 		if (reg && is_simple_linear(scev, r_scev, &coefs) && is_widenable_reg_type(reg)) {
- 			/* 32-bit ALU operations on pointers convert them to scalars */
-@@ -3137,6 +3203,18 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
- 			}
- 			continue;
- 		}
-+
-+		/*
-+		 * [0, max] that loses bits is in [0, max], a bit that is 0 stays 0: what enters
-+		 * the loop stands for all iterations as it is. 64 or [64, 127] does not: it
-+		 * can become 0.
-+		 */
-+		if (reg && reg->type == SCALAR_VALUE && !test_bit(r, loop->store_base_regs) &&
-+		    reg_is_zero_to_max(reg) &&
-+		    expr_loses_bits_only(scev, header_env->reg2expr[r], r, 0)) {
-+			__set_bit(r, iters->mask_regs);
-+			continue;
-+		}
- cant_widen:
- 		if (log->level & BPF_LOG_LEVEL2) {
- 			r_expr = header_env->reg2expr[r];
-@@ -3234,8 +3312,29 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
- 
- 	header_env = find_header_env(scev, insn_idx);
- 	for (r = 0; r < REGS_NUM; r++) {
--		if (!scev_reg_alive(env, st, r) || is_unbound_scev_reg(env, cur_func, r))
-+		if (!scev_reg_alive(env, st, r) || is_unbound_scev_reg(env, cur_func, r) ||
-+		    is_const_scev_reg(env, insn_idx, r))
-+			continue;
-+
-+		reg = scev_reg_for_linear(cur_func, r);
-+		if (reg && reg->type == PTR_TO_ARENA)
-+			continue;
-+
-+		if (test_bit(r, iters->mask_regs)) {
-+			/* The range stays. It's no longer equal to the registers with its id. */
-+			err = scev_reg_for_write(env, cur_func, r, &reg);
-+			if (err)
-+				return err;
-+			if (log->level & BPF_LOG_LEVEL2) {
-+				bpf_log(log, "loop header at %d, ", insn_idx);
-+				log_reg(env, r);
-+				bpf_log(log, " stays in 0..%llu, it loses bits only\n",
-+					reg_umax(reg));
-+			}
-+			scratch_widened_reg_id(env, reg);
-+			mark_scev_reg_scratched(env, r);
- 			continue;
-+		}
- 
- 		r_expr = header_env->reg2scev[r];
- 		/* If SCEV for r is (linear <reg> <slope>)*/
-@@ -3327,6 +3426,14 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
- 		if (reg->type != entry_reg->type)
- 			continue;
- 
-+		/*
-+		 * bpf_compute_loop_iters() gives no range to a pointer to arena that moves, and
-+		 * it does not look at dead registers. Set a range only where it would.
-+		 */
-+		if (!is_widenable_reg_type(entry_reg) ||
-+		    (coefs.zext32 && entry_reg->type != SCALAR_VALUE))
-+			continue;
-+
- 		linear_bounds(entry_reg, max_header_count, &coefs, &bounds);
- 		if (r == entry->iv_reg)
- 			iv_bounds(&bounds, entry->iv_range);
+ /*
+  * r7 = ctx->data;
+  * r8 = r7
 -- 
 2.55.0
 
