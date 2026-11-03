@@ -1,72 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793672122;
-	b=r8P7ImjZeLc5+OjHGhyEEjjF7Jo5588ZXIq7O6Zn6cHK9tuqJw1PwgPVWT3exGdMsTBZ
-	 WgQ8Mi8iM7hVMyXenU45IzR0ewqmGCfA8cI6S2HYRClny1xI9bwdLlOlbc9h7oZqZqcwl
-	 My+NFwe4O4EDYvaoQkqOZ6lBvu1sqmq7/BCLmqlvQvM78gMRQ188pjwBK8iUWyU3p2mXl
-	 qUW7afwzdiDALNSbKLyjxy8vrhggae5LmT9ioWgM8moqlRnHMUuJPNmW6avniXFOn3zpD
-	 9mftpy2BuKFHrTHgrqxcb8UNOLxkyeTDiSDJ91brDxTeTUqIK3XTT7TLnDNbGWkoSww==
+	t=1793672656;
+	b=p9dC38U+TVoKzm0YyB4ktu7C+wtVMGOEIM/T9dAcMDcM9NBmNTDztaHism8e+H950Qpx
+	 Ae0N0kaCG+RPF8LQx6O/kkQ2CeLiWTTwQnsX1Z+ppIlUV9t24D9Dq63TQdXKN/Waq9Vs+
+	 RZo5Rw6yhQ287qFheF8vM2DibwQs0NAIhvc7KgjrSAtbDniH0u8AyHysJjdkT2fUHjJ4i
+	 fCkOI2V+OWDoO6109o4fBkBOLeWc/3P59eWOQhQgNfHUy8rIULnO0y3uvwEUIJiqEgFRe
+	 KWuzqIk2AkPg52E6nNxxQNjO1Cru3HwkdkMgD7XPgnq3oVaVnKKob67tI6w+PrtsOWA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793672122;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=swMBrZuLYQl7RYBGcyFALBP5NnR05K4Y76My6FBJtU0=;
-	b=hJ5qD30jfcHRgi9Cg6CJsfWTwMFhMLHTjXtk2zYmM69mKS8FX6u9zYEiHd8ljobr8GG0
-	 y6y8GTl+BXwUwMcAqBuecVk6EW5Psr5tgn2yjV8x1w3dJ7NRAN0b1cbryjRE7iOcXwcn5
-	 q1GOiGzvVBg6HUiLonS/AV0KmUG7NU1URRq1n83ky/g1DnxmtzcIEF9gMrKDFNJhBadx3
-	 Bw2q/1Tr3YVdUgmLIYJb8eTg2zttaCUwbeP1oYUfuA1jBkSh9bmWr/mNFVch6oDRWrYgV
-	 b0DDKzvEnKiHictmNVVq2VnjZar3yGgL7wsBTLn3Lf8jUrX0gPQzRzoDAO3d5WqYc6Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793672656;
+	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
+	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
+	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=UTAawBq1TFFImCpcVMvX7PdBtwNak+VTPEQ+ylgpEcw=;
+	b=PTHj7lTC5ua4YNwhR7gUeXdQt4RoHQ24fsgINHZVbldY9FnDA/Qp5l16NVh1t1nKPQJ6
+	 6TMAgvMmTz+Jb/oorxSzQoDmW6NnKkTQbOHD7255s5Fp7KzQwW+BJDtA0uHiTgmpiQta3
+	 hnRhakJGXrPhgwXdlDU5U29UnQTYrMdS4MTSfbL9EMrMamMFd6rYGTVBJfFIV3MUtC7lf
+	 bFDyoYZXRVGBkoPYc/v/r9/MatlJhL6yokixgdEYOPaNpbqqXF2ANpG6LkjRRSiQa/7pe
+	 Q3byPprOrjESmNAgYWqWG24w22S77Rf2mjUpcC2ZVA3N9Z7cGrxrN9RYpM2fb/4f83g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lX4qJf0e;
-	arc=none smtp.remote-ip=95.215.58.62
-Received: from mta1.migadu.com (out-62.mta1.migadu.com [95.215.58.62])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91329606A32F
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 02:15:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 91329606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lX4qJf0e
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Z4q8r55MMjPLd9lBbgy0/F1GPB2LJsVrIvS8JZYXVIM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793672119; v=1; x=1794276919;
- b=lX4qJf0evWkWo2H1GzdHljzs7DptE1ZYrRbf8XisV/6XjG1cxnHYRhmmVUWcCY8tKdmyuoP2
- C/LAmXc7JadQV4BZR++4X9gTsqc8mVhmW9xcw7rlz8NHNS85TPF1wyRIM1FfbDU8M0Hgj+oor4L
- ZfC4OZaZ+0qyvGEzfhUwqhWY=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 635985c26460c19e;
-	Tue, 03 Nov 2026 02:15:16 +0000
-X-Mizu-Trace-ID: 635985c26460c19e
-X-Migadu-Flow: FLOW_OUT
-Date: Tue, 3 Nov 2026 10:15:03 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-	David Lebrun <david.lebrun@uclouvain.be>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Mathieu Xhonneux <m.xhonneux@gmail.com>,
-	David Lebrun <dlebrun@google.com>,
-	Stefano Salsano <stefano.salsano@uniroma2.it>,
-	Andrea Mayer <andrea@common-net.org>
-Subject: Re: [PATCH net 3/6] seg6: update skb checksum when SRv6 behaviors
- advance to the next SID
-Message-ID: <aulA09qBNtIxJq7S@fedora>
-References: <20261031225033.64-1-andrea.mayer@uniroma2.it>
- <20261031225033.64-4-andrea.mayer@uniroma2.it>
+	dmarc=none header.from=loongson.cn;
+	spf=pass smtp.mailfrom=loongson.cn;
+	arc=none smtp.remote-ip=114.242.206.163
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AD48606A324;
+	Tue,  3 Nov 2026 02:24:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AD48606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8DxC9LLRelqRc8bAA--.14963S3;
+	Tue, 03 Nov 2026 10:24:11 +0800 (CST)
+Received: from [127.0.0.1] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAx3c7KRelqWAsyAA--.37821S2;
+	Tue, 03 Nov 2026 10:24:11 +0800 (CST)
+Subject: Re: [PATCH v1 1/2] LoongArch: BPF: Make arena support depend on SCQ
+ extension
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261102072808.23080-1-yangtiezhu@loongson.cn>
+ <20261102072808.23080-2-yangtiezhu@loongson.cn>
+ <CAAhV-H52mbZJX2vkgG_h=XfwHoio=asLjFdhTJwUYqDp4V5JMg@mail.gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <8b00e5a7-4e60-19bd-7953-f76dc71e15ec@loongson.cn>
+Date: Tue, 3 Nov 2026 10:24:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,110 +56,119 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261031225033.64-4-andrea.mayer@uniroma2.it>
+In-Reply-To: <CAAhV-H52mbZJX2vkgG_h=XfwHoio=asLjFdhTJwUYqDp4V5JMg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAx3c7KRelqWAsyAA--.37821S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxZF1fCFyDGFyUKr18Kr1kCrX_yoW5AFykpF
+	W7ArnrCrWYgrn5JrZrK3yrWF4DJrn8K342ga10krykJF98Xa4UXr18C3ZxXFn8Jrs5Ww40
+	gFyYka4a9asxJagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
+	xVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
+	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jnUUUU
+	UUUU=
 
-Hi Andrea,
-On Sat, Oct 31, 2026 at 11:50:30PM +0100, Andrea Mayer wrote:
-> advance_nextseg() decrements Segments Left and writes the next segment into
-> the destination address, and seg6_next_csid_advance_arg() advances the
-> NEXT-C-SID argument in the destination address.
-> With CHECKSUM_COMPLETE, neither updates skb->csum for these changes. The
-> stale skb->csum is read when the packet is delivered on the same node, e.g.
-> through End.B6.Encaps towards a local End.DT6 SID.
-> As a consequence, when skb->csum is computed in software, for instance by
-> conntrack, UDP can drop the packet as a checksum error. With skb->csum
-> computed by the device, TCP can instead log a "hw csum failure", as if the
-> device had computed a wrong skb->csum.
+On 2026/11/2 下午10:20, Huacai Chen wrote:
+> Hi, Tiezhu,
 > 
-> Update skb->csum in both functions with update_csum_diff16() for the
-> destination address. advance_nextseg() also uses update_csum_diff4() for
-> Segments Left.
-> 
-> Depends on patch "seg6: fix skb checksum update helpers".
-> 
-> Found by manual code inspection while working on
-> commit 8ae3f4067ba4 ("seg6: ensure packet data is writable before modifying
-> SRH and IPv6 DA"), and reproduced in a VM without kernel changes or error
-> injection. A following commit adds a selftest that reproduces the problem
-> with a tc ct action. With this patch, the selftest passes for the
-> End.B6.Encaps and next-csid paths. Also tested against the srv6 selftests,
-> and with a ConnectX-6 Lx NIC (mlx5) that provides CHECKSUM_COMPLETE.
-> 
-> Fixes: 140f04c33bbc ("ipv6: sr: implement several seg6local actions")
-> Fixes: 848f3c0d4769 ("seg6: add NEXT-C-SID support for SRv6 End behavior")
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> ---
->  net/ipv6/seg6_local.c | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> index 0c3d1be7f129..57a82477ce3f 100644
-> --- a/net/ipv6/seg6_local.c
-> +++ b/net/ipv6/seg6_local.c
-> @@ -291,7 +291,9 @@ static struct ipv6_sr_hdr *advance_nextseg(struct sk_buff *skb,
->  					   struct ipv6_sr_hdr *srh,
->  					   enum skb_drop_reason *reason)
->  {
-> +	struct in6_addr *daddr;
->  	struct in6_addr *addr;
-> +	__be32 old;
->  	int srhoff;
->  	int wlen;
->  
-> @@ -309,10 +311,19 @@ static struct ipv6_sr_hdr *advance_nextseg(struct sk_buff *skb,
->  
->  	/* skb_ensure_writable() may change skb pointers; evaluate srh again */
->  	srh = (struct ipv6_sr_hdr *)(skb->data + srhoff);
-> +	daddr = &ipv6_hdr(skb)->daddr;
-> +	/* nexthdr, hdrlen, type and segments_left */
-> +	old = *(__be32 *)srh;
->  
->  	srh->segments_left--;
->  	addr = srh->segments + srh->segments_left;
-> -	ipv6_hdr(skb)->daddr = *addr;
-> +
-> +	if (skb->ip_summed == CHECKSUM_COMPLETE) {
-> +		update_csum_diff4(skb, old, *(__be32 *)srh);
-> +		update_csum_diff16(skb, (__be32 *)daddr, (__be32 *)addr);
-> +	}
-> +
-> +	*daddr = *addr;
+> On Mon, Nov 2, 2026 at 3:28 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>> When testing bpf selftest "jit_insns/cast_to_user", there are different
+>> behaviors on different Loongson machines.
 
-Nit: we can re-use seg6_update_csum() if the transport header set correctly.
-But that function is static and we need adjust header files.
-So the current change looks good for me.
+...
 
->  
->  	return srh;
->  }
-> @@ -427,11 +438,13 @@ seg6_next_csid_advance_arg(struct sk_buff *skb,
->  	__u8 fnc_octects = seg6_flv_lcnode_func_octects(finfo);
->  	__u8 blk_octects = seg6_flv_lcblock_octects(finfo);
->  	struct in6_addr *addr;
-> +	struct in6_addr old;
->  
->  	if (unlikely(skb_ensure_writable(skb, sizeof(struct ipv6hdr))))
->  		return SKB_DROP_REASON_NOMEM;
->  
->  	addr = &ipv6_hdr(skb)->daddr;
-> +	old = *addr;
->  
->  	/* advance DA.Argument */
->  	memmove(&addr->s6_addr[blk_octects],
-> @@ -440,6 +453,9 @@ seg6_next_csid_advance_arg(struct sk_buff *skb,
->  
->  	memset(&addr->s6_addr[16 - fnc_octects], 0x00, fnc_octects);
->  
-> +	if (skb->ip_summed == CHECKSUM_COMPLETE)
-> +		update_csum_diff16(skb, (__be32 *)&old, (__be32 *)addr);
-> +
->  	return SKB_NOT_DROPPED_YET;
->  }
->  
-> -- 
-> 2.43.0
-> 
+>> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+>> index 3ab039d0afb6..01c12da168ee 100644
+>> --- a/arch/loongarch/net/bpf_jit.c
+>> +++ b/arch/loongarch/net/bpf_jit.c
+>> @@ -2489,7 +2489,15 @@ bool bpf_jit_bypass_spec_v4(void)
+>>
+>>   bool bpf_jit_supports_arena(void)
+>>   {
+>> -       return true;
+>> +       /*
+>> +        * The arena range tree uses kmalloc_nolock(), which requires 128-bit
+>> +        * atomic cmpxchg support, provided by SCQ extension on LoongArch.
+>> +        */
+>> +#ifdef system_has_cmpxchg128
+>> +       return system_has_cmpxchg128();
+>> +#else
+>> +       return false;
+>> +#endif
+> You can "return cpu_has_scq" directly.
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+This was my initial thought too; it is simpler, but unfortunately
+not enough here.
+
+The 128-bit atomic cmpxchg arch_cmpxchg128() not only depends on
+the hardware SCQ extension, but also requires assembler support,
+which was addressed in commit c8b8f3c50f48 ("LoongArch: Only use
+SC.Q when supported by the assembler").
+
+Therefore, using #ifdef system_has_cmpxchg128 as in the current
+patch is necessary to handle toolchain compatibility properly.
+
+Here is a simple diff to verify this scenario. On a 3A6000 machine
+with hardware SCQ extension, if we hack bpf_jit_supports_arena() to
+return cpu_has_scq directly, but force AS_HAS_SCQ_EXTENSION to 'n'
+to simulate an environment without assembler support, the original
+test error "libbpf: map 'arena': failed to create: -ENOMEM" still
+shows up because the underlying slab allocator lacks the flag
+__CMPXCHG_DOUBLE.
+
+```
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index b5ed4881d3c0..6f572d24d2c3 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -336,7 +336,7 @@ config AS_HAS_LVZ_EXTENSION
+         def_bool $(as-instr,hvcl 0)
+
+  config AS_HAS_SCQ_EXTENSION
+-       def_bool $(as-instr,sc.q \$t0$(comma)\$t1$(comma)\$t2)
++       def_bool n
+
+  config CC_HAS_ANNOTATE_TABLEJUMP
+         def_bool $(cc-option,-mannotate-tablejump)
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 8cc78efe722d..1e8049937851 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -2490,15 +2490,7 @@ bool bpf_jit_bypass_spec_v4(void)
+
+  bool bpf_jit_supports_arena(void)
+  {
+-       /*
+-        * The arena range tree uses kmalloc_nolock(), which requires 
+128-bit
+-        * atomic cmpxchg support, provided by SCQ extension on LoongArch.
+-        */
+-#ifdef system_has_cmpxchg128
+-       return system_has_cmpxchg128();
+-#else
+-       return false;
+-#endif
++       return cpu_has_scq;
+  }
+
+  bool bpf_jit_supports_fsession(void)
+```
+
+So, the current patch has no problem IMO.
+
+Thanks,
+Tiezhu
+
