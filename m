@@ -1,83 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793736057;
-	b=YUfILU0cyO3fb+y8r9BkGJN+yPowe+XivmO3gPkGIrqkNcrTCl6b4c4jKP9iDO2gRqG8
-	 w91JUC6UhZyHQjhmOFDEiCYesxje60gVhd9OfKJ2erqwGWBR/iw6WptvBAKMUogGcO9lD
-	 ppXPwR9xGOU8YR9kFwCxgQBU91Lq39lwk1MSl/GLotsRySkUix/yTBO6tKa+7aA7QH4Nv
-	 oC49b/8oPDfBsRZ44oHqyk+Y6aX/eA7T+8HIXehqLGH9++yDnFUFPMbcOdEnzxXT5KlCa
-	 3y3kpukamp8VZN5qPakYkCMl0y6UU3DNUBk5kiyy7iHGOKCVlmRFSTFLYOqZPnIdL4A==
+	t=1793736059;
+	b=UXYbeigKXzY+zilryi9/2vtwk3AmC6Ltxd/GGjGmGUPJbRMuavv8CzI86VMw7qyyBkEW
+	 4CQXOQKMVzXmHWyixSHENvzF4Y/exsRpfSGT5LkaKwmKz90R6ail/Z28kheHCNp7o1jwj
+	 ry4CgKvtrMX0pTOwVs7Hio4HFVBQYIOLB4vdY+lwGP32j7D6qtcUbr6I6WmGRRWQiWBHY
+	 AlMhRBmvCb9ljVFg2LwE50FKsB1NMpsK1xp8wGXoZhzzTol6qh/DapX0noNauQ1NCMrmU
+	 7yW2ECy5TWAQ/kV9uMJVqhkYADc5jPK9oY60m8GUZ8iSmtE5qGHUfS2nGAefgwIJi8A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793736057;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793736059;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=mlFelYWIRdulUJeu8Py+aDXguvFlkxFE6N66Qy/SxHg=;
-	b=uJjkpiFMba364iSTxdYP2/Y/HjKfKv4QW8Z+gXmlPTNgxYaDm4UKtsnlULL1L0/UBWP5
-	 CsBsOo1cqlmJSwd/uQeDjl+XqqzxhdPizeq96GMC1l+hrJxIM/eo7J3EjzSJmI2qLv0oV
-	 qJVDf/Bw5YHky/MlD2/T0USia3cf+8L1rUkDJFhmPF01vHCdqSmmVMYhU4UMFdoJrHZgv
-	 f6NejCq+F32/UDAtn7Nc//4pf+u2mqRWSA85UvkN7TyhkcTZ1xrvVdbkVNW02JcbgK4Sx
-	 PmmIUbXsVCqDuHAhlUHt9AmYf9Q/SxslkMxZEEbMFmhwyTCOsXsmqrsF3gbXc7iP5GA==
+	bh=wkydveF0zq5jAFEFr/DEfHBHOLC9wRiqiIlprBvXT0U=;
+	b=tfk30YVTryP2L6F+tE8B1jionA/UTYKQmI0QxaUTSqwEOBX7BkY9LMtNTBSf0UBiDGwg
+	 YxuYZVeT6Hg6lMFIARZsdRWxuE7iuSTBGs7YY4XnbT/8ZbcrVpltgNtgu4AjvN5q5tqBv
+	 SjS1wC3JX3OH4rfeO4LFVgsE4v8F4wFPTGpf/olCkBG3cb72Bgwg6WQaDCu707xBrA6+3
+	 sl9aEGNNrOBatTTpJm0JyjZnUAZ43W+lBZL8F4rNC09bhKClT++tCJ76xQmlcqJlulRUy
+	 9tCpKS03scdmmzs8C063CboGcosuGJWmGemQcqdOe3Ol7r+LW3l4/P2oq1GdzzWLIYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=EsO0dbm1;
-	arc=none smtp.remote-ip=209.85.218.54
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b="F7FIs0/3";
+	arc=none smtp.remote-ip=209.85.208.44
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A480606A32C
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 20:00:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A480606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5183A606A32C
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 20:00:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5183A606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=EsO0dbm1
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c4ced671398so191870266b.3
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 12:00:56 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=F7FIs0/3
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6a642495d81so7053563a12.2
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 12:00:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1793736055; x=1794340855; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1793736058; x=1794340858; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mlFelYWIRdulUJeu8Py+aDXguvFlkxFE6N66Qy/SxHg=;
-        b=EsO0dbm1bGfsye5KZ5OcUac1g8c2L+thR+EhdMijecI0VJbL7V5fkwDw8RfXnY/n9j
-         UeLanVc2T54tOs+nDeuC5VCmfeHa4WWKilz+y+xDCR/CsADLAA7uv5EP0MpGPIvrCqGV
-         OyhNt7WVn49m4AXx1OptwoM1YhTlkIUWvzC42rWfQ0pOrO7SNeKZCNMWVwjzKvgdSDfU
-         1Y2uK9BZEBgRSwopY2C6/tsWaTJ2pTk+m6wt4d3uTXt3eXDJmqWV8LU+3c2tjzSYTDu6
-         FG5hmQ2cYfIUWL9sxyFm85UV9UClkg/b3az+1/DEhRNKd7VOmKfvTcGTEKUpX085TPrT
-         TYiA==
+        bh=wkydveF0zq5jAFEFr/DEfHBHOLC9wRiqiIlprBvXT0U=;
+        b=F7FIs0/3+Ty6jo5zAhl0l4yDHXyXiG1N7o1sAt0wUS/AVTpd3WJFSFbtxNqjfBVZ/F
+         BTb/33O8/v2FPTbLzj6815/tzeGrsxvkee8XbbNsxwMOC+XhJ3PKOzqbFLoydaQ0kfr0
+         vntwPSg34Knm3kb3ehlKMDdh2om105Vbf1JhW8bfpiDmGJFRL7Wuq7iBHzwUQ5Q3lGRk
+         OSH8zkn4mWYp+2BcjTJa6JrqIkWb41EGFuJ81VtOTmCOtGV3bsCDLBnVHN5BGZ1zmEfI
+         LPvMW+pbjg4Gx0TriFAGdrLHOimaedt9Xv3kvmnmGRbtTekGJAs0Viis9pG1QysXVBh6
+         2cVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793736055; x=1794340855;
+        d=1e100.net; s=20260707; t=1793736058; x=1794340858;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mlFelYWIRdulUJeu8Py+aDXguvFlkxFE6N66Qy/SxHg=;
-        b=DZ1RluZXSGzBj2bLS32kl1lOSU+2bb+QB8TDEsukbzla8E/0bT1/g0F1R1p1C+CMqo
-         Nz2Paqrrcw9zlmrILCTrVUA01QdBL2dsUdqQzE/1VpIbX7sBq5yRHQkFilSW7l8/PFio
-         V0YZZOteVFfem474acipsAFrayzz+MebXqIxVA1QIuPmF4pYroamAun1QbSgoyV3QNlS
-         j81fxAybTPmyIou9T0Z26r0dhMkoFbUR8CPTlBr0sCCuawsyn/8w8h4V/zRap2psGOFz
-         9hPyeJM8PAHOVHep2mlqCect9G9AJ8Q3YAgdwxK/G6OmUe2626NscnzsOmzyiodrnCs7
-         ft3Q==
-X-Forwarded-Encrypted: i=1; AKwUvBynl6p500Uu/UWp4z1ofZ80pYSqZ35mbqYdLoT6Jps8vC+EWU7FmSsdlptwFiLhvEN5pYk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8vEf5wd/2l02ZrUdvFpA7tTJ91XbhhPLIZhEJnpP+PthZu7MXA
-	gP6ZQNrwZfdBNmPd/q1gnckDghGUGnFhfCD1qJX9EoF8PsxY7EPlfw8nZDBXhnA0ep4=
-X-Gm-Gg: AYBFou3+tM+LgSEYB8VfgCY8d/kZhnXL0d4XEpSq+d3f2C4Q1S0y7JhNbj6kx982onx
-	jaMD1NrHA3c+CE+vjFPwPYoOMZBvfpDyKhEYPzPHRYgaj04e9B20QJs/s0RjQb+W1KWjkiwdkbo
-	T4clAHUYv/uSw+5IO02YRCwmYcTLVi/i06UTKW7QYR8bflCwmnwlWa9b83HuAcWxynMXbiWPOdG
-	E7bBZCOn+EgsuA3Mgx1ayLL9oYxUWEotAMk9YfoEpH98UA582aWw+b9+8gMzf9vCdsN5QGAuBjU
-	fcUsFt1LlOv+/If+uFNuXEui9ys9wMuzB2/aDDWjOc/5MltHj+rMO3ivvGlM44U/lF0cdkxThCc
-	TlYRa19sZWFfyYA7f+vtp2+T86nbZHu3Q1Ihni/pTg2yjrZb3yOxvwptHjCdxDXukjxyrexzWUU
-	3JJu3H67YckDtj/CgVkHN2VKUq0XKxmKeCObHxpFB8rjNOPVqRpzqaoW4TlFuOQwy85iwrF93lX
-	1sG9jenHS7H6/7pSRt4YU4e65AJ2AKztgbWRJAGDP7+fJKpeHgm1peL/AQOaFh0/ShnQ8BH9syq
-	63vb8cin77Jiqyfo8pX8hbPvD9ic2YPKyDPFl1Qo1Nm5o5P8nkf1/J/Q+ZSTCa+PMwMx
-X-Received: by 2002:a17:907:9607:b0:c2e:2d8c:4585 with SMTP id a640c23a62f3a-c4ca7a9b17dmr1299809166b.36.1793736054809;
-        Tue, 03 Nov 2026 12:00:54 -0800 (PST)
+        bh=wkydveF0zq5jAFEFr/DEfHBHOLC9wRiqiIlprBvXT0U=;
+        b=vDGEZJ9ddVSOe/NfGhP+c/ZBc6QgRLXQDRSCX1BEckG4M6IAiRt791S0nKsZADY2iK
+         1AanB7AxCoMtXBoQ3hpNiQgypa9m8dHhUWzN+c7hALuXqDyYBj2JPl558K7k3NFlG2ZK
+         LeCAI/3Gg++rNWlL3gBzkJq9oWZpKrwdv7h6Hir/kDKgRoKDYRRL9d1AwRvNRhcXAX7m
+         5pOtMF0ySdAn6J1NiaZOVL0oHpvHRYc/z3qJ+VR+3uXh+Ddu5kxFZhjqGHbN0orLEg5r
+         9D18+c8VQgBnQwuauxfNqZa9xD5NbS0WYlZZzZHuQDIahK/t4eKYaKav1wQwTRu1/2z5
+         Qazw==
+X-Forwarded-Encrypted: i=1; AKwUvBxbYMTqgmtI0O8tmBQFPUSuk9yQZHveuVKPQ8Bu4q9cREoUMJvZf8oCv/CLmdkIzt1DnGc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z81aP6Zf7bY14QhHZoxPT0tyPLkqDpOpSng7fz5HnMUmSL4qfTm
+	s9iyRqrDC6vltLcWnerUGMW9U8aq/ru2uZGpo9zi0q1Ul8j4BePz6nxPgByLqlOcWrsKVLbm1Ep
+	bHmm8cLI=
+X-Gm-Gg: AYBFou1/BxGlmv0CabIGJ2WisBv/58cilgynijS7Wdbm2WAW8VIb7yNIDAHp6nGpMh3
+	z/oQ6j+UDndFKKwtl7Pej0JOxbxDynvXkiYBG1ApYItYzSfuGWDSPxqZu0H7nGF51uIwr+9BGF+
+	KBZSESO1t04Vf69rftarYNuz499rClcVKWoapE8klrcOXKIrthVISgBTtYySHZypy5aVyoxGLd4
+	ToFZZQii1pPGzBTCLJmhjUsjNRbYzU9BvGvp0G1QWap3cs1UpPBrPusSF+0jH6hCmoTS1sWAKhH
+	Z7jELrwRipkwzu86eFoQOYtLEa8YBb7ALg2hUdkMdhDV+ZjflsLNHrjTAkODAiPAJWnR3zeLal7
+	lpHWkJnc98QKk7DoY3nQzqk8ciEa5y20gnuN2lQKMj2U4FI5PlPvyFytkDr1zVrPmKImMZYhizh
+	Qvj3aE7JaX4QT0UF3qDU2AMujitYgrVeQgtDZGDh1/zoPBf/5aJIKrhrEOBLLQgk+mBUk9OSwso
+	b89t5zvAfMqYwdL2nOnisNv5SvGiWUO5L7cnSOKV+Y+dsXLSEki17gQoEuFPOfulXhB6KKC7LFl
+	YAlmWrqrMzizlHq+lDb5YKRqgtLuVDusXNLrvliyZUUi11I=
+X-Received: by 2002:a05:6402:234b:b0:6b1:df89:7e1e with SMTP id 4fb4d7f45d1cf-6b4d33aaff6mr10849177a12.1.1793736057694;
+        Tue, 03 Nov 2026 12:00:57 -0800 (PST)
 Received: from D90XRJJJNQ ([2a09:bac6:37af:1e5a::306:a])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b4ec91e2f2sm4499801a12.0.2026.11.03.12.00.52
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b4ec91e2f2sm4499801a12.0.2026.11.03.12.00.54
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 03 Nov 2026 12:00:52 -0800 (PST)
+        Tue, 03 Nov 2026 12:00:56 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -98,9 +99,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	bpf@vger.kernel.org,
 	kernel-team@cloudflare.com,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net 1/2] net: fix mac_len of skbs copied by generic XDP
-Date: Tue,  3 Nov 2026 20:00:36 +0000
-Message-ID: <20261103200036.65764-3-tianyi@cloudflare.com>
+Subject: [PATCH net 2/2] selftests: drv-net: ping: test generic XDP redirect to cpumap
+Date: Tue,  3 Nov 2026 20:00:37 +0000
+Message-ID: <20261103200036.65764-4-tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261103200036.65764-2-tianyi@cloudflare.com>
 References: <20261103200036.65764-2-tianyi@cloudflare.com>
@@ -115,35 +116,123 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-skb_pp_cow_data() copies the header fields of the old skb with
-skb_copy_header(). skb_copy_header() does not copy mac_len.
+The generic XDP tests in ping.py only cover XDP_PASS. Add a test that
+redirects all packets to a cpumap with an xdp.frags program. It runs
+the same ping and TCP checks as the other tests.
 
-Generic XDP uses skb_pp_cow_data() for programs with frags support.
-After such a program, the skb can have mac_len 0.
-cpu_map_generic_redirect() and tc ingress then get the position of the
-Ethernet header wrong.
+xdp_cpumap.bpf.c is a new program. It redirects every packet to entry 0
+of a cpumap. It is not added to xdp_dummy.bpf.c. test_xdp_offload loads
+xdp_dummy.bpf.o in offload mode, which would fail on a cpumap.
 
-Copy mac_len in skb_pp_cow_data(), as dev_map_generic_redirect() does
-after skb_copy().
+The new test extends _set_xdp_generic_mb_on() with two optional
+arguments. The first argument, prog, is the XDP program file name, with
+default "xdp_dummy.bpf.o". The second argument, on_attach, is a
+callback function, with default None. on_attach runs right after the
+program is attached. The new test passes "xdp_cpumap.bpf.o" to prog and
+a lambda that adds the cpumap entry to on_attach.
 
-Fixes: e6d5dbdd20aa ("xdp: add multi-buff support for xdp running in generic mode")
+Without the previous patch, the new test fails on netdevsim because ping
+gets no reply.
+
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
- net/core/skbuff.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/drivers/net/ping.py   | 27 ++++++++++++++++---
+ .../selftests/net/lib/xdp_cpumap.bpf.c        | 19 +++++++++++++
+ 2 files changed, 43 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/net/lib/xdp_cpumap.bpf.c
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 48f676411724..aa0b11204708 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -967,6 +967,7 @@ int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
+diff --git a/tools/testing/selftests/drivers/net/ping.py b/tools/testing/selftests/drivers/net/ping.py
+index da3623c5e8a9..a0de9a98d906 100755
+--- a/tools/testing/selftests/drivers/net/ping.py
++++ b/tools/testing/selftests/drivers/net/ping.py
+@@ -7,7 +7,7 @@ from lib.py import ksft_run, ksft_exit
+ from lib.py import ksft_eq, KsftSkipEx, KsftFailEx
+ from lib.py import EthtoolFamily, NetDrvEpEnv
+ from lib.py import bkg, cmd, wait_port_listen, rand_port
+-from lib.py import defer, ethtool, ip
++from lib.py import bpf_map_set, defer, ethtool, ip
  
- 	skb_reserve(nskb, headroom);
- 	skb_copy_header(nskb, skb);
-+	nskb->mac_len = skb->mac_len;
- 	skb_mark_for_recycle(nskb);
+ no_sleep=False
  
- 	err = skb_copy_bits(skb, 0, nskb->data, size);
+@@ -75,16 +75,23 @@ def _set_xdp_generic_sb_on(cfg) -> None:
+     if no_sleep != True:
+         time.sleep(10)
+ 
+-def _set_xdp_generic_mb_on(cfg) -> None:
+-    prog = cfg.net_lib_dir / "xdp_dummy.bpf.o"
++def _set_xdp_generic_mb_on(cfg, prog="xdp_dummy.bpf.o", on_attach=None) -> None:
++    prog = cfg.net_lib_dir / prog
+     cmd(f"ip link set dev {cfg.remote_ifname} mtu 9000", shell=True, host=cfg.remote)
+     defer(ip, f"link set dev {cfg.remote_ifname} mtu 1500", host=cfg.remote)
+     ip("link set dev %s mtu 9000 xdpgeneric obj %s sec xdp.frags" % (cfg.ifname, prog))
+     defer(ip, f"link set dev {cfg.ifname} mtu 1500 xdpgeneric off")
++    if on_attach:
++        on_attach()
+ 
+     if no_sleep != True:
+         time.sleep(10)
+ 
++def _set_xdp_generic_cpumap_mb_on(cfg) -> None:
++    cfg.require_cmd("bpftool")
++    _set_xdp_generic_mb_on(cfg, "xdp_cpumap.bpf.o",
++                           on_attach=lambda: bpf_map_set("map_cpumap", 0, 2048))
++
+ def _set_xdp_native_sb_on(cfg) -> None:
+     prog = cfg.net_lib_dir / "xdp_dummy.bpf.o"
+     cmd(f"ip link set dev {cfg.remote_ifname} mtu 1500", shell=True, host=cfg.remote)
+@@ -192,6 +199,19 @@ def test_xdp_generic_mb(cfg, netnl) -> None:
+     _test_v6(cfg)
+     _test_tcp(cfg)
+ 
++def test_xdp_generic_cpumap_mb(cfg, netnl) -> None:
++    """Redirect all packets to a cpumap from a generic xdp.frags program."""
++    _schedule_checksum_reset(cfg, netnl)
++    _set_xdp_generic_cpumap_mb_on(cfg)
++    _set_offload_checksum(cfg, netnl, "off")
++    _test_v4(cfg)
++    _test_v6(cfg)
++    _test_tcp(cfg)
++    _set_offload_checksum(cfg, netnl, "on")
++    _test_v4(cfg)
++    _test_v6(cfg)
++    _test_tcp(cfg)
++
+ def test_xdp_native_sb(cfg, netnl) -> None:
+     _schedule_checksum_reset(cfg, netnl)
+     _set_xdp_native_sb_on(cfg)
+@@ -230,6 +250,7 @@ def main() -> None:
+                   test_default_v6,
+                   test_xdp_generic_sb,
+                   test_xdp_generic_mb,
++                  test_xdp_generic_cpumap_mb,
+                   test_xdp_native_sb,
+                   test_xdp_native_mb,
+                   test_xdp_offload],
+diff --git a/tools/testing/selftests/net/lib/xdp_cpumap.bpf.c b/tools/testing/selftests/net/lib/xdp_cpumap.bpf.c
+new file mode 100644
+index 000000000000..150352343114
+--- /dev/null
++++ b/tools/testing/selftests/net/lib/xdp_cpumap.bpf.c
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_CPUMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u32);
++} map_cpumap SEC(".maps");
++
++SEC("xdp.frags")
++int xdp_cpumap_prog_frags(struct xdp_md *ctx)
++{
++	return bpf_redirect_map(&map_cpumap, 0, XDP_DROP);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
