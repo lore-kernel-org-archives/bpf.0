@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.1
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.250
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793674670;
-	b=lZn1j6DlQ2Xrks5nHmTPPYXJJda7NqkwLf08eTwag9H7I0t+nldk2IFib4X6VtXC71W7
-	 ms44RXFbSV+2O8Z6gg7hV7Fd0/EzR4J/CcQ/KkljX9Lp87xolPyruIcCwHuftn6yLG5eB
-	 kuakExST2pngBQQ36HRoBiLfRoc+oKCIJtxoj3oEnRlrVC9OGYMDkFpwN4DwxKU2BqHUV
-	 Wrc3iT8l9t8lzOK9IeRQxyrQKECw3nsQmViUBQg3oR2XynwINRJvFFFhQpOwApq91OiTh
-	 LfoOxZss9I7odYm2bgflS3qjv6EuOebzJwrjgfXV8+wwh0gA0UJkdC088GEXfttTaIg==
+	t=1793674683;
+	b=2dWC1lsHaJsBw8PUPXi/fgSIabIbdswBilXdYap7adS5uzyygVdPp7tTeo0D8WSLxNqR
+	 oBhchz7YFn9OKVfkcF79SfNspAlz79rEONH6hHeWsc8DQhV+nfGYgmyMy5OCgXRXtaJWZ
+	 advuloGuXcWIXnK2Y5dEh08Br3Uv+y0ls20Y2Wa5l3lAE4IAeivqpFsb5su+t1ONqKzrL
+	 pwYvEVEaLqh1lQOB5p19y/aWIvrLf5RKS2XsZsVE/S62kQJIlf5Eo6S5x6UIzj2+f2ozU
+	 d/P/X7/iqrtqVMYwrSEuNvt0OsWkPLSzjbEIw+ou3DBUU8sQrabtbsSbMv2IOb8YczA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793674670;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793674683;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-Id:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=2CYw4TJon3a1gyE3IXvNjkyv8y6xkEjfo7VNXh+JX/8=;
-	b=5hEtUWttBTBchLtWToUCXMT1xPhEa+9t/QMiPGlOSz9B88zRvaGVN8BRcLzhmbqyFTSm
-	 zcLiOYmfnBLEwGpSTTcJY4yt8FuMRiiZ68H8H8snavjDJX4ffoPe/YCC3KO93hJcW33cW
-	 70GLSJ4i0a1XRdHYZPC0DosiKXKNrG+0FbOSWhiBx1erl4oRVf/NcIQ5wpw05SYKn5S7Z
-	 87Y90R6kaeHh/SwTbfB2dPoAjoXGWrhGtLk2f6yc1mODD4wKwF5dZVgZunrYecTLf7MAn
-	 mP3xyhlTI4Sw2SM3A6vUnms/1Ump48ZMT2PCnIC4Sau6LsrdMbJW/86KhQfk7j8JRTQ==
+	bh=4IRpsKB31ZWOQ5n/UsohIDOoT7iKXviBSO161ss/1dE=;
+	b=mw/DL+TNi0bKQkVNz3G7fKP9JM/z44eChbr0snPmsfo1Ez8MZDFNxaifnXYdW/GubnPI
+	 Zwd8nLiiA8Vs+/lPpj5908W6FtwTb2VMZCxKKs+jLkO0DxR6EFQc+BAXfyWAQNTlsKZSM
+	 ychlq8ItUJQFBcdRu4S9Bxiw0IWgIqtuF9pk941d4ABli21QEeQ19Onme7KleLY6ZrEvp
+	 ZYtbRnXyH0o3gE/RzbL+I5qvSYPm15SCPoHXm6NReWUMlXyvvxsLSFYnd3e8LeNx4YMbB
+	 3Oc4yvDo1eQJ4Fsl40ts7y+Wy6PIje7Xs1B/wwLUWcITnCrDKsxXxHyMowbEZ75j3Xg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qRmZKOvx;
-	arc=none smtp.remote-ip=91.218.175.1
-Received: from mta0.migadu.com (out-1.mta0.migadu.com [91.218.175.1])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Ymnes9hU;
+	arc=none smtp.remote-ip=95.215.58.250
+Received: from mta1.migadu.com (out-250.mta1.migadu.com [95.215.58.250])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5CB606A32C
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 02:57:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DD5CB606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C5F606A329
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 02:58:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66C5F606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qRmZKOvx
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Ymnes9hU
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=JI4Fvh2wr8Cnl+a4gBEMEis0OoLVQQsg/DZU5Vjf0/o=;
+DKIM-Signature: a=rsa-sha256; bh=lyrb92uDQUPbkiBltZi1bjdhjSGbJYzJNmN2CpAeRBY=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793674668; v=1; x=1794279468;
- b=qRmZKOvxAZzm29pWdZ4p+FiOcdAlOd31TkwZ1mYWu/Aio0acThHVchO6FD9KWaFd/nRjO78T
- e5LBfuH+TgccdMlIR8DpejX0pY34wf/rrevm06HpYXTCB0J5wGvvHe4/wTPC9n+m7nXwVgfTJYX
- 53zm5OnXyfcKKE7BNqjbDBS4=
+ t=1793674680; v=1; x=1794279480;
+ b=Ymnes9hUueYcoUxGz5QwDS5GUw1Qmnr7X/K2zXmtGUWjBAqldu6yJuJArKlNuSWuC36/5Kw5
+ BCkiEyv5qn7dI9NQNbJMqcVEVyyNlWsdwcoMUU9VOtgUcRweQ7FNGpdbwVe7hR2frOOLJNuqDOu
+ ValsYvN1tCUXXv1UX2u6Uwn8=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 066f37554edb6d0d;
-	Tue, 03 Nov 2026 02:57:46 +0000
-X-Mizu-Trace-ID: 066f37554edb6d0d
+Received: by smtp.migadu.com with ESMTPS id 595423ef5b9c1195;
+	Tue, 03 Nov 2026 02:57:59 +0000
+X-Mizu-Trace-ID: 595423ef5b9c1195
 X-Migadu-Flow: FLOW_OUT
 From: Ridong Chen <ridong.chen@linux.dev>
 To: Steven Rostedt <rostedt@goodmis.org>,
@@ -75,9 +75,9 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_)),
 	Ridong Chen <ridong.chen@linux.dev>,
 	Ridong Chen <chenridong@xiaomi.com>
-Subject: [PATCH v6 6/7] mm/mglru: add lruvec_gen_size() helper
-Date: Tue,  3 Nov 2026 10:56:09 +0800
-Message-Id: <20261103025610.3738894-7-ridong.chen@linux.dev>
+Subject: [PATCH v6 7/7] mm/mglru: add tracepoint for inc_max_seq()
+Date: Tue,  3 Nov 2026 10:56:10 +0800
+Message-Id: <20261103025610.3738894-8-ridong.chen@linux.dev>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261103025610.3738894-1-ridong.chen@linux.dev>
 References: <20261103025610.3738894-1-ridong.chen@linux.dev>
@@ -94,108 +94,106 @@ Content-Transfer-Encoding: 8bit
 
 From: Ridong Chen <chenridong@xiaomi.com>
 
-The number of pages of a given type in a generation is computed by
-summing lrugen->nr_pages[gen][type][] over all zones and clamping each
-per-zone counter to >= 0, since the counters are updated locklessly and
-can transiently go negative. This loop is open-coded in
-lruvec_evictable_size() and in the debugfs lru_gen output.
+Aging in MGLRU advances max_seq via inc_max_seq(), creating a new
+youngest generation. There is currently no tracepoint on this path, so
+the moment a new generation is created, and how the min_seq of each type
+trails behind it, cannot be observed as it happens.
 
-Add lruvec_gen_size() to compute it from a seq, and convert both users.
-Put it in mm/vmscan.h so that the vmscan tracepoints, which include that
-header, can use it as well.
-An upcoming tracepoint and the MGLRU swappiness rework will also use it.
+Add mm_mglru_inc_max_seq, emitted right after max_seq is bumped while
+the lruvec lock is still held, with the node id, memcg id, the new
+max_seq, the anon and file min_seq, and the number of pages in each
+generation for both types, as computed by lruvec_gen_size().
 
-No functional change.
+The nr_anon/nr_file arrays are ordered by seq rather than by generation
+slot: entry i holds the generation max_seq - MAX_NR_GENS + 1 + i, i.e.
+they go from the oldest generation to the newest, the same order as the
+debugfs lru_gen file, so the output can be read directly without mapping
+slots back to seqs. Entries for seqs below the corresponding min_seq are
+not in use and normally read as 0. The arrays are printed with
+__print_array(), so the output is hex and its length follows
+MAX_NR_GENS automatically.
 
-Suggested-by: Barry Song <baohua@kernel.org>
+Only the lruvec is passed in; all of the above is collected in
+TP_fast_assign(), so inc_max_seq() does no extra work when the event is
+disabled. Paired with mm_mglru_scan_folios it makes the full
+aging-to-eviction window observable per memcg.
+
 Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
 ---
- mm/vmscan.c | 18 ++++++------------
- mm/vmscan.h | 16 ++++++++++++++++
- 2 files changed, 22 insertions(+), 12 deletions(-)
+ mm/trace_vmscan.h | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ mm/vmscan.c       |  2 ++
+ 2 files changed, 48 insertions(+)
 
+diff --git a/mm/trace_vmscan.h b/mm/trace_vmscan.h
+index 8148b8224422..40d6d90f1d7a 100644
+--- a/mm/trace_vmscan.h
++++ b/mm/trace_vmscan.h
+@@ -456,6 +456,52 @@ TRACE_EVENT(mm_mglru_scan_folios,
+ 		__entry->min_seq)
+ );
+ 
++TRACE_EVENT(mm_mglru_inc_max_seq,
++
++	TP_PROTO(struct lruvec *lruvec),
++
++	TP_ARGS(lruvec),
++
++	TP_STRUCT__entry(
++		__field(u64, memcg_id)
++		__field(unsigned long, max_seq)
++		__field(unsigned long, anon_min_seq)
++		__field(unsigned long, file_min_seq)
++		__array(unsigned long, nr_anon, MAX_NR_GENS)
++		__array(unsigned long, nr_file, MAX_NR_GENS)
++		__field(int, nid)
++	),
++
++	TP_fast_assign(
++		struct lru_gen_folio *lrugen = &lruvec->lrugen;
++		unsigned long max_seq = lrugen->max_seq;
++		int i;
++
++		__entry->memcg_id = mem_cgroup_id(lruvec_memcg(lruvec));
++		__entry->max_seq = max_seq;
++		__entry->anon_min_seq = lrugen->min_seq[LRU_GEN_ANON];
++		__entry->file_min_seq = lrugen->min_seq[LRU_GEN_FILE];
++		/* from the oldest generation to the newest, as debugfs lru_gen does */
++		for (i = 0; i < MAX_NR_GENS; i++) {
++			unsigned long seq = max_seq - MAX_NR_GENS + 1 + i;
++
++			__entry->nr_anon[i] =
++				lruvec_gen_size(lrugen, LRU_GEN_ANON, seq);
++			__entry->nr_file[i] =
++				lruvec_gen_size(lrugen, LRU_GEN_FILE, seq);
++		}
++		__entry->nid = lruvec_pgdat(lruvec)->node_id;
++	),
++
++	TP_printk("nid=%d memcg_id=%llu max_seq=%lu anon_min_seq=%lu file_min_seq=%lu nr_anon=%s nr_file=%s",
++		__entry->nid,
++		__entry->memcg_id,
++		__entry->max_seq,
++		__entry->anon_min_seq,
++		__entry->file_min_seq,
++		__print_array(__entry->nr_anon, MAX_NR_GENS, sizeof(unsigned long)),
++		__print_array(__entry->nr_file, MAX_NR_GENS, sizeof(unsigned long)))
++);
+ #endif /* CONFIG_LRU_GEN */
+ 
+ TRACE_EVENT(mm_vmscan_write_folio,
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 3054175717ab..1581b73aec56 100644
+index 1581b73aec56..841fefa68d1f 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -4207,18 +4207,15 @@ static void set_initial_priority(struct pglist_data *pgdat, struct scan_control
- 
- static unsigned long lruvec_evictable_size(struct lruvec *lruvec, int swappiness)
- {
--	int gen, type, zone;
-+	int type;
- 	unsigned long seq, total = 0;
- 	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 	DEFINE_MAX_SEQ(lruvec);
- 	DEFINE_MIN_SEQ(lruvec);
- 
- 	for_each_evictable_type(type, swappiness) {
--		for (seq = min_seq[type]; seq <= max_seq; seq++) {
--			gen = lru_gen_from_seq(seq);
--			for (zone = 0; zone < MAX_NR_ZONES; zone++)
--				total += max(READ_ONCE(lrugen->nr_pages[gen][type][zone]), 0L);
--		}
-+		for (seq = min_seq[type]; seq <= max_seq; seq++)
-+			total += lruvec_gen_size(lrugen, type, seq);
- 	}
- 
- 	return total;
-@@ -5723,20 +5720,17 @@ static int lru_gen_seq_show(struct seq_file *m, void *v)
- 		seq = 0;
- 
- 	for (; seq <= max_seq; seq++) {
--		int type, zone;
-+		int type;
- 		int gen = lru_gen_from_seq(seq);
- 		unsigned long birth = READ_ONCE(lruvec->lrugen.timestamps[gen]);
- 
- 		seq_printf(m, " %10lu %10u", seq, jiffies_to_msecs(jiffies - birth));
- 
- 		for (type = 0; type < ANON_AND_FILE; type++) {
--			unsigned long size = 0;
- 			char mark = full && seq < min_seq[type] ? 'x' : ' ';
- 
--			for (zone = 0; zone < MAX_NR_ZONES; zone++)
--				size += max(READ_ONCE(lrugen->nr_pages[gen][type][zone]), 0L);
--
--			seq_printf(m, " %10lu%c", size, mark);
-+			seq_printf(m, " %10lu%c",
-+				   lruvec_gen_size(lrugen, type, seq), mark);
- 		}
- 
- 		seq_putc(m, '\n');
-diff --git a/mm/vmscan.h b/mm/vmscan.h
-index adb22e80d760..c6b583fc7493 100644
---- a/mm/vmscan.h
-+++ b/mm/vmscan.h
-@@ -3,6 +3,7 @@
- #define _MM_VMSCAN_H
- 
- #include <linux/gfp_types.h>
-+#include <linux/mm_inline.h>
- #include <linux/nodemask.h>
- #include <linux/swap.h>
- #include <linux/types.h>
-@@ -115,4 +116,19 @@ struct scan_control {
- 	struct reclaim_state reclaim_state;
- };
- 
-+#ifdef CONFIG_LRU_GEN
-+/* The number of pages of @type in the generation @seq, summed over all zones */
-+static inline unsigned long lruvec_gen_size(struct lru_gen_folio *lrugen,
-+					    int type, unsigned long seq)
-+{
-+	int gen = lru_gen_from_seq(seq);
-+	unsigned long size = 0;
+@@ -4115,6 +4115,8 @@ static bool inc_max_seq(struct lruvec *lruvec, unsigned long seq, int swappiness
+ 	WRITE_ONCE(lrugen->timestamps[next], jiffies);
+ 	/* make sure preceding modifications appear */
+ 	smp_store_release(&lrugen->max_seq, lrugen->max_seq + 1);
 +
-+	for (int zone = 0; zone < MAX_NR_ZONES; zone++)
-+		size += max(READ_ONCE(lrugen->nr_pages[gen][type][zone]), 0L);
-+
-+	return size;
-+}
-+#endif /* CONFIG_LRU_GEN */
-+
- #endif /* _MM_VMSCAN_H */
++	trace_mm_mglru_inc_max_seq(lruvec);
+ unlock:
+ 	lruvec_unlock_irq(lruvec);
+ 
 -- 
 2.34.1
 
