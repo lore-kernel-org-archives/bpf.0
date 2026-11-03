@@ -1,105 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793734405;
-	b=AuLy9RVSoaQSnt1NX6Z9Am02R4eQcwzj+Vum5EzmZLbCiuCg4lcR2q9ApFOHz1Tn5bpe
-	 TzauS8oxw0YQbmCktG/CS8KOc50Jr4jIMtzPTviY0qcVZZvKC1AUPvP/LUUWQxPHm6Rs5
-	 YagyhdcgwcqvG0JhUkfnfjYxFmVzgpW1E7F6Dp6ENGvTgRzr5xelMQKJBzTVVDvbUvgTF
-	 renlnSuesCwAXAfxzz5LX1nfn1OVM29i1bzNwmopfHOihMCJUNCFDAqu1ETVdTGLqPnx5
-	 cpuhALiBZK++uhx1h8O95e2J5gD+k1/xCEA6ZJx8bd00gMI85u9vVcBG0yCyt/Eb4Mg==
+	t=1793734677;
+	b=3Soz2TgTFAOajM2ruXCyb8LxvpsMp/2uj+M3SVigb49y+LQMeQCEQiVeYHkJjfGVl40I
+	 gy69wbj2ivASj4Bf35f7KrmFZvHQ9lt9uHbloaTX3i+PFR6XwQkEw50fep3ptnx+RJ2B7
+	 VI0RaLmz9sYAHXQ/TM1W5m0OpbQecsD4vt/qCwxOcBwqXzAe+XVzo81FypYCU04HLNDOm
+	 cgPYS/GjSgYtxdZXC+r82eDp+bywrCQmq8I8XIS+SgGAiE5wJcOV+lAK64Gl0EJvkif2V
+	 /pniDyfVA/dN2bkO1GvuxZQ2gCRH6o8SsQHYgqZLX+l5MfiNsHRk8YZD1Ql0KqtL85g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793734405;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=15RJraNkt4G9imlgns/mzHRKCrlWGmqvpmr2tllrIBY=;
-	b=g7dPKLd60CRWZZ43sODKOcJQ3fTDzeb/dexGlqFu0BmL9NMSxxu/8K2GsPksbmEQJFT6
-	 8JvVCQ/cSfSQ7PicKrF5VsxVOPsEsZFWHI6rmWk1Wv1gxRG0wVTKfkNCi2PD/IwQ5lM1w
-	 Cjrt6Kwa0Lkqom3uowrYXYR3UAsM4QFY9TAqTG56A+NSMdz8oNxHha476mqZzqRD2PYyG
-	 I1C78mlyxQRRbGjGphsrxN7KyMwGpvmfUbP+cd8eKl0cyvVwEe1/Lp63bNEuofpxqw6c0
-	 kK6gA9W5Jgxgw05fJ4nKZULfGnU1ZplGpiBGrnDqeyUZIcvXroPrT9EIgPgGRGnEcCg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793734677;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=ItAo9qYkmyvqf88f/LW+ytUpAFOtt3hebtfMpwFkRN0=;
+	b=oUyf83zzt1CExhJwPIOsdsuSSY4RdC6JihoozOlEUIviRrbOLHcybXR5okzsO8Twl9Ik
+	 ZT97Xt2WPmD4T4g6LGeF5FwVILoI28JNC89RnLBfqlbBInOOLfLqE5rmdBQCdC54BbFi4
+	 Xcopv7EWFevWcA4nPn6GVw9E0rBOQUh5t4Z4DFh72+PFMr4v5sYWA6kqOqrWcdaR8gpsY
+	 1qHKqHo60qpzeOhN5SAo0c1LHxftyedIk/WbL5qoKzQVdS8oF/tPGbS378sKSNtDYb1wr
+	 KLAywYQVr2G5+YqJCtY4X0KMpuKZP7+Tb54yvv43R06YMkvL6adzMHhD8b8JWolibcg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wV02aST+;
-	arc=none smtp.remote-ip=74.125.229.8
-Received: from mail-dy2-f8.google.com (mail-dy2-f8.google.com [74.125.229.8])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TtFnvrFg;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97608606D809
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 19:33:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97608606D809
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1CE606A324
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 19:37:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wV02aST+
-Received: by mail-dy2-f8.google.com with SMTP id 5a478bee46e88-36a6ce64b95so1346306eec.1
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 11:33:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793734404; x=1794339204; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=15RJraNkt4G9imlgns/mzHRKCrlWGmqvpmr2tllrIBY=;
-        b=wV02aST+LnFuxBvV4bpYViFOafiBAI18U+cmy1u7/O8lBLjisx42g0f7VqlS7j6qWi
-         fzZdeH2AtavuBEinDao1789fn1sBOJr3JreFzWRfnqHWIS3MgMOBh+kCvVGAjlYJmkjp
-         QgfY3aVLjOO27toy9Do9VDZOcgWKHeLvUXUJt9+QhVCfgJ8B4pweYXZ1VRn20ajx22In
-         N4rtQdS+6e7xZeweLYsATcu/Kuk3bCtZw5GIGxJKzMd7MVsi0m5Otgs1Yi62uqzl21Oz
-         tUF7KmL6ccLm27Tb19Y4GTxqG+Oyz0lqfrSYtZL/ELJWt//50dFblUY+uRpGpFRRPic4
-         ZEOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793734404; x=1794339204;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=15RJraNkt4G9imlgns/mzHRKCrlWGmqvpmr2tllrIBY=;
-        b=F2TOwsWeUfME20dxy4mXe+c3nuHYDG2D+pHsepNkY6XtJ4yf9sw8dATgQrCp75g+Up
-         0hBdHLLf8F3RXbMiJLNqpCSJWCqaJKfizbPA9K20uU/e5rymunTm7CD1vMmmuigYr/Hl
-         OHthoBTeQSe7N1Elfu0LO5Ejv7rlkmJY13QKdXFoBbY2vpO+vmMKI+CGwodklJ4zHyFu
-         JosQdE25tEJs0DiGenDfTB5TqMkl9ZRKUFzltIRw5a3h5UucCNCUGzivwQ6Dv5mZTBkB
-         L4y4NyxL7+5Ehp4NgVGpHqF+8LV6wSaxISjvRLm7s6hF+j9nTXnmfrRAqqmnjKnz7Bw8
-         Jwzg==
-X-Forwarded-Encrypted: i=1; AKwUvBx2naaBSCYIkCwePRwsHV41pMSVSILG6nkhJXjEld1vsd04rcYmb7tkoLQxsU42La84vgY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z87gdgSulmy1tJd3ndmp1hJlJl8v12gYM6mfTF7txo5aN8sLQv8
-	OS7zmRDl6UdRckZYkiKBJ/iYJsjiISzMxZmSMyW67KN5Q1mWs5Mk+goD7ZGFUyx+
-X-Gm-Gg: AYBFou0e9FK3srTnYhbIiGzZhPujauN5LoMVgBr0F77UVN8iyjnswxFVhzPe5Hd17FE
-	IDYwHjWhV3dTf1/BRUUGTR+qdC+uMyoeTORgmWqSg/l/yiGcaYJ9lyVXBFko2Sy3kzg20aulXXr
-	yJmNsIuqnnAWBpFRxJFdAvut/8bHQgK9D/gulJ5fbm5lWuelw/zLbD1METmSpI8Vcrj52ROmKVN
-	gDRJjnSxfDVGQZq5LF3cGe2JNLGEEiUyO16twoQsS1Xher/1wPsbWxInwj8457vRHeB7bIvzC5V
-	8QBUovn8lDWiYcJ4mDRkZbDhxrmQ21C2v9LLVTYmpt9B6sdotWKD2LvvxwcMFrCBrLMp2JtT0RF
-	gMtYFrUTcS7wruZ1TejsvInShexkNxDuPGoaxVjTiSnUyeTi2hotUbSOxEcJIJU5WGPi6ca8vJp
-	MMdWWZ7rGfyv+lAYYqYCtYvYfu9SIrgOybPpPT4htkj1/hTmi05sqP+9kKBRR4qH4kWos+Zi9YK
-	I+HZabE/Ubxb1MZWDhBCj1rP3pIFXjHPxSpdRQI+lP2X7b//u0+wmQR62HqUrQ3tUWhTiScvRZQ
-	ANliL+KyscPzI7Bt4aQcIA==
-X-Received: by 2002:a05:7301:103:b0:36c:9af3:22eb with SMTP id 5a478bee46e88-36c9af32cb0mr2691600eec.34.1793734403660;
-        Tue, 03 Nov 2026 11:33:23 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:6b::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca3785430sm527244eec.3.2026.11.03.11.33.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 11:33:23 -0800 (PST)
-Date: Tue, 3 Nov 2026 11:32:44 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>, 
-	Eric Dumazet <edumazet@kernel.org>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, david.laight.linux@gmail.com, 
-	kernel-team@meta.com
-Subject: Re: [PATCH net-next v4 6/7] ipv6: convert do_ipv6_getsockopt() to
- sockopt_t
-Message-ID: <auo21mFFkL2zH2MT@devvm16445.scu0.facebook.com>
-References: <20261103-sockopt_expand_out_v2-v4-0-2d36da923578@debian.org>
- <20261103-sockopt_expand_out_v2-v4-6-2d36da923578@debian.org>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TtFnvrFg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E4621F00A1A
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 19:37:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793734676;
+	bh=ItAo9qYkmyvqf88f/LW+ytUpAFOtt3hebtfMpwFkRN0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=TtFnvrFgJ4LexlXbJVvg3d77tz6QZ1WwXk9RMjJolAO4CjfjvPW8HVmpgOHcQ/R0y
+	 5sRwGBUbH5WAexfXq508yDEoio5t2k7NTLk4ovwAU+tekKewqLa1vNvCFHtE/zvlAr
+	 XA/2Rz2pKVKp7tx5xIoOVTwHb4JI/00lIsC02ECXAydEYTrexk3Pk4mqz9nsJO6sTL
+	 AQ7OV60z8e3Q728qQJfOu7Ekz257G502lbR+acVi3GUVN97Qs/EjMoOIhYxfxzt7kj
+	 Ibf9Uc1JYIbU341HFuA06n2u0HjnfHET/ouut5LvUuW1ISm1oGSeDmWxtpKX26qRI5
+	 HF4Lvedgf1BEg==
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-4ab8cb2a6e4so3278217b6e.0
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 11:37:56 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AKwUvBxIZpftxJUbH6uhc+QnyLcZwlWRSCP82j/Od0BUz2uPGUUC7SErGDuExKsavs/gxGqyMtg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9dseCKQyBiHB/Q8I3dRCkbsnlsorT0Qu5rJsOAR6q9TyKhEfX4
+	DzY6OMvebgp9n12V41pssPKFiNewqWcdrLoY/l/XvR15nI89CR0/Tqg+A/SSU9L27/eeIlbZg/2
+	hxuDKDFJt5atonICbiykzvg+5Bm55dAc=
+X-Received: by 2002:a05:6809:1c8:10b0:564:5fe0:dd76 with SMTP id
+ 5614622812f47-5645fe0f8f1mr2447428b6e.18.1793734675879; Tue, 03 Nov 2026
+ 11:37:55 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,45 +59,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261103-sockopt_expand_out_v2-v4-6-2d36da923578@debian.org>
+References: <20261101194433.2637113-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261101194433.2637113-1-alexei.starovoitov@gmail.com>
+From: Eric Dumazet <edumazet@kernel.org>
+Date: Tue, 3 Nov 2026 20:37:45 +0100
+X-Gmail-Original-Message-ID: <CAL4Wiiqw9kPmPp8WKJqUCOs+KUYY=Ek9yruY7QNZ1ZqqBcyxgw@mail.gmail.com>
+X-Gm-Features: AclHuK_lWYrFuPqxHF7f8eVNTy2rRRIATiIorWPnhP8XtQMXmlNogVjkmkttJxk
+Message-ID: <CAL4Wiiqw9kPmPp8WKJqUCOs+KUYY=Ek9yruY7QNZ1ZqqBcyxgw@mail.gmail.com>
+Subject: Re: [PATCH net] net: reject a negative TCP header offset in qdisc_pkt_len_segs_init()
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, dongchenchen2@huawei.com, 
+	bpf@vger.kernel.org, daniel@iogearbox.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/03, Breno Leitao wrote:
-> Convert the SOL_IPV6 switch and its two remaining sockptr_t leaves,
-> ip6_mroute_getsockopt() and ipv6_getsockopt_sticky().
-> 
-> ipv6_getsockopt() writes optlen back unconditionally, and
-> sol_ipv6_sockopt() builds the sockopt_t with sockptr_to_sockopt() and
-> stores optlen back as well.
-> 
-> ipv6_getsockopt() cannot use sockopt_init_user() as its IPv4 sibling
-> does, since that rejects a negative optlen and this level answers it as
-> 4. See "ipv6: treat a negative optlen as 4 in do_ipv6_getsockopt()".
-> 
-> Instead ipv6_getsockopt() applies that rule itself and builds the
-> sockopt_t with the new sockopt_set_user(), which sockopt_init_user() now
-> shares. MRT6_* is the exception: it has always rejected a negative
-> optlen, and still does.
-> 
-> The write-back also happens before the netfilter fallback, so an
-> unwritable optlen turns any error into -EFAULT and skips the fallback.
-> Likewise optlen is now read before the MRT6_* dispatch, so an unreadable
-> or negative one wins over -EOPNOTSUPP.
-> 
-> For the other options, a failing call that passed a negative optlen now
-> leaves it as 4 instead of untouched, and the netfilter fallback sees that
-> 4 too.
-> 
-> IPV6_2292PKTOPTIONS and the sticky options used to return the result of
-> copy_to_sockptr(), the number of bytes not copied, so an unwritable
-> optlen made getsockopt() return 4. They now return -EFAULT.
-> 
-> The extra code in sol_ipv6_sockopt() will go away when
-> sol_ipv6_sockopt() receives sockopt_t, but, for now, it only moves the
-> leaves.
-> 
-> Acked-by: Ido Schimmel <idosch@nvidia.com>
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+Le dim. 1 nov. 2026 =C3=A0 20:44, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> a =C3=A9crit :
+>
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> qdisc_pkt_len_segs_init() stores skb_transport_offset(), or the inner
+> offset, in the unsigned hdr_len. A header in front of skb->data gives a
+> negative offset. For an offset a little below zero, pskb_may_pull() gets =
+a
+> small length and succeeds. Then a 64-bit kernel reads the TCP header far
+> after the skb and can crash. Further below zero pskb_may_pull() fails.
+>
+> Commit 28a57fb2c5df ("net: iptunnel: fix stale transport header during
+> tunnel decapsulation") fixed one source of such offsets. Other code that
+> removes bytes from the front of a packet can leave the same stale header.
+>
+> Return SKB_DROP_REASON_SKB_BAD_GSO for a negative offset in the TCP branc=
+h.
+> SKB_GSO_UDP_L4 and the other GSO types read no header and still get a wro=
+ng
+> qdisc_pkt_len(). On a 64-bit kernel only packets that cause the read afte=
+r
+> the skb today get a new result. Then __dev_queue_xmit() drops them and
+> returns -EINVAL, but sch_handle_ingress() ignores the result. Their conte=
+nt
+> can be valid. Thus the code that leaves the header stale needs its own fi=
+x.
+>
+> Fixes: 7fb4c1967011 ("net: pull headers in qdisc_pkt_len_segs_init()")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Reviewed-by: Eric Dumazet <edumazet@kernel.org>
