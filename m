@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793749304;
-	b=vQwbCJjweJIVAU3LZb3UgQooGzhDrLQtJ+T36x4ps4+HwxRNsv7lKQVPLD5bWAl2W3aj
-	 aWAFNADtRWaUq6qgzR5j+8GM06LYC5WSdw4xHzBAn7OURl2LyuborBctUSCbs7fU0ZseF
-	 rzWAwTEedSPqHLzosSAcakpsWfrtXpz2941JDuTvpRX7z9nCGNX3xICgz5QvxlqtKUi10
-	 Tdoe2ntgL8HeKKOhbkZLWcP32OcsEGZPsdRMrghxGRgrJUvnfmKuD/KbZuzVOwG5NG16t
-	 EVfqNdOMKQkl5BDDcPN3GUGvdZADueFn2q8e/8m+sq789U4qkABkz5cNLp43TL0mFjA==
+	t=1793749310;
+	b=CsBaZ1xj5zrimE/ZjEUBGQg3h1dZjvGpxv5YzZQw7V6UB7mJTRyHjZcgxzn4hFc2yP/q
+	 nKODmFytj24Z0mV5OqOW/dnFjoCNYHWNEROuw0QV9xDc87wk+IDqQJIw8/7islxWs38t4
+	 CutTKaZPMuHNdJkHyrb3An9AAyHcwdVVeY/E2Cd8gmr0WbjQQ+n567UTnpuj+vz4C29XY
+	 Z1VQ5h6oaLBq7VhMkQ1knUmQqbTrvc9eMZSjBqDzaVfW6ecWtXeXiCIX1I9Kdv7TSTEoA
+	 lf8JXBD1Sja+m7p6qBa/8/YgLRpZ8An1B4jAjbo20Dkw7DOac3jNRE4bmK8nDYnFm6Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793749304;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793749310;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=jrUTfIeSPKK20RKqrzsccNasrXp4AIx6ku5sVQKdH3U=;
-	b=RZktX7mhAxLaeW2tRsm8+uUaVJ/O9/7Zix/H2sfXOWvr5+rFK8XubGvGsoCxC7wQX86S
-	 Bz5tIuggzaQG8sp0LPMNdtn8BluPNyhklcbWaAR5Pybzo/ki/tkr2OqCtWFeHYIszH3S7
-	 2ll51D3Ps5Lu7s2vhIhaIqIab9ZEDazeLnEHpl+7AsI7OnGQev3DaBSbHKKLuq2dfnsWX
-	 4kmokfUUlnQv/HkbgzaZL2VKUDzALzH7FcnbCwiaY8bb/Nu0Pf/QJV0UDXhUjzJVQyqeh
-	 nVVhDBJyFFR7DsITDt8DH0HKZ6opOD60AhmmACWgUG5oUQ5ewz+7Sv8DW454hhpkn9g==
+	bh=3E1g13XDoAecDocbkvJHQ9QmuNGVLptTMmbLjXJLoWs=;
+	b=ly7A9M2qrcB/hIxhcaNilggbIw3Me3/6Nrc0zv5FWP+HDS7hKBBC/Jv/eT3oDLHKc1J5
+	 3+KOe+4A6GE3F6brkEpV9O3XqgA8WZ5p+f9pL3z5GBsddwj0oIKF11fO352fISnL9iT9N
+	 vRbINUqwg7i5wbT5bU7kZvfY8yPEPiVVeqiNHwPWQUCUzqD9XSbIhdHz68N/mM/S6pnsm
+	 t40kyn9MiJ6UoRGmulRWm6NZPejpGYJH401qVZaNDNDA6+g9RqRfxD1RqMYf6b/mCKc3E
+	 zgzM/JOqgGqlB53F2ifjslJBCwNILWPZM5zY5ZhUhh9Q4yaI2yA3qJutpcOQFqpp3dQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jhzdAiTc;
-	arc=none smtp.remote-ip=209.85.216.52
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wKapkSwt;
+	arc=none smtp.remote-ip=209.85.216.50
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A830606A31B
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:41:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A830606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE36606A330
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:41:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8FE36606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jhzdAiTc
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3ae7626d14aso112898a91.2
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:41:43 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wKapkSwt
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3ada8bc2380so78318a91.3
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:41:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793749303; x=1794354103; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793749309; x=1794354109; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jrUTfIeSPKK20RKqrzsccNasrXp4AIx6ku5sVQKdH3U=;
-        b=jhzdAiTcVhY+hVUNQ1hOHazuk0gdZcZHT5NI8kCfQlw3W1Zfvi1WOjjt4QrPZR6J9Z
-         1/1WAgZLsPIgj3KoMam+ZWTLbojDLNmUa0RHKwy2xX3wopzzUNiyCUSiS/NqKVYQlQbM
-         MyWJyGyA38OpewGmoIyfUMDjSlWnU75OVeIE5zvNKquN89SmmtenruANCkwGfS/BrH1H
-         7MGbgRVFI2b9E6LaAFyxCtx8J3U1rHJtTHogYO/H+lokj6sjfTB50nPO6uxSqw95Geqz
-         caUBe07lTOOH8p8Qu0WReG0kATsgvwkj5+931N6A+Gwe1qM8gDDJUy6R1VtmvdGE0koE
-         QcJA==
+        bh=3E1g13XDoAecDocbkvJHQ9QmuNGVLptTMmbLjXJLoWs=;
+        b=wKapkSwtoTkoJZg6DZJTuxgRebUnvk+v+vDtvToSePB+CC2SQL9XudIHO8M3mWic6s
+         BQ9m8ygE0E0rTYmLq64iLmadJ/AiZH6ZA29SamS0PxuP+milXLjbAJG9UKJg7MF6iY6a
+         yUTw86oLgGZGmEx+v9pNlceHVaP/TpisHU1MlObIxm+8GjcqWKmok2hsoopaUSpa3Kyg
+         YjMn+z0X7jg8TAeY3n46udKQKLOLqbtylk4fgN2HfJH0utcgoLdWonDCgH/OxzM9j/z6
+         zJH8U7RpaTc/+rlse/V1RpsiJ+ZoCbHMjfl1t7I79oL85Of/vfAlnIqajSAobWcCR6gu
+         /DXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793749303; x=1794354103;
+        d=1e100.net; s=20260707; t=1793749309; x=1794354109;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jrUTfIeSPKK20RKqrzsccNasrXp4AIx6ku5sVQKdH3U=;
-        b=DkS8CflHUVDTK+nbyRAYX0uRyYutDIxNKOOW8IeZuD6q1a2iIB5ClfFlY80X/YGYIG
-         scj0ZzEr/HG9G/ptcjY5EAWBFT6SyWXsQKimSgBJDXbgOvN51STl/p8wDmYtCA0cUWKE
-         1cn7qX/fdx6qpRmsR5hhRqcIq9ncAZ4K9tHxtyDQXAL6BOCnSGPepHU4PTAsxXyCJuRx
-         ixVQ1r/YRBKpfvNl5lUXbd6JSchS3y37xD8JsYYfKSvrWlTtPz+5c4gyPV3U8gbYN9JT
-         GpjjQGpurz9hoehMaKODiG+uLe62QLxaM2F4N4L+Nn1B4QGRCAlFnKJFz1p3ctYvfBH8
-         7FsA==
-X-Gm-Message-State: APuU4Z+brymhcPeWpcYvyyEe9YV0Pi/rmrXRLVkY28FkHDqx+AMcS4Mq
-	JEYKnYdCZrP9+8MeKC7Zse1DNewELH/LE1s54kCDP/DufrpgYajfN322qREjvw==
-X-Gm-Gg: AYBFou2nb0rUchNSG5lNbdXeEzYsxJIaP+/D1eyGSIYI2ssVRYWFV/LPWeJYtI74MoV
-	kPFBBB0yyyLGpR1IcczZ1AJ8mWaWDLknVdLZLjd+fa48p2ycU5Wi1x7wcl1krFEBsZq+6Igap9M
-	DttL9E2lGQphGXKb5cWUBDRSWLq3JtUvz3b9X0WQon2fPHN73g4inCdbT9vpgw66k0PovjzIYJA
-	8yQHdZsXINE+mFF8CUwSvFXeRfAVt2aK1MbL38/Cmm4JTIS5H5GGVoNq/nR/C/A0u9XIWQvwAw7
-	Th1zzqjneX15XTa55udalrtM3tTTo7VB2nEwaOysBAfBiP8rww1a7lQVgQskiFrwa/0+ICTjuWX
-	hwAz5HckdhCRbN2fBxWkTCsr1y9xUxKKIgOxbT9xIKhr+sT5GobupaMPidR3S4zRpvOxi4gIpFe
-	5byc8ZaxdzkTpHLlVgSjBHgI/idSNM/fsyAUZPFHvL0SxFt2yryKs3/5L2x6eNU8tKqVyOTqA8a
-	6cTdRyZOwr97gYfXaUAZsAmKSIrIRnuwx7HQdUWRV8voku64EhguluSlQa1cw2F68Fz369E9I1c
-	0YrBiqLrEg6OO9T3t/PVmMMH4MLawlqCSXOLJ8mG+TiqsckZY7RFo2NU99RS1Pf1dvZlZOYWpDx
-	LWbV6kHgVTcC1287C6d55a9HhHA5SfPQHpSJbyC+GkNMYQjlkowcoMIUXf88hAiNfMUHpQdheRA
+        bh=3E1g13XDoAecDocbkvJHQ9QmuNGVLptTMmbLjXJLoWs=;
+        b=BaLX4nqbICxwpdeH37qo/zQg9RrHkFm2pNbFqDc6vkui+SDiQNjqK/RewMhT7fC5Yu
+         e6DJnS0Xq8ALihp9fLZEN0kS3E3Hl9AE2zy+fa0hnzJjNJUO06PdY0EM3Wz9aoOB7Q0m
+         ivHNGkfaUFH1pGiM9rNFrjeDNQrmzq7iExJbGEz7Sw+Rh3msz6povoInWY1297WzjyMc
+         0H2gACCF3pknl1iNQxizJDBGMt25OrDFikCwiwo21mxvCc9z3JhuX/A+evS0I8pcmFEa
+         v+bFLyLaaSTd8jzLVOQwAyffFAM48sU4hviMMSSf3nFkDVaSJoy3J0RJPQZsP2CCuODg
+         U1lg==
+X-Gm-Message-State: APuU4Z9htkrjD7r81JAhF+Q29bU5Cm1JaQKIKa28uW2QFx3qmwVbkFOj
+	zoLoZweIykt9w2IP87NZXInobqTnOGJnA9OMZ44/WnbPRKDdSnQnCBTB5gXETw==
+X-Gm-Gg: AYBFou0JuDtW3gHf5ViSNvBFBy9QQtcoegCSGXJ2j/3rYllv01qMXzqr+xXyZHWigpC
+	YfkmXB/pIEVpb53kNOBoq8OX8cE7vYzhleYjYqjCX1L4Gc//8kpUyM8R6UpxWebju0UOZTGyUWD
+	WNKi5/mT+jIToyOZgBBrj0X7KpUzYlDRXD/KuQhL4YMbhMagEZN+Iv4VocSuj36IJSuQpHJkf7q
+	yLv07wFZ+XGZVbYIAP61h0aKuv9aMjROTtp6UUJv5pzmrN1vXbDYCBPnnePybu6uDO1E/lMUAzY
+	brLkXwwgBjyBPfyDc9WQCzoBhw5M2y5g3rhDIxQ4/9WhUzgKjPQ2CwKoovL+6Jc9Zgw+oPR6+gV
+	rmD6A+tfhKl93z2rYjsVFAca0Ta+wN0yYmUnooOlI9TeYPv7BrvUlhU11PKJlcLL/2rUOKR58i5
+	H3Na54EwHmn/pzKSkN9vOOGkh2tue5jXr3rgrcHFLIc/7hd9P4OWLiQJYb9y0NQzRcbnl0QT6qz
+	EvNP9iHXcdyrdiCMQ7/LxEPDCXkGIpBi3GjCL2ae5goOCjehJ4c5uRNPOW+qLQSABdusV3SiDPa
+	Le0+9LGz8V2ZrFsLL5ooRs+qfqtXXen02kdj1VBgnWuswkKg5rWMyHDQkpCuRPC2g7+SUtSLDJv
+	CLzGC1Z0bWs1KDw8rC2DO83m81J8n2bGtW8HSQa/wRrqzqGb5L0ReHMTKe12vsTpxFZuMPi8FNg
 	==
-X-Received: by 2002:a17:90b:534c:b0:3a0:abc3:afb5 with SMTP id 98e67ed59e1d1-3ae897f5d26mr11419822a91.34.1793749302626;
-        Tue, 03 Nov 2026 15:41:42 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c8460acsm6462113a91.7.2026.11.03.15.41.42
+X-Received: by 2002:a17:90b:4a11:b0:3a8:c0cd:57f3 with SMTP id 98e67ed59e1d1-3ae896f8539mr11192005a91.18.1793749308482;
+        Tue, 03 Nov 2026 15:41:48 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b094d70a60sm491722a91.1.2026.11.03.15.41.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 15:41:42 -0800 (PST)
+        Tue, 03 Nov 2026 15:41:48 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 06/37] bpf: Count stack arguments of a static subprog from its code
-Date: Tue,  3 Nov 2026 23:40:31 +0000
-Message-ID: <20261103234104.208239-7-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 07/37] selftests/bpf: Test static subprogs that don't take what BTF says
+Date: Tue,  3 Nov 2026 23:40:32 +0000
+Message-ID: <20261103234104.208239-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
 References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
@@ -104,402 +104,225 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The caller stores the 6th and subsequent arguments of a subprog through
-r11, and the subprog loads them through r11. The verifier takes the number
-of these stack arguments from the BTF prototype of the subprog.
+The compiler can pass more or fewer arguments to a static subprog than its
+BTF prototype has parameters.
 
-But BTF describes the source. It does not describe what the compiler passes
-to a static function. rustc returns Option<i32> through a hidden pointer,
-and it passes Option<i32> in two registers:
+  test                             the subprog                   result
+  -------------------------------  ----------------------------  ----------
+  more_than_prototype              1 in BTF, loads the 6th       returns 7
+  more_than_prototype_no_store     the same, the caller stores   reject
+                                   nothing
+  less_than_prototype              7 in BTF, reads r1-r5, the    returns 15
+                                   caller stores nothing
+  stack_arg_write_prototype_slots  the same, the caller stores   returns 15
+                                   the 6th and the 7th
+  r11_no_jit_support               a store through r11, the JIT  reject
+                                   has no stack arguments
+  global_more_than_prototype       global, 1 in BTF, loads the   reject
+                                   6th
+  tgt_prog_takes_6th               1 in BTF, loads the 6th,      refuse
+                                   fentry attaches to it
 
-  fn pick_idle_cpu(p: Task, prev_cpu: i32, this_cpu: Option<i32>,
-                   wake_flags: u64) -> Option<i32>
+more_than_prototype also examines the x86 code of the subprog. The subprog
+passes no stack arguments to other functions. Thus the JIT must not move
+rsp in it.
 
-  BTF:  p, prev_cpu, this_cpu, wake_flags                        4
-  code: result, p, prev_cpu, this_cpu (2 registers), wake_flags  6
+less_than_prototype has no insn that uses r11. It has a tail call, which a
+prog with stack arguments cannot have. Thus it runs only with a JIT that
+mixes tail calls and subprogs, also where that JIT has no stack arguments.
 
-  invalid read from stack arg off 8 depth 0
-
-31 of the 225 progs of the sched-ext schedulers in rust-bpf have such a
-function.
-
-For a static subprog use the code: the number of its stack arguments is the
-highest slot that it loads through r11 on any path, dead code included. The
-verifier verifies a static subprog with the state of its caller, so a load
-gives the value that the caller stored. At each call and callx the caller
-must have stored all slots up to that number. The error is -EFAULT, as
-today with reliable BTF. Two tests of verifier_stack_arg_order.c now fail
-at the call: update their messages. Global subprogs do not change: BTF is
-their only source.
-
-A trampoline keeps only what BTF has. Thus BTF is unreliable when the code
-loads more stack arguments, and then the attach is refused.
-
-BTF alone does not reject a static subprog any more. The JIT is asked at a
-store through r11, not when BTF has 6 parameters. More than 12 parameters,
-or a slot of BTF that is neither stored nor loaded, make BTF unreliable.
-
-The caller can store the slots that a callee loads, and the slots of the
-prototype of a callee that it has stored when the verifier reaches the
-call. A store to another slot is an error as before. Thus a callee that
-ignores its last stack argument must have it in BTF. LLVM loads all stack
-arguments at function entry, and it stores them in front of the call.
+more_than_prototype and stack_arg_write_prototype_slots store through r11.
+The interpreter has no stack arguments: they load only when the JIT is on.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h                           |   2 +
- include/linux/bpf_verifier.h                  |   9 ++
- kernel/bpf/btf.c                              |  18 ++-
- kernel/bpf/fixups.c                           |   2 +-
- kernel/bpf/verifier.c                         | 106 ++++++++++--------
- .../bpf/progs/verifier_stack_arg_order.c      |   8 +-
- 6 files changed, 81 insertions(+), 64 deletions(-)
+ .../selftests/bpf/prog_tests/tracing_struct.c |   3 +
+ .../bpf/progs/tracing_struct_int128_tgt.c     |   9 +-
+ .../selftests/bpf/progs/verifier_stack_arg.c  | 102 ++++++++++++++++++
+ 3 files changed, 113 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index ef94a168c902..ca8992702dbd 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1765,6 +1765,8 @@ struct bpf_func_info_aux {
- 	bool unreliable;
- 	/* The function returns in R0:R2 */
- 	bool ret_reg_pair;
-+	/* The code of a static function loads stack arguments */
-+	bool stack_args;
- 	bool called[BPF_FUNC_CTX_CNT];
- 	bool verified[BPF_FUNC_CTX_CNT];
- 	bool called_with_pkt_ptrs;
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 4a514f27f239..581458927512 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -984,12 +984,21 @@ struct bpf_subprog_info {
- 
- 	enum priv_stack_mode priv_stack_mode;
- 	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_ARGS];
-+	/*
-+	 * Static subprog: the number of arguments on the stack is the highest slot that
-+	 * the code loads. BTF describes the source. The compiler may pass something else:
-+	 * a hidden pointer to the result, a pair in two registers, no dead arguments.
-+	 */
-+	bool stack_args_from_code: 1;
-+	u8 code_stack_args:4;
- 	u16 stack_arg_cnt; /* incoming + max outgoing */
- 	u16 max_out_stack_arg_cnt;
- };
- 
- static inline u16 bpf_in_stack_arg_cnt(const struct bpf_subprog_info *sub)
- {
-+	if (sub->stack_args_from_code)
-+		return sub->code_stack_args;
- 	if (sub->arg_slot_cnt > MAX_BPF_FUNC_REG_ARGS)
- 		return sub->arg_slot_cnt - MAX_BPF_FUNC_REG_ARGS;
- 	return 0;
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 8bf39098ba97..228b93d4f8c9 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -8742,8 +8742,7 @@ static int btf_validate_return_type(struct bpf_verifier_env *env, struct btf *bt
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+index ab74ba077041..a08b480eca73 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+@@ -398,6 +398,9 @@ void test_tracing_struct(void)
+ 	if (test__start_subtest("tgt_prog_unreliable"))
+ 		test_tgt_prog_unreliable("unreliable_entry", "callee_unreliable",
+ 					 "unreliable BTF and stack arguments");
++	if (test__start_subtest("tgt_prog_takes_6th"))
++		test_tgt_prog_unreliable("unreliable_entry", "callee_takes_6th",
++					 "unreliable BTF and stack arguments");
+ 	if (test__start_subtest("tgt_prog_returns_pair"))
+ 		test_tgt_prog_unreliable("odd_exit", "callee_takes_r5",
+ 					 "with a >8 byte return value");
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
+index 2e2ddd1b52df..6a8079fe809b 100644
+--- a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
++++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
+@@ -69,6 +69,12 @@ static __noinline __u64 callee_unreliable(__u64 *p, __u64 b, __u64 c, __u64 d,
+ 	return *p + b * 2 + c * 3 + d * 4 + e * 5 + f * 6;
  }
  
- static int btf_check_arg_slots(struct bpf_verifier_log *log, const char *tname,
--			       bool is_global, u32 slot_cnt,
--			       struct bpf_subprog_info *sub)
-+			       bool is_global, u32 slot_cnt)
- {
- 	if (slot_cnt <= MAX_BPF_FUNC_REG_ARGS)
- 		return 0;
-@@ -8755,12 +8754,7 @@ static int btf_check_arg_slots(struct bpf_verifier_log *log, const char *tname,
- 			tname, slot_cnt, MAX_BPF_FUNC_REG_ARGS);
- 		return -EINVAL;
- 	}
--	if (!bpf_jit_supports_stack_args()) {
--		bpf_log(log, "JIT does not support function %s() with %d argument slots\n",
--			tname, slot_cnt);
--		return -EFAULT;
--	}
--	sub->stack_arg_cnt = slot_cnt - MAX_BPF_FUNC_REG_ARGS;
-+	/* The code of a static function tells which stack arguments it takes */
- 	return 0;
- }
- 
-@@ -8827,13 +8821,15 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
- 	}
- 	args = (const struct btf_param *)(t + 1);
- 	nargs = btf_type_vlen(t);
--	sub->arg_slot_cnt = nargs;
-+	sub->arg_slot_cnt = min_t(u32, nargs, MAX_BPF_FUNC_ARGS);
- 	if (nargs > MAX_BPF_FUNC_ARGS) {
-+		if (!is_global) /* not fatal for static funcs */
-+			return -EINVAL;
- 		bpf_log(log, "kernel supports at most %d parameters, function %s has %d\n",
- 			MAX_BPF_FUNC_ARGS, tname, nargs);
- 		return -EFAULT;
- 	}
--	err = btf_check_arg_slots(log, tname, is_global, nargs, sub);
-+	err = btf_check_arg_slots(log, tname, is_global, nargs);
- 	if (err)
- 		return err;
- 
-@@ -9022,7 +9018,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
- 		return -EINVAL;
- 	}
- 
--	err = btf_check_arg_slots(log, tname, is_global, slots_used, sub);
-+	err = btf_check_arg_slots(log, tname, is_global, slots_used);
- 	if (err)
- 		return err;
- 	sub->arg_slot_cnt = slots_used;
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 6b719a28be68..e8442d39d8a8 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1677,7 +1677,7 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
- 		return -EINVAL;
- 	}
- 	for (i = 0; i < env->subprog_cnt; i++) {
--		if (bpf_in_stack_arg_cnt(&env->subprog_info[i])) {
-+		if (env->subprog_info[i].stack_arg_cnt) {
- 			verbose(env, "stack args are not supported in non-JITed programs\n");
- 			return -EINVAL;
- 		}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d95f86b62e99..b480c5c242af 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4639,6 +4639,12 @@ static int check_stack_arg_write(struct bpf_verifier_env *env, struct bpf_func_s
- 	struct bpf_reg_state *arg;
- 	int err;
- 
-+	/* BTF is not needed for stack arguments, so ask here. There is no load without a store. */
-+	if (!bpf_jit_supports_stack_args()) {
-+		verbose(env, "JIT does not support stack arguments\n");
-+		return -EOPNOTSUPP;
-+	}
++/* BTF has 'a'. The code also takes the 6th argument, on the stack. */
++static __naked __noinline __used __u64 callee_takes_6th(__u64 a)
++{
++	asm volatile ("r0 = *(u64 *)(r11 + 8); r0 += r1; exit;");
++}
 +
- 	if (spi >= max_stack_arg_regs) {
- 		verbose(env, "stack arg write offset %d exceeds max %d stack args\n",
- 			off, max_stack_arg_regs);
-@@ -11336,6 +11342,8 @@ static u32 code_arg_slots(struct bpf_verifier_env *env, struct bpf_subprog_info
+ /* BTF has 'a'. The code also takes r5. It returns in r0 and r2. */
+ static __naked __noinline __used __int128 callee_takes_r5(__u64 a)
  {
- 	u32 live_regs = env->insn_aux_data[sub->start].live_regs_before;
+@@ -77,7 +83,8 @@ static __naked __noinline __used __int128 callee_takes_r5(__u64 a)
  
-+	if (bpf_in_stack_arg_cnt(sub))
-+		return MAX_BPF_FUNC_REG_ARGS + bpf_in_stack_arg_cnt(sub);
- 	return fls((live_regs & GENMASK(BPF_REG_5, BPF_REG_1)) >> BPF_REG_1);
+ static __naked __noinline __u64 call_takes_more(void)
+ {
+-	asm volatile ("r1 = 7; r5 = 2; call callee_takes_r5; r0 += r2; exit;");
++	asm volatile ("r1 = 1; *(u64 *)(r11 - 8) = 6; call callee_takes_6th;"
++		      "r1 = r0; r5 = 2; call callee_takes_r5; r0 += r2; exit;");
  }
  
-@@ -11346,7 +11354,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog, s
- 	const struct btf_type *func, *func_proto;
- 	struct bpf_call_arg_meta meta;
- 	struct bpf_func_proto *fn;
--	int ret, err;
-+	int ret;
- 	u32 i;
+ #else
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+index abf319cb8514..d1fd5a402565 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+@@ -3,6 +3,7 @@
  
- 	memset(&meta, 0, sizeof(meta));
-@@ -11355,16 +11363,8 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog, s
- 	meta.func_name = bpf_subprog_name(env, subprog);
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
++#include "../../../include/linux/filter.h"
+ #include "bpf_misc.h"
  
- 	ret = btf_prepare_func_args(env, subprog);
--	if (ret) {
--		if (bpf_in_stack_arg_cnt(sub) > 0) {
--			err = check_outgoing_stack_args(env, caller, sub->arg_slot_cnt,
--							bpf_subprog_name(env, subprog),
--							NULL, NULL);
--			if (err)
--				return err;
--		}
-+	if (ret)
- 		return ret;
--	}
+ struct {
+@@ -12,6 +13,40 @@ struct {
+ 	__type(value, long long);
+ } map_hash_8b SEC(".maps");
  
- 	func = btf_type_by_id(btf, env->prog->aux->func_info[subprog].type_id);
- 	func_proto = btf_type_by_id(btf, func->type);
-@@ -11375,7 +11375,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog, s
- 	meta.func_proto = func_proto;
- 
- 	/*
--	 * Check if all register arguments declared in BTF are initialized,
-+	 * Check if all arguments declared in BTF are initialized,
- 	 * and if the code takes no other arguments: a trampoline keeps only
- 	 * what BTF declares. If not, the BTF is unreliable.
- 	 */
-@@ -11385,6 +11385,10 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog, s
- 		for (i = 0; i < min_t(u32, sub->arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS); i++)
- 			if (caller->regs[BPF_REG_1 + i].type == NOT_INIT)
- 				return -EINVAL;
-+		/* check_func_args() reports a missing slot that the code loads: it has the name */
-+		for (i = max(i, code_arg_slots(env, sub)); i < sub->arg_slot_cnt; i++)
-+			if (!bpf_get_spilled_stack_arg(i - MAX_BPF_FUNC_REG_ARGS, caller))
-+				return -EINVAL;
- 	}
- 	return check_func_args(env, &meta, env->insn_idx);
- }
-@@ -11525,8 +11529,8 @@ static int process_bpf_exit_full(struct bpf_verifier_env *env,
- static int check_static_func_call(struct bpf_verifier_env *env, int subprog,
- 				  int *insn_idx)
- {
-+	struct bpf_subprog_info *caller_info, *callee_info = &env->subprog_info[subprog];
- 	struct bpf_verifier_state *state = env->cur_state;
--	struct bpf_subprog_info *caller_info;
- 	u16 callee_incoming, stack_arg_cnt;
- 	struct bpf_func_state *caller;
- 	int err;
-@@ -11537,13 +11541,24 @@ static int check_static_func_call(struct bpf_verifier_env *env, int subprog,
- 	/*
- 	 * Track caller's total stack arg count (incoming + max outgoing).
- 	 * This is needed so the JIT knows how much stack arg space to allocate.
-+	 * The callee can load less than its prototype has, and the caller can still store
-+	 * all of it. Count the slots of the prototype only as far as the caller has stored
-+	 * them: compilers store in front of the call. bpf_fixup_call_args() rejects the rest.
- 	 */
- 	caller_info = &env->subprog_info[caller->subprogno];
--	callee_incoming = bpf_in_stack_arg_cnt(&env->subprog_info[subprog]);
--	stack_arg_cnt = bpf_in_stack_arg_cnt(caller_info) + callee_incoming;
-+	callee_incoming = bpf_in_stack_arg_cnt(callee_info);
-+	stack_arg_cnt = bpf_in_stack_arg_cnt(caller_info) +
-+			max_t(int, callee_incoming,
-+			      min_t(int, caller_info->max_out_stack_arg_cnt,
-+				    callee_info->arg_slot_cnt - MAX_BPF_FUNC_REG_ARGS));
- 	if (stack_arg_cnt > caller_info->stack_arg_cnt)
- 		caller_info->stack_arg_cnt = stack_arg_cnt;
- 
-+	err = check_outgoing_stack_args(env, caller, MAX_BPF_FUNC_REG_ARGS + callee_incoming,
-+					bpf_subprog_name(env, subprog), NULL, NULL);
-+	if (err)
-+		return err;
++#if defined(__BPF_FEATURE_STACK_ARGUMENT)
 +
- 	/*
- 	 * For regular function entry setup new frame and continue
- 	 * from that frame.
-@@ -15213,12 +15228,29 @@ static bool try_btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
- /* Prepare argument metadata for liveness; the main program is handled separately. */
- static void prepare_subprog_args(struct bpf_verifier_env *env)
- {
--	int i;
-+	struct bpf_subprog_info *sub;
-+	struct bpf_insn *insn;
-+	int i, j, cnt;
- 
- 	for (i = 1; i < env->subprog_cnt; i++) {
-+		sub = &env->subprog_info[i];
- 		if (!try_btf_prepare_func_args(env, i) && bpf_subprog_is_global(env, i))
- 			/* Keep all argument registers live if the prototype is unavailable. */
--			env->subprog_info[i].arg_slot_cnt = MAX_BPF_FUNC_REG_ARGS;
-+			sub->arg_slot_cnt = MAX_BPF_FUNC_REG_ARGS;
-+		if (bpf_subprog_is_global(env, i))
-+			continue;
-+		cnt = 0;
-+		for (j = sub->start; j < (sub + 1)->start; j++) {
-+			insn = &env->prog->insnsi[j];
-+			if (is_stack_arg_ldx(insn))
-+				cnt = max(cnt, insn->off / BPF_REG_SIZE);
-+		}
-+		sub->stack_args_from_code = true;
-+		sub->code_stack_args = min(cnt, MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS);
-+		/* incoming + max outgoing. Calls add the latter. */
-+		sub->stack_arg_cnt = sub->code_stack_args;
-+		if (env->prog->aux->func_info_aux)
-+			env->prog->aux->func_info_aux[i].stack_args = sub->code_stack_args;
- 	}
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table SEC(".maps");
++
++/* BTF has what the source says. The compiler dropped the arguments that are not used. */
++static __naked __noinline __used
++long takes_5_says_7(long a, long b, long c, long d, long e, long f, long g)
++{
++	asm volatile ("r0 = r1; r0 += r2; r0 += r3; r0 += r4; r0 += r5; exit;" ::: __clobber_all);
++}
++
++#define CALL_TAKES_5_SAYS_7(stores) \
++	"r1 = 1; r2 = 2; r3 = 3; r4 = 4; r5 = 5;" stores "call takes_5_says_7; exit;"
++
++/* No insn uses r11: the JIT needs no stack arguments, and a tail call is allowed */
++SEC("tc")
++__description("stack_arg: static subprog takes less than its prototype says")
++__success __retval(15)
++__load_if_JITed()
++__arch_x86_64 __arch_arm64 __arch_riscv64 __arch_s390x __arch_loongarch
++__naked void less_than_prototype(void)
++{
++	asm volatile ("r2 = %[jmp_table] ll; r3 = 0; call %[bpf_tail_call];"
++		      CALL_TAKES_5_SAYS_7("")
++		      :: __imm_addr(jmp_table), __imm(bpf_tail_call) : __clobber_all);
++}
++
++#endif
++
+ #if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
+ 	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
+ 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+@@ -94,6 +129,52 @@ __naked void stack_arg_read_uninitialized(void)
+ 	);
  }
  
-@@ -22062,7 +22094,6 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog,
- 			    sub->args[0].arg_type != ARG_PTR_TO_CTX) {
- 				env->prog->aux->func_info_aux[0].unreliable = true;
- 				sub->arg_slot_cnt = 1;
--				sub->stack_arg_cnt = 0;
- 			}
- 		}
- 
-@@ -22583,33 +22614,6 @@ static int flatten_bpf_func_model(struct bpf_verifier_log *log, const char *tnam
- 	return 0;
++/* BTF has 'a'. The code also takes the 6th argument. It passes none: rsp stays where it is. */
++static __naked __noinline __used long takes_6th_says_1(long a)
++{
++	asm volatile ("r0 = *(u64 *)(r11 + 8); r0 += r1; exit;" ::: __clobber_all);
++}
++
++SEC("tc")
++__description("stack_arg: static subprog takes more than its prototype says")
++__success __retval(7)
++__load_if_JITed()
++__arch_x86_64
++__jited("func #1")
++__jited("...")
++__jited("	movq	%r9, %rax")
++__jited("	addq	%rdi, %rax")
++__jited("	leave")
++__arch_arm64 __arch_riscv64
++__naked void more_than_prototype(void)
++{
++	asm volatile ("r1 = 1; *(u64 *)(r11 - 8) = 6; call takes_6th_says_1; exit;"
++		      ::: __clobber_all);
++}
++
++SEC("tc")
++__description("stack_arg: static subprog takes more than its prototype says, no store")
++__failure __msg("callee expects 6 args, stack arg1 is not initialized")
++__naked void more_than_prototype_no_store(void)
++{
++	asm volatile ("r1 = 1; call takes_6th_says_1; exit;" ::: __clobber_all);
++}
++
++/* BTF is the only source for a global subprog: it has no stack arguments. */
++__noinline __used long global_loads_6th(long a)
++{
++	asm volatile ("%0 = *(u64 *)(r11 + 8);" : "=r"(a));
++	return a;
++}
++
++SEC("tc")
++__description("stack_arg: global subprog loads the 6th argument")
++__failure __msg("invalid read from stack arg off 8 depth 0")
++__naked void global_more_than_prototype(void)
++{
++	asm volatile ("r1 = 1; call global_loads_6th; exit;" ::: __clobber_all);
++}
++
+ SEC("tc")
+ __description("stack_arg: gap at offset -8, only wrote -16")
+ __failure
+@@ -405,6 +486,16 @@ __naked void stack_arg_write_unused_slot(void)
+ 	);
  }
  
--/*
-- * The verifier lets a static function use stack arguments counted from its
-- * BTF, even if that BTF turns out unreliable. A trampoline on the function is
-- * then given only MAX_BPF_FUNC_REG_ARGS u64 arguments and would lose the
-- * stack arguments, so such a function cannot be attached to.
-- */
--static int check_unreliable_func_args(struct bpf_verifier_log *log, struct btf *btf,
--				      const struct btf_type *func_proto, const char *tname)
--{
--	struct btf_func_model m;
--	u32 i, nslots = 0;
--
--	if (btf_distill_func_proto(NULL, btf, func_proto, tname, &m)) {
--		/* at least a slot for each argument */
--		nslots = btf_type_vlen(func_proto);
--	} else {
--		for (i = 0; i < m.nr_args; i++)
--			nslots += btf_func_model_arg_slots(&m, i);
--	}
--	if (nslots <= MAX_BPF_FUNC_REG_ARGS)
--		return 0;
--
--	bpf_log(log, "Cannot attach to static function %s: unreliable BTF and stack arguments\n",
--		tname);
--	return -EINVAL;
--}
--
- /* Functions may share a type id. The first of them is attached to. */
- static int find_tgt_subprog(const struct bpf_prog *tgt_prog, u32 btf_id)
- {
-@@ -22991,10 +22995,16 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			return -EINVAL;
++SEC("tc")
++__description("stack_arg: write the slots of the prototype, the callee loads none")
++__success __retval(15)
++__load_if_JITed()
++__naked void stack_arg_write_prototype_slots(void)
++{
++	asm volatile (CALL_TAKES_5_SAYS_7("*(u64 *)(r11 - 8) = 6; *(u64 *)(r11 - 16) = 7;")
++		      ::: __clobber_all);
++}
++
+ SEC("tc")
+ __description("stack_arg: sequential calls reuse slots")
+ __failure
+@@ -669,6 +760,17 @@ __naked void stack_arg_precision_fallback(void)
  
- 		if (tgt_prog && conservative) {
--			if (subprog > 0) {
--				ret = check_unreliable_func_args(log, btf, t, tname);
--				if (ret)
--					return ret;
-+			/*
-+			 * The verifier lets a static function use the stack arguments that
-+			 * its code loads, whatever its BTF says. The trampoline is given
-+			 * MAX_BPF_FUNC_REG_ARGS u64 arguments and would lose them.
-+			 */
-+			if (tgt_prog->aux->func_info_aux[subprog].stack_args) {
-+				bpf_log(log,
-+					"Cannot attach to static function %s: unreliable BTF and stack arguments\n",
-+					tname);
-+				return -EINVAL;
- 			}
- 			t = NULL;
- 		}
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-index 5bfcd300c7a0..cd5a77dd467b 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-@@ -127,8 +127,8 @@ __naked void stack_arg_pruning_load_after_call(void)
- /*
-  * "bad_ptr": the first arg is 'long *', which is not a recognized pointer
-  * type for static subprogs (not ctx, dynptr, or tagged).  btf_prepare_func_args()
-- * sets arg_slot_cnt = 7 / stack_arg_cnt = 2, then fails with -EINVAL.  The
-- * subprog is marked unreliable but the call still proceeds for static subprogs.
-+ * fails with -EINVAL.  The subprog is marked unreliable but the call still
-+ * proceeds for static subprogs.  The two loads through r11 make 2 stack arguments.
-  */
- __noinline __used __naked
- static void subprog_bad_ptr_7args(long *a, int b, int c, int d, int e, int f, int g)
-@@ -182,7 +182,7 @@ __naked void stack_arg_read_without_write_1(void)
- SEC("tc")
- __description("stack_arg: read with not-initialized caller write")
- __failure
--__msg("invalid read from uninitialized stack arg off 8")
-+__msg("callee expects 7 args, stack arg1 is not initialized")
- __btf_func_path("btf__verifier_stack_arg_order.bpf.o")
- __naked void stack_arg_read_without_write_2(void)
- {
-@@ -204,7 +204,7 @@ __naked void stack_arg_read_without_write_2(void)
- SEC("tc")
- __description("stack_arg: unreliable callee with too few stack args")
- __failure
--__msg("invalid read from uninitialized stack arg off 16")
-+__msg("callee expects 7 args, stack arg2 is not initialized")
- __btf_func_path("btf__verifier_stack_arg_order.bpf.o")
- __naked void stack_arg_read_with_short_bridge_write(void)
- {
+ #else
+ 
++/* No BTF tells about this store. The insn is what JIT has to deal with. */
++SEC("tc")
++__description("stack_arg: r11 where JIT has no stack arguments")
++__failure __msg("JIT does not support stack arguments")
++__arch_s390x __arch_loongarch
++__naked void r11_no_jit_support(void)
++{
++	asm volatile (".8byte %[st_r11]; r0 = 0; exit;"
++		      :: __imm_insn(st_r11, BPF_ST_MEM(BPF_DW, 11, -8, 1)) : __clobber_all);
++}
++
+ SEC("socket")
+ __description("stack_arg is not supported by compiler or jit, use a dummy test")
+ __skip("stack_arg is not supported by compiler or jit")
 -- 
 2.55.0
 
