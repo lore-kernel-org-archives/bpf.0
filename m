@@ -1,67 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.231.112
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793708868;
-	b=ElZF/7wWdoxxXDympNKaUPs7UYfL+j4538NlWw4e0AaKnKzcDyrWiY1XmLJ1cGCI0YVQ
-	 Neo/9aZp/tyE6K/teUZyJoUr5+EVPprF7tkO10n2+4EdWX6hDgmuzzwsYRO44tImfy1FL
-	 /j+ILHjn3tVcy79HI2gfsKRBaLbrFKSnPbkgM1vTxSdPu8O0lzJjKNmQt81V/qu/TAJUK
-	 MR9BfzRV7lGuyEUnifmqVgRiamhZOJd4a26yrQa7i7XrxTUgenDH7ZJHmGnFCU+D4i3oJ
-	 LhTVly5xeZoNBSH7g7e9u78h+oiJ54bx3GB56HQbCpXIKJD6JPDW8xejELeeVsJmsqw==
+	t=1793708948;
+	b=hC6+PP8vyo3E1/sm+PysEBpui5HTSlTVDSGE7oDx2zdUSOoNqNkUO/AzdlG8omVLz7W7
+	 +QWr5bMaiO59G+XcsXQPTNkUmFPZ9jzyo1yLQKWxMOJI/GscitRNc6PePpVCiN3bk5FDy
+	 4mMN9PI96Nnwa7lEgcKRHd3kRInJbIsl4hcgjca/KpFur/XCVAd5LJ60IBlrFUW886MoM
+	 6Q5xbWibsEFzANdulN15yNqxTqDt/LvaPXnV5KiCSf5x2tnM1uGpAY8rncvEPiV4JmBc6
+	 bdka76DMO4F6wfT7MasZDUCRRsD5ncxfS24pvIn5g3gQGsi7hOHZ/cJ8wjJuSK3j4ww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793708868;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Virus-Scanned;
-	bh=zxh6g1/AudKAbrbexRykeEOYDRasXE90eVH1rBZl/7s=;
-	b=lWTKrQQGSgptiisvITOpb28Jn2AltNZOTBoNHOM6ca/dnwUP3YogQ7K6qCgN1nO1sk7J
-	 QBKGov9UXPAndKs0WiPHTjOxyYEZj6rzVbV1dh4GALniggHzH5R7rHDG8qhJ8iDOzuwPr
-	 AoBcX9j4Adj1tDAxYdTE2q+u+7MsoF24oL3DAgTdG/litfv+PcaM6LOTMP1AOtGXbKxgJ
-	 tlnCZLVh87IVO7V189t2aqHNGl1XEojFa5BgbrEXpkwbuiku3ybE6uQhQB6wHg2hLvtOX
-	 sKjJJFp1C58PlEhEoriAs1k/y6nna6cpQTeCBYEnLgqm2vxk8LBajS5lOJfuMaSSc7w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793708948;
+	h=DMARC-Filter:DKIM-Signature:Mime-Version:Content-Type:From:
+	 Content-Transfer-Encoding:Date:X-Original-From:X-Lms-Return-Path:To:
+	 Subject:X-Mailer:Cc:Message-Id;
+	bh=wOhCgbps4lA7SRHLdsZoglLbAnTEV76cW6tNLVgU3KQ=;
+	b=3WqTSIT4hCY6d5LGIimKtOpSVElaJvSL07z1M2N0Z8M7JyQvRWxGG3eQSVnT/Eg0osp8
+	 MerjagL3P7vXA53giQXHN3evLyFQ85fRQHFz6kMuJHz4qaKpKhbOdkFSRSOst9frqoFac
+	 TuAnYhrfDEec2Ms3KvXyPeNBhJjqYjyk4kmgZwD3IcZ6Ef5Mm9pBsnG+Wdnl02Y/1NwL/
+	 0e5fhT7vxnYzI/d3fZG+nsOYcFBD9JpHOSLbYc7X+ifA4gOnGMP2I788tuz3jZKrSlqsu
+	 uL12cZgbfrI8W7PH3NVMadyNOPVTcv8faAoNyaZCuhyxCcwa+EfPPqN09RI75vgSzMw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=iogearbox.net;
-	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=nEeAVv9E;
-	arc=none smtp.remote-ip=213.133.104.62
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=bytedance.com;
+	spf=pass smtp.mailfrom=bytedance.com;
+	arc=none smtp.remote-ip=209.127.231.112
+Received: from va-2-112.ptr.blmpb.com (va-2-112.ptr.blmpb.com [209.127.231.112])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BE7606A33B
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 12:27:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43BE7606A33B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=nEeAVv9E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B555606A326
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 12:29:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B555606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=zxh6g1/AudKAbrbexRykeEOYDRasXE90eVH1rBZl/7s=; b=nEeAVv9EOKp8ui3M1sOPiDLaeQ
-	0/XqYebarZOcmg+uK90s9z5c4ZEK+UUYdgNPOWWgn+mW9MsEan1CgrWGzpFYbwdKiB2WrrhhqRcSQ
-	fNzvLRebtJ3xfQdS6rX08eya0Kh3FfdDSlButC/BaeI4HVHYCkCJAS7RYQrDAfFZgk6b5AJMoqUVl
-	+C0zlKpSb2DceYV6vCyiwj3I1P6Lf7QMOHv8PjNRRKMD1Fnbu53qD6VMlGLaAtfQa8CxWi1Xpd2xL
-	1PnskuNA482b1sK5DZJMPGkD6a7bLunJEj/PYmSer9dKhpL+k9abNjwvkLc/Fu0QqoEHVmIowJKLh
-	Xhe7er4g==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xODc4-000MRR-25;
-	Tue, 03 Nov 2026 13:27:40 +0100
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: ast@kernel.org
-Cc: puranjay@kernel.org,
-	memxor@gmail.com,
-	xukuohai@huaweicloud.com,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 10/20] bpf, arm64: Store zero immediates from the zero register
-Date: Tue,  3 Nov 2026 13:27:23 +0100
-Message-ID: <20261103122733.1383002-11-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261103122733.1383002-1-daniel@iogearbox.net>
-References: <20261103122733.1383002-1-daniel@iogearbox.net>
+ s=2212171451; d=bytedance.com; t=1793708935; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=wOhCgbps4lA7SRHLdsZoglLbAnTEV76cW6tNLVgU3KQ=;
+ b=flOJ/X+ybYPE0Hw4aOowGOFweRGDj5wp90XD0ZDJd3YEc7liRSuOxdYJb1w176ufzFQZGm
+ vukg3j0UsIJ60M2J0Dc118YPrpEJakKP5Wa7SiS+W5E2AlyBbf6VWujCzC/k+tYUtk03N1
+ 9kqqB+DEwtAV3xjH302BOj0Dd9OoHeX5zQzNHy7LEdlCbubi1gYeMk9PzEMfdQ+Ftbh8YU
+ zxbBo1qFWly9lag/rwXrs2d6rAbdqnasVopYdmKEk9RZRN6whQuYlM1EgJjsdDEOltyNRR
+ u/Fd1jA1FFRdlwcnz8gm6GEmvaf9iKsXIDeL3ZndzramxVK1idxj9FtYOvIR3A==
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,44 +48,95 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.6/28173/Tue Nov  3 07:27:52 2026)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+From: "Li Zhe" <lizhe.67@bytedance.com>
+Content-Transfer-Encoding: 7bit
+Date: Tue,  3 Nov 2026 20:28:13 +0800
+X-Original-From: Li Zhe <lizhe.67@bytedance.com>
+X-Lms-Return-Path: <lba+26ae9d386+ea1628+vger.kernel.org+lizhe.67@bytedance.com>
+To: <tj@kernel.org>, <hannes@cmpxchg.org>, <mkoutny@suse.com>, 
+	<akpm@linux-foundation.org>, <david@kernel.org>, <gourry@gourry.net>, 
+	<ziy@nvidia.com>, <joshua.hahnjy@gmail.com>, 
+	<ying.huang@linux.alibaba.com>, <ljs@kernel.org>, <liam@infradead.org>, 
+	<rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>
+Subject: [PATCH 0/3] mm/mempolicy: add per-cgroup weighted interleave controls
+X-Mailer: git-send-email 2.45.2
+Cc: <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
+	<linux-mm@kvack.org>, <bpf@vger.kernel.org>, 
+	"Li Zhe" <lizhe.67@bytedance.com>
+Message-Id: <20261103122816.48037-1-lizhe.67@bytedance.com>
 
-A store of an immediate first moves it into a temporary, also for a zero,
-which the zero register provides for free. Store it from xzr, which saves
-the mov on every zeroing of a stack slot, as LLVM with cpu v4 emits them
-in rows to initialize the structs and arrays BPF programs hand to helpers.
+MPOL_WEIGHTED_INTERLEAVE currently has one system-wide weight table,
+configured through sysfs or auto-derived from node bandwidth. This series
+adds an optional BPF control plane that lets privileged BPF syscall
+programs install manual weighted-interleave overrides for individual
+cgroups. The per-cgroup override is supported only for the default
+cgroup-v2 hierarchy.
 
-Before/after for *(u64 *)(r10 - 8) = 0 with 16 bytes of stack:
+Different workloads may prefer different DRAM/CXL memory ratios depending
+on latency and bandwidth sensitivity. Per-cgroup weights let an operator
+tune co-located jobs independently while leaving the system-wide default
+unchanged.
 
-  d280000a  mov x10, #0x0
-  f90007ea  str x10, [sp, #8]
-  f90007ff  str xzr, [sp, #8]
+There is no new user-visible Kconfig option. The BPF control plane is
+compiled behind a hidden derived CONFIG_BPF_WEIGHTED_INTERLEAVE symbol
+when the required NUMA, cgroup, BPF syscall and BTF prerequisites are
+present. The existing weighted-interleave mempolicy remains
+unconditional, as it is today.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- arch/arm64/net/bpf_jit_comp.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Each cgroup stores only an explicit weight override. Cgroups without
+their own weights inherit the nearest ancestor override and otherwise
+fall back to the system-wide weighted-interleave weights. No per-cgroup
+weight table is allocated when a cgroup is created. The first BPF update
+for a cgroup materializes a complete local weight table by copying the
+currently effective parent or global weights. Nodes not named by that
+first update become cgroup-local values and do not continue to track
+ancestor changes. This keeps cgroup creation unchanged and keeps the
+common no-override case behind a static key.
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 2a9bbd600bc0..b459f50fd533 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -2089,9 +2089,10 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 			emit(A64_ADD(1, tmp3, dst, arena_vm_base), ctx);
- 			dst = tmp3;
- 		}
--		/* Load imm to a register then store it */
--		emit_a64_mov_i(1, tmp, imm, ctx);
--		emit_ldst(code, tmp, dst, off, tmp2, ctx);
-+		/* A zero comes from the zero register, any other imm through a register */
-+		if (imm)
-+			emit_a64_mov_i(1, tmp, imm, ctx);
-+		emit_ldst(code, imm ? tmp : A64_ZR, dst, off, tmp2, ctx);
- 
- 		ret = add_exception_handler(insn, ctx, DONT_CLEAR);
- 		if (ret)
+For simplicity, this series keeps the existing per-task
+weighted-interleave cursor behavior. A task still caches the current
+node and remaining dynamic weight quota. Weight changes and cgroup
+migration are observed when that cached quota is refilled; the hot
+allocation path does not revalidate a partially consumed quota on every
+allocation.
+
+Readers use the same lifetime model as the upstream weighted-interleave
+table. Normal allocation paths select the effective table under RCU.
+The bulk allocation path may sleep in the page allocator, so it first
+enters wi_srcu, briefly uses RCU to choose the current task/cgroup
+effective table, and then keeps wi_srcu held while walking the table
+through bulk allocation. Replaced cgroup and global tables are retired
+with wi_state_retire(), preserving both the SRCU sleeping-reader and RCU
+non-sleeping-reader grace periods used by the upstream code.
+
+This patchset provides three BPF kfuncs: bpf_wi_set_weight() creates or
+updates a cgroup weight override, bpf_wi_clear_weights() removes it, and
+bpf_wi_get_weight() returns the effective weight. All three kfuncs
+require host CAP_SYS_ADMIN.
+
+The cgid argument must name a cgroup from the default cgroup-v2
+hierarchy. Overrides are cgroup kernel state: they persist after the BPF
+program that installed them exits and are removed by
+bpf_wi_clear_weights() or by cgroup deletion.
+
+The existing sysfs interface remains global. It still shows and updates
+only the system-wide weighted-interleave state; cgroup overrides affect
+new allocations by tasks in the target cgroup and descendants that do
+not have a nearer override.
+
+Li Zhe (3):
+  mm/mempolicy: factor weighted interleave state helpers
+  mm/mempolicy: add cgroup weighted interleave plumbing
+  mm/mempolicy: add BPF kfuncs for cgroup interleave weights
+
+ include/linux/cgroup-defs.h |   5 +
+ include/linux/mempolicy.h   |  10 +
+ kernel/cgroup/cgroup.c      |   2 +
+ mm/Kconfig                  |   6 +
+ mm/mempolicy.c              | 357 ++++++++++++++++++++++++++++++++----
+ 5 files changed, 348 insertions(+), 32 deletions(-)
+
 -- 
-2.43.0
-
+2.20.1
