@@ -1,86 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.250
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793674683;
-	b=2dWC1lsHaJsBw8PUPXi/fgSIabIbdswBilXdYap7adS5uzyygVdPp7tTeo0D8WSLxNqR
-	 oBhchz7YFn9OKVfkcF79SfNspAlz79rEONH6hHeWsc8DQhV+nfGYgmyMy5OCgXRXtaJWZ
-	 advuloGuXcWIXnK2Y5dEh08Br3Uv+y0ls20Y2Wa5l3lAE4IAeivqpFsb5su+t1ONqKzrL
-	 pwYvEVEaLqh1lQOB5p19y/aWIvrLf5RKS2XsZsVE/S62kQJIlf5Eo6S5x6UIzj2+f2ozU
-	 d/P/X7/iqrtqVMYwrSEuNvt0OsWkPLSzjbEIw+ou3DBUU8sQrabtbsSbMv2IOb8YczA==
+	t=1793674810;
+	b=wixM+11BfLzw0iRe5Y01PaKIRdJJVHl6WLnxf/UBA62ImHB+j1rZAtRbVsTS7muwP5x3
+	 HWJkyNccYhKHgZwg1AU8BAw3wDWNatoTncSpa4UJ6Zt3M7k3pZpuNklUKmwyjObtdeEGo
+	 Ys7VWOi11wLTZtyPNiuJ53q3JL8oRn9sCa54ZWVNX9syMAYQO17LLnZgSpi3xvBKEmWmO
+	 nCiaFd4t2EMEcNFmzMMFbBJlx+fmo7+crgQ6QRJ52cfgZ6SmlM9WeLYlFMJMtaiujd/Nn
+	 dqFg6Tr61I5iT2ulGG39ouh/1A6gva8PnlbMEq8vDWJ5r7dPV+H/3XEWFS7arVsfeXg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793674683;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-Id:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=4IRpsKB31ZWOQ5n/UsohIDOoT7iKXviBSO161ss/1dE=;
-	b=mw/DL+TNi0bKQkVNz3G7fKP9JM/z44eChbr0snPmsfo1Ez8MZDFNxaifnXYdW/GubnPI
-	 Zwd8nLiiA8Vs+/lPpj5908W6FtwTb2VMZCxKKs+jLkO0DxR6EFQc+BAXfyWAQNTlsKZSM
-	 ychlq8ItUJQFBcdRu4S9Bxiw0IWgIqtuF9pk941d4ABli21QEeQ19Onme7KleLY6ZrEvp
-	 ZYtbRnXyH0o3gE/RzbL+I5qvSYPm15SCPoHXm6NReWUMlXyvvxsLSFYnd3e8LeNx4YMbB
-	 3Oc4yvDo1eQJ4Fsl40ts7y+Wy6PIje7Xs1B/wwLUWcITnCrDKsxXxHyMowbEZ75j3Xg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793674810;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=yVOQ1L8O+8jKxtIQtsjnk6fzaZoe6ThQio4f1IPG6QM=;
+	b=wUK18U2/7FFTMBAtZb6z7kEqEVhNOAWS004/vrltoGDIUkTGec5z0v7zY8WAbxTUFU11
+	 kLo47YOKtTIbMWyEmCFSg0Jw/f/mi0tNUFZVvKcl7Y8DOkwickruksDzXqeP1gpWkqaXT
+	 FpXsxMp6gx4Nx453FQklkwl9V4R7YZ07QzBqzqkXGWihoX4rRZTAMyVdrwG1JWR47pljW
+	 5UPcPBmTWnZZOerFnVCRZO8slUoIc/EYLJ5BFc36BLO4hkJY0mEs/wE0pui/17XXdGud4
+	 FAFJ6uA72im8FIGVtO6qAUiB5gFyD0g6x8FSVWfp483pFpDQAp1vW4UqCQ0E/WRU9qA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Ymnes9hU;
-	arc=none smtp.remote-ip=95.215.58.250
-Received: from mta1.migadu.com (out-250.mta1.migadu.com [95.215.58.250])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IWKww995;
+	arc=none smtp.remote-ip=209.85.216.41
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C5F606A329
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 02:58:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66C5F606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19080606A326
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 03:00:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19080606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Ymnes9hU
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=lyrb92uDQUPbkiBltZi1bjdhjSGbJYzJNmN2CpAeRBY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793674680; v=1; x=1794279480;
- b=Ymnes9hUueYcoUxGz5QwDS5GUw1Qmnr7X/K2zXmtGUWjBAqldu6yJuJArKlNuSWuC36/5Kw5
- BCkiEyv5qn7dI9NQNbJMqcVEVyyNlWsdwcoMUU9VOtgUcRweQ7FNGpdbwVe7hR2frOOLJNuqDOu
- ValsYvN1tCUXXv1UX2u6Uwn8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 595423ef5b9c1195;
-	Tue, 03 Nov 2026 02:57:59 +0000
-X-Mizu-Trace-ID: 595423ef5b9c1195
-X-Migadu-Flow: FLOW_OUT
-From: Ridong Chen <ridong.chen@linux.dev>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Dave Chinner <david@fromorbit.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Qi Zheng <qi.zheng@linux.dev>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Kairui Song <kasong@tencent.com>,
-	Barry Song <baohua@kernel.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>,
-	Wei Xu <weixugc@google.com>,
-	Baoquan He <baoquan.he@linux.dev>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_)),
-	Ridong Chen <ridong.chen@linux.dev>,
-	Ridong Chen <chenridong@xiaomi.com>
-Subject: [PATCH v6 7/7] mm/mglru: add tracepoint for inc_max_seq()
-Date: Tue,  3 Nov 2026 10:56:10 +0800
-Message-Id: <20261103025610.3738894-8-ridong.chen@linux.dev>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261103025610.3738894-1-ridong.chen@linux.dev>
-References: <20261103025610.3738894-1-ridong.chen@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IWKww995
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ac6794fe45so2695683a91.0
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 19:00:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793674808; x=1794279608; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=yVOQ1L8O+8jKxtIQtsjnk6fzaZoe6ThQio4f1IPG6QM=;
+        b=IWKww995EvtZZoHiYy/wXjTGbmZog9wtq5/Jc+an6R2jG84GS2Eu2YsnzdYVWofwPs
+         bUsKacRZmhscQLX7lCKMlB1X35QGKhrzLjgI0T1/jdPT6t8PiY5S4UqsU75X5nzusTAi
+         x+TZLy+OUgvncCeMHBiNtzX6Lrq3PFus696BRDfhNOTyaPbV62l6MbtvOIweI3UjeTto
+         NyGBxB1mjUU9xbF/bV2+kogfkJKfWhjLgB1t8K3KcHpwx00x7lZ+sCOo0l46m9i9NE5/
+         F+ZdWWPD5/2ErfBXCvZPeYWK32peHv24HTt0AJgMm/ZDr4ouChLdJ4tD9nP/JKIecR+a
+         St4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793674808; x=1794279608;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=yVOQ1L8O+8jKxtIQtsjnk6fzaZoe6ThQio4f1IPG6QM=;
+        b=qXjbkfyRkc4qvkJQGxvqe/lr9DmpB4VuplVuQMQbuYgm7FKAwdEEEAKDX1TBiCLRCK
+         7DAcwkeE0TN1GTD7Voiw256tMEyuGrr4C1Kc/05Ky1G4VrxxuyNIAG7wehVBK3H+I0Gg
+         Vzug2BkZ3wxsQvIwSIMMAzQJx2ypyRclw8hX/kIOzaAvbT0qT1GruPZDdnlfP+0xdQWZ
+         lwSvLWe+5EaJh+vuDpxdaeg/ABeURzV30+B/HGLU2Ye3kGmAjrdB5IVZx0OE2jSUHVVR
+         f81bs6Fc1YxOij79TiDJ5pW6Y4hzNTWGCeFiqivQ36HoPgLs1u+BEam1Kg+WL6IFce20
+         SypQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwh6wuo4wjeLNLKmubs4dJnkvKjjQl632eHNAqPGZNcyJk1HtYgEE44NqqF76GGP1YkJic=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+GDBDpX3XSKCa+DIsExyGDyUjzwQCK88vDwlsAYVr/265mvlg7
+	fOlsH7/dtVgJLujl6ePVmjJNVetv44aO/8su/ALet5Lq0jYP6lI8Fnnc
+X-Gm-Gg: AYBFou3mMDuVYzlwcNSUdGmR+6KB0voYpnFi5geGL34Yikc0HH/2VtVinUxJjKBMfAF
+	bPWEmEMWxMUV7zNyCps+Yc7YzS1TCAzKVC2XGc1+uGp8vApskQAh3GeDEdmwsan0VcWaN6/xMfy
+	1bfuQfhqm6wOn5s5AhXsWSuEAsNXNJhwEi6Icdeep9EAnO+t6FOJ//gGdk5cwXCGnyK0S1Hf1u5
+	6senaXvOApnIOfGmFJf+945U5hDinGfr3Exf6qQKmUEfCdNStihwJAJ7QvcDepAgh71Ykhdy9Iv
+	qdtNp6PnUCilotRzBRuf199S9KhfRGNwTAHR9ovZNqtUqf1XQGTbCr/Xlal3kihc3NCUIyq68av
+	m28RYcg4cmfUBRhcLy4Sq2ihfOlW2tn/qT5FRHcO9yPxN/OFBlOOkEN9O9zTsZaxjg22xjmgHzg
+	jdJuDG8vKovS1A8cGGgdgLWHMsNJfiTnamJpUbhMtLWZijuWhsWST9yG0HeLhI6yEXAiS4+E8Kk
+	aXnqyp1ylR24Fs43gFx/Tb/jOblHPyiai/r7FbZYK/S2CQwUQrlwLxBNFRltv1aScePChYEiEei
+	qjuHjbDn3E7jjH+a/GEn7aOy3b90/Mgcr4jKfGL8hpjnJQgGcx0HalO62hfRvzNYKYwT9nB+yc+
+	xr6MZqrPFgWI5SBbzeMsEzDyVSlqvmKKhFQ==
+X-Received: by 2002:a17:90b:1d03:b0:3a8:49f2:8ddb with SMTP id 98e67ed59e1d1-3ae8984de33mr10126233a91.60.1793674808172;
+        Mon, 02 Nov 2026 19:00:08 -0800 (PST)
+Received: from localhost ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c5adc33sm1790498a91.1.2026.11.02.19.00.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 19:00:07 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 03 Nov 2026 03:00:07 +0000
+Message-Id: <DML8NIYTERIZ.1GLZ1R1VJPLUG@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yifan Zhang" <yfzhang23@stu.pku.edu.cn>, "Jiri Kosina"
+ <jikos@kernel.org>, "Benjamin Tissoires" <bentiss@kernel.org>,
+ <linux-input@vger.kernel.org>
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] HID: bpf: synchronize hardware operations with
+ device destruction
+In-Reply-To: <179367391951.8187.17327354719079930667@stu.pku.edu.cn>
+References: <179367391951.8187.14164894863012056170@stu.pku.edu.cn> <179367391951.8187.17327354719079930667@stu.pku.edu.cn>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -90,110 +103,200 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Ridong Chen <chenridong@xiaomi.com>
+On Mon, Nov 02, 2026 at 06:45 PM Yifan Zhang <yfzhang23@stu.pku.edu.cn> wrote:
+> Add a lifetime lock that serializes admission of HID-BPF hardware
+> operations with device destruction.  Take an SRCU read lock while holding
+> the lifetime lock before accessing the report tables or the low-level
+> driver.  Destruction marks the device destroyed under the same lock and
+> waits for the SRCU readers before cleaning up the SRCU state.
 
-Aging in MGLRU advances max_seq via inc_max_seq(), creating a new
-youngest generation. There is currently no tracepoint on this path, so
-the moment a new generation is created, and how the min_seq of each type
-trails behind it, cannot be observed as it happens.
+The lifetime lock is needed only because hid_bpf_destroy_device() calls
+cleanup_srcu_struct(). After that a reference to hid_device is not
+enough to call srcu_read_lock().
+The splat in patch 2 has the same cause. So does
+commit 578e1b96fad7 ("HID: bpf: abort dispatch if device destroyed").
 
-Add mm_mglru_inc_max_seq, emitted right after max_seq is bumped while
-the lruvec lock is still held, with the node id, memcg id, the new
-max_seq, the anon and file min_seq, and the number of pages in each
-generation for both types, as computed by lruvec_gen_size().
+Lets keep hdev->bpf.srcu valid until hiddev_free().
+Then the check of 'destroyed' goes inside the SRCU section.
+No need for the 2nd mutex.
 
-The nr_anon/nr_file arrays are ordered by seq rather than by generation
-slot: entry i holds the generation max_seq - MAX_NR_GENS + 1 + i, i.e.
-they go from the oldest generation to the newest, the same order as the
-debugfs lru_gen file, so the output can be read directly without mapping
-slots back to seqs. Entries for seqs below the corresponding min_seq are
-not in use and normally read as 0. The arrays are printed with
-__print_array(), so the output is hex and its length follows
-MAX_NR_GENS automatically.
+The dispatchers have the same race and this patch leaves it.
+hid_bpf_destroy_device() runs before hidraw_disconnect():
 
-Only the lruvec is passed in; all of the above is collected in
-TP_fast_assign(), so inc_max_seq() does no extra work when the event is
-disabled. Paired with mm_mglru_scan_folios it makes the full
-aging-to-eviction window observable per memcg.
+  hidraw ioctl                        hid_destroy_device()
+  dispatch_hid_bpf_raw_requests()
+    destroyed == false
+                                      destroyed = true
+                                      synchronize_srcu()
+                                      cleanup_srcu_struct()
+    srcu_read_lock()   <- use after free
 
-Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
----
- mm/trace_vmscan.h | 46 ++++++++++++++++++++++++++++++++++++++++++++++
- mm/vmscan.c       |  2 ++
- 2 files changed, 48 insertions(+)
+hid_close_report() also runs on unbind and on device_reprobe().
+SRCU doesn't cover that. Neither this patch nor the diff below fixes it.
 
-diff --git a/mm/trace_vmscan.h b/mm/trace_vmscan.h
-index 8148b8224422..40d6d90f1d7a 100644
---- a/mm/trace_vmscan.h
-+++ b/mm/trace_vmscan.h
-@@ -456,6 +456,52 @@ TRACE_EVENT(mm_mglru_scan_folios,
- 		__entry->min_seq)
- );
- 
-+TRACE_EVENT(mm_mglru_inc_max_seq,
-+
-+	TP_PROTO(struct lruvec *lruvec),
-+
-+	TP_ARGS(lruvec),
-+
-+	TP_STRUCT__entry(
-+		__field(u64, memcg_id)
-+		__field(unsigned long, max_seq)
-+		__field(unsigned long, anon_min_seq)
-+		__field(unsigned long, file_min_seq)
-+		__array(unsigned long, nr_anon, MAX_NR_GENS)
-+		__array(unsigned long, nr_file, MAX_NR_GENS)
-+		__field(int, nid)
-+	),
-+
-+	TP_fast_assign(
-+		struct lru_gen_folio *lrugen = &lruvec->lrugen;
-+		unsigned long max_seq = lrugen->max_seq;
-+		int i;
-+
-+		__entry->memcg_id = mem_cgroup_id(lruvec_memcg(lruvec));
-+		__entry->max_seq = max_seq;
-+		__entry->anon_min_seq = lrugen->min_seq[LRU_GEN_ANON];
-+		__entry->file_min_seq = lrugen->min_seq[LRU_GEN_FILE];
-+		/* from the oldest generation to the newest, as debugfs lru_gen does */
-+		for (i = 0; i < MAX_NR_GENS; i++) {
-+			unsigned long seq = max_seq - MAX_NR_GENS + 1 + i;
-+
-+			__entry->nr_anon[i] =
-+				lruvec_gen_size(lrugen, LRU_GEN_ANON, seq);
-+			__entry->nr_file[i] =
-+				lruvec_gen_size(lrugen, LRU_GEN_FILE, seq);
-+		}
-+		__entry->nid = lruvec_pgdat(lruvec)->node_id;
-+	),
-+
-+	TP_printk("nid=%d memcg_id=%llu max_seq=%lu anon_min_seq=%lu file_min_seq=%lu nr_anon=%s nr_file=%s",
-+		__entry->nid,
-+		__entry->memcg_id,
-+		__entry->max_seq,
-+		__entry->anon_min_seq,
-+		__entry->file_min_seq,
-+		__print_array(__entry->nr_anon, MAX_NR_GENS, sizeof(unsigned long)),
-+		__print_array(__entry->nr_file, MAX_NR_GENS, sizeof(unsigned long)))
-+);
- #endif /* CONFIG_LRU_GEN */
- 
- TRACE_EVENT(mm_vmscan_write_folio,
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 1581b73aec56..841fefa68d1f 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4115,6 +4115,8 @@ static bool inc_max_seq(struct lruvec *lruvec, unsigned long seq, int swappiness
- 	WRITE_ONCE(lrugen->timestamps[next], jiffies);
- 	/* make sure preceding modifications appear */
- 	smp_store_release(&lrugen->max_seq, lrugen->max_seq + 1);
-+
-+	trace_mm_mglru_inc_max_seq(lruvec);
- unlock:
- 	lruvec_unlock_irq(lruvec);
- 
--- 
-2.34.1
+Instead of patches 1 and 2:
 
+and Pls wait for Benjamin before sending v3.
+
+diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
+index 6b467c7..6c2b136 100644
+--- a/drivers/hid/bpf/hid_bpf_dispatch.c
++++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+@@ -99,13 +99,15 @@ int dispatch_hid_bpf_raw_requests(struct hid_device *hdev,
+ 	struct hid_bpf_ops *e;
+ 	int ret, idx;
+
+-	if (unlikely(hdev->bpf.destroyed))
+-		return -ENODEV;
+-
+ 	if (rtype >= HID_REPORT_TYPES)
+ 		return -EINVAL;
+
+ 	idx = srcu_read_lock(&hdev->bpf.srcu);
++	if (unlikely(hdev->bpf.destroyed)) {
++		ret = -ENODEV;
++		goto out;
++	}
++
+ 	list_for_each_entry_srcu(e, &hdev->bpf.prog_list, list,
+ 				 srcu_read_lock_held(&hdev->bpf.srcu)) {
+ 		if (!e->hid_hw_request)
+@@ -139,10 +141,12 @@ int dispatch_hid_bpf_output_report(struct hid_device *hdev,
+ 	struct hid_bpf_ops *e;
+ 	int ret, idx;
+
+-	if (unlikely(hdev->bpf.destroyed))
+-		return -ENODEV;
+-
+ 	idx = srcu_read_lock(&hdev->bpf.srcu);
++	if (unlikely(hdev->bpf.destroyed)) {
++		ret = -ENODEV;
++		goto out;
++	}
++
+ 	list_for_each_entry_srcu(e, &hdev->bpf.prog_list, list,
+ 				 srcu_read_lock_held(&hdev->bpf.srcu)) {
+ 		if (!e->hid_hw_output_report)
+@@ -423,6 +427,11 @@ hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
+ 	if (ctx_kern->from_bpf)
+ 		return -EDEADLOCK;
+
++	/* hid_bpf_destroy_device() waits for us before the transport goes away */
++	guard(srcu)(&ctx->hid->bpf.srcu);
++	if (ctx->hid->bpf.destroyed)
++		return -ENODEV;
++
+ 	/* check arguments */
+ 	ret = __hid_bpf_hw_check_params(ctx, buf, &size, rtype, true);
+ 	if (ret)
+@@ -483,6 +492,10 @@ hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz)
+ 	if (ctx_kern->from_bpf)
+ 		return -EDEADLOCK;
+
++	guard(srcu)(&ctx->hid->bpf.srcu);
++	if (ctx->hid->bpf.destroyed)
++		return -ENODEV;
++
+ 	/* check arguments */
+ 	ret = __hid_bpf_hw_check_params(ctx, buf, &size, HID_OUTPUT_REPORT, true);
+ 	if (ret)
+@@ -641,13 +654,9 @@ void hid_bpf_destroy_device(struct hid_device *hdev)
+ 	if (!hdev)
+ 		return;
+
+-	/* mark the device as destroyed in bpf so we don't reattach it */
+-	hdev->bpf.destroyed = true;
+-
+ 	__hid_bpf_ops_destroy_device(hdev);
+
+ 	synchronize_srcu(&hdev->bpf.srcu);
+-	cleanup_srcu_struct(&hdev->bpf.srcu);
+ }
+ EXPORT_SYMBOL_GPL(hid_bpf_destroy_device);
+
+@@ -659,6 +668,13 @@ int hid_bpf_device_init(struct hid_device *hdev)
+ }
+ EXPORT_SYMBOL_GPL(hid_bpf_device_init);
+
++/* A reference to hdev is enough to use hdev->bpf.srcu */
++void hid_bpf_device_free(struct hid_device *hdev)
++{
++	cleanup_srcu_struct(&hdev->bpf.srcu);
++}
++EXPORT_SYMBOL_GPL(hid_bpf_device_free);
++
+ static int __init hid_bpf_init(void)
+ {
+ 	int err;
+diff --git a/drivers/hid/bpf/hid_bpf_struct_ops.c b/drivers/hid/bpf/hid_bpf_struct_ops.c
+index c90b689..f3bbe11 100644
+--- a/drivers/hid/bpf/hid_bpf_struct_ops.c
++++ b/drivers/hid/bpf/hid_bpf_struct_ops.c
+@@ -197,10 +197,13 @@ static int hid_bpf_reg(void *kdata, struct bpf_link *link)
+ 	if (IS_ERR(hdev))
+ 		return PTR_ERR(hdev);
+
+-	ops->hdev = hdev;
+-
+ 	mutex_lock(&hdev->bpf.prog_list_lock);
+
++	if (hdev->bpf.destroyed) {
++		err = -ENODEV;
++		goto out_unlock;
++	}
++
+ 	count = list_count_nodes(&hdev->bpf.prog_list);
+ 	if (count >= HID_BPF_MAX_PROGS_PER_DEV) {
+ 		err = -E2BIG;
+@@ -222,6 +225,7 @@ static int hid_bpf_reg(void *kdata, struct bpf_link *link)
+ 			goto out_unlock;
+ 	}
+
++	ops->hdev = hdev;
+ 	if (ops->flags & BPF_F_BEFORE)
+ 		list_add_rcu(&ops->list, &hdev->bpf.prog_list);
+ 	else
+@@ -324,6 +328,8 @@ void __hid_bpf_ops_destroy_device(struct hid_device *hdev)
+ 	int count = 0;
+
+ 	mutex_lock(&hdev->bpf.prog_list_lock);
++	/* mark the device as destroyed in bpf so we don't reattach it */
++	hdev->bpf.destroyed = true;
+ 	list_for_each_entry(e, &hdev->bpf.prog_list, list) {
+ 		e->hdev = NULL;
+ 		count++;
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index b4fd482..827a0ee 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -768,6 +768,7 @@ void hiddev_free(struct kref *ref)
+
+ 	hid_close_report(hid);
+ 	hid_free_bpf_rdesc(hid);
++	hid_bpf_device_free(hid);
+ 	kfree(hid->dev_rdesc);
+ 	kfree(hid);
+ }
+diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
+index 19fffa4..0db7f67 100644
+--- a/include/linux/hid_bpf.h
++++ b/include/linux/hid_bpf.h
+@@ -213,6 +213,7 @@ int hid_bpf_connect_device(struct hid_device *hdev);
+ void hid_bpf_disconnect_device(struct hid_device *hdev);
+ void hid_bpf_destroy_device(struct hid_device *hid);
+ int hid_bpf_device_init(struct hid_device *hid);
++void hid_bpf_device_free(struct hid_device *hid);
+ const u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, const u8 *rdesc, unsigned int *size);
+ #else /* CONFIG_HID_BPF */
+ static inline u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type,
+@@ -232,6 +233,7 @@ static inline int hid_bpf_connect_device(struct hid_device *hdev) { return 0; }
+ static inline void hid_bpf_disconnect_device(struct hid_device *hdev) {}
+ static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
+ static inline int hid_bpf_device_init(struct hid_device *hid) { return 0; }
++static inline void hid_bpf_device_free(struct hid_device *hid) {}
+ static inline const u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, const u8 *rdesc,
+ 						 unsigned int *size) { return rdesc; }
+
+
+pw-bot: cr
