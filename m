@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.106
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793729936;
-	b=xzDxWb4Otciirv0MAoFOKAsD7eI+5tSz2JSdoFf1e9FvNTLpY4kkCazAZTcfw1dmFE6L
-	 S59pTh9281v+NuAkOuVEFMhHuDOZuCrn/IAjQbw2XHLRmHA5GNyI6l+RMyeayknaNGXfb
-	 VhALcinN+j+cRT/lh5o3lpny1IjOzNnCKSNznS7YM39GhEofpPUgTmx3vnQI/NXB8NZB1
-	 NeW2Cg4oP2Dek0e9Q/BMbsl8kSOszBUSMXq1+GB93k63O8BcyneRm324DikYvDM7MMGpw
-	 /45CTokMLU8rj9stOh8QN6csPFl+3hHRBbBgewx5YosApzoim9e8YD5zSKtIGLRgp+Q==
+	t=1793729945;
+	b=Co9Xf6GfuQorsL6TlXE72Gnb8mlj8LHQUQA2Sn6MX4H7tY4y6mrGwI09eFmMqfs87/du
+	 FDPYWHbzupFyuP5deY2t30gtd7uTZe+RX5RKkb8c1H9POQTN8bABhjuzu4B7JDHt2DRQ2
+	 GqFqaZVB5SbNKuhOF+ND1LkEYHX8e1JC0/bHWmpZBCkCzCR5r/Y7DLLS4j/sU4Bh9Essv
+	 Ussx6vsJhBdzc47bK1K99ayLkZaIgyiuOd55dFCyTBWjyiG3meX4lKdwlqFaYsvpHk9SX
+	 Tfh1nRDCxzzD0fjYglrAI+9KUCTYfEnHIBvB4jc0eGwQ/1CxFXQdcYChlEattT8oNLg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793729936;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793729945;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=GGaE1qmOX0XSLLPtwH4YObFVEwZzLL39kmhyeWNe6tU=;
-	b=Tg84H1pU/5SO60fK1oCQzM4ZwHIMcEIofwXqR1EBtMiuUjhEBFAboh/dKyDRh3tWLsQX
-	 gyUbg2qdIAUvGF3bssxVXpmUI/ig9HUzaY/Y7HjP8ajupSUi5bW9LPIRhW/dqlK+kD5uy
-	 +9h25syF7qU5p6g02/JqM+S5dESIW/UCMP58o5In00cNjVbD3NMDFcQkG6FPQvxrlN+7V
-	 R0TjpQP0OH0J/9A7F/YslilmjoJbhYBo6PrbfC/mbQ/ArLN0NUXCVBsoqGYjhcTeb6doJ
-	 NJffTBf+ZhK2n89dxsFdAoM5p8deRxfxmCkrND6yV+R6jDkvlz0GOy16fzRA1Amce6A==
+	bh=YSZQ+J6hgmvwL5BqaWSRwkZd+znwwTgC7/Ng8tbBvhs=;
+	b=5Ehy38vr/coHFjamlbFprfxPx35CjF0iwi/qEduLaqfktx6x93F/13xkOStw1glPo4Su
+	 ZKllaV915EmKCwoyFrF6Biust9VuB/z65ooHdC9vPf6tKkKX9w6zF/PVo1YxXpPPFv7Ar
+	 7FDkCYOZ1GX8d7YxMveFDEwYcRPfzjroGvzqCz6zM6FpR/Wch3xGW9YMbm+VN88qbl1ix
+	 XqFxw/lQ2tbsgu+yFawKkM4zJwyyOgbc0+rEvlHp8EQ0KlmuXC7NVY0I9Wx50YbiBAw2J
+	 apWqObtkPOmUZV3h3lUdejjBfr5oM0A9uF2vT0e5kvgr4NrTGHMmmYlRqD/6iIifjVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DUTY7QV9;
-	arc=none smtp.remote-ip=91.218.175.177
-Received: from mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dANVKjEM;
+	arc=none smtp.remote-ip=95.215.58.106
+Received: from mta1.migadu.com (out-106.mta1.migadu.com [95.215.58.106])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E2D2606A324
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 18:18:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E2D2606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5649D606A330
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 18:19:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5649D606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DUTY7QV9
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dANVKjEM
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=zo09GNgf0pXdePnCPl0ruATW0SNC4vI/eJ/Ulc7x7co=;
+DKIM-Signature: a=rsa-sha256; bh=krvGQ2lkyDUQgDl9voqOAGs1UxNMtj+awsIr1zVTZ9M=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793729933; v=1; x=1794334733;
- b=DUTY7QV9uJCHDJsgbbrKR+pVZg+nvXlGU4ddwPMDuSGflhzj99u7RfEIDF0cekt2cOcaLNeW
- ygoVD1QG9DGisjvRHmCpSrNwGym9t2ZfISCB8CgORjfBzc0v5+1tslnDinBc7ecVQzVgSYcdJQI
- g+mqZjYBcQQpC4sI8P6gZNyc=
+ t=1793729942; v=1; x=1794334742;
+ b=dANVKjEM6SWER1GYVVQFrdcnWLQHYSMnNFXXwR+nKCocmZkOfhPZexAX3qFggTYv9JaS2RUN
+ jZQLCB9rStL4a9MZZPY36gjdNUOonYDeznk85anlf03TDIIe03ACPBoNSCJS4SJrjeN84TrqMCW
+ 9Wd2f2VVBT0iwFrHnqGt+K+M=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 36c57bbdd4ee3765;
-	Tue, 03 Nov 2026 18:18:53 +0000
-X-Mizu-Trace-ID: 36c57bbdd4ee3765
+Received: by smtp.migadu.com with ESMTPS id 3e27892a11e1cc9f;
+	Tue, 03 Nov 2026 18:19:02 +0000
+X-Mizu-Trace-ID: 3e27892a11e1cc9f
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: bpf@vger.kernel.org
@@ -67,9 +67,9 @@ Cc: ast@kernel.org,
 	jose.marchesi@oracle.com,
 	david.faust@oss.qualcomm.com,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v4 4/8] selftests/bpf: spell the addr_space_cast address spaces in decimal
-Date: Tue,  3 Nov 2026 10:18:12 -0800
-Message-ID: <20261103181816.254686-5-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v4 5/8] selftests/bpf: write the mixed arena/scalar ALU tests in asm
+Date: Tue,  3 Nov 2026 10:18:13 -0800
+Message-ID: <20261103181816.254686-6-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261103181816.254686-1-vineet.gupta@linux.dev>
 References: <20261103181816.254686-1-vineet.gupta@linux.dev>
@@ -84,310 +84,183 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The inline asm in the arena tests writes the two address spaces of
-addr_space_cast() in hex which trips up a GNU assembler bug:
+They fail to build with BPF_GCC:
 
-  progs/jit_insns_arena.c:49: Error: unrecognized instruction `r7 =addr_space_cast(r7,0x0,0x1)'
-  progs/jit_insns_arena.c:49: Error: expected ',', got 'x'
+  progs/verifier_arena.c:566:5: error: optimization may eliminate reads and/or writes to register variables [-Werror=volatile-register-var]
 
-This has been fixed and landed binutils commit 835aee81fa93 ("bpf: accept
-any spelling of the addr_space_cast address spaces"), but will only land
-in the 2.47 release, so add the workarounds for now.
-A GCC that defines __BPF_FEATURE_ADDR_SPACE_CAST would be paired with
-a capable binutils.
+for
 
-No functional change.
+  volatile register __u64 reg asm("r3");
+
+and GCC means it. With the warning silenced it drops both scalar
+accesses, leaving nothing that uses r3 as a scalar:
+
+  call	7
+  if w0 == 0 goto .L136
+  r9 = arena ll;r3 = 0;r3 = addr_space_cast(r3, 0, 1);
+  .L136:
+  r0 = 0
+  exit
+
+`reg = 1ULL << 32' and `reg += 1' are both gone. The tests need one
+instruction reached with r3 live as a scalar on one path and as an
+arena pointer on the other; what is left gives the verifier no reason
+to reject anything, so the __failure expectation would not hold. A
+local register variable is not guaranteed to survive a helper call
+either, which GCC is also entitled to act on.
+
+Nothing here needs a compiler to allocate registers, so write the
+whole body in asm like mixed_arena_stack_atomic below, which tests the
+same shape. Both compilers then emit the same sequence, with the
+branch landing on the shared ALU op:
+
+  call 7
+  r6=r0
+  r3=1
+  r3<<=32
+  if w6==0 goto 4          <- lands on r3+=1
+  r9=0 ll
+  r3=0
+  r3 = addr_space_cast(r3, 0, 1)
+  r3+=1                    <- scalar on one path, arena pointer on the other
+  r0=0
+  exit
+
+And while here also bring in __load_if_JITed(). A program binding an
+arena map is rejected in check_map_prog_compatibility() with "JIT is
+required to use arena" during map resolution, before do_check() can
+reach the shared instruction, so without a JIT these would fail on the
+wrong message rather than skip.
+
+Both tests become visible once 6/8 stops hiding them, and pass:
+
+  verifier_arena/mixed_arena_scalar_alu64_scalar_first   -> OK
+  verifier_arena/mixed_arena_scalar_alu64_arena_first    -> OK
+
+Notes:
+ - This does need an __arena capable BPF_GCC.
+ - Under clang the rewrite is not a no-op: the existing version spilled r3
+   to the stack and did the shared ALU op on r1 reloaded from it, so the
+   test was not exercising one register live as both a scalar and an arena
+   pointer.
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
-v3 -> v4: new patch.
+v3 -> v4: was 7/8, now ahead of the guard removal that stops hiding
+these tests. Otherwise unchanged.
 
- .../selftests/bpf/progs/arena_atomics.c       | 32 +++++++++----------
- .../selftests/bpf/progs/jit_insns_arena.c     |  8 ++---
- .../selftests/bpf/progs/verifier_arena.c      | 16 +++++-----
- .../selftests/bpf/progs/verifier_hmul_arena.c |  4 +--
- .../selftests/bpf/progs/verifier_ldsx.c       | 10 +++---
- 5 files changed, 35 insertions(+), 35 deletions(-)
+ .../selftests/bpf/progs/verifier_arena.c      | 91 +++++++++++--------
+ 1 file changed, 51 insertions(+), 40 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/arena_atomics.c b/tools/testing/selftests/bpf/progs/arena_atomics.c
-index ce76a73d197b..2a9664f54399 100644
---- a/tools/testing/selftests/bpf/progs/arena_atomics.c
-+++ b/tools/testing/selftests/bpf/progs/arena_atomics.c
-@@ -227,11 +227,11 @@ int fetch_r0(const void *ctx)
- #if defined(ENABLE_ATOMICS_TESTS) && defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- 	asm volatile (
- 	"r1 = %[fetch_src_r0_value] ll;"
--	"r1 = addr_space_cast(r1, 0x0, 0x1);"
-+	"r1 = addr_space_cast(r1, 0, 1);"
- 	"r0 = 0x1100000011 ll;"
- 	".8byte %[fetch_src_r0_insn];"
- 	"r2 = %[fetch_src_r0_result] ll;"
--	"r2 = addr_space_cast(r2, 0x0, 0x1);"
-+	"r2 = addr_space_cast(r2, 0, 1);"
- 	"*(u64 *)(r2 + 0) = r0;"
- 	:
- 	: __imm_addr(fetch_src_r0_value),
-@@ -242,16 +242,16 @@ int fetch_r0(const void *ctx)
- 
- 	asm volatile (
- 	"r0 = %[fetch_dst_r0_value] ll;"
--	"r0 = addr_space_cast(r0, 0x0, 0x1);"
-+	"r0 = addr_space_cast(r0, 0, 1);"
- 	"r1 = 0x1100000011 ll;"
- 	".8byte %[fetch_dst_r0_insn];"
- 	"r2 = %[fetch_dst_r0_result] ll;"
--	"r2 = addr_space_cast(r2, 0x0, 0x1);"
-+	"r2 = addr_space_cast(r2, 0, 1);"
- 	"*(u64 *)(r2 + 0) = r1;"
- 	/* r0 is only read by the atomic, so it must still be the pointer. */
- 	"r3 = *(u64 *)(r0 + 0);"
- 	"r2 = %[fetch_dst_r0_readback] ll;"
--	"r2 = addr_space_cast(r2, 0x0, 0x1);"
-+	"r2 = addr_space_cast(r2, 0, 1);"
- 	"*(u64 *)(r2 + 0) = r3;"
- 	:
- 	: __imm_addr(fetch_dst_r0_value),
-@@ -363,17 +363,17 @@ int uaf(const void *ctx)
- 	asm volatile (
- 	"r0 = %[page];"
- 	"r0 += 4096;"
--	"r0 = addr_space_cast(r0, 0x0, 0x1);"
-+	"r0 = addr_space_cast(r0, 0, 1);"
- 	"r1 = 1;"
- 	"r2 = %[uaf_r0_before_dst_r0] ll;"
--	"r2 = addr_space_cast(r2, 0x0, 0x1);"
-+	"r2 = addr_space_cast(r2, 0, 1);"
- 	"*(u64 *)(r2 + 0) = r0;"
- 	".8byte %[fetch_dst_r0];"
- 	"r2 = %[uaf_r0_after_dst_r0] ll;"
--	"r2 = addr_space_cast(r2, 0x0, 0x1);"
-+	"r2 = addr_space_cast(r2, 0, 1);"
- 	"*(u64 *)(r2 + 0) = r0;"
- 	"r2 = %[uaf_r1_after_dst_r0] ll;"
--	"r2 = addr_space_cast(r2, 0x0, 0x1);"
-+	"r2 = addr_space_cast(r2, 0, 1);"
- 	"*(u64 *)(r2 + 0) = r1;"
- 	: : [page]"r"(page64),
- 	    __imm_insn(fetch_dst_r0,
-@@ -387,11 +387,11 @@ int uaf(const void *ctx)
- 	asm volatile (
- 	"r1 = %[page];"
- 	"r1 += 4096;"
--	"r1 = addr_space_cast(r1, 0x0, 0x1);"
-+	"r1 = addr_space_cast(r1, 0, 1);"
- 	"r0 = 1;"
- 	".8byte %[fetch_src_r0];"
- 	"r2 = %[uaf_r0_after_src_r0] ll;"
--	"r2 = addr_space_cast(r2, 0x0, 0x1);"
-+	"r2 = addr_space_cast(r2, 0, 1);"
- 	"*(u64 *)(r2 + 0) = r0;"
- 	: : [page]"r"(page64),
- 	    __imm_insn(fetch_src_r0,
-@@ -409,10 +409,10 @@ int uaf(const void *ctx)
- 	asm volatile (
- 	"r1 = %[page];"
- 	"r1 += 4096;"
--	"r1 = addr_space_cast(r1, 0x0, 0x1);"
-+	"r1 = addr_space_cast(r1, 0, 1);"
- 	"r3 = *(u64 *)(r1 + 0);"
- 	"r2 = %[uaf_reread] ll;"
--	"r2 = addr_space_cast(r2, 0x0, 0x1);"
-+	"r2 = addr_space_cast(r2, 0, 1);"
- 	"*(u64 *)(r2 + 0) = r3;"
- 	: : [page]"r"(page64),
- 	    __imm_addr(uaf_reread)
-@@ -460,10 +460,10 @@ int load_acquire(const void *ctx)
- #define LOAD_ACQUIRE_ARENA(SIZEOP, SIZE, SRC, DST)	\
- 	{ asm volatile (				\
- 	"r1 = %[" #SRC "] ll;"				\
--	"r1 = addr_space_cast(r1, 0x0, 0x1);"		\
-+	"r1 = addr_space_cast(r1, 0, 1);"		\
- 	".8byte %[load_acquire_insn];"			\
- 	"r3 = %[" #DST "] ll;"				\
--	"r3 = addr_space_cast(r3, 0x0, 0x1);"		\
-+	"r3 = addr_space_cast(r3, 0, 1);"		\
- 	"*(" #SIZE " *)(r3 + 0) = r2;"			\
- 	:						\
- 	: __imm_addr(SRC),				\
-@@ -515,7 +515,7 @@ int store_release(const void *ctx)
- 	{ asm volatile (			\
- 	"r1 = " VAL ";"				\
- 	"r2 = %[" #DST "] ll;"			\
--	"r2 = addr_space_cast(r2, 0x0, 0x1);"	\
-+	"r2 = addr_space_cast(r2, 0, 1);"	\
- 	".8byte %[store_release_insn];"		\
- 	:					\
- 	: __imm_addr(DST),			\
-diff --git a/tools/testing/selftests/bpf/progs/jit_insns_arena.c b/tools/testing/selftests/bpf/progs/jit_insns_arena.c
-index 95736eae2a58..997a897d66eb 100644
---- a/tools/testing/selftests/bpf/progs/jit_insns_arena.c
-+++ b/tools/testing/selftests/bpf/progs/jit_insns_arena.c
-@@ -47,7 +47,7 @@ int arena_zero_off(void *ctx)
- 	/* Accesses through two base registers */
- 	asm volatile ("					\
- 	r7 = %[res];					\
--	r7 = addr_space_cast(r7, 0x0, 0x1);		\
-+	r7 = addr_space_cast(r7, 0, 1);		\
- 	r1 = r7;					\
- 	r8 = 0x1122334455667788 ll;			\
- 	*(u64 *)(r7 + 0) = r8;				\
-@@ -93,12 +93,12 @@ int cast_to_user(void *ctx)
- 	/* The user address comes back from the kernel one, NULL stays NULL */
- 	asm volatile ("					\
- 	r7 = %[page];					\
--	r1 = addr_space_cast(r7, 0x0, 0x1);		\
--	r1 = addr_space_cast(r1, 0x1, 0x0);		\
-+	r1 = addr_space_cast(r7, 0, 1);		\
-+	r1 = addr_space_cast(r1, 1, 0);		\
- 	r9 = r1;					\
- 	r9 ^= r7;					\
- 	r2 = 0;						\
--	r2 = addr_space_cast(r2, 0x1, 0x0);		\
-+	r2 = addr_space_cast(r2, 1, 0);		\
- 	r9 |= r2;					\
- 	%[res] = r9;					\
- "	: [res]"=r"(res)
 diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index b17a6dfc100d..9b149c724160 100644
+index 9b149c724160..146febd99523 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -524,7 +524,7 @@ int scalar_add_arena_ptr(void *ctx)
+@@ -561,53 +561,64 @@ int arena_ptr_add_arena_ptr(void *ctx)
+ 	return 0;
+ }
  
- 	asm volatile (
- 		"%[arena_ptr] = 8192;"
--		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0x0, 0x1);"
-+		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0, 1);"
- 		"%[scalar] = 12;"
- 		"%[scalar] += %[arena_ptr];"
- 		: [scalar] "=r"(scalar),
-@@ -549,9 +549,9 @@ int arena_ptr_add_arena_ptr(void *ctx)
++/*
++ * Tests that one insn cannot be reached with a register holding a scalar
++ * on one path and an arena pointer on the other.
++ */
+ SEC("syscall")
+ __failure __msg("same insn cannot be used with and without arena pointer")
+-int mixed_arena_scalar_alu64_scalar_first(void *ctx)
+-{
+-	volatile register __u64 reg asm("r3");
+-	__u32 pick_arena = bpf_get_prandom_u32();
+-
+-	reg = 1ULL << 32;
+-
+-	if (pick_arena) {
+-		asm volatile (
+-			"r9 = %[arena] ll;"
+-			"%[reg] = 0;"
+-			"%[reg] = addr_space_cast(%[reg], 0, 1);"
+-			: [reg] "=r"(reg)
+-			: __imm_addr(arena)
+-			: "r9"
+-		);
+-	}
+-
+-	reg += 1;
+-
+-	return 0;
++__load_if_JITed()
++__naked void mixed_arena_scalar_alu64_scalar_first(void)
++{
++	/*
++	 * The r9 load is never read.  libbpf binds the object's arena to
++	 * every program through fd_array, so the verifier knows about it
++	 * without this; the load is the fallback for a kernel without
++	 * fd_array_cnt and for the light skeleton loader.
++	 */
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r6 = r0;					\
++	r3 = 1;						\
++	r3 <<= 32;					\
++	if w6 == 0 goto 1f;				\
++	r9 = %[arena] ll;				\
++	r3 = 0;						\
++	r3 = addr_space_cast(r3, 0, 1);			\
++1:	r3 += 1;					\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm_addr(arena),
++	  __imm(bpf_get_prandom_u32)
++	: __clobber_all);
+ }
  
- 	asm volatile (
- 		"%[arena_ptr1] = 8192;"
--		"%[arena_ptr1] = addr_space_cast(%[arena_ptr1], 0x0, 0x1);"
-+		"%[arena_ptr1] = addr_space_cast(%[arena_ptr1], 0, 1);"
- 		"%[arena_ptr2] = 4096;"
--		"%[arena_ptr2] = addr_space_cast(%[arena_ptr2], 0x0, 0x1);"
-+		"%[arena_ptr2] = addr_space_cast(%[arena_ptr2], 0, 1);"
- 		"%[arena_ptr2] += %[arena_ptr1];"
- 		: [arena_ptr2] "=r"(arena_ptr2),
- 		  [arena_ptr1] "=&r"(arena_ptr1)
-@@ -574,7 +574,7 @@ int mixed_arena_scalar_alu64_scalar_first(void *ctx)
- 		asm volatile (
- 			"r9 = %[arena] ll;"
- 			"%[reg] = 0;"
--			"%[reg] = addr_space_cast(%[reg], 0x0, 0x1);"
-+			"%[reg] = addr_space_cast(%[reg], 0, 1);"
- 			: [reg] "=r"(reg)
- 			: __imm_addr(arena)
- 			: "r9"
-@@ -596,7 +596,7 @@ int mixed_arena_scalar_alu64_arena_first(void *ctx)
- 	asm volatile (
- 		"r9 = %[arena] ll;"
- 		"%[reg] = 0;"
--		"%[reg] = addr_space_cast(%[reg], 0x0, 0x1);"
-+		"%[reg] = addr_space_cast(%[reg], 0, 1);"
- 		: [reg] "=r"(reg)
- 		: __imm_addr(arena)
- 		: "r9"
-@@ -635,7 +635,7 @@ int scalar_xor_arena_ptr(void *ctx)
++/*
++ * As mixed_arena_scalar_alu64_scalar_first(), including the r9 load, with
++ * the arena pointer established first.
++ */
+ SEC("syscall")
+ __failure __msg("same insn cannot be used with and without arena pointer")
+-int mixed_arena_scalar_alu64_arena_first(void *ctx)
++__load_if_JITed()
++__naked void mixed_arena_scalar_alu64_arena_first(void)
+ {
+-	volatile register __u64 reg asm("r3");
+-	__u32 pick_scalar = bpf_get_prandom_u32();
+-
+-	asm volatile (
+-		"r9 = %[arena] ll;"
+-		"%[reg] = 0;"
+-		"%[reg] = addr_space_cast(%[reg], 0, 1);"
+-		: [reg] "=r"(reg)
+-		: __imm_addr(arena)
+-		: "r9"
+-	);
+-
+-	if (pick_scalar)
+-		reg = 1ULL << 32;
+-
+-	reg += 1;
+-
+-	return 0;
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r6 = r0;					\
++	r9 = %[arena] ll;				\
++	r3 = 0;						\
++	r3 = addr_space_cast(r3, 0, 1);			\
++	if w6 == 0 goto 1f;				\
++	r3 = 1;						\
++	r3 <<= 32;					\
++1:	r3 += 1;					\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm_addr(arena),
++	  __imm(bpf_get_prandom_u32)
++	: __clobber_all);
+ }
  
- 	asm volatile (
- 		"%[arena_ptr] = 8192;"
--		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0x0, 0x1);"
-+		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0, 1);"
- 		"%[scalar] = 12;"
- 		"%[scalar] ^= %[arena_ptr];"
- 		: [scalar] "=r"(scalar),
-@@ -660,7 +660,7 @@ int arena_ptr_add_to_non_arena_ptr(void *ctx)
- 
- 	asm volatile (
- 		"%[arena_ptr] = 8192;"
--		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0x0, 0x1);"
-+		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0, 1);"
- 		"%[dst] = %[ctx];"
- 		"%[dst] += %[arena_ptr];"
- 		: [arena_ptr] "=&r"(arena_ptr),
-@@ -685,7 +685,7 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
- 
- 	asm volatile (
- 		"%[arena_ptr] = 8192;"
--		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0x0, 0x1);"
-+		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0, 1);"
- 		"%[src] = %[ctx];"
- 		"%[arena_ptr] += %[src];"
- 		: [arena_ptr] "=&r"(arena_ptr),
-diff --git a/tools/testing/selftests/bpf/progs/verifier_hmul_arena.c b/tools/testing/selftests/bpf/progs/verifier_hmul_arena.c
-index a8709ec447aa..b94892fff2f8 100644
---- a/tools/testing/selftests/bpf/progs/verifier_hmul_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_hmul_arena.c
-@@ -29,7 +29,7 @@ __naked void uhmul64_arena_ptr(void)
- 	asm volatile (
- 	"r1 = %[arena] ll;"
- 	"r0 = 1;"
--	"r0 = addr_space_cast(r0, 0x0, 0x1);"
-+	"r0 = addr_space_cast(r0, 0, 1);"
- 	".8byte %[hmul];"
- 	"exit;"
- 	:
-@@ -48,7 +48,7 @@ __naked void shmul64_arena_ptr(void)
- 	asm volatile (
- 	"r1 = %[arena] ll;"
- 	"r1 = 1;"
--	"r1 = addr_space_cast(r1, 0x0, 0x1);"
-+	"r1 = addr_space_cast(r1, 0, 1);"
- 	"r0 = 2;"
- 	".8byte %[hmul];"
- 	"exit;"
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-index 49e8cd4bb4f9..45b2e52fd715 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-@@ -310,7 +310,7 @@ __naked void arena_ldsx_disasm(void *ctx)
- 	"r4 = %[numa_no_node];"
- 	"r5 = 0;"
- 	"call %[bpf_arena_alloc_pages];"
--	"r0 = addr_space_cast(r0, 0x0, 0x1);"
-+	"r0 = addr_space_cast(r0, 0, 1);"
- 	"r1 = r0;"
- 	"r8 = *(s32 *)(r0 + 16);"
- 	"r8 = *(s16 *)(r0 + 24);"
-@@ -338,7 +338,7 @@ __naked void arena_ldsx_exception(void *ctx)
- 	asm volatile (
- 	"r1 = %[arena] ll;"
- 	"r0 = 0xdeadbeef;"
--	"r0 = addr_space_cast(r0, 0x0, 0x1);"
-+	"r0 = addr_space_cast(r0, 0, 1);"
- 	"r1 = 0x3fe;"
- 	"*(u64 *)(r0 + 0) = r1;"
- 	"r0 = *(s8 *)(r0 + 0);"
-@@ -364,7 +364,7 @@ __naked void arena_ldsx_s8(void *ctx)
- 	"r4 = %[numa_no_node];"
- 	"r5 = 0;"
- 	"call %[bpf_arena_alloc_pages];"
--	"r0 = addr_space_cast(r0, 0x0, 0x1);"
-+	"r0 = addr_space_cast(r0, 0, 1);"
- 	"r1 = 0x3fe;"
- 	"*(u64 *)(r0 + 0) = r1;"
- #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-@@ -396,7 +396,7 @@ __naked void arena_ldsx_s16(void *ctx)
- 	"r4 = %[numa_no_node];"
- 	"r5 = 0;"
- 	"call %[bpf_arena_alloc_pages];"
--	"r0 = addr_space_cast(r0, 0x0, 0x1);"
-+	"r0 = addr_space_cast(r0, 0, 1);"
- 	"r1 = 0x3fffe;"
- 	"*(u64 *)(r0 + 0) = r1;"
- #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-@@ -428,7 +428,7 @@ __naked void arena_ldsx_s32(void *ctx)
- 	"r4 = %[numa_no_node];"
- 	"r5 = 0;"
- 	"call %[bpf_arena_alloc_pages];"
--	"r0 = addr_space_cast(r0, 0x0, 0x1);"
-+	"r0 = addr_space_cast(r0, 0, 1);"
- 	"r1 = 0xfffffffe;"
- 	"*(u64 *)(r0 + 0) = r1;"
- #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ SEC("syscall")
 -- 
 2.53.0-Meta
 
