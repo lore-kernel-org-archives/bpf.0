@@ -1,51 +1,53 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.141
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793672740;
-	b=Mb/sxktDT7l1DrYtVrry1HINs4KLjZncmby92k2v7Xce70CEpDqJCiiDZAAyarE5umUO
-	 RIDtgVIm6QNQ9M7KjMovOS8+UUZhkMxPBcTLb8fEsggGh0Lb8NYRXENQZGvcK63V7Ygi3
-	 vKaJn1UxEYvAGJcr++8OZHak/E4mRWaO4xhoassLnM9xun9r2BQTr7cKzN4ITadeIrNAS
-	 0xGQfjsU7GLwaZDb21s37X5bjxNuUnbJJkU1rK9Q29VSFcwdRfnoAD/vkaG+S8QMzEoJe
-	 ZO5ogwz+gdXEUMa4wQM0/1BK5SvKkFcUD+3UPXlRLk8iOoq7sawN36/m7Qice2kSUpw==
+	t=1793672864;
+	b=q61xQpTV+WZdLP3GfcBkbOvQi6By5KjS8zyT2WzIfx4B7j+a1ju/g0YYrvikiSFoi8yl
+	 v594HcDaDelRXv/xmfj1nLNUpbY2vTeSjUmApXCgk0oxc4Kx1wpyQ3WikC0yA+wwAAEEm
+	 yklaAEczBbfTX8eXwydxlIKN1Hh1CpB9KX4/OhScvHfgPDbzhtYWFBNoYrl1nqA489Gkd
+	 jk7UDCgOjujDJ5kMfbhCL2x/VIYART4W84yn4emaWJf3bGPfm0CE/kOGbvRaxOi5nJ+2l
+	 UqDR76ufhkSn4IaKuEeYvdXf5wtCpEvZL81g6ztwrJ72CmBXQYAeAOJlz3HoLnAUuhA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793672740;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=IvOE97nqCYOuKLVpMLw0btVRPz7o5pR9mipwEI05Wt4=;
-	b=p7g22ZhwajBz9DnqXi6+gjd9hnlb9Qky9MWgUdWNGH7vIXymHP5FppLHQ0QE/0EkSIug
-	 EEz65thc3vg87zF0bAgZ9LkIiSXeHRKz6prq3KoTaePtBKf7skPMywvz8cioQzLVSNX3N
-	 KJSimS5OqhJPEK8Nt+ole2norR3a3IIddru7VumoVZcc9BpKsoqEZlg9rwpNRf3AeWbLw
-	 boisbne5d48wag6wjQyGwIPOTMJMMU6BfEE5XO8y6z+2IH3ES3uaMjsb7OvQQ0Lk26p9x
-	 7PwBDGT1FjAKa7iCnsxhqDCpqZOz25gjAsFOPMdlOzvyidzqelo01JxLS9BJlMiSRdg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793672864;
+	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
+	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
+	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=jwmw9ePHObCEAc7+hakbNtWfd2LgIPfpKlFzZDtHoSw=;
+	b=ImfdgzYb0bo0+fRgNcZSAsUnMUDKlvjCy6V7zNeNtoDQx+JaGG8HJFDAp61+Xx1QgWiS
+	 Lljxh7c595bgKUUOQhO5AvSeIV8QxOulseGVm9VOlymaysSHg0FukOIWpElyurhajesmD
+	 ZsKLWupwUiW5rM0/KIkLcKpZwA9QuerP4dGuy8lNhSwZvX+U4bKz4C+mpZGyEILWGXTDg
+	 v3ZODtwuB1BfEOFyWQuco226/jF3yy6+zt2y/E/soE9/dR5WFa2v1EDvMwn7zGASDnjR9
+	 dmVsy8Ak+pRz1eFn3yTBqmfQJglgNxPjRacElvAkctx7hnDvzTQZr/7nPpx7EHOxi5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=91.218.175.141
-Received: from mta0.migadu.com (out-141.mta0.migadu.com [91.218.175.141])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FAF606A326
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 02:25:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49FAF606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=IvOE97nqCYOuKLVpMLw0btVRPz7o5pR9mipwEI05Wt4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793672736; v=1; x=1794277536;
- b=I5SSa/hBkeH/5TPTeuN4X07ju8nimjMubtSxy3YDqbsZhEDXwfvyXC6MLzr5m+4WTeH6YWl1
- 5rQ6R5/95ZCsT+JnqTUDRVVFWUMFrFnuCiHacr9bTC82WWKt8l09zoQx9sGf3T36x3UNzzUPRwl
- x1p1nzzCBuYxH7Fp8cytOjlc=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 736ecbeae81c178a;
-	Tue, 03 Nov 2026 02:25:36 +0000
-X-Mizu-Trace-ID: 736ecbeae81c178a
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <fc5a153e-f1d8-4b2f-a1ee-646ac5d8d8e4@linux.dev>
-Date: Tue, 3 Nov 2026 10:25:24 +0800
+	dmarc=none header.from=loongson.cn;
+	spf=pass smtp.mailfrom=loongson.cn;
+	arc=none smtp.remote-ip=114.242.206.163
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6736606A324;
+	Tue,  3 Nov 2026 02:27:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C6736606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8DxpvCcRulqes8bAA--.15231S3;
+	Tue, 03 Nov 2026 10:27:40 +0800 (CST)
+Received: from [127.0.0.1] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAxX8+bRulqcQsyAA--.37690S2;
+	Tue, 03 Nov 2026 10:27:40 +0800 (CST)
+Subject: Re: [PATCH v1 2/2] LoongArch: BPF: Use beqz and bnez instructions for
+ trampoline
+To: bot+bpf-ci@kernel.org, chenhuacai@kernel.org, hengqi.chen@gmail.com
+Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
+ yonghong.song@linux.dev, mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261102072808.23080-3-yangtiezhu@loongson.cn>
+ <c3b8e6ae47164ab1a643a1730f0600993de03c8a30e35122a9812ac73d807697@mail.kernel.org>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <1276eb14-b851-aee7-36ad-d61e2ddd9ba4@loongson.cn>
+Date: Tue, 3 Nov 2026 10:27:39 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -55,46 +57,46 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 14/15] bpf, sockmap: Keep the rest of the cork
- after a redirect
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, john.fastabend@gmail.com, jakub@cloudflare.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
- matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org,
- josef@toxicpanda.com
-References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
- <20261102072112.4160195-15-alexei.starovoitov@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261102072112.4160195-15-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <c3b8e6ae47164ab1a643a1730f0600993de03c8a30e35122a9812ac73d807697@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAxX8+bRulqcQsyAA--.37690S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWruFyxtFW7GF1UXFWUCw15trc_yoWxtwb_Gw
+	1UXFn7A3yUJF93KFs2gFs3Zrs7tF43Zr4rAryxZrWjqry7GrWkWF98JFyYva15WF93Ars8
+	Zws8uw4furnxZosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
+	JVW8Jr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
+	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5
+	McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
+	I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCF
+	x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r
+	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
+	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr
+	0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+	0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jz-eOUUUUU=
 
+On 2026/11/2 下午3:53, bot+bpf-ci@kernel.org wrote:
+>> LoongArch: BPF: Use beqz and bnez instructions for trampoline
+> 
+> TL;DR: Commit message only: the claimed branch-overflow risk looks impossible,
+> since trampolines fit in one page and the old code behaved identically, so the
+> Fixes: and Cc: stable tags may not be justified.
 
-On 11/2/26 3:21 PM, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
->
-> After bpf_msg_apply_bytes() a verdict can apply to a part of the message.
-> Then tcp_bpf_send_verdict() sends this part and goes to more_data, and the
-> sk_msg prog runs on the rest. The SK_REDIRECT branch does not go there if
-> the message is the cork. It removes the cork from the psock before it
-> releases the socket lock. After the redirect it frees the cork together
-> with the rest. Thus the rest is lost, and sendmsg() reports it as sent.
->
-> If bytes remain after the redirect, put the cork back into the psock. Then
-> the prog runs on the rest, as after SK_PASS. If the new verdict is SK_DROP
-> or the push fails, sendmsg() now returns a smaller value or the error.
->
-> msg->cork_bytes keeps its value, thus the rest can stay in the cork. If the
-> psock has a new cork after lock_sock(), the kernel still frees the rest. If
-> the redirect of a cork fails, sendmsg() still returns success and frees it.
->
-> Fixes: 4f738adba30a ("bpf: create tcp_bpf_ulp allowing BPF to monitor socket TX/RX data")
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+...
 
+> Could the changelog drop the overflow-risk wording, or describe the change
+> as a cleanup, and could the Fixes: and Cc: stable tags be reconsidered given
+> that stable-kernel-rules requires a fix for a real bug?
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Will update the commit message and remove the 'Fixes' and 'Cc: stable'
+tags. If no more comments, I will send out v2 next week.
+
+Thanks,
+Tiezhu
 
