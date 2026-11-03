@@ -1,55 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.223
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793688523;
-	b=0uBIJZYccbZ0wuPGM3smRfC0vSCA27WkGeQ+M3/nvmQgQmk4cXpVFyhHYDEx8xh/r36Y
-	 slt8tCY/Qo83YeiA5xd0l4mRbXti1bsIqQ+BgRcGVaWKzz8exD3EHIFfSUpM6mmkqG56C
-	 bQuRzH05AoucplpSymWwvfpSHb9ahmaeXiPhTOrzHUuo4yu4AGdnQTMwpmvQMhrdbyVzQ
-	 2X1qdf6ta0QzJYDmPPcM33CDOyxR+nBdFENwSxtlM/Ev65oupEZ2uTrbOA8sFgRz9o4xj
-	 nez0JSPUzmlah+PpZwrWhAkgTyRugJoEjBUz/swOP+AtQrI3hY+v976USUD5ws6lT/Q==
+	t=1793692290;
+	b=LaJ0ZVkIBMNItKchsUSqjeE1E3R/PjzmiC7sYWgO2j5v0CjuoDwNg/IrId1Wfne/2Udm
+	 NyLuI0xOJ49MouBP8TELeIYgDxM25CqSyBWynQ87/E5IK3amRAGSTdN3YW9UGVwkuYFzC
+	 4XT48LQT628XsQmLymbaRZpi/JXeqxA4UUJj8k288V9pWg07tHDdERHhcd/sIsgeT9bpu
+	 QOhoURYzHCOJ1lheWBqKTZKThhXn8Or2WlJtNjzujFomU97gYTIJT5wFRUBIeJndiuUX8
+	 IC6RgBaUx2RRPShdIZTzq7y/Cjr8Enpohe67d1K45kp3yKyVrw2yvnBJsplkFk5FW7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793688523;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=47gVMNE2szA456na8yleBIvHosW+wgwadu3yBUGMAhw=;
-	b=S2XNgOEHnIc5Ks17sCzUIPcCWkdM8nCex+egXdz2pB9kwMj10vg4Vkl6iKCqERpyIE7X
-	 MvoQf12YdUquul5eE0puG1sZ+d3WXox+UCs9F/qjtBQ2oeQ+ODkyMznQxUg2+qMXAyJRq
-	 kI3pvCeDLCexEzcbPOqvR+KFY7NqYa91qlEV+1Fc6jRVkB7LYWPD0YW1+N0nCIKc1aIJ3
-	 +CEBrlt84OPET+H/KDGuQsfd7IIOERvnlRTsx8MJNd/VIsmLfoStvXgNV503pXMdxGCM0
-	 e4dyDTskLw5+tOnY313Y4cjTp9MaSUFnlz2n8i6pK3e+TCXQAulivwLbapRKwzhPAWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793692290;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:X-Originating-IP:X-ClientProxiedBy;
+	bh=whOPXAhmuyoqQssML4ZFu0H8T+s7JMuYpqdJcIs4gvs=;
+	b=WD+P/r4BVEy07a+02E/YrYEO8HmeCgpVH4+6nYKLSa3fjuDfnbrIvcXVzVODE/j5nTRd
+	 zCh9MIMOn9tsh9xVb0E0GW21NlehYnqg3DDkqNXsIrCPUbz4OFeC9HqQHB/q14TElDQvj
+	 skVx7isMLfEia1vYKmgk2h/1SLXjC7bMsMASZH2vP5KWMYCXbLe1HKVZln4m3/Jn5F7Zr
+	 4Sw4cC3j6o5v4WKx9o/QCuQzUYpCEJU5WUrdGp3uttiiUyj7rLQp0eaSCrpvqsY3gPogX
+	 RB4g454T7pMSfih+nsjzJ7JpTpWdsHDPRYUwoLLcygdolry9SsavAMrCbZ/JHAe4xmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PCXHJlLx;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	arc=none smtp.remote-ip=113.46.200.223
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C66606A32C
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 06:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PCXHJlLx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3EE31F00919
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 06:48:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793688522;
-	bh=47gVMNE2szA456na8yleBIvHosW+wgwadu3yBUGMAhw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=PCXHJlLx5uT56I3g2/299SMhwphQgkeJYW0rwrP1IMJM6akhAulBEQfoHh3VWV4xt
-	 U0ZcdcUBR3fic8CzRDhJOCn42qoqXRkoYBFAPjvFubsywIy1mQJJYPhR+2QMWhX3H/
-	 NcT8Kn1k86ZutxegRMnWH1vTBbHmilczKGpffIL282zNGISD/Qe+Uy5f1dEoVD4oky
-	 X/kkT2+y3+vWiKRmlMJ3TE3QZ8R5gBDYl2jAh7abWtOFU1ecZkW801ThldTB8Xijze
-	 CxdEYu4adfyo+TwF3Vc5QNP4FZF/YppvW+3ZF9+SPuqdS2liHpz41EMnWURyK5t0Un
-	 EqqwDUsXvhPrQ==
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-945ae2daa68so47924685a.1
-        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 22:48:42 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvBzFSxkqnEerlSQ0hAD1HRWUUqD9S3SRKt/GiEhcKEx+JDTeZZUkAVaA3Pmnet/FfnWKg68=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+LG2FMjKrp1QQmLf9sdrP3UK5cGsC7kDXrbqdQW8AvTJ4QSkLN
-	2UflZOVsKy++YxZGiaCU3RYJoRqy7edEItDIBDx6y3jkaYexMtu8VMKUhX+nNhHYAl1YLlO4OJP
-	LeaeCHveAiuCmDXWepgx148EehJL5L4I=
-X-Received: by 2002:a05:620a:6013:b0:93e:5de7:fd45 with SMTP id
- af79cd13be357-94413382637mr2049169685a.18.1793688522192; Mon, 02 Nov 2026
- 22:48:42 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0769A606A324;
+	Tue,  3 Nov 2026 07:51:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0769A606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=whOPXAhmuyoqQssML4ZFu0H8T+s7JMuYpqdJcIs4gvs=;
+	b=K1ntj93SuOFBbZMZ5wjY2n/9aYDuGCFApbIcYDMOZsDHw3LP0cc6pA997a+7mSYvtkIuywbrH
+	Qw/lBcnVa0Gy5QEDROFwj8AUvSKPZHUhka6xoXRMWtByD3RmtOy5L94dk0wAAYC9cf9aWQzVG01
+	bQPYB4LD2sXsqByX/wDj7Q8=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4jJgk83Db8zmV6r;
+	Tue,  3 Nov 2026 15:51:12 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id 79BB64058E;
+	Tue,  3 Nov 2026 15:51:22 +0800 (CST)
+Received: from octopus.huawei.com (10.67.174.191) by
+ whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 3 Nov 2026 15:51:21 +0800
+From: Cai Xinchen <caixinchen1@huawei.com>
+To: <nicolas.bouchinet@oss.cyber.gouv.fr>, <xiujianfeng@huawei.com>,
+	<paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+	<shuah@kernel.org>, <caixinchen1@huawei.com>
+CC: <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<lujialin4@huawei.com>
+Subject: [PATCH -next 5/9] lsm: remove unused lockdown audit data
+Date: Tue, 3 Nov 2026 16:24:17 +0800
+Message-ID: <20261103082421.3033195-6-caixinchen1@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
+In-Reply-To: <20261103082421.3033195-1-caixinchen1@huawei.com>
+References: <20261103082421.3033195-1-caixinchen1@huawei.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,91 +69,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261103025610.3738894-1-ridong.chen@linux.dev> <20261103025610.3738894-8-ridong.chen@linux.dev>
-In-Reply-To: <20261103025610.3738894-8-ridong.chen@linux.dev>
-From: Barry Song <baohua@kernel.org>
-Date: Tue, 3 Nov 2026 14:48:30 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4xCTSctcPcC7X6Dx4zYaOycaPqs0DG7AaxB55wx1Afwpg@mail.gmail.com>
-X-Gm-Features: AclHuK9iw40Xx1JKG7xg0GhepEe64uIgtchPvP4-nxYEY5aIoWWOik_yiFOewsU
-Message-ID: <CAGsJ_4xCTSctcPcC7X6Dx4zYaOycaPqs0DG7AaxB55wx1Afwpg@mail.gmail.com>
-Subject: Re: [PATCH v6 7/7] mm/mglru: add tracepoint for inc_max_seq()
-To: Ridong Chen <ridong.chen@linux.dev>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Dave Chinner <david@fromorbit.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Muchun Song <muchun.song@linux.dev>, 
-	Qi Zheng <qi.zheng@linux.dev>, David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Baoquan He <baoquan.he@linux.dev>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, cgroups@vger.kernel.org, 
-	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>, Ridong Chen <chenridong@xiaomi.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
-On Tue, Nov 3, 2026 at 10:58=E2=80=AFAM Ridong Chen <ridong.chen@linux.dev>=
- wrote:
->
-> From: Ridong Chen <chenridong@xiaomi.com>
->
-> Aging in MGLRU advances max_seq via inc_max_seq(), creating a new
-> youngest generation. There is currently no tracepoint on this path, so
-> the moment a new generation is created, and how the min_seq of each type
-> trails behind it, cannot be observed as it happens.
+Commit f5d0e5e9d72d ("selinux: remove the SELinux lockdown
+implementation") removed the only producer of LSM_AUDIT_DATA_LOCKDOWN.
+The type, the u.reason union member and the audit formatting case are now
+dead, so drop them.
 
-We might be more interested in why aging is triggered rather
-than the exact moment when max_seq is advanced.
+Signed-off-by: Cai Xinchen <caixinchen1@huawei.com>
+---
+ include/linux/lsm_audit.h | 2 --
+ security/lsm_audit.c      | 4 ----
+ 2 files changed, 6 deletions(-)
 
-With your patch, we get:
+diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
+index 5cf0b4795065..51b498c0ec74 100644
+--- a/include/linux/lsm_audit.h
++++ b/include/linux/lsm_audit.h
+@@ -74,7 +74,6 @@ struct common_audit_data {
+ #define LSM_AUDIT_DATA_FILE	12
+ #define LSM_AUDIT_DATA_IBPKEY	13
+ #define LSM_AUDIT_DATA_IBENDPORT 14
+-#define LSM_AUDIT_DATA_LOCKDOWN 15
+ #define LSM_AUDIT_DATA_NOTIFICATION 16
+ #define LSM_AUDIT_DATA_ANONINODE	17
+ #define LSM_AUDIT_DATA_NLMSGTYPE	18
+@@ -98,7 +97,6 @@ struct common_audit_data {
+ 		const struct file *file;
+ 		struct lsm_ibpkey_audit *ibpkey;
+ 		struct lsm_ibendport_audit *ibendport;
+-		int reason;
+ 		const char *anonclass;
+ 		u16 nlmsg_type;
+ 		struct {
+diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+index 955b2e7b2c8e..4b653edcb77e 100644
+--- a/security/lsm_audit.c
++++ b/security/lsm_audit.c
+@@ -393,10 +393,6 @@ void audit_log_lsm_data(struct audit_buffer *ab,
+ 				 a->u.ibendport->dev_name,
+ 				 a->u.ibendport->port);
+ 		break;
+-	case LSM_AUDIT_DATA_LOCKDOWN:
+-		audit_log_format(ab, " lockdown_reason=\"%s\"",
+-				 lockdown_reasons[a->u.reason]);
+-		break;
+ 	case LSM_AUDIT_DATA_ANONINODE:
+ 		audit_log_format(ab, " anonclass=%s", a->u.anonclass);
+ 		break;
+-- 
+2.18.0.huawei.25
 
-~ # cat /sys/kernel/tracing/trace | grep mglru_inc_max_seq
-           a.out-93      [001] d..1.   278.276539:
-mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D4 anon_min_seq=3D2
-file_min_seq=3D1 nr_anon=3D{0x0,0xf016,0x12,0x0}
-nr_file=3D{0x1886,0xb,0x4c,0x0}
-         kswapd0-50      [000] d..1.   278.422400:
-mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D5 anon_min_seq=3D2
-file_min_seq=3D2 nr_anon=3D{0x5,0xccb6,0x3439,0x0}
-nr_file=3D{0x4ae,0x4f,0x55,0x0}
-         kswapd0-50      [000] d..1.   278.508003:
-mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D6 anon_min_seq=3D3
-file_min_seq=3D4 nr_anon=3D{0xccb6,0x3d29,0x1,0x0}
-nr_file=3D{0x0,0x59,0x7,0x0}
-         kswapd0-50      [000] d..1.   280.046056:
-mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D7 anon_min_seq=3D4
-file_min_seq=3D5 nr_anon=3D{0x3bf3,0xcbbd,0x23e,0x0}
-nr_file=3D{0x0,0xb,0x1,0x0}
-         kswapd0-50      [000] d..1.   280.124876:
-mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D8 anon_min_seq=3D5
-file_min_seq=3D6 nr_anon=3D{0xcafd,0x3e31,0x0,0x0}
-nr_file=3D{0x0,0x5,0x7,0x0}
-           a.out-96      [001] d..1.   290.629014:
-mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D9 anon_min_seq=3D7
-file_min_seq=3D6 nr_anon=3D{0x0,0x10615,0xb,0x0}
-nr_file=3D{0x331,0xb,0x9a,0x0}
-         kswapd0-50      [000] d..1.   290.653098:
-mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D10 anon_min_seq=3D7
-file_min_seq=3D7 nr_anon=3D{0x15,0xef23,0x18c4,0x0}
-nr_file=3D{0xb,0xb8,0x55,0x0}
-           a.out-96      [001] d..1.   290.684875:
-mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D11 anon_min_seq=3D8
-file_min_seq=3D9 nr_anon=3D{0xeee3,0x1afb,0x2,0x0}
-nr_file=3D{0x0,0x76,0x4,0x0}
-
-You can see that the youngest generation is always zero,
-because you're just getting the newly added youngest
-generation :-)
-
-This somehow suggests that the information is redundant, as
-there is always a zero there.
-
-I suspect we'll need an additional tracepoint to show why
-aging is triggered and at what sc->priority it happens.
-
-But do you know why you trace the moment just after aging
-is completed, rather than the reason why aging is needed?
-
-Best,
-Regards
