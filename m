@@ -1,45 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793695954;
-	b=i5goVvlp82TcCNPoEVBq/u9IjcfDgL+f5bhfd/qfYsGIKd/j2iK+lzHEWurI8mKCM4OQ
-	 rTy4imnDHQ8ZNa1LnmX8BHUXOUBokV3TEsPNZtqD2rXhggz7SHT4qlzZFnL0H5ewQ9GIx
-	 v4GgchL002PZ74FqQOm6mfIb0O8CgwGMa8ykMJekJiGCMDw38s/CORXlfSU6Q5IqIIWP+
-	 cYVqOgAVqgyaKKqRcdZF1Z1yrAOUUmRJ4b8eoQX5CSsHH/uww8r5AxZuMArZkuz5+LB7S
-	 1E2Jr4TWs+alDauASma72WiAOuaaZYuEvgHwEPULspHKJwtqc27GqYMSA4Hbk6GXijw==
+	t=1793696627;
+	b=J068j2JdH/0Ha7KJOXUMwO2hKhe0/A/Uu2+j+oeRMsU5oZEa3se19oeSCZVm7QyKqA27
+	 5s7nmL4MMqsoD88XbKvk1y3tuVuPSzeUCSUzAckgFiYlVDmxn/lUhPt1jUpjpUJZrR7XS
+	 ZZiSgMMxRv3a5FN6fM6iKK6249ZVSt+3A9FrCJG7Tk6pxPyIsbNC9JoAGzLv/Se9yoHhM
+	 +KGmOpvGes34Yjuw6yRCA5vwA5AcOhxlUUa7HfFd0AhT2KtDTvGEboOydRcdlaDTps4P9
+	 2tcNCuFxbcb2Pe0AIglur13S92cjUscdK0KnjqbvbB0dwNHiXAkGJuO0AgUIa4Ms/CA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793695954;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=kOsQgTVGIr/Tgep+NhW4hFbLq1/HBMqauRz/MX5hys0=;
-	b=XnG2/qXFaTHMfT3On5d1j2PL9TIwRK+35/dX32CyI3xZ/vf92qFQKAOlBGG/jENGLIGI
-	 qtWVZwwpxaCJAxU7bjfxWih5rCHc250YHwOiVwrd5wgiuay+gqNrlM+XtPX7nWDmxEBAq
-	 PsAjFwVHxLdKhY4qvJQSaUdyG5vhmhw2z62TChRzOIZTH8SyFNMyNl+pRBjDHzU3Tg5LN
-	 0OEOGzYUlu8eBLDTtePcwMS490wgSiWgRrWyrPAkjmgeXptIzEAPNjie3feLZ7qkrOevL
-	 w0aMHmPggtpPQEztLcWVsFQjEE+eNv6VWYofiKsNfx1w2mIwAZuS8jtIUW40ekxF9xA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793696627;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=rF3lwQrlgvyoEcEb2mTJ5z+aXEk03V2/91Tqdny4RHk=;
+	b=sRe5Fzm8DGadBu4kBTABUFaRWFxiwBFgFw7BPVbxtm868B9IONpJsJ/R33hiEvX6M+2B
+	 /4dBA2YLbVH36G/0/ebRQgV3k5TlmmZI12srxKoW12hwhSnyzwhDAo2BjhlghPhmeFgkg
+	 vQy61ztoXBH7wlOjLsVU6duwpeTYhaDmFzI1e0fu8X8vfGBcK/clJsaYuBXh9EJZ5Qv72
+	 9nkwPHFEIF8ZKklE5xJRl/qsd6nwHhIP+uBSoE33l7O8DBesppuK5m6oP17vsnzZV+ZyQ
+	 AIQLW2bKwghgW1xQLHeKnpmzOK7cnDLxfUAXry5V5XJTh9p2L9yeO9i5lOJlCdELwIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=huWd5l+4;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=BiLfIXx9;
+	arc=none smtp.remote-ip=220.197.31.4
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B6D606A326
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 08:52:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D44606A327;
+	Tue,  3 Nov 2026 09:03:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C4D44606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=huWd5l+4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD3C1F000C1;
-	Tue,  3 Nov 2026 08:52:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793695954;
-	bh=kOsQgTVGIr/Tgep+NhW4hFbLq1/HBMqauRz/MX5hys0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=huWd5l+4F1p+J0e/58VInghO7CNSTaaGVdbo5FineQFBFdmf24vmWLFN79iG31zWp
-	 CIoe1TPdP5xOq9rQEM4AwCOCC27U7hVXBuwqvb/uJG7PXNuUIjb7Qvv1+odSMnI0VE
-	 gcTCo+nv9IAI8fIdYrYqGxh89ujO1h6ZLZMsg4BTF86q2d3LfApttRJ1Av4gf7AV10
-	 GbzaX1t7dTzXLTvaS9Bd/seH4No5BR1nUhUWOa/TLtZiIO/bXqDLzit7aG88HgiQUO
-	 VKNL27/sUq/WjFFAbm2gK4o6+tvorDsU8BTMQzBukjtY3KitCvGSV8WDUYnd56gy8Y
-	 1fMW+OJVd52dA==
-Content-Type: multipart/mixed; boundary="===============4326115560903711698=="
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=BiLfIXx9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=rF
+	3lwQrlgvyoEcEb2mTJ5z+aXEk03V2/91Tqdny4RHk=; b=BiLfIXx9RjMXEnQtb9
+	QSO8NrVbPKRHOcKoy7lSNWOhVpoChejG9bW79ViG2r8cVtuZeRu1J0/jXq5Zjw0e
+	/g3OZKEAFuz2sRURAqgQHfjeXlsNKG6Yb1fQhXDw8LPMrI7AopQNsZJcGaEz2xi4
+	3t5vBj3tbXVi1juplIBYwW2PU=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp4 (Coremail) with SMTP id PygvCgDHT6oyo+lq0SHqDg--.7504S2;
+	Tue, 03 Nov 2026 17:02:44 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: alexei.starovoitov@gmail.com
+Cc: andrii@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	mathieu.desnoyers@efficios.com,
+	matt@bobrowski.net,
+	memxor@gmail.com,
+	mhiramat@kernel.org,
+	rostedt@goodmis.org,
+	song@kernel.org,
+	yangfeng59949@163.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH v2 bpf-next] bpf: Fix suspicious RCU usage for sleepable bpf_get_stack()
+Date: Tue,  3 Nov 2026 17:02:42 +0800
+Message-Id: <20261103090242.680147-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <DML8PRKSQ4ZX.2A8Q5SC26RO6Q@gmail.com>
+References: <DML8PRKSQ4ZX.2A8Q5SC26RO6Q@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,52 +78,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <777e38238bae7c9eed41283cbb64940b49db57f67f10be75346de2051fac6dce@mail.kernel.org>
-In-Reply-To: <20261103075916.100050-3-jolsa@kernel.org>
-References: <20261103075916.100050-3-jolsa@kernel.org>
-Subject: Re: [PATCHv2 bpf-next 2/8] bpf: Add user memory kfuncs
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net
-Cc: bpf@vger.kernel.org,linux-mm@kvack.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ljs@kernel.org,john.fastabend@gmail.com,nierro92@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue,  3 Nov 2026 08:52:33 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PygvCgDHT6oyo+lq0SHqDg--.7504S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Kw17Xr4rur1DuFWrZF17trb_yoW8Aw1DpF
+	93tr1Skr4UXr1Fyr47Ww4kWa45CwnxXa17WF1rKr1rA3W5Zr17WrWxKF48ZF98CrykWw1j
+	qFyjq39rGr4UAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR4KZLUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbCzxULg2rpozXY7wAA3w
 
---===============4326115560903711698==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, 03 Nov 2026 03:03:02 +0000, Alexei Starovoitov wrote:
+> On Sun, Nov 01, 2026 at 11:37 PM Feng Yang <yangfeng59949@163.com> wrote:
+> > Route these paths to bpf_get_stack_sleepable() and mark the new protos
+> > might_sleep, since build_id_parse() may fault in file data for
+> > BPF_F_USER_STACK | BPF_F_USER_BUILD_ID.  Sleepable programs that call
+> > bpf_get_stack() from inside a bpf_rcu_read_lock() region are now rejected
+> > by the verifier, which is the correct behavior for a helper that can
+> > sleep.
+> 
+> That's a new feature. It's not a fix for the splat.
+> Andrii's point in v1 is about build IDs. That's a good reason for this
+> patch, but the splat needs Songsen's patch anyway:
+> https://lore.kernel.org/bpf/20261028121859.994-1-yangsongsen@insta360.com/
+> 
+>                                         Songsen's patch  this patch
+>   ------------------------------------  ---------------  -------------
+>   splat in sleepable progs              fixed            fixed
+>   splat in bpf_wq, task_work callbacks  fixed            still there
+>   build ID when the page is paged out   no               yes
+>   progs that load today                 all load         some rejected
+> 
+> Row 2: the callback is sleepable, but its prog is not.
+> 
+>   bpf_wq_work()                    rcu_read_lock_trace() only
+>     callback_fn()                  prog->sleepable == false
+>       bpf_get_task_stack()         may_fault == false
+>         __bpf_get_stack()          no rcu_read_lock()
+>           get_callchain_entry()    rcu_dereference(): splat
+> 
+> Row 4: sleepable fentry, lsm, iter, syscall and tracepoint progs that
+> call bpf_get_stack() under bpf_rcu_read_lock() or bpf_preempt_disable()
+> load fine today. With this patch the verifier rejects them.
+> It does so even when flags don't have BPF_F_USER_BUILD_ID.
+> 
+> Pls respin it as a feature, with a new subject and commit log
+> and a selftest.
 
-> bpf: Add user memory kfuncs
+Thanks. I will add the selftest and respin this patch as a feature change.
 
-TL;DR: Commit message only: it lists what the diff does; could it describe the
-use case and why FOLL_FORCE writes and PROT_EXEC anonymous mappings are
-needed? No code bug reported.
-
->     bpf: Add user memory kfuncs
->
->     Add sleepable kfuncs to copy data into a task's address space and to map
->     or unmap private anonymous memory in the current process.
->
->     Require a usable user mm for mmap and munmap. Register the kfuncs for
->     KPROBE programs and gate them on CAP_SYS_ADMIN BPF token capability and
->     the BPF_WRITE_USER lockdown check.
->
->     Use FOLL_FORCE | FOLL_WRITE for task memory copies and return -EFAULT
->     when a copy is incomplete.
->
->     Rename the syscall info-copy helper to bpf_copy_to_user_buf to avoid
->     the name collision.
->
->     Assisted-by: Codex:GPT-6
->     Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-
-this isn't a bug, but could the changelog describe the use case for these
-kfuncs, and why FOLL_FORCE writes and PROT_EXEC anonymous mappings are
-needed, instead of listing what the diff does?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41602296728
---===============4326115560903711698==--
