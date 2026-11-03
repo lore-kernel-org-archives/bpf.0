@@ -1,50 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793694484;
-	b=uB+ZmMrtb1hMcYFy82lG+gfM7V6qmLmr0jBA6jVfqHTAL8oG1XS8///++AIIOqrsW+Ns
-	 aH36SdNJeOIrPA2oOzjdFWsAWNSRwFC5FvfQstQupqoACONPSXh99uqdbIJ+fpfn5QztP
-	 qMVefOoYMZzqGuZjCaRLQoc8g9y2kmDHozIvvogfsSQFb1Ac/2U7DSq4s2xcHGOY3piGL
-	 lybPhG6wGWyKf/tjNGKXtqVEfULWvUrskre6jjJ5fPvwolhaDlJGPx9KSIhHZ5rEdVuCX
-	 fEi/OdQE/K3UlF8Usqj3DTgUiGFDkZMpl5zDx86xmZQ3QYEv2eHl4qwGL0wsgYtPjdw==
+	t=1793694492;
+	b=AlkNxTiJX5pmwY1dnhT0OH3k/lQEu+1aoAvgTR+vQD38JEQcHJJk0Din8oE/CcANz6wP
+	 jif14w8dDxEMGbE7GxNYIqXiNKGx7KOgy8X8wW9BJXGiAVNIPhqObh1YAMdkjnPF+vP0F
+	 eKODxO+auibTm9TAF5cNyoUhP5hPtvO+IS0zBNyo9Ex38ilnYE5lj5Z5A/58uNlkIrFlE
+	 UpMQ6FurC2C8GYuegQ4hnjWHxg+wAppw0uCz+7mjJSVa8rwbS2tCCwgTuWwRUDMHL2nEE
+	 AmAuFsC0MJeKJetlcgR3py2nKoza6hT5wZBmGnN2LO6vskBPR3+LqCuVJXMqMypXOHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793694484;
-	h=Received:DKIM-Signature:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=Fsirq8b1tOF7xGnt9JKmVFznOcgYPeH7MNBVIQjnYAw=;
-	b=s/VN+Nyk838q4Kq+bgapyI+huSx66CR+IIWezV+WR1eMzjuqGsQ8qsq90n4t5fz+PNdT
-	 7RP8TbRCJ9ol+J96udkktyEdXuDxIlJQBh29DANKGnvFzm4QtNNCfr/deTVLqh3mxTiOq
-	 +/zwyyguVZralX59RLXjCBq8JzUEC23F6doBPI2wOsigYwG1t9dk5ULkMZMP/C1kA6EHl
-	 3viTI7nHzx7CQVbWHijtjyPGDT8vhXIA88xnYrC6jFcmLSi+QbwuKav/A+dag/tuIEeqb
-	 UlVVYkOhdji1qxKx/K6ORAdJhsEPOmVq48P/fQu7k6gOs2OcV2LiniLBJ4N2/WuoypQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793694492;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=OvY0AiutF4T/EB4hRLo3HpPGeukYkdDeEJ/iU+h1ORc=;
+	b=BrWM6ekPlkWYZ0OlKPaweKuJ0eDGzx0VkFl9l4f7IgTULKNahPV/4oiPNcBUAbZVENz6
+	 vCHJtTd7vSd1VLS22hZc+UN3rh5dG87Ujf0e69WPXJt2mjjIahK5z1Dtd4gJkYJpuqzjT
+	 8IjgLoK/ULfT3wEnuAR4u5Lo+zoHBQpoTszsb+BqAtPRKGHP8zlUcCKO6zGAAan5yWbvx
+	 ychHNP+5e707Gs80fVIgwjftZ6vlm8CNtBH/t79iUh88EnkUWUs2ZMn3kGMCaiNtBQY/1
+	 QxPOrG1rCipNTfwD328G+gGChZDWYA9lgVDmeCz5cr1MvKTCSfoedcHdVR5FarqSZkA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LZ9GBgE+;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Jsi2k6DU;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CA5606A327;
-	Tue,  3 Nov 2026 08:28:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E08606A326;
+	Tue,  3 Nov 2026 08:28:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LZ9GBgE+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 555311F0093A;
-	Tue,  3 Nov 2026 08:27:57 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Jsi2k6DU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55461F00A18;
+	Tue,  3 Nov 2026 08:28:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793694484;
-	bh=Fsirq8b1tOF7xGnt9JKmVFznOcgYPeH7MNBVIQjnYAw=;
-	h=From:Subject:Date:To:Cc;
-	b=LZ9GBgE+6z1dxJNlGmIEYbLWgU8h2E5PEdgyN9NKIA0VaGVcncEmxMrB5iadlM0Nn
-	 lsxYS0s1MojLzCDJY9sOIFOIJt/X+v8MKTTZWds8jgIGWH8h2Ju5yHVQidwK1mFeMR
-	 rXY/zje18Dsq4xDwAicEhbhn3NgIwuQ6pkbID6UUZ4WhIsiuRJbihFd3AFGx/rTi1N
-	 OcrV0rXbke+zBcKyezsU2LFhsgS70ul3cwXf90UCjYrNFT9bs8x4SCBx8Ntwz74mVD
-	 nW00LouKPe+96bRnfEQYDH4NAdlTxzOweBU2JDDAv47nmuKo0RdRIbdUXefB4m1wFt
-	 2NEGdQbb6sFIQ==
+	s=k20260515; t=1793694491;
+	bh=OvY0AiutF4T/EB4hRLo3HpPGeukYkdDeEJ/iU+h1ORc=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=Jsi2k6DU7Oh4aCzLUoyqdjj7G7J2pWq2gAvAERDaWugLeCNd45aEyJUjjH1j3DIZ/
+	 4WK2D69zuXf0TH9ivA4uU9EhOPCOuxAd/uwOLvAb1rTsiZq0JdKIbHch8U79SWHR9/
+	 TQjwjIApWZVNqq7wkmW3QcGZEer2VvcsJ24gorf/qPVJPaBaRru6Sr6+kR/04yj0Vr
+	 JoK2GPJHqpPFLmyP478wap5BJcXtgqU2I45bSkryz3AbK+7/vJMy9asK6uLB4fzk+1
+	 xK0QKeLbJ+lljB2lGISxrOsqQ7AiLZyoyLJ+shsQF9Easzn435NgEVR/yPaR+yHlJO
+	 7ouc47z0RzQKQ==
 From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Subject: [PATCH 0/5] mm/khugepaged: bound mmap_lock hold time when walking
- an mm's VMAs
-Date: Tue, 03 Nov 2026 08:27:41 +0000
-Message-Id: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
+Date: Tue, 03 Nov 2026 08:27:42 +0000
+Subject: [PATCH 1/5] Revert "mm/khugepaged: remove definition of struct
+ khugepaged_mm_slot"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -56,10 +55,9 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2M0QqEIBQFfyXucxdMSmh/JXoQPdmlxUIriujfV
- /ZxBmYeykiCTJ/qoYRTsqyxQFNX5GYbA1h8YdJKm0bpnpf5CNhsgOev3RHdzZNc3Kq277wxsJ2
- iEm8JRf/Hw/i+P04JZmRoAAAA
-X-Change-ID: 20261029-khugepaged-latency-fix-40495d66ea50
+Message-Id: <20261103-khugepaged-latency-fix-v1-1-a07ab16ac860@kernel.org>
+References: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
+In-Reply-To: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
 To: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
  Baolin Wang <baolin.wang@linux.alibaba.com>, 
  "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
@@ -81,78 +79,229 @@ To: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
 Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
  "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2978; i=ljs@kernel.org;
- h=from:subject:message-id; bh=XXzzroOk3JzB70Kjl+zLo7wwLJmwdmiu+XnhF/h0hi0=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJezub07jtZPs3hZ101N694fbdfzVdvDfXOirsP7zjdK
- Ty/fTdXRykLgxgXg6yYIsvzL+L7g0TC5nVe8HeDmcPKBDKEgYtTACay4SfDH45qsUkXUpPyPOuV
- hQ8qTPq0ym/p2gu71rXsvLd35p77DlWMDKcOPHCefaTv0bWucqn0xLC23xmPc37VS0ztSUpYUio
- wkxEA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6851; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=ty70DWaf971lvzzena0vW+gJxafYRNDAfLReCqRuH9g=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJezuaZ6c1iubrVitX2xWq/2QVdm4KCPmW9fvta6xbnY
+ qnbNya96ihlYRDjYpAVU2R5/kV8f5BI2LzOC/5uMHNYmUCGMHBxCsBElsky/C9i1kvb4+hrmTtl
+ j6N6SdyECTMOH1MJjA1jYSvdc8FTwYPhn1n5q71Kv1g29y++f31Z73vXaxvEX3g2HmY8eC206t7
+ zt2wA
 X-Developer-Key: i=ljs@kernel.org; a=openpgp;
  fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-This series introduces a couple small changes to khugepaged to improve its
-behaviour both in the face of mm->mmap_lock contention and to reduce that
-lock contention when possible.
+This partially reverts commit b4c9ffb54b32 ("mm/khugepaged: remove
+definition of struct khugepaged_mm_slot"), as a subsequent commit needs to
+resurrect this type to store additional data alongside the mm_slot.
 
-It also updates other places which release the mmap read lock to allow mmap
-contended mmap write locks a chance to make progress (BPF iterators and
-/proc/$pid/maps + friends).
+The stated intent of the commit was to address a NULL check in
+__khugepaged_exit():
 
-Looking at the first change - if the mmap lock is contended, an attempted
-mmap trylock in collapse_scan_mm_slot() will result in the scan being
-aborted wherever it happens to be, and when next the mm is processed it
-starts from the beginning again.
+	mm_slot = mm_slot_entry(slot, struct khugepaged_mm_slot, slot);
 
-If an mm has a lot of ineligible VMAs and is undergoing significant
-mmap_lock contention, collapsing the eligible VMAs there can take a very
-long time.
+slot can be NULL and mm_slot_entry() is an alias for container_of(), so
+this is container_of() a NULL value.
 
-Patch 2 of the series fixes this (patch 1 is a prerequisite) by keeping
-track of where khugepaged was in the mm before aborting the scan.
+This was benign as there was only 1 field in khugepaged_mm_slot (offsetting
+NULL at 0 results in NULL), however it was right to fix this, so retain the
+fix.
 
-This issue was noticed during some work in which an mm was instantiated
-with a large number of small VMAs under significant mmap_lock contention,
-during which collapse was observed to take 10.8s. With this patch applied
-it took 3.6s to collapse the same mm.
-
-Patch 3 introduces new rwsem primitives - down_read_nosteal() and
-down_read_killable_nosteal() - to allow for read locks to be taken without
-stealing them from a queued write lock.
-
-Patch 4 adds mmap lock wrappers for this - mmap_read_lock_nosteal() and
-mmap_read_lock_killable_nosteal() and updates callers which release the mmap
-read lock on contention - BPF iterators + /proc/$pid/maps et al.
-
-Finally, patch 5 uses this to have khugepaged release + reacquire the mmap
-read lock in the face of a large number of ineligible VMAs.
-
-This was also observed as part of the previously mentioned work in the form
-of mmap lock stalls, which patch 5 resolves.
-
-Importantly, none of the changes introduces any regressions for khugepaged
-anywhere. It is all upside, and implemented conservatively.
+It also unwrapped KMEM_CACHE() in khugepaged_init(). This was a mistake,
+and was itself reverted in commit c14bdcc9f274 ("mm/khugepaged: use
+KMEM_CACHE()"). Therefore, retain the KMEM_CACHE() form in this revert.
 
 Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 ---
-Lorenzo Stoakes (ARM) (5):
-      Revert "mm/khugepaged: remove definition of struct khugepaged_mm_slot"
-      mm/khugepaged: scan mm's more efficiently under mmap_lock contention
-      locking/rwsem: add down_read[_killable]_nosteal()
-      mm: add and use mmap_read_lock[_killable]_nosteal() on contention
-      mm/khugepaged: drop/reacquire mmap read lock if skipped enough VMAs
+ mm/khugepaged.c | 57 ++++++++++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 38 insertions(+), 19 deletions(-)
 
- include/linux/mmap_lock.h |  44 +++++++++++++++++++
- include/linux/rwsem.h     |   2 +
- kernel/bpf/task_iter.c    |   2 +-
- kernel/locking/rwsem.c    |  71 ++++++++++++++++++++++++------
- mm/khugepaged.c           | 108 ++++++++++++++++++++++++++++++----------------
- mm/mmap_lock.c            |   2 +-
- 6 files changed, 178 insertions(+), 51 deletions(-)
----
-base-commit: 34f88a114888c9dba49e45f2b0c2a3e83c4c871c
-change-id: 20261029-khugepaged-latency-fix-40495d66ea50
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index da91762f6358..aad8797f8d5a 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -66,6 +66,14 @@ static DEFINE_READ_MOSTLY_HASHTABLE(mm_slots_hash, MM_SLOTS_HASH_BITS);
+ 
+ static struct kmem_cache *mm_slot_cache __ro_after_init;
+ 
++/**
++ * struct khugepaged_mm_slot - khugepaged information per mm that is being scanned
++ * @slot: hash lookup from mm to mm_slot
++ */
++struct khugepaged_mm_slot {
++	struct mm_slot slot;
++};
++
+ /**
+  * struct khugepaged_scan - cursor for scanning
+  * @mm_head: the head of the mm list to scan
+@@ -76,7 +84,7 @@ static struct kmem_cache *mm_slot_cache __ro_after_init;
+  */
+ struct khugepaged_scan {
+ 	struct list_head mm_head;
+-	struct mm_slot *mm_slot;
++	struct khugepaged_mm_slot *mm_slot;
+ 	unsigned long address;
+ };
+ 
+@@ -386,7 +394,7 @@ int hugepage_madvise(struct vm_area_struct *vma,
+ 
+ int __init khugepaged_init(void)
+ {
+-	mm_slot_cache = KMEM_CACHE(mm_slot, 0);
++	mm_slot_cache = KMEM_CACHE(khugepaged_mm_slot, 0);
+ 	if (!mm_slot_cache)
+ 		return -ENOMEM;
+ 
+@@ -446,20 +454,22 @@ static bool hugepage_enabled(void)
+ 
+ void __khugepaged_enter(struct mm_struct *mm)
+ {
++	struct khugepaged_mm_slot *mm_slot;
+ 	struct mm_slot *slot;
+ 	int wakeup;
+ 
+ 	/* __khugepaged_exit() must not run from under us */
+ 	VM_BUG_ON_MM(collapse_test_exit(mm), mm);
+ 
+-	slot = mm_slot_alloc(mm_slot_cache);
+-	if (!slot)
++	mm_slot = mm_slot_alloc(mm_slot_cache);
++	if (!mm_slot)
+ 		return;
+ 
+ 	if (unlikely(mm_flags_test_and_set(MMF_VM_HUGEPAGE, mm))) {
+-		mm_slot_free(mm_slot_cache, slot);
++		mm_slot_free(mm_slot_cache, mm_slot);
+ 		return;
+ 	}
++	slot = &mm_slot->slot;
+ 
+ 	spin_lock(&khugepaged_mm_lock);
+ 	mm_slot_insert(mm_slots_hash, mm, slot);
+@@ -504,12 +514,15 @@ void khugepaged_enter_vma(struct vm_area_struct *vma,
+ 
+ void __khugepaged_exit(struct mm_struct *mm)
+ {
++	struct khugepaged_mm_slot *mm_slot;
+ 	struct mm_slot *slot;
+ 	int free = 0;
+ 
+ 	spin_lock(&khugepaged_mm_lock);
+ 	slot = mm_slot_lookup(mm_slots_hash, mm);
+-	if (slot && khugepaged_scan.mm_slot != slot) {
++
++	mm_slot = slot ? mm_slot_entry(slot, struct khugepaged_mm_slot, slot) : NULL;
++	if (mm_slot && khugepaged_scan.mm_slot != mm_slot) {
+ 		mm_slot_remove(slot);
+ 		free = 1;
+ 	}
+@@ -517,9 +530,9 @@ void __khugepaged_exit(struct mm_struct *mm)
+ 
+ 	if (free) {
+ 		mm_flags_clear(MMF_VM_HUGEPAGE, mm);
+-		mm_slot_free(mm_slot_cache, slot);
++		mm_slot_free(mm_slot_cache, mm_slot);
+ 		mmdrop(mm);
+-	} else if (slot) {
++	} else if (mm_slot) {
+ 		/*
+ 		 * This is required to serialize against
+ 		 * collapse_test_exit() (which is guaranteed to run
+@@ -1773,8 +1786,9 @@ static enum scan_result collapse_scan_anon(struct vm_area_struct *vma,
+ 	return result;
+ }
+ 
+-static void collect_mm_slot(struct mm_slot *slot)
++static void collect_mm_slot(struct khugepaged_mm_slot *mm_slot)
+ {
++	struct mm_slot *slot = &mm_slot->slot;
+ 	struct mm_struct *mm = slot->mm;
+ 
+ 	lockdep_assert_held(&khugepaged_mm_lock);
+@@ -1790,7 +1804,7 @@ static void collect_mm_slot(struct mm_slot *slot)
+ 		 */
+ 
+ 		/* khugepaged_mm_lock actually not necessary for the below */
+-		mm_slot_free(mm_slot_cache, slot);
++		mm_slot_free(mm_slot_cache, mm_slot);
+ 		mmdrop(mm);
+ 	}
+ }
+@@ -2891,6 +2905,7 @@ static void collapse_scan_mm_slot(unsigned int progress_max,
+ 	__acquires(&khugepaged_mm_lock)
+ {
+ 	struct vma_iterator vmi;
++	struct khugepaged_mm_slot *mm_slot;
+ 	struct mm_slot *slot;
+ 	struct mm_struct *mm;
+ 	struct vm_area_struct *vma;
+@@ -2900,12 +2915,14 @@ static void collapse_scan_mm_slot(unsigned int progress_max,
+ 	*result = SCAN_FAIL;
+ 
+ 	if (khugepaged_scan.mm_slot) {
+-		slot = khugepaged_scan.mm_slot;
++		mm_slot = khugepaged_scan.mm_slot;
++		slot = &mm_slot->slot;
+ 	} else {
+ 		slot = list_first_entry(&khugepaged_scan.mm_head,
+ 				     struct mm_slot, mm_node);
++		mm_slot = mm_slot_entry(slot, struct khugepaged_mm_slot, slot);
+ 		khugepaged_scan.address = 0;
+-		khugepaged_scan.mm_slot = slot;
++		khugepaged_scan.mm_slot = mm_slot;
+ 	}
+ 	spin_unlock(&khugepaged_mm_lock);
+ 
+@@ -2981,7 +2998,7 @@ static void collapse_scan_mm_slot(unsigned int progress_max,
+ breakouterloop_mmap_lock:
+ 
+ 	spin_lock(&khugepaged_mm_lock);
+-	VM_BUG_ON(khugepaged_scan.mm_slot != slot);
++	VM_BUG_ON(khugepaged_scan.mm_slot != mm_slot);
+ 	/*
+ 	 * Release the current mm_slot if this mm is about to die, or
+ 	 * if we scanned all vmas of this mm, or THP got disabled.
+@@ -2993,14 +3010,16 @@ static void collapse_scan_mm_slot(unsigned int progress_max,
+ 		 * mm_slot not pointing to the exiting mm.
+ 		 */
+ 		if (!list_is_last(&slot->mm_node, &khugepaged_scan.mm_head)) {
+-			khugepaged_scan.mm_slot = list_next_entry(slot, mm_node);
++			slot = list_next_entry(slot, mm_node);
++			khugepaged_scan.mm_slot =
++				mm_slot_entry(slot, struct khugepaged_mm_slot, slot);
+ 			khugepaged_scan.address = 0;
+ 		} else {
+ 			khugepaged_scan.mm_slot = NULL;
+ 			khugepaged_full_scans++;
+ 		}
+ 
+-		collect_mm_slot(slot);
++		collect_mm_slot(mm_slot);
+ 	}
+ 
+ 	trace_mm_khugepaged_scan(mm, cc->progress - progress_prev,
+@@ -3090,7 +3109,7 @@ static void khugepaged_wait_work(void)
+ 
+ static int khugepaged(void *none)
+ {
+-	struct mm_slot *slot;
++	struct khugepaged_mm_slot *mm_slot;
+ 
+ 	set_freezable();
+ 	set_user_nice(current, MAX_NICE);
+@@ -3101,10 +3120,10 @@ static int khugepaged(void *none)
+ 	}
+ 
+ 	spin_lock(&khugepaged_mm_lock);
+-	slot = khugepaged_scan.mm_slot;
++	mm_slot = khugepaged_scan.mm_slot;
+ 	khugepaged_scan.mm_slot = NULL;
+-	if (slot)
+-		collect_mm_slot(slot);
++	if (mm_slot)
++		collect_mm_slot(mm_slot);
+ 	spin_unlock(&khugepaged_mm_lock);
+ 	return 0;
+ }
 
-Cheers,
 -- 
-Lorenzo Stoakes (ARM) <ljs@kernel.org>
+2.56.0
 
