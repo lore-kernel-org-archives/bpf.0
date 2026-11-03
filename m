@@ -1,101 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793724702;
-	b=K6RkThKcGgTHZmxYoUaYUFu+A6WCowCGBE1kyq5H2DnwyjwhCrGJu4P2/M0s/e04HKBV
-	 tm8CjyZgLYD2ZQX9V2AUS66CCBPOH8QSFHaz9916HQVscbg2hcEsIkLo/iAdVqtOYz0mn
-	 qf+UAVdtevSmibE8kJg3G7/VQr8KoXo8Rcjneb5TnlYDVejWlIyACguSPwAhX/nNrELua
-	 NxU8XmtpAAeOa/2PMf7ZDpq7sTBy1Yxr1gnQ3P3n8QGALMmilWHAGpe47QMDZaWqtspo9
-	 R2hljpbnha9JRWLJQwT1QDtvJDAT/V0vaa389or8FZSpSyIj6vyJFk2KvaKgJzQ6z5Q==
+	t=1793724793;
+	b=HL5cWN1i9zgLeWDKEYqkO45KaqteNEAoQybea2+8kMFUMpWxMRNbALkK2agIAjIW4+ei
+	 1guZgvOOqL+cUGYx0jUbpybWqgoJktJ1DyR6tSLcR9EOg7yOjo1EQlmMNN/Pz/i26SqcU
+	 AxsFHmQYGwdWrSo690n+zGAt1ZtT+HaQpR2MuN8iAZPam8/lrSwUsSoHaKo5eZzziyo5l
+	 Bw/CUYNewKNcyBXAdjmCCUlbcvfJn7dLy89/SfAk0IPMs2ZaQT++y6uV+wOHYTDIYaMUJ
+	 bIhpCh0cJEOI2RAxz5MemVii2cRg6WWPOZCKZiwstnlywgTEIIlW+4kexnjJ4LGeCKg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793724702;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=z/+aYEPLoBSp7AxjoxxgYR8cgspXFyNdt6Vr/KNLDmE=;
-	b=mjkYgQUniHHZ5O2milBr06Iu6SYW35MQjO9rjNPjpmOWQsrKAuEiHlZ4WYegDW54TTFJ
-	 Vv2lMJhavNePptjMsL1QfhdBhOOC8GFi5Ed0E3MBVcREf5YwbGGRuIq+Nin0r42fQqFgu
-	 TRDvsJuksuKjbkotkV/MiDSLrUOfZah757G8W2v3fGjkw8e3VKYabQofTzJT0qS9xnabI
-	 K+h9e/LdakfPLzvzb4c6kPGZUXtATs1TJlUvhgoZZ0pNeUUWpTBVGQLaWq4Y97s3qOLz/
-	 PyJ+F+Z3hTtF+RUl8GL3BbuU5+IT3RnOe8T917dzddbO3EVfIbGc2G3MVNHuiZPW3fA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793724793;
+	h=Received:DKIM-Signature:Received:Subject:From:In-Reply-To:References:
+	 X-PR-Tracked-List-Id:X-PR-Tracked-Message-Id:X-PR-Tracked-Remote:
+	 X-PR-Tracked-Commit-Id:X-PR-Merge-Tree:X-PR-Merge-Refname:
+	 X-PR-Merge-Commit-Id:Message-Id:Date:To:Cc;
+	bh=Epw7LFSI+Vc1KBCqkZx2Tdj/yQ1FCu7g5ChBWY3RbUk=;
+	b=Pqy/WZTzHSeUjnmbCPdVIRzVZxU0PIaCnDZxNzYok2ak0m6ktcAKs0HRox7s1ej6CLkW
+	 ZyLXqR3LEZS7m0wmzu6KmJRVWKmgIVj+C+KAsgWXwpS3Twl00H8sG84KcWhz9/nrnEgID
+	 rOyo5PRp8jwKU3PdasHk5UhKN1pG/h4ugcsZ/XwBlndVgDA0NpRkdhJLnLgWPr8W70nlR
+	 vB4xlwJnqqTUn6BwBlxlvhOAPJDJ72m/Ea1Us7PInZHoX3sQINxLlf9HjWSvrZ58bkH9d
+	 IUUcdqRqDlK0JMhLMLQ8fAzb8M4LTf6BvFBiX8Ty+eX/k7CqaeVFOAFrEdDBVYHFAsQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eTIFtqdT;
-	arc=none smtp.remote-ip=209.85.210.176
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j4Q3XAV2;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3047606A33E
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 16:51:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C3047606A33E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B99606A324
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 16:53:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eTIFtqdT
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8a07025cce4so2272563b3a.2
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 08:51:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793724701; x=1794329501; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=z/+aYEPLoBSp7AxjoxxgYR8cgspXFyNdt6Vr/KNLDmE=;
-        b=eTIFtqdTdXpA/AfqqKkL10HIQZLcduWeqawGhkY8XSlpOW7wAg7SwK7IyckCmAeC8z
-         QZEJnVKKbFm1lme2SYMMxv1HNP1Njw8KJE3QtzbovqqCyntSjZr0OxFCZk8earTy7ZeP
-         s5VZOXYH++PjPF1kTEA3lESRC8qsEpTcVQUri9WLAkuFv2cuZix2S1MDadbIk2gWxXcO
-         a1CWIRWP4N0snge7OVszIUi9zzUBbb6XW85sc28z+DIK0qUMW3AE1Bt1XJHJEohjeBO9
-         ub6LOMq+gg31oFsCGTjAhEdvsMpjkdKA0Yw0Eq/2gp4qZRvsM2ML5GSPlkglQB80sBeL
-         ogXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793724701; x=1794329501;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=z/+aYEPLoBSp7AxjoxxgYR8cgspXFyNdt6Vr/KNLDmE=;
-        b=sWy6sNTwf0ZV2duJHUTwv2HkhWcPWBeDiRWAZValpgI56aDGTKzVak93hkCuHVi9an
-         fNbA2YMDfqP+ZZS3njpEmWJeeKKifYuk9QIUKfZHoNyGM165Cry54QPm1rW6fZCQGZxp
-         MXoazMDS/Nt3W5dK5mo9k2Pp2O4F/at9G93Ejmm+fACzRZfhVZSLnlZD2m4UFR9igEvp
-         mANfWqQXWtIocK/ka1ICDWLEQTSfDhu9yXENOcYYrZvGvv1L+BLwalSldVz089AXTlbG
-         AhD+rVZQfTozXBm/eqUyNWXuYM9EYxlgZqrLh3JYh9mXJ7s7Gu3sPPzWkastqrmn2bX/
-         sxDw==
-X-Forwarded-Encrypted: i=1; AKwUvBy0h6JBMKo/7Zft0kyE10Q4CqclypkGKcdcgti8rhfzI3MxnXfQsX3MJ8gbg4ERZAqcOWE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9UqZC70ZJyaQxj4Dt9Qdi8xnaG3ayMs4dxJ+Q9oeLWZwpEnG9b
-	kUVLSmU9Q029fKr6FSsRWL/iF3LtcIYrGg6208hHcPqEAQF/5QcOnQ+2
-X-Gm-Gg: AYBFou0QFDAsHRWofB8hSLsyMYn6MqP8qcCraAhc/4pAOqXLAYWIHL5Dx/ygXS7kmE2
-	vgMu36Z1GlhnTUqSrnMDvZo0SFGw/Uz6ZECJP9gqf1+fql4BlsHWqNr3x2tg3P9S/48/ChrmcrY
-	UfHMteiceVnAm5bfb5Rp9uvwPEtJ9hvQgfGwx449xnZmr8IOjPFkX2gGo8euc1L87SmtjHgD602
-	oCLnghaHCYc5HkME/zAx+5/UzGuStBNfmAbAzjxU+5U2ahyrCqLxMcuetp25lWJEGr/LVQs7pS/
-	3CQbS3THrgGkDewmXq0a+UDUSccAylBkJLOHlb/C7Jk7QPmcMvWTznGTK6GvBwGbqYXyxSt6F/J
-	58+h9RQeJc2t22XebiBLvG8FhZHmgQxJw+7lDHxvOe5IXstdXY8rKBWJiZ9Y8DAE13oeBv6lQSu
-	HUGH5i0nqXO/wEAC4Aog5Q5riIy6iNkhwAmnPjZPuBaG+IQ+KitqFIyI9GyHIMXRUXUr2OgjaO/
-	gTVxEQJAETIWE+00Tj4Nylmhfvi+y+BIq7TiH9XiP8tvxOE+y3U+yLxQeQrRAHLeXnvnnc5pAq4
-	MgqTxFEZ+7bAwQRQmcy2sBhDksyWb4IfBryHKWwfD/YfSwhnQvPVXjZWbbFGWCIXbdbpHJEoXoP
-	uFGrmZgo9PoNRuSK1HyBJYxlj7ZJ6Au+WzA==
-X-Received: by 2002:a05:6a00:3a12:b0:8a0:2cfd:87cb with SMTP id d2e1a72fcca58-8a9bf90ab27mr11070101b3a.43.1793724700510;
-        Tue, 03 Nov 2026 08:51:40 -0800 (PST)
-Received: from localhost ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8aad77fccffsm3794904b3a.7.2026.11.03.08.51.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2026 08:51:40 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 03 Nov 2026 16:51:39 +0000
-Message-Id: <DMLQC758A2C3.175VOTFQ2Z8HD@gmail.com>
-Cc: <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <daniel@iogearbox.net>,
- <linux-kselftest@vger.kernel.org>, <cuitao@kylinos.cn>,
- <ameryhung@gmail.com>
-Subject: Re: [RFC PATCH v12 1/4] blk-iocost: add BPF struct_ops cost model
- support
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Tao Cui" <cui.tao@linux.dev>, <tj@kernel.org>, <josef@toxicopanda.com>,
- <axboe@kernel.dk>
-In-Reply-To: <20261103132613.1952975-2-cui.tao@linux.dev>
-References: <20261103132613.1952975-1-cui.tao@linux.dev> <20261103132613.1952975-2-cui.tao@linux.dev>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j4Q3XAV2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C52D91F000C1;
+	Tue,  3 Nov 2026 16:53:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793724792;
+	bh=Epw7LFSI+Vc1KBCqkZx2Tdj/yQ1FCu7g5ChBWY3RbUk=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc;
+	b=j4Q3XAV2e0LWfxTzhjK7X0tx6yXFNMaCu1k3Iw6M3B9WrRzpey7KjGuWFlMIUo7mx
+	 4TVzFZyDPye37vMsMr6IUkX6OcQw47DFd+cWrPRnWJ9sU82qGai/Yf6nS5kDgdE6K+
+	 jVlpG2dwZUnNZdWnyVxRvVX6TxF/VzOHCkXx0+vbjCPuFP3vUq9n0xS9WVgg1iV9lU
+	 jaJP5PtR61gDYC8ZMyR98vsN40pRRGFfYaPf77eHca10VEZjf0y1nAoH1XwptkTasY
+	 h3MrhcBi6TV6xFpqtmL+sC+HKOVGDy35Fq3Ol4ucTtE3SlwQ7YMdfoOitItXNVzYmZ
+	 YJqsFDDhneVLQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA4C3391AFFF;
+	Tue,  3 Nov 2026 16:53:12 +0000 (UTC)
+Subject: Re: [GIT PULL] BPF fixes for 7.4-rc2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20261102233400.1941543-1-alexei.starovoitov@gmail.com>
+References: <20261102233400.1941543-1-alexei.starovoitov@gmail.com>
+X-PR-Tracked-List-Id: <bpf.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20261102233400.1941543-1-alexei.starovoitov@gmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+X-PR-Tracked-Commit-Id: 9abe2c42ecab6c86b54838d2d645ca2e10204606
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a4da531b171c664a6cf42c5b82d1610cbdf14fe4
+Message-Id: <179372479120.1755341.153490011186531245.pr-tracker-bot@kernel.org>
+Date: Tue, 03 Nov 2026 16:53:11 +0000
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: torvalds@linux-foundation.org, bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,17 +67,16 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
 
-On Tue, Nov 03, 2026 at 05:26 AM Tao Cui <cui.tao@linux.dev> wrote:
-> @@ -3223,7 +3306,6 @@ static u64 ioc_weight_prfill(struct seq_file *sf, struct blkg_policy_data *pd,
->  	return 0;
->  }
->
-> -
->  static int ioc_weight_show(struct seq_file *sf, void *v)
+The pull request you sent on Mon,  2 Nov 2026 23:34:00 +0000:
 
-Unrelated change. Tejun pointed at this hunk in v11.
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
 
-Overall makes sense to me:
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a4da531b171c664a6cf42c5b82d1610cbdf14fe4
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
