@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793741882;
-	b=XvZ6hTrdAex3q+4KaBQGOJp2QTmvGgFZkKMDEJYEVZNS30focfZ4iJyG/62KlRkUUCys
-	 zbluTtvMwsNUXHaWW6dSycFXlcKdz2y12tdPonnoS9dBOTU9MUdoREogw9iGF0hCcjLSj
-	 PqkpfDsfy2Iu1atrJ7lVLZj5nOktjA//MtZutKVcBmihWe73goY8svqmkBzGyY5GgrPpl
-	 vLsXhKbRg4zuSNWGpgAh8aBBQlNZos39IkTA0DVK25je5+kU2k5YFM5w5g+hXEisGIvQT
-	 50MK4PPjjw4m+wwhMDVVUWbQz69UD03SORRCWxGdNpgx7osa4DTbBca6DWaJEEDz08w==
+	t=1793741879;
+	b=Wwn/0yTJEx/vxlswl53v2sxhJoo3V7P6eAJcjfP13nxj7m5M4zpKxOg4U5c6XpXcPYtP
+	 4T+t8UCgstZcWi2+3LIMFxicLoJzOLbyJT+Jiyv3UzO5TPywptny7gF/M117M8ZCCs2eI
+	 c1A3S3ZiWLbxk98BFqK4BbPk+aFfAIoDTZLDa5OESSfXalbXLxF3KcKFyCf3QSCvAkYyn
+	 lcYIKuf2AA18kwlbzySgirpP2VeVwu9COUSfWcv6O1R8DBbihosF4JgsqdQWCI+9SRAxJ
+	 WMun4zYe60NxEcV0crAA/rh+vJqmi12JZEpQFm8STZmRXKf49V54CHrR2j5dvHh9rXg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793741882;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793741879;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=qT2LBx85XctbDsC5iPBV6BjNvzAGZkSFB96TXC2ej8Y=;
-	b=kxjzc7fsMwh0RfCVZiCcjaozowv2q2J36R9+LOLZ38G40YR5KXvCrFZahy6qw5L6RdL0
-	 6sZPsMA66pe5yzWm+8HglemRNooFI/+ghBzwWJ36w45Kw9lhfGjaHlkJhDTiZgT3qf3Zw
-	 2km9WWAzSpf8EHy0mtroOTryIqQDwVqGvpZkL5LxCIY83Tdknp9yiJBqnluhBuzUdyrLd
-	 2CU5EtsDcJD4kvHeOkRDZiozr28SMP4pxMJ4YLeLCHOAEVCMwzZ2SQ1nr5ABymitBe6kn
-	 FHeOQPRvhfnT+yJ1RlqKZp/MblT/JM4h5l4QbPuyCA45EEt2n2SisBeTD4k4iFcPW/Q==
+	bh=uyJDo7OV7DfHD/HxsDJJ2zC/feoJdSr9R7W6gWr18ck=;
+	b=XeOeCm6QX6AZGBqzUzmZJVevU5yRDntIqMrxFkcEsuicldtf6jPpzzN52KrEL+s9eR0l
+	 BfpL+kupRIKDBD+nl8bjkOYgrL1fx+pKiwrrMnwElmz/+Wf0NiWuF2FUalptniXnMow2Z
+	 SMTwegw8QbcO2ve0jaNfMbvsHe9/HHTWJMhohVWR03RqI9b4vckcaHx5zGQwWvLfQ1pYF
+	 5CX0sb7KYQavkxe2lcPqhYnL3QHdhMq3sTyFqDRIPoT2Ovo2elJCQTzZz1HQbIBWdT8Jo
+	 xxlUtz4lOPZ8726nelxh7KhRxsL/779jxx0O1KamgjiTxiDaHmoYxOgVoNhYs1bJ8YA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hc7YS2us;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hIJArRi2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80482606A329;
-	Tue,  3 Nov 2026 21:38:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9512606A31B;
+	Tue,  3 Nov 2026 21:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hc7YS2us
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE881F000C1;
-	Tue,  3 Nov 2026 21:38:01 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hIJArRi2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB691F000C1;
+	Tue,  3 Nov 2026 21:37:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793741882;
-	bh=qT2LBx85XctbDsC5iPBV6BjNvzAGZkSFB96TXC2ej8Y=;
+	s=k20260515; t=1793741878;
+	bh=uyJDo7OV7DfHD/HxsDJJ2zC/feoJdSr9R7W6gWr18ck=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=hc7YS2usCDXg+HZI0HNVy6w1PHaBMOjd5GZC5J5F/0w63jXcBILQdfy62z5h8SAbp
-	 svWQrn7PJ+l+vGcOWTzcDaZtO0NlGXW+keU6nT5vNKYXDZIzADtqiRGwmLgyq8ecoz
-	 NWhVLmi08uH0wBJHpukxhQBfRKlYCD0FCzzSl7iMFLirwVe/LhDufmndhez3Qcg9h+
-	 PoErElIo7yZ4f95LlQnglrPGmQVptjkoQYS6Vrm17luYvfroL05Ta9d+QZGpz0ND0n
-	 4cxEOGZC3S5oQNGhwDOt1G+sPGDSil6MvK8hyCGxn6K2O3wZa/ArPXKlcNqYWLZoBr
-	 Mj5pALxLkigJw==
-Subject: Re: [PATCH bpf v2 07/15] bpf, sockmap: Check the target of an egress
- redirect before each send
+	b=hIJArRi2YVu09RgrD/mUwF8RfI9DkQ9kkT6QVdGMxl/dlcT/A8K/spx2KN5HGHyP9
+	 iGkLckfXrhuhi3aLIgNRuGPoAkZDPNkEtmNmZSD4oOHrbExzJxlZk/DeSMgxbF6eU1
+	 SUnRvoqOYDNKJCc273KMtIUj2Idk5zjf8L5JN2tpymzlIdATbZfJZ7GGDGLVCJ+8LI
+	 BhEVijWe0vNrBCF7yYojkNzCAV+SwSb3PofPuCBbN/NSG5FLsNBFXQi8EJNKX4+Hug
+	 mL4ZBUb+iLKPyHjzCiVqC/7Gmgp1FU4NMo+FN+J+Uc9c7ilZIvAxOLKflKL0ImkyzK
+	 lCGf2wqKmUxnw==
+Subject: Re: [PATCH bpf v2 03/15] bpf, sockmap: Don't let an SK_PASS verdict
+ cover the next message
 From: netdev-bot+sashiko@kernel.org
 To: alexei.starovoitov@gmail.com
 Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
@@ -50,11 +50,11 @@ Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
  davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
  horms@kernel.org, kuniyu@google.com, willemb@google.com, matttbe@kernel.org,
  mptcp@lists.linux.dev, mason@kernel.org, josef@toxicpanda.com
-Date: Tue, 03 Nov 2026 21:38:00 +0000
-Message-ID: <179374188061.488855.10389706003415159913@kernel.org>
-In-Reply-To: <20261102072112.4160195-8-alexei.starovoitov@gmail.com>
-References: <20261102072112.4160195-8-alexei.starovoitov@gmail.com>
-X-sashiko-severity: Medium
+Date: Tue, 03 Nov 2026 21:37:57 +0000
+Message-ID: <179374187706.488855.8366350890804573396@kernel.org>
+In-Reply-To: <20261102072112.4160195-4-alexei.starovoitov@gmail.com>
+References: <20261102072112.4160195-4-alexei.starovoitov@gmail.com>
+X-sashiko-severity: Critical
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -67,10 +67,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 4 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 (2) · Low: 3
+Critical: 1 · High: 1 · Medium: 1 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -78,246 +78,193 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] The claim: tcp_bpf_redir_allowed() runs only before
-  tcp_sendmsg_locked().
-- [Low] Non-blocking egress redirects to a connecting target now fail
-  with EINVAL instead of EAGAIN, and the commit message does not say so.
-- [Low] The claim: tcp_bpf_sendmsg() strips MSG_FASTOPEN for every psock
-  send, including __SK_PASS to the sender's own socket, while the…
-- [Low] The comment in tcp_bpf_sendmsg() is now inaccurate.
-
-Pre-existing issues:
-- [Medium] An egress-redirect sender sleeping in sk_stream_wait_memory()
-  on a target's wait queue is not woken when the target's owner closes…
-- [Medium] tcp_bpf_push_locked() (and bpf_tcp_ingress()) call lock_sock()
-  on a redirect target that may be a child still in a listener's accept…
+- [Critical] Use-after-free of psock->cork.
+- [High] The fix is incomplete when the verdict has a byte budget
+  (psock->apply_bytes != 0).
+- [Medium] The patch resets eval early, which lets one sender's bytes be
+  charged against another sender's verdict and end that verdict early.
 
 --
 
-bpf, sockmap: Check the target of an egress redirect before each send
+bpf, sockmap: Don't let an SK_PASS verdict cover the next message
 
-This adds tcp_bpf_redir_allowed() and calls it in tcp_bpf_push() before
-each tcp_sendmsg_locked() call made for an egress redirect. The redirect
-fails with -EINVAL when the target has no struct socket or is still
-connecting, and with -EPIPE after close(). It also clears MSG_FASTOPEN in
-tcp_bpf_sendmsg(), so a redirect cannot enter the target's connect code.
+This commit changes the __SK_PASS branch of tcp_bpf_send_verdict(). When
+psock->apply_bytes is 0, it now resets psock->eval to __SK_NONE before
+tcp_bpf_push(). When the push fails, it subtracts the bytes that went out
+from apply_bytes and ends the verdict if apply_bytes reaches 0.
 
 > diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index fd443350f9b81..ef2e15de0fe3b 100644
+> index d90bcc911b36b..b016aa419fb2d 100644
 > --- a/net/ipv4/tcp_bpf.c
 > +++ b/net/ipv4/tcp_bpf.c
-> @@ -88,6 +88,24 @@ static int bpf_tcp_ingress(struct sock *sk, struct sk_psock *psock,
->  	return ret;
->  }
+> @@ -457,8 +457,22 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
 >  
-> +/*
-> + * The target of a redirect belongs to somebody else. A child that nobody has
-> + * accepted yet, and an orphan, have no struct socket and no wait queue.
-> + * tcp_sendmsg_locked() needs both. See sendmsg_locked() in skbuff.c.
-> + * The sender holds no reference to the file of the target, which can be closed
-> + * whenever tcp_sendmsg_locked() sleeps. sk_stream_wait_connect() and
-> + * inet_wait_for_connect() go back to the wait queue when they wake up, so the
-> + * sender must not wait for a connect.
-> + */
+>  	switch (psock->eval) {
+>  	case __SK_PASS:
+> +		/* The push may sleep without the socket lock, and it may fail */
+> +		if (!psock->apply_bytes)
+> +			psock->eval = __SK_NONE;
+
+[Severity: High]
+
+When psock->apply_bytes is not 0, eval stays __SK_PASS during the push.
+The budget is still debited only after tcp_bpf_push() returns. Can a
+second sender on the same socket still get past the prog here?
+
+This call chain releases the socket lock:
+
+tcp_bpf_push()->tcp_sendmsg_locked()->sk_stream_wait_memory()->sk_wait_event()
+
+While sender A sleeps there, sender B can enter tcp_bpf_send_verdict(). B
+sees eval == __SK_PASS, so the prog doesn't run, and B computes its tosend
+from the budget before A's bytes are taken out:
+
+	tosend = msg->sg.size;
+	if (psock->apply_bytes && psock->apply_bytes < tosend)
+		tosend = psock->apply_bytes;
+
+A's bytes are subtracted only later, by sk_msg_apply_bytes(psock, tosend)
+on success or by the new sk_msg_apply_bytes(psock, origsize -
+msg->sg.size) on failure.
+
+If both pushes succeed, a verdict that bpf_msg_apply_bytes() limited to N
+bytes covers up to 2N bytes. If A's message alone uses up the budget, B's
+message is the next message, and it passes without running the prog.
+
+The commit message says:
+
+    When apply_bytes is not 0, eval stays __SK_PASS during the push, and
+    the prog does not run for another message, as today. The verdict must
+    still cover the bytes that a failed push does not send. But such a
+    message also lowers apply_bytes.
+
+But B's message is sized against the budget before A's in-flight bytes
+are removed from it. Would it be better to reserve the budget before the
+push? That means debiting tosend, and ending the verdict when the budget
+reaches 0, before calling tcp_bpf_push(), instead of subtracting after a
+failure.
+
+The __SK_PASS branch also looks unchanged at the end of the series.
+
+> +		origsize = msg->sg.size;
+>  		ret = tcp_bpf_push(sk, msg, tosend, flags, true);
+
+[Severity: Critical]
+
+Can another sender free msg while this push sleeps?
+
+msg can be psock->cork here. tcp_bpf_sendmsg() picks it up with:
+
+		if (psock->cork) {
+			msg_tx = psock->cork;
+
+The __SK_REDIRECT branch detaches psock->cork before release_sock(). The
+__SK_PASS branch leaves it attached during tcp_bpf_push(). tcp_bpf_push()
+keeps sge and page pointing into the cork's sg ring across
+tcp_sendmsg_locked(), and that call can sleep in sk_stream_wait_memory()
+without the socket lock.
+
+With this patch and apply_bytes == 0 (the default), eval is __SK_NONE
+during that sleep. Sender B can take the lock, reuse the same psock->cork,
+append to it, and run the prog on A's partly sent cork. If the prog
+returns SK_REDIRECT, B's __SK_REDIRECT branch does:
+
+		if (psock->cork) {
+			cork = true;
+			psock->cork = NULL;
+		}
+		...
+		if (cork) {
+			sk_msg_free(sk, msg);
+			kfree(msg);
+
+When A resumes, tcp_bpf_push() writes into the freed struct sk_msg:
+
+		msg->sg.size -= ret;
+		sge->offset += ret;
+		sge->length -= ret;
+
+It may also retry with, or call put_page() on, a page that was already
+released. If the push failed, the new failure path reads msg->sg.size and
+calls sk_msg_free(sk, msg) on the freed object.
+
+If B's prog returns SK_DROP instead, sk_msg_free() in the __SK_DROP branch
+drops page references that A is still using.
+
+The shared-cork problem with two PASS senders already existed. The kfree()
+variant used to need a third sender to end a byte-limited verdict. The
+early reset makes it reachable with only two senders.
+
+The later commit "bpf, sockmap: Check that the redirected message is the
+cork" also says that "a cork is still not safe for two senders on one
+socket". The __SK_PASS branch is unchanged at the end of the series.
+
+Is it safe to reset eval here while psock->cork is still attached and
+being pushed?
+
+>  		if (unlikely(ret)) {
+> +			/* A part of it may have gone out */
+> +			sk_msg_apply_bytes(psock, origsize - msg->sg.size);
+> +			/* Another sender can use up the rest during the push */
+> +			if (!psock->apply_bytes) {
+> +				psock->eval = __SK_NONE;
+> +				if (psock->sk_redir) {
+> +					sock_put(psock->sk_redir);
+> +					psock->sk_redir = NULL;
+> +				}
+> +			}
 
 [Severity: Medium]
-This isn't a bug introduced by this patch, but the comment mentions
-unaccepted children as redirect targets. Can tcp_bpf_push_locked() hold
-the lock of such a child while the listener tears it down?
 
-A sockops BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB program can put a child that
-is still in the accept queue into a sockmap. sock_map_sk_state_allowed()
-accepts TCP_ESTABLISHED:
+With the early reset, can sender A's bytes be charged against a verdict
+that another sender installed?
 
-    return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
+When apply_bytes is 0 on entry, A's tosend is its whole message. eval is
+now __SK_NONE while A sleeps in tcp_sendmsg_locked(). Sender B can take
+the socket lock and run the prog, which installs B's verdict:
 
-The redirect sender then does:
-
-tcp_bpf_push_locked()
-    lock_sock(sk);
-    ret = tcp_bpf_push(sk, msg, apply_bytes, flags, uncharge);
-    release_sock(sk);
-
-If the listener is closed in that window, inet_csk_listen_stop() does:
-
-    bh_lock_sock(child);
-    WARN_ON(sock_owned_by_user(child));
-    sock_hold(child);
-
-Then inet_child_forget() disconnects, orphans and destroys the child
-without waiting for the lock owner.
-
-Would the sender's release_sock() then run __release_sock() and
-tcp_release_cb() on the torn-down child?
-
-bpf_tcp_ingress() takes lock_sock() on the target in the same way. This
-patch makes the egress window shorter, because the lock is now held only
-long enough to find sk_socket == NULL and return -EINVAL. The race itself
-seems to remain.
-
-> +static bool tcp_bpf_redir_allowed(const struct sock *sk)
-> +{
-> +	if (!sk->sk_socket)
-> +		return false;
-> +	if ((1 << sk->sk_state) & (TCPF_SYN_SENT | TCPF_SYN_RECV))
-> +		return tcp_passive_fastopen(sk);
-
-[Severity: Low]
-Does this change the errno that non-blocking senders see? Every target in
-TCP_SYN_SENT is rejected, whatever the sender's timeout is. One example is
-a sockmap member that disconnected and then reconnected.
-
-Before this patch, a sender using MSG_DONTWAIT got timeo == 0 in
-tcp_sendmsg_locked(). sk_stream_wait_connect() then returned before
-add_wait_queue():
-
-net/core/stream.c:sk_stream_wait_connect() {
+net/core/skmsg.c:sk_psock_msg_verdict() {
     ...
-		if (!*timeo_p)
-			return -EAGAIN;
+	psock->apply_bytes = msg->apply_bytes;
+	if (ret == __SK_REDIRECT) {
+    ...
+		psock->sk_redir = msg->sk_redir;
+		sock_hold(psock->sk_redir);
     ...
 }
 
-So this case never reached the remove_wait_queue() path. Now tcp_bpf_push()
-returns -EINVAL before it calls tcp_sendmsg_locked(), so a retryable EAGAIN
-becomes EINVAL.
+If B's apply_bytes is larger than B's message, B's verdict (PASS, DROP or
+REDIRECT) stays active with some budget left. When A resumes, it
+subtracts its bytes from B's budget, even though A's own verdict had no
+byte limit. On success that happens through the unchanged
+sk_msg_apply_bytes(psock, tosend). On failure it happens through the new
+call above.
 
-The commit message says the redirect fails "when the sender has to wait
-for the connection". A non-blocking sender never waits, though.
+If that brings apply_bytes to 0, either this new block or the common block
+at the end of tcp_bpf_send_verdict() sets eval to __SK_NONE and drops
+psock->sk_redir:
 
-Could non-blocking senders keep getting -EAGAIN here? If not, could the
-commit message mention the errno change?
+	if (likely(!ret)) {
+		if (!psock->apply_bytes) {
+			psock->eval =  __SK_NONE;
+			if (psock->sk_redir) {
+				sock_put(psock->sk_redir);
+				psock->sk_redir = NULL;
+			}
+		}
 
-> +	return true;
-> +}
-> +
->  static int tcp_bpf_push(struct sock *sk, struct sk_msg *msg, u32 apply_bytes,
->  			int flags, bool uncharge)
->  {
-> @@ -109,6 +127,10 @@ static int tcp_bpf_push(struct sock *sk, struct sk_msg *msg, u32 apply_bytes,
->  		page = sg_page(sge);
->  
->  retry:
-> +		/* Only a redirect sends data which is not charged to sk */
-> +		if (!uncharge && unlikely(!tcp_bpf_redir_allowed(sk)))
-> +			return sock_flag(sk, SOCK_DEAD) ? -EPIPE : -EINVAL;
+That ends B's verdict before it has covered the bytes B's prog asked for.
+Later bytes that should have been dropped or redirected get a fresh prog
+run instead.
 
-[Severity: Medium]
-This check only runs before each tcp_sendmsg_locked() call. Suppose
-tcp_sendmsg_locked() sleeps in sk_stream_wait_memory() on an accepted
-ESTABLISHED target, and the owner calls close(). sock_orphan() then clears
-sk_wq:
+Before this patch, eval stayed __SK_PASS during A's push, so this needed a
+third sender. Could A record locally whether its verdict had a byte limit
+on entry? Then it would touch psock->apply_bytes, eval and sk_redir only
+when that is true and the verdict is still its own.
 
-    write_lock_bh(&sk->sk_callback_lock);
-    sock_set_flag(sk, SOCK_DEAD);
-    sk_set_socket(sk, NULL);
-    sk->sk_wq  = NULL;
-
-On wakeup, the loop in sk_stream_wait_memory() goes back to:
-
-	while (1) {
-		sk_set_bit(SOCKWQ_ASYNC_NOSPACE, sk);
-
-Can this dereference a NULL sk_wq_raw when SOCK_FASYNC is set on the
-target?
-
-The commit message says so: "sk_stream_wait_memory() has this test, but
-it can still use sk_wq after the sleep. This patch does not change that."
-
-The next patch in the series, "net: Leave sk_stream_wait_memory() once the
-socket is dead", adds this right after sk_wait_event():
-
-		if (ret < 0 || sock_flag(sk, SOCK_DEAD))
-			goto do_error;
-
-After that, the retry check here returns -EPIPE. So the window exists only
-at this commit, or in a backport that takes this patch without the next
-one.
-
-Could the series be reordered so that fix lands first?
-
-The out: label also skips remove_wait_queue() for a dead socket, which
-leaves the on-stack wait entry on the old queue. That skip predates this
-series, and no waker was found that could still walk that queue.
-
-[Severity: Medium]
-This is a pre-existing issue, but it is related to the sleep above. Is a
-redirect sender that sleeps in sk_stream_wait_memory() on the target woken
-at all when the target's owner closes it?
-
-In the default close path, __tcp_close() does:
-
-    WRITE_ONCE(sk->sk_shutdown, SHUTDOWN_MASK);
-
-Then it calls tcp_close_state() and tcp_send_fin(), or tcp_set_state(TCP_CLOSE)
-plus a reset when data was unread, and then sock_orphan(). None of these
-wakes sk_sleep(sk). Only the tcp_disconnect() paths call
-sk_error_report().
-
-After sock_orphan(), sk_stream_write_space() does nothing:
-
-	if (__sk_stream_is_writeable(sk, 1) && sock) {
-
-tcp_done() also skips sk_state_change() for a SOCK_DEAD socket.
-
-The sender would then stay in TASK_INTERRUPTIBLE until the target's
-sk_sndtimeo expires (MAX_SCHEDULE_TIMEOUT by default) or a signal arrives.
-All that time it pins the target sock (sock_hold() in
-tcp_bpf_send_verdict()) and its psock (sk_psock_get() in
-tcp_bpf_sendmsg_redir()).
-
-The check added here runs before tcp_sendmsg_locked(), so it can't help a
-sender that is already asleep inside it. The SOCK_DEAD exit added later in
-the series only helps after a wakeup, so the hang seems to remain once the
-whole series is applied.
-
-> +
->  		msghdr.msg_flags = flags | MSG_SPLICE_PAGES;
->  		has_tx_ulp = tls_sw_has_ctx_tx(sk);
->  		if (has_tx_ulp)
-> @@ -555,7 +577,7 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
->  	int flags;
->  
->  	/* Don't let internal flags through */
-> -	flags = (msg->msg_flags & ~MSG_SENDPAGE_DECRYPTED);
-> +	flags = (msg->msg_flags & ~(MSG_SENDPAGE_DECRYPTED | MSG_FASTOPEN));
-
-[Severity: Low]
-This clears MSG_FASTOPEN for every psock send. That includes __SK_PASS to
-the sender's own socket in tcp_bpf_send_verdict():
-
-    ret = tcp_bpf_push(sk, msg, tosend, flags, true);
-
-The fallback without a psock keeps the flag:
-
-	if (unlikely(!psock))
-		return tcp_sendmsg(sk, msg, size);
-
-So the same sendmsg(MSG_FASTOPEN) on a connected socket returns -EISCONN
-without a psock and succeeds with one. Is that difference intended?
-
-The commit message does describe it ("send() with MSG_FASTOPEN sends the
-data. Today it fails with EISCONN."). It also matches the behaviour before
-c5c37af6ecad, when do_tcp_sendpages() ignored MSG_FASTOPEN.
-
-tcp_bpf_push() builds its msghdr with no msg_name, so a fastopen connect
-could never succeed on this path anyway. This may well be fine as is.
-
-[Severity: Low]
-This isn't a bug, but the comment above still says "Don't let internal
-flags through". The mask now also clears MSG_FASTOPEN, which is a UAPI
-send flag rather than an internal one.
-
-The reason for clearing it is that the target's connect code uses
-sk_socket and sk_wq without a file reference. That reason is only in the
-commit message, and the comment on tcp_bpf_redir_allowed() does not
-mention MSG_FASTOPEN.
-
-Could the comment be updated to say why MSG_FASTOPEN is cleared?
-
->  	flags |= MSG_NO_SHARED_FRAGS;
->  
->  	psock = sk_psock_get(sk);
+>  			*copied -= sk_msg_free(sk, msg);
+>  			break;
+>  		}
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261102072112.4160195-1-alexei.starovoitov%40gmail.com
