@@ -1,49 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793730006;
-	b=lfcM36hXoIDZcNKdIAczq7o6z4wz+Z3XTD9VuBP9LgVZ9LOAsfEr4RpO/z6tnLuv+J7b
-	 06kLg6l5sUKFO9Gr+lpcJTykE3XdynjFELvkIml15rL1QvXmrEb0B6wIkJWNxzPUS6027
-	 56oQeYHSpuXvcOpY9XvyY6u/ehJj1Fm0vM1M1w8k/YwEQIhfE5dVlu4guxUnpUQicS7Bk
-	 vJe1dhr7+3B3LVumIiODCQ3rHfm5ck1tSjYc270d4YzHtDdvvbnWKnQqQvCwhcb71tTo8
-	 rVCRqzfHOAY5IWPAN0K2cqI+YUDp5cWlz31kbgArLahAPYXFNcQbxP8QmmCg1Iqj3aw==
+	t=1793730540;
+	b=yUkpJ0i/ofQ0SCuJ95PKopNofqIFCx0vAs2ptUi7SxqpOaG4oWOGvdXZOr6cBdfS9dWY
+	 BebF/JaW9n6YII3vdrIHPIZ/eKUZhMUiHchSFnxGltxDE/u1fU7h0FaTX4Uv/b+cyrdk3
+	 nRW08y/mBekhTCvs5FiRN9VNDqMZVurX1PLfkSnwam6rwTzQYLUnI/9Olz/oZi5ef42wt
+	 EOPB/yA4wZl4i+kad1PcmGZt8o9BdcBK6sOFAOiS96NK7oDgFkEVSzRfGtWrmLYLVRnMF
+	 1kf7rvGWqxskYBD+/IzzXpChcfV//WIY0bRWkThhXEj4oPlbUv/8vjJGaqv0cVK7YOA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793730006;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=eAXyQr3vEdqukSsGH0jkkOnnAJcU9mFR9v4sFv8zuQc=;
-	b=a3v/iWqcL0IqdCs1B68McRqhGXNpaNN+k4+P7xHNA6YbjRPQvZltTWfPc3G3oQq2Y8Hy
-	 MWSoa4l0NFHcPE4H1JHZLYp82ubEbjK9PKJJhbjdSE35LLqN0YBT1Au/3jSI3l1tti8Rl
-	 BEUDpW3ynQ4vBuY6sqpWKZDOXh+obVwSRbF+T6c3NIoTiq9Hmv5lVYNScNOBPd2ACisst
-	 V53ZJYpPk04VivhhitqwTHdkipWb/nfpVwdUT9/24RSctquwKMQ0XnBQOuodbSVstCrTv
-	 YpUg/0s9bIa42k2Kwibrz6qjEqsV0NkOinbHhelR6xfPPZFsl8UDDDJxnO3g5hMqdCA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793730540;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=A2SxbtdInviKmhuZ6qhITPKihTTKCU8zqlv1zCWXFFY=;
+	b=X+lwaQ3wPaUzAQev7NhyO/QRDLzlTZqDaK/0lwb9s03+KhD+XVd3mTihjYDBaSRKdiMh
+	 DSdPPOqcc7t+7GxYUemkARrUq03TUDdPMWha5aP/dkzRoIBgyqiTFHeFS7HG43LSfqKKF
+	 j92jrWD5dRK7i0uXxrhv0GEGMffSz1d14M+JoEzQg86f8I8OUP9NnlRzPoMCulXTe7g0J
+	 vF3Zy0leFzkkQ5zY3U6sKtJ8fdtfmeddUCRXITmxbKv+W0aueiP9Uhux2mGGgaKiCK7zq
+	 TvV7Z6E3CWbSnXUsBhGqJbBN1Jh+urewXsWVf+OqBt6j1FUXtshVR+XPlUoA8dHRucw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iHBmmKzz;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eWTqrsFV;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E840A606A32D;
-	Tue,  3 Nov 2026 18:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947A2606A31B
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 18:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iHBmmKzz
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 870931F000C1;
-	Tue,  3 Nov 2026 18:20:05 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eWTqrsFV
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 604A21F00919
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 18:29:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793730005;
-	bh=eAXyQr3vEdqukSsGH0jkkOnnAJcU9mFR9v4sFv8zuQc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=iHBmmKzzLxaMbfNh2VIr8qtFixQURdpeWXSH4TPG7f83JjYnc5R/CAMURMDSZpgge
-	 B0icZHc6d/hYMiFMqp2e27OPtaJ2Pja1bDxUAE6XN4+jgQwLh3Oa9kCahAuIlHueCE
-	 7TBfXJoT8O6E+nTTyNz19lcBUfvM/VnJSFU8mWOVC4Q8O+txlJwOE1DW/ACvE4BqgY
-	 FARUVTR15Eqol5hrXrz1KquyUkHOE/Lt5zGz+BpE8y3Slj1vQ2f3iwA/gpLeOPyWjY
-	 VBUvcdm94ZwrtNz0bQHz0sx/XD5fkgNVIe5ZLCxGMkS0SziUw37zgNV8tj5ri3uJWY
-	 ijmor+v5p1CRA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D269391B05E;
-	Tue,  3 Nov 2026 18:20:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1793730540;
+	bh=A2SxbtdInviKmhuZ6qhITPKihTTKCU8zqlv1zCWXFFY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=eWTqrsFVSCOoYkWO6JKwgxZuZbuyGCUqOjMv2hJ+fgZhXiUMArt90EvcdZH0kBsPm
+	 SKpH4PJpntYX3RqET8dHhFZdjNDDCbJ2M2SKJjhf8Q2JAgYkrkte9awr31Hr44qSmq
+	 ubysmm8JJKzmgJ3UPwM7S90X8doOeOlcejbs0IeS5W4D/ZU/sgpni+vTjlGPegD2sU
+	 d9k5eaYNOJe5pu9tVWan1knYixg7QPfXH61E56pEmGWzVHyXLGd5KgOdGznJvs/1G6
+	 +6jPHvaHyZ9aGhQJGPKTO8xZ4TItOjfrAMsZcvKEld2ozllOt+Z2Vc1GeUupBwhDQ1
+	 BpcAZvVx6btBQ==
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-93efc0452b5so292228185a.0
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 10:29:00 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AKwUvBwwmsxuMJJn27GfiCsapgktKnjNFCJA5s8E04gmr3wwtbvSofnQtCYg7pu2zb+HyWeb0A4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/0ZVqy3Zco2USqzCjf8sO6Ssbq9mJlzPQ4XVnBdMxpoAuCoVV9
+	LWCySnjfa+b2pBBJrS5O5oAZKFpfj9Ir3Qa5hCqYPu2jNSYU9gd36qjLrxs9hzA0ON3RsygvlR8
+	uN/PzT2LZcE3Peri9rhQXqRtPLSB1oCA=
+X-Received: by 2002:a05:620a:3196:b0:93a:824:ac8d with SMTP id
+ af79cd13be357-944216b1afemr2371370885a.27.1793730539153; Tue, 03 Nov 2026
+ 10:28:59 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,44 +59,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: use FS_USERNS_DELEGATABLE for bpffs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179373000431.1799506.14381637067962664484.git-patchwork-notify@kernel.org>
-Date: Tue, 03 Nov 2026 18:20:04 +0000
-References: <20261103101405.70180-1-alex@amutable.com>
-In-Reply-To: <20261103101405.70180-1-alex@amutable.com>
-To: Alexander Mikhalitsyn <alex@amutable.com>
-Cc: ast@kernel.org, brauner@kernel.org, jlayton@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261103025610.3738894-1-ridong.chen@linux.dev>
+ <20261103025610.3738894-8-ridong.chen@linux.dev> <CAGsJ_4xCTSctcPcC7X6Dx4zYaOycaPqs0DG7AaxB55wx1Afwpg@mail.gmail.com>
+ <9cabcddf-d807-4a36-84f1-5bb06ea72aac@linux.dev> <CAGsJ_4xXDZjhN+NkvtN+vAp8Bokack_JdNgP=nGPQtHUX8_rqg@mail.gmail.com>
+ <f5137dbb-b0ed-44ea-a23f-5c848315a68a@linux.dev>
+In-Reply-To: <f5137dbb-b0ed-44ea-a23f-5c848315a68a@linux.dev>
+From: Barry Song <baohua@kernel.org>
+Date: Wed, 4 Nov 2026 02:28:46 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4zNZynkZn1mb+nT1n6dq4n399VC8Lbo5Sv92gioDfPxUg@mail.gmail.com>
+X-Gm-Features: AclHuK8ocj8au7qeT_BVvieNJJ4o0s2vwCrhyBoxk-38BXmuY8mPvZOfmLABhGE
+Message-ID: <CAGsJ_4zNZynkZn1mb+nT1n6dq4n399VC8Lbo5Sv92gioDfPxUg@mail.gmail.com>
+Subject: Re: [PATCH v6 7/7] mm/mglru: add tracepoint for inc_max_seq()
+To: Ridong Chen <ridong.chen@linux.dev>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Dave Chinner <david@fromorbit.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Muchun Song <muchun.song@linux.dev>, 
+	Qi Zheng <qi.zheng@linux.dev>, David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Baoquan He <baoquan.he@linux.dev>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, cgroups@vger.kernel.org, 
+	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>, Ridong Chen <chenridong@xiaomi.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Tue, Nov 3, 2026 at 8:23=E2=80=AFPM Ridong Chen <ridong.chen@linux.dev> =
+wrote:
+[...]
+>
+> Hi Barry,
+>
+> Agreed, I'll go with option 2. Two things I'd like to confirm first:
+>
+> 1) To report the reason, should_run_aging() would need to return it
+>   instead of a bool, e.g. an enum like:
+>
+>    enum lru_gen_aging_reason {
+>         AGING_NONE,
+>         AGING_NO_EVICTABLE,     /* eviction is not possible anymore */
+>         AGING_MIN_GENS,         /* better to age, eviction still possible=
+ */
+>    };
+>
+> Or just report sc->priority, swappiness, max_seq/min_seq and the
+> per-generation nr_pages, and let users derive the reason from them?
+> The former is more direct, the latter keeps should_run_aging()
+> unchanged.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Right. We can let users infer the reason from max_seq,
+min_seq, and nr_pages in each generation. This shouldn't
+be difficult, especially since should_run_aging() may
+change. We don't need to spell out the exact reason.
+Just present users with the overall state of the lru_gen.
 
-On Tue,  3 Nov 2026 11:14:05 +0100 you wrote:
-> Instead of FS_USERNS_MOUNT we should use recently introduced [1]
-> FS_USERNS_DELEGATABLE cause it better expresses what we
-> really want to get there. Filesystem should not be allowed
-> to be mounted by an unprivileged user, but at the same time
-> we want to have sb->s_user_ns to point to the container's
-> user namespace, at the same time superblock should be allowed
-> be created only if capable(CAP_SYS_ADMIN) check is successful.
-> 
-> [...]
+>
+> 2) try_to_shrink_lruvec() has changed quite a lot recently, e.g.
+> Kairui's reclaim loop rework, and your swappiness series also touches it,
+> including the aging part. Is it stable enough now to carry a tracepoint t=
+here?
+>
 
-Here is the summary with links:
-  - [bpf-next] bpf: use FS_USERNS_DELEGATABLE for bpffs
-    https://git.kernel.org/bpf/bpf-next/c/cd8a2d402273
+Yes, I think aging will always be needed, regardless of how
+we change the code, so this should remain stable.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Best,
+Barry
