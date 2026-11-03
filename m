@@ -1,63 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793716081;
-	b=LCtoUBzR9fAQ4LHikW/iVgdY5/R+efGtXmToLN7r4VNXZ7/OMyYYcK02dVgrP4IFfHIE
-	 c7QuvKjxe/q+uDoNDnIwZOg9TWt8BJFMxHiPJ2yzs3HGtiwogjbFY+0IjBOwpb5Bws9hx
-	 9rL/fvo2Uz8KFhylyADng+2VizmOauiKfmIW7tDDHPL2BSX0A77oCWG7K9/12VxZhVp1b
-	 Tp9T3EcwWfGLTEFEUtO8Ou9goPe0Pf3tBvRgY8RG9gysqovn4Jk6wDjyjH4IKYhZp4OJV
-	 yERA7TOEW2R+GEWOhJvZFHrtBeTL0HZZqm+NJ8+kLsfew7vfT+udm2Y6GT3i8XLYjmg==
+	t=1793716155;
+	b=tUjzn4eparwwPDtObQ+CDaXj8rTFkM8jkMeZHldlIPmw/eBEFtB+V+NMY5pE7g10wgdU
+	 MbDwY8RCBeDA2bV2bYyBRKR/Achy9E+bi71V/1RzY3KelGmSc7gR0/ZIQ00Q5Mhxrtubk
+	 PZkJJEHIBfxlOoqe5ATYKqijvCXkoR4ylG+PCV/4gOfVZpuqj04zZ27Q7kF4VCJofsde4
+	 lYzbCiMXFOIR6F0w6IcYoyvMf/1Rw++Jj5wE9Jr9+FP1oG4ZXzSRRP3Fx1Me3AVyl6EM3
+	 uRcM8thqwtWV5YVxhPQDzDkX3UkPVoWoj8ExkXZEI70/Cntqsne+c4Q79zCO1GCH8ZQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793716081;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:Auto-Submitted:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=PJRu7W6/Or1we5Gv3BgoLEtby0D0Y0UGgfjBHfRc5+k=;
-	b=sgCEzOG5MmlwroamKp6HsP5IgH649KiGgr5TeVMmM9eFBzB9VU40yezASGZuQKH7xnVz
-	 ist4wogupJ2YOvcZMVXs5wzXwPS9TVaYpaD7njqi7lMYFJm4Aa++VQDjUsJMtyKrBtAp2
-	 2q08JcTntdRbpcqHMHr/VZJQ31oeuUMVuj4pup3/7da8p4QMD+AxM0/WBCGAiXR12QhaU
-	 b/hoicxz+63QOpDBAzMde6sfP4Ufpl40RYSsQ03DUWekpjISbYu+6j/JVY7Fm7ht3nzuB
-	 1MLhTdvmO0CrY8ZOQfCNikOq3TVxZz8eKWfbuyhfxhuUfE/Lm1YHkUAckXwk4lTEHsQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793716155;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=oZHUWqTFzAYc6EeZQBOGUKwe0sk6p3GJrYnYURhZBY8=;
+	b=Zd1rqeWxNRJ6GzD5GIcFolBlRQyBg7I7x1terC8BQ2yY4Nhs6NWdPo8iLn2TmBhwBSRJ
+	 ElN5uJQXn8WhiyNTiVrag70JXTqR+iD1t/cVROQigYlfaGz11Kue+zs5oevnjMIzesNaR
+	 c/MCukHvDGrhBSBN7Fvi6J8S3L9zQOcoJhyKLxdwynNa5TldPqF+HlvfkO+XwIrfoSSf9
+	 RsG5HJVCC/UsjHpoad/S7w/AlnFTxa02U39RzuGddL1XWC/BENW07LwA4316dKdI1s5vF
+	 ssUNKNFePn4zTuBuK49FV8v6F0WT5KeFo3RIL5v9qgdNtLaoBDZvxgrRTBaMs63fiRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HHpjdexY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nMvoDbwN;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12D1606A328;
-	Tue,  3 Nov 2026 14:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EE0606A328
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 14:29:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HHpjdexY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 732951F000C1;
-	Tue,  3 Nov 2026 14:27:59 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nMvoDbwN
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D6BD1F000C1;
+	Tue,  3 Nov 2026 14:29:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793716080;
-	bh=PJRu7W6/Or1we5Gv3BgoLEtby0D0Y0UGgfjBHfRc5+k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=HHpjdexYLv1LKFZhWNvbOPCNPUsD/VZW8osv5/BChV1k2ouAGtlQR9SQn5QMzOthq
-	 m058MRJH9UbvslLaBI1qYprnEAb8vklbQkkWKgqM/Npgil7PBBZAAGOM/gYC2e4srq
-	 rPcFraQzJMLo3j+FOTlKmjQbtfV9Xd/gd7YWIn8/3BJ3zXJCJNjUHtdy3R3ELgP197
-	 lT0QIgG9IL6pFlvA0J/7Vn0b4Uv2Dlpc9L6O1HBJJuSxrNGQYxxgx+qK3FnWOD3K5L
-	 2903gMFeOEbJvYRba/ie5qyjb5Sx1gCrtsdqtfjwmUJ8k8Cn3QHuJWrjGCfIeJAgzn
-	 1ATTd+1lQLj9Q==
-From: netdev-bot+sinfo@kernel.org
-To: Antonio Quartulli <antonio@mandelbit.com>
-Cc: willemdebruijn.kernel@gmail.com, jasowangio@gmail.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, mst@redhat.com,
- eperezma@redhat.com, shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- maheshb@google.com, peterpenkov96@gmail.com, netdev@vger.kernel.org,
- virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org
-Subject: Re: [PATCH net v4 0/2] tun: bound the NAPI receive queue
-Date: Tue, 03 Nov 2026 14:27:59 +0000
-Message-ID: <179371607900.488859.488506175171813009@kernel.org>
-In-Reply-To: <20261103142232.1869185-1-antonio@mandelbit.com>
-References: <20261103142232.1869185-1-antonio@mandelbit.com>
-Auto-Submitted: auto-generated
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	s=k20260515; t=1793716154;
+	bh=oZHUWqTFzAYc6EeZQBOGUKwe0sk6p3GJrYnYURhZBY8=;
+	h=From:To:Cc:Subject:Date;
+	b=nMvoDbwNiEtRcji2f2h6NDn4nLBheUcVp6L02LSboe2BMJtZo3Q8IC3ADdSrsxyuI
+	 ehx9jGurS3vBpELPRduBvafVPyBkJ8H822JCFQ4KfbflluE2s8LMkTlMG12oal68js
+	 nmvx+SVTQHS0X/99lKSXAl2R7jeYhBiaSGGSWblIuRYbN0zVb//3yw18EtiLa6kIxJ
+	 02A/Ex3v0KJa/IHwYQ62dEHMf6gP0iR58Kw2h9GUiTi168+irQVL5qh2ePeFVpe+lE
+	 68UuUz6I5sD2TB7Khiuv9bO1AnH2kimWLWHcq5BnJXmx6hY4vOR1DHw1oEdXVqYeby
+	 HGo75BA/zdFQA==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	"Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Martin KaFai Lau" <martin.lau@linux.dev>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+	"Song Liu" <song@kernel.org>,
+	"Yonghong Song" <yonghong.song@linux.dev>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf 0/2] bpf: Shorten pack_mutex critical sections
+Date: Tue,  3 Nov 2026 06:28:52 -0800
+Message-ID: <20261103142856.463063-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,21 +64,34 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi!
+Patch 2 moves bpf_arch_text_invalidate() out of pack_mutex, as
+suggested on v1 [1].
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
+That makes the frees fast enough to hit a deadlock that was already
+there: the pack_mutex owner frees an empty pack and waits in
+flush_work() for vmalloc purge work, which cannot run while
+bpf_prog_free_deferred() items waiting for pack_mutex fill the
+system_percpu_wq pool. Patch 1 allocates and frees pack memory without
+pack_mutex. Seen on arm64; x86 and powerpc take the same path.
 
- - How the issue was discovered, e.g. hit in production, hit during
-   development, syzbot report, manual code inspection, LLM or static
-   analysis tool scan.
+Changes since v1:
+- Invalidate before taking pack_mutex on all archs, instead of dropping
+  and retaking it on arm64
+- New patch 1 for the deadlock
 
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account. If the series needs another revision for
-other reasons, please include the information in the commit messages
-then.
+[1] https://lore.kernel.org/bpf/20261024031046.625578-1-alexei.starovoitov@gmail.com/
 
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
+Puranjay Mohan (2):
+  bpf: Don't allocate and free prog pack memory with pack_mutex held
+  bpf: Invalidate freed prog pack memory without holding pack_mutex
+
+ kernel/bpf/core.c | 58 +++++++++++++++++++++++++++++++----------------
+ 1 file changed, 39 insertions(+), 19 deletions(-)
+
+
+base-commit: 9abe2c42ecab6c86b54838d2d645ca2e10204606
+-- 
+2.53.0-Meta
+
