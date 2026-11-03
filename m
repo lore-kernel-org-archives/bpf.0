@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793740809;
-	b=ic8VvliphqCXeQXFlXKAWVDzgXTgXZsbL3YDG2ZiD9DSO4BF4lqhNenPbnFNGvGUM/Uc
-	 pnCzpfhfQcZJzPM6ZkukoT/9WWebp2PqSHqNj46U3mpSUtewqAgBF2B9l54rtpWEzszEF
-	 JUJK6fQ48FCGKEp+ImrrIhd+6rES1yKyrpqfJvw4nu6CgGL+aqx0Y/w+0tYA8EPBFB+OX
-	 DDVSGi0SptQ10cKqeg6U92XbrHTONQkhvMPr9DVTatwGXFMgrnqoAVni0XgfIDNIm61Qw
-	 xwvyPV5W56zbLQEyM5StdNc24k5h13XHUi11GUw3pg/iqg+ZfdTCuf7jZIYEZg7e9fg==
+	t=1793740811;
+	b=xt3WVxoE8v4C33HUuwed4bjGr3O0kpiZvvNRzta0GyQPtZEXsq3PSGFm1NRPs6ySJfeq
+	 05NG5gJiuWKtItWUi1bjQNAAvh543Hp2X111QEWL8amntosYnrvmFA2ko+T63P37pZCIv
+	 HmUelRiATL8ke1irYbjb8LBh9h2jsq62eW7E2RrMevI+rHKP9SPbmMp4JnDxlPr+sM5nX
+	 BkZ7ElyWdz/AoV/AiHFI+ihwfB3I/vkEviC01CUYZ0Ik54PsKO5N/OR1fKDSgD6qFkB8N
+	 OZ15ijtUbbUTpUHs1OHZxfkbdiB/dG5SGNOMrQfqJeg8/TDSWnaopZOLT89qf9kJ/Ww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793740809;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793740811;
 	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
 	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
 	 In-Reply-To:To:Cc;
-	bh=C/5YYMN2ZgdbpmSIHlvzQMkG6vvXS4pBNreZkDhVc6o=;
-	b=gu+EUSZFFBdwtb94D0a1xoaze1h0YRDDifLu+pVFZpz6hcLSXNlVss7KN9MUWVhTuiY3
-	 Ig5Oe5fGrFBRf6BGoDZmMek+gDazNVvIcOtEniTyvUjtSVCa79s+i7ZfOlUyRIpWozYTf
-	 SY0NgHOxnq1znCE1zkAZrGsa+QqytpCE6pP9RAjr0X9n4a3MaRSnoqEuPsUBEk+ku5/Dj
-	 w4mC/Acsl+LqAzJailEPJ5BHTRP1jmOumkuiF/tS12Ty5m5e7njI02PKfWpEY0CnSHY8y
-	 WJrxB5S9gU8SRAOOUofi5DJGF/K5OFMCMg9YE94KVuVGrM9thzt9vdvfLjvpM5OdIiQ==
+	bh=ZyPK20KOp8+G6RcMlMhtqHt6i6AKVBGN72ubBHm6PXQ=;
+	b=ImNU6AFt4NVPE9ZCtoTBY1ioqEC7XNRckW7OSWBA9LCqgcOxjcoMLpmKwW9KQmUBPQog
+	 Mj2STJl4vnMvJQlx9ox1nV0FYUiC2SIlqlMrRvti6YJCRfpP1lFXUngOT4gnrQDg2hjbj
+	 9jETck1V37T/AF4Ddc9Ah4blI5+qmsZJX0HoFC44NSJW6O6zoKQkoBHZr5A4Mf0DkUdc1
+	 WNsqjp03A3ONCWFAstTYFvG1fspoVg77TVkE4cOvno85xXFLZunUMLIPAfX3zArUygdPR
+	 7WXExkrE7n23RK2y1UMiXTcQNBVAEWbJ0E2MMo2boXgCsYhqaQaZq1Gwm6JdBuzyVwg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=in3LaZXP;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QN3IyaO9;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080E1606A324;
-	Tue,  3 Nov 2026 21:20:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC789606A329;
+	Tue,  3 Nov 2026 21:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=in3LaZXP
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBCA1F000C1;
-	Tue,  3 Nov 2026 21:20:08 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QN3IyaO9
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 483091F000C1;
+	Tue,  3 Nov 2026 21:20:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793740808;
-	bh=C/5YYMN2ZgdbpmSIHlvzQMkG6vvXS4pBNreZkDhVc6o=;
+	s=k20260515; t=1793740810;
+	bh=ZyPK20KOp8+G6RcMlMhtqHt6i6AKVBGN72ubBHm6PXQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=in3LaZXPDcQqZ7E7vWB0kFun9YW4/Dm30Sv4NjHnClWpuTdygkSgxUaffyzZNduO4
-	 LSSiTsFb8CJkhJ7wwupKGeuPEHK21LiSZUT6XbRkf5bPA+oTCpS9mQXDxGztrPSz61
-	 dBFbvQ5Zpyu0bV7yYntt+iFwMwVa+wJ/I1Lx2YxSjTHa1s12/12kEbB5w/Mj6Vz+gO
-	 XdZfL7lhfMTGOwLkAIPBAMq3oGEb8SF59Q2SBgi9qlvHclxBpCEINtX2mw5JrR4r77
-	 J36zyjrVURv8pEn4LMPr0Z/Lshi199wTQyyC3NYCw7UWWXMNhfzxtroPSuxMmMOmdT
-	 AFZYyKR8fuFbA==
+	b=QN3IyaO91ZZCKUD7t1v+Q/LsQflhMr47ktj78CKqZr72vplU68OwUHJI1Kf25Sg2s
+	 3BD4ddRhUzv9zG0roFnNLbIdt3pwS7PGFbVEZDnjc5VV784ZlWzoRKel382ikcuhG5
+	 ydu3BeXxHIXQQPx1aRlGth1q8pSCctTPCfCwjfBCa5BhkveMRgwc53TD7WrS83xA0O
+	 bSFKxC5dXOglS/YYL+pc3tX9L0L86BcB3Nok/EmJKHBXfhF1Kqx8Iy7wGIghaD2gM2
+	 FItFmGtL7KzK05tzaOb+LZKTmw5FvJZuuAWv7sjjSYToo31PRtnbOaP6biy0GUV8mr
+	 QWaFK5jlhTW2Q==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA2DF391B0A1;
-	Tue,  3 Nov 2026 21:20:08 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4024F391B0A1;
+	Tue,  3 Nov 2026 21:20:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,56 +54,40 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/8] selftests/bpf: let the arena tests build
- with
- GCC
+Subject: Re: [PATCH bpf-next v2] bpf,
+ lsm: Fix cgroup shim selection for socket hooks
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179374080755.1885738.6613699311027745325.git-patchwork-notify@kernel.org>
-Date: Tue, 03 Nov 2026 21:20:07 +0000
-References: <20261103181816.254686-1-vineet.gupta@linux.dev>
-In-Reply-To: <20261103181816.254686-1-vineet.gupta@linux.dev>
-To: Vineet Gupta <vineet.gupta@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, john.fastabend@gmail.com,
- shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, jose.marchesi@oracle.com,
- david.faust@oss.qualcomm.com
+ <179374080880.1885738.1778795471883427227.git-patchwork-notify@kernel.org>
+Date: Tue, 03 Nov 2026 21:20:08 +0000
+References: <20261103165541.291744-1-parri.andrea@gmail.com>
+In-Reply-To: <20261103165541.291744-1-parri.andrea@gmail.com>
+To: Andrea Parri <parri.andrea@gmail.com>
+Cc: kpsingh@kernel.org, matt@bobrowski.net, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ sdf@fomichev.me, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue,  3 Nov 2026 10:18:08 -0800 you wrote:
-> The arena selftests cannot be built by GCC today. Three separate
-> build failures stand in the way, and they are all hidden rather than
-> avoided by the __BPF_FEATURE_ADDR_SPACE_CAST guards wrapped around
-> those tests -- the moment a GCC defines that macro, which is what the
-> in-progress arena support does, the guards stop hiding them and the
-> build breaks.
+On Tue,  3 Nov 2026 17:55:40 +0100 you wrote:
+> bpf_lsm_find_cgroup_shim() picks the shim that runs a BPF_LSM_CGROUP
+> program from the first argument of the attached hook. It compares
+> args[0].type, the BTF id of the argument's pointer type, against
+> btf_sock_ids[], which holds the struct ids of struct socket and struct
+> sock. A pointer id is never equal to a struct id, so neither branch is
+> taken and every cgroup LSM program runs through
+> __cgroup_bpf_run_lsm_current().
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v4,1/8] selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
-    https://git.kernel.org/bpf/bpf-next/c/5b127a2d9d44
-  - [bpf-next,v4,2/8] selftests/bpf: don't pass clang-only warning flags to GCC
-    https://git.kernel.org/bpf/bpf-next/c/a74a26a8f284
-  - [bpf-next,v4,3/8] selftests/bpf: make arena_base() opaque to GCC's -Warray-bounds
-    https://git.kernel.org/bpf/bpf-next/c/2775ec48ecaa
-  - [bpf-next,v4,4/8] selftests/bpf: spell the addr_space_cast address spaces in decimal
-    https://git.kernel.org/bpf/bpf-next/c/0a2eb9a7fa34
-  - [bpf-next,v4,5/8] selftests/bpf: write the mixed arena/scalar ALU tests in asm
-    https://git.kernel.org/bpf/bpf-next/c/db06ab42ec4b
-  - [bpf-next,v4,6/8] selftests/bpf: drop the arena guards and tag the tests that need arena
-    https://git.kernel.org/bpf/bpf-next/c/84459cc976cd
-  - [bpf-next,v4,7/8] selftests/bpf: cast explicitly in the struct_ops arena triggers
-    https://git.kernel.org/bpf/bpf-next/c/7eead323843a
-  - [bpf-next,v4,8/8] selftests/bpf: cast explicitly in the arena subprog and callback faults
-    https://git.kernel.org/bpf/bpf-next/c/b64845f6280f
+  - [bpf-next,v2] bpf, lsm: Fix cgroup shim selection for socket hooks
+    https://git.kernel.org/bpf/bpf-next/c/7b8b803c3ce6
 
 You are awesome, thank you!
 -- 
