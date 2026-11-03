@@ -1,79 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793714396;
-	b=Y4R0WK0v7UWFW+JTOk5Y5rqEzSkT2lng1eNvc38J0dQlfyhA6iXZ1veM1YuCQYc7XYhF
-	 wWS8t+opJN24ixrvZCmkgh2sJwPuMIeHCZQrxqDUkgjkFu6MUFuZnTBdxTGBrxf5e3Dbw
-	 bFBeGN7hjRVPi9SAd06juYye/hNXbJnt2g+PicU8IkEQozbDRIVGjaCg2IafKvJeywVPo
-	 P/hdyVQU+SzlxWffJNDbgrKKiOGkCvNpu7m0cehOvkb0KKpqlOJEO8jwnHbpw8aoh+L1K
-	 ZfeuGp//glTVaYhy8X9tpmOQWV0RPgpcNLpJnMRPjz7Sl5uV9YzoGs1Ly3vB+162d4Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793714396;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=KIipZjig14H8lJmsSF4jjlP+SZ/ZdCYhKJ4RJl3Qdjg=;
-	b=n0XKKZy768k4X50435c/+Bgr4lNxukd/c5hgXtTJDFJ1AFOA6q2THkxzO7sN8VHbgQZQ
-	 vXpIBq7NCBc+3hX1qcoUSwez3jZt9yrF9SQNIIxsFIRb2GrQr23aLABhuek0FBYCn2U+G
-	 7AEB+Id9wpPuFiVQ+M1SaCfOJWKrq+vcLEOkh663itYB4P0yb9FB0A+tGD7g9lfr5yU7y
-	 WZP8+1BwtXpS8G87jNEHRwyiBtPZq9RgsUOlw3+mQaJOFnOH2B/mXx4m/mpEkWa+87acq
-	 mtQjRX8zKpNz2TlNhyFdQW2xioJ81/E3wSZEbzjm9SFMzW75IjsTtgXXg6DE+2P5w1g==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k8xu2yN9;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793714860;
+	b=cE/767WmUyhUaL7eSVVthFfNTr6RMU4Va2cAiIjj8Q7qoofJKOI/wiaq2DFqLLrGNsyj
+	 +7WfQjhwFi/vlfrm9T672ocSevk15kUMmiLk2e1hYGGz8vftzpg7XEba/yhWEePdQ4Ocq
+	 4rmAoVRjg1YxOnwmraVx44xTa2dL+bXaDZXzPc6RW4/i45Lrrks8J9imgecEJibM2Ucjn
+	 exF/ZlasgoLwz4lfVGx26vGoqwr4ueOlhA2HU5FRuVlePen9qnHG5oOezRoPWniv5QVKW
+	 mCBLvrClE4xML+2vH0gCZsPBnS9p7nlX8ERSqrXqrk4Bpy5MKSCq6uKt7uBHmQViovg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793714860;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=qxI6uxKuEBsKWE5dZToQWARpMTqM0sfykaf/tV2OkQE=;
+	b=iblv5MxGkDRCnV2kr6Q3r+uy4uLsxzxfij5bfQ8b5Zn/D52dePolAtRc0Tn1OKDxpETn
+	 6jqTy5CYBwfJOrqlEpbKU4O0ZCfX3zZDQvq4W2VQkvOskg2jA+Q8SeuRz7ajTyhiHAY2u
+	 nelnUUik+Don87yLonfeH/Af48joA8baAby1O0n70gDJtB58eJwyIO7oBj+6eHmmjvZJy
+	 rDOsMyNGjX//EeHmQEozcWxEguqgGXCaplsJmLutf+mBghhcZ68X8a+d8HjpXSStThSOX
+	 PIf8C5u7g2DFRSXM6NT7vVs81pM9bICmXYxeXJMtqDOIqtrAlg7fc61D5r1ZlqfdH9w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kvAhsPMv;
+	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7D3606D809;
-	Tue,  3 Nov 2026 13:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D020A606A336;
+	Tue,  3 Nov 2026 14:07:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=k8xu2yN9
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793714396;
-	b=BAffGAZvPEjZjNrd5LJevP4DSAf3+qKTGkbxzft2eeUbtAD44J//bXeduYJZFVx7l6le
-	 JoEJHUVcSiMVnjn9q8EWSO/Euld1WVZ6PS6j7Yf0SFnUgDeCVz7bk0Pjl4IHyBzqZovO+
-	 a5GDfknNSR4IHRUyUGFhnRbTwUWZj8sX8aLbK4VrscCp+LMT8aM53PFY8t28P7ilVDQxd
-	 o2nQTrCeRdiLrPPQzCEpQzo4FDcUZF9kQGiSOBeT77FhX11OB4OiehMhFnUH0o/JeZO5C
-	 UyWcS3h2WM+3JqV4jfaMyOMEaOXan1LT9q/NKFreXUvPmdVlAcgA6wk9CZBP/GLHncw==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793714396;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=KIipZjig14H8lJmsSF4jjlP+SZ/ZdCYhKJ4RJl3Qdjg=;
-	b=q+7hZxxrxxTOtj+rj4Y1ViBk7LNwRv3nfJURY1tjcuUUDQ5Gv8UnhKOh3Ct/zrE5JDaN
-	 K6XRMIT7oRdJkqf+o4LLw/w7Fq7n7nPA83BZLtpUOVdboTsDVlJUYUUVprDzqohYzIe51
-	 Q5WwnyxrPf0TNm99cGuEWfxiZv6oZmWKsooiZ2eGatdyVGgyS1O8S2J8gnCW0iUK8KDgI
-	 wQkLItzw8UTt2gll928fY/xi7JVzaiIb3EpvtPIvesbd91fB4FQJS4l3ktBU6qQYeCLiI
-	 3NTOgMToMAL5pIMQaS3MA38XwxgujIOiPFe7AvqU3euEAwHYKpCNyy5kq+IZ+CAqRww==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BA9691F0093A;
-	Tue,  3 Nov 2026 13:59:54 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kvAhsPMv
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EF31F0093A;
+	Tue,  3 Nov 2026 14:07:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793714396;
-	bh=KIipZjig14H8lJmsSF4jjlP+SZ/ZdCYhKJ4RJl3Qdjg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=k8xu2yN9s6uE1enF1L2kE5k82wkVWDTk3iCAfe5IvosD5sjmVltnp3Wx+7YkhHzeU
-	 3raBsLRu3y/3ap4kjvb1ylnofThdwXXJYRnCnVRxTcBpmceWxcFTU4awwmq2Pwpzxq
-	 w43l4ggRxFxhCFEZBcD8KFmstxSuuuDccmFEzt0gHwl2d0BXnB+Oo0oGpqM98s6lTM
-	 zJIsSucRMqaMIfkyHuOv2Kd/JCT3hJ6LWSeitlBa1yvHkNccNXX7ff9hVp0F4ESng3
-	 fmH1xwingIwp3sWp8FOs/3k38ob0MvAIuQt3IF9TmmgBpTfsjQi3Xg/NHAocmkTRdX
-	 Jwzgrf8xfVqrQ==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 3A43146985;
-	Tue,  3 Nov 2026 13:59:54 +0000 (UTC)
-From: Mark Korenberg via B4 Relay <devnull+socketpair.gmail.com@kernel.org>
-Date: Tue, 03 Nov 2026 18:59:54 +0500
-Subject: [PATCH bpf-next v5 2/3] bpftool: Don't require a disassembler to
- dump a JITed program to a file
+	s=k20260515; t=1793714859;
+	bh=qxI6uxKuEBsKWE5dZToQWARpMTqM0sfykaf/tV2OkQE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=kvAhsPMvD47M67OaIC8UcigKRO5xXurkov7sP13ENoG9Bu8aSgSd4XGyHHp+MHDbS
+	 rjhyieqt2+LLMMTKTa2+Il1z6oGL8rZ60njQIpEmAmSgFE1U9O94psfATXjDm1SiO6
+	 n0vptLQLV1S0wy7d/e0Psm4iNIMRXTyXVT43KLThvIyp6jFhniBDBdo2A4bsdIoGHJ
+	 i+6OWJsxSz4S37woEi7UMx51fGMHxnh7Fo0o77QSy3WSfFk/yth/jEO6h5hh8aLa+8
+	 EMadLU71WZDBZWr/ZemQM7hENGXMQ7RTvMbxpwUbfORwZSTzJlkD2YHzVISli31o5Z
+	 8wvLAtpgk6ehw==
+Content-Type: multipart/mixed; boundary="===============0895216361124977455=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,77 +49,83 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261103-bpftool-plugin-v5-2-683e08a25df0@gmail.com>
-References: <20261103-bpftool-plugin-v5-0-683e08a25df0@gmail.com>
-In-Reply-To: <20261103-bpftool-plugin-v5-0-683e08a25df0@gmail.com>
-To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
- Justin Stitt <justinstitt@google.com>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>
-Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
- Mark Korenberg <socketpair@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793714393; l=1265;
- i=socketpair@gmail.com; s=20260603; h=from:subject:message-id;
- bh=YA3fRuAfEUIVwaShslcQVsu+SC7z7OAIjbkZp9Lhxg0=;
- b=Z1J5xoIL49fKB2/6kCpqsAROwLn77sNLXyfAPF2ORHGm7kAnGSTxyan1auk6kRSUjMkiR2WI5
- KCduzWdu52ZDu0nmPhTrlj+6w6t3kpQTrqmmq4euw27vHcl+W9dqkxB
-X-Developer-Key: i=socketpair@gmail.com; a=ed25519;
- pk=2iAMjWhs7kA9X8ccetT2YVX8dvniXua2okQogw3Don8=
-X-Endpoint-Received: by B4 Relay for socketpair@gmail.com/20260603 with
- auth_id=806
-X-Original-From: Mark Korenberg <socketpair@gmail.com>
-Reply-To: socketpair@gmail.com
+Message-Id: <cdb4a70a69306fb920d52c3e5511bb1cbac094d4f47b1b89ae56b674853c287d@mail.kernel.org>
+In-Reply-To: <20261103132613.1952975-4-cui.tao@linux.dev>
+References: <20261103132613.1952975-4-cui.tao@linux.dev>
+Subject: Re: [RFC PATCH v12 3/4] selftests/bpf: add iocost cost model test
+From: bot+bpf-ci@kernel.org
+To: cui.tao@linux.dev,tj@kernel.org,josef@toxicopanda.com,axboe@kernel.dk,alexei.starovoitov@gmail.com
+Cc: cgroups@vger.kernel.org,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,linux-kselftest@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ameryhung@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue,  3 Nov 2026 14:07:39 +0000 (UTC)
+
+--===============0895216361124977455==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-From: Mark Korenberg <socketpair@gmail.com>
+> selftests/bpf: add iocost cost model test
 
-"bpftool prog dump jited PROG file FILE" only writes the JITed image to
-FILE, but do_dump() calls disasm_init() before it parses the arguments,
-so the command fails when bpftool has no disassembler.
+TL;DR: Selftest cgroup names "iocost_pairing" and "iocost_ms" lack a leading
+'/', so the cgroups are likely created outside the work directory and not
+removed by cleanup_cgroup_environment(), leaving empty cgroups on the host.
 
-Call disasm_init() only when the image is disassembled.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
+> new file mode 100644
 
-Fixes: 29a9c10e4110 ("bpftool: make libbfd optional")
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Mark Korenberg <socketpair@gmail.com>
+[ ... ]
+
+> +	/*
+> +	 * cgroup_setup_and_join() creates the priced-IO cgroup with the
+> +	 * available controllers enabled, so the cgroup has
+> +	 * io.weight/io.stat and the iocg activates.
+> +	 * cleanup_cgroup_environment() removes it from every exit path
+> +	 * below. io.cost.qos and io.cost.model are root-only cgroupfs
+> +	 * files: they are written at the hierarchy root and reverted on
+> +	 * exit.
+> +	 */
+> +	cg = cgroup_setup_and_join("iocost_pairing");
+
+[ ... ]
+
+> +		cg = cgroup_setup_and_join("iocost_ms");
+
+Will these cgroups actually be removed by cleanup_cgroup_environment()?
+
+The name has no leading '/', and format_cgroup_path() in cgroup_helpers.c
+joins the pieces with no separator:
+
+    #define format_cgroup_path_pid(buf, path, pid) \
+        snprintf(buf, sizeof(buf), "%s%s%d%s", CGROUP_MOUNT_PATH, \
+        CGROUP_WORK_DIR, pid, path)
+
+So cgroup_setup_and_join("iocost_pairing") ends up doing mkdir on
+"/mnt/cgroup-test-work-dir<pid>iocost_pairing".  That is a sibling of the
+work directory directly under the cgroup2 root, not a child of it.
+join_cgroup(), write_cgroup_file() and read_cgroup_file() build the same
+path, so the test itself works.
+
+But __cleanup_cgroup_environment() only walks the work directory:
+
+    format_cgroup_path(cgroup_workdir, "");
+    join_cgroup_from_top(CGROUP_MOUNT_PATH);
+    nftw(cgroup_workdir, nftwfunc, WALK_FD_LIMIT, FTW_DEPTH | FTW_MOUNT);
+
+so the sibling directory is never visited.  The empty cgroup remains on the
+host as /sys/fs/cgroup/cgroup-test-work-dir<pid>iocost_pairing, which also
+contradicts the comment above ("cleanup_cgroup_environment() removes it from
+every exit path below").  serial_test_iocost_model_streams() has the same
+problem with "iocost_ms", including the matching write_cgroup_file() and
+read_cost_usage() calls.
+
+Other callers that use a fixed name pass a leading slash, for example
+"/skb_cgroup_test" and "/cgroup_iter_memcg_test".  Would "/iocost_pairing"
+and "/iocost_ms" at every place they are passed put the cgroups under the
+work directory where the existing cleanup removes them?
+
+
 ---
- tools/bpf/bpftool/prog.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 43599c79c93ac..15efc6eebffb1 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -894,8 +894,6 @@ static int do_dump(int argc, char **argv)
- 	int err = -1;
- 
- 	if (is_prefix(*argv, "jited")) {
--		if (disasm_init())
--			return -1;
- 		mode = DUMP_JITED;
- 	} else if (is_prefix(*argv, "xlated")) {
- 		mode = DUMP_XLATED;
-@@ -959,6 +957,8 @@ static int do_dump(int argc, char **argv)
- 		p_err("'visual' is not compatible with JSON output");
- 		goto exit_close;
- 	}
-+	if (mode == DUMP_JITED && !filepath && disasm_init())
-+		goto exit_close;
- 
- 	if (json_output && nb_fds > 1)
- 		jsonw_start_array(json_wtr);	/* root array */
-
--- 
-2.56.0
-
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41646836440
+--===============0895216361124977455==--
