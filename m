@@ -1,57 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793676777;
-	b=dqixVd6fV+PNfKYONElp4kw3/JUuYa2r5XrRSAp//YiUYaTSmxTjSD807M3c7ZJ+zZ4Z
-	 m/12VJQ5ruAU2A2u/SJm08TXjddUSOxniGaQqz62nHKzwVajlA2zTTDOQfDX8X9hGwbVx
-	 IVaeUWIjBkC2BbR+qKz0swhl/actA76EAfAzUCYL7mKftZ9CQ1+YC2yd0WPYHBXq2as0K
-	 PUcuAWk7YsFqUm5diK8+Pixmjig76CjLTVs1QNuLUWZKmpth7kofP8S6XZcB4FyD90h/c
-	 Ub2jzW6fkWmTjf26kH9j20pklhbZj16ndOZRmpkBFKC4Kc05osun6KVJlvu1TzerDqA==
+	t=1793676978;
+	b=xN2qeG9zRgfN0ZBrsKTGpNbkXji9rcOXBx+GKsoxryT5ENyiNVjhixqKTgjcYpLzeJZX
+	 JQMzqpOpa9xv/TYbIjoJ5ulLT4C2/vWlES0RweqEnJNTesInspRmbcyxuC+rrIwA3NUXY
+	 0prsj5oc/voTx58eyisNN08/PycO4j23ftqJ+kJ2b9R/0VEXcwqB1pp69tD7ev7d2AB90
+	 HDaq3bY6zB2GlPLo3fgV7aPJU8CA0v28ho/HWTng37GhhOl8wn0dvV65R4Bs077ap3K1y
+	 +bFo2xw3uTfH9joiGbG7D6qI2lvQkOsjGDz4wEtjalEM3X1ZIu/90XvH9Gcr8AzROBQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793676777;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=JxhW9dG6cYmQ5UijK/Xj6wGP+4rIcfFWx2TW6kgtn1E=;
-	b=O8Ogwn0Yt1WqEyWTyfh1vRabS+sQk7GtFTQsalYoNeScz+TQMjRFlMltbKICEdR4lrYq
-	 1HgYIRYujTtEEwCQSsvc556b3QzO3yE/iZasPE8AkBTqUOP6DZdYISE5z+y4t3SZm7lUj
-	 it0ZVXtqUBx2fc7L1p4IHTD7DKd71nIc+n3jzpVRVcg17w22koZAJ0wmKtRNCkIq47AgN
-	 nzI0ElqEcLvDiO6uPiHNkrEgBVuULL5GE1YWbobZqPp4Dq4amJ+QBQyYaXtaYrilJ0/jT
-	 Q0WTeXXOVkg1sglCPjnxUEC1YWmXNY/QN+05yLOwtmSwu95PVEOdDj7eJWD7lNn/xHg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793676978;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Wsw4x3FfCJ+pN/2oal8RH+4qQ7zCjiSz9UZAU4n7+7g=;
+	b=4BQ4D28PVWnj7p8Hd3AFuh9VJvskkrRr+pUSJvbWhhGgJO4NsSJOaHKxeN51NOtDLJHJ
+	 VRz0rMnsogO49JrInEomrs94V6Rfdsi9D+vau0ipJ4YHliyKwfmCTfsytydt4IUMpj53B
+	 9kpAQlciIgNQpdzIrQGaCksB0afvw1LO1q80MIA15NVbowrQVggaDZ8A5KTw8OWLRY4Oi
+	 UVxQrrpcCuGe+lRuqbh+C6wC5Mn6hV7OF4C5bLk3nuwjNm5liv5nEoG6UgW/x6i8A+vkv
+	 cXMh/FsUope6/l4wzz8VkzU4j5WXcpaQX2kiSI5E3t0FZclxqvbk1JhnpLu4j16MGNg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mb+yIX+B;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Sc76JSK4;
+	arc=none smtp.remote-ip=209.85.222.50
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B52606A324
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 03:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4364606A326
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 03:36:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4364606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mb+yIX+B
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359F51F000C1;
-	Tue,  3 Nov 2026 03:32:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793676776;
-	bh=JxhW9dG6cYmQ5UijK/Xj6wGP+4rIcfFWx2TW6kgtn1E=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=Mb+yIX+Bu8z6wW+V13qJfwflZ51gqcfRwBnZgHzOhuAJPwsZVkb1FCai2bMIkfE8V
-	 ik3uUCHsVU3m7P2CbPg2ZaSIfbwq4B0SKZP0sFxSjY9Vipd3Q9VIA2cOfgBe9si69l
-	 q38fUk1hh0Scr+268Lw2gv8uQOS8VR6elLSfoPqznEhfh9AIBysy76CSkNJchiT7Fs
-	 d7+RqDYAR/w3NJKHHSaRQJ2uo65zB+pd6CsLK+j3i3yW/WFk6xISM2a2p5a7bJlOE5
-	 7AI0nLz49vB6QNf+vy5swYj8oRV+JIBWSttePYxZlzlkBUrMNCsTXwoluGux1j2GDH
-	 M8/rfzsfVPyWw==
-Message-ID: <sashiko-outbox-194519@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add overflow test for
- BTF dump zero-scan
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Gu Bin" <gubin@cmss.chinamobile.com>, bpf@vger.kernel.org
-In-Reply-To: <20261103032619.1378-3-gubin@cmss.chinamobile.com>
-References: <20261102131632.1124-1-gubin@cmss.chinamobile.com>
- <20261103032619.1378-1-gubin@cmss.chinamobile.com>
- <20261103032619.1378-3-gubin@cmss.chinamobile.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 03 Nov 2026 03:32:55 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Sc76JSK4
+Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-9912c61b8b8so1879496241.2
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 19:36:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793676977; x=1794281777; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Wsw4x3FfCJ+pN/2oal8RH+4qQ7zCjiSz9UZAU4n7+7g=;
+        b=Sc76JSK4zjl2ETNUSMOYa1pklyS18Uew1akrbZZzlCb8K9hW1lB/uHYD3GcM4cGgZn
+         KqLZKHrW+2IFnD9oKBqzpbRSWOhzv9P8gEph0+Blr1rHNpOETEpr40sAzBAnHwFNnWfT
+         pVsT7EegLiqt0IG2riv/99Kmj2ZTvz4BaxAYn7mWlhSn7WIbZpH4CaGW1ctemEG0OEnD
+         NqEFyYQ3XWkWeOs/yCb/LLwF4Kdjx3XsGBcHWeUbeJX96g0Ff/0w3HG8D1CF8erJw0MU
+         4JsSM9N5ZUfmZw+Y4nRms01IA+F1ODehxAhukDzZqmS3sYSK60+J66gaZF6604toETdF
+         3L4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793676977; x=1794281777;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Wsw4x3FfCJ+pN/2oal8RH+4qQ7zCjiSz9UZAU4n7+7g=;
+        b=jVGv9xeqRwIhDrJ+fQFawAhOM9sBS6kUisx3xEjELY6z0j+bC2eqv8lQmCrZ9D5mFX
+         kh8SYpE9uFDQ+MDbGu0vL40Av4MAFZXzGV5jteMf4oYltYhGH0sSgfk7ZbZw02QxpTAJ
+         Q+JX/dqM5AJevwVugeCeE92ssCegsPVgFHU3KEguN9ZxRQ7WyJfpjlnaEvxRjT0Xd0RX
+         A8xCl5yfVN/1+EBIO9Dv32aLkJIqwwBowPkK/hzvhX3c8eSMEUc4y2SklhfrROqtbhvL
+         91Rq2Y0cfFvR3K8VslX1NKWFwem2OKPgopNipYv3wR/3PZ1tLyaOcmCem4Fko+EKo+B9
+         PYmQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw5I4IkZqnzVyI3v4uQ/lexue2/FygtTw6Wwfmz5dM4HkFxL484TAQkQaMe3Ms5qV/vmaI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8I0uzXxlKXAMiPhUdCKps9Zt/1RaCbdPEHk+KoQnplwjUZ/GO0
+	JSvNfj/0joVx+aPufeoc685daAihm6MZkVU351b+CP2Up6KauTLvA9NO
+X-Gm-Gg: AYBFou3+BB8kjHh2DON1tLoN8H593qMbGiYjnKHSun9hJ9Fg3Bl0WapXD5+uOMFwcnL
+	qOE3mEKyYZfY74iXt8IMjcJNet5g2EUgzWerSOuHNKv1gDWm5LEMUArXkMx+Fl05LMCbw2x50pp
+	aogwOox/8yoaGUajhvhTZoNOk3kMlfombYQ+5DdVdaI0Qk1X58OM22s0OTUV4YJU6wIQMg/58Z+
+	WCFFlmfswmxf2XnQ3SsAcp+WfmZh0cRgTvkx9+Pxmq3i2/PhXFU8zUyrpVFdKKLuUlR0tmsdL42
+	C97+3fGpF2GPqjn60o3s1j8itUSu68MFhFeQCFbvTQyFtSt/al0XJK/4VqJDH7dbVf6hr8K1QxS
+	OWKp0NS0BfqZSDeCawBU0qy3HK1JUehSaLuSrp/fwbSabzX810kYJ0IV7S5GSeI8OwwK4jgNEya
+	6gO/roV73GVnCYSNqKK391tTo8Tg3I+6AuevK550S2bdlvLSOI0SMuU3McAFCjbP6AK4fivdgSi
+	vKZqD++X/NPRSI6FogjqinxMnADYj587GvP/V5tE7HzQE7jije9j5u988uCw87G4TMwy29Xe7ly
+	hHWI65KLqQzHFeyDZrcm0L2thGSr1G925DffW5z9gQb4FfH3QdGp6xGVgpus3Uoar+5eiDqWUxJ
+	vhjgrU/2niFJlKbBoafVQuwh0j9Jac2OFNTG0iu/ofmrCXUwcCT3Z9wWIjqFvZvnT2ot29URICR
+	f22+a2RkRe4R2dq8LyOw==
+X-Received: by 2002:a05:6102:6058:b0:7a4:da60:acfb with SMTP id ada2fe7eead31-7d072bb37b9mr3882342137.8.1793676976764;
+        Mon, 02 Nov 2026 19:36:16 -0800 (PST)
+Received: from willemb.c.googlers.com.com (223.230.150.34.bc.googleusercontent.com. [34.150.230.223])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-992ee1d1b35sm13341793241.1.2026.11.02.19.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 19:36:15 -0800 (PST)
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	bpf@vger.kernel.org,
+	stephen@networkplumber.org,
+	dsahern@kernel.org,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH net-next] docs: netdev: fix iproute2 process documentation
+Date: Mon,  2 Nov 2026 22:35:56 -0500
+Message-ID: <20261103033611.949104-1-willemdebruijn.kernel@gmail.com>
+X-Mailer: git-send-email 2.56.0.385.gac671c819a-goog
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,92 +102,116 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] selftests/bpf: wrong expected_val in test_btf_dump_struct_data()=
- overflow test
-- [Low] selftests/bpf: multi-line comment style in test_btf_dump_struct_dat=
-a()
---
+From: Willem de Bruijn <willemb@google.com>
 
-commit c037995f7dcc94c6cb7bb8863c0b417b37425882
-Author: Gu Bin <gubin@cmss.chinamobile.com>
+The instructions on sending patches to iproute2 span both netdev and
+bpf docs, contain outdated references and miss some instructions.
+Address this:
 
-selftests/bpf: Add overflow test for BTF dump zero-scan
+- Move all info to maintainer-netdev
+- Add a link in bpf_devel_QA to this location
+- Update URLs to git repositories
+- Update URL to patchwork instance
+- Update subject prefix rules
+- Add suggestion to Cc: maintainers
+- Add pointer to iproute2 MAINTAINERS
+- Add pointer to iproute2 README.devel
 
-This commit adds a TEST_BTF_DUMP_DATA_OVER() test case in
-test_btf_dump_struct_data() that dumps an all-zero union bpf_iter_link_info
-with a data_sz one byte short of the type size to verify that the zero-scan
-returns -E2BIG instead of reading past data_end.
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+---
+ Documentation/bpf/bpf_devel_QA.rst          | 30 ++++---------------
+ Documentation/process/maintainer-netdev.rst | 33 +++++++++++++++++++++
+ 2 files changed, 39 insertions(+), 24 deletions(-)
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/te=
-sting/selftests/bpf/prog_tests/btf_dump.c
-> index dbef014f75acd..f6cff6cc56c4f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> @@ -1161,6 +1161,13 @@ static void test_btf_dump_struct_data(struct btf *=
-btf, struct btf_dump *d,
->  			   "(union bpf_iter_link_info){.cgroup =3D (struct){.cgroup_fd =3D (_=
-_u32)1,},.task =3D (struct){.pid =3D (__u32)1,},}",
->  			   { .cgroup =3D { .cgroup_fd =3D 1 }});
-> =20
-> +	/* overflow test for all-zero union: with a data_sz one byte short
-> +	 * of the type size, the zero-scan must not read past data_end and
-> +	 * must return -E2BIG.
-> +	 */
+diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
+index 4729efd657c3..888b29599761 100644
+--- a/Documentation/bpf/bpf_devel_QA.rst
++++ b/Documentation/bpf/bpf_devel_QA.rst
+@@ -304,31 +304,13 @@ downstream distributions.
+ 
+ Q: Do you accept patches as well for iproute2's BPF loader?
+ -----------------------------------------------------------
+-A: Patches for the iproute2's BPF loader have to be sent to:
++A: Patches for iproute2, including its BPF loader, are sent to
++netdev@vger.kernel.org. For details on iproute2 patch submission, see
++"Co-posting iproute2 patches" in Documentation/process/maintainer-netdev.rst.
+ 
+-  netdev@vger.kernel.org
+-
+-While those patches are not processed by the BPF kernel maintainers,
+-please keep them in Cc as well, so they can be reviewed.
+-
+-The official git repository for iproute2 is run by Stephen Hemminger
+-and can be found at:
+-
+-  https://git.kernel.org/pub/scm/linux/kernel/git/shemminger/iproute2.git/
+-
+-The patches need to have a subject prefix of '``[PATCH iproute2
+-master]``' or '``[PATCH iproute2 net-next]``'. '``master``' or
+-'``net-next``' describes the target branch where the patch should be
+-applied to. Meaning, if kernel changes went into the net-next kernel
+-tree, then the related iproute2 changes need to go into the iproute2
+-net-next branch, otherwise they can be targeted at master branch. The
+-iproute2 net-next branch will get merged into the master branch after
+-the current iproute2 version from master has been released.
+-
+-Like BPF, the patches end up in patchwork under the netdev project and
+-are delegated to 'shemminger' for further processing:
+-
+-  http://patchwork.ozlabs.org/project/netdev/list/?delegate=389
++While iproute2 BPF loader patches are not processed by the BPF kernel
++maintainers, please Cc bpf@vger.kernel.org and the BPF maintainers for
++review.
+ 
+ Q: What is the minimum requirement before I submit my BPF patches?
+ ------------------------------------------------------------------
+diff --git a/Documentation/process/maintainer-netdev.rst b/Documentation/process/maintainer-netdev.rst
+index df220a965438..51669d66c272 100644
+--- a/Documentation/process/maintainer-netdev.rst
++++ b/Documentation/process/maintainer-netdev.rst
+@@ -363,6 +363,39 @@ to the mailing list, e.g.::
+ Posting as one thread is discouraged because it confuses patchwork
+ (as of patchwork 2.2.2).
+ 
++Co-posting iproute2 patches
++~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++The official git repositories for iproute2 are:
++
++- iproute2: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git
++- iproute2-next: https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git
++
++Patches for iproute2 must have a subject prefix of ``[PATCH iproute2]``
++or ``[PATCH iproute2-next]`` to indicate the target repository where the
++patch should be applied. If kernel changes target net-next or bpf-next,
++then the related iproute2 changes need to target iproute2-next, else they
++must target iproute2. The iproute2-next tree will be merged into the
++iproute2 tree after the current iproute2 version has been released.
++
++Patches are tracked in patchwork under the netdevbpf project and delegated
++to 'shemminger' for further processing:
++
++  https://patchwork.kernel.org/project/netdevbpf/list/?delegate=7961&state=*
++
++Send patches to netdev@vger.kernel.org and always include the iproute2
++maintainers in the email Cc: list. See the MAINTAINERS file in the
++repository for email addresses and other details:
++
++  https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/MAINTAINERS
++
++For patches that target iproute2's BPF loader, also include
++bpf@vger.kernel.org and the BPF maintainers.
++
++For more information, see also README.devel in the repository:
++
++  https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/README.devel
++
+ Co-posting selftests
+ ~~~~~~~~~~~~~~~~~~~~
+ 
+-- 
+2.56.0.385.gac671c819a-goog
 
-[Severity: Low]
-This isn't a bug, but in BPF code multi-line comments place the opening /*
-on its own line with the comment text starting on the next line. Could this
-comment be formatted to match the BPF style?
-
-> +	TEST_BTF_DUMP_DATA_OVER(btf, d, "union", str, union bpf_iter_link_info,
-> +				sizeof(union bpf_iter_link_info) - 1, "", {});
-
-[Severity: Medium]
-Will this test fail the expected string check in btf_dump_data()?
-
-When btf_dump__dump_type_data() enters btf_dump_dump_type_data() at
-d->typed_dump->depth =3D=3D 0 for a union:
-
-tools/lib/bpf/btf_dump.c:btf_dump_dump_type_data() {
-	size =3D btf_dump_type_data_check_overflow(d, t, id, data, bits_offset, bi=
-t_sz);
-	if (size < 0)
-		return size;
-	err =3D btf_dump_type_data_check_zero(d, t, id, data, bits_offset, bit_sz);
-	if (err) {
-		...
-	}
-	btf_dump_data_pfx(d);
-
-	if (!d->typed_dump->skip_names) {
-		if (fname && strlen(fname) > 0)
-			btf_dump_printf(d, ".%s =3D ", fname);
-		btf_dump_emit_type_cast(d, id, true);
-	}
-}
-
-At depth =3D=3D 0, btf_dump_type_data_check_overflow() only checks base typ=
-es and
-returns the union size (16), and btf_dump_type_data_check_zero() immediately
-returns 0. Then btf_dump_emit_type_cast() and btf_dump_struct_data() emit
-"(union bpf_iter_link_info){\n" into str before iterating over the union
-members at depth =3D=3D 1, where btf_dump_type_data_check_zero() on the .cg=
-roup
-member detects the overflow and returns -E2BIG.
-
-In btf_dump_data(), after verifying that btf_dump__dump_type_data() returns
--E2BIG, it checks:
-
-	if (!ASSERT_STREQ(str, expected_val, "ensure expected/actual match"))
-		return -EFAULT;
-
-Because str contains "(union bpf_iter_link_info){\n" while expected_val is
-passed as "", shouldn't expected_val be "(union bpf_iter_link_info){\n" here
-(similar to the atomic_t overflow test in test_btf_dump_int_data())?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103032619.1378=
--1-gubin@cmss.chinamobile.com?part=3D2
