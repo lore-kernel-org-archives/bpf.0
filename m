@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793749386;
-	b=ovC3bJM5UctvKpBkZj+/AjWXPxohHDzth5yMpgyBgIHgl0iTBqw6IT3m4rP/BQFIWij6
-	 dS6rTF1uwuyLcxYbN4jGjAYR9rODdhnKRaziw66xYzWoY3rPUN4d32r7y932+UhaeibGV
-	 Rpp4kIEtRDusUOkn2tRipx8N/1vCElKTApDiWyQOd+XK7ePbYc5S6MYdBHSa+yAlPdcmT
-	 aIVqm2dr24jNO02+j7baCSC8udtvRVNqWGFIq+UZ/pFrjKTqnld0udWAqu+MczaQd8/8d
-	 YmW6BXhWsJ0dLGS2bGt/gVovLJ21FoOG9DpgHIoEg4oEDz4yQ6w5wo/UJhIcFhjox0A==
+	t=1793749392;
+	b=AwN8wwilJafJIZ4JYXfxvW/yvKznsP4zgJDpeDhxufJNPwnzVU6pr5GQOtrYWH4ENlyR
+	 CCk0IDURmtV1p9RAiXA6YdKbZPJ4ClNeDAnIH14pJQ31cxM87lfU+UShWaJAZdEdgGwuf
+	 LX6vfSItNP8Kb75g1V0nc+NJ/alX0I41F8InZevYj78sjJIeCTVO/K8ABBaGT7yJa1c93
+	 xAfr3X/rySUhahRgN5XDSVzivRj37+yM8/PQ72OyFxV6w9rJI4cl+X66saXyxVWcNr4Bu
+	 xUKOEFKTRRBLtRjH5x4FcBTT0Vdvg35O/otYAeUNGARfTcb6Pb63IZEKNx+KCEOmarw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793749386;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793749392;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=dLJpvPoumSFexmTFflmUNY8ZT6ZJaVenaHcrkKAe+ng=;
-	b=Er3J8fprsvbVfymzGfCFHHqV3f9BCrfmvw8tmNvQolMT0SXTbEaOEoGBZyIQRQEuIfyr
-	 egaQhujIW2/08qk3JpYtVcgpAvz+l0IyNwZiyItKqyiHKPZO/L/m7cVjTwGeQT86GYuqx
-	 oXbpOZipX8Xr2pJUp2DzUErFFf6UCB8DeViDK72GVoCqNnfy/wUo+Tz0oFWq+xorjHvtS
-	 fB4anqt/Kf1gbB6T5XYFx1nP8Q0ucostfFlPDwgWrgHjoJbho2m7VkBxkd7xm3IZbuQ1T
-	 ai9wofGTaRihNfpIbDP/bi8+KfYwK/wea2QTLE1jE5AH90gIgw5rWP7NCo7fOg4ho7g==
+	bh=QegSc/wcoBZa70IWsMViHKtlaHl5ugZvdHMGid4vM0I=;
+	b=sHK3RJdRax74YUZs/W3zOHby392W7S2n5AT8H0lj7I1NX/SoagxcbdzH2f34Hpgi46c8
+	 KvkVS2VSn3N+diY1JRqtCKIfX3MuBxtctKdCbERWKPxy1+XRHWlZAJXrJjIaNwQAFg1Ma
+	 +QhhPLjWbX2A0YT2vmOad1pZWVwJZ3Msc5h6uensefuWLNUVidlnguHDWGuZH5nAouHfl
+	 IyjJt5dLFweF5CGYdkyyapaFrWKn5H8L/r5AWbB5LmxfqiPMNFVFyo8DOzTEkI8o2LPkv
+	 uNwijsFgvfly3CDloHShVFaLGWLyIVjpao/IOn3hNvkmlt2S7O6Ka4lB/QhT4RAtYqQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LgD9i8+p;
-	arc=none smtp.remote-ip=209.85.215.182
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="fbM1VN/2";
+	arc=none smtp.remote-ip=209.85.214.177
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F66B606A333
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:43:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F66B606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB84E606A31B
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:43:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB84E606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LgD9i8+p
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cc751eddf25so77378a12.3
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:43:05 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fbM1VN/2
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2e60f9af6e6so834325ad.3
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:43:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793749385; x=1794354185; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793749391; x=1794354191; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=dLJpvPoumSFexmTFflmUNY8ZT6ZJaVenaHcrkKAe+ng=;
-        b=LgD9i8+pzmlPBOR75ucqi80MltF3ok/GAx3or9nxgpBiNz6STouDltkuL/nlX+DNhk
-         JbyDj4H1Isj8AVOH9xk14TcgYDkH4vnGvbAlhGOdApE2tfE4JTwWp1c8NiNwSel/aBH0
-         2HaTGedJpppllkVlNBW1NlgXMmy47cWCctA4PiMpZGSdrzxdBnTdt3Rms2E13Ewnv5N9
-         HYz+Rl5d9EmbM18wS5ziz9AEeBUCagC+bc0zo8vfDu5APKSTqOBrCrLmg39JGK475OyD
-         /HhCCjNxd10TO/lyo2f536bcvCkUMwJxm/CZi3srKTmRvKJHiDx7XRNrjHJounKyVgL7
-         WpTg==
+        bh=QegSc/wcoBZa70IWsMViHKtlaHl5ugZvdHMGid4vM0I=;
+        b=fbM1VN/2F9ae7D7zWIDOLHSEC8i2XnC9duUDrPQwjDpE8eazv6ILtvUR+kO3Y4j3hW
+         ZRg1jKWI7zqgGM2OcFAhCpkLGiAA1DM+YIvNVMkWX8lMsY9D5HcOH+kNVMkGoe5FncZF
+         jlBjiA7laajC27LHW3C+jqgDC5DJCg/IHgv5PrlcE0+Y6UP62E73cvworJK77mA9daQp
+         Np61pJZsmVXUO0sflDnXhleeXUjWKJZL8FJA9bULzgy9bNDzF7PV5DD2wRHQyVO/2hVv
+         pvtQojZvrpK/CtVTvs2HsUgdGaQ9o2Hm14fgmob69HP1niBz95oUgG1kJDOkvsCBQdbc
+         c+Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793749385; x=1794354185;
+        d=1e100.net; s=20260707; t=1793749391; x=1794354191;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dLJpvPoumSFexmTFflmUNY8ZT6ZJaVenaHcrkKAe+ng=;
-        b=hZullNYvWN+cv//bF/+5T2bKJbrUP2D6AVVT/WBLQWxRtDOSxE1sZFhNXlTM7/KoEE
-         foH7G6FxFkj9g5gXOiEg9U4XXxhSCQx6MUd0T5kQxdM9sh6+BzKWfoqyQO1eQceRW46M
-         5CmvZYv0m1EMgi07Q17fvSrj0cLRHa9MWuVS0pLORHzfnjT2TP/07hJt1ooBzJxDt2Cf
-         1MTK7yh0gagZly8hWmFuQjnvHkFkwjW5L11BZ+20fHRq0+I4Io2siNwTrqxTIUMnVISs
-         ltVG+yejKJb0N6RQTpNu7eAkH0mEke662U2qSgH5VjXRYmsvIcE4wkVFOEJR5xUrQMsy
-         7MOg==
-X-Gm-Message-State: APuU4Z89DNtmavjX98RIf0ssaeFu8AY58cTjoFAtt2i0lZDgYPatp+1U
-	yffX/cwFx2F9H9fShWzxTq/9zY38cuFFP7K07lCEAICyxArR+JMPtd6rmLKl6Q==
-X-Gm-Gg: AYBFou2BEr+8fi+2iV13AxkXyGwFOx64y0DUKHy7Jy60x+1uPLdCl+eFNCMpLg11l3t
-	q6McCWAumki4vlDZXwPBMdr1WWRWkkONB163/Moc23PDBVuNI5XmVdaIxqbDgpkhBZiQokayOVS
-	qLMPWg4rzkpCoNnWP4NTkXeE8ixlWe2nRgI3huNfXORggW0zkysSF0LTDRiUZUPxZhpZvlczRy4
-	srCzQlm3GtCndtvLK/5K+vAfh1hGxsbEC+FMt5YFdsQEoR5qfVthD7BGw0KGXrWtIpi/QcbHaQL
-	kHIQY8pcb1xRj4LMICnWjizG+h9Phopum3pqm40H4Ai3riuSzNcpOSsoh9HmmzRaGZuGxfrVrtr
-	T0vqH+qa+ujxX0nZpAYABFv9Tw23aOB/Dpjvj1PcslucdXutE/d4QaJ/nzqWCENnAGUhtPVGIfg
-	w1O4A8ZxNVe/a654cMH99BgjczkGcnYbKxA7OHGPEIQ6lsKRxUg1n1IuN35O1dXYJii6MttY8Us
-	tTQv8VcwOlGovwhGOx1WbEydsCSOKYvJ6OlOvXGkVaO40HaXesr86DJLTOR+EpZO4HTz04viacB
-	ynxF9cjJ/L2uEcq0Xx3JGlywf6A9O3QeSAKVeljuIUlOlz/PIif4V9VQ4YGicoSQ1YKqCk4M8+l
-	B8ZAsdQN5h2yGSWclAit8Un0faPrwgJHR6GSWn+/osQri82g+KaeQbKQz5GTIx9SIB3MWdzMgMA
-	==
-X-Received: by 2002:a17:90a:d008:b0:3a4:b0f3:6597 with SMTP id 98e67ed59e1d1-3ae89188f68mr12183487a91.0.1793749385049;
-        Tue, 03 Nov 2026 15:43:05 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c9b0ec5sm6329623a91.16.2026.11.03.15.43.04
+        bh=QegSc/wcoBZa70IWsMViHKtlaHl5ugZvdHMGid4vM0I=;
+        b=1lGt9Aa9Tz4BvBxkKGXoyOi164DaGi5ZivdjLLuf/XwCYZh1kreUgu1cHnurgEy32B
+         gnMC1vyz2Ht1w9LF1mfB7OxZ4gYf/4jOuSUNFnvOml/ICYoMYmbr7kYyjWZM8MzmrUz/
+         4fM+2LeblTyrwGgXcwaqzj+qnI0/RiE2DrRcxpQTnB0HOXufz4+Wl1LfYE8Xk0E7Xsbl
+         z3BV4KHB6Z5zzl9iXHDypozNLgDZPd6ceDpapDw3WKqem+88hhw9G/BY3ouATR2+yoRF
+         1yMkYDWjdBuG3zJF12i5f6S7oGtBweyYE+iLyx6DaD8Y34ebgz/ORr4wJRPTZkzFiuTv
+         npLw==
+X-Gm-Message-State: APuU4Z9wF0F9TcR7ImhhEtgqA2JC00zL57zsqAEGccize+NmCalMfEKX
+	2k/0Yx0fsClZQz50BJLzVEgZUtF8xsZ3ey1bup+JHnCi/ZPNAlNBOLBXI54MQQ==
+X-Gm-Gg: AYBFou0cOcTvLrOSDW/A0XLYbO0vhYQrG7Yav4LVWJgSfTCOK2NfI3Ga6aLzDjFwwIu
+	Z45VYidyDTc1VjPHsXVtrHmXJWur15F5OvOEynvQL9JKyxzVK/BcHhn1hWCcVkw9olhHIbnrP69
+	Kl1w6Ggiwa5lm6W4wBwWomV9WLoDUcPLvmqClOlE/0eZwqPlPuwcAtPWWgR+n+e8wQP9Cg3umGo
+	hx5N1jBKp1T39wxsSnpt8ileXrdqrS/EtT3PfwEHzRFisbmkX2INmA3naCSZM7ekzV9wjlQTb4d
+	eFuZ4oBnjqnfm/LT6LPVRE2wrUTo0zpPfoJ6/3+c8CGE2MJ+quiTFwgOsnv1zrZ0MzK1e+qQ1gn
+	f6zcVSDX7jydz7avuoqnHDR6LDF8qmYlAQ5htJnBrrgr+BdKrrG4EwOoTmimIqMKfpnk+hU1iSS
+	a4x9LzOPj2DrA13EnM9Lx609A0Qb591JkLEEky954uJdqWO/uleVvvYm1KLfRwf7pr8zk7q/oQz
+	xvPlbNFe5xj51n+T+/tpuT1esEmXvXlYweH/kDBDazsGpKRM2GEWEoUBoP0h4TBE4S7PIrQ0Vx3
+	78h3aUy1zza8N6zYCcI1UUSnGL5dSS7t33jyu3zCMFSTfxOsFBAIJJjiX7X9Pam3GLA7n3/5bVV
+	p3R0D9r7GuwaK82ImmVG16n7LrAQRgzsyhnuqf53J3BMFzR8x5JCtYmR03jUG033p8SWFcnFtZh
+	MxBniYuuvZVM98abOenCk=
+X-Received: by 2002:a17:902:dad2:b0:2ed:74a:6722 with SMTP id d9443c01a7336-2ed074a68dfmr4655895ad.29.1793749391035;
+        Tue, 03 Nov 2026 15:43:11 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed0922b86asm397615ad.76.2026.11.03.15.43.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 15:43:04 -0800 (PST)
+        Tue, 03 Nov 2026 15:43:10 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 20/37] bpf: Compute scev for a loop that has more than 256 exits
-Date: Tue,  3 Nov 2026 23:40:45 +0000
-Message-ID: <20261103234104.208239-21-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 21/37] selftests/bpf: Test a loop with 301 exits
+Date: Tue,  3 Nov 2026 23:40:46 +0000
+Message-ID: <20261103234104.208239-22-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
 References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
@@ -104,128 +104,69 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-clang unrolls the loop of pyperf600 in part: 4 iterations with 150 copies
-of the body. Each copy has two 'break' and a 'return', thus the loop has
-451 exits. The list of exits of a loop holds 256. When the list is full
-scalar evolution gives up on the loop:
+A loop with 4 iterations and 301 exits is in another loop. The inner loop
+has a count. The outer loop is not analysed:
 
-  loop header at 164, unsupported loop: too many exits
+  loop header at 1, unsupported loop: too many exits of a nested loop
+  loop header at 2, header_count is [0..4]
 
-The complete list is for the loop around. Scalar evolution takes a nested
-loop for one insn, and the exits are the successors of this insn. No result
-for the loop itself depends on the list: the number of iterations comes
-from the jumps that dominate the back edge. mark_latches() prepares the
-exits for the loop around, and compute_max_iters() asks if there is only
-one exit.
-
-Keep the two apart:
-
-  exits_overflow           the list of this loop is cut
-  nested_exits_overflow    the list of a loop in this one is cut, and the
-                           list of this loop can lack exits too
-
-Only the second one makes scalar evolution give up.
-
-  loop header at 164, header_count is [0..4]
-
-A loop around a loop with more than 256 exits is not analysed, as before.
-
-pyperf600 and pyperf180 have 5 such loops each. They get a count. Each of
-them changes one more register that has no formula, thus the verifier still
-unrolls them.
+Without "bpf: Compute scev for a loop that has more than 256 exits" the
+inner loop is 'unsupported loop: too many exits' too.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  3 +++
- kernel/bpf/loops.c           |  6 ++++--
- kernel/bpf/scev.c            | 15 +++++++++++----
- 3 files changed, 18 insertions(+), 6 deletions(-)
+ .../selftests/bpf/progs/verifier_scev.c       | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 724f3b60130f..95e0d7face11 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -746,7 +746,10 @@ struct bpf_loop {
- 	int exits_cnt;
- 	bool irreducible;
- 	bool backedges_overflow;
-+	/* @exits is cut at MAX_LOOP_EXITS. Only a loop around this one needs all of them. */
- 	bool exits_overflow;
-+	/* @exits of a loop in this one is cut. Then @exits of this loop can lack exits too. */
-+	bool nested_exits_overflow;
- 	/*
- 	 * Loop-entry registers used to compute stack addresses for loads,
- 	 * stores and calls requiring fixed stack offsets, in this and nested
-diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
-index 2568079c2945..e584549bd208 100644
---- a/kernel/bpf/loops.c
-+++ b/kernel/bpf/loops.c
-@@ -555,7 +555,7 @@ int bpf_compute_loops(struct bpf_verifier_env *env)
- 				 *  s: ...
- 				 *   }
- 				 */
--				/* Enclosing loops inherit the overflow, see below */
-+				/* Enclosing loops get nested_exits_overflow, see below */
- 				if (aux[t].loop->exits_overflow)
- 					break;
- 				err = add_exit(aux[t].loop, i, s);
-@@ -572,7 +572,7 @@ int bpf_compute_loops(struct bpf_verifier_env *env)
- 		if (!loop || !loop->exits_overflow)
- 			continue;
- 		for (t = aux[i].loop_header; t >= 0; t = aux[t].loop_header)
--			aux[t].loop->exits_overflow = true;
-+			aux[t].loop->nested_exits_overflow = true;
- 	}
- 
- 	if (env->log.level & BPF_LOG_LEVEL2) {
-@@ -587,6 +587,8 @@ int bpf_compute_loops(struct bpf_verifier_env *env)
- 				bpf_log(log, ", irreducible");
- 			if (loop->exits_overflow)
- 				bpf_log(log, ", too many exits");
-+			if (loop->nested_exits_overflow)
-+				bpf_log(log, ", too many exits of a nested loop");
- 			bpf_log(log, "\n");
- 			for (j = 0; j < loop->backedges_cnt; j++) {
- 				backedge = &loop->backedges[j];
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 0d49c9021e30..e0d71df9c0b4 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -1260,10 +1260,16 @@ static int join_successor(struct bpf_verifier_env *env, int cur_header, int succ
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index c91d178a1aed..4b9a094328de 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -2238,6 +2238,44 @@ __naked void one_backedge_two_exits(void)
+ 	: __clobber_all);
  }
  
--/* Unsupported loops get only an unknown header environment. */
++__naked __noinline __used static int returns_zero(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
 +/*
-+ * Unsupported loops get only an unknown header environment.
-+ * A nested loop is processed as a single instruction, its exits are the successors: all of
-+ * them are needed. No result for the loop itself depends on the list of its own exits:
-+ * mark_latches() prepares them for the loop around, and compute_max_iters() asks if there is
-+ * only one, which a list that is cut does not have.
++ * A loop that the compiler unrolls in part has an exit for every 'break' and 'return' in every
++ * copy of its body. How many there are says nothing about the number of iterations.
++ * Scalar evolution takes a nested loop for one insn, and its exits are the successors of this insn.
++ * The list of exits is not complete: the loop around has no formulas.
 + */
- static bool can_compute_loop_scev(const struct bpf_loop *loop)
- {
--	return !loop->irreducible && !loop->exits_overflow;
-+	return !loop->irreducible && !loop->nested_exits_overflow;
- }
- 
- static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
-@@ -3050,12 +3056,13 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
- 	 */
- 	loop = aux[insn_idx].loop;
- 	if (!loop || loop->irreducible || loop->backedges_cnt != 1 || loop->backedges_overflow ||
--	    loop->exits_overflow) {
-+	    loop->nested_exits_overflow) {
- 		if (log->level & BPF_LOG_LEVEL2)
- 			bpf_log(log, "loop header at %d, unsupported loop:%s%s%s\n", insn_idx,
- 				!loop || loop->irreducible ? " irreducible" : "",
- 				loop && loop->backedges_cnt > 1 ? " multiple backedges" : "",
--				loop && loop->exits_overflow ? " too many exits" : "");
-+				loop && loop->nested_exits_overflow ?
-+				" too many exits of a nested loop" : "");
- 		return 0;
- 	}
- 
++SEC("xdp")
++__success __log_level(2)
++__msg("loop at 1, too many exits, too many exits of a nested loop")
++__msg("loop at 2, nested in 1, too many exits")
++__msg("loop header at 1, unsupported loop: too many exits of a nested loop")
++__msg("loop header at 2, header_count is [0..4] ")
++__naked void loop_around_301_exits(void)
++{
++	asm volatile ("					\
++	r7 = 0;						\
++3:	r6 = 0;						\
++1:	call returns_zero;				\
++	.rept 300;					\
++	if r0 == 7 goto 2f;				\
++	.endr;						\
++	r6 += 1;					\
++	if r6 != 4 goto 1b;				\
++	r7 += 1;					\
++	if r7 != 4 goto 3b;				\
++2:	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
+ SEC("xdp")
+ __success
+ __log_level(2)
 -- 
 2.55.0
 
