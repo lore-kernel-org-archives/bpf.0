@@ -1,56 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793699656;
-	b=wzSNVPsJz26W67Y9qC/tlqaML/5w3odo66qEIwLCaGRKwKzoS46aaHabUh0EOnpAUawe
-	 UXAzZ54hcGxnboUOKI4Ux8YHzMf9VK3k+U+7TTbVaGp7CKKuWrXygCngqsxNwjB7npgY4
-	 TLw8kWZLbVDl2aSRho0cDASbTztPTpsqBYBhYSxy0B65ZhmaUahMJhgXKsxNccvNVtRhX
-	 I5LItqfJKLkvRqA3XwFDjMPLg6LIgA34k6WepoTxzuUau5MeIj/1W8AUsZhc3Nm2+vT2H
-	 xVKXho5Wl4GDn0O1UqD8d3uEPPgUm6wUi+NDi4tYmeUZ9qd/cDRELK/4xacmtuaUpBw==
+	t=1793699809;
+	b=y2qtyvEHRM9GLIw5Hxj2HOXpMQdopmJwh7isFIxESDvxqucQ5FUNyVKa0Ya7J7ThuQjb
+	 dB25U3imvccVj3LduHQznPplyyWRtFcgllqJAwDBuGpKQy1g5FkLXbOwZIO94HaK7sb5S
+	 2TPcVMID/ufk6VmkP0xrdmUUcIIebPpl+KeiNcjurv46hBl75SA0h1+9QbKIQEUKxcJem
+	 RxOHACE5ZubvF/Xlb+B9uXBNRV078a9G5r4HT4culnb3SsR4MCgCY4pUKW1Hxw+xU4KGk
+	 nX8dPLKPIHD0YdRzcr0PfILYiHZZ7mQUcPWL23d9ARw1xo0GL+hxs1SeuL5U2W1B6bQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793699656;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793699809;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=GM3SqG7BK1zP8y6kzedvjOBhXxI8GlFNtGrpW7qR3bo=;
-	b=jsqZGHuTTJ3VuVI5MJt/imiQYqCrd9Zv+qHSS1hbM3Q81XdAxOOaZ//QpVi8j403MsaG
-	 0weu7tiYy1LrMYV8jPsrn+XDEu/UjrmYlh6yt8KtRIyoZs1xril2SHyHDzk/t5sgLrMW5
-	 2mJTg2RnIrwz+ZQDkPzUni+ApTVjSWnU6MYV4ZCJqfqAHHtOGuENrwQVBSwPmXtWL3RK/
-	 HyFHP0nHajVrBQaZOTkhpURfXcdf78AYUgbWxq2UMo6OAle2oqs2VdH60k12Tgl9CzAkb
-	 sfC99Fn5nu+3WhntUPmPV/ZKpmDzGsE/u4CeuayoyEvE8mfd/ijCmw3lvcQNVvL9r8Q==
+	bh=Zr1gXMsOmSpFG5+TOTKNZZ3xnB6NeOoUG48hE3Nt3/U=;
+	b=zwRhb09d+96+yVCUj1Ao8oEAFRRgtBzPeepUrPklz3R1016eC9ZeRdAa9HqTYmginYXT
+	 qHF40BQQ6pTarTlXzqWFTlshtT16ET9vlpjypDsHlB9+vBPqWE0zqC4iyZxX6Ra/Pk6B8
+	 /V5cVbkgVFpV0peTnLb8uhJzhBIPCEp9swg+1qlJ3OJVh086BVck3ad3YszdlCqKnOex1
+	 z0ez/kdLpVoQO7b93e8gCcpUS725wESWOumtNeueYFk737zEUIIv5wphIy92Ev3AP4KHJ
+	 6AXGUVZdwjyGiWLSy+odMzia2GLkBJd5xrxpTClVFqlIBtuaOLZvFtL9ViH+9j8gkiA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UHqRKbrN;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="PYBo7Y/p";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7160A60A2619
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 09:54:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315A5606A32D
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 09:56:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UHqRKbrN
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F1951F00A1F;
-	Tue,  3 Nov 2026 09:54:16 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PYBo7Y/p
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B961F000C1;
+	Tue,  3 Nov 2026 09:56:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793699656;
-	bh=GM3SqG7BK1zP8y6kzedvjOBhXxI8GlFNtGrpW7qR3bo=;
+	s=k20260515; t=1793699808;
+	bh=Zr1gXMsOmSpFG5+TOTKNZZ3xnB6NeOoUG48hE3Nt3/U=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UHqRKbrNtBfr7GRy3a4Y44HP6guCp3cax7N9uwkwbEJByGuxXW8aI3s8lpC+2igEO
-	 3eky5oArCEBgOY7mJDjTx0yDSrG4Sz/+sShmMil3YUrEWWJIjVG6O69Gx5cDvwYFkQ
-	 fmkyCDdRvfvvNHWJIwq/OZS1PJURIuRRlxGgslrLMz+o2wGRO24Lemh+KkxGvZpOzN
-	 jmraWIohGeLMzCyHUVDju9kfUaHSwiDjWseaREmEwBrX9M5XcdhiQR8HkRyp1g/9d/
-	 mWAWuo5UUwERUeDZtX93jKIvBrGP1zEElAr2qjwhh4BQi2zh8egOPu1zMEkerBeFj3
-	 CXmxWzSVNXJaw==
-Message-ID: <sashiko-outbox-194982@kernel.org>
+	b=PYBo7Y/pfcpORs7MSjcGptyzvdHfUaDciWgQV+4hmr6P8kzAKtHAeds7rkxQKMRu1
+	 C5obkhWTy1z1692ecp22KnMh6R4V4KHMY4dHqKl131+ayknWWZOr6FYS7BnfZl0ZJs
+	 EjlESuPWcOt/N9rnoIluCiJEewBVhD10uc6xz+oztZyd2SfLGftBVHp0tI+mZYweRf
+	 Wgjo0USJvDqRQikKebwjpDLFUXp9IYXHVpN60JC0Dt86AMyOILdr1Rg5/kIcJh0fMu
+	 wkxLA3t7RLZW2PyDVmTCUV+6dNplAJTrKhHH9racGLE/lGO0/aFGVwWKw/gsuoDsSB
+	 viHdG6G7SlA7w==
+Message-ID: <sashiko-outbox-194987@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 3/4] libbpf: Detect BPF_TRACE_UPROBE support
+Subject: Re: [PATCH bpf-next 4/4] selftests/bpf: Verify classic uprobe
+ attach types
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jiri Olsa" <jolsa@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261103093400.112178-4-jolsa@kernel.org>
+In-Reply-To: <20261103093400.112178-5-jolsa@kernel.org>
 References: <20261103093400.112178-1-jolsa@kernel.org>
- <20261103093400.112178-4-jolsa@kernel.org>
+ <20261103093400.112178-5-jolsa@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 03 Nov 2026 09:54:15 +0000
+Date: Tue, 03 Nov 2026 09:56:48 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,58 +61,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] libbpf: broken BPF_TRACE_UPROBE detection in probe_kern_uprobe_a=
-ttach_type()
+- [Critical] bpf: classic uprobes with expected_attach_type 0 still use pri=
+vate stack
+- [High] bpf: unchecked kprobe expected_attach_type breaks uprobe feature p=
+robe
 --
 
-commit daaaf792d9bbc9ce6b848daf8f14739d2eddbab7
+commit 9ee5232694f8a364dae370cb864edf0a6d7ff502
 Author: Jiri Olsa <jolsa@kernel.org>
 
-libbpf: Detect BPF_TRACE_UPROBE support
+selftests/bpf: Verify classic uprobe attach types
 
-This commit probes whether the kernel supports BPF_TRACE_UPROBE as the
-expected attach type for BPF_PROG_TYPE_KPROBE programs and sets it for
-uprobe, uretprobe, and usdt sections when supported.
+This commit adds assertions to the uprobe selftest to check that loaded
+classic uprobe and uretprobe programs keep BPF_TRACE_UPROBE as their
+expected attach type.
 
-> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-> index adb5d2e7fdfa2..175d96c0a5012 100644
-> --- a/tools/lib/bpf/features.c
-> +++ b/tools/lib/bpf/features.c
-> @@ -318,6 +318,24 @@ static int probe_kern_exp_attach_type(int token_fd)
->  	return probe_fd(fd);
->  }
-> =20
-> +static int probe_kern_uprobe_attach_type(int token_fd)
-> +{
-> +	LIBBPF_OPTS(bpf_prog_load_opts, opts,
-> +		.expected_attach_type =3D BPF_TRACE_UPROBE,
-> +		.token_fd =3D token_fd,
-> +		.prog_flags =3D token_fd ? BPF_F_TOKEN_FD : 0,
-> +	);
-> +	struct bpf_insn insns[] =3D {
-> +		BPF_MOV64_IMM(BPF_REG_0, 0),
-> +		BPF_EXIT_INSN(),
-> +	};
-> +	int fd;
-> +
-> +	fd =3D bpf_prog_load(BPF_PROG_TYPE_KPROBE, NULL, "GPL", insns,
-> +			   ARRAY_SIZE(insns), &opts);
-> +	return probe_fd(fd);
-> +}
+> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe.c b/tools/test=
+ing/selftests/bpf/prog_tests/uprobe.c
+> index 86404476c1daf..7d372552f5eab 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/uprobe.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe.c
+> @@ -44,6 +44,10 @@ static void test_uprobe_attach(void)
+>  	skel =3D test_uprobe__open_and_load();
+>  	if (!ASSERT_OK_PTR(skel, "skel_open"))
+>  		return;
+> +	ASSERT_EQ(bpf_program__expected_attach_type(skel->progs.test1),
+> +		  BPF_TRACE_UPROBE, "uprobe_attach_type");
+> +	ASSERT_EQ(bpf_program__expected_attach_type(skel->progs.test3),
+> +		  BPF_TRACE_UPROBE, "uretprobe_attach_type");
 
-[Severity: Medium]
-Does probe_kern_uprobe_attach_type() actually detect whether the running
-kernel supports BPF_TRACE_UPROBE?
+[Severity: High]
+Does the feature probe behind this expected_attach_type assignment actually
+detect kernel support for BPF_TRACE_UPROBE?
 
-In kernel/bpf/syscall.c, bpf_prog_load() does not reject
-attr->expected_attach_type >=3D __MAX_BPF_ATTACH_TYPE, and
-bpf_prog_load_check_attach() has no case for BPF_PROG_TYPE_KPROBE, so it
-falls through to the default branch and returns 0:
+In tools/lib/bpf/libbpf.c, libbpf_prepare_prog_load() sets
+expected_attach_type when FEAT_UPROBE_ATTACH_TYPE is supported:
 
-kernel/bpf/syscall.c:bpf_prog_load_check_attach() {
-    ...
+	/* set uprobe attach_type if supported */
+	if ((def & SEC_UPROBE) && kernel_supports(prog->obj, FEAT_UPROBE_ATTACH_TY=
+PE)) {
+		prog->expected_attach_type =3D BPF_TRACE_UPROBE;
+		opts->expected_attach_type =3D BPF_TRACE_UPROBE;
+	}
+
+In tools/lib/bpf/features.c, probe_kern_uprobe_attach_type() probes this by
+calling bpf_prog_load() with BPF_PROG_TYPE_KPROBE and
+opts.expected_attach_type =3D BPF_TRACE_UPROBE:
+
+	fd =3D bpf_prog_load(BPF_PROG_TYPE_KPROBE, NULL, "GPL", insns,
+			   ARRAY_SIZE(insns), &opts);
+	return probe_fd(fd);
+
+However, in kernel/bpf/syscall.c, bpf_prog_load_check_attach() does not have
+a case for BPF_PROG_TYPE_KPROBE and falls into the default case:
+
 	case BPF_PROG_TYPE_SYSCALL:
 	case BPF_PROG_TYPE_EXT:
 		if (expected_attach_type)
@@ -119,55 +124,53 @@ kernel/bpf/syscall.c:bpf_prog_load_check_attach() {
 		fallthrough;
 	default:
 		return 0;
-	}
-}
 
-Because BPF_PROG_LOAD has accepted any expected_attach_type value for
-BPF_PROG_TYPE_KPROBE since Linux 4.17 (when token_fd is 0),
-probe_kern_uprobe_attach_type() will return 1 even on older kernels that do
-not know about BPF_TRACE_UPROBE.
+Because BPF_PROG_LOAD does not validate expected_attach_type for
+BPF_PROG_TYPE_KPROBE, wouldn't probe_kern_uprobe_attach_type() always
+succeed on older kernels too, causing libbpf to unconditionally set
+BPF_TRACE_UPROBE while current kernels accept arbitrary invalid
+expected_attach_type values for kprobe programs? Also, since
+test_uprobe_attach() only checks the userspace getter
+bpf_program__expected_attach_type(), should the test also verify that the
+kernel rejects attaching a BPF_TRACE_UPROBE program to a non-uprobe perf
+event?
 
-When bpf_object__load() -> bpf_object_load_prog() ->
-libbpf_prepare_prog_load() then sets prog->expected_attach_type and
-opts->expected_attach_type to BPF_TRACE_UPROBE on those older kernels:
+[Severity: Critical]
+In addition, can a classic uprobe program loaded with expected_attach_type
+set to 0 still be assigned a per-CPU private stack and corrupt stack memory?
 
-tools/lib/bpf/libbpf.c:libbpf_prepare_prog_load() {
-    ...
-	if ((def & SEC_UPROBE) && kernel_supports(prog->obj, FEAT_UPROBE_ATTACH_TY=
-PE)) {
-		prog->expected_attach_type =3D BPF_TRACE_UPROBE;
-		opts->expected_attach_type =3D BPF_TRACE_UPROBE;
-	}
-    ...
-}
+In kernel/bpf/verifier.c, bpf_enable_priv_stack() only disables the private
+stack when expected_attach_type is explicitly set to one of the uprobe
+attach types:
 
-can this cause regressions for existing programs? For example:
+	case BPF_PROG_TYPE_KPROBE:
+		/* Disable private stack for uprobe programs. */
+		if (prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE ||
+		    prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE_MULTI ||
+		    prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE_SESSION)
+			return NO_PRIV_STACK;
+		fallthrough;
 
-1. In kernel/bpf/core.c, bpf_prog_map_compatible() requires matching
-expected_attach_type values for BPF_MAP_TYPE_PROG_ARRAY:
+And in kernel/events/core.c, __perf_event_set_bpf_prog() still allows
+attaching a BPF_PROG_TYPE_KPROBE program with expected_attach_type =3D=3D 0=
+ (and
+jits_use_priv_stack =3D=3D true) to a uprobe perf event:
 
-kernel/bpf/core.c:bpf_prog_map_compatible() {
-    ...
-		if (ret &&
-		    map->map_type =3D=3D BPF_MAP_TYPE_PROG_ARRAY &&
-		    map->owner->expected_attach_type !=3D fp->expected_attach_type)
-			ret =3D false;
-    ...
-}
+	if (prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE && !is_uprobe)
+		return -EINVAL;
 
-Sharing a tail-call map between a SEC("uprobe") program (loaded with
-expected_attach_type =3D=3D BPF_TRACE_UPROBE) and a SEC("kprobe") program
-(loaded with expected_attach_type =3D=3D 0) will now fail.
+	if (prog->type =3D=3D BPF_PROG_TYPE_KPROBE && prog->sleepable && !is_uprob=
+e)
+		/* only uprobe programs are allowed to be sleepable */
+		return -EINVAL;
 
-2. Callers checking bpf_program__expected_attach_type() will observe
-BPF_TRACE_UPROBE on kernels that neither enforce uprobe-only attach nor
-disable the private stack for BPF_TRACE_UPROBE.
-
-3. If FEAT_UPROBE_ATTACH_TYPE is cached without a token and later used when
-loading a program with a BPF token on kernels 6.9+ prior to
-BPF_TRACE_UPROBE, bpf_token_allow_prog_type() in kernel/bpf/token.c will
-reject the load because attach_type >=3D __MAX_BPF_ATTACH_TYPE.
+If an existing userspace loader (or a sleepable BPF_PROG_TYPE_KPROBE program
+loaded with expected_attach_type =3D=3D 0) loads a program with stack depth=
+ >=3D
+BPF_PRIV_STACK_MIN_SIZE and attaches it to a uprobe event, won't it still
+receive PRIV_STACK_ADAPTIVE and overwrite the per-CPU private stack if
+preempted on the same CPU?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103093400.1121=
-78-1-jolsa@kernel.org?part=3D3
+78-1-jolsa@kernel.org?part=3D4
