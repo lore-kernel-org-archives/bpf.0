@@ -1,72 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.252
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793676417;
-	b=JbnrMIVr6O7MZlTlTkuKtCq8pkE4cYL5BV2IMbnDBsNVhqeudeyX8OinhKuRN22/Dlrz
-	 rKUvdA/+kK3dcAvgTNFISfDHerU0nHCO5aVGhwDSj5kC1M5dbB8bTiZSSMBPfpacecgWy
-	 i6jxHF7AqV3jIlk40JkuuRPFtXCau2JtdgZl6IljfGXNEirc+X5SG31Qr1CRW1WRZUdZH
-	 OoxMW3x7o6abOE5C721K+BPduIVqdmyFlX7s1LYGPdqWv9j6LjiWk03RAPkAyQk13tLtj
-	 P1M8s+vEOb8AFSCGm9bhI20wVAeYIqG0EVaAW9A+eC/FB/4IQJb61Mu+rrxJVpNq9aA==
+	t=1793676777;
+	b=dqixVd6fV+PNfKYONElp4kw3/JUuYa2r5XrRSAp//YiUYaTSmxTjSD807M3c7ZJ+zZ4Z
+	 m/12VJQ5ruAU2A2u/SJm08TXjddUSOxniGaQqz62nHKzwVajlA2zTTDOQfDX8X9hGwbVx
+	 IVaeUWIjBkC2BbR+qKz0swhl/actA76EAfAzUCYL7mKftZ9CQ1+YC2yd0WPYHBXq2as0K
+	 PUcuAWk7YsFqUm5diK8+Pixmjig76CjLTVs1QNuLUWZKmpth7kofP8S6XZcB4FyD90h/c
+	 Ub2jzW6fkWmTjf26kH9j20pklhbZj16ndOZRmpkBFKC4Kc05osun6KVJlvu1TzerDqA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793676417;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=Pj1JU03F9Laxq6eHx9zjcjJnN4EfO5e/haxBemgdWVs=;
-	b=GMPQF3sc3mUmVuJf3k7bbrEZ4lQKRYS/PXD6/JpWFkEaKVxaHZ0pFB3Qh7VcPQqiWyKb
-	 /474AGwH5c+XpiST1oeis/CIQXyJ0ByEIKTO4Vcb3rJ20W4QmO5GaFMqXcOAWs2z/+WZB
-	 ORo7IZqJgaTfglfJvMMpSzq+VL3OCXGEt+w46c78s+JP+IawljuCmcVkODUpO1QXGgZUe
-	 8n3J4V9bQ1dtxEbHEP7vRZJiMLyqZ0IxVfc/5nvb2P+vcyIRJFE6zVtamfhzgMnAQiTFe
-	 a6AQ8RcLj82Dl7Qoh1Ld6P/Gq6sCRFm9WgJPC4Vdg0bNmg3wfF0RvIBT9KExmU4yXKA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793676777;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=JxhW9dG6cYmQ5UijK/Xj6wGP+4rIcfFWx2TW6kgtn1E=;
+	b=O8Ogwn0Yt1WqEyWTyfh1vRabS+sQk7GtFTQsalYoNeScz+TQMjRFlMltbKICEdR4lrYq
+	 1HgYIRYujTtEEwCQSsvc556b3QzO3yE/iZasPE8AkBTqUOP6DZdYISE5z+y4t3SZm7lUj
+	 it0ZVXtqUBx2fc7L1p4IHTD7DKd71nIc+n3jzpVRVcg17w22koZAJ0wmKtRNCkIq47AgN
+	 nzI0ElqEcLvDiO6uPiHNkrEgBVuULL5GE1YWbobZqPp4Dq4amJ+QBQyYaXtaYrilJ0/jT
+	 Q0WTeXXOVkg1sglCPjnxUEC1YWmXNY/QN+05yLOwtmSwu95PVEOdDj7eJWD7lNn/xHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=wZ3Vm7l0;
-	arc=none smtp.remote-ip=91.218.175.252
-Received: from mta0.migadu.com (out-252.mta0.migadu.com [91.218.175.252])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mb+yIX+B;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF92606A324
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 03:26:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EEF92606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B52606A324
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 03:32:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=wZ3Vm7l0
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=wtEVdOVSVnuKwh+DFugaJpr8wQGqhhMMSkFBirTr1Zg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793676414; v=1; x=1794281214;
- b=wZ3Vm7l0mlxhJDHMtn+MSeTkfra8gPRhQ/C9k1Ov7E5B2EKvdeEFGhRIzJ8empktpQHbZLSy
- sWaXtGmxIrM1ilcMcT5/WgFfmCwPB4DJNFpQ7m1N1/QT+Xt/mFQnCB+BUoBPZLv3cUTN8OaZ2W3
- c2PI4w6nCYlqu5dodVSmpQ2Q=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id e74cd1523336b06b;
-	Tue, 03 Nov 2026 03:26:54 +0000
-X-Mizu-Trace-ID: e74cd1523336b06b
-X-Migadu-Flow: FLOW_OUT
-Date: Tue, 3 Nov 2026 11:26:35 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-	David Lebrun <david.lebrun@uclouvain.be>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Mathieu Xhonneux <m.xhonneux@gmail.com>,
-	David Lebrun <dlebrun@google.com>,
-	Stefano Salsano <stefano.salsano@uniroma2.it>,
-	Andrea Mayer <andrea@common-net.org>
-Subject: Re: [PATCH net 6/6] selftests: seg6: add test for skb checksum with
- CHECKSUM_COMPLETE
-Message-ID: <aulUayPCDOYwAm1e@fedora>
-References: <20261031225033.64-1-andrea.mayer@uniroma2.it>
- <20261031225033.64-7-andrea.mayer@uniroma2.it>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mb+yIX+B
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359F51F000C1;
+	Tue,  3 Nov 2026 03:32:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793676776;
+	bh=JxhW9dG6cYmQ5UijK/Xj6wGP+4rIcfFWx2TW6kgtn1E=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=Mb+yIX+Bu8z6wW+V13qJfwflZ51gqcfRwBnZgHzOhuAJPwsZVkb1FCai2bMIkfE8V
+	 ik3uUCHsVU3m7P2CbPg2ZaSIfbwq4B0SKZP0sFxSjY9Vipd3Q9VIA2cOfgBe9si69l
+	 q38fUk1hh0Scr+268Lw2gv8uQOS8VR6elLSfoPqznEhfh9AIBysy76CSkNJchiT7Fs
+	 d7+RqDYAR/w3NJKHHSaRQJ2uo65zB+pd6CsLK+j3i3yW/WFk6xISM2a2p5a7bJlOE5
+	 7AI0nLz49vB6QNf+vy5swYj8oRV+JIBWSttePYxZlzlkBUrMNCsTXwoluGux1j2GDH
+	 M8/rfzsfVPyWw==
+Message-ID: <sashiko-outbox-194519@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add overflow test for
+ BTF dump zero-scan
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Gu Bin" <gubin@cmss.chinamobile.com>, bpf@vger.kernel.org
+In-Reply-To: <20261103032619.1378-3-gubin@cmss.chinamobile.com>
+References: <20261102131632.1124-1-gubin@cmss.chinamobile.com>
+ <20261103032619.1378-1-gubin@cmss.chinamobile.com>
+ <20261103032619.1378-3-gubin@cmss.chinamobile.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 03 Nov 2026 03:32:55 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -75,79 +60,92 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261031225033.64-7-andrea.mayer@uniroma2.it>
 
-Hi Andrea,
-On Sat, Oct 31, 2026 at 11:50:33PM +0100, Andrea Mayer wrote:
-> Add a selftest for received packets with CHECKSUM_COMPLETE that the SRv6
-> code processes before they are delivered on the same node. The test checks
-> that, after the node changes the packet, UDP does not read a wrong
-> skb->csum.
-> 
-> The test uses a host and a router connected through a veth pair. Since veth
-> does not provide CHECKSUM_COMPLETE, a tc ct action on the router computes
-> skb->csum in software.
-> 
-> The host sends a UDP datagram to the router along five paths: no SRH (the
-> reference), an SRH with local segments, End.B6.Encaps with End.DT6, End
-> with the next-csid flavor, and End.BPF. Each datagram is expected to be
-> delivered, not dropped as a checksum error. Without the previous patches,
-> every path except the reference fails. With them, every path passes.
-> 
-> The host also sends a control datagram. It checks that the test detects a
-> wrong skb->csum after a change to the packet. After the ct action, a BPF
-> program on the router changes the Flow Label of the control datagram
-> without updating skb->csum, and UDP must drop it. If UDP accepts it, the
-> paths above may report a false pass, and the test fails.
-> 
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> ---
->  tools/testing/selftests/net/Makefile          |   1 +
->  .../selftests/net/srv6_csum_complete.bpf.c    |  65 ++
->  .../selftests/net/srv6_csum_complete_test.sh  | 642 ++++++++++++++++++
->  3 files changed, 708 insertions(+)
->  create mode 100644 tools/testing/selftests/net/srv6_csum_complete.bpf.c
->  create mode 100755 tools/testing/selftests/net/srv6_csum_complete_test.sh
-> 
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: wrong expected_val in test_btf_dump_struct_data()=
+ overflow test
+- [Low] selftests/bpf: multi-line comment style in test_btf_dump_struct_dat=
+a()
+--
 
-[...]
+commit c037995f7dcc94c6cb7bb8863c0b417b37425882
+Author: Gu Bin <gubin@cmss.chinamobile.com>
 
-> +
-> +log_test()
-> +{
-> +	log_test_expected "$1" "$2" "$3"
-> +}
+selftests/bpf: Add overflow test for BTF dump zero-scan
 
-We'd better use log_test_expected directly, otherwise the log_test in
-lib.sh will be overwrite.
+This commit adds a TEST_BTF_DUMP_DATA_OVER() test case in
+test_btf_dump_struct_data() that dumps an all-zero union bpf_iter_link_info
+with a data_sz one byte short of the type size to verify that the zero-scan
+returns -E2BIG instead of reading past data_end.
 
-> +
-> +test_command_or_ksft_skip()
-> +{
-> +	local cmd="$1"
-> +
-> +	if [ ! -x "$(command -v "${cmd}")" ]; then
-> +		echo "SKIP: Could not run test without \"${cmd}\" tool"
-> +		exit "${ksft_skip}"
-> +	fi
-> +}
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/te=
+sting/selftests/bpf/prog_tests/btf_dump.c
+> index dbef014f75acd..f6cff6cc56c4f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+> @@ -1161,6 +1161,13 @@ static void test_btf_dump_struct_data(struct btf *=
+btf, struct btf_dump *d,
+>  			   "(union bpf_iter_link_info){.cgroup =3D (struct){.cgroup_fd =3D (_=
+_u32)1,},.task =3D (struct){.pid =3D (__u32)1,},}",
+>  			   { .cgroup =3D { .cgroup_fd =3D 1 }});
+> =20
+> +	/* overflow test for all-zero union: with a data_sz one byte short
+> +	 * of the type size, the zero-scan must not read past data_end and
+> +	 * must return -E2BIG.
+> +	 */
 
-Then we can use require_command() in lib.sh here, which will call
-log_test() in lib.sh.
+[Severity: Low]
+This isn't a bug, but in BPF code multi-line comments place the opening /*
+on its own line with the comment text starting on the next line. Could this
+comment be formatted to match the BPF style?
 
-[...]
+> +	TEST_BTF_DUMP_DATA_OVER(btf, d, "union", str, union bpf_iter_link_info,
+> +				sizeof(union bpf_iter_link_info) - 1, "", {});
 
-> +
-> +if [ "$(id -u)" -ne 0 ]; then
-> +	echo "SKIP: Need root privileges"
-> +	exit "${ksft_skip}"
-> +fi
+[Severity: Medium]
+Will this test fail the expected string check in btf_dump_data()?
 
-I wonder if there is any one run the selftest with none root privileges.
-Cause almost all the selftests need ip configurations.
+When btf_dump__dump_type_data() enters btf_dump_dump_type_data() at
+d->typed_dump->depth =3D=3D 0 for a union:
 
-Thanks
-Hangbin
+tools/lib/bpf/btf_dump.c:btf_dump_dump_type_data() {
+	size =3D btf_dump_type_data_check_overflow(d, t, id, data, bits_offset, bi=
+t_sz);
+	if (size < 0)
+		return size;
+	err =3D btf_dump_type_data_check_zero(d, t, id, data, bits_offset, bit_sz);
+	if (err) {
+		...
+	}
+	btf_dump_data_pfx(d);
+
+	if (!d->typed_dump->skip_names) {
+		if (fname && strlen(fname) > 0)
+			btf_dump_printf(d, ".%s =3D ", fname);
+		btf_dump_emit_type_cast(d, id, true);
+	}
+}
+
+At depth =3D=3D 0, btf_dump_type_data_check_overflow() only checks base typ=
+es and
+returns the union size (16), and btf_dump_type_data_check_zero() immediately
+returns 0. Then btf_dump_emit_type_cast() and btf_dump_struct_data() emit
+"(union bpf_iter_link_info){\n" into str before iterating over the union
+members at depth =3D=3D 1, where btf_dump_type_data_check_zero() on the .cg=
+roup
+member detects the overflow and returns -E2BIG.
+
+In btf_dump_data(), after verifying that btf_dump__dump_type_data() returns
+-E2BIG, it checks:
+
+	if (!ASSERT_STREQ(str, expected_val, "ensure expected/actual match"))
+		return -EFAULT;
+
+Because str contains "(union bpf_iter_link_info){\n" while expected_val is
+passed as "", shouldn't expected_val be "(union bpf_iter_link_info){\n" here
+(similar to the atomic_t overflow test in test_btf_dump_int_data())?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103032619.1378=
+-1-gubin@cmss.chinamobile.com?part=3D2
