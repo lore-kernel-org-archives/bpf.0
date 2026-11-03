@@ -1,75 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.82
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=93.188.205.243
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793712434;
-	b=Evn8+v566GOscEzdbpfhcU74Vl1uVe8kEbMNUcFSp/N6cEymxTn/fkgX5zirSs2oPzxu
-	 FBuDf660rWNwCudSzTimh6Fc3EQXDeazCcPMoNPE2+qZtynkubOkxqczpllHoBk7Em+xo
-	 bDKUxFqAqjf2EdbMYGMXeipOWKz0cC+hU+16uudVPxh043CdFt7/2OMF6W1HjhdWyPMkr
-	 xlgBlfR3ZYPrzoYfa8Te5wZ93aR61sD9b6PpVJsduyOgajF7bdWgVTYFtHxWwFHVp+PnG
-	 8jeKSyemoOWKEs3jKs32rZY9fs2VguA/lV0Muwq1/eiRl4oYbbHXaHOjy8KKgUJ0iIA==
+	t=1793712433;
+	b=2dUTkx41W7BBl7R7c7Nt1hGlWhNgNLfKDNOYluxgchSyvyG+csDCSe9qIWnZ5IWfeVER
+	 DUBXRB4f/5sw4MRvZD1t+pafZcGLCkiAO7PZDmCi0yfJZpaMVzLvvjIlMPumSseBDZEJM
+	 4Jw5C2mzI+6vvFRwql7Rnec8aZX0m8bkPCBc4IOEXtcAGJpXD/dVBsRkB2sJ8K86cY7HT
+	 n2MWvxJfvicGoWr4vnrOrfBtxn1hSGdcVES7UlxmCKE7iPzNw+JzXSGzR3z9o/yg3xiJ+
+	 CtnpS5PoDpXDrOI8KKj5yvOGWLLbOImQZqp/sGJTZ3Qxjr7M9arSq9Bqe1wM/kY+0cg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793712434;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=9VAhO8KBM9mOdifI8nmOoX/2TqgeYxG3nBGm5R3+hSk=;
-	b=inoUNt6oWBPJGF2idy7r4GVZ7fP8Abf11PokekglifGQED0Ux0HRLh/+eRFtD8vET7LF
-	 ucQzw4+3QCtLBJmaNWGRqGE1x4XuCEuQJupj1dAATP2qgKcQGpxabwhH76JACi7Gm+D7A
-	 Vp4YZ2rO3D1la/NgMc/UFADw/LOksADv9jUfODfgayjCFpA1Xnlu8BeQE10ooJdKYT3+1
-	 EEXvN5IfDiDjInfFboUR7V2EvQKDhHaGb5FivebeUE7hZxcuW4j0U91xRnzEDFCdl48Nu
-	 3V38Cn9fTHBNU2tvaEJLFd9jMM2K/PQ6rj6JDTZqkeFfWaBqzGak8Oydx7c2YlNodSg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793712433;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Received:From:To:Cc:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding:X-KSMG-AntiPhishing:X-KSMG-AntiSpam-Auth:
+	 X-KSMG-AntiSpam-Envelope-From:X-KSMG-AntiSpam-Info:
+	 X-KSMG-AntiSpam-Interceptor-Info:X-KSMG-AntiSpam-Lua-Profiles:
+	 X-KSMG-AntiSpam-Method:X-KSMG-AntiSpam-Rate:X-KSMG-AntiSpam-Status:
+	 X-KSMG-AntiSpam-Version:X-KSMG-AntiVirus:X-KSMG-AntiVirus-Status:
+	 X-KSMG-LinksScanning:X-KSMG-Message-Action:X-KSMG-Rule-ID;
+	bh=6OP42S54OKX78BiUtyHVgUQAOSoy774DMu20I6vV1fI=;
+	b=2O2EE+9VgDvkYp4LxHtDzd0fFZ06RShvicwmPUMZ5wPbtVRqWCa3UANrnU66PtcfPxXL
+	 q5FFW+tjr693dh8tS7zZM9ERwQeReYoMtUEB26TT62cTUCAze7eD/SH7Xr/3KUGdOm3cJ
+	 9H7+6DUlTv4o0f3HWY315B+xNovqjhVwI4YMW9K6J92OibJY3beuT8IrEhuz2qrDglIf6
+	 k7ntB0n2O6eB7vJQMbLR300lOke7HcQfNL92hiZwY3SvBtEy4IjDuwViFY8vkfZwg2u58
+	 ynTtAJWZhYPFqOL5K1B9boPu1xOELDArBp8gbddmAu0FJbfttNpaYs9i97QCCoQgwdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=jQggFAhP;
-	arc=none smtp.remote-ip=95.215.58.82
-Received: from mta1.migadu.com (out-82.mta1.migadu.com [95.215.58.82])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=astralinux.ru;
+	spf=pass smtp.mailfrom=astralinux.ru;
+	arc=none smtp.remote-ip=93.188.205.243
+Received: from mail-gw02.astralinux.ru (mail-gw02.astralinux.ru [93.188.205.243])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9716F6082BCC
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 13:27:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9716F6082BCC
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=jQggFAhP
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=dZMvqS4c+48JMUQ62nOXGEohEi1C+eqSvF1H1cvPGHA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793712431; v=1; x=1794317231;
- b=jQggFAhPNDGDne8cOo7hGsMcyDuPltvGyPW3td6U8W4asuBjI8QYBcouRdgc7uM4lIrNOcaX
- ZPX6OfGvIxwiff3hNLL9/H2vWvuCdhUDoYAZcI80mA8/Nc5Y2Ch3hNTLp48UhucYNoUklNoFRSJ
- WB/oR4IoP74z2XP3lsgcvEHk=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id fb2cfe47defad250;
-	Tue, 03 Nov 2026 13:27:11 +0000
-X-Mizu-Trace-ID: fb2cfe47defad250
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org,
-	josef@toxicopanda.com,
-	axboe@kernel.dk,
-	alexei.starovoitov@gmail.com
-Cc: cgroups@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A306083631;
+	Tue,  3 Nov 2026 13:27:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70A306083631
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=astralinux.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=astralinux.ru;
+	s=mail; t=1793712427;
+	bh=I33FXfO8Gp7E7V66wFrmBkH+r2omEzUOSnQAEGC4qEE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gmzWkpU2ogr0P4r0iopl7XF2VylUpM0uFl2rPtQ4dTB3Lyag9D835hn5UywaPbzme
+	 NdwUyqI3l9KY2EejTS+XxJJtrvHpDt2dzx+7kpYhqkqfoPqKYiK3oc+uSVUK7fEKkG
+	 26YkRACjjSi5zSywvZrZkYVYGJu0NJxsUKcnHe4B8i/TxUFPOTy8t09k6YoPDWrPj8
+	 zIO35DV14ofL86rk+JXh2k/e7YRg+3cyre42t7OJu3G+e1ru6BaVLTLQupsUYHObrq
+	 Ox+gPmtFTF3PYxTVQ9xEagMV0K5gr8lZCaYSp+Esrq1l+JtWRAUp/Go4ZLltEC89Nt
+	 7QPSSQeiIajaw==
+Received: from gca-msk-a-srv-ksmg01.astralinux.ru (localhost [127.0.0.1])
+	by mail-gw02.astralinux.ru (Postfix) with ESMTP id 57E9B1F6FA;
+	Tue,  3 Nov 2026 16:27:07 +0300 (MSK)
+Received: from new-mail.astralinux.ru (unknown [10.205.207.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-gw02.astralinux.ru (Postfix) with ESMTPS;
+	Tue,  3 Nov 2026 16:27:05 +0300 (MSK)
+Received: from DESKTOP-D46TNHI (unknown [10.198.27.207])
+	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4jJq9h6wlFz22lT;
+	Tue, 03 Nov 2026 16:27:04 +0300 (MSK)
+From: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>
+To: stable@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>,
+	Lang Xu <xulang@uniontech.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	Kaiyan Mei <kaiyanm@hust.edu.cn>,
 	bpf@vger.kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	linux-kselftest@vger.kernel.org,
-	cui.tao@linux.dev,
-	cuitao@kylinos.cn,
-	ameryhung@gmail.com
-Subject: [RFC PATCH v12 4/4] docs: cgroup-v2: document the iocost BPF cost model attachment
-Date: Tue,  3 Nov 2026 21:26:13 +0800
-Message-ID: <20261103132613.1952975-5-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261103132613.1952975-1-cui.tao@linux.dev>
-References: <20261103132613.1952975-1-cui.tao@linux.dev>
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lvc-project@linuxtesting.org
+Subject: [PATCH 5.10/5.15] bpf: Fix OOB in pcpu_init_value
+Date: Tue,  3 Nov 2026 16:25:30 +0300
+Message-ID: <20261103132532.643-1-mdmitrichenko@astralinux.ru>
+X-Mailer: git-send-email 2.54.0.windows.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -80,93 +85,75 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-KSMG-AntiPhishing: NotDetected, bases: 2026/11/03 12:04:00
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Envelope-From: mdmitrichenko@astralinux.ru
+X-KSMG-AntiSpam-Info: LuaCore: 133 0.3.133 d508d579b02cdb6df47808421a9b9e12fc9fb75b, {date_rfc_vio_soft_silent}, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, new-mail.astralinux.ru:7.1.1;127.0.0.199:7.1.2;lore.kernel.org:7.1.1;astralinux.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1, FromAlignment: s
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiSpam-Lua-Profiles: 207225 [Nov 03 2026]
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Version: 6.1.1.27
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.0.7854, bases: 2026/11/03 11:26:00 #28786010
+X-KSMG-AntiVirus-Status: NotDetected, skipped
+X-KSMG-LinksScanning: NotDetected, bases: 2026/11/03 12:04:00
+X-KSMG-Message-Action: skipped
+X-KSMG-Rule-ID: 1
 
-From: Tao Cui <cuitao@kylinos.cn>
+From: Lang Xu <xulang@uniontech.com>
 
-Document the BPF cost model attachment in the io.cost.model section
-of the cgroup v2 documentation: attaching an iocost_model_ops
-struct_ops to a device by its major:minor, the model=bpf readback
-while attached (ctrl keeps describing the coefficients), the builtin
-model coming back on detach, and ctrl writes never selecting a model.
+commit 576afddfee8d1108ee299bf10f581593540d1a36 upstream.
 
-Suggested-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+An out-of-bounds read occurs when copying element from a
+BPF_MAP_TYPE_CGROUP_STORAGE map to another pcpu map with the
+same value_size that is not rounded up to 8 bytes.
+
+The issue happens when:
+1. A CGROUP_STORAGE map is created with value_size not aligned to
+   8 bytes (e.g., 4 bytes)
+2. A pcpu map is created with the same value_size (e.g., 4 bytes)
+3. Update element in 2 with data in 1
+
+pcpu_init_value assumes that all sources are rounded up to 8 bytes,
+and invokes copy_map_value_long to make a data copy, However, the
+assumption doesn't stand since there are some cases where the source
+may not be rounded up to 8 bytes, e.g., CGROUP_STORAGE, skb->data.
+the verifier verifies exactly the size that the source claims, not
+the size rounded up to 8 bytes by kernel, an OOB happens when the
+source has only 4 bytes while the copy size(4) is rounded up to 8.
+
+Fixes: d3bec0138bfb ("bpf: Zero-fill re-used per-cpu map element")
+Reported-by: Kaiyan Mei <kaiyanm@hust.edu.cn>
+Closes: https://lore.kernel.org/all/14e6c70c.6c121.19c0399d948.Coremail.kaiyanm@hust.edu.cn/
+Link: https://lore.kernel.org/r/420FEEDDC768A4BE+20260402074236.2187154-1-xulang@uniontech.com
+Signed-off-by: Lang Xu <xulang@uniontech.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+[mdmitrichenko: The older implementation uses bpf_long_memcpy()
+ rather than copy_map_value_long(). Replace it with memcpy() using
+ map.value_size to avoid reading beyond the source buffer.]
+Signed-off-by: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>
 ---
- Documentation/admin-guide/cgroup-v2.rst | 45 ++++++++++++++++++++-----
- 1 file changed, 37 insertions(+), 8 deletions(-)
+Backport fix for CVE-2026-53076.
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 9e3c67b02ae2..0965645b1286 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2056,8 +2056,9 @@ IO Interface Files
- 	currently implements "io.weight" proportional control.  Lines
- 	are keyed by $MAJ:$MIN device numbers and not ordered.  The
- 	line for a given device is populated on the first write for
--	the device on "io.cost.qos" or "io.cost.model".  The following
--	nested keys are defined.
-+	the device on "io.cost.qos" or "io.cost.model", or when a BPF
-+	cost model is attached to it.  The following nested keys are
-+	defined.
+ kernel/bpf/hashtab.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 4c7cab79d90e5..59f1ffa9a59d3 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -844,8 +844,8 @@ static void pcpu_init_value(struct bpf_htab *htab, void __percpu *pptr,
  
- 	  ======	=====================================
- 	  enable	Weight-based control enable
-@@ -2111,13 +2112,40 @@ IO Interface Files
- 	implements "io.weight" proportional control.  Lines are keyed
- 	by $MAJ:$MIN device numbers and not ordered.  The line for a
- 	given device is populated on the first write for the device on
--	"io.cost.qos" or "io.cost.model".  The following nested keys
--	are defined.
-+	"io.cost.qos" or "io.cost.model", or when a BPF cost model is
-+	attached to it.  The following nested keys are defined.
- 
--	  =====		================================
-+	  =====		==========================================
- 	  ctrl		"auto" or "user"
--	  model		The cost model in use - "linear"
--	  =====		================================
-+	  model		The cost model in use - "linear" or "bpf"
-+	  =====		==========================================
-+
-+	When BPF cost model support is available, a BPF cost model
-+	can be bound to a device by attaching an
-+	"iocost_model_ops" struct_ops carrying the whole disk's
-+	major:minor as encoded by makedev(3) in its "dev" member (a
-+	partition's major:minor is rejected).  Attaching creates the
-+	controller if needed, like
-+	an io.cost.model write does, switches the device's pricing to
-+	the model and populates the device's line in this file and in
-+	"io.cost.qos" if it did not exist yet.  Attaching fails with
-+	-EBUSY if the device already has a model attached.  The
-+	attached model prices IOs only while the controller is
-+	enabled through "io.cost.qos"; attaching does not enable it.
-+	IOs issued directly by the root cgroup bypass the model.
-+
-+	While a model is attached, "model" selects between it and the
-+	builtin model: "model=bpf" switches to the attached model and
-+	"model=linear" switches back to the builtin model, and neither
-+	detaches the struct_ops.
-+
-+	Detaching removes the model, after which "model=bpf"
-+	fails and the device prices with the builtin model again.
-+	Device removal ejects the attached model as well, while the
-+	struct_ops link remains until userspace destroys it.  "ctrl"
-+	accepts only "auto" and "user" and never selects a model.  It
-+	keeps describing the builtin coefficients, which take effect
-+	again when switched back.
- 
- 	When "ctrl" is "auto", the kernel may change all parameters
- 	dynamically.  When "ctrl" is set to "user" or any other
-@@ -2125,7 +2153,8 @@ IO Interface Files
- 	automatic changes are disabled.
- 
- 	When "model" is "linear", the following model parameters are
--	defined.
-+	defined.  They remain readable and writable while "model" is
-+	"bpf".
- 
- 	  =============	========================================
- 	  [r|w]bps	The maximum sequential IO throughput
+ 		for_each_possible_cpu(cpu) {
+ 			if (cpu == current_cpu)
+-				bpf_long_memcpy(per_cpu_ptr(pptr, cpu), value,
+-						size);
++				memcpy(per_cpu_ptr(pptr, cpu), value,
++				       htab->map.value_size);
+ 			else
+ 				memset(per_cpu_ptr(pptr, cpu), 0, size);
+ 		}
 -- 
-2.53.0
+2.43.0
 
