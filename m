@@ -1,71 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793695767;
-	b=kXFUOTT+PK7dzqfzF0XKs5/Ts0KYIIJ9d+HGV7MpnVt3W/laYTiGIZLbzRPG1LUMRPs8
-	 M7T7k6Vf7ZFq//74UUwC6vXzM7hVceUCXvUJB0tEC1oZVfBJoL+Z1zlXXmQHvctqH9Sy6
-	 2br80UFc6Z28Fls2rqUYB1dlIBHusdobpcrGYbYUs4/PeI1263wnzkxmcORKFTVS5OiX7
-	 m91nCtVKC2y6iFZr4n/Zd8RGaLKOZDhotw3BNK6PQQc/I59UmzLWx0apIks4FcnBfBv7H
-	 WZL9h2vYbbupRtYHSh8UziV6BL8HCR9DNID2yN30/cb3mYLIjO+9VZE48Opb5WxG65w==
+	t=1793695953;
+	b=CZzbSxOBEZTuW4sutj4uD/2zvQyrTfTKbJTUmXfODOrRKJbGwVKlxYWnQ2Dri0aBw11V
+	 bHK885FPDVxIcpe71XLWNrVVy547fQFEqSUaMR6jZ5HwCi1CundAmTLn/w01JRsuMMr8x
+	 ZHXDEl5zfIJ07lg8ZcDscjL6AcRftEfs8OCDipXjc5mXiptFcsDhsWzKhHG9qL8uW3CSZ
+	 ogJTAbFBVG1zuFc9PySCGRUPJCmKhjqOt8gq94fNmdrb6jC8YlxdyXWI9gTYmKvlxmkX1
+	 1jzWmulCNIo4DGM2AYIFY5kFF3JD7uSzWeEINQWgomjdfJOmiz4MuYVTpqTfyVMF3Bg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793695767;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=kKjb1wbG/EIzIWyCjCRnYVp4ON/5x4pkyYmDZcd6O6w=;
-	b=vhDykIq+G3/GsOf+H9Fmym2/aRKUXkz4GxJOHiMFLmW+05XetXvqIENl9QS/tmIt5Kfj
-	 2iQIl9DJvksKDh+QMHPh4uiqR3FMI52bHojUtpabw6WkP6CkoemktZNoL7JvHH5HmdCS0
-	 MwDnb+3hkONno5wvUVO2tT2CEmrWaAsP2ja0vE/OIkCh88HiMlFiijsWrph3Qpw2pAJZn
-	 nzVB3q9X8vf+z0ts6pxSLPLmUUlZwzgGsTOhg8k3aYJcgH7dtqoQFxHdkrSKyjNblu2m0
-	 yuL72ULaS8vZBB2bZDf185d9YYN1hLkMM/Eumiv4TTe1e3e7z8zfKzvddRjFN01BmBA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793695953;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=H1zLd6hG/R8x62IgEXyvz1fvxMh0hGKtNRoZJvWwbaA=;
+	b=L3L5T1vWREWg8+SZ/cyGw85ntQFpCDUTDD969j0yO+3A/pOhhtnLadQ1KN2+FGo20nj+
+	 odyvLMPeWDHpAru+0m6NPC40yNsCbIQOAJWz45F7TYUeufQ2+Hawf4KSBv0fikSYctCtJ
+	 ruuRGVWN3QTezg6NoFP3LPcJ+QVflFBsbNP4RPiZ7tGtd5hm9ussTEIWcOc866+BS3uSB
+	 qYzyg9o73u0wGmubEoQx5waY4NKB9Gg7EAhOZPhLNLUbExgul13VY7k0/TRds9ck58D2q
+	 /JdSXAwwxwKsO76K7dZFnteXrH4HvfaHOhH9y7UQo2/C4D/aL8jcQIpdsdL9N0bFb1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GeMrxnvQ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Ey2/rNZS";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8879F606A329
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 08:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28A6606A327
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 08:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GeMrxnvQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B50731F000C1;
-	Tue,  3 Nov 2026 08:49:25 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ey2/rNZS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 039E21F000C1;
+	Tue,  3 Nov 2026 08:52:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793695767;
-	bh=kKjb1wbG/EIzIWyCjCRnYVp4ON/5x4pkyYmDZcd6O6w=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GeMrxnvQGkybuXNxCBv0Hnl/0BBEzMYf4btC4ksy6vF/o6TGUw0bgsUR6h/CfdtAr
-	 VrbpEPrR7Od3oFy0p8FYVdtu9l0DO49MISFMYk1hlI2WX6rphaqpeFkN5Aua89ea77
-	 btAr3+HQt+iKHhcNtPe+YwsPcMyjcpAImxnelWhgoVCuQMMxWr7E+av/4ZPKNhc9JP
-	 HOz/M4eFp5nKh3Uk32jqhecBuQe8aF8s0U0Z5GaGp/0FKm6ckvcmVs3Pf7qsbRLD5m
-	 Txw75WkYgAWGvY5L+dluQiHWeVQCg1prg2hhmGVAqALTp83hNBqot9gfk0EXCizSkb
-	 Bl3/rS5xkpOUg==
-Message-ID: <sashiko-outbox-194883@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 5/5] mm/khugepaged: drop/reacquire mmap read lock if
- skipped enough VMAs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>, "David
- Hildenbrand" <david@kernel.org>, "Zi Yan" <ziy@nvidia.com>, "Baolin Wang" <baolin.wang@linux.alibaba.com>, "Liam
- R. Howlett" <liam@infradead.org>, "Nico Pache" <nico.pache@linux.dev>, "Ryan
- Roberts" <ryan.roberts@arm.com>, "Dev Jain" <dev.jain@arm.com>, "Barry Song" <baohua@kernel.org>, "Lance
- Yang" <lance.yang@linux.dev>, "Usama Arif" <usama.arif@linux.dev>, "Kiryl
- Shutsemau" <kas@kernel.org>, "Andrew Morton" <akpm@linux-foundation.org>, "Peter
- Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>, "Will
- Deacon" <will@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Waiman Long" <longman@redhat.com>, "Suren
- Baghdasaryan" <surenb@google.com>, "Vlastimil Babka" <vbabka@kernel.org>, "Shakeel
- Butt" <shakeel.butt@linux.dev>, "Yonghong Song" <yonghong.song@linux.dev>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song
- Liu" <song@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>
-Cc: linux-mm@kvack.org, bpf@vger.kernel.org
-In-Reply-To: <20261103-khugepaged-latency-fix-v1-5-a07ab16ac860@kernel.org>
-References: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
- <20261103-khugepaged-latency-fix-v1-5-a07ab16ac860@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 03 Nov 2026 08:49:25 +0000
+	s=k20260515; t=1793695952;
+	bh=H1zLd6hG/R8x62IgEXyvz1fvxMh0hGKtNRoZJvWwbaA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Ey2/rNZSZSGEgNni1SBM051jGaDNXKipu6bI+WhqXg+DXQtxTAkPHp1y6npUYrPMd
+	 xG+FEEg6UyC0ULBue/cBsk5nnYzKj6PlsZ6wuwRfOkzFTa+1PgFj49FrepxPsmfx3g
+	 MpWpm7Rd+T0rbT5L5MhjpOknL27S4xBg7V7z657TtsQ5A3taA7GGwMQncLSH1ywyWB
+	 0YYFzQSqU2+NuAm1u5c621J5DSXar3ssYU1XYYOg8Vhz/fdsKsEJ643KBwbTOjIg1w
+	 QfQdei9I65G90fAi1cTue17tdqDZXM6TNp4UwAXwPwoCWerM6/8ut7/VkDPCNe51dr
+	 08zz1FF3faELw==
+Content-Type: multipart/mixed; boundary="===============8055261971948351789=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -74,138 +48,63 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <3b79b99ba7a323fc42e7d3a19139c46535271762ae6f70ab629213866f54f54f@mail.kernel.org>
+In-Reply-To: <20261103075916.100050-2-jolsa@kernel.org>
+References: <20261103075916.100050-2-jolsa@kernel.org>
+Subject: Re: [PATCHv2 bpf-next 1/8] bpf: Honor const on generic kfunc memory arguments
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net
+Cc: bpf@vger.kernel.org,linux-mm@kvack.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ljs@kernel.org,john.fastabend@gmail.com,nierro92@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue,  3 Nov 2026 08:52:31 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] mm/khugepaged: vm_end ALIGN() overflow rewinds vmi in collapse_sca=
-n_mm_slot()
-- [Medium] mm/khugepaged: sub-PMD VMAs bypass skip batching in collapse_sca=
-n_mm_slot()
---
+--===============8055261971948351789==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 0a737288374fc8ce4ac1b20ac082b7190ad6db37
-Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> bpf: Honor const on generic kfunc memory arguments
 
-mm/khugepaged: drop/reacquire mmap read lock if skipped enough VMAs
+TL;DR: Commit message only: it lacks motivation and doesn't say the verifier
+now trusts const in kfunc prototypes, so a kfunc casting const away and
+writing could make it unsound; kfuncs.rst doesn't say this either.
 
-This commit drops and reacquires the mmap read lock using
-mmap_read_lock_nosteal() in collapse_scan_mm_slot() after skipping
-KHUGEPAGED_MAX_SKIP_BATCH ineligible VMAs to reduce mmap_lock hold times and
-relieve writer contention.
+>     bpf: Honor const on generic kfunc memory arguments
+>
+>     Mark generic kfunc memory arguments as read-only when their BTF pointer
+>     type points to const data. Preserve that access mode when resolving
+>     scalar structs to fixed-size memory.
+>
+>     Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 216c4b8d28c40..b9c72ee8b4211 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
+This isn't a bug, but the changelog describes what changes without saying
+why.  Could it explain the motivation, for example that read-only memory
+such as .rodata can now be passed to these kfuncs?
 
-[ ... ]
+Before this patch, generic kfunc memory arguments were checked as
+BPF_READ | BPF_WRITE.  After it, a const pointee is checked as BPF_READ
+only.  As a result:
 
-> @@ -2910,6 +2916,7 @@ static void collapse_scan_mm_slot(unsigned int prog=
-ress_max,
->  	struct mm_struct *mm;
->  	struct vm_area_struct *vma;
->  	unsigned int progress_prev =3D cc->progress;
-> +	unsigned int skipped =3D 0;
-> =20
->  	lockdep_assert_held(&khugepaged_mm_lock);
->  	*result =3D SCAN_FAIL;
-> @@ -2951,6 +2958,14 @@ static void collapse_scan_mm_slot(unsigned int pro=
-gress_max,
->  			/* Unable to collapse, skip to the next candidate. */
->  			mm_slot->address =3D ALIGN(vma->vm_end, HPAGE_PMD_SIZE);
->  			cc->progress++;
-> +			if (++skipped >=3D KHUGEPAGED_MAX_SKIP_BATCH) {
-> +				/* Skipped a lot of VMAs, so wait for writers. */
-> +				mmap_read_unlock(mm);
-> +				cond_resched();
-> +				mmap_read_lock_nosteal(mm);
-> +				vma_iter_set(&vmi, mm_slot->address);
-> +				skipped =3D 0;
-> +			}
+  - check_reg_type() now accepts read-only registers (rdonly_mem,
+    rdonly_buf, BPF_F_RDONLY_PROG map values, map keys, and
+    PTR_TO_BTF_ID | PTR_TRUSTED).
 
-[Severity: High]
-Can mm_slot->address overflow to 0 here and cause vma_iter_set() to rewind
-vmi back to the start of the address space?
+  - Program types that may only read packets can now pass packet
+    pointers.
 
-On architectures where TASK_SIZE extends into the final PMD range of the
-unsigned long address space, such as 64-bit s390 in
-arch/s390/include/asm/processor.h:
+  - check_stack_range_initialized() no longer marks the stack bytes as
+    clobbered, so the verifier keeps what it knew about the stack across
+    the call.
 
-#define TASK_SIZE		(TASK_SIZE_MAX)
-#define TASK_UNMAPPED_BASE	(_REGION2_SIZE >> 1)
-#define TASK_SIZE_MAX		(-PAGE_SIZE)
+Could the changelog mention that the verifier now relies on the const
+qualifier in a kfunc's C prototype, so a kfunc that casts away const and
+writes through the pointer would make the verifier unsound?  Neither the
+changelog nor Documentation/bpf/kfuncs.rst says this.
 
-a user process can map VMAs with vma->vm_end > (ULONG_MAX & HPAGE_PMD_MASK).
-When collapse_scan_mm_slot() skips such a VMA,
-ALIGN(vma->vm_end, HPAGE_PMD_SIZE) wraps around to 0.
 
-If ++skipped >=3D KHUGEPAGED_MAX_SKIP_BATCH triggers on that VMA,
-vma_iter_set(&vmi, mm_slot->address) resets the VMA iterator to address 0.
-Because the !collapse_possible_orders() path does not check
-cc->progress >=3D progress_max, if the mm contains no eligible PMD-spanning
-VMAs (for example, 1024 ineligible VMAs ending in the top PMD range),
-wouldn't for_each_vma(vmi, vma) restart from address 0 and loop
-indefinitely inside collapse_scan_mm_slot() until the process exits or THP
-is disabled?
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
->  			continue;
->  		}
->  		hstart =3D ALIGN(vma->vm_start, HPAGE_PMD_SIZE);
-
-[Severity: Medium]
-Should the skip batching and progress accounting also cover VMAs that pass
-collapse_possible_orders() under sub-PMD mTHP but do not span a full PMD?
-
-In mm/khugepaged.c, collapse_possible_orders() checks all enabled anonymous
-mTHP orders when called with TVA_KHUGEPAGED:
-
-static unsigned long collapse_possible_orders(struct vm_area_struct *vma,
-		vm_flags_t vm_flags, enum tva_type tva_flags)
-{
-	unsigned long orders;
-
-	/* If khugepaged is scanning an anonymous vma, allow mTHP collapse */
-	if ((tva_flags =3D=3D TVA_KHUGEPAGED) && vma_is_anonymous(vma))
-		orders =3D THP_ORDERS_ALL_ANON;
-	else
-		orders =3D BIT(HPAGE_PMD_ORDER);
-
-	return thp_vma_allowable_orders(vma, vm_flags, tva_flags, orders);
-}
-
-When a sub-PMD anonymous mTHP order is enabled, a faulted anonymous VMA
-smaller than HPAGE_PMD_SIZE passes collapse_possible_orders(), bypassing
-the !collapse_possible_orders() block in collapse_scan_mm_slot() and
-falling through to:
-
-		hstart =3D ALIGN(vma->vm_start, HPAGE_PMD_SIZE);
-		hend =3D ALIGN_DOWN(vma->vm_end, HPAGE_PMD_SIZE);
-		if (mm_slot->address > hend) {
-			cc->progress++;
-			continue;
-		}
-		if (mm_slot->address < hstart)
-			mm_slot->address =3D hstart;
-		VM_WARN_ON_ONCE(mm_slot->address & ~HPAGE_PMD_MASK);
-
-		while (mm_slot->address < hend) {
-
-For these sub-PMD VMAs, hstart >=3D hend:
-- When mm_slot->address > hend, it increments cc->progress and continues
-  without incrementing skipped or dropping mmap_lock.
-- When mm_slot->address <=3D hend (for instance, when a sub-PMD VMA starts =
-on
-  a PMD boundary so hstart =3D=3D hend =3D=3D mm_slot->address, or on the f=
-irst
-  unaligned sub-PMD VMA in a PMD range where mm_slot->address =3D=3D hend <
-  hstart), both mm_slot->address > hend and mm_slot->address < hend are
-  false, so neither skipped nor cc->progress is incremented.
-
-As a result, if an mm has a large number of small faulted anonymous VMAs
-while sub-PMD mTHP is enabled, wouldn't collapse_scan_mm_slot() still walk
-all of them without ever reaching KHUGEPAGED_MAX_SKIP_BATCH and dropping
-mmap_lock?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103-khugepaged=
--latency-fix-v1-0-a07ab16ac860@kernel.org?part=3D5
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41602296728
+--===============8055261971948351789==--
