@@ -1,74 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=194.13.80.246
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793696627;
-	b=J068j2JdH/0Ha7KJOXUMwO2hKhe0/A/Uu2+j+oeRMsU5oZEa3se19oeSCZVm7QyKqA27
-	 5s7nmL4MMqsoD88XbKvk1y3tuVuPSzeUCSUzAckgFiYlVDmxn/lUhPt1jUpjpUJZrR7XS
-	 ZZiSgMMxRv3a5FN6fM6iKK6249ZVSt+3A9FrCJG7Tk6pxPyIsbNC9JoAGzLv/Se9yoHhM
-	 +KGmOpvGes34Yjuw6yRCA5vwA5AcOhxlUUa7HfFd0AhT2KtDTvGEboOydRcdlaDTps4P9
-	 2tcNCuFxbcb2Pe0AIglur13S92cjUscdK0KnjqbvbB0dwNHiXAkGJuO0AgUIa4Ms/CA==
+	t=1793696710;
+	b=5iCDzPPyUUuwV6A0sQi3BtsON/p5wT7m2sGClNPkaVCtNmp9nI9xGFahOxXL7SL0C15l
+	 mJqgr7WA3oqaIQiMH0SsUemOVSLjlK4GHIX4g4tGVugBDOg83W8RWZ6QrrG+q+GGBtiSM
+	 q/ZVsGrjrDfLOKUld8wWhhaNs6+23/62sxBqguYPTabOylxoL6F8qAjsEIgiLYNJnOKQy
+	 Yw1Mae0aqmN8H8DZmSTOVWvUBbsyoOZ9KtQMGeU4rpYd9ADpt04PEAAdBlFcDAwgUSq89
+	 VPemtmY5Q9MJQPu5lxuMc7SxRMWIwsQxk5pJMoH3KNay18bcep07B5e6VtvE39GLgog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793696627;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
-	 X-CM-SenderInfo;
-	bh=rF3lwQrlgvyoEcEb2mTJ5z+aXEk03V2/91Tqdny4RHk=;
-	b=sRe5Fzm8DGadBu4kBTABUFaRWFxiwBFgFw7BPVbxtm868B9IONpJsJ/R33hiEvX6M+2B
-	 /4dBA2YLbVH36G/0/ebRQgV3k5TlmmZI12srxKoW12hwhSnyzwhDAo2BjhlghPhmeFgkg
-	 vQy61ztoXBH7wlOjLsVU6duwpeTYhaDmFzI1e0fu8X8vfGBcK/clJsaYuBXh9EJZ5Qv72
-	 9nkwPHFEIF8ZKklE5xJRl/qsd6nwHhIP+uBSoE33l7O8DBesppuK5m6oP17vsnzZV+ZyQ
-	 AIQLW2bKwghgW1xQLHeKnpmzOK7cnDLxfUAXry5V5XJTh9p2L9yeO9i5lOJlCdELwIA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793696710;
+	h=DMARC-Filter:Received:DKIM-Signature:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Last-TLS-Session-Version;
+	bh=ELsL0x7qBytlZgP42ggxXZDWX3Lx3FRVsRzrdJlITNU=;
+	b=gAwvouCftCTUvHaknzERjLeeEyA3ixs4T0dhjozaROo5Qfv0DwmHQb+ElPxzLJkwAp2y
+	 9oQuaDyESDIFleHBDgiLRJf/3BSwcq9MoWOm7HdnNGKrTC6GUwSeL9Jy79i4dPFAjxc7c
+	 9yjomGdjVwsJHyOwFPoKNzerWDMpmmon2CVF0CFrelC+PAew0x+RUUJN/0Yl+GKZClkTK
+	 7tJd1XbSpKclX9LYTLFiOFhXOCVsiIVom2X/WNqPtUXtIrC8xq57OadJgSZbDF9NdWxDh
+	 Wp4tNyJeDf+39mhge8CU3+KVVgQnhVhxwzblWUHFp+43QyXchR0leheqPE2dLInl6Eg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=BiLfIXx9;
-	arc=none smtp.remote-ip=220.197.31.4
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	dmarc=none header.from=tipi-net.de;
+	spf=pass smtp.mailfrom=tipi-net.de;
+	dkim=pass header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=D6LleYEk;
+	arc=none smtp.remote-ip=194.13.80.246
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D44606A327;
-	Tue,  3 Nov 2026 09:03:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C4D44606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1371F606A327;
+	Tue,  3 Nov 2026 09:05:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1371F606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=BiLfIXx9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=rF
-	3lwQrlgvyoEcEb2mTJ5z+aXEk03V2/91Tqdny4RHk=; b=BiLfIXx9RjMXEnQtb9
-	QSO8NrVbPKRHOcKoy7lSNWOhVpoChejG9bW79ViG2r8cVtuZeRu1J0/jXq5Zjw0e
-	/g3OZKEAFuz2sRURAqgQHfjeXlsNKG6Yb1fQhXDw8LPMrI7AopQNsZJcGaEz2xi4
-	3t5vBj3tbXVi1juplIBYwW2PU=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp4 (Coremail) with SMTP id PygvCgDHT6oyo+lq0SHqDg--.7504S2;
-	Tue, 03 Nov 2026 17:02:44 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: alexei.starovoitov@gmail.com
-Cc: andrii@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	mathieu.desnoyers@efficios.com,
-	matt@bobrowski.net,
-	memxor@gmail.com,
-	mhiramat@kernel.org,
-	rostedt@goodmis.org,
-	song@kernel.org,
-	yangfeng59949@163.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH v2 bpf-next] bpf: Fix suspicious RCU usage for sleepable bpf_get_stack()
-Date: Tue,  3 Nov 2026 17:02:42 +0800
-Message-Id: <20261103090242.680147-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <DML8PRKSQ4ZX.2A8Q5SC26RO6Q@gmail.com>
-References: <DML8PRKSQ4ZX.2A8Q5SC26RO6Q@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=D6LleYEk
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6EEDAA1643;
+	Tue, 03 Nov 2026 10:04:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1793696699; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=ELsL0x7qBytlZgP42ggxXZDWX3Lx3FRVsRzrdJlITNU=;
+	b=D6LleYEk8UR4/zsyHkwNJxtbFKPqhLNOuZdLo+PkIcQklWkBhyWie03oIH321xLsR96e87
+	XJ96XX6NwJM4FHqJNavDmgefmkiYd/eEHJ/r7gvXutlAMa/z0YsFsdaAWSHTJppSzxCigN
+	jIJWiRP3AXYsb1hD7H+ZhivpPphH8TaRn/KAduQuABL+GNoqk2WzH8V40HiIm9dTJqLnYU
+	UO0NIiPksUApshlc6T/YxcvAHzYBywV7j5EBAys77Ws374rlcfsfKTVvKwQVhRnyjoEaIB
+	VR7Q3NrKLVcKNXtMHSkvbWqVMkS/UYzdZECstP9akU/3GhNK0EI00aRX6tLAVg==
+From: Nicolai Buchwitz <nb@tipi-net.de>
+Date: Tue, 03 Nov 2026 10:04:49 +0100
+Subject: [PATCH net v2] octeontx2-pf: fix XDP frames freed as skbs on
+ interface down
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,50 +56,99 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PygvCgDHT6oyo+lq0SHqDg--.7504S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Kw17Xr4rur1DuFWrZF17trb_yoW8Aw1DpF
-	93tr1Skr4UXr1Fyr47Ww4kWa45CwnxXa17WF1rKr1rA3W5Zr17WrWxKF48ZF98CrykWw1j
-	qFyjq39rGr4UAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR4KZLUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbCzxULg2rpozXY7wAA3w
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261103-nb-otx2-xdp-cqe-cleanup-net-v2-1-5430545c9cbc@tipi-net.de>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/32Oyw6CMBBFf4XM2jHT8pC48j8MC2hHqTGltoVgC
+ P9ugb3Le+fk3FkgsDcc4Jot4HkywQw2BXnKQPWtfTIanTJIkpUgWaPtcIizxFk7VB9G9ebWjg4
+ tRyxrQbogFjonSAbn+WHm3X6HBEBzlGHsXqzi5t2w3oQ4+O/+wyR2+JjL6e/cJFDgRVCVl4oeJ
+ RW3aJzZTmfN0Kzr+gP8/kfT3wAAAA==
+X-Change-ID: 20261028-nb-otx2-xdp-cqe-cleanup-net-5810d40e1d30
+To: Sunil Goutham <sgoutham@marvell.com>, 
+ Geetha sowjanya <gakula@marvell.com>, 
+ Ratheesh Kannoth <rkannoth@marvell.com>, 
+ Subbaraya Sundeep <sbhatta@marvell.com>, 
+ Bharat Bhushan <bbhushan2@marvell.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Suman Ghosh <sumang@marvell.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, Daniel Machon <daniel.machon@microchip.com>, 
+ Nicolai Buchwitz <nb@tipi-net.de>
+X-Mailer: b4 0.16.0
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue, 03 Nov 2026 03:03:02 +0000, Alexei Starovoitov wrote:
-> On Sun, Nov 01, 2026 at 11:37 PM Feng Yang <yangfeng59949@163.com> wrote:
-> > Route these paths to bpf_get_stack_sleepable() and mark the new protos
-> > might_sleep, since build_id_parse() may fault in file data for
-> > BPF_F_USER_STACK | BPF_F_USER_BUILD_ID.  Sleepable programs that call
-> > bpf_get_stack() from inside a bpf_rcu_read_lock() region are now rejected
-> > by the verifier, which is the correct behavior for a helper that can
-> > sleep.
-> 
-> That's a new feature. It's not a fix for the splat.
-> Andrii's point in v1 is about build IDs. That's a good reason for this
-> patch, but the splat needs Songsen's patch anyway:
-> https://lore.kernel.org/bpf/20261028121859.994-1-yangsongsen@insta360.com/
-> 
->                                         Songsen's patch  this patch
->   ------------------------------------  ---------------  -------------
->   splat in sleepable progs              fixed            fixed
->   splat in bpf_wq, task_work callbacks  fixed            still there
->   build ID when the page is paged out   no               yes
->   progs that load today                 all load         some rejected
-> 
-> Row 2: the callback is sleepable, but its prog is not.
-> 
->   bpf_wq_work()                    rcu_read_lock_trace() only
->     callback_fn()                  prog->sleepable == false
->       bpf_get_task_stack()         may_fault == false
->         __bpf_get_stack()          no rcu_read_lock()
->           get_callchain_entry()    rcu_dereference(): splat
-> 
-> Row 4: sleepable fentry, lsm, iter, syscall and tracepoint progs that
-> call bpf_get_stack() under bpf_rcu_read_lock() or bpf_preempt_disable()
-> load fine today. With this patch the verifier rejects them.
-> It does so even when flags don't have BPF_F_USER_BUILD_ID.
-> 
-> Pls respin it as a feature, with a new subject and commit log
-> and a selftest.
+On interface down, the TX completion cleanup also runs on the XDP
+queues, but treats the pending xdp_frames as skbs. Freeing them with
+dev_kfree_skb_any() corrupts page pool memory. AF_XDP TX completions
+in these queues were never reported to the socket either.
 
-Thanks. I will add the selftest and respin this patch as a feature change.
+This happens when XDP_TX or redirected packets are still in flight on
+ifdown, or when the XDP program is replaced.
+
+Fixes: 94c80f748873 ("octeontx2-pf: use xdp_return_frame() to free xdp buffers")
+Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
+---
+Pre-existing bug, flagged by the clashiko review of my ipsec transmit
+fixes for this driver [1], which seems reasonable (and fixable) to me.
+
+The other pre-existing findings there (e.g. the SA lifetime in
+cn10k_ipsec_del_state()) may be worth fixing too, but I'll leave those
+to the maintainers.
+
+Compile-tested only, I have no octeontx2 hardware.
+
+[1] https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261027-nb-otx2-ipsec-tx-fixes-net-v1-0-2114c4f10c36%40tipi-net.de
+---
+Changes in v2:
+- Report AF_XDP TX completions with xsk_tx_completed() (Daniel, sashiko)
+- Link to v1: https://patch.msgid.link/20261030-nb-otx2-xdp-cqe-cleanup-net-v1-1-710635c0f504@tipi-net.de
+---
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+index 90af9b9044aa0..b038bb1451949 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+@@ -1332,6 +1332,7 @@ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
+ 	struct nix_cqe_tx_s *cqe;
+ 	struct netdev_queue *txq;
+ 	int processed_cqe = 0;
++	int xsk_frames = 0;
+ 	struct sg_list *sg;
+ 	int qidx;
+ 
+@@ -1348,6 +1349,10 @@ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
+ 
+ 		if (!cqe)
+ 			continue;
++		if (cq->cq_type == CQ_XDP) {
++			otx2_xdp_snd_pkt_handler(pfvf, sq, cqe, &xsk_frames);
++			continue;
++		}
+ 		sg = &sq->sg[cqe->comp.sqe_id];
+ 		skb = (struct sk_buff *)sg->skb;
+ 		if (skb) {
+@@ -1359,6 +1364,9 @@ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
+ 		}
+ 	}
+ 
++	if (xsk_frames && sq->xsk_pool)
++		xsk_tx_completed(sq->xsk_pool, xsk_frames);
++
+ 	if (likely(tx_pkts)) {
+ 		if (qidx >= pfvf->hw.tx_queues)
+ 			qidx -= pfvf->hw.xdp_queues;
+
+---
+base-commit: c3e67bd82b9b9b1a5118f09a429ccefe2aab0741
+change-id: 20261028-nb-otx2-xdp-cqe-cleanup-net-5810d40e1d30
+
+Best regards,
+--  
+Nicolai Buchwitz <nb@tipi-net.de>
 
