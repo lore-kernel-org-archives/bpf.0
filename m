@@ -1,134 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.7
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793742435;
-	b=RdAouOVCUlAT/cRQCR0r7nqdFrhenO/iF8Kgq7MEnHRzN6tafp1WJzgLfpXUunjWcWCB
-	 tIC3ztGEhUZDK9aD8JD3H8mYTuySFZk1bLf34Z9XTfGvRJQv1JvFbHifEM7nzIL/4mxgJ
-	 NSt3uMmigmQbx9NrQHhr2H3fSlDAeUnra/l47A+Y+S8zg7kdLRv46haiWBo1IqRPGpRQK
-	 8ZMyJ8HJwMWHio7wqs/C78F+MZHYYL9A4bC+IXe+LH/rzCmy+HoxxzIWUnMl6OZvKsJgj
-	 kQxd+/puUrmBTForpTj+is2KsbzpJST/hsklunJnv8RsX1eUUER/RgkwBFMk3b9y1jg==
+	t=1793742954;
+	b=Wf/FLYTzsj1P4dsq2H5HHgWLnVbDVgg+yuooWamB9ik3j8Mrjh33W97XL/V3NJIfn+5f
+	 bRRR7DN6wDZ5NVMNDJyvml32K3jZl05Q1qddRy0IgR9AEg2/q2/OP3sQ8nWaNfypvm092
+	 oaNDquEYqhkTMR6jBxhkxQgqZFYghJBbEuM9hnEI5vReSTx/SdiY4X6Niul9b7yBpd8Xn
+	 YQiNK9yHMvr2DtLajQ4bZuc3+BqRicJoO2EuGPV/20Jsxlw8EW2K//R2UloAS+pLj2cak
+	 85RZOxfh5dvFKka//fYGs9Rs1Xp1lh2zz4P9qjJFUrqynIXwFCJbTnI72JivHCfyCrQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793742435;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793742954;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:Mail-Followup-To:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=Gslbebf1LMvPLM8Q5E/+GJDx3HzrVAFeNFBvrSeRD3A=;
-	b=SFOgytyKoaU++p3ID1fMG5mS/ud2BgO1y1oc2qmAqruQPZi4KsvPQY1QSqgXqh4RWJ5K
-	 WpGIgv8X9rH5yWFIU5Rq5qXz5Mlxp+1zOLoukBvF1LzHxhHdekb6M7JoHPTNud+t77EDp
-	 UzJzJq+A2RzjwALGYzE/HedPbi7n8yL0dGHnIh3RldITPJW6axBghtYhtunREmzYloHEn
-	 p4So9KponxdXXHs+1KYv0tu/r7nXa4CU/2hz8zCts313xJHdZH4Ryxqd1Rv/X3BHK7wXJ
-	 7cxnzWERfb9JrQrDP6D8IR+9ljg3mblE8LHac+nryf9kbdDIk28TqJjkK7orIq9BCvg==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Uxnt8iGFrfRR2RqBEZ3KeYSljAR2LUdExAhrd9BxOE4=;
+	b=wKJU0KH2Hbm0WzBdEOgboA3ObD6AjehOQp9zA+S9KFUR7DZ/zE7kWU5eZuFd5C8vg5lI
+	 JfnuHUC+3UlNDKoka61nTcnrH5e+mWWtpNKWRKhGX3KcknmaQnFrY1pwKazXucNvvP4ii
+	 4BLpUwWLTDKOLIDvPm7DNkCqQWTFw8+VwWPyFoMh73slnJOpkwrZgWATO47e5rwdIZtv6
+	 8vePphQxnB2XwSi1c0ZzGrvT1fQo5kJjCjKj1qOKS581PtUTEbLPYoDfR8CESeBrLf3IC
+	 m8nJpx2phnZzdiYUM7KaX+boeL6r8/1g99QdDn8moinAltov1CDRcWJ8Dm8/ZuTmOcQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=dama.to;
-	spf=none smtp.mailfrom=dama.to;
-	dkim=pass header.d=dama-to.20260707.gappssmtp.com header.i=@dama-to.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=Rz9zp9i3;
-	arc=none smtp.remote-ip=209.85.216.41
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sfuNBzzN;
+	arc=none smtp.remote-ip=74.125.229.7
+Received: from mail-dy2-f7.google.com (mail-dy2-f7.google.com [74.125.229.7])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90067606A31B
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 21:47:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 90067606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8521C606A328
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 21:55:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8521C606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=dama-to.20260707.gappssmtp.com header.i=@dama-to.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=Rz9zp9i3
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ac451e128cso79857a91.1
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 13:47:14 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sfuNBzzN
+Received: by mail-dy2-f7.google.com with SMTP id 5a478bee46e88-368c26de2e0so1228286eec.1
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 13:55:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20260707.gappssmtp.com; s=20260707; t=1793742434; x=1794347234; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Gslbebf1LMvPLM8Q5E/+GJDx3HzrVAFeNFBvrSeRD3A=;
-        b=Rz9zp9i32GrLsqYq1Wv4k+MOEXRHkge1QpJ7C6/aNofnyPzJwsED2mBJ+BO36t2Hut
-         U/X3EX/P4yEQJBoeXN5o24QnyrjGOEkzSU+wtx5SH/xuFKBlH+Cty7/2p2y+FTtjgmls
-         7I7QCjDZfxEAhev/iKP3MQSpbIsLV8Ph/6Q+DPR/n0huTq4GXHNbcfILEA1X4NPlfLj2
-         ND391PjSxTHj0exOiD1aylibkcBR08bsztmT24DXhejY8LZmDn5tUiL/cjmU17IMgXiy
-         Yh3kpGdUO96yk7UD5JPAXXx4ItoLfJNwcyTu4xlyq02RpXu59D1Buwn7SqITNQ1GbrHI
-         y5pg==
+        d=gmail.com; s=20260707; t=1793742954; x=1794347754; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Uxnt8iGFrfRR2RqBEZ3KeYSljAR2LUdExAhrd9BxOE4=;
+        b=sfuNBzzN/UPokfGhMFu7uaQLMXvaErnOcSaFw2i3bFhGkgbRskcKeni8N53tr/B4WI
+         +boW9bxRpBvOUiE4wWizeSWbRvN5zEt4A73maTA/LhcdeO1KuKwFdLMEkL0VCr2NPHx2
+         0c0z0J/lzfmH4L6dj4TEzzwOsZQ/FBo6LAIr72HvRiUqNIN0jW+RNHA7LuSwUzbgrNwj
+         HyeR0ginrwv94KBDVPeF6hKIglgoX+LoEOaevgMT2vgy2lRomtXkYwIOer/Rl6RULaZQ
+         oEpKMyiPK1719m9OvaU1G0OvijYckCFUYvGpYXGohwjNa3gBDqROKfN7kYQWwvPf1bie
+         Ib4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793742434; x=1794347234;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Gslbebf1LMvPLM8Q5E/+GJDx3HzrVAFeNFBvrSeRD3A=;
-        b=sCO4qFcutLBWH/XrGmkFfCmSO2iEMss9fEfAaNGVsnf7YbrIoKZRa30TKb2yAoIbhR
-         h373KBnTXiqZc8tPRZZKVlRh5dC+T3HOK2IPYYOGaANAtN1GsC59CMVsQYKmOzU86Q/r
-         jmHirwyFRzIKgo8lyWppX3oKQQ0DtkHEQZCjU86jp5Jhz+VqLnLS8pTJpj+eEiLDgADm
-         AMNQ1OAGZnz8NqqMoAWtrbgzR7WDrgdmU+BJJ14+rzFLn6PENauYNa8EGdI6hSzRCfHo
-         lPuEyfTcbOvVD47f7TxGO7hFCQGDaKi6dlSmu0hme3bcu3m++MbiFC6nrFhrjgHWEhoi
-         kW3Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwD2VLtGKY8lmA1Vn4XHsmkmL1oxfCjowOawyunKQSq5vNUjIEFDrgZJ1Td1o+GRsQaxWs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8t3StI9Vxr1lViL8Bsjhu7trkjwVB4defjG40Ow8YwkF3S+mja
-	O30tWbkpD8O3TJkJoLoOALgGCuZrMCqc5/BwmlGml+8iaRlHi4WSTsNqWEgeb2YdX88=
-X-Gm-Gg: AYBFou08P87h8fbTLBuvyPnUPefTs5wrAWvC6cPZjvWyHiPmZ1oZ2/zIjwtbOBTBu/S
-	i87iIdfd4ZUXynUVyfYTN8i99pu6PNu62JBngEr6aDNQbUU+xindQLbGWgHaPQRfdM1ADzA3fmQ
-	DoFLuddOslz41+OQcfHcltXkek9m6yYSyL52M7g9r/orDAWnJLRVzMN18TKb21J2/IyALevkr88
-	3F10zI10LHzKqhPopTpxO/vmexAKIioYp406Rk+dgY66qZKYSbhtCkEyN/fEfA3kGPPOjHQklTg
-	kwZbxN+OPDAcC+6YmhtNJLGLfP8vKltaIzrIJk/J1rZYtVEqbzJQSSDY8HV4smqlYOAIPgIO6VB
-	3jlr8WKL+oaIjp+s71NTDhYLaDzNnKEqj+jkDdYrzY7GFtcnMMxbLoV29iKIUxqikXb2CVnFa+z
-	RUK+p/oXJ8x5419W95K1F3jx1A4UDrXAIK4ksINqQf60+T5+GIoPIN5JDi04ouscA338eo7+bLw
-	TXswr7A1GgLN8WRcOSBQ0/UPF1qSZ0bXpITj/wXbXDZnpyQTt0xFoGYva7bBav+xmCvWRh/E38C
-	oCEilbMcCsDDrgs6GU252v+7DdpkRbpZ1yFHrK1We7AnErsjmZ2F6duXSdjcI60=
-X-Received: by 2002:a17:90b:584c:b0:3ac:fe93:a731 with SMTP id 98e67ed59e1d1-3ae8981e640mr10608128a91.56.1793742434015;
-        Tue, 03 Nov 2026 13:47:14 -0800 (PST)
-Received: from localhost ([2a03:2880:2ff:4d::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae87fc548fsm12790312a91.4.2026.11.03.13.47.12
+        d=1e100.net; s=20260707; t=1793742954; x=1794347754;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Uxnt8iGFrfRR2RqBEZ3KeYSljAR2LUdExAhrd9BxOE4=;
+        b=y40g1+0rr+YMhzs4AzYoDVDTw4aXfh8RZOmGvnJRnjvVNxPo5mspx5rFweaVhQb8eO
+         tUwuiyANuUWeNpn+ZGybNiKHICUt1lmuK+dUiqug1qYRA9EHza7KldCk6wXyib7Fj99T
+         WmJn216Cmz3QlPVwYxHLcM1VimRZWG6dVXL6d7lSwyjWXGqRHZxBNIaFkiw/Q3OdELhW
+         fdcEwUzt+bIVidgSHp8t0nUR5TxuxseEcD31zlRTaXDEIWHlyFA0I7TkizfI4/b6jtPS
+         TA4INzk+o866+i0Ozs7WMWKKdjyOF+uOp/fALPS4FLMPwLgk57YSb6KRKQ8JUOvgkOxY
+         lMAA==
+X-Forwarded-Encrypted: i=1; AKwUvByY/tL37DjN9ZCv+aufKngNz3kxia5RhhBQ8QTQ7ANwIIaX22PYZ0UZOg4GG57dmbvOkw0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+SIiKfDE3Bh60KNs1+wqEFl0SrhBIY7e0hWW65QEOSmFoN7CXe
+	tHeURtMZ3DkOtwpxP6SqbKyRhbg1S2IEhNzsGSjwFuORuUKpobMkS2A5
+X-Gm-Gg: AYBFou0mIx3f23i76dDNd+YAVowimk+Nn7QyCyg6qxTD7ohXoH+Ag4s7O7c4LJ6v16D
+	BaAE0x1wOyaUFHP0QjdZRK2hrzpu/4PdrJQzo2xiKjHr55mCYdm3WcffUfiBG44ueRTgrbsI1uv
+	RypHP/aIoAbKMx3S3/0kbR5f5vIuznfNpHNAQAcMGscOtykAkQP35QBLp/MJQYJ+JAMNbNYWSUs
+	T1ug8fRXNKus4zFXvi+lvzYoZurTCO2E7WKt4d1FbR/0GW+eIiibVchiXmjU0glOQ/Ca2G3HDdL
+	t5Sui34fNSAsKIRECn+37w/ETKSe9gnx5absxA0zjz/NQEbGorvDUfqS7EwOkQhSyohT30mx3X+
+	xH/mCDhbQX/vfmBcIEQWgF8uwqsE1K+7armid0EsU9gJmbt9gMUaI8kjQuGA3fvgmH0HjCshDdn
+	z/dgoHWgkiSAKhr19HLACmPRDyrDSXqYq5qHt9xbTca5sxCteuPdjv7EAX+KJie5eKDRcoPXRxT
+	bRYs8nRYlW3VfDyKTQD0+D5cJgOF8h9mOru18tHLrvzyj+3kzAfQmDT6mb911jJ2766NuAXTdm5
+	WivscXCRl7AaWl0iDdkv8ZKaW6GV/+jWo6yAKagUVPS/XWcGDrLYF6hSZ/KslWc8U8PLzF6X/n9
+	l2w9cAVuwMswJWfau5WCPzXcqfstP+YbopNdoXg==
+X-Received: by 2002:a05:693c:6090:b0:36a:4a68:84e5 with SMTP id 5a478bee46e88-36a4a68851cmr22202818eec.8.1793742953533;
+        Tue, 03 Nov 2026 13:55:53 -0800 (PST)
+Received: from localhost.localdomain ([98.148.34.5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca3958746sm867414eec.22.2026.11.03.13.55.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 13:47:12 -0800 (PST)
-Date: Tue, 3 Nov 2026 13:47:11 -0800
-From: Joe Damato <joe@dama.to>
-To: Breno Leitao <leitao@debian.org>
-Cc: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
-	Eric Dumazet <edumazet@kernel.org>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, david.laight.linux@gmail.com,
-	kernel-team@meta.com
-Subject: Re: [PATCH net-next v4 2/7] net: cap sockopt_expand_out() at
- MAX_RW_COUNT
-Message-ID: <aupWXwkFZIQi7Mae@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Breno Leitao <leitao@debian.org>, David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
-	Eric Dumazet <edumazet@kernel.org>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, david.laight.linux@gmail.com,
-	kernel-team@meta.com
-References: <20261103-sockopt_expand_out_v2-v4-0-2d36da923578@debian.org>
- <20261103-sockopt_expand_out_v2-v4-2-2d36da923578@debian.org>
+        Tue, 03 Nov 2026 13:55:53 -0800 (PST)
+From: Hungyu Lin <dennylin0707@gmail.com>
+To: ast@kernel.org,
+	bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	iii@linux.ibm.com,
+	bjorn@kernel.org,
+	pulehui@huawei.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hungyu Lin <dennylin0707@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Account for zero extensions in patch list expectations
+Date: Tue,  3 Nov 2026 21:53:09 +0000
+Message-ID: <20261103215309.19950-1-dennylin0707@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -138,35 +104,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261103-sockopt_expand_out_v2-v4-2-2d36da923578@debian.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 03, 2026 at 03:01:01AM -0800, Breno Leitao wrote:
-> sockopt_expand_out() grows the output iterator up to INT_MAX, but the
-> MCAST_MSFILTER getters converted by the next two patches rewind it with
-> iov_iter_revert() once they know the real reply size. iov_iter_revert()
-> refuses to unroll past MAX_RW_COUNT:
-> 
-> 	if (WARN_ON(unroll > MAX_RW_COUNT))
-> 		return;
-> 
-> MAX_RW_COUNT is INT_MAX rounded down to a page boundary, so a caller
-> that expands into the (MAX_RW_COUNT, INT_MAX] range and then reverts
-> hits that WARN_ON, and the iterator is left where it was instead of
-> rewound. So does a caller whose optlen already covers such a size.
-> 
-> Cap the size at MAX_RW_COUNT instead, before the early return for an
-> optlen that already covers it, so a size that could never be reverted
-> later is rejected up front.
-> 
-> Sashiko found this while reviewing the conversions.
-> 
-> Acked-by: Ido Schimmel <idosch@nvidia.com>
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  include/linux/net.h | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
->
+patch_list_insert_in_front() checks the translated instructions around
+the call of an inlined bpf_loop() and its callback. On s390, the verifier
+adds zero extensions after the two 32-bit register writes in the loop.
+The call is therefore at instruction 25 rather than 23, and the later
+instructions checked by the test are also shifted by two. The test
+fails despite the call and jump offsets being correct.
 
-Reviewed-by: Joe Damato <joe@dama.to>
+Use the corresponding instruction indices on s390 and RISC-V, whose
+JITs request explicit zero extensions. Keep the original expectations
+for the other enabled architectures and retain all branch offset and
+callback entry checks.
+
+Fixes: 57fae4059380 ("Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf 7.4-rc1")
+Link: https://github.com/kernel-patches/bpf/actions/runs/41696128762/job/126138168160
+Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
+---
+ .../selftests/bpf/progs/verifier_patch_list.c  | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_patch_list.c b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
+index 581b75b7b5c5..a9ad1dc56c3a 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_patch_list.c
++++ b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
+@@ -298,6 +298,23 @@ __arch_arm64
+ __arch_riscv64
+ __arch_loongarch
+ __success
++/* The verifier adds two zero extensions for these JITs. */
++#if defined(__TARGET_ARCH_s390) || defined(__TARGET_ARCH_riscv)
++__xlated("25: call pc+7")
++__xlated("...")
++__xlated("32: exit")
++__xlated("33: r0 = ")
++__xlated("35: r0 = &(void __percpu *)(r0)")
++__xlated("36: r0 = *(u64 *)(r0 +0)")
++__xlated("37: if r0 != 0x0 goto pc+2")
++__xlated("38: r0 = 1")
++__xlated("39: exit")
++__xlated("40: r1 += -1")
++__xlated("...")
++__xlated("51: if r1 != 0x0 goto pc-12")
++__xlated("52: r0 = 0")
++__xlated("53: exit")
++#else
+ __xlated("23: call pc+7")
+ __xlated("...")
+ __xlated("30: exit")
+@@ -312,6 +329,7 @@ __xlated("...")
+ __xlated("49: if r1 != 0x0 goto pc-12")
+ __xlated("50: r0 = 0")
+ __xlated("51: exit")
++#endif
+ __naked void patch_list_insert_in_front(void)
+ {
+ 	asm volatile (
+
+base-commit: d4bf9e34e299e45af8da2b0457b0ac3efbd7ae8d
+-- 
+2.43.0
+
