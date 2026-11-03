@@ -1,85 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.195
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793706731;
-	b=DwaO05+4p8SLWDOUkJUk38zJrD+bTVa5Kj+iBA14MM5s1B98B5oqUPnDjEHVn+fM1zr/
-	 FwcmIGLm80BAOAxa9gVqEavwnz/ggxgKcJc87wREyzfZgJXu/YYPS3RNb3UYZkfIC89fE
-	 V7Nyt7FcaQqte+klaq8iyevLIB6BApO7DjA7wqf3k/f7F/Y2b9zPtq2/nMinrs7tCuAym
-	 sakXoGHO1p5cnw+nragMLx34lY+oLfSVg2F3HNaS1bv3etlhXCO7ADNpJPLC59RiPsjsm
-	 TovRUeZFRREGQcNd6h6roB+OXD60+Y2t3KkHFC9OQA0w9Foapwvix1CnjgcY1lB7Iyw==
+	t=1793708641;
+	b=gXQ8kPR9683m2RsjjYrMrdu7Tv7sSebXpzxdBil2I1tcIa5AkL+Wu3s0AUgzF9gK2ADK
+	 WRPshEMUQ6zPxkoZgykFOk7ozpGaV0947X64ZN8yxPE8a+lsOxBjoeYd3xAJS1xZIF+Jv
+	 dEohGDh3l5c8n8jwsG0Jon9yaz/CIm1OlDcxuTCXLotXcdoQYzhLMP3bLv9A2t/QUSrDS
+	 jPLxDvoa6H4Y7IWjVpGiqjQuO6cRR2d0ihAYYs3U0DoPx4MW4us5x1X6r+CTer2eSgFiB
+	 yM5wiYTDjcOoC+BFTguJ4pP32CYO8JxB8zX5NFuvp+/Fgp2GbDsyUQCoKau0cVb41fg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793706731;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=eI4CVv+ydIY1wa3rrW/Odp3qY0sHcQj8Jj1GQUapMZo=;
-	b=e0E0YuKVwn+gHtx5DHbDRs0VweYuVzaN/1IPvPM8bQP8IH8NdLSK/T9Dqpvd8vfrWwv7
-	 90AcVAKJ/6Gqw4SwgN+vSbBf076vte5OkxRWnR1FVNWC7gqS66zuvDFj5tHZ9HLNm94tp
-	 3V33uzTh7ONhUXj0QVgjdEqn3nD8LMBo+HPP1eEc9n062R9RNAnqsFRB6/hXl5WyOpY39
-	 Gzangpf53tVeQUpTUjonCUC8V65D3GluJcy57KIj2QTXDOypLJUZOxijlS3RHjWLCaKRb
-	 RmVX1aE0hcUL/ICXRJ65G98nShCH+mGZU9Wey0A2GPR3ycsM7ipMXXl1Zoet/8zPmng==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793708641;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=5+giExnZG9PbIRprmj3rcwLAC4uTyxxBQab4OXS7D6o=;
+	b=Y1yQFaUH6HXEQauFw8JR9gJoIn8JFFv/DHethg2IZyV1BQeXaKtXK0XWQ9+NfWVoAlfJ
+	 DNtuFFLPviniStu2khYXfejxuleNZ6wuCebcnpJmwkiAwDaesUXh2WWomoAk+bTav62i/
+	 5S/RmEkkvowNyYMfLV/YFFuCl7e00Dbu0nKJry6wf9xkR+iqjWoGHkCGf3FBUuj0Ju/ns
+	 rlWLSD+1SiWdkj3UJDBAqbZurMVvb6O6DDvAOX5c74baAFchUYu6nbpdhGUPnKypUFZLg
+	 sfvSxf8iF7C/w6b7Ly8UI7ll/Y1Riv+Lzv8SUaKaFqR0YV7txS4vU31DjK6+aOKXcKQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=r26bKKjz;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dbTCJdF2;
+	arc=none smtp.remote-ip=95.215.58.195
+Received: from mta1.migadu.com (out-195.mta1.migadu.com [95.215.58.195])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44210606A329;
-	Tue,  3 Nov 2026 11:52:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44210606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E282606A328
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 12:23:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E282606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=r26bKKjz
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=eI4CVv+ydIY1wa3rrW/Odp3qY0sHcQj8Jj1GQUapMZo=; b=r26bKKjz1RxbYOpykqB9PYTHT2
-	RrsgjuOIdrXMvpVMWJNvYLrdz8gy2PEpCUs5b9Sjl3NcHHlWNfLz9Rf5D6lZjf4krWvMajTSihUOQ
-	lMLqmSzi59qhLI17XqMtmPOSU4mcVOjOrcnBv63pa4FK6J6wZnivAUcW7DqYQ/gGMsZbBRw+Q0HTe
-	/yswu39KjLyquVmUnrjlrA8kYQ0V/sGP5q4tFiIjAR5ghbIQG3ZGAoCJoJ5P5p8Xh6sX1lhCVAjRF
-	zXUWRWolS0rMreglj+beiVoiC26YySEdsW3joRAtJmwnWN1Fdn/rcH/Lh0rVEOf9Beb5+WDLHqyOr
-	Lj+2z3kQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xOD3Y-0000000Bt6e-2ENh;
-	Tue, 03 Nov 2026 11:52:00 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C62F9300322; Tue, 03 Nov 2026 12:51:59 +0100 (CET)
-Date: Tue, 3 Nov 2026 12:51:59 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 3/5] locking/rwsem: add down_read[_killable]_nosteal()
-Message-ID: <20261103115159.GK1813469@noisy.programming.kicks-ass.net>
-References: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
- <20261103-khugepaged-latency-fix-v1-3-a07ab16ac860@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dbTCJdF2
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ZCZPLAdU2GP8PtTvn35MB7p7rMmvQ15GA72KpLOK3eo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793708632; v=1; x=1794313432;
+ b=dbTCJdF2uGcqzh37oFPtMCzkhAalFFRRJDdXJ3PFE5wouyD0ejuykduxUhTOFCxnMbQqANKp
+ nlP4F/PNQVafFAM1T3CV9vFtgoIYVeJCBEZZiwrQe0Xfppf5goqSZKwXRYoVzz477MXUSzNJH49
+ rlmPhYYvxKH+9ZumpGmTeFfs=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e671a108ae62cf5d;
+	Tue, 03 Nov 2026 12:23:52 +0000
+X-Mizu-Trace-ID: e671a108ae62cf5d
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <f5137dbb-b0ed-44ea-a23f-5c848315a68a@linux.dev>
+Date: Tue, 3 Nov 2026 20:23:37 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -89,36 +58,173 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261103-khugepaged-latency-fix-v1-3-a07ab16ac860@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 7/7] mm/mglru: add tracepoint for inc_max_seq()
+To: Barry Song <baohua@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Dave Chinner <david@fromorbit.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Muchun Song <muchun.song@linux.dev>, Qi Zheng <qi.zheng@linux.dev>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Axel Rasmussen <axelrasmussen@google.com>,
+ Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+ Baoquan He <baoquan.he@linux.dev>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org,
+ cgroups@vger.kernel.org,
+ "open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>,
+ Ridong Chen <chenridong@xiaomi.com>
+References: <20261103025610.3738894-1-ridong.chen@linux.dev>
+ <20261103025610.3738894-8-ridong.chen@linux.dev>
+ <CAGsJ_4xCTSctcPcC7X6Dx4zYaOycaPqs0DG7AaxB55wx1Afwpg@mail.gmail.com>
+ <9cabcddf-d807-4a36-84f1-5bb06ea72aac@linux.dev>
+ <CAGsJ_4xXDZjhN+NkvtN+vAp8Bokack_JdNgP=nGPQtHUX8_rqg@mail.gmail.com>
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <CAGsJ_4xXDZjhN+NkvtN+vAp8Bokack_JdNgP=nGPQtHUX8_rqg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 03, 2026 at 08:27:44AM +0000, Lorenzo Stoakes (ARM) wrote:
-> Since commit 1a728dff855a ("locking/rwsem: Enable reader optimistic lock
-> stealing") a sleeping, queued writer whose handoff timeout hasn't expired
-> can have its lock stolen by a read lock issued before a woken queued writer
-> was able to acquire a lock.
-> 
-> To avoid write lock starvation, this is only permitted if no other read
-> locks are held.
-> 
-> However, this behaviour defeats the purpose of a reader periodically
-> dropping the lock to allow writers in, as doing so only works if the write
-> lock is acquired first, another read lock is held, or a queued writer's
-> handoff timeout has expired.
-> 
-> Provide a means of indicating this intent via down_read_nosteal() and
-> down_read_killable_nosteal().
-> 
-> Implement it by exposing a steal parameter to rwsem_down_read_slowpath(),
-> update the starvation logic to modify this parameter and modify the steal
-> branch to check it first.
-> 
-> Also drop the duplicated RWSEM_WRITER_LOCKED check and remove the
-> goto as the steal condition makes this redundant.
-> 
-> Exposing this function is safe as it only makes the lock more pessimistic,
-> so does not impact lock contention.
 
-Not generally a fan of this -- can't we tweak the steal thing to never
-steal if there are pending writers?
+
+On 11/3/2026 6:00 PM, Barry Song wrote:
+> On Tue, Nov 3, 2026 at 4:39 PM Ridong Chen <ridong.chen@linux.dev> wrote:
+>>
+>>
+>>
+>> On 11/3/2026 2:48 PM, Barry Song wrote:
+>>> On Tue, Nov 3, 2026 at 10:58 AM Ridong Chen <ridong.chen@linux.dev> wrote:
+>>>>
+>>>> From: Ridong Chen <chenridong@xiaomi.com>
+>>>>
+>>>> Aging in MGLRU advances max_seq via inc_max_seq(), creating a new
+>>>> youngest generation. There is currently no tracepoint on this path, so
+>>>> the moment a new generation is created, and how the min_seq of each type
+>>>> trails behind it, cannot be observed as it happens.
+>>>
+>>> We might be more interested in why aging is triggered rather
+>>> than the exact moment when max_seq is advanced.
+>>>
+>>> With your patch, we get:
+>>>
+>>> ~ # cat /sys/kernel/tracing/trace | grep mglru_inc_max_seq
+>>>              a.out-93      [001] d..1.   278.276539:
+>>> mm_mglru_inc_max_seq: nid=0 memcg_id=1 max_seq=4 anon_min_seq=2
+>>> file_min_seq=1 nr_anon={0x0,0xf016,0x12,0x0}
+>>> nr_file={0x1886,0xb,0x4c,0x0}
+>>>            kswapd0-50      [000] d..1.   278.422400:
+>>> mm_mglru_inc_max_seq: nid=0 memcg_id=1 max_seq=5 anon_min_seq=2
+>>> file_min_seq=2 nr_anon={0x5,0xccb6,0x3439,0x0}
+>>> nr_file={0x4ae,0x4f,0x55,0x0}
+>>>            kswapd0-50      [000] d..1.   278.508003:
+>>> mm_mglru_inc_max_seq: nid=0 memcg_id=1 max_seq=6 anon_min_seq=3
+>>> file_min_seq=4 nr_anon={0xccb6,0x3d29,0x1,0x0}
+>>> nr_file={0x0,0x59,0x7,0x0}
+>>>            kswapd0-50      [000] d..1.   280.046056:
+>>> mm_mglru_inc_max_seq: nid=0 memcg_id=1 max_seq=7 anon_min_seq=4
+>>> file_min_seq=5 nr_anon={0x3bf3,0xcbbd,0x23e,0x0}
+>>> nr_file={0x0,0xb,0x1,0x0}
+>>>            kswapd0-50      [000] d..1.   280.124876:
+>>> mm_mglru_inc_max_seq: nid=0 memcg_id=1 max_seq=8 anon_min_seq=5
+>>> file_min_seq=6 nr_anon={0xcafd,0x3e31,0x0,0x0}
+>>> nr_file={0x0,0x5,0x7,0x0}
+>>>              a.out-96      [001] d..1.   290.629014:
+>>> mm_mglru_inc_max_seq: nid=0 memcg_id=1 max_seq=9 anon_min_seq=7
+>>> file_min_seq=6 nr_anon={0x0,0x10615,0xb,0x0}
+>>> nr_file={0x331,0xb,0x9a,0x0}
+>>>            kswapd0-50      [000] d..1.   290.653098:
+>>> mm_mglru_inc_max_seq: nid=0 memcg_id=1 max_seq=10 anon_min_seq=7
+>>> file_min_seq=7 nr_anon={0x15,0xef23,0x18c4,0x0}
+>>> nr_file={0xb,0xb8,0x55,0x0}
+>>>              a.out-96      [001] d..1.   290.684875:
+>>> mm_mglru_inc_max_seq: nid=0 memcg_id=1 max_seq=11 anon_min_seq=8
+>>> file_min_seq=9 nr_anon={0xeee3,0x1afb,0x2,0x0}
+>>> nr_file={0x0,0x76,0x4,0x0}
+>>>
+>>> You can see that the youngest generation is always zero,
+>>> because you're just getting the newly added youngest
+>>> generation :-)
+>>>
+>>
+>> Hi Barry,
+>>
+>> Thank you very much for testing and reviewing.
+>>
+>>> This somehow suggests that the information is redundant, as
+>>> there is always a zero there.
+>>>
+>>> I suspect we'll need an additional tracepoint to show why
+>>> aging is triggered and at what sc->priority it happens.
+>>>
+>>> But do you know why you trace the moment just after aging
+>>> is completed, rather than the reason why aging is needed?
+>>>
+>> My original goal was to pair it with mm_mglru_scan_folios, to see how
+>> the aging window of each memcg moves. The per-generation anon/file
+>> nr_pages were added following your suggestion on v1. I put it at the
+>> end of inc_max_seq() because of the restart there, as max_seq and
+>> min_seq are only final after that.
+> 
+> The per-generation anon/file nr_pages are perfectly good, as
+> they can also help explain why aging is needed, especially
+> now that we're introducing new code for imbalance-based
+> aging.
+> 
+>>
+>> You make a very good point that the reason for aging is also
+>> important. So I'd like to discuss which way is better:
+>>
+>> 1) Keep mm_mglru_inc_max_seq, and add another tracepoint at the aging
+>>    decision in try_to_shrink_lruvec(), reporting why aging is needed
+>>    and at what sc->priority.
+>>
+>> 2) Replace mm_mglru_inc_max_seq with a single tracepoint in
+>>    try_to_shrink_lruvec(), right before try_to_inc_max_seq(), reporting
+>>    the reason, sc->priority, swappiness, max_seq/min_seq and the
+>>    per-generation nr_pages before aging. The youngest generation is
+>>    not empty at that point, and the new window after aging can still
+>>    be seen from the following mm_mglru_scan_folios.
+>>
+>> Which one do you prefer?
+> 
+> Maybe we should keep option 2 for now. Understanding why
+> we are aging and at what priority is much more important,
+> especially since we're still introducing some
+> imbalance-based aging code.
+> 
+> It should be quite simple, just a matter of moving the code
+> around a little.
+> 
+> If we later find a good reason to have option 1, we can
+> always add it, right?
+> 
+
+Hi Barry,
+
+Agreed, I'll go with option 2. Two things I'd like to confirm first:
+
+1) To report the reason, should_run_aging() would need to return it
+  instead of a bool, e.g. an enum like:
+
+   enum lru_gen_aging_reason {
+	AGING_NONE,
+	AGING_NO_EVICTABLE,     /* eviction is not possible anymore */
+	AGING_MIN_GENS,		/* better to age, eviction still possible */
+   };
+	
+Or just report sc->priority, swappiness, max_seq/min_seq and the
+per-generation nr_pages, and let users derive the reason from them?
+The former is more direct, the latter keeps should_run_aging()
+unchanged.
+
+2) try_to_shrink_lruvec() has changed quite a lot recently, e.g.
+Kairui's reclaim loop rework, and your swappiness series also touches it, 
+including the aging part. Is it stable enough now to carry a tracepoint there?
+
+-- 
+Best regards
+Ridong
+
