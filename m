@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793695953;
-	b=CZzbSxOBEZTuW4sutj4uD/2zvQyrTfTKbJTUmXfODOrRKJbGwVKlxYWnQ2Dri0aBw11V
-	 bHK885FPDVxIcpe71XLWNrVVy547fQFEqSUaMR6jZ5HwCi1CundAmTLn/w01JRsuMMr8x
-	 ZHXDEl5zfIJ07lg8ZcDscjL6AcRftEfs8OCDipXjc5mXiptFcsDhsWzKhHG9qL8uW3CSZ
-	 ogJTAbFBVG1zuFc9PySCGRUPJCmKhjqOt8gq94fNmdrb6jC8YlxdyXWI9gTYmKvlxmkX1
-	 1jzWmulCNIo4DGM2AYIFY5kFF3JD7uSzWeEINQWgomjdfJOmiz4MuYVTpqTfyVMF3Bg==
+	t=1793695954;
+	b=i5goVvlp82TcCNPoEVBq/u9IjcfDgL+f5bhfd/qfYsGIKd/j2iK+lzHEWurI8mKCM4OQ
+	 rTy4imnDHQ8ZNa1LnmX8BHUXOUBokV3TEsPNZtqD2rXhggz7SHT4qlzZFnL0H5ewQ9GIx
+	 v4GgchL002PZ74FqQOm6mfIb0O8CgwGMa8ykMJekJiGCMDw38s/CORXlfSU6Q5IqIIWP+
+	 cYVqOgAVqgyaKKqRcdZF1Z1yrAOUUmRJ4b8eoQX5CSsHH/uww8r5AxZuMArZkuz5+LB7S
+	 1E2Jr4TWs+alDauASma72WiAOuaaZYuEvgHwEPULspHKJwtqc27GqYMSA4Hbk6GXijw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793695953;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793695954;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=H1zLd6hG/R8x62IgEXyvz1fvxMh0hGKtNRoZJvWwbaA=;
-	b=L3L5T1vWREWg8+SZ/cyGw85ntQFpCDUTDD969j0yO+3A/pOhhtnLadQ1KN2+FGo20nj+
-	 odyvLMPeWDHpAru+0m6NPC40yNsCbIQOAJWz45F7TYUeufQ2+Hawf4KSBv0fikSYctCtJ
-	 ruuRGVWN3QTezg6NoFP3LPcJ+QVflFBsbNP4RPiZ7tGtd5hm9ussTEIWcOc866+BS3uSB
-	 qYzyg9o73u0wGmubEoQx5waY4NKB9Gg7EAhOZPhLNLUbExgul13VY7k0/TRds9ck58D2q
-	 /JdSXAwwxwKsO76K7dZFnteXrH4HvfaHOhH9y7UQo2/C4D/aL8jcQIpdsdL9N0bFb1A==
+	bh=kOsQgTVGIr/Tgep+NhW4hFbLq1/HBMqauRz/MX5hys0=;
+	b=XnG2/qXFaTHMfT3On5d1j2PL9TIwRK+35/dX32CyI3xZ/vf92qFQKAOlBGG/jENGLIGI
+	 qtWVZwwpxaCJAxU7bjfxWih5rCHc250YHwOiVwrd5wgiuay+gqNrlM+XtPX7nWDmxEBAq
+	 PsAjFwVHxLdKhY4qvJQSaUdyG5vhmhw2z62TChRzOIZTH8SyFNMyNl+pRBjDHzU3Tg5LN
+	 0OEOGzYUlu8eBLDTtePcwMS490wgSiWgRrWyrPAkjmgeXptIzEAPNjie3feLZ7qkrOevL
+	 w0aMHmPggtpPQEztLcWVsFQjEE+eNv6VWYofiKsNfx1w2mIwAZuS8jtIUW40ekxF9xA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Ey2/rNZS";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=huWd5l+4;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28A6606A327
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 08:52:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B6D606A326
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 08:52:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ey2/rNZS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 039E21F000C1;
-	Tue,  3 Nov 2026 08:52:31 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=huWd5l+4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD3C1F000C1;
+	Tue,  3 Nov 2026 08:52:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793695952;
-	bh=H1zLd6hG/R8x62IgEXyvz1fvxMh0hGKtNRoZJvWwbaA=;
+	s=k20260515; t=1793695954;
+	bh=kOsQgTVGIr/Tgep+NhW4hFbLq1/HBMqauRz/MX5hys0=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Ey2/rNZSZSGEgNni1SBM051jGaDNXKipu6bI+WhqXg+DXQtxTAkPHp1y6npUYrPMd
-	 xG+FEEg6UyC0ULBue/cBsk5nnYzKj6PlsZ6wuwRfOkzFTa+1PgFj49FrepxPsmfx3g
-	 MpWpm7Rd+T0rbT5L5MhjpOknL27S4xBg7V7z657TtsQ5A3taA7GGwMQncLSH1ywyWB
-	 0YYFzQSqU2+NuAm1u5c621J5DSXar3ssYU1XYYOg8Vhz/fdsKsEJ643KBwbTOjIg1w
-	 QfQdei9I65G90fAi1cTue17tdqDZXM6TNp4UwAXwPwoCWerM6/8ut7/VkDPCNe51dr
-	 08zz1FF3faELw==
-Content-Type: multipart/mixed; boundary="===============8055261971948351789=="
+	b=huWd5l+4F1p+J0e/58VInghO7CNSTaaGVdbo5FineQFBFdmf24vmWLFN79iG31zWp
+	 CIoe1TPdP5xOq9rQEM4AwCOCC27U7hVXBuwqvb/uJG7PXNuUIjb7Qvv1+odSMnI0VE
+	 gcTCo+nv9IAI8fIdYrYqGxh89ujO1h6ZLZMsg4BTF86q2d3LfApttRJ1Av4gf7AV10
+	 GbzaX1t7dTzXLTvaS9Bd/seH4No5BR1nUhUWOa/TLtZiIO/bXqDLzit7aG88HgiQUO
+	 VKNL27/sUq/WjFFAbm2gK4o6+tvorDsU8BTMQzBukjtY3KitCvGSV8WDUYnd56gy8Y
+	 1fMW+OJVd52dA==
+Content-Type: multipart/mixed; boundary="===============4326115560903711698=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,57 +49,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <3b79b99ba7a323fc42e7d3a19139c46535271762ae6f70ab629213866f54f54f@mail.kernel.org>
-In-Reply-To: <20261103075916.100050-2-jolsa@kernel.org>
-References: <20261103075916.100050-2-jolsa@kernel.org>
-Subject: Re: [PATCHv2 bpf-next 1/8] bpf: Honor const on generic kfunc memory arguments
+Message-Id: <777e38238bae7c9eed41283cbb64940b49db57f67f10be75346de2051fac6dce@mail.kernel.org>
+In-Reply-To: <20261103075916.100050-3-jolsa@kernel.org>
+References: <20261103075916.100050-3-jolsa@kernel.org>
+Subject: Re: [PATCHv2 bpf-next 2/8] bpf: Add user memory kfuncs
 From: bot+bpf-ci@kernel.org
 To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net
 Cc: bpf@vger.kernel.org,linux-mm@kvack.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ljs@kernel.org,john.fastabend@gmail.com,nierro92@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue,  3 Nov 2026 08:52:31 +0000 (UTC)
+Date: Tue,  3 Nov 2026 08:52:33 +0000 (UTC)
 
---===============8055261971948351789==
+--===============4326115560903711698==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Honor const on generic kfunc memory arguments
+> bpf: Add user memory kfuncs
 
-TL;DR: Commit message only: it lacks motivation and doesn't say the verifier
-now trusts const in kfunc prototypes, so a kfunc casting const away and
-writing could make it unsound; kfuncs.rst doesn't say this either.
+TL;DR: Commit message only: it lists what the diff does; could it describe the
+use case and why FOLL_FORCE writes and PROT_EXEC anonymous mappings are
+needed? No code bug reported.
 
->     bpf: Honor const on generic kfunc memory arguments
+>     bpf: Add user memory kfuncs
 >
->     Mark generic kfunc memory arguments as read-only when their BTF pointer
->     type points to const data. Preserve that access mode when resolving
->     scalar structs to fixed-size memory.
+>     Add sleepable kfuncs to copy data into a task's address space and to map
+>     or unmap private anonymous memory in the current process.
 >
+>     Require a usable user mm for mmap and munmap. Register the kfuncs for
+>     KPROBE programs and gate them on CAP_SYS_ADMIN BPF token capability and
+>     the BPF_WRITE_USER lockdown check.
+>
+>     Use FOLL_FORCE | FOLL_WRITE for task memory copies and return -EFAULT
+>     when a copy is incomplete.
+>
+>     Rename the syscall info-copy helper to bpf_copy_to_user_buf to avoid
+>     the name collision.
+>
+>     Assisted-by: Codex:GPT-6
 >     Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-This isn't a bug, but the changelog describes what changes without saying
-why.  Could it explain the motivation, for example that read-only memory
-such as .rodata can now be passed to these kfuncs?
-
-Before this patch, generic kfunc memory arguments were checked as
-BPF_READ | BPF_WRITE.  After it, a const pointee is checked as BPF_READ
-only.  As a result:
-
-  - check_reg_type() now accepts read-only registers (rdonly_mem,
-    rdonly_buf, BPF_F_RDONLY_PROG map values, map keys, and
-    PTR_TO_BTF_ID | PTR_TRUSTED).
-
-  - Program types that may only read packets can now pass packet
-    pointers.
-
-  - check_stack_range_initialized() no longer marks the stack bytes as
-    clobbered, so the verifier keeps what it knew about the stack across
-    the call.
-
-Could the changelog mention that the verifier now relies on the const
-qualifier in a kfunc's C prototype, so a kfunc that casts away const and
-writes through the pointer would make the verifier unsound?  Neither the
-changelog nor Documentation/bpf/kfuncs.rst says this.
+this isn't a bug, but could the changelog describe the use case for these
+kfuncs, and why FOLL_FORCE writes and PROT_EXEC anonymous mappings are
+needed, instead of listing what the diff does?
 
 
 ---
@@ -107,4 +97,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41602296728
---===============8055261971948351789==--
+--===============4326115560903711698==--
