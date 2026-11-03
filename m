@@ -1,80 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793714397;
-	b=C/o28rWs77Y0CRK/oZ50A9p16nj+hNcfywSgmWYulQum8NbwzBd+4AtnquNJ2pNzuXeK
-	 95g75AYD7cjUQWOjPD1WlT7b8dKt5bK29mCOooOgL8h4FbiTOpXN2gsNozfIk3VNvhLoK
-	 MLelNJLySunxLIoEm5YnZqhAoziTCnIrI6w6QYya3iateXZE5Id23HPa5yhkdcIYd0kYw
-	 9mploYLBEyElC077+ItJW9MJ6T1wUZoxrIVHzqitP4sWukma06PnLhZU48BY0HL7S8y+v
-	 bCJGyMIFYLcJT2Stfo9FRkXeLHL0wwk0HSCpvdC6rYo27a/8mv3Ynq11jkIFsBHN7Yg==
+	t=1793714396;
+	b=NnJ6fI+7td1CHFZPF/tyB0zczAk9yyY4AEctEbv/UIcYwY+KkMzSyhRa7Ouvhzycu2TC
+	 sDcMDsI6wLBm7lVRU0sb8fuAkC1r2Ls+Nk/Lsmc0MIssM7wN8DSjuDMO3q2S0Du+yEI7K
+	 MHsOAKdT1qDYDqzLCONfjWDJHQyrOg3/LyBH7Ov9nXIgfbganB4B1UveHe1qJDTXycMNx
+	 brW/8ORkP2RKC6AQ7YD7UKq+Nj5yeP+5XdCRPXZJuc6InJz3FlclKv/aEeDaTmNWjwWso
+	 o/Rf9TOjYH8eZYm7A4/dQcwktUmPg8KYLVXwLCtsKcAuViBbWLpVTcr9aw9zf7dt2Ew==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793714397;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=eAJAOTI6E0N7XqB8gY0HnnSavIbY3EivEPEaxZWww7Y=;
-	b=0aC4vwJG16zjLE141cJClpL8yxZGwWOFIDpXGuQoB3i6JaPyO7DehDcvXyWzqN4NT14P
-	 gbidikSWBDTzxjUpVcYZAQYbZW1Zupo6WmO4XwNA+7lFLZDSPj5a7jZUrGRoRoQ99C6g1
-	 2ILsES/o93lKMk2NAF4EDrV4NbmVnVQXl4ASJ53OK04b679kRI7kEAd7jjlDmxzzftjZ+
-	 kV2NN/nt4KJ72e/1lGX6TMDTFJxKOuaz3d1LCqf460SxSQ3FUBupu1yBRp6uERrvZSgdn
-	 OQaOLxvs1c85sEGLJG0wiw2hFVxLS9YGAFPH74X4ejHGA+ynMWH5sp3bXCRmEwg38cQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793714396;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=fdwV+XH9NvK1Im6ennF2xULO8qxPmM8IB/d5hh95yUY=;
+	b=pKxRTm4Njg7semn7huEsAS4//tuw5QsSJ7RQshlIokHwcOTm7tvEVMzE2LEJ18+8U11q
+	 6IbAauj0FqsSSkk3QaNiZgbKqR2gemvUvVWzK5ZdR4xRy6Rpeknk4k3MKeOGJzYLorUNB
+	 rTLhHGLkm7d1S0dYViUZgwtGeR0SXvPlT7/rEU72spQrSOd3NftzZ/xM9tNqTdE6XEerm
+	 z0FxkNtm/ql+pU8ekZNX3eROTVTC9PRH5cf/VYgGyxOex9rZRpszb2niQMS9i7MJ97uiX
+	 0Qr1WzdAcxiIxog4QiAAiKrmzKgVwZmd3X7k6wheCe6K/vkJGXQYXOWkH0HQP29kwRQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eiFk7esk;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B8SFfs3m;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D569608362B;
-	Tue,  3 Nov 2026 13:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C239608361F;
+	Tue,  3 Nov 2026 13:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eiFk7esk
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B8SFfs3m
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793714397;
-	b=d4a5He7huzrrTt2LYz1/nxN0Bbk7ZCLUh+tukP5wWAG8XXl4txEx2NLeQDpqLZG4TyI4
-	 DfTXvHUmgquvk9A19yL98hWlD2+jcTJAsk9aei4rPcRVE389Pgezk9NCClpMdy3vagYwq
-	 m8qZvtwWMnrgMh1Dj9dPHQLoRokv69NT9aNfNl954TS2LY+jcszKPksaSsrvPf/cc7OsQ
-	 kLnxuJxBfyicZ2MvUXRGz52WvoGj1teFxFaBxX/OqUKlOBPxUGmMhWEEROhq3lhnhUWKK
-	 GL4Yof73ZgFZ/bkcJE5Sfnq5rdjqy7T+DCK08IixClf4hdxSh3iOuVniCa1LV5CdMOg==
+	t=1793714396;
+	b=TEr25OPPKq2iDUeb4SuglmShiP5kGqE/lbiqVTQM2yF5QSDqUIKRiPbRfxUJG18yYtPG
+	 MKL4K7mGXs/fhItK9fVwPbyyVQL7EI1dDngx7Cl+Gdnj0qcb4pTqoZI0SCLn+69UFWkNc
+	 h4ZdPbq7TAN7dsz3mopgfO5kMCnmybqJXtatNKTB/TWed8EofAwfaNSs9QXWXP6Vt4r9k
+	 KG73iPhaxmmQYLv6voqmrRyx8REY7cvgP+smEBDBrPIcTUr+duHv74Ni7rZgvSLFMXzcB
+	 bGdO+vEvSnP6oNgao6KGn13hLfYxLevuu0fklym8nad/kjgKSDFVqQd+xWBa8a6ohyg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793714397;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=eAJAOTI6E0N7XqB8gY0HnnSavIbY3EivEPEaxZWww7Y=;
-	b=a5O01Q7LBeL6+QWbR43Sl0H267WJyEeKkYvQdVFqQkPDgH42eQD2RIZ2PnlyC8TejJ9i
-	 vTZ6ja8q0K2A0R8JmAzZh8y9Fenk1I8gWdPjWlV2SPVjzRocWEe5m0d9lSX4371ChXXHE
-	 hTkhi4AYl9B2j1ZpJ1X0odC9VlSMULHncmQxgc9elfZx11n9zi0NOi3abaEVKrIKDizEp
-	 VslVnrw7UvY0eR4XLCDBN6IK2nSrFeLZpUV9kTMuY79g9VmxdB53orB2SorPMAZYq7ZcZ
-	 3GKehp6n9QyJzEH6ahyEWwgAgn/xq096lVWRKneKwywXT1VKypYfo3a0zOwjCdUCFYA==
+	c=relaxed/relaxed; t=1793714396;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=fdwV+XH9NvK1Im6ennF2xULO8qxPmM8IB/d5hh95yUY=;
+	b=XlcBEAmKRNB00eumKbY/WGzWXaOt2qj9VxCJKFBvrMiEE0zoAqthu36HFDaFdhSPQUL8
+	 YY4vwagqYkb3Bv8rFns0hnW3P3XTRnDrYE0oG1JfHC7dlJlI/uIzU8A/KozdVUvrw6E7Z
+	 v8va4ybDpaNhFeW+gETPmcnt1RFO2VYv/xTGyMROOb1y05HHmTs+TGeKY1Rb4PIKzPUXY
+	 2VhHf7TMEXmsnG+QxuCZ3r07NDbVODh3A8NAlD14mgCEKj3ETiHdOjrNxjl3Eae77JYFB
+	 W/4W+SeqY0Ybk9qsJUV1ma6pAH/2H7WYy7g6l/+cNXDqyLvTIM9e3ArAvo0EGpxcR0g==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BA6EC1F00919;
+	by smtp.kernel.org (Postfix) with ESMTPS id BB2C51F00A15;
 	Tue,  3 Nov 2026 13:59:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1793714396;
-	bh=eAJAOTI6E0N7XqB8gY0HnnSavIbY3EivEPEaxZWww7Y=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=eiFk7eskI8sSCHI2aL6WZIhE1gHJFpEsDRQljYX6y1MmbMjXN+OvO3VGtZI1FfpJ8
-	 DCWxHAq6vXMud1oWYvLjWAR8G/qlV1zPXqRj6u4f5EXeY2bcw27+hjjGgfq3PHDkHU
-	 UWmfBcruJa6Gqjg8GRorJS3L3HHdu87AkD/lipNI8nJSFqd4uavaRhG426zEcqNAqa
-	 WrV3Q7F+m9Gr+mdqfiYcnc1kD1ghlRLEpiexOm4AJ20eQb2d7+LWPwIJZWEZkwPZbT
-	 NW2kpUgHe1M7ydwA4ARLiTCTCo+ANRuidHeVpWQ/EFCi4UYeBIVR8eLE99JivrUXh4
-	 Aw17CgXqi57EQ==
+	bh=fdwV+XH9NvK1Im6ennF2xULO8qxPmM8IB/d5hh95yUY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=B8SFfs3mXyzGQYuIw8pJl698NuP1cvwqVxbhzbVpyOQvl1lgaSZ8S2Dxd6Lf7GdGw
+	 VDW1raWBoN3rJIjKzSR9WCEBCs3KMm+UwyQAv3gl0PLkSprjG6CwqwYMyTFhoTb2k0
+	 CTF38Krq3dYx9s0knfksITj7nVYVazLWcnngkA/VgjcdWzZFWtAXfY05i00wE7l87K
+	 Rt/tjdPtMaDvuCtehRkZKLz0RuAKq1Re0hv4aH4lgxOkTR/vYN/Nz3P2vLP2tXRXXJ
+	 hqQm6XRmpDKwXUOsDrYqh05HZbfLL7qIqSBQqXdZef+06rVM5WuPgzEE818ZDzapeP
+	 CVYOtpPWiHq+A==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 1D09646981;
+	by lkml.kernel.org (Postfix) with ESMTP id 2CE6A46966;
 	Tue,  3 Nov 2026 13:59:54 +0000 (UTC)
 From: Mark Korenberg via B4 Relay <devnull+socketpair.gmail.com@kernel.org>
-Subject: [PATCH bpf-next v5 0/3] bpftool: Make the LLVM disassembler an
- optional runtime dependency
-Date: Tue, 03 Nov 2026 18:59:52 +0500
-Message-Id: <20261103-bpftool-plugin-v5-0-683e08a25df0@gmail.com>
+Date: Tue, 03 Nov 2026 18:59:53 +0500
+Subject: [PATCH bpf-next v5 1/3] bpftool: Fix disposal of the LLVM
+ disassembler context
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,13 +84,9 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33NTWrDMBAF4KsErTtlpJF/Jqvco3QxkmVH4FjGd
- k1K8N0rvGhDQrp8vPne3NQcphhmdTzc1BTWOMc05FC8HZQ/y9AFiE3OyqApsUQCN7ZLSj2M/Vc
- XB/DM1nkKWFpSGY1TaON1H/xQ+RaGcF3UZ27OcV7S9L1/WvXevxpdNWgoa4/iWbeF0Km7SOzff
- brsU6v55RoNP3EDCFps5QyxdugeOf3PKfO6krZibsSiPHL7x7N/4jbzQuqCAlfUOL7n27b9AHO
- liWBzAQAA
-X-Change-ID: 20260603-bpftool-plugin-c994bc3e0643
+Message-Id: <20261103-bpftool-plugin-v5-1-683e08a25df0@gmail.com>
+References: <20261103-bpftool-plugin-v5-0-683e08a25df0@gmail.com>
+In-Reply-To: <20261103-bpftool-plugin-v5-0-683e08a25df0@gmail.com>
 To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -107,98 +102,47 @@ To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
  Mark Korenberg <socketpair@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793714393; l=4062;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793714393; l=926;
  i=socketpair@gmail.com; s=20260603; h=from:subject:message-id;
- bh=FTpGNAMeoY1x3nm3HnFThoT7APvBIz/tLsd5anzdXyg=;
- b=GOhRtZTKRCK2jOK3H5P/nT+F8yC+FXobdGQdayYJTcqsAXPp9Llk74PL5166ccg3PCn8XiwyK
- OuZ+XsG4mMRCy1KF8Q6kdUwdrrnwlNKMuO+ew8No82kyrTLOKQKWz1Z
+ bh=WFtOq3wdcmZOoH/EhJgh2UIYAu0AaQ6cH9OmA9+kaSo=;
+ b=hTCTXZ6eoCML/m1GjNTUVVsHdppz6wlw86fD8uroJrgV44vs3OkUJ9FzaEK2Wmxgp0gqzW6wt
+ QJ2H5pwW5ohAsMV1chrBl2iL2VDJeATAWWtAV4uNP1rJgS0JHr911Ng
 X-Developer-Key: i=socketpair@gmail.com; a=ed25519;
  pk=2iAMjWhs7kA9X8ccetT2YVX8dvniXua2okQogw3Don8=
 X-Endpoint-Received: by B4 Relay for socketpair@gmail.com/20260603 with
  auth_id=806
 X-Original-From: Mark Korenberg <socketpair@gmail.com>
 Reply-To: socketpair@gmail.com
+Content-Transfer-Encoding: 7bit
 
-libLLVM (~140 MiB on Fedora) is a hard dependency of bpftool, although it
-is only used by "bpftool prog dump jited". With this series, bpftool is
-no longer linked with libLLVM.so but loads it with dlopen() when it needs
-to disassemble JITed programs, so that distributions can make it optional.
-Patch 1 fixes a leak found on the way. Patch 2 makes "prog dump jited
-... file FILE" work without a disassembler.
+From: Mark Korenberg <socketpair@gmail.com>
 
-Changes in v5:
-- Use the soname of libLLVM for dlopen(), not the name of the file it
-  points to, which is not in the ld.so path on Ubuntu 24.04 (Sashiko,
-  Alexei)
-- New patch 2: call disasm_init() only when the image is disassembled,
-  so that "prog dump jited ... file FILE" works without libLLVM (Alexei)
-- Update common_options.rst, which still said that bpftool links with
-  LLVM (Alexei)
-- Rebase on bpf-next
-- Link to v4: https://lore.kernel.org/r/20261102-bpftool-plugin-v4-0-5a853e973db9@gmail.com
+destroy_context() frees the disassembler context with LLVMDisposeMessage(),
+which is a plain free() meant for strings returned by LLVM. The context is
+therefore never destroyed, leaking about 28 KiB per disassembled function.
+Use LLVMDisasmDispose() instead.
 
-Changes in v4:
-- Drop the plugin, load libLLVM.so with dlopen() instead, as suggested by
-  Alexei. This also makes "prog dump jited" work with the bpftool built by
-  selftests.
-- Keep "llvm" in "bpftool version" a build time feature (Alexei)
-- Unlike the suggested diff, still link with LLVM built with
-  BUILD_SHARED_LIBS=ON, rather than failing to build
-- Link to v3: https://lore.kernel.org/r/20261029-bpftool-plugin-v3-0-87af799da40a@gmail.com
-
-Changes in v3:
-- Look for the plugin next to the bpftool binary before its install
-  directory, so that bpftool run from its build directory does not pick
-  an older installed plugin (Sashiko)
-- Link to v2: https://lore.kernel.org/r/20261029-bpftool-plugin-v2-0-1a47b2391b0b@gmail.com
-
-Changes in v2:
-- Move the LLVMDisasmDispose() fix to a separate patch (Quentin)
-- Look for the plugin next to the bpftool binary when it is not installed,
-  so that bpftool works from its build directory (Quentin, Sashiko). Not in
-  the current directory: bpftool usually runs as root.
-- Export a single versioned structure of callbacks from the plugin (Quentin)
-- Only report "llvm" in "bpftool version" if the plugin loads (Quentin)
-- Handle dlerror() returning NULL (Quentin)
-- Rebuild jit_disasm.o if libdir changes between "make" and
-  "make install" (Quentin)
-- uninstall: use QUIET_UNINST, remove $(libdir)/bpftool (Quentin)
-- With a static libLLVM, which a static bpftool requires, link the
-  disassembler into bpftool as before (Sashiko). This drops
-  LLVM_LINK_STATIC: static LLVM archives are never linked into a shared
-  object.
-- Commit log and comment fixes (Quentin, Sashiko)
-- Rebase on bpf-next
-- Link to v1: https://lore.kernel.org/r/20260603-bpftool-plugin-v1-1-68c0ac91f5a3@gmail.com
-
-Tested on Fedora 44 x86_64, LLVM 22: builds with shared, static and
-per-component LLVM, and with SKIP_LLVM; "prog dump jited" (plain, JSON
-and to a file) on live programs; bpftool, also when installed as
-selftests do, loads libLLVM.so only for "prog dump jited" and reports an
-error if it is missing; "prog dump jited ... file" works without a
-disassembler. Also tested with Ubuntu 24.04 (LLVM 18) userspace, where
-bpftool now loads libLLVM.so.18.1 (v4 tried libLLVM.so.1).
-
-The changes since v1 were written with the help of an AI assistant
-(Claude), from the review comments; I reviewed and tested them.
-
+Fixes: eb9d1acf634b ("bpftool: Add LLVM as default library for disassembling JIT-ed programs")
+Signed-off-by: Mark Korenberg <socketpair@gmail.com>
 ---
-Mark Korenberg (3):
-      bpftool: Fix disposal of the LLVM disassembler context
-      bpftool: Don't require a disassembler to dump a JITed program to a file
-      bpftool: Make the LLVM disassembler an optional runtime dependency
+ tools/bpf/bpftool/jit_disasm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- tools/bpf/bpftool/Documentation/common_options.rst | 10 ++-
- tools/bpf/bpftool/Makefile                         | 16 +++-
- tools/bpf/bpftool/jit_disasm.c                     | 88 +++++++++++++++++++++-
- tools/bpf/bpftool/prog.c                           |  4 +-
- 4 files changed, 110 insertions(+), 8 deletions(-)
----
-base-commit: cd5bc55288d4fd999595c8f2af6a5408cbe92a52
-change-id: 20260603-bpftool-plugin-c994bc3e0643
+diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
+index 04541155e9ccc..5ff144ce84a1c 100644
+--- a/tools/bpf/bpftool/jit_disasm.c
++++ b/tools/bpf/bpftool/jit_disasm.c
+@@ -115,7 +115,7 @@ init_context(disasm_ctx_t *ctx, const char *arch,
+ 
+ static void destroy_context(disasm_ctx_t *ctx)
+ {
+-	LLVMDisposeMessage(*ctx);
++	LLVMDisasmDispose(*ctx);
+ }
+ 
+ static int
 
-Best regards,
 -- 
-Mark Korenberg <socketpair@gmail.com>
+2.56.0
 
 
