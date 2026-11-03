@@ -1,54 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.234
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793665507;
-	b=gzD26SwaTvw7xm/0mIKt5WKMppPaAc4E88ICifqRv81hNHc3zO6w1V/sENf5W8tHZjT0
-	 v9juqjG4ggDVI8FqNe2M3HenoV/FKmxwMS3/J3/G2aCukxcS3zVBoZxWomXfBuCD7aX0c
-	 NLv40ZRfDbV1K+mHMPqljgGkujVMF7SxOCXRJo+55W0qZcSabDnw5tP9VrdqooCKKWwtF
-	 djMzVW5DO0eFpYylWS0wQqmcPP5qKsOhpocYRToSUMZ3nQ2TY7j0KmtuDXMOkN7V61+H3
-	 oEi6SI4285Xq5YJ2T0DrLuvBt4fYPQWBHAZU3Tyjo38bDtrKbdwSS+OkIUGipe6Jiag==
+	t=1793669151;
+	b=oaP2IskQqyNfSiTstKLptzlUS6UkLNAFyEkIjGl7C4ux4lLome5v8Nmfvf3yafjk90QY
+	 89OAOUjp03Zry+ze5OPX9ZAfIu5CQOIRR9KZTgmPL5RNVSym60eDzOi15W+KkN9cqqHUN
+	 2lgkg0ofkEq68y2oPC/i9Y/8J7Zx0BCfWp+10OAaACP38DE8a7XUnef6mxpLPovCt1yaY
+	 nLrUPLTEvrQkea4RVxIBDlJP18W2d8lj2UrdQKusfuxIGoBISJV6dmFceHJVQ25ddKbpl
+	 RWQak+BPhS2SZtUvQWL38vVrPtnwihIp7JZkruUwgZMDs2u0BDCwpLMxL2ZgUyuq/Ow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793665507;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793669151;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=WL5iolAf94oLsqAEcWGHL9OqEh2AXtCdQtE3qaXwqSA=;
-	b=QrNvv8pXYNBaawXjYCAz5jQkMu/uB2sGu/JzQPKO21HesivMyyihj5BAcM+WVwNNGrfC
-	 ar5YLDX9kXD/irmFPMvmuq+i/8yN6i9RHiCVF+WOAGb5dMwwroFI+aL2qG8di9e37Kf0G
-	 jpzZ/7kqQKvAs9aG9x3NM7sWIzy75ReHnsrKOQf1d2UH+SbHYJ/thqKAKe90IIyK69QNm
-	 LFv7YE1G/ITY9By/n2IXfApyD2kbKC3WB5e600XdyZQIIk7UOUi3aiuHoMu68lrOt4jDT
-	 jWdi9rKh0eHhRUjeHite6jAm+vl7S8XI+laeY8XRH1NwPiVdIHNtST6pTO3sIQrsH7A==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=GQtsOse1qaHHpOot+MsPd8LDVEFm4Ow2k3IZR+G/F4o=;
+	b=NzwsjZaM2cBkMc8Hh2a0sGZ+JwynAFEpr8wq3GTnln4cF0Owrenyj3melQ9TJXIVIYb7
+	 Ec8f3ib/EWxYnIftR3Rawa0N6osySjdaH9N5ehSSQnrd2BcAi1ohdxcWECFn0d4+SSFkS
+	 Qn6cl6pG0dK2rLuuwfhVIxSIopeI9rI+GPlnuIvrxRIzLfWW4UQ4AR10HAl/oEcjMyWW2
+	 6qYfw/AWVJ/A6FOf4zvTcoW2Sf5FBw6j7wa7xS/TEwP+/h56eziluXulOvSq9rExKZPOC
+	 HiX9I91NBEImAgwsCwmiSaHg/+1XPFc8u0vpfMkQX47ugryyhA2RacF0HMZc/gYkTDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=n1kKVMDy;
-	arc=none smtp.remote-ip=95.215.58.234
-Received: from mta1.migadu.com (out-234.mta1.migadu.com [95.215.58.234])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lgCB80zu;
+	arc=none smtp.remote-ip=91.218.175.52
+Received: from mta0.migadu.com (out-52.mta0.migadu.com [91.218.175.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE9C606A324
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 00:25:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2CE9C606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E6B6606A329
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 01:25:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1E6B6606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=n1kKVMDy
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lgCB80zu
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=0NiGdF1zPVMSf3imwwweoeAtV33VTkvQTK2VMLHyPXI=;
+DKIM-Signature: a=rsa-sha256; bh=zAP4af6W/8M6VGTZwGRKoUek7DR1Y9SfEGiGrMO6wuQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793665503; v=1; x=1794270303;
- b=n1kKVMDyzOkE3Z5GuYcJ3e540E+GN2izrpKr5kzbrFbv0FnKXi/AcmKVicmKzkxWhfYrGXrv
- sWYHZtvd6O0Y94Upp88TEkcLL2cc7FjtA5MKILse6luLLMGe8Ik41SP6dQxBTT+3CMT3COplgk2
- j2KeHsI2+ABYZ2Dt9huu0nVo=
+ t=1793669148; v=1; x=1794273948;
+ b=lgCB80zuW4tSswDe6VDPJYBRdZHEMaJCq0U/2ybazv3A4PqyFLJTEySM8nnYfgeg2OmLVx+F
+ NzXxNLlpUkfrhEOaUc9ou7XlQPSOGJrIxvD6pmIIbLdx1ians2B+KXR8xd8+x15kTlnlihsEi9Z
+ N313ndmnalXWRiF+gLxw/nUA=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 47407431e2103519;
-	Tue, 03 Nov 2026 00:25:03 +0000
-X-Mizu-Trace-ID: 47407431e2103519
+Received: by mta11.migadu.com with ESMTPS id 86b764d73d51d8da;
+	Tue, 03 Nov 2026 01:25:47 +0000
+X-Mizu-Trace-ID: 86b764d73d51d8da
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <31855f25-0fce-4460-a550-a2b93222fba4@linux.dev>
-Date: Mon, 2 Nov 2026 16:24:58 -0800
+Date: Tue, 3 Nov 2026 09:25:28 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	David Lebrun <david.lebrun@uclouvain.be>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Mathieu Xhonneux <m.xhonneux@gmail.com>,
+	David Lebrun <dlebrun@google.com>,
+	Stefano Salsano <stefano.salsano@uniroma2.it>,
+	Andrea Mayer <andrea@common-net.org>
+Subject: Re: [PATCH net 1/6] seg6: fix skb checksum update helpers
+Message-ID: <auk4COJzzhbGK-3g@fedora>
+References: <20261031225033.64-1-andrea.mayer@uniroma2.it>
+ <20261031225033.64-2-andrea.mayer@uniroma2.it>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,172 +75,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 3/8] selftests/bpf: report SKIP for arena
- tests a compiler cannot build
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, john.fastabend@gmail.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- jose.marchesi@oracle.com, david.faust@oss.qualcomm.com
-References: <20261102220717.4079739-1-vineet.gupta@linux.dev>
- <20261102220717.4079739-4-vineet.gupta@linux.dev>
- <DML31IUICB7B.2FO0J06WCREC8@gmail.com>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <DML31IUICB7B.2FO0J06WCREC8@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261031225033.64-2-andrea.mayer@uniroma2.it>
 
-On 11/2/26 2:36 PM, Alexei Starovoitov wrote:
-> On Mon, Nov 02, 2026 at 02:07 PM Vineet Gupta <vineet.gupta@linux.dev> wrote:
->> Give each guard an #else with a dummy marked __skip(), so the skip gap is
->> reported rather than invisible.  Add __skip_without_arena for it, which
->> expands to __skip() with a fixed reason when the compiler cannot do arena.
-> How about the following approach instead...
-> looks much simpler to me...
+On Sat, Oct 31, 2026 at 11:50:28PM +0100, Andrea Mayer wrote:
+> With CHECKSUM_COMPLETE, ipv6_srh_rcv() updates skb->csum for the new
+> Segments Left and destination address through seg6_update_csum().
+> Replacing "from" with "to" in the packet must change skb->csum (C) to
+> C - from + to, but update_csum_diff4() and update_csum_diff16() compute:
+> 
+>   ~csum_partial({ ~from, to }, ~C) = ~(~C + ~from + to) = C + from - to
+> 
+> This does not affect packets forwarded by ip6_forward(), which sets
+> ip_summed to CHECKSUM_NONE. But when the packet is delivered on the same
+> node and skb->csum was computed in software, for instance by conntrack, UDP
+> can drop the packet as a checksum error. With skb->csum computed by the
+> device, TCP can instead log a "hw csum failure", as if the device had
+> computed a wrong skb->csum.
+> 
+> Fix update_csum_diff4() and update_csum_diff16() to compute C - from + to.
+> 
+> Found by manual code inspection, while checking that the skb->csum updates
+> in the SRv6 receive path are consistent. A following commit adds a selftest
+> that reproduces the problem with a tc ct action. The issue was confirmed in
+> a VM without kernel changes or error injection: with the rest of this
+> series and without this patch, that selftest fails, as UDP drops datagrams
+> as checksum errors. Also tested against the srv6 selftests, and with a
+> ConnectX-6 Lx NIC (mlx5) that provides CHECKSUM_COMPLETE.
+> 
+> Fixes: 1ababeba4a21 ("ipv6: implement dataplane support for rthdr type 4 (Segment Routing Header)")
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> ---
+>  include/net/seg6.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/net/seg6.h b/include/net/seg6.h
+> index 82b3fbbcbb93..01d8034e48fc 100644
+> --- a/include/net/seg6.h
+> +++ b/include/net/seg6.h
+> @@ -19,7 +19,7 @@ static inline void update_csum_diff4(struct sk_buff *skb, __be32 from,
+>  {
+>  	__be32 diff[] = { ~from, to };
+>  
+> -	skb->csum = ~csum_partial((char *)diff, sizeof(diff), ~skb->csum);
+> +	skb->csum = csum_partial(diff, sizeof(diff), skb->csum);
+>  }
+>  
+>  static inline void update_csum_diff16(struct sk_buff *skb, __be32 *from,
+> @@ -30,7 +30,7 @@ static inline void update_csum_diff16(struct sk_buff *skb, __be32 *from,
+>  		to[0], to[1], to[2], to[3],
+>  	};
+>  
+> -	skb->csum = ~csum_partial((char *)diff, sizeof(diff), ~skb->csum);
+> +	skb->csum = csum_partial(diff, sizeof(diff), skb->csum);
+>  }
+>  
+>  struct seg6_pernet_data {
+> -- 
+> 2.43.0
+> 
 
-Agree: it does look simpler and they uncover more code to be tested now 
-than being skipped.
-
-Thx,
--Vineet
-
-> pw-bot: cr
->
-> diff --git a/tools/testing/selftests/bpf/progs/arena_kfunc_jit.c b/tools/testing/selftests/bpf/progs/arena_kfunc_jit.c
-> index b5a01cb..16c3dd9 100644
-> --- a/tools/testing/selftests/bpf/progs/arena_kfunc_jit.c
-> +++ b/tools/testing/selftests/bpf/progs/arena_kfunc_jit.c
-> @@ -23,8 +23,6 @@ struct {
->   /* volatile to force the scalar reloads below */
->   volatile u64 stash;
->
-> -#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-> -
->   SEC("syscall")
->   __arch_x86_64
->   __jited("...")
-> @@ -93,6 +91,7 @@ __jited("	cbz	w4, L0")
->   __jited("	add	x4, x28, w4, uxtw")
->   __jited("L0:	{{.*}}")
->   __success
-> +__skip_without_arena
->   int arena_arg_jit_args5(void *ctx)
->   {
->   	u64 __arena *val;
-> @@ -113,6 +112,4 @@ int arena_arg_jit_args5(void *ctx)
->   	return 0;
->   }
->
-> -#endif /* __BPF_FEATURE_ADDR_SPACE_CAST */
-> -
->   char _license[] SEC("license") = "GPL";
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-> index d7f706c..4ec840b 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-> +++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-> @@ -116,6 +116,10 @@
->    *                   feature the toolchain or JIT cannot provide, so a run does
->    *                   not report OK for coverage it never executed.
->    *
-> + * __skip_without_arena
-> + *                   __skip() when the compiler does not support the arena
-> + *                   address space, nothing otherwise.
-> + *
->    * __log_level       Log level to use for the program, numeric value expected.
->    *
->    * __flag            Adds one flag use for the program, the following values are valid:
-> @@ -156,6 +160,11 @@
->   #define __success		__test_tag("test_expect_success")
->   #define __description(desc)	__test_tag("test_description=" desc)
->   #define __skip(reason)		__test_tag("test_skip=" reason)
-> +#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
-> +#define __skip_without_arena
-> +#else
-> +#define __skip_without_arena	__skip("compiler does not support the arena address space")
-> +#endif
->   #define __msg_unpriv(msg)	__test_tag("test_expect_msg_unpriv=" msg)
->   #define __not_msg_unpriv(msg)	__test_tag("test_expect_not_msg_unpriv=" msg)
->   #define __msg_next_unpriv(msg)	__test_tag("test_expect_msg_next_unpriv=" msg)
-> diff --git a/tools/testing/selftests/bpf/progs/jit_insns_arena.c b/tools/testing/selftests/bpf/progs/jit_insns_arena.c
-> index 95736ea..77d135a 100644
-> --- a/tools/testing/selftests/bpf/progs/jit_insns_arena.c
-> +++ b/tools/testing/selftests/bpf/progs/jit_insns_arena.c
-> @@ -106,6 +106,14 @@ int cast_to_user(void *ctx)
->   	: "r1", "r2", "r7", "r9");
->   	return res != 0;
->   }
-> +#else
-> +SEC("socket")
-> +__skip_without_arena
-> +__success
-> +int arena_unsupported(void)
-> +{
-> +	return 0;
-> +}
->   #endif
->
->   char _license[] SEC("license") = "GPL";
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_large.c b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-> index dbdea14..428b984 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-> @@ -181,7 +181,6 @@ int free_reserved(void *ctx)
->   	return 0;
->   }
->
-> -#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
->   #define PAGE_CNT 100
->   __u8 __arena * __arena page[PAGE_CNT]; /* occupies the first page */
->   __u8 __arena *base;
-> @@ -220,6 +219,7 @@ __noinline int alloc_pages(int page_cnt, int pages_atonce, bool first_pass,
->
->   SEC("syscall")
->   __success __retval(0)
-> +__skip_without_arena
->   int big_alloc2(void *ctx)
->   {
->   	__u8 __arena *pg;
-> @@ -290,9 +290,9 @@ int big_alloc2(void *ctx)
->   /* Nonsleepable because it binds to a socket program. */
->   SEC("socket")
->   __success __retval(0)
-> +__skip_without_arena
->   int big_alloc3(void *ctx)
->   {
-> -#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
->   	char __arena *pages;
->   	u64 i;
->   	int err = 0;
-> @@ -314,16 +314,14 @@ int big_alloc3(void *ctx)
->
->   	bpf_arena_free_pages(&arena, pages, LARGE_PAGE_CNT);
->   	return err;
-> -#endif
-> -	return 0;
->   }
->
->   /* SYSCALL programs are always sleepable. */
->   SEC("syscall")
->   __success __retval(0)
-> +__skip_without_arena
->   int big_alloc4(void *ctx)
->   {
-> -#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
->   	char __arena *pages;
->   	u64 i;
->   	int err = 0;
-> @@ -345,8 +343,6 @@ int big_alloc4(void *ctx)
->
->   	bpf_arena_free_pages(&arena, pages, LARGE_PAGE_CNT);
->   	return err;
-> -#endif
-> -	return 0;
->   }
-> -#endif
-> +
->   char _license[] SEC("license") = "GPL";
-
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
