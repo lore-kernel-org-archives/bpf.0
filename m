@@ -1,54 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793708867;
-	b=D4LNpPpcEI2Cu5VoAH+YI29u+5Dn+QsDaFEyW3KkIXQ7WQrh3QjlbfDtzL6AQqk+KMq8
-	 g5bi4RrvSE7ZbFQVA27xonmVYqCbqpaNpGFmobfIc8UGmczYxjWK5KQhNdRfkv1jNwNOF
-	 HzlSw4ZKqb20NcjUxrSpxFgUtov8N9UlRYrxDi4Q0ivGRHhvl1r9E4gQSSSwnHgt8M1M9
-	 wgafDvrbgSMX4tgFKnQK87B2E7yjAmBA2HS2ldYo5HgtAfUxByfq4Mhf2pNmaT+PKpadC
-	 iYi0Pq9uBUPVCwy7gi6tV02Aia0cY+dVqmelnH+kCIivJgPmcDQIdDnekj93HkrJPXg==
+	b=UH1WFnodvEOw2TvE4whCBCWR8hGiK2SfBCmFQjogN68t3bNkQjw8SGyHrXCPYW+Llf7f
+	 oOCe6hXEuvI1xtpXy2lL1Ot3DNw0swM/3Nn7DUohtQpjOwVGO8VnSK2EnjsQlgj2V1S/J
+	 vpouT8pq3ftqSLGwGjQeFbvZMmAEruyMGQlIhqRy6wrcs8zvPjdIyO7YO0biIveTDDDS3
+	 8h5U8qJCP0Mc2YNRqgS8aelJ1QUwURga/S85HTfUL4Z4S3nCMU6BZScsN4qYy/1KDqX9c
+	 Z+AhdX/QgbASfccMliam2vX2Bt3o2OZCMU3zLLYD9LKuwXFFfNWoasCBHWuAvcZyxwA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793708867;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Virus-Scanned;
-	bh=mcfBWFu+TLh6VHxlrGSI4KBwJabDRpuzgnM/MEaxr1c=;
-	b=llJm4SDgQCZ92P4AN4jn6TechV1qt4uwy8wHc4JV77bjriJCkgpC1Wnozk6P6udaamBw
-	 lBSBNGaDcOXZZXj6UP046Ov5z+3NZnfpdZXK7vcaJXxKDFEi1An9+Vq7FrcY0DsrFP06Q
-	 qpwRDMybyVEPZqugULshl+gpac0N3kdwq4ZcUH0GwQaPm7dgdJsAkCotqzhZeIry3bE8R
-	 ebWaE2+CbB5a6CJN8UPsGjekGpJM7yhBLRk9F+kifb5l3LPynaDH4Yvaz8iVD1LTab5qB
-	 LfSAGCqEH1s6Sh5Gh7aKoak+elpSSKqMwEF7LD+9/uTfYLU9Qo8cJ81wi+bEe62EMwg==
+	bh=4Cozozu9RCKzZ0Csn/8Ru73jWh7Kwt8zLMlWpokD1hM=;
+	b=wCBtTCbC75dBBRbqACRICMBeHtAmpGaC6/wOVHAiQuML5DHairujpU8gJfcEreCf++7S
+	 fbOIYIgxbKJ+PjUI0qV6cakY/1Wpb7P9oWwGgL43CPNxSP5QjWFgifoLpNr15owIWSBW5
+	 oBK00G6P8CM8BE3i96DcAkX11JDcjF1g62GjxcXuMtYG4jftXd2gIYijMNRkbCmEEaHS1
+	 FeySizvrY4fMmQ2UJZjojJRyN/iQP0rs3ozQXWyqWBz4dYrk3wF2lGkQ+/VE4YLfl2AGX
+	 c9S5tYlCmrSW1rCs0VLdB6XxkgkfpEwp8hI97fDZm8DU90el4mUMvl2jJnMjw8lgO2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=iogearbox.net;
 	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b="j0Y/VTH4";
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=ddMvLgYk;
 	arc=none smtp.remote-ip=213.133.104.62
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35209606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ECD6606D801
 	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 12:27:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 35209606A333
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4ECD6606D801
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=j0Y/VTH4
+	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=ddMvLgYk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=mcfBWFu+TLh6VHxlrGSI4KBwJabDRpuzgnM/MEaxr1c=; b=j0Y/VTH45ryJGbTvsvEfr5eWFR
-	Di2q2mhSpQo8m5MIWWL+rx6r6Fy5FEUV8AMYkMbN2wVw3gNt6S0susekOrvO8ywhQ+vdzta2bJ10U
-	+InvhNmKkm0y+Y4jSsbWcc9asoi5p3o1tE4GSbvBEBpPiiqgNcMiwwbRLx/qwERxOxIq6LAy4i2Ij
-	C0+FGb6MUPe6j0SpG3VCfaC9VUG2EM5VXGyQYL7eGm1fqZGO9C879nAKAz4utRGMCGHEyB8e+rjU0
-	PMbMH3+IaLi8FP2IMahxY/sv/GmKyqy3Ghzod/79FJNAJQvMBqg9vRb4x5VrOlReHM0PcV0589Jjs
-	Fa9ajEBg==;
+	bh=4Cozozu9RCKzZ0Csn/8Ru73jWh7Kwt8zLMlWpokD1hM=; b=ddMvLgYklQFV1rVUhMCx5jDQB1
+	mXCUCnnbU0oL1Qm5+W4+7XgbslKDBijXMygVFiNlljBc6+oiCCp7zAVxTmcgNmmgJr1UrQtHvDx9i
+	jzappWeGFi62snE3XqdyoqKoRKbVDJ5tWwu36v4zzygw9573MxJvbKdU/iHRSf6PxTTpebh59TBVV
+	+sTV4MIH2s7X3kiehqVR26Txhfc93aFPc1RxbmHyWRMbh8NofQvbYkV9eO1+mDJv1Hqt2aHGNjZhE
+	9bbomeBzPicp3E7C/SjZVQ4TBx1E0A1zgeu0ahtKXi7v1ObF8krjOKqcZwssIQZ2k37qYBoofOVQA
+	6v9gz8/g==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1xODc3-000MQz-1e;
+	id 1xODc2-000MQm-39;
 	Tue, 03 Nov 2026 13:27:39 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: ast@kernel.org
@@ -56,9 +56,9 @@ Cc: puranjay@kernel.org,
 	memxor@gmail.com,
 	xukuohai@huaweicloud.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 08/20] bpf, arm64: Consolidate the load and store emission into a helper
-Date: Tue,  3 Nov 2026 13:27:21 +0100
-Message-ID: <20261103122733.1383002-9-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 07/20] bpf: Move the division magic number selection out of the x86 JIT
+Date: Tue,  3 Nov 2026 13:27:20 +0100
+Message-ID: <20261103122733.1383002-8-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261103122733.1383002-1-daniel@iogearbox.net>
 References: <20261103122733.1383002-1-daniel@iogearbox.net>
@@ -74,294 +74,420 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.6/28173/Tue Nov  3 07:27:52 2026)
 
-The BPF_LDX, BPF_ST and BPF_STX cases each pick the base and offset of
-an access through the frame pointer, and then switch over the access
-size to emit the immediate offset form or the register offset fallback,
-three times the same code. Add emit_ldst() for it, with the A64 size
-and type derived from the instruction. The emitted code is unchanged.
+bpf_magic_udiv() and bpf_magic_sdiv() compute the multiplier and shift
+for the division by a constant, and emit_div_const() picks the divisors
+they take, the correction of the signed quotient and the shift of the
+dividend by the trailing zeros of an even divisor whose magic number
+needs 65 bits otherwise, and guards the shift count. None of it is x86
+specific, so move it to the core as bpf_magic_div(), which a JIT calls
+once before emitting the instructions, for the other JITs to use without
+a copy of their own. The magic numbers divide 64-bit values by a divisor
+only known at run time, which a 32-bit kernel has no inline form for, so
+they come under CONFIG_64BIT like the JITs which can use them. No
+functional change.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- arch/arm64/net/bpf_jit_comp.c | 227 +++++++++++-----------------------
- 1 file changed, 71 insertions(+), 156 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 163 ++++--------------------------------
+ include/linux/filter.h      |  12 +++
+ kernel/bpf/core.c           | 147 ++++++++++++++++++++++++++++++++
+ 3 files changed, 175 insertions(+), 147 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 99f1d9bd13ea..41e2d1aef71f 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -357,6 +357,74 @@ static bool is_lsi_offset(int offset, int scale)
- 	return true;
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 83b0cb1f911c..1f4d3bbfa90e 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -2028,109 +2028,12 @@ static void emit_shiftx(u8 **pprog, u32 dst_reg, u8 src_reg, bool is64, u8 op)
+ 	*pprog = prog;
  }
  
-+/* The A64 size of a BPF load or store, and the scale of its offset */
-+static enum aarch64_insn_size_type a64_ldst_size(const u8 code, int *scale)
-+{
-+	switch (BPF_SIZE(code)) {
-+	case BPF_B:
-+		*scale = 0;
-+		return AARCH64_INSN_SIZE_8;
-+	case BPF_H:
-+		*scale = 1;
-+		return AARCH64_INSN_SIZE_16;
-+	case BPF_W:
-+		*scale = 2;
-+		return AARCH64_INSN_SIZE_32;
-+	default:
-+		*scale = 3;
-+		return AARCH64_INSN_SIZE_64;
-+	}
-+}
+-struct bpf_div_magic {
+-	u64 m;		/* multiplier, sign extended for signed division */
+-	int s;		/* shift of the high half of the product */
+-	bool add;	/* multiplier has 65 bits, use the add sequence */
+-};
+-
+-/*
+- * Multiplier and shift for an unsigned division by the constant d, with
+- * 2 <= d < 2^64 and a dividend below 2^(64 - lz): n / d == (mulhu(n, m)
+- * >> s), or with the add sequence when m needs 65 bits, (((n - t) >> 1)
+- * + t) >> (s - 1) with t = mulhu(n, m). Hacker's Delight, 2nd ed., figure
+- * 10-2.
+- */
+-static void bpf_magic_udiv(u64 d, int lz, struct bpf_div_magic *mag)
+-{
+-	u64 mask = ~0ULL >> (lz & 63);
+-	u64 nc, delta, q1, r1, q2, r2;
+-	int p;
+-
+-	mag->add = false;
+-	/* Largest value with nc mod d == d - 1 */
+-	nc = mask - (mask % d + 1) % d;
+-	p = 63;
+-	q1 = (1ULL << 63) / nc;			/* 2^p / nc */
+-	r1 = (1ULL << 63) - q1 * nc;		/* 2^p mod nc */
+-	q2 = (~0ULL >> 1) / d;			/* (2^p - 1) / d */
+-	r2 = (~0ULL >> 1) - q2 * d;		/* (2^p - 1) mod d */
+-	do {
+-		p++;
+-		if (r1 >= nc - r1) {
+-			q1 = 2 * q1 + 1;
+-			r1 = 2 * r1 - nc;
+-		} else {
+-			q1 = 2 * q1;
+-			r1 = 2 * r1;
+-		}
+-		if (r2 + 1 >= d - r2) {
+-			if (q2 >= (~0ULL >> 1))
+-				mag->add = true;
+-			q2 = 2 * q2 + 1;
+-			r2 = 2 * r2 + 1 - d;
+-		} else {
+-			if (q2 >= (1ULL << 63))
+-				mag->add = true;
+-			q2 = 2 * q2;
+-			r2 = 2 * r2 + 1;
+-		}
+-		delta = d - 1 - r2;
+-	} while (p < 128 && (q1 < delta || (q1 == delta && r1 == 0)));
+-
+-	mag->m = q2 + 1;
+-	mag->s = p - 64;
+-}
+-
+-/*
+- * Multiplier and shift for a signed division by the constant d, with
+- * 2 <= |d| < 2^63: q = mulhs(n, m), q += n if d > 0 and m < 0, q -= n
+- * if d < 0 and m > 0, q >>= s (arithmetic), n / d == q + (q >>> 63).
+- * Hacker's Delight, 2nd ed., figure 10-1.
+- */
+-static void bpf_magic_sdiv(s64 d, struct bpf_div_magic *mag)
+-{
+-	u64 ad = d < 0 ? -(u64)d : (u64)d;
+-	u64 t, anc, delta, q1, r1, q2, r2;
+-	int p;
+-
+-	t = (1ULL << 63) + (d < 0);
+-	anc = t - 1 - t % ad;			/* |nc| */
+-	p = 63;
+-	q1 = (1ULL << 63) / anc;		/* 2^p / |nc| */
+-	r1 = (1ULL << 63) - q1 * anc;		/* 2^p mod |nc| */
+-	q2 = (1ULL << 63) / ad;			/* 2^p / |d| */
+-	r2 = (1ULL << 63) - q2 * ad;		/* 2^p mod |d| */
+-	do {
+-		p++;
+-		q1 = 2 * q1;
+-		r1 = 2 * r1;
+-		if (r1 >= anc) {
+-			q1++;
+-			r1 -= anc;
+-		}
+-		q2 = 2 * q2;
+-		r2 = 2 * r2;
+-		if (r2 >= ad) {
+-			q2++;
+-			r2 -= ad;
+-		}
+-		delta = ad - r2;
+-	} while (q1 < delta || (q1 == delta && r1 == 0));
+-
+-	mag->m = q2 + 1;
+-	if (d < 0)
+-		mag->m = -mag->m;
+-	mag->s = p - 64;
+-	mag->add = false;
+-}
+-
+ /*
+  * Divide dst_reg by the constant in insn->imm of a 64-bit division through
+- * a multiplication with the magic number from bpf_magic_udiv() or
+- * bpf_magic_sdiv(). The dividend goes through rax and the multiplier
+- * through r11, the caller saves rax and rdx unless they are dst_reg, and
+- * r10 is scratch. Returns false for the divisors left to div/idiv.
++ * a multiplication with the magic number from bpf_magic_div(). The dividend
++ * goes through rax and the multiplier through r11, the caller saves rax and
++ * rdx unless they are dst_reg, and r10 is scratch. Returns false for the
++ * divisors left to div/idiv.
+  */
+ static bool emit_div_const(u8 **pprog, const struct bpf_insn *insn, u32 dst_reg)
+ {
+@@ -2140,46 +2043,12 @@ static bool emit_div_const(u8 **pprog, const struct bpf_insn *insn, u32 dst_reg)
+ 	s32 imm32 = insn->imm;
+ 	struct bpf_div_magic mag;
+ 	u8 *prog = *pprog;
+-	int corr = 0, pre = 0, s;
+ 
+-	if (is_signed) {
+-		/* |d| >= 2, the verifier already rewrote d == -1 */
+-		if (imm32 >= -1 && imm32 <= 1)
+-			return false;
+-		bpf_magic_sdiv(imm32, &mag);
+-		/* q += n for d > 0 and m < 0, q -= n for d < 0 and m > 0 */
+-		if (imm32 > 0 && (s64)mag.m < 0)
+-			corr = 1;
+-		else if (imm32 < 0 && (s64)mag.m > 0)
+-			corr = -1;
+-	} else {
+-		/* d >= 2, a negative imm32 is a divisor above 2^63 */
+-		if (imm32 < 2)
+-			return false;
+-		bpf_magic_udiv(imm32, 0, &mag);
+-		/*
+-		 * Shift the dividend by the trailing zeros of an even divisor
+-		 * first, the magic number of the odd part then fits without
+-		 * the add sequence.
+-		 */
+-		if (mag.add && !(imm32 & 1)) {
+-			pre = __ffs(imm32) & 31;
+-			bpf_magic_udiv(imm32 >> pre, pre, &mag);
+-			if (mag.add)
+-				return false;
+-		}
+-	}
+-	s = mag.s;
+-	/*
+-	 * The shift is at most 63, or 64 with the add sequence which shifts
+-	 * by s - 1 and needs s >= 1. Never hit for d >= 2, kept as a guard
+-	 * against an unencodable count.
+-	 */
+-	if (s > 64 - !mag.add || (mag.add && !s))
++	if (!bpf_magic_div(imm32, is_signed, &mag))
+ 		return false;
+ 
+ 	/* Keep the dividend when the multiplication clobbers it */
+-	if ((is_mod || mag.add || corr) &&
++	if ((is_mod || mag.add || mag.corr) &&
+ 	    (dst_reg == BPF_REG_0 || dst_reg == BPF_REG_3)) {
+ 		emit_mov_reg(&prog, true, BPF_REG_AX, dst_reg);
+ 		n_reg = BPF_REG_AX;
+@@ -2188,18 +2057,18 @@ static bool emit_div_const(u8 **pprog, const struct bpf_insn *insn, u32 dst_reg)
+ 	/* mov rax, dst_reg; shr rax, pre; mov r11, m; mul r11 or imul r11 */
+ 	if (dst_reg != BPF_REG_0)
+ 		emit_mov_reg(&prog, true, BPF_REG_0, dst_reg);
+-	if (pre)
+-		emit_shift_imm(&prog, BPF_RSH, BPF_REG_0, pre, true);
++	if (mag.pre)
++		emit_shift_imm(&prog, BPF_RSH, BPF_REG_0, mag.pre, true);
+ 	emit_mov_imm64(&prog, AUX_REG, mag.m >> 32, (u32)mag.m);
+ 	EMIT3(0x49, 0xF7, is_signed ? 0xEB : 0xE3);
+ 	if (is_signed) {
+ 		/* add rdx, n_reg or sub rdx, n_reg */
+-		if (corr)
+-			emit_alu_reg(&prog, corr > 0 ? BPF_ADD : BPF_SUB,
++		if (mag.corr)
++			emit_alu_reg(&prog, mag.corr > 0 ? BPF_ADD : BPF_SUB,
+ 				     BPF_REG_3, n_reg, true);
+ 		/* sar rdx, s */
+-		if (s)
+-			emit_shift_imm(&prog, BPF_ARSH, BPF_REG_3, s, true);
++		if (mag.s)
++			emit_shift_imm(&prog, BPF_ARSH, BPF_REG_3, mag.s, true);
+ 		/* mov rax, rdx; shr rax, 63; add rdx, rax */
+ 		emit_mov_reg(&prog, true, BPF_REG_0, BPF_REG_3);
+ 		emit_shift_imm(&prog, BPF_RSH, BPF_REG_0, 63, true);
+@@ -2207,8 +2076,8 @@ static bool emit_div_const(u8 **pprog, const struct bpf_insn *insn, u32 dst_reg)
+ 		q_reg = BPF_REG_3;
+ 	} else if (!mag.add) {
+ 		/* shr rdx, s */
+-		if (s)
+-			emit_shift_imm(&prog, BPF_RSH, BPF_REG_3, s, true);
++		if (mag.s)
++			emit_shift_imm(&prog, BPF_RSH, BPF_REG_3, mag.s, true);
+ 		q_reg = BPF_REG_3;
+ 	} else {
+ 		/* mov rax, n_reg; sub rax, rdx; shr rax, 1 */
+@@ -2217,8 +2086,8 @@ static bool emit_div_const(u8 **pprog, const struct bpf_insn *insn, u32 dst_reg)
+ 		emit_shift_imm(&prog, BPF_RSH, BPF_REG_0, 1, true);
+ 		/* add rax, rdx; shr rax, s - 1 */
+ 		emit_alu_reg(&prog, BPF_ADD, BPF_REG_0, BPF_REG_3, true);
+-		if (s > 1)
+-			emit_shift_imm(&prog, BPF_RSH, BPF_REG_0, s - 1, true);
++		if (mag.s > 1)
++			emit_shift_imm(&prog, BPF_RSH, BPF_REG_0, mag.s - 1, true);
+ 		q_reg = BPF_REG_0;
+ 	}
+ 
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 8a8134752f30..bf0d04cca2ce 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1500,6 +1500,18 @@ void bpf_jit_binary_pack_free(struct bpf_binary_header *ro_header,
+ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
+ 				struct bpf_jit_poke_descriptor *poke);
+ 
++#ifdef CONFIG_64BIT
++struct bpf_div_magic {
++	u64 m;		/* multiplier, sign extended for signed division */
++	int s;		/* shift of the high half of the product */
++	int pre;	/* shift of the dividend before the multiplication */
++	int corr;	/* dividend added (1) or subtracted (-1) to the product */
++	bool add;	/* multiplier has 65 bits, use the add sequence */
++};
 +
-+/* The A64 type of a BPF load or store, in the immediate or register offset form */
-+static enum aarch64_insn_ldst_type a64_ldst_type(const u8 code, bool reg_offset)
++bool bpf_magic_div(s32 d, bool is_signed, struct bpf_div_magic *mag);
++#endif
++
+ int bpf_jit_get_func_addr(const struct bpf_prog *prog,
+ 			  const struct bpf_insn *insn, bool extra_pass,
+ 			  u64 *func_addr, bool *func_addr_fixed);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 0586ed020397..9fd13fcf7d84 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1519,6 +1519,153 @@ void __weak bpf_jit_free(struct bpf_prog *fp)
+ 	bpf_prog_unlock_free(fp);
+ }
+ 
++#ifdef CONFIG_64BIT
++/*
++ * Multiplier and shift for an unsigned division by the constant d, with
++ * 2 <= d < 2^64 and a dividend below 2^(64 - lz): n / d == (mulhu(n, m)
++ * >> s), or with the add sequence when m needs 65 bits, (((n - t) >> 1)
++ * + t) >> (s - 1) with t = mulhu(n, m). Hacker's Delight, 2nd ed., figure
++ * 10-2.
++ */
++static void bpf_magic_udiv(u64 d, int lz, struct bpf_div_magic *mag)
 +{
-+	if (BPF_CLASS(code) != BPF_LDX)
-+		return reg_offset ? AARCH64_INSN_LDST_STORE_REG_OFFSET :
-+				    AARCH64_INSN_LDST_STORE_IMM_OFFSET;
-+	if (BPF_MODE(code) == BPF_MEMSX || BPF_MODE(code) == BPF_PROBE_MEMSX ||
-+	    BPF_MODE(code) == BPF_PROBE_MEM32SX)
-+		return reg_offset ? AARCH64_INSN_LDST_SIGNED_LOAD_REG_OFFSET :
-+				    AARCH64_INSN_LDST_SIGNED_LOAD_IMM_OFFSET;
-+	return reg_offset ? AARCH64_INSN_LDST_LOAD_REG_OFFSET :
-+			    AARCH64_INSN_LDST_LOAD_IMM_OFFSET;
++	u64 mask = ~0ULL >> (lz & 63);
++	u64 nc, delta, q1, r1, q2, r2;
++	int p;
++
++	mag->add = false;
++	/* Largest value with nc mod d == d - 1 */
++	nc = mask - (mask % d + 1) % d;
++	p = 63;
++	q1 = (1ULL << 63) / nc;			/* 2^p / nc */
++	r1 = (1ULL << 63) - q1 * nc;		/* 2^p mod nc */
++	q2 = (~0ULL >> 1) / d;			/* (2^p - 1) / d */
++	r2 = (~0ULL >> 1) - q2 * d;		/* (2^p - 1) mod d */
++	do {
++		p++;
++		if (r1 >= nc - r1) {
++			q1 = 2 * q1 + 1;
++			r1 = 2 * r1 - nc;
++		} else {
++			q1 = 2 * q1;
++			r1 = 2 * r1;
++		}
++		if (r2 + 1 >= d - r2) {
++			if (q2 >= (~0ULL >> 1))
++				mag->add = true;
++			q2 = 2 * q2 + 1;
++			r2 = 2 * r2 + 1 - d;
++		} else {
++			if (q2 >= (1ULL << 63))
++				mag->add = true;
++			q2 = 2 * q2;
++			r2 = 2 * r2 + 1;
++		}
++		delta = d - 1 - r2;
++	} while (p < 128 && (q1 < delta || (q1 == delta && r1 == 0)));
++
++	mag->m = q2 + 1;
++	mag->s = p - 64;
 +}
 +
 +/*
-+ * Load or store of a BPF access size at rn + off. An access through the
-+ * frame pointer goes from the stack pointer, or from the private stack
-+ * pointer, with the offset adjusted by the frame size, and takes the
-+ * frame pointer register for the register offset form.
++ * Multiplier and shift for a signed division by the constant d, with
++ * 2 <= |d| < 2^63: q = mulhs(n, m), q += n if d > 0 and m < 0, q -= n
++ * if d < 0 and m > 0, q >>= s (arithmetic), n / d == q + (q >>> 63).
++ * Hacker's Delight, 2nd ed., figure 10-1.
 + */
-+static void emit_ldst(const u8 code, const u8 rt, const u8 rn, const s32 off,
-+		      const u8 tmp, struct jit_ctx *ctx)
++static void bpf_magic_sdiv(s64 d, struct bpf_div_magic *mag)
 +{
-+	enum aarch64_insn_size_type size;
-+	s32 off_adj = off;
-+	u8 rn_adj = rn;
-+	int scale;
++	u64 ad = d < 0 ? -(u64)d : (u64)d;
++	u64 t, anc, delta, q1, r1, q2, r2;
++	int p;
 +
-+	size = a64_ldst_size(code, &scale);
-+	if (rn == bpf2a64[BPF_REG_FP]) {
-+		if (ctx->priv_sp_used) {
-+			rn_adj = bpf2a64[PRIVATE_SP];
-+			off_adj += ctx->stack_size;
-+		} else {
-+			rn_adj = A64_SP;
-+			off_adj += ctx->stack_size + ctx->stack_arg_size;
++	t = (1ULL << 63) + (d < 0);
++	anc = t - 1 - t % ad;			/* |nc| */
++	p = 63;
++	q1 = (1ULL << 63) / anc;		/* 2^p / |nc| */
++	r1 = (1ULL << 63) - q1 * anc;		/* 2^p mod |nc| */
++	q2 = (1ULL << 63) / ad;			/* 2^p / |d| */
++	r2 = (1ULL << 63) - q2 * ad;		/* 2^p mod |d| */
++	do {
++		p++;
++		q1 = 2 * q1;
++		r1 = 2 * r1;
++		if (r1 >= anc) {
++			q1++;
++			r1 -= anc;
 +		}
-+	}
++		q2 = 2 * q2;
++		r2 = 2 * r2;
++		if (r2 >= ad) {
++			q2++;
++			r2 -= ad;
++		}
++		delta = ad - r2;
++	} while (q1 < delta || (q1 == delta && r1 == 0));
 +
-+	if (is_lsi_offset(off_adj, scale)) {
-+		emit(aarch64_insn_gen_load_store_imm(rt, rn_adj, off_adj, size,
-+						     a64_ldst_type(code, false)), ctx);
-+	} else {
-+		emit_a64_mov_i(1, tmp, off, ctx);
-+		emit(aarch64_insn_gen_load_store_reg(rt, rn, tmp, AARCH64_INSN_EXTEND_UXTX,
-+						     false, size, a64_ldst_type(code, true)), ctx);
-+	}
++	mag->m = q2 + 1;
++	if (d < 0)
++		mag->m = -mag->m;
++	mag->s = p - 64;
++	mag->add = false;
 +}
 +
- /* generated main prog prologue:
-  *      bti c // if CONFIG_ARM64_BTI_KERNEL
-  *      mov x9, lr
-@@ -1455,9 +1523,7 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 	const u8 tmp = bpf2a64[TMP_REG_1];
- 	const u8 tmp2 = bpf2a64[TMP_REG_2];
- 	const u8 tmp3 = bpf2a64[TMP_REG_3];
--	const u8 fp = bpf2a64[BPF_REG_FP];
- 	const u8 arena_vm_base = bpf2a64[ARENA_VM_START];
--	const u8 priv_sp = bpf2a64[PRIVATE_SP];
- 	const s16 off = insn->off;
- 	const s32 imm = insn->imm;
- 	const int i = insn - ctx->prog->insnsi;
-@@ -1466,11 +1532,7 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 	u8 jmp_cond;
- 	s32 jmp_offset;
- 	u32 a64_insn;
--	u8 src_adj;
--	u8 dst_adj;
--	int off_adj;
- 	int ret;
--	bool sign_extend;
- 
- 	if (bpf_insn_is_indirect_target(env, ctx->prog, i))
- 		emit_bti(A64_BTI_J, ctx);
-@@ -1963,70 +2025,7 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 			emit(A64_ADD(1, tmp2, src, arena_vm_base), ctx);
- 			src = tmp2;
- 		}
--		if (src == fp) {
--			src_adj = ctx->priv_sp_used ? priv_sp : A64_SP;
--			off_adj = off + ctx->stack_size;
--			if (!ctx->priv_sp_used)
--				off_adj += ctx->stack_arg_size;
--		} else {
--			src_adj = src;
--			off_adj = off;
--		}
--		sign_extend = (BPF_MODE(insn->code) == BPF_MEMSX ||
--				BPF_MODE(insn->code) == BPF_PROBE_MEMSX ||
--				 BPF_MODE(insn->code) == BPF_PROBE_MEM32SX);
--		switch (BPF_SIZE(code)) {
--		case BPF_W:
--			if (is_lsi_offset(off_adj, 2)) {
--				if (sign_extend)
--					emit(A64_LDRSWI(dst, src_adj, off_adj), ctx);
--				else
--					emit(A64_LDR32I(dst, src_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp, off, ctx);
--				if (sign_extend)
--					emit(A64_LDRSW(dst, src, tmp), ctx);
--				else
--					emit(A64_LDR32(dst, src, tmp), ctx);
--			}
--			break;
--		case BPF_H:
--			if (is_lsi_offset(off_adj, 1)) {
--				if (sign_extend)
--					emit(A64_LDRSHI(dst, src_adj, off_adj), ctx);
--				else
--					emit(A64_LDRHI(dst, src_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp, off, ctx);
--				if (sign_extend)
--					emit(A64_LDRSH(dst, src, tmp), ctx);
--				else
--					emit(A64_LDRH(dst, src, tmp), ctx);
--			}
--			break;
--		case BPF_B:
--			if (is_lsi_offset(off_adj, 0)) {
--				if (sign_extend)
--					emit(A64_LDRSBI(dst, src_adj, off_adj), ctx);
--				else
--					emit(A64_LDRBI(dst, src_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp, off, ctx);
--				if (sign_extend)
--					emit(A64_LDRSB(dst, src, tmp), ctx);
--				else
--					emit(A64_LDRB(dst, src, tmp), ctx);
--			}
--			break;
--		case BPF_DW:
--			if (is_lsi_offset(off_adj, 3)) {
--				emit(A64_LDR64I(dst, src_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp, off, ctx);
--				emit(A64_LDR64(dst, src, tmp), ctx);
--			}
--			break;
--		}
-+		emit_ldst(code, dst, src, off, tmp, ctx);
- 
- 		ret = add_exception_handler(insn, ctx, dst);
- 		if (ret)
-@@ -2061,51 +2060,9 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 			emit(A64_ADD(1, tmp3, dst, arena_vm_base), ctx);
- 			dst = tmp3;
- 		}
--		if (dst == fp) {
--			dst_adj = ctx->priv_sp_used ? priv_sp : A64_SP;
--			off_adj = off + ctx->stack_size;
--			if (!ctx->priv_sp_used)
--				off_adj += ctx->stack_arg_size;
--		} else {
--			dst_adj = dst;
--			off_adj = off;
--		}
- 		/* Load imm to a register then store it */
- 		emit_a64_mov_i(1, tmp, imm, ctx);
--		switch (BPF_SIZE(code)) {
--		case BPF_W:
--			if (is_lsi_offset(off_adj, 2)) {
--				emit(A64_STR32I(tmp, dst_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp2, off, ctx);
--				emit(A64_STR32(tmp, dst, tmp2), ctx);
--			}
--			break;
--		case BPF_H:
--			if (is_lsi_offset(off_adj, 1)) {
--				emit(A64_STRHI(tmp, dst_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp2, off, ctx);
--				emit(A64_STRH(tmp, dst, tmp2), ctx);
--			}
--			break;
--		case BPF_B:
--			if (is_lsi_offset(off_adj, 0)) {
--				emit(A64_STRBI(tmp, dst_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp2, off, ctx);
--				emit(A64_STRB(tmp, dst, tmp2), ctx);
--			}
--			break;
--		case BPF_DW:
--			if (is_lsi_offset(off_adj, 3)) {
--				emit(A64_STR64I(tmp, dst_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp2, off, ctx);
--				emit(A64_STR64(tmp, dst, tmp2), ctx);
--			}
--			break;
--		}
-+		emit_ldst(code, tmp, dst, off, tmp2, ctx);
- 
- 		ret = add_exception_handler(insn, ctx, DONT_CLEAR);
- 		if (ret)
-@@ -2130,49 +2087,7 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 			emit(A64_ADD(1, tmp2, dst, arena_vm_base), ctx);
- 			dst = tmp2;
- 		}
--		if (dst == fp) {
--			dst_adj = ctx->priv_sp_used ? priv_sp : A64_SP;
--			off_adj = off + ctx->stack_size;
--			if (!ctx->priv_sp_used)
--				off_adj += ctx->stack_arg_size;
--		} else {
--			dst_adj = dst;
--			off_adj = off;
--		}
--		switch (BPF_SIZE(code)) {
--		case BPF_W:
--			if (is_lsi_offset(off_adj, 2)) {
--				emit(A64_STR32I(src, dst_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp, off, ctx);
--				emit(A64_STR32(src, dst, tmp), ctx);
--			}
--			break;
--		case BPF_H:
--			if (is_lsi_offset(off_adj, 1)) {
--				emit(A64_STRHI(src, dst_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp, off, ctx);
--				emit(A64_STRH(src, dst, tmp), ctx);
--			}
--			break;
--		case BPF_B:
--			if (is_lsi_offset(off_adj, 0)) {
--				emit(A64_STRBI(src, dst_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp, off, ctx);
--				emit(A64_STRB(src, dst, tmp), ctx);
--			}
--			break;
--		case BPF_DW:
--			if (is_lsi_offset(off_adj, 3)) {
--				emit(A64_STR64I(src, dst_adj, off_adj), ctx);
--			} else {
--				emit_a64_mov_i(1, tmp, off, ctx);
--				emit(A64_STR64(src, dst, tmp), ctx);
--			}
--			break;
--		}
-+		emit_ldst(code, src, dst, off, tmp, ctx);
- 
- 		ret = add_exception_handler(insn, ctx, DONT_CLEAR);
- 		if (ret)
++/*
++ * Magic number for the 64-bit division or modulo by the constant d of a
++ * BPF_DIV or BPF_MOD with BPF_K, signed per is_signed, as the JITs emit it:
++ * the high half of the product of the dividend, shifted right by pre for an
++ * unsigned division, and the multiplier m, shifted right by s, the add
++ * sequence of bpf_magic_udiv() instead when add is set, and for a signed
++ * division with the dividend added for corr > 0 or subtracted for corr < 0
++ * before the arithmetic shift and the sign bit of the quotient added after
++ * it. The dividend of an even unsigned divisor is shifted by the trailing
++ * zeros first when the magic number needs 65 bits otherwise, the one of the
++ * odd part then fits without the add sequence. Returns false for the
++ * divisors left to the division instruction: 0 and +-1, the unsigned ones
++ * above 2^63, which a negative d stands for, and a shift the sequences do
++ * not take, which d >= 2 never gives.
++ */
++bool bpf_magic_div(s32 d, bool is_signed, struct bpf_div_magic *mag)
++{
++	mag->pre = 0;
++	mag->corr = 0;
++	if (is_signed) {
++		/* |d| >= 2, the verifier already rewrote d == -1 */
++		if (d >= -1 && d <= 1)
++			return false;
++		bpf_magic_sdiv(d, mag);
++		/* q += n for d > 0 and m < 0, q -= n for d < 0 and m > 0 */
++		if (d > 0 && (s64)mag->m < 0)
++			mag->corr = 1;
++		else if (d < 0 && (s64)mag->m > 0)
++			mag->corr = -1;
++	} else {
++		/* d >= 2, a negative d is a divisor above 2^63 */
++		if (d < 2)
++			return false;
++		bpf_magic_udiv(d, 0, mag);
++		/*
++		 * Shift the dividend by the trailing zeros of an even divisor
++		 * first, the magic number of the odd part then fits without
++		 * the add sequence.
++		 */
++		if (mag->add && !(d & 1)) {
++			mag->pre = __ffs(d) & 31;
++			bpf_magic_udiv(d >> mag->pre, mag->pre, mag);
++			if (mag->add)
++				return false;
++		}
++	}
++	/*
++	 * The shift is at most 63, or 64 with the add sequence which shifts
++	 * by s - 1 and needs s >= 1. Never hit for d >= 2, kept as a guard
++	 * against an unencodable count.
++	 */
++	return mag->s <= 64 - !mag->add && (!mag->add || mag->s);
++}
++#endif /* CONFIG_64BIT */
++
+ int bpf_jit_get_func_addr(const struct bpf_prog *prog,
+ 			  const struct bpf_insn *insn, bool extra_pass,
+ 			  u64 *func_addr, bool *func_addr_fixed)
 -- 
 2.43.0
 
