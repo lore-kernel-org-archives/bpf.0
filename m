@@ -1,45 +1,53 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.97.179.56
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793711190;
-	b=lK1oeyntreWpECJt/b0UourXCP0QjX8fSxPLJD3q9+A+SV/cp7Bo8b0ulEiH6ox68pTE
-	 VObKxvqRB4J+9PpF1tZepwddwcZeHz/OppBMfPMStHxGAdgmqSCKAYS0rjzVy7nfHCAQ/
-	 Lkx4iCVa4yigQNOwpeYpMMyo83tpAr0hauwRz62YhhSXSFlsHA0rr5m/OWgX7XYtZyZNL
-	 4JqdDQN9SRb2KSoHZYGUgaOw4O1NFNwq5fTN9QJt4XA8QeJO3++TUmUqznvJeu9i8DGcs
-	 /dLHAnWGhDTDd0a1g597decV9oSpLhyWsnBMrZGk0xoI2zEGj4lJfscyoodNrngs7NA==
+	t=1793711683;
+	b=0cVz3+R3TwppfUUpYf+slb1qBxzxTQ2P5ysesb8Sl/wtENuq4mJ9GhKkfzU4Kb+2tEhb
+	 uh9jGopP4FL2qxXP6fUoIQo/QCR4Zhp3RjSHgKJvG92/ShSaqTPJ7o6FTsCJKCUI64hp+
+	 WNTv6CWBPbOvE5yTTR3u/1IHznUtIoKgAwAVgM7cC7wqTXBp3pssSfWNwoCNZ/Oq3cTwg
+	 TvN+zPCARifyPfyq++8I1HILfGxSbyPaH1mM2LlRSRXf7CdLEU6yYKHM5EOTuOggcKeZR
+	 NMzI/fay/fQOjVP3fUHGXuenwcPg8fa3v4Mm6PKh8DGEVxz8lG+4hFcknk+qdbCYfsg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793711190;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=4t5qgb3kRPkkx38LxHpP3L1ZUslZ1VfKOsMAe4GNMpk=;
-	b=nivdtbs5rCz4WfLdsI3hqtLwkDAvSAtM+JC+/3yAvaLZ4PMtXO3d0a0JuTpBtlFR2Rkc
-	 CxEkAL3ZwI6+L9ABHwDb21srbjdG07GA3tT7FgS2qeyNWgzF1PaeWpinh8niyXmxh2jJM
-	 9xQ3oarUYBgobzatLIxa9JMCNQvUOSd8iUPrT9hNZmOGgWPRRoYbCb2ZjdPaDgzXYMESV
-	 XoNQYFm/ToyTDBVU7KvZmqmnbx+/h31wwqX0hR3ZKO5hZLsHSWh1mfHtAYmaiPacGYPYf
-	 zD+G3nzFqTN4iMZS9bmiCyxSnPH2CSimOtMte+TjZDNOMGVeQkx6lksNUm1ym0oR1sw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793711683;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=rVMu4rtivE+4uT+wryolWoG5P/tne9KaZkuGtzcKWPs=;
+	b=vVGMMpOyXISGDxAvRd+6weDSZXA5XXSvWbXgWcnOw1qumAlp2/oVyZacdsw0O1EUPKX3
+	 GLk07KAcIc2ySTpG0v2kPBjQoDz57LAdt7c/cThAEEPNKyZR76SeOU/9vIL7WXTHy4xXI
+	 QZdvzK4iLe3ZU4UTXZmVMgAq8JL9p4bErWO9tt+LqkKIPeZLZWuTSQJKz14NBVFtihUB3
+	 IRvD1LHWQ8y0d2KqcI3falIfVx63tXFbeHbjFo3kiIxQsEsO/xE+9pyBOsA7z7aUCdLJv
+	 AYwyi4N46ZBritUslWLC+GFpGAbD3dw8JuWbgVvNsdd6rr8Gwqkk3NzwxuI8T7aAm/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="X/QqQ3Zp";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=igalia.com;
+	spf=pass smtp.mailfrom=igalia.com;
+	dkim=pass header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=aerYH+HI;
+	arc=none smtp.remote-ip=213.97.179.56
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 923646083635
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 13:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1481606A324;
+	Tue,  3 Nov 2026 13:14:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1481606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X/QqQ3Zp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC91C1F0157F;
-	Tue,  3 Nov 2026 13:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793711190;
-	bh=4t5qgb3kRPkkx38LxHpP3L1ZUslZ1VfKOsMAe4GNMpk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=X/QqQ3ZpVUj/qXWcMuAp2cL/EfqG4U/8L4kVldR2ctbxhLmIM72xTo8854+nMEqqX
-	 9i2P8bx11TrCUKd3TPSly99kOvYudJo9aBpkXwj8SHYY0kHiQtzw5MWJd8dpaLEmQu
-	 0sl7fchg1YrH2Insj2aTnXcndSDBXz38Uvvkz1d3/c8fPlxYZHZ+++pV3vL4e5oIc+
-	 SNg2j4SJu49svxwBlLQUudB+T9ApzTBnNY7lHKsqkAJom7zEuqacRlalL68eI8krjD
-	 1b8F92mLyZUX9zCp1TwNHZDn5/abJ3/N1vfvanQTvcUJoZidwQ3hYQ19OW8DqS0iGk
-	 PO0JPEfbIVIFQ==
-Content-Type: multipart/mixed; boundary="===============5224988881577539910=="
+	dkim=pass (2048-bit key, unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256 header.s=20170329 header.b=aerYH+HI
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:From:Cc:To:Subject:
+	MIME-Version:Date:Message-ID:From:Reply-To;
+	bh=rVMu4rtivE+4uT+wryolWoG5P/tne9KaZkuGtzcKWPs=; t=1793711681; x=2109071681; 
+	b=aerYH+HIKE6hoEYy253iqS7vKie5T5ZZBBTXtHO+JGU/H7IVAimBuCnVNtTbkgf/Nej6OLhEVOk
+	Yaz42wAC2TkkC2mLw0XMhJS7C7y0mhxmt2AK/S6sc/XipKjS70tVk+ciGHdq5ufxaEFr66s39FR0o
+	SKZUVS7Adm7Dkqik9PSAzCHrzU9GHUt3/0ZXKDleGjl7C5coX4h7gozjzhrUz/2bJYLF+Zq1EL6Qv
+	NeJxOhXDgOUhfbV5aI++wtGn9aw3oEE7bGRHhpV6r6FmuB1hWjhVE6QTZmlVtQF+Axx5NjLsLzdI/
+	FRlv6Fmsyejf0xvXX0WiT0ozV3JWhWanNzbg==;
+Received: from [58.29.145.179] (helo=[192.168.8.237])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1xOELH-001F30-R0; Tue, 03 Nov 2026 14:14:24 +0100
+Message-ID: <bcf2e1c2-bc97-4d8e-a690-a1836a371033@igalia.com>
+Date: Tue, 3 Nov 2026 22:14:15 +0900
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,64 +57,114 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <241dc212e4511cc5c0aacd95e05d56548b14f600c345122ffe8ea54b47eb4ad9@mail.kernel.org>
-In-Reply-To: <20261103122733.1383002-8-daniel@iogearbox.net>
-References: <20261103122733.1383002-8-daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next v2 07/20] bpf: Move the division magic number selection out of the x86 JIT
-From: bot+bpf-ci@kernel.org
-To: daniel@iogearbox.net,ast@kernel.org
-Cc: puranjay@kernel.org,memxor@gmail.com,xukuohai@huaweicloud.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue,  3 Nov 2026 13:06:29 +0000 (UTC)
-
---===============5224988881577539910==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: libarena: Cache the rbtree's
+ leftmost node and count
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, david.dai@linux.dev,
+ Gavin Guo <gavinguo@igalia.com>, bpf@vger.kernel.org,
+ sched-ext@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-dev@igalia.com
+References: <20261028060046.549097-1-changwoo@igalia.com>
+ <20261028060046.549097-3-changwoo@igalia.com>
+ <DMJGWV96Y5SV.33OTYFHFZQ1WT@gmail.com>
+From: Changwoo Min <changwoo@igalia.com>
+Content-Language: en-US, ko-KR, en-US-large, ko
+In-Reply-To: <DMJGWV96Y5SV.33OTYFHFZQ1WT@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> bpf: Move the division magic number selection out of the x86 JIT
+Hi Alexei,
 
-TL;DR: Nit only: the long comment above bpf_magic_div() is hard to follow and
-repeats the in-function comments and struct field comments; suggest trimming
-it to what it fills in and when it returns false.
+Thanks for the review.
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
+On 11/1/26 10:03 AM, Alexei Starovoitov wrote:
+> On Tue, Oct 27, 2026 at 11:00 PM Changwoo Min <changwoo@igalia.com> wrote:
+>>   struct rbtree {
+>> +	/* Writer fields, on a cache line of their own. */
+>>   	struct rbnode __arena *root;
+>>   	enum rbtree_alloc alloc;
+>>   	enum rbtree_insert_mode insert;
+>> +
+>> +	/*
+>> +	 * The leftmost node and the node count on their own cache line.
+>> +	 * The writer keeps them current, and readers may read them without
+>> +	 * the writer's lock (see rb_first() and friends).
+>> +	 */
+>> +	struct {
+>> +		struct rbnode __arena *first;
+>> +		uint64_t nr;
+>> +	} __attribute__((aligned(RB_CACHELINE_SIZE)));
+>>   };
+> 
+> That's 16 -> 128 bytes.
+> Without perf numbers it's a premature optimization.
 
-[ ... ]
+You are right. I ran a scheduler-side task queue built on this rbtree
+(based on scx_lavd replacing its DSQs) on a 2-socket, 192-CPU EPYC
+machine (no hyperthreading) to compare the aligned vs. unaligned
+versions. The following are the results of the 10 runs.
 
-> +/*
-> + * Magic number for the 64-bit division or modulo by the constant d of a
-> + * BPF_DIV or BPF_MOD with BPF_K, signed per is_signed, as the JITs emit it:
-> + * the high half of the product of the dividend, shifted right by pre for an
-> + * unsigned division, and the multiplier m, shifted right by s, the add
-> + * sequence of bpf_magic_udiv() instead when add is set, and for a signed
-> + * division with the dividend added for corr > 0 or subtracted for corr < 0
-> + * before the arithmetic shift and the sign bit of the quotient added after
-> + * it. The dividend of an even unsigned divisor is shifted by the trailing
-> + * zeros first when the magic number needs 65 bits otherwise, the one of the
-> + * odd part then fits without the add sequence. Returns false for the
-> + * divisors left to the division instruction: 0 and +-1, the unsigned ones
-> + * above 2^63, which a negative d stands for, and a shift the sequences do
-> + * not take, which d >= 2 never gives.
-> + */
-> +bool bpf_magic_div(s32 d, bool is_signed, struct bpf_div_magic *mag)
+                                     aligned        unaligned
+   perf bench sched messaging (s)    0.51 +- 0.01   0.50 +- 0.01
+   perf bench sched pipe (us/op)     3.18 +- 0.04   3.19 +- 0.04
+   schbench full, wakeup p99 (us)    78.3 +- 5.7    79.5 +- 3.6
+   schbench full, RPS                44941 +- 124   44954 +- 86
+   schbench 2x over, RPS             45146 +- 101   45133 +- 141
 
-this isn't a bug, but could the comment above bpf_magic_div() be cut down
-to what it fills in and when it returns false?
+There are no statistically meaningful differences so I will drop the
+alignment in v2.
 
-The opening sentence is one long chain of clauses that is hard to follow.
-The trailing-zeros sentence and the closing "a shift the sequences do not
-take, which d >= 2 never gives" clause repeat the comments inside the
-function body ("Shift the dividend by the trailing zeros of an even
-divisor first ..." and "Never hit for d >= 2, kept as a guard ...").  The
-meaning of m/s/pre/corr/add is also described in the struct
-bpf_div_magic field comments in include/linux/filter.h.
+> 
+>> +	ret = rbnode_remove(rbtree, node);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (was_first)
+>> +		rb_set_first(rbtree, next);
+> 
+> In an RB_ALLOC tree rbnode_remove() frees the node and then rebalances
+> the tree. first points to the freed node all that time:
+> 
+>    CPU 0, holds the lock            CPU 1, no lock
+>    rb_pop()
+>      rb_node_remove()
+>        rbnode_remove()
+>          rb_node_free(node)
+>                                     rb_first_key()
+>                                       first = rbtree->first
+>                                       first->key    <- use after free
+>          rebalance
+>        rb_set_first(next)
+> 
+> buddy_free() poisons the node. A prog built with ASAN gets a report from
+> rb_first_key().
+> 
+> rb_erase_cached() moves rb_leftmost before rb_erase().
+> Should it be the same here?
+> Move rb_next() from patch 3 in front of this patch. Then at the top of
+> rb_node_remove():
+> 
+>    if (rbtree->first == node)
+>            rb_set_first(rbtree, rb_next(node));
+>    WRITE_ONCE(rbtree->nr, rbtree->nr - 1);
+> 
+> and no need for the wrapper, was_first and the rename to rbnode_remove().
+> 
 
+Sure, I will move rb_next() before this patch and update first and
+nr at the top of rb_node_remove() in v2, as you suggested.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Regards,
+Changwoo Min
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41637976292
---===============5224988881577539910==--
+> Patch 1 looks good.
+> 
+> pw-bot: cr
+
