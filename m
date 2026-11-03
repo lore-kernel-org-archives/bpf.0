@@ -1,61 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793698487;
-	b=gGqeAa9F5YPD1elqbAqfG598hefqtXfhujAhvmpfNkaVvr0c32f8PamPiT8Hlp9QCLMr
-	 hrr/C9qf5TRUsgh3VghrhHPH6S6uapK/oJv2X5T9UAa24MGvcQvaYQ+ITkAiAvpdOav4O
-	 u5jFbw4KoCnxsoYcIwUnehRCVPPkih/MS9aPD81qYKKnpTP7aX138WoKj16RGBb5DQ4Ku
-	 X5rGHyJvaXBuz52bZP3bVdG/AFd1DajHkVwDdd7eJ4vUGqsdpbYcWsjBqukXYBypmr5Od
-	 LtZbC7tO8s4mXFsW4fVqx39kM8YxFbVqdXDjhSYYTOvxeyAVHzwAuDQUT0qlgeWb+OA==
+	t=1793698806;
+	b=uL8cajN0L8iVEVvT4EIQw1FOReDKOXr7G6U7zZ9+YQpr+ivrzDh/LzakDMyaFYLY23gZ
+	 dYFlEHP9oxU0bUnzYLrLC86J7ogj8Um8FREeaRJAW4+rzuFCtja7t2mnt14X22XhgO46M
+	 hDEZecKh1p64kEK+WeUwiMacf/ov1nR0Ri40DOfc3yW0iLdMbGVYfxCRix2yvdrW57bzh
+	 xP9sa5Kya8hOwcI6CVEVDldMaGaKoi9XQQaUT+Zebsw+Kb+fyfjrIY0oJkEpetVHj4HJp
+	 FqrFWSUdwjL9zrSYQOC8nfoh8ON2Hd3lOQJnU1jYrA0rWiik13GcqcqnpN8ViTdWGOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793698487;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=nEqMgqyd/762KLfRuk3SpbGEirCMEdUQqsbedRol0yE=;
-	b=KATKv71uQrS9wuiusnPZGvaZRQ0YjojfR6qQXrM09HusG5BEB3Dw+uZk2LWLGKxbjFmq
-	 1PLcyH4NBvU7Tr/ueiAhcr5TH3mZBy46ShsYvB3VyeR5GjBJqd+atDgy6vp5lr5RvOajA
-	 W1aejfGH27WjmV3N1zTUoWnlHcDpmSLBZLmrF3kBzqsE41yWET05/9Ig2AeyyXhbavkB/
-	 cll4u8tB0v3bEf0Duuj4ETA6m5wDw6Rrz0wcPnY5n6JHug9AO0RnjL0A3QNaAltfBXm1W
-	 XkXwEc4fCSaKZoQ2mki3L3G38qvLmHluRMSlCtZAMWBcs3nyGKnAKOpdeNchGV6A/nw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793698806;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=l9NYlvgHlUWqzrB8ItT1431hoKjJzv5jDHoE1wF/pE8=;
+	b=xoE5dO6n69tWQbLHqMWYILGGQG/Ygt7Gw+Cs3F7scARWbng2B+8Tvx69n6NX8WaX7mAB
+	 of/DttBr9zKEnd7oOr2kbk5F22P/4jXbvAJXLw+PTKIi3m44/hy43LpzFHo/7pMKHhsIw
+	 s5bXUPb7JPSAEmVL5byQCZriF5nrepJNwXxy7YBgDa6E3nGbYqSEHki2KvzJ4oxJdaIG/
+	 QL8wYaXvmxF5YCfzntg7kWHy13zYwwa12ubwkasUqRr9wVlEUE8sCa+GIvAKCeCpeHFcV
+	 n148nWe1mABEjcmnksnsROLYVkLeBgyIycJ7G2ZiIOCrbuVdhYPoX1GNTs9vzgi3hpA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fdI4SjA0;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jea4Zofg;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF265606A324
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 09:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5C6606A327;
+	Tue,  3 Nov 2026 09:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fdI4SjA0
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14061F000C1;
-	Tue,  3 Nov 2026 09:34:43 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jea4Zofg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C904D1F000C1;
+	Tue,  3 Nov 2026 09:40:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793698486;
-	bh=nEqMgqyd/762KLfRuk3SpbGEirCMEdUQqsbedRol0yE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fdI4SjA0lHJciGnHDno1xeSGphHtiyyMkRp/eADiuetnME44g0gH9TcX76yI/KLok
-	 UGYcSMMq/GHgUtH92R+7vulmM1WucYKnyeb0Zi5HKH5oXq2CIHKJ9LOcehAr/VNWCd
-	 kjJQBRkB45IJxKKUKY8jYshJvXM+omhS94UJnclZDzkQnt8YyLbQLI0ke/l7vnbosJ
-	 2k4QxA9yfdmqJCc03NttJZLum0yeGJmB7lEDmwwZCKlYscrosqaS0sX/lKXv9LaXVr
-	 LvGGH2mq06UZvflVEd9U8vl1qBT2oN8Cv8mbSkDAyOSG4n1ydM7NpBji1QFEynphJN
-	 EAiQscsJ99AWw==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	HyeongJun An <sammiee5311@gmail.com>,
-	Christian Simon <simon@swine.de>
-Subject: [PATCH bpf-next 4/4] selftests/bpf: Verify classic uprobe attach types
-Date: Tue,  3 Nov 2026 10:34:00 +0100
-Message-ID: <20261103093400.112178-5-jolsa@kernel.org>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261103093400.112178-1-jolsa@kernel.org>
-References: <20261103093400.112178-1-jolsa@kernel.org>
+	s=k20260515; t=1793698805;
+	bh=l9NYlvgHlUWqzrB8ItT1431hoKjJzv5jDHoE1wF/pE8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=jea4ZofgkJjMwLA5ETMUEGEDhwlRHat2oE9vgMNHgWOsIKp7O6VoWTr3lo/r1ZyKT
+	 IaeWPOrXT/VPOdAHAWkUSaVS52mdHaONSEvnKSuiTVKjWiyHJ8CtfvEb1gHmQTrxaI
+	 nm3DYcV7WDSyKXrN6xvkb2uGglJa9YrLeOsFIRDR6v/6U2NbqvlSkSDU7/nm+k2h0I
+	 FA3KogDeaNO0PE3BJpLm2oWllFWha6lSq7k0U+7OeXYJMDcjPfd3eQKjQkWZlDeT0M
+	 Z/H6Ho9niWN1sFoosFBtUwKZfODOwfubHDJflcKTTtigSZL9cByJdyNrZMzWl0QFjJ
+	 wU1iMQK9TcE3w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA3153805CCA;
+	Tue,  3 Nov 2026 09:40:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,30 +54,44 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] eth: fbnic: Report the logical RX queue to XDP
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179369880455.983821.231132787856931883.git-patchwork-notify@kernel.org>
+Date: Tue, 03 Nov 2026 09:40:04 +0000
+References: <20261030141452.1173282-1-bjorn@kernel.org>
+In-Reply-To: <20261030141452.1173282-1-bjorn@kernel.org>
+To: =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
+ pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, horms@kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 
-Check that loaded uprobe and uretprobe programs retain
-BPF_TRACE_UPROBE as their expected attach type.
+Hello:
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- tools/testing/selftests/bpf/prog_tests/uprobe.c | 4 ++++
- 1 file changed, 4 insertions(+)
+This patch was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe.c b/tools/testing/selftests/bpf/prog_tests/uprobe.c
-index 86404476c1da..7d372552f5ea 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe.c
-@@ -44,6 +44,10 @@ static void test_uprobe_attach(void)
- 	skel = test_uprobe__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "skel_open"))
- 		return;
-+	ASSERT_EQ(bpf_program__expected_attach_type(skel->progs.test1),
-+		  BPF_TRACE_UPROBE, "uprobe_attach_type");
-+	ASSERT_EQ(bpf_program__expected_attach_type(skel->progs.test3),
-+		  BPF_TRACE_UPROBE, "uretprobe_attach_type");
- 
- 	urand_pipe = urand_spawn(&urand_pid);
- 	if (!ASSERT_OK_PTR(urand_pipe, "urand_spawn"))
+On Fri, 30 Oct 2026 15:14:50 +0100 you wrote:
+> fbnic reports queue 0 to XDP on all RX queues. The XDP RX queue is
+> registered with the header buffer queue index, which is always 0,
+> instead of the completion queue index, which is the netdev queue id.
+> 
+> Any XDP program that reads rx_queue_index gets 0 on every queue, so a
+> program that uses the queue id uses the wrong queue. AF_XDP has the
+> same problem: XSKMAP finds the wrong socket, and redirect to a socket
+> on another queue fails.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] eth: fbnic: Report the logical RX queue to XDP
+    https://git.kernel.org/netdev/net/c/c8848b2ca6e6
+
+You are awesome, thank you!
 -- 
-2.43.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
