@@ -1,75 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793740472;
-	b=3qqq+jMKpuXNb6bkkEyKMdrlNeWcJlmG/BG1yF3rzzFIAUR0LgzQgy7LI5QlUhB+KOLt
-	 Jk6XQ8u3QC+VqpTZqfMAElxxLqlEOpn+E/cfEGqnAJZhcv/d9dFaSoEWHnOcrTzJMA8Ef
-	 r5A++mDSzKvjic9LkhdnMuZvQrb3mixYMp5kamo8htuUvmAHofQYzDPo+6CTUCVR+7ESq
-	 TcpTIZF6GNjMARx94TemlHaTI9E7p0N7Bg1IGhvIppUGCoOd3Xme61c+qv6nTwSR99iGs
-	 hOESY+nRHRpySQTHssEgdeJlfi1d0n+h4wrkZSrsAvG9PQ5IxQA8LdTKa0TK3/G4+Dg==
+	t=1793740809;
+	b=ic8VvliphqCXeQXFlXKAWVDzgXTgXZsbL3YDG2ZiD9DSO4BF4lqhNenPbnFNGvGUM/Uc
+	 pnCzpfhfQcZJzPM6ZkukoT/9WWebp2PqSHqNj46U3mpSUtewqAgBF2B9l54rtpWEzszEF
+	 JUJK6fQ48FCGKEp+ImrrIhd+6rES1yKyrpqfJvw4nu6CgGL+aqx0Y/w+0tYA8EPBFB+OX
+	 DDVSGi0SptQ10cKqeg6U92XbrHTONQkhvMPr9DVTatwGXFMgrnqoAVni0XgfIDNIm61Qw
+	 xwvyPV5W56zbLQEyM5StdNc24k5h13XHUi11GUw3pg/iqg+ZfdTCuf7jZIYEZg7e9fg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793740472;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=+2yCJaGEbyCpc4GPm4MdejLrIvWaF/SQGhmWy+Wu8aI=;
-	b=WEUeaX9lXQK7I2MDEr2aEBJXlEhO4DyBbFWvAwdEH8lnpIImwqui0rsq+HrmPM8Yu7f0
-	 3xafcXa2nLrlzLdOhF25JBhuQ4YcJo5hTJyTrX7VuL2DUCK0PYoNHLHy13KaIG2dduL1t
-	 3u/h+lYi2SMP8ZE+aBHmTGCkw6fLmgWZC4eHR/aeAKDIum5bBA4Q+kBTAgUFDvUsufESr
-	 ArFpuSsOrvUcGiM1Kcmt1LkEDZKValIuVG5aBmOzbDolo/eCzQB5XuoI/wz7cQXR2rF9E
-	 rb0HaNVsdMpBvrE8ZeqQ1O1ujEbMZhrbmxyXvn1amSG2AXbT5I/X5lrd5VZ+KdHjrtg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793740809;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=C/5YYMN2ZgdbpmSIHlvzQMkG6vvXS4pBNreZkDhVc6o=;
+	b=gu+EUSZFFBdwtb94D0a1xoaze1h0YRDDifLu+pVFZpz6hcLSXNlVss7KN9MUWVhTuiY3
+	 Ig5Oe5fGrFBRf6BGoDZmMek+gDazNVvIcOtEniTyvUjtSVCa79s+i7ZfOlUyRIpWozYTf
+	 SY0NgHOxnq1znCE1zkAZrGsa+QqytpCE6pP9RAjr0X9n4a3MaRSnoqEuPsUBEk+ku5/Dj
+	 w4mC/Acsl+LqAzJailEPJ5BHTRP1jmOumkuiF/tS12Ty5m5e7njI02PKfWpEY0CnSHY8y
+	 WJrxB5S9gU8SRAOOUofi5DJGF/K5OFMCMg9YE94KVuVGrM9thzt9vdvfLjvpM5OdIiQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=J0GTklSJ;
-	arc=none smtp.remote-ip=74.125.82.198
-Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=in3LaZXP;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97257606EE8F
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 21:14:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97257606EE8F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080E1606A324;
+	Tue,  3 Nov 2026 21:20:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=J0GTklSJ
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-30bcb065bfdso8206739eec.0
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 13:14:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793740471; x=1794345271; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+2yCJaGEbyCpc4GPm4MdejLrIvWaF/SQGhmWy+Wu8aI=;
-        b=J0GTklSJA0yPK2BwCTAjrh9eqi5L3NgNqWDz3qWwHvFAKjuw260KypyEmWMZHb8zpQ
-         4g53u+aqrx7AhHkDvpATs7i2/vmEWInSfCx9tDXP8qTyqK6I+V4keW/5NkamP7Vf+maW
-         y27HLk7d4vqhxNompL8ALUuNpOyDgHI8EGkgu6WK/R/fin39qMbZc6ODbIqS8utfqPoQ
-         cCBJMVtE0c/FYOuCjqhHjAyzFs1P51xbWZYILfE9CzZkglJU8u1JpAaov5qOJloEcGvi
-         Wc+RgAJeTXEot7KayINFeiN6WVP2QWc2ouNKaShXUpts1teJX3yrpS8WDvF8BkeVJz9N
-         gudg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793740471; x=1794345271;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+2yCJaGEbyCpc4GPm4MdejLrIvWaF/SQGhmWy+Wu8aI=;
-        b=Oem7lLQlDPgc3drwv7NuTRSMH456X3ZJfCLEVlP9gctS3C7zdH+yD/TEK9A49gUR9a
-         ugzJYCz9HPBVVQHpW935npNEUcWMWth6c53XqQC00ddlZCwJid4Fe2DPSSJp4mnGTjwF
-         f3NErSMxvyN2wIH8/ZdlKPVLxp0ESGWzXmaYGw6gwy3jdAhpx/SRE6Ys6U1kNaL2Uluv
-         PyLYCkuSmR/L2Prvzm1+O6lhZx0Fcsp/3uSW98Pk9xQsGgt5OhPuFJMnBzRyT7wTsaW2
-         Dh/fBu/dW2FhUdI1sDMCbgoM3FUjgaEWgCmtdMfn4y6pZdRwdsRwunJZJxGeTPCMw+a3
-         3P5w==
-X-Forwarded-Encrypted: i=1; AKwUvBybzVAARdiBgR2lcb4e27LVRktqTsAjRLgW5DmjEpkdlnQPoWGULnTzMDuTv16so00G6Rc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/NqU8Fg9TV4o4+hIr8v2PfBs09gJMEJHZ29OKNK2XtMFDyaIuA
-	FQk5y2YB5Do1CzwsjVMPJ9hTVyteXzMRpuRxRwnMUQ1ogMjYGmu1d2wEmIpA4+sILx1OF2lOx4E
-	jgdk2yryABshr4KA8MJtUgttYkg==
-X-Received: from dyvj18-n1.prod.google.com ([2002:a05:693c:87d2:10b0:368:2c6d:de10])
- (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:693c:8959:20b0:369:f5f6:36a7 with SMTP id 5a478bee46e88-36a423d1cc5mr22095354eec.16.1793740470274;
- Tue, 03 Nov 2026 13:14:30 -0800 (PST)
-Date: Tue,  3 Nov 2026 21:14:22 +0000
-In-Reply-To: <20261103211424.127627-1-almasrymina@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=in3LaZXP
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBCA1F000C1;
+	Tue,  3 Nov 2026 21:20:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793740808;
+	bh=C/5YYMN2ZgdbpmSIHlvzQMkG6vvXS4pBNreZkDhVc6o=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=in3LaZXPDcQqZ7E7vWB0kFun9YW4/Dm30Sv4NjHnClWpuTdygkSgxUaffyzZNduO4
+	 LSSiTsFb8CJkhJ7wwupKGeuPEHK21LiSZUT6XbRkf5bPA+oTCpS9mQXDxGztrPSz61
+	 dBFbvQ5Zpyu0bV7yYntt+iFwMwVa+wJ/I1Lx2YxSjTHa1s12/12kEbB5w/Mj6Vz+gO
+	 XdZfL7lhfMTGOwLkAIPBAMq3oGEb8SF59Q2SBgi9qlvHclxBpCEINtX2mw5JrR4r77
+	 J36zyjrVURv8pEn4LMPr0Z/Lshi199wTQyyC3NYCw7UWWXMNhfzxtroPSuxMmMOmdT
+	 AFZYyKR8fuFbA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA2DF391B0A1;
+	Tue,  3 Nov 2026 21:20:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,299 +52,62 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261103211424.127627-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.56.0.385.gac671c819a-goog
-Message-ID: <20261103211424.127627-4-almasrymina@google.com>
-Subject: [PATCH net-next v1 3/5] net: datagram: refcount page_pool frags in zerocopy_fill_skb_from_iter()
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, linux-doc@vger.kernel.org, 
-	bcm-kernel-feedback-list@broadcom.com, imx@lists.linux.dev, 
-	linux-rdma@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-omap@vger.kernel.org
-Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Willem de Bruijn <willemb@google.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Pavel Begunkov <asml.silence@gmail.com>, 
-	Bobby Eshleman <bobbyeshleman@meta.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowangio@gmail.com>, 
-	"=?UTF-8?q?Eugenio=20P=C3=A9rez?=" <eperezma@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Sabrina Dubroca <sd@queasysnail.net>, 
-	Johannes Berg <johannes@sipsolutions.net>, Byungchul Park <byungchul@sk.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Lorenzo Bianconi <lorenzo@kernel.org>, 
-	Wen Gu <guwen@linux.alibaba.com>, Philo Lu <lulie@linux.alibaba.com>, 
-	Justin Chen <justin.chen@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Vikas Gupta <vikas.gupta@broadcom.com>, Michael Chan <michael.chan@broadcom.com>, 
-	Pavan Chebbi <pavan.chebbi@broadcom.com>, Doug Berger <opendmb@gmail.com>, 
-	Nicolai Buchwitz <nb@tipi-net.de>, Satish Kharat <satishkh@cisco.com>, Wei Fang <wei.fang@nxp.com>, 
-	Frank Li <frank.li@nxp.com>, Shenwei Wang <shenwei.wang@nxp.com>, 
-	Joshua Washington <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Jijie Shao <shaojijie@huawei.com>, Jian Shen <shenjian15@huawei.com>, 
-	Fan Gong <gongfan1@huawei.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Marcin Wojtas <marcin.s.wojtas@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Sunil Goutham <sgoutham@marvell.com>, 
-	Geetha sowjanya <gakula@marvell.com>, Ratheesh Kannoth <rkannoth@marvell.com>, 
-	Subbaraya Sundeep <sbhatta@marvell.com>, Bharat Bhushan <bbhushan2@marvell.com>, 
-	Felix Fietkau <nbd@nbd.name>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Tariq Toukan <tariqt@nvidia.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
-	Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, 
-	Horatiu Vultur <horatiu.vultur@microchip.com>, UNGLinuxDriver@microchip.com, 
-	Daniel Machon <daniel.machon@microchip.com>, Steen Hegelund <Steen.Hegelund@microchip.com>, 
-	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-	Dexuan Cui <decui@microsoft.com>, Yibo Dong <dong100@mucse.com>, 
-	Brett Creeley <brett.creeley@amd.com>, Justin Lai <justinlai0215@realtek.com>, 
-	Larry Chiu <larry.chiu@realtek.com>, 
-	"=?UTF-8?q?Niklas=20S=C3=B6derlund?=" <niklas.soderlund@ragnatech.se>, Paul Barker <paul@pbarker.dev>, 
-	Masahisa Kojima <kojima.masahisa@socionext.com>, 
-	Maxime Chevallier <maxime.chevallier@bootlin.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
-	Siddharth Vadapalli <s-vadapalli@ti.com>, Roger Quadros <rogerq@kernel.org>, 
-	MD Danish Anwar <danishanwar@ti.com>, Jiawen Wu <jiawenwu@trustnetic.com>, 
-	Mengyuan Lou <mengyuanlou@net-swift.com>, Ronak Doshi <ronak.doshi@broadcom.com>, 
-	Ryder Lee <ryder.lee@mediatek.com>, Shayne Chen <shayne.chen@mediatek.com>, 
-	Sean Wang <sean.wang@mediatek.com>, Juergen Gross <jgross@suse.com>, 
-	Stefano Stabellini <sstabellini@kernel.org>, 
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, Jordan Rhee <jordanrhee@google.com>, 
-	Ankit Garg <nktgrg@google.com>, Tim Hostetler <thostet@google.com>, 
-	Erni Sri Satya Vennela <ernis@linux.microsoft.com>, Eric Joyner <eric.joyner@amd.com>, 
-	Mohammad Heib <mheib@redhat.com>, Prabu Thayalan <prabu.ponrajthayalan@amd.com>, 
-	Chintan Vankar <c-vankar@ti.com>, Nora Schiffer <nora.schiffer@ew.tq-group.com>, 
-	Alexander Sverdlin <alex@sverdlin.org>, Kevin Hao <haokexin@gmail.com>, 
-	Karl Mehltretter <kmehltretter@gmail.com>, 
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Meghana Malladi <m-malladi@ti.com>, 
-	Jacob Keller <jacob.e.keller@intel.com>, StanleyYP Wang <StanleyYP.Wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v4 0/8] selftests/bpf: let the arena tests build
+ with
+ GCC
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179374080755.1885738.6613699311027745325.git-patchwork-notify@kernel.org>
+Date: Tue, 03 Nov 2026 21:20:07 +0000
+References: <20261103181816.254686-1-vineet.gupta@linux.dev>
+In-Reply-To: <20261103181816.254686-1-vineet.gupta@linux.dev>
+To: Vineet Gupta <vineet.gupta@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, john.fastabend@gmail.com,
+ shuah@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, jose.marchesi@oracle.com,
+ david.faust@oss.qualcomm.com
 
-When an application maps order-0 page_pool RX fragments into user space
-via TCP_ZEROCOPY_RECEIVE and forwards that mapped address into TX
-sendmsg(MSG_ZEROCOPY), zerocopy_fill_skb_from_iter() pins the pages via
-iov_iter_get_pages2() (which increments page->_refcount) while
-skb_release_data() releases fragments via netmem_dec_ref().
+Hello:
 
-Acquire each fragment reference via netmem_inc_ref() when attaching a
-fragment in zerocopy_fill_skb_from_iter() and release the corresponding
-GUP page->_refcount reference via the existing batched page_ref_sub()
-path so the TX SKB fragment reference pairs with netmem_dec_ref() in
-skb_release_data() once netmem_inc_ref() and netmem_dec_ref() handle
-page_pool netmems.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Signed-off-by: Mina Almasry <almasrymina@google.com>
----
- net/core/datagram.c |   5 ++
- net/core/net_test.c | 146 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 151 insertions(+)
+On Tue,  3 Nov 2026 10:18:08 -0800 you wrote:
+> The arena selftests cannot be built by GCC today. Three separate
+> build failures stand in the way, and they are all hidden rather than
+> avoided by the __BPF_FEATURE_ADDR_SPACE_CAST guards wrapped around
+> those tests -- the moment a GCC defines that macro, which is what the
+> in-progress arena support does, the guards stop hiding them and the
+> build breaks.
+> 
+> [...]
 
-diff --git a/net/core/datagram.c b/net/core/datagram.c
-index ecc30a6f83023..f2d6d1d7be2b6 100644
---- a/net/core/datagram.c
-+++ b/net/core/datagram.c
-@@ -34,6 +34,7 @@
-  *
-  */
- 
-+#include <kunit/visibility.h>
- #include <linux/module.h>
- #include <linux/types.h>
- #include <linux/kernel.h>
-@@ -696,12 +697,16 @@ int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
- 				refs = 0;
- 			}
- 			skb_fill_page_desc_noacc(skb, frag++, head, start, size);
-+			netmem_inc_ref(page_to_netmem(head));
-+			last_head = head;
-+			refs++;
- 		}
- 		if (refs)
- 			page_ref_sub(last_head, refs);
- 	}
- 	return 0;
- }
-+EXPORT_SYMBOL_IF_KUNIT(zerocopy_fill_skb_from_iter);
- 
- static int
- zerocopy_fill_skb_from_devmem(struct sk_buff *skb, struct iov_iter *from,
-diff --git a/net/core/net_test.c b/net/core/net_test.c
-index e20059a00003c..73da75e6ca2c8 100644
---- a/net/core/net_test.c
-+++ b/net/core/net_test.c
-@@ -515,7 +515,9 @@ static void ip_tunnel_flags_test_run(struct kunit *test)
- 
- /* Netmem & SKB fragment refcounting */
- 
-+#include <linux/folio_queue.h>
- #include <linux/skbuff_ref.h>
-+#include <linux/uio.h>
- #include <net/netmem.h>
- #include <net/netdev_rx_queue.h>
- #include <net/page_pool/helpers.h>
-@@ -841,6 +843,149 @@ static void netmem_ref_test_pp_page(struct kunit *test)
- 	page_pool_put_full_page(pool, page, false);
- 	page_pool_destroy(pool);
- }
-+
-+int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
-+				struct iov_iter *from, size_t length);
-+
-+static void netmem_ref_test_zerocopy_fill_skb_from_iter(struct kunit *test)
-+{
-+	struct page_pool_params pp_params = {
-+		.order = 0,
-+		.pool_size = 4,
-+		.nid = NUMA_NO_NODE,
-+	};
-+	struct page *pp_page, *comp_page, *reg_page;
-+	struct page_pool *pool, *comp_pool;
-+	int base_ref, base_comp_ref, base_reg_ref;
-+	long base_pp_ref, base_comp_pp_ref;
-+	struct folio_queue folioq;
-+	struct bio_vec bvec[3];
-+	struct iov_iter iter;
-+	struct sk_buff *skb;
-+
-+	pool = page_pool_create(&pp_params);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pool);
-+	pp_page = page_pool_dev_alloc_pages(pool);
-+	KUNIT_ASSERT_NOT_NULL(test, pp_page);
-+	base_ref = page_ref_count(pp_page);
-+	base_pp_ref = atomic_long_read(&pp_page->pp_ref_count);
-+
-+	/* 1. Single order-0 page_pool page (simulating TCP_ZEROCOPY_RECEIVE
-+	 * page forwarded into MSG_ZEROCOPY TX via zerocopy_fill_skb_from_iter).
-+	 */
-+	skb = alloc_skb(0, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, skb);
-+	bvec_set_page(&bvec[0], pp_page, 128, 0);
-+	iov_iter_bvec(&iter, ITER_SOURCE, bvec, 1, 128);
-+	KUNIT_ASSERT_EQ(test, zerocopy_fill_skb_from_iter(skb, &iter, 128), 0);
-+	KUNIT_EXPECT_EQ(test, skb_shinfo(skb)->nr_frags, 1);
-+	KUNIT_EXPECT_EQ(test, atomic_long_read(&pp_page->pp_ref_count),
-+			base_pp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(pp_page), base_ref + 1);
-+	consume_skb(skb);
-+	KUNIT_EXPECT_EQ(test, atomic_long_read(&pp_page->pp_ref_count),
-+			base_pp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(pp_page), base_ref);
-+
-+	/* 2. Contiguous segments on the same page_pool page coalesce into a
-+	 * single skb_frag_t while a non-contiguous segment creates a second
-+	 * skb_frag_t; all 3 GUP _refcounts are dropped.
-+	 */
-+	skb = alloc_skb(0, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, skb);
-+	bvec_set_page(&bvec[0], pp_page, 64, 0);
-+	bvec_set_page(&bvec[1], pp_page, 64, 64);
-+	bvec_set_page(&bvec[2], pp_page, 64, 256);
-+	iov_iter_bvec(&iter, ITER_SOURCE, bvec, 3, 192);
-+	KUNIT_ASSERT_EQ(test, zerocopy_fill_skb_from_iter(skb, &iter, 192), 0);
-+	KUNIT_EXPECT_EQ(test, skb_shinfo(skb)->nr_frags, 2);
-+	KUNIT_EXPECT_EQ(test, skb_frag_size(&skb_shinfo(skb)->frags[0]), 128U);
-+	KUNIT_EXPECT_EQ(test, skb_frag_size(&skb_shinfo(skb)->frags[1]), 64U);
-+	KUNIT_EXPECT_EQ(test, atomic_long_read(&pp_page->pp_ref_count),
-+			base_pp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(pp_page), base_ref + 2);
-+	consume_skb(skb);
-+	KUNIT_EXPECT_EQ(test, atomic_long_read(&pp_page->pp_ref_count),
-+			base_pp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(pp_page), base_ref);
-+
-+	/* 3. Order-1 compound page_pool page spanning 2 subpages in a single
-+	 * iov_iter_get_pages2() batch coalesces into 1 skb_frag_t and drops
-+	 * both GUP _refcounts via batched page_ref_sub, alongside a
-+	 * non-page_pool page in the same skb.
-+	 */
-+	pp_params.order = 1;
-+	comp_pool = page_pool_create(&pp_params);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, comp_pool);
-+	comp_page = page_pool_dev_alloc_pages(comp_pool);
-+	KUNIT_ASSERT_NOT_NULL(test, comp_page);
-+	base_comp_ref = page_ref_count(comp_page);
-+	base_comp_pp_ref = atomic_long_read(&comp_page->pp_ref_count);
-+
-+	reg_page = alloc_page(GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, reg_page);
-+	base_reg_ref = page_ref_count(reg_page);
-+
-+	skb = alloc_skb(0, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, skb);
-+	bvec_set_page(&bvec[0], comp_page, 2 * PAGE_SIZE, 0);
-+	bvec_set_page(&bvec[1], reg_page, 64, 0);
-+	iov_iter_bvec(&iter, ITER_SOURCE, bvec, 2, 2 * PAGE_SIZE + 64);
-+	KUNIT_ASSERT_EQ(test,
-+			zerocopy_fill_skb_from_iter(skb, &iter,
-+						    2 * PAGE_SIZE + 64), 0);
-+	KUNIT_EXPECT_EQ(test, skb_shinfo(skb)->nr_frags, 2);
-+	KUNIT_EXPECT_EQ(test, skb_frag_size(&skb_shinfo(skb)->frags[0]),
-+			(unsigned int)(2 * PAGE_SIZE));
-+	KUNIT_EXPECT_EQ(test, atomic_long_read(&comp_page->pp_ref_count),
-+			base_comp_pp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(comp_page), base_comp_ref + 1);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(reg_page), base_reg_ref + 1);
-+	consume_skb(skb);
-+	KUNIT_EXPECT_EQ(test, atomic_long_read(&comp_page->pp_ref_count),
-+			base_comp_pp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(comp_page), base_comp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(reg_page), base_reg_ref);
-+
-+	/* 4. Single-batch mixed folios via ITER_FOLIOQ: order-1 compound
-+	 * page_pool folio (2 subpages) + non-page_pool folio + order-0
-+	 * page_pool folio returned in a single iov_iter_get_pages2() call.
-+	 */
-+	folioq_init(&folioq, 0);
-+	folioq_append(&folioq, page_folio(comp_page));
-+	folioq_append(&folioq, page_folio(reg_page));
-+	folioq_append(&folioq, page_folio(pp_page));
-+	iov_iter_folio_queue(&iter, ITER_SOURCE, &folioq, 0, 0,
-+			     3 * PAGE_SIZE + 64);
-+
-+	skb = alloc_skb(0, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, skb);
-+	KUNIT_ASSERT_EQ(test,
-+			zerocopy_fill_skb_from_iter(skb, &iter,
-+						    3 * PAGE_SIZE + 64), 0);
-+	KUNIT_EXPECT_EQ(test, skb_shinfo(skb)->nr_frags, 3);
-+	KUNIT_EXPECT_EQ(test, atomic_long_read(&comp_page->pp_ref_count),
-+			base_comp_pp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(comp_page), base_comp_ref + 1);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(reg_page), base_reg_ref + 1);
-+	KUNIT_EXPECT_EQ(test, atomic_long_read(&pp_page->pp_ref_count),
-+			base_pp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(pp_page), base_ref + 1);
-+	consume_skb(skb);
-+	KUNIT_EXPECT_EQ(test, atomic_long_read(&comp_page->pp_ref_count),
-+			base_comp_pp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(comp_page), base_comp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(reg_page), base_reg_ref);
-+	KUNIT_EXPECT_EQ(test, atomic_long_read(&pp_page->pp_ref_count),
-+			base_pp_ref);
-+	KUNIT_EXPECT_EQ(test, page_ref_count(pp_page), base_ref);
-+
-+	__free_page(reg_page);
-+	page_pool_put_full_page(comp_pool, comp_page, false);
-+	page_pool_destroy(comp_pool);
-+	page_pool_put_full_page(pool, pp_page, false);
-+	page_pool_destroy(pool);
-+}
- #endif
- 
- #if defined(CONFIG_PAGE_POOL) && defined(CONFIG_NET_DEVMEM)
-@@ -1738,6 +1883,7 @@ static struct kunit_case net_test_cases[] = {
- 	KUNIT_CASE(netmem_ref_test_page),
- #ifdef CONFIG_PAGE_POOL
- 	KUNIT_CASE(netmem_ref_test_pp_page),
-+	KUNIT_CASE(netmem_ref_test_zerocopy_fill_skb_from_iter),
- #endif
- #if defined(CONFIG_PAGE_POOL) && defined(CONFIG_NET_DEVMEM)
- 	KUNIT_CASE(netmem_ref_test_net_iov),
+Here is the summary with links:
+  - [bpf-next,v4,1/8] selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
+    https://git.kernel.org/bpf/bpf-next/c/5b127a2d9d44
+  - [bpf-next,v4,2/8] selftests/bpf: don't pass clang-only warning flags to GCC
+    https://git.kernel.org/bpf/bpf-next/c/a74a26a8f284
+  - [bpf-next,v4,3/8] selftests/bpf: make arena_base() opaque to GCC's -Warray-bounds
+    https://git.kernel.org/bpf/bpf-next/c/2775ec48ecaa
+  - [bpf-next,v4,4/8] selftests/bpf: spell the addr_space_cast address spaces in decimal
+    https://git.kernel.org/bpf/bpf-next/c/0a2eb9a7fa34
+  - [bpf-next,v4,5/8] selftests/bpf: write the mixed arena/scalar ALU tests in asm
+    https://git.kernel.org/bpf/bpf-next/c/db06ab42ec4b
+  - [bpf-next,v4,6/8] selftests/bpf: drop the arena guards and tag the tests that need arena
+    https://git.kernel.org/bpf/bpf-next/c/84459cc976cd
+  - [bpf-next,v4,7/8] selftests/bpf: cast explicitly in the struct_ops arena triggers
+    https://git.kernel.org/bpf/bpf-next/c/7eead323843a
+  - [bpf-next,v4,8/8] selftests/bpf: cast explicitly in the arena subprog and callback faults
+    https://git.kernel.org/bpf/bpf-next/c/b64845f6280f
+
+You are awesome, thank you!
 -- 
-2.56.0.385.gac671c819a-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
