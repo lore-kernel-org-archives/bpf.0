@@ -1,56 +1,52 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793699972;
-	b=3FcH4G/N5esDnqI9LbSGXnZQedx0byzlW//2d/J1Pl65NKjEQN9yifjj2mPQgD4MNkdH
-	 JQWJUmzIsqxvKpyu3x2xD8GNC6FahHT9mk8z7YxoBBvwhdt2BN+6FjST8m8b+WWA6MQHc
-	 gg1gOsH6pYXRhdYu8lOF/ks46t6+pqObszCfUMLxocS2tqp+ll83TCbKf5iUE4X2rA4gn
-	 ScXlYspPSD57RAe/uvwO7Qx6PJ6b7dIzL9TyB386JHW7Rpc+uUz/onKqg9E85H98xV/16
-	 WIVaL0bL3O7lmAxYjZLhf3VPtWcS/fcoUm1FyqeO8kmOJNDr5D/ICC4mCie6txi4bKw==
+	t=1793700037;
+	b=P7Qy+21ErxuIBVOE44Y6kG3Xv/QdGj9kuwWg5EWRZqlf/RL57Fcwd/mE9VEmNuGC0I7W
+	 OTuQx//TvqcdYFPMgaUx1r4uBesDZXg9CckFba3Nb6FNCSaJxPOQoHltaHT8wYlsRq/M8
+	 q4VvQigkptsWvGAdSunnjux44KV9UMAgchYmX5hd6AVtrrTqo0JnvxeZ0xP0P0OTXYzQN
+	 OL/QWkjQllpkOvJCPUBuGdiCVQR5wdGBa3J/5RG7MBaENJ/3bJY4vWS6ImQkmd06eu2h8
+	 699EUUbP2peUzTqS9avgN/yUP4BDJAEWGcMH4YtHfM89NJsh78I2TBec9pfDk7BMfBQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793699972;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=ja/E6TkmV2USNhcIVIMnBiNF3Ue8V8sGmWj6TSPjuWE=;
-	b=WnCb6/fnrp9yt9Kdp/NTxUPdx1Ht0Aq6EV9ux4y+MoAr0BVfPathvfg5xcSS85TFNheD
-	 ix/pt70i7BuwNTlYcnLGKFlRRbmnHUwlqCrhuI9OVNKhu+uGW5z5v4X5fy/PjA3mrfLxm
-	 OKQNHyjgb5mqvz/1JigF/anLBtSahjOWJ8qvf/Pt96yG4JMBivGwROzH0HdwU/wQtm4xl
-	 4eJXqwlrVnuGCQ2jdjZcpcFv+ibMepMOuide7J7/rJyA43qVgPnTigHkKLlXMV4+VJXTc
-	 iQwKHac/UWT1SQrS78HpphRrF1cpuKcL4z6JfXAONXPi0yS2vTlpX9JnV4Wrd20bbig==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793700037;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=5eBsKnOAtib/53cPHq4YDPTfnBHbrb23tyc46Pd1NRs=;
+	b=lXucKrfkNUTgAvF0edJsxSOzlqwVWsYKUlxZCbrUe6dksclgQyKVxWNr9jslA3Y3KJs1
+	 upVkSe6d+R0vjtdNXhuZUCHWQir76NxOi2RaWLRgSF89cRl8N2ybxVALiwhY25Zlwprw9
+	 M5J7wWxW9PHY767gVgH9oQcUYcuucI6VZWlqeRJ4GoqWDLqnS93Pcl4bQwV2SbdCYGKfh
+	 yUBy8bfvBG5njwZwCV4cD8Yq3uqh0NYSD6rilns+FVe++7TCHUIk3rXWPl4D5Tw6F5nMu
+	 uAlYs9r32xduB/FnvjLqK929ns7YHC+mD/8t+FW7nbgq7hxEvJzV7pqtRs3U/ZNys0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oR4pUkIX;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6976E606FADE
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 09:59:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oR4pUkIX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE1A1F00A18;
-	Tue,  3 Nov 2026 09:59:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD86D606A836
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 10:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 165F71F0093A
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 10:00:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793699972;
-	bh=ja/E6TkmV2USNhcIVIMnBiNF3Ue8V8sGmWj6TSPjuWE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oR4pUkIXoFqy9f+RGQ2ia/lzb0NozXVQseRdR0ZfkMtbyTgrx3glZNOtrvX81w0sS
-	 nnkq49CzT/pWO90Dwi8ASD4fGsd0D/Vum8bt3z8CHr4ybFqyvx+IKbeS/BKPjz6nou
-	 IlXXonWOUMUL1mMOOa/b22CTon6hmdCOg4KpvXfou4LLhBUqAgR3KDkHWbPFLxrChw
-	 wWB5LZsOHIsfXwgCbSWt94lCvLfuXeENW/vSUhNS8flPXxOSmz/u9ibUmW2rZnGW07
-	 viIZJdBIT5yfRcD1Kn4AgMRnjBe47ScmWiW1K5yYmcrK/KvDsQcw5LJN+oVdSeaKz+
-	 193ygMLaIu7pA==
-Message-ID: <sashiko-outbox-194993@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/4] bpf: Add BPF_TRACE_UPROBE attach type
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261103093400.112178-3-jolsa@kernel.org>
-References: <20261103093400.112178-1-jolsa@kernel.org>
- <20261103093400.112178-3-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 03 Nov 2026 09:59:31 +0000
+	s=k20260515; t=1793700026;
+	bh=5eBsKnOAtib/53cPHq4YDPTfnBHbrb23tyc46Pd1NRs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=eiSil1mqSE0j2PYtwUbO9UfsvsIc5feXXEeOV0FGZxcqNNvxcFFzgkmJz2YYlj5KA
+	 W4xh6ZLH6hqIBcKHCrN/zbE+Nyix2wwVQh2jGgY9APgvDVsvgLjOBTOyyClHwvO/au
+	 xbLkvvIHhYgbqAR0qXbZwlp0ztXzvvK1lTFj6O5wjuZOXUwx8tkp4fSciwzsrUhAQ2
+	 Bh5v+AZ5LNxws7W1zrbh6S7jUGTtlLIsIA3WPGQLMQtgFidT76LzNqYUg8xD1uKKcS
+	 olKLS5u8FGkqrefsr146rJBCUIXSysi3dMug3YD64IteAWnOz21nM6rO9eDwY5o2oN
+	 MDpFozkxNK7jg==
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-93cc1ab5f6cso477981985a.0
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 02:00:25 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AKwUvBwHaYxXT+3NL41GALBdxFI2sRv/7VK1lPFsH9BoFJhkqLyx2MQqWSiPGF0xjddq146ryDI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9uq7ItFhiGsWZB/LqeIt5kYePX1gZtMt2OkNOB+J8IS9lAxijZ
+	m7INPp0Wnh6sim6sB4PQYGnaOfaK15GAqAo8YIfehVVNLhVu+YvWxwcKIeYjz5aO1584I2OEO5f
+	YWCnMVApVpoNQDx5Zj4Pdnby9dY8/hDw=
+X-Received: by 2002:a05:620a:7303:10b0:945:b101:67c1 with SMTP id
+ af79cd13be357-945b10169d1mr751687785a.24.1793700025088; Tue, 03 Nov 2026
+ 02:00:25 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,165 +55,147 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+References: <20261103025610.3738894-1-ridong.chen@linux.dev>
+ <20261103025610.3738894-8-ridong.chen@linux.dev> <CAGsJ_4xCTSctcPcC7X6Dx4zYaOycaPqs0DG7AaxB55wx1Afwpg@mail.gmail.com>
+ <9cabcddf-d807-4a36-84f1-5bb06ea72aac@linux.dev>
+In-Reply-To: <9cabcddf-d807-4a36-84f1-5bb06ea72aac@linux.dev>
+From: Barry Song <baohua@kernel.org>
+Date: Tue, 3 Nov 2026 18:00:13 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4xXDZjhN+NkvtN+vAp8Bokack_JdNgP=nGPQtHUX8_rqg@mail.gmail.com>
+X-Gm-Features: AclHuK-l8OdgfBebeJ7I2lXBHNEFb91IlwAm3Z2gmv4eIjSIYhVp7xL_4GoZss8
+Message-ID: <CAGsJ_4xXDZjhN+NkvtN+vAp8Bokack_JdNgP=nGPQtHUX8_rqg@mail.gmail.com>
+Subject: Re: [PATCH v6 7/7] mm/mglru: add tracepoint for inc_max_seq()
+To: Ridong Chen <ridong.chen@linux.dev>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Dave Chinner <david@fromorbit.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Muchun Song <muchun.song@linux.dev>, 
+	Qi Zheng <qi.zheng@linux.dev>, David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Baoquan He <baoquan.he@linux.dev>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, cgroups@vger.kernel.org, 
+	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>, Ridong Chen <chenridong@xiaomi.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] bpf: private stack remains enabled for uprobes without BPF_TRACE_U=
-PROBE
-- [Medium] bpf: missing BPF_TRACE_UPROBE validation at prog load and attach
---
+On Tue, Nov 3, 2026 at 4:39=E2=80=AFPM Ridong Chen <ridong.chen@linux.dev> =
+wrote:
+>
+>
+>
+> On 11/3/2026 2:48 PM, Barry Song wrote:
+> > On Tue, Nov 3, 2026 at 10:58=E2=80=AFAM Ridong Chen <ridong.chen@linux.=
+dev> wrote:
+> >>
+> >> From: Ridong Chen <chenridong@xiaomi.com>
+> >>
+> >> Aging in MGLRU advances max_seq via inc_max_seq(), creating a new
+> >> youngest generation. There is currently no tracepoint on this path, so
+> >> the moment a new generation is created, and how the min_seq of each ty=
+pe
+> >> trails behind it, cannot be observed as it happens.
+> >
+> > We might be more interested in why aging is triggered rather
+> > than the exact moment when max_seq is advanced.
+> >
+> > With your patch, we get:
+> >
+> > ~ # cat /sys/kernel/tracing/trace | grep mglru_inc_max_seq
+> >             a.out-93      [001] d..1.   278.276539:
+> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D4 anon_min_seq=3D2
+> > file_min_seq=3D1 nr_anon=3D{0x0,0xf016,0x12,0x0}
+> > nr_file=3D{0x1886,0xb,0x4c,0x0}
+> >           kswapd0-50      [000] d..1.   278.422400:
+> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D5 anon_min_seq=3D2
+> > file_min_seq=3D2 nr_anon=3D{0x5,0xccb6,0x3439,0x0}
+> > nr_file=3D{0x4ae,0x4f,0x55,0x0}
+> >           kswapd0-50      [000] d..1.   278.508003:
+> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D6 anon_min_seq=3D3
+> > file_min_seq=3D4 nr_anon=3D{0xccb6,0x3d29,0x1,0x0}
+> > nr_file=3D{0x0,0x59,0x7,0x0}
+> >           kswapd0-50      [000] d..1.   280.046056:
+> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D7 anon_min_seq=3D4
+> > file_min_seq=3D5 nr_anon=3D{0x3bf3,0xcbbd,0x23e,0x0}
+> > nr_file=3D{0x0,0xb,0x1,0x0}
+> >           kswapd0-50      [000] d..1.   280.124876:
+> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D8 anon_min_seq=3D5
+> > file_min_seq=3D6 nr_anon=3D{0xcafd,0x3e31,0x0,0x0}
+> > nr_file=3D{0x0,0x5,0x7,0x0}
+> >             a.out-96      [001] d..1.   290.629014:
+> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D9 anon_min_seq=3D7
+> > file_min_seq=3D6 nr_anon=3D{0x0,0x10615,0xb,0x0}
+> > nr_file=3D{0x331,0xb,0x9a,0x0}
+> >           kswapd0-50      [000] d..1.   290.653098:
+> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D10 anon_min_seq=3D=
+7
+> > file_min_seq=3D7 nr_anon=3D{0x15,0xef23,0x18c4,0x0}
+> > nr_file=3D{0xb,0xb8,0x55,0x0}
+> >             a.out-96      [001] d..1.   290.684875:
+> > mm_mglru_inc_max_seq: nid=3D0 memcg_id=3D1 max_seq=3D11 anon_min_seq=3D=
+8
+> > file_min_seq=3D9 nr_anon=3D{0xeee3,0x1afb,0x2,0x0}
+> > nr_file=3D{0x0,0x76,0x4,0x0}
+> >
+> > You can see that the youngest generation is always zero,
+> > because you're just getting the newly added youngest
+> > generation :-)
+> >
+>
+> Hi Barry,
+>
+> Thank you very much for testing and reviewing.
+>
+> > This somehow suggests that the information is redundant, as
+> > there is always a zero there.
+> >
+> > I suspect we'll need an additional tracepoint to show why
+> > aging is triggered and at what sc->priority it happens.
+> >
+> > But do you know why you trace the moment just after aging
+> > is completed, rather than the reason why aging is needed?
+> >
+> My original goal was to pair it with mm_mglru_scan_folios, to see how
+> the aging window of each memcg moves. The per-generation anon/file
+> nr_pages were added following your suggestion on v1. I put it at the
+> end of inc_max_seq() because of the restart there, as max_seq and
+> min_seq are only final after that.
 
-commit c83a6cf6c87c8d327256fad738b73343332bf238
-Author: Jiri Olsa <jolsa@kernel.org>
+The per-generation anon/file nr_pages are perfectly good, as
+they can also help explain why aging is needed, especially
+now that we're introducing new code for imbalance-based
+aging.
 
-bpf: Add BPF_TRACE_UPROBE attach type
+>
+> You make a very good point that the reason for aging is also
+> important. So I'd like to discuss which way is better:
+>
+> 1) Keep mm_mglru_inc_max_seq, and add another tracepoint at the aging
+>   decision in try_to_shrink_lruvec(), reporting why aging is needed
+>   and at what sc->priority.
+>
+> 2) Replace mm_mglru_inc_max_seq with a single tracepoint in
+>   try_to_shrink_lruvec(), right before try_to_inc_max_seq(), reporting
+>   the reason, sc->priority, swappiness, max_seq/min_seq and the
+>   per-generation nr_pages before aging. The youngest generation is
+>   not empty at that point, and the new window after aging can still
+>   be seen from the following mm_mglru_scan_folios.
+>
+> Which one do you prefer?
 
-This commit adds the BPF_TRACE_UPROBE expected attach type for classic upro=
-be
-programs, disables the private stack for programs using it in the verifier,
-and rejects attaching them to non-uprobe perf events.
+Maybe we should keep option 2 for now. Understanding why
+we are aging and at what priority is much more important,
+especially since we're still introducing some
+imbalance-based aging code.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index a9c6a4b8eecce..7c941e009a337 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5707,7 +5707,8 @@ static enum priv_stack_mode bpf_enable_priv_stack(s=
-truct bpf_prog *prog)
->  	switch (prog->type) {
->  	case BPF_PROG_TYPE_KPROBE:
->  		/* Disable private stack for uprobe programs. */
-> -		if (prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE_MULTI ||
-> +		if (prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE ||
-> +		    prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE_MULTI ||
->  		    prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE_SESSION)
->  			return NO_PRIV_STACK;
->  		fallthrough;
+It should be quite simple, just a matter of moving the code
+around a little.
 
-[Severity: High]
-Can classic uprobe programs still end up with a private stack enabled and
-corrupt per-CPU stack state when expected_attach_type is 0?
+If we later find a good reason to have option 1, we can
+always add it, right?
 
-Classic uprobe programs run via __uprobe_perf_func() ->
-bpf_prog_run_array_uprobe() in preemptible (and sleepable when
-prog->sleepable is set) context with migrate_disable() and without any
-per-CPU recursion guard:
-
-include/linux/bpf.h:bpf_prog_run_array_uprobe() {
-	...
-	migrate_disable();
-	while ((prog =3D READ_ONCE(item->prog))) {
-		if (!prog->sleepable)
-			rcu_read_lock();
-
-		run_ctx.bpf_cookie =3D item->bpf_cookie;
-		ret &=3D run_prog(prog, ctx);
-		item++;
-
-		if (!prog->sleepable)
-			rcu_read_unlock();
-	}
-	migrate_enable();
-	...
-}
-
-If a BPF_PROG_TYPE_KPROBE program with a stack depth of at least
-BPF_PRIV_STACK_MIN_SIZE is loaded with expected_attach_type =3D=3D 0 (inclu=
-ding
-programs with uprobe-only properties such as prog->sleepable or
-prog->aux->kprobe_write_ctx), bpf_enable_priv_stack() still returns
-PRIV_STACK_ADAPTIVE.
-
-Even with libbpf updated in the follow-up commit to pass BPF_TRACE_UPROBE,
-__perf_event_set_bpf_prog() still permits attaching a BPF_PROG_TYPE_KPROBE
-program with expected_attach_type =3D=3D 0 and prog->aux->jits_use_priv_sta=
-ck
-set to a uprobe perf event. If one task executing the uprobe on a CPU is
-preempted or sleeps on a page fault and another task on the same CPU hits t=
-he
-same uprobe, both tasks will share prog->aux->priv_stack_ptr and overwrite
-each other's stack frames.
-
-Should bpf_enable_priv_stack() also check prog->sleepable and
-prog->aux->kprobe_write_ctx, and should __perf_event_set_bpf_prog() reject
-attaching a program with prog->aux->jits_use_priv_stack to a uprobe perf
-event?
-
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 457d75ea71420..016d479467edc 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -11835,6 +11835,9 @@ static int __perf_event_set_bpf_prog(struct perf_=
-event *event,
->  	    (is_syscall_tp && prog->type !=3D BPF_PROG_TYPE_TRACEPOINT))
->  		return -EINVAL;
-> =20
-> +	if (prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE && !is_uprobe)
-> +		return -EINVAL;
-> +
->  	if (prog->type =3D=3D BPF_PROG_TYPE_KPROBE && prog->sleepable && !is_up=
-robe)
->  		/* only uprobe programs are allowed to be sleepable */
->  		return -EINVAL;
-
-[Severity: Medium]
-What happens if a non-kprobe program is loaded with BPF_TRACE_UPROBE, or if=
- a
-kprobe program with BPF_TRACE_UPROBE is attached via BPF_LINK_CREATE with a
-mismatched attach_type?
-
-In kernel/bpf/syscall.c, bpf_prog_load_check_attach() does not restrict
-BPF_TRACE_UPROBE to BPF_PROG_TYPE_KPROBE. If a BPF_PROG_TYPE_PERF_EVENT
-program is loaded with expected_attach_type =3D=3D BPF_TRACE_UPROBE and att=
-ached
-to a non-tracing perf event, __perf_event_set_bpf_prog() returns early befo=
-re
-reaching the new check:
-
-kernel/events/core.c:__perf_event_set_bpf_prog() {
-	if (event->state <=3D PERF_EVENT_STATE_REVOKED)
-		return -ENODEV;
-
-	if (!perf_event_is_tracing(event))
-		return perf_event_set_bpf_handler(event, prog, bpf_cookie);
-	...
-	if (prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE && !is_uprobe)
-		return -EINVAL;
-}
-
-Additionally, in kernel/bpf/syscall.c, bpf_prog_attach_check_attach_type()
-validates BPF_TRACE_KPROBE_MULTI, BPF_TRACE_KPROBE_SESSION,
-BPF_TRACE_UPROBE_MULTI, and BPF_TRACE_UPROBE_SESSION under
-BPF_PROG_TYPE_KPROBE, but does not check that prog->expected_attach_type =
-=3D=3D
-BPF_TRACE_UPROBE requires attach_type =3D=3D BPF_PERF_EVENT:
-
-kernel/bpf/syscall.c:bpf_prog_attach_check_attach_type() {
-	...
-	case BPF_PROG_TYPE_KPROBE:
-		if (prog->expected_attach_type =3D=3D BPF_TRACE_KPROBE_MULTI &&
-		    attach_type !=3D BPF_TRACE_KPROBE_MULTI)
-			return -EINVAL;
-		if (prog->expected_attach_type =3D=3D BPF_TRACE_KPROBE_SESSION &&
-		    attach_type !=3D BPF_TRACE_KPROBE_SESSION)
-			return -EINVAL;
-		if (prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE_MULTI &&
-		    attach_type !=3D BPF_TRACE_UPROBE_MULTI)
-			return -EINVAL;
-		if (prog->expected_attach_type =3D=3D BPF_TRACE_UPROBE_SESSION &&
-		    attach_type !=3D BPF_TRACE_UPROBE_SESSION)
-			return -EINVAL;
-}
-
-If a BPF_PROG_TYPE_KPROBE program with expected_attach_type =3D=3D
-BPF_TRACE_UPROBE is passed to link_create() with attach_type set to
-BPF_TRACE_KPROBE_MULTI or BPF_TRACE_UPROBE_MULTI, it bypasses
-bpf_prog_attach_check_attach_type() and returns -EOPNOTSUPP instead of
--EINVAL when CONFIG_FPROBE or CONFIG_UPROBES is disabled or on 32-bit
-architectures.
-
-Should bpf_prog_load_check_attach() and bpf_prog_attach_check_attach_type()
-also validate BPF_TRACE_UPROBE?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103093400.1121=
-78-1-jolsa@kernel.org?part=3D2
+Best,
+Barry
