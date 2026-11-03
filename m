@@ -1,49 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.150
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793698806;
-	b=uL8cajN0L8iVEVvT4EIQw1FOReDKOXr7G6U7zZ9+YQpr+ivrzDh/LzakDMyaFYLY23gZ
-	 dYFlEHP9oxU0bUnzYLrLC86J7ogj8Um8FREeaRJAW4+rzuFCtja7t2mnt14X22XhgO46M
-	 hDEZecKh1p64kEK+WeUwiMacf/ov1nR0Ri40DOfc3yW0iLdMbGVYfxCRix2yvdrW57bzh
-	 xP9sa5Kya8hOwcI6CVEVDldMaGaKoi9XQQaUT+Zebsw+Kb+fyfjrIY0oJkEpetVHj4HJp
-	 FqrFWSUdwjL9zrSYQOC8nfoh8ON2Hd3lOQJnU1jYrA0rWiik13GcqcqnpN8ViTdWGOg==
+	t=1793699065;
+	b=bkWAYCq0Pbu2VbH+mjxS7GL1GUhfgmq22maJY6zRRJJb0Y0kgQzDw4svUV4wH4Ndgtf9
+	 QvgD8/RiJIg6qfnrxoI74BboqsPNDkaYfwCsmFAPhkpd9s8Vq0EqcbHC6g/mXz35lwrx9
+	 t4c0B41BXNM+xGldmbtZoIqpmPOULPFjgORrjr2oeqWCpdJf5SUZVcNzWiPCV95/60LL2
+	 M3MKvb6a9J9pqEYg41U6UVa/CQh6TULlmSIvFfh5fiCgkmZcQtDA2xFJJi9JwSyv0o9El
+	 aj3HwCJ4HWtd7+m10hUJtQlmRMH0PSBLWs1RKooVXez6i2QzfLV7ocROgEvyfuyr4ig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793698806;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=l9NYlvgHlUWqzrB8ItT1431hoKjJzv5jDHoE1wF/pE8=;
-	b=xoE5dO6n69tWQbLHqMWYILGGQG/Ygt7Gw+Cs3F7scARWbng2B+8Tvx69n6NX8WaX7mAB
-	 of/DttBr9zKEnd7oOr2kbk5F22P/4jXbvAJXLw+PTKIi3m44/hy43LpzFHo/7pMKHhsIw
-	 s5bXUPb7JPSAEmVL5byQCZriF5nrepJNwXxy7YBgDa6E3nGbYqSEHki2KvzJ4oxJdaIG/
-	 QL8wYaXvmxF5YCfzntg7kWHy13zYwwa12ubwkasUqRr9wVlEUE8sCa+GIvAKCeCpeHFcV
-	 n148nWe1mABEjcmnksnsROLYVkLeBgyIycJ7G2ZiIOCrbuVdhYPoX1GNTs9vzgi3hpA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793699065;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=SYguy4w1YM/41pc0M9vIj3VvmIP455ki3qTLrxyk+EI=;
+	b=WSHeeHOy4igbl7Hr1Gblvp7mqKOUwWGVoax4cWkVVi1gZBzJiz9bDS41uxcDRkmDiDyj
+	 hXVySk+F1CVgjvuYAmTCO9CyefmBhz8xh9O5iW65N+1j9T8wSuzC2Al7V9EdF9D8ypJ1f
+	 k4S790tyEeZ5kgsngLTUvZF/Ll62/4UH76jGZG1ZX61Kw4rDgYFzi4YNmVECbB4npVxMi
+	 4ymKvwcSDZLbVCuzQOzAqeCtx7TWPUwidZaWG3BGlM9ftL2u6Ny76WXlko3Zw057+tmYt
+	 9axYdDr8IeGnRuWu+/RnO4C12ST3pRiV8NmTkYJUytppQVGrHBhHuLedrnRRHGIYHBA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jea4Zofg;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="BmFNg/1V";
+	arc=none smtp.remote-ip=95.215.58.150
+Received: from mta1.migadu.com (out-150.mta1.migadu.com [95.215.58.150])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5C6606A327;
-	Tue,  3 Nov 2026 09:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA366606A32E
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 09:44:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA366606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jea4Zofg
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C904D1F000C1;
-	Tue,  3 Nov 2026 09:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793698805;
-	bh=l9NYlvgHlUWqzrB8ItT1431hoKjJzv5jDHoE1wF/pE8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=jea4ZofgkJjMwLA5ETMUEGEDhwlRHat2oE9vgMNHgWOsIKp7O6VoWTr3lo/r1ZyKT
-	 IaeWPOrXT/VPOdAHAWkUSaVS52mdHaONSEvnKSuiTVKjWiyHJ8CtfvEb1gHmQTrxaI
-	 nm3DYcV7WDSyKXrN6xvkb2uGglJa9YrLeOsFIRDR6v/6U2NbqvlSkSDU7/nm+k2h0I
-	 FA3KogDeaNO0PE3BJpLm2oWllFWha6lSq7k0U+7OeXYJMDcjPfd3eQKjQkWZlDeT0M
-	 Z/H6Ho9niWN1sFoosFBtUwKZfODOwfubHDJflcKTTtigSZL9cByJdyNrZMzWl0QFjJ
-	 wU1iMQK9TcE3w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA3153805CCA;
-	Tue,  3 Nov 2026 09:40:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=BmFNg/1V
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ytP1FYc4mLUgzvNlPS6MBB0Sb8vEqTbsbrXFac19CKg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793699062; v=1; x=1794303862;
+ b=BmFNg/1Vfge10nj+Wh9lYq5C/9PkGB0qDq3YYr5sdNjpljWdlY0j4DwQnMwLfGmieJ6B0lBF
+ S9F4e0aUUhu7IXV0Yx3QB8prhHsAeDzOfbMJuaR1DyOOLEHw9NP0+3XnPM1+jI+tg/nZYtoehJ6
+ DECA8Fa37anyRzIw/yYdBGdE=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4fced7d92f6bec66;
+	Tue, 03 Nov 2026 09:44:21 +0000
+X-Mizu-Trace-ID: 4fced7d92f6bec66
+X-Migadu-Flow: FLOW_OUT
+Date: Tue, 3 Nov 2026 17:44:13 +0800
+From: Hao Li <hao.li@linux.dev>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Vlastimil Babka <vbabka@kernel.org>, Harry Yoo <harry@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Christoph Lameter <cl@gentwo.org>, 
+	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org, 
+	loongarch@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] mm/slub: Genericize x86-specific cmpxchg16b comment
+Message-ID: <aumssHCOA4D_BFm1@fedora>
+References: <20261102082730.12430-1-yangtiezhu@loongson.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,45 +65,32 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] eth: fbnic: Report the logical RX queue to XDP
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179369880455.983821.231132787856931883.git-patchwork-notify@kernel.org>
-Date: Tue, 03 Nov 2026 09:40:04 +0000
-References: <20261030141452.1173282-1-bjorn@kernel.org>
-In-Reply-To: <20261030141452.1173282-1-bjorn@kernel.org>
-To: =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, horms@kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261102082730.12430-1-yangtiezhu@loongson.cn>
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Fri, 30 Oct 2026 15:14:50 +0100 you wrote:
-> fbnic reports queue 0 to XDP on all RX queues. The XDP RX queue is
-> registered with the header buffer queue index, which is always 0,
-> instead of the completion queue index, which is the netdev queue id.
+On Mon, Nov 02, 2026 at 04:27:30PM +0800, Tiezhu Yang wrote:
+> The kmalloc_nolock() infrastructure relies on slab caches with double-word
+> atomic cmpxchg capabilities (__CMPXCHG_DOUBLE). The current inline comment
+> in __kmalloc_nolock_noprof() uses 'cmpxchg16b' as the prerequisite hardware
+> capability.
 > 
-> Any XDP program that reads rx_queue_index gets 0 on every queue, so a
-> program that uses the queue id uses the wrong queue. AF_XDP has the
-> same problem: XSKMAP finds the wrong socket, and redirect to a socket
-> on another queue fails.
+> However, "cmpxchg16b" is an x86-specific instruction mnemonic (CX16). On
+> modern architectures supported by the Linux kernel, this 128-bit atomic
+> primitive is satisfied by different hardware implementations:
+>   - arm64: satisfies it via LSE atomics ('casp' instruction)
+>   - s390: satisfies it via native 'cdsg' instruction
+>   - riscv: satisfies it via ZACAS extension ('amocas.q' instruction)
+>   - loongarch: satisfies it via SCQ extension (using an 'll.d'/'sc.q' loop)
 > 
-> [...]
+> Update the comment to refer to "128-bit atomic cmpxchg" to accurately
+> describe the cross-platform hardware invariant needed by the lockless
+> allocator, and to avoid misleading developers of non-x86 archs.
 
-Here is the summary with links:
-  - [net] eth: fbnic: Report the logical RX queue to XDP
-    https://git.kernel.org/netdev/net/c/c8848b2ca6e6
+Personally, I feel the commit message is a bit lengthy for a simple
+comment-only patch. It might be better to keep it concise and just directly
+state the purpose of the change.
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Hao
