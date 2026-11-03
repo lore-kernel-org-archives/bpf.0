@@ -1,83 +1,83 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=68.232.154.123
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793711857;
-	b=jAQlyRXdmBMjxDilL4dSUkBUzQxmCQYCVGGGM1/fekisbiHfIxueAXGvh668jU+Sxwvc
-	 lYDK2vhvgjKFFTIGEjGJCwgX1J0e7Vm4UAYisymeVzKJZAnM1aUSQgqzqbtGI1rtPPrZt
-	 w1V2l80ygG1LeG4/AM9m5QDZO1mWNzmhIEuGmFckXE3OJSulGXAg4F5Uedr1x8+kk5a61
-	 7qToOO7GgY9kJZfEcOqP32/CBBi1oYF6a9ClHRrWop/VjxQAbzA1+eO/Ed1NSkve5ZyK/
-	 lBVXW1qJqq5B6bsCwiPtppjyF8BlRiLpg05I2F8qVofN+2pRKTZK/c9yP0i12PvOz0w==
+	t=1793711883;
+	b=x79uQE9XZTNyBlTYrT4GZvU/ytbZgJYiK93zYn1RXq/Px9If+Ytk6fM1WWgKALQ3dT8P
+	 qhiAKxVPQx/MFvJ0WYeT6lfa8VTRcOyBgNHr1dyWDsY4Xe+pAkVzUw6k2DoUFJUvIuiEs
+	 R5NKNivJ0cfbGw+wdluEP8o6FkZ9q9eJzN1ToOlHZmmw1eYpvkKVD8ughrBt9hoYHJJ0o
+	 aVc4s1u5g5HFKu6dOcO8XlLpmFcHWnFv524FEu7FSVVuO/Cf4ygLU4cJqb3ER3b/Hnig4
+	 L/OVUqsyj5PO8ysa+yhSEx4I7RTqXhWNVR8XA325C+iUp/cS8ybTzjaQPMK4jNNgNtw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793711857;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793711883;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-Amp-Result:Received:Received:Received:Date:From:To:CC:
 	 Subject:Message-ID:References:MIME-Version:Content-Type:
 	 Content-Disposition:In-Reply-To;
-	bh=8jNxLKZJ0+Ujjqcgm7O6G2p5yvTyzeq9NAf4nQDsOak=;
-	b=d/w9DUM065ZoattX13MCOB6Yp1imK2EGKJc5/K45M77aLaRUc2YCy5u7Ls8Wv8skOQK2
-	 yxaPw3SC15XRWIHbiP8jCrBDTEfGsn3MnJl07yBPPV4QNsPqkaWpqyaYFBv7OU1DFSgBG
-	 ovm0RsHPOpHhIMPs339u9bEOt4P32VqQLGEmPniDLgtMjsRcIiHeVRYC13kZ3IkKKOEDM
-	 Zh6kLCeu5PvT1iKbHqtbvtM2Dn+OA4UhVaczqrTJ+/GaFgpLjVcjjfAq0240FZd0VZjLl
-	 ErCCq22GKdrloFvD/6ZC8PxFVE8sQrvt25Dr5415u3UxkAvbB4BIdPL/fOZI5BjVvqA==
+	bh=ndbDYQ+0aDAKm5IXh5NCg7VxUMjA6WygtYo6a6b0nTc=;
+	b=OUyUxlTgsp8E9ZXGd8X+jw5/qYQbLhAwXRbBFmxn8pCOGFAM4qUXrSV6aWeuke9PqZ5L
+	 wMIoepBgnz+XlOBazH7cyTzzwo0Wo3LVtl4eddxiK3lhdtpe2AaKKT1EaolD7hRdJQ1Fl
+	 mT/c1F+XpPMrQ7LIUsxV0xbCkE8xZXwOjCbFw4U41+u4BXFH9F86Pa96L92ZrieV2ZaTl
+	 jzmxkEIsvpcEOUqSsaTEKLN2fgO7zhGA5v3nHjbgE9/CY0X/khp5RnWGSILzRDIDtIlw3
+	 WjaMV+lRYarxIkeDE2ft3wh14aVeD2opIjPlI/sSJA201k+pMhqK1PnB35vs06YQijw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=microchip.com;
 	spf=pass smtp.mailfrom=microchip.com;
-	dkim=pass header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=TxhUMdX4;
+	dkim=pass header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=dEQzcJQB;
 	arc=none smtp.remote-ip=68.232.154.123
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3016F606A328;
-	Tue,  3 Nov 2026 13:17:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3016F606A328
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE516082BCC;
+	Tue,  3 Nov 2026 13:18:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2EE516082BCC
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=TxhUMdX4
+	dkim=pass (2048-bit key, unprotected) header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=dEQzcJQB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1793711857; x=1825247857;
+  t=1793711883; x=1825247883;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qg8Xxxvy/Qj+8i2OmfTlCLXN559/BTN2nQA+TRADqKE=;
-  b=TxhUMdX4RFuEJqC2GixwtZy7dKchb8pXjrJLLdG2+vzWG2Gv47dOt+N1
-   c2XQUD11CZOAdkC8+xvZKpNj6BdNV7a/pGvMISVA5kdWqkqKonOSuzpq6
-   Wh5bx7mAkXXfAb7qT7sUT/gRToxsndx0lm0soMSLVijSCo02myM8UoeRA
-   7oAxxQ/EW5t3HV899aAUy+Wk9mrn513XlGG0uD5ZEC+BWeRnLf7R81azK
-   CjmmvnBbYskI0D3pQOBrukIimYqI2LxUeyvD7LUbMFki20Xo9gm4n4gBp
-   pCOLT+jkAoWpZxfo2t1T0+kETG7O4sghctn5+FcrmkVwadr7sRgOeNSVF
-   A==;
-X-CSE-ConnectionGUID: ivVIAx7WQoekeZRNTi+1ZQ==
-X-CSE-MsgGUID: d/ZbvNGEQBmNQIcSRRskqw==
+  bh=QRLnd+UBXZsm2ULCPmbvMIfcEp/fdiFArcUzETdYZFA=;
+  b=dEQzcJQBR9jyQxcYvo7yCCtiBgBvbbGYEm+jCjpV80ohNjOjVptcxlmJ
+   nqVu5xY6Vs3MW2A4X3gSXpLMlA6s8lM6PQI90sI9B0WfYUg+cLLm8oIIA
+   uVixEJvxqHVGdvd+w6/qFLt6DMOgX1geiwBYNyJwZYsLqymY+TJs9xLLy
+   vxjwE2y2Wh8FSfV/hsEybiQKM39muEYvzWsTgE9tDZbvNEvSeOY+ZqIDz
+   XDfKgNVwt7oD3udMDNRKOapfkwyhagPjScgioxKm2z57yMA+8smVjJEVi
+   o3FwDJdYnHfAdE9SV9s6UBMIN9ATlbAi8iiMhNZzwi1+74dgCetWDa25u
+   Q==;
+X-CSE-ConnectionGUID: 0mkX0q64QtqqgJ6xhB3D4g==
+X-CSE-MsgGUID: Nw0X1Po/QHa1wucV7HivOw==
 X-IronPort-AV: E=Sophos;i="6.27,193,1787036400"; 
-   d="scan'208";a="64982494"
+   d="scan'208";a="64982512"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2026 06:17:36 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex2.mchp-main.com (10.10.87.31) with Microsoft SMTP Server
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Nov 2026 06:18:02 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.56; Tue, 3 Nov 2026 06:17:35 -0700
+ 15.1.2507.58; Tue, 3 Nov 2026 06:18:01 -0700
 Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Tue, 3 Nov 2026 06:17:32 -0700
-Date: Tue, 3 Nov 2026 14:17:32 +0100
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Tue, 3 Nov 2026 06:17:58 -0700
+Date: Tue, 3 Nov 2026 14:17:57 +0100
 From: Daniel Machon <daniel.machon@microchip.com>
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-CC: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+To: Nicolai Buchwitz <nb@tipi-net.de>
+CC: Sunil Goutham <sgoutham@marvell.com>, Geetha sowjanya
+	<gakula@marvell.com>, Ratheesh Kannoth <rkannoth@marvell.com>, Subbaraya
+ Sundeep <sbhatta@marvell.com>, Bharat Bhushan <bbhushan2@marvell.com>, Andrew
+ Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
  Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre
- Torgue <alexandre.torgue@foss.st.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer
-	<hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
- Fomichev <sdf@fomichev.me>, Song Yoong Siang <yoong.siang.song@intel.com>,
-	<netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<bpf@vger.kernel.org>
-Subject: Re: [PATCH net] net: stmmac: set XDP metadata length on the
- page_pool RX path
-Message-ID: <20261103131732.5wdtyhk7o6fa6iol@DEN-DL-M70577.microsemi.net>
-References: <20261102-stmmac_meatada_pp_path-v1-1-d93cc4f9a864@oss.qualcomm.com>
+	<pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	Suman Ghosh <sumang@marvell.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH net v2] octeontx2-pf: fix XDP frames freed as skbs on
+ interface down
+Message-ID: <20261103131757.tt4j6eyowgp4jx2d@DEN-DL-M70577.microsemi.net>
+References: <20261103-nb-otx2-xdp-cqe-cleanup-net-v2-1-5430545c9cbc@tipi-net.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -89,28 +89,17 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20261102-stmmac_meatada_pp_path-v1-1-d93cc4f9a864@oss.qualcomm.com>
+In-Reply-To: <20261103-nb-otx2-xdp-cqe-cleanup-net-v2-1-5430545c9cbc@tipi-net.de>
 
-> stmmac_rx() initializes the XDP buffer with the metadata area valid, so
-> an XDP program can reserve metadata with bpf_xdp_adjust_meta() and write
-> it in [xdp->data_meta, xdp->data), for example to export the RX hardware
-> timestamp obtained from the metadata kfunc. When such a frame is passed
-> to the stack, the skb is built in place around the same page with
-> napi_build_skb(), but skb_metadata_set() is never called.
+> On interface down, the TX completion cleanup also runs on the XDP
+> queues, but treats the pending xdp_frames as skbs. Freeing them with
+> dev_kfree_skb_any() corrupts page pool memory. AF_XDP TX completions
+> in these queues were never reported to the socket either.
 > 
-> napi_build_skb() clears skb_shared_info up to dataref, which includes
-> meta_len, so skb_metadata_len() stays zero. The stack and TC BPF then see
-> an empty metadata range even though the bytes are present in the skb
-> headroom. The AF_XDP zero-copy path already records the length in
-> stmmac_construct_skb_zc().
+> This happens when XDP_TX or redirected packets are still in flight on
+> ifdown, or when the XDP program is replaced.
 > 
-> Record the metadata length after reserving the headroom and adding the
-> frame data. No copy is needed because the skb is built over the buffer the
-> XDP program wrote to. With the length recorded, the software VLAN
-> stripping path can move the metadata together with the MAC header, as it
-> already does for zero-copy frames.
-> 
-> Fixes: e3f9c3e34840 ("net: stmmac: add Rx HWTS metadata to XDP receive pkt")
-> Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+> Fixes: 94c80f748873 ("octeontx2-pf: use xdp_return_frame() to free xdp buffers")
+> Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
 
 Reviewed-by: Daniel Machon <daniel.machon@microchip.com>
