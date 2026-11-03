@@ -1,83 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.22
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793711883;
-	b=x79uQE9XZTNyBlTYrT4GZvU/ytbZgJYiK93zYn1RXq/Px9If+Ytk6fM1WWgKALQ3dT8P
-	 qhiAKxVPQx/MFvJ0WYeT6lfa8VTRcOyBgNHr1dyWDsY4Xe+pAkVzUw6k2DoUFJUvIuiEs
-	 R5NKNivJ0cfbGw+wdluEP8o6FkZ9q9eJzN1ToOlHZmmw1eYpvkKVD8ughrBt9hoYHJJ0o
-	 aVc4s1u5g5HFKu6dOcO8XlLpmFcHWnFv524FEu7FSVVuO/Cf4ygLU4cJqb3ER3b/Hnig4
-	 L/OVUqsyj5PO8ysa+yhSEx4I7RTqXhWNVR8XA325C+iUp/cS8ybTzjaQPMK4jNNgNtw==
+	t=1793712397;
+	b=d3YvDT6dVVEcyVVXi7KRN3TgMQh31ZF6Img7mOuvyzVpVj5eI50vAtk3aUTPxMJ1cf22
+	 pXS43l6LADienIqXub0RBPGE6Iptn3jNIv5T2HAb5T5v5CS7xWAW7+uqNYIGARf7eewiW
+	 on8k5t59g1/eBqLd2zTDBLQaqFVj3KTM4V9Pleh4CtQLUipdwn+8FrD0/a/Yd9/COwmtB
+	 PMDMAjk+YsaVHyGUGoKCIa5x4jg+H9DDWwgwSVrgFCrArIp5dU1QW0P3UXKxTq0AuYaKm
+	 BchldqBqkl91e05dAll++nkfDme7UlvIe7ue22NWUBRzQCeAsanpSStUSIbav91ZHxA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793711883;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-Amp-Result:Received:Received:Received:Date:From:To:CC:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=ndbDYQ+0aDAKm5IXh5NCg7VxUMjA6WygtYo6a6b0nTc=;
-	b=OUyUxlTgsp8E9ZXGd8X+jw5/qYQbLhAwXRbBFmxn8pCOGFAM4qUXrSV6aWeuke9PqZ5L
-	 wMIoepBgnz+XlOBazH7cyTzzwo0Wo3LVtl4eddxiK3lhdtpe2AaKKT1EaolD7hRdJQ1Fl
-	 mT/c1F+XpPMrQ7LIUsxV0xbCkE8xZXwOjCbFw4U41+u4BXFH9F86Pa96L92ZrieV2ZaTl
-	 jzmxkEIsvpcEOUqSsaTEKLN2fgO7zhGA5v3nHjbgE9/CY0X/khp5RnWGSILzRDIDtIlw3
-	 WjaMV+lRYarxIkeDE2ft3wh14aVeD2opIjPlI/sSJA201k+pMhqK1PnB35vs06YQijw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793712397;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=8lMZMIQfgxM1Y1sLfd9pmLbFTG91TDyafPfpoX4xnzA=;
+	b=W06UD1uXN9JHOPoPjWhYF8kp99rexTmqPmxq6VejoTvmZBJnqwHgqG76pyuh0OKR7KAW
+	 wLPX7SgmH4NXrIwuKIzX01QzK5T08ZbYggPWt/cA5k6aDez14qKhcn/Nvmz2ntTVqvZ/b
+	 eCNY7fic8xS0vE9rKZKm4JTLRklR0V1Nm6Q/wPZF/7sdkk9f0BsLG1bKyzqatd3Vo5zKL
+	 JmT+iq+CH+aYQhI+6ui7HlYrjfELIUre0aER7kYTaJi2OhTymC0eWfZMdNFktxxEoqViB
+	 gONmVrhEcycvzzJaO6stZE0LRFnSsPwQxWlUSfTNRderIW1cejSwfUlbYRlWvXldV7g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=microchip.com;
-	spf=pass smtp.mailfrom=microchip.com;
-	dkim=pass header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=dEQzcJQB;
-	arc=none smtp.remote-ip=68.232.154.123
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	arc=none smtp.remote-ip=95.215.58.22
+Received: from mta1.migadu.com (out-22.mta1.migadu.com [95.215.58.22])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE516082BCC;
-	Tue,  3 Nov 2026 13:18:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2EE516082BCC
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=dEQzcJQB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1793711883; x=1825247883;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QRLnd+UBXZsm2ULCPmbvMIfcEp/fdiFArcUzETdYZFA=;
-  b=dEQzcJQBR9jyQxcYvo7yCCtiBgBvbbGYEm+jCjpV80ohNjOjVptcxlmJ
-   nqVu5xY6Vs3MW2A4X3gSXpLMlA6s8lM6PQI90sI9B0WfYUg+cLLm8oIIA
-   uVixEJvxqHVGdvd+w6/qFLt6DMOgX1geiwBYNyJwZYsLqymY+TJs9xLLy
-   vxjwE2y2Wh8FSfV/hsEybiQKM39muEYvzWsTgE9tDZbvNEvSeOY+ZqIDz
-   XDfKgNVwt7oD3udMDNRKOapfkwyhagPjScgioxKm2z57yMA+8smVjJEVi
-   o3FwDJdYnHfAdE9SV9s6UBMIN9ATlbAi8iiMhNZzwi1+74dgCetWDa25u
-   Q==;
-X-CSE-ConnectionGUID: 0mkX0q64QtqqgJ6xhB3D4g==
-X-CSE-MsgGUID: Nw0X1Po/QHa1wucV7HivOw==
-X-IronPort-AV: E=Sophos;i="6.27,193,1787036400"; 
-   d="scan'208";a="64982512"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Nov 2026 06:18:02 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Tue, 3 Nov 2026 06:18:01 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Tue, 3 Nov 2026 06:17:58 -0700
-Date: Tue, 3 Nov 2026 14:17:57 +0100
-From: Daniel Machon <daniel.machon@microchip.com>
-To: Nicolai Buchwitz <nb@tipi-net.de>
-CC: Sunil Goutham <sgoutham@marvell.com>, Geetha sowjanya
-	<gakula@marvell.com>, Ratheesh Kannoth <rkannoth@marvell.com>, Subbaraya
- Sundeep <sbhatta@marvell.com>, Bharat Bhushan <bbhushan2@marvell.com>, Andrew
- Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
-	Suman Ghosh <sumang@marvell.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH net v2] octeontx2-pf: fix XDP frames freed as skbs on
- interface down
-Message-ID: <20261103131757.tt4j6eyowgp4jx2d@DEN-DL-M70577.microsemi.net>
-References: <20261103-nb-otx2-xdp-cqe-cleanup-net-v2-1-5430545c9cbc@tipi-net.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A86606D825
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 13:26:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 55A86606D825
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=VwdILgRNSWIPkWDn3eJqPy63I1Bwv0LiB91pK15cOp4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793712391; v=1; x=1794317191;
+ b=RKUEs0xXGMHXqpldvK6xKP9OgY/JkqJguHg9nwDITmPZYbZSfAdhCDOfLqEXbyxGkw5DOJg+
+ sUpJMrY5rz4yDlReExV7mql76Heuw9veg2/T3jq7KFYQjb+PtZryeX40GnyotIZJX2ts1N6upNJ
+ 9H01i8xwDXIYfrtWX8KekVE4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 223b7a157b0f36b3;
+	Tue, 03 Nov 2026 13:26:31 +0000
+X-Mizu-Trace-ID: 223b7a157b0f36b3
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org,
+	josef@toxicopanda.com,
+	axboe@kernel.dk,
+	alexei.starovoitov@gmail.com
+Cc: cgroups@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	linux-kselftest@vger.kernel.org,
+	cui.tao@linux.dev,
+	cuitao@kylinos.cn,
+	ameryhung@gmail.com
+Subject: [RFC PATCH v12 0/4] blk-iocost: BPF struct_ops cost model
+Date: Tue,  3 Nov 2026 21:26:09 +0800
+Message-ID: <20261103132613.1952975-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,19 +73,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20261103-nb-otx2-xdp-cqe-cleanup-net-v2-1-5430545c9cbc@tipi-net.de>
+Content-Transfer-Encoding: 8bit
 
-> On interface down, the TX completion cleanup also runs on the XDP
-> queues, but treats the pending xdp_frames as skbs. Freeing them with
-> dev_kfree_skb_any() corrupts page pool memory. AF_XDP TX completions
-> in these queues were never reported to the socket either.
-> 
-> This happens when XDP_TX or redirected packets are still in flight on
-> ifdown, or when the XDP program is replaced.
-> 
-> Fixes: 94c80f748873 ("octeontx2-pf: use xdp_return_frame() to free xdp buffers")
-> Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
+From: Tao Cui <cuitao@kylinos.cn>
 
-Reviewed-by: Daniel Machon <daniel.machon@microchip.com>
+This series lets a BPF program take over the cost model of one device.
+The BPF model provides calc_cost() for charged IOs plus two transfer
+coefficients for the completion-time sizing, io.cost.model selects
+between the attached model and the builtin one, and enabling and
+disabling the controller stays with io.cost.qos.
+
+The builtin model is a linear formula derived from a handful of device
+parameters, and the right formula is device specific.  A BPF model can
+be adapted to the device and updated without rebuilding the kernel.
+
+The series is based on next-20261030.
+
+Patches:
+
+  1/4 blk-iocost: add BPF struct_ops cost model support
+  2/4 blk-iocost: add iocost_ioc_tick tracepoint for per-period
+      device summary
+  3/4 selftests/bpf: add iocost cost model test
+  4/4 docs: cgroup-v2: document the iocost BPF cost model attachment
+
+Changes since v11:
+
+- dropped the cgroup callbacks (the models build their state in
+  calc_cost() anyway)
+- dropped the queue freeze from detach
+- folded everything into blk-iocost.c
+- the selftest now uses cgroup_helpers: the tests create their own
+  cgroups and remove them on exit; io.cost.qos/io.cost.model are
+  root-only cgroupfs files and the test reverts them on its exit
+  paths
+
+Tested on next-20261030 (qemu x86_64): the selftests pass, and the
+2x example model doubles the charged cost over the builtin on a
+rotational device (2.01x measured), returning to 1.00x after
+"model=linear".
+
+Link: https://lore.kernel.org/r/20261028143534.135968-1-cui.tao@linux.dev # v11
