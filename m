@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793749274;
-	b=nV0wKBWTfGfGhPbzhcJbHc4AV7plheqfxodACaPJXx2kQ0/CWak+vaPd0o6ao4l+oUPt
-	 KBVwp4VX1xdM8IR9CW5BTUid6cPlumajDNH5WxO6APrZKhwOeCyC4xET3cJ2jJy2SGGHR
-	 i9xfxSl1GnBC+7WZlqOGXq2Sq2f/F6SnYT6+ueC7cHtIhatcvMe4SC37gbdDa9BmBIDlN
-	 ZhJM/a6WABm48rvLdbpqPW938L9TVnEZ1LY3P87wwBxsfnzF4zkMhZoz6nnpaSRHBAnl9
-	 GCNx1txI9CUG2k1P2Kzj1PgziOxVASFy1/DMlm7gGgH9Pvu2lu+wRgtN18788Elphew==
+	t=1793749280;
+	b=A1hP9LUAOOIr9zzkgsPOQl5jZIfFFqWmeK3AfGJiwV49qOxeQ9QqEjkBgrFhUZIwmGHV
+	 CNkYdCK5u0ix+P2EQX91HM9E3caZSL6fUQxYyIcTl+PcjrUGdjv/rO7zrbrZYfKg59Ugo
+	 sFxFobCrysWgDtEgIeMfcvC9MQXai2lUrHlyZmhqHVeIiOC2aDID4xjrM1fqc/oW3H51I
+	 UE8QkpYmBIrJORyzntBhOEo69s2Fg2HdfYphaJbHVGtR03RIeun0eESkfqkWL+TOFjI72
+	 gd2zXt+y2FGFVnawh11cLAQ/NIqE3gxEjQQIaUbmST6U5E759saBSRMv+jwFG03hoyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793749274;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793749280;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=GxDTa6SI1HdscuSDw4K4E8IXSIC9q4IT/ZKi1JT1DXg=;
-	b=u7JvsKjpY3dAkjfkqOjDzqnCm5Hp9f/pULlBD0pGUlhva+Smfnymsb+ha9C5nAtCZm6x
-	 31R0ylEX42zihqXO5DIVe3NQcRpjiefDaDVR2ZFq357xbBlkubdj9OgZWdGoZswXiWzhd
-	 1dNCPJipzmzHWF5dX0iKNlODrQsg1YgODGc8UNoWi6grpRxKw14+uKAKdeyWIQFSdDXja
-	 1J7g/ZDghkO2pkS6AhqlV7PJ1XD6z9jWshqqAZSWFLGum0jHcarKNW1zBjEO3FRhvrz8y
-	 iym57k3w+dyMOCSsp02uoh3+ldFWJDLaWp+8a6+DCS8h3Gs5yGtoPQBEVwTXahaiVFA==
+	bh=DG252wxWFY4VFP7NQq4EPNRF6QYNWw5dgS/1j2l70qQ=;
+	b=0ZFS/UWEAaJTIEBqYh+f16stfQYyqryVYnWuL+pj60S7jqeSimNOXEB4gqOkZzq9QvbP
+	 /b+LxDNDHbrWzo1Cc3aPrh1IP39kOCFBEQUG4EOsW0yjydjUhDe9YOrpOsFHXzg/0oWNE
+	 h1XTnmXy4Ruqo+xBhfFxwnh+HAy5seIiaMiFmwIwExlEPnW7Fh/Q1f2yA++xeZk6/1JMc
+	 1O5LONMY3rHcAYL3EqjNh1eK+gzHqk3uC2xsq62P8LO5gMWxy1C9vzZA6nre5+Kw7EO23
+	 qb3RzPK1fOG/gDKKFCq55iXKYTAZcGccJ75oOFge4nDIyaDuo96Ob9kfSrxwBCqRCew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pQrBH9ZG;
-	arc=none smtp.remote-ip=209.85.210.173
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lwtCpn7y;
+	arc=none smtp.remote-ip=209.85.215.178
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B04E6606A31B
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:41:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B04E6606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D4F606A31B
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:41:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95D4F606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pQrBH9ZG
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-89ff475a152so68939b3a.3
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:41:13 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lwtCpn7y
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cdb2e0062bbso60121a12.1
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:41:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793749273; x=1794354073; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793749279; x=1794354079; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GxDTa6SI1HdscuSDw4K4E8IXSIC9q4IT/ZKi1JT1DXg=;
-        b=pQrBH9ZGcR9ENEVAiJjrALbRNg3rV6DL3evfFNfByyHVGYMoCRT0m4D4X6A8rNM53u
-         iQqgCZvYEH8VcIMshMEMGSeVgF3MRD3e5b+qjmQBbsIyzkEwlt2kmvYXAzv8M7HCS+E5
-         ROD6xqINNN56MyN+y7JdCadLDkkZCYFoILyLYOGPHyo+xFJIaO6l5dBuiAu8IZobgTsc
-         iq6FPk80s5fYQXl6u73StKz9D1uuoH8axzTbLC8woHjbvHOEKKPlpQkTaegZdSmceXzo
-         zH6TZZFb7jiYkgl94PYy6mAddam6EW3h1bDgKr0B6//Gj1cRImDFCeK+VnZ55IK6wnDL
-         zxow==
+        bh=DG252wxWFY4VFP7NQq4EPNRF6QYNWw5dgS/1j2l70qQ=;
+        b=lwtCpn7yhaeQ0LVKvaAE/IJoB8IlQa/Xk0GYVgruD9QftfpR4wQswR6H2Tg8NZOKNf
+         YhE8k/E+XgonvdmkMNuDnshK9mQKa01UgoTav6cNfqatgEzlZ4uCRHstzYci6mBhnXe8
+         p53QiWYAuBOeGkJTqxGFTQMbu2oqWitBdtQH8XlAMgYWrGhBKlRP+6OiH9iLo8gRXobM
+         QsLTnkYxMFtyTabfFV1bj5hzDszu+HhbJhwkOezyeZuqpIEBhqyW7lYqC4crob1/kpjd
+         JM7iBbQ9OrcjeJ/ATtV5N/pZN3El5VDFrbKG9o5tfOXIJK+P3+8BVyUGlQDORAB50DwT
+         +o5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793749273; x=1794354073;
+        d=1e100.net; s=20260707; t=1793749279; x=1794354079;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GxDTa6SI1HdscuSDw4K4E8IXSIC9q4IT/ZKi1JT1DXg=;
-        b=g4N3Kj7qHWtJ/wPziLrxOkOepJdm8es+pl/DWH1jnsaOzzPluXbVMITvaTzSvtX1YU
-         Wg+DHuWG0m2Q5q0cnWFN9KfMAbtPVAPm8i1ndXCgQVWLGoNyeVZw19AfgxGR6FTKn+N8
-         gDr2fkjeYF8iNaGPX3lsIpkU+8Lv1z6nlcPq5wPMAoZdanFzg0a9BHLUuug+vR8R7AMJ
-         gKHRBWHdClSv9m0smr0N1LDpYDuku/GiNvkzZbp1/XpA56jUxxQ5YXHX24goI1QkeXEi
-         Uy+K8w8cgK05W8rMdNcmgN/T+nOAJ0XAPcegeC2TI2FMNrc6d9STXW2h0IJCFbgl8CgP
-         0Jmw==
-X-Gm-Message-State: APuU4Z/2Gy0BVvcvlhxH5ZybvWXpFFjK1zUHfF8WdG4EP6vPFr/U0b6Y
-	pKrS038eZ9Ol/y0+i2pKUaEUmsYiaq+Yp/acGOoNr29oXmC8Rct9wsUBZceF+g==
-X-Gm-Gg: AYBFou2pkwxxX3q3xyTRIrQJ9QrxtDVqzN8XIoHipKEd19kK7ogohCucnSoyXjXjBdR
-	915/yKslPzHMJcVAH7XPEufJC1l9BfOJJBK0bicxqHYfgWDINwZ9PauK/cgIC+KMrWQpH6zhlTN
-	3e8VJkAB5fgThAw2YueD9acJb6ST1FLgC8TzcLwmW/nXpdZZQeS3UGePrkiSU7CM0lgOH3XlrdI
-	ijiStyH97AKryxdpli0SX3AUuQcpagyi/8fWhjkeGEJCgdP7Zfki1BeOkSPCZ72aw0QiqFBDxxZ
-	jrlF65Sm2sxgGvcEh08TRD6l57S6R/tkIOERYguz7THOTRjiRvCtU49t5IKnvR8RsNk6mEUfs+a
-	Wyvb0O6oz/c49Cbd+R5ZTEcgYjMCs5SR163xfIZz1FiLl6wcisYqL+bGqpVw3Kpe/7S1aWan1YW
-	6uUyTnht5B7gNlmo789L15zy5kI6a8l8LbxTXNfRNUgAthPf9s+eDTsFjSFpcoNc06Zs71fBCLw
-	KWanopcKxahqKaw3MZmGDgEEFz54jkg9fnJNMU/ncdvSDqLxp72Br8Rskqt6opckGHckncFsy8b
-	J1xPAzypw1bYGLoNZYOKNhklQ+VPQh5zlgmADMnp/W8aJfnVMmJzVvFCxthfj3rQ+s4WzvXuXz9
-	v5ef6QSXol2sjw6O0JIVic7vBP46YnWgGRWa1Cqu6r0U6IWpMqIAa8f67F/2qdcLMohZAr186nA
-	==
-X-Received: by 2002:a05:6a00:3a1c:b0:878:34d7:69b2 with SMTP id d2e1a72fcca58-8a9bffd63e3mr10705309b3a.57.1793749272685;
-        Tue, 03 Nov 2026 15:41:12 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b09af91d24sm151264b3a.29.2026.11.03.15.41.12
+        bh=DG252wxWFY4VFP7NQq4EPNRF6QYNWw5dgS/1j2l70qQ=;
+        b=THoRDZZbbSBE1ssAKhs3/csjFahDE4k+I1Pt+OIzsmJSNy6Fc0/DY+ljiQG17dI2Hc
+         7pqSu7di1exjM1yEV9UCWtg2fNLTvZXiidVoEpXCG+lPBKco91FrprGvu8I6pr28ervY
+         GZJKDpXMZnngarsIlXTBZl6iXQw6ciSzwV8+/j4HoIgOLVwJ4FyVeVaKQYX/77AB1aza
+         tTa2W2eK0wxemx07iNRR3a8TZ45yY6Ehhxv9orL8AHfkSCPIISMAYXstmyqiq81PAfe9
+         qBaGE0jLn+PZ1u8HjN2gthhodfQLQUe3v4gb6JbJklvXoK5U9SJxce4vwt2jBqB5uvDC
+         S0+g==
+X-Gm-Message-State: APuU4Z/9AYlnsOY8q5I1/DlKyLBVIyLUDBRsArRJdgWRl/BthqOpMEPX
+	euU/4kJmaMjqnISRsomW+0LDZqQ4lpYHdJp4TMZG37DRE/bifMkfcRnZikAhCA==
+X-Gm-Gg: AYBFou2r285elBwruKiy4ty2uaKXU7Y5HEPjkkbBPq48uvLFFIA9P6YPaVkxheeZ31J
+	FcCOktVRjfoJZDJnLgqqpkuUluQEzc9BIzUqsc9RokrPs0FSbwvIdoAjkdhOE82/IYCGT6bj57e
+	PNvEIwyU5vJ3ViVIxM0geC9QLKBUf9VotXaxm7Ra3aqxo5YBO+IJFDtdw8al7yF70ymfG0Zh5Uk
+	PEPbKqmvnZnuDMPIKUU8dEa0niglPz5ZC+GU+SvINuL7pUWBhyVlLFqebVxP+JrGggIUdvb/bmj
+	jgT2GtwwDLdR29M5z099HS7PzybKWsK1Q87gOf4n1eDcoKSV6L0b7z6YKk/dli+4fA4ZO5InT8M
+	uk6gmC4F7s0o6WtxUIhcZk9bfBvncTwzDTa9V3LkQbYkp8HCo//HsqMi+zUpvcOK7ThvTf3TEzr
+	2uSdDyIRfBOPmuOU9BIPHPLj+sATtFMYm5AV5EdRbV2AyoyoQAdnfSBSDahTvd1tYLB9FwlpkxG
+	I4s0WzsGwkVRVbjHAjrAHvu3Eg3gUN4AdL8EV7MKnE6nxZdmaXA0Xb8IjP0Ga8FcEEZX29l4+zr
+	mLKQDqWYEOAAtSRbNfHmI/A1p6d0WWFojkczxSI5FFazXrny5KGC1u8F1H5mf7rAzrM75BS6Gv1
+	YU5DQgsPDDMbZ2O4gQcKSloTCg8naDYNS0osa3cAz6/VF+dMGktAeqgjS81a3dF6vO/Zf0dd2uA
+	4=
+X-Received: by 2002:a17:90a:e397:b0:3b0:96ce:104f with SMTP id 98e67ed59e1d1-3b096ce1144mr283855a91.5.1793749278672;
+        Tue, 03 Nov 2026 15:41:18 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c7dea24sm6230631a91.5.2026.11.03.15.41.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 15:41:12 -0800 (PST)
+        Tue, 03 Nov 2026 15:41:18 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 01/37] bpf: Keep the range of a packet pointer when a number >= 0 is added
-Date: Tue,  3 Nov 2026 23:40:26 +0000
-Message-ID: <20261103234104.208239-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 02/37] selftests/bpf: Test range of a packet pointer after a number is added
+Date: Tue,  3 Nov 2026 23:40:27 +0000
+Message-ID: <20261103234104.208239-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
 References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
@@ -104,108 +104,135 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-After a prog compares 'pkt + 54' with pkt_end, the verifier knows that
-54 bytes are in the packet: the range of pkt (r=54 in the log). The range
-stays when the prog adds a constant. But the verifier clears it when the
-prog adds a scalar that is not a constant, although it has an upper bound:
+In each test the prog checks 54 bytes of the packet. Then it adds a number
+that is not a constant to the pointer:
 
-  if (pkt + 54 > pkt_end || off > 38)
-          return 0;
-  *(u64 *)(pkt + off)     rejected: pkt has r=54, the sum has r=0
-
-Keep the range when the scalar cannot be negative. The verifier accepts a
-load if umax + insn->off + size <= range, where umax is the largest offset
-of the pointer. Thus it accepts range - umax bytes after the pointer. A
-scalar in [0, N] adds N to umax, and it moves the pointer by N at most:
-
-  pkt                 pkt + off         pkt + 38        pkt + 54
-  |                   |                 |               |
-                      the sum           its umax        its range
-                      |<-- 16 bytes ->|                     accepted
-                      |<------- 54 - off bytes -------->|   in the packet
-
-Clear the range, as before, when umax of the sum is not below it. Such a
-range permits only a load with a negative insn->off, which stays rejected.
-It would make states different that regsafe() can prune today.
-
-reg_bounds_sync() of the sum stays: the alignment check and the check of
-the smallest offset use what var_off and the step tell about the sum. But
-it can make umax smaller. Then make the range smaller by the same number,
-with bpf_trim_pkt_range() of commit 88e2c896d859 ("bpf: Keep the valid
-bytes of a packet pointer in scalar evolution"). This is sufficient because
-the sum gets a new id, as before: no other pointer shares its range.
-
-'(pkt + x) - y' can keep a range now, and BPF_SUB does not sync a result
-that keeps a range. A prog that needs what the sync learns from var_off
-about this difference (smallest offset, alignment) is rejected now. To sync
-and trim the results of BPF_SUB like a sum would also change 'pkt - y',
-which is not synced today: valid progs that load today are rejected then.
-
-Sums of paths that checked different lengths now differ in the range, and
-regsafe() prunes fewer of them. veristat shows the same verdicts and insns
-for Cilium, Katran, sched-ext/scx and the selftests. These progs check only
-the bytes in front of a variable offset: no sum keeps a range.
+ - [0, 38]: the range stays, 16 bytes after the sum can be read.
+ - [-4, 4], or [1, 54] that can get to the range: the range is cleared.
+ - The sum has a new id. A comparison of 'sum + 100' with pkt_end must not
+   give 107 bytes to the old pointer.
+ - var_off makes umax of a sum smaller by 2. The range must follow, or the
+   prog reads 2 bytes after the packet.
+ - 'pkt + 4' plus a loop counter 4, 12 .. 36 is a multiple of 8. Only the
+   step of the counter shows that. The prog loads with
+   BPF_F_STRICT_ALIGNMENT.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
+ .../bpf/progs/verifier_direct_packet_access.c | 100 ++++++++++++++++++
+ 1 file changed, 100 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 62f26149c3ae..fa53ee735762 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16358,6 +16358,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 	const char *reason;
- 	int ret, bounds_ret;
- 	bool to_scalar;
-+	s64 smax;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
+index 139ff019d87d..6c1d2014b95b 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
++++ b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
+@@ -1032,6 +1032,106 @@ l0_%=:	r0 = 0;						\
+ 	: __clobber_all);
+ }
  
- 	dst_reg = &regs[dst];
- 	/*
-@@ -16513,12 +16514,18 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 			if (!known)
- 				dst_reg->id = ++env->id_gen;
- 			/*
--			 * Clear range for unknown addends since we can't know
--			 * where the pkt pointer ended up. Also clear AT_PKT_END /
-+			 * The range is what umax of the pointer may get to, see
-+			 * check_packet_access(). umax of the addend was added to it
-+			 * and the pointer moved by that much at most, so the range
-+			 * holds. Clear it if the addend may be negative: umax says
-+			 * nothing then. Clear it if umax got to it: it permits no
-+			 * byte at or after the pointer, and it would only keep equal
-+			 * states apart in regsafe(). Also clear AT_PKT_END /
- 			 * BEYOND_PKT_END from prior comparison as any pointer
- 			 * arithmetic invalidates them.
- 			 */
--			if (!known || dst_reg->range < 0)
-+			if (dst_reg->range < 0 ||
-+			    (!known && (smin_val < 0 || reg_umax(dst_reg) >= dst_reg->range)))
- 				memset(&dst_reg->raw, 0, sizeof(dst_reg->raw));
- 		}
- 		break;
-@@ -16611,11 +16618,18 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 	 * A packet pointer that keeps its id or range is checked against a
- 	 * range set from the checked pointer's umax, so var_off must not tighten
- 	 * its umax. r32 must still match var_off for reg_bounds_sanity_check().
-+	 * A sum with a new id is different: progs rely on what var_off and the
-+	 * step tell about it (alignment, umin). No other pointer has its id, so
-+	 * it is enough that its range loses what its umax loses.
- 	 */
--	if (reg_is_pkt_pointer(dst_reg) && (known || dst_reg->range > 0))
-+	if (reg_is_pkt_pointer(dst_reg) &&
-+	    (known || (opcode == BPF_SUB && dst_reg->range > 0))) {
- 		__update_reg32_bounds(dst_reg);
--	else
-+	} else {
-+		smax = reg_smax(dst_reg);
- 		reg_bounds_sync(dst_reg);
-+		bpf_trim_pkt_range(dst_reg, smax);
-+	}
- 	bounds_ret = sanitize_check_bounds(env, insn, dst_reg);
- 	if (bounds_ret == -EACCES)
- 		return bounds_ret;
++/* r2 = pkt, r3 = pkt_end, r4 = unknown. 54 bytes from r2 are in the packet. */
++#define PKT_54_BYTES(insns)						\
++	asm volatile ("							\
++	r2 = *(u32*)(r1 + %[__sk_buff_data]);				\
++	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);			\
++	r4 = *(u32*)(r1 + %[__sk_buff_mark]);				\
++	r5 = r2;							\
++	r5 += 54;							\
++	if r5 > r3 goto l0_%=;						\
++	" insns "							\
++l0_%=:	r0 = 0;								\
++	exit;								\
++"	:								\
++	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),	\
++	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)), \
++	  __imm_const(__sk_buff_mark, offsetof(struct __sk_buff, mark))	\
++	: __clobber_all)
++
++SEC("tc")
++__description("direct packet access: checked pointer plus non-negative unknown keeps range")
++__success __retval(0) __flag(BPF_F_ANY_ALIGNMENT)
++__naked void pkt_add_unknown_keeps_range(void)
++{
++	PKT_54_BYTES("if r4 > 38 goto l0_%=;"
++		     "r2 += r4;"
++		     "r0 = *(u64*)(r2 + 8);");
++}
++
++SEC("tc")
++__description("direct packet access: checked pointer plus unknown that may be negative")
++__failure __msg("invalid access to packet, off=16 size=1, R2(id={{[0-9]+}},off=16,r=0)")
++__naked void pkt_add_negative_clears_range(void)
++{
++	PKT_54_BYTES("if r4 > 8 goto l0_%=;"
++		     "r4 += -4;"
++		     "r2 += 20;"
++		     "r2 += r4;"
++		     "r0 = *(u8*)(r2 + 0);");
++}
++
++/* The byte is in the packet, but a range that umax gets to is not kept */
++SEC("tc")
++__description("direct packet access: checked pointer plus unknown that can get to the range")
++__failure __msg("invalid access to packet, off=0 size=1, R2(id={{[0-9]+}},off=0,r=0)")
++__naked void pkt_add_up_to_range_clears_range(void)
++{
++	PKT_54_BYTES("if r4 < 1 goto l0_%=;"
++		     "if r4 > 54 goto l0_%=;"
++		     "r2 += r4;"
++		     "r0 = *(u8*)(r2 - 1);");
++}
++
++/* If r2 kept the id of r6, the check of r2 + 100 would give 107 bytes to r6 */
++SEC("tc")
++__description("direct packet access: sum that keeps range is checked, old pointer is used")
++__failure __msg("invalid access to packet, off=106 size=1, R6(id=0,off=106,r=54)")
++__naked void pkt_add_unknown_gets_new_id(void)
++{
++	PKT_54_BYTES("r6 = r2;"
++		     "r4 &= 7;"
++		     "r2 += r4;"
++		     "r5 = r2; r5 += 100;"
++		     "if r5 > r3 goto l0_%=;"
++		     "r0 = *(u8*)(r6 + 106);");
++}
++
++/*
++ * r4 is 0, 8 .. 48, but its umax is 50. 16 bytes from r2 = pkt + r4 are in the packet: r=66.
++ * Then 0 or 8 is added: 8 bytes are left. var_off makes umax 56, not 58, so r=64, not 66.
++ */
++SEC("tc")
++__description("direct packet access: var_off lowers umax of a sum that keeps range")
++__failure __msg("invalid access to packet, off=64 size=1, R2(id={{[0-9]+}},off=64,r=64)")
++__naked void pkt_add_unknown_var_off(void)
++{
++	PKT_54_BYTES("r4 &= 0x38;"
++		     "if r4 > 50 goto l0_%=;"
++		     "r2 += r4;"
++		     "r5 = r2; r5 += 16;"
++		     "if r5 > r3 goto l0_%=;"
++		     "r4 &= 8;"
++		     "r2 += r4;"
++		     "r0 = *(u8*)(r2 + 7);"
++		     "r0 = *(u8*)(r2 + 8);");
++}
++
++/* r4 is 4, 12 .. 36. Only its step says that pkt + 4 + r4 is a multiple of 8. */
++SEC("tc")
++__description("direct packet access: checked pointer plus loop counter, alignment")
++__success __retval(0) __flag(BPF_F_STRICT_ALIGNMENT)
++__naked void pkt_add_counter_alignment(void)
++{
++	PKT_54_BYTES("r4 = 4;"
++		     "l1_%=: r5 = r2; r5 += 4;"
++		     "r5 += r4;"
++		     "r0 = *(u64*)(r5 + 6);"
++		     "r4 += 8;"
++		     "if r4 < 40 goto l1_%=;");
++}
++
+ SEC("tc")
+ __description("direct packet access: no pruning of a path whose checks prove fewer bytes")
+ __failure __msg("invalid access to packet, off=255 size=8")
 -- 
 2.55.0
 
