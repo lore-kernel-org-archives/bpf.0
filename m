@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793744091;
-	b=xVvsXPJdoHtGKCqPxCeL9+2wAc66dN+kR/WLEr89fuDcEDiaiEtWidveNG33XSJKq1VE
-	 Ac6lH2gNRq8D9DfqzQMT1kb2iP7b8XCnHoEJzCS6o1U/SnYZqgz21lD6qFeS0foaX0GNi
-	 C6kC8pSolSPK/qNXSf1DC6WUaR9+8ViNBQ5HKaX0EZW9Rj2EsQin8LtfsvenCi5aQY728
-	 lwLGoJhyS4F1t1wgXjDpAQlaTqQwrBoZfKf/QKzrvmWsuQMh1YLsX2Th3pDM1L1RgO3Vr
-	 qG56C5CMX0qumUtxchnCdFYOT+4GsiV50hckyT/adYMqgE18n9XeJtFn2IQJ2cRwwlg==
+	t=1793744098;
+	b=KRlBBWyesS8ZQDdSiBD3foO64I65YI5ifay48rNaFT2/36nvYw78gW1tiq3r7D43k8dD
+	 Rki7ZOe7dAE4aFJ9I9Exi5ZaHpmEvOLv+4CRpdtEiDRbkZA1wC7lKf1r/PuGO0xwBkxs+
+	 NmKi+PqxXO2swQ49g6jUE/9orj8QegHq34DMhO6m5j/moqdCdz4QlcpvI1OJ/RlysmhF/
+	 uoiJgtCLfDo9co9LmySxTaMeOhoo1T8wU9lfIWaMZ19q6EJVHXDgTNXvP1rpsG2C7P1uJ
+	 IiVxXtfftRQ//sWP2Q/UzDOLZJxTSLCcN0204E9HBrv8+Tp3Zs64XX/A4/lZVCkAuVQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793744091;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793744098;
 	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=GrWMLf5u+Ta3+WJYmHg9xA9PrNNnzI5nPox/tR4OoAA=;
-	b=JRmYqsIz2JBlVagduCaUqohR+wSxMNtpsM3bU6sCFi0bZLRGbVGoXX0yjQMQOoe1+XUj
-	 ofL3NLDc1KxSxtmF/rUSKqZi/b2iXCq4ArNaUKO49DF4Cb36R10/ArtbaV6H3BdloooRK
-	 Axks1SIowfc4nyy2iCKubEoAh6R37fCDxUB21i2bCBYqX8oz5aHliJh68wEfjOLR7FYnQ
-	 HPO+jlNc515xlzkPO9KEpWlCiXrb+ZxXto8W8ScblVUgoJ+iizGHDmQsFO6hcct8FHRlR
-	 CQ+MRnhzUllY6MoGjVHe1SCBIuCcbUm0YOSmul/J4leaY/lLzGT8PbZ1etW98rLaOSw==
+	bh=duzRvg964RfXuPnhLXTxeyHtzA5Vnl51oG0y9EUSR9A=;
+	b=GldmWnUGoHR2LgKhgaSlEH1tMuUsnT3zB9uGT5AiM2V3FIjLlXOGnvPqZQkM63kN4pZk
+	 MpdiahmNI3O/RtJhcYaDK7DntklZrK9SOHsaRfRopzN2w1GBVkzns5CIzKbB0pdaGostE
+	 YyRo2ZFIt5WfJEaW4hFPZqyGFfs9kdDhiVrp6jXCszEQhAlm5CR4mNUcummtySpvmnVhK
+	 yMPSGQ5kb8ohKJpPc8hmlrpfvyoA73tJPKFsfaBa0aLhxOueG2MYjV8dzMPEaf02ldti+
+	 VQLyTC1OaQ18yQTA3ZNBuK9FYO19FZSY1Lcj1xEUrXFWC2f/B585Y7ssFFEYf1bBUyw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ejQ1g1+t;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bBaRQdiW;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400A1606A326;
-	Tue,  3 Nov 2026 22:14:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BC0606D80A;
+	Tue,  3 Nov 2026 22:14:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ejQ1g1+t
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9615A1F000C1;
-	Tue,  3 Nov 2026 22:14:47 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bBaRQdiW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED5C1F00A16;
+	Tue,  3 Nov 2026 22:14:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793744090;
-	bh=GrWMLf5u+Ta3+WJYmHg9xA9PrNNnzI5nPox/tR4OoAA=;
+	s=k20260515; t=1793744098;
+	bh=duzRvg964RfXuPnhLXTxeyHtzA5Vnl51oG0y9EUSR9A=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=ejQ1g1+tKWLQP5xtbi3inO8a/xlExDnXSLdhDTNvnH49TrVn3DG4qF0yZ2XqRfsqa
-	 oKAocEh8B2jcTcLublrJyFQXZLCScpTd9m8+3LAhpybqBOVthNQeshTmKhOzvbGtuv
-	 w9y03MRNyN0jJ7aDJ/+GGZuspc2xtvs8VWt9lBjz4yqzgbe2Yove6CNvZP/XW3Nnha
-	 1YoE6FX7Q8dwXpvCKR4Mzy7IQe5Y6y2kDnPv4lyKhG9HEZC25u2KnD6MDo16W1c6oS
-	 mHn5EyT1NBxSmtYU+akyVtFH16euS38bByL6lwBjVzGg/KKCVQi+DiRiTvIMBW/hrY
-	 nq965KidmwKzg==
-Message-ID: <a3ef692a-a9b5-4057-b9b6-1279951d7bc1@kernel.org>
-Date: Tue, 3 Nov 2026 22:14:46 +0000
+	b=bBaRQdiWm/PneqSd0aJZ1MkSqZ4YMJfFj3ihBTIn2Rqg68CfnOQi6ATO74gckFP3+
+	 zLlz3asm6TWFVh0aXuzHXpkTHZbpxBPDy+OWpZGQ1waMB0Wuk1w+QSibz7iRru6Sah
+	 hpILvVFcLy2n1BcwbSj/EELyea2wxq7wo0dzY4eHPCrCzfkXr5ceZWDCcFzm9P0RLC
+	 2zFT8isozEJJ52Wbm91stdKzpp5OkW+E5SRZWNIeqmguNdrhBkD4+e319NM6GKevrQ
+	 8Lhd9Y8l+5NXP5jRugwiQAkd+VWZshcluuqra/B39s0X/Lj4z+5nRmVHRdc0ptwUd0
+	 7G3caakdf58ng==
+Message-ID: <b7ef8ef2-d3f4-4ae6-997f-c47c58dd7d7a@kernel.org>
+Date: Tue, 3 Nov 2026 22:14:54 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -52,8 +52,8 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/3] bpftool: Fix disposal of the LLVM
- disassembler context
+Subject: Re: [PATCH bpf-next v5 2/3] bpftool: Don't require a disassembler to
+ dump a JITed program to a file
 To: socketpair@gmail.com, Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
  Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
@@ -67,10 +67,10 @@ To: socketpair@gmail.com, Alexei Starovoitov <ast@kernel.org>,
  <kuba@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>
 Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
 References: <20261103-bpftool-plugin-v5-0-683e08a25df0@gmail.com>
- <20261103-bpftool-plugin-v5-1-683e08a25df0@gmail.com>
+ <20261103-bpftool-plugin-v5-2-683e08a25df0@gmail.com>
 From: Quentin Monnet <qmo@kernel.org>
 Content-Language: en-GB
-In-Reply-To: <20261103-bpftool-plugin-v5-1-683e08a25df0@gmail.com>
+In-Reply-To: <20261103-bpftool-plugin-v5-2-683e08a25df0@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -78,12 +78,14 @@ Content-Transfer-Encoding: 7bit
 <devnull+socketpair.gmail.com@kernel.org>
 > From: Mark Korenberg <socketpair@gmail.com>
 > 
-> destroy_context() frees the disassembler context with LLVMDisposeMessage(),
-> which is a plain free() meant for strings returned by LLVM. The context is
-> therefore never destroyed, leaking about 28 KiB per disassembled function.
-> Use LLVMDisasmDispose() instead.
+> "bpftool prog dump jited PROG file FILE" only writes the JITed image to
+> FILE, but do_dump() calls disasm_init() before it parses the arguments,
+> so the command fails when bpftool has no disassembler.
 > 
-> Fixes: eb9d1acf634b ("bpftool: Add LLVM as default library for disassembling JIT-ed programs")
+> Call disasm_init() only when the image is disassembled.
+> 
+> Fixes: 29a9c10e4110 ("bpftool: make libbfd optional")
+> Suggested-by: Alexei Starovoitov <ast@kernel.org>
 > Signed-off-by: Mark Korenberg <socketpair@gmail.com>
 
 Acked-by: Quentin Monnet <qmo@kernel.org>
