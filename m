@@ -1,105 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793724958;
-	b=nrCFXiQZG3lSIHTYtWO5Qa+PHqXWHATy+41ryy5wqfxw/FE+bN3/mC+PAaYVah99yOo/
-	 Jr5TxwVZRQ13hzmouquDDFmzj5JeNcSRJNi4Vlpjb25aXcC0/SUT2TotXIDTC6oIP8T8T
-	 Fuoq68N3OvR0wiz4tl7c/Rq9LfS3E3W1i7/cMV9o4a9zfLypssFWoAF4p1JsTj+hCbRv2
-	 zSISJ0dYLTVcKE2p6Zg1WNyFlsqXUU/93lffJ82UfF2DPIGL06BfcmoTAOvOBihWs57Cz
-	 laBlfFhF2C7BNl3qb5cEpYvKIN0xZ73xJo3gIM6b0KuvzhIQJpa8gr0xUU4+zxHAFIA==
+	t=1793727185;
+	b=QDDimsFdDYyae/hh9xUnwRSlVSV0i1650VveSSiK6fsdXdUjQsvGvv8k892fgX6TFRZx
+	 UsDdIpW0EfQIC8e6pAWMZ9JtzO82+UAO7A0T76a7JcoE+2lnjb3WYOQW9C2r25Nn0DrxA
+	 CDWOnwHkWVPelZh6H9YrK1zVAZXIKGzzBvNYtfHe4gO/t4GeMpogYmb3pA+c1/HBf4Hw7
+	 B0kygPuLbdJHv3UjOAdOIxxadll/n8HNaSeCBdkuIHhuZPOKDUDPQwTNJjvS0ko0amcp/
+	 qgJ4+ATAqT11UIcLAGxOr6vLmN2wAwQ9thkCQMsG63vwbGx5Nd/wi+g/SII2Kk89vBg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793724958;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=Dx0fQ9jWsbJGGEfFlztRkY1SCts3dYp3DMV0/n4sk/0=;
-	b=vyLdFkKz2ixEXS+kNUaed3E/nyrjLHV8Pyo9STICgrfe+W26GXlCTcNuTp+jwcfDhoNU
-	 tP3eAc2cAeWsG3QmLY+sTJRcqcsJNoNEdNvF9Hm1MGwaie8pGcxjZhdR/gF8xaCoGdkto
-	 7LeMpVVy20bsL8i/KluKBAINyFnHniQYBpYFscGKdnpdOpfCHS7tI7IQQd6Q29HlFKZAA
-	 PZzYaRFEBV3evg26/ucDDnXnqRAq/uwB0fMrjqRvy/2xujnww/FVgyWuyi6OArXVLLz/2
-	 sBD0XYOxbXMYhbLBLIH9Q8DNqcrElS3phqW80N5tANLrSuJa5GSxOJQIYTJhqGWXtGw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793727185;
+	h=DMARC-Filter:DKIM-Signature:From:To:Cc:Subject:X-CM-TRANSID:
+	 Message-Id:X-Coremail-Antispam:Date:X-CM-SenderInfo;
+	bh=wx+pTWYe2L1J9TNpz5QtoSwN8J9xEqwWbSaGt++qleY=;
+	b=o9hKHHjz/lxvxJmAA99q9++3NMhMNHcvxotGAnNrTMItLX7g0nP65jvYvqRPv5uaCelH
+	 /u3KOQoR8IH+LYlKIXpEVcTWmDSDcwv/jxlv4ZgrBNHnzSnZA7Xnsj3c/CGog/q8V4WHz
+	 T+CAKM8Ep61DT8QqaTjr4+kL2a/hu3v1eqOCxtwwxNfj+Bfc+C6D85Tlt2/I/vSu/lDwt
+	 dX9FNHISzyiZqwdkC3h1yJNd+cLSw5sG/eb/Pfywlo2aDvc/cM9EYGHBDNlb/+nJB+iyQ
+	 gcH7MPRndvqqqeGkxa2dWbJQjFJLLF44jbpGO1IAr/muvf9oki4xmGD+zsPOmuBgBYA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=z920EnPC;
-	arc=none smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b="PVCHlrY/";
+	arc=none smtp.remote-ip=117.135.210.4
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD132606A334
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 16:55:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CD132606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A854606A328;
+	Tue,  3 Nov 2026 17:33:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5A854606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=z920EnPC
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a140e7405dso44376785e9.3
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 08:55:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793724956; x=1794329756; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Dx0fQ9jWsbJGGEfFlztRkY1SCts3dYp3DMV0/n4sk/0=;
-        b=z920EnPCDnXnUS73ipITtZNX/YHqpZa0drLuvN0rSPm7+jJyQ2fp1Ei404814Vumuv
-         o9lM1qdTr5rQc5+7Y/BApDoQZo0Nn2/tFgCV8cIqGBoEZl1PoHMX2m6xz1puawvkpFID
-         /fOjaKp4rz2UehtNfnd5s++vuhjZX8RO0PBLrfU811mWZZZlsqy+QmWUmoasOTeJEskF
-         d4lujM9f8yNwUYU4kDWcYHqiXn7hH5XhHk2KBL7D0oh2FGRBJaw389zcIjy3a/bgKL2g
-         Mje31JrrxgfnG8VzL/WfyhYSiPL42fOUMLzes8zT5r3ct07qSCKg4lWrlOZyozQpaRuZ
-         a84Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793724956; x=1794329756;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Dx0fQ9jWsbJGGEfFlztRkY1SCts3dYp3DMV0/n4sk/0=;
-        b=x+doXNqxGibOFUoRep7DYPeRSKZeFeVEHgxTof0qFlOSLwRVe4+0HF6dEx72OZ5yXp
-         VqulDuLfOs+lQzr/KFYQAnn4shDLsbYeuFmDx9JXfFSzWCLMZ7Lzg4xR7lO+ltB9inxb
-         qUxO/oow8+HYHQtghoYA9pCeQerz/EcVDoe0yWcdXhnRjW+XiozIRdAL9Uv7Mmwob896
-         K/Fm7UHnkIL/0e7+cwpIeASUrvEMdbxaCyyzZYFscKSqeixBTAIUvle3I+ZpRniUCxFJ
-         hLXSrxai9XADTulqcIqt7apTKxEoTkCNw9UMvxfCl3O7YoTmYOs5v/Ce3vxRDAk3NYtG
-         ZSEQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxlJ+3K2Lv0UV7T+E/BHuCGa5XLJ8ebZIQLLZ/LxsqbSPLnFBghdR6WkD9KjchgBJGvBsM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Bifh82IwWM62KazsfrGUpL724YhwA4hFNS9enN3YiOU7AI8aZ
-	4OLvLTeSkXB/GI83od8tTTa05IjyZOoXVMWkiXM+Ip49KiRJJWcgqNYY
-X-Gm-Gg: AYBFou3I7/iFKzP5U9Nia6/l9KBvqeaGmmJgyS3omxYSP0w15orzFGyq5XeNtKKxcT1
-	/aX4xZpiagqYEyDZtmKEWcs3PZQgIH/NZeoSBC7Oc0NtDxvqWQfG8XYDhi3BcgyzieJ9myfGA7C
-	xeDVobdv8A/t9iKc492VD1iiJWnW925qmk3sGBAvN26xPiOLiBhm/6xtmAdgfdW6e2ncLfDqUCC
-	+nYQoT+22vuScwMgv3ku96bsGL3EdoYI3hnw4z8I1Y6XgdZTHXEdKknORg1+Mc1Vr21Q6AiJjHa
-	ZUeKnI6Lf6avDoi5BJMph2PxiJwdnPYzSDd4I5SXOlJV1kzWDUWsnzBqrMwM7Xck86WH5EzzTs9
-	Zs4sYy2qU+SJsviie1GWArdyHzxprqt8EfHaulCSZF8oDduYP+V+A0YNsus4XfRvxDWJ5xa3UpK
-	hu8A+RWpNSvQdfs4w9k4laUkhc2U+G3dnX2AzVLSJz8owSqCnxbHDLWiIK+vkF5IOL+gM41QW6b
-	Oh7NsnHsi2g52WyVwpYfhzeienr95kZoPlDBW7cstJH3M5+Wh4jsHsH/9JW78R2UsZcde8Z944i
-	CunzzioGeqUVHOlvdmxh1Vk1RoYb7oSfBrHIoTPsPQj3K1tvFO6dD0E5fdVcpbDwbcMa9rS5Th5
-	/efRKj+Ef/S4/SKDIsBZvzyg=
-X-Received: by 2002:a05:600c:870f:b0:4a2:1196:db0e with SMTP id 5b1f17b1804b1-4ac1899348bmr289523635e9.30.1793724956048;
-        Tue, 03 Nov 2026 08:55:56 -0800 (PST)
-Received: from andreayoga.wind3.hub ([31.189.68.219])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abea533a1esm239726215e9.1.2026.11.03.08.55.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 08:55:55 -0800 (PST)
-From: Andrea Parri <parri.andrea@gmail.com>
-To: kpsingh@kernel.org,
-	matt@bobrowski.net,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Cc: Andrea Parri <parri.andrea@gmail.com>,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2] bpf, lsm: Fix cgroup shim selection for socket hooks
-Date: Tue,  3 Nov 2026 17:55:40 +0100
-Message-ID: <20261103165541.291744-1-parri.andrea@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=PVCHlrY/
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Message-Id:Date; bh=wx+pTWYe2L1J9TN
+	pz5QtoSwN8J9xEqwWbSaGt++qleY=; b=PVCHlrY/Uy5NiugXnsGWzwtaizh87dW
+	f3Q62CpWneg5N2lLggoeW8RO00etsPNV3+HhhDWThP0n5D8pV/TFqpejvX4dbWFA
+	zAEPI2KqjjvxN5u8oaEYEj8j41q1FF95Ech3mLMrwTeIu4uvbvjdZWZkq6jYJFT8
+	XYulfqXr42m0=
+From: shaos <shawnq1@163.com>
+To: Amery Hung <amery.hung@bytedance.com>
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+ Toke =?utf-8?q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	netdev@vger.kernel.org, bpf@vger.kernel.org,	linux-kernel@vger.kernel.org
+Subject:
+ [PATCH] bpf: net_sched: reject bpf_throw() in qdisc teardown callbacks
+X-CM-TRANSID:PSgvCgCXagqsGupqnkg9Dg--.50703S2
+Message-Id:<6AEA1AAD.2E7977.08739@m16.mail.163.com>
+X-Coremail-Antispam: 1Uf129KBjvJXoWxuw45ZFW5trWrtFWftry8AFb_yoW7Zr43pa
+	ykZ345Kr4rJr43WFsFyF4DAF13C39xWw4UCryDWry5CwsaqFyjqFWxKa47uFyYkryDCry0
+	qr1qy3W3WF40kFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jsdbbUUUUU=
+Date: Wed, 4 Nov 2026 01:32:29 +0800 (CST)
+X-CM-SenderInfo: pvkd40jtr6il2tof0z/xtbCzw0HFWrqGq3ejAAA31
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -108,98 +62,136 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-bpf_lsm_find_cgroup_shim() picks the shim that runs a BPF_LSM_CGROUP
-program from the first argument of the attached hook. It compares
-args[0].type, the BTF id of the argument's pointer type, against
-btf_sock_ids[], which holds the struct ids of struct socket and struct
-sock. A pointer id is never equal to a struct id, so neither branch is
-taken and every cgroup LSM program runs through
-__cgroup_bpf_run_lsm_current().
+Hello,
 
-Socket and sock hooks therefore run against task_dfl_cgroup(current)
-instead of the socket's cgroup. When a socket is used from a cgroup other
-than the one that created it, the caller's cgroup policy is applied instead
-of the socket's, and __cgroup_bpf_run_lsm_socket() and
-__cgroup_bpf_run_lsm_sock() are dead code.
+A BPF qdisc's generated reset/destroy epilogue cancels its watchdog
+timer.  bpf_throw() unwinds directly to the exception callback and
+skips that epilogue.  If the timer was armed, qdisc deletion frees the
+qdisc while the embedded timer remains queued.  Later timer-queue
+activity accesses the freed qdisc, producing a KASAN slab-use-after-free
+and a kernel crash.
 
-Resolve the argument's pointee with btf_type_resolve_ptr() and compare that
-id against btf_sock_ids[].
+The reproducer registers a BPF qdisc whose dequeue callback arms the
+watchdog and whose reset/destroy callbacks throw.  Two fresh KASAN boots
+reported use-after-free in rb_insert_color on an object allocated by
+qdisc_alloc() and later freed by qdisc teardown.  An otherwise identical
+no-throw control completed deletion cleanly.  The required BPF and
+network-administration capabilities make this a privileged local kernel
+crash; no privilege escalation or code execution is demonstrated.
 
-Two socket hooks are not always called with a usable socket:
-ip_cmsg_recv_security() passes a NULL socket to socket_getpeersec_dgram,
-and sock_create_lite() calls socket_post_create before sock->sk is set.
-Add both to bpf_lsm_current_hooks, so that their cgroup does not depend on
-the caller.
+HEAD commit:    c03c1a14507dfaf8b856c2608f9ac216021fc222
+Git tree:       30fd2ef82912c26cf3a58ad0ba6afc375fa851ac
+Source version: Linux 7.3
+Compiler:       gcc 11.4.0, GNU ld 2.38, clang 20 (BPF PoC)
 
-socket_post_create is unchanged when called from __sock_create(), where
-the current task allocates the sk and gives it its cgroup.
-socket_getpeersec_dgram keeps the current cgroup, as today. The other
-socket hooks always get a socket with an sk, and the sock hooks a non-NULL
-sk.
+The console log, full KASAN kernel config, and BPF C reproducer are
+available from one fixed-revision Gist:
 
-Existing BPF_LSM_CGROUP users will see a behavior change. The other socket
-and sock hooks now run the socket's cgroup programs, as described in
-commit 69fd337a975c ("bpf: per-cgroup lsm flavor"). Hooks that can run in
-softirq, such as socket_sock_rcv_skb, inet_conn_request and sk_getsecid,
-no longer depend on which task was interrupted.
+Console output:
+https://gist.githubusercontent.com/shaos26/9908a8ddac69e303cb5dcc709958537f/raw/3fa043e43683907bcccacdc80a71b150920049da/console-output.txt
+Kernel config:
+https://gist.githubusercontent.com/shaos26/9908a8ddac69e303cb5dcc709958537f/raw/3fa043e43683907bcccacdc80a71b150920049da/kernel-config.txt
+PoC source:
+https://gist.githubusercontent.com/shaos26/9908a8ddac69e303cb5dcc709958537f/raw/3fa043e43683907bcccacdc80a71b150920049da/poc.c
 
-The bug was found with the help of an LLM.
+Run this as root in a disposable VM booted with the target kernel,
+CONFIG_DEBUG_INFO_BTF=y, bpftool, iproute2, clang 20, and libbpf-dev.
+Build each variant against that kernel's BTF; test them on separate
+fresh boots.  With libbpf headers installed under /usr/include:
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+    bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
+    CLANG=/usr/lib/llvm-20/bin/clang
+    LIBBPF_INC=/usr/include
+    "$CLANG" -target bpf -D__TARGET_ARCH_x86 -O2 -g -Wall -Werror \
+      -Wno-missing-declarations -I. -I"$LIBBPF_INC" \
+      -DVARIANT_THROW=1 -c poc.c -o qdisc-throw.bpf.o
+    "$CLANG" -target bpf -D__TARGET_ARCH_x86 -O2 -g -Wall -Werror \
+      -Wno-missing-declarations -I. -I"$LIBBPF_INC" \
+      -DVARIANT_THROW=0 -c poc.c -o qdisc-control.bpf.o
+
+Mount bpffs if it is not already mounted, register the matching object,
+attach its qdisc to loopback, send one packet to arm the watchdog, and
+delete the qdisc:
+
+    mkdir -p /sys/fs/bpf
+    mount -t bpf bpffs /sys/fs/bpf 2>/dev/null || true
+    bpftool struct_ops register qdisc-throw.bpf.o /sys/fs/bpf
+    ip link set lo up
+    tc qdisc add dev lo root handle 1: agent31_uaf
+    ping -c 1 -W 1 127.0.0.1
+    tc qdisc del dev lo root
+    sleep 10
+
+For the separate control boot, register qdisc-control.bpf.o and use
+qdisc kind agent31_ctl in the same sequence.
+
+On the vulnerable kernel, the two throw runs reproduced the KASAN UAF;
+the no-throw control survived.  With the patch below, the verifier
+rejects bpf_throw() from reset/destroy with -EACCES, before qdisc
+registration.  The patched control object registered, attached, armed
+and deleted normally, then survived the watchdog interval.
+
+Fixes: 7a2dafda950b ("bpf: net_sched: Add a qdisc watchdog timer")
+Signed-off-by: shaos <shawnq1@163.com>
 ---
-v2:
-- Add socket_post_create and socket_getpeersec_dgram to
-  bpf_lsm_current_hooks instead of falling back to the current cgroup in
-  __cgroup_bpf_run_lsm_socket() (Alexei)
-- Drop Fixes: and Cc: stable, target bpf-next (Alexei)
+ net/sched/bpf_qdisc.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-v1: https://lore.kernel.org/bpf/20261102152913.366237-1-parri.andrea@gmail.com/
-
- kernel/bpf/bpf_lsm.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index f58dce888ff4a..485e8fe8524c8 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -66,6 +66,10 @@ BTF_SET_START(bpf_lsm_current_hooks)
- #ifdef CONFIG_SECURITY_NETWORK
- BTF_ID(func, bpf_lsm_sk_alloc_security)
- BTF_ID(func, bpf_lsm_sk_free_security)
-+/* sock->sk is NULL in sock_create_lite() */
-+BTF_ID(func, bpf_lsm_socket_post_create)
-+/* sock is NULL in ip_cmsg_recv_security() */
-+BTF_ID(func, bpf_lsm_socket_getpeersec_dgram)
- #endif
- BTF_SET_END(bpf_lsm_current_hooks)
+diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
+index 098ca02aed89c..61f0dc93d3856 100644
+--- a/net/sched/bpf_qdisc.c
++++ b/net/sched/bpf_qdisc.c
+@@ -12,6 +12,7 @@
+ #define QDISC_MOFF_IDX(moff)	(moff / sizeof(void (*)(void)))
  
-@@ -95,6 +99,7 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
- 			     bpf_func_t *bpf_func)
+ static struct bpf_struct_ops bpf_Qdisc_ops;
++static const struct bpf_verifier_ops bpf_qdisc_verifier_ops;
+ 
+ struct bpf_sched_data {
+ 	struct qdisc_watchdog watchdog;
+@@ -131,6 +132,7 @@ static int bpf_qdisc_btf_struct_access(struct bpf_verifier_log *log,
+ }
+ 
+ BTF_ID_LIST_SINGLE(bpf_qdisc_init_prologue_ids, func, bpf_qdisc_init_prologue)
++BTF_ID_LIST_SINGLE(bpf_qdisc_throw_ids, func, bpf_throw)
+ 
+ static int bpf_qdisc_gen_prologue(struct bpf_insn *insn_buf, bool direct_write,
+ 				  const struct bpf_prog *prog)
+@@ -307,20 +309,31 @@ enum qdisc_ops_kf_flags {
+ 	QDISC_OPS_KF_COMMON		= 0,
+ 	QDISC_OPS_KF_ENQUEUE		= 1 << 0,
+ 	QDISC_OPS_KF_DEQUEUE		= 1 << 1,
++	QDISC_OPS_KF_TEARDOWN		= 1 << 2,
+ };
+ 
+ static const u32 qdisc_ops_context_flags[] = {
+ 	[QDISC_OP_IDX(enqueue)]		= QDISC_OPS_KF_ENQUEUE,
+ 	[QDISC_OP_IDX(dequeue)]		= QDISC_OPS_KF_DEQUEUE,
+ 	[QDISC_OP_IDX(init)]		= QDISC_OPS_KF_COMMON,
+-	[QDISC_OP_IDX(reset)]		= QDISC_OPS_KF_COMMON,
+-	[QDISC_OP_IDX(destroy)]		= QDISC_OPS_KF_COMMON,
++	[QDISC_OP_IDX(reset)]		= QDISC_OPS_KF_TEARDOWN,
++	[QDISC_OP_IDX(destroy)]		= QDISC_OPS_KF_TEARDOWN,
+ };
+ 
+ static int bpf_qdisc_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
  {
- 	const struct btf_param *args __maybe_unused;
-+	u32 id __maybe_unused = 0;
+ 	u32 moff, flags;
  
- 	if (btf_type_vlen(prog->aux->attach_func_proto) < 1 ||
- 	    btf_id_set_contains(&bpf_lsm_current_hooks,
-@@ -105,10 +110,12 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
++	/* bpf_throw() bypasses the generated watchdog-cancellation epilogue. */
++	if (kfunc_id == bpf_qdisc_throw_ids[0] &&
++	    prog->aux->st_ops &&
++	    prog->aux->st_ops->verifier_ops == &bpf_qdisc_verifier_ops) {
++		moff = prog->aux->attach_st_ops_member_off;
++		flags = qdisc_ops_context_flags[QDISC_MOFF_IDX(moff)];
++		if (flags & QDISC_OPS_KF_TEARDOWN)
++			return -EACCES;
++	}
++
+ 	if (!btf_id_set8_contains(&qdisc_kfunc_ids, kfunc_id))
+ 		return 0;
  
- #ifdef CONFIG_NET
- 	args = btf_params(prog->aux->attach_func_proto);
-+	/* args[0].type is the id of the pointer. btf_sock_ids[] has structs. */
-+	btf_type_resolve_ptr(prog->aux->attach_btf, args[0].type, &id);
- 
--	if (args[0].type == btf_sock_ids[BTF_SOCK_TYPE_SOCKET])
-+	if (id == btf_sock_ids[BTF_SOCK_TYPE_SOCKET])
- 		*bpf_func = __cgroup_bpf_run_lsm_socket;
--	else if (args[0].type == btf_sock_ids[BTF_SOCK_TYPE_SOCK])
-+	else if (id == btf_sock_ids[BTF_SOCK_TYPE_SOCK])
- 		*bpf_func = __cgroup_bpf_run_lsm_sock;
- 	else
- #endif
 -- 
-2.53.0
+2.34.1
 
