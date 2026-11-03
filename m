@@ -1,54 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.236
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793670123;
-	b=TCyTVeCyk4vm/0RM8cEYhdlbGHTOnyIBGc4ZMwrJ7yo2Zqz4nbHqTjqcZ7S/TfLFsRlk
-	 NqMn95aWYKGDWUId93wbcpI8mfsgK0lLu4YIIx3VqbREx3hlH/Scu8u6Q0D/qbVolt3Qx
-	 38eFIxCrBFOpspN5aLm7MVnXVyvDPlLRVpp6FX8kazdXmYhpRXHkcM5RN4UduDtQ1T9sP
-	 q24/OtZyCjmxPsPV7WwtMfJJQgOVctaJ9Ab67JtFx3xqAYmMqao1vqJrtoehx0drxwrtH
-	 Crl8wl5AgvQJc35/wwGOheV6ZWxwiflEodc6fPyGYXjAd/9JMWl2jCqyVzydhltts0Q==
+	t=1793670444;
+	b=4LAaW/QF7m2evspJkZsdGhdlxPVmhB6rT27XF2EgRIk8/5Z3yOUad+Fh+rGnwP/RENXd
+	 PWUG/ZQKjTlL6h+d1WX3Kgwybl6VC0lEWwTjokHwCPhNHwq13ishEL7PIZznqsdci+JTJ
+	 VsIF37CY1ZuZS5HRyySK6ip7UAFMTo/7ujkooEEJMj3CvfyybmHAcbwEhChaZhcIXhVJs
+	 BoUmSwIlL1TcjeeEDN1fjw2DeAn8iOlMoLXrmpKxtasc58TKH7GjxVkiGrRJ2/4ceShI5
+	 hnuPd6eWQ9xv47/Gp4FM/Fx8pSPILyWkVcPFA826/dJdiv09vPJigajWFndloGZwMrQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793670123;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=dGnaZBUj0XNcB11772fHKRR4jnMCSTKoOZ96EtQkLP8=;
-	b=JYEYYfsGeKuuCcInlhS7DpC7HFhEhikBCnMR2SNhQVNs7qLqLA93idm7vR6QhC7tg03/
-	 v3a0k0/usrkbaiN8BfC1aZnBtbOFXiMtY6QCDrIBW4RLJltpGDQTVLkENCAOQ13zR2N7K
-	 qfmGDGDUIlC7coQrOCMQvKCMaLYvMLibiywcVaz2A0QlD/35tEuPzTZBacKWTscWNs7uA
-	 7HbK5jEGf/80cBjLgcIsY46IljUxBQ3dzsSn1c0ElLAWDaAnT49FYsUfklwLhiLuu7H45
-	 +xGt4lepvok/mHUUXiVWPYZGemxN2M+Y+iIhd+PfFbgG6QNmZPv6qnji/YUi5jisSpQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793670444;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=0n9lMGW1sVKzw3HmKLjrZGL8pys2XInZez3bJmOScBs=;
+	b=Nh0QQHBWXtc1QA/itYk4Twp78TV3fMxaWdYTSMZcCjty8Md9GfZX0YGuZL1YzP6TUfoU
+	 sbh+UGpelVbxU5x2/toO1NbeSLi75RHFhrsmiRs4Nd9DtIgJYhO1HvpyzD9hEChOKxKN1
+	 tbXlYZbp9LBxp4S7tskg28jabp0oekQOZ8KII5/iQ6/HE28bc7QFb07dHUQx6iDwBuDgD
+	 8hEPWKfh5dF5Lxz9s3VbK+B2xdgBAyhyLr+AupIFBwtoj4WSACUFNwED4oWTpJTYoTKp9
+	 UELw3JlyI96IFdQGhizzjgB7ImZIukvS4PcOihSPjQT0YbWBEoaqpPB7g/vsJu7ml3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fKH70yEb;
-	arc=none smtp.remote-ip=91.218.175.236
-Received: from mta0.migadu.com (out-236.mta0.migadu.com [91.218.175.236])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MvvuDtF2;
+	arc=none smtp.remote-ip=209.85.214.173
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05860606A326
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 01:42:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05860606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11555606A324
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 01:47:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11555606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fKH70yEb
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=dGnaZBUj0XNcB11772fHKRR4jnMCSTKoOZ96EtQkLP8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793670121; v=1; x=1794274921;
- b=fKH70yEbYDywQGAwgfKSS+FjmYqpdNjx/QAS6L7HT/xmTPtjFKacyw2MbKh0akpklTS9OHgd
- koVAORicRuRu3tQLsfJU9vw1xGIoAAdyPRjlLZcrpLoB9v3kYqa4Gj0jnTKUox/RvMJ0oLPNMh6
- k8yttt+zw5PAe78xF3bDXib8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4aed7de82dbe24fe;
-	Tue, 03 Nov 2026 01:42:01 +0000
-X-Mizu-Trace-ID: 4aed7de82dbe24fe
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <f64dd211-6449-4522-92e2-af1d5f238f73@linux.dev>
-Date: Tue, 3 Nov 2026 09:41:52 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MvvuDtF2
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2e9d7791b00so28905165ad.0
+        for <bpf@vger.kernel.org>; Mon, 02 Nov 2026 17:47:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793670443; x=1794275243; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0n9lMGW1sVKzw3HmKLjrZGL8pys2XInZez3bJmOScBs=;
+        b=MvvuDtF2QUWEtPVt26mUsyI+vEiTKwI2jIqsyURw6To2Tg9/MIVQXdOu8eXhoK+TSV
+         JJgHEyqpmo6BQfPcxM6elQlYleQCTndpHhcGnP2SO1TD0vhSahWPjzS9WlnTwoXvtd3t
+         x9a8Ce2VhSzfYJxogcHMZJnx8y4rYZWdpZxP5DE9/vzSwwlLcPw7BHuu86mpFrn1n0+R
+         AgmoDmJhlrRVyXBVDHCnr8LLcBdePp6i2q+lq31UbEfR1/CfIU6FNm+yizziSptG+PJe
+         V8xEtLLPbsSI0YWZfI2qqfIorPUEcVQaBRF7MBGpUqo6Bj7ES5o8QuRM3naqqdm5fbGG
+         tr+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793670443; x=1794275243;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0n9lMGW1sVKzw3HmKLjrZGL8pys2XInZez3bJmOScBs=;
+        b=gRiK4xLS9crU/geGMvypbAfkF6gcjC2wriojsGRAvJFF9h6RlECYshiEE9QyuFQ0bX
+         p1o9ZRcaduqWRli13KkEq1G54jne4ppKRuwc1ttzS6QJTA9OPRrgtF+3b4B3SROHcNnP
+         jJPkzScaWop26FYnoE5EvqP0OB2lrHsQ3viHO4LlVuyPi4dbOpxHxNpJyd1gyg67tgda
+         ruKPXbVVYxAnJKtElFr2TalKJkkCceTJy/C4Z30ZvkDYVKbG69pWsikRrzw/+QmCCvOC
+         NpYevR+IwOH15WfY3mFfn2VYt53OKVhqjQKf5jerPbbHBwYxvigtC4v/DHhn0IA3bOzo
+         lZLQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwgQYCm1z3FpbO62zSdb5XVj64CvoreKVJebMmkW6S8q4YE6IkWjytJdwLVkIE3hVstTe8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/JBcHXl8ztz1s0gjnceQMCvgx/17sKpetCx73QsUgA7uWlZw79
+	Q4lRM2V0tnZxCuUZrp8PJXo1Ng0dNDAmqDaX9jSVxL6TTzrvOuVcQoap
+X-Gm-Gg: AYBFou1SCYNU60Ic+LbGeyuQh9S9HvsHMVODvICmj7reFT2WjUPyzNdUuBgq2njDxp6
+	LzT3KOktiownEAG3ZU2V2IUG6Yx7hDTMI2cmM2mN6HPAuq9LWlmoy3qSWzLJDUNxxVRf9NVTUZN
+	hKtBiAYMz5gyhwRSAKiaVl7KyadzUnCKcxB9/7U69teJwYVt+eT3ELFtUJjS1QHRVLhiNDNUkQC
+	hXLO7z7Id8osxFyxDb2/qU/OEdrxlFu/bzs/RG3e0kw5MOlDmACI1vSScv9qBZdRHG0rBOc2Tnl
+	U2ZNAOAmvRtUEo6KDKx5rSGasY+y5+zgNVopIwKlJ/+MW1b/ZsadrxyQYhImXeBD1q0V4MSizja
+	JWa354TxpzM14SL22SLVhGRE2n3ev2A4dv6qnmdT4IQJipq0iemDkCTeLuO6baqfqYk7qXhb8gi
+	Q2jyiH6DFmZbz2UJxo2QACHO064tiugJVNhFlaKVxF2HCuZIeOlKsclCWwgDT/zoz3y5rtneITd
+	oe68OauYLboSQ557oRVEaOc47vbOPYOMM6WrVKTpGqdzLcCQLOWV1MGryigeYLoCi12eSOV5+ey
+	GXGNewpjaVkKKt5ZhGAegdFURWOBUWl5Tt6HhberI+F5sUlpRt5t2g1mDuFJxF7Vu4RELMWr4hU
+	69FnQMi22ru01rFT+UPwmlS4wQeWJJA2ZEg==
+X-Received: by 2002:a17:903:906:b0:2e9:401f:f0f4 with SMTP id d9443c01a7336-2eb364961b2mr122770945ad.16.1793670443134;
+        Mon, 02 Nov 2026 17:47:23 -0800 (PST)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eb392965fesm33422135ad.59.2026.11.02.17.47.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 17:47:22 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 03 Nov 2026 01:47:22 +0000
+Message-Id: <DML73TNAFORF.67E0ZRLWONC@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: "Emil Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
+ <andrii@kernel.org>, <eddyz87@gmail.com>, <daniel@iogearbox.net>, "Tejun
+ Heo" <tj@kernel.org>
+Subject: Re: [PATCH bpf 1/2] bpf: recover page faults across all arenas
+In-Reply-To: <CAP01T77fBRqfCM=VVjq0Vo8zFYzBLL9Adw5Wr8ar-fb862L1RA@mail.gmail.com>
+References: <20261028015141.10710-1-emil@etsalapatis.com> <20261028015141.10710-2-emil@etsalapatis.com> <DML3ICCA0NOI.3NTJHPQB0ZF29@gmail.com> <CAP01T77fBRqfCM=VVjq0Vo8zFYzBLL9Adw5Wr8ar-fb862L1RA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,52 +101,18 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 11/15] bpf, sockmap: Don't copy 0 bytes into a full
- cork
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, john.fastabend@gmail.com, jakub@cloudflare.com,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
- matttbe@kernel.org, mptcp@lists.linux.dev, mason@kernel.org,
- josef@toxicpanda.com
-References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
- <20261102072112.4160195-12-alexei.starovoitov@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261102072112.4160195-12-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
+On Mon, Nov 02, 2026 at 03:35 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>> > -     prog = bpf_prog_find_from_stack();
+>>
+>> This has to stay. If there are thousands arena. Above should still be a fast path.
+>> Only for sched-ext arena access it should search link link.
+>
+> We cannot rely on this, there might be a different program in the call
+> stack. That's why there is an equality check on the arena when
+> actually reporting, to make sure it's going to the right program.
 
-On 11/2/26 3:21 PM, Alexei Starovoitov wrote:
-> From: Chris Mason <mason@kernel.org>
->
-> psock->cork is a ring. sk_msg_memcopy_from_iter() writes at sg.curr.
-> sk_msg_alloc() adds room at sg.end, where a full ring has a spare element.
->
-> When only a part of the data fits, tcp_bpf_sendmsg() copies this part and
-> flushes the cork. If nothing fits, it copies 0 bytes. This copy writes
-> nothing, but it moves sg.curr to sg.end and returns -ENOSPC. Thus sendmsg()
-> fails without a flush. sg.curr stays at sg.end, and from there a copy moves
-> it past the spare element. Then a copy can skip the first new element, and
-> the peer gets memory that nobody wrote.
->
-> Skip the copy when sk_msg_alloc() adds nothing, as tls_sw_sendmsg_locked()
-> does. This pass of the loop flushes the cork. The flush empties the element
-> at sg.curr, thus the copy in the next pass starts at the first new element.
-> Now sendmsg() on a full cork does not fail with ENOSPC. The prog runs on
-> less data than it wants to cork, as it does when a part fits.
->
-> The first Fixes tag is for the -ENOSPC without a flush. The commit in the
-> second tag added the spare element. Since then sg.curr can move past it.
->
-> Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-> Fixes: 031097d9e079 ("net: skmsg: fix TLS 1.3 crash with full sk_msg")
-> Signed-off-by: Chris Mason <mason@kernel.org>
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-
-
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
+I meant it as a fast path, not as the only path.
+the equality check is needed, of course.
+A different prog on the stack will fail that check and
+the handler will do latch search.
