@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793749292;
-	b=gmJ/rz7XYCqS8Ka+AsGB7ndDrxsEm58VQ4p2tNhis18yOVKy0a8c9oYWK3+xTKFOu6I0
-	 XCFE092etiqxBpDMct3A1eb2rxcMxWASPdJ+yr4dip1eCdlvrlYNNjsNNOsbxxwrSjkce
-	 rq9OcNOXdnWJlhfasXN7dWGRSHhDXek40i6Fx8BXkQdxsfMp7cnP3wY6Vt2VZaTFDXhNS
-	 XD80c45GWSVXalIDfLfx7QxgmCk1u+O0l0py8Shpare45dh0iry/TuSD1wjnIjttwFtXT
-	 91SCQUgnkzXXW3bgNg+dOSgRFvWMTfFN5a6BHbpXqtTAyHQaSFin25+O3HFxuwAaRhA==
+	t=1793749298;
+	b=mgQzwOhLZIy8Q9b2B+M1cH8n6Ye3dwy3MoK4qrWXKI+L6z/BpwZexNUci5EH6onzHmww
+	 iPsUIEFanRlSIH0dpqPGRqbN7QBfmrjAF/8YrfuW0ZvNcojH0lTRhZqpKmbPIMbnHjbLJ
+	 go+Pac0JILJysalGHRYdOwr/7JzcyFVeywwH6XfPHOOYgPABgL3ZcjtCQ12ROm1F1GQe5
+	 iULvoAtqL4vJXcWQyab/5oCSOktWOwteakIpT/1loSmUN51BF0btiiJ+ElG4MHvdJrMU2
+	 g0PirtDuTXsEjBd0XBDIV22Fe5f+NSe/XWvKCmng6XwT4t/zbPEZnW3nXfll40jC9ww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793749292;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793749298;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=tBdJDIYNq0yh2yirDO1LcyjNGf5PBxMQXmdlNg08he8=;
-	b=MIhy8J/lYO6kB+L6xSLrRCkOAe9gqSBkh+SfTxS6KTUl//1SBTQzT0IhdTz8Dylo+r6b
-	 4a+VkUrQ4yW1YZGosFZ2QGzR9a1tv0CJIO/qcOXR3qjprUsDJnhx0NPfV9vBnNKWk33hy
-	 xzLeD9i53FIZ0tVG4ufb5mNwi0Mhnfpu2AezRCa9tR+L/FhZOMuu1oIgpct9eOFn3nFCj
-	 Fh5iqEoi0yYW8hSeAhvlKCD3jNHcCww2Fhw851NWKL6TraURXJyal5hqGqqWwh8NxL6IN
-	 02nJyfiY7aH4Nmq8M1fGXNW4jJH3dTyB85+gqSJfiRa1En3oPkfO3DAt9W+DTDsnx1A==
+	bh=0RCaW/EaGePAjy6kmDzdtAnMLiVkitpp853anBrhjoc=;
+	b=OTP7NjhlZm7l7AL2EiVf6pmvx0eKicudJhGat84fFduHzJpn+TAnPyt6bFlhNtxKZ0oc
+	 6FbtIDGSUa9waAjqRcMOkMPLC2uekQEIyyqqkpAlWhK5NHW7lFOU4OhbpEUEQ5ZIn37fa
+	 2btLJ4hiWODeTtvO8LvDXyaV7Q0ZJDZPtahNMyfhP44g/4m84oV3pT+ZuCc+ooaSHlyPs
+	 j1b7QDtG60rw9KBEMVaOcNt9RdqE+LK8r9Rdriw2Yp7ziFBy4au7VxeE/3Crs8h+pISLN
+	 tsOU10oBxeJlkRp/5a5jYZCk1ZEN3EldDJZmSmAAqjtUVX4cnj0bfRRr3Trq3wx1Myg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=V5MUlHbp;
-	arc=none smtp.remote-ip=209.85.210.171
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iiM3+0Oi;
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0437606A31B
-	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:41:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0437606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6245606A31B
+	for <bpf@vger.kernel.org>; Tue,  3 Nov 2026 23:41:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6245606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=V5MUlHbp
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8a06210b29fso82096b3a.1
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:41:31 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iiM3+0Oi
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ac78f4c10bso89316a91.1
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 15:41:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793749291; x=1794354091; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793749297; x=1794354097; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=tBdJDIYNq0yh2yirDO1LcyjNGf5PBxMQXmdlNg08he8=;
-        b=V5MUlHbpJTRl/z7vTtLTIyzxy+3A4W5Z1j1VmSNKLzTHr5b9+252QV3M5UmSvjQdVc
-         QYedbDUR96AzPZlupjV9TDaWKJHztAdVHsuJCJpfCOlRYwn+t6xpeIjzI092XpxVVoQR
-         gSq8X5zDv4kwMydwyXJA5934Yz2MHOF1IKpGM1r90I0xidwGxkfZeX9wjaDVu4dWYRAJ
-         q4aOmkenpsUv20CjsvGZqYXi4eEY//Otp5tJFzDF2tz0mmY5omfr7pqa2MTIXgV/JazH
-         6WfS7rReYX6NLAqKhRKVULO8W1pq3zRuVnCqGpoXjGegkUisQL5WiRTMdLUggKohH9mJ
-         7o9w==
+        bh=0RCaW/EaGePAjy6kmDzdtAnMLiVkitpp853anBrhjoc=;
+        b=iiM3+0Oi/vZEOrV3hDE4wZ1kgFYM5yVuqHotJf/LTfNRlGS5upuPGHe+wT9AJWRqbR
+         1NkdpwGZmmXDZ092985wlLu8ylVYpxn+cREP1Ms+r2EVG2MSymNLI+sMi7izYqScua5b
+         60OiOYA82ft27iYEj0LDoqVoulDqCr/KYw2iXXNHvZV49vH+qLYdF1DyUWHHvpBRSOAJ
+         7CyfAdLwPL64nmwUpi5edhhVwUT9+4B0p/hKJN3s9AZi8Wg21S/JEkYTXkMrbDSaJasr
+         jiAln5dwbgbbxlF/14hF2nQCgPiefoVFvzOX/tDTogA48fs6USyVayvtFQAp41PvpYxu
+         u33w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793749291; x=1794354091;
+        d=1e100.net; s=20260707; t=1793749297; x=1794354097;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tBdJDIYNq0yh2yirDO1LcyjNGf5PBxMQXmdlNg08he8=;
-        b=oxn6aVJQfsT+nxbwM1xwrO0HXEVgMqJBITNN6YgGdfugq9Yd1ObVgBNmSmVl9mRTvL
-         ScMv2S5u3LI7STl6ao/8rc224PlzSaTfImz10bCquKp7RfOYRXOk3VUC0CyF9YL7GJEl
-         QOBbT270yyTU347yodinn8BTmF0u2QFjfP1DMV0mc9ne3nTLlKKepOL7UKxoHUQqua3s
-         wIYjym1YKbCj7zwo60dOh41eyszUOeQuucP2vgpSwzpDVNA6oidERat0LT/32KOTFu5O
-         vVyRH7glOOYN1ahyQ2FG7ejHmXB9jwLMq2m5Z/U4kNgWjCXOJI4nd6KEE2NmZAbfh5Aq
-         UyFQ==
-X-Gm-Message-State: APuU4Z+aH4eMLN44aKos23elUDuSf9yeG7DJ8a9NH6IrgjxWX4tn3uZO
-	mQihNXG3iRu3McCFXJTGiPfqXPMnPLwE6kHz8BV41HK3bO7C4NW9cUHVtliydg==
-X-Gm-Gg: AYBFou20mqpu2mXoOIl2aluR54vTCsk4D3ZBZVef/TqGLP3jv90gC1dBBygF6y++Mm7
-	hTuWMZMXwZ9pwtVc8UQy+rSw+ufCITp5Z1dusRZa8jvI8K29NjxKExyEQgnmcPo2ph0U1Va1dF6
-	Cy+4u6Zan8poQB0W+YUkYOlNxK0J/5HnL+4UwMiS+GQIXF3hkTUrELgwo2XDsudGMi7eNlO6F7U
-	tWl4gL/xnnd5ZnumHUktm9Eif6Zy21AhImRxUMCuOTWerrfPNwV2CbYTIC7k7OAAP8w2Ef+HSvA
-	hJmSCMT/6TDaxN/KyKj/ezfTk+q6kG2b8TK5CMLHtBOl/Fcqnr6oH+2QgsB59AFOBGyDO5OIWeh
-	+fCr7m50Dw27O+wBvDrArpsSyqziBafC2ElVAiF7C06+0NKWb6Hs5jEdWSotPUIK6em0wycc20c
-	J3Lg5TBpMp+A882kbL8bgceTTW88GegHRYgoNiT65oLQYQjYipzzpR90gI+tmxGMRYmqpoe8pkF
-	XbOGDJun6bTd07r6bTrrrT3MqFtlar9tmyyFx/UlaInOx1ELB7at6sUEpfWZQoPh1o9MncBbJcd
-	h1El2De/E+oOt+2ObjI6b/qBgOfzyxkJjyipddcYV7DV/gO26CDgr29YMAkSs4C4N1aeDtGAyvA
-	sCvoZ0K5tGfz/htuejG13RwFcGcuhkXe/wko57fKzUDF+m94btnr4tZLd2W/7EeIiOCnXPtr3rg
+        bh=0RCaW/EaGePAjy6kmDzdtAnMLiVkitpp853anBrhjoc=;
+        b=cC+cGqnsXJRXqxZ30Ik0UusvsP3c1revFhpQXrhUT2Ai5FbCPIYWZuapRkk6JKQdPg
+         xhvWbjbPrKSDk7j6tlJ1Q4Zl6gyMlkQ7Sjb5MhdzfzeENLMT9nLWJfbgUFWBcPFRYMM5
+         Bc8W2eiOiQAQipwFQObgXZp48siPu4hpqfkYMVBErBAB423f8ldCZfu20P9ToAl6DtXh
+         U5ZVNSURMtdHgFGZiS0XtjQFFfLAnvz/Ug2AEha8Ycbb3zZ2GklDyKVErvCCj1zoi2ml
+         pPjDGq3jiop5GTtEPakmj7TV7HRpl9d3swKjoXQ7VmvjjLbcxGcoBLU4UApeHJjptAdv
+         QqYg==
+X-Gm-Message-State: APuU4Z/7mtIUdfMonRf+74L2Tz5tS2TxB1rncmeSbT9OKCFyA3rBlDUN
+	NuU/r/HPVnODi/sdtYxEWLDikj4cai4AE4lf/+xzkv+wIJNmj+6H4ThuLX200w==
+X-Gm-Gg: AYBFou2BpUA+C3ZCdF1aWGxjSOCxfH5ZAQtpeGn+19AaCyIoz3BpK/AlulR3A+x7Zj8
+	eWmPZfl2V/R/RCIfxYlLaMoDvxd5Bb5kPovrnH8bQUMD7CKfQi51JWuFcxB5yV/hdw9904ulxPv
+	okElKPnYRfKcYysHlrcyJlObAjYJymUi+lN8boNbvYbPRhb5kYL4S2TO1Du98qsexzoibRNI0RT
+	3roUGXLGGieBQUl4uJbzWaj/yoyguIzl4gBMcdTifDAnU8g23qjCutcbdo1+lk7wAjnAlVVc3Fe
+	C93V0lvzANdyDpMMrgzj+n3YSV9r+9heiEii1yTeEPgZk+f4ehypYIUEqE5AYw/1iIapTupwlZM
+	j82gMpmil8ryNeSjL6a6FpJoGRt4SkbX4UIyOD6gsQxixNalQrdhFuQg8rUy5WfqoWbEvDtcZq1
+	uhmJ49z1vJxT9G62ACV0qIVn5qLYMkWlYPoTfMKAn9Jas7PtKe1zw1joWGifqZeF/Ong6tkg79F
+	P872txBp0j1hMmK74105Pw5JDw2vY8eym1/1rD5GhfF6yukM94Ls58nhXyDP74ZV/wMw+C18oUS
+	X15e3bfqOsRCym9/Yr7S1DcaZBz3tFkTDecDcbuuUlv3dlrsBA64DTJl3y8rnJ6KX+9ighFGTAU
+	MJz4A3edbLUwIKFlwrrg/7Cl6WDWhP4qz4JfK/t07qKBFL04QM1bbIzgOmDKql+65M21bCGjMvA
 	==
-X-Received: by 2002:a05:6a20:a126:b0:3e1:c716:3a00 with SMTP id adf61e73a8af0-3e928dc7a79mr13996278637.53.1793749290627;
-        Tue, 03 Nov 2026 15:41:30 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb4ba7d488sm21837a12.15.2026.11.03.15.41.30
+X-Received: by 2002:a17:90b:3d4b:b0:3ae:2969:903f with SMTP id 98e67ed59e1d1-3ae89771936mr12257689a91.45.1793749296800;
+        Tue, 03 Nov 2026 15:41:36 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b095314e85sm848578a91.15.2026.11.03.15.41.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 15:41:30 -0800 (PST)
+        Tue, 03 Nov 2026 15:41:36 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 04/37] bpf: Don't trust BTF of a static subprog that reads more registers
-Date: Tue,  3 Nov 2026 23:40:29 +0000
-Message-ID: <20261103234104.208239-5-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 05/37] selftests/bpf: Test trampolines on subprogs that take more than BTF says
+Date: Tue,  3 Nov 2026 23:40:30 +0000
+Message-ID: <20261103234104.208239-6-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
 References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
@@ -104,87 +104,175 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A trampoline saves and restores the argument registers that the BTF
-prototype of its target has. The prog that is attached can clobber all
-other registers.
+callee_takes_r5() has one parameter in BTF. Its code also reads r5, and it
+returns in r0 and r2.
 
-BTF of a static subprog describes the source. It does not describe what the
-compiler passes: the code can take more arguments than the prototype has
-parameters. rustc, for example, adds a hidden pointer to the result.
+  test                   attached  expected
+  ---------------------  --------  ------------------------------------
+  int128_tgt_prog        fentry    the subprog gets r5 of its caller
+  tgt_prog_returns_pair  fexit     the verifier refuses to load the prog
 
-Thus the verifier compares BTF with the registers at each call of a static
-subprog. When they disagree it marks BTF as unreliable, and a trampoline
-keeps all of r1-r5. But the verifier examines only the registers that BTF
-has. A subprog that reads more of r1-r5 keeps reliable BTF:
+The fentry prog reads r5 from its context. That loads only when the
+trampoline has 5 u64 arguments. Then it clobbers r1-r5, so that the result
+does not depend on what the kernel leaves in these registers.
 
-  BTF:  f(a)                  the trampoline keeps r1
-  code: reads r1 and r2       the caller's r2 is lost
+test_tgt_prog_unreliable() gets the prog, the target and the message as
+arguments, so that both refusals share it.
 
-With fentry, fexit or fsession attached, the subprog runs with a value in
-r2 that the verifier did not see.
+The two cases need no stack arguments. They still run only where the
+compiler and the JIT have them, because they share that function and the
+block of the static subprogs with the cases that need them.
 
-Compare in the other direction too: BTF is unreliable when a register of
-r1-r5 that BTF does not have is live at the entry of the subprog. A prog
-can still attach. It gets 5 u64 arguments instead of the arguments of BTF,
-and fexit gets the result behind them.
-
-Liveness errs on the safe side. One static function of the C schedulers in
-sched-ext/scx gets unreliable BTF though its BTF is right: a call of a
-helper that the kernel does not have counts as a read of r1-r5.
-
-There is one exception. Liveness misses r3-r5 of bpf_trace_printk() and the
-flags of bpf_get_branch_snapshot(), which their protos do not declare. A
-subprog that takes them from its caller keeps reliable BTF, and it prints
-or passes a wrong number under a tracer. The helpers are safe with any
-value there: the verifier never checks these registers.
-
-Fixes: 8c1b6e69dcc1 ("bpf: Compare BTF types of functions arguments with actual types")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/tracing_struct.c | 27 +++++++++++++------
+ .../bpf/progs/tracing_struct_int128_tgt.c     | 15 ++++++++++-
+ .../bpf/progs/tracing_struct_int128_tracer.c  |  6 ++++-
+ 3 files changed, 38 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index dcfced2573ee..d95f86b62e99 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11325,6 +11325,20 @@ static void gen_subprog_arg_proto(const struct bpf_subprog_info *sub, const stru
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+index de358f335d98..ab74ba077041 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+@@ -198,6 +198,10 @@ static void test_int128_tgt_prog(void)
+ 							     "callee_split");
+ 		err = err ?: bpf_program__set_attach_target(tracer->progs.split_exit, fd,
+ 							     "callee_split");
++		/* The trampoline has to keep r5, which BTF doesn't have. */
++		bpf_program__set_autoload(tracer->progs.unreliable_entry, true);
++		err = err ?: bpf_program__set_attach_target(tracer->progs.unreliable_entry, fd,
++							     "callee_takes_r5");
+ 	} else {
+ 		bpf_program__set_autoload(tracer->progs.stack_entry, false);
+ 		bpf_program__set_autoload(tracer->progs.stack_exit, false);
+@@ -239,6 +243,8 @@ static void test_int128_tgt_prog(void)
+ 		ASSERT_EQ(tracer->bss->split_i, 10, "split:i");
+ 		ASSERT_EQ(tgt->bss->ret_split, 246, "split ret");
+ 		ASSERT_EQ(tracer->bss->split_ret, 246, "split fexit ret");
++		ASSERT_EQ(tracer->bss->unreliable_r5, 2, "takes more:r5");
++		ASSERT_EQ(tgt->bss->ret_takes_more, 11, "takes more ret");
  	}
+ 
+ out:
+@@ -252,14 +258,15 @@ static void test_int128_tgt_prog(void)
+ /*
+  * A static function whose BTF is unreliable gets a trampoline that only knows
+  * of the register arguments, so one taking stack arguments must be refused.
++ * It only knows of r0 too, so fexit to one returning in r0 and r2 must be refused.
+  */
+-static void test_tgt_prog_unreliable(void)
++static void test_tgt_prog_unreliable(const char *name, const char *func, const char *msg)
+ {
+ #if defined(__x86_64__) || defined(__aarch64__)
+ 	struct tracing_struct_int128_tracer *tracer = NULL;
+ 	struct tracing_struct_int128_tgt *tgt;
++	struct bpf_program *prog, *entry;
+ 	char log_buf[4096] = {};
+-	struct bpf_program *prog;
+ 	int err, fd;
+ 
+ 	tgt = tracing_struct_int128_tgt__open_and_load();
+@@ -277,16 +284,16 @@ static void test_tgt_prog_unreliable(void)
+ 
+ 	bpf_object__for_each_program(prog, tracer->obj)
+ 		bpf_program__set_autoload(prog, false);
+-	bpf_program__set_autoload(tracer->progs.unreliable_entry, true);
+-	bpf_program__set_log_buf(tracer->progs.unreliable_entry, log_buf, sizeof(log_buf));
+-	err = bpf_program__set_attach_target(tracer->progs.unreliable_entry, fd,
+-					     "callee_unreliable");
++	entry = bpf_object__find_program_by_name(tracer->obj, name);
++	bpf_program__set_autoload(entry, true);
++	bpf_program__set_log_buf(entry, log_buf, sizeof(log_buf));
++	err = bpf_program__set_attach_target(entry, fd, func);
+ 	if (!ASSERT_OK(err, "set_attach_target"))
+ 		goto out;
+ 
+ 	err = tracing_struct_int128_tracer__load(tracer);
+ 	ASSERT_ERR(err, "tracer__load");
+-	ASSERT_HAS_SUBSTR(log_buf, "unreliable BTF and stack arguments", "log");
++	ASSERT_HAS_SUBSTR(log_buf, msg, "log");
+ 
+ out:
+ 	tracing_struct_int128_tracer__destroy(tracer);
+@@ -389,7 +396,11 @@ void test_tracing_struct(void)
+ 	if (test__start_subtest("int128_tgt_prog"))
+ 		test_int128_tgt_prog();
+ 	if (test__start_subtest("tgt_prog_unreliable"))
+-		test_tgt_prog_unreliable();
++		test_tgt_prog_unreliable("unreliable_entry", "callee_unreliable",
++					 "unreliable BTF and stack arguments");
++	if (test__start_subtest("tgt_prog_returns_pair"))
++		test_tgt_prog_unreliable("odd_exit", "callee_takes_r5",
++					 "with a >8 byte return value");
+ 	if (test__start_subtest("stack_arg_tailcall"))
+ 		test_stack_arg_tailcall();
+ 	if (test__start_subtest("union_args"))
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
+index 2561422c25dd..2e2ddd1b52df 100644
+--- a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
++++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
+@@ -2,13 +2,14 @@
+ /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+ #include <vmlinux.h>
+ #include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
+ 
+ struct int128_arg {
+ 	__int128 v;
+ };
+ 
+ __u64 base;
+-__u64 ret_odd, ret_stack, ret_split, ret_unreliable;
++__u64 ret_odd, ret_stack, ret_split, ret_unreliable, ret_takes_more;
+ 
+ #if defined(__clang__)
+ 
+@@ -68,6 +69,17 @@ static __noinline __u64 callee_unreliable(__u64 *p, __u64 b, __u64 c, __u64 d,
+ 	return *p + b * 2 + c * 3 + d * 4 + e * 5 + f * 6;
  }
  
-+/*
-+ * The argument slots that the code of a static subprog takes, whatever its BTF says.
-+ * Liveness errs on the safe side: a callx in the subprog counts as a read of r1-r5.
-+ * But it misses r3-r5 of bpf_trace_printk() and the flags of bpf_get_branch_snapshot(), which
-+ * their protos do not declare. Such a subprog prints or passes a wrong number under a tracer.
-+ * The helpers are safe with any value there: the verifier never checks these registers.
-+ */
-+static u32 code_arg_slots(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
++/* BTF has 'a'. The code also takes r5. It returns in r0 and r2. */
++static __naked __noinline __used __int128 callee_takes_r5(__u64 a)
 +{
-+	u32 live_regs = env->insn_aux_data[sub->start].live_regs_before;
-+
-+	return fls((live_regs & GENMASK(BPF_REG_5, BPF_REG_1)) >> BPF_REG_1);
++	asm volatile ("r0 = r1; r0 += r5; r2 = r5; exit;");
 +}
 +
- static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog, struct btf *btf)
- {
- 	struct bpf_subprog_info *sub = subprog_info(env, subprog);
-@@ -11361,10 +11375,13 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog, s
- 	meta.func_proto = func_proto;
++static __naked __noinline __u64 call_takes_more(void)
++{
++	asm volatile ("r1 = 7; r5 = 2; call callee_takes_r5; r0 += r2; exit;");
++}
++
+ #else
  
- 	/*
--	 * Check if all register arguments declared in BTF are initialized.
--	 * If they aren't the BTF is unreliable.
-+	 * Check if all register arguments declared in BTF are initialized,
-+	 * and if the code takes no other arguments: a trampoline keeps only
-+	 * what BTF declares. If not, the BTF is unreliable.
- 	 */
- 	if (!bpf_subprog_is_global(env, subprog)) {
-+		if (code_arg_slots(env, sub) > sub->arg_slot_cnt)
-+			return -EINVAL;
- 		for (i = 0; i < min_t(u32, sub->arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS); i++)
- 			if (caller->regs[BPF_REG_1 + i].type == NOT_INIT)
- 				return -EINVAL;
+ const volatile bool has_stack_arg = false;
+@@ -93,6 +105,7 @@ int run(void *ctx)
+ 		ret_unreliable = callee_unreliable(&x, base + 2, base + 3,
+ 						   base + 4, base + 5, base + 6);
+ 	}
++	ret_takes_more = call_takes_more();
+ #endif
+ #endif
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
+index fc81c2eea4a8..6a1d5ce0c171 100644
+--- a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
++++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
+@@ -67,10 +67,14 @@ int split_exit(unsigned long long *ctx)
+ 	return 0;
+ }
+ 
+-/* Refused: the trampoline would lose the stack argument. */
++long unreliable_r5;
++
++/* For static functions with unreliable BTF: the arguments are r1-r5. It clobbers them. */
+ SEC("?fentry/callee_unreliable")
+ int unreliable_entry(unsigned long long *ctx)
+ {
++	unreliable_r5 = ctx[4];
++	asm volatile ("r1 = 0; r2 = 0; r3 = 0; r4 = 0; r5 = 0;" ::: "r1", "r2", "r3", "r4", "r5");
+ 	return 0;
+ }
+ 
 -- 
 2.55.0
 
