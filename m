@@ -1,45 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793789029;
-	b=mWpT26YpnTZSYjCSqM2nBxQd3EQlNGxRHZuxERYZJ5bUn+bPBZTcPYDUljfrU6R4JRKL
-	 gV6q4IBtdTHwrm47SYbebxnoOO+PjoRIcHP+VX8OTcm70vdX/3j8HTEQ3RNYq9bBqg66Q
-	 NEjva/5QecGDjVuyEiT0cV4RBcnDGhP8dCwjUjrMzPD7tAg/KWyZchD8uXIWE0JJBmJB0
-	 aEIE7FSQEoW9xKhlFfd4kWyCIIVTYMWZrt6N8JYr+5jHBVWoXxUa8R8feo4pyYbxQ1Zss
-	 2aQ7x2CBJMvwyfD6xevgKYNWs4fa4Bf3ruyyBa/rfCFt3XYrIUlFXMfCAcuQ9moHbGg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793789029;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=4+EcRDWVmPDx1ZpyH2GACpj8rgMH2E771rpsXUmTySI=;
-	b=Axb6mEglVnW7m77c9uA3X9ocJhsukS3eConVk72ZzS3Sirsf0KsKyhyfSQ/BUsCRDSIZ
-	 cr0uwNpvgkDocZ+BMQEaOOSHEIfMiOi0adMGYi/3/Ez2EyEBWIJz3keL1aM1Reps54Va3
-	 iz5na7aPqh6hKCFGNEb+yzDsPS3AixFUtONKB6pI9/uqlgj4vtLahvldO5eD+m2GjV7LI
-	 sM5DJ9+TfMwlhHR4EoOxajqOgp1LytsIg+klp4d4QBPpkd8beOBxZ+BqYMT0s/y7BSMUW
-	 eHPoP3C7wkcH22QyD767N3yVL/det1pUuMeVvnHOTLxpCp2Zp7OBzm35L+i/UjvWkgw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IAMT6IEp;
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793792281;
+	b=ePvYPSskbqv5tBJDjOGULzcERHf7DvtpsHW/yZTEPq5Eup/YPxDeEGpuTib7nRgeTI1C
+	 eqwHlt53jBJc/MTUr3J54Ui8WlP37Y8abif6MQumbZgC3JC6UC8XoA3hwJDGxsob3gY5R
+	 PlR8qCwsbyaLc+O7Pm5Y06jFm5s3cryBd92Yi7WGbfnXMCuzO2SJVThqJ2HRG2XedMyb1
+	 Y4HpqkQx/fV3DXVi4oHDbKTBuAKRLU7OtqgL1WqqvvTAb+tWbWgA9piQ2Fd/SNyEIOS3e
+	 5aagbBsIiMHv3xYG/dRI2/AxuYCE1UFcfKAHbHjAow1bnhB72FhvrkKD6R9o8id/bow==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793792281;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=i4o/1Ov+Rk4PSAZfblqY+qRYIgcMzFlXPluPXC1UsjY=;
+	b=zmWYK6okbBVdYHo+pR5oomYQmlTxoeuXqqQl2QvM7Y6BFNRNuQleY5nI8gyxMSqX8Y3p
+	 YIncDOpH3XiUzMNX9si6fFo/vecaRsweABcCPjMkrxzskn+KgntmnsqsvwQxWihdFTRpU
+	 m8rtsZI6SpKbeL3b7jymxQM5slrO25iHdD9RYlgLwp2U1Zz1jL9FKIwdbMBj4IplhO01m
+	 Dp5S/vhEXIgpcGfJM4BqKTlHLSs4FO1hCCWU+1x9CPVjI8wgH4opYlIbqIyAdOoVjxtsL
+	 yyxCnCs0kV/11CISeV/JIO3oijoOFwNOvZR36S+3sjjL0OrzXF5dF0J2Xt/3LAfNluQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nBxr1yhv;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F50D606A31B;
-	Wed,  4 Nov 2026 10:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A36606A332;
+	Wed,  4 Nov 2026 11:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IAMT6IEp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97CC71F000C1;
-	Wed,  4 Nov 2026 10:43:48 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nBxr1yhv
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1793792281;
+	b=jWQpCriwAskY/KjBg5g5XhDo3wzqodGqf1GmHkdA/0fWU9ByL1fjlqAHmcLSL74Y7xMh
+	 iZEtAoxtuJyoqbD+AwirUI/kcTTGVtE3oBc+qj2CUHURFlW7zrDNY54qqRKCtnrOPTbZL
+	 g9lBJfFVrhxXOVHBXcGtk9qduKqd6Pu0/4IdzVe6j0PzL9VYnwvf1HrQ0O3qAf7zlbAGD
+	 54hyFjhEXR/AqSh3dqSzVaSIzhhJDYO5CujYJT7Tf4lsiRNVGMo1al4ytfmWAwIq73xVt
+	 0NXeDnaI0ZvCzk5OMqTcEWqly837MubYbsW3j6/L88bpKJJupt52mjXpkLaBdcJZ69w==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793792281;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=i4o/1Ov+Rk4PSAZfblqY+qRYIgcMzFlXPluPXC1UsjY=;
+	b=nUKLNZ40qcq6i+GpxrLJL3HKlIABNCLaF6iMD5IiF3hPSIv0ykxD2qyvdBBquLcxakeL
+	 4W6Y1alk/mVi2H1vOoAsg+ZZpPGCrykj+L7n5UxsZUDr0KuG3AxFWPcAFLW41y0QQo8zY
+	 7d6IhuxPwDMqXSjO//NgK3keZK4Y47OIYYBqiDuszrtjbMO/MoaG8m86WXpfPWMRAGHjm
+	 3G+b/nDHAgiz29g0D7JodvEzg2ZlMFIBT9F0Z4C+AEOl0GkU9znz0tL3M5bwZTVcrpEIJ
+	 bKZ6mywLljPaTK8qoD09jlA5scbGykYbtJZae2m0zObmNHFQydN/TdSC5jdQ6osSDxQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A5E111F00919;
+	Wed,  4 Nov 2026 11:38:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793789029;
-	bh=4+EcRDWVmPDx1ZpyH2GACpj8rgMH2E771rpsXUmTySI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=IAMT6IEpl/QMyUK0smoW4bFmv3nLyQ7xt99aBDZLcTYCFItn0RTUnhrfLwFNuNQUT
-	 P4ebdCuXDpC+CwFG7aTmsIYpJ6BDwcxQKB3mdjsVkWxrcwWacToq65U+rswtrWs4dJ
-	 3jSTCBJK4pOZRinRwH54VZgPcyrssoF/ynNmiy5XRmIEu3VynlgUJNFb8bkotuZebX
-	 CiO4ftWaoQZ5V21RYmfu+jsPz5qKyGpoKyxR7wSHjzLNCywv90YP+u451pW+g1cqYH
-	 m7ET7EzTzhtXO71f8/wRTSSqoVEz88PlVY70Rl02YtpdVgErR30z1Bp9gF695XOLkJ
-	 dhkxW5T9/J8lQ==
-Content-Type: multipart/mixed; boundary="===============5210111555606903047=="
+	s=k20260515; t=1793792281;
+	bh=i4o/1Ov+Rk4PSAZfblqY+qRYIgcMzFlXPluPXC1UsjY=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=nBxr1yhvpdWcKBD0Gmn6Hehj3DhnKK3TvpmTj+16u6NhviH1GEh9zF7C7KCD5XFuM
+	 b8v4DhCGJJvzUpVyVc/2ZKVg4Wp0+o77OsNpuvuSbsFQCxW8qTALDXvb4n1nxloxwh
+	 ttunfDURxhhNaAV/IrYqqkb/bYZgjDFaOY5Sbu+yGLCdPtQLHYF1hjHAC3gh0FlsM9
+	 haSY63xH4MrOdthC6WNDjHQJWcLjfhjreRCnuHKsFmAUocrHYdp0f+/S4TsLvbz+XH
+	 2kETG401XNvYGGHtrOUfA4cgvBqW+uOiHK9I7+gwNszY8mrqsDScTypcT0ze1gDM/r
+	 DNPY/yd8DTWYg==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id F352246DEF;
+	Wed,  4 Nov 2026 11:37:59 +0000 (UTC)
+From: Jonathan Bastari Thamrin via B4 Relay <devnull+thamrinjonathan.gmail.com@kernel.org>
+Subject: [PATCH bpf-next 0/2] Limit local storage value size to max
+ kmalloc_nolock() allocation
+Date: Wed, 04 Nov 2026 18:37:56 +0700
+Message-Id: <20261104-local-storage-max-v1-0-c836731bd184@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,98 +84,67 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <6e5775fb342f79e0404d11547d954fc855dd7bfcfafac5d43184c966fc3ca290@mail.kernel.org>
-In-Reply-To: <20261104100411.997-4-cp0613@linux.alibaba.com>
-References: <20261104100411.997-4-cp0613@linux.alibaba.com>
-Subject: Re: [PATCH v2 bpf-next 3/3] selftests/bpf: Add a runtime test for private stack and stack arguments
-From: bot+bpf-ci@kernel.org
-To: cp0613@linux.alibaba.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,memxor@gmail.com,bjorn@kernel.org,puranjay@kernel.org
-Cc: eddyz87@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,pulehui@huawei.com,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,luke.r.nels@gmail.com,xi.wang@gmail.com,shuah@kernel.org,rgbi3307@gmail.com,guoren@kernel.org,bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  4 Nov 2026 10:43:48 +0000 (UTC)
-
---===============5210111555606903047==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqAIBAAvxJ7bkErivpKdLBtrYXS0Agh+nvSc
+ RhmHogchCMMxQOBb4niXQZdFkCbcSujLJmhUlWrtWpw92R2jJcPJsvDJKS6U72lpbUzQe7OwFb
+ S/xxhPi06ThdM7/sB9RsjSm0AAAA=
+X-Change-ID: 20261104-local-storage-max-c3709fcd6fbc
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Amery Hung <ameryhung@gmail.com>, 
+ Slava Imameev <slava.imameev@crowdstrike.com>, 
+ Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793792278; l=1220;
+ i=thamrinjonathan@gmail.com; s=20261102; h=from:subject:message-id;
+ bh=7tD517TNGR3Xl9ZhLbA/MFMMtT5aaAkfnZnVLX73hmk=;
+ b=BTjv2wvo5BWzwx918zqZt/0lRYf+OY3GGArIhxuadr66khkgWOYChCNRIt5GSWBeo9az5Vlkq
+ IzS0MoJgwM/C1N4drlaatguxem7qKp38vJMK7tgaLY+YI/6rDQzFvAJ
+X-Developer-Key: i=thamrinjonathan@gmail.com; a=ed25519;
+ pk=mr0q5PZVaUIrv8WvTxIfK7QVcAiRSYI8hOByBQL1ZRo=
+X-Endpoint-Received: by B4 Relay for thamrinjonathan@gmail.com/20261102
+ with auth_id=1383
+X-Original-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+Reply-To: thamrinjonathan@gmail.com
 
-> selftests/bpf: Add a runtime test for private stack and stack arguments
+BPF local storage elements are allocated using kmalloc_nolock()
+but map creation is still allowed with values up to kmalloc()'s
+larger limit. BPF_LOCAL_STORAGE_MAX_VALUE_SIZE is changed to be
+based on KMALLOC_MAX_CACHE_SIZE instead and maps with larger
+values fail on creation with E2BIG. Cgroup storage
+(BPF_MAP_TYPE_CGROUP_STORAGE) uses the previous limit since it
+allocates with kmalloc().
 
-TL;DR: Commit message only: it may be inaccurate in saying fentry/fexit tests
-are left at NO_PRIV_STACK, since tracing programs that recurse are eligible
-for a private stack; the review suggests rewording.
-
->     selftests/bpf: Add a runtime test for private stack and stack arguments
->
->     No existing test reaches the combination. bpf_enable_priv_stack() grants
->     an adaptive private stack only to kprobe, tracepoint, perf_event and
->     raw_tracepoint programs, and to tracing, lsm and struct_ops ones that
->     request it or recurse. The stack-argument tests run from tc, socket,
->     syscall and fentry/fexit, all left at NO_PRIV_STACK; the private-stack
->     tests call subprograms of up to three arguments, which stay in
->     registers. Neither pairs a private stack with outgoing stack arguments,
->     where the caller writes the argument area relative to SP and the callee
->     reads it relative to the frame pointer.
->
->     Add a runtime test for that combination. A static ten-argument callee
->     writes through a pointer into the caller frame and keeps a 128-byte
->     volatile local array, so its own depth crosses the 64-byte threshold at
->     which the verifier grants a subprog the adaptive private stack. The same
->     workload runs from a raw tracepoint, which gets a private stack, and
->     from tc, which does not; the test pins itself to each allowed CPU in
->     turn and checks the CPU the program reported.
->
->     A runtime result cannot show where the three stack areas landed, so the
->     riscv64 __jited patterns pin the layout: the caller's kernel frame is 48
->     bytes against the control group's 176 and the callee's 64 against 208,
->     the 128 and 144 byte differences being exactly the BPF stack that moved
->     to the per-CPU area. Both groups write the two outgoing arguments at
->     0x0(sp) and 0x8(sp) and the callee reads them back at 0x0(s0) and
->     0x8(s0), so the outgoing area, the saved registers and the BPF stack
->     occupy disjoint ranges. None of the patterns assert the per-CPU lookup,
->     which is only emitted on CONFIG_SMP, so one set matches SMP and UP
->     alike.
->
->     The zero-depth struct_ops program is a control case for the kernel
->     stack path, not a private-stack allocation: the verifier grants the
->     adaptive private stack only once a subprog's stack depth, rounded up to
->     the JIT's 16-byte granularity, reaches 64 bytes.
->
->     Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
-
-The commit message says the stack-argument tests run from "tc, socket,
-syscall and fentry/fexit, all left at NO_PRIV_STACK".  Is that accurate
-for fentry/fexit?
-
-Those are BPF_PROG_TYPE_TRACING programs, and bpf_enable_priv_stack() does:
-
-    case BPF_PROG_TYPE_TRACING:
-    case BPF_PROG_TYPE_LSM:
-    case BPF_PROG_TYPE_STRUCT_OPS:
-        if (prog->aux->priv_stack_requested || bpf_prog_check_recur(prog))
-            return PRIV_STACK_ADAPTIVE;
-
-bpf_prog_check_recur() returns true for TRACING unless expected_attach_type
-is BPF_TRACE_ITER, so the fentry/fexit tracers in
-progs/tracing_stack_arg_tailcall_tracer.c and
-progs/tracing_struct_int128_tracer.c get PRIV_STACK_ADAPTIVE at the program
-level.  That is the "tracing ... ones that ... recurse" case named in the
-preceding sentence.
-
-The real reasons those tracers never pair a private stack with stack
-arguments seem to be different.  check_max_stack_depth_subprog() only gives
-a subprog PRIV_STACK_ADAPTIVE when its rounded depth reaches
-BPF_PRIV_STACK_MIN_SIZE (64), and these programs only copy a few ctx[]
-slots into globals.  They also make no outgoing stack-argument calls; the
-stack arguments belong to the traced syscall-program target.
-
-Could the sentence say that the fentry/fexit tracers are eligible for a
-private stack, but stay below the 64-byte threshold and make no
-stack-argument calls?
-
+A selftest is also added to both find the largest task storage
+size and test that this value can be stored. It also checks
+that the size is at least 4096 to check that the limit isn't too
+low.
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Jonathan Bastari Thamrin (2):
+      bpf: Limit local storage value size to max kmalloc_nolock() allocation
+      selftests/bpf: Test local storage max value size
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41813628482
---===============5210111555606903047==--
+ include/linux/bpf_local_storage.h                  | 10 +--
+ kernel/bpf/local_storage.c                         | 13 +++-
+ .../selftests/bpf/prog_tests/task_local_storage.c  | 87 ++++++++++++++++++++++
+ 3 files changed, 103 insertions(+), 7 deletions(-)
+---
+base-commit: d346f59069676eda84b3313cbd2c2ab21045d3ee
+change-id: 20261104-local-storage-max-c3709fcd6fbc
+
+Best regards,
+-- 
+Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+
+
