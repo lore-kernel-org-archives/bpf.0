@@ -1,114 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793826893;
-	b=DQfbRCZUZrH6O07xzavOh8CCOSk7fuuvQ7Nf4OKKzSzJE5XOFISoDzjDgCWV+KJzs8vG
-	 n8GV1LwFpgXx/8iatVvQc6m3y8jpSZfBnkVFGznzc9cUUGtMoYiy1UtIfdh7tY5ApSLnd
-	 Qyrkls/cxsyKdEgb735klE3aDHEEJFtkpON3+GbLsyidZuvQpIr5zQFzTixCnAEnfM+zF
-	 UL920RAg3enGdTkucRAQMHCw+cmXrqVtIS5J1VxzCzzCvy/Y7wkIpAlL4hiw84JdJN60u
-	 tBkdTh4SWNSGyx3OFlPsuuCVstYI9PFJdstO5X7mQwpuXmg5U0aqmH+bljO9+BhWaNw==
+	t=1793827614;
+	b=Y59ORMvAOJqzJrw5wWWTe0Fb8Er+IxqVwvhTeZnWwJ3KyVO5guRhT8dbhnPrKepv8VEJ
+	 aQw9NE6DBcGBE13XjjIxP6f59x5j73DW+7s7wbmnrDb8hl1Yg3Hpj1CuG09AT/eow08ks
+	 W0IKu7taMGonpgz9apNdXle/bxGX72f7l7g2UZDyftNmZB/XbEFWVz/3fzOzC06az4YVa
+	 JGFSywaAIvW2L7aeifAdpzPinYGcefYevgPqLo3k0h6ejH7kS5jJlv2b7WPS3wY5VsM05
+	 qDFoTqEW8eFkeHce2DRbN0sECinNmCzqoKkz2N5DG2XBkJjoDJDTmaetUQMgC6sWHig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793826893;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=wMYCt5EP/sNWDxIUvBX8we5zMZEdPqHevTqaZp/nA6U=;
-	b=xp+v4EEeR8hD9Xrg+1ZHQkD77rLzpgr7O/IWs6G21q0wSPyq320Fjwp4lJUz6QdyOmYG
-	 iqzQ21ShwKq5ZM91i/5HNp7DDYKFTWiyDvmX9eg27Q11ft0Sy1xEQxgY0QXgAFEqS0o3O
-	 YTJ0C6cyUoKH8rj1LqOE1vWPca8nOwbHyAgFzbMP7CGBilPbPeOG7v5iEBVh4xjwiB372
-	 QX0AO0rUo71xRR5RCKGbVfjip3QRyFce7auBtMrd9IBva07FnFXFYiCX3h+1A4UI7AfAH
-	 yWAl1BIdtB2n0qhPcsSd5lcaXCPqveoxgYOGo6VsAdkTviR7DeNkVJGI1PNliWKl2iQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793827614;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=Fx8mwjCrbZCWbiZSWWBXN0aiI/C9oFeig/QmjdPJVek=;
+	b=qgzzZLYX7YxBt93qqGAyAXtF/AFTekrzwcUsiYtp+gnjMvg5gRpgNWNqGbyhTUjV4hSw
+	 bYymqRheF78RAsUxAcQsKS3ODvgnedNgrFFlj6jEKShRD93sa0mGnnNb6ZgLVTbWpZKFW
+	 lsnUE92X/RBv5XhMUqpLQ7Pxb81H3tYKMsimY3aIXI7nnLJ8QLfN9GvF/YImveGgdM3m6
+	 8/FsrcPQRG0iNw14l4//wnhDiEm/2jUrgxNtg3WRMsZ2wNjZcgF2b5fEs24MIYP96IG22
+	 yEmlyFxH/EOz7NchCHPyDlQRAgGR+JzuRmrnwPg3iX08r9/NnUSkhSdGsv8H0liR0eg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EupUpYNb;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Vy+SWiVb;
+	arc=none smtp.remote-ip=209.85.160.180
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BF2607075B;
-	Wed,  4 Nov 2026 21:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A822606BA2C
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 21:26:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4A822606BA2C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EupUpYNb
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A46161F0093A;
-	Wed,  4 Nov 2026 21:14:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793826892;
-	bh=wMYCt5EP/sNWDxIUvBX8we5zMZEdPqHevTqaZp/nA6U=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EupUpYNbxsz7bxH1Xzhu1FdX+NjLRR6kk4e4PfJE7IMhtjK7/HWHEMKGK108XFPhS
-	 mBwSFyjkd183mb6RqzkERIBKWvlcjGSx0uKON9JOdu0eq4hUKnCXRz669Laqlw4yVd
-	 W7nSUjz3LeWEHdPY5DLD4UanqsN3qrhBUv32Fp1qwlEKJXjg59aq/U94RtHRFKTg7D
-	 imBGe3ru67Ls+x0axIKynDMFis1BtlyEqG0fRMtPLDtffXBT4cUsviW7QYExBRkbOy
-	 s5kkuE5RxZcZs+9vddUbBdS88QI7/R2ST4LsqyQjyK1XhBYoWoOIHd6qVdMfevYpSM
-	 CIQJcp9jsMIZA==
-Message-ID: <sashiko-outbox-198071@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v1 2/5] net: skbuff: refcount spliced page_pool
- frags via skb_pipe_buf_ops
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mina Almasry" <almasrymina@google.com>, virtualization@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com, imx@lists.linux.dev, linux-rdma@vger.kernel.org, linux-hyperv@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Steffen Klassert" <steffen.klassert@secunet.com>, "Herbert
- Xu" <herbert@gondor.apana.org.au>, "Willem de Bruijn" <willemb@google.com>, "Stanislav
- Fomichev" <sdf@fomichev.me>, "Pavel Begunkov" <asml.silence@gmail.com>, "Bobby
- Eshleman" <bobbyeshleman@meta.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "Michael
- S. Tsirkin" <mst@redhat.com>, "Jason Wang" <jasowangio@gmail.com>,
- =?utf-8?b?RXVnZW5pbyBQw6lyZXo=?= <eperezma@redhat.com>, "Xuan Zhuo" <xuanzhuo@linux.alibaba.com>, "Andrew
- Morton" <akpm@linux-foundation.org>, "David Hildenbrand" <david@kernel.org>, "Lorenzo
- Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, "Vlastimil
- Babka" <vbabka@kernel.org>, "Mike Rapoport" <rppt@kernel.org>, "Suren
- Baghdasaryan" <surenb@google.com>, "Michal Hocko" <mhocko@suse.com>, "Jesper
- Dangaard Brouer" <hawk@kernel.org>, "Ilias Apalodimas" <ilias.apalodimas@linaro.org>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "John
- Fastabend" <john.fastabend@gmail.com>, "Sabrina Dubroca" <sd@queasysnail.net>, "Johannes
- Berg" <johannes@sipsolutions.net>, "Byungchul Park" <byungchul@sk.com>, "Jonathan
- Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy
- Dunlap" <rdunlap@infradead.org>, "Lorenzo Bianconi" <lorenzo@kernel.org>, "Wen
- Gu" <guwen@linux.alibaba.com>, "Philo Lu" <lulie@linux.alibaba.com>, "Justin
- Chen" <justin.chen@broadcom.com>, "Florian Fainelli" <florian.fainelli@broadcom.com>, "Vikas
- Gupta" <vikas.gupta@broadcom.com>, "Michael Chan" <michael.chan@broadcom.com>, "Pavan
- Chebbi" <pavan.chebbi@broadcom.com>, "Doug Berger" <opendmb@gmail.com>, "Nicolai
- Buchwitz" <nb@tipi-net.de>, "Satish Kharat" <satishkh@cisco.com>, "Wei Fang" <wei.fang@nxp.com>, "Frank
- Li" <frank.li@nxp.com>, "Shenwei Wang" <shenwei.wang@nxp.com>, "Joshua
- Washington" <joshwash@google.com>, "Harshitha Ramamurthy" <hramamurthy@google.com>, "Jijie
- Shao" <shaojijie@huawei.com>, "Jian Shen" <shenjian15@huawei.com>, "Fan
- Gong" <gongfan1@huawei.com>, "Tony Nguyen" <anthony.l.nguyen@intel.com>, "Przemek
- Kitszel" <przemyslaw.kitszel@intel.com>, "Marcin Wojtas" <marcin.s.wojtas@gmail.com>, "Russell
- King" <linux@armlinux.org.uk>, "Sunil Goutham" <sgoutham@marvell.com>, "Geetha
- sowjanya" <gakula@marvell.com>, "Ratheesh Kannoth" <rkannoth@marvell.com>, "Subbaraya
- Sundeep" <sbhatta@marvell.com>, "Bharat Bhushan" <bbhushan2@marvell.com>, "Felix
- Fietkau" <nbd@nbd.name>, "Matthias Brugger" <matthias.bgg@gmail.com>, "AngeloGioacchino
- Del Regno" <angelogioacchino.delregno@collabora.com>, "Tariq Toukan" <tariqt@nvidia.com>, "Saeed
- Mahameed" <saeedm@nvidia.com>, "Mark Bloch" <mbloch@nvidia.com>, "Leon
- Romanovsky" <leon@kernel.org>, "Ido Schimmel" <idosch@nvidia.com>, "Petr
- Machata" <petrm@nvidia.com>, "Horatiu Vultur" <horatiu.vultur@microchip.com>, UNGLinuxDriver@microchip.com, "Daniel
- Machon" <daniel.machon@microchip.com>, "Steen Hegelund" <Steen.Hegelund@microchip.com>, "Haiyang
- Zhang" <haiyangz@microsoft.com>, "Wei Liu" <wei.liu@kernel.org>, "Dexuan
- Cui" <decui@microsoft.com>, "Yibo Dong" <dong100@mucse.com>, "Brett Creeley" <brett.creeley@amd.com>, "Justin
- Lai" <justinlai0215@realtek.com>, "Larry Chiu" <larry.chiu@realtek.com>,
- =?utf-8?b?TmlrbGFzIFPDtmRlcmx1bmQ=?= <niklas.soderlund@ragnatech.se>, "Paul
- Barker" <paul@pbarker.dev>, "Masahisa Kojima" <kojima.masahisa@socionext.com>, "Maxime
- Chevallier" <maxime.chevallier@bootlin.com>, "Maxime Coquelin" <mcoquelin.stm32@gmail.com>, "Alexandre
- Torgue" <alexandre.torgue@foss.st.com>, "FUJITA Tomonori" <fujita.tomonori@gmail.com>, "Siddharth
- Vadapalli" <s-vadapalli@ti.com>, "Roger Quadros" <rogerq@kernel.org>, "MD
- Danish Anwar" <danishanwar@ti.com>, "Jiawen Wu" <jiawenwu@trustnetic.com>, "Mengyuan
- Lou" <mengyuanlou@net-swift.com>, "Ronak Doshi" <ronak.doshi@broadcom.com>, "Ryder
- Lee" <ryder.lee@mediatek.com>, "Shayne Chen" <shayne.chen@mediatek.com>, "Sean
- Wang" <sean.wang@mediatek.com>, "Juergen Gross" <jgross@suse.com>, "Stefano
- Stabellini" <sstabellini@kernel.org>, "Oleksandr Tyshchenko" <oleksandr_tyshchenko@epam.com>, "Jordan
- Rhee" <jordanrhee@google.com>, "Ankit Garg" <nktgrg@google.com>, "Tim
- Hostetler" <thostet@google.com>, "Erni Sri Satya Vennela" <ernis@linux.microsoft.com>, "Eric
- Joyner" <eric.joyner@amd.com>, "Mohammad Heib" <mheib@redhat.com>, "Prabu
- Thayalan" <prabu.ponrajthayalan@amd.com>, "Chintan Vankar" <c-vankar@ti.com>, "Nora
- Schiffer" <nora.schiffer@ew.tq-group.com>, "Alexander Sverdlin" <alex@sverdlin.org>, "Kevin
- Hao" <haokexin@gmail.com>, "Karl Mehltretter" <kmehltretter@gmail.com>, "Aleksandr
- Loktionov" <aleksandr.loktionov@intel.com>, "Meghana Malladi" <m-malladi@ti.com>, "Jacob
- Keller" <jacob.e.keller@intel.com>, "StanleyYP Wang" <StanleyYP.Wang@mediatek.com>, Frank.Li@kernel.org, wsa+renesas@sang-engineering.com
-In-Reply-To: <20261103211424.127627-3-almasrymina@google.com>
-References: <20261103211424.127627-1-almasrymina@google.com>
- <20261103211424.127627-3-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 04 Nov 2026 21:14:45 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Vy+SWiVb
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-536c8f958d7so9079761cf.1
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 13:26:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793827612; x=1794432412; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Fx8mwjCrbZCWbiZSWWBXN0aiI/C9oFeig/QmjdPJVek=;
+        b=Vy+SWiVb/NpXstpdw56lw+criQ5VLmL5fI7nn0T68KlPT3t+Dt/ZXXIrVA+Cb9oTH4
+         TPCa6A3seRH9NuwzLYB4U8f/OShYV6IlQIso/owGoN/zGKf8RjT/HHAYQiFq6Md9/AGx
+         OQu+WfEphT/kKjXP8GvKBBFJyiAVMrQefdiWdJmUUcdvKTLoDsWtPAZotnQX9UJOrzaQ
+         xRONIbMdbEwkr1WI3Kg4PeBEsFZ5Y37wda519hWTRbTA9zS4VszXsqzBXwuK7HvvH0Qa
+         FvCJLDSn4KAlIWnCl9a6eAaYBJKX17NVHsnq7L+bnHg+v812XRAWefqQg5U2r0LgvExP
+         /fLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793827612; x=1794432412;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Fx8mwjCrbZCWbiZSWWBXN0aiI/C9oFeig/QmjdPJVek=;
+        b=J54Sz0ALPBFDy1F7woDeZgE4DMUM/cpg3WGRerYRI9VOsj/nwewYKUMxYj6RMRyqkj
+         kJvcEmxgupOJZVNAwEDZgkw7CRVNe0hhWxoKYh2ruKJP3CDPaf1Vnn9AYkTSyWKaT/67
+         9N019KyuVzHvXOlIkdg9igqZJvkIYZouZzYMLcQ+aYvvPTkK+sl1saQUeAlygo19o9k8
+         gKT6JyevjCuJ13uHle9mL7kIPrUtDGc7VoDszqtm6RWkmxNdiTTCdgyPWdrcxuN9BcQI
+         tzY7PIBMErVGrQqgV1mniXevvBCN6QwjkzKm87vJSR0MPZ7+Euk56pQcGu6WgerdE8rO
+         iDdQ==
+X-Forwarded-Encrypted: i=1; AKwUvByM/4ntdWp7cp6O1/SeFiGJpXGgz06AvPkGcwbkxFKMivIp8xnUqb9bBO0m6P3EwWPNRVk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+2YTMfSC8B2UYWBnSpkO5l03zrS3ECOqqbxY7BxoMENOsIqSMT
+	D1iM0b+xEZnnOqtESQuHzkm08VeFYsRhKQZ6ZRT7hfmnHFM7vNYMFVel
+X-Gm-Gg: AYBFou1WpEeM9h9HdB2Ko8Yf9HABy+7vm7cT16zT16cgWg7DYXz71NlF5RCdc91RA3M
+	U2sfXad+AQsGZ/9bR6fGj9Yps1rmmJOUC3r03fC0RI/A9TRFfVYudIgHT62QvshKAopbiAGLWl0
+	JGHlXwE8kFlMjUojzcJIOoXwHzUL7zDnOJUIcJwZdvKLfFmIKzIQ1QB0bWY1V49vWd6jFRoh3AA
+	xUV5Aojoz9Xj3mR3oi48OcvI9NMHhpshiQB03bvXVRFkL+re9NvKkaZTzC4XWUdFu35W8NUbyiN
+	0S7ME82LEAsEDjUEaF2GXEHqwO62KaU2YULQWfl/bhm56227ijoYPv3zkG5Q7x7SDKnPKQPooLe
+	IwGTlr+sDnmKvuZMT9PZTNG5SxXZlp5igaT7UypLTBb8/Y0RMPH8X5ibKJvMX+TD1N3ODFqEpzY
+	V/v3XvcgeJQ+uzXsqel5SkIzWkoW+gezIfr2Ua8FV6cId7p36C37MHfy/0+OlFG97NCsUocRNEG
+	uQwQFMYqugdJ6T6q50WPAfhvGfMTl4bhl5xb93f0egE9Ilhtl6WibnuFAJtRuAmnGFFhBFEWAwO
+	hBmDlUs6fPWPH8o8
+X-Received: by 2002:a05:622a:2510:b0:533:8bf0:e6 with SMTP id d75a77b69052e-542b6a703c1mr284677281cf.35.1793827611998;
+        Wed, 04 Nov 2026 13:26:51 -0800 (PST)
+Received: from localhost ([2620:10d:c091:500::4:a8c5])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-54b10c4dcddsm34508841cf.20.2026.11.04.13.26.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Nov 2026 13:26:51 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -117,93 +87,105 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 04 Nov 2026 16:26:50 -0500
+Message-Id: <DMMQTFS3ULM2.3HSJGB1UT085M@gmail.com>
+Cc: "Simon Horman" <horms@kernel.org>, "Jakub Sitnicki"
+ <jakub@cloudflare.com>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Willem de
+ Bruijn" <willemb@google.com>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>
+Subject: Re: [PATCH net v2 2/2] selftests/net: psp: test bidirectional data
+ transfer
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Wei Wang" <weiwan@google.com>, "David S . Miller"
+ <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
+ <pabeni@redhat.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "Shuah Khan"
+ <shuah@kernel.org>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20261030043145.2185700-1-weiwan@google.com>
+ <20261030043145.2185700-3-weiwan@google.com>
+In-Reply-To: <20261030043145.2185700-3-weiwan@google.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] net: skbuff: missing refcount overflow check in skb_pipe_buf_get()
---
-
-commit 9c79ad1ae20fce07ba4bd771a989ba25467dc207
-Author: Mina Almasry <almasrymina@google.com>
-
-net: skbuff: refcount spliced page_pool frags via skb_pipe_buf_ops
-
-This commit updates skb_splice_bits() and skb_append_pagefrags() to acquire
-and release fragment references via netmem_inc_ref(), netmem_dec_ref(), and
-skb_frag_ref() using a new skb_pipe_buf_ops table.
-
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 48f6764117243..32a9dcdf2cb22 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -3114,9 +3114,27 @@ EXPORT_SYMBOL(skb_copy_bits);
->   */
->  static void sock_spd_release(struct splice_pipe_desc *spd, unsigned int =
-i)
->  {
-> -	put_page(spd->pages[i]);
-> +	netmem_dec_ref(page_to_netmem(spd->pages[i]));
->  }
+On Fri Oct 30, 2026 at 12:31 AM EDT, Wei Wang wrote:
+> _data_basic_send() and _data_basic_send_netkit_psp_assoc() currently
+> only verify unidirectional data transmission from the test socket to
+> psp_responder. As a result, they do not exercise the receive path for
+> PSP-encrypted TCP data segments arriving at the test socket (such as
+> packets redirected across a netkit interface associated via dev-assoc,
+> which relies on SKB_EXT_PSP surviving packet scrubbing).
+>
+> Use the existing "data echo" command in psp_responder to verify that the
+> test socket can also receive PSP-encrypted data from the peer in both
+> _data_basic_send() and _data_basic_send_netkit_psp_assoc().
+>
+> Signed-off-by: Wei Wang <weiwan@google.com>
+> ---
+>  tools/testing/selftests/drivers/net/psp.py | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/s=
+elftests/drivers/net/psp.py
+> index 473500901879..e507951b440b 100755
+> --- a/tools/testing/selftests/drivers/net/psp.py
+> +++ b/tools/testing/selftests/drivers/net/psp.py
+> @@ -120,6 +120,12 @@ def _check_data_rx(cfg, exp_len):
+>      ksft_eq(read_len, exp_len)
 > =20
-> +static void skb_pipe_buf_release(struct pipe_inode_info *pipe,
-> +				 struct pipe_buffer *buf)
-> +{
-> +	netmem_dec_ref(page_to_netmem(buf->page));
-> +}
+> =20
+> +def _check_data_echo(cfg, s):
+> +    _send_with_ack(cfg, b'data echo\0')
+> +    s.settimeout(1.0)
+
+I'm not a huge fan of setting the blocking timeout here. If we are going
+to set a timeout it should be when the socket is created. Otherwise this
+function has an unexpected side-effect. Another option is to use non
+blocking reads with timeout like:
+
+def _recv_careful(s, target, timeout=3D2):
+    """Read exactly target bytes, tolerating short reads"""
+    data =3D b''
+    end =3D time.monotonic() + timeout
+    while time.monotonic() < end:
+        try:
+            data +=3D s.recv(target - len(data), socket.MSG_DONTWAIT)
+            if len(data) =3D=3D target:
+                return data
+        except BlockingIOError:
+            time.sleep(0.001)
+    raise KsftFailEx(f"short read, got {len(data)} of {target} bytes")
+
+
+def _req_echo(cfg, s):
+    """Ask the peer to echo, and check the reply arrives intact"""
+    _send_with_ack(cfg, b'data echo\0')
+    ksft_eq(_recv_careful(s, 5), b'echo\0')
+
+> +    ksft_eq(s.recv(5), b'echo\0')
 > +
-> +static bool skb_pipe_buf_get(struct pipe_inode_info *pipe,
-> +			     struct pipe_buffer *buf)
-> +{
-> +	netmem_inc_ref(page_to_netmem(buf->page));
-> +	return true;
-> +}
+> +
+>  def _check_data_outq(s, exp_len, force_wait=3DFalse):
+>      outq =3D 0
+>      for _ in range(10):
+> @@ -478,6 +484,7 @@ def _data_basic_send(cfg, version, ipver):
+> =20
+>      data_len =3D _send_careful(cfg, s, 100)
+>      _check_data_rx(cfg, data_len)
+> +    _check_data_echo(cfg, s)
+>      _close_psp_conn(cfg, s)
+> =20
+> =20
+> @@ -726,6 +733,7 @@ def _data_basic_send_netkit_psp_assoc(cfg, version, i=
+pver):
+> =20
+>          data_len =3D _send_careful(cfg, sock, 100)
+>          _check_data_rx(cfg, data_len)
+> +        _check_data_echo(cfg, sock)
+>          _close_psp_conn(cfg, sock)
+> =20
+> =20
 
-[Severity: High]
-Does replacing nosteal_pipe_buf_ops with skb_pipe_buf_ops in skb_splice_bit=
-s()
-drop the page reference count overflow check when pipe buffers are duplicat=
-ed?
-
-Previously, nosteal_pipe_buf_ops used generic_pipe_buf_get(), which calls
-try_get_page() and fails when the signed 32-bit page reference count is <=
-=3D 0:
-
-fs/pipe.c:generic_pipe_buf_get() {
-	return try_get_page(buf->page);
-}
-
-include/linux/mm.h:try_get_page() {
-	page =3D compound_head(page);
-	if (WARN_ON_ONCE(page_ref_count(page) <=3D 0))
-		return false;
-	page_ref_inc(page);
-	return true;
-}
-
-With skb_pipe_buf_get(), duplicating a spliced pipe buffer via tee() ->
-link_pipe(), splice() -> splice_pipe_to_pipe(), or fuse_dev_splice_write()
-invokes skb_pipe_buf_get() -> netmem_inc_ref() -> get_page() and
-unconditionally returns true:
-
-include/net/netmem.h:netmem_inc_ref() {
-	if (netmem_is_net_iov(netmem))
-		net_iov_inc_ref(netmem_to_net_iov(netmem));
-	else
-		get_page(netmem_to_page(netmem));
-}
-
-For any struct page-backed netmem using standard page refcounting (such as
-sk_page_frag() pages from linear_to_page(), non-page_pool RX fragments, user
-pages sent over a local socket, or page_pool pages whose pp_ref_count is 0,=
- as
-well as all struct pages at this commit prior to commit "net: remove
-skb->pp_recycle and consolidate netmem refcounting"), can repeated pipe buf=
-fer
-duplications push the page reference count past INT_MAX, triggering
-VM_BUG_ON_FOLIO(folio_ref_zero_or_close_to_overflow(folio), folio) under
-CONFIG_DEBUG_VM or wrapping _refcount to 0 and causing a use-after-free when
-CONFIG_DEBUG_VM is disabled?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103211424.1276=
-27-1-almasrymina@google.com?part=3D2
+I'm ok with the approach overall. The coverage is sufficient for the
+purposes of the series.
