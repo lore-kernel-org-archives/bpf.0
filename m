@@ -1,85 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.231.113
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793759830;
-	b=3EVxjxE6wKxt0iq0iSuj/dlUB7+m/IL1AeBOu+RRDK1lXbOsKdEwv76mB9k1/7CHbD4r
-	 I9EsyFPFxQAju9vwA8MTfPDJBBjrR204LxBZh3nRg3jmhZjkXZGMT5R59sk00NnCpyCur
-	 OC8iCYxbLHrvCqyXzkzBYaPsQRLNBkTOwXeSGgqlAGjZy2S8adV32BRj3UdlnOwi6lfMu
-	 KNQlwvHrXYpGMv4/YcpaTg1BBY5k95Z/V9P+WN5IjMVruuLxss+h/5Iee8Q92xEfwwz9p
-	 6JuAH/JkOXGO9FwMUukvRA2bmWulnqVwukfM0VF9dbAcHCFJ2NgELmvcMGHrpS1tiBQ==
+	t=1793760318;
+	b=DYP22b7/o7XuzNavpfsvsG67LwocHHfhCR7mi6KKFjtL0RUYOctbPUuqZ4iuXTdaNJA6
+	 JbiMoIj0ksA5j2n/pRviwBHjcPzxSotGNZbziLx/9/zjDnGSpWwofC3Y68YcOz/nbQx2l
+	 HnmxkmwCdZ3P2aQIGR6SWV4wZIaTsg1iwmYNevn5qz7AZzmWYzoplCMIb+GSKZA9O0dZl
+	 JnssSh/5spV6t1kJpe7oiEqmjlHmLHlCJbqU25QlepV4+KGLh5hdR5R9jVHhJxS+roUb8
+	 qs6JcEJdQXzybgDiPOqMlqQIEsiz+HFHWE3a17GOsyPP3tja+AsC4bKUNTI1QiQhJfw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793759830;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=XLnoIpzSxDFdhKtQb49/oEceTAIjw4HsHtGoP3scKEs=;
-	b=PFiaPQYQHx8l0gI0q1uX3rJ+kPQBk0VstZX0rKEhH465N8LgMqcoKxJGs8yANaRFlNyf
-	 QSiEPpNsWBjmmtlhzuhPNoXc/+sHIeWN8u8XgzspfdjtA6ejQyFu9MP4ZxlZ/nvxPxqrO
-	 YB131osRxnn0glhcnRNOxDQuHwCN78QmMNkjXz8mefc1IidtraSAx0dItxpwuTVHqccwf
-	 lrIDVz4i/UxVp2tvmAyJdVht2aaVdtlZpEp/xYp0uClfZGYarL+u8WM8ELV6kukhMoyVB
-	 iUV0hP/z/ENNW+sh3QZeB6q4bmk68N4na2IsmnW/Iv9+RrTD6GWPp5O03b2J3Lmst5g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793760318;
+	h=DMARC-Filter:DKIM-Signature:In-Reply-To:Mime-Version:
+	 X-Lms-Return-Path:X-Original-From:User-Agent:To:Subject:Date:
+	 References:Cc:From:Content-Type:Message-Id:Content-Transfer-Encoding;
+	bh=rRzhUBlhk/MV6qetpAub4eArNWxfVuqj/T9Xhffcs+I=;
+	b=EALYvcGxS0yzzvqjlrpjCgilz+BxzofL4zQR7lb2cQ0IUx/3icsBPG+C/Q5XHKatBOI1
+	 LC4pe8q2ckUXqxTjQLf+CBWcaE5Zxe+VSN+J8cjuTWVqG+1oKibfDSZ4aMVLB8HwzryLg
+	 gJ3qN/fgNvYSplg0PZvXmUHGKrk9l7F6aeoN5/ggpFZd//x41nXNmnGDpqGPMwJP47HyT
+	 HAQwwXraXRByOgbmotlrV0iF3BjuD6sgkPJw44ICgXMTknziJ5rwuBC11LtJkw9U1PHA+
+	 e7gPj3HC6nBz6fdZdeSgK0YZJATan8XxJh8ln62FxI3/O2iyoBm4yEa4CznWZiTzQCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="B/go1qXy";
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	dmarc=pass header.from=bytedance.com;
+	spf=pass smtp.mailfrom=bytedance.com;
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=a3uy0tnS;
+	arc=none smtp.remote-ip=209.127.231.113
+Received: from va-2-113.ptr.blmpb.com (va-2-113.ptr.blmpb.com [209.127.231.113])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D21606A329
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 02:37:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A7D21606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903DB606A326
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 02:45:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 903DB606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B/go1qXy
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3ab2cb8d577so244783a91.1
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 18:37:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793759829; x=1794364629; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=XLnoIpzSxDFdhKtQb49/oEceTAIjw4HsHtGoP3scKEs=;
-        b=B/go1qXye9l9V3znZ4yybm+Oyc2RUzavDN+B6OanfwIX3RaTlFKQXeyca1V7yiLGaC
-         fcASchYl0AY2g98Wchnv2Dw/1Q+XjCVcF5fl6CJmbUhuCZ/ULqGK6G7HJEFIWAgv/YFU
-         8cQs+UG3rBRQObAzcvpMdY3dzgpHC0qpTYxNeXWTX4iWSljbk15ce4d+S8jaQcrdhBdb
-         8ODwXGbV6zQVCafOk9CSkF5eFQ3IRXPnF2HVxSi5PRvLnENwvbCv5nSAjHuVd9rsuJe3
-         k/MAeglK7r3fT6iO7/OA4NirLTbI0M/lb2FaH0mWwqR/RI2IrK6pbyJeQUI3U+YqKCDB
-         QX0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793759829; x=1794364629;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XLnoIpzSxDFdhKtQb49/oEceTAIjw4HsHtGoP3scKEs=;
-        b=xWjnvyMfA7psO5CL1lmMde9M0uZQf1VlHNr2+hBaDeohrUEFGZuOzDE3/Lli6H/o1I
-         OzSXgifI5aPuI+ir48Ry3ZEoMI2a9khQlXscM4Bc0ip6wpUVoeQ4Y3G+eTnPojxz6a0u
-         /7KdbDwVIBZvT4+oGged3y95ZtsOz8Gxs2ULQ2qp/WCDAvVHUjP0nTddlsW8lbYKdUEK
-         s0aOW+2YDFpZyJJmcBqzKVKAJKVUCFe5jS0jYct5wDtfAk70IHy0Klfoc2uLDG6RiczM
-         0QiLndiQqxgCcvy3FYmRvU+5Xi4yF+oJOjnTIVTcM1lLpbWKiT3cAcHI2fq+CoRLHJdI
-         gDMg==
-X-Forwarded-Encrypted: i=1; AKwUvBxCQKOddybZdTNs0KR8oM0Urr5b7XnP61o4sptBccERC2+r7V1Hxy3sR8lauIVF1jmWP48=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/0l9LsjoLwu0l9Gj25aN9TCdjSghszJbfKRdaAqKryBDh+L4if
-	2EuaeCn+pzEKROGdEmoIQjMBWr8TVOdxTG7rPAY+cTxv/1CEGf0KboLr
-X-Gm-Gg: AYBFou0Gqaq7iwlLgd+7BrZfMuN3vq1aMkDu9idQ7rRQE4hmf2sEwF+ckFhMPodMqs2
-	EFrfvbWABm5Xg91ar+tvyHa5zjxLJZYtenD3dbmnmIt1S1IoNaAp1MYyUwmePVAdwDf2XAs2Ijh
-	6qvcGMvqiRhmRHvexIoAZDioSqxnnOApcRpeUQcvPVUPyuq2cf8L1ev8utWZYQstXvzcUuKQSM+
-	W8qdQ1DAM+ykGeGV6S0BSgX6b4SK6GVjofgqs8OmEiTU7TYtanngGNRrwrpA4LqWvNwLog0Mzus
-	r6SGR9ABV9BFJxP+IC8YqCSOfL9BUAoOeDI1dho+g/hiH5QkScwNzRx4Fi6BqygmccCvczfK7Jc
-	KaZuVLqyhawa2PNVbwXSsosasNYye8clWhaiJfmH1ERF/sdqXHa/O3oRHMQul3R4b9oG+PzReG8
-	UYm4rHr1FIO87cC8vb18NmKsc5qfJq0i5fRb6e3fM2TRVtX1p0hfSW3Ux5PnobAph+IHSq4vZng
-	FxCXFFc4PuPOQuAqcxeZSGSYUd12hS6lqGL8SivXj9R+Se0/VIavsbMtwz8SQUbXxDRlmU7K8xX
-	jF711k4TO8xT/y2L70QhS/AiIIm/oJIRfehx4u2lDpqi4N+liFGpU0m9AFFlNwVpJILF/X3c6io
-	4AtnUURYEe48YCNWQSf8ciJ4Wv7z8i2eWmQ==
-X-Received: by 2002:a17:90b:528c:b0:3ac:adce:60be with SMTP id 98e67ed59e1d1-3ae897c8105mr12886992a91.21.1793759828747;
-        Tue, 03 Nov 2026 18:37:08 -0800 (PST)
-Received: from localhost ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c7dea24sm6701219a91.5.2026.11.03.18.37.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2026 18:37:07 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=a3uy0tnS
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1793760311; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=rRzhUBlhk/MV6qetpAub4eArNWxfVuqj/T9Xhffcs+I=;
+ b=a3uy0tnSn2cJBr5aBLK8fXX5Ap+fy0xWiabvtBdkU30DxrO5TfMZMmfSbqWVG5UQ8DMX7Y
+ 5SRrXF+D395hSWT3hX2UJD8DMrWn+XO6vzfJg3g1BOd5xn80IPBmZUdxN32Avvk37foB0w
+ DoeDyCoPlToHA3kZLB0gLh3AZXqdubVxF33fnCvt8hlM4qhfgswauCoccOk8e/tzyk/Ug+
+ 9eFkJ6+CDc8x/15HlMWqXDrg2sgq+G+HdygOrKyXCzCsQZw+dHnSbNo6ltBSg2EsNfIcmz
+ eFMexcSAP5x7RHi9SLOwKv3OG1hKtQGuYICvLX7N3y7szk/xK9DSjU/NKP7XQw==
+In-Reply-To: <0efbf4db1decd8e6bb6a5fcdcf897314@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -89,64 +53,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+X-Lms-Return-Path: <lba+26aea9c34+3f4f81+vger.kernel.org+lizhe.67@bytedance.com>
+X-Original-From: Li Zhe <lizhe.67@bytedance.com>
+User-Agent: Mozilla Thunderbird
+To: "Tejun Heo" <tj@kernel.org>
+Subject: Re: [PATCH 0/3] mm/mempolicy: add per-cgroup weighted interleave controls
+Date: Wed, 4 Nov 2026 10:44:46 +0800
+References: <20261103122816.48037-1-lizhe.67@bytedance.com> <0efbf4db1decd8e6bb6a5fcdcf897314@kernel.org>
+Cc: <hannes@cmpxchg.org>, <mkoutny@suse.com>, <akpm@linux-foundation.org>, 
+	<david@kernel.org>, <gourry@gourry.net>, <ziy@nvidia.com>, 
+	<joshua.hahnjy@gmail.com>, <ying.huang@linux.alibaba.com>, 
+	<ljs@kernel.org>, <liam@infradead.org>, <rppt@kernel.org>, 
+	<surenb@google.com>, <mhocko@suse.com>, <cgroups@vger.kernel.org>, 
+	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>, 
+	<bpf@vger.kernel.org>
+From: "Li Zhe" <lizhe.67@bytedance.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 04 Nov 2026 02:37:07 +0000
-Message-Id: <DMM2SGQ43OOJ.1QYUMNEVN2LIQ@gmail.com>
-Cc: <sashiko-reviews@lists.linux.dev>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3 06/14] libbpf: Relocate pointers that are
- stored in arena
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Roman Gushchin" <roman.gushchin@linux.dev>
-X-Mailer: aerc 0.20.1-355-gf870624f6c37
-References: <DMM226XFK9P5.265MSTVAV5QPL@gmail.com>
- <EB1C0109-74FC-4DFC-A25D-DB11BD62EC97@linux.dev>
-In-Reply-To: <EB1C0109-74FC-4DFC-A25D-DB11BD62EC97@linux.dev>
+Message-Id: <03bceb67-d362-47a6-b555-ed5aa1f9bd3e@bytedance.com>
+Content-Transfer-Encoding: 7bit
 
-On Wed Nov 4, 2026 at 2:32 AM UTC, Roman Gushchin wrote:
->> On Nov 3, 2026, at 6:02=E2=80=AFPM, Alexei Starovoitov <alexei.starovoit=
-ov@gmail.com> wrote:
->>=20
->> =EF=BB=BFOn Tue, Nov 03, 2026 at 05:44 PM sashiko-bot@kernel.org <sashik=
-o-bot@kernel.org> wrote:
->>>> +    ptrs =3D libbpf_reallocarray(NULL, nrels, sizeof(*ptrs));
->>>> +    if (!ptrs)
->>>> +        return -ENOMEM;
->>>> +    obj->arena_ptrs =3D ptrs;
->>=20
->> [...]
->>=20
->>> 1. If multiple SEC_RELO sections target arena_data_shndx, the second ca=
-ll
->>> overwrites obj->arena_ptrs (leaking the prior allocation) and allocates=
- only
->>> nrels entries, while obj->arena_ptr_cnt holds the sum across both calls=
-. When
->>> bpf_object__create_maps() -> relocate_arena_ptrs() later runs:
->>=20
->> Not a bug. Only a hand-made ELF has two SHT_REL sections for one section=
-.
->> clang emits one for .addr_space.1, and the static linker merges them by
->> name in linker_append_elf_relos().
->>=20
->>> 2. If an empty .rel.addr_space.1 section has sh_size =3D=3D 0 (nrels =
-=3D=3D 0),
->>> libbpf_reallocarray(NULL, 0, sizeof(*ptrs)) calls realloc(NULL, 0), whi=
-ch may
->>> return NULL and cause bpf_object__collect_arena_relos() to return -ENOM=
-EM.
->>=20
->> No. Nothing emits an empty SHT_REL section.
->> glibc returns a pointer for realloc(NULL, 0). Where it's NULL the open o=
-f
->> such a file fails, and that's fine.
->>=20
->> I'm replying to a bot hoping that Roman will teach it to learn from main=
-tainers
->> and stop reporting such bugs in libbpf where input is trusted.
+On 11/3/26 11:35 PM, Tejun Heo wrote:
+> Hello, Zhe.
 >
-> Thanks, well appreciated!
-> It=E2=80=99s going into that direction, now at least it should not raise =
-it again in next versions.
+> On Tue, Nov 03, 2026 at 08:28:13PM +0800, Li Zhe wrote:
+>> MPOL_WEIGHTED_INTERLEAVE currently has one system-wide weight table,
+>> configured through sysfs or auto-derived from node bandwidth. This series
+>> adds an optional BPF control plane that lets privileged BPF syscall
+>> programs install manual weighted-interleave overrides for individual
+>> cgroups.
+> ...
+>
+> I don't think this has much to do with cgroups. Weighted interleave is
+> already a per-thread/per-VMA policy chosen through set_mempolicy() and
+> mbind(), and the weights are parameters of that policy. I think this
+> should be tied to the memory policy instead. This is different from
+> the per-cgroup NUMA balancing kfuncs. NUMA balancing has no per-task
+> opt-in and acts on memory with no task context.
+>
+> Gregory Price's mempolicy2 series already proposed set_mempolicy2() and
+> mbind2() with task-local weights:
+>
+>    https://lore.kernel.org/all/20240103224209.2541-1-gregory.price@memverge.com/
 
-Thank you!
+
+Hi Tejun. Thanks for taking a look.
+
+I agree that MPOL_WEIGHTED_INTERLEAVE itself is selected by the task or
+VMA through the existing mempolicy interfaces. This series is not trying
+to make cgroups select that policy for tasks. A task still has to opt in
+to MPOL_WEIGHTED_INTERLEAVE explicitly.
+
+The part this series tries to make cgroup-scoped is the weight table.
+Today that table is already outside struct mempolicy and is configured
+as a system-wide administrative parameter. The problem we are trying to
+solve is that different co-located workloads may need different DRAM/CXL
+ratios while using the same MPOL_WEIGHTED_INTERLEAVE policy.
+
+I have looked at the mempolicy2/mbind2 direction. It would model the
+weights as task-local or VMA-local policy parameters, but it also requires
+new syscall ABI and a much larger mempolicy UAPI extension. This BPF kfunc
+interface was intended as a smaller administrative control plane for the
+existing global-weight model: keep the existing mempolicy ABI, keep the
+global sysfs table as the default, and allow a privileged manager to
+install an override for a cgroup in the default hierarchy.
+
+Does that distinction make the cgroup-scoped override acceptable? If not,
+could you suggest a better way to support this kind of administrative
+weight override without adding new mempolicy syscalls?
+
+Thanks,
+Zhe
+
+>
+> Thanks.
+>
+> --
+> tejun
