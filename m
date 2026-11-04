@@ -1,55 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793786104;
-	b=21NXCh5mfW34Pa60N2zBs9z1jw6/0POqAyGirkdvXeHvU6EfJwibgz/n8QMyJOAf5Rb8
-	 Z4c8Hg3zN0qbsyYxkQh3BkgoNKmylxzRR4W4Tus0lXrgI6I8UeVg4Qnhhgm4MS0ToLhGC
-	 2Iz0r0xV6+cGtNjSsAKtea/t+GclVzKrTinDvFMJU/o63TXiS+Frc9mUIaHu0o+xJkxwT
-	 HtBHLyzP24HGaoLWEvFhM8LAggnewpetXxb3zSRUzRjnZjGtwkR0yGEX6dBJVjenh2BpO
-	 TXbbXDWLXfXFx14Q7FMvppIyD2CoQHEE64iIgtvwdRMh/ykqN+yYsnmGTEIG1FRvznQ==
+	t=1793786394;
+	b=P2Exd9vDUZ1/GJHeQPJEP2BJMqVROV/ej9Y46dAli3NIQgbRcZCW/GdldO2Th9h14oPr
+	 HX6STC4rfj2v7O5YnHoRCzfFkg2CGqX2w4XLPTm68MF629YZNAdf8jGXvSvermVNuqV7E
+	 D9ajv+iPIpBDlY0E5P4FNI4yG7gXNeA2gMg7Jt/WODm9Kofb7u04SB1NfHfXh6kPix1cW
+	 cyPr+uHSO9KtYZe1shbYy+2k8DHtdFsb/LbUSqoLCNQtTwYJTMbORrspMKTzsYJrdBU6J
+	 WRecroe8BpK/BQe6cdbuT48J0cCGaDthXUGN7Mg5KmP/aJ2d9c81srlh8CnaWZAvE7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793786104;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=7S4gJgJJUabrpB6VRwq4SCe6ojSm3qa1EXPFVgqVgUc=;
-	b=4ANAQGFIIcg7dJhpiua/Sam8dpkjzE4ooHKextkhAOylEHCSZBZLP72KIhdC0xLfURRa
-	 gqbUpYb1rDM/9i530BOeJuwK09/zy+Wp9X9qd7qExWLD1+Aqn+fnUdwFqFj0BmqNH3Abd
-	 Pn9mzifcJ3pRbftiIX6nGnsXNjWMz2OhOxDSAh7pCT7TwukR316oVvQKWtoZv/AyHmrmI
-	 onKEPkBndanCCFc0tQca37ycnpHPJ/3a8orwvIKVXwvSz0kwn7lWy/ntwZvZ9VZYV62QF
-	 FqCN9bg0NFjjSY+14/hqeQdPHbFlpf8Kt4V/fitwIJqbS3sapyQpsbDQWO1QK7t5k0g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793786394;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:Date:
+	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Last-TLS-Session-Version;
+	bh=y4W1eE8E1/91FCr6e2Z/bZGYHOBtRy+Y9cuTbiFyZt4=;
+	b=yKx8f12BBHKE3gf13eCVzxRZlvAPf+gNTlCO1De6w6y2sumBxLeQtdAHEcn3XIyGUZ2m
+	 PBqCj72iVTq4h8UmpT6PEfvEzvpxZRHJP30h2kf5loxTJIEOHsMIPYQSfL8a5AWEEW8uI
+	 oOoN1UUgIc34Pq3K+gk6gPxSE78l+ljSg3uYD5fmc9VlvGrYD9OWJokBcjzgKhV/M7ZR/
+	 lQzvBGh1V5uDwkZnirDhmdyKqxsHyS0B1Qj9u5FW1BlkWS2lwOf1WzQb1PE78nWZO5a7I
+	 JXQ5Ij5t/WuG+7Wio2hyl0KiGoUHVVRCdKswc0cwDGwrkODzniEuTliOZj1YpNrldmQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N3H3whoU;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=oTuG6hva;
+	arc=none smtp.remote-ip=185.171.202.116
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DAD606A326
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 09:55:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6C5606A326
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 09:59:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C6C5606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N3H3whoU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A22071F0093A
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 09:55:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793786103;
-	bh=7S4gJgJJUabrpB6VRwq4SCe6ojSm3qa1EXPFVgqVgUc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=N3H3whoUPIS4XVnOUkJ/nDq0kerw2hmhnX6FZG9zM/0PnnG52q8Y9eUXvk2u6X6Vx
-	 tE6lKwbZuaYis0bcmNrMMz618HT6CaSrhhFRMtfhxEb2OUL5J50tUy7VLE9GqCE1ll
-	 QXSRMqB1a6reS6WaXFxCw5CGUlr3dJo0MKRaIo6HJ8fgwlOJ0vxP/3y6XrJPylHHI3
-	 YOsem5mQqT6tRdEMSYWZ+hvzQ9SSwjNJyyn+rHG7qvizWaSpOSk3WsxfuruMiY6ERG
-	 48hsOCW+Th2qfvd2sACPO69ShOsEetXoY99XA1NB44Qdjc0Yh5YQlG5JFEJaKJbsYK
-	 OKGtAZV7HMqKg==
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6b429f71dbeso439461a12.1
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 01:55:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvByYg34aqb95zh/8h3Pb5ieY9FjaBgyoqXLgN1ce+4RcA20PvoZk4c4WAhlT+F/OTKQkbzw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/bBlUCn8Zq55Uq++sY8+ytdlCLctBzkrbYoCTIWmE/+/tRhEfl
-	es2KxIaqUaC5JQWdKz+WC3bHT2E8GT5GTOboLdk4Y8y85UFXERhLZaUz0zILflukqfaCi9B2uu9
-	iksrbNzSM/D3UTmWw9IdtFw1kL9c+/IU=
-X-Received: by 2002:a05:6402:a510:20b0:6b4:201f:17b6 with SMTP id
- 4fb4d7f45d1cf-6b4d3374079mr8567339a12.6.1793786102316; Wed, 04 Nov 2026
- 01:55:02 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=oTuG6hva
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 57B0AC8F46C;
+	Wed,  4 Nov 2026 10:00:55 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 57CC760770;
+	Wed,  4 Nov 2026 09:59:50 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3D1C8103291CE;
+	Wed,  4 Nov 2026 10:59:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1793786388; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=y4W1eE8E1/91FCr6e2Z/bZGYHOBtRy+Y9cuTbiFyZt4=;
+	b=oTuG6hva+dMWSHf42Vh9nNdVHHDPqd/uQJarO+o6MJbQe7Y4hdi10We0KJ8Cz0dt9YblEl
+	BHbPitgMJ3mdZafKt4RYrZnobKnGm3O7GfHMaF7isrrsudiwjfZc/uDMMYvhC1gmhiNegT
+	8glTxmSqzTtIndmQogvkAXJMiLx0QYQ1Dp+QWnK51gNtPKSctMHtAdaTu1QeQrKFs3+33G
+	QW2WpcegVaua5FJnJIgQiWEwd6YAeH8Tzfz0we3X77GpUpD0gfLHLTCFfujfiCZnL08JCU
+	hUf0xz9rVdHQBHptwnKfyzbnFsTbtqS3crdy7Iefj1x6tVFIR4wbEuqMRVqBLg==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Wed, 04 Nov 2026 10:59:33 +0100
+Subject: [PATCH bpf-next v2] selftests/bpf: port test_ftrace.sh to
+ test_progs
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,163 +63,201 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261102072808.23080-1-yangtiezhu@loongson.cn>
- <20261102072808.23080-2-yangtiezhu@loongson.cn> <CAAhV-H52mbZJX2vkgG_h=XfwHoio=asLjFdhTJwUYqDp4V5JMg@mail.gmail.com>
- <8b00e5a7-4e60-19bd-7953-f76dc71e15ec@loongson.cn> <CAAhV-H52bqRD1SyrZsvMkNbCpGiM5DPSGPARiasZ8G3XsE5Tgw@mail.gmail.com>
- <6446c385-623c-d4cf-5a07-0c2276c6f50c@loongson.cn>
-In-Reply-To: <6446c385-623c-d4cf-5a07-0c2276c6f50c@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 4 Nov 2026 17:54:50 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4m-cokYz19HHAoDeLAjRGp4T=vwDOJaJEcHXZDW15rkQ@mail.gmail.com>
-X-Gm-Features: AclHuK-tyGt7dKynXW9DKY0ZRtsdV6cnh8v5lndrM8_P4nSQD_OrvjPPBDK8wfA
-Message-ID: <CAAhV-H4m-cokYz19HHAoDeLAjRGp4T=vwDOJaJEcHXZDW15rkQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] LoongArch: BPF: Make arena support depend on SCQ extension
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20261104-ftrace_in_test_progs-v2-1-45363230d228@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/22OzQqDMBCEX6XsuSlJxAo99T2KSNxsdEubSJKKR
+ Xz3+nPtcZj5ZmaGRJEpwe00Q6SREwe/Cn0+AfbGdyTYrhq01FcldSVcjgapYd9kSrkZYuiSsKW
+ rpNFFIQ3Cig6RHE977QPawQlPU4b6cNKnfRLmrXXL9pxyiN/9wah24hgr5P+xUQkpjCklltYqR
+ Ly3IeQX+wuGN9TLsvwASOD9mtYAAAA=
+X-Change-ID: 20261027-ftrace_in_test_progs-d5f70a2330ac
+To: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.16.0
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, Nov 4, 2026 at 2:58=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn>=
- wrote:
->
-> On 11/4/26 12:29 PM, Huacai Chen wrote:
-> > On Tue, Nov 3, 2026 at 10:24=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongso=
-n.cn> wrote:
->
-> ...
->
-> >> So, the current patch has no problem IMO.
-> > OK, then I think we can use:
-> >
-> > return __is_defined(system_has_cmpxchg128) && system_has_cmpxchg128();
->
-> If CONFIG_AS_HAS_SCQ_EXTENSION is not enabled, system_has_cmpxchg128()
-> is not defined at all. If we change the code to follow your suggestion,
-> something like this:
->
-> ```
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index b5ed4881d3c0..6f572d24d2c3 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -336,7 +336,7 @@ config AS_HAS_LVZ_EXTENSION
->          def_bool $(as-instr,hvcl 0)
->
->   config AS_HAS_SCQ_EXTENSION
-> -       def_bool $(as-instr,sc.q \$t0$(comma)\$t1$(comma)\$t2)
-> +       def_bool n
->
->   config CC_HAS_ANNOTATE_TABLEJUMP
->          def_bool $(cc-option,-mannotate-tablejump)
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index d7ea515045ec..d124632b0fa9 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -2495,11 +2495,7 @@ bool bpf_jit_supports_arena(void)
->           * atomic cmpxchg; this is provided by not only hardware SCQ
-> extension
->           * but also assembler support on LoongArch.
->           */
-> -#ifdef system_has_cmpxchg128
-> -       return system_has_cmpxchg128();
-> -#else
-> -       return false;
-> -#endif
-> +       return __is_defined(system_has_cmpxchg128) &&
-> system_has_cmpxchg128();
->   }
->
->   bool bpf_jit_supports_fsession(void)
-> ```
->
-> We will encounter a fatal build error:
->
->    CC      arch/loongarch/net/bpf_jit.o
-> arch/loongarch/net/bpf_jit.c: In function =E2=80=98bpf_jit_supports_arena=
-=E2=80=99:
-> arch/loongarch/net/bpf_jit.c:2498:55: error: implicit declaration of
-> function =E2=80=98system_has_cmpxchg128=E2=80=99 [-Wimplicit-function-dec=
-laration]
->   2498 |         return __is_defined(system_has_cmpxchg128) &&
-> system_has_cmpxchg128();
->        |
-> ^~~~~~~~~~~~~~~~~~~~~
-> make[5]: *** [scripts/Makefile.build:290: arch/loongarch/net/bpf_jit.o]
-> Error 1
->
-> Even if we change it to use IS_ENABLED(CONFIG_AS_HAS_SCQ_EXTENSION),
-> something like this:
->
-> ```
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index b5ed4881d3c0..6f572d24d2c3 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -336,7 +336,7 @@ config AS_HAS_LVZ_EXTENSION
->          def_bool $(as-instr,hvcl 0)
->
->   config AS_HAS_SCQ_EXTENSION
-> -       def_bool $(as-instr,sc.q \$t0$(comma)\$t1$(comma)\$t2)
-> +       def_bool n
->
->   config CC_HAS_ANNOTATE_TABLEJUMP
->          def_bool $(cc-option,-mannotate-tablejump)
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index d7ea515045ec..1b87b1e4262e 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -2495,11 +2495,7 @@ bool bpf_jit_supports_arena(void)
->           * atomic cmpxchg; this is provided by not only hardware SCQ
-> extension
->           * but also assembler support on LoongArch.
->           */
-> -#ifdef system_has_cmpxchg128
-> -       return system_has_cmpxchg128();
-> -#else
-> -       return false;
-> -#endif
-> +       return IS_ENABLED(CONFIG_AS_HAS_SCQ_EXTENSION) &&
-> system_has_cmpxchg128();
->   }
->
->   bool bpf_jit_supports_fsession(void)
-> ```
->
-> It still fails with the same error due to the macro visibility:
->
->    CC      arch/loongarch/net/bpf_jit.o
-> arch/loongarch/net/bpf_jit.c: In function =E2=80=98bpf_jit_supports_arena=
-=E2=80=99:
-> arch/loongarch/net/bpf_jit.c:2498:59: error: implicit declaration of
-> function =E2=80=98system_has_cmpxchg128=E2=80=99 [-Wimplicit-function-dec=
-laration]
->   2498 |         return IS_ENABLED(CONFIG_AS_HAS_SCQ_EXTENSION) &&
-> system_has_cmpxchg128();
->        |
-> ^~~~~~~~~~~~~~~~~~~~~
-> make[5]: *** [scripts/Makefile.build:290: arch/loongarch/net/bpf_jit.o]
-> Error 1
->
-> Therefore, using the explicit #ifdef block in the original patch is the
-> only way to ensure toolchain compatibility and compile-time robustness
-> here IMO.
-This is OK:
+Commit ff205766dbbe ("ftrace: Fix function_graph tracer interaction with
+BPF trampoline") made sure that trampolines generated for tracing
+programs did not collide with the function graph when we are returning
+from the hooked function. The series bringing this commit also came with
+a new test ensuring that the kernel does not crash when executing BPF
+programs handled by trampolines while the function graph trace is
+enabled, but this test is a standalone shell script, hence not executed
+in CI.
 
-return cpu_has_scq && __is_defined(system_has_cmpxchg128);
+Convert the script to the test_progs runner so it can be executed
+automatically by the CI infrastructure. There are two main options to
+port this test:
+  - just enable ftrace during some existing trampoline-related tests
+    (eg: fentry/fexit tests)
+  - create a dedicated, minimal test with function graph
 
-It means two things:
-1. CPU supports SC.Q;
-2. Kernel defines system_has_cmpxchg128.
+The new test adopts the latter approach, with a smaller scope to keep
+execution time reasonable, while reusing an existing
+fentry/fexit/fmod_ret test. Despite the few asserts in the new test, the
+actual goal is to make sure that the kernel does not crash because of
+some incorrect stack frame skipping when both the function graph and
+tracing programs are running.
 
-Very clear.
+ftrace is configured through a dedicated ftrace instance which is
+dropped at the end of the test.
 
-Huacai
+With the new test integrated into test_progs, drop test_ftrace.sh.
 
->
-> Anyway, I will modify the patch subject, update the commit message
-> and code comment to make it more clear.
->
-> Thanks,
-> Tiezhu
->
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Hello,
+this is v2 of a small series aiming to port the test_ftrace.sh script
+(testing that trampolines and function graph behave correctly when both
+are enabled) into the test_progs framework. The test is heavily
+simplified following Alexei's review and suggestions.
+---
+Changes in v2:
+- use a ftrace instance rather than global ftrace
+- drop fgraph filters
+- drop custom ftrace helpers in favor of direct manipulation in test
+- drop custom bpf prog, reuse test_modify_return directly
+- move test in existing test file (modify_return.c)
+- make the test parallel (drop serial_)
+- Link to v1: https://patch.msgid.link/20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com
+
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+---
+ .../selftests/bpf/prog_tests/modify_return.c       | 32 ++++++++++++++++
+ tools/testing/selftests/bpf/test_ftrace.sh         | 44 ----------------------
+ 2 files changed, 32 insertions(+), 44 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/modify_return.c b/tools/testing/selftests/bpf/prog_tests/modify_return.c
+index 4661d77ebdfc..15681b49f86f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/modify_return.c
++++ b/tools/testing/selftests/bpf/prog_tests/modify_return.c
+@@ -11,6 +11,10 @@
+ #define LOWER(x) ((x) & 0xffff)
+ #define UPPER(x) ((x) >> 16)
+ 
++#define MAX_INSTANCE_PATH_LEN	128
++#define TRACEFS_DEFAULT		"/sys/kernel/tracing"
++#define TRACEFS_IN_DEBUGFS	"/sys/kernel/debug/tracing"
++#define TRACE_FTRACE_DEFAULT	TRACEFS_DEFAULT "/trace"
+ 
+ static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
+ {
+@@ -61,3 +65,31 @@ void test_modify_return(void)
+ 		 0 /* want_side_effect */,
+ 		 -EINVAL * 2 /* want_ret */);
+ }
++
++void test_modify_return_graph(void)
++{
++	char instance[MAX_INSTANCE_PATH_LEN];
++	char *ftrace_dir;
++	int ret;
++
++	ftrace_dir = access(TRACE_FTRACE_DEFAULT, F_OK) ? TRACEFS_IN_DEBUGFS :
++							  TRACEFS_DEFAULT;
++
++	ret = snprintf(instance, MAX_INSTANCE_PATH_LEN,
++		       "%s/instances/bpf-XXXXXX", ftrace_dir);
++	if (ret < 0)
++		return;
++
++	if (!ASSERT_OK_PTR(mkdtemp(instance), "mkdtemp"))
++		return;
++
++	SYS(out, "echo 'bpf_modify_return_test*' > %s/set_ftrace_filter",
++	    instance);
++	SYS(out, "echo function_graph > %s/current_tracer", instance);
++
++	test_modify_return();
++
++	SYS(out, "grep -q bpf_modify_return_test2 %s/trace", instance);
++out:
++	ASSERT_OK(rmdir(instance), "rmdir");
++}
+diff --git a/tools/testing/selftests/bpf/test_ftrace.sh b/tools/testing/selftests/bpf/test_ftrace.sh
+deleted file mode 100755
+index f5109eb0e951..000000000000
+--- a/tools/testing/selftests/bpf/test_ftrace.sh
++++ /dev/null
+@@ -1,44 +0,0 @@
+-#!/bin/bash
+-
+-if [[ -e /sys/kernel/tracing/trace ]]; then
+-    TR=/sys/kernel/tracing/
+-else
+-    TR=/sys/kernel/debug/tracing/
+-fi
+-
+-clear_trace() { # reset trace output
+-    echo > $TR/trace
+-}
+-
+-disable_tracing() { # stop trace recording
+-    echo 0 > $TR/tracing_on
+-}
+-
+-enable_tracing() { # start trace recording
+-    echo 1 > $TR/tracing_on
+-}
+-
+-reset_tracer() { # reset the current tracer
+-    echo nop > $TR/current_tracer
+-}
+-
+-disable_tracing
+-clear_trace
+-
+-echo "" > $TR/set_ftrace_filter
+-echo '*printk* *console* *wake* *serial* *lock*' > $TR/set_ftrace_notrace
+-
+-echo "bpf_prog_test*" > $TR/set_graph_function
+-echo "" > $TR/set_graph_notrace
+-
+-echo function_graph > $TR/current_tracer
+-
+-enable_tracing
+-./test_progs -t fentry
+-./test_progs -t fexit
+-disable_tracing
+-clear_trace
+-
+-reset_tracer
+-
+-exit 0
+
+---
+base-commit: b0e67f50519538b1b4c6364edc7811f482703f75
+change-id: 20261027-ftrace_in_test_progs-d5f70a2330ac
+
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+
