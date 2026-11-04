@@ -1,60 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=79.135.107.169
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793811189;
-	b=gqKlBx41pQkkBuqBzel8gEHq6rUfYpfPSlKSUCxklfLkJk5O5sLyvOAUL+U1FbAAHaiB
-	 e1IaYq/GMTU2qo/O50srgyrThk8NgCgNfZQYJhNLr2HkbR3B+wIKio1uN5gxnK795W0WL
-	 faMQpUMfCTkSYCU0A0u0Y1O0X2+e9tH3FVH2P+3C4zvhTrTLWWCIjLeiKTC0k6j6BKcaY
-	 eJdO2RjRMVuo6BVYrHgKVK/pm4kYL7X8vBR9gULXaiYAnIFZT4QxuSstJrzaezoG2rdaO
-	 ktoDn1MFthBTrJvSoMzd/CXzRqNc+W22NEt2G7+eSmRVyBzbt3H+bsKxfWmWMC6NxWg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793811189;
-	h=DMARC-Filter:DKIM-Signature:Date:Subject:In-Reply-To:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:From:To:Cc:Message-ID:
-	 References:X-SimpleLogin-Type:X-SimpleLogin-EmailLog-ID:
-	 X-SimpleLogin-Want-Signing;
-	bh=THYlU6dsxV8ed96P6OJPtEWq8tUs/nV5roX8ImFt+iY=;
-	b=Pc0ucO5kFOLaO4a/QO+bTwD3IhDQoeMkHRFdK0L/SBwJKI7ok5GmvvSl1+vGEv77CpGg
-	 iOMQ6+BNPjVvGIn0U0p1dlYczsqkYmzkhJWEwUeQsLYKrMXPfvPfWkbJc4+JkIgJ0aK44
-	 B2ntuMvGR4Xm69y17FZ0xrrGtG9JQ5PmDXaNSMSCYrTBMucT/yCkC0YLKSyWfszORNIeT
-	 o+6OxZN78DRQNBNmM6BtMUKEyEyN2IkwfaovF1Bo1KXQ7cjQzaDKnB+iI9b/D4hLFzYry
-	 C3USNLy0mu6U8jg1Hx7tC4sAmmlEynkFy2lAkda85Swe3S20HOHtRDM0xlEcqisjEXQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=eldare.de;
-	spf=pass smtp.mailfrom=eldare.de;
-	dkim=pass header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b=BIvjAjm5;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=79.135.107.169
-Received: from mail-107169.simplelogin.co (mail-107169.simplelogin.co [79.135.107.169])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793815325;
+	b=fcZT958hM8HVd37yjqXqtO2tRby5ZeXzQ2zfmq/T1ynPQNc2twQT3VA4WNqjSqmbKlKe
+	 fktT66AWZTgZbmgMnx1JE7G0uUOxHjHGE/e3YwR9OXXLfk61RPWFyDVJvO5TDNeMGKBBk
+	 v2JEjGxPCoGGKBJu7uJWDyA09QOL3VxHsr65K2LgksCqgQTRBytd1IwrVKJlOix5/s4XI
+	 q6bMlK51ExO3yiWTPKdjEJDcX9m8T/hCX2R/bc+x9AstFzjn4QyxQf8l3jM7xz9/axIz6
+	 CKf6xRJuConjwv2yq2YRb2cbG0hSBjRczR6373m5nEJafqCHJU0PrwIgfJeeyZe2YbA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793815325;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=gU7bwdY72Yv09gphDpfGMchXiFum+5+mX5PyuHUZG00=;
+	b=46Dy9LdQK4eII1wbUOFGpdpYl8nIodhF5LECq6Rwy6IQsasK+WvRtpUoVmRwy3AtWZ+k
+	 JOdQY2GMgsKDDXSRe/aR63AlUKUUy5sLbwyybGkNVj7NVzThVgCca0MO89rk4O4nZwYLg
+	 K9mp1ylYY/9GHtTzgtcKa0ZWA1Wo9BStL2WFBQxotunNHthD46Olx5+5q2SIqP+RzQr7c
+	 Ph4BhdjE1XUtoLaMtjmQJUuaS8v83f5KQdOBVHKnjzTFXd7vpz4bVwggrirfw8ElDAn0V
+	 edSc8sWxUamMthdNAJDZvRRCBNjBgd+5+BY9t7xPeWj0pgCb/kD0KGA8siYTgUhEWlQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xxf2QRTF;
+	arc=none smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9EC606A328
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 16:53:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CF9EC606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=eldare.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eldare.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2B8606B206
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 18:02:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A2B8606B206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b=BIvjAjm5
-ARC-Seal: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626; t=1793811187;
-	cv=none; b=T1BH8iovP5IY7PZ99nmbuIqKoa2giHP6pkahLrc1ahPdHCfNpWw7U39IBp7i9rlO5RqGUou9vn52f6k/DQQKykRpLUp2s1wTA+NEY1ATtcza5jsJdKwWVEoaZ+ccLr1J9QI73JLOJId4PznJzv48L2erjMHtZ3zfg/qOcnvMhjdRhyDq3G5ZUFE6A6FJw+K/ypZYsuAUAJ8ZsGgYzMZ6/Yide+pGYaheG67JktkGhFbmtzL7dwvdcoNkkjNJRy8fGTW0XTgAhQWNMgeCapKiurHjD280kArvXVyzTDXlQUHnLxyGQSALnqwnwMjbBsmgX2ohLF5oWzr9Kwg2eKKVjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626;
-	t=1793811187; c=relaxed/simple;
-	bh=b22BmvbWIYRK51tJiOsPu3kTH0mAG+T8cRcAHNYNM48=;
-	h=Date:Subject:In-Reply-To:From:To:Cc:References; b=Z0jNM7uwKbon+u9Co4fj22kvwfX2gs7+jh1imglCD4LGvpyOSoZocavrh4gvsy6N6lLF8e9ybJd90DBdukwzZEFb/bqCbsNSG+/gvyptehY/FVzsD71USOG+LMc1vF+/ZG36nulX/jfLZ1jHSmz0k3mHXanb4y3ItsEdhQGpm/Oy2w8YS8r9SohhjLjMP3WUMZeQ6xsvhp1/bOpykfsjMJkEeGQguYd8jSpWUUKwAUcTeoa0OIQ2dBMCs+Ce8qNAd563WMaJdl3T/NamB+Zpz7rcef0hStnM9x6OInfhHNoUUmogbkE1qBmz3iKkx+e/ohjm80uJEzSU0S1DJoCPNw==
-ARC-Authentication-Results: i=1; mail.protonmail.ch
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=eldare.de; s=dkim;
-	t=1793811187;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=THYlU6dsxV8ed96P6OJPtEWq8tUs/nV5roX8ImFt+iY=;
-	b=BIvjAjm5TRTO61GsOBpZh8JyEhMHRyp2ciJjRUsqrPmbrSppaR0sMWhwKWAEXDG9SQ3WbG
-	pLzwuv43YJd5ISH48y5Dh7JmSHF9GAFWgtTuZI7oPrsSFxxaCQHe7FztKNejlPJVgpeq4Q
-	XDisBlPe4pE7SmfmSFz2NcV1Az4/GnE=
-Date: Wed, 04 Nov 2026 16:52:59 +0000
-Subject: Re: [PATCH net v3 2/2] vsock/bpf: fix zero-length,
- MSG_OOB and MSG_ERRQUEUE reads in recvmsg
-In-Reply-To: <auSngVsWiGI475J4@sgarzare-redhat>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xxf2QRTF
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8b1a705b88aso262773b3a.2
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 10:02:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793815325; x=1794420125; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gU7bwdY72Yv09gphDpfGMchXiFum+5+mX5PyuHUZG00=;
+        b=xxf2QRTFd0fTLwa7DShrNBSQkQrrznSasz22/ejPMNTWqJSNSBLws9A/Om1fo+VVLS
+         HakI+q8pzC7y6aCDcFuwakDfGOLhyO/DhwnYyK35tze32CzF/BwZqABDCM9iSvI8IIsi
+         Fuqi/+Zx1VT0rrSPTILlc2ixcItlukb4t4qQArDZcXzdv9ARIDbVDGmQqfIdmJtxjOTj
+         69HVbB5xWkvJOrdcJ3UmApJ+zZMTT5Ox/hi5JVQqvqZ1WTwGuvpyE3Kg85VJ24dxVdv0
+         lv4IOiFN33EAd6iiOlgQ4zVcEwEpk2rX2SUoQTUuY86yKE1HzaFDx3+oWc4Y6FJt6S52
+         PGgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793815325; x=1794420125;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gU7bwdY72Yv09gphDpfGMchXiFum+5+mX5PyuHUZG00=;
+        b=z+yLXY/nzlBPfb7R0kbrYMLVs7IYZYuUjlO90sj9dbMqww1uDUMfL3JiEikIHgXK3J
+         HdOtwiynWGk0ghygCVWBtwUqr69h7ahzVc7K6cbC/+f+lqbe9da+pnbUW7OQpDO7Pbcw
+         JgqtR9RPvN+vdbINUj22G8n0u8E4W1qLnmBDAyzMov2SeWPzbHyoWqqeOIlSPSsh4r4R
+         6m8yHpcgwo0SuSLxB9ZpGyIIHILbEg5FZdWLr5DOivw7TiPVS0klY0zxQv1qPdPqddNC
+         mN9rYVBkm2IQWyneZv0r7sYNTDWBwPJ4AKr4YR2EfLu/9IETylSRLTe9d3uq8Do996wR
+         ePzg==
+X-Forwarded-Encrypted: i=1; AKwUvBzAkBtvkXo0tX2g5AL1WXwfyCexd8OPg0/NuKGAzzeU6y/TnbMEC721QZD9N33hXFd2S5c=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8zStu52qGq+nbSQoX9UFk6Xy+GV08ZQc7gWzLpCmyYmM1KLIf6
+	5KWfS44ylG4ywSFiGE5f6BQyvRVxId/f4uy+JioJL4Gni802v0FdCh2t
+X-Gm-Gg: AYBFou2y2+I9POlw/hsw4VxhQKQ1XxSCdPgcBHuoaHFQrJgMlTezQR6Qw/Gr9IcY7Es
+	inN92jNl29fsFbQls/s2FIYzXo7YVH/zAG21XTO7+sRNRsYCzxI6iq2V0d7ObUDVlPsDUKiOtH6
+	lIRC7r0asaci6qlscIutOArPfgQsamr8+sgTiuL6dTpHZAv3FJS3595AMLydNRyqEDbyCZTyEKl
+	/15u3A2jkjM/8cNd+0nkGfn/ZToe+fR8SZBluqAUEaj7llFsq9H4TouERpYCFC/2y7dev6UTvYG
+	c+YpX91RgZ5rgE5QgH/bdVdrisrTeH7oh2OvaFszvdfmob2vzIwFxz/7uc1XTByvft7ml84D887
+	+rNWSSi3NfFVR+88uuAt4w4e9ITYW3SpAA1wnFpPIyjr0DbrOCM2jH7Ik6KDduxw3Z2QxLa8cRW
+	xqdlr8tL9aF64SP40e93XzJEgXI81cszAjgzkUVaSbI3RdByq7N3wonZAWEpG3TmBJbVS2Zkwbk
+	NforumznB8NLa+lL3d3q6sm0I4EGfZ8GlM5vPUlKsj80XgQ4tBRkIWHZbw5HvAJvsK41lYN62+A
+	yEaSTMoASIvY46z38WX1RTo8yV7ZRKT0O9y50JAlfkQo5ThFONBmt5u9Ukyq+Pyjl4FwuEEM0c7
+	+k0237t63BDHxDzoj9rHs6wMYyS8ZpMQTzPE=
+X-Received: by 2002:a05:6a00:b81:b0:89f:e248:5727 with SMTP id d2e1a72fcca58-8a9ba9f7b81mr13693775b3a.6.1793815324356;
+        Wed, 04 Nov 2026 10:02:04 -0800 (PST)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b1d9403d9esm98837b3a.52.2026.11.04.10.02.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Nov 2026 10:02:02 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 04 Nov 2026 18:02:02 +0000
+Message-Id: <DMMMGML15GX5.3GT3JKTNCB748@gmail.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>
+Subject: Re: [PATCH bpf-next v3 00/14] bpf: A stack in arena
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+In-Reply-To: <DMM94NDU83WN.337PKDJT31SOE@gmail.com>
+References: <20261104012401.1354861-1-alexei.starovoitov@gmail.com> <DMM3XWQJWG41.38YIBYIE2576N@gmail.com> <DMM94NDU83WN.337PKDJT31SOE@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,58 +99,18 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From: jrmmhm.kernel@eldare.de
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Bobby Eshleman <bobbyeshleman@meta.com>,"David S. Miller"
- <davem@davemloft.net>,Eric Dumazet <edumazet@kernel.org>,Jakub Kicinski
- <kuba@kernel.org>,Paolo Abeni <pabeni@redhat.com>,Simon Horman
- <horms@kernel.org>,"Michael S. Tsirkin" <mst@redhat.com>,Michal Luczaj
- <mhal@rbox.co>,virtualization@lists.linux.dev,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,stable@vger.kernel.org
-Message-ID: <179381118562.7.1635260105890086879.1746288140@eldare.de>
-References: <20261028-kbh3-1-022-fix-v2-v3-0-bc0752b2d3db@eldare.de>
- <20261028-kbh3-1-022-fix-v2-v3-2-bc0752b2d3db@eldare.de>
- <auSngVsWiGI475J4@sgarzare-redhat>
-X-SimpleLogin-Type: Reply
-X-SimpleLogin-EmailLog-ID: 1746288192
-X-SimpleLogin-Want-Signing: yes
 
-On Fri, Oct 30, 2026 at 03:25:26PM +0100, Stefano Garzarella wrote:
-> Ditto.
-
-Same as for 1/2, I'll rewrite it.
-
-> >+    if (unlikely(flags & MSG_ERRQUEUE))
-> >+            return __vsock_recvmsg(sk, msg, len, flags);
+On Tue, Nov 03, 2026 at 11:35 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>> The price against libarena with __arena: two times more casts, JITed code
+>> +18%, arena_malloc() +7%.
 >
-> If the psock ingress queue is not empty, wouldn't recvmsg(MSG_ERRQUEUE)
-> (e.g. a MSG_ZEROCOPY user reading completions) also consume stream bytes
-> through sk_msg_recvmsg(), since it only looks at MSG_PEEK? If so, maybe
-> worth mentioning in the commit message.
+> Could you elaborate on this? Are the extra casts due to the fact that globals,
+> heaps, and locals on the stack are moving to arena memory? 
 
-Yes, when the read passes a buffer. I reproduced it: without this patch
-a 1-byte MSG_ERRQUEUE read with stream data in the psock ingress queue
-returns that byte. A zero-length read, as MSG_ZEROCOPY users do, takes
-none, but never reaches the error queue either: it gets -EAGAIN instead
-of the completion. Routing MSG_ERRQUEUE first fixes both; I'll mention
-it in the message.
+exactly.
 
-> >+    if (flags & MSG_OOB)
-> >+            return -EOPNOTSUPP;
-> >+
-> >+    if (!len)
-> >+            return 0;
->
-> Is the order of the checks important? We should mention it in the commit
-> description (if it's important or not and why).
+> My understanding is
+> that 1-1, the compiler approach is still more efficient in terms of the casts
+> emitted (and 32-bit narrowing) vs BPF_F_ARENA_SCALAR.
 
-Yes. MSG_ERRQUEUE must come first, or a zero-length error-queue read
-returns 0. MSG_OOB goes before len =3D=3D 0 so that recv(fd, buf, 0, MSG_OO=
-B)
-returns -EOPNOTSUPP as in the native path on a connected socket. I'll say
-so in the message.
-
-Thanks,
-Jerome
-
+Right. llvm adding casts is a clear win over BPF_F_ARENA_SCALAR.
