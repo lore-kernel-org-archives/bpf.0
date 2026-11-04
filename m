@@ -1,70 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.54.127.154
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.54.127.65
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793822093;
-	b=A1HMMWTaHzRTpNVjKMtatk+ryBtZww677fXIFJu5P4M8VA71Wd7pjRvxj/9f+ZFhX4Gb
-	 AOn4QJd04XlKvmjHYhZ6t3b7+rcis8FhWIqOJhcICFr6d+ut984ozYVwiqYtw32snw1y2
-	 DgarQy+HlcmOKM536zCMGrrY/YCP4OeRbESFd35TasLRawakeI7r28cpieii/7tz+Kqou
-	 AgHGV8jCx1vF2BKVt2FeKXKdGOlsymJEvMbzkZWJVfKF1M9m+Y6hl/2RxmUggaWT+CzF8
-	 X/aEm0la9csbfbfuNV6LzsCmdzjTUeixm0VL7yTUbULe2OVW9L7ax8u2e2QRs4G/Kxw==
+	t=1793822096;
+	b=gHHM2hRo+eMeRoKpv6K10DO/3JZrjbdwb56ZvfL3cSy30msN0uuZxwe6AAwc4TBtH4+9
+	 KR5nIUTCmlilrvorY8iVCV3DRMijwGdVqw7VRHFy9vPtadWEn/mShEkHt15rk4Vfoh4yB
+	 NcWFA1ihGPX9iHXJl4vnxzUNPm+4DM9bNMP0BmkFMI4FzdHC4WJvGMvXAUbuhleDl2aqX
+	 E+hHs2HjhagYvaEYWm5ifjBasRzF9fnTNalWHdXD5/KJlpWOt7Kh4wU52TY78Eo/ReG2/
+	 4pW9JXUJWtLD9wzeipGVR/NtSS/+UmQp7/gQOzgmvYnRfn7vDyek6YR9KtrJWv6++DQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793822093;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793822096;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-Envelope-From;
-	bh=WHoNfqtH04OsXPCfBb3kmpxHV2hBvnBrqZ8UJDzkCnw=;
-	b=XAC9VEu3hv4/8RTsmaTQmJyvEDMI8MDVSSeTK67MYBXiT3o/rsTT7yCzWLiZQXHyFWFf
-	 o/ZUkejv3+vIKwBgZ93NOgv+rWlJmQjIlqyBqHbSaELODx4HA7haSV4hThaADhLqAOMpR
-	 OjUFpJZK8fdPApSc+FA5rzrKQskfu0mqseWKUqrcVBI4a4Tuq3l5LpJTBfY9Z50/YwCTo
-	 +A97doB03FWFxIF1DMARYWpfGuNSdh8E5brjcBJq1P4ca92J7Iu3ax3KLFPG+p/MPYIiW
-	 FANz28PJODxHemF3GYAC6EJ7sm5tOzWfQdqeOj8PUgEensT7Ou5VrsaTT9Jask0EGYw==
+	 Message-ID:In-Reply-To:References:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version:X-Envelope-From;
+	bh=VcIN67GTsXNoBlIaq3XR45xamAJGvyioRTJR7elGh3o=;
+	b=1KKRVwwQvFuwqYGIhZA6R5eXnsr5GkFFeJV95IgbtSyBQjhcx1E07uxBGkagrjtvlGi2
+	 uKl+enfdGe4gxLSFuflUaU3FokKZICMyEi7WuSkdBj2k7U9kz5aVQnYGHrP7DJSjUVgp9
+	 i0QinT5+s5NFy6nR29Dc+0B58uU/geceYU+I8Sw4pNn4cnDpvgY6ml34HK2KkZqbp9VSb
+	 qfaPauPA0xlOxUmtYoQ+vWoMzcbvfdRW0N8KsNIeMzRJDn1ROoFCftqxZD426KZNkjr2D
+	 rdFBiYmzlf/rkn5/fYxkWLuIaJBnLPX8B8Qby5M7Dqh6Hk6S01pfqAP8l+EmOeyYcsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=tychen.cc;
 	spf=pass smtp.mailfrom=tychen.cc;
-	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b="l+i/qV1K";
-	arc=none smtp.remote-ip=198.54.127.154
-Received: from out-2z4y-a154.jellyfish.systems (out-2z4y-a154.jellyfish.systems [198.54.127.154])
+	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=RHg09mAj;
+	arc=none smtp.remote-ip=198.54.127.65
+Received: from out-zbxj-a65.jellyfish.systems (out-zbxj-a65.jellyfish.systems [198.54.127.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9926098F68
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 19:54:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC9926098F68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED816098F6E
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 19:54:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7ED816098F6E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=l+i/qV1K
-Received: from fedora (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
+	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=RHg09mAj
+Received: from [10.18.116.108] (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKbk66vx5z2x9B;
-	Wed, 04 Nov 2026 19:54:22 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKbkN3vlzz8sWP;
+	Wed, 04 Nov 2026 19:54:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1793822066;
-	bh=WHoNfqtH04OsXPCfBb3kmpxHV2hBvnBrqZ8UJDzkCnw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=l+i/qV1K19UXI2JQaKILic7H7hYxMc3ziO2wfGAmeT4mXNCCK0XCX5VKNbTWxLAvR
-	 vAtGuDAoGg87sYs56aArYpvBjPLfEcMwRWzjtsC2dzLO3u1E592kuxobhJ/rSJlZRT
-	 Dc3QbteLRKZux/gsE0XimaBJGMMESwioUd1uNrkFVRUNShOJqrT4BElvcPzwnFMmh6
-	 l6nQESUUhdGwE52c6M+Zot4Ch7MF6pnumE8ssovsi8De5XtaD/Ef0w04DvGbTBufKC
-	 QRZKYZXodV+9lfQPoYBktV/wzwZyyhAFIkv6x1naP4Ayi4x6ozKcRrDyR0w2XGUYQN
-	 8S0t/oldSdVhg==
+	s=spacemail; t=1793822077;
+	bh=VcIN67GTsXNoBlIaq3XR45xamAJGvyioRTJR7elGh3o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=RHg09mAjYsx4Pwn+Nc9DwHrJxykhKlfzao6gaFRJZunJyJpCpAXI4dHlpV4bxyVGm
+	 5B1SdMxZaI7ag+8vPKB1OuBXqwgY8/UpWj8BQOhHFWwk8nhbFGRrgjmHMwjQK+tezR
+	 0KlzqNkfB3/WUgoyArnTPz4eIeeD/Dd2yNsT3egzjNwPC81+4YExe5qReIErztReLJ
+	 wrPOTwcBBXjbhdIKGM41LXzRY3s8bcPynV0HJUSel8TtRlvZ+RhM24tjibdOGXmsNB
+	 Fv9pRENJIf6D22fBC6rattquwPwzCW6+z0zLOrKLJHGWVDFB1KofOnnBHAFyFcmYUt
+	 SFHIdfXJcT1fQ==
 From: Tianyi Chen <hi@tychen.cc>
-To: bpf@vger.kernel.org
-Cc: Tianyi Chen <hi@tychen.cc>,
-	qmo@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ihor.solodrai@linux.dev,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	daniel@iogearbox.net,
-	ast@kernel.org,
-	alexei.starovoitov@gmail.com
-Subject: [PATCH bpf-next v9 0/2] bpftool: Use batch lookups for map dumps
-Date: Thu,  5 Nov 2026 04:54:11 +0900
-Message-ID: <cover.1793821981.git.hi@tychen.cc>
-X-Mailer: git-send-email 2.56.0
+To: sashiko-bot@kernel.org
+Cc: hi@tychen.cc, bpf@vger.kernel.org
+Subject:
+ Re: [PATCH bpf-next v8 2/2] selftests/bpf: Check bpftool batch map dumps
+Date: Thu, 05 Nov 2026 04:54:12 +0900
+Message-ID:
+ <179382205294.440318.17988073505184009869.bpftool-batch-v9-review@tychen.cc>
+In-Reply-To: <sashiko-outbox-197940@kernel.org>
+References: <cover.1793818387.git.hi@tychen.cc>
+ <4b2b24fdabd4cdef1364a8664d7d9615e960c72c.1793818387.git.hi@tychen.cc>
+ <sashiko-outbox-197940@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -74,36 +72,21 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-Use batch lookups for map dumps and continue with individual lookups
-from the last printed key after any batch error.
+> Would setting opts.map_extra = max_entries for BPF_MAP_TYPE_RHASH avoid
+> scheduling background resizes by pre-sizing the rhashtable to 256 buckets at
+> creation time?
 
-Changes in v9 (selftests only):
-- Pre-size RHASH maps to keep asynchronous growth out of the
-  order-sensitive dump comparisons (Sashiko).
-- Correct the explanation of the injected -EBUSY: it exercises fallback,
-  but is not the current hash bucket lock failure errno (BPF CI).
+Yes. A smaller in-process comparison after 100 inserts, with no further
+userspace updates, produced 25 count mismatches in 1000 runs; with
+map_extra=100 it produced none. The complete old bpftool subtest passed
+50 repetitions, so this is not a claim that it fails reliably.
 
-Tested in an x86-64 VM: all 16 batch subtests, 100 repetitions of the
-RHASH subtest, and the combination with the recursive series pass.
+v9 sets map_extra=max_entries for RHASH. The updated subtest passed
+100 repetitions.
 
-v8: https://lore.kernel.org/r/cover.1793818387.git.hi@tychen.cc
+v9: https://lore.kernel.org/r/cover.1793821981.git.hi@tychen.cc
 
-Tianyi Chen (2):
-  bpftool: Use batch lookups for map dumps
-  selftests/bpf: Check bpftool batch map dumps
-
- tools/bpf/bpftool/map.c                       |  97 ++++++--
- .../bpf/prog_tests/bpftool_map_batch.c        | 231 ++++++++++++++++++
- .../selftests/bpf/progs/bpftool_map_batch.c   |  42 ++++
- 3 files changed, 355 insertions(+), 15 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpftool_map_batch.c
-
-
-base-commit: 8fb43ffc3327d12d57d3fbe6f4820b5a522de0d1
--- 
-2.56.0
-
+Thanks,
+Tianyi
