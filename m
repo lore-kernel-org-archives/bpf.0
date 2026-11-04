@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793829365;
-	b=B7WuQJ8Mg2VIV+0x6Q5lO5ofJPT2mGw89VikkOd7U8t6BS10UK6BGMd+jv1Z1g/zMnKv
-	 1sDwNjWHMQo/0JWgDL+TtiTJ+2CfYCHWwpxmN6cuw8nERVhbGOzoq1k22F06p0nWN3Les
-	 bBhRut6nIlt2vW9V7VGhRIBo+zZeFlmngyJ/et4vNHw9Qs7+6EFHQeh6W0f2lO8+6/vHN
-	 EkU0JkfKSYnR/0HBo/LP5wkUV08/aXDt5/dqzr5gFj4R0/fpabvIbs4PB+CAcoEh7pxay
-	 8xD85cCskAJ5w9uxm3dPNKNr1dv1XM517DK9JWqEQQk/sHfq0pnTUeQURQ9yiQdRwlA==
+	t=1793829372;
+	b=H88qTgV55aN6gdjW/PDLoFZ+KqreXNV7Umrx51uHBCE6h4aPAWeTcxtlVdpzaVr9a06y
+	 aZbAJABJK7PT6r3n6o/izrm5STSc6CQ2SCkSBHFWSC5g2G04BmY2JOoAq0V6u7AKjZWk9
+	 XC8U9rg7uOUULtSTuBLnFbSt1jQZYk0JjSKK9Dtd4Mor8Kz/ckM/ALzjSMGrg+QncJ94X
+	 R/P83HeGhDDMwsGViBNHPOeP9mfdgOVykgmb8u9CHrQiGbEEKnS3xPLZ4F5FEeybvWwf0
+	 XNuSydgusLMhpkqyLX7dkIaFECOZCL1QbIlYJhcnb0M327pfZcDzaWlSO5hZzC1Zmiw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793829365;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793829372;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=sAJoJfE3nkXJ7yx10D2cQVkiaA5saG7UBkzdQrDunRw=;
-	b=FzUbRnxm+NMCYmeJJOS+ipJjsre4bUyGIBfTQZeA/YNCoexJ7odpIcP7BJoKhIjBl4W4
-	 hR7NyNWPq+cExGRQxfzzXbNyBma4cjMBKJrAO5x+LtrSUzhU/QTBqj0a9nNRFqUyDbZ0a
-	 1hiceO4ptA3UYZFYjUpti2nx4ir1gA7FMgeSm1mSgItuZz+9sZqrX5CCDc6SZs0DhDBpM
-	 AmhjCx7cqKGX6o2rkGw1wtLaukuCpz2Jz/o6EmQWQrYjIg/Xqig9nzLel1DtiE6DKU67d
-	 lxYSUcfCzGbYzUjt/qqC+M5/7WBTVwe5ONraRFy5dHlxT7kM5jqsCSPp7A6F7iImCOw==
+	bh=Jo+Zw9Nbq0mbPrKoSCRf5CUgy1nVsLyYn746GJsPu+U=;
+	b=dgm0NU4pmwFUTjZr/4r9Lcil7TV9hVpUS7HsfUXwRgt7uH501j2AJF9Lm6FChuBiR/D7
+	 ApZAhJFwj5GKm9fkvInHu0RJajfagX0pd7WUNYKiFdjQi7crn1B6uwhDe60VI8Ycek6tF
+	 oU49DejqxkV+RYAX3K4ay7LpCzRrRugYdwWtptbnM9JiXqzeh7Cq5zWE3jdpBkNVE7fo4
+	 Fkqxvjo7yin6xPUoAgQtWh3uBbme/5o8JE+qsRI8LkiGk56ueunedRA+7wKH5c93DCd0J
+	 RFrkOln7zf7cHvZ9+a1195ob3MISaRs7auQiJVVm+Oy+lKBuNnT3V2Vz59B//o0IJ5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hg9TpYi5;
-	arc=none smtp.remote-ip=209.85.210.175
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="W/RjnGfW";
+	arc=none smtp.remote-ip=209.85.210.181
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7105B60BF2DD
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 21:56:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7105B60BF2DD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2F960BF2EF
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 21:56:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE2F960BF2EF
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hg9TpYi5
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8a05b210703so677649b3a.0
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 13:56:05 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=W/RjnGfW
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-886e61fa30fso588227b3a.1
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 13:56:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793829365; x=1794434165; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793829371; x=1794434171; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=sAJoJfE3nkXJ7yx10D2cQVkiaA5saG7UBkzdQrDunRw=;
-        b=hg9TpYi5c2VSVzGXGOExzO7p7pRD86RDQXe2k5lX/b//xqpPXi/haOEd4dazzysnpz
-         Z/fYzYuq3mBpgA3pxA60A9YdhjvyGv6lKwSuhBxGce85hVfzHrNeb33nC6/FsI2Np5Sn
-         fooZIH748LntudzX94HLiySE0Dw8/eDjyXienyDJJ1xQaCKakI2aW5vj5X4h0Js/eAlF
-         mIew8j9SjbIOFJsBRi2K+OhvzQWnQwjtARtF4tcd6ZYkCIPBNYliBGkvVUv6Soe97ci3
-         +x7RzlqeLUfxtAR5hjX0vC7DMhbDtBdgjyaqTd77B3CDfr+h4OA/PlqXjCP4uRHzRvVm
-         q7aA==
+        bh=Jo+Zw9Nbq0mbPrKoSCRf5CUgy1nVsLyYn746GJsPu+U=;
+        b=W/RjnGfWV/aI02yIzXVNOnlcc2E4E7HirlAglCAJVO1IWV+v3Ghhg979l8RZTA6VlW
+         0DjkfO0Sku7Y3tl1QMFV3hL3k+XeRmhl5Cixp4mOzYQy6POkuLQdTEFDA0eIBs0F2gkg
+         lJknfC4hqZNYfKtvYrUYV1bwMq4oiBZdHb3nVoWBCQu0srv2lkq53CTwEgyfvmkycHv6
+         G/u4v4SkWxv58wpg/yFRl1u79C3XMO8pity+ir7+7SzDq0jI/Jyva1LTx0+cNCIYuxCW
+         wSw/WuZnYGEibpuCP8APFLvl2UMweIB61pd2OYJ/NAmrOn4tZNyC34J02bynxOPS3qrE
+         ZA6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793829365; x=1794434165;
+        d=1e100.net; s=20260707; t=1793829371; x=1794434171;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=sAJoJfE3nkXJ7yx10D2cQVkiaA5saG7UBkzdQrDunRw=;
-        b=G61b9o0Qeboa93TeHRR8hJmE6WD+5IsD7DZgCwZFiMGeLVLHAofGKj0nOV2VsuPWtB
-         K4GJGISt42reiStIpyEUP+Qki88U6snpb6ZufWWtg+VsYtrBfa1oa1dDX77Unc59qUtU
-         KLwLme5aK1crFluBJ+jcEVWlxgVBsEFOZSd5CHwmcOWMUPMsZ2oFc659IWMsifJD6Y95
-         XWeC4sKlex8f7qS1VRXN7Hpv7WhZEPi4sq6aEWfIvgJa6fiiH8P0hIj+FLbB1L2YMJRy
-         0StpUJgZgxlQEtpmTQ66YEL9Qs5wY6lahCUBsSnFQG1F/CJp7veP+jbhM0iruj3rg2zh
-         iSeA==
-X-Gm-Message-State: APuU4Z/1qHCmiJloP3Ku2sDeXZaCPukXOitO3Myl+HFfdvTUEwsyTefD
-	j50VOR/HArMytj1Nq0bEneJCVxZDlUPfUPSaINu/uGDFnu2JoJovDpFVGCIujA==
-X-Gm-Gg: AYBFou3233VJhkRQPG7fikgfrx5VqFq5a2P2V/r4WWt0uwUrq5D+iPUgZvQJZXVQtWW
-	K4uqoRjEfV1zDiotRZ3nYG7QPqMG7c+mS3hFyd/rHGDhQYNwzUh2KW2ZNEPesHJMKcu+nYk1/hU
-	q68mysCxiWiLkcY7iTPNSLMEOCI/KRrQhouPapDPbOfwxpFgW5mprMVsx8TJdGaqdzIyZuGuSEz
-	W2LUijL0in2++Riahlpt6+bYzsIiyF4P3yqzIAF62gzebcLEYPjQv44ieCHUyihn7OwK+uFycAj
-	pqGrPD2vHD91Vg6Hn3lbsKhqWnVLFdG2/x2hdePq9jdxizk5PTSE5k13kFuQ4yY54K3wkRsibtU
-	ths6WxpXLufkZZku/mOoJHHgeJclvnLV1TTDRLvva3vVk9xh7wAYBwEG2quON9NDQLa/bgQMgmH
-	1fY5SEoOqhJG+CmAfiqa8reLwM8GTJ7aPnJ6k9dawnb+DIqIlt+m/IDOVccajX8BDRET39/cH0g
-	817JY+Vli4uHQ5CPvvyO51DQZdHQ7MUn+DvgPIF+5bTDJ06pbFtcjVr+QCxusGZW93DmrT0DUYA
-	M+qzB4Y+p3ApOxjLPalHt6dDe520s7fTMpNzcAhRzpWDE0G9c5jpo0GQvkPB1ZHn/MIGJBHCd3Q
-	VgWcMaGFBUTFq8WqeIdC2CThRJ2kM6crFT/45ZivxZyR9aSO1hvhwdPkEn+K7ikCRptG0Z5OSoQ
+        bh=Jo+Zw9Nbq0mbPrKoSCRf5CUgy1nVsLyYn746GJsPu+U=;
+        b=YwB2Vbn+WvlsTK6M7y+H3A1mpNQBa6Eo5KyY4w8GGLwZ7efJrIajM2Y4xSVLKeNpz4
+         yO1vMeNDmCl/PHgFIuIqg99mcD6uf5Sn9k2LAXjjePUd2WOkXAYpwGtpl7kZcivWUN+C
+         TnR9mcDtr6l5sw5pp5XgJBfrAe94YVLmWPjWl2XVOdQZwWUIeGqQP85ZYS/bX6+n6d4O
+         Sckh1JQnq6KduqWBn83VDOyhq/DpFerVsxUCZlc1onoSQBldyuskPPI+y8ge74zDm/kT
+         qNgRwC6M5MAjqLLGhBUoerpmPgvWu96t3aRCafp3nA5XnjU+eoc9l4+WBrFEFyNEKdZq
+         t7FA==
+X-Gm-Message-State: APuU4Z+Qd39YL6ihBZ0Rkx9BY1YdhW2ciEalXDo6eUJV5xeGEtWQJEcg
+	dDOJco0janJS4DvKrJs5XCdXFXFqfieWV088SjlbfjPqYHp5PyMZBxi22RKnjg==
+X-Gm-Gg: AYBFou3tvZW//bFJG11jAxIQCm+oomLk8t+wVh/lQO3wbVcj4tsJXm2AeI14G8xLREA
+	gw0a13vkxyFv5h+fENEXEmd6Vg0hPvchAY/zasMkTSd6/aBP7qZbe/9KWnc8oxroK9IeXDBZgkf
+	WlS47RdUijP338bMkFQrvizHrHgbgOPueAhzx44JVQFtQW7g1gccYO7/loPEmIjCiKuiXD3DE3g
+	1TMYx1GuQFK/uotVw4U9gsBQXj2ijQhWzWF12utmEGrTYiI2WVvLYF+px763RZ1nh/L9vbUA1T3
+	6iXPirBNeE9ODk7UdAtx64HJ96FUeIdu2GVbrW4Sxu8szj4g5xY1BiN6D6wIT290yj858sM8PQk
+	sWMe0nVM0lJnOv7wAo5XlI1DRCDfhrmQPbxdcRged1hhoLdkWeeRknLhoSs0K4kW2et6eHfXci+
+	pRDWLyK47+Vy9RkLFpRj50s2KM/LjNH6jtHOD7iLpEXNfUQIoVtKQcWxR9VdeLXCRHf2pAxWgZ+
+	CPdbZ/Pyz4xphAPRrrHlcY8eXFQi/VWmXuM/R+7oEtLcjHAefgHkTsuDHnRvlRYJgJwrfPAwRbC
+	DUQD1TVqIwsmIzlFJhGdMkQy/Ia6FcHxOTEede6cN/C5exKHeoMzAh8coZLJju3Y/y+7Er3Dok6
+	WJciEh0pIPWw2Jtdn+uoZyS6WGozC1s1r/IbaMLh0yOtdWvhD1C7dwp+nxJSvQpQNSU+jvanMPA
 	==
-X-Received: by 2002:a05:6a00:b90:b0:89f:c156:d209 with SMTP id d2e1a72fcca58-8a9beb6a102mr15103006b3a.39.1793829364463;
-        Wed, 04 Nov 2026 13:56:04 -0800 (PST)
+X-Received: by 2002:a05:6a00:a0e:b0:898:efb4:ec4 with SMTP id d2e1a72fcca58-8a9bffd508bmr13249666b3a.55.1793829370725;
+        Wed, 04 Nov 2026 13:56:10 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b1ee455336sm123263b3a.54.2026.11.04.13.56.03
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b09b66155dsm1339589b3a.42.2026.11.04.13.56.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 13:56:04 -0800 (PST)
+        Wed, 04 Nov 2026 13:56:10 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 6/9] bpf: Use the call graph to compute the depth of chains of calls
-Date: Wed,  4 Nov 2026 21:55:20 +0000
-Message-ID: <20261104215523.1852636-7-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 7/9] selftests/bpf: Test what follows from the chains of calls
+Date: Wed,  4 Nov 2026 21:55:21 +0000
+Message-ID: <20261104215523.1852636-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261104215523.1852636-1-alexei.starovoitov@gmail.com>
 References: <20261104215523.1852636-1-alexei.starovoitov@gmail.com>
@@ -104,376 +104,338 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Three sums are left in the walk of the chains of calls: the bytes of stack,
-the bytes of the stack in arena, and the number of frames since the last
-global subprog.
+Add a prog with 32 global functions that call the next one in both branches
+of an 'if'. It has 2^32 chains of calls, and its load took 7 minutes. Add
+a prog with a tail call in an exception callback that calls nothing. It was
+accepted.
 
-The walk adds them up for every chain. Only the largest sum counts, and it
-follows from the largest sums of the callers:
-
-  depth(callee) = max over the callers (depth(caller) + frame(caller))
-
-Start with 0 at the main prog and at the async callbacks, and repeat until
-nothing changes. The graph has no cycles, so this comes to an end. Then
-compare the sums of every live subprog with the limits.
-
-As before, the sums have the frames as the main verification pass leaves
-them. What later passes add to a frame, like the inlined bpf_loop(), is not
-counted.
-
-Nothing is left in the walk. Remove it.
-
-Time to load N global functions that call the next one in both branches of
-an 'if':
-
-    N    before     after
-   16      4 ms    0.4 ms
-   20     70 ms    0.5 ms
-   24    1.3 sec   0.6 ms
-   28     24 sec   0.7 ms
-   60         -    1.3 ms
-  250         -    5.7 ms
-
-250 global functions where each one calls all that follow, 31125 calls,
-load in 20 ms.
-
-The messages are the same. The subprog that goes over a limit is reported,
-and not what it calls. When several subprogs go over it, the message is
-about the first one in the prog and has the numbers of its longest chain,
-and not of the chain that the walk got to first. A prog that breaks two
-rules can get the other message and errno.
+The other tests pass before and after the change. No test looked at these
+rules: the number of frames and the bytes of the stack in arena when the
+second caller has the longer chain, which frame is reported when libbpf
+puts a callee in front of its caller, stack arguments two calls above
+a tail call, no private stack for a subprog with stack arguments, and which
+of two nested callbacks takes a stack in arena.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 282 +++++++++++++++++++-----------------------
- 1 file changed, 129 insertions(+), 153 deletions(-)
+ .../bpf/progs/test_global_func_deep_stack.c   | 49 ++++++++++++
+ .../bpf/progs/verifier_arena_stack.c          | 61 +++++++++++++++
+ .../bpf/progs/verifier_large_stack.c          | 17 ++++
+ .../bpf/progs/verifier_private_stack.c        | 40 ++++++++++
+ .../selftests/bpf/progs/verifier_tailcall.c   | 78 +++++++++++++++++++
+ 5 files changed, 245 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5362687eba8b..b8f4549da6db 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6045,170 +6045,159 @@ static void mark_arena_stack_entries(struct bpf_verifier_env *env, struct bpf_ca
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c b/tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c
+index edb8a223a3cb..3a852809b078 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func_deep_stack.c
+@@ -92,6 +92,55 @@ int XCAT(f, n)(unsigned long a)                  \
  
- /* temporary state used for call frame depth calculation */
- struct bpf_subprog_call_depth_info {
--	int ret_insn; /* caller instruction where we return to. */
--	int caller; /* caller subprogram idx */
--	int frame; /* # of consecutive static call stack frames on top of stack */
--	int callx_insn; /* callx instruction whose callees are being walked */
--	int callx_next; /* next callee of callx_insn to walk */
-+	int caller; /* the caller that has the most on the stack. -1: the kernel */
-+	int depth; /* the most that the frames of the callers take. -1: not known yet */
-+	int arena_depth; /* the same in the stack in arena */
-+	int frame; /* the most consecutive static call stack frames on top of stack */
- };
+ F(37)
  
--/* starting from main bpf function walk all instructions of the function
-- * and recursively walk all callees that given function can call.
-- * Ignore jump and exit insns.
-- */
--static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
--					 struct bpf_subprog_call_depth_info *dinfo)
-+/* what the frame of the subprog adds to the frames of its callers */
-+static int subprog_stack_size(struct bpf_verifier_env *env, int s)
- {
--	struct bpf_subprog_info *subprog = env->subprog_info;
--	struct bpf_insn *insn = env->prog->insnsi;
--	int depth = 0, frame = 0, i, subprog_end, subprog_depth;
--	int arena_depth = 0;
--	int total;
--	int tmp;
--
--	/* no caller idx */
--	dinfo[idx].caller = -1;
--
--	i = subprog[idx].start;
--process_func:
--	dinfo[idx].callx_insn = -1;
--
--	/* protect against potential stack overflow that might happen when
--	 * bpf2bpf calls get combined with tailcalls. Limit the caller's stack
--	 * depth for such case down to 256 so that the worst case scenario
--	 * would result in 8k stack size (32 which is tailcall limit * 256 =
--	 * 8k).
--	 *
--	 * To get the idea what might happen, see an example:
--	 * func1 -> sub rsp, 128
--	 *  subfunc1 -> sub rsp, 256
--	 *  tailcall1 -> add rsp, 256
--	 *   func2 -> sub rsp, 192 (total stack size = 128 + 192 = 320)
--	 *   subfunc2 -> sub rsp, 64
--	 *   subfunc22 -> sub rsp, 128
--	 *   tailcall2 -> add rsp, 128
--	 *    func3 -> sub rsp, 32 (total stack size 128 + 192 + 64 + 32 = 416)
--	 *
--	 * tailcall will unwind the current stack frame but it will not get rid
--	 * of caller's stack as shown on the example above.
--	 */
--	arena_depth += subprog[idx].arena_stack_depth;
--	if (arena_depth > env->max_arena_stack_depth)
--		env->max_arena_stack_depth = arena_depth;
--	if (arena_depth > BPF_ARENA_STACK_MAX) {
--		verbose(env, "combined size of the frames in the stack in arena is %d. Too large\n",
--			arena_depth);
--		return -EACCES;
--	}
-+	struct bpf_subprog_info *sub = &env->subprog_info[s];
- 
--	if (idx && subprog[idx].has_tail_call && depth >= 256) {
--		verbose(env,
--			"tail_calls are not allowed when call stack of previous frames is %d bytes. Too large\n",
--			depth);
--		return -EACCES;
--	}
-+	if (sub->priv_stack_mode == PRIV_STACK_ADAPTIVE)
-+		return 0;
-+	return round_up_stack_depth(env, sub->stack_depth);
++#define ASM_FUNC(linkage, name, insns)					\
++linkage __naked __noinline __used int name(void)			\
++{									\
++	asm volatile (insns "r0 = 0; exit;"				\
++		      :: __imm(bpf_get_prandom_u32) : __clobber_all);	\
 +}
- 
--	subprog_depth = round_up_stack_depth(env, subprog[idx].stack_depth);
--	if (subprog[idx].priv_stack_mode == PRIV_STACK_ADAPTIVE) {
--		if (subprog_depth > env->max_stack_depth)
--			env->max_stack_depth = subprog_depth;
--		if (subprog_depth > env->stack_limit) {
--			verbose(env, "stack size of subprog %d is %d. Too large\n",
--				idx, subprog_depth);
--			return -EACCES;
--		}
--	} else {
--		depth += subprog_depth;
--		if (depth > env->max_stack_depth)
--			env->max_stack_depth = depth;
--		if (depth > env->stack_limit) {
--			total = 0;
--			for (tmp = idx; tmp >= 0; tmp = dinfo[tmp].caller)
--				total++;
-+/*
-+ * A subprog is entered with no more than what one of its callers is entered with plus
-+ * the frame of that caller. The graph has no cycles, so this comes to an end.
-+ */
-+static void compute_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph *cg,
-+			       struct bpf_subprog_call_depth_info *dinfo)
-+{
-+	struct bpf_subprog_info *si = env->subprog_info;
-+	struct bpf_subprog_call_depth_info *callee;
-+	int depth, arena_depth, frame, j, s;
-+	bool changed;
- 
--			verbose(env, "combined stack size of %d calls is %d. Too large\n",
--				total, depth);
--			return -EACCES;
--		}
-+	for (s = 0; s < cg->cnt; s++) {
-+		dinfo[s].caller = -1;
-+		dinfo[s].depth = !s || si[s].is_async_cb ? 0 : -1;
- 	}
--continue_func:
--	subprog_end = subprog[idx + 1].start;
--	for (; i < subprog_end; i++) {
--		int next_insn, sidx;
--
--		if (bpf_is_callx(insn + i) || bpf_calls_callback(env, i)) {
--			/*
--			 * Walk the callees and the callbacks recorded by
--			 * the main verification pass one by one, returning to
--			 * this insn after each.
--			 */
--			if (dinfo[idx].callx_insn != i) {
--				dinfo[idx].callx_insn = i;
--				dinfo[idx].callx_next = 0;
--			}
--			sidx = next_callx_callee(env, idx, dinfo[idx].callx_next);
--			if (sidx < 0)
-+	do {
-+		cond_resched();
-+		changed = false;
-+		for_each_set_bit(s, cg->live, cg->cnt) {
-+			if (dinfo[s].depth < 0)
- 				continue;
--			dinfo[idx].callx_next = sidx + 1;
--			dinfo[idx].ret_insn = i;
--			next_insn = subprog[sidx].start;
--		} else if (bpf_pseudo_call(insn + i) || bpf_pseudo_func(insn + i)) {
--			/* find the callee */
--			next_insn = i + insn[i].imm + 1;
--			sidx = bpf_find_subprog(env, next_insn);
--			if (verifier_bug_if(sidx < 0, env, "callee not found at insn %d", next_insn))
--				return -EFAULT;
--			if (subprog[sidx].is_async_cb) {
--				/* async callbacks don't increase bpf prog stack size unless called directly */
--				if (!bpf_pseudo_call(insn + i))
-+			depth = dinfo[s].depth + subprog_stack_size(env, s);
-+			arena_depth = dinfo[s].arena_depth + si[s].arena_stack_depth;
-+			for_each_set_bit(j, subprog_calls(cg, s), cg->cnt) {
-+				callee = &dinfo[j];
-+				frame = bpf_subprog_is_global(env, j) ? 0 : dinfo[s].frame + 1;
-+				if (depth <= callee->depth && arena_depth <= callee->arena_depth &&
-+				    frame <= callee->frame)
- 					continue;
-+				if (depth > callee->depth) {
-+					callee->depth = depth;
-+					callee->caller = s;
-+				}
-+				callee->arena_depth = max(callee->arena_depth, arena_depth);
-+				callee->frame = max(callee->frame, frame);
-+				changed = true;
- 			}
--			/* remember insn to return to */
--			dinfo[idx].ret_insn = i + 1;
--		} else {
--			continue;
- 		}
-+	} while (changed);
-+}
- 
--		/* store caller info for after we return from callee */
--		dinfo[idx].frame = frame;
-+static int check_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph *cg)
-+{
-+	struct bpf_subprog_info *si = env->subprog_info;
-+	struct bpf_subprog_call_depth_info *dinfo;
-+	int depth, total, tmp, s, err;
- 
--		/* push caller idx into callee's dinfo */
--		dinfo[sidx].caller = idx;
-+	dinfo = kvzalloc_objs(*dinfo, cg->cnt, GFP_KERNEL_ACCOUNT);
-+	if (!dinfo)
-+		return -ENOMEM;
-+	compute_call_depth(env, cg, dinfo);
- 
--		i = next_insn;
-+	for_each_set_bit(s, cg->live, cg->cnt) {
-+		/* A caller of it is over a limit. That one is reported, not what it calls. */
-+		if (dinfo[s].frame > MAX_CALL_FRAMES || dinfo[s].depth > env->stack_limit ||
-+		    dinfo[s].arena_depth > BPF_ARENA_STACK_MAX)
-+			continue;
- 
--		idx = sidx;
--		frame = bpf_subprog_is_global(env, idx) ? 0 : frame + 1;
--		if (frame >= MAX_CALL_FRAMES) {
-+		err = -E2BIG;
-+		if (dinfo[s].frame >= MAX_CALL_FRAMES) {
- 			verbose(env, "the call stack of %d frames is too deep !\n",
--				frame);
--			return -E2BIG;
-+				dinfo[s].frame);
-+			goto out;
- 		}
--		goto process_func;
--	}
--	/* end of for() loop means the last insn of the 'subprog'
--	 * was reached. Doesn't matter whether it was JA or EXIT
--	 */
--	if (frame == 0 && dinfo[idx].caller < 0)
--		return 0;
--	if (subprog[idx].priv_stack_mode != PRIV_STACK_ADAPTIVE)
--		depth -= round_up_stack_depth(env, subprog[idx].stack_depth);
--	arena_depth -= subprog[idx].arena_stack_depth;
- 
--	/* pop caller idx from callee */
--	idx = dinfo[idx].caller;
-+		err = -EACCES;
-+		depth = dinfo[s].arena_depth + si[s].arena_stack_depth;
-+		if (depth > env->max_arena_stack_depth)
-+			env->max_arena_stack_depth = depth;
-+		if (depth > BPF_ARENA_STACK_MAX) {
-+			verbose(env, "combined size of the frames in the stack in arena is %d. Too large\n",
-+				depth);
-+			goto out;
-+		}
- 
--	/* retrieve caller state from its frame */
--	frame = dinfo[idx].frame;
--	i = dinfo[idx].ret_insn;
-+		/*
-+		 * protect against potential stack overflow that might happen when
-+		 * bpf2bpf calls get combined with tailcalls. Limit the caller's stack
-+		 * depth for such case down to 256 so that the worst case scenario
-+		 * would result in 8k stack size (32 which is tailcall limit * 256 =
-+		 * 8k).
-+		 *
-+		 * To get the idea what might happen, see an example:
-+		 * func1 -> sub rsp, 128
-+		 *  subfunc1 -> sub rsp, 256
-+		 *  tailcall1 -> add rsp, 256
-+		 *   func2 -> sub rsp, 192 (total stack size = 128 + 192 = 320)
-+		 *   subfunc2 -> sub rsp, 64
-+		 *   subfunc22 -> sub rsp, 128
-+		 *   tailcall2 -> add rsp, 128
-+		 *    func3 -> sub rsp, 32 (total stack size 128 + 192 + 64 + 32 = 416)
-+		 *
-+		 * tailcall will unwind the current stack frame but it will not get rid
-+		 * of caller's stack as shown on the example above.
-+		 */
-+		depth = dinfo[s].depth;
-+		if (s && si[s].has_tail_call && depth >= 256) {
-+			verbose(env,
-+				"tail_calls are not allowed when call stack of previous frames is %d bytes. Too large\n",
-+				depth);
-+			goto out;
-+		}
- 
--	goto continue_func;
-+		if (si[s].priv_stack_mode == PRIV_STACK_ADAPTIVE) {
-+			depth = round_up_stack_depth(env, si[s].stack_depth);
-+			if (depth > env->max_stack_depth)
-+				env->max_stack_depth = depth;
-+			if (depth > env->stack_limit) {
-+				verbose(env, "stack size of subprog %d is %d. Too large\n",
-+					s, depth);
-+				goto out;
-+			}
-+			continue;
-+		}
-+		depth = dinfo[s].depth + subprog_stack_size(env, s);
-+		if (depth > env->max_stack_depth)
-+			env->max_stack_depth = depth;
-+		if (depth > env->stack_limit) {
-+			total = 0;
-+			for (tmp = s; tmp >= 0; tmp = dinfo[tmp].caller)
-+				total++;
 +
-+			verbose(env, "combined stack size of %d calls is %d. Too large\n",
-+				total, depth);
-+			goto out;
-+		}
-+	}
-+	err = 0;
-+out:
-+	kvfree(dinfo);
-+	return err;
++/*
++ * Every function calls the next one in both branches of an 'if': 32 calls are
++ * executed, and there are 2^32 chains of calls.
++ */
++#undef F_0
++#undef FN
++#define F_0 ASM_FUNC(, either0, "")
++#define FN(n, prev)							\
++	ASM_FUNC(, either##n,						\
++		 "call %[bpf_get_prandom_u32];"				\
++		 "if r0 == 0 goto +2;"					\
++		 "call either" #prev ";"				\
++		 "goto +1;"						\
++		 "call either" #prev ";")
++F(32)
++
++SEC("syscall")
++__success
++__load_if_JITed()
++int global_func_many_chains(void *ctx)
++{
++	return either32();
++}
++
++/*
++ * r1 is the number of calls that follow, so main -> fs7 .. fs0 and main -> fs15 .. fs8
++ * are executed: 9 frames each. main -> fs15 .. fs0 is in the call graph: 17 frames.
++ * libbpf puts fs7() .. fs0() in front of their second caller fs8().
++ */
++#undef F_0
++#undef FN
++#define F_0 ASM_FUNC(static, fs0, "")
++#define FN(n, prev) ASM_FUNC(static, fs##n, "if r1 == 0 goto +2; r1 += -1; call fs" #prev ";")
++F(15)
++
++SEC("syscall")
++__failure __msg("the call stack of 16 frames is too deep !")
++__naked int static_func_deep_stack_second_caller(void)
++{
++	asm volatile ("r1 = 7; call fs7; r1 = 7; call fs15; exit;" ::: __clobber_all);
++}
++
+ /* Ensure that even 32 levels deep, the function verifies. */
+ SEC("syscall")
+ __success
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_stack.c b/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
+index a23ab1ed2f96..1d676da4b5ea 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
+@@ -745,6 +745,65 @@ __naked void callback_names_backward(void)
+ 	: __clobber_all);
  }
  
- static int check_max_stack_depth(struct bpf_verifier_env *env)
++/* adds 10 to what the context points to. callee_with_frame() is two calls away */
++static __naked __noinline __used long far_from_r12_cb(void)
++{
++	asm volatile (
++	"r6 = r2;"
++	"call callee_in_the_middle;"
++	"r1 = *(u64 *)(r6 + 0);"
++	"r1 += r0;"
++	"*(u64 *)(r6 + 0) = r1;"
++	"r0 = 0;"
++	"exit;"
++	::: __clobber_all);
++}
++
++static __naked __noinline __used long loops_far_from_r12_cb(void)
++{
++	asm volatile (
++	"r3 = r2;"
++	"r1 = 2;"
++	"r2 = far_from_r12_cb ll;"
++	"r4 = 0;"
++	"call %[bpf_loop];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_loop)
++	: __clobber_all);
++}
++
++SEC("syscall")
++__description("arena stack: the callback that is next to r12 takes a stack")
++__success __retval(60)
++__load_if_JITed()
++/* the end of the main program, the first insn of loops_far_from_r12_cb() */
++__xlated("r0 = r6")
++__xlated("exit")
++__xlated("r3 = r2")
++__xlated("...")
++/* the end of the code that takes a stack, the first insn of far_from_r12_cb() */
++__xlated("r12 = *(u32 *)(r{{[0-9]}} +8)")
++__xlated("r6 = r2")
++__naked void callback_in_callback(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r1 = 3;"
++	"r2 = loops_far_from_r12_cb ll;"
++	"r3 = r10;"
++	"r3 += -8;"
++	"r4 = 0;"
++	"call %[bpf_loop];"
++	"r0 = *(u64 *)(r10 - 8);"
++	"exit;"
++	:
++	: __imm(bpf_loop)
++	: __clobber_all);
++}
++
+ SEC("syscall")
+ __description("arena stack: call of a callback that uses r12")
+ __failure __msg("loop_cb() uses R12 and is both called and a callback")
+@@ -1009,10 +1068,12 @@ __naked void depth_max(void)
+ SEC("syscall")
+ __description("arena stack: more than 32K")
+ __failure __msg("combined size of the frames in the stack in arena is 32784. Too large")
++/* frame_16() has two callers. The one that has more in the stack in arena counts */
+ __naked void depth_too_large(void)
  {
- 	enum priv_stack_mode priv_stack_mode = PRIV_STACK_UNKNOWN;
--	struct bpf_subprog_call_depth_info *dinfo = NULL;
- 	struct bpf_subprog_info *si = env->subprog_info;
- 	struct bpf_call_graph cg = {};
- 	int s, ret;
-@@ -6264,21 +6253,8 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
- 		}
- 	}
- 
--	dinfo = kvzalloc_objs(*dinfo, env->subprog_cnt, GFP_KERNEL_ACCOUNT);
--	if (!dinfo) {
--		ret = -ENOMEM;
--		goto out;
--	}
--
--	for (int i = env->subprog_cnt - 1; i >= 0; i--) {
--		if (!i || si[i].is_async_cb) {
--			ret = check_max_stack_depth_subprog(env, i, dinfo);
--			if (ret < 0)
--				goto out;
--		}
--	}
-+	ret = check_call_depth(env, &cg);
- out:
--	kvfree(dinfo);
- 	kvfree(cg.calls);
- 	return ret;
+ 	asm volatile (
+ 	".8byte %[adj];"
++	"call frame_16;"
+ 	"call frame_16k_calls_16;"
+ 	"exit;"
+ 	:
+diff --git a/tools/testing/selftests/bpf/progs/verifier_large_stack.c b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
+index c2a3ddf5ac91..7e4f5e3463a2 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_large_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
+@@ -112,6 +112,23 @@ __naked void five_frames_of_512(void)
+ "	::: __clobber_all);
  }
+ 
++/* libbpf puts frame_512_leaf() in front of frame_512_depth_2(), which goes over the budget */
++SEC("socket")
++__description("the frame that exceeds the 2 KiB budget is reported, not its callee")
++__load_if_large_stack()
++__failure __msg("combined stack size of 3 calls is 2064. Too large")
++__naked void callee_in_front_of_caller(void)
++{
++	asm volatile ("					\
++	r1 = 5;						\
++	*(u64 *)(r10 - 1040) = r1;			\
++	call frame_512_leaf;				\
++	call frame_512_depth_3;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
+ __used __naked
+ static void frame_1536_leaf(void)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+index bbc09f516d92..aa15361bcca5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+@@ -70,6 +70,46 @@ __naked void no_private_stack_nested(void)
+ "	::: __clobber_all);
+ }
+ 
++#ifdef __BPF_FEATURE_STACK_ARGUMENT
++__used
++__naked static long subprog_6args(long a, long b, long c, long d, long e, long f)
++{
++	asm volatile ("			\
++	r0 = *(u64 *)(r11 + 8);		\
++	*(u64 *)(r10 - 64) = r0;	\
++	exit;				\
++"	::: __clobber_all);
++}
++
++/* x86-64 has one register for the private stack and for the sixth argument */
++SEC("raw_tp")
++__description("No private stack, stack arguments")
++__success
++__load_if_JITed()
++__arch_x86_64
++__log_level(4) __msg("stack depth max 128")
++__naked void no_private_stack_stack_args(void)
++{
++	asm volatile ("			\
++	r1 = 42;			\
++	*(u64 *)(r10 - 64) = r1;	\
++	*(u64 *)(r11 - 8) = r1;		\
++	call subprog_6args;		\
++	r0 = 0;				\
++	exit;				\
++"	::: __clobber_all);
++}
++#else
++SEC("raw_tp")
++__description("No private stack, stack arguments")
++__skip("stack_arg is not supported by compiler")
++__success
++int no_private_stack_stack_args(void)
++{
++	return 0;
++}
++#endif
++
+ __used
+ __naked static void cumulative_stack_depth_subprog(void)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall.c b/tools/testing/selftests/bpf/progs/verifier_tailcall.c
+index 51687da97225..42b90b692dc5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_tailcall.c
++++ b/tools/testing/selftests/bpf/progs/verifier_tailcall.c
+@@ -50,6 +50,84 @@ static int subprog_tail_call(void)
+ 	: __clobber_all);
+ }
+ 
++/* The exception callback has no ctx, so its tail call can only be dead code */
++__used __noinline
++int exception_cb_tail_call(__u64 cookie)
++{
++	asm volatile ("			\
++	r0 = 0;				\
++	if r0 == 0 goto +4;		\
++	r2 = %[jmp_table] ll;		\
++	r3 = 0;				\
++	call %[bpf_tail_call];		\
++"	:
++	: __imm(bpf_tail_call),
++	  __imm_addr(jmp_table)
++	: __clobber_common);
++	return 0;
++}
++
++SEC("tc")
++__description("tail call in an async callback that calls nothing")
++__failure __msg("cannot tail call within callback")
++__attribute__((btf_decl_tag("exception_callback:exception_cb_tail_call")))
++__naked void tail_call_in_async_callback(void)
++{
++	asm volatile ("			\
++	r0 = 0;				\
++	exit;				\
++"	::: __clobber_all);
++}
++
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
++	defined(__BPF_FEATURE_STACK_ARGUMENT)
++
++__used __noinline
++static long subprog_6args(long a, long b, long c, long d, long e, long f)
++{
++	return f;
++}
++
++__used __naked
++static int calls_subprog_tail_call(void)
++{
++	asm volatile ("			\
++	call subprog_tail_call;		\
++	exit;				\
++"	::: __clobber_all);
++}
++
++SEC("tc")
++__description("stack arguments two calls above a tail call")
++__failure __msg("tail_calls are not allowed in programs with stack args")
++__load_if_JITed()
++__naked void stack_args_above_tail_call(void)
++{
++	asm volatile ("			\
++	r6 = r1;			\
++	*(u64 *)(r11 - 8) = 6;		\
++	call subprog_6args;		\
++	r1 = r6;			\
++	call calls_subprog_tail_call;	\
++	r0 = 0;				\
++	exit;				\
++"	::: __clobber_all);
++}
++
++#else
++
++SEC("tc")
++__description("stack arguments two calls above a tail call")
++__skip("stack_arg is not supported by compiler or jit")
++__success
++int stack_args_above_tail_call(void)
++{
++	return 0;
++}
++
++#endif
++
+ /*
+  * A tail call unwinds only the frame of the subprog doing it, so the
+  * frames of its callers stay on the stack. With up to 33 tail calls in
 -- 
 2.55.0
 
