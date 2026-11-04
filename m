@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793755480;
-	b=1YzUzWlSy0UX6y3rSAZqFKaDQo2WhlMhJRO2GruM/MLe3SCkyBG5Br66jPvYnM4WRF1A
-	 Ukpj+g5Pc5b1a5otUe49rf65mJiXKH9DQNrLjg52Bl3IlDqIMXLUkKlezcLsgN04/Y1U8
-	 l7YnD4rBnxeqq/e/bLXplyMgF2GcMrxkKuSOpws3fCbpNHb3YjV4ES+5Id53icZ3E1i1r
-	 cuRciKsk4rFMzCMvhf16E/ZiF4uPfFsAHSY/VURbFu3fXq6UvRHvEQ5Bu2Jtycx1tZYGm
-	 q72IfckV8a2c/TC3w8BfhJK6w5hi/jN+2B3glLNdQ9KgooLCn35zw4HQ87IIgNTxlvw==
+	t=1793755486;
+	b=Fz0t2lx/rLxxXycDSoNfdN7lqFhszzuKtQxwLawphG6lB88PP/OWwaCuFb+bXtoLOfOv
+	 ncMl5xFa6mN2ypl9z1/XIJhzb1kEpf5W+EOsCnCDMdUcXBvKYqMdRqmrKRzdA/u7Nc7sg
+	 kNjoLoY9vXZ05EiyIV6NH7s0vtrISiD1F8INN7Apu7QJfLoSGVy8mNj6x5bHE7m++ZdoO
+	 /d7qyq18L1UXwf69ZiQnAoiBL903cJmORCSRcMKoM8Wy6dZwQtawXujALsxpv9UMAz8CF
+	 5158rhseNnSu6g09DXyOmTglavv9AEcuC3B2GYXPbXQAtpZeGf8LHJk0GEXBuw6puYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793755480;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793755486;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=DBiMWG/JxvW22JGMQQRBhU95ba6t/rF6J+qCWDzSqko=;
-	b=hCsbSHVhhAy6xUYWRqs8YWvHW/7PGOZiAnchyY5PZqtMvHM0eRII9sN7RTQnbIwjmBNy
-	 9resBnj3D3bEjJyhcj0e/gvyQPKm5bLRvrumPTYR0blcSgCU409ZOfRUfUBmKToCY8Rd+
-	 tCd9MXXAI630UbblQu5/qpPwBnyVqktopUrvqQyWjcfHSwsWHp+89I+JpVC56yYYdPAmQ
-	 +dGq/mzOkQpf7Nd65cRae9x+/nTXIsH0rCfDI8V373fId4lM4HvkSaZE7q6DqLSouExg0
-	 GMLvC0jH7GMmzye+5fv6ZxZyW4m2qI2rBLUP+8Bd3SCIICbyrEmEmcN3Plfd63jfwew==
+	bh=t68Aog5ohonTlOBSW18O5/IXMuuB6DC8HahbyJ8qbEc=;
+	b=cacERr03OmA+URCRJ/8lnSrPep7CP8EDAMQHICujfhdQxqaWlUxBTN/pshopcpB+xdKW
+	 lT+OwSSuR1q/zCMSV/huk0w/NN+QlL9K8hC2Tbm2PWOB8O15GeLpqs8O6NgziytsDLv9E
+	 7Rsl4K/Yw8CE426cyY+1jQEggQgeK/TjaCmPMdCxo1TT+Rir7AUIujFq2gQAUHZ1L7ZlP
+	 N0df+2t8abYvq+Zv/bMfvOX7IQ8JpOolK1wJ9xv0UWURPdqIomubdhorJ6hENymp5hAKg
+	 mdAmuyjWNsviqhmTHCcCWLxZguOaaPArGt0hHn7UnKPc0djMTJpveS1y0liFhoA5+iw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=frubd9Mm;
-	arc=none smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MCIWLhLf;
+	arc=none smtp.remote-ip=209.85.215.178
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04FD606A31B
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 01:24:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D04FD606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA40606A31B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 01:24:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDA40606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=frubd9Mm
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e98798cbddso778985ad.0
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 17:24:39 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MCIWLhLf
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cdab9e9761cso125582a12.2
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 17:24:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793755479; x=1794360279; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793755485; x=1794360285; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DBiMWG/JxvW22JGMQQRBhU95ba6t/rF6J+qCWDzSqko=;
-        b=frubd9MmJY31RjJjNH2Wqec2LNKtzyRtLtZ9DmDf6TUhq+MeXN4eZ6Gz4a10AyzrPW
-         2vzBOHhVaKOXG2prA9a9vXrajji4qeq15GyAkeDbwDhBJwkcp2w7iFr67JD63eHwSXiF
-         I9NEyHGuqUFNDS4fHOHd0fz4pf3ZVrZ+Gc8kMt/0AKk5MW2ktNYVEKXpAXy2ihABjmZ5
-         22RzI5bnsLgFfKL8EPzFKLRh9I9efRf0QQ/vFSTTbrMJZ9Q3cWjJtHWfNWJ/HzZQ+qcD
-         1k+WRkJNBY0YkGgm4JgL9Vrgut/VbLzG2pVfilL5zhc3IXm/7SNk2joeZm+9YrS4Amlk
-         Mriw==
+        bh=t68Aog5ohonTlOBSW18O5/IXMuuB6DC8HahbyJ8qbEc=;
+        b=MCIWLhLf/Ylw/d7+PRJHu2M9wV6+SoTuRz99kxrl9BYMwWnU9e2pZimz/6kSaJe7gL
+         BZ5VCJtRHztRyTVDVHgIkV+Ka9OsT5jSK/+l0TtrQosPLeXs52FlsfNBFLiFCjJ9uOkL
+         wq6VjfE1B8ULsNsw/Ytz4YUVyhgp+HM0Uyfl4tS6E5Jnn9ePSmwB3Crum9wa/joYKKSk
+         PVkdxssKNMVlL4C78SFWUW3BGz8uTot7VkqwqCPpsPMF8B0xzZu+0wS3upIBmQCs2UHY
+         5oLlT8UIJ0M1ksQjqwnE8uMife/XC4DiTjKfAaGekutb7CJzCK3IiiznNekC0CRTJI1p
+         aJuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793755479; x=1794360279;
+        d=1e100.net; s=20260707; t=1793755485; x=1794360285;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DBiMWG/JxvW22JGMQQRBhU95ba6t/rF6J+qCWDzSqko=;
-        b=12TafUGADmtJ5/VnLU6q+hwMQ7QYB22PkYhQkmXmr5eKgA7TjyTBgwchVRcKNqJ2yh
-         3YRqDzml6t/ia6KvtNNQYGHwTXU5tVCKQ0f6X/VOHB6lr7iYog4sA9ycB3+WubSO0KbE
-         RaUDk8AnR1zgOgwTSXTl2flcdursYTRQO5n07Q4sGaD8icq/ZU3C1Nm1wJdzs/0+vNJ4
-         6FQCkbAChS/+a/lkmAAAUmqHCv59bo29OdqB6lxMnjU3SD2duGD2j6ka+lWTRRa/RqxP
-         cujtdsk0yF4git1adhg+ugzMj+ih6jAYE9Oia8wBReAje5lPnahNmo+z8OGEQvcGjWBw
-         4MoQ==
-X-Gm-Message-State: APuU4Z81EuaOLX3GSF3yeu8WCaX9+CiaV/i9ipRP/v/tEyWjmcrjJTq5
-	8QO3i2ybN7y6JaHgQVelBY29TnD/GVvjc4dFaAx8j8K72EJD7uSxLkcm8MYppA==
-X-Gm-Gg: AYBFou2zMGZ6wbGsWnO0RQp0/5ZLx3fnYSK1h0rkltxXDkTT8/g2aJB5CQJCbMowsVi
-	BRvDeaIgoXgjMMeuwiYs1bKgGUGnO2fg46yIi+jrOGau/XXIRpE5/WijJnTMR/qyY+f4cIGj0yA
-	NgacGl6c9FgLUdGU0Ku3s8Gc7cqN0weRc5rfa8+ngKzTFhcDTffSs8wOBH1b1mUWQINawZR+A54
-	pc035bE4QRBL/ExqMlGAkbbiH79oIaYA+ZRZJ7P5CPfY3cCYyzEmXWYa337onxCv3kHnUd0fhQQ
-	/jDajed4pnGGXaH7d5CrUvasQ1zw1tau5zEXK2z9xzJV6TRDMRB7agClUirV8Oj6qvgI2K6V63S
-	IDuABCDZhckLD2Rs6ufBBXTrO6BD1LSJeDx1nWSAoOYfUqKoD80rqWRJktXvqCyEGhFSGoxB9tG
-	L/85k8H5qB8fVX782Wz/DTG+bdGBAG4q6AJtOJczWZXqwDy46717dAwljJ/8aDS456tC/o+6aiO
-	rS1zZ55OnZy82xtAov8QRRub17iEt3ddz8pVSOjpybryTnVDdkFwJ7TO+0ie7NBjDyS0ujnBDbY
-	UGgzIVLOX8WZTldqt3Y4zV15LltyPlgS9i7w/3P0cYEogpUpwIcyJQyOwe9HzNCMNFSL9OjqXRf
-	gpufFtjds6SLbsvdkVqFkyFfzR7/rI1kEFZA5f6zRjvHNVNoyqUgkawK0P8u/55D3kEodvcr1BA
-	==
-X-Received: by 2002:a17:903:3848:b0:2e5:e1de:9c3c with SMTP id d9443c01a7336-2eb364ddf03mr127084075ad.47.1793755478940;
-        Tue, 03 Nov 2026 17:24:38 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed08fe1e4dsm772315ad.21.2026.11.03.17.24.38
+        bh=t68Aog5ohonTlOBSW18O5/IXMuuB6DC8HahbyJ8qbEc=;
+        b=DWoGHlVpDR08hdtxESMbMZi2WVZLDojB1eUG/pRU+4+p0Eeu3q7g8gpvc9maBnYtWR
+         1rX8Yjm9/r/WJhadaLIvSbpBWFb2jNgb0E96ircVFcjo7NyNq2RaALSSlX8RAvnTwxz1
+         x9u+5hTVI5g5pALXaUTN9LiNpkf94Ws4CCXvMGX1dkPbFRLcnySH/PKDwf12SyMZaEot
+         pbF1TLCXTloi97a5+Q39rreJq+1wJqS/gPDWHh/SJjSTLch/b2TOgFI931qurMZ1u78F
+         1Km+1AX2r5iUU4tTx9C2snAVgD9m1hVKbcDojSLAztd83TduqiQGMvFOZgHoDUwYki39
+         ex9w==
+X-Gm-Message-State: APuU4Z/UMgnnjJmsg1JEqNulF8OKr2ZFIyALEZU3WUY4BJIVfMq0Kgv2
+	ltdL6nQxcRK4/O96tBkv7uzi3XWw8bLcP5NbNUhyDyzwWlGH4JRk3hnElAmN/w==
+X-Gm-Gg: AYBFou15+ai/CKVl7iRLIZt1aD0BTyS9UZVYw13memeKN/pTZaqkCCtibR4/9o34KrA
+	V0lsKiH3jXfBDXB8mlw12oOc8oQfGtBKRy5tfs716Zk4HWrUAcN+Wzu1Vv6a99qSUX2ZvKuO50/
+	JYJeJT/I4C2568KhC+mLX+DyzCeK8hXRWNyFmy88w0OZSmmMGVsPIXJzgvSkrtijW/f0KQuo/7d
+	gEVDDwhgosJQMAFWXL4AM96onhhCQ+rBabg7HR7eFp2ABkjU+D+EVNAEaqywcaHANWjyjNXKzJr
+	qJ1fVTA8wY2r3FEyox5hqCyts3DYyxTZDQ6+7o9Q0z94CR58iTN5fnUvVxIy/sMlw2nmFTLDaHG
+	Ziva2EZ5ZJgef15zztfqvQP9ZoTSBs5xEi3I74UTCarvGaiH3qAASU0Vz6pMqeXJsxvOErHu0zr
+	8rQ7TZpM5K0bQPxdtH5503oX851l5OjEtc4hql+tKUItCRzYPoNy79yp3qJieib3vFBghbCyGyw
+	U3O/ALnIgEZBfm04wyZ+kPwdlKi/ukW7NtOtGTu0AF4cjSrOgKaxIwin987K0HWNXqVfD6v4T9I
+	cY+dhvnbf6hzFWaidtZe5Nj+jQtEgFQaEz7edrq67OSaPgDjbo70G8f3rRaSD4VXd3OfuCGe1/D
+	XIVM/N2JurTzLFgSW7D3DO3vo5S2hNatp3yriCMdJlvEM0TL1Ks+CglXbPykLBhCrBFadiTZaef
+	xPTDXQfCyQTcDj8ixPKFE=
+X-Received: by 2002:a17:90b:2252:b0:3a7:8c68:6446 with SMTP id 98e67ed59e1d1-3ae8987d10amr12605381a91.63.1793755485002;
+        Tue, 03 Nov 2026 17:24:45 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b09311866fsm1455755a91.17.2026.11.03.17.24.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 17:24:38 -0800 (PST)
+        Tue, 03 Nov 2026 17:24:44 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 06/14] libbpf: Relocate pointers that are stored in arena
-Date: Wed,  4 Nov 2026 01:23:52 +0000
-Message-ID: <20261104012401.1354861-7-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 07/14] selftests/bpf: Test pointers in arena and .bss.addr_space.1
+Date: Wed,  4 Nov 2026 01:23:53 +0000
+Message-ID: <20261104012401.1354861-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261104012401.1354861-1-alexei.starovoitov@gmail.com>
 References: <20261104012401.1354861-1-alexei.starovoitov@gmail.com>
@@ -104,202 +104,313 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A variable in arena that points to a different variable in arena gets an
-incorrect value:
+The initial values of variables in arena point to other variables in arena:
 
-  int __arena x = 42;
-  int __arena * __arena px = &x;
+  pointer       points to
+  ------------  -------------------------------------------
+  px            an int
+  parr          the third element of an array
+  head, next    the elements of a list
+  pbig          an element of an array in .bss.addr_space.1
+  psx           a static int
+  psbig         an element of a static array in .bss.addr_space.1
 
-The compiler emits an R_BPF_64_ABS64 relocation for px. libbpf ignores the
-relocations of .addr_space.1. The object loads without an error, and px is
-0.
+The prog and user space must see the same pointers:
+ - The prog follows each pointer and examines the value that it finds.
+ - User space compares px, parr, head and next with the addresses in the
+   skeleton.
+ - User space reads through pbig, psx and psbig the values that the prog
+   stored there. Static variables are not in the skeleton.
 
-The address of x is not known until libbpf maps the arena. Thus libbpf does
-the work in two steps:
- - At open it records where each such pointer is and which variable it
-   points to.
- - At load it maps the arena, copies the variables, and adds the address of
-   the variable to each pointer.
+The selftests link each object with the static linker. Thus the object with
+psx and psbig does not build without the change in linker.c.
 
-The pointer gets the address in user space. The prog can use the same
-value, because an access to arena from a prog uses only the low 32 bits.
+The variables in .bss.addr_space.1 must be zero and aligned, and the object
+file must be smaller than these variables. The size of .addr_space.1 is not
+a multiple of the alignment, thus libbpf must align the second section.
 
-A pointer in arena to a variable that is not in arena has no correct value.
-Fail the open.
+A second object has a pointer in arena to a variable that is not in arena.
+The open of this object must fail.
 
-For a pointer to a static variable the relocation refers to the section,
-and the offset of the variable is stored in place. The static linker
-rejects such a relocation in a data section. Make it add the new offset of
-the section, as it does for pointers to static functions. All pointers in
-the arena data of Rust objects have this form.
+The test is serial, as the other tests in prog_tests/arena_*.c. See commit
+a14f9ba080c1 ("selftests/bpf: Run arena tests serially").
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 83 +++++++++++++++++++++++++++++++++++++++++-
- tools/lib/bpf/linker.c | 10 +++--
- 2 files changed, 87 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/Makefile.skel     |   3 +-
+ .../bpf/prog_tests/arena_data_ptrs.c          |  70 +++++++++
+ .../selftests/bpf/progs/arena_data_ptrs.c     | 138 ++++++++++++++++++
+ .../bpf/progs/arena_data_ptrs_fail.c          |  25 ++++
+ 4 files changed, 235 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_data_ptrs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_data_ptrs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_data_ptrs_fail.c
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index a7c53dc5b91d..1172fe7992bf 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -797,6 +797,12 @@ struct bpf_object {
- 	size_t arena_data_sz;
- 	size_t arena_data_off;
- 	size_t arena_bss_off; /* from the start of arena_data */
-+	/* pointers to variables in arena that are stored in variables in arena */
-+	struct arena_ptr {
-+		size_t off;	 /* where the pointer is, from the start of arena_data */
-+		size_t targ_off; /* the symbol it points to, from the start of arena_data */
-+	} *arena_ptrs;
-+	size_t arena_ptr_cnt;
+diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
+index e8699903feef..b8eaecc7f429 100644
+--- a/tools/testing/selftests/bpf/Makefile.skel
++++ b/tools/testing/selftests/bpf/Makefile.skel
+@@ -20,7 +20,8 @@ ifneq ($(BPF_CC),)
+ BPF_SRCS := $(notdir $(wildcard progs/*.c))
+ BPF_OBJS := $(patsubst %.c,$(RDIR)/%.bpf.o,$(BPF_SRCS))
  
- 	void *jumptables_data;
- 	size_t jumptables_data_sz;
-@@ -4171,10 +4177,11 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+-SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
++SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c	\
++		  arena_data_ptrs_fail.c
  
- 			/*
- 			 * Only do relo for section with exec instructions,
--			 * struct_ops, maps, and read-only data that might
--			 * have pointers to functions.
-+			 * struct_ops, maps, read-only data that might
-+			 * have pointers to functions, and arena.
- 			 */
- 			if (!section_have_execinstr(obj, targ_sec_idx) &&
-+			    strcmp(name, ".rel" ARENA_SEC) &&
- 			    strcmp(name, ".rel" RODATA_SEC) &&
- 			    !str_has_pfx(name, ".rel" RODATA_SEC ".") &&
- 			    strcmp(name, ".rel" DATA_REL_RO_SEC) &&
-@@ -5430,6 +5437,21 @@ bpf_object__reuse_map(struct bpf_map *map)
- 	return 0;
- }
- 
-+/* The arena is mapped. The address of a variable is the same for the program and for user space. */
-+static void relocate_arena_ptrs(struct bpf_object *obj, const struct bpf_map *arena)
-+{
-+	void *data = arena->mmaped + obj->arena_data_off;
-+	struct arena_ptr *p = obj->arena_ptrs;
-+	__u64 val;
-+	size_t i;
+ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
+ 		linked_vars.skel.h linked_maps.skel.h linked_arena.skel.h \
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_data_ptrs.c b/tools/testing/selftests/bpf/prog_tests/arena_data_ptrs.c
+new file mode 100644
+index 000000000000..a01c712ff3d0
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_data_ptrs.c
+@@ -0,0 +1,70 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+	for (i = 0; i < obj->arena_ptr_cnt; i++, p++) {
-+		memcpy(&val, data + p->off, sizeof(val));
-+		val += (__u64)(unsigned long)data + p->targ_off;
-+		memcpy(data + p->off, &val, sizeof(val));
-+	}
++#include <test_progs.h>
++
++struct elem {
++	struct elem *next;
++	int val;
++};
++
++#include "arena_data_ptrs.skel.h"
++
++static int run_prog(struct bpf_program *prog)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++
++	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(prog), &opts), "run"))
++		return -1;
++	return opts.retval;
 +}
 +
- static int
- bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
- {
-@@ -5856,6 +5878,7 @@ bpf_object__create_maps(struct bpf_object *obj)
- 					memcpy(map->mmaped + obj->arena_data_off, obj->arena_data,
- 						obj->arena_data_sz);
- 					zfree(&obj->arena_data);
-+					relocate_arena_ptrs(obj, map);
- 				}
- 			}
- 			if (map->init_slots_sz && map->def.type != BPF_MAP_TYPE_PROG_ARRAY) {
-@@ -8223,6 +8246,59 @@ static int bpf_object__collect_rodata_relos(struct bpf_object *obj,
- 	return 0;
- }
- 
-+/*
-+ * Collect pointers that are stored in variables in arena, like
-+ *   int __arena * __arena p = &var;
-+ * They are R_BPF_64_ABS64 relocations. The addend is stored in place.
-+ */
-+static int bpf_object__collect_arena_relos(struct bpf_object *obj,
-+					   Elf64_Shdr *shdr, Elf_Data *data)
++static void test_ptrs_and_bss(void)
 +{
-+	int i, nrels = shdr->sh_size / shdr->sh_entsize;
-+	struct arena_ptr *ptrs;
-+	const char *sym_name;
-+	size_t sym_idx;
-+	Elf64_Sym *sym;
-+	Elf64_Rel *rel;
++	struct arena_data_ptrs *skel;
++	size_t elf_sz;
 +
-+	ptrs = libbpf_reallocarray(NULL, nrels, sizeof(*ptrs));
-+	if (!ptrs)
-+		return -ENOMEM;
-+	obj->arena_ptrs = ptrs;
++	skel = arena_data_ptrs__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
 +
-+	for (i = 0; i < nrels; i++, ptrs++) {
-+		rel = elf_rel_by_idx(data, i);
-+		if (!rel) {
-+			pr_warn("sec '.rel%s': failed to get relo #%d\n", ARENA_SEC, i);
-+			return -LIBBPF_ERRNO__FORMAT;
-+		}
-+
-+		sym_idx = ELF64_R_SYM(rel->r_info);
-+		sym = elf_sym_by_idx(obj, sym_idx);
-+		if (!sym) {
-+			pr_warn("sec '.rel%s': symbol #%zu not found for relo #%d\n",
-+				ARENA_SEC, sym_idx, i);
-+			return -LIBBPF_ERRNO__FORMAT;
-+		}
-+
-+		if (ELF64_R_TYPE(rel->r_info) != R_BPF_64_ABS64 ||
-+		    (sym->st_shndx != obj->efile.arena_data_shndx &&
-+		     sym->st_shndx != obj->efile.arena_bss_shndx)) {
-+			sym_name = elf_sym_str(obj, sym->st_name) ?: "<?>";
-+			pr_warn("sec '%s': pointer to '%s' at offset %zu: it's not in arena\n",
-+				ARENA_SEC, sym_name, (size_t)rel->r_offset);
-+			return -LIBBPF_ERRNO__RELOC;
-+		}
-+
-+		ptrs->off = rel->r_offset;
-+		ptrs->targ_off = sym->st_value;
-+		if (sym->st_shndx == obj->efile.arena_bss_shndx)
-+			ptrs->targ_off += obj->arena_bss_off;
-+		obj->arena_ptr_cnt++;
++	ASSERT_OK(run_prog(skel->progs.use_ptrs), "use_ptrs");
++	if (skel->bss->skip) {
++		printf("%s:SKIP:compiler doesn't support arena_cast\n", __func__);
++		test__skip();
++		goto out;
 +	}
++	ASSERT_OK(run_prog(skel->progs.use_bss), "use_bss");
++
++	/* addresses are the same in user space */
++	ASSERT_EQ((void *)skel->arena->px, (void *)&skel->arena->x, "px");
++	ASSERT_EQ((void *)skel->arena->parr, (void *)&skel->arena->arr[2], "parr");
++	ASSERT_EQ((void *)skel->arena->head, (void *)&skel->arena->n1, "head");
++	ASSERT_EQ((void *)skel->arena->n1.next, (void *)&skel->arena->n2, "n1.next");
++	ASSERT_EQ(*(long *)skel->arena->pbig, 7, "*pbig");
++	/* static variables are not in the skeleton */
++	ASSERT_EQ(*(int *)skel->arena->psx, 45, "*psx");
++	ASSERT_EQ(*(long *)skel->arena->psbig, 9, "*psbig");
++
++	/* 'big' is not in the file */
++	arena_data_ptrs__elf_bytes(&elf_sz);
++	ASSERT_LT(elf_sz, 8192 * sizeof(long), "elf_sz");
++out:
++	arena_data_ptrs__destroy(skel);
++}
++
++static void test_ptr_to_not_arena(void)
++{
++	struct bpf_object *obj;
++
++	obj = bpf_object__open_file("./arena_data_ptrs_fail.bpf.o", NULL);
++	if (!ASSERT_ERR_PTR(obj, "open"))
++		bpf_object__close(obj);
++}
++
++void serial_test_arena_data_ptrs(void)
++{
++	if (test__start_subtest("ptrs_and_bss"))
++		test_ptrs_and_bss();
++	if (test__start_subtest("ptr_to_not_arena"))
++		test_ptr_to_not_arena();
++}
+diff --git a/tools/testing/selftests/bpf/progs/arena_data_ptrs.c b/tools/testing/selftests/bpf/progs/arena_data_ptrs.c
+new file mode 100644
+index 000000000000..bf3048ab2d7a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_data_ptrs.c
+@@ -0,0 +1,138 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define BPF_NO_KFUNC_PROTOTYPES
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_experimental.h"
++#include <bpf_arena_common.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 64);
++} arena SEC(".maps");
++
++bool skip;
++
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
++
++struct elem {
++	struct elem __arena *next;
++	int val;
++};
++
++int __arena x = 42;
++int __arena arr[4] = { 1, 2, 3, 4 };
++struct elem __arena n3 = { NULL, 3 };
++struct elem __arena n2 = { &n3, 20 };
++struct elem __arena n1 = { &n2, 100 };
++
++/* variables that are zero and take no space in the file */
++#define __arena_bss __arena SEC(".bss.addr_space.1")
++char __arena_bss one;
++long __arena_bss big[8192];
++char __arena_bss aligned64[64] __attribute__((aligned(64)));
++
++/* a pointer to a static variable is relocated against the section, not against a symbol */
++static int __arena sx = 44;
++static long __arena_bss sbig[16];
++
++/* pointers to variables in arena that are stored in variables in arena */
++int __arena * __arena px = &x;
++int __arena * __arena parr = &arr[2];
++struct elem __arena * __arena head = &n1;
++long __arena * __arena pbig = &big[8000];
++int __arena * __arena psx = &sx;
++long __arena * __arena psbig = &sbig[3];
++
++/* the size of .addr_space.1 is not a multiple of the alignment of .bss.addr_space.1 */
++char __arena odd = 1;
++
++SEC("syscall")
++int use_ptrs(void *ctx)
++{
++	struct elem __arena *n;
++	int i, sum = 0;
++
++	if (*px != 42)
++		return 1;
++	*px = 43;
++	if (x != 43)
++		return 2;
++	if (parr[0] != 3 || parr[1] != 4)
++		return 3;
++	for (n = head, i = 0; n && i < 10; n = n->next, i++)
++		sum += n->val;
++	if (sum != 123)
++		return 4;
++	if (*psx != 44)
++		return 5;
++	*psx = 45;
++	if (sx != 45)
++		return 6;
 +	return 0;
 +}
 +
- static int cmp_func_ptrs(const void *_a, const void *_b)
- {
- 	const struct func_ptr *a = _a;
-@@ -8263,6 +8339,8 @@ static int bpf_object__collect_relos(struct bpf_object *obj)
- 			err = bpf_object__collect_st_ops_relos(obj, shdr, data);
- 		else if (idx == obj->efile.btf_maps_shndx)
- 			err = bpf_object__collect_map_relos(obj, shdr, data);
-+		else if (idx == obj->efile.arena_data_shndx)
-+			err = bpf_object__collect_arena_relos(obj, shdr, data);
- 		else
- 			err = bpf_object__collect_prog_relos(obj, shdr, data);
- 		if (err)
-@@ -10384,6 +10462,7 @@ void bpf_object__close(struct bpf_object *obj)
- 		close(obj->token_fd);
- 
- 	zfree(&obj->arena_data);
-+	zfree(&obj->arena_ptrs);
- 
- 	zfree(&obj->jumptables_data);
- 	obj->jumptables_data_sz = 0;
-diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-index dba88f4fd6cd..d537388d495c 100644
---- a/tools/lib/bpf/linker.c
-+++ b/tools/lib/bpf/linker.c
-@@ -2291,12 +2291,14 @@ static int linker_append_elf_relos(struct bpf_linker *linker, struct src_obj *ob
- 					else
- 						insn->imm += sec->dst_off;
- 				} else if (sym_type == R_BPF_64_ABS64 &&
--					   (sec->shdr->sh_flags & SHF_EXECINSTR)) {
-+					   ((sec->shdr->sh_flags & SHF_EXECINSTR) ||
-+					    !strcmp(src_linked_sec->sec_name, ".addr_space.1"))) {
- 					/*
- 					 * A pointer to a static function in a data section,
--					 * which is stored in place as an offset of the
--					 * function in its section. Data sections are kept
--					 * in the byte order of the object.
-+					 * or a pointer in arena to a static variable. It's
-+					 * stored in place as an offset of the function or
-+					 * the variable in its section. Data sections are
-+					 * kept in the byte order of the object.
- 					 */
- 					void *ptr = dst_linked_sec->raw_data + dst_rel->r_offset;
- 					__u64 off;
++SEC("syscall")
++int use_bss(void *ctx)
++{
++	unsigned long addr = (unsigned long)&aligned64;
++
++	if (one || big[0] || big[8000] || big[8191] || aligned64[63])
++		return 1;
++	*pbig = 7;
++	if (big[8000] != 7 || big[7999] || big[8001])
++		return 2;
++	big[8191] = 8;
++	one = 1;
++	/* variables that are not zero are where they were */
++	if (arr[3] != 4)
++		return 3;
++	/* hide the address from the compiler, it knows that '& 63' is 0 */
++	asm volatile ("" : "+r"(addr));
++	if (addr & 63)
++		return 4;
++	if (sbig[2] || sbig[3] || sbig[4])
++		return 5;
++	*psbig = 9;
++	if (sbig[3] != 9 || sbig[2] || sbig[4])
++		return 6;
++	return 0;
++}
++
++#else
++
++/* The skeleton has to have what user space looks at */
++struct elem {
++	struct elem *next;
++	int val;
++};
++
++int __arena_global x;
++int __arena_global arr[4];
++struct elem __arena_global n2;
++struct elem __arena_global n1;
++int * __arena_global px;
++int * __arena_global parr;
++struct elem * __arena_global head;
++long * __arena_global pbig;
++int * __arena_global psx;
++long * __arena_global psbig;
++
++SEC("syscall")
++int use_ptrs(void *ctx)
++{
++	skip = true;
++	return 0;
++}
++
++SEC("syscall")
++int use_bss(void *ctx)
++{
++	skip = true;
++	return 0;
++}
++
++#endif
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/arena_data_ptrs_fail.c b/tools/testing/selftests/bpf/progs/arena_data_ptrs_fail.c
+new file mode 100644
+index 000000000000..93533dea5f71
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_data_ptrs_fail.c
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define BPF_NO_KFUNC_PROTOTYPES
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_experimental.h"
++#include <bpf_arena_common.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 1);
++} arena SEC(".maps");
++
++/* the pointer is in arena, what it points to is not */
++int y = 1;
++int *py SEC(".addr_space.1") = &y;
++
++SEC("syscall")
++int prog(void *ctx)
++{
++	return y;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
