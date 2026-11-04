@@ -1,45 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793784242;
-	b=W2zD0lZDp3k9GMV3YFPkU4q4CE6WL8AovBibu6D5Gd5pY/747/vHgNcwSIl+Ro2JYMMe
-	 iadPU7U1g+mw0T4GYS8cS6lYsobRzzBhPtOL2OmkRP1dWpayDHMeb21XhCTIuDL/CbWnU
-	 thME5U6KxKf58lbX3UstLIbiQ+ZcoR6vTGEgOw/h8QIpxKUVK4rd1Ktrhi1BwMABnB6xp
-	 bPmfIbe/ylucI01Rp6K6R/v2voW8ayaeZoSEfYiRp8KFTCyi+l75uHMSKbVcE7yjlK0CN
-	 zsdKzNAxcR2jMDKUruhsRXH3OJUi/EhfRK3ksTONkfy89zF81RpuwwY0MwTnRX0cafw==
+	t=1793786104;
+	b=21NXCh5mfW34Pa60N2zBs9z1jw6/0POqAyGirkdvXeHvU6EfJwibgz/n8QMyJOAf5Rb8
+	 Z4c8Hg3zN0qbsyYxkQh3BkgoNKmylxzRR4W4Tus0lXrgI6I8UeVg4Qnhhgm4MS0ToLhGC
+	 2Iz0r0xV6+cGtNjSsAKtea/t+GclVzKrTinDvFMJU/o63TXiS+Frc9mUIaHu0o+xJkxwT
+	 HtBHLyzP24HGaoLWEvFhM8LAggnewpetXxb3zSRUzRjnZjGtwkR0yGEX6dBJVjenh2BpO
+	 TXbbXDWLXfXFx14Q7FMvppIyD2CoQHEE64iIgtvwdRMh/ykqN+yYsnmGTEIG1FRvznQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793784242;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=L+88iVde34Oo/REFSbiXXB2pfC0goIHj3cRCJ8dtLrU=;
-	b=McfK//GT65r6C5vzrNxKdQFPI5gdX1XV6fUvFLUw74C3QUjF+sTXTvZ++rzpgM8qIxON
-	 iacBszPbt0NRxyQba8XTXmXhbePeWjXe7A4m+3w25N29/R/7LRAiMor7RQxlFdqifUpjP
-	 wKNBXa9kaBiZljAW5ws09/zm7LXc1X0VbRv4APc6NDiCzkIrjFaQO+1nsZ35nlFdDaWKe
-	 hCMDZzVxvc5DrE7bVZZr2S2gxA/8OTNUYg7w9izoqCe89v84RHLY2Zd/p5OQv0h38PFxE
-	 qWTkGtB2Yvn55sNJ2g9xS52byiaflIH4cfXfadu0H3gcTt1utgL6b1mCc+6Mx2Arznw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793786104;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=7S4gJgJJUabrpB6VRwq4SCe6ojSm3qa1EXPFVgqVgUc=;
+	b=4ANAQGFIIcg7dJhpiua/Sam8dpkjzE4ooHKextkhAOylEHCSZBZLP72KIhdC0xLfURRa
+	 gqbUpYb1rDM/9i530BOeJuwK09/zy+Wp9X9qd7qExWLD1+Aqn+fnUdwFqFj0BmqNH3Abd
+	 Pn9mzifcJ3pRbftiIX6nGnsXNjWMz2OhOxDSAh7pCT7TwukR316oVvQKWtoZv/AyHmrmI
+	 onKEPkBndanCCFc0tQca37ycnpHPJ/3a8orwvIKVXwvSz0kwn7lWy/ntwZvZ9VZYV62QF
+	 FqCN9bg0NFjjSY+14/hqeQdPHbFlpf8Kt4V/fitwIJqbS3sapyQpsbDQWO1QK7t5k0g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=chhb0SxH;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N3H3whoU;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45047606D815;
-	Wed,  4 Nov 2026 09:24:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DAD606A326
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 09:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=chhb0SxH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5324B1F00A15;
-	Wed,  4 Nov 2026 09:24:01 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N3H3whoU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A22071F0093A
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 09:55:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793784241;
-	bh=L+88iVde34Oo/REFSbiXXB2pfC0goIHj3cRCJ8dtLrU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=chhb0SxH0sRbIv41mbOf1XZzsDh5nHsJ50zTY4PkoO1yQtIvHjVbtn+pLJfpCBHCs
-	 +9MhlAB5wHCgD6qrbUILMO0w2u6B/W+81//0tVoc1PLbWmbsE0FyZL2CG9BPK3Xmk1
-	 g2tQOYQMxGxVcqqHbKNRsju9m4F0gjZk2ADBNFqcvq5i3MdM134yb8TaAkel6/fvR9
-	 uw2a9tPF+FJQgcvWxIxCcrUOzOsMTe/Sw/QGKnq0pbGoSpbMP6EQhsQfyZrI/qWazg
-	 uw4aD+U6g3WkUhgqGc+RXNE0Jz5ETnmRawSdh8RVrM+8KEQqxUGIzFPD29TJMjOqxJ
-	 qRYThYIYTKVwA==
-Content-Type: multipart/mixed; boundary="===============0075720949142317520=="
+	s=k20260515; t=1793786103;
+	bh=7S4gJgJJUabrpB6VRwq4SCe6ojSm3qa1EXPFVgqVgUc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=N3H3whoUPIS4XVnOUkJ/nDq0kerw2hmhnX6FZG9zM/0PnnG52q8Y9eUXvk2u6X6Vx
+	 tE6lKwbZuaYis0bcmNrMMz618HT6CaSrhhFRMtfhxEb2OUL5J50tUy7VLE9GqCE1ll
+	 QXSRMqB1a6reS6WaXFxCw5CGUlr3dJo0MKRaIo6HJ8fgwlOJ0vxP/3y6XrJPylHHI3
+	 YOsem5mQqT6tRdEMSYWZ+hvzQ9SSwjNJyyn+rHG7qvizWaSpOSk3WsxfuruMiY6ERG
+	 48hsOCW+Th2qfvd2sACPO69ShOsEetXoY99XA1NB44Qdjc0Yh5YQlG5JFEJaKJbsYK
+	 OKGtAZV7HMqKg==
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6b429f71dbeso439461a12.1
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 01:55:03 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AKwUvByYg34aqb95zh/8h3Pb5ieY9FjaBgyoqXLgN1ce+4RcA20PvoZk4c4WAhlT+F/OTKQkbzw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/bBlUCn8Zq55Uq++sY8+ytdlCLctBzkrbYoCTIWmE/+/tRhEfl
+	es2KxIaqUaC5JQWdKz+WC3bHT2E8GT5GTOboLdk4Y8y85UFXERhLZaUz0zILflukqfaCi9B2uu9
+	iksrbNzSM/D3UTmWw9IdtFw1kL9c+/IU=
+X-Received: by 2002:a05:6402:a510:20b0:6b4:201f:17b6 with SMTP id
+ 4fb4d7f45d1cf-6b4d3374079mr8567339a12.6.1793786102316; Wed, 04 Nov 2026
+ 01:55:02 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,83 +59,163 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <1653a9b2f3190fc956341a7cce09701b03b7fcafa3aa02d1fba34c29136053d0@mail.kernel.org>
-In-Reply-To: <20261104083833.971911-2-yangfeng59949@163.com>
-References: <20261104083833.971911-2-yangfeng59949@163.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Test faulting build IDs from a sleepable raw tracepoint
-From: bot+bpf-ci@kernel.org
-To: yangfeng59949@163.com,song@kernel.org,jolsa@kernel.org,ihor.solodrai@linux.dev,kpsingh@kernel.org,matt@bobrowski.net,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,emil@etsalapatis.com,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com
-Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  4 Nov 2026 09:24:01 +0000 (UTC)
+References: <20261102072808.23080-1-yangtiezhu@loongson.cn>
+ <20261102072808.23080-2-yangtiezhu@loongson.cn> <CAAhV-H52mbZJX2vkgG_h=XfwHoio=asLjFdhTJwUYqDp4V5JMg@mail.gmail.com>
+ <8b00e5a7-4e60-19bd-7953-f76dc71e15ec@loongson.cn> <CAAhV-H52bqRD1SyrZsvMkNbCpGiM5DPSGPARiasZ8G3XsE5Tgw@mail.gmail.com>
+ <6446c385-623c-d4cf-5a07-0c2276c6f50c@loongson.cn>
+In-Reply-To: <6446c385-623c-d4cf-5a07-0c2276c6f50c@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Wed, 4 Nov 2026 17:54:50 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4m-cokYz19HHAoDeLAjRGp4T=vwDOJaJEcHXZDW15rkQ@mail.gmail.com>
+X-Gm-Features: AclHuK-tyGt7dKynXW9DKY0ZRtsdV6cnh8v5lndrM8_P4nSQD_OrvjPPBDK8wfA
+Message-ID: <CAAhV-H4m-cokYz19HHAoDeLAjRGp4T=vwDOJaJEcHXZDW15rkQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] LoongArch: BPF: Make arena support depend on SCQ extension
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============0075720949142317520==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Nov 4, 2026 at 2:58=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn>=
+ wrote:
+>
+> On 11/4/26 12:29 PM, Huacai Chen wrote:
+> > On Tue, Nov 3, 2026 at 10:24=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongso=
+n.cn> wrote:
+>
+> ...
+>
+> >> So, the current patch has no problem IMO.
+> > OK, then I think we can use:
+> >
+> > return __is_defined(system_has_cmpxchg128) && system_has_cmpxchg128();
+>
+> If CONFIG_AS_HAS_SCQ_EXTENSION is not enabled, system_has_cmpxchg128()
+> is not defined at all. If we change the code to follow your suggestion,
+> something like this:
+>
+> ```
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index b5ed4881d3c0..6f572d24d2c3 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -336,7 +336,7 @@ config AS_HAS_LVZ_EXTENSION
+>          def_bool $(as-instr,hvcl 0)
+>
+>   config AS_HAS_SCQ_EXTENSION
+> -       def_bool $(as-instr,sc.q \$t0$(comma)\$t1$(comma)\$t2)
+> +       def_bool n
+>
+>   config CC_HAS_ANNOTATE_TABLEJUMP
+>          def_bool $(cc-option,-mannotate-tablejump)
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index d7ea515045ec..d124632b0fa9 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -2495,11 +2495,7 @@ bool bpf_jit_supports_arena(void)
+>           * atomic cmpxchg; this is provided by not only hardware SCQ
+> extension
+>           * but also assembler support on LoongArch.
+>           */
+> -#ifdef system_has_cmpxchg128
+> -       return system_has_cmpxchg128();
+> -#else
+> -       return false;
+> -#endif
+> +       return __is_defined(system_has_cmpxchg128) &&
+> system_has_cmpxchg128();
+>   }
+>
+>   bool bpf_jit_supports_fsession(void)
+> ```
+>
+> We will encounter a fatal build error:
+>
+>    CC      arch/loongarch/net/bpf_jit.o
+> arch/loongarch/net/bpf_jit.c: In function =E2=80=98bpf_jit_supports_arena=
+=E2=80=99:
+> arch/loongarch/net/bpf_jit.c:2498:55: error: implicit declaration of
+> function =E2=80=98system_has_cmpxchg128=E2=80=99 [-Wimplicit-function-dec=
+laration]
+>   2498 |         return __is_defined(system_has_cmpxchg128) &&
+> system_has_cmpxchg128();
+>        |
+> ^~~~~~~~~~~~~~~~~~~~~
+> make[5]: *** [scripts/Makefile.build:290: arch/loongarch/net/bpf_jit.o]
+> Error 1
+>
+> Even if we change it to use IS_ENABLED(CONFIG_AS_HAS_SCQ_EXTENSION),
+> something like this:
+>
+> ```
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index b5ed4881d3c0..6f572d24d2c3 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -336,7 +336,7 @@ config AS_HAS_LVZ_EXTENSION
+>          def_bool $(as-instr,hvcl 0)
+>
+>   config AS_HAS_SCQ_EXTENSION
+> -       def_bool $(as-instr,sc.q \$t0$(comma)\$t1$(comma)\$t2)
+> +       def_bool n
+>
+>   config CC_HAS_ANNOTATE_TABLEJUMP
+>          def_bool $(cc-option,-mannotate-tablejump)
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index d7ea515045ec..1b87b1e4262e 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -2495,11 +2495,7 @@ bool bpf_jit_supports_arena(void)
+>           * atomic cmpxchg; this is provided by not only hardware SCQ
+> extension
+>           * but also assembler support on LoongArch.
+>           */
+> -#ifdef system_has_cmpxchg128
+> -       return system_has_cmpxchg128();
+> -#else
+> -       return false;
+> -#endif
+> +       return IS_ENABLED(CONFIG_AS_HAS_SCQ_EXTENSION) &&
+> system_has_cmpxchg128();
+>   }
+>
+>   bool bpf_jit_supports_fsession(void)
+> ```
+>
+> It still fails with the same error due to the macro visibility:
+>
+>    CC      arch/loongarch/net/bpf_jit.o
+> arch/loongarch/net/bpf_jit.c: In function =E2=80=98bpf_jit_supports_arena=
+=E2=80=99:
+> arch/loongarch/net/bpf_jit.c:2498:59: error: implicit declaration of
+> function =E2=80=98system_has_cmpxchg128=E2=80=99 [-Wimplicit-function-dec=
+laration]
+>   2498 |         return IS_ENABLED(CONFIG_AS_HAS_SCQ_EXTENSION) &&
+> system_has_cmpxchg128();
+>        |
+> ^~~~~~~~~~~~~~~~~~~~~
+> make[5]: *** [scripts/Makefile.build:290: arch/loongarch/net/bpf_jit.o]
+> Error 1
+>
+> Therefore, using the explicit #ifdef block in the original patch is the
+> only way to ensure toolchain compatibility and compile-time robustness
+> here IMO.
+This is OK:
 
-> selftests/bpf: Test faulting build IDs from a sleepable raw tracepoint
+return cpu_has_scq && __is_defined(system_has_cmpxchg128);
 
-TL;DR:
-- Test issue: raise() may call getpid again, so the BPF programs may overwrite
-  the stack the test inspects; results may depend on libc
-- Nit: usage message omits the new uprobe-paged-out-stop mode
+It means two things:
+1. CPU supports SC.Q;
+2. Kernel defines system_has_cmpxchg128.
 
-> diff --git a/tools/testing/selftests/bpf/uprobe_multi.c b/tools/testing/selftests/bpf/uprobe_multi.c
-> --- a/tools/testing/selftests/bpf/uprobe_multi.c
-> +++ b/tools/testing/selftests/bpf/uprobe_multi.c
+Very clear.
 
-[ ... ]
+Huacai
 
-> +int __attribute__((weak)) trigger_stop(void)
-> +{
-> +	int err = prep_build_id_page(false /* page-out build ID */);
-> +
-> +	if (err)
-> +		return err;
-> +
-> +	/*
-> +	 * Make one syscall that the BPF program under test filters on, then
-> +	 * stop this process so that the recorded stack cannot be overwritten
-> +	 * by another syscall while the caller inspects it.
-> +	 */
-> +	(void)syscall(SYS_getpid);
-> +	raise(SIGSTOP);
-
-With glibc, raise() goes through pthread_kill() which calls __getpid() to
-get the tgid for tgkill().  So rawtp_nofault and rawtp_sleepable can match
-a second time on id == SYS_getpid, from inside raise(), before SIGSTOP
-takes effect.
-
-That second match overwrites stack_rawtp_* and res_rawtp_*, so the stack
-that subtest_raw_tp() inspects comes from the getpid stub called by
-__pthread_kill_implementation(), not from the explicit syscall(SYS_getpid).
-In the sleepable case, that stack is also captured after the first match
-has already faulted the build ID page back in.
-
-Whether a uprobe_multi frame shows up then depends on how libc compiles
-raise()/pthread_kill().
-
-Could the BPF programs keep only the first match, for example by returning
-early once res_rawtp_* is non-zero?  Or could the comment and commit
-message mention that raise() issues a matching getpid() as well?
-
-[ ... ]
-
-> +	if (!strcmp("uprobe-paged-out-stop", argv[1]))
-> +		return trigger_stop();
->  
->  error:
->  	fprintf(stderr,
-
-This isn't a bug, but main() now accepts "uprobe-paged-out-stop" while the
-usage message that follows still lists only
-<bench|usdt|uprobe-paged-out|uprobe-paged-in>.  Should the new mode be
-added there?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41802507259
---===============0075720949142317520==--
+>
+> Anyway, I will modify the patch subject, update the commit message
+> and code comment to make it more clear.
+>
+> Thanks,
+> Tiezhu
+>
