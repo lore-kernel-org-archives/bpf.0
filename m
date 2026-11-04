@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793751170;
-	b=vHMSdJuSx9DeIwiF3NCu9GfmB5V4w0H+ZV2YsJMHfEtu3Wzd87xE6y1uYrfuAY4zxee0
-	 SLj58ULwnjSi8dXeMZXoKvhz6HJp2Xnv2UkZoDeYLlJCAF7fgNzKE+Urx2AqZNANXiLeN
-	 P0nJiyFHEZLjfBAPV/JCL1bkV0sENezmi74wGoPxdi77oNF4os8iS6BLMAxKpmkWQ1Obm
-	 FnwrKwUs2L1jJPxkX/XDiA5rfXI7SuzknB52zkM0b6R2yZXdXODApaIsQF5zryt0Byz2R
-	 35MAYStvnGhAtPQjt2xOCNF5VTT5tm9bH24wBHLlM4NFHSl9dv8YTIkKJaIb+IpqTnw==
+	t=1793751271;
+	b=jBAkqiPePpTi7W6hVhULMt/wHHp/88Ra/YDWml5Kd+9N3YoDzUf+JUyGfY7ZFp/mRNPT
+	 rqIMbL1dYzCcSY9MDpzguqBy3sJdoT/Hl4Kzru9qbPXqVzOYao7pO4eu0PaAoCU5vb5qY
+	 SFHPEh5ocVAQNhauV2w6swOE3deitjmjdqTwW0kPtV4BnwidAG8hdresGybm0K/rMV6zf
+	 4XEh7NpGdlYcczyXJX387ELpOw/YqFRNC6aKZephHG8UXxG7bvTb9KA3fahEY7FZnLE2o
+	 Z6h8bO+IuCoJFL9Ri59KbiQJkVZaLm36msqLASwb9LTvIOIuiECSQ6SG6d0dk2gCvzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793751170;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793751271;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=EcAf1i7ybCsA89reAR6uRyuT0z0tenbdn7GumDJHokc=;
-	b=QUNArbE6oC6SbB+KfIHnFh7331sTIaMW3Af2pKWxRvJzxUyz2Jl/QS38KcQ/lr41WEQ7
-	 hfmSkSexcgVhJo0TMhBnne2xVR+z1m6cGaNmyqjTGDxfkGGT6zSdaGo7TlEf3NTUhF/wz
-	 YJBExGdXpJYJ0nbNspsS2iwQxWXwJuwMbtEkrlE+Ywk/WtfgCoo0fmtntSDEfCqx9oSPG
-	 J5J9g+DNChcT5Jtm+dghvJsxqtETFSkUz9N8GUSEv6eedxsEc5vkXb1yEImiTYjJB2fcY
-	 HGokANsBLtBzsCTHQCD0F8p1nPISURiv/nto1KY5PSH4d4Wn0QeuAhvkXPA4CYbEpbQ==
+	bh=yKUh2CyaHi9OXDWRoDC5XIPXmch4YlH2pxwBy4Vbw8M=;
+	b=nsukGJPaS97LFGme7UnzBCjstuK3UCXaCwllptfiygtCIgLc6nurGXJ2xtU04M6WvNlF
+	 bDKzzluBv5EXoVdIe/+4xa9ZKaa2T+7qKiH7nJhbVp3z85A4MNsXSFoGqPZm7i401AXmJ
+	 pW+14KedIrUVAHKRQfsKutpTzQIIFQwlgJIsCJkipmDvgAZiLZ27eLDsDKowfSULQ73Na
+	 CbmgquCrnnsJIFQtKJ0qoaeEHB5wDV4KddWklpyF/QAVtse+Amps9rWwGm5uYzwTjackH
+	 WlapsgvDwez0M0vvXfA3XMspKxmT9Rficqh2nH4LAL0f9z1yXSsAvDqDhj5DbXM9NFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R0K+HpOr;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bgQJWgyB;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7C6606A324
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 00:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1076F606A31B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 00:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R0K+HpOr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E3E1F00919;
-	Wed,  4 Nov 2026 00:12:49 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bgQJWgyB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD4851F00919;
+	Wed,  4 Nov 2026 00:14:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793751169;
-	bh=EcAf1i7ybCsA89reAR6uRyuT0z0tenbdn7GumDJHokc=;
+	s=k20260515; t=1793751270;
+	bh=yKUh2CyaHi9OXDWRoDC5XIPXmch4YlH2pxwBy4Vbw8M=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=R0K+HpOrlrnC8PsB2QypujiwrysNm2zk1OwwnmRb9H5wiVnf58gfEg/zWscEtsiZp
-	 XD09NX2HiWNCF5kFdLAK0dPSsrmH3O2M2o6ZNFROQ4Nz9EXM+1uXhfFO+k6CPIyoD+
-	 RsyrkRDdief45WA34fPjtIDmajk9UUbJQgcn9DLTOiI2lokREbA7sEyQ0iNKqKBuZo
-	 ka7WIFh5xlvjj/v5zz06nxpGC1wUePmn1ijmGwfN3jDbKycxRHj3IkMxDiXH1ZXSjj
-	 a3bFOKEgfsho/VLxRMBcXxwH625+hUar0GzEL5auwzBHcp5v7eJUsXFwIB6m5SUHt5
-	 qUK6NpxBqXSfg==
-Message-ID: <sashiko-outbox-196291@kernel.org>
+	b=bgQJWgyBKbtL3n7xKuSysRIbDhdt+dPYbs1kPJomB//1H+8gUrQml6a1n3jG0m5ei
+	 Hdwp6dY9lfI8amTmvMEplUQr4bxnULkj7GHT2VVTu1ng84jfZjIXKxtdwvmJOKNqGT
+	 77iyT0k8+GCdIxqBgasov/hCOWbrtu3eMxHRPGQOC2ybiM3Dd/Fn4BDk6ol14M4dw7
+	 UTPGbIph8QX15TPVxf6h28U8SAAQ52D2BqQiakn6RFRxnPDjH9DzDWmVCB1IDBogTX
+	 6o4wDr+NsCzarvNJpMoJ0ECkU2/UsuXtZ64+EKtIccWHwejOBFCzAifoDbWaHOFr1R
+	 US0EzALjPd1Xw==
+Message-ID: <sashiko-outbox-196294@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 32/37] bpf: Allow BPF_MAX_SUBPROGS targets of a
- read from a table of functions
+Subject: Re: [PATCH bpf-next 06/37] bpf: Count stack arguments of a static
+ subprog from its code
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261103234104.208239-33-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261103234104.208239-7-alexei.starovoitov@gmail.com>
 References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
- <20261103234104.208239-33-alexei.starovoitov@gmail.com>
+ <20261103234104.208239-7-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 04 Nov 2026 00:12:49 +0000
+Date: Wed, 04 Nov 2026 00:14:29 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,60 +62,128 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] bpf: __free(kfree) variable declared as NULL at top of check_func_p=
-tr_read()
+- [Medium] bpf: undercounted arg_slot_cnt on early return in btf_prepare_fu=
+nc_args()
 --
 
-commit 6a9289c982c1e888c820e75173835d8cb92fc098
+commit 7a7c085f34a6a2a56b7b82b03b95e750d7742fd9
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Allow BPF_MAX_SUBPROGS targets of a read from a table of functions
+bpf: Count stack arguments of a static subprog from its code
 
-This commit raises BPF_MAX_FUNC_PTR_TARGETS from 64 to BPF_MAX_SUBPROGS and
-allocates the targets array dynamically in check_func_ptr_read() instead of
-keeping it on the stack.
+This commit changes the verifier to determine the number of stack arguments
+of a static subprogram from the highest stack argument slot loaded through
+r11 in its instructions rather than solely from its BTF prototype. It also
+updates caller stack argument accounting and trampoline attachment checks
+accordingly.
+
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 8bf39098ba97a..228b93d4f8c94 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+
+[ ... ]
+
+> @@ -8827,13 +8821,15 @@ int btf_prepare_func_args(struct bpf_verifier_env=
+ *env, int subprog)
+>  	}
+>  	args =3D (const struct btf_param *)(t + 1);
+>  	nargs =3D btf_type_vlen(t);
+> -	sub->arg_slot_cnt =3D nargs;
+> +	sub->arg_slot_cnt =3D min_t(u32, nargs, MAX_BPF_FUNC_ARGS);
+>  	if (nargs > MAX_BPF_FUNC_ARGS) {
+> +		if (!is_global) /* not fatal for static funcs */
+> +			return -EINVAL;
+>  		bpf_log(log, "kernel supports at most %d parameters, function %s has %=
+d\n",
+>  			MAX_BPF_FUNC_ARGS, tname, nargs);
+>  		return -EFAULT;
+>  	}
+> -	err =3D btf_check_arg_slots(log, tname, is_global, nargs, sub);
+> +	err =3D btf_check_arg_slots(log, tname, is_global, nargs);
+>  	if (err)
+>  		return err;
+> =20
+> @@ -9022,7 +9018,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+>  		return -EINVAL;
+>  	}
+> =20
+> -	err =3D btf_check_arg_slots(log, tname, is_global, slots_used, sub);
+> +	err =3D btf_check_arg_slots(log, tname, is_global, slots_used);
+>  	if (err)
+>  		return err;
+>  	sub->arg_slot_cnt =3D slots_used;
+
+[ ... ]
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 93ca0126a3108..d503dc7cea1f8 100644
+> index d95f86b62e99f..b480c5c242af8 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -7114,17 +7114,20 @@ static int check_func_ptr_read(struct bpf_verifie=
-r_env *env, struct bpf_reg_stat
->  	struct bpf_reg_state *regs =3D cur_regs(env);
->  	struct bpf_map *map =3D reg->map_ptr;
->  	struct bpf_verifier_state *branch;
-> -	int subprog, targets[BPF_MAX_FUNC_PTR_TARGETS];
-> +	u16 *targets __free(kfree) =3D NULL;
->  	struct bpf_func_ptr *ptrs;
->  	u32 i, cnt, n =3D 0;
->  	u64 o, lo, hi;
-> -	int err;
-> +	int err, subprog;
-> =20
->  	ptrs =3D bpf_map_range_func_ptrs(env, map, min_off, max_off - min_off +=
- size, &cnt);
->  	if (!ptrs)
->  		return -ENOENT;
->  	if (cnt > BPF_MAX_FUNC_PTR_RANGE)
->  		goto overlap;
-> +	targets =3D kmalloc_array(BPF_MAX_FUNC_PTR_TARGETS, sizeof(*targets), G=
-FP_KERNEL_ACCOUNT);
-> +	if (!targets)
-> +		return -ENOMEM;
+> @@ -11537,13 +11541,24 @@ static int check_static_func_call(struct bpf_ve=
+rifier_env *env, int subprog,
+>  	/*
+>  	 * Track caller's total stack arg count (incoming + max outgoing).
+>  	 * This is needed so the JIT knows how much stack arg space to allocate.
+> +	 * The callee can load less than its prototype has, and the caller can =
+still store
+> +	 * all of it. Count the slots of the prototype only as far as the calle=
+r has stored
+> +	 * them: compilers store in front of the call. bpf_fixup_call_args() re=
+jects the rest.
+>  	 */
+>  	caller_info =3D &env->subprog_info[caller->subprogno];
+> -	callee_incoming =3D bpf_in_stack_arg_cnt(&env->subprog_info[subprog]);
+> -	stack_arg_cnt =3D bpf_in_stack_arg_cnt(caller_info) + callee_incoming;
+> +	callee_incoming =3D bpf_in_stack_arg_cnt(callee_info);
+> +	stack_arg_cnt =3D bpf_in_stack_arg_cnt(caller_info) +
+> +			max_t(int, callee_incoming,
+> +			      min_t(int, caller_info->max_out_stack_arg_cnt,
+> +				    callee_info->arg_slot_cnt - MAX_BPF_FUNC_REG_ARGS));
+>  	if (stack_arg_cnt > caller_info->stack_arg_cnt)
+>  		caller_info->stack_arg_cnt =3D stack_arg_cnt;
 
-[Severity: Low]
-This isn't a bug, but in check_func_ptr_read() in kernel/bpf/verifier.c,
-targets is declared with __free(kfree) =3D NULL at the top of the function
-and then assigned after a goto overlap check, while the rest of the
-function continues to use goto overlap for error handling.
+[Severity: Medium]
+Can btf_prepare_func_args() leave sub->arg_slot_cnt undercounted when it
+returns early on a static subprogram with multi-slot parameters?
 
-Per the cleanup.h conventions, should targets be defined and initialized
-in a single statement at the point of allocation, and should mixing
-__free() with goto-based error handling in the same function be avoided?
+In kernel/bpf/btf.c, btf_prepare_func_args() initially sets:
+
+	nargs =3D btf_type_vlen(t);
+	sub->arg_slot_cnt =3D min_t(u32, nargs, MAX_BPF_FUNC_ARGS);
+
+which is the BTF parameter count rather than the 8-byte slot count. It only
+updates sub->arg_slot_cnt to slots_used at the end of the function if the
+return type and all parameters are accepted:
+
+	err =3D btf_check_arg_slots(log, tname, is_global, slots_used);
+	if (err)
+		return err;
+	sub->arg_slot_cnt =3D slots_used;
+
+If btf_prepare_func_args() returns an error early for a static subprogram
+(for example, when btf_validate_return_type() rejects a pointer return type,
+when the parameter loop encounters an untagged pointer parameter, or when
+slots_used exceeds MAX_BPF_FUNC_ARGS at too_many_slots while nargs is at
+most MAX_BPF_FUNC_ARGS), sub->arg_slot_cnt remains set to nargs instead of
+the prototype's 8-byte slot count.
+
+When that static subprogram also has multi-slot parameters (such as 9-to-16
+byte structs passed by value or 128-bit integers) and ignores a trailing
+stack argument slot, check_static_func_call() in kernel/bpf/verifier.c
+computes:
+
+	callee_info->arg_slot_cnt - MAX_BPF_FUNC_REG_ARGS
+
+using the parameter count rather than the slot count. Because this
+undercounts the prototype's stack argument slots, wouldn't
+bpf_fixup_call_args() reject valid caller stores to those trailing stack
+argument slots?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103234104.2082=
-39-1-alexei.starovoitov@gmail.com?part=3D32
+39-1-alexei.starovoitov@gmail.com?part=3D6
