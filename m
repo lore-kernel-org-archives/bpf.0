@@ -1,74 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793766625;
-	b=N4G9JXUGQwq2X9Hh70NeB855dudGOJkjS8DDFlZ4bwj87xmiWdU2Vl4N9dgTxsPqrRDQ
-	 Vss/bY5hD67PplOAIfyKm1rRkTij8BuQXny+8zhohV3ir2UGtXv+0jlc44XpCvCm7cC4Q
-	 vv3ngCHWML7Nju77FH6Y2bLKk5LCIkzcOngdM4zOO2cCw3BVD10YZ1d1aso5uPmKcIKE/
-	 ii54jepSh12WzhKEPWGB6VQT6oagIuXeRep4asJ0c7wxTcM1Jm+lNfhyNiSQ/bpnBLGcs
-	 rSluaTyCARCT4nAm/caLrJ3ES5qn1XyQxyyC1erzMkTOHCVHiJhqSEZo8mmmMP725uA==
+	t=1793766627;
+	b=gKkCPCyf289r0umxwyLPqbQj/vBv3lQLfoFdhGDIAANA9XAiSU8/AUa/C0HEaATqZ5cL
+	 5V5y96dWGkXsERy9lPpy9z3X86Q5FY7mr+40oOtJ5StDTqcm64TvGXKVJZ75RSnr/4nEu
+	 0OxaIirr+vnXyQWd+0X350DtMaRs961wbOh7CUt0BEYimn4PjS32Y8tkD+1uKFr9EB/wu
+	 4H32qpSQqwWo9o5WlnpP3AVhu4lWEAO0CAHSTYoKYxl7vlgInfwBOfoD3gdcIqjT9ytZu
+	 gPe3nxrHw+tJwC7muofJrKeDZeCuSS/kBnBGcITWDx7KCU1Qs2LlXxK8Dj1nsnJQSkA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793766625;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793766627;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=lf8+fUIi9nYvAfKMMCuyoqEDJu1jsXhBuDkXiGeAP2M=;
-	b=z2U1ocRlbNNYwUpBHcJSJTuJjLJhTRFAWx6GDfC1cjWWFH+RpAojuV2+payk7ZK1ptYs
-	 8iWP2Jnxu4m0pM85sHBmYhQ/bOtxHKPDkZdGrKzaKYtkclHCzMKj+Pj675tMCxl1eE0wB
-	 8y0nymT2KPfhv47lWqrTRBNm76LpXCvPj14i8b+HTlYby9q4EPqYTbbI3wh8zBn/IGi/L
-	 Jh5gzEeg1LSkb0txvkVpGKdN9sl4j870UvExWp7cXsSNx81YqgrnCEjm48dG9w4vWEIr/
-	 P49ZNP5Ez01xHpKU8v+cjEPNV96lBY3iST3MHVoUGIdd2oXqLQgInDaFzbGPCPDrqSg==
+	bh=h4jb5xa1q8l407p1Mod4RUtxmtTO0FmmjcGLjgwkwiY=;
+	b=Lj0VkVrgiAtkyaWWJy2nXmjUQyY40NLhXERjtlpZvNrYI45enAlDAP3J1O1F2DsNXNlg
+	 WaGyPu9PMY7xnCavzGpM1SNCXof1RSi1XsM1afscBDYP+tk/olNeff4VEvkjNU1+9n7MP
+	 y/PefpuN1SRV4vmkTJrdw6UVkPnxorBbpIxW/us5VWQY959aRGv4DOKl70+Nkzfr6FpUx
+	 IdTNI+9dL2PajEXQGDDWH4g+I0neXyF8I5wx+o71c3qPNmQUvXUOdPfutb6fKd0m8n0P8
+	 WiRpFtwlwj/WOejMmoHHjISEIagzRjJc6NBUaiWt+Z5QXN84q9JeK/KHTQxZg8mn7Sw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=S2NL62jh;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pHVZB5Sm;
 	arc=none smtp.remote-ip=74.125.82.198
 Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBC9606A328
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 04:30:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4FBC9606A328
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F969606A33B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 04:30:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0F969606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=S2NL62jh
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-3662e7a9299so1048478eec.1
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 20:30:24 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=pHVZB5Sm
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-36a223755e4so1036763eec.0
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 20:30:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793766623; x=1794371423; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1793766626; x=1794371426; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lf8+fUIi9nYvAfKMMCuyoqEDJu1jsXhBuDkXiGeAP2M=;
-        b=S2NL62jhYPj0Kpdrgpiy41JLh38Zfoiq8uefbVCDNEgr4KYtyJVuB3qKbIxFcqMfj3
-         WP8uVp5Em69yb8z5c7Ft/lUEjpm2jhsCFoiOoKG3Ax1DLRpRVWeQnfZUyv4Tmb+LfjyE
-         6ZHiGPH9o8242nilDtRyg+IEAb+GhYyVT5bYfctX71Bz3y704RRZo0eEGw2L0NDSAZD2
-         uCt6deYmbJYCUCWkYM62+MJUUUaMgI+4cFvpOZ6uCFT8JNAcZ1iu/WDczv9QpGffQmi9
-         9iA+brl/6pJUhGIDSjPbZ89rUlS+iPQ3kxvscT4wR8Uo3mU+ONTxldGuGjh7yNXx+rsV
-         YDAA==
+        bh=h4jb5xa1q8l407p1Mod4RUtxmtTO0FmmjcGLjgwkwiY=;
+        b=pHVZB5Sm3KMzAWRcG28OSC0xG4KhDva279w0FY5Sm5aS4tVtOIetvUeR4aQO6qMm63
+         3AYFfDUIXcYkK+98I5H9IBbYM5SNNUe20vZiG4WQ6m3K+/7cjZqmrjPQjv0Ezar9DJFs
+         dlpc22KihrXhls+bw0HGNJZSfMY59L/Y8n1Uf118kXyuzzTALHSC05/2FIfa/CV0uUkU
+         lrPFfBWAE3crGj6fZEsnwjIa4ak4hO2mhy6fb1CByxnYxV9ElCBdQ05G8XmQrzf+sbeN
+         pFAj9t5R9qxPK6fHRbBUGE02laq41gIeqJhULiodhKLiFqKSYrbtWXept5noL1OO3BfG
+         bmmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793766623; x=1794371423;
+        d=1e100.net; s=20260707; t=1793766626; x=1794371426;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=lf8+fUIi9nYvAfKMMCuyoqEDJu1jsXhBuDkXiGeAP2M=;
-        b=Bq2Uk6B2kmfzeahmqmXb9LXqpqIEty8RW7fPH96IibdKEx8xldPFjR9Dctf8Wx6tgA
-         6aeIxaA/OFkTa/iXsIVF0Y2A6Lphbcbvg3HH5D4GmbRCfIyIS6f5S5/YpNFjDUxPKsFg
-         mv/GyP4gGqv6Nmo5peOjVK/1YHj7Y/A5sPmVtZc7Yf1gjv2rWEwJkYQh+gRQne6WR+2B
-         sBPt6cu6kKjiVSnEaVL6BPx/EfXhSP1BsEvK1cgVuaTcOJ6iMeTNsDy+okiB9DkD1qgz
-         ik19IyoOJ0rEb/AHN+eNYGRYnxWyS9b81Wgv/ngr8u4npROLlJ2Oe+3DABB9/yvUfU6O
-         /bdA==
-X-Forwarded-Encrypted: i=1; AKwUvBwp8TbBZhah/zemGNyK6gi5TIaDFRJHfNnUPSsqLzghmXjpaC+5bnMpwO/+hQcE91p4oM8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9k9JtyylZrdyUMg+R8wvPMh+wNeEpLNtftzZWP1w2FaT0RYOIS
-	YZju0IE363fzLTbxGUmqQyxfvfLDg8GPnV3P/ox5tCkfHaz56lPzfjOtuqSO3w8BLjsoAHw2QlQ
-	PYo0xzjX5hQ==
-X-Received: from dynv12.prod.google.com ([2002:a05:7300:5a0c:b0:36c:9b55:8436])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:6312:b0:36a:1709:458
- with SMTP id 5a478bee46e88-36a423cce1fmr25708786eec.27.1793766623064; Tue, 03
- Nov 2026 20:30:23 -0800 (PST)
-Date: Tue,  3 Nov 2026 20:30:04 -0800
+        bh=h4jb5xa1q8l407p1Mod4RUtxmtTO0FmmjcGLjgwkwiY=;
+        b=Cf8Qr+jOHXHTli4h9Yp83JbS053md7WCczzEMbIElJPpsSoNVjxhxPgoxcCHDhqCIm
+         IbIKdsrTo68y3RbDjAw6tSDJQZVu20v4xwViCnUPZb2MvIX9PF6By3M8nufFmNmESioc
+         H+NxIBXUJ2uB6qpbTYCFq2JbgoXQTSW9tUtp6JgETGi0+OE0EW5DEujkQnD9Q+NSE4X7
+         1zYXBMNP5mBpeqFwYhX00VomOIdLGB0cYL4ruWdMHKVhg9Hn6kl33dqHg6gp3suV3y8M
+         3EuAuVxfMaJY1FJqQY9Cu4Q63bZIrMEPvgMP3YQ2EOsfnWCDDv6YFesoc24E/3U5bL6X
+         shyg==
+X-Forwarded-Encrypted: i=1; AKwUvBwiAagCvuSXOcm1wzukdUz7d8ikh8aqWdUemkrE+QJqC3EvWWGJB0dByry/MXK8ZYSTiiU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9RAcjGZ2RP1wP4zN8ZiE6l4fV45e4tFX2PzQfJuti3GtJTqOw1
+	UAdSpsXZ9BhXE7995qwi9Sh16FR2GDKDph9wo9M9fiqJ4tndUf0OVU9qbc8oePR9XyV/M256W+V
+	RzZfcKa1r+g==
+X-Received: from dycc2.prod.google.com ([2002:a05:693c:60c2:b0:359:a8c8:38e2])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:2a05:b0:36c:b138:651e
+ with SMTP id 5a478bee46e88-36cb1386818mr2042119eec.22.1793766625795; Tue, 03
+ Nov 2026 20:30:25 -0800 (PST)
+Date: Tue,  3 Nov 2026 20:30:05 -0800
 In-Reply-To: <20261104043006.1199857-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261104043006.1199857-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.0.385.gac671c819a-goog
-Message-ID: <20261104043006.1199857-3-irogers@google.com>
-Subject: [PATCH v3 2/4] perf build: Add explicitly sequenced -lzstd to libbfd
+Message-ID: <20261104043006.1199857-4-irogers@google.com>
+Subject: [PATCH v3 3/4] bpftool: Add explicitly sequenced -lzstd to libbfd
  feature fallback
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -101,40 +101,45 @@ Distributions like Fedora ship a statically compiled binutils libbfd
 that depends on zstd to decompress sections (e.g. undefined reference to
 'ZSTD_decompress').
 
-Since libbfd does not reliably distribute a .pc file for pkg-config,
-perf probes manual linker flag combinations in fallback chains (-lbfd
--ldl -liberty -lz).
+Add libbfd-liberty-z-zstd to FEATURE_TESTS and FEATURE_DISPLAY in
+tools/bpf/bpftool/Makefile and append the '-lbfd -ldl -lopcodes -liberty
+-lz -lzstd' branch to the libbfd fallback chain.
 
-Extend the testing cascade in tools/perf/Makefile.config to check
-libbfd-liberty-z-zstd and append '-lbfd -lopcodes -liberty -lz -lzstd'
-when detected.
-
+Acked-by: Quentin Monnet <qmo@kernel.org>
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.config | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/bpf/bpftool/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index b4764f69f47f..78423b0dcc73 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -896,6 +896,7 @@ ifdef BUILD_NONDISTRO
-   $(call feature_check,libbfd-threadsafe)
-   $(call feature_check,libbfd-liberty)
-   $(call feature_check,libbfd-liberty-z)
-+  $(call feature_check,libbfd-liberty-z-zstd)
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index b0f7168e7943..1cac4508eb0c 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -125,6 +125,7 @@ FEATURE_TESTS += libcap
+ FEATURE_TESTS += libbfd
+ FEATURE_TESTS += libbfd-liberty
+ FEATURE_TESTS += libbfd-liberty-z
++FEATURE_TESTS += libbfd-liberty-z-zstd
+ FEATURE_TESTS += disassembler-four-args
+ FEATURE_TESTS += disassembler-init-styled
+ FEATURE_TESTS += libelf-zstd
+@@ -135,6 +136,7 @@ FEATURE_DISPLAY += libcap
+ FEATURE_DISPLAY += libbfd
+ FEATURE_DISPLAY += libbfd-liberty
+ FEATURE_DISPLAY += libbfd-liberty-z
++FEATURE_DISPLAY += libbfd-liberty-z-zstd
+ endif
  
-   ifneq ($(feature-libbfd-threadsafe), 1)
-     $(error binutils-dev(el) 2.42 or later is required for non-distro builds)
-@@ -909,6 +910,8 @@ ifdef BUILD_NONDISTRO
-     EXTLIBS += -lbfd -lopcodes -liberty
-   else ifeq ($(feature-libbfd-liberty-z), 1)
-     EXTLIBS += -lbfd -lopcodes -liberty -lz
-+  else ifeq ($(feature-libbfd-liberty-z-zstd), 1)
-+    EXTLIBS += -lbfd -lopcodes -liberty -lz -lzstd
+ check_feat := 1
+@@ -201,6 +203,8 @@ else
+     LIBS += -lbfd -ldl -lopcodes -liberty
+   else ifeq ($(feature-libbfd-liberty-z),1)
+     LIBS += -lbfd -ldl -lopcodes -liberty -lz
++  else ifeq ($(feature-libbfd-liberty-z-zstd),1)
++    LIBS += -lbfd -ldl -lopcodes -liberty -lz -lzstd
    endif
  
-   CFLAGS += -DHAVE_LIBBFD_SUPPORT
+   # If one of the above feature combinations is set, we support libbfd
 -- 
 2.56.0.385.gac671c819a-goog
 
