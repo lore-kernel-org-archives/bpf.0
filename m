@@ -1,70 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=104.207.68.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793817242;
-	b=JE55RTJ1DEAB+hJkmlr658eHZNKN0mN21iTU5hMmHqB6xii5Z6qHJsyV9vrvp+DsDcfB
-	 gYJKsbk5J4moegbsM+mUUDaVWznI6PADbN4z7S94m9MyPy1v/GFOQmod/MvAic262QOI4
-	 rJi8igwdPIoq8kzV4mkQqC8zU+zDbcZT7TOVrPHbjRujPn/uiqyPRBxzzhnqDctEKixBO
-	 71i4ZLnerFaJxlDj+WymS3TFPSum66Mkpv+DhJk9IrjlaeXY8rHk92frPJpdoTmR/Jvom
-	 sGIWg20arpGME9iRbmzD75y+jukybLx6yLimv+N0f7kqZRttJLV58GATZTdX/k1VffA==
+	t=1793817614;
+	b=thMWa09exI70UQSKfq2oQXV9O9X8erX+XMLOl8s7c9dfCYQvCOM4AYwNzYhpq0iDuJhy
+	 FDUHPzrlLLNkdSdgrBWM+U2rcWNJZPzyxOJM0190oAZc8KujJHusE0JyqosxmD2Dih2Pi
+	 ciVJXLhFuRkzMd7ylWj39qkSURtyOkT/QJYpasYSgtIJQrkqYacH+BPCjtquSFP2vMkzy
+	 VAt0tIXB6sQNhL3dHe6I27boS1GqI/rHBBXpmVY83TdGyL4Mayh8uKATSs5KHKtHGFt35
+	 sE0MmcsE7SX+3e+X92DZjSXvbALd8O+rPZFIOhl0rOESo+Vmor7cMo/Pt5HYjKhz5IQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793817242;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-Envelope-From;
-	bh=Xgai1G4OTIWdkpPHAVPKrNN9CkdFO7yMfOuATYz1nZA=;
-	b=eSeTN6f6Y+UbhN3hkEIbQyTDvSHvB8MXOgf7jdNLHu3LWctQbXIlcD8HpvOldzPrRXdC
-	 +iNJHEkQNb3WnvSYsnED9z0maOCHpmIjl3kW4BuOLGgoS72LDRRYXUmfyZtSXPd1YX94N
-	 j8lQ1Xe+MMbymSxpZLudbXLgcQw7E1VnGtQ182SlwODdT2s6SuYYf+U+0ayC8jCfayFmh
-	 6RDBwj+7rlnB3L1ALdWuCLlhfBc9VNHE3R+wPOagZvzbZfp2bFKo7mBGG3COejMR2IOSC
-	 DXsVW0zB2n3kRlc9XetyhRdNHacWXMWuOEQftw4K4X/qRWQEFnrGmyqPZvROhrfvNdg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793817614;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=nRPkXVmhcOMxeOcyT5R5LuX+2eYXylUTRx3d3KHE+OE=;
+	b=qF65HO4t4HjW/wGT4M9ajvbBtVkOypF4dXuky7qjU6tyGaAwakYuqVQDX2V+SBTtSvQD
+	 PdzMELt2JIBPSk7b7z56nKSZulGEfhLU9vL7kUWoEoO1DFx80PyEYYDsmarIoTw5wbDYU
+	 D9V1sux644+n5+aU3h4n0SomwKOQYN8u+bE6D9MUSSVwaMKwfzLzrXngk9uu/1/BTKIOu
+	 chyY19i/WTRk8xTCPwI33oNsqLmaWdrlhBp/Mjk8BzhtEIzkwpHBrLJgcp+8Ih9hGEDgX
+	 LSIruItu/H7qq4wDEiGV086Ff+Zkzsq4azy6ZAgjK8aDW1JRS7+ZTxaNSVBUYFWMD/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=tychen.cc;
-	spf=pass smtp.mailfrom=tychen.cc;
-	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=c2x6iZxD;
-	arc=none smtp.remote-ip=104.207.68.39
-Received: from out-93wp-a39.jellyfish.systems (out-93wp-a39.jellyfish.systems [104.207.68.39])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GsfQt5Yo;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AAD606A32E
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 18:34:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96AAD606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AE8606D81D
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 18:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=c2x6iZxD
-Received: from fedora (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKYwr53Znz2x9C;
-	Wed, 04 Nov 2026 18:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1793817215;
-	bh=Xgai1G4OTIWdkpPHAVPKrNN9CkdFO7yMfOuATYz1nZA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=c2x6iZxDJCJcOpuC2yxPuxPaa9ztC6rOJxy9VJ6+nToD8PHfv+HyslfB+oaU/9gOv
-	 qSylU4EajjvgYer3gQT8R7Ika4DMeWFtfL5f5dFbtgQ4ku7WLGrlljfE/Hp+YMStuu
-	 yoCFZUMDsC2ayfZ8SPFiD1oTiRADlge6Ven7VssueOUmOs+oJQwAiD5qYikGBhHSbD
-	 TCDWsbDgjvRht1cvd22EZCmMaAXiS945etQ7EL0M4hp+Wb2egrBKhLjNJ19+SAXY0G
-	 j8tdSio0ReXL3c0qho6UuWOTrZ+q1TXMYxad1qYkHDrD76gMy4J4/dDIiRAarps/QF
-	 cNdoChBRg1twQ==
-From: Tianyi Chen <hi@tychen.cc>
-To: bpf@vger.kernel.org
-Cc: Tianyi Chen <hi@tychen.cc>,
-	=?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
-	qmo@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ihor.solodrai@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf] selftests/bpf: Look up unpinned maps by ID in bpftool_maps_access
-Date: Thu,  5 Nov 2026 03:33:23 +0900
-Message-ID: <20261104183323.409412-1-hi@tychen.cc>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GsfQt5Yo
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC3D1F00919;
+	Wed,  4 Nov 2026 18:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793817614;
+	bh=nRPkXVmhcOMxeOcyT5R5LuX+2eYXylUTRx3d3KHE+OE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=GsfQt5You8z7KcBGhjPUiWlEqMqceOhlZe/UYt+3PnSnjExqqD/ZwTb8rqw1TOzsj
+	 eGQ+iO2PT7365s1ycAPi4q0CTOiyamTj/zMNekMFX//HD7mdKCY2/hk1Xv+64roBzE
+	 iEVdDEVvc7NY72u4D+CybsGNoV2wgWtWW2M+tLaxjnk4LHcN7jrIChxVCksKagx/SK
+	 p14ajFa4ZYli6yCC2CnzsUGqWbB/aMQsxFh1OtwxEKFXD3SkgrIOiNSBrgti34GIdx
+	 YpUtCBIvpsLzXSM1ryL4FD+sTIzr76VD+mK6fHW3z2snjeX1t8FfC8rwCsD/xlzJmF
+	 mF7DD+fkrSbng==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4013C380045C;
+	Wed,  4 Nov 2026 18:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -75,130 +54,122 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Envelope-From: hi@tychen.cc
+Subject: Re: [PATCH bpf-next 00/37] bpf: More precision, more counted loops,
+ larger limits
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179381761305.3037121.5006370449835582185.git-patchwork-notify@kernel.org>
+Date: Wed, 04 Nov 2026 18:40:13 +0000
+References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com
 
-The unpinned subtests pass "name prot_map" or "name not_prot_map" to
-bpftool. Both maps are used by programs attached through trampolines,
-which are freed only after RCU grace periods and hold their map
-references until then. A run's maps therefore stay in the map ID table
-after its skeleton is destroyed, for about 300 ms in an x86-64 VM.
+Hello:
 
-If the test runs again within that window, the name matches maps from
-both runs, bpftool fails with "several maps match this handle", and
-the unpinned subtests fail.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Look up these maps by ID instead and drop the now unused map names.
+On Tue,  3 Nov 2026 23:40:25 +0000 you wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> This series lets the verifier of today accept more of the code that
+> compilers make. The main pass does not change: it follows each path of
+> a prog and prunes, as before.
+> 
+>   precision   A packet pointer keeps its range when the prog adds a scalar
+>               that is not negative. A shift, a division and a remainder by
+>               a range have bounds.
+>   loops       Scalar evolution counts more forms of 'for' and 'while', and
+>               it has a formula for more of the registers that a loop
+>               changes. The verifier verifies such a loop one time.
+>   subprogs    The verifier takes the arguments of a static subprog from
+>               its code and not from BTF. A trampoline on such a subprog
+>               keeps what the code takes, or the attach is refused.
+>   limits      24 arguments of a static subprog, 1024 subprogs.
+> 
+> [...]
 
-Fixes: 2d96bbdfd3b5 ("selftests/bpf: convert test_bpftool_map_access.sh into test_progs framework")
-Assisted-by: LLM
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
----
-Tested in an x86-64 VM with unmodified bpftool. Back-to-back runs of
-this test fail before the fix; with the fix, all six subtests pass in
-ten consecutive runs, including ID lookups while stale same-name maps
-are still present.
+Here is the summary with links:
+  - [bpf-next,01/37] bpf: Keep the range of a packet pointer when a number >= 0 is added
+    https://git.kernel.org/bpf/bpf-next/c/45d59681f3cc
+  - [bpf-next,02/37] selftests/bpf: Test range of a packet pointer after a number is added
+    https://git.kernel.org/bpf/bpf-next/c/51032aea1bf1
+  - [bpf-next,03/37] bpf: Refuse fexit on an unreliable static subprog that returns in R0:R2
+    https://git.kernel.org/bpf/bpf-next/c/2eb1eed2e5d1
+  - [bpf-next,04/37] bpf: Don't trust BTF of a static subprog that reads more registers
+    https://git.kernel.org/bpf/bpf-next/c/2896cd5e4c13
+  - [bpf-next,05/37] selftests/bpf: Test trampolines on subprogs that take more than BTF says
+    https://git.kernel.org/bpf/bpf-next/c/4a0cd51e286c
+  - [bpf-next,06/37] bpf: Count stack arguments of a static subprog from its code
+    https://git.kernel.org/bpf/bpf-next/c/046d838506d5
+  - [bpf-next,07/37] selftests/bpf: Test static subprogs that don't take what BTF says
+    https://git.kernel.org/bpf/bpf-next/c/9886ecdcd7fa
+  - [bpf-next,08/37] bpf: Don't treat a partial spill as widened in scalar evolution
+    https://git.kernel.org/bpf/bpf-next/c/37f84dfb1659
+  - [bpf-next,09/37] selftests/bpf: Test loops that change a partial spill
+    https://git.kernel.org/bpf/bpf-next/c/d75ccdaae417
+  - [bpf-next,10/37] bpf: Let scalar evolution see loads from read-only maps
+    https://git.kernel.org/bpf/bpf-next/c/175e26169525
+  - [bpf-next,11/37] selftests/bpf: Test scalar evolution with a loop bound in .rodata
+    https://git.kernel.org/bpf/bpf-next/c/0634a3013121
+  - [bpf-next,12/37] bpf: Helpers don't write through ARG_ANYTHING
+    https://git.kernel.org/bpf/bpf-next/c/17c81e54313a
+  - [bpf-next,13/37] selftests/bpf: Test scalar evolution with stack address as ARG_ANYTHING
+    https://git.kernel.org/bpf/bpf-next/c/3c2d8f49910b
+  - [bpf-next,14/37] bpf: Fold sums of constants and two shifts by 32 in scalar evolution
+    https://git.kernel.org/bpf/bpf-next/c/28a373cb0f6a
+  - [bpf-next,15/37] selftests/bpf: Test sums of constants and shifts by 32 in scalar evolution
+    https://git.kernel.org/bpf/bpf-next/c/9ab0b9bdd6ad
+  - [bpf-next,16/37] bpf: Count loops whose first value or bound is a range
+    https://git.kernel.org/bpf/bpf-next/c/1e589fdc85a8
+  - [bpf-next,17/37] selftests/bpf: Test loops whose first value or bound is a range
+    https://git.kernel.org/bpf/bpf-next/c/e3abb964db81
+  - [bpf-next,18/37] bpf: Describe more registers of a counted loop
+    https://git.kernel.org/bpf/bpf-next/c/09c5008302ed
+  - [bpf-next,19/37] selftests/bpf: Test more registers of a counted loop
+    https://git.kernel.org/bpf/bpf-next/c/96e163a3ada8
+  - [bpf-next,20/37] bpf: Compute scev for a loop that has more than 256 exits
+    https://git.kernel.org/bpf/bpf-next/c/445fd137453e
+  - [bpf-next,21/37] selftests/bpf: Test a loop with 301 exits
+    https://git.kernel.org/bpf/bpf-next/c/b8d40996942a
+  - [bpf-next,22/37] bpf: Describe a 32-bit counter that lives on the stack
+    https://git.kernel.org/bpf/bpf-next/c/e5872c5e13da
+  - [bpf-next,23/37] selftests/bpf: Test a 32-bit counter that lives on the stack
+    https://git.kernel.org/bpf/bpf-next/c/11f494a9180b
+  - [bpf-next,24/37] bpf: Count a loop with several back edges
+    https://git.kernel.org/bpf/bpf-next/c/638524a5a882
+  - [bpf-next,25/37] selftests/bpf: Test loops with several back edges
+    https://git.kernel.org/bpf/bpf-next/c/e82182c75c5f
+  - [bpf-next,26/37] bpf: Compute bounds for a shift, a division and a remainder by a range
+    https://git.kernel.org/bpf/bpf-next/c/ec0e0a31f7ad
+  - [bpf-next,27/37] selftests/bpf: Test a shift, a division and a remainder by a range
+    https://git.kernel.org/bpf/bpf-next/c/1508ee94f9f1
+  - [bpf-next,28/37] bpf: Count a loop whose latch is false in the first iteration
+    https://git.kernel.org/bpf/bpf-next/c/68c6597b1661
+  - [bpf-next,29/37] bpf: Count '!=' across 0 in 32 bits and loops that go down
+    https://git.kernel.org/bpf/bpf-next/c/3e2b371a432f
+  - [bpf-next,30/37] bpf: Count a loop whose latch tests a flag that a jump sets
+    https://git.kernel.org/bpf/bpf-next/c/c385a413be75
+  - [bpf-next,31/37] selftests/bpf: Test more latches of counted loops
+    https://git.kernel.org/bpf/bpf-next/c/d80f5b119460
+  - [bpf-next,32/37] bpf: Allow BPF_MAX_SUBPROGS targets of a read from a table of functions
+    https://git.kernel.org/bpf/bpf-next/c/3f4f430fa1b2
+  - [bpf-next,33/37] bpf: Keep the frame of analyze_subprog() small
+    https://git.kernel.org/bpf/bpf-next/c/bd1e73de87fc
+  - [bpf-next,34/37] bpf: Allow 24 arguments of static subprogs
+    https://git.kernel.org/bpf/bpf-next/c/b19a6aa8487a
+  - [bpf-next,35/37] selftests/bpf: Test a static subprog with 24 arguments
+    https://git.kernel.org/bpf/bpf-next/c/3c824fe3c78d
+  - [bpf-next,36/37] bpf: Bump BPF_MAX_SUBPROGS to 1024
+    https://git.kernel.org/bpf/bpf-next/c/70bcb39a7392
+  - [bpf-next,37/37] selftests/bpf: Make room in veristat for the stats of 1024 subprogs
+    https://git.kernel.org/bpf/bpf-next/c/65a45c702bee
 
- .../bpf/prog_tests/bpftool_maps_access.c      | 31 +++++++++----------
- 1 file changed, 15 insertions(+), 16 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_maps_access.c b/tools/testing/selftests/bpf/prog_tests/bpftool_maps_access.c
-index e0eb869cb1b47..5763cb19236a6 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpftool_maps_access.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_maps_access.c
-@@ -13,8 +13,6 @@
- #include <bpf/bpf.h>
- #include "security_bpf_map.skel.h"
- 
--#define PROTECTED_MAP_NAME	"prot_map"
--#define UNPROTECTED_MAP_NAME	"not_prot_map"
- #define BPF_ITER_FILE		"bpf_iter_map_elem.bpf.o"
- #define BPFFS_PIN_DIR		"/sys/fs/bpf/test_bpftool_map"
- #define INNER_MAP_NAME		"inner_map_tt"
-@@ -32,7 +30,6 @@ struct test_desc {
- 	char *name;
- 	enum map_protection protection;
- 	struct bpf_map *map;
--	char *map_name;
- 	bool pinned;
- 	char pin_path[PATH_MAX_LEN];
- 	bool write_must_fail;
-@@ -93,13 +90,10 @@ static void update_test_desc(struct security_bpf_map *skel,
- 	/* Now that the skeleton is loaded, update all missing fields to
- 	 * have the subtest properly configured
- 	 */
--	if (test->protection == PROTECTED) {
-+	if (test->protection == PROTECTED)
- 		test->map = skel->maps.prot_map;
--		test->map_name = PROTECTED_MAP_NAME;
--	} else {
-+	else
- 		test->map = skel->maps.not_prot_map;
--		test->map_name = UNPROTECTED_MAP_NAME;
--	}
- }
- 
- static int test_setup(struct security_bpf_map *skel, struct test_desc *desc)
-@@ -253,16 +247,25 @@ static int add_outer_map_entry(int key)
- 
- static void test_basic_access(struct test_desc *desc)
- {
-+	struct bpf_map_info info = {};
-+	__u32 len = sizeof(info);
- 	char map_handle[MAP_NAME_MAX_LEN];
- 	char iter_pin_path[PATH_MAX_LEN];
- 	int ret;
- 
--	if (desc->pinned)
-+	if (desc->pinned) {
- 		ret = snprintf(map_handle, MAP_NAME_MAX_LEN, "pinned %s",
- 			       desc->pin_path);
--	else
--		ret = snprintf(map_handle, MAP_NAME_MAX_LEN, "name %s",
--			       desc->map_name);
-+	} else {
-+		/*
-+		 * Maps from an earlier run stay visible until its trampoline
-+		 * programs are freed, so a name can match more than one map.
-+		 */
-+		ret = bpf_map_get_info_by_fd(bpf_map__fd(desc->map), &info, &len);
-+		if (!ASSERT_OK(ret, "get map info"))
-+			return;
-+		ret = snprintf(map_handle, MAP_NAME_MAX_LEN, "id %u", info.id);
-+	}
- 	if (!ASSERT_GT(ret, 0, "format map handle"))
- 		return;
- 
-@@ -312,28 +315,24 @@ static struct test_desc tests[] = {
- 	{
- 		.name = "unprotected_unpinned",
- 		.protection = UNPROTECTED,
--		.map_name = UNPROTECTED_MAP_NAME,
- 		.pinned = false,
- 		.write_must_fail = false,
- 	},
- 	{
- 		.name = "unprotected_pinned",
- 		.protection = UNPROTECTED,
--		.map_name = UNPROTECTED_MAP_NAME,
- 		.pinned = true,
- 		.write_must_fail = false,
- 	},
- 	{
- 		.name = "protected_unpinned",
- 		.protection = PROTECTED,
--		.map_name = UNPROTECTED_MAP_NAME,
- 		.pinned = false,
- 		.write_must_fail = true,
- 	},
- 	{
- 		.name = "protected_pinned",
- 		.protection = PROTECTED,
--		.map_name = UNPROTECTED_MAP_NAME,
- 		.pinned = true,
- 		.write_must_fail = true,
- 	}
-
-base-commit: 05441d697f7f9a927264f4058cbbc6a03dfcac9d
+You are awesome, thank you!
 -- 
-2.56.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
