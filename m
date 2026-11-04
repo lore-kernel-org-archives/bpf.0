@@ -1,100 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.49
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793754885;
-	b=yE+elEbRxULYSquDfbGQCN9pZTne+9HLrQCmov0QWrhy5X5+w9526bOcL2hpa6qCu7AD
-	 OR2D17pWRNHspX5HzmfWSJGiOBcYxz/768uHHn2PyLtjRGuHXyRpIWZGEwCIBJ0N9puGo
-	 Ir64ehflMD4gyplacH/f1DSF7ajpStQ+sEqyYE9KG9RKyL/y2sYA21GWJ4K/W7dJTexyS
-	 0CvrSb76UGgufq78CzjVFbbukXBy9bLXXlPzp/Ga92znPwQpO+FasvVzyFg5br3XUfCv5
-	 qS4iWciZb1/jAbMChgXgNYJZBQ6MHEYzJVmyBJ92IMgUcuE/a9w4uCfoh+PgqonCNVw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793754885;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793755444;
+	b=aDNQIXkXxyVp6Z8gLZ8aHveTOaNMJFRJP0MH3caZEs6efOb8WEuQLE5/InCI9z6teOH0
+	 mhsYQH/cnIYyHBou6v+4sISVOmho/eJAghBz3DEUa7DKmwDX4+kfEnkgW3J/4Do3oPe7u
+	 JRtx0R6Sqfnzmyaj3WYCp/JAfRBVMfHL97a2P5mtveS466RoYhslkJSQZh2hfh6sAHEbh
+	 WOy4AQjjBKGc2Y2hCLwscI9sdeXJbL+kNLZHbLXbqqveMBjNPqEB0/TqdugCPf7E2hA9I
+	 IuxYk491Gxmpd4DCcLc8lE3jI4MQUbJ+0zh1gvhO69EhmZ56qKYUtXmef1o53bGXiew==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793755444;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=iGrlFhobszoDubbYHr5z1P67t+I99oDwFpibAkY+FJc=;
-	b=GeHpctE3vNv+f8Ol16LUFk3I4gJMpDpTJWY6UtyEWxoDWuf1gDVpTTgJhfppGT8czAe+
-	 YTyHFXWRMkAFUVzmRpb+fcYjk+W1ruMUMY7bYQf9VDJzZ4mpBvhepiwn3jeWYHWt760kY
-	 REXyhLewrrOcbZcoGXVIv6JWoh9MadnazIghpRTxAAHJ0QFPxKpGJjtp0lIvWybcNT0ee
-	 L8szmUeEyw5/426Uwf/hhVDc4rtJI2WE0Ftrs7QP3ZiWTumhb52x6MtIT2j/zKfhvL7KU
-	 GI0g1qVETuxtSw5SggHHiDY6hFKaH6kb5sKqV9N+zFrIyHZRnxX5zC5eJV031z0nQfw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IR9x7CF7;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.49
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=kUiq7FTwT7mmzWIZfMwBM7OcdDdwBHGLRgW3h/0Drb8=;
+	b=mIN7oBDlnfoGv78ym4ptdiIguM4GsKd6oP2HxoC29pZHiwk/zRgvXyZfbuSZ7nXoZlgS
+	 bpS1TxnYUHrv1cfjKQLwpsk3lWYaqqjEBGMkgl+l3yD0xRktHdBJH7YPJnh0urtrm1VFm
+	 twuZViefG5KKULgfkttVEZZllpoWj+AHi5xW9nJ6jVJ3y/b/pbLlbtuFc39td1Z196JBn
+	 PJsuhF4T9jNaVsdhBAQFqTDZuTRP4qus8v5pIjwwS/1Y1t3uko/RrwDyag5njvx4j8Q9n
+	 q/Qy7c2RuVAibzrfdsJhgNCTjkcLDUu2a/jQ/meCnUWJQkq+Xp/WceFshXVknHEXJmQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="YVj9/ZX7";
+	arc=none smtp.remote-ip=209.85.214.174
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7E8606A329
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 01:14:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B7E8606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37431606A326
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 01:24:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37431606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IR9x7CF7
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6b1aa27963eso2008142a12.1
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 17:14:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793754879; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Qp4TnwdMAuWr6j//MGo2yXO9B3jgwPmuOtNDjJkQovWeMDkGtwWMwyxwdW3TPLWJm5
-         1EoNvWxwxB0skmwjnjRPjObXHVl7tGJUo81r8c19eQSXRAr5ecMwlPKKOCFgnk6K+RDj
-         +ktqFuvLWztGyMX8l2G5tyU0SZrxlFGH3QMSNCCHgdlD+yVpH+STtv40CvzHV3IYDn2z
-         Yyi/W65Ag21ueaOiL8a5C5VJ+vUicnu37foYC+qw2bjtSJOKXE0808rsFcdApmUP5fid
-         gA6I3OdE2Lvl+Vq+rPocjYpwBgtZVuc7sqI7CarCb8/VfZI5KoFA6KzbFLNsp441smYb
-         cLdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=iGrlFhobszoDubbYHr5z1P67t+I99oDwFpibAkY+FJc=;
-        fh=SfE/31dJuevlToHxgKWmdUzHJVwHl/oEdR1J5U2eNe4=;
-        b=efCVBZ4h9JU4spErIxPtN9eli/GhHSZrEjMZxmRVbQ7wWJIpzS+Pa5dxTujV0tm5n3
-         F5GJ5xE5N3rmijfTR2d/8aHSimC9PFbEFRZ+xK6Q8xjksXIGyxd2hSXKverUtgTv/107
-         II/SzSzBjN+wGCcrYQWX7r/OrWFkXvRkk/nTlfxNg4cMmXAj/dUwB7NypjZeLhs+r9uz
-         0W2gT2Ps0gmfKQiTGK25fyTr9sc8KBGvYetxXknRF6ejJYHHM1QDI8g5zc6CbIKyr+Ui
-         AE+F4SjCabyFB4OTaE5uM2eh9pYz4cJ7FzPxRF+Su+OqdZ5vn8pgO6Kyi1+ASmgxg57F
-         XniQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YVj9/ZX7
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e5378b281aso961605ad.2
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 17:24:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793754879; x=1794359679; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=iGrlFhobszoDubbYHr5z1P67t+I99oDwFpibAkY+FJc=;
-        b=IR9x7CF7c4Mx0rniIXPJTap8Sl2/dr9gnbELz6lBJ5PjaAf02D1YAm2LSs37v81qCo
-         DJ71amOTkdnMI00EPyhPmP/6O+dR1fHBGhBB8N08HS6IJb3bavA83yLJPIT5q1bmVYfO
-         U9I8Mv1AhAISD9gQHYCQU9CqQs9uRSuFf/GBXxNes4jOmAx8FJ1/EC6+PRLfHwtyJlGh
-         4bs/oRUDp3W+5e0rZ33XgLzI9zfcEnyXv3UPZwfkyHp9gepUycTy312afEDxLJBu+uDY
-         JrNO004oX9+ApUMczZEAcZ/liFPBCKXYAxWJ3CGOVdhpd9Rcsvf05tTRbO/lhbaNTijb
-         aS+A==
+        d=gmail.com; s=20260707; t=1793755443; x=1794360243; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=kUiq7FTwT7mmzWIZfMwBM7OcdDdwBHGLRgW3h/0Drb8=;
+        b=YVj9/ZX7KhkdYbeZ0kuYh/n67C52dMv/+/TGR1nlycDBH8blezBt/e5ffSKGriNVNP
+         R3eAfjCgERqEGKkdMnJn6DshC2QuOxnCjlBPJsjISzM2BVXw9NQJUQXaexU2jCg2H45c
+         CovuRoyKu2X/Li3jI92X0INhrTjq6mGdu7sMY4LtaCBp8tkuQ6o2bGVm147yP2q3N8My
+         2AXYwoondMpm4pwb7AxzmBQFHLR26mlg4lByCvnAxKj5PXLbFWvs1QuMVrroU2GobYCk
+         ywcQ+SLAJU/XMmUlrk0OHAW2iXO4LtGr5LFPmTBYm6dD4NUvJ7hJGCZt8RFbOV5HfdTO
+         pnfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793754879; x=1794359679;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=iGrlFhobszoDubbYHr5z1P67t+I99oDwFpibAkY+FJc=;
-        b=cJ1blnyOOL/1bWfrpnQvQuHujeA+M6TFQgtBwghmV6yCvYVoQ6CiRTUZoTPaUCJRGu
-         sBZ44yQtT6/MoOEKTkHegHhAyev/arUW15tqTwwUZ9uc8qbDeHsbhPDrNjrHWlgwPlv5
-         5NG9BbBwDAfzM06QnTnYwmbmUJveeNh0uii3vRS65+jbIgOlhryj5hrGHEmPkLOfqqPe
-         SmcKeYgvaBtdWfPgz4l0a7+rh5KcgglgOPojplFKl8T8MvPbTqyxq5jCw0z7na54fG+M
-         eBITJy1SGs2/6IIbxsNScMcrvwSJ7lPEwF5a4Mxw/3s9tXXFluE8CKArNg+OFyib21p/
-         0hPQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzBn8zmy+fUD3HYlY7mh4hXdWHQRxmoT3Gg3tuzFCHDfPIxSnN2slkl3LZSAcr4BqLFmic=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+HYt/qXdFmRYBfdOOfDfYfUcV8+nkOxBhkAI7mnG/D7jp5pEKW
-	54axx5QJeg5VwQwc65N5+q+6wulU239+rT02AA2e3vQt8zYyUMOxE1JIg0f6Bi8LmiY+JwXqeJ5
-	saVCjNuYolviXF5pPBtFKBeOfZVWoAslZE4oGQmha
-X-Gm-Gg: AYBFou2/votTjdY9XQAnkIJV9u7ljqM7MImkPrPhx/nq3B1A1TIAGcwZuKLA5wDqwYi
-	sCG9KwodvznL07X9LVLRGF4HSmjQ16HgRc/EHuiQfTtvCMGCHQ+ha94vKifJlvRsTw3AeA57gRs
-	WUUgET/9XwK0pPWFEdR7+LnOMxsKPjm5+vPG6cG5SVqz2W0dDs5Ho8Ikkj40HpldiGQ1wq9NPdw
-	x9g/hCRysO9IqEm9fz7UlW55LkLY5fQybwMyad4ImSKYD4PGFj5McDTkFuD2452jO42A9gEgQPz
-	CA7RSBBFmdSGpo0al1yFiePfVmLcb4FoM6F/AS9ktYhKUDxxyx5iJSAe8hB+YUARcBn7n1CdJWe
-	8rYEwqIUkNij8+6QT8SC7Mv5CyR0rWkM+wiBuy6DCC94HKmuww3DOcIg7KqfdGFH+RkSoLnw=
-X-Received: by 2002:a17:906:9946:b0:c4d:939:526b with SMTP id
- a640c23a62f3a-c4d0939530bmr80653766b.0.1793754878307; Tue, 03 Nov 2026
- 17:14:38 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793755443; x=1794360243;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=kUiq7FTwT7mmzWIZfMwBM7OcdDdwBHGLRgW3h/0Drb8=;
+        b=SK1lz9R4aOGg+jjtw6kyhoMWJ0Gob1pthbQbXkgIM+fEXfPFik+jQk5yf+k3lZzCEA
+         0hYlV+gvO1hkXVR+YmQa49fAuzyQAVN03lXl3SxJHbc1MZPGCT1vlanP7okwjSfLO6fm
+         +1COepCEZjAFfo71oRXO2NS/daLdfHyhYGBeYANydaZJGHalrcmuDNGJ0wayIaIThaxq
+         5gUMlHpqQNjsuBrIObZhtMUMqIw6mqjnpbK33c3S6d+QhFkYdJjjt6U5bM8+IskPJ6MH
+         XaSctoLM6J0jVeXGcfEebpxexxXUNsKyy946cLGxoGPAFuL7gsB+97RV2+oXx+gU6PoC
+         Lenw==
+X-Gm-Message-State: APuU4Z8f2VD9TNnm60HCsi1px+LSFQAO1ZfqoMOlQjeXnC0r2ZFdg241
+	quGT5LL2Ns7unPj9qyU1gx/+/0u2drHc1gIZ0P5BoLwBkAEDN/ISJ/BB3f/fTw==
+X-Gm-Gg: AYBFou3iobxxuI4NKBxslCs83c75mLvTS0oqwRml5tA3CfGTWKpOEedUuCEBDT4p/Q5
+	HW5r4m8PTDnuOk12XqEYa3D68/LSUvH2AnPOA+rxsyv/6YeK8vIt85VMXbg8019JGdOn9cmHOVv
+	E59fhtn95wY5AiZ2qFwo0DTzv7N/DrvFewoQHQFBptptbftV55x66Z2UNjRyYvMXKOsGko6Bsgb
+	Ku24EDyy+9vBDJsA+kIZ96Q5rNuOLQqnTpCT7dphPihtR9CTicUIZRxmYSt0YVJGdt11iHPQ/U6
+	QfHz6p0Rn9HA/yfnzNDy0/Sc+qsbg3YiixBKmWt1H6nIUomJj3fXbA1drltA1jFQUOB/EzF0Fjx
+	bBLnFoF+9l2TGT5Pv4HK7B740sAJICMPCXwt9yiQ9cfP5JgxoQ5guguLOn7kVvyzc6o/FWXoaNJ
+	xdG+gxMXCbP+G2XK2MLJ9HQg51uDUTuM5eIyBjOVghU/o/N2A8LeqQwfwTvQqsZ4SCkMJq5bPky
+	/6+qdT3vrc1z5nRLfhPCrz1QLMUenPD5EskMUxVo5ZuSWwXUbXZkjEaVnJpoFyQzzC/NouE0t6P
+	cCqTORJZv75ekM6uSh1ZHLZCyh2URv7G7xDIXZ4p+1muAeh3yRF3F7wQHpC9YYocPfZmc4OyP1y
+	l5A0ZkwrILng+hGNiRhvZ71+VnpUU+FhOy8vILrMIjgPBHGDCBXBTWaRxiZEh7UiCu/2kFR7r/w
+	==
+X-Received: by 2002:a17:90b:1b12:b0:39e:3713:c2e4 with SMTP id 98e67ed59e1d1-3ae896f51e5mr12899853a91.14.1793755443143;
+        Tue, 03 Nov 2026 17:24:03 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b07c8329afsm6626329a91.8.2026.11.03.17.24.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2026 17:24:02 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next v3 00/14] bpf: A stack in arena
+Date: Wed,  4 Nov 2026 01:23:46 +0000
+Message-ID: <20261104012401.1354861-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,88 +96,327 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
- <20261028134012.01d52e94@pumpkin> <CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
- <20261030100215.6f8e0d4f@pumpkin>
-In-Reply-To: <20261030100215.6f8e0d4f@pumpkin>
-From: Samuel Wu <wusamuel@google.com>
-Date: Tue, 3 Nov 2026 17:14:26 -0800
-X-Gm-Features: AclHuK-cSPxC_sFXLW9VVvDKj-9cMyP8tHQ9MAfu7xEMrtFl6vQvJ8w_LlboHFk
-Message-ID: <CAG2KctqdPq6NmK6rB13s2bgM7kP2w4OMMy2hdp_OFMVYYhTnZA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 30, 2026 at 3:02=E2=80=AFAM David Laight
-<david.laight.linux@gmail.com> wrote:
->
-> On Thu, 29 Oct 2026 15:05:45 -0700
-> Samuel Wu <wusamuel@google.com> wrote:
-[...]
-> > BY_NAME matches names exactly, like kallsyms_lookup_name(), so they
-> > would be different symbols at different addresses. Please correct me
-> > if I'm missing something here!
->
-> Only that the user might really want one of the copies.
-> Sometimes there is only the copy.
+From: Alexei Starovoitov <ast@kernel.org>
 
-Good point. I'll have v3 add KALLSYMS_F_PREFIX + pos/next_pos
-pagination to cover these. A prefix query for "foo." also finds the
-copies when plain foo does not exist (expanded on this in my reply to
-Andrii's Oct 30 mail in this thread).
+The goal is to load Rust programs as rustc and LLVM compile them. The test
+programs are in https://github.com/4ast/rust-bpf
 
-[...]
-> > > Have you tried measuring it with my patches that speed up the kernel
-> > > 'search by name' code?
-> > > That speeds the lookup by a factor of ~18 (testing the code in usersp=
-ace).
-> >
-> > Not yet. Can you point me to the latest version? Happy to try it out.
->
-> I've just forwarded you all the patches.
-> (They include patches to the tests and scripts/kallsyms)
-> I'll copy you (and the other people getting this email) for v3.
+This is part 2 of "bpf: Stack in arena and a verifier that joins states"
+[1], as a series of its own. Part 1 is merged. This series does not depend
+on part 3, and it does not change the main pass of the verifier.
 
-Thanks for forwarding the patches! I'll be looking out for your v3. I
-tested them across baseline, baseline + my series, and baseline + my
-series + your series, using the same two benchmarks and setups as v2
-patchseries:
+The problem
+===========
 
-Loading a BPF program with 11 typeless ksyms via libbpf (8-CPU x86-64
-Cuttlefish VM, 273k /proc/kallsyms lines; BY_NAME, unfiltered, so each
-query also scans ~35.8k module symbols for ambiguity):
-- Base: 156.1 ms
-- Base + my v3 series: 2.05 ms
-- Base + my v3 series + your v2 series: 1.95 ms
+A Rust reference does not say where the object is:
 
-Perfetto symbolizer (8-CPU x86-64 VM, 175k /proc/kallsyms lines;
-BY_ADDR; init / 50k cached symbolizations):
-- Base: 129.1 ms / 28.0 ms
-- Base + my v3 series: 0.04 ms / 3.4 ms
-- Base + my v3 series + your v2 series: 0.04 ms / 3.1 ms
+  struct Node<'a> { val: u32, next: Option<&'a Node<'a>> }
 
-I'm seeing your series help most when the vmlinux name search
-dominates: on the Cuttlefish VM, a vmlinux-filtered BY_NAME call is
-5-7x faster (hit: 8.3 us -> 1.7 us, miss: 9.5 us -> 1.4 us).
+  static IN_RODATA: Node = Node { val: 3, next: None };
 
-[...]
-> > > > +     __u64 query_flags;      /* in - query mode (enum kallsyms_que=
-ry_flags) */
->
-> There is no need for a command here - use the ioctl cmd.
+  fn sum(mut node: Option<&Node>) -> u32 {
+      let mut sum = 0;
+      while let Some(n) = node { sum += n.val; node = n.next; }
+      sum
+  }
 
-Agreed, done in v3
+  let heap = Box::new(Node { val: 20, next: Some(&IN_RODATA) });
+  let local = Node { val: 100, next: Some(&*heap) };
+  sum(Some(&local));
+
+sum() reads the three nodes with the same two insns:
+
+     local            heap          IN_RODATA
+  +---------+      +---------+      +---------+
+  | next  --+----->| next  --+----->| None    |
+  | 100     |      | 20      |      | 3       |
+  +---------+      +---------+      +---------+
+       ^                ^                ^
+       +----------------+----------------+
+                        |
+          w0 = *(u32 *)(r1 + 8)      n.val
+          r1 = *(u64 *)(r1 + 0)      n.next
+
+These two insns must work for the three areas. Hence the decisions:
+
+  step  memory               where  why
+  ----  -------------------  -----  ---------------------------------------
+  1     heap                 arena  The prog allocates it and links it with
+                                    plain pointers.
+  2     .data .bss .rodata   arena  heap.next is a load from arena, so it's
+                                    a number. A number can be an address in
+                                    arena and nothing else.
+  3     address-taken local  arena  r1 is &local, then heap.next. One insn
+                                    has one form in JIT.
+  4     the rest of the      r10    The verifier doesn't track arena, and
+        stack                       user space writes to it.
+
+The size is the second reason. Rust progs routinely need 32 Kbyte of stack.
+The kernel stack cannot supply them. The private stack has one frame for
+each function and cpu. Thus it supports neither recursion nor a second run
+on the same cpu.
+
+The patterns in real code that the tracking of the r10 stack cannot handle:
+
+ 1. One insn, two kinds of memory.
+
+      sum(&local_array)     r1 = fp-64    --+
+                                            +-->  r2 = *(u64 *)(r1 + 0)
+      sum(&vec)             r1 = arena    --+
+
+    A copy of the function for each kind of memory does not help:
+
+      case                               why
+      ---------------------------------  ----------------------------------
+      the pointer comes from memory      no kind for the compiler, a number
+                                         for the verifier
+      an indirect call: &dyn Trait, fmt  one function for the two kinds
+      if c { &local } else { &*boxed }   one pointer, two kinds
+      n pointer arguments                up to 2^n copies
+
+    For example, core::fmt::num writes the digits to a local array. It
+    passes a part of the array as &str to Formatter::pad_integral(), which
+    calls write_str() of a &mut dyn Write. The same write_str() gets
+    strings from .rodata and from the heap.
+
+ 2. The address of a local goes to memory. A load gives a number. The
+    memory can be the heap, when the object in the heap is dropped first:
+
+      let x = [1, 2, 3];
+      let v: Vec<&i32> = x.iter().collect();
+
+The design
+==========
+
+The series adds a second stack, in arena. A new register, r12
+(BPF_REG_ARENA_SP), points to it.
+
+      kernel memory                     arena
+  +---------------------+      +--------------------------+
+  | BPF stack    <- r10 |      | heap, statics            |
+  |                     |      +--------------------------+
+  |  spilled registers  |      | stack in arena    <- r12 |
+  |  other locals       |      |                          |
+  |                     |      |  locals whose address    |
+  +---------------------+      |  the prog takes          |
+                               +--------------------------+
+  The verifier tracks          The verifier tracks nothing.
+  each slot.                   An access cannot leave arena.
+
+ - The compiler selects the stack for each local.
+ - Each run of a prog takes a stack at its start and gives it back at its
+   exit. The usual case is 8 and 4 insns without a call.
+ - The verifier accepts r12 in four insns only: 'r12 += N' as the first
+   insn of a function, a load, a store, and 'rX = r12'.
+ - x86 and arm64 JITs support r12.
+
+The other places for an address-taken local that were tried:
+
+  where the local is                      what breaks it
+  --------------------------------------  ---------------------------------
+  structs by value, more inlining         an optimization. Pattern 2 stays
+  a second vm area or arena, a map value  a different base: pattern 1
+  arena, a fixed frame for each function  recursion, a second run on the
+  and cpu, as in the private stack        same cpu
+  arena stack, the kernel supplies it     this series
+
+The logs of patches 8, 9, 11 and 12 give the reasons for the other
+choices: where the stack pointer is, how a run gets a stack, what the
+verifier accepts, and which x86 register r12 is.
+
+The compiler
+============
+
+The compiler selects the stack by use, after all IR optimizations, for the
+full local and its full life:
+
+  rule 1   r10   The function that owns the local passes its address to
+                 a helper or a kfunc: iterator, irq flag, dynptr, map key.
+  rule 2   r10   The prog stores a kernel pointer in it and loads it again.
+                 Also a local that holds the address of such a local.
+  else     r12
+
+Thus open coded iterators, bpf_local_irq_save() and dynptrs work as today.
+When the compiler puts such a local in r12 by mistake, the prog does not
+load: its address and what is loaded from it are numbers for the verifier.
+It is not a memory error.
+
+  what      clang for C today     with the flag, for Rust
+  --------  --------------------  -----------------------------------------
+  statics   __arena variables:    statics: .addr_space.1 and
+            .addr_space.1         .bss.addr_space.1
+  locals    r10                   r10 or r12
+  casts     by type: __arena      by origin: one cast for each pointer that
+            pointers              doesn't come from the kernel
+
+  data in .rodata                  where
+  -------------------------------  -------------
+  statics of Rust                  arena
+  tables of functions              read-only map
+  strings for helpers and kfuncs   read-only map
+
+The price: .rodata in arena is writable, and its values are not constants
+for the verifier.
+
+No released compiler emits this code. The change to the BPF backend of LLVM
+is in review: https://github.com/llvm/llvm-project/pull/235577
+
+The patches
+===========
+
+  patches 1-2    The default size of arena.
+  patches 3-4    addr_space_cast of a pointer that is not in arena. The
+                 compiler casts a pointer when it does not know its origin.
+  patches 5-7    Statics: .bss.addr_space.1, and pointers that are stored
+                 in arena.
+  patches 8-14   r12: the register, the stacks, the verifier, the JITs, the
+                 tests.
+
+Patches 8-14 do not change the code of progs without r12. A prog with r12
+pays 0.3 to 2.3 nsec in each run on x86-64 (Zen 5) with hot caches. Loads,
+stores and calls cost the same as with r10. Patches 9-12 have the tables.
+Patch 3 changes the code of a prog in C only where the verifier finds a
+kernel pointer at a cast.
+
+v2 -> v3:
+ - Rebased. The three fixes that v2 needed are merged. BPF CI could not
+   apply v2 without them.
+ - Patch 11: bpf_patch_insn_data() is gone. The code that takes a stack and
+   gives it back goes through the list of deferred patches. A call that the
+   verifier emits is marked in the insn (BPF_EMIT_KERNEL_CALL), not in
+   insn_aux_data.
+ - Patch 11: "bpf: End bpf_loop() when the time of may_goto is up" added
+   is_called to struct bpf_subprog_info, for functions that BPF code calls
+   and for callbacks of other helpers. A callback of another helper can
+   take a stack, a function that BPF code calls cannot. The callbacks have
+   a bit of their own now, is_other_cb.
+ - Patch 8: BPF_REG_AX is r13 also in the tests of may_goto and of the
+   patch list that were merged after v2.
+ - Patch 14: three tests of may_goto in progs with r12. The test of callx
+   is built when CAN_USE_CALLX is defined.
+ - Patch 4: two tests: the cast of an untrusted kernel pointer is a move.
+ - Patch 11: a call of the main prog is rejected, as a call of a callback
+   that takes a stack.
+ - Patches 2, 7 and 14: arena_default_size, arena_data_ptrs and arena_stack
+   are serial, as the other tests in prog_tests/arena_*.c.
+ - Patch 7: the test fails when .bss.addr_space.1 is not aligned.
+ - Corrections in the logs of patches 3, 9, 11 and 14.
+ - The log of patch 1 says why libbpf needs the default also when the
+   kernel accepts 0 (Andrii, Kumar).
+ - The cover letter has an example for pattern 2, and it says what happens
+   when the compiler selects r12 by mistake (Kumar).
+ - The code of patches 1, 3, 5, 6, 9, 10, 12 and 13 is the same.
+
+v2: https://lore.kernel.org/bpf/20261101030511.1578690-1-alexei.starovoitov@gmail.com/
+
+v1 -> v2:
+ - A series of its own, on bpf-next.
+ - The default size of arena is 4 Gbyte (Andrii, Kumar).
+ - The cover letter and the logs give the reasons for the design (Kumar).
+ - A cast that is a move has 64 bits. JITs that need explicit zero
+   extension lost the upper half of the pointer (Ihor, CI on s390x).
+ - callx of a callback that takes a stack is rejected, as a call is.
+ - For the analysis of live stack slots the result of a cast is never
+   a certain pointer to a slot. A store to arena counted as a write to the
+   stack, and a prog with an access out of bounds loaded.
+ - The code that takes a stack is added before gen_prologue() and
+   gen_epilogue(). A BPF qdisc without a stack skipped the two.
+ - BPF_LD_ABS and BPF_LD_IND are rejected in progs with r12.
+ - gotox to the first insn of a function does not take a stack again.
+   A call as the first insn of a callback keeps its target.
+ - x86: bpf_throw() in a function with stack arguments restored the
+   callee saved registers of the kernel from incorrect slots.
+ - A slot for a stack does not name pages that are freed.
+ - The static linker accepts pointers in arena to static variables.
+ - arm64 is tested in QEMU.
+ - bpf_alloc(), bpf_free(), bpf_arena_memcmp() and bpf_arena_memcpy() are
+   not in the series.
+
+[1] https://lore.kernel.org/bpf/20261026025943.404450-1-alexei.starovoitov@gmail.com/
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+
+Alexei Starovoitov (14):
+  libbpf: Make arena 4 Gbyte when max_entries is not set
+  selftests/bpf: Test the default size of arena
+  bpf: Treat addr_space_cast of a pointer that is not in arena as a move
+  selftests/bpf: Test addr_space_cast of pointers that are not in arena
+  libbpf: Support .bss.addr_space.1 section
+  libbpf: Relocate pointers that are stored in arena
+  selftests/bpf: Test pointers in arena and .bss.addr_space.1
+  bpf: Introduce bpf register BPF_REG_ARENA_SP
+  bpf: Add stacks for programs to arena
+  bpf, x86: Add BPF_ATOMIC_LOCAL
+  bpf: Support BPF_REG_ARENA_SP in the verifier
+  bpf, x86: Support BPF_REG_ARENA_SP
+  bpf, arm64: Support BPF_REG_ARENA_SP
+  selftests/bpf: Add tests for BPF_REG_ARENA_SP
+
+ arch/arm64/net/bpf_jit_comp.c                 |   12 +
+ arch/x86/net/bpf_jit_comp.c                   |  150 ++-
+ include/linux/bpf.h                           |   32 +
+ include/linux/bpf_verifier.h                  |   17 +-
+ include/linux/filter.h                        |   72 +-
+ kernel/bpf/arena.c                            |  142 ++
+ kernel/bpf/backtrack.c                        |    2 +-
+ kernel/bpf/const_fold.c                       |    7 +
+ kernel/bpf/core.c                             |   34 +-
+ kernel/bpf/disasm.c                           |    7 +
+ kernel/bpf/fixups.c                           |  222 +++-
+ kernel/bpf/liveness.c                         |   23 +-
+ kernel/bpf/scev.c                             |    9 +-
+ kernel/bpf/verifier.c                         |  248 +++-
+ tools/lib/bpf/libbpf.c                        |  132 +-
+ tools/lib/bpf/linker.c                        |   21 +-
+ tools/testing/selftests/bpf/Makefile.skel     |    3 +-
+ .../bpf/prog_tests/arena_data_ptrs.c          |   70 +
+ .../bpf/prog_tests/arena_default_size.c       |   22 +
+ .../selftests/bpf/prog_tests/arena_stack.c    |  323 +++++
+ .../selftests/bpf/prog_tests/ctx_rewrite.c    |   14 +-
+ .../selftests/bpf/prog_tests/pro_epilogue.c   |    2 +
+ .../prog_tests/test_struct_ops_refcounted.c   |    2 +
+ .../selftests/bpf/prog_tests/verifier.c       |    4 +
+ .../selftests/bpf/progs/arena_data_ptrs.c     |  138 ++
+ .../bpf/progs/arena_data_ptrs_fail.c          |   25 +
+ .../selftests/bpf/progs/arena_default_size.c  |   21 +
+ .../selftests/bpf/progs/arena_noarena.c       |   14 +
+ .../testing/selftests/bpf/progs/arena_stack.c |  334 +++++
+ .../selftests/bpf/progs/arena_stack_fentry.c  |   13 +
+ .../selftests/bpf/progs/arena_stack_grow.c    |  151 +++
+ .../selftests/bpf/progs/arena_stack_loop.c    |   77 ++
+ .../selftests/bpf/progs/arena_stack_nomem.c   |   41 +
+ .../selftests/bpf/progs/arena_stack_throw.c   |  110 ++
+ .../bpf/progs/pro_epilogue_arena_stack.c      |  199 +++
+ .../struct_ops_refcounted_fail__arena_stack.c |   61 +
+ .../selftests/bpf/progs/verifier_arena_cast.c |  800 +++++++++++
+ .../bpf/progs/verifier_arena_stack.c          | 1169 +++++++++++++++++
+ .../bpf/progs/verifier_bpf_fastcall.c         |   24 +-
+ .../selftests/bpf/progs/verifier_may_goto_1.c |   12 +-
+ .../selftests/bpf/progs/verifier_patch_list.c |    6 +-
+ .../selftests/bpf/progs/verifier_sdiv.c       |   64 +-
+ .../selftests/bpf/verifier/basic_stx_ldx.c    |    4 +-
+ 43 files changed, 4721 insertions(+), 112 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_data_ptrs.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_default_size.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_stack.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_data_ptrs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_data_ptrs_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_default_size.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_stack.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_stack_fentry.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_stack_grow.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_stack_loop.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_stack_nomem.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_stack_throw.c
+ create mode 100644 tools/testing/selftests/bpf/progs/pro_epilogue_arena_stack.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_refcounted_fail__arena_stack.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_arena_cast.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_arena_stack.c
+
+
+base-commit: 7b8b803c3ce6e961e9c32a166c7169fcb17da6d4
+-- 
+2.55.0
+
