@@ -1,65 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.39
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793787492;
-	b=3GYp/F6NlQgAguiV1nqTlG5NjiwHWMkRSs0isFpqPJKA5AvPUVna4/2c039MQnK4urGB
-	 La9+2L+ft2OpmHrlcAJOrOiYrjDPJGIJrAWX5O4Ag78aoo91TB3Z+Qktx6M8XFAMtbKCw
-	 +C4lo0MYQnX0fc/BAG6G7bKTMy+31VnPYu2LSn7tBApjvZq1v5AYntGCqQPC95+ChViIy
-	 +WO3bU+P+x8yqoKGoQEmOpJnce+hP1iDUMLEY1nh+ei2L0akyWIBuZyAcjJZB/f7n+j55
-	 S6E5q9zi0IKszfdpxwLqqqiwFRz0Go8vFzrgA3XnZdASkjjja909oWvebU4gs7LEbwA==
+	t=1793787571;
+	b=NJh4o+NO2PdWiVnW5uB8CO/igQqycyBmbw6gfI59vjMnhYTERCLP5YBmyFOSShcVE5Ht
+	 3y/BHaYT9jEoqxPGQR0tog3VGPqyBcoaznMI80abmE8CdRDC+5oyQGD/+fY1hw+uatFnT
+	 ru81oGIoGf47RERhbpS0xhN1wp0cxES8PyIv4hFELhc97riSmnHqjx2vAtA/9NyENnz3/
+	 Sw3/BoGolTUtCSXeTUMpv5owMa48anLfVO6llu6+J8sOzk5RGWP/7YxE2ciimlIGOULZX
+	 MDY4aO+qeMXGQ/7zHDVV8PYf/5jmiXAOMri2MVlx0tYCXGGf250EPArKfCY8ZbhJdSg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793787492;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=kzlN/YSlDBcWBl/PHuR26tChnN3ik0juVI5FwAqXzXw=;
-	b=OjBp6avo2hkgB5M2YRb6ulcoHchE+Brc1t7fI8BG95AzekZHg2Qhgu+alOmwXh+C4qrb
-	 /Z2yVAxZ7bY9vh2KqapRAQOUQgcF/zYqp6Q4ZKvtBfg9UTlVJcAKWpOgCLXn9fsUMepaj
-	 NpSEY94ig9QW9NKWLzVvTDXJj2QiUVtQGWNyeoe/vhkyyWr7lX78Dl/+xu8BH3Vv9pxiL
-	 CnYamNTr4IBv9g1RFhjByvG00EpL+cK9KD/zO5eaTVRIyehHeJZiQKMwNFdnYgSv4Y044
-	 5uRzNHRnKBp0PKtgyBtcyggcN+AQKW9oc7XwVN76RCtiDbaaNdCpa1QF5xK5J9m0RoA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793787571;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=PHOrIONiVnB9qj2DBrsXOkXEckvs6hQ3EHFyOc2DRaY=;
+	b=Vqf9woaxpkrUM3dxQaiQOwCrdTp1sLobL4vtRvala7aCZMgZtB+F8sWvXZBo+Mn4JEcu
+	 +OvOdsB3GnItbbZKbQSHVyIMF/qtOh4pr0fuPDp6WQxeBjXQntnq7ltg9N1NvZILm8TsB
+	 +ZDg6qF/NhRuiDC6q2ptoyMqRWNf+t8J77IU2qmKEr4YqCOPtxhHYLo838xzjT8Mj/qt7
+	 8vDJED4rVqydJO7FnbHMumIAvnURupr0atRCs9LNN/l7ge2sRU91PtifTPqUHki0ZCLTH
+	 2TUJoddDzVt2LAIZhH90vQp4hv8Tpfp2omntsXwbmVpGC8npWKnmtqI4nrkJ+tJ5Ksw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="s/Dw6yqL";
-	arc=none smtp.remote-ip=95.215.58.39
-Received: from mta1.migadu.com (out-39.mta1.migadu.com [95.215.58.39])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XjnDtVW8;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C842606A332
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 10:18:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C842606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2F5606A32F
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 10:19:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=s/Dw6yqL
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=QICrwvJ1q+p6O5FfC7tO/QRvFz9LYnqsPT4idoPDTMg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793787486; v=1; x=1794392286;
- b=s/Dw6yqLjHgjK4hC+q3he0UIo9WlnSbuhHZictdeYHfn0g5eLA+/jLTEsDkKqQY+gbMBbTFv
- E0JxTJeYiHFf5PxfyrFlG4LPlvNpuBlWmQasw907mX2iCbXTKmT3DQAlg/i7orQfFNco2MRDl5F
- /JMtvzwzP+ultA/y2OOC4zBo=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b7af79601e9f84b4;
-	Wed, 04 Nov 2026 10:18:06 +0000
-X-Mizu-Trace-ID: b7af79601e9f84b4
-X-Migadu-Flow: FLOW_OUT
-From: George Guo <dongtai.guo@linux.dev>
-To: yangtiezhu@loongson.cn
-Cc: chenhuacai@kernel.org,
-	hengqi.chen@gmail.com,
-	loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] LoongArch: BPF: Make arena support depend on SCQ extension
-Date: Wed,  4 Nov 2026 19:17:53 +0900
-Message-ID: <20261104101753.20704-1-dongtai.guo@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261102072808.23080-2-yangtiezhu@loongson.cn>
-References: <20261102072808.23080-2-yangtiezhu@loongson.cn>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XjnDtVW8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 900601F00A02;
+	Wed,  4 Nov 2026 10:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793787570;
+	bh=PHOrIONiVnB9qj2DBrsXOkXEckvs6hQ3EHFyOc2DRaY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=XjnDtVW8T6I+mldgxYgsAGFPJPMKyNw9Q+4ZL4whAZCfaeBI3rGPCe8wVSbFfZ8nK
+	 MMbXRgSpMivxIWu6ltRaRPac4hYoQjEMBFaHVZVy6OANmJ9mma8aoylAgDrt1S9o8R
+	 wcOu7WvbxZ364iCEEMX5/E3UiFjsbtkuAeTuaOBIsRS1W+Wt6X+1zxoKJTmzBm3Lkz
+	 CR+5DqKwXciG8taZ0nNqYISZkB0o0z7/+jqYEHbBkTYNtypU8B46gmzebVn5z8nHHS
+	 nMVHav4YYmnByjj1OdIntghmQKAfDROCzewAd3sV9RvvieRRvbXtpz4bcNyLMmbb0a
+	 Ik0kF8VBmeCkw==
+Message-ID: <sashiko-outbox-197083@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 bpf-next 3/3] selftests/bpf: Add a runtime test for
+ private stack and stack arguments
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Chen Pei" <cp0613@linux.alibaba.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261104100411.997-4-cp0613@linux.alibaba.com>
+References: <20261104100411.997-1-cp0613@linux.alibaba.com>
+ <20261104100411.997-4-cp0613@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 04 Nov 2026 10:19:30 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,37 +60,117 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Hi Tiezhu,
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: broken compiler skip in serial_test_private_stack=
+_runtime()
+--
 
-On 2026/11/2 15:28, Tiezhu Yang wrote:
-> This is because the arena range tree uses kmalloc_nolock(), which requires
-> 128-bit atomic cmpxchg support, provided by SCQ extension on LoongArch.
+commit d5748c85c54dbc46700395b1926da29c28fcdef7
+Author: Chen Pei <cp0613@linux.alibaba.com>
 
-There is an existing SLUB debug fallback worth checking before making
-arena support depend on SCQ.
+selftests/bpf: Add a runtime test for private stack and stack arguments
 
-In __kmalloc_nolock_noprof(), the rejection condition is:
+This commit adds a runtime and JIT disassembly selftest on 64-bit RISC-V for
+BPF programs that combine an adaptive private stack with outgoing stack
+arguments.
 
-        if (!(s->flags & __CMPXCHG_DOUBLE) && !kmem_cache_debug(s))
-                return NULL;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/private_stack_runtime=
+.c b/tools/testing/selftests/bpf/prog_tests/private_stack_runtime.c
+> new file mode 100644
+> index 0000000000000..918c41d6b179c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/private_stack_runtime.c
+> @@ -0,0 +1,84 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <network_helpers.h>
+> +#include "private_stack_runtime.h"
+> +#include "private_stack_runtime.skel.h"
+> +
+> +void serial_test_private_stack_runtime(void)
+> +{
+> +#if defined(__riscv) && __riscv_xlen =3D=3D 64
+> +	LIBBPF_OPTS(bpf_test_run_opts, opts,
+> +		    .data_in =3D &pkt_v4,
+> +		    .data_size_in =3D sizeof(pkt_v4),
+> +	);
+> +	struct private_stack_runtime *skel;
+> +	struct bpf_link *trace =3D NULL, *ops =3D NULL;
+> +	cpu_set_t saved, single;
+> +	int cpu, err, tested =3D 0;
+> +
+> +	/*
+> +	 * Two independent halves. RUN_TESTS() validates the __jited patterns
+> +	 * through the test loader, which builds its own object from the ELF
+> +	 * bytes. The half below loads a separate skeleton to check the runtime
+> +	 * values and the CPU the program reported, which disassembly patterns
+> +	 * cannot express.
+> +	 */
+> +	RUN_TESTS(private_stack_runtime);
+> +
+> +	if (!ASSERT_OK(sched_getaffinity(0, sizeof(saved), &saved), "getaffinit=
+y"))
+> +		return;
+> +
+> +	skel =3D private_stack_runtime__open();
+> +	if (!ASSERT_OK_PTR(skel, "open"))
+> +		return;
+> +	if (!skel->rodata->has_stack_args) {
+> +		printf("%s:SKIP: clang lacks __BPF_FEATURE_STACK_ARGUMENT\n", __func__=
+);
+> +		test__skip();
+> +		goto out;
+> +	}
 
-Debug caches do not require cmpxchg128 for this path. They use
-kmem_cache_node->list_lock with spin_trylock_irqsave() instead.
-With CONFIG_SLUB_DEBUG=y, booting with slab_debug enables this path;
-CONFIG_SLUB_DEBUG_ON=y enables debugging by default as well.
+[Severity: Medium]
+In tools/testing/selftests/bpf/prog_tests/private_stack_runtime.c,
+serial_test_private_stack_runtime() calls RUN_TESTS(private_stack_runtime)
+before opening the skeleton and checking skel->rodata->has_stack_args.
 
-The proposed bpf_jit_supports_arena() check would reject arena maps on
-CPUs without SCQ, even when the SLUB debug fallback is available.
-This would prevent us from running arena tests on those machines
-with slab_debug enabled.
+When the BPF compiler does not define __BPF_FEATURE_STACK_ARGUMENT (such as
+bpf-gcc or an older Clang), tools/testing/selftests/bpf/progs/private_stack=
+_runtime.c
+compiles run_args() as an empty stub and omits the __arch_riscv64 and
+__jited() annotations on private_args and kernel_args without adding a
+__skip() annotation:
 
-Could you rerun jit_insns/cast_to_user on the 3A5000 with slab_debug
-enabled, before and after this patch? The claim that kmalloc_nolock()
-requires 128-bit cmpxchg should account for debug caches, and it would
-be useful to preserve that fallback when addressing the error reporting.
+tools/testing/selftests/bpf/progs/private_stack_runtime.c:
+    #else
+    const volatile bool has_stack_args =3D false;
 
-Thanks,
-George
+    static __always_inline void run_args(struct private_stack_result *resul=
+t)
+    {
+    }
+    #endif
+
+    SEC("raw_tp/sys_enter")
+    #ifdef __BPF_FEATURE_STACK_ARGUMENT
+    __arch_riscv64
+    ...
+    __jited("	ld	{{.*}}, 0x8(s0)")
+    #endif
+
+    int private_args(void *ctx)
+
+When RUN_TESTS(private_stack_runtime) runs in that configuration,
+parse_test_spec() and run_subtest() treat private_args, kernel_args, and
+zero_stack as three valid subtests with no __jited() expectations, load all
+three, and record 3 passing subtests before resetting env.subtest_state to
+NULL.
+
+Execution then reaches the !skel->rodata->has_stack_args check and calls
+test__skip() outside any subtest, incrementing test_state->skip_cnt to 1 wh=
+ile
+test_state->subtest_num is 3. Because skipped_cnt !=3D subtests_cnt in
+print_test_result(), doesn't this run three vacuous subtests and report the
+test as OK (SKIP: 1/3) instead of skipping it when the compiler lacks
+__BPF_FEATURE_STACK_ARGUMENT? Could the has_stack_args check be performed
+before RUN_TESTS(private_stack_runtime), or should the programs be annotated
+with __skip() when __BPF_FEATURE_STACK_ARGUMENT is undefined?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104100411.997-=
+1-cp0613@linux.alibaba.com?part=3D3
