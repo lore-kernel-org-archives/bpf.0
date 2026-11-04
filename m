@@ -1,101 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793817161;
-	b=W3gUMVHf2vbFL6VZYdAvnrPdHsUiAc+Z/bK1PjmOVGFGcj0HFdR4E8XgsNfwej+uY70+
-	 wVTAV42meCjxhaePRPxGBrE9fz61qV0/rLsDcgaDZCThflqgjD4ZaDvixPN1KrHTgE4k2
-	 KK+MjejA64bpmBa6zZH83faxn3SWmEuzkI/y5jCY9xNd6Qi+fs1C7urfgnisZ5jdeSGHR
-	 oRfFT4a9zah0EmwnApEWLxi+t+FI2he97m/ro2PRePEuWxtYhRKTff0ud2CSFmIxEFN6G
-	 6OlvpAx3fKTHdux1moP/+J47PoM0DKFjFuLuP/IBEgl81pKHKcZlUSDlUL73sMrmcbQ==
+	t=1793817204;
+	b=UZNQM8YsNbQtAljYEaZNK+QxNNKLsCgNQ9pACzCeLd/UPr/3evVbtOpoOejKbl8cpJoy
+	 cItlB8Vp5xUI6z49DShQQB+13FXXqyeQvLGS0lYoYB9/UuhARylxTa1PYDIurGRi7t7EE
+	 43XtleXgg52ZqI+YEBdqPLqaF4LfY3uBEczJzTSF4D3ufNPjF/LGbiJU0aZWxFucJUA75
+	 V+lLkTzLiiF5mr5vggIcA6FmzHqZAHtibzTAszKwobKs/tSCfrqLAdvzM4A3M/fvFlFn0
+	 q+C4ycsWmrR8NnhGd9NHyKpn8ZCXd87lsnX+1r2q/6nSolsWRsjmQw79rpduRgoJNWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793817161;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793817204;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=bgGvwwQ0hp1A5Cajh6ZjxfCDvcyK9tWxZx+AIP+8L3A=;
-	b=dKRK90IjlaGSbUBSux3qRopnEyrz24iZqka57IvK3DNpNrrcpsTSAdQ6phrXmf6mgoov
-	 sNky4wy//V9KQm4HElfuRZnEDkGFmUASy07aM7vgbaLkbkOzHnky4HxkQnJCZtyAW7MkG
-	 t1DpJVt0qGQg/gK9cAeGULqENtYtsWco6ZZ5Y848QdBSuFi3h+nlmMkyxoYRQAyAWpEeh
-	 iyZpFUdEZGWj2sw6JX39sS7BuCYvufEZyQ8Zn7EKJucrAkFy+4a1sakY5fVFqsxmWUSJC
-	 U6HHV9qZaSKLD87QQEYeSvxyLT/sXWW+dspjXT47wMwuftoGcaxCvbhblVk2Y85bpxA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=dZJEIVEG28glfd0CAZR7e5GpNzf2U/0XgvN5No7CeMA=;
+	b=NmPQW0/LFyXkj3Mf6cba47as/ejmdA3ngw1jq7pwee40q1e85Wr57ggrRsu1mrXOvG7h
+	 Kqk/44kN0zYhZN/6fWUiKUJQjN1BG1ywN29H8evUIVmFPqB/p+3TcG/sLE9DoysU68GLU
+	 OEunUG6HMQ/IrW1O/1c9s5xHP59t0QPGfMJuXYGZap+0UpgGtYEqkwS+tVx4VokuJGWaK
+	 YCIXnD/vp8m8m+67sXCCbejl4NRvLIA7quMhvoEPs5BtAaQM7y53VYmhnRe7Sc1tGNfcv
+	 B+4N0r2VT5YxcfrKZ+HN9Py9+eUhLHj+mQvlJCX15wnLnpamq42UwXsuUSi8i5tks3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WnhNglyv;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qIpAUGhv;
+	arc=none smtp.remote-ip=74.125.229.5
+Received: from mail-dy2-f5.google.com (mail-dy2-f5.google.com [74.125.229.5])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DCA606A326
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 18:32:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73DCA606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D28606A329
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 18:33:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6D28606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WnhNglyv
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cc147d86bebso616146a12.0
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 10:32:41 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qIpAUGhv
+Received: by mail-dy2-f5.google.com with SMTP id 5a478bee46e88-36d94af5b9eso205707eec.0
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 10:33:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793817161; x=1794421961; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bgGvwwQ0hp1A5Cajh6ZjxfCDvcyK9tWxZx+AIP+8L3A=;
-        b=WnhNglyvCBh7ZPhaI+5vGqQkRigBp6TtgG0deUYHZNLf5FfinhmiZlHNByAGYNI4SL
-         iSmUomw8vSyjos/KvmTEAGXcIjs5ntqRuFyyj+SDPaP1aolY1XC5rpnAwltboXplmF+H
-         npO6z20tFVzn719f2b9XBNGstbEQRzUzgPW46+Dsks0ffp36oCT9dlXJBTg/OBdPsrVi
-         GNYZxZ3TbMimbcRV0fLQ8t6EMIgUb0I6KT4dp0PaW8ZUcUSIu2Wb+fcGOlDFOAa4NmGE
-         /sOsDZA4Gw4LOrkEAAF/eXmFi8HbwyV59xDcNGJrES/3JiZfwhay4EOl/OoArRih0CKd
-         3NWw==
+        d=gmail.com; s=20260707; t=1793817203; x=1794422003; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=dZJEIVEG28glfd0CAZR7e5GpNzf2U/0XgvN5No7CeMA=;
+        b=qIpAUGhvFdhdjiNZY95XDqTQbtGBbGg7sgpqh306FuV+wFMlmPguGtm67f+68aFJkX
+         YESK5wz+nx+lDSX0oVgx3A8NLmsosisHzaPapWs/bKWNNgw1e6ZE/IY6pkVtPIRIC2UD
+         43ep6FIHUK8tFR/9GHyeD/OUNh+bCcQPQqmQCLWznxBlIPrs4lk/PA5iJmeyCMi/udrp
+         DWqs3N4hTIgCQcdc75yy0l3FCCsJ6STwaHtNs+qwzlDbMn4wqwFhOPDU4A0Lgj6hF6Ow
+         1tDeuRDbLKduAtYpaMH3ybvkwthxk+XN0nvwL0szzBNh2MEsDnv6xSemPaD4aXXleoPm
+         5rqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793817161; x=1794421961;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bgGvwwQ0hp1A5Cajh6ZjxfCDvcyK9tWxZx+AIP+8L3A=;
-        b=zFjsVaNEuo6cOCaPAMlqQxbEFW9Gyai9D6iac9hRZNnbI4i10Dx+ziMxKzADfgx4iK
-         He5LRmSl/5a8cvBVcy+kWW7ziYxMegHfzZeKZHLl4/kAnnk8Vu8ZFELNyi39j1e7U83I
-         yhHo0PH6LmlTIbTe++ebyt+KWXVflAPuHZ5Mf91FrysoUi7U69ONqFGGVZux3S6800RX
-         8PE53OKAaH+lfRfGq0d/3DeOFIDl7xAUgpLBz6KRycoOTIagpUXjVOwJks28DzUym+4R
-         goSkJSUwpZkGQgR9oSrtQmU5Le2x1RDVxPJXRHAb43I7PLwau4zSbfKMEMqAmBQ1EM4o
-         qp2w==
-X-Gm-Message-State: APuU4Z9JRWYAnRaD4rK+FJi1QVks5AMOhpF2ixw6FlQ6VuYhFhloRQ+7
-	c7grTMARvr6G2VrhD9GuKNbMLV55ViLRFTllIDfARqWA/ScwrHqcogtJ
-X-Gm-Gg: AYBFou1nFY8l8y8cjfBThJVBcrtN6Z+RuwBPeqQ0A5ENNAXFPWUpiZmrQ7EpZq+Dbmu
-	I7wzuGW6A0YDfMRXTDJgAzOjypDG/wRZkT/JoQEpWRI4qTH3tQoSSuz3eXPGfeH2cONTtkFkAyR
-	uo01JCN7MTCqQQQ3l3Y4YiI/SCPeqvhYqfYKrUX8VID+marLs3RnZnFMlgDh6egLZU4p5uTarPq
-	BbVz3Uy4tQxRz38xGNk303CPFcMNJIiSe/krTvDq6pt67NYCdEgMwPrj+4DmL0gGDLmMq/wpjpN
-	wLfXIpUCtIgtjgFHzauX2/y4ko09eWEuYqnbEoDFKfaz2Mf6JwV47iSD2YId6s70meaL/NKpUh6
-	xjjU28sMNIAu2KUTzHtAFn2uA9IvtIwie7YktBkeTq3epCn9dhxC+3rEh/IWvkKbYxVrzZe63oB
-	nZ7t44LyJOnFDX1hJc1QECvpvDnwB0U/l5OmQC89GVoapIalhpiT6+vX4ToqYlSjFZrbiufcMLG
-	sr7rykTe0WHe03tE1OmVSgzpPwafTQu6+vygsw2gsPuZbPFLHJzXR7fisvJO+e9GejKe8a5ZUi5
-	+RcIrBh9MfS6nHFXQQoLrQmtgY/lLEWt+OWgewry5vx/4lFzZs0U0BPJ9MJl/M2f4imxOUm/fkV
-	6BC0K5FApTrkrytySP0CM+PNaCgJMGGeJtQ==
-X-Received: by 2002:a17:90b:554c:b0:3b0:a1c6:95ae with SMTP id 98e67ed59e1d1-3b0afc77a41mr178745a91.31.1793817160656;
-        Wed, 04 Nov 2026 10:32:40 -0800 (PST)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b313c143sm154357a91.2.2026.11.04.10.32.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Nov 2026 10:32:39 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 04 Nov 2026 18:32:39 +0000
-Message-Id: <DMMN42GPUESV.YUIKSBF4E297@gmail.com>
-Cc: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <john.fastabend@gmail.com>, <jakub@cloudflare.com>,
- <jiayuan.chen@linux.dev>, <davem@davemloft.net>, <kuba@kernel.org>,
- <pabeni@redhat.com>, <horms@kernel.org>, <kuniyu@google.com>,
- <willemb@google.com>, <matttbe@kernel.org>, <mptcp@lists.linux.dev>,
- <mason@kernel.org>, <josef@toxicpanda.com>
-Subject: Re: [PATCH bpf v2 08/15] net: Leave sk_stream_wait_memory() once
- the socket is dead
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Eric Dumazet" <edumazet@kernel.org>
-In-Reply-To: <CAL4Wiiq+QX8quVBjEZK5qipki6Yt7vx4=tt2L4o+FwO9zD-5=g@mail.gmail.com>
-References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com> <20261102072112.4160195-9-alexei.starovoitov@gmail.com> <CAL4Wiiq+QX8quVBjEZK5qipki6Yt7vx4=tt2L4o+FwO9zD-5=g@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20260707; t=1793817203; x=1794422003;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=dZJEIVEG28glfd0CAZR7e5GpNzf2U/0XgvN5No7CeMA=;
+        b=cTUpPEuu+IPCzg5BjCADiuTiwvgr+nAvmXUEs2iMIajrLO1t257rgrjNwT5D47IUXD
+         9n7Q17ybChUyQY0XCIU7hLRQTbxAxy1czMdaMAh/cnYMIvOVYzLIcUONcmdS+Gof79Jc
+         elVKSMVi8LPDpRLk77OzRerYpVnYKl2SdK27Kp8Dt+dZsALhczTzSFuROk4TbDnf1uNk
+         iDZH0g3y8prAU5gng8OV6wOvk3sxJmPvQPTuJQ/6N9qaGtVDH3MzMmO5qlRSWrYoZw2L
+         VmnuLPb7LbvA6bCH5gbHIr/rfzW8JgALqbTYZzO/b/QZtUfBZ07BKJqTa1XJKW3myhQ0
+         B5cw==
+X-Forwarded-Encrypted: i=1; AKwUvBxJG+1mb4HmGsbNZClzJ0CtKMd++Bw5vktQsKz3kB0CY/XNpVieaf7it6iBP4lZwoSlaro=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+cjh5ucmIWsqUKYrD+vtBTVTPEJmMrXngVfYMPREx2XhTFTO1k
+	ZfjaogNpcxDHDLuUxRZYTX4N+1bY7kPCmNAJwOJHzpcytU8UalzARWS12Pb6gH7mMzc=
+X-Gm-Gg: AYBFou18RYSPzPS4kPtNx29WFsrdIw4pSmGmDSk1VjM9gTNWRFDU+ExfokbYZX7+g2L
+	+3KfUma/JWnD+MgEG9W79UDIJAwBG2G+vPVf39M0YaR07UKmnVc8GltxlakMB0q1xm1LJWdbG2m
+	QVINFWzKSHrhDIi0e01M8KJ8mxh10tA/NbJkMcP4SZmkhlskDVuJLJ7QrVtdAAx4vmXOprWNuoC
+	761UtV3u2GhwA0ZkgXIL7JP+xRIiCXd0U7ZZxLT/a0ZyAmegCWtU5QyDrpBMdr37Q5Zc+adk8aC
+	ftuOqcjoV5E1UN+GDdS+WWIgq7nmzhxxut4/BdCOFeGy99zbWxSto8O8M4ss/rkriXb/hnPyUwM
+	h3+o8b6CR7KfHW041K9XB0f3E6D2HLatU0fU5gB207Jd0ZKZONLOfDGpsfUeZQDWwi3hV8GH5Hv
+	01p5GIteu81J8X47DjSVAhA1n8YQknpS1WPAmW0AsMRiAtnDBQJ/ALd0MR/S9u1lAuUSTMtUDKS
+	LnuFhRkuJsJN8Tt2TZ6pA1a187TkzljcZys9jqgikucpqtR0f1OtiBY1ocg+YVX6ZK6zdrZE7jz
+	1MRr1Aj32jR3Sk/yd1lTevZM6IwCclLjkXwQ2RlD4HEz1V538YJiC1MUTLv4imPbVMYviikssu3
+	1G5KnsF8sNn10/KYYzBEr
+X-Received: by 2002:a05:693c:88c9:20b0:35c:8b96:94d9 with SMTP id 5a478bee46e88-36a42444bf2mr26662280eec.19.1793817202132;
+        Wed, 04 Nov 2026 10:33:22 -0800 (PST)
+Received: from localhost.localdomain ([2401:4900:1c0f:581b:f54f:2020:25aa:5e4])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36dd7ec8881sm1851435eec.18.2026.11.04.10.33.18
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 04 Nov 2026 10:33:21 -0800 (PST)
+From: Dhanush Arivappagari <arivappa.dvorak@gmail.com>
+To: Quentin Monnet <qmo@kernel.org>,
+	bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Dhanush Arivappagari <arivappa.dvorak@gmail.com>
+Subject: [PATCH bpf-next] bpftool: Add missing commands to documentation synopses
+Date: Thu,  5 Nov 2026 00:00:18 +0530
+Message-ID: <20261104183018.30052-1-arivappa.dvorak@gmail.com>
+X-Mailer: git-send-email 2.50.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,45 +98,183 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 03, 2026 at 09:23 PM Eric Dumazet <edumazet@kernel.org> wrote:
-> "A signal or SO_SNDTIMEO of the target ends it" does not look enough to
-> me. tcp_sendmsg_locked() takes the timeout from sock_sndtimeo() of the
-> target, a socket the sender does not own and cannot configure. With the
-> default MAX_SCHEDULE_TIMEOUT, a blocking sendmsg() on the sender's own
-> socket never returns, and the sender's sock_hold() pins the dead target
-> until then.
+Several commands and objects implemented in bpftool are currently missing
+from the SYNOPSIS sections in the man pages, causing documentation drift.
 
-Right. It's not enough.
+Update the documentation across bpftool man pages:
+- Add the missing 'token' object and its commands to bpftool.rst.
+- Add missing subcommands to the SYNOPSIS blocks of btf, feature, gen,
+  link, map, net, and prog man pages to reflect existing implementations.
+- Update help command headings in the cgroup and token documentation
+  to reference their respective objects instead of prog.
 
-> Since this patch makes SOCK_DEAD a reason to leave, one wakeup before
-> sock_orphan(), while the socket is still owned by the closer, should be
-> enough. The sender can only get the socket lock back after
-> sock_orphan(), so it sees SOCK_DEAD. Nothing walks the wait queue after
-> sock_orphan(), so skipping remove_wait_queue() stays safe.
->
-> Something like this (untested). sk_wq can be NULL here for MPTCP
-> subflows, hence skwq_has_sleeper():
->
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ void __tcp_close(struct sock *sk, long timeout)
->  adjudge_to_death:
->   state = sk->sk_state;
->   sock_hold(sk);
-> + /* A sockmap egress redirect can sleep in sk_stream_wait_memory()
-> + * without a reference on our file. Let it see SOCK_DEAD.
-> + */
-> + rcu_read_lock();
-> + wq = rcu_dereference(sk->sk_wq);
-> + if (skwq_has_sleeper(wq))
-> + wake_up_interruptible_all(&wq->wait);
-> + rcu_read_unlock();
->   sock_orphan(sk);
->
-> This can be a follow-up and does not need to block the series.
+Signed-off-by: Dhanush Arivappagari <arivappa.dvorak@gmail.com>
+---
+ tools/bpf/bpftool/Documentation/bpftool-btf.rst |  2 +-
+ .../bpftool/Documentation/bpftool-cgroup.rst    |  2 +-
+ .../bpftool/Documentation/bpftool-feature.rst   |  2 +-
+ tools/bpf/bpftool/Documentation/bpftool-gen.rst |  2 +-
+ .../bpf/bpftool/Documentation/bpftool-link.rst  |  2 +-
+ tools/bpf/bpftool/Documentation/bpftool-map.rst |  3 ++-
+ .../bpf/bpftool/Documentation/bpftool-prog.rst  |  2 +-
+ .../bpf/bpftool/Documentation/bpftool-token.rst |  2 +-
+ tools/bpf/bpftool/Documentation/bpftool.rst     | 17 ++++++++++-------
+ 9 files changed, 19 insertions(+), 15 deletions(-)
 
-Makes sense to me. Thx
-It depends on the SOCK_DEAD test, so it goes on top of this series.
-Will send it as a follow-up.
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+index c6dc445cd4a1..e25277260ceb 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+@@ -18,7 +18,7 @@ SYNOPSIS
+ 
+ *OPTIONS* := { |COMMON_OPTIONS| | [{ **-B** | **--base-btf**} *FILE*]...  }
+ 
+-*COMMANDS* := { **dump** | **help** }
++*COMMANDS* := { **show** | **list** | **dump** | **help** }
+ 
+ BTF COMMANDS
+ =============
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+index d1b8193dc576..7633a42b54b0 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+@@ -131,7 +131,7 @@ bpftool cgroup attach *CGROUP* *ATTACH_TYPE* *PROG* [*ATTACH_FLAGS*]
+ bpftool cgroup detach *CGROUP* *ATTACH_TYPE* *PROG*
+     Detach *PROG* from the cgroup *CGROUP* and attach type *ATTACH_TYPE*.
+ 
+-bpftool prog help
++bpftool cgroup help
+     Print short help message.
+ 
+ OPTIONS
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+index c7f837898bc7..9ed5ff93ebdb 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+@@ -18,7 +18,7 @@ SYNOPSIS
+ 
+ *OPTIONS* := { |COMMON_OPTIONS| }
+ 
+-*COMMANDS* := { **probe** | **help** }
++*COMMANDS* := { **probe** | **list_builtins** | **help** }
+ 
+ FEATURE COMMANDS
+ ================
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+index d0a36f442db7..0c0f9616f676 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+@@ -18,7 +18,7 @@ SYNOPSIS
+ 
+ *OPTIONS* := { |COMMON_OPTIONS| | { **-L** | **--use-loader** } | [ { **-S** | **--sign** } {**-k** <private_key.pem>} **-i** <certificate.x509> ] }
+ 
+-*COMMAND* := { **object** | **skeleton** | **help** }
++*COMMAND* := { **object** | **skeleton** | **subskeleton** | **min_core_btf** | **help** }
+ 
+ GEN COMMANDS
+ =============
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-link.rst b/tools/bpf/bpftool/Documentation/bpftool-link.rst
+index 6f09d4405ed8..21b22aa70fdc 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-link.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-link.rst
+@@ -18,7 +18,7 @@ SYNOPSIS
+ 
+ *OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } | { **-n** | **--nomount** } }
+ 
+-*COMMANDS* := { **show** | **list** | **pin** | **help** }
++*COMMANDS* := { **show** | **list** | **pin** | **detach** | **help** }
+ 
+ LINK COMMANDS
+ =============
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+index e4ed7e701c9e..391b0c6c0c6a 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+@@ -20,7 +20,8 @@ SYNOPSIS
+ 
+ *COMMANDS* :=
+ { **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
+-**delete** | **pin** | **help** }
++**delete** | **pin** | **event_pipe** | **peek** | **push** | **pop** | **enqueue** | **dequeue** |
++**freeze** | **help** }
+ 
+ MAP COMMANDS
+ =============
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index 8dbd34ef3d8b..c239cb506c38 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -23,7 +23,7 @@ SYNOPSIS
+ 
+ *COMMANDS* :=
+ { **show** | **list** | **dump xlated** | **dump jited** | **pin** | **load** |
+-**loadall** | **help** }
++**loadall** | **attach** | **detach** | **tracelog** | **run** | **profile** | **help** }
+ 
+ PROG COMMANDS
+ =============
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-token.rst b/tools/bpf/bpftool/Documentation/bpftool-token.rst
+index d082c499cfe3..1f4e6f4f64b0 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-token.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-token.rst
+@@ -35,7 +35,7 @@ bpftool token { show | list }
+     **bpf**\ () system call commands, maps, programs, and attach types for the
+     token.
+ 
+-bpftool prog help
++bpftool token help
+     Print short help message.
+ 
+ OPTIONS
+diff --git a/tools/bpf/bpftool/Documentation/bpftool.rst b/tools/bpf/bpftool/Documentation/bpftool.rst
+index f38ae5c40439..a213f7032d8d 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool.rst
+@@ -21,35 +21,38 @@ SYNOPSIS
+ **bpftool** **version**
+ 
+ *OBJECT* := { **map** | **prog** | **link** | **cgroup** | **perf** | **net** | **feature** |
+-**btf** | **gen** | **struct_ops** | **iter** }
++**btf** | **gen** | **struct_ops** | **iter** | **token** }
+ 
+ *OPTIONS* := { { **-V** | **--version** } | |COMMON_OPTIONS| }
+ 
+ *MAP-COMMANDS* :=
+ { **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
+-**delete** | **pin** | **event_pipe** | **help** }
++**delete** | **pin** | **event_pipe** | **peek** | **push** | **pop** | **enqueue** | **dequeue** |
++**freeze** | **help** }
+ 
+ *PROG-COMMANDS* := { **show** | **list** | **dump jited** | **dump xlated** | **pin** |
+-**load** | **attach** | **detach** | **help** }
++**load** | **loadall** | **attach** | **detach** | **run** | **profile** | **tracelog** | **help** }
+ 
+ *LINK-COMMANDS* := { **show** | **list** | **pin** | **detach** | **help** }
+ 
+-*CGROUP-COMMANDS* := { **show** | **list** | **attach** | **detach** | **help** }
++*CGROUP-COMMANDS* := { **show** | **list** | **tree** | **attach** | **detach** | **help** }
+ 
+ *PERF-COMMANDS* := { **show** | **list** | **help** }
+ 
+-*NET-COMMANDS* := { **show** | **list** | **help** }
++*NET-COMMANDS* := { **show** | **list** | **attach** | **detach** | **help** }
+ 
+-*FEATURE-COMMANDS* := { **probe** | **help** }
++*FEATURE-COMMANDS* := { **probe** | **list_builtins** | **help** }
+ 
+ *BTF-COMMANDS* := { **show** | **list** | **dump** | **help** }
+ 
+-*GEN-COMMANDS* := { **object** | **skeleton** | **min_core_btf** | **help** }
++*GEN-COMMANDS* := { **object** | **skeleton** | **subskeleton** | **min_core_btf** | **help** }
+ 
+ *STRUCT-OPS-COMMANDS* := { **show** | **list** | **dump** | **register** | **unregister** | **help** }
+ 
+ *ITER-COMMANDS* := { **pin** | **help** }
+ 
++*TOKEN-COMMANDS* := { **show** | **list** | **help** }
++
+ DESCRIPTION
+ ===========
+ *bpftool* allows for inspection and simple modification of BPF objects on the
