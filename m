@@ -1,95 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793765725;
-	b=ulcVpY75Ey/m+VKznzIuk5T+lNiXcFh4lVJ1TG8WJ8N3aDalbb61111pU9eO20BHsCVu
-	 UNqIEV4nIDQ7PygG5YEJQ0cV4HktyVT0XN5z0P0qhv1QX4PVG6DVOpssRqg1wvppagZj8
-	 lX3JILY0f18K8LIGS/Gve3r9siprvze7Nb0/sImHH6mast/BR/pLdvPpDCMcvIHz/ZRLb
-	 vOQtTd1e0X/TreZ55WgxEi95h/seUKq+JGJ4/zJ11EzXgHnGR6qbZApqWkYarNmE59dtt
-	 nRrR7X/SVaX+xW1sPUvJpHPig/9+m0QobF3C19Yh6tZzwGlqe5c0ANoqD4e8l/JvzQA==
+	t=1793765740;
+	b=g5wD569y3tGAkTtXBJFb8wwAVk1V1ytDA6tdf9V+c5OIbQHChB8FyiyZM8DppUG0brI+
+	 Yjf0r7gCfJJxJTxz1oBOj6ARuOzkzD3+4vyttYOtrWDm/+3qIfZwcyW4tptIB7pBvkmlV
+	 Mt+QmKf9LDKBTVg2zIeUqzmDBiczGz8u2j/+r1fEM2EVJ3eN/GgOrl6jWKwWmG7Qti9FB
+	 cBe31ILLBb1X/iV42pRtt9ztskgGHSC5JG6rOFEfkJB9Led7YK9rtCSeZcKTcB7QBvY8b
+	 3YvT+nZiNkgtd4aTBbf1GOHQmuagi0xHTVz2quEOWIHNdaODT4b2N+A76UNZeqHiJPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793765725;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=jJGFz/S2j3hPiSr3TOku2e+EdJAJmyIi18CZsDBrgDo=;
-	b=XUm5XFwDkbhv0rWM+2+EdFvL/gjpCkMAFXN5CcDnKeghdX37XL6JUlKWcTS0cP0lScw/
-	 RZ10G+/z24e5ClC0qL+gXo85z+R3tbZt3Y9NvOsRvVrhHvKeipNgL4jFNy4xBi9iYu3U8
-	 oqfu1edxeFWGsgtSmwO8unb6HwsKpArmUQgZaODiqkyXWkNcr7mIALxGYkX/hnr9fwpNg
-	 WpDJsIBRUta/kK7K5xMZF218ppv/biTDuGna2GyIEAG7ItyB4ec631Rp+xxM8dLSPv6Mr
-	 q3IAbhlEsZNHpjKY0c4gexn+xcBy+gVmhDKHvMtxGwyiquwsLEhGMS5tvjgA++TNcCg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793765740;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=t33hTerwq+aQ3mBUBeIWL6pRcgQAoxI6zsMD8gzG6mU=;
+	b=rtmEVq7z9MQROzdNCGUDr28usaPeo6K4io8CIG1ErkYlYAQQbON6l0XtdfjoD52RFZDw
+	 dzn5EqU1nRpnMQJmqYeaG2kAUxgApx5yPZJuED7tOcdMps/gDZt5/v+CWLBCIWVP6k27f
+	 +GDApExiajTZEU/IKXZN6zuPVZu4krETg5MP2Ij2ze9J7zixp0FQV0Ru7kbND9k/ckzoS
+	 zVWxV1FuWos61HxKhgGWWm73q2JCF3AmaJltVi2oU0CZ2K8TcQTWw7B0/z3BT+UUwfmeP
+	 tvdpFZ0lyDHHNPjnK6jDaBKMFMmSeqJOEdwxtXs4ZUloG8fPwoxrDJVhF3CQR+8EoVw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cHNRkMeq;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Nm5tWPga;
+	arc=none smtp.remote-ip=91.218.175.198
+Received: from mta0.migadu.com (out-198.mta0.migadu.com [91.218.175.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C692606A31B
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 04:15:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C692606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229E0606A326
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 04:15:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 229E0606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cHNRkMeq
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cd67cc518a6so187789a12.1
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 20:15:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793765724; x=1794370524; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jJGFz/S2j3hPiSr3TOku2e+EdJAJmyIi18CZsDBrgDo=;
-        b=cHNRkMeqkjC6Bok68Z0/IwC55+5GSYe3CkAqa7VSV2vSN8LXE68QvYwCn9wjWyDPoT
-         U/Yp47rN0B9OC97hHlSNNtmni3AGOQG2ReyS0osoVfRIkIulDc94NNXQ9zpZ4Y/Cx+RT
-         9frYO3ZYy33DEB8S00Q0xFR1V2KGFZ/iMkhCQQGvXDBxVfIssC8WuwGNKWf3XgUAxfEH
-         Fsq0KK7VXyMdZsQ+KtjeOei6WHZz37/iviBnTpONA6Weaofh7thr17A1K3v2uJKqqo3B
-         iqbDQFHyGXb2a4Y2DxK66Csj0Uzju1UwkzkpGXTCosIGg390Lxs9H6DDLYiYXpikNaEk
-         hJcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793765724; x=1794370524;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jJGFz/S2j3hPiSr3TOku2e+EdJAJmyIi18CZsDBrgDo=;
-        b=U1LKJ1SnRR3s92hk+C7VcubW+DwFb26zvGLdhqFxbMU/rHYj5BN2HGOI6BdtoVV/kH
-         6fws66m+9+pMTt4u0uHrGPvPbMmav7IliQLj8WektPX2+3wuxiJsy0x5LzTJkhOhTIux
-         QXnrHiPRZBVL2IhjtM06uqx7FOVhS1NblVaGfRJhmeHTg4EKb1Zw6Y46GzYRA/8H4DQH
-         7r+W2B1ZhgK5iiRVSJVcwSvF2n2P6S2tmlps7BMmSut+pLyC3lCR5u8Mr6Qj53E/I0uU
-         YnFAg5sZTKQ1qSWwfwfU4p23c9J/7XhMFOVcdsGu9osPPKQOeU4jD/vxgAjYxiZaST0b
-         M89g==
-X-Forwarded-Encrypted: i=1; AKwUvBys4CszAYhVBZYL9XjOtqnW+XvUbgNJXsPJ2W7fpU1asV+PqzbyxJn9s9obT7KRGuA0hL8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+oUG8Ogf76QxEC+JLlzFNfPb6fBjweXyDDXesT4ao8f2zlGJAS
-	/SXWaEOXzf3ADuChFH012wdIAzaMT0qORNxzsYp2kPA7G73kt1SkXcEP
-X-Gm-Gg: AYBFou2phXeaB94bNw5OOC5q6H0rRG10NnJm4bSZoQ8II3KRzaq8kw6wP4dH4GS6NI/
-	Os/LAF6lr7ciJF+hxYVLISo88OA5pPDckBmMBsV03+FLP6cAbb51jEzBMdKRSlRqG645OSBlqZs
-	eiUyFDa/tn1AlsgyQ7ZOqyb7DLF9N1pIl/QSv+z9XvQo18qWf/EawTnqvHVu+frv6TZExw8ePtN
-	kNohqbihRTY/IpDEAOUNsgFmBuGhr0fcgTIz6e8P38xG0vLhTXI0V5jDryE+5hSPyRB9llHkoaa
-	oIescqlJALRi6Q5OBBAjD70Cx4sV2l2Q6ooz7PzR9tBparl/8bDbAvdkDTYx+pk3FM0/CB15sG5
-	JR6UFxJ3xgo/m+BQkzja7x2AJGcMiDi89sUgB9kayfkgInU9KQplfNcOEmQwkdoptn6SZ2RfXrU
-	Jic7Wbz4wQMnD5uvY6YWfUvW4EDouV1pBHUB1DZoLqCs40WfzYIbURXS6SdS3wWmrNqRWiyMgNo
-	cbBdSpAG1YjH1dagM0jUBKgybKFTs0C0HdgWJ+ft3FkEg82y7oKVSTabYfsso0Qn/zC842+4MAH
-	W7oxQ28ZBLqAvf3fc793Wj9iOrmj5+7BXnFYWsWnbHsfYbmpazbvQghOtbDvJYpNRfZCOsroQ46
-	Qv3y614TNCO+Ho7pSDHugE+lINsg6LH3Yh20=
-X-Received: by 2002:a17:90b:3194:b0:3ae:a4fe:7ad4 with SMTP id 98e67ed59e1d1-3aea4fe7dd4mr6853169a91.2.1793765724403;
-        Tue, 03 Nov 2026 20:15:24 -0800 (PST)
-Received: from localhost ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b09449bff2sm1810028a91.9.2026.11.03.20.15.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2026 20:15:24 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 04 Nov 2026 04:15:23 +0000
-Message-Id: <DMM4VPCRUGPX.2NW9IS2F4A3FX@gmail.com>
-To: "zhangchujun" <zhangchujun@cmss.chinamobile.com>, <bpf@vger.kernel.org>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>
-Subject: Re: [PATCH] samples/bpf: hbm: check the return value of fopen()
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20261104035317.1133-1-zhangchujun@cmss.chinamobile.com>
-References: <20261104035317.1133-1-zhangchujun@cmss.chinamobile.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Nm5tWPga
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=NxfwJu25c702HsG2QS65lReEnsmm0Rh4tGfKZ6I/Ny4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793765736; v=1; x=1794370536;
+ b=Nm5tWPgalX68xFEfNNc38YSABIskZs6IG3VHTQJSocIT9xy+bmmlyDrpey5dO0uaTtE3Dxg2
+ FlByApCrm5HoyBCjsWmgB3rQSOmlqx8bwsHCmfr5IN1jMcByvHN5l+GVTlUDRCh840ayfel0S83
+ 2LguG0x76ctHm9JLCq0RQ8t4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4202d724f29ea87b;
+	Wed, 04 Nov 2026 04:15:23 +0000
+X-Mizu-Trace-ID: 4202d724f29ea87b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <ea399c85-c775-47a7-b42a-80a645ae16b9@linux.dev>
+Date: Wed, 4 Nov 2026 12:15:08 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,16 +58,98 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v4 1/7] ipv6: treat a negative optlen as 4 in
+ do_ipv6_getsockopt()
+To: Breno Leitao <leitao@debian.org>, David Ahern <dsahern@kernel.org>,
+ Ido Schimmel <idosch@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+ Eric Dumazet <edumazet@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ david.laight.linux@gmail.com, kernel-team@meta.com
+References: <20261103-sockopt_expand_out_v2-v4-0-2d36da923578@debian.org>
+ <20261103-sockopt_expand_out_v2-v4-1-2d36da923578@debian.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20261103-sockopt_expand_out_v2-v4-1-2d36da923578@debian.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 03, 2026 at 07:53 PM zhangchujun <zhangchujun@cmss.chinamobile.com> wrote:
-> run_bpf_prog() passes the FILE pointer returned by fopen() directly
-> to fscanf() without checking it for NULL.  When the file cannot be
-> opened (e.g. the network interface is not named eth0), fscanf()
-> dereferences NULL and the program crashes.
 
-samples/bpf/ are dead.
-'hbm -w' works with eth0 only. Usage() says so.
-Without eth0 it fails with and without this patch.
-I don't think we need this patch.
+On 11/3/26 7:01 PM, Breno Leitao wrote:
+> do_ipv6_getsockopt() reads optlen into an int and never checks its
+> sign. Most of what consumes len compares it as unsigned, so a negative
+> optlen reads as a huge buffer, and the reply depends on the option.
+>
+> The int options clamp it to their own size:
+>
+> 	len = min_t(unsigned int, sizeof(int), len);
+>
+> so getsockopt(fd, SOL_IPV6, IPV6_TCLASS, buf, &len) with len set to -1
+> answers 4 bytes and reports 4, rather than failing.
+>
+> The other options see a huge buffer. The sticky options reply with
+> their whole header, IPV6_2292PKTOPTIONS writes every pending control
+> message without a limit, and IPV6_PATHMTU and IPV6_FLOWLABEL_MGR pass
+> their length check.
+>
+> do_ip_getsockopt() rejects a negative optlen, but doing that here would
+> turn a call that works today into an error for a caller that passes an
+> uninitialized length. Answer it as 4, as the int options do, for every
+> option this function handles itself.
+>
+> That leaves the int options as they are. The sticky headers are cut to
+> 4 bytes, IPV6_2292PKTOPTIONS gets a 4 byte control buffer, and
+> IPV6_PATHMTU and IPV6_FLOWLABEL_MGR fail with -EINVAL, as they do for
+> any other undersized buffer.
+>
+> MRT6_* is dispatched earlier and keeps rejecting a negative optlen, and
+> the netfilter fallback still sees the caller's value.
+>
+> This changes what callers that pass a negative length see. It is a
+> behaviour change, not a fix, so there is no Fixes: tag.
+>
+> The conversion of this function to sockopt_t builds its buffers from
+> optlen, which the standard helpers reject when negative, so the answer
+> has to be settled before that.
+>
+> Suggested-by: David Laight <david.laight.linux@gmail.com>
+> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> Acked-by: Ido Schimmel <idosch@nvidia.com>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-pw-bot: cr
+
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+
+
+> ---
+>  net/ipv6/ipv6_sockglue.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+> index 4b3536571c9804..700133e2fd11c2 100644
+> --- a/net/ipv6/ipv6_sockglue.c
+> +++ b/net/ipv6/ipv6_sockglue.c
+> @@ -1002,6 +1002,11 @@ int do_ipv6_getsockopt(struct sock *sk, int level, int optname,
+>  
+>  	if (copy_from_sockptr(&len, optlen, sizeof(int)))
+>  		return -EFAULT;
+> +	/* Historic bug compatibility: take a negative optlen as 4, as the
+> +	 * int options always did.
+> +	 */
+> +	if (len < 0)
+> +		len = 4;
+>  	switch (optname) {
+>  	case MCAST_MSFILTER:
+>  		if (in_compat_syscall())
+>
