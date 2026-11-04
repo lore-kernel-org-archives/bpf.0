@@ -1,47 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793810319;
-	b=e2QRtVsApf0V0IDHSdqxv7EMlMrRMWZAJCTiSW/+zE4cmQKaAje4/CbiwBoRytWMqpP9
-	 iWXVY1WFN3Do73Li3pMsqrdu6bbMR4XJEvcIx+/h0VSmHYczuSJiVmEMDSKBQ9ddHZJ29
-	 sGDIvToMClpdhiD7PfZqUI2Xnrh3UmDxk2BwryK1t55rMdc0fpgase46anKUXQPS/Di4H
-	 X+2k1t/SAcyT9np2CQWCgVN9ZiL73cGJWDjVYY9Ir1jGT4y5mM9dwZSaJ6Xu9FMexQNCc
-	 m9Q9AbSG1cD4RJW03EjQYE2I3NfIcedTlfo209ZYRZ5Je6qGlDqqXaJurOM0CmcMBOg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793810319;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:To:
-	 Cc:References:Subject:Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=N0muImAzdk2G4HZLLzIJnZcOiJybvTQLP1LgYzvtqc4=;
-	b=FpY7c7g6LQg6RDUdu0qmVZZ6ZL/+1Co4sBZLwLYDJa2key0wufN9BSJXpG64NLgsty4s
-	 D7USbwQDkuQIZxY6ULCoPjQTcCckzZNnasf6w9kboYSgVF1tZPB5fJSS9UBDYGYRadigg
-	 SZqAMy3M3oWB4zVfCrqtfS/WtbxOfqAaJDyFI4yBD2RXGqWQCViVqC48V8EPwBhQkBfVq
-	 rQ9tjL4AyatJUhWg7j4sMn51lAvR1XAJLzwEeR31fr/8KVKe8YxIOfj0skQn4jscoxxIT
-	 xQFyjuS35OCQ+MAnofAd2liGK5EPaPk4X7oxlpSzrD/ulHN4oFU8Fq7IR5yPqghfm+Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wi6HJwyi;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=176.119.200.165
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793810939;
+	b=S7hr6sZBA2lC6pOLk0N8pCcva1PEqd72vEmNmq7w9KPSh6it2rMjE4NSdKOw5SCCsA+V
+	 EOnTWlDf+Q1RsbLKH/wSvpjK5NH3hEVkFadwggS+WFzsS9xwAIIg2g8sjak6Bf9lmTzVc
+	 N0tRmWva7DYitvVWSo99L2Wcqz+HBN/2+i2c0XcDVvBLmN5ycuKwnRqJBqpLjjATSMJsQ
+	 tBDfskEj2ieA+HEWYqgLlLDpBJ1UWw7HP9vcNfriLlfC8yKugfMj1Y4+2hogvzium3hsg
+	 mPxAGINLYXNyCXgkw9DHy+sSwWUROcl5w2alSEixEQ5L2jOC4Sr09bDKQH/Z+fOXahA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793810939;
+	h=DMARC-Filter:DKIM-Signature:Date:Subject:In-Reply-To:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:From:To:Cc:Message-ID:
+	 References:X-SimpleLogin-Type:X-SimpleLogin-EmailLog-ID:
+	 X-SimpleLogin-Want-Signing;
+	bh=+6NWrTkD19j6pXo7fX9iBIpL0RSF2GXs9ygbR1u2JBY=;
+	b=0HX1nIYyrwWpNGApnq31uJxA9K87i1RHS2Y44NOl42C45bM+EkJaejldotGv7AJWyMSe
+	 d+DNudx533l/qpTJrAmUhtciUWpocflmABzcf21diRX9dv5iwp74SQ2hyN08ruv/cS7FJ
+	 +q13JCDrjh9Tin9AHWqP1O0hAYaUBOjkjJDeNy4SzDVDTP5GNDJ1agbHwFqWqG5gN6TC7
+	 lJjKnkJSCuXSFB79yIgMSz+aLD9u8xS9O6WiyMYDIMC4RXhnmzSa7EFj3BVfMH/rZdgJs
+	 7XgXb5DsiCOUdh9Ym7A68AMs4kZhZemXIlQgwYLje2P5V/6vdNMzhiVAMe9142KR+XA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=eldare.de;
+	spf=pass smtp.mailfrom=eldare.de;
+	dkim=pass header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b=LPPJmNY1;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=176.119.200.165
+Received: from mail-200165.simplelogin.co (mail-200165.simplelogin.co [176.119.200.165])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A56E606D815;
-	Wed,  4 Nov 2026 16:38:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E6D6082BDE
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 16:48:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14E6D6082BDE
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=eldare.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eldare.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wi6HJwyi
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBF411F00A1A;
-	Wed,  4 Nov 2026 16:38:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793810318;
-	bh=N0muImAzdk2G4HZLLzIJnZcOiJybvTQLP1LgYzvtqc4=;
-	h=Date:To:Cc:References:Subject:From:In-Reply-To;
-	b=Wi6HJwyiSGs0V9V3CzXYUgQnsulmkkv3mjnLpw18E11Ote71dKiP3yqSyqHE7knty
-	 docxpxdSqrRA51GkOHmfzo2oMiGh4i2N9jKJoHdjlzEkYGeVmEKEBF9Fm1ov/BWUrs
-	 rm+TJGu9BdkEl/T9JMgyUalAuRfwtjPhqtmvLyiUi8pTrw75PvzTIZ44tPL3LpKsrO
-	 +bHEZsWNn00ikrQ3BmEr+vrTOPv2e+IAwfvEsaW1wGex4rgI0Ir3LUrDXVF7scQ8ub
-	 QqVxfAhN5m9REAnpLOtxD+1QH97k47TuFCrPtwvVnnRXD+v5tt6HSCERgy9sBfdIJy
-	 OBz/wf47OMaGw==
-Message-ID: <87dfc1f8-6ef4-424c-a48d-62e935eeeb28@kernel.org>
-Date: Wed, 4 Nov 2026 16:38:34 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b=LPPJmNY1
+ARC-Seal: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626; t=1793810931;
+	cv=none; b=vNNsw+udY1vYJbNjVyXwt+DnayQTkYHfuxdNl6jI5OCNzzieV8/Nz0cRI/Hzotb28MjUX8GK2YJ63FX1ZcfAoLkUA0L3/q8uYOiUhkj/BYiDxwlynlmlOzV/qPAucZIR90h1LCMhlbuDKFOSpMtgPJKZnfLW/pFRstqDAynH1MF/ofxEKMuzLJ0tMHcbhpWBnURWh/qq8y/H/iDgV7/0kYMGNMjH5/VKgh51SpxC/ZITgr4j1aZLhjdzaqSYi1mQ8P418bbRhm4bRGGGe44WL5QjCV4oa1wOqbHZxrzv5+eBYx0r9ade+r7ojwlvd9CwOSvKbiyR9ZjjPfuwzOZOlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626;
+	t=1793810931; c=relaxed/simple;
+	bh=NZfHjc8GabK+5fWc9xU1eIPV8ar6IHlihuK1W6X9Wrk=;
+	h=Date:Subject:In-Reply-To:From:To:Cc:References; b=CqyEDSrkOyrGgTHIQxjYSBNbn0RoKwBxczaaIB1oItAJIJuOZTRvi3RxUaI04S5DJsIqeMIu8AJQMZrH1cXtnj3oleyut6juWA0tS2ZzH1xCP/SicTmUPqAFg1W+S/k0UJcNuYLD3IOewaK6wX1dm5arJ8t3GdjwaJM/oh7a4nVeV+viOz8m21+D/s7BAQ8wVvXMmtyo+DFRaFjh3GbZnM0W/GsCW+PV9mjEUJOeZK3o1utvXHg+rjMwWI/I7qszBGXSaqpWerOpLgBVGpvGBtyb+vwSEBfWAUn+EjcrkQOcP3XZZ9cd47mzAYFHbDXHgOJLDe8ZATGP/WDMKul1wg==
+ARC-Authentication-Results: i=1; mail.protonmail.ch
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=eldare.de; s=dkim;
+	t=1793810931;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+6NWrTkD19j6pXo7fX9iBIpL0RSF2GXs9ygbR1u2JBY=;
+	b=LPPJmNY1E9Afuj8tm1dblKOuW0bxHTT/z8wxoKA1SWLuokKtwfZQdsa1q0vyV1i4itNXSH
+	t70Rmwl3JdmySaKgnjxgXHQ1Z0I0pGT/edUTIiU72xqAa7fNWOwaigxF9i/aB33SlYt8la
+	BTYSyUnSSDLMgNBg2V3RfWM23P7RpDs=
+Date: Wed, 04 Nov 2026 16:48:44 +0000
+Subject: Re: [PATCH net v3 1/2] vsock/bpf: release sock lock while waiting for
+ data in recvmsg
+In-Reply-To: <auSkQOU6qmj0NPEt@sgarzare-redhat>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,95 +64,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: linux@alanderk.com
-Cc: acme@kernel.org, alan.maguire@oracle.com, bpf@vger.kernel.org,
- dwarves@vger.kernel.org, rust-for-linux@vger.kernel.org
-References: <20261010005227.976-1-linux@alanderk.com>
-Subject: Re: [PATCH dwarves v2 0/2] dwarf_loader: Fix --lang_exclude on merged
- CUs
-Content-Language: en-GB
-From: Alan Maguire <almagui@kernel.org>
-In-Reply-To: <20261010005227.976-1-linux@alanderk.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From: jrmmhm.kernel@eldare.de
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: Bobby Eshleman <bobbyeshleman@meta.com>,"David S. Miller"
+ <davem@davemloft.net>,Eric Dumazet <edumazet@kernel.org>,Jakub Kicinski
+ <kuba@kernel.org>,Paolo Abeni <pabeni@redhat.com>,Simon Horman
+ <horms@kernel.org>,"Michael S. Tsirkin" <mst@redhat.com>,Michal Luczaj
+ <mhal@rbox.co>,virtualization@lists.linux.dev,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,stable@vger.kernel.org
+Message-ID: <179381093020.9.4719932034061956856.1746278795@eldare.de>
+References: <20261028-kbh3-1-022-fix-v2-v3-0-bc0752b2d3db@eldare.de>
+ <20261028-kbh3-1-022-fix-v2-v3-1-bc0752b2d3db@eldare.de>
+ <auSkQOU6qmj0NPEt@sgarzare-redhat>
+X-SimpleLogin-Type: Reply
+X-SimpleLogin-EmailLog-ID: 1746278844
+X-SimpleLogin-Want-Signing: yes
 
-> From: Alan Derk <linux@alanderk.com>
-> To: Arnaldo Carvalho de Melo <acme@kernel.org>,
-> 	Alan Maguire <alan.maguire@oracle.com>
-> Cc: dwarves@vger.kernel.org,
-> 	bpf@vger.kernel.org,
-> 	rust-for-linux@vger.kernel.org
-> Subject: [PATCH dwarves v2 0/2] dwarf_loader: Fix --lang_exclude on merged CUs
-> Date: Sat, 10 Oct 2026 00:52:25 +0000
-> Message-ID: <20261010005227.976-1-linux@alanderk.com>
-> X-Mailer: git-send-email 2.55.0
-> Precedence: bulk
-> X-Mailing-List: dwarves@vger.kernel.org
-> List-Id: <dwarves.vger.kernel.org>
-> List-Subscribe: <mailto:dwarves+subscribe@vger.kernel.org>
-> List-Unsubscribe: <mailto:dwarves+unsubscribe@vger.kernel.org>
-> MIME-Version: 1.0
-> Content-Transfer-Encoding: 8bit
-> 
-> Two fixes for --lang_exclude when CUs are merged, as for LTO objects.
-> 
-> Patch 1 takes the merged CU's language from a CU that is kept, so that
-> excluding the language of the first CU no longer drops the whole
-> object. With LTO, this is what makes BTF generation fail for kernel
-> modules that mix Rust and C.
-> 
-> Patch 2 fixes a second bug from the same commit, which I found while
-> testing userspace LTO objects after sending v1. With clang LTO, a type
-> such as int is emitted once and shared through DW_FORM_ref_addr, so
-> skipping the excluded CUs left references into them dangling: pahole
-> crashed printing such members, and -J encoded them as void. Patch 2
-> loads the types that kept CUs use from the excluded CUs. Output without
-> --lang_exclude does not change, and neither does the BTF of the LTO
-> kernels I tested.
-> 
-> Patch 1 exposes this bug in one more link order. For a C++ object
-> linked before a C one, pahole used to drop the C types without any
-> error; with patch 1 alone it keeps them, and then crashes printing them,
-> or encodes them as void with -J. Please apply the two together.
-> 
-> As far as I know, patch 1 removes the last thing that keeps the kernel's
-> RUST option off when LTO and BTF are both on. Once these fixes are in a
-> release, I'd like to propose relaxing that dependency to something like:
-> 
->   depends on !DEBUG_INFO_BTF || (PAHOLE_HAS_LANG_EXCLUDE && (!LTO || PAHOLE_VERSION >= 133))
-> 
-> assuming they land in 1.33. The kernel tests in patch 1 ran with
-> "&& !LTO" dropped from that line, hence the Cc to rust-for-linux.
-> 
-> Changes in v2:
-> - Add patch 2.
-> - Patch 1 is unchanged; its note about the Kconfig follow-up moved here.
-> 
-> v1: https://lore.kernel.org/all/20261009201032.40105-1-linux@alanderk.com/
+On Fri, Oct 30, 2026 at 03:18:10PM +0100, Stefano Garzarella wrote:
+> Ditto about commit message, please put more effort on writing something
+> readable by a human.
 
-Thanks for doing this work! Sorry for the delay in getting to it, I'm looking
-at the patches now. 
+Agreed, I'll rewrite both messages myself for v4, much shorter.
 
-In terms of enabling kernel builds to support adding BTF data for Rust, that's a
-goal we're working towards too, but it turns out there are some complications.
-We discussed a bit of this in Linux Plumbers in the BPF track [1], but the
-main issue boils down to how bindgen-generated structures differ somewhat
-from the C-based types; enums aren't always faithfully represented for example.
-This has knock-on effects for BTF generation and we often end up with duplicate 
-types for key kernel data structures; the bindgen and C versions of "struct sock"
-for example. This in turn can confuse tooling which expects a canonical type
-for the critical kernel structures.
+> >+            if (sk->sk_err) {
+> >+                    ret =3D -sk->sk_err;
+>
+> Why?
 
-We've been working on a solution; essentially, the idea is to detect such cases
-and fix up the type graph in pahole using a new "rust_bindgen_replace" feature
-so that the final BTF does not have to carry such duplicates. It will only run for
-Rust CUs, and it is implemented in a work-in-progress series at [2]; the bindgen-related
-changes are in [3].
+Same as vsock_connectible_wait_data(): an error that arrives during the
+wait is returned to recv(). Without the check the loop still ends, since
+every path that sets sk_err also closes the socket or sets peer_shutdown,
+but recv() then returns 0 or -ENOTCONN instead of the error.
 
-The other commits in the series add BTF tags to allow tracers to use demangled names
-in function tracing descriptors, and add testing etc.
+> >+            if (sk->sk_state !=3D TCP_ESTABLISHED) {
+> >+                    ret =3D sock_flag(sk, SOCK_DONE) ? 0 : -ENOTCONN;
+> >+                    break;
+> >+            }
+>
+> I'm thinking if we should split this in multiple patches.
 
-[1] https://lpc.events/event/20/contributions/2408/
-[2] https://github.com/alan-maguire/dwarves/tree/pahole-next-btf-rust
-[3] https://github.com/acmel/dwarves/commit/68954b9e0d1b4a191a6d7e3329875c2acc983c8c
+From reading the code, it can be split without breaking bisect: first
+loop on all exit conditions with the lock still held, then drop the lock
+around wait_woken(). The order is fixed, since dropping the lock alone
+brings back the early -EAGAIN, and the loop alone does not fix the
+deadlock, so both would carry the Fixes tag. That is why I kept it as one
+patch, but I'm fine either way. Split it like that for v4, with the
+current 2/2 on top, or keep it as one?
+
+> >+            if (!timeo) {
+> >+                    ret =3D -EAGAIN;
+> >+                    break;
+> >+            }
+>
+> Is the move of this check changing some user visible error?
+> I mean before this patch it was one of the first checks, is this okay?
+
+Yes, for non-blocking reads, intentionally: -sk_err, 0 on peer shutdown
+and the not-connected result now come before -EAGAIN, as on the native
+recvmsg path. I'll say so in the commit message.
+
+> >+            if (signal_pending(current)) {
+> >+                    ret =3D sock_intr_errno(timeo);
+> >+                    break;
+> >+            }
+>
+> Why? Should be a separate patch?
+
+No, the loop needs it: with a pending signal wait_woken() returns at
+once, so without the check the loop spins until SO_RCVTIMEO expires, or
+forever if none is set. I checked it by removing the check: a signalled
+reader without SO_RCVTIMEO never returned and used a full CPU. The
+native path does the same.
+
+> >+            if (data < 0) {
+>
+> Why not data <=3D 0  and void the other if?
+
+Right, will do in v4.
+
+Thanks,
+Jerome
+
