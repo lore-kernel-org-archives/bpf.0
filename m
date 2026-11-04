@@ -1,56 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.121
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793797579;
-	b=UPpP5si7B9JH7E2MdhjmjPumgdKxS+ikARVKqCUiDyj+U+Hi0DOQ9lIUyR0qs2qud3RG
-	 6usiYX1UE1ejpyjuoh2dItZlCESGLOjY7cP3stlwybIIrDqhVM7pPFsEf/AvL32sKteNJ
-	 dX8PKbN2FnnLd14bjAlJHwVRmT8fiD6t7am+O4qmvN9amDw9QTNpG7vZdQg3WeBiW5vob
-	 HTMNCzOEZZ4MVpeG+B9W6S7Vu5eNqB7lzBBWiaccc0OARiOt6VE/P0TyI7mQAcZ2kLbg9
-	 7R/JvZfVC23VLNY9rROLN9cpwAv90qR6nRMNND40p/QTjpAJ1piPlGfgh5LFnkokL6w==
+	t=1793797724;
+	b=DKiY1ibnlj41a/QwPDsh+jvz9sMKJM/McYSI62v3/vdGsShGDcmBVOEAwXTmMXHfU8PU
+	 VL8KQIGRG4W9NsH5FJNqBMuu1rtMqlC9S8/pNQqVfwhkTw1C0204aStpIZJpw0vuxoTV2
+	 J/JxxecBByhAZoJ/NDs5bjSi/jAUiBlBLsNHCIvdDnbeZTjDaHsRuDw7nsxbNgsI/mBMQ
+	 CIKwVW/M9beGwwfbvjF3RhXmMgSMcOzlHxZpB0EsTch9HxKQfxw7j1PsOa1a+fOsBBt7c
+	 4UR1RRlomNup1ie04C1TEEpT5rxRsLeR406oyZh+DCfCJPn/MM+qVsNXCie4EA1UxQw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793797579;
-	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
-	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
-	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=t0N3y9MtqQSrXVauEHd0fFtWMbMzBCQaF+BK87D4JBk=;
-	b=1kdbGePPQw4rbs203V9UoBsY109KTB76qgNKXJFOY4d02yl7LT1PODX3xidVDOVlk/C5
-	 L9NqQ8Jva8I0LKoqyXoWqKm0rUxjVmkpyHqKmqUtMLYjVTha8A7GNKE89NLL7Q74j5skG
-	 Dt5EBYkwK6SLbX145nbcIDtnvry0LWVkiKpS5m1CroIcLvfYTUHX50lVauxghXSiszWSk
-	 F6/nbriErYVaEXG2tVWvTCt9v9ueYvdknZc4Po1d2FJ+2S9M5dPj2a+AtA56FSo2scGYW
-	 DE2H2W8StttR52AXklOzEPkpfW3yjRPhzcOB8ccogQ/lBxgphFcFr4Y2jH+ya4gBrng==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793797724;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-Id:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=SD83MyKiywTc+TN/8/2wfNOj/0fFKMFcGtnw7SCodeU=;
+	b=unp7n6giU5Z84mo85db+EBdakc1Pv4fW50VE5AQN19RR3R0nVMbXexg8jI/AZssUK1mn
+	 xYkFE56fH5omppWyYb4ugQ21bUep1PEbOvopwX6f/oNtiBL4UG18/CnNrA0wrP0S0N0mq
+	 10PsX8XrVyiB6YKqvQi8iUFhcoD9sMmlTWyGFb25h5lRPnp/mtcXfI4/ZDiRvcx/jsRTQ
+	 PgR0mJgbIrKhEIVHY/+wM3O0NMBY9ZY1eozhBkvn3cX1ULsV556RnD2PWJH7pTVPxBIAN
+	 sbUCZYm/xiWxdGKrA75q9uZBItUlZjs1cit+eMAl0MC9b8hlnfV7Tjf7siiV3ijaIfQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64CCD606A329;
-	Wed,  4 Nov 2026 13:06:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64CCD606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8BxbdLHLetqIEwcAA--.18050S3;
-	Wed, 04 Nov 2026 21:06:15 +0800 (CST)
-Received: from [127.0.0.1] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJCx9czFLetqql8yAA--.10756S2;
-	Wed, 04 Nov 2026 21:06:14 +0800 (CST)
-Subject: Re: [PATCH v1 1/2] LoongArch: BPF: Make arena support depend on SCQ
- extension
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261102072808.23080-1-yangtiezhu@loongson.cn>
- <20261102072808.23080-2-yangtiezhu@loongson.cn>
- <CAAhV-H52mbZJX2vkgG_h=XfwHoio=asLjFdhTJwUYqDp4V5JMg@mail.gmail.com>
- <8b00e5a7-4e60-19bd-7953-f76dc71e15ec@loongson.cn>
- <CAAhV-H52bqRD1SyrZsvMkNbCpGiM5DPSGPARiasZ8G3XsE5Tgw@mail.gmail.com>
- <6446c385-623c-d4cf-5a07-0c2276c6f50c@loongson.cn>
- <CAAhV-H4m-cokYz19HHAoDeLAjRGp4T=vwDOJaJEcHXZDW15rkQ@mail.gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <64b8f867-029d-3cdb-7896-1229a076e25c@loongson.cn>
-Date: Wed, 4 Nov 2026 21:06:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=bSu+kViu;
+	arc=none smtp.remote-ip=91.218.175.121
+Received: from mta0.migadu.com (out-121.mta0.migadu.com [91.218.175.121])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5EF606A32D
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 13:08:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E5EF606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=bSu+kViu
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=yOZI4i+Ly/cHDAGc0pvxPEGgnqpY30xhJvqcupnDhuY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793797719; v=1; x=1794402519;
+ b=bSu+kViurHqJIPdQRGDI/TTtXJBWtZuOfdjnIRkh8qjR7BaCr+KtzPXFP/LO27cW5NxL8sxw
+ IB0BF0OmbpOUfplEhBtcjMKtsZ38/BOzBBjjte8S8XwJYGdEduK3eMrcQYtSEeLZ8E2j+4u/6um
+ UuEaUYZECKrDfj2QOK+3KMmA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 44a248944bee64e0;
+	Wed, 04 Nov 2026 13:08:39 +0000
+X-Mizu-Trace-ID: 44a248944bee64e0
+X-Migadu-Flow: FLOW_OUT
+From: Ridong Chen <ridong.chen@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Dave Chinner <david@fromorbit.com>
+Cc: David Hildenbrand <david@kernel.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Qi Zheng <qi.zheng@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Kairui Song <kasong@tencent.com>,
+	Barry Song <baohua@kernel.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>,
+	Wei Xu <weixugc@google.com>,
+	Baoquan He <baoquan.he@linux.dev>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org (open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)),
+	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_)),
+	Ridong Chen <ridong.chen@linux.dev>,
+	Ridong Chen <chenridong@xiaomi.com>
+Subject: [PATCH v7 0/7] mm/vmscan: move tracepoints to mm/ and add MGLRU tracepoints
+Date: Wed,  4 Nov 2026 21:08:10 +0800
+Message-Id: <20261104130817.849089-1-ridong.chen@linux.dev>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,154 +87,225 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H4m-cokYz19HHAoDeLAjRGp4T=vwDOJaJEcHXZDW15rkQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCx9czFLetqql8yAA--.10756S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxXF17Zw1rtry8Cw1xZr13GFX_yoWrJw1xpa
-	yrCr4DKrWjgr4Fy397KFnxuw1UCrsIkrWUWayFkrWkZrn0qw17Gr1Fk3W5ZF4DtrWF93Wj
-	9Fs0y3ZI93WkAagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv
-	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
-	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-	1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8cz
-	VUUUUUU==
 
-On 11/4/26 5:54 PM, Huacai Chen wrote:
-> On Wed, Nov 4, 2026 at 2:58 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+From: Ridong Chen <chenridong@xiaomi.com>
 
-...
+Background
+==========
 
->> Therefore, using the explicit #ifdef block in the original patch is the
->> only way to ensure toolchain compatibility and compile-time robustness
->> here IMO.
-> This is OK:
-> 
-> return cpu_has_scq && __is_defined(system_has_cmpxchg128);
-> 
-> It means two things:
-> 1. CPU supports SC.Q;
-> 2. Kernel defines system_has_cmpxchg128.
-> 
-> Very clear.
+MGLRU currently has no tracepoints of its own. The scan and evict paths
+reuse the classic-LRU tracepoints (trace_mm_vmscan_lru_isolate() and
+trace_mm_vmscan_lru_shrink_inactive()), which predate MGLRU and carry no
+generation, sequence or memcg context. A trace of a running system
+therefore cannot tell which memcg a given scan belongs to, how far
+reclaim has progressed through the generations, or when a new generation
+is created.
 
-I tested your suggestion:
-return cpu_has_scq && __is_defined(system_has_cmpxchg128);
+While reviewing an earlier version that added two MGLRU tracepoints,
+Steven suggested moving include/trace/events/vmscan.h to
+mm/trace_vmscan.h [1], as several other subsystems already do. Once the
+header lives under mm/, struct scan_control can be moved there too,
+letting the trace events access its fields directly instead of having
+each callsite copy the scalars out by hand. This version merges the two
+efforts into one series: the restructuring first, then the two new
+tracepoints built on top of it.
 
-There is no build error. However, this introduces a fatal functional
-bug because __is_defined(system_has_cmpxchg128) is blindly evaluated
-to 0 as a text string token. As a result, the expression is always
-translated into "return cpu_has_scq && 0;", which disables BPF Arena
-support permanently even on the Loongson-3A6000 system with hardware
-SCQ extension and assembler sc.q support.
+Implementation
+==============
 
-I did the following changes:
+Part 1, restructuring (patches 1-4):
 
-```
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 3ab039d0afb6..b61cca6a8947 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -2489,7 +2489,13 @@ bool bpf_jit_bypass_spec_v4(void)
+  1) drop the unused vmscan trace include from memcontrol.c;
+  2) move include/trace/events/vmscan.h to mm/trace_vmscan.h, setting
+     TRACE_INCLUDE_PATH to "." and adding -I$(src) for vmscan.o;
+  3) move struct scan_control into a dedicated mm/vmscan.h with an
+     ordinary include guard, which trace_vmscan.h pulls in;
+  4) pass scan_control to the vmscan tracepoints and pick the fields
+     out in TP_fast_assign: the reclaim-begin events, the LRU
+     isolate/shrink events, mm_vmscan_reclaim_pages and
+     mm_vmscan_balance_pgdat_end.
 
-  bool bpf_jit_supports_arena(void)
-  {
--       return true;
-+       /*
-+        * The arena range tree uses kmalloc_nolock(), which requires 
-128-bit
-+        * atomic cmpxchg; this is provided by not only hardware SCQ 
-extension
-+        * but also assembler support on LoongArch.
-+        */
-+       pr_info("__is_defined(system_has_cmpxchg128)=%d\n", 
-__is_defined(system_has_cmpxchg128));
-+       return cpu_has_scq && __is_defined(system_has_cmpxchg128);
-  }
+Part 2, MGLRU tracepoints (patches 5-7):
 
-  bool bpf_jit_supports_fsession(void)
-```
+  5) add mm_mglru_scan_folios on the scan path, next to the classic
+     mm_vmscan_lru_isolate, reporting the same counters plus nr_sorted
+     and the nid, memcg id, max_seq, tier and min_seq of the lruvec;
+  6) add lruvec_gen_size() to mm/vmscan.h, returning the number of
+     pages of one type in the generation of a given seq, and convert
+     the two open-coded users in vmscan.c;
+  7) add mm_mglru_aging where aging is triggered in
+     try_to_shrink_lruvec(), reporting the nid, memcg id,
+     sc->priority, swappiness, max_seq, the anon/file min_seq and the
+     per-generation page counts of both types before aging, from the
+     oldest generation to the newest as in the debugfs lru_gen file.
 
-Here is the test result on the Loongson-3A6000 system with hardware
-SCQ extension and assembler sc.q support:
+Both new events only take pointers (lruvec, sc) plus a few local
+values, and derive everything else in TP_fast_assign(), so the reclaim
+paths do no extra work when they are disabled.
 
-   $ sudo ./test_progs -a jit_insns/cast_to_user
-   ...
-   libbpf: map 'arena': failed to create: -EOPNOTSUPP
-   run_subtest:FAIL:unexpected_load_failure unexpected error: -95 (errno 95)
-   ...
-   #197/2   jit_insns/cast_to_user:FAIL
-   #197     jit_insns:FAIL
-   Summary: 0/0 PASSED, 0 SKIPPED, 1/1 FAILED
+Effect
+======
 
-   $ dmesg -t | grep system_has_cmpxchg128
-   __is_defined(system_has_cmpxchg128)=0
+Part 1 moves the loads of the tracepoint arguments out of the reclaim
+paths and into the trace event callbacks, which only run when the event
+is enabled. On x86_64 with gcc 11.4, the callers in mm/vmscan.o shrink
+accordingly (bytes), e.g.:
 
-This is not expected.
+  isolate_lru_folios    4499 -> 4335 (-164)
+  __node_reclaim        2402 -> 2220 (-182)
+  isolate_folios        8706 -> 8577 (-129)
+  shrink_active_list    3669 -> 3544 (-125)
+  evict_folios          4858 -> 4769  (-89)
 
-AFAICT, there are two viable ways to handle both assembler and runtime
-constraints:
+There is no functional change in part 1. TP_STRUCT__entry and TP_printk
+of the existing events are untouched, so their tracefs format is
+identical. This was confirmed by diffing the tracefs format files before
+and after, and by capturing the direct/memcg/node reclaim-begin events
+under load in a QEMU guest (order, gfp_flags and memcg_id all match).
+BPF programs attached via raw_tp/tp_btf do see the new TP_PROTO and need
+to be adjusted; tracepoints are not a stable ABI (see
+Documentation/bpf/bpf_design_QA.rst).
 
-(1)Use system_has_cmpxchg128 at compile-time and run-time. This is
-more aligned with semantic intent, as BPF relies on the generic
-128-bit cmpxchg interface.
+highest_zoneidx and nr_reclaimed stay separate arguments: the former is
+a balance_pgdat() parameter (sc.reclaim_idx may differ from it by the
+time the end event fires), and the latter is the return value of
+shrink_folio_list(), which does not update sc->nr_reclaimed.
 
-```
-bool bpf_jit_supports_arena(void)
-{
-         /*
-          * The arena range tree uses kmalloc_nolock(), which requires 
-128-bit
-          * atomic cmpxchg; this is provided by not only hardware SCQ 
-extension
-          * but also assembler support on LoongArch.
-          */
-#ifdef system_has_cmpxchg128
-         return system_has_cmpxchg128();
-#else
-         return false;
-#endif
-}
-```
+Part 2 makes the full aging-to-eviction window observable per memcg:
+aging advances max_seq (the leading edge), scanning consumes the oldest
+generations, and the min_seq/max_seq pair on each event shows how the
+generation window moves over time. A sample trace, captured under
+memory.reclaim of a test memcg, with the classic-LRU tracepoints left
+enabled to show how they interleave:
 
-(2) Use CONFIG_AS_HAS_SCQ_EXTENSION at compile-time and cpu_has_scq
-at run-time. This is more aligned with kernel coding aesthetics by
-avoiding #ifdef blocks.
+  mm_vmscan_lru_isolate: classzone=4 order=0 nr_requested=64 nr_scanned=36 nr_skipped=0 nr_taken=36 lru=inactive_file
+  mm_mglru_scan_folios: nid=0 memcg_id=1833 classzone=4 order=0 nr_requested=64 nr_scanned=36 nr_sorted=0 nr_skipped=0 nr_taken=36 lru=inactive_file max_seq=3 tier=3 min_seq=0
+  mm_vmscan_lru_shrink_inactive: nid=0 nr_scanned=36 nr_reclaimed=31 nr_dirty=1 nr_writeback=0 nr_congested=0 nr_immediate=0 nr_activate_anon=0 nr_activate_file=1 nr_ref_keep=4 nr_unmap_fail=0 priority=2 flags=RECLAIM_WB_FILE|RECLAIM_WB_ASYNC
+  mm_mglru_aging: nid=0 memcg_id=1833 priority=2 swappiness=0 max_seq=3 anon_min_seq=0 file_min_seq=2 nr_anon={0x0,0x0,0x802,0x0} nr_file={0x0,0x0,0x357,0x0}
+  mm_vmscan_lru_isolate: classzone=4 order=0 nr_requested=64 nr_scanned=64 nr_skipped=0 nr_taken=64 lru=inactive_file
+  mm_mglru_scan_folios: nid=0 memcg_id=1833 classzone=4 order=0 nr_requested=64 nr_scanned=64 nr_sorted=0 nr_skipped=0 nr_taken=64 lru=inactive_file max_seq=4 tier=3 min_seq=2
+  mm_vmscan_lru_shrink_inactive: nid=0 nr_scanned=64 nr_reclaimed=64 nr_dirty=0 nr_writeback=0 nr_congested=0 nr_immediate=0 nr_activate_anon=0 nr_activate_file=0 nr_ref_keep=0 nr_unmap_fail=0 priority=2 flags=RECLAIM_WB_FILE|RECLAIM_WB_ASYNC
+  mm_mglru_aging: nid=0 memcg_id=1833 priority=2 swappiness=0 max_seq=4 anon_min_seq=1 file_min_seq=2 nr_anon={0x0,0x802,0x0,0x0} nr_file={0x0,0x317,0x0,0x0}
 
-```
-bool bpf_jit_supports_arena(void)
-{
-         /*
-          * The arena range tree uses kmalloc_nolock(), which requires 
-128-bit
-          * atomic cmpxchg; this is provided by not only hardware SCQ 
-extension
-          * but also assembler support on LoongArch.
-          */
-         return IS_ENABLED(CONFIG_AS_HAS_SCQ_EXTENSION) && cpu_has_scq;
-}
-```
+The mm_mglru_scan_folios lines carry the node, memcg id and the
+generation window (max_seq/min_seq) that the bare mm_vmscan_lru_isolate
+lines above them cannot - those cannot even say which memcg they came
+from. The mm_mglru_aging lines show when and why aging is triggered:
+the first one has only two file generations left (file_min_seq=2,
+max_seq=3, swappiness=0), so eviction is not possible anymore; the
+second one has three left, and aging runs again as the priority is
+below DEF_PRIORITY. The scans in between already report the new window
+(max_seq=4 min_seq=2).
 
-Since cpu_has_scq and system_has_cmpxchg128() share the exact same
-runtime expansion (cpu_opt(LOONGARCH_CPU_SCQ)), both approaches are
-functionally equivalent and produce identical machine code.
+Testing
+=======
 
-Personally, I feel Approach 1 represents the pure semantic intent
-better, whereas Approach 2 looks more aesthetically pleasing.
+The output of mm_mglru_aging matches the debugfs lru_gen_full file
+dumped right before the aging. As the sizes are taken before aging, the
+youngest generation is populated too, e.g. for a test memcg whose anon
+pages are being accessed while it is aged:
 
-Which one do you prefer for the v2 patch?
+  mm_mglru_aging: nid=0 memcg_id=1833 priority=11 swappiness=60 max_seq=13 anon_min_seq=12 file_min_seq=12 nr_anon={0x0,0x0,0x1925,0x15ef} nr_file={0x0,0x0,0x411,0x0}
 
-Thanks,
-Tiezhu
+  # cat /sys/kernel/debug/lru_gen_full    (generation lines only)
+  memcg 1833 /tpy
+   node     0
+           10       4539          0           0x
+           11       2904          0           0x
+           12       2757       6437        1041
+           13       1564       5615           0
+
+[1]: https://lore.kernel.org/linux-mm/20260916095122.50cbb620@robin/
+
+This series was developed with the assistance of an LLM-based coding
+assistant.
+
+---
+Changes in v7:
+  - Patch 7: replace mm_mglru_inc_max_seq with mm_mglru_aging, emitted
+    in try_to_shrink_lruvec() right before try_to_inc_max_seq(), to
+    show why and at what priority aging is triggered. It also reports
+    sc->priority and swappiness, and the per-generation sizes are taken
+    before aging, so the youngest generation is populated as well. The
+    reason itself is not reported, as it can be derived from these
+    fields (Barry).
+  - Rebase onto the latest mm-new.
+  - Collect Reviewed-by tags from Baoquan and Barry.
+  - Link to v6: https://lore.kernel.org/linux-mm/20261103025610.3738894-1-ridong.chen@linux.dev/
+
+Changes in v6:
+  - Rebase onto mm-new; MAINTAINERS already listed
+    include/trace/events/vmscan.h under MEMORY MANAGEMENT - RECLAIM,
+    patch 2 now renames that entry.
+  - New patch 6: add lruvec_gen_size(), ported from Barry's swappiness
+    series [3], in mm/vmscan.h so the tracepoint can use it too, and
+    convert lruvec_evictable_size() and the debugfs lru_gen output
+    (Barry).
+  - Patch 7: order nr_anon/nr_file by seq, from the oldest generation
+    to the newest, the same order as the debugfs lru_gen file, instead
+    of by generation slot (Barry, Baoquan).
+  - Collect Reviewed-by/Acked-by/Tested-by tags from Baoquan, Muchun
+    and Barry.
+  - Link to v5: https://lore.kernel.org/linux-mm/20261031090041.58574-1-ridong.chen@linux.dev/
+
+Changes in v5:
+  - Squash v4 patches 4-7 into a single patch 4 (Barry).
+  - Link to v4: https://lore.kernel.org/linux-mm/20261019034426.2354049-1-ridong.chen@linux.dev/
+
+Changes in v4:
+  - Merge the MGLRU tracepoint series [2] into this one, on top of the
+    restructuring, and drop the RFC tag.
+  - Patch 2: use TRACE_INCLUDE_PATH "." with CFLAGS_vmscan.o += -I$(src)
+    instead of a relative path (Steven).
+  - Patches 8-9: pass lruvec/sc and compute the fields in
+    TP_fast_assign() instead of at the call site (Steven).
+  - Patches 8-9: add nid, derived from the lruvec (Baoquan).
+  - Patch 8: group the int fields at the end of the entry to avoid
+    padding on 64-bit (Steven).
+  - Drop "mm/mglru: factor out lru_gen_seq_nr_pages()" from [2]: the
+    per-generation page count is now summed inside TP_fast_assign(), so
+    the helper has no user. The Reviewed-by tags given to [2] are not
+    carried over, as patches 8-9 changed substantially.
+  - Link to RFC v3: https://lore.kernel.org/all/20261013131309.2790253-1-ridong.chen@linux.dev/
+
+Changes in RFC v3:
+  - Use "Assisted-by: LLM" (Muchun).
+  - Note the BPF raw_tp/tp_btf impact in the changelogs (Sashiko).
+  - Changelog wording fixes and minor indentation fixes.
+  - Link to RFC v2: https://lore.kernel.org/all/20260928114625.3609130-1-ridong.chen@linux.dev/
+
+Changes in RFC v2:
+  - Convert the remaining vmscan tracepoints too.
+  - Move struct scan_control to mm/vmscan.h (Baoquan).
+
+[2]: https://lore.kernel.org/all/20260911102939.2485750-1-ridong.chen@linux.dev/
+[3]: https://lore.kernel.org/linux-mm/20261022220203.91911-11-baohua@kernel.org/
+
+
+
+Ridong Chen (7):
+  mm/memcontrol: drop unused vmscan tracepoint include
+  mm/vmscan: move vmscan tracepoints to a local header
+  mm/vmscan: move struct scan_control to a dedicated header
+  mm/vmscan: pass scan_control to the vmscan tracepoints
+  mm/mglru: add tracepoint for scan_folios()
+  mm/mglru: add lruvec_gen_size() helper
+  mm/mglru: add tracepoint for aging
+
+ MAINTAINERS                                   |   5 +-
+ mm/Makefile                                   |   1 +
+ mm/memcontrol.c                               |   2 -
+ mm/shrinker.c                                 |   2 +-
+ .../events/vmscan.h => mm/trace_vmscan.h      | 198 ++++++++++++++----
+ mm/vmscan.c                                   | 157 ++------------
+ mm/vmscan.h                                   | 134 ++++++++++++
+ 7 files changed, 322 insertions(+), 177 deletions(-)
+ rename include/trace/events/vmscan.h => mm/trace_vmscan.h (75%)
+ create mode 100644 mm/vmscan.h
+
+
+base-commit: 74d73ffcffe03804f97e9fb82301dadf75671282
+-- 
+2.34.1
 
