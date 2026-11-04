@@ -1,112 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.75
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793793875;
-	b=DQiZv+MnQl4qERwHn3EsYq8BSz4+2fMjIqWVcJ10fhlsTK1FdyQF7b2bMnfZNHbjttGM
-	 J8Pvu8DBVdHGmu81IVM2yCb7EvLWGNIui6R3YsWCnIMrdjBKx6W+fXhRTpUkQ37xZkwyh
-	 LhxM78fxWW28SimbdCCqLfYsjcY0Yupo2vwx9poYg0F39ImWc1f9AG6jCpk9aqxUovMG5
-	 R15quaOyYLXgaEDS8Qd7xoRiclKO/Pp/nKvLHbv64rsYE892omeEXtfbUGZguRc6tKynq
-	 /SZ6UnuO+Z/CWSho5qyERVNjKNySFd4ZkQc2UHJunfNCjagwYfxRmVYNXzMLa/ImgYA==
+	t=1793794434;
+	b=MaBr77NYdDY+NAycb2MZAs2ttCblOsx15z5vJTyb0xzIjFng0LbpZ2ZGCwQ5URPjRMzk
+	 fG7JEewwAN0WOVA1t99/Is4XAp25h+fGQ0Y8evkDkFH2e6y+Bt9icwlieV0am2qPmJDDM
+	 lVx8WpIg5wE1fU+a6mRRBSbWCxa6KGjc9Us/I/wPKHPI2hGs0uFbd1prPOiUEaUVK479L
+	 gPr+H8R/m/hpDf8+P9c13ZJJ1li1Pyuf09sJ51zrr4AHp4/NiWaVez33grc/3vm0mdObf
+	 cBVD5XOtpenCE6lW9k/6FEIhYf/C3/A37Un8vvQQ5W9pm0Pf13PTFqCyvxfYrEDo8bg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793793875;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=OUiJjgiBoxlCfwD7k2wmbIMBxvsfPqQZKBPmjCnOmAg=;
-	b=AU08sxBd/Xki6g8yharDhT0Je/n1Q9Nz6QlREdpW+4nZLS2jn2f+SpN8nbJ4IhzwL+59
-	 l/bc/sXMHv2rqFmSlmEddtyZ6vPyvad1f7lBxcLSJoDrqATFva7wJ/kzrQjmdVFHKQpRZ
-	 UwUF9Wtleg1p9KxWghCbNdB6sRfbi3q4W9Kr9ZjvAIu4UfUVWG1lT0dCJz94MGdJcM0Zr
-	 NTlMMmU9GPlLPRssO8h0i4jVzlHFcsup7DKPlSD4cWgT5CKOr0lXTVSsM5y0K+vtH4OO4
-	 tHsv8IiiwX8lqpUsElAh6lpDGf8q0mq9kX1DVaLj72qLc9/lrcbNj+GabliZTk78C+Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793794434;
+	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
+	 DKIM-Signature;
+	bh=wG6ehImCXqJJq6Q4xB8kVIpSfqa+LfpN95tF0siACuQ=;
+	b=SGNzFpHqjv9qHPlUD2JeQT1PByjISOO+XM3TRtlKU9/rKHE8mGkgCfrO3iFlvRLSkYt1
+	 A/ZYPVReR+NUzUt9nT8EcuYCrYBvArazf05iND+AHHpdTLKFyYCOKd9Q+/5TjT+I9g+8n
+	 dnaokOsqX6DT4v+w9UXma3DaqAdO7vouDgl+V7vrmssgad4UnR7tkfeIdyOYNsd3JHcgz
+	 9U/GSfeGJd7CZB4r0lK2cvYkVzpwIES3iD0lou9YEOPnqesitvnhv3Ib+0IPZ9dVt2SWB
+	 RCM+i0tIPDYoNv5rYH9vZS6xU+IVECSK/FZnjIDKPSb5t3cFV7k92vzA7/wEhRwAxAQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=VLs5gJaK;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=XY4SsWNC;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=poczta.fm;
+	spf=pass smtp.mailfrom=poczta.fm;
+	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=M3LL+mYz;
+	arc=none smtp.remote-ip=217.74.67.75
+Received: from smtpo75.interia.pl (smtpo75.interia.pl [217.74.67.75])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DB4606A328
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 12:04:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 02DB4606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681F2606A331
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 12:13:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 681F2606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=VLs5gJaK;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=XY4SsWNC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793793872;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OUiJjgiBoxlCfwD7k2wmbIMBxvsfPqQZKBPmjCnOmAg=;
-	b=VLs5gJaK7bx8YTuEZMp56OkEoRmYZ9vkbXW0ZUO2IkulnY1Nn/+OZXJNQljLs5Nzc+G9YM
-	sFFI1w+VxA4bCKT+YMwnTgOtIlcEhIQus/0+qLY1bp4762PZwm4+MTp0+RS6plAAaCsyV4
-	oAgGsTT5qej6kIlyofvIdoPvOgrat7I=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-106--LNWRAdoNL6cpJANFEJvkg-1; Wed, 04 Nov 2026 07:04:31 -0500
-X-MC-Unique: -LNWRAdoNL6cpJANFEJvkg-1
-X-Mimecast-MFC-AGG-ID: -LNWRAdoNL6cpJANFEJvkg_1793793871
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-48e011829easo414076f8f.3
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 04:04:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793793870; x=1794398670; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OUiJjgiBoxlCfwD7k2wmbIMBxvsfPqQZKBPmjCnOmAg=;
-        b=XY4SsWNCd/XyU4bYIRGZpysUegzvuvZjLZwC9/pkKxhwrQvlMsnFy1RNbVfp+sFKXf
-         c0OGUwcXRMIFZ0LfYbkEHiGiEn930zYX1E6u5PRXkoViBsWCGQKrnEVgdawdALpC4gPo
-         hqW+JhS4TmRElOr4HGCVNzELVq1D1Dtw44VTNT9DVaxzp7l20rkUqbTeefUXmiCb8FBy
-         ig+m4gcVtIgasXfARf7/uF8n0l73dj7ImFfbN2BPSfYzs25EzNgu+tC6O8Iz2S4TJwPW
-         CSFT0UkEFSbBQbL7MeF+5FrHHLxxIaqSfN95ZZYrZ1DkbGtuayqpPqR0RjoZf94GdPj+
-         +/kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793793870; x=1794398670;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OUiJjgiBoxlCfwD7k2wmbIMBxvsfPqQZKBPmjCnOmAg=;
-        b=UdCpPh7W+lGjQtD/rtxY9f5fwIL5D/vwn9jr4yZaIUoeQKKFFR2ldLiWVYxkDicXp6
-         fRBP4Co+czwnPQQMZbiXUS+sY+o1j1pgCpWz+kzOBjF7oTEp0INOj6HIVN7+XXK+U4pK
-         UUQ4DqPUUeW29++ZaAlCqJVyon8LElUA3ZFSd6+gYFvFkPApvMQMcl6EJiGbrrZTdlSQ
-         76gDGfiC2AxfrfrERJjHoWq8Jht9EhBLVj7plVu8JKa+DJN8q/nKsSWRVj0SAmsiFFjr
-         sRWQkjlg0VdZJ2Rs/ArfJpy8cVout8GatoExgUxmwudtdscA6uyS1PXjCRkm+AWodjEG
-         qjwg==
-X-Forwarded-Encrypted: i=1; AKwUvBy3cI4gGx4gdP8U7a7Zv44i143pHhRbXa3fHq0VnbgpxYJYjG+Mm09Y/mQOgR7DMzitgoM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+0iAZAYTMyaS2nLQAxOknRgomMCch0F9mNGld0jQy3zNX1mEoR
-	XW0aPTU152xzKSGPF+jS+oGoj4OA3ROhqbhG55mnjcf5lOhdTwPPl7TWVgv4oqMsnj18GwxW4jW
-	peZdSTGdtoIaPEG9k4r6/fiX73VjfGoKmT5P5Zi9i71XNzY9Xs5hhIg==
-X-Gm-Gg: AYBFou0vuj19Ro1yUkPftHtlfKrzH9mMQF4pDLqheZEkrTzC76frnwsPuo2veVTOxKI
-	MLtp+LWuhUXCdLQMeFKs3Pn7w2x1J7RvB5B0Xz79Vy6DIgnmwiTdwAZCMy9g9C6xMEWAF+b76e9
-	Nm3XkZec1fVtItlPBXD/TNb7s8SEtycbMkrpHKqEGGxcDwyWnS8c0eVHa8Zb3OsGxIBNEWg3MQR
-	NksTx9YrTMPg+QlqkPhhygYAWb9SjnQLscuyGT5dP8495nL2yxk4dqoCVscxcYANqz2TGBxCO9d
-	n2pftODUmSMRuWOnezbb+3aPv4EdmzwXmYIRFYMQ2yeLhwjMXw1T/3egA6TLJzepsVOGzVu74x4
-	yjtFxjDuW+25mQTezkxBQZc/uRxImZ8Vn7NiVr0iRnw==
-X-Received: by 2002:a05:6000:15ce:b0:487:1662:cf4c with SMTP id ffacd0b85a97d-48e6e2c155cmr25924777f8f.7.1793793870302;
-        Wed, 04 Nov 2026 04:04:30 -0800 (PST)
-X-Received: by 2002:a05:6000:15ce:b0:487:1662:cf4c with SMTP id ffacd0b85a97d-48e6e2c155cmr25924726f8f.7.1793793869640;
-        Wed, 04 Nov 2026 04:04:29 -0800 (PST)
-Received: from redhat.com ([2a0d:6fc0:1506:fd00:9e19:9994:44b1:e6f2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48fed0844e2sm2780896f8f.28.2026.11.04.04.04.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 04:04:28 -0800 (PST)
-Date: Wed, 4 Nov 2026 07:04:26 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
-	dongchenchen2@huawei.com, bpf@vger.kernel.org, daniel@iogearbox.net
-Subject: Re: [PATCH net] net: reject a negative TCP header offset in
- qdisc_pkt_len_segs_init()
-Message-ID: <20261104070345-mutt-send-email-mst@kernel.org>
-References: <20261101194433.2637113-1-alexei.starovoitov@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=M3LL+mYz
+Received: from localhost (unknown [80.68.231.31])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
+	Wed,  4 Nov 2026 13:13:49 +0100 (CET)
+From: Slawomir Stepien <sst@poczta.fm>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me
+Cc: netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	aleksander.lobakin@intel.com,
+	ilias.apalodimas@linaro.org,
+	toke@redhat.com,
+	lorenzo@kernel.org,
+	ihor.solodrai@linux.dev,
+	tavip@google.com,
+	maciej.fijalkowski@intel.com,
+	sst@poczta.fm,
+	syzbot+ff145014d6b0ce64a173@syzkaller.appspotmail.com
+Subject: [PATCH v6 bpf 1/3] xdp: introduce xdp_convert_skb_to_buff()
+Date: Wed,  4 Nov 2026 13:13:14 +0100
+Message-ID: <20261104121316.1155680-2-sst@poczta.fm>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261104121316.1155680-1-sst@poczta.fm>
+References: <20261104121316.1155680-1-sst@poczta.fm>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -116,58 +73,153 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261101194433.2637113-1-alexei.starovoitov@gmail.com>
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
+	t=1793794431; bh=wG6ehImCXqJJq6Q4xB8kVIpSfqa+LfpN95tF0siACuQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=M3LL+mYzWV6df9ojSc0RjGuYyvY9YaqEAzGmDTUEgiyScc74d+3e+CZASK3ByPV1q
+	 yoXwOWHTuSpCoIM8o80xF3ON0g2oJzp0G9nKREXkijQRD/oDAp67z8Muj30s8AlD7e
+	 ri01kbuGSo/jXzXcXx86gRU1jAQGmNaDp3m4iCaM=
 
-On Sun, Nov 01, 2026 at 07:44:33PM +0000, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> qdisc_pkt_len_segs_init() stores skb_transport_offset(), or the inner
-> offset, in the unsigned hdr_len. A header in front of skb->data gives a
-> negative offset. For an offset a little below zero, pskb_may_pull() gets a
-> small length and succeeds. Then a 64-bit kernel reads the TCP header far
-> after the skb and can crash. Further below zero pskb_may_pull() fails.
-> 
-> Commit 28a57fb2c5df ("net: iptunnel: fix stale transport header during
-> tunnel decapsulation") fixed one source of such offsets. Other code that
-> removes bytes from the front of a packet can leave the same stale header.
-> 
-> Return SKB_DROP_REASON_SKB_BAD_GSO for a negative offset in the TCP branch.
-> SKB_GSO_UDP_L4 and the other GSO types read no header and still get a wrong
-> qdisc_pkt_len(). On a 64-bit kernel only packets that cause the read after
-> the skb today get a new result. Then __dev_queue_xmit() drops them and
-> returns -EINVAL, but sch_handle_ingress() ignores the result. Their content
-> can be valid. Thus the code that leaves the header stale needs its own fix.
-> 
-> Fixes: 7fb4c1967011 ("net: pull headers in qdisc_pkt_len_segs_init()")
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+Currently, generic XDP hook uses xdp_rxq_info from netstack Rx queues
+which do not have its XDP memory model registered. There is a case when
+XDP program calls bpf_xdp_adjust_tail() BPF helper, which in turn
+releases underlying memory. This happens when it consumes enough amount
+of bytes and when XDP buffer has fragments. For this action the memory
+model knowledge passed to XDP program is crucial so that core can call
+suitable function for freeing/recycling the page.
 
-and cc stable, maybe.
+For netstack queues it defaults to MEM_TYPE_PAGE_SHARED (0) due to lack
+of mem model registration. The problem we're fixing here is when kernel
+copied the skb to new buffer backed by system's page_pool and XDP buffer
+is built around it. Then when bpf_xdp_adjust_tail() calls
+__xdp_return(), it acts incorrectly due to mem type not being set to
+MEM_TYPE_PAGE_POOL and causes a page leak.
 
+Pull out the existing code from bpf_prog_run_generic_xdp() that
+init/prepares xdp_buff onto new helper xdp_convert_skb_to_buff() and
+embed there rxq's mem_type initialization that is assigned to xdp_buff.
+Make it agnostic to current skb->data position.
 
-> ---
->  net/core/dev.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 3ac700d37e59..ccf4b02e08de 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4320,7 +4320,9 @@ static enum skb_drop_reason qdisc_pkt_len_segs_init(struct sk_buff *skb)
->  	if (likely(shinfo->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6))) {
->  		const struct tcphdr *th;
->  
-> -		if (!pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
-> +		/* A header in front of skb->data gives a negative offset. */
-> +		if ((int)hdr_len < 0 ||
-> +		    !pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
->  			return SKB_DROP_REASON_SKB_BAD_GSO;
->  
->  		th = (const struct tcphdr *)(skb->data + hdr_len);
-> -- 
-> 2.55.0
-> 
+The mem type is only consulted when the program releases fragments; the
+head can not be freed from under the skb. All current users pass skbs
+with fragments through skb_pp_cow_data() first, and when the CoW fails
+the skb is linearized, so fragments seen here are always page_pool
+backed. Hence set MEM_TYPE_PAGE_POOL unconditionally and warn under
+CONFIG_DEBUG_NET if a non-linear skb shows up without pp_recycle.
+
+This problem was triggered by syzbot as well as AF_XDP test suite which
+is about to be integrated to BPF CI.
+
+Reported-by: syzbot+ff145014d6b0ce64a173@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/netdev/6756c37b.050a0220.a30f1.019a.GAE@google.com/
+Fixes: e6d5dbdd20aa ("xdp: add multi-buff support for xdp running in generic mode")
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Co-developed-by: Octavian Purdila <tavip@google.com>
+Signed-off-by: Octavian Purdila <tavip@google.com> # whole analysis, testing, initiating a fix
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com> # commit msg and proposed more robust fix
+[sst: rebased onto bpf/master; set MEM_TYPE_PAGE_POOL unconditionally, add
+ DEBUG_NET_WARN_ON_ONCE() and kdoc as agreed in v4/v5 review; dropped
+ Tested-by/Reviewed-by as the code changed]
+Signed-off-by: Slawomir Stepien <sst@poczta.fm>
+---
+ include/net/xdp.h | 36 ++++++++++++++++++++++++++++++++++++
+ net/core/dev.c    | 25 ++++---------------------
+ 2 files changed, 40 insertions(+), 21 deletions(-)
+
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 07231adfb5f8..28bd78dbef20 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -389,6 +389,42 @@ struct sk_buff *xdp_build_skb_from_frame(struct xdp_frame *xdpf,
+ 					 struct net_device *dev);
+ struct xdp_frame *xdpf_clone(struct xdp_frame *xdpf);
+ 
++/**
++ * xdp_convert_skb_to_buff - build an xdp_buff on top of an skb
++ * @skb: skb to describe, packet data is taken from its MAC header onwards
++ * @xdp: xdp_buff to initialize
++ * @xdp_rxq: Rx queue info to attach to @xdp
++ *
++ * The memory type set on @xdp_rxq is only used to release fragments that
++ * the XDP program consumes; the head can not be freed from under the skb.
++ * A non-linear @skb is expected to have gone through skb_pp_cow_data(), so
++ * all of its fragments are page_pool backed.
++ */
++static inline
++void xdp_convert_skb_to_buff(struct sk_buff *skb, struct xdp_buff *xdp,
++			     struct xdp_rxq_info *xdp_rxq)
++{
++	u32 frame_sz, pkt_len;
++
++	/* SKB "head" area always have tailroom for skb_shared_info */
++	frame_sz = skb_end_pointer(skb) - skb->head;
++	frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++	pkt_len = skb_tail_pointer(skb) - skb_mac_header(skb);
++
++	xdp_init_buff(xdp, frame_sz, xdp_rxq);
++	xdp_prepare_buff(xdp, skb->head, skb->mac_header, pkt_len, true);
++
++	if (skb_is_nonlinear(skb)) {
++		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
++		xdp_buff_set_frags_flag(xdp);
++	} else {
++		xdp_buff_clear_frags_flag(xdp);
++	}
++
++	DEBUG_NET_WARN_ON_ONCE(skb_is_nonlinear(skb) && !skb->pp_recycle);
++	xdp->rxq->mem.type = MEM_TYPE_PAGE_POOL;
++}
++
+ static inline
+ void xdp_convert_frame_to_buff(const struct xdp_frame *frame,
+ 			       struct xdp_buff *xdp)
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 3ac700d37e59..4eeeb0182a6a 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -5667,35 +5667,18 @@ static struct netdev_rx_queue *netif_get_rxqueue(struct sk_buff *skb)
+ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+ 			     const struct bpf_prog *xdp_prog)
+ {
+-	void *orig_data, *orig_data_end, *hard_start;
++	void *orig_data, *orig_data_end;
+ 	struct netdev_rx_queue *rxqueue;
+ 	bool orig_bcast, orig_host;
+-	u32 mac_len, frame_sz;
++	u32 metalen, act, mac_len;
+ 	__be16 orig_eth_type;
+ 	struct ethhdr *eth;
+-	u32 metalen, act;
+ 	int off;
+ 
+-	/* The XDP program wants to see the packet starting at the MAC
+-	 * header.
+-	 */
++	rxqueue = netif_get_rxqueue(skb);
+ 	mac_len = skb->data - skb_mac_header(skb);
+-	hard_start = skb->data - skb_headroom(skb);
+-
+-	/* SKB "head" area always have tailroom for skb_shared_info */
+-	frame_sz = (void *)skb_end_pointer(skb) - hard_start;
+-	frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+ 
+-	rxqueue = netif_get_rxqueue(skb);
+-	xdp_init_buff(xdp, frame_sz, &rxqueue->xdp_rxq);
+-	xdp_prepare_buff(xdp, hard_start, skb_headroom(skb) - mac_len,
+-			 skb_headlen(skb) + mac_len, true);
+-	if (skb_is_nonlinear(skb)) {
+-		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
+-		xdp_buff_set_frags_flag(xdp);
+-	} else {
+-		xdp_buff_clear_frags_flag(xdp);
+-	}
++	xdp_convert_skb_to_buff(skb, xdp, &rxqueue->xdp_rxq);
+ 
+ 	orig_data_end = xdp->data_end;
+ 	orig_data = xdp->data;
+-- 
+2.56.0
 
