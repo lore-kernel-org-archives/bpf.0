@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793755492;
-	b=hRzh0DMm1o6+vNtlfw1nt+4Ms66U6JbwzHgYWttS1H/OAuj3hvPpgDzTozO8YUfswY7l
-	 nDiZFgOKEdvD+qwcTKySjrH4he88t7xk4e63rgvTWCRCR0cdy0mcAknAKuJ58zzwyCg2h
-	 BO5SALSI4olutkunuB/Krtj+CN/TTnbUBGmMzwtAvlUQjRzJtGGaazqrcWTi+LLZVdpSb
-	 PeHl4zEVGiZqiAOpg3lnpONHP1GQijZ56Tldg5jzzubeaeqhU01ja7f+HKVgizJZ3zPCA
-	 DMwd0tshwAmO3sqhERt3H6e2RKtoFVy37cquxCCdk29xmoPxz5E1d06hLS9OBpHVwIA==
+	t=1793755499;
+	b=EYKNY7xqXa/VKnD+oS1Ad6Oo15S5uNZEyR6ZKjLDBZjzQFu/usCL2A4kubZjUMiNG/dp
+	 NttPRCHMeDTKwEsoJCc15lahQNJnXaGTctzJP/c7Ap9cKbiGoFXUyK/Ugqf6u/pIiYObF
+	 bRmTLgTOGO1C7Cz6HPy2eh4WgbgM62ryYhLkFeeTt//Uw10eeY9Ce2/309MiT2aVZX1c4
+	 lyrEvzl6jFkaukmPLcyum34WsXf4NCvTwfsrvn1iZIyRBkedqpM1V8Xow35Xoc5nWlp3r
+	 Nna5s/RTjto7+oRCicGKrgR6raFVH7dow4ifchqjUHDP78JaTfgG0BXRzVN2IWLpLgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793755492;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793755499;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=viTzTrOrsJsF8b0V7PgYmqrVi7ZHWMLJFvwZhyFb6qQ=;
-	b=kXokvRvtnq/Bol+wbNRXBK3ZVzWgIpf2iFjnFuI1KtA8s/3VcGgBZTaBKEhg9CvhkyT7
-	 N2ktW8QJ8FZ1OXonJdcJok59+XBW1KeaZU8uDH1MycQ/sT8/RYmu6DWxv3A7QdXAd7ypo
-	 7V4XkTy5U9ajjcAnE7VxKuRe4p/HuVef4Xidv4Eab7rDP44vOtkcWUvQx2DyxM50TOndd
-	 4dQi+/VAYOM+o6M6UOeHiBkJnKMRA9VlDxtG7l9/b8wwPrK0pSYXbkkZzIYde4Zy2oNKF
-	 QJ8CgOXFZUKe3eInlYxGAALiJWSLNrm3Orh6+vhDyRIp4qeBeESH9amg05UtTYG5WYw==
+	bh=BLJT5BQ3sZlbL0+7LTOlKEOu3PRLlLyTi3WyzGCbJQ0=;
+	b=Iy+5sqMsXa1sUS3DXUxjknP7B8z9A8qnrzHPL5N/F3VKHEBLkr45kk9W+WVIFRWHjXUu
+	 PdMDGcVcVFD2LE924Yyrma5DK7rGKAK67rbEJi8vCxBVwyl6ihKSl4I8SpxBAZwy4s7sn
+	 9arOuxzLKv+LxlmtgkfXlO4QB0kvMzID1HeWDyAg6GZqQsSe6rXu6N6MQZP48juh7iZt9
+	 CaeVKSHpBQD09LnVxKKpDTuLYfLAa3gJSTG5lzSyN1fdYVbYLNP6u1CmwegEiFBwMR5On
+	 uo1oCNb3utoGb5iiR6kgVYf1nBvDPnrULTtz6prG7Qo/DMxvPFPBXxjVQvf+dq7B/3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mbzwGakK;
-	arc=none smtp.remote-ip=209.85.214.181
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JfRdudsP;
+	arc=none smtp.remote-ip=209.85.216.41
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B1D606A31B
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 01:24:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4B1D606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC629606A31B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 01:24:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC629606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mbzwGakK
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2e9d7791b00so1227865ad.0
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 17:24:51 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JfRdudsP
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ac77270fbfso131468a91.2
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 17:24:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793755491; x=1794360291; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793755498; x=1794360298; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=viTzTrOrsJsF8b0V7PgYmqrVi7ZHWMLJFvwZhyFb6qQ=;
-        b=mbzwGakKllQytbIHcFtfsiKh5TpL9GGnnLM7OvGOFaU5ls1GrWG974dLW6lGI1hl9V
-         c4ZY7rvrDuOM8EvneQVqnbO+GmYqfQsNiEt84svF1/lHZm6wPiVUieonRiIKgJsg4PNt
-         v/VizHi6m9XiVFeUM5j0LRJIkhC8qVWXTKTXIq5WbrZupZ+rYUZmqWsXgli5Eqp82ZEv
-         iyx8phf7HflpROXEjWZr4PhkWGCmPothYwiT9vXEvUNd7gWMxjquJoBI6M/fOMkJKsCa
-         ZVRow6ZZ0jGTIfAuWJ7aKIRgw3q8I7QJBzTLuztdb9X0sX8fE9AUAelVxAqufaAfvU7W
-         BndA==
+        bh=BLJT5BQ3sZlbL0+7LTOlKEOu3PRLlLyTi3WyzGCbJQ0=;
+        b=JfRdudsPzj9CxvbIr39W3aq/1H9Vmb/X5h4WjXWUokqfY7c4Dbc6ayqjnG/u0iGUt+
+         bbSkBAYpmhDwoDgJQgeWQfjG7t4ywuOR47vYVHP0wtlOh6ilV3ZJmiCqjgLP7jFTLyQy
+         XWUXJvaSe9OWcf2teW0Rl8c6QYOqMc3oyUbmsY0ZTDQTlYeEnT7i+I5MprVf2d5psK4z
+         HSw9C62PwNrLvu7S2B9cBY75/CosPgMcYX7pdsT/x8nFkSsVqkYheoiAxEhGivThE727
+         vsHBTK5pJRJu96e7VDov9//BLaO3mWp1h5JsWv550v2RYJm21lqu3jTBB1hmshzqAqn/
+         JgNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793755491; x=1794360291;
+        d=1e100.net; s=20260707; t=1793755498; x=1794360298;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=viTzTrOrsJsF8b0V7PgYmqrVi7ZHWMLJFvwZhyFb6qQ=;
-        b=sZddSjpjKSp58D6dN/7LoDJ3sS5RTAYdBpi3lmdNur3VaMx/mhxs2dZ3qE5Wq3UsIm
-         VJsHLlhD2hvlklVuYrVrvjvnIoaAU+1UPhvi34muBV78p+ph6SE36hwtfUrUIkIlEppQ
-         wx2LWYmyAKtCepCF6WNp/lfOcCHrXAIJPGVIblkDAivFWdfU24o3MrEKbaFiPobvO0hT
-         ph3Y2xB+SYFENfbfp8Cc68EUf0+JpYGICC5YyzbqP4xQrUm/FgPUqD6BNSnJh4cOI7xO
-         bCxo1RQwACDW8NBHvCx1vCkeKQZcDxetxz22pXmF1/M+YaanvXPB/Ai9z+phgXZy6SHf
-         cDwQ==
-X-Gm-Message-State: APuU4Z/Lhht/jYTVvYc0+9z4MOUsO74zlwnBwgm5fsf0v8n+Lm0zPV3B
-	ONh+lHVZ45205cj5+f/juVNxD/Oerw+rG3i0wLaejWROd4yABHhtf/6g8m+qnA==
-X-Gm-Gg: AYBFou3oSZgQk8rKzMjRjUmMQFatcxr1/vaDZB68T+zwyuaJIUjo7QHNfB7WFiCm7cx
-	nLgi5jwNh0KCAme1Yj4ZJxuPZfSQ6HRofYnjxqI3ZjQBIuZT16GurmuyKl6WKia3R69ijb/vhZV
-	zqL4oGNJ4mSWtC86v0Y5YVznzmm4HoXe9kCfAkwAcC1lgN1/wGFF1o+fWs4V5kGH817yOifpW72
-	UIGrc/SSzQbtpdS0oRfmtz0WWUu6UIAHPpcncxZ77zJlTXSU1ij4PQGLpSD2/xHKK+MAABfbHu1
-	2EkZiDFZ3rsJTkly6ym2NJRPBYMoqTRwxVAwVo/uLl5kiQfOMf9tYtQHzdTSzrOe4PmADKdQx5a
-	WVaPb84N96XDxxiFJ6PMxd0yWavjLLYvbPMC8CKQQATYF5ZLlDDzShCPRRpdz+MYhqoWkCWq1Vn
-	xEPsS0I+JwwnqDSghbodtb/auWVjuo2ti/E//o8nn+V0LtZ4sK5cJR0OT1G9ec6+1ghqus/fYAZ
-	d6QsWfjBsUbl5bIScliozMVbBsf3u9G0HP30k0UXhRPiQ1hktABdBmErBkKvJw9uFCjAH2ru5Ar
-	/k49uzOdvAYLBPYTTTvBjedPJU1wp4E6iPZAHSg8+ryAz07r+Udbx9RxfjxZtPjWRlAzDzESCxw
-	wDvZsOgRlN7Exvxw+A5izGWP49auKHUKTYuBgglxbjLQkllOWRFhRGd0+9+Aiq0xWXWv1JDkPFR
-	8=
-X-Received: by 2002:a17:902:ce8d:b0:2e6:13b1:e196 with SMTP id d9443c01a7336-2eb36524f63mr120106385ad.74.1793755490883;
-        Tue, 03 Nov 2026 17:24:50 -0800 (PST)
+        bh=BLJT5BQ3sZlbL0+7LTOlKEOu3PRLlLyTi3WyzGCbJQ0=;
+        b=HnFuVjY+hWTQW3c9V/hdUkguRjQ6sRLUS8YtVb/TxPtiEZNMrem53WHzyoJiSsDJra
+         jo+6yUQS88kI+7ewab7yPWdEKiL33mST+nutnoC13ILcnSI4Qz0LkBBKu86sHAnX+rvn
+         R57pNepER5XqlbA/sxvBT+EJzfVrM4xis2Vy27KfBVHKhBX974Ak2tmYB7Nj6YAVxonx
+         7oQDg5TGJ2JAMBayi/tfw7pXuKDTs1Twa8FjNNk3r7jEgG3XgN1FAefefRWDdhEWNDPd
+         J15FVHdrU2WTDEnIC9PSN2JcySI8xhFEVhPwVV6GuvfIzyO1U6kswQiPdHt5fOTQ2lnV
+         vBGg==
+X-Gm-Message-State: APuU4Z+UDotljGyyN+wQu8pk3KIYaTALyFOSlzwXZU0IRifELvIWTX8S
+	TSjoJLbgHPnFsOVRXZQlzjxeDUo9XSVSwCn71S17edjeOiukNok9T41RXIE+tg==
+X-Gm-Gg: AYBFou0lX92z6cIEScBDhqU9YPExKt2/msf2Zvb374Bfo63g69zE4KpChsZ61L5dIMf
+	l3r28DNXc0DnEkVOWfSGtLstQeaz4xJM3Z3TtY3GJ6yj+QCuxazrUxK1T9qa7zCJFUXQDnxUbgV
+	HZ+p7ar/IIBbykHhot62hV3WXkJolVwPY9Bm3cnsj6RULGwJGLrqP4nOun7n0gr5DKaF4Wv8Onr
+	V0iZOAoHiGsCL5pqLM3zJA78jz6DvbhStmZOU+oVAAuiSI/Ef8bsk5P1/Rn5fbwSmMqLPFcUIrc
+	VdO9YgA+RZCw8vnQc0CCAZbvqVLBlZ26QCbwF0ehOrLoppGtbxmH/V4x93rJ9akefBo+tzDTFsg
+	TARHOpaf797pRfs7AAWdmIW2OkzkDQFF72859ViWTXpZEUxL8Necz3xrnPCpupVk10aGPJeYAo2
+	0DXlKsRt7BAOFPDoyIzHL9eX6KlR+X+j7/3p7lRvjOuDiCtI1U8yNUfrruDWFQ5o9PVDrX8l0wX
+	3DCAM8eOxKB86uobPi9EtkVAukXaJU+DoTOkbuYMDSyBP/V8y1DZauRJg4ep15MsoByOsb0WN9c
+	63WIHhQtw/o4v6IjAgZxuTRE8a4Q8UZbKTlqrJL1xC/U3e5Ncb64tjm+ALusxfLPS7skml7np+x
+	C5w9OGEyFW/q0s+FPvsXYNm7hrGzb08oe7CAJm/V4+jIYnNN7m/urpFaaLI233UJB9Ih2eooGIY
+	Y=
+X-Received: by 2002:a17:90b:134f:b0:3ac:7613:1ec3 with SMTP id 98e67ed59e1d1-3ae897e081cmr10583587a91.37.1793755497884;
+        Tue, 03 Nov 2026 17:24:57 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed08bd518csm795745ad.10.2026.11.03.17.24.50
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b094ce9f65sm698378a91.1.2026.11.03.17.24.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 17:24:50 -0800 (PST)
+        Tue, 03 Nov 2026 17:24:56 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 08/14] bpf: Introduce bpf register BPF_REG_ARENA_SP
-Date: Wed,  4 Nov 2026 01:23:54 +0000
-Message-ID: <20261104012401.1354861-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 09/14] bpf: Add stacks for programs to arena
+Date: Wed,  4 Nov 2026 01:23:55 +0000
+Message-ID: <20261104012401.1354861-10-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261104012401.1354861-1-alexei.starovoitov@gmail.com>
 References: <20261104012401.1354861-1-alexei.starovoitov@gmail.com>
@@ -104,330 +104,303 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A Rust function that gets &T does not know where T is. T can be on the
-heap, a static, or a local variable of the caller. The same insn accesses
-all three. The heap and the statics of a Rust prog are in arena. Thus a
-local variable whose address is taken must be in arena too, and the prog
-needs a second stack there.
+A prog that keeps local variables in arena needs a stack in arena while it
+runs. r12 (BPF_REG_ARENA_SP) is the stack pointer of this stack.
 
-Each function must find the end of this stack. The places for the stack
-pointer that were tried:
+One stack for each cpu is not sufficient. A run of a prog is interrupted,
+is preempted or sleeps, and a second run starts on the same cpu. The second
+run cannot put its frames after the frames of the first run, because the
+first run can continue before the second run ends:
 
-  stack pointer in         what is wrong with it
-  -----------------------  ----------------------------------------------
-  a per-cpu variable       A second run on the same cpu moves it, and the
-                           first run can continue before the second ends.
-  bpf_run_ctx              Load, add and store in each function.
-  a hidden argument        It takes an argument register and a callee
-                           saved register. BTF does not match the code.
-  r9, reserved             The verifier changes too, and the prog has one
-                           register less.
-  a new register           It costs verifier code and a register in each
-                           JIT. This series.
+  cpu 0    run 1: f()     run 2: h()      run 1: f() calls g()
 
-Introduce BPF_REG_ARENA_SP, r12, the stack pointer of the stack in arena.
-BPF_REG_AX stays the last register and becomes r13:
+  stack    | f |          | f | h |       | f | g |
+                                                ^ g overwrites h
 
-  register            before    after
-  ----------------    ------    -----
-  BPF_REG_PARAMS      r11       r11
-  BPF_REG_ARENA_SP              r12
-  BPF_REG_AX          r12       r13
+Thus each run takes a stack when it starts and gives it back when it exits.
+Usually there is only one run on a cpu. Make this case a few insns without
+a call:
 
-This patch only reserves the number. The verifier continues to reject insns
-with r12.
+  stack that a run gets     condition                      nsec per run
+  ------------------------  -----------------------------  ------------
+  the per-cpu stack         no other run is on this cpu    2.2
+  one of 16 more per cpu    the per-cpu stack is taken     9.1 more
+  new pages for this run    all 17 stacks are taken        1300 to 1600
 
-BPF_REG_AX is visible in xlated insns. Adjust the selftests that match it
-there.
+The times are for x86-64 (Zen 5), in a KVM guest. The first time is the
+difference to a prog that has the same variables in the r10 stack. The
+third time is for a stack of 1 page.
+
+Each run increments the per-cpu counter 'busy'. The run that finds 0 has
+the per-cpu stack, and it stores 0 when it exits. The other runs call
+bpf_arena_stack_get() and bpf_arena_stack_put(). One bit of r12,
+BPF_ARENA_STACK_SLOW, shows at the exit which of the two ways is necessary.
+
+The other choices:
+
+  in this patch                  what was rejected, and why
+  -----------------------------  ----------------------------------------
+  The kernel supplies the        The compiler or libbpf supplies them:
+  stacks, one set for each       the code that takes a stack is in each
+  arena.                         object file, for ever.
+  A stack is contiguous. It      4 fixed stacks per cpu: 512 Mbyte of
+  has the size that the prog     addresses. Segments: each function can
+  needs: 32 Kbyte of frames at   fail. Pages on a fault: a prog can fail
+  most. It gets pages at the     in the middle of a run.
+  first use.
+  The pages are regular pages    Pages that user space does not see: no
+  of the arena.                  gain. User space can corrupt all other
+                                 data of the prog.
+  A run takes a stack: a         Preemption off: no sleepable progs. Two
+  counter, then more stacks,     calls, get and put: 4 nsec. One way for
+  then new pages.                sleepable progs and one for the others:
+                                 two mechanisms. Skip the second run: not
+                                 possible for a scheduler.
+
+The third row is for a burst. The kernel frees pages of arena later, in
+a work item. It takes 1700 to 2000 nsec more for each such run, on the same
+cpu, and that is slower than the allocation. While all 17 stacks of
+a cpu stay taken, runs that follow each other without a pause take pages
+faster than the work item frees them. When the arena is full, runs are
+skipped and allocations of the prog fail until the work item catches up.
+
+This patch adds the data and the two functions.
+"bpf: Support BPF_REG_ARENA_SP in the verifier" emits the insns that use
+them. Progs without r12 get the same code.
+
+Memory:
+ - A stack gets pages of the arena at its first use, in
+   bpf_arena_stack_get(), and keeps them until a prog needs a larger stack.
+ - The bookkeeping has 152 bytes per cpu. It is in kernel memory, because
+   the prog and user space can write to arena.
+ - struct bpf_arena has one more pointer and no longer fits in 512 bytes.
+   Each arena, with or without stacks, takes 512 bytes more.
+ - When there is no memory for a stack, the prog does not run. The kernel
+   counts a miss and writes a message to the stderr of the prog. A callback
+   that gets no stack does not run either: it returns 0 to the helper, and
+   the prog continues.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/filter.h                        |  5 +-
- kernel/bpf/core.c                             |  3 +-
- .../selftests/bpf/prog_tests/ctx_rewrite.c    | 14 ++--
- .../bpf/progs/verifier_bpf_fastcall.c         | 24 +++----
- .../selftests/bpf/progs/verifier_may_goto_1.c | 12 ++--
- .../selftests/bpf/progs/verifier_patch_list.c |  6 +-
- .../selftests/bpf/progs/verifier_sdiv.c       | 64 +++++++++----------
- 7 files changed, 65 insertions(+), 63 deletions(-)
+ include/linux/bpf.h |  30 ++++++++++
+ kernel/bpf/arena.c  | 142 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 172 insertions(+)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index e9f619deb2a8..abc759ad14a6 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -61,8 +61,9 @@ struct ctl_table_header;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 5413fa5d2b2b..5c059a05f89d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -673,6 +673,31 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
+ 		      struct bpf_spin_lock *spin_lock);
+ u64 bpf_arena_get_kern_vm_start(struct bpf_arena *arena);
+ u64 bpf_arena_get_user_vm_start(struct bpf_arena *arena);
++/*
++ * The stack in arena of a cpu. The invocation of a program that finds it free
++ * takes it. The others, that interrupt or preempt that one, take a stack from
++ * bpf_arena_stack_get(). bpf_insert_arena_stack() emits the code.
++ */
++struct bpf_arena_cpu_stack {
++	/*
++	 * Every invocation increments it. The one that finds 0 has the stack
++	 * and sets it to 0 when it exits.
++	 */
++	u64 busy;
++	u32 base;	/* r12 when the main program starts, the low 32 bits of the address */
++	u32 size;
++};
++
++/*
++ * r12 is a multiple of 32 when the main program starts in the stack of the cpu.
++ * It has this bit set in all other stacks. They go back with bpf_arena_stack_put().
++ */
++#define BPF_ARENA_STACK_SLOW 16
++
++int bpf_arena_stack_init(struct bpf_arena *arena);
++void __percpu *bpf_arena_stack_percpu(struct bpf_arena *arena);
++u64 bpf_arena_stack_get(struct bpf_prog_aux *aux, u64 busy);
++void bpf_arena_stack_put(struct bpf_prog_aux *aux, u32 base);
+ u64 bpf_arena_map_kern_vm_start(struct bpf_map *map);
+ struct bpf_map *bpf_prog_arena(struct bpf_prog *prog);
+ int bpf_obj_name_cpy(char *dst, const char *src, unsigned int size);
+@@ -1919,6 +1944,11 @@ struct bpf_prog_aux {
+ 	u64 prog_array_member_cnt; /* counts how many times as member of prog_array */
+ 	struct mutex ext_mutex; /* mutex for freplace_link_cnt and prog_array_member_cnt */
+ 	struct bpf_arena *arena;
++	/*
++	 * The size of the stack in arena that the program needs, a multiple of
++	 * the page size. 0 when r12 is not used.
++	 */
++	u32 arena_stack_size;
+ 	void (*recursion_detected)(struct bpf_prog *prog); /* callback if recursion is detected */
+ 	/* BTF_KIND_FUNC_PROTO for valid attach_btf_id */
+ 	const struct btf_type *attach_func_proto;
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index ec2bda1a6ebf..366c4c2b6a41 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -68,6 +68,33 @@ struct bpf_arena {
+ 	struct irq_work     free_irq;
+ 	struct work_struct  free_work;
+ 	struct llist_head   free_spans;
++	struct arena_stacks __percpu *stacks;
++};
++
++/*
++ * The stack in arena, see BPF_REG_ARENA_SP. An invocation of a program takes one
++ * when it starts and gives it back when it exits.
++ *
++ * Nothing here is in arena: the program and user space can write there.
++ *
++ * Invocations on a cpu don't nest: a program that is preempted or sleeps can exit
++ * before the one that started later. Hence a bit per stack and not a counter.
++ * Programs don't migrate, so the stack is returned on the cpu it was taken on.
++ *
++ * Most of the time there is one invocation on a cpu. It takes the stack of
++ * the cpu, see struct bpf_arena_cpu_stack, and doesn't need these.
++ */
++#define ARENA_STACK_SLOTS 16
++
++struct arena_stack {
++	u32 base;	/* low 32 bits of r12 when the main program starts */
++	u32 size;	/* 0 until the first use */
++};
++
++struct arena_stacks {
++	struct bpf_arena_cpu_stack cpu;
++	unsigned long busy;
++	struct arena_stack slot[ARENA_STACK_SLOTS];
+ };
  
- /* Kernel hidden auxiliary/helper register. */
- #define BPF_REG_PARAMS		MAX_BPF_REG
--#define BPF_REG_AX		(MAX_BPF_REG + 1)
--#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 2)
-+#define BPF_REG_ARENA_SP	(MAX_BPF_REG + 1)
-+#define BPF_REG_AX		(MAX_BPF_REG + 2)
-+#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 3)
- #define MAX_BPF_JIT_REG		MAX_BPF_EXT_REG
+ static void arena_free_worker(struct work_struct *work);
+@@ -401,6 +428,7 @@ static void arena_map_free(struct bpf_map *map)
+ 	free_vm_area(arena->kern_vm);
+ 	range_tree_destroy(&arena->rt);
+ 	__free_page(arena->scratch_page);
++	free_percpu(arena->stacks);
+ 	bpf_map_area_free(arena);
+ }
  
- /* unused opcode to mark special call to bpf_tail_call() helper */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index dcaf9cf13ce9..06d6d45b1c0e 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1578,7 +1578,8 @@ static int bpf_jit_blind_insn(const struct bpf_insn *from,
- 	u32 imm_rnd = get_random_u32();
- 	int off;
+@@ -1040,6 +1068,120 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
+ 	irq_work_queue(&arena->free_irq);
+ }
  
--	BUILD_BUG_ON(BPF_REG_PARAMS + 2 != MAX_BPF_JIT_REG);
-+	BUILD_BUG_ON(BPF_REG_PARAMS + 3 != MAX_BPF_JIT_REG);
-+	BUILD_BUG_ON(BPF_REG_ARENA_SP + 2 != MAX_BPF_JIT_REG);
- 	BUILD_BUG_ON(BPF_REG_AX + 1 != MAX_BPF_JIT_REG);
- 
- 	/* Constraints on AX register:
-diff --git a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-index 2c3124092b73..2d0bb771626d 100644
---- a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-@@ -69,19 +69,19 @@ static struct test_case test_cases[] = {
- #if defined(__x86_64__) || defined(__aarch64__)
- 	{
- 		N(SCHED_CLS, struct __sk_buff, tstamp),
--		.read  = "r12 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
--			 "if w12 & 0x4 goto pc+1;"
-+		.read  = "r13 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
-+			 "if w13 & 0x4 goto pc+1;"
- 			 "goto pc+4;"
--			 "if w12 & 0x3 goto pc+1;"
-+			 "if w13 & 0x3 goto pc+1;"
- 			 "goto pc+2;"
- 			 "$dst = 0;"
- 			 "goto pc+1;"
- 			 "$dst = *(u64 *)($ctx + sk_buff::tstamp);",
--		.write = "r12 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
--			 "if w12 & 0x4 goto pc+1;"
-+		.write = "r13 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
-+			 "if w13 & 0x4 goto pc+1;"
- 			 "goto pc+2;"
--			 "w12 &= -4;"
--			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) = r12;"
-+			 "w13 &= -4;"
-+			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) = r13;"
- 			 "*(u64 *)($ctx + sk_buff::tstamp) = $src;",
- 	},
- #endif
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-index d908298b9fc7..314652a0006d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-@@ -915,13 +915,13 @@ __xlated("...")
- /* may_goto expansion starts, r0 and r1 are live */
- __xlated("10: r2 = ")
- __xlated("12: r2 = &(void __percpu *)(r2)")
--__xlated("13: r12 = *(u64 *)(r2 +0)")
--__xlated("14: if r12 == 0x0 goto pc+6")
--__xlated("15: r12 -= 1")
--__xlated("16: if r12 != 0x0 goto pc+2")
--__xlated("17: r12 = r2")
-+__xlated("13: r13 = *(u64 *)(r2 +0)")
-+__xlated("14: if r13 == 0x0 goto pc+6")
-+__xlated("15: r13 -= 1")
-+__xlated("16: if r13 != 0x0 goto pc+2")
-+__xlated("17: r13 = r2")
- __xlated("18: call unknown")
--__xlated("19: *(u64 *)(r2 +0) = r12")
-+__xlated("19: *(u64 *)(r2 +0) = r13")
- /* may_goto expansion ends */
- __xlated("20: *(u64 *)(r10 -8) = r1")
- __xlated("21: exit")
-@@ -958,13 +958,13 @@ __xlated("7: call bpf_get_smp_processor_id")
- /* may_goto expansion starts, r0 and r1 are live */
- __xlated("8: r2 = ")
- __xlated("10: r2 = &(void __percpu *)(r2)")
--__xlated("11: r12 = *(u64 *)(r2 +0)")
--__xlated("12: if r12 == 0x0 goto pc+6")
--__xlated("13: r12 -= 1")
--__xlated("14: if r12 != 0x0 goto pc+2")
--__xlated("15: r12 = r2")
-+__xlated("11: r13 = *(u64 *)(r2 +0)")
-+__xlated("12: if r13 == 0x0 goto pc+6")
-+__xlated("13: r13 -= 1")
-+__xlated("14: if r13 != 0x0 goto pc+2")
-+__xlated("15: r13 = r2")
- __xlated("16: call unknown")
--__xlated("17: *(u64 *)(r2 +0) = r12")
-+__xlated("17: *(u64 *)(r2 +0) = r13")
- /* may_goto expansion ends */
- __xlated("18: *(u64 *)(r10 -8) = r1")
- __xlated("19: exit")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-index 20152a15ca36..8d231fb2a317 100644
---- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-@@ -97,13 +97,13 @@ __xlated("5: *(u64 *)(r0 +16) = 0")
- /* may_goto, r0 is dead */
- __xlated("6: r0 = ")
- __xlated("8: r0 = &(void __percpu *)(r0)")
--__xlated("9: r12 = *(u64 *)(r0 +0)")
--__xlated("10: if r12 == 0x0 goto pc+6")
--__xlated("11: r12 -= 1")
--__xlated("12: if r12 != 0x0 goto pc+2")
--__xlated("13: r12 = r0")
-+__xlated("9: r13 = *(u64 *)(r0 +0)")
-+__xlated("10: if r13 == 0x0 goto pc+6")
-+__xlated("11: r13 -= 1")
-+__xlated("12: if r13 != 0x0 goto pc+2")
-+__xlated("13: r13 = r0")
- __xlated("14: call unknown")
--__xlated("15: *(u64 *)(r0 +0) = r12")
-+__xlated("15: *(u64 *)(r0 +0) = r13")
- __xlated("16: r0 = 1")
- __xlated("17: r0 = 2")
- __xlated("18: exit")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_patch_list.c b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-index 581b75b7b5c5..5e8166bb79cc 100644
---- a/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_patch_list.c
-@@ -103,8 +103,8 @@ __xlated("10: goto pc+1")
- __xlated("11: r0 /= r1")
- __xlated("12: r2 = ")
- __xlated("14: r2 = &(void __percpu *)(r2)")
--__xlated("15: r12 = *(u64 *)(r2 +0)")
--__xlated("16: if r12 == 0x0 goto pc+9")
-+__xlated("15: r13 = *(u64 *)(r2 +0)")
-+__xlated("16: if r13 == 0x0 goto pc+9")
- __xlated("...")
- __xlated("22: if r1 != 0x0 goto pc+2")
- __xlated("23: w0 ^= w0")
-@@ -220,7 +220,7 @@ __arch_arm64
- __success
- __xlated("12: if r6 != 0x0 goto pc-3")
- __xlated("...")
--__xlated("32783: if r12 != 0x0 goto pc+1")
-+__xlated("32783: if r13 != 0x0 goto pc+1")
- __xlated("32784: gotol pc-32773")
- __naked void patch_list_may_goto_gotol(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-index 4ac92335da91..02e2065c9669 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-@@ -779,10 +779,10 @@ __arch_loongarch
- __xlated("0: r2 = 0x8000000000000000")
- __xlated("2: r3 = -1")
- __xlated("3: r4 = r2")
--__xlated("4: r12 = r3")
--__xlated("5: r12 += 1")
--__xlated("6: if r12 > 0x1 goto pc+4")
--__xlated("7: if r12 == 0x0 goto pc+1")
-+__xlated("4: r13 = r3")
-+__xlated("5: r13 += 1")
-+__xlated("6: if r13 > 0x1 goto pc+4")
-+__xlated("7: if r13 == 0x0 goto pc+1")
- __xlated("8: r2 = 0")
- __xlated("9: r2 = -r2")
- __xlated("10: goto pc+1")
-@@ -814,10 +814,10 @@ __arch_x86_64
- __arch_loongarch
- __xlated("0: r2 = 5")
- __xlated("1: r3 = -1")
--__xlated("2: r12 = r3")
--__xlated("3: r12 += 1")
--__xlated("4: if r12 > 0x1 goto pc+4")
--__xlated("5: if r12 == 0x0 goto pc+1")
-+__xlated("2: r13 = r3")
-+__xlated("3: r13 += 1")
-+__xlated("4: if r13 > 0x1 goto pc+4")
-+__xlated("5: if r13 == 0x0 goto pc+1")
- __xlated("6: r2 = 0")
- __xlated("7: r2 = -r2")
- __xlated("8: goto pc+1")
-@@ -895,10 +895,10 @@ __arch_loongarch
- __xlated("0: w2 = -2147483648")
- __xlated("1: w3 = -1")
- __xlated("2: w4 = w2")
--__xlated("3: r12 = r3")
--__xlated("4: w12 += 1")
--__xlated("5: if w12 > 0x1 goto pc+4")
--__xlated("6: if w12 == 0x0 goto pc+1")
-+__xlated("3: r13 = r3")
-+__xlated("4: w13 += 1")
-+__xlated("5: if w13 > 0x1 goto pc+4")
-+__xlated("6: if w13 == 0x0 goto pc+1")
- __xlated("7: w2 = 0")
- __xlated("8: w2 = -w2")
- __xlated("9: goto pc+1")
-@@ -931,10 +931,10 @@ __arch_loongarch
- __xlated("0: w2 = -5")
- __xlated("1: w3 = -1")
- __xlated("2: w4 = w2")
--__xlated("3: r12 = r3")
--__xlated("4: w12 += 1")
--__xlated("5: if w12 > 0x1 goto pc+4")
--__xlated("6: if w12 == 0x0 goto pc+1")
-+__xlated("3: r13 = r3")
-+__xlated("4: w13 += 1")
-+__xlated("5: if w13 > 0x1 goto pc+4")
-+__xlated("6: if w13 == 0x0 goto pc+1")
- __xlated("7: w2 = 0")
- __xlated("8: w2 = -w2")
- __xlated("9: goto pc+1")
-@@ -1013,10 +1013,10 @@ __arch_loongarch
- __xlated("0: r2 = 0x8000000000000000")
- __xlated("2: r3 = -1")
- __xlated("3: r4 = r2")
--__xlated("4: r12 = r3")
--__xlated("5: r12 += 1")
--__xlated("6: if r12 > 0x1 goto pc+3")
--__xlated("7: if r12 == 0x1 goto pc+3")
-+__xlated("4: r13 = r3")
-+__xlated("5: r13 += 1")
-+__xlated("6: if r13 > 0x1 goto pc+3")
-+__xlated("7: if r13 == 0x1 goto pc+3")
- __xlated("8: w2 = 0")
- __xlated("9: goto pc+1")
- __xlated("10: r2 s%= r3")
-@@ -1044,10 +1044,10 @@ __arch_loongarch
- __xlated("0: r2 = 5")
- __xlated("1: r3 = -1")
- __xlated("2: r4 = r2")
--__xlated("3: r12 = r3")
--__xlated("4: r12 += 1")
--__xlated("5: if r12 > 0x1 goto pc+3")
--__xlated("6: if r12 == 0x1 goto pc+3")
-+__xlated("3: r13 = r3")
-+__xlated("4: r13 += 1")
-+__xlated("5: if r13 > 0x1 goto pc+3")
-+__xlated("6: if r13 == 0x1 goto pc+3")
- __xlated("7: w2 = 0")
- __xlated("8: goto pc+1")
- __xlated("9: r2 s%= r3")
-@@ -1121,10 +1121,10 @@ __arch_loongarch
- __xlated("0: w2 = -2147483648")
- __xlated("1: w3 = -1")
- __xlated("2: w4 = w2")
--__xlated("3: r12 = r3")
--__xlated("4: w12 += 1")
--__xlated("5: if w12 > 0x1 goto pc+3")
--__xlated("6: if w12 == 0x1 goto pc+4")
-+__xlated("3: r13 = r3")
-+__xlated("4: w13 += 1")
-+__xlated("5: if w13 > 0x1 goto pc+3")
-+__xlated("6: if w13 == 0x1 goto pc+4")
- __xlated("7: w2 = 0")
- __xlated("8: goto pc+1")
- __xlated("9: w2 s%= w3")
-@@ -1154,10 +1154,10 @@ __arch_loongarch
- __xlated("0: w2 = -5")
- __xlated("1: w3 = -1")
- __xlated("2: w4 = w2")
--__xlated("3: r12 = r3")
--__xlated("4: w12 += 1")
--__xlated("5: if w12 > 0x1 goto pc+3")
--__xlated("6: if w12 == 0x1 goto pc+4")
-+__xlated("3: r13 = r3")
-+__xlated("4: w13 += 1")
-+__xlated("5: if w13 > 0x1 goto pc+3")
-+__xlated("6: if w13 == 0x1 goto pc+4")
- __xlated("7: w2 = 0")
- __xlated("8: goto pc+1")
- __xlated("9: w2 s%= w3")
++/* Called when a program that uses BPF_REG_ARENA_SP is loaded */
++int bpf_arena_stack_init(struct bpf_arena *arena)
++{
++	struct arena_stacks __percpu *stacks;
++
++	if (READ_ONCE(arena->stacks))
++		return 0;
++	stacks = bpf_map_alloc_percpu(&arena->map, sizeof(*stacks), __alignof__(*stacks),
++				      GFP_USER | __GFP_NOWARN);
++	if (!stacks)
++		return -ENOMEM;
++	if (cmpxchg(&arena->stacks, NULL, stacks))
++		free_percpu(stacks);
++	return 0;
++}
++
++void __percpu *bpf_arena_stack_percpu(struct bpf_arena *arena)
++{
++	return arena->stacks;
++}
++
++/*
++ * Called at the start of the main program or of a callback, in any context. When
++ * @busy is 0 the program has taken the stack of the cpu and it's too small.
++ * Returns the low 32 bits of r12 with bit 32 set, or 0 when there is no memory.
++ * The program doesn't run then.
++ */
++u64 bpf_arena_stack_get(struct bpf_prog_aux *aux, u64 busy)
++{
++	struct arena_stacks *stacks = this_cpu_ptr(aux->arena->stacks);
++	struct bpf_arena_cpu_stack *cpu = &stacks->cpu;
++	struct bpf_arena *arena = aux->arena;
++	u32 size = aux->arena_stack_size;
++	struct arena_stack *st = NULL, old;
++	struct bpf_stream_stage ss;
++	long addr;
++	int i;
++
++	if (!busy) {
++		/* It's not there yet, or programs that used it needed less */
++		addr = arena_alloc_pages(arena, 0, size >> PAGE_SHIFT, NUMA_NO_NODE, false);
++		if (!addr) {
++			WRITE_ONCE(cpu->busy, 0);
++			goto err;
++		}
++		old = (struct arena_stack){ cpu->base, cpu->size };
++		/* r12 is not 0: neither at the start of the stack nor at the end */
++		cpu->base = addr + 32;
++		cpu->size = size - 64;
++		if (old.size)
++			arena_free_pages(arena, old.base, (old.size + 64) >> PAGE_SHIFT, false);
++		return BIT_ULL(32) | cpu->base;
++	}
++
++	while ((i = ffz(READ_ONCE(stacks->busy))) < ARENA_STACK_SLOTS) {
++		if (test_and_set_bit(i, &stacks->busy))
++			continue;
++		st = &stacks->slot[i];
++		if (st->size >= size)
++			return BIT_ULL(32) | st->base;
++		break;
++	}
++
++	/*
++	 * It's the first use of the slot, or programs that used it needed less,
++	 * or all slots are busy and bpf_arena_stack_put() is going to free the pages.
++	 */
++	addr = arena_alloc_pages(arena, 0, size >> PAGE_SHIFT, NUMA_NO_NODE, false);
++	if (!addr) {
++		if (st)
++			clear_bit(i, &stacks->busy);
++		goto err;
++	}
++	if (!st)
++		return BIT_ULL(32) | (u32)(addr + BPF_ARENA_STACK_SLOW);
++
++	/*
++	 * bpf_arena_stack_put() finds a slot by its base. No slot may name pages that
++	 * another run can get.
++	 */
++	old = *st;
++	st->base = addr + BPF_ARENA_STACK_SLOW;
++	st->size = size;
++	if (old.size)
++		arena_free_pages(arena, old.base, old.size >> PAGE_SHIFT, false);
++	return BIT_ULL(32) | st->base;
++
++err:
++	bpf_prog_inc_misses_counter(aux->prog);
++	bpf_stream_stage(ss, aux->prog, BPF_STDERR, ({
++		bpf_stream_printk(ss, "ERROR: No memory for the stack in arena. The program didn't run\n");
++	}));
++	return 0;
++}
++
++/*
++ * Called before the main program or a callback exits with a stack that is not
++ * the stack of the cpu: BPF_ARENA_STACK_SLOW is set in @base.
++ */
++void bpf_arena_stack_put(struct bpf_prog_aux *aux, u32 base)
++{
++	struct arena_stacks *stacks = this_cpu_ptr(aux->arena->stacks);
++	u32 size = aux->arena_stack_size;
++	int i;
++
++	for (i = 0; i < ARENA_STACK_SLOTS; i++) {
++		if (stacks->slot[i].base != base || !stacks->slot[i].size)
++			continue;
++		clear_bit(i, &stacks->busy);
++		return;
++	}
++	arena_free_pages(aux->arena, base, size >> PAGE_SHIFT, false);
++}
++
+ /*
+  * Reserve an arena virtual address range without populating it. This call stops
+  * bpf_arena_alloc_pages from adding pages to this range.
 -- 
 2.55.0
 
