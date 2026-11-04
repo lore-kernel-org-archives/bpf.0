@@ -1,95 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.80.4.35
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793821975;
-	b=YzwyZpHEZLb422FqooOibsfRSs9Fm4jn6emXdhUIBFBRULTcLibw5JsaIZp5mwOErzoe
-	 MGlKohZgjLmOhZZTfEJlusRzcBSF6RTFASeUDCWGzsMIT1V3bEBs2JxZpNB9QMEFbS1G9
-	 P5Ua9nUQ80wKT8HjB9zOGw2us4aeqlUeZnHy+L0/A4DdWvXW3XXNV7IntM3Ugh/BgWa3j
-	 TZF9rNShxcwuWxmos+P7ZcGFArhXhbjC+bcFCYDaFe4gspNSDTCyb8Xr2YsMMxw8LlZ3h
-	 kEh1r0PKdBCrW+iBorPPwyGiOtZ8tqPSvHBU3Fpl4A/avEcYa+wPR0jXSBwJmdmSeXA==
+	t=1793821981;
+	b=DDrmyzD5Ivs/Pdx8Fox7VfAR5ObFNANqLXAjcWc8ueO2Ktv18izEtCsRQvbmfQC0HP2p
+	 ERlxXG+Ri0ZMw8t5ffHr1CVEcrMyl7URod9LyN4HMQfALYbF5w0JkZ0ATlBOwjon48prH
+	 45PSBwRIPVUGomoS8Yxz3o615FaoAjzP9xrntu7HYM7045fUljj/ArdnlMFDst7yXXoE/
+	 F2Y51ukNa/nKyvEmJNn85mmymNhlPBrVuKMZjofLEGU2j5sb5eOVB8gdN5y9+KkbY/5jF
+	 m8VCSxEMbrmr+bPFbFzW/H48AFo1k8e+ZXMTwb+ZauEYk7IYAogBtbZ+vz2g5W9aSgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793821975;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:Date:
-	 From:To:Cc:Subject:Message-Id:In-Reply-To:References:X-Mailer:
-	 Mime-Version:Content-Type:Content-Transfer-Encoding:X-Virus-Scanned:
-	 X-Virus-Status;
-	bh=EpEivueZqLIKADrPWMjl3A7k/b/byEHl6Jp1sTC5nhg=;
-	b=ldGIEEye4F38GYLdeIXqP7UF3zS+gXK+lxNn4RSMR0kD0QY/O1E5qpVWMZS9R3R5qfa1
-	 h0IpVpd3sKOngvOH5STYf44jqob8ZinUW1Zh1eJoCNTqWEFs/PRm2S3UaqrqB6ANCfhZx
-	 HAzp8OuzvrI5PFS/be/qRu4/ED4BjPJKnWSMmTTlEOD+lTM7X/qJc7DnrCafzxc+wSv0L
-	 zZzB1ztuL8u5316CbQbDITmMDE/Qn6aN4u3pypBroqnSfS1jU2wchq2+N52FuffRktAYb
-	 RMmVnV1OxDSlC6sPorusStuHNo5lThuLe40wl9hYxCYMtOujvjNPvuVHUwzXy6Vcb9Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793821981;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Rspamd-Queue-Id;
+	bh=bjNAE/sqW+6C7Fn4/hwxUDn8yEwHvj++UXJMUvq2N60=;
+	b=Y7vpWoy5+wdnPaSMsoqZzW9KcSXRKIXCFkGQj+3tIovm6miNuqZmAoOng5ZyXTOhKy8E
+	 RfemXw/C0wAIn8oCiKV71oaqZUEDD4FnZuLWgUReOJLeba3bEEd8yp1om107fT8zrcQTd
+	 b6LEC4paSLtgKiULaqSCSYTB2ZJesipzlzD92EXMJd68qCq2XwUhjfwaoj+WSWlMGXRAe
+	 Hmmp49+fnv/UW+R1yvz8BmUIccl8Qz/Np5/M/Bc6zrM0YLlYbPEacAb4Wd4fNX65BFvkS
+	 qHbJU2YcRP3/Y3A2PUtvJJBn1HrLKlNE+eBGoA+rEx6Mvb7lby/6wfI6GyT/r8ZngKA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=uniroma2.it;
-	spf=pass smtp.mailfrom=uniroma2.it;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b="82Rinob/";
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=pNb6qZfq;
-	arc=none smtp.remote-ip=160.80.4.35
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.35])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8963606D829;
-	Wed,  4 Nov 2026 19:52:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8963606D829
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=82Rinob/;
-	dkim=pass (2048-bit key, unprotected) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=pNb6qZfq
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 6A4JpmJF025384;
-	Wed, 4 Nov 2026 20:51:53 +0100
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id CD48A121681;
-	Wed,  4 Nov 2026 20:51:43 +0100 (CET)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1793821904; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EpEivueZqLIKADrPWMjl3A7k/b/byEHl6Jp1sTC5nhg=;
-	b=82Rinob/Kq6ijDpOWSDVjYui4K310k0guZ4huTu5qmv02CiEy0tC6aSjjC5d6ClOIE/ctE
-	Td69ys8BnLPeJnBw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1793821904; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EpEivueZqLIKADrPWMjl3A7k/b/byEHl6Jp1sTC5nhg=;
-	b=pNb6qZfq/ux+uANgdgzkai8tw1rFIfLTwO+Om53h8yqg6/JsnXt9wViqFRRG6MRqAB4y0R
-	EouYFy1suM3t5S1VUIWwi/bJlnuLKqAnodQdLN8q4VD6iupoE7mvN8H5N8lIGFRyXTX2in
-	z/TjO4lrPe4b3QT3oZ/W+o0/98/CjxJSmbqGvyQ5dkzXVOTZURP5+piBH0e/U/0wux0H/4
-	cFwvE7HLUVBiuW9vAxLfr76QbGaFZXLdZgCQ4MAq+wUBagrAgPIF6ySHF9fGHa1Dr/ciuO
-	THWheRk2k76QVQ95sZzDTtlHmzR8dnSidQ99TZ0IWFOVPQkYn2U0+r4ZCbCGlw==
-Date: Wed, 4 Nov 2026 20:51:43 +0100
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        David Ahern
- <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
-        Shuah Khan
- <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        bpf@vger.kernel.org, David Lebrun
- <david.lebrun@uclouvain.be>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Mathieu Xhonneux <m.xhonneux@gmail.com>,
-        David Lebrun <dlebrun@google.com>,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Andrea Mayer
- <andrea@common-net.org>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [PATCH net 3/6] seg6: update skb checksum when SRv6 behaviors
- advance to the next SID
-Message-Id: <20261104205143.f254aaaf5d5b112fc0188016@uniroma2.it>
-In-Reply-To: <aulA09qBNtIxJq7S@fedora>
-References: <20261031225033.64-1-andrea.mayer@uniroma2.it>
- <20261031225033.64-4-andrea.mayer@uniroma2.it>
- <aulA09qBNtIxJq7S@fedora>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	dmarc=none header.from=mandelbit.com;
+	spf=pass smtp.mailfrom=mandelbit.com;
+	arc=none smtp.remote-ip=195.10.208.52
+Received: from mout-b-203.mailbox.org (mout-b-203.mailbox.org [195.10.208.52])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EAEC60960A5;
+	Wed,  4 Nov 2026 19:52:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8EAEC60960A5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA512)
+	(No client certificate requested)
+	by mout-b-203.mailbox.org (Postfix) with ESMTPS id 4jKbhD6bLczLmWY;
+	Wed, 04 Nov 2026 20:52:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
+	s=MBO0001; t=1793821964;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bjNAE/sqW+6C7Fn4/hwxUDn8yEwHvj++UXJMUvq2N60=;
+	b=yUhujfsOWWBMMBcPYAduvPg6sBeDchIrJo4Lvbu4XcVkfjNv0IIaPRCGRZczweJ679nBiM
+	MMqAF/MSm/NlAGgr3WL1Bmk/v6OVoX3s6zURHcibMxtJASJTgh6GAJ5ipoEs5y4XhTTrYG
+	snqp/i3OYGN5pqOQUIBkJCqg9qUQcTUNXXjlWSmScZymhJ0jcvP80rnCe3m5lu3aXkw/RQ
+	P+xvETRGjGX3GISDOnitTH1mWzZywrrc4jwoTXyCP4QP6IEZdFHtfABBLM8gr1dnDjpuyN
+	qumxqqwKd+eX4GrIIcGJp7MSAeKB0yn6L0OlOMSejWhf1r572KfpwzYAkcByvw==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
+From: Antonio Quartulli <antonio@mandelbit.com>
+To: netdev@vger.kernel.org
+Cc: saeedm@nvidia.com,
+	tariqt@nvidia.com,
+	mbloch@nvidia.com,
+	leon@kernel.org,
+	dtatulea@nvidia.com,
+	cratiu@nvidia.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	linux-rdma@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Antonio Quartulli <antonio@mandelbit.com>
+Subject: [PATCH net-next v2] net/mlx5e: Prefetch the packet a few strides ahead in the linear MPWQE path
+Date: Wed,  4 Nov 2026 20:52:41 +0100
+Message-ID: <20261104195241.1883539-1-antonio@mandelbit.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -98,36 +84,115 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4jKbhD6bLczLmWY
 
-On Tue, 3 Nov 2026 10:15:03 +0800
-Hangbin Liu <hangbin.liu@linux.dev> wrote:
+Without cache injection (DDIO/SDCI), the first accesses to a received
+packet's headers and skb_shared_info are DRAM misses, and the
+net_prefetch() in mlx5e_skb_from_cqe_mpwrq_linear() is too late to hide
+them. This caps the packet rate of a queue.
 
-> [snip]
-> > +	if (skb->ip_summed == CHECKSUM_COMPLETE) {
-> > +		update_csum_diff4(skb, old, *(__be32 *)srh);
-> > +		update_csum_diff16(skb, (__be32 *)daddr, (__be32 *)addr);
-> > +	}
-> > +
-> > +	*daddr = *addr;
-> 
-> Nit: we can re-use seg6_update_csum() if the transport header set correctly.
-> But that function is static and we need adjust header files.
-> So the current change looks good for me.
-> [snip]
+In the linear striding RQ path a packet takes one stride and the device
+fills the strides in order, so the packet MLX5E_RX_PREFETCH_DIST (4)
+strides ahead is known without its CQE: prefetch its headers and page,
+and the line its skb_shared_info will use if it has the length of the
+current packet, as in bulk flows. That line matters when every packet
+becomes its own skb: TCP inside an ovpn UDP tunnel gains 34% with it and
+4% without.
 
-Hi Hangbin,
+AMD Ryzen 9 9950X, ConnectX-5 Ex, one RX queue on a dedicated CPU,
+MTU 1500, mean of 3 runs:
 
-I thought about something similar. seg6_local finds the SRH with
-seg6_get_srh(), and the SRH is not always where the transport header
-points, for example with a Destination Options header before it. Passing
-the SRH to seg6_update_csum() and moving it to include/net/seg6.h would
-make it usable in seg6_local. I will likely propose this for net-next,
-after this series, to avoid changing more files than needed in this fix.
+                                   before       after
+  UDP 512B flood, pktgen         2.52 Mpps    3.44 Mpps   +36%
+  TCP, 1 stream                  44.6 Gb/s    48.0 Gb/s    +8%
+    NAPI CPU cycles/packet            1334          715   -46%
+  XDP_DROP reading the packet,
+    NAPI CPU cycles/packet             409          280   -32%
+  XDP_TX, NAPI CPU cycles/packet       829          554   -33%
 
-Thanks for the review,
-Andrea
+With the change, the XDP packet rates were limited by the sender, so
+cycles per packet are compared.
+
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
+---
+v2:
+- prefetch the packet MLX5E_RX_PREFETCH_DIST strides ahead instead of
+  looking at the CQE ahead (Alexei); no CQE peek, RQ state bit or wq.h
+  helper any more, and it also works with CQE compression (with it on:
+  UDP floods +26%, TCP +6%, where v1 did nothing)
+- also prefetch the skb_shared_info line, guessing the length from the
+  current packet: without it, TCP inside a VPN tunnel (one skb per
+  record) gained 4% instead of 34%
+- XDP numbers added; XDP_DROP without touching the packet is unchanged,
+  and the XDP packet rates were capped by the sender (12-16 Mpps), so
+  cycles per packet are quoted
+v1: https://lore.kernel.org/netdev/20261103235823.536706-1-antonio@openvpn.net/
+
+Notes:
+- Distance: with v1, 4, 6 and 8 were within 3% of each other.
+- The prefetches are issued before the stride ahead is synced for the
+  CPU; if the device hasn't written it yet (low rate), they are wasted.
+- No prefetch for the first 4 strides of a WQE.
+- Measured on one system only (Zen 5 desktop, no cache injection,
+  CX-5 Ex); numbers from DDIO/SDCI systems and CX-6/CX-7 would be
+  welcome.
+
+ .../net/ethernet/mellanox/mlx5/core/en_rx.c   | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+index 22fea4739a2c..57da30b1bffe 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+@@ -2094,6 +2094,36 @@ mlx5e_skb_from_cqe_mpwrq_nonlinear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *w
+ 	return skb;
+ }
+ 
++#define MLX5E_RX_PREFETCH_DIST	4
++
++/* A packet that fits the MTU takes one stride of a linear MPWQE, and the
++ * device fills the strides in order: prefetch the packet
++ * MLX5E_RX_PREFETCH_DIST strides ahead, and the line its skb_shared_info
++ * will use if it has the length of the current one, as in a bulk flow.
++ */
++static void mlx5e_mpwrq_linear_prefetch(struct mlx5e_rq *rq,
++					struct mlx5e_mpw_info *wi,
++					u32 head_offset, u32 page_idx,
++					u16 cqe_bcnt)
++{
++	struct mlx5e_frag_page *frag_page;
++	void *va;
++
++	head_offset += MLX5E_RX_PREFETCH_DIST << rq->mpwqe.log_stride_sz;
++	page_idx += head_offset >> rq->mpwqe.page_shift;
++	if (page_idx >= rq->mpwqe.pages_per_wqe)
++		return;
++
++	head_offset &= (1 << rq->mpwqe.page_shift) - 1;
++	frag_page = &wi->alloc_units.frag_pages[page_idx];
++	va = netmem_address(frag_page->netmem) + head_offset;
++	prefetch(netmem_to_page(frag_page->netmem));
++	net_prefetch(va + rq->buff.headroom);
++	/* with XDP the packet may not become an skb */
++	if (!rcu_access_pointer(rq->xdp_prog))
++		prefetchw(va + SKB_DATA_ALIGN(rq->buff.headroom + cqe_bcnt));
++}
++
+ static struct sk_buff *
+ mlx5e_skb_from_cqe_mpwrq_linear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *wi,
+ 				struct mlx5_cqe64 *cqe, u16 cqe_bcnt, u32 head_offset,
+@@ -2114,6 +2144,8 @@ mlx5e_skb_from_cqe_mpwrq_linear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *wi,
+ 		return NULL;
+ 	}
+ 
++	mlx5e_mpwrq_linear_prefetch(rq, wi, head_offset, page_idx, cqe_bcnt);
++
+ 	va             = netmem_address(frag_page->netmem) + head_offset;
+ 	data           = va + rx_headroom;
+ 	frag_size      = MLX5_SKB_FRAG_SZ(rx_headroom + cqe_bcnt);
+-- 
+2.56.0
+
