@@ -1,83 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793788670;
-	b=l/fkgy2+ta443Ia25x8/BaYkXgdEo8LGxxK6euntb+g158uaHOBBbA8wkIUQPGNfhXw3
-	 7ik42ioiwlmEbeo4fec1ZCbfv5hIPMiLTtgYuezD+sAAhkyfgY93l+4zFzFxOjwCMF9t+
-	 79nlJRkCjkaMt5EQDpR8xjY2+j83y5eiB7o/UExvFldY7SSCT626wqGbFy6faQMDGuv2D
-	 6hOpGVGVO18vMiwmyj66Ahc79X63gXCNmMMfA8vD1MbOmwsOphVYmlvaxZYGkk4eBUWQv
-	 MspARrqH061XW3e2OICQnLPsB+XH7kL+VSKCHdHIbCNhE86gy1FzConLS0KrlJdLkCA==
+	t=1793788675;
+	b=3xNZBKbYiCkro+aTqjDm8zFSMQHceYzioel18YUYCOprF7UZ/oD7UMfWfOl22Lxi+QlQ
+	 1clOjXsOarutQ8fz+l24hjWlY6oNEloV3BPLHwn/1G8zo4GtPgqkYL/fsFKag/CHj0vX3
+	 OFel7Y3dI0JZoiJ6GIzeSohysbu7Eu0/W+D0QDB0J/bIKMeZZIT8NfcLWqT1+FQQZJtLd
+	 E4jNVyAV1Zd5QfldmbVqhXlXxtcHZ9LQ49tyAgAjWCvcIwRB7GbJVmX0RRQaGAmJaFwRn
+	 WWVtP/v98l8+2GmrCdLGjDHNsYUJ5hx8KjPQ1y34tP6IF/3AryDp69ETds/P43Z3m6w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793788670;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793788675;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=1dkLsXb9/bTYDqyZhGVg0eEZjhAqz/Od70PIDf4k4fc=;
-	b=IxDzmQIimuj6pQvWVJaZx5/xpj7VhvblubSMVjiHz/Io5kqCcqQWSe66MGg8IcKAKqqm
-	 /t4bBE/r4Gy64+Dh1te9YTo7b/CcG1ihlTOEVlE3Qsvl/QYirgDmW2ZV6dUPerVxAXKN5
-	 0RcCycOideJRfa+sl/S+SyYCxNhqMCDL77u5E7ZRtcguViGPrkE1pn4JGPdsFhvd+kfYs
-	 uODMP3rXxXTJ+Nsp5GcnBGmpknXI3nKp2zPIlqDs0LaVqIOdzHPKq+DI1yj6fKHjr8R4j
-	 +vLyY3p3zjyymwSl6FsVD6xVO9BHw3XS7Im8BhlhdJa3AA1V8lRSg4SLgzKcFqtpoBA==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=onAfKGASw105JYI87UHnMZzgOAw/UrE5Kfe5HtsiM5Y=;
+	b=pLyyb1H+0rnTmDhmv9tZXZM0JAvV8RTSOM9nHFwfGPyMMuwARq7oqCbHjaMhS8xE/8FY
+	 pCe9sczpzsA3qtRhalYrMYbslTgb83l4k3lAkkfvezlLsdjleav6Q+RRDU6T4kktE1Muc
+	 nMOyMWp+JJLlcIGnB56MASbmW3BvTqepTI+cgoBb6xMV1CWzIKTqEPtzCSe50Eqtb6pqF
+	 DAqf2LklbyUi9yrXSD9qNMQE+Ar4+i5lTTyRyRw0Oggv03bpHzVLvmSDISDa4ENp60kHQ
+	 3Bt+oF3tXG+sjZNB62P8fN0XhP4cXF+jLSm63XHOYk2h2lN0yFAFY+zbvWdOfsEgpiQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zn4rPmWa;
-	arc=none smtp.remote-ip=209.85.128.42
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="ky/Vvs7v";
+	arc=none smtp.remote-ip=209.85.128.44
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86055606A31B
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 10:37:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86055606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E04606A336
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 10:37:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7E04606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zn4rPmWa
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4b4571ff080so5468795e9.1
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 02:37:49 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ky/Vvs7v
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a210470b49so3625565e9.2
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 02:37:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793788668; x=1794393468; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1dkLsXb9/bTYDqyZhGVg0eEZjhAqz/Od70PIDf4k4fc=;
-        b=zn4rPmWaJ3a++hiLo7Xe3RVBG+PeT0bEuPCVcAY+8QPdo50paPEhhqtYcxONPUreWY
-         PTSi5rKZBSU+UfM2I4p6WT3/ITMxuAymkUkGT8IJHI9u77NwNIJdSGO4UiSMOYnsxqBi
-         mZ0JHuPeqeYvfugiG1VaiRh49iD5NIzkygnQHSlFf/ZI1ExufTef1Ry/Ps1rgGKgm6AX
-         GYnRZI3UrKforOJokHSRElmQp0VRHHU56egQHw/9RXEMu2jN3JbF+9s5GmxZCzV8NTgp
-         JiAk7mjeb8DyW6wgDIXKYP3/DMzg5hX8VpUTEn5Z1QV3TT9NY6wZBqtRICzqHkHlBAti
-         1G3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793788668; x=1794393468;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793788673; x=1794393473; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=1dkLsXb9/bTYDqyZhGVg0eEZjhAqz/Od70PIDf4k4fc=;
-        b=DbpjfFoMew0uTwEBEZ5XgjxIVg9ivTZ85g3zhDvpHXFdMr1SAvAGWMDGlyCV6q5hR3
-         1fXcENqbHdVM9dgJuf1MCl08AVVgzLLkToCWOLf9vT1bc/bK2Uz+qFmc8KAzVJ2MwRYK
-         /VKqtONYKzF+vsZLFehxZMYZGz4IO0noZi5WIi0emuq2Cb8vqu2DXGpZk23BZD/1xliK
-         ahtuNb4Mm7SZ1bv014QkdN1+CdC1dCUwrOS+NSb1fe7ozhtYYpn52RFWEUcYA7luofxg
-         hEcQ4nkmduIPfIVUs0LN7mtyaCgh5xsjbgd4pICWCoEKzWDl1syXBUUf0LKST2NLvgCU
-         A4Zw==
-X-Forwarded-Encrypted: i=1; AKwUvByPYwriPX/ru44UwfOrJl6byzGkIfWT8sr2tONWLsGs3X4qu7Nj+/IDxCoCwAmfizntzac=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+Sh4HdL0hCvUCxoFiBURgCrvHPBSdR6r1tkqD4RD1l8TrnW2+j
-	vS8HC3R9RdhkIh82+z59OV2zxr7s3+sNkJ1QmwKfUkywFeIhNPkSmA03
-X-Gm-Gg: AYBFou22wSIlPqOIKexLJNa5vBoJRZKa13OG06F1Vx5M8fvbSvSDRpdJqt/XVBCvuPi
-	DWKyE06zz1NGFZ0MrQrBhN9/f85Ncg9GeQHTgsHXZudq7IXyHh+4Wvka8W9SPrTz+mffrml8hM4
-	MpP5u25PL/wVutc3qZXlldiHLDGal+11z7GNDoizx7HjKd1xLfNx5zD3ZVW4z3PyM6r5JSWQ8xZ
-	r8mQ5/Bn6pxA9AXSOm/uX9L2VqFbFQYVhDPno5TGESsyztzbBa9T/RWCO4TGNms1qxuwj9f9fpU
-	6yIYIxHPPcWAcWUTv8Kuxqhp57EWFS4nhFRLtTconu+yE3dM+RhBMxNRPYNpSJSpeu1TVnMzNay
-	nWhJF9meF1gVQDm4Y0/msaPFwkLj7uzy1xtAfFTVYUFnVkz9yL5e7QXQ1oZnhRc5SNvB6WGqNC9
-	Tc3FOa3EgXDh8myi66mmYE6xXWwcsjix6fQ/fxRpnoPInBI/3yZ1NgE6ovmYB0PBUOnmg15VzsA
-	9BQ7NKGOxzgvPzViCfaxnmyv45BvJLXXHI4dh+tbLVT+dZsEMyW/SbTMgNg6hliXilWKd1450A0
-	M8XAs5LQ4khKJUdmEK+iGXZYYLLm4bYwTKG5BXVHLvBspK7LcnxhfYpMUKOlprVc5uTVI+En3a9
-	KJPojViLwMQj3/9FJzTscqQ==
-X-Received: by 2002:a05:600c:698d:b0:4a2:994:575c with SMTP id 5b1f17b1804b1-4ac185bcc4emr358335545e9.34.1793788667829;
-        Wed, 04 Nov 2026 02:37:47 -0800 (PST)
+        bh=onAfKGASw105JYI87UHnMZzgOAw/UrE5Kfe5HtsiM5Y=;
+        b=ky/Vvs7vq9acnbAepAf0/7PqZUgHqQhJ4a1jWVId1ZL5PMZ9n1cXoI4O/MFd4PCDuN
+         mVCr3+rcb95tcGDQ2pM0Z3W/KlfGkuN3rysnVL57YSKjWbxA+d37SlXRl6VteydczA0A
+         +P4PEfGGiBxtkM/CTtyxvU3OgfwnnRUNiouA5vud1D6xnJwPoSiy+pNIl5Euv0YYZWsL
+         2wbSgTRF9oLjzz+reaRVnj/xSyCLeDXuJe1HiTgncZJXx/QYVH7odhAuTW92cQrh8oiM
+         TCNRpahqS22ALACm8jukuWC2qySmc6IalfIOt+blGS5PFLQV0BQ3sT/RylPghRnniv34
+         vT/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793788673; x=1794393473;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=onAfKGASw105JYI87UHnMZzgOAw/UrE5Kfe5HtsiM5Y=;
+        b=rHCM2wOpGgSafm7PuS1LfJzhYJaeSoP0gf6F477g1tkqU9yw8jm0hgPGkK8+En/+lu
+         Al0sPNdujbmNOpepez1X4LYCkzCmVEv1Wn6KkAV5cAv0dvFDhW2zyFZzR9/ol3GSUv82
+         sAMC54VL+Ulwh/6GrSc1B0La+m3BEuW441+jwozOMTFk/h2ACFrS/d7q0oNr1wYjtan9
+         wOZ25uPtgsKYn/bYNkUq0ELD1/Pk67fWduZoYRsghME+57z3vpZ0c3hNkJ3UigRgomPe
+         H6mXoyqmMIqr98p2v6ZoMFCuvQ+Uk1+qT54VF+RpahzxmZ6XkyMv8uInE/wplzhSMhDN
+         Jeew==
+X-Forwarded-Encrypted: i=1; AKwUvBxu6BDWN0jqM1niVOgd3gNXRmYaXUeWhfBApB2Mv7Scsu77Z1utK4r5guWAbQ+4noKUb1c=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/2WSmoT303QnbMTqnGEypoc145CEHwzZv2t+QwGS3IoQCSis7G
+	veEKwZmSTXU/DB5s9HIoRQyTY+3yRBDc0i+g7fjNr6Nsqlg9Zj9kA7k1
+X-Gm-Gg: AYBFou1r+UQHOPP8Fj9KbkXO1oTIR1rMPBf9IZhPBTaAbUlAzG459BLGAIYe4GC9iFY
+	VkpJWfj7NH8Hkbx1wENWSSA3eYlkirHjWtydqRFpBO5bYzKpMkpWS+hDHNw+IOr4wjWOlKbA3+F
+	eQaLkBPH1XAN83b+jm55dgeTcpTOg803hcX0JF/ONpAHaOs2mNZ/SVgpjI869zJqztQe7c992e+
+	cfPcXG/RcYLr9OGrrcOp9eIdymKd3dbaJzC/WpiOCKkQXW/PCeN5PjhI6R2RnrNew2OGakXpxnM
+	GZjAv1oPUwBKs6gGXKvqeQ4rsgbwbINYJDFrsOFJnlBe6p0x2dh9XWHfa6yMBIxR3v0dnIHTa5F
+	MWxzM2K5xaAmEdI8vJLRmwAd2verCky4kZ2IZwC6AoaP6scZpme9/VUs8aByonclP9qgPBwS39V
+	Lc/VCzvYmzCmRg3Ge/Y8Q+YKoniaQqSPE2pM9fJsmU42rAehyO874qQznnTWGU3eJ3RcqHmZflU
+	P9Zwc0d3ibvT2Ybjxp+wiWz7Nw9OlvFipkF8pA9Ba43tBMRfNRumKWZ074tSUuhMAl0gT18MIid
+	r2UsJaDaOFafGC3g7Xm3rsHL1ky78KqPgq2RjBGvFoBKPgMvh+FO8D6RTglATq/IHPPP+6Vam49
+	9Cw9AwgFyykb056a2dAJJkY0=
+X-Received: by 2002:a05:600c:8b06:b0:4a2:d:5ccc with SMTP id 5b1f17b1804b1-4ac17b2bc63mr368842285e9.10.1793788673254;
+        Wed, 04 Nov 2026 02:37:53 -0800 (PST)
 Received: from andreayoga.wind3.hub ([151.76.4.179])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b40ff10f88sm36342995e9.0.2026.11.04.02.37.46
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b40ff10f88sm36342995e9.0.2026.11.04.02.37.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 02:37:47 -0800 (PST)
+        Wed, 04 Nov 2026 02:37:52 -0800 (PST)
 From: Andrea Parri <parri.andrea@gmail.com>
 To: Kees Cook <kees@kernel.org>
 Cc: Andrea Parri <parri.andrea@gmail.com>,
@@ -94,10 +95,12 @@ Cc: Andrea Parri <parri.andrea@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH 0/4] seccomp: fix user-notification state transitions
-Date: Wed,  4 Nov 2026 11:37:30 +0100
-Message-ID: <20261104103736.71956-1-parri.andrea@gmail.com>
+Subject: [PATCH 3/4] seccomp: add a helper to move a notification to SENT
+Date: Wed,  4 Nov 2026 11:37:33 +0100
+Message-ID: <20261104103736.71956-4-parri.andrea@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261104103736.71956-1-parri.andrea@gmail.com>
+References: <20261104103736.71956-1-parri.andrea@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,79 +112,78 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-An atomic SECCOMP_IOCTL_NOTIF_ADDFD request moves a notification from
-SENT to REPLIED, so the listener stops reporting EPOLLOUT for it.  Two
-paths move it back to SENT without waking poll waiters, so a supervisor
-waiting for EPOLLOUT, with edge- or level-triggered epoll, poll() or
-select(), can remain asleep, leaving the target blocked in the trapped
-syscall.
+seccomp_notify_recv(), seccomp_handle_addfd() and seccomp_notify_addfd()
+each move a user notification to the SENT state.  The notification then
+accepts a reply, so each site must also wake EPOLLOUT waiters.  Both
+addfd paths have missed that wakeup before.
 
-Patch 1 fixes the failed descriptor install, present since commit
-0ae71c7720e3a ("seccomp: Support atomic "addfd + send reply"").  Patch 2
-fixes the restore on signal interruption, added by
-commit 832b9b176be06 ("seccomp: restore knotif->state when
-SECCOMP_ADDFD_FLAG_SEND is interrupted").  Patch 3 moves the state change
-and the wakeup into one helper, with no functional change.
+Move the state change and the wakeup into seccomp_notify_set_sent() so a
+new path cannot set SENT without waking poll waiters.  The helper asserts
+that notify_lock is held, as all three callers already do.
 
-SECCOMP_IOCTL_NOTIF_RECV marks a notification SENT before copying it to
-userspace.  Unless SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV is also set, a
-signal during the copy makes the target return EINTR, even with
-SECCOMP_FILTER_FLAG_RESTART_BEFORE_RECV, while the supervisor can receive
-a withdrawn ID.  With it, the signal is held back as if the notification
-had already been received.  Patch 4 adds a RECEIVING state and marks the
-notification SENT only after the copy.
+No functional change intended.
 
-Patch 4 affects all filters, not only those using RESTART_BEFORE_RECV:
-RECV now fails with ENOENT if the target withdraws the notification during
-the copy.  It clears the buffer first, and
-Documentation/userspace-api/seccomp_filter.rst already asks supervisors to
-retry on ENOENT.
+The change was written with the help of an LLM.
 
-All four patches concern transitions into SENT; patch 4 takes its
-post-copy transition through the helper added by patch 3.
-
-Tested in vng on x86_64 with the full seccomp_bpf suite, using the seccomp
-selftest config plus CHECKPOINT_RESTORE: 146 passed, 0 failed, 0 skipped.
-Reverting the kernel/seccomp.c changes of the whole series makes
-user_notification_addfd_rlimit and user_notification_addfd_send_interrupted
-time out on their second epoll_wait() and all four during_receive variants
-fail; reverting only those of patch 4 makes just the during_receive
-variants fail.
-
-The bugs were found and the patches were written with the help of an LLM.
-
+Cc: stable@vger.kernel.org # 7.4.x
+Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
 ---
-Reviewer notes: 832b9b176be06 and f7952251ecc3, fixed by patches 2 and 4,
-are in v7.4-rc1.  Patches 3 and 4 only need backporting to 7.4.x:
-f7952251ecc3 adds a new flag that is not tagged for stable itself,
-unlike 832b9b176be06, and patch 3 is tagged only because patch 4 needs
-it.
+ kernel/seccomp.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-Patches 1 and 2 do not depend on patches 3 and 4 and can be applied
-first.
-
-The series conflicts with Cong Wang's RFC "seccomp: report the result of
-continued system calls" [1], which is based on v7.3.  After patch 4, a
-task killed while its held notification is being received is in
-RECEIVING, so the "killed unseen" check in seccomp_hold_result() would
-need to become n.state <= SECCOMP_NOTIFY_RECEIVING for the result to
-still be queued.
-
-[1] https://lore.kernel.org/all/20261020001124.974063-1-xiyou.wangcong@gmail.com/
-
-Andrea Parri (4):
-  seccomp: wake poll waiters after failed addfd send
-  seccomp: wake poll waiters after interrupted addfd send
-  seccomp: add a helper to move a notification to SENT
-  seccomp: publish user notifications after copying them to userspace
-
- kernel/seccomp.c                              |  79 +++++----
- tools/testing/selftests/seccomp/config        |   1 +
- tools/testing/selftests/seccomp/seccomp_bpf.c | 162 +++++++++++++++++-
- 3 files changed, 204 insertions(+), 38 deletions(-)
-
-
-base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index ee94a071736ef..75a758128db2d 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -1125,6 +1125,15 @@ static u64 seccomp_next_notify_id(struct seccomp_filter *filter)
+ 	return filter->notif->next_id++;
+ }
+ 
++/* A notification in SENT state accepts a reply; tell poll waiters. */
++static void seccomp_notify_set_sent(struct seccomp_filter *filter,
++				    struct seccomp_knotif *n)
++{
++	lockdep_assert_held(&filter->notify_lock);
++	n->state = SECCOMP_NOTIFY_SENT;
++	wake_up_poll(&filter->wqh, EPOLLOUT | EPOLLWRNORM);
++}
++
+ static void seccomp_handle_addfd(struct seccomp_filter *filter,
+ 				 struct seccomp_kaddfd *addfd,
+ 				 struct seccomp_knotif *n)
+@@ -1145,8 +1154,7 @@ static void seccomp_handle_addfd(struct seccomp_filter *filter,
+ 	if (addfd->ioctl_flags & SECCOMP_ADDFD_FLAG_SEND) {
+ 		/* If we fail reset and return an error to the notifier */
+ 		if (fd < 0) {
+-			n->state = SECCOMP_NOTIFY_SENT;
+-			wake_up_poll(&filter->wqh, EPOLLOUT | EPOLLWRNORM);
++			seccomp_notify_set_sent(filter, n);
+ 		} else {
+ 			/* Return the FD we just added */
+ 			n->flags = 0;
+@@ -1600,8 +1608,7 @@ static long seccomp_notify_recv(struct seccomp_filter *filter,
+ 	unotif.pid = task_pid_vnr(knotif->task);
+ 	unotif.data = *(knotif->data);
+ 
+-	knotif->state = SECCOMP_NOTIFY_SENT;
+-	wake_up_poll(&filter->wqh, EPOLLOUT | EPOLLWRNORM);
++	seccomp_notify_set_sent(filter, knotif);
+ 	ret = 0;
+ out:
+ 	mutex_unlock(&filter->notify_lock);
+@@ -1824,10 +1831,8 @@ static long seccomp_notify_addfd(struct seccomp_filter *filter,
+ 		ret = kaddfd.ret;
+ 	} else {
+ 		list_del(&kaddfd.list);
+-		if (addfd.flags & SECCOMP_ADDFD_FLAG_SEND) {
+-			knotif->state = SECCOMP_NOTIFY_SENT;
+-			wake_up_poll(&filter->wqh, EPOLLOUT | EPOLLWRNORM);
+-		}
++		if (addfd.flags & SECCOMP_ADDFD_FLAG_SEND)
++			seccomp_notify_set_sent(filter, knotif);
+ 	}
+ 
+ out_unlock:
 -- 
 2.53.0
 
