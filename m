@@ -1,94 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.223
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793781821;
-	b=Kp2y5nqJKyW9Oefleb/wvfbTHSJBgo8w1yZ4ciA1V+/lEEwz9XR13vMgz/qPCDjHrJI2
-	 bpDSSICIxlDfLUE3jbZuKTVJKFmML8A+6Dsh+h9XuPEmyG4EctW7hr/8G4FUAipbrnpah
-	 GIO+qTpViZdrVsM+CCkDUJfJfRRbl2d8TgydLnfv8PmQF+x6Um206Tu6g9pdBQrsKfgG4
-	 vvBO0aNbT9evs+oiF1Bq94IpaC+L2RZX7Eqjy910V8ER202GqKtYEhabUUUGecMaEVzHj
-	 oIBRi9As3vJkMW1DN6iDecwWvqhvrnEIxZN3YuPIoK6WPg0Co9XuDl0M8ltoBLky+wQ==
+	t=1793782625;
+	b=otbQEIXVpcM334w9+Trk9V1LzPPs4OVn45CpJQS3ce2ssvg57Mvk+Sdj3gzhXi+HtxhS
+	 si3iYQDMGq1aJIqM2F1fIjWCT/6ey5qiis8n+YQLiHEx/LC7wwTRFDmFs2aNLYxaDLzHJ
+	 ScOAScJ9Ns373A0ZsvSN5B/R7SIMQ4VlJXhhQ85R51YVM7sCWgK4ZuPqmVh5gHIScjX/Y
+	 c8m+eZBMLG0mn62s6AvDOAniDKJ4efVueSBCffChu8X359wZrnNKs0IpfltOKhohqCJqd
+	 n+B4OWXWWB1XoczitWoH1DNLB4wwDCcR4Fxux61ohOS2+9sdij534tZ8rEcli9tBr1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793781821;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=f2hk/rNUhdh8MzoGh+JB++bhZwGGGXc0fWWdJjx7Q34=;
-	b=AMF2FkMWGXZRSGdqJ8O1SDziFiebkZwIEe1/zn3djoXKi99XOeMWTCkhpuZyrvWJl000
-	 7BWwOebvPSYqfqaWhJ/Vf/o6roh89XmF0MzRUMOxA42JT2N6NU0kduAiOazac+A5y4G+i
-	 KQfoK7+b1n9gzj+FUreJIj683sDvPfMBpBiSNDGzLH+J7zRfribqqTthBHA55Y1nHQVua
-	 az4x411Qn0ZS0vhE52s94j8MzLc0v5+Vum7/5feXUvRn8GxhCM9KFdTsisuuxP04uh/AI
-	 yXnFxm63ohMGaYYo+YBrbwSt/dWgfMOo/EOH/KFTiRSRVBh+dmRMs+y147mTOqcg2rA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793782625;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=HlALTijt5CRapJC/NolluYCFJC6FcDyvgnNPx8+9O8Q=;
+	b=N487hteNYPfkiPivu7jAdEbffqlydxIThFK4mVLfE98pb9t+xIT4EvVDdV6eNDUIdbBu
+	 YASmP00zwJaLXiI/3P+d2djySJZ94t4tXfXx1TpyozDgQeheuDab+Oql0QAeUJdYRQgjB
+	 k+F93MFqE3NnaoFj0gjrd7wi3oNDFNlZiIjF6LfmgPgKy3igLp0PRikaoyZ1SsMOdtaTq
+	 vbx4kPGcbosU74KTaEWWLAeVbY+8oJE0KzNOswzPsaaoTdJe3311ubBL2O+BLSv7HZRuD
+	 kFXrWqER2DWJaQ23uH9SHOgJPNb2Y2zq62KGbe8m+ZQPllwfi/jzajxXEcCuSP7eGew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sp83wNpG;
-	arc=none smtp.remote-ip=95.215.58.223
-Received: from mta1.migadu.com (out-223.mta1.migadu.com [95.215.58.223])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MkDzc0YG;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FAF606A335
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 08:43:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 15FAF606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FBE606A31B;
+	Wed,  4 Nov 2026 08:57:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sp83wNpG
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=f2hk/rNUhdh8MzoGh+JB++bhZwGGGXc0fWWdJjx7Q34=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793781817; v=1; x=1794386617;
- b=sp83wNpGcg3gaaZ8Q1xR/9GuIAN39T9nU3daATAk0D3PyazINZZkLbge+C8jvkhlT/l1yMyQ
- z4PY8O3ch/eBLnfTIKoQOWvUBUqWReMoaFrNfi96CuAqZM2S8rXHR4UmnarPZPvmVgtfzb2K9u1
- F4JsYvveNIOBOxe1A0qJ86Lg=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3c5b907775b29065;
-	Wed, 04 Nov 2026 08:43:36 +0000
-X-Mizu-Trace-ID: 3c5b907775b29065
-X-Migadu-Flow: FLOW_OUT
-From: Lance Yang <lance.yang@linux.dev>
-To: ljs@kernel.org
-Cc: david@kernel.org,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	liam@infradead.org,
-	nico.pache@linux.dev,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	usama.arif@linux.dev,
-	kas@kernel.org,
-	akpm@linux-foundation.org,
-	peterz@infradead.org,
-	mingo@redhat.com,
-	will@kernel.org,
-	boqun@kernel.org,
-	longman@redhat.com,
-	surenb@google.com,
-	vbabka@kernel.org,
-	shakeel.butt@linux.dev,
-	yonghong.song@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH 2/5] mm/khugepaged: scan mm's more efficiently under mmap_lock contention
-Date: Wed,  4 Nov 2026 16:43:26 +0800
-Message-ID: <20261104084326.35457-1-lance.yang@linux.dev>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20261103-khugepaged-latency-fix-v1-2-a07ab16ac860@kernel.org>
-References: <20261103-khugepaged-latency-fix-v1-2-a07ab16ac860@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MkDzc0YG
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859421F000C1;
+	Wed,  4 Nov 2026 08:57:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793782624;
+	bh=HlALTijt5CRapJC/NolluYCFJC6FcDyvgnNPx8+9O8Q=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=MkDzc0YGaVlxHbugFKLbnuWK0745cupfb7jX+eTKrUvH3035K0+7pUi0/FkS6Z61L
+	 2H8PmPUIJPAmrtApKGcxIVnhbgun6m8XARe9em1XEannlNPEiWF4BfyrIrUeHJi/60
+	 Gbr4W0Y4RAoBBu07DL8ZwtBEOO8SH1634Oke05lDAWM7MGPiTGGed3vEEMNXKs09OX
+	 JF+m6j3i8U7OpDGf8uD5iiVnJ1D83waL4Pl63FLnoKFYq4ELvWW4X1BhXdXub7Z/Fr
+	 dc56o6vkNRfkp4CQtveqnvui46cVFoxAI2LQjJuN9v4xs6fXlX2M+XNmO1wvc/6xtc
+	 k9iTUoXwdvj7w==
+Message-ID: <sashiko-outbox-196902@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Test faulting build IDs
+ from a sleepable raw tracepoint
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Feng Yang" <yangfeng59949@163.com>
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+In-Reply-To: <20261104083833.971911-2-yangfeng59949@163.com>
+References: <20261104083833.971911-1-yangfeng59949@163.com>
+ <20261104083833.971911-2-yangfeng59949@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 04 Nov 2026 08:57:04 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -97,82 +60,205 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: raise(SIGSTOP) in trigger_stop() overwrites recor=
+ded stack
+- [Medium] selftests/bpf: broken s390x unwind and missing IP check in subte=
+st_raw_tp()
+--
 
-On Tue, Nov 03, 2026 at 08:27:43AM +0000, Lorenzo Stoakes (ARM) wrote:
->Ostensibly khugepaged collapse traverses eligible mm's, scanning up to
->/sys/kernel/mm/transparent_hugepage/khugepaged/pages_to_scan eligible pages
->at a time, sleeping for /sys/.../scan_sleep_millisecs between each
->traversal.
->
->mm's are scanned in collapse_scan_mm_slot() under the mmap read lock,
->obtained using mmap_read_trylock(), skipping the mm if there is lock
->contention, and dropping the lock before allocation.
->
->khugepaged will keep scanning the same mm until it is about to be torn
->down, prctl(PR_SET_THP_DISABLE) disables THP for it, mm->mmap_lock
->contention occurs, or all its VMAs have been scanned.
->
->When any of these occur, khugepaged doesn't keep track of where it left
->off, as the current address is tracked in
->khugepaged_scan.address (essentially a global value), which is reset.
->
->This is a problem when lock contention occurs, as when the mm is next
->scanned, it starts from address 0 again.
->
->If there's a lot of mmap_lock contention this can significantly slow down
->collapse later in the mm, since the /sys/.../pages_to_scan budget can run
->out before the end of the mm is reached.
->
->The budget is incremented (as tracked in cc->progress) at a rate of 1 page
->per ineligible VMA, but the budget is only checked once eligible VMAs are
->encountered.
->
->Then, it only takes the combined total of ineligible VMAs and eligible but
->non-collapsible pages to exceed the /sys/.../pages_to_scan budget for the
->rest of the mm to be skipped.
->
->For a system with 4 KiB page size and default sysctl settings this only
->requires 4096 ineligible VMAs/uncollapsible pages to be skipped before this
->happens.
->
->Examples of eligible but uncollapsible ranges are those containing a large
->number of forked PTE entries (more than /sys/.../max_ptes_shared), swapped
->out PTE entries (more than /sys/.../max_ptes_swap) or none or zero-page PTE
->entries (more than /sys/.../max_ptes_none).
->
->The latter might seem unlikely to happen given /sys/.../max_ptes_none
->defaults to HPAGE_PMD_NR - 1 and CONFIG_PT_RECLAIM frees PTE page tables,
->however CONFIG_PT_RECLAIM only removes the page table if the zapped range
->spans at least a PMD size (see pte_table_reclaim_possible()).
->
->Thus, userland software that applies madvise(..., MADV_DONTNEED) across
->sub-PMD ranges can thwart this, which is quite feasible for memory
->allocators and GC heaps, for instance.
->
->Resolve the issue by simply tracking the last examined address in the
->khugepaged_mm_slot object, so when the mm is resumed, the scan starts from
->where it left off.
->
->Additionally, skip to the next candidate if a VMA cannot be collapsed.
->
->This issue was noticed during some work in which an mm was instantiated
->with a large number of small VMAs under significant mmap_lock contention,
->during which collapse was observed to take 10.8s. With this patch applied
->it took 3.6s to collapse the same mm.
->
->Also, while here, update a couple VM_BUG_ON()'s to VM_WARN_ON_ONCE()'s.
->
->This patch is also a pre-requisite for a later patch in this series.
->
->Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
->---
+commit f32a6f825aa7edd03a124636be8381204465d887
+Author: Feng Yang <yangfeng@kylinos.cn>
 
-Looks good on its own, since vmi isn't reset inside the loop yet. Patch
-#05 will need to handle the ALIGN() overflow Sashiko reported before
-adding that reset.
+selftests/bpf: Test faulting build IDs from a sleepable raw tracepoint
 
-Reviewed-by: Lance Yang <lance.yang@linux.dev>
+This commit extends the build_id selftest with sleepable and non-sleepable
+raw tracepoints on sys_enter to test faulting in build IDs when the build
+ID page of uprobe_multi has been evicted.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/build_id.c b/tools/te=
+sting/selftests/bpf/prog_tests/build_id.c
+> index aec9c8d6bc96b..885dc3da5900b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/build_id.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/build_id.c
+
+[ ... ]
+
+> @@ -104,6 +106,138 @@ static void subtest_sleepable(void)
+>  	test_build_id__destroy(skel);
+>  }
+> =20
+> +static bool stack_has_build_id(const struct bpf_stack_build_id *stack, i=
+nt frame_cnt,
+> +			       const char *id, int id_sz)
+> +{
+> +	int i;
+> +
+> +	for (i =3D 0; i < frame_cnt; i++)
+> +		if (stack[i].status =3D=3D BPF_STACK_BUILD_ID_VALID &&
+> +		    !memcmp(stack[i].build_id, id, id_sz))
+> +			return true;
+> +
+> +	return false;
+> +}
+
+[ ... ]
+
+> +static void subtest_raw_tp(bool sleepable)
+> +{
+
+[ ... ]
+
+> +	ASSERT_GT(frame_cnt, 0, "frames");
+> +	if (sleepable)
+> +		ASSERT_TRUE(stack_has_build_id(stack, frame_cnt, build_id, build_id_sz=
+),
+> +			    "sleepable_build_id");
+> +	else
+> +		ASSERT_FALSE(stack_has_build_id(stack, frame_cnt, build_id, build_id_s=
+z),
+> +			     "nofault_build_id");
+
+[Severity: Medium]
+In trigger_stop(), uprobe_multi invokes the syscall via libc's syscall()
+wrapper:
+
+    subtest_raw_tp()
+      -> run_uprobe_multi_stopped()
+        -> trigger_stop()
+          -> syscall(SYS_getpid)
+
+When rawtp_nofault or rawtp_sleepable fires on sys_enter and calls
+bpf_get_stack() with BPF_F_USER_STACK | BPF_F_USER_BUILD_ID, stack[0] is
+inside libc.so rather than uprobe_multi, so reaching uprobe_multi requires
+perf_callchain_user() to unwind user stack frames past libc.so.
+
+On s390x, arch_stack_walk_user_common() in arch/s390/kernel/stacktrace.c
+unwinds user stacks via sf->back_chain. Because uprobe_multi is built with
+-fno-omit-frame-pointer but without -mbackchain in
+tools/testing/selftests/bpf/Makefile, sf->back_chain is 0 and unwinding
+stops after stack[0] in libc.so. Will raw-tp-sleepable-paged-out fail on
+s390x because stack_has_build_id() never sees a frame from uprobe_multi?
+
+Also, the commit message states that for the non-sleepable control:
+
+    the same frame must be reported as IP, which also proves that the page
+    was really evicted.
+
+However, the non-sleepable branch in subtest_raw_tp() only asserts that
+stack_has_build_id() is false without checking that any frame has status
+BPF_STACK_BUILD_ID_IP. If unwinding stops at stack[0] in libc.so (whose
+build ID is resident and valid), won't the non-sleepable subtest pass even
+though uprobe_multi was never reached and no frame was reported with
+BPF_STACK_BUILD_ID_IP?
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/test_build_id.c b/tools/te=
+sting/selftests/bpf/progs/test_build_id.c
+> index 32ce59f9aa27b..a6d6712888dc9 100644
+> --- a/tools/testing/selftests/bpf/progs/test_build_id.c
+> +++ b/tools/testing/selftests/bpf/progs/test_build_id.c
+> @@ -3,6 +3,7 @@
+> =20
+>  #include "vmlinux.h"
+>  #include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> =20
+>  struct bpf_stack_build_id stack_sleepable[128];
+>  int res_sleepable;
+> @@ -28,4 +29,41 @@ int uprobe_sleepable(struct pt_regs *ctx)
+>  	return 0;
+>  }
+> =20
+> +struct bpf_stack_build_id stack_rawtp_sleepable[128];
+> +int res_rawtp_sleepable;
+> +
+> +struct bpf_stack_build_id stack_rawtp_nofault[128];
+> +int res_rawtp_nofault;
+> +
+> +int target_tgid;
+> +int target_syscall;
+> +
+> +SEC("raw_tp/sys_enter")
+> +int BPF_PROG(rawtp_nofault, struct pt_regs *regs, long id)
+> +{
+> +	if ((u32)(bpf_get_current_pid_tgid() >> 32) !=3D (u32)target_tgid ||
+> +	    id !=3D target_syscall)
+> +		return 0;
+> +
+> +	res_rawtp_nofault =3D bpf_get_stack(ctx, stack_rawtp_nofault,
+> +					  sizeof(stack_rawtp_nofault),
+> +					  BPF_F_USER_STACK | BPF_F_USER_BUILD_ID);
+> +
+> +	return 0;
+> +}
+> +
+> +SEC("raw_tp.s/sys_enter")
+> +int BPF_PROG(rawtp_sleepable, struct pt_regs *regs, long id)
+> +{
+> +	if ((u32)(bpf_get_current_pid_tgid() >> 32) !=3D (u32)target_tgid ||
+> +	    id !=3D target_syscall)
+> +		return 0;
+> +
+> +	res_rawtp_sleepable =3D bpf_get_stack(ctx, stack_rawtp_sleepable,
+> +					    sizeof(stack_rawtp_sleepable),
+> +					    BPF_F_USER_STACK | BPF_F_USER_BUILD_ID);
+> +
+> +	return 0;
+> +}
+> +
+>  char _license[] SEC("license") =3D "GPL";
+> diff --git a/tools/testing/selftests/bpf/uprobe_multi.c b/tools/testing/s=
+elftests/bpf/uprobe_multi.c
+> index 0af330b6c3646..ef44d86962c13 100644
+> --- a/tools/testing/selftests/bpf/uprobe_multi.c
+> +++ b/tools/testing/selftests/bpf/uprobe_multi.c
+
+[ ... ]
+
+> @@ -123,12 +125,39 @@ int __attribute__((weak)) trigger_uprobe(bool build=
+_id_resident)
+
+[ ... ]
+
+> +int __attribute__((weak)) trigger_stop(void)
+> +{
+> +	int err =3D prep_build_id_page(false /* page-out build ID */);
+> +
+> +	if (err)
+> +		return err;
+> +
+> +	/*
+> +	 * Make one syscall that the BPF program under test filters on, then
+> +	 * stop this process so that the recorded stack cannot be overwritten
+> +	 * by another syscall while the caller inspects it.
+> +	 */
+> +	(void)syscall(SYS_getpid);
+> +	raise(SIGSTOP);
+
+[Severity: Medium]
+Does raise(SIGSTOP) here end up issuing a second SYS_getpid syscall that
+overwrites stack_rawtp_nofault and stack_rawtp_sleepable?
+
+In glibc, raise(SIGSTOP) calls __pthread_kill_implementation(), which calls
+__getpid() and executes SYS_getpid before invoking tgkill(). Because
+rawtp_nofault and rawtp_sleepable in
+tools/testing/selftests/bpf/progs/test_build_id.c only filter on
+target_tgid and target_syscall without disarming after the first hit, the
+SYS_getpid inside raise(SIGSTOP) will trigger the BPF program a second
+time.
+
+In raw-tp-sleepable-paged-out, the first syscall(SYS_getpid) has already
+faulted in uprobe_multi's build ID page, so the second call records the
+stack when the page is already resident. Furthermore, when libc.so is built
+with -fomit-frame-pointer, unwinding out of __pthread_kill_implementation()
+during the second SYS_getpid can fail to reach uprobe_multi, overwriting
+the valid trace captured during syscall(SYS_getpid) and causing the
+sleepable_build_id assertion in subtest_raw_tp() to fail.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104083833.9719=
+11-1-yangfeng59949@163.com?part=3D2
