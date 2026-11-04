@@ -1,56 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793820102;
-	b=ZVK8iVkSMRF0D1fYgH6wD8BQ2B1h4A05KcO4cdPSTWXJAKz5/m5hbzZIy8j9DA3uGB9u
-	 aAQIx72MKXHX2Q0vSfIwPXNQGyHqYR4qzzvbbQixVAkPvKAox7fnkWYXb/KTe8Aga9u2e
-	 by+Gq9EHJmPTEcyetmGvQoGrrpBihzlPQhC5qzxUeSIIFp0lx7m7a59RRAtdWZTsqtvdT
-	 eoleI3PJOgHue3XB0BQOR1J88DY7HVDtv3V8RCJvkD2oFPfbBygNP9Nk176Q/HrI3rm4/
-	 Bc1rjak5n4jJNpVqOVx8w94s7Qf8WYldoEXcy7sKrruqwRW2zVXbDJIF09d5N4mV5PA==
+	t=1793820257;
+	b=w4fKasBBSopa1u5e1io4qwn3WqWTpeMMdrFabf3sztQ35WGgcGkFcrRKV8B1cNcB0vw+
+	 2CKB6chJey61XzLP/zOQmtqRJJfttNfJ6Jlo+r3kGj+mJvIY5KkgO1pVzM/1DgdjG8/Ch
+	 NpX4Pn2Il51Sm5m8MXrp3gh8WDss9Z7QrH7vjI+XPrrwAZTTllGtJ7+GP5p+kfEtyUEsq
+	 Q76v44/TgRSThxm1q0GktlOnBvQ10q2gtsFrgbdIZbh+imnatxeTz+7Wi/jJ8SBJAJelp
+	 kaAymqm14zWc4xEKk0t0qr8mgmgCMZ1FWErnNYgn8EMBhg17YO5H14BpB1hFFgwd7NA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793820102;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=uU9s9C1o+HyqlrWjOAZmUUUB8ZRG2Mo4Mxxh4trltwU=;
-	b=UR60NlYVbMs4P0lQyB8Cx180JSV6EkWFDORMeIrtrfw/ztnw/O1OwTRbRSiqRctS3mH5
-	 4XXcMIBB1gkqUxNwdU6gvFlROJuHL3dMcV5CZMxRH9Th8jrsP+5V75FD5f7eh39W2nnC5
-	 dk+qNGCqNLKK7+qmPiAdCgg0cAxkIeH9XzFERCvW1R3WHXe755Vha6lzB0xJsdXMKG8WB
-	 +WhHPx/8k/glLQSpRshEnjp+vlTP3aePb3j90dwhsHrY7GpfBTm1QNU9U4XsaTjKvVcgt
-	 lNOjbf+EXcF2Z8B3OpZ6Vv686rvSWzGHn4VanWSwMJdDr7GN9e7TIvyL3Lfa1XxsfWQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793820257;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=mR1Obv3OQO7Rr03XXwq0Vuu5vswoLyJMagXWwpBbflw=;
+	b=R1T3fWJmP9ckTU+jbmEW6vdgVRpCn+xf7VHCCZ4qdBL2KGAMOL4LSD0HSBTC7sU5tE7v
+	 lXDKjHntcnEazOHOgNXri3nayDGLNjdSZzmRCxGEE+IgrIS+tDlvuDrfUAvR3CHAxcvnV
+	 PfSaCdDrGWb/Orq5UtYIuQ3iGY4cjOYHzt08HUrTBrWPWgymG7iXDHBqQ5ShBchS2HgMR
+	 oyBQb1Btn4gTvcNjzyiDsNmI8Rt4XZOZDeEB7XHyJzDvM8kJJZkoivyeaxROaTlHiBrmE
+	 E4X7nVboqRH7M1MJ5gx/vFLTNa5nWwpNfvz1YL6fXOl6TOoHDuqRfFDV7BZJZGBP8rA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ja9VmqAG;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VLzEXYzy;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02D6606B383
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 19:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90846606FAC1;
+	Wed,  4 Nov 2026 19:24:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ja9VmqAG
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B3981F00A1C;
-	Wed,  4 Nov 2026 19:21:41 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VLzEXYzy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BFC31F0093A;
+	Wed,  4 Nov 2026 19:24:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793820101;
-	bh=uU9s9C1o+HyqlrWjOAZmUUUB8ZRG2Mo4Mxxh4trltwU=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=ja9VmqAGG593uWGkxxRlyRxEFLZj09uTo3CWdbl+hOsRzR0jNMjBPea3YHkOv79OC
-	 JCfb8k82UQgjgLMY+rsHSAc34OwVlJGPNDov7LCYE3gqRNc874CJZ5hBQD3fjEcc6a
-	 uIIP8INSthH9EAgMn55cnEzz0aTJD2fmOuPV+GwrDnJrgyw7WpmaD88e5aOhnK2Iau
-	 rFr5qgN89dYizUJaa9pQz7X9QnTKHD6TPOoS9wzOBFEV+bUCqI65J6FncJpeKav3Zk
-	 +8InNPfpi2e2lde5yWljQORcuwcRyEAHG+Cs00zii4P7eXLZYZNUWAnquXS1dU4U0Z
-	 Mh0ChEIF36sog==
-Message-ID: <sashiko-outbox-197940@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v8 2/2] selftests/bpf: Check bpftool batch map
- dumps
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tianyi Chen" <hi@tychen.cc>, bpf@vger.kernel.org
-In-Reply-To: <4b2b24fdabd4cdef1364a8664d7d9615e960c72c.1793818387.git.hi@tychen.cc>
-References: <cover.1793818387.git.hi@tychen.cc>
- <4b2b24fdabd4cdef1364a8664d7d9615e960c72c.1793818387.git.hi@tychen.cc>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 04 Nov 2026 19:21:40 +0000
+	s=k20260515; t=1793820257;
+	bh=mR1Obv3OQO7Rr03XXwq0Vuu5vswoLyJMagXWwpBbflw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=VLzEXYzyB987Mq/g4CO0K7QgCQUco1Ui/zkCG1VglMZN1YSdGOPeeW7zi3yOP/4k5
+	 DpvubYCdz7kX1wvpxIcCnGqxqv6q5xgQtXVImaAxVavZdMiophOXe/IU8H1cnisq8H
+	 xmqWYQNFFvDSDmXugpk3AFnH1MQFsnH1xfTHYeXssX00Lin1QJ12CVJ82lQv/Vf9wh
+	 BNslafcMucR6QIcwhw7h2rgFVy1ernQ6Hywu/nssEiga41QeSyF+YCjLFM10vZcvwE
+	 cT4zBqwu8PuMXhw0DIo1plbZq6KjAIXgCeXaTzg55RV5gvS7p/R8W8iam1XD/zPzvG
+	 FYtsyOhoZp2Zg==
+Content-Type: multipart/mixed; boundary="===============4878618093610613736=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,92 +48,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <103bfd4d913a69e7a005386906734f0b702779d435e88572bd94e855a0c59ded@mail.kernel.org>
+In-Reply-To: <9a0298fe0bc97f58bc5482f5642bc58835b2d3a1.1793818386.git.hi@tychen.cc>
+References: <9a0298fe0bc97f58bc5482f5642bc58835b2d3a1.1793818386.git.hi@tychen.cc>
+Subject: Re: [PATCH bpf-next v11 3/3] selftests/bpf: Cover recursive bpftool map dumps
+From: bot+bpf-ci@kernel.org
+To: hi@tychen.cc,bpf@vger.kernel.org
+Cc: hi@tychen.cc,qmo@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,linux-kselftest@vger.kernel.org,shuah@kernel.org,daniel@iogearbox.net,ast@kernel.org,alexei.starovoitov@gmail.com,skokovmaksimevg@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed,  4 Nov 2026 19:24:17 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] selftests/bpf: async rhashtable resize race on RHASH dump in run=
-_case()
---
+--===============4878618093610613736==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 6de2831c6843be67feeb4ee441d5b150a4946b8a
-Author: Tianyi Chen <hi@tychen.cc>
+> selftests/bpf: Cover recursive bpftool map dumps
 
-selftests/bpf: Check bpftool batch map dumps
+TL;DR: Nit only, in the selftest: one bpf_map_create() call uses a compound
+literal with a hand-set .sz instead of LIBBPF_OPTS() like create_outer() does
+in the same file.
 
-This commit adds a BPF selftest that verifies bpftool batched map dumps
-produce the same plain and JSON output as individual element lookups across
-supported map types, including fallback handling when batch lookups return
--EBUSY.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c b=
-/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump_recursive.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump_recursive.c
 > new file mode 100644
-> index 0000000000000..5cf764bb5e362
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
-> @@ -0,0 +1,228 @@
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump_recursive.c
 
 [ ... ]
 
-> +static void run_case(struct bpftool_map_batch *skel, const struct dump_c=
-ase *test,
-> +		     char *expected, char *output)
+> +static void test_unchanged(void)
 > +{
-> +	LIBBPF_OPTS(bpf_map_create_opts, opts);
-> +	int fd =3D -1, inner_fd =3D -1, cpus =3D 1, cpu;
 
 [ ... ]
 
-> +	if (test->type =3D=3D BPF_MAP_TYPE_LPM_TRIE || test->type =3D=3D BPF_MA=
-P_TYPE_RHASH)
-> +		opts.map_flags =3D BPF_F_NO_PREALLOC;
-> +	max_entries =3D test->entries ?: 1;
-> +	/* Leave room for per-CPU LRU free lists instead of testing eviction. */
-> +	if (test->type =3D=3D BPF_MAP_TYPE_LRU_HASH ||
-> +	    test->type =3D=3D BPF_MAP_TYPE_LRU_PERCPU_HASH)
-> +		max_entries *=3D 4;
-> +
-> +	fd =3D bpf_map_create(test->type, "batch_dump", test->key_size,
-> +			    test->value_size, max_entries, &opts);
+> +	fds[1] = bpf_map_create(BPF_MAP_TYPE_HASH_OF_MAPS, "rec_empty", 4, 4, 1,
+> +				&(struct bpf_map_create_opts){
+> +					.sz = sizeof(struct bpf_map_create_opts),
+> +					.inner_map_fd = fds[0],
+> +				});
 
-[Severity: Medium]
-Can the rhash subtest in test_bpftool_map_batch() race with asynchronous
-rhashtable resizing during check_dump()?
+this isn't a bug, but could this use LIBBPF_OPTS(bpf_map_create_opts, opts,
+.inner_map_fd = fds[0]) like create_outer() does in this file, rather than a
+compound literal with a hand-set .sz?
 
-In run_case(), opts.map_extra is left at 0 when creating a BPF_MAP_TYPE_RHA=
-SH
-map with 100 entries. In the kernel, rhtab_map_alloc() passes
-params.nelem_hint =3D (u32)attr->map_extra to rhashtable_init(), so the
-rhashtable starts with the default 64 buckets (HASH_DEFAULT_SIZE).
 
-During the 100-element bpf_map_update_elem() loop in run_case(), inserting
-the 49th element exceeds the 75% load threshold (rht_grow_above_75()) in
-__rhashtable_insert_fast() and schedules rht_deferred_worker() on system_wq
-to resize the table from 64 to 128 buckets. Inserting the 97th element then
-exceeds the 75% threshold of the 128-bucket table and queues a second
-asynchronous resize to 256 buckets just three updates before check_dump()
-runs:
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-run_case()
-  bpf_map_update_elem()
-    rhtab_map_update_elem()
-      rhashtable_lookup_get_insert_key()
-        __rhashtable_insert_fast()
-          if (rht_grow_above_75(ht, tbl))
-            schedule_work(&ht->run_work); -> rht_deferred_worker()
-
-If rht_deferred_worker() runs concurrently with or between the bpftool dumps
-in check_dump(), can an in-flight rehash cause bpf_map_get_next_key() to sk=
-ip
-or revisit elements (failing the individual_lookups assertion), or finish
-rehashing with a new hash seed and bucket count between the individual dump
-and the batch dump so that their iteration order differs (failing
-check_same() on batch_output)?
-
-Would setting opts.map_extra =3D max_entries for BPF_MAP_TYPE_RHASH avoid
-scheduling background resizes by pre-sizing the rhashtable to 256 buckets at
-creation time?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1793818387.gi=
-t.hi@tychen.cc?part=3D2
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41893660017
+--===============4878618093610613736==--
