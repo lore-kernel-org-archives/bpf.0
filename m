@@ -1,81 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.54.127.65
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793821981;
-	b=DDrmyzD5Ivs/Pdx8Fox7VfAR5ObFNANqLXAjcWc8ueO2Ktv18izEtCsRQvbmfQC0HP2p
-	 ERlxXG+Ri0ZMw8t5ffHr1CVEcrMyl7URod9LyN4HMQfALYbF5w0JkZ0ATlBOwjon48prH
-	 45PSBwRIPVUGomoS8Yxz3o615FaoAjzP9xrntu7HYM7045fUljj/ArdnlMFDst7yXXoE/
-	 F2Y51ukNa/nKyvEmJNn85mmymNhlPBrVuKMZjofLEGU2j5sb5eOVB8gdN5y9+KkbY/5jF
-	 m8VCSxEMbrmr+bPFbFzW/H48AFo1k8e+ZXMTwb+ZauEYk7IYAogBtbZ+vz2g5W9aSgg==
+	t=1793822081;
+	b=CCgqda2xQMVwhnDHmYKP5OplJg9ITjN2d0XUz9BV/73d2DWP8AcyF7vr7xsNZUFtGfCx
+	 2soFnz+ZuolggTK/1ar/hhkXj0p7+VFPOn77tPIO5PnpvPEFouu6GrWXfb4qoPDji8bcE
+	 fCOwQ2wRK5KuiZ5F4vEzZsY8d3uyUOTUzKwzI6ffWCKYE5ftC28E5ajo0iT/a1A+bUOXD
+	 uwOqxxDVDuY/NfixHweiHeJedN+1DSkTF/nKb9TEsgdFi5QlTnsuIcPuGpqo0kaqbDPF1
+	 pF8qEOq4YI+PBYmbjmXDqk3KLV0fsx0HACXleqYC89mwcKhKmIAn+CG/Sw6fuo+G4DA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793821981;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793822081;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-Rspamd-Queue-Id;
-	bh=bjNAE/sqW+6C7Fn4/hwxUDn8yEwHvj++UXJMUvq2N60=;
-	b=Y7vpWoy5+wdnPaSMsoqZzW9KcSXRKIXCFkGQj+3tIovm6miNuqZmAoOng5ZyXTOhKy8E
-	 RfemXw/C0wAIn8oCiKV71oaqZUEDD4FnZuLWgUReOJLeba3bEEd8yp1om107fT8zrcQTd
-	 b6LEC4paSLtgKiULaqSCSYTB2ZJesipzlzD92EXMJd68qCq2XwUhjfwaoj+WSWlMGXRAe
-	 Hmmp49+fnv/UW+R1yvz8BmUIccl8Qz/Np5/M/Bc6zrM0YLlYbPEacAb4Wd4fNX65BFvkS
-	 qHbJU2YcRP3/Y3A2PUtvJJBn1HrLKlNE+eBGoA+rEx6Mvb7lby/6wfI6GyT/r8ZngKA==
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Envelope-From;
+	bh=DRYW9LsOkwqorjTVMq50L2691tSj2pAGda8sueNbSfA=;
+	b=NCJZht9BuqqK9xY7BqtnXPSobbsy2+HvI+/+3jSE0JjZ7aEP6ImtG3zI3IG7f/4+bUy5
+	 LPaJyMWQTLzydAZ+U2erDfdc5m0FT6z224zb5DzD/XauNx0nk+k0eHSTT5B/2vCG2o11D
+	 xesksWEUjXZPnQP49jUaVPMCtuvQbv09XlwERFMbKA4MWXXfh0Jf/rMqhIfySBxj2828H
+	 1sdH9fJteErtqw2I0FOqe/Q0o/gHc904VxOqHkz80pdJlATeGikVmBHVXXaWh6Gpid0o2
+	 YfJ39hW8fB84FTpyLS9EmNlpYeTo++7uqNvOzkhS1zQ3mRR3Gj411tB84wWyImBzKfA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mandelbit.com;
-	spf=pass smtp.mailfrom=mandelbit.com;
-	arc=none smtp.remote-ip=195.10.208.52
-Received: from mout-b-203.mailbox.org (mout-b-203.mailbox.org [195.10.208.52])
+	dmarc=pass header.from=tychen.cc;
+	spf=pass smtp.mailfrom=tychen.cc;
+	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=XIZi8HV+;
+	arc=none smtp.remote-ip=198.54.127.65
+Received: from out-zbxj-a65.jellyfish.systems (out-zbxj-a65.jellyfish.systems [198.54.127.65])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EAEC60960A5;
-	Wed,  4 Nov 2026 19:52:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8EAEC60960A5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C116A6098F5B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 19:54:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C116A6098F5B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=XIZi8HV+
+Received: from fedora (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA512)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-b-203.mailbox.org (Postfix) with ESMTPS id 4jKbhD6bLczLmWY;
-	Wed, 04 Nov 2026 20:52:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
-	s=MBO0001; t=1793821964;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bjNAE/sqW+6C7Fn4/hwxUDn8yEwHvj++UXJMUvq2N60=;
-	b=yUhujfsOWWBMMBcPYAduvPg6sBeDchIrJo4Lvbu4XcVkfjNv0IIaPRCGRZczweJ679nBiM
-	MMqAF/MSm/NlAGgr3WL1Bmk/v6OVoX3s6zURHcibMxtJASJTgh6GAJ5ipoEs5y4XhTTrYG
-	snqp/i3OYGN5pqOQUIBkJCqg9qUQcTUNXXjlWSmScZymhJ0jcvP80rnCe3m5lu3aXkw/RQ
-	P+xvETRGjGX3GISDOnitTH1mWzZywrrc4jwoTXyCP4QP6IEZdFHtfABBLM8gr1dnDjpuyN
-	qumxqqwKd+eX4GrIIcGJp7MSAeKB0yn6L0OlOMSejWhf1r572KfpwzYAkcByvw==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
-From: Antonio Quartulli <antonio@mandelbit.com>
-To: netdev@vger.kernel.org
-Cc: saeedm@nvidia.com,
-	tariqt@nvidia.com,
-	mbloch@nvidia.com,
-	leon@kernel.org,
-	dtatulea@nvidia.com,
-	cratiu@nvidia.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKbkB495jz2x9C;
+	Wed, 04 Nov 2026 19:54:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1793822070;
+	bh=DRYW9LsOkwqorjTVMq50L2691tSj2pAGda8sueNbSfA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=XIZi8HV+6YGfXJGlt2uRhfhkE80/hLaOfpdhsHDtI7lYuYeovpm/JHOYlediTxP/Z
+	 6qPcmpVCehJAEy2pXnXXHXWo/wYfRGCra0dvNCfkWTTP2RHWyHOq+uSnvAY8q6aLDT
+	 DH+QnqqD6e0dsypbjp23SxAKUhTYR0x94J0TOV4qy8pudC0jcOczjE4Vil84z8tQCU
+	 eS1HRbc0tvkBemCdNKzOeRpm8XRJ3eKeKlCAt77IHMr0MnvwrO259rJMCC+abKeOGr
+	 Q3nRFdoeqdmvBMH63yzdJxncy56xb0BvCjeerzAyjjTa4f6dQh2PIWuRrH6NS4CIhO
+	 UwfkvKVgOS4lA==
+From: Tianyi Chen <hi@tychen.cc>
+To: bpf@vger.kernel.org
+Cc: Tianyi Chen <hi@tychen.cc>,
+	qmo@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
 	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	linux-rdma@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Antonio Quartulli <antonio@mandelbit.com>
-Subject: [PATCH net-next v2] net/mlx5e: Prefetch the packet a few strides ahead in the linear MPWQE path
-Date: Wed,  4 Nov 2026 20:52:41 +0100
-Message-ID: <20261104195241.1883539-1-antonio@mandelbit.com>
+	ast@kernel.org,
+	alexei.starovoitov@gmail.com
+Subject: [PATCH bpf-next v9 1/2] bpftool: Use batch lookups for map dumps
+Date: Thu,  5 Nov 2026 04:54:12 +0900
+Message-ID: <7a728136ad18840c94836ec1ce988f8bc2fcfb35.1793821981.git.hi@tychen.cc>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <cover.1793821981.git.hi@tychen.cc>
+References: <cover.1793821981.git.hi@tychen.cc>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -86,113 +77,175 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4jKbhD6bLczLmWY
+X-Envelope-From: hi@tychen.cc
 
-Without cache injection (DDIO/SDCI), the first accesses to a received
-packet's headers and skb_shared_info are DRAM misses, and the
-net_prefetch() in mlx5e_skb_from_cqe_mpwrq_linear() is too late to hide
-them. This caps the packet rate of a queue.
+Dumping a map takes two BPF syscalls per element: one to get the next
+key and one to look it up. Use BPF_MAP_LOOKUP_BATCH instead, with keys
+and values bounded to 1 MiB and per-CPU value strides accounted for.
+The output is unchanged.
 
-In the linear striding RQ path a packet takes one stride and the device
-fills the strides in order, so the packet MLX5E_RX_PREFETCH_DIST (4)
-strides ahead is known without its CQE: prefetch its headers and page,
-and the line its skb_shared_info will use if it has the length of the
-current packet, as in bulk flows. That line matters when every packet
-becomes its own skb: TCP inside an ovpn UDP tunnel gains 34% with it and
-4% without.
+For a hash map with 100,000 4-byte keys and values, a plain dump takes 5
+BPF syscalls instead of 200,005. With output to /dev/null, the median of
+15 runs in an x86-64 KVM guest on Linux 7.3 dropped from 86 ms to 52 ms
+(JSON: 78 ms to 42 ms). Printing to a terminal dominates either way.
 
-AMD Ryzen 9 9950X, ConnectX-5 Ex, one RX queue on a dedicated CPU,
-MTU 1500, mean of 3 runs:
+If a batch lookup fails, discard its output and continue with individual
+lookups after the last printed key. bpf_map_get_next_key() walks the map
+in the same order. This covers maps without batch support, and hash
+maps whose bucket lock cannot be taken, which individual lookups do not
+need.
 
-                                   before       after
-  UDP 512B flood, pktgen         2.52 Mpps    3.44 Mpps   +36%
-  TCP, 1 stream                  44.6 Gb/s    48.0 Gb/s    +8%
-    NAPI CPU cycles/packet            1334          715   -46%
-  XDP_DROP reading the packet,
-    NAPI CPU cycles/packet             409          280   -32%
-  XDP_TX, NAPI CPU cycles/packet       829          554   -33%
-
-With the change, the XDP packet rates were limited by the sender, so
-cycles per packet are compared.
-
+Link: https://github.com/libbpf/bpftool/issues/63
 Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
+Assisted-by: LLM
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
-v2:
-- prefetch the packet MLX5E_RX_PREFETCH_DIST strides ahead instead of
-  looking at the CQE ahead (Alexei); no CQE peek, RQ state bit or wq.h
-  helper any more, and it also works with CQE compression (with it on:
-  UDP floods +26%, TCP +6%, where v1 did nothing)
-- also prefetch the skb_shared_info line, guessing the length from the
-  current packet: without it, TCP inside a VPN tunnel (one skb per
-  record) gained 4% instead of 34%
-- XDP numbers added; XDP_DROP without touching the packet is unchanged,
-  and the XDP packet rates were capped by the sender (12-16 Mpps), so
-  cycles per packet are quoted
-v1: https://lore.kernel.org/netdev/20261103235823.536706-1-antonio@openvpn.net/
+ tools/bpf/bpftool/map.c | 97 ++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 82 insertions(+), 15 deletions(-)
 
-Notes:
-- Distance: with v1, 4, 6 and 8 were within 3% of each other.
-- The prefetches are issued before the stride ahead is synced for the
-  CPU; if the device hasn't written it yet (low rate), they are wasted.
-- No prefetch for the first 4 strides of a WQE.
-- Measured on one system only (Zen 5 desktop, no cache injection,
-  CX-5 Ex); numbers from DDIO/SDCI systems and CX-6/CX-7 would be
-  welcome.
-
- .../net/ethernet/mellanox/mlx5/core/en_rx.c   | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-index 22fea4739a2c..57da30b1bffe 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-@@ -2094,6 +2094,36 @@ mlx5e_skb_from_cqe_mpwrq_nonlinear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *w
- 	return skb;
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 4b65edf74859b..c0bd9bf846492 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -59,13 +59,16 @@ static int map_type_from_str(const char *type)
+ 	return -1;
  }
  
-+#define MLX5E_RX_PREFETCH_DIST	4
-+
-+/* A packet that fits the MTU takes one stride of a linear MPWQE, and the
-+ * device fills the strides in order: prefetch the packet
-+ * MLX5E_RX_PREFETCH_DIST strides ahead, and the line its skb_shared_info
-+ * will use if it has the length of the current one, as in a bulk flow.
-+ */
-+static void mlx5e_mpwrq_linear_prefetch(struct mlx5e_rq *rq,
-+					struct mlx5e_mpw_info *wi,
-+					u32 head_offset, u32 page_idx,
-+					u16 cqe_bcnt)
-+{
-+	struct mlx5e_frag_page *frag_page;
-+	void *va;
-+
-+	head_offset += MLX5E_RX_PREFETCH_DIST << rq->mpwqe.log_stride_sz;
-+	page_idx += head_offset >> rq->mpwqe.page_shift;
-+	if (page_idx >= rq->mpwqe.pages_per_wqe)
-+		return;
-+
-+	head_offset &= (1 << rq->mpwqe.page_shift) - 1;
-+	frag_page = &wi->alloc_units.frag_pages[page_idx];
-+	va = netmem_address(frag_page->netmem) + head_offset;
-+	prefetch(netmem_to_page(frag_page->netmem));
-+	net_prefetch(va + rq->buff.headroom);
-+	/* with XDP the packet may not become an skb */
-+	if (!rcu_access_pointer(rq->xdp_prog))
-+		prefetchw(va + SKB_DATA_ALIGN(rq->buff.headroom + cqe_bcnt));
+-static void *alloc_value(struct bpf_map_info *info)
++static size_t map_value_size(struct bpf_map_info *info)
+ {
+ 	if (map_is_per_cpu(info->type))
+-		return malloc(round_up(info->value_size, 8) *
+-			      get_possible_cpus());
+-	else
+-		return malloc(info->value_size);
++		return (size_t)round_up(info->value_size, 8) * get_possible_cpus();
++	return info->value_size;
 +}
 +
- static struct sk_buff *
- mlx5e_skb_from_cqe_mpwrq_linear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *wi,
- 				struct mlx5_cqe64 *cqe, u16 cqe_bcnt, u32 head_offset,
-@@ -2114,6 +2144,8 @@ mlx5e_skb_from_cqe_mpwrq_linear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *wi,
- 		return NULL;
- 	}
++static void *alloc_value(struct bpf_map_info *info)
++{
++	return malloc(map_value_size(info));
+ }
  
-+	mlx5e_mpwrq_linear_prefetch(rq, wi, head_offset, page_idx, cqe_bcnt);
+ static int do_dump_btf(const struct btf_dumper *d,
+@@ -741,15 +744,10 @@ static int do_show(int argc, char **argv)
+ 	return errno == ENOENT ? 0 : -1;
+ }
+ 
+-static int dump_map_elem(int fd, void *key, void *value,
+-			 struct bpf_map_info *map_info, struct btf *btf,
+-			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
++static void print_map_elem(void *key, void *value,
++			   struct bpf_map_info *map_info, struct btf *btf,
++			   json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
+ {
+-	if (bpf_map_lookup_elem(fd, key, value)) {
+-		print_entry_error(map_info, key, errno);
+-		return -1;
+-	}
+-
+ 	if (json_output) {
+ 		print_entry_json(map_info, key, value, btf, cpu_ids, cpu_cnt);
+ 	} else if (btf) {
+@@ -763,10 +761,74 @@ static int dump_map_elem(int fd, void *key, void *value,
+ 	} else {
+ 		print_entry_plain(map_info, key, value, cpu_ids, cpu_cnt);
+ 	}
++}
+ 
++static int dump_map_elem(int fd, void *key, void *value,
++			 struct bpf_map_info *map_info, struct btf *btf,
++			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
++{
++	if (bpf_map_lookup_elem(fd, key, value)) {
++		print_entry_error(map_info, key, errno);
++		return -1;
++	}
 +
- 	va             = netmem_address(frag_page->netmem) + head_offset;
- 	data           = va + rx_headroom;
- 	frag_size      = MLX5_SKB_FRAG_SZ(rx_headroom + cqe_bcnt);
++	print_map_elem(key, value, map_info, btf, btf_wtr, cpu_ids, cpu_cnt);
+ 	return 0;
+ }
+ 
++#define MAP_DUMP_BATCH_BYTES (1U << 20)
++
++/*
++ * Print the elements returned by batched lookups, leaving the last one in
++ * @key. Return true at the end of the map. After any error, the caller
++ * continues with bpf_map_get_next_key(), which walks the map in the same order.
++ */
++static bool dump_map_batch(int fd, void *key, void *value,
++			   struct bpf_map_info *info, struct btf *btf,
++			   json_writer_t *wtr, const int *cpu_ids, int cpu_cnt,
++			   unsigned int *num_elems)
++{
++	size_t value_size = map_value_size(info);
++	void *keys, *values, *batch, *in_batch = NULL;
++	__u32 capacity, count, i;
++	bool done = false;
++	int err;
++
++	capacity = min(MAP_DUMP_BATCH_BYTES / (info->key_size + value_size),
++		       (size_t)info->max_entries);
++	if (!capacity)
++		return false;
++
++	/* Hash table batch cursors are u32 bucket indices; other maps use keys. */
++	batch = malloc(max(info->key_size, 4U));
++	keys = malloc((size_t)capacity * info->key_size);
++	values = malloc((size_t)capacity * value_size);
++	if (!batch || !keys || !values)
++		goto out;
++
++	do {
++		count = capacity;
++		err = bpf_map_lookup_batch(fd, in_batch, batch, keys, values,
++					   &count, NULL);
++		if (err && err != -ENOENT)
++			goto out;
++		for (i = 0; i < count; i++) {
++			/* Preserve alignment for odd-sized BTF keys and values. */
++			memcpy(key, keys + (size_t)i * info->key_size, info->key_size);
++			memcpy(value, values + (size_t)i * value_size, value_size);
++			print_map_elem(key, value, info, btf, wtr, cpu_ids, cpu_cnt);
++		}
++		*num_elems += count;
++		in_batch = batch;
++	} while (!err);
++	done = true;
++out:
++	free(batch);
++	free(keys);
++	free(values);
++	return done;
++}
++
+ static int maps_have_btf(int *fds, int nb_fds)
+ {
+ 	struct bpf_map_info info = {};
+@@ -836,7 +898,8 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+ 	struct btf *btf = NULL;
+ 	int *cpu_ids = NULL;
+ 	int cpu_cnt = 0;
+-	int err;
++	bool done = false;
++	int err = 0;
+ 
+ 	key = malloc(info->key_size);
+ 	value = alloc_value(info);
+@@ -895,7 +958,11 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+ 		p_info("Warning: cannot read values from %s map with value_size != 8",
+ 		       map_type_str);
+ 	}
+-	while (true) {
++	done = dump_map_batch(fd, key, value, info, btf, wtr, cpu_ids, cpu_cnt,
++			      &num_elems);
++	if (num_elems)
++		prev_key = key;
++	while (!done) {
+ 		err = bpf_map_get_next_key(fd, prev_key, key);
+ 		if (err) {
+ 			if (errno == ENOENT) {
 -- 
 2.56.0
 
