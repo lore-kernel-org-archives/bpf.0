@@ -1,58 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793802178;
-	b=ea4+TABwHMvFbGpVDU59/YlqxHSwbX8/FdvgUIX4r2p2EUDhNtNUUqdCIOZxy9q154MX
-	 sSqs23vQAcRqJreb5c0mCWh8r3KGNYTmFgoH9NujRvpaWXrPG59eE8F+PJlciuihEXG4K
-	 4mt9M7zp6CSP11K9QzNmgETD0kaSqa679feS1Jl/EN1SeblPCqcFwJsQrO3OqhopEf3GK
-	 t2QhK1Cl5tuaCMr6wBj/owCTLi9pzL00iGAno/vuZe1eN6J8CyYiOJ4mzYSpd/QqpP+aH
-	 o0CJ/+gSZnPSif9s2SiZ+wv1DM1QEYTo/Zsb7YfchBNQirALYZFkcnc0r3U12EjZhAg==
+	t=1793802202;
+	b=rIhZqWBGTye4Zqn5bZCpN1+IsVf1WIuafi7+hGRnYBJB8404Ec3MBgmZbZ+TU5UcHR7C
+	 KqFjlD5AHXkYCn0OEpHmXn6L8VcNuwlC/hw0T572iOSyShCKW2nmzKgzV3S8Nq5lLFvrl
+	 k/N4U/qBZa4lLeso4bqNNTN/T+RTBra2InZhBTrq3bDBBfRTwEeVabgwSoV2uc9FmORVN
+	 DpmIJINVErTNNZ0bIAUE0AGKPSG4Zwe9rWtwXUI16WFqDuorRvU3dOGOqhJUd1sCzSbR0
+	 Gq/QWIx5rS9ecU2yo9jyBaXNfQyvmabXIwCuaoNhQ8KN9RNr112I6fNvzoY8rYqn8hA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793802178;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=i2bMK/jqQkCRu3q1LO8vNTLJ40L/bfvtBNu6ZJx6jI4=;
-	b=tzTSE2+eDr8kldAcaCghrgjY9dchiG8p0temQ0/hLgFtk1vBacyBByKUsBn48ghGlS+s
-	 tYUDY6t2gnDqdUeOEyAimJzYCMVgdhQp+CMezIbVoeMm3PuNBIphlp8E6Ci/WDfreMr7Y
-	 aookQePLpB0NeO3fd4yOBU/Oz24F4W8E5Vt8+nDd8oXrcwebucDKzQwav4bgm40El7NB4
-	 kkH7uhq4DLJiDFHLFJyEZAfTF2Hrl5TPogE48vinOWKCkGODDnoTW6eZm1a0xvMaE3pzq
-	 ekSAuRsVqCmqSwpYLQj0RFbcUR2t+iK9VqCHNwREE9b8mmIQ2xYhDNmkYMXXHol8F5g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793802202;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=ipCVhzNjz3bkUh3HIH/dC2V084l64YZgYq8uC+CfKVA=;
+	b=M0gen57mwiEtF75hU3iZxhIVDm5oa3DTzHBrVcqwDwIA1vs+VXMD/xLmsxF/PhirY47P
+	 FQfXtUID1D5ybSmGlajdLPxSz1DNJLqALTIvP/R6pWkVDyA6GgP6rvfGDRxUMGBt85MgQ
+	 y5WMlI5LMBfn1uX3gWCmm3rszuJi7ILSL7t0Z73UQojHz1/ppQgxX9ZXnR/xcGzArMcyY
+	 O+O2tCjvXVbQUkdoJ29+tmk4eLZ0bjVvjZtrC/EkhOVCErhssGSQGDAj/7ASD0QZL0LFA
+	 bjD4gHL72T4/ptvVnk6UfSbI4cC0Nsfd1r00FMyG17j4cF/CLwSmoLwssAbBY5A9nkw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mNdda6mU;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0LsVrB1R;
+	arc=none smtp.remote-ip=209.85.128.42
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5565606A328;
-	Wed,  4 Nov 2026 14:22:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AEA4606A330
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 14:23:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2AEA4606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mNdda6mU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F61C1F00919;
-	Wed,  4 Nov 2026 14:22:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793802177;
-	bh=i2bMK/jqQkCRu3q1LO8vNTLJ40L/bfvtBNu6ZJx6jI4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mNdda6mUSu9j0EzEPNEYOyzDAFWmpPuu4L/AE+SJet/hBA+dRQnheqgOx0Zg+22yB
-	 gqwGQQejNhhoTKKv5jYpZaxLAOGz+7UXUQJg23szwubD/xAr5xt40539Gfyh9rwC5y
-	 GH7S5V7v6w11015arzqUPB1QxHAMTIE9ekjZjyTSAk8wqsP4UPtq+g348RXl/xDiUe
-	 Vdecqe2msH4fuz6E3xLAn5RrVptCb6NHU2krmuKwBmq96U8Gld1DRf1uwusooZqyfY
-	 l73Ln9E3RKI1t+oEeY36Qxaw+u+t2DcLBeeAg7HyQSufNfXwFykOic/MQlI0o1hU6Y
-	 22oVeC44XeOfQ==
-Message-ID: <sashiko-outbox-197426@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v4 2/2] selftests: net: add a vhost-net test for the
- tun NAPI queue bound
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Antonio Quartulli" <antonio@mandelbit.com>
-Cc: virtualization@lists.linux.dev, bpf@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>, "Eugenio
- Perez" <eperezma@redhat.com>
-In-Reply-To: <20261103142232.1869185-3-antonio@mandelbit.com>
-References: <20261103142232.1869185-1-antonio@mandelbit.com>
- <20261103142232.1869185-3-antonio@mandelbit.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 04 Nov 2026 14:22:57 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0LsVrB1R
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4a20bdaf39cso8051255e9.1
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 06:23:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793802195; x=1794406995; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ipCVhzNjz3bkUh3HIH/dC2V084l64YZgYq8uC+CfKVA=;
+        b=0LsVrB1RbPjDtXwX3qjLB1A3vbWVpqZ7HZf5pVQXVp4B7btdszFS1RljBh17d4QysC
+         BS3cixxniLqtiMaPPHJK5cPfu73HovzOQC3aoX+YmxViTbcNeU+xrWcrtDpOK3olBzbq
+         8BYj61J6NvVpkQGghxMoUWWxHaUL3v2+0S7dfFQuuTth1J1asNB7GdDfzPs5Ij5j1Fma
+         CAHQ0lbRdCK0qEiS0+sQqrIdPbDnjliso64JP9yRZdlJQLMNlR49y+Q1lop64YIK2xJG
+         yr/u0N5gPgEp75e1VVKhayMcmVrXJMOLfY8AaES0WpLtJCBYs28K3LQlgCNZwXYwAbjv
+         QTiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793802195; x=1794406995;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ipCVhzNjz3bkUh3HIH/dC2V084l64YZgYq8uC+CfKVA=;
+        b=GLPoNaiWvNqTBoKrQYNKt0W6BIa1iOFYeZ1Zh4dpwf4WhvoNQ7o8Z0RJ3lZFUHLKWZ
+         9c2z92EHL3fblkgml1XrVuS88YmKoLi0bhmQnhErkO10k3AIsv29IWHzEl+WF7EZjR7s
+         CYzA9H9NqAWhwp6JzapAj+cLoYIPLC6j79avZXpLw6+8M2OaH3iDKAS87eHkuUErNDGs
+         MAPIWlknEHUu+mmC/1j8pLXIYs+6OTVLZ1Pl3JVI6SAXV4Roq9+XjQC/RYRR+f0Vp/La
+         T1Bbl+Dka1j7B3r2HWcwDQpMrAEA55lhJDiUZ5rsaCioiKsQH8iD0eWOC8ZtO/1Ia+sU
+         OhIQ==
+X-Forwarded-Encrypted: i=1; AKwUvBys1LmiPkSeIggD44ITPdBQxkeQfWtjAnjxyg0ruTYO8pfc49h/tjPEroy6dJrYwAco824=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+foW2OtxPrJ8FsOMrqMHfJF4r/1NFK8r3REscwr1lBe+oG7maO
+	t0nHXKVR+Rgax7sGRgYVHn+qbbkvsf4so+arlww6G9i60GX7TuCN5Jd9
+X-Gm-Gg: AYBFou3rvmSfE6LGKC7ByLy0rS8RuNLGaNmwMDBodag1tz0C1V+ARPHdv6yW44aI7Io
+	1I/4eEue/3hyYjtKgAsu3r5v9p42zffUlH84JdJFRJMSOW161gqP4N65yui/2Xu04725NdFRuId
+	whssGwJ7UG9p/Y5BljrDD8xStc1mnMrGppgdd5UQ7BaZr41jAJ0aWfOFOL+9VH6IL8VrD07gsZh
+	9E/rTsXClaZJoCypYzstW9esyXY3XYRyB3fzRB7Rgwihnx6jKzn0IgjDLTN3a5DM3gguF9LS0rE
+	cprBStA6ZKERfDg1VP6sBdtbejQKbH27tweFuJhKBBtr4dU/D45vuFppxRVyO6qfQQP1ElNEs35
+	JCenIpgcsxstIgJMD4BKIwvoQnjt9By/1x6/yfCJV6sQCKs55GsqsaNqSNTsVh44gUeFlvi5sUN
+	xpgH1wnBSoPNP95wvBsz/5zR3BhWq/LVL/OYdrrMr1I8ujG6COzTgihBM0WDKbM8NyrsejZopbY
+	gUGBQUx79yuHF+vCT5O7/Ba+VoSrQeho5usC8E9hKS1IT4imcs893HC8NNEhfJKlEuQzzg1ZMON
+	CMXWuKD5vCoNyCqn8FM3S0hN5tt3hGFlRjSMkLyDPL0YDmZ2tAjFb8l3WlllVvaQ
+X-Received: by 2002:a05:600c:4f55:b0:4a3:d327:6ed with SMTP id 5b1f17b1804b1-4ac182dcba3mr406397685e9.17.1793802195353;
+        Wed, 04 Nov 2026 06:23:15 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b43c7480e3sm87089165e9.7.2026.11.04.06.23.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2026 06:23:09 -0800 (PST)
+Date: Wed, 4 Nov 2026 14:23:07 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Samuel Wu <wusamuel@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner
+ <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai
+ <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ kernel-team@android.com, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to
+ /proc/kallsyms
+Message-ID: <20261104142307.431fc12f@pumpkin>
+In-Reply-To: <CAG2KctqdPq6NmK6rB13s2bgM7kP2w4OMMy2hdp_OFMVYYhTnZA@mail.gmail.com>
+References: <20261023001603.560210-8-wusamuel@google.com>
+	<20261023001603.560210-9-wusamuel@google.com>
+	<20261028134012.01d52e94@pumpkin>
+	<CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
+	<20261030100215.6f8e0d4f@pumpkin>
+	<CAG2KctqdPq6NmK6rB13s2bgM7kP2w4OMMy2hdp_OFMVYYhTnZA@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,205 +116,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] selftests: net: native-endian vring access in tv_post() and tv_r=
-eap()
-- [Medium] selftests: net: global netdev_max_backlog leaked on setup fail o=
-r teardown
-- [Low] selftests: net: missing tun_vhost entry in selftests/net/.gitignore
---
+On Tue, 3 Nov 2026 17:14:26 -0800
+Samuel Wu <wusamuel@google.com> wrote:
 
-commit 428d9005b1a3d09435bb7a0e0e6230535e135403
-Author: Antonio Quartulli <antonio@mandelbit.com>
+> On Fri, Oct 30, 2026 at 3:02=E2=80=AFAM David Laight
+> <david.laight.linux@gmail.com> wrote:
+> >
+> > On Thu, 29 Oct 2026 15:05:45 -0700
+> > Samuel Wu <wusamuel@google.com> wrote: =20
+> [...]
+> > > BY_NAME matches names exactly, like kallsyms_lookup_name(), so they
+> > > would be different symbols at different addresses. Please correct me
+> > > if I'm missing something here! =20
+> >
+> > Only that the user might really want one of the copies.
+> > Sometimes there is only the copy. =20
+>=20
+> Good point. I'll have v3 add KALLSYMS_F_PREFIX + pos/next_pos
+> pagination to cover these. A prefix query for "foo." also finds the
+> copies when plain foo does not exist (expanded on this in my reply to
+> Andrii's Oct 30 mail in this thread).
 
-selftests: net: add a vhost-net test for the tun NAPI queue bound
+I'm busy rebasing my patches - they got stamped all over :-(
+I should get a v3 that applies by the end of the week.
 
-This commit adds a tun_vhost selftest that sends packets from vhost-net int=
-o a
-tap device with IFF_NAPI and netdev_max_backlog set to 8 across batch, copy,
-and zerocopy variants to verify that excess packets are dropped, the queue
-continues draining, and all ring buffers are returned.
+I will add a 'prefix' variant for you.
+The 'next symbol matches' flag is exactly that (actually it is a
+this symbol is a duplicate to avoid issues at the start of the array).
+So in this case that application would always need to read
+the next symbol (by name).
 
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftes=
-ts/net/Makefile
-> index 9180b9bec5155..babb684d6f77a 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -202,6 +202,7 @@ TEST_GEN_PROGS :=3D \
->  	tap \
->  	tcp_port_share \
->  	tls \
-> +	tun_vhost \
->  	udp_splice_checksum \
->  # end of TEST_GEN_PROGS
+I think it might be more sensible (less pitfalls later on) to return
+the symbol number - not that of the next one.
 
-[Severity: Low]
-This isn't a bug, but since tun_vhost is added to TEST_GEN_PROGS in
-tools/testing/selftests/net/Makefile, should tun_vhost also be added to
-tools/testing/selftests/net/.gitignore like the other generated test binari=
-es
-in this directory?
-
-> diff --git a/tools/testing/selftests/net/tun_vhost.c b/tools/testing/self=
-tests/net/tun_vhost.c
-> new file mode 100644
-> index 0000000000000..dbf76d324a7e2
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/tun_vhost.c
-[ ... ]
-> +static void tv_vhost_setup(struct __test_metadata *_metadata,
-> +			   FIXTURE_DATA(tun_vhost) *self)
-> +{
-> +	struct vhost_vring_state state =3D { .index =3D TV_TX_VQ };
-> +	struct vhost_vring_file file =3D { .index =3D TV_TX_VQ };
-> +	struct vhost_vring_addr addr =3D { .index =3D TV_TX_VQ };
-> +	size_t memsz =3D sizeof(struct vhost_memory) +
-> +		       sizeof(struct vhost_memory_region);
-> +	unsigned long long features;
-> +	struct vhost_memory *mem;
-> +
-> +	ASSERT_EQ(ioctl(self->vhost, VHOST_SET_OWNER, NULL), 0);
-> +	ASSERT_EQ(ioctl(self->vhost, VHOST_GET_FEATURES, &features), 0);
-> +	ASSERT_TRUE(features & (1ULL << VIRTIO_F_VERSION_1));
-> +	features =3D 1ULL << VIRTIO_F_VERSION_1;
-> +	ASSERT_EQ(ioctl(self->vhost, VHOST_SET_FEATURES, &features), 0);
-[ ... ]
-> +FIXTURE_SETUP(tun_vhost)
-> +{
-> +	struct ifreq ifr =3D {};
-> +	int hdrlen =3D TV_HDR_LEN;
-> +	int sndbuf =3D 1 << 20;
-> +	ssize_t n;
-> +	int i, fd;
-> +
-> +	self->tap =3D -1;
-> +	self->vhost =3D open("/dev/vhost-net", O_RDWR);
-> +	if (self->vhost < 0)
-> +		SKIP(return, "no /dev/vhost-net");
-> +	if (variant->zerocopy && !tv_zerocopy_enabled())
-> +		SKIP(return, "vhost_net experimental_zcopytx not enabled");
-> +	if (variant->batch && tv_zerocopy_enabled())
-> +		SKIP(return, "vhost_net does not batch with zerocopy");
-> +
-> +	/* global, and only visible from init_net: keep it open to restore */
-> +	self->backlog_fd =3D open("/proc/sys/net/core/netdev_max_backlog",
-> +				O_RDWR);
-> +	ASSERT_GE(self->backlog_fd, 0);
-> +	n =3D read(self->backlog_fd, self->backlog, sizeof(self->backlog) - 1);
-> +	ASSERT_GT(n, 0);
-> +	self->backlog[n] =3D '\0';
-> +	ASSERT_EQ(pwrite(self->backlog_fd, TV_BACKLOG, strlen(TV_BACKLOG), 0),
-> +		  strlen(TV_BACKLOG));
-> +
-> +	ASSERT_EQ(unshare(CLONE_NEWNET), 0);
-> +
-> +	self->tap =3D open("/dev/net/tun", O_RDWR);
-> +	ASSERT_GE(self->tap, 0);
-[ ... ]
-> +	tv_vhost_setup(_metadata, self);
-> +}
-> +
-> +FIXTURE_TEARDOWN(tun_vhost)
-> +{
-> +	if (self->tap < 0)
-> +		return;
-> +	/* waits for outstanding zerocopy buffers */
-> +	close(self->vhost);
-> +	close(self->tap);
-> +	if (pwrite(self->backlog_fd, self->backlog, strlen(self->backlog),
-> +		   0) < 0)
-> +		TH_LOG("cannot restore netdev_max_backlog to %s",
-> +		       self->backlog);
-> +	close(self->backlog_fd);
-> +}
-
-[Severity: Medium]
-Can this leave the host-global /proc/sys/net/core/netdev_max_backlog sysctl
-clobbered at 8 if setup fails or if teardown hangs waiting for zerocopy
-buffers?
-
-In FIXTURE_SETUP(tun_vhost), TV_BACKLOG is written to self->backlog_fd befo=
-re
-unshare(CLONE_NEWNET), open("/dev/net/tun"), TUNSETIFF, socket setup, and
-tv_vhost_setup(). In tools/testing/selftests/kselftest_harness.h
-(__TEST_F_IMPL), _metadata->no_teardown remains true until FIXTURE_SETUP
-returns, so if any subsequent ASSERT_* fails during setup, teardown is skip=
-ped
-entirely (and FIXTURE_TEARDOWN also returns early when self->tap < 0).
-
-In addition, in FIXTURE_TEARDOWN(tun_vhost), close(self->vhost) is called
-before restoring self->backlog_fd. If the zerocopy variant fails because a
-dropped zerocopy packet never completes its ubuf_info, close(self->vhost) ->
-vhost_net_release() -> vhost_net_flush() -> vhost_net_ubuf_put_and_wait() w=
-ill
-block in uninterruptible sleep until the test harness kills the process with
-SIGKILL, preventing the pwrite() restore from running.
-
-Should netdev_max_backlog be written only at the end of FIXTURE_SETUP(tun_v=
-host)
-after all fallible setup steps succeed, and restored in
-FIXTURE_TEARDOWN(tun_vhost) before calling close(self->vhost)?
-
-> +/* queue up to @n buffers, return how many */
-> +static int tv_post(FIXTURE_DATA(tun_vhost) *self, int pktlen, int n)
-> +{
-> +	int inflight =3D (unsigned short)(self->avail_idx - self->used_idx);
-> +	unsigned long long one =3D 1;
-> +	int i;
-> +
-> +	for (i =3D 0; i < n && inflight < TV_RING_NUM; i++, inflight++) {
-> +		unsigned int id =3D self->avail_idx % TV_RING_NUM;
-> +
-> +		self->vr.desc[id].addr =3D (unsigned long)self->bufs +
-> +					 id * TV_BUF_SIZE;
-> +		self->vr.desc[id].len =3D TV_HDR_LEN + pktlen;
-> +		self->vr.desc[id].flags =3D 0;
-> +		self->vr.avail->ring[id] =3D id;
-> +		self->avail_idx++;
-> +	}
-> +	__atomic_store_n(&self->vr.avail->idx, self->avail_idx,
-> +			 __ATOMIC_RELEASE);
-> +	if (i && write(self->kick, &one, sizeof(one)) !=3D sizeof(one))
-> +		return -1;
-> +	return i;
-> +}
-> +
-> +/* reap returned buffers, waiting up to @ms for at least one */
-> +static int tv_reap(FIXTURE_DATA(tun_vhost) *self, int ms)
-> +{
-> +	struct pollfd pfd =3D { .fd =3D self->call, .events =3D POLLIN };
-> +	unsigned short used;
-> +	unsigned long long v;
-> +
-> +	for (;;) {
-> +		used =3D __atomic_load_n(&self->vr.used->idx, __ATOMIC_ACQUIRE);
-> +		if (used !=3D self->used_idx) {
-> +			int n =3D (unsigned short)(used - self->used_idx);
-> +
-> +			self->used_idx =3D used;
-> +			return n;
-> +		}
-
-[Severity: Medium]
-Will tv_post() and tv_reap() fail on big-endian architectures such as s390x?
-
-In tv_vhost_setup(), the test negotiates VIRTIO_F_VERSION_1 via
-ioctl(self->vhost, VHOST_SET_FEATURES, &features), which causes vhost to
-interpret all vring fields as little-endian (vq->is_le =3D true in
-vhost_init_is_le()).
-
-However, tv_post() stores self->vr.desc[id].addr, self->vr.desc[id].len,
-self->vr.avail->ring[id], and self->vr.avail->idx in CPU-native byte order,
-and tv_reap() loads and subtracts self->vr.used->idx in CPU-native byte ord=
-er.
-On big-endian hosts, vhost will byte-swap those native values when reading
-avail->idx and descriptors, and tv_reap() will misread used->idx.
-
-Should these vring accesses use htole64(), htole32(), htole16(), and le16to=
-h()?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103142232.1869=
-185-1-antonio@mandelbit.com?part=3D2
+David
