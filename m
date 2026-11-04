@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793820257;
-	b=w4fKasBBSopa1u5e1io4qwn3WqWTpeMMdrFabf3sztQ35WGgcGkFcrRKV8B1cNcB0vw+
-	 2CKB6chJey61XzLP/zOQmtqRJJfttNfJ6Jlo+r3kGj+mJvIY5KkgO1pVzM/1DgdjG8/Ch
-	 NpX4Pn2Il51Sm5m8MXrp3gh8WDss9Z7QrH7vjI+XPrrwAZTTllGtJ7+GP5p+kfEtyUEsq
-	 Q76v44/TgRSThxm1q0GktlOnBvQ10q2gtsFrgbdIZbh+imnatxeTz+7Wi/jJ8SBJAJelp
-	 kaAymqm14zWc4xEKk0t0qr8mgmgCMZ1FWErnNYgn8EMBhg17YO5H14BpB1hFFgwd7NA==
+	t=1793820291;
+	b=tJatMjGBHte+QYMPDJgFGjSM93/w7svjxT/VoOBNRjk0FeSufeUhzh1+rJwWdPDE0b3u
+	 EDUhWuWuHNSUOrXTOluhtrvBFmmiAdFiNPYw8KmWvVM+L3WyzTETMWiQTz8FfPn3UQ1V5
+	 OKzDuNPHajVYPYIfeUtdivVMkdAwf5mP8B36q7SBl2luVgeP04H+q3LlfZQdzOzmcNyHL
+	 LOFJ1wAp6HdekHdhpQSJe8Ro5lUMqNJSUsAGvN8rxgPdlHoocmQEKsZZU9K9Xa0KY9Lgq
+	 nB3MHJaGuMbXgN+nE6f7hGFLc8WKt2d2HBgrFLjygn5268rVthmbabOLxnMVk/elPkw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793820257;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793820291;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=mR1Obv3OQO7Rr03XXwq0Vuu5vswoLyJMagXWwpBbflw=;
-	b=R1T3fWJmP9ckTU+jbmEW6vdgVRpCn+xf7VHCCZ4qdBL2KGAMOL4LSD0HSBTC7sU5tE7v
-	 lXDKjHntcnEazOHOgNXri3nayDGLNjdSZzmRCxGEE+IgrIS+tDlvuDrfUAvR3CHAxcvnV
-	 PfSaCdDrGWb/Orq5UtYIuQ3iGY4cjOYHzt08HUrTBrWPWgymG7iXDHBqQ5ShBchS2HgMR
-	 oyBQb1Btn4gTvcNjzyiDsNmI8Rt4XZOZDeEB7XHyJzDvM8kJJZkoivyeaxROaTlHiBrmE
-	 E4X7nVboqRH7M1MJ5gx/vFLTNa5nWwpNfvz1YL6fXOl6TOoHDuqRfFDV7BZJZGBP8rA==
+	bh=2cl+IPVJlClBxWQlKHZKipsDZ6QUPUvr34kW14M+CmU=;
+	b=mYvdsDYLCkeeOCHc9GJfYivqbUbCUpCnJYzSLpl3fE74RqtQG/v7Opx8T/jq8DAo1qFR
+	 tF3NzEtcmGRj3eN1lKaUG2l7MaQnXuYCG9Xeb3bpNNl2Mj4bcB54sv/uMDdsdhi6aohU1
+	 2QshW2F9c+N8tFEGHMGBC2/C514+ejm1kP2r4ma7FMVkL+bRbregtDDs0Hi/R9GFI0z4/
+	 Skb8wjDrNqp4eMKLtr62AseJuTbQjCO18E3xp8cJUbQVL73UEZ8qHkNJIQMo6517JduN+
+	 um/3hwVWtt+9Duur2+kI21aSJCQOXnHRj256KDEFpTETyteItqzyMeUzNQB9s6mMatA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VLzEXYzy;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LtrEJpci;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90846606FAC1;
-	Wed,  4 Nov 2026 19:24:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0276070E66;
+	Wed,  4 Nov 2026 19:24:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VLzEXYzy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BFC31F0093A;
-	Wed,  4 Nov 2026 19:24:17 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LtrEJpci
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 099821F000C1;
+	Wed,  4 Nov 2026 19:24:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793820257;
-	bh=mR1Obv3OQO7Rr03XXwq0Vuu5vswoLyJMagXWwpBbflw=;
+	s=k20260515; t=1793820290;
+	bh=2cl+IPVJlClBxWQlKHZKipsDZ6QUPUvr34kW14M+CmU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=VLzEXYzyB987Mq/g4CO0K7QgCQUco1Ui/zkCG1VglMZN1YSdGOPeeW7zi3yOP/4k5
-	 DpvubYCdz7kX1wvpxIcCnGqxqv6q5xgQtXVImaAxVavZdMiophOXe/IU8H1cnisq8H
-	 xmqWYQNFFvDSDmXugpk3AFnH1MQFsnH1xfTHYeXssX00Lin1QJ12CVJ82lQv/Vf9wh
-	 BNslafcMucR6QIcwhw7h2rgFVy1ernQ6Hywu/nssEiga41QeSyF+YCjLFM10vZcvwE
-	 cT4zBqwu8PuMXhw0DIo1plbZq6KjAIXgCeXaTzg55RV5gvS7p/R8W8iam1XD/zPzvG
-	 FYtsyOhoZp2Zg==
-Content-Type: multipart/mixed; boundary="===============4878618093610613736=="
+	b=LtrEJpciasdBqwJR7UCMuE83mRgAsfJd95YrCqYDxstR7kmS5ie32cqCleSTDaaCj
+	 pexMT53rH6JeiIckRf0FsyXlrrE+LmvbXYfuGgwrJ9QPN53f8MGC3wC9jB8Opil/hz
+	 +Dak9Jl6Z3ddnrQdc+DPJsB4sxbMYun4d684ySUDTkELbuu3V+izKiSvG7iv/3D+x1
+	 DmlScfuNYdb11YV+fQcAO/1jy0IkS7fwbrVy1W0sZxmkjQ5thaQ6uyZ0oIAeIdSH8p
+	 kKCjSgeRdYQ7pYEcfxnH2g2P61xxHmHUbAOzIVTBmQO6BMl9lsjtXDCwt6OF/NfOcL
+	 X2cGv/8LrLzVQ==
+Content-Type: multipart/mixed; boundary="===============2959817077743352993=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,52 +49,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <103bfd4d913a69e7a005386906734f0b702779d435e88572bd94e855a0c59ded@mail.kernel.org>
-In-Reply-To: <9a0298fe0bc97f58bc5482f5642bc58835b2d3a1.1793818386.git.hi@tychen.cc>
-References: <9a0298fe0bc97f58bc5482f5642bc58835b2d3a1.1793818386.git.hi@tychen.cc>
-Subject: Re: [PATCH bpf-next v11 3/3] selftests/bpf: Cover recursive bpftool map dumps
+Message-Id: <8397ab89d713edcda68bf7dfa564b3a6f2c7d4c420a9a1a9a49fa2dfc8833233@mail.kernel.org>
+In-Reply-To: <4b2b24fdabd4cdef1364a8664d7d9615e960c72c.1793818387.git.hi@tychen.cc>
+References: <4b2b24fdabd4cdef1364a8664d7d9615e960c72c.1793818387.git.hi@tychen.cc>
+Subject: Re: [PATCH bpf-next v8 2/2] selftests/bpf: Check bpftool batch map dumps
 From: bot+bpf-ci@kernel.org
 To: hi@tychen.cc,bpf@vger.kernel.org
-Cc: hi@tychen.cc,qmo@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,linux-kselftest@vger.kernel.org,shuah@kernel.org,daniel@iogearbox.net,ast@kernel.org,alexei.starovoitov@gmail.com,skokovmaksimevg@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  4 Nov 2026 19:24:17 +0000 (UTC)
+Cc: hi@tychen.cc,qmo@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,linux-kselftest@vger.kernel.org,shuah@kernel.org,daniel@iogearbox.net,ast@kernel.org,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed,  4 Nov 2026 19:24:50 +0000 (UTC)
 
---===============4878618093610613736==
+--===============2959817077743352993==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Cover recursive bpftool map dumps
+> selftests/bpf: Check bpftool batch map dumps
 
-TL;DR: Nit only, in the selftest: one bpf_map_create() call uses a compound
-literal with a hand-set .sz instead of LIBBPF_OPTS() like create_outer() does
-in the same file.
+TL;DR: Commit message and comment say the selftest's injected -EBUSY mimics a
+hash bucket lock failure, but rqspinlock apparently returns -EDEADLK or
+-ETIMEDOUT; test still works, so only wording (or the errno) needs fixing.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump_recursive.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump_recursive.c
+>     Batched dumps must print the same output as individual lookups. Use an
+>     fmod_ret program on security_bpf() to count the map lookups made by
+>     bpftool children of the test, and to fail batch lookups with -EBUSY as
+>     a hash bucket lock failure would.
+>
+>     For each map type with batched lookups, compare plain and JSON dumps
+>     with a dump whose batch lookups all fail, and check that no individual
+>     lookups were needed. Cover BTF and per-CPU output, an empty map, 1-byte
+>     keys and unaligned values. With 4 KiB values, check dumps that need
+>     several batches, and that failing the first or second batch lookup
+>     continues with individual lookups without restarting the dump.
+>
+>     Assisted-by: LLM
+>     Signed-off-by: Tianyi Chen <hi@tychen.cc>
+
+> diff --git a/tools/testing/selftests/bpf/progs/bpftool_map_batch.c b/tools/testing/selftests/bpf/progs/bpftool_map_batch.c
 > new file mode 100644
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump_recursive.c
 
 [ ... ]
 
-> +static void test_unchanged(void)
-> +{
+> +	} else if (cmd == BPF_MAP_LOOKUP_BATCH) {
+> +		batch_calls++;
+> +		/* Same error as a hash bucket lock failure. */
+> +		if (fail_batch < 0 || fail_batch == batch_calls)
+> +			return -EBUSY;
+> +	}
 
-[ ... ]
+The commit message says batch lookups fail "with -EBUSY as a hash bucket
+lock failure would", and this comment says the same.  Is that accurate?
 
-> +	fds[1] = bpf_map_create(BPF_MAP_TYPE_HASH_OF_MAPS, "rec_empty", 4, 4, 1,
-> +				&(struct bpf_map_create_opts){
-> +					.sz = sizeof(struct bpf_map_create_opts),
-> +					.inner_map_fd = fds[0],
-> +				});
+Since commit 4fa8d68aa53e ("bpf: Convert hashtab.c to rqspinlock"),
+htab_lock_bucket() returns whatever raw_res_spin_lock_irqsave() returns:
 
-this isn't a bug, but could this use LIBBPF_OPTS(bpf_map_create_opts, opts,
-.inner_map_fd = fds[0]) like create_outer() does in this file, rather than a
-compound literal with a hand-set .sz?
+    ret = raw_res_spin_lock_irqsave(&b->raw_lock, flags);
+    if (ret)
+        return ret;
+
+and rqspinlock only fails with -EDEADLK or -ETIMEDOUT.
+__htab_map_lookup_and_delete_batch() passes that value back to user space
+via "goto after_loop", so no BPF_MAP_LOOKUP_BATCH path returns -EBUSY for a
+lock failure.
+
+The test still works, because dump_map_batch() in bpftool treats any error
+other than -ENOENT the same way.  Could the comment and the changelog say
+"an error other than -ENOENT" instead, or could this return -EDEADLK?
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41893660017
---===============4878618093610613736==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41893799307
+--===============2959817077743352993==--
