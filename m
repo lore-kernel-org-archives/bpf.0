@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.54.127.65
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.54.127.128
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793822081;
-	b=CCgqda2xQMVwhnDHmYKP5OplJg9ITjN2d0XUz9BV/73d2DWP8AcyF7vr7xsNZUFtGfCx
-	 2soFnz+ZuolggTK/1ar/hhkXj0p7+VFPOn77tPIO5PnpvPEFouu6GrWXfb4qoPDji8bcE
-	 fCOwQ2wRK5KuiZ5F4vEzZsY8d3uyUOTUzKwzI6ffWCKYE5ftC28E5ajo0iT/a1A+bUOXD
-	 uwOqxxDVDuY/NfixHweiHeJedN+1DSkTF/nKb9TEsgdFi5QlTnsuIcPuGpqo0kaqbDPF1
-	 pF8qEOq4YI+PBYmbjmXDqk3KLV0fsx0HACXleqYC89mwcKhKmIAn+CG/Sw6fuo+G4DA==
+	t=1793822091;
+	b=S8t8+R/GO3IL9kl7VtI8MSWXoC1hYC4dv9h6B9dxH59BfeQn5eC1H4lLyosjSVynPfBd
+	 ajXiwHM7kScKfWQFxZYd+UvjdXMJv0rbn3abWZBLLOPg9kncnyoyI/BhQdIcT6tNdVA2G
+	 znmpV94kiqLjG6/9U13hdZNk3968r8LuMfvfhCMM/0phTGmf5pwF9yaPKQYKaFnESZgKG
+	 7epxcHIc7T7+pozZ3Iaii33DsUFR9JS3pejk9QkzZbp3mZNoKb2Yy5/0DdycBCedM1y9C
+	 B3yM4VygO+cx7hLswoMd5RFV8YF4kiEcm90sdbKaf3q3Yp3g2VjsuQ9GBglhfWhsyjg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793822081;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793822091;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Envelope-From;
-	bh=DRYW9LsOkwqorjTVMq50L2691tSj2pAGda8sueNbSfA=;
-	b=NCJZht9BuqqK9xY7BqtnXPSobbsy2+HvI+/+3jSE0JjZ7aEP6ImtG3zI3IG7f/4+bUy5
-	 LPaJyMWQTLzydAZ+U2erDfdc5m0FT6z224zb5DzD/XauNx0nk+k0eHSTT5B/2vCG2o11D
-	 xesksWEUjXZPnQP49jUaVPMCtuvQbv09XlwERFMbKA4MWXXfh0Jf/rMqhIfySBxj2828H
-	 1sdH9fJteErtqw2I0FOqe/Q0o/gHc904VxOqHkz80pdJlATeGikVmBHVXXaWh6Gpid0o2
-	 YfJ39hW8fB84FTpyLS9EmNlpYeTo++7uqNvOzkhS1zQ3mRR3Gj411tB84wWyImBzKfA==
+	bh=RuJing33sTSyr8nNw0srFM/fQ8v9tfQcK7zb7jIdo2o=;
+	b=2NFdDtcbnMoLhgc124V60dEMdRn1wJ/rjpQbvxyoz+GtMr1LuykEVJU+kn2cHHGK6a7v
+	 CZwKzNJiNRRSx2OH+/Pdu4rv0AjD3ihZJ2g7oasPTiW1h37CTyBAGXjpyeJvYn2wkqQxh
+	 M4wh6mzsgyBViIs6YscJsdS4dFnett61JvpPGLIu1rUSa2SZQ1nL5PrWo3lJh8YmX6yQD
+	 Iz+vGWYiOW8oi/Ef+JYHjAEb8q4UQgWCX4CVZNveiewiFT8PxEAkFt8XOdY5LvV/SyvTh
+	 TK62tePipiBPhasSL82z5WHaaKPQx3c3UL/gWbDZQLj8O7UNPlFvaS9DWIIWqs/8M9w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=tychen.cc;
 	spf=pass smtp.mailfrom=tychen.cc;
-	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=XIZi8HV+;
-	arc=none smtp.remote-ip=198.54.127.65
-Received: from out-zbxj-a65.jellyfish.systems (out-zbxj-a65.jellyfish.systems [198.54.127.65])
+	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=er5WBXSy;
+	arc=none smtp.remote-ip=198.54.127.128
+Received: from out-2z4y-a128.jellyfish.systems (out-2z4y-a128.jellyfish.systems [198.54.127.128])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C116A6098F5B
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 19:54:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C116A6098F5B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87C26099A38
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 19:54:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B87C26099A38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=XIZi8HV+
+	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=er5WBXSy
 Received: from fedora (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKbkB495jz2x9C;
-	Wed, 04 Nov 2026 19:54:26 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKbkG5Bhnz2x98;
+	Wed, 04 Nov 2026 19:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1793822070;
-	bh=DRYW9LsOkwqorjTVMq50L2691tSj2pAGda8sueNbSfA=;
+	s=spacemail; t=1793822074;
+	bh=RuJing33sTSyr8nNw0srFM/fQ8v9tfQcK7zb7jIdo2o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XIZi8HV+6YGfXJGlt2uRhfhkE80/hLaOfpdhsHDtI7lYuYeovpm/JHOYlediTxP/Z
-	 6qPcmpVCehJAEy2pXnXXHXWo/wYfRGCra0dvNCfkWTTP2RHWyHOq+uSnvAY8q6aLDT
-	 DH+QnqqD6e0dsypbjp23SxAKUhTYR0x94J0TOV4qy8pudC0jcOczjE4Vil84z8tQCU
-	 eS1HRbc0tvkBemCdNKzOeRpm8XRJ3eKeKlCAt77IHMr0MnvwrO259rJMCC+abKeOGr
-	 Q3nRFdoeqdmvBMH63yzdJxncy56xb0BvCjeerzAyjjTa4f6dQh2PIWuRrH6NS4CIhO
-	 UwfkvKVgOS4lA==
+	b=er5WBXSyGmiKEQR/BTtSMOXH+NQs+g+DYl1HoZqC0FqPcVu34FaUFXnr6p+IMbJLM
+	 MUQCYqCboZieI6+uCzM3VBHlsP5rMZcgp5MsImxMrAKhNERDzQV3v5hmvvXNI6OjYw
+	 /gtkNSyRkyR8yCirOaEBUQtbeZvQqk3PAlkBBgPbJrLO7UseVwF4UQr1DVmyt1Q8UK
+	 AXhKa0xwB9E1Srch4MDhgXsKa1g8j+c5SEjki5LPhnVzyJ3FTIyCf607lN7v1/KOKO
+	 Wk9dWwK8Koaj1vRBCX6qojFsYeZXTfwzqVxIVBOn1tVSrCpCe2Z7PCfxH+pdmabwrY
+	 RXeHgXRmvqV+g==
 From: Tianyi Chen <hi@tychen.cc>
 To: bpf@vger.kernel.org
 Cc: Tianyi Chen <hi@tychen.cc>,
@@ -61,9 +61,9 @@ Cc: Tianyi Chen <hi@tychen.cc>,
 	daniel@iogearbox.net,
 	ast@kernel.org,
 	alexei.starovoitov@gmail.com
-Subject: [PATCH bpf-next v9 1/2] bpftool: Use batch lookups for map dumps
-Date: Thu,  5 Nov 2026 04:54:12 +0900
-Message-ID: <7a728136ad18840c94836ec1ce988f8bc2fcfb35.1793821981.git.hi@tychen.cc>
+Subject: [PATCH bpf-next v9 2/2] selftests/bpf: Check bpftool batch map dumps
+Date: Thu,  5 Nov 2026 04:54:13 +0900
+Message-ID: <e4cd18723b893385d66232276f44049bb86c8e51.1793821981.git.hi@tychen.cc>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <cover.1793821981.git.hi@tychen.cc>
 References: <cover.1793821981.git.hi@tychen.cc>
@@ -79,173 +79,314 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-Dumping a map takes two BPF syscalls per element: one to get the next
-key and one to look it up. Use BPF_MAP_LOOKUP_BATCH instead, with keys
-and values bounded to 1 MiB and per-CPU value strides accounted for.
-The output is unchanged.
+Batched dumps must print the same output as individual lookups. Use an
+fmod_ret program on security_bpf() to count the map lookups made by
+bpftool children of the test, and to fail batch lookups with -EBUSY.
 
-For a hash map with 100,000 4-byte keys and values, a plain dump takes 5
-BPF syscalls instead of 200,005. With output to /dev/null, the median of
-15 runs in an x86-64 KVM guest on Linux 7.3 dropped from 86 ms to 52 ms
-(JSON: 78 ms to 42 ms). Printing to a terminal dominates either way.
+For each map type with batched lookups, compare plain and JSON dumps
+with a dump whose batch lookups all fail, and check that no individual
+lookups were needed. Cover BTF and per-CPU output, an empty map, 1-byte
+keys and unaligned values. With 4 KiB values, check dumps that need
+several batches, and that failing the first or second batch lookup
+continues with individual lookups without restarting the dump.
 
-If a batch lookup fails, discard its output and continue with individual
-lookups after the last printed key. bpf_map_get_next_key() walks the map
-in the same order. This covers maps without batch support, and hash
-maps whose bucket lock cannot be taken, which individual lookups do not
-need.
+Pre-size RHASH maps so asynchronous growth does not race with the
+order-sensitive dump comparisons.
 
-Link: https://github.com/libbpf/bpftool/issues/63
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Assisted-by: LLM
 Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
- tools/bpf/bpftool/map.c | 97 ++++++++++++++++++++++++++++++++++-------
- 1 file changed, 82 insertions(+), 15 deletions(-)
+ .../bpf/prog_tests/bpftool_map_batch.c        | 231 ++++++++++++++++++
+ .../selftests/bpf/progs/bpftool_map_batch.c   |  42 ++++
+ 2 files changed, 273 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpftool_map_batch.c
 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 4b65edf74859b..c0bd9bf846492 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -59,13 +59,16 @@ static int map_type_from_str(const char *type)
- 	return -1;
- }
- 
--static void *alloc_value(struct bpf_map_info *info)
-+static size_t map_value_size(struct bpf_map_info *info)
- {
- 	if (map_is_per_cpu(info->type))
--		return malloc(round_up(info->value_size, 8) *
--			      get_possible_cpus());
--	else
--		return malloc(info->value_size);
-+		return (size_t)round_up(info->value_size, 8) * get_possible_cpus();
-+	return info->value_size;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
+new file mode 100644
+index 0000000000000..4cca77f410a06
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
+@@ -0,0 +1,231 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <arpa/inet.h>
++#include <test_progs.h>
++#include <bpf/btf.h>
++#include "bpftool_helpers.h"
++#include "bpftool_map_batch.skel.h"
++
++/* Fits the plain and JSON dumps of the multi-batch cases below. */
++#define OUTPUT_SIZE (8U << 20)
++
++struct dump_case {
++	const char *name;
++	enum bpf_map_type type;
++	__u32 key_size;
++	__u32 value_size;
++	__u32 entries;
++	bool btf;
++	/* Values large enough that the 1 MiB budget needs several batches. */
++	bool multi_batch;
++};
++
++static bool is_percpu(enum bpf_map_type type)
++{
++	return type == BPF_MAP_TYPE_PERCPU_HASH ||
++	       type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
++	       type == BPF_MAP_TYPE_PERCPU_ARRAY;
 +}
 +
-+static void *alloc_value(struct bpf_map_info *info)
++static int run_dump(struct bpftool_map_batch *skel, __u32 id, bool json,
++		    int fail_batch, char *output)
 +{
-+	return malloc(map_value_size(info));
- }
- 
- static int do_dump_btf(const struct btf_dumper *d,
-@@ -741,15 +744,10 @@ static int do_show(int argc, char **argv)
- 	return errno == ENOENT ? 0 : -1;
- }
- 
--static int dump_map_elem(int fd, void *key, void *value,
--			 struct bpf_map_info *map_info, struct btf *btf,
--			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
-+static void print_map_elem(void *key, void *value,
-+			   struct bpf_map_info *map_info, struct btf *btf,
-+			   json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
- {
--	if (bpf_map_lookup_elem(fd, key, value)) {
--		print_entry_error(map_info, key, errno);
--		return -1;
--	}
--
- 	if (json_output) {
- 		print_entry_json(map_info, key, value, btf, cpu_ids, cpu_cnt);
- 	} else if (btf) {
-@@ -763,10 +761,74 @@ static int dump_map_elem(int fd, void *key, void *value,
- 	} else {
- 		print_entry_plain(map_info, key, value, cpu_ids, cpu_cnt);
- 	}
-+}
- 
-+static int dump_map_elem(int fd, void *key, void *value,
-+			 struct bpf_map_info *map_info, struct btf *btf,
-+			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
-+{
-+	if (bpf_map_lookup_elem(fd, key, value)) {
-+		print_entry_error(map_info, key, errno);
-+		return -1;
-+	}
-+
-+	print_map_elem(key, value, map_info, btf, btf_wtr, cpu_ids, cpu_cnt);
- 	return 0;
- }
- 
-+#define MAP_DUMP_BATCH_BYTES (1U << 20)
-+
-+/*
-+ * Print the elements returned by batched lookups, leaving the last one in
-+ * @key. Return true at the end of the map. After any error, the caller
-+ * continues with bpf_map_get_next_key(), which walks the map in the same order.
-+ */
-+static bool dump_map_batch(int fd, void *key, void *value,
-+			   struct bpf_map_info *info, struct btf *btf,
-+			   json_writer_t *wtr, const int *cpu_ids, int cpu_cnt,
-+			   unsigned int *num_elems)
-+{
-+	size_t value_size = map_value_size(info);
-+	void *keys, *values, *batch, *in_batch = NULL;
-+	__u32 capacity, count, i;
-+	bool done = false;
++	char command[64];
 +	int err;
 +
-+	capacity = min(MAP_DUMP_BATCH_BYTES / (info->key_size + value_size),
-+		       (size_t)info->max_entries);
-+	if (!capacity)
-+		return false;
-+
-+	/* Hash table batch cursors are u32 bucket indices; other maps use keys. */
-+	batch = malloc(max(info->key_size, 4U));
-+	keys = malloc((size_t)capacity * info->key_size);
-+	values = malloc((size_t)capacity * value_size);
-+	if (!batch || !keys || !values)
-+		goto out;
-+
-+	do {
-+		count = capacity;
-+		err = bpf_map_lookup_batch(fd, in_batch, batch, keys, values,
-+					   &count, NULL);
-+		if (err && err != -ENOENT)
-+			goto out;
-+		for (i = 0; i < count; i++) {
-+			/* Preserve alignment for odd-sized BTF keys and values. */
-+			memcpy(key, keys + (size_t)i * info->key_size, info->key_size);
-+			memcpy(value, values + (size_t)i * value_size, value_size);
-+			print_map_elem(key, value, info, btf, wtr, cpu_ids, cpu_cnt);
-+		}
-+		*num_elems += count;
-+		in_batch = batch;
-+	} while (!err);
-+	done = true;
-+out:
-+	free(batch);
-+	free(keys);
-+	free(values);
-+	return done;
++	snprintf(command, sizeof(command), "%smap dump id %u",
++		 json ? "-j " : "", id);
++	skel->bss->fail_batch = fail_batch;
++	skel->bss->batch_calls = 0;
++	skel->bss->elem_calls = 0;
++	output[0] = '\0';
++	err = get_bpftool_command_output(command, output, OUTPUT_SIZE);
++	if (!ASSERT_LT(strlen(output), OUTPUT_SIZE - 1, "output_fits"))
++		return -1;
++	return err;
 +}
 +
- static int maps_have_btf(int *fds, int nb_fds)
- {
- 	struct bpf_map_info info = {};
-@@ -836,7 +898,8 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
- 	struct btf *btf = NULL;
- 	int *cpu_ids = NULL;
- 	int cpu_cnt = 0;
--	int err;
-+	bool done = false;
-+	int err = 0;
- 
- 	key = malloc(info->key_size);
- 	value = alloc_value(info);
-@@ -895,7 +958,11 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
- 		p_info("Warning: cannot read values from %s map with value_size != 8",
- 		       map_type_str);
- 	}
--	while (true) {
-+	done = dump_map_batch(fd, key, value, info, btf, wtr, cpu_ids, cpu_cnt,
-+			      &num_elems);
-+	if (num_elems)
-+		prev_key = key;
-+	while (!done) {
- 		err = bpf_map_get_next_key(fd, prev_key, key);
- 		if (err) {
- 			if (errno == ENOENT) {
++static void check_same(const char *output, const char *expected, const char *name)
++{
++	size_t i;
++
++	for (i = 0; output[i] && output[i] == expected[i]; i++)
++		;
++	if (!ASSERT_EQ(output[i], expected[i], name))
++		printf("%s: first difference at offset %zu\n", name, i);
++}
++
++/* Failing every batch lookup gives the dump of individual lookups. */
++static void check_dump(struct bpftool_map_batch *skel, const struct dump_case *test,
++		       __u32 id, bool json, char *expected, char *output)
++{
++	int fail;
++
++	if (!ASSERT_OK(run_dump(skel, id, json, -1, expected), "individual_dump") ||
++	    !ASSERT_EQ(skel->bss->elem_calls, test->entries, "individual_lookups"))
++		return;
++
++	if (!ASSERT_OK(run_dump(skel, id, json, 0, output), "batch_dump"))
++		return;
++	ASSERT_GE(skel->bss->batch_calls, test->multi_batch ? 2 : 1, "batch_calls");
++	ASSERT_EQ(skel->bss->elem_calls, 0, "batch_only");
++	check_same(output, expected, "batch_output");
++
++	if (!test->multi_batch)
++		return;
++	/* Fail before and after a batch has been printed. */
++	for (fail = 1; fail <= 2; fail++) {
++		if (!ASSERT_OK(run_dump(skel, id, json, fail, output), "fallback_dump"))
++			return;
++		ASSERT_EQ(skel->bss->batch_calls, fail, "fallback_batch_calls");
++		if (fail == 1) {
++			ASSERT_EQ(skel->bss->elem_calls, test->entries, "fallback_lookups");
++		} else {
++			ASSERT_GT(skel->bss->elem_calls, 0, "resumed_lookups");
++			ASSERT_LT(skel->bss->elem_calls, test->entries, "not_restarted");
++		}
++		check_same(output, expected, "fallback_output");
++	}
++}
++
++static void fill_bytes(void *buf, __u32 size, __u32 seed)
++{
++	__u8 *bytes = buf;
++	__u32 i;
++
++	for (i = 0; i < size; i++)
++		bytes[i] = seed * 37 + i;
++}
++
++static void run_case(struct bpftool_map_batch *skel, const struct dump_case *test,
++		     char *expected, char *output)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts);
++	int fd = -1, inner_fd = -1, cpus = 1, cpu;
++	struct bpf_map_info info = {};
++	__u32 len = sizeof(info);
++	__u32 i, max_entries, stride;
++	struct btf *btf = NULL;
++	__u8 key[8] = {};
++	void *values = NULL;
++
++	if (is_percpu(test->type)) {
++		cpus = libbpf_num_possible_cpus();
++		if (!ASSERT_GT(cpus, 0, "possible_cpus"))
++			return;
++	}
++	stride = is_percpu(test->type) ? (test->value_size + 7) & ~7U : test->value_size;
++	values = calloc(cpus, stride);
++	if (!ASSERT_OK_PTR(values, "values"))
++		return;
++
++	if (test->btf) {
++		btf = btf__new_empty();
++		if (!ASSERT_OK_PTR(btf, "btf_new") ||
++		    !ASSERT_EQ(btf__add_int(btf, "unsigned int", 4, 0), 1, "btf_int") ||
++		    !ASSERT_OK(btf__load_into_kernel(btf), "btf_load"))
++			goto out;
++		opts.btf_fd = btf__fd(btf);
++		opts.btf_key_type_id = 1;
++		opts.btf_value_type_id = 1;
++	}
++	if (test->type == BPF_MAP_TYPE_ARRAY_OF_MAPS ||
++	    test->type == BPF_MAP_TYPE_HASH_OF_MAPS) {
++		inner_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "batch_inner", 4, 4, 1, NULL);
++		if (!ASSERT_OK_FD(inner_fd, "inner_map"))
++			goto out;
++		opts.inner_map_fd = inner_fd;
++	}
++	if (test->type == BPF_MAP_TYPE_LPM_TRIE || test->type == BPF_MAP_TYPE_RHASH)
++		opts.map_flags = BPF_F_NO_PREALLOC;
++	max_entries = test->entries ?: 1;
++	/* Leave room for per-CPU LRU free lists instead of testing eviction. */
++	if (test->type == BPF_MAP_TYPE_LRU_HASH ||
++	    test->type == BPF_MAP_TYPE_LRU_PERCPU_HASH)
++		max_entries *= 4;
++	/* Avoid asynchronous growth during dump comparisons. */
++	if (test->type == BPF_MAP_TYPE_RHASH)
++		opts.map_extra = max_entries;
++
++	fd = bpf_map_create(test->type, "batch_dump", test->key_size,
++			    test->value_size, max_entries, &opts);
++	if (!ASSERT_OK_FD(fd, "map_create"))
++		goto out;
++	for (i = 0; i < test->entries; i++) {
++		if (test->type == BPF_MAP_TYPE_LPM_TRIE) {
++			__u32 prefix[] = { 32, htonl(i) };
++
++			memcpy(key, prefix, sizeof(prefix));
++		} else if (test->key_size == 1) {
++			key[0] = (__u8)i;
++		} else {
++			/* Array map indices use native byte order. */
++			memcpy(key, &i, sizeof(i));
++		}
++		if (inner_fd >= 0)
++			memcpy(values, &inner_fd, sizeof(inner_fd));
++		else
++			for (cpu = 0; cpu < cpus; cpu++)
++				fill_bytes(values + cpu * stride, test->value_size,
++					   i + cpu * 101);
++		if (!ASSERT_OK(bpf_map_update_elem(fd, key, values, BPF_ANY), "map_update"))
++			goto out;
++	}
++	if (!ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &len), "map_info"))
++		goto out;
++
++	check_dump(skel, test, info.id, false, expected, output);
++	check_dump(skel, test, info.id, true, expected, output);
++out:
++	if (fd >= 0)
++		close(fd);
++	if (inner_fd >= 0)
++		close(inner_fd);
++	btf__free(btf);
++	free(values);
++}
++
++void test_bpftool_map_batch(void)
++{
++	static const struct dump_case cases[] = {
++		{ "hash", BPF_MAP_TYPE_HASH, 4, 4, 100 },
++		{ "empty", BPF_MAP_TYPE_HASH, 4, 4, 0 },
++		/* The hash cursor is wider than the key; values are unaligned. */
++		{ "odd_sizes", BPF_MAP_TYPE_HASH, 1, 3, 100 },
++		{ "btf", BPF_MAP_TYPE_HASH, 4, 4, 100, true },
++		{ "lru_hash", BPF_MAP_TYPE_LRU_HASH, 4, 4, 100 },
++		{ "percpu_hash", BPF_MAP_TYPE_PERCPU_HASH, 4, 3, 100 },
++		{ "lru_percpu_hash", BPF_MAP_TYPE_LRU_PERCPU_HASH, 4, 4, 100 },
++		{ "btf_percpu_hash", BPF_MAP_TYPE_PERCPU_HASH, 4, 4, 100, true },
++		{ "rhash", BPF_MAP_TYPE_RHASH, 4, 4, 100 },
++		{ "array", BPF_MAP_TYPE_ARRAY, 4, 4, 100 },
++		{ "percpu_array", BPF_MAP_TYPE_PERCPU_ARRAY, 4, 3, 100 },
++		{ "lpm_trie", BPF_MAP_TYPE_LPM_TRIE, 8, 4, 100 },
++		{ "array_of_maps", BPF_MAP_TYPE_ARRAY_OF_MAPS, 4, 4, 100 },
++		{ "hash_of_maps", BPF_MAP_TYPE_HASH_OF_MAPS, 4, 4, 100 },
++		/* Bucket and key cursors, up to 255 entries per batch. */
++		{ "multi_batch_hash", BPF_MAP_TYPE_HASH, 4, 4096, 256, false, true },
++		{ "multi_batch_array", BPF_MAP_TYPE_ARRAY, 4, 4096, 256, false, true },
++	};
++	struct bpftool_map_batch *skel;
++	char *expected = NULL, *output = NULL;
++	unsigned int i;
++
++	skel = bpftool_map_batch__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		return;
++	skel->bss->test_tgid = getpid();
++	if (!ASSERT_OK(bpftool_map_batch__attach(skel), "skel_attach"))
++		goto out;
++	expected = malloc(OUTPUT_SIZE);
++	output = malloc(OUTPUT_SIZE);
++	if (!ASSERT_OK_PTR(expected, "expected") || !ASSERT_OK_PTR(output, "output"))
++		goto out;
++
++	for (i = 0; i < ARRAY_SIZE(cases); i++)
++		if (test__start_subtest(cases[i].name))
++			run_case(skel, &cases[i], expected, output);
++out:
++	free(expected);
++	free(output);
++	bpftool_map_batch__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpftool_map_batch.c b/tools/testing/selftests/bpf/progs/bpftool_map_batch.c
+new file mode 100644
+index 0000000000000..0ca6f7973e880
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpftool_map_batch.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_core_read.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++#define EBUSY 16
++
++char _license[] SEC("license") = "GPL";
++
++/* The test process; bpftool runs as its child or grandchild via popen(). */
++int test_tgid;
++/* 1-based batch lookup to fail, -1 to fail all of them, 0 for none. */
++int fail_batch;
++int batch_calls;
++int elem_calls;
++
++static bool is_test_bpftool(void)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++
++	return BPF_CORE_READ(task, real_parent, tgid) == test_tgid ||
++	       BPF_CORE_READ(task, real_parent, real_parent, tgid) == test_tgid;
++}
++
++SEC("fmod_ret/security_bpf")
++int BPF_PROG(count_bpftool_lookups, int cmd, union bpf_attr *attr,
++	     unsigned int size, bool kernel)
++{
++	if (kernel || !is_test_bpftool())
++		return 0;
++
++	if (cmd == BPF_MAP_LOOKUP_ELEM) {
++		elem_calls++;
++	} else if (cmd == BPF_MAP_LOOKUP_BATCH) {
++		batch_calls++;
++		/* Trigger fallback rather than end-of-iteration (-ENOENT). */
++		if (fail_batch < 0 || fail_batch == batch_calls)
++			return -EBUSY;
++	}
++	return 0;
++}
 -- 
 2.56.0
 
