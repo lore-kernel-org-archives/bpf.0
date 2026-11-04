@@ -1,65 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.151
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793761102;
-	b=i0ZAgrjNyYJgZQKOTptVsFKKrGFRT5E0dw6j63ydx/GZYifHO9gu1IX2jKwtrfXkie7e
-	 DHMJq0xnwJj+lPllFzEydClHAc9g4olLvztG3AtheHSp0VnYf/3h4EOg2OiGqUJLfDEhl
-	 B2aGNpyDFlVFoCqiI07Oo2YmKAsatraMaDz3xz+Hg4TLGiersHqgPdUGz39F0CZ+1pchA
-	 jcWCyWhzoSTlH1PXDc+2hYvbJ5QwknF4BpAC6q86J9i30pYtrzdu16GTMne6+Tab6sh6m
-	 FGGUbuPk7xxPzlgzsSsFXSHsh1bZELqjjTxh9/kJnzf7bj70LjEiSA7CZ+5mRycfetw==
+	t=1793761122;
+	b=HBW/SwO2epl/DAtO4Tu5FKXD6pkWDH6Lhi+255Ooo3hvASwXSMWwy/YYivb+cBYzvX5E
+	 ELg3mwUbRUhFI3JprCWCqAKjMvMZWipfiuJD3HSHHUyQXNaPcpzYJuaDV4jonlJbmLNng
+	 FNIzd0KXvHdOg5+zLeapCt6UvHQwgSHTvNTs/4hf4gZuKQa0weYyKlEAPnsNJr9wJRkYJ
+	 9IseqLkOUPRzBovms04R+00Aa2NMheZNCmg9CZ9UKYQKNWy6nt/9h58wQR+E85J1qjVke
+	 GyGBQljtOE0erVTJ8Fub4WfIQkk1UbP/kNSgXG2tdyuHQzTVziMb7iaEQgmRIP+MHoA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793761102;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=RVJUiOMzifuWLvORGaPxKr6+HjeI3slXPjpEMS39T2E=;
-	b=dLjPC4TImdwHJK8tlxHQ5SBPZLaqxLtcAnr2nFaNOaekw6V3CT4sRBmJcEgBE1yAagRl
-	 mFukvLxIHgQ/8fYBUwuYeGuFyAsUQEigTVuqxr/2cSKhvxpylVuESlIZc5P0IEqh2YYhL
-	 WQQCQxWbkRRc42Gu78b/gt0ahVK1mBOs+rJ6FICAOaQR4bJyAfViLz2iVw0TTG8gr/Uku
-	 eX/Kp8+kK2lWMvwvG1VzAu+Vc+5OlFOwJXukRxP8uSqRWPRU6gUh5FnPvlFIcL8fXvGVL
-	 5+KJr0qzYzY2sAxvl0B8YnoVW/q9YeylBVYeKWNRXp/rHvOe5YO7ugbdpaeioxEMjnA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793761122;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 In-Reply-To:References:Auto-Submitted:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=URC7r36kokGjXCV5G6Ei8oKV54JoMbconYpCKkPt2AY=;
+	b=HdqrZ8qGs8DTPeQQ82GJYcaZNGTahLuZV7iOrSzxsNj3NrqB2ZOdJe3VjpQ/a7K2mMhf
+	 vMWx7uggH7RSLTkvT+BHtw3XaMviorzBhh2qkyeU35zg0bvZOO5JTqH9e/dkmac20ZEle
+	 MpzmraPhsOKidtUzcLpDI+3Tvo0iL5QVEB8ZmWt/5LR6KHJfSKrDFmo89uc/lkK5Dz2qN
+	 HJiwPZd+IUxam2y/kQ8x/jEeriVqFnzF2Fb0478Q7E+1lw9l1jQ0iTnuJnJApHZ41F2/7
+	 t4dpa0Fm51X9l6MiXm3i6+PhhFyYYMu0sPd5nJpDmLAxOL+7L2LeWq879U9JEv0FrrQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	arc=none smtp.remote-ip=111.22.67.151
-Received: from cmccmta8.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F24E606A32C
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 02:58:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2F24E606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=Qrk/HCSas5sblnUyRAEwqxcGKUjCXAlboGFS9jl9TavaxGu47/Mon8PCqq8C/XItXzYms9iMV3nf0
-	 Z6RnMiJCXsbA4B+2Jkb0yKov3NHJAxKtkO5CAY01PUxwDDC05cA+emU+Sv4FP2JMxilTkp7FYsX2x2
-	 myH1ggCiM3n+jnns=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee26aea9f491a5-d4b0d;
-	Wed, 04 Nov 2026 10:58:17 +0800 (CST)
-X-RM-TRANSID:2ee26aea9f491a5-d4b0d
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from FHB-W5100250 (unknown[36.137.216.21])
-	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee16aea9f40f20-10571;
-	Wed, 04 Nov 2026 10:58:16 +0800 (CST)
-X-RM-TRANSID:2ee16aea9f40f20-10571
-From: Gu Bin <gubin@cmss.chinamobile.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	alan.maguire@oracle.com,
-	alexei.starovoitov@gmail.com
-Subject: [PATCH bpf-next v4 0/2] Fix OOB read in BTF dumper zero-scan
-Date: Wed,  4 Nov 2026 10:58:01 +0800
-Message-ID: <20261104025806.1693-1-gubin@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.50.1.windows.1
-In-Reply-To: <20261103032619.1378-1-gubin@cmss.chinamobile.com>
-References: <20261103032619.1378-1-gubin@cmss.chinamobile.com>
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V92RrUXk;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97ABA606A326;
+	Wed,  4 Nov 2026 02:58:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V92RrUXk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 934241F000C1;
+	Wed,  4 Nov 2026 02:58:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793761122;
+	bh=URC7r36kokGjXCV5G6Ei8oKV54JoMbconYpCKkPt2AY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=V92RrUXkes8jC7W0ma0nXdbMJh+Jw3cQQV3MevMlfBhA5/HQ+wwwb64DbSm3flLQ8
+	 xtMog8btn41pEMVdjvbE7tE3KdI+XNwLTAS7eWHV4V9gvIKyfv0BOolqDVttNB9hYV
+	 kv45JdN8785kZfK9ohHe+NSAwa9PyC5A9dJN2Q9JAnosNfWApoh/TNncnfJzPlG5yJ
+	 lHpE+O4xm95WdU0CS4KjOeLBQOBpO+W5/3qEmk8eE9b7O35+trEka9fFxGSPqlKbdh
+	 ZTTva8s34dsdw6Sr8qpYfkt7Ks7Cipl0JMtfn8vh8AejrRw1VgmckmWRmb9dU+5QTx
+	 PhBN/0WLwEsWQ==
+From: netdev-bot+sinfo@kernel.org
+To: Wentao Liang <vulab@iscas.ac.cn>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org
+Subject: 
+ Re: [PATCH] net: stmmac: unwind the XSK pool when the initial wakeup fails
+Date: Wed, 04 Nov 2026 02:58:41 +0000
+Message-ID: <179376112114.488859.12792693475372171240@kernel.org>
+In-Reply-To: <20261104025342.1527441-1-vulab@iscas.ac.cn>
+References: <20261104025342.1527441-1-vulab@iscas.ac.cn>
+Auto-Submitted: auto-generated
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,46 +72,29 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-v2 fixed two issues: the missing minus sign in the struct/union
-ENODATA comparison, and the unbounded zero-scan.  As Alexei pointed
-out, the sign fix has since landed as commit ab332ec8953d ("libbpf:
-Fix struct and union zero detection in BTF dumper"), so this respin
-is rebased on top of it and covers the OOB only.  The overflow check
-runs once at the top of btf_dump_type_data_check_zero(), as
-suggested, instead of in both member/element loops, and the direct
-*(char *)data == 0 test in the array branch is dropped in favour of
-the bounds-checked element-0 recursion.
+Hi!
 
-v3 added the requested selftest.  v4 fixes its expected string: it
-must be the partial dump output written before the zero-scan returns
--E2BIG, matching the atomic_t overflow test, and the comment style
-was adjusted.
+This is an automated message. This series looks like a fix, but its
+commit messages seem to be missing some information:
 
-Tested on x86_64 (bpf-next @ cd5bc5528 + this series, clang 20.1.8),
-distro 6.8 kernel (the fix is libbpf-only, so no kernel boot was
-involved):
+ - How the issue was discovered, e.g. hit in production, hit during
+   development, syzbot report, manual code inspection, LLM or static
+   analysis tool scan.
 
-  # ./test_progs -t btf_dump
-  #55/18 btf_dump/btf_dump: struct_data:OK
-  #55 btf_dump:OK
-  Summary: 2/24 PASSED, 0 SKIPPED, 0/0 FAILED
+ - Whether the issue was actually triggered, or is only theoretical
+   (e.g. found by code inspection). If it was triggered please include
+   the symptoms, like the stack trace or error messages.
 
-The new case covers the fix: with only the libbpf hunk dropped
-(selftest kept), it fails with "failed to return -E2BIG: actual 16
-!= expected -7" on the same build.
+ - What hardware the change was tested on. For driver fixes please
+   mention the device (and if relevant firmware version) used for
+   testing, or say that the change was not tested on real hardware.
 
-Gu Bin (2):
-  libbpf: Fix OOB read in BTF dumper zero-scan
-  selftests/bpf: Add overflow test for BTF dump zero-scan
+Please do not repost the series just to address the above. Instead,
+reply to this email with the missing information, so that reviewers
+can take it into account. If the series needs another revision for
+other reasons, please include the information in the commit messages
+then.
 
- tools/lib/bpf/btf_dump.c                          | 9 ++++++---
- tools/testing/selftests/bpf/prog_tests/btf_dump.c | 9 ++++++--
- 2 files changed, 12 insertions(+), 6 deletions(-)
-
--- 
-2.55.0.windows.3
-
-
-
+The evaluation is done by an LLM so it may be wrong, if you think
+that is the case please reply and explain.
