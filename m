@@ -1,101 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.136
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793764120;
-	b=413Bg6D9j0CYUbQ/zccJfsh+A1MRNJc9asmEslLBRuNapy3J4pzgH+GSWqSsYlDFxutg
-	 epoTBZ4ZvnJP/rg0h3mUttqd6P0lyLwwNHGGqQphKdiwQZ5/6yI/x2b//Wsp50wv7lpr/
-	 KzRnKdrpaiMTs1DiwWF1XN8Si/ZAoc85Z3nL3vlpqW4rEGByKBTi6JPlsbJVt7h6/Pkhk
-	 6YfHSqq70uZc1vXKF8b2LZ7WF7ABpz6yF7AxhMm0V0KSlFW0ZgD8L1gyOp66XdeberbNj
-	 81v7PPCf/IgQJfiKPVhfrVFQ0y7Xehjwx43xwivVlENjA8tudpHQKkek3NhZBlzkFKQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793764120;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793764147;
+	b=HWFHEV0Wee/j2mac5OmgSpiPYXJxBVwO7HXf9mCWi1biaLyZ7ehRYTCAcfIry7v2o2kS
+	 qX+ff+kGgCvL4ubEOqWgxlaDZgtSZZEo54Ho+ntxxucX7CSi+7+um91U7uJYpSESyyRJI
+	 u3BkvyGmKukR5gvdU0zIjBWUbNLBPCFU+xZaBssWXd0GdvYuj8JBznbz1/kmRywxnrKPN
+	 Nft0vieQ8IZifPrPzVQTTmLXcIsA4M5IMyG+1c2xGaUaKiWhLfjSGIrZxAm5iNmJxmCRs
+	 fszeFUHo8SL/vR1Yc1sNGOA9t/lVoB66Y9hGDIfr8m6HlyXS8wHlxGQ1Lq8V7ZgKg8A==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793764147;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=WFO8J1ucI898mjdej6Y+DNeBq7R/vaD7rjRGa1QY3e4=;
-	b=vs7yoN7ZXMACv5OGxqqSmaulBYIx8LePp2QPApQuq0hoC6jOZkk3AVL6M1Sqvq8wE0Q5
-	 d0s4nwcFGbxcX2iLPoNnnNwIWAoUaBYKupVdrHoTqk2GST3xmH2wHAKnWcM+K49ToFbMZ
-	 TMxDtFMCoDqiQLmZhIex+z2uQkYWH5SyYLF2dUAgAySsySr1QcJaCXYliSsYZdrP/q+X9
-	 0ie1FHaSMfLaMBPjqFLj+vdf7ItUeL3hcSmeJ4BWyrzWDcNlkizpkDVMdZsMw79roEMQd
-	 vizLsl01PrFTC3LDJJyDPyBofXwTZr8qBljnIy2Yz7y0qJOUXjuboefuFZng2zcxEww==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jwdKu59i;
-	arc=none smtp.remote-ip=74.125.227.136
-Received: from mail-pj2-f8.google.com (mail-pj2-f8.google.com [74.125.227.136])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=cKWjRS9Xq/l8hl3060rXc9wXNrOk8HsfCBzOk8+AuV4=;
+	b=T3i8IRoEuK9+FJa1WYF5IC9WyiXuk8pOzO+3+yqsFtdAzrhj6HYcxirrmO0iH0UOSVdZ
+	 gB1odMlGWwLDjhLasQvzpS7yUeELlWLnwbKxTKENCdhzSGDkAlK6V0CeAtKdweB8iJwM6
+	 Zsdx9qnbxVAqQOaoOzjcLdC02kEkN3POidh2C18yfQzvHmgL4bQhso9rvLEeJfdV8U+kU
+	 WAhKk2XiyyzZqv2UES0hoG2/D4ZIok5QrThYOCR+btNZW+NYtDUTGRv2R3YT3Cn2e8NMI
+	 HxtY0o3ICjXjgunMw/r+kIqPyaAbcVLry4RYkpVsEF8+17r4iCRnlO8jgaJmycTWp5Q==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="Zff7lCr/";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9985606A329
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 03:48:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9985606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 301FC606A32C
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 03:49:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 301FC606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jwdKu59i
-Received: by mail-pj2-f8.google.com with SMTP id 98e67ed59e1d1-3ae93a86008so204900a91.0
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 19:48:39 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Zff7lCr/
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-533202fe429so154991cf.0
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 19:49:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793764145; cv=none;
+        d=google.com; s=arc-20260327;
+        b=BUL2pTLSwsFhb1s8D0/fOAMcLHahHMwChxclYTpiIOUtAK/IWn6IZuaTjGtmp9jtP7
+         STveNwljIomxsY7ScxYtaVs9p4K2V074orDtzO2BAZM1ETRTDpivl/ohx8KjulGV5hGb
+         tpleYd0rHE9G0Nk29lxtSCKTYRkSQ+/uK1EntiNuP2XuNHXi0yu/tGO8vk6AYKjMRLoZ
+         0K9K/Ketp+GRugw5RkYUVh58DE156bJY6s6X5czBcIDl9Y4D9EPEoPBBsHBREEV6YZoJ
+         YvBFjc8mZj0p2U0Ixlt6qOrOzJ0fLaKB8p3IsLUxldv54drLzTnqz0lAUQrRTQOeQzkb
+         YwGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=cKWjRS9Xq/l8hl3060rXc9wXNrOk8HsfCBzOk8+AuV4=;
+        fh=INvSO/Q4gn4Jtt/gsPOC3W55IugdhnCzGE2Mogb5vhc=;
+        b=UUhZLcu8FPMuuSvTbb6/Eto75LKrnkO4OD9YEGEmgbyWQYkWl5S+1vb7ApBg79Uo41
+         TfEJ2l+Pzgta0e5oCcuvVajF0aAUuHt1YXbsFH7JadPqqSpS/WrMts5ImDijm5ihwcc8
+         /nsDlVl5NLuLly6rNiDzxKxvf0iAAHd2VyoOLt7qVUrjfG9Wrxve6TWy3rY6CBt+D02q
+         33+pnsZv1QLchjYkxrnmr5gGwAEuKVbPMdMXbQ6nqMVreCZ5XECG24qVV8HK6Mtmp7t3
+         8ZXYZS++hP6m/mB6HKeMs/3TNapR4AOLEUpMbXOhAEQOnkJZJ5GuERmuSG3I87h7QJ2H
+         KV1w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793764119; x=1794368919; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=WFO8J1ucI898mjdej6Y+DNeBq7R/vaD7rjRGa1QY3e4=;
-        b=jwdKu59isphCIRPMplBWCRGmAZ/SrNhqVe7GlzU0WKao5TK4j3njAIIUdz0YwAapXp
-         ZbaOqZ+icCBzmYzYau6twWXQCuXQ2PnAFXATVy+y5NKli8tyPAL6gh2Dz5nuglY7YsyF
-         hmkbJtPgcrpNvTHIULODtUEG69ahNEb5Hv1D5ZV5fzdhAqyldTC7ryVy6D8katJdV3Jy
-         9G5uh5C6Kds+v3hP6oHG9wD+Ptj7Sfr+FcRkjTuRaspUyJcJNOQowlmkfbFfE1UQFgz8
-         yV3xUzRbKunc7DYh3KQktL1QtsyYWWU5F9hnjo4yEx2geSqZtA0ytmIaUhqoMM5LhbpC
-         Bd9Q==
+        d=google.com; s=20260707; t=1793764145; x=1794368945; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=cKWjRS9Xq/l8hl3060rXc9wXNrOk8HsfCBzOk8+AuV4=;
+        b=Zff7lCr/RYzDOMb26mR07xi/YgRsLCknrcp7xuB7uYbEei3iXUJHgJAMS5sDc9s/p3
+         e5VGpX9uTqFK3Wdv5gDPAQxvyroQYQfHwlWZlPA58bsPYLpTlyfBcRF4WalCLlkbFevK
+         VSjvYCAMvny47vCLyYeWEr0vylVwhyEkDw0z5B8YPPpXD1zmHK9kWfoVCm+6uPTiWp4W
+         2jN/qeIPx4hx78uKvP0NOTWfQepDmHq1Pln6bOhyt7nqhnVPCkbcsmrYHjX93TUtWnIh
+         RcY3+kfHuG2RPAAWQ7dhhfhgP6QZ4/o2h/vMA3mI4hrEvYdwmBXODg8YOv8Ybn8qgR37
+         8TSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793764119; x=1794368919;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=WFO8J1ucI898mjdej6Y+DNeBq7R/vaD7rjRGa1QY3e4=;
-        b=Ok/Exoho/pZZnmo75zKwDcugVpPe+cJY0ittjcaQ9fLwhABlwF+OWLnptsi91MJYLb
-         XMnzfJAFYiqbuj+zq8cJjRMdPVdYwEivJeuN6bjIqgDoZDx3bOoNDx+rdnJko0EHKW78
-         usFC13V/HDcIGZwCrsNEkyQG/1EGDA2C62Wh8CTYPiU8UxX8/MWMaJB5i4JZBYDVk8El
-         IZNoqja4yzOSeEL0rtmAj4PB6J3qgZ/FfR+e5hETBof1DifYIYYPluYXM8KvqFYLCYVe
-         pPkLwipjoN2cA8RQx+TIJDPg4SyBdcXip1PxiPzXwPwzRQGDUuHtbWnTbj+k15pbPGVp
-         MUog==
-X-Forwarded-Encrypted: i=1; AKwUvByvphSg3KBfw4P6/mG7E0oOcf+t6pFPayf1sW/zRagLLUAKXSJtNsUwVAL7Hrvxzu4wPfc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Ko7/Fd3WL1dhb1UY7XBs6FvcjppfmyGkkw1/9FpChKR1YU0Pu
-	6mnXyi7gHxIQ8fN7bXqUntCcMbWYivrDNuPWheJr9otguS0rS8Kty4g6
-X-Gm-Gg: AYBFou3kt/vG4QNyBK106I2pfcGrF97P9/g35VAdhMTyEkcbgiHGq48IDqG1XAmZLm/
-	vL2MtBWwNqsGU4Rh/ZloECXZqGeVhs7id2GFsZsGjzflMNdjf0Pg2vmMYChcUpcxolP3Ms2UkKY
-	EQQBKHLW9aA05LkJugPt2EMYUuHOVhKCFtjrATt13RQ/qSfql+9yBIMUVxdxti2D+dh8eByqz1p
-	4FvLEQct5zxqMCOcF1OSCMy5N2CnUmIeGD3vaqVXkQqo3TsUmEyKucvk3TR/HEDSIEdmHsS8W85
-	BkXHAk6C7w97LL5QEeGuhOE7PLQeiJCeAjf/7glJ0is/SzLvLIfSHbfhv1Optq+NeX8mZpSp9za
-	jgA71fvdmu5wZIuUVPKQWKP70tvXHLNXHFpeYdYHQNKZm1HCD4H0obElIPQwAc+DzmfWVEGGfad
-	q5WhVzCAx4kDYPUiTePoaaxShdoGuISA6oarpdbxixPIU/jRaNi8H/HJBIpEL1iqKOdWPvJU1tW
-	OkO0RtsjLgC8dDl9WRU67XpXRA4ntdkUH8edYLSU77j9g2lt40Zm8rPZLgt9p27xmTq1YnIWhnn
-	EWDy082lIu3eJ+zCEitUm0aDwF7TIpEz9bo5Agw0vt/Db9XlX9XaMs46b7lzWBBYp8o3if99Rl/
-	LGtxItvruV9gElg==
-X-Received: by 2002:a17:90b:5868:b0:3ac:945c:7f69 with SMTP id 98e67ed59e1d1-3ae8980a25bmr13103989a91.66.1793764118925;
-        Tue, 03 Nov 2026 19:48:38 -0800 (PST)
-Received: from localhost.localdomain ([240e:46e:1a00:3fd3:e1be:ed6b:40ce:8dab])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0944a0ff7sm1705472a91.10.2026.11.03.19.48.33
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 03 Nov 2026 19:48:38 -0800 (PST)
-From: Rongzheng Wang <testwrzwrz@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	stable@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Rongzheng Wang <testwrzwrz@gmail.com>
-Subject: [PATCH net v5 2/2] selftests/bpf: cover AF_XDP multi-buffer TX software checksum
-Date: Wed,  4 Nov 2026 11:48:09 +0800
-Message-Id: <20261104034809.24545-3-testwrzwrz@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20261104034809.24545-1-testwrzwrz@gmail.com>
-References: <20261104034809.24545-1-testwrzwrz@gmail.com>
+        d=1e100.net; s=20260707; t=1793764145; x=1794368945;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cKWjRS9Xq/l8hl3060rXc9wXNrOk8HsfCBzOk8+AuV4=;
+        b=TcLjJJAxkW3gGgpCkKq8xJR33OQJMmUg4KBBojCDEMxSJcdWxZYK7Mo9U58wWFMAoJ
+         VdXSzeNmn18MlX/A8P9a7Tx7EQiOJ2SRINazju9aJmMqdT+oebU92joJudR0bzNPXxq7
+         5MYp2W7HJuDhoO5O65b5F0l8hOqkcOkvcvyjqvxPTkVStYByTg6sxGpImuDoTqaN1rQN
+         2SZS8rH1Ge2OidJuXhlgbVesiPeuPzUgWvQd/7o7uIRtAiD6ruJ0P2Bld+weZcpLmeMb
+         Z0MrOEuJLOFAJPOV8rQmpTHOc1tMLqkTDCWXGzeNA8JhmVyyqV2ZNqrI6JLFf+molRUl
+         Kvmw==
+X-Forwarded-Encrypted: i=1; AKwUvBx4tOCo3gF5eiDysrPaXULxRik6EsPwyiT3RPcE+3Nph/zIKUrKpPemiHlF76Ao/uOg2Ws=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+ozPhwth/eOE9L77/zC9w6xJ44cMEOYgePFEvBWJ6IrJm0+DeR
+	5bDfC1cqZhGIhxxS5cooDSSJwPs/a4uZmF/DjJC9HamaU11UR+X18bzXS1jLx//tobDmerTi9+H
+	F/jlo21yzlPR7t9e8SXECqb2TWblCwoyFjReohESs
+X-Gm-Gg: AYBFou3zJvaK2YrnvZtM/Bt/nm7M7foUZRjnJMEiVWVdfweNmyaC8ZKdavyGqi1ennp
+	mw0LDCLYnqOX1cGXHzGESBSjbbbHYXjUY2FdvRjTzAX3HhP+6MS0UnE6cUGMWIMwVV8Uhsqo2Gh
+	+zSX3jikmsI4SFy5SJzwWOHj1WzWv+j67NME0mCKilVDJTfIIufq+o8DnD8AxgpnvnH4r+KFlAI
+	7qxyLsBb5BTmdrHGVlibugZTZV8YzMas0juvPjdEL4gnCf6fkUZA7x1AA7sr+hLjt7ET39W0c/b
+	o48GuXe/jylG3bQO4z5y4G0che/ShmMi8Nvlv9eaWGPfVj7xnHjUdnvYFEu1Uj5ZkR+Dn2gYrDZ
+	7aynn7fY9hUvONo0P6A4RXEjYpe8WSwykdsGClQ==
+X-Received: by 2002:a05:622a:2298:b0:546:92f2:7830 with SMTP id
+ d75a77b69052e-54b61e27b15mr3087041cf.6.1793764144251; Tue, 03 Nov 2026
+ 19:49:04 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,286 +104,173 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261030202710.3863806-1-irogers@google.com> <20261030202710.3863806-4-irogers@google.com>
+ <25216bda-7e36-4bad-ba7c-1984dbb9dfda@kernel.org>
+In-Reply-To: <25216bda-7e36-4bad-ba7c-1984dbb9dfda@kernel.org>
+From: Ian Rogers <irogers@google.com>
+Date: Tue, 3 Nov 2026 19:48:52 -0800
+X-Gm-Features: AclHuK8jUTP0fZRLAUdhb4V7KjnS7XAslg-dpWxyxMmrVUFMhhemkzjXApXA5fA
+Message-ID: <CAP-5=fXKeqy75_1p9TgrqOgw_Eh8h=U5FB40PQbZhwxczV-CrQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 3/3] bpftool: Prefer zlib-rs over zlib when available
+To: Quentin Monnet <qmo@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Extend test_xdp_metadata to send the same UDP packet using every descriptor
-count from 1 through MAX_TX_DESCS (MAX_SKB_FRAGS + 1), and to run the
-existing metadata and checksum verification for each case.
+On Mon, Nov 2, 2026 at 8:20=E2=80=AFAM Quentin Monnet <qmo@kernel.org> wrot=
+e:
+>
+> Hi Ian, thanks for the v2,
+>
+>
+> 2026-10-30 13:27 UTC-0700 ~ Ian Rogers <irogers@google.com>
+> > Add zlib-rs and zlib to FEATURE_TESTS and FEATURE_DISPLAY in
+> > tools/bpf/bpftool/Makefile and use feature_rust_lib to configure
+> > ZLIB_CFLAGS and ZLIB_LIBS when zlib-rs is detected (unless disabled wit=
+h
+> > NO_ZLIB_RS=3D1), falling back to -lz.
+> >
+> > Decompression of kernel configuration (/proc/config.gz) and compressed
+> > ELF/BTF sections (via libbpf, libelf, and libbfd) processes data that
+>
+>
+> Is there any mechanism in place that prevents libbpf, libelf, and libbfd
+> to link to different versions of zlib (zlib vs zlib-rs, I mean)? I
+> imagine you could have bpftool linking against zlib-rs, but the libs
+> installed on the system linking against zlib? Also I think the static
+> build with the LLVM disassembler [0] passes -lz -lzstd in LIBS and I'm
+> not sure how it would combine with the change, I need to take a closer lo=
+ok.
 
-Build the packet once and write it into the TX descriptors in a loop
-instead of using a flat two-descriptor layout. Keep the first descriptor
-large enough to cover the checksum offset; the remaining payload is split
-across the continuation descriptors, with the last descriptor taking the
-remaining length.
+Thanks for raising both of these!
 
-Reuse the existing AF_XDP setup, packet generation, completion, and receive
-helpers in xdp_metadata.c instead of adding a separate test harness.
+1. On preventing libbpf, libelf, and libbfd from using different zlib
+   implementations: in libelf.so, libdw.so, and libbfd.so, the zlib symbol
+   references (inflate, inflateInit_, inflateReset, inflateEnd, etc.) are
+   unversioned. If we link libz_rs.a with:
 
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-Signed-off-by: Rongzheng Wang <testwrzwrz@gmail.com>
----
- .../selftests/bpf/prog_tests/xdp_metadata.c   | 147 +++++++++++-------
- 1 file changed, 92 insertions(+), 55 deletions(-)
+     -Wl,--whole-archive $(LIBZ_RS_OUTPUT)libz_rs.a
+-Wl,--no-whole-archive -Wl,--export-dynamic
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-index 5c31054ad4a4..17da0a145666 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-@@ -18,12 +18,15 @@
- #define TX_NAME "veTX"
- #define RX_NAME "veRX"
- 
--#define UDP_PAYLOAD_BYTES 4
-+#define UDP_PAYLOAD_BYTES 32
-+
-+#define MAX_SKB_FRAGS 17 /* minimum CONFIG_MAX_SKB_FRAGS */
-+#define MAX_TX_DESCS (MAX_SKB_FRAGS + 1)
- 
- #define UDP_SOURCE_PORT 1234
- #define AF_XDP_CONSUMER_PORT 8080
- 
--#define UMEM_NUM 16
-+#define UMEM_NUM 64
- #define UMEM_FRAME_SIZE XSK_UMEM__DEFAULT_FRAME_SIZE
- #define UMEM_SIZE (UMEM_FRAME_SIZE * UMEM_NUM)
- #define XDP_FLAGS XDP_FLAGS_DRV_MODE
-@@ -56,13 +59,13 @@ struct xsk {
- 	struct xsk_socket *socket;
- };
- 
--static int open_xsk(int ifindex, struct xsk *xsk)
-+static int open_xsk(int ifindex, struct xsk *xsk, __u32 bind_flags)
- {
- 	int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE;
- 	const struct xsk_socket_config socket_config = {
- 		.rx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
- 		.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
--		.bind_flags = XDP_COPY,
-+		.bind_flags = bind_flags,
- 	};
- 	const struct xsk_umem_config umem_config = {
- 		.fill_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
-@@ -133,31 +136,35 @@ static void close_xsk(struct xsk *xsk)
- 	munmap(xsk->umem_area, UMEM_SIZE);
- }
- 
--static int generate_packet(struct xsk *xsk, __u16 dst_port)
-+static int generate_packet(struct xsk *xsk, __u16 dst_port, u32 num)
- {
- 	struct xsk_tx_metadata *meta;
- 	struct xdp_desc *tx_desc;
- 	struct udphdr *udph;
- 	struct ethhdr *eth;
- 	struct iphdr *iph;
-+	u16 first_len;
-+	u16 pkt_len;
-+	u8 pkt[256];
-+	u32 offset;
- 	void *data;
- 	__u32 idx;
-+	u32 addr;
- 	int ret;
-+	u32 i;
- 
--	ret = xsk_ring_prod__reserve(&xsk->tx, 1, &idx);
--	if (!ASSERT_EQ(ret, 1, "xsk_ring_prod__reserve"))
-+	pkt_len = sizeof(*eth) + sizeof(*iph) + sizeof(*udph) + UDP_PAYLOAD_BYTES;
-+	first_len = sizeof(*eth) + sizeof(*iph) + sizeof(*udph);
-+	if (!num || num > MAX_TX_DESCS ||
-+	    (num > 1 && pkt_len - first_len < num - 1))
- 		return -1;
- 
--	tx_desc = xsk_ring_prod__tx_desc(&xsk->tx, idx);
--	tx_desc->addr = idx % (UMEM_NUM / 2) * UMEM_FRAME_SIZE + sizeof(struct xsk_tx_metadata);
--	printf("%p: tx_desc[%u]->addr=%llx\n", xsk, idx, tx_desc->addr);
--	data = xsk_umem__get_data(xsk->umem_area, tx_desc->addr);
--
--	meta = data - sizeof(struct xsk_tx_metadata);
--	memset(meta, 0, sizeof(*meta));
--	meta->flags = XDP_TXMD_FLAGS_TIMESTAMP;
-+	ret = xsk_ring_prod__reserve(&xsk->tx, num, &idx);
-+	if (!ASSERT_EQ(ret, num, "xsk_ring_prod__reserve"))
-+		return -1;
- 
--	eth = data;
-+	memset(pkt, 0, sizeof(pkt));
-+	eth = (void *)pkt;
- 	iph = (void *)(eth + 1);
- 	udph = (void *)(iph + 1);
- 
-@@ -180,18 +187,43 @@ static int generate_packet(struct xsk *xsk, __u16 dst_port)
- 	udph->source = htons(UDP_SOURCE_PORT);
- 	udph->dest = htons(dst_port);
- 	udph->len = htons(sizeof(*udph) + UDP_PAYLOAD_BYTES);
-+	memset(udph + 1, 0xAA, UDP_PAYLOAD_BYTES);
- 	udph->check = ~csum_tcpudp_magic(iph->saddr, iph->daddr,
- 					 ntohs(udph->len), IPPROTO_UDP, 0);
- 
--	memset(udph + 1, 0xAA, UDP_PAYLOAD_BYTES);
--
--	meta->flags |= XDP_TXMD_FLAGS_CHECKSUM;
--	meta->request.csum_start = sizeof(*eth) + sizeof(*iph);
--	meta->request.csum_offset = offsetof(struct udphdr, check);
-+	for (i = 0, offset = 0; i < num; i++) {
-+		u32 len;
-+
-+		if (num == 1)
-+			len = pkt_len;
-+		else if (!i)
-+			len = first_len;
-+		else if (i == num - 1)
-+			len = pkt_len - offset;
-+		else
-+			len = (pkt_len - first_len) / (num - 1);
-+
-+		addr = (idx + i) % (UMEM_NUM / 2) * UMEM_FRAME_SIZE;
-+		tx_desc = xsk_ring_prod__tx_desc(&xsk->tx, idx + i);
-+		tx_desc->addr = addr + sizeof(*meta);
-+		tx_desc->len = len;
-+		tx_desc->options = i ? 0 : XDP_TX_METADATA;
-+		if (i + 1 < num)
-+			tx_desc->options |= XDP_PKT_CONTD;
-+		printf("%p: tx_desc[%u]->addr=%llx\n", xsk, idx + i, tx_desc->addr);
-+		data = xsk_umem__get_data(xsk->umem_area, tx_desc->addr);
-+		if (!i) {
-+			meta = data - sizeof(*meta);
-+			memset(meta, 0, sizeof(*meta));
-+			meta->flags = XDP_TXMD_FLAGS_TIMESTAMP | XDP_TXMD_FLAGS_CHECKSUM;
-+			meta->request.csum_start = sizeof(*eth) + sizeof(*iph);
-+			meta->request.csum_offset = offsetof(struct udphdr, check);
-+		}
-+		memcpy(data, pkt + offset, len);
-+		offset += len;
-+	}
- 
--	tx_desc->len = sizeof(*eth) + sizeof(*iph) + sizeof(*udph) + UDP_PAYLOAD_BYTES;
--	tx_desc->options |= XDP_TX_METADATA;
--	xsk_ring_prod__submit(&xsk->tx, 1);
-+	xsk_ring_prod__submit(&xsk->tx, num);
- 
- 	ret = sendto(xsk_socket__fd(xsk->socket), NULL, 0, MSG_DONTWAIT, NULL, 0);
- 	if (!ASSERT_GE(ret, 0, "sendto"))
-@@ -224,24 +256,27 @@ static int generate_packet_inet(void)
- 	return err;
- }
- 
--static void complete_tx(struct xsk *xsk)
-+static void complete_tx(struct xsk *xsk, u32 num)
- {
- 	struct xsk_tx_metadata *meta;
- 	__u64 addr;
- 	void *data;
- 	__u32 idx;
--
--	if (ASSERT_EQ(xsk_ring_cons__peek(&xsk->comp, 1, &idx), 1, "xsk_ring_cons__peek")) {
--		addr = *xsk_ring_cons__comp_addr(&xsk->comp, idx);
--
--		printf("%p: complete tx idx=%u addr=%llx\n", xsk, idx, addr);
--
--		data = xsk_umem__get_data(xsk->umem_area, addr);
--		meta = data - sizeof(struct xsk_tx_metadata);
--
--		ASSERT_NEQ(meta->completion.tx_timestamp, 0, "tx_timestamp");
--
--		xsk_ring_cons__release(&xsk->comp, 1);
-+	__u32 i;
-+
-+	if (ASSERT_EQ(xsk_ring_cons__peek(&xsk->comp, num, &idx), num,
-+		      "xsk_ring_cons__peek")) {
-+		for (i = 0; i < num; i++) {
-+			addr = *xsk_ring_cons__comp_addr(&xsk->comp, idx + i);
-+			printf("%p: complete tx idx=%u addr=%llx\n", xsk, idx + i, addr);
-+
-+			if (i == 0) {
-+				data = xsk_umem__get_data(xsk->umem_area, addr);
-+				meta = data - sizeof(*meta);
-+				ASSERT_NEQ(meta->completion.tx_timestamp, 0, "tx_timestamp");
-+			}
-+		}
-+		xsk_ring_cons__release(&xsk->comp, num);
- 	}
- }
- 
-@@ -325,7 +360,7 @@ static int verify_xsk_metadata(struct xsk *xsk, bool sent_from_af_xdp)
- 	ASSERT_EQ(meta->rx_hash_type, 0, "rx_hash_type");
- 
- 	/* checksum offload */
--	ASSERT_EQ(udph->check, htons(0x721c), "csum");
-+	ASSERT_EQ(udph->check, htons(0x1c8f), "csum");
- 
- done:
- 	xsk_ring_cons__release(&xsk->rx, 1);
-@@ -361,6 +396,7 @@ void test_xdp_metadata(void)
- 	int retries = 10;
- 	int rx_ifindex;
- 	int tx_ifindex;
-+	unsigned int i;
- 	int sock_fd;
- 	int ret;
- 
-@@ -398,7 +434,7 @@ void test_xdp_metadata(void)
- 
- 	/* Setup separate AF_XDP for RX interface. */
- 
--	ret = open_xsk(rx_ifindex, &rx_xsk);
-+	ret = open_xsk(rx_ifindex, &rx_xsk, XDP_COPY);
- 	if (!ASSERT_OK(ret, "open_xsk(RX_NAME)"))
- 		goto out;
- 
-@@ -462,27 +498,28 @@ void test_xdp_metadata(void)
- 
- 	/* Setup separate AF_XDP for TX interface nad send packet to the RX socket. */
- 	tx_ifindex = if_nametoindex(TX_NAME);
--	ret = open_xsk(tx_ifindex, &tx_xsk);
-+	ret = open_xsk(tx_ifindex, &tx_xsk, XDP_COPY | XDP_USE_SG);
- 	if (!ASSERT_OK(ret, "open_xsk(TX_NAME)"))
- 		goto out;
- 
--	if (!ASSERT_GE(generate_packet(&tx_xsk, AF_XDP_CONSUMER_PORT), 0,
--		       "generate AF_XDP_CONSUMER_PORT"))
--		goto out;
-+	for (i = 1; i <= MAX_TX_DESCS; i++) {
-+		if (!ASSERT_GE(generate_packet(&tx_xsk, AF_XDP_CONSUMER_PORT, i), 0,
-+			       "generate AF_XDP packet"))
-+			goto out;
- 
--	switch_ns_to_rx(&tok);
--	if (!ASSERT_OK_PTR(tok, "setns rx"))
--		goto out;
-+		switch_ns_to_rx(&tok);
-+		if (!ASSERT_OK_PTR(tok, "setns rx"))
-+			goto out;
- 
--	/* Verify packet sent from AF_XDP has proper metadata. */
--	if (!ASSERT_GE(verify_xsk_metadata(&rx_xsk, true), 0,
--		       "verify_xsk_metadata"))
--		goto out;
-+		if (!ASSERT_GE(verify_xsk_metadata(&rx_xsk, true), 0,
-+			       "verify xsk metadata"))
-+			goto out;
- 
--	switch_ns_to_tx(&tok);
--	if (!ASSERT_OK_PTR(tok, "setns tx"))
--		goto out;
--	complete_tx(&tx_xsk);
-+		switch_ns_to_tx(&tok);
-+		if (!ASSERT_OK_PTR(tok, "setns tx"))
-+			goto out;
-+		complete_tx(&tx_xsk, i);
-+	}
- 
- 	/* Now check metadata of packet, generated with network stack */
- 	if (!ASSERT_GE(generate_packet_inet(), 0, "generate UDP packet"))
-@@ -518,7 +555,7 @@ void test_xdp_metadata(void)
- 		goto out;
- 
- 	/* Send packet to trigger . */
--	if (!ASSERT_GE(generate_packet(&tx_xsk, AF_XDP_CONSUMER_PORT), 0,
-+	if (!ASSERT_GE(generate_packet(&tx_xsk, AF_XDP_CONSUMER_PORT, 1), 0,
- 		       "generate freplace packet"))
- 		goto out;
- 
--- 
-2.39.5 (Apple Git-154)
+   in Makefile.rust (perf already passes -export-dynamic via python-config,
+   so adding --whole-archive is actually important for perf too so it
+   exports the full zlib ABI rather than only the objects referenced at
+   static link time), then ELF symbol interposition binds all zlib calls
+   from libelf.so and libbfd.so directly to zlib-rs in the executable:
 
+     $ LD_BIND_NOW=3D1 LD_DEBUG=3Dbindings ./bpftool version 2>&1 | grep in=
+flate
+     binding file /lib/x86_64-linux-gnu/libelf.so.1 [0] to ./bpftool
+[0]: normal symbol `inflate'
+     binding file /lib/x86_64-linux-gnu/libelf.so.1 [0] to ./bpftool
+[0]: normal symbol `inflateEnd'
+     binding file /lib/x86_64-linux-gnu/libelf.so.1 [0] to ./bpftool
+[0]: normal symbol `inflateInit_'
+     binding file /lib/x86_64-linux-gnu/libelf.so.1 [0] to ./bpftool
+[0]: normal symbol `inflateReset'
+
+   That ensures libbpf, libelf, and libbfd all use the same zlib-rs
+   implementation at runtime, and means all compressed ELF/BTF/debug
+   section decompression in libelf and libbfd also gets the memory-safety
+   and performance benefits of zlib-rs even when linking against distro
+   shared libraries.
+
+2. On the static build with LLVM disassembler: `llvm-config --system-libs`
+   emits `-lz`. Since `LIBS` in bpftool (and `EXTLIBS` in perf) already
+   includes `$(ZLIB_LIBS)`, we should wrap `--system-libs` with
+   `$(filter-out -lz,$(shell $(LLVM_CONFIG) --system-libs ...))` so static
+   LLVM builds don't pull in `-lz` alongside `$(ZLIB_LIBS)`.
+
+> > benefits from a memory-safe implementation. Preferring zlib-rs over C
+> > zlib provides memory safety and improved decompression performance whil=
+e
+> > keeping bpftool aligned with tools/perf (including sharing libz_rs.a
+> > when building bootstrap bpftool for perf BPF skeletons).
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+>
+> Recalling our discussion from v1:
+>
+> >> Hi Ian, bpftool doesn't make an intensive use of zlib (mostly, it's a
+> >> requirement from other dependencies; we may also use it to unzip the
+> >> kernel config on the host if necessary for probing BPF features on the
+> >> system, but only on some distributions). So I'm struggling to understa=
+nd
+> >> the motivation for your proposal, what do we gain by switching to
+> >> zlib-rs when available? I understand this implementation is in Rust, b=
+ut
+> >> I'm not sure the added complexity and feature probing in the build
+> >> system is worth it.
+> >
+> > Hi Quentin,
+> >
+> > At my workplace, we are transitioning from zlib to zlib-rs for both
+> > security and performance reasons. I'd like to keep upstream tools
+> > aligned but they don't have to be, it just seems nice. I agree zlib is
+> > of a lower priority to users than, say, zstd. For attackers, like with
+> > brotli, it is probably an area of interest. Knowing the implementation
+> > is memory safe is at least something in favor of zlib-rs. I sent this
+> > series out as an RFC because I obviously have no way to mandate what
+> > upstream should or shouldn't be doing. There are things that can make
+> > life a little nicer and easier, and this patch series, for me, is one
+> > of them.
+> I understand you're transitioning to zlib-rs, but the current patch is
+> not a full transition, in the sense that it doesn't replace zlib with
+> zlib-rs but allows any of the two options; and I don't see support for
+> the standard zlib being removed from bpftool anytime soon, which means
+> that in practice, we've got to maintain compatibility with the two
+> versions going forward. Others may want to chime in, but I'm still not
+> convinced this is worth the burden.
+
+Because zlib-rs (via libz-rs-sys) implements the exact C zlib ABI and
+headers, there is no C code difference to maintain between the two=E2=80=94=
+only
+the Makefile selection of ZLIB_CFLAGS and ZLIB_LIBS via feature_rust_lib.
+With the symbol interposition above, bpftool (and perf) get memory-safe
+zlib decompression across libbpf, libelf, libbfd, and libLLVM whenever
+zlib-rs is installed at build time, while still building everywhere else
+with C zlib.
+
+> You also mention zstd, do you plan to add support for a zstd alternative
+> as well in perf and bpftool in the future?
+
+No current plans for zstd. Unlike zlib-rs (where libz-rs-sys provides a
+complete, drop-in C ABI for both compression and decompression and is
+already packaged in Debian/Ubuntu/Fedora), I don't think there is an
+equivalent drop-in Rust replacement for the full libzstd C ABI yet
+(ruzstd is currently focused on decoding, and the zstd crate wraps C
+libzstd).
+
+> (By the way, if you allow me a short digression, you had a patch related
+> to the zstd probing for perf and bpftool [0] and I don't see in the
+> tree, do you know if it was ever merged?)
+
+Thanks for the reminder! That series wasn't merged yet=E2=80=94both you (on
+patch 3/4) and Peter Zijlstra (on patch 4/4) gave Acked-by on v2, and I
+think it fell through the cracks waiting to be picked up into
+perf-tools-next. I'll send out a rebased v3 with your and Peter's Acks
+collected.
+
+Thanks,
+Ian
+
+> Best regards,
+> Quentin
+>
+>
+> [0]
+> https://github.com/libbpf/bpftool/blob/main/.github/workflows/static-buil=
+d.yaml
+> [1] https://lore.kernel.org/all/20260909204122.1993010-4-irogers@google.c=
+om/
