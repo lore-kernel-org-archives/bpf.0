@@ -1,45 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793820291;
-	b=tJatMjGBHte+QYMPDJgFGjSM93/w7svjxT/VoOBNRjk0FeSufeUhzh1+rJwWdPDE0b3u
-	 EDUhWuWuHNSUOrXTOluhtrvBFmmiAdFiNPYw8KmWvVM+L3WyzTETMWiQTz8FfPn3UQ1V5
-	 OKzDuNPHajVYPYIfeUtdivVMkdAwf5mP8B36q7SBl2luVgeP04H+q3LlfZQdzOzmcNyHL
-	 LOFJ1wAp6HdekHdhpQSJe8Ro5lUMqNJSUsAGvN8rxgPdlHoocmQEKsZZU9K9Xa0KY9Lgq
-	 nB3MHJaGuMbXgN+nE6f7hGFLc8WKt2d2HBgrFLjygn5268rVthmbabOLxnMVk/elPkw==
+	t=1793821611;
+	b=iMc4+xcABcpD/9o5F+gQ2SVbk2plJ8K6fU2lgLMT20JP3fVw8J1roE3fT+XqZkqTW/1k
+	 AnpAHTshD1pCTSJSZyA64/KS7HvEHo04IinDK636oFACb+A6oNve3i8x+IPgWyeUkbyqJ
+	 89dFvp2DHPorHWIsT6wmUTtuQXVWJ3+fUa4N//5no3F5+HJZ9F2aIt/XS7+XW693Jc5oX
+	 ovvL//8mAP9B/tK9XUH6deiDy1GY20yEtYd19M3FjckAGFGg9EmpkY+F20zghlzZVE0xh
+	 YLXZyUqdV4Tn2HuaaYt0WvOahWDMBnzHeJJQcOLjAcdPG7712kGiIGlzoH755+3xH+Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793820291;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=2cl+IPVJlClBxWQlKHZKipsDZ6QUPUvr34kW14M+CmU=;
-	b=mYvdsDYLCkeeOCHc9GJfYivqbUbCUpCnJYzSLpl3fE74RqtQG/v7Opx8T/jq8DAo1qFR
-	 tF3NzEtcmGRj3eN1lKaUG2l7MaQnXuYCG9Xeb3bpNNl2Mj4bcB54sv/uMDdsdhi6aohU1
-	 2QshW2F9c+N8tFEGHMGBC2/C514+ejm1kP2r4ma7FMVkL+bRbregtDDs0Hi/R9GFI0z4/
-	 Skb8wjDrNqp4eMKLtr62AseJuTbQjCO18E3xp8cJUbQVL73UEZ8qHkNJIQMo6517JduN+
-	 um/3hwVWtt+9Duur2+kI21aSJCQOXnHRj256KDEFpTETyteItqzyMeUzNQB9s6mMatA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793821611;
+	h=DMARC-Filter:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:
+	 Organization:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Rspamd-Queue-Id;
+	bh=5mMtQ1ykVc8hLzz2/8sqp19SKRaqnGNJ8R6YMinTtwg=;
+	b=bptOKJ6Blq7Qh7g8bvb6IxVkdTnxDkZnEtXP7jHw27obKl3KBA4wP4dRKrh+/qWwX/wn
+	 gKVbZAdeRbNIgapxrye7hLAKBh5wBC6gpUCMQJx7tCYlD4KLm+0TPCmPkfoU2/z2Z3t8K
+	 /YjRWZQYe2aJdL5spp+L/6OGupcOejmWpVFK8fTXM5yZKcaTvMXRvGAq0xKKIXFTKRBTE
+	 ZdWJLVArgGtASTqa8vDYQ3Xc+sOBYPNQF/qE5YOfeQuchD9YQfIF5gVwKTkvzGpzRWWR+
+	 C/k57oLLC9+znFHzAlYU3eTkiz/PJgGFxI8faF6RhuAZs3r8vqj4yA/OPBH8qwjAPxQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LtrEJpci;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=mandelbit.com;
+	spf=pass smtp.mailfrom=mandelbit.com;
+	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=NRxKGG1F;
+	arc=none smtp.remote-ip=195.10.208.62
+Received: from mout-b-202.mailbox.org (mout-b-202.mailbox.org [195.10.208.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0276070E66;
-	Wed,  4 Nov 2026 19:24:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE940608C9B3;
+	Wed,  4 Nov 2026 19:46:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE940608C9B3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LtrEJpci
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 099821F000C1;
-	Wed,  4 Nov 2026 19:24:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793820290;
-	bh=2cl+IPVJlClBxWQlKHZKipsDZ6QUPUvr34kW14M+CmU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=LtrEJpciasdBqwJR7UCMuE83mRgAsfJd95YrCqYDxstR7kmS5ie32cqCleSTDaaCj
-	 pexMT53rH6JeiIckRf0FsyXlrrE+LmvbXYfuGgwrJ9QPN53f8MGC3wC9jB8Opil/hz
-	 +Dak9Jl6Z3ddnrQdc+DPJsB4sxbMYun4d684ySUDTkELbuu3V+izKiSvG7iv/3D+x1
-	 DmlScfuNYdb11YV+fQcAO/1jy0IkS7fwbrVy1W0sZxmkjQ5thaQ6uyZ0oIAeIdSH8p
-	 kKCjSgeRdYQ7pYEcfxnH2g2P61xxHmHUbAOzIVTBmQO6BMl9lsjtXDCwt6OF/NfOcL
-	 X2cGv/8LrLzVQ==
-Content-Type: multipart/mixed; boundary="===============2959817077743352993=="
+	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=NRxKGG1F
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-b-202.mailbox.org (Postfix) with ESMTPS id 4jKbY920ZgzKnmR;
+	Wed, 04 Nov 2026 20:46:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
+	s=MBO0001; t=1793821597;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5mMtQ1ykVc8hLzz2/8sqp19SKRaqnGNJ8R6YMinTtwg=;
+	b=NRxKGG1FlFJU0JKddYKfBWf+IlBopX9xQGcJjScOYCfQEpRyxTfXYn/MHAsXMhnx3avkGl
+	4Et5+naPtOW1dMERriWlbEQnNo0DzRvZRvwc5H8BNMQqU8OewOILlNzTU4z/6jppef2oEe
+	rGb10Y6/ZHa1iL98uNrNXyNLtkmalVPK2eqiBmNTtpQdegCuW/TnYufkHCs9JOBYIaR25X
+	Max+TSm2/XFkMp2bk7TS2EU617Jy/dVb6sjLPL53TQSDfo+LbshEGMUU6ogGo9RLnJqwpk
+	R6SrNqUGQ0srGOS9UK6J4R4Kyf1ZYpZMMWzyQyPgMX3Zg7SmtdFwYCwwPKAtKQ==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
+Message-ID: <f4bdb8b8-45d6-477d-bd7f-4ca4bbafef7c@mandelbit.com>
+Date: Wed, 4 Nov 2026 20:46:34 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,76 +66,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <8397ab89d713edcda68bf7dfa564b3a6f2c7d4c420a9a1a9a49fa2dfc8833233@mail.kernel.org>
-In-Reply-To: <4b2b24fdabd4cdef1364a8664d7d9615e960c72c.1793818387.git.hi@tychen.cc>
-References: <4b2b24fdabd4cdef1364a8664d7d9615e960c72c.1793818387.git.hi@tychen.cc>
-Subject: Re: [PATCH bpf-next v8 2/2] selftests/bpf: Check bpftool batch map dumps
-From: bot+bpf-ci@kernel.org
-To: hi@tychen.cc,bpf@vger.kernel.org
-Cc: hi@tychen.cc,qmo@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,linux-kselftest@vger.kernel.org,shuah@kernel.org,daniel@iogearbox.net,ast@kernel.org,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  4 Nov 2026 19:24:50 +0000 (UTC)
-
---===============2959817077743352993==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next] net/mlx5e: Prefetch packets of upcoming CQEs in
+ the linear MPWQE path
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
+ dtatulea@nvidia.com, cratiu@nvidia.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, netdev@vger.kernel.org, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, linux-rdma@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261103235823.536706-1-antonio@openvpn.net>
+ <DMM0ADCEGAAB.2RFNF1ZI5TGWK@gmail.com>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@mandelbit.com>
+Organization: Mandelbit SRL
+In-Reply-To: <DMM0ADCEGAAB.2RFNF1ZI5TGWK@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 4jKbY920ZgzKnmR
 
-> selftests/bpf: Check bpftool batch map dumps
+Hi Alexei,
 
-TL;DR: Commit message and comment say the selftest's injected -EBUSY mimics a
-hash bucket lock failure, but rqspinlock apparently returns -EDEADLK or
--ETIMEDOUT; test still works, so only wording (or the errno) needs fixing.
+thank you very much for the review!!
 
->     Batched dumps must print the same output as individual lookups. Use an
->     fmod_ret program on security_bpf() to count the map lookups made by
->     bpftool children of the test, and to fail batch lookups with -EBUSY as
->     a hash bucket lock failure would.
->
->     For each map type with batched lookups, compare plain and JSON dumps
->     with a dump whose batch lookups all fail, and check that no individual
->     lookups were needed. Cover BTF and per-CPU output, an empty map, 1-byte
->     keys and unaligned values. With 4 KiB values, check dumps that need
->     several batches, and that failing the first or second batch lookup
->     continues with individual lookups without restarting the dump.
->
->     Assisted-by: LLM
->     Signed-off-by: Tianyi Chen <hi@tychen.cc>
+On 04/11/2026 01:39, Alexei Starovoitov wrote:
+> can we prefetch 4 strides ahead without the CQE, like gve_rx() ?
 
-> diff --git a/tools/testing/selftests/bpf/progs/bpftool_map_batch.c b/tools/testing/selftests/bpf/progs/bpftool_map_batch.c
-> new file mode 100644
+Yep! I measured your version against this patch on the same system (one
+RX queue, MTU 1500, mean of 3 runs, gain over stock):
 
-[ ... ]
-
-> +	} else if (cmd == BPF_MAP_LOOKUP_BATCH) {
-> +		batch_calls++;
-> +		/* Same error as a hash bucket lock failure. */
-> +		if (fail_batch < 0 || fail_batch == batch_calls)
-> +			return -EBUSY;
-> +	}
-
-The commit message says batch lookups fail "with -EBUSY as a hash bucket
-lock failure would", and this comment says the same.  Is that accurate?
-
-Since commit 4fa8d68aa53e ("bpf: Convert hashtab.c to rqspinlock"),
-htab_lock_bucket() returns whatever raw_res_spin_lock_irqsave() returns:
-
-    ret = raw_res_spin_lock_irqsave(&b->raw_lock, flags);
-    if (ret)
-        return ret;
-
-and rqspinlock only fails with -EDEADLK or -ETIMEDOUT.
-__htab_map_lookup_and_delete_batch() passes that value back to user space
-via "goto after_loop", so no BPF_MAP_LOOKUP_BATCH path returns -EBUSY for a
-lock failure.
-
-The test still works, because dump_map_batch() in bpftool treats any error
-other than -ENOENT the same way.  Could the comment and the changelog say
-"an error other than -ENOENT" instead, or could this return -EDEADLK?
+                                    v1      yours    yours + shinfo
+   UDP 512B flood, packets/s       +39%      +35%      +36%
+   TCP, 1 stream                    +7%       +5%       +8%
+   TCP in an ovpn UDP tunnel       +36%       +4%      +34%
+   XDP_DROP reading the packet,
+     NAPI CPU cycles/packet        -38%      -45%      -32%
+   XDP_TX, cycles/packet           -35%      -30%      -33%
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+It matches my v1, except where every packet becomes its own skb, like the
+records of a VPN tunnel (ovpn from a development tree here).
+In that case I got only +4% instead of +36%.
+Dropping only the skb_shared_info prefetch from v1 gives +5% there, so
+that line is the one that matters.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41893799307
---===============2959817077743352993==--
+Its position depends on the packet length, which needs the CQE, but in
+bulk flows the next packets have the length of the current one. So v2
+will be your patch plus a prefetchw of the skb_shared_info line computed
+with the current packet's length: +34% for the tunnel, the rest
+unchanged, no CQE peek and no state bit, and it also covers CQE
+compression, where v1 did nothing: with it on, UDP floods gain 26%,
+TCP 6% (-46% cycles/packet) and the tunnel 32%.
+
+> Pls add XDP_DROP and XDP_TX numbers.
+
+In the table above. XDP_DROP without touching the packet doesn't change
+with any of them. With the prefetch the XDP rates hit the limit of the
+sender (12-16 Mpps) before the NAPI CPU saturates, so I quote cycles per
+packet there.
+
+I'll send v2 with your Suggested-by soonish.
+
+
+Thanks!
+
+-- 
+Antonio Quartulli
+
+CEO and Co-Founder
+Mandelbit Srl
+https://www.mandelbit.com
+
