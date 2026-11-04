@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793751271;
-	b=jBAkqiPePpTi7W6hVhULMt/wHHp/88Ra/YDWml5Kd+9N3YoDzUf+JUyGfY7ZFp/mRNPT
-	 rqIMbL1dYzCcSY9MDpzguqBy3sJdoT/Hl4Kzru9qbPXqVzOYao7pO4eu0PaAoCU5vb5qY
-	 SFHPEh5ocVAQNhauV2w6swOE3deitjmjdqTwW0kPtV4BnwidAG8hdresGybm0K/rMV6zf
-	 4XEh7NpGdlYcczyXJX387ELpOw/YqFRNC6aKZephHG8UXxG7bvTb9KA3fahEY7FZnLE2o
-	 Z6h8bO+IuCoJFL9Ri59KbiQJkVZaLm36msqLASwb9LTvIOIuiECSQ6SG6d0dk2gCvzw==
+	t=1793751717;
+	b=CDgdgxQ/YA+/29cnf2HKPl5YhvqZ3sSoTRWV+0CGZz8Xgp+tx4dmErGV0VPWs3T8uzcF
+	 sHBzVotqYP32iXN6BaF9TZ5gJLvmFe/KJ/fSAD4DUOVUbUF1HHR6c392xnYuskf7/l6QD
+	 r2aTD6u+IU4arzlZ8fPttm795oBC+BKDHldKTgngLg8X83Sp4JFKNKOffjnQJzzVgy8+/
+	 FV01ggZx8ct/XcSDDaKtVP7O90HYl3AHLypXMn6fwg2Z95M4QwDfBRlQrivMyBQnymc2T
+	 rm0I9/T2p4HaXqWEZjqvTnpCZFFIA+OP3KfuTIR15LZQ/kbEF+XDYbxXThhRgatc1Wg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793751271;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793751717;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=yKUh2CyaHi9OXDWRoDC5XIPXmch4YlH2pxwBy4Vbw8M=;
-	b=nsukGJPaS97LFGme7UnzBCjstuK3UCXaCwllptfiygtCIgLc6nurGXJ2xtU04M6WvNlF
-	 bDKzzluBv5EXoVdIe/+4xa9ZKaa2T+7qKiH7nJhbVp3z85A4MNsXSFoGqPZm7i401AXmJ
-	 pW+14KedIrUVAHKRQfsKutpTzQIIFQwlgJIsCJkipmDvgAZiLZ27eLDsDKowfSULQ73Na
-	 CbmgquCrnnsJIFQtKJ0qoaeEHB5wDV4KddWklpyF/QAVtse+Amps9rWwGm5uYzwTjackH
-	 WlapsgvDwez0M0vvXfA3XMspKxmT9Rficqh2nH4LAL0f9z1yXSsAvDqDhj5DbXM9NFQ==
+	bh=BPMg9RayCRLxGMG3i10iYJvVqa1MP6cKsQX1zNKJ/gg=;
+	b=aQcsWZtPAtv2aDPaQLbdRY7U5dZRBURhBBXJqFbIfEQ3EkQpn5Pilv3ghi2qE2cMRTtB
+	 /avbBBY/7yzGtnsPQV/DyYEaua9r9WV7ifWP1wn9QVymjdH1Ut50oKsxpj+HRDtVj5yAK
+	 t1IUBilLyMFLqcfofVVBXEdYtRM6G/PZ/P8m40R0FyP5Hk4wgVdgZeEyafqJxQr9ot0q2
+	 4I+atmvq6RWAQQxEHjHIqrKXBXVPX65GsxKszFps8U8qv5rLRqlzD15aieLgbzD501eop
+	 TpOrcO6asx8JuGlwVNcRndK6FrCAUt8UbBpfjWBVcxm+vDxphGR1am7Phyfb7k8XkEw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bgQJWgyB;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l8oIVGiH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1076F606A31B
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 00:14:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B67D606A31B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 00:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bgQJWgyB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD4851F00919;
-	Wed,  4 Nov 2026 00:14:30 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l8oIVGiH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF161F000C1;
+	Wed,  4 Nov 2026 00:21:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793751270;
-	bh=yKUh2CyaHi9OXDWRoDC5XIPXmch4YlH2pxwBy4Vbw8M=;
+	s=k20260515; t=1793751717;
+	bh=BPMg9RayCRLxGMG3i10iYJvVqa1MP6cKsQX1zNKJ/gg=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=bgQJWgyBKbtL3n7xKuSysRIbDhdt+dPYbs1kPJomB//1H+8gUrQml6a1n3jG0m5ei
-	 Hdwp6dY9lfI8amTmvMEplUQr4bxnULkj7GHT2VVTu1ng84jfZjIXKxtdwvmJOKNqGT
-	 77iyT0k8+GCdIxqBgasov/hCOWbrtu3eMxHRPGQOC2ybiM3Dd/Fn4BDk6ol14M4dw7
-	 UTPGbIph8QX15TPVxf6h28U8SAAQ52D2BqQiakn6RFRxnPDjH9DzDWmVCB1IDBogTX
-	 6o4wDr+NsCzarvNJpMoJ0ECkU2/UsuXtZ64+EKtIccWHwejOBFCzAifoDbWaHOFr1R
-	 US0EzALjPd1Xw==
-Message-ID: <sashiko-outbox-196294@kernel.org>
+	b=l8oIVGiHx4R6tmo3wqEO+Ei9ZxbMn8gQcWtTGLFFjgKoGnXBxn7n3QnPxtuHSSRyc
+	 F8tarcuVmb0Z+HrGBhRdhNOVExRFJ3YRNCkn//kQea+uCuR7YYxbPlygjaMtQ1OD0s
+	 cW0VBnA/vHQhupBQZLvodqxHJmkFl4QqyXqE1KqWb4jZBCoQVr5ZhXn0YnDhNcQbUv
+	 cpJhQvPS6P7f5mPUKE7Yvd5vzb1z5e2KsBG0QMKC4t7+D/QhZ1o8tDWyTmFQm7dNYq
+	 t943cwyGE03Ce8jlaS22nI0qji2/miG/EiN8orjcQPI7H8akJMnFncXOkopwen4tHw
+	 A11IwV7MtrvTw==
+Message-ID: <sashiko-outbox-196303@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 06/37] bpf: Count stack arguments of a static
- subprog from its code
+Subject: Re: [PATCH bpf-next 16/37] bpf: Count loops whose first value or
+ bound is a range
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261103234104.208239-7-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261103234104.208239-17-alexei.starovoitov@gmail.com>
 References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
- <20261103234104.208239-7-alexei.starovoitov@gmail.com>
+ <20261103234104.208239-17-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 04 Nov 2026 00:14:29 +0000
+Date: Wed, 04 Nov 2026 00:21:55 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,128 +62,80 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] bpf: undercounted arg_slot_cnt on early return in btf_prepare_fu=
-nc_args()
+- [Low] bpf: iv_bounds() leaves bounds->r32 un-narrowed before log_bounds()
 --
 
-commit 7a7c085f34a6a2a56b7b82b03b95e750d7742fd9
+commit 2f96c458caf20b2679374f41e2e5031f644f1eb1
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Count stack arguments of a static subprog from its code
+bpf: Count loops whose first value or bound is a range
 
-This commit changes the verifier to determine the number of stack arguments
-of a static subprogram from the highest stack argument slot loaded through
-r11 in its instructions rather than solely from its BTF prototype. It also
-updates caller stack argument accounting and trampoline attachment checks
-accordingly.
+This commit extends BPF scalar evolution (SCEV) to compute upper bounds on
+loop iteration counts when the initial value or latch bound is a range rath=
+er
+than a constant, and narrows the induction variable range at the loop header
+using iv_bounds().
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 8bf39098ba97a..228b93d4f8c94 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-
+> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+> index 8662205a3b594..eac792dc7b103 100644
+> --- a/kernel/bpf/scev.c
+> +++ b/kernel/bpf/scev.c
 [ ... ]
-
-> @@ -8827,13 +8821,15 @@ int btf_prepare_func_args(struct bpf_verifier_env=
- *env, int subprog)
->  	}
->  	args =3D (const struct btf_param *)(t + 1);
->  	nargs =3D btf_type_vlen(t);
-> -	sub->arg_slot_cnt =3D nargs;
-> +	sub->arg_slot_cnt =3D min_t(u32, nargs, MAX_BPF_FUNC_ARGS);
->  	if (nargs > MAX_BPF_FUNC_ARGS) {
-> +		if (!is_global) /* not fatal for static funcs */
-> +			return -EINVAL;
->  		bpf_log(log, "kernel supports at most %d parameters, function %s has %=
-d\n",
->  			MAX_BPF_FUNC_ARGS, tname, nargs);
->  		return -EFAULT;
->  	}
-> -	err =3D btf_check_arg_slots(log, tname, is_global, nargs, sub);
-> +	err =3D btf_check_arg_slots(log, tname, is_global, nargs);
->  	if (err)
->  		return err;
+> @@ -2626,6 +2935,14 @@ static void linear_bounds(struct bpf_reg_state *re=
+g, u32 max_header_count,
+>  	out->r32 =3D r32;
+>  }
 > =20
-> @@ -9022,7 +9018,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
->  		return -EINVAL;
->  	}
+> +static void iv_bounds(struct bounds *bounds, struct cnum64 iv_range)
+> +{
+> +	struct cnum64 r64 =3D cnum64_intersect(bounds->r64, iv_range);
+> +
+> +	if (!cnum64_is_empty(r64))
+> +		bounds->r64 =3D r64;
+> +}
+> +
+[ ... ]
+> @@ -2925,6 +3244,8 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *en=
+v, struct bpf_verifier_state
+>  			if (err)
+>  				return err;
+>  			linear_bounds(reg, iters->max_header_count, &coefs, &bounds);
+> +			if (r =3D=3D iters->iv_reg)
+> +				iv_bounds(&bounds, iters->iv_range);
+>  			if (log->level & BPF_LOG_LEVEL2) {
+>  				bpf_log(log, "loop header at %d, widening ", insn_idx);
+>  				log_reg(env, r);
+[ ... ]
+> @@ -3005,6 +3328,8 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *en=
+v, struct bpf_func_state *cur
+>  			continue;
 > =20
-> -	err =3D btf_check_arg_slots(log, tname, is_global, slots_used, sub);
-> +	err =3D btf_check_arg_slots(log, tname, is_global, slots_used);
->  	if (err)
->  		return err;
->  	sub->arg_slot_cnt =3D slots_used;
+>  		linear_bounds(entry_reg, max_header_count, &coefs, &bounds);
+> +		if (r =3D=3D entry->iv_reg)
+> +			iv_bounds(&bounds, entry->iv_range);
+>  		if (log->level & BPF_LOG_LEVEL2) {
+>  			bpf_log(log, "loop header at %d, clamping ", insn_idx);
+>  			log_reg(env, r);
 
-[ ... ]
+[Severity: Low]
+Should iv_bounds() also narrow bounds->r32 when bounds->r64 is narrowed?
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index d95f86b62e99f..b480c5c242af8 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+When widening or clamping a 32-bit induction variable (coefs.zext32 is true)
+with a range initial value or bound, linear_bounds() populates both
+bounds.r64 and bounds.r32 with the wider range computed from
+max_header_count (for example, 0..32 when initial is 0..16 and bound is 17).
 
-[ ... ]
+Calling iv_bounds() then intersects bounds->r64 with iv_range (narrowing
+bounds.r64 to 0..16), but leaves bounds->r32 untouched at 0..32.
 
-> @@ -11537,13 +11541,24 @@ static int check_static_func_call(struct bpf_ve=
-rifier_env *env, int subprog,
->  	/*
->  	 * Track caller's total stack arg count (incoming + max outgoing).
->  	 * This is needed so the JIT knows how much stack arg space to allocate.
-> +	 * The callee can load less than its prototype has, and the caller can =
-still store
-> +	 * all of it. Count the slots of the prototype only as far as the calle=
-r has stored
-> +	 * them: compilers store in front of the call. bpf_fixup_call_args() re=
-jects the rest.
->  	 */
->  	caller_info =3D &env->subprog_info[caller->subprogno];
-> -	callee_incoming =3D bpf_in_stack_arg_cnt(&env->subprog_info[subprog]);
-> -	stack_arg_cnt =3D bpf_in_stack_arg_cnt(caller_info) + callee_incoming;
-> +	callee_incoming =3D bpf_in_stack_arg_cnt(callee_info);
-> +	stack_arg_cnt =3D bpf_in_stack_arg_cnt(caller_info) +
-> +			max_t(int, callee_incoming,
-> +			      min_t(int, caller_info->max_out_stack_arg_cnt,
-> +				    callee_info->arg_slot_cnt - MAX_BPF_FUNC_REG_ARGS));
->  	if (stack_arg_cnt > caller_info->stack_arg_cnt)
->  		caller_info->stack_arg_cnt =3D stack_arg_cnt;
-
-[Severity: Medium]
-Can btf_prepare_func_args() leave sub->arg_slot_cnt undercounted when it
-returns early on a static subprogram with multi-slot parameters?
-
-In kernel/bpf/btf.c, btf_prepare_func_args() initially sets:
-
-	nargs =3D btf_type_vlen(t);
-	sub->arg_slot_cnt =3D min_t(u32, nargs, MAX_BPF_FUNC_ARGS);
-
-which is the BTF parameter count rather than the 8-byte slot count. It only
-updates sub->arg_slot_cnt to slots_used at the end of the function if the
-return type and all parameters are accepted:
-
-	err =3D btf_check_arg_slots(log, tname, is_global, slots_used);
-	if (err)
-		return err;
-	sub->arg_slot_cnt =3D slots_used;
-
-If btf_prepare_func_args() returns an error early for a static subprogram
-(for example, when btf_validate_return_type() rejects a pointer return type,
-when the parameter loop encounters an untagged pointer parameter, or when
-slots_used exceeds MAX_BPF_FUNC_ARGS at too_many_slots while nargs is at
-most MAX_BPF_FUNC_ARGS), sub->arg_slot_cnt remains set to nargs instead of
-the prototype's 8-byte slot count.
-
-When that static subprogram also has multi-slot parameters (such as 9-to-16
-byte structs passed by value or 128-bit integers) and ignores a trailing
-stack argument slot, check_static_func_call() in kernel/bpf/verifier.c
-computes:
-
-	callee_info->arg_slot_cnt - MAX_BPF_FUNC_REG_ARGS
-
-using the parameter count rather than the slot count. Because this
-undercounts the prototype's stack argument slots, wouldn't
-bpf_fixup_call_args() reject valid caller stores to those trailing stack
-argument slots?
+Although bpf_set_reg_range() later synchronizes reg->r32 from reg->r64 via
+reg_bounds_sync(), log_bounds() is called in bpf_widen_scev_regs() and
+bpf_clamp_scev_regs() before bpf_set_reg_range(). Because bounds->r32.size
+is less than U32_MAX and cnum32_smax(bounds->r32) differs from
+cnum64_smax(bounds->r64), log_bounds() at BPF_LOG_LEVEL2 prints the stale
+un-narrowed 32-bit subregister range (for example, "0..16 (s32 0..32) step =
+1").
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103234104.2082=
-39-1-alexei.starovoitov@gmail.com?part=3D6
+39-1-alexei.starovoitov@gmail.com?part=3D16
