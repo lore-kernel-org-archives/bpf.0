@@ -1,85 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793758873;
-	b=qccbrbJtvh7jckFiHE08+ovbuwoQEONsw29pAFWyz5GVMX2yNFIVuhVRuuL0luRCUonv
-	 E5wfVNIN2+D8xUF1MKbkm+Tt9cmQHb/5tgLDibveGnXD9gcwFz6iCn+enwgnVW12rL2+F
-	 N3E2F2MwliZAD7gac8Wb/Zyau+1Nvq86p0azDtrdKHuhnrwLHZvmE4HUR7EH0dDsRSFQv
-	 3jpQ89TcDuiqTNMia9CeuYWXIRCP4OPX68MZDO2GEmhOasQIVYMhJZjCFeOdLSGqBWtlv
-	 l2t0bS5MT9G9DZB8ClhcQZJvKYy+BeF8X7//fh9Fr+PSukcxOAdWyDYLhXdFCM8HVYQ==
+	t=1793759187;
+	b=zcyvVtaG2h1FJEPYBqfb64RqsD+ITwqRM8Am38+dRTKzesG5/h1uvGoFzgdPZsYVd01l
+	 eRSBSO4O6YW0w6KK1u3o9WL1yNdRWNnaO8M5mpmWfph31LqIdu0bCnVo+WeeFPSzHjVsl
+	 cVGHj0lRYDJhSodZH2/DWAFa3rIgYwteQ6XAvAtUYbqtC1h8/TDMC71lp7IV32kJM3P83
+	 NiHPvxWf2Iuy6GlgrKu1kQytpVlRKr6zuQKd1qbwM/qx7Ec+/McGaxiz7Q2/rR0LceDfW
+	 OPhy1P/hHQmMvVUB+2Fwjoi0mdg3FCpdJBYWKCpPORZbTsFOLuQMi1gKPRQ6MayBFpQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793758873;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793759187;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 To:Cc:Subject:From:X-Mailer:References:In-Reply-To;
-	bh=3kL9nPKcOeNL1nqkLRFVJC2yAbsuis72ch1sU7/sTFE=;
-	b=BWAqXikx+gCBKrdaxLvmy2FjPdLbzEovAWKL6nnaZOO5YXzMfwOI8pBZVJkoW6o1esGq
-	 C7mijNJ24hdSD+/V1lDt8e5QfT8ieaO78iV9SdKrjclESa4j32X7Mzeaz+pSeH8F/HbkK
-	 x8NuFWeJe3JR5axi+d0LYa84WtreUMp3tj5ifIh9wKyWGMvfJgpOWsn0w+uTfMv243xh1
-	 plErD5RyqinUD4t2jJqWQwJq6bRRh8OuNk4bn9PqEAOnDtaJ+lo6WI0t1qgxSRCizXu0w
-	 Jj1dXYIU2qj95IhSYNGlJeCoYzTyRSRMfTyGB7ZwM9vfCm1CUArPdKmFRo34LNU6Jdw==
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=zid1k/6UZskVzJMqyOQqLRcmeMMFnOUpkJZ/a+E0ZIs=;
+	b=fQJvG+jarOCwmJfJnvGYbqiL1yA7MZOVzylUYSNpJ5D+r34Zj1SvF1QVuN4TyyHZeM46
+	 IUagA7Arrwm8McqmWw41/ZmXk7y8kuKYdmok7D3LFftYM+gbu2rKdkRwWb1P+MbX1CDKp
+	 rnQITkIkBcWcPyG3FWIQPTzx+m0XQICBE69Fhy7xDSbGvj8ya+8v17aqM5sqPkMmlWa1W
+	 1Sp1wUo+8i2DJEEe2P9gFYzR7U2od3ulPWGpmtcxlhSs8zXHt9tLrNDbQV1cpyquMKyOL
+	 GDXcx/lMq30mtRmbQqXeqULocuO3vOfpJXUw69HvBrXlIs+dFNvI3AbCOFqTS7K4kUw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ufKTEGLW;
-	arc=none smtp.remote-ip=209.85.210.171
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="GY6dOFm/";
+	arc=none smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED98606A32C
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 02:21:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5ED98606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C951A606A329
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 02:26:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C951A606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ufKTEGLW
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8a4c72951b8so176996b3a.3
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 18:21:13 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GY6dOFm/
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-89d6bd67045so73163b3a.0
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 18:26:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793758873; x=1794363673; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=3kL9nPKcOeNL1nqkLRFVJC2yAbsuis72ch1sU7/sTFE=;
-        b=ufKTEGLWP6UzLiCvOprUKER8FGsbqdunjCzIauuX5gywzqqPVl+M04XmyTRhrXyYRY
-         OLHdnvsB2Q3L2/l4WIvSgLWPqGq3jbQBp8VKXEuSKCkxD0svr0yCR4LmWr7yryrJc2bB
-         YeBWHIeqqmDfWaK1aYk2NE/L/4cR3rj5zLhms+3FPKYh3/Ja/uvm0m3HxJeF28j0WRDj
-         DGp9zVTDFdSq2pixbJ67BHxlrsa3M6as7tc/hgtMq2JeTR3ApTTvZjRj3zCN8OhiobmG
-         4Yev4utAiH/WQ44huAkHJDNInnMcXRlSSj98SGnMtvV+DWBAYiyFj1/qP2Mu+J97hzkx
-         Jdmg==
+        d=gmail.com; s=20260707; t=1793759186; x=1794363986; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=zid1k/6UZskVzJMqyOQqLRcmeMMFnOUpkJZ/a+E0ZIs=;
+        b=GY6dOFm/ELILMBuZ0HaFVYyupFPlKLVIr7q6uYh7qMn6Ux6ME8ot0rCTZatUml0aFL
+         ShJwb5VqMnwQWewqYVyXluzp+0cc13Yum6JnVr7B2oZUer8+Ow7ZhB6MIQ9+f5DRNRYf
+         d5+7S190D2DVXMhb5aiZ+l9cnJBi4VCatQgHJopG321bQRAWGDgNRo7uasmUxhtJ9QNI
+         TVbtMT25XKXVywH09OeN45XJrDJlrwfacEer0vLYn4k5TzzETGHcwEMvbUq/QxfYjqMq
+         ujfgAGGsKHBVFGxULT8GVFe2HA/uFpE32xv1GJNLEwXW44p45wyPSQ1o1SfkHknvRFDH
+         mEWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793758873; x=1794363673;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1793759186; x=1794363986;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3kL9nPKcOeNL1nqkLRFVJC2yAbsuis72ch1sU7/sTFE=;
-        b=tOGv5JBD4afrS+CMZcJkF+AS4/dL0D/4lxXTe5amsdEtxyUEtTx6VRK2yDwpZKJg4Z
-         ROuok2jtpOpPalkI52SqblA5lnRXDmWe5c59skk8h9Ff3SWpO86b+ABe9wfxHQsNq+4b
-         29Ys89q/TybETikj6mAUF9eWQaZAvmAxJCt03Vvp/a0+z661Q741FICXsg5n8KZ8hPLu
-         TdE8HSikw7ZkiV5DpWPE6I2/x+DCiQNllqSEybHp1Y8Mhxk8MMK6fFbWyQzH3i39fEiY
-         /er0KEmwtFBatZgkK/Y6TilKpVtIoC4iCNTuwOfF1IfiWqdWQ9krpASADjyTLmEYzN1n
-         w/MQ==
-X-Forwarded-Encrypted: i=1; AKwUvBw2mS+rV4iQ72MUdz9OaQ7c+2QPnUMIcWzJSNg6kyT9NcXab/ZLMatBuvHFpHdftzP94Ks=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+zY304oQwQko4wDCkkJ5KHEvyN5/3P30O+NaQ28TC2uriGndy2
-	kEasyH1ir5u7JOW6sxO0+LP0XExWap2qqOC1Ff63jWsfyfQWCDkBk3hQ
-X-Gm-Gg: AYBFou0Q/1G1FdqTr1NubFi+LPWLqzD95TRkLBz1cR8v5O5FTuhvX/xhg/myIWFf4AH
-	m7jOl1Dw/brfUOs8GMXRNGUrglHcSmrdXrlF8Q2js/S5iZQ11EacJ6AlRWH6LI24fQRH/xAlwMg
-	11FAL8wTo78TDQN55Ut9Os0p6AqcwFjPCRRWVxnkXcTtwxXO4Ji7QUnknRGwWp3tvW/6Qfvh1bB
-	Llx7rcrcGsSrIMXvU0b+ZWqt5U/8ER2u1pH00Gmw7RuN6BodOwFOTZF2d+wzRh70DCuds6EMAqZ
-	rCqitnKxYrRP8EePJhgfn5Yv8BGYTjq23eiLDhM4VAdTE2Ocn2g9KfhpWirgnK/J8ZfT+0VmVM/
-	8YjLbKXbufivMHJbGUZTJrMIMmr5pSOwN0tR2mhULOGNCCc+dvucFCWX+c2BHl/rPn88wBA1uOx
-	P+3D3Ndxn50yXlcQpotJ9VETa/ZMBrCtw97XnPGYNbBWJvCj/zCDse9dAQHbOv6ff2a2PPWEVEG
-	DUcK9eP8Zb9tdJgJL5lrrdKjv3FAOz87UEs6ErURcXMN9MBP55YkJnnIJ3qFVB0iaplN3IEypYR
-	yzzonmz3fLMsZUb3JcGulHCTU5pXujaW/WIsUC708eakHEwY7rxE36zAkHhO/sptusAvVM81Bw8
-	dFjobofy0z2toBplEQGxgCB+P5mCVsSmWVgc=
-X-Received: by 2002:a05:6a00:230b:b0:89f:6989:cb9b with SMTP id d2e1a72fcca58-8a9beb6284emr11317502b3a.27.1793758872638;
-        Tue, 03 Nov 2026 18:21:12 -0800 (PST)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b09b470b7esm233999b3a.32.2026.11.03.18.21.12
+        bh=zid1k/6UZskVzJMqyOQqLRcmeMMFnOUpkJZ/a+E0ZIs=;
+        b=XlGPavDtsl0Z0/dcnfrZSKgirlMEerS2bLjh9q5PEApMEDRT/xF8UueVk+Hit7AgiP
+         U0NohwtLv3Ur44s1QyiyyOWp1V3UbQu8JTL9DCz8k0PEDnQ74EoJAzGPKwynXfpXF4xz
+         XXK5xHa4i2k5mGNHEdyIgqLGWrzSHp39jNcgToKUZwu80nJLgOxmOcx9sK6vMgrww63f
+         IEaSGigToGhzkE18Snv/XFdjFFYsXov+TMWJqlNuKYNdxW53oo2QMQKBSUHk84uhQza7
+         GhD4xNp9O5r99xLS8/TJ2KVcq4SOUqC5M35UgmygIb/bYKwvtgo2/Jx0JxbtVj8hxW49
+         LsDA==
+X-Forwarded-Encrypted: i=1; AKwUvByjspy4quslQQZ1bvWM3p41+4L3qZT1Z7bvbL8gGG5mFI4HG9lBWWF/HOG35eTfU657Eos=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Y37lp0X2/nCz7nPIw9D1v2RUPwMkLSqb+UfZQSbwtyyfn3sk9
+	RdTA+SXc4kvvFOg3ZR9tMzdfLSIc7Y73YnVvIwSXHz0R8DRg+uys/vmN
+X-Gm-Gg: AYBFou1mxhO3V9haO0ZCPokure53XJ4HpOCx6bSrU1/y+j2jU2vY2CRy5FVXb7BAJQI
+	2d0yH0YEe+hxI2s4HVtiKE8KPjtlLvpZpdd0ahZhWG8hJ7MMqU++ACYY3UXXvx2yJfiIZ79GiUd
+	KGr6gwZeuDaeFnM3fP/GBPeeLV0du6TJc0sB/Z1JLX2aAE2jVIBBOciMjrT3RlY0uVgF63cSod6
+	HKSVQOOlyi9n0OD9WFfBDf2pku47kMgdtgYj31i6XTOdNzqZ+uvxaR0Y7dhuK9yl6sTI5cwQHTs
+	TKeVT58+rv0XjTMaUYF+0OR4QXCN97sb4dKplU7ICMErkZzZiDmSo10tL2QCzQzr2YNzwtlmEsf
+	C2DTbnXKIW2EOaIWCwgbvKlK6vHj04MczhEhEGK99e76UhJqPpGb2T3Nw1a4Wvry5OB1MhQEbbx
+	5wmixNAIRE1Cg4LChHu2B/SgT/3oVwIZNTadvhqy0drQmeCzABumVMg4CGcGbhVMSlvOAL0GjcA
+	kgI5Hbih7FMVC4DLsFlbU//UEhGEuFXfYXDb4FUoIMIiKIwvgTflpKhKs2akLNRlFfCXuVPfy2r
+	Jb+wT+r24poKYKBAuENnPD5Xp0AbybPDlxKDopz76ighu3ziWpiJ2CUaJeMXkgzyaeaUdXW+7lC
+	aNYew6GWdOtae/E2PTZvR7gx20nAcbJGyyQ==
+X-Received: by 2002:a05:6a00:1382:b0:8a0:31e5:8cc3 with SMTP id d2e1a72fcca58-8a8317dd858mr10312051b3a.10.1793759185937;
+        Tue, 03 Nov 2026 18:26:25 -0800 (PST)
+Received: from localhost ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b09a7ce4cbsm218798b3a.11.2026.11.03.18.26.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2026 18:21:12 -0800 (PST)
+        Tue, 03 Nov 2026 18:26:25 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 04 Nov 2026 02:26:25 +0000
+Message-Id: <DMM2K9N35AGL.3KWJ07UTOLU4Q@gmail.com>
+Cc: <qmo@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <ihor.solodrai@linux.dev>, <linux-kselftest@vger.kernel.org>,
+ <daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next v7 1/2] bpftool: Use batch lookups for hash map
+ dumps
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Tianyi Chen" <hi@tychen.cc>, <bpf@vger.kernel.org>
+In-Reply-To: <a107a124d50c11a6d26363acce98e5e3b8377155.1793732386.git.hi@tychen.cc>
+References: <cover.1793732386.git.hi@tychen.cc> <a107a124d50c11a6d26363acce98e5e3b8377155.1793732386.git.hi@tychen.cc>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -88,46 +101,193 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 04 Nov 2026 02:21:11 +0000
-Message-Id: <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com>
-To: "JP Kobryn" <jp.kobryn@linux.dev>, <mikeba@sentinelone.com>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
- Olsa" <jolsa@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
- "Shuah Khan" <shuah@kernel.org>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption cause false
- recursion drops in trampoline progs
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.20.1-355-gf870624f6c37
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com> <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
-In-Reply-To: <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
+MIME-Version: 1.0
 
-On Tue Nov 3, 2026 at 11:46 PM UTC, JP Kobryn wrote:
-> On 10/30/26 3:22 PM, Alexei Starovoitov wrote:
->> On Sun, Oct 25, 2026 at 04:02 AM Mike Bazov via B4 Relay <devnull+mikeba=
-.sentinelone.com@kernel.org> wrote:
->>=20
->>> Is disabling preemption in __bpf_prog_enter_recur() on !PREEMPT_RT the
->>> preferred fix for fentry/fexit, or would you prefer a different
->>> mechanism for reconciling preemptible execution with prog->active and
->>> the per-CPU private stack?
->>=20
->> No.
->> We cannot disable preemption, since progs are not short
->> with may_goto they can take 1/4 sec.
->
->
-> Seeing this issue as well. This patch opts in ALL non-sleepable programs
-> with trampolines. Alexei, would your thoughts be the same if there was
-> an opt-in approach, like a libbpf annotation "fentry.nonpreempt", for
-> select programs? A patch like this could then check if
-> program->nonpreempt is set.
+On Tue, Nov 03, 2026 at 11:01 AM Tianyi Chen <hi@tychen.cc> wrote:
+> Bound the combined key/value buffers to 4 MiB. Start with up to 256
+> entries and grow on ENOSPC using the same input cursor. At the buffer
+> limit, continue individual lookups from the last emitted key without
+> restarting output. Also fall back if the initial batch is unsupported.
 
-I don't think it's a good idea. Try bpf_preemt_disable(), as I mentioned
-in the other reply.
+This is overkill for 32 ms per 100k elements.
+v4 measured 0.774 s vs 0.734 s without the redirect to /dev/null.
+
+n_buckets >= max_entries in htab. A bucket with more than 256 elements
+is not a real case. The growth is dead code. No subtest in patch 2
+reaches it.
+
+bpf_map_get_next_key() walks the map in the same order as the batch.
+So continue from the last printed key after any error, not only after
+ENOSPC. Then no need for the growth, can_restart, the list of errnos,
+three return values, fprintf(stderr) and the end_dump label.
+
+> +static bool map_dump_can_batch(const struct bpf_map_info *info)
+> +{
+> +	return info->type == BPF_MAP_TYPE_HASH && info->max_entries &&
+
+No need for the type check either. The kernel has three batch lookups:
+
+  kernel function                        maps                      cursor
+  -------------------------------------  ------------------------  ------
+  __htab_map_lookup_and_delete_batch()   hash, lru_hash,           u32
+                                         percpu_hash,
+                                         lru_percpu_hash,
+                                         hash_of_maps
+  generic_map_lookup_batch()             array, percpu_array,      key
+                                         array_of_maps, lpm_trie
+  __rhtab_map_lookup_and_delete_batch()  rhash                     key
+
+All three walk the map in the order of bpf_map_get_next_key().
+A map without map_lookup_batch returns ENOTSUPP and takes the old path.
+
+> +		if (err && err != ENOENT)
+> +			goto error;
+
+The batch takes the bucket lock. htab_lock_bucket() can fail, and the
+batch returns that error. bpf_map_lookup_elem() doesn't take the lock.
+So a dump that works today fails here.
+
+Something like this (not even compile tested):
+
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 4b65edf..a522d80 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -59,13 +59,18 @@ static int map_type_from_str(const char *type)
+ 	return -1;
+ }
+
+-static void *alloc_value(struct bpf_map_info *info)
++static size_t map_value_size(struct bpf_map_info *info)
+ {
+ 	if (map_is_per_cpu(info->type))
+-		return malloc(round_up(info->value_size, 8) *
+-			      get_possible_cpus());
++		return (size_t)round_up(info->value_size, 8) *
++		       get_possible_cpus();
+ 	else
+-		return malloc(info->value_size);
++		return info->value_size;
++}
++
++static void *alloc_value(struct bpf_map_info *info)
++{
++	return malloc(map_value_size(info));
+ }
+
+ static int do_dump_btf(const struct btf_dumper *d,
+@@ -741,15 +746,10 @@ static int do_show(int argc, char **argv)
+ 	return errno == ENOENT ? 0 : -1;
+ }
+
+-static int dump_map_elem(int fd, void *key, void *value,
+-			 struct bpf_map_info *map_info, struct btf *btf,
+-			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
++static void print_map_elem(void *key, void *value,
++			   struct bpf_map_info *map_info, struct btf *btf,
++			   json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
+ {
+-	if (bpf_map_lookup_elem(fd, key, value)) {
+-		print_entry_error(map_info, key, errno);
+-		return -1;
+-	}
+-
+ 	if (json_output) {
+ 		print_entry_json(map_info, key, value, btf, cpu_ids, cpu_cnt);
+ 	} else if (btf) {
+@@ -763,10 +763,70 @@ static int dump_map_elem(int fd, void *key, void *value,
+ 	} else {
+ 		print_entry_plain(map_info, key, value, cpu_ids, cpu_cnt);
+ 	}
++}
+
++static int dump_map_elem(int fd, void *key, void *value,
++			 struct bpf_map_info *map_info, struct btf *btf,
++			 json_writer_t *btf_wtr, const int *cpu_ids, int cpu_cnt)
++{
++	if (bpf_map_lookup_elem(fd, key, value)) {
++		print_entry_error(map_info, key, errno);
++		return -1;
++	}
++
++	print_map_elem(key, value, map_info, btf, btf_wtr, cpu_ids, cpu_cnt);
+ 	return 0;
+ }
+
++#define MAP_DUMP_BATCH_BYTES (1U << 20)
++
++/*
++ * Print the elements that batched lookups return. 'key' is the last of them.
++ * Return true at the end of the map. After any error the caller continues
++ * with bpf_map_get_next_key(). It walks the map in the same order.
++ */
++static bool dump_map_batch(int fd, void *key, struct bpf_map_info *info,
++			   struct btf *btf, json_writer_t *btf_wtr,
++			   const int *cpu_ids, int cpu_cnt,
++			   unsigned int *num_elems)
++{
++	void *keys, *values, *batch, *in_batch = NULL;
++	size_t value_size = map_value_size(info);
++	__u32 max_cnt, cnt, i;
++	bool done = false;
++	int err;
++
++	max_cnt = min(MAP_DUMP_BATCH_BYTES / (info->key_size + value_size),
++		      (size_t)info->max_entries);
++	/* The cursor is a u32 in htab maps and a key in all other maps */
++	batch = malloc(max(info->key_size, 4U));
++	keys = malloc(max_cnt * info->key_size);
++	values = malloc(max_cnt * value_size);
++	if (!max_cnt || !batch || !keys || !values)
++		goto out;
++
++	do {
++		cnt = max_cnt;
++		err = bpf_map_lookup_batch(fd, in_batch, batch, keys, values,
++					   &cnt, NULL);
++		if (err && err != -ENOENT)
++			goto out;
++		for (i = 0; i < cnt; i++) {
++			memcpy(key, keys + i * info->key_size, info->key_size);
++			print_map_elem(key, values + i * value_size, info, btf,
++				       btf_wtr, cpu_ids, cpu_cnt);
++		}
++		*num_elems += cnt;
++		in_batch = batch;
++	} while (!err);
++	done = true;
++out:
++	free(batch);
++	free(keys);
++	free(values);
++	return done;
++}
++
+ static int maps_have_btf(int *fds, int nb_fds)
+ {
+ 	struct bpf_map_info info = {};
+@@ -836,7 +896,8 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+ 	struct btf *btf = NULL;
+ 	int *cpu_ids = NULL;
+ 	int cpu_cnt = 0;
+-	int err;
++	int err = 0;
++	bool done;
+
+ 	key = malloc(info->key_size);
+ 	value = alloc_value(info);
+@@ -895,7 +956,11 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+ 		p_info("Warning: cannot read values from %s map with value_size != 8",
+ 		       map_type_str);
+ 	}
+-	while (true) {
++	done = dump_map_batch(fd, key, info, btf, wtr, cpu_ids, cpu_cnt,
++			      &num_elems);
++	if (num_elems)
++		prev_key = key;
++	while (!done) {
+ 		err = bpf_map_get_next_key(fd, prev_key, key);
+ 		if (err) {
+ 			if (errno == ENOENT) {
+
+pw-bot: cr
