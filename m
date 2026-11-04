@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793756418;
-	b=gj1cA8Hq3QJjL2JNi5T2Zd+el0D9qhXbrf/rcvH3m3BUG1ly/dETG24UuVqfsK+20f21
-	 omjdbfQ7zyfUNsVhdsL7QRwCOg1e5wF4t/UF2kJ77w+9p6sKs+R7X1hFynNFEIQoWVImx
-	 NTxPYlV5K3o8l2E2/a3qfwVgWJBD+iszrOq80eBP6QhuEogbMT4yzH+Z1mGAOJj0Scnfi
-	 4OcUbVZbrLNpUqIuAxHfzFrOz/ym7wne9ujNf+bpGLJYMl0tAkmA1aEHIc9Bph4xpLXDI
-	 EX3p6MIl5aHXjapi7UkTERccNsAvPd3mtGEHtn9Qv7posp088EITI+nI4GeI92kTiDA==
+	t=1793756697;
+	b=kDU1eq6ycBsJra7v6reqCqKBHwJD76tAEUsB5vp0dzGTK3AfWnbEzpPSp0DWDC9of0+3
+	 BLQNK4181/N4ezn6iEQS+XEsWBhp8VNBTvNWWu/6ueweDlXOAI4iZsLfmpx6KoUpTN3FA
+	 2rX/TBNBsXEF4FqORWPLPl5G7qiFYSBmt0iR8qcIWa8nj2K1As8uICjOi/sxVSb9HRdCp
+	 r33D0qVtvX2UUXY26CHktiSDbXtlpMr0Yh5HECpqWh8cB6tqkLN2ZG3e39IOMch7mQiKR
+	 kEIswfXmz7/mDkUKCOjzSOV+43HThdxBB2CeyeFgLP5GfhAGjbz+93MWFNImSH+GpIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793756418;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793756697;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=7j074EsLQ5+HiW+n0It9s1DVaK3CFOhFA1D/KWUhlAk=;
-	b=Lq7GCtMU7ADHIRg+Et+UJ8tn6f9FjALicwkpqNY/QYqfAF+rEGOjSRhh4qhFqVts49n+
-	 sooGQhir6GHf4l1/CHq+y2sLEEb3FJEPUVY0qhIEzT+fGUHy9ly8rxLrwSDnhJRd7WSkK
-	 VuGM61XgjcEQkf9EE6181ulXUiGOo+FgoIaftoa42e+vuj3dwga56Sa1SymG3S8wL+UzO
-	 VcvMcNq8TeFF1YMBELW65i1G2p0InbDkNrS35nue0TULq9WQoEc+Wh8DGJVjLUm8m8x8y
-	 hd8qhYACoTA+SmFwbw6jv0KtSWT0YYLcPs4oG3EKUZRK1y5owcdBmAgjYZ++72HEnPQ==
+	bh=mziydOo6BG2gBYgrbnUM8zXxBDG1UHmhKN6owqY7sp4=;
+	b=R2B9GYSn0Qmxj3zqsMyQGTHeixJe/FZrl+psd/8V7wNMQ5WcoZqMa3IKJRuQlt8fEuNf
+	 Q6xB3/WLMEFlpSjNtwtiY1/ZhEBtodyEkgzfRSZAob6q08iRQGO/udNWiwkyY59WsvSjD
+	 lE3Jj/Ve+lmObFjlwnCNQWa+aawVFfQR4369tOhZV9gitOWgXs8xaYZ6CxDmAd9Ly4HVq
+	 BjU+It72H8FFRp3RWXKwuVlCHYw74dWVfxKY4Sq36r5RE1aFRnnNeYnSJJnqDCT/QsPmU
+	 Jc9AQ7AerN/eMsDxiCaXZzTLrG59MrTqrSZQDQTsJoKRNvxq2eLDXM+K6NSDUFO22ww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QUIBh+g0;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BOvetmGO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46FBE606A326
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 01:40:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45421606A31B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 01:44:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QUIBh+g0
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A141F00A02;
-	Wed,  4 Nov 2026 01:40:17 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BOvetmGO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA2271F000C1;
+	Wed,  4 Nov 2026 01:44:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793756418;
-	bh=7j074EsLQ5+HiW+n0It9s1DVaK3CFOhFA1D/KWUhlAk=;
+	s=k20260515; t=1793756696;
+	bh=mziydOo6BG2gBYgrbnUM8zXxBDG1UHmhKN6owqY7sp4=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=QUIBh+g0QqneYydYm4FGR8iHV7Oi0SHeIaSB8qitROYzgqpfh/HZ7r6t/81TG822d
-	 fAwsaxzRZ5gsYnVUKK3CRfBllnppGSqdEa0XVxYn8qV+0jcGJ+/4qGBFgG47/ZJjpX
-	 wYIYRLcQfr7CAqtetd3maSBZndoujwe9GQ3Zal2W66X/1d64ZiztVzhGR5oCB0x7FT
-	 gS8OI0KxJ1MLRGgggeZUx2eMefVw1wQJ9BFq35cc5iu2r+UWZjeVds4HarlC+Yzd7m
-	 u1EmB1+gnfqrL8wQ0l+bRX2gFNcE0vN0TlnvKJ2gnSL7aWhecV9AtsARF51mwAjyLH
-	 xSg0B4wYUf1lg==
-Message-ID: <sashiko-outbox-196371@kernel.org>
+	b=BOvetmGOAG9VMgCzAnpncapv1LNrLh7QYFlP6080f0vhaUMZYAtkdo8ax9V9zbNIK
+	 nHW+9JHpKGRaPSoRtJSvRwf8m6QmddTKxybsN4GLxI4QrBt9q8ZhdXUQZEgAj6BF/D
+	 RCsPqwgqLHw/KnF7FfWn4E3pCCvnRQ5T2A6d8XW1hnG2zUHq/wNEWHLcN9TuXhxYwi
+	 eq4ECO3R1U5NpBMId/8cODGUk9FPOq4L2OqS5+DbZWsJ54dc8myYbOS9E99/i8wp/g
+	 61EwqFtsMCGVCez8oq1UTY0DGSzfBIRiv4AO99eS2c1CNKTFgpAuwYUbgFBbrhDuk8
+	 W8ibK7QyKGOPw==
+Message-ID: <sashiko-outbox-196376@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 04/14] selftests/bpf: Test addr_space_cast
- of pointers that are not in arena
+Subject: Re: [PATCH bpf-next v3 06/14] libbpf: Relocate pointers that are
+ stored in arena
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261104012401.1354861-5-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261104012401.1354861-7-alexei.starovoitov@gmail.com>
 References: <20261104012401.1354861-1-alexei.starovoitov@gmail.com>
- <20261104012401.1354861-5-alexei.starovoitov@gmail.com>
+ <20261104012401.1354861-7-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 04 Nov 2026 01:40:17 +0000
+Date: Wed, 04 Nov 2026 01:44:56 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,60 +62,126 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] selftests/bpf: wrong stack offset in r10_stored_to_arena()
+- [Medium] libbpf: memory leak and OOB access in bpf_object__collect_arena_=
+relos()
 --
 
-commit 54fbcf6815ff6f19ca4963d449d29e574fbc1941
+commit 146cf79dea60b56b79e9a35a046106f0fa3e6d27
 Author: Alexei Starovoitov <ast@kernel.org>
 
-selftests/bpf: Test addr_space_cast of pointers that are not in arena
+libbpf: Relocate pointers that are stored in arena
 
-This commit adds BPF verifier selftests in verifier_arena_cast.c to test
-addr_space_cast behavior on non-arena pointers, numbers, and stack slot
-liveness tracking across casts.
+This commit teaches libbpf and the BPF static linker to relocate R_BPF_64_A=
+BS64
+pointers stored in arena data sections that reference other arena variables=
+. At
+open time, libbpf records the relocation offsets, and at load time, it adds=
+ the
+mapped arena base address and target offsets in place.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_cast.c b/to=
-ols/testing/selftests/bpf/progs/verifier_arena_cast.c
-> new file mode 100644
-> index 0000000000000..14a199318d0d5
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_arena_cast.c
-> @@ -0,0 +1,800 @@
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index a7c53dc5b91df..1172fe7992bf5 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
 [ ... ]
 
-> +SEC("syscall")
-> +__description("arena cast: r10 is stored to arena, a pointer to map valu=
-e is in the stack")
-> +__failure __msg("invalid access to map value, value_size=3D8 off=3D4096 =
-size=3D1")
-> +__naked void r10_stored_to_arena(void)
+> @@ -8223,6 +8246,59 @@ static int bpf_object__collect_rodata_relos(struct=
+ bpf_object *obj,
+>  	return 0;
+>  }
+> =20
+> +/*
+> + * Collect pointers that are stored in variables in arena, like
+> + *   int __arena * __arena p =3D &var;
+> + * They are R_BPF_64_ABS64 relocations. The addend is stored in place.
+> + */
+> +static int bpf_object__collect_arena_relos(struct bpf_object *obj,
+> +					   Elf64_Shdr *shdr, Elf_Data *data)
 > +{
-> +	asm volatile (
-> +	"r1 =3D %[arena] ll;"
-> +	UPDATE_AND_LOOKUP
-> +	"if r0 =3D=3D 0 goto 2f;"
-> +	"r9 =3D r0;"
-> +	STALE_SPILL_R7(-8)
-> +	".8byte %[cast_r7_r7];"
-> +	"r1 =3D r9;"
-> +	"r1 +=3D 8;"
-> +	"*(u64 *)(r10 - 32) =3D r1;"
-> +	/* to arena, not to fp-32 */
-> +	"*(u64 *)(r7 + 0) =3D r10;"
-> +	"r7 =3D *(u64 *)(r10 - 32);"
+> +	int i, nrels =3D shdr->sh_size / shdr->sh_entsize;
+> +	struct arena_ptr *ptrs;
+> +	const char *sym_name;
+> +	size_t sym_idx;
+> +	Elf64_Sym *sym;
+> +	Elf64_Rel *rel;
+> +
+> +	ptrs =3D libbpf_reallocarray(NULL, nrels, sizeof(*ptrs));
+> +	if (!ptrs)
+> +		return -ENOMEM;
+> +	obj->arena_ptrs =3D ptrs;
+> +
+> +	for (i =3D 0; i < nrels; i++, ptrs++) {
+> +		rel =3D elf_rel_by_idx(data, i);
+> +		if (!rel) {
+> +			pr_warn("sec '.rel%s': failed to get relo #%d\n", ARENA_SEC, i);
+> +			return -LIBBPF_ERRNO__FORMAT;
+> +		}
+> +
+> +		sym_idx =3D ELF64_R_SYM(rel->r_info);
+> +		sym =3D elf_sym_by_idx(obj, sym_idx);
+> +		if (!sym) {
+> +			pr_warn("sec '.rel%s': symbol #%zu not found for relo #%d\n",
+> +				ARENA_SEC, sym_idx, i);
+> +			return -LIBBPF_ERRNO__FORMAT;
+> +		}
+> +
+> +		if (ELF64_R_TYPE(rel->r_info) !=3D R_BPF_64_ABS64 ||
+> +		    (sym->st_shndx !=3D obj->efile.arena_data_shndx &&
+> +		     sym->st_shndx !=3D obj->efile.arena_bss_shndx)) {
+> +			sym_name =3D elf_sym_str(obj, sym->st_name) ?: "<?>";
+> +			pr_warn("sec '%s': pointer to '%s' at offset %zu: it's not in arena\n=
+",
+> +				ARENA_SEC, sym_name, (size_t)rel->r_offset);
+> +			return -LIBBPF_ERRNO__RELOC;
+> +		}
+> +
+> +		ptrs->off =3D rel->r_offset;
+> +		ptrs->targ_off =3D sym->st_value;
+> +		if (sym->st_shndx =3D=3D obj->efile.arena_bss_shndx)
+> +			ptrs->targ_off +=3D obj->arena_bss_off;
+> +		obj->arena_ptr_cnt++;
+> +	}
+> +	return 0;
+> +}
 
 [Severity: Medium]
-In r10_stored_to_arena() in
-tools/testing/selftests/bpf/progs/verifier_arena_cast.c, should
-STALE_SPILL_R7(-8) be STALE_SPILL_R7(-32) instead?
+Can bpf_object__collect_arena_relos() leak obj->arena_ptrs and overflow it
+during relocate_arena_ptrs(), or fail with -ENOMEM when nrels is 0?
 
-As written, STALE_SPILL_R7(-8) gives r7 a stale stack offset of fp-8 rather
-than fp-32. When *(u64 *)(r7 + 0) =3D r10 executes, static stack analysis
-tracks the store against slot fp-8 (which is immediately overwritten by
-SPILL_FP24_TO_FP8) and never touches slot fp-32, so the test does not
-exercise joining the map value pointer in fp-32 (ARG_NONE) with r10 (fp+0).
+In bpf_object__elf_collect(), every SHT_REL section matching .rel.addr_spac=
+e.1
+is marked as SEC_RELO without checking sh_size > 0 or deduplicating target
+sections. bpf_object__collect_relos() then calls
+bpf_object__collect_arena_relos() for each SEC_RELO section whose sh_info
+matches obj->efile.arena_data_shndx.
+
+Because libbpf_reallocarray(NULL, nrels, sizeof(*ptrs)) passes NULL instead=
+ of
+reallocating obj->arena_ptrs for obj->arena_ptr_cnt + nrels, while the loop
+still increments obj->arena_ptr_cnt++ cumulatively, two issues can occur:
+
+1. If multiple SEC_RELO sections target arena_data_shndx, the second call
+overwrites obj->arena_ptrs (leaking the prior allocation) and allocates only
+nrels entries, while obj->arena_ptr_cnt holds the sum across both calls. Wh=
+en
+bpf_object__create_maps() -> relocate_arena_ptrs() later runs:
+
+	for (i =3D 0; i < obj->arena_ptr_cnt; i++, p++) {
+		memcpy(&val, data + p->off, sizeof(val));
+		val +=3D (__u64)(unsigned long)data + p->targ_off;
+		memcpy(data + p->off, &val, sizeof(val));
+	}
+
+it reads past the end of obj->arena_ptrs and corrupts memory at data + p->o=
+ff.
+
+2. If an empty .rel.addr_space.1 section has sh_size =3D=3D 0 (nrels =3D=3D=
+ 0),
+libbpf_reallocarray(NULL, 0, sizeof(*ptrs)) calls realloc(NULL, 0), which m=
+ay
+return NULL and cause bpf_object__collect_arena_relos() to return -ENOMEM.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261104012401.1354=
-861-1-alexei.starovoitov@gmail.com?part=3D4
+861-1-alexei.starovoitov@gmail.com?part=3D6
