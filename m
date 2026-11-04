@@ -1,55 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793766558;
-	b=SaITTjrYHcurENyLulRbSDhpRW3aUmKGSX3oYDPwg1Ui6gDZzvbPFF38aB8ww/OMcpet
-	 v4DioBPLslK/9XXRA9iquZpMFNSAyBx39jmlUCgUx9L61n1XJ4NrLzsT4JlJv2kIROMfN
-	 mL/LAHdW/WyLoBP/7UrhdocEFxPgKRJstZtQE038nOcGdO6regRwV9iEZQl9Egr8RaEc2
-	 UX7ibLeBN3Ndl6rAM1D+gkk1vH+lpqfdSdeFrXALFl1TOE9qKU6DIFLGbLfrBCpr8uFZ+
-	 0eo9SGwsn7j3T1eEbswXg1c7GyZVWmfclWK5ehxCYoB76C9XyBhZxdrPb4Q7mtGuotw==
+	t=1793766619;
+	b=0iLZjngPzx444mwNk/pzVBvIFaz5MmRaqMjtUFiEIGEzCiaTgWYMIErYSzrlE00PMu+k
+	 QvvUfcnMO70S92PWpwbk0QmifcqLAtTHphVk0TObEOYLEjNzbRHElAFUjfQ2xa5Ch0v/S
+	 jOLDTBBRSp0N7Hsu5KsbwR2AF90Izrh+jWt/o01GBgf7ALtKFILBsjJQG7nnnQqiQk9s6
+	 0iH/4j5OnpVJ5J50hTqRhwyAJpB9Nt2h3WfBhisqAnFaMGki2KbA1K4/HMFjgAX8Jr1F2
+	 Mqj/8Obva/4NnDjkATKwgpiUe+rORtqZIz+SWuQZVt+F6NG6y6gM9wc04/l3kDoQWVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793766558;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=LDYMmvOBK4q7hJhqT63nAAwc74NWaz+sOAw95hHamsE=;
-	b=w7eHW/b3UaKYCP9lzHLHKtTRRbesY9DBqExC/NMJaBDfzogQEBe5B1bmT9YRyGFeQdP0
-	 zX3K8eoDE3yBj/vvfMxO3lxNvGYKW7RDou4W6dBN+Y/MhbAPpCGkEIqYVgLloZixVHp/d
-	 j9LAcKkiRs5oZu/FigBuPBMmxlbLCJgTgefbAqOy54FKXw1LFKOMHQcPJdd3aorpVaOm7
-	 uE1w0NTaDlIPSk88ovvckSlgzYP9tSeHSxGIuKP467sBgkA8yFfJpO8Jz2VSXk80koDSD
-	 7AysfMu6L684bBgnW5DiGeDALkOJ50MPhD8SFsRnvwX87lgkC1gQhbjiRJ0DeJarXNA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793766619;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=8waw0InSHbtK6ZY3bCOmuZQhAY4jX7XSlK/9kloqXLc=;
+	b=Bsef6eLZ2tb6/gRqaasjMw2aEDtwucdXp9lC/0hjqH/yFYb2/aggQyhb5/enLPDU9K8K
+	 3IiETKbzywKqxCANPJEU5kCt0uS+38/IYrZcvWyYt3u/o+Vs5swvlMs7FYnlRDR3cjJDA
+	 xLMAzilNaDno+hfsYGDJibkqtNiYoCi8s1K3IT6pSwVZ06nsWZNUdstfaJZdJ/N6bqWMg
+	 ohCstxuRKy+hQktGp2kul6yUlmxRDPaO8GYkFj3kUw3z22n3Hs0cLypy10mlCZlYpJuoQ
+	 WWA+zBZ6GKsjp+VRshOYTPJrtvAFhI9M7M2/2Yk+Rr4YaQMcPf/DN+G0vhy5AikizBw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dW6chahP;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cA05iQ+L;
+	arc=none smtp.remote-ip=74.125.82.198
+Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 004E1606A326
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 04:29:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02788606A326
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 04:30:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 02788606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dW6chahP
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858F81F00A02
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 04:29:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793766557;
-	bh=LDYMmvOBK4q7hJhqT63nAAwc74NWaz+sOAw95hHamsE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=dW6chahP08DaTLrno2PMUuGgwQ/4coLGO3CdiftLMvEPvr05H6+yxLv3TRl1crL4b
-	 vji3Orp/ErBdyNMDf4D7nsmsHZXw7Fze+BT4svVV4PXCOeOlTaPpK9GMIUUsOyO1lQ
-	 Y0q91CeJSCb8hI5deySIaPtmuGhpa/uXErJ4XEOskgLu9lt+YCyiD3L1RKqii5VSKL
-	 YqJUgyo91RVlDa+TpArSTT7DL1EBObiEnMlB1HFGCXgquMWL8dgeO0LP34KI9jZFLf
-	 aY93lUjphdRQ4NMcTFr9BBn2sXrDF+vacdkS3bFV2kj94WBCU2NYag5/8r9YXBT/Hf
-	 1KI8u1mRnk/xA==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6acb57c2b88so281066a12.2
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 20:29:17 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvBxbEpfVb+Cd7lwkPHE/ipkAcpUcJKmhGh+9kyed7drDcV/d2VxMHR6QAMmuc8IhaiD1JSA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8hNpPsOu7wLeeaVkmkblUwIaYbiL2QKIXxeNLkmrsewSIN29pz
-	EiqtnmN2h9xlUyw/rkXwkJz5uzp54MAgeOI2i+5coipofL0TvlKnM6P+y4XF4vSIkpGc9KYUc77
-	CvVQc5iInGskGH+Z0ltU5efTG+eyTDf4=
-X-Received: by 2002:a05:6402:90c:b0:6b4:1629:b1aa with SMTP id
- 4fb4d7f45d1cf-6b4d3370d2bmr11376191a12.2.1793766556207; Tue, 03 Nov 2026
- 20:29:16 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=cA05iQ+L
+Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-341eff9e381so548394eec.1
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 20:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793766618; x=1794371418; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=8waw0InSHbtK6ZY3bCOmuZQhAY4jX7XSlK/9kloqXLc=;
+        b=cA05iQ+L87KeC0XJCB1HKfGJI3KaZo1LmjL2Gxvh14+v5B/W70zKGkNbJurgtAdwLr
+         b9Yb7vLuXGqWqaM/lxCIqLtUfRnQcpCegjVN4dZnPvxA2taBEi0lx23PIRtTGNtGKlii
+         tMyD0Ga5SfnLTe0hKtFdZJyqYtwD2pdHC2W3HkTrkGYOWyG6Z5BYFwkqli4Y32lPFAds
+         Ko8HvAsJRUFJj3+wPler6pryCcqFAHGUEOssYiMRGStWPsJr5SwryNmrLcbbos4SjFEV
+         OiP6fHkU4TKo2tJY7o/eODqrG1AcWG/42vuaPmwjB5kRreJyTpYV+IWp2ne5FN96qipL
+         ylKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793766618; x=1794371418;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8waw0InSHbtK6ZY3bCOmuZQhAY4jX7XSlK/9kloqXLc=;
+        b=gF1c6HMJDTWk1SoLhDe8Ua16TbGCwi18jKSRz3MhOaNHMkINBFcQIjK5ZRsaYSa283
+         ulqtvkNW3bkbNVElE8bvOYadE42nmSfmF4XLB4CyCVXyATS1OIj9pjPd/54y0DBnNIb4
+         OWnRplarndG2GZ/2og+LyLeVkYMNAMOF9CYlGgHINA1MHLmPrfp9YdYmNkFU+W4U/jmu
+         8Zl87+RYPhLIqla3r0Cp+FUBfAX/qr0r//OiRf7H4C6vy3342OyEEw6HS7eNhRGu/OIS
+         wExTfCbPK/MHk7Z/Z9bAtZ/Nc5QZ4HMdj77xGKj7Dx4lZqD0Lho7Oaqoyl7IZ0GdXaEz
+         JpJg==
+X-Forwarded-Encrypted: i=1; AKwUvBzWQuDcnjYRvSVNRPuJJBycrM9yFQ3IxhBBrZD6ZKnONo2akKBDPphMt5a3grrfif5BPBY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8XEdKB1ZL7DC3rBlnTzT+g+wtuEoHsBQO/AK66eCT77j3N5xbs
+	zkWsqIfYgHy6aNnPkCG4GdYyj8o/M4rft7QSGTgmkt75c6NnD89zk3gocGg9h+o7+E5tIW5n2oM
+	lmuO6wDjGHg==
+X-Received: from dybhh13.prod.google.com ([2002:a05:7301:290d:b0:369:7ef0:57a8])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:c019:20b0:36b:f09f:924a
+ with SMTP id 5a478bee46e88-36bf09fa41emr5753785eec.14.1793766617812; Tue, 03
+ Nov 2026 20:30:17 -0800 (PST)
+Date: Tue,  3 Nov 2026 20:30:02 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,128 +75,67 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261102072808.23080-1-yangtiezhu@loongson.cn>
- <20261102072808.23080-2-yangtiezhu@loongson.cn> <CAAhV-H52mbZJX2vkgG_h=XfwHoio=asLjFdhTJwUYqDp4V5JMg@mail.gmail.com>
- <8b00e5a7-4e60-19bd-7953-f76dc71e15ec@loongson.cn>
-In-Reply-To: <8b00e5a7-4e60-19bd-7953-f76dc71e15ec@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 4 Nov 2026 12:29:02 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H52bqRD1SyrZsvMkNbCpGiM5DPSGPARiasZ8G3XsE5Tgw@mail.gmail.com>
-X-Gm-Features: AclHuK-f4gMcp2qAOufsbV572BaO2w6ixQ0D3tlSSirFRvRGjI9TObJIDPst5n8
-Message-ID: <CAAhV-H52bqRD1SyrZsvMkNbCpGiM5DPSGPARiasZ8G3XsE5Tgw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] LoongArch: BPF: Make arena support depend on SCQ extension
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev, bpf@vger.kernel.org, 
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.385.gac671c819a-goog
+Message-ID: <20261104043006.1199857-1-irogers@google.com>
+Subject: [PATCH v3 0/4] tools build: Fixes for libbfd -lzstd dependency
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Quentin Monnet <qmo@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, James Clark <james.clark@linaro.org>, 
+	Leo Yan <leo.yan@arm.com>, linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 3, 2026 at 10:24=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
->
-> On 2026/11/2 =E4=B8=8B=E5=8D=8810:20, Huacai Chen wrote:
-> > Hi, Tiezhu,
-> >
-> > On Mon, Nov 2, 2026 at 3:28=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson=
-.cn> wrote:
-> >>
-> >> When testing bpf selftest "jit_insns/cast_to_user", there are differen=
-t
-> >> behaviors on different Loongson machines.
->
-> ...
->
-> >> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit=
-.c
-> >> index 3ab039d0afb6..01c12da168ee 100644
-> >> --- a/arch/loongarch/net/bpf_jit.c
-> >> +++ b/arch/loongarch/net/bpf_jit.c
-> >> @@ -2489,7 +2489,15 @@ bool bpf_jit_bypass_spec_v4(void)
-> >>
-> >>   bool bpf_jit_supports_arena(void)
-> >>   {
-> >> -       return true;
-> >> +       /*
-> >> +        * The arena range tree uses kmalloc_nolock(), which requires =
-128-bit
-> >> +        * atomic cmpxchg support, provided by SCQ extension on LoongA=
-rch.
-> >> +        */
-> >> +#ifdef system_has_cmpxchg128
-> >> +       return system_has_cmpxchg128();
-> >> +#else
-> >> +       return false;
-> >> +#endif
-> > You can "return cpu_has_scq" directly.
->
-> This was my initial thought too; it is simpler, but unfortunately
-> not enough here.
->
-> The 128-bit atomic cmpxchg arch_cmpxchg128() not only depends on
-> the hardware SCQ extension, but also requires assembler support,
-> which was addressed in commit c8b8f3c50f48 ("LoongArch: Only use
-> SC.Q when supported by the assembler").
->
-> Therefore, using #ifdef system_has_cmpxchg128 as in the current
-> patch is necessary to handle toolchain compatibility properly.
->
-> Here is a simple diff to verify this scenario. On a 3A6000 machine
-> with hardware SCQ extension, if we hack bpf_jit_supports_arena() to
-> return cpu_has_scq directly, but force AS_HAS_SCQ_EXTENSION to 'n'
-> to simulate an environment without assembler support, the original
-> test error "libbpf: map 'arena': failed to create: -ENOMEM" still
-> shows up because the underlying slab allocator lacks the flag
-> __CMPXCHG_DOUBLE.
->
-> ```
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index b5ed4881d3c0..6f572d24d2c3 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -336,7 +336,7 @@ config AS_HAS_LVZ_EXTENSION
->          def_bool $(as-instr,hvcl 0)
->
->   config AS_HAS_SCQ_EXTENSION
-> -       def_bool $(as-instr,sc.q \$t0$(comma)\$t1$(comma)\$t2)
-> +       def_bool n
->
->   config CC_HAS_ANNOTATE_TABLEJUMP
->          def_bool $(cc-option,-mannotate-tablejump)
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 8cc78efe722d..1e8049937851 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -2490,15 +2490,7 @@ bool bpf_jit_bypass_spec_v4(void)
->
->   bool bpf_jit_supports_arena(void)
->   {
-> -       /*
-> -        * The arena range tree uses kmalloc_nolock(), which requires
-> 128-bit
-> -        * atomic cmpxchg support, provided by SCQ extension on LoongArch=
-.
-> -        */
-> -#ifdef system_has_cmpxchg128
-> -       return system_has_cmpxchg128();
-> -#else
-> -       return false;
-> -#endif
-> +       return cpu_has_scq;
->   }
->
->   bool bpf_jit_supports_fsession(void)
-> ```
->
-> So, the current patch has no problem IMO.
-OK, then I think we can use:
+This series addresses build problems when linking against static
+libbfd/libopcodes on distributions like Fedora where binutils is built
+with zstd section decompression support (requiring '-liberty -lz -lzstd'
+together).
 
-return __is_defined(system_has_cmpxchg128) && system_has_cmpxchg128();
+In v2, commit 89d001d48ec7 ("tools build: Add zstd to the binutils
+library feature tests") landed in tools/build/feature/Makefile at the
+same time, creating a merge conflict and only adding '|| $(BUILD_BFD)
+-lzstd' without '-liberty -lz' or the corresponding
+libbfd-liberty-z-zstd feature check in perf and bpftool (so even if
+test-libbfd.bin passed with -lzstd, perf and bpftool would link only
+'-lbfd -lopcodes' without '-lzstd').
 
-Huacai
+v3 rebases onto perf-tools-next (v7.4-rc1), fixes commit 89d001d48ec7 in
+patch 1/4, collects the Acked-by tags from Quentin Monnet and Peter
+Zijlstra, updates the LIBOPCODES_LIBS comment in tools/objtool/Makefile,
+and moves the AI assistance disclosure from commit trailers to the cover
+letter.
 
->
-> Thanks,
-> Tiezhu
->
->
+v2: https://lore.kernel.org/all/20260909204122.1993010-1-irogers@google.com/
+v1: https://lore.kernel.org/linux-perf-users/20260909181030.1870496-1-irogers@google.com/
+
+AI Assistance Disclosure (per Documentation/process/coding-assistants.rst):
+- Tools used: Antigravity coding assistant and Sashiko automated patch
+  review.
+- Summary of prompts and assistance: Rebased the 4-patch series onto
+  perf-tools-next, resolved the conflict with commit 89d001d48ec7 in
+  tools/build/feature/Makefile, incorporated review feedback and
+  Acked-by tags, and verified with scripts/checkpatch.pl.
+
+Ian Rogers (4):
+  tools build: Add explicitly sequenced -lzstd to libbfd feature
+    fallback
+  perf build: Add explicitly sequenced -lzstd to libbfd feature fallback
+  bpftool: Add explicitly sequenced -lzstd to libbfd feature fallback
+  objtool: Add explicitly sequenced -lzstd to libopcodes fallback
+
+ tools/bpf/bpftool/Makefile   |  4 ++++
+ tools/build/Makefile.feature |  3 ++-
+ tools/build/feature/Makefile | 19 +++++++++++++------
+ tools/objtool/Makefile       |  7 ++++---
+ tools/perf/Makefile.config   |  3 +++
+ 5 files changed, 26 insertions(+), 10 deletions(-)
+
+-- 
+2.56.0.385.gac671c819a-goog
+
