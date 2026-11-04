@@ -1,45 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793768638;
-	b=cFng6NVbNtKkoBky3Rn1/g0t9n1ysqXrcrr3mRN5/AHnx+0gfU9H7JJa6mZn+QSxUwGQ
-	 tzbt8mY4hH8h8BAA/oPTJQyCOiAyDfC4ENkXEDejd8PH99p9Zkoszw17o+xdSg0886NVT
-	 wbUA4B7JuQ3b/1UPKNeQEXx6F0/q925SDy73K5bPhArCENlXwraiCHCgOYbL0NyNKj546
-	 wmIFXKIS2k6LIzXLgKybkLamcTk3x7MlH6OcHHB7nTXvNu9fl3flMoB5zEn4ybFjJK7mS
-	 mlhYCvkZvuti2qsdYdWh/ghZid/w7ghSHOLhnO/g0wZRhd7/jJ1K9cp9Uet6uPbe0PQ==
+	t=1793769826;
+	b=Ztuf7L8EaHm2Ynn38XbcyxReH0vADl3FoDGpgC1zp/xXW3bEQ171qTBnl/Z4slss3z9b
+	 E5B3MbXRW+DxJ7eNACDQ6sFcYuNhRq1bvyi7fZhHaX+UVwE9jbfTPU5qHbxtbLqwMCZqV
+	 nTtPCmTp7njV4qgsg+hHubb7vPbvtsLKAWBB9zmFuhFSltLgMYx9g3h4JxFDiMyntkoMJ
+	 SGzxJDNsYJSY5k0uZ99FCFKqH7UG1sE30LCMYPylOGQF5wtm0qX7iQpcPMwwz9GSexU/k
+	 OQoHP/T+7c+tNE9jigDHZ7wN2oCjcUYu7ohw2a2DVNv5TwrB2SZ0AidRuTzfW/Khwng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793768638;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Bh8KfPuJj2iTXOUheCNI6RmSE0TesHaKpRuqz0dQaqM=;
-	b=NTUWu/PoCtlKv6b+tcln1VOM7wCgIIIS7w8rRHI2ITiRh5SXjxoG5K1FtNkIkB2zpQSO
-	 BqIy5GJzHmwVvQo6ENok+CebNxc3ejrUKXAmHJrlWcxqoR2gYDqY0zAhICJEPobJCaV9F
-	 iodhnokp+Y5jCkMZ4a6r0YIMornDc/Gd1ORYTL6da60ya68eb3bI4wpvnKIRhATHnlRBw
-	 lYOjcsKJUNI/q1jAIBNXUkWWRNvURSI1uXgdzjinFv5WTG+jiUXjAjbkmfZ3cvZMKK5Qr
-	 epUWmSYhuqonzg7WPqMQ1Du41XmmjS+gLUkFsLBBXpEHKmFSjnk+AQ8RtbHS+epasqA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793769826;
+	h=Received:DKIM-Signature:Received:X-Gm-Message-State:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=Qn8NAtZoDb7HH34IWyK2VCQA4luhbTedxXM4sKwZuRo=;
+	b=N9WOP1BZ2mPBAyX07XTKEPZz1/qESiF01nPm/M6pjUb4u6T9gw6HoFSFYqI2E9lim7tv
+	 TOAamx0toA1/vDGyLU3NLI4I5/Y2xQf+CkwDi1p0JxuSBKJrvdYoOEzAZeL9bRoYu5aZX
+	 A+p0r9kTkoY2rraV+W6ahz2VZYYm0gjIKUwyHAlrBdmdlGo8MPFa3jJ0MWjHgneELt+BN
+	 V3+lniJCh7PqdvqMDwqUOtZK01CySOQtjdHQh4/u85p0iYcNPN1g7HSorbuh5Fu0LB6Gr
+	 iUzhpOceNSGz54mrkcayv2v586CHXwq/6hT7PiKfD6rkGgA/n+4Jme7iumNBlrJdT9w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HMx7Sunj;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oC27qxmL;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D913D606A31B;
-	Wed,  4 Nov 2026 05:03:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C268606A326
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 05:23:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HMx7Sunj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED7701F00919;
-	Wed,  4 Nov 2026 05:03:56 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oC27qxmL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08941F00A17
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 05:23:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793768637;
-	bh=Bh8KfPuJj2iTXOUheCNI6RmSE0TesHaKpRuqz0dQaqM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HMx7SunjXBZt9ll09S6BwIUGp7QPmG2RH6JGtH8xsGsdEbPuqtgAcAtd9DMnQUIwj
-	 /ZVWbep7FxXYWKiBp+zS6cux8gRKRyyIfJDYEBfinRvbXjAEqIkXqmYENEU82PMVSK
-	 RNo6FpcV5Cdr30HISamHe6rLzabyMNuT7OqAuiIjeK5N1iONSyO/LJ5bIbYJfFhjtG
-	 wsh9WEUJy8qQU0V7BcoM9521pDS8l13CuWHk7dfrVCL1vk7CnqAIO4YfHP13dmeru+
-	 bNPc7X7+N6zdnbWRYNLanPJZVw6Jic546oakdCxfjmM0MLDhPx1PoDrGkZL+hJ5cYi
-	 JrSxXS5yVHZyw==
-Content-Type: multipart/mixed; boundary="===============0821062343041324575=="
+	s=k20260515; t=1793769825;
+	bh=Qn8NAtZoDb7HH34IWyK2VCQA4luhbTedxXM4sKwZuRo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=oC27qxmLddM+EFhnLVgpy/VmEZXINf+xmHMuE4FdR6WRBLVsnWvH4KjVNHVFraJuO
+	 /8MkqE97l3jpwOqC3pKUzDOHT9ZRJ1DXXVzgBzKn9ZKDZfJsxzGxxh2bMHJWSUoO4P
+	 Iw9Rl2YyPuajJcU8OJRvCxTdBU9IleHw9W+6i52qbeVTRP/a4YmrOt01ifcx6sjGHh
+	 ZJUmeQWpsSTW5zqXezbe306mtiwtYW/T/dYIHro4eFD8m5+H6WJxonqCYrmAb1qqy0
+	 h4YEOzoU8ZjAqpOXrGwZ3Owi4CViRUiQdQ7ALC9gsPHBJny2GXKyd3FzwjFZ+u3zSd
+	 pjJPF6FRZ9MwA==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-4a85c656c58so198129fac.3
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 21:23:45 -0800 (PST)
+X-Gm-Message-State: APuU4Z/GmkJFqo3R2xP4IJz5xlpYV4ablQoxwE3tzvZO/EPY4y4SLtB9
+	w/VD6IILUyWTe6pT+Mrcgm2KotnNg4k9jC4wrI20U5NCvU/472KJwXm56Eb/AcMSPAsMqIscX1M
+	S0qbyhEBWsqdLVxkZlXJRHcDgCRR+Kcs=
+X-Received: by 2002:a05:6870:e988:b0:485:d1ab:793c with SMTP id
+ 586e51a60fabf-4a90769be04mr9501691fac.29.1793769824978; Tue, 03 Nov 2026
+ 21:23:44 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,88 +58,114 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <d94520950f855a1d5ac4b51975988b70185ba7da61836aa84b044b69e8104bbc@mail.kernel.org>
-In-Reply-To: <20261104043006.1199857-2-irogers@google.com>
-References: <20261104043006.1199857-2-irogers@google.com>
-Subject: Re: [PATCH v3 1/4] tools build: Add explicitly sequenced -lzstd to libbfd feature fallback
-From: bot+bpf-ci@kernel.org
-To: irogers@google.com,peterz@infradead.org,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,jolsa@kernel.org,irogers@google.com,adrian.hunter@intel.com,qmo@kernel.org,jpoimboe@kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,james.clark@linaro.org,leo.yan@arm.com,linux-perf-users@vger.kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  4 Nov 2026 05:03:56 +0000 (UTC)
+References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com> <20261102072112.4160195-9-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261102072112.4160195-9-alexei.starovoitov@gmail.com>
+From: Eric Dumazet <edumazet@kernel.org>
+Date: Wed, 4 Nov 2026 06:23:34 +0100
+X-Gmail-Original-Message-ID: <CAL4Wiiq+QX8quVBjEZK5qipki6Yt7vx4=tt2L4o+FwO9zD-5=g@mail.gmail.com>
+X-Gm-Features: AclHuK_M_LLkqH56WlWzBGN8TVZ6lnrAKJmZVwCPt2OMDTAdOmG-v8JtUt35WrY
+Message-ID: <CAL4Wiiq+QX8quVBjEZK5qipki6Yt7vx4=tt2L4o+FwO9zD-5=g@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 08/15] net: Leave sk_stream_wait_memory() once the
+ socket is dead
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+	john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev, 
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	kuniyu@google.com, willemb@google.com, matttbe@kernel.org, 
+	mptcp@lists.linux.dev, mason@kernel.org, josef@toxicpanda.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============0821062343041324575==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Le lun. 2 nov. 2026 =C3=A0 08:22, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> a =C3=A9crit :
+>
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> When an sk_msg prog redirects data to the egress of another socket, the
+> sender calls tcp_sendmsg_locked() on that socket. The sender holds a
+> reference to the sock, but not to its file. Thus __tcp_close() can call
+> sock_orphan() while the sender sleeps in sk_stream_wait_memory().
+> sock_orphan() sets SOCK_DEAD and sets sk_wq to NULL.
+>
+> After the sleep the loop continues and does not test SOCK_DEAD. The
+> subsequent sk_set_bit() can dereference the NULL sk_wq. The tests of sk_e=
+rr
+> and sk_shutdown do not always stop the sender. sock_error() clears sk_err=
+,
+> and __tcp_close() can call tcp_disconnect(), which clears sk_shutdown. Th=
+e
+> sender then adds data to the write queue of the dead socket, and
+> inet_sock_destruct() warns.
+>
+> Leave the loop with -EPIPE when the socket is dead after the sleep. The
+> function already tests SOCK_DEAD before remove_wait_queue() for the same
+> reason. A caller that has the socket open never sees SOCK_DEAD.
+>
+> Fixes: 4f738adba30a ("bpf: create tcp_bpf_ulp allowing BPF to monitor soc=
+ket TX/RX data")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
+>  net/core/stream.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/core/stream.c b/net/core/stream.c
+> index cb255e2a3a5d..334124d683a7 100644
+> --- a/net/core/stream.c
+> +++ b/net/core/stream.c
+> @@ -150,7 +150,11 @@ int sk_stream_wait_memory(struct sock *sk, long *tim=
+eo_p)
+>                                     (sk_stream_memory_free(sk) && !vm_wai=
+t),
+>                                     &wait);
+>                 sk->sk_write_pending--;
+> -               if (ret < 0)
+> +               /*
+> +                * A sender which sockmap has redirected to sk does not k=
+eep it
+> +                * open. A dead socket has no sk_wq.
+> +                */
+> +               if (ret < 0 || sock_flag(sk, SOCK_DEAD))
+>                         goto do_error;
 
-> tools build: Add explicitly sequenced -lzstd to libbfd feature fallback
+This is fine, but it only helps a sender that wakes up.
 
-TL;DR: Possible build break at this commit: the libbfd -lzstd fallback is
-removed but no consumer uses the new feature test yet, so perf may fail to
-link and bpftool may lose JIT disassembly.
+As you said in your reply to the bot on patch 07, nothing wakes it.
+__tcp_close() sets sk_shutdown and calls sock_orphan() without a wakeup
+on sk_sleep(sk), and once sk_wq is NULL, sk_stream_write_space() cannot
+reach the sleeper either.
 
-> diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> --- a/tools/build/feature/Makefile
-> +++ b/tools/build/feature/Makefile
+"A signal or SO_SNDTIMEO of the target ends it" does not look enough to
+me. tcp_sendmsg_locked() takes the timeout from sock_sndtimeo() of the
+target, a socket the sender does not own and cannot configure. With the
+default MAX_SCHEDULE_TIMEOUT, a blocking sendmsg() on the sender's own
+socket never returns, and the sender's sock_hold() pins the dead target
+until then.
 
-[ ... ]
+Since this patch makes SOCK_DEAD a reason to leave, one wakeup before
+sock_orphan(), while the socket is still owned by the closer, should be
+enough. The sender can only get the socket lock back after
+sock_orphan(), so it sees SOCK_DEAD. Nothing walks the wait queue after
+sock_orphan(), so skipping remove_wait_queue() stays safe.
 
-> @@ -249,18 +250,21 @@ $(OUTPUT)test-python-module.bin:
->  	$(BUILD) $(FLAGS_PYTHON_EMBED)
->  
->  $(OUTPUT)test-libbfd.bin:
-> -	$(BUILD_BFD) || $(BUILD_BFD) -lzstd
-> +	$(BUILD_BFD)
->  
->  $(OUTPUT)test-libbfd-threadsafe.bin:
-> -	$(BUILD_BFD) || $(BUILD_BFD) -lzstd || $(BUILD_BFD) -liberty || $(BUILD_BFD) -liberty -lz
-> +	$(BUILD_BFD) || $(BUILD_BFD) -liberty || $(BUILD_BFD) -liberty -lz || \
-> +	$(BUILD_BFD) -liberty -lz -lzstd
+Something like this (untested). sk_wq can be NULL here for MPTCP
+subflows, hence skwq_has_sleeper():
 
-Can this leave perf and bpftool unable to link libbfd at this commit?
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ void __tcp_close(struct sock *sk, long timeout)
+ adjudge_to_death:
+  state =3D sk->sk_state;
+  sock_hold(sk);
++ /* A sockmap egress redirect can sleep in sk_stream_wait_memory()
++ * without a reference on our file. Let it see SOCK_DEAD.
++ */
++ rcu_read_lock();
++ wq =3D rcu_dereference(sk->sk_wq);
++ if (skwq_has_sleeper(wq))
++ wake_up_interruptible_all(&wq->wait);
++ rcu_read_unlock();
+  sock_orphan(sk);
 
-Nothing here reads the new libbfd-liberty-z-zstd result.  Neither
-tools/perf/Makefile.config nor tools/bpf/bpftool/Makefile calls
-feature_check for it or has a branch that uses it.
-
-On a system where "-lbfd -ldl" fails but "-lbfd -ldl -lzstd" links, the
-parent commit gave feature-libbfd=1 through the removed fallback.  Here
-feature-libbfd, feature-libbfd-liberty and feature-libbfd-liberty-z are
-all 0, while feature-libbfd-threadsafe is 1 through the new
-"-liberty -lz -lzstd" fallback.
-
-With BUILD_NONDISTRO=1, perf's Makefile.config then passes the threadsafe
-check but takes none of the EXTLIBS branches:
-
-  ifeq ($(feature-libbfd), 1)
-    EXTLIBS += -lbfd -lopcodes
-  else ifeq ($(feature-libbfd-liberty), 1)
-    EXTLIBS += -lbfd -lopcodes -liberty
-  else ifeq ($(feature-libbfd-liberty-z), 1)
-    EXTLIBS += -lbfd -lopcodes -liberty -lz
-  endif
-
-  CFLAGS += -DHAVE_LIBBFD_SUPPORT
-
-util/libbfd.o is still built, so the perf link can fail with undefined
-references to bfd_openr(), bfd_check_format() and disassembler().  bpftool
-goes down the same chain, silently drops -lbfd and -DHAVE_LIBBFD_SUPPORT,
-and loses JIT disassembly.
-
-The consumers are added later in the series:
-
-  6eb66acc776f ("perf build: Add explicitly sequenced -lzstd to libbfd
-  feature fallback")
-  155513d3a59d ("bpftool: Add explicitly sequenced -lzstd to libbfd
-  feature fallback")
-
-Would it be better to keep the old -lzstd fallback until those consumers
-land, or to reorder or squash so that each commit remains buildable?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41774922004
---===============0821062343041324575==--
+This can be a follow-up and does not need to block the series.
