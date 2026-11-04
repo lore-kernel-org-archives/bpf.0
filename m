@@ -1,49 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793767211;
-	b=LTBn4wH9cqJOKW9nbLhPJhHpYc6+QJFAPCzFiAJUEG2YnZX9FinN7V2E8jK/cxgrDqSB
-	 fePdE7uSnLjpBciwrHycgnzhgcDLoh1MSUOOluMWt9UzL1JE4PGUWbrgGUha0JwqqfOzf
-	 yvv6GkiDelQyB6sTu1OaJ846DyJn2TE2lSp6G91lg7lQE1+ARYsY89UJK9vSxmt6OtN3b
-	 sffIuhM9nfc9MhYI3FGntF3hhZUzQ9PEIqNKJsp7zkhcssAcelX7mKuUV8EGhGpuq3E5c
-	 +h4uncZwIdcN05qkDNhqxv0cN8vaaAfoPUXRqqjenXfFE+WZzVgYpao5bosvYFgjFYA==
+	t=1793768638;
+	b=cFng6NVbNtKkoBky3Rn1/g0t9n1ysqXrcrr3mRN5/AHnx+0gfU9H7JJa6mZn+QSxUwGQ
+	 tzbt8mY4hH8h8BAA/oPTJQyCOiAyDfC4ENkXEDejd8PH99p9Zkoszw17o+xdSg0886NVT
+	 wbUA4B7JuQ3b/1UPKNeQEXx6F0/q925SDy73K5bPhArCENlXwraiCHCgOYbL0NyNKj546
+	 wmIFXKIS2k6LIzXLgKybkLamcTk3x7MlH6OcHHB7nTXvNu9fl3flMoB5zEn4ybFjJK7mS
+	 mlhYCvkZvuti2qsdYdWh/ghZid/w7ghSHOLhnO/g0wZRhd7/jJ1K9cp9Uet6uPbe0PQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793767211;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=yDNMtsvfB4pI9zwgFjMxckJnvbkqEPEwSr6fXlmbHxo=;
-	b=Ev7Q80g03tGt7dc9wksEJZ5kdUHYqh/o9HTXJ65vpk/DlkZ1hPWOV3cu3XRo3j9dEOK3
-	 DBvza3tz9uq4YyV90y2A/REsexPr86qYtQ2mVjT+M1eeU6711YZKXx8KphwYdSz0Y29yv
-	 WNzTDojV++3SW+QNAaAj+82ykKfoQfXcGaR+rJnu/WWQD3LIq3rkvxz9PYKT4KcUutBuL
-	 224Cxo4X9xzbpxDgx6aiM+s8K6wm4+aLHO01TRKVpxYGGNCU+Oh3vgXCFVION+1guIBFW
-	 oXbmX6qxcpU+upBAqXx36XDD72APkIAqMhc9YkhusaNLHU7axQf05ho/pRagNHp2N1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793768638;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=Bh8KfPuJj2iTXOUheCNI6RmSE0TesHaKpRuqz0dQaqM=;
+	b=NTUWu/PoCtlKv6b+tcln1VOM7wCgIIIS7w8rRHI2ITiRh5SXjxoG5K1FtNkIkB2zpQSO
+	 BqIy5GJzHmwVvQo6ENok+CebNxc3ejrUKXAmHJrlWcxqoR2gYDqY0zAhICJEPobJCaV9F
+	 iodhnokp+Y5jCkMZ4a6r0YIMornDc/Gd1ORYTL6da60ya68eb3bI4wpvnKIRhATHnlRBw
+	 lYOjcsKJUNI/q1jAIBNXUkWWRNvURSI1uXgdzjinFv5WTG+jiUXjAjbkmfZ3cvZMKK5Qr
+	 epUWmSYhuqonzg7WPqMQ1Du41XmmjS+gLUkFsLBBXpEHKmFSjnk+AQ8RtbHS+epasqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NtVmiQwC;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HMx7Sunj;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F51606A32C;
-	Wed,  4 Nov 2026 04:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D913D606A31B;
+	Wed,  4 Nov 2026 05:03:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NtVmiQwC
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8818F1F000C1;
-	Wed,  4 Nov 2026 04:40:10 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HMx7Sunj
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED7701F00919;
+	Wed,  4 Nov 2026 05:03:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793767210;
-	bh=yDNMtsvfB4pI9zwgFjMxckJnvbkqEPEwSr6fXlmbHxo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=NtVmiQwCOPgWwzgE5tddys6yEWRocATzwlqipdrPf7vl1EyTkz9O7JEAkZQLEuOvA
-	 15ox5q3Uzup3Ie84LIhrDTuMjdGJ+owPeapboTH+/Df81ALsmGW0kP8FASPvyoXm/F
-	 u8X6cXc2spEYpQRE9Hdab1J99SnpO6rNDTXh613xk6lZ7GtOJQ0lZCaCbiSfzYBKeQ
-	 MgXGyOe9bVEV2jKwI05gjl9VW6ofPt4yQC/hDpZj1FdxxltyDVc7Z+Wqok8jThQnRk
-	 cHepISR7tLGL+h2NM2EiUDBkb7z9/PaXdOuoKEJE2htl+Mnrd1xApDClmUvwqUIbem
-	 WtsQnbZl3B3Uw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D28639D0C34;
-	Wed,  4 Nov 2026 04:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1793768637;
+	bh=Bh8KfPuJj2iTXOUheCNI6RmSE0TesHaKpRuqz0dQaqM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=HMx7SunjXBZt9ll09S6BwIUGp7QPmG2RH6JGtH8xsGsdEbPuqtgAcAtd9DMnQUIwj
+	 /ZVWbep7FxXYWKiBp+zS6cux8gRKRyyIfJDYEBfinRvbXjAEqIkXqmYENEU82PMVSK
+	 RNo6FpcV5Cdr30HISamHe6rLzabyMNuT7OqAuiIjeK5N1iONSyO/LJ5bIbYJfFhjtG
+	 wsh9WEUJy8qQU0V7BcoM9521pDS8l13CuWHk7dfrVCL1vk7CnqAIO4YfHP13dmeru+
+	 bNPc7X7+N6zdnbWRYNLanPJZVw6Jic546oakdCxfjmM0MLDhPx1PoDrGkZL+hJ5cYi
+	 JrSxXS5yVHZyw==
+Content-Type: multipart/mixed; boundary="===============0821062343041324575=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,56 +49,88 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/5] bpf: Fix three bugs around constant blinding
- and nop removal
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179376720904.2078713.14897677456982144973.git-patchwork-notify@kernel.org>
-Date: Wed, 04 Nov 2026 04:40:09 +0000
-References: <20261102-bpf-blind-nops-fixes-v1-0-844300e42cdb@gmail.com>
-In-Reply-To: <20261102-bpf-blind-nops-fixes-v1-0-844300e42cdb@gmail.com>
-To: Qiliang Yuan <odys.yuan@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, luis.gerhorst@fau.de,
- henriette.herzog@rub.de, a.s.protopopov@gmail.com, xukuohai@huawei.com,
- hengqi.chen@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- stable@vger.kernel.org
+Message-Id: <d94520950f855a1d5ac4b51975988b70185ba7da61836aa84b044b69e8104bbc@mail.kernel.org>
+In-Reply-To: <20261104043006.1199857-2-irogers@google.com>
+References: <20261104043006.1199857-2-irogers@google.com>
+Subject: Re: [PATCH v3 1/4] tools build: Add explicitly sequenced -lzstd to libbfd feature fallback
+From: bot+bpf-ci@kernel.org
+To: irogers@google.com,peterz@infradead.org,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,jolsa@kernel.org,irogers@google.com,adrian.hunter@intel.com,qmo@kernel.org,jpoimboe@kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,james.clark@linaro.org,leo.yan@arm.com,linux-perf-users@vger.kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed,  4 Nov 2026 05:03:56 +0000 (UTC)
 
-Hello:
+--===============0821062343041324575==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+> tools build: Add explicitly sequenced -lzstd to libbfd feature fallback
 
-On Mon, 02 Nov 2026 07:37:00 -0500 you wrote:
-> Alexei listed three bugs that were in the tree before the patch list
-> series [1]. Each patch fixes one, the last two add tests:
-> 
->   bug                                                  fix   test
->   line info stays blinded when the JIT falls back      1     -
->   removing a nospec jump as a nop drops its barrier    2     4
->   log_true_size misses an error from blinding          3     5
-> 
-> [...]
+TL;DR: Possible build break at this commit: the libbfd -lzstd fallback is
+removed but no consumer uses the new feature test yet, so perf may fail to
+link and bpftool may lose JIT disassembly.
 
-Here is the summary with links:
-  - [bpf-next,1/5] bpf: Put the line info back when the JIT falls back after blinding
-    https://git.kernel.org/bpf/bpf-next/c/82e89a32c974
-  - [bpf-next,2/5] bpf: Keep the barrier of a nospec insn when removing nops
-    https://git.kernel.org/bpf/bpf-next/c/ea2ae2cdadee
-  - [bpf-next,3/5] bpf: Finalize the verifier log after the runtime is selected
-    https://git.kernel.org/bpf/bpf-next/c/4dc6335da407
-  - [bpf-next,4/5] selftests/bpf: Cover a nospec jump that becomes a nop
-    https://git.kernel.org/bpf/bpf-next/c/08843010ceae
-  - [bpf-next,5/5] selftests/bpf: Test log_true_size with an error from blinding
-    https://git.kernel.org/bpf/bpf-next/c/970c0d366166
+> diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+> --- a/tools/build/feature/Makefile
+> +++ b/tools/build/feature/Makefile
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[ ... ]
+
+> @@ -249,18 +250,21 @@ $(OUTPUT)test-python-module.bin:
+>  	$(BUILD) $(FLAGS_PYTHON_EMBED)
+>  
+>  $(OUTPUT)test-libbfd.bin:
+> -	$(BUILD_BFD) || $(BUILD_BFD) -lzstd
+> +	$(BUILD_BFD)
+>  
+>  $(OUTPUT)test-libbfd-threadsafe.bin:
+> -	$(BUILD_BFD) || $(BUILD_BFD) -lzstd || $(BUILD_BFD) -liberty || $(BUILD_BFD) -liberty -lz
+> +	$(BUILD_BFD) || $(BUILD_BFD) -liberty || $(BUILD_BFD) -liberty -lz || \
+> +	$(BUILD_BFD) -liberty -lz -lzstd
+
+Can this leave perf and bpftool unable to link libbfd at this commit?
+
+Nothing here reads the new libbfd-liberty-z-zstd result.  Neither
+tools/perf/Makefile.config nor tools/bpf/bpftool/Makefile calls
+feature_check for it or has a branch that uses it.
+
+On a system where "-lbfd -ldl" fails but "-lbfd -ldl -lzstd" links, the
+parent commit gave feature-libbfd=1 through the removed fallback.  Here
+feature-libbfd, feature-libbfd-liberty and feature-libbfd-liberty-z are
+all 0, while feature-libbfd-threadsafe is 1 through the new
+"-liberty -lz -lzstd" fallback.
+
+With BUILD_NONDISTRO=1, perf's Makefile.config then passes the threadsafe
+check but takes none of the EXTLIBS branches:
+
+  ifeq ($(feature-libbfd), 1)
+    EXTLIBS += -lbfd -lopcodes
+  else ifeq ($(feature-libbfd-liberty), 1)
+    EXTLIBS += -lbfd -lopcodes -liberty
+  else ifeq ($(feature-libbfd-liberty-z), 1)
+    EXTLIBS += -lbfd -lopcodes -liberty -lz
+  endif
+
+  CFLAGS += -DHAVE_LIBBFD_SUPPORT
+
+util/libbfd.o is still built, so the perf link can fail with undefined
+references to bfd_openr(), bfd_check_format() and disassembler().  bpftool
+goes down the same chain, silently drops -lbfd and -DHAVE_LIBBFD_SUPPORT,
+and loses JIT disassembly.
+
+The consumers are added later in the series:
+
+  6eb66acc776f ("perf build: Add explicitly sequenced -lzstd to libbfd
+  feature fallback")
+  155513d3a59d ("bpftool: Add explicitly sequenced -lzstd to libbfd
+  feature fallback")
+
+Would it be better to keep the old -lzstd fallback until those consumers
+land, or to reorder or squash so that each commit remains buildable?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41774922004
+--===============0821062343041324575==--
