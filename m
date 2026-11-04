@@ -1,49 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=63.250.43.106
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793818232;
-	b=ZEkDIJQEPajp+vJE2Ru4WRTchwRpIj73eJCxOlDYEv59Avp4KeYBg1tAR3Rj/ynsEXSU
-	 mNByzLDiIhBRE+Z6/5g202NM54IzLvbqtizul7VOmFtI7b7odFM6Sabm/jZYS+xovOLmh
-	 FwhZ3715BQQkAH/4oU3cGR1BSqw+cgAbMbg9KBPuuJ0nu5T78L5umMzI9O+inQ8I3/YAh
-	 cOhInRzFoRT+q64RM6GHhJwkAbQ7cVLAShDPudPAMSUoPppkhabTooWQrBskGANQ4pjjT
-	 lHE/KDjXyRL9xk0rVAFeRyymwTlG2OyEH5KHa/ThOlf6NLD/fOOOtkp+CzMk5stedpQ==
+	t=1793818500;
+	b=dTJLLOQNwvnrKwcFv77NwGwnbWhUGzkT5ihLxQVZsAdh9JwEwsEFbfV4FePxYU9y1T1F
+	 ZSK+0HZ9eGxjs09SjLKnfsf39fhhkobKA0Mj1Hksh4A/+Uj7xPfr1MIkgf0+rCqidP8Mm
+	 Y7heja5RDQ2IK8WJ+Z9v3K61zJKwgPMIIlLf2nL3PWH8LU/+NrTjMvJI/PfGtVX9ouIdz
+	 5/Of168UnAUDub4dHbkOZzXnRcndnjovEvc5XqqFG49gVYj1Z7/WwhM3QlDCYOI7ZQM7D
+	 iREbamc5o5aYBhrxKJjzSkE0paxH2Urtq0ijpgp5P0KWgdOKB/gCaBIO0FP7CghaWdg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793818232;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=EwghIjCIbGs1NDrmAzR7dg2Zewz0hQEfosg9p/Jb5jA=;
-	b=xHKoo1dYxWTxUJdXF+jnoneZHCs9Yk70LFL/ijs8ujn4szwmcRX8YM4VwX52SH/EGdzr
-	 PCwCTFdE5lr+z1OQy7s5SonFKyXBjTWPPbCjHzlq5LwYCSFkYHg82u8gUP4oNIqpvq9rv
-	 eUlg71traBtpNwpsnI7ZUV+7fe4/B3m21Y4XGCcDMh73n4go9PwDN1Cnzlxi/f+wcWRxk
-	 SvWziQ0BCHCWcPROSUrlNfhILUCeGNOwBEedtVrXRWRTF255tNtWNHm4xEWt9MvKwLlES
-	 o7gc6/irWeWu2dp8L2nZpg38fGDNxB1Y9bXnuG2A2iLKZ8NvKZetoV4zU/1fTdcvD/A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793818500;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Envelope-From;
+	bh=DhE9pS/R2JT9liAZOqJWys/743Fnb42sj7FCB68RT3A=;
+	b=wA0ZjeDdcv3wlBDnI8czZBctLm1DL84XcCEC8ivpS2q90PtfRs6WPzvYDDqQ48wB6QI6
+	 jJUstH3HVpTov4CqgoS4zVcNYz0fRkWM8RH2zXtdEGnp0s21ANeUO5KkUG1hLijyO8lIA
+	 goGJduDFiHTnNp50A7YdUZD6jWOz1dMIdGUwlI2QJIRNMSbGFgz+phoq6sde1xJT1zCto
+	 QW9XiCz59gJGp2vzZRaboL/cERWObvfq1IS6vkQ7OkoeMw+a9CRGRW0WluXeoKiF6xBFL
+	 ZfseuB+KqEPUMwbJXx0DrSGyrWmML4W4l7uP5AuTB6yAZ+rtLMvXquLpP/CMpkGUosg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WtbUHL8H;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=tychen.cc;
+	spf=pass smtp.mailfrom=tychen.cc;
+	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=GoUJQhyn;
+	arc=none smtp.remote-ip=63.250.43.106
+Received: from out-2uec-a106.jellyfish.systems (out-2uec-a106.jellyfish.systems [63.250.43.106])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137DF606A329;
-	Wed,  4 Nov 2026 18:50:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF415606A31B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 18:54:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EF415606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WtbUHL8H
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D751F000C1;
-	Wed,  4 Nov 2026 18:50:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793818231;
-	bh=EwghIjCIbGs1NDrmAzR7dg2Zewz0hQEfosg9p/Jb5jA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=WtbUHL8HAxJZdXcvlrmHLqrRFBKaGhlzDRyNw0FbP9teGOyukxU/0FyvTa7t4JF8x
-	 Rohly1WUN3ysOy99n6OxvN9mWkgpbslRt0Yougir3WysLxZE3wYm66cfEiU2dPjT8/
-	 Lzrh8lT0qAwxssUlRDDpIW6fSMHpd/1ZrOrMAtDVNsP3RTI6GzCbF73Lw7P6aSoRg0
-	 uJ0v3OPbkKj+ZKzW5AxDpvOACfg1fgMk+Sv7m1q3y7RUB20aDkeO9FQnJsd0MxDt1U
-	 FSkzbRKmQIpcH80DtLr3cRdRGJ/uY3GFaHOcL408IjQuv+Pjsajh3eI2ErzGkg579M
-	 oKd1lf8SSW5kw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA1E2380045E;
-	Wed,  4 Nov 2026 18:50:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=GoUJQhyn
+Received: from fedora (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKZPN5Rpsz8sWS;
+	Wed, 04 Nov 2026 18:54:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1793818491;
+	bh=DhE9pS/R2JT9liAZOqJWys/743Fnb42sj7FCB68RT3A=;
+	h=From:To:Cc:Subject:Date:From;
+	b=GoUJQhynFrGakBujM2PEYzpIKqCp2r2OqsIFJPC+OJDNt7mfiuVuf05oTW8276R7T
+	 KRZxPteUHCp6SXkKcLzAEk3iqLQpnPEqPULWmHoe54IRwGbMzi3vNBAeYB/OifATBK
+	 ZprmsQhVmFrKsc47HeAlKkrG5pZ8mgfuxTARn8+qfPELCB5oUX7sVhr675UE+fu97Z
+	 0yhBvToeDy8JRm2EzUtV3QJNtAVE+l/UrLjvXkpYGqLoIYzTroE4dOztU11pSfXjrV
+	 O7/oH3L3wxlpAX2Lmbrm5mjyqDj0IKzpw5dZDnWoN81+f/w3e1UbokYNy4TvJR304d
+	 OaXqfIAAhWEzw==
+From: Tianyi Chen <hi@tychen.cc>
+To: bpf@vger.kernel.org
+Cc: Tianyi Chen <hi@tychen.cc>,
+	qmo@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	daniel@iogearbox.net,
+	ast@kernel.org,
+	alexei.starovoitov@gmail.com,
+	skokovmaksimevg@gmail.com
+Subject: [PATCH bpf-next v11 0/3] bpftool: Add recursive map dumping
+Date: Thu,  5 Nov 2026 03:54:36 +0900
+Message-ID: <cover.1793818386.git.hi@tychen.cc>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,80 +76,40 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 00/15] bpf, sockmap: Fixes for verdicts, redirects,
- corks and recvmsg()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179381823055.3044562.10845634608221940300.git-patchwork-notify@kernel.org>
-Date: Wed, 04 Nov 2026 18:50:30 +0000
-References: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261102072112.4160195-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, kuniyu@google.com, willemb@google.com, matttbe@kernel.org,
- mptcp@lists.linux.dev, mason@kernel.org, josef@toxicpanda.com
+X-Envelope-From: hi@tychen.cc
 
-Hello:
+Dump each inner map in the entry that references it. Open it by ID, dump
+it and close it immediately; a missing inner map is an error only in
+that entry, and shared inner maps are printed in every referring entry.
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Changes in v11:
+- Drop the queue, deduplication and second pass, as Alexei suggested.
+- Drop the ineffective map-info test. Keep the map-info clearing fix
+  for bpftool running on kernels without the kernel-side fix.
+- Rewrite the recursive tests and drop Quentin's Acked-by on the
+  rewritten patch.
 
-On Mon,  2 Nov 2026 07:20:57 +0000 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> These patches fix bugs in sockmap:
-> 
->   patches  area
->   -------  ----------------------------------------------------------------
->   01       recvmsg() after a fault
->   02-04    the verdict of an sk_msg prog and the return value of sendmsg()
->   05       the backlog of a stopped psock
->   06       TCP listeners
->   07-08    the target of an egress redirect
->   09       the TCP state in recvmsg()
->   10-14    corks and the redirect target
->   15       bpf_msg_push_data() and bpf_msg_pop_data()
-> 
-> [...]
+Tested in an x86-64 VM, including shared and missing inner maps, BTF,
+multiple roots, and the combination with the batch series.
 
-Here is the summary with links:
-  - [bpf,v2,01/15] bpf, sockmap: Write sg.start when recvmsg() faults
-    https://git.kernel.org/bpf/bpf/c/b889ea1f6dbe
-  - [bpf,v2,02/15] bpf, sockmap: Don't let an SK_DROP verdict stick
-    https://git.kernel.org/bpf/bpf/c/436c4cfa071e
-  - [bpf,v2,03/15] bpf, sockmap: Don't let an SK_PASS verdict cover the next message
-    https://git.kernel.org/bpf/bpf/c/f4c044966d6c
-  - [bpf,v2,04/15] bpf, sockmap: Subtract all dropped bytes from the return value
-    https://git.kernel.org/bpf/bpf/c/fa84be67b5bc
-  - [bpf,v2,05/15] bpf, sockmap: Clear the resume state of a stopped psock
-    https://git.kernel.org/bpf/bpf/c/51e0f3d60be5
-  - [bpf,v2,06/15] bpf, sockmap: Give no progs to a TCP listener
-    https://git.kernel.org/bpf/bpf/c/7c036a39ba29
-  - [bpf,v2,07/15] bpf, sockmap: Check the target of an egress redirect before each send
-    https://git.kernel.org/bpf/bpf/c/4aeaad1c536e
-  - [bpf,v2,08/15] net: Leave sk_stream_wait_memory() once the socket is dead
-    https://git.kernel.org/bpf/bpf/c/430775a30b1f
-  - [bpf,v2,09/15] bpf, sockmap: Check the TCP state in recvmsg()
-    https://git.kernel.org/bpf/bpf/c/9f5763e6287a
-  - [bpf,v2,10/15] bpf, sockmap: Reset the copy position when corking
-    https://git.kernel.org/bpf/bpf/c/12c45473dfe7
-  - [bpf,v2,11/15] bpf, sockmap: Don't copy 0 bytes into a full cork
-    https://git.kernel.org/bpf/bpf/c/a912358996f8
-  - [bpf,v2,12/15] bpf, sockmap: Clear the redirect target before the sk_msg prog runs
-    https://git.kernel.org/bpf/bpf/c/e4c2fe0b9a62
-  - [bpf,v2,13/15] bpf, sockmap: Check that the redirected message is the cork
-    https://git.kernel.org/bpf/bpf/c/815cfc482e63
-  - [bpf,v2,14/15] bpf, sockmap: Keep the rest of the cork after a redirect
-    https://git.kernel.org/bpf/bpf/c/13c41b87e4a7
-  - [bpf,v2,15/15] bpf, sockmap: Clear the end mark of elements added by push and pop
-    https://git.kernel.org/bpf/bpf/c/0048086bd361
+v10: https://lore.kernel.org/r/cover.1793732336.git.hi@tychen.cc
 
-You are awesome, thank you!
+Tianyi Chen (3):
+  bpftool: Reset map info before each query in show and dump loops
+  bpftool: Add recursive map dumping
+  selftests/bpf: Cover recursive bpftool map dumps
+
+ .../bpf/bpftool/Documentation/bpftool-map.rst |   9 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |   3 +
+ tools/bpf/bpftool/map.c                       |  67 +++-
+ .../prog_tests/bpftool_map_dump_recursive.c   | 375 ++++++++++++++++++
+ .../bpf/progs/bpftool_map_dump_recursive.c    |  17 +
+ 5 files changed, 465 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_dump_recursive.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpftool_map_dump_recursive.c
+
+
+base-commit: 8fb43ffc3327d12d57d3fbe6f4820b5a522de0d1
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.56.0
 
