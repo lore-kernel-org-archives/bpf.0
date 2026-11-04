@@ -1,77 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.135
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793763543;
-	b=BTbw3z0ud0H20h0JrRRTAEMndsI6TVcfRd+bmS5irZONCtLloQJ+7b0tg2FeR26GF1wB
-	 g6j5nJJ9rpKDI4Rh3qQ+dK1C93IupqRxmZnOWyYzRYlCUFJU/yFrwZ1x1tSY4iO9g2Gqs
-	 5tBYk63sZ3y3ZyASQc0ZZz/lb7o6OdOKcJYOzzxoqkzzFWghsxK6PrY0+UjmNh4pZKktO
-	 U9yPJjEG1XolPiqxLIx5pECjbYgzPgtADcPKmGI9R4fULx/VBilx+QZhmEnc5BHXh7FiS
-	 oO1zltZ9zuMSUM/qlHRLkTIMkUkPHg+2deVCe6wUOtMNU+aVE9stP3u68IDaaDy35AQ==
+	t=1793764104;
+	b=BehaYGCZiUdv8xdliuQ2bRHwcPEl7I5o2SzwtMmVaBbY6Nd5kY9SYIjsfbQQa2LZrIEX
+	 Hx3Q9AyJh7mDoGQAVn6uXgJZRClWQ0ec6WuuB7hJdMdPnP5pffnhxDYSxeBLRYEjxc1hl
+	 ky99oqHYx9Y2SN41N6XM9Femf5CcPMux0vvCy2XGnkRzCI1Kk+f5hN2eTa+RGShuguNuF
+	 d5n7CvTn9aMiPBTONXrlZ9y5tjk53rjZiXMx6Xc2Tr9rHygRTvZbfZLe0X0E8+jg/JHFA
+	 fC5iGg3OkWY9DgUyr8hOVz7stoQO6LSqDMl0MqB/S717iRayUV2LlUdKZciWMQi0ohA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793763543;
-	h=Received:DKIM-Signature:To:Cc:Subject:From:In-Reply-To:Message-ID:
-	 References:Date:MIME-Version:Content-Type;
-	bh=9MSatX/G/vVIWGJoAI0tPC6fx007E3Z2lu/4uprBFlM=;
-	b=hUEeBwLIQRbHJveR7yYsr0C095wlfXI6PgbmrOtPVfBLfw0KBJNpsjkWmpZudZ1Rc3gm
-	 6muoV6O1pSgSjl9dBoNFUQ6TuV5l9VNOs+DROieU+FswsxHTK0+lYCL/kXVLErcjIxhac
-	 bTISKbjtxgpMojwys7IRUwLsZBycEZvc9Fjc2kils6qRephPFHV6k9wUiZMXvyQQsuM7H
-	 OT5GS6ofnIiM2VChcxIVoU5EmyRa4QJAnr2IRNgoN3kAqWJE5IxdIUJcs+G/30qz8j+my
-	 0fZxSg5u9ft+3MRBR2jj4y5uZN1Zmbo7Bf6i7zQIc0YGengA/RG0Sc59nI8u/LTEHTg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793764104;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=zgT7bUtyHPWasmCZmDkpecrIY3qUpLy/3lFoHoAwrQg=;
+	b=twVTGj6qe7VmiWtHv4cpA9o6duWM5JvosZ5Z8WveKIHIoWTFVIeawNYfISktf3PS1XI3
+	 tE1rEnZ1SKLVivF7qdABrA3eC4ivfrdD4V7k7OlV+fJPCu1RdB94ChooQC2R0BO2komw1
+	 BwWEf8sJiF8Kyt0dqL5FGBNGePOEVfVod1n1J0x2t47h7KJl1tRmRNbWoo/FZSBi+h9MV
+	 GGq/tirrX30ajewu1Ap6Wcnc/JR6CSVBuUyTvbTm5qjqCNq5YUJ9aK3PJ+beONtDKF59w
+	 A54yMmHVdLNaRGr6JroeSICgco05GA1ovu2jnoIPXWzVkC0bahgqiRhZaPS0FFboG3g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="oU8AH/tk";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VgUuajXE;
+	arc=none smtp.remote-ip=74.125.227.135
+Received: from mail-pj2-f7.google.com (mail-pj2-f7.google.com [74.125.227.135])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D3D606A32C;
-	Wed,  4 Nov 2026 03:39:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A70606A328
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 03:48:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2A70606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oU8AH/tk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FA41F00919;
-	Wed,  4 Nov 2026 03:39:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793763543;
-	bh=9MSatX/G/vVIWGJoAI0tPC6fx007E3Z2lu/4uprBFlM=;
-	h=To:Cc:Subject:From:In-Reply-To:References:Date;
-	b=oU8AH/tkWpzRwTF1kdq202zjvQncB0rfXyqulT4eyrNzEnIF4j48NgAbG2Caj1a7B
-	 bMwPFiLxGpjgTtxKflKmS29xjpsYy+uoF/n935fbiBKeNusPTC1ePuFEOlPnPPcNEk
-	 xFtpzO5elTJwY12Cy11QLYphesyVhHicZbo4/L/e91qX3dGksuyh8kvN9FyyrHgXAL
-	 A2ZHgW8K1y0maVcVzKrTUm2MaPtPdCroAFRqGZ9P0+cop628w2faHu/6+eEMRMpwPc
-	 3lqsGfgHjJTW8+Vc/3zNDrpsahxe/9gmvL+iS2SrdtAafA7cJAAJim7GFFQPdMePbb
-	 CybKyOCyWeu4A==
-To: James Houghton <jthoughton@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,  Alexander Viro
- <viro@zeniv.linux.org.uk>,  Thomas Gleixner <tglx@kernel.org>,  Peter
- Zijlstra <peterz@infradead.org>,  Kees Cook <kees@kernel.org>,  Arnd
- Bergmann <arnd@arndb.de>,  David Hildenbrand <david@kernel.org>,  Lorenzo
- Stoakes <ljs@kernel.org>,  "Liam R. Howlett" <liam@infradead.org>,
-  Vlastimil Babka <vbabka@kernel.org>,  Mike Rapoport <rppt@kernel.org>,
-  Suren Baghdasaryan <surenb@google.com>,  Michal Hocko <mhocko@suse.com>,
-  Sean Christopherson <seanjc@google.com>,  Paolo Bonzini
- <pbonzini@redhat.com>,  Jim Mattson <jmattson@google.com>,  Jens Axboe
- <axboe@kernel.dk>,  Pavel Begunkov <asml.silence@gmail.com>,  "James E.J.
- Bottomley" <James.Bottomley@HansenPartnership.com>,  "Martin K. Petersen"
- <mkp@kernel.org>,  David Sterba <dsterba@suse.com>,  Chris Mason
- <mason@kernel.org>,  Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  John Fastabend <john.fastabend@gmail.com>,  Josh
- Poimboeuf <jpoimboe@kernel.org>,  Steven Rostedt <rostedt@goodmis.org>,
-  Masami Hiramatsu <mhiramat@kernel.org>,  Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>,  Ingo Molnar <mingo@redhat.com>,
-  Arnaldo Carvalho de Melo <acme@kernel.org>,  Namhyung Kim
- <namhyung@kernel.org>,  linux-mm@kvack.org,
-  linux-fsdevel@vger.kernel.org,  kvm@vger.kernel.org,
-  io-uring@vger.kernel.org,  linux-scsi@vger.kernel.org,
-  linux-btrfs@vger.kernel.org,  bpf@vger.kernel.org,
-  linux-trace-kernel@vger.kernel.org,  linux-perf-users@vger.kernel.org,
-  linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 01/10] scsi: bsg: Don't copy sense data to user
- memory when canceled
-From: "Martin K. Petersen" <mkp@kernel.org>
-In-Reply-To: <20261026215226.3713941-2-jthoughton@google.com>
-Message-ID: <yq1fqxh1d15.fsf@mail.kernel.org>
-References: <20261026215226.3713941-1-jthoughton@google.com>
-	<20261026215226.3713941-2-jthoughton@google.com>
-Date: Tue, 03 Nov 2026 22:39:01 -0500
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VgUuajXE
+Received: by mail-pj2-f7.google.com with SMTP id 98e67ed59e1d1-3ac63aee1ecso132779a91.0
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 19:48:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793764103; x=1794368903; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=zgT7bUtyHPWasmCZmDkpecrIY3qUpLy/3lFoHoAwrQg=;
+        b=VgUuajXE3fSQNacAxk3tEj3LnGJEDe8eO4Xmi74v6UY6fHz6tM3wa7S4tUAUWkHaBM
+         59ho7QGCRoW/e1+9Kfw/D3fuzzPaViTo9tlaMuoP7axIzYO2nEO17qpALd9cEOTLymK6
+         UYFvxKM6X9SUGVxJowCEQrtOBdJW/HWvUoAZoEvn5ATujp/55l/zYq78izLTyuuLUSpe
+         wSrm7vgT2wQcq1AB79XHUT0+BU5jNvnwTpab77YKTc5ImYJFdywHCga0pB49jTwNEAOn
+         YENRyBabanJlUxoJqV4t6/vIXVCXdMjYrbJ26/qhFsUqDm1o4E5sTJf1sc34JPYx5bsJ
+         /9Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793764103; x=1794368903;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=zgT7bUtyHPWasmCZmDkpecrIY3qUpLy/3lFoHoAwrQg=;
+        b=au15Ezy8HA+deQL/gkBJ+w5HZ442utlvmndSKhw9iTMN2G0IkIL9JdL7UbMgV3Avgx
+         DsawQ1lCEIbsNiL36yYG8dc58Fs6bXhKpAf8mPo9FV3vmYVC8drGrm0+Tn0ZNPToaSeV
+         urmK+6K1XLecBxP/O8Hrh1WTJXFiBA1YM7lIm7OgIMKTg6XOzv8CQuQaJTzTwwIs5oYF
+         isKOSIP3mvmjpdOr60jVjEZhuLEiLn2HJwpC5lglwxfDnk1EWanSLngGesl9gbtFN3VB
+         dS/OoCy8aDnrQcWUofX/kgg7aHvGaYuE1reY8jjAxYOnxyHewYtRxrM4DM9nZL8dLizD
+         Xz/w==
+X-Forwarded-Encrypted: i=1; AKwUvBzXNbBgKeoSsU/FWwt8+R+nYpHWXglZyVlS9gSfoWjzVT3eA2L7eNxfUH5LvEmOVcxX+CU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+dknCmi6zIgihMK2/M3TdFHB85UlXTAGqxyEyBXiiPBpbbYCBZ
+	eD5UhEOIN9oe3MVJMaEm0D5CRy1kbbHt58vKSnLeBLPD2BNmOVElLOaK
+X-Gm-Gg: AYBFou3Io5r9f9utFCoowzLHvx18UBclWdZ7s3M6IHRH8OUZon9Gn54TDzDFpmxBy1A
+	mz9QJPb5onQ3GUhLLsQKOrEagYFNGh5aOADRqZVHp6wM6oBaDZX7g5gY4gxGnJUM/zMJ168p57T
+	CcPeWs5dEptCVDhJL0+ogrmOUmIFGg6zvGvqUMMQ0nUJiAjqp8heSJhHeyjKd8Fh2sowMSpA1YE
+	7HnqmcS24wxoLTrTGsQ4zCpDIRsnWvhd4XPsblD12k0s300OupKnGrBACmeQ+PE1/7lxschpOId
+	u9B8ity8BVTnNy1NesX/pK4Tkiq0ekLdm68H/aa+Vc9ve3JmzYkBmy9+CW3HDcKdizHw7RTXsJa
+	lsgYVQbL1mqmTATqgOVmQ1vX0H+8V3+ZMOZ9jdERCYicVNriXwvDKBCTrdnLOxaVK0xZUEArTGk
+	jMSr1pzMLs5dqp8S91Hn7OqJLya5Gc+1dzqB0SwcWaTkX1/jfDcnDWWDy/+vbOHLnwfYqpkKZCa
+	IdglqnVOj0apvU/h3IsZDZZJA1A9mCb9JRX0tf9NEDzN7zGLcnfFL8kOnCJs6d0hsGH96QL3bGb
+	/RQFyn/nN+QVadtYvBUFQ8X/IANuadZ9GH5FlwODF/O1t7n+EGelDpBqthG2xMtimF8E
+X-Received: by 2002:a17:90a:ec90:b0:3ac:9c37:942e with SMTP id 98e67ed59e1d1-3ae89831a14mr12516860a91.49.1793764103123;
+        Tue, 03 Nov 2026 19:48:23 -0800 (PST)
+Received: from localhost.localdomain ([240e:46e:1a00:3fd3:e1be:ed6b:40ce:8dab])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0944a0ff7sm1705472a91.10.2026.11.03.19.48.17
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 03 Nov 2026 19:48:22 -0800 (PST)
+From: Rongzheng Wang <testwrzwrz@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	stable@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Rongzheng Wang <testwrzwrz@gmail.com>
+Subject: [PATCH net v5 0/2] xsk: fix multi-buffer TX software checksum
+Date: Wed,  4 Nov 2026 11:48:07 +0800
+Message-Id: <20261104034809.24545-1-testwrzwrz@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -81,19 +101,43 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
+This is v5 of the AF_XDP multi-buffer TX software checksum fix.
 
-James,
+I found this while testing multi-buffer TX with XDP_UMEM_TX_SW_CSUM: a
+two-descriptor packet had a bad wire checksum, while a single descriptor
+was correct. There was no production or syzbot report.
 
-> scsi_bsg_uring_task_cb() copies the sense data to the submitter's
-> response_addr with copy_to_user(). It runs as io_uring task work, but
-> io_uring may also run it with tw.cancel set from other contexts when the
-> submitting task can't run it: from a kworker when the submitting task
-> has exited (io_tctx_fallback_work()), or from io_cancel_local_task_work()
-> when a DEFER_TASKRUN ring is torn down.
+Patch 1 moves the software checksum calculation from xsk_skb_metadata() to
+the point where the last descriptor has been added to the skb.  The old
+code calculated the checksum after the first descriptor, so multi-buffer
+packets only included the first fragment in the checksum.
 
-Applied to 7.4/scsi-fixes, thanks!
+Patch 2 sends the packet using every descriptor count from 1 through
+MAX_SKB_FRAGS + 1, and runs the existing metadata and checksum verification
+for each case.  The last case is the copy-mode frame limit documented in
+af_xdp.rst.
+
+The updated selftest passes in a local QEMU run.
+
+v5:
+- remove the unnecessary else branch after the multi-buffer check
+- carry all review tags received on v3 and v4
+
+v4: https://lore.kernel.org/all/20261030023248.78802-1-testwrzwrz@gmail.com/
+v3: https://lore.kernel.org/all/20261028025026.11401-1-testwrzwrz@gmail.com/
+v2: https://lore.kernel.org/all/20261024141157.59301-1-testwrzwrz@gmail.com/
+v1: https://lore.kernel.org/all/20261024091256.17918-1-testwrzwrz@gmail.com/
+
+Rongzheng Wang (2):
+  xsk: defer software checksum until the skb is complete
+  selftests/bpf: cover AF_XDP multi-buffer TX software checksum
+
+ net/xdp/xsk.c                                 |  23 ++-
+ .../selftests/bpf/prog_tests/xdp_metadata.c   | 147 +++++++++++-------
+ 2 files changed, 107 insertions(+), 63 deletions(-)
 
 -- 
-Martin K. Petersen
+2.39.5 (Apple Git-154)
+
