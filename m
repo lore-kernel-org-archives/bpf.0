@@ -1,98 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793759564;
-	b=hz3VgZaRw2Eyc0lG4SCDCZ4IGFZFFaILmcdNv4lfeMs6K/GXTVMgpsmVc9LL2TK9s38v
-	 e510SvpnDvko4xNAoFOakVSmtc8bj53a8Wx2ALwgwUGO/ffjcbf8hvTl1gHcH2SsfG10Q
-	 xspoqkBEMF59g7FBqpk7sfQgUyB+ys8a9qovcEoZmEif2bPjDckbAcHF7Vm6nzwalhKq7
-	 imtTH0KTlFBiKfoQfV+bT5hmJfQj9gbLc2K9f816soeVeUM5bYnhj6NMPEHoXOcSR0SRZ
-	 NeE3abALZs+CghtsIpFm5h8OvslhHOa/DqM3OXrljd8JTncFgAI07YH94X2+W7s+8Tg==
+	t=1793759567;
+	b=Jv1/GMMJKldx2OxZIbCf5Fj1YZ//p8GLOVcLbHyff6O4b2VDyVvCPWbFo/XMFTrqWE4r
+	 NNTPptVXAAEwo3eQlmmSrzivhkmEHuABRC/zVaeDzAsCgJjf8EUsM8wij45aEz1edNabO
+	 zpahq8vpG727Jc1LU5kf0rIRVBTdns7zo1vLDKUEOf0IvXT4Td43zXmdNqTMhpsndBYxQ
+	 KCMHOhOU5CQ0SzowpBDEPeXdDgVjfQrEHxNoIIrHBsWH4RD+JL2FHaEfgW+7vet7S+3Fg
+	 p+V13MuR9ePc21yRM9O15Wsm7sVRhB2PIJqirPRymk+kcEgQrYDLLmewPEMyaJpNeIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793759564;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=EpeEKBT2i8Xv42sIU/6Qhq6U7Mk/eS3sWEL7Re+cAEU=;
-	b=ddD8o8uVPLBBPrPoAtjoJtnOxQ85EcYCncZduxZAh6z+M9PDLxw0+TsoNYBJc7yPHtHY
-	 e8dvGFEAIJLHgwmueYXdVBaxpF0CtlcTZeZy+cG4i5fTPf34mqiuL57eTyoG9I3ebW3o4
-	 TpWp28hkv4FvYMsZSNC3O40Q7ulD3jnSGWJ+2DXoGHA2aAwd4uWjQ1uDPTdiVOTzXNFj4
-	 VkCTmfr8uQ4JG8WBUz/QaWKJHaDp9iKObO1CEwkY2M1osSdLTMhR4ZyYHUgqrUVU2HsVk
-	 4qdS+uQOkEDJJoBXio8h1jL3VglDQoJ3OXk6Dw2mbLKjAtCn+uBE8HoFBTCdhTtnlPA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793759567;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Content-Type:Content-Transfer-Encoding:
+	 Mime-Version:Subject:From:In-Reply-To:Date:Cc:Message-Id:References:
+	 To:X-Mailer;
+	bh=JdxpFZYkqe2r6MAw1mDQYOUbbanQPJ2WbaXpicFh2co=;
+	b=xNe4BMsdk2K9fxk+Nebn+2JVnk6ymlhDy1DTNDLj5VdkEJ3DOTI58SOxdoowiwcjhfJs
+	 iEGWW6xc8ngVWYaYhZjIlxwQ6O1SxD7BbDAOS6LiwnTL1qxirlyNRC2aVB0UWihPJyh4L
+	 rDktOONIlXG9M4WtnUT8DcPwTPOYy4B0NnCQ1DEbfoMgMgdOJuXK+DE4rFcSC+s4lmtE2
+	 YemaKMGhXqgkX9Uw+o+DTa+qE3B7OVZBfNfWdhezT7GSI6GwXQbkP4kEcZfcQTn/PJy2A
+	 +kpEKkjBb7nAM8bmgGvcULTkkG922Gbu61jbV0dAFbbte97VasGIqOA610oyF0m28rg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JBKwVpQw;
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	arc=none smtp.remote-ip=95.215.58.179
+Received: from mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2A6606A326
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 02:32:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F2A6606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JBKwVpQw
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e946155442so1651995ad.3
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 18:32:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793759563; x=1794364363; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=EpeEKBT2i8Xv42sIU/6Qhq6U7Mk/eS3sWEL7Re+cAEU=;
-        b=JBKwVpQw39lAIPOTcLNMcTByMDKI/qifmz2Z6OIbdfHF0xLdHPKpsbAQkcWXHh6CXk
-         2yUfDAgmTJqfuVhUmqNhhRhbKXe0aTc8h5alZPLu+ZpCL7Z5Wh6FrIW3f+HaMOrUIKAj
-         xS9CKclqgSdAcybz41sxDnecuJXvnos1EghEF2H/DSjfBKLmqy/ODb5BpWJzn1m0poRS
-         Pp8L11SyXWGoMPf20XoP6OCOamyDP97ioRzlcFe0P4HRnAKENFZkZoxSdZ4sPsPZCOfN
-         3mAQrwdveLAuL562uRkV7eqIgnV6b+kGRl0pQeOujygIFqdrKzz1xZkhef4w/zedvdXL
-         bAOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793759563; x=1794364363;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EpeEKBT2i8Xv42sIU/6Qhq6U7Mk/eS3sWEL7Re+cAEU=;
-        b=MUxPrXuQlNh9N/noo6fm57VCO/iM43vHYfV7IvU6ath9mhd1q7iW1pt6HZ7N0Pmwgm
-         J0ZvK9D5axt3yj6M5Jsjri/Y2E8PEYhwfNsOMyJA9Jb7JtOovBmzDuyXKa2CIIQ3JbYa
-         Jkre0kL1C094ixPfno0Amy+bnsrgaWy0saqzA5yXkw+ZKRr35VMknJI/jDnyBJJHmNkX
-         aOuG/+2tDHvqAol7VpJPB7SFO/Qu4sS4Z1NK7hBc0oP7Cw5wyijJQ4qAjTwvMnbuYmYc
-         YAZr6ffrfs1h/KRABsnhHmlJkYwST9WH+GoUkiyZRiIjeFxoeRx0XqGnefMj3GGTtRvo
-         lM4Q==
-X-Forwarded-Encrypted: i=1; AKwUvByoRzSgh6sx9LfxqyMFwJNFAMpO3WjChkyspt6lQIA5YkgXASFxEPcUeYsiGh4kWwBbjeY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8z44O6UdI1qByr2/W0Zq+vdiQ+3wFqTyneY4biqpMFw3Qo5olc
-	mPbegSbK/svj6niOYHLgODlIxiH/YcdgfvQ5CMicl0ATR5KyMfHHIYT5
-X-Gm-Gg: AYBFou2xg9+VwJgbtI91QDGPkx5vrvtCTpimZmERsRCGsXG7OcBLL/4wFCrKP196dm+
-	8TzmKykf9tz0J+VcTZ0sN0Z/QGBJp6Hdal6LPoPQ3yGFFGpuIybcryjtLj4gbIY+QIsOf4BhXli
-	8CcPmJmUyHeW/dva+DuMy3neGnrM1fQflqndxP7FIXpsaJ4WuUv+NlGn/xFfsvCj6/OuAvRvjAf
-	vE24737ZtrLUwS1Kc9ucBZkroRINcNAZhXleJKpzSXALrhGhqQ6Rz5dmpRf4osGb4B2/nWhiYPi
-	Xvcl8fd+E33yxwkbCvJnsdxcBgtsSSg5Cr+Bkdu/g0zjXrmXcj2+Tg6i1OTrKhi0H69SW5BTrep
-	3dkyzGHjy+nMLj8wmc0bgSMWxdOHv9MNWLSbQ6SU+CA2VcEIeK7dE763bFURSs57jZvHI3zknBM
-	KyQ8B3uLr3NJMshHDAcU3gLcCSMbDOO52axIhvUWV3NIzqo37qOoT2+4sVOLSx2dV1sI53AljCq
-	VXFC8gGDr4bd8veaSIzuLTDypPXAfekXuJih4cqAM95z+1+iSyd4ME3r4LZCsx7aMGOGClz1mxT
-	FuZnvWKGJ5hxzu5bKqsk6LEQbSo1F5+8/1IyqVqzoWWa6Rgsj3V0R/Up90li5hmFu3NhQEVOj2Y
-	soCjEJCLiNW7yLdBJjcH0tKXl2IowgUWQ7mM=
-X-Received: by 2002:a17:90b:2891:b0:3ab:1e1c:837f with SMTP id 98e67ed59e1d1-3ae898484d4mr11834421a91.47.1793759562716;
-        Tue, 03 Nov 2026 18:32:42 -0800 (PST)
-Received: from localhost ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b09445f7b3sm1505304a91.5.2026.11.03.18.32.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2026 18:32:42 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 04 Nov 2026 02:32:41 +0000
-Message-Id: <DMM2P2LRLRBB.2AM6NI5CLIG96@gmail.com>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <martin.lau@kernel.org>, <yonghong.song@linux.dev>,
- <mason@kernel.org>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v3 03/14] bpf: Treat addr_space_cast of a
- pointer that is not in arena as a move
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
-In-Reply-To: <20624e1d325fbb5acc44943f55c08b622648583bce6559911be3cf47d2d882ec@mail.kernel.org>
-References: <20261104012401.1354861-4-alexei.starovoitov@gmail.com> <20624e1d325fbb5acc44943f55c08b622648583bce6559911be3cf47d2d882ec@mail.kernel.org>
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E75B606A32C
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 02:32:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4E75B606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=LPQ6Pxo3+i8TljaoQX55dwxGlecaYeyf7p99vtqk4ts=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793759564; v=1; x=1794364364;
+ b=wArlUlO5j2sUwSOwT1wwLYy7/GXuSsYRWzPDX0fX1By5eGH+NBJzIFyGKZMrovc++0y4SkH1
+ zwGMQUvyneUhjb3K56WvGqsJhzvoe0TOGZ1eNtaL2t7WJL9GozGrUpqMyz3p0I+aaEiXdUxDC4k
+ fCf3NgUezNRhIY+pYfMaA1h0=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta11.migadu.com with ESMTPS id 0cb60aae72736be7;
+	Wed, 04 Nov 2026 02:32:44 +0000
+X-Mizu-Trace-ID: 0cb60aae72736be7
+X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,25 +54,58 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH bpf-next v3 06/14] libbpf: Relocate pointers that are stored in arena
+From: Roman Gushchin <roman.gushchin@linux.dev>
+In-Reply-To: <DMM226XFK9P5.265MSTVAV5QPL@gmail.com>
+Date: Tue, 3 Nov 2026 18:32:31 -0800
+Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+Message-Id: <EB1C0109-74FC-4DFC-A25D-DB11BD62EC97@linux.dev>
+References: <DMM226XFK9P5.265MSTVAV5QPL@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+X-Mailer: iPad Mail (23G90)
 
-On Tue, Nov 03, 2026 at 06:12 PM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel.org> wrote:
-> The commit message says these members are rdonly_untrusted_mem and "the
-> cast is a move too", but it does not say that these registers hold as(1)
-> addresses rather than kernel addresses, or that programs which loaded and
-> worked before now either fail to load or silently read 0.
+> On Nov 3, 2026, at 6:02=E2=80=AFPM, Alexei Starovoitov <alexei.starovoitov=
+@gmail.com> wrote:
+>=20
+> =EF=BB=BFOn Tue, Nov 03, 2026 at 05:44 PM sashiko-bot@kernel.org <sashiko-=
+bot@kernel.org> wrote:
+>>> +    ptrs =3D libbpf_reallocarray(NULL, nrels, sizeof(*ptrs));
+>>> +    if (!ptrs)
+>>> +        return -ENOMEM;
+>>> +    obj->arena_ptrs =3D ptrs;
+>=20
+> [...]
+>=20
+>> 1. If multiple SEC_RELO sections target arena_data_shndx, the second call=
 
-It's already explained in the commit log.
+>> overwrites obj->arena_ptrs (leaking the prior allocation) and allocates o=
+nly
+>> nrels entries, while obj->arena_ptr_cnt holds the sum across both calls. W=
+hen
+>> bpf_object__create_maps() -> relocate_arena_ptrs() later runs:
+>=20
+> Not a bug. Only a hand-made ELF has two SHT_REL sections for one section.
+> clang emits one for .addr_space.1, and the static linker merges them by
+> name in linker_append_elf_relos().
+>=20
+>> 2. If an empty .rel.addr_space.1 section has sh_size =3D=3D 0 (nrels =3D=3D=
+ 0),
+>> libbpf_reallocarray(NULL, 0, sizeof(*ptrs)) calls realloc(NULL, 0), which=
+ may
+>> return NULL and cause bpf_object__collect_arena_relos() to return -ENOMEM=
+.
+>=20
+> No. Nothing emits an empty SHT_REL section.
+> glibc returns a pointer for realloc(NULL, 0). Where it's NULL the open of
+> such a file fails, and that's fine.
+>=20
+> I'm replying to a bot hoping that Roman will teach it to learn from mainta=
+iners
+> and stop reporting such bugs in libbpf where input is trusted.
 
-> Could btf_struct_access() return SCALAR_VALUE for WALK_PTR_UNTRUSTED when
-> type_is_alloc(reg->type), as it already does for WALK_PTR, so that such a
-> member takes the cast_arena path?  Alternatively, should is_cast_mov() not
-> treat untrusted memory derived from program BTF as as(0)?
+Thanks, well appreciated!
+It=E2=80=99s going into that direction, now at least it should not raise it a=
+gain in next versions.
 
-No.
 
-> The same applies to the case in the commit message of an untagged
-> (gcc-built) kernel __arena member: there, writes would stop loading
-> instead of reaching the arena.
-
-No.
