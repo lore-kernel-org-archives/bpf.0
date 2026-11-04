@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793829333;
-	b=4vdEnsIclueXeJrONiYlEgnrUpQhaYdc5odNTe1s5NSRVYHINJsdr47UxReMBLCf666u
-	 q8A8fS+nel7T6zIAKZDq2JKfV1JYpDm3MwMnzpNaSk+c2T8TMbDUayNWVDdYokTLMLsKJ
-	 EydLUO9m2q3Wl5/4R2Z/gUXn8z6xvz9ZAUr0BV0hNmOvXIM6jcx6CuYei3FXzPaymVHjd
-	 Md1AMC91SU6Sm95fSyiLN7KadkH7APa86bKbAkaMM53lLw/xhYZJ7YvgTRZHjF4js6O6I
-	 VIlB9SPlCo5Qp0SV8mL3Lo2AifVC6lLML/lnRmbClKtZpIImpLaxBywaVhcgeeCdPBA==
+	t=1793829340;
+	b=jKvTF8s9OriF+l8tbMTqYT2cPJgX8kFL/yCd2L2yPubKfgu8W8ohqiFhPbtRtsSgqB9w
+	 IsQPYfBnokR+hMXWUEsIBs4qY1ZTk81fW0Go3SGmz3pYmS3027dDCWfHzf//gVFgQw+vF
+	 2yZ8g/IHxqtZ0cTKpA5tgky8gWZEKW/omoYIevzxLnnT9UEfkQ9INIwmiTm6WFwcvWb3B
+	 hkIMGT7B45am6tEouy6r1gziSNEUst9VSQejsaFA5Ygel+HD3vUpJ7FEPUOqdobh8+l6/
+	 fpNPq5fkk8cSVRkMGVoMy8DgJQGCe7ebiWqAtwZwoQJGRArh1Ei0yTWerqVhRAnG0+g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793829333;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793829340;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=XXb9NT+V17pIowvzvAxSQFiHNLNgwbN7uYYm5BsHdjs=;
-	b=5IQY/3ConPBupqaeRMkYsm8cDbt4V/qoLXLGOH0tDndBf9QuTxksAfdpFwX1WOPczYP/
-	 Di2cqKQdaso1gv5qkHlTDzkjOum1NCPklYUILrfsZukgWOgOjfBGMiLHvknPHDqoltQVp
-	 Q8imFM6HeCzbeW2e5eVnl5ISBck4/hY4o73Uunpxqci+7GOMxzNdjWHUNmAC/+75ToNy/
-	 W1Ifkb3gfwcCuzuXQ73z5SW6K3DtcazFBFO9tJVU75Ii2MufldxLKP2nYT0jZ6Pq0qrBx
-	 48zTcOM0Y3gagAnR0SW8QN/Apwro8B/10KM3sEQwLfZmiwFmESjCxc41y98aXU8EzuQ==
+	bh=AApaTpO6I5mR3Iq52DdzMrq8aicL1VwTkThLthvWsig=;
+	b=UZqU+xc2jL9rA1OHR8KfNV62WWXzLCjPjfG0gmlaAdT3vKnHOZrn/PJoRF0jneMybaau
+	 IpX5AK+d0usjvcNI21xMfniKbmRJV5dXSxdeDn2fwnf0sHj/ZmN7Onr+kbVSE1NZLx69T
+	 nYD+Cj4V/0lPrs9Plh2RA02BDUrEYIFwF0rHz69ruIiII0qH4sIcDhtHbLDGaO2LI82co
+	 O4IqQ3mdN02Iabi2LTROsyuQDJBZ8q8tKMV2Z1wJ9gHQb+PF5IlTR6unwNn1PgsuYHDkH
+	 nW0/ADkhGledkp8chMKiEXBBDOwfq/toYVSAgi9Ho2ekdZ3gfEA5ymrHYNZP0X/5YxA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pG1loZFp;
-	arc=none smtp.remote-ip=209.85.216.47
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jVWilyLg;
+	arc=none smtp.remote-ip=209.85.216.52
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B72B60A3830
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 21:55:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B72B60A3830
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E0460A3834
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 21:55:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 02E0460A3834
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pG1loZFp
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3b0ae87069dso212370a91.2
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 13:55:33 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jVWilyLg
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3b08cf16decso861109a91.0
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 13:55:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793829332; x=1794434132; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793829339; x=1794434139; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=XXb9NT+V17pIowvzvAxSQFiHNLNgwbN7uYYm5BsHdjs=;
-        b=pG1loZFp8uunV4rtY+/HhJ6SS1OOW2hxCiD+7oQalYLNqdKmhoi2G7Zh+ceZ6NRbM7
-         LtjEfsXfOBpmLZbwG7dr/5NqPDQi+kk5Z0kSFvWSs1WIKyKvMT+hTDARg5F+LBBIa2h1
-         QqnLIYgYy/vnUf9fK820EorC4RqBMBu8Tbjh6A+ieyVk7sc6WeWXml9KX78zuqaC1AgN
-         BsZAh6Vy/g1AW2wLwTU4HxgsL/FiVyAU2N71LGf/VhvXbE2vWUXgy3AtX+pmg51YKLq1
-         S9R4ieyjgSX3BTNNxRAsMB5yYaSX9DKXwXvJfirtceN7o7nzNyiDZuy56/R5hCRA5xDp
-         l1HA==
+        bh=AApaTpO6I5mR3Iq52DdzMrq8aicL1VwTkThLthvWsig=;
+        b=jVWilyLgwkoYN/itUbbBEwZgH597j0Sc7wMlqSdUPed3c8EOIrOYzKFqpoA/Y+aSis
+         XTHDG9V4vOcxpNJ1yaygrSXnqZFEm5JzoXGNr3cjves32g7A7CFQUFdxvL6lTGlUDnJz
+         3QYpv8mePzgGn1hB0rL9wabTsDoKMDCbfcw6CxWbHOIvhDyvcaI41DF2j6/uDWQ9WADR
+         riEMwjDaT+0zIRg97I2grhv7UgI5P6TKxCnpMU0kIDqkFbKWCFQNnrqENqVZfspy5Ctw
+         8xCFNW++Awr/8dN6/7I0v9bOqxy2685IWJaJUSe7V6U7N0xEWdOZtPyJHrE/gLoFRwtL
+         pBdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793829332; x=1794434132;
+        d=1e100.net; s=20260707; t=1793829339; x=1794434139;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XXb9NT+V17pIowvzvAxSQFiHNLNgwbN7uYYm5BsHdjs=;
-        b=vAi9a6Gv/0deQnM+u6OcKDRV+rgfcGs/33BBxQRKi9MFziX5YG3W6YUwQdTwzCO3nU
-         cQG3fRsTR1C5lAe5z0fHPoUGSWWfoFC92mlbYtr1DrPhaKjx8tQSWH0nr9NKLiIMoiqg
-         SIC1bcuPQboCP+rwlhAYgdeI6yAZsasSXEFW6apCEH+XYMHsieWGB7rBtcbyFZcLUkOP
-         dGHmkE3sz1CIKmoaG9yMYtxrFdHtm/AVDLV01D0Vv+VAE8UDTggA3/EhP8lFB/FKBB6X
-         ZAR1WdUJXs1CYbOYBpeSgq4EGnZ0fWi795RMxca7H1XkR4wxjTmFrCGsTPoJTSoQeCf6
-         owLQ==
-X-Gm-Message-State: APuU4Z+FWzNWvywgnnQm+0Ct7xwRZncP/Q4yAUUnzY/kngB5jDejMTKf
-	GSomj4y7mLb9CzaFl4AXBcorLBmwTXlEjUPIVW2WKMwowvWw3hU4p9QSjgJRpQ==
-X-Gm-Gg: AYBFou34NP9KSJOaTaDyYhW8IevUOY+fFghoNVCvhLF36aX0qM90tjp7iaBqErpBrgz
-	QyRNEFwruaWF7ADS3AS/9j/EdlR1I1bsbuD4wOMjujWwFsXwzA/iy9oWqA38TM0H8JUSWkWg6HU
-	6xGGji26SkbaL4DJc+LeTJeCz1tUaDykZ+YSCkpHwdKS45WA1cF4eYiaplRMx8DDV1cchbCt7zk
-	6yxZ1HJAxOPvdk5x73rt2K1CH+HMQMrE7sGZdfzmSfdTmXxKwUC01+a0VMe22SneGCQ0FaJqLaO
-	xJYp5vWmf0VENGSx/VjtQmDY5B+lZ4aPO4w1zXdX+3NBC1dfKCAN/ctFqEhKNQ1RtjJZIyDzbSp
-	kgxoiJnJHu5N98/h8K5ZLLL9gr3SNwbJut1WE28mOYVtZufMmJ66fw9SjIaUL2KwNcvRbTn5pex
-	V+RQBYBZk61YTdgwKcI7wHgVE5VQSM65qJIfRSHtzFtlKKhuEX4D8ckbhZtzZirKd3DMEsqwrhc
-	KoMHWghr84ym4xH6ckibRZnUKGxNQ60ES8kUlxaryCljQgadcXQ1+35ux0ldgur6bVRkoeQMr3u
-	EmrxAMTd9MGhfuirf+uSsjYiTwmSAQKNDmPrIuyblWsd0OgXg5Xe6dRv2nB3pKJsRmlisuzR3h0
-	i8ur+ZZQ99v5IHWd/1jsP1LdtTyaKQdnEb/f4A1OhnnYC9Mj6fmEuIiRC2sIsgDYP4zyC4JY+b3
-	8=
-X-Received: by 2002:a17:90b:4f8a:b0:3a4:b74a:795c with SMTP id 98e67ed59e1d1-3ae89710dd1mr14236397a91.16.1793829332408;
-        Wed, 04 Nov 2026 13:55:32 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b3131f8csm734656a91.2.2026.11.04.13.55.31
+        bh=AApaTpO6I5mR3Iq52DdzMrq8aicL1VwTkThLthvWsig=;
+        b=HuYi2FRckvP5xtgStGmUjB5E5Q3bND/Cig44Gq7VrB6jL9UYe3yKIXV4UoHy9UGG6Z
+         H31bvjtqcHp1bmyRMEnhcMBhwZddxy74Gd0XTYJVjVelLbVDl6smgUNIUjxAiYobDOUH
+         0CKJ/S7e0CeBkSyGAUtXmlcLx2nbZMMEkkEFgNY13/081cxATLTNnYW6RQmpW3HRBl/U
+         A5EbiBAea4jzsjdZ7RU7cgZfPRUvDwgLuxPgvrx8YlyNiZNGMO0d3dd6OMOPIa8WVjM0
+         YJAIxMKldpZU1Sh8co2YvoL+MRGs93eNxVuloGPKy5C1i9xrOzCp5RhBf/dHLMOLkuYK
+         quIA==
+X-Gm-Message-State: APuU4Z+1FU1c0pQ51OCsv5RY0khDLHUWdW43qBJXRTSbtp8IT/3Tsnxy
+	nWdvsszc4mpQMRVGBNEUhYNjgC0UqPEEPYR1mShHFz5BxipczinIyEtxAZ+Cjg==
+X-Gm-Gg: AYBFou0fAmFTaLx0M2DqLFjFPVrdMDd+Kp9w8kkTAZY/i1pov45oMoXLTcuK5J1F/eX
+	3muTsfdmTVBT3pqBKawO8Gjw+Esqx+viX6OA9NASqjk285qtu0AjZY/07lGew4YX2SN4Y3P7GM2
+	aSvq5wPOSMdKM9hmWqfwTsN+rieePY9fxuC45IDIGu08iLcIk8wNqWyk3k8vt7+XxnWIxBuiLMX
+	pvfTlaYD+lLGtbgbWA55rxEUsPyk1xLZ4stD8deoOl95sWVna0cdueGUw5rovI+TsH9/ZLjpwo1
+	O+Vle7D0qAATh2732Ff4c95thWwiKTC1dnqrg3y8H1pJm/abq/XoQo0+ZZdKbp6fvWQj0W+c5AE
+	xVQdVtkJzAP7GVN9ftD9idarIgEUb1ZcmckNj/M0tdPqRYxcf/JHTfOXIed1XessLPV2Fa78Tin
+	a9qtlWyNdGLQAcLnvm6UXm2QqhHe3Wu5A6Pc4MduwuVCrwmkIDg4J/TWWX1D6SblXi/TRETZ0RN
+	rDlJDcpBM66Atd/bv3oOpojJBLGnNSYrcsylIXw6WwsbvqEV1Vct4g/he/j3pLpZM32Xt+9adUC
+	c1ULZ6xr/JM7+XFAke/nrFYGVqjasql6Pxh8lr2oRh0cUKw9ZQuVA/YvX/AI+npwZzdzHL7as03
+	wP6Jl/Dq0KWJ3+h3i/TG32IbWTYBT49t0sqpyub9PdAM1SvfKsxRqx8xJ6g+6lakX6K68nPvNyc
+	A=
+X-Received: by 2002:a17:90b:58cb:b0:3a8:1943:cb7a with SMTP id 98e67ed59e1d1-3ae896f8320mr14619027a91.18.1793829338992;
+        Wed, 04 Nov 2026 13:55:38 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b3280378sm616766a91.12.2026.11.04.13.55.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 13:55:31 -0800 (PST)
+        Wed, 04 Nov 2026 13:55:37 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 1/9] bpf: Build the call graph of a prog after the main verification pass
-Date: Wed,  4 Nov 2026 21:55:15 +0000
-Message-ID: <20261104215523.1852636-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 2/9] bpf: Use the call graph to find what runs in a callback
+Date: Wed,  4 Nov 2026 21:55:16 +0000
+Message-ID: <20261104215523.1852636-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261104215523.1852636-1-alexei.starovoitov@gmail.com>
 References: <20261104215523.1852636-1-alexei.starovoitov@gmail.com>
@@ -104,216 +104,80 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-check_max_stack_depth() walks the chains of calls of a prog one by one:
+A callback cannot use BPF_LD_[ABS|IND] and cannot call bpf_throw(). The
+same holds for every subprog that the callback gets to. When the walk of
+the chains of calls meets such an insn, it looks for a callback among the
+callers in the current chain.
 
-      main          main -> A -> C -> D
-      /  \          main -> A -> C -> E
-     A    B         main -> B -> C -> D
-      \  /          main -> B -> C -> E
-       C
-      / \
-     D   E
-
-The number of chains grows exponentially with the number of subprogs. When
-each of N global functions calls the next one in both branches of an 'if',
-the prog executes N calls, and the walk looks at 2^N chains. 24 functions
-take 1.3 sec to load, 30 functions take 105 sec.
-
-The walk does more than its name says. It looks for recursion, it finds
-the subprogs that get to a tail call, that run in a callback and that can
-use a private stack, and it counts frames. None of it depends on a chain.
-It depends on who calls whom.
-
-Build that graph: a bitmap of callees for every subprog, and the transitive
-closure, which says what a subprog gets to. The edges are what the walk
-follows, in dead code too:
- - a call of a subprog,
- - the address of a subprog, unless it is an async callback,
- - what the main verification pass recorded for callx and for helpers that
-   call callbacks.
-'live' are the subprogs that the walk visits: the main prog, the async
-callbacks and what they get to.
-
-Move the first two checks. A live subprog that gets to itself is
-a recursion. A live subprog cannot call the exception callback. The walk
-still does the rest.
-
-No verdict changes. The message names the last call of the cycle. When
-several subprogs are on the cycle, it can be another call of that cycle
-than before. A prog that breaks two rules can get the other message and
-errno. sort_subprogs_topo() and its rerun after the main pass stay: they
-also reject some cycles through the address of an async callback.
+In the call graph it is one set: the live callbacks and what they get to.
+Look for these insns in the subprogs of the set. This is done before the
+walk, so a prog that breaks two rules can get the other message and errno.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 218 ++++++++++++++++++++++++++++++++++--------
- 1 file changed, 180 insertions(+), 38 deletions(-)
+ kernel/bpf/verifier.c | 58 +++++++++++++++++++++++--------------------
+ 1 file changed, 31 insertions(+), 27 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 81ed32a4b048..d94c273aa3b4 100644
+index d94c273aa3b4..ef2af44afb0c 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -5777,6 +5777,167 @@ static int round_up_stack_depth(struct bpf_verifier_env *env, int stack_depth)
- 	return round_up(max_t(u32, stack_depth, 1), 32);
+@@ -5808,6 +5808,7 @@ struct bpf_call_graph {
+ 	unsigned long *calls; /* calls + s * words: the subprogs that s calls */
+ 	unsigned long *reach; /* reach + s * words: the subprogs that s gets to */
+ 	unsigned long *live; /* what the kernel calls and what that gets to */
++	unsigned long *in_cb; /* callbacks and what they get to */
+ };
+ 
+ static unsigned long *subprog_calls(struct bpf_call_graph *cg, int s)
+@@ -5836,11 +5837,12 @@ static int build_call_graph(struct bpf_verifier_env *env, struct bpf_call_graph
+ 
+ 	cg->cnt = cnt;
+ 	cg->words = words;
+-	cg->calls = kvcalloc((2 * cnt + 1) * words, sizeof(long), GFP_KERNEL_ACCOUNT);
++	cg->calls = kvcalloc((2 * cnt + 2) * words, sizeof(long), GFP_KERNEL_ACCOUNT);
+ 	if (!cg->calls)
+ 		return -ENOMEM;
+ 	cg->reach = cg->calls + cnt * words;
+ 	cg->live = cg->reach + cnt * words;
++	cg->in_cb = cg->live + words;
+ 
+ 	for (s = 0; s < cnt; s++) {
+ 		for (i = si[s].start; i < si[s + 1].start; i++) {
+@@ -5869,6 +5871,10 @@ static int build_call_graph(struct bpf_verifier_env *env, struct bpf_call_graph
+ 	for (s = 0; s < cnt; s++)
+ 		if (!s || si[s].is_async_cb)
+ 			add_reach(cg, cg->live, s);
++	for_each_set_bit(s, cg->live, cnt) {
++		if (si[s].is_cb)
++			add_reach(cg, cg->in_cb, s);
++	}
+ 	return 0;
  }
  
-+/*
-+ * A set of subprogs is a bitmap. The call graph has a set for every subprog:
-+ * calls + s * BITS_TO_LONGS(cnt) are the subprogs that s calls. Make it
-+ * the subprogs that s gets to, through any number of calls.
-+ */
-+static void close_call_graph(unsigned long *calls, int cnt)
-+{
-+	int words = BITS_TO_LONGS(cnt);
-+	int j, s;
-+
-+	for (j = 0; j < cnt; j++)
-+		for (s = 0; s < cnt; s++)
-+			if (test_bit(j, calls + s * words))
-+				bitmap_or(calls + s * words, calls + s * words,
-+					  calls + j * words, cnt);
-+}
-+
-+/*
-+ * Who calls whom. It's known after the main verification pass, which finds out
-+ * what callx and the helpers that take callbacks call.
-+ *
-+ * What follows for a subprog from its callers, or from what it calls, is computed
-+ * over this graph and not by a walk of one chain of calls after another: the
-+ * number of chains grows exponentially.
-+ */
-+struct bpf_call_graph {
-+	int cnt; /* subprogs */
-+	int words; /* longs in a set of subprogs */
-+	unsigned long *calls; /* calls + s * words: the subprogs that s calls */
-+	unsigned long *reach; /* reach + s * words: the subprogs that s gets to */
-+	unsigned long *live; /* what the kernel calls and what that gets to */
-+};
-+
-+static unsigned long *subprog_calls(struct bpf_call_graph *cg, int s)
-+{
-+	return cg->calls + s * cg->words;
-+}
-+
-+static unsigned long *subprog_reach(struct bpf_call_graph *cg, int s)
-+{
-+	return cg->reach + s * cg->words;
-+}
-+
-+/* add the subprog and what it gets to */
-+static void add_reach(struct bpf_call_graph *cg, unsigned long *set, int s)
-+{
-+	__set_bit(s, set);
-+	bitmap_or(set, set, subprog_reach(cg, s), cg->cnt);
-+}
-+
-+static int build_call_graph(struct bpf_verifier_env *env, struct bpf_call_graph *cg)
+@@ -5938,6 +5944,29 @@ static int check_recursion(struct bpf_verifier_env *env, struct bpf_call_graph *
+ 	return 0;
+ }
+ 
++static int check_callbacks(struct bpf_verifier_env *env, struct bpf_call_graph *cg)
 +{
 +	struct bpf_subprog_info *si = env->subprog_info;
 +	struct bpf_insn *insn = env->prog->insnsi;
-+	int cnt = env->subprog_cnt, words = BITS_TO_LONGS(cnt);
-+	int i, j, s;
++	int i, s;
 +
-+	cg->cnt = cnt;
-+	cg->words = words;
-+	cg->calls = kvcalloc((2 * cnt + 1) * words, sizeof(long), GFP_KERNEL_ACCOUNT);
-+	if (!cg->calls)
-+		return -ENOMEM;
-+	cg->reach = cg->calls + cnt * words;
-+	cg->live = cg->reach + cnt * words;
-+
-+	for (s = 0; s < cnt; s++) {
-+		for (i = si[s].start; i < si[s + 1].start; i++) {
-+			/* the subprog that takes the address of a subprog counts as its caller */
-+			if (!bpf_pseudo_call(insn + i) && !bpf_pseudo_func(insn + i))
-+				continue;
-+			j = bpf_find_subprog(env, i + insn[i].imm + 1);
-+			if (verifier_bug_if(j < 0, env, "callee not found at insn %d",
-+					    i + insn[i].imm + 1))
-+				return -EFAULT;
-+			/*
-+			 * async callbacks don't increase bpf prog stack size
-+			 * unless called directly
-+			 */
-+			if (si[j].is_async_cb && !bpf_pseudo_call(insn + i))
-+				continue;
-+			__set_bit(j, subprog_calls(cg, s));
++	for_each_set_bit(s, cg->in_cb, cg->cnt) {
++		if (si[s].has_ld_abs) {
++			verbose(env, "cannot use BPF_LD_[ABS|IND] within callback\n");
++			return -EINVAL;
 +		}
-+		/* the callees of callx and the callbacks of helpers, see record_callx_edge() */
-+		for (j = next_callx_callee(env, s, 0); j >= 0; j = next_callx_callee(env, s, j + 1))
-+			__set_bit(j, subprog_calls(cg, s));
-+	}
-+	memcpy(cg->reach, cg->calls, cnt * words * sizeof(long));
-+	close_call_graph(cg->reach, cnt);
-+
-+	for (s = 0; s < cnt; s++)
-+		if (!s || si[s].is_async_cb)
-+			add_reach(cg, cg->live, s);
-+	return 0;
-+}
-+
-+/* the insn of subprog 'caller' that is the edge to subprog 'callee' */
-+static int find_call_insn(struct bpf_verifier_env *env, int caller, int callee)
-+{
-+	struct bpf_subprog_info *si = env->subprog_info;
-+	struct bpf_insn *insn = env->prog->insnsi;
-+	int i, end = si[caller + 1].start;
-+
-+	for (i = si[caller].start; i < end; i++) {
-+		if (!bpf_pseudo_call(insn + i) &&
-+		    (!bpf_pseudo_func(insn + i) || si[callee].is_async_cb))
-+			continue;
-+		if (i + insn[i].imm + 1 == si[callee].start)
-+			return i;
-+	}
-+	/* It's not recorded which callx or helper calls what. Take the first one. */
-+	for (i = si[caller].start; i < end - 1; i++)
-+		if (bpf_is_callx(insn + i) || bpf_calls_callback(env, i))
-+			break;
-+	return i;
-+}
-+
-+/* The exception callback is an async callback, so only a call is an edge to it */
-+static int check_exception_cb(struct bpf_verifier_env *env, struct bpf_call_graph *cg)
-+{
-+	int cb = env->exception_callback_subprog, s;
-+
-+	for_each_set_bit(s, cg->live, cg->cnt) {
-+		if (!cb || !test_bit(cb, subprog_calls(cg, s)))
-+			continue;
-+		verbose(env, "insn %d cannot call exception cb directly\n",
-+			find_call_insn(env, s, cb));
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * The DFS of sort_subprogs_topo() follows the address of a function like a call, and
-+ * tolerates a cycle only when such address closes it, since it doesn't know what it is
-+ * taken for. Such cycle counts as a recursion, unless the function is an async callback:
-+ * its address is not an edge of the graph. The main verification pass limits the
-+ * depth of the recursion, but it doesn't follow calls of global functions.
-+ */
-+static int check_recursion(struct bpf_verifier_env *env, struct bpf_call_graph *cg)
-+{
-+	int j, s;
-+
-+	for_each_set_bit(s, cg->live, cg->cnt) {
-+		if (!test_bit(s, subprog_reach(cg, s)))
-+			continue;
-+		/* the last call of the cycle */
-+		for_each_set_bit(j, subprog_reach(cg, s), cg->cnt)
-+			if (test_bit(s, subprog_calls(cg, j)))
-+				break;
-+		verbose(env, "recursive call from %s() to %s()\n",
-+			bpf_subprog_name(env, j), bpf_subprog_name(env, s));
-+		bpf_diag_program_structure(
-+			env, find_call_insn(env, j, s), "recursive subprogram call",
-+			"Rewrite the recursion as an explicit bounded loop, or split the logic so subprogram calls do not form a cycle.",
-+			"This call or callback would make the subprogram call graph recursive. "
-+			"The verifier requires a finite, acyclic call graph so it can bound stack depth and analysis.");
-+		return -EINVAL;
++		for (i = si[s].start; i < si[s + 1].start; i++) {
++			if (!bpf_is_throw_kfunc(insn + i))
++				continue;
++			verbose(env,
++				"bpf_throw kfunc (insn %d) cannot be called from callback subprog %d\n",
++				i, s);
++			return -EINVAL;
++		}
 +	}
 +	return 0;
 +}
@@ -321,116 +185,54 @@ index 81ed32a4b048..d94c273aa3b4 100644
  /* temporary state used for call frame depth calculation */
  struct bpf_subprog_call_depth_info {
  	int ret_insn; /* caller instruction where we return to. */
-@@ -5950,10 +6111,6 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
- 				/* async callbacks don't increase bpf prog stack size unless called directly */
- 				if (!bpf_pseudo_call(insn + i))
- 					continue;
--				if (subprog[sidx].is_exception_cb) {
--					verbose(env, "insn %d cannot call exception cb directly", i);
--					return -EINVAL;
--				}
- 			}
- 			/* remember insn to return to */
- 			dinfo[idx].ret_insn = i + 1;
-@@ -5961,27 +6118,6 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
- 			continue;
- 		}
- 
--		/*
--		 * sort_subprogs_topo() tolerates cycles in the call graph that
--		 * go through the address of a function being taken, since it
--		 * doesn't know what it is taken for. Such cycle is a recursion
--		 * unless it's an async callback, which are skipped above.
--		 * The main verification pass limits the depth of the recursion,
--		 * but it doesn't follow calls of global functions.
--		 */
+@@ -5973,14 +6002,6 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 		subprog[idx].priv_stack_mode = NO_PRIV_STACK;
+ process_func:
+ 	dinfo[idx].callx_insn = -1;
+-	if (subprog[idx].has_ld_abs) {
 -		for (tmp = idx; tmp >= 0; tmp = dinfo[tmp].caller) {
--			if (tmp != sidx)
+-			if (subprog[tmp].is_cb) {
+-				verbose(env, "cannot use BPF_LD_[ABS|IND] within callback\n");
+-				return -EINVAL;
+-			}
+-		}
+-	}
+ 
+ 	/* protect against potential stack overflow that might happen when
+ 	 * bpf2bpf calls get combined with tailcalls. Limit the caller's stack
+@@ -6067,24 +6088,6 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 	for (; i < subprog_end; i++) {
+ 		int next_insn, sidx;
+ 
+-		if (bpf_pseudo_kfunc_call(insn + i) && !insn[i].off &&
+-		    bpf_is_throw_kfunc(insn + i)) {
+-			bool err = false;
+-
+-			for (tmp = idx; tmp >= 0 && !err; tmp = dinfo[tmp].caller) {
+-				if (subprog[tmp].is_cb) {
+-					err = true;
+-					break;
+-				}
+-			}
+-			if (!err)
 -				continue;
--			verbose(env, "recursive call from %s() to %s()\n",
--				bpf_subprog_name(env, idx), bpf_subprog_name(env, sidx));
--			bpf_diag_program_structure(
--				env, i, "recursive subprogram call",
--				"Rewrite the recursion as an explicit bounded loop, or split the logic so subprogram calls do not form a cycle.",
--				"This call or callback would make the subprogram call graph recursive. "
--				"The verifier requires a finite, acyclic call graph so it can bound stack depth and analysis.");
+-			verbose(env,
+-				"bpf_throw kfunc (insn %d) cannot be called from callback subprog %d\n",
+-				i, idx);
 -			return -EINVAL;
 -		}
 -
- 		/* store caller info for after we return from callee */
- 		dinfo[idx].frame = frame;
+ 		if (bpf_is_callx(insn + i) || bpf_calls_callback(env, i)) {
+ 			/*
+ 			 * Walk the callees and the callbacks recorded by
+@@ -6228,6 +6231,7 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ 	ret = build_call_graph(env, &cg);
+ 	ret = ret ?: check_exception_cb(env, &cg);
+ 	ret = ret ?: check_recursion(env, &cg);
++	ret = ret ?: check_callbacks(env, &cg);
+ 	if (ret)
+ 		goto out;
  
-@@ -6064,22 +6200,18 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
- static int check_max_stack_depth(struct bpf_verifier_env *env)
- {
- 	enum priv_stack_mode priv_stack_mode = PRIV_STACK_UNKNOWN;
--	struct bpf_subprog_call_depth_info *dinfo;
-+	struct bpf_subprog_call_depth_info *dinfo = NULL;
- 	struct bpf_subprog_info *si = env->subprog_info;
-+	struct bpf_call_graph cg = {};
- 	bool priv_stack_supported;
- 	int ret;
- 
--	dinfo = kvzalloc_objs(*dinfo, env->subprog_cnt, GFP_KERNEL_ACCOUNT);
--	if (!dinfo)
--		return -ENOMEM;
--
- 	for (int i = 0; i < env->subprog_cnt; i++) {
- 		if (si[i].has_tail_call) {
- 			/* the stack in arena wouldn't be returned */
- 			if (env->uses_arena_sp) {
- 				verbose(env, "tail_calls are not allowed in programs that use R%d\n",
- 					BPF_REG_ARENA_SP);
--				kvfree(dinfo);
- 				return -EINVAL;
- 			}
- 			priv_stack_mode = NO_PRIV_STACK;
-@@ -6093,6 +6225,18 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
- 	if (priv_stack_mode == PRIV_STACK_UNKNOWN)
- 		priv_stack_mode = bpf_enable_priv_stack(env->prog);
- 
-+	ret = build_call_graph(env, &cg);
-+	ret = ret ?: check_exception_cb(env, &cg);
-+	ret = ret ?: check_recursion(env, &cg);
-+	if (ret)
-+		goto out;
-+
-+	dinfo = kvzalloc_objs(*dinfo, env->subprog_cnt, GFP_KERNEL_ACCOUNT);
-+	if (!dinfo) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
- 	/* All async_cb subprogs use normal kernel stack. If a particular
- 	 * subprog appears in both main prog and async_cb subtree, that
- 	 * subprog will use normal kernel stack to avoid potential nesting.
-@@ -6106,10 +6250,8 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
- 			priv_stack_supported = !i && priv_stack_mode == PRIV_STACK_ADAPTIVE;
- 			ret = check_max_stack_depth_subprog(env, i, dinfo,
- 					priv_stack_supported);
--			if (ret < 0) {
--				kvfree(dinfo);
--				return ret;
--			}
-+			if (ret < 0)
-+				goto out;
- 		}
- 	}
- 
-@@ -6119,10 +6261,10 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
- 			break;
- 		}
- 	}
--
-+out:
- 	kvfree(dinfo);
--
--	return 0;
-+	kvfree(cg.calls);
-+	return ret;
- }
- 
- static int __check_buffer_access(struct bpf_verifier_env *env,
 -- 
 2.55.0
 
