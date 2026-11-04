@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793752511;
-	b=13w8ACwU1nC0gcQU/RWDEuEx+jXGmNvEXmbxw6HzeAEUfkBP2Z1UNGZ/7PeovCVlX6Me
-	 jCXDT3jsqLyLKP58SVNVA2ANyVEPFKC1QyZptVTUUvzwz+86BQ5zWKticWTI2rl/zZ4Bs
-	 5T4oF7oruGXRgIEMOIHUNJbFtTSljjo06e8oijSvDfEuxsKfq6vxH5YAlCrSu6PEIKfzD
-	 CCo60Tx0hu4cbYZKBmSh6zyk8RuAljfVxWE6AOwVilYTesOB+FrB9/QCff5sVF6rtYWHj
-	 aOhnooc2dapDR4gto2X94xlJgUP1H6SFedDr4tQge5SOS03ThBMBMwCLaOTcW9MKSLA==
+	t=1793752770;
+	b=zIoY/Faw3VgUO/xppOehnIMLow3fHYfE9PVmkOxIxLzhrD6v52pjTqoLNQI8tgnhlYUH
+	 X9QUCT4NL1Y51pbFkKFg+hvvm3TS68Ds0wBN9uKZ2SSLHPHRvNovZ3mTm9anlnkLNQwhl
+	 N0TF/TmidsMT1iy3XOzkFbKStaoMTQ91Q55Jfj6+k/Cs3Zt44iN9dPio5OuV6yda0jV17
+	 Ko/skpGAbjBceW/4WLAEwTZW3YfD+qapPM8kH8xeV4lsmhcHkxopWAqiA2BOp3p/07ZVs
+	 N++6hNckSattNwCbJqCO4dzAlvysD5Io26h1q6fDIySxOADOHO7yj3bEh03LhqX7q7g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793752511;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793752770;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
 	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=FcHuatx2meUTlgCG0m9y4eNcSRZC+D790iV3bNU7SzY=;
-	b=p4DXt1juJTYL7YI+QA43N9uHKUXWuhtCyflQUgwCvBCR9hWoXtXHY8kQNuWXEZttiJWx
-	 gpPglm37EHD/rDVWyXTmZ67kbEi1RhBeIZXCcpFeIQp7SpY1PclBxfQBR3QxNB3ovh3B8
-	 Gi2FE1pN5XPFexmHPazldwzv12GC/XAYExYHxzjZYwhnNCR+rVUDoaBggKvKy6bdm3vy2
-	 1FQDCs/4l96Rzzx1MOFTXaMEf8yoNMloLvVhjtrwRtOSR/X3JpupmCaE1bF43HhL2QtMl
-	 cSg+F0tV0zzMJATwrwIbHPSkzlHLoAowfwYHuKDBCZJG05MDutLtkyRKm3afZ+YfN2w==
+	bh=lQ2xOzxsF+CEtv2Z632brvuKrWBZQypDKsxmzWa1C5s=;
+	b=qutl8x2QjeWPOIt77awWoFxujdZfAe07Z3vcs72ZbiO3L3R8mlnQwOvyguH64CqJVJsn
+	 B+U3Z6kJFXF5UABE+gRjcZ5LNEptp2ocfo6dBd0Hsi63aiY5EdLaiUB3Zb5aOaDD3+32z
+	 TLrkBLQPQMdvKpVYL3cKMuKg/kdKtKAb2ko3AUA/LevIRuFrU02bW/FcT2rzQmasGeWMo
+	 LlF+0Eh5YJzUFh6Z4rQnHiVVbeCMc5Uzv5HmvIrRXe4wTHIBrWimAKtL2F2fgwHbzN8kG
+	 vZtJDni3YZPjHXR5JZ/TOrXunuZNrZ0E89F1ARt2WHDd4HTFNjWNGC1U3u3VC1nxDmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ldUqheBG;
-	arc=none smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hr+JzZTf;
+	arc=none smtp.remote-ip=209.85.214.172
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1E7606A324
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 00:35:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E1E7606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CAE8606A324
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 00:39:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0CAE8606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ldUqheBG
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2ed08b07213so413785ad.2
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 16:35:10 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hr+JzZTf
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2e9e53d011eso868855ad.1
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 16:39:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793752510; x=1794357310; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=FcHuatx2meUTlgCG0m9y4eNcSRZC+D790iV3bNU7SzY=;
-        b=ldUqheBG7uRnuiKhd9W2cb9bgQJMGO7+vnNvtoIXd2DCURC5f2rpCpBEehiAtlDkZc
-         nZa/6IW7UotN7sRfVuufxDTOb0nKSsvUpy8sQBXuzYEL7F7aejhmnC72UWZd6D6p48bI
-         yzTncya7rsLZU4uc4V0PGkPTlg1N+I1jDUSPa/Dq9xX/MfVgv7qiZs8NXFXZ4BbyqA+h
-         VK6zMZZcVZqDV1GpCz7bu8AXdbBwT1TJJX+A370plPPdh26D2+giv8yrFiKZd/1tCFYZ
-         YxwLYBof8lB9dfPjxPpXkudjKcGBeFcxqKmdBsuIPhaHISydHkDoIIj1t1eaQ4Kq0jGQ
-         pexw==
+        d=gmail.com; s=20260707; t=1793752769; x=1794357569; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lQ2xOzxsF+CEtv2Z632brvuKrWBZQypDKsxmzWa1C5s=;
+        b=hr+JzZTfML76aUBPRMSo/3TW8wG01zPPhuL/+lyor+y27KaG7K0wNq1h4XbItsLlae
+         9aQFRKvZAF64WmcAU2FaEbMNIk3lag9vklnCV1nNbvazHFxJvS86TiagPTxFNZsiE0Xs
+         vmuzGeSSudENZM5KFICQTPzdSCrbJ9JQ10LroE06YTO1PjeHV/Dey+drr3CWhXurH1oh
+         /BkuNs0yz8eGrh5zbvxZUepb3LrXz0S3lsC414wKo84s+rmkO8uiO1APW2AtNOlMixgt
+         ht6OtwB6e0WNLNDXQ1ZF55RHYIVaS/nYeFn69hB3sXqqBm+PAgLA4S4QokHq0OhiU7Ro
+         6fUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793752510; x=1794357310;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1793752769; x=1794357569;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FcHuatx2meUTlgCG0m9y4eNcSRZC+D790iV3bNU7SzY=;
-        b=di3KUuyCKX3U6KT4oLT3HLTuE4nPJaoXoZ4UZp89kmN0BKCwrfGRlFksu++oCM1Cba
-         prqOAsAKnDfkDP4vUNFQmIgo2tctC6Yo7FCxcIqgCGRcfdecxVlclUt81CKePWX7Bl8V
-         1fdokSQ9gef7U3NiUCc8hEQIGzmE9YqGH426CXabKCL/HfeA8+vojOlpLHQdOHxsHzpy
-         zIb/vWElNV5PSzQ7qYVCot8flLYxWp1lmTaxk3WuaaEVB2tj3xvwTqTYtnHAaG4Qx9mL
-         3VW4AN5pqlJ2zWF/roUjKK8AtIrmzHIC2DSdRViHkhSVLPdbmVU2mEmYFDB+GyRwyCr4
-         VEsQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxYV+o2nQSM99I5PFXmfELP83tYI7l5+btmICnrzFNT3PyTcBtL4KuWD0L+T+gFGMOsKoA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Yg4Rq7GjrcFVHAwaOLYHSlqe5PCsLbAJJMOkxPssaxJ5fA31E
-	g4E7wa0nVy0LqVSfuIkfQbTHrQqajsnqtR5vKX35C+va5rUo/+y4xuC7
-X-Gm-Gg: AYBFou1Bd3OF0SX5qyfBWg1iX/XPUaS86oDZdklisnZvpSluBRtoKrhwzB5ZgKLi9+g
-	bFml5rDsRdY0yKSjfJ8L31gc/gOXSeED54nr3wsCy8RcBjyEEXQ+lP32XYrHnqjQVfyfFuJHPiy
-	R0vzPHHVgjntm3Kob9rPaAqrJAimzx5V/Rvk7UKG7SUr8ot5Q8cXqSsoXJvfEjdx/ekeo32crmq
-	+xilEUlyBcw2t46fs573tzwYgwoJwVl7NK2bWq9I2NelRzMaoNhIsuno/Hjff5cqTNAD0m80BVE
-	2h78MLZSiAJSV/ekMArBwji3una9wf6Ub5xVVRNHO9lWbZke/WQODGRazMkbQbKKCTeAhR6+SvP
-	IwSd71nDaJsOUrvW8baZYSM0H8a+jH4EYQCR8cJw2H+mJwUDsQO0zfTge/BvlsO7bRgT4X6EuHN
-	z8+skX8AQUJWZwaQ/ywd2Hr96w14OTcFO+sblJGUe68uCPdy9ShC9EjCf+pjVE4j30I4Jn5EvY3
-	fII29f9hga8ez8GpchNeFxvt6iC/I5BMg/P06P+blYyNMXZy+DbTW5u6r0XcUwKl1EamnyX+JFf
-	Xw27H1qvmHQGqMnyPwZU9Fw4iwrADNQcyw1kNKW8dALiCaRdoJijcJaX++BbIBXDQjlXbW1oRL+
-	VP9LmGBxNckSSXgfYcG3NkX9MNB7vxTTyBg==
-X-Received: by 2002:a17:90a:e7c6:b0:3ac:6e91:3f22 with SMTP id 98e67ed59e1d1-3ae897dc106mr10674785a91.52.1793752510264;
-        Tue, 03 Nov 2026 16:35:10 -0800 (PST)
+        bh=lQ2xOzxsF+CEtv2Z632brvuKrWBZQypDKsxmzWa1C5s=;
+        b=gq+HdnwsUoadlpGDMrNbYT/xe1dqZ2zwkl04fWjWBjMYtvsKIoO+ezbQPMQayUslC/
+         BV9ThkSLKKKPKjLlMrvu2eYWPgPhjrphuEltaEGbglO0ZhTA+mu0LjtCEglehQms2dDh
+         b5zR6SiJjRwf6uukFSwvIbiCE/oZaTN2Bmsp3xJN6i2TwNnsqT2gu3eu9Y6rTjaKrt3i
+         bi9Ji6Xcx5mqPv1M8btzFcOqz1QSxWxAgUqpjeISC0c/e9jwXcglZnpV5JFhauyldmL3
+         o6X7TjQOgjI9W5lefSr5tIN6r5R9l9IXdaaxrVUvwFQYFpY+ATomdbbIlxxHw29lsbUZ
+         fC2Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxAKPreXor/Bk2Me7yzkxmHV4EOJvs7NKMahTnaZnmUE84NBfofYE7M1B6qPgpzXRL3mkQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8ZL3J23zfTEgJGyq4LMe6jQB8EofqdszlrZk/vxUDCHL2tZs0h
+	rE4UjosGoph64Z6v8ozedifhxxp2XjjSPDaoC0Y/TETrgxhQL1zkItFh
+X-Gm-Gg: AYBFou3GfbKb7Fr6qDIuabCm+UoSKnMBSZrojYjG0uj1oAoNQKPHoYAwpRjZvhhTJiA
+	+MJMaoUSTkFaHAiKmlI+wP5HCFdhm/t0CgRT1rnetFIC6J9ZEk5huVZENUmns4A8IcC6b/1EE0D
+	LN365Sia7/JiM6KqqBrAmsKcbe6/fdxbhGBrDdOWDWH4+/3cPsUGhgRZcIkX3+TqSOmMPpiDmdw
+	WtPpNnFujORSYWj8KHT9yHA+gXSbB8JR08GzPHsYtnrtf40SaiIut6FsRLkOndBIO/InG3FACVR
+	7A1iBv7hMAflXNlxPQJqCgidxEz4OIlVCyemaqq0pbUXEeu6Iw8T0EhX+yUBAaeOOOugZIHrmVR
+	Zh74/DRa6LbGP00eVSFJJjHtI218/LOACEbyuH452ONQXkAp39oBwv7jS36n0csmfcZzM2OXO/V
+	FvE6ahFwALOjGdKf9VpK13LTZanX9kV3XYMpCSonJsxplguJZI6nep0IeoZZvjER/Et3/EwkVx/
+	jcL/ZLiHjCJeuxNDoLcLD7LhH7XEMf9hFefj7I9ZvqLkeYTYKVo8fDjusNvubGJVU9XZLzS80EB
+	tdWCyWHTAvn562MnNN9QltTvlOPTMhhN6SdDlmw66jt/m/gAobktMl/CqosW1Ergwmd5JmYrTt5
+	VyVRIX3DEFDwr5Y0C9yIDG08u2DTNcYLWc6Kvs2FMV+5GEXwh6G5dgg8=
+X-Received: by 2002:a17:903:2306:b0:2e9:628d:e9c1 with SMTP id d9443c01a7336-2eb364b0c7emr143562815ad.26.1793752769163;
+        Tue, 03 Nov 2026 16:39:29 -0800 (PST)
 Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b093d481a3sm1183720a91.1.2026.11.03.16.35.09
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed090f7313sm510055ad.45.2026.11.03.16.39.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2026 16:35:09 -0800 (PST)
+        Tue, 03 Nov 2026 16:39:28 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 04 Nov 2026 00:35:08 +0000
-Message-Id: <DMM072L9H884.193UBSBZRTKYO@gmail.com>
-To: <mt4022@columbia.edu>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Mykyta Yatsenko" <yatsenko@meta.com>
-Cc: "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <tz2294@columbia.edu>
-Subject: Re: [PATCH bpf] bpf: Fail rhtab inserts and deletes with IRQs
- disabled
+Date: Wed, 04 Nov 2026 00:39:27 +0000
+Message-Id: <DMM0ADCEGAAB.2RFNF1ZI5TGWK@gmail.com>
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20261103-bpf-rhtab-irqs-disabled-v1-1-9874d96a088c@columbia.edu>
-References: <20261103-bpf-rhtab-irqs-disabled-v1-1-9874d96a088c@columbia.edu>
+To: "Antonio Quartulli" <antonio@openvpn.net>, <netdev@vger.kernel.org>
+Cc: <saeedm@nvidia.com>, <leon@kernel.org>, <tariqt@nvidia.com>,
+ <mbloch@nvidia.com>, <dtatulea@nvidia.com>, <cratiu@nvidia.com>,
+ <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@kernel.org>,
+ <kuba@kernel.org>, <pabeni@redhat.com>, <daniel@iogearbox.net>,
+ <hawk@kernel.org>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
+ <linux-rdma@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Antonio Quartulli" <antonio@mandelbit.com>
+Subject: Re: [PATCH net-next] net/mlx5e: Prefetch packets of upcoming CQEs
+ in the linear MPWQE path
+In-Reply-To: <20261103235823.536706-1-antonio@openvpn.net>
+References: <20261103235823.536706-1-antonio@openvpn.net>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -107,207 +107,81 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Tue, Nov 03, 2026 at 10:46 AM Mani Tofigh via B4 Relay <devnull+mt4022.columbia.edu@kernel.org> wrote:
-> A bucket lock is only ever held with IRQs disabled, so return -EBUSY
-> from deletes and from inserts of new keys when IRQs are already
-> disabled, like the other hash maps do on re-entry.  Lookups and updates
+On Tue, Nov 03, 2026 at 03:58 PM Antonio Quartulli <antonio@openvpn.net> wrote:
+> While processing a CQE, look at the CQE MLX5E_RX_PREFETCH_DIST (4) entries
+> ahead and, if it is completed, prefetch its packet headers, skb_shared_info
+> and page. Also prefetch the CQE twice as far ahead.
+>
+> Looking ahead requires uncompressed CQEs, so this is enabled only for
+> linear striding RQs without CQE compression.
 
-The other hash maps fail on re-entry only. rqspinlock detects it.
-This check fails every insert and delete with irqs disabled.
-That's perf_event progs, kprobes via int3, sched_switch and
-sched_wakeup tracepoints, sched_ext ops under rq lock.
-imo it's not worth breaking all of them for a rare deadlock.
+can we prefetch 4 strides ahead without the CQE, like gve_rx() ?
+In linear mode a packet takes one stride and HW fills the strides in order.
+mlx5e_alloc_rx_mpwqe() allocates all pages of the WQE.
+So mlx5e_skb_from_cqe_mpwrq_linear() can compute the address of the packet
+4 strides ahead from head_offset and page_idx.
 
-> This is the check Alexei suggested on the RFC of the series [1].  It also
-> stops perf_event and other programs that run with IRQs disabled from
-> inserting or deleting keys.  I can turn the reproducer into a selftest
-> if that helps.
+  per packet                 the patch     4 strides ahead
+  -------------------------  ------------  ------------------
+  CQE reads                  2             1
+  dma_rmb()                  2             1
+  mlx5e_get_mpw_info()       2             1
+  headers, page              prefetch      prefetch
+  skb_shared_info            prefetch      no, needs cqe_bcnt
+  next CQEs                  prefetch      no
+  first 4 strides of a WQE   prefetch      no
+  stride is not filled yet   no prefetch   wasted prefetch
+  CQE compression            not covered   covered
 
-It was my suggestion, sorry. It's too broad.
-v4 of rhash picked bpf_disable_instrumentation() to keep these callers:
-https://lore.kernel.org/bpf/20260513-rhash-v4-0-dd3d541ccb0b@meta.com/
+Then no need for MLX5E_RQ_STATE_PREFETCH_NEXT and mlx5_cqwq_get_cqe_ctr().
 
-Only a caller with irqs disabled can run inside the locked section of
-this cpu. Lets trylock the bucket in that case and spin otherwise.
+Something like this (not even compile tested):
 
-  caller with irqs disabled    today      this patch   trylock
-  -------------------------    --------   ----------   -------
-  bucket is not locked         works      -EBUSY       works
-  locked by another cpu        spins      -EBUSY       -EBUSY
-  locked by this cpu           deadlock   -EBUSY       -EBUSY
-
-Then no need for bpf_disable_instrumentation() in rhtab.
-params.trylock_irqsoff is a compile time constant in the fast path,
-like insecure_elasticity. The other rhashtable users pay nothing.
-
-The diff leaves one more bug: rhashtable_insert_rehash() calls
-kvmalloc(GFP_ATOMIC). That's not ok in NMI.
-
-Something like this (compile tested only):
-
-diff --git a/include/linux/rhashtable-types.h b/include/linux/rhashtable-types.h
-index 3576b8f..a5c4e69 100644
---- a/include/linux/rhashtable-types.h
-+++ b/include/linux/rhashtable-types.h
-@@ -52,6 +52,8 @@ typedef int (*rht_obj_cmpfn_t)(struct rhashtable_compare_arg *arg,
-  * @min_size: Minimum size while shrinking
-  * @insecure_elasticity: Set to true to disable chain length checks
-  * @automatic_shrinking: Enable automatic shrinking of tables
-+ * @trylock_irqsoff: With irqs disabled insert and remove don't spin on
-+ *		     the bucket lock and return -EBUSY
-  * @hashfn: Hash function (default: jhash2 if !(key_len % 4), or jhash)
-  * @obj_hashfn: Function to hash object
-  * @obj_cmpfn: Function to compare key with object
-@@ -65,6 +67,7 @@ struct rhashtable_params {
- 	u16			min_size;
- 	bool			insecure_elasticity;
- 	bool			automatic_shrinking;
-+	bool			trylock_irqsoff;
- 	rht_hashfn_t		hashfn;
- 	rht_obj_hashfn_t	obj_hashfn;
- 	rht_obj_cmpfn_t		obj_cmpfn;
-diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
-index 70dac92..ba2c594 100644
---- a/include/linux/rhashtable.h
-+++ b/include/linux/rhashtable.h
-@@ -339,6 +339,33 @@ static inline unsigned long rht_lock(struct bucket_table *tbl,
- 	return rht_lock_nested(tbl, bkt, 0);
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+index 22fea47..31d5bc4 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+@@ -2094,6 +2094,29 @@ mlx5e_skb_from_cqe_mpwrq_nonlinear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *w
+ 	return skb;
  }
 
-+/*
-+ * The bucket lock is held with irqs disabled. A caller with irqs disabled
-+ * may run inside the locked section of this cpu (NMI, kprobe, tracepoint).
-+ * It cannot spin.
++#define MLX5E_RX_PREFETCH_DIST	4
++
++/* A packet takes one stride of a linear MPWQE. The address of the packet
++ * MLX5E_RX_PREFETCH_DIST strides ahead is known without its CQE.
 + */
-+static inline bool rht_lock_or_busy(struct bucket_table *tbl,
-+				    struct rhash_lock_head __rcu **bkt,
-+				    const struct rhashtable_params params,
-+				    unsigned long *flags)
-+	__cond_acquires(true, __bitlock(0, bkt))
++static void mlx5e_mpwrq_linear_prefetch(struct mlx5e_rq *rq,
++					struct mlx5e_mpw_info *wi,
++					u32 head_offset, u32 page_idx)
 +{
-+	if (!params.trylock_irqsoff || !irqs_disabled()) {
-+		*flags = rht_lock(tbl, bkt);
-+		return true;
-+	}
-+	/* bit_spin_trylock() always succeeds on UP */
-+	if (!IS_ENABLED(CONFIG_SMP))
-+		return false;
-+	local_irq_save(*flags);
-+	if (!bit_spin_trylock(0, (unsigned long *)bkt)) {
-+		local_irq_restore(*flags);
-+		return false;
-+	}
-+	lock_acquire_exclusive(&tbl->dep_map, 0, 1, NULL, _THIS_IP_);
-+	return true;
++	struct mlx5e_frag_page *frag_page;
++
++	head_offset += MLX5E_RX_PREFETCH_DIST << rq->mpwqe.log_stride_sz;
++	page_idx += head_offset >> rq->mpwqe.page_shift;
++	if (page_idx >= rq->mpwqe.pages_per_wqe)
++		return;
++
++	head_offset &= BIT(rq->mpwqe.page_shift) - 1;
++	frag_page = &wi->alloc_units.frag_pages[page_idx];
++	prefetch(netmem_to_page(frag_page->netmem));
++	net_prefetch(netmem_address(frag_page->netmem) + head_offset +
++		     rq->buff.headroom);
 +}
 +
- static inline void rht_unlock(struct bucket_table *tbl,
- 			      struct rhash_lock_head __rcu **bkt,
- 			      unsigned long flags)
-@@ -785,7 +812,9 @@ static __always_inline void *__rhashtable_insert_fast(
- 	if (!bkt)
- 		goto out;
- 	pprev = NULL;
--	flags = rht_lock(tbl, bkt);
-+	data = ERR_PTR(-EBUSY);
-+	if (!rht_lock_or_busy(tbl, bkt, params, &flags))
-+		goto out;
+ static struct sk_buff *
+ mlx5e_skb_from_cqe_mpwrq_linear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *wi,
+ 				struct mlx5_cqe64 *cqe, u16 cqe_bcnt, u32 head_offset,
+@@ -2114,6 +2137,8 @@ mlx5e_skb_from_cqe_mpwrq_linear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *wi,
+ 		return NULL;
+ 	}
 
- 	if (unlikely(rcu_access_pointer(tbl->future_tbl))) {
- slow_path:
-@@ -1066,7 +1095,8 @@ static __always_inline int __rhashtable_remove_fast_one(
- 	if (!bkt)
- 		return -ENOENT;
- 	pprev = NULL;
--	flags = rht_lock(tbl, bkt);
-+	if (!rht_lock_or_busy(tbl, bkt, params, &flags))
-+		return -EBUSY;
++	mlx5e_mpwrq_linear_prefetch(rq, wi, head_offset, page_idx);
++
+ 	va             = netmem_address(frag_page->netmem) + head_offset;
+ 	data           = va + rx_headroom;
+ 	frag_size      = MLX5_SKB_FRAG_SZ(rx_headroom + cqe_bcnt);
 
- 	rht_for_each_from(he, rht_ptr(bkt, tbl, hash), tbl, hash) {
- 		struct rhlist_head *list;
-@@ -1149,6 +1179,7 @@ static __always_inline int __rhashtable_remove_fast(
- 	 */
- 	while ((err = __rhashtable_remove_fast_one(ht, tbl, obj, params,
- 						   rhlist)) &&
-+	       err != -EBUSY &&
- 	       (tbl = rht_dereference_rcu(tbl->future_tbl, ht)))
- 		;
+> - With XDP, skb_shared_info is not prefetched. XDP_DROP rate, low-rate
+>   traffic and multiple queues were not measured.
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 6e21154..edc7572 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -2983,6 +2983,7 @@ struct bpf_rhtab {
- static const struct rhashtable_params rhtab_params = {
- 	.head_offset = offsetof(struct rhtab_elem, node),
- 	.key_offset  = offsetof(struct rhtab_elem, data),
-+	.trylock_irqsoff = true,
- };
-
- static inline void *rhtab_elem_value(struct rhtab_elem *l, u32 key_size)
-@@ -3011,6 +3012,7 @@ static const struct rhashtable_params rhtab_params_long = {
- 	.head_offset = offsetof(struct rhtab_elem, node),
- 	.key_offset  = offsetof(struct rhtab_elem, data),
- 	.key_len     = sizeof(long),
-+	.trylock_irqsoff = true,
- 	.hashfn      = rhtab_hashfn_long,
- 	.obj_cmpfn   = rhtab_key_cmp_long,
- };
-@@ -3143,21 +3145,11 @@ static int rhtab_delete_elem(struct bpf_rhtab *rhtab, struct rhtab_elem *elem, v
- {
- 	int err;
-
--	/*
--	 * disable_instrumentation() mitigates the deadlock for programs running in NMI context.
--	 * rhashtable locks bucket with local_irq_save(). Only NMI programs may reenter
--	 * rhashtable code, bpf_disable_instrumentation() disables programs running in NMI, except
--	 * raw tracepoints, which we don't have in rhashtable.
--	 */
--	bpf_disable_instrumentation();
--
- 	if (rhtab->map.key_size == sizeof(long))
- 		err = rhashtable_remove_fast(&rhtab->ht, &elem->node, rhtab_params_long);
- 	else
- 		err = rhashtable_remove_fast(&rhtab->ht, &elem->node, rhtab_params);
-
--	bpf_enable_instrumentation();
--
- 	if (err)
- 		return err;
-
-@@ -3268,16 +3260,11 @@ static long rhtab_map_update_elem(struct bpf_map *map, void *key, void *value, u
- 	memcpy(elem->data, key, map->key_size);
- 	copy_map_value(map, rhtab_elem_value(elem, map->key_size), value);
-
--	/* Prevent deadlock for NMI programs attempting to take bucket lock */
--	bpf_disable_instrumentation();
--
- 	if (map->key_size == sizeof(long))
- 		tmp = rhashtable_lookup_get_insert_fast(&rhtab->ht, &elem->node, rhtab_params_long);
- 	else
- 		tmp = rhashtable_lookup_get_insert_fast(&rhtab->ht, &elem->node, rhtab_params);
-
--	bpf_enable_instrumentation();
--
- 	if (tmp) {
- 		bpf_mem_cache_free(&rhtab->ma, elem);
- 		if (IS_ERR(tmp))
-diff --git a/lib/rhashtable.c b/lib/rhashtable.c
-index 500c45c..2dc13f0 100644
---- a/lib/rhashtable.c
-+++ b/lib/rhashtable.c
-@@ -650,7 +650,8 @@ static void *rhashtable_try_insert(struct rhashtable *ht, const void *key,
- 		} else {
- 			bool inserted;
-
--			flags = rht_lock(tbl, bkt);
-+			if (!rht_lock_or_busy(tbl, bkt, ht->p, &flags))
-+				return ERR_PTR(-EBUSY);
- 			data = rhashtable_lookup_one(ht, bkt, tbl,
- 						     hash, key, obj);
- 			new_tbl = rhashtable_insert_one(ht, bkt, tbl,
-
-Pls add the reproducer as a selftest in patch 2 and cc Herbert Xu
-on respin.
-
-pw-bot: cr
+Pls add XDP_DROP and XDP_TX numbers.
