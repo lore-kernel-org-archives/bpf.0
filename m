@@ -1,101 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793757883;
-	b=1eKoeXmbhdrOghBTZZk6u3EAxSS6jYRnSilaw7rSnsPfaQxf31dWSkvF76LeFDFkccHx
-	 2THS7UfkpW9b+vqU5MtnOGZWF/7jomnVgJL3UsQsyXb70RLr9I58aTNBixRnrsV2SbCYW
-	 blI1RJ1WzAqK8HFnwCV/i8rP7fe5Ems6k1yA/Ywd59s+MZKx8Ng2ML494Y7jRHY8MiT5G
-	 2vIHUyRriKsV7gv+xMUkN16SKNxPpkvopJ6i5YPSJv1VMaGp0cil+URSe56kqD45tCFNz
-	 6IKm7ezrIODcJ89+BmDTTEnmPz3fP+cnKUuLepN1/9AjxfH5/AT97srVhRn/5h/9vuA==
+	t=1793758370;
+	b=j+ckiBr1ZCy2lLCLYDnv/TVGtDXcdeW6nW6k7P+P8KP4EMpjwEJ6x50QviY9yJTwOPNc
+	 r5VsxkMFNV4shihrf7Tea4zHYfQaIy2ty8QkdQnN3O36mOYcReumDr7OMuGFI8RTloUwu
+	 oQO9AGO8E3j8U42hpiyFrzCy0WSZiv+up9UCJvhBXg8LJCg4ahX4UVhFSss+XAn/KcLHz
+	 ZNbz25u/X8f5IFIfTWUHDaaIoVXAZ/CRasTa8qRbGy+E1XLsPWrNgrv44XAPD2DHQRoKM
+	 PToe4RnedV9IkA5DL33eOodxPvG5clPQDYrIPVYbIxWj+zCH3wDYjcqvC79iT2qDl5Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793757883;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=i5DyPuoQ2QtooVZJkj1fmVXJYWMukRTdT9UmVFgbpUc=;
-	b=qYDOhwQzKUErU7SnnprdJXQFEqocCTm6I638FPCJzZ0OKgEyHQ35eBT9IX7au6KgdQ1g
-	 Wj4pe9WAuGSY8j0qsdtToXzyM5nIVt1SEfqKFI707GdWHN6ZTLo1dX5y1gwuUpY5SYhtR
-	 I9WPu2LywFX02XnIxqCn1Kqe2pUnJjzjJu4FCcnL8kytZhBXWqTgtGD2IkoY4xqAfQfvk
-	 Tt6EMwhKBBRmcNEUkxPJJFejK5+7VuM0e/g8G0dQzSNbTM6z8x5+LFaHzGcNqouCMaASe
-	 HtrQvOMVH/98bjSWJoIwVnO69bY2DM2IHSKJadhd2vAhTJSzZDOQ49Ru70Znjo8hHXg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793758370;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=sSMkGs+FM31LQn6NU9vxaAtCTdBlQc1g2P1KFfFuEwA=;
+	b=fhH4ygs6GZDdiIKmgrIgP8UlNRBO4FBsgNupdMtn8QBilStAzWMFmHWtVpgS5BFfVTTO
+	 fBN2qiP/Peca16UXxVH585kOa43m//LUhxOgTe53IPwoT2Ou4UPC/p3GxgbULnTakbrr/
+	 ybaVbtzJAPwQUhKwrcRJBc6Mn/LZO4DF2fYZPVgXZLQmDkesZ9QbcgW6TTj4mWfgZdTW8
+	 oNuibtbEhKFZnzVxi8dDtcqDb8JRkloqg0u9ZJH3PXxXUJjLM47WZDhLMYU12Ve46+9SB
+	 FOEUIu2KXLiA5plSuOxnZURcfdj3RwmfsUxHTMu4BguUsAdAUFIorWcp87ZnGXCzOWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IkMqmVb+;
-	arc=none smtp.remote-ip=209.85.214.177
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ifqHLmH+;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FEEB606A329
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 02:04:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9FEEB606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D272606A31B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 02:12:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IkMqmVb+
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2e96502e447so1449695ad.1
-        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 18:04:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793757882; x=1794362682; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=i5DyPuoQ2QtooVZJkj1fmVXJYWMukRTdT9UmVFgbpUc=;
-        b=IkMqmVb+s7eQXz9CRvobFAuhMp454C/jf+ZIpYugWSUX8QxHFjn8nf5QeJtQO9OSGB
-         57QeCNwuigRQgzjCPjjJ4XfQnBiphfCdDiwMjAtOhUdJ17e9VAFRZZSdwbos1/UwYqth
-         4tUHXGaJz7XgeC00BldzMMa+mCtV7r46X4WOMOHAMsg3qVMLWzDa9wWTMgYEQNiukexy
-         qL+OZcDmCjTVgftVHFtL/axcExcDwglF7mKlVdjYlHk454YgBWJNTQfmGWuPX8Q5XWca
-         pmIcTokqfn11vp50ZxY6fpgpvWfYAq46HkTSzIp3HPQt4QtHmNaNp5n1JXmY+bTOhbiW
-         dbLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793757882; x=1794362682;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=i5DyPuoQ2QtooVZJkj1fmVXJYWMukRTdT9UmVFgbpUc=;
-        b=W13KX781LMmWfFIEL/ibCFenNa0EMwlQf0Xz/T3mUoUczQ9p8nZ36n8ODTWvrNYs5l
-         5hpCaAdvogDxDxhHTaXQhTy5e9muRpXIJMZb/W8Pd9V5QZp2xU6iYG3A1TKHjcwjy1ll
-         GrhzbqO0QykJPJ4WoHWIUoDpZjccwy6mvHX/mXKyeft+apuhtmfzrGYwxH3LafppDr4h
-         h53TJCvi5w8Gwl1z9Mnefld0ZK3rMtmY70Y02I8oyFstclP3LGfDhbTzmboSGZrU6biJ
-         cFEREEoYN6CWOs13wLXELMkLF2b9pvuwBqoiJKGH+kh7+UHifMyJ2zQ7onM1XDQzKdQp
-         BSNQ==
-X-Gm-Message-State: APuU4Z+Eo/X4RPMtY7tfULI5D/OZp3Ifx2c0Cb+/3o1BC+d38zv8c4do
-	h3Kb6T9MbIDYZ4xmft/JXvAjU9HbKfxb4Rav4txZXmiQftsOxjGBomID
-X-Gm-Gg: AYBFou0HfHMJacMq5BjpfkRoOgC9ayCgRBA06HTFn1m891W5V7NfCNiEUmhS+6ZYfGe
-	PODVzyA+rEamSNYFd2g362KTDX0T/7GTVmVAf3BJtK/7W0I43Ny5PTTkOwTZwWuLh8nvc+9ozde
-	LRdV/nxlvJ2m4YhtuEF+spu4XamPuN/NVtKNZM/Q6z8A0fIauh4DXpLE65OVm5Ih+3ZJAplyjy+
-	H7Jo9xDAokXjosYy+zu2vbmIMYxM748EuLCcgRM15UfIiVkTxbW5SpP0N8g9jiA2hFAiE6P7SvL
-	itTjxg9XjwInpx8Oh5VUItW61AlzAkRBWy0sBMwh8sdskKnhmg0+/vaZdV4QJTFTfN22wCsR9pL
-	vAUv8t+ejMkPufOfZICXubKk6I1cR5fX+QVlD15fyPRCNdpRoRdpmkzSnYH8PCaPl1TXOJgF4Qj
-	TnGijWetqtv8VQ/2o6ANL3q/mQ+/1FGkPWfCunUmtAeHY7yJ2YzL3ulNk9xWIzyju0Mon9o1prH
-	sHiMOFHQ7sDYuxrut/5z8DjTeqruBrUhT9zuVQdoDuHixc3sqWubHchMAbHgXJrmCWhzDZTRLiC
-	vUykhv1VETKfqU6J7imKTKYH1ODcXDFx+VtclERRw2jiCwn/j4OnLsPEaBYyn1ttpJGLAT0JrGM
-	FMPxqQLe4HChRUOczbHxG/kjTO32caUlK8g==
-X-Received: by 2002:a17:90b:48d0:b0:3ac:80de:44e8 with SMTP id 98e67ed59e1d1-3ae8983c697mr11675852a91.43.1793757882013;
-        Tue, 03 Nov 2026 18:04:42 -0800 (PST)
-Received: from localhost ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0944bb7d0sm1356275a91.11.2026.11.03.18.04.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2026 18:04:41 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 04 Nov 2026 02:04:40 +0000
-Message-Id: <DMM23MFOQ7ZL.3P1ZUMR0MKVEM@gmail.com>
-Cc: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <john.fastabend@gmail.com>, <jakub@cloudflare.com>, <davem@davemloft.net>,
- <edumazet@kernel.org>, <kuba@kernel.org>, <pabeni@redhat.com>,
- <horms@kernel.org>, <kuniyu@google.com>, <willemb@google.com>,
- <matttbe@kernel.org>, <mptcp@lists.linux.dev>, <mason@kernel.org>,
- <josef@toxicpanda.com>
-Subject: Re: [PATCH bpf v2 03/15] bpf, sockmap: Don't let an SK_PASS verdict
- cover the next message
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <netdev-bot+sashiko@kernel.org>
-In-Reply-To: <4d3b8639-a313-444b-831a-f1f069882b86@linux.dev>
-References: <20261102072112.4160195-4-alexei.starovoitov@gmail.com> <179374187706.488855.8366350890804573396@kernel.org> <DMM01WTK5E12.1RIGV9OGW23PZ@gmail.com> <4d3b8639-a313-444b-831a-f1f069882b86@linux.dev>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ifqHLmH+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952851F000C1;
+	Wed,  4 Nov 2026 02:12:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793758369;
+	bh=sSMkGs+FM31LQn6NU9vxaAtCTdBlQc1g2P1KFfFuEwA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ifqHLmH+nH6VjoeXeyknC3g7rxNoiEAj7cyjZkCCD6b7SQWx1438LTerVao2Ajudy
+	 yRBJ8B06DjvtEGuFg7RqJbivPZG2jqKdSu8+RmZ/n+zLbBe+UYqSYUj1b9ZuXG8pGX
+	 HF+U8+uXdFsEUmE2gLLtFa7K7HdmY636P5P5hQyODhLPjxJr/fl9P6UpI1nFth+TNk
+	 54PcNCmn5VJoFEKqAW8jhgfnfdjmvEW/95uKurw/PvQLa9EYoauKsPo8BBcOdccmNs
+	 m6ter9dQGZVEJ1PEzzybpMVPmAhOJny7HFnNmACpNBcIKL1UVyXtRQh/jhWROuimDJ
+	 kuht7H4i/OwXQ==
+Content-Type: multipart/mixed; boundary="===============4312699437886039344=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,15 +49,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Message-Id: <80c599809cfc3fbcfa077d05c36283e64225f6340c30ecb08407210c74e438ae@mail.kernel.org>
+In-Reply-To: <20261104012401.1354861-15-alexei.starovoitov@gmail.com>
+References: <20261104012401.1354861-15-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v3 14/14] selftests/bpf: Add tests for BPF_REG_ARENA_SP
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed,  4 Nov 2026 02:12:49 +0000 (UTC)
 
-On Tue, Nov 03, 2026 at 05:32 PM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
->> The log of patch 13 says that a cork is not safe for two senders.
->> Jiayuan proposed to serialize the senders in the reply to that patch.
->
->
-> I will pick up thoes pre-existing issues and organize others reported by sashiko.
+--===============4312699437886039344==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks, but make sure to create reproducers for all sashiko findings.
-Most of them are wrong.
+> selftests/bpf: Add tests for BPF_REG_ARENA_SP
 
-I'm waiting for netdev maintainers to ack net/core/ bits.
+TL;DR: Nit in selftests: the r12 instruction macros (ADJ, LDX, ST) are
+duplicated across several arena_stack test files, some hand-encoded. Suggests
+moving them to one shared header.
+
+> diff --git a/tools/testing/selftests/bpf/progs/arena_stack_grow.c b/tools/testing/selftests/bpf/progs/arena_stack_grow.c
+> new file mode 100644
+> index 000000000000..be64296431c3
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/arena_stack_grow.c
+
+[ ... ]
+
+> +/* Compilers don't know r12 yet */
+> +#define R12 12
+> +#define ADJ(n)		BPF_RAW_INSN(BPF_ALU64 | BPF_ADD | BPF_K, R12, 0, 0, n)
+> +#define LDX(dst, off)	BPF_RAW_INSN(BPF_LDX | BPF_MEM | BPF_DW, dst, R12, off, 0)
+> +#define ST(off, imm)	BPF_RAW_INSN(BPF_ST | BPF_MEM | BPF_DW, R12, 0, off, imm)
+
+This isn't a bug, but this block of r12 insn macros (R12, ADJ, LDX, ST) is
+the same as the one in arena_stack.c, while arena_stack_loop.c and
+arena_stack_nomem.c write the same encodings out by hand, e.g.
+__imm_insn(adj, BPF_RAW_INSN(BPF_ALU64 | BPF_ADD | BPF_K, 12, 0, 0, 16))
+with a "r12 += 16" comment.  verifier_arena_stack.c defines a third,
+size-taking variant.
+
+Could these macros live in one shared place, for example bpf_misc.h or a
+small arena-stack header, so that arena_stack_loop.c and arena_stack_nomem.c
+can use ADJ(16) like their neighbours, and the encodings can be dropped in
+one spot once compilers emit r12?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41755299448
+--===============4312699437886039344==--
