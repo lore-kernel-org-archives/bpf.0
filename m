@@ -1,79 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793779896;
-	b=GSmU9I0jxPgW1xPFGDZbYxJ9DMCLNrOOArSQn+j7TPonmUKgIyKsHVUNOaneQk/DW8QG
-	 hTDrJzHPvCYuEgYa3Wj838qcpv+kqm0Pwc/KZUX+VUtPCN+irlJFOao+I20zNNEGA9XOL
-	 FjyKeCoGkvSLYTLWZqUAopr8h4M5bY2CyC6n6RLb3phafSFibpcFFXLNQU32oTp60kwRx
-	 oCcyyk2zBXYg/H7QlSXL5fXfHkTGZvliitg7SSkB3eY/wr2v7E4EWM5Vvd0RiRSkVKemx
-	 cArtVbom+6JuXsFEePOcy/bJJdploic9hIMa8Qhf6R8rdwGa9ctQMiukUhvLsJa+FBw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793779896;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=MLhpiOQq+BcLHoXpwFBleckIHcU5aB2HxUSVZEWSQXc=;
-	b=sNqPr33gj2ePQyWBBFufCZqZhczblKEbgop1W152s2Pe+aZXQrznYrQQHSXrDBg9mYwN
-	 S95uQ5lS32yyeFmQ3WqemfxCH2xxOoRyH6BNkhQkLv2Vh4KROvnmUrmwFFUAAqWuCm4KM
-	 igydlTlomKtnZ/pC/H2VENqHcYZDmPQawggQzyURNxz2hNe5+vaMrTnEbgapg57Y5hThj
-	 rjz5MPADkKy62tVtWUImPTyac7H3wb5wqBQhnYSzDw3bEYR6Bqd+NRF0jOq9tM1xZzlr1
-	 k9o4HbFqoSKBAl0XEfA3ArMe+BPE7iQkj1dBtmT93PHfFjBYdCk9uKH7o8OBxksLrxw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="IuXFvwm/";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41DD606A31B;
-	Wed,  4 Nov 2026 08:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IuXFvwm/
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793779895;
-	b=a2NQcqweFi0UL41gAF1ZBj1W0z3PpKMG7kCeS3l2smMS17M9UqKj4z7fR80TUfR0LE9X
-	 iL9PbfWvrRhlBxnf9qCf/TOIh2mr4+JwEt5s2WQV0HR9N1YuRm30pWrnWdgoUSDPM5/ZG
-	 LmpjJHfwTU5XyfZTDny8n5kxCIl6GhYcd02bWcP/Oe1qpKY9mQcF7Re/CF90EcHLs+Ta4
-	 xKdIsoSrvtNNBtk7hkaZ30BkxOoQ0fAJcYSy1YKWsgRSCANojYPoFOW9G2SnkgbJq43vs
-	 OWquyDiuhA8IqRshsVfxXAcQXXsNxqIiJLIvu7ziG43QHZB6mKzGPD8FgpHu1Ekw5zw==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793779895;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=MLhpiOQq+BcLHoXpwFBleckIHcU5aB2HxUSVZEWSQXc=;
-	b=onY+AXlfaq2v+lNl8+i1GnWHzalFb/HcO2kUIyC5oznBY9tNesNlF+okmShSBs5vqIwz
-	 wvhx5YFrP1HqhQoOsLc/IHYTYekdriJ/yim/MzIjNynLPYJxsOc+IMzXafApgqA3rwbpJ
-	 BGykl7rYI1yU6IEE60lGpAUU/luZNZIGhsxNa1LsV0CC7wVpK5+gVKvdZbczI0Yf41Y1W
-	 CKaLCWI4X5oePeFWZADpmzMcdffCSGWUI7c4oiGmhcXnptt0rYbbB5k2hSabSg5f+JrsR
-	 o91p/JBAjdQwWVybCu8CibXWVaqnjFPmE0IgN+J40Avmz6GqJX4GjxzbHS2+QlXkpXw==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.5
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793781582;
+	b=jAdCqEYq1+zTu/BivWs/OcxN9p7mMD2BXWvRxJK9biU0MfOYTb0QO/ac2564oEbbc8s8
+	 gSq0yAQeUWgIzPtqk24+7r/iAiZKrnGQ4pJtII6+74t3YmGKFJpcgWlTWIfJBbBvIzSui
+	 x6ARF7uzy63KdpmpsRdCrZALS98ih785xaSn6Nc1lsEhcg1VknkBz1FCSyFfDwYIYkyzE
+	 2KXKI/wrjnjiwgUXnSCFQnJ3qB/4iE07Z0DHau/JVLHF9SDeQTIowvSgg7UO2+2NRtheM
+	 AI+MaHcBfKjexx27KVfkggMDXIqzEvPj9dwAO8vyy6A9d30ZOQvytMJ7u31dtrpEPOQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793781582;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=PxxRd/okwspTcATcRMnJkqLx7V5OMPg49j6hXfab6ws=;
+	b=gMp5ae5zdx3w0oQAeqH1vXIHnetbYMl59XrmGKJD7ui7DvrzfU8raR3/EFKjsYSoaR5v
+	 42eRMBIhywTMhR+KzqY79ysO+QaONM1jaDpaX0mxpwKVGDDMTLtrelSkd7jCBBmOf+zK0
+	 fN4THW/9psByTSoymkYe2tKFeKkdpIF+lf+lP+CQjKhp60h7yR+17iny/PPdAcDASNqaZ
+	 wNfQJD6/gWwbkXkOo7wscjE87IugT5WrZ8DQtk6bzV4dEG5hHnnR6VLO4Jk22jOSHK2an
+	 swL5qR4fcZwcPDhBAocIspJWx7AtAHu+fKO2ISQAkk7ka9Bk3sZrHiZ6izMyE55eMAQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=UNYq18WU;
+	arc=none smtp.remote-ip=220.197.31.5
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D90231F000C1;
-	Wed,  4 Nov 2026 08:11:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793779895;
-	bh=MLhpiOQq+BcLHoXpwFBleckIHcU5aB2HxUSVZEWSQXc=;
-	h=From:Date:Subject:To:Cc:Reply-To;
-	b=IuXFvwm/+J/Uw90dfZV8DYqJig3VePze9NUmNZyJSpUgokU4roHu3dwD34f0QZFKR
-	 H6+6SZSDk2olabbd3/lY9OAp/fQUe3GiMeV/IFynh05MCitH2Fb9ojYiYuxSiGLIKb
-	 P2nG97WdhzzjAxE4dEfeYo7sgg8Ah2gXFRib2vw8cA3Zka2XvIcDBSjZLZI9PhzjyN
-	 vjd395E9DuQEzIY7iA23/jfuRaBKU1g1cNt4kyjnu/20GbiH3R9HGr+4aEFZOUWdQ0
-	 51JWU6Q9QYhLOOVz0HzAmh3mYGX5gNLMxB4YUhESXhoL27kSnLwOk9bshKCn+fdCFS
-	 6TY7uQ7nZHiug==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 4E3BB46D4D;
-	Wed,  4 Nov 2026 08:11:34 +0000 (UTC)
-From: Marcin Knap via B4 Relay <devnull+marcin.knap.vecima.com@kernel.org>
-Date: Wed, 04 Nov 2026 09:11:24 +0100
-Subject: [PATCH net v3] xsk: Do not free ZC Rx buffer when the Rx ring is
- full
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43DE8606A326;
+	Wed,  4 Nov 2026 08:39:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43DE8606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=UNYq18WU
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Px
+	xRd/okwspTcATcRMnJkqLx7V5OMPg49j6hXfab6ws=; b=UNYq18WUVXDVLSc5Zo
+	AtYAXQcFBZHZXg4/IDFit6vyqJR87OKx8xnQffrMBV/A8EcBOf9Dmo5/CU0OLzlF
+	knw2k6DGI2iXkcfXvgfantHba7exMB7TgCyr+biPpQLO7SzKjh6hTlQVd4BAqUfX
+	h9g3PHta4MZYotyCUTDbw4E40=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3vy8J7+pqdSeZFQ--.24622S2;
+	Wed, 04 Nov 2026 16:38:35 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: song@kernel.org,
+	jolsa@kernel.org,
+	ihor.solodrai@linux.dev,
+	kpsingh@kernel.org,
+	matt@bobrowski.net,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	yonghong.song@linux.dev,
+	emil@etsalapatis.com,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com
+Cc: bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v3 1/2] bpf: Add sleepable version of bpf_get_stack in tracing_prog_func_proto and tp_prog_func_proto
+Date: Wed,  4 Nov 2026 16:38:32 +0800
+Message-Id: <20261104083833.971911-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,252 +75,154 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261104-xsk-zc-rx-double-free-v3-1-11a0c7ef1973@vecima.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4XNQQ6CMBAF0KuQrh3TKYjiynsYF6VMpSrUtNCgh
- LtbcKML4/JP/rw/Mk/OkGf7ZGSOgvHGtjGkq4SpWrZnAlPFzAQXOXIsYPBXeCpwA1S2L28E2hE
- ByrTkm0JVGWoWf++OtBkW98ha6tjpffR9eSHVzeJcq43vrHss6wGX8p+hgIAgpMRC57nY6fIQS
- JlGrpVtlpEgPpiU/2JEZJTmWGWy0KnefjHTNL0A+P3rnhkBAAA=
-X-Change-ID: 20261019-xsk-zc-rx-double-free-1a3b059cd41f
-To: Tony Nguyen <anthony.l.nguyen@intel.com>, 
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Magnus Karlsson <magnus.karlsson@intel.com>, 
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, jtollet@cisco.com
-Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Jason Xing <kerneljasonxing@gmail.com>, 
- Nitin Shetty J <nshettyj@marvell.com>, Marcin Knap <marcin.knap@vecima.com>, 
- Joshua Washington <joshwash@google.com>, 
- Harshitha Ramamurthy <hramamurthy@google.com>, 
- Sunil Goutham <sgoutham@marvell.com>, Geetha sowjanya <gakula@marvell.com>, 
- Ratheesh Kannoth <rkannoth@marvell.com>, 
- Subbaraya Sundeep <sbhatta@marvell.com>, 
- Bharat Bhushan <bbhushan2@marvell.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793779893; l=8126;
- i=marcin.knap@vecima.com; s=20261019; h=from:subject:message-id;
- bh=/laycyHfa7+gbXe0gfkjeC8lPXK/Rk4DOFzJfL0dQwQ=;
- b=hQCx725MgG1C0JQBAD56aXXsYonoB7PKYR+oWIN1Bt+sR9ahZvW+49W7jXZ/OcSy9QDVfXk28
- shOgotK2NCWB0XstEKyqQIWoOAlOaPF9TGPzKZTut+Z2IOzTkHQoE8N
-X-Developer-Key: i=marcin.knap@vecima.com; a=ed25519;
- pk=rCvVOuopf4s4BHtLE+FRnv0x83PoFHgBPo9mtNlvzLk=
-X-Endpoint-Received: by B4 Relay for marcin.knap@vecima.com/20261019 with
- auth_id=1237
-X-Original-From: Marcin Knap <marcin.knap@vecima.com>
-Reply-To: marcin.knap@vecima.com
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3vy8J7+pqdSeZFQ--.24622S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Gr1fKw4kKF1kZFW3uF43Awb_yoW7tr4DpF
+	9IyFyayr4kX3ySqFZxGw1DZFy5W3ykX3yUKFyxG34Y9r1UXr18tFy7KF4a9F1rur97G342
+	93W0qrsFkw40va7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07ja4E_UUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbCzw1UzGrq7w2LrQAA3e
 
-From: Marcin Knap <marcin.knap@vecima.com>
+From: Feng Yang <yangfeng@kylinos.cn>
 
-When an XDP program redirects a zero-copy buffer to an XSK and the
-socket's Rx ring is full, xsk_rcv_zc() frees the buffer and returns
--ENOBUFS to xdp_do_redirect().
+bpf_get_stack() has two implementations.  bpf_get_stack() passes
+may_fault == false and resolves build IDs with build_id_parse_nofault(),
+so an IP whose backing file page is not resident falls back to
+BPF_STACK_BUILD_ID_IP.  bpf_get_stack_sleepable() passes may_fault == true
+and uses build_id_parse(), which faults the page in and returns a real
+build ID.
 
-A failed xdp_do_redirect() leaves the buffer owned by the caller, so
-the driver releases it as well. That is harmless when the driver frees
-it right away, as i40e, ice, igc, stmmac, idpf and most others do:
-xp_free() ignores a buffer that is already on the pool free list. It
-breaks when the driver releases or uses the buffer later, after it may
-have been reallocated:
+Only kprobe/uprobe programs are routed to the sleepable implementation
+today, so the other program types that can be sleepable keep losing
+build IDs for non-resident pages:
 
-- mlx5e treats the failure as XDP_DROP and releases the buffer when
-  the Rx WQE is refilled. By then the buffer can be in use for another
-  Rx descriptor, so an in-use buffer goes back on the free list and the
-  same UMEM frame is later handed to user space twice. With striding
-  RQ this also ended in a NULL pointer dereference in
-  mlx5e_post_rx_wqes().
-- ixgbe and igb keep the buffer in the ring on their need_wakeup
-  -ENOBUFS (XDP_EXIT) path and run XDP on it again on the next poll.
-- dpaa2 hands the buffer back to its hardware pool while it is also on
-  the pool free list.
-- octeontx2 returns false on a failed redirect, so the caller goes on
-  to build an skb from the freed buffer.
+ - tracing_prog_func_proto() serves BPF_TRACE_ITER, fentry/fexit/fmod_ret
+   and BPF_TRACE_RAW_TP programs, and falls back to
+   raw_tp_prog_func_proto() for BPF_FUNC_get_stack, which is also the
+   get_func_proto() of BPF_PROG_TYPE_RAW_TRACEPOINT and is reached by
+   BPF_PROG_TYPE_LSM and BPF_PROG_TYPE_SYSCALL through the default cases
+   of bpf_lsm_func_proto() and syscall_prog_func_proto().
 
-Leave the buffer with the caller on both the single-buffer and the
-multi-buffer -ENOBUFS paths, as xsk_rcv() and xsk_rcv_check() already
-do. Make the drivers that relied on the core freeing the buffer free
-it themselves:
+ - tp_prog_func_proto() serves BPF_PROG_TYPE_TRACEPOINT programs.
 
-- i40e and ice consume the descriptor on XDP_EXIT without freeing it.
-- gve DQO counts the redirect error without freeing the buffer.
-- octeontx2 now frees the buffer and reports it as consumed.
+Route them to bpf_get_stack_sleepable() as well and mark the new
+prototypes might_sleep, following
+commit 9d02927fdf4e ("bpf: Mark faultable stack helpers as sleepable"),
+which did the same for bpf_get_task_stack() and uprobe programs.
 
-Seen on Mellanox ConnectX-6 DX MT2892 (FW 22.47.1026) with AF_XDP
-zero-copy on 7.3.0-rc6 when the user-space consumer could not keep up
-with the Rx ring. With this change no duplicate frames were seen with
-striding RQ on or off.
+The verifier then rejects bpf_get_stack() from these program types
+whenever in_sleepable_context() is false: inside bpf_rcu_read_lock(),
+bpf_preempt_disable(), bpf_local_irq_save() and bpf_spin_lock() regions,
+and in callback subprograms running under rcu_read_lock().  This also
+covers calls that do not pass BPF_F_USER_BUILD_ID and would not sleep;
+such programs load today.  This is the same trade off that making the
+faultable stack helpers sleepable made for bpf_get_task_stack().
 
-Fixes: 269009893146 ("xsk: recycle buffer in case Rx queue was full")
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Reviewed-by: Björn Töpel <bjorn@kernel.org>
-Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
-Reviewed-by: Nitin Shetty J <nshettyj@marvell.com>
-Signed-off-by: Marcin Knap <marcin.knap@vecima.com>
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
 ---
-Tested on mlx5 (ConnectX-6 DX) in zero-copy single-buffer mode.
-The i40e and ice changes and the multi-buffer path are build-tested
-only, as I don't have that hardware available.
+v3: Add selftest. Update commit messages.
+
+v2: Move regs onto the stack.
+https://lore.kernel.org/all/20261102073714.1103088-1-yangfeng59949@163.com/
+
+v1: https://lore.kernel.org/all/20261028093548.790977-1-yangfeng59949@163.com/
 ---
-Changes in v3:
-- Target net instead of bpf (Maciej).
-- Reword the changelog only: drivers that free the buffer right away
-  are not affected; name the ones with a deferred release or reuse
-  after free (AI review). No code changes.
-- Collect Reviewed-by tags.
-- Link to v2: https://patch.msgid.link/20261030-xsk-zc-rx-double-free-v2-1-cf01d4a9f3f7@vecima.com
+ kernel/trace/bpf_trace.c | 54 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 52 insertions(+), 2 deletions(-)
 
-Changes in v2:
-- Also free the buffer on zero-copy redirect failure in gve DQO and
-  octeontx2, which relied on the core freeing it (AI review).
-- Audited the remaining zero-copy drivers against Björn's table.
-  ixgbe and igb no longer run XDP on a freed buffer after
-  XDP_EXIT; making them drop and consume the descriptor (R2) is
-  left for a follow-up unless you prefer it in this patch.
-- Rebased on current bpf.
-- Link to v1: https://patch.msgid.link/20261019-xsk-zc-rx-double-free-v1-1-2aa19f6628fb@vecima.com
-
-To: Joshua Washington <joshwash@google.com>
-To: Harshitha Ramamurthy <hramamurthy@google.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>
-To: "David S. Miller" <davem@davemloft.net>
-To: Eric Dumazet <edumazet@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-To: Sunil Goutham <sgoutham@marvell.com>
-To: Geetha sowjanya <gakula@marvell.com>
-To: Ratheesh Kannoth <rkannoth@marvell.com>
-To: Subbaraya Sundeep <sbhatta@marvell.com>
-To: Bharat Bhushan <bbhushan2@marvell.com>
-To: Magnus Karlsson <magnus.karlsson@intel.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-To: Simon Horman <horms@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: intel-wired-lan@lists.osuosl.org
-Cc: bpf@vger.kernel.org
----
- drivers/net/ethernet/google/gve/gve_rx_dqo.c           |  4 +++-
- drivers/net/ethernet/intel/i40e/i40e_xsk.c             |  1 +
- drivers/net/ethernet/intel/ice/ice_xsk.c               |  1 +
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c |  3 ++-
- net/xdp/xsk.c                                          | 15 +++------------
- 5 files changed, 10 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-index 82ed5e48b00a..cc544420df11 100644
---- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-+++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-@@ -686,8 +686,10 @@ static void gve_xsk_done_dqo(struct gve_priv *priv, struct gve_rx_ring *rx,
- 			goto err;
- 		break;
- 	case XDP_REDIRECT:
--		if (unlikely(xdp_do_redirect(priv->dev, xdp, xprog)))
-+		if (unlikely(xdp_do_redirect(priv->dev, xdp, xprog))) {
-+			xsk_buff_free(xdp);
- 			goto err;
-+		}
- 		break;
- 	}
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 2aec56d7f3d3..87f7758ffd04 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -84,6 +84,7 @@ static struct bpf_raw_event_map *bpf_get_raw_tracepoint_module(const char *name)
  
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index 51a05ce4c7ce..a11ee1f3fa38 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -360,6 +360,7 @@ static void i40e_handle_xdp_result_zc(struct i40e_ring *rx_ring,
- 		return;
+ u64 bpf_get_stackid(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ u64 bpf_get_stack(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
++u64 bpf_get_stack_sleepable(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
  
- 	if (xdp_res == I40E_XDP_EXIT) {
-+		xsk_buff_free(xdp_buff);
- 		*failure = true;
- 		return;
- 	}
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index 0643017541c3..7c1dd4c87a71 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -636,6 +636,7 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring,
- 		if (likely(xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR))) {
- 			xdp_xmit |= xdp_res;
- 		} else if (xdp_res == ICE_XDP_EXIT) {
-+			xsk_buff_free(first);
- 			failure = true;
- 			first = NULL;
- 			break;
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-index 90af9b9044aa..6d10c132f61c 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-@@ -1555,7 +1555,8 @@ static bool otx2_xdp_rcv_pkt_handler(struct otx2_nic *pfvf,
- 				*need_xdp_flush = true;
- 				return true;
- 			}
--			return false;
-+			xsk_buff_free(xsk_buff);
-+			return true;
- 		}
+ static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
+ 				  u64 flags, const struct btf **btf,
+@@ -1477,6 +1478,26 @@ static const struct bpf_func_proto bpf_get_stack_proto_tp = {
+ 	.arg4_type	= ARG_ANYTHING,
+ };
  
- 		err = xdp_do_redirect(pfvf->netdev, &xdp, prog);
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 781ba46eb152..89bac2feeff2 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -224,21 +224,15 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- 	struct list_head *xskb_list;
- 	u32 contd = 0;
- 	u32 num_desc;
--	int err;
++BPF_CALL_4(bpf_get_stack_tp_sleepable, void *, tp_buff, void *, buf, u32, size,
++	   u64, flags)
++{
++	struct pt_regs *regs = *(struct pt_regs **)tp_buff;
++
++	return bpf_get_stack_sleepable((unsigned long) regs, (unsigned long) buf,
++				       (unsigned long) size, flags, 0);
++}
++
++static const struct bpf_func_proto bpf_get_stack_proto_tp_sleepable = {
++	.func		= bpf_get_stack_tp_sleepable,
++	.gpl_only	= true,
++	.might_sleep	= true,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
++	.arg4_type	= ARG_ANYTHING,
++};
++
+ static const struct bpf_func_proto *
+ tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+@@ -1486,7 +1507,8 @@ tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_get_stackid:
+ 		return &bpf_get_stackid_proto_tp;
+ 	case BPF_FUNC_get_stack:
+-		return &bpf_get_stack_proto_tp;
++		return prog->sleepable ? &bpf_get_stack_proto_tp_sleepable
++				       : &bpf_get_stack_proto_tp;
+ 	case BPF_FUNC_get_attach_cookie:
+ 		return &bpf_get_attach_cookie_proto_trace;
+ 	default:
+@@ -1716,6 +1738,33 @@ static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
+ 	.arg4_type	= ARG_ANYTHING,
+ };
  
--	if (likely(!frags)) {
--		err = __xsk_rcv_zc(xs, xskb, len, contd);
--		if (err)
--			goto err;
--		return 0;
--	}
-+	if (likely(!frags))
-+		return __xsk_rcv_zc(xs, xskb, len, contd);
- 
- 	contd = XDP_PKT_CONTD;
- 	num_desc = xdp_get_shared_info_from_buff(xdp)->nr_frags + 1;
- 	if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
- 		xs->rx_queue_full++;
--		err = -ENOBUFS;
--		goto err;
-+		return -ENOBUFS;
- 	}
- 
- 	__xsk_rcv_zc_safe(xs, xskb, len, contd);
-@@ -252,9 +246,6 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- 	}
- 
- 	return 0;
--err:
--	xsk_buff_free(xdp);
--	return err;
- }
- 
- static void *xsk_copy_xdp_start(struct xdp_buff *from)
-
----
-base-commit: fb7bd3a2aad70a76232a7168a505386d0a1396af
-change-id: 20261019-xsk-zc-rx-double-free-1a3b059cd41f
-
-Best regards,
---  
-Marcin Knap <marcin.knap@vecima.com>
-
++BPF_CALL_4(bpf_get_stack_raw_tp_sleepable, struct bpf_raw_tracepoint_args *, args,
++	   void *, buf, u32, size, u64, flags)
++{
++	/*
++	 * Don't take a per-CPU bpf_raw_tp_regs slot here: those slots are a
++	 * LIFO nest counter and cannot be held across the sleep that
++	 * build_id_parse() may take.  Sleepable programs never run in
++	 * IRQ/NMI context, so a stack copy is sufficient.
++	 */
++	struct pt_regs regs = {};
++
++	perf_fetch_caller_regs(&regs);
++	return bpf_get_stack_sleepable((unsigned long) &regs, (unsigned long) buf,
++				       (unsigned long) size, flags, 0);
++}
++
++static const struct bpf_func_proto bpf_get_stack_proto_raw_tp_sleepable = {
++	.func		= bpf_get_stack_raw_tp_sleepable,
++	.gpl_only	= true,
++	.might_sleep	= true,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
++	.arg4_type	= ARG_ANYTHING,
++};
++
+ static const struct bpf_func_proto *
+ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+@@ -1725,7 +1774,8 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_get_stackid:
+ 		return &bpf_get_stackid_proto_raw_tp;
+ 	case BPF_FUNC_get_stack:
+-		return &bpf_get_stack_proto_raw_tp;
++		return prog->sleepable ? &bpf_get_stack_proto_raw_tp_sleepable
++				       : &bpf_get_stack_proto_raw_tp;
+ 	case BPF_FUNC_get_attach_cookie:
+ 		return &bpf_get_attach_cookie_proto_tracing;
+ 	default:
+-- 
+2.25.1
 
