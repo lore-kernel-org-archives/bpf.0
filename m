@@ -1,45 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793751074;
-	b=mJEMJfpcHpyjLqPXpsr9777qH1qEFHLCIHThBb1VQZyQJHTs5zsgF7X9nifTBqti/aHV
-	 pyksNmsKgswVh9E81N0KJ5Gi4F30i9S0ZiGdNN+gO78kfCx5Z8QQR+YspyCL6Xir08bMs
-	 lxyM0vlrNYN7q2sw8oxEbBHezkPAdiqYXL6k2bieu3kvg7qtwudVdRZU6n207XPm8IMUs
-	 ybW4O5K46NbwQiDQ9/BNE90ZmykdumKa8yHEN7UhScrX9xhNhTCJG+aZw9RuWDNl+U0sA
-	 yrzsRWSqQlqjoqMqbs4X/IXQWHWv5wSuDnz1abgaZAmene18Ie+nyuYS7NBDBgwMZwA==
+	t=1793751170;
+	b=vHMSdJuSx9DeIwiF3NCu9GfmB5V4w0H+ZV2YsJMHfEtu3Wzd87xE6y1uYrfuAY4zxee0
+	 SLj58ULwnjSi8dXeMZXoKvhz6HJp2Xnv2UkZoDeYLlJCAF7fgNzKE+Urx2AqZNANXiLeN
+	 P0nJiyFHEZLjfBAPV/JCL1bkV0sENezmi74wGoPxdi77oNF4os8iS6BLMAxKpmkWQ1Obm
+	 FnwrKwUs2L1jJPxkX/XDiA5rfXI7SuzknB52zkM0b6R2yZXdXODApaIsQF5zryt0Byz2R
+	 35MAYStvnGhAtPQjt2xOCNF5VTT5tm9bH24wBHLlM4NFHSl9dv8YTIkKJaIb+IpqTnw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793751074;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=jgeWAqTW3mCNm/oMwm1hCkX77cfg//uB1x8i+B4HYzE=;
-	b=cu/efYeGo98n950/VUtTNOu9X+8SwPpJq5kqgC03quzaWQIVLBvlJsT9ncmpSsH+Oqp2
-	 62aXcISlxIMwonVc/2fVGr7Gv619R58eYvGadLjo60sfhQiKc3tuPksZkgCsno/yC9EOI
-	 qj+uQ4KTvuCYwmRA1UUWgdtEh+I4bw1hbGxqdBOri+afv1XTRvUDEoVXdTopGp3hTpVeO
-	 pPpVxctYpcdsFwkczOiovbpn+0yenvX8p85jXcfenLjJd/Nu2Pjgc+TjmCyqGBDHGuptT
-	 oyLEp9ZV2Hn2NJh2McbW+CRWOygD9Omd64ARj9ikiHc99iKwuSoWhPTxs70J4jvTfXQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793751170;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=EcAf1i7ybCsA89reAR6uRyuT0z0tenbdn7GumDJHokc=;
+	b=QUNArbE6oC6SbB+KfIHnFh7331sTIaMW3Af2pKWxRvJzxUyz2Jl/QS38KcQ/lr41WEQ7
+	 hfmSkSexcgVhJo0TMhBnne2xVR+z1m6cGaNmyqjTGDxfkGGT6zSdaGo7TlEf3NTUhF/wz
+	 YJBExGdXpJYJ0nbNspsS2iwQxWXwJuwMbtEkrlE+Ywk/WtfgCoo0fmtntSDEfCqx9oSPG
+	 J5J9g+DNChcT5Jtm+dghvJsxqtETFSkUz9N8GUSEv6eedxsEc5vkXb1yEImiTYjJB2fcY
+	 HGokANsBLtBzsCTHQCD0F8p1nPISURiv/nto1KY5PSH4d4Wn0QeuAhvkXPA4CYbEpbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hvAMg6FN;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R0K+HpOr;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BA1606A31B
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 00:11:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7C6606A324
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 00:12:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hvAMg6FN
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D3911F000C1;
-	Wed,  4 Nov 2026 00:11:13 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=R0K+HpOr
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E3E1F00919;
+	Wed,  4 Nov 2026 00:12:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793751073;
-	bh=jgeWAqTW3mCNm/oMwm1hCkX77cfg//uB1x8i+B4HYzE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=hvAMg6FNNcdO/o9QIaBWHRN4zheNJkMpcdFqDPy0qFFE04F2Wcw+hC5YFTVzTg20P
-	 ET4M3aWihNvoom4f+GTAPkUSpwVTRSkfVMBu32qSREJfDS5NuAEI8axNHUGpyI6aXB
-	 JL7Eix1pxz7jfM8QR32IkcqnyGskHzwoMt0Hft5PLWdIj07VCVycxK4Im4xViD5T1E
-	 3w2ezpertpOnW1aCOcK8x/L07dO0nvWt/IDlkKObsuXThrqbG5gKVrW7eHu8cQlxWp
-	 bI5uR0M2dUJNsy87wMUPb1yfGLvkOROiT0Fb4/PcT6YbTdecCdAnFAeogwmJfuy4ar
-	 ZDVTWv/fh+LwA==
-Content-Type: multipart/mixed; boundary="===============0723896134661938906=="
+	s=k20260515; t=1793751169;
+	bh=EcAf1i7ybCsA89reAR6uRyuT0z0tenbdn7GumDJHokc=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=R0K+HpOrlrnC8PsB2QypujiwrysNm2zk1OwwnmRb9H5wiVnf58gfEg/zWscEtsiZp
+	 XD09NX2HiWNCF5kFdLAK0dPSsrmH3O2M2o6ZNFROQ4Nz9EXM+1uXhfFO+k6CPIyoD+
+	 RsyrkRDdief45WA34fPjtIDmajk9UUbJQgcn9DLTOiI2lokREbA7sEyQ0iNKqKBuZo
+	 ka7WIFh5xlvjj/v5zz06nxpGC1wUePmn1ijmGwfN3jDbKycxRHj3IkMxDiXH1ZXSjj
+	 a3bFOKEgfsho/VLxRMBcXxwH625+hUar0GzEL5auwzBHcp5v7eJUsXFwIB6m5SUHt5
+	 qUK6NpxBqXSfg==
+Message-ID: <sashiko-outbox-196291@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 32/37] bpf: Allow BPF_MAX_SUBPROGS targets of a
+ read from a table of functions
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261103234104.208239-33-alexei.starovoitov@gmail.com>
+References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
+ <20261103234104.208239-33-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 04 Nov 2026 00:12:49 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,84 +59,63 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <2e3b7163c71acdc345acd3eef28d5c4348e5b4734f5198b586f5fa88f55887af@mail.kernel.org>
-In-Reply-To: <20261103231931.89739-2-alexei.starovoitov@gmail.com>
-References: <20261103231931.89739-2-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 1/3] bpf: Force BPF_JIT_ALWAYS_ON on x86-64 and arm64
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  4 Nov 2026 00:11:13 +0000 (UTC)
 
---===============0723896134661938906==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] bpf: __free(kfree) variable declared as NULL at top of check_func_p=
+tr_read()
+--
 
-> bpf: Force BPF_JIT_ALWAYS_ON on x86-64 and arm64
+commit 6a9289c982c1e888c820e75173835d8cb92fc098
+Author: Alexei Starovoitov <ast@kernel.org>
 
-TL;DR:
-- Docs/Kconfig text says x86_64 and arm64 "always" enable JIT_ALWAYS_ON, but
-  it still depends on BPF_SYSCALL
-- Nit: new sentence in filter.rst breaks the "This is even the case" flow
+bpf: Allow BPF_MAX_SUBPROGS targets of a read from a table of functions
 
-> diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/admin-guide/sysctl/net.rst
-> --- a/Documentation/admin-guide/sysctl/net.rst
-> +++ b/Documentation/admin-guide/sysctl/net.rst
-> @@ -90,6 +90,9 @@ Values:
->  	- 1 - enable the JIT
->  	- 2 - enable the JIT and ask the compiler to emit traces on kernel log.
->  
-> +With CONFIG_BPF_JIT_ALWAYS_ON the value is 1 and cannot be changed. x86_64 and
-> +arm64 always enable this option.
+This commit raises BPF_MAX_FUNC_PTR_TARGETS from 64 to BPF_MAX_SUBPROGS and
+allocates the targets array dynamically in check_func_ptr_read() instead of
+keeping it on the stack.
 
-Is "always enable this option" accurate here?
-
-BPF_JIT_ALWAYS_ON still has "depends on BPF_SYSCALL && HAVE_EBPF_JIT &&
-BPF_JIT", so the new "default ARCH_WANT_BPF_JIT_ALWAYS_ON" is limited by
-those dependencies.  An x86-64 or arm64 kernel with BPF_JIT=y but
-BPF_SYSCALL=n keeps BPF_JIT_ALWAYS_ON=n and the interpreter, and
-bpf_jit_enable (registered under CONFIG_BPF_JIT) can still be set to 0, 1
-or 2.
-
-The commit message states the condition ("For a kernel with
-CONFIG_BPF_SYSCALL=y and CONFIG_BPF_JIT=y"), but this text, the similar
-sentence in Documentation/networking/filter.rst, and the new help text in
-kernel/bpf/Kconfig ("x86-64 and arm64 always enable this option.") leave it
-out.  Would something like "x86_64 and arm64 enable this option whenever
-CONFIG_BPF_SYSCALL is set" be more accurate?
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 93ca0126a3108..d503dc7cea1f8 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> diff --git a/Documentation/networking/filter.rst b/Documentation/networking/filter.rst
-> --- a/Documentation/networking/filter.rst
-> +++ b/Documentation/networking/filter.rst
-> @@ -404,7 +404,8 @@ Example output from dmesg::
->      [ 3389.935852] JIT code: 00000040: eb 02 31 c0 c9 c3
->  
->  When CONFIG_BPF_JIT_ALWAYS_ON is enabled, bpf_jit_enable is permanently set to 1 and
-> -setting any other value than that will return in failure. This is even the case for
-> +setting any other value than that will return in failure. x86_64 and arm64 always
-> +enable it. This is even the case for
->  setting bpf_jit_enable to 2, since dumping the final JIT image into the kernel log
->  is discouraged and introspection through bpftool (under tools/bpf/bpftool/) is the
->  generally recommended approach instead.
+> @@ -7114,17 +7114,20 @@ static int check_func_ptr_read(struct bpf_verifie=
+r_env *env, struct bpf_reg_stat
+>  	struct bpf_reg_state *regs =3D cur_regs(env);
+>  	struct bpf_map *map =3D reg->map_ptr;
+>  	struct bpf_verifier_state *branch;
+> -	int subprog, targets[BPF_MAX_FUNC_PTR_TARGETS];
+> +	u16 *targets __free(kfree) =3D NULL;
+>  	struct bpf_func_ptr *ptrs;
+>  	u32 i, cnt, n =3D 0;
+>  	u64 o, lo, hi;
+> -	int err;
+> +	int err, subprog;
+> =20
+>  	ptrs =3D bpf_map_range_func_ptrs(env, map, min_off, max_off - min_off +=
+ size, &cnt);
+>  	if (!ptrs)
+>  		return -ENOENT;
+>  	if (cnt > BPF_MAX_FUNC_PTR_RANGE)
+>  		goto overlap;
+> +	targets =3D kmalloc_array(BPF_MAX_FUNC_PTR_TARGETS, sizeof(*targets), G=
+FP_KERNEL_ACCOUNT);
+> +	if (!targets)
+> +		return -ENOMEM;
 
-This isn't a bug, but the new sentence now sits between "will return in
-failure." and "This is even the case for setting bpf_jit_enable to 2".
+[Severity: Low]
+This isn't a bug, but in check_func_ptr_read() in kernel/bpf/verifier.c,
+targets is declared with __free(kfree) =3D NULL at the top of the function
+and then assigned after a goto overlap check, while the rest of the
+function continues to use goto overlap for error handling.
 
-"This" used to refer to the failed write, so the paragraph now reads as if
-x86_64 and arm64 always enabling it is "even the case for setting
-bpf_jit_enable to 2".  Could the arch sentence move to the end of the
-paragraph, after "...is the generally recommended approach instead."?
+Per the cleanup.h conventions, should targets be defined and initialized
+in a single statement at the point of allocation, and should mixing
+__free() with goto-based error handling in the same function be avoided?
 
-The line "enable it. This is even the case for" is also not reflowed.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41741570364
---===============0723896134661938906==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103234104.2082=
+39-1-alexei.starovoitov@gmail.com?part=3D32
