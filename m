@@ -1,60 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=176.119.200.165
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793810939;
-	b=S7hr6sZBA2lC6pOLk0N8pCcva1PEqd72vEmNmq7w9KPSh6it2rMjE4NSdKOw5SCCsA+V
-	 EOnTWlDf+Q1RsbLKH/wSvpjK5NH3hEVkFadwggS+WFzsS9xwAIIg2g8sjak6Bf9lmTzVc
-	 N0tRmWva7DYitvVWSo99L2Wcqz+HBN/2+i2c0XcDVvBLmN5ycuKwnRqJBqpLjjATSMJsQ
-	 tBDfskEj2ieA+HEWYqgLlLDpBJ1UWw7HP9vcNfriLlfC8yKugfMj1Y4+2hogvzium3hsg
-	 mPxAGINLYXNyCXgkw9DHy+sSwWUROcl5w2alSEixEQ5L2jOC4Sr09bDKQH/Z+fOXahA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793810939;
-	h=DMARC-Filter:DKIM-Signature:Date:Subject:In-Reply-To:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:From:To:Cc:Message-ID:
-	 References:X-SimpleLogin-Type:X-SimpleLogin-EmailLog-ID:
-	 X-SimpleLogin-Want-Signing;
-	bh=+6NWrTkD19j6pXo7fX9iBIpL0RSF2GXs9ygbR1u2JBY=;
-	b=0HX1nIYyrwWpNGApnq31uJxA9K87i1RHS2Y44NOl42C45bM+EkJaejldotGv7AJWyMSe
-	 d+DNudx533l/qpTJrAmUhtciUWpocflmABzcf21diRX9dv5iwp74SQ2hyN08ruv/cS7FJ
-	 +q13JCDrjh9Tin9AHWqP1O0hAYaUBOjkjJDeNy4SzDVDTP5GNDJ1agbHwFqWqG5gN6TC7
-	 lJjKnkJSCuXSFB79yIgMSz+aLD9u8xS9O6WiyMYDIMC4RXhnmzSa7EFj3BVfMH/rZdgJs
-	 7XgXb5DsiCOUdh9Ym7A68AMs4kZhZemXIlQgwYLje2P5V/6vdNMzhiVAMe9142KR+XA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=eldare.de;
-	spf=pass smtp.mailfrom=eldare.de;
-	dkim=pass header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b=LPPJmNY1;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=176.119.200.165
-Received: from mail-200165.simplelogin.co (mail-200165.simplelogin.co [176.119.200.165])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793811144;
+	b=j4VPv1biSY42rIDYrfeDqN9js5yizufB0mGBpFUIbqPWddBGrUR/O4RMbTeGG+HrmrL7
+	 O7a5jV5FpicDjXwi/fVJc0zMOmYBQfZO87x7Kh5o9vjbjG1ED1cfu7EhJqjKAH8JLnREw
+	 Vtgg1HjeH6WyQ4Iu/gHxseeb2hDzholRKVJJCWB0Wjid0kMrva5563qhFNa1ILmpM48AM
+	 nUTpehxHZckUfwOQayxvweJZxY79gc3pwOdcFMfAyAgPnHRUDkecpYxny4xS7foWj1gFi
+	 E/tQf2VWpW8LFYqHWWEta0FHi3/URJfDDt3L+Pqe4IWPnDgrN5UnFS0gvldMTPnXSdw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793811144;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Mime-Version:
+	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
+	 From:To:X-Mailer:References:In-Reply-To;
+	bh=mDQelrr4Kh/Jq4lqD8Bd1ygw8a8v5DRiulkfJQImUaA=;
+	b=SwAr3elqSw7OxwT0WejGub80w74i7yDN3DLMdFEBxloTb+fT+Gysjfab+vjgFeo5qypR
+	 IxIHlECiaDu2T1B3bek9WMsspcncB0GAkiOiMnbGiY5sNxw23HLHNzw+FW75ZFKhSlwEf
+	 lZyvhmkU+phBdKqG6GQXTxXr4XIW0hCMJ9+IQ6aWtXBW6esSd7yBOVHoX/PXteT+VecmN
+	 +3GpEyUF7sW/GJlZbzboy+NsyQdmbw4/Ppgvuq2Sm3eCEsQBAvatwIOp6/lhEc43zhMmB
+	 frtiEzLmEk30860yCJnp4IHiIE94O6QeHz/o314WC6GaINeOn8wqmvPhFdix1lcXlTg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kvAlMHA9;
+	arc=none smtp.remote-ip=209.85.216.49
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E6D6082BDE
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 16:48:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14E6D6082BDE
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=eldare.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eldare.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E895606D81E
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 16:52:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E895606D81E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b=LPPJmNY1
-ARC-Seal: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626; t=1793810931;
-	cv=none; b=vNNsw+udY1vYJbNjVyXwt+DnayQTkYHfuxdNl6jI5OCNzzieV8/Nz0cRI/Hzotb28MjUX8GK2YJ63FX1ZcfAoLkUA0L3/q8uYOiUhkj/BYiDxwlynlmlOzV/qPAucZIR90h1LCMhlbuDKFOSpMtgPJKZnfLW/pFRstqDAynH1MF/ofxEKMuzLJ0tMHcbhpWBnURWh/qq8y/H/iDgV7/0kYMGNMjH5/VKgh51SpxC/ZITgr4j1aZLhjdzaqSYi1mQ8P418bbRhm4bRGGGe44WL5QjCV4oa1wOqbHZxrzv5+eBYx0r9ade+r7ojwlvd9CwOSvKbiyR9ZjjPfuwzOZOlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626;
-	t=1793810931; c=relaxed/simple;
-	bh=NZfHjc8GabK+5fWc9xU1eIPV8ar6IHlihuK1W6X9Wrk=;
-	h=Date:Subject:In-Reply-To:From:To:Cc:References; b=CqyEDSrkOyrGgTHIQxjYSBNbn0RoKwBxczaaIB1oItAJIJuOZTRvi3RxUaI04S5DJsIqeMIu8AJQMZrH1cXtnj3oleyut6juWA0tS2ZzH1xCP/SicTmUPqAFg1W+S/k0UJcNuYLD3IOewaK6wX1dm5arJ8t3GdjwaJM/oh7a4nVeV+viOz8m21+D/s7BAQ8wVvXMmtyo+DFRaFjh3GbZnM0W/GsCW+PV9mjEUJOeZK3o1utvXHg+rjMwWI/I7qszBGXSaqpWerOpLgBVGpvGBtyb+vwSEBfWAUn+EjcrkQOcP3XZZ9cd47mzAYFHbDXHgOJLDe8ZATGP/WDMKul1wg==
-ARC-Authentication-Results: i=1; mail.protonmail.ch
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=eldare.de; s=dkim;
-	t=1793810931;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+6NWrTkD19j6pXo7fX9iBIpL0RSF2GXs9ygbR1u2JBY=;
-	b=LPPJmNY1E9Afuj8tm1dblKOuW0bxHTT/z8wxoKA1SWLuokKtwfZQdsa1q0vyV1i4itNXSH
-	t70Rmwl3JdmySaKgnjxgXHQ1Z0I0pGT/edUTIiU72xqAa7fNWOwaigxF9i/aB33SlYt8la
-	BTYSyUnSSDLMgNBg2V3RfWM23P7RpDs=
-Date: Wed, 04 Nov 2026 16:48:44 +0000
-Subject: Re: [PATCH net v3 1/2] vsock/bpf: release sock lock while waiting for
- data in recvmsg
-In-Reply-To: <auSkQOU6qmj0NPEt@sgarzare-redhat>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kvAlMHA9
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3ada8bc2380so499515a91.3
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 08:52:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793811144; x=1794415944; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=mDQelrr4Kh/Jq4lqD8Bd1ygw8a8v5DRiulkfJQImUaA=;
+        b=kvAlMHA9YpLVp95q/S6+rfIKB0rxBFrfLZZgcxl9tkXcKRkQztUBTwOrAwv1bYnEZh
+         qDB1aza7sd7sCkFjHBgbTr5ONi7xasnnWnCMi3ZChAbqAIz43AtJgQH3k5eE7vHhu81s
+         a/gxOxiNC2yAXPRow31/dN3IIgNd3T99tw940mkHjn4kRm7FfmfUBHFenV0rEbEQyWQL
+         FhiKhaB64QHMEzInvtZs2J9qRFs2LQzbdCgHc3iKCCKThQI3QIo4EmxmOra02M2gpiiQ
+         rfTN9Xgt5EltN0laDIAcJhL3bE61iNfw35jRRqPFxcu2WlCzSTaKzJ7BnZOYk1NW8jyC
+         2NYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793811144; x=1794415944;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mDQelrr4Kh/Jq4lqD8Bd1ygw8a8v5DRiulkfJQImUaA=;
+        b=hSQXwbwRBk4C1tizfl1ltwaLEOvrG6kLUevYVdyZxW+Aamtlajmg3LzW5xxO1hP7er
+         oB1qV5YV/3x46HCl9GyGrJQ3h/f5uZuWx69vc0Z1YJqEcBcqfEqmpW59wTFlhVqcOi1r
+         Sl+zqZgh8q1fBUbU0pVaak7cUdqNniDUr/GpoCWtXBBw6lusIHa10dMklSuqKdeUamtF
+         iI9/3ZUuZoIXbXV8+jqrdOf1PVzXdei0YIq6ebkW4ejD3IbEa32Wogtk+XdeUNZ6OsKL
+         4f10yqLXzRedLxKLr7lBukR1GM1KQn+XjGVqbekbyxYxAiG+T9MPiNTwnZVhruyKpcw+
+         +kIw==
+X-Gm-Message-State: APuU4Z/L+rfAGkH2mxwYYqpAS4Sqsgj9oNBE7PuPyT+BO0sik8+YSvnL
+	mRPlzUZO2nO5lUAyVVF5jx55jwNN+f2M4yR7G92WZ+r/MaILDaSLPbtbS3me9Q==
+X-Gm-Gg: AYBFou25Hc8GTSAtkc7wvTG03KbJzcIpHMGfzKxAhBc/KBTgTmTtSsYbGt3/O0Vd7C5
+	l8/59O9FfLPvDDXmHwIi30WM1t13UjJxCz+WE5jhQY8uqVRp/ZtrNkLcl+aNZCy7WMbB9yHJBen
+	9HSklPQ067jVTqhszZ1itiCsLAF+zJ5r69kNYojcbm/Tu/IL7pJZ2kgWD414gM1uuGkZjSvhKI5
+	Q88huN8CYxMPb9rAgAA3g2hoH2MLTuX361Fhn/+1qmU4x06W0zuOLjoQ0NuC2SJsmEk3sW4Du6a
+	yf8d+8JXjIDMDghR5iPk2sqFnEX1sC1QwXO/t2chTQCaZ7oCHycWpB/gzQo1DyJrmn54/jj85nM
+	RwJeDhSqs8UHQTVQon8IZ1t3VB6K5SwkXFrgRFhxLo71WWcECJ4+ukkoulGink3i9vu0yZODOXf
+	uMemEfQ0NsaA4daob8ZspvupLON6RjcpziRsxESqn5/HBhcwR7/Or9C5qMmzEpe4GRNQvP66CPW
+	t3ZPDFHeF6jmHVaReAF6Gu9FBKTNH/3DoI6FJECj0q0MD8sHo34MtBOL5Hxa+HwB8riMGE6gCnz
+	ld+VcunHW7pbTB2059YHybMn/j6imgEcfuZtyIQOk7RXH/GdFLXPcEjRJM8qC+kvh/9Xnh/ek/s
+	NlNX/fqJ6P4IVWMaLMvWNBPLnNaOqTzs8uA==
+X-Received: by 2002:a17:90a:fc4d:b0:3b0:ac2c:1619 with SMTP id 98e67ed59e1d1-3b0ac2c19c0mr685175a91.39.1793811143452;
+        Wed, 04 Nov 2026 08:52:23 -0800 (PST)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b09445a7f6sm4685568a91.6.2026.11.04.08.52.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Nov 2026 08:52:22 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,86 +87,75 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-From: jrmmhm.kernel@eldare.de
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Bobby Eshleman <bobbyeshleman@meta.com>,"David S. Miller"
- <davem@davemloft.net>,Eric Dumazet <edumazet@kernel.org>,Jakub Kicinski
- <kuba@kernel.org>,Paolo Abeni <pabeni@redhat.com>,Simon Horman
- <horms@kernel.org>,"Michael S. Tsirkin" <mst@redhat.com>,Michal Luczaj
- <mhal@rbox.co>,virtualization@lists.linux.dev,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,stable@vger.kernel.org
-Message-ID: <179381093020.9.4719932034061956856.1746278795@eldare.de>
-References: <20261028-kbh3-1-022-fix-v2-v3-0-bc0752b2d3db@eldare.de>
- <20261028-kbh3-1-022-fix-v2-v3-1-bc0752b2d3db@eldare.de>
- <auSkQOU6qmj0NPEt@sgarzare-redhat>
-X-SimpleLogin-Type: Reply
-X-SimpleLogin-EmailLog-ID: 1746278844
-X-SimpleLogin-Want-Signing: yes
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 04 Nov 2026 16:52:22 +0000
+Message-Id: <DMMKZAEHX53I.49LHFPRSGLX4@gmail.com>
+Cc: <bpf@vger.kernel.org>, "network dev" <netdev@vger.kernel.org>
+Subject: Re: [PATCH net] net: reject a negative TCP header offset in
+ qdisc_pkt_len_segs_init()
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Paolo Abeni" <pabeni@redhat.com>, <sashiko-reviews@lists.linux.dev>
+X-Mailer: aerc 0.20.1-355-gf870624f6c37
+References: <20261101194433.2637113-1-alexei.starovoitov@gmail.com>
+ <sashiko-outbox-194018@kernel.org> <DML39PMNWP8Q.7K2P5T3AG8LP@gmail.com>
+ <f029172d-855b-4e93-8a86-d4aff72c9abb@redhat.com>
+In-Reply-To: <f029172d-855b-4e93-8a86-d4aff72c9abb@redhat.com>
 
-On Fri, Oct 30, 2026 at 03:18:10PM +0100, Stefano Garzarella wrote:
-> Ditto about commit message, please put more effort on writing something
-> readable by a human.
-
-Agreed, I'll rewrite both messages myself for v4, much shorter.
-
-> >+            if (sk->sk_err) {
-> >+                    ret =3D -sk->sk_err;
+On Wed Nov 4, 2026 at 8:41 AM UTC, Paolo Abeni wrote:
+> On 11/2/26 23:46, Alexei Starovoitov wrote:
+>> On Mon, Nov 02, 2026 at 11:44 AM sashiko-bot@kernel.org <sashiko-bot@ker=
+nel.org> wrote:
+>>>> +		/* A header in front of skb->data gives a negative offset. */
+>>>> +		if ((int)hdr_len < 0 ||
+>>>> +		    !pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
+>>>>   			return SKB_DROP_REASON_SKB_BAD_GSO;
+>>>
+>>> [Severity: High]
+>>> Should the (int)hdr_len < 0 check be placed immediately after hdr_len i=
+s
+>>> computed rather than only inside the SKB_GSO_TCPV4 | SKB_GSO_TCPV6 bran=
+ch?
+>>=20
+>> No. It's already explained in the commit log.
+>>=20
+>>> When (int)hdr_len < -8, hdr_len + sizeof(struct udphdr) wraps to an
+>>> unsigned int in [0x80000008, 0xffffffff] (> INT_MAX), which triggers
+>>> DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in
+>>> include/linux/skbuff.h:pskb_may_pull_reason() before returning
+>>> SKB_DROP_REASON_SKB_BAD_GSO.
+>>=20
+>> Not a bug. That's CONFIG_DEBUG_NET only and the warn is right:
+>> the header is stale.
+>>=20
+>>> Can this write uh->len (and uh->check in bnxt_sw_udp_gso_xmit() and
+>>> enetc_tso_hdr_csum()) before the start of the header buffer when
+>>> skb_transport_offset(skb) < -4?
+>>=20
+>> No. The driver doesn't see this offset.
+>>=20
+>>> Third, for other GSO types (such as SKB_GSO_FRAGLIST, SKB_GSO_UDP,
+>>> SKB_GSO_SCTP, or SKB_GSO_ESP), hdr_len remains 2^32 - |offset| at the e=
+nd
+>>> of qdisc_pkt_len_segs_init():
+>>>
+>>> When (gso_segs - 1) * |offset| > skb->len, can qdisc_skb_cb(skb)->pkt_l=
+en
+>>> underflow in 32-bit unsigned arithmetic to ~4.29 GiB (exceeding
+>>> QDISC_PKT_LEN_MAX), causing deficit-based schedulers such as drr_dequeu=
+e()
+>>> and ets_dequeue() to spin in their deficit-refill loops?
+>>=20
+>> No.
 >
-> Why?
-
-Same as vsock_connectible_wait_data(): an error that arrives during the
-wait is returned to recv(). Without the check the loop still ends, since
-every path that sets sk_err also closes the socket or sets peer_shutdown,
-but recv() then returns 0 or -ENOTCONN instead of the error.
-
-> >+            if (sk->sk_state !=3D TCP_ESTABLISHED) {
-> >+                    ret =3D sock_flag(sk, SOCK_DONE) ? 0 : -ENOTCONN;
-> >+                    break;
-> >+            }
+> FTR the nipa sashiko instance dismissed the above concerns autonomously:
 >
-> I'm thinking if we should split this in multiple patches.
-
-From reading the code, it can be split without breaking bisect: first
-loop on all exit conditions with the lock still held, then drop the lock
-around wait_woken(). The order is fixed, since dropping the lock alone
-brings back the early -EAGAIN, and the loop alone does not fix the
-deadlock, so both would carry the Fixes tag. That is why I kept it as one
-patch, but I'm fine either way. Split it like that for v4, with the
-current 2/2 on top, or keep it as one?
-
-> >+            if (!timeo) {
-> >+                    ret =3D -EAGAIN;
-> >+                    break;
-> >+            }
+> https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261101194433.263711=
+3-1-alexei.starovoitov@gmail.com
 >
-> Is the move of this check changing some user visible error?
-> I mean before this patch it was one of the first checks, is this okay?
+> you can reasonably safely refer only to such instance when submitting
+> patches to net/net-next.
 
-Yes, for non-blocking reads, intentionally: -sk_err, 0 on peer shutdown
-and the not-connected result now come before -EAGAIN, as on the native
-recvmsg path. I'll say so in the commit message.
-
-> >+            if (signal_pending(current)) {
-> >+                    ret =3D sock_intr_errno(timeo);
-> >+                    break;
-> >+            }
->
-> Why? Should be a separate patch?
-
-No, the loop needs it: with a pending signal wait_woken() returns at
-once, so without the check the loop spins until SO_RCVTIMEO expires, or
-forever if none is set. I checked it by removing the check: a signalled
-reader without SO_RCVTIMEO never returned and used a full CPU. The
-native path does the same.
-
-> >+            if (data < 0) {
->
-> Why not data <=3D 0  and void the other if?
-
-Right, will do in v4.
-
-Thanks,
-Jerome
+Nice. I'll borrow your mechanism.
 
