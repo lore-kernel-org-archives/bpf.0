@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=63.250.43.106
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.54.127.90
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793818500;
-	b=dTJLLOQNwvnrKwcFv77NwGwnbWhUGzkT5ihLxQVZsAdh9JwEwsEFbfV4FePxYU9y1T1F
-	 ZSK+0HZ9eGxjs09SjLKnfsf39fhhkobKA0Mj1Hksh4A/+Uj7xPfr1MIkgf0+rCqidP8Mm
-	 Y7heja5RDQ2IK8WJ+Z9v3K61zJKwgPMIIlLf2nL3PWH8LU/+NrTjMvJI/PfGtVX9ouIdz
-	 5/Of168UnAUDub4dHbkOZzXnRcndnjovEvc5XqqFG49gVYj1Z7/WwhM3QlDCYOI7ZQM7D
-	 iREbamc5o5aYBhrxKJjzSkE0paxH2Urtq0ijpgp5P0KWgdOKB/gCaBIO0FP7CghaWdg==
+	t=1793818507;
+	b=MqWSAGGYjUvOPdPXKfEPaPfkXGQDvlLA5exs4k25zX658N6AKht3F+dJvTn6axE8s9/4
+	 FriNVs1IDDGiHVQoFOH8UAqm2u57pjnG7GU+zg9m2rbZyX4vhEjRwUdhZKdrKzV8Uo1ih
+	 U7rHQemJqWOEJTWp2ztjKG8Hm/rsJuj00k3d04PVF3aaVAuDAGyITd1/5w7hxultT3umO
+	 208scF7RHTvQ+w4hxNxATJulFQOsli+kSououUkWJ9oXJ1As5SUJo1p3JsTFV/wJd5pdJ
+	 sFT4nKb4yzg6o+qs0YbmagJqtbgaAQgyfsyYnw6CMNfVb+vZQ5/f2t8zEc1ozaTqVNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793818500;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793818507;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-Envelope-From;
-	bh=DhE9pS/R2JT9liAZOqJWys/743Fnb42sj7FCB68RT3A=;
-	b=wA0ZjeDdcv3wlBDnI8czZBctLm1DL84XcCEC8ivpS2q90PtfRs6WPzvYDDqQ48wB6QI6
-	 jJUstH3HVpTov4CqgoS4zVcNYz0fRkWM8RH2zXtdEGnp0s21ANeUO5KkUG1hLijyO8lIA
-	 goGJduDFiHTnNp50A7YdUZD6jWOz1dMIdGUwlI2QJIRNMSbGFgz+phoq6sde1xJT1zCto
-	 QW9XiCz59gJGp2vzZRaboL/cERWObvfq1IS6vkQ7OkoeMw+a9CRGRW0WluXeoKiF6xBFL
-	 ZfseuB+KqEPUMwbJXx0DrSGyrWmML4W4l7uP5AuTB6yAZ+rtLMvXquLpP/CMpkGUosg==
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Envelope-From;
+	bh=AXWG/qhSArt5EnQWuwrCQmFVUH/N2VZPyjnPB/yAPfM=;
+	b=xnmdJW+oPJCRdeQSWT175I6qxpkeIVVqQ7mLg3sNAAOUj8dpVFVHsd+zsHgl4O+aadkP
+	 sRR/rieABha5G6Xu+hS2izWrjuPcmf8fS52MZXF83L9eAhW5cPSDvGWBiMdFi6mWXeZtM
+	 p6KKQceMvo80zpnGzIpdBoqJhE2YQARNH5Km1OYpHihbMMS6r9IAvG2hnrEtpWf9EoBhv
+	 cV1O5pJ1SpU3LQ5/lKlCxMzNPhEQ6RhPVC1141qDs/R7XsChkk4tJY0nwL0m+OmuGLV07
+	 xt/7edBe67rR8ChdOHETFiMgxppquGG6oJzwqZv37P1OUiOpFJANw9b2cAE7kdD7h5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=tychen.cc;
 	spf=pass smtp.mailfrom=tychen.cc;
-	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=GoUJQhyn;
-	arc=none smtp.remote-ip=63.250.43.106
-Received: from out-2uec-a106.jellyfish.systems (out-2uec-a106.jellyfish.systems [63.250.43.106])
+	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=hklP4eZJ;
+	arc=none smtp.remote-ip=198.54.127.90
+Received: from out-zbxj-a90.jellyfish.systems (out-zbxj-a90.jellyfish.systems [198.54.127.90])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF415606A31B
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 18:54:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EF415606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEEF2606A31B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 18:55:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BEEF2606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=GoUJQhyn
+	dkim=pass (2048-bit key, unprotected) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=hklP4eZJ
 Received: from fedora (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKZPN5Rpsz8sWS;
-	Wed, 04 Nov 2026 18:54:48 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4jKZPR4kG4z8sWX;
+	Wed, 04 Nov 2026 18:54:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1793818491;
-	bh=DhE9pS/R2JT9liAZOqJWys/743Fnb42sj7FCB68RT3A=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GoUJQhynFrGakBujM2PEYzpIKqCp2r2OqsIFJPC+OJDNt7mfiuVuf05oTW8276R7T
-	 KRZxPteUHCp6SXkKcLzAEk3iqLQpnPEqPULWmHoe54IRwGbMzi3vNBAeYB/OifATBK
-	 ZprmsQhVmFrKsc47HeAlKkrG5pZ8mgfuxTARn8+qfPELCB5oUX7sVhr675UE+fu97Z
-	 0yhBvToeDy8JRm2EzUtV3QJNtAVE+l/UrLjvXkpYGqLoIYzTroE4dOztU11pSfXjrV
-	 O7/oH3L3wxlpAX2Lmbrm5mjyqDj0IKzpw5dZDnWoN81+f/w3e1UbokYNy4TvJR304d
-	 OaXqfIAAhWEzw==
+	s=spacemail; t=1793818495;
+	bh=AXWG/qhSArt5EnQWuwrCQmFVUH/N2VZPyjnPB/yAPfM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=hklP4eZJPyouccyWBZpazYkxTMR+DiJaFCW9gHld+m2mm+HhfLIlo21EmOi93deDI
+	 shUUT3DkbaQV2liL3sZX6Bc9qJLxpX2CCtOvy0BxCQevbQNh1ucgr9MumA5okmcooe
+	 cHTsA3u6DKZkB1mObcyQ0fWAHd7dQPcu8/KE4/O7NCXFNnODY6nyrQEVTXJDl0N/ob
+	 vdPZthMgsFWVnJDMrpPnJin5yiO+4ol+3C1nD6p8PvTZ9gup4wFtLvgJnJIR4t/IiV
+	 22CQMYa4qMep+R2YlnZrkLBSpvcfohxUtdCbxdFDAtW2Xmr8mtrwPRkuYNoe3Q+O9+
+	 g1vTANMIuZ6Fw==
 From: Tianyi Chen <hi@tychen.cc>
 To: bpf@vger.kernel.org
 Cc: Tianyi Chen <hi@tychen.cc>,
@@ -62,10 +62,12 @@ Cc: Tianyi Chen <hi@tychen.cc>,
 	ast@kernel.org,
 	alexei.starovoitov@gmail.com,
 	skokovmaksimevg@gmail.com
-Subject: [PATCH bpf-next v11 0/3] bpftool: Add recursive map dumping
-Date: Thu,  5 Nov 2026 03:54:36 +0900
-Message-ID: <cover.1793818386.git.hi@tychen.cc>
+Subject: [PATCH bpf-next v11 1/3] bpftool: Reset map info before each query in show and dump loops
+Date: Thu,  5 Nov 2026 03:54:37 +0900
+Message-ID: <0adb4f97dffd5e63319d28e5dea44a96f564dcea.1793818386.git.hi@tychen.cc>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <cover.1793818386.git.hi@tychen.cc>
+References: <cover.1793818386.git.hi@tychen.cc>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,38 +80,66 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-Dump each inner map in the entry that references it. Open it by ID, dump
-it and close it immediately; a missing inner map is an error only in
-that entry, and shared inner maps are printed in every referring entry.
+On kernels that copy bpf_map_info from userspace without clearing output
+fields, reusing the structure for a map without BTF retains the preceding
+map's BTF IDs.
 
-Changes in v11:
-- Drop the queue, deduplication and second pass, as Alexei suggested.
-- Drop the ineffective map-info test. Keep the map-info clearing fix
-  for bpftool running on kernels without the kernel-side fix.
-- Rewrite the recursive tests and drop Quentin's Acked-by on the
-  rewritten patch.
+Clear the structure and restore its length before each query in map
+listing, named-map listing, BTF detection and dumping. This prevents
+stale BTF IDs and formatting a map with another map's key and value types,
+including when bpftool runs on kernels without the kernel-side fix.
 
-Tested in an x86-64 VM, including shared and missing inner maps, BTF,
-multiple roots, and the combination with the batch series.
+Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
+Fixes: 99f9863a0c45 ("bpftool: Match maps by name")
+Reported-by: Quentin Monnet <qmo@kernel.org>
+Link: https://lore.kernel.org/r/3acbe829-06f0-4df4-b57c-a8c7b802ec96@kernel.org
+Acked-by: Quentin Monnet <qmo@kernel.org>
+Assisted-by: LLM
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
+---
+ tools/bpf/bpftool/map.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-v10: https://lore.kernel.org/r/cover.1793732336.git.hi@tychen.cc
-
-Tianyi Chen (3):
-  bpftool: Reset map info before each query in show and dump loops
-  bpftool: Add recursive map dumping
-  selftests/bpf: Cover recursive bpftool map dumps
-
- .../bpf/bpftool/Documentation/bpftool-map.rst |   9 +-
- tools/bpf/bpftool/bash-completion/bpftool     |   3 +
- tools/bpf/bpftool/map.c                       |  67 +++-
- .../prog_tests/bpftool_map_dump_recursive.c   | 375 ++++++++++++++++++
- .../bpf/progs/bpftool_map_dump_recursive.c    |  17 +
- 5 files changed, 465 insertions(+), 6 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_dump_recursive.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpftool_map_dump_recursive.c
-
-
-base-commit: 8fb43ffc3327d12d57d3fbe6f4820b5a522de0d1
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 4b65edf74859b..b150a06a25085 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -647,6 +647,8 @@ static int do_show_subset(int argc, char **argv)
+ 	if (json_output && nb_fds > 1)
+ 		jsonw_start_array(json_wtr);	/* root array */
+ 	for (i = 0; i < nb_fds; i++) {
++		memset(&info, 0, sizeof(info));
++		len = sizeof(info);
+ 		err = bpf_map_get_info_by_fd(fds[i], &info, &len);
+ 		if (err) {
+ 			p_err("can't get map info: %s",
+@@ -718,6 +720,8 @@ static int do_show(int argc, char **argv)
+ 			break;
+ 		}
+ 
++		memset(&info, 0, sizeof(info));
++		len = sizeof(info);
+ 		err = bpf_map_get_info_by_fd(fd, &info, &len);
+ 		if (err) {
+ 			p_err("can't get map info: %s", strerror(errno));
+@@ -774,6 +778,8 @@ static int maps_have_btf(int *fds, int nb_fds)
+ 	int err, i;
+ 
+ 	for (i = 0; i < nb_fds; i++) {
++		memset(&info, 0, sizeof(info));
++		len = sizeof(info);
+ 		err = bpf_map_get_info_by_fd(fds[i], &info, &len);
+ 		if (err) {
+ 			p_err("can't get map info: %s", strerror(errno));
+@@ -970,6 +976,8 @@ static int do_dump(int argc, char **argv)
+ 	if (wtr && nb_fds > 1)
+ 		jsonw_start_array(wtr);	/* root array */
+ 	for (i = 0; i < nb_fds; i++) {
++		memset(&info, 0, sizeof(info));
++		len = sizeof(info);
+ 		if (bpf_map_get_info_by_fd(fds[i], &info, &len)) {
+ 			p_err("can't get map info: %s", strerror(errno));
+ 			err = -1;
 -- 
 2.56.0
 
