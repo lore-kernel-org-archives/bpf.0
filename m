@@ -1,54 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793775516;
-	b=OoYJr5yUPGKKVGhnBQjBgYmTWbE1/ec3bXu5ZaT876OQJmSJRiZCegRKSRL0fRHRony/
-	 mxcH8ju2WL2hoJbpMbgP27sWd5Ok4yaOmW50srgn6BJVsFvKSa289PEMSu2mReNLTDLan
-	 YsTQhjank8XLRyXIxD0+uL+iz97HMxzBFjraxr7UqZEyuVVo+VhpFVBT7l5I8VednTl+Y
-	 mdjnBDNMlhsVcdsiUASEFNIJZayFIILOWuvOK3+Vb3yR27SpuahJeJKLeXqAzaqRwgYXP
-	 /VAw8kK5j6RFM8ixzjMj8W9M/MamhEglKEjKWkrf6Ql+WZEkBck7ZjlG1v/0l6QEcrw==
+	t=1793777206;
+	b=kmX3vSf/kQuSmk62dPyViosov3czVcVn2TCTTQXJvnUFkB0mAcnYrx+gL2ZHxQ9e5uqt
+	 a9vXVWDuadOXz1YLSm+2YOZRbeEE2ClIq+1qSROyGqlRJnfKZq+RGGtJ9b5BUMj4nR/i0
+	 Bp+DyNtsipLYoZ3SXsN6lReeE9qiajQah+ZfcvVuEX4486rdu1rXZhyTmt7lwNLr/mta2
+	 XQIkn+L+cOfZJ5n9a9OYzvkxtYnt1PdI6CvEEc2V/+ux/FZhB+uVS+QDetA/n0NDd0Qti
+	 ksSgQDB+mXJi/KodZNOAqxbLF2n/yxD92mFYrdYzBbD6KNCk9DRQcfpblQ2nPzRuAoQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793775516;
-	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
-	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
-	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=hdQK57f7HyDlb+RjbKtfMWetjSY2KiFfxeS/E3Ij6Cw=;
-	b=maj/Fjoa7VQozw+1j12ZfSjDGXhc87eadhbkpTXOj1MuqqRQ/D8uOR7xXaSx5RMT8+yR
-	 XQDpNdozFWBUuLSbTD8RodcuUC/g8wcRJGDcWGo0eOFWpqRVhSjMnJ4sqHbfi6dtDHdXs
-	 UxhpJGt6CWsWVxy6vO2/Fu+Y3DdNsZdKWwPlwTXkh4eqKOCcndzKoZY/46sQXvHIrcqLZ
-	 PqN1w5h5iZGa6zTou1iVCJR19cX7NMQXIAhrkIqQmRs5oC7zBndU51jgnfgHF4swdZQoS
-	 1Ka1D/Am0RrNDVWrXkk/oJc+EaCgb+m+v1tdhvfsuuhIj7oOMpLwjuCOHDGfw7uleqw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793777206;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=nzNG0/YK8WDIZzlezpfUa+szM40i3f9UjD+pAaw0PVk=;
+	b=4tAbRDjkctZbL67/IAWnrmMcQPNWmqQb32hL3+UXiNS6mi1baShw3ZCRcUAdQDnELUjq
+	 LUXPe/4Hk+II1rZwmSCv0OHg1SNAmmb94PY0qKPEyYzy27E81c8P9gL/CzDVhIxd2vVkr
+	 CfnLGQc7M9i8VuvozhipXyCVMnlqGQfVSlMrY2YbQGZ+NXX7izDEVbJpL+aUm6bNBl4Kz
+	 syZUIbMPaDIy4rZl/QjTCP/uYMdLio8Qkw59lLUxveialkFoS4eMCZZd1eK6iyrTq1zUS
+	 a6foEeBsmpUbbXUDNxikFdf+IFnCN+wW25SYdVGYiAnRDi8NOm8Gz5BlNLl5hoM5EaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85128606A31B;
-	Wed,  4 Nov 2026 06:58:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85128606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8AxntKY1+pq6jccAA--.16033S3;
-	Wed, 04 Nov 2026 14:58:32 +0800 (CST)
-Received: from [127.0.0.1] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAxlMyW1+pq2UQyAA--.10843S2;
-	Wed, 04 Nov 2026 14:58:31 +0800 (CST)
-Subject: Re: [PATCH v1 1/2] LoongArch: BPF: Make arena support depend on SCQ
- extension
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261102072808.23080-1-yangtiezhu@loongson.cn>
- <20261102072808.23080-2-yangtiezhu@loongson.cn>
- <CAAhV-H52mbZJX2vkgG_h=XfwHoio=asLjFdhTJwUYqDp4V5JMg@mail.gmail.com>
- <8b00e5a7-4e60-19bd-7953-f76dc71e15ec@loongson.cn>
- <CAAhV-H52bqRD1SyrZsvMkNbCpGiM5DPSGPARiasZ8G3XsE5Tgw@mail.gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <6446c385-623c-d4cf-5a07-0c2276c6f50c@loongson.cn>
-Date: Wed, 4 Nov 2026 14:58:30 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nGR0Wv8Z;
+	arc=none smtp.remote-ip=209.85.215.177
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F951606A326
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 07:26:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F951606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nGR0Wv8Z
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cdab938dc83so174768a12.3
+        for <bpf@vger.kernel.org>; Tue, 03 Nov 2026 23:26:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793777205; x=1794382005; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=nzNG0/YK8WDIZzlezpfUa+szM40i3f9UjD+pAaw0PVk=;
+        b=nGR0Wv8ZJzYqpCCSZTHU8s5UOmMvWiCTTbx7EKS5Eb5viU374gfHxvowklhQHxEGP6
+         CEIySAf1D2NjAfDQuJmiehCV6wvZo1qUEzUZXDBrC44taV+ZQV9M/BjCSBXJWGYRKO38
+         MWu+zwL8NTcGRBCQ5p3GC5Fkyno3827X/xKIU6z7zzkMiMi1xFbN6rTOx0ct6apvYvXM
+         vGM7P/WOOydKGKhAR2LV/hRoUPTWuI78J1QaD8dK8ny9oxqR/XKW3OtjdwyomGdyvBdv
+         BQ1WpW4dwYElKIp7zCfjRlXpyKk5u5faESYxxXz1A0s9zK7+fvJKQ6bmIwms6DRea1cF
+         YMeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793777205; x=1794382005;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nzNG0/YK8WDIZzlezpfUa+szM40i3f9UjD+pAaw0PVk=;
+        b=I+6Zo3IPwY2lEyvTdYR2fRq7Lx/jGBStn6CFcFgH98sio2jPCEwdL3yxCGU2FSExW4
+         2GpauqFXWrGpLWRdf2vawYrTqH83s3Pw/JE+ojNBF18JUS2e0AEBGV2uLCqjA7VMiOpi
+         Q8nrqHTlCpexaxouFxHmmcHK6WWkHlT2M/ercqmczMaGMX6lR2faZtCHOOWTYLncWooC
+         9CFlFwgAMz2KIlKlGaoj88epSaAVcL8I1NlD4FS0MVdHp7uonmSqTjmd3K2gQW1YRM42
+         rtcRkXszy/uOy0103T3YRFHyqqBi6tKLPOGuEIGzTcH/DxM6fhajrmEiYeERxVB34KHb
+         QLeA==
+X-Forwarded-Encrypted: i=1; AKwUvBzbPGnHTBHvvYhIFL9WrdGzSYFphMHhKtXX7km67Td5Qw1NVZ1REBg4tRc8uWy646PbX84=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8s79kb9Cak1ZdIdCddtErg6zp4ILl+BkxdJtuKtxVGOEqjXiMZ
+	HKm99Gf52POh6bZW/vs0PgPBFfB09N7fq7SzYpPPJvaaoLsnu3Dlhb51DzvqiQ==
+X-Gm-Gg: AYBFou0MPLgGr3wgX+Fdq8cJMQJTJH1C/riuHQU65MGG5ab/oMpKzOsrTa5hm/Faq3o
+	kZjl30c8A5DYkRBl2vBROVk/NC0ehrsheYvgbKcTFuRkbJDmli1vGWRp8ODDNylmxPRGai3q9HD
+	/gUBpusoi3Ldis/YnMENcGX4ySUNVK/MtzIcc9inxrgWH4PFBpJYUkBfHN+jtfR3w/RH8XX01Fw
+	PZ4rsENme5Eijz/6dRDe1fEtLL1RSSZGdr5q5SquQW8HXE1Y0/abs61qrg6AjEnXcGBKMJE7oCL
+	wfknZatuGsN6KrefteWNwmgFcIJkQzONVYiVb9ciXSioQO3R10ZCSP3FYlzOz2QXj1Hdl1GbIJm
+	TOfikUlrdVYIN0m9lQBxVjmiIeqG2Jn/p5UNTJwKDJf9UVxjYzM6WRYpVyBMtCjDskm8rPTxExz
+	tjfMV2PD8uI6lrbMYxXTc1LF4OBwkHixeRuDUwHoolz98eNFP6Zu6YHR71mBzajpnGrAsQIdp9V
+	8ebXNl49mjt773jfJxSGl5gGbpDV5j37K/xYun4+je7cTKtWMs5zWgSDHQP+Nnm7xXP3S6+iyxM
+	wwsuK8Ag8ZXpctfdZQjt5P8ATHkD8kbTsRIQfWozekgbGLbG5T8bNvc+
+X-Received: by 2002:a17:90a:f307:b0:3ae:9944:3bf0 with SMTP id 98e67ed59e1d1-3ae99443c7bmr8431848a91.34.1793777204673;
+        Tue, 03 Nov 2026 23:26:44 -0800 (PST)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b09452d89bsm1388475a91.0.2026.11.03.23.26.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2026 23:26:44 -0800 (PST)
+Message-ID: <f1e784a5de228293bc4fe21a5cfcc60d93a4400d.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 16/37] bpf: Count loops whose first value or
+ bound is a range
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Date: Wed, 04 Nov 2026 00:26:40 -0700
+In-Reply-To: <20261103234104.208239-17-alexei.starovoitov@gmail.com>
+References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
+	 <20261103234104.208239-17-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10+b1 
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,150 +101,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H52bqRD1SyrZsvMkNbCpGiM5DPSGPARiasZ8G3XsE5Tgw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxlMyW1+pq2UQyAA--.10843S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxAry5uFyxWryUWFy3KrW3Jwc_yoWrWFyUp3
-	yxArnrGrWUWr1kJrZxt3yrWr4Dtr98K34a9a18A348Aan8Xa48Xr10kwn5WF1Dt39Yg3WF
-	qFWrK3ZI9Fy8AabCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE
-	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
-	AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
-	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtw
-	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
-	67AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU24So
-	DUUUU
 
-On 11/4/26 12:29 PM, Huacai Chen wrote:
-> On Tue, Nov 3, 2026 at 10:24 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+On Tue, 2026-11-03 at 23:40 +0000, Alexei Starovoitov wrote:
 
 ...
 
->> So, the current patch has no problem IMO.
-> OK, then I think we can use:
-> 
-> return __is_defined(system_has_cmpxchg128) && system_has_cmpxchg128();
+> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+> index 8662205a3b59..eac792dc7b10 100644
+> --- a/kernel/bpf/scev.c
+> +++ b/kernel/bpf/scev.c
+> @@ -2035,11 +2035,20 @@ static int match_linear_latch(struct bpf_verifier=
+_env *env,
+> =C2=A0	return false;
+> =C2=A0}
+> =C2=A0
+> +/* What is known about a scalar or about the offset of a pointer. */
+> =C2=A0struct scev_value {
+> -	u64 value;	/* scalar value or a pointer offset */
+> +	u64 umin, umax;
+> +	s64 smin, smax;
+> +	u32 u32_min, u32_max;
+> +	s32 s32_min, s32_max;
+> =C2=A0	int ptr_reg;	/* SCEV register identifying the pointer origin, or -=
+1. */
+> =C2=A0};
 
-If CONFIG_AS_HAS_SCQ_EXTENSION is not enabled, system_has_cmpxchg128()
-is not defined at all. If we change the code to follow your suggestion,
-something like this:
+Nice set of improvements.
+Quick question: can the above use cnum{32,64} instead of direct bounds?
+Reason being, that I thought compute_backedge_taken_count() can be
+expressed in terms of cnums as well, in which case there would be no
+need to split it as two functions.
 
-```
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index b5ed4881d3c0..6f572d24d2c3 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -336,7 +336,7 @@ config AS_HAS_LVZ_EXTENSION
-         def_bool $(as-instr,hvcl 0)
+...
 
-  config AS_HAS_SCQ_EXTENSION
--       def_bool $(as-instr,sc.q \$t0$(comma)\$t1$(comma)\$t2)
-+       def_bool n
+> +/*
+> + * The first value or the bound is not a constant. The count is for the =
+pair that is
+> + * the furthest apart.
+> + */
+> +static bool compute_backedge_taken_max(struct bpf_verifier_env *env, str=
+uct bpf_func_state *st,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struct linear_latch *latc=
+h,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struct scev_value *initia=
+l,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struct scev_value *step_v=
+al,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struct scev_value *bound,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct bpf_loop_iters *iters, u=
+64 *result)
 
-  config CC_HAS_ANNOTATE_TABLEJUMP
-         def_bool $(cc-option,-mannotate-tablejump)
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index d7ea515045ec..d124632b0fa9 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -2495,11 +2495,7 @@ bool bpf_jit_supports_arena(void)
-          * atomic cmpxchg; this is provided by not only hardware SCQ 
-extension
-          * but also assembler support on LoongArch.
-          */
--#ifdef system_has_cmpxchg128
--       return system_has_cmpxchg128();
--#else
--       return false;
--#endif
-+       return __is_defined(system_has_cmpxchg128) && 
-system_has_cmpxchg128();
-  }
+cnums aside, it appears surprising that both compute_backedge_taken_count()
+and compute_backedge_taken_max() are necessary.
+For example, I'd expect that compute_backedge_taken_max() should be
+expressible using compute_backedge_taken_count() as:
 
-  bool bpf_jit_supports_fsession(void)
-```
+  high  :=3D compute_backedge_taken_count(..., min(initial), step, max(boun=
+d), ...);
+  low   :=3D compute_backedge_taken_count(..., max(initial), step, min(boun=
+d), ...);
+  ... overflow check for iv with `low` and `high` ...
 
-We will encounter a fatal build error:
+Or vice-versa, compute_backedge_taken_count() seem to be expressible
+as a special case for compute_backedge_taken_max() with ranges
+[initial, initial] and [bound, bound].
 
-   CC      arch/loongarch/net/bpf_jit.o
-arch/loongarch/net/bpf_jit.c: In function ‘bpf_jit_supports_arena’:
-arch/loongarch/net/bpf_jit.c:2498:55: error: implicit declaration of 
-function ‘system_has_cmpxchg128’ [-Wimplicit-function-declaration]
-  2498 |         return __is_defined(system_has_cmpxchg128) && 
-system_has_cmpxchg128();
-       | 
-^~~~~~~~~~~~~~~~~~~~~
-make[5]: *** [scripts/Makefile.build:290: arch/loongarch/net/bpf_jit.o] 
-Error 1
+Is there some precision loss I don't understand?
 
-Even if we change it to use IS_ENABLED(CONFIG_AS_HAS_SCQ_EXTENSION),
-something like this:
+--
 
-```
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index b5ed4881d3c0..6f572d24d2c3 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -336,7 +336,7 @@ config AS_HAS_LVZ_EXTENSION
-         def_bool $(as-instr,hvcl 0)
+Also, you'd consider it a nit, but compute_backedge_taken_count() has
+a nice set of comments explaining where each condition is coming from.
 
-  config AS_HAS_SCQ_EXTENSION
--       def_bool $(as-instr,sc.q \$t0$(comma)\$t1$(comma)\$t2)
-+       def_bool n
-
-  config CC_HAS_ANNOTATE_TABLEJUMP
-         def_bool $(cc-option,-mannotate-tablejump)
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index d7ea515045ec..1b87b1e4262e 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -2495,11 +2495,7 @@ bool bpf_jit_supports_arena(void)
-          * atomic cmpxchg; this is provided by not only hardware SCQ 
-extension
-          * but also assembler support on LoongArch.
-          */
--#ifdef system_has_cmpxchg128
--       return system_has_cmpxchg128();
--#else
--       return false;
--#endif
-+       return IS_ENABLED(CONFIG_AS_HAS_SCQ_EXTENSION) && 
-system_has_cmpxchg128();
-  }
-
-  bool bpf_jit_supports_fsession(void)
-```
-
-It still fails with the same error due to the macro visibility:
-
-   CC      arch/loongarch/net/bpf_jit.o
-arch/loongarch/net/bpf_jit.c: In function ‘bpf_jit_supports_arena’:
-arch/loongarch/net/bpf_jit.c:2498:59: error: implicit declaration of 
-function ‘system_has_cmpxchg128’ [-Wimplicit-function-declaration]
-  2498 |         return IS_ENABLED(CONFIG_AS_HAS_SCQ_EXTENSION) && 
-system_has_cmpxchg128();
-       | 
-^~~~~~~~~~~~~~~~~~~~~
-make[5]: *** [scripts/Makefile.build:290: arch/loongarch/net/bpf_jit.o] 
-Error 1
-
-Therefore, using the explicit #ifdef block in the original patch is the
-only way to ensure toolchain compatibility and compile-time robustness
-here IMO.
-
-Anyway, I will modify the patch subject, update the commit message
-and code comment to make it more clear.
-
-Thanks,
-Tiezhu
-
+...
