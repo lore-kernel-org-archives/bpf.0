@@ -1,59 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.119
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793786394;
-	b=P2Exd9vDUZ1/GJHeQPJEP2BJMqVROV/ej9Y46dAli3NIQgbRcZCW/GdldO2Th9h14oPr
-	 HX6STC4rfj2v7O5YnHoRCzfFkg2CGqX2w4XLPTm68MF629YZNAdf8jGXvSvermVNuqV7E
-	 D9ajv+iPIpBDlY0E5P4FNI4yG7gXNeA2gMg7Jt/WODm9Kofb7u04SB1NfHfXh6kPix1cW
-	 cyPr+uHSO9KtYZe1shbYy+2k8DHtdFsb/LbUSqoLCNQtTwYJTMbORrspMKTzsYJrdBU6J
-	 WRecroe8BpK/BQe6cdbuT48J0cCGaDthXUGN7Mg5KmP/aJ2d9c81srlh8CnaWZAvE7w==
+	t=1793786665;
+	b=1kl4lMyWMihTVCR8ko1ILpbJtmViSkdNrspCVii3fv4iYz8SwGI1+wJMXRfBM+SbZpfx
+	 zYDXn3EXGr8iQTqfb8SxbndvIZb43s7J0CX0GLr8NtvbAWiZyTmg0qVhxgGtkcdf1t7bs
+	 64l/7Bpu+S11znJb+bpAc/bgc4nADYp6nMQjBv61l2qvTe/KMIN3eR9js+Wj4j7LZyqeM
+	 EoMfbr2xNypZ5YJIsjK5JqsCzKpsv0wmHK4f+s71N4dc5TVsxU9LD6DXxTe/2/V7FO5tc
+	 7OmNi0l84lKhKr70Ksg5rohAIFVbN6zai1qVMxHEOUfeCSBrtORI2MUlqUR5bT/EHhg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793786394;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:From:Date:
-	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Last-TLS-Session-Version;
-	bh=y4W1eE8E1/91FCr6e2Z/bZGYHOBtRy+Y9cuTbiFyZt4=;
-	b=yKx8f12BBHKE3gf13eCVzxRZlvAPf+gNTlCO1De6w6y2sumBxLeQtdAHEcn3XIyGUZ2m
-	 PBqCj72iVTq4h8UmpT6PEfvEzvpxZRHJP30h2kf5loxTJIEOHsMIPYQSfL8a5AWEEW8uI
-	 oOoN1UUgIc34Pq3K+gk6gPxSE78l+ljSg3uYD5fmc9VlvGrYD9OWJokBcjzgKhV/M7ZR/
-	 lQzvBGh1V5uDwkZnirDhmdyKqxsHyS0B1Qj9u5FW1BlkWS2lwOf1WzQb1PE78nWZO5a7I
-	 JXQ5Ij5t/WuG+7Wio2hyl0KiGoUHVVRCdKswc0cwDGwrkODzniEuTliOZj1YpNrldmQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793786665;
+	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=MGGIrCRkMY2tw6CcNj/MCmch+qG0XHux1S4w4kckfr0=;
+	b=CfmvfqIK6V6sPLnIWkSOoUYLlf2elq7dX89ypn/GfUjNVw77E/+ckmCl6dvfpzvx4hd9
+	 bbaDB1aN3uqNxLQ8IPQs0W3g3McXyl6sRBZTTiFvjZeJktCrgWV45OX2DVTl4wZNmMSrt
+	 ehSzjLDAu/JLUYFqGDSOMhFZqHQ1+MRST8IcCRKY7lH3gT9tRkxI9NzLQfW/qM0NgfiIx
+	 t+KPN2Uet1+2rKZ2XLdgMUHCwM1TbX7WSgYgN01U4M8QaiJxtUx+aUORqt2zI+4PlyCDs
+	 +4uhVgppV64126gHyGoxLZVPId+UJBzLqPVTheYNR3msPE85Goe9TE/hfFrLW37YicQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=oTuG6hva;
-	arc=none smtp.remote-ip=185.171.202.116
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	dmarc=pass header.from=linux.alibaba.com;
+	spf=pass smtp.mailfrom=linux.alibaba.com;
+	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=W8GFFAQE;
+	arc=none smtp.remote-ip=115.124.30.119
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6C5606A326
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 09:59:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C6C5606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 140E9606A31B;
+	Wed,  4 Nov 2026 10:04:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 140E9606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=oTuG6hva
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 57B0AC8F46C;
-	Wed,  4 Nov 2026 10:00:55 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 57CC760770;
-	Wed,  4 Nov 2026 09:59:50 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3D1C8103291CE;
-	Wed,  4 Nov 2026 10:59:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1793786388; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=y4W1eE8E1/91FCr6e2Z/bZGYHOBtRy+Y9cuTbiFyZt4=;
-	b=oTuG6hva+dMWSHf42Vh9nNdVHHDPqd/uQJarO+o6MJbQe7Y4hdi10We0KJ8Cz0dt9YblEl
-	BHbPitgMJ3mdZafKt4RYrZnobKnGm3O7GfHMaF7isrrsudiwjfZc/uDMMYvhC1gmhiNegT
-	8glTxmSqzTtIndmQogvkAXJMiLx0QYQ1Dp+QWnK51gNtPKSctMHtAdaTu1QeQrKFs3+33G
-	QW2WpcegVaua5FJnJIgQiWEwd6YAeH8Tzfz0we3X77GpUpD0gfLHLTCFfujfiCZnL08JCU
-	hUf0xz9rVdHQBHptwnKfyzbnFsTbtqS3crdy7Iefj1x6tVFIR4wbEuqMRVqBLg==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 04 Nov 2026 10:59:33 +0100
-Subject: [PATCH bpf-next v2] selftests/bpf: port test_ftrace.sh to
- test_progs
+	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=W8GFFAQE
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1793786659; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=MGGIrCRkMY2tw6CcNj/MCmch+qG0XHux1S4w4kckfr0=;
+	b=W8GFFAQEtk+ehX5Hhr1k/61DxOBmxlI0M9fHwV10sppXtzjO1v/tSptzPYA9SzQcMKCvg6ipfC6khg9DvjEXqIDu/wGakDU7IoP3EwCTxiXq+b5E6lT9oACMtgt8mHxdSQixmvo2C1QFBHbaHDR40k4zqvMHJaA+mF4SJs1jeFU=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R331e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0XE5SaXm_1793786652;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XE5SaXm_1793786652 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 04 Nov 2026 18:04:17 +0800
+From: Chen Pei <cp0613@linux.alibaba.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	bjorn@kernel.org,
+	puranjay@kernel.org
+Cc: eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	pulehui@huawei.com,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	luke.r.nels@gmail.com,
+	xi.wang@gmail.com,
+	shuah@kernel.org,
+	rgbi3307@gmail.com,
+	guoren@kernel.org,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 bpf-next 0/3] riscv: bpf: Add BPF private stack support
+Date: Wed,  4 Nov 2026 18:04:08 +0800
+Message-ID: <20261104100411.997-1-cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,201 +83,106 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20261104-ftrace_in_test_progs-v2-1-45363230d228@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/22OzQqDMBCEX6XsuSlJxAo99T2KSNxsdEubSJKKR
- Xz3+nPtcZj5ZmaGRJEpwe00Q6SREwe/Cn0+AfbGdyTYrhq01FcldSVcjgapYd9kSrkZYuiSsKW
- rpNFFIQ3Cig6RHE977QPawQlPU4b6cNKnfRLmrXXL9pxyiN/9wah24hgr5P+xUQkpjCklltYqR
- Ly3IeQX+wuGN9TLsvwASOD9mtYAAAA=
-X-Change-ID: 20261027-ftrace_in_test_progs-d5f70a2330ac
-To: ebpf@linuxfoundation.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.16.0
-X-Last-TLS-Session-Version: TLSv1.3
 
-Commit ff205766dbbe ("ftrace: Fix function_graph tracer interaction with
-BPF trampoline") made sure that trampolines generated for tracing
-programs did not collide with the function graph when we are returning
-from the hooked function. The series bringing this commit also came with
-a new test ensuring that the kernel does not crash when executing BPF
-programs handled by trampolines while the function graph trace is
-enabled, but this test is a standalone shell script, hence not executed
-in CI.
+This series adds private-stack support to the RV64 BPF JIT.
 
-Convert the script to the test_progs runner so it can be executed
-automatically by the CI infrastructure. There are two main options to
-port this test:
-  - just enable ftrace during some existing trampoline-related tests
-    (eg: fentry/fexit tests)
-  - create a dedicated, minimal test with function graph
+The verifier rejects a struct_ops program that requests a private stack
+with -EACCES when the JIT does not report
+bpf_jit_supports_private_stack(), and sched_ext requests one for its
+dispatch callback, so no sched_ext scheduler can load on riscv64 today.
 
-The new test adopts the latter approach, with a smaller scope to keep
-execution time reasonable, while reusing an existing
-fentry/fexit/fmod_ret test. Despite the few asserts in the new test, the
-actual goal is to make sure that the kernel does not crash because of
-some incorrect stack frame skipping when both the function graph and
-tracing programs are running.
+Allocation, the guard value and the lifetime handling follow arm64,
+x86-64 and powerpc64; the 16-byte two-copy guard layout follows arm64
+and powerpc64, since x86-64 uses an 8-byte guard with a single copy.
+What is specific to riscv64 is where the pointers end up:
 
-ftrace is configured through a dedicated ftrace instance which is
-dropped at the end of the test.
+ - Every BPF stack access goes through BPF_REG_FP (S5), so pointing S5
+   at the top of the per-CPU area and leaving SP on the kernel stack is
+   all the JIT has to do. S5 is callee-saved and each subprog derives
+   its own, so bpf2bpf calls need no extra save and restore.
+ - The outgoing stack-argument area stays in the kernel frame: callers
+   write it relative to SP while callees read it relative to RV_REG_FP.
+   Unlike x86-64, no register here is shared with the private-stack
+   frame pointer, so no verifier-side exclusion is needed and stack
+   arguments keep working together with a private stack. arm64 already
+   does the same, and patch 3 measures the three ranges at run time and
+   pins them in the disassembly.
+ - The per-CPU lookup is emitted after the tail-call entry point. A
+   program using a private stack can still be entered as a tail-call
+   target, at RV_TAILCALL_OFFSET, so it has to set up its own S5 there;
+   and since that offset is a constant added to the target's bpf_func,
+   everything in front of it must be the same size in every program.
 
-With the new test integrated into test_progs, drop test_ftrace.sh.
+The base address is materialized with absolute moves, as on arm64,
+x86-64 and powerpc64. Those three reach the per-CPU offset through gs:,
+TPIDR or r13 and only have to move the base into a register; riscv64 has
+no such register, so the address of __per_cpu_offset is loaded here too.
+A PC-relative pair is not an option for the base itself: the dynamic
+per-CPU area is vmalloc'd, further from the JIT region than auipc
+reaches, which is why the whole setup is ten instructions on the kernel
+tested here. __per_cpu_offset is a kernel-image symbol and on that
+kernel lands in the sign-extended 32-bit range, so emit_imm() renders it
+in two instructions through its 32-bit fast path - what an emit_addr()
+pair would cost, and the form insn_is_mov_percpu_addr() already uses;
+unifying the two needs an extra_pass argument and an error return in
+bpf_jit_build_prologue(), which also touches bpf_jit_comp32.c, so it is
+left as is. Both constants are fixed before the offset-convergence loop,
+so the prologue length is stable across passes.
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
-Hello,
-this is v2 of a small series aiming to port the test_ftrace.sh script
-(testing that trampolines and function graph behave correctly when both
-are enabled) into the test_progs framework. The test is heavily
-simplified following Alexei's review and suggestions.
----
-Changes in v2:
-- use a ftrace instance rather than global ftrace
-- drop fgraph filters
-- drop custom ftrace helpers in favor of direct manipulation in test
-- drop custom bpf prog, reuse test_modify_return directly
-- move test in existing test file (modify_return.c)
-- make the test parallel (drop serial_)
-- Link to v1: https://patch.msgid.link/20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com
+RV32 does not declare support and keeps the existing behaviour; the
+prologue signature is unchanged, so bpf_jit_comp32.c needs no edit.
 
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org
-Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
- .../selftests/bpf/prog_tests/modify_return.c       | 32 ++++++++++++++++
- tools/testing/selftests/bpf/test_ftrace.sh         | 44 ----------------------
- 2 files changed, 32 insertions(+), 44 deletions(-)
+Changes since v1:
+ - Patch 1 commit message: guard layout credited to arm64 and powerpc64,
+   value alone to x86-64; __per_cpu_offset described as a choice.
+ - Patch 3: test_private_stack_runtime() renamed to
+   serial_test_private_stack_runtime(), and the stack-argument skip
+   prints a reason.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/modify_return.c b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-index 4661d77ebdfc..15681b49f86f 100644
---- a/tools/testing/selftests/bpf/prog_tests/modify_return.c
-+++ b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-@@ -11,6 +11,10 @@
- #define LOWER(x) ((x) & 0xffff)
- #define UPPER(x) ((x) >> 16)
- 
-+#define MAX_INSTANCE_PATH_LEN	128
-+#define TRACEFS_DEFAULT		"/sys/kernel/tracing"
-+#define TRACEFS_IN_DEBUGFS	"/sys/kernel/debug/tracing"
-+#define TRACE_FTRACE_DEFAULT	TRACEFS_DEFAULT "/trace"
- 
- static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
- {
-@@ -61,3 +65,31 @@ void test_modify_return(void)
- 		 0 /* want_side_effect */,
- 		 -EINVAL * 2 /* want_ret */);
- }
-+
-+void test_modify_return_graph(void)
-+{
-+	char instance[MAX_INSTANCE_PATH_LEN];
-+	char *ftrace_dir;
-+	int ret;
-+
-+	ftrace_dir = access(TRACE_FTRACE_DEFAULT, F_OK) ? TRACEFS_IN_DEBUGFS :
-+							  TRACEFS_DEFAULT;
-+
-+	ret = snprintf(instance, MAX_INSTANCE_PATH_LEN,
-+		       "%s/instances/bpf-XXXXXX", ftrace_dir);
-+	if (ret < 0)
-+		return;
-+
-+	if (!ASSERT_OK_PTR(mkdtemp(instance), "mkdtemp"))
-+		return;
-+
-+	SYS(out, "echo 'bpf_modify_return_test*' > %s/set_ftrace_filter",
-+	    instance);
-+	SYS(out, "echo function_graph > %s/current_tracer", instance);
-+
-+	test_modify_return();
-+
-+	SYS(out, "grep -q bpf_modify_return_test2 %s/trace", instance);
-+out:
-+	ASSERT_OK(rmdir(instance), "rmdir");
-+}
-diff --git a/tools/testing/selftests/bpf/test_ftrace.sh b/tools/testing/selftests/bpf/test_ftrace.sh
-deleted file mode 100755
-index f5109eb0e951..000000000000
---- a/tools/testing/selftests/bpf/test_ftrace.sh
-+++ /dev/null
-@@ -1,44 +0,0 @@
--#!/bin/bash
--
--if [[ -e /sys/kernel/tracing/trace ]]; then
--    TR=/sys/kernel/tracing/
--else
--    TR=/sys/kernel/debug/tracing/
--fi
--
--clear_trace() { # reset trace output
--    echo > $TR/trace
--}
--
--disable_tracing() { # stop trace recording
--    echo 0 > $TR/tracing_on
--}
--
--enable_tracing() { # start trace recording
--    echo 1 > $TR/tracing_on
--}
--
--reset_tracer() { # reset the current tracer
--    echo nop > $TR/current_tracer
--}
--
--disable_tracing
--clear_trace
--
--echo "" > $TR/set_ftrace_filter
--echo '*printk* *console* *wake* *serial* *lock*' > $TR/set_ftrace_notrace
--
--echo "bpf_prog_test*" > $TR/set_graph_function
--echo "" > $TR/set_graph_notrace
--
--echo function_graph > $TR/current_tracer
--
--enable_tracing
--./test_progs -t fentry
--./test_progs -t fexit
--disable_tracing
--clear_trace
--
--reset_tracer
--
--exit 0
+Testing
+=======
+QEMU virt rv64, an 8 vCPU SMP kernel and a 1 vCPU UP kernel, both built
+on the base commit below, source tree clean at the head of this series,
+selftests built from these patches. There are no private-stack related
+failures, and no run logged a BUG, WARNING, panic, unknown opcode or
+guard corruption. On UP, kfunc_call/subprog, kfunc_call/subprog_lskel
+and scx_simple are not run: all three fail the same way on the unpatched
+base.
 
----
-base-commit: b0e67f50519538b1b4c6364edc7811f482703f75
-change-id: 20261027-ftrace_in_test_progs-d5f70a2330ac
+ - verifier_private_stack, struct_ops_private_stack,
+   private_stack_runtime.
+ - tailcalls, stack_arg, subprogs, fentry_fexit, kfunc_call,
+   percpu_alloc, async_stack_depth, arena_atomics, arena_ldsx.
+ - verifier_stack_arg, stack_arg_precision.
+ - may_goto_priv_stack, may_goto_far, verifier_may_goto_1,
+   verifier_may_goto_2.
+ - scx_simple.
+ - sched_ext runner sweep on SMP: 40 cases, 39 pass. enable_cmask fails
+   because its ops.enable() takes a struct scx_cmask __arena pointer and
+   riscv64 does not implement bpf_jit_supports_arena_args().
 
-Best regards,
---  
-Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+Chen Pei (3):
+  riscv: bpf: Add BPF private stack support
+  selftests/bpf: Enable private stack tests for riscv64
+  selftests/bpf: Add a runtime test for private stack and stack
+    arguments
+
+ arch/riscv/net/bpf_jit.h                      |   1 +
+ arch/riscv/net/bpf_jit_comp64.c               |  42 +++++-
+ arch/riscv/net/bpf_jit_core.c                 |  84 +++++++++--
+ .../selftests/bpf/private_stack_runtime.h     |  12 ++
+ .../bpf/prog_tests/private_stack_runtime.c    |  84 +++++++++++
+ .../bpf/prog_tests/struct_ops_private_stack.c |   3 +-
+ .../bpf/progs/private_stack_runtime.c         | 140 ++++++++++++++++++
+ .../bpf/progs/verifier_private_stack.c        |  41 ++++-
+ 8 files changed, 393 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/private_stack_runtime.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/private_stack_runtime.c
+ create mode 100644 tools/testing/selftests/bpf/progs/private_stack_runtime.c
+
+
+base-commit: 8fb43ffc3327d12d57d3fbe6f4820b5a522de0d1
+-- 
+2.50.1
 
