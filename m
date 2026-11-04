@@ -1,54 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793800008;
-	b=nS/rc9OiN4rmK+IR5E5gxkza26p/lx3NIlP8+iEAYNhR14/YBWui6gXfhcU8hUtA9MAn
-	 UD7kvGlOkLYGwY5eJsjLWh0PHVYMYs2KjX3D43uV/grhnS6EI+fNFv1PzH9JFACIQtUL6
-	 S8/EplFnFlpSa3gB/By7fBv25DARU+6ELDYApMWRXqmbI6w3rWjk3e+fxfhKacx8WmSnB
-	 6CYmsGL7lRzux1d6hO5Y6Xp0tOE3JHPMBKQjPzDsTN11iDQfKBEx9T9bTmwsJ7hCqH4TU
-	 nTLR1yg/gea9LRTJ8cbku22Jdk6mAF110NXK2HUV/rA7Tu0KfWxrMBK0wYzDenSvDFQ==
+	b=jmE46bavBdCvORuR8plztPlRlIjUA0rqS7PkTHxRLs9WGxidrbPqfRD9Cu+TFwjQfPg2
+	 ap/Y0hOsKxNkBh40fnUEW288RqBgQYvGN4/8WEt4+RXlbmJshRKjkSG9e7MLMJGntK4DA
+	 q0pTvrlbLeIc6mN3vDrqrUln52nTl3ScoDvQAp+UfACLtGTZTSQMxsT7yMz3pVcnI2emQ
+	 HXrT5D2CIslwV6f/4xKVTnWKt9WUetebGE/jtH7komCatfN00vxfF3btPvM/Riv5+Nuze
+	 sdxoekxwbMN1EfReM60BF+j8r1EIg2FbKb7/4gGp3xOfbod4PBh4oYv7F8JOS2QO47g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793800008;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Cn/hlvigXlpGfZZ1gqnf+WeteE6RPNzFgxH6LqIzyjQ=;
-	b=hpqWChB8FIKXrQXzKv87QRVkupgcrlT3oLIFGwaDp/ZULkxtTwHNmW3lrIKlvZqGnqMz
-	 he84yXgDPx+2lL7m1qGlE2zWjF9Zcxl4j7p0P18VUAMNAeRIO5dyaft7OGt1N3suMIcaA
-	 Ob064AN7/Zr68kgs54czKgytLyASu7cg+wUlH8js9bXLV4J7klspInWVXFEdFu/G8WUIH
-	 DQzilQYXA+NZpWYPuO6WovmwHFAaW9IH2G7OMJak1aI+So3BK1VIieFfRAtQY2bm3OJ79
-	 oPTAGwxAmpqpywjfeDAv+nM6sEacapRQhysUX6KO7XXCjdX8hDp5W/4/sOlE3y9R/Rg==
+	bh=8X3xdx4LAVWaOtkTT2nNXBYt75fASyvB/XY5OBCB788=;
+	b=RxLaFs6fudvvHi8fqIoK/EYvm3fdswNKkfusJfNbHYDWUT3ThbjmTnHpAL/z8gIw4rvH
+	 0eWV9bp9lOBCBP4z15XknW8tEd6KaDbTbTYbGqNVHerlbae0lNqbYJjFA3VTe9nka3n2D
+	 aXer8PdxhKWdJGLDrP4t2OsaX933y9FkkV77VpsYx4a6KK9WVNOQrZGL2WtgejHpQvIv3
+	 hxAOcWIo7bGTho2dK5VZLSzyXinTea3xaaxu4rMawR/v+IPk9Wb2yCbQj/feWeLhWJVcK
+	 puOqxwL4HWfQionbi+RGgFHS17/fpvuDMWyjzOXrmLAt7pHu7hlA+DU5fjf35DnQKVA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fuQ5QDB7;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="SOrN/qIf";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087A5606A31B
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 13:46:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA25606A326
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 13:46:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fuQ5QDB7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84A751F000C1;
-	Wed,  4 Nov 2026 13:46:47 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SOrN/qIf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F5221F00919;
+	Wed,  4 Nov 2026 13:46:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793800007;
-	bh=Cn/hlvigXlpGfZZ1gqnf+WeteE6RPNzFgxH6LqIzyjQ=;
+	s=k20260515; t=1793800008;
+	bh=8X3xdx4LAVWaOtkTT2nNXBYt75fASyvB/XY5OBCB788=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fuQ5QDB70VC+izEGWFhM/svelCeXiq21hajUE0E36to6Ets4KnJc4pUGuS+ZAUf5j
-	 AhWCIrQNK5bXV8hBuHNbGHMYmczJ0UQ+PugamEBlLBooazihhCvD9p17cBkSAr8q9x
-	 a7k1eTq93RhUWSzjXMlng5O4p7Ba+HTyrvQAw9TA6+bS5wWIYFIQ/Ooq5mY3IOx/QR
-	 SbR4e6mc3RiE1C1XYqqdSd/11C66GKbHALBqZ1gLFXFwCaTV2G1+kc8RUsFISOZ2sB
-	 YQ32Hq9e8HvN1pJgZLHoHmjZwfcU+StpdZSZnrTLRfVGa3RawuuZ49TuvWEM4eVK1t
-	 hVyUrxccKO8jg==
-Message-ID: <sashiko-outbox-197353@kernel.org>
+	b=SOrN/qIfLaq3mQT1mfg+RGm/NkCRc6uv38A1WVuaJCNcHMsg1qUTFsniWj37NP3Kx
+	 NjKj+4xwtMjt/D+d8pchH7E5coZm6RRQDPyu96rErVKClbHHtN/Tpaw1trBSCS9/D6
+	 exgQSyiJ23TZQl0hEpmTWCo6fx2lq1FzUpK0qGUza3kBdHfuYjb368zlfq4xMy04BO
+	 2VPQxpZMfwpmSm9dCGV5QvO5q9Ozt230vuExybKK0AeOoei/zLEPTvpsLUKR81AEr1
+	 O0lWxn+Qe8vYf0MuiL/PLA3V60o8cbKjBvMn3UODCFfC9aOuGoRRdIty4LOE3haFnZ
+	 j2y3LXV0Zd37A==
+Message-ID: <sashiko-outbox-197354@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH net-next 1/2] icssg: Add multi-flow RX support with
- per-flow NAPI and classification
+Subject: Re: [RFC PATCH net-next 2/2] icssg: Add ethtool RX flow
+ classification support
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Meghana Malladi" <m-malladi@ti.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261103134501.4123194-2-m-malladi@ti.com>
+In-Reply-To: <20261103134501.4123194-3-m-malladi@ti.com>
 References: <20261103134501.4123194-1-m-malladi@ti.com>
- <20261103134501.4123194-2-m-malladi@ti.com>
+ <20261103134501.4123194-3-m-malladi@ti.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Wed, 04 Nov 2026 13:46:47 +0000
@@ -61,844 +61,606 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 12 potential issue=
+Thank you for your contribution! Sashiko AI review found 13 potential issue=
 (s) to consider:
-- [Critical] net: ti: icssg: hardcoded flow 0 and queue 0 in multi-flow XSK=
- and XDP
-- [Critical] net: ti: icssg: missing rx_flow_num bounds check in XSK pool a=
-nd wakeup
-- [High] net: ti: icssg: undersized shared RX FDQ ring in prueth_init_rx_ch=
-ns()
-- [High] net: ti: icssg: shared RX FDQ page leaks in prueth_destroy_rxq() t=
-eardown
-- [High] net: ti: icssg: build breakage in icssg_prueth_sr1.c from RX API c=
-hanges
-- [High] net: ti: icssg: hang in prueth_destroy_rxq() on prueth_create_rxq(=
-) error
-- [Medium] net: ti: icssg: unsigned irq check misses errors in prueth_init_=
-rx_chns()
-- [Medium] net: ti: icssg: emac_set_coalesce() only sets RX coalescing on f=
-low 0
-- [Medium] net: ti: icssg: prueth_destroy_rxqs() skips NAPI wakeup for non-=
-XSK flows
-- [Medium] net: ti: icssg: RX teardown and IRQ pacing bugs in prueth_destro=
-y_rxqs()
-- [Medium] net: ti: icssg: PRUSS DRAM leak in prueth_netdev_init() on bitma=
-p alloc error
-- [Medium] net: ti: icssg: allocate PRUETH_MAX_RX_FLOWS rx queues and set r=
-eal_num_rx_queues
+- [Critical] net: ti: icssg: heap overflow and NULL deref in icssg_rxnfc_ru=
+le_get_all()
+- [High] net: ti: icssg: icssg_rxnfc_classifier_update() clobbers HSR class=
+ifiers
+- [High] icssg: uninitialized rxnfc lock and list on SR1.0 via icssg_ethtoo=
+l_ops
+- [High] icssg: RXNFC rules wiped on open/restart and deleted across suspend
+- [High] icssg: icssg_rxnfc_classifier_update() clobbers HSR/PRP classifiers
+- [High] icssg: premature page_pool_destroy() and FDQ race in prueth_destro=
+y_rxq()
+- [High] icssg: napi_disable() hang on prueth_create_rxq() error and FDQ ov=
+erflow
+- [Medium] net: ti: icssg: missing location validation in icssg_rxnfc_rule_=
+add()
+- [Medium] net: ti: icssg: unvalidated ether_spec masks and queue 0 in vali=
+date_rule()
+- [Medium] net: ti: icssg: unreachable ETHTOOL_GRXRINGS in emac_get_rxnfc()
+- [Medium] icssg: memory leak of rxnfc rules in prueth_netdev_exit()
+- [Low] net: ti: icssg: sparse endianness mismatch in icssg_ft3_program_fil=
+ter()
+- [Low] icssg: undocumented UDMA RX completion drain in prueth_destroy_rxq()
 --
 
-commit a2ae6a161ac2d7097a317321767fd99ea3cc193c
+commit 21ba5b8fca0b052692d50b8d741061eff437183c
 Author: Meghana Malladi <m-malladi@ti.com>
 
-icssg: Add multi-flow RX support with per-flow NAPI and classification
+icssg: Add ethtool RX flow classification support
 
-This commit extends the ICSSG driver to support up to 8 RX flows per EMAC,
-introducing per-flow NAPI, hrtimer, page pool, XDP rxq, AF_XDP pool, and
-IRQ management while sharing a single UDMA RX channel and descriptor pool.
+This commit adds ethtool get_rxnfc and set_rxnfc support to the ICSSG
+driver to steer packets to RX flows using FT3 hardware filters and RX
+classifier OR tables, and drains the UDMA RX completion ring during RX
+queue teardown.
 
-> diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/e=
-thernet/ti/icssg/icssg_common.c
-> index 4a7d1a6f470b1..99f4353b46966 100644
-> --- a/drivers/net/ethernet/ti/icssg/icssg_common.c
-> +++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
+>     icssg: Add ethtool RX flow classification support
+>    =20
+>     Enable dynamic RX flow classification via ethtool set_rxnfc/get_rxnfc.
+>     Users can install/remove filter rules to steer packets to specific RX=
+ flows
+>     based on EtherType patterns via FT3 hardware filters.
+>    =20
+>     - Add RXNFC rule tracking structures and lifecycle management
+>     - Implement ethtool get_rxnfc/set_rxnfc callbacks
+>     - FT3 slot allocation and hardware programming for pattern matching
+>     - RX classifier OR table updates based on active rules
+>     - Max 15 rules per EMAC, using FT3 slots 0-13,15 (slot 14 reserved)
+>    =20
+>     Signed-off-by: Meghana Malladi <m-malladi@ti.com>
 
+[Severity: Low]
+This isn't a bug, but prueth_destroy_rxq() in
+drivers/net/ethernet/ti/icssg/icssg_prueth.c also adds a loop to drain the
+UDMA RX completion ring before calling k3_udma_glue_reset_rx_chn() so that
+page_pool_destroy() does not stall waiting for inflight pages. Should that
+change be documented in the commit message or split into a separate patch?
+
+> diff --git a/drivers/net/ethernet/ti/icssg/icssg_classifier.c b/drivers/n=
+et/ethernet/ti/icssg/icssg_classifier.c
+> index 87a8577093dbb..f11539611df75 100644
+> --- a/drivers/net/ethernet/ti/icssg/icssg_classifier.c
+> +++ b/drivers/net/ethernet/ti/icssg/icssg_classifier.c
 [ ... ]
-
-> @@ -584,40 +622,49 @@ int prueth_init_rx_chns(struct prueth_emac *emac,
->  				K3_UDMA_GLUE_SRC_TAG_LO_USE_REMOTE_SRC_TAG,
->  		};
-> =20
-> +		flow =3D &rx_chn->flows[i];
-> +		flow->emac =3D emac;
-> +		flow->id =3D i;
-> +		flow->irq =3D -EINVAL;
+> +/* Program FT3 filter slot with ethertype pattern */
+> +static void icssg_ft3_program_filter(struct regmap *miig_rt, int slice,
+> +				     int slot, struct icssg_rxnfc_rule *rule)
+> +{
+> +	const struct ethtool_rx_flow_spec *fs =3D &rule->flow_spec;
+> +	u16 ether_type;
 > +
->  		rx_flow_cfg.ring_rxfdq0_id =3D fdqring_id;
-> -		rx_flow_cfg.rx_cfg.size =3D max_desc_num;
-> -		rx_flow_cfg.rxfdq_cfg.size =3D max_desc_num;
-> +		rx_flow_cfg.rx_cfg.size =3D PRUETH_MAX_RX_DESC;
-> +		rx_flow_cfg.rxfdq_cfg.size =3D PRUETH_MAX_RX_DESC;
+> +	/* Extract EtherType from flow spec (network byte order) */
+> +	ether_type =3D fs->h_u.ether_spec.h_proto;
+
+[Severity: Low]
+Does assigning fs->h_u.ether_spec.h_proto (which is __be16) directly to u16
+ether_type trigger a sparse endianness warning when building
+drivers/net/ethernet/ti/icssg/icssg_classifier.c with C=3D1, while the
+(__force u32) cast further down in icssg_ft3_program_filter() is applied to
+what is already a plain u16?
+
+> +
+> +	/* Deactivate filter before programming */
+> +	regmap_write(miig_rt, FT3_N_REG(slice, slot, FT3_CFG), 0);
+[ ... ]
+> +static void icssg_rxnfc_classifier_update(struct prueth_emac *emac)
+> +{
+> +	struct prueth *prueth =3D emac->prueth;
+> +	struct regmap *miig_rt =3D prueth->miig_rt;
+> +	int slice =3D prueth_emac_slice(emac);
+> +	u32 or_table[ICSSG_NUM_CLASSIFIERS] =3D { };
+> +	struct icssg_rxnfc_rule *rule;
+> +	int n;
+> +
+> +	if (slice < 0)
+> +		return;
+> +
+> +	/* Build per-classifier OR table: classifier index =3D target queue ind=
+ex */
+> +	list_for_each_entry(rule, &emac->rxnfc.rules, list) {
+> +		int cls =3D rule->queue_index;
+> +
+> +		if (cls < ICSSG_NUM_CLASSIFIERS)
+> +			or_table[cls] |=3D RX_CLASS_FT_FT3_MATCH(rule->ft3_slot);
+> +	}
+> +
+> +	/* Write OR tables for user-rule classifiers; skip classifier 0 (defaul=
+t flow).
+> +	 * Use RX_CLASS_N_REG with RX_CLASS_OR_EN =E2=80=94 NOT RX_CLASS_OR_REG=
+ which uses
+> +	 * rx_class_or_base (=3D rx_class_base + 4), causing an off-by-4 that l=
+ands on
+> +	 * AND_EN of classifier n+1 instead of OR_EN of classifier n.
+> +	 */
+> +	for (n =3D 1; n < ICSSG_NUM_CLASSIFIERS; n++) {
+> +		regmap_write(miig_rt,
+> +			     RX_CLASS_N_REG(slice, n, RX_CLASS_OR_EN),
+> +			     or_table[n]);
+> +	}
+> +}
 
 [Severity: High]
-Does rx_flow_cfg.rxfdq_cfg.size need to be scaled to rx_chn->descs_num
-(PRUETH_MAX_RX_DESC * rx_cfg.flow_id_num) here?
+Won't looping up to ICSSG_NUM_CLASSIFIERS (16) in
+icssg_rxnfc_classifier_update() overwrite the HSR/PRP classifiers with 0?
 
-In prueth_init_rx_chns(), flow 0 allocates a shared FDQ ring with
-K3_RINGACC_RING_SHARED and subsequent flows pass rx_flow_cfg.ring_rxfdq0_id
-=3D fdqring_id. On UDMAP platforms such as AM654, k3_udma_glue_cfg_rx_flow()
-shares flow 0's ringrxfdq across all flows, and k3_ringacc_ring_cfg() only
-configures the ring size on the first user.
+In icssg_ft3_hsr_configurations(), HSR/PRP offload configures FT3_PTP_SLOT
+(slot 14) and programs CLASSIFIER_PTP_DUP (classifier 10) and
+CLASSIFIER_HSR_TAG (classifier 11):
 
-When emac->rx_flow_num > 1, prueth_prepare_rx_flow(emac, 0) pushes
-PRUETH_MAX_RX_DESC (512) descriptors into the 512-entry shared FDQ ring,
-completely filling it, so prueth_prepare_rx_flow(emac, 1) immediately fails
-with -ENOMEM in k3_ringacc_ring_push().
+drivers/net/ethernet/ti/icssg/icssg_classifier.c:icssg_ft3_hsr_configuratio=
+ns() {
+	...
+	regmap_write(miig_rt, RX_CLASS_OR_REG(slice, CLASSIFIER_PTP_DUP, RX_CLASS_=
+AND_EN),
+		     RX_CLASS_OR_DUP_PTP);
+	...
+	if (prueth->hsr_prp_version !=3D PRP_V1) {
+		...
+		regmap_write(miig_rt, RX_CLASS_OR_REG(slice, CLASSIFIER_HSR_TAG, RX_CLASS=
+_AND_EN),
+			     RX_CLASS_OR_HSR_TAG);
+	...
+}
 
->  		rx_flow_cfg.rxfdq_cfg.mode =3D emac->prueth->pdata.fdqring_mode;
-> =20
->  		ret =3D k3_udma_glue_rx_flow_init(rx_chn->rx_chn,
->  						i, &rx_flow_cfg);
->  		if (ret) {
->  			netdev_err(ndev, "Failed to init rx flow%d %d\n",
->  				   i, ret);
->  			goto fail;
->  		}
->  		if (!i)
->  			fdqring_id =3D k3_udma_glue_rx_flow_get_fdq_id(rx_chn->rx_chn,
->  								     i);
-> -		ret =3D k3_udma_glue_rx_get_irq(rx_chn->rx_chn, i);
-> -		if (ret < 0) {
-> +		flow->irq =3D k3_udma_glue_rx_get_irq(rx_chn->rx_chn, i);
-> +		if (flow->irq <=3D 0) {
-> +			ret =3D flow->irq;
->  			netdev_err(ndev, "Failed to get rx dma irq");
->  			goto fail;
->  		}
+Although FT3 slot 14 is reserved via ICSSG_FT3_RESERVED_SLOTS, user RX
+queues are bounded by emac->rx_flow_num <=3D ICSSG_MAX_RFLOWS (8, classifie=
+rs
+0..7), so or_table[8..15] are always 0. When a rule is added or deleted via
+emac_set_rxnfc() -> icssg_rxnfc_rule_add() / icssg_rxnfc_rule_del() ->
+icssg_rxnfc_classifier_update(), writing or_table[n] for n =3D 1..15 zeroes
+RX_CLASS_OR_EN on classifiers 10 and 11.
+
+In addition, when prueth_emac_common_start() runs during emac_ndo_open() or
+prueth_emac_restart(), it calls icssg_class_default() ->
+icssg_class_disable(), which zeroes RX_CLASS_OR_EN across all classifiers
+without calling icssg_rxnfc_classifier_update() to restore active rules in
+emac->rxnfc.rules.
+
+> +
+> +/* Validate rule parameters */
+> +static int validate_rule(struct prueth_emac *emac,
+> +			 struct ethtool_rx_flow_spec *fs)
+> +{
+> +	/* Only ETHER_FLOW supported for Phase 1 */
+> +	if (fs->flow_type !=3D ETHER_FLOW)
+> +		return -EOPNOTSUPP;
+> +
+> +	/* Check RX queue is valid */
+> +	if (fs->ring_cookie >=3D emac->rx_flow_num)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
 
 [Severity: Medium]
-In struct prueth_rx_flow, irq is declared as unsigned int. When
-k3_udma_glue_rx_get_irq() returns a negative error code, assigning it
-directly to flow->irq wraps it to a large positive value, causing
-flow->irq <=3D 0 to evaluate to false and bypassing the error check.
+What happens in validate_rule() when userspace passes an ETHER_FLOW rule
+with MAC address masks or a partial EtherType mask in fs->m_u.ether_spec,
+flow_type extension flags (FLOW_EXT or FLOW_MAC_EXT), or fs->ring_cookie =
+=3D=3D
+0?
 
-Furthermore, if flow->irq is 0, ret =3D flow->irq sets ret to 0 and jumps to
-fail:, which cleans up the RX channel and returns 0 (success) to
-emac_ndo_open(). Should the return value of k3_udma_glue_rx_get_irq() be
-checked in a signed int variable before assigning to flow->irq?
+In validate_rule(), fs->m_u.ether_spec.h_dest, fs->m_u.ether_spec.h_source,
+and fs->m_u.ether_spec.h_proto are not checked before
+icssg_ft3_program_filter() programs FT3_T with fs->h_u.ether_spec.h_proto
+and FT3_T_MASK with FT3_ETHERTYPE_MASK, so MAC filter requests are silently
+accepted and programmed as EtherType matches (matching 0x0000 if h_proto was
+not set).
+
+Also, validate_rule() allows fs->ring_cookie =3D=3D 0 (which is the only va=
+lid
+queue under the default emac->rx_flow_num =3D 1 in prueth_netdev_init()). A
+rule with ring_cookie =3D=3D 0 allocates an FT3 slot and sets or_table[0] in
+icssg_rxnfc_classifier_update(), but the register write loop starts at
+n =3D 1 and never writes or_table[0] to hardware.
 
 [ ... ]
-
-> @@ -641,8 +688,9 @@ int prueth_dma_rx_push_mapped(struct prueth_emac *ema=
-c,
->  	swdata =3D cppi5_hdesc_get_swdata(desc_rx);
->  	swdata->type =3D PRUETH_SWDATA_PAGE;
->  	swdata->data.page =3D page;
-> +	swdata->flow_id =3D flow_id;
-> =20
-> -	return k3_udma_glue_push_rx_chn(rx_chn->rx_chn, PRUETH_RX_FLOW_DATA,
-> +	return k3_udma_glue_push_rx_chn(rx_chn->rx_chn, flow_id,
->  					desc_rx, desc_dma);
->  }
+> +/* Cleanup RX flow classification */
+> +void icssg_rxnfc_rule_cleanup(struct prueth_emac *emac)
+> +{
+> +	struct prueth *prueth =3D emac->prueth;
+> +	struct regmap *miig_rt =3D prueth->miig_rt;
+> +	int slice =3D prueth_emac_slice(emac);
+> +	struct icssg_rxnfc_rule *rule, *tmp;
+> +	int n;
+> +
+> +	if (slice < 0)
+> +		return;
+> +
+> +	mutex_lock(&emac->rxnfc.rxnfc_lock);
+> +
+> +	/* Disable all active FT3 filters */
+> +	list_for_each_entry_safe(rule, tmp, &emac->rxnfc.rules, list) {
+> +		icssg_ft3_disable_filter(miig_rt, slice, rule->ft3_slot);
+> +		free_ft3_slot(emac, rule->ft3_slot);
+> +		list_del(&rule->list);
+> +		kfree(rule);
+> +	}
+> +
+> +	emac->rxnfc.rxnfc_rule_count =3D 0;
+> +	emac->rxnfc.ft3_slots_used =3D ICSSG_FT3_RESERVED_SLOTS;
+> +
+> +	/* Clear all user-rule classifier OR tables (classifier 0 =3D default, =
+skip) */
+> +	for (n =3D 1; n < ICSSG_NUM_CLASSIFIERS; n++)
+> +		regmap_write(miig_rt,
+> +			     RX_CLASS_N_REG(slice, n, RX_CLASS_OR_EN), 0);
+> +
+> +	mutex_unlock(&emac->rxnfc.rxnfc_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(icssg_rxnfc_rule_cleanup);
 
 [Severity: High]
-If k3_udma_glue_push_rx_chn() fails in prueth_dma_rx_push_mapped() (or in
-prueth_dma_rx_push_mapped_zc()), does this leak desc_rx from
-rx_chn->desc_pool because k3_cppi_desc_pool_free() is not called before
-returning?
+Similar to icssg_rxnfc_classifier_update(), doesn't the loop in
+icssg_rxnfc_rule_cleanup() clear RX_CLASS_N_REG(slice, n, RX_CLASS_OR_EN)
+for n =3D 1..15 (ICSSG_NUM_CLASSIFIERS - 1) instead of stopping at
+ICSSG_MAX_RFLOWS - 1 (7)?
+
+Because offs[slice].rx_class_or_base is offs[slice].rx_class_base + 4
+(RX_CLASS_OR_EN), RX_CLASS_N_REG(slice, n, RX_CLASS_OR_EN) is the same
+register as RX_CLASS_OR_REG(slice, n, RX_CLASS_AND_EN) programmed by
+icssg_ft3_hsr_configurations() for CLASSIFIER_PTP_DUP (10) and
+CLASSIFIER_HSR_TAG (11), so calling icssg_rxnfc_rule_cleanup() clobbers both
+HSR/PRP classifiers.
+
+> +
+> +/* Add a new RX flow classification rule */
+> +int icssg_rxnfc_rule_add(struct prueth_emac *emac, struct ethtool_rxnfc =
+*info)
+> +{
+[ ... ]
+> +	/* Check for duplicate */
+> +	if (rule_exists(emac, fs)) {
+> +		ret =3D -EEXIST;
+> +		goto unlock;
+> +	}
+> +
+> +	/* Allocate FT3 slot */
+> +	ft3_slot =3D allocate_ft3_slot(emac);
+> +	if (ft3_slot < 0) {
+> +		ret =3D -ENOSPC;
+> +		goto unlock;
+> +	}
+> +
+> +	/* Auto-assign location from FT3 slot if RX_CLS_LOC_ANY requested */
+> +	if (fs->location =3D=3D RX_CLS_LOC_ANY)
+> +		fs->location =3D ft3_slot;
+> +
+> +	/* Allocate rule structure */
+> +	rule =3D kzalloc(sizeof(*rule), GFP_KERNEL);
+> +	if (!rule) {
+> +		ret =3D -ENOMEM;
+> +		free_ft3_slot(emac, ft3_slot);
+> +		goto unlock;
+> +	}
+> +
+> +	/* Program FT3 hardware */
+> +	rule->flow_spec =3D *fs;
+> +	rule->ft3_slot =3D ft3_slot;
+> +	rule->queue_index =3D fs->ring_cookie;
+> +	rule->location =3D fs->location;
+
+[Severity: Medium]
+How are explicit or special fs->location values validated in
+icssg_rxnfc_rule_add()?
+
+In emac_get_rxnfc(), ETHTOOL_GRXCLSRLCNT sets info->data to
+ICSSG_RXNFC_MAX_RULES | RX_CLS_LOC_SPECIAL (advertising 15 locations,
+0..14, plus special location specifiers). However:
+
+1. Neither validate_rule() nor icssg_rxnfc_rule_add() validates fs->location
+   when fs->location !=3D RX_CLS_LOC_ANY, so RX_CLS_LOC_FIRST,
+   RX_CLS_LOC_LAST, reserved slot 14, or values >=3D ICSSG_RXNFC_MAX_RULES =
+are
+   stored directly in rule->location.
+2. When fs->location =3D=3D RX_CLS_LOC_ANY, allocate_ft3_slot() skips reser=
+ved
+   slot 14 and returns ft3_slot =3D 15 for the 15th rule, assigning
+   fs->location =3D 15 (>=3D ICSSG_RXNFC_MAX_RULES).
+3. Because allocate_ft3_slot() picks the lowest free FT3 slot independently
+   of an explicit fs->location and rule_exists() only checks flow_type and
+   h_proto, adding a rule with explicit location 1 (getting ft3_slot =3D 0,
+   rule->location =3D 1) followed by a rule with RX_CLS_LOC_ANY (getting
+   ft3_slot =3D 1, rule->location =3D 1) or another rule with location 1 cr=
+eates
+   duplicate rule->location entries in emac->rxnfc.rules. Since
+   icssg_rxnfc_rule_get() and icssg_rxnfc_rule_del() stop at the first match
+    from list_add(), the older rule is shadowed and also hidden from
+   ethtool_get_max_rxnfc_channel() when reducing channel count.
 
 [ ... ]
-
-> @@ -863,31 +911,32 @@ static int prueth_dma_rx_push_mapped_zc(struct prue=
-th_emac *emac,
->  					struct xdp_buff *xdp)
->  {
->  	struct net_device *ndev =3D emac->ndev;
-> +	struct prueth_rx_flow *rx_flow =3D &emac->rx_chns.flows[PRUETH_RX_FLOW_=
-DATA];
->  	struct cppi5_host_desc_t *desc_rx;
->  	struct prueth_swdata *swdata;
->  	dma_addr_t desc_dma;
->  	dma_addr_t buf_dma;
->  	int buf_len;
-> =20
->  	buf_dma =3D xsk_buff_xdp_get_dma(xdp);
->  	desc_rx =3D k3_cppi_desc_pool_alloc(rx_chn->desc_pool);
->  	if (!desc_rx) {
->  		netdev_err(ndev, "rx push: failed to allocate descriptor\n");
->  		return -ENOMEM;
->  	}
->  	desc_dma =3D k3_cppi_desc_pool_virt2dma(rx_chn->desc_pool, desc_rx);
-> =20
->  	cppi5_hdesc_init(desc_rx, CPPI5_INFO0_HDESC_EPIB_PRESENT,
->  			 PRUETH_NAV_PS_DATA_SIZE);
->  	k3_udma_glue_rx_dma_to_cppi5_addr(rx_chn->rx_chn, &buf_dma);
-> -	buf_len =3D xsk_pool_get_rx_frame_size(rx_chn->xsk_pool);
-> +	buf_len =3D xsk_pool_get_rx_frame_size(rx_flow->xsk_pool);
->  	cppi5_hdesc_attach_buf(desc_rx, buf_dma, buf_len, buf_dma, buf_len);
->  	swdata =3D cppi5_hdesc_get_swdata(desc_rx);
->  	swdata->type =3D PRUETH_SWDATA_XSK;
->  	swdata->data.xdp =3D xdp;
-> =20
->  	return k3_udma_glue_push_rx_chn(rx_chn->rx_chn, PRUETH_RX_FLOW_DATA,
->  					desc_rx, desc_dma);
->  }
-> =20
-> -static int prueth_rx_alloc_zc(struct prueth_emac *emac, int budget)
-> +static int prueth_rx_alloc_zc(struct prueth_emac *emac, int flow_id, int=
- budget)
->  {
-> -	struct prueth_rx_chn *rx_chn =3D &emac->rx_chns;
-> +	struct prueth_rx_flow *rx_flow =3D &emac->rx_chns.flows[flow_id];
->  	struct xdp_buff *xdp;
->  	int i, ret;
-> =20
->  	for (i =3D 0; i < budget; i++) {
-> -		xdp =3D xsk_buff_alloc(rx_chn->xsk_pool);
-> +		xdp =3D xsk_buff_alloc(rx_flow->xsk_pool);
->  		if (!xdp)
->  			break;
-> =20
-> -		ret =3D prueth_dma_rx_push_mapped_zc(emac, rx_chn, xdp);
-> +		ret =3D prueth_dma_rx_push_mapped_zc(emac, &emac->rx_chns, xdp);
+> +/* Get all RX flow classification rules */
+> +int icssg_rxnfc_rule_get_all(struct prueth_emac *emac, u32 *rule_locs,
+> +			     u32 *rule_cnt)
+> +{
+> +	struct icssg_rxnfc_rule *rule;
+> +	u32 count =3D 0;
+> +
+> +	mutex_lock(&emac->rxnfc.rxnfc_lock);
+> +
+> +	list_for_each_entry(rule, &emac->rxnfc.rules, list) {
+> +		rule_locs[count++] =3D rule->location;
+> +	}
+> +
+> +	*rule_cnt =3D count;
+> +
+> +	mutex_unlock(&emac->rxnfc.rxnfc_lock);
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(icssg_rxnfc_rule_get_all);
 
 [Severity: Critical]
-In prueth_rx_alloc_zc(), xdp buffers are allocated from
-flows[flow_id].xsk_pool, but prueth_dma_rx_push_mapped_zc() does not take a
-flow_id parameter and instead hardcodes PRUETH_RX_FLOW_DATA (0) for both
-rx_flow->xsk_pool and k3_udma_glue_push_rx_chn().
+Can icssg_rxnfc_rule_get_all() dereference a NULL rule_locs pointer or
+overflow the rule_locs[] heap buffer when called from emac_get_rxnfc() for
+ETHTOOL_GRXCLSRLALL?
 
-If an XSK pool is active on flow_id > 0 while flows[0].xsk_pool is NULL,
-won't xsk_pool_get_rx_frame_size(rx_flow->xsk_pool) dereference a NULL
-pointer, or otherwise push flow_id's XSK buffers into flow 0's ring?
+In net/ethtool/ioctl.c:ethtool_get_rxnfc(), when info.cmd =3D=3D
+ETHTOOL_GRXCLSRLALL, the kernel allocates rule_buf based on the
+user-supplied info.rule_cnt (or leaves rule_buf as NULL if info.rule_cnt =
+=3D=3D
+0):
 
-[ ... ]
+net/ethtool/ioctl.c:ethtool_get_rxnfc() {
+	...
+	if (info.cmd =3D=3D ETHTOOL_GRXCLSRLALL) {
+		if (info.rule_cnt > 0) {
+			if (info.rule_cnt <=3D KMALLOC_MAX_SIZE / sizeof(u32))
+				rule_buf =3D kcalloc(info.rule_cnt, sizeof(u32),
+						   GFP_USER);
+			if (!rule_buf)
+				return -ENOMEM;
+		}
+	}
+	...
+	ret =3D ops->get_rxnfc(dev, &info, rule_buf);
+}
 
-> @@ -1155,19 +1206,22 @@ void prueth_rx_cleanup(void *data, dma_addr_t des=
-c_dma)
->  	struct prueth_rx_chn *rx_chn =3D data;
->  	struct cppi5_host_desc_t *desc_rx;
->  	struct prueth_swdata *swdata;
-> -	struct page_pool *pool;
-> +	struct page_pool *pool =3D NULL;
->  	struct xdp_buff *xdp;
->  	struct page *page;
-> =20
-> -	pool =3D rx_chn->pg_pool;
->  	desc_rx =3D k3_cppi_desc_pool_dma2virt(rx_chn->desc_pool, desc_dma);
->  	swdata =3D cppi5_hdesc_get_swdata(desc_rx);
-> -	if (rx_chn->xsk_pool) {
-> +
-> +	if (swdata->type =3D=3D PRUETH_SWDATA_XSK) {
->  		xdp =3D swdata->data.xdp;
->  		xsk_buff_free(xdp);
-> -	} else {
-> -		page =3D swdata->data.page;
-> -		page_pool_recycle_direct(pool, page);
-> +	} else if (swdata->type =3D=3D PRUETH_SWDATA_PAGE) {
-> +		pool =3D rx_chn->flows[swdata->flow_id].pg_pool;
-> +		if (pool) {
-> +			page =3D swdata->data.page;
-> +			page_pool_recycle_direct(pool, page);
-> +		}
->  	}
-> =20
->  	k3_cppi_desc_pool_free(rx_chn->desc_pool, desc_rx);
+In emac_get_rxnfc(), the ETHTOOL_GRXCLSRLALL case ignores the caller's
+info->rule_cnt capacity, passes a local rule_cnt =3D 0 to
+icssg_rxnfc_rule_get_all(), and does not set info->data to the rule table
+size (ICSSG_RXNFC_MAX_RULES). Inside icssg_rxnfc_rule_get_all(), the loop
+writes rule_locs[count++] =3D rule->location for every active rule without
+checking if rule_locs is NULL or if count has reached the caller's
+info->rule_cnt capacity (where it should return -EMSGSIZE).
 
-[ ... ]
-
-> @@ -1488,59 +1531,77 @@ int icssg_napi_rx_poll(struct napi_struct *napi_r=
-x, int budget)
->  }
->  EXPORT_SYMBOL_GPL(icssg_napi_rx_poll);
-> =20
-> -int prueth_prepare_rx_chan(struct prueth_emac *emac,
-> -			   struct prueth_rx_chn *chn,
-> -			   int buf_size)
-> +int prueth_prepare_rx_flow(struct prueth_emac *emac,
-> +			   int flow)
->  {
-> +	int buf_size =3D PRUETH_MAX_PKT_SIZE;
-> +	struct prueth_rx_flow *rx_flow;
-> +	struct prueth_rx_chn *rx_chn;
-> +	struct page_pool *pool;
->  	struct page *page;
->  	int desc_avail;
->  	int i, ret;
-> =20
-> -	desc_avail =3D k3_cppi_desc_pool_avail(chn->desc_pool);
-> -	if (desc_avail < chn->descs_num)
-> -		netdev_warn(emac->ndev,
-> -			    "not enough RX descriptors available %d < %d\n",
-> -			    desc_avail, chn->descs_num);
-> +	rx_chn =3D &emac->rx_chns;
-> +	rx_flow =3D &emac->rx_chns.flows[flow];
-> =20
-> -	if (chn->xsk_pool) {
-> -		/* get pages from xsk_pool and push to RX ring
-> -		 * queue as much as possible
-> +	if (rx_flow->xsk_pool) {
-> +		/* XSK zero-copy: buffers come from the XSK fill ring, no page
-> +		 * pool needed.  Push as many XSK buffers as descriptors allow;
-> +		 * the fill ring will be replenished by user-space.
->  		 */
-> -		ret =3D prueth_rx_alloc_zc(emac, desc_avail);
-> -		if (!ret)
-> -			goto recycle_alloc_pg;
-> -	} else {
-> -		for (i =3D 0; i < desc_avail; i++) {
-> -			/* NOTE: we're not using memory efficiently here.
-> -			 * 1 full page (4KB?) used here instead of
-> -			 * PRUETH_MAX_PKT_SIZE (~1.5KB?)
-> -			 */
-> -			page =3D page_pool_dev_alloc_pages(chn->pg_pool);
-> -			if (!page) {
-> -				netdev_err(emac->ndev, "couldn't allocate rx page\n");
-> -				ret =3D -ENOMEM;
-> -				goto recycle_alloc_pg;
-> -			}
-> +		desc_avail =3D k3_cppi_desc_pool_avail(rx_chn->desc_pool);
-> +		if (desc_avail < PRUETH_MAX_RX_DESC)
-> +			netdev_warn(emac->ndev,
-> +				    "not enough RX descriptors available %d < %d\n",
-> +				    desc_avail, PRUETH_MAX_RX_DESC);
-> =20
-> -			ret =3D prueth_dma_rx_push_mapped(emac, chn, page, buf_size);
-> -			if (ret < 0) {
-> -				netdev_err(emac->ndev,
-> -					   "cannot submit page for rx chan %s ret %d\n",
-> -					   chn->name, ret);
-> -				page_pool_recycle_direct(chn->pg_pool, page);
-> -				goto recycle_alloc_pg;
-> -			}
-> +		prueth_rx_alloc_zc(emac, flow, desc_avail);
-> +		return 0;
-> +	}
-
-[Severity: High]
-In the rx_flow->xsk_pool branch of prueth_prepare_rx_flow(), desc_avail is
-the total number of available descriptors in the shared rx_chn->desc_pool
-(up to PRUETH_MAX_RX_DESC * emac->rx_flow_num). Should the budget passed to
-prueth_rx_alloc_zc() be capped at min(desc_avail, PRUETH_MAX_RX_DESC) so a
-single XSK flow does not consume descriptors needed by subsequent flows?
-
-> +
-> +	pool =3D prueth_create_page_pool(emac, rx_chn->dma_dev, rx_chn->descs_n=
-um, rx_flow);
-> +	if (IS_ERR(pool))
-> +		return PTR_ERR(pool);
-> +
-> +	rx_flow->pg_pool =3D pool;
-> +
-> +	desc_avail =3D k3_cppi_desc_pool_avail(rx_chn->desc_pool);
-> +	if (desc_avail < PRUETH_MAX_RX_DESC)
-> +		netdev_warn(emac->ndev,
-> +			    "not enough RX descriptors available %d < %d\n",
-> +			    desc_avail, PRUETH_MAX_RX_DESC);
-> +
-> +	for (i =3D 0; i < PRUETH_MAX_RX_DESC; ++i) {
-> +		page =3D page_pool_dev_alloc_pages(pool);
-> +		if (!page) {
-> +			netdev_err(emac->ndev, "couldn't allocate rx page\n");
-> +			ret =3D -ENOMEM;
-> +			goto err_free_pushed;
->  		}
-> +
-> +		ret =3D prueth_dma_rx_push_mapped(emac, rx_chn, page, buf_size, flow);
-> +		if (ret < 0) {
-> +			netdev_err(emac->ndev,
-> +				   "cannot submit skb for rx chan %s ret %d\n",
-> +				   rx_flow->name, ret);
-> +			page_pool_recycle_direct(pool, page);
-> +			goto err_free_pushed;
-> +		}
->  	}
-> =20
->  	return 0;
-> =20
-> -recycle_alloc_pg:
-> -	prueth_reset_rx_chan(&emac->rx_chns, PRUETH_MAX_RX_FLOWS, false);
-> -
-> +err_free_pushed:
-> +	/* i pages were successfully pushed to the ring.  Reset the channel
-> +	 * to drain them back and recycle via prueth_rx_cleanup before the
-> +	 * caller destroys the page pool.
-> +	 */
-> +	k3_udma_glue_reset_rx_chn(rx_chn->rx_chn, flow, rx_chn,
-> +				   prueth_rx_cleanup);
->  	return ret;
->  }
-
-[Severity: High]
-How does per-flow reset interact with the shared FDQ ring on UDMAP
-platforms?
-
-In k3_udma_glue_reset_rx_chn():
-
-    if (rx_chn->single_fdq && flow_num)
-            goto do_reset;
-
-Because all flows share flow 0's FDQ (rx_chn->single_fdq is true on UDMAP),
-k3_udma_glue_reset_rx_chn() only drains ringrxfdq when flow_num =3D=3D 0 and
-skips it completely when flow_num > 0:
-
-1. Here at err_free_pushed:, if flow > 0 fails partway through pushing
-   pages, k3_udma_glue_reset_rx_chn(..., flow, ...) skips ringrxfdq and
-   does not drain the pushed pages before the caller destroys
-   rx_flow->pg_pool.
-
-2. In prueth_create_rxqs(), the error unwind loop runs backwards:
-
-       for (--i; i >=3D 0; i--)
-               prueth_destroy_rxq(emac, i);
-
-   For i > 0, prueth_destroy_rxq(emac, i) skips draining ringrxfdq, calls
-   page_pool_destroy(flow->pg_pool), and sets flow->pg_pool =3D NULL. When
-   i =3D=3D 0 finally runs k3_udma_glue_reset_rx_chn(..., 0, ...),
-   prueth_rx_cleanup() sees rx_chn->flows[swdata->flow_id].pg_pool =3D=3D N=
-ULL
-   for all descriptors with swdata->flow_id > 0 and leaks those pages.
-
-3. In prueth_xsk_pool_enable() and prueth_xsk_pool_disable(), calling
-   prueth_destroy_rxq(emac, queue_id) on a single queue while the shared RX
-   channel is enabled either drains and resets the shared FDQ for all flows
-   (if queue_id =3D=3D 0) or fails to drain queue_id's descriptors from the
-   shared FDQ before destroying its page pool or unmapping its XSK pool
-   (if queue_id > 0).
-
-4. During normal multi-flow RX on a shared FDQ ring, UDMAP pops descriptors
-   from the shared FDQ in FIFO order regardless of which flow's page_pool
-   allocated the page, whereas emac_rx_packet() syncs and recycles pages
-   using rx_flow->pg_pool rather than rx_chn->flows[swdata->flow_id].pg_poo=
-l,
-   and concurrent per-flow NAPI instances call k3_ringacc_ring_push() on
-   the same shared struct k3_ring without serialization.
+If rules are installed and userspace passes info.rule_cnt =3D=3D 0,
+rule_locs[count++] dereferences NULL. If userspace passes 0 < info.rule_cnt
+< emac->rxnfc.rxnfc_rule_count, rule_locs[count++] writes past the end of
+the kcalloc() buffer and updates info->rule_cnt to the larger count, causing
+ethtool_rxnfc_copy_to_user() to read out-of-bounds kernel heap memory back
+to userspace.
 
 > diff --git a/drivers/net/ethernet/ti/icssg/icssg_ethtool.c b/drivers/net/=
 ethernet/ti/icssg/icssg_ethtool.c
-> index b715af21d23ac..5c2936ecd595c 100644
+> index 5c2936ecd595c..9f0a1116e530c 100644
 > --- a/drivers/net/ethernet/ti/icssg/icssg_ethtool.c
 > +++ b/drivers/net/ethernet/ti/icssg/icssg_ethtool.c
-
-[ ... ]
-
-> @@ -245,6 +248,8 @@ static int emac_set_coalesce(struct net_device *ndev,
->  			     struct netlink_ext_ack *extack)
->  {
->  	struct prueth_emac *emac =3D netdev_priv(ndev);
-> +	struct prueth_rx_chn *rx_chn =3D &emac->rx_chns;
-> +	struct prueth_rx_flow *flow =3D &rx_chn->flows[0];
->  	struct prueth *prueth =3D emac->prueth;
->  	struct prueth_tx_chn *tx_chn;
-> =20
-> @@ -264,7 +269,7 @@ static int emac_set_coalesce(struct net_device *ndev,
->  		coal->tx_coalesce_usecs =3D ICSSG_MIN_COALESCE_USECS;
->  	}
-> =20
-> -	emac->rx_pace_timeout_ns =3D coal->rx_coalesce_usecs * 1000;
-> +	flow->rx_pace_timeout_ns =3D coal->rx_coalesce_usecs * 1000;
->  	tx_chn->tx_pace_timeout_ns =3D coal->tx_coalesce_usecs * 1000;
-> =20
+> @@ -299,6 +299,52 @@ static int emac_set_per_queue_coalesce(struct net_de=
+vice *ndev, u32 queue,
 >  	return 0;
+>  }
+> =20
+> +static int emac_get_rxnfc(struct net_device *ndev, struct ethtool_rxnfc =
+*info,
+> +			  u32 *rule_locs)
+> +{
+> +	struct prueth_emac *emac =3D netdev_priv(ndev);
+> +	int ret =3D 0;
+> +
+> +	switch (info->cmd) {
+> +	case ETHTOOL_GRXRINGS:
+> +		info->data =3D emac->rx_flow_num;
+> +		break;
 
 [Severity: Medium]
-Now that rx_pace_timeout_ns is stored per flow in struct prueth_rx_flow and
-checked by icssg_napi_rx_poll() on each flow, emac_set_coalesce() only
-updates rx_chn->flows[0].rx_pace_timeout_ns (and
-emac_set_per_queue_coalesce() only handles TX queues). Does this leave RX
-flows 1..7 with rx_pace_timeout_ns =3D=3D 0 when RX coalescing is configure=
-d?
+Is the ETHTOOL_GRXRINGS case in emac_get_rxnfc() reachable?
+
+In net/ethtool/ioctl.c:ethtool_get_rxrings(), ETHTOOL_GRXRINGS is handled by
+calling ethtool_get_rx_ring_count(), which checks ops->get_rx_ring_count in
+struct ethtool_ops and returns -EOPNOTSUPP when it is NULL, rather than
+calling ops->get_rxnfc(). Should icssg_ethtool_ops implement
+.get_rx_ring_count instead?
+
+[ ... ]
+>  const struct ethtool_ops icssg_ethtool_ops =3D {
+[ ... ]
+>  	.nway_reset =3D emac_nway_reset,
+>  	.get_rmon_stats =3D emac_get_rmon_stats,
+> +	.get_rxnfc =3D emac_get_rxnfc,
+> +	.set_rxnfc =3D emac_set_rxnfc,
+>  };
+>  EXPORT_SYMBOL_GPL(icssg_ethtool_ops);
+
+[Severity: High]
+What happens when emac_get_rxnfc() or emac_set_rxnfc() (or
+ethtool_set_channels() -> ethtool_check_max_channel() ->
+ethtool_get_max_rxnfc_channel()) is called on an SR1.0 device?
+
+In drivers/net/ethernet/ti/icssg/icssg_prueth_sr1.c:prueth_netdev_init(),
+SR1.0 net_devices also use icssg_ethtool_ops:
+
+drivers/net/ethernet/ti/icssg/icssg_prueth_sr1.c:prueth_netdev_init() {
+	...
+	ndev->netdev_ops =3D &emac_netdev_ops;
+	ndev->ethtool_ops =3D &icssg_ethtool_ops;
+	...
+}
+
+However, icssg_rxnfc_rule_init(emac) is only called in
+drivers/net/ethernet/ti/icssg/icssg_prueth.c:prueth_netdev_init() and not in
+icssg_prueth_sr1.c, nor do emac_get_rxnfc() / emac_set_rxnfc() guard against
+emac->is_sr1. On SR1.0 devices, emac->rxnfc.rxnfc_lock is uninitialized and
+emac->rxnfc.rules has NULL next/prev pointers, so any RXNFC call will lock
+an uninitialized mutex and dereference a NULL list_head. (Note also that
+drivers/net/ethernet/ti/icssg/icssg_prueth_sr1.c:emac_ndo_open() and related
+RX channel calls in this series still use the old struct prueth_rx_chn
+fields and helper signatures, breaking the build when
+CONFIG_TI_ICSSG_PRUETH_SR1 is enabled.)
 
 > diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.c b/drivers/net/e=
 thernet/ti/icssg/icssg_prueth.c
-> index 591be5c8056b4..8338402597b21 100644
+> index 8338402597b21..f234198d4cc42 100644
 > --- a/drivers/net/ethernet/ti/icssg/icssg_prueth.c
 > +++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-
-[ ... ]
-
-> @@ -883,14 +832,14 @@ static int icssg_update_vlan_mcast(struct net_devic=
-e *vdev, int vid,
->  static void prueth_set_xsk_pool(struct prueth_emac *emac, u16 queue_id)
+> @@ -874,10 +874,29 @@ static void prueth_destroy_rxq(struct prueth_emac *=
+emac, int qid)
 >  {
->  	struct prueth_tx_chn *tx_chn =3D &emac->tx_chns[queue_id];
-> -	struct prueth_rx_chn *rx_chn =3D &emac->rx_chns;
-> +	struct prueth_rx_flow *rx_flow =3D &emac->rx_chns.flows[PRUETH_RX_FLOW_=
-DATA];
+>  	struct prueth_rx_chn *rx_chn =3D &emac->rx_chns;
+>  	struct prueth_rx_flow *flow =3D &rx_chn->flows[qid];
+> +	dma_addr_t desc_dma;
 > =20
-> -	if (emac->xsk_qid !=3D queue_id) {
-> -		rx_chn->xsk_pool =3D NULL;
-> -		tx_chn->xsk_pool =3D NULL;
-> -	} else {
-> -		rx_chn->xsk_pool =3D xsk_get_pool_from_qid(emac->ndev, queue_id);
-> +	if (test_bit(queue_id, emac->xsk_queues)) {
-> +		rx_flow->xsk_pool =3D xsk_get_pool_from_qid(emac->ndev, queue_id);
->  		tx_chn->xsk_pool =3D xsk_get_pool_from_qid(emac->ndev, queue_id);
-> +	} else {
-> +		rx_flow->xsk_pool =3D NULL;
-> +		tx_chn->xsk_pool =3D NULL;
->  	}
->  }
-
-[Severity: Critical]
-In prueth_set_xsk_pool(), rx_flow is indexed with PRUETH_RX_FLOW_DATA (0)
-instead of queue_id. When enabling or disabling an XSK pool on queue_id > 0,
-won't this overwrite or clear flows[0].xsk_pool while flow 0 is running and
-leave flows[queue_id].xsk_pool untouched?
-
-Also, in prueth_init_rx_chns(), flow->xsk_pool is set to NULL for all flows
-during emac_ndo_open() without calling prueth_set_xsk_pool() to restore
-pools for queues set in emac->xsk_queues.
-
-[ ... ]
-
-> @@ -921,40 +870,58 @@ static void prueth_destroy_txq(struct prueth_emac *=
-emac)
->  	}
->  }
-> =20
-> -static void prueth_destroy_rxq(struct prueth_emac *emac)
-> +static void prueth_destroy_rxq(struct prueth_emac *emac, int qid)
-> +{
-> +	struct prueth_rx_chn *rx_chn =3D &emac->rx_chns;
-> +	struct prueth_rx_flow *flow =3D &rx_chn->flows[qid];
+> -	/* reset napi and hrtimer, and free all pending buffers */
+>  	napi_disable(&flow->napi_rx);
+>  	hrtimer_cancel(&flow->rx_hrtimer);
 > +
-> +	/* reset napi and hrtimer, and free all pending buffers */
-> +	napi_disable(&flow->napi_rx);
-> +	hrtimer_cancel(&flow->rx_hrtimer);
-
-[Severity: Medium]
-If flow->rx_hrtimer is pending when prueth_destroy_rxq() cancels it,
-flow->irq_disabled is true and flow->irq is currently disabled at the IRQ
-chip waiting for emac_rx_timer_callback() to re-enable it.
-
-When prueth_destroy_rxq() is called from prueth_xsk_pool_enable() or
-prueth_xsk_pool_disable() on a running interface, cancelling the timer
-without re-enabling flow->irq and clearing flow->irq_disabled leaves the
-flow's RX IRQ permanently disabled (and across emac_ndo_stop() /
-emac_ndo_open(), flow->irq_disabled remains true because
-prueth_init_rx_chns() does not reset it). Should prueth_destroy_rxq() check
-flow->irq_disabled and call enable_irq(flow->irq) after hrtimer_cancel()?
-
-> +	k3_udma_glue_reset_rx_chn(rx_chn->rx_chn, flow->id, rx_chn,
-> +				  prueth_rx_cleanup);
-> +
-> +	if (xdp_rxq_info_is_reg(&flow->xdp_rxq))
-> +		xdp_rxq_info_unreg(&flow->xdp_rxq);
-> +
-> +	if (flow->pg_pool) {
-> +		page_pool_destroy(flow->pg_pool);
-> +		flow->pg_pool =3D NULL;
-> +	}
-> +}
-> +
-> +static void prueth_destroy_rxqs(struct prueth_emac *emac)
->  {
->  	int i, ret;
-> =20
->  	/* tear down and disable UDMA channels */
->  	reinit_completion(&emac->tdown_complete);
->  	k3_udma_glue_tdown_rx_chn(emac->rx_chns.rx_chn, true);
-> =20
->  	/* When RX DMA Channel Teardown is initiated, it will result in an
->  	 * interrupt and a Teardown Completion Marker (TDCM) is queued into
->  	 * the RX Completion queue. Acknowledging the interrupt involves
->  	 * popping the TDCM descriptor from the RX Completion queue via the
->  	 * RX NAPI Handler. To avoid timing out when waiting for the TDCM to
->  	 * be popped, schedule the RX NAPI handler to run immediately.
->  	 */
-> -	if (!napi_if_scheduled_mark_missed(&emac->napi_rx)) {
-> -		if (napi_schedule_prep(&emac->napi_rx))
-> -			__napi_schedule(&emac->napi_rx);
-> +	for (int i =3D 0; i < emac->rx_flow_num; i++) {
-> +		if (test_bit(i, emac->xsk_queues)) {
-> +			if (!napi_if_scheduled_mark_missed(&emac->rx_chns.flows[i].napi_rx)) {
-> +				if (napi_schedule_prep(&emac->rx_chns.flows[i].napi_rx))
-> +					__napi_schedule(&emac->rx_chns.flows[i].napi_rx);
-> +			}
-> +		}
->  	}
-
-[Severity: Medium]
-Why is NAPI scheduling during RX teardown restricted to flows with
-test_bit(i, emac->xsk_queues) set (also shadowing the outer int i)?
-
-If XSK is not enabled on a flow and its RX IRQ is currently disabled by
-rx_hrtimer coalescing when prueth_destroy_rxqs() initiates teardown, NAPI
-will not be scheduled immediately to pop the TDCM descriptor, causing
-wait_for_completion_timeout(&emac->tdown_complete, msecs_to_jiffies(1000))
-to time out.
-
-[ ... ]
-
-> @@ -978,27 +945,62 @@ static int prueth_create_txq(struct prueth_emac *em=
-ac)
->  	return ret;
->  }
-> =20
-> -static int prueth_create_rxq(struct prueth_emac *emac)
-> +static int prueth_create_rxq(struct prueth_emac *emac, int id)
->  {
-> +	struct prueth_rx_chn *rx_chn =3D &emac->rx_chns;
-> +	struct prueth_rx_flow *flow =3D &rx_chn->flows[id];
-> +	struct xdp_rxq_info *rxq =3D &flow->xdp_rxq;
->  	int ret;
-> =20
-> -	ret =3D prueth_prepare_rx_chan(emac, &emac->rx_chns, PRUETH_MAX_PKT_SIZ=
-E);
-> +	ret =3D prueth_prepare_rx_flow(emac, id);
->  	if (ret)
-> -		return ret;
-> +		goto err;
-> =20
-> -	ret =3D k3_udma_glue_enable_rx_chn(emac->rx_chns.rx_chn);
-> +	ret =3D xdp_rxq_info_reg(rxq, emac->ndev, 0, flow->napi_rx.napi_id);
-
-[Severity: Critical]
-Should the third argument to xdp_rxq_info_reg() be id instead of hardcoded
-0 so each flow's xdp_rxq_info is registered with its own queue index? With
-queue_index hardcoded to 0, XDP_REDIRECT to AF_XDP sockets bound to queues
-1..7 will fail queue index validation in xsk_rcv_check().
-
->  	if (ret)
-> -		goto reset_rx_chn;
-> +		goto err;
-> =20
-> -	ret =3D prueth_create_xdp_rxqs(emac);
-> -	if (ret)
-> -		goto reset_rx_chn;
-> +	if (flow->xsk_pool) {
-> +		ret =3D xdp_rxq_info_reg_mem_model(rxq, MEM_TYPE_XSK_BUFF_POOL, NULL);
-> +		if (ret)
-> +			goto err;
-> +		xsk_pool_set_rxq_info(flow->xsk_pool, rxq);
-> +	} else {
-> +		ret =3D xdp_rxq_info_reg_mem_model(rxq, MEM_TYPE_PAGE_POOL, flow->pg_p=
-ool);
-> +		if (ret)
-> +			goto err;
+> +	/* Drain the UDMA completion ring for this flow before resetting
+> +	 * the free ring.  k3_udma_glue_reset_rx_chn() only drains the
+> +	 * free ring (descriptors pushed as empty receive buffers).  Any
+> +	 * frames that the hardware already DMA-completed but NAPI hadn't
+> +	 * popped yet remain in the completion ring with their pages still
+> +	 * counted as "inflight" in the page pool.  Draining them here
+> +	 * ensures page_pool_destroy() finds zero inflight pages and
+> +	 * completes immediately instead of stalling for 60+ seconds.
+> +	 *
+> +	 * The caller must have stopped new frames from arriving (e.g. via
+> +	 * icssg_set_port_state(ICSSG_EMAC_PORT_DISABLE)) before calling
+> +	 * prueth_destroy_rxq() so this loop terminates.
+> +	 */
+> +	while (!k3_udma_glue_pop_rx_chn(rx_chn->rx_chn, qid, &desc_dma)) {
+> +		if (!cppi5_desc_is_tdcm(desc_dma))
+> +			prueth_rx_cleanup(rx_chn, desc_dma);
 > +	}
 > +
-> +	napi_enable(&flow->napi_rx);
-> +	return 0;
-> +
-> +err:
-> +	prueth_destroy_rxq(emac, id);
-> +	return ret;
-> +}
+>  	k3_udma_glue_reset_rx_chn(rx_chn->rx_chn, flow->id, rx_chn,
+>  				  prueth_rx_cleanup);
+> =20
 
 [Severity: High]
-If prueth_prepare_rx_flow(), xdp_rxq_info_reg(), or
-xdp_rxq_info_reg_mem_model() fails in prueth_create_rxq(), execution jumps
-to err: and calls prueth_destroy_rxq(emac, id) before
-napi_enable(&flow->napi_rx) has been called.
+When multiple RX flows are active (emac->rx_flow_num > 1), doesn't calling
+prueth_destroy_rxq(emac, i) sequentially in prueth_destroy_rxqs() destroy
+flows[0].pg_pool before higher flows' completion rings are drained?
 
-Because netif_napi_add() (or a prior napi_disable()) leaves
-NAPIF_STATE_SCHED set until napi_enable() is called, won't
-napi_disable(&flow->napi_rx) in prueth_destroy_rxq() hang in an infinite
-loop waiting for NAPIF_STATE_SCHED to clear?
+In prueth_init_rx_chns(), all RX flows share flow 0's Free Descriptor Queue
+(ringrxfdq), so descriptors pushed by flow 0 (with swdata->flow_id =3D=3D 0=
+ and
+pages from flows[0].pg_pool) can be popped by UDMA when packets are steered
+by FT3 rules to flow qid > 0 and placed into flows[qid]'s completion ring.
 
-[ ... ]
+When prueth_destroy_rxqs() runs:
 
-> @@ -1018,24 +1020,21 @@ static int emac_ndo_open(struct net_device *ndev)
->  	struct prueth *prueth =3D emac->prueth;
->  	int slice =3D prueth_emac_slice(emac);
->  	struct device *dev =3D prueth->dev;
-> -	int max_rx_flows;
-> -	int rx_flow;
-> =20
->  	/* set h/w MAC as user might have re-configured */
->  	ether_addr_copy(emac->mac_addr, ndev->dev_addr);
-> =20
->  	icssg_class_set_mac_addr(prueth->miig_rt, slice, emac->mac_addr);
->  	icssg_ft1_set_mac_addr(prueth->miig_rt, slice, emac->mac_addr);
-> =20
->  	/* Notify the stack of the actual queue counts. */
->  	ret =3D netif_set_real_num_tx_queues(ndev, num_data_chn);
->  	if (ret) {
->  		dev_err(dev, "cannot set real number of tx queues\n");
->  		return ret;
->  	}
+1. On qid =3D=3D 0, prueth_destroy_rxq(emac, 0) disables only flows[0].napi=
+_rx
+   while flows[1..rx_flow_num-1].napi_rx are still enabled and can push
+   requeued descriptors into the shared ringrxfdq concurrently with
+   k3_udma_glue_reset_rx_chn(rx_chn->rx_chn, 0, ...).
+2. prueth_destroy_rxq(emac, 0) drains only flow 0's completion ring and
+   immediately calls page_pool_destroy(flows[0].pg_pool) and sets
+   flows[0].pg_pool =3D NULL while descriptors with swdata->flow_id =3D=3D =
+0 are
+   still sitting in flows[1..rx_flow_num-1]'s completion rings.
+3. When prueth_destroy_rxq(emac, qid) subsequently drains flows[qid] for
+   qid >=3D 1 and calls prueth_rx_cleanup():
 
-[Severity: Medium]
-In prueth_netdev_init(), alloc_etherdev_mq(sizeof(*emac), num_tx_chn) is
-called with num_tx_chn =3D PRUETH_MAX_TX_QUEUES (4), which only allocates 4
-RX queues in ndev->_rx (ndev->num_rx_queues =3D 4, ndev->real_num_rx_queues=
- =3D
-4), and emac_ndo_open() never calls
-netif_set_real_num_rx_queues(ndev, emac->rx_flow_num).
+drivers/net/ethernet/ti/icssg/icssg_common.c:prueth_rx_cleanup() {
+	...
+	} else if (swdata->type =3D=3D PRUETH_SWDATA_PAGE) {
+		pool =3D rx_chn->flows[swdata->flow_id].pg_pool;
+		if (pool) {
+			page =3D swdata->data.page;
+			page_pool_recycle_direct(pool, page);
+		}
+	}
+}
 
-When emac->rx_flow_num is set to 5..8 via ethtool, queues 4..7 have no
-struct netdev_rx_queue entries in ndev->_rx (breaking AF_XDP, RPS, sysfs,
-and netlink queue operations for queues >=3D 4), and when emac->rx_flow_num
-is 1..3, the stack still sees 4 active RX queues. Should
-prueth_netdev_init() use alloc_etherdev_mqs(..., PRUETH_MAX_TX_QUEUES,
-PRUETH_MAX_RX_FLOWS) and emac_ndo_open() call
-netif_set_real_num_rx_queues(ndev, emac->rx_flow_num)?
-
-[ ... ]
-
-> @@ -1467,7 +1459,6 @@ static int emac_xdp_setup(struct prueth_emac *emac,=
- struct netdev_bpf *bpf)
->  static int prueth_xsk_pool_enable(struct prueth_emac *emac,
->  				  struct xsk_buff_pool *pool, u16 queue_id)
->  {
-> -	struct prueth_rx_chn *rx_chn =3D &emac->rx_chns;
->  	u32 frame_size;
->  	int ret;
-> =20
-> @@ -1481,7 +1472,7 @@ static int prueth_xsk_pool_enable(struct prueth_ema=
-c *emac,
->  	if (frame_size < PRUETH_MAX_PKT_SIZE)
->  		return -EOPNOTSUPP;
-> =20
-> -	ret =3D xsk_pool_dma_map(pool, rx_chn->dma_dev, PRUETH_RX_DMA_ATTR);
-> +	ret =3D xsk_pool_dma_map(pool, emac->rx_chns.dma_dev, PRUETH_RX_DMA_ATT=
-R);
->  	if (ret) {
->  		netdev_err(emac->ndev, "Failed to map XSK pool: %d\n", ret);
->  		return ret;
-> @@ -1492,21 +1483,21 @@ static int prueth_xsk_pool_enable(struct prueth_e=
-mac *emac,
->  		ret =3D icssg_set_port_state(emac, ICSSG_EMAC_PORT_DISABLE);
->  		if (ret)
->  			return ret;
-> -		prueth_destroy_rxq(emac);
-> +		prueth_destroy_rxq(emac, queue_id);
->  	}
-> =20
-> -	emac->xsk_qid =3D queue_id;
-> +	set_bit(queue_id, emac->xsk_queues);
->  	prueth_set_xsk_pool(emac, queue_id);
-> =20
->  	if (netif_running(emac->ndev)) {
-> -		ret =3D prueth_create_rxq(emac);
-> +		ret =3D prueth_create_rxq(emac, queue_id);
->  		if (ret) {
->  			netdev_err(emac->ndev, "Failed to create RX queue: %d\n", ret);
->  			return ret;
->  		}
->  		ret =3D icssg_set_port_state(emac, ICSSG_EMAC_PORT_FORWARD);
->  		if (ret) {
-> -			prueth_destroy_rxq(emac);
-> +			prueth_destroy_rxq(emac, queue_id);
->  			return ret;
->  		}
->  		ret =3D prueth_xsk_wakeup(emac->ndev, queue_id, XDP_WAKEUP_RX);
-
-[Severity: Critical]
-In prueth_xsk_pool_enable() and prueth_xsk_pool_disable(), queue_id is
-checked against PRUETH_MAX_RX_FLOWS and emac->tx_ch_num, but not against
-emac->rx_flow_num:
-
-    if (queue_id >=3D PRUETH_MAX_RX_FLOWS ||
-        queue_id >=3D emac->tx_ch_num)
-
-If emac->tx_ch_num > emac->rx_flow_num (e.g. tx_ch_num =3D=3D 4 and
-rx_flow_num =3D=3D 1) and an AF_XDP pool is bound to queue_id =3D=3D 1,
-prueth_destroy_rxq(emac, 1) and prueth_create_rxq(emac, 1) will operate on
-an uninitialized flows[1] (hanging in napi_disable() on an uninitialized
-napi_struct and indexing past rx_chn->rx_chn->flows in
-k3_udma_glue_reset_rx_chn()).
-
-Also, if prueth_xsk_pool_enable() fails after xsk_pool_dma_map() or
-set_bit(queue_id, emac->xsk_queues), does it need to unmap the pool and
-clear the bit and xsk_pool pointers on the error path?
-
-[ ... ]
-
-> @@ -1594,9 +1586,9 @@ int prueth_xsk_wakeup(struct net_device *ndev, u32 =
-qid, u32 flags)
->  {
->  	struct prueth_emac *emac =3D netdev_priv(ndev);
->  	struct prueth_tx_chn *tx_chn =3D &emac->tx_chns[qid];
-> -	struct prueth_rx_chn *rx_chn =3D &emac->rx_chns;
-> +	struct prueth_rx_flow *rx_flow =3D &emac->rx_chns.flows[PRUETH_RX_FLOW_=
-DATA];
-> =20
-> -	if (emac->xsk_qid !=3D qid) {
-> +	if (!test_bit(qid, emac->xsk_queues)) {
->  		netdev_err(ndev, "XSK queue %d not registered\n", qid);
->  		return -EINVAL;
->  	}
-> @@ -1611,7 +1603,7 @@ int prueth_xsk_wakeup(struct net_device *ndev, u32 =
-qid, u32 flags)
->  		return -EINVAL;
->  	}
-> =20
-> -	if (!rx_chn->xsk_pool) {
-> +	if (!rx_flow->xsk_pool) {
->  		netdev_err(ndev, "XSK pool not registered for RX queue %d\n", qid);
->  		return -EINVAL;
->  	}
-> @@ -1624,9 +1616,9 @@ int prueth_xsk_wakeup(struct net_device *ndev, u32 =
-qid, u32 flags)
->  	}
-> =20
->  	if (flags & XDP_WAKEUP_RX) {
-> -		if (!napi_if_scheduled_mark_missed(&emac->napi_rx)) {
-> -			if (likely(napi_schedule_prep(&emac->napi_rx)))
-> -				__napi_schedule(&emac->napi_rx);
-> +		if (!napi_if_scheduled_mark_missed(&rx_flow->napi_rx)) {
-> +			if (likely(napi_schedule_prep(&rx_flow->napi_rx)))
-> +				__napi_schedule(&rx_flow->napi_rx);
->  		}
->  	}
-
-[Severity: Critical]
-In prueth_xsk_wakeup():
-
-1. test_bit(qid, emac->xsk_queues) is called before checking whether
-   qid >=3D PRUETH_MAX_RX_FLOWS, which can read out of bounds of the
-   emac->xsk_queues bitmap if qid is out of range (and the bounds check
-   itself also misses qid >=3D emac->rx_flow_num).
-
-2. rx_flow is hardcoded to &emac->rx_chns.flows[PRUETH_RX_FLOW_DATA]
-   instead of &emac->rx_chns.flows[qid], so XDP_WAKEUP_RX always checks and
-   schedules flow 0's NAPI instead of flow qid's NAPI.
-
-> @@ -1697,6 +1689,14 @@ static int prueth_netdev_init(struct prueth *pruet=
-h,
->  	}
-> =20
->  	emac->tx_ch_num =3D 1;
-> +	emac->rx_flow_num =3D 1;
-> +	emac->xsk_queues =3D devm_bitmap_zalloc(prueth->dev,
-> +					      PRUETH_MAX_RX_FLOWS, GFP_KERNEL);
-> +	if (!emac->xsk_queues) {
-> +		dev_err(prueth->dev, "failed to allocate xsk_queues bitmap\n");
-> +		ret =3D -ENOMEM;
-> +		goto free_ndev;
-> +	}
-
-[Severity: Medium]
-If devm_bitmap_zalloc() fails here in prueth_netdev_init(), jumping to
-free_ndev skips pruss_release_mem_region(prueth->pruss, &emac->dram) at the
-free: label. Should this jump to free instead so emac->dram is not leaked?
-
-> diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth_sr1.c b/drivers/n=
-et/ethernet/ti/icssg/icssg_prueth_sr1.c
-> index b8115ca47082f..582d582cba89f 100644
-> --- a/drivers/net/ethernet/ti/icssg/icssg_prueth_sr1.c
-> +++ b/drivers/net/ethernet/ti/icssg/icssg_prueth_sr1.c
-> @@ -570,11 +570,11 @@ static int emac_ndo_open(struct net_device *ndev)
->  	icssg_mii_update_mtu(prueth->mii_rt, slice, ndev->max_mtu);
-> =20
->  	/* Prepare RX */
-> -	ret =3D prueth_prepare_rx_chan(emac, &emac->rx_chns, PRUETH_MAX_PKT_SIZ=
-E);
-> +	ret =3D prueth_prepare_rx_flow(emac, &emac->rx_chns, PRUETH_MAX_PKT_SIZ=
-E);
->  	if (ret)
->  		goto stop;
-> =20
-> -	ret =3D prueth_prepare_rx_chan(emac, &emac->rx_mgm_chn, 64);
-> +	ret =3D prueth_prepare_rx_flow(emac, &emac->rx_mgm_chn, 64);
->  	if (ret)
->  		goto reset_rx_chn;
+   rx_chn->flows[0].pg_pool is already NULL, so page_pool_recycle_direct()
+   is skipped and the inflight pages from flows[0].pg_pool are never
+   recycled, causing page_pool_destroy() to stall and leaking the pages.
 
 [Severity: High]
-Does drivers/net/ethernet/ti/icssg/icssg_prueth_sr1.c still build when
-CONFIG_TI_ICSSG_PRUETH_SR1 is enabled?
+Can prueth_create_rxq() also hang in napi_disable() when its error path
+calls prueth_destroy_rxq()?
 
-Here in emac_ndo_open(), prueth_prepare_rx_flow() is called with 3
-arguments (passing struct prueth_rx_chn * as the second argument), whereas
-its prototype in icssg_prueth.h is now:
+In prueth_create_rxq(), if prueth_prepare_rx_flow(), xdp_rxq_info_reg(), or
+xdp_rxq_info_reg_mem_model() fails, execution jumps to err before
+napi_enable(&flow->napi_rx) is called:
 
-    int prueth_prepare_rx_flow(struct prueth_emac *emac, int flow);
+drivers/net/ethernet/ti/icssg/icssg_prueth.c:prueth_create_rxq() {
+	...
+	ret =3D prueth_prepare_rx_flow(emac, id);
+	if (ret)
+		goto err;
+	...
+	napi_enable(&flow->napi_rx);
+	return 0;
 
-Elsewhere in icssg_prueth_sr1.c:
-- prueth_process_rx_mgm() still accesses the removed rx_chn->pg_pool member
-  and calls the 5-argument prueth_dma_rx_push_mapped() with 4 arguments.
-- emac_ndo_open(), emac_ndo_stop(), and prueth_netdev_init() still access
-  the removed emac->napi_rx, emac->rx_chns.irq, and emac->rx_mgm_chn.irq
-  fields, and call prueth_init_rx_chns(), prueth_reset_rx_chan(), and
-  prueth_cleanup_rx_chns() with their old argument lists.
-- emac_ndo_open() passes emac as dev_id to request_irq(..., prueth_rx_irq,
-  ..., emac), whereas prueth_rx_irq() now expects &rx_flow->napi_rx as
-  dev_id.
+err:
+	prueth_destroy_rxq(emac, id);
+	return ret;
+}
+
+Because netif_napi_add() sets NAPIF_STATE_SCHED and napi_enable() was not
+called to clear it, calling napi_disable(&flow->napi_rx) at the start of
+prueth_destroy_rxq() loops forever waiting for NAPIF_STATE_SCHED to clear.
+Furthermore, in prueth_init_rx_chns(), the shared ringrxfdq is sized to
+PRUETH_MAX_RX_DESC (512) while each flow pushes 512 descriptors in
+prueth_prepare_rx_flow(), so opening an interface with emac->rx_flow_num > 1
+deterministically overflows ringrxfdq on flow 1 and hits this hang.
+
+> @@ -1160,6 +1179,9 @@ static int emac_ndo_stop(struct net_device *ndev)
+>  	prueth_cleanup_rx_chns(emac);
+>  	prueth_cleanup_tx_chns(emac);
+> =20
+> +	/* Cleanup RX flow classification rules */
+> +	icssg_rxnfc_rule_cleanup(emac);
+> +
+>  	prueth->emacs_initialized--;
+> =20
+>  	return 0;
+
+[Severity: High]
+Does calling icssg_rxnfc_rule_cleanup(emac) in emac_ndo_stop() cause rules
+to be lost across system suspend/resume, while rules added before
+emac_ndo_open() or before prueth_emac_restart() lose their hardware
+classifier programming?
+
+Specifically:
+
+1. Changing RX channel count in emac_set_channels() requires the interface
+   to be down (!netif_running(emac->ndev)), and emac_set_rxnfc() allows
+   adding rules while down. When emac_ndo_open() or prueth_emac_restart()
+    subsequently calls prueth_emac_common_start() -> icssg_class_default() =
+->
+   icssg_class_disable(), all RX_CLASS_OR_EN registers on both slices are
+   reset to 0 without re-applying emac->rxnfc.rules via
+   icssg_rxnfc_classifier_update().
+2. During suspend, prueth_suspend() calls ndev->netdev_ops->ndo_stop(ndev)
+   -> emac_ndo_stop() -> icssg_rxnfc_rule_cleanup(emac), which frees and
+   deletes all user-configured RXNFC rules so they are gone upon
+   prueth_resume().
+
+> @@ -1676,6 +1698,9 @@ static int prueth_netdev_init(struct prueth *prueth,
+>  	emac->ndev->pcpu_stat_type =3D NETDEV_PCPU_STAT_TSTATS;
+>  	INIT_WORK(&emac->rx_mode_work, emac_ndo_set_rx_mode_work);
+> =20
+> +	/* Initialize RX flow classification */
+> +	icssg_rxnfc_rule_init(emac);
+> +
+>  	INIT_DELAYED_WORK(&emac->stats_work, icssg_stats_work_handler);
+> =20
+>  	ret =3D pruss_request_mem_region(prueth->pruss,
+
+[Severity: Medium]
+Can struct icssg_rxnfc_rule entries in emac->rxnfc.rules be leaked when the
+driver is removed in prueth_netdev_exit()?
+
+Because icssg_rxnfc_rule_add() allocates struct icssg_rxnfc_rule via
+kzalloc() even when the interface is down, and icssg_rxnfc_rule_cleanup() is
+only called in emac_ndo_stop() (and not in
+drivers/net/ethernet/ti/icssg/icssg_common.c:prueth_netdev_exit()), any
+rules added while the interface is down are never freed if the device is
+unregistered and freed without being opened and stopped first.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103134501.4123=
-194-1-m-malladi@ti.com?part=3D1
+194-1-m-malladi@ti.com?part=3D2
