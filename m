@@ -1,97 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.42
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793805569;
-	b=M1t8yLC9XCtwJ0QkXfUEqnI6LrtJq39Kk31dHMGxMTN6dCm0Mca7IVTw2XlawqO2+jTs
-	 uDrd5X4OahvW0cn20ab8j3MDQI/0GG3GBAPlrFaTicCY3GcgtupI2uI4VEgRwcYHp2Qg0
-	 +qnYJaJi3ie/swopRjI6E04Ros1s2uHE7aqUy9AsYBJmH0aoDA47EK4ySNDmW9V4cXQd1
-	 9vvKLwgVTYWsf4Q1WalP/XYzekvA9QWN/vD+LwgBhoc7xw5LKpH34uZo/NINC5re9jkON
-	 dcKssTxcJTR7nYfQSR7FI8oCSqziD6yu03LCHg2EasGORTBLrgaCiKXZNwjl538fRQA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793805569;
-	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=1kasbafd3T9Fhrw7R0Nr/dFHUF4ChKeJYhTGf2AiF+Y=;
-	b=33rIHFdbng1WBu1vW8AYF8MkEUe4UsvvZ7DE9q3jLVuEEbisNcapYsT3mrIIDnEZ8ILv
-	 IXqJeXM58E9sUJCz32MBp3unAaZRzG8IqC/q9kKHvJCIlaAW54kgzwzyORM4qlZ1sZNn7
-	 EaNyR0GAwSuCHh74WuufxmlSW2GKv40hn2SLg0Ljj9rY1hqImbHJEf0ZzvOTAHHWBaL5T
-	 lCme/4HgkafDkp+JN686XOvZ5Q0x7lrVGqIGF7UznOMdY5k0JMHllXaLWzqjuHjgkj1CG
-	 eeHb59JuCEdHinstcdLadICimnSzdWqpJFsspy7O1pN5yiLo4O0PAHbNvEAVuONpW0w==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=grische.xyz;
-	spf=pass smtp.mailfrom=grische.xyz;
-	arc=none smtp.remote-ip=209.85.221.42
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.170
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793806625;
+	b=Vuz57PXyShK3a0ilwWLyFtcu2uBStefI2SM+1GaUyK2FEuRVPwFrJxJyvF7BiqwRCovV
+	 DQnvvz4t4L6QEwUUpkpcbt3PrpvotPDLObEc0DI5xQZ9XxHIX1xcZY5gYNrQT6dvCl3o9
+	 b4twkX/bT94RD4bybNO1WLow7zhLolwMMyozW1lLEZReoSk1typ8qE43tGpNHPvF9UzpM
+	 9p89kqpNgUw7u3L2HVwZB8MBi0ZZPqXLG6V5W+AC4JDinbdQwrIKLZndiYQ6sMklJeaOg
+	 msw9vdgFfSvTyr489nVUtusKEJGIy2t6BLxmX4SOMebwCYWfIm/52S3Z7EXtVqH8POA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793806625;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=W98HN7wJ4fZcfV5odlqIGcVOnLj/iuIKM2l41tHLMh4=;
+	b=uwDQ8mkLMLGgCbb4ALKQsrqM3+CbLjVIpgHuvhvEh0xN8oUAH7BDnz+E+PJv5iTEhCh6
+	 mFVmUqz6B35n/OTPAtRFzw/FPfcl9BDz51xQkln628+EDCX4mLcgmjhAk6SvH55z9x3uB
+	 UYfy2IW43QvULrmm6q7vSJ3d4nklkdhlBPm6phhjrjXogEWCWYFid5YxJ4fX3byyqPyKt
+	 rSXHME3fbujXfsHOekt3jDWcmFB30QzHLP1G2GJPKrd5edyBYcBmIwBLqWba11I+b+L5W
+	 moZfG2il/JYVdoxkjcDawBT/7saOvyJe48ufLV5aLqf9gewzpv3k7nG6iBVSFVV0TDg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ETdVW47E;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.170
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DA7606EE98
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 15:19:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 94DA7606EE98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=grische.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grische.xyz
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-490d59c3edaso163397f8f.1
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 07:19:29 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2DBB606D80B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 15:37:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E2DBB606D80B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ETdVW47E
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-3ab3dd9670bso8195131fa.1
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 07:37:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793806623; cv=none;
+        d=google.com; s=arc-20260327;
+        b=PYF/7TMfM51i1cXOTJ0frHUSYXY93V0AxBcO8OSQGhdy4vhQrWfCHJjs5491rUMxDG
+         GlTcE47FntIESKbdX8ji5FCl1RFuHiSPghGHjx9PANWAUU7aSuJfAhJaZ25FFRIOlTgN
+         PZB3tpoFms/qnNpWowK7N613jREWHI7XKwj0g0yGun6gvmB1Xb5Ba3WjVxospEpNOzGl
+         BZSiD+BZrbofMj4c7u89PuMm28oWdx8LVuThmSv4Hb7LH+cQ0tLnrgZKw4U+Fq3weVyp
+         S1CqLO95LL9REO0T2v3HTTFyTgBikGPALqOgBRvXTwMSwl0H0ko4nxkmzi1S35kVxSvF
+         YMWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=W98HN7wJ4fZcfV5odlqIGcVOnLj/iuIKM2l41tHLMh4=;
+        fh=8Xlu2dVcG+m1qfGdGb9b3uNRNQ5jAobNx8LFPGM/EhA=;
+        b=qYTKP/gMtZXMGgMjRaPuMe5audQPMh58Q81cnx7NQldrVwsFbeiYNPKNx9SqDjojVh
+         IqbCEjfGHE2kbzlU34Kqj/AKyVUry42xOp9+Q2Xpjh3pZjI0edaHiENe4pz2wKr2ld9Z
+         bIvrEt8YPVK7CHGZNMMcJ4LLVh3IR6VtJlsBC4yo/Kl7KgALjne+TY/EauUmOCcrqazk
+         Ol4hg1J3tn3BMe8zOPUlAbDXDUnwB60+AgWj3yK7kcZfHnsu//IWQcriglxUpzpea/Xw
+         hwlzwoIyDo2MaMmybGasrRr5gr45WKsdEDTBg4yddROcr/5ZgHd0fVQNS9t1RWHGoEsD
+         DblQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793806623; x=1794411423; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=W98HN7wJ4fZcfV5odlqIGcVOnLj/iuIKM2l41tHLMh4=;
+        b=ETdVW47ERq8+IQVeUMVqMAqQCwFpkiJJoe7KGeo8X8fUPPryq5zwQI6X4/Sspby7R3
+         IZnAeClJIqjcqBW933pNUHP+npj9dglngaNlTnUOReO8Op4dj8PYX418F4G0sFi+Frim
+         NPZwKtkveE9D36hbqhQ7cGBKSWXGASgigNhpzykB5qe75RaXT7vraT53eEdcRDXKc5CK
+         hV5TTpDFqcTmb/Ddk65RKUSFW5OymBNHUfWv98BxQK05kpY8T83lx++XG6MTMwY5A+T2
+         650so2hJnfyyrIaCjW6bL3ou78fTTfIcDRTT/oRSoanTc8PJr0HQPmd2VHLgNTFNm385
+         uF8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793805568; x=1794410368;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1kasbafd3T9Fhrw7R0Nr/dFHUF4ChKeJYhTGf2AiF+Y=;
-        b=i7Q78ZprDnPswg8RYB3NIZZfjbbLqIw3jPZd+K1WLD8cKePzmT084VcxOx8BkvEmrF
-         vtoqsTCMvyGWEjczMCCLJFwHgoT1IYCLuRoyV/i9Ohuk1zFgZDK8dafxf3K11Pa3aRRa
-         zKQOLxnMX7TLNee9WZjTYdLI0H//hTlr15W0rViK9r0/3wBdJ9ejtn/OWR/ibZ4QRYhx
-         QQf8mFISuh9SbxdiYGLAWTU0TmG/d+W8EYgUbLV8d3H7M+XPutKDYsecuhFbqgIyR7s3
-         uzH6XVfLr7BjwW+A6btXjYSldqy7ZT1QaBYDSVxSbYFsdkNXbD9aeeHZa3inMJnadCYX
-         lWlQ==
-X-Forwarded-Encrypted: i=1; AKwUvBykkNTsbw+NmlOzyEfAu4zw4q37oIH7MR1OkDNQZwCpoifHUH1d8J9R+5Ltp/tT2bfmzSc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8158DNOMbbnB4yvUeN6PdKMiCW2H37bcHARk/ogYtVhGMF+XKe
-	DNE0WvXYUrwGH/au5k4E+3SOP4EZFF98rlW1HNrIhD0kFWV9K6ihYqfDc2+X2gQ5gNA=
-X-Gm-Gg: AYBFou0DjhU33VpxhusxBnYGnp+1LwhT6OSKS2Ou91wcb9JuBDze8n9jHlfRL/8raV2
-	k8qvOGJaYhFeK5GLq2sVDNU+9ecpOBHe8YEv62WxUmNMKT2QBA7ClH6NaHlVpjaw861Nkf2jwLE
-	KOiHUtq8o41krgrbQEscGNbpW2f1QStj1x0gm9789OYJsJI/y1UXviXwIPPVzBoK+NxfZZtIbu4
-	W4JuQD6Jal2YKzdM6gdJYaZtRPEP3ppHOxmoXm5jFpAHCREqhU37e9ncso7Z1tnMdtBA3Da1wF8
-	eeqpg6aDPWpaqiuHgbnj1d2Df+r8EKQCuxLUXz+IBKB0S8eZYnogLFIGwnZw86dElo5XVyVDf87
-	zRyycJQNB7jLGlSvwG1kp6WDS+B4zVnhP9EC07yWg2uEX5neHPKN9AuQbn1eyvfFebYyJkvA/fK
-	zqsAB8GMokkXT6Tl/bCLRAwFYQYxpiSnaVd8nPfs3zND/l6GhR71u1BtpzH2M2v2jnSA2guK+cK
-	I+7BSKJ+r4cuK19lDqanNFKr+U383huLBN3I5j5Q0QoyetHvjoeazpp7fjIKB6p86M4/9j9dkCa
-	glL3K52XGwQbXfaiOtstnTfpwQ==
-X-Received: by 2002:adf:e18c:0:b0:48e:eb:56c5 with SMTP id ffacd0b85a97d-48e6e2c1d83mr40340920f8f.8.1793805567922;
-        Wed, 04 Nov 2026 07:19:27 -0800 (PST)
-Received: from lake ([2a02:810d:d09:1b65:4366:70cb:bf82:f8ac])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48fec8d8e29sm4639812f8f.19.2026.11.04.07.19.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 07:19:26 -0800 (PST)
-From: Christian Schmidbauer <opensource@grische.xyz>
-To: netdev@vger.kernel.org
-Cc: maxime.chevallier@bootlin.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Christian Schmidbauer <opensource@grische.xyz>,
-	stable@vger.kernel.org,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Ong Boon Leong <boon.leong.ong@intel.com>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net v2 1/3] net: stmmac: honour Rx checksum errors in the AF_XDP zero-copy path
-Date: Wed,  4 Nov 2026 16:19:11 +0100
-Message-ID: <20261104151914.2651241-2-opensource@grische.xyz>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261104151914.2651241-1-opensource@grische.xyz>
-References: <20261104151914.2651241-1-opensource@grische.xyz>
+        d=1e100.net; s=20260707; t=1793806623; x=1794411423;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=W98HN7wJ4fZcfV5odlqIGcVOnLj/iuIKM2l41tHLMh4=;
+        b=I5MAREswjZ6070e1SPWNwwIocc6YgRXxp1OzTVeWbaGewxG2cobsm6Aa+S43zfFRnR
+         X2lgEEGI21NQs4BTAHbfgKlrMk+KFlxFMz8sGFmOV5qDMpuZXiu19FRGAjkUip9gnEMb
+         dnz/sP+N9vgdmHPkbW5z2Gg5QbfXP0hx2TvHkG+DldJM/ViUHYqXFN/R5uOyo7YUOwj2
+         4c36HLTbz4T+JSBWPpQ0SGq2wkO6VKXhWdZVtGY/wcnRKUUZf1R3TZMN7F69PF89rknu
+         D7lYLIbA6OjTp6zWHzlG76hJWE+EuBSGHbiM/lMi3wns+OT+g7yQGsqnqXM8a6Sdl1VC
+         GYfA==
+X-Forwarded-Encrypted: i=1; AKwUvBx74QoqTjvqcblsWFYbMddUTMwoYtkZ0MoB6oCcdoHvFe1K4Jy/ZBrRte2O5+cYjqsElDU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/s1yZ+QS5ieofsiGwLYpxw/vdqYYCAMBSTF06ptxJ/gLCQUVlW
+	hPywQ0U6V3D+//aIMnlzE9BsDMK1YU04WS2QPGlpSyTxiITMaPeKM+l64bxEk3bg8/NPuC8dksc
+	iYFIznI+mY51Hn2/kPsog/CCj/LzLNAGAAQ==
+X-Gm-Gg: AYBFou2CCYrJPqibTvNX5UPOWOR3Hsr23wvOgI21556MG+iIZ9tNysctzxaRdV2A9Qs
+	QtIH3vtGF+UqbF1u/dzzIzECohSj6HYP/yBbUevi0SROBfymA+FdyspcBBaBKbJzsd4c44VJ9qc
+	51NyPRv/k/PNkSLH/bBT0u16JU7AhrkwKsmyJ9sbMQMDv3eWK/7f0xLMZv8zqKsGrgFk9+iy+6l
+	n/MsfB9/jbKzb6zHmjlysFr8nmAbrR9uNrvbClTlECG9AC+9gw8Ju60JtJ6kX3fmMVmSD+e4kxG
+	NvNPnpyFbFx2cZyUmuX5AJDRY32sTNCl3AFDd2jIQRry1DoN8+DP4UL5/RVXEjgKuLZ8IKN76Yj
+	gMBxPz4YFoIGZIZdXLKPyOI4awftvIR0BH1lmwBnHsiubQJUTB/go3caQxZE7ia7cNkVCoKU/fH
+	habQK1l4/YqO3gQ7iv4SMGcQNbLCSpjUbB6ZQe/wHKNqu2BpwrPQ==
+X-Received: by 2002:a05:651c:b07:b0:3aa:f72e:8ef5 with SMTP id
+ 38308e7fff4ca-3acb7a8f83cmr38793161fa.19.1793806622513; Wed, 04 Nov 2026
+ 07:37:02 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,61 +104,23 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <202608191340.98574fe2-lkp@intel.com> <4h7zrdfpu3ailx5ajkyqohmcfuxgrk3tn7i7n3dkp3ksy5xehk@xqg5j6pqzocv>
+ <179361623876.3.16264907931792312619.redis-ibpb-report@gmail.com> <84ecf492-5a71-4871-a555-abb76a1402db@intel.com>
+In-Reply-To: <84ecf492-5a71-4871-a555-abb76a1402db@intel.com>
+From: Chengfeng Lin <lin2530632123@gmail.com>
+Date: Wed, 4 Nov 2026 23:36:50 +0800
+X-Gm-Features: AclHuK-Vjr9iNtCEqcfXxOk7Wz6zZfhG5pCaMZhb6xGcDRnMQOLOvY9anCSqSS0
+Message-ID: <CANGjgdnbBaTHYvvk1rOYH-Pe0DCHr0HWb5v6DjdNFn97dLtbNQ@mail.gmail.com>
+Subject: Re: [linus:master] [x86/bugs] a3af84b0fa: stress-ng.seccomp.ops_per_sec
+ 95.7% regression
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, x86@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Commit ee0aace5f844 ("net: stmmac: Correctly handle Rx checksum offload
-errors") taught stmmac_rx() to honour the csum_none status, but
-stmmac_dispatch_skb_zc() still ignores it and sets CHECKSUM_UNNECESSARY
-for every IP frame whenever the checksum offload engine (CoE) is
-enabled.
+Thanks for taking a look, Dave. I'll investigate further and follow up if I
+find anything useful.
 
-Since commit fe4042797651 ("net: stmmac: dwmac4: stop hardware from
-dropping checksum-error packets") dwmac4 delivers such frames instead of
-dropping them, so this path receives them.
 
-Mark the skb CHECKSUM_NONE when csum_none is set, as stmmac_rx() does.
-
-Fixes: bba2556efad6 ("net: stmmac: Enable RX via AF_XDP zero-copy")
-Cc: <stable@vger.kernel.org>
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Christian Schmidbauer <opensource@grische.xyz>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 7ffed295eb14..3e5803db19b4 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -5547,7 +5547,7 @@ static struct sk_buff *stmmac_construct_skb_zc(struct stmmac_channel *ch,
- 
- static void stmmac_dispatch_skb_zc(struct stmmac_priv *priv, u32 queue,
- 				   struct dma_desc *p, struct dma_desc *np,
--				   struct xdp_buff *xdp)
-+				   struct xdp_buff *xdp, int status)
- {
- 	struct stmmac_rxq_stats *rxq_stats = &priv->xstats.rxq_stats[queue];
- 	struct stmmac_channel *ch = &priv->channel[queue];
-@@ -5575,7 +5575,8 @@ static void stmmac_dispatch_skb_zc(struct stmmac_priv *priv, u32 queue,
- 
- 	skb->protocol = eth_type_trans(skb, priv->dev);
- 
--	if (unlikely(!coe) || !stmmac_has_ip_ethertype(skb))
-+	if (unlikely(!coe) || !stmmac_has_ip_ethertype(skb) ||
-+	    (status & csum_none))
- 		skb_checksum_none_assert(skb);
- 	else
- 		skb->ip_summed = CHECKSUM_UNNECESSARY;
-@@ -5789,7 +5790,8 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 
- 		switch (res) {
- 		case STMMAC_XDP_PASS:
--			stmmac_dispatch_skb_zc(priv, queue, p, np, buf->xdp);
-+			stmmac_dispatch_skb_zc(priv, queue, p, np, buf->xdp,
-+					       status);
- 			xsk_buff_free(buf->xdp);
- 			break;
- 		case STMMAC_XDP_CONSUMED:
--- 
-2.54.0
-
+Chengfeng
