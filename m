@@ -1,79 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793792282;
-	b=COVI0doK8sD5SfK/Anws+X0I2VdQA4TdIQZ0yS0MdKyfBqsvwgfP8IfCaQacBS3EfTih
-	 Chr6DDfMg980N29Pr4KWEQieAHjou5hONzxTIZG6YdZ2OHDrxlnPyAzEfjGTDLZaxsWTe
-	 0LjVnmU2zYbEVuvhWB18y7wm4DqgAFKSZo+SFj46TuT5UDzEAlQt/hRYowFV0ulnZGbfr
-	 kKk8inVbv/bDtip/CqL9t96uQls6CI7ROABl2KfLqtN82fHnBSWxyww/D5mEGZH33XL9t
-	 hfOD5rVpeq/Yt3GzmQJguzvz/aPFnYmTCOqITkINNf2SyzTgrJUXTIt3dDYWxL+6xCw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793792282;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=LC6o94h33PMpBSRX2oT9zIzB0iubJnPS2+w0Nf9vLoM=;
-	b=idvptYh8Mqfb2+LZdfjkrd3uNI2kG8APHSQz8h+UslDmjqrA9u8yZjyklX3kksdto9T4
-	 b9wCw9tvwUGe0jY+McytukyiYbYklCbtvoKvzpQfhbEb8+IjMYSFdWfiop8GcQklsEdA1
-	 Vq2+l7QuTNcxYmjeIX1KQ8ySi/o5Jxybaogi79UigGT3DFSnxLVcLgLakq3am40SiitFx
-	 yOmlVQtaMMmji4fQBahUQW+H1cOw2P6M9957J3kyIUcasnPWXBFMXQ6a/wlyYEorxT6L0
-	 Ia266j30s26zXAH/E9aVVqnsSIPTnWkN9Krfa7GWd7gHYVDjSVy/kFj6c/PgOPd8TWg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="UC6X/1jn";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23450606D803;
-	Wed,  4 Nov 2026 11:38:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UC6X/1jn
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793792281;
-	b=s4xEzx4PNDVgcIK/2w/pqnPsK6PehLv+WfMBJx26MPTUdB25B1C7pF481XMU6LS7UE+J
-	 vkvREbAr3LHNaTvojOxSwglwsAIrD+o2TdjEOf5eYy2RoxpCiTWSsWwSmvmw9ErPyaX2Z
-	 8Hc+WB3enCPGWIf0zd/FRBGQ/nFDYgM+6Wuo+zmzcNz9ylvq80SuzXGiNLt7yRJCvcM2E
-	 qIJntiSVJXl0wtUkbVEkeVMwd8AHUlbg4RiGNZvAA7sf//jqXF98cWw/DkIXzmOy0RvmU
-	 x2bkvdJjg3BODafhaZVUnGdUAenqnPJdsFEiZzXTJeqEC56Y1WtbatyKBpmRtdPhusg==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793792281;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=LC6o94h33PMpBSRX2oT9zIzB0iubJnPS2+w0Nf9vLoM=;
-	b=URTvLy8t6QnwDT2GxSAb2JzYeuUWFbMq/rTBOJv5srPLbmyveYh8QadlCvNp/jlIfbeG
-	 NgZhrPfPN9XSnrX3UX6AqZZLlxExhESk+RsEKUPcv5Z/7XVwCTjGT/+gzoSPcaMcDddgT
-	 iBpNgxijnAjcgLq+7sL+y2H4M/kW1nxcCgCOS7ScOWjn6aVm5XtbtEYN+Z3s4SnjkneDj
-	 PS80/OXor0OxAEPkqds5n9H56BQwGmIG6pdcqMS56Ol6LUjoQfzxdqRQu9mvU8r4wHqR9
-	 FrMgwjazgxe6M3gsDChQsEaoPpLnsQfB9RLPk63nr3p4iAP6hhQQyElderJjm7lpd3w==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793792450;
+	b=Vme3X3Xc2pp+TBj5aN8Yv5idPz7AniJdddwRp+jGOrRIah4jxwlj+Y2EQrPZTHimaW9Z
+	 Rafv3cu2JojbejvqBVqeWRKB90EKBddVx8lcnHi92mntNFUGN6ky3cNU8pxsMH8tE34ch
+	 iKtN6Rq+fxr8BXYUNTLkMiAcwK3HM+n+M7IEwdw4EIDybwkXFcTiglh4oZBTd8erZLzCt
+	 gdiNZFToPLZeayln2NqtHh7ethgfYFh6RH5UonoXZpcYh5sfG//GEgeATzkY4okAqpPYA
+	 LlJ0+phNlfZK3/A1raoAe08FBuQOha1baEAxUiCPJIBcCk3nKA/FbDJj6YUXDdj2P+Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793792450;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=ZsCmj2Bd0zCOX9XIs7fgWNRdvJoAisSGzCFmbSIRZkQ=;
+	b=TAUk5yWLz99T74G55MHJLI+bd9TAwC5Q3gvQBRZv3jANcInGoEKwFkoGGFd5JjbSZ9cS
+	 PhU1i3xcDZPOLRsMB+uwgrUWyy5vurWPU4COAzZP4AMrh9GIOn3zH8nT+8J0ZMfK4M1Yw
+	 PEXeDUd5q/6scM4CHVFCgCMKTWEaMP4mnmE8boxLiStJjwiZ7eJ6GznkLFl6NZOVBbTq7
+	 H/LDdHbOsQ0RjhcH16hVVfPsR/5ayqOHMx+QQcxIqr2yLcoyqFw8wuV7bsT0iL9ovZTcN
+	 00RaLxqL8k76irzaP/B1e2ftLB++AYbqJ9sI8tKZzZlmRJ33QBwvydY6sg0JNZUAHsQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hBwm9xd+;
+	arc=none smtp.remote-ip=209.85.221.53
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A5FB71F0093A;
-	Wed,  4 Nov 2026 11:38:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793792281;
-	bh=LC6o94h33PMpBSRX2oT9zIzB0iubJnPS2+w0Nf9vLoM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=UC6X/1jnj0FBJzHgDXczgjhxylwC36AVJd0eP0+9P7HGvyBdEcG5ypnEK8neLXk/p
-	 zItQtP6Br1ixCJ8cbt1aTrWNRouchiEjozPKPKyWWVraz74JLi06NE/udio3A1rc4s
-	 NMeiS1fBO+ac5kRgLZccXMpO5bsj9POdgQPTKPJ050KKcWG7K4QFSrFvM5GCLm8viW
-	 4qsSSYd6qP9M8LADnJFM79Zv4iTYKfcwl14iTFOYcOuUzIjU/xgylSSPm70wPouiSK
-	 dT33cZSDjCAu/19KYk/DgSHxJQ5G17ChaI6vi6aa+0xXeLXlRbxWo0XL1xSHkUBnMC
-	 LiB10kWWBkWXQ==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 1DC5746DF3;
-	Wed,  4 Nov 2026 11:38:00 +0000 (UTC)
-From: Jonathan Bastari Thamrin via B4 Relay <devnull+thamrinjonathan.gmail.com@kernel.org>
-Date: Wed, 04 Nov 2026 18:37:58 +0700
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test local storage max value
- size
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31867606D81A
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 11:40:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31867606D81A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hBwm9xd+
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-48c45111bebso276614f8f.0
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 03:40:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793792448; x=1794397248; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ZsCmj2Bd0zCOX9XIs7fgWNRdvJoAisSGzCFmbSIRZkQ=;
+        b=hBwm9xd+NzrXQ15nvYc7IXZyKTbKyi+gZB+RBYF7H4NhnJiOL7kOYbTV5GizeYbRBN
+         TGaK7jYFhDREKzFjICLIdgsNrugXo+AoBC7ERADoEhuiFlXRUaMxH1M+cxqgZNmiKIvx
+         jK4515YqOMdwfhKjMIySFjnkcteq9y0ZLL/RpuZ/UtxQdmp81oSM3sdSvrq2QolInnEJ
+         sBCuu4intpYACXDvlA0okHE/AVfzLJb/JDfcDEpEjJIAvaBz3pU1iwVa2Eh5W8L6MhNK
+         O0+5R5r140YrTo7yRdgmrRLKfgyspIGnSXHHlWuwy+ATSKnS8rKrExTnpk9TSep2b2Ah
+         u8kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793792448; x=1794397248;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=ZsCmj2Bd0zCOX9XIs7fgWNRdvJoAisSGzCFmbSIRZkQ=;
+        b=EsB8C2mJGx5Ja6TELfd37NXtU6GK/xFyNIS1ZJ/dCr57i3QH+RTr47yYCwvLDNX3v+
+         e64/mqEXzNzVelH5QBF3K+6hIpDwZkk97u90oFyHLb2WTDEyn+X8TZHgeiDSr9rG+lIS
+         J3JzTalcxTM9J+Cf6s9ON5rs2lgfKN/Zek/vktPELWS2TPkPYRtkkLFeoLVCwhh5sqiu
+         vhQG46KEi1z/D9kwtaQ46sVlg68ADt8K6eQ2aKOpND+deTKIJMiH4OjaCIT1ZLBfpd4m
+         IZfq1a1KdAU7Jm8fMHRPQNf0EaQq6KPSf4Qpw33CbOr/BYoUMn589XaBOyX4jLerJgF+
+         DXww==
+X-Forwarded-Encrypted: i=1; AKwUvBy9JRuW34vHj1xcW59Euh3AkwMnnKmNW7e2Xy4Sp7SHQKU0+Bx18XVzFctuCnqKylmwqfY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8DQgyar6xBh7j/TwZMYa2ruhsuKuaNbcMJySQorNEw+sVAbEhl
+	jOKfg/q01cVBAxC2PUkAK84Oz8taR4i1/mdTF2wF+bhJ3AMbv7vBBDMu
+X-Gm-Gg: AYBFou0l/1uPBlyIwDFzDfwcfucnRimTkj7+AXtJJbmIRMyKja/ZdvPWqzTAvhkqXCd
+	HdVF4yDLwC4ufMEWHFM7sTOA7ISzNL56qK1N0tQV0QbAMjB+/jSk+pnNS9Pu59PeXvTv9io5fmh
+	a3gexyWHDn/32LpsH7PdaMSYD4vbS9OYM3YaxdSZBRTpAcdnpXZKK4lBXVbXG2sV0/xFdzpyXZU
+	ghwQtPiFFdp61KWvZdmnfZmWlUlg2D4Irc9CXs5jZ+WWeVBmioH109k2R7OFBCgksZJUgT8evnU
+	Zcvq3m+kjEM3cunpikRnDW6eWZ+8V0vfhCe0OHMgNk0rJn29NQRX6KnZTLpkeIHeshO4s5GUMy8
+	YCcawRdq5/FPLn2sYewObEiyb3nZ2GPBLStwd/NigEqAWoL9sRdyrQJUfHdeoNksMoDXcaXP6Ra
+	k2y3ltDDsv8H6LP2DtLiSq2q5m4DE3viTkUnYGqGL2P2lP8NmfC15oT6fO/tk6XsX4fjsVswhXn
+	d6KyfnmT3sy4u3FcRdKwF/puW8ziM6E+Lv0qWflKGUGPnlueI44af3sIzqdKkwE09bHIE59CBsB
+	zwo=
+X-Received: by 2002:a05:6000:248a:b0:490:411a:1eed with SMTP id ffacd0b85a97d-490411a20c3mr2322400f8f.39.1793792448263;
+        Wed, 04 Nov 2026 03:40:48 -0800 (PST)
+Received: from krava ([2a02:8308:a00c:e200::25dc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48feda1f100sm3457605f8f.46.2026.11.04.03.40.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2026 03:40:47 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 4 Nov 2026 12:40:45 +0100
+To: Alexis =?iso-8859-1?Q?Lothor=E9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: ebpf@linuxfoundation.org,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: port test_ftrace.sh to
+ test_progs
+Message-ID: <ausZvdHfmevg3mMZ@krava>
+References: <20261104-ftrace_in_test_progs-v2-1-45363230d228@bootlin.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,157 +111,153 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261104-local-storage-max-v1-2-c836731bd184@gmail.com>
-References: <20261104-local-storage-max-v1-0-c836731bd184@gmail.com>
-In-Reply-To: <20261104-local-storage-max-v1-0-c836731bd184@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Amery Hung <ameryhung@gmail.com>, 
- Slava Imameev <slava.imameev@crowdstrike.com>, 
- Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793792278; l=3581;
- i=thamrinjonathan@gmail.com; s=20261102; h=from:subject:message-id;
- bh=sbS2w6xefcyYIn4G7cqCv6ZgI7XpeANsGRjBwSGkGqU=;
- b=rQNa/Dfm/Af0QN97+0IUJCG2LTuk806TrnWh4gLHs4MVZbOhOj4RJN8w/7QgzeYew77aLlQPF
- kYTu0cA8q9fCKNr6Vm+AFguOlIPuDj7IYejHwIMbyRCNFfTsEYdjb4y
-X-Developer-Key: i=thamrinjonathan@gmail.com; a=ed25519;
- pk=mr0q5PZVaUIrv8WvTxIfK7QVcAiRSYI8hOByBQL1ZRo=
-X-Endpoint-Received: by B4 Relay for thamrinjonathan@gmail.com/20261102
- with auth_id=1383
-X-Original-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
-Reply-To: thamrinjonathan@gmail.com
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261104-ftrace_in_test_progs-v2-1-45363230d228@bootlin.com>
 
-From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
+On Wed, Nov 04, 2026 at 10:59:33AM +0100, Alexis Lothoré (eBPF Foundation) wrote:
+> Commit ff205766dbbe ("ftrace: Fix function_graph tracer interaction with
+> BPF trampoline") made sure that trampolines generated for tracing
+> programs did not collide with the function graph when we are returning
+> from the hooked function. The series bringing this commit also came with
+> a new test ensuring that the kernel does not crash when executing BPF
+> programs handled by trampolines while the function graph trace is
+> enabled, but this test is a standalone shell script, hence not executed
+> in CI.
+> 
+> Convert the script to the test_progs runner so it can be executed
+> automatically by the CI infrastructure. There are two main options to
+> port this test:
+>   - just enable ftrace during some existing trampoline-related tests
+>     (eg: fentry/fexit tests)
+>   - create a dedicated, minimal test with function graph
+> 
+> The new test adopts the latter approach, with a smaller scope to keep
+> execution time reasonable, while reusing an existing
+> fentry/fexit/fmod_ret test. Despite the few asserts in the new test, the
+> actual goal is to make sure that the kernel does not crash because of
+> some incorrect stack frame skipping when both the function graph and
+> tracing programs are running.
+> 
+> ftrace is configured through a dedicated ftrace instance which is
+> dropped at the end of the test.
+> 
+> With the new test integrated into test_progs, drop test_ftrace.sh.
+> 
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> ---
+> Hello,
+> this is v2 of a small series aiming to port the test_ftrace.sh script
+> (testing that trampolines and function graph behave correctly when both
+> are enabled) into the test_progs framework. The test is heavily
+> simplified following Alexei's review and suggestions.
+> ---
+> Changes in v2:
+> - use a ftrace instance rather than global ftrace
+> - drop fgraph filters
+> - drop custom ftrace helpers in favor of direct manipulation in test
+> - drop custom bpf prog, reuse test_modify_return directly
+> - move test in existing test file (modify_return.c)
+> - make the test parallel (drop serial_)
+> - Link to v1: https://patch.msgid.link/20261030-ftrace_in_test_progs-v1-0-aa50c5dd1ccc@bootlin.com
 
-Add a test that finds the largest value size accepted for a task
-storage map using binary search, then checks that a value of this
-size can be stored. It also checks the size is >=4096 to make sure
-the limit is not set too low. This test fails without the previous
-patch with ENOMEM.
+lgtm, it might be worth to add something like this also for
+tracing-multi (maybe also kprobe-multi) and run some tests
+with function or function_graph enabled
 
-Signed-off-by: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
----
- .../selftests/bpf/prog_tests/task_local_storage.c  | 87 ++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
+Reviewed-by: Jiri Olsa <jolsa@kernel.org>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-index 5b2b56cc3a4f..c7e9fa6743b9 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-+++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-@@ -495,6 +495,91 @@ static void test_uptr_map_failure(const char *map_name, int expected_errno)
- 	uptr_map_failure__destroy(skel);
- }
- 
-+static int create_task_storage_map(__u32 value_size)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, create_attr);
-+	struct btf *btf;
-+	int int_id, char_id, arr_id, err, saved_errno;
-+	int map_fd = -1;
-+
-+	btf = btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf, "btf__new"))
-+		goto done;
-+
-+	int_id = btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
-+	char_id = btf__add_int(btf, "char", 1, 0);
-+	arr_id = btf__add_array(btf, int_id, char_id, value_size);
-+	err = btf__load_into_kernel(btf);
-+	if (!ASSERT_OK(err, "btf__load_into_kernel"))
-+		goto done;
-+
-+	create_attr.map_flags = BPF_F_NO_PREALLOC;
-+	create_attr.btf_fd = btf__fd(btf);
-+	create_attr.btf_key_type_id = int_id;
-+	create_attr.btf_value_type_id = arr_id;
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_TASK_STORAGE, "big_ls_map",
-+				sizeof(int), value_size, 0, &create_attr);
-+
-+done:
-+	saved_errno = errno;
-+	btf__free(btf);
-+	errno = saved_errno;
-+	return map_fd;
-+}
-+
-+/* Return the largest value_size the kernel accepts for a local storage
-+ * map, or -1 on an unexpected error.
-+ */
-+static int find_max_value_size(void)
-+{
-+	int lo = 1, hi = 65535, mid, map_fd;
-+
-+	while (lo < hi) {
-+		mid = lo + (hi - lo + 1) / 2;
-+
-+		map_fd = create_task_storage_map(mid);
-+		if (map_fd >= 0) {
-+			close(map_fd);
-+			lo = mid;
-+		} else {
-+			if (!ASSERT_EQ(errno, E2BIG, "create_task_storage_map errno"))
-+				return -1;
-+			hi = mid - 1;
-+		}
-+	}
-+	return lo;
-+}
-+
-+static void test_local_storage_max_value_size(void)
-+{
-+	int map_fd, task_fd = -1, max_size, err;
-+	void *buf = NULL;
-+
-+	max_size = find_max_value_size();
-+	if (!ASSERT_GE(max_size, 4096, "find_max_value_size"))
-+		return;
-+
-+	map_fd = create_task_storage_map(max_size);
-+	if (!ASSERT_OK_FD(map_fd, "create_task_storage_map"))
-+		return;
-+
-+	task_fd = sys_pidfd_open(getpid(), 0);
-+	if (!ASSERT_OK_FD(task_fd, "sys_pidfd_open"))
-+		goto out;
-+
-+	buf = calloc(1, max_size);
-+	if (!ASSERT_OK_PTR(buf, "calloc"))
-+		goto out;
-+	err = bpf_map_update_elem(map_fd, &task_fd, buf, 0);
-+	ASSERT_OK(err, "bpf_map_update_elem");
-+
-+out:
-+	free(buf);
-+	if (task_fd >= 0)
-+		close(task_fd);
-+	close(map_fd);
-+}
-+
- void test_task_local_storage(void)
- {
- 	if (test__start_subtest("sys_enter_exit"))
-@@ -521,5 +606,7 @@ void test_task_local_storage(void)
- 		test_uptr_map_failure("empty_uptr_map", EINVAL);
- 	if (test__start_subtest("uptr_map_failure_kstruct"))
- 		test_uptr_map_failure("kstruct_uptr_map", EINVAL);
-+	if (test__start_subtest("local_storage_max_value_size"))
-+		test_local_storage_max_value_size();
- 	RUN_TESTS(uptr_failure);
- }
+jirka
 
--- 
-2.56.0
+SNIP
 
+> +void test_modify_return_graph(void)
+> +{
+> +	char instance[MAX_INSTANCE_PATH_LEN];
+> +	char *ftrace_dir;
+> +	int ret;
+> +
+> +	ftrace_dir = access(TRACE_FTRACE_DEFAULT, F_OK) ? TRACEFS_IN_DEBUGFS :
+> +							  TRACEFS_DEFAULT;
+> +
+> +	ret = snprintf(instance, MAX_INSTANCE_PATH_LEN,
+> +		       "%s/instances/bpf-XXXXXX", ftrace_dir);
+> +	if (ret < 0)
+> +		return;
+> +
+> +	if (!ASSERT_OK_PTR(mkdtemp(instance), "mkdtemp"))
+> +		return;
+> +
+> +	SYS(out, "echo 'bpf_modify_return_test*' > %s/set_ftrace_filter",
+> +	    instance);
 
+nit, no need for new line
+
+> +	SYS(out, "echo function_graph > %s/current_tracer", instance);
+> +
+> +	test_modify_return();
+> +
+> +	SYS(out, "grep -q bpf_modify_return_test2 %s/trace", instance);
+> +out:
+> +	ASSERT_OK(rmdir(instance), "rmdir");
+> +}
+> diff --git a/tools/testing/selftests/bpf/test_ftrace.sh b/tools/testing/selftests/bpf/test_ftrace.sh
+> deleted file mode 100755
+> index f5109eb0e951..000000000000
+> --- a/tools/testing/selftests/bpf/test_ftrace.sh
+> +++ /dev/null
+> @@ -1,44 +0,0 @@
+> -#!/bin/bash
+> -
+> -if [[ -e /sys/kernel/tracing/trace ]]; then
+> -    TR=/sys/kernel/tracing/
+> -else
+> -    TR=/sys/kernel/debug/tracing/
+> -fi
+> -
+> -clear_trace() { # reset trace output
+> -    echo > $TR/trace
+> -}
+> -
+> -disable_tracing() { # stop trace recording
+> -    echo 0 > $TR/tracing_on
+> -}
+> -
+> -enable_tracing() { # start trace recording
+> -    echo 1 > $TR/tracing_on
+> -}
+> -
+> -reset_tracer() { # reset the current tracer
+> -    echo nop > $TR/current_tracer
+> -}
+> -
+> -disable_tracing
+> -clear_trace
+> -
+> -echo "" > $TR/set_ftrace_filter
+> -echo '*printk* *console* *wake* *serial* *lock*' > $TR/set_ftrace_notrace
+> -
+> -echo "bpf_prog_test*" > $TR/set_graph_function
+> -echo "" > $TR/set_graph_notrace
+> -
+> -echo function_graph > $TR/current_tracer
+> -
+> -enable_tracing
+> -./test_progs -t fentry
+> -./test_progs -t fexit
+> -disable_tracing
+> -clear_trace
+> -
+> -reset_tracer
+> -
+> -exit 0
+> 
+> ---
+> base-commit: b0e67f50519538b1b4c6364edc7811f482703f75
+> change-id: 20261027-ftrace_in_test_progs-d5f70a2330ac
+> 
+> Best regards,
+> --  
+> Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> 
