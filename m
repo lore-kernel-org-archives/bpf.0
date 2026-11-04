@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793758370;
-	b=j+ckiBr1ZCy2lLCLYDnv/TVGtDXcdeW6nW6k7P+P8KP4EMpjwEJ6x50QviY9yJTwOPNc
-	 r5VsxkMFNV4shihrf7Tea4zHYfQaIy2ty8QkdQnN3O36mOYcReumDr7OMuGFI8RTloUwu
-	 oQO9AGO8E3j8U42hpiyFrzCy0WSZiv+up9UCJvhBXg8LJCg4ahX4UVhFSss+XAn/KcLHz
-	 ZNbz25u/X8f5IFIfTWUHDaaIoVXAZ/CRasTa8qRbGy+E1XLsPWrNgrv44XAPD2DHQRoKM
-	 PToe4RnedV9IkA5DL33eOodxPvG5clPQDYrIPVYbIxWj+zCH3wDYjcqvC79iT2qDl5Q==
+	t=1793758372;
+	b=ayILHcAOw1Y+XQoxsF+V/XMOdh642xEKqSRyUzeqOI3xitDXmc4su+bXfYiI8oiTz8oj
+	 avAQcT/X5VnurhdRqVfUReP7RnbhHpmQTJ+wlUoJjnCRuETh06enlJQkkeeu6lHe9AkJf
+	 oPOKNhh/q//j0T0imIKthRJeDVRV+a3vzaCWoxynksDoucvQL1w9kTqXv0KFfX5g+Ij0e
+	 Smy/K24ABHN3U+ZGRwlMCS9O3U1cBwmumLVj1yWOc8PoNnW7xnXaj4Rgn7cJvCZ2PM2Qi
+	 PbxBfuycmo1ljtfYvC8eIB5JDYZKbM1XBv5AOeIUt8lKKEF/TOCjPcbTNUMJAt/dfEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793758370;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793758372;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=sSMkGs+FM31LQn6NU9vxaAtCTdBlQc1g2P1KFfFuEwA=;
-	b=fhH4ygs6GZDdiIKmgrIgP8UlNRBO4FBsgNupdMtn8QBilStAzWMFmHWtVpgS5BFfVTTO
-	 fBN2qiP/Peca16UXxVH585kOa43m//LUhxOgTe53IPwoT2Ou4UPC/p3GxgbULnTakbrr/
-	 ybaVbtzJAPwQUhKwrcRJBc6Mn/LZO4DF2fYZPVgXZLQmDkesZ9QbcgW6TTj4mWfgZdTW8
-	 oNuibtbEhKFZnzVxi8dDtcqDb8JRkloqg0u9ZJH3PXxXUJjLM47WZDhLMYU12Ve46+9SB
-	 FOEUIu2KXLiA5plSuOxnZURcfdj3RwmfsUxHTMu4BguUsAdAUFIorWcp87ZnGXCzOWw==
+	bh=E6qYmbdS1aTuYvFHeAxo+rkVIN5rdLZm18+CbYkp5y8=;
+	b=GCkSnNbGmcyq1AqL1VgbdR0dgVDoNTLRjHEekyinx17GCTuwpbMnts9+OlQjRDN3+ioY
+	 5t/iOdDbtMj1AsR4tApNOtprPB9OYE0PlYavygIH4yHtmmQzT/D39lk/lEO0D4hJS2HYn
+	 5cQNIeiFuDp7GOAPemeekwRuuMYIh3TfXMMnhqaddrHxuK2hmeA/rvs2f3o6drD6o+3cw
+	 HLgdSHwvWW1ErI2m38sHd8REw3P1CL4g8HQpPKCyQYnrFPv8fmG/8mRTb8tcCndyjjEBV
+	 b8i7eeA2zgH4451j4j9AK7TJfPlTE0OLC6L00IGhiPESsUpmFM/M5aPr+//3f153vlg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ifqHLmH+;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kle7Vg+F;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D272606A31B
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 02:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11F0606A31B
+	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 02:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ifqHLmH+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952851F000C1;
-	Wed,  4 Nov 2026 02:12:49 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kle7Vg+F
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 669921F000C1;
+	Wed,  4 Nov 2026 02:12:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793758369;
-	bh=sSMkGs+FM31LQn6NU9vxaAtCTdBlQc1g2P1KFfFuEwA=;
+	s=k20260515; t=1793758371;
+	bh=E6qYmbdS1aTuYvFHeAxo+rkVIN5rdLZm18+CbYkp5y8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ifqHLmH+nH6VjoeXeyknC3g7rxNoiEAj7cyjZkCCD6b7SQWx1438LTerVao2Ajudy
-	 yRBJ8B06DjvtEGuFg7RqJbivPZG2jqKdSu8+RmZ/n+zLbBe+UYqSYUj1b9ZuXG8pGX
-	 HF+U8+uXdFsEUmE2gLLtFa7K7HdmY636P5P5hQyODhLPjxJr/fl9P6UpI1nFth+TNk
-	 54PcNCmn5VJoFEKqAW8jhgfnfdjmvEW/95uKurw/PvQLa9EYoauKsPo8BBcOdccmNs
-	 m6ter9dQGZVEJ1PEzzybpMVPmAhOJny7HFnNmACpNBcIKL1UVyXtRQh/jhWROuimDJ
-	 kuht7H4i/OwXQ==
-Content-Type: multipart/mixed; boundary="===============4312699437886039344=="
+	b=kle7Vg+Fx7qfch97nxwSTDi7gpZpx5ZmDNm2PsmDHuOKo+qxdgJC+HuNunFP1iBkt
+	 qpxdahAjmUpm/1NSbtpHB7HZ6mXAKC/kv5V55ZVWXKO448i5xdxdqQL1swvbf+Ew8N
+	 hqF1cZxKpKsPAZUmGGz7Pb5WDqQHyoucA7LPNcxZOrgMW//8hKTQPbaukMuHfyg14E
+	 L7oGI3Wsxlz0fy0mc36tAadOtkCDfgI/n1YpPbKanbvHjDGrQTU4jsUfOSd7yesFsv
+	 C8BfWfi/AuYcNVT3y47omF6xUVNbo39PDhBcv1Wvd7elK2xOA46fT7odjEQBHvlGRI
+	 2h9UyIvm5c1xA==
+Content-Type: multipart/mixed; boundary="===============7445167922784116080=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,51 +49,95 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <80c599809cfc3fbcfa077d05c36283e64225f6340c30ecb08407210c74e438ae@mail.kernel.org>
-In-Reply-To: <20261104012401.1354861-15-alexei.starovoitov@gmail.com>
-References: <20261104012401.1354861-15-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v3 14/14] selftests/bpf: Add tests for BPF_REG_ARENA_SP
+Message-Id: <20624e1d325fbb5acc44943f55c08b622648583bce6559911be3cf47d2d882ec@mail.kernel.org>
+In-Reply-To: <20261104012401.1354861-4-alexei.starovoitov@gmail.com>
+References: <20261104012401.1354861-4-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v3 03/14] bpf: Treat addr_space_cast of a pointer that is not in arena as a move
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  4 Nov 2026 02:12:49 +0000 (UTC)
+Date: Wed,  4 Nov 2026 02:12:51 +0000 (UTC)
 
---===============4312699437886039344==
+--===============7445167922784116080==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Add tests for BPF_REG_ARENA_SP
+> bpf: Treat addr_space_cast of a pointer that is not in arena as a move
 
-TL;DR: Nit in selftests: the r12 instruction macros (ADJ, LDX, ST) are
-duplicated across several arena_stack test files, some hand-encoded. Suggests
-moving them to one shared header.
+TL;DR: is_cast_mov() may treat arena pointers loaded from bpf_obj_new()
+objects (untrusted mem) as as(0); previously working programs may now fail to
+load on stores or silently read zeros on loads. Commit message doesn't mention
+this.
 
-> diff --git a/tools/testing/selftests/bpf/progs/arena_stack_grow.c b/tools/testing/selftests/bpf/progs/arena_stack_grow.c
-> new file mode 100644
-> index 000000000000..be64296431c3
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/arena_stack_grow.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> +/* Compilers don't know r12 yet */
-> +#define R12 12
-> +#define ADJ(n)		BPF_RAW_INSN(BPF_ALU64 | BPF_ADD | BPF_K, R12, 0, 0, n)
-> +#define LDX(dst, off)	BPF_RAW_INSN(BPF_LDX | BPF_MEM | BPF_DW, dst, R12, off, 0)
-> +#define ST(off, imm)	BPF_RAW_INSN(BPF_ST | BPF_MEM | BPF_DW, R12, 0, off, imm)
+> +static bool is_cast_mov(const struct bpf_insn *insn, const struct bpf_reg_state *src_reg)
+> +{
+> +	/* cast from as(1) to as(0) */
+> +	if (insn->imm != 1)
+> +		return false;
+> +
+> +	switch (base_type(src_reg->type)) {
+> +	case SCALAR_VALUE:
+> +	case PTR_TO_ARENA:
+> +		return false;
+> +	default:
+> +		return true;
+> +	}
+> +}
 
-This isn't a bug, but this block of r12 insn macros (R12, ADJ, LDX, ST) is
-the same as the one in arena_stack.c, while arena_stack_loop.c and
-arena_stack_nomem.c write the same encodings out by hand, e.g.
-__imm_insn(adj, BPF_RAW_INSN(BPF_ALU64 | BPF_ADD | BPF_K, 12, 0, 0, 16))
-with a "r12 += 16" comment.  verifier_arena_stack.c defines a third,
-size-taking variant.
+Is it correct for is_cast_mov() to treat every pointer type other than
+PTR_TO_ARENA as already being in as(0)?
 
-Could these macros live in one shared place, for example bpf_misc.h or a
-small arena-stack header, so that arena_stack_loop.c and arena_stack_nomem.c
-can use ADJ(16) like their neighbours, and the encodings can be dropped in
-one spot once compilers emit r12?
+A load of a non-struct pointer member (for example 'u64 __arena *data')
+from an object described by program BTF, such as one from bpf_obj_new(),
+bpf_percpu_obj_new() or a local kptr, goes through btf_struct_walk() which
+returns WALK_PTR_UNTRUSTED.  Unlike WALK_PTR, btf_struct_access() has no
+type_is_alloc() exception for it:
+
+    case WALK_PTR_UNTRUSTED:
+        *flag = MEM_RDONLY | PTR_UNTRUSTED;
+        ret = PTR_TO_MEM;
+
+So after something like 'e->data = bpf_arena_alloc_pages(...)', loading
+e->data gives PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED, but the value in
+the register is an arena user address, since arena_alloc_pages() returns
+clear_lo32(arena->user_vm_start) + uaddr32.  When the program dereferences
+it, clang emits 'rX = addr_space_cast(rY, 0, 1)'.
+
+Before this patch rX became PTR_TO_ARENA, the access was rewritten to
+BPF_PROBE_MEM32, and it reached the arena page.  After this patch the cast
+is lowered to 'rX = rY' and rX stays rdonly_untrusted_mem:
+
+- A store through rX is now rejected at load time ("cannot write into
+  rdonly_untrusted_mem").
+
+- A load through rX becomes a BPF_PROBE_MEM load from the 64-bit user VA.
+  The x86 JIT emits its "src_reg + off > TASK_SIZE_MAX + PAGE_SIZE" check
+  for that load, so the program reads zeros instead of the arena contents,
+  and nothing reports it.
+
+The commit message says these members are rdonly_untrusted_mem and "the
+cast is a move too", but it does not say that these registers hold as(1)
+addresses rather than kernel addresses, or that programs which loaded and
+worked before now either fail to load or silently read 0.
+
+Could btf_struct_access() return SCALAR_VALUE for WALK_PTR_UNTRUSTED when
+type_is_alloc(reg->type), as it already does for WALK_PTR, so that such a
+member takes the cast_arena path?  Alternatively, should is_cast_mov() not
+treat untrusted memory derived from program BTF as as(0)?
+
+The same applies to the case in the commit message of an untagged
+(gcc-built) kernel __arena member: there, writes would stop loading
+instead of reaching the arena.
+
+No later commit in the series changes is_cast_mov() or the
+WALK_PTR_UNTRUSTED handling.
 
 
 ---
@@ -101,4 +145,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41755299448
---===============4312699437886039344==--
+--===============7445167922784116080==--
