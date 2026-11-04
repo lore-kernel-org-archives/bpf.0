@@ -1,45 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=160.80.4.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793824285;
-	b=fuJkM4ZF8WmA2KRxB7vlg6PZ+8R4qAhoXWDo3RdGloe61MEFIzV2a2ps7W2kcxdhJd8i
-	 bnzX5KPJG8EmcpgQCl84jqMt6c1A4HFoCumi77u+Zz7lnzRWTLtut2tVt1hzi1+Zhx4/c
-	 Vn9O1xHYfHlLxEEQ+5ikMrxjM32BKx+N9SOaK9R7D/L13iEtNK+E47q/+tVQXsJteBu7h
-	 LeH5xccjcN98v0nFISRgrrJo5wnqOwdqxBO79bgLMqGPkt1KQCx6LJbQU/tolcETrKKoP
-	 XrJOzW46cK3E6M8FW0pA29zYoc4z9toLYKzpQJRD7MqbfFQYlYJWUYnyz/YN2p8jwRQ==
+	t=1793825380;
+	b=dqxwQxC3t72vT5Ogi7Nk3Q7C1/U+450b1Hc7JzkOQlxnk+Au8OY4onncbgpghZC0Kbby
+	 V7VnSch46ycTfhZwx8v+7CG21DwOu9CJXOyo8bUWWBG5anun0ItcnYCMwHZi58q3CprDG
+	 yLTbhiNcKtqw7JgNiAusLzuDlwJyvEisxoX1ETF3h4VD5XegOv8ayGlyBc3Xect7T4FYA
+	 0qaj1GU6xtVZsImuPKU1iUNWUMuRMPL78ESvxvB7XN2eY4aAxUYi3FPKF6dyRce03MBcE
+	 YMQ3V8UjbRD0VaSeD37mYPqRKLbjBkhRaAZYJKN6ZYfiAO8otWlPKuozQdHEm72esuQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793824285;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=QsP1oGJUZlZpjP1/87YykQzIVLED1z/hj//V22Zi4iQ=;
-	b=XukxDYvhF4XCm3b/WlQRILJnxtvjwGdH4mAkUSVbb/lfL1Q5xMNcWzIS2cFNptO9xaH1
-	 j0WS1iwqlE2attkpNNd7Mz/K0kjEspsDVtT6cnVebccJht3GP0DcHawSaKykoYgzqB6u+
-	 rgU4fIMrZNNwut3HzgGaobRBDmO/B9AdOOzOwqK8EKbdRVX0hbi9dLzShylBduLtlaSSC
-	 jJqdojUhcUszwr3meowfYaBb0I/i1v/qsUmUhW2NPvh6v4HkX1mWHNUu78Y6YNQeYeXBy
-	 ndV1eV49Rgzx/3d2HXEck/8Qu3EaWsMA6LLIA3APdo1k25BQJn6IN9Jj7EjMLsKtz/A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793825380;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:Date:
+	 From:To:Cc:Subject:Message-Id:In-Reply-To:References:X-Mailer:
+	 Mime-Version:Content-Type:Content-Transfer-Encoding:X-Virus-Scanned:
+	 X-Virus-Status;
+	bh=KWiRV1sGkuoDXhM09Z+91Z+gqhSc78puMi7yQgR1TGE=;
+	b=NcTrOW18xxL9EM/jO8YiG5torkkB99TioKFeEIM204Okv63E1FfMC3wT2Q9Q66TGISKn
+	 UWQY/BYHBcQNXo1DENVWhL21r3Z2aj6W+7Abm39z8x3bjaEZfElTrY/kJLDZPDgjGKhsE
+	 wT5Xz62sxqOFAsv3bFQdm27nkT19pZu+2iEAi4xqmwyHiSsnnPBJVQ2+RPU4/Seo8A5pT
+	 yHiF1C2rSuIiD9VvL9WMgo2Gwg8gD9uwpj7W1zBOAoGhVvF6nw+EELAKXE3Zp4UTWWYif
+	 XGne76xiHQI9EPjZSxON+tKjSml/lhDpDywts2baAkZlq2qYpx2Rf52EWEhw5uym+9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y9ImckX6;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321FD606AE29;
-	Wed,  4 Nov 2026 20:31:25 +0000 (UTC)
+	dmarc=pass header.from=uniroma2.it;
+	spf=pass smtp.mailfrom=uniroma2.it;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=3lud85Yp;
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=gIjKeGI7;
+	arc=none smtp.remote-ip=160.80.4.35
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.35])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508AC606B2E4;
+	Wed,  4 Nov 2026 20:49:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 508AC606B2E4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y9ImckX6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A21DD1F000C1;
-	Wed,  4 Nov 2026 20:31:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793824285;
-	bh=QsP1oGJUZlZpjP1/87YykQzIVLED1z/hj//V22Zi4iQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Y9ImckX6YvAD8+w8xc088OiGYmjoTC62mheNaT3zSwlCK9lJbWFbD0tu2+hlWWhzN
-	 UI/9GHXZGvS4RPLdTFwnzjCRuZ8pNoGBIM6qblE2tgO2ZqhRnoqg3PBS5Vo/BaPCVG
-	 8cIz28sbcSIQfAqGiylDsfuPogfZyCUZwaunNLqobvipKx1e0yGNYoW1A0Cv0KSFtu
-	 iGMEMKKw8Z/NbPxmqBFMOsCE6Y81vZ5rANnsxxFIL+1FDGaJjNAe4Rkv4fxIsJ0o24
-	 fjDtD23rxXPbQH2CzAVsClM4/CiCpetxgUC3+nRfwC9ZA/iui42afxRVyLuCzfoy/R
-	 52r3Xck5d+OeQ==
-Content-Type: multipart/mixed; boundary="===============1535382468903377011=="
+	dkim=pass header.d=uniroma2.it header.i=@uniroma2.it header.a=ed25519-sha256 header.s=ed201904 header.b=3lud85Yp;
+	dkim=pass (2048-bit key, unprotected) header.d=uniroma2.it header.i=@uniroma2.it header.a=rsa-sha256 header.s=rsa201904 header.b=gIjKeGI7
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 6A4Kmwv7026955;
+	Wed, 4 Nov 2026 21:49:03 +0100
+Received: from lubuntu-18.04 (unknown [160.80.103.126])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 3A5D8121681;
+	Wed,  4 Nov 2026 21:48:53 +0100 (CET)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1793825333; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KWiRV1sGkuoDXhM09Z+91Z+gqhSc78puMi7yQgR1TGE=;
+	b=3lud85Ypuk1tJ4tH2Yskpq8GzXEWvWfGmN9+7cebU6nDqyMHSirqd70IOiIm/74cz/PBeg
+	jLQkFeBqdmDRtaDQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1793825333; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KWiRV1sGkuoDXhM09Z+91Z+gqhSc78puMi7yQgR1TGE=;
+	b=gIjKeGI7fmepMSDdBPAlik4cT5XZmFCK5v/N/c5pedyglD8RjJJr/NOmaJ01XH904Vu+xZ
+	9sjCp9XD/QzLFvudkjfrFM7ku642bphdwieD9vqn0D2MkOjX4O8Gpv0K2N19MXGh0DamjS
+	p5z1qyxWzfxl6H5o6jyO/gFN3kYtYoP+QZNICk/l/QypChvSHz6M2zbcKA7ACKvy61IikD
+	FpL/nILSAQC12OE8NTobXZm/gTvou1yZMIjNHxUidllVDFySilBE09vEKxybns9UBLXKpe
+	cEPbLllIc7QziULnLD6LibaeiCdAZxW6/AgU2huu7TFG3Me21r5jubtRz0qwUg==
+Date: Wed, 4 Nov 2026 21:48:52 +0100
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        David Ahern
+ <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+        Shuah Khan
+ <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bpf@vger.kernel.org, David Lebrun
+ <david.lebrun@uclouvain.be>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Mathieu Xhonneux <m.xhonneux@gmail.com>,
+        David Lebrun <dlebrun@google.com>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Andrea Mayer
+ <andrea@common-net.org>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: Re: [PATCH net 6/6] selftests: seg6: add test for skb checksum with
+ CHECKSUM_COMPLETE
+Message-Id: <20261104214852.853a936a50a49e2cf2acbbd4@uniroma2.it>
+In-Reply-To: <aulUayPCDOYwAm1e@fedora>
+References: <20261031225033.64-1-andrea.mayer@uniroma2.it>
+ <20261031225033.64-7-andrea.mayer@uniroma2.it>
+ <aulUayPCDOYwAm1e@fedora>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,108 +98,62 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <33b057d852c258c157f6aa31e45083418944efe0efaad1d72bcb5513205a67f6@mail.kernel.org>
-In-Reply-To: <7a728136ad18840c94836ec1ce988f8bc2fcfb35.1793821981.git.hi@tychen.cc>
-References: <7a728136ad18840c94836ec1ce988f8bc2fcfb35.1793821981.git.hi@tychen.cc>
-Subject: Re: [PATCH bpf-next v9 1/2] bpftool: Use batch lookups for map dumps
-From: bot+bpf-ci@kernel.org
-To: hi@tychen.cc,bpf@vger.kernel.org
-Cc: hi@tychen.cc,qmo@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,linux-kselftest@vger.kernel.org,shuah@kernel.org,daniel@iogearbox.net,ast@kernel.org,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  4 Nov 2026 20:31:24 +0000 (UTC)
-
---===============1535382468903377011==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-> bpftool: Use batch lookups for map dumps
+On Tue, 3 Nov 2026 11:26:35 +0800
+Hangbin Liu <hangbin.liu@linux.dev> wrote:
 
-TL;DR: For BPF_MAP_TYPE_RHASH, a concurrent delete may make batch lookup
-return -ENOENT early, so bpftool map dump could silently print a short dump as
-success, unlike the old get_next_key walk.
+> [snip]
+> > +
+> > +log_test()
+> > +{
+> > +	log_test_expected "$1" "$2" "$3"
+> > +}
+> 
+> We'd better use log_test_expected directly, otherwise the log_test in
+> lib.sh will be overwrite.
 
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
+Hi Hangbin,
 
-[ ... ]
+Right, I will call log_test_expected() directly in v2.
 
-> +static bool dump_map_batch(int fd, void *key, void *value,
-> +			   struct bpf_map_info *info, struct btf *btf,
-> +			   json_writer_t *wtr, const int *cpu_ids, int cpu_cnt,
-> +			   unsigned int *num_elems)
-> +{
+> > +
+> > +test_command_or_ksft_skip()
+> > +{
+> > +	local cmd="$1"
+> > +
+> > +	if [ ! -x "$(command -v "${cmd}")" ]; then
+> > +		echo "SKIP: Could not run test without \"${cmd}\" tool"
+> > +		exit "${ksft_skip}"
+> > +	fi
+> > +}
+> 
+> Then we can use require_command() in lib.sh here, which will call
+> log_test() in lib.sh.
 
-[ ... ]
+Yes, I will use require_command() too.
 
-> +	do {
-> +		count = capacity;
-> +		err = bpf_map_lookup_batch(fd, in_batch, batch, keys, values,
-> +					   &count, NULL);
-> +		if (err && err != -ENOENT)
-> +			goto out;
-> +		for (i = 0; i < count; i++) {
-> +			/* Preserve alignment for odd-sized BTF keys and values. */
-> +			memcpy(key, keys + (size_t)i * info->key_size, info->key_size);
-> +			memcpy(value, values + (size_t)i * value_size, value_size);
-> +			print_map_elem(key, value, info, btf, wtr, cpu_ids, cpu_cnt);
-> +		}
-> +		*num_elems += count;
-> +		in_batch = batch;
-> +	} while (!err);
-> +	done = true;
+> [snip]
+> > +
+> > +if [ "$(id -u)" -ne 0 ]; then
+> > +	echo "SKIP: Need root privileges"
+> > +	exit "${ksft_skip}"
+> > +fi
+> 
+> I wonder if there is any one run the selftest with none root privileges.
+> Cause almost all the selftests need ip configurations.
+> [snip]
 
-For BPF_MAP_TYPE_RHASH, can the kernel return -ENOENT before the real end
-of the map, so that this code silently produces a short dump?
+The test needs root privileges to create the namespaces, write the
+sysctls, add the tc filters and load the BPF programs. Without the
+check, a non-root user without these privileges gets a SKIP from a later
+check, for example "SKIP: dummy dev not supported", which does not say
+that the privileges are missing. With the check, that user gets "SKIP:
+Need root privileges". I would prefer to keep it.
 
-In __rhtab_map_lookup_and_delete_batch(), each element is copied and then
-the next one is looked up from the copied key:
-
-    memcpy(dst_key, elem->data, key_size);
-    ...
-    elem = rhashtable_next_key(&rhtab->ht, dst_key);
-    ...
-    if (elem && !IS_ERR(elem)) {
-            memcpy(cursor, elem->data, key_size);
-            has_next_cursor = true;
-    }
-    ...
-    if (!has_next_cursor)
-            ret = -ENOENT;
-
-If a BPF program or another process deletes that element between the
-memcpy() and rhashtable_next_key(), __rhashtable_next_in_table() cannot
-find prev_key and returns ERR_PTR(-ENOENT).  The call then returns the
-elements copied so far with -ENOENT, the same code used for a real end of
-the map.
-
-dump_map_batch() prints those elements, leaves the loop, sets done = true,
-and map_dump() skips the bpf_map_get_next_key() loop and prints "Found N
-elements" and returns 0.  Every element after that point is missing, with
-no error.
-
-Before this patch, bpftool walked RHASH maps with bpf_map_get_next_key(),
-and rhtab_map_get_next_key() restarts from the first key when the previous
-key was deleted:
-
-    if (PTR_ERR(elem) == -ENOENT) elem = rhashtable_next_key(&rhtab->ht, NULL);
-
-So a concurrent delete could previously cause duplicates but not a short
-dump reported as success.  The comment in
-__rhtab_map_lookup_and_delete_batch() says a lost cursor returns -EAGAIN
-so userspace can distinguish it from -ENOENT, but that only holds between
-calls, not within a single call.
-
-Does this contradict the commit message statements "The output is
-unchanged" and the fallback "after any error"?  The root cause may be in
-the kernel's rhtab batch code, but this patch makes bpftool depend on it.
-I did not see a later patch in the series that addresses this.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41903699624
---===============1535382468903377011==--
+Thanks for the review,
+Andrea
