@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793873793;
-	b=DD2nfULZpwbLKKpWGv3ujOCWrzRN1T3Mla20teW+vEd12lC3qwo0VNX7zyynOKJX0RsS
-	 6uFQ+rQmfas4XSxDWl3hPtZak29SssMPkiJ+/wI2c2oLEtizOW0/Ubr7Su/ux1NkqMKbw
-	 j8o9c6T99l1NvIyKHj1fGzQIo/08AM9QTlELSYYmYu/7MSMgd4gtDbSZd74UkGn3Mx71J
-	 92Dy57AQMLSsy1ADavzjlfk6gpHYiqo/uAEpPyhgHHuUup2zEWGj5zjymoAJuxW8SzlPh
-	 EmoJQN0dvjMq36QNtzpr2pkvrUZ6jN89jwvEqLax2LU4s89j6L3+n6Rcdru9TVwFXAw==
+	t=1793873879;
+	b=K9HWOwEit1vGtaDROkaA9+ncy0rzVrvmfaTFp/5Jqwmr4XGTOgnxnHwZqwwvau2IsO0t
+	 +ZBNT/Z9BaoNv8T6Jb9eGJT2G6CMK0ARUmCwzRljixmnCeeRU/f77IxzCq7bVUG7Zt9Na
+	 sShF+AQDgRvlD051OnElWsp3vmFXFvMmvjZmzekgGQxWbs7xoS+cO7rvjDQ1xXIjBDoOG
+	 9L4RpEQjw2WMtHp7DLPT9KKYOKHW9mJ0f/dPv28TsUuLm1Gg63U52s0PjbrRjXpMIZZ5r
+	 WA5AzDTyP1IUEpKfzmYWzThg54SkMQtl2vy69S7iNGGLRcR0N2SMANScWE3Nzu+oNWg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793873793;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793873879;
 	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=LbDaZ3sw5+rDHF9XCX1pA/1HXOf4/tGA8FHG4g881lI=;
-	b=l6nKkmUThwa0F42J5UxjUd+nlp0yR2wRg3Tb0DHFNmGEItQt4H3nlC1ArL8zHE2Lv3/b
-	 xT8VLGpZch9542ao1dzc2skVDWDVOL94mi2b4TKDaoXh2ascp/DXAloEaFn9EUpvcxFi5
-	 8JqAEAeU2B/dZKiMWY2tscj8T3mzpsCE7/9zOY0UW5a+I4fGOvLFmaLRxMHSh3iwLDuYp
-	 MHqCdnTnxOK4TXBmw7P3ZMFiQnUt6MrIMgJfM8cFMJoA8ZwHnDWrC/OsssX1voMyYmTnw
-	 p8ellTU1az9aSIULm0e3jfXF38Au1aTDHX5diZxshYiX3F81KsouB5xN3SYoPMrUaNA==
+	bh=ge0csq01UDr23GRywGYDdJfNDf0j4kn1jvr1l1h6C8s=;
+	b=4H33Qd8AjwAh5sPPV67TWDqQplGvsgnFAxFQjRFYaCZGFOhFztprdaVerfpjf8zDzbFA
+	 ZZAz8OJfx54K5eoEMKSqToOfaawaWVtdOwNz37L0k/EZqZ0YRNtFeaiGXR4NUB9lhwcK+
+	 vMVT6lcjlgf5TgiHI9sFlCbBaQ2fpAVkQ56GmvEWR5hLDZATSkB5kN1IWJRpT7UhmgF0J
+	 fm7GYNzOP1r4twzbI6idzVRU2cj96LIAdiGrLRjjt7TnQLuUeLGc8x8dxbkBs6bvM6KnK
+	 mn6x1oji8fxyI329fvlut2jZyYFxx9rRJMXPldBNolO/baBNC/6Z/j8fTTpyDJZexFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SckyjmOk;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JjpWMhIm;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8026A606A326;
-	Thu,  5 Nov 2026 10:16:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EA5606A31B;
+	Thu,  5 Nov 2026 10:17:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SckyjmOk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D32FE1F000C1;
-	Thu,  5 Nov 2026 10:16:25 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JjpWMhIm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF9701F00919;
+	Thu,  5 Nov 2026 10:17:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793873793;
-	bh=LbDaZ3sw5+rDHF9XCX1pA/1HXOf4/tGA8FHG4g881lI=;
+	s=k20260515; t=1793873879;
+	bh=ge0csq01UDr23GRywGYDdJfNDf0j4kn1jvr1l1h6C8s=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=SckyjmOk9+NrqAky5ti5dc0q+Evu8Jve+xxi3zsVHpIMk3zuNtbKVINXZOH0yMVlE
-	 8wtyIlwsVzvujrpA9ymvq9O+f9Tf1/x2kF/2UJzi4PBCivqGnO4PomtugYl+fPZCCV
-	 Xk9HDEH1QntitHj6u/vdJ6Jb5a3KhcL9O5CVXS5j/0QY0MY09xVixddIv7qngShN47
-	 aylVHUu2aifxYlQ3vb4hBwLqCoYKeaA9Z1BVtT+bAByM5TMgJs4U+8p+z4pysuhNso
-	 hxCrkOvMr32jSlR9i995wbOucyJmQx+2A0aBhGSsy26MHBaxGQuz5ksSCGny76IZCC
-	 XVm+mvyr6tiug==
-Message-ID: <3a77219e-39e5-4e98-8f88-6f90bccf69f0@kernel.org>
-Date: Thu, 5 Nov 2026 11:16:23 +0100
+	b=JjpWMhImRu+LAmbhcVmFv2rI+GeyzSZNvjXT0r8xfZLpg331rjnt55cx0ggPww50w
+	 VXDPTlps85VpjVB00uZULQZcEnh2cw4udDrqGKTfeDTF4YLWeROIoWjdXEkimWk4Tn
+	 yTFjodeEJzt15GfJbm6XgFo3K6QcdTD9Ra2rJ7AOiUYNer7+yE8dSM5Fs+8SD2tmXw
+	 kBnJBuXCOriKvzR15xIJkefyO9T8d+PxLBK94+JuZsnNWKJGfBzp6thjdLmBqkh1pM
+	 3BnJxbvHoP5FebNWl+CUmyjdhMGN0sDhYBj/hZARkU7onHM1zCZ1BjrkFH9Sk15uLe
+	 8XnrcyvfAgAqQ==
+Message-ID: <e58309a5-1a5c-4c34-9c28-d1794400616f@kernel.org>
+Date: Thu, 5 Nov 2026 11:17:49 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -52,8 +52,8 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] mm: add and use mmap_read_lock[_killable]_nosteal()
- on contention
+Subject: Re: [PATCH 1/5] Revert "mm/khugepaged: remove definition of struct
+ khugepaged_mm_slot"
 To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
  Baolin Wang <baolin.wang@linux.alibaba.com>,
  "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
@@ -74,7 +74,7 @@ To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
  Ihor Solodrai <ihor.solodrai@linux.dev>
 Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 References: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
- <20261103-khugepaged-latency-fix-v1-4-a07ab16ac860@kernel.org>
+ <20261103-khugepaged-latency-fix-v1-1-a07ab16ac860@kernel.org>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -121,33 +121,37 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20261103-khugepaged-latency-fix-v1-4-a07ab16ac860@kernel.org>
+In-Reply-To: <20261103-khugepaged-latency-fix-v1-1-a07ab16ac860@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/3/26 09:27, Lorenzo Stoakes (ARM) wrote:
-> With down_read[_killable]_nosteal() available, it becomes possible to
-> release the mmap read lock in such a way that a queued write lock always
-> takes precedence.
+> This partially reverts commit b4c9ffb54b32 ("mm/khugepaged: remove
+> definition of struct khugepaged_mm_slot"), as a subsequent commit needs to
+> resurrect this type to store additional data alongside the mm_slot.
 > 
-> Expose this to mm through two new wrappers - mmap_read_lock_nosteal() and
-> mmap_read_lock_killable_nosteal().
+> The stated intent of the commit was to address a NULL check in
+> __khugepaged_exit():
 > 
-> Make use of this in scenarios where the mmap read lock is dropped
-> explicitly for the purposes of relieving mmap_lock contention - the BPF
-> task VMA iterator, and lock_next_vma_under_mmap_lock(), which is where
-> /proc/$pid/smaps_rollup re-acquires the mmap lock after dropping it on
-> contention and falling back from per-VMA locking.
+> 	mm_slot = mm_slot_entry(slot, struct khugepaged_mm_slot, slot);
+> 
+> slot can be NULL and mm_slot_entry() is an alias for container_of(), so
+> this is container_of() a NULL value.
+> 
+> This was benign as there was only 1 field in khugepaged_mm_slot (offsetting
+> NULL at 0 results in NULL), however it was right to fix this, so retain the
+> fix.
+> 
+> It also unwrapped KMEM_CACHE() in khugepaged_init(). This was a mistake,
+> and was itself reverted in commit c14bdcc9f274 ("mm/khugepaged: use
+> KMEM_CACHE()"). Therefore, retain the KMEM_CACHE() form in this revert.
 > 
 > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 > ---
->  include/linux/mmap_lock.h | 44 ++++++++++++++++++++++++++++++++++++++++++++
->  kernel/bpf/task_iter.c    |  2 +-
 
+LGTM
 
-I'd appreciate an ack from BPF folks and a confirmation that I could take this
-through my tree :)
-
+Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
