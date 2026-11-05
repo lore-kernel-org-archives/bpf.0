@@ -1,75 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793902181;
-	b=R0B5Mxl2N6QoNz14seXcbGDOLwFxekiYz8GlewIWattFQPA2cwd8Fhahiew9gSDkeq4V
-	 VCq08mlJKIyzVRpMj9zFoGcbogRPO0nPOZukY7Ys5IF9FTl/gEdYh+HLFv0P0Sx8PxAwz
-	 /QhJF0eiUS+c/fYZg1f3OrUb/8BqioTC3u8hmmW3US37DZGMVCD7iVh4uY3VYgyT8h5oQ
-	 BydQhR9OTkhnTpIUjfjkhOGkgQKrHLk36B1Witgas2nnMxPpCLVVWlO3vSrnw7OZmREDf
-	 6Ll13JcFSWzNSU+e2ltasJdHte7DX6cVpXtoXoFSj3bZS88xd2M9WnSexM/puu+uOOA==
+	t=1793902619;
+	b=zPGtMlOQkyVkGtiAyHDwL7CcSNCQ2YKAM6IsT9AD/hnCIaBR8kzNhQGM5CcCzdOiMGq3
+	 6LtZmCLevnF5RIB+seu4eC0QsjarnqYg6DmMi/90N9BmBkpvtQX2dDwOY9KO3vGrPrn99
+	 z1CMDYV3xxbbgRkq420MSFSy84nrBNZgraljYiFHQOLAvAEl7WklfKjp9veEURDPBNJ7c
+	 HEg66OijbmgFTDCy0gTvDhNW6TgYjPRVFRdkhKForrFgqIuGKSz1HmFqs3/87AfHmNnTG
+	 Vq/F8eZoXIbhHspDCSP1KL+XO192KNT2VZFL3G4yPMaGBF1SKMrv6rRZTa37TGhOL0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793902181;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=kF8SevhVCQWHNZC9drCBA7xTfiDAAX0qaL0O6Q4z388=;
-	b=RoqRLZBSI8/Y19R4HG9BK5Lbd8jyPBds4a6kf+BCtLdMIYsizoCc52knd61F5veRF16h
-	 wqC3bk9a9qhaw9hwkJoYlAvPY+yS+4/HumWm60f5PpFkq3/tkAhlvDFfKErtvppeW5/Zb
-	 HgSPXHG9oKDhRMzjau5ggMOOTbaUaf7l72nsnUHYL9SJA+AVYAPQEB2n4FCxb+hspRFzG
-	 RBZs06s90KdhxTmLmo5fZHyCgoSIZ3gtAlk1Z/FjYvPtzSBT2EavDX9oCjASUpR5SlmG/
-	 /GvlAJIZfyGRmuLZYGEKP7OebtfXKh6c1kr/Zf4AD9F//On0L2xgH0TgQDwTbhQEt5A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793902619;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=yIiVETiccds2zLkjCiKuZlUeMe9lENg+8cWHsJoSEm8=;
+	b=RZU53+j4ey4vKJ11clfNq+N/CvKagyIDq5AMi13B9yP8+UaD1uWyUrLvaNY20VE8E2sw
+	 rtCz6Zp5wAedz0Ns009j9wNWqtJ/zd6HOaaxIa64HXNZXcsmIP4F464zBqJeg4e8DZHly
+	 gcdtr5K4hf7Es03y8FSHc49StglnQEgZlpJwtyuAA2sra1gigOkSBXJ3jwm1R4s0eRUEf
+	 Hoy/z1iKG3Zrjk1klnYFUrpMr3vzLbhT5cufC4L3Egrq5J5MmKotxKcROTwnoXjIMzXLm
+	 HK0hosYNz6qYYbOfvimvLf3E+bnuUhCrdOfmIx5kOHtkf/C51+jlGhdzPLLhhDScRfA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=KhjCu0Rt;
-	arc=none smtp.remote-ip=74.125.82.199
-Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GYSvWhVL;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D1C606D801
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 18:09:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2D1C606D801
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62662606A31B
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 18:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=KhjCu0Rt
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-359b81ad4e8so2645270eec.0
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 10:09:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793902179; x=1794506979; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kF8SevhVCQWHNZC9drCBA7xTfiDAAX0qaL0O6Q4z388=;
-        b=KhjCu0RtE1fjxQyH7jLjWc9APASw+c47Lvtb4g5NfieZ95xtD1auD152/nba4XQH47
-         fn1F8xfQTlX6mgObvK/ep7Y4sk27aHAj+N/5JE9jnm0VxMcKnmOSPn/yLgRzZQcd0pA4
-         C5wlHv2t3fOx54Jjaa8yvUICvuEaL2YPcfob4PaubLDOPfdMa7rbZa+AYV/Gpw6+arcY
-         s4CMljob8LoxT+VxAeAJUMCCxX+QEcPy/bthKQpVKF8gznBkEbdDsJIePHXuQvrIz2vb
-         q052YIb38Q1RgbLpgehqUI6bl3QVVVm1uCrSresESH2sAXgAJb0jG/byAqPi/Ivw8xce
-         UWFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793902179; x=1794506979;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=kF8SevhVCQWHNZC9drCBA7xTfiDAAX0qaL0O6Q4z388=;
-        b=c42NgCrHCDd7+6LZDHph4At+xlC2s4PbNNJXtaicVUwth76l2IKQm+xdwh7pIWTM75
-         sCU0kbfft6mHpCtibGJky4/IxIIV/+xIyiP6r4EN5EjmIQPyUBC1PYVLtklGIsvjjpKD
-         WB0E4EtIbKV3QSJwYIU2ZXKDbTDEDHqMUi0BWG8acN80dEmR4ePaBi3WnxGq6P318ekc
-         sSJClqBTOjI3BaaG7si7al2HwRqD2YYebM0mwpljmd6x1uoix7fEoX2hH1aKU3IAb2cc
-         zWnkQbKucDve+5vszznkyhXBd2HlaP3z/4ldWbXlhUoR39WppbABVu0nU2ECW462XNRO
-         zVfQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy9mR/TyYcVUugUcjZhO8cc5aCO2mdbG6Wp4P1VKWt+zWpVhLkLMfU0NxRVzAa54sCvb2c=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8SQ2bXVOWPDFglmk86feHllqWZAfSpK6ogaophn4vxkf/xFhNL
-	hEKTJRD+Z2c5OjhPWUz4ypF3DLzrQi9C+kRrxo9QuIk22pX6MrQWXdMy6FQQYVNlSjff3esu1PN
-	glCfg10XHbQ==
-X-Received: from dybfe17.prod.google.com ([2002:a05:7300:bf91:b0:369:dee2:2b37])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:144b:b0:36a:1c46:2765
- with SMTP id 5a478bee46e88-36a42218429mr27162461eec.4.1793902179165; Thu, 05
- Nov 2026 10:09:39 -0800 (PST)
-Date: Thu,  5 Nov 2026 10:09:22 -0800
-In-Reply-To: <20261105180923.3441359-1-irogers@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GYSvWhVL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D77B21F00A15;
+	Thu,  5 Nov 2026 18:16:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793902619;
+	bh=yIiVETiccds2zLkjCiKuZlUeMe9lENg+8cWHsJoSEm8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=GYSvWhVLCoKWr2jvxHKs8hJ61YwzYjyq3fExwViVV4PLHv9lSFsmKPekmjj2/U7ri
+	 XdgPsWChBga1wLo7eZhV7tss5U1v74ZSW6ORx/pZXasJj2Xq5E+HB81oUupaTUTpYz
+	 caB8qCdg3szXI2gBCkG/pS0GpsHJCAr9a/RlaoMP0SygzMuUmxDC2p3i1wHcutqfjc
+	 tj3GIXlEg/f/GpQutM3kcCYzrg79F/wdqBrMtsvmuGo4dvTh95O/wbMGH0CmXi3iM+
+	 SOTkGHVBWeh0kUFwnEA2VQSsPOImwf5+VGWVwWERmh1Nlk1MKnVmbnqb23z3WlIBfn
+	 /XYVNUAY3nFgA==
+Message-ID: <sashiko-outbox-199716@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 07/17] libbpf, bpftool, resolve_btfids: Dump
+ kflagged BTF tags as is
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261105175845.30357-8-ihor.solodrai@linux.dev>
+References: <20261105175845.30357-1-ihor.solodrai@linux.dev>
+ <20261105175845.30357-8-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 05 Nov 2026 18:16:58 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,399 +60,100 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261105180923.3441359-1-irogers@google.com>
-X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
-Message-ID: <20261105180923.3441359-3-irogers@google.com>
-Subject: [RFC PATCH v3 2/3] perf build: Prefer zlib-rs over zlib when available
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Quentin Monnet <qmo@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>
-Cc: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-perf-users@vger.kernel.org, 
-	bpf@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-Detect and prefer zlib-rs over C zlib in the perf build unless disabled
-with NO_ZLIB_RS=1 (or NO_ZLIB=1 / NO_RUST=1):
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: changing kflag BTF_KIND_TYPE_TAG format breaks C dumps acro=
+ss versions
+--
 
-- Move Rust compiler detection ahead of zlib detection in
-  tools/perf/Makefile.config and use feature_check + feature_rust_lib for
-  zlib-rs, setting both HAVE_ZLIB_SUPPORT and HAVE_ZLIB_RS_SUPPORT when
-  zlib-rs is used and falling back to C zlib (-lz) otherwise.
-- Replace -lz with $(ZLIB_LIBS) in DWARFLIBS and llvm-config
-  --system-libs so static libdw/libelf and libLLVM configurations use
-  the selected zlib implementation.
-- Build and clean libz_rs.a in $(OUTPUT)libz_rs/, pass ZLIB_CFLAGS when
-  building static libbpf, and share RUST_OUTPUT with the host bootstrap
-  bpftool build in tools/perf/bpf_skel.mak.
-- Expose 'zlib-rs' in 'perf check feature' / 'perf version --build-options'
-  and document it in perf-check.txt.
-- Add zlib-rs package mappings to tools/perf/scripts/install-build-deps.sh
-  and NO_ZLIB / NO_ZLIB_RS build tests to tools/perf/tests/make.
+commit 02905c14788165a6bc8db8f66ae9bfa227c2d55a
+Author: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/.gitignore                    |  1 +
- tools/perf/Documentation/perf-check.txt  |  1 +
- tools/perf/Makefile.config               | 92 ++++++++++++++----------
- tools/perf/Makefile.perf                 | 32 +++++++--
- tools/perf/bpf_skel.mak                  |  8 ++-
- tools/perf/builtin-check.c               |  1 +
- tools/perf/scripts/install-build-deps.sh |  6 ++
- tools/perf/tests/make                    |  9 +++
- 8 files changed, 107 insertions(+), 43 deletions(-)
+libbpf, bpftool, resolve_btfids: Dump kflagged BTF tags as is
 
-diff --git a/tools/perf/.gitignore b/tools/perf/.gitignore
-index 3b968c5158b8..8a5df9c9e8ae 100644
---- a/tools/perf/.gitignore
-+++ b/tools/perf/.gitignore
-@@ -55,6 +55,7 @@ libbpf/
- libperf/
- libsubcmd/
- libsymbol/
-+libz_rs/
- fixdep
- Documentation/doc.dep
- python_ext_build/
-diff --git a/tools/perf/Documentation/perf-check.txt b/tools/perf/Documentation/perf-check.txt
-index 1406a41c5d09..dda75b1d9cbd 100644
---- a/tools/perf/Documentation/perf-check.txt
-+++ b/tools/perf/Documentation/perf-check.txt
-@@ -66,6 +66,7 @@ feature::
-                 numa_num_possible_cpus  /  HAVE_LIBNUMA_SUPPORT
-                 python-module           /  HAVE_PYTHON_MODULE_SUPPORT
-                 zlib                    /  HAVE_ZLIB_SUPPORT
-+                zlib-rs                 /  HAVE_ZLIB_RS_SUPPORT
-                 zstd                    /  HAVE_ZSTD_SUPPORT
- 
- OPTIONS
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index b4764f69f47f..81b56cbc8658 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -69,6 +69,12 @@ endif
- 
- include $(srctree)/tools/scripts/Makefile.arch
- 
-+ifneq ($(CROSS_COMPILE),)
-+  ifneq ($(RUST_TARGET_FLAGS_$(ARCH)),)
-+    RUST_FLAGS += --target=$(RUST_TARGET_FLAGS_$(ARCH))
-+  endif
-+endif
-+
- $(call detected_var,SRCARCH)
- 
- CFLAGS += -I$(OUTPUT)arch/$(SRCARCH)/include/generated
-@@ -532,13 +538,54 @@ ifdef CORESIGHT
-   endif
- endif
- 
-+ifndef NO_RUST
-+  $(call feature_check,rust)
-+  ifneq ($(feature-rust), 1)
-+    $(warning Rust is not found. Test workloads with rust are disabled.)
-+    NO_RUST := 1
-+  else
-+    NO_RUST := 0
-+    CFLAGS += -DHAVE_RUST_SUPPORT
-+    $(call detected,CONFIG_RUST_SUPPORT)
-+  endif
-+
-+  ifneq ($(CROSS_COMPILE),)
-+    ifeq ($(RUST_TARGET_FLAGS_$(ARCH)),)
-+      $(error Unknown rust cross compilation architecture $(ARCH))
-+    endif
-+  endif
-+endif
-+
-+# Building zlib-rs from Cargo crate sources requires a working rustc.
-+ifneq ($(NO_RUST), 0)
-+  NO_ZLIB_RS := 1
-+endif
-+
-+# Prefer zlib-rs over C zlib when available, unless disabled via NO_ZLIB=1 or
-+# NO_ZLIB_RS=1. Both provide the standard zlib C API (HAVE_ZLIB_SUPPORT), while
-+# HAVE_ZLIB_RS_SUPPORT records that zlib-rs is the implementation in use.
- ifndef NO_ZLIB
--  ifeq ($(feature-zlib), 1)
-+  ifndef NO_ZLIB_RS
-+    $(call feature_check,zlib-rs)
-+    ifeq ($(feature-zlib-rs), 1)
-+      $(call feature_rust_lib,zlib-rs)
-+      ZLIB_CFLAGS := $(FEATURE_CFLAGS-zlib-rs)
-+      ZLIB_LIBS := $(FEATURE_LIBS-zlib-rs)
-+      CFLAGS += -DHAVE_ZLIB_RS_SUPPORT $(ZLIB_CFLAGS)
-+      $(call detected,CONFIG_ZLIB_RS)
-+    endif
-+  endif
-+  ifeq ($(ZLIB_LIBS),)
-+    ifeq ($(feature-zlib), 1)
-+      ZLIB_LIBS := -lz
-+    else
-+      NO_ZLIB := 1
-+    endif
-+  endif
-+  ifneq ($(ZLIB_LIBS),)
-     CFLAGS += -DHAVE_ZLIB_SUPPORT
--    EXTLIBS += -lz
-+    EXTLIBS += $(ZLIB_LIBS)
-     $(call detected,CONFIG_ZLIB)
--  else
--    NO_ZLIB := 1
-   endif
- endif
- 
-@@ -580,7 +627,7 @@ ifndef NO_LIBELF
-   ifndef NO_LIBDW
-     CFLAGS += -DHAVE_LIBDW_SUPPORT $(LIBDW_CFLAGS)
-     LDFLAGS += $(LIBDW_LDFLAGS)
--    EXTLIBS += ${DWARFLIBS}
-+    EXTLIBS += $(patsubst -lz,$(or $(ZLIB_LIBS),-lz),${DWARFLIBS})
-     $(call detected,CONFIG_LIBDW)
-   endif # NO_LIBDW
- 
-@@ -908,7 +955,7 @@ ifdef BUILD_NONDISTRO
-   else ifeq ($(feature-libbfd-liberty), 1)
-     EXTLIBS += -lbfd -lopcodes -liberty
-   else ifeq ($(feature-libbfd-liberty-z), 1)
--    EXTLIBS += -lbfd -lopcodes -liberty -lz
-+    EXTLIBS += -lbfd -lopcodes -liberty $(or $(ZLIB_LIBS),-lz)
-   endif
- 
-   CFLAGS += -DHAVE_LIBBFD_SUPPORT
-@@ -930,7 +977,7 @@ ifndef NO_LIBLLVM
-     CFLAGS += -DHAVE_LIBLLVM_SUPPORT
-     LLVM_CFLAGS := $(shell $(LLVM_CONFIG) --cflags 2>/dev/null)
-     LLVM_CXXFLAGS := $(shell $(LLVM_CONFIG) --cxxflags 2>/dev/null)
--    LLVM_LIBLLVM := $(shell $(LLVM_CONFIG) --libs all 2>/dev/null) $(shell $(LLVM_CONFIG) --system-libs 2>/dev/null)
-+    LLVM_LIBLLVM := $(shell $(LLVM_CONFIG) --libs all 2>/dev/null) $(patsubst -lz,$(or $(ZLIB_LIBS),-lz),$(shell $(LLVM_CONFIG) --system-libs 2>/dev/null))
-     LLVM_LIBDIR := $(shell $(LLVM_CONFIG) --libdir 2>/dev/null)
-     CFLAGS += $(LLVM_CFLAGS)
-     CXXFLAGS += -DHAVE_LIBLLVM_SUPPORT $(LLVM_CXXFLAGS)
-@@ -1132,37 +1179,6 @@ ifneq ($(NO_LIBTRACEEVENT),1)
-   endif
- endif
- 
--ifndef NO_RUST
--  $(call feature_check,rust)
--  ifneq ($(feature-rust), 1)
--    $(warning Rust is not found. Test workloads with rust are disabled.)
--    NO_RUST := 1
--  else
--    NO_RUST := 0
--    CFLAGS += -DHAVE_RUST_SUPPORT
--    $(call detected,CONFIG_RUST_SUPPORT)
--  endif
--
--  ifneq ($(CROSS_COMPILE),)
--    RUST_TARGET_FLAGS_arm	:= arm-unknown-linux-gnueabi
--    RUST_TARGET_FLAGS_arm64	:= aarch64-unknown-linux-gnu
--    RUST_TARGET_FLAGS_loongarch	:= loongarch64-unknown-linux-gnu
--    RUST_TARGET_FLAGS_m68k	:= m68k-unknown-linux-gnu
--    RUST_TARGET_FLAGS_mips	:= mipsel-unknown-linux-gnu
--    RUST_TARGET_FLAGS_powerpc	:= powerpc64le-unknown-linux-gnu
--    RUST_TARGET_FLAGS_riscv	:= riscv64gc-unknown-linux-gnu
--    RUST_TARGET_FLAGS_s390	:= s390x-unknown-linux-gnu
--    RUST_TARGET_FLAGS_x86	:= x86_64-unknown-linux-gnu
--    RUST_TARGET_FLAGS_x86_64	:= x86_64-unknown-linux-gnu
--
--    ifeq ($(RUST_TARGET_FLAGS_$(ARCH)),)
--      $(error Unknown rust cross compilation architecture $(ARCH))
--    endif
--
--    RUST_FLAGS += --target=$(RUST_TARGET_FLAGS_$(ARCH))
--  endif
--endif
--
- # Among the variables below, these:
- #   perfexecdir
- #   libbpf_include_dir
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index b74b534e1153..0c24b13e9e0c 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -75,6 +75,8 @@ include ../scripts/utilities.mak
- #
- # Define NO_ZLIB if you do not want to support compressed kernel modules
- #
-+# Define NO_ZLIB_RS if you do not want to use zlib-rs for zlib support
-+#
- # Define NO_BABELTRACE2 if you do not want babeltrace2-ctf-writer support
- # for CTF data format.
- #
-@@ -417,6 +419,13 @@ ifdef LIBBPF_STATIC
-   CFLAGS += -I$(LIBBPF_OUTPUT)/include
- endif
- 
-+ifneq ($(OUTPUT),)
-+  LIBZ_RS_OUTPUT = $(abspath $(OUTPUT))/libz_rs
-+else
-+  LIBZ_RS_OUTPUT = $(CURDIR)/libz_rs
-+endif
-+LIBZ_RS = $(filter %/libz_rs.a,$(ZLIB_LIBS))
-+
- ifneq ($(OUTPUT),)
-   LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
- else
-@@ -741,6 +750,11 @@ ifdef LIBBPF_STATIC
- prepare: $(LIBBPF)
- endif
- 
-+ifneq ($(LIBZ_RS),)
-+prepare: $(LIBZ_RS)
-+bpf-skel-prepare: $(LIBZ_RS)
-+endif
-+
- $(OUTPUT)%.o: %.c prepare FORCE
- 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(build-dir) $@
- 
-@@ -805,15 +819,25 @@ $(LIBAPI)-clean:
- 	$(call QUIET_CLEAN, libapi)
- 	$(Q)$(RM) -r -- $(LIBAPI_OUTPUT)
- 
--$(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
-+$(LIBBPF): FORCE $(LIBZ_RS) | $(LIBBPF_OUTPUT)
- 	$(Q)$(MAKE) -C $(LIBBPF_DIR) FEATURES_DUMP=$(FEATURE_DUMP_EXPORT) \
- 		O= OUTPUT=$(LIBBPF_OUTPUT)/ DESTDIR=$(LIBBPF_DESTDIR) prefix= subdir= \
--		EXTRA_CFLAGS="-fPIC" $@ install_headers
-+		EXTRA_CFLAGS="-fPIC $(ZLIB_CFLAGS)" $@ install_headers
- 
- $(LIBBPF)-clean:
- 	$(call QUIET_CLEAN, libbpf)
- 	$(Q)$(RM) -r -- $(LIBBPF_OUTPUT)
- 
-+ifneq ($(LIBZ_RS),)
-+$(LIBZ_RS): | $(LIBZ_RS_OUTPUT)
-+	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.rust LIBZ_RS_OUTPUT=$(LIBZ_RS_OUTPUT)/ \
-+		CARGO="$(CARGO)" RUSTC="$(RUSTC)" RUST_FLAGS="$(RUST_FLAGS)" $@
-+endif
-+
-+libz-rs-clean:
-+	$(call QUIET_CLEAN, libz_rs)
-+	$(Q)$(RM) -r -- $(LIBZ_RS_OUTPUT)
-+
- $(LIBPERF): FORCE | $(LIBPERF_OUTPUT)
- 	$(Q)$(MAKE) -C $(LIBPERF_DIR) O=$(LIBPERF_OUTPUT) \
- 		DESTDIR=$(LIBPERF_DESTDIR) prefix= subdir= \
-@@ -1026,7 +1050,7 @@ python-clean:
- 		$(RM) $(OUTPUT)python/perf.pyi; \
- 	fi
- 
--$(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(LIBSUBCMD_OUTPUT) $(LIBSYMBOL_OUTPUT):
-+$(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(LIBSUBCMD_OUTPUT) $(LIBSYMBOL_OUTPUT) $(LIBZ_RS_OUTPUT):
- 	$(Q)$(MKDIR) -p $@
- 
- bpf-skel-clean:
-@@ -1050,7 +1074,7 @@ else # When an OUTPUT directory is present, clean up the copied pmu-events/arch
- endif
- 
- clean:: $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBSYMBOL)-clean $(LIBPERF)-clean \
--		arm64-sysreg-defs-clean fixdep-clean python-clean bpf-skel-clean \
-+		libz-rs-clean arm64-sysreg-defs-clean fixdep-clean python-clean bpf-skel-clean \
- 		pmu-events-clean
- 	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive \
- 		$(OUTPUT)perf-iostat $(LANG_BINDINGS)
-diff --git a/tools/perf/bpf_skel.mak b/tools/perf/bpf_skel.mak
-index f2559de39f96..d2ac4c4a7402 100644
---- a/tools/perf/bpf_skel.mak
-+++ b/tools/perf/bpf_skel.mak
-@@ -39,9 +39,15 @@ ifneq ($(WERROR),0)
-   CLANG_OPTIONS += -Werror
- endif
- 
-+# When not cross-compiling, share the top-level $(OUTPUT)libz_rs/ directory
-+# with the host bootstrap bpftool build so libz_rs.a is not compiled twice.
-+ifeq ($(CROSS_COMPILE),)
-+BPFTOOL_RUST_OUTPUT := RUST_OUTPUT=$(abspath $(or $(OUTPUT),.))/
-+endif
-+
- $(BPFTOOL):
- 	$(Q)mkdir -p $(SKEL_TOOL_TMP_OUT)
--	$(Q)CFLAGS= $(MAKE) -C ../bpf/bpftool OUTPUT=$(SKEL_TOOL_TMP_OUT)/ bootstrap
-+	$(Q)CFLAGS= $(MAKE) -C ../bpf/bpftool OUTPUT=$(SKEL_TOOL_TMP_OUT)/ $(BPFTOOL_RUST_OUTPUT) bootstrap
- 
- # Paths to search for a kernel to generate vmlinux.h from.
- VMLINUX_BTF_ELF_PATHS ?= $(if $(O),$(O)/vmlinux)			\
-diff --git a/tools/perf/builtin-check.c b/tools/perf/builtin-check.c
-index 1e43e097e7a7..fe1fc40561a9 100644
---- a/tools/perf/builtin-check.c
-+++ b/tools/perf/builtin-check.c
-@@ -59,6 +59,7 @@ struct feature_status supported_features[] = {
- 	FEATURE_STATUS("lzma", HAVE_LZMA_SUPPORT),
- 	FEATURE_STATUS("numa_num_possible_cpus", HAVE_LIBNUMA_SUPPORT),
- 	FEATURE_STATUS("zlib", HAVE_ZLIB_SUPPORT),
-+	FEATURE_STATUS("zlib-rs", HAVE_ZLIB_RS_SUPPORT),
- 	FEATURE_STATUS("zstd", HAVE_ZSTD_SUPPORT),
- 	FEATURE_STATUS("rust", HAVE_RUST_SUPPORT),
- 
-diff --git a/tools/perf/scripts/install-build-deps.sh b/tools/perf/scripts/install-build-deps.sh
-index 3e53c7bf0f85..7c405f1a4c83 100755
---- a/tools/perf/scripts/install-build-deps.sh
-+++ b/tools/perf/scripts/install-build-deps.sh
-@@ -146,6 +146,9 @@ fedora_pkg_for() {
- 	zlib)
- 		echo "zlib-devel"
- 		;;
-+	zlib-rs)
-+		echo "cargo rust-libz-rs-sys-devel"
-+		;;
- 	lzma)
- 		echo "xz-devel"
- 		;;
-@@ -305,6 +308,9 @@ debian_pkg_for() {
- 	zlib)
- 		echo "zlib1g-dev"
- 		;;
-+	zlib-rs)
-+		echo "cargo librust-libz-rs-sys-dev"
-+		;;
- 	lzma)
- 		echo "liblzma-dev"
- 		;;
-diff --git a/tools/perf/tests/make b/tools/perf/tests/make
-index 7524de522802..96567d9ea2a4 100644
---- a/tools/perf/tests/make
-+++ b/tools/perf/tests/make
-@@ -99,6 +99,8 @@ make_no_babeltrace2 := NO_BABELTRACE2=1
- make_with_coresight := CORESIGHT=1
- make_no_sdt	    := NO_SDT=1
- make_no_libpfm4     := NO_LIBPFM4=1
-+make_no_zlib        := NO_ZLIB=1
-+make_no_zlib_rs     := NO_ZLIB_RS=1
- make_with_gtk4      := GTK4=1
- make_refcnt_check   := EXTRA_CFLAGS="-DREFCNT_CHECKING=1"
- make_tags           := tags
-@@ -193,6 +195,8 @@ run += make_no_sdt
- run += make_no_babeltrace2
- run += make_with_coresight
- run += make_no_libpfm4
-+run += make_no_zlib
-+run += make_no_zlib_rs
- run += make_refcnt_check
- run += make_help
- run += make_doc
-@@ -302,6 +306,11 @@ test_make_install_pdf_O  := $(test_ok)
- test_make_libbpf_dynamic :=   ldd $(PERF_O)/perf | grep -q libbpf
- test_make_libbpf_dynamic_O := ldd $$TMP_O/perf | grep -q libbpf
- 
-+test_make_no_zlib             := test -x $(PERF_O)/perf && ! $(PERF_O)/perf check -q feature zlib && ! $(PERF_O)/perf check -q feature zlib-rs
-+test_make_no_zlib_O           := test -x $$TMP_O/perf && ! $$TMP_O/perf check -q feature zlib && ! $$TMP_O/perf check -q feature zlib-rs
-+test_make_no_zlib_rs          := test -x $(PERF_O)/perf && ! $(PERF_O)/perf check -q feature zlib-rs
-+test_make_no_zlib_rs_O        := test -x $$TMP_O/perf && ! $$TMP_O/perf check -q feature zlib-rs
-+
- # Feature tests are allowed to fail, so a broken C++ compiler command line
- # doesn't fail the build, it just quietly turns off everything that needs a
- # C++ compiler. Check a feature that does, otherwise these tests would pass
--- 
-2.56.0.455.g6c5a503b38-goog
+This commit changes btf_dump to print kflagged BTF decl and type tags as-is
+without wrapping them in __attribute__((...)), updates resolve_btfids to
+encode the full __attribute__((address_space(1))) string in TYPE_ATTR_ARENA,
+and adds a split-BTF decl tag override in bpftool for older kernel BTF.
 
+> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/m=
+ain.c
+> index 5ad5473563034..c16dd93fa6d4c 100644
+> --- a/tools/bpf/resolve_btfids/main.c
+> +++ b/tools/bpf/resolve_btfids/main.c
+> @@ -204,7 +204,7 @@ struct btf_links {
+>  #define KF_ARENA_ARG2	(1 << 15)
+>  #define KF_IMPLICIT_ARGS (1 << 16)
+>  #define KF_IMPL_SUFFIX "_impl"
+> -#define TYPE_ATTR_ARENA "address_space(1)"
+> +#define TYPE_ATTR_ARENA "__attribute__((address_space(1)))"
+>  #define PARAM_SUFFIX_ARENA "__arena"
+>  #define PARAM_SUFFIX_ARENA_NULLABLE "__arena__nullable"
+> =20
+> diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+> index c12c3c248407f..fcd97aa905897 100644
+> --- a/tools/lib/bpf/btf_dump.c
+> +++ b/tools/lib/bpf/btf_dump.c
+> @@ -1023,7 +1023,7 @@ static void btf_dump_emit_decl_tag(struct btf_dump =
+*d, const struct btf_type *t)
+>  	const char *name =3D btf_name_of(d, t->name_off);
+> =20
+>  	if (btf_kflag(t))
+> -		btf_dump_printf(d, " __attribute__((%s))", name);
+> +		btf_dump_printf(d, " %s", name);
+>  	else
+>  		btf_dump_printf(d, " __attribute__((btf_decl_tag(\"%s\")))", name);
+>  }
+> @@ -1602,7 +1602,7 @@ static void btf_dump_emit_type_chain(struct btf_dum=
+p *d,
+>  				break;
+>  			name =3D btf_name_of(d, t->name_off);
+>  			if (btf_kflag(t))
+> -				btf_dump_printf(d, " __attribute__((%s))", name);
+> +				btf_dump_printf(d, " %s", name);
+>  			else
+>  				btf_dump_printf(d, " __attribute__((btf_type_tag(\"%s\")))", name);
+>  			break;
+
+[Severity: Medium]
+As reported by bot+bpf-ci@kernel.org on v3 [1], changing how kflagged
+BTF_KIND_TYPE_TAG entries are encoded by resolve_btfids and emitted by
+btf_dump_emit_type_chain() causes regressions when dumping C headers across
+versions.
+
+In tools/bpf/resolve_btfids/main.c, TYPE_ATTR_ARENA is changed to
+"__attribute__((address_space(1)))" and passed to btf__add_type_attr() in
+arena_tag_ptr(), which encodes the full attribute wrapper into vmlinux BTF =
+for
+arena kfuncs. When an existing bpftool built with libbpf 1.6 or later dumps
+vmlinux.h from a newly built kernel, its btf_dump_emit_type_chain() wraps t=
+he
+kflagged type tag in __attribute__((%s)) again, emitting:
+
+  void __attribute__((__attribute__((address_space(1))))) *
+
+This breaks compilation of any BPF program including vmlinux.h unless
+BPF_NO_KFUNC_PROTOTYPES is defined.
+
+Conversely, in tools/lib/bpf/btf_dump.c, changing btf_dump_emit_type_chain()
+to print kflagged BTF_KIND_TYPE_TAG strings without __attribute__((...))
+means that any external caller of btf_dump__dump_type() or
+btf_dump__emit_type_decl() outside bpftool (which does not run
+btf_c_annotate_type_tags()) will emit bare address_space(1) when dumping
+existing v6.16+ kernel BTF or BTF produced by pahole with
+--btf_features=3Dattributes, which also fails to compile.
+
+Since btf_dump already allows a kflagged BTF_KIND_DECL_TAG (with
+component_idx =3D -1) in the dump split BTF to override how a referenced
+BTF_KIND_TYPE_TAG is printed, could btf_dump_emit_type_chain() and
+TYPE_ATTR_ARENA in resolve_btfids be left unchanged, and raw printing be
+restricted to kflagged BTF_KIND_DECL_TAG in btf_dump_emit_decl_tag() as
+requested by Alexei Starovoitov on v3?
+
+[1] https://lore.kernel.org/r/b8912e062900f51fd8c8f44c44ef43d0788ce6af12582=
+abc0060dd6cd4c05065@mail.kernel.org
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261105175845.3035=
+7-1-ihor.solodrai@linux.dev?part=3D7
