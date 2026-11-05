@@ -1,69 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793874608;
-	b=IvXvUdBgQJIYEtJMNGq5KZ4FaiHHQK2piecTqo9e0r78w0kaIPwPXRTkFExXCHIr+N5G
-	 SGIEEV6BEMBckJPZULRd9aKRrILvJZfU4lQ/o+sQlmdjvmrs/hsDnhPh7uDAQckPbkfUE
-	 PiUzWMWN1dKtgkDuyYow6m7ztzDaouOiE9/PxUpzcwuKKilzhraTQfaCUhLWQuHOFfLmh
-	 ltWZN6rYsay0MXEB7MnbsnlKinY+mJxoOYWpMn6WjgyOuJCebezfYSsewKy5PCeoBO27m
-	 Tbd/Y0zfkYGk/Kc/+MEng1V6jhXTZvxXWec5XrRSh7dr8IweF0lv1G0oQrZHmFJcoew==
+	t=1793874722;
+	b=M6FVb8OwNXcqHK2t06UaGXJ2HUUI8xny0km4NZmdNsbaMbkzhFwRe8xDBzsfpXHhaPyp
+	 gkSAhXbY8So+563sxE/sr6pI01kt8rE89MSItWIvXb5czqFBajjfYXEEk7Rbrxe+6XlQy
+	 j3ZpWGjIOfrT+SCJoWUVlqv6pihwTM2iSUmsgHxfqdn6XEMDArUFBtPXu08tertSGCdWc
+	 9t556aEU/RMhppyiEv1DLcHNqYF6+BbxNUe+kgtxedu2mwsoWNhIkAWl8cvCrbGRTv8M6
+	 nHQqA7UUXGTOsmfmIkv1HFgeNUVots/GwArbcjN9QjDC8xeGrgHhIkp7QTulYgVbD6Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793874608;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=n9zGelRzeR9jm80W8T8wv8FzP08CSeK9Ddixf5lP1vw=;
-	b=0J3Q0tMNb3btNd40nE0z2bJK8IIUaSRG5mYXXAiGRXmEqDxyfRhVGLzlhannKnjDeqnH
-	 4G/EvuoGwXonF/HULPQoIzSoMiPtEeY8HL0Od+lwS2mykShFQPXdB/HsUFAGc9goqD4jQ
-	 Mk7+pSPgoguyJoUFz4TbyR0U8J72ukOR+J4LM6RxEdYZmmojK2nq9D8IdB1pTfnkGDPC2
-	 h6tZIDGDUEr4Mtf5JOzq5cWxtDTjmVutrcGPggDMhKFVL4ZoxP0rPkK9o3EXUeYe79Qyg
-	 SX+ddRH+ik6AEyGTVHt+/VzB4IfE/7ynXr3dpLqDUSxchBhDcxxA2rptQODAAvT5m9g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793874722;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=xKhjKjL6NUJD8Nx7MIL7fAZeI2PVjUsp8Wn9XjenML0=;
+	b=uZfhLT226ZjWEc7Y3uuyxClpJu2wdKvnJzlVOjbuhi0FqE0c48Eae7/yB23VTcp43y0T
+	 LYvf/x90bFDrEvtmR5TmIyj4i6IWm5/MuEpondKvgS5wuYRXnnpWENvEPBAShHUhesOUw
+	 7GhD4n9RLJjJ7N1iJlmfnv+sZ0mqFPb0YnYeubi+QTm5JyfkLvYIwZuLeh88oY2c+pbE0
+	 Yid/dzmdnGBvjpEoe1FBaI1tyZfe5+Dw1qSvI7YsgEUZxnlo/d+YoQL4vNSNmgmYsY0PN
+	 5/xCX9ifrwu62LPL2KRYiWYgccnot79+tjntX8ZXHYuqxp34biF7KZ5fRH+QpP6Euzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="hqTmKQ/q";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L+w76bhR;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47D5606A329;
-	Thu,  5 Nov 2026 10:30:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A08606A328
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:32:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hqTmKQ/q
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04DCE1F000C1;
-	Thu,  5 Nov 2026 10:30:01 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L+w76bhR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 376B71F00919;
+	Thu,  5 Nov 2026 10:32:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793874608;
-	bh=n9zGelRzeR9jm80W8T8wv8FzP08CSeK9Ddixf5lP1vw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=hqTmKQ/qNd9AeJgNq91fZYaBkT1aP98v69T7CblGk1hbHSSV41l03zI/1/gLM3P39
-	 gr2TpxhJt9bX3ruuedNEVPDI3PC/uwQke8cG8mPbP4N1aS6QHl/CzhSema57b19cM0
-	 FcavNSTFKDWdhBUABl23/UCdpe7kfj64O5K3lAHwlxA85029NxyrZ8hKOPWx6HmMO3
-	 74/lcRV0iMzpQuYy95W6qJ2QC4F+kCiMDOwcAIa/BvYHSZYnL0kbfunbtWKVHZRZpp
-	 +nRyPjoeSUj1qwEc8FYLCLEGra3P9X0mm1jCPybRdUbf+Cq4XXo/GbUcnmsAao7Akl
-	 m89HXXZCO1PEg==
-Date: Thu, 5 Nov 2026 10:29:59 +0000
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
-	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 3/5] locking/rwsem: add down_read[_killable]_nosteal()
-Message-ID: <auxaRUi4h4a4tfUk@gremlin>
-References: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
- <20261103-khugepaged-latency-fix-v1-3-a07ab16ac860@kernel.org>
- <20261103115159.GK1813469@noisy.programming.kicks-ass.net>
- <aunLcWto870swo38@gremlin>
- <9c367177-1822-4b6d-8bee-d283eef7b895@kernel.org>
+	s=k20260515; t=1793874721;
+	bh=xKhjKjL6NUJD8Nx7MIL7fAZeI2PVjUsp8Wn9XjenML0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=L+w76bhRzvh3DlQftxYcZVSjXpIK0PKvDJXlhm+XtBg+CcdCP1pMKjOZ8HY56g585
+	 q1p8JHZKs7HZ5rabs5rrpLYXFJBqC4Op9YaJnNCkiNWk+UTYDV55moBm6pOfA4vwvA
+	 B1XJU8yX6GcZvaSr5yjw1rZ3wmBUjVMujPPlZOAlvCVFTi64vL4zyMllAxI3BY6uUt
+	 FxSfgKdIqNBbBz4yPHNCNEUpljza8e9jqHhpC44B8U3qbSDLuLQBPgY2za/5obEhre
+	 UWIuEqJ6v6HAPvl6TsxKkrKSmklNgbRVsPkPyI6ahAa4mYZSlrQuFnHva4N3NwarWE
+	 0Qg+ocdKu9AhA==
+Message-ID: <sashiko-outbox-198859@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv3 bpf-next 4/8] selftests/bpf: Test const kfunc memory
+ arguments
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org, linux-mm@kvack.org, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Lorenzo
+ Stoakes" <ljs@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>, "Federico
+ Di Pierro" <nierro92@gmail.com>
+In-Reply-To: <20261105102343.311331-5-jolsa@kernel.org>
+References: <20261105102343.311331-1-jolsa@kernel.org>
+ <20261105102343.311331-5-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 05 Nov 2026 10:32:00 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,57 +64,104 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9c367177-1822-4b6d-8bee-d283eef7b895@kernel.org>
 
-On Thu, Nov 05, 2026 at 11:25:25AM +0100, David Hildenbrand (Arm) wrote:
-> On 11/3/26 13:24, Lorenzo Stoakes (ARM) wrote:
-> > On Tue, Nov 03, 2026 at 12:51:59PM +0100, Peter Zijlstra wrote:
-> >> On Tue, Nov 03, 2026 at 08:27:44AM +0000, Lorenzo Stoakes (ARM) wrote:
-> >>> Since commit 1a728dff855a ("locking/rwsem: Enable reader optimistic lock
-> >>> stealing") a sleeping, queued writer whose handoff timeout hasn't expired
-> >>> can have its lock stolen by a read lock issued before a woken queued writer
-> >>> was able to acquire a lock.
-> >>>
-> >>> To avoid write lock starvation, this is only permitted if no other read
-> >>> locks are held.
-> >>>
-> >>> However, this behaviour defeats the purpose of a reader periodically
-> >>> dropping the lock to allow writers in, as doing so only works if the write
-> >>> lock is acquired first, another read lock is held, or a queued writer's
-> >>> handoff timeout has expired.
-> >>>
-> >>> Provide a means of indicating this intent via down_read_nosteal() and
-> >>> down_read_killable_nosteal().
-> >>>
-> >>> Implement it by exposing a steal parameter to rwsem_down_read_slowpath(),
-> >>> update the starvation logic to modify this parameter and modify the steal
-> >>> branch to check it first.
-> >>>
-> >>> Also drop the duplicated RWSEM_WRITER_LOCKED check and remove the
-> >>> goto as the steal condition makes this redundant.
-> >>>
-> >>> Exposing this function is safe as it only makes the lock more pessimistic,
-> >>> so does not impact lock contention.
-> >>
-> >> Not generally a fan of this -- can't we tweak the steal thing to never
-> >> steal if there are pending writers?
-> >
-> > Oh, well, I had assumed I couldn't fiddle with that behaviour across
-> > rwsem's in general, so if I can yeah that's preferable!
-> >
-> > I could send that change separately then and drop it out of this series.
->
-> Just so I understand correctly, this patch here would be gone entirely?
->
-> But #4 depends on it, so now I'm confused :)
-
-#4 would go too :P see, making your life easier ;)
-
-I'll try sending the rwsem separately, then respin this one.
-
-
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: kfunc_call_test_const_mem() fails due to MEM_WRIT=
+E in verifier
 --
-Cheers, Lorenzo
+
+commit 0e976b113cb623dc07d1d416bf2badf98c0f26f7
+Author: Jiri Olsa <jolsa@kernel.org>
+
+selftests/bpf: Test const kfunc memory arguments
+
+This commit adds BPF selftests and bpf_testmod kfuncs to verify passing
+read-only global data, writable stack data, and const scalar structs to
+const-qualified kfunc memory arguments, while rejecting read-only data
+passed to writable memory arguments.
+
+> diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/=
+testing/selftests/bpf/progs/kfunc_call_test.c
+> index 8e6560c31e781..4f4a6713aa6e5 100644
+> --- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+> +++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+> @@ -5,6 +5,9 @@
+>  #include "bpf_misc.h"
+>  #include "../test_kmods/bpf_testmod_kfunc.h"
+> =20
+> +static const char kfunc_const_data[] =3D "read-only source";
+> +static const struct prog_test_pass1 kfunc_const_struct =3D { .x0 =3D 1 };
+> +
+>  static struct bpf_spin_lock kfunc_call_lock SEC(".data.A");
+> =20
+>  SEC("tc")
+> @@ -208,6 +211,17 @@ int kfunc_call_test_pass(struct __sk_buff *skb)
+>  	return 0;
+>  }
+> =20
+> +SEC("tc")
+> +int kfunc_call_test_const_mem(struct __sk_buff *skb)
+> +{
+> +	char stack_data[] =3D "read-write";
+> +
+> +	bpf_kfunc_call_test_const_mem(kfunc_const_data, sizeof(kfunc_const_data=
+));
+> +	bpf_kfunc_call_test_const_mem(stack_data, sizeof(stack_data));
+> +	bpf_kfunc_call_test_const_struct(&kfunc_const_struct);
+> +	return 0;
+> +}
+
+[Severity: Medium]
+Does kfunc_call_test_const_mem() pass verification without a corresponding
+verifier change to preserve const qualification on kfunc memory arguments?
+
+In kernel/bpf/verifier.c, get_kfunc_arg_type() strips modifiers from the
+pointed-to type via btf_type_skip_modifiers() and unconditionally marks
+pointer+size and fixed-size memory arguments as writable:
+
+kernel/bpf/verifier.c:get_kfunc_arg_type() {
+	ref_id_ptr =3D &t->type;
+	ref_t =3D btf_type_skip_modifiers(meta->btf, *ref_id_ptr, &ref_id);
+	while (*ref_id_ptr !=3D ref_id)
+		ref_id_ptr =3D &btf_type_by_id(meta->btf, *ref_id_ptr)->type;
+	...
+	} else if (arg + 1 < nargs &&
+		 (is_kfunc_arg_mem_size(meta->btf, &args[arg + 1]) ||
+		  is_kfunc_arg_const_mem_size(meta->btf, &args[arg + 1]))) {
+		...
+		arg_type =3D ARG_PTR_TO_MEM | MEM_WRITE;
+	} else if (btf_type_is_struct(ref_t))
+		arg_type =3D ARG_PTR_TO_BTF_ID;
+	else {
+		...
+		arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE;
+	}
+}
+
+Similarly, for bpf_kfunc_call_test_const_struct(), get_kfunc_arg_type()
+records the argument as a BTF struct pointer with proto->arg_btf_id[arg]
+pointing past the const modifier, and resolve_func_arg_type() then rewrites
+the scalar struct argument to writable memory:
+
+kernel/bpf/verifier.c:resolve_func_arg_type() {
+	...
+	*arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE |
+		    (*arg_type & (PTR_MAYBE_NULL | MEM_UNINIT));
+}
+
+When kfunc_call_test_const_mem() passes the .rodata globals kfunc_const_data
+and &kfunc_const_struct to bpf_kfunc_call_test_const_mem() and
+bpf_kfunc_call_test_const_struct(), check_func_arg() requests write access
+via func_arg_access_type() -> check_helper_mem_access() ->
+check_map_access_type(), which rejects the program with "write into map
+forbidden".
+
+Because kfunc_call_test_const_mem() is an autoloaded program in
+kfunc_call_test.c, won't this also cause kfunc_call_test__open_and_load()
+and kfunc_call_test_lskel__open_and_load() in verify_success() to fail for
+all subtests using the kfunc_call_test skeleton?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261105102343.3113=
+31-5-jolsa@kernel.org?part=3D1
