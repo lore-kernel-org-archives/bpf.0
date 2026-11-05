@@ -1,49 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.213
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793842214;
-	b=cVExzKP5fFUhuQ0Q5M06PE9FtJ4MLxs7pH/5NZl9RCP/O8ogRefB2WCjBNsClDudkev2
-	 2iWya5sb4TQXdd8YJa4BHrSno04+t8Q5qh8Ne9d0NiXab2vYLj4r1iBRUGcRwhUN1zbh1
-	 f+07vBp+WoYiUCXNxiKWbYc41RP/fRZcV6P8rWYulVNrAIxOvtTEZMHKLUeDsfif7IzaN
-	 ZBXPSvl5wu6yBLUcnCbiakBZ7H+um+nGxNpTqdoyfX5KPKAzjEIY9CjaiOKnsA3P6zqjT
-	 XWrNP3MZUwFUjdfmi8o3fYhqnsXhgSVlcvQ4W9etPFT+IIL7JtEXLVuOkQY50YYH5wg==
+	t=1793843317;
+	b=0nt7/CedAYDrT5vbAHcy9+2wzbJ9zH9yJ5hoJHrK4L3MpTLwu9DEpXgWjsJksJqSdQJY
+	 ydmeqPfOTkZNq6YA+p3FitKRxImSjturq2tnOIN/vtCCX9zuz7eRDSq1Tb16j/BaJk2ca
+	 zyzQlOA6LgJpFg9w/R2LVoZc0wxsruT9ChpLfK0HHlo4ag0yX7FiK13RDWprlzhWIJVjX
+	 RgOa0HQCqLfSlgjIPLwxbvXozBQNFZRjEJ64ASvn4RZSuIXVJusD8MYBDk8lZwYKY93aR
+	 7fYNCRJO1trcxvYzkoPZ1lBHeOUSm7t0AQVWaRINyzFgBHJadjEsBC3WvJ7v/FQM1dg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793842214;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=h8Qq6f7QvgbnrG0J0OoBUg4aeaCtKAluQMwQobqJX00=;
-	b=dpkI0uSBmz44aG3NIPkGYLHWCD/ihAV6cI1sEZ+6Tv3y7rOA0bOnaEqXhSx+ILCbsIjw
-	 Hi3DybdyJIogbZerZyvJrPefYs24thyeJBH0H0iA/XOyTt8M51I3MVQfRUsHLWcoZ1eqk
-	 A6XC6R5mI6oPf97LGLvdtg0RkMzovFFL5ba1Xr1lTNQY2dZ3YdzzVk2+rC50zigSqZ7xx
-	 7dY1Zgbk4f/Vj14U43ddAysQ3Pjt6r2fw2YBfk38syWEXwpoGHYDCq4bZDjX+CUfSxgPB
-	 wCX++t9hr9cQ2vP2joALG+Cm/Q3A4ESEbpWrWtHSi7RXhSyvFRZD9gmfdfxE/By38qw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793843317;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=sQkjxX3K1joAq68TfOUhRaY9yTvSWkChu+qzeIISQGI=;
+	b=q2WWsiuJBS1DA46olDu1JIrqefFMSgswF6W3gs5ZsQgQG33xF/UgJHAu0VePl34HCyCh
+	 TNomXb/2o1azur1sTjqMDJDgtq6Auq13gnbVYBhn+44MeV/A7fbWjkUnsJ9vxWdo8UVQP
+	 JC8y97z95xubSkV5CuHyXxB5y+KJiNH1DyVY+dOAVPdEwo+SdBCq2XM9e7iD44k61yYVC
+	 MY3q0/VFGvOZh0i/0tljN0RNkUqmm2LBlNU3BMFf9bTcLzZotZX3CuBDcKr4Emn8EWg5u
+	 fl198MgE3HZnBQYjcR1PxkiHZPuhm2CmUpmaMVqwOowmLmgBpK7P6q1ke3iyIqTqoMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UeiAME1L;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Bj6MbLCe;
+	arc=none smtp.remote-ip=91.218.175.213
+Received: from mta0.migadu.com (out-213.mta0.migadu.com [91.218.175.213])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27FAE606A332
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 01:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0880A606A326
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 01:48:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0880A606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UeiAME1L
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D721F000C1;
-	Thu,  5 Nov 2026 01:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793842213;
-	bh=h8Qq6f7QvgbnrG0J0OoBUg4aeaCtKAluQMwQobqJX00=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=UeiAME1LKV7XCXVL5AXNRaGihIAKwpZvBSWX5fkfRGLPW2OUt0ifJP75XAgDke+Mb
-	 +p37TOBItdnil44qesyavi5CiOP+oRtw46U7pg6zhOPHuV8L5jDUDiCfX+egoRhLmq
-	 6v8ip1JptpTGmg+Pu96vw0zjPL0cFaDpDBnySJQOeU/yKmdp+2/bgnvMIXhlJCoLHX
-	 siLwwdLlJtOtzdDtFIBXB17XesiFyPJbnU113tnYz4Hjn+w+hl8a7QMQyrGIst08Ke
-	 X3VulCwrIpOBDquZEtkLrFlrHg+IeG9W3YLBTPjlU8vWi6tg7Ni9BjFyLM3otyuMCO
-	 nK2T2G4pmyKEw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D0E638003F7;
-	Thu,  5 Nov 2026 01:30:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Bj6MbLCe
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=E+Tnnknq496cXrkg+nZvAVLx4JY0DVaLftLc8cBxV7o=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793843313; v=1; x=1794448113;
+ b=Bj6MbLCe42vYTLjGG2GoPahv/cBkkaGFa15VL9LAyQs2zARA+S7dw2BtKaWofKCwoCT3DCB7
+ /p32Ia1MzTYptErzDopKP17SIwpt4yRpYYS+9OQQ3G4ifSyh28A+6E5FpaoFrjQLRKFbDgSYY1x
+ aV7ReBKBjjc7D9qJmjieIemo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id db3cfca7bcba751d;
+	Thu, 05 Nov 2026 01:48:33 +0000
+X-Mizu-Trace-ID: db3cfca7bcba751d
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <4f830c30-f99c-4f75-851b-1a3f6d1342b1@linux.dev>
+Date: Thu, 5 Nov 2026 09:48:23 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,44 +58,186 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 7/7] mm/mglru: add tracepoint for aging
+To: Barry Song <baohua@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Dave Chinner
+ <david@fromorbit.com>, David Hildenbrand <david@kernel.org>,
+ Michal Hocko <mhocko@kernel.org>, Qi Zheng <qi.zheng@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Lorenzo Stoakes <ljs@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Muchun Song <muchun.song@linux.dev>, Kairui Song <kasong@tencent.com>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Baoquan He <baoquan.he@linux.dev>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+ "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)"
+ <cgroups@vger.kernel.org>,
+ "open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>,
+ Ridong Chen <chenridong@xiaomi.com>
+References: <20261104130817.849089-1-ridong.chen@linux.dev>
+ <20261104130817.849089-8-ridong.chen@linux.dev>
+ <CAGsJ_4y_Ay0mYO3ic72oepjtW6KYf2sKRXEHb3Ff8uwKrOJZjQ@mail.gmail.com>
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <CAGsJ_4y_Ay0mYO3ic72oepjtW6KYf2sKRXEHb3Ff8uwKrOJZjQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix bpf_gotox with noipa global
- func
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179384221218.3342012.8649357736417717871.git-patchwork-notify@kernel.org>
-Date: Thu, 05 Nov 2026 01:30:12 +0000
-References: <20261104214912.1543558-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261104214912.1543558-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com
 
-Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
 
-On Wed,  4 Nov 2026 21:49:12 +0000 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
+On 11/5/2026 4:56 AM, Barry Song wrote:
+> On Wed, Nov 4, 2026 at 9:10 PM Ridong Chen <ridong.chen@linux.dev> wrote:
+>>
+>> From: Ridong Chen <chenridong@xiaomi.com>
+>>
+>> Aging in MGLRU advances max_seq to create a new youngest generation.
+>> It is triggered from try_to_shrink_lruvec() when should_run_aging()
+>> finds that eviction is no longer possible, or that it would be better
+>> to age first at the current priority. There is currently no tracepoint
+>> on this path, so it cannot be observed when and why aging is needed.
+>>
+>> Add mm_mglru_aging, emitted in try_to_shrink_lruvec() right before
+>> try_to_inc_max_seq(), with the node id, memcg id, sc->priority,
+>> swappiness, max_seq, the anon and file min_seq, and the number of pages
+>> in each generation for both types, as computed by lruvec_gen_size().
+>>
+>> The reason for aging is not reported explicitly, as the logic in
+>> should_run_aging() may change, e.g. for imbalance-based aging. It can
+>> be derived from the generation window and the per-generation sizes,
+>> which are taken before aging, so the youngest generation is populated
+>> as well.
+>>
+>> The nr_anon/nr_file arrays are ordered by seq rather than by generation
+>> slot: entry i holds the generation max_seq - MAX_NR_GENS + 1 + i, i.e.
+>> they go from the oldest generation to the newest, the same order as the
+>> debugfs lru_gen file, so the output can be read directly without mapping
+>> slots back to seqs. The arrays are printed with __print_array(), so the
+>> output is hex and its length follows MAX_NR_GENS automatically.
+>>
+>> Only the lruvec, sc and swappiness are passed in; everything else,
+>> including max_seq, is read in TP_fast_assign(), so try_to_shrink_lruvec()
+>> does no extra work when the event is disabled. Reading max_seq there
+>> rather than using the caller's copy keeps the window consistent with
+>> the per-generation sizes read right after it, should another reclaimer
+>> age the lruvec in between.
+>>
+>> The event marks the aging decision, not its result: the following
+>> try_to_inc_max_seq() may find that aging is already in progress or
+>> done by another reclaimer, so concurrent reclaimers can each emit it
+>> for the same max_seq. Whether max_seq was advanced can be seen from the
+>> following mm_mglru_scan_folios.
+>>
+>> Suggested-by: Barry Song <baohua@kernel.org>
+>> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+>> ---
 > 
-> use_nonstatic_global_other_sec() is an fentry prog, so it has to return 0.
-> It returns the result of the global function __nonstatic_global(), which
-> always returns 0.
+> Much better now:
 > 
-> Before llvm commit 28b4a2032f97 ("[BPF] Mark global functions noipa") the
-> compiler replaced the result of the call with 0. Now it does not look into
-> a global function. The verifier does not either:
+> ~ # echo 1 > /sys/kernel/tracing/events/vmscan/mm_mglru_aging/enable
+> ~ # ./a.out
+> Mapped 400 MB at 0xffff98a00000
+> ^C
+> ~ # cat /sys/kernel/tracing/trace | grep mglru_aging
+>           kswapd0-49      [001] .....   104.277689: mm_mglru_aging:
+> nid=0 memcg_id=1 priority=6 swappiness=60 max_seq=3 anon_min_seq=2
+> file_min_seq=1 nr_anon={0x0,0x0,0xd360,0x0}
+> nr_file={0x0,0x23e2,0x0,0x0}
+>           kswapd0-49      [001] .....   104.536448: mm_mglru_aging:
+> nid=0 memcg_id=1 priority=3 swappiness=60 max_seq=4 anon_min_seq=2
+> file_min_seq=2 nr_anon={0x0,0x20,0xf8bc,0x0}
+> nr_file={0x0,0x91a,0xbd,0x0}
+>             a.out-79      [000] .....   104.689518: mm_mglru_aging:
+> nid=0 memcg_id=1 priority=4 swappiness=60 max_seq=5 anon_min_seq=3
+> file_min_seq=4 nr_anon={0x0,0xf8a0,0x1188,0x0}
+> nr_file={0x0,0x0,0x2,0x7}
+>           kswapd0-49      [001] .....   107.282038: mm_mglru_aging:
+> nid=0 memcg_id=1 priority=2 swappiness=60 max_seq=6 anon_min_seq=4
+> file_min_seq=5 nr_anon={0x0,0x6c50,0xa168,0x605}
+> nr_file={0x0,0x0,0x98,0x18}
+>           kswapd0-49      [001] .....   107.812598: mm_mglru_aging:
+> nid=0 memcg_id=1 priority=1 swappiness=60 max_seq=7 anon_min_seq=5
+> file_min_seq=6 nr_anon={0x0,0xfe10,0x1721,0x54}
+> nr_file={0x0,0x0,0x1a,0x3}
+>             a.out-79      [000] .....   108.936872: mm_mglru_aging:
+> nid=0 memcg_id=1 priority=2 swappiness=60 max_seq=8 anon_min_seq=6
+> file_min_seq=7 nr_anon={0x8,0x7d29,0x8c54,0xc90}
+> nr_file={0x0,0x0,0x4,0x2}
+>           kswapd0-49      [001] .....   108.937115: mm_mglru_aging:
+> nid=0 memcg_id=1 priority=2 swappiness=60 max_seq=8 anon_min_seq=6
+> file_min_seq=7 nr_anon={0x0,0x7d15,0x8c94,0xcac}
+> nr_file={0x0,0x0,0x4,0x2}
+>           kswapd0-49      [001] .....   109.425258: mm_mglru_aging:
+> nid=0 memcg_id=1 priority=1 swappiness=60 max_seq=9 anon_min_seq=7
+> file_min_seq=8 nr_anon={0x0,0xed69,0x24bc,0x488}
+> nr_file={0x0,0x0,0x3,0x3}
 > 
-> [...]
+> One thing that looks a bit weird, though. For example:
+> 
+> max_seq=3 anon_min_seq=2
+> 
+> We have only two generations for anon, but we print four:
+> 
+> nr_anon={0x0,0x0,0xd360,0x0}
+> 
+> The two oldest generations don't actually exist. Ideally,
+> we would print only the two existing generations:
+> 
+> nr_anon={0xd360,0x0}
+> 
+> you should be able to fix it by:
+> 
+> __print_array(__entry->nr_anon, __entry->max_seq -
+> __entry->anon_min_seq + 1 , sizeof(unsigned long)),
+> __print_array(__entry->nr_file, __entry->max_seq -
+> __entry->file_min_seq + 1, sizeof(unsigned long)))
+> 
+> But I guess it's fine, since the two extra entries are both
+> zero.
+> 
+> And, I personally prefer the youngest-to-oldest order,
+> as we usually have:
+> 
+> head ---------- tail
+> 
+> where head is young and tail is old.
+> 
+> Your output uses:
+> 
+> tail ---------- head
+> 
+> But anyway, I guess this is just a matter of whether we
+> read it from left to right or right to left. Personally, I
+> find it more natural to read from youngest to oldest.
+> 
+> If you're not tired of working on this and would like to make
+> a few more improvements, you could address the two issues
+> above. But it is up to you.
+> 
+> For the patch,
+> 
+> Reviewed-by: Barry Song <baohua@kernel.org>
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Fix bpf_gotox with noipa global func
-    https://git.kernel.org/bpf/bpf-next/c/327c53dfd6b5
+Hi, Barry,
 
-You are awesome, thank you!
+Thanks a lot for testing and the Reviewed-by.
+
+Updating it would be fine with me, but I'd slightly prefer the current
+output, to keep it consistent with the debugfs lru_gen_full file. It
+also prints a fixed window of MAX_NR_GENS generations from the oldest
+to the newest, marking the ones below min_seq with 'x'. The event
+reports anon_min_seq and file_min_seq in place of the 'x', so the
+generations that don't exist can still be told apart, and they always
+read 0. Keeping the same window and order makes it easy to compare the
+event with debugfs, e.g. when looking at both while debugging.
+
+That said, if others such as Baolin, Baoquan or Kairui also prefer
+printing only the existing generations from the youngest to the
+oldest, I'm happy to send another version with that change.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Best regards
+Ridong
 
