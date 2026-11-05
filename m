@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793911708;
-	b=ydO3P4WHxiZ169eocs+/2ogb0deQR8uBR2JveOTWxbAb4kRCbbBi9gkvvdLxNCKbOwbY
-	 OQEmhY8FVdHAW0f+Vhx39FiD9DiyrB+0U2vFeaGEpkOT2thPs2xu+Yunc6z3410m26S9/
-	 COTeDp8lyScjGTPsZQYobNWaFWbihPjkK4TAzaWkqc3FJchsFe73O5FMql2SYHtXZE+lv
-	 6E252GkmkP/iLegA7/Lefs3LBzQnOvUHXvw2LpU46J1A1UNACf3Fx24fZWadtgwVG5dmh
-	 BIGohrQjAv/Yo3YWOaf01w/ln9MqB3cNfJjhocxxtuQ4yrGah7CNvdwIaO/uV1bCtjQ==
+	t=1793911714;
+	b=Ro2LS0lb9oQSUBNq0Kii2TxwxoOn4it3v7AoPQ9zUDR4uOrIK3VI+/aCOuma6+VORu+J
+	 XZBJ/2pcXIzez4syGxcdBkxt+fplaXM8C/oXfNsYHSAk6yGoDl4WPWICL6EmgCNjYyaKV
+	 Rq2NHf9a7W4ws8TSmlDOpQjk9GhWjf+FKjFYx3C/+ZW+E+MZI+Ll5w4EBsj8s9nYDX1bB
+	 oU1VzgnsanaUsGk+kJDiqzkvJ+RECvdFqbt50kRxZGRjV9YPhl/m0SgwxWLvvOvmdchJ5
+	 LByClCRXG1k+M89Vs2ANoD93CVtGReQTxy7OUEGTJvmr6/TrNeNgEjRwJaMP5Rpftiw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793911708;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793911714;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=cLtBFu7jHqZR3ZUMd/umw7ZuFixNEDK8oYUsWHluDwg=;
-	b=2JzBROdCt8oGFV9ajOhCzrzojxlYrdR+DuZmSjkX85qoPZBn92xw6I/yzsukXQk07sJ9
-	 eT34Z0msDncyD3cPemwSdXeWL92XIZSOoawHbXkRJEK8+UHMaF4RSgZzgpRE6HlGZB9UC
-	 SYBX4ZJqSwa2ryMWZBeTOdHHwByuPAw/U2GG5FOzXzRWtvEf23fs+Dpx+nIIw5E7TBLTL
-	 F+EgL5qjM8aG81Sn2EHlknO32tO+uO15nlAo3Spf5zsA0qTp0OhfhcojaGcjru6K9TO9g
-	 L0m+Bh/E4RN5Yiag3xFtMsOwC4QVhGfeNLd3J6cgmZK3LGbAbFsrPJCjIInlybF1h8Q==
+	bh=d5oJuSHIoT4PP7+GsouNsm/BX7U0oNOQOxX5/080pDo=;
+	b=K3pktN1w+E+utO2Un+g8ymjQIMaxCmirqJP6FN513LNjzu3/No+w54khcpWiVBfr+4ZI
+	 GGCD9e6rQ+C3KdqdjiaEle+Whr9k6UkLTT3mYFkzJAYkm4xtULwdgtgMy+Pt8uNcgKEeU
+	 XC9oZHc4YpJxj0niRlo1lkxpoOGvVVDX2Tyw/o70b/GP609fsZs8wTzWkp9Q9xG24kDL0
+	 22h9dj0+xi3QtuYklGbsGG/PnKAP7tERNn2oyGmYBZzpWK+OIfjo8+HWGZhacebG4Gk/i
+	 A+r6ogG0KgmBz2XQLIsEAN0KRM3sWQlRiT0gMp0ANm3miU1aDBNIcBG/U6J391Q3mWA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BqH6Qhml;
-	arc=none smtp.remote-ip=209.85.215.177
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bjpJJBS3;
+	arc=none smtp.remote-ip=209.85.215.172
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBC3606A31B
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 20:48:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5EBC3606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33905606A31B
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 20:48:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 33905606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BqH6Qhml
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cc758830601so1642627a12.2
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 12:48:27 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bjpJJBS3
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cd62c570b5dso1466881a12.2
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 12:48:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793911707; x=1794516507; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793911712; x=1794516512; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=cLtBFu7jHqZR3ZUMd/umw7ZuFixNEDK8oYUsWHluDwg=;
-        b=BqH6Qhmlz8VheRyXwSZsD0NAAYahQMlrkfP8SizSdRBouVw+uX1WcfmZoLF3ln/3Pu
-         D8q2p/RS78V2ibCyNNulPc5fbQWGApzSCFHxH2BmcKwqoR3QfUCrV7SumXx1MQ77YKu+
-         TkmL3GgnqTKJhT8BgFv44WDNxaFAOYaB+vYQodgCFnKpb56VB8HWbI6LPOG1NwcUsKiP
-         cDdMKnv4GfevS5QxikhgtPbuqc7kyv6J7Pm6ZTGs1l486jA1PaMhSt4GTEJPHc84Q4aS
-         jU8S0u/ns+ph5n4QUI0fur75Vdqck+NcaCjH//HkH1YciZELki1HUW4FQMRd5l1JiXeu
-         5LcQ==
+        bh=d5oJuSHIoT4PP7+GsouNsm/BX7U0oNOQOxX5/080pDo=;
+        b=bjpJJBS3Npkdu4E6hHZcjIV2tsFeB4s6MdXoEXCd2fuiOuLOxCv0XEUMUsvLs6sWBe
+         sqT+6xmX8mP+EJyz5q9qHi/LtaHjr2vP7HPRDNpOFUc+ge0f10fEqCh63fi7KHlTK6ww
+         IMBGeZC9S3/WwTGFH6pW0YuK1TFIVMRcbW3I1h94+B/WzDeWeNgOEc1YyaMad69hRpLC
+         Gh1iAIoZIrzN46M+ec6xZGuPDlpt+ZzXyQWIaqL1q6Zv0tbKZsghIsQCN9NFXfxipsCV
+         YdYFpBH+WePD5WpcMVSeP8XmTp3kII6SbvwnL4FG+SqblfhDopZhFMPWuyBXkZ7RrqrH
+         JohQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793911707; x=1794516507;
+        d=1e100.net; s=20260707; t=1793911712; x=1794516512;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cLtBFu7jHqZR3ZUMd/umw7ZuFixNEDK8oYUsWHluDwg=;
-        b=rbV26O9jJfKE1LSZ3Xo5kfkd2MMDqo2/DKZmtziqKUiBLPc9ERcud/0090fBdWbo02
-         IYXBf9tfVjkiWrnpoqp+N2Wi3o52+cniv49jnw/P/nlrghRKRL2r7ARmqq7prOw/Lc/y
-         ZxIc3j5y2SYR+Af7NFIXD97Ig1mbrsascyhU4mQxbfMJV9fYWBTQHiSddx3NpRa+QmuW
-         oIQKXnvllsIP3KJjH8fweX4BgYBaBSIJp3frC7Dxlq4wKxUJovvpbjpxy40zZS2UI+4o
-         qUp8oa/2pilEnujbIsRhF0R8vwPKPqpVr1Eaqgw46lUof0STDjE4M9MtJhordbyoPGQR
-         v3BQ==
-X-Gm-Message-State: APuU4Z+91gIdgsALFb8MvfR/Kaxv9ifdsUAd3Wcso8naFWrKPsr/KABE
-	5aCvuWlxeDfgp6dbh1u4od6LPLhRfsH1giSUvI2fR/CR1DxyRLIqc8dtmi0qEA==
-X-Gm-Gg: AYBFou2U+dV6kO9ddYzFRY2cWg+BoRR8bDLif9ImgOddkSgnmXMrfNzdyXuJpxNhKQJ
-	kfM38dcqYXy4vyoSvcF5Ibs/jAG/jiyMulepZTDBzWOrAZFqmQ8a5qNo2COmzs08sgmQ4inKYLc
-	eLgh10tHVCsYEBCPUKTM/9jqAtqy+GYSLdE3xHR/8+X2Br5Fjxc0vC0mEVWnJ3JrK/MymSrCQSy
-	oN9wjMuLK+fYWrMjVW9HMWVCnhriCEknc7M8kZIGS2QhHwLM0Uut3j07pwII3FDtW8rwDxMzyT5
-	hwqoac5tPVFgVsuIzflzLMu7t3qGh3OunNe9Cq5ZuMGWi3Rt9iDH8r0J1wJDDpNlHzMtrTguxcZ
-	MoVRMZHypfS+st8Nf2XGLw1nawC3LRJtSVFdwOE7JWZJOgCPxqA4l2Xd0zNXLXfu8UXcW4kOdLu
-	/2NeXFtYvkBeHREZY7/tIhWwVy5YhWNETGP9isI7VMGsZVzeUlXVcLOEqoUZ5SACuyhsvIA//Eb
-	rxx79jwQSY5bEjdRpnvsjOpWsoGjTUfcMHLwRtOcGhidgF77WwIqscApTio+uDPZhm0e9J1hfTc
-	rKkL1yuhkAakdBagbdM8fioWvDua0VUUYWDnazbXfs1PGP0v3CjKP4QPa9PHwyiS3mY/NoN5W/k
-	n1j0LGgYBFXKowF9ZbRRZslQ516sH2Vp+b4ScY+OxLO5VFjuIOxtcBZiu9zes3s6V8yc7mAwdyA
+        bh=d5oJuSHIoT4PP7+GsouNsm/BX7U0oNOQOxX5/080pDo=;
+        b=TAcCg42EnXuXT7Iji2KxnDmu1OGLHXmEVeGTG1TE0kXVrFAC8rlvWn8zUDXx+mqDDH
+         ydLvh8YCWmJn2XeZX5y9AcBU+ZGnu3Am/tr67MeAEDgnvLSnTOQS0qluMyhilQ+/NU5V
+         wErXdfoXQgCvSg1CB2BfsKArnVTRBLIFSdAftzZ8gcv/zUdzf5ll+YG7ezHr2ZAdjVhR
+         Y05PdozhI+40CTblyN6jkyP3F7PSZNDmhkt+AIcOtMhQmVxHg/+EdP7vVqmyoRf57681
+         jzT9109rLzxNTndMrGR8HB/c9ZIkfNk1n8BA6cBiLOA23uF2+IQUQMYsL3KiHwWa0Op6
+         Brrg==
+X-Gm-Message-State: APuU4Z9wNcs+nkZlILzrp/lltyyEtVCvHIOFZHEp9DTghu9tZkyfvmK0
+	Bgb1ZXJyNQueZ9Ygf1dwyOSNiPyZ6KaQqEH3+JH4qNoLGIryop1XD61AEWrA9w==
+X-Gm-Gg: AYBFou2fM6wdrDV4hi2w8bBMS8d1tzDyKntEcV7ciJH3FRjREe6DE0JRE06jS1WZ9U9
+	EiT8lCLPOhEaXNNh1yCJxJHVkB8AvT6u+gdoY11S3TeFDcKy3wwvKfUNMNNeCrgjUcJEBt/ykYv
+	ph668sVy+LuXjf6QchFwY2PtCNn1hyjbjCc1E49xXUCCraNHJVpcd+OenSQpPGF4REHWbpGgQFg
+	yxIbx/I3FFw3kXsxmih26+TPhftRlB0DBfJNo7uygC0KC4nVujzXr6/CvJT2vQwomHT4vliqFas
+	G4C+4oNu0eYn2LUdTm82aLiu9K6ltdY99ciMn+8kmRcnGOVIwiPu2//WGzP3P8S4MxBEfTYeyjL
+	tLZVO5i4tDjT9y1lYAUGmd+yNOoCg8j7dp8Fe4jKwqb00Hnm6aZc3pDiFH6lau1Tfk76Cod47XM
+	uHCpAeruQ9TjcdElXp5nTIbUDMnN/j33pa0eXVijAortu8G9Df0cNEOf7f/JTUq1/p5QkZcNwPm
+	j9/6OIaMYZ6y+UYQk2E14X5g1fdYFhYkpdpAlLqUw22cm1cpxOLzg46otmQpKCpAvPA+Eyik0Rn
+	0qL9pACbrRrCm96sYwZORDgNB2gNI+U6uhLACsPGaOggUMOLoMBhdFJupko5yLhCfHxKy6dQJtx
+	KkTx+C4SVKVfURWoVlqldvuD7H0bB10cvRUeHE/HQ83450+t3IU7QkaV0uVYlCaltkBtIe8qCgQ
 	==
-X-Received: by 2002:a17:90b:4a89:b0:3ab:27f0:c90b with SMTP id 98e67ed59e1d1-3b0db6fbf17mr201969a91.53.1793911706220;
-        Thu, 05 Nov 2026 12:48:26 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b5c5d785sm2259784a91.0.2026.11.05.12.48.25
+X-Received: by 2002:a17:90b:4a89:b0:3a0:9c9d:eb18 with SMTP id 98e67ed59e1d1-3b0db6f8424mr205332a91.54.1793911712030;
+        Thu, 05 Nov 2026 12:48:32 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b2cf80c9sm5280995a91.0.2026.11.05.12.48.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 12:48:25 -0800 (PST)
+        Thu, 05 Nov 2026 12:48:31 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 32/35] selftests/bpf: Test static subprogs that are verified on their own
-Date: Thu,  5 Nov 2026 20:45:09 +0000
-Message-ID: <20261105204513.2230344-33-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 33/35] selftests/bpf: Test loops that are counted, walked or widened
+Date: Thu,  5 Nov 2026 20:45:10 +0000
+Message-ID: <20261105204513.2230344-34-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
 References: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
@@ -104,879 +104,1024 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The verifier followed each call into the subprog, with the frames of the
-callers in the state. Now it verifies most static subprogs for the states
-at their first insn, without these frames. A call waits, and each exit
-state goes to all calls that wait for this entry state. What can go wrong:
-a call does not get a result that is its own, or the subprog changes what
-a caller holds and the caller does not see it.
+The verifier has three methods for a loop:
+ - Counted: scalar evolution gives the number of iterations and a range for
+   each register that has a closed form. The body is verified one time.
+ - Walked: iteration by iteration, with the real values.
+ - Widened: what returns to the head is joined with the state at the head.
+   A bound that grows moves to a fixed stop, until nothing changes.
+The wrong method rejects a valid prog or costs thousands of insns. A wrong
+state at the head loads an unsafe prog.
 
-  [E] "bpf: Add the sets of states at an insn and the entries of functions"
+  [W] "bpf: Add union and widening of the range of a register"
+  [J] "bpf: Add join of registers and stack slots"
+  [A] "bpf: Find the registers and stack slots that later checks depend on"
   [M] "bpf: Move states along edges, into loops and subprogs and out of
       them"
-  [B] "bpf: Make the state after a call from the caller's state and an
-      exit state"
-  [O] "bpf: Verify static subprogs on their own"
+  [L] "bpf: Enter and leave loops in the main pass, build flow.c"
+  [C] "bpf: Keep the count of a loop when a register has no closed form"
 
-  verifier_..         the case                                        pins
-  ------------------  ----------------------------------------------  ----
-  calls_in_a_row.c    20 calls pass kind 3, one call passes kind 1:   [E]
-                      the 20 entry states are joined, the one stays
-                      'x = inc(x); x = inc(x);' loads and returns 2   [M]
-                      3 entry states meet in the subprog in 2 steps:  [E]
-                      the exit state is for all 3 calls, if they      [B]
-                      wait together or come one after the other
-  subprog_callers.c   The subprog gives up the lock or the RCU        [O]
-                      section of its caller and takes it again.
-                      3 calls wait when the verifier finds it out.
-                      It is called, and it is a timer callback too.   [O]
-                      Recursive subprogs change packet data or        [O]
-                      a tree in the callback of bpf_rbtree_add().
-                      Ids at the return: an inner map from each of    [B]
-                      2 calls, a reference 2 calls down, too many ids.
-                      Two calls pass packet pointers whose offsets    [O]
-                      have different ranges.
-  stack_arg.c         The stack arguments that a subprog got are not  [O]
-                      the ones that it passes on. A subprog does the
-                      NULL check of a stack argument for its caller.
+  verifier_..        the loop                     the verifier must
+  -----------------  ---------------------------  -------------------------
+  loop_need.c        is counted, 'x = x * 3 + 1'  [C] walk it if a jump, an
+                     has no closed form           access or a call ahead
+                                                  depends on x ([A]), else
+                                                  verify it one time
+  loop_as_is.c       is not counted               [M] join the state that
+                                                  ends a walk with a state
+                                                  of this walk only
+                     'if (..) n--', from 3        [W] stop n at 0
+  loop_walk.c        has two entries (bpfjailer)  [L] walk it to its end
+                     each iteration decides       [L] go on with the walk
+                     a jump that leaves the loop
+                     'while (rnd()) n++'          [L] give up at once
+                     32 states enter, each needs  [L] count the insns of
+                     a walk of 300 insns          each walk, not of all
+                     is too long for a walk       [L] not try it again
+  value_ptr_arith.c  'p = &v[p->next]'            [J] keep [0, 31] next to
+                                                  0: it covers the rest
+                     'p += 1'                     [J] reject
+  scev.c             takes a reference in each    [L] reject, or load
+                     iteration, or in one
+  iterating_         bpf_loop() is the head of    [L] verify the callback
+  callbacks.c        a walked loop                in the last iteration too
 
-14 of the 20 progs are unsafe and must be rejected: only one call gets
-a number that is out of bounds, only the code after one call uses what the
-subprog took away.
+In most tests the number is an index after the loop, where no jump limits
+it: its range at the head decides.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   4 +
- .../bpf/progs/verifier_calls_in_a_row.c       | 170 ++++++
- .../selftests/bpf/progs/verifier_stack_arg.c  |  85 +++
- .../bpf/progs/verifier_subprog_callers.c      | 509 ++++++++++++++++++
- 4 files changed, 768 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_calls_in_a_row.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_subprog_callers.c
+ .../selftests/bpf/prog_tests/verifier.c       |   6 +
+ .../bpf/progs/verifier_iterating_callbacks.c  |  53 +++
+ .../selftests/bpf/progs/verifier_loop_as_is.c | 198 +++++++++++
+ .../selftests/bpf/progs/verifier_loop_need.c  | 320 ++++++++++++++++++
+ .../selftests/bpf/progs/verifier_loop_walk.c  | 197 +++++++++++
+ .../selftests/bpf/progs/verifier_scev.c       |  59 ++++
+ .../bpf/progs/verifier_value_ptr_arith.c      |  55 +++
+ 7 files changed, 888 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_as_is.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_need.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_walk.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index b19173905f64..a57744663e99 100644
+index a57744663e99..1424dc3036c5 100644
 --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
 +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -36,6 +36,7 @@
- #include "verifier_btf_flex_array.skel.h"
- #include "verifier_btf_unreliable_prog.skel.h"
- #include "verifier_call_large_imm.skel.h"
-+#include "verifier_calls_in_a_row.skel.h"
- #include "verifier_callx.skel.h"
- #include "verifier_callx_rodata.skel.h"
- #include "verifier_cfg.skel.h"
-@@ -129,6 +130,7 @@
- #include "verifier_stack_arg_order.skel.h"
- #include "verifier_stack_ptr.skel.h"
- #include "verifier_store_release.skel.h"
-+#include "verifier_subprog_callers.skel.h"
- #include "verifier_subprog_insn_stats.skel.h"
- #include "verifier_subprog_precision.skel.h"
- #include "verifier_subprog_topo.skel.h"
-@@ -235,6 +237,7 @@ void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_access); }
- void test_verifier_btf_flex_array(void)       { RUN(verifier_btf_flex_array); }
- void test_verifier_btf_unreliable_prog(void)  { RUN(verifier_btf_unreliable_prog); }
- void test_verifier_call_large_imm(void)       { RUN(verifier_call_large_imm); }
-+void test_verifier_calls_in_a_row(void)       { RUN(verifier_calls_in_a_row); }
- void test_verifier_callx(void)                { RUN_JITED(verifier_callx); }
- void test_verifier_callx_rodata(void)         { RUN_JITED(verifier_callx_rodata); }
- void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
-@@ -340,6 +343,7 @@ void test_verifier_stack_arg(void)            { RUN(verifier_stack_arg); }
- void test_verifier_stack_arg_order(void)      { RUN(verifier_stack_arg_order); }
- void test_verifier_stack_ptr(void)            { RUN(verifier_stack_ptr); }
- void test_verifier_store_release(void)        { RUN(verifier_store_release); }
-+void test_verifier_subprog_callers(void)      { RUN(verifier_subprog_callers); }
- void test_verifier_subprog_insn_stats(void)   { RUN(verifier_subprog_insn_stats); }
- void test_verifier_subprog_precision(void)    { RUN(verifier_subprog_precision); }
- void test_verifier_subprog_topo(void)        { RUN(verifier_subprog_topo); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_calls_in_a_row.c b/tools/testing/selftests/bpf/progs/verifier_calls_in_a_row.c
-new file mode 100644
-index 000000000000..8dcb1a82b3a4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_calls_in_a_row.c
-@@ -0,0 +1,170 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* A static subprog that is called from many places */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+/* gcc makes a copy of a function for an argument that is the same constant in most calls */
-+#if defined(__GNUC__) && !defined(__clang__)
-+#define __noclone __attribute__((noclone))
-+#else
-+#define __noclone
-+#endif
-+
-+volatile int sel;
-+char arr[64];
-+
-+#define SITES_4(call, n)  call(n) call(n + 1) call(n + 2) call(n + 3)
-+#define SITES_20(call)    SITES_4(call, 0) SITES_4(call, 4) SITES_4(call, 8) \
-+			  SITES_4(call, 12) SITES_4(call, 16)
-+
-+/*
-+ * The states of the 20 calls are joined at the entry of the subprog one by one: x grows. The state
-+ * of the first call stays apart from them, however many joins it takes.
-+ *
-+ * kind 1: idx is an index. kind 3: idx is something else. 2 is not there.
-+ */
-+static __noinline __noclone int use(int kind, unsigned int idx, int x)
-+{
-+	if (kind == 1)
-+		return arr[idx] + x;
-+	return idx + x;
-+}
-+
-+SEC("socket")
-+__description("20 calls in a row, a number that a jump tests")
-+__success
-+int many_sites_gap(void *ctx)
-+{
-+	int r = use(1, 5, 100);
-+
-+#define USE(n) if (sel == n) r += use(3, 1000, n);
-+	SITES_20(USE)
-+	return r;
-+}
-+
-+/* The second call gets what the first call returns */
-+static __noinline __noclone int inc(int x)
-+{
-+	return x + 1;
-+}
-+
-+SEC("socket")
-+__description("x = inc(x), two times in a row")
-+__success __retval(2)
-+int inc_two_times(void *ctx)
-+{
-+	int x = 0;
-+
-+	x = inc(x);
-+	x = inc(x);
-+	return x;
-+}
-+
-+char four[4] SEC(".data.four") = { 10, 11, 12, 13 };
-+
-+/*
-+ * r1 is 1, 3 or 5, and the jumps look at it: the states of three calls stay apart at the first
-+ * insn. Those of 1 and 3 meet behind the second jump. What becomes of them meets that of 5 behind
-+ * the first one. From there on one state stands for the three, and what comes out is for
-+ * all three calls.
-+ * Returns r2 + 3, r2 + 2, r2.
-+ */
-+static __naked __noinline __used int three_kinds(void)
-+{
-+	asm volatile (
-+	"if r1 == 5 goto 2f;"
-+	"if r1 == 3 goto 1f;"
-+	"r2 += 1;"
-+"1:"
-+	"r2 += 2;"
-+"2:"
-+	"r0 = r2;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+#define CALL(kind, v)				\
-+	"r1 = " #kind ";"			\
-+	"r2 = " #v ";"				\
-+	"call three_kinds;"
-+
-+#define LOAD					\
-+	"r1 = %[four] ll;"			\
-+	"r1 += r0;"				\
-+	"r0 = *(u8 *)(r1 + 0);"
-+
-+/* The three calls wait at the same time */
-+#define BRANCHES(v1, load1, v3, load3, v5, load5)	\
-+	asm volatile (				\
-+	"r6 = *(u32 *)(r1 + %[len]);"		\
-+	"if r6 == 1 goto 1f;"			\
-+	"if r6 == 3 goto 3f;"			\
-+	CALL(5, v5)				\
-+	load5					\
-+	"exit;"					\
-+"1:"						\
-+	CALL(1, v1)				\
-+	load1					\
-+	"exit;"					\
-+"3:"						\
-+	CALL(3, v3)				\
-+	load3					\
-+	"exit;"					\
-+	:					\
-+	: __imm_addr(four),			\
-+	  __imm_const(len, offsetof(struct __sk_buff, len))	\
-+	: __clobber_all)
-+
-+SEC("tc")
-+__description("three calls wait, their states meet in two steps")
-+__success __retval(10)
-+__naked void three_calls_wait(void)
-+{
-+	BRANCHES(0, LOAD, 0, LOAD, 0, LOAD);
-+}
-+
-+SEC("tc")
-+__description("three calls wait, their states meet in two steps, the first one gets 7")
-+__failure __msg("invalid access to map value, value_size=4 off=7 size=1")
-+__naked void three_calls_wait_bad_1(void)
-+{
-+	BRANCHES(4, LOAD, 0, "", 0, "");
-+}
-+
-+#define ADD	LOAD "r6 += r0;"
-+
-+/* A call is done with before the next one is made */
-+#define ROW(k1, v1, load1, k2, v2, load2, k3, v3, load3)	\
-+	asm volatile (				\
-+	"r6 = 0;"				\
-+	CALL(k1, v1)				\
-+	load1					\
-+	CALL(k2, v2)				\
-+	load2					\
-+	CALL(k3, v3)				\
-+	load3					\
-+	"r0 = r6;"				\
-+	"exit;"					\
-+	:					\
-+	: __imm_addr(four)			\
-+	: __clobber_all)
-+
-+SEC("tc")
-+__description("three calls in a row, their states meet in two steps")
-+__success __retval(35)
-+__naked void three_calls_in_a_row(void)
-+{
-+	ROW(1, 0, ADD, 3, 0, ADD, 5, 0, ADD);
-+}
-+
-+SEC("tc")
-+__description("three calls in a row, the second one gets 6")
-+__failure __msg("invalid access to map value, value_size=4 off=6 size=1")
-+__naked void three_calls_in_a_row_bad_2(void)
-+{
-+	ROW(1, 0, "", 3, 4, ADD, 5, 0, "");
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-index 146cdf81bbc4..9cd4fee561b2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -445,6 +445,91 @@ __naked void stack_arg_shared_store(void)
+@@ -83,7 +83,10 @@
+ #include "verifier_liveness_exp.skel.h"
+ #include "verifier_load_acquire.skel.h"
+ #include "verifier_loop_hierarchy.skel.h"
++#include "verifier_loop_as_is.skel.h"
+ #include "verifier_loop_latch.skel.h"
++#include "verifier_loop_need.skel.h"
++#include "verifier_loop_walk.skel.h"
+ #include "verifier_loops1.skel.h"
+ #include "verifier_lwt.skel.h"
+ #include "verifier_map_in_map.skel.h"
+@@ -284,7 +287,10 @@ void test_verifier_linked_scalars(void)       { RUN(verifier_linked_scalars); }
+ void test_verifier_live_stack(void)           { RUN(verifier_live_stack); }
+ void test_verifier_liveness_exp(void)         { RUN(verifier_liveness_exp); }
+ void test_verifier_loop_hierarchy(void)       { RUN(verifier_loop_hierarchy); }
++void test_verifier_loop_as_is(void)           { RUN(verifier_loop_as_is); }
+ void test_verifier_loop_latch(void)           { RUN(verifier_loop_latch); }
++void test_verifier_loop_need(void)            { RUN(verifier_loop_need); }
++void test_verifier_loop_walk(void)            { RUN(verifier_loop_walk); }
+ void test_verifier_loops1(void)               { RUN(verifier_loops1); }
+ void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
+ void test_verifier_map_in_map(void)           { RUN(verifier_map_in_map); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+index a3e31aa25fe1..e30f7676081f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
++++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+@@ -290,6 +290,59 @@ static __naked void iter_limit_bug_cb(void)
  	);
  }
  
-+/* What it stores is what it got: the path that stores nothing looks the same at the call. */
-+static __naked __noinline __used long stores_same_on_one_path(long a, long b, long c, long d,
-+							      long e, long f, long g)
++static __naked __noinline __used void set_flag_cb(void)
 +{
 +	asm volatile (
-+	"r6 = *(u64 *)(r11 + 8);"
-+	"r7 = *(u64 *)(r11 + 16);"
-+	"if r1 == 0 goto l0_%=;"
-+	"*(u64 *)(r11 - 8) = r6;"
-+	"*(u64 *)(r11 - 16) = r7;"
-+"l0_%=:"
-+	"r1 = 0;"
-+	"r2 = 0;"
-+	"r3 = 0;"
-+	"r4 = 0;"
-+	"r5 = 0;"
-+	"call subprog_7args;"
++	"r1 = 1;"
++	"*(u64 *)(r2 + 0) = r1;"
++	"r0 = 0;"
 +	"exit;"
-+	::: __clobber_all);
++	::: __clobber_all
++	);
 +}
 +
-+SEC("tc")
-+__description("stack_arg: incoming args are not taken for outgoing args, same values")
-+__failure __msg("callee expects 7 args, stack arg1 is not initialized")
-+__naked void incoming_for_outgoing_same(void)
++/*
++ * bpf_loop() is the head of a loop whose iterations are looked at one by one, because of r1.
++ * The callback comes back to it in the same iteration, the last one included.
++ */
++SEC("socket")
++__failure __msg("frame pointer is read only")
++__naked void callback_returns_to_loop_head(void)
 +{
 +	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r1 = r0;"
-+	"r2 = 2;"
-+	"r3 = 3;"
-+	"r4 = 4;"
-+	"r5 = 5;"
-+	"*(u64 *)(r11 - 8) = 6;"
-+	"*(u64 *)(r11 - 16) = 7;"
-+	"call stores_same_on_one_path;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+static __naked __noinline __used long sixth_is_there(long a, long b, long c, long d, long e,
-+						     long *f)
-+{
-+	asm volatile (
-+	"r0 = *(u64 *)(r11 + 8);"
-+	"if r0 == 0 goto l0_%=;"
-+	"r0 = 1;"
-+"l0_%=:"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: subprog does the NULL check for its caller")
-+__success
-+__naked void null_check_of_stack_arg(void)
-+{
-+	asm volatile (
++	"r7 = 0;"
 +	"r1 = 0;"
 +	"*(u64 *)(r10 - 8) = r1;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"r1 = %[map_hash_8b] ll;"
-+	"call %[bpf_map_lookup_elem];"
-+	"r6 = r0;"
 +	"r1 = 1;"
-+	"r2 = 2;"
-+	"r3 = 3;"
-+	"r4 = 4;"
-+	"r5 = 5;"
-+	"*(u64 *)(r11 - 8) = r6;"
-+	"call sixth_is_there;"
-+	"if r0 == 0 goto l0_%=;"
-+	"r0 = *(u64 *)(r6 + 0);"
-+"l0_%=:"
++	"r2 = %[set_flag_cb] ll;"
++	"r3 = r10;"
++	"r3 += -8;"
++	"r4 = 0;"
++	"1:"
++	"call %[bpf_loop];"
++	"r1 = *(u64 *)(r10 - 8);"
++	"if r1 == 0 goto 2f;"
++	"if r7 != 3 goto 2f;"
++	"r10 = 0;"
++	"2:"
++	"r7 += 1;"
++	"r1 = 0;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r1 = r7;"
++	"r2 = %[set_flag_cb] ll;"
++	"r3 = r10;"
++	"r3 += -8;"
++	"r4 = 0;"
++	"if r7 < 4 goto 1b;"
 +	"r0 = 0;"
 +	"exit;"
 +	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_8b)
-+	: __clobber_all);
++	: __imm_addr(set_flag_cb),
++	  __imm(bpf_loop)
++	: __clobber_all
++	);
 +}
 +
- /* r1 - r5 and all 19 slots. Its prototype has no parameters: what it takes is seen in its code. */
- __naked __noinline __used
- static unsigned long subprog_24args(void)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_callers.c b/tools/testing/selftests/bpf/progs/verifier_subprog_callers.c
+ /*
+  * may_goto doesn't leave the loop, so it's not what stops it. The address is greater than 10:
+  * the loop spins until may_goto that the verifier adds ends the prog.
+diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_as_is.c b/tools/testing/selftests/bpf/progs/verifier_loop_as_is.c
 new file mode 100644
-index 000000000000..2b847a7723b1
+index 000000000000..0316da3003ad
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_subprog_callers.c
-@@ -0,0 +1,509 @@
++++ b/tools/testing/selftests/bpf/progs/verifier_loop_as_is.c
+@@ -0,0 +1,198 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* A static subprog and its callers: what they hold, where they run */
++/*
++ * The state that enters a loop that is not counted is left as it is. So is the state that ends
++ * a walk through the iterations of such a loop. What stands for many iterations is a join of states
++ * that were seen, not a guess that is written into one of them.
++ */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
 +
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64[9]);
++} map SEC(".maps");
++
++#define LOOKUP(reg)							\
++	"r1 = 0;"							\
++	"*(u32 *)(r10 - 4) = r1;"					\
++	"r2 = r10;"							\
++	"r2 += -4;"							\
++	"r1 = %[map] ll;"						\
++	"call %[bpf_map_lookup_elem];"					\
++	#reg " = r0;"							\
++	"if r0 == 0 goto 9f;"
++
++#define END								\
++"9:"									\
++	"r0 = 0;"							\
++	"exit;"								\
++	:								\
++	: __imm(bpf_map_lookup_elem), __imm_addr(map)			\
++	: __clobber_all
++
++#define OK(text)	SEC("socket") __description("as is: " text) __success __retval(0)
++#define BAD(text)	SEC("socket") __description("as is: " text) __failure
++
++/*
++ *	do { n += 3; } while (v[0]);
++ * Two iterations are looked at as they are. The second one ends the walk: its jump goes both
++ * ways. Its state is joined with the one before, nothing stops n, so n is any number.
++ * What comes back next is within that. The number of insns tells that there is no fourth pass.
++ * The loop gets may_goto when the walk ends, and all is done again: two times 24 insns.
++ */
++OK("the state that ends a walk is joined with the one before")
++__log_level(1) __msg("processed 48 insns")
++__naked void two_passes(void)
++{
++	asm volatile (
++	LOOKUP(r7)
++	"r6 = 0;"
++"1:"
++	"r6 += 3;"
++	"r1 = *(u32 *)(r7 + 0);"
++	"if r1 != 0 goto 1b;"
++	"r6 &= 63;"
++	"r7 += r6;"
++	"r0 = *(u8 *)(r7 + 8);"
++	END);
++}
++
++/*
++ *	x = (v[0] & 1) << 62; do { x |= x >> 1; if (x > 1 << 62) break; } while (v[1]);
++ * The range at the head is 0..1 << 62 in every pass, the lower half is 0, and one more bit is not
++ * known: bit 61, 60 .. 32. That is not followed bit by bit, 30 passes and more in a nest of loops:
++ * the known bits are what the range says after the first one.
++ */
++OK("known bits are not lost one by one")
++__log_level(1) __msg("processed 74 insns")
++__naked void bits_one_by_one(void)
++{
++	asm volatile (
++	LOOKUP(r7)
++	"r6 = *(u64 *)(r7 + 0);"
++	"r6 &= 1;"
++	"r6 <<= 62;"
++	"r8 = 1;"
++	"r8 <<= 62;"
++"1:"
++	"r1 = r6;"
++	"r1 >>= 1;"
++	"r6 |= r1;"
++	"if r6 > r8 goto 9f;"
++	"r1 = *(u64 *)(r7 + 8);"
++	"if r1 != 0 goto 1b;"
++	"r6 >>= 60;"
++	"r7 += r6;"
++	"r0 = *(u8 *)(r7 + 0);"
++	END);
++}
++
++/*
++ *	if (x < 1000000) return; do { if (x && !v[2]) x--; } while (v[1]);
++ * x is 1000000..U64_MAX, then 999999..U64_MAX. As a signed number it's S64_MIN..S64_MAX all the
++ * time: no signed bound moves, and the range does, a million times if nothing is done about it.
++ */
++OK("a range moves and its signed bounds do not")
++__log_level(1) __msg("processed 68 insns")
++__naked void unsigned_bound_moves(void)
++{
++	asm volatile (
++	LOOKUP(r7)
++	"r6 = *(u64 *)(r7 + 0);"
++	"if r6 < 1000000 goto 9f;"
++"1:"
++	"if r6 == 0 goto 2f;"
++	"r1 = *(u64 *)(r7 + 16);"
++	"if r1 != 0 goto 2f;"
++	"r6 += -1;"
++"2:"
++	"r1 = *(u64 *)(r7 + 8);"
++	"if r1 != 0 goto 1b;"
++	"r6 &= 7;"
++	"r7 += r6;"
++	"r0 = *(u8 *)(r7 + 0);"
++	END);
++}
++
++/*
++ *	n = 3; while (v[0]) { if (v[0] != 1 && n) n--; }
++ * n goes from 3 to 0. The bound that moves at the head of the loop is put at 0, the nearest of the
++ * fixed stops, and that holds. Without it n goes on to fall, and n & 63 is up to 63.
++ */
++OK("a number that falls stops at 0")
++__naked void stops_at_0(void)
++{
++	asm volatile (
++	LOOKUP(r6)
++	"r7 = 3;"
++"1:"
++	"r1 = *(u64 *)(r6 + 0);"
++	"if r1 == 0 goto 3f;"
++	"if r1 == 1 goto 2f;"
++	"if r7 == 0 goto 2f;"
++	"r7 += -1;"
++"2:"
++	"goto 1b;"
++"3:"
++	"r7 &= 63;"
++	"r6 += r7;"
++	"r0 = *(u8 *)(r6 + 68);"
++	END);
++}
++
++static __naked __noinline __used void nothing(void)
++{
++	asm volatile ("r0 = 0; exit;" ::: __clobber_all);
++}
++
++/*
++ *	if (v[0]) { n = 7; have = 1; }
++ *	nothing();
++ *	i = 0; do { if (v[0] != 3) i++; } while (i < 8 && v[0] != 2);
++ *	if (have) return n;
++ * (have = 0, n is not set) and (have = 1, n = 7) wait for the function. What comes out of it goes
++ * to both at once, and the insn behind the call is the head of the loop: two walks begin, and no
++ * insn is looked at in between. The state that ends one of them is joined with a state of
++ * that walk. With a state of the other one it would be (have = 0 or 1, n is not set).
++ */
++#define TWO_WALKS(name, test)						\
++__naked void name(void)							\
++{									\
++	asm volatile (							\
++	LOOKUP(r8)							\
++	"r9 = 0;"							\
++	"r1 = *(u32 *)(r8 + 0);"					\
++	"if r1 != 0 goto 1f;"						\
++	"r7 = 0;"							\
++	"goto 2f;"							\
++"1:"									\
++	"r6 = 7;"							\
++	"r7 = 1;"							\
++"2:"									\
++	"call nothing;"							\
++"3:"									\
++	"r1 = *(u32 *)(r8 + 0);"					\
++	"if r1 == 3 goto +1;"						\
++	"r9 += 1;"							\
++	"if r9 > 7 goto 4f;"						\
++	"if r1 == 1 goto 3b;"						\
++	"if r1 != 2 goto 3b;"						\
++"4:"									\
++	test								\
++	"r0 = r6;"							\
++	"exit;"								\
++	END);								\
++}
++
++OK("two walks begin at the same time")
++TWO_WALKS(two_walks_at_once, "if r7 == 0 goto 9f;")
++
++/* n is read when it is not set */
++BAD("two walks begin at the same time, the register is not set")
++__msg("R6 !read_ok")
++TWO_WALKS(two_walks_at_once_bad, "if r7 != 0 goto 9f;")
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_need.c b/tools/testing/selftests/bpf/progs/verifier_loop_need.c
+new file mode 100644
+index 000000000000..d13030f766bf
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_loop_need.c
+@@ -0,0 +1,320 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * A counted loop changes a number in a way that has no formula:
++ *	for (i = 0; i < 1000; i++) x = x * 3 + 1;
++ * The verifier can go through the iterations one by one to find out what x is. It does so only
++ * if something ahead looks at x: a jump, an access to memory, a call. Otherwise x is not
++ * known in the loop and behind it, and the loop is looked at once.
++ *
++ * What looks at a number is found ahead of the main pass, and it is a guess. A use that is missed
++ * rejects a program that would load after a walk. It never loads a program that is not safe.
++ */
 +#include <vmlinux.h>
 +#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
 +#include "bpf_misc.h"
-+#include "bpf_experimental.h"
 +
-+#define private(name) SEC(".bss." #name) __hidden __attribute__((aligned(8)))
-+
-+struct elem {
-+	struct bpf_list_node l;
-+	__u64 data;
-+};
-+
-+private(A) struct bpf_spin_lock lock_a;
-+private(A) struct bpf_list_head head_a __contains(elem, l);
-+
-+int pid;
-+
-+static __noinline void relock_a(void)
-+{
-+	bpf_spin_unlock(&lock_a);
-+	bpf_spin_lock(&lock_a);
-+}
-+
-+/* Somebody else can pop and free the node while the lock is not held. */
-+SEC("tc")
-+__description("subprog drops the lock of its caller for a while, non-owning reference")
-+__failure __msg("invalid mem access 'scalar'")
-+int relock_non_owning_ref(struct __sk_buff *skb)
-+{
-+	struct elem *n;
-+
-+	n = bpf_obj_new(typeof(*n));
-+	if (!n)
-+		return 0;
-+	bpf_spin_lock(&lock_a);
-+	bpf_list_push_front(&head_a, &n->l);
-+	relock_a();
-+	n->data = 42;
-+	bpf_spin_unlock(&lock_a);
-+	return 0;
-+}
-+
-+static __noinline void rcu_window(void)
-+{
-+	bpf_rcu_read_unlock();
-+	bpf_rcu_read_lock();
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__description("subprog leaves the RCU section of its caller for a while")
-+__failure __msg("R1 must be a rcu pointer")
-+int rcu_window_rcu_ptr(void *ctx)
-+{
-+	struct task_struct *task = bpf_get_current_task_btf(), *parent;
-+
-+	bpf_rcu_read_lock();
-+	parent = task->real_parent;
-+	if (!parent)
-+		goto out;
-+	rcu_window();
-+	parent = bpf_task_acquire(parent);
-+	if (parent) {
-+		pid = parent->pid;
-+		bpf_task_release(parent);
-+	}
-+out:
-+	bpf_rcu_read_unlock();
-+	return 0;
-+}
-+
-+struct timer_elem {
-+	struct bpf_timer timer;
-+};
++/* a map value of 64 bytes that holds nothing but numbers */
++u64 vals[8];
 +
 +struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++	__uint(max_entries, 4096);
++} ringbuf SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
 +	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct timer_elem);
-+} timers SEC(".maps");
++} arena SEC(".maps");
 +
-+static __noinline int leaves_preempt_off(void *map, int *key, struct timer_elem *val)
++#define OK(text)	SEC("socket") __description("need: " text) __success
++#define BAD(text)	SEC("socket") __description("need: " text) __failure
++#define NOT_WALKED	__log_level(2) __msg("nothing looks at it")
++#define WALKED		__log_level(2) __not_msg("nothing looks at it")
++
++/* The read is not allowed */
++#define UNLESS(cond)	"if " cond " goto +1; r0 = *(u64 *)(r10 + 8);"
++
++/* r6 is 1 or 2, and is multiplied by 3 in each of @n iterations. @use comes behind the loop. */
++#define TIMES_3_IN(init, n, use)					\
++	asm volatile (							\
++	init								\
++	"call %[bpf_get_prandom_u32];"					\
++	"r6 = r0;"							\
++	"r6 &= 1;"							\
++	"r6 += 1;"							\
++	"r7 = 0;"							\
++"1:	r6 *= 3;"							\
++	"r7 += 1;"							\
++	"if r7 < " #n " goto 1b;"					\
++	use								\
++	"exit;"								\
++	:: __imm(bpf_get_prandom_u32), __imm_addr(vals) : __clobber_all)
++#define TIMES_3(n, use)	TIMES_3_IN("", n, use "r0 = 0;")
++
++OK("a number that is only stored is not followed")
++NOT_WALKED __msg("processed 11 insns")
++__naked void stored_only(void)
 +{
-+	bpf_preempt_disable();
-+	return 0;
++	TIMES_3(1000, "*(u64 *)(r10 - 8) = r6;");
 +}
 +
-+/* The call and the callback have one frame each. The callback returns to the kernel. */
-+SEC("tc")
-+__description("subprog is called, then it is made a timer callback")
-+__failure __msg("cannot be used inside bpf_preempt_disable-ed region")
-+int call_then_timer_callback(struct __sk_buff *skb)
++OK("a jump looks at the number")
++WALKED
++__naked void jump(void)
 +{
-+	struct timer_elem *val = bpf_map_lookup_elem(&timers, &(int){0});
-+
-+	if (!val)
-+		return 0;
-+	leaves_preempt_off(NULL, NULL, NULL);
-+	bpf_preempt_enable();
-+	bpf_timer_set_callback(&val->timer, leaves_preempt_off);
-+	return 0;
++	TIMES_3(5, UNLESS("r6 <= 486"));
 +}
 +
-+struct tree_elem {
-+	long key;
-+	struct bpf_rb_node node;
++BAD("a jump looks at the number, which is too large")
++__msg("invalid read from stack")
++__naked void jump_too_large(void)
++{
++	TIMES_3(5, UNLESS("r6 <= 485"));
++}
++
++OK("the number is an offset in a map value that holds numbers")
++WALKED
++__naked void value_offset(void)
++{
++	/* 27 or 54 */
++	TIMES_3(3, "r1 = %[vals] ll; r1 += r6; r0 = *(u8 *)(r1 + 9);");
++}
++
++#define VALUE_AT(reg, off)	"r1 = %[vals] ll; r1 += " #reg "; r0 = *(u8 *)(r1 + " #off ");"
++
++__naked __noinline __used
++static unsigned long value_at_plus_9(void)
++{
++	asm volatile ("r2 = r1;" VALUE_AT(r2, 9) "exit;" :: __imm_addr(vals) : __clobber_all);
++}
++
++OK("the number is an offset in a map value in a function")
++WALKED
++__naked void value_offset_argument(void)
++{
++	TIMES_3(3, "r1 = r6; call value_at_plus_9;");
++}
++
++__naked __noinline __used
++static unsigned long times_27(void)
++{
++	TIMES_3_IN("", 3, "r0 = r6;");
++}
++
++OK("what a function returns is an offset in a map value")
++WALKED
++__naked void value_offset_returned(void)
++{
++	asm volatile ("call times_27;" VALUE_AT(r0, 9) "exit;"
++		      :: __imm_addr(vals) : __clobber_all);
++}
++
++#if defined(__clang_major__) && __clang_major__ >= 23
++struct pair {
++	__u64 lo;	/* r0 */
++	__u64 hi;	/* r2 */
 +};
 +
-+private(D) struct bpf_spin_lock lock_d;
-+private(D) struct bpf_rb_root root_d __contains(tree_elem, node);
-+
-+static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
++__naked __noinline __used
++static struct pair zero_and_times_27(void)
 +{
-+	struct tree_elem *elem_a = container_of(a, struct tree_elem, node);
-+	struct tree_elem *elem_b = container_of(b, struct tree_elem, node);
-+
-+	return elem_a->key < elem_b->key;
++	TIMES_3_IN("", 3, "r0 = 0; r2 = r6;");
 +}
 +
-+static __noinline long removes_and_recurses(struct tree_elem *e, int n)
++OK("the second half of what a function returns is an offset in a map value")
++__load_if_JITed() WALKED
++__naked void value_offset_returned_in_r2(void)
 +{
-+	struct bpf_rb_node *node;
++	asm volatile ("call zero_and_times_27;" VALUE_AT(r2, 9) "exit;"
++		      :: __imm_addr(vals) : __clobber_all);
++}
++#endif
 +
-+	if (n <= 0)
-+		return 0;
-+	node = bpf_rbtree_remove(&root_d, &e->node);
-+	if (node)
-+		bpf_rbtree_add(&root_d, node, less);
-+	n = removes_and_recurses(e, n - 1);
-+	barrier_var(n);
-+	return n + 1;
++__naked __noinline __used
++static unsigned long times_27_there(void)
++{
++	TIMES_3_IN("r8 = r1;", 3, "*(u64 *)(r8 + 0) = r6; r0 = 0;");
 +}
 +
-+static bool less_changes_tree(struct bpf_rb_node *a, const struct bpf_rb_node *b)
-+{
-+	struct tree_elem *elem_a = container_of(a, struct tree_elem, node);
-+	struct tree_elem *elem_b = container_of(b, struct tree_elem, node);
++#define TIMES_27_AT_FP_8	"r1 = r10; r1 += -8; call times_27_there; r2 = *(u64 *)(r10 - 8);"
 +
-+	removes_and_recurses(elem_b, 1);
-+	return elem_a->key < elem_b->key;
++OK("a function stores the number in the stack of its caller")
++WALKED
++__naked void stored_for_the_caller(void)
++{
++	asm volatile (TIMES_27_AT_FP_8 VALUE_AT(r2, 9) "exit;"
++		      :: __imm_addr(vals) : __clobber_all);
 +}
 +
-+/* bpf_rbtree_add() walks the tree while it calls the callback. */
-+SEC("?tc")
-+__description("recursive subprog changes the tree, it is called from the callback of rbtree_add")
-+__arch_x86_64
-+__arch_arm64
-+__failure __msg("bpf_rbtree_remove not allowed in rbtree cb")
-+int recursion_removes_in_rbtree_callback(void *ctx)
++OK("the number is an offset in the stack")
++WALKED
++__naked void stack_offset(void)
 +{
-+	struct tree_elem *e;
-+
-+	e = bpf_obj_new(typeof(*e));
-+	if (!e)
-+		return 0;
-+	bpf_spin_lock(&lock_d);
-+	bpf_rbtree_add(&root_d, &e->node, less_changes_tree);
-+	bpf_spin_unlock(&lock_d);
-+	return 0;
++	/* fp-9 or fp-18 */
++	TIMES_3(2, "*(u64 *)(r10 - 8) = r7; *(u64 *)(r10 - 16) = r7; *(u64 *)(r10 - 24) = r7;"
++		   "r6 = -r6; r1 = r10; r1 += r6; r0 = *(u8 *)(r1 + 0);");
 +}
 +
-+/*
-+ * What a subprog does is what its callees do. The walk over the graph is done with second()
-+ * before it is done with first(), which second() calls: the prog calls second() and then
-+ * first(), so first() is looked at first, and in it the call that comes last.
-+ */
-+static __noinline int pulls_data(struct __sk_buff *skb)
++__naked __noinline __used
++static unsigned long times_9(void)
 +{
-+	return bpf_skb_pull_data(skb, 0);
++	TIMES_3_IN("", 2, "r0 = r6;");
 +}
 +
-+static __noinline int pulls_first(struct __sk_buff *skb, int n);
++/* fp-9 or fp-18, plus @off */
++#define STACK_AT_MINUS_R0(off)						\
++	"*(u64 *)(r10 - 8) = r0; *(u64 *)(r10 - 16) = r0; *(u64 *)(r10 - 24) = r0;"	\
++	"r0 = -r0; r1 = r10; r1 += r0; r0 = *(u8 *)(r1 + " #off ");"
 +
-+static __noinline int pulls_second(struct __sk_buff *skb, int n)
++OK("what a function returns is an offset in the stack")
++WALKED
++__naked void stack_offset_returned(void)
 +{
-+	if (n <= 0)
-+		return 0;
-+	return pulls_first(skb, n - 1) + 1;
++	asm volatile ("call times_9;" STACK_AT_MINUS_R0(0) "exit;" ::: __clobber_all);
 +}
 +
-+static __noinline int pulls_first(struct __sk_buff *skb, int n)
-+{
-+	int r = pulls_data(skb);
++/* r6 is 1, and is multiplied by 3 in each of 2 iterations */
++#define NINE(use)							\
++	asm volatile (							\
++	"r6 = 1;"							\
++	"r7 = 0;"							\
++"1:	r6 *= 3;"							\
++	"r7 += 1;"							\
++	"if r7 < 2 goto 1b;"						\
++	use								\
++	"r0 = 0;"							\
++	"exit;"								\
++	:: __imm(bpf_ringbuf_reserve), __imm(bpf_ringbuf_discard),	\
++	   __imm_addr(ringbuf) : __clobber_all)
 +
-+	return r + pulls_second(skb, n);
++OK("the number is part of a size that has to be a constant")
++WALKED
++__naked void constant_argument(void)
++{
++	NINE("r1 = %[ringbuf] ll; r2 = 7; r2 += r6; r3 = 0; call %[bpf_ringbuf_reserve];"
++	     "if r0 == 0 goto +3; r1 = r0; r2 = 0; call %[bpf_ringbuf_discard];");
 +}
 +
-+SEC("?tc")
-+__description("recursive static subprogs, the one that is explored last changes packet data")
-+__arch_x86_64
-+__arch_arm64
-+__failure __msg("invalid mem access 'scalar'")
-+int recursion_changes_pkt_data(struct __sk_buff *skb)
-+{
-+	char *p = (void *)(long)skb->data, *end = (void *)(long)skb->data_end;
-+	int r;
-+
-+	if (p + 1 > end)
-+		return 0;
-+	r = pulls_second(skb, 1);
-+	*p = 42;
-+	r += pulls_first(skb, 0);
-+	return r & 1;
-+}
-+
-+static __naked __noinline __used long returns_third(void)
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
++/* Nothing checks where a pointer to arena points to */
++OK("an address in arena is not followed")
++NOT_WALKED
++__naked void arena_address(void)
 +{
 +	asm volatile (
-+	"r0 = r1;"
-+	"r0 = r2;"
-+	"r0 = r3;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* What comes back has the range of r6, not the range of the pointer of the first call. */
-+#define PKT_POINTERS_OF_TWO_RANGES(func)	\
-+	asm volatile (				\
-+	"r9 = *(u32 *)(r1 + %[data]);"		\
-+	"r8 = *(u32 *)(r1 + %[data_end]);"	\
-+	"call %[bpf_get_prandom_u32];"		\
-+	"r7 = r0;"				\
-+	"r0 &= 0xff;"				\
-+	"r1 = 0;"				\
-+	"r2 = 3;"				\
-+	"r3 = r9;"				\
-+	"r3 += r0;"				\
-+	"call " #func ";"			\
-+	"r7 &= 1;"				\
-+	"r6 = r9;"				\
-+	"r6 += r7;"				\
-+	"r1 = 0;"				\
-+	"r2 = 3;"				\
-+	"r3 = r6;"				\
-+	"call " #func ";"			\
-+	"if r0 == 0 goto 1f;"			\
-+	"if r0 > r8 goto 1f;"			\
-+	"r0 = *(u8 *)(r6 + 100);"		\
-+"1:"						\
-+	"r0 = 0;"				\
-+	"exit;"					\
-+	:					\
-+	: __imm(bpf_get_prandom_u32),		\
-+	  __imm_const(data, offsetof(struct __sk_buff, data)),		\
-+	  __imm_const(data_end, offsetof(struct __sk_buff, data_end))	\
-+	: __clobber_all)
-+
-+SEC("tc")
-+__description("two calls, the offset of the packet pointer has a smaller range in the second one")
-+__failure __msg("invalid access to packet")
-+__naked void pkt_pointers_of_two_ranges(void)
-+{
-+	PKT_POINTERS_OF_TWO_RANGES(returns_third);
-+}
-+
-+static __naked __noinline __used long returns_third_r2_calls_down(void)
-+{
-+	asm volatile (
-+	"if r2 == 0 goto 1f;"
-+	"r2 += -1;"
-+	"call returns_third_r2_calls_down;"
-+	"exit;"
-+"1:"
-+	"r0 = r3;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* A recursive subprog that gets such a pointer needs the frames of its callers too. */
-+SEC("?tc")
-+__description("two calls of a recursive subprog, the second packet pointer has the smaller range")
-+__arch_x86_64
-+__arch_arm64
-+__failure __msg("invalid access to packet")
-+__naked void pkt_pointers_of_two_ranges_recursion(void)
-+{
-+	PKT_POINTERS_OF_TWO_RANGES(returns_third_r2_calls_down);
-+}
-+
-+static __naked __noinline __used long tcp_sock_of(void)
-+{
-+	asm volatile (
-+	"call %[bpf_tcp_sock];"
-+	"exit;"
-+	:
-+	: __imm(bpf_tcp_sock)
-+	: __clobber_all);
-+}
-+
-+static __naked __noinline __used long calls_tcp_sock_of(void)
-+{
-+	asm volatile (
-+	"call tcp_sock_of;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/* The caller of tcp_sock_of() has the reference from its own caller. */
-+SEC("tc")
-+__description("reference goes down two calls, what is made from it is used after the release")
-+__failure __msg("R7 invalid mem access 'scalar'")
-+__naked void reference_two_calls_down(void)
-+{
-+	asm volatile (
-+	"r2 = 0;"
-+	"*(u64 *)(r10 - 8) = r2;"
-+	"*(u64 *)(r10 - 16) = r2;"
-+	"r2 = r10;"
-+	"r2 += -16;"
-+	"r3 = 12;"
-+	"r4 = 0;"
-+	"r5 = 0;"
-+	"call %[bpf_sk_lookup_tcp];"
-+	"if r0 == 0 goto 1f;"
-+	"r6 = r0;"
-+	"r1 = r6;"
-+	"call calls_tcp_sock_of;"
-+	"r7 = r0;"
-+	"r1 = r6;"
-+	"call %[bpf_sk_release];"
-+	"if r7 == 0 goto 1f;"
-+	"r0 = *(u32 *)(r7 + 0);"
-+"1:"
++	"r1 = %[arena] ll;"
++	"r6 = 1;"
++	"r7 = 0;"
++"1:	r1 = addr_space_cast(r6, 0x0, 0x1);"
++	"r0 = *(u64 *)(r1 + 0);"
++	"r6 *= 3;"
++	"r7 += 1;"
++	"if r7 < 1000 goto 1b;"
 +	"r0 = 0;"
 +	"exit;"
-+	:
-+	: __imm(bpf_sk_lookup_tcp),
-+	  __imm(bpf_sk_release)
-+	: __clobber_all);
++	:: __imm_addr(arena) : __clobber_all);
 +}
++#endif
 +
-+struct inner_timers {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct timer_elem);
-+} inner_timers SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 2);
-+	__type(key, int);
-+	__array(values, struct inner_timers);
-+} outer_timers SEC(".maps");
-+
-+static __naked __noinline __used long inner_map(void)
++/*
++ *	p = NULL; for (i = 0; i < 3; i++) { if (have) n += *p; p = &val; have = 1; }
++ * No jump and no add looks at p.
++ */
++OK("the base of a load is 0 in the first iteration")
++WALKED
++__naked void base_of_a_load(void)
 +{
 +	asm volatile (
-+	"*(u32 *)(r10 - 4) = r1;"
-+	"r2 = r10;"
-+	"r2 += -4;"
-+	"r1 = %[outer_timers] ll;"
-+	"call %[bpf_map_lookup_elem];"
++	"r6 = %[vals] ll;"
++	"r7 = 0;"
++	"r8 = 0;"
++	"r9 = 0;"
++"1:	if r9 == 0 goto 2f;"
++	"r0 = *(u64 *)(r8 + 0);"
++"2:	r8 = r6;"
++	"r9 = 1;"
++	"r7 += 1;"
++	"if r7 < 3 goto 1b;"
++	"r0 = 0;"
 +	"exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(outer_timers)
-+	: __clobber_all);
++	:: __imm_addr(vals) : __clobber_all);
 +}
 +
-+#define TWO_INNER_MAPS				\
-+	"r1 = 0;"				\
-+	"call inner_map;"			\
-+	"if r0 == 0 goto 1f;"			\
-+	"r6 = r0;"				\
-+	"r1 = 1;"				\
-+	"call inner_map;"			\
-+	"if r0 == 0 goto 1f;"			\
-+	"r7 = r0;"
-+
-+/* The timer is in the map in r0. It is fine only if that is the map in r6. */
-+#define INIT_TIMER_WITH_R6			\
-+	"r1 = 0;"				\
-+	"*(u32 *)(r10 - 4) = r1;"		\
-+	"r2 = r10;"				\
-+	"r2 += -4;"				\
-+	"r1 = r0;"				\
-+	"call %[bpf_map_lookup_elem];"		\
-+	"if r0 == 0 goto 1f;"			\
-+	"r1 = r0;"				\
-+	"r2 = r6;"				\
-+	"r3 = 1;"				\
-+	"call %[bpf_timer_init];"		\
-+"1:"						\
-+	"r0 = 0;"				\
++/* r8 goes on by 0 or 8 bytes. Nothing tells how far but the iterations. */
++OK("a pointer that moves is followed")
++WALKED
++__naked void pointer(void)
++{
++	asm volatile (
++	"r8 = %[vals] ll;"
++	"r7 = 0;"
++"1:	r1 = r7;"
++	"r1 &= 1;"
++	"r1 <<= 3;"
++	"r8 += r1;"
++	"r7 += 1;"
++	"if r7 < 14 goto 1b;"
++	"r0 = *(u64 *)(r8 + 0);"
++	"r0 = 0;"
 +	"exit;"
-+
-+#define INNER_MAP_IMMS				\
-+	__imm(bpf_get_prandom_u32),		\
-+	__imm(bpf_map_lookup_elem),		\
-+	__imm(bpf_timer_init)
-+
-+/* Each call returns another map. */
-+SEC("tc")
-+__description("subprog returns an inner map, timer of one map is set up with another one")
-+__failure __msg("doesn't match map pointer in R2")
-+__naked void inner_maps_of_two_calls(void)
-+{
-+	asm volatile (
-+	TWO_INNER_MAPS
-+	INIT_TIMER_WITH_R6
-+	:
-+	: INNER_MAP_IMMS
-+	: __clobber_all);
++	:: __imm_addr(vals) : __clobber_all);
 +}
 +
-+/* As many as there is room for ids at the return, and one more. */
-+static __naked __noinline __used void saves_irq_flags_many_times(void)
++/* The sets have 64 slots of the stack. What is deeper is followed. */
++OK("a jump looks at a slot below fp-512")
++__load_if_large_stack()
++WALKED
++__naked void deep_slot(void)
 +{
 +	asm volatile (
-+	".rept 9153;"
++	"r6 = 2;"
++	"*(u64 *)(r10 - 520) = r6;"
++	"r7 = 0;"
++"1:	r6 = *(u64 *)(r10 - 520);"
++	"r6 *= 3;"
++	"*(u64 *)(r10 - 520) = r6;"
++	"r7 += 1;"
++	"if r7 < 5 goto 1b;"
++	"r6 = *(u64 *)(r10 - 520);"
++	UNLESS("r6 == 486")
++	"r0 = 0;"
++	"exit;"
++	::: __clobber_all);
++}
++
++/* The iterator is not a number. It is at its end after 3 of 5 iterations. */
++OK("a slot that holds an iterator is followed")
++WALKED
++__naked void iterator_slot(void)
++{
++	asm volatile (
 +	"r1 = r10;"
 +	"r1 += -8;"
-+	"call %[bpf_local_irq_save];"
-+	"r1 = 0;"
-+	"*(u64 *)(r10 - 8) = r1;"
-+	".endr;"
-+	"exit;"
-+	:
-+	: __imm(bpf_local_irq_save)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("subprog comes back with more ids than there is room for")
-+__failure __msg("too many ids at the call at insn")
-+__log_level(4)
-+int too_many_ids_at_the_return(void *ctx)
-+{
-+	unsigned long flags;
-+
-+	saves_irq_flags_many_times();
-+	bpf_local_irq_save(&flags);
-+	bpf_local_irq_restore(&flags);
-+	return 0;
-+}
-+
-+static __naked __noinline __used void leaves_rcu_section(void)
-+{
-+	asm volatile (
-+	"call %[bpf_rcu_read_unlock];"
-+	"call %[bpf_rcu_read_lock];"
-+	"exit;"
-+	:
-+	: __imm(bpf_rcu_read_unlock),
-+	  __imm(bpf_rcu_read_lock)
-+	: __clobber_all);
-+}
-+
-+static __naked __noinline __used int returns_zero(void)
-+{
-+	asm volatile (
++	"r2 = 0;"
++	"r3 = 3;"
++	"call %[bpf_iter_num_new];"
++	"r7 = 0;"
++"1:	r1 = r10;"
++	"r1 += -8;"
++	"call %[bpf_iter_num_next];"
++	"r7 += 1;"
++	"if r7 < 5 goto 1b;"
++	"r1 = r10;"
++	"r1 += -8;"
++	"call %[bpf_iter_num_destroy];"
 +	"r0 = 0;"
 +	"exit;"
-+	::: __clobber_all);
++	:: __imm(bpf_iter_num_new), __imm(bpf_iter_num_next), __imm(bpf_iter_num_destroy)
++	: __clobber_all);
 +}
 +
-+/*
-+ * Three calls wait for the subprog. When it's known what the subprog does to the RCU section of
-+ * its callers each of them stops to wait and is verified in the context of its caller.
-+ * Then one more call waits.
-+ */
-+#define RCU_BRANCHES(then1, then2, then3)	\
-+	asm volatile (				\
-+	"r6 = *(u32 *)(r1 + %[len]);"		\
-+	"call %[bpf_rcu_read_lock];"		\
-+	"if r6 == 1 goto 1f;"			\
-+	"if r6 == 2 goto 2f;"			\
-+	"call leaves_rcu_section;"		\
-+	then3					\
-+	"goto 3f;"				\
-+"1:"						\
-+	"call leaves_rcu_section;"		\
-+	then1					\
-+	"goto 3f;"				\
-+"2:"						\
-+	"call leaves_rcu_section;"		\
-+	then2					\
-+"3:"						\
-+	"call %[bpf_rcu_read_unlock];"		\
-+	"call returns_zero;"			\
-+	"exit;"					\
-+	:					\
-+	: __imm(bpf_rcu_read_lock),		\
-+	  __imm(bpf_rcu_read_unlock),		\
-+	  __imm_const(len, offsetof(struct __sk_buff, len))	\
-+	: __clobber_all)
-+
-+SEC("tc")
-+__description("three calls stop to wait")
-+__success __retval(0)
-+__naked void three_calls_stop_to_wait(void)
++/* BTF FUNC records are not generated for kfuncs referenced from inline assembly */
++void __kfunc_btf_root(void)
 +{
-+	RCU_BRANCHES("", "", "");
-+}
-+
-+SEC("tc")
-+__description("three calls stop to wait, what follows the first one")
-+__failure __msg("R7 !read_ok")
-+__naked void three_calls_stop_to_wait_bad_1(void)
-+{
-+	RCU_BRANCHES("r0 = r7;", "", "");
++	bpf_iter_num_new(0, 0, 0);
++	bpf_iter_num_next(0);
++	bpf_iter_num_destroy(0);
 +}
 +
 +char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_walk.c b/tools/testing/selftests/bpf/progs/verifier_loop_walk.c
+new file mode 100644
+index 000000000000..f3e24fdfe12d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_loop_walk.c
+@@ -0,0 +1,197 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * A loop that is not counted is looked at iteration by iteration for a while: some thousand insns.
++ * Each such walk counts the insns that are looked at in it, not those of the walks next to it.
++ */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, u32);
++	__type(value, char[2048]);
++} map SEC(".maps");
++
++/* 0 and 2 stay apart up to the jump that looks at them */
++#define SET(slot)								\
++	"call %[bpf_get_prandom_u32]; r1 = 0; if r0 == 0 goto +1; r1 = 2;"	\
++	"*(u64 *)(r10 - " #slot ") = r1;"
++#define TEST(slot)	"r1 = *(u64 *)(r10 - " #slot "); if r1 == 1 goto 9f;"
++#define PAD4		"r3 = r6; r3 += 1; r4 = r3; r4 += 1;"
++
++/*
++ * 32 states enter the loop one after the other. The counter has 8 bits, which has no formula. The
++ * offset is 1, 2, 4 ...: only a walk tells that it stays in the value. One walk takes 300 insns.
++ */
++#define WALKS(name, trips)							\
++__naked void name(void)								\
++{										\
++	asm volatile ("								\
++	r1 = 0;									\
++	*(u32 *)(r10 - 4) = r1;							\
++	r2 = r10;								\
++	r2 += -4;								\
++	r1 = %[map] ll;								\
++	call %[bpf_map_lookup_elem];						\
++	if r0 == 0 goto 9f;							\
++	r6 = r0;								\
++"	SET(16) SET(24) SET(32) SET(40) SET(48) "				\
++	w8 = 0;									\
++	r9 = 1;									\
++1:	r1 = r6;								\
++	r1 += r9;								\
++	r2 = 0;									\
++	*(u8 *)(r1 + 0) = r2;							\
++	r9 <<= 1;								\
++"	PAD4 PAD4 PAD4 PAD4 "							\
++	w8 += 1;								\
++	w2 = w8;								\
++	w2 &= 255;								\
++	if w2 < " #trips " goto 1b;						\
++"	TEST(16) TEST(24) TEST(32) TEST(40) TEST(48) "				\
++9:	r0 = 0;									\
++	exit;									\
++"	:									\
++	: __imm(bpf_map_lookup_elem), __imm(bpf_get_prandom_u32), __imm_addr(map) \
++	: __clobber_all);							\
++}
++
++SEC("socket")
++__description("walk: 32 walks at a time")
++__success
++WALKS(walks_32, 11)
++
++/*
++ *	for (i = 7; i >= 0; i--) { if (i >= n) continue; a[i] = 0; }
++ * A compiler tests 'i >= n' in front of the loop too and jumps into the middle of it. Such a loop
++ * has no count. It's walked to its end whichever way its jumps go: no may_goto is added.
++ */
++SEC("socket")
++__description("walk: a loop with two entries")
++__success __retval(0)
++__arch_x86_64
++__arch_arm64
++__xlated("w3 += -1")
++__xlated("if w3 s< 0x0 goto pc+2")
++__xlated("if w3 < w2 goto pc-6")
++__xlated("goto pc-4")
++__xlated("exit")
++__naked void two_entries(void)
++{
++	asm volatile ("								\
++	call %[bpf_get_prandom_u32];						\
++	r2 = r0;								\
++	r2 &= 7;								\
++	r0 = 0;									\
++	w3 = 7;									\
++	if w3 >= w2 goto 2f;							\
++1:	r1 = r10;								\
++	r1 += r3;								\
++	*(u8 *)(r1 - 8) = r0;							\
++2:	w3 += -1;								\
++	if w3 s< 0 goto 3f;							\
++	if w3 < w2 goto 1b;							\
++	goto 2b;								\
++3:	exit;									\
++"	:: __imm(bpf_get_prandom_u32) : __clobber_all);
++}
++
++/*
++ *	for (i = 0; (u8)i < 11; i++) { if (!rnd()) break; v[1 << i] = 0; }
++ * One jump that leaves the loop goes both ways in each iteration, the other one is decided in
++ * each iteration: the loop counts. The walk goes on. Only a walk tells what the offset is.
++ */
++SEC("socket")
++__description("walk: goes on while an iteration decides a jump that leaves the loop")
++__success
++__naked void walk_goes_on(void)
++{
++	asm volatile ("								\
++	r1 = 0;									\
++	*(u32 *)(r10 - 4) = r1;							\
++	r2 = r10;								\
++	r2 += -4;								\
++	r1 = %[map] ll;								\
++	call %[bpf_map_lookup_elem];						\
++	if r0 == 0 goto 9f;							\
++	r6 = r0;								\
++	w8 = 0;									\
++	r9 = 1;									\
++1:	call %[bpf_get_prandom_u32];						\
++	if r0 == 0 goto 9f;							\
++	r1 = r6;								\
++	r1 += r9;								\
++	*(u8 *)(r1 + 0) = r0;							\
++	r9 <<= 1;								\
++	w8 += 1;								\
++	w2 = w8;								\
++	w2 &= 255;								\
++	if w2 < 11 goto 1b;							\
++9:	r0 = 0;									\
++	exit;									\
++"	:									\
++	: __imm(bpf_map_lookup_elem), __imm(bpf_get_prandom_u32), __imm_addr(map) \
++	: __clobber_all);
++}
++
++/*
++ *	while (rnd()) n++;
++ * The second iteration decides nothing. The walk gives up at once: less than 100 insns.
++ */
++SEC("socket")
++__description("walk: gives up when an iteration decides no jump that leaves the loop")
++__success __log_level(4) __msg("processed {{..}} insns")
++__naked void walk_gives_up(void)
++{
++	asm volatile ("								\
++	r6 = 0;									\
++1:	call %[bpf_get_prandom_u32];						\
++	if r0 == 0 goto 2f;							\
++	r6 += 1;								\
++	goto 1b;								\
++2:	r0 = 0;									\
++	exit;									\
++"	:: __imm(bpf_get_prandom_u32) : __clobber_all);
++}
++
++static __naked __noinline __used int long_loop(void)
++{
++	asm volatile ("								\
++	w3 = 0;									\
++1:	w3 += 1;								\
++	w2 = w3;								\
++	w2 &= 0xffff;								\
++	if w2 < 5000 goto 1b;							\
++	r0 = 0;									\
++	*(u64 *)(r1 + 0) = r0;							\
++	exit;									\
++"	::: __clobber_all);
++}
++
++/*
++ * The walk doesn't get to the end of the loop. The function is looked at three times, for three
++ * pointers. There is no walk the second and the third time: less than 10000 insns in all.
++ */
++SEC("socket")
++__description("walk: no other try for a loop that is too long")
++__success __log_level(4) __msg("processed {{....}} insns")
++__naked void walk_fails_once(void)
++{
++	asm volatile ("								\
++	r1 = r10;								\
++	r1 += -8;								\
++	call long_loop;								\
++	r1 = r10;								\
++	r1 += -16;								\
++	call long_loop;								\
++	r1 = r10;								\
++	r1 += -24;								\
++	call long_loop;								\
++	r0 = 0;									\
++	exit;									\
++"	::: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index 5e566933f7e4..a6a99afad3c3 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -4411,6 +4411,65 @@ __naked void post_cond_jlt32_copy(void)
+ 	: __clobber_all);
+ }
+ 
++/*
++ * Every iteration takes a reference, only the last one is released. The state that comes back
++ * to the head of the loop has a reference that nothing holds.
++ */
++SEC("socket")
++__failure __msg("Unreleased reference")
++__naked void loop_takes_reference_every_time(void)
++{
++	asm volatile (
++	"r6 = 0;"
++"1:"
++	"r1 = %[ringbuf] ll;"
++	"r2 = 8;"
++	"r3 = 0;"
++	"call %[bpf_ringbuf_reserve];"
++	"if r0 == 0 goto 2f;"
++	"r8 = r0;"
++	"r6 += 1;"
++	"if r6 < 10 goto 1b;"
++	"r1 = r8;"
++	"r2 = 0;"
++	"call %[bpf_ringbuf_discard];"
++"2:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ringbuf_reserve), __imm(bpf_ringbuf_discard), __imm_addr(ringbuf)
++	: __clobber_all);
++}
++
++/*
++ * The first iteration that has something to say takes a reference, the rest use it. The state
++ * that comes back to the head has a reference more than the state that entered, once.
++ */
++__u64 nr_vals, vals[64];
++
++SEC("socket")
++__success __retval(0)
++int loop_takes_reference_once(void *ctx)
++{
++	__u64 *sum = NULL;
++	int i;
++
++	bpf_for(i, 0, nr_vals) {
++		if (i >= 64 || !vals[i])
++			continue;
++		if (!sum) {
++			sum = bpf_ringbuf_reserve(&ringbuf, sizeof(*sum), 0);
++			if (!sum)
++				break;
++			*sum = 0;
++		}
++		*sum += vals[i];
++	}
++	if (sum)
++		bpf_ringbuf_submit(sum, 0);
++	return 0;
++}
++
+ /*
+  * r6 is a pointer to ringbuf memory with a step of 1. bpf_ringbuf_discard() in the first iteration
+  * makes a number of it. The offsets 0..1 of the pointer are not the range of this number: it's an
+diff --git a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
+index f9ad07704578..260cbc22fbc4 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
++++ b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
+@@ -859,6 +859,61 @@ l0_%=:	r0 = 1;						\
+ 	: __clobber_all);
+ }
+ 
++/*
++ * A list in a map value: it starts at element 0 and goes on with the element that the current one
++ * names. The offset is 0 in front of the loop and [0, 31] after every trip. The second of
++ * these states at the head of the loop stands for all that follow.
++ */
++SEC("tc")
++__description("map access: the offset of a value pointer grows in the first trip of a loop")
++__success
++__naked void loop_offset_settles(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r2 = r10; r2 += -8;"
++	"r1 = %[map_array_48b] ll;"
++	"call %[bpf_map_lookup_elem];"
++	"if r0 == 0 goto 2f;"
++	"r6 = r0;"
++	"r2 = r6;"
++"1:	r5 = *(u8 *)(r2 + 0);"
++	"r5 &= 31;"
++	"r2 = r6; r2 += r5;"
++	"may_goto 2f;"
++	"goto 1b;"
++"2:	r0 = 0; exit;"
++	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_array_48b)
++	: __clobber_all);
++}
++
++SEC("tc")
++__description("map access: the offset of a value pointer grows in every trip of a loop")
++__failure __msg("invalid access to map value, value_size=48 off=48 size=1")
++__naked void loop_offset_grows(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r2 = r10; r2 += -8;"
++	"r1 = %[map_array_48b] ll;"
++	"call %[bpf_map_lookup_elem];"
++	"if r0 == 0 goto 2f;"
++	"r2 = r0;"
++"1:	r5 = *(u8 *)(r2 + 0);"
++	"r2 += 1;"
++	"may_goto 2f;"
++	"goto 1b;"
++"2:	r0 = 0; exit;"
++	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_array_48b)
++	: __clobber_all);
++}
++
+ SEC("socket")
+ __description("map access: value_ptr += known scalar, 4")
+ __success __success_unpriv __retval(1)
 -- 
 2.55.0
 
