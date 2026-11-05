@@ -1,45 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793914547;
-	b=gMFzvh+hULW+Gv8ptQcho+CaCNdWz6jxmU59vL86xpXEDM8nJx7XCnidNZrKW4TBUwjn
-	 D1QbD+7Ivs7s12nqVJnyx3tM7z5PPbJldjOcZUgbY5aWAYZ4N7BC3RkoO/HXOIZkVUTUe
-	 Ff39W4I+c9VV8jIT2AFve0ecOvihO1UL9+C3cDzNrATi/1pI37ARKe1tdiIw62y1Y3Jc1
-	 wfSs0NrCxUMZBY3uvFbnGZGlqhzQsQ0BRKYOaboLqKcEuUOlnvRNHRo1RLQ45uNOplQVV
-	 4FNtw8Qh+HP98zP7ZohIeI208+3jSLvdirs3BUoKAj1gbmht6piKQUc9parhb2RLbcA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793914547;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Vb4kdl1gMuHbzOGURluhe1Pmkv9kqoZd2Aeme2Ko+8c=;
-	b=kIQislK4zhdcZ/m+B6gPLtcZelgb+rYb1iC1NjatM5HHGrGCt+URCp2DQAzCR5FPeVx5
-	 fbeFWlRv0yjqiT9bEpZrH/iWemfMm54pHw3N/K6jAGTSZO2E2RCJ/3bK8DTgX9bnnxlu8
-	 nZVqLfhBj9DGNHTLy0iWyOXz0uxQSgR6NMRQFYjE3HvFkVTRpxPIXcT5iW7WjNd16AkFc
-	 bmZIHSNwe13jqJ3t/DyTiaWxUlKfanXWRfVvfLVyFrBTUlFuMIiHerkbYqwIYEOJXaQ2n
-	 R73mCw+e8WF3Hh/QOou3Ks2izfWuirbehSpAhxuL4wECHcc35c8t4+ePjgZEGbloG0w==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bAZ3gOWQ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.54
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793914619;
+	b=15Uo8w2XSdCmSw1J/MyXGtDXPtePWJ2M8hEkGmOU2Kpse9hXJC1nRkInj5x28vVhO4B4
+	 OD0BzsfPUszD6dUvM/4m2171CDqKb2mrWDwRqtrNOvxmCS14OQHR1ZxPCg46YqdDtTZn7
+	 cbmnLUxUVOWQsJR/zfIQWHMYUpg0cAnYRKMcSVdfXzMnuhezeVZ3ExrGnKM5utEc7nmbn
+	 HR8401MUnRKBA3NYocbwCOPcHze7xP9JJMEXKY+1inoWh/qb3cdATK72QQhsQZwjMGSR5
+	 x0ej2Y3hzWX8WALLVaWv+MjYxHwBHJZbPv8vPOllBuv6Ojxnr5yyg6bVDH2JWS7xLHQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793914619;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=2E4Xme3iGj8AG7tp5kyRL4U0PVxMRPmUII8euE4aY4I=;
+	b=Go64JcBOzkXsgyuKKZJBJAMGMP04MrUasCt+b3wML9asMAegIkk12M0A8HfaA//JxohL
+	 7DKcRkrWydY6sC2hwtEGshgoPxlqZLY6BJOt8iYy0vrp0VI+o9/NLnm6j0f5CKSEzbD76
+	 /Ihx2/QG09qoE4cfaD0W9y/gyH/mjEmGu8NOH3NhU8rYlGS5voraYvr+yP6EA+yvps9Jb
+	 vEIRFxfi4KtqROePkBnhbkH5c6j/XiOrHhLS5Oxl1uVDnLJqTWvzhBCEwOgE6K1JjP3mz
+	 +TVbK3/SLXm5BogeKz4N1LpeBWP2xLO557iSedg8MMBkQTWQrdUC3AehdaDf2I59oUw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=qNV3YK2A;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.54
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62BD9606D815
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 21:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C965F606A334
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 21:36:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C965F606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bAZ3gOWQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBEE71F008A7;
-	Thu,  5 Nov 2026 21:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793914547;
-	bh=Vb4kdl1gMuHbzOGURluhe1Pmkv9kqoZd2Aeme2Ko+8c=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=bAZ3gOWQaOBd3f4rshLModyWlqL6JVkLhGoz+0kjhpzb0WW629iXwW97MzERbnGzB
-	 8mfhudeDEveOwUbqP0p7gYqqwiSL5Tn0IXjK8Kq+YhHh7pqYMIwfSNFN3l2wwobKp+
-	 m39IO5qR/rIOSU+F0tq9pMJjaPHuPd7B4JX7psCHD35nA7rsGvY/HgSFX5832ZqTko
-	 TfKK7U50fRclDBi5JHGggyrppoZWE9BZ+xlieEB/+im1jAMM8X+xzWJajdhfIO7Fgw
-	 DDG8ljOWOxz7Y2qITM5xagZEIidSqvkDV413Lp+pfo0pAZPBGnqMltyV553WikRy04
-	 k6kykP/KMHeHQ==
-Content-Type: multipart/mixed; boundary="===============7507013332646739707=="
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=qNV3YK2A
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c247f6687dcso407239066b.2
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 13:36:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793914612; cv=none;
+        d=google.com; s=arc-20260327;
+        b=FlXof0RuLbzpo1esqXKe+qhc4rX53m+IXtVVwgVvsZmESWx4cGqzR4PdxTDqZE2jNI
+         8C91VXS8WsT8+/S011D2dzOsv6jeJPUZYqATVVPnuzF3ylWsvVqzvOn/WL21+5HjVZlh
+         TRfywClWLIWtSy5E9ZpXlXktc5hgQsWgei9uLVv+MySRKhH1PEB6VzwjF0day298FfGA
+         MiMNzQ7jiNRIdNkyR1aTBPXjQER5UgwssO3ogl45XQX0QL7wHKAc/wkYJykD5bgKxGGs
+         Mxu4wHUncKkkLVJfqS+RW9hkGBCSClTuEKLicne0znA5YKGQbnGGqgJuBOrWg5CGjI6w
+         F1Kw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2E4Xme3iGj8AG7tp5kyRL4U0PVxMRPmUII8euE4aY4I=;
+        fh=ok07m3FvHb3eNbKFLPdjJjsl4wKF1W9f87O0n8XdzjI=;
+        b=srfbTm7WFF71dCJWh9nOFnvRqHbHisP++lI904nkWzReUekd4Rez5qtiYa4xPIt1C+
+         g7W3+D/8ml5DAwi/9Dbd13+gJTro5FWFmP4qIkXILfgPIRD07neL7bgzSIaNN/kE4ZfR
+         tQDF54SDXNE3Y4ZdZ8DU1NqvDJdmBWKt7AJXzpP5EM7LHrrtncuJlYRATxgzanWRIO+Q
+         kPao9p7YtPhr1MtP0IO82UdFDoQmmy0W/a5E6kK3EzbOaQKIvZltM04opcDHTmVdDKTm
+         fuQCf1u6bH9kpGLERXKUNMfghqXcxSmF9g38dYk51TT1clChQmqPOrwjnX972yVw3K80
+         JM+w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793914612; x=1794519412; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2E4Xme3iGj8AG7tp5kyRL4U0PVxMRPmUII8euE4aY4I=;
+        b=qNV3YK2AvifU1tOsCQ8wk4axq2Bpnp9T4w05lcq35MoN1lflDph5Y1IYtTpLN9oiu1
+         oljv6zhoDl0Vdx6KwOE+YZ2XrvF12KIBahqeuzL0AI1Ihf1xglBIFGRlNFmbLRw1BvGj
+         cHOsnpHe5ExcVUNebf5XytYqgD/im+o9YfI2/bO5gRjiKXBfTL4w9S2eMuvmZ4trc6CA
+         kCNJxMHTFWh4eiUO3KMPLUXRVAjTsqzWtt3brnLtM+MWPucllL2IlplxbMf3C29B/5Fm
+         Zq9m93kWEpns5SBYbYB5Q3+CTVkb/fUXg2wz7C4TsaW16nXsgwuTB3NnvQNvu0l335c9
+         ZYPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793914612; x=1794519412;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2E4Xme3iGj8AG7tp5kyRL4U0PVxMRPmUII8euE4aY4I=;
+        b=f5e25wmhRKFcsuV/dwO3SFLmaI0BCqMUtDhemuVg316GClGvTJdDULxWemTdxuM5hR
+         yBUudp9zQ3IKtRTI0iB+h7QIYA7zWm+6XAoIlcYy4oHbvyuqyoAipSpEGqc1NOZpmD6Q
+         NttGObj2FpkuhfY3Ew0oPTk5nwczC2Trc0fx4Pi4lZVItg7dcfx+oatD7DJM+B6W+FjL
+         Qo5sw3cTqp5zcnfo3x6wB3axumSiu1l0Mi8ZsAd/fCBwaCuC8HAIg0arJ1DqIPhBEM7o
+         yfNHisebOyQjoyrMOGgVhzbVg/rppNtow+T74VhILrn5QcI9EmqWwqr2UV+noB5dTn8R
+         5d9w==
+X-Forwarded-Encrypted: i=1; AKwUvBxTdg1XuJyJClS6ZBYLqWFqghsmj/mN7D+2YbfRZ2AgebxM65U7pGfHKVs4L4fmdqjA+Pk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8ZMR9OfTO9bgCHSfz/ed5uX8GDAQvcczVpX7jz1+ldUkDG64Q5
+	+CAuyXkFa7y4oakntkyu2XeNMto78L1BqR5zSi9pGd5HHxS/c4eS97oKIe9n4urTsNxz4CWriU+
+	8PbBJu8b+ASyCp4Z/cnPpC34QOV6vJTi/F0fRzLQ5
+X-Gm-Gg: AYBFou1CwagmodnWtJeChnfRqoVC4kBRVWUqqIr7D/lNy5PuN7fs9HuxhD6PYeoFwHY
+	FMD7H948KpK1Wo0lCyZ82VeOp0kvEEDJYzOCQuOKS3CLPdHZ0uxLVbovHnwxLqe2JAW5bG0Ft9c
+	62f7mR+Vp6nQvRKY/D1YWHrQrcPUluXenEEm5EQI7UdTlKlSzv3Hbuc08jZE22bUXZutHVmHzbE
+	8oWHwBt4RWiR9bqRyGvHZB8s/l508j91WrbXqz7LHBVPx0QLlibiyhXMt1n9Vpf67xCPzUX+MXL
+	ZtDSj+OslDURK+/mbKKGkJljmZrejTiDQL1vIT5rQ7m1+FdJhAsaVtHrPwJ7Noa0Igx3Qp2a1ND
+	aUWeCK0GrwTZCuwoFtrZ7y7LOrsSh+AzNdQ7zYevokqMVHVwlKURtTZgLHDB69cDjV6qxhqs=
+X-Received: by 2002:a17:906:9f89:b0:c46:645f:cedf with SMTP id
+ a640c23a62f3a-c4d3546bf6emr55329366b.15.1793914611758; Thu, 05 Nov 2026
+ 13:36:51 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,114 +104,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <a62019b90ed4a5d6bbe52f18f29d860310a5a48bba11a76b31c8f03c8e685743@mail.kernel.org>
-In-Reply-To: <20261105204513.2230344-21-alexei.starovoitov@gmail.com>
-References: <20261105204513.2230344-21-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 20/35] bpf: Keep the count of a loop when a register has no closed form
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu,  5 Nov 2026 21:35:46 +0000 (UTC)
+References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
+ <20261028134012.01d52e94@pumpkin> <CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
+ <20261030100215.6f8e0d4f@pumpkin> <CAG2KctqdPq6NmK6rB13s2bgM7kP2w4OMMy2hdp_OFMVYYhTnZA@mail.gmail.com>
+ <20261104142307.431fc12f@pumpkin> <CAG2KctrY6GmVqsKP+fXYCsL6wDR4zp1kdRd7a7uOdCgg_JcMdQ@mail.gmail.com>
+ <20261105083712.14847dcf@pumpkin>
+In-Reply-To: <20261105083712.14847dcf@pumpkin>
+From: Samuel Wu <wusamuel@google.com>
+Date: Thu, 5 Nov 2026 13:36:40 -0800
+X-Gm-Features: AclHuK-4-3cdEVpuwe7ZR8h4IzWEsLs5z4V7r2FIsMuL4z-PpEQaIZ0fXLkqICE
+Message-ID: <CAG2KctocE=kj2CO29D0tVmrBeWmCDYA6FhpHr-7ZbD63GM1CsQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============7507013332646739707==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, Nov 5, 2026 at 12:37=E2=80=AFAM David Laight
+<david.laight.linux@gmail.com> wrote:
+>
+> On Wed, 4 Nov 2026 16:05:52 -0800
+> Samuel Wu <wusamuel@google.com> wrote:
+>
+> > > I think it might be more sensible (less pitfalls later on) to return
+> > > the symbol number - not that of the next one.
+> >
+> > What pitfalls were you anticipating? If the current symbol's position
+> > is returned, userspace needs another ioctl() call and an -ENOENT
+> > check, to learn that there are no more matches. Alternatively,
+> > returning the next position means every call pays for a look-ahead,
+> > which for an unfiltered query walks the module symbols even when
+> > userspace only wants the first match.
+>
+> I was thinking more of the kernel api.
 
-> bpf: Keep the count of a loop when a register has no closed form
+Ahh ok, makes more sense now. I misunderstood your previous reply to
+be about the ioctl(), not the internal kernel functions.
 
-TL;DR: In bpf_compute_loop_iters(), a NOT_INIT register read only under an
-iteration-dependent guard may not be treated as needed, so the verifier could
-reject a previously loading program with "!read_ok".
+> The 'position' is just an array index.
+> So a 'read by symbol name' would return the array index of that symbol.
+> A 'read by symbol name index' would return the name (uncompressed) and
+> do the lookup (binary search and linear scan) to find the value.
+>
+> I've used a bit in the 'sorted by name array' to indicate that the
+> symbol is a duplicate of the previous one.
+> So checking an 'exact match' for being a duplicate is cheap.
+> But for a partial match you start needing the name buffer to be in-out
+> on the read-by position request.
+> So you start needing 'read by position' and 'read by position with
+> name compare'.
+> It is likely that the caller will need to validate the name anyway.
 
-> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-> --- a/kernel/bpf/scev.c
-> +++ b/kernel/bpf/scev.c
+Got it, thanks for clarifying! That works with QUERY_BY_NAME in v3:
+- In the UAPI, the input query string
+(kallsyms_query_by_name.sym_name) and the output matched name
+(kallsyms_query_by_name ->kallsyms_sym.sym_name) are separate buffers,
+so the name buffer is not in-out.
+- In kernel/kallsyms.c, the vmlinux lookup only needs the two helpers
+you described:
+1. lookup by name/prefix -> index
+2. index -> uncompressed name + address
 
-[ ... ]
+> An 'interesting' idea would be an ioctl that returned the value of
+> the nth symbol along with the name of the n+1th.
+> That might get confusing though.
 
-> @@ -3541,10 +3546,69 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
->  				bpf_log(log, ", requires exact stack-offset tracking");
->  			bpf_log(log, "\n");
->  		}
-> -		return 0;
-> +		/* the count stands, it is this one that is not known in the loop */
-> +		if (spill_base) {
-> +			iters->spill_base = true;
-> +			walk = true;
-> +			continue;
-> +		}
-> +		__set_bit(r, iters->forget_regs);
-> +		/*
-> +		 * Only a walk through the iterations tells what it is in each of them. That is not
-> +		 * worth it for a number that nothing looks at: a sum, a hash, what a call leaves in
-> +		 * r1 - r5. It's not known in the loop then. A pointer, or a slot that holds
-> +		 * something else than a register, would be of no use any more.
-> +		 */
-> +		if (!reg || (reg->type != SCALAR_VALUE && reg->type != NOT_INIT) ||
-> +		    bpf_flow_is_needed(env, insn_idx, r)) {
-> +			walk = true;
-> +			continue;
-> +		}
-
-Can a NOT_INIT register that is live at the loop header be treated as "nothing
-looks at it" here?
-
-scev_forget_reg() only rewrites SCALAR_VALUE and PTR_TO_ARENA registers:
-
-	if (r < MAX_BPF_REG) {
-		if (func->regs[r].type == SCALAR_VALUE) { ... }
-		else if (func->regs[r].type == PTR_TO_ARENA) { ... }
-		return;
-	}
-
-so in the head state that has to cover every iteration the register stays
-NOT_INIT.  If the loop reads it only under an iteration-dependent guard, the
-widened induction variable makes both sides of the guard feasible, and
-check_reg_arg() rejects the read with "R8 !read_ok".  The bpf_flow_is_needed()
-tables only record jumps, pointer and stack offsets, helper arguments and
-load/store bases, so a plain arithmetic read does not set them.
-
-For example (privileged, no pseudo calls in the loop):
-
-	r6 = 0; r7 = 0;
-1:	call bpf_get_prandom_u32;
-	if r7 == 0 goto 2f;
-	r6 ^= r8;          /* r8 is set from iteration 1 on */
-2:	r8 = r0;
-	r7 += 1;
-	if r7 < 64 goto 1b;
-	r0 = 0; exit;
-
-This is what clang makes of:
-
-	u64 prev;
-	for (i = 0; i < 64; i++) {
-		now = ...;
-		if (i)
-			sum ^= now - prev;
-		prev = now;
-	}
-
-r7 is linear with a count of 64, while r6 and r8 have no closed form.
-Neither is flagged as needed, so bpf_compute_loop_iters() returns 1,
-bpf_widen_scev_regs() widens r7 to [0,63], and r8 stays NOT_INIT.  "if r7 == 0"
-is no longer decided, so the fall-through reads r8 and the load fails.
-
-Before this patch the first register without a closed form made
-bpf_compute_loop_iters() return 0, and flow_try_walk() walked the loop
-exactly.  In iteration 0, "r7 == 0" is decided, r8 is never read
-uninitialised, and the program loaded.  Does this reject a program that
-loaded before?
-
-The commit message says of method 1 that "It is an unknown scalar in the
-state that covers all iterations", which does not hold for NOT_INIT.  Should a
-NOT_INIT register that liveness reports as read count as needed (walk = true)?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42109044416
---===============7507013332646739707==--
+Agreed, it's simpler to have the ioctl() return a single symbol.
