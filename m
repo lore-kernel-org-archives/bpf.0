@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793911564;
-	b=fqCBWvxLQGuxO4VjP6zyCmxI9xEDqD2c6yUotvpXI+uVXvLMGIpefy6EHKlA1OpRbmQd
-	 4REt8hcWE11AlhOKJqAqnYo2mlEie3OKk0fLGM9pjzIU1hVibsydnZRNbmO+Q7mhEYg7F
-	 VJck8DKGl+hTDT7/NjH7krimTOQZi0dKC/VcjMwem3diDcZEOca0PmSHvruhSkgQjXY64
-	 9d5fJWIKPCs4WBntcMQxcqyXDREUrdVSSQ5/SSXehQSx8axoXpGte0Q4nPj7dmD9pzQ/A
-	 tEpUr1eBK6x9cXRCS0hPxCi+3Vq6zK+7LsJjNEm2OEUsXEYGq5fH3EWt/ke/ial0Rkg==
+	t=1793911570;
+	b=4qTqi7jWSBNwG+SQiHenqm860glMqpdhyaotFeLH8Vu/kM2bsryUCO5JoNhs6HIASFBP
+	 3KcBWqltaXF0zI8kDRO6BRLQCB1eC0gwIGLnCkhZbMtmM7tm49C3dXmCNZWOgWPxReELG
+	 QXcp+GVvN5trBS5Qn+N8X24hNZqLCw0Zfrrk8gNLkw8kKGfuAFx3F6lT920k17UpC9R7j
+	 kn+zlfw414zhsGogj3IH9xeWDNX1XcnHOC/YphT/9H22Bqul3yPz5ywN34wKr3GIcV4UE
+	 BC9MImnDdiOBl+p9aWRAnDGDNge+UxldVsbFYVIFRBTUlIODqPnaymZhjUyx4e6p9Kg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793911564;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793911570;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=JVGQlHRJuGY4FMHBo6URHjBCbsA+t7ekozhXbARFb5I=;
-	b=wrK7eIOEDw6Gj2FSiJN9RLgvnPzDbghwgZrOY30g3qK9+iEgXk25CfntK9ddRbasya1u
-	 l3nNS/6E4jW5fNpNhOro1iK1bONk4Zs35vhZ662edd25wlUYOY8jjPXJzSngRRww8L6Om
-	 OUZJGRqBYWw58StAXiIOtgBiCMFGlpuIwcOUcp5bfj8Y+Q1nV1K1vMgG0RxGo/MZ82STI
-	 gPZjzjaF4DZ7qz+hz44gJnY2YPpBZoKGCM5JeEmWjWzwUDr7H3moBHcvCFGPKUgFDMhCt
-	 3sr+Tq2TdTjHj2TKIopGUomr8E7gTfWzfjmiIb5xcLSLvzYg85bxiL646Xii7tfky+A==
+	bh=yQoJTz50Yx2Yyhcbwsr6pKD0oN8CtlXnaeC4KwZ4wD4=;
+	b=q7DS7EVQpP0esZYOBTFTeX1yutXYoXR/+djAB+AuFpnZ9fe3CPraZnqvSUofXD/7j6RL
+	 T/PDt2zMYFQO7IuwEGxfDW2tASkxLOq+O9yMlDKhhwYa4nkIJ5DX4Wjp6GVMH30SWJeiB
+	 0hO9ASPeFl6GW0zkhh914q9iwxP+ui5Bc1SZ/ZHPYa3PZWwme60P1k9i4LoBy1UdFXP34
+	 jbgkZGtyGUVjVXY0OljZKz8d+Z2+9tRP1qgGDi1zu4ZYITmQdz75uBrYk0uBkBkZF8c2j
+	 4OPaXnUwQ0tjznBwkKnzuOo49AdgSKTPsYYnwpKMaOTbvbycQlqCZjFmPboqO8RaiXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ttKOKywq;
-	arc=none smtp.remote-ip=209.85.216.44
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=i69ZGm3T;
+	arc=none smtp.remote-ip=209.85.216.49
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB96D606A31B
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 20:46:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CB96D606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2A8606A326
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 20:46:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF2A8606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ttKOKywq
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3acdcfa2bd3so2024959a91.3
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 12:46:03 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=i69ZGm3T
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3b0a2a44a0cso1324078a91.1
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 12:46:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793911563; x=1794516363; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793911569; x=1794516369; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=JVGQlHRJuGY4FMHBo6URHjBCbsA+t7ekozhXbARFb5I=;
-        b=ttKOKywqtj0iEEotaFpsXVw2oZqGJCGHEptmfRH3OMtdz9N/sMZxtTXEzL1dbJXH5a
-         KNg9A8AsDKNQHcIfKvA+wnlwc4XtQqWO9KCCwdSj8gipEFTbHayboPHE5/6P5one4/NI
-         ZMGh0mDhnE4Bbo37933DrpxasVzX/3mswFQsmtq3gshotclhLvftoMRaCaUGyUpINsUV
-         ed9J2lUksvAtWFNPg+PS803Zi6ZjT/AregIE2K8p0L2PyOqE9ht/lAnMZ6i7U9Ep9FRd
-         CaHHa201/ghc2AbTC/4ynb0XJVrIO3KoRidXXJvnDe2YbvMjGR6yhpDg4dGQDkaJuKgb
-         2Y5Q==
+        bh=yQoJTz50Yx2Yyhcbwsr6pKD0oN8CtlXnaeC4KwZ4wD4=;
+        b=i69ZGm3ThuIz/vWtpmb4VsrO7XxX/WHWX8fqrZhgbL3131f6syQdvFR2AOB76H5EiF
+         FRWRcjUr7om4wI5JwqZZwY6g7vVWiDHc1JyV93hwhKqKBR5AgJa0IokEKBREuuflSZ6S
+         BMLUhAKlx7gG/dsICqspP4P2wdW5vAtVfKQoPml1MqSq2meT1yghTDyD0CiII+ud0iSp
+         4GpRfXd04BMrJpGKBe1T7mJvgS8ppG5fmLQnTtoUZxPaL4JZg03YQqKdTIeEiDJgMVEZ
+         FMNrnUvTqSSIReLSrmZHPka1J6iAijTf1uJ4OQNG5cuTMn3XPI3pwck1Hi1kL+fqHME2
+         xe1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793911563; x=1794516363;
+        d=1e100.net; s=20260707; t=1793911569; x=1794516369;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JVGQlHRJuGY4FMHBo6URHjBCbsA+t7ekozhXbARFb5I=;
-        b=n6Oo750cnzzF+1whF1jNQnUG4apHbU11oX5w4e6nTDc9olkZo24Kq0BrfRAY228R2x
-         4S7u+RceVsU6KmMSdl/oX+V0yKy3hE56ugo7DPWQyfiiADeRn7Y2iAsybJ6ISV2KHHds
-         d7l3QpcJ4oeVe3u4qYEl8E5dhBR6rEWwhd6xpQY5rnzyZ9h1ooKc05bsdooyZMRRlUIZ
-         ouedF+H8KuJKuPut+9A9AmyMCwZJ0AlEUqjK+AcsgGnQAsSc0W6INOSn/8tl33ZJEJ9T
-         M3onCKHihQN2/0Rhl5BZhNta9a4UL+Paw0hJn1MV2hdutDGRWjfPhHAvKgKHhwHrfy7/
-         WcLg==
-X-Gm-Message-State: APuU4Z8Irl17XXPxQMNjz1vMFprcZdS91V7SxQl2BzpWY5ldj6qj55k4
-	xauxD3DYNGK9JkelilfQ7OiuWPvPZL6kbuGq8had2O6gFWQZyCWiicbmdLrdxw==
-X-Gm-Gg: AYBFou0Hnb9PN2sb05xvLQVWdaM4Bmz1VBJBWWZFHcA3t2Ba62AFz9vVhfQHrPXA6EC
-	vxHPtUu7ZHVlQDhgQZOpI0v9rSGd0akFTtPnmfQ5/Hb6CL8ggajzyIQVz837vlTLtyhapzroemI
-	+fiyR4St0WRGIm3eAjMP/AoSOueqyqoo3mhBBSJh+s99tlOCLTLTrK5KlgRBuerJPH98bHi9yo6
-	9ARMwTA38r1sbSFzV2LyLMzDRPSRAi49go3R6pPGWwuSiF9Ikaf0+LXWKIiBKNNjICmUBWLhVAt
-	J3OsXNdNPNanwx/1C2oId+PjWam6/wsEiBOcO4Z4HYzImgOlqbHfobkU0xCuvFXGX1jKFUuiKI7
-	iQ8fG+9lihNWAuy5MuITuKSaqKZO1VqcFEYMsXW3lYqAzdGCxoyxmQvsmZje/5XoEC/YT2WGBN0
-	lg9gC5lnePw95W8aqp02kNYNDPfN7d6KPdwXcew7BG3BEvArJ+X8c7erPef+zLNxZbRUVb1sKVf
-	Anec56PrsknneOOUefpTeDH5J5cMcCIq3HGPPqmQcDd7STFlMp3gLWdHcQ7fa9qoRac76OTVluM
-	YaAa+YwE3nzjHLTV9HmJvQLlcogByeYlWpHNfaVocNPY8FmsDyCafgRpFMRm3UTAcBZpuQKdNZm
-	TCXRPEcZiA9TbYpOnxkEGN8cAb3SXAMV3gFwemkdQ14OtQiNWG85WohxmWcYvBRlhOin5aSHKZG
-	k=
-X-Received: by 2002:a17:90b:2d0c:b0:3ac:d79f:8229 with SMTP id 98e67ed59e1d1-3b0db7077d8mr176542a91.61.1793911562723;
-        Thu, 05 Nov 2026 12:46:02 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b09455fbdasm4269702a91.0.2026.11.05.12.46.02
+        bh=yQoJTz50Yx2Yyhcbwsr6pKD0oN8CtlXnaeC4KwZ4wD4=;
+        b=1nUQmI0J0M2/xlK2SiqbudQrvdDE20Tla2zTnzVfWi2ZD+OoFN/7L3u8c6Jkbe3cWI
+         AAGgXAplqJR8T7tHfL62XyY/CFd4KNmXVbUnCmyJOl+MyNOon4W9yCVrPbiv7g0fbnwO
+         n6dZjYXAN3yHNCP6Ak3IvWysdIukZ9SzQfTnwNia42nmkGF0c5mTY/Jn8zcaNla5t2SZ
+         Cdb30m9QPAh/uuDLW6ikPaOf1SPZamPeX7L71PyI10baiXMhao+KxEo+RoVX+pe1Q853
+         GpmoVhCeV7s+kccZLMcBAr3rxOJ1LjqrRNP2tUO8lGyUUJ/HSVfc9klxljsefEyF0/Za
+         p5mA==
+X-Gm-Message-State: APuU4Z/FGslAr588c9UN44cnvI9OlgRs4P7iG/Ywzt6EkrjpUgME9Oai
+	MJk0arBps/ZKikneePXmoBK06uD19sw6WGncbfm27zsAc5g1VWS2kXbH0cXxmQ==
+X-Gm-Gg: AYBFou02kKURBqIVquEGKUFmOxSlDKpNeSSbmoedd7xZC+3kd5PuvgFByohNWQNoWMV
+	P4QVq2NfNHYkvCWsFKXk3Rb3uIedQ0B9riticR5KL4wPx2XeTKYmdy1ziwgRKcuL+tItbu2EGK7
+	WR7SDKjYhYTvS2IxDQBvPVC1qWRMH0KBCyB2KvTM0B7bNDF6ecsHTLRDTHul8y/IDJlqGnBkOSL
+	iK4B5gE4IczY7SVkojcb+rApnF+Gmtd2jO2aNCfKyielBIqyb59nLIZL9+blsUd7fbh+l/O4XNO
+	KgKzaANfx3DBgRQyGQXBe5zIOf7ceBA5nF40n9S7cuLPMn7o6p0sRw8FGqh43/H/qA22V6SIETf
+	cexj1krgy9rXsrL8aRTrQV1u3gTYM+KLfvdryFMmyR0f0UVEnpkUL/agO2ShwsbGS42SNsW0ZLH
+	3z059e+2oYcUwRHSEwU+nu/dMnDeDNkYREbHKP7W6imklJPHHFKd2Bu4bQkm/u/68gCnFmNXIBQ
+	wSdLKBihXGrkdQ8w/T5vAbyKK6ne3s+9rMq32oXkfjmLiQ+wTz6L6meJje336JVVgECIPM0D/z/
+	Mb7rqSfuerHfwfI3TNYpeI8D171frgrHCbM99YmJPCWvSEor/kf9vxVUlhRwGAKaXuOlPxyV3tK
+	v+6ZOa4K+/5am1KPZufhuYoPRqzt6mkreEWp7T0AtNLrilotO0r+V/JIbojCetfwLblcOAsx5tO
+	Q=
+X-Received: by 2002:a17:90b:3f85:b0:3ac:ea3b:f28b with SMTP id 98e67ed59e1d1-3b0db6f7e0bmr169351a91.24.1793911568571;
+        Thu, 05 Nov 2026 12:46:08 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b32b6507sm5646864a91.16.2026.11.05.12.46.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 12:46:02 -0800 (PST)
+        Thu, 05 Nov 2026 12:46:08 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 08/35] bpf: Order the insns, find what stops a loop and where may_goto can go
-Date: Thu,  5 Nov 2026 20:44:45 +0000
-Message-ID: <20261105204513.2230344-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 09/35] bpf: Find the registers that hold a number or a pointer to arena
+Date: Thu,  5 Nov 2026 20:44:46 +0000
+Message-ID: <20261105204513.2230344-10-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
 References: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
@@ -104,432 +104,371 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A fixpoint shows that each iteration of a loop is safe, not that it ends:
+The allocator of tools/sched_ext/scx_sdt.bpf.c looks for a free slot:
 
-  do { i++; sum += PT_REGS_RC(ctx); } while (i < 0x100000000ULL);
+  if ((word & 0xffffffff) == 0) { num += 32; word >>= 32; }
+  if ((word & 0xffff) == 0) { num += 16; word >>= 16; }
+  ...                                         six times, this is ffs()
+  return (i * 64) + ffs(freeslots);
 
-Today selftest loop3 hits the limit of 1M insns. The main pass widens i and
-is done, so the verifier has to add a may_goto. That is an edge that the
-prog does not have. Its place decides which progs load:
+The main pass joins the two states behind each 'if': num is [0, 32], then
+[0, 48]. It must not join two constants that the prog adds to a pointer to
+the packet, the context or a kernel object: these need the exact offset.
+The states meet before the add, and there the add is only 'r0 += r3'. If r0
+can be such a pointer, num stays a constant and each 'if' doubles the
+states: up to 256 at an insn, not 2.
 
-1. None, if each iteration executes a may_goto that leaves the loop, or
-bpf_iter_*_next() of an iterator that was created before the loop.
+  insns processed with this pass, and without it:
+  scx_sdt    sdt_init_task                               666       4897
+  scx_rusty  rusty_init_task, the same allocator        1404      22884
+  all progs of: selftests +23 %, scx +72 %, schedulers of rust-bpf +129 %
+  rust-bpf   the main pass rejects rand_ranges_shuffle:
+             "more than 1024 states that cannot be joined at insn 393"
 
-  bpf_repeat(1000000) {
-          map_val = bpf_map_lookup_elem(&hash_map, &key);
-          if (map_val) { found = true; break; }
-  }
-  if (found) *map_val = 123;
+bpf_flow_compute_kinds() goes forward through the control flow graph,
+before the main pass. In front of each insn it finds the registers, the
+stack slots and the stack arguments that hold, on each path to the insn:
+ - a scalar or a pointer to arena: no check depends on where it points,
+ - that, or a pointer to a map value that has only scalars and that is not
+   read-only: only the lowest and the highest offset count,
+ - the context: a load through it can give a pointer to the packet.
+It starts with 'all is known' and removes what is false on some path, until
+nothing changes. The result is plain_regs and value_regs of an insn.
 
-An added may_goto goes where 'break' goes, without the test. Selftest
-iters/iter_tricky_but_fine: "R6 invalid mem access 'map_value_or_null'".
-layered_init of scx_layered and mitosis_init of scx_mitosis fail alike.
+  ALU op other than 64-bit add, sub, mov     scalar, addr_space_cast too
+  64-bit add, sub                            what both operands are
+  load through a scalar or a map value       scalar
+  load through the context                   is_valid_access() tells
+  other load                                 scalar if below 8 bytes
+  spill and fill through r10, r11            what the prog stored
+  helper, kfunc                              from the prototype
+  static subprog                             true at all calls, all exits
+  global subprog, callback, target of callx  only the context
 
-2. In front of a conditional jump that leaves the loop, to its target: the
-prog gets there with the same registers and stack. One jump of the loop
-itself, bpf_insn_leaves_loop(), that each iteration goes through is enough:
-the 'while' of loop3. Else each back edge gets one: a may_goto at the head
-skips the body, and the first exit can read what the body sets.
-
-3. At the head, if a back edge has none. The compiler makes one loop of
-
-  while self.locked.compare_exchange(0, 1, Acquire, Relaxed).is_err() {
-      while self.locked.load(Relaxed) != 0 { core::hint::spin_loop(); }
-  }
-
-and the inner back edge has none. Without this place the main pass says
-"loop at insn 127 never exits" for 142 of the 225 progs of the schedulers
-of rust-bpf. This edge can skip what stops an outer loop: it leaves all.
-
-The added insn executes in each state. Thus a loop has it for all states or
-for none. The main pass can find out late: it first goes through loop3
-iteration by iteration, as today, and gives up. Then the pass is repeated.
-
-The main pass takes the blocks that have a new state in the order of
-flow_compute_order(): reverse post order, but a loop stays together. Else
-the code behind a 'break' is verified before the loop is done, then again.
+The result only selects the states that the main pass does not join. If it
+takes a pointer for a scalar, a join can reject a valid prog. If it takes
+a scalar for a pointer, there are more states. No unsafe prog loads.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |   1 +
- kernel/bpf/flow.c            | 335 +++++++++++++++++++++++++++++++++++
- kernel/bpf/loops.c           |   8 +
- 3 files changed, 344 insertions(+)
+ kernel/bpf/flow.c | 307 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 307 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index dafbf2851b22..53507aed9f20 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1609,6 +1609,7 @@ int bpf_insert_loop_guards(struct bpf_verifier_env *env);
- u16 bpf_call_const_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn);
- u16 bpf_call_checked_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn);
- bool bpf_insn_is_iter_next(struct bpf_verifier_env *env, struct bpf_insn *insn);
-+bool bpf_insn_leaves_loop(struct bpf_verifier_env *env, int h, int n);
- bool bpf_edge_leaves_loop(struct bpf_verifier_env *env, int h, int n, int t);
- bool bpf_jump_leaves_loop(struct bpf_verifier_env *env, int h, int n);
- int bpf_insert_recursion_checks(struct bpf_verifier_env *env);
 diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index 01681957855d..0f5acdf1cb94 100644
+index 0f5acdf1cb94..837d5054c2a3 100644
 --- a/kernel/bpf/flow.c
 +++ b/kernel/bpf/flow.c
-@@ -179,3 +179,338 @@ struct bpf_flow {
- 	u32 seq;
- 	u32 live_states;
- };
+@@ -514,3 +514,310 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env)
+ 	kvfree(seen);
+ 	return ret;
+ }
 +
 +/*
-+ * The order. Reverse post order is a topological order of the graph without
-+ * back edges, but it may put what follows a loop between the insns of
-+ * the loop. Keep the insns of a loop together, the head first: in the list of
-+ * its parent the loop takes the place of the insn of it that comes first.
-+ *
-+ * Every cycle has a back edge of the depth first search in it and
-+ * bpf_compute_loops() makes the target of such edge a loop head. So every edge
-+ * that goes backwards in the order is in a loop whose head is at or before its
-+ * target, loops that are not reducible included.
++ * The places of a function that hold a value: the registers, the arguments on the stack that it
++ * got and those that it hands over, the slots of the stack that struct flow_need has a bit for.
 + */
-+static int flow_compute_order(struct bpf_verifier_env *env, struct bpf_flow *flow)
++enum {
++	FLOW_ARG_IN	= 16,
++	FLOW_ARG_OUT	= FLOW_ARG_IN + MAX_STACK_ARG_SLOTS,
++	FLOW_SLOT	= 64,
++	FLOW_PLACES	= 128,
++};
++static_assert(FLOW_ARG_OUT + MAX_STACK_ARG_SLOTS <= FLOW_SLOT);
++
++enum flow_kind {
++	FLOW_IS_PLAIN,	/* a number or a pointer to arena: nothing checks where it points to */
++	FLOW_IS_VALUE,	/* that, or a pointer to a map value that holds nothing but numbers */
++	FLOW_IS_CTX,	/* the context, as the prog or a global function got it */
++	FLOW_KINDS,
++	FLOW_IS_OTHER = FLOW_KINDS,
++};
++
++/* What the places hold for sure in front of an insn */
++struct flow_kinds {
++	unsigned long is[FLOW_KINDS][BITS_TO_LONGS(FLOW_PLACES)];
++};
++
++static void flow_kind_set(struct flow_kinds *k, u32 place, enum flow_kind kind)
 +{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	int len = env->prog->len, i, s, n, h, top, depth;
-+	int *next, *head, *tail, *stack;
-+	unsigned long *linked;
-+	u32 pos = 0;
-+	int err = -ENOMEM;
++	int i;
 +
-+	/* lists of members are indexed by loop head, len is the function */
-+	next = kvmalloc_array(len, sizeof(int), GFP_KERNEL_ACCOUNT);
-+	head = kvmalloc_array(len + 1, sizeof(int), GFP_KERNEL_ACCOUNT);
-+	tail = kvmalloc_array(len + 1, sizeof(int), GFP_KERNEL_ACCOUNT);
-+	stack = kvmalloc_array(len + 1, sizeof(int), GFP_KERNEL_ACCOUNT);
-+	linked = kvcalloc(BITS_TO_LONGS(len), sizeof(long), GFP_KERNEL_ACCOUNT);
-+	if (!next || !head || !tail || !stack || !linked)
-+		goto out;
-+
-+	for (i = 0; i <= len; i++)
-+		head[i] = tail[i] = -1;
-+
-+	for (s = 0; s < env->subprog_cnt; s++) {
-+		int first = env->subprog_info[s].postorder_start;
-+		int last = env->subprog_info[s + 1].postorder_start - 1;
-+
-+		head[len] = tail[len] = -1;
-+		for (i = last; i >= first; i--) {
-+			n = env->cfg.insn_postorder[i];
-+			/* n, then the heads of the loops around it that are not in a list yet */
-+			depth = 0;
-+			for (h = n; h >= 0 && !test_bit(h, linked); h = aux[h].loop_header)
-+				stack[depth++] = h;
-+			while (depth) {
-+				h = stack[--depth];
-+				top = aux[h].loop_header >= 0 ? aux[h].loop_header : len;
-+				__set_bit(h, linked);
-+				next[h] = -1;
-+				if (tail[top] < 0)
-+					head[top] = h;
-+				else
-+					next[tail[top]] = h;
-+				tail[top] = h;
-+			}
-+		}
-+
-+		depth = 0;
-+		n = head[len];
-+		while (n >= 0 || depth) {
-+			if (n < 0) {
-+				n = next[stack[--depth]];
-+				continue;
-+			}
-+			flow->pos[n] = pos++;
-+			if (aux[n].loop && head[n] >= 0) {
-+				stack[depth++] = n;
-+				n = head[n];
-+			} else {
-+				n = next[n];
-+			}
-+		}
-+	}
-+	err = 0;
-+out:
-+	kvfree(next);
-+	kvfree(head);
-+	kvfree(tail);
-+	kvfree(stack);
-+	kvfree(linked);
-+	return err;
++	for (i = 0; i < FLOW_KINDS; i++)
++		__assign_bit(place, k->is[i], i == kind);
++	if (kind == FLOW_IS_PLAIN)
++		__set_bit(place, k->is[FLOW_IS_VALUE]);
 +}
 +
-+/* Does the insn at @idx stop the loop @h? */
-+static bool flow_is_bound(struct bpf_verifier_env *env, int h, int idx)
++static void flow_kind_copy(struct flow_kinds *to, u32 place, const struct flow_kinds *from,
++			   u32 from_place)
 +{
++	int i;
++
++	for (i = 0; i < FLOW_KINDS; i++)
++		__assign_bit(place, to->is[i], test_bit(from_place, from->is[i]));
++}
++
++/* What holds on both ways to an insn. Returns true if that is less than before. */
++static bool flow_kinds_meet(struct flow_kinds *to, const struct flow_kinds *from)
++{
++	unsigned long lost = 0;
++	int i, j;
++
++	for (i = 0; i < FLOW_KINDS; i++) {
++		for (j = 0; j < ARRAY_SIZE(to->is[i]); j++) {
++			lost |= to->is[i][j] & ~from->is[i][j];
++			to->is[i][j] &= from->is[i][j];
++		}
++	}
++	return lost;
++}
++
++/* The first insn of a function that is called from @k */
++static bool flow_kinds_enter(struct flow_kinds *to, const struct flow_kinds *k)
++{
++	struct flow_kinds e = {};
++	int i;
++
++	/* r12 points to arena. The rest is not set. */
++	bitmap_fill(e.is[FLOW_IS_PLAIN], FLOW_PLACES);
++	bitmap_fill(e.is[FLOW_IS_VALUE], FLOW_PLACES);
++	flow_kind_set(&e, BPF_REG_FP, FLOW_IS_OTHER);
++	for (i = BPF_REG_1; i <= BPF_REG_5; i++)
++		flow_kind_copy(&e, i, k, i);
++	for (i = 0; i < MAX_STACK_ARG_SLOTS; i++)
++		flow_kind_copy(&e, FLOW_ARG_IN + i, k, FLOW_ARG_OUT + i);
++	return flow_kinds_meet(to, &e);
++}
++
++/* The place that @insn loads from or stores to through r10 or r11, -1 if it's something else */
++static int flow_mem_place(const struct bpf_insn *insn, u8 base)
++{
++	int n = (abs(insn->off) - 1) / BPF_REG_SIZE;
++
++	if (!insn->off)
++		return -1;
++	if (base == BPF_REG_FP && insn->off < 0 && n < 64)
++		return FLOW_SLOT + n;
++	if (base == BPF_REG_PARAMS && n < MAX_STACK_ARG_SLOTS)
++		return (insn->off < 0 ? FLOW_ARG_OUT : FLOW_ARG_IN) + n;
++	return -1;
++}
++
++static enum flow_kind flow_map_value_kind(const struct bpf_map *map)
++{
++	if (map->map_type == BPF_MAP_TYPE_ARENA)
++		return FLOW_IS_PLAIN;
++	/* what is at a known offset of a read-only map is known: a number, a string, a function */
++	if (map->map_flags & BPF_F_RDONLY_PROG)
++		return FLOW_IS_OTHER;
++	return IS_ERR_OR_NULL(map->record) && !map->inner_map_meta ? FLOW_IS_VALUE : FLOW_IS_OTHER;
++}
++
++/* What @insn loads through the register @base */
++static enum flow_kind flow_loaded_kind(struct bpf_verifier_env *env, const struct flow_kinds *k,
++				       const struct bpf_insn *insn, u8 base)
++{
++	struct bpf_insn_access_aux info = { .reg_type = SCALAR_VALUE };
++	int size = bpf_size_to_bytes(BPF_SIZE(insn->code));
++	bool tstamp = env->prog->tstamp_type_access, valid;
++
++	/* a number that is good for a load is an address in arena */
++	if (test_bit(base, k->is[FLOW_IS_VALUE]))
++		return FLOW_IS_PLAIN;
++	/* only the context has pointers that are shorter than a register */
++	if (!test_bit(base, k->is[FLOW_IS_CTX]))
++		return size < BPF_REG_SIZE ? FLOW_IS_PLAIN : FLOW_IS_OTHER;
++	valid = env->ops->is_valid_access &&
++		env->ops->is_valid_access(insn->off, size, BPF_READ, env->prog, &info);
++	/* it notes what the prog reads, and this is a question */
++	env->prog->tstamp_type_access = tstamp;
++	return valid && info.reg_type == SCALAR_VALUE ? FLOW_IS_PLAIN : FLOW_IS_OTHER;
++}
++
++/* What a helper or a kfunc returns */
++static enum flow_kind flow_returned_kind(struct bpf_verifier_env *env, int idx)
++{
++	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
 +	struct bpf_insn *insn = &env->prog->insnsi[idx];
-+	int t;
++	const struct bpf_func_proto *fn;
++	struct bpf_call_arg_meta meta;
++	const struct btf_type *t;
 +
-+	/* Once it is out of budget it's a jump. It has to leave the loop. */
-+	if (bpf_is_may_goto_insn(insn)) {
-+		t = bpf_loop_at_index(env, idx + insn->off + 1);
-+		return t != h && !bpf_is_nested_loop(env, t, h);
++	if (bpf_pseudo_kfunc_call(insn)) {
++		if (bpf_fetch_kfunc_arg_meta(env, insn->imm, insn->off, &meta) < 0)
++			return FLOW_IS_OTHER;
++		t = btf_type_skip_modifiers(meta.btf, meta.func_proto->type, NULL);
++		if (!btf_type_is_ptr(t))
++			return FLOW_IS_PLAIN;
++		/* void * is a number, unless the verifier knows the kfunc. Such kfunc may fail. */
++		t = btf_type_skip_modifiers(meta.btf, t->type, NULL);
++		return btf_type_is_void(t) && !(meta.kfunc_flags & KF_RET_NULL) ? FLOW_IS_PLAIN :
++										  FLOW_IS_OTHER;
 +	}
-+	if (!bpf_insn_is_iter_next(env, insn))
-+		return false;
-+	/* unless the main pass finds that it doesn't, see iter_stops_loops() */
-+	t = env->insn_aux_data[idx].not_stopped;
-+	return t < 0 || bpf_is_nested_loop(env, h, t);
++	if (bpf_get_helper_proto(env, insn->imm, &fn) < 0)
++		return FLOW_IS_OTHER;
++	if (fn->ret_type == RET_INTEGER || fn->ret_type == RET_VOID)
++		return FLOW_IS_PLAIN;
++	if (base_type(fn->ret_type) == RET_PTR_TO_MAP_VALUE &&
++	    (aux->const_reg_map_mask & BIT(BPF_REG_1)))
++		return flow_map_value_kind(env->used_maps[aux->const_reg_vals[BPF_REG_1]]);
++	return FLOW_IS_OTHER;
 +}
 +
 +/*
-+ * What stops a loop at run time is may_goto that leaves it, or bpf_iter_*_next() of
-+ * an iterator that is older than the loop, that every trip goes through. A loop without
-+ * it gets may_goto unless the number of its trips turns out to be known.
-+ *
-+ * The place for it is in front of a conditional jump that leaves the loop, with
-+ * the same target. The registers and the stack are what they are when
-+ * the program leaves the loop there. One such jump that every trip goes
-+ * through is enough. Otherwise every back edge needs one.
++ * @k is what holds in front of the insn at @idx. Make it what holds behind it.
++ * @ret: the registers that are FLOW_IS_PLAIN at all exits of a subprog.
++ * Returns true if less is known than before at the entry or about the exits of a subprog.
 + */
-+static void flow_set_guard(struct bpf_verifier_env *env, int h, int n)
++static bool flow_kinds_step(struct bpf_verifier_env *env, struct flow_kinds *kinds, u16 *ret,
++			    struct flow_kinds *k, int idx)
 +{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	int t = n + env->prog->insnsi[n].off + 1;
-+	int i = bpf_loop_at_index(env, t);
-+
-+	if (i == h || bpf_is_nested_loop(env, i, h))
-+		t = n + 1;
-+	aux[n].guard_place = true;
-+	aux[n].guard_to = t;
-+	aux[h].loop->has_guards = true;
-+}
-+
-+static void flow_place_guards(struct bpf_verifier_env *env, int h, u32 *seen)
-+{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	struct bpf_loop *loop = aux[h].loop;
-+	int i, n, o, t, found = -1;
-+
-+	if (loop->backedges_overflow)
-+		goto header;
-+
-+	/*
-+	 * The head of a loop with more than one entry doesn't dominate what is in the loop.
-+	 * Then an insn that dominates a back edge can be passed once, on the way in, and
-+	 * never again. Every trip goes through the jump that is the back edge, and
-+	 * through the head.
-+	 */
-+	if (loop->irreducible) {
-+		for (i = 0; i < loop->backedges_cnt; i++)
-+			if (!loop->backedges[i].latches_cnt ||
-+			    loop->backedges[i].latches[0] != loop->backedges[i].from)
-+				goto header;
-+		for (i = 0; i < loop->backedges_cnt; i++)
-+			flow_set_guard(env, h, loop->backedges[i].from);
-+		return;
-+	}
-+
-+	/* seen[n]: the number of back edges that n dominates */
-+	for (i = 0; i < loop->backedges_cnt; i++)
-+		for (n = loop->backedges[i].from; n >= 0; n = n == h ? -1 : env->idoms[n])
-+			seen[n]++;
-+	for (n = loop->backedges[0].from; n >= 0 && found < 0; n = n == h ? -1 : env->idoms[n])
-+		if (seen[n] == loop->backedges_cnt && bpf_insn_leaves_loop(env, h, n))
-+			found = n;
-+	for (i = 0; i < loop->backedges_cnt; i++)
-+		for (n = loop->backedges[i].from; n >= 0; n = n == h ? -1 : env->idoms[n])
-+			seen[n] = 0;
-+	if (found >= 0) {
-+		flow_set_guard(env, h, found);
-+		return;
-+	}
-+
-+	for (i = 0; i < loop->backedges_cnt; i++)
-+		if (!loop->backedges[i].latches_cnt)
-+			goto header;
-+	for (i = 0; i < loop->backedges_cnt; i++)
-+		flow_set_guard(env, h, loop->backedges[i].latches[0]);
-+	return;
-+
-+header:
-+	/*
-+	 * In front of a jump may_goto goes where the jump goes. From the head to where the loop
-+	 * is left is not an edge of the program: it skips what is in the loop. If that is what
-+	 * stops a loop around this one, bpf_iter_*_next() or i++, and the exit leads back to
-+	 * the head of that loop, the program goes round and round from may_goto to may_goto.
-+	 * So leave all loops.
-+	 *
-+	 * What is derived from the graph in the direction of the edges has to know about this
-+	 * one, see bpf_head_guard_target().
-+	 */
-+	for (o = h; aux[o].loop_header >= 0; o = aux[o].loop_header)
-+		;
-+	/* a loop that has no exit can only be stopped together with the program */
-+	if (!aux[o].loop->exits_cnt)
-+		return;
-+	t = aux[o].loop->exits[0].to;
-+	aux[h].guard_place = true;
-+	aux[h].guard_at_header = true;
-+	aux[h].guard_to = t;
-+	loop->has_guards = true;
-+}
-+
-+/* Does every trip of the loop @h go through an insn that stops it? */
-+static bool flow_loop_is_bounded(struct bpf_verifier_env *env, int h)
-+{
-+	struct bpf_loop *loop = env->insn_aux_data[h].loop;
-+	int i, n;
-+
-+	/* see flow_place_guards() about loops with more than one entry */
-+	if (loop->backedges_overflow || loop->irreducible)
-+		return false;
-+	for (i = 0; i < loop->backedges_cnt; i++) {
-+		for (n = loop->backedges[i].from; n >= 0 && n != h; n = env->idoms[n])
-+			if (flow_is_bound(env, h, n))
-+				break;
-+		if (n < 0 || !flow_is_bound(env, h, n))
-+			return false;
-+	}
-+	return true;
-+}
-+
-+/*
-+ * The main pass got to bpf_iter_*_next() at @insn_idx in a state in which it doesn't stop
-+ * the loop @h around it. What is assumed about the loops stays as it is until the pass
-+ * is over, so that all states are treated alike.
-+ */
-+void bpf_flow_next_is_no_bound(struct bpf_verifier_env *env, int insn_idx, int h)
-+{
-+	struct bpf_insn_aux_data *aux = &env->insn_aux_data[insn_idx];
-+
-+	if (aux->not_stopped >= 0 && !bpf_is_nested_loop(env, h, aux->not_stopped))
-+		return;
-+	aux->not_stopped = h;
-+	env->restart = true;
-+}
-+
-+/*
-+ * True if a loop was taken for bounded in the pass and is not. The pass is done again then.
-+ * A loop that has something else that stops it, like the outer one of two nested
-+ * bpf_for(), is not affected. Every time at least one loop is found out for good.
-+ */
-+bool bpf_flow_loops_lost_bound(struct bpf_verifier_env *env)
-+{
-+	struct bpf_loop *loop;
++	struct bpf_subprog_info *sub = env->subprog_info;
++	struct bpf_insn *insn = &env->prog->insnsi[idx];
++	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
++	u8 dst = insn->dst_reg, src = insn->src_reg;
++	bool wide = BPF_SIZE(insn->code) == BPF_DW && BPF_MODE(insn->code) == BPF_MEM &&
++		    !(insn->off % BPF_REG_SIZE);
 +	bool lost = false;
-+	int h;
++	u16 regs = U16_MAX;
++	int i, s;
 +
-+	for (h = 0; h < env->prog->len; h++) {
-+		loop = env->insn_aux_data[h].loop;
-+		if (!loop || !loop->rt_bounded || flow_loop_is_bounded(env, h))
-+			continue;
-+		loop->rt_bounded = false;
-+		lost = true;
++	if (class == BPF_ALU64 && (op == BPF_ADD || op == BPF_SUB)) {
++		__clear_bit(dst, k->is[FLOW_IS_CTX]);
++		for (i = 0; BPF_SRC(insn->code) == BPF_X && i < FLOW_IS_CTX; i++)
++			if (!test_bit(src, k->is[i]))
++				__clear_bit(dst, k->is[i]);
++	} else if (insn->code == (BPF_ALU64 | BPF_MOV | BPF_X) && !insn->off) {
++		flow_kind_copy(k, dst, k, src);
++	} else if (class == BPF_ALU || class == BPF_ALU64) {
++		/*
++		 * addr_space_cast too. It leaves a pointer that is not in arena as it is, and
++		 * a compiler casts what it cannot know. Nearly all of that is in arena.
++		 */
++		flow_kind_set(k, dst, FLOW_IS_PLAIN);
++	} else if (class == BPF_LDX) {
++		s = flow_mem_place(insn, src);
++		if (wide && s >= 0)
++			flow_kind_copy(k, dst, k, s);
++		else
++			flow_kind_set(k, dst, flow_loaded_kind(env, k, insn, src));
++	} else if (class == BPF_STX || class == BPF_ST) {
++		i = bpf_atomic_load_reg(insn);
++		if (i >= 0)
++			flow_kind_set(k, i, flow_loaded_kind(env, k, insn,
++						insn->imm == BPF_LOAD_ACQ ? src : dst));
++		s = flow_mem_place(insn, dst);
++		if (class == BPF_STX && wide && s >= 0)
++			flow_kind_copy(k, s, k, src);
++		else if (s >= 0)
++			flow_kind_set(k, s, FLOW_IS_PLAIN);
++	} else if (bpf_is_ldimm64(insn)) {
++		if (src == BPF_PSEUDO_MAP_VALUE || src == BPF_PSEUDO_MAP_IDX_VALUE)
++			flow_kind_set(k, dst, flow_map_value_kind(
++					env->used_maps[env->insn_aux_data[idx].map_index]));
++		else
++			flow_kind_set(k, dst, src ? FLOW_IS_OTHER : FLOW_IS_PLAIN);
++	} else if (insn->code == (BPF_JMP | BPF_EXIT) && !bpf_is_unwind_exit(insn)) {
++		s = bpf_find_containing_subprog(env, idx) - sub;
++		lost = ret[s] & ~k->is[FLOW_IS_PLAIN][0];
++		ret[s] &= k->is[FLOW_IS_PLAIN][0];
++	} else if (class == BPF_LD || (class == BPF_JMP && op == BPF_CALL)) {
++		s = bpf_pseudo_call(insn) ? bpf_find_subprog(env, idx + insn->imm + 1) : -1;
++		if (s >= 0 && !bpf_subprog_is_global(env, s)) {
++			lost = flow_kinds_enter(&kinds[sub[s].start], k);
++			regs = ret[s];
++		} else if (bpf_is_callx(insn)) {
++			regs = 0;
++		}
++		/* a subprog may return a pair in R0 and R2, the rest is not set */
++		regs |= ~(BIT(BPF_REG_0) | BIT(BPF_REG_2));
++		for (i = BPF_REG_0; i <= BPF_REG_5; i++)
++			flow_kind_set(k, i, regs & BIT(i) ? FLOW_IS_PLAIN : FLOW_IS_OTHER);
++		for (i = 0; i < MAX_STACK_ARG_SLOTS; i++)
++			flow_kind_set(k, FLOW_ARG_OUT + i, FLOW_IS_PLAIN);
++		if (bpf_helper_call(insn) || bpf_pseudo_kfunc_call(insn))
++			flow_kind_set(k, BPF_REG_0, flow_returned_kind(env, idx));
 +	}
 +	return lost;
 +}
 +
 +/*
-+ * A state is in the loop @h without a count, so the loop gets may_goto. At run time may_goto is
-+ * there for everybody, also for those who know the number of trips or got to the end of the loop
-+ * trip by trip. It can be out of budget in the first trip, because of a loop before this one.
++ * Find the registers that hold a number or a pointer to arena, and those that point to the value
++ * of a map that holds nothing but numbers at worst, whichever way the prog gets to an insn:
++ * plain_regs and value_regs of struct bpf_insn_aux_data. The others may hold any pointer.
 + *
-+ * So a loop has may_goto or it has not, and a state takes the edges of may_goto if the loop had
-+ * it when the state entered. If a state entered without it, with a count or on a walk that may
-+ * give up, all is done again, and the loop has may_goto from the start.
++ * Forwards, from "all is known" down, until nothing changes. Arguments go from the callers to
++ * the callees and results the other way, so the subprogs are looked at in both orders in turn.
++ *
++ * Nothing depends on it but which states are kept apart. A pointer that is taken for
++ * a number costs a rule. A number that is taken for a pointer costs states. So it's fine to
++ * miss a store through a pointer to the stack, and to take what callx calls for unknown.
++ *
++ * The edges that the verifier adds, see bpf_head_guard_target(): may_goto at the head of a loop
++ * takes what holds there to its target. A subprog that is out of budget goes to an exit with 0
++ * in place of the result, a number.
 + */
-+void bpf_flow_loop_gets_guards(struct bpf_verifier_env *env, int h)
++int bpf_flow_compute_kinds(struct bpf_verifier_env *env)
 +{
-+	struct bpf_loop *loop = env->insn_aux_data[h].loop;
++	struct bpf_subprog_info *sub = env->subprog_info;
++	int len = env->prog->len, cnt = env->subprog_cnt, i, j, n, s, t, idx, err = 0;
++	struct flow_kinds *kinds, k = {};
++	struct bpf_iarray *succ;
++	bool lost = true;
++	u16 *ret;
 +
-+	if (loop->guarded)
-+		return;
-+	loop->guarded = true;
-+	if (loop->no_guard_edges)
-+		env->guards_late = true;
-+}
-+
-+/* The main prog and the global functions are about to be verified, maybe not for the first time */
-+void bpf_flow_new_round(struct bpf_verifier_env *env)
-+{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	int i;
-+
-+	env->restart = false;
-+	env->guards_late = false;
-+	for (i = 0; i < env->prog->len; i++) {
-+		aux[i].guard_edge_dropped = false;
-+		if (aux[i].loop)
-+			aux[i].loop->no_guard_edges = false;
-+	}
-+}
-+
-+/*
-+ * Which loops have something that stops them at run time, and where may_goto goes in the others.
-+ * Returns 1 if a place is at the head of a loop.
-+ */
-+int bpf_flow_place_guards(struct bpf_verifier_env *env)
-+{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	int len = env->prog->len, h, i, depth, ret = 0;
-+	struct bpf_loop *loop;
-+	u32 *seen;
-+
-+	seen = kvcalloc(len, sizeof(*seen), GFP_KERNEL_ACCOUNT);
-+	if (!seen)
++	kinds = kvmalloc_array(len, sizeof(*kinds), GFP_KERNEL_ACCOUNT);
++	ret = kvmalloc_array(env->subprog_cnt, sizeof(*ret), GFP_KERNEL_ACCOUNT);
++	if (!kinds || !ret) {
++		kvfree(kinds);
++		kvfree(ret);
 +		return -ENOMEM;
++	}
++	memset(kinds, 0xff, len * sizeof(*kinds));
++	memset(ret, 0xff, env->subprog_cnt * sizeof(*ret));
 +
-+	for (i = 0; i < len; i++) {
-+		aux[i].not_stopped = -1;
-+		depth = 0;
-+		for (h = bpf_loop_at_index(env, i); h >= 0; h = aux[h].loop_header) {
-+			/* the main pass doesn't get that deep */
-+			if (++depth > LOOP_STACK_SIZE) {
-+				verbose(env, "Too many nested loops at %d\n", i);
-+				kvfree(seen);
-+				return -E2BIG;
-+			}
-+			aux[h].loop->nr_insns++;
-+			if (bpf_pseudo_call(&env->prog->insnsi[i]) ||
-+			    bpf_is_callx(&env->prog->insnsi[i]))
-+				aux[h].loop->has_calls = true;
-+		}
++	/* what the kernel, a helper, callx or another prog calls: only the context is known */
++	for (s = 0; s < env->subprog_cnt; s++) {
++		if (s && !bpf_subprog_is_global(env, s) && !sub[s].addr_taken)
++			continue;
++		flow_kinds_enter(&kinds[sub[s].start], &k);
++		for (i = 0; i < MAX_BPF_FUNC_REG_ARGS; i++)
++			if (sub[s].args[i].arg_type == ARG_PTR_TO_CTX ||
++			    (!s && !i && env->prog->type != BPF_PROG_TYPE_EXT))
++				flow_kind_set(&kinds[sub[s].start], BPF_REG_1 + i, FLOW_IS_CTX);
 +	}
 +
-+	for (h = 0; h < len; h++) {
-+		loop = aux[h].loop;
-+		if (!loop)
-+			continue;
-+		/* a deep nest of loops takes long */
++	for (n = 0; lost; n++) {
++		lost = false;
++		/* a chain of calls takes a round for each link */
 +		if (signal_pending(current)) {
-+			ret = -EAGAIN;
++			err = -EAGAIN;
 +			break;
 +		}
 +		cond_resched();
-+		loop->rt_bounded = flow_loop_is_bounded(env, h);
-+		/* also when it's bounded: the main pass may find that it's not */
-+		flow_place_guards(env, h, seen);
-+		if (aux[h].guard_at_header)
-+			ret = 1;
++		for (j = 0; j < cnt; j++) {
++			/* it has callees first */
++			s = env->subprog_topo_order[n & 1 ? j : cnt - 1 - j];
++			for (i = sub[s + 1].postorder_start; i-- > sub[s].postorder_start;) {
++				idx = env->cfg.insn_postorder[i];
++				k = kinds[idx];
++				lost |= flow_kinds_step(env, kinds, ret, &k, idx);
++				succ = bpf_insn_successors(env, idx);
++				iarray_for_each(t, succ)
++					lost |= flow_kinds_meet(&kinds[t], &k);
++				t = bpf_head_guard_target(env, idx);
++				if (t >= 0)
++					lost |= flow_kinds_meet(&kinds[t], &kinds[idx]);
++			}
++		}
 +	}
-+	kvfree(seen);
-+	return ret;
++	for (i = 0; i < len; i++) {
++		env->insn_aux_data[i].plain_regs = kinds[i].is[FLOW_IS_PLAIN][0];
++		env->insn_aux_data[i].value_regs = kinds[i].is[FLOW_IS_VALUE][0];
++	}
++	kvfree(kinds);
++	kvfree(ret);
++	return err;
 +}
-diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
-index cc15712f70d4..729e0055f86f 100644
---- a/kernel/bpf/loops.c
-+++ b/kernel/bpf/loops.c
-@@ -540,6 +540,14 @@ bool bpf_jump_leaves_loop(struct bpf_verifier_env *env, int h, int n)
- 	       (f != h && !bpf_is_nested_loop(env, f, h));
- }
- 
-+/* The same for an insn that is in the loop @h itself */
-+bool bpf_insn_leaves_loop(struct bpf_verifier_env *env, int h, int n)
-+{
-+	if (bpf_loop_at_index(env, n) != h)
-+		return false;
-+	return bpf_jump_leaves_loop(env, h, n);
-+}
-+
- int bpf_compute_loops(struct bpf_verifier_env *env)
- {
- 	int i, j, k, s, t, iloop, sloop, err = 0, len = env->prog->len;
 -- 
 2.55.0
 
