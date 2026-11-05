@@ -1,105 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=207.54.77.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793896625;
-	b=SVwkPd3nf9Y0NG89bc6iIPWd2iy4SgjfjbMfaz38tQwPLEG/YaEj8bKHCmK0QPqARour
-	 RZ310rBHQQ7VRwdkZqW4nD0AdebaaxvBfEv0vneIVmLOqFXtZ1FPxkmhpEpXnht+u2W9t
-	 ljqopUTrh4JZUsuaqI6j/NiRwmkK8iiE4oNOxqXtuUm9+xPmUtfv7Oz9YjQ+ujTJ/+PXq
-	 KuJucIn/9bcjr0HW64GpPp+4W+1NAKygz6ATEXATWesNgH6ZXACNAGCPCkS/VzIyLcxN4
-	 dwB6FwV8muvldvRwgoLeW+g1IG5oum/Kf8d1npbYV+fgJYKgqerP4OmCuBxTWeQn72A==
+	t=1793896706;
+	b=eQ3ZgQWIt1IbQrhIn7gza9Zfd9GViqoXbilZZK9WFjNDQuA4Vzx0bwNnwHd62C9irNUc
+	 cwcVAAX+qlaWchf6tIfo4Ju3GSecbShudnFfx0GtOxbdhoOB5iuv/gwkgMkU2qRKSmTMM
+	 JRW3ry7V1JRlbn4bsQSi7Nbw3TW+NUmHEs7IRRvvVomOWaBK27h00tAlHWk5u3dv4Pj3v
+	 gutpmP3TpFnnCc2RG8lJVcgD+ChBXRw0VVqWxr0B/ojWxev/FcBEDJkGK1kkUgESZJv3s
+	 4/4PDXexBnBzjX19wUeBaSargJ/j0cA5xFVaWil6GSSam/DidA6uA054saD03UE0uTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793896625;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=EMTT2HHjSkY1uGJyH89VPeEJ36kiCXEDFii0T4E6Iac=;
-	b=GKly3so+jyqN0Y0Iwj65wNmoDRMmJt5y+2SQ1WKbVDw4xT9WoJsqlc6N1cCwdjLeR0Ji
-	 ZaXi7kgF9el97t6qH3sPTMX7KNlmFNKn6hczJQfSfSmwxtCSZbHtGh8O1ieDGTc7GTfg5
-	 UZQPGdqSU6WlGFIjEtgUzwDCdRByRF0VqzKwm61iM+1JbBOTlszOwQvwXxIVCqzYvknuc
-	 rMGyXV03gbWsLhiYWoJkNjdvWPzAtXn1th/qSLjTPDEkRLEb74LACWzXxZagOob2Av88j
-	 IiRVSxygs9TyU2IH+8Al/WUgWx/SQCtlQzmVlrigw7HC2bs8qRgNy+nNE+CicC9Wzjg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793896706;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-Amp-Result:X-Amp-File-Uploaded:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:Received:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer;
+	bh=eGJncRZo7pGOtgDIQrvzb7fQrMtZ5o5Cn5x2f91k7gQ=;
+	b=4w0nErOFCUJtms5+s7p42h0x+7oorwncTmSMDgLedyoDHcVsqH/Wa4Rr55LbV6UmLwRW
+	 Oo/dwUmg7l8rL214TCfAPVqN8Q6mGiHIWPnT6X+C0zA2Do1HA/GZJqfN0MZm3y65l2eja
+	 tvr2EoRSovFjZViL67Ge7F8FlAbcJ1PMRzK7VEyLIZvNaQppZF3SRmmHNh5j84Gx0oz8R
+	 IvJjGHErJXHvwP/kmrhyRlE3aIkEIfwK5puJwfUr+8BfFnaRj0jldiUNEmOj4kHWZeCY7
+	 JKFXaTCsXodpD/g6gpng1z/TVzwDkkfKNiqzXVjazO5Q8RWbEf2EbsyK2JrSHMvunyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h43CPja3;
-	arc=none smtp.remote-ip=209.85.216.46
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D497606A903
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 16:37:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D497606A903
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h43CPja3
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3adac5b29ebso1236328a91.2
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 08:37:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793896624; x=1794501424; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=EMTT2HHjSkY1uGJyH89VPeEJ36kiCXEDFii0T4E6Iac=;
-        b=h43CPja397Wxk7BuUAKdbooVEpDaqJLuGmG3AT5/791iKKS5eiAU6lh7u1JbE0Mq78
-         +9oRSianhKPO/HA1gBL2vrU3w6lIR7qSraYBEdVYl2uPJ65ncsS1I9I2leOVuGrcv/bt
-         sAy/aUnI4dnTLwPZC2bvNsTsU3icEgBMF6UpzeBqy/b0rCnmZGuF2bDQzCh8XbcZgzR7
-         yKsxt1bp1lX5qfOUdhfexth16YT+tHLrRTx2oVdFuCI2YzD+TdredLDDH/ZKAC+4wHi7
-         EB/KRd04cjwrwGzxsPxdGWxuJHdoqObrQeSF2bNgnOpZueQPe7OyekDD96xtrxdjvPtR
-         59nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793896624; x=1794501424;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EMTT2HHjSkY1uGJyH89VPeEJ36kiCXEDFii0T4E6Iac=;
-        b=izZ9Sy30xDDJ2I3QBDnrP840TFvylb3zYt/NIb2vpHCKfBKqmtXfiVhX+Ds0GV+ovQ
-         xsVY65Z8SBCL94vMPk7tZaptR8sG9dyjrmin4BUdKpdjBYN9ZmIiDXFgLNZdlPgtcpmh
-         sNz4SivXDyCUggQBT5RIMr288h619Lk+DSHo5BIiqjtGUNwgjtUl7u8l297xdb+C4/wF
-         8jDXR4xIz5bbuwLDWHxqL89M3k+uhXwsT4Tx56MxhnGyCRm0VFjKMuh0T3XJnspKYq7R
-         vpyF+qEt/ECRMCtmjwwhU1iSu/AbnhGcyLmm4yzPw6kf5nKrV2eFySbXHgAeZqlbg9Yf
-         9/8w==
-X-Forwarded-Encrypted: i=1; AKwUvBwN3paKYV7uvpDdFCaMqw8w5+m9cd/ANK6sy+Bf3XgjPqOuj4k9Fr+K/zjhj6jmh1V2wY4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+VsYsn31fnrX6QG0BJmuT9MY4ES4hVlC5ZWy5M1z8KddkQvCL0
-	TrbSDbARQ8YxYEG9QTbo6NLJJ6uq+RqxNLApz6iyLzO8COaVQdYfBfwS
-X-Gm-Gg: AYBFou0lAYJbQUtut7K07MLPHfim4B3PGluvTGWjN5sBUMsBnJJrLxjaFSs9P5qOfZg
-	ZbviMNYsJTRXSHGBwC9pOk2Hjh5Is9WtX6/q5ooVJv5+GDC05hDIg+weSGBgzmi7lh3xNA0t/dO
-	mTwjpYRnbYeS1UjzqS9XaV8GGliq4nHzwqot7op+BMevygd4DJvNM5gRMD9FILKXAZpWOjNh4WE
-	P2XyP6mKiRQurlQN4vS5DzXUlTd0p+FMVqFT+Bh5UvJg82kWTpHApx7AuDdQdGTN/5+N+mt8blf
-	jfogEAquuoAsNCcS5cLsTb0RMERzjU8SVVmlWCJj/Hc8XpOZa+dUafK3EKmH58Wq+qRIo9Ra5HJ
-	Ww9ySEOX7SIesyVImvBG0K5Ls+IFYvHQc0A/u8MnwAn6QOY4xHbQ1lQAJ0RpweL5JyIZ501NI6f
-	uUWHrv4sHpiA6PLMoYONNAQl6c3GY7EAS9OrX92x4KfDkzITMF5WCicIu9Hv6muU9vqbbGvNPS2
-	sUWrBTnKfi0gAPOZJuP5k8Ew0CBk7mJb4q1r7TQijdk21w7xrCjhuBmK1BuFMLVAB3Z7gWxC4Ss
-	6gtKoWalxt+ncfKQhLzrpcihzUceSNqy9jdYxPde5n+PtaUpnEwGyPNu/9Pd4l2QiMybCaDfZAY
-	Wtn6rXvQO/jbwuQ1A+T/0XNiRDrRsJwNtFQ==
-X-Received: by 2002:a17:90b:4d85:b0:3b0:a378:1cf with SMTP id 98e67ed59e1d1-3b0a378049cmr4183905a91.22.1793896623555;
-        Thu, 05 Nov 2026 08:37:03 -0800 (PST)
-Received: from localhost ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b3160634sm4692625a91.6.2026.11.05.08.37.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Nov 2026 08:37:02 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 05 Nov 2026 16:37:02 +0000
-Message-Id: <DMNFA3D0M816.2K02S8LB47QM4@gmail.com>
-Cc: <eddyz87@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <ihor.solodrai@linux.dev>, <pulehui@huawei.com>, <pjw@kernel.org>,
- <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <alex@ghiti.fr>,
- <luke.r.nels@gmail.com>, <xi.wang@gmail.com>, <shuah@kernel.org>,
- <rgbi3307@gmail.com>, <guoren@kernel.org>, <bpf@vger.kernel.org>,
- <linux-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next 3/3] selftests/bpf: Add a runtime test for
- private stack and stack arguments
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Chen Pei" <cp0613@linux.alibaba.com>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <memxor@gmail.com>, <bjorn@kernel.org>,
- <puranjay@kernel.org>
-In-Reply-To: <20261104100411.997-4-cp0613@linux.alibaba.com>
-References: <20261104100411.997-1-cp0613@linux.alibaba.com> <20261104100411.997-4-cp0613@linux.alibaba.com>
-Content-Transfer-Encoding: 8bit
+	dmarc=pass header.from=mobileye.com;
+	spf=pass smtp.mailfrom=mobileye.com;
+	arc=none smtp.remote-ip=207.54.77.171
+Received: from esa4.hc555-34.eu.iphmx.com (esa4.hc555-34.eu.iphmx.com [207.54.77.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8C4C606A32C;
+	Thu,  5 Nov 2026 16:38:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8C4C606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mobileye.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mobileye.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=mobileye.com; i=@mobileye.com; q=dns/txt; s=MoEyIP;
+  t=1793896702; x=1825432702;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=WvyUYNeaZ1LL9KGoOQ7tav19Ed1rArF0jm0dRRx4+Ug=;
+  b=TV5JssVhOEKiLOvJ+MqV+KLxQ81QiNt9aqECl7hIb0v8aLZSrN1+rDmo
+   tMJLQEjhlelVAOUu9obwC4nIpxEYoSEJEIyF4JCsNtMBksYVYhSZw+FQs
+   DcQXC6iuHePFuyDuhVifMyuKwOhF17RPrJfwOtYvFvgg135sEPJd1oUIC
+   S7XnGzS0MYuiRXPl9cfqOgpu/Rj0bYfgH7URwts7ROI+i1DeI4J5BVgid
+   kQFioOB+1XW+kuU6z7wxQB9m08/sG0j61wJ3wxQJm1t5ja2lhPKJtUFSX
+   hKGGj+uY/IxQcRf+dVaGdsToe9AitgcCwQ2/lmObRfg6N27L4b1Hwi+su
+   g==;
+X-CSE-ConnectionGUID: kxlx5RjZRbCDeUXhqehlfg==
+X-CSE-MsgGUID: tvmmzmU8TMWCEwyPNQvxEg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from unknown (HELO ces03_data.me-corp.lan) ([146.255.191.134])
+  by esa4.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 18:38:13 +0200
+X-CSE-ConnectionGUID: 6zHfRl9qR8Wg4YoysQMoXw==
+X-CSE-MsgGUID: snS1cDkuTMebzCQMYkG3wA==
+Received: from unknown (HELO epgd071.me-corp.lan) ([10.154.54.2])
+  by ces03_data.me-corp.lan with SMTP; 05 Nov 2026 18:46:01 +0200
+Received: by epgd071.me-corp.lan (sSMTP sendmail emulation); Thu, 05 Nov 2026 18:38:11 +0200
+From: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Subject: [PATCH v5 0/3] riscv: support CPUs with slow Zaamo
+Date: Thu, 05 Nov 2026 18:37:35 +0200
+Message-Id: <20261105-lrsc-only-v5-0-f0648f57b2e1@mobileye.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,87 +66,181 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANCw7GoC/12MQQ6CMBBFr0K6tmamLURceQ/jwg6DNAFKWtNIC
+ He3sJG4mMWb/PcWETk4juJaLCJwctH5MUN5KgR1z/HF0jWZhQJVASqQfYgk/djPkggqo1RbWos
+ i76fArfvsrfsjc+fi24d5Tye9ffcK5jtUkpYgmVRNF6yhtXgbvHU9z3wmP4gtlMxPRsCjbLJsG
+ BtAMJW2+k9e1/ULdy9YjeIAAAA=
+X-Change-ID: 20260120-lrsc-only-cc06422f5bb1
+To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+ Mark Rutland <mark.rutland@arm.com>, Gary Guo <gary@garyguo.net>, 
+ Yury Norov <yury.norov@gmail.com>, 
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+ Chao-ying Fu <chao-ying.fu@globalfoundries.com>, 
+ torvalds@linux-foundation.org, olof@lixom.net, 
+ aleksa.paunovic@htecgroup.com, arikalo@gmail.com, 
+ Boqun Feng <boqun@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+ Boqun Feng <boqun@kernel.org>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Vladimir.Kondratiev@mobileye.com, bpf@vger.kernel.org, 
+ linux-trace-kernel@vger.kernel.org, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+X-Mailer: b4 0.16.0
 
-On Wed, Nov 04, 2026 at 02:04 AM Chen Pei <cp0613@linux.alibaba.com> wrote:
->  .../selftests/bpf/private_stack_runtime.h     |  12 ++
->  .../bpf/prog_tests/private_stack_runtime.c    |  84 +++++++++++
->  .../bpf/progs/private_stack_runtime.c         | 140 ++++++++++++++++++
->  3 files changed, 236 insertions(+)
+RISC-V split the A extension into Zaamo (AMO*.w/AMO*.d) and Zalrsc
+(LR/SC). The kernel puts "a" in -march and emits AMO for atomic_add,
+bitops, xchg and the like, and LR/SC for cmpxchg.
 
-bpf ci is right in the other email.
+Zaamo is not always native. On MIPS P8700 [1] every AMO instruction
+traps into M-mode and is emulated there, so the extension is formally
+supported, and advertised to userspace, but very slow. A typical
+uncontended atomic increment costs:
 
-pw-bot: cr
+  native AMO                                     2..5 cycles
+  LR/SC, private L1 reservation monitor         6..12 cycles
+  LR/SC, PoC (L2) reservation monitor       about 40 cycles
+  AMO emulated by an M-mode trap           about 600 cycles
 
-Also, the test runs on riscv64 only. BPF CI runs arm64 and not riscv64.
-arm64 has the same combination and no test for it.
-The run time part has nothing specific to riscv64.
-The __jited patterns pin the frame sizes that clang picks for C code.
-zero_stack doesn't use the private stack.
-It's the only reason for serial_.
+The last two were measured on the eyeq7h hardware. On such a CPU the
+kernel has to use LR/SC for every atomic.
 
-Two asm progs in verifier_stack_arg.c are enough.
-BPF_PROG_TEST_RUN runs a raw_tp prog. No need to attach it.
-The test runs on x86-64, arm64 and riscv64.
-On x86-64 both frames stay on the kernel stack.
+Mobileye is going to use the "eyeq7h" platform, built on this CPU, for
+ADAS and autonomous driving. Kernel atomics are on the scheduling,
+memory-management and driver paths of that product, so the emulated
+AMO cost is not acceptable there.
 
-Like (not even compile tested):
+Patch 1 adds RISCV_ISA_ZAAMO. It defaults to y and nothing changes:
+-march keeps "a" and the generated code is the same. When it is turned
+off, -march carries _zalrsc instead of "a" and every kernel atomic is
+an LR/SC loop. Such a kernel runs on any hart that implements A, it
+just does not use AMO, so the option does not depend on NONPORTABLE.
+Turning Zaamo off needs a compiler that accepts _zaamo and _zalrsc in
+-march; GCC 15.1 is the first release that does.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-index abf319c..9423048 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -667,6 +667,53 @@ __naked void stack_arg_precision_fallback(void)
- 	);
- }
+The choice is made at compile time rather than with alternatives.
+Nearly every CPU has a native A extension, and an alternative would
+inflate all those kernels with the nops needed to pad one AMO to the
+size of an LR/SC loop, at every atomic site, for the benefit of a few.
 
-+/* Writes both ends of its frame, then reads args 9, 10 and the frame of the caller. */
-+__naked __noinline __used
-+static long priv_stack_10args(long a, long b, long c, long d, long e, long f, long g, long h,
-+			      long i, long *j)
-+{
-+	asm volatile (
-+		"r1 = 0;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+		"*(u64 *)(r10 - 64) = r1;"
-+		"r0 = *(u64 *)(r11 + 32);"
-+		"r1 = *(u64 *)(r11 + 40);"
-+		"r1 = *(u64 *)(r1 + 0);"
-+		"r0 += r1;"
-+		"exit;"
-+	);
-+}
-+
-+/*
-+ * A frame of 64 bytes in a raw_tp prog goes to the private stack.
-+ * arm64 and riscv64 pass args 9 and 10 on the kernel stack.
-+ */
-+SEC("raw_tp")
-+__description("stack_arg: private stack in the caller and in the callee")
-+__success __retval(890)
-+__naked void stack_arg_priv_stack(void)
-+{
-+	asm volatile (
-+		"r1 = 800;"
-+		"*(u64 *)(r10 - 64) = r1;"
-+		"r1 = r10;"
-+		"r1 += -64;"
-+		"*(u64 *)(r11 - 40) = r1;"
-+		"*(u64 *)(r11 - 32) = 90;"
-+		"*(u64 *)(r11 - 24) = 8;"
-+		"*(u64 *)(r11 - 16) = 7;"
-+		"*(u64 *)(r11 - 8) = 6;"
-+		"r1 = 1;"
-+		"r2 = 2;"
-+		"r3 = 3;"
-+		"r4 = 4;"
-+		"r5 = 5;"
-+		"call priv_stack_10args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
- #else
+Nothing changes for userspace. The hart still advertises "a", which is
+true. Userspace that cares can know about the slow AMO upfront, or
+measure it.
 
- SEC("socket")
+Zalrsc stays mandatory. cmpxchg, conditional atomics and futex CAS are
+already LR/SC sequences; Zaamo cannot replace them. RISCV_ISA_ZALRSC
+is always y and exists as the Kconfig counterpart of
+RISCV_ISA_EXT_ZALRSC, which hwcap.h already has next to
+RISCV_ISA_EXT_ZAAMO; the two sets are tested together, for example by
+rv_ext_enabled() in the BPF JIT. RISCV_ISA_A exists for the same
+reason, paired with RISCV_ISA_EXT_A.
+
+Three sets of extensions provide every atomic Linux needs: "a", which
+is what the kernel supports today; Zalrsc plus Ziccrse, which this
+series adds, with Ziccrse as the forward-progress guarantee for the
+constrained LR/SC loops; and Zaamo plus Zacas, with CAS loops in place
+of LR/SC as on x86. The series leaves the last one open:
+RISCV_ISA_ZALRSC is where it would go, by allowing "n" there and making
+amocas the base implementation.
+
+The BPF JIT encodes its own atomics. Patch 2 makes it emit LR/SC loops
+when Zaamo is disabled, so BPF programs do not trap either. The Zabha
+and Zacas paths in the JIT and in cmpxchg.h are selected at runtime
+from the ISA string; firmware for a CPU that emulates AMO should not
+advertise them, as both extensions are AMO.
+
+A breakpoint inside an LR/SC sequence drops the reservation and the
+loop never completes. With every atomic an LR/SC loop that is easy to
+hit, so patch 3 makes kprobes and uprobes reject such addresses.
+kprobes walk from the enclosing symbol; uprobes scan forward using the
+constrained-sequence rules from the ISA. This patch fixes a problem
+that exists today, since cmpxchg is already an LR/SC loop. It does not
+depend on the rest of the series and can be merged on its own.
+
+[1] https://mips.com/products/hardware/p8700/
+
+Changes in v5:
+- Treat Zaamo as supported but slow rather than absent. The hart keeps
+  advertising "a" and the kernel keeps accepting it, so the boot-time
+  extension check patch is dropped.
+- Drop the NONPORTABLE dependency. A kernel built without Zaamo runs
+  on any hart that implements A.
+- Rename TOOLCHAIN_HAS_ZALRSC to TOOLCHAIN_HAS_ZALRSC_ZAAMO and test
+  both _zaamo and _zalrsc in -march.
+- Explain why RISCV_ISA_ZALRSC and RISCV_ISA_A exist, and why the
+  choice is made at compile time rather than with alternatives.
+- Add the BPF JIT patch. Without Zaamo the JIT emits LR/SC loops for
+  the BPF read-modify-write atomics on RV32 and RV64, and reserves a
+  second exception-table entry for the sc of an arena atomic.
+- Reject kprobes and uprobes on lr and sc, and on any instruction
+  between them.
+- Link to v4: https://patch.msgid.link/20261101-lrsc-only-v4-0-4e1d010463b3@mobileye.com
+
+Changes in v4:
+- Require a compiler that accepts _zalrsc in -march before Zaamo can
+  be disabled. GCC 15.1 introduces that support. Older compilers keep
+  Zaamo enabled and -march keeps "a".
+- Link to v3: https://patch.msgid.link/20261026-lrsc-only-v3-0-ec29c8190fb1@mobileye.com
+
+Changes in v3:
+- Make Zalrsc mandatory. cmpxchg and the conditional atomics already
+  use LR/SC, so RISCV_ISA_ZALRSC can no longer be turned off.
+- Check AMO and LR/SC support independently. A kernel that emits both
+  requires "a", or both "zaamo" and "zalrsc".
+- Put the LR/SC bitop sequence in its own block so two inlined
+  set_bit or clear_bit calls compile.
+- Remove the LR/SC loop that ran after the hart lottery and accessed
+  address 1. Build the lottery increment with add so RV32 assembles.
+- Add an exception-table entry for sc as well as lr in the futex
+  LR/SC helper.
+
+Changes in v2:
+- Switch from a runtime choice of atomic implementation to a
+  compile-time one, gated by NONPORTABLE.
+
+Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+---
+Vladimir Kondratiev (3):
+      riscv: build kernel atomics from LR/SC when Zaamo is disabled
+      riscv, bpf: emit LR/SC loops when Zaamo is disabled
+      riscv: probes: reject probes inside an LR/SC sequence
+
+ arch/riscv/Kconfig                     |  53 ++++++++++++++++
+ arch/riscv/Makefile                    |  16 +++--
+ arch/riscv/include/asm/atomic.h        |  52 +++++++++++++++-
+ arch/riscv/include/asm/bitops.h        |  47 ++++++++++++++
+ arch/riscv/include/asm/cmpxchg.h       |  16 +++++
+ arch/riscv/include/asm/futex.h         |  45 ++++++++++++++
+ arch/riscv/include/asm/insn.h          |  28 +++++++++
+ arch/riscv/kernel/entry.S              |   7 +++
+ arch/riscv/kernel/head.S               |  12 ++++
+ arch/riscv/kernel/probes/decode-insn.c |  94 ++++++++++++++++++++++++++++
+ arch/riscv/kernel/probes/decode-insn.h |   7 +++
+ arch/riscv/kernel/probes/kprobes.c     |  22 ++++++-
+ arch/riscv/kernel/probes/uprobes.c     |  31 ++++++++++
+ arch/riscv/net/bpf_jit.h               |   1 +
+ arch/riscv/net/bpf_jit_comp32.c        |  81 +++++++++++++++++++++++--
+ arch/riscv/net/bpf_jit_comp64.c        | 108 ++++++++++++++++++++++++++++++++-
+ arch/riscv/net/bpf_jit_core.c          |  29 +++++++++
+ 17 files changed, 636 insertions(+), 13 deletions(-)
+---
+base-commit: c03c1a14507dfaf8b856c2608f9ac216021fc222
+change-id: 20260120-lrsc-only-cc06422f5bb1
+
+Best regards,
+--  
+Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
 
