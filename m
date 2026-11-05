@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.152
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793901687;
-	b=zxa11Vsb3ktcIimlrzYWYpPVx2DbrFIzSr7eEYBC4EsmFIpWVtHCc89mVHOyB1bKdT50
-	 FRa598f4YalBEc3dLS2SSzuhW6TpEnYJF9CITNS9FlKoGfVK6lgeT2c7CR77enMuRSVHQ
-	 qlVcIrp3FZSTDKqrAvh0w+0ciuYiibgs/PnvewJ5/RVkxEM1P/k8FQUAKPW6W8sZKVCvf
-	 SV01K5TEfbvP8ad8LXYcQwyB+rclI1hXrd6XASOiFEjzq5JWOLwGHJEYPJHxn46QANU4/
-	 lGvVHv3eYjZHPw8oEvZmhG5CtXu00TsxC2ylSJTthUD0cnPb26P40g9X5DWzuyYhWRA==
+	t=1793901693;
+	b=wklsbsMFpkS3Tc57ybuTAUt2CGa3nvuBdEyLtHpGRx7GwZ9Sz68+bRF6DZoMCQMziWJx
+	 tt5Pq7/IcTU8iFJNgydsVGrHMbOQwsQ2IDl5bma4xj49TFK8TwS/Go0OA7BgPI92yy+B5
+	 Xr8dgd1QsbuI3itvIpOpc+3tTTKiCcIRnBeITy2sYRFK5l3muPf49nPMGhyRrEwScZlxV
+	 Z7zfW8JU5SmysxwZLZ1X8EIQn42Wee8nQ4DAM1KcMdJCwPwFUgVaDjVIUn3hLXVsxE7hK
+	 NlEXvEYDPtHOQYI+yvk3yC6JD7Q7+O4j1ba3WCd/5WqYJ/DDySnjrzanmEL5jEJ4i9Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793901687;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793901693;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Zs8v/oaTpbj5+iDyRfn8jTNZ+ce6pKl7TqE8jbTUjE0=;
-	b=4S+zLOHRuosfLahb6IFV44JScl5U7zp0wOhu9pSyMNyVptC7RjjKaM0jl09fFEiOqKC+
-	 L9d+Rvjx1rcsoV4l6cjOtGLcrhCpmVU5k3N4N4aE9xAVGEHIQGRcSjeOHaDcf8adh2TqI
-	 4Crl5lTTSxZmUEseTRB4jH+BiDW56V6CCUD0rUeJSAGNszhP/7mB+c5AWw4Q4+4JF5V4V
-	 4E91nCQCSiEram4KnNXvxbxtHT0feoYx2c7OzhQ9L+Ak0GGzaKMrx+DguERwkl36yJJjQ
-	 D3nLEZJBOicQyKi8QBhRiJjv9oihw05gbWR18eOnRjIQ5HKp96dEuc/kOTB467RQMHQ==
+	bh=Qj3J10VY5miBS5hBnjDoDxTo09SRQd61+QErZepy/2s=;
+	b=Cy8VsVB4tKOc9eh9n5mviX5qRBqexkYEBkhvjtE/kDCbxli1H+JaFwA4fkjSYaO1jNkS
+	 YUyXlVqCbKWbRqVCgdCbDK3KPPXK6+4CwXGmbAhqlbvC5dV0qp7PaZnDdrdj1HJf+TAfY
+	 h58bjl7wmRVrYlN9+nUTSRFeE4rBMK/VufSYTKks4xm/cL+YKA0lo+kN+drWXWXrQwoX7
+	 Rf97FcXU4zF4ZZAGDgNpvSj/NH7O403GukIzkZV2i841wWPDu5y51lctsCFzAWNri/+Z3
+	 6UzgylPGcPSL5zse2MVPHUEw3YRzDngNU+7E5LASsCkQtv1+BU0FJRamyoALk6xl9RA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=L6Ceks2f;
-	arc=none smtp.remote-ip=91.218.175.44
-Received: from mta0.migadu.com (out-44.mta0.migadu.com [91.218.175.44])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=wsyHf1XG;
+	arc=none smtp.remote-ip=95.215.58.152
+Received: from mta1.migadu.com (out-152.mta1.migadu.com [95.215.58.152])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2CD606A326
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 18:01:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CB2CD606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA45B606A326
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 18:01:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BA45B606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=L6Ceks2f
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=wsyHf1XG
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=wrjEt8jRg4gwf4wijWzqa8MYgMszjs75z6HuWvFbvqo=;
+DKIM-Signature: a=rsa-sha256; bh=hl9NNn/Fg51cdvxSYWBb0P9KwxEzjC/UIt9GiYlBgfU=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793901684; v=1; x=1794506484;
- b=L6Ceks2f3ZHueQIOwcXqCjPAmU+fipx3SX8YPoj1BBdVb8QSgNQquHKixrSR1/fgSGZvrCF9
- pV+wDDWf6HXwacnjlPiPLBMocb9RlR9xxnS4JnhY3wAQcH7WFK8UNdH0cnpnBGQN8wlS+Y10WAo
- xrQPhol/Ocvalg4HhGDon6TU=
+ t=1793901690; v=1; x=1794506490;
+ b=wsyHf1XGc6kMDF4/HjpNdWrREjFnPloYklP2/T3GdoJf4vr5XgdIYkx58/S78WJ2kmbLDZPm
+ 2YZfiKKHFHnjuUKQEt28XtnvfmzAn+Ybi/6TDjEopHm3XToNOIOSSHV1cW6OQm+XqMLHFyqct7M
+ f7aApNrjCS05jSb43nTRv5gM=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id eee34d608ccc3c9a;
-	Thu, 05 Nov 2026 18:01:24 +0000
-X-Mizu-Trace-ID: eee34d608ccc3c9a
+Received: by smtp.migadu.com with ESMTPS id acfab565e3b6b5ab;
+	Thu, 05 Nov 2026 18:01:30 +0000
+X-Mizu-Trace-ID: acfab565e3b6b5ab
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -62,9 +62,9 @@ Cc: bpf@vger.kernel.org,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	Vineet Gupta <vineet.gupta@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v4 14/17] selftests/bpf: Cover context and socket accesses through vmlinux.h
-Date: Thu,  5 Nov 2026 10:58:42 -0700
-Message-ID: <20261105175845.30357-15-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v4 15/17] bpftool: Document __bpf_relocatable and __bpf_static_offset
+Date: Thu,  5 Nov 2026 10:58:43 -0700
+Message-ID: <20261105175845.30357-16-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261105175845.30357-1-ihor.solodrai@linux.dev>
 References: <20261105175845.30357-1-ihor.solodrai@linux.dev>
@@ -79,112 +79,111 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Incorrect vmlinux.h annotations can make valid context and socket
-accesses fail to load.
+The C dump annotates record definitions with the __bpf_relocatable and
+__bpf_static_offset macros, which programs can pre-define.
+BPF_NO_PRESERVE_ACCESS_INDEX disables only __bpf_relocatable. The
+bpftool-btf page describes none of this.
 
-Add load tests through the generated header for these cases:
+Describe both macros in a new GENERATED HEADERS section, including how
+to avoid the Clang crash on CO-RE field-info builtins on types
+annotated with __bpf_static_offset, and add an example of the generated
+header.
 
-- fields in nested anonymous unions of context types, which vmlinux.h
-  leaves unannotated, and a bpf_sock field.
-- skb_narrow_field(): a narrow skb->mark load, which the verifier
-  rejects if __sk_buff carries __bpf_relocatable.
-- skb_merge_loads(): skb field loads merged across branches, which the
-  verifier rejects without __bpf_static_offset. Built only if the
-  compiler supports preserve_static_offset.
-
+Suggested-by: Quentin Monnet <qmo@kernel.org>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../bpf/progs/verifier_ctx_rewritten.c        | 60 +++++++++++++++++++
- 2 files changed, 62 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_ctx_rewritten.c
+ .../bpf/bpftool/Documentation/bpftool-btf.rst | 67 ++++++++++++++++++-
+ 1 file changed, 66 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index ae23304c1340..d41339ef00d8 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -45,6 +45,7 @@
- #include "verifier_const.skel.h"
- #include "verifier_const_or.skel.h"
- #include "verifier_ctx.skel.h"
-+#include "verifier_ctx_rewritten.skel.h"
- #include "verifier_ctx_sk_msg.skel.h"
- #include "verifier_d_path.skel.h"
- #include "verifier_default_trusted_ptr.skel.h"
-@@ -242,6 +243,7 @@ void test_verifier_cgroup_storage(void)       { RUN(verifier_cgroup_storage); }
- void test_verifier_const(void)                { RUN(verifier_const); }
- void test_verifier_const_or(void)             { RUN(verifier_const_or); }
- void test_verifier_ctx(void)                  { RUN_TESTS(verifier_ctx); }
-+void test_verifier_ctx_rewritten(void)        { RUN_TESTS(verifier_ctx_rewritten); }
- void test_verifier_ctx_sk_msg(void)           { RUN(verifier_ctx_sk_msg); }
- void test_verifier_d_path(void)               { RUN(verifier_d_path); }
- void test_verifier_default_trusted_ptr(void)  { RUN_TESTS(verifier_default_trusted_ptr); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ctx_rewritten.c b/tools/testing/selftests/bpf/progs/verifier_ctx_rewritten.c
-new file mode 100644
-index 000000000000..5feba7e1af73
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_ctx_rewritten.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+index c6dc445cd4a1..a3778f449d73 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+@@ -68,7 +68,8 @@ bpftool btf dump *BTF_SRC* [format *FORMAT*] [root_id *ROOT_ID*]
+     **format** option can be used to override default (raw) output format. Raw
+     (**raw**) or C-syntax (**c**) output formats are supported. With C-style
+     formatting, the output is sorted by default. Use the **unsorted** option
+-    to avoid sorting the output.
++    to avoid sorting the output. See **GENERATED HEADERS** for the
++    annotations in C output.
+ 
+     **root_id** option can be used to filter a dump to a single type and all
+     its dependent types. It cannot be used with any other types of filtering
+@@ -98,6 +99,30 @@ OPTIONS
+     BTF object is passed through other handles, this option becomes
+     necessary.
+ 
++GENERATED HEADERS
++=================
++C output annotates struct and union definitions individually. Most records
++carry ``__bpf_relocatable``. The generated header defines it as
++``__attribute__((preserve_access_index))`` where supported, or as empty
++when **BPF_NO_PRESERVE_ACCESS_INDEX** is defined or the compiler lacks the
++attribute. GCC-BPF can apply CO-RE through these attributes.
 +
-+SEC("tc")
-+__success
-+int skb_socket(struct __sk_buff *skb)
-+{
-+	struct bpf_sock *sk = skb->sk;
++Context and socket types whose field accesses the verifier rewrites carry
++``__bpf_static_offset`` instead, and their nested anonymous records carry
++no attribute. Where supported (Clang 18 and later), ``__bpf_static_offset``
++expands to ``__attribute__((preserve_static_offset))``. It is empty
++otherwise. The attribute keeps static field offsets in load and store
++instruction immediates. **BPF_NO_PRESERVE_ACCESS_INDEX** does not affect
++``__bpf_static_offset``.
 +
-+	return sk ? sk->family : 0;
-+}
++Define either macro before including the header, as a complete annotation
++such as ``__attribute__((preserve_access_index))``, or as empty.
 +
-+SEC("sockops")
-+__success
-+int sockops_args_reply(struct bpf_sock_ops *skops)
-+{
-+	skops->reply = skops->args[1];
-+	return 0;
-+}
++Clang 18 through 23 crash when ``__builtin_preserve_field_info`` is used on
++a type marked ``__bpf_static_offset``, including through ``bpf_core_field_*``
++and the CO-RE bitfield helpers. Compile with ``-D__bpf_static_offset=`` to
++use these helpers with an affected compiler.
 +
-+SEC("sk_msg")
-+__success
-+int sk_msg_data(struct sk_msg_md *msg)
-+{
-+	return msg->data < msg->data_end;
-+}
+ EXAMPLES
+ ========
+ **# bpftool btf dump id 1226**
+@@ -273,3 +298,43 @@ All the standard ways to specify map or program are supported:
+   [104859] FUNC 'smbalert_work' type_id=9695 linkage=static
+   [104860] FUNC 'smbus_alert' type_id=71367 linkage=static
+   [104861] FUNC 'smbus_do_alert' type_id=84827 linkage=static
 +
-+SEC("cgroup/getsockopt")
-+__success
-+int sockopt_optval(struct bpf_sockopt *ctx)
-+{
-+	return ctx->optval < ctx->optval_end;
-+}
++**$ bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h**
 +
-+SEC("tc")
-+__success
-+int skb_narrow_field(struct __sk_buff *skb)
-+{
-+	/* a nonzero byte offset becomes pointer arithmetic with preserve_access_index */
-+	return ((__u8 *)&skb->mark)[1];
-+}
++**$ cat vmlinux.h**
 +
-+#if __has_attribute(preserve_static_offset)
-+SEC("tc")
-+__success
-+int skb_merge_loads(struct __sk_buff *skb)
-+{
-+	__u32 value;
++::
 +
-+	if (skb->len)
-+		value = skb->pkt_type;
-+	else
-+		value = skb->mark;
-+	return value;
-+}
-+#endif
++  #ifndef __VMLINUX_H__
++  #define __VMLINUX_H__
 +
-+char _license[] SEC("license") = "GPL";
++  #ifndef __bpf_relocatable
++  #if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)
++  #define __bpf_relocatable __attribute__((preserve_access_index))
++  #else
++  #define __bpf_relocatable
++  #endif
++  #endif
++
++  #ifndef __bpf_static_offset
++  #if __has_attribute(preserve_static_offset)
++  #define __bpf_static_offset __attribute__((preserve_static_offset))
++  #else
++  #define __bpf_static_offset
++  #endif
++  #endif
++  ...
++  struct list_head {
++          struct list_head *next;
++          struct list_head *prev;
++  } __bpf_relocatable;
++  ...
++  struct __sk_buff {
++          __u32 len;
++          ...
++          union {
++                  struct bpf_flow_keys *flow_keys;
++          };
++          ...
++  } __bpf_static_offset;
++  ...
 -- 
 2.56.0
 
