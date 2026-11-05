@@ -1,61 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793874307;
-	b=o5EGoWlraQWEYLrJQ+he9l1EJY4g13jBTsmy7J42vLiQicOaSG4Pg1T82mI1bsPm9JJZ
-	 7rNoEXc/8tqQJpboc4sdj67IAZRjauI0hKCGzfBKRHBvv0jZYBriugBs8D28frPwlyWuu
-	 SLwrAAVUjf9NElNKOFL7ML5bLyQkcs4Qo9JGg0f0egUin3+2NN+FBuAQVX8a3/2X18L1G
-	 m73rpao3POyudIXFCNtmoxAYAXQ5zlfWHQnFJwxnGkKK4uq42aLM3lzWFQCcpbIuhBeS6
-	 QnramKCiB+zvupujLCreDDWC9hee8iEQYE78RQ4Zngv3qrBgwe4pNAjoNgjLxRcHWgQ==
+	t=1793874335;
+	b=INE4QXp14So0JutxnEVxr5zApi4mv0jS9H0sBjPbrRrjfvkB1WMoZiMDZ2fwmmkQX8cS
+	 v+fvslum6jhOmG6STuGrNggZ/c1z7S67cH4JAbOfiu68dl/MrRBRDFRFlckh9ya3iAVFi
+	 T+dxL5+eEr7XmMb+ylhK0NBvWGagxZhdIJ3fuStIyMb6ZNl7GHw0v9BrJDW/Mzfhuq4WY
+	 v42v8l6iQd9paQYWsZqNXwX/4SeFm0deg7oRecTEopQvdX5GRNcb57lEz41aDPgPJ73k9
+	 woaVGcF7KRDF6udBtK7tBKaVPbu4U6MMwD55LBZMHE4ddN53VhMQotnlcC9Mfvx5gtw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793874307;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=NgYSfYwyN7oBQyMujaH2GQXta4jctPstkZ2Nv//4TlA=;
-	b=EE4H86+vUeIn6otvKYUcIQ1EnZaJWeLHR2SYVbC9qMtvgYQn8VZwv6NN9hxWYQNaUnZB
-	 1QCNW5PdjI/ehtPB9MkAgEhHErtG4wjD8hfto3pjpKJGEMWzG+1hh7pvXJF5f9opwBr0L
-	 cMVVGYpWELrm4ZerV6zeL5yYwHKD/IfN9MAtxP1HgS2u5hPFiGsE1zG7FRjyTqz06O6bu
-	 3GqiUQ3TIJ6vWLkgCfq9JErmq0uEU7QRmiSkoykBXybsZ6buzxghbpV4xFyHqPZ3wFrqy
-	 vSLfOR7fAsAAJCetnHymIVaqpfX+kX9DHmXl/L1bOUZZ/FGo4w8w4EmNi8hODHoD9ag==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793874335;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=CTZjVvkIUqA1hYxbAMBN5D0S+bQTUaargjdOqGhgIgw=;
+	b=IZxeKe72Wyyov0LYs3JTcuSApXa4F6Jy03TO2TSlRCoEYmdu4R5J0Y6ZF9tEq1Th19Gb
+	 wycRTltCqw4jZFyt0xN9yIczmDi2fXz54Mdk27PfOeBcDNHd7vHWi/Mdf8Jm7uJgqt50O
+	 TFus/NkA98TOJyYJ95N6rKkrzo1cFmC1kBhtNjwmzcpQzFH4vNsylbQ95pZWbxIFgAnHl
+	 uJ09jw5yuATFlAZQyuytZJyg4cY0y6ajt3VuaaJOS54qdQh7akJdL191kgrZtnBV6A68H
+	 5LNEPta8t+LdeRQ6wiXmtAwmUQaU1CHwbf1P33D2xvf0hkBgpHfEEukL4YrsCK010Aw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iWZlZVUj;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AWA5EUum;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D209606A31B
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F1F606A31B;
+	Thu,  5 Nov 2026 10:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iWZlZVUj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9875F1F000C1;
-	Thu,  5 Nov 2026 10:25:04 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AWA5EUum
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3DA1F000C1;
+	Thu,  5 Nov 2026 10:25:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793874307;
-	bh=NgYSfYwyN7oBQyMujaH2GQXta4jctPstkZ2Nv//4TlA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=iWZlZVUjlbdXUn4O6ZApFvutDcMLk+Vw2a3rL1UINfwi2FKVJoJ87RATxgyOdDrog
-	 RUT7eiRJ+B/IY2nJ85oBk6IJV3mniphp1QKwI+gl2v31dz6A9yQ06V2xiR/1SAw3vi
-	 x/vOnsqXkcrZiyonohHvsNKLKx+1tk2FX9zOhlxejMVWWZoq7C2A79KFYthp6dz4ky
-	 DL1qUY2md7wkCELRJMAmIrcdYISh9DYwd2WJCKPMbLk77g8IZN/FzcTQTjJ9L+x2Xv
-	 HLnxu1+NCuyBy0D7B+6OmghHPTWm/IdBcWXxgufJkRocdMJpaafhKLjb3Uc1npFlhj
-	 hpyHRc46QCICw==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Federico Di Pierro <nierro92@gmail.com>
-Subject: [PATCHv3 bpf-next 8/8] selftests/bpf: Test user memory kfunc errors
-Date: Thu,  5 Nov 2026 11:23:42 +0100
-Message-ID: <20261105102343.311331-9-jolsa@kernel.org>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261105102343.311331-1-jolsa@kernel.org>
-References: <20261105102343.311331-1-jolsa@kernel.org>
+	s=k20260515; t=1793874335;
+	bh=CTZjVvkIUqA1hYxbAMBN5D0S+bQTUaargjdOqGhgIgw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=AWA5EUumNdwSBWn4g6tCydb8yT3P9NIpU1AhnI/l68ypPPQQjsmlpmZcmjqP0LN7w
+	 N27be4rfuMZiWwBCq7her7lB+sc11HSH4D/It973/gw2n+J+yJdXPUKAwXRjqOXG6y
+	 +3pvrnmk/IkTbMiVT+f7swrdRCPqMW2Hvq2OBNpXeaZjFaLDXFyS2ZLfADRs+mUY4L
+	 zAGr34i+l3CSk3NcxiMWRysp3rMsXyT3OAyIDd0GQElcCJpX8c7qsNkVzOhFqRdS82
+	 7Ro2+vUiGHSoWSeJ0BfSs4RidofOfhFtdjMtqubRz5QJeJjYyTeuR/NxOeDYB3wbBP
+	 DHBSE9YQBSBJQ==
+Message-ID: <9c367177-1822-4b6d-8bee-d283eef7b895@kernel.org>
+Date: Thu, 5 Nov 2026 11:25:25 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,126 +51,123 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/5] locking/rwsem: add down_read[_killable]_nosteal()
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>
+Cc: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Ingo Molnar <mingo@redhat.com>,
+ Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>,
+ Waiman Long <longman@redhat.com>, Suren Baghdasaryan <surenb@google.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
+ <20261103-khugepaged-latency-fix-v1-3-a07ab16ac860@kernel.org>
+ <20261103115159.GK1813469@noisy.programming.kicks-ass.net>
+ <aunLcWto870swo38@gremlin>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <aunLcWto870swo38@gremlin>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Test invalid copy arguments, zero-length mapping operations, partial copy
-faults, and copying to read-only mappings. Verify that a failed unmap
-leaves the mapping intact, and that non-sleepable programs and programs
-without CAP_SYS_ADMIN cannot call bpf_user_anon_mmap.
+On 11/3/26 13:24, Lorenzo Stoakes (ARM) wrote:
+> On Tue, Nov 03, 2026 at 12:51:59PM +0100, Peter Zijlstra wrote:
+>> On Tue, Nov 03, 2026 at 08:27:44AM +0000, Lorenzo Stoakes (ARM) wrote:
+>>> Since commit 1a728dff855a ("locking/rwsem: Enable reader optimistic lock
+>>> stealing") a sleeping, queued writer whose handoff timeout hasn't expired
+>>> can have its lock stolen by a read lock issued before a woken queued writer
+>>> was able to acquire a lock.
+>>>
+>>> To avoid write lock starvation, this is only permitted if no other read
+>>> locks are held.
+>>>
+>>> However, this behaviour defeats the purpose of a reader periodically
+>>> dropping the lock to allow writers in, as doing so only works if the write
+>>> lock is acquired first, another read lock is held, or a queued writer's
+>>> handoff timeout has expired.
+>>>
+>>> Provide a means of indicating this intent via down_read_nosteal() and
+>>> down_read_killable_nosteal().
+>>>
+>>> Implement it by exposing a steal parameter to rwsem_down_read_slowpath(),
+>>> update the starvation logic to modify this parameter and modify the steal
+>>> branch to check it first.
+>>>
+>>> Also drop the duplicated RWSEM_WRITER_LOCKED check and remove the
+>>> goto as the steal condition makes this redundant.
+>>>
+>>> Exposing this function is safe as it only makes the lock more pessimistic,
+>>> so does not impact lock contention.
+>>
+>> Not generally a fan of this -- can't we tweak the steal thing to never
+>> steal if there are pending writers?
+> 
+> Oh, well, I had assumed I couldn't fiddle with that behaviour across
+> rwsem's in general, so if I can yeah that's preferable!
+> 
+> I could send that change separately then and drop it out of this series.
 
-Assisted-by: Codex:GPT-6
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/user_mem.c       | 57 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/user_mem.c  | 19 +++++++
- 2 files changed, 76 insertions(+)
+Just so I understand correctly, this patch here would be gone entirely?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/user_mem.c b/tools/testing/selftests/bpf/prog_tests/user_mem.c
-index f13aff73c9bf..f1b88bba71c9 100644
---- a/tools/testing/selftests/bpf/prog_tests/user_mem.c
-+++ b/tools/testing/selftests/bpf/prog_tests/user_mem.c
-@@ -262,10 +262,59 @@ static void test_partial_copy_fault(struct user_mem *skel)
- 		munmap((void *)addr, second_page_unmapped ? page_size : page_size * 2);
- }
- 
-+static void test_zero_length_mapping(struct user_mem *skel)
-+{
-+	skel->bss->map_len = 0;
-+	skel->bss->map_prot = PROT_READ | PROT_WRITE;
-+	skel->bss->action = USER_MEM_MMAP;
-+	user_mem_trigger();
-+
-+	ASSERT_EQ(skel->bss->user_addr, (unsigned long)-EINVAL, "zero_length_mapping");
-+}
-+
-+static void test_failed_unmap(struct user_mem *skel)
-+{
-+	long page_size = sysconf(_SC_PAGESIZE);
-+	unsigned long addr = ~0UL;
-+
-+	if (!user_mem_mmap(skel, page_size, PROT_READ | PROT_WRITE, &addr))
-+		return;
-+
-+	skel->bss->user_addr = addr;
-+	skel->bss->map_len = 0;
-+	skel->bss->action = USER_MEM_UNMAP;
-+	user_mem_trigger();
-+
-+	if (ASSERT_EQ(skel->bss->ret, -EINVAL, "zero_length_unmap"))
-+		check_user_mem_vma((void *)addr, page_size, "rw-p");
-+
-+	munmap((void *)addr, page_size);
-+}
-+
-+static void test_invalid_copy(struct user_mem *skel)
-+{
-+	ASSERT_EQ(user_mem_copy(skel, 1, sizeof(data), 0), -EFAULT, "bad_copy");
-+	ASSERT_EQ(user_mem_copy(skel, 1, sizeof(data), 1), -EINVAL, "bad_copy_flags");
-+	ASSERT_EQ(user_mem_copy(skel, 1, 0, 0), 0, "zero_length_copy");
-+	ASSERT_EQ(user_mem_copy(skel, 1, 0, 1), -EINVAL, "zero_length_copy_bad_flags");
-+}
-+
-+static void test_invalid_prot(struct user_mem *skel)
-+{
-+	skel->bss->map_len = sysconf(_SC_PAGESIZE);
-+	skel->bss->map_prot = 0x80000000;
-+	skel->bss->action = USER_MEM_MMAP;
-+	user_mem_trigger();
-+
-+	ASSERT_EQ(skel->bss->user_addr, -EINVAL, "invalid_prot");
-+}
-+
- void test_user_mem(void)
- {
- 	struct user_mem *skel;
- 
-+	RUN_TESTS(user_mem);
-+
- 	skel = user_mem__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "open_and_load"))
- 		return;
-@@ -286,6 +335,14 @@ void test_user_mem(void)
- 		test_copy_to_readonly_mapping(skel);
- 	if (test__start_subtest("partial_copy_fault"))
- 		test_partial_copy_fault(skel);
-+	if (test__start_subtest("failed_unmap"))
-+		test_failed_unmap(skel);
-+	if (test__start_subtest("invalid_copy"))
-+		test_invalid_copy(skel);
-+	if (test__start_subtest("invalid_prot"))
-+		test_invalid_prot(skel);
-+	if (test__start_subtest("zero_length_mapping"))
-+		test_zero_length_mapping(skel);
- 
- out:
- 	user_mem__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/user_mem.c b/tools/testing/selftests/bpf/progs/user_mem.c
-index e12a19fc8784..6d397fe1b3a9 100644
---- a/tools/testing/selftests/bpf/progs/user_mem.c
-+++ b/tools/testing/selftests/bpf/progs/user_mem.c
-@@ -80,3 +80,22 @@ int user_mem_test(struct pt_regs *ctx)
- 
- 	return 0;
- }
-+
-+SEC("?uprobe//proc/self/exe:user_mem_trigger")
-+__failure
-+__msg("program must be sleepable to call sleepable kfunc bpf_user_anon_mmap")
-+__msg("cannot be used in non-sleepable program")
-+int user_mem_nonsleepable(struct pt_regs *ctx)
-+{
-+	bpf_user_anon_mmap(4096, 1);
-+	return 0;
-+}
-+
-+SEC("?uprobe.s//proc/self/exe:user_mem_trigger")
-+__failure_unpriv __caps_unpriv(CAP_BPF | CAP_PERFMON)
-+__msg_unpriv("calling kernel function bpf_user_anon_mmap is not allowed")
-+int user_mem_no_sysadmin(struct pt_regs *ctx)
-+{
-+	bpf_user_anon_mmap(4096, 1);
-+	return 0;
-+}
+But #4 depends on it, so now I'm confused :)
+
 -- 
-2.43.0
+Cheers,
 
+David
