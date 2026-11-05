@@ -1,118 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793874176;
-	b=BlI+DhYoVC07fh6aCXAcjEevnPNhsvbRqzEVdCQi8558dxl3vPhOfVKQ4Yq+PpgQABq0
-	 Fxx5EY5Tui9JED84QKGvotJ5Qb0Qka6xexqk/J4JvYvhM1DtVFEtcAOGZ0NmT7tlwOCMW
-	 +Sf3bQIcjzNm62SeHeovekxblliXRAkWVgy6BtJBcOSVzk4bCJK4txLldyO+glpsbpEx6
-	 6nc9L8Hk84Q4TZm7uXP4Dc2kgmylpd99/DctmoY4OcOcP+WASHKGZ/IaB6b851ae3YNMa
-	 zwe39yFwEPHb9JykmDDTJNAZSQCkMzfB9p158JAKfa3HIN8G64nPfRRIsTT1LVrQkWw==
+	t=1793874229;
+	b=g13C9XvkSLEdA6pkxfPTYgx3oFyhxaqW6mgXeT13ls743eo0gYx/XNNEXyPTVWZL3mZb
+	 SI8KCUjVcixUE/ToqhvziuROaY8t6iT2o20cCICiYZaQ82oKd46+rfdmfLfSk5Q4RmE5A
+	 cUD11ZsiWgQJJ78mpEdEB+GZlVqwAosYlmdTx5o8UuAUFUeOA7kLE8zi4keLBALumRaDQ
+	 Pv/8kmlyWQr+R13Hw4Fp2XdIGWBiXTVdZGVO67c4yX4mVQCaCNvhHatxWs5/ab8sbkSA+
+	 ZxqjaJkjxw1thoLZFzyIEJoW8s4xZNP08cEnne380E78CFdspGy/35RIzv/VMJU8zQg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793874176;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=mA0JUWIMJDLe3trqouiE/a4ohypc9UC+FqDIAXVqBsQ=;
-	b=XLNK0lNS6ckhvhWmKP51h0NNnnRk+r0c9yO7qqZDobBb8Y1CYJaLWTXqGyytgDfYPwxV
-	 M+87CMmQNllELgSuv4M0/nqOOigg0KMlNUkn8pLsYtyMnBy3vQQ+2hm6qFD3ob1RZfBlS
-	 BlD6zu0gbQ37GSgK+Rs1PnzTF0GmyBxSBw78jpQY8sjRqubl7P6vkoNuA8CVPQwKSgbOL
-	 aLbkEKnKPTIP7KsKcRAXQszm+DouMfo9TkKuRUL/JcRYcJnjyQxHRu/fGxrAOxiy6elsB
-	 0yfwNvkTs1dwmj75EUWK4tMBNkxbNtHy3bjhSOy7fQGRWjyn9OMBvZLJugQlx6H3tWQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793874229;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=7vPiI7uyQG5/hNrt1SoYsN5v0SSwiCd4tGYudI5VrdI=;
+	b=17bU2+ANZy+fQ5MfFBJIU+rkEauZt9u2ctJ/jDBuEDcTk6cYUNTl4du/pNiIidz869IB
+	 8vpdwxcK/Lin+Tyjqq65kzGVgzfjlpfYNiFNu0UJuf8m2bnWEV2uuPavvoMvKS3N67xoC
+	 K7AZyEmNCQ7yxCyVi35+GoUFhflC7E+5hXAR6gRX/OlhpSc/5THR535nkxCLUcLGdiZ16
+	 K0wuyaNje/3mMaV03HQa21Z8tDQa8mLGb9ig/uCYVQOUSv2wcEDBo/mN453HHFb7VbDFZ
+	 8MC3/ndIutyzn3iwRWzX7PsPByiBv5N5LEM42SpJlFPkmBznID5pXeYGICR9kQ88ecw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UeONTUv0;
-	dkim=temperror header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b="qC/e/HgG";
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="VxHmbG/j";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8C0606A32C
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:22:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9A8C0606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6DE606A329
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:23:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UeONTUv0;
-	dkim=temperror header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=qC/e/HgG
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1793874164;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mA0JUWIMJDLe3trqouiE/a4ohypc9UC+FqDIAXVqBsQ=;
-	b=UeONTUv0UgbS5IUIOd2M8qcgqpI9bup4ehO2VCa6ewq4x1MYJAwx6ft01Ive/vgQPmNKGi
-	B51756vtLbZspiZcqvueGLxArHlu9yOJClOBjaLP6vE4o1QQ0BOzwHKW5U1uCH7Pzjg5H8
-	g0ToCWbB9ajtcd6wwt8VLJXy45ul9hk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-668-FJI8Y9BAOpKbka9SIe6ZOQ-1; Thu, 05 Nov 2026 05:22:43 -0500
-X-MC-Unique: FJI8Y9BAOpKbka9SIe6ZOQ-1
-X-Mimecast-MFC-AGG-ID: FJI8Y9BAOpKbka9SIe6ZOQ_1793874162
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-48fc8d1c14bso1762372f8f.2
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 02:22:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1793874162; x=1794478962; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=mA0JUWIMJDLe3trqouiE/a4ohypc9UC+FqDIAXVqBsQ=;
-        b=qC/e/HgGDYx/2Lh64K+89w43sgmoFIHWuFrBEhX60rDYwVSNtChRz09WqDqoa22QP3
-         e+RVTc/axkWchbGnZ3bhlpNKuPgym35DUljxtawDPCmFsmx777kOCV+ov8IzqAcZ/zCj
-         +m61HPAOhT4aaK+kunQ9lvKI9eb7DRq/zTkCF88XFdg8MfS59WYJv2wsJlIs17ttGDlZ
-         l04iU5g3LWp2lj1xaCjSfMW21OaWaWKSyNo/7BhXdOUfvHKpt/gxvo16mpMSe4BDPBED
-         6KeLgf6F0gh81FV1kkef3Co93QjgWMlUFqLJ2atYtMmUIreGL0IogeUNiQdWbznpjUJa
-         UwOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793874162; x=1794478962;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mA0JUWIMJDLe3trqouiE/a4ohypc9UC+FqDIAXVqBsQ=;
-        b=P3kMtFDtpiTZ94L5opVOaeTqhr+t0MxjnH5OMD6R1FGya5AYJX52ZY1P6tFoBYQWw2
-         //Q7BbCwe4hs3yBPc6t1gtSGcwULNMzUnFO1mUGdoK/JEvz4ZnSQWQZOvAZfQeiS4Ac+
-         Qnzf2H+XYIgXsvf0lgbEgJT2qH5QFJ5hSirmU2hON39qJwoatSk5ro5inX9xvkYXjXDo
-         30533gryJsKGAXXZgWy1sU+RE8KaSiOB/WzNo/Z3xJ9YORlysXyw5IrqYdOzPW0vvYRn
-         T9ATJXezFuIxOTV59sCGryY14FU5dJZAuGZnzWlgo6obFQzZx+fm3s41AY80oqbq5DQJ
-         RUSg==
-X-Forwarded-Encrypted: i=1; AKwUvBww8/pfcGlTyu+DT11pMYjKR9FSGsEuAR8g+lP7rjR7jdNcXqNKs/gI8ZWE5fxV2rTKljg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/SxHNsZ34IB/HpDU0Sech5f4cxXOvnha9Fcd3M0JI4cepOu3tg
-	+Aj86cZlXUYD5BmyfD7UyjEBR6fYhFSCbIsw0SJHSK3yyAWobwxOdwgp3kSvkOz0JC6lRQg0F70
-	aw4Q6N3+ZikjdvbCBKecryrw8GGpiDYTDcfPldtOwncVxFXsfpMWo4A==
-X-Gm-Gg: AYBFou09uxe7VU0noONihRGm9w3ThlMnTvhMi//5kFvA0IFSKd/p3PB0pvssqkFBkUZ
-	2jc5e1+3Lw65vZXS4c+vXIVhWGGZcwhW4npRxr9wVXLjjuLcKBy/FLezT15XRdHSeYpHTrdNzbf
-	jRuC/ttqBCDK4MkcW1Twc31kRafjcAsLFZdLITtnNiO+UM5QW8do/GqbEN2gGharMYCLA5FEu2f
-	V7uNMa0h9k4M2XlFQXXhslO8CbyFrJ4IXuyLieqWTlDPflOsH90brSHWehXFm5UUiAfEPjFGtJP
-	4khspZ89QYtZV37pqkpDyN+nDKIALmASyLTpsIz+UOLFUmh6cQnQZfP+sn/zgToSCQ8DTpNC7yc
-	5EGKA97ZrM58efu0Z5SKT5P3o+mMYN5E+/H5uMIzPI0KL5tZM0lFF
-X-Received: by 2002:a05:600c:c87:b0:4a8:cb23:f71b with SMTP id 5b1f17b1804b1-4ac186b1a2amr423568205e9.18.1793874162222;
-        Thu, 05 Nov 2026 02:22:42 -0800 (PST)
-X-Received: by 2002:a05:600c:c87:b0:4a8:cb23:f71b with SMTP id 5b1f17b1804b1-4ac186b1a2amr423567735e9.18.1793874161708;
-        Thu, 05 Nov 2026 02:22:41 -0800 (PST)
-Received: from sgarzare-redhat ([80.116.143.202])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b56f0237aesm56586085e9.9.2026.11.05.02.22.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 02:22:41 -0800 (PST)
-Date: Thu, 5 Nov 2026 11:22:36 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: jrmmhm.kernel@eldare.de
-Cc: Bobby Eshleman <bobbyeshleman@meta.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Michal Luczaj <mhal@rbox.co>, virtualization@lists.linux.dev, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	stable@vger.kernel.org
-Subject: Re: [PATCH net v3 1/2] vsock/bpf: release sock lock while waiting
- for data in recvmsg
-Message-ID: <auxYWGV4l-xEAajy@sgarzare-redhat>
-References: <20261028-kbh3-1-022-fix-v2-v3-0-bc0752b2d3db@eldare.de>
- <20261028-kbh3-1-022-fix-v2-v3-1-bc0752b2d3db@eldare.de>
- <auSkQOU6qmj0NPEt@sgarzare-redhat>
- <179381093020.9.4719932034061956856.1746278795@eldare.de>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VxHmbG/j
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FC291F000C1;
+	Thu,  5 Nov 2026 10:23:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793874228;
+	bh=7vPiI7uyQG5/hNrt1SoYsN5v0SSwiCd4tGYudI5VrdI=;
+	h=From:To:Cc:Subject:Date;
+	b=VxHmbG/jrt+mvpz9g0I9AmxMQqudYtqta93/nPqhZozHrDcZ2TPGeb2/OH1uXp3Hz
+	 L6M7yHDEqWYAcXsCWwzUXGcqWQSTq74jUthaoWgvzDQ0WiK58Sf5ie67jVIIG6HGC+
+	 Cig10k/kPuAofy4kW2626hNI2iW9m2dTOaocyx1ElFts3sHaQ/Vz1ctk5l2WTJiqgk
+	 c3zWsbFtGufTLVsIT//mzDY7Kz2OQZj6zXcSIqcsjwzJShjCp24otbpO7HlceZg39c
+	 mcvaI+7JRub8f9LqKatCEg2Zb27TzJpC1EDe/xBsvDr7p4wu57n4/TiZjU/IsHLA+W
+	 HaH5qgPU2q6YA==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Federico Di Pierro <nierro92@gmail.com>
+Subject: [PATCHv3 bpf-next 0/8] bpf: Add user memory kfuncs
+Date: Thu,  5 Nov 2026 11:23:34 +0100
+Message-ID: <20261105102343.311331-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -122,90 +63,93 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <179381093020.9.4719932034061956856.1746278795@eldare.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 04, 2026 at 04:48:44PM +0000, jrmmhm.kernel@eldare.de wrote:
->On Fri, Oct 30, 2026 at 03:18:10PM +0100, Stefano Garzarella wrote:
->> Ditto about commit message, please put more effort on writing something
->> readable by a human.
->
->Agreed, I'll rewrite both messages myself for v4, much shorter.
->
->> >+            if (sk->sk_err) {
->> >+                    ret = -sk->sk_err;
->>
->> Why?
->
->Same as vsock_connectible_wait_data(): an error that arrives during the
->wait is returned to recv(). Without the check the loop still ends, since
->every path that sets sk_err also closes the socket or sets peer_shutdown,
->but recv() then returns 0 or -ENOTCONN instead of the error.
+hi,
+BPF programs have no supported interface for creating or removing private
+anonymous mappings in the current task. This limits use cases that need normal
+or executable memory in a live process, such as replacing a function or
+changing environment variables.
 
-Please add a comment with the reason.
+Although bpf_probe_write_user() can write to user memory, it disables page
+faults during the copy and therefore cannot handle memory that needs to be
+faulted in.
 
->
->> >+            if (sk->sk_state != TCP_ESTABLISHED) {
->> >+                    ret = sock_flag(sk, SOCK_DONE) ? 0 : -ENOTCONN;
->> >+                    break;
->> >+            }
->>
->> I'm thinking if we should split this in multiple patches.
->
->From reading the code, it can be split without breaking bisect: first
->loop on all exit conditions with the lock still held, then drop the lock
->around wait_woken(). The order is fixed, since dropping the lock alone
->brings back the early -EAGAIN, and the loop alone does not fix the
->deadlock, so both would carry the Fixes tag. That is why I kept it as one
->patch, but I'm fine either way. Split it like that for v4, with the
->current 2/2 on top, or keep it as one?
+This series adds three sleepable kfuncs for those operations:
 
-Okay, if the entire change is needed to fix the deadlock, then it makes 
-sense to have a single patch. Please make it clear in the commit 
-description.
+  - bpf_user_anon_mmap(len, prot) creates a private anonymous mapping in the
+    current task and returns its address. The requested protections can include
+    execute permission.
 
->
->> >+            if (!timeo) {
->> >+                    ret = -EAGAIN;
->> >+                    break;
->> >+            }
->>
->> Is the move of this check changing some user visible error?
->> I mean before this patch it was one of the first checks, is this okay?
->
->Yes, for non-blocking reads, intentionally: -sk_err, 0 on peer shutdown
->and the not-connected result now come before -EAGAIN, as on the native
->recvmsg path. I'll say so in the commit message.
+  - bpf_copy_to_user(dst, src, len, flags) copies data into the current task’s
+    address space, handles page faults, and reports copy errors.
 
-Yes, please.
+  - bpf_user_munmap(addr, len) removes a mapping.
 
->
->> >+            if (signal_pending(current)) {
->> >+                    ret = sock_intr_errno(timeo);
->> >+                    break;
->> >+            }
->>
->> Why? Should be a separate patch?
->
->No, the loop needs it: with a pending signal wait_woken() returns at
->once, so without the check the loop spins until SO_RCVTIMEO expires, or
->forever if none is set. I checked it by removing the check: a signalled
->reader without SO_RCVTIMEO never returned and used a full CPU. The
->native path does the same.
+Together, the kfuncs provide a small interface for allocating, populating,
+and removing memory:
 
-Okay, please explain this in the commit description or in a comment on 
-top of that check.
+  addr = bpf_user_anon_mmap(len, prot);
+  ret = bpf_copy_to_user((void *)addr, src, len, flags);
+  bpf_user_munmap(addr, len);
 
->
->> >+            if (data < 0) {
->>
->> Why not data <= 0  and void the other if?
->
->Right, will do in v4.
->
->Thanks,
->Jerome
->
->
+This interface lets a BPF program perform the operations in the current task’s
+address space without changing bpf_probe_write_user()’s fault behavior or
+introducing a separate mapping abstraction.
 
+thanks,
+jirka
+
+
+rfc: https://lore.kernel.org/bpf/20261021195759.119421-1-jolsa@kernel.org/
+v1:  https://lore.kernel.org/bpf/20261029212551.56964-1-jolsa@kernel.org/
+v2:  https://lore.kernel.org/bpf/20261103075916.100050-1-jolsa@kernel.org/
+
+v3 changes:
+- use Alexei's change for checking the const [Aleexi]
+- drop ia32 support/hack for vm_mmap [Alexei]
+- remove leftover srcptr suffix in kfunc declaration
+- drop extra verifier test for non-sleepable kprobe
+
+v2 changes:
+- infer read-only from constness of a pointer instead of srcptr
+  argument suffix [Andrii]
+- rename bpf_user_mmap to bpf_user_anon_mmap [Andrii]
+- use arch_validate_prot to validate prot argument in mmap
+- add the x86 compat mmap workaround
+- assorted small changes
+
+v1 changes:
+- follow vm_mmap/vm_munmap design suggested by Alexei
+- allow user space write only to current process, because we don't
+  have remote task use case and it simplifies security checks
+- many changes in tests
+
+---
+Jiri Olsa (8):
+      bpf: Honor const on generic kfunc memory arguments
+      bpf: Add user memory kfuncs
+      selftests/bpf: Add get_procmap_info helper
+      selftests/bpf: Test const kfunc memory arguments
+      selftests/bpf: Test user memory mmap kfuncs
+      selftests/bpf: Test user memory page exec
+      selftests/bpf: Test bpf_copy_to_user kfunc
+      selftests/bpf: Test user memory kfunc errors
+
+ Documentation/bpf/kfuncs.rst                               |  21 ++++
+ kernel/bpf/helpers.c                                       | 107 ++++++++++++++++
+ kernel/bpf/syscall.c                                       |  10 +-
+ kernel/bpf/verifier.c                                      |  24 +++-
+ tools/testing/selftests/bpf/prog_tests/kfunc_call.c        |   2 +
+ tools/testing/selftests/bpf/prog_tests/user_mem.c          | 349 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kfunc_call_fail.c        |  10 ++
+ tools/testing/selftests/bpf/progs/kfunc_call_test.c        |  14 +++
+ tools/testing/selftests/bpf/progs/user_mem.c               | 101 +++++++++++++++
+ tools/testing/selftests/bpf/test_kmods/bpf_testmod.c       |  10 ++
+ tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h |   2 +
+ tools/testing/selftests/bpf/trace_helpers.c                |  38 +++++-
+ tools/testing/selftests/bpf/trace_helpers.h                |   1 +
+ 13 files changed, 676 insertions(+), 13 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/user_mem.c
+ create mode 100644 tools/testing/selftests/bpf/progs/user_mem.c
