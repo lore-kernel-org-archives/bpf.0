@@ -1,95 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.231.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.136.65.226
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793858636;
-	b=QwIP5XAHjjrVHYfWB/XibB4LQffnS1Mq1Sv9FtClf1JSOqsZX4JN00GTtiGAgV1Qulw0
-	 txMK+YFWClUjbkhmista2IaeQLv1rTGY7cAdXjfFGlRQOsxXUgHkveJFiHnvANzv92d8j
-	 GLDd/MY8I+CTB95eg0/qRgGC3J5T6sz6Zxik/zCz2zSOHStJDTU6BAyeZEJLB6dSSkYIx
-	 CKCYhmFNxQ4DJ/9k5a6ENCDy46SSKAr2TIa5oZy8mYR8NAHPGek4aPESiiyYswHcTOMvS
-	 k864ViiHTk2FdhI8XSi/TKf6SYz45vYOaGr4aQimIbjFcXRnyeq1Tv1qgBJDqX7IQFQ==
+	t=1793863156;
+	b=gjrNkSxGIY4zQzr566ki5QrgnyQcHturZx+eeV8tLs+2QDTdQdmt2rVJaCfR2egbtUy7
+	 qMyo/HCwbRTrTA4uphAHQOMnwH8UgUbjUM+MDpfFylJvXXB0Cm4m97o6ajoZHPnaJ/DoM
+	 Mplophb50clJQnJ2zSm2Lgkf3HbtMJDD+qu3OGPOBu1S/tQdu7056rArZI6qHGWMJZu0Q
+	 b72TG/jsTRqIZ6mjGT+NQkPuP79cvj5Os8sh1C69RD3FnMjFAEk63P8QY0o3b+U+xCx90
+	 wlV983L0ShQpEJ0hUfFLlBA64fmZpjhd5eSuOYL4e8flp4NdF1jloSUZUPQZlAvnSRg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793858636;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=fl+RqVSy++c8t4D9ZLDA6qx49eqFU8GFdwgJMfJOyN4=;
-	b=oseEYKGCdECMfyH4IMkmFDBwMMkV5R2cdSBVcVV7O8xEMkUpu1U05dbqaq5OegkGA4nT
-	 xnfeF9+uxQHeq1QKjKqQTIDUE0JNdfKzhdQSqvsaTlWrmMjaBJXmlvsHBljXEErNWUXw8
-	 J9iS17dF4L5zqhouszt8bfhZoH6s1+YJodIJLSTrW6ABKazm7uGZnJ4YCnkm3x1iUdsPN
-	 /c/00MigiFGJ0Z4HjG7dCujYDQe8cWXPAHn7Ri/F+Sp0Jh7wCmv01RrG440gwY/dfKCJV
-	 DAurlDJpxitiGHWf9ZbE004YM5Mi4Njivc0z8omXgWkvOuCsd0AYdoi2/QXSEUmHgqQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793863156;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:MIME-Version:Content-Transfer-Encoding:
+	 X-Flowmailer-Platform:Feedback-ID;
+	bh=2UeepKs1wiyGHBtfdukXuMgoSbbJsCgDnloMbndsSsg=;
+	b=fbookdOPKVjJZM1H0a9DO04u3iL2zL0QMUudgpkAopEKtx02QZ1IdbxTMWsfOKMLLVy6
+	 cKEyl9ePYJG9ogWGIUZCKANSS0NnInXqJ8xpcbFFTrSGukU9rZ5bXeS+Vdgnr4w0tNgZ1
+	 ODRGEp8eK/p56l/itqPWVvpB4Q8rER0jaaOLkgucr9enzIXJiN2NkxXUucLMe+8yW2RoR
+	 W9fVW1GzpH+pTT0GVWWqJ1o6Fdqq9NSRTaxbiMjV1nF/fPOXjv9/3ZSgDuQ9dr0lWzHnp
+	 rLOp6eWYzjdAFicN3SH0W8Gno233gQoUeu3H6RGklaQinWx3018jAq47iw+IXDGbKlQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sITsORkr;
-	arc=none smtp.remote-ip=74.125.231.200
-Received: from mail-oi2-f8.google.com (mail-oi2-f8.google.com [74.125.231.200])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=siemens.com;
+	spf=pass smtp.mailfrom=rts-flowmailer.siemens.com;
+	dkim=pass header.d=siemens.com header.i=meng.ding@siemens.com header.a=rsa-sha256 header.s=fm2 header.b=MbHBkvax;
+	arc=none smtp.remote-ip=185.136.65.226
+Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9753D606A326
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 06:03:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9753D606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA05606A328
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 07:19:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDA05606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sITsORkr
-Received: by mail-oi2-f8.google.com with SMTP id 5614622812f47-51cddc2451aso725026b6e.0
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 22:03:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793858634; x=1794463434; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fl+RqVSy++c8t4D9ZLDA6qx49eqFU8GFdwgJMfJOyN4=;
-        b=sITsORkr/kUi1tLLm2LhV4O4MeBBZD5P42Mn7DMsbqXc1l0My7lI4VmgtVtnfCNRPm
-         F2K5ABd1e0VHSJ8v2yESdYDjTq4i63tkKEsmDkfU94JGf8/kaTIlpLIWCue9vT5bF1Nu
-         nuFchHwAR7Ftsz3TEZCXr+WCGl9OD/waFlfO7CL1Jilo/txk7zlc2begOhUWVb0h/j/R
-         TGbTC/6DEKgD1gf7luCdWPsrmDKhVsiH4PA2kU5S6CZ068gtUu1ny0pcnBfzdI1R8zjJ
-         BNwajppvpcVWWXsA70Yz5DddZP4BTQKmTeGOmnqBOD5ep97jZ1ZC4JL9FAWfb5NB8wJq
-         qSnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793858634; x=1794463434;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fl+RqVSy++c8t4D9ZLDA6qx49eqFU8GFdwgJMfJOyN4=;
-        b=ee/YS69seG6sBUYWZSeyYSyRCHJ9YPdyhaak9v1bYZ0f8ovunXZS3alyIhghEXO9ga
-         16FF0rYJvFb4q14IajF80FJvA8U90z5FrsQ4fY+AutS6iX19FTWKmswwHSQ5g35fXzsv
-         PTkevLsBwt5kcHyZYkD6XCcvbBeHsSKTkPrQ+gUboBhyhaKfDbzfiU5oNKQCj+hiMXvr
-         X2oEL78ayKAIQU4BssYMP0szl6rM0HuvPQbHOXKA9JalCHzKJypj2jHNNopv3aIvsfTY
-         Js7rqzvRjZAwVy9n12jBFwMNLnKUH4Wql0pmfMmotYZBoM901fZqxfzB825544M1B49q
-         pe/w==
-X-Gm-Message-State: APuU4Z81Ou/VFc9zszJ5fad3Kj5pZfV/FwIIM90dSdFnCDBQsX3QT2y0
-	cUjduwQsYwBDPDjxrzOmObCUVLb3X9899Ay6Xuha1xNpArjQ2MrliU62
-X-Gm-Gg: AYBFou31ejjXLSsf92yLyzcQPMyV5IdR++SMB/epbBT6pWYkEksweD4nmg8HDrAtSpl
-	4WnGMtiy7/SzgOMZx4gsWbxcnlhSRn4ExO3J+Qwjf0mde6XPUo7g0mLCoDcUN79BpUB3mJusB4Y
-	7vVppub8jT348nKos0MmE0i3Nb0IoW9jHTObqtqm0koClrYa4HPmgDeQuMWWls/l499UMUyTrcs
-	DQlc1KbV33d/dyjGGOf8b42g01Xqb+onaYerAsBh6ziEQ/9+AMeLew7UXuzEJrWkQ+3APDlxrRm
-	diDhbBwBC8uv7lVjWDAjQFEjMa9GzU0G5M/2O//LIRC31PEYMZV0Gz4f6dKA/i6yTCnvXl/sH9a
-	+Kq/fSxNrn+RfPopbFhl8a4eGCdg7kmcsK7wpgxhl6R2N0nA57ITc9XL0+sR7ACyj38hV+fOlwr
-	glrQsvqqi3jEcyMXi+p8L/Z2Tq3YAz86LDSf/9wtIDVLqK64UsoMo0u1Js5ecLzQCZl4XPUQiQq
-	zZkQiQC9JShgMwUNxHNLxoDvrgVLthmYlBvWv89kxs3UDt1IkUlv+SdLLR7X0LOUsP/UukdDpXp
-	qJ3hhuFHANWbBMYp9iQpje3o976SX6spI4sRcG1HEJBosSsYkQ45qFVBKBPvr7oEygw=
-X-Received: by 2002:a05:6808:14d2:b0:532:963f:3118 with SMTP id 5614622812f47-5640d97353cmr12997705b6e.3.1793858634408;
-        Wed, 04 Nov 2026 22:03:54 -0800 (PST)
-Received: from localhost.localdomain ([14.22.11.161])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-567a9f41424sm3493476b6e.9.2026.11.04.22.03.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 22:03:53 -0800 (PST)
-From: Henry Martin <bsdhenrymartin@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	john.fastabend@gmail.com
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	stable@vger.kernel.org,
-	Henry Martin <bsdhenrymartin@gmail.com>
-Subject: [PATCH] bpf: fix verifier model mismatch on __sk_buff.remote_port narrow read
-Date: Thu,  5 Nov 2026 14:03:31 +0800
-Message-ID: <20261105060331.1912252-1-bsdhenrymartin@gmail.com>
-X-Mailer: git-send-email 2.43.7
+	dkim=pass (2048-bit key, unprotected) header.d=siemens.com header.i=meng.ding@siemens.com header.a=rsa-sha256 header.s=fm2 header.b=MbHBkvax
+Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 20261105071905d24869aae100020720
+        for <bpf@vger.kernel.org>;
+        Thu, 05 Nov 2026 08:19:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm2;
+ d=siemens.com; i=meng.ding@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=2UeepKs1wiyGHBtfdukXuMgoSbbJsCgDnloMbndsSsg=;
+ b=MbHBkvaxkeyUCwfUVzgQ1zs+Ifzqcm8ShV801eVKdDDdOajsC1zROPDsFOkPrRLIXualRq
+ ljtDbGgqh9sgFeK9izYu5evE/RyVB7DkhluMQi6IchNA2WJTSPoinSUux5Kh+O5m7J23Typ6
+ 6W/xUDmoZN3krR2c8DZVE//prNykK4KKliRt59nFJI4tTPArUEVhmZ6/aR6QRJnrtgqD2P6u
+ fNCZtVsRth7aWbl3n1hgVvlVxKHfcKfHe2goliePomWYhxBmJ63y44Z2kx6dZBZuKElPnmKY
+ 3lSy9Nl6UBDRzyRII9rw8EzNd+ksmnMP0x3M+QBl0zfTffwOUCNwBAIw==;
+From: Ding Meng <meng.ding@siemens.com>
+To: netdev@vger.kernel.org,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>
+Cc: florian.bezdeka@siemens.com,
+	jan.kiszka@siemens.com,
+	wq.wang@siemens.com,
+	p@1g4.org,
+	gerhard@engleder-embedded.com,
+	Ding Meng <meng.ding@siemens.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH] net: mark skb NAPI IDs independently of busy polling
+Date: Thu,  5 Nov 2026 15:16:08 +0800
+Message-ID: <20261105071706.7043-1-meng.ding@siemens.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,61 +100,205 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-1335312:519-21489:flowmailer
 
-On little endian, the ctx access conversion for __sk_buff.remote_port
-loads the 16-bit skc_dport and shifts it left by 16, producing a
-4-byte value of up to 0xffff0000.  It reports its width through
-bpf_target_off() as 2, the member size.
+Commit 97dc7cd92ac6 ("ptp: Support late timestamp determination")
+added support for deferring RX timestamp conversion to
+ndo_get_tstamp(). When the timestamp is consumed, get_timestamp()
+uses the skb's NAPI ID to find the device that owns the timestamp
+cookie and invoke its callback.
 
-A 2-byte read is a narrower load of this 4-byte ctx field, but the
-fixup pass only masks the result when the access size is smaller
-than the reported width, so the masking is skipped.  The verifier
-models the register as [0, 0xffff] while the runtime value is
-[0, 0xffff0000].  Arithmetic the verifier folds to a constant can
-therefore take any 16-bit port value at runtime, enabling
-out-of-bounds reads and writes relative to map values.
+Commit e68b6e50fa35 ("udp: enable busy polling for all sockets")
+gated NAPI ID bookkeeping with CONFIG_NET_RX_BUSY_POLL. As a result,
+when busy polling is disabled, the skb may not carry a usable NAPI ID.
+The device lookup then fails, so the driver callback is not invoked.
+get_timestamp() falls back to hwtstamp, which does not contain the
+converted timestamp, resulting in an incorrect RX hardware timestamp.
 
-Report the real produced width (4) so the fixup pass applies the
-usual RSH/AND masking to narrow reads.  Full 4-byte reads are
-unaffected.
+Record skb NAPI IDs independently of busy-poll support to support
+drivers that use deferred timestamp conversion and future driver
+features that need to look up a device by its NAPI ID.
 
-This issue was discovered by Tencent CodeBuddy Security.
-
-Reported-by: zeroday zhao <zerodayzhao@tencent.com>
-Fixes: 8a31db5615667 ("bpf: add access to sock fields and pkt data from sk_skb programs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
+Signed-off-by: Ding Meng <meng.ding@siemens.com>
+Reviewed-by: Florian Bezdeka <florian.bezdeka@siemens.com>
 ---
- net/core/filter.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+In the discussion of the issue reported at
+https://lore.kernel.org/netdev/20260630112056.885071-1-meng.ding@siemens.com/
+this previous patch added an igc-specific fallback for configurations
+with CONFIG_NET_RX_BUSY_POLL disabled. It populated skb's hwtstamp
+field with a timestamp converted using the default hardware timer,
+allowing get_timestamp() to return it without invoking ndo_get_tstamp().
+But Jakub Kicinski noted that the proposed fix appeared to be a
+driver-specific workaround for a generic problem. The engleder driver
+would also be affected by the same issue.
 
+This patch introduces a new configuration option to enable NAPI ID
+bookkeeping independently of busy polling. The option is enabled
+whenever busy polling is enabled, preserving the existing behavior.
+It is also selected by the igc and engleder drivers, ensuring that
+skbs carry a NAPI ID even when busy polling is disabled.
+
+Another approach considered was to require drivers using deferred
+timestamp conversion, such as igc and engleder, to enable busy polling.
+However, this would introduce an unnecessary dependency between two
+independent features: hardware timestamp reporting should not require
+busy polling to be enabled.
+
+Timestamping has been tested only with igc; it has not been tested
+with engleder.
+
+ Documentation/networking/timestamping.rst | 11 ++++++++---
+ drivers/net/ethernet/engleder/Kconfig     |  1 +
+ drivers/net/ethernet/intel/Kconfig        |  1 +
+ include/linux/skbuff.h                    |  4 ++--
+ include/net/busy_poll.h                   |  2 +-
+ include/trace/events/net.h                |  2 +-
+ net/Kconfig                               |  4 ++++
+ net/core/filter.c                         |  2 +-
+ net/core/skbuff.c                         |  2 +-
+ 9 files changed, 20 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/networking/timestamping.rst b/Documentation/networking/timestamping.rst
+index 2162c4f2b28a6..dbe40a1972639 100644
+--- a/Documentation/networking/timestamping.rst
++++ b/Documentation/networking/timestamping.rst
+@@ -278,9 +278,14 @@ SOF_TIMESTAMPING_OPT_PKTINFO:
+   packets with hardware timestamps. The message contains struct
+   scm_ts_pktinfo, which supplies the index of the real interface which
+   received the packet and its length at layer 2. A valid (non-zero)
+-  interface index will be returned only if CONFIG_NET_RX_BUSY_POLL is
+-  enabled and the driver is using NAPI. The struct contains also two
+-  other fields, but they are reserved and undefined.
++  interface index will be returned only if CONFIG_SKB_MARK_NAPI_ID is
++  enabled and the driver is using NAPI. This hidden configuration is
++  selected automatically by busy-poll support and by drivers that need
++  skb NAPI IDs to resolve deferred hardware timestamps. Drivers that
++  use deferred timestamp conversion must select it so the networking
++  stack can find the device and call its timestamp callback even when
++  busy polling is disabled. The struct contains also two other fields,
++  but they are reserved and undefined.
+ 
+ SOF_TIMESTAMPING_OPT_TX_SWHW:
+   Request both hardware and software timestamps for outgoing packets
+diff --git a/drivers/net/ethernet/engleder/Kconfig b/drivers/net/ethernet/engleder/Kconfig
+index 3df6bf476ae7e..9700a243bea11 100644
+--- a/drivers/net/ethernet/engleder/Kconfig
++++ b/drivers/net/ethernet/engleder/Kconfig
+@@ -22,6 +22,7 @@ config TSNEP
+ 	depends on PTP_1588_CLOCK_OPTIONAL
+ 	select PHYLIB
+ 	select PAGE_POOL
++	select SKB_MARK_NAPI_ID
+ 	help
+ 	  Support for the Engleder TSN endpoint Ethernet MAC IP Core.
+ 
+diff --git a/drivers/net/ethernet/intel/Kconfig b/drivers/net/ethernet/intel/Kconfig
+index 780f113986ea8..7fb63f351fc20 100644
+--- a/drivers/net/ethernet/intel/Kconfig
++++ b/drivers/net/ethernet/intel/Kconfig
+@@ -376,6 +376,7 @@ config IGC
+ 	depends on PCI
+ 	depends on PTP_1588_CLOCK_OPTIONAL
+ 	depends on ETHTOOL_NETLINK
++	select SKB_MARK_NAPI_ID
+ 	help
+ 	  This driver supports Intel(R) Ethernet Controller I225-LM/I225-V
+ 	  family of adapters.
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 6787fcf6ac3e4..164c862f7a403 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -1059,7 +1059,7 @@ struct sk_buff {
+ 			__u16	vlan_tci;
+ 		};
+ 	};
+-#if defined(CONFIG_NET_RX_BUSY_POLL) || defined(CONFIG_XPS)
++#if defined(CONFIG_SKB_MARK_NAPI_ID) || defined(CONFIG_XPS)
+ 	union {
+ 		unsigned int	napi_id;
+ 		unsigned int	sender_cpu;
+@@ -1267,7 +1267,7 @@ static inline bool skb_pkt_type_ok(u32 ptype)
+  */
+ static inline unsigned int skb_napi_id(const struct sk_buff *skb)
+ {
+-#ifdef CONFIG_NET_RX_BUSY_POLL
++#ifdef CONFIG_SKB_MARK_NAPI_ID
+ 	return skb->napi_id;
+ #else
+ 	return 0;
+diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
+index 6e172d0f6ef5f..f7c0e62c6a7d7 100644
+--- a/include/net/busy_poll.h
++++ b/include/net/busy_poll.h
+@@ -130,7 +130,7 @@ static inline void sk_busy_loop(struct sock *sk, int nonblock)
+ static inline void __skb_mark_napi_id(struct sk_buff *skb,
+ 				      const struct gro_node *gro)
+ {
+-#ifdef CONFIG_NET_RX_BUSY_POLL
++#ifdef CONFIG_SKB_MARK_NAPI_ID
+ 	/* If the skb was already marked with a valid NAPI ID, avoid overwriting
+ 	 * it.
+ 	 */
+diff --git a/include/trace/events/net.h b/include/trace/events/net.h
+index dbc2c5598e35a..99ed7645242eb 100644
+--- a/include/trace/events/net.h
++++ b/include/trace/events/net.h
+@@ -208,7 +208,7 @@ DECLARE_EVENT_CLASS(net_dev_rx_verbose_template,
+ 
+ 	TP_fast_assign(
+ 		__assign_str(name);
+-#ifdef CONFIG_NET_RX_BUSY_POLL
++#ifdef CONFIG_SKB_MARK_NAPI_ID
+ 		__entry->napi_id = napi_id_valid(skb->napi_id) ?
+ 				   skb->napi_id : 0;
+ #else
+diff --git a/net/Kconfig b/net/Kconfig
+index 76ab44aa439a6..8fa7586dc08ca 100644
+--- a/net/Kconfig
++++ b/net/Kconfig
+@@ -346,9 +346,13 @@ config CGROUP_NET_CLASSID
+ 	  Cgroup subsystem for use as general purpose socket classid marker that is
+ 	  being used in cls_cgroup and for netfilter matching.
+ 
++config SKB_MARK_NAPI_ID
++	bool
++
+ config NET_RX_BUSY_POLL
+ 	bool
+ 	default y if !PREEMPT_RT || (PREEMPT_RT && !NETCONSOLE)
++	select SKB_MARK_NAPI_ID
+ 
+ config BQL
+ 	bool
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 9245009d9f1eb..6eb4751441f39 100644
+index b7ac145b68b1f..e2218c18622b8 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -10455,13 +10455,19 @@ static u32 bpf_convert_ctx_access(enum bpf_access_type type,
- 	case offsetof(struct __sk_buff, remote_port):
- 		BUILD_BUG_ON(sizeof_field(struct sock_common, skc_dport) != 2);
+@@ -10274,7 +10274,7 @@ static u32 bpf_convert_ctx_access(enum bpf_access_type type,
+ 		break;
  
-+		/*
-+		 * The converted value is 4 bytes wide, not 2: on little
-+		 * endian the 16-bit port is shifted into the high half.
-+		 * Don't use bpf_target_off() here, it would report the
-+		 * member size and the narrow-load masking in the fixup
-+		 * pass would be skipped.
-+		 */
-+		*target_size = 4;
- 		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, sk),
- 				      si->dst_reg, si->src_reg,
- 				      offsetof(struct sk_buff, sk));
- 		*insn++ = BPF_LDX_MEM(BPF_H, si->dst_reg, si->dst_reg,
--				      bpf_target_off(struct sock_common,
--						     skc_dport,
--						     2, target_size));
-+				      offsetof(struct sock_common, skc_dport));
- #ifndef __BIG_ENDIAN_BITFIELD
- 		*insn++ = BPF_ALU32_IMM(BPF_LSH, si->dst_reg, 16);
+ 	case offsetof(struct __sk_buff, napi_id):
+-#if defined(CONFIG_NET_RX_BUSY_POLL)
++#if defined(CONFIG_SKB_MARK_NAPI_ID)
+ 		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->src_reg,
+ 				      bpf_target_off(struct sk_buff, napi_id, 4,
+ 						     target_size));
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index eb9fcc4b1fd1a..386a32cdc0cc8 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -1581,7 +1581,7 @@ static void __copy_skb_header(struct sk_buff *new, const struct sk_buff *old)
+ #ifdef CONFIG_NETWORK_SECMARK
+ 	CHECK_SKB_FIELD(secmark);
  #endif
+-#ifdef CONFIG_NET_RX_BUSY_POLL
++#ifdef CONFIG_SKB_MARK_NAPI_ID
+ 	CHECK_SKB_FIELD(napi_id);
+ #endif
+ #ifdef CONFIG_XPS
+
+base-commit: d135ab453a7400a34930bdda1ef4bdc8acfac80e
 -- 
-2.43.7
+2.47.3
 
