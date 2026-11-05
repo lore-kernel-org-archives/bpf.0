@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793887325;
-	b=IQr9phMyFpHaHTUx0BXfyjTpnKfEFN5rkHZzqkGxVqlX49BAREjkhvW8f4uWk0OitSbj
-	 mJejqF7ZPOrHjRagk8Txu8NDw3sbaz7C76cSwfD9f2CijBB9BWJ+ls+bfNJA4mMRD259e
-	 /fP9ILPBtcsv+bDjMYKiG2ctdLMKHbtc06Ini4M3OVATWebKzchNYAsHiNMyVhnu71u03
-	 3/TGRTQ4zAvgP20fC4FddgxCS/12U1JGFOYr700Pn3Lm3W0tGRjourAA/OEq0OtFwqSQb
-	 fpABNjuUWjXaz000WwF9SPFb7nSv/4mMOCFEJkO+ofdljEawcGYgIlUmSAMk8rKPzHQ==
+	t=1793887373;
+	b=hxgU75o0MNEyj9Wcy+C54mmMULliEYUPa3QXGaJYe4r6ekksCLYNOraZ8ViOd7/sPobV
+	 aTHVgt2bPIMfH7G5ylcy0PAYPdUaigyTB9IQemo6w0AgC8tXTQ1aR9lZhJaPKBJ6k6H0k
+	 cMqQz7UKaxhWzgAesyRV7iOnTXN5soFFEnxlnFdCXxY4f8LoDx+bg4MiI2DZoBsKht3HD
+	 ZncOESiVC5sotWP1cjlavuakSeEU/MMCurJ1iu5w8W/Fu19C7bXfQdH0lNJy19DWVWc5G
+	 amyzEQXXzz+EaW7JIMXihUb8uMTDWW7m6FNJHG7E/DvDioE5a5goOqA0eRxJbuDHy+g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793887325;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793887373;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=xsq3HeGsICcD9qR4LeaVPKieAjkKF0z7rahKgx3b78c=;
-	b=M0p9Ysjv5P4s4uAFsqAc4r7YuhXRde3evJ8dfkA5aDWEx0qJe7KVmkIHMiNIXJZnCZWi
-	 9TKm3V6SR6AheBPjuRq89yeOF+uh3V0HlKRP2bto4Czy5894ux9fP142ViM1U8Vxfv4Oz
-	 ulcYzroJLrVr4I3mFgSIIQOAgMtzBKtEPFM7KEQQTcUd3etdZ4Yg6MFQVwNGu++/Z1Mfk
-	 VxQpush+6+lt2/cSHBEmbop2+U8eGOEGryfA4oXf1bjZL+tukuA5n07O5eOu5D2rq1bj5
-	 0BuB4Lj8jfXObYLNk/JTE6UAMnNphE5R08xPC9VFzHb2os4XEqsA5yz1MC73JVUJLeA==
+	bh=Zn4FGyqcpXuDOI4yAR+P0rUnqH2M0CuU1TGwYX3rR+o=;
+	b=MlwkFfnMiVIeQRsaDL0JteocjMeRv/dUbF4P0aKgQ8goy9hgBboLu3ZqopepROyHPkt8
+	 pIVrROEaIBWDoPP5muMSFK9LCjApSPM/vTFHkZpZ/xyK/US2TCcYxUlu2KwAoJrua3lSk
+	 BsU754XzuBgjXk5rxkEdevqSryW2OwQuqqbV8oRz11bhFGP79GgHlXFK2nm1roqXcjX97
+	 qmVw+iM7B7nbgF3DJf5NalGIOkjcktKaX9w1n4gaEd9+MBTzxYKW72dbX+MTjuNtaZarf
+	 UFimc9aqDFOA2gzT69Hv1W7/ioSwxouarzzQntY5BFqVTiwktgwoyNUnLdN255UTsnw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VCXdsPfc;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PBGMmnjh;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE69F606A32C;
-	Thu,  5 Nov 2026 14:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14C2606A31B;
+	Thu,  5 Nov 2026 14:02:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VCXdsPfc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E023E1F000C1;
-	Thu,  5 Nov 2026 14:01:58 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PBGMmnjh
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A31E1F00919;
+	Thu,  5 Nov 2026 14:02:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793887324;
-	bh=xsq3HeGsICcD9qR4LeaVPKieAjkKF0z7rahKgx3b78c=;
+	s=k20260515; t=1793887372;
+	bh=Zn4FGyqcpXuDOI4yAR+P0rUnqH2M0CuU1TGwYX3rR+o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VCXdsPfcQokl8f+rjLdNBL+YCFkzVLRKWrFySEE1WMzPl+ktC9vx0bBWrQsN9nihj
-	 tI18V1AdcZLO2Wp4q/XVD+jddiqq8RxzmrwGeZc2I/5xJGlBmc/lzvB9ahZ8wbsrHo
-	 2uxI2T8kn4sNtptex1MZV2ldZjPoTKOBNL315/ys3xnd96b7/OmUqv3SMvRknBUU6n
-	 dlceNP+HUlg47v3tzKlUWNTjIKpN5HQZNGVg406HGvI1os0tGuxwamsSam0tHt6WI5
-	 TLF6oIQU3Cawwx/shvdd/m82/qVvcUBjYJs1I074yQfHmmLWRCw4F5bVOdVN7WG+5r
-	 flUIfgaLzHqIQ==
-Date: Thu, 5 Nov 2026 14:01:56 +0000
+	b=PBGMmnjhDZ38hOgzwbJkh3sIHEnlSGL9uYp2wngdD276txrDfZ30SbBzuawEV1nnq
+	 Rv0xUXVLJMiY178nhfx2khC2t9XI1dRXm6G5TlAoNS7YPerunjz7djsPlvLVZ0/C/k
+	 26g4h1VjB/HlAFQV1zmssZ7NwOIYzsSSZb0yhkM1tOMG25faR5/ai3+x+Y/3RVOPDj
+	 gdYrprathq27egizqYSvwVuvU1wkKGxUxFpKE7ymPIMPn6A9ky5MdawMzjXl4/mefd
+	 pI0UAGhaO/oyhaxueCevuZ2zkOe8TTbhuwEgihtJKqK+ADu/Zx5bMOsVPAt+1bETdu
+	 NZoZqyIdegmtQ==
+Date: Thu, 5 Nov 2026 14:02:45 +0000
 From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
 To: "David Hildenbrand (Arm)" <david@kernel.org>
 Cc: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
@@ -57,12 +57,12 @@ Cc: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
 	Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
 	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, linux-mm@kvack.org, 
 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 2/5] mm/khugepaged: scan mm's more efficiently under
- mmap_lock contention
-Message-ID: <auyL2gLT3lDVqwMJ@gremlin>
+Subject: Re: [PATCH 4/5] mm: add and use mmap_read_lock[_killable]_nosteal()
+ on contention
+Message-ID: <auyMat25VPKwzSuL@gremlin>
 References: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
- <20261103-khugepaged-latency-fix-v1-2-a07ab16ac860@kernel.org>
- <dfa01a1d-0b95-4cd2-ab8a-390da5ffe2ab@kernel.org>
+ <20261103-khugepaged-latency-fix-v1-4-a07ab16ac860@kernel.org>
+ <3a77219e-39e5-4e98-8f88-6f90bccf69f0@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -74,39 +74,34 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dfa01a1d-0b95-4cd2-ab8a-390da5ffe2ab@kernel.org>
+In-Reply-To: <3a77219e-39e5-4e98-8f88-6f90bccf69f0@kernel.org>
 
-On Thu, Nov 05, 2026 at 11:23:41AM +0100, David Hildenbrand (Arm) wrote:
-> I could have sworn I saw a similar patch from Nico at some point ... maybe it
-> was in a private discussion.
-
-Ah, yeah, it seems a fairly obvious thing to do (as often these things
-are), was surprised somebody hadn't already tried it.
-
+On Thu, Nov 05, 2026 at 11:16:23AM +0100, David Hildenbrand (Arm) wrote:
+> On 11/3/26 09:27, Lorenzo Stoakes (ARM) wrote:
+> > With down_read[_killable]_nosteal() available, it becomes possible to
+> > release the mmap read lock in such a way that a queued write lock always
+> > takes precedence.
+> >
+> > Expose this to mm through two new wrappers - mmap_read_lock_nosteal() and
+> > mmap_read_lock_killable_nosteal().
+> >
+> > Make use of this in scenarios where the mmap read lock is dropped
+> > explicitly for the purposes of relieving mmap_lock contention - the BPF
+> > task VMA iterator, and lock_next_vma_under_mmap_lock(), which is where
+> > /proc/$pid/smaps_rollup re-acquires the mmap lock after dropping it on
+> > contention and falling back from per-VMA locking.
+> >
+> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> > ---
+> >  include/linux/mmap_lock.h | 44 ++++++++++++++++++++++++++++++++++++++++++++
+> >  kernel/bpf/task_iter.c    |  2 +-
 >
 >
-> Am I correct or is the short version of this change "Remember the next scan
-> address per MM instead of starting from address 0 whenever we continue scanning
-> a MM after a skip; and we might skip under mmap lock contention" ?
+> I'd appreciate an ack from BPF folks and a confirmation that I could take this
+> through my tree :)
 
-Yes!
-
->
-> I think a lot of the commit message above can be simplified.
-
-The book author part of me comes through sometimes ;) Will try and cut it
-down for the respin.
-
->
-> Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
-
-Thanks!
-
->
-> --
-> Cheers,
->
-> David
+With the rwsem thing as a separate patch this patch will be dropped in any case,
+which simplifies things :)
 
 --
 Cheers, Lorenzo
