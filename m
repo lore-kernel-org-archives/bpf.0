@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793914518;
-	b=WuSH8m6VCSJKaumByXRjNRxQi4jk3jqNHiedZ3gO+1ioNTEUqC9EWw7bn9d7XBYYlLJf
-	 8geiLyLuWD3KRh/6PkYiq1U09OWF1CVLqXWVvmR+GRwHjtLQDp9Zm2sfTjJ2tVyvF6pDU
-	 KybfF7T5PA7p9ch/zXqer/vZpa/571UyWblAavHiHL6JguQL+nTVteM0O1oRPahpdrBZE
-	 OEzx74ry+gptS3z4j2hpxYEB9BlmcvWeuw77LLuxBW+R9LleWoBof+0a96hOtQfQXs202
-	 uy9WdxlhNb/EZ+UjoHykCUWS5t6Og+j9cHa6S1DKrkW2zH7Ww0NirZ1QSH/jJKLAWvg==
+	t=1793914521;
+	b=qslmHDtMj4H3gDZF58PnRuWAJk0Te5Y0eiujc4zSVUT1/5OJVgS16h1mn1bHL34Zd1Sf
+	 sYMTTiVt396kOeBWWPFm6Xml6TdEcYxk5YPtGOps4PfItL8zdJPWDoVjmBCrhiUvviRY9
+	 I/TH9Gbddo7+qRYrjVPpg/+lnoIRoCS110gryRxbE1NLw84W6f4k7eHvm94KtsQuCD/RH
+	 SJQ9vUjVALQWv9A0OcWCg+AyCl77z7gLhABJmsem4O1Xd7GiU2aoJUwGoLOkb+bGwwS7l
+	 JDqRq5xjyDpHkE8Bff6ke/x9dUJLwobTH+rqp3cZUQTLF7ImceLlQuX4ZDB90Z+3dNQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793914518;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793914521;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=s5upxJbA/t7Sb+dXUJHPA9zsouHVQteK6MPfOEu2hjg=;
-	b=j8rbb2aLFbPlU22KgzsYxCXSTE4u55dqysOUCe+AOnCSkdp/TqMpGjtzn9xmKsA/rVRb
-	 LtbS1VgzQViR/xbeTB4TDL64KiV1wsh48gVvS2j0KYA+/bT/XRXXLjXOfcn0He5oTHkmF
-	 hqRhsqU32w/AbmG3+AVqZWDtzxaKroYcFDTBfow2EbCaGHbkw+1mZ4LHx0wyx9mMpagPT
-	 CsvuqyvnCr92tqDNV5qUnkiu73Vfe7jDxDOwE9hmkbNCvZduyqp7U2HOXtHHjnH49QdGt
-	 S9PeT9FRU/YBd7eRvylxNR+KdBxIqtvBCASyBoWUjFy32n1VuGZ8Z6Ey0lBB6+0Jh4g==
+	bh=yK1r3VhxLgsb4Q+B+bvKVZGIxWJTTuMJpLavEV7P0Ps=;
+	b=X+c690qJv67BprNYdsMbG8rRaJbFPIrDb0CD6Mb/nazLU7ZtQGLw2XVRUQepiw3KiJ28
+	 ptsFjC/M3ERjIy7zGuFowX4qGOjyyKMq8WWecE1+bpUmFwSeCgQRuIrEE8aiswSkAHQuo
+	 ggkNSmxQ6w6IrCqYGsYGyhPZ0dmd62o/VDyNN8g30o/uwhzNgktpvBc11q7+mAE5xpMek
+	 XAes8c/MY1FEKo+SZDx+zgY1eB9pQ2OXMZ66NwrpyDbwsqRUCxAleQo4jwklS9EHqNl/k
+	 QNMIn4Vx/0ZSqr52m6ogMXapgq1kuwZXHjTLySBcBNlULsMaKBHbFgX/k8fepXuMVjA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Akn74zw2;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NDNlVI8i;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8388D606A339
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 21:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81607606D806
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 21:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Akn74zw2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCFE91F0089F;
-	Thu,  5 Nov 2026 21:35:17 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NDNlVI8i
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC8271F0089F;
+	Thu,  5 Nov 2026 21:35:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793914518;
-	bh=s5upxJbA/t7Sb+dXUJHPA9zsouHVQteK6MPfOEu2hjg=;
+	s=k20260515; t=1793914521;
+	bh=yK1r3VhxLgsb4Q+B+bvKVZGIxWJTTuMJpLavEV7P0Ps=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Akn74zw2CpRWOqzalXG70ektpcUDrfExcwA/3YLavdOWSNbrbb83CVGVnca+QDigS
-	 Z2QtwvWp51zZ4qdRnjIJ++r7q+5DpMCF5O+KeL4k62AHNGCIhK4atzMn9oniJ7kYHr
-	 6AbBALwUC2DA8s9PRWV86FA5qDM/R6pYMdzp/WGNNFdWyXUae2SDxWfkz6U+6Zc3Bx
-	 BZbUnrpSkA3uD3cSBaeVXVnTr9XziPETac7jA+ocdZZZMoNJtrxLnmHTsJ7vei3xHG
-	 AcFSzGkVeXClxQmUoXzuAdOTKqobISOEnPRPurQ5GTzltQbe7wjgjHmqfdeGwyfLRv
-	 cqWDXCYJwxlWA==
-Content-Type: multipart/mixed; boundary="===============3532816860953062628=="
+	b=NDNlVI8ibbbNrTNzS4zJwSQJ8cjW9wdq1eiQSDzzb4i/D6c8oWS+lLtyD74+0sr9Y
+	 uM7XW+E1NBSrclbQMYXnqyyIOCwn4UDAyvMzmqBhQ/5uYdhfItFjqOcpSTBXaoSfxx
+	 yVxLXPLrYejHaTGKubDOZIZwT5foiwvHZBoZZrQUB7mVGeWZLUyxKOYTaXF9FCjH9K
+	 SDsygrUK7eEyr0Tz5eodbsp908vrwb7MUQ6YlakCpU6N/azHmKhkrAyGwmkaQ+I4TD
+	 OFWxp4Hj/wXcdWmoIdNtq0va/3IN1Q8Q85OL6sCnpDUUwl4jfwYzauwUHodvyXNut7
+	 GqfIdLZwDXZXQ==
+Content-Type: multipart/mixed; boundary="===============7457293908775248651=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,94 +49,106 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <a99e51d9a9501d70c6f7b4010b00794b9e69b3d841ac6c0e00e9a0641c45ec32@mail.kernel.org>
-In-Reply-To: <20261105204513.2230344-14-alexei.starovoitov@gmail.com>
-References: <20261105204513.2230344-14-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 13/35] bpf: Decide which states are not joined
+Message-Id: <ee77c73bff0b56a40098080a5335d5fd5e4d8592ac15afe769c1c4661f026576@mail.kernel.org>
+In-Reply-To: <20261105204513.2230344-5-alexei.starovoitov@gmail.com>
+References: <20261105204513.2230344-5-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v2 04/35] bpf: Add join of registers and stack slots
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu,  5 Nov 2026 21:35:17 +0000 (UTC)
+Date: Thu,  5 Nov 2026 21:35:20 +0000 (UTC)
 
---===============3532816860953062628==
+--===============7457293908775248651==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Decide which states are not joined
+> bpf: Add join of registers and stack slots
 
-TL;DR: The "copies of a number" check in flow_join_makes_up() only looks at
-state a's ids, so states may be joined that lose register links, costing
-precision and order-dependent results; not unsafe.
+TL;DR: In join_reg() with explore_alu_limits, dropping an unmatched ADD_CONST
+link zeroes dst->delta, so the join may fail the subsumption check and make a
+previously loadable program fail to load (-EFAULT, verifier_bug warning).
 
-> diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-> --- a/kernel/bpf/flow.c
-> +++ b/kernel/bpf/flow.c
+> diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
+> --- /dev/null
+> +++ b/kernel/bpf/join.c
 
 [ ... ]
 
-> +static bool flow_join_makes_up(const struct bpf_flow *flow, const struct bpf_verifier_state *a,
-> +			       const struct bpf_verifier_state *b)
+> +static bool join_reg(struct bpf_join_state *js, struct bpf_reg_state *dst,
+> +		     const struct bpf_reg_state *ra, const struct bpf_reg_state *rb, int pass)
 > +{
 
 [ ... ]
 
-> +			ra = flow_number_at(a->frame[fr], i);
-> +			rb = flow_number_at(b->frame[fr], i);
-> +			if (!ra || !rb || !flow_disjoint(ra, rb))
-> +				continue;
-> +			if (flow_gap(ra, rb))
-> +				return true;
-> +			/* copies of a number are one number */
-> +			if (one && (!id || id != (ra->id & ~BPF_ADD_CONST)))
-> +				return true;
-> +			one = true;
-> +			id = ra->id & ~BPF_ADD_CONST;
+> +	switch (base_type(ra->type)) {
+> +	case SCALAR_VALUE:
+> +		if (js->env->explore_alu_limits && !reg_value_equal(ra, rb))
+> +			return false;
+> +		if (pass == 1) {
+> +			jid_note(js, ra->id, rb->id, scalar_link_consistent(ra, rb));
+> +			return true;
+> +		}
+> +		join_range(js, dst, ra, rb);
+> +		/* a link that exists on one side only is dropped */
+> +		if (ra->id && !jid_good(js, ra->id, rb->id)) {
+> +			dst->id = 0;
+> +			dst->delta = 0;
+> +		}
+> +		return true;
 
-Does this "copies of a number are one number" test only look at the ids in
-state a?  It never checks that the same registers or slots are linked in
-state b, or that a BPF_ADD_CONST link has the same delta there.
+With explore_alu_limits set, can this build a join that bpf_state_subsumes()
+then rejects?
 
-The join does not keep a link that only one side has.  In join_reg() in
-kernel/bpf/join.c, the first pass calls
-jid_note(js, ra->id, rb->id, scalar_link_consistent(ra, rb)), which records
-nothing when rb->id is 0 and marks the pair bad when the deltas differ.  The
-second pass then does:
+In that mode regsafe() compares scalars bytewise up to 'id':
 
-	if (ra->id && !jid_good(js, ra->id, rb->id)) {
-		dst->id = 0;
-		dst->delta = 0;
-	}
+    if (env->explore_alu_limits) {
+            return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+                   check_scalar_ids(rold->id, rcur->id, idmap);
 
-So when two registers are copies in a but not in b, the joined state holds
-two independent numbers.
+'delta' sits before 'id' in struct bpf_reg_state, so it is inside the
+compared range.  join_reg() only allows the join when reg_value_equal(ra, rb)
+holds, so ra->delta == rb->delta.  But when the id pair is not good, the
+code does 'dst->delta = 0'.
 
-For example, in a, r6 = r7 in [0,1] (same id X).  In b, r6 = [2,3] and
-r7 = [2,3] with no shared id.  Both are in FLOW_NEED_JUMP, and each pair is
-disjoint with no gap, so flow_gap() is false.  On the second register,
-id == (ra->id & ~BPF_ADD_CONST), so the function returns false and
-bpf_states_join() goes ahead.
+If ra->id has BPF_ADD_CONST, ra->delta is non-zero (adjust_reg_min_max_vals()
+sets 'dst_reg->delta = off'), so dst->delta then differs from both inputs.
+join_check() -> bpf_state_subsumes() -> regsafe(dst, a) fails the memcmp, and
+join_check() reports:
 
-The join then has r6 = [0,3] and r7 = [0,3] with no link, which includes
-r6 = 0 with r7 = 3, a combination no path has.  A later 'if (r6 < 2)' no
-longer narrows r7.  The same happens when a has r7 = r6 + 10 and b has
-r7 = r6 + 6: the masked ids are equal, but scalar_link_consistent() fails
-because the deltas differ.
+    verifier_bug(env, "join of states at insn %u does not subsume input '%s'", ...);
+    return -EFAULT;
 
-Is the result also dependent on argument order?  With the links in b instead
-of a, the first number's id is 0 (or does not match), so the join is refused.
-flow_merge() calls flow_join_makes_up(flow, &t->st, &s->st), so whether a
-join happens depends on which state arrived first.
+bpf_states_join() returns that error, flow.c's 'if (err < 0) goto err_free;'
+fails the load, and verifier_bug() fires BPF_WARN_ONCE.
 
-This cannot make the verifier accept an unsafe program, since the joined
-state is still a superset of both inputs.  The cost is precision, which is
-what the commit message says this change is meant to protect ("Two tested
-numbers, each without a common value").  This function is unchanged at the
-end of the series (e9cbd02faf11).
+A pair is not good when, for example:
 
-Would tracking the id of the first disjoint number in b as well, and
-requiring both ids (and a consistent link per scalar_link_consistent()) to
-match, make the test symmetric?
+- the same base id pairs with two different partners: state a has r1=X,
+  r2=X|ADD_CONST64 (delta 1) and r3=X; state b has r1=Y,
+  r2=Y|ADD_CONST64 (delta 1) and r3=Z.  jid_note() marks (X,Y) bad.
+
+- the ADD_CONST flags differ: 'r2 += 1' on one path and 'w2 += 1' on the
+  other give X|ADD_CONST64 and Y|ADD_CONST32 with equal value bytes, so
+  scalar_link_consistent() is false.
+
+In both cases reg_value_equal() passes, because unknown or equal ranges give
+identical bytes before 'id'.
+
+This needs a loader with CAP_BPF but not CAP_PERFMON (bpf_capable is needed
+for the ADD_CONST linking, and !bypass_spec_v1 for sanitize_ptr_alu() to set
+explore_alu_limits), and a program that does pointer arithmetic with a
+non-constant scalar.  Nothing in flow.c skips the join when
+explore_alu_limits is set, and before the join existed these two states were
+explored separately and the program loaded.
+
+The code is unchanged at the end of the series (e9cbd02faf11).  The join
+becomes reachable with c523034aa289 ("bpf: Add join of verifier states") and
+b195aa29eeee ("bpf: Merge the state that arrives into the set at an insn").
+
+Should join_reg() return false when an ADD_CONST id would be dropped under
+explore_alu_limits, or clear only dst->id and leave dst->delta, which equals
+both inputs?
 
 
 ---
@@ -144,4 +156,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42109044416
---===============3532816860953062628==--
+--===============7457293908775248651==--
