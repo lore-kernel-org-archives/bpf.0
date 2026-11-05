@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793874722;
-	b=M6FVb8OwNXcqHK2t06UaGXJ2HUUI8xny0km4NZmdNsbaMbkzhFwRe8xDBzsfpXHhaPyp
-	 gkSAhXbY8So+563sxE/sr6pI01kt8rE89MSItWIvXb5czqFBajjfYXEEk7Rbrxe+6XlQy
-	 j3ZpWGjIOfrT+SCJoWUVlqv6pihwTM2iSUmsgHxfqdn6XEMDArUFBtPXu08tertSGCdWc
-	 9t556aEU/RMhppyiEv1DLcHNqYF6+BbxNUe+kgtxedu2mwsoWNhIkAWl8cvCrbGRTv8M6
-	 nHQqA7UUXGTOsmfmIkv1HFgeNUVots/GwArbcjN9QjDC8xeGrgHhIkp7QTulYgVbD6Q==
+	t=1793874803;
+	b=EEnIq50MabPOCghH+j/g3fHksRLSPdGUT6a8I1zLJZvQahMIqYtVBDvqefrAGdUtV7GW
+	 83soW/jFRiQM4cMtVnsXE/vkwT4eLAeljQQhn7ywvZHZq48pC2oIwe72a9OsbSt6b+bUM
+	 w5fl/4bBqOKJWfetQ6WFg2Sg7gX/Q8ejIoaOe/xbZim5XPdLqtJ2oQcKIiC++U2BaHrsM
+	 tlp2Zk+HXTlwhnmIWLaTwZD5lMJxpjQC8invwV2v477v6Vy6NgmyKxNMH7Xv2irDwrbaC
+	 KgiDXfxpZoyoKZ8E76Zdnh7XFxOgzOUoKvP2roWqHkoPcmTZeNdzJoNm/VonI2flPKw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793874722;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793874803;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=xKhjKjL6NUJD8Nx7MIL7fAZeI2PVjUsp8Wn9XjenML0=;
-	b=uZfhLT226ZjWEc7Y3uuyxClpJu2wdKvnJzlVOjbuhi0FqE0c48Eae7/yB23VTcp43y0T
-	 LYvf/x90bFDrEvtmR5TmIyj4i6IWm5/MuEpondKvgS5wuYRXnnpWENvEPBAShHUhesOUw
-	 7GhD4n9RLJjJ7N1iJlmfnv+sZ0mqFPb0YnYeubi+QTm5JyfkLvYIwZuLeh88oY2c+pbE0
-	 Yid/dzmdnGBvjpEoe1FBaI1tyZfe5+Dw1qSvI7YsgEUZxnlo/d+YoQL4vNSNmgmYsY0PN
-	 5/xCX9ifrwu62LPL2KRYiWYgccnot79+tjntX8ZXHYuqxp34biF7KZ5fRH+QpP6Euzw==
+	bh=3VKtMFUcvKjJEe9s8szWWukUuDsVUDxIJTJiZTdgl9o=;
+	b=f3rXHjs8vC1FINjMwiKRouahvGWEmUlWdKf5Yl3ZyX7eT0heICLxikYpZJ2uZ/lJQ9XO
+	 YLCUfQ/v5S35jjkMzq8csZAzvu4imhMgA+e3sqMDNKB+v+2dcsri6QhoeEi1WdyZhIDJo
+	 tBobjJnbbEIOAFYHKLJSFFVsawGNdnFGOM92RIEcwPi5PXrtafJ1fZ8qyEiMvftrTVz2X
+	 2YyiAZBD00tHxiUWAiq6OgNz/o7LLUx0lvgdKh6FS/rtmaSZrGDbMRcTQ/BKCJed25pn0
+	 wz3sAFxFJmfFr4Frrc4fc//8PgYgZPGNjAwF1llJ7seB00htOCjIUkee5nz5emK0Lqg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L+w76bhR;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lL+rueNl;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A08606A328
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:32:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38110606A329
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:33:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L+w76bhR
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 376B71F00919;
-	Thu,  5 Nov 2026 10:32:01 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lL+rueNl
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E6F01F000C1;
+	Thu,  5 Nov 2026 10:33:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793874721;
-	bh=xKhjKjL6NUJD8Nx7MIL7fAZeI2PVjUsp8Wn9XjenML0=;
+	s=k20260515; t=1793874802;
+	bh=3VKtMFUcvKjJEe9s8szWWukUuDsVUDxIJTJiZTdgl9o=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L+w76bhRzvh3DlQftxYcZVSjXpIK0PKvDJXlhm+XtBg+CcdCP1pMKjOZ8HY56g585
-	 q1p8JHZKs7HZ5rabs5rrpLYXFJBqC4Op9YaJnNCkiNWk+UTYDV55moBm6pOfA4vwvA
-	 B1XJU8yX6GcZvaSr5yjw1rZ3wmBUjVMujPPlZOAlvCVFTi64vL4zyMllAxI3BY6uUt
-	 FxSfgKdIqNBbBz4yPHNCNEUpljza8e9jqHhpC44B8U3qbSDLuLQBPgY2za/5obEhre
-	 UWIuEqJ6v6HAPvl6TsxKkrKSmklNgbRVsPkPyI6ahAa4mYZSlrQuFnHva4N3NwarWE
-	 0Qg+ocdKu9AhA==
-Message-ID: <sashiko-outbox-198859@kernel.org>
+	b=lL+rueNlOuxwK6jMOoLgjD/3XR9iJOsgyqXAYHVNDlMY36sku3+yybFGvu68+2lKp
+	 m9bVwHfTDNPJgUSUvfgKgJPX92CsxzcztSDkf5i5yOdo2g89q/Rp2j0bLId8MLWGI/
+	 m4LmLhmR7KRj58uoaKOJP4ib8Hn6INUOxuYJE+64dw2EdysFARAiwa6XxuVunCG5sx
+	 CGPx0b1DK82ARoqHebswt9PL1+/CU5EIc8xrt08YHYCoNxiNw2z0fVNx+fem/6ghgF
+	 qkOUBRpESfJPEztHylmqVmmwfASlWjxd3r923XlyjcYhrC7YvmsQCkb3TvmkkVrvgb
+	 W+ZhWUnpSXymA==
+Message-ID: <sashiko-outbox-198860@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv3 bpf-next 4/8] selftests/bpf: Test const kfunc memory
- arguments
+Subject: Re: [PATCHv3 bpf-next 5/8] selftests/bpf: Test user memory mmap
+ kfuncs
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
  Borkmann" <daniel@iogearbox.net>
@@ -50,12 +50,12 @@ Cc: bpf@vger.kernel.org, linux-mm@kvack.org, "Andrii Nakryiko" <andrii@kernel.or
  Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Lorenzo
  Stoakes" <ljs@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>, "Federico
  Di Pierro" <nierro92@gmail.com>
-In-Reply-To: <20261105102343.311331-5-jolsa@kernel.org>
+In-Reply-To: <20261105102343.311331-6-jolsa@kernel.org>
 References: <20261105102343.311331-1-jolsa@kernel.org>
- <20261105102343.311331-5-jolsa@kernel.org>
+ <20261105102343.311331-6-jolsa@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 10:32:00 +0000
+Date: Thu, 05 Nov 2026 10:33:21 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,103 +65,144 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] selftests/bpf: kfunc_call_test_const_mem() fails due to MEM_WRIT=
-E in verifier
+- [Medium] selftests/bpf: call to undefined get_procmap_info() breaks build
+- [Medium] selftests/bpf: user_mem_test() calls non-existent user mmap kfun=
+cs
 --
 
-commit 0e976b113cb623dc07d1d416bf2badf98c0f26f7
+commit 602c938f4e2233efed73c162a7e2295814283b95
 Author: Jiri Olsa <jolsa@kernel.org>
 
-selftests/bpf: Test const kfunc memory arguments
+selftests/bpf: Test user memory mmap kfuncs
 
-This commit adds BPF selftests and bpf_testmod kfuncs to verify passing
-read-only global data, writable stack data, and const scalar structs to
-const-qualified kfunc memory arguments, while rejecting read-only data
-passed to writable memory arguments.
+This commit adds BPF selftests for bpf_user_anon_mmap() and bpf_user_munmap=
+()
+invoked from a sleepable uprobe, checking that created mappings have the
+expected permissions and that unmapped addresses are removed.
 
-> diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/=
-testing/selftests/bpf/progs/kfunc_call_test.c
-> index 8e6560c31e781..4f4a6713aa6e5 100644
-> --- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-> +++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-> @@ -5,6 +5,9 @@
->  #include "bpf_misc.h"
->  #include "../test_kmods/bpf_testmod_kfunc.h"
-> =20
-> +static const char kfunc_const_data[] =3D "read-only source";
-> +static const struct prog_test_pass1 kfunc_const_struct =3D { .x0 =3D 1 };
+> diff --git a/tools/testing/selftests/bpf/prog_tests/user_mem.c b/tools/te=
+sting/selftests/bpf/prog_tests/user_mem.c
+> new file mode 100644
+> index 0000000000000..eadf668f7056b
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/user_mem.c
+> @@ -0,0 +1,111 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +
->  static struct bpf_spin_lock kfunc_call_lock SEC(".data.A");
-> =20
->  SEC("tc")
-> @@ -208,6 +211,17 @@ int kfunc_call_test_pass(struct __sk_buff *skb)
->  	return 0;
->  }
-> =20
-> +SEC("tc")
-> +int kfunc_call_test_const_mem(struct __sk_buff *skb)
+> +#include <test_progs.h>
+> +#include <sys/mman.h>
+> +#include <unistd.h>
+> +
+> +#include "user_mem.skel.h"
+> +#include "trace_helpers.h"
+
+[ ... ]
+
+> +static bool check_user_mem_vma(void *addr, unsigned long size, const cha=
+r *perms)
 > +{
-> +	char stack_data[] =3D "read-write";
+> +	size_t start, end;
+> +	char vma_perms[5];
+> +	int err;
 > +
-> +	bpf_kfunc_call_test_const_mem(kfunc_const_data, sizeof(kfunc_const_data=
-));
-> +	bpf_kfunc_call_test_const_mem(stack_data, sizeof(stack_data));
-> +	bpf_kfunc_call_test_const_struct(&kfunc_const_struct);
-> +	return 0;
+> +	err =3D get_procmap_info(addr, &start, &end, vma_perms);
+> +	if (!ASSERT_OK(err, "user_mem_vma"))
+> +		return false;
+> +
+> +	/* VMA can be merged, so ensure it covers at least the requested range.=
+ */
+> +	if (!ASSERT_GE(end - (size_t)addr, size, "vma_size"))
+> +		return false;
+> +
+> +	return ASSERT_STREQ(vma_perms, perms, "vma_perms");
+> +}
+> +
+> +static bool check_user_mem_unmapped(void *addr)
+> +{
+> +	size_t start, end;
+> +	int err;
+> +
+> +	err =3D get_procmap_info(addr, &start, &end, NULL);
+> +	return ASSERT_EQ(err, -ESRCH, "user_mem_unmapped");
 > +}
 
 [Severity: Medium]
-Does kfunc_call_test_const_mem() pass verification without a corresponding
-verifier change to preserve const qualification on kfunc memory arguments?
+Was a prerequisite patch adding get_procmap_info() omitted from this series?
 
-In kernel/bpf/verifier.c, get_kfunc_arg_type() strips modifiers from the
-pointed-to type via btf_type_skip_modifiers() and unconditionally marks
-pointer+size and fixed-size memory arguments as writable:
+Both check_user_mem_vma() and check_user_mem_unmapped() call
+get_procmap_info(), and tools/testing/selftests/bpf/prog_tests/user_mem.c
+includes trace_helpers.h, but neither tools/testing/selftests/bpf/trace_hel=
+pers.h
+nor tools/testing/selftests/bpf/trace_helpers.c declares or defines
+get_procmap_info().
 
-kernel/bpf/verifier.c:get_kfunc_arg_type() {
-	ref_id_ptr =3D &t->type;
-	ref_t =3D btf_type_skip_modifiers(meta->btf, *ref_id_ptr, &ref_id);
-	while (*ref_id_ptr !=3D ref_id)
-		ref_id_ptr =3D &btf_type_by_id(meta->btf, *ref_id_ptr)->type;
-	...
-	} else if (arg + 1 < nargs &&
-		 (is_kfunc_arg_mem_size(meta->btf, &args[arg + 1]) ||
-		  is_kfunc_arg_const_mem_size(meta->btf, &args[arg + 1]))) {
-		...
-		arg_type =3D ARG_PTR_TO_MEM | MEM_WRITE;
-	} else if (btf_type_is_struct(ref_t))
-		arg_type =3D ARG_PTR_TO_BTF_ID;
-	else {
-		...
-		arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE;
-	}
-}
+Because the BPF selftests are compiled with -Werror, does this cause buildi=
+ng
+test_progs to fail with an implicit function declaration error and an
+undefined reference at link time?
 
-Similarly, for bpf_kfunc_call_test_const_struct(), get_kfunc_arg_type()
-records the argument as a BTF struct pointer with proto->arg_btf_id[arg]
-pointing past the const modifier, and resolve_func_arg_type() then rewrites
-the scalar struct argument to writable memory:
+[ ... ]
 
-kernel/bpf/verifier.c:resolve_func_arg_type() {
-	...
-	*arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE |
-		    (*arg_type & (PTR_MAYBE_NULL | MEM_UNINIT));
-}
+> diff --git a/tools/testing/selftests/bpf/progs/user_mem.c b/tools/testing=
+/selftests/bpf/progs/user_mem.c
+> new file mode 100644
+> index 0000000000000..e3b0689f5f2a5
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/user_mem.c
+> @@ -0,0 +1,43 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +#include "bpf_misc.h"
+> +
+> +char _license[] SEC("license") =3D "GPL";
+> +
+> +extern unsigned long bpf_user_anon_mmap(unsigned long len, unsigned long=
+ prot) __ksym;
+> +extern int bpf_user_munmap(unsigned long addr, unsigned long len) __ksym;
 
-When kfunc_call_test_const_mem() passes the .rodata globals kfunc_const_data
-and &kfunc_const_struct to bpf_kfunc_call_test_const_mem() and
-bpf_kfunc_call_test_const_struct(), check_func_arg() requests write access
-via func_arg_access_type() -> check_helper_mem_access() ->
-check_map_access_type(), which rejects the program with "write into map
-forbidden".
+[ ... ]
 
-Because kfunc_call_test_const_mem() is an autoloaded program in
-kfunc_call_test.c, won't this also cause kfunc_call_test__open_and_load()
-and kfunc_call_test_lskel__open_and_load() in verify_success() to fail for
-all subtests using the kfunc_call_test skeleton?
+> +SEC("uprobe.s//proc/self/exe:user_mem_trigger")
+> +int user_mem_test(struct pt_regs *ctx)
+> +{
+> +	if ((bpf_get_current_pid_tgid() >> 32) !=3D monitored_pid)
+> +		return 0;
+> +
+> +	switch (action) {
+> +	case USER_MEM_MMAP:
+> +		user_addr =3D bpf_user_anon_mmap(map_len, map_prot);
+> +		break;
+> +	case USER_MEM_UNMAP:
+> +		ret =3D bpf_user_munmap(user_addr, map_len);
+> +		break;
+> +	}
+
+[Severity: Medium]
+Are the kernel definitions for bpf_user_anon_mmap() and bpf_user_munmap()
+missing from the tree?
+
+In tools/testing/selftests/bpf/progs/user_mem.c, user_mem_test() invokes
+bpf_user_anon_mmap() and bpf_user_munmap() declared as strong __ksym extern=
+s,
+and test_user_mem() in tools/testing/selftests/bpf/prog_tests/user_mem.c
+loads the program via user_mem__open_and_load():
+
+    skel =3D user_mem__open_and_load();
+    if (!ASSERT_OK_PTR(skel, "open_and_load"))
+        return;
+
+Since neither bpf_user_anon_mmap nor bpf_user_munmap is defined or register=
+ed
+in any BTF kfunc set in the kernel or selftest kernel modules, won't
+user_mem__open_and_load() fail unconditionally when libbpf tries to resolve
+their BTF IDs?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261105102343.3113=
-31-5-jolsa@kernel.org?part=3D1
+31-6-jolsa@kernel.org?part=3D1
