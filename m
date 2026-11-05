@@ -1,125 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.152.16
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793913104;
-	b=uFwkVT6Syw/wCupqa8WM3QsKGYq4uXdssC4A2jtfIPu3Z3nuYkIHpTIW/j6891887xaz
-	 lZMZonjb2rYfDLIFAxPrFqLaf9bYaCQprzq+YWv0zfG7eDCut9GzsYIOX/p3WcdmxxhTQ
-	 5ZbLuxyn/6KatpGzz8LtFIaI/zSk12C42+XCLRuBiPqb2F7Kbi50vViuqot6tWOmHXomp
-	 Cuf9tseK9UcGsQUPB8lWMedorWX1NljwghK3sE/gMa4gjyeG7jaluREoJs3rHGdBnARrk
-	 bQBa59RTin0wjSazhlc6AsvLban0KS1SiX9uKpLt0h10MCAHRq/A9oLVJUtR/sw+WAQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793913104;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:MIME-Version:
-	 References:In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:
-	 Cc:Content-Type:Content-Transfer-Encoding:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=ww/Ky12z8kY0m7ktU2CqeMinUpnlKKPyaD44um6v3bw=;
-	b=z32d+kDu2zzM08tvaUKqRUep01PknwISr/Smg3mJFdD9TaamyAR+DNUottAVA3eHpei0
-	 w6cK6yUloNAP5Hzzr4CGFojp5D3yLGgmK4sq5v3/50D3ocxhByu/jJOthIRTtldaQ3blZ
-	 dODbgPocNNdqxKrbYfNlTAwKzF5ChWXxwCbLU6lr6VmXV2vvkt2GP2siNI87NF7/GdvIb
-	 I/k2/N79VDlRbm4XCpcOTenlE20CXgzvB2vH8TsPuKjfOxCi4jx4B8tBkL/+6o2Z+pYBE
-	 55dxE35C8YeQyvPmYF7uzFMRzkq7gJczDySLw5mUfDbSug0H+q/TX7jZna95rdj2j1g==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=crowdstrike.com;
-	spf=pass smtp.mailfrom=crowdstrike.com;
-	dkim=temperror header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=wmuSZD6G;
-	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=google header.b="Hcmb/f/k";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.152.16
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793913282;
+	b=h322iXjvKv5jdlUAgDnlCzLXhy0R7M0DSe0ZQK1WARLfO4lDXdIMJWCZbKMg/HWEzXe+
+	 ZRrxtrp/ExF26OZr4A3/h0pWjxSHHDsFgzQve7lDN5fZ67S/Q+sOGzzWngZwQrksAJ9TW
+	 Bp5kssfteMIa8tOKOY0O1QXyeA/+WAaW/ENR2bJ8CjPO6n3DnRtQHHHAEMwFclwdA/Yes
+	 2h/5FvSAldJT54wtPLK8Q2N/+wecxsSQTvljpTON/0SZVWcpR3zEuYFI6HNB02ntBlCob
+	 uS/YRCOibX1wYxzqZ7UQ/haDr1jTpKVIGmNExXsE8BcSNLpk4k5RM79bMzC4Blp3ayQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793913282;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=khMG3Nf4jVFkyHA2UKSeSuvTDTzg/XMhVF7O241qpr0=;
+	b=rry4MHgU348a5yCiQmhNcjLR+ILZWMdLND21FVXy8Z2ycFBQXoBmrez1W+oBGOMt1QN8
+	 eqVB1evcx/6SLZn6oDv5aAltzE1jTXoi1VLFvCztBo3PQzvzftjVVGjnMZ5wMbqY7Itp2
+	 mODh6iaT9NjjVgkSDiCpy2H5sEBsIloHKA5csGSv7sxMcxduQGfSh8pH+OYwMtziQTKLN
+	 ZCfBckaMCPgXtekCX2VTY7MTKMlHf/r89gyGRy1TZ3Di93eu84eoTCB00gN7pw8FDakRx
+	 defuLsPAH5QNdKDUn981lvs0xCnB3UNszXA2ut/Pq5Z4Ulu8QFQBHOoCcthZo8HGlwA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z24vXluW;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331EE606A326
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 21:11:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 331EE606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF85606A31B
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 21:14:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=temperror header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=wmuSZD6G;
-	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=google header.b=Hcmb/f/k
-Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A5KLbxm2434557
-	for <bpf@vger.kernel.org>; Thu, 5 Nov 2026 21:11:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=ww/Ky12z8kY0m7ktU2CqeMinUpnlKKPyaD44um6v3bw=; b=wmuS
-	ZD6GJgOLyd9o3FxMzCIWfh/isB98pMHOKECgcbilgrNptojIzJa88Fntl8SAKgBy
-	7H79EMg9VJaA8qHLYrLktT7RCTByV8pDfGTKiub9g+96E+cR3LhnVWwWtaMOXVZ6
-	7UgFDRhReTbkLqFj/8XW8fxIRABa+UaMuGN56w1C79bYx5kFgRGh+nYFWQVp2FgH
-	ygNNq46gKOBD/j551zQah9c0c9TS1dd15Azgo0wkSkZWhldBzpZqjoYy5A/F+aq8
-	J0b5ydWnNlsXQ162gJ4TqSbwkjsDEX/rLVq3bXP8972y1Fud0LiG+WqWAa0W8QiH
-	yGFX5zUlNeJVcqIotQ==
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4hrm99b1nw-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 21:11:31 +0000 (GMT)
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c3613c35145so106808066b.3
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 13:11:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793913091; cv=none;
-        d=google.com; s=arc-20260327;
-        b=UZFRcU43s8vfxNt+MWDQAGfJBjBpcpJsjr3XaMdVieKjpMcYxOBGqfp4QbLpDlvI3s
-         mmjN5NEyXCKpafrqDxw8jOVj2NDTQeqPfUgnFY9qfpmIt1OeAsY0KQbMTnzrLiqMi6JB
-         EzmhiGJkLGj8PsSrIauRzslFDSCzqxKgEpH5pBIgAFN4gxK2vbWYuQY6bwvZj6EkVfqh
-         jdrGT0loLKiWHiB6AU3EJcdTFfnx0FR/+vmKaeXyV2HpNJSdrbyEFk2qTJXEmaoYoICN
-         HVJeRmw/yOhWuXJlt1umbGjwPHK/QQ7G7XARGQjpZZ8iFb62f12zR0pQHEun5Bo+M0PS
-         wh3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ww/Ky12z8kY0m7ktU2CqeMinUpnlKKPyaD44um6v3bw=;
-        fh=7OoQ6IrhvagWloHlCvtLGyUuR0kvp84dVLZ3PXlso8s=;
-        b=m17fH5QdwlnJtsSSAiqPPF8sw7jw/gvj8+nZEV9PP6oi88WHfeXv3s2Q7WPLoA18hG
-         9GXDUpL0SaZC1K5XFMuAfLNlKbPzqq6a2RmQOusLIndW6dB/7IcRFeOSO88+AJ2zK1nJ
-         0PkdTbWWfpWMniQcQn61lZNQs0LxKSV5G+FyVlz1sKFe2nAJPUZiZ6cqFd//w6ttXiHy
-         O+ZXHKjsjwGLbrLVzZR43LeXm/3Oru/yYklp6B1/qNxR1LelSRL5dIfeLwqRfECtz16O
-         oCcSXTPGBrV3zuI/G8IeHyBhdv8K896aTK3vPTJJgx8CKspg0IXAK6jrj84IxMJmXAbk
-         DSDQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1793913091; x=1794517891; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ww/Ky12z8kY0m7ktU2CqeMinUpnlKKPyaD44um6v3bw=;
-        b=Hcmb/f/kif60JRaO89pC7K6vrAeZqaS9XXmio+c77pBbfy/RTNPa01K8I0mh8oPYI0
-         L9c5Gp6aWYIZ7YA75PPrMLB0CGqMgUb2rSEjOM/Xu9NG1/ToVA4LISRUWLQ8siwn8Ow4
-         Rn9wzEG3cHERVPD4VdaurcO2x0DptX7aUq7uvZ6pv6UyV4j943KXnMdtlnqOhn1329hg
-         7f39RpyZT2LBhhmb6IcA+zfyvmhHwJPTgJF88sEWMja93e+mi8hvMk9EZVtTU5qB3QN4
-         Ck59u+gSJ1BzJpjB66yshJe7g8WVh9U6X0daHf/Mmx2fXqS+0CjIhtVH9m30P8mPMIn7
-         Rmzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793913091; x=1794517891;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ww/Ky12z8kY0m7ktU2CqeMinUpnlKKPyaD44um6v3bw=;
-        b=1UOWg5E9zLdIZ++VqA77Fod5UIbvZSQ6e6AtE8OyD5IM7NrjHZzJPprdhyTofpBcAq
-         XnFOF9fT8eJDVgcDHaJskpawhdckvsgV996tffysXd+Om41IdAlcRITDKzMX7tPpVd8V
-         dT+9UxHy4xFDT9AcdeZcBDRbI9gUqWlmb0ER3L9U6yYwKWkwpLIGiJhWIV3SEbTJDa5d
-         2XW4sqrY3a+Z7ORwM6Lvty57PMWTo7W5U4/b0WNW+krlYKNEsBz2PzHGk7/Um5xpKN6A
-         DwAtKrVuSStaaO9gOyxXMasCXiqwX9+HRThdwNtbLZVd+65eifGQFdu63bv0GbVJzd47
-         t6eg==
-X-Forwarded-Encrypted: i=1; AKwUvBzEl3Yi0f2oXOegVRpHHgC5um/sua2tZHMi7nDLR9Oil+6xgEmFRpbLNH0hxIDGIrHhXbs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/rLwT2fuyzh30NeGLXQ2GHtWeKc+m4zkgJ4v5PrkgzOge2fub+
-	eJrQURcygvTLFlYZz15C/mcBh2sDZ+7TCMxNU8bHtpZHyEqVpiDf3FQsZkNycq1+OlWZ8AbECgt
-	HhaBsf3r9xc6q+0h7uf4+VPn8OWEm/pFMVu2GLqGqhvjVqrupTLy66DvCW5N154bSKH2DJx456x
-	vWczilMK9ajm1h+kwVTgk3xsjhxUab
-X-Gm-Gg: AYBFou3Opf7Wqh9z0bkA0xE6GiyvfdFeXOmMBwUPb9ot5IaeKpfltiJZmqOmor+koqz
-	OgJTkgR8/WA5G+6cSST/yZOSqoM/XwHNhahvLTHjbLm2uLgc1C6FzAjMNX98Pa/NvepgBRAvhog
-	F8jhMIihjV9hjQyE7Qmq2aNKtEzo/jIDsP8h4jvtFYfszzeCgcHzWQsGwukjz1EFivby8n0cN7b
-	sgUi+UG1Lci2D+aJ+ioRtRryEHNpZRFw7r1b7ObFa6glr3E8yBMIthe+7GtK4eu3eT+cAj/98Ri
-	Vw==
-X-Received: by 2002:a17:907:d22:b0:c29:659e:2fd2 with SMTP id a640c23a62f3a-c4d35519e9fmr51348066b.27.1793913090750;
-        Thu, 05 Nov 2026 13:11:30 -0800 (PST)
-X-Received: by 2002:a17:907:d22:b0:c29:659e:2fd2 with SMTP id
- a640c23a62f3a-c4d35519e9fmr51345666b.27.1793913090205; Thu, 05 Nov 2026
- 13:11:30 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z24vXluW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0F61F0089F;
+	Thu,  5 Nov 2026 21:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793913282;
+	bh=khMG3Nf4jVFkyHA2UKSeSuvTDTzg/XMhVF7O241qpr0=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=Z24vXluWU6SjHAX3pi84cubEUmj8Yomh7B++gsmoGPDSTgeRHsy8RbkW867PEX0xE
+	 9ovee58xgkuTh6aYdgX4JhUvieEJWwJDITs2fmqIfqEiv/UHnRbPEqZBMWv+7pIN4o
+	 I3zxLUTBrMGR9OuV46YAW9kSDW2VEiCrxo3qn+Dpf4mnfGu9ShSSlYqpj1NFQ0vvYP
+	 udu6uYRBaM9zVoRWd1FCJg+sjo4xhbmmhRuH4uKJM8496kR5uN3TlpD5nbCtWSgF5f
+	 yNfHJgd9hIBEHwyf642EYa3mzvPfWGflzNUYkzV1jC0GDx8rGrSBexWNGgJdIHBxrf
+	 1/HqjALh/W8dw==
+Message-ID: <sashiko-outbox-200205@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 01/35] bpf: Add may_goto to the loops that
+ the verifier marks
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261105204513.2230344-2-alexei.starovoitov@gmail.com>
+References: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
+ <20261105204513.2230344-2-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 05 Nov 2026 21:14:41 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -128,77 +59,160 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
- <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
- <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com> <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
- <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com>
-In-Reply-To: <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com>
-From: Martin Kelly <martin.kelly@crowdstrike.com>
-Date: Thu, 5 Nov 2026 13:10:53 -0800
-X-Gm-Features: AclHuK80YOzI2BQNU2ehKijMeyWHkLC1DDyHgXW5LfR8ObnEvZ5A2mjJk9W6SIw
-Message-ID: <CAH=2mMD-N+JXZR3eeXf3cOf4snnjkAHjRditS1o1Fb_oxNQEdg@mail.gmail.com>
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
- cause false recursion drops in trampoline progs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Mike Bazov <mikeba@sentinelone.com>, JP Kobryn <jp.kobryn@linux.dev>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA1MDA4NCBTYWx0ZWRfX1b31RvjrMtu1
- SWJ6aVA+k6hw0PMBSrTar5EM5w7w7gbutFbzVjtOVC6jzWCHVQnwB9aBHBnj+XI9pj5JpQ3/vkN
- Xkr15FGlGX0EKVHOSioIhvua/kC0W6npdlhjo16MQ7pnUIEgpUvylsWqpl3K3QeapWD6lgr9mQB
- ubaTTuMz78XtoLXKArX3ebrfNu3Jmg2W19aFi4Q607w3JwZKAbzDZugG7l4lYGYR4FNbpcT9VFt
- W5FNNINTjYRDmYAoe84M+4rWzxV9KbYxtzpAKMy+OijWIEvlRTrBr6g55KPmuSV08Xzot+ob6Lp
- vdf1EJh0Wp7vTWMxnqicGT5M+BhbCY0itLsjgJ3sGjgr6j1SNCABuq2Qu7ES8QPklEyAklsAgXl
- nJTQWfXGXS1R0d7zkSecr/Cf4/0nXcKuAL+EbEHYrPmpMItZFDoDdDL7H36mhFCiOI7IHuxrU4F
- XuELVLU9G+nSsASz7JA==
-X-Proofpoint-GUID: k51g0x_NMIt8ZUczLpjlwjoomWnTirEL
-X-Proofpoint-ORIG-GUID: k51g0x_NMIt8ZUczLpjlwjoomWnTirEL
-X-Authority-Analysis: v=2.4 cv=PJ6aavqC c=1 sm=1 tr=0 ts=6aecf103 cx=c_pps
- a=edIAN7ErZTGbxav20d8A7Q==:117 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
- a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
- a=vDKVRhTs-M86Ea50iKLw:22 a=pGLkceISAAAA:8 a=FZbjhw69-ufqTzFgkyEA:9
- a=QEXdDO2ut3YA:10 a=nIuFr-8touD1a-RngYHT:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA1MDA4NCBTYWx0ZWRfX8O9+pm72SOaJ
- W07BmPa0qGjGO7u9fRWU/Iw9kYoymTcXN92GSAJ7DakI4Vxl+bT5hIr42Z2nlmW7cf0p+Qb11WY
- cSRcjLXhZu9gMCWWI8Q8JCh+OSegD2nzpWXIT9RfpkdxeJoHuqJ2
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11957
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 bulkscore=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2610300000
- definitions=main-2611050084
 
-On Wed, Nov 4, 2026 at 9:21=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> >      run_cnt 38040015, recursion_misses 4063
->
-> hmm. you really cannot tolerate that small drop? it's tracing at the end.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] bpf: unadjusted BPF_JMP32 | BPF_JA self-jump in bpf_insert_loop_gu=
+ards()
+- [Low] bpf: bpf_insert_loop_guards() logs shifted insn index instead of or=
+ig_idx
+--
 
-We realize tracing programs don't have a full guarantee, but prior to
-7.0 and HRTICK, they were still reliable in many practical cases. It's
-less about the absolute rate and more that the same workload had a
-~35-300x increased drop rate (depending on hook) in one release, and
-that behavior is now the default. Since the long-term direction of the
-kernel is for more preemption, the recursion_misses issue looks like it
-will keep getting worse until we can move away from per-CPU BPF
-recursion counters.
+commit 9383027921f2fdc75a3e30a579a0417926be85e9
+Author: Alexei Starovoitov <ast@kernel.org>
 
-> Also it needs to be per-task + per-prog. How will it look like?
+bpf: Add may_goto to the loops that the verifier marks
 
-We're going to look into options for per-task + per-prog tracking and
-let you know how it goes.
+This commit introduces bpf_insert_loop_guards() to prepend may_goto
+instructions to loops marked by the verifier, along with per-subprogram
+budget exit sequences when the guard unwinds or exits the subprogram.
 
-Thanks,
-Martin
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index f95af2ca3591b..6fd79c2fbdc1e 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -587,6 +587,225 @@ static int bpf_adj_moved_insn(struct bpf_insn *insn=
+, u32 delta)
+>  	return 0;
+>  }
+> =20
+> +static bool jumps_to_itself(const struct bpf_insn *insn)
+> +{
+> +	u8 class =3D BPF_CLASS(insn->code), op =3D BPF_OP(insn->code);
+> +
+> +	return (class =3D=3D BPF_JMP || class =3D=3D BPF_JMP32) && op !=3D BPF_=
+CALL && op !=3D BPF_EXIT &&
+> +	       insn->code !=3D (BPF_JMP32 | BPF_JA) && insn->off =3D=3D -1;
+> +}
+
+[ ... ]
+
+> +int bpf_insert_loop_guards(struct bpf_verifier_env *env)
+> +{
+
+[ ... ]
+
+> +	for (s =3D 0; s < env->subprog_cnt && !err; s++) {
+> +		leave[s] =3D append_budget_exit(env, s);
+> +		if (leave[s] < 0)
+> +			err =3D leave[s];
+> +	}
+> +	/* A guard cannot jump into a patch that is in the list: 'r0 =3D 0' has=
+ no index yet. */
+> +	err =3D err ?: bpf_patch_list_commit(env);
+
+[ ... ]
+
+> +	for (i =3D 0; i < len; i++) {
+> +		to =3D target[i];
+> +		if (to =3D=3D -1)
+> +			continue;
+
+[ ... ]
+
+> +		if (off > S16_MAX || off < S16_MIN) {
+> +			verbose(env, "exit of the loop is too far from insn %d for may_goto\n=
+", i);
+> +			err =3D -ERANGE;
+> +			break;
+> +		}
+> +		patch[jmp] =3D BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, off, 0);
+> +		if (to =3D=3D -2)
+> +			patch[jmp] =3D budget_exit_insn(env, bpf_find_containing_subprog(env,=
+ i));
+> +		patch[n] =3D env->prog->insnsi[i];
+> +		/* A jump to itself is a back edge. It goes through may_goto like the =
+others. */
+> +		if (jumps_to_itself(&patch[n]))
+> +			patch[n].off -=3D n;
+> +		else
+> +			err =3D bpf_adj_moved_insn(&patch[n], n);
+
+[Severity: High]
+What happens here when the guarded instruction at patch[n] is a 32-bit
+unconditional jump to itself (BPF_JMP32 | BPF_JA with imm =3D=3D -1)?
+
+In jumps_to_itself(), BPF_JMP32 | BPF_JA is excluded and only insn->off =3D=
+=3D -1
+is checked, so jumps_to_itself(&patch[n]) returns false. Control then passes
+to bpf_adj_moved_insn(&patch[n], n):
+
+kernel/bpf/fixups.c:bpf_adj_moved_insn() {
+	...
+	} else if ((class =3D=3D BPF_JMP || class =3D=3D BPF_JMP32) &&
+		   op !=3D BPF_CALL && op !=3D BPF_EXIT) {
+		if (insn->code !=3D (BPF_JMP32 | BPF_JA)) {
+			off =3D insn->off;
+			off_min =3D S16_MIN;
+			is_imm =3D false;
+		}
+		/* jump to itself stays */
+		if (off >=3D -1)
+			return 0;
+	...
+}
+
+Because off is -1, bpf_adj_moved_insn() returns 0 without subtracting n from
+patch[n].imm, and patch_list_adj_insn() during bpf_patch_list_commit() also
+leaves it unchanged because the target n + (-1) + 1 =3D n is within the pat=
+ch.
+
+Wouldn't that leave patch[n].imm as -1 so that at runtime execution passes
+through the prepended may_goto once and then spins forever on patch[n]
+itself, bypassing the loop guard? And when adjusting a self-jumping
+BPF_JMP32 | BPF_JA, shouldn't n be subtracted from patch[n].imm rather than
+patch[n].off?
+
+> +		if (err) {
+> +			verbose(env, "insn %d cannot be patched due to 16-bit range\n", i);
+> +			break;
+> +		}
+
+[Severity: Low]
+Should these two verbose() calls in bpf_insert_loop_guards() log
+aux[i].orig_idx instead of i, as bpf_patch_list_insert(),
+bpf_patch_list_commit(), and bpf_convert_ctx_accesses() do?
+
+Before this loop runs, the first pass in bpf_insert_loop_guards() calls
+append_budget_exit() and commits those patches via bpf_patch_list_commit().
+Any subprogram that received a budget exit has 2 or 3 instructions appended,
+so i in subsequent subprograms is shifted relative to the original program.
+
+Also, in kernel/bpf/verifier.c:bpf_check():
+
+	if (ret =3D=3D 0)
+		ret =3D bpf_insert_loop_guards(env);
+
+skip_full_check:
+	kvfree(env->explored_states);
+
+	/* might decrease stack depth, keep it before passes that
+	 * allocate additional slots.
+	 */
+	if (ret =3D=3D 0)
+		ret =3D bpf_remove_fastcall_spills_fills(env);
+
+	if (ret =3D=3D 0)
+		ret =3D check_max_stack_depth(env);
+
+	/* instruction rewrites happen after this point */
+
+Calling bpf_insert_loop_guards() before check_max_stack_depth() rewrites
+instructions before check_exception_cb(), check_recursion(), and
+check_callbacks(), which log raw instruction indices from env->prog->insnsi.
+Should bpf_insert_loop_guards() be placed after check_max_stack_depth() with
+the other instruction rewrites?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261105204513.2230=
+344-1-alexei.starovoitov@gmail.com?part=3D1
