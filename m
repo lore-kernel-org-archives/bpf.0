@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.221
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.1
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793901574;
-	b=pnvRWndu9gEjaO3s7Ka6sv1FZe2TvUn0IRjZFV0C/NXe4eDuMF4z9u9llhBj0WlJ57bq
-	 BMOQTnCRvthB6rMbLV2rklu0J3U9L8GU3qOLydTwT2K8Cp6PjkW5SSfaGHFIe+DBJB/dH
-	 zzbimjsH+sBHg6ZKaQ4lQPWBVoQm1HsvG2qUCYDaybOUgMvNA9pt2dmENh33DHuWhswdR
-	 Jx5uNFnIUqQuT869deFUU9MxL2W98xIV++/QuoRHmwJwrqqWa/m2/3UKlrTHJHcrGTAoH
-	 zIJ9eLkcxEPhCOldt+6KtBaKCgRN5gIzWMnvl/ZEWoKGQMw54TYRsCAAfOvvfRuVr7A==
+	t=1793901579;
+	b=haJcZaFWpjS3x5+7M493YwZE3hK38563f+W52cZt7A2E8WGzeTNCwcMithX9wLhoTNFY
+	 OVbuC558MQi6ze6VKe6YK0sP0AUHRd627sCWx3AEAA4a++ufGAg2RivgTNa2JBnOPNilh
+	 Ybabx66CAOxrG5NjrbhO6Yu5XcKYWJIlP1EVJ+M18mDX9anVBVIbZN+tZrVdaiIAbb5UG
+	 rb70qkzDhqo0TqqGIiWPmoISEcywf00kxThyMAzoKNV/bRDuvSkZf1it+v5nSwSM6rv2o
+	 M2+QRNg4+vq4f3h5or+FsEPoxOw9OyrqKv9v2tQ79RRttGPkWN4DXrflMw9HGw3mmZw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793901574;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793901579;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=n8ZViMW1MawyefItBv1UZBmlgvNlGvjumGa9Cgcp5X0=;
-	b=Opqz/xYucnqdjAmeHAQz6r7Pu1IO9z4dqXLIonFy7/bZGrN0V/Wkmq5Oxbh2WnsXBAVY
-	 L3nIlZ9GcAzii+jLH84lWFxxFeqqtQ7KN4JLgpTzALwra6fVwFp5C3rWDGjb4Ec4W+AZ5
-	 v9QG+X2xroqZYOHnmYJoFdTyIA44Vle/7gOoxqoVbWzDBry/0OXbdNZ4l3k/cjpNQiIBH
-	 6uG4mLgWSiQturk6PjroKYeQlKcUdq2hls9/xhYtifbPuEYnyxtu5BqIMV6PzsoIGoiIH
-	 AY7bZjen55df3ayq2om3YjSitscPLxc9YOREN4BVg7vbKMJ0cxZOCsNNqnCvAmkR6lg==
+	bh=dxfKc4tfkvkIzf7zzr3lw8N6K6NOKEx7d1XkXcvuqPA=;
+	b=MpIm7/OKSobfJ1ppKzPb12jVYDS5JlVvnDsMZrsy+a7M3XiSD+BCk3fA1ULNxDaHb/7K
+	 AYqzEJsbptyn7UhZCU/H6F2HUTlHKMJoxe8YboSjU6+AiE/dUB/mtFKHirlkN+FEw4moU
+	 T01qbthy33n0lkgBbdr9rK1XLaOWwnWcjz4UMbwogZErZBbhsHIcz4HnTCZqPyhpfBiQn
+	 EcyzbPV/CfisxiXNDsJtFw820eVM2mazJakf3y82dAyGXN26cX+LZlSDDctPqqIuKPkYO
+	 4l/oxOhXMfWPxIBGda62QSe++TC1Q8DSS0qjgag5XY64gCb1oBdGEKm8+qO/1HLpr1w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JOTiPaD9;
-	arc=none smtp.remote-ip=91.218.175.221
-Received: from mta0.migadu.com (out-221.mta0.migadu.com [91.218.175.221])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=isuj8yzE;
+	arc=none smtp.remote-ip=95.215.58.1
+Received: from mta1.migadu.com (out-1.mta1.migadu.com [95.215.58.1])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57530606A329
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 17:59:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57530606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C796606A326
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 17:59:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1C796606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JOTiPaD9
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=isuj8yzE
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SL5JKr0sJ1cO/OzigGYQgubfvDLFwhYQYS19uBM4Xl4=;
+DKIM-Signature: a=rsa-sha256; bh=KJu3dGU0Al9H58KIMI3ZRTN+4pr7vvX1nmGUup4X6u4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793901571; v=1; x=1794506371;
- b=JOTiPaD9sb7Q9H60TGAItwDIfwCe+D9NagsHcQDhi2XOM7cOZ5dFZv4ouRxSgWgsyNpJ3vV5
- M7u00jA+T//R/wnqq03dPvSzyxW0xRjFuMUxV75CZMFRtJwHmLtZkn5t0zuSuZVhqPmvd5pasM2
- 2r2ZCbtgeEKmM/Qcud4wCrz0=
+ t=1793901577; v=1; x=1794506377;
+ b=isuj8yzECGp7ZGRryegoNHk3BKOCfUrmAQyRPsqTFiBix1AGMaT3DZmEUPtB6z0S3jsvMYEb
+ KE4n23w8sWXo7HlfGjOuO327+nFW9f1/Xa7lhaZW/u2jWtrBy9fgTaRUdXZEyI0F7KyEzgtGiDA
+ foy3m/LNjS33q05/kta0fx+Y=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id f7df7c898d37275c;
-	Thu, 05 Nov 2026 17:59:31 +0000
-X-Mizu-Trace-ID: f7df7c898d37275c
+Received: by smtp.migadu.com with ESMTPS id 62adfd3c28aaf402;
+	Thu, 05 Nov 2026 17:59:37 +0000
+X-Mizu-Trace-ID: 62adfd3c28aaf402
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -62,9 +62,9 @@ Cc: bpf@vger.kernel.org,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	Vineet Gupta <vineet.gupta@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v4 02/17] libbpf: Look up BTF strings without making BTF modifiable
-Date: Thu,  5 Nov 2026 10:58:30 -0700
-Message-ID: <20261105175845.30357-3-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v4 03/17] bpftool: Dump C through a split BTF
+Date: Thu,  5 Nov 2026 10:58:31 -0700
+Message-ID: <20261105175845.30357-4-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261105175845.30357-1-ihor.solodrai@linux.dev>
 References: <20261105175845.30357-1-ihor.solodrai@linux.dev>
@@ -79,131 +79,93 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-btf__find_str() needs a hash index of the string section, and gets one
-by making BTF modifiable. That copies types and strings out of the raw
-data, and fails with -EOPNOTSUPP on BTF with unknown extension bytes.
+btf_dump prints decl tags, so bpftool can annotate types in the C dump
+by adding decl tags to the BTF it dumps. Adding them to the input BTF
+would make it modifiable, which libbpf refuses for BTF with unknown
+header-extension bytes, such as BTF from a newer kernel.
 
-btf__add_str() and split btf__dedup() look up strings in the base BTF
-first. So adding a string to split BTF, or deduping it, makes the base
-modifiable as a side effect, and fails if the base comes from a newer
-kernel with new header fields.
+Dump C through an empty split BTF over the input instead, so that the
+annotations can go there. btf__new_empty_split() does not inherit the
+base pointer size, so set it explicitly.
 
-Build the string index without making BTF modifiable, and reuse it if
-BTF becomes modifiable later. The index can now exist on read-only
-BTF, so btf__free() frees it unconditionally.
+No functional change.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/lib/bpf/btf.c | 45 +++++++++++++++++++++++++++------------------
- 1 file changed, 27 insertions(+), 18 deletions(-)
+Later in this series bpftool adds decl tags to the split, for record
+attributes and type tag spellings.
+---
+ tools/bpf/bpftool/btf.c | 28 +++++++++++++++++++++-------
+ 1 file changed, 21 insertions(+), 7 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index e1ff97098ee5..5786232c1fea 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -153,9 +153,10 @@ struct btf {
- 	 */
- 	int start_str_off;
- 
--	/* only one of strs_data or strs_set can be non-NULL, depending on
--	 * whether BTF is in a modifiable state (strs_set is used) or not
--	 * (strs_data points inside raw_data)
-+	/*
-+	 * strs_data points inside raw_data until BTF becomes modifiable,
-+	 * then strings live in strs_set. Before that, strs_set may exist
-+	 * as a lookup index for btf__find_str().
- 	 */
- 	void *strs_data;
- 	/* a set of unique strings */
-@@ -1252,15 +1253,15 @@ void btf__free(struct btf *btf)
- 
- 	if (btf_is_modifiable(btf)) {
- 		/* if BTF was modified after loading, it will have a split
--		 * in-memory representation for types, strings and layout
--		 * sections, so we need to free all of them individually. It
--		 * might still have a cached contiguous raw data present,
--		 * which will be unconditionally freed below.
-+		 * in-memory representation for types and layout sections,
-+		 * so we need to free both individually. It might still have
-+		 * a cached contiguous raw data present, which will be
-+		 * unconditionally freed below.
- 		 */
- 		free(btf->types_data);
--		strset__free(btf->strs_set);
- 		free(btf->layout);
- 	}
-+	strset__free(btf->strs_set);
- 	btf_free_raw_data(btf);
- 	free(btf->raw_data_swapped);
- 	free(btf->type_offs);
-@@ -2043,6 +2044,21 @@ static void btf_invalidate_raw_data(struct btf *btf)
- 	btf->named_start_id = 0;
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index 385521e6b028..a438b5a03f5a 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -1092,17 +1092,30 @@ static struct sort_datum *sort_btf_c(const struct btf *btf)
+ 	return datums;
  }
  
-+static int btf_ensure_strs_set(struct btf *btf)
-+{
-+	struct strset *set;
-+
-+	if (btf->strs_set)
-+		return 0;
-+
-+	set = strset__new(BTF_MAX_STR_OFFSET, btf->strs_data, btf->hdr.str_len);
-+	if (IS_ERR(set))
-+		return PTR_ERR(set);
-+
-+	btf->strs_set = set;
-+	return 0;
-+}
-+
- /* Ensure BTF is ready to be modified (by splitting into a three memory
-  * regions for types, strings and layout. Also invalidate cached
-  * raw_data, if any.
-@@ -2050,7 +2066,6 @@ static void btf_invalidate_raw_data(struct btf *btf)
- static int btf_ensure_modifiable(struct btf *btf)
+-static int dump_btf_c(const struct btf *btf,
++static int dump_btf_c(struct btf *btf,
+ 		      __u32 *root_type_ids, int root_type_cnt, bool sort_dump)
  {
- 	void *types, *layout = NULL;
--	struct strset *set = NULL;
- 	int err = -ENOMEM;
+ 	struct sort_datum *datums = NULL;
+-	struct btf_dump *d;
++	struct btf_dump *d = NULL;
++	struct btf *split;
++	size_t ptr_sz;
+ 	int err = 0, i;
  
- 	if (btf_is_modifiable(btf)) {
-@@ -2078,18 +2093,14 @@ static int btf_ensure_modifiable(struct btf *btf)
- 		       btf->hdr.layout_len);
+-	d = btf_dump__new(btf, btf_dump_printf, NULL, NULL);
+-	if (!d)
++	split = btf__new_empty_split(btf);
++	if (!split)
+ 		return -errno;
+ 
++	/* btf__new_empty_split() does not inherit the base pointer size */
++	ptr_sz = btf__pointer_size(btf);
++	if (ptr_sz)
++		btf__set_pointer_size(split, ptr_sz);
++
++	d = btf_dump__new(split, btf_dump_printf, NULL, NULL);
++	if (!d) {
++		err = -errno;
++		goto done;
++	}
++
+ 	printf("#ifndef __VMLINUX_H__\n");
+ 	printf("#define __VMLINUX_H__\n");
+ 	printf("\n");
+@@ -1130,10 +1143,10 @@ static int dump_btf_c(const struct btf *btf,
+ 				goto done;
+ 		}
+ 	} else {
+-		int cnt = btf__type_cnt(btf);
++		int cnt = btf__type_cnt(split);
+ 
+ 		if (sort_dump)
+-			datums = sort_btf_c(btf);
++			datums = sort_btf_c(split);
+ 		for (i = 0; i < cnt; i++) {
+ 			int idx = datums ? datums[i].index : i;
+ 
+@@ -1146,7 +1159,7 @@ static int dump_btf_c(const struct btf *btf,
+ 				goto done;
+ 		}
+ 
+-		err = dump_btf_kfuncs(d, btf);
++		err = dump_btf_kfuncs(d, split);
+ 		if (err)
+ 			goto done;
  	}
- 
--	/* build lookup index for all strings */
--	set = strset__new(BTF_MAX_STR_OFFSET, btf->strs_data, btf->hdr.str_len);
--	if (IS_ERR(set)) {
--		err = PTR_ERR(set);
-+	err = btf_ensure_strs_set(btf);
-+	if (err)
- 		goto err_out;
--	}
- 
- 	/* only when everything was successful, update internal state */
- 	btf->types_data = types;
- 	btf->types_data_cap = btf->hdr.type_len;
- 	btf->strs_data = NULL;
--	btf->strs_set = set;
- 	if (layout)
- 		btf->layout = layout;
- 	/* if BTF was created from scratch, all strings are guaranteed to be
-@@ -2108,7 +2119,6 @@ static int btf_ensure_modifiable(struct btf *btf)
- 	return 0;
- 
- err_out:
--	strset__free(set);
- 	free(types);
- 	free(layout);
+@@ -1160,6 +1173,7 @@ static int dump_btf_c(const struct btf *btf,
+ done:
+ 	free(datums);
+ 	btf_dump__free(d);
++	btf__free(split);
  	return err;
-@@ -2131,8 +2141,7 @@ int btf__find_str(struct btf *btf, const char *s)
- 			return off;
- 	}
- 
--	/* BTF needs to be in a modifiable state to build string lookup index */
--	err = btf_ensure_modifiable(btf);
-+	err = btf_ensure_strs_set(btf);
- 	if (err)
- 		return libbpf_err(err);
+ }
  
 -- 
 2.56.0
