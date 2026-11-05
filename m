@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793911714;
-	b=Ro2LS0lb9oQSUBNq0Kii2TxwxoOn4it3v7AoPQ9zUDR4uOrIK3VI+/aCOuma6+VORu+J
-	 XZBJ/2pcXIzez4syGxcdBkxt+fplaXM8C/oXfNsYHSAk6yGoDl4WPWICL6EmgCNjYyaKV
-	 Rq2NHf9a7W4ws8TSmlDOpQjk9GhWjf+FKjFYx3C/+ZW+E+MZI+Ll5w4EBsj8s9nYDX1bB
-	 oU1VzgnsanaUsGk+kJDiqzkvJ+RECvdFqbt50kRxZGRjV9YPhl/m0SgwxWLvvOvmdchJ5
-	 LByClCRXG1k+M89Vs2ANoD93CVtGReQTxy7OUEGTJvmr6/TrNeNgEjRwJaMP5Rpftiw==
+	t=1793911720;
+	b=OGEOEfmHo4zrbHTDGXgIwby+N7y3MvVmnxz5KFt77SkT6qkE7eV5yLQ/aA5SAPwuW4S+
+	 s1WN3swfsCATOH8e1IJN7aFAA0HR7WfNO/eNuUWOeYpiLuF/FlOMLDLyu7HOI0pPdpCLs
+	 SR2ynJiD/xS9+B/isiRu4D5Mtx6J3eiow1ijmooRl95I6crnT/3rB/SpoJs/5+gO8DqJx
+	 yWT0mPBEDVnAoYxGkUJWrgh/yiPAlCSe2Ie00kxt+1ChJKOH39QsJvIBCLP15KugPn8KE
+	 VIjC6M/LP4SyNkYS1nKBaD8MnnXDObOO9xXS68hzgJQxTjk4IAQVvd1QhDHIPq36M2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793911714;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793911720;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=d5oJuSHIoT4PP7+GsouNsm/BX7U0oNOQOxX5/080pDo=;
-	b=K3pktN1w+E+utO2Un+g8ymjQIMaxCmirqJP6FN513LNjzu3/No+w54khcpWiVBfr+4ZI
-	 GGCD9e6rQ+C3KdqdjiaEle+Whr9k6UkLTT3mYFkzJAYkm4xtULwdgtgMy+Pt8uNcgKEeU
-	 XC9oZHc4YpJxj0niRlo1lkxpoOGvVVDX2Tyw/o70b/GP609fsZs8wTzWkp9Q9xG24kDL0
-	 22h9dj0+xi3QtuYklGbsGG/PnKAP7tERNn2oyGmYBZzpWK+OIfjo8+HWGZhacebG4Gk/i
-	 A+r6ogG0KgmBz2XQLIsEAN0KRM3sWQlRiT0gMp0ANm3miU1aDBNIcBG/U6J391Q3mWA==
+	bh=4fmBf6O6ChZI8/dXUszBPTtiyHfaSprnTgT/QRFvF9w=;
+	b=wDQtNXBXOm6dAmuUeZrRxsn91INC3emyYWaXYmY65/gYVTnBR/j/qnzYNFtyErhCwzxd
+	 k5H7C+hG40nF8UYLWzSvJKbItyS4RdhyrNmS+bHn/qT5Fo05H4VxI+/WX8GKH8SlB9xBr
+	 cevm7cQzEgo5Vdeum0lr/P0bWjtR0dGyJAHOHHr1+baXHL2KijgtiP+KS9llprmw/+35A
+	 OL38T6eorEBtKiO8adcCuPBj4fA64ggNR2Z115e/VSZ3RHo9bZ8xO3epFANC/HlHyz8ao
+	 K+io3UNqchXHHkasG/tt8ItjhFIXQR+130jNTHgaI1e3SEy23gmk2WlJzAw+tAQPDgQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bjpJJBS3;
-	arc=none smtp.remote-ip=209.85.215.172
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=l68JHKSe;
+	arc=none smtp.remote-ip=209.85.216.45
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33905606A31B
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 20:48:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 33905606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2F0606A328
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 20:48:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B2F0606A328
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bjpJJBS3
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cd62c570b5dso1466881a12.2
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 12:48:33 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=l68JHKSe
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ad41b47541so1709908a91.1
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 12:48:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793911712; x=1794516512; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793911719; x=1794516519; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=d5oJuSHIoT4PP7+GsouNsm/BX7U0oNOQOxX5/080pDo=;
-        b=bjpJJBS3Npkdu4E6hHZcjIV2tsFeB4s6MdXoEXCd2fuiOuLOxCv0XEUMUsvLs6sWBe
-         sqT+6xmX8mP+EJyz5q9qHi/LtaHjr2vP7HPRDNpOFUc+ge0f10fEqCh63fi7KHlTK6ww
-         IMBGeZC9S3/WwTGFH6pW0YuK1TFIVMRcbW3I1h94+B/WzDeWeNgOEc1YyaMad69hRpLC
-         Gh1iAIoZIrzN46M+ec6xZGuPDlpt+ZzXyQWIaqL1q6Zv0tbKZsghIsQCN9NFXfxipsCV
-         YdYFpBH+WePD5WpcMVSeP8XmTp3kII6SbvwnL4FG+SqblfhDopZhFMPWuyBXkZ7RrqrH
-         JohQ==
+        bh=4fmBf6O6ChZI8/dXUszBPTtiyHfaSprnTgT/QRFvF9w=;
+        b=l68JHKSeA04ZI+31PLdKw0aWJP4PCHhqwivyxLiBcYTUonhOEw/RSdrdVG9W+VzgnM
+         xv38gQkhz0QMYPfFq4UlSTT614tXWIO+pvE9RV+0XU4m3ueEF4Lzsps9CJTiBXfHZOU+
+         tPCCHjXvqMPCD/jZ3pwiOhUgNe5TCtTT6Sh4K6Ya8VUOfhofxO9YGJ6US9TF8N3FHy6B
+         vHyFeGeO8Lhzd5iLgSBmYyekoogUpn50SkxNVZFt48Sol9TDO0LT0E3owHbZwEgLY8Io
+         kXLwfnFgutX3eHoKhl9vLK5RZLQMtvZCDzZdwh9pQDh0sX3UQfEYqwH/CupLQAA601I2
+         bGRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793911712; x=1794516512;
+        d=1e100.net; s=20260707; t=1793911719; x=1794516519;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=d5oJuSHIoT4PP7+GsouNsm/BX7U0oNOQOxX5/080pDo=;
-        b=TAcCg42EnXuXT7Iji2KxnDmu1OGLHXmEVeGTG1TE0kXVrFAC8rlvWn8zUDXx+mqDDH
-         ydLvh8YCWmJn2XeZX5y9AcBU+ZGnu3Am/tr67MeAEDgnvLSnTOQS0qluMyhilQ+/NU5V
-         wErXdfoXQgCvSg1CB2BfsKArnVTRBLIFSdAftzZ8gcv/zUdzf5ll+YG7ezHr2ZAdjVhR
-         Y05PdozhI+40CTblyN6jkyP3F7PSZNDmhkt+AIcOtMhQmVxHg/+EdP7vVqmyoRf57681
-         jzT9109rLzxNTndMrGR8HB/c9ZIkfNk1n8BA6cBiLOA23uF2+IQUQMYsL3KiHwWa0Op6
-         Brrg==
-X-Gm-Message-State: APuU4Z9wNcs+nkZlILzrp/lltyyEtVCvHIOFZHEp9DTghu9tZkyfvmK0
-	Bgb1ZXJyNQueZ9Ygf1dwyOSNiPyZ6KaQqEH3+JH4qNoLGIryop1XD61AEWrA9w==
-X-Gm-Gg: AYBFou2fM6wdrDV4hi2w8bBMS8d1tzDyKntEcV7ciJH3FRjREe6DE0JRE06jS1WZ9U9
-	EiT8lCLPOhEaXNNh1yCJxJHVkB8AvT6u+gdoY11S3TeFDcKy3wwvKfUNMNNeCrgjUcJEBt/ykYv
-	ph668sVy+LuXjf6QchFwY2PtCNn1hyjbjCc1E49xXUCCraNHJVpcd+OenSQpPGF4REHWbpGgQFg
-	yxIbx/I3FFw3kXsxmih26+TPhftRlB0DBfJNo7uygC0KC4nVujzXr6/CvJT2vQwomHT4vliqFas
-	G4C+4oNu0eYn2LUdTm82aLiu9K6ltdY99ciMn+8kmRcnGOVIwiPu2//WGzP3P8S4MxBEfTYeyjL
-	tLZVO5i4tDjT9y1lYAUGmd+yNOoCg8j7dp8Fe4jKwqb00Hnm6aZc3pDiFH6lau1Tfk76Cod47XM
-	uHCpAeruQ9TjcdElXp5nTIbUDMnN/j33pa0eXVijAortu8G9Df0cNEOf7f/JTUq1/p5QkZcNwPm
-	j9/6OIaMYZ6y+UYQk2E14X5g1fdYFhYkpdpAlLqUw22cm1cpxOLzg46otmQpKCpAvPA+Eyik0Rn
-	0qL9pACbrRrCm96sYwZORDgNB2gNI+U6uhLACsPGaOggUMOLoMBhdFJupko5yLhCfHxKy6dQJtx
-	KkTx+C4SVKVfURWoVlqldvuD7H0bB10cvRUeHE/HQ83450+t3IU7QkaV0uVYlCaltkBtIe8qCgQ
-	==
-X-Received: by 2002:a17:90b:4a89:b0:3a0:9c9d:eb18 with SMTP id 98e67ed59e1d1-3b0db6f8424mr205332a91.54.1793911712030;
-        Thu, 05 Nov 2026 12:48:32 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b2cf80c9sm5280995a91.0.2026.11.05.12.48.31
+        bh=4fmBf6O6ChZI8/dXUszBPTtiyHfaSprnTgT/QRFvF9w=;
+        b=fftaLCY0f/6mWp3m+rmPXw4kZkIAJbbVGsHsHtIr18n9Ug19yPza88mc5rT1xz4HaE
+         8TK3sxS40NJwPWSosnVCkEFgFOvaiYgaQf1kP7IgpfNn8Mg/6+WuP0USJytSTvmLTGO/
+         YF+bPLAxFj9m8RZKR9VN5VMyDjbk7ZeZhYseBFdR/CUkfPcvCO5q1J6+QKFjq+oNSX+q
+         PSpWp1SrLlBnhlgTfM22cbiRNs4PxWlk6Lctc/UIr/MVlFwb5bsQlN5HPrPC/wPAztsW
+         ku9B47H9pTDjw5Xg1HE1e3IbF4brpPdxi1vgKZr/kw06MgrWuBMweGXUil9uMQijQA3y
+         SxnQ==
+X-Gm-Message-State: APuU4Z/hqNp9h+XMBU+q2x62iyoNQ7C0epMDXysQsc46+Zeqi4PUiMUa
+	zOVJmx33md95ChlwGGwU4mgJjEX5xyNcFwm04tsUqAH+7txwSNIol0CFZXIy8w==
+X-Gm-Gg: AYBFou0r7+RiR2pbO/vpdSxND/e9iXDta4xMGbTyWzM7irbdm+QoR26vJQSwKOCgN3U
+	o5dipkI/yfmZ3/EZHM05dAWfmuxtAXnje41lJUZNFs/kWMwEmTVoN/u8A4ueb9raevfu2IVi0d8
+	PHpGDPiMaszXGZA53RMoeq0oK6xyS+YpjTBwiI+ZdwS1sz9qMBpHA0sRCNzZQ1d1YiO8wPnQg9F
+	4/zFNXsnAeb5mxOaKuTVzADQBU5UM96+1uTGl4BWVHNkPK+V71x8q4zV+WTfNNRI54BDKF8wBrP
+	zXGHEjLO8iZmVFlgwpglEvipLsPgCYC9741gCEvf9UjyhxTs4/9Mah+M3/6KmsZ4VrSFJDSmT7s
+	hTMn4gDd3LJ2V3AGlUMI54wuLM3+6ekRIzhVSPWp/rnCTjlMm0jkbi4Q/samkB4PikE8T7RHIon
+	dbQQTKRiFOXS+PPDYVNJiC4df4Ok1krGsAvFuUs3UdMqyhQZlPrbejck/inNdX1781q/h5bNPXe
+	mOE14LiRvOqW71Aqo+a+6KuI1BWt6aA+3D8NJrwbwZhgSYmJsNI64QrE8sYQp6Du74RYpIMcqf6
+	fqaL9qdGxx9Nrb78YQ9cJtoqMt7ZzTC8zG7lKGRfiL8gCHRmxmYARQM0u8/RKkoDi9ioQGIiwcc
+	KnDkYiRiqkTaqShTlCW1KzZZccGZjvWQxAKvI+GcGd2xNq8MSsUDsOgC7p7QBMlnuVzaziQ9U94
+	mmnGj6VOqu7p1SeqVEYFA=
+X-Received: by 2002:a17:90b:5705:b0:3ac:945c:7f69 with SMTP id 98e67ed59e1d1-3b0db70bc84mr205458a91.66.1793911717861;
+        Thu, 05 Nov 2026 12:48:37 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b094ce9f65sm5394555a91.1.2026.11.05.12.48.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 12:48:31 -0800 (PST)
+        Thu, 05 Nov 2026 12:48:37 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 33/35] selftests/bpf: Test loops that are counted, walked or widened
-Date: Thu,  5 Nov 2026 20:45:10 +0000
-Message-ID: <20261105204513.2230344-34-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 34/35] selftests/bpf: Test progs that run out of budget
+Date: Thu,  5 Nov 2026 20:45:11 +0000
+Message-ID: <20261105204513.2230344-35-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
 References: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
@@ -104,1024 +104,2066 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The verifier has three methods for a loop:
- - Counted: scalar evolution gives the number of iterations and a range for
-   each register that has a closed form. The body is verified one time.
- - Walked: iteration by iteration, with the real values.
- - Widened: what returns to the head is joined with the state at the head.
-   A bound that grows moves to a fixed stop, until nothing changes.
-The wrong method rejects a valid prog or costs thousands of insns. A wrong
-state at the head loads an unsafe prog.
+The verifier does not prove that a prog ends. It adds may_goto to each loop
+that it cannot bound, and a check to the entry of each recursive subprog.
+A prog is out of budget when may_goto times out or the check fails. No
+other test gets there: a mistake in the added code rejects nothing, it
+locks up a cpu, or the prog goes on along an edge that nobody verified.
+Load and run such progs. Each invocation must return, and the return value
+shows where the prog went on.
 
-  [W] "bpf: Add union and widening of the range of a register"
-  [J] "bpf: Add join of registers and stack slots"
-  [A] "bpf: Find the registers and stack slots that later checks depend on"
-  [M] "bpf: Move states along edges, into loops and subprogs and out of
-      them"
-  [L] "bpf: Enter and leave loops in the main pass, build flow.c"
-  [C] "bpf: Keep the count of a loop when a register has no closed form"
+  [G] "bpf: Add may_goto to the loops that the verifier marks"
+  [P] "bpf: Order the insns, find what stops a loop and where may_goto
+      can go"
+  [F] "bpf: Verify programs as a fixpoint over the control flow graph"
+  [R] "bpf: Limit depth and time of recursive subprogs at run time",
+      "bpf: Allow recursive subprogs"
 
-  verifier_..        the loop                     the verifier must
-  -----------------  ---------------------------  -------------------------
-  loop_need.c        is counted, 'x = x * 3 + 1'  [C] walk it if a jump, an
-                     has no closed form           access or a call ahead
-                                                  depends on x ([A]), else
-                                                  verify it one time
-  loop_as_is.c       is not counted               [M] join the state that
-                                                  ends a walk with a state
-                                                  of this walk only
-                     'if (..) n--', from 3        [W] stop n at 0
-  loop_walk.c        has two entries (bpfjailer)  [L] walk it to its end
-                     each iteration decides       [L] go on with the walk
-                     a jump that leaves the loop
-                     'while (rnd()) n++'          [L] give up at once
-                     32 states enter, each needs  [L] count the insns of
-                     a walk of 300 insns          each walk, not of all
-                     is too long for a walk       [L] not try it again
-  value_ptr_arith.c  'p = &v[p->next]'            [J] keep [0, 31] next to
-                                                  0: it covers the rest
-                     'p += 1'                     [J] reject
-  scev.c             takes a reference in each    [L] reject, or load
-                     iteration, or in one
-  iterating_         bpf_loop() is the head of    [L] verify the callback
-  callbacks.c        a walked loop                in the last iteration too
+  the prog                                        out of budget
+  ----------------------------------------------  -------------------------
+  a loop, the prog holds nothing                  [G] the prog ends
+  a loop under a lock                             [G] the loop exits
+  the same, the code after it needs p != NULL     [G] reject
+  a loop in a subprog                             [G] the loop exits
+  the same, the call has unwind_goto              [G] the subprog unwinds
+  a landing pad does not release a lock           [G] reject
+  all registers are live at the added may_goto    [G] none of them changes
+  a loop has no exit, a nest of 17 loops          [F] [P] reject
+  may_goto of the prog does not leave the loop,   [P] may_goto at the head,
+  a jump to itself, a loop with two entries       the prog ends
+  an iterator does not stop the loop around it    [F] the prog ends
+  recursion is too deep, no unwind_goto           [R] the subprog returns 0
+  the kernel stack where such a recursion ends    [R] a half of it is free
+  recursion is too deep, calls have unwind_goto   [R] the landing pad runs
+  recursion is not deep, but makes 2^60 calls     [R] the prog returns
+  recursion through bpf_loop(), or in a loop      [R] the prog returns
+  recursion through a global subprog and a table  [R] reject
+  a timer callback arms itself again              [R] no recursion
 
-In most tests the number is an index after the loop, where no jump limits
-it: its range at the head decides.
+The edge of an added may_goto is an edge of the prog. 10 more progs are
+unsafe only on this edge: a register that only the loop sets, a bound of
+the next loop, a loop that is counted for one state or call and gets
+may_goto for a different one ([P], [F]). The verifier must reject them.
+
+verifier_budget.c is serial, like timed_may_goto: its progs spin for 250 ms
+in an RCU read-side critical section, one after the other. It takes 5 sec.
+verifier_callx.c gets a test of packet pointers after callx of an argument.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   6 +
- .../bpf/progs/verifier_iterating_callbacks.c  |  53 +++
- .../selftests/bpf/progs/verifier_loop_as_is.c | 198 +++++++++++
- .../selftests/bpf/progs/verifier_loop_need.c  | 320 ++++++++++++++++++
- .../selftests/bpf/progs/verifier_loop_walk.c  | 197 +++++++++++
- .../selftests/bpf/progs/verifier_scev.c       |  59 ++++
- .../bpf/progs/verifier_value_ptr_arith.c      |  55 +++
- 7 files changed, 888 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_as_is.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_need.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_walk.c
+ .../selftests/bpf/prog_tests/verifier.c       |    3 +
+ .../selftests/bpf/progs/verifier_budget.c     | 1873 +++++++++++++++++
+ .../selftests/bpf/progs/verifier_callx.c      |   33 +
+ .../bpf/progs/verifier_callx_rodata.c         |   51 +
+ 4 files changed, 1960 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_budget.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index a57744663e99..1424dc3036c5 100644
+index 1424dc3036c5..5b3eacb36a6c 100644
 --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
 +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -83,7 +83,10 @@
- #include "verifier_liveness_exp.skel.h"
- #include "verifier_load_acquire.skel.h"
- #include "verifier_loop_hierarchy.skel.h"
-+#include "verifier_loop_as_is.skel.h"
- #include "verifier_loop_latch.skel.h"
-+#include "verifier_loop_need.skel.h"
-+#include "verifier_loop_walk.skel.h"
- #include "verifier_loops1.skel.h"
- #include "verifier_lwt.skel.h"
- #include "verifier_map_in_map.skel.h"
-@@ -284,7 +287,10 @@ void test_verifier_linked_scalars(void)       { RUN(verifier_linked_scalars); }
- void test_verifier_live_stack(void)           { RUN(verifier_live_stack); }
- void test_verifier_liveness_exp(void)         { RUN(verifier_liveness_exp); }
- void test_verifier_loop_hierarchy(void)       { RUN(verifier_loop_hierarchy); }
-+void test_verifier_loop_as_is(void)           { RUN(verifier_loop_as_is); }
- void test_verifier_loop_latch(void)           { RUN(verifier_loop_latch); }
-+void test_verifier_loop_need(void)            { RUN(verifier_loop_need); }
-+void test_verifier_loop_walk(void)            { RUN(verifier_loop_walk); }
- void test_verifier_loops1(void)               { RUN(verifier_loops1); }
- void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
- void test_verifier_map_in_map(void)           { RUN(verifier_map_in_map); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-index a3e31aa25fe1..e30f7676081f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-@@ -290,6 +290,59 @@ static __naked void iter_limit_bug_cb(void)
- 	);
- }
- 
-+static __naked __noinline __used void set_flag_cb(void)
-+{
-+	asm volatile (
-+	"r1 = 1;"
-+	"*(u64 *)(r2 + 0) = r1;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all
-+	);
-+}
-+
-+/*
-+ * bpf_loop() is the head of a loop whose iterations are looked at one by one, because of r1.
-+ * The callback comes back to it in the same iteration, the last one included.
-+ */
-+SEC("socket")
-+__failure __msg("frame pointer is read only")
-+__naked void callback_returns_to_loop_head(void)
-+{
-+	asm volatile (
-+	"r7 = 0;"
-+	"r1 = 0;"
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"r1 = 1;"
-+	"r2 = %[set_flag_cb] ll;"
-+	"r3 = r10;"
-+	"r3 += -8;"
-+	"r4 = 0;"
-+	"1:"
-+	"call %[bpf_loop];"
-+	"r1 = *(u64 *)(r10 - 8);"
-+	"if r1 == 0 goto 2f;"
-+	"if r7 != 3 goto 2f;"
-+	"r10 = 0;"
-+	"2:"
-+	"r7 += 1;"
-+	"r1 = 0;"
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"r1 = r7;"
-+	"r2 = %[set_flag_cb] ll;"
-+	"r3 = r10;"
-+	"r3 += -8;"
-+	"r4 = 0;"
-+	"if r7 < 4 goto 1b;"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm_addr(set_flag_cb),
-+	  __imm(bpf_loop)
-+	: __clobber_all
-+	);
-+}
-+
- /*
-  * may_goto doesn't leave the loop, so it's not what stops it. The address is greater than 10:
-  * the loop spins until may_goto that the verifier adds ends the prog.
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_as_is.c b/tools/testing/selftests/bpf/progs/verifier_loop_as_is.c
+@@ -31,6 +31,7 @@
+ #include "verifier_bpf_get_stack.skel.h"
+ #include "verifier_bpf_trap.skel.h"
+ #include "verifier_bswap.skel.h"
++#include "verifier_budget.skel.h"
+ #include "verifier_btf_array_access.skel.h"
+ #include "verifier_btf_ctx_access.skel.h"
+ #include "verifier_btf_flex_array.skel.h"
+@@ -235,6 +236,8 @@ void test_verifier_bounds_mix_sign_unsign(void) { RUN(verifier_bounds_mix_sign_u
+ void test_verifier_bpf_get_stack(void)        { RUN(verifier_bpf_get_stack); }
+ void test_verifier_bpf_trap(void)             { RUN(verifier_bpf_trap); }
+ void test_verifier_bswap(void)                { RUN(verifier_bswap); }
++/* Serial: many progs spin for 250 ms in an RCU read-side critical section, see timed_may_goto.c */
++void serial_test_verifier_budget(void)        { RUN(verifier_budget); }
+ void test_verifier_btf_array_access(void)     { RUN(verifier_btf_array_access); }
+ void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_access); }
+ void test_verifier_btf_flex_array(void)       { RUN(verifier_btf_flex_array); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_budget.c b/tools/testing/selftests/bpf/progs/verifier_budget.c
 new file mode 100644
-index 000000000000..0316da3003ad
+index 000000000000..1aa5b3eff712
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_loop_as_is.c
-@@ -0,0 +1,198 @@
++++ b/tools/testing/selftests/bpf/progs/verifier_budget.c
+@@ -0,0 +1,1873 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * The state that enters a loop that is not counted is left as it is. So is the state that ends
-+ * a walk through the iterations of such a loop. What stands for many iterations is a join of states
-+ * that were seen, not a guess that is written into one of them.
-+ */
 +#include <linux/bpf.h>
 +#include <bpf/bpf_helpers.h>
++#include "../../../include/linux/filter.h"
 +#include "bpf_misc.h"
++
++/*
++ * The verifier adds may_goto to a loop that it cannot count and a check of
++ * the stack to a recursive subprog. What the program does when it is out of budget:
++ * - it unwinds, when unwind_goto follows every call of the subprog and the subprog
++ *   holds nothing of its own. The pads of the callers are verified.
++ * - the main prog and an async callback end
++ * - otherwise it leaves the loop, or returns 0 from the subprog
++ *
++ * It takes unwinding, per-cpu insns and timed may_goto in JIT. Some of the progs never end
++ * on their own.
++ */
++#define unwind_goto(off) ".8byte %[insn_unwind_goto_" #off "];"
++#define unwind_exit ".8byte %[insn_unwind_exit];"
++
++#define __imm_unwind_goto(off) \
++	__imm_insn(insn_unwind_goto_##off, \
++		   BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, BPF_UNWIND_GOTO, off, 0))
++#define __imm_unwind_exit \
++	__imm_insn(insn_unwind_exit, \
++		   BPF_RAW_INSN(BPF_JMP | BPF_EXIT, 0, BPF_UNWIND_EXIT, 0, 0))
++
++extern void bpf_rcu_read_lock(void) __ksym;
++extern void bpf_rcu_read_unlock(void) __ksym;
++
++extern int bpf_iter_num_new(struct bpf_iter_num *it, int start, int end) __ksym;
++extern int *bpf_iter_num_next(struct bpf_iter_num *it) __ksym;
++extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __ksym;
++
++/* The verifier doesn't know what is in there */
++unsigned long zero;
++unsigned long one = 1;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, long);
++} empty SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 2);
++	__type(key, int);
++	__type(value, long[2]);
++} pairs SEC(".maps");
++
++SEC("socket")
++__description("budget: a loop in the main prog ends it")
++__arch_x86_64
++__arch_arm64
++__success __retval(1)
++__naked void loop_in_main(void)
++{
++	asm volatile (
++		"r6 = %[zero] ll;"
++	"1:"
++		"r1 = *(u64 *)(r6 + 0);"
++		"if r1 != 0 goto 1b;"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm_addr(zero)
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: a loop in the main prog that holds something is left")
++__arch_x86_64
++__arch_arm64
++__success __retval(1)
++__naked void loop_in_main_rcu(void)
++{
++	asm volatile (
++		"r6 = %[zero] ll;"
++		"call %[bpf_rcu_read_lock];"
++	"1:"
++		"r1 = *(u64 *)(r6 + 0);"
++		"if r1 != 0 goto 1b;"
++		"call %[bpf_rcu_read_unlock];"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm_addr(zero),
++		  __imm(bpf_rcu_read_lock),
++		  __imm(bpf_rcu_read_unlock)
++		: __clobber_all
++	);
++}
++
++/* 0 is not what this prog may return */
++SEC("cgroup/recvmsg4")
++__description("budget: a loop in the main prog that cannot return 0 is left")
++__arch_x86_64
++__arch_arm64
++__success
++__naked void loop_in_main_retval(void)
++{
++	asm volatile (
++		"r6 = %[zero] ll;"
++	"1:"
++		"r1 = *(u64 *)(r6 + 0);"
++		"if r1 != 0 goto 1b;"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm_addr(zero)
++		: __clobber_all
++	);
++}
++
++/*
++ * do { p = lookup(); } while (!p); return *p;
++ * may_goto must not go where the loop goes when it's over: p may be NULL. Something is held, so
++ * it cannot end the prog either: there is no way out.
++ */
++SEC("socket")
++__description("budget: something is held and the code behind the loop counts on its exit")
++__arch_x86_64
++__arch_arm64
++__failure __msg("R0 invalid mem access 'map_value_or_null'")
++__naked void exit_of_loop_checks_null_rcu(void)
++{
++	asm volatile (
++		"r1 = 0;"
++		"*(u32 *)(r10 - 4) = r1;"
++		"call %[bpf_rcu_read_lock];"
++	"1:"
++		"r2 = r10;"
++		"r2 += -4;"
++		"r1 = %[empty] ll;"
++		"call %[bpf_map_lookup_elem];"
++		"if r0 == 0 goto 1b;"
++		"r6 = *(u64 *)(r0 + 0);"
++		"call %[bpf_rcu_read_unlock];"
++		"r0 = r6;"
++		"exit;"
++		:
++		: __imm_addr(empty),
++		  __imm(bpf_map_lookup_elem),
++		  __imm(bpf_rcu_read_lock),
++		  __imm(bpf_rcu_read_unlock)
++		: __clobber_all
++	);
++}
++
++__naked __noinline __used
++static unsigned long spins(void)
++{
++	asm volatile (
++		"r2 = %[one] ll;"
++	"1:"
++		"r1 = *(u64 *)(r2 + 0);"
++		"if r1 != 0 goto 1b;"
++		"r0 = 7;"
++		"exit;"
++		:
++		: __imm_addr(one)
++	);
++}
++
++/* the same, for the tests that call it another way */
++__naked __noinline __used
++static unsigned long spins_caught(void)
++{
++	asm volatile (
++		"r2 = %[one] ll;"
++	"1:"
++		"r1 = *(u64 *)(r2 + 0);"
++		"if r1 != 0 goto 1b;"
++		"r0 = 7;"
++		"exit;"
++		:
++		: __imm_addr(one)
++	);
++}
++
++SEC("socket")
++__description("budget: a loop in a subprog is left when there is no unwind_goto")
++__arch_x86_64
++__arch_arm64
++__success __retval(7)
++__naked void loop_in_subprog(void)
++{
++	asm volatile (
++		"call spins;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: a loop in a subprog unwinds when there is unwind_goto")
++__arch_x86_64
++__arch_arm64
++__success __retval(42)
++__naked void loop_in_subprog_caught(void)
++{
++	asm volatile (
++		"call spins_caught;"
++		unwind_goto(1)
++		"exit;"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_unwind_goto(1)
++		: __clobber_all
++	);
++}
++
++__naked __noinline __used
++static unsigned long spins_caught3(void)
++{
++	asm volatile (
++		"r2 = %[zero] ll;"
++	"1:"
++		"r1 = *(u64 *)(r2 + 0);"
++		"if r1 != 0 goto 1b;"
++		"r0 = 7;"
++		"exit;"
++		:
++		: __imm_addr(zero)
++	);
++}
++
++/* Nothing in the subprog unwinds. The pad is looked at because of may_goto that is added. */
++SEC("socket")
++__description("budget: the pad forgets what the caller holds")
++__arch_x86_64
++__arch_arm64
++__failure __msg("cannot be used inside bpf_rcu_read_lock-ed region")
++__naked void pad_forgets(void)
++{
++	asm volatile (
++		"call %[bpf_rcu_read_lock];"
++		"call spins_caught3;"
++		unwind_goto(4)
++		"r6 = r0;"
++		"call %[bpf_rcu_read_unlock];"
++		"r0 = r6;"
++		"exit;"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_unwind_goto(4),
++		  __imm(bpf_rcu_read_lock),
++		  __imm(bpf_rcu_read_unlock)
++		: __clobber_all
++	);
++}
++
++/* There is no pad for what the subprog took itself */
++__naked __noinline __used
++static unsigned long spins_locked(void)
++{
++	asm volatile (
++		"call %[bpf_rcu_read_lock];"
++		"r2 = %[one] ll;"
++	"1:"
++		"r1 = *(u64 *)(r2 + 0);"
++		"if r1 != 0 goto 1b;"
++		"call %[bpf_rcu_read_unlock];"
++		"r0 = 7;"
++		"exit;"
++		:
++		: __imm_addr(one),
++		  __imm(bpf_rcu_read_lock),
++		  __imm(bpf_rcu_read_unlock)
++	);
++}
++
++SEC("socket")
++__description("budget: a loop in a subprog that holds something is left")
++__arch_x86_64
++__arch_arm64
++__success __retval(7)
++__naked void loop_in_subprog_locked(void)
++{
++	asm volatile (
++		"call spins_locked;"
++		unwind_goto(1)
++		"exit;"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_unwind_goto(1)
++		: __clobber_all
++	);
++}
++
++/* r1: how deep to go. Returns the sum of 1 .. r1 */
++__naked __noinline __used
++static unsigned long sum_to(void)
++{
++	asm volatile (
++		"if r1 != 0 goto 1f;"
++		"r0 = 0;"
++		"exit;"
++	"1:"
++		"r6 = r1;"
++		"r1 += -1;"
++		"call sum_to;"
++		"r0 += r6;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: recursion")
++__arch_x86_64
++__arch_arm64
++__success __retval(55)
++__naked void recursion(void)
++{
++	asm volatile (
++		"r1 = 10;"
++		"call sum_to;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/*
++ * The one that is called too deep returns 0: 1000 + 999 + ... down to where it was: more than
++ * 1000, less than 500500
++ */
++SEC("socket")
++__description("budget: recursion that is too deep returns 0 when there is no unwind_goto")
++__arch_x86_64
++__arch_arm64
++__success __retval(1)
++__naked void recursion_too_deep(void)
++{
++	asm volatile (
++		"r1 = 1000;"
++		"call sum_to;"
++		"r1 = r0;"
++		"r0 = 0;"
++		"if r1 <= 1000 goto +2;"
++		"if r1 >= 500500 goto +1;"
++		"r0 = 1;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++unsigned long lowest_r10;
++
++__naked __noinline __used
++static unsigned long goes_down(void)
++{
++	asm volatile (
++		"r2 = %[lowest_r10] ll;"
++		"*(u64 *)(r2 + 0) = r10;"
++		"call goes_down;"
++		"exit;"
++		:
++		: __imm_addr(lowest_r10)
++		: __clobber_all
++	);
++}
++
++/*
++ * The stack of a task is aligned to its size, 16K at least. r10 of the last frame whose body
++ * runs is right above the middle.
++ */
++SEC("socket")
++__description("budget: recursion ends in the middle of the kernel stack")
++__arch_x86_64
++__arch_arm64
++__success __retval(1)
++__naked void recursion_ends_in_the_middle(void)
++{
++	asm volatile (
++		"call goes_down;"
++		"r1 = %[lowest_r10] ll;"
++		"r1 = *(u64 *)(r1 + 0);"
++		"r1 += 64;"
++		"r1 &= 8191;"
++		"r0 = 1;"
++		"if r1 < 256 goto +1;"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(lowest_r10)
++		: __clobber_all
++	);
++}
++
++__naked __noinline __used
++static unsigned long has_large_frame(void)
++{
++	asm volatile (
++		"*(u64 *)(r10 - 1024) = r1;"
++		"call has_large_frame;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/* The limit on the stack of a chain of calls has the frame of a recursive subprog in it */
++SEC("socket")
++__description("budget: one frame of a recursive subprog counts in the depth of the stack")
++__arch_x86_64
++__arch_arm64
++__failure __msg("combined stack size of 2 calls is 2560. Too large")
++__naked void recursion_with_large_frames(void)
++{
++	asm volatile (
++		"*(u64 *)(r10 - 1536) = r1;"
++		"call has_large_frame;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++__naked __noinline __used
++static unsigned long sum_to_caught(void)
++{
++	asm volatile (
++		"if r1 != 0 goto 1f;"
++		"r0 = 0;"
++		"exit;"
++	"1:"
++		"r6 = r1;"
++		"r1 += -1;"
++		"call sum_to_caught;"
++		unwind_goto(2)
++		"r0 += r6;"
++		"exit;"
++		"r0 = 0;"
++		unwind_exit
++		:
++		: __imm_unwind_goto(2),
++		  __imm_unwind_exit
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: recursion with unwind_goto")
++__arch_x86_64
++__arch_arm64
++__success __retval(55)
++__naked void recursion_caught(void)
++{
++	asm volatile (
++		"r1 = 10;"
++		"call sum_to_caught;"
++		unwind_goto(1)
++		"exit;"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_unwind_goto(1)
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: recursion that is too deep unwinds")
++__arch_x86_64
++__arch_arm64
++__success __retval(42)
++__naked void recursion_too_deep_caught(void)
++{
++	asm volatile (
++		"r1 = 1000;"
++		"call sum_to_caught;"
++		unwind_goto(1)
++		"exit;"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_unwind_goto(1)
++		: __clobber_all
++	);
++}
++
++/* r1: how deep to go. It calls itself twice: 2^r1 calls */
++__naked __noinline __used
++static unsigned long calls_itself_twice(void)
++{
++	asm volatile (
++		"if r1 != 0 goto 1f;"
++		"r0 = 1;"
++		"exit;"
++	"1:"
++		"r6 = r1;"
++		"r1 += -1;"
++		"call calls_itself_twice;"
++		"r7 = r0;"
++		"r1 = r6;"
++		"r1 += -1;"
++		"call calls_itself_twice;"
++		"r0 += r7;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: recursion that is not deep, 2^10 calls")
++__arch_x86_64
++__arch_arm64
++__success __retval(1024)
++__naked void recursion_tree(void)
++{
++	asm volatile (
++		"r1 = 10;"
++		"call calls_itself_twice;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/* 61 frames fit in the stack. The check begins with may_goto: the time is limited too. */
++SEC("socket")
++__description("budget: recursion that is not deep, 2^60 calls")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
++__naked void recursion_tree_forever(void)
++{
++	asm volatile (
++		"r1 = 60;"
++		"call calls_itself_twice;"
++		"r0 = 0;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/* The time slice is for an invocation of the prog, not for the call that starts a recursion */
++SEC("socket")
++__description("budget: a loop that calls a subprog that calls itself 2^60 times")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
++__naked void loop_calls_recursion_tree(void)
++{
++	asm volatile (
++		"r8 = %[one] ll;"
++	"1:"
++		"r1 = 60;"
++		"call calls_itself_twice;"
++		"r1 = *(u64 *)(r8 + 0);"
++		"if r1 != 0 goto 1b;"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm_addr(one)
++		: __clobber_all
++	);
++}
++
++/*
++ * Every frame loops forever and calls itself in every trip. The call that finds no room in the
++ * stack returns at once. When the time slice is over every frame that is on the stack leaves
++ * its loop.
++ */
++__naked __noinline __used
++static unsigned long calls_itself_in_a_loop(void)
++{
++	asm volatile (
++		"r6 = %[one] ll;"
++	"1:"
++		"call calls_itself_in_a_loop;"
++		"r1 = *(u64 *)(r6 + 0);"
++		"if r1 != 0 goto 1b;"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(one)
++	);
++}
++
++SEC("socket")
++__description("budget: a subprog that calls itself in a loop that never ends")
++__arch_x86_64
++__arch_arm64
++__success __retval(1)
++__naked void recursion_in_a_loop(void)
++{
++	asm volatile (
++		"call calls_itself_in_a_loop;"
++		"r0 = 1;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/*
++ * calls_loop() -> bpf_loop() -> loop_cb() -> calls_loop(): the frames of the helper are on
++ * the stack too
++ */
++static int loop_cb(__u32 i, void *ctx);
++
++static __noinline int calls_loop(int x)
++{
++	bpf_loop(1, loop_cb, NULL, zero);
++	return 0;
++}
++
++static __noinline int loop_cb(__u32 i, void *ctx)
++{
++	return calls_loop(i);
++}
++
++SEC("socket")
++__description("budget: recursion through a helper that calls a callback")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
++int recursion_through_callback(void *ctx)
++{
++	return calls_loop(0);
++}
++
++struct timer {
++	struct bpf_timer t;
++};
 +
 +struct {
 +	__uint(type, BPF_MAP_TYPE_ARRAY);
 +	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64[9]);
-+} map SEC(".maps");
++	__type(key, int);
++	__type(value, struct timer);
++} timers SEC(".maps");
 +
-+#define LOOKUP(reg)							\
-+	"r1 = 0;"							\
-+	"*(u32 *)(r10 - 4) = r1;"					\
-+	"r2 = r10;"							\
-+	"r2 += -4;"							\
-+	"r1 = %[map] ll;"						\
-+	"call %[bpf_map_lookup_elem];"					\
-+	#reg " = r0;"							\
-+	"if r0 == 0 goto 9f;"
-+
-+#define END								\
-+"9:"									\
-+	"r0 = 0;"							\
-+	"exit;"								\
-+	:								\
-+	: __imm(bpf_map_lookup_elem), __imm_addr(map)			\
-+	: __clobber_all
-+
-+#define OK(text)	SEC("socket") __description("as is: " text) __success __retval(0)
-+#define BAD(text)	SEC("socket") __description("as is: " text) __failure
-+
-+/*
-+ *	do { n += 3; } while (v[0]);
-+ * Two iterations are looked at as they are. The second one ends the walk: its jump goes both
-+ * ways. Its state is joined with the one before, nothing stops n, so n is any number.
-+ * What comes back next is within that. The number of insns tells that there is no fourth pass.
-+ * The loop gets may_goto when the walk ends, and all is done again: two times 24 insns.
-+ */
-+OK("the state that ends a walk is joined with the one before")
-+__log_level(1) __msg("processed 48 insns")
-+__naked void two_passes(void)
++__naked __noinline __used
++static int arms_itself(void)
 +{
 +	asm volatile (
-+	LOOKUP(r7)
-+	"r6 = 0;"
-+"1:"
-+	"r6 += 3;"
-+	"r1 = *(u32 *)(r7 + 0);"
-+	"if r1 != 0 goto 1b;"
-+	"r6 &= 63;"
-+	"r7 += r6;"
-+	"r0 = *(u8 *)(r7 + 8);"
-+	END);
++		"r1 = r3;"
++		"r2 = %[arms_itself] ll;"
++		"call %[bpf_timer_set_callback];"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(arms_itself), __imm(bpf_timer_set_callback)
++		: __clobber_all
++	);
 +}
 +
-+/*
-+ *	x = (v[0] & 1) << 62; do { x |= x >> 1; if (x > 1 << 62) break; } while (v[1]);
-+ * The range at the head is 0..1 << 62 in every pass, the lower half is 0, and one more bit is not
-+ * known: bit 61, 60 .. 32. That is not followed bit by bit, 30 passes and more in a nest of loops:
-+ * the known bits are what the range says after the first one.
-+ */
-+OK("known bits are not lost one by one")
-+__log_level(1) __msg("processed 74 insns")
-+__naked void bits_one_by_one(void)
++/* The helper keeps the callback for later. There is nothing to count, on any architecture. */
++SEC("socket")
++__description("budget: a callback that arms itself again is not a recursion")
++__success
++__xlated("...")
++__xlated("exit")
++__xlated("r1 = r3")
++__naked void callback_arms_itself(void)
 +{
 +	asm volatile (
-+	LOOKUP(r7)
-+	"r6 = *(u64 *)(r7 + 0);"
-+	"r6 &= 1;"
-+	"r6 <<= 62;"
-+	"r8 = 1;"
-+	"r8 <<= 62;"
-+"1:"
-+	"r1 = r6;"
-+	"r1 >>= 1;"
-+	"r6 |= r1;"
-+	"if r6 > r8 goto 9f;"
-+	"r1 = *(u64 *)(r7 + 8);"
-+	"if r1 != 0 goto 1b;"
-+	"r6 >>= 60;"
-+	"r7 += r6;"
-+	"r0 = *(u8 *)(r7 + 0);"
-+	END);
++		"r1 = 0;"
++		"*(u32 *)(r10 - 4) = r1;"
++		"r2 = r10;"
++		"r2 += -4;"
++		"r1 = %[timers] ll;"
++		"call %[bpf_map_lookup_elem];"
++		"if r0 == 0 goto 1f;"
++		"r1 = r0;"
++		"r2 = %[arms_itself] ll;"
++		"call %[bpf_timer_set_callback];"
++	"1:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(timers), __imm_addr(arms_itself), __imm(bpf_map_lookup_elem),
++		  __imm(bpf_timer_set_callback)
++		: __clobber_all
++	);
 +}
-+
-+/*
-+ *	if (x < 1000000) return; do { if (x && !v[2]) x--; } while (v[1]);
-+ * x is 1000000..U64_MAX, then 999999..U64_MAX. As a signed number it's S64_MIN..S64_MAX all the
-+ * time: no signed bound moves, and the range does, a million times if nothing is done about it.
-+ */
-+OK("a range moves and its signed bounds do not")
-+__log_level(1) __msg("processed 68 insns")
-+__naked void unsigned_bound_moves(void)
-+{
-+	asm volatile (
-+	LOOKUP(r7)
-+	"r6 = *(u64 *)(r7 + 0);"
-+	"if r6 < 1000000 goto 9f;"
-+"1:"
-+	"if r6 == 0 goto 2f;"
-+	"r1 = *(u64 *)(r7 + 16);"
-+	"if r1 != 0 goto 2f;"
-+	"r6 += -1;"
-+"2:"
-+	"r1 = *(u64 *)(r7 + 8);"
-+	"if r1 != 0 goto 1b;"
-+	"r6 &= 7;"
-+	"r7 += r6;"
-+	"r0 = *(u8 *)(r7 + 0);"
-+	END);
-+}
-+
-+/*
-+ *	n = 3; while (v[0]) { if (v[0] != 1 && n) n--; }
-+ * n goes from 3 to 0. The bound that moves at the head of the loop is put at 0, the nearest of the
-+ * fixed stops, and that holds. Without it n goes on to fall, and n & 63 is up to 63.
-+ */
-+OK("a number that falls stops at 0")
-+__naked void stops_at_0(void)
-+{
-+	asm volatile (
-+	LOOKUP(r6)
-+	"r7 = 3;"
-+"1:"
-+	"r1 = *(u64 *)(r6 + 0);"
-+	"if r1 == 0 goto 3f;"
-+	"if r1 == 1 goto 2f;"
-+	"if r7 == 0 goto 2f;"
-+	"r7 += -1;"
-+"2:"
-+	"goto 1b;"
-+"3:"
-+	"r7 &= 63;"
-+	"r6 += r7;"
-+	"r0 = *(u8 *)(r6 + 68);"
-+	END);
-+}
-+
-+static __naked __noinline __used void nothing(void)
-+{
-+	asm volatile ("r0 = 0; exit;" ::: __clobber_all);
-+}
-+
-+/*
-+ *	if (v[0]) { n = 7; have = 1; }
-+ *	nothing();
-+ *	i = 0; do { if (v[0] != 3) i++; } while (i < 8 && v[0] != 2);
-+ *	if (have) return n;
-+ * (have = 0, n is not set) and (have = 1, n = 7) wait for the function. What comes out of it goes
-+ * to both at once, and the insn behind the call is the head of the loop: two walks begin, and no
-+ * insn is looked at in between. The state that ends one of them is joined with a state of
-+ * that walk. With a state of the other one it would be (have = 0 or 1, n is not set).
-+ */
-+#define TWO_WALKS(name, test)						\
-+__naked void name(void)							\
-+{									\
-+	asm volatile (							\
-+	LOOKUP(r8)							\
-+	"r9 = 0;"							\
-+	"r1 = *(u32 *)(r8 + 0);"					\
-+	"if r1 != 0 goto 1f;"						\
-+	"r7 = 0;"							\
-+	"goto 2f;"							\
-+"1:"									\
-+	"r6 = 7;"							\
-+	"r7 = 1;"							\
-+"2:"									\
-+	"call nothing;"							\
-+"3:"									\
-+	"r1 = *(u32 *)(r8 + 0);"					\
-+	"if r1 == 3 goto +1;"						\
-+	"r9 += 1;"							\
-+	"if r9 > 7 goto 4f;"						\
-+	"if r1 == 1 goto 3b;"						\
-+	"if r1 != 2 goto 3b;"						\
-+"4:"									\
-+	test								\
-+	"r0 = r6;"							\
-+	"exit;"								\
-+	END);								\
-+}
-+
-+OK("two walks begin at the same time")
-+TWO_WALKS(two_walks_at_once, "if r7 == 0 goto 9f;")
-+
-+/* n is read when it is not set */
-+BAD("two walks begin at the same time, the register is not set")
-+__msg("R6 !read_ok")
-+TWO_WALKS(two_walks_at_once_bad, "if r7 != 0 goto 9f;")
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_need.c b/tools/testing/selftests/bpf/progs/verifier_loop_need.c
-new file mode 100644
-index 000000000000..d13030f766bf
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_loop_need.c
-@@ -0,0 +1,320 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * A counted loop changes a number in a way that has no formula:
-+ *	for (i = 0; i < 1000; i++) x = x * 3 + 1;
-+ * The verifier can go through the iterations one by one to find out what x is. It does so only
-+ * if something ahead looks at x: a jump, an access to memory, a call. Otherwise x is not
-+ * known in the loop and behind it, and the loop is looked at once.
-+ *
-+ * What looks at a number is found ahead of the main pass, and it is a guess. A use that is missed
-+ * rejects a program that would load after a walk. It never loads a program that is not safe.
-+ */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+/* a map value of 64 bytes that holds nothing but numbers */
-+u64 vals[8];
 +
 +struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 4096);
-+} ringbuf SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(type, BPF_MAP_TYPE_HASH);
 +	__uint(max_entries, 1);
-+} arena SEC(".maps");
++	__type(key, int);
++	__type(value, long);
++} hash SEC(".maps");
 +
-+#define OK(text)	SEC("socket") __description("need: " text) __success
-+#define BAD(text)	SEC("socket") __description("need: " text) __failure
-+#define NOT_WALKED	__log_level(2) __msg("nothing looks at it")
-+#define WALKED		__log_level(2) __not_msg("nothing looks at it")
-+
-+/* The read is not allowed */
-+#define UNLESS(cond)	"if " cond " goto +1; r0 = *(u64 *)(r10 + 8);"
-+
-+/* r6 is 1 or 2, and is multiplied by 3 in each of @n iterations. @use comes behind the loop. */
-+#define TIMES_3_IN(init, n, use)					\
-+	asm volatile (							\
-+	init								\
-+	"call %[bpf_get_prandom_u32];"					\
-+	"r6 = r0;"							\
-+	"r6 &= 1;"							\
-+	"r6 += 1;"							\
-+	"r7 = 0;"							\
-+"1:	r6 *= 3;"							\
-+	"r7 += 1;"							\
-+	"if r7 < " #n " goto 1b;"					\
-+	use								\
-+	"exit;"								\
-+	:: __imm(bpf_get_prandom_u32), __imm_addr(vals) : __clobber_all)
-+#define TIMES_3(n, use)	TIMES_3_IN("", n, use "r0 = 0;")
-+
-+OK("a number that is only stored is not followed")
-+NOT_WALKED __msg("processed 11 insns")
-+__naked void stored_only(void)
++static __noinline int sleeps_at_the_bottom(int n, void *user_ptr)
 +{
-+	TIMES_3(1000, "*(u64 *)(r10 - 8) = r6;");
++	char buf[8];
++
++	if (n)
++		return sleeps_at_the_bottom(n - 1, user_ptr) + 1;
++	return bpf_copy_from_user(buf, sizeof(buf), user_ptr);
 +}
 +
-+OK("a jump looks at the number")
-+WALKED
-+__naked void jump(void)
++static int calls_what_sleeps(void *map, void *key, void *value, void *ctx)
 +{
-+	TIMES_3(5, UNLESS("r6 <= 486"));
++	return sleeps_at_the_bottom(1, (void *)zero) & 1;
 +}
 +
-+BAD("a jump looks at the number, which is too large")
-+__msg("invalid read from stack")
-+__naked void jump_too_large(void)
++SEC("syscall")
++__description("budget: recursion in a sleepable prog can sleep")
++__arch_x86_64
++__arch_arm64
++__success
++int recursion_sleeps(void *ctx)
 +{
-+	TIMES_3(5, UNLESS("r6 <= 485"));
++	return sleeps_at_the_bottom(1, (void *)zero) & 1;
 +}
 +
-+OK("the number is an offset in a map value that holds numbers")
-+WALKED
-+__naked void value_offset(void)
++/* The frames of the callers are not there when a recursive subprog is verified */
++SEC("syscall")
++__description("budget: recursion in a callback that runs under rcu_read_lock() cannot sleep")
++__arch_x86_64
++__arch_arm64
++__failure __msg("sleepable helper bpf_copy_from_user#148 in callback running under rcu_read_lock")
++int recursion_sleeps_in_rcu_callback(void *ctx)
 +{
-+	/* 27 or 54 */
-+	TIMES_3(3, "r1 = %[vals] ll; r1 += r6; r0 = *(u8 *)(r1 + 9);");
++	bpf_for_each_map_elem(&hash, calls_what_sleeps, NULL, 0);
++	return 0;
 +}
-+
-+#define VALUE_AT(reg, off)	"r1 = %[vals] ll; r1 += " #reg "; r0 = *(u8 *)(r1 + " #off ");"
-+
-+__naked __noinline __used
-+static unsigned long value_at_plus_9(void)
-+{
-+	asm volatile ("r2 = r1;" VALUE_AT(r2, 9) "exit;" :: __imm_addr(vals) : __clobber_all);
-+}
-+
-+OK("the number is an offset in a map value in a function")
-+WALKED
-+__naked void value_offset_argument(void)
-+{
-+	TIMES_3(3, "r1 = r6; call value_at_plus_9;");
-+}
-+
-+__naked __noinline __used
-+static unsigned long times_27(void)
-+{
-+	TIMES_3_IN("", 3, "r0 = r6;");
-+}
-+
-+OK("what a function returns is an offset in a map value")
-+WALKED
-+__naked void value_offset_returned(void)
-+{
-+	asm volatile ("call times_27;" VALUE_AT(r0, 9) "exit;"
-+		      :: __imm_addr(vals) : __clobber_all);
-+}
-+
-+#if defined(__clang_major__) && __clang_major__ >= 23
-+struct pair {
-+	__u64 lo;	/* r0 */
-+	__u64 hi;	/* r2 */
-+};
-+
-+__naked __noinline __used
-+static struct pair zero_and_times_27(void)
-+{
-+	TIMES_3_IN("", 3, "r0 = 0; r2 = r6;");
-+}
-+
-+OK("the second half of what a function returns is an offset in a map value")
-+__load_if_JITed() WALKED
-+__naked void value_offset_returned_in_r2(void)
-+{
-+	asm volatile ("call zero_and_times_27;" VALUE_AT(r2, 9) "exit;"
-+		      :: __imm_addr(vals) : __clobber_all);
-+}
-+#endif
-+
-+__naked __noinline __used
-+static unsigned long times_27_there(void)
-+{
-+	TIMES_3_IN("r8 = r1;", 3, "*(u64 *)(r8 + 0) = r6; r0 = 0;");
-+}
-+
-+#define TIMES_27_AT_FP_8	"r1 = r10; r1 += -8; call times_27_there; r2 = *(u64 *)(r10 - 8);"
-+
-+OK("a function stores the number in the stack of its caller")
-+WALKED
-+__naked void stored_for_the_caller(void)
-+{
-+	asm volatile (TIMES_27_AT_FP_8 VALUE_AT(r2, 9) "exit;"
-+		      :: __imm_addr(vals) : __clobber_all);
-+}
-+
-+OK("the number is an offset in the stack")
-+WALKED
-+__naked void stack_offset(void)
-+{
-+	/* fp-9 or fp-18 */
-+	TIMES_3(2, "*(u64 *)(r10 - 8) = r7; *(u64 *)(r10 - 16) = r7; *(u64 *)(r10 - 24) = r7;"
-+		   "r6 = -r6; r1 = r10; r1 += r6; r0 = *(u8 *)(r1 + 0);");
-+}
-+
-+__naked __noinline __used
-+static unsigned long times_9(void)
-+{
-+	TIMES_3_IN("", 2, "r0 = r6;");
-+}
-+
-+/* fp-9 or fp-18, plus @off */
-+#define STACK_AT_MINUS_R0(off)						\
-+	"*(u64 *)(r10 - 8) = r0; *(u64 *)(r10 - 16) = r0; *(u64 *)(r10 - 24) = r0;"	\
-+	"r0 = -r0; r1 = r10; r1 += r0; r0 = *(u8 *)(r1 + " #off ");"
-+
-+OK("what a function returns is an offset in the stack")
-+WALKED
-+__naked void stack_offset_returned(void)
-+{
-+	asm volatile ("call times_9;" STACK_AT_MINUS_R0(0) "exit;" ::: __clobber_all);
-+}
-+
-+/* r6 is 1, and is multiplied by 3 in each of 2 iterations */
-+#define NINE(use)							\
-+	asm volatile (							\
-+	"r6 = 1;"							\
-+	"r7 = 0;"							\
-+"1:	r6 *= 3;"							\
-+	"r7 += 1;"							\
-+	"if r7 < 2 goto 1b;"						\
-+	use								\
-+	"r0 = 0;"							\
-+	"exit;"								\
-+	:: __imm(bpf_ringbuf_reserve), __imm(bpf_ringbuf_discard),	\
-+	   __imm_addr(ringbuf) : __clobber_all)
-+
-+OK("the number is part of a size that has to be a constant")
-+WALKED
-+__naked void constant_argument(void)
-+{
-+	NINE("r1 = %[ringbuf] ll; r2 = 7; r2 += r6; r3 = 0; call %[bpf_ringbuf_reserve];"
-+	     "if r0 == 0 goto +3; r1 = r0; r2 = 0; call %[bpf_ringbuf_discard];");
-+}
-+
-+#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
-+/* Nothing checks where a pointer to arena points to */
-+OK("an address in arena is not followed")
-+NOT_WALKED
-+__naked void arena_address(void)
-+{
-+	asm volatile (
-+	"r1 = %[arena] ll;"
-+	"r6 = 1;"
-+	"r7 = 0;"
-+"1:	r1 = addr_space_cast(r6, 0x0, 0x1);"
-+	"r0 = *(u64 *)(r1 + 0);"
-+	"r6 *= 3;"
-+	"r7 += 1;"
-+	"if r7 < 1000 goto 1b;"
-+	"r0 = 0;"
-+	"exit;"
-+	:: __imm_addr(arena) : __clobber_all);
-+}
-+#endif
 +
 +/*
-+ *	p = NULL; for (i = 0; i < 3; i++) { if (have) n += *p; p = &val; have = 1; }
-+ * No jump and no add looks at p.
++ * may_goto of the program stops the loop that it leaves. This one goes to itself
++ * when it is out of budget. The loop spins until may_goto that is added ends the prog.
 + */
-+OK("the base of a load is 0 in the first iteration")
-+WALKED
-+__naked void base_of_a_load(void)
++SEC("socket")
++__description("budget: may_goto that doesn't leave the loop")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
++__naked void may_goto_stays_in_loop(void)
 +{
 +	asm volatile (
-+	"r6 = %[vals] ll;"
-+	"r7 = 0;"
-+	"r8 = 0;"
-+	"r9 = 0;"
-+"1:	if r9 == 0 goto 2f;"
-+	"r0 = *(u64 *)(r8 + 0);"
-+"2:	r8 = r6;"
-+	"r9 = 1;"
-+	"r7 += 1;"
-+	"if r7 < 3 goto 1b;"
-+	"r0 = 0;"
-+	"exit;"
-+	:: __imm_addr(vals) : __clobber_all);
++		"r6 = %[one] ll;"
++	"1:"
++		".8byte %[may_goto_self];"
++		"r1 = *(u64 *)(r6 + 0);"
++		"if r1 != 0 goto 1b;"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm_addr(one),
++		  __imm_insn(may_goto_self, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, -1, 0))
++		: __clobber_all
++	);
 +}
 +
-+/* r8 goes on by 0 or 8 bytes. Nothing tells how far but the iterations. */
-+OK("a pointer that moves is followed")
-+WALKED
-+__naked void pointer(void)
++/* The jump to itself has to go through may_goto that is added in front of it */
++SEC("socket")
++__description("budget: a conditional jump to itself")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
++__naked void jump_to_itself(void)
 +{
 +	asm volatile (
-+	"r8 = %[vals] ll;"
-+	"r7 = 0;"
-+"1:	r1 = r7;"
-+	"r1 &= 1;"
-+	"r1 <<= 3;"
-+	"r8 += r1;"
-+	"r7 += 1;"
-+	"if r7 < 14 goto 1b;"
-+	"r0 = *(u64 *)(r8 + 0);"
-+	"r0 = 0;"
-+	"exit;"
-+	:: __imm_addr(vals) : __clobber_all);
++		"r6 = %[one] ll;"
++		"r1 = *(u64 *)(r6 + 0);"
++	"1:"
++		"if r1 != 0 goto 1b;"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm_addr(one)
++		: __clobber_all
++	);
 +}
 +
-+/* The sets have 64 slots of the stack. What is deeper is followed. */
-+OK("a jump looks at a slot below fp-512")
-+__load_if_large_stack()
-+WALKED
-+__naked void deep_slot(void)
++/* A cycle with two entries: there is no insn that every way into it goes through */
++SEC("socket")
++__description("budget: a loop with two entries")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
++__naked void loop_with_two_entries(void)
 +{
 +	asm volatile (
-+	"r6 = 2;"
-+	"*(u64 *)(r10 - 520) = r6;"
-+	"r7 = 0;"
-+"1:	r6 = *(u64 *)(r10 - 520);"
-+	"r6 *= 3;"
-+	"*(u64 *)(r10 - 520) = r6;"
-+	"r7 += 1;"
-+	"if r7 < 5 goto 1b;"
-+	"r6 = *(u64 *)(r10 - 520);"
-+	UNLESS("r6 == 486")
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
++		"r6 = %[one] ll;"
++		"r1 = *(u64 *)(r6 + 0);"
++		"if r1 != 0 goto 2f;"
++	"1:"
++		"r2 = *(u64 *)(r6 + 0);"
++		"if r2 == 0 goto 3f;"
++	"2:"
++		"r3 = *(u64 *)(r6 + 0);"
++		"if r3 != 0 goto 1b;"
++	"3:"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm_addr(one)
++		: __clobber_all
++	);
 +}
 +
-+/* The iterator is not a number. It is at its end after 3 of 5 iterations. */
-+OK("a slot that holds an iterator is followed")
-+WALKED
-+__naked void iterator_slot(void)
++/*
++ * bpf_iter_num_next() stops the loop that the program leaves when there is nothing left.
++ * This one goes on. The iterator is held, so the loop is left when it is out of budget.
++ */
++SEC("socket")
++__description("budget: a loop that goes on when its iterator is drained")
++__arch_x86_64
++__arch_arm64
++__success __retval(1)
++__naked void loop_after_iter_is_drained(void)
 +{
 +	asm volatile (
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"r2 = 0;"
-+	"r3 = 3;"
-+	"call %[bpf_iter_num_new];"
-+	"r7 = 0;"
-+"1:	r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_next];"
-+	"r7 += 1;"
-+	"if r7 < 5 goto 1b;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call %[bpf_iter_num_destroy];"
-+	"r0 = 0;"
-+	"exit;"
-+	:: __imm(bpf_iter_num_new), __imm(bpf_iter_num_next), __imm(bpf_iter_num_destroy)
-+	: __clobber_all);
++		"r1 = r10;"
++		"r1 += -8;"
++		"r2 = 0;"
++		"r3 = 10;"
++		"call %[bpf_iter_num_new];"
++		"r6 = %[one] ll;"
++	"1:"
++		"r1 = r10;"
++		"r1 += -8;"
++		"call %[bpf_iter_num_next];"
++		"r1 = *(u64 *)(r6 + 0);"
++		"if r1 != 0 goto 1b;"
++		"r1 = r10;"
++		"r1 += -8;"
++		"call %[bpf_iter_num_destroy];"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm_addr(one),
++		  __imm(bpf_iter_num_new),
++		  __imm(bpf_iter_num_next),
++		  __imm(bpf_iter_num_destroy)
++		: __clobber_all
++	);
 +}
 +
-+/* BTF FUNC records are not generated for kfuncs referenced from inline assembly */
++/*
++ * bpf_iter_num_next() stops the loops that the program entered after it made the iterator.
++ * The loop around bpf_for() makes a new one in every trip, so it gets may_goto. It ends on its own
++ * after a time that is much longer than the budget.
++ */
++unsigned long trips, sum;
++unsigned long many = 1UL << 32;
++
++SEC("socket")
++__description("budget: the iterator of bpf_for() doesn't stop the loop around it")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
++int loop_around_bpf_for(void *ctx)
++{
++	volatile unsigned long *cnt = &trips, *max = &many;
++	int i;
++
++	do {
++		bpf_for(i, 0, 2)
++			sum += i;
++		(*cnt)++;
++	} while (*cnt < *max);
++	return 1;
++}
++
++/*
++ * The first time the outer loop counts on bpf_iter_num_next(): its trips are joined, r7 is not
++ * known and the store is refused. All is done again, the loop is walked, r7 is 27 and the store is
++ * dead code. Where the first time got to doesn't count.
++ */
++SEC("socket")
++__description("budget: an insn that is reached only before all is done again is dead code")
++__arch_x86_64
++__arch_arm64
++__success
++__xlated("...")
++__xlated("if r6 < 0x3 goto pc-{{[0-9]+}}")
++__xlated("r0 = 0")
++__xlated("exit")
++__naked void insn_of_dropped_round(void)
++{
++	asm volatile (
++		"r6 = 0;"
++		"r7 = 1;"
++	"1:"
++		"r1 = r10;"
++		"r1 += -8;"
++		"r2 = 0;"
++		"r3 = 10;"
++		"call %[bpf_iter_num_new];"
++	"2:"
++		"r1 = r10;"
++		"r1 += -8;"
++		"call %[bpf_iter_num_next];"
++		"if r0 != 0 goto 2b;"
++		"r1 = r10;"
++		"r1 += -8;"
++		"call %[bpf_iter_num_destroy];"
++		"r7 *= 3;"
++		"r6 += 1;"
++		"if r6 == 1 goto 1b;"
++		"if r6 < 3 goto 1b;"
++		"if r7 == 27 goto 3f;"
++		"r1 = 0;"
++		"*(u64 *)(r1 + 0) = r1;"
++	"3:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_iter_num_new),
++		  __imm(bpf_iter_num_next),
++		  __imm(bpf_iter_num_destroy)
++		: __clobber_all
++	);
++}
++
++/*
++ * The loop at 3: spins. It has no jump that every trip goes through, so may_goto is at its head.
++ * The first way out of it, from 2: to 1:, is the back edge of the loop at 1:, which
++ * has no may_goto of its own: bpf_iter_num_next() stops it. From the head of 3: to 1: there is
++ * no bpf_iter_num_next().
++ */
++SEC("socket")
++__description("budget: may_goto at the head of a loop leaves the loops around it too")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
++__naked void guard_at_head_of_nested_loop(void)
++{
++	asm volatile (
++		"r6 = %[one] ll;"
++		"r9 = %[zero] ll;"
++		"r7 = 0;"
++		"r1 = r10;"
++		"r1 += -8;"
++		"r2 = 0;"
++		"r3 = 2;"
++		"call %[bpf_iter_num_new];"
++		"call %[bpf_rcu_read_lock];"
++		"r7 += 1;"
++		"goto 1f;"
++	"2:"
++		"r7 += 1;"
++		"r1 = *(u64 *)(r9 + 0);"
++		"if r1 != 0 goto 4f;"
++		"r1 = *(u64 *)(r9 + 0);"
++		"if r1 != 0 goto 4f;"
++	"1:"
++		"r7 += 1;"
++		"r1 = *(u64 *)(r6 + 0);"
++	"5:"
++		"if r1 == 0 goto 5b;"
++	"3:"
++		"r1 = *(u64 *)(r9 + 0);"
++		"if r1 != 0 goto +0;"
++	"4:"
++		"r7 += 1;"
++		"r1 = *(u64 *)(r9 + 0);"
++		"if r1 == 0 goto 3b;"
++		"r1 = r10;"
++		"r1 += -8;"
++		"call %[bpf_iter_num_next];"
++		"if r0 == 0 goto 6f;"
++		"r1 = *(u64 *)(r9 + 0);"
++		"if r1 == 0 goto 2b;"
++		"r1 = *(u64 *)(r6 + 0);"
++		"if r1 != 0 goto 4b;"
++	"6:"
++		"call %[bpf_rcu_read_unlock];"
++		"r1 = r10;"
++		"r1 += -8;"
++		"call %[bpf_iter_num_destroy];"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(one),
++		  __imm_addr(zero),
++		  __imm(bpf_iter_num_new),
++		  __imm(bpf_iter_num_next),
++		  __imm(bpf_iter_num_destroy),
++		  __imm(bpf_rcu_read_lock),
++		  __imm(bpf_rcu_read_unlock)
++		: __clobber_all
++	);
++}
++
++#define NEST(n, body)	#n ": call %[bpf_get_prandom_u32];" body "if r0 == " #n " goto " #n "b;"
++#define NEST4(a, b, c, d, body)	NEST(a, NEST(b, NEST(c, NEST(d, body))))
++
++/* It's refused before anything goes up the nest from each of its insns */
++SEC("socket")
++__description("budget: a nest of 17 loops")
++__failure __msg("Too many nested loops at")
++__naked void nest_of_17_loops(void)
++{
++	asm volatile (
++		NEST4(1, 2, 3, 4, NEST4(5, 6, 7, 8, NEST4(9, 10, 11, 12,
++		NEST4(13, 14, 15, 16, NEST(17, "")))))
++		"r0 = 0;"
++		"exit;"
++		:: __imm(bpf_get_prandom_u32) : __clobber_all);
++}
++
++/*
++ * The loops below spin and have no jump that every trip goes through, so may_goto is at the head.
++ * It goes to the code behind the loop, past what the loop makes for that code, with the registers
++ * and the stack as they are at the head.
++ *
++ * r6 is 5 on every edge of the program that gets behind the loop. At the head it's 7.
++ */
++__naked __noinline __used
++static unsigned long spins_and_makes(void)
++{
++	asm volatile (
++		"r8 = %[one] ll;"
++		"r6 = 7;"
++	"1:"
++		"r1 = *(u64 *)(r8 + 0);"
++		"if r1 == 1 goto 1b;"
++		"r6 = 5;"
++		"if r1 != 2 goto 1b;"
++		"r0 = r6;"
++		"exit;"
++		:
++		: __imm_addr(one)
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: may_goto at the head of a loop keeps a register that the loop sets")
++__arch_x86_64
++__arch_arm64
++__success __retval(7)
++__naked void guard_at_head_keeps_reg(void)
++{
++	asm volatile (
++		"call spins_and_makes;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/* Only the loop sets r6 */
++__naked __noinline __used
++static unsigned long spins_and_makes_unset(void)
++{
++	asm volatile (
++		"r8 = %[zero] ll;"
++	"1:"
++		"r1 = *(u64 *)(r8 + 0);"
++		"if r1 == 1 goto 1b;"
++		"r6 = 5;"
++		"if r1 != 2 goto 1b;"
++		"r0 = r6;"
++		"exit;"
++		:
++		: __imm_addr(zero)
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: may_goto at the head of a loop, a register that only the loop sets")
++__failure __msg("R6 !read_ok")
++__naked void guard_at_head_unset_reg(void)
++{
++	asm volatile (
++		"call spins_and_makes_unset;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/* fp-8 is 0 on every edge of the program that gets behind the loop. It's dead at the head. */
++__naked __noinline __used
++static unsigned long spins_and_makes_slot(void)
++{
++	asm volatile (
++		"r8 = %[zero] ll;"
++		"r7 = 1;"
++		"*(u64 *)(r10 - 8) = r7;"
++		"r7 = 0;"
++	"1:"
++		"r1 = *(u64 *)(r8 + 0);"
++		"if r1 == 1 goto 1b;"
++		"*(u64 *)(r10 - 8) = r7;"
++		"if r1 != 2 goto 1b;"
++		"r0 = *(u64 *)(r10 - 8);"
++		"r0 <<= 3;"
++		"r8 += r0;"
++		"r0 = *(u64 *)(r8 + 0);"
++		"exit;"
++		:
++		: __imm_addr(zero)
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: may_goto at the head of a loop, a stack slot that is dead there")
++__failure __msg("slot poisoned by dead code elimination")
++__naked void guard_at_head_dead_slot(void)
++{
++	asm volatile (
++		"call spins_and_makes_slot;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/*
++ * The low half of r7 is live at the head of the loop, all of it where may_goto goes. On the edges
++ * of the program that get there it's 3. 'w7 &= 7' has to clear the upper half.
++ */
++__naked __noinline __used
++static unsigned long spins_with_half_of_reg(void)
++{
++	asm volatile (
++		"r8 = %[zero] ll;"
++		"r7 = *(u64 *)(r8 + 0);"
++		"w7 &= 7;"
++	"1:"
++		"r1 = *(u64 *)(r8 + 0);"
++		"if w1 == w7 goto 1b;"
++		"r7 = 3;"
++		"if r1 == 2 goto 2f;"
++		"w7 = 5;"
++		"goto 1b;"
++	"2:"
++		"r0 = r7;"
++		"r0 >>= 32;"
++		"exit;"
++		:
++		: __imm_addr(zero)
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: may_goto at the head of a loop, one half of a register is live there")
++__arch_x86_64
++__arch_arm64
++__flag(BPF_F_TEST_RND_HI32)
++__success __retval(0)
++__naked void guard_at_head_half_of_reg(void)
++{
++	asm volatile (
++		"call spins_with_half_of_reg;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/*
++ * From the head of a loop to the code behind it is not an edge of the program. What holds on
++ * every edge of the program that gets there doesn't hold when may_goto does.
++ */
++const volatile unsigned long four = 4;
++char five_bytes[5] SEC(".data.five_bytes");
++
++/*
++ * r7 points to 'four' on every edge. At the head of the first loop it points to @at_head.
++ * The second loop goes on while r6 is less than what r7 points to.
++ */
++#define SPINS_THEN_COUNTS(at_head)			\
++		"r8 = %[zero] ll;"			\
++		"r7 = %[" #at_head "] ll;"		\
++	"1:"						\
++		"r2 = *(u64 *)(r7 + 0);"		\
++		"r1 = *(u64 *)(r8 + 0);"		\
++		"if r1 == 1 goto 1b;"			\
++		"r7 = %[four] ll;"			\
++		"if r1 == 2 goto 2f;"			\
++		"r7 = %[" #at_head "] ll;"		\
++		"goto 1b;"				\
++	"2:"						\
++		"r6 = 0;"				\
++	"3:"						\
++		"r2 = *(u64 *)(r7 + 0);"		\
++		"if r6 >= r2 goto 4f;"			\
++		"r1 = %[five_bytes] ll;"		\
++		"r1 += r6;"				\
++		"r3 = 1;"				\
++		"*(u8 *)(r1 + 0) = r3;"			\
++		"r6 += 1;"				\
++		"goto 3b;"				\
++	"4:"						\
++		"r0 = r6;"				\
++		"exit;"					\
++		:					\
++		: __imm_addr(zero),			\
++		  __imm_addr(one),			\
++		  __imm_addr(four),			\
++		  __imm_addr(five_bytes)		\
++		: __clobber_all
++
++__naked __noinline __used
++static unsigned long spins_then_counts_to_anything(void)
++{
++	asm volatile (SPINS_THEN_COUNTS(one));
++}
++
++SEC("socket")
++__description("budget: may_goto at the head of a loop, another bound for the next loop")
++__arch_x86_64
++__arch_arm64
++__failure __msg("math between map_value pointer and register with unbounded min value")
++__naked void guard_at_head_bound_of_next_loop(void)
++{
++	asm volatile (
++		"call spins_then_counts_to_anything;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/*
++ * r7 is fp-8 on every edge and fp-16 at the head of the first loop. The second loop
++ * counts in fp-16 and stores a number that nobody knows through r7.
++ */
++__naked __noinline __used
++static unsigned long spins_then_counts_on_stack(void)
++{
++	asm volatile (
++		"r8 = %[zero] ll;"
++		"r3 = 0;"
++		"*(u64 *)(r10 - 8) = r3;"
++		"*(u64 *)(r10 - 16) = r3;"
++		"r7 = r10;"
++		"r7 += -16;"
++	"1:"
++		"r2 = *(u64 *)(r7 + 0);"
++		"r1 = *(u64 *)(r8 + 0);"
++		"if r1 == 1 goto 1b;"
++		"r7 = r10;"
++		"r7 += -8;"
++		"if r1 == 2 goto 2f;"
++		"r7 = r10;"
++		"r7 += -16;"
++		"goto 1b;"
++	"2:"
++		"r3 = 0;"
++		"*(u64 *)(r10 - 16) = r3;"
++	"3:"
++		"r6 = *(u64 *)(r10 - 16);"
++		"if r6 == 4 goto 4f;"
++		"r1 = %[five_bytes] ll;"
++		"r1 += r6;"
++		"r3 = 1;"
++		"*(u8 *)(r1 + 0) = r3;"
++		"r6 += 1;"
++		"*(u64 *)(r10 - 16) = r6;"
++		"r3 = *(u64 *)(r8 + 0);"
++		"*(u64 *)(r7 + 0) = r3;"
++		"goto 3b;"
++	"4:"
++		"r0 = r6;"
++		"exit;"
++		:
++		: __imm_addr(zero),
++		  __imm_addr(five_bytes)
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: may_goto at the head of a loop, another pointer to the stack")
++__arch_x86_64
++__arch_arm64
++__failure __msg("math between map_value pointer and register with unbounded min value")
++__naked void guard_at_head_stack_pointer(void)
++{
++	asm volatile (
++		"call spins_then_counts_on_stack;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/*
++ * Two states that have no join enter a loop. One has no count, so the loop gets may_goto.
++ * The other one has a count. may_goto is there when it runs too, and a loop in front
++ * may have used up the time slice. Then it leaves the loop in the first trip.
++ *
++ * r7 = the value, 16 bytes, and r8 = count, or r7 = 0 and r8 = anything
++ */
++#define VALUE_AND_COUNT_OR_NEITHER(count)		\
++		"r1 = 0;"				\
++		"*(u32 *)(r10 - 4) = r1;"		\
++		"r2 = r10;"				\
++		"r2 += -4;"				\
++		"r1 = %[pairs] ll;"			\
++		"call %[bpf_map_lookup_elem];"		\
++		"if r0 == 0 goto 9f;"			\
++		"r9 = %[zero] ll;"			\
++		"r2 = *(u64 *)(r9 + 0);"		\
++		"if r2 == 0 goto 3f;"			\
++		"r7 = r0;"				\
++		"r8 = " #count ";"			\
++		"goto 4f;"				\
++	"3:"						\
++		"r7 = 0;"				\
++		"r8 = *(u64 *)(r9 + 0);"		\
++	"4:"
++
++/* It's in the value when r6 is what it is at the end of the loop that was counted: last */
++#define LOAD_IF_VALUE(last)				\
++		"if r7 == 0 goto 9f;"			\
++		"r2 = " #last ";"			\
++		"r2 -= r6;"				\
++		"r2 &= 1;"				\
++		"r2 <<= 4;"				\
++		"r7 += r2;"				\
++		"r0 = *(u64 *)(r7 + 0);"		\
++		"exit;"					\
++	"9:"						\
++		"r0 = 0;"				\
++		"exit;"					\
++		:					\
++		: __imm_addr(pairs),			\
++		  __imm_addr(zero),			\
++		  __imm(bpf_map_lookup_elem)		\
++		: __clobber_all
++
++__naked __noinline __used
++static unsigned long counted_or_not(void)
++{
++	asm volatile (
++		VALUE_AND_COUNT_OR_NEITHER(10)
++		"r6 = 0;"
++	"1:"
++		"r6 += 1;"
++		"if r6 < r8 goto 1b;"
++		LOAD_IF_VALUE(10)
++	);
++}
++
++SEC("socket")
++__description("budget: may_goto that another state needs, the loop is counted")
++__arch_x86_64
++__arch_arm64
++__failure __msg("invalid access to map value, value_size=16 off=16 size=8")
++__naked void guard_in_counted_loop(void)
++{
++	asm volatile (
++		"call counted_or_not;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/* 2 4 8 16 is not counted. Constants decide the jump. */
++__naked __noinline __used
++static unsigned long walked_or_not(void)
++{
++	asm volatile (
++		VALUE_AND_COUNT_OR_NEITHER(16)
++		"r6 = 1;"
++	"1:"
++		"r6 <<= 1;"
++		"if r6 < r8 goto 1b;"
++		"r6 >>= 1;"
++		LOAD_IF_VALUE(8)
++	);
++}
++
++SEC("socket")
++__description("budget: may_goto that another state needs, constants decide the exit of the loop")
++__arch_x86_64
++__arch_arm64
++__failure __msg("invalid access to map value, value_size=16 off=16 size=8")
++__naked void guard_in_walked_loop(void)
++{
++	asm volatile (
++		"call walked_or_not;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/* i = 0; do { i++; } while (i < n); return v ? v[((10 - i) & 1) * 2] : 0; */
++__naked __noinline __used
++static unsigned long counts(unsigned long n, long *v)
++{
++	asm volatile (
++		"r0 = 0;"
++	"1:"
++		"r0 += 1;"
++		"if r0 < r1 goto 1b;"
++		"if r2 == 0 goto 2f;"
++		"r3 = 10;"
++		"r3 -= r0;"
++		"r3 &= 1;"
++		"r3 <<= 4;"
++		"r2 += r3;"
++		"r0 = *(u64 *)(r2 + 0);"
++	"2:"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++#define LOOKUP_PAIR					\
++		"r1 = 0;"				\
++		"*(u32 *)(r10 - 4) = r1;"		\
++		"r2 = r10;"				\
++		"r2 += -4;"				\
++		"r1 = %[pairs] ll;"			\
++		"call %[bpf_map_lookup_elem];"		\
++		"if r0 == 0 goto 9f;"			\
++		"r6 = r0;"
++
++SEC("socket")
++__description("budget: a subprog is called without a count, then with a count")
++__arch_x86_64
++__arch_arm64
++__failure __msg("invalid access to map value, value_size=16 off=16 size=8")
++__naked void two_callers(void)
++{
++	asm volatile (
++		LOOKUP_PAIR
++		"r1 = %[zero] ll;"
++		"r1 = *(u64 *)(r1 + 0);"
++		"r2 = 0;"
++		"call counts;"
++		"r1 = 10;"
++		"r2 = r6;"
++		"call counts;"
++	"9:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(pairs),
++		  __imm_addr(zero),
++		  __imm(bpf_map_lookup_elem)
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: a subprog is called with a count, then without a count")
++__arch_x86_64
++__arch_arm64
++__failure __msg("invalid access to map value, value_size=16 off=16 size=8")
++__naked void two_callers_counted_first(void)
++{
++	asm volatile (
++		LOOKUP_PAIR
++		"r1 = 10;"
++		"r2 = r6;"
++		"call counts;"
++		"r1 = %[zero] ll;"
++		"r1 = *(u64 *)(r1 + 0);"
++		"r2 = 0;"
++		"call counts;"
++	"9:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(pairs),
++		  __imm_addr(zero),
++		  __imm(bpf_map_lookup_elem)
++		: __clobber_all
++	);
++}
++
++/* A global subprog is verified after the main prog */
++__naked __noinline __used
++int counts_anything(void)
++{
++	asm volatile (
++		"r1 = %[zero] ll;"
++		"r1 = *(u64 *)(r1 + 0);"
++		"r2 = 0;"
++		"call counts;"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(zero)
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: a subprog is called with a count, then without a count by a global subprog")
++__arch_x86_64
++__arch_arm64
++__failure __msg("invalid access to map value, value_size=16 off=16 size=8")
++__naked void two_callers_two_passes(void)
++{
++	asm volatile (
++		LOOKUP_PAIR
++		"r1 = 10;"
++		"r2 = r6;"
++		"call counts;"
++		"call counts_anything;"
++	"9:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(pairs),
++		  __imm(bpf_map_lookup_elem)
++		: __clobber_all
++	);
++}
++
++/*
++ * if (x) lock(); do { p = lookup(); } while (!p); if (x) { unlock(); return 0; } return *p;
++ * looks(0) holds nothing: may_goto unwinds. looks(1) cannot, so may_goto leaves the loop, in
++ * looks(0) too, and p is NULL.
++ */
++__naked __noinline __used
++static unsigned long looks(unsigned long x)
++{
++	asm volatile (
++		"r6 = r1;"
++		"if r6 == 0 goto 1f;"
++		"call %[bpf_rcu_read_lock];"
++	"1:"
++		"r1 = 0;"
++		"*(u32 *)(r10 - 4) = r1;"
++		"r2 = r10;"
++		"r2 += -4;"
++		"r1 = %[empty] ll;"
++		"call %[bpf_map_lookup_elem];"
++		"if r0 == 0 goto 1b;"
++		"if r6 == 0 goto 2f;"
++		"call %[bpf_rcu_read_unlock];"
++		"r0 = 0;"
++		"exit;"
++	"2:"
++		"r0 = *(u64 *)(r0 + 0);"
++		"exit;"
++		:
++		: __imm_addr(empty),
++		  __imm(bpf_map_lookup_elem),
++		  __imm(bpf_rcu_read_lock),
++		  __imm(bpf_rcu_read_unlock)
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: a subprog finds out late that something is held")
++__arch_x86_64
++__arch_arm64
++__failure __msg("R0 invalid mem access 'map_value_or_null'")
++__naked void unwinds_then_cannot(void)
++{
++	asm volatile (
++		"r1 = 0;"
++		"call looks;"
++		unwind_goto(5)
++		"r1 = 1;"
++		"call looks;"
++		unwind_goto(2)
++		"r0 = 0;"
++		"exit;"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_unwind_goto(5),
++		  __imm_unwind_goto(2)
++		: __clobber_all
++	);
++}
++
++SEC("socket")
++__description("budget: a loop without an exit")
++__arch_x86_64
++__arch_arm64
++__failure __msg("never exits")
++__naked void loop_without_exit(void)
++{
++	asm volatile (
++		"r0 = 0;"
++	"1:"
++		"r0 += 1;"
++		"goto 1b;"
++		::: __clobber_all
++	);
++}
++
++/*
++ * may_goto keeps the address of its count in a register that is dead. What is live in front
++ * of the insn that gets may_goto is live in front of may_goto.
++ */
++SEC("socket")
++__description("budget: may_goto in front of a jump keeps R0")
++__arch_x86_64
++__arch_arm64
++__success __retval(7)
++__naked void guard_keeps_r0(void)
++{
++	asm volatile (
++		"r6 = %[zero] ll;"
++		"r0 = 7;"
++	"1:"
++		"r1 = *(u64 *)(r6 + 0);"
++		"if r1 != 0 goto 1b;"
++		"exit;"
++		:
++		: __imm_addr(zero)
++		: __clobber_all
++	);
++}
++
++#define ALL_REGS_LIVE_IN_LOOP(var)			\
++		"r9 = %[" #var "] ll;"			\
++		"r0 = 1;"				\
++		"r2 = 2;"				\
++		"r3 = 3;"				\
++		"r4 = 4;"				\
++		"r5 = 5;"				\
++		"r6 = 6;"				\
++		"r7 = 7;"				\
++		"r8 = 8;"				\
++	"1:"						\
++		"r1 = *(u64 *)(r9 + 0);"		\
++		"if r1 != 0 goto 1b;"			\
++		"r0 += r1;"				\
++		"r0 += r2;"				\
++		"r0 += r3;"				\
++		"r0 += r4;"				\
++		"r0 += r5;"				\
++		"r0 += r6;"				\
++		"r0 += r7;"				\
++		"r0 += r8;"				\
++		"r9 = *(u64 *)(r9 + 0);"		\
++		"r0 += r9;"				\
++		"exit;"					\
++		:					\
++		: __imm_addr(var)			\
++		: __clobber_all
++
++/* No register is dead: R0 waits in the stack */
++SEC("socket")
++__description("budget: may_goto where all registers are live")
++__arch_x86_64
++__arch_arm64
++__success __retval(36)
++__xlated("...")
++__xlated("*(u64 *)(r10 -8) = r0")
++__xlated("r0 = 0x{{.*}}")
++__xlated("r0 = &(void __percpu *)(r0)")
++__xlated("r13 = *(u64 *)(r0 +0)")
++__xlated("...")
++__xlated("*(u64 *)(r0 +0) = r13")
++__xlated("r0 = *(u64 *)(r10 -8)")
++__xlated("if r1 != 0x0 goto pc-{{[0-9]+}}")
++__naked void guard_all_regs_live(void)
++{
++	asm volatile (
++		ALL_REGS_LIVE_IN_LOOP(zero)
++	);
++}
++
++__naked __noinline __used
++static unsigned long spins_all_regs_live(void)
++{
++	asm volatile (
++		ALL_REGS_LIVE_IN_LOOP(one)
++	);
++}
++
++/* The time is up: the loop is left with r1 = 1 and all the other registers as they are */
++SEC("socket")
++__description("budget: may_goto where all registers are live, out of budget")
++__arch_x86_64
++__arch_arm64
++__success __retval(38)
++__naked void guard_all_regs_live_spins(void)
++{
++	asm volatile (
++		"call spins_all_regs_live;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/*
++ * A loop that has no count is looked at trip by trip for a while. A state that is within a state of
++ * an earlier trip is dropped, wherever that is. Then nothing says that the loop ends, it gets
++ * may_goto, and all is done again. None of the loops below ends on its own.
++ */
++SEC("socket")
++__description("budget: every second trip leaves everything as it was")
++__arch_x86_64
++__arch_arm64
++__success __retval(0) __log_level(2)
++__msg("processed 25 insns")
++__naked void trips_of_period_two(void)
++{
++	asm volatile (
++		"r6 = %[one] ll;"
++		"r7 = 1;"
++	"1:"
++		"r7 ^= 3;"
++		"r1 = *(u64 *)(r6 + 0);"
++		"if r1 == 0 goto 2f;"
++		"if r7 != 7 goto 1b;"
++	"2:"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm_addr(one)
++		: __clobber_all
++	);
++}
++
++/*
++ * r7 is 0 at the head in the first trip and 5 in the second one. It's dead at 2, where the second
++ * trip is dropped. Nothing comes back to the head that is within what is there.
++ */
++SEC("socket")
++__description("budget: a trip is dropped in the middle of the loop")
++__arch_x86_64
++__arch_arm64
++__success __retval(0) __log_level(2)
++__msg("processed 33 insns")
++__naked void trip_dropped_in_the_middle(void)
++{
++	asm volatile (
++		"r6 = %[one] ll;"
++		"r7 = 0;"
++	"1:"
++		"if r7 == 7 goto 3f;"
++		"r1 = *(u64 *)(r6 + 0);"
++		"if r1 == 0 goto 3f;"
++		"if r1 == 2 goto 2f;"
++		"r1 = 0;"
++	"2:"
++		"r7 = 5;"
++		"goto 1b;"
++	"3:"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm_addr(one)
++		: __clobber_all
++	);
++}
++
++/* n ? zero_at_the_bottom(n - 1) : zero */
++__naked __noinline __used
++static unsigned long zero_at_the_bottom(unsigned long n)
++{
++	asm volatile (
++		"if r1 == 0 goto 1f;"
++		"r1 += -1;"
++		"call zero_at_the_bottom;"
++		"exit;"
++	"1:"
++		"r1 = %[zero] ll;"
++		"r0 = *(u64 *)(r1 + 0);"
++		"exit;"
++		:
++		: __imm_addr(zero)
++		: __clobber_all
++	);
++}
++
++/*
++ * The call of a recursive subprog waits for what comes out of it. The call of the second trip is
++ * within the one that waits. A recursive subprog that has no time or no stack left returns 0 at
++ * once, so that doesn't stop the loop.
++ */
++SEC("socket")
++__description("budget: a trip is dropped at a call that waits")
++__arch_x86_64
++__arch_arm64
++__success __retval(0) __log_level(2)
++__msg("processed 27 insns")
++__naked void trip_dropped_at_a_call(void)
++{
++	asm volatile (
++		"r7 = 0;"
++	"1:"
++		"if r7 == 7 goto 2f;"
++		"r1 = 3;"
++		"call zero_at_the_bottom;"
++		"r7 = 5;"
++		"if r0 == 0 goto 1b;"
++	"2:"
++		"r0 = 1;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/*
++ * Every trip goes through bpf_iter_num_next(), so the loop is taken for bounded at first, and
++ * through may_goto of the program. The iterator is made in the loop, and may_goto stays in it:
++ * neither of them stops it. The program doesn't end on its own.
++ */
++SEC("socket")
++__description("budget: may_goto that stays in the loop doesn't stop it")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
++__naked void may_goto_stays_in_the_loop(void)
++{
++	asm volatile (
++		"r6 = %[zero] ll;"
++		"r6 = *(u64 *)(r6 + 0);"
++		"if r6 != 0 goto 4f;"
++	"1:"
++		"r1 = r10;"
++		"r1 += -8;"
++		"r2 = 0;"
++		"r3 = 2;"
++		"call %[bpf_iter_num_new];"
++	"2:"
++		"r1 = r10;"
++		"r1 += -8;"
++		"call %[bpf_iter_num_next];"
++		"if r0 != 0 goto 2b;"
++		"r1 = r10;"
++		"r1 += -8;"
++		"call %[bpf_iter_num_destroy];"
++		".8byte %[may_goto];"
++		"if r6 == 0 goto 1b;"
++	"4:"
++		"r0 = 1;"
++		"exit;"
++		:
++		: __imm_addr(zero),
++		  __imm(bpf_iter_num_new),
++		  __imm(bpf_iter_num_next),
++		  __imm(bpf_iter_num_destroy),
++		  __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 0 /* offset */, 0))
++		: __clobber_all
++	);
++}
++
++/* No state is within another one: the walk gets to the end of the loop, no may_goto */
++SEC("socket")
++__description("budget: ten trips that differ")
++__success __retval(10) __log_level(2)
++__msg("processed 34 insns")
++__xlated("r8 += 1")
++__xlated("r7 <<= 1")
++__xlated("if r7 != 0x400 goto pc-3")
++__naked void ten_trips_that_differ(void)
++{
++	asm volatile (
++		"r7 = 1;"
++		"r8 = 0;"
++	"1:"
++		"r8 += 1;"
++		"r7 <<= 1;"
++		"if r7 != 1024 goto 1b;"
++		"r0 = r8;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/*
++ * BTF FUNC records are not generated for kfuncs referenced
++ * from inline assembly. These records are necessary for
++ * libbpf to link the program. The function below is a hack
++ * to ensure that BTF FUNC records are generated.
++ */
 +void __kfunc_btf_root(void)
 +{
++	bpf_rcu_read_lock();
++	bpf_rcu_read_unlock();
 +	bpf_iter_num_new(0, 0, 0);
 +	bpf_iter_num_next(0);
 +	bpf_iter_num_destroy(0);
 +}
 +
 +char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_walk.c b/tools/testing/selftests/bpf/progs/verifier_loop_walk.c
-new file mode 100644
-index 000000000000..f3e24fdfe12d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_loop_walk.c
-@@ -0,0 +1,197 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * A loop that is not counted is looked at iteration by iteration for a while: some thousand insns.
-+ * Each such walk counts the insns that are looked at in it, not those of the walks next to it.
-+ */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, u32);
-+	__type(value, char[2048]);
-+} map SEC(".maps");
-+
-+/* 0 and 2 stay apart up to the jump that looks at them */
-+#define SET(slot)								\
-+	"call %[bpf_get_prandom_u32]; r1 = 0; if r0 == 0 goto +1; r1 = 2;"	\
-+	"*(u64 *)(r10 - " #slot ") = r1;"
-+#define TEST(slot)	"r1 = *(u64 *)(r10 - " #slot "); if r1 == 1 goto 9f;"
-+#define PAD4		"r3 = r6; r3 += 1; r4 = r3; r4 += 1;"
-+
-+/*
-+ * 32 states enter the loop one after the other. The counter has 8 bits, which has no formula. The
-+ * offset is 1, 2, 4 ...: only a walk tells that it stays in the value. One walk takes 300 insns.
-+ */
-+#define WALKS(name, trips)							\
-+__naked void name(void)								\
-+{										\
-+	asm volatile ("								\
-+	r1 = 0;									\
-+	*(u32 *)(r10 - 4) = r1;							\
-+	r2 = r10;								\
-+	r2 += -4;								\
-+	r1 = %[map] ll;								\
-+	call %[bpf_map_lookup_elem];						\
-+	if r0 == 0 goto 9f;							\
-+	r6 = r0;								\
-+"	SET(16) SET(24) SET(32) SET(40) SET(48) "				\
-+	w8 = 0;									\
-+	r9 = 1;									\
-+1:	r1 = r6;								\
-+	r1 += r9;								\
-+	r2 = 0;									\
-+	*(u8 *)(r1 + 0) = r2;							\
-+	r9 <<= 1;								\
-+"	PAD4 PAD4 PAD4 PAD4 "							\
-+	w8 += 1;								\
-+	w2 = w8;								\
-+	w2 &= 255;								\
-+	if w2 < " #trips " goto 1b;						\
-+"	TEST(16) TEST(24) TEST(32) TEST(40) TEST(48) "				\
-+9:	r0 = 0;									\
-+	exit;									\
-+"	:									\
-+	: __imm(bpf_map_lookup_elem), __imm(bpf_get_prandom_u32), __imm_addr(map) \
-+	: __clobber_all);							\
-+}
-+
-+SEC("socket")
-+__description("walk: 32 walks at a time")
-+__success
-+WALKS(walks_32, 11)
-+
-+/*
-+ *	for (i = 7; i >= 0; i--) { if (i >= n) continue; a[i] = 0; }
-+ * A compiler tests 'i >= n' in front of the loop too and jumps into the middle of it. Such a loop
-+ * has no count. It's walked to its end whichever way its jumps go: no may_goto is added.
-+ */
-+SEC("socket")
-+__description("walk: a loop with two entries")
-+__success __retval(0)
-+__arch_x86_64
-+__arch_arm64
-+__xlated("w3 += -1")
-+__xlated("if w3 s< 0x0 goto pc+2")
-+__xlated("if w3 < w2 goto pc-6")
-+__xlated("goto pc-4")
-+__xlated("exit")
-+__naked void two_entries(void)
-+{
-+	asm volatile ("								\
-+	call %[bpf_get_prandom_u32];						\
-+	r2 = r0;								\
-+	r2 &= 7;								\
-+	r0 = 0;									\
-+	w3 = 7;									\
-+	if w3 >= w2 goto 2f;							\
-+1:	r1 = r10;								\
-+	r1 += r3;								\
-+	*(u8 *)(r1 - 8) = r0;							\
-+2:	w3 += -1;								\
-+	if w3 s< 0 goto 3f;							\
-+	if w3 < w2 goto 1b;							\
-+	goto 2b;								\
-+3:	exit;									\
-+"	:: __imm(bpf_get_prandom_u32) : __clobber_all);
-+}
-+
-+/*
-+ *	for (i = 0; (u8)i < 11; i++) { if (!rnd()) break; v[1 << i] = 0; }
-+ * One jump that leaves the loop goes both ways in each iteration, the other one is decided in
-+ * each iteration: the loop counts. The walk goes on. Only a walk tells what the offset is.
-+ */
-+SEC("socket")
-+__description("walk: goes on while an iteration decides a jump that leaves the loop")
-+__success
-+__naked void walk_goes_on(void)
-+{
-+	asm volatile ("								\
-+	r1 = 0;									\
-+	*(u32 *)(r10 - 4) = r1;							\
-+	r2 = r10;								\
-+	r2 += -4;								\
-+	r1 = %[map] ll;								\
-+	call %[bpf_map_lookup_elem];						\
-+	if r0 == 0 goto 9f;							\
-+	r6 = r0;								\
-+	w8 = 0;									\
-+	r9 = 1;									\
-+1:	call %[bpf_get_prandom_u32];						\
-+	if r0 == 0 goto 9f;							\
-+	r1 = r6;								\
-+	r1 += r9;								\
-+	*(u8 *)(r1 + 0) = r0;							\
-+	r9 <<= 1;								\
-+	w8 += 1;								\
-+	w2 = w8;								\
-+	w2 &= 255;								\
-+	if w2 < 11 goto 1b;							\
-+9:	r0 = 0;									\
-+	exit;									\
-+"	:									\
-+	: __imm(bpf_map_lookup_elem), __imm(bpf_get_prandom_u32), __imm_addr(map) \
-+	: __clobber_all);
-+}
-+
-+/*
-+ *	while (rnd()) n++;
-+ * The second iteration decides nothing. The walk gives up at once: less than 100 insns.
-+ */
-+SEC("socket")
-+__description("walk: gives up when an iteration decides no jump that leaves the loop")
-+__success __log_level(4) __msg("processed {{..}} insns")
-+__naked void walk_gives_up(void)
-+{
-+	asm volatile ("								\
-+	r6 = 0;									\
-+1:	call %[bpf_get_prandom_u32];						\
-+	if r0 == 0 goto 2f;							\
-+	r6 += 1;								\
-+	goto 1b;								\
-+2:	r0 = 0;									\
-+	exit;									\
-+"	:: __imm(bpf_get_prandom_u32) : __clobber_all);
-+}
-+
-+static __naked __noinline __used int long_loop(void)
-+{
-+	asm volatile ("								\
-+	w3 = 0;									\
-+1:	w3 += 1;								\
-+	w2 = w3;								\
-+	w2 &= 0xffff;								\
-+	if w2 < 5000 goto 1b;							\
-+	r0 = 0;									\
-+	*(u64 *)(r1 + 0) = r0;							\
-+	exit;									\
-+"	::: __clobber_all);
-+}
-+
-+/*
-+ * The walk doesn't get to the end of the loop. The function is looked at three times, for three
-+ * pointers. There is no walk the second and the third time: less than 10000 insns in all.
-+ */
-+SEC("socket")
-+__description("walk: no other try for a loop that is too long")
-+__success __log_level(4) __msg("processed {{....}} insns")
-+__naked void walk_fails_once(void)
-+{
-+	asm volatile ("								\
-+	r1 = r10;								\
-+	r1 += -8;								\
-+	call long_loop;								\
-+	r1 = r10;								\
-+	r1 += -16;								\
-+	call long_loop;								\
-+	r1 = r10;								\
-+	r1 += -24;								\
-+	call long_loop;								\
-+	r0 = 0;									\
-+	exit;									\
-+"	::: __clobber_all);
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index 5e566933f7e4..a6a99afad3c3 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -4411,6 +4411,65 @@ __naked void post_cond_jlt32_copy(void)
- 	: __clobber_all);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
+index afe4990cd027..5f0d9e545656 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_callx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
+@@ -637,6 +637,39 @@ __naked void callx_mutual_recursion(void)
+ 		: __clobber_all);
  }
  
++static __noinline __used int pulls_data(struct __sk_buff *skb)
++{
++	return bpf_skb_pull_data(skb, 0);
++}
++
 +/*
-+ * Every iteration takes a reference, only the last one is released. The state that comes back
-+ * to the head of the loop has a reference that nothing holds.
++ * The prog loads the address of the function, apply() calls it. The packet
++ * pointer of the prog is gone after the call of apply().
 + */
-+SEC("socket")
-+__failure __msg("Unreleased reference")
-+__naked void loop_takes_reference_every_time(void)
++SEC("tc")
++__failure __msg("R6 invalid mem access 'scalar'")
++__naked void callx_fn_as_arg_changes_pkt_data(void)
 +{
 +	asm volatile (
-+	"r6 = 0;"
-+"1:"
-+	"r1 = %[ringbuf] ll;"
-+	"r2 = 8;"
-+	"r3 = 0;"
-+	"call %[bpf_ringbuf_reserve];"
-+	"if r0 == 0 goto 2f;"
-+	"r8 = r0;"
-+	"r6 += 1;"
-+	"if r6 < 10 goto 1b;"
-+	"r1 = r8;"
-+	"r2 = 0;"
-+	"call %[bpf_ringbuf_discard];"
-+"2:"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_ringbuf_reserve), __imm(bpf_ringbuf_discard), __imm_addr(ringbuf)
-+	: __clobber_all);
++		"r2 = r1;"
++		"r6 = *(u32 *)(r1 + %[data]);"
++		"r7 = *(u32 *)(r1 + %[data_end]);"
++		"r0 = 0;"
++		"r3 = r6;"
++		"r3 += 1;"
++		"if r3 > r7 goto 1f;"
++		"r1 = %[pulls_data] ll;"
++		"call apply;"
++		"*(u8 *)(r6 + 0) = 42;"
++		"r0 = 0;"
++	"1:	exit;"
++		:
++		: __imm_addr(pulls_data),
++		  __imm_const(data, offsetof(struct __sk_buff, data)),
++		  __imm_const(data_end, offsetof(struct __sk_buff, data_end))
++		: __clobber_all);
 +}
 +
-+/*
-+ * The first iteration that has something to say takes a reference, the rest use it. The state
-+ * that comes back to the head has a reference more than the state that entered, once.
-+ */
-+__u64 nr_vals, vals[64];
-+
-+SEC("socket")
-+__success __retval(0)
-+int loop_takes_reference_once(void *ctx)
-+{
-+	__u64 *sum = NULL;
-+	int i;
-+
-+	bpf_for(i, 0, nr_vals) {
-+		if (i >= 64 || !vals[i])
-+			continue;
-+		if (!sum) {
-+			sum = bpf_ringbuf_reserve(&ringbuf, sizeof(*sum), 0);
-+			if (!sum)
-+				break;
-+			*sum = 0;
-+		}
-+		*sum += vals[i];
-+	}
-+	if (sum)
-+		bpf_ringbuf_submit(sum, 0);
-+	return 0;
-+}
-+
- /*
-  * r6 is a pointer to ringbuf memory with a step of 1. bpf_ringbuf_discard() in the first iteration
-  * makes a number of it. The offsets 0..1 of the pointer are not the range of this number: it's an
-diff --git a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-index f9ad07704578..260cbc22fbc4 100644
---- a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-@@ -859,6 +859,61 @@ l0_%=:	r0 = 1;						\
- 	: __clobber_all);
+ /* calls_arg(fn) { return fn(); } */
+ __naked __noinline __used
+ static unsigned long calls_arg(void)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+index 8bb74b579203..2e7e65949497 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
++++ b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+@@ -198,6 +198,57 @@ __naked void callx_rodata_array_of_structs_data(void)
+ 		: __clobber_all);
  }
  
++int calls_what_calls_it(void);
++
++__naked __noinline __used
++static unsigned long calls_global(void)
++{
++	asm volatile (
++		"call calls_what_calls_it;"
++		"r0 = 0;"
++		"exit;"
++		::: __clobber_all);
++}
++
++__naked __noinline __used
++int calls_what_calls_it(void)
++{
++	asm volatile (
++		RODATA(cb, ".quad calls_global;")
++		"r2 = cb_%= ll;"
++		"r2 = *(u64 *)(r2 + 0);"
++		"r1 = 1;"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_loop)
++		: __clobber_all);
++}
++
 +/*
-+ * A list in a map value: it starts at element 0 and goes on with the element that the current one
-+ * names. The offset is 0 in front of the loop and [0, 31] after every trip. The second of
-+ * these states at the head of the loop stands for all that follow.
++ * No subprog takes the address of the callback, and calls of global functions are not
++ * followed. It's a recursion all the same, and nothing checks the stack.
 + */
-+SEC("tc")
-+__description("map access: the offset of a value pointer grows in the first trip of a loop")
-+__success
-+__naked void loop_offset_settles(void)
++SEC("socket")
++__failure __msg("recursive call from calls_global() to calls_what_calls_it()")
++__naked void callx_rodata_callback_recursion(void)
 +{
 +	asm volatile (
-+	"r1 = 0;"
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"r2 = r10; r2 += -8;"
-+	"r1 = %[map_array_48b] ll;"
-+	"call %[bpf_map_lookup_elem];"
-+	"if r0 == 0 goto 2f;"
-+	"r6 = r0;"
-+	"r2 = r6;"
-+"1:	r5 = *(u8 *)(r2 + 0);"
-+	"r5 &= 31;"
-+	"r2 = r6; r2 += r5;"
-+	"may_goto 2f;"
-+	"goto 1b;"
-+"2:	r0 = 0; exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array_48b)
-+	: __clobber_all);
++		FUNC_TABLE2(tbl, add1, add2)
++		"call calls_what_calls_it;"
++		/* libbpf resolves the pointers for progs that have callx */
++		"r2 = tbl_%= ll;"
++		"r2 = *(u64 *)(r2 + 0);"
++		"r1 = 1;"
++		"callx r2;"
++		"r0 = 0;"
++		"exit;"
++		::: __clobber_all);
 +}
 +
-+SEC("tc")
-+__description("map access: the offset of a value pointer grows in every trip of a loop")
-+__failure __msg("invalid access to map value, value_size=48 off=48 size=1")
-+__naked void loop_offset_grows(void)
-+{
-+	asm volatile (
-+	"r1 = 0;"
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"r2 = r10; r2 += -8;"
-+	"r1 = %[map_array_48b] ll;"
-+	"call %[bpf_map_lookup_elem];"
-+	"if r0 == 0 goto 2f;"
-+	"r2 = r0;"
-+"1:	r5 = *(u8 *)(r2 + 0);"
-+	"r2 += 1;"
-+	"may_goto 2f;"
-+	"goto 1b;"
-+"2:	r0 = 0; exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array_48b)
-+	: __clobber_all);
-+}
-+
+ /* but not the data and the pointer with the same load */
  SEC("socket")
- __description("map access: value_ptr += known scalar, 4")
- __success __success_unpriv __retval(1)
+ __failure __msg("overlaps with a pointer to a function")
 -- 
 2.55.0
 
