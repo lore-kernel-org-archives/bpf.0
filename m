@@ -1,57 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793899551;
-	b=4vzE8vI+Mt8dPFHypaYSf2NkKfC222vReOZVkgczwkKKcz2vFJ40ZoctDNzB9UGu8QxQ
-	 95VW/Sr02GcJ7hhxuBcJrnlc10toC5bX18PfDCSnqNJjPnIxFYm+K+F9HhpO/jn//X6ua
-	 9t94QvgQ4/25zK/yt7YCWZOJg91AYiEk9HQs7DNlyjwiWDF+ngHSksdUb6DOxFfqz+xRh
-	 cnHB+TgHXCPIBthlO0YxwtBV8WhwN2djvCJsPlar/9UKjFDwHFpXw/k88AB+FxihrVnww
-	 6LrC1SFEjEmAkLKM7H8E+ZLA2fCVCl7kBNrwPci1WyzJTUK1cZu2ZKKdUVwO7L28WLQ==
+	t=1793899616;
+	b=Qq9ppBqESj0cMNyoaDTBfetwwXQM/1mMTZEamY1hjQJW/4LVFSDfu/jBjq12OPA4HCBU
+	 rXrs7eliaMJRbXJWEl7UhJYxGQhpJsxU0QXXmnjU2x9vAVDHyxUEOKQZWIyPZLLsI0wZn
+	 IH50xfIpLt1AUnoiYaEHMDxJYAjz8JMey6TM4ObtZJCgafnYH3aPgs23EsNkU8cvQPNyK
+	 YluvU++C9LZ5E21OfTInxIEBK/3EXXZNLUWIp/MHMsnXin4fyziptyXbgekWnoGWzXuqD
+	 MGDDTs3x54wLsljyuGt1IyhxkNic04LJB4SQ7zORRZhbj6GVjhn9jgtnWPA6S1yRJng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793899551;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=NPkHrIBcg/8lpAx8TomjVgpgtliD3lXe8zJJ4DdOAT4=;
-	b=c2VHBC+wTDJqmwiUJVH+ABmEIrcOlPBf36MsUXkGTSMlqwBQuo5/paCx0NSp38BHCugm
-	 u8U1AgqmUdZFykt+A+z4snDSbAtq2wTIWbX8/blHWUhp7lHMlHugAlA9YJNeuILi743Yt
-	 vAbis6i93Ht70X1WU1pHm9gxvc9TSZmiL7dIlJzhFwLPv8XE90geKRFFAB9Wdfmf7zBZk
-	 lZQUcjUHAtDX8uYU2K70jl8MqqkMVMGC/eEjlx0TWXC8nBV8AEzpnxSSAxqx3q4CvYsmZ
-	 mxS80vbm127VZRrVxw3Rbw+Ru46T6XEV8i1ENYJUypF46uJlX/RW5JeEiFtF5Ykz8kA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793899616;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
+	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=pv7MklMh40uZcAi4SKZfbl5EAYBB+uiXBzpLsbSe1GE=;
+	b=rzXrNDkV6dMQbZk0A8zpt/0r+OlHh71PwCC5rtSDeCpC4lBuFXaj1WyLSb+EJNPCmRSC
+	 eelYbd49Q17q+1qx/VQRRZqBKH/ewXY86NN6CqVasXy6bdM0mo+1fpcb+7It4Gu3H5UDd
+	 aRTKamkujP5XlHnbQdqEonjsQMxvdeyplCT520SY81de0xClbYFgynxobvv/7wFajvddq
+	 gu4OqcjknNMVJsWaStP0n+Y1s0mvV4nW0eA8qjawjXOVHn9udB2DA9pdpgYWhLRzpPUhN
+	 L3eDiENBBhC0PclT7RKNcI8vt1Z/XOMB8Kd2BmTrOvGc4kUsMTPdPzaTEtrmoA/4Guw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hk3+73cQ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=RHfWCLgr;
+	arc=none smtp.remote-ip=216.40.44.15
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82460606D811;
-	Thu,  5 Nov 2026 17:25:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC552606D803;
+	Thu,  5 Nov 2026 17:26:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC552606D803
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hk3+73cQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C3A31F000C1;
-	Thu,  5 Nov 2026 17:25:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793899551;
-	bh=NPkHrIBcg/8lpAx8TomjVgpgtliD3lXe8zJJ4DdOAT4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hk3+73cQvZT5TZodDginoYp6hD4La4PlWOrgGyXER0mFvwIZBDqswdlcj1gTP7if2
-	 Pasfne2Zzt+F092SisqDAsnzydV1ArLACpnvLaYuU5BPD3rbOMXMZiCR+G4yZhGiQ1
-	 pMu7c7bHpYWnAY1zA7NOQhuarxAr6x+Qpk8YR4R6NURmLJi984anwDxjAN9+ERocyX
-	 w/U+xSfX25WTPkariD01IVvp8nxW71vnu4bc2s4Brnm8DE1igi8pDwYtnGh75xY6Ql
-	 yJZuqoKlyhpaxMI02KZ9Oepothec4DvQDf3IGvNoh0H/XoU0unVvY+6ViL60Ii7Vko
-	 iK1tQj3FKUVQw==
-Message-ID: <sashiko-outbox-199612@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/3] stddef: Add offsetofp() and offsetofendp() for
- pointer arithmetic
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Bence Csokas" <bence.csokas@arm.com>
-Cc: linux-rdma@vger.kernel.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org, linux-sound@vger.kernel.org, media-ci@linuxtv.org
-In-Reply-To: <20261105-offsetof-v1-1-4153f5c10edc@arm.com>
-References: <20261105-offsetof-v1-0-4153f5c10edc@arm.com>
- <20261105-offsetof-v1-1-4153f5c10edc@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 17:25:50 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=RHfWCLgr
+Received: from omf01.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id B40781A0C0A;
+	Thu,  5 Nov 2026 17:26:52 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id 5DDF36000F;
+	Thu,  5 Nov 2026 17:26:50 +0000 (UTC)
+Date: Thu, 5 Nov 2026 12:26:48 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Vineet Gupta <vineet.gupta@linux.dev>
+Cc: Peter Zijlstra <peterz@infradead.org>, mhiramat@kernel.org,
+ mark.rutland@arm.com, mathieu.desnoyers@efficios.com, andrii@kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, kernel-team@meta.com, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] tracing: fgraph: Raise FTRACE_RETSTACK_ALLOC_SIZE
+ to 1024
+Message-ID: <20261105122648.67abbe1d@gandalf.local.home>
+In-Reply-To: <1e223334-b371-487b-a60a-7f1f5c007f7e@linux.dev>
+References: <20260922225526.1554758-1-vineet.gupta@linux.dev>
+	<20260922225526.1554758-2-vineet.gupta@linux.dev>
+	<20260924100040.GD4121339@noisy.programming.kicks-ass.net>
+	<1e223334-b371-487b-a60a-7f1f5c007f7e@linux.dev>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,62 +64,31 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 5DDF36000F
+X-Stat-Signature: 6d38fdaz4tpccretw3cu5fob64q9xee9
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18Y4DFtXkg4jsJZYBISd9ocbt9PHNYCMOA=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=pv7MklMh40uZcAi4SKZfbl5EAYBB+uiXBzpLsbSe1GE=; b=RHfWCLgrnx4ZxBIH2r6VcZ24XDAK/69saLUX/jGVp0l69uyPFkkq0WeCWSkgL10OXYnAU1ucQ2OfghwEK7IsYCvppdeMyO/3GE5HBISOAeDYIuyzbGJdIvzG2CrCoQ0mBjHaeE8ETynP6wIhnMy2C+g8ErmBzNDkTUTMcwuxFEI=
+X-HE-Tag: 1793899610-320862
+X-HE-Meta: U2FsdGVkX196ApTKk9z3YfX9TVkdxyThCeVOey5oiGGnblNR0vtupo1sCnJeFXkpA+lsfg/nxOW0Ze/w06Jw5JgIcSOEolRbWv5tNNLDILUXjhqq6WNqFPREk+mBYz04qFk6NKvY5hCTgXUTrfFg3HSILOjh+bjTnNDhuJZgJCMZVxw33zouJ87ekKPUazr5bW/jS4b7ikPpuziO1Vdm56194XyDemAtffZiF1kGknFBvEluljcUQ0ERGV8DO9wzvExfgDg4NnSWmFd3jnBlKhMyvqZMjpJCNh1fJQr2bumme3is7qyL5cvl+r8uMc+JgZjuU6Jgz7HGasXAGR3Pbh37Hxmi9Wo4TO87NhmOhmWmnt2wQaDBXTBGJlSk6cRuBEL99hNd+b0ejQudiWHHmVNfGXL4VNJdz5Z4FT01x2YwYKyM0G30yDFh53dc3fjcUbZm1E5kVN7a1XiO4vEJoA==
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] stddef: offsetofp() duplicates existing struct_offset() macro
---
+On Fri, 25 Sep 2026 12:32:49 -0700
+Vineet Gupta <vineet.gupta@linux.dev> wrote:
 
-commit 1381df6311c78f1d5db9e362d720874ccb5bad75
-Author: Bence Csokas <bence.csokas@arm.com>
+> For submission, would you take this up as reported-by me or do you 
+> prefer I send a v2 (your authorship and SoB etc) ? No big deal either 
+> ways just not sure what the std operating procedure is and nuances of 
+> all the tags etc.
 
-stddef: Add offsetofp() and offsetofendp() for pointer arithmetic
+Please implement Peter's suggestion and send a v2 with the tags:
 
-This commit introduces offsetofp() and offsetofendp() in
-include/linux/stddef.h as convenience wrappers around offsetof() and
-offsetofend() that take a struct pointer instead of a struct type.
+Link: https://lore.kernel.org/all/20260924100040.GD4121339@noisy.programming.kicks-ass.net/
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 
-> diff --git a/include/linux/stddef.h b/include/linux/stddef.h
-> index e1851c50c89b5..87f0e131d2350 100644
-> --- a/include/linux/stddef.h
-> +++ b/include/linux/stddef.h
-> @@ -32,6 +32,22 @@ enum {
->  #define offsetofend(TYPE, MEMBER) \
->  	(offsetof(TYPE, MEMBER)	+ sizeof_field(TYPE, MEMBER))
-> =20
-> +/**
-> + * offsetofp() - Get the offset of a struct field from a pointer to the =
-struct
-> + *
-> + * @P: Pointer to the structure
-> + * @MEMBER: The member within the structure to get the start offset of
-> + */
-> +#define offsetofp(P, MEMBER) offsetof(typeof(*(P)), MEMBER)
-> +
-> +/**
-> + * offsetofendp() - Get the end of a struct field from a pointer to the =
-struct
-> + *
-> + * @P: Pointer to the structure
-> + * @MEMBER: The member within the structure to get the end offset of
-> + */
-> +#define offsetofendp(P, MEMBER) offsetofend(typeof(*(P)), MEMBER)
+Thanks,
 
-[Severity: Low]
-This isn't a bug, but commit f6ed9c5d3190 ("overflow: Implement
-size_t saturating arithmetic helpers") already added struct_offset() in
-include/linux/overflow.h with the same definition:
-
-    #define struct_offset(p, member) (offsetof(typeof(*(p)), member))
-
-which is currently used in kernel/trace/trace.c and
-sound/soc/codecs/cs-amp-lib.c, following the struct_size(p, member, count)
-vs struct_size_t(type, member, count) naming convention.
-
-Should offsetofp() and struct_offset() be consolidated (and offsetofendp()
-aligned with the chosen naming convention) so there aren't two redundant
-macros for pointer-based member offsets across the tree?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261105-offsetof-v=
-1-0-4153f5c10edc@arm.com?part=3D1
+-- Steve
