@@ -1,51 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.64
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793843424;
-	b=LRdTOUUDm/1ZTTVgo7PvHt5JXRc+mc0uEDvpQHCgrazlkERhV3NTCvnISTLthtj7Fpg7
-	 DBX8iPd0lmalpma4NxPNlVqV3uSY43WL4IwiRQNFITw6qgX1PAXyq7LnGZ6URhq4Js5YV
-	 qzIeab3KxciXWMwmyzxO98sY9ZwBtIUAqNOuGjjGeylskx5+rK8ATXe4GltsoJR2c7J/N
-	 6yid2ESBTGDG0D8AGmlRx8fzRmz/81mtB6FD0NaDfjeJNz90bYRa1fS8QKOL109swRblF
-	 Lzcj9vvHlnDAv9mUYSKvj4sJqZG8LNG027S1Rj5BPuJpcuE2cawy5E+qcK9i5GvxIhg==
+	t=1793843905;
+	b=bpazeRvajUJTS9/9hC+H+Vqd+c/QZka26y+sVxG8aZRYfutOeuR/irlgtQa4ajCY+/Z2
+	 lBukhZwfFm1TMz8EOYBRZOSDAmsXpiw9P/l/i/SWyv6TIX/8FiHc2c2I1AhVLZJdogyVZ
+	 /VaJUT2Kklm4RcqzhuNEnUgVG2bLF9dwrYM/Bo8MDmjsQZaDtDNuRtI9ZBPib+nbtiWKG
+	 JF/+vU84MUpvlyzH0ghTaLTGIOCFMFibzYLpdI38rHVdgMciPMNKLMhm3ahr1jo5XZnwc
+	 3IhEoCixZht4kM+sclAwvFUK56DDRravV047cLAqkBZNkTCkcap/DTTMQ3LKe3Q0qQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793843424;
-	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
-	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
-	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=w3bjmnRpABvjjTMc+j8jy7xf8N+60afMMXD7WGaabWI=;
-	b=cCm/FyDhKL/ynFJO+y9MiwVS6lNjhgtCIyWzgypWWVQAO/olXZdtRFlP+A6RidJZWh8w
-	 TKIGBkKAmmBmnJzEUNRRrExQ5/2Lal1GVqEfCtT6Zfb2V37nu11dsr+THuB5I9T0bYic+
-	 ec28b6or81lImYFV/BhuFT0x/aIg3pwtTMPGrhtw4GiXMBwZS5PXofGY4SnzyRVVaocCS
-	 2SfLi41Q3y4GLqFG+9b0/LJA+gEBtqoHWSMgc8r6qalMtWmNMA5sFdWPB7t+s/wGC0UCL
-	 GmWvU4jc7nAFaKi9Y4s+vxNEiegmKcHa0Ey3AvVbn+u76FZyupTfDvd9ftbjGh2tvZQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793843905;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=kkfpYua5cYTgKG0pQiNdMFsj1/CFOQNS4WMIfupofhA=;
+	b=XTlMs8ZsGzZ8YKZZYTBFipYkzJgqwA3a4VU4ewz93Jp7EImGvh0ep2wHCIczVClyFrUr
+	 IZHG4anpJNXxLPiraXd71hCiCuOu1uIIuEQupD6PFn/pRnbDfFneWrmNN+VFMoz41hKvK
+	 ZXbAAtqQxQhu0ciqR4K805SWqI9LqqQzbsUf6qChIBvndjNDS+DqGeyT8EMoPvtlUKJar
+	 u0dpT5IUn2TsA6p1x7sgo7U+14OOjZKYL7UO4v5pnCvSlxY9yYIfwqu1jd+X1fjx7iQ5R
+	 HoVrtwBjWGdcl1CqnooxSOyeNa4bk4jgpD1DuwMvge2/hlZpwPlATMbadQncu5z0bYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7066606A31B;
-	Thu,  5 Nov 2026 01:50:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E7066606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8Bxn9HW4Otq8H4cAA--.16332S3;
-	Thu, 05 Nov 2026 09:50:14 +0800 (CST)
-Received: from [127.0.0.1] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJBxJs3T4OtqVHgyAA--.61748S2;
-	Thu, 05 Nov 2026 09:50:12 +0800 (CST)
-Subject: Re: [PATCH v1 1/2] LoongArch: BPF: Make arena support depend on SCQ
- extension
-To: George Guo <dongtai.guo@linux.dev>
-Cc: chenhuacai@kernel.org, hengqi.chen@gmail.com, loongarch@lists.linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261102072808.23080-2-yangtiezhu@loongson.cn>
- <20261104101753.20704-1-dongtai.guo@linux.dev>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <4e9bcddf-7dfe-b78f-035f-8a4b76584fdd@loongson.cn>
-Date: Thu, 5 Nov 2026 09:50:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JCJnDqsr;
+	arc=none smtp.remote-ip=91.218.175.64
+Received: from mta0.migadu.com (out-64.mta0.migadu.com [91.218.175.64])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E45606A329
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 01:58:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 94E45606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JCJnDqsr
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=gZlY+lL7fdgfCyQVenuD4E5PVkQaAHWWt10XOZ4LvLg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793843901; v=1; x=1794448701;
+ b=JCJnDqsr5gDCg4Ok7Z+jJ84EBXR21P1ESBXhE5mntiy0NMDTOc3tWKQjnPLh7QLvulPSZwQo
+ 1xuTTuhBlkGiHw/IxWKPXHEbawARxARw/nhRlYonqvxxxoheRGUGyiGjazg6d4OyFKL5SQll0+6
+ v1AL4qqFT6e8vZwyRZcoNGuo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id d8b7aae3e53a8f40;
+	Thu, 05 Nov 2026 01:58:20 +0000
+X-Mizu-Trace-ID: d8b7aae3e53a8f40
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 5 Nov 2026 09:58:10 +0800
+From: Baoquan He <baoquan.he@linux.dev>
+To: Ridong Chen <ridong.chen@linux.dev>
+Cc: Barry Song <baohua@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Dave Chinner <david@fromorbit.com>,
+	David Hildenbrand <david@kernel.org>,
+	Michal Hocko <mhocko@kernel.org>, Qi Zheng <qi.zheng@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Kairui Song <kasong@tencent.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org,
+	"open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" <cgroups@vger.kernel.org>,
+	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>,
+	Ridong Chen <chenridong@xiaomi.com>
+Subject: Re: [PATCH v7 7/7] mm/mglru: add tracepoint for aging
+Message-ID: <auvisj8NeTJ8FunG@MiWiFi-R3L-srv>
+References: <20261104130817.849089-1-ridong.chen@linux.dev>
+ <20261104130817.849089-8-ridong.chen@linux.dev>
+ <CAGsJ_4y_Ay0mYO3ic72oepjtW6KYf2sKRXEHb3Ff8uwKrOJZjQ@mail.gmail.com>
+ <4f830c30-f99c-4f75-851b-1a3f6d1342b1@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -55,73 +87,164 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <20261104101753.20704-1-dongtai.guo@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:qMiowJBxJs3T4OtqVHgyAA--.61748S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7WFW3Cr17ZFW5tFWDAry7Jwc_yoW8ur15pa
-	y8Wr4UZrZ0gw1jyr4Iyw4fuF4rW34rCF4UJw1fW348Zwn8Wr1fWr4FkFW5XF1Uurs3AF4U
-	tF4Iqa429r4jyagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
-	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zwZ7UU
-	UUU==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4f830c30-f99c-4f75-851b-1a3f6d1342b1@linux.dev>
 
-On 11/4/26 6:17 PM, George Guo wrote:
-> Hi Tiezhu,
+On 11/05/26 at 09:48am, Ridong Chen wrote:
 > 
-> On 2026/11/2 15:28, Tiezhu Yang wrote:
->> This is because the arena range tree uses kmalloc_nolock(), which requires
->> 128-bit atomic cmpxchg support, provided by SCQ extension on LoongArch.
 > 
-> There is an existing SLUB debug fallback worth checking before making
-> arena support depend on SCQ.
+> On 11/5/2026 4:56 AM, Barry Song wrote:
+> > On Wed, Nov 4, 2026 at 9:10 PM Ridong Chen <ridong.chen@linux.dev> wrote:
+> > > 
+> > > From: Ridong Chen <chenridong@xiaomi.com>
+> > > 
+> > > Aging in MGLRU advances max_seq to create a new youngest generation.
+> > > It is triggered from try_to_shrink_lruvec() when should_run_aging()
+> > > finds that eviction is no longer possible, or that it would be better
+> > > to age first at the current priority. There is currently no tracepoint
+> > > on this path, so it cannot be observed when and why aging is needed.
+> > > 
+> > > Add mm_mglru_aging, emitted in try_to_shrink_lruvec() right before
+> > > try_to_inc_max_seq(), with the node id, memcg id, sc->priority,
+> > > swappiness, max_seq, the anon and file min_seq, and the number of pages
+> > > in each generation for both types, as computed by lruvec_gen_size().
+> > > 
+> > > The reason for aging is not reported explicitly, as the logic in
+> > > should_run_aging() may change, e.g. for imbalance-based aging. It can
+> > > be derived from the generation window and the per-generation sizes,
+> > > which are taken before aging, so the youngest generation is populated
+> > > as well.
+> > > 
+> > > The nr_anon/nr_file arrays are ordered by seq rather than by generation
+> > > slot: entry i holds the generation max_seq - MAX_NR_GENS + 1 + i, i.e.
+> > > they go from the oldest generation to the newest, the same order as the
+> > > debugfs lru_gen file, so the output can be read directly without mapping
+> > > slots back to seqs. The arrays are printed with __print_array(), so the
+> > > output is hex and its length follows MAX_NR_GENS automatically.
+> > > 
+> > > Only the lruvec, sc and swappiness are passed in; everything else,
+> > > including max_seq, is read in TP_fast_assign(), so try_to_shrink_lruvec()
+> > > does no extra work when the event is disabled. Reading max_seq there
+> > > rather than using the caller's copy keeps the window consistent with
+> > > the per-generation sizes read right after it, should another reclaimer
+> > > age the lruvec in between.
+> > > 
+> > > The event marks the aging decision, not its result: the following
+> > > try_to_inc_max_seq() may find that aging is already in progress or
+> > > done by another reclaimer, so concurrent reclaimers can each emit it
+> > > for the same max_seq. Whether max_seq was advanced can be seen from the
+> > > following mm_mglru_scan_folios.
+> > > 
+> > > Suggested-by: Barry Song <baohua@kernel.org>
+> > > Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+> > > ---
+> > 
+> > Much better now:
+> > 
+> > ~ # echo 1 > /sys/kernel/tracing/events/vmscan/mm_mglru_aging/enable
+> > ~ # ./a.out
+> > Mapped 400 MB at 0xffff98a00000
+> > ^C
+> > ~ # cat /sys/kernel/tracing/trace | grep mglru_aging
+> >           kswapd0-49      [001] .....   104.277689: mm_mglru_aging:
+> > nid=0 memcg_id=1 priority=6 swappiness=60 max_seq=3 anon_min_seq=2
+> > file_min_seq=1 nr_anon={0x0,0x0,0xd360,0x0}
+> > nr_file={0x0,0x23e2,0x0,0x0}
+> >           kswapd0-49      [001] .....   104.536448: mm_mglru_aging:
+> > nid=0 memcg_id=1 priority=3 swappiness=60 max_seq=4 anon_min_seq=2
+> > file_min_seq=2 nr_anon={0x0,0x20,0xf8bc,0x0}
+> > nr_file={0x0,0x91a,0xbd,0x0}
+> >             a.out-79      [000] .....   104.689518: mm_mglru_aging:
+> > nid=0 memcg_id=1 priority=4 swappiness=60 max_seq=5 anon_min_seq=3
+> > file_min_seq=4 nr_anon={0x0,0xf8a0,0x1188,0x0}
+> > nr_file={0x0,0x0,0x2,0x7}
+> >           kswapd0-49      [001] .....   107.282038: mm_mglru_aging:
+> > nid=0 memcg_id=1 priority=2 swappiness=60 max_seq=6 anon_min_seq=4
+> > file_min_seq=5 nr_anon={0x0,0x6c50,0xa168,0x605}
+> > nr_file={0x0,0x0,0x98,0x18}
+> >           kswapd0-49      [001] .....   107.812598: mm_mglru_aging:
+> > nid=0 memcg_id=1 priority=1 swappiness=60 max_seq=7 anon_min_seq=5
+> > file_min_seq=6 nr_anon={0x0,0xfe10,0x1721,0x54}
+> > nr_file={0x0,0x0,0x1a,0x3}
+> >             a.out-79      [000] .....   108.936872: mm_mglru_aging:
+> > nid=0 memcg_id=1 priority=2 swappiness=60 max_seq=8 anon_min_seq=6
+> > file_min_seq=7 nr_anon={0x8,0x7d29,0x8c54,0xc90}
+> > nr_file={0x0,0x0,0x4,0x2}
+> >           kswapd0-49      [001] .....   108.937115: mm_mglru_aging:
+> > nid=0 memcg_id=1 priority=2 swappiness=60 max_seq=8 anon_min_seq=6
+> > file_min_seq=7 nr_anon={0x0,0x7d15,0x8c94,0xcac}
+> > nr_file={0x0,0x0,0x4,0x2}
+> >           kswapd0-49      [001] .....   109.425258: mm_mglru_aging:
+> > nid=0 memcg_id=1 priority=1 swappiness=60 max_seq=9 anon_min_seq=7
+> > file_min_seq=8 nr_anon={0x0,0xed69,0x24bc,0x488}
+> > nr_file={0x0,0x0,0x3,0x3}
+> > 
+> > One thing that looks a bit weird, though. For example:
+> > 
+> > max_seq=3 anon_min_seq=2
+> > 
+> > We have only two generations for anon, but we print four:
+> > 
+> > nr_anon={0x0,0x0,0xd360,0x0}
+> > 
+> > The two oldest generations don't actually exist. Ideally,
+> > we would print only the two existing generations:
+> > 
+> > nr_anon={0xd360,0x0}
+> > 
+> > you should be able to fix it by:
+> > 
+> > __print_array(__entry->nr_anon, __entry->max_seq -
+> > __entry->anon_min_seq + 1 , sizeof(unsigned long)),
+> > __print_array(__entry->nr_file, __entry->max_seq -
+> > __entry->file_min_seq + 1, sizeof(unsigned long)))
+> > 
+> > But I guess it's fine, since the two extra entries are both
+> > zero.
+> > 
+> > And, I personally prefer the youngest-to-oldest order,
+> > as we usually have:
+> > 
+> > head ---------- tail
+> > 
+> > where head is young and tail is old.
+> > 
+> > Your output uses:
+> > 
+> > tail ---------- head
+> > 
+> > But anyway, I guess this is just a matter of whether we
+> > read it from left to right or right to left. Personally, I
+> > find it more natural to read from youngest to oldest.
+> > 
+> > If you're not tired of working on this and would like to make
+> > a few more improvements, you could address the two issues
+> > above. But it is up to you.
+> > 
+> > For the patch,
+> > 
+> > Reviewed-by: Barry Song <baohua@kernel.org>
 > 
-> In __kmalloc_nolock_noprof(), the rejection condition is:
+> Hi, Barry,
 > 
->          if (!(s->flags & __CMPXCHG_DOUBLE) && !kmem_cache_debug(s))
->                  return NULL;
+> Thanks a lot for testing and the Reviewed-by.
 > 
-> Debug caches do not require cmpxchg128 for this path. They use
-> kmem_cache_node->list_lock with spin_trylock_irqsave() instead.
-> With CONFIG_SLUB_DEBUG=y, booting with slab_debug enables this path;
-> CONFIG_SLUB_DEBUG_ON=y enables debugging by default as well.
+> Updating it would be fine with me, but I'd slightly prefer the current
+> output, to keep it consistent with the debugfs lru_gen_full file. It
+> also prints a fixed window of MAX_NR_GENS generations from the oldest
+> to the newest, marking the ones below min_seq with 'x'. The event
+> reports anon_min_seq and file_min_seq in place of the 'x', so the
+> generations that don't exist can still be told apart, and they always
+> read 0. Keeping the same window and order makes it easy to compare the
+> event with debugfs, e.g. when looking at both while debugging.
 > 
-> The proposed bpf_jit_supports_arena() check would reject arena maps on
-> CPUs without SCQ, even when the SLUB debug fallback is available.
-> This would prevent us from running arena tests on those machines
-> with slab_debug enabled.
-> 
-> Could you rerun jit_insns/cast_to_user on the 3A5000 with slab_debug
-> enabled, before and after this patch? The claim that kmalloc_nolock()
-> requires 128-bit cmpxchg should account for debug caches, and it would
-> be useful to preserve that fallback when addressing the error reporting.
+> That said, if others such as Baolin, Baoquan or Kairui also prefer
+> printing only the existing generations from the youngest to the
+> oldest, I'm happy to send another version with that change.
 
-I noticed that a similar concern regarding the slub_debug exception
-was previously raised by the CI bot in the RISC-V ZACAS patch:
-https://lore.kernel.org/bpf/594ed4944926f6a7202b016eca03d879d11bfdf09a2cbaea039421ae4ab962c0@mail.kernel.org/
-
-I highly agree with the bot's conclusion there:
- > "That narrowing is arguably desirable (BPF should not depend on a SLUB
- > debug-mode escape hatch)."
-
-Moreover, handling this runtime debug mode inside the architecture's JIT
-layer would inevitably introduce undesirable cross-module coupling with
-SLUB internals. Restricting the JIT capability solely to native hardware
-and toolchain support keeps the implementation clean and robust.
-
-Thanks,
-Tiezhu
+I like oldest -> youngest a little better because when I am thinking
+about MGLRU logic in my mind, I would put min_seq in the left, max_seq
+in the right, then wrap around from right to left.
 
