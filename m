@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793904089;
-	b=2qWQs4C1BTu+lMoi5Uej0OSl3s6z7aE5jI62e0j13wntWmMq6V1enoHFFyxD9nAu6UoI
-	 h27QMkF3DKBIy0LOJHuvvWO2NyyDKUGXr5S5CuApSulGvIXe6fTiLYQWb2COY58Rp//tP
-	 z2WDpZw9HerA0YQy9ZlakOzM//69fpZw6vFEyxvaf1NApXc70Kq5j1J5gf/QzLn9y0GAV
-	 Z/lWul5n+6Ed6wUcWSC6xdQv9WvCLbph1+2QF6LaRHusHFK2mDToWTym79uRyqWpE/IJw
-	 joAEDuQ7JKc16SM8LLNoo+2DVqkTerkfYz4BKFnMn3L03UGFP4neOkk64SiSCN2lpqA==
+	t=1793904091;
+	b=s/q9ztNJj9belv6UplpRNvtfvrzx+mkbNG3HvkplNhyMNCZHIrnTfLElHt7RywHANz/g
+	 siZqHVYid0y3QatxAyXgAuHWAxkTBPDSbGUPuzFUvagihL+jMyryCR2sQShdXH6IZ1o7d
+	 524t4BtgB8+bdzwJplf+k63G3BsKW7xYH+i155vlZSwQMSwko2afNCKJfjmLUVl5qqXy4
+	 7UYUG7GPtDhWSkFTPWMygHet5fHnCcbuvcjrAkaYCV208HwlF8tQ7cKdiGbk7NNDqNl7e
+	 rVpNReXBfyOAxzlE3avN2oHwqaaVzIsKYNL0OtJAW5fISpBs0HmjfzN8Ur4fklO5juA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793904089;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793904091;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=2iOZN3vVbG3Zld80aIYXrMBPjNOQaHbRiPmkPckJZZI=;
-	b=EmDOBtV03fgPu4AQE/kRy8cCI+5wwghk2Vj4Ys+Ejq1ZdGwujwDlPBDhRaU/7fK/kbAE
-	 p5fNMZ0ww6rDff/G6Zg4rOyNPWp8CWeOjd3foPI/TJpo3zoEYSAQrUclsfv7Pp7ObM49L
-	 HSeupoBujy7uN5c8jX3Jrt08Jn3rHqmHH2MFWKOTYFGHUnhw30F65zNTvaNrqGbvPT6BT
-	 h031sF+r17hSZFwJVlJgWbPgld7X14P9WARITmb4zyNQxxoWD+cvrNZ7p9zXVWzchIbYs
-	 64orwoH/UolIq+IbNwpHHAjm985H1YHDJQGpnZ12/NJvy1EoDKGSrerAmSjJUFPZc5g==
+	bh=Ao83bkd/tSb+gzvRHOhQcBytaDanZ7yH56Tl/7rLQMw=;
+	b=pm2yCAqWtwb8XfD+zGzc5xykz6lha+n3XVTpwRa0IddL5sTftGVc+CzwGF9XyGpstB7y
+	 djTbk/g0+B1fkoBqpzAaG1oJ0FFv7qy0UvRWTp2UUvGDGbQUJsLoFWWmfamDivhqOMuaq
+	 NCJicP2TBtMrstn1Db3bvk8Be6BpwZ87aeyKKWXTMias7TMGKioTz8KXkb8gzlHxnKM4X
+	 lOiGzgky51VwVEfG+iDQ53qbzca0BPvqtv+fLs0vzZ1g+1+pdnYTSUMe5Lm/OtdBcwjue
+	 Av9Vc2ixKA8zgADK0aP2DHOcruxwXYpMnRliLDlsxxVlFH6qAzD22zesvsddM+qP4aQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TETHPbTV;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ax7Rdzpg;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FEF606A32C
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 18:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D2A606A32C
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 18:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TETHPbTV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A6DB1F00A02;
-	Thu,  5 Nov 2026 18:41:28 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ax7Rdzpg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69AB51F000C1;
+	Thu,  5 Nov 2026 18:41:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793904088;
-	bh=2iOZN3vVbG3Zld80aIYXrMBPjNOQaHbRiPmkPckJZZI=;
+	s=k20260515; t=1793904090;
+	bh=Ao83bkd/tSb+gzvRHOhQcBytaDanZ7yH56Tl/7rLQMw=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TETHPbTVdbyy7bvR2OfJtu2D9g2xg1ngamBF9g56rqAH+jujNEUqa71sjF83+dUdA
-	 GZ+2DCUyLGvuLwYHM/8QvBA5W+tcFefcwZpuoKygtMQBmxGYkEX212bUkhCBv6FTV5
-	 Xdqp64ZH8RWqlHUmejMPCi0YCbh8G34p1cUz1EooLo1GN+IcQDDaYIwlmInMVhEytU
-	 9HR7/SeNafpotlE8G+bGSaIXyn9Sb2iE5ep+IVmCm3MqokD6y84ItDj1ezFtKkynwq
-	 wFoLrzylGCKFatY1HdRr7fL/pdXnllEI3VoUdqltw4yh+o3XvaSqs1PrLj0jsNmkc+
-	 R4Zky3APffADw==
-Content-Type: multipart/mixed; boundary="===============3717782323944586867=="
+	b=ax7RdzpgK5lj7o2Zbwf4CHO9msDL56GCWYqzsin30PZqUtYMLVVMEdbxfhEeMDQIE
+	 hJVCbd9cCWUs2frNMAMWR1//nK+pfAvnJRUxFLj7UQmE6OdhcwhaFAyImttIOn1ZFZ
+	 +J7cB5Br3wjp6KiInENFXWRnMnQOacgbzIgOtt8svhiqqQ1L2Vc4FD3Tn4NDKhNwlA
+	 W/S//ca+UxxCE0LU6RfrNBXkzfcRG/zjkIrs1iZxv2m7MyHn4JHrHCeV+HbtiHgc7L
+	 +TcleU98jx7sC4sEpF3wJpUZCJp9ckAd0vPfVHNlibD0o5OrqdZyGzI/vZVUt01gSD
+	 8dLgV/kJP3mCw==
+Content-Type: multipart/mixed; boundary="===============2006081096416102589=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,88 +49,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <e0df4fa9e17514c79de41ee9fd2eb610d43a95741fb994db160b35fd488f054a@mail.kernel.org>
-In-Reply-To: <20261105175845.30357-3-ihor.solodrai@linux.dev>
-References: <20261105175845.30357-3-ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v4 02/17] libbpf: Look up BTF strings without making BTF modifiable
+Message-Id: <ccf64f8cf04be6730d9d8a9b1ac14b0013c478a595bc736388d48d55218e180e@mail.kernel.org>
+In-Reply-To: <20261105175845.30357-11-ihor.solodrai@linux.dev>
+References: <20261105175845.30357-11-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v4 10/17] bpftool: Apply __bpf_relocatable per record on BTF dump
 From: bot+bpf-ci@kernel.org
 To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,qmo@kernel.org
 Cc: bpf@vger.kernel.org,alan.maguire@oracle.com,cupertino.miranda@oracle.com,david.faust@oss.qualcomm.com,irogers@google.com,jose.marchesi@oracle.com,vineet.gupta@linux.dev,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu,  5 Nov 2026 18:41:28 +0000 (UTC)
+Date: Thu,  5 Nov 2026 18:41:30 +0000 (UTC)
 
---===============3717782323944586867==
+--===============2006081096416102589==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> libbpf: Look up BTF strings without making BTF modifiable
+> bpftool: Apply __bpf_relocatable per record on BTF dump
 
-TL;DR: The base-BTF modifiable loop and stale comment in btf_rewrite_str() may
-now be obsolete; btf__add_btf() into split BTF may still fail with -EOPNOTSUPP
-on vmlinux BTF with extra header fields, so drop the loop or note it.
+TL;DR: Tagging every struct, including verifier-rewritten context types like
+__sk_buff, may make GCC-BPF programs fail verification until later patches fix
+it; unverified. Consider excluding context types in this patch for
+bisectability.
 
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
+> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> --- a/tools/bpf/bpftool/btf.c
+> +++ b/tools/bpf/bpftool/btf.c
 
 [ ... ]
 
-> @@ -2131,8 +2141,7 @@ int btf__find_str(struct btf *btf, const char *s)
->  			return off;
->  	}
->  
-> -	/* BTF needs to be in a modifiable state to build string lookup index */
-> -	err = btf_ensure_modifiable(btf);
-> +	err = btf_ensure_strs_set(btf);
->  	if (err)
->  		return libbpf_err(err);
+> @@ -1131,6 +1131,24 @@ static int btf_c_annotate_type_tags(struct btf *btf)
+>  	return 0;
+>  }
+>
+> +static int btf_c_annotate_records(struct btf *btf)
+> +{
+> +	__u32 i, cnt = btf__type_cnt(btf);
+> +	int err;
+> +
+> +	for (i = 1; i < cnt; i++) {
+> +		const struct btf_type *t = btf__type_by_id(btf, i);
+> +
+> +		if (!btf_is_composite(t))
+> +			continue;
+> +		err = btf__add_decl_attr(btf, "__bpf_relocatable", i, -1);
 
-After this change btf__add_str() no longer makes the base BTFs modifiable
-or frees their raw data.  Is the workaround in btf_rewrite_str() now
-obsolete?
+Can this break GCC-BPF programs that access verifier-rewritten context
+types?
 
-tools/lib/bpf/btf.c:btf_rewrite_str() {
-	/*
-	 * btf__add_str() first looks the string up in the base BTFs of dst,
-	 * which makes each of them modifiable and frees its raw data. If src
-	 * shares a base with dst and the string lives in that base, the
-	 * pointer taken below would be left dangling. So make the bases
-	 * modifiable before the pointer is taken.
-	 */
-	for (base = p->dst->base_btf; base; base = base->base_btf) {
-		err = btf_ensure_modifiable(base);
-		if (err)
-			return err;
-	}
-	...
-}
+btf_c_annotate_records() tags every struct and union, including __sk_buff,
+xdp_md, bpf_sock, bpf_sock_ops, sk_msg_md, bpf_sockopt and the like.
 
-The comment is no longer accurate, since btf__find_str() on a base now only
-calls btf_ensure_strs_set() and never calls btf_invalidate_raw_data().  A
-pointer from btf__str_by_offset() into a read-only shared base stays valid.
+For Clang nothing changes, since the old pragma already applied
+preserve_access_index to these types.  GCC-BPF ignored the pragma, so
+vmlinux.h never gave it preserve_access_index.  With this patch GCC-BPF
+applies the attribute to the context types as well, unless
+BPF_NO_PRESERVE_ACCESS_INDEX is defined.
 
-The loop still runs, so btf__add_type() and btf__add_btf() into split BTF
-still make every base modifiable.  That still fails with -EOPNOTSUPP when
-a base has unknown header bytes:
+For program types with convert_ctx_access, check_ctx_access() in the
+verifier rejects a ctx pointer that has an added offset:
 
-	if (btf->has_hdr_extra)
-		return -EOPNOTSUPP;
+    __check_ptr_off_reg(env, reg, argno, fixed_off_ok)
+    fixed_off_ok = !env->ops->convert_ctx_access
 
-btf__add_btf() only calls btf_rewrite_str() for
-*str_off >= src_btf->start_str_off, so it never touches strings of a shared
-base, yet the loop forces the base modifiable anyway.  For example, bpftool
-merge_btf_files() does:
+With preserve_access_index on these types the compiler can emit pointer
+arithmetic, for example for a one-byte load at offset 1 into skb->mark,
+and the verifier then rejects an otherwise valid program.  A GCC-BPF tc
+program that includes vmlinux.h without BPF_NO_PRESERVE_ACCESS_INDEX could
+pass before this patch and fail after it.
 
-	combined = btf__new_empty_split(vmlinux_base);
-	btf__add_btf(combined, mod);
+The in-tree GCC-BPF selftests are not affected because the bpf_gcc flavor
+passes -DBPF_NO_PRESERVE_ACCESS_INDEX.  I did not build with GCC-BPF to
+confirm the exact instructions it emits.
 
-which reaches btf_rewrite_str() -> btf_ensure_modifiable(vmlinux_base), and
-that fails for vmlinux BTF with new header fields, which is the case the
-commit message says it wants to avoid.
+This is addressed later in the series by 87b9a5139319 ("bpftool: Skip
+__bpf_relocatable on verifier-rewritten context types") and
+c6d74cfddc8d ("bpftool: Emit __bpf_static_offset on verifier-rewritten
+context types").  Would it be better to put the context-type exclusion in
+this patch, or ahead of it, so GCC-BPF context accesses don't break in the
+window between them (for example when bisecting)?
 
-Could the loop and its comment be dropped as part of this change, or should
-the commit message note that btf__add_type() and btf__add_btf() still
-require a modifiable base?
+> +		if (err < 0)
+> +			return err;
+> +	}
+> +
+> +	return 0;
+> +}
 
 
 ---
@@ -138,4 +140,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42081937070
---===============3717782323944586867==--
+--===============2006081096416102589==--
