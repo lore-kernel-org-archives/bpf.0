@@ -1,47 +1,118 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793873879;
-	b=K9HWOwEit1vGtaDROkaA9+ncy0rzVrvmfaTFp/5Jqwmr4XGTOgnxnHwZqwwvau2IsO0t
-	 +ZBNT/Z9BaoNv8T6Jb9eGJT2G6CMK0ARUmCwzRljixmnCeeRU/f77IxzCq7bVUG7Zt9Na
-	 sShF+AQDgRvlD051OnElWsp3vmFXFvMmvjZmzekgGQxWbs7xoS+cO7rvjDQ1xXIjBDoOG
-	 9L4RpEQjw2WMtHp7DLPT9KKYOKHW9mJ0f/dPv28TsUuLm1Gg63U52s0PjbrRjXpMIZZ5r
-	 WA5AzDTyP1IUEpKfzmYWzThg54SkMQtl2vy69S7iNGGLRcR0N2SMANScWE3Nzu+oNWg==
+	t=1793874176;
+	b=BlI+DhYoVC07fh6aCXAcjEevnPNhsvbRqzEVdCQi8558dxl3vPhOfVKQ4Yq+PpgQABq0
+	 Fxx5EY5Tui9JED84QKGvotJ5Qb0Qka6xexqk/J4JvYvhM1DtVFEtcAOGZ0NmT7tlwOCMW
+	 +Sf3bQIcjzNm62SeHeovekxblliXRAkWVgy6BtJBcOSVzk4bCJK4txLldyO+glpsbpEx6
+	 6nc9L8Hk84Q4TZm7uXP4Dc2kgmylpd99/DctmoY4OcOcP+WASHKGZ/IaB6b851ae3YNMa
+	 zwe39yFwEPHb9JykmDDTJNAZSQCkMzfB9p158JAKfa3HIN8G64nPfRRIsTT1LVrQkWw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793873879;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=ge0csq01UDr23GRywGYDdJfNDf0j4kn1jvr1l1h6C8s=;
-	b=4H33Qd8AjwAh5sPPV67TWDqQplGvsgnFAxFQjRFYaCZGFOhFztprdaVerfpjf8zDzbFA
-	 ZZAz8OJfx54K5eoEMKSqToOfaawaWVtdOwNz37L0k/EZqZ0YRNtFeaiGXR4NUB9lhwcK+
-	 vMVT6lcjlgf5TgiHI9sFlCbBaQ2fpAVkQ56GmvEWR5hLDZATSkB5kN1IWJRpT7UhmgF0J
-	 fm7GYNzOP1r4twzbI6idzVRU2cj96LIAdiGrLRjjt7TnQLuUeLGc8x8dxbkBs6bvM6KnK
-	 mn6x1oji8fxyI329fvlut2jZyYFxx9rRJMXPldBNolO/baBNC/6Z/j8fTTpyDJZexFQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793874176;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=mA0JUWIMJDLe3trqouiE/a4ohypc9UC+FqDIAXVqBsQ=;
+	b=XLNK0lNS6ckhvhWmKP51h0NNnnRk+r0c9yO7qqZDobBb8Y1CYJaLWTXqGyytgDfYPwxV
+	 M+87CMmQNllELgSuv4M0/nqOOigg0KMlNUkn8pLsYtyMnBy3vQQ+2hm6qFD3ob1RZfBlS
+	 BlD6zu0gbQ37GSgK+Rs1PnzTF0GmyBxSBw78jpQY8sjRqubl7P6vkoNuA8CVPQwKSgbOL
+	 aLbkEKnKPTIP7KsKcRAXQszm+DouMfo9TkKuRUL/JcRYcJnjyQxHRu/fGxrAOxiy6elsB
+	 0yfwNvkTs1dwmj75EUWK4tMBNkxbNtHy3bjhSOy7fQGRWjyn9OMBvZLJugQlx6H3tWQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JjpWMhIm;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UeONTUv0;
+	dkim=temperror header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b="qC/e/HgG";
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EA5606A31B;
-	Thu,  5 Nov 2026 10:17:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8C0606A32C
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:22:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9A8C0606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JjpWMhIm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF9701F00919;
-	Thu,  5 Nov 2026 10:17:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793873879;
-	bh=ge0csq01UDr23GRywGYDdJfNDf0j4kn1jvr1l1h6C8s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=JjpWMhImRu+LAmbhcVmFv2rI+GeyzSZNvjXT0r8xfZLpg331rjnt55cx0ggPww50w
-	 VXDPTlps85VpjVB00uZULQZcEnh2cw4udDrqGKTfeDTF4YLWeROIoWjdXEkimWk4Tn
-	 yTFjodeEJzt15GfJbm6XgFo3K6QcdTD9Ra2rJ7AOiUYNer7+yE8dSM5Fs+8SD2tmXw
-	 kBnJBuXCOriKvzR15xIJkefyO9T8d+PxLBK94+JuZsnNWKJGfBzp6thjdLmBqkh1pM
-	 3BnJxbvHoP5FebNWl+CUmyjdhMGN0sDhYBj/hZARkU7onHM1zCZ1BjrkFH9Sk15uLe
-	 8XnrcyvfAgAqQ==
-Message-ID: <e58309a5-1a5c-4c34-9c28-d1794400616f@kernel.org>
-Date: Thu, 5 Nov 2026 11:17:49 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=UeONTUv0;
+	dkim=temperror header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=qC/e/HgG
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1793874164;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mA0JUWIMJDLe3trqouiE/a4ohypc9UC+FqDIAXVqBsQ=;
+	b=UeONTUv0UgbS5IUIOd2M8qcgqpI9bup4ehO2VCa6ewq4x1MYJAwx6ft01Ive/vgQPmNKGi
+	B51756vtLbZspiZcqvueGLxArHlu9yOJClOBjaLP6vE4o1QQ0BOzwHKW5U1uCH7Pzjg5H8
+	g0ToCWbB9ajtcd6wwt8VLJXy45ul9hk=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-668-FJI8Y9BAOpKbka9SIe6ZOQ-1; Thu, 05 Nov 2026 05:22:43 -0500
+X-MC-Unique: FJI8Y9BAOpKbka9SIe6ZOQ-1
+X-Mimecast-MFC-AGG-ID: FJI8Y9BAOpKbka9SIe6ZOQ_1793874162
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-48fc8d1c14bso1762372f8f.2
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 02:22:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1793874162; x=1794478962; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=mA0JUWIMJDLe3trqouiE/a4ohypc9UC+FqDIAXVqBsQ=;
+        b=qC/e/HgGDYx/2Lh64K+89w43sgmoFIHWuFrBEhX60rDYwVSNtChRz09WqDqoa22QP3
+         e+RVTc/axkWchbGnZ3bhlpNKuPgym35DUljxtawDPCmFsmx777kOCV+ov8IzqAcZ/zCj
+         +m61HPAOhT4aaK+kunQ9lvKI9eb7DRq/zTkCF88XFdg8MfS59WYJv2wsJlIs17ttGDlZ
+         l04iU5g3LWp2lj1xaCjSfMW21OaWaWKSyNo/7BhXdOUfvHKpt/gxvo16mpMSe4BDPBED
+         6KeLgf6F0gh81FV1kkef3Co93QjgWMlUFqLJ2atYtMmUIreGL0IogeUNiQdWbznpjUJa
+         UwOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793874162; x=1794478962;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mA0JUWIMJDLe3trqouiE/a4ohypc9UC+FqDIAXVqBsQ=;
+        b=P3kMtFDtpiTZ94L5opVOaeTqhr+t0MxjnH5OMD6R1FGya5AYJX52ZY1P6tFoBYQWw2
+         //Q7BbCwe4hs3yBPc6t1gtSGcwULNMzUnFO1mUGdoK/JEvz4ZnSQWQZOvAZfQeiS4Ac+
+         Qnzf2H+XYIgXsvf0lgbEgJT2qH5QFJ5hSirmU2hON39qJwoatSk5ro5inX9xvkYXjXDo
+         30533gryJsKGAXXZgWy1sU+RE8KaSiOB/WzNo/Z3xJ9YORlysXyw5IrqYdOzPW0vvYRn
+         T9ATJXezFuIxOTV59sCGryY14FU5dJZAuGZnzWlgo6obFQzZx+fm3s41AY80oqbq5DQJ
+         RUSg==
+X-Forwarded-Encrypted: i=1; AKwUvBww8/pfcGlTyu+DT11pMYjKR9FSGsEuAR8g+lP7rjR7jdNcXqNKs/gI8ZWE5fxV2rTKljg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/SxHNsZ34IB/HpDU0Sech5f4cxXOvnha9Fcd3M0JI4cepOu3tg
+	+Aj86cZlXUYD5BmyfD7UyjEBR6fYhFSCbIsw0SJHSK3yyAWobwxOdwgp3kSvkOz0JC6lRQg0F70
+	aw4Q6N3+ZikjdvbCBKecryrw8GGpiDYTDcfPldtOwncVxFXsfpMWo4A==
+X-Gm-Gg: AYBFou09uxe7VU0noONihRGm9w3ThlMnTvhMi//5kFvA0IFSKd/p3PB0pvssqkFBkUZ
+	2jc5e1+3Lw65vZXS4c+vXIVhWGGZcwhW4npRxr9wVXLjjuLcKBy/FLezT15XRdHSeYpHTrdNzbf
+	jRuC/ttqBCDK4MkcW1Twc31kRafjcAsLFZdLITtnNiO+UM5QW8do/GqbEN2gGharMYCLA5FEu2f
+	V7uNMa0h9k4M2XlFQXXhslO8CbyFrJ4IXuyLieqWTlDPflOsH90brSHWehXFm5UUiAfEPjFGtJP
+	4khspZ89QYtZV37pqkpDyN+nDKIALmASyLTpsIz+UOLFUmh6cQnQZfP+sn/zgToSCQ8DTpNC7yc
+	5EGKA97ZrM58efu0Z5SKT5P3o+mMYN5E+/H5uMIzPI0KL5tZM0lFF
+X-Received: by 2002:a05:600c:c87:b0:4a8:cb23:f71b with SMTP id 5b1f17b1804b1-4ac186b1a2amr423568205e9.18.1793874162222;
+        Thu, 05 Nov 2026 02:22:42 -0800 (PST)
+X-Received: by 2002:a05:600c:c87:b0:4a8:cb23:f71b with SMTP id 5b1f17b1804b1-4ac186b1a2amr423567735e9.18.1793874161708;
+        Thu, 05 Nov 2026 02:22:41 -0800 (PST)
+Received: from sgarzare-redhat ([80.116.143.202])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b56f0237aesm56586085e9.9.2026.11.05.02.22.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2026 02:22:41 -0800 (PST)
+Date: Thu, 5 Nov 2026 11:22:36 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: jrmmhm.kernel@eldare.de
+Cc: Bobby Eshleman <bobbyeshleman@meta.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Michal Luczaj <mhal@rbox.co>, virtualization@lists.linux.dev, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	stable@vger.kernel.org
+Subject: Re: [PATCH net v3 1/2] vsock/bpf: release sock lock while waiting
+ for data in recvmsg
+Message-ID: <auxYWGV4l-xEAajy@sgarzare-redhat>
+References: <20261028-kbh3-1-022-fix-v2-v3-0-bc0752b2d3db@eldare.de>
+ <20261028-kbh3-1-022-fix-v2-v3-1-bc0752b2d3db@eldare.de>
+ <auSkQOU6qmj0NPEt@sgarzare-redhat>
+ <179381093020.9.4719932034061956856.1746278795@eldare.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,109 +122,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] Revert "mm/khugepaged: remove definition of struct
- khugepaged_mm_slot"
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>,
- Waiman Long <longman@redhat.com>, Suren Baghdasaryan <surenb@google.com>,
- Vlastimil Babka <vbabka@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
- <20261103-khugepaged-latency-fix-v1-1-a07ab16ac860@kernel.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
- ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
- AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
- 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
- g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
- ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
- 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
- /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
- jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
- DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
- HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
- 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
- LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
- 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
- VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
- /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
- iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
- 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
- zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
- azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
- FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
- sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
- 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
- EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
- IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
- 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
- Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
- sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
- yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
- 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
- r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
- 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
- CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
- qIws/H2t
-In-Reply-To: <20261103-khugepaged-latency-fix-v1-1-a07ab16ac860@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <179381093020.9.4719932034061956856.1746278795@eldare.de>
 
-On 11/3/26 09:27, Lorenzo Stoakes (ARM) wrote:
-> This partially reverts commit b4c9ffb54b32 ("mm/khugepaged: remove
-> definition of struct khugepaged_mm_slot"), as a subsequent commit needs to
-> resurrect this type to store additional data alongside the mm_slot.
-> 
-> The stated intent of the commit was to address a NULL check in
-> __khugepaged_exit():
-> 
-> 	mm_slot = mm_slot_entry(slot, struct khugepaged_mm_slot, slot);
-> 
-> slot can be NULL and mm_slot_entry() is an alias for container_of(), so
-> this is container_of() a NULL value.
-> 
-> This was benign as there was only 1 field in khugepaged_mm_slot (offsetting
-> NULL at 0 results in NULL), however it was right to fix this, so retain the
-> fix.
-> 
-> It also unwrapped KMEM_CACHE() in khugepaged_init(). This was a mistake,
-> and was itself reverted in commit c14bdcc9f274 ("mm/khugepaged: use
-> KMEM_CACHE()"). Therefore, retain the KMEM_CACHE() form in this revert.
-> 
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
+On Wed, Nov 04, 2026 at 04:48:44PM +0000, jrmmhm.kernel@eldare.de wrote:
+>On Fri, Oct 30, 2026 at 03:18:10PM +0100, Stefano Garzarella wrote:
+>> Ditto about commit message, please put more effort on writing something
+>> readable by a human.
+>
+>Agreed, I'll rewrite both messages myself for v4, much shorter.
+>
+>> >+            if (sk->sk_err) {
+>> >+                    ret = -sk->sk_err;
+>>
+>> Why?
+>
+>Same as vsock_connectible_wait_data(): an error that arrives during the
+>wait is returned to recv(). Without the check the loop still ends, since
+>every path that sets sk_err also closes the socket or sets peer_shutdown,
+>but recv() then returns 0 or -ENOTCONN instead of the error.
 
-LGTM
+Please add a comment with the reason.
 
-Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
+>
+>> >+            if (sk->sk_state != TCP_ESTABLISHED) {
+>> >+                    ret = sock_flag(sk, SOCK_DONE) ? 0 : -ENOTCONN;
+>> >+                    break;
+>> >+            }
+>>
+>> I'm thinking if we should split this in multiple patches.
+>
+>From reading the code, it can be split without breaking bisect: first
+>loop on all exit conditions with the lock still held, then drop the lock
+>around wait_woken(). The order is fixed, since dropping the lock alone
+>brings back the early -EAGAIN, and the loop alone does not fix the
+>deadlock, so both would carry the Fixes tag. That is why I kept it as one
+>patch, but I'm fine either way. Split it like that for v4, with the
+>current 2/2 on top, or keep it as one?
 
--- 
-Cheers,
+Okay, if the entire change is needed to fix the deadlock, then it makes 
+sense to have a single patch. Please make it clear in the commit 
+description.
 
-David
+>
+>> >+            if (!timeo) {
+>> >+                    ret = -EAGAIN;
+>> >+                    break;
+>> >+            }
+>>
+>> Is the move of this check changing some user visible error?
+>> I mean before this patch it was one of the first checks, is this okay?
+>
+>Yes, for non-blocking reads, intentionally: -sk_err, 0 on peer shutdown
+>and the not-connected result now come before -EAGAIN, as on the native
+>recvmsg path. I'll say so in the commit message.
+
+Yes, please.
+
+>
+>> >+            if (signal_pending(current)) {
+>> >+                    ret = sock_intr_errno(timeo);
+>> >+                    break;
+>> >+            }
+>>
+>> Why? Should be a separate patch?
+>
+>No, the loop needs it: with a pending signal wait_woken() returns at
+>once, so without the check the loop spins until SO_RCVTIMEO expires, or
+>forever if none is set. I checked it by removing the check: a signalled
+>reader without SO_RCVTIMEO never returned and used a full CPU. The
+>native path does the same.
+
+Okay, please explain this in the commit description or in a comment on 
+top of that check.
+
+>
+>> >+            if (data < 0) {
+>>
+>> Why not data <= 0  and void the other if?
+>
+>Right, will do in v4.
+>
+>Thanks,
+>Jerome
+>
+>
+
