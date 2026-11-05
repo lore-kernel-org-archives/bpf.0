@@ -1,82 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793881573;
-	b=kHofzyQHmPSbcGXVGAsHcZbJIGXPHIfQOePk898Y+n0M8KuuZd9HbVt24ofXYIV0VrW9
-	 F/SKJ4gmY8lbu9Riv+AfUp0ulP0/ao5Yy0Nr3jfwWmu11bgIGI0sFqTOp/6Qm0RBqCF9N
-	 7gvCaCoJPrq9KryT7KkRRO+pV9XO+7WPwyVgX9cE1/YRKh+g89uG2L2sXyFngS8+H7nsQ
-	 jD91NtFOGd42I1whBuPKSttTfwl+U56K5lB2sL9mIFuD5iOLIt1jIAUCUKyBkpLmMX/fH
-	 Me9lBs1xFHY0z+Qq5o/yvc28kJsdgFA8oX3bLDLF6LCr+lpwWoJEqy1uqED0zZ2mHLQ==
+	t=1793881842;
+	b=YWCeN8TPzXmDvlS1rTtup0r4nX87yL6267r9KL8AISZ5eUJatGEz5e5KfBYbmrLCDm3r
+	 1tnFW8B1klLIVpjz5D2DJjzyLD7TXPx7Zd0aC7GbFWbTeWDrephzyDOnm3NbbnkDr6Qxd
+	 iI6qi+iSmC94Q8u5CGbe9UDKltvEkvO5bzFjYXcNt8ErpqYmSyeVKCiOINXX9OvGWf9LX
+	 mrC2nEDMKO/0seayXJcr8bXPiHsyeIkioeXqBb6cQtj8IsY1qHuDU8i27kGTT6qNlzjYC
+	 X/efDa3Pj8GCsP6adIzVdzKWr+BWbq1U0NvhI6OZXN3zCq3ZoK1sMlLxmRNVprDZB7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793881573;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=SOhMdo0S3VoEznsmoM+S40XpUm7IcJEEZYZHmhkEm3g=;
-	b=Yp4PQWzKXc531xG5tB4d5MPqBI6X0I5E213uh+XDb7ATVWq76eN6JSejiGJG19C2H+T6
-	 NMrnANri3cywILqhyWtauS+sCItelBGKqIJ2W+rc1brRvIr+Vptn/u6PK/9cBaY2Q83bR
-	 /Sm8JxlyjSZfUX/TIkwqIIVdlq93bajxQTA8CYgE/1JwKN1mMe1eiMaHRwNseSFTriLH0
-	 NkuYY9+Qnoo8MSz0m/mbMbhgAD/PrjAmT3sPPN/28hpoDZdIhpNnnD9KTX9L/Pxr+wgQ+
-	 NMbc3CrfRvaO79d1H5sD7vc31ut1Nq03lB1ddwUTIapRxav1oRT3kxxXuyv0mXjEBmA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793881842;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=DHGsTHubc4aMMBvmjHu/ylYilusYO6zlJFm21HDhy9s=;
+	b=D3isvPS27vd9EKfFiFgP6F7+6sSranYW0dLta6qMBkwnOyTb0ip60olCme9J90iVZZjx
+	 7susO1GcGbUm4lHx7OnLgQjZ4uuoM58eUN0d8HbUDSaGLy7CD89llxLjWgojdBzVVm3Sh
+	 c5z3nQ3Tk3IWjpA3gAO8p556DunkdlCiSfBddCJyAsND+RV9oZj4eL3ye1f9Jlryvwe6C
+	 8Rv6Th0SYb5/lP30+PWQDkHloXMd3E0dbvC0AboqAhY+nREGE8XaSyb5JrElEpm/XecX5
+	 No7vc5rYen2YQRNiZnlJVJibstBmwG82fKmdv5gRdCAn2UQgZdfCH6Mm/5wtG/FES2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=GfFR9ZA3;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h2ixqdkF;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979FB606A32C;
-	Thu,  5 Nov 2026 12:26:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 979FB606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC502606A332
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 12:30:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=GfFR9ZA3
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=SOhMdo0S3VoEznsmoM+S40XpUm7IcJEEZYZHmhkEm3g=; b=GfFR9ZA3ZvPtPrpOktrGrpr2Bt
-	Nagr/IUr79PbLpTffvL0MrTMEavQra/op0vcEdvs1RByq9F77mvbQeA7wmSkHnYu7LI8IhkCwNIR6
-	+Rd0oPvbNImVxLFxX+v5G+TzzJuBKZNqYKCwjj0hhDLOrlswWRZKr+bHOaMvrUilqvTMVtgL+KdUD
-	0hh30vc+UcZwPq1reYlXZ9uyYH1Z8qGZLeMaim33Jx2WpodO/P3oza8r/Cwko9ass/6xpo+QLgoMP
-	M2+UUunbRr0diO2fG6jL0y1S28WUJ9Zvgtal7hXk9CmtyRgBRQCXg87gtXiAe7YZBe0CAJ0Gsyq5F
-	iuAhPVjQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xOwXd-000000086ip-3VmT;
-	Thu, 05 Nov 2026 12:26:05 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id A547D3002F0; Thu, 05 Nov 2026 13:26:04 +0100 (CET)
-Date: Thu, 5 Nov 2026 13:26:04 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Martin Kelly <martin.kelly@crowdstrike.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Mike Bazov <mikeba@sentinelone.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
-	Thomas Gleixner <tglx@kernel.org>
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let
- preemption cause false recursion drops in trampoline progs
-Message-ID: <20261105122604.GB1779021@noisy.programming.kicks-ass.net>
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
- <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com>
- <CAPnbwjrB_je6jXt3BGD-1q1yFs_wFd-Yh9KzixKzLK_X3Stuag@mail.gmail.com>
- <DML75890DWIX.EYB690LPBM1O@gmail.com>
- <CAPnbwjpv3bkGAKVjc7Eywgo-H4X6uDLYPJWFuSakGs_sBdgr3w@mail.gmail.com>
- <DMM2FJ2SNYYO.24TEJ05OOR08E@gmail.com>
- <CAH=2mMABxvf+GNr7vUKNkGvyU-gmaXKMGNJHg4URUCW_eyuxGg@mail.gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h2ixqdkF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC071F00A15;
+	Thu,  5 Nov 2026 12:30:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793881841;
+	bh=DHGsTHubc4aMMBvmjHu/ylYilusYO6zlJFm21HDhy9s=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=h2ixqdkFeFqpLPEzgj5s3zrhlE4WGGbkA8CuNtFFn5mlYLJN7s+MxKsp6NScwIF7j
+	 Fz2Uxd0ossQAJMKaibq5Xu35bpruNEhTo6vvJ96PNyugOx459bwjPVAhznI8SDMdta
+	 JsH7huo177vTAdCb5fIF0E6HtST5o7xq8lJ+lZza7QIkRNTyqSWn5EBoyfdR7YaIDk
+	 KhpPL4ibFIAmW1kcoipGE1aQzkcL0SAFI1Fek/IfI+nrOEKILSH9PEKBFb+ygsdiLT
+	 pWOKBYX7JHqBi9FIApQ+S0pbpigK6wTztaSV0P7fb3SduETJ5W+Qv5m+/SQB+JSkWe
+	 upI12zr44NMFA==
+Message-ID: <sashiko-outbox-199035@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] bpf: Add network namespace boundary inspection kfuncs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Abhishek Khade" <abhishekkhade69@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261105121642.38019-1-abhishekkhade69@gmail.com>
+References: <20261105121642.38019-1-abhishekkhade69@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 05 Nov 2026 12:30:40 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,181 +57,276 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAH=2mMABxvf+GNr7vUKNkGvyU-gmaXKMGNJHg4URUCW_eyuxGg@mail.gmail.com>
 
-On Wed, Nov 04, 2026 at 05:12:15PM -0800, Martin Kelly wrote:
-> We have noticed this issue independently in testing of our own security
-> agent and have hit the same false recursion skips on 7.0 and 7.1
-> kernels. More details and measurements below.
-> 
-> On Tue, Nov 3, 2026 at 6:24 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> > Today a fentry prog never runs twice at the same time on one cpu.
-> > Existing progs rely on that for their per-cpu maps.
-> >
-> >   task A, cpu 0                     task B, cpu 0
-> >   buf = lookup(&percpu_scratch)
-> >   fill buf
-> >   <preempted>
-> >                                     buf = lookup(&percpu_scratch)
-> >                                     fill buf
-> >                                     output(buf)
-> >   output(buf)   <- data of B
-> >
-> > A plain (*cnt)++ in a per-cpu map loses updates the same way.
-> > Today B is skipped and recursion_misses counts it.
-> > With the per-task check A sends a corrupted event and nothing counts it.
-> 
-> Our programs avoid writing to per-CPU arrays because of corruption on
-> PREEMPT_RT kernels, where trampolines have always been preemptible and
-> thus can corrupt these structures. So for us, an opt-in flag that allows
-> preemption (instead of skipping) would work well and not regress current
-> programs that don't opt in. A verifier scan for per-CPU arrays could
-> also work, but it would need to distinguish read-only vs write access to
-> those maps.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Critical] bpf: use-after-free of task->nsproxy in netns task kfuncs
+- [Medium] bpf: missing __nullable suffix on netns kfunc pointer parameters
+- [Medium] selftests/bpf: incomplete coverage and error checks in test_netn=
+s_kfunc()
+--
 
-This seems weird; your task-B bpf prog would never run due to the
-prog_active thing.
+commit becb6e580b969813c102c712d541272b54c4d34c
+Author: Abhishek Khade <abhishekkhade69@gmail.com>
 
-> In a process-heavy workload on a 2-vCPU VM (~1M fork+exec of
-> short-lived processes, ~606/second) we recorded the following number of
-> recursion_misses on a 7.0.9 and a 7.1.5 kernel. Both kernels use lazy
-> preemption with PREEMPT_RCU enabled. The miss rate has increased
-> significantly, which we suspect is due to the HRTICK change.
-> 
->                                   7.0.9 (HRTICK off) 7.1.5 (HRTICK on)
->                                   ================== =================
-> security_file_permission fentry   1 in 61,580        1 in 1,568
-> security_inode_getattr fentry     1 in 59,242        1 in 1,707
-> do_file_open fexit                1 in 813,983       1 in 2,503
-> sched_process_exec raw_tracepoint 1 in 1,000,816     1 in 500,408
-> 
-> The sched_process_exec raw_tp had few misses (1-2) but is included just
-> to show that raw_tp can have misses as well since tracepoints became
-> preemptible.
+bpf: Add network namespace boundary inspection kfuncs
 
-So HRTICK will still only set RESCHED_LAZY, which should not tickle
-preempt_enable() into a reschedule. RESCHED_LAZY is acted upon in only 2
-distinct spots:
+This commit adds three BPF kfuncs (bpf_task_is_init_net,
+bpf_task_get_netns_inum, and bpf_sock_is_init_net) to inspect whether a
+task or socket belongs to init_net and retrieve a task's network namespace
+inode number, along with a BPF selftest.
 
- - return to userspace; it will reschedule.
- - the periodic tick; it will upgrade RESCHED_LAZY to RESCHED.
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 6788489a2608b..3584703d139f1 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
-This would suggest you're seeing a lot of tick driven promotion. One
-reason could be due to HRTICK setting LAZY and the normal tick happening
-very shortly after it. 
+[ ... ]
 
-You've not mentioned your CONFIG_HZ setting? Anyway, something daft like
-the below would make promotion less aggressive (also, clearly I couldn't
-come up with a decent name for the intermediate step :-).
+> @@ -2991,6 +2994,77 @@ __bpf_kfunc long bpf_task_under_cgroup(struct task=
+_struct *task,
+>  	return ret;
+>  }
+> =20
+> +#ifdef CONFIG_NET
+> +/**
+> + * bpf_task_is_init_net - check whether task belongs to initial network =
+namespace
+> + * @task: the task to be tested
+> + *
+> + * Returns true if @task belongs to the initial network namespace (init_=
+net),
+> + * or false otherwise (or if @task or its nsproxy is NULL).
+> + */
+> +__bpf_kfunc bool bpf_task_is_init_net(const struct task_struct *task)
+> +{
+> +	struct nsproxy *nsproxy;
+> +	struct net *net;
+> +	bool ret =3D false;
+> +
+> +	if (!task)
+> +		return false;
+> +
+> +	rcu_read_lock();
+> +	nsproxy =3D rcu_dereference(task->nsproxy);
+> +	if (nsproxy) {
+> +		net =3D READ_ONCE(nsproxy->net_ns);
+> +		ret =3D (net =3D=3D &init_net);
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * bpf_task_get_netns_inum - get inode number of task's network namespace
+> + * @task: the task to inspect
+> + *
+> + * Returns the inode number (inum) of @task's network namespace, or 0 if
+> + * @task, its nsproxy, or net_ns is NULL.
+> + */
+> +__bpf_kfunc u32 bpf_task_get_netns_inum(const struct task_struct *task)
+> +{
+> +	struct nsproxy *nsproxy;
+> +	struct net *net;
+> +	u32 inum =3D 0;
+> +
+> +	if (!task)
+> +		return 0;
+> +
+> +	rcu_read_lock();
+> +	nsproxy =3D rcu_dereference(task->nsproxy);
+> +	if (nsproxy) {
+> +		net =3D READ_ONCE(nsproxy->net_ns);
+> +		if (net)
+> +			inum =3D net->ns.inum;
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	return inum;
+> +}
 
+[Severity: Critical]
+Can bpf_task_is_init_net() and bpf_task_get_netns_inum() trigger a
+use-after-free of task->nsproxy (and task->nsproxy->net_ns) when called on
+a task other than current?
 
-> Possible approaches
-> ===
-> We don't have a preferred mechanism and are generally open to any
-> approach that would help reduce these recursion_misses. Whatever the
-> mechanism, it would be ideal to cover raw_tp programs too, since
-> a46023d5616e made those preemptible.
-> 
-> We'd be happy to help test or develop patches if needed.
+Both kfuncs are registered with KF_RCU and accept an arbitrary
+struct task_struct pointer (for example from bpf_task_from_pid(), a task
+iterator, task->real_parent, or a tracing/LSM hook), then read
+task->nsproxy under rcu_read_lock() without holding task_lock(task).
 
-I would strongly prefer all BPF programs that attach to known
-preemptible sites to use a per-task recursion counter or something of
-that sort.
+However, task_struct::nsproxy is not an __rcu pointer (which also causes
+rcu_dereference(task->nsproxy) to emit a Sparse address-space mismatch
+warning when building with C=3D1 and CONFIG_SPARSE_RCU_POINTER), and
+include/linux/nsproxy.h notes that accessing task->nsproxy on a
+non-current task requires task_lock(task).
 
-This per-cpu active count stuff is quite mad; and I think I've told
-Alexei that plenty of times.
+When the target task concurrently runs unshare(), setns(),
+exec_task_namespaces(), or exits via do_exit() ->
+exit_nsproxy_namespaces(), switch_task_namespaces() updates p->nsproxy
+under task_lock(p) and immediately drops the old reference without waiting
+for an RCU grace period:
 
+kernel/nsproxy.c:switch_task_namespaces() {
+	task_lock(p);
+	ns =3D p->nsproxy;
+	p->nsproxy =3D new;
+	task_unlock(p);
 
----
-diff --git a/include/asm-generic/thread_info_tif.h b/include/asm-generic/thread_info_tif.h
-index 528e6fc7efe9..feed08b51a62 100644
---- a/include/asm-generic/thread_info_tif.h
-+++ b/include/asm-generic/thread_info_tif.h
-@@ -22,33 +22,35 @@
- #define _TIF_NEED_RESCHED	BIT(TIF_NEED_RESCHED)
- 
- #ifdef HAVE_TIF_NEED_RESCHED_LAZY
--# define TIF_NEED_RESCHED_LAZY	5	// Lazy rescheduling needed
-+# define TIF_NEED_RESCHED_MEH	5
-+# define _TIF_NEED_RESCHED_MEH	BIT(TIF_NEED_RESCHED_MEH)
-+# define TIF_NEED_RESCHED_LAZY	6	// Lazy rescheduling needed
- # define _TIF_NEED_RESCHED_LAZY	BIT(TIF_NEED_RESCHED_LAZY)
- #endif
- 
- #ifdef HAVE_TIF_POLLING_NRFLAG
--# define TIF_POLLING_NRFLAG	6	// idle is polling for TIF_NEED_RESCHED
-+# define TIF_POLLING_NRFLAG	7	// idle is polling for TIF_NEED_RESCHED
- # define _TIF_POLLING_NRFLAG	BIT(TIF_POLLING_NRFLAG)
- #endif
- 
--#define TIF_USER_RETURN_NOTIFY	7	// notify kernel of userspace return
-+#define TIF_USER_RETURN_NOTIFY	8	// notify kernel of userspace return
- #define _TIF_USER_RETURN_NOTIFY	BIT(TIF_USER_RETURN_NOTIFY)
- 
--#define TIF_UPROBE		8	// breakpointed or singlestepping
-+#define TIF_UPROBE		9	// breakpointed or singlestepping
- #define _TIF_UPROBE		BIT(TIF_UPROBE)
- 
--#define TIF_PATCH_PENDING	9	// pending live patching update
-+#define TIF_PATCH_PENDING	10	// pending live patching update
- #define _TIF_PATCH_PENDING	BIT(TIF_PATCH_PENDING)
- 
- #ifdef HAVE_TIF_RESTORE_SIGMASK
--# define TIF_RESTORE_SIGMASK	10	// Restore signal mask in do_signal()
-+# define TIF_RESTORE_SIGMASK	11	// Restore signal mask in do_signal()
- # define _TIF_RESTORE_SIGMASK	BIT(TIF_RESTORE_SIGMASK)
- #endif
- 
--#define TIF_RSEQ		11	// Run RSEQ fast path
-+#define TIF_RSEQ		12	// Run RSEQ fast path
- #define _TIF_RSEQ		BIT(TIF_RSEQ)
- 
--#define TIF_HRTIMER_REARM	12       // re-arm the timer
-+#define TIF_HRTIMER_REARM	13       // re-arm the timer
- #define _TIF_HRTIMER_REARM	BIT(TIF_HRTIMER_REARM)
- 
- #endif /* _ASM_GENERIC_THREAD_INFO_TIF_H_ */
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 1c93da75226e..d5f9176e1a75 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2117,7 +2117,9 @@ static inline void set_tsk_need_resched(struct task_struct *tsk)
- 
- static inline void clear_tsk_need_resched(struct task_struct *tsk)
- {
--	atomic_long_andnot(_TIF_NEED_RESCHED | _TIF_NEED_RESCHED_LAZY,
-+	atomic_long_andnot(_TIF_NEED_RESCHED |
-+			   _TIF_NEED_RESCHED_MEH |
-+			   _TIF_NEED_RESCHED_LAZY,
- 			   (atomic_long_t *)&task_thread_info(tsk)->flags);
- }
- 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 04b62c16fa8c..f8e225dc2504 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5854,8 +5854,17 @@ void sched_tick(void)
- 	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
- 	update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
- 
--	if (dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY))
--		resched_curr(rq);
-+	/*
-+	 * Two-stage promotion of LAZY to RESCHED, ensuring there is at least
-+	 * one full tick of respite.
-+	 */
-+	if (dynamic_preempt_lazy()) {
-+		if (tif_test_bit(TIF_NEED_RESCHED_MEH))
-+			resched_curr(rq);
-+
-+		else if (tif_test_bit(TIF_NEED_RESCHED_LAZY))
-+			 set_thread_flag(TIF_NEED_RESCHED_MEH);
-+	}
- 
- 	donor->sched_class->task_tick(rq, donor, 0);
- 	if (sched_feat(LATENCY_WARN))
+	if (ns)
+		put_nsproxy(ns);
+}
+
+put_nsproxy() -> nsproxy_free() then drops ns->net_ns and frees the
+nsproxy slab object synchronously:
+
+kernel/nsproxy.c:nsproxy_free() {
+	...
+	put_net(ns->net_ns);
+	kmem_cache_free(nsproxy_cachep, ns);
+}
+
+Because nsproxy_cachep is not SLAB_TYPESAFE_BY_RCU and nsproxy_free() does
+not use call_rcu(), rcu_read_lock() does not keep nsproxy alive after
+loading task->nsproxy. Couldn't nsproxy be freed and poisoned or reused
+before READ_ONCE(nsproxy->net_ns) and net->ns.inum are read?
+
+> +
+> +/**
+> + * bpf_sock_is_init_net - check whether socket belongs to initial networ=
+k namespace
+> + * @sk: the socket to be tested
+> + *
+> + * Returns true if @sk belongs to init_net, or false otherwise (or if @s=
+k is NULL).
+> + */
+> +__bpf_kfunc bool bpf_sock_is_init_net(const struct sock *sk)
+> +{
+> +	if (!sk)
+> +		return false;
+> +
+> +	return net_eq(sock_net(sk), &init_net);
+> +}
+
+[Severity: Medium]
+Should the pointer arguments of bpf_task_is_init_net(),
+bpf_task_get_netns_inum(), and bpf_sock_is_init_net() use the __nullable
+suffix (task__nullable and sk__nullable)?
+
+The kernel-doc comments and implementations of all three kfuncs explicitly
+handle NULL pointers by checking if (!task) or if (!sk) and returning
+false or 0.
+
+However, in kernel/bpf/verifier.c, is_kfunc_arg_nullable() and
+get_kfunc_arg_type() only mark a kfunc pointer parameter as PTR_MAYBE_NULL
+when the parameter name ends with __nullable. Without that suffix, won't
+the verifier reject BPF programs that pass a nullable pointer (such as an
+unchecked skb->sk or a PTR_MAYBE_NULL task pointer) to these kfuncs?
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/netns_kfunc.c b/tools=
+/testing/selftests/bpf/prog_tests/netns_kfunc.c
+> new file mode 100644
+> index 0000000000000..3072f7ede8124
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/netns_kfunc.c
+
+[ ... ]
+
+> @@ -0,0 +1,104 @@
+> +	skel->bss->target_pid =3D pid;
+> +	close(pipefd[0]);
+> +	if (write(pipefd[1], &status, sizeof(status)) < 0) {
+> +		close(pipefd[1]);
+> +		waitpid(pid, NULL, 0);
+> +		goto cleanup;
+> +	}
+> +	close(pipefd[1]);
+> +	waitpid(pid, &status, 0);
+> +
+> +	ASSERT_EQ(skel->bss->inv_is_init_net, 1, "host_task_is_init_net");
+> +	ASSERT_GT(skel->bss->inv_netns_inum, 0, "host_netns_inum_valid");
+> +	host_inum =3D skel->bss->inv_netns_inum;
+
+[ ... ]
+
+> +	skel->bss->target_pid =3D pid;
+> +	close(pipefd[0]);
+> +	if (write(pipefd[1], &status, sizeof(status)) < 0) {
+> +		close(pipefd[1]);
+> +		waitpid(pid, NULL, 0);
+> +		goto cleanup;
+> +	}
+> +	close(pipefd[1]);
+> +	waitpid(pid, &status, 0);
+> +
+> +	ASSERT_EQ(skel->bss->inv_is_init_net, 0, "netns_task_not_init_net");
+> +	ASSERT_GT(skel->bss->inv_netns_inum, 0, "child_netns_inum_valid");
+> +	ASSERT_NEQ(skel->bss->inv_netns_inum, host_inum, "netns_inum_different"=
+);
+> +
+> +cleanup:
+> +	test_netns_kfunc__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_netns_kfunc.c b/tools=
+/testing/selftests/bpf/progs/test_netns_kfunc.c
+> new file mode 100644
+> index 0000000000000..3ad49f8ba39a3
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_netns_kfunc.c
+> @@ -0,0 +1,32 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Abhishek Khade */
+> +
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +#include "bpf_misc.h"
+> +
+> +bool bpf_task_is_init_net(const struct task_struct *task) __ksym;
+> +u32 bpf_task_get_netns_inum(const struct task_struct *task) __ksym;
+> +
+> +pid_t target_pid;
+> +int inv_is_init_net =3D -1;
+> +u32 inv_netns_inum;
+> +
+> +SEC("tp_btf/sched_process_exec")
+> +int BPF_PROG(on_exec, struct task_struct *task, u64 old_pid,
+> +	     struct linux_binprm *bprm)
+> +{
+> +	pid_t pid =3D task->tgid;
+> +
+> +	if (pid !=3D target_pid)
+> +		return 0;
+> +
+> +	inv_is_init_net =3D bpf_task_is_init_net(task) ? 1 : 0;
+> +	inv_netns_inum =3D bpf_task_get_netns_inum(task);
+> +
+> +	return 0;
+> +}
+
+[Severity: Medium]
+There are a few issues in test_netns_kfunc() and on_exec():
+
+1. The patch adds bpf_sock_is_init_net(), but neither test_netns_kfunc.c
+nor netns_kfunc.c declares or exercises it. Could the selftest also cover
+bpf_sock_is_init_net() in both init_net and the unshared network
+namespace?
+
+2. In test_netns_kfunc(), both write(pipefd[1], &status, sizeof(status))
+error paths jump straight to cleanup without an ASSERT_*() failure, which
+would allow the test to pass silently if write() fails, and waitpid(pid,
+&status, 0) does not assert that the child exited cleanly via WIFEXITED()
+and WEXITSTATUS(). Should those paths use ASSERT_EQ() so child failures in
+unshare(CLONE_NEWNET) or execlp() are reported explicitly?
+
+3. In on_exec(), task->tgid (the global PID in init_pid_ns) is compared
+against target_pid (the userspace fork() return value in the caller's PID
+namespace), and the first subtest assumes the test runner itself starts in
+init_net. Would this cause false failures when running test_progs inside a
+container or non-initial PID/network namespace?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261105121642.3801=
+9-1-abhishekkhade69@gmail.com?part=3D1
