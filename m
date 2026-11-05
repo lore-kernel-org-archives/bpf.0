@@ -1,83 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.64
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793843905;
-	b=bpazeRvajUJTS9/9hC+H+Vqd+c/QZka26y+sVxG8aZRYfutOeuR/irlgtQa4ajCY+/Z2
-	 lBukhZwfFm1TMz8EOYBRZOSDAmsXpiw9P/l/i/SWyv6TIX/8FiHc2c2I1AhVLZJdogyVZ
-	 /VaJUT2Kklm4RcqzhuNEnUgVG2bLF9dwrYM/Bo8MDmjsQZaDtDNuRtI9ZBPib+nbtiWKG
-	 JF/+vU84MUpvlyzH0ghTaLTGIOCFMFibzYLpdI38rHVdgMciPMNKLMhm3ahr1jo5XZnwc
-	 3IhEoCixZht4kM+sclAwvFUK56DDRravV047cLAqkBZNkTCkcap/DTTMQ3LKe3Q0qQA==
+	t=1793845494;
+	b=PuDfD8q7nkfDmPBpqtinqP3p1LbAWr02yf7OaaV2FZnevqtXRS+7+ByakXEe4CbcUJVB
+	 3LlsQY3AyzADXQyhYKRy58truuE9G1b6SM1BPpEqukZmAautxd5rRrM2PDpMFkhVZRBCt
+	 I3O/0ukSmMQvy+KcqFk98Nl39RfQxf6s05e73Nq/Su3tUj71o26TqKzpllO9ylFGOsIc5
+	 sOeHgu6t8Mzo0hDzUEczEMaorVEH9tTPOe2ZZKYeCduux2XmPHs3IicYtV0IeLGTnH7QB
+	 UqTDLrufOTjyts4m5wuaPBedWYYCi0wjL3FBEEKhtFebjGWsSUo6oetRaoc9s5sTkLA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793843905;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=kkfpYua5cYTgKG0pQiNdMFsj1/CFOQNS4WMIfupofhA=;
-	b=XTlMs8ZsGzZ8YKZZYTBFipYkzJgqwA3a4VU4ewz93Jp7EImGvh0ep2wHCIczVClyFrUr
-	 IZHG4anpJNXxLPiraXd71hCiCuOu1uIIuEQupD6PFn/pRnbDfFneWrmNN+VFMoz41hKvK
-	 ZXbAAtqQxQhu0ciqR4K805SWqI9LqqQzbsUf6qChIBvndjNDS+DqGeyT8EMoPvtlUKJar
-	 u0dpT5IUn2TsA6p1x7sgo7U+14OOjZKYL7UO4v5pnCvSlxY9yYIfwqu1jd+X1fjx7iQ5R
-	 HoVrtwBjWGdcl1CqnooxSOyeNa4bk4jgpD1DuwMvge2/hlZpwPlATMbadQncu5z0bYQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793845494;
+	h=DMARC-Filter:Received:Received:Subject:From:To:Cc:References:
+	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
+	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=Sbhm20W68mSgDIFaGhBAslfNjBCrE2BwjldhEdE4E30=;
+	b=vrjegHCLSWtm2AmAG4D+RGPMxSf5GxJ9qIEvLuizhhab03qfM/UeFHFSiDbWIn58u99s
+	 Y/czjwN8hJO9BZ5+X8gQSYc6+jPOPzbBiEsRMgEuLBq7jUFKsu6dGxGETySD5T61XIllb
+	 wAGHC+X7nFo/IbaaRgQ37IxY/9ixYf0WlwK4jJ2y1h9dT3T/k0YqNFj1Ga2ol+68JBMGs
+	 7oxmg5kqgVLoliaNnQZ6tB5NUVbzfV/o5UjGVsfTbI0Ltl0eh+mS2quc83sdvj6MN/IUq
+	 I+znO18i7RnxU00BZp2nwcDpqqHcvJurA5bZl4f3VvrdNaq5KPpl0UGRawJltm2cL/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JCJnDqsr;
-	arc=none smtp.remote-ip=91.218.175.64
-Received: from mta0.migadu.com (out-64.mta0.migadu.com [91.218.175.64])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E45606A329
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 01:58:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 94E45606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JCJnDqsr
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=gZlY+lL7fdgfCyQVenuD4E5PVkQaAHWWt10XOZ4LvLg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793843901; v=1; x=1794448701;
- b=JCJnDqsr5gDCg4Ok7Z+jJ84EBXR21P1ESBXhE5mntiy0NMDTOc3tWKQjnPLh7QLvulPSZwQo
- 1xuTTuhBlkGiHw/IxWKPXHEbawARxARw/nhRlYonqvxxxoheRGUGyiGjazg6d4OyFKL5SQll0+6
- v1AL4qqFT6e8vZwyRZcoNGuo=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id d8b7aae3e53a8f40;
-	Thu, 05 Nov 2026 01:58:20 +0000
-X-Mizu-Trace-ID: d8b7aae3e53a8f40
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 5 Nov 2026 09:58:10 +0800
-From: Baoquan He <baoquan.he@linux.dev>
-To: Ridong Chen <ridong.chen@linux.dev>
-Cc: Barry Song <baohua@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Dave Chinner <david@fromorbit.com>,
-	David Hildenbrand <david@kernel.org>,
-	Michal Hocko <mhocko@kernel.org>, Qi Zheng <qi.zheng@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Kairui Song <kasong@tencent.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org,
-	"open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" <cgroups@vger.kernel.org>,
-	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>,
-	Ridong Chen <chenridong@xiaomi.com>
-Subject: Re: [PATCH v7 7/7] mm/mglru: add tracepoint for aging
-Message-ID: <auvisj8NeTJ8FunG@MiWiFi-R3L-srv>
-References: <20261104130817.849089-1-ridong.chen@linux.dev>
- <20261104130817.849089-8-ridong.chen@linux.dev>
- <CAGsJ_4y_Ay0mYO3ic72oepjtW6KYf2sKRXEHb3Ff8uwKrOJZjQ@mail.gmail.com>
- <4f830c30-f99c-4f75-851b-1a3f6d1342b1@linux.dev>
+	dmarc=none header.from=loongson.cn;
+	spf=pass smtp.mailfrom=loongson.cn;
+	arc=none smtp.remote-ip=114.242.206.163
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0581606A328;
+	Thu,  5 Nov 2026 02:24:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0581606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8Bx69Hw6Otq0YAcAA--.16799S3;
+	Thu, 05 Nov 2026 10:24:48 +0800 (CST)
+Received: from [127.0.0.1] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJCxf8_u6OtqrHkyAA--.40113S2;
+	Thu, 05 Nov 2026 10:24:47 +0800 (CST)
+Subject: Re: [PATCH v1 1/2] LoongArch: BPF: Make arena support depend on SCQ
+ extension
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261102072808.23080-1-yangtiezhu@loongson.cn>
+ <20261102072808.23080-2-yangtiezhu@loongson.cn>
+ <CAAhV-H52mbZJX2vkgG_h=XfwHoio=asLjFdhTJwUYqDp4V5JMg@mail.gmail.com>
+ <8b00e5a7-4e60-19bd-7953-f76dc71e15ec@loongson.cn>
+ <CAAhV-H52bqRD1SyrZsvMkNbCpGiM5DPSGPARiasZ8G3XsE5Tgw@mail.gmail.com>
+ <6446c385-623c-d4cf-5a07-0c2276c6f50c@loongson.cn>
+ <CAAhV-H4m-cokYz19HHAoDeLAjRGp4T=vwDOJaJEcHXZDW15rkQ@mail.gmail.com>
+ <64b8f867-029d-3cdb-7896-1229a076e25c@loongson.cn>
+Message-ID: <e43e0960-be3b-126e-1a79-35e56d821319@loongson.cn>
+Date: Thu, 5 Nov 2026 10:24:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,164 +61,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4f830c30-f99c-4f75-851b-1a3f6d1342b1@linux.dev>
+In-Reply-To: <64b8f867-029d-3cdb-7896-1229a076e25c@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowJCxf8_u6OtqrHkyAA--.40113S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtF48Wry7uF1ftFy8tFyDCFX_yoWkWFc_Wr
+	s5Kr1qyw1kXFy3Ga1vqr1FvFsrKw4vga48tryvgr13Z340qry5GayxtryfXrn3Kw4vvFn8
+	Ca98Z39xZw1q9osvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUb3AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
+	JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
+	vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
+	6r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+	CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIev
+	Ja73UjIFyTuYvjxUzZ2-UUUUU
 
-On 11/05/26 at 09:48am, Ridong Chen wrote:
-> 
-> 
-> On 11/5/2026 4:56 AM, Barry Song wrote:
-> > On Wed, Nov 4, 2026 at 9:10 PM Ridong Chen <ridong.chen@linux.dev> wrote:
-> > > 
-> > > From: Ridong Chen <chenridong@xiaomi.com>
-> > > 
-> > > Aging in MGLRU advances max_seq to create a new youngest generation.
-> > > It is triggered from try_to_shrink_lruvec() when should_run_aging()
-> > > finds that eviction is no longer possible, or that it would be better
-> > > to age first at the current priority. There is currently no tracepoint
-> > > on this path, so it cannot be observed when and why aging is needed.
-> > > 
-> > > Add mm_mglru_aging, emitted in try_to_shrink_lruvec() right before
-> > > try_to_inc_max_seq(), with the node id, memcg id, sc->priority,
-> > > swappiness, max_seq, the anon and file min_seq, and the number of pages
-> > > in each generation for both types, as computed by lruvec_gen_size().
-> > > 
-> > > The reason for aging is not reported explicitly, as the logic in
-> > > should_run_aging() may change, e.g. for imbalance-based aging. It can
-> > > be derived from the generation window and the per-generation sizes,
-> > > which are taken before aging, so the youngest generation is populated
-> > > as well.
-> > > 
-> > > The nr_anon/nr_file arrays are ordered by seq rather than by generation
-> > > slot: entry i holds the generation max_seq - MAX_NR_GENS + 1 + i, i.e.
-> > > they go from the oldest generation to the newest, the same order as the
-> > > debugfs lru_gen file, so the output can be read directly without mapping
-> > > slots back to seqs. The arrays are printed with __print_array(), so the
-> > > output is hex and its length follows MAX_NR_GENS automatically.
-> > > 
-> > > Only the lruvec, sc and swappiness are passed in; everything else,
-> > > including max_seq, is read in TP_fast_assign(), so try_to_shrink_lruvec()
-> > > does no extra work when the event is disabled. Reading max_seq there
-> > > rather than using the caller's copy keeps the window consistent with
-> > > the per-generation sizes read right after it, should another reclaimer
-> > > age the lruvec in between.
-> > > 
-> > > The event marks the aging decision, not its result: the following
-> > > try_to_inc_max_seq() may find that aging is already in progress or
-> > > done by another reclaimer, so concurrent reclaimers can each emit it
-> > > for the same max_seq. Whether max_seq was advanced can be seen from the
-> > > following mm_mglru_scan_folios.
-> > > 
-> > > Suggested-by: Barry Song <baohua@kernel.org>
-> > > Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
-> > > ---
-> > 
-> > Much better now:
-> > 
-> > ~ # echo 1 > /sys/kernel/tracing/events/vmscan/mm_mglru_aging/enable
-> > ~ # ./a.out
-> > Mapped 400 MB at 0xffff98a00000
-> > ^C
-> > ~ # cat /sys/kernel/tracing/trace | grep mglru_aging
-> >           kswapd0-49      [001] .....   104.277689: mm_mglru_aging:
-> > nid=0 memcg_id=1 priority=6 swappiness=60 max_seq=3 anon_min_seq=2
-> > file_min_seq=1 nr_anon={0x0,0x0,0xd360,0x0}
-> > nr_file={0x0,0x23e2,0x0,0x0}
-> >           kswapd0-49      [001] .....   104.536448: mm_mglru_aging:
-> > nid=0 memcg_id=1 priority=3 swappiness=60 max_seq=4 anon_min_seq=2
-> > file_min_seq=2 nr_anon={0x0,0x20,0xf8bc,0x0}
-> > nr_file={0x0,0x91a,0xbd,0x0}
-> >             a.out-79      [000] .....   104.689518: mm_mglru_aging:
-> > nid=0 memcg_id=1 priority=4 swappiness=60 max_seq=5 anon_min_seq=3
-> > file_min_seq=4 nr_anon={0x0,0xf8a0,0x1188,0x0}
-> > nr_file={0x0,0x0,0x2,0x7}
-> >           kswapd0-49      [001] .....   107.282038: mm_mglru_aging:
-> > nid=0 memcg_id=1 priority=2 swappiness=60 max_seq=6 anon_min_seq=4
-> > file_min_seq=5 nr_anon={0x0,0x6c50,0xa168,0x605}
-> > nr_file={0x0,0x0,0x98,0x18}
-> >           kswapd0-49      [001] .....   107.812598: mm_mglru_aging:
-> > nid=0 memcg_id=1 priority=1 swappiness=60 max_seq=7 anon_min_seq=5
-> > file_min_seq=6 nr_anon={0x0,0xfe10,0x1721,0x54}
-> > nr_file={0x0,0x0,0x1a,0x3}
-> >             a.out-79      [000] .....   108.936872: mm_mglru_aging:
-> > nid=0 memcg_id=1 priority=2 swappiness=60 max_seq=8 anon_min_seq=6
-> > file_min_seq=7 nr_anon={0x8,0x7d29,0x8c54,0xc90}
-> > nr_file={0x0,0x0,0x4,0x2}
-> >           kswapd0-49      [001] .....   108.937115: mm_mglru_aging:
-> > nid=0 memcg_id=1 priority=2 swappiness=60 max_seq=8 anon_min_seq=6
-> > file_min_seq=7 nr_anon={0x0,0x7d15,0x8c94,0xcac}
-> > nr_file={0x0,0x0,0x4,0x2}
-> >           kswapd0-49      [001] .....   109.425258: mm_mglru_aging:
-> > nid=0 memcg_id=1 priority=1 swappiness=60 max_seq=9 anon_min_seq=7
-> > file_min_seq=8 nr_anon={0x0,0xed69,0x24bc,0x488}
-> > nr_file={0x0,0x0,0x3,0x3}
-> > 
-> > One thing that looks a bit weird, though. For example:
-> > 
-> > max_seq=3 anon_min_seq=2
-> > 
-> > We have only two generations for anon, but we print four:
-> > 
-> > nr_anon={0x0,0x0,0xd360,0x0}
-> > 
-> > The two oldest generations don't actually exist. Ideally,
-> > we would print only the two existing generations:
-> > 
-> > nr_anon={0xd360,0x0}
-> > 
-> > you should be able to fix it by:
-> > 
-> > __print_array(__entry->nr_anon, __entry->max_seq -
-> > __entry->anon_min_seq + 1 , sizeof(unsigned long)),
-> > __print_array(__entry->nr_file, __entry->max_seq -
-> > __entry->file_min_seq + 1, sizeof(unsigned long)))
-> > 
-> > But I guess it's fine, since the two extra entries are both
-> > zero.
-> > 
-> > And, I personally prefer the youngest-to-oldest order,
-> > as we usually have:
-> > 
-> > head ---------- tail
-> > 
-> > where head is young and tail is old.
-> > 
-> > Your output uses:
-> > 
-> > tail ---------- head
-> > 
-> > But anyway, I guess this is just a matter of whether we
-> > read it from left to right or right to left. Personally, I
-> > find it more natural to read from youngest to oldest.
-> > 
-> > If you're not tired of working on this and would like to make
-> > a few more improvements, you could address the two issues
-> > above. But it is up to you.
-> > 
-> > For the patch,
-> > 
-> > Reviewed-by: Barry Song <baohua@kernel.org>
-> 
-> Hi, Barry,
-> 
-> Thanks a lot for testing and the Reviewed-by.
-> 
-> Updating it would be fine with me, but I'd slightly prefer the current
-> output, to keep it consistent with the debugfs lru_gen_full file. It
-> also prints a fixed window of MAX_NR_GENS generations from the oldest
-> to the newest, marking the ones below min_seq with 'x'. The event
-> reports anon_min_seq and file_min_seq in place of the 'x', so the
-> generations that don't exist can still be told apart, and they always
-> read 0. Keeping the same window and order makes it easy to compare the
-> event with debugfs, e.g. when looking at both while debugging.
-> 
-> That said, if others such as Baolin, Baoquan or Kairui also prefer
-> printing only the existing generations from the youngest to the
-> oldest, I'm happy to send another version with that change.
+On 11/4/26 9:06 PM, Tiezhu Yang wrote:
+> On 11/4/26 5:54 PM, Huacai Chen wrote:
 
-I like oldest -> youngest a little better because when I am thinking
-about MGLRU logic in my mind, I would put min_seq in the left, max_seq
-in the right, then wrap around from right to left.
+...
+
+> Personally, I feel Approach 1 represents the pure semantic intent
+> better, whereas Approach 2 looks more aesthetically pleasing.
+> 
+> Which one do you prefer for the v2 patch?
+
+FYI, here is another relevant discussion from the RISC-V ZACAS patch
+where the same code aesthetic vs. semantic precision trade-off was
+evaluated:
+https://lore.kernel.org/bpf/3e7fb313-021a-49d0-9def-fd9f03e3c2bb@huawei.com/
+
+ > "Originally, I thought
+ > rv_ext_enabled(ZACAS) && IS_ENABLED(CONFIG_TOOLCHAIN_HAS_ZACAS)
+ > would make it more explicit, but system_has_cmpxchg128() seems
+ > to better capture what we were missing."
+
+Using the generic system_has_cmpxchg128() directly mirrors the
+precise condition defined in the MM core layer (mm/slab.h). It
+prevents the JIT layer from over-relying on arch-specific
+Kconfig/hardware knobs to mock generic allocator properties.
+
+Therefore, I think using the generic #ifdef form is more robust
+and keeps cross-architecture BPF JIT implementations symmetric.
+
+Thanks,
+Tiezhu
 
