@@ -1,96 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.180
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793837571;
-	b=F2y3FSC5uFqmXZcbKpPNY4rp1txINm4Jkgmf4S+zYhhUjLZz2fNbkdkwpWslC6XP/TxM
-	 7pvlQN1ZhGpqeXDQ99YDGrPBs127D35j2Ma8BIi8+9DTac6o48HV7V4S0rnEuw+1zk5Ml
-	 o+aHT/Jo41U3RlbxG7+JG2AgrL9ezCsg/mMGN/mwMVeMW2Gydh6LrJdb5NAyqUocO2nVk
-	 zhpoI+WtJdh3nqugpZuM0lX3pab8YJx/z4wAyCZ10Mntu92amt44VVAj1duMacYjBqrfT
-	 i0Fd86SHtXguK6nrR+ON2V3BciAYs15kTCQqBtxt5psg7Beh2H8xp28T76bhxgO1sNQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793837571;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793838403;
+	b=TUD34Z8x/lMXf6FZKb4qZMQ+cR/WNG/ARxvbNjwqtmWiKwTO6ihf3a55AkLlw9/Kss7/
+	 1TJJUXLhIIF0JTO3IrYtMQ6oOAIMtjWqKJi1Mp6v4Nb1VhqIWYPt5AmMmsZjuQ7bfzey0
+	 IxertoCRPZFtNqc7ehNEexxj5RGjDrNFHJCrzOoCk4ZL4/QJ/p+79PqP25oiW1ZFCDOoN
+	 ZF36Vk0Ck32RAnBubuhLuxGmrFXHT9fMUvRBzb3sxpCRF1m3GFIp8FLORJZMVV3PEruow
+	 I6xOqINhgtW8zez5m7Mv5Ovh57TeSLzhVbhotU73qbZ534+3CMxS3q3aQq1D8gGR7Ng==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793838403;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=rwJhK3x7XVjm47244mpJl9P7sCIrVF4iHXLk2RT9ybs=;
-	b=ctvf9I5QPRL+9CIWkz+YreCqjlpZ5YOiqAKpR6Fc+Uomb5L36fVAhxEKd7Um8RzLmbVZ
-	 HQW+vEMocg+Ylh3TI+oOjOmWF84/siN/KoDWtake/wgh/ka22jWsnChINikcQ8n47B733
-	 Og2fKnVMwhk2dbKqLkBiNgAl8hmhLrgj4UUSUOXlOZj0wMIADlJar5rI147MRon8G2bbN
-	 1VEHe2Z/uhjx41Mu1ioyq5DwgUi32XSysIvzX7hmmOCk7SwXGV5cwvarQ+2fF1F3Y7K7b
-	 hTgsY8lM46Nf6AfwFlX/hlB2yyHOOyA2aILLSHX77v7aI1x4iWpB5sAwJq7ro6L/IlQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=sentinelone.com;
-	spf=pass smtp.mailfrom=sentinelone.com;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=CwXKbQAV0SKUBCKeaDmQyuZbmqiB7VLocRCm8PA2gNU=;
+	b=hhdG/bHLO0U0jP3EDAEEppFJNMOXBaLQ3MWeXfUE5+b92bSQmzJOcvb87NXoZ1MdYP2d
+	 1WBYD/XR6nZJcxh4TvyN2NPvKtwmliubDPDOzfnn40jYSj7c9IntyzVC0HCpLJbJKG6Hp
+	 QyfxVNNDNGPt6g3rYpre8dRRiMR3J95I5jmPd1Xy7UZYILsgF6ClJDOMVe2DFHrtwGX9x
+	 Jp34IFKknWR51JvSUQB+CfL38QalLn4wkZwbz/shhY1HzocnQcaAJg4eQLlOIS3GfVqtt
+	 69cyEv8SMn921J6SoCUOQ+bvu4rUZbrGx4BGVQ+7pssQzx2Z82W5hVyF/G5+Woi8zUQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PeZ+jq7z;
+	arc=none smtp.remote-ip=209.85.215.176
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A6D606A332
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 00:12:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 42A6D606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2eac4936dfdso1580025ad.2
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 16:12:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793837565; cv=none;
-        d=google.com; s=arc-20260327;
-        b=JjNinP5oJNT7+WPS/9q0tJZmXAL4ZZL5qNNQMu5sPULnhjpu2CYa6nF0kd5ni9xAbf
-         g0pGJ9SJNKuU+H4VxvofZmqFSrRpsUIl84+yiVGv3GKetV7phdKkhkn/+o6pXJ4K3juf
-         m8vL3ITVpcaAyr6cWUdqMJ3GaKIJutISM+/JyVYkXYj8Dc/fCzFH+K4XQaZMntXogm6y
-         +rhfZFnq6rIqhSdO8qiaWxBZpySVLyf/PTT9u/aHjyAxxL9MtVycphHIucVBjID8dq+S
-         IlNEVsHzQCqwSoCAEN08gVQNGMGbrWqPKGvrM53hfKx7+Xkv8MnCemMk1YG7NlmSOnEs
-         dMjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=rwJhK3x7XVjm47244mpJl9P7sCIrVF4iHXLk2RT9ybs=;
-        fh=ZSn4taASM4FAEBe4PONDR3j4h/IAl0HNQ6FvUdVpf1c=;
-        b=iD5Ave8HVqYSsT3ZmLz6onMb/PPBXFuSCX3wQmCnph6tz2M8dIWp6KhHizDbYv67dV
-         jtD+DJOZjzG1tvirceqyGwax8rO/S/pwOhaf7ghnQcBaAc4euQICiUx/bGRdWD1XKg/V
-         vNpQDoDq8gBnQynaRPZLpBddiulNbJImDdgEJMvK+1IfkwUl7pg9Enu2aaBWjVB5gvR9
-         etnHyh+blKPmahyJ8lLx2CXt1Iyw+jnzjR8RuccPGMgU0KBAPQX1hQgXkkr4bxFWOLxH
-         KWbSM9fTH22j3nKZf7klGcwo5aCUG2YIW4bKlJcyz3isqITK8r/4fvVDL4v9h4A8hOlc
-         tYyg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C90606A31B
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 00:26:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96C90606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PeZ+jq7z
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cd67cc518a6so844232a12.1
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 16:26:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sentinelone.com; s=google; t=1793837565; x=1794442365; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rwJhK3x7XVjm47244mpJl9P7sCIrVF4iHXLk2RT9ybs=;
-        b=AIPk4pu6kv59pyU6Yftzb6cZja53z0GgjNiVDI0dY1cJucbOX64fTB4HWQprJ6UX3X
-         bdYP63NgbU7hxKqGeS6fxjDJ+uk2aEAPmWo9GY9dDfVd2DNFHLu3aXzP9bFUF79PNSKy
-         1omu0Tuve/kzRnzrZdOSkaEX0//VbVnQpQOdySSg2rNpGHxQ03eOKXvYNgsaZv9ZP1nB
-         HKPe1ivDtl8WX++yckdqnXl45otViFSbIevYUhwZ3Ynn0HQ5Gz+5Ja5Gxk8Bjab7Kg9j
-         3/QNU4jkIzgYYJeZxCT/zKUf+spcR9Y37aGtXc+/kS7fg9w7ZXZDM9x072jSL7DhWi72
-         lMaA==
+        d=gmail.com; s=20260707; t=1793838402; x=1794443202; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=CwXKbQAV0SKUBCKeaDmQyuZbmqiB7VLocRCm8PA2gNU=;
+        b=PeZ+jq7z7z9VV01iY+srFx4v1jnbjWRxkrAiizOCbkhE20Amw+760Ui3WLfUq3AaGK
+         QOE8G4yiNq9Xb4VD4OJumICovfPK3c7GaWRi2YsFNLOuGohQZyMD1Z+w24a5iI8v18c2
+         RrzU5QHIorVxj88iU8olOBKnwXvmxhlu3E7Cq/75XaPLEChG/SwQcvOXIRq3S108yiZ9
+         KaANVfOFs1hBUR5MSkEyOEqu6HN7Wcv+yR4NW2TGNAnQN5pe8Rr5Xnz7N5mZtV+DhQC6
+         amHi5MQPaWG0hcYKJz8SAxW2xPgALIVVPsxlKSYQeKRg3S7JjQPpJ0T3GkTJHwTmx7nC
+         Ajmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793837565; x=1794442365;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=rwJhK3x7XVjm47244mpJl9P7sCIrVF4iHXLk2RT9ybs=;
-        b=pEO8/N13Ts4RlqvaCrNHdfDR5e0y972sR/DSlUAOlk89vuTa5j5ovxUl/i0L+e2dyt
-         UD7wmT4C+yIW8IhM9FZld3l965pajoz/tKGpzjV+yjMFDE9LwQaVF6AoVmY0PNvHI4z5
-         O0qjI3qVv8goL5jDpWgYXjARQISUk3x0rVdpfgCBieuOKV2X7QHvgMBWBOD0efxGz9sF
-         f7cf/LxCKKp9j700xzUzMWZ2YpYjkma1+zKm+AjTAc2Tw/+n0lSUAWEwMTS6nXHKo84S
-         4ocA86dEwHn+NrnWdmogRLgk2a0PDwokBMLt+PRNiWEQfCieYk6jU4GOSMk84aXCH2Gv
-         HZDA==
-X-Forwarded-Encrypted: i=1; AKwUvBz0isLWuOa+qCKxPJKx3jh7DOqMKEMdlFIO1zYWd1q0k4yqehv+pgM59gSTLQB5Bi2P6D8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/byqNMwrMGA5GG1ec6BHLVEKnuvYREcT+NLD66m8+3ULnmizOU
-	fNsTQOIlkpnIOAwCSvjABqbCJ9a+8x/x24A3PuQDzDw05pVPunyhB3Wf1sQS/4Cfp2bw2mP9SFI
-	sEWl+8XvPeGfynXgWfCx8vpuvkBLS9eR4QvXVcEgmEw==
-X-Gm-Gg: AYBFou2l27u7GoPkWXcwvgAy2WM33K2gkbH4yb6CD9YdMSA3WS2YnfrbczfQjLQatzw
-	x9WhZsGHwACEIf3/X5TGpZOzm5lUkdK1GAC4FzUaDV5EharklQ+l7W+TaQ/lsas9QIiIzXOGfru
-	4ClalpER9S4zXN2R73Ha4kwSi2Ni9dK3pTPDuME3WMapVn/iTjeoPaTMKqzcwWQmp+Az3xfYHwC
-	3oht5D6G1m/v/uMzrI1g+kCuCrBq4ZwUsx09qnV1M2aapxghBSFoM1QSkRCQtIDlrO0YGJn1pgA
-	uEF+5iVZMxT5YiCQ5xXO9tb22AE2EiehgqnjsB03D/q1a+dT2ZQ+IwrehRArqMOnJfrBuEuHJkq
-	Knc+xMzhv8PF7q1ifyIUf3UOLJebkx3YAJFYf
-X-Received: by 2002:a17:90b:2891:b0:3a8:1759:2217 with SMTP id
- 98e67ed59e1d1-3ae8964f436mr24798413a91.2.1793837565532; Wed, 04 Nov 2026
- 16:12:45 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793838402; x=1794443202;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CwXKbQAV0SKUBCKeaDmQyuZbmqiB7VLocRCm8PA2gNU=;
+        b=WPvW4sbwgy79jRIz6XKDM4AKf98XGFWHnqHUs4M7nHUF/+qR4TUqLeNuBxk2k/pwtB
+         hke1vrhfw6+5gDr9mgaUG7tT1rOkjR6HqDeZrqstRQpMv9cym4p4yzEOQd0pACVWJZK/
+         M4cyoCWjjBXbw+A/I6flC9R3gdpGBJeCuVEOICzedFPnACiJT8mzA6mMJSCuhDpQvRs1
+         OTb07QC3iWzZsgVOJvH05Rp/8QRWghOOxE1pVMo+JqxgV4AqEXrT8/bkW3Mh4VG0kLZG
+         Rs9ieF4QOA0+F8GPq0mMj0wxDUNEa9viJDIwPWdaM1XAS8oN/I0lWq9qtpUyyCtbDJg7
+         ifWw==
+X-Forwarded-Encrypted: i=1; AKwUvBxWkqY1FMI94faPwAoMGcqJEo48eMGqEylx/wH+pTJuCagBS8ZutA6bRcPbpP05f10fqzc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9T89WrIsqhXmbBo1K4CcJqSof6EGt7WyKCva4A9XsELbY3bhGU
+	EgeykoEtatkMmBNJ5dEHpOnCZfy5fI7f33EDQieUZh0l4j0bgigKpIbT
+X-Gm-Gg: AYBFou1zCsSI6V8vuF7Dj3rkak8RUR3HBN/xqn8LDgBajtEYMXM2crI22kbt/kFY4XH
+	NbqcqUxuHnBBpbhmqb5yEIEQpC+FQFyZ4w8qc7xU3+DZKmpQNbjHfBZ6mqdc6ZcktrEAEZou6UB
+	3frCgPZUPcd5+QRMTFzL7WH6mBInBq+baC8SwbJEKjP4Y/dQVPca5jvdtjZofGCrleP1pZVxE+H
+	tSbVlI0eDDUuYMBTZFdyKVEW4v28ib7uDbrG0XTNDrS04CE+e2Leeh1p6bNa1mSnU40TG4jf4I9
+	enSJezZMatsYr0nrum7gnVEj0rva5Um0ZLtMOQk+LK0ufFD5Tae/M/nGEWYVKQ47+n3k2GZ7J6l
+	PmwF+McD1ZTghUj3oA/fFrKmcOL/ufRQBMxDOyEnLduZ+escGJEd9f6jEZESTZJwtwmkHfrSz9g
+	Fm/+7h0v/DtwzO2ieJMfY16ty/lm5X74GV+qOfWZUQd7rAZxCPuqVRkkf3z10T3ptF2vPvLFoVE
+	HbnoTDNbwhTT7j/LUBKQCRoJD10IzclpDj9lT/nDUKjcgRxSq6YTWHsm2Dr1cGDpQtydcz0BXxl
+	r+fDkxH2C336BBK1HH8GC87qRfwsxJCQG712PoADJJPW2px1fY+RaJA0ZSI93gnpcAYpcdAsdsE
+	Yj0s=
+X-Received: by 2002:a17:903:1a30:b0:2e3:598:75b8 with SMTP id d9443c01a7336-2eb364b0dc1mr171242215ad.27.1793838401772;
+        Wed, 04 Nov 2026 16:26:41 -0800 (PST)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed08bd5ab2sm11649895ad.5.2026.11.04.16.26.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2026 16:26:41 -0800 (PST)
+Message-ID: <74784940b7a6dcd4fee6f3008307ee6b04d65bc3.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 16/37] bpf: Count loops whose first value or
+ bound is a range
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Date: Wed, 04 Nov 2026 17:26:39 -0700
+In-Reply-To: <DMMMYOKCCSS2.15GTRVXFVMHTL@gmail.com>
+References: <20261103234104.208239-1-alexei.starovoitov@gmail.com>
+	 <20261103234104.208239-17-alexei.starovoitov@gmail.com>
+	 <f1e784a5de228293bc4fe21a5cfcc60d93a4400d.camel@gmail.com>
+	 <DMMMYOKCCSS2.15GTRVXFVMHTL@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,58 +104,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
- <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
- <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com>
-In-Reply-To: <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com>
-From: Mike Bazov <mikeba@sentinelone.com>
-Date: Thu, 5 Nov 2026 02:12:51 +0200
-X-Gm-Features: AclHuK-Mv6D6Vzn9HGZ74QBGavLw0oS_88AhPwykn9JGIV4rU_H6TjzTRynM-M4
-Message-ID: <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
- cause false recursion drops in trampoline progs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: JP Kobryn <jp.kobryn@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Nov 04, 2026 at 02:20 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-   > Add bpf_preempt_disable().
-   > Your test forces the preemption in the middle of the prog.
-   > Explicit bpf_preempt_disable() will fix it.
+On Wed, 2026-11-04 at 18:25 +0000, Alexei Starovoitov wrote:
 
-   I tried it, and with the whole prog body wrapped in bpf_preempt_disable() /
-   bpf_preempt_enable(), Task B is still skipped in every round (on a 7.0
-   kernel, 20 rounds, fentry and fexit: runs_b=0, recursion_misses=20).
+...
 
-   perf record -e sched:sched_switch -g shows where Task A is switched out
-   now, 20 of 20 (Task A, SCHED_OTHER, preempted by Task B, SCHED_FIFO):
+> The value that ends the loop depends on (bound - first value) % step.
+>=20
+>   for (u64 i =3D first; i > 0; i -=3D 2)
+>=20
+>   first   i at the latch     _count()
+>   -----   ----------------   ---------------------
+>   10      10 8 6 4 2 0       5
+>   11      11 9 7 5 3 1 -1    none, -1 wraps around
+>   12      12 10 8 6 4 2 0    6
+>=20
+> For 10..12 both ends have a count, and 11 wraps around.
+> A range needs a check that holds for each remainder.
+> The value that ends the loop is less than a step behind the bound.
+> Here the worst one is 0 - 2 + 1 =3D -1, so 10..12 has no count.
+> The same check rejects [10, 10], and _count() accepts 10.
+>=20
+> The options
+>=20
+> Four ways to get a count for constants and for ranges:
+>=20
+>   option                           what breaks
+>   -------------------------------  ------------------------------
+>   _count() for constants and       nothing, it is two functions
+>   _max() for ranges (the patch)
+>   _max() from two _count() calls   11 in the example
+>   _count() as _max() of [c, c]     constants lose counts
+>   one function on top of cnums     the same as [c, c]
+>=20
+> Two _count() calls
+>=20
+> The overflow check in _count() is exact for one first value.
+> It passes for both ends in the example, so it says nothing about 11.
+> The check has to come from the bound, and that is what _max() does.
+> _count() also returns false when the latch is false at first.
+> 'low' of 'i =3D 0; i < (n & 15)' is _count(0, 1, 0), which is false.
+> The division is all that the two can share.
+>=20
+> _max() of [c, c]
+>=20
+> The two differ in what must not wrap around and in '!=3D'.
+>=20
+>                 _count()                     _max()
+>   -----------   --------------------------   ----------------------------
+>   wrap around   first + step * count         bound + step - 1 for '<'
+>   '!=3D'          step divides bound - first   step is 1 or -1, each firs=
+t
+>                                              value in front of each bound
+>=20
+> post32_lt, post32_sgt and post32_slt_max end the loop at U32_MAX,
+> S32_MIN and S32_MAX. The check of _max() gives them no count.
+> pre_ne, post_ne and pre_ne_wrap_up have a step of 2.
+> The '!=3D' rule of _max() gives them no count.
+>=20
+> _max() can restore both with branches for constants.
+> That is the same two calculations in one function.
+> imo it's better to keep _count() as is.
+> It's exact and the tests cover it.
+>=20
+> But I'm open to any other approach that my bots couldn't think of.
 
-     __schedule+0x48f
-     preempt_schedule+0x59
-     preempt_schedule_thunk+0x16
-     bpf_preempt_enable+0x1c
-     bpf_trampoline_6442539626+0x105
-     bpf_prog_7dd04eadc26e277d_on_fentry+0x11
-     bpf_trampoline_6442539626+0x192
-     __set_task_comm+0x5
-
-   That is still inside the prog, while prog->active is held.
-
-   > What are run_cnt and recursion_misses of your progs on inet_sendmsg()
-   > and inet_recvmsg() in production?
-
-   We hit this while testing new distros with 7.0 kernels, so we don't
-   have fleet numbers for these counters yet. For our inet_sendmsg/recvmsg
-   progs, in testing: fentry/fexit on inet[6]_{send,recv}msg, Ubuntu 24.04
-   with its stock 7.0 HWE kernel (7.0.0-38-generic, default lazy
-   preemption, 4 vCPUs), behind nginx -> gunicorn -> redis, with wrk from
-   another machine (128 keep-alive connections, ~1.07M requests over 10
-   minutes, ~62% CPU):
-
-     run_cnt 38040015, recursion_misses 4063
+I have a sketch that extracts cnum64/cnum32/tnum/base/step from
+bpf_reg_state as `struct scalar` plus a set of arithmetic operations
+and moves scev.c to use this abstraction.
+This removes `bias`, `domain_range` and unifies _count and _max
+variants, separate 32-bit into 64-bit embeddings.
+Can share tomorrow after cleanup if you are interested.
