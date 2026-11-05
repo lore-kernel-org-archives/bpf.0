@@ -1,55 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793872460;
-	b=Bq2V+6b7WH6ImWOUI2LhgseudSjsl9M50upomXYAmewWwKIaEJ/bUcvk3t+lF9XBVun7
-	 evfKtq79RX5ZO/mH0fl0vX20dRyggVX/9D68L2AyEC0RhOR1I+yUNc4jln9ZJlhP8cQ80
-	 Eqg7KaYAPqAvc/m60Mc52RKhbEXFBh/twODdDiDnwE92dFNCpjYU25PXo0KyF8AVtYFQi
-	 g3yZ6tIJAB0dW1x9tXc89nqVG5XD/YQpd8unb6H4S2xsQj7BnojvnpQZJ6lF+kc5P2V/d
-	 KuhQ6vJ6mDLayPFOk1KkfDekp2BNvaEjtoUjQePlfHDAGZkmyZWavOeZobAkNozhM4A==
+	t=1793872780;
+	b=1Ow0zzz7Wyhw5eCCz7KQkhiJOOs3l2KECSHkTGyUaneJLHX2/pd8adsQHNP0jk85pGoM
+	 Vm2xadkjbT2t2G5jxfJTgsejFG/HfVa8VUN9+NF58z9aTnTNy9LQIP8aMzEov5m4A3tcX
+	 e1tVs/u+wS/yC26k4dFVs8trMFmQzk6fgaXkYm79GVVqhBwcXSvVECvy9Po7smXRH6Tn0
+	 MZAHAj7M7EAI3qcgQzMyawMeZN4APdblo3Pn2DnqhFe5m742CehfmDHzXLxkVNXZ1+DDV
+	 tB4R6SsR2w1Pq+1TaKvzAq3BpTEH22GiPGr2cnPf4JczxdNB75qOIiSF1puiSbrU0RA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793872460;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Mime-Version:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Subject:Cc:
-	 From:To:X-Mailer:References:In-Reply-To:X-Last-TLS-Session-Version;
-	bh=V6R4Z5QNn1TmY3Fb9b2cmHECgOA3rdSKsC6p62jeDtk=;
-	b=yFW6AHd19JMCgT8/5AuQEN0lXFeE1Ek73dFOGhM0m7zHSjw/lttjwRU1Y6ov359aKkQs
-	 12BniQZw8ghv438jSABATPBPiuyqihXpkxh3/XN24c5RKuIwBdBvD8u03kCtVyjkB4Fze
-	 q4WyAppM2r8s4vckeVMMj9RFOQKVx5OR4lx6t7SF355T1KUkAZR29/k7xT9Wgd3homrue
-	 et+RljBsWA3Ez020/18fXjwCz6oq+qoRqtpZD++L7Q+GgBZNywDjsHoFIis7pX2cmVmzg
-	 b2qUBcznhvrNC5/zwYClXl0kRyVIV4QkT54d6fyAXz+drPX7T74A9y3guRFJueeqVgw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793872780;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=DFynwRQzUygtrqE+QHjdbW9aoarxVpxVGzFfqPEgWug=;
+	b=VxNRi+pnMBtgycTBoSknQ6p9BnCkj4g9U+i1KWD3GSKRjnEALuteQQAKcN4GU59Cv/zN
+	 bIzR63t+1Nx2YMw0OgSc+Fpdxp2UYgD1qy2zDRHS51jdnjFyUmeQ/FReLn4Tkd40HHYw9
+	 LXBkqvs16P5bo5B5fZw2MB0XUzxIB6F2lM0tPRkOU0NStg43wmJ6xjQbGagxol+A4Gcpr
+	 MaEMsboKq7AzoVbZ8sfSoRTozFjcU2xwRh9ch2ZNkn71IafCPdfvxsLUW0aJYPbmkUUbZ
+	 5Tgw/zdBsbRievCsV/q4UQIPxcd5yjLe4osEwu0OjoET7kaLZgb3ajKVSRTEmicH3dA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Drud5Bh2;
-	arc=none smtp.remote-ip=185.246.85.4
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LnApAkbW;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46965606A31B
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 09:54:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46965606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569C5606A326;
+	Thu,  5 Nov 2026 09:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Drud5Bh2
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id B91AD4E40774;
-	Thu,  5 Nov 2026 09:54:11 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 72EC15FF85;
-	Thu,  5 Nov 2026 09:54:11 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4A14A10328E77;
-	Thu,  5 Nov 2026 10:54:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1793872446; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=V6R4Z5QNn1TmY3Fb9b2cmHECgOA3rdSKsC6p62jeDtk=;
-	b=Drud5Bh2kSmQFCtnnvVRBf9Bpw/2pvB6u2mFtC6kIBwe6l/lvVAABTN9MUisRt8dR8oay5
-	aYfk922o/+l+N+kukaDg+AwrL/pFqsQs0Hly8htVtM9x/9bO9YlofGTYafqV5KorPhIT5Z
-	+FiLICdmBKFIaOjNtXH+XT9IRaNw9xl7+YR1Mfqg7dqPAeGnz1mocGfIcbakHMLN4vKHPF
-	4q7PyuN7EsmOTeVhc43D0a1MC9+Hg1WjQBZZywg9EDJpLnBaPnDgqwXztVmcizl/XElOKF
-	4HRY5RITniyt7rrY097BUozGfWDDfcWlyiyPU+wkHICAd2wy5UYte9HbAUICmA==
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LnApAkbW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB481F000C1;
+	Thu,  5 Nov 2026 09:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793872780;
+	bh=DFynwRQzUygtrqE+QHjdbW9aoarxVpxVGzFfqPEgWug=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=LnApAkbWfIGnF9Whko+YqQC0EYPDHDdMbqIKDsR+QoiyOcol1rAVwCFi2+s5vcoC5
+	 3aepn9+5lv/GLJejO/RHud648OqqmhJIBx2qDgSS+OabJyGaMdkqLqf+2IWARJWfKJ
+	 f8Ua9mRFVKPchgEiq67H+wNd/+HM1fjXZG7NTFsP7dOJThiCgi2pqD3+uPG4L88aXD
+	 udzc9sTWXQi9uweVeAioCtlS/5f96NWxLSGHJwXnwAnaDMUkzy8/tt+21zAizMfiRq
+	 KK2a9tQO0amZGP8GRarVnB5DXKr0D6YyEPDx2h3lqJzMkYVFsQBVHDHlhTD+SreR2r
+	 5WeM7rRBn78GQ==
+Message-ID: <833b2ebf-ac7c-42b1-bb75-2fc56e0f0fbe@kernel.org>
+Date: Thu, 5 Nov 2026 10:59:34 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,62 +50,116 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 05 Nov 2026 10:54:02 +0100
-Message-Id: <DMN6PJC05X2R.2PXWV13VGT156@bootlin.com>
-Subject: Re: [PATCH bpf] selftests/bpf: Look up unpinned maps by ID in
- bpftool_maps_access
-Cc: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- <qmo@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <ihor.solodrai@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Tianyi Chen" <hi@tychen.cc>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.22.0-0-gc2f86b7abde3
-References: <20261104183323.409412-1-hi@tychen.cc>
-In-Reply-To: <20261104183323.409412-1-hi@tychen.cc>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 bpf 0/3] xdp: fix page_pool leaks
+To: Slawomir Stepien <sst@poczta.fm>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+ kuba@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
+ aleksander.lobakin@intel.com, ilias.apalodimas@linaro.org, toke@redhat.com,
+ lorenzo@kernel.org, ihor.solodrai@linux.dev, tavip@google.com,
+ Tianyi Gao <tianyi@cloudflare.com>
+References: <20261104121316.1155680-1-sst@poczta.fm> <ausorQSZn/tuxUWg@boxer>
+ <auw7ofYYYwOoGH2d@nr200>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <auw7ofYYYwOoGH2d@nr200>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Tianyi,
 
-On Wed Nov 4, 2026 at 7:33 PM CET, Tianyi Chen wrote:
-> The unpinned subtests pass "name prot_map" or "name not_prot_map" to
-> bpftool. Both maps are used by programs attached through trampolines,
-> which are freed only after RCU grace periods and hold their map
-> references until then. A run's maps therefore stay in the map ID table
-> after its skeleton is destroyed, for about 300 ms in an x86-64 VM.
->
-> If the test runs again within that window, the name matches maps from
-> both runs, bpftool fails with "several maps match this handle", and
-> the unpinned subtests fail.
->
-> Look up these maps by ID instead and drop the now unused map names.
->
-> Fixes: 2d96bbdfd3b5 ("selftests/bpf: convert test_bpftool_map_access.sh i=
-nto test_progs framework")
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
 
-I've reproduced locally in my VM the mentioned issue (and saw the
-"Error: several maps match this handle") with:
+On 11/5/26 09:17, Slawomir Stepien wrote:
+> On lis 04, 2026 13:44, Maciej Fijalkowski wrote:
+>> On Wed, Nov 04, 2026 at 01:13:13PM +0100, Slawomir Stepien wrote:
+>>> v1:
+>>> https://lore.kernel.org/bpf/20251003140243.2534865-1-maciej.fijalkowski@intel.com/
+>>> v1->v2:
+>>> - add skb to xdp_buff converter (Jakub)
+>>> - postpone restoration of veth's xdp_rxq_info mem model (AI)
+>>>
+>>> v2:
+>>> https://lore.kernel.org/bpf/20251017143103.2620164-1-maciej.fijalkowski@intel.com/T/
+>>> v2->v3:
+>>> - make skb->xdp_buff conversion agnostic of current skb->data position
+>>>    (Toke)
+>>> - do not pull mac header in veth (Toke)
+>>> - use virt_to_head_page() when checking if xdp->data comes from
+>>>    page_pool (Olek)
+>>> - add ack from Toke
+>>>
+>>> v3:
+>>> https://lore.kernel.org/bpf/20251022125209.2649287-1-maciej.fijalkowski@intel.com/
+>>> v3->v4:
+>>> - include skb->head when calculating packet length (Toke, lkp)
+>>>
+>>> v4:
+>>> https://lore.kernel.org/bpf/20251027121318.2679226-1-maciej.fijalkowski@intel.com/
+>>> v4->v5:
+>>> - rely again on sk_buff::pp_recycle when setting mem type on rxq
+>>>    (Jesper, Jakub)
+>>> - add ack from Toke on patch 2 and restore it on patch 1
+>>>
+>>> v5:
+>>> https://lore.kernel.org/bpf/20251029221315.2694841-1-maciej.fijalkowski@intel.com/
+>>> v5->v6:
+>>> - rebase onto bpf/master
+>>> - patch 1: set MEM_TYPE_PAGE_POOL unconditionally in
+>>>    xdp_convert_skb_to_buff(); mem type only matters for frags consumed
+>>>    by the program, and those always come from skb_pp_cow_data() (Jakub)
+>>> - patch 1: add DEBUG_NET_WARN_ON_ONCE() for a non-linear skb without
+>>>    pp_recycle and document the expectation in kdoc (Jakub); the warning
+>>>    is limited to non-linear skbs since linear ones legitimately skip
+>>>    the CoW
+>>> - new patch 2: veth_xdp_rcv_one() ran the program on an xdp_frame with
+>>>    whatever mem type the previous packet left on rq->xdp_rxq; use the
+>>>    frame's mem type instead, as cpumap and devmap do. With patch 3 alone
+>>>    veth sends page_pool frames to its peer and the peer's program
+>>>    trimming frags crashed the kernel, so this comes first
+>>> - patch 3 (was 2): veth turns the buff into an xdp_frame on
+>>>    XDP_{TX,REDIRECT}, so the head is released through mem type too;
+>>>    keep the queue's original model unless the buffer was copied into
+>>>    rq->page_pool (Jakub)
+>>> - patch 3: take page_pool refs on compound heads via netmem helpers
+>>> - patch 3: do not restore the rxq mem model after XDP_{TX,REDIRECT}
+>>>    and on the error path; with patch 2 every path sets its own mem type
+>>> - patch 3: veth can now redirect MEM_TYPE_PAGE_POOL frames, which needs
+>>>    commit b3ca872947ef ("bpf: Use the frame mem type in devmap egress
+>>>    XDP") in devmap; list it as a stable prerequisite
+>>> - drop Reviewed-by/Tested-by tags as patches 1 and 3 changed
+>>
+>> I mentioned the changes [0] that were developed after v5 revision yet you
+>> decided to go with what you had - that might be okay but to be transparent
+>> it would be worth stating *why* you chose not to pursue further or explore
+>> approach where __do_xdp_generic() is called from veth.
+>>
+>> Was it due to semantics change pointed out by Bjorn? Or is it too big a
+>> hammer for fixing page_pool leaks and should be implemented as a
+>> follow-up?
+> 
+> That. For me, at this point in time it is easier to reason about the fix first rather than refactor.
+> 
 
-  while true; do ./test_progs -a bpftool_maps_access/unprotected_unpinned; =
-done
+I like approach where __do_xdp_generic() is called from veth.
+Look at patch link[0] below - how much (ugly) code is removed from veth.c
 
-With your patch applied, I don't see the error anymore. The fix
-looks sane to me.
+>> Regardless, thank you for reviving this work, I am to blame for not
+>> dedicating further effort here.
+> 
+> No worries Maciej! You did a great job and I think it is worth pushing.
+> 
+>> [0]: https://lore.kernel.org/bpf/20260509084858.773921-5-maciej.fijalkowski@intel.com/
+>>
+I like how much code this [0] patch removes. Especially removing the
+ugly veth_xdp_get() function that manipulate the refcnt directly on pages.
 
-Tested-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.co=
-m>
-Reviewed-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.=
-com>
+Thanks for working on this, much appreciated!
 
-Thanks, Alexis
+--Jesper
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Cc. Tianyi Gao <tianyi@cloudflare.com> whom is working on improving veth
+for Cloudflare use-cases.
+
 
