@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793920648;
-	b=44L4ZexeYPAIAr5GZraotf0E/EqulQcaxgPT+Woh9ezYCtXBogVL/gNs2ZkTdbfL51km
-	 YsjTJqjPJHA2Zf22y2rhK0MbQ353JMkhGav7ReTdW6CO3NZF+wQMKP8x4YBmDdiYvfAxB
-	 sW6U1wIuAto2EZcjcIyy6yHVGxj+Yi6hyElGKVfHqyAOLBfWBdSxZBjIBvZafiTf7aoqe
-	 3TtDv01HnqVEiRuKl0sERBlBNNPGtphrIflTy2eynX8dErSYt+VP4D+JiuSUP0MrfDp0k
-	 tgfAI+Tm7hGun5GjNrjG5nacnWCuuT9pPaaKNo8utWLgIWyxLE7GVg7NxqZlf6yhRqw==
+	t=1793920746;
+	b=l1z1w+/Xk2vdeOdVdf98slkp4ecQngxjIOOpowc0WVjw8Q3RAhIcF/3LvPIm0vv8f+Qp
+	 OXKzWxLsamloCXjnNoRJRTCPzOs04vBOPEN0ELU+dI744nyx6aKtxMU/JKGhha0oiju4o
+	 nI4RF96JsGXJqq5RoRq+mZImAjfIym7ODyLvBUOvbJerVI+I8g50JNc5mFvY88CZJINWl
+	 Q4TMwntj/n6DbPzgSSASHsGiw2e03ueLQuAbRH0lPnf0E/jIXztpitxnbtzgR7lcvaHM5
+	 19cEpCQfP/qkvJBbG8yY5C2pzKq5ZK8Nwe8ii/FlmLEe4TCLgY47l3oYeBR9htoZgbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793920648;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793920746;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=nS8K+tTrCD60z97KzHtCQ+Aw8s9IoPw3sQcXiQqJaTA=;
-	b=g5Xy9vzWBO7FU4vZDoDdBAYCQQvgiZNf6LgCkm4BvqS9euKA+yntWVbrneJ5ABH4+uAl
-	 QBbMPX0u6TlO/i49ni8STjO49vaMCduXB64k22/CZ4MFDRZkx1vHQaRsaEhFq613fwrFn
-	 7Ft94QqrS8OeXE4gStndpg166wVXnnvCB+zs6iww02vp6q2HV5vcETpKkJmdxq6OL+vTt
-	 vT0h6z2Lg0dybtr1UYyLotT1gIDlw2xTZd6PnWMc9ElbjPXfvcJwKPZ6uildBFR3TrLQs
-	 RwdCLFg9Ze5TGmTyQzNbBhVdFxuw47WIELX3acghfj/OoVbLaoyt3Aoxza8e9AOQmZA==
+	bh=z3DVw2XVbogDG3LNk5Eay8yxRp1GXvk81AZ8Tll3Tw4=;
+	b=J+95URp8FtZHjiVbbeNRw/FopmlSUwZtr8NdyKvkULC1OiOiN4xyDnLEt3JdMpDlpPLC
+	 Uq432V+RQKL3U41EiGRG60T4iXCylo+O3Mu1XhJupiuejWMVA8qgK6i6GimG1NyRLSfK2
+	 i217KI8oa6TG3ly07wjYN76ZAbgFYrbXF97uRk5hJLOQYpqKZaLtxq5kG/d3ah9zfZmCU
+	 o7neP/BV/6ESE044oXDA6EVFAHY6PBu/sN/4u6jLm8+rJCLRZ67jFdZeDPkW0fALi1NF6
+	 PBJ/ZuXv2dhT44Ndsv6vOmKMdF4C/5pco43bkwSpuYGz3eOjaIfeT5wpCP+k6Y4MhWg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EdbTYVX9;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="cgUAPSe/";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43688606A31B
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 23:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B39C606A326
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 23:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EdbTYVX9
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBF3A1F008A3;
-	Thu,  5 Nov 2026 23:17:27 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cgUAPSe/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 231031F0089F;
+	Thu,  5 Nov 2026 23:19:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793920647;
-	bh=nS8K+tTrCD60z97KzHtCQ+Aw8s9IoPw3sQcXiQqJaTA=;
+	s=k20260515; t=1793920746;
+	bh=z3DVw2XVbogDG3LNk5Eay8yxRp1GXvk81AZ8Tll3Tw4=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=EdbTYVX9hUWw6N88pvFkoWF5beWzR92P3x64rYUvWUXgMLVhVRCi5E1WHHws+l+c9
-	 cuU6Q9Fu0FKqCBr2T23KnFrldlJbLX3mWKZ86q2f1fOfHO9DQCprzzknV2AV9PxR7V
-	 6KrllwP2vw1Ucxocy41MngyCjf+s3z79Hw8mkPhImyrqb+4nwYw46/sToWmySfXYNb
-	 5KTYsDaBrIOekatOnnSqHEmT4jYTQx0wV4XO/vB4sl+mqNDKUT6WH1mb/F9sDKyGWl
-	 qomeJoIZPcf8o6znk2A9q2+EVDlJ7PY6qS1frkN66p/HhOJz5nAHdmqF9+JjCdInHm
-	 xH2qZTshWzz7w==
-Message-ID: <sashiko-outbox-200362@kernel.org>
+	b=cgUAPSe/lAhaNnpeFYfWNssJiLuQSwnPbZgM5kbdWB2CtHvZ10uh9eKfM5hHqcil0
+	 YVHoewjzEJJsfKEoZ4H/DJ/bYVnHyw6gndo9VrcnlxzauFp7PkRyiVVxa88TQwXYpK
+	 mWucSp8qIoIPKGcP/FO6TOjA3U7oL9GiV51uKnxWOEguvJSxAZMI/5FTq2YKQE6gRi
+	 T/ewSV9xro5DMGysdpmvsALDmpK5Ofdf5w3YOueRgeCi5lkL+nW4OM6SnzG4yMPzos
+	 ZsErWIoNnJVaETSFfwBDZxP4NdOP0HRerjTjj+8eTUN/8geyjxipn3/U/zIiGPNcuQ
+	 vpy+zsP4RDzPg==
+Message-ID: <sashiko-outbox-200365@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 35/35] selftests/bpf: Test callx of one of a
- set of functions
+Subject: Re: [PATCH bpf-next v2 34/35] selftests/bpf: Test progs that run
+ out of budget
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261105204513.2230344-36-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261105204513.2230344-35-alexei.starovoitov@gmail.com>
 References: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
- <20261105204513.2230344-36-alexei.starovoitov@gmail.com>
+ <20261105204513.2230344-35-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 23:17:27 +0000
+Date: Thu, 05 Nov 2026 23:19:04 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,125 +60,160 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] selftests/bpf: missing __load_if_JITed() in callx_one_of_two_not=
-_written()
+- [Medium] selftests/bpf: use RUN_JITED() in serial_test_verifier_budget()
+- [Medium] selftests/bpf: loop_in_main() and loop_in_main_rcu() never run o=
+ut of budget
 --
 
-commit ba1c0308dc6dec8af4c86b33d496967258a01c7c
+commit a539b7e8368514c3719738508a3c302fb0c6d907
 Author: Alexei Starovoitov <ast@kernel.org>
 
-selftests/bpf: Test callx of one of a set of functions
+selftests/bpf: Test progs that run out of budget
 
-This commit adds verifier selftests covering indirect calls (callx) to a set
-of functions loaded from read-only tables, callback verification, state lim=
-its,
-stack arguments, and BTF-declared argument liveness.
+This commit adds BPF verifier selftests for programs that exhaust their loop
+or recursion runtime budget, along with a test for packet pointer invalidat=
+ion
+after indirect calls in verifier_callx.c.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
+sting/selftests/bpf/prog_tests/verifier.c
+> index 1424dc3036c5d..5b3eacb36a6cc 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/too=
-ls/testing/selftests/bpf/progs/verifier_stack_arg.c
-> index 9cd4fee561b23..dfb16434572dc 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-> @@ -530,6 +530,60 @@ __naked void null_check_of_stack_arg(void)
->  	: __clobber_all);
->  }
-> =20
-> +static __naked __noinline __used long adds_arg6_arg7(long a, long b, lon=
-g c, long d, long e,
-> +						     long f, long g)
+> @@ -235,6 +236,8 @@ void test_verifier_bounds_mix_sign_unsign(void) { RUN=
+(verifier_bounds_mix_sign_u
+>  void test_verifier_bpf_get_stack(void)        { RUN(verifier_bpf_get_sta=
+ck); }
+>  void test_verifier_bpf_trap(void)             { RUN(verifier_bpf_trap); }
+>  void test_verifier_bswap(void)                { RUN(verifier_bswap); }
+> +/* Serial: many progs spin for 250 ms in an RCU read-side critical secti=
+on, see timed_may_goto.c */
+> +void serial_test_verifier_budget(void)        { RUN(verifier_budget); }
+
+[Severity: Medium]
+Should serial_test_verifier_budget() use RUN_JITED(verifier_budget) instead=
+ of
+RUN(verifier_budget) (matching test_verifier_callx() and
+test_verifier_callx_rodata())?
+
+When BPF JIT is disabled (for example with bpf_jit_enable=3D0),
+is_jit_enabled() is false and prog->jit_requested is 0, while none of the
+subtests in verifier_budget.c specify __load_if_JITed():
+
+1. callback_arms_itself() has no architecture filter and passes a callback =
+to
+bpf_timer_set_callback(), which jit_subprogs() rejects with "callbacks are =
+not
+allowed in non-JITed programs".
+
+2. Subtests with recursive subprograms (such as recursion(),
+recursion_too_deep(), recursion_ends_in_the_middle(), and others) fail in
+check_recursion() with -EOPNOTSUPP because bpf_prog_has_invocation_budget()
+requires prog->jit_requested.
+
+3. Subtests using unwind_goto or unwind_exit (such as loop_in_subprog_caugh=
+t()
+and loop_in_subprog_locked()) set prog->jit_required =3D 1 in
+check_unwind_insns() and fail to load without JIT.
+
+4. guard_all_regs_live() asserts per-cpu timed may_goto instructions
+("r0 =3D &(void __percpu *)(r0)") via __xlated, which bpf_do_misc_fixups() =
+only
+emits when timed_may_goto is enabled.
+
+5. In may_goto_stays_in_loop(), without timed may_goto in JIT,
+bpf_do_misc_fixups() expands both may_goto_self and the verifier-added
+may_goto at the loop head with separate stack counters via may_goto_expand(=
+).
+Each time may_goto_self counts down 8M iterations and jumps to the loop hea=
+d,
+the outer may_goto decrements once and may_goto_self re-initializes to 8M,
+resulting in 2^46 iterations in the interpreter.
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_budget.c b/tools/=
+testing/selftests/bpf/progs/verifier_budget.c
+> new file mode 100644
+> index 0000000000000..1aa5b3eff712d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_budget.c
+> @@ -0,0 +1,1873 @@
+
+[ ... ]
+
+> +/* The verifier doesn't know what is in there */
+> +unsigned long zero;
+> +unsigned long one =3D 1;
+
+[ ... ]
+
+> +SEC("socket")
+> +__description("budget: a loop in the main prog ends it")
+> +__arch_x86_64
+> +__arch_arm64
+> +__success __retval(1)
+> +__naked void loop_in_main(void)
 > +{
 > +	asm volatile (
-> +	"r0 =3D *(u64 *)(r11 + 8);"
-> +	"r1 =3D *(u64 *)(r11 + 16);"
-> +	"r0 +=3D r1;"
-> +	"exit;"
-> +	::: __clobber_all);
+> +		"r6 =3D %[zero] ll;"
+> +	"1:"
+> +		"r1 =3D *(u64 *)(r6 + 0);"
+> +		"if r1 !=3D 0 goto 1b;"
+> +		"r0 =3D 1;"
+> +		"exit;"
+> +		:
+> +		: __imm_addr(zero)
+> +		: __clobber_all
+> +	);
 > +}
 > +
-> +static __naked __noinline __used long subs_arg6_arg7(long a, long b, lon=
-g c, long d, long e,
-> +						     long f, long g)
+> +SEC("socket")
+> +__description("budget: a loop in the main prog that holds something is l=
+eft")
+> +__arch_x86_64
+> +__arch_arm64
+> +__success __retval(1)
+> +__naked void loop_in_main_rcu(void)
 > +{
 > +	asm volatile (
-> +	"r0 =3D *(u64 *)(r11 + 8);"
-> +	"r1 =3D *(u64 *)(r11 + 16);"
-> +	"r0 -=3D r1;"
-> +	"exit;"
-> +	::: __clobber_all);
-> +}
-> +
-> +SEC("tc")
-> +__description("stack_arg: callx of one of two functions, args are not wr=
-itten")
-> +__failure __msg("callee expects 7 args, stack arg1 is not initialized")
-> +__naked void callx_one_of_two_not_written(void)
-> +{
-> +	asm volatile (
-> +	".pushsection .rodata,\"a\",@progbits;"
-> +	".balign 8;"
-> +"two_funcs_%=3D:"
-> +	".quad adds_arg6_arg7;"
-> +	".quad subs_arg6_arg7;"
-> +	".type two_funcs_%=3D, @object;"
-> +	".size two_funcs_%=3D, .-two_funcs_%=3D;"
-> +	".popsection;"
-> +	"call %[bpf_get_prandom_u32];"
-> +	"r0 &=3D 1;"
-> +	"r0 <<=3D 3;"
-> +	"r2 =3D two_funcs_%=3D ll;"
-> +	"r2 +=3D r0;"
-> +	"r6 =3D *(u64 *)(r2 + 0);"
-> +	"r1 =3D 1;"
-> +	"r2 =3D 2;"
-> +	"r3 =3D 3;"
-> +	"r4 =3D 4;"
-> +	"r5 =3D 5;"
-> +	"callx r6;"
-> +	"exit;"
-> +	:
-> +	: __imm(bpf_get_prandom_u32)
-> +	: __clobber_all);
+> +		"r6 =3D %[zero] ll;"
+> +		"call %[bpf_rcu_read_lock];"
+> +	"1:"
+> +		"r1 =3D *(u64 *)(r6 + 0);"
+> +		"if r1 !=3D 0 goto 1b;"
+> +		"call %[bpf_rcu_read_unlock];"
+> +		"r0 =3D 1;"
+> +		"exit;"
+> +		:
+> +		: __imm_addr(zero),
+> +		  __imm(bpf_rcu_read_lock),
+> +		  __imm(bpf_rcu_read_unlock)
+> +		: __clobber_all
+> +	);
 > +}
 
 [Severity: Medium]
-Should callx_one_of_two_not_written() be marked with __load_if_JITed() (and
-guarded by CAN_USE_CALLX)?
+Should loop_in_main() and loop_in_main_rcu() load the address of one instead
+of zero (and should loop_in_main() expect __retval(0))?
 
-In tools/testing/selftests/bpf/prog_tests/verifier.c, test_verifier_stack_a=
-rg()
-runs the suite with RUN(verifier_stack_arg) rather than RUN_JITED():
+Because r6 is initialized from zero, "r1 =3D *(u64 *)(r6 + 0);" loads 0 on =
+the
+first trip and "if r1 !=3D 0 goto 1b;" falls through immediately without
+spinning or running out of budget.
 
-    void test_verifier_stack_arg(void)            { RUN(verifier_stack_arg)=
-; }
-
-When BPF JIT is disabled, env->prog->jit_requested is false. Unlike direct-=
-call
-failure tests in verifier_stack_arg.c that reach check_outgoing_stack_args()
-during do_check() before bpf_fixup_call_args() checks jit_requested, the
-.rodata function pointer read and callx in callx_one_of_two_not_written() h=
-it
-check_func_ptr_read() -> require_callx_jit() (and check_func_callx() ->
-require_callx_jit()) during do_check():
-
-kernel/bpf/verifier.c:require_callx_jit() {
-	if (!env->prog->jit_requested) {
-		verbose(env, "JIT is required to use callx\n");
-		return -EOPNOTSUPP;
-	}
-    ...
-}
-
-Wouldn't running verifier_stack_arg with JIT disabled fail because the veri=
-fier
-rejects the program with "JIT is required to use callx" before reaching
-check_func_callx_set() -> check_outgoing_stack_args() to emit "callee expec=
-ts
-7 args, stack arg1 is not initialized"?
+In loop_in_main(), falling through executes "r0 =3D 1; exit;" instead of ti=
+ming
+out on the verifier-added may_goto and jumping to the budget exit ("r0 =3D =
+0;
+exit;") when the main prog holds nothing. In loop_in_main_rcu(), the loop
+exits via the normal branch condition on the first trip rather than timing =
+out
+via the verifier-added may_goto while holding the RCU read lock.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261105204513.2230=
-344-1-alexei.starovoitov@gmail.com?part=3D35
+344-1-alexei.starovoitov@gmail.com?part=3D34
