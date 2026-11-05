@@ -1,55 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793849643;
-	b=XbQmWkYFjAxH6rA3vjZfAiSwXg6QaYOegkFU5kf5Pe0fVk3vl3SlVyRTEplgjOrwm6Gd
-	 YfWtC9gum17fXzEzEBewsbGtIC1uDii86ngUu1sturNCG9i/udCcxM2PZA6dKnkWBmkMZ
-	 CAS2OC0Hl01GMjWXr6q6MfPeHiDQz/ksuf/mqApPf4hKldqEZuhkFrxrpH5VeUO2teNbM
-	 klMev5UIUDiXknzEeWIRqFuVMef6oUMKg191x0tChgLjnNsSVnqUdf6/ag2JO8b1MoUSm
-	 xSHhHZJmMAYKkx1lHf1Zr4V1djFHgVaLG+FUzGBizFsIvoeiAl6JmPUpP7nvUk6UVQQ==
+	t=1793855658;
+	b=w59izMKZ0lpQP+Ym8pe5HfkltF+vS89fVLe66F7312o5fR0mXOv3t3LvYm6nhdVvUjre
+	 kg5eujumUg+E7qmXbDUgYNe18Zuj0hRCQhmRFP6X8KKHtHtzgXRerT06wUr0UVxY/QPWk
+	 Y6tgLqA2w1j9xf1vBh3SX0P0VgU3TrHizccOv8ADSlopI+ySrXvKSulm9BZRB6KTCebqD
+	 ClMez+lLK5xeX5TrphxVJCQ/8BQklXNbrSNhzbTRXOE7GkZss75XQvLEanJ2JZUKuS+mF
+	 HUEwtGhu7OW4R1WlOEjt7PxFJVrKBKf3WrJSQy5QuGhGyNsErfwY9QVlC15dQc5ZM0A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793849643;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=l+Yp56smGIs8eBVmZ42TlX/QjRgKCo02jmsCVaG2LHM=;
-	b=WyVqcchHV0KXQ52sS1crCf8972mpIqR/BQ68HbAWzieuvS1wJPle5nDfPrCq36gHUjBB
-	 J2r8lU22hLux90wc59UHJUh/j9dbNze1eBC2wBrfrf7dkvJv7nFHJMhspMyPwbrNFQG/J
-	 azH50s4QsHIqwvafJNPfnIWXhjWv9vR7IrL/g5J6KN5LaWCQ7wz3Gd0vzBU4m+ZEXXWEP
-	 LjCtgzigrIqvcj1Pw8v4rNc6T0GW73z7aLWZp2HqKE4x9Ik6KRPj3p5Dcp9CvLoe4jvHb
-	 H63F20jsfmUaLhzuSqICT5l/7kQ/uXEI3AHuq7E5Am7ASMTPJ3e+8w2DAxlV4xRy9Eg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793855658;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 To:Cc:Subject:From:X-Mailer:References:In-Reply-To;
+	bh=/dNLoK8eolfJkj1an88i/VPdEv8gehRvTnLhDc4kaqU=;
+	b=0C9md9ua+YuAZ0JnJB2csw3wkYmmNL/K0lPhNwnmIT+2N22NdhwGoJMd/dc6BTNDEbSR
+	 jnLHc20Dz9ewkI3oOF/EJ/vdQwiEgYRn1+M8NhB2q7HqjsDTN6Swke53si2/irmEyCQz4
+	 Su2dSB2MirI77KVGqMz4DIioTfdoWgU7CfXLMF8O9ajGsx9grc2fQ5kehKriKtRYHidK1
+	 xeLKRRsL8phOJWuanabdnxwtcjhpqNKIyXx26tSR8sQJ+v+XT53nC8/f3GDrfjFAmBg35
+	 Wf5ZT+ar1pxtqHTFBoeUQPb06JweA7Xg4+jjt9D13cU/nu/TzDAKXfO1gBMEBJCvZKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YGjYA7GK;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wmpmO1aN;
+	arc=none smtp.remote-ip=209.85.214.182
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD05F606A326
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 03:34:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C62606A32E
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 05:14:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82C62606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YGjYA7GK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 691761F00A27
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 03:34:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793849642;
-	bh=l+Yp56smGIs8eBVmZ42TlX/QjRgKCo02jmsCVaG2LHM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=YGjYA7GK343Pjnrfl3nofa0xcvg8KD1pXJekSNdyyCiTvYVtawW3B5HsQyMsage1F
-	 j4Drah6q6VlOF5mqA0cMvykdPH7q2jFJADU1qs4r/jM2c2wVcGsEaOhL6I1NT4r25v
-	 yBzXn9kmVUfdGUZMMwIIIWh/2jJPZ7YlCRQ5touqvXt8CASPKZOkADXbUvuBi1p0Xm
-	 kVwX0CvQCqnjUwipJd3dRGy/W2npv7BntvX/KM95lwaL0ZMg9D+7JUJbPrtfVAMLsg
-	 sBfpQyW4hrdzahpG74ElKjd4UP4l9N09jpRCho70txcS/HaXse5J0hJg4G4jmDAnHS
-	 rMVggHotSGVrg==
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-93f3c8958d5so158863785a.2
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 19:34:02 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AKwUvByYy2zqz8KmVoeasLP9MMbYb0S42Ajz8zwEZId545XYPYGVOMVAPPMaAjasY/qFtkrW9dc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+iF7JI+lIe1Yp28ofkJtMvzQ5K5Hw376tc4P2tZ6LWlsKy9hGm
-	fC/cygrqMnFHu0f6lltWQUFmYIMHdE63yTVmg85JFHzPf3Zo3l0JD45krovQdwoV9iB1RSQKzU2
-	iZ44G2ksgCMYOVdptvAlznxkGb1coFpc=
-X-Received: by 2002:a05:620a:3720:b0:93e:fc02:e8d4 with SMTP id
- af79cd13be357-94421630bedmr3380444185a.27.1793849641568; Wed, 04 Nov 2026
- 19:34:01 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wmpmO1aN
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e96502e447so12405595ad.1
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 21:14:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793855658; x=1794460458; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=/dNLoK8eolfJkj1an88i/VPdEv8gehRvTnLhDc4kaqU=;
+        b=wmpmO1aNcXZo6fYqQBuOI8WyNSidCMIjF0MAWyjOg45Ff9KVA85lXzdGf8TT2kIwnA
+         nwq+Flrd6vzgzgcbVpSkwymojlv9nCXBLVP7Bn18JFDCMW5BrDjyR4b4ectKrsExjfFb
+         X7Kx5aqb8xzIa+/BR7GpBv/cO7hhWp/zvbd9KiowAV1LZ4H2zIrh2LCMjKngCTKDAJR8
+         aPoLtBo8QPyyZi8JNfITn5/0XGy3xijE8aceN5ANa3znno7CqkydXB1RzsPmz/XTy2l6
+         RnET+OvMMZImCKwBJD1w3TmIiR3x1utzV1CpNECmK0ygR123cwPnzKxU1SR2tLhvNRBs
+         KjGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793855658; x=1794460458;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/dNLoK8eolfJkj1an88i/VPdEv8gehRvTnLhDc4kaqU=;
+        b=oEI0GRXsmJsbwGi9MA8nVx+KNMqlf4tbrrLO13L0qfj7Orr09l+GSA9F8huooAcIpD
+         v1CulX6R+yDaD7P72w/pj4AfqljfgtYAcz0L1zwUx+QdPB4VuWP7AjF9lWDe9Mn9QIL7
+         /IPwu6TPtZ7a7DcOU9NxkJsTzN+UFttr8Oaa+l9iira/GhzZMWeWn9Hi2nruTKRJrmCT
+         BUqtBierbxdAcThZLhgrj96/isQTnS+HSwtn46y3oqAylPZ5MPQ5WTp3B1EYwdjfyNbF
+         /Te7/0j4nfiLKSm902FdlVeqNbxdXyiZpMa9RziuovUn1VQiLQ7W/b4+OUNqAWiPbOis
+         AkUA==
+X-Forwarded-Encrypted: i=1; AKwUvBxqS73ueeEE4Lm/w8supv+4B0QxoodEqSLODceE2sx1k7vf7hQgrclACyHHPXlGcjStLGY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9+UfGiYSnyve5OfPOTmYieWXKYBRSUmd4exFi5SpfqO9BJj+dY
+	RbwdboCmXbs7v9Xo0WhNdLOBsZUMRtE1iImDNCLTlDdpISp3SBUjrHF+
+X-Gm-Gg: AYBFou1INu9aCRnucR+mrM035rcr0aWFTNiHcKMsOHJXQVu8WIhM7WrGzarDKehUGNd
+	6eGgw7WPJ6BfAvFoV4FU6WMqg3sJGsF2CPLwsmlreARaRe/yhpzDdRIskTkWivF8IDwlhy/93yl
+	84/g2mlYlLosYRrCdPln4eZdQzxSdLkcUIdXuvmfkZEIH15KVjr4bHXZtxAzYf1L2D2Yoj1Gsug
+	A+hViW8tdI4NW/g48qa8nM7RKOEEJu2W1LaFZb+dTXedIoJjjqkvAIZCiBIYnlEW/y7uIvzokfh
+	bOpkfzSBmmD+v7tp+IxFAvSjSeKJuLKobE4useF5PWesLMpTP4Gxn4+B9OKuPdDX0fZ5OP9D3Wl
+	FosJgMkC0YJHNs3xgSjTmQxWZ+KnG6jkRookqSIm/kt98VnMs9oNEkftGAJbjSzR0R0EPbe42Kg
+	4KdGATcVgAUS/Sc2NMtJABZQjuQzL7vSj6mC0gE7Quiwc7mcoIdLY86Af0G/XAU3sLbMB4IUPCb
+	cdeEFk9ILiMtQQ5YneVKBDdbu3SnZeXgfzRzbP5DuN5odaErlgaF6ngtLC+XMyafVCFm1VgSlGM
+	G65MhLUzkjPOC9ybH2KVx0+cKMPI5FA9QKwECqy9r/P+1kG+I2+q4v344VzYa4NHEsdIwNhCt8M
+	LS0k37NganF1GT5OH1xx2AiW5PxSaeSaOvoo=
+X-Received: by 2002:a17:902:d485:b0:2dd:c053:a6ee with SMTP id d9443c01a7336-2eb364ce5e3mr166128155ad.32.1793855657678;
+        Wed, 04 Nov 2026 21:14:17 -0800 (PST)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed0910faaasm13103375ad.47.2026.11.04.21.14.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Nov 2026 21:14:17 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,68 +88,85 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261104130817.849089-1-ridong.chen@linux.dev>
- <20261104130817.849089-8-ridong.chen@linux.dev> <CAGsJ_4y_Ay0mYO3ic72oepjtW6KYf2sKRXEHb3Ff8uwKrOJZjQ@mail.gmail.com>
- <4f830c30-f99c-4f75-851b-1a3f6d1342b1@linux.dev> <auvisj8NeTJ8FunG@MiWiFi-R3L-srv>
-In-Reply-To: <auvisj8NeTJ8FunG@MiWiFi-R3L-srv>
-From: Barry Song <baohua@kernel.org>
-Date: Thu, 5 Nov 2026 11:33:50 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4zVwLMRKOOGycVfnGEjxwy3wO8azyWD4YX6+d7DpAypzQ@mail.gmail.com>
-X-Gm-Features: AclHuK95QOPSEjcqkBAiK0QpfFcwI57KNwsmNgJhbn3lT1vePCwCD9VdxFwjbS0
-Message-ID: <CAGsJ_4zVwLMRKOOGycVfnGEjxwy3wO8azyWD4YX6+d7DpAypzQ@mail.gmail.com>
-Subject: Re: [PATCH v7 7/7] mm/mglru: add tracepoint for aging
-To: Baoquan He <baoquan.he@linux.dev>
-Cc: Ridong Chen <ridong.chen@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Dave Chinner <david@fromorbit.com>, David Hildenbrand <david@kernel.org>, Michal Hocko <mhocko@kernel.org>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Muchun Song <muchun.song@linux.dev>, Kairui Song <kasong@tencent.com>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org, 
-	"open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" <cgroups@vger.kernel.org>, 
-	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>, Ridong Chen <chenridong@xiaomi.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 05 Nov 2026 05:14:16 +0000
+Message-Id: <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com>
+To: "Mike Bazov" <mikeba@sentinelone.com>
+Cc: "JP Kobryn" <jp.kobryn@linux.dev>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Shuah Khan"
+ <shuah@kernel.org>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let
+ preemption cause false recursion drops in trampoline progs
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc 0.20.1-355-gf870624f6c37
+References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com> <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev> <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com> <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
+In-Reply-To: <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
 
-On Thu, Nov 5, 2026 at 9:58=E2=80=AFAM Baoquan He <baoquan.he@linux.dev> wr=
-ote:
-[...]
-> > >
-> > > Reviewed-by: Barry Song <baohua@kernel.org>
-> >
-> > Hi, Barry,
-> >
-> > Thanks a lot for testing and the Reviewed-by.
-> >
-> > Updating it would be fine with me, but I'd slightly prefer the current
-> > output, to keep it consistent with the debugfs lru_gen_full file. It
-> > also prints a fixed window of MAX_NR_GENS generations from the oldest
-> > to the newest, marking the ones below min_seq with 'x'. The event
-> > reports anon_min_seq and file_min_seq in place of the 'x', so the
-> > generations that don't exist can still be told apart, and they always
-> > read 0. Keeping the same window and order makes it easy to compare the
-> > event with debugfs, e.g. when looking at both while debugging.
-> >
-> > That said, if others such as Baolin, Baoquan or Kairui also prefer
-> > printing only the existing generations from the youngest to the
-> > oldest, I'm happy to send another version with that change.
+On Thu Nov 5, 2026 at 12:12 AM UTC, Mike Bazov wrote:
+> On Wed, Nov 04, 2026 at 02:20 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+>    > Add bpf_preempt_disable().
+>    > Your test forces the preemption in the middle of the prog.
+>    > Explicit bpf_preempt_disable() will fix it.
 >
-> I like oldest -> youngest a little better because when I am thinking
-> about MGLRU logic in my mind, I would put min_seq in the left, max_seq
-> in the right, then wrap around from right to left.
+>    I tried it, and with the whole prog body wrapped in bpf_preempt_disabl=
+e() /
+>    bpf_preempt_enable(), Task B is still skipped in every round (on a 7.0
+>    kernel, 20 rounds, fentry and fexit: runs_b=3D0, recursion_misses=3D20=
+).
 >
+>    perf record -e sched:sched_switch -g shows where Task A is switched ou=
+t
+>    now, 20 of 20 (Task A, SCHED_OTHER, preempted by Task B, SCHED_FIFO):
+>
+>      __schedule+0x48f
+>      preempt_schedule+0x59
+>      preempt_schedule_thunk+0x16
+>      bpf_preempt_enable+0x1c
+>      bpf_trampoline_6442539626+0x105
+>      bpf_prog_7dd04eadc26e277d_on_fentry+0x11
+>      bpf_trampoline_6442539626+0x192
+>      __set_task_comm+0x5
+>
+>    That is still inside the prog, while prog->active is held.
 
-OK. We have both left-handed and right-handed people
-in the world. Somehow, I feel like a right-handed person
-trying to write with my left hand when reading from
-oldest to youngest. But I'm perfectly fine with that!
+Right. Pls hack bpf_preempt_enable() to use preempt_enable_no_resched().
+I think recursion misses may disappear or become single digit.
+If it's good enough we can quickly add bpf_preempt_enable_no_resched() kfun=
+c.
 
-Thanks for sharing your thoughts, Ridong and Baoquan!
+Also try NO_HRTICK in /sys/kernel/debug/sched/features.
+That may be decent workaround for now.
 
-Best,
-Barry
+>    > What are run_cnt and recursion_misses of your progs on inet_sendmsg(=
+)
+>    > and inet_recvmsg() in production?
+>
+>    We hit this while testing new distros with 7.0 kernels, so we don't
+>    have fleet numbers for these counters yet. For our inet_sendmsg/recvms=
+g
+>    progs, in testing: fentry/fexit on inet[6]_{send,recv}msg, Ubuntu 24.0=
+4
+>    with its stock 7.0 HWE kernel (7.0.0-38-generic, default lazy
+>    preemption, 4 vCPUs), behind nginx -> gunicorn -> redis, with wrk from
+>    another machine (128 keep-alive connections, ~1.07M requests over 10
+>    minutes, ~62% CPU):
+>
+>      run_cnt 38040015, recursion_misses 4063
+
+hmm. you really cannot tolerate that small drop? it's tracing at the end.
+It would be a different story if such drops were on lsm hook.
+
+let's try to think how per-task counter would work.
+I'm guessing 128 connections is 128 threads servicing them,
+so 200 cpus will be hammering the same per-task counter which will
+cause real perf loss.
+Gotta do better than per-task.
+Also it needs to be per-task + per-prog. How will it look like?
