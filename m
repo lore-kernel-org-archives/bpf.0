@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793874335;
-	b=INE4QXp14So0JutxnEVxr5zApi4mv0jS9H0sBjPbrRrjfvkB1WMoZiMDZ2fwmmkQX8cS
-	 v+fvslum6jhOmG6STuGrNggZ/c1z7S67cH4JAbOfiu68dl/MrRBRDFRFlckh9ya3iAVFi
-	 T+dxL5+eEr7XmMb+ylhK0NBvWGagxZhdIJ3fuStIyMb6ZNl7GHw0v9BrJDW/Mzfhuq4WY
-	 v42v8l6iQd9paQYWsZqNXwX/4SeFm0deg7oRecTEopQvdX5GRNcb57lEz41aDPgPJ73k9
-	 woaVGcF7KRDF6udBtK7tBKaVPbu4U6MMwD55LBZMHE4ddN53VhMQotnlcC9Mfvx5gtw==
+	t=1793874539;
+	b=PzhZkZnB6dJKuAjA7Ns7eztjG2f6GtmfVSJ3++075D0DQ45DR+83cscZsxeJP7j9fOHD
+	 SEvEWiViLgTQJheCNUknZM87zKLDkIk0W95z8tPkmacvW0pGrwsy8AJOLbkNenn62bIzz
+	 gvUL4Srq+RCSBKjr9yV+t5WhmLD172rKRRbpQRN7OF/YOqVxWQKuNowJdk3Ep44XY3i4k
+	 cIakjoFifYC23zG/c5q+vPrmNIvaJaPPEwm0KPKoq/l196PX6giAgQ0vj1hOG2qZQ6gMj
+	 v39aJ+J5P4304MaBG1dxdL8VfMF8eriuD6OZC1J3oVTa2+OCvn4k0y1hxoyQScw2jEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793874335;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793874539;
 	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=CTZjVvkIUqA1hYxbAMBN5D0S+bQTUaargjdOqGhgIgw=;
-	b=IZxeKe72Wyyov0LYs3JTcuSApXa4F6Jy03TO2TSlRCoEYmdu4R5J0Y6ZF9tEq1Th19Gb
-	 wycRTltCqw4jZFyt0xN9yIczmDi2fXz54Mdk27PfOeBcDNHd7vHWi/Mdf8Jm7uJgqt50O
-	 TFus/NkA98TOJyYJ95N6rKkrzo1cFmC1kBhtNjwmzcpQzFH4vNsylbQ95pZWbxIFgAnHl
-	 uJ09jw5yuATFlAZQyuytZJyg4cY0y6ajt3VuaaJOS54qdQh7akJdL191kgrZtnBV6A68H
-	 5LNEPta8t+LdeRQ6wiXmtAwmUQaU1CHwbf1P33D2xvf0hkBgpHfEEukL4YrsCK010Aw==
+	bh=DSkOHXuDBf1pgGwk7mqhtOIuvilX/GFlHMjt2QNkx6I=;
+	b=wxPVwpPWcYfZdb+NP5OVTxOqQyHMxIL6G4Y9acLzXCODKrGAwC9ifz3ArduCFH/+gZFW
+	 fi3y/SCrgQ9MtKc1v/QZ+UDMLEGUi8dupFfqltQJ3IQB7/GybibQotCvSWqfLs9O3sTYA
+	 O3ZWP/3nsFg9uTOk1Sf0nG5lIH0NSBrOAuFUTYC9/pUSPlXWNd0Tvc3G+kHmZRgzCTqa4
+	 Q7wkjacIXnK0GDJVPsU8fJCJ1p4RKQ+EDgdRuI6az1YsU1R2RyJFPMpd8m67Iqz2PnFU5
+	 EePhiKP5Gx+OINlSbhYLtGsn54XIVPYYvL5zf/JaCQL3W5DmxkZUMwHAydCC78fEZ1g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AWA5EUum;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="D5FX/qth";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F1F606A31B;
-	Thu,  5 Nov 2026 10:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F97606A31B;
+	Thu,  5 Nov 2026 10:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AWA5EUum
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3DA1F000C1;
-	Thu,  5 Nov 2026 10:25:27 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D5FX/qth
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9919D1F000C1;
+	Thu,  5 Nov 2026 10:28:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793874335;
-	bh=CTZjVvkIUqA1hYxbAMBN5D0S+bQTUaargjdOqGhgIgw=;
+	s=k20260515; t=1793874538;
+	bh=DSkOHXuDBf1pgGwk7mqhtOIuvilX/GFlHMjt2QNkx6I=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=AWA5EUumNdwSBWn4g6tCydb8yT3P9NIpU1AhnI/l68ypPPQQjsmlpmZcmjqP0LN7w
-	 N27be4rfuMZiWwBCq7her7lB+sc11HSH4D/It973/gw2n+J+yJdXPUKAwXRjqOXG6y
-	 +3pvrnmk/IkTbMiVT+f7swrdRCPqMW2Hvq2OBNpXeaZjFaLDXFyS2ZLfADRs+mUY4L
-	 zAGr34i+l3CSk3NcxiMWRysp3rMsXyT3OAyIDd0GQElcCJpX8c7qsNkVzOhFqRdS82
-	 7Ro2+vUiGHSoWSeJ0BfSs4RidofOfhFtdjMtqubRz5QJeJjYyTeuR/NxOeDYB3wbBP
-	 DHBSE9YQBSBJQ==
-Message-ID: <9c367177-1822-4b6d-8bee-d283eef7b895@kernel.org>
-Date: Thu, 5 Nov 2026 11:25:25 +0100
+	b=D5FX/qthyK0NqnE0cZ6gDihcGQqcR+80V0Pvt0dHUbgQZE6mFbffUCUREvE5DEvzS
+	 99vhZZ6A/YabImxHJ8X34i2j8aeyZ24ncS/tjQ6Dghp3ahbNi7qRasKjsE4tb+0LDp
+	 8rY2fNrgoGg+v6Mqr7rnbzY3H423iPxrkGBWXayxV5cpx3WLY3ITr67vMcSkW4eDlm
+	 PIU7REyUmeiVu7VELSVOleQQdjnEkae/F48HBht2qROXj+W0/yCABs32z49O8Ux/zl
+	 V1zSQNF0Brx8TEz+dnYPI0qYdNgOhltl+vaCGSQpG39O6T22vky+xsm0yM6ZTWDwns
+	 2JypCrn1Hzzrw==
+Message-ID: <c05cb7a5-35b7-4364-9b7a-a87e54bf0ecf@kernel.org>
+Date: Thu, 5 Nov 2026 11:28:47 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -52,15 +52,16 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] locking/rwsem: add down_read[_killable]_nosteal()
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>
-Cc: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+Subject: Re: [PATCH 5/5] mm/khugepaged: drop/reacquire mmap read lock if
+ skipped enough VMAs
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
  "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
  Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
  Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
  Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Ingo Molnar <mingo@redhat.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
  Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>,
  Waiman Long <longman@redhat.com>, Suren Baghdasaryan <surenb@google.com>,
  Vlastimil Babka <vbabka@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>,
@@ -70,12 +71,10 @@ Cc: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
  Kumar Kartikeya Dwivedi <memxor@gmail.com>,
  Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 References: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
- <20261103-khugepaged-latency-fix-v1-3-a07ab16ac860@kernel.org>
- <20261103115159.GK1813469@noisy.programming.kicks-ass.net>
- <aunLcWto870swo38@gremlin>
+ <20261103-khugepaged-latency-fix-v1-5-a07ab16ac860@kernel.org>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -122,50 +121,75 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <aunLcWto870swo38@gremlin>
+In-Reply-To: <20261103-khugepaged-latency-fix-v1-5-a07ab16ac860@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/3/26 13:24, Lorenzo Stoakes (ARM) wrote:
-> On Tue, Nov 03, 2026 at 12:51:59PM +0100, Peter Zijlstra wrote:
->> On Tue, Nov 03, 2026 at 08:27:44AM +0000, Lorenzo Stoakes (ARM) wrote:
->>> Since commit 1a728dff855a ("locking/rwsem: Enable reader optimistic lock
->>> stealing") a sleeping, queued writer whose handoff timeout hasn't expired
->>> can have its lock stolen by a read lock issued before a woken queued writer
->>> was able to acquire a lock.
->>>
->>> To avoid write lock starvation, this is only permitted if no other read
->>> locks are held.
->>>
->>> However, this behaviour defeats the purpose of a reader periodically
->>> dropping the lock to allow writers in, as doing so only works if the write
->>> lock is acquired first, another read lock is held, or a queued writer's
->>> handoff timeout has expired.
->>>
->>> Provide a means of indicating this intent via down_read_nosteal() and
->>> down_read_killable_nosteal().
->>>
->>> Implement it by exposing a steal parameter to rwsem_down_read_slowpath(),
->>> update the starvation logic to modify this parameter and modify the steal
->>> branch to check it first.
->>>
->>> Also drop the duplicated RWSEM_WRITER_LOCKED check and remove the
->>> goto as the steal condition makes this redundant.
->>>
->>> Exposing this function is safe as it only makes the lock more pessimistic,
->>> so does not impact lock contention.
->>
->> Not generally a fan of this -- can't we tweak the steal thing to never
->> steal if there are pending writers?
+On 11/3/26 09:27, Lorenzo Stoakes (ARM) wrote:
+> khugepaged walks an mm's VMAs under the mmap read lock in
+> collapse_scan_mm_slot(), checking for ineligible VMAs first, and skipping
+> them if encountered.
 > 
-> Oh, well, I had assumed I couldn't fiddle with that behaviour across
-> rwsem's in general, so if I can yeah that's preferable!
+> It charges cc->progress 1 page against the 8 * HPAGE_PMD_NR budget when
+> these are encountered, however only checking this budget once an eligible
+> PMD-spanning VMA is encountered.
 > 
-> I could send that change separately then and drop it out of this series.
+> It can therefore hold the mmap read lock for a long time if there are a
+> large number of ineligible VMAs present in an mm, over which time no mmap
+> write locks (and thus no VMA write locks) can be acquired.
+> 
+> Address this by dropping + re-acquiring the mmap read lock after
+> KHUGEPAGED_MAX_SKIP_BATCH VMAs have been processed. Use the newly
+> introduced mmap_read_lock_nosteal() to ensure queued writers take
+> precedence when doing so.
+> 
+> This was tested locally with ~1M ineligible VMAs mapped ahead of a
+> collapsible region of memory, and resulted in a reduced mmap_lock hold time
+> of 170us down from 95ms.
+> 
+> This was also observed to reduce mmap_lock stalls in concurrent threads of
+> a similar duration.
+> 
+> KHUGEPAGED_MAX_SKIP_BATCH was derived empirically to a conservative value
+> of 1024 VMAs, which should not interfere with mm's that have an ordinary
+> number of VMAs.
+> 
+> Local measurements indicated no change for ordinary use cases, so this is
+> all upside.
+> 
+> This work came out of investigations into mmap stalls when getting latency
+> numbers for an unrelated patch series.
+> 
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> ---
+>  mm/khugepaged.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 216c4b8d28c4..b9c72ee8b421 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -66,6 +66,12 @@ static DEFINE_READ_MOSTLY_HASHTABLE(mm_slots_hash, MM_SLOTS_HASH_BITS);
+>  
+>  static struct kmem_cache *mm_slot_cache __ro_after_init;
+>  
+> +/*
+> + * The number of VMAs with nothing to scan to walk before dropping and
+> + * reacquiring the mmap_lock to relieve lock contention.
+> + */
+> +#define KHUGEPAGED_MAX_SKIP_BATCH 1024
 
-Just so I understand correctly, this patch here would be gone entirely?
+I don't quite enjoy this magic number.
 
-But #4 depends on it, so now I'm confused :)
+Besides it saying nothing about "VMAS", so the name it self is pretty unclear.
+
+I was wondering whether we can give the "cc->progress += 1" a different weight.
+Skipping VMAs seems to be more expensive than we thought.
+
+
+(Maybe we should also just say "skip after X" VMAs in general, whether we
+skipped them or not?)
+
 
 -- 
 Cheers,
