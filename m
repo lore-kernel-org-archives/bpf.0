@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793874239;
-	b=q8o+zuTDMBzui1o1QLAsO2T2Leib2+bbgvrwVFhmYzJ04Z3xJ0Zdge0fIS+EplLO5wQX
-	 6Tvb807xSQ0rSdkyuaP/7/D95EBNB/rFspRLScWWg1KZO7mMWERAtYhHutilyReDmG+h9
-	 R0NCwV5zfzCj4QL3W01NA0PtWpXnaH7b+uterHwLIqgvh9hP829tc95fZhayh3jJwfl4U
-	 Ccrd0kPogsi42pPry2Hnkzbms/2bqFIk56M9DqLKy7VlUcJzd4eQuZT6AkdGku+gcM1AQ
-	 8NMvBbKAXnAFSBWUxps0bR22V3k0+zGyJDc73pNV9N6HU5oR3TTzDEGspFOMeUMyhUA==
+	t=1793874248;
+	b=w58bGe0UZa778xZ2vNhIs4g+TH/B5FfLZisv3R4s/ExsK/CSn6SEO0o/6WItTTDlf1In
+	 TSDRlRoxgufO3szKj5LPXsyjkCpnWRUAoqqF9JVJNuiSoDINUnoyMPG6afWVGonDmEZWT
+	 vJRp9M07l0fD1tBEvPJLUOz0ZqJtUPeM4uhC3LNaQU694g3sfY1R9fFSTj1L65icUf6zu
+	 Rz0LVnsW+Btof7vMGcvzl48worhf8GbvmbwZ5CDMUPdOmGPtHWsSNdR/koNOPCMacMW1x
+	 JqoStUa7Sua78NwglV/InFDVSZvjOCXIvVuBtCWJlF3F0SaJNe9yyaWo1PWFWUDG/1w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793874239;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793874248;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=PYhUmCcAZz8D4rH/ZuLGB4Wi87kHi8TGQCw2xjNzenQ=;
-	b=28LGopkbqujdsA19atjCutPoTuBGJdlNtaWf9OGWHu58/Fv+f/El+Xs1Y3GW3ryUPm8b
-	 4aVqYefTLDOF1qWK0Tw+UMiIgC6Aq7IlQP9dGsN0MKpxWMyBvHyDej9TZ6hhmUxC/t2TB
-	 X6XxONRjCdCnCfoxoJNfVH9Vperx4+47thy70XDcZc1s4om7BHNVcSnN/9OY3Uuc3BGpA
-	 yCRJg0iMO57Qo+iit5HxBbc/Z515Qu+4ba0ssqh44bT7ESxztynpWyHgqCXBhRpHxYsKP
-	 L8h+q/4FwQAs0dDB5vmBfdRoT6nsujDsEHrqr2eohDue1NOqNS7awVlDlTGGXiu0VRw==
+	bh=ukfAuOjvggf2x46fnM5SSPXxPa35OmUkK54EQRFxays=;
+	b=Z/Xis4qQx8wrlFnxivQkWkQ9Ch2ylW6v03gyIugTn7CLiowoS3lipRDVpQV4cAbJTkZy
+	 0qebuNADjqYSFl2yrOYDG1WIOHxWIZV469QrnOc7rwWnPNLCkOStCx9yidIbbPCY/DBV0
+	 vuc4BdH19Yti1lDbVDyBucwDbshQucdgDkAvun4AQ7P3qDofinW+W70hOnlfg5W/6ysER
+	 v4E9rSS/qmr9yZUtxjmKrBPt+aI3JLgEZWSiarNmHWhekdgWBhLl7Xj3QFTzrZrf4C4Ws
+	 XixvlzgJGWiy2VgG7+Y/6+3F+1HhNuj1su9PF4lz/PAUT6MvMScql0idLn0L6AvsqXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OR2s2vHe;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TD3Ho5vA;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0343A606A334
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E00D606A332
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:24:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OR2s2vHe
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E40431F00919;
-	Thu,  5 Nov 2026 10:23:55 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TD3Ho5vA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A861F0093A;
+	Thu,  5 Nov 2026 10:24:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793874238;
-	bh=PYhUmCcAZz8D4rH/ZuLGB4Wi87kHi8TGQCw2xjNzenQ=;
+	s=k20260515; t=1793874248;
+	bh=ukfAuOjvggf2x46fnM5SSPXxPa35OmUkK54EQRFxays=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=OR2s2vHeD3dD8muCdAuzzN7A+BZOD8oCRQ+Qv9FC0ClcDR8K0DALQpwUkSiKm+SDC
-	 30ZDS+iViSRJVTpBz3ZJB9OZjQGdmVqvZxwhgbf4JBSn93sQLHGGL4o6qw7r8a1hSb
-	 rG7a/Dn8Xpip6zD/MlCZ/Z6HKorb6yXrbb/D0wInMTrfSQfSqYlscXCf46sM5cETfV
-	 TUP/H7WyFPSBNRmka9rG1B6JQshp1eyjQJS94MY8zSMEkhekX9uOuroj2cIWmXAcr7
-	 g7huGG7qZ8h/gWDfKgotAsG2MX4r9/D+fMfl2IQWE31Zxc1P8Vz62lZw27p5Gbk+mX
-	 1cXJ1NIMkfQmA==
+	b=TD3Ho5vAdZTm3OwPTMs1WIGa51yfZn6wuA6V6bsU2pwqHAeHaUyjDN1jVGPsza/bx
+	 80YBY+97YdHXEHEi5971iUANIyN50uFTbzU2w/+3O5wiu8QGbU6qhE+pR0/QwMt1oM
+	 aa3FBoHYg0NcTfevLUUwAb6z6cetaDtoNQJGfb6ueY3fG31rAr4KlfIhce4aVFrVLX
+	 15h65pNOjLLf91XlJ+8pgEbGAVaZBZr1Fwc3vk0ILMmoCSVLqO+AeuHnwgoPMtFJ6P
+	 l2H+QlUL5f72t21yqXBM1t0phfanNVajy8ENBtb/E1Wr7296HjFpGA0+hsZUo+d+JO
+	 eJnwtsjhv8uGQ==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>
@@ -50,9 +50,9 @@ Cc: bpf@vger.kernel.org,
 	Lorenzo Stoakes <ljs@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Federico Di Pierro <nierro92@gmail.com>
-Subject: [PATCHv3 bpf-next 1/8] bpf: Honor const on generic kfunc memory arguments
-Date: Thu,  5 Nov 2026 11:23:35 +0100
-Message-ID: <20261105102343.311331-2-jolsa@kernel.org>
+Subject: [PATCHv3 bpf-next 2/8] bpf: Add user memory kfuncs
+Date: Thu,  5 Nov 2026 11:23:36 +0100
+Message-ID: <20261105102343.311331-3-jolsa@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261105102343.311331-1-jolsa@kernel.org>
 References: <20261105102343.311331-1-jolsa@kernel.org>
@@ -67,92 +67,233 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Mark generic kfunc memory arguments as read-only when their BTF pointer
-type points to const data. Preserve that access mode when resolving
-scalar structs to fixed-size memory.
+Add sleepable kfuncs to copy data into a task's address space and to map
+or unmap private anonymous memory in the current process.
 
-Derive the memory access flag from the pointer's BTF type, and preserve it
-when resolving scalar structs to fixed-size memory. Document that const
-memory arguments require read access only.
+Require a usable user mm for mmap and munmap. Register the kfuncs for
+KPROBE programs and gate them on CAP_SYS_ADMIN BPF token capability and
+the BPF_WRITE_USER lockdown check.
+
+Use FOLL_FORCE | FOLL_WRITE for task memory copies and return -EFAULT
+when a copy is incomplete.
+
+Rename the syscall info-copy helper to bpf_copy_to_user_buf to avoid
+the name collision.
 
 Assisted-by: Codex:GPT-6
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- Documentation/bpf/kfuncs.rst |  4 ++++
- kernel/bpf/verifier.c        | 24 +++++++++++++++++++++---
- 2 files changed, 25 insertions(+), 3 deletions(-)
+ Documentation/bpf/kfuncs.rst |  17 ++++++
+ kernel/bpf/helpers.c         | 107 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/syscall.c         |  10 ++--
+ 3 files changed, 129 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 901c37504217..4f8dd7c1d785 100644
+index 4f8dd7c1d785..81686d556f58 100644
 --- a/Documentation/bpf/kfuncs.rst
 +++ b/Documentation/bpf/kfuncs.rst
-@@ -137,6 +137,10 @@ argument as its size. By default, without __sz annotation, the size of the type
- of the pointer is used. Without __sz annotation, a kfunc cannot accept a void
- pointer.
- 
-+The verifier checks such memory for read and write access. When the argument
-+is a pointer to const, like ``const void *mem``, the verifier checks it for
-+read access only, and read-only memory (e.g. ``.rodata``) can be passed.
+@@ -976,3 +976,20 @@ the verifier. bpf_cgroup_ancestor() can be used as follows:
+ BPF provides a set of kfuncs that can be used to query, allocate, mutate, and
+ destroy struct cpumask * objects. Please refer to :ref:`cpumasks-header-label`
+ for more details.
 +
- 2.3.2 __k Annotation
- --------------------
++4.4 User memory kfuncs
++----------------------
++
++The user memory kfuncs operate on the current process's address space.
++``bpf_copy_to_user()`` writes to this address space, including private mappings
++that are not writable. A partial copy is not rolled back if it faults.
++
++``bpf_user_anon_mmap()`` and ``bpf_user_munmap()`` create and remove mappings
++by calling the kernel's mapping functions directly rather than issuing
++``mmap(2)`` or ``munmap(2)`` syscalls. As a result, seccomp filters do not
++mediate these mapping operations. A seccomp filter can still allow or deny the
++syscall that triggers a BPF program, but it cannot separately filter the
++mapping performed by these kfuncs.
++
++.. kernel-doc:: kernel/bpf/helpers.c
++   :identifiers: bpf_copy_to_user bpf_user_anon_mmap bpf_user_munmap
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 6788489a2608..937a0d7d6839 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -29,6 +29,9 @@
+ #include <linux/task_work.h>
+ #include <linux/irq_work.h>
+ #include <linux/buildid.h>
++#include <linux/mm.h>
++#include <linux/mman.h>
++#include <linux/limits.h>
  
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6c93437f8db0..8f885d3acaa9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13237,6 +13237,22 @@ static bool is_kfunc_arg_const_mem_size(const struct btf *btf,
- 	return btf_param_match_suffix(btf, arg, "__szk");
+ #include "../../lib/kstrtox.h"
+ 
+@@ -3768,6 +3771,88 @@ __bpf_kfunc int bpf_copy_from_user_mm(void *dst, u32 dst__sz,
+ 	return ret;
  }
  
-+/* A kfunc only reads through 'const T *arg'. The compiler enforces it. */
-+static enum bpf_type_flag kfunc_arg_mem_flag(const struct btf *btf,
-+					     const struct btf_param *arg)
++/**
++ * bpf_copy_to_user() - Copy data to the current task's address space
++ * @unsafe_ptr__ign: Destination address in the current task's address space
++ * @src:     Source address, in kernel space
++ * @src__sz: Number of bytes to copy
++ * @flags:   Reserved for future use; must be zero
++ *
++ * Faults in the destination and writes the way ptrace(PTRACE_POKETEXT) does:
++ * a private mapping doesn't have to be writable. A partial copy is not undone,
++ * the bytes before the fault stay written.
++ *
++ * The caller must coordinate with other threads so they do not execute the
++ * destination range while it is being modified, and ensure execution begins
++ * only after the copy completes.
++ *
++ * Return: 0 on success, -EINVAL if @flags is non-zero, or -EFAULT if the copy
++ * fails or is partial.
++ */
++__bpf_kfunc int bpf_copy_to_user(void __user *unsafe_ptr__ign, const void *src,
++				 u32 src__sz, u64 flags)
 +{
-+	const struct btf_type *t = btf_type_skip_modifiers(btf, arg->type, NULL);
-+	u32 id, ref_id;
++	int ret;
 +
-+	btf_type_skip_modifiers(btf, t->type, &ref_id);
-+	for (id = t->type; id != ref_id; id = t->type) {
-+		t = btf_type_by_id(btf, id);
-+		if (btf_kind(t) == BTF_KIND_CONST)
-+			return MEM_RDONLY;
-+	}
-+	return MEM_WRITE;
++	if (unlikely(flags))
++		return -EINVAL;
++	if (unlikely(src__sz > S32_MAX))
++		return -EINVAL;
++	if (unlikely(!src__sz))
++		return 0;
++	ret = access_process_vm(current, (unsigned long)unsafe_ptr__ign, (void *)src,
++				src__sz, FOLL_FORCE | FOLL_WRITE);
++	return ret == src__sz ? 0 : -EFAULT;
 +}
 +
- static bool is_kfunc_arg_constant(const struct btf *btf, const struct btf_param *arg)
++/* bpf_wq and bpf_task_work callbacks can run without a usable mm. */
++static bool bpf_user_mm_ok(void)
++{
++	return current->mm && !(current->flags & (PF_KTHREAD | PF_EXITING));
++}
++
++/**
++ * bpf_user_anon_mmap() - Map private anonymous memory into the current process
++ * @len:  Length of the mapping
++ * @prot: PROT_* flags of mmap(2), including PROT_EXEC
++ *
++ * This maps memory by calling vm_mmap() directly. It does not invoke the
++ * mmap(2) syscall, so seccomp filters do not mediate this mapping.
++ *
++ * Note that ia32 tasks are unsupported. This calls vm_mmap() directly and
++ * bypasses the compat mmap syscall wrapper.
++ *
++ * Return: The address of the mapping on success, -EPERM if the caller has no
++ * user mm, or an unsigned-long encoded negative error code, as returned by
++ * vm_mmap().
++ */
++__bpf_kfunc unsigned long bpf_user_anon_mmap(unsigned long len, unsigned long prot)
++{
++	if (!bpf_user_mm_ok())
++		return -EPERM;
++	if (!arch_validate_prot(prot, 0))
++		return -EINVAL;
++	return vm_mmap(NULL, 0, len, prot, MAP_PRIVATE | MAP_ANONYMOUS, 0);
++}
++
++/**
++ * bpf_user_munmap() - Unmap a range of addresses of the current process
++ * @addr: Start of the range
++ * @len:  Length of the range
++ *
++ * This unmaps memory by calling vm_munmap() directly. It does not invoke the
++ * munmap(2) syscall, so seccomp filters do not mediate this unmapping.
++ *
++ * Return: 0 on success, -EPERM if the caller has no user mm, or a negative
++ * error code.
++ */
++__bpf_kfunc int bpf_user_munmap(unsigned long addr, unsigned long len)
++{
++	if (!bpf_user_mm_ok())
++		return -EPERM;
++	return vm_munmap(addr, len);
++}
++
+ /**
+  * bpf_copy_from_user_mm_str() - Copy a string from an address space
+  * @dst:             Destination address, in kernel space. This buffer must be
+@@ -5175,6 +5260,27 @@ static const struct btf_kfunc_id_set generic_kfunc_set = {
+ 	.set   = &generic_btf_ids,
+ };
+ 
++BTF_KFUNCS_START(user_mem_btf_ids)
++BTF_ID_FLAGS(func, bpf_copy_to_user, KF_SLEEPABLE | KF_PERFMON)
++BTF_ID_FLAGS(func, bpf_user_anon_mmap, KF_SLEEPABLE | KF_PERFMON)
++BTF_ID_FLAGS(func, bpf_user_munmap, KF_SLEEPABLE | KF_PERFMON)
++BTF_KFUNCS_END(user_mem_btf_ids)
++
++static int user_mem_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
++{
++	if (!btf_id_set8_contains(&user_mem_btf_ids, kfunc_id))
++		return 0;
++	if (!bpf_token_capable(prog->aux->token, CAP_SYS_ADMIN))
++		return -EPERM;
++	return security_locked_down(LOCKDOWN_BPF_WRITE_USER);
++}
++
++static const struct btf_kfunc_id_set user_mem_kfunc_set = {
++	.owner  = THIS_MODULE,
++	.set    = &user_mem_btf_ids,
++	.filter = user_mem_kfunc_filter,
++};
++
+ BTF_ID_LIST(generic_dtor_ids)
+ BTF_ID(struct, task_struct)
+ BTF_ID(func, bpf_task_release_dtor)
+@@ -5302,6 +5408,7 @@ static int __init kfunc_init(void)
+ 	};
+ 
+ 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc_set);
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_KPROBE, &user_mem_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 02ed5368f056..9004f2673ccf 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3932,8 +3932,8 @@ static void bpf_raw_tp_link_show_fdinfo(const struct bpf_link *link,
+ 		   raw_tp_link->cookie);
+ }
+ 
+-static int bpf_copy_to_user(char __user *ubuf, const char *buf, u32 ulen,
+-			    u32 len)
++static int bpf_copy_to_user_buf(char __user *ubuf, const char *buf, u32 ulen,
++			       u32 len)
  {
- 	return btf_param_match_suffix(btf, arg, "__k");
-@@ -13618,7 +13634,8 @@ static int resolve_func_arg_type(struct bpf_verifier_env *env,
- 			PTR_ERR(resolve_ret));
- 		return -EINVAL;
- 	}
--	*arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE |
-+	*arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE |
-+		    kfunc_arg_mem_flag(meta->btf, &args[arg]) |
- 		    (*arg_type & (PTR_MAYBE_NULL | MEM_UNINIT));
+ 	if (ulen >= len + 1) {
+ 		if (copy_to_user(ubuf, buf, len + 1))
+@@ -3970,7 +3970,7 @@ static int bpf_raw_tp_link_fill_link_info(const struct bpf_link *link,
+ 	if (!ubuf)
+ 		return 0;
  
- 	return 0;
-@@ -14170,7 +14187,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 				reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
- 			return -EINVAL;
- 		}
--		arg_type = ARG_PTR_TO_MEM | MEM_WRITE;
-+		arg_type = ARG_PTR_TO_MEM | kfunc_arg_mem_flag(meta->btf, &args[arg]);
- 	} else if (btf_type_is_struct(ref_t))
- 		/* A pointer to a struct without a size argument is classified as ARG_PTR_TO_BTF_ID */
- 		arg_type = ARG_PTR_TO_BTF_ID;
-@@ -14195,7 +14212,8 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 			return -EINVAL;
- 		}
- 		proto->arg_size[arg] = type_size;
--		arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE;
-+		arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE |
-+			   kfunc_arg_mem_flag(meta->btf, &args[arg]);
- 	}
+-	return bpf_copy_to_user(ubuf, tp_name, ulen, tp_len);
++	return bpf_copy_to_user_buf(ubuf, tp_name, ulen, tp_len);
+ }
  
- 	if (is_kfunc_arg_uninit(meta->btf, &args[arg]))
+ static const struct bpf_link_ops bpf_raw_tp_link_lops = {
+@@ -4031,7 +4031,7 @@ static int bpf_perf_link_fill_common(const struct perf_event *event,
+ 		goto out;
+ 
+ 	if (buf) {
+-		err = bpf_copy_to_user(uname, buf, ulen, len);
++		err = bpf_copy_to_user_buf(uname, buf, ulen, len);
+ 	} else {
+ 		char zero = '\0';
+ 
+@@ -5710,7 +5710,7 @@ static int bpf_task_fd_query_copy(const union bpf_attr *attr,
+ 			if (put_user(zero, ubuf))
+ 				return -EFAULT;
+ 		} else {
+-			err = bpf_copy_to_user(ubuf, buf, input_len, len);
++			err = bpf_copy_to_user_buf(ubuf, buf, input_len, len);
+ 			if (err == -EFAULT)
+ 				return err;
+ 		}
 -- 
 2.43.0
 
