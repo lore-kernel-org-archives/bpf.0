@@ -1,47 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793896560;
-	b=3MxJePvqET/rKF8sWWlCZX9rmV+WdUC1Ei6/fJ7fpu1ckNpGUgTqJf1P/ojunVFIfnp+
-	 XzGoDYCD1B0aqqN633mfkTYCkBPZcpbkfyXIDpEEJur61lQIxSy5u17Yx9aT8rrjIxK20
-	 PW9KMraFP9xlKN/GlTy7sRSJPIEOjxRg6H6E5NV8wmwcT/byD9GfLGYrzTTjOdIutvx94
-	 e3KXXN+rTe81gj/25AcZQY9Ttmlm9aXWC57oKIc9E7W3xXX1pJ9+8LNU5Q33STQHGfikn
-	 SFkw5iQ3A95NncLJniYBtw1zewO5lLc+k3ag776pfRCx1rBkbk9GQJha8r3FWtZglrA==
+	t=1793896625;
+	b=SVwkPd3nf9Y0NG89bc6iIPWd2iy4SgjfjbMfaz38tQwPLEG/YaEj8bKHCmK0QPqARour
+	 RZ310rBHQQ7VRwdkZqW4nD0AdebaaxvBfEv0vneIVmLOqFXtZ1FPxkmhpEpXnht+u2W9t
+	 ljqopUTrh4JZUsuaqI6j/NiRwmkK8iiE4oNOxqXtuUm9+xPmUtfv7Oz9YjQ+ujTJ/+PXq
+	 KuJucIn/9bcjr0HW64GpPp+4W+1NAKygz6ATEXATWesNgH6ZXACNAGCPCkS/VzIyLcxN4
+	 dwB6FwV8muvldvRwgoLeW+g1IG5oum/Kf8d1npbYV+fgJYKgqerP4OmCuBxTWeQn72A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793896560;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=oaFEybmB3/LpRlTwU2ESXZoM0QOYsoH22CakPe6LiW0=;
-	b=WKUB0QkMDAn4Vx0wTnBZ7LmLyjIx4d4hxvqXsqBN8XLGM4b2Jld6Vsm6aIMWjYbJicMj
-	 JAu+fOlyxtr0fjWKmqdqJ8Liut5/DRaZ9nUMASWNenp8OV+CNBzSAyTJd5ObFDizc8PvI
-	 9VxYJehL+tuYpptGJwBatIC6vXTZSZZ4aJZ0u7gZ3f7WkoCU5dnjLGnmoh3bVAx7ONEAa
-	 2Q6O3+ILeX3aN+4QXNESuBl0J0op9azPpNDxLi8p9vODc52vRlO0rqmG6RRCQyzO2CvIN
-	 eMqbwT3T1XMjZQ6om2s//oqrnrB2N1Oru+yc9zth1iR9J+llMoq3oGyVJ2ADuOrSupQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793896625;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=EMTT2HHjSkY1uGJyH89VPeEJ36kiCXEDFii0T4E6Iac=;
+	b=GKly3so+jyqN0Y0Iwj65wNmoDRMmJt5y+2SQ1WKbVDw4xT9WoJsqlc6N1cCwdjLeR0Ji
+	 ZaXi7kgF9el97t6qH3sPTMX7KNlmFNKn6hczJQfSfSmwxtCSZbHtGh8O1ieDGTc7GTfg5
+	 UZQPGdqSU6WlGFIjEtgUzwDCdRByRF0VqzKwm61iM+1JbBOTlszOwQvwXxIVCqzYvknuc
+	 rMGyXV03gbWsLhiYWoJkNjdvWPzAtXn1th/qSLjTPDEkRLEb74LACWzXxZagOob2Av88j
+	 IiRVSxygs9TyU2IH+8Al/WUgWx/SQCtlQzmVlrigw7HC2bs8qRgNy+nNE+CicC9Wzjg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="PpT8/D5z";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h43CPja3;
+	arc=none smtp.remote-ip=209.85.216.46
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D52B606A33F;
-	Thu,  5 Nov 2026 16:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D497606A903
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 16:37:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D497606A903
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PpT8/D5z
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10A1A1F000C1;
-	Thu,  5 Nov 2026 16:35:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793896559;
-	bh=oaFEybmB3/LpRlTwU2ESXZoM0QOYsoH22CakPe6LiW0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=PpT8/D5zeLlfhjXRHDS9Xn7yTDCLEhyyWpMkM0/IfblI9PMLXcKedSOlnoASybHch
-	 QMV8ab3TA2uSLtQsY231ygXHLK4E1dZjZWYTUyaq5EG+U+7SRxv/SC5EV5zIEGfbl+
-	 Anl6FvxIWk2bzbUyorgGwbK7QtWE0eneo9Vkb0oEtRPqNHIcsTwj/H9gaUxgdyQRKl
-	 9la8Ee4KQAzAUk3BDbj8WwQQ1UKgW36gLtWALpg8W7Mm455sUJQJK7b75HwOTlAxFH
-	 tWWXsXG7Et2NnPPdGnHQoyRFRfRXjPc/WvDrWcLkNmwuDZMfzvcAqJShtCN7KTNjC+
-	 ltbn1tD2mVL7w==
-Message-ID: <cf2e3292-d591-42a4-bf6e-76f4567604c6@kernel.org>
-Date: Thu, 5 Nov 2026 17:35:34 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h43CPja3
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3adac5b29ebso1236328a91.2
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 08:37:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793896624; x=1794501424; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EMTT2HHjSkY1uGJyH89VPeEJ36kiCXEDFii0T4E6Iac=;
+        b=h43CPja397Wxk7BuUAKdbooVEpDaqJLuGmG3AT5/791iKKS5eiAU6lh7u1JbE0Mq78
+         +9oRSianhKPO/HA1gBL2vrU3w6lIR7qSraYBEdVYl2uPJ65ncsS1I9I2leOVuGrcv/bt
+         sAy/aUnI4dnTLwPZC2bvNsTsU3icEgBMF6UpzeBqy/b0rCnmZGuF2bDQzCh8XbcZgzR7
+         yKsxt1bp1lX5qfOUdhfexth16YT+tHLrRTx2oVdFuCI2YzD+TdredLDDH/ZKAC+4wHi7
+         EB/KRd04cjwrwGzxsPxdGWxuJHdoqObrQeSF2bNgnOpZueQPe7OyekDD96xtrxdjvPtR
+         59nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793896624; x=1794501424;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EMTT2HHjSkY1uGJyH89VPeEJ36kiCXEDFii0T4E6Iac=;
+        b=izZ9Sy30xDDJ2I3QBDnrP840TFvylb3zYt/NIb2vpHCKfBKqmtXfiVhX+Ds0GV+ovQ
+         xsVY65Z8SBCL94vMPk7tZaptR8sG9dyjrmin4BUdKpdjBYN9ZmIiDXFgLNZdlPgtcpmh
+         sNz4SivXDyCUggQBT5RIMr288h619Lk+DSHo5BIiqjtGUNwgjtUl7u8l297xdb+C4/wF
+         8jDXR4xIz5bbuwLDWHxqL89M3k+uhXwsT4Tx56MxhnGyCRm0VFjKMuh0T3XJnspKYq7R
+         vpyF+qEt/ECRMCtmjwwhU1iSu/AbnhGcyLmm4yzPw6kf5nKrV2eFySbXHgAeZqlbg9Yf
+         9/8w==
+X-Forwarded-Encrypted: i=1; AKwUvBwN3paKYV7uvpDdFCaMqw8w5+m9cd/ANK6sy+Bf3XgjPqOuj4k9Fr+K/zjhj6jmh1V2wY4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+VsYsn31fnrX6QG0BJmuT9MY4ES4hVlC5ZWy5M1z8KddkQvCL0
+	TrbSDbARQ8YxYEG9QTbo6NLJJ6uq+RqxNLApz6iyLzO8COaVQdYfBfwS
+X-Gm-Gg: AYBFou0lAYJbQUtut7K07MLPHfim4B3PGluvTGWjN5sBUMsBnJJrLxjaFSs9P5qOfZg
+	ZbviMNYsJTRXSHGBwC9pOk2Hjh5Is9WtX6/q5ooVJv5+GDC05hDIg+weSGBgzmi7lh3xNA0t/dO
+	mTwjpYRnbYeS1UjzqS9XaV8GGliq4nHzwqot7op+BMevygd4DJvNM5gRMD9FILKXAZpWOjNh4WE
+	P2XyP6mKiRQurlQN4vS5DzXUlTd0p+FMVqFT+Bh5UvJg82kWTpHApx7AuDdQdGTN/5+N+mt8blf
+	jfogEAquuoAsNCcS5cLsTb0RMERzjU8SVVmlWCJj/Hc8XpOZa+dUafK3EKmH58Wq+qRIo9Ra5HJ
+	Ww9ySEOX7SIesyVImvBG0K5Ls+IFYvHQc0A/u8MnwAn6QOY4xHbQ1lQAJ0RpweL5JyIZ501NI6f
+	uUWHrv4sHpiA6PLMoYONNAQl6c3GY7EAS9OrX92x4KfDkzITMF5WCicIu9Hv6muU9vqbbGvNPS2
+	sUWrBTnKfi0gAPOZJuP5k8Ew0CBk7mJb4q1r7TQijdk21w7xrCjhuBmK1BuFMLVAB3Z7gWxC4Ss
+	6gtKoWalxt+ncfKQhLzrpcihzUceSNqy9jdYxPde5n+PtaUpnEwGyPNu/9Pd4l2QiMybCaDfZAY
+	Wtn6rXvQO/jbwuQ1A+T/0XNiRDrRsJwNtFQ==
+X-Received: by 2002:a17:90b:4d85:b0:3b0:a378:1cf with SMTP id 98e67ed59e1d1-3b0a378049cmr4183905a91.22.1793896623555;
+        Thu, 05 Nov 2026 08:37:03 -0800 (PST)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b3160634sm4692625a91.6.2026.11.05.08.37.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Nov 2026 08:37:02 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 05 Nov 2026 16:37:02 +0000
+Message-Id: <DMNFA3D0M816.2K02S8LB47QM4@gmail.com>
+Cc: <eddyz87@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <ihor.solodrai@linux.dev>, <pulehui@huawei.com>, <pjw@kernel.org>,
+ <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <alex@ghiti.fr>,
+ <luke.r.nels@gmail.com>, <xi.wang@gmail.com>, <shuah@kernel.org>,
+ <rgbi3307@gmail.com>, <guoren@kernel.org>, <bpf@vger.kernel.org>,
+ <linux-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 bpf-next 3/3] selftests/bpf: Add a runtime test for
+ private stack and stack arguments
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Chen Pei" <cp0613@linux.alibaba.com>, <daniel@iogearbox.net>,
+ <andrii@kernel.org>, <memxor@gmail.com>, <bjorn@kernel.org>,
+ <puranjay@kernel.org>
+In-Reply-To: <20261104100411.997-4-cp0613@linux.alibaba.com>
+References: <20261104100411.997-1-cp0613@linux.alibaba.com> <20261104100411.997-4-cp0613@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,206 +109,87 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v1 0/5] net: deprecate skb->pp_recycle and
- skb_mark_for_recycle()
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
- linux-mm@kvack.org, bpf@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-doc@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
- imx@lists.linux.dev, linux-rdma@vger.kernel.org,
- linux-hyperv@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-omap@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Willem de Bruijn <willemb@google.com>, Stanislav Fomichev <sdf@fomichev.me>,
- Pavel Begunkov <asml.silence@gmail.com>,
- Bobby Eshleman <bobbyeshleman@meta.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "Michael S. Tsirkin" <mst@redhat.com>,
- Jason Wang <jasowangio@gmail.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
- <eperezma@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Sabrina Dubroca <sd@queasysnail.net>,
- Johannes Berg <johannes@sipsolutions.net>, Byungchul Park
- <byungchul@sk.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
- Wen Gu <guwen@linux.alibaba.com>, Philo Lu <lulie@linux.alibaba.com>,
- Justin Chen <justin.chen@broadcom.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Vikas Gupta <vikas.gupta@broadcom.com>,
- Michael Chan <michael.chan@broadcom.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>, Doug Berger <opendmb@gmail.com>,
- Nicolai Buchwitz <nb@tipi-net.de>, Satish Kharat <satishkh@cisco.com>,
- Wei Fang <wei.fang@nxp.com>, Frank Li <frank.li@nxp.com>,
- Shenwei Wang <shenwei.wang@nxp.com>, Joshua Washington
- <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
- Jijie Shao <shaojijie@huawei.com>, Jian Shen <shenjian15@huawei.com>,
- Fan Gong <gongfan1@huawei.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Marcin Wojtas <marcin.s.wojtas@gmail.com>,
- Russell King <linux@armlinux.org.uk>, Sunil Goutham <sgoutham@marvell.com>,
- Geetha sowjanya <gakula@marvell.com>, Ratheesh Kannoth
- <rkannoth@marvell.com>, Subbaraya Sundeep <sbhatta@marvell.com>,
- Bharat Bhushan <bbhushan2@marvell.com>, Felix Fietkau <nbd@nbd.name>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Tariq Toukan <tariqt@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>,
- Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
- Horatiu Vultur <horatiu.vultur@microchip.com>, UNGLinuxDriver@microchip.com,
- Daniel Machon <daniel.machon@microchip.com>,
- Steen Hegelund <Steen.Hegelund@microchip.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Yibo Dong <dong100@mucse.com>,
- Brett Creeley <brett.creeley@amd.com>, Justin Lai
- <justinlai0215@realtek.com>, Larry Chiu <larry.chiu@realtek.com>,
- =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
- Paul Barker <paul@pbarker.dev>,
- Masahisa Kojima <kojima.masahisa@socionext.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- FUJITA Tomonori <fujita.tomonori@gmail.com>,
- Siddharth Vadapalli <s-vadapalli@ti.com>, Roger Quadros <rogerq@kernel.org>,
- MD Danish Anwar <danishanwar@ti.com>, Jiawen Wu <jiawenwu@trustnetic.com>,
- Mengyuan Lou <mengyuanlou@net-swift.com>,
- Ronak Doshi <ronak.doshi@broadcom.com>, Ryder Lee <ryder.lee@mediatek.com>,
- Shayne Chen <shayne.chen@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
- Juergen Gross <jgross@suse.com>, Stefano Stabellini
- <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- Jordan Rhee <jordanrhee@google.com>, Ankit Garg <nktgrg@google.com>,
- Tim Hostetler <thostet@google.com>,
- Erni Sri Satya Vennela <ernis@linux.microsoft.com>,
- Eric Joyner <eric.joyner@amd.com>, Mohammad Heib <mheib@redhat.com>,
- Prabu Thayalan <prabu.ponrajthayalan@amd.com>,
- Chintan Vankar <c-vankar@ti.com>,
- Nora Schiffer <nora.schiffer@ew.tq-group.com>,
- Alexander Sverdlin <alex@sverdlin.org>, Kevin Hao <haokexin@gmail.com>,
- Karl Mehltretter <kmehltretter@gmail.com>,
- Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
- Meghana Malladi <m-malladi@ti.com>, Jacob Keller <jacob.e.keller@intel.com>,
- StanleyYP Wang <StanleyYP.Wang@mediatek.com>
-References: <20261103211424.127627-1-almasrymina@google.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20261103211424.127627-1-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+On Wed, Nov 04, 2026 at 02:04 AM Chen Pei <cp0613@linux.alibaba.com> wrote:
+>  .../selftests/bpf/private_stack_runtime.h     |  12 ++
+>  .../bpf/prog_tests/private_stack_runtime.c    |  84 +++++++++++
+>  .../bpf/progs/private_stack_runtime.c         | 140 ++++++++++++++++++
+>  3 files changed, 236 insertions(+)
 
+bpf ci is right in the other email.
 
-On 11/3/26 22:14, Mina Almasry wrote:
-> Remove the per-SKB skb->pp_recycle bitfield and skb_mark_for_recycle()
-> helper, and reference-count netmems directly by their underlying type
-> via netmem_is_pp() inside netmem_inc_ref() and netmem_dec_ref().
-> 
-> This series simplifies SKB and netmem reference counting:
-> - Reclaims 1 bit from struct sk_buff (skb->pp_recycle).
-> - Unifies reference counting of SKB fragment netmems and regular netmems
->    under netmem_inc_ref() and netmem_dec_ref(), eliminating the separate
->    skb_netmem_ref(), skb_netmem_unref(), and skb_mark_for_recycle() APIs.
+pw-bot: cr
 
-Part of the performance gain from page_pool was to completely avoid the
-atomic refcnt operation, when we can see that page refcnt==1.
-Are you removing this?
+Also, the test runs on riscv64 only. BPF CI runs arm64 and not riscv64.
+arm64 has the same combination and no test for it.
+The run time part has nothing specific to riscv64.
+The __jited patterns pin the frame sizes that clang picks for C code.
+zero_stack doesn't use the private stack.
+It's the only reason for serial_.
 
+Two asm progs in verifier_stack_arg.c are enough.
+BPF_PROG_TEST_RUN runs a raw_tp prog. No need to attach it.
+The test runs on x86-64, arm64 and riscv64.
+On x86-64 both frames stay on the kernel stack.
 
-> - Removes 110 net lines of non-test/doc code across 63 files (196
->    insertions, 306 deletions).
-> 
-> 1/5: net: skbuff: skip managed zerocopy frags in skb_frag_ref()
-> 2/5: net: skbuff: refcount spliced page_pool frags via skb_pipe_buf_ops
-> 3/5: net: datagram: refcount page_pool frags in zerocopy_fill_skb_from_iter()
-> 4/5: net: remove skb->pp_recycle and consolidate netmem refcounting
-> 5/5: net: remove skb_mark_for_recycle()
-> 
-> Mina Almasry (5):
->    net: skbuff: skip managed zerocopy frags in skb_frag_ref()
->    net: skbuff: refcount spliced page_pool frags via skb_pipe_buf_ops
->    net: datagram: refcount page_pool frags in
->      zerocopy_fill_skb_from_iter()
->    net: remove skb->pp_recycle and consolidate netmem refcounting
->    net: remove skb_mark_for_recycle()
-> 
->   Documentation/networking/page_pool.rst        |   1 -
->   drivers/net/ethernet/airoha/airoha_eth.c      |   1 -
->   drivers/net/ethernet/alibaba/eea/eea_rx.c     |   3 -
->   .../net/ethernet/broadcom/asp2/bcmasp_intf.c  |   1 -
->   .../net/ethernet/broadcom/bnge/bnge_txrx.c    |   5 -
->   drivers/net/ethernet/broadcom/bnxt/bnxt.c     |   8 -
->   .../net/ethernet/broadcom/genet/bcmgenet.c    |   2 -
->   drivers/net/ethernet/cisco/enic/enic_rq.c     |   1 -
->   drivers/net/ethernet/engleder/tsnep_main.c    |   2 -
->   drivers/net/ethernet/freescale/fec_main.c     |   1 -
->   drivers/net/ethernet/google/gve/gve_rx_dqo.c  |   9 -
->   .../net/ethernet/hisilicon/hibmcge/hbg_txrx.c |   1 -
->   .../net/ethernet/hisilicon/hns3/hns3_enet.c   |   6 -
->   .../net/ethernet/huawei/hinic3/hinic3_rx.c    |   1 -
->   drivers/net/ethernet/intel/iavf/iavf_txrx.c   |   2 -
->   drivers/net/ethernet/marvell/mvneta.c         |   2 -
->   .../net/ethernet/marvell/mvpp2/mvpp2_main.c   |   2 -
->   .../marvell/octeontx2/nic/otx2_txrx.c         |   1 -
->   drivers/net/ethernet/mediatek/mtk_eth_soc.c   |   1 -
->   drivers/net/ethernet/mellanox/mlx4/en_rx.c    |   1 -
->   .../net/ethernet/mellanox/mlx5/core/en_rx.c   |   8 -
->   drivers/net/ethernet/mellanox/mlxsw/pci.c     |   2 -
->   .../ethernet/microchip/lan966x/lan966x_fdma.c |   2 -
->   .../microchip/sparx5/lan969x/lan969x_fdma.c   |   1 -
->   drivers/net/ethernet/microsoft/mana/mana_en.c |   3 -
->   .../net/ethernet/mucse/rnpgbe/rnpgbe_lib.c    |   1 -
->   .../net/ethernet/pensando/ionic/ionic_txrx.c  |   2 -
->   .../net/ethernet/realtek/rtase/rtase_main.c   |   1 -
->   drivers/net/ethernet/renesas/ravb_main.c      |   2 -
->   drivers/net/ethernet/socionext/netsec.c       |   1 -
->   .../net/ethernet/stmicro/stmmac/stmmac_main.c |   1 -
->   drivers/net/ethernet/tehuti/tn40.c            |   1 -
->   drivers/net/ethernet/ti/am65-cpsw-nuss.c      |   1 -
->   drivers/net/ethernet/ti/cpsw.c                |   2 -
->   drivers/net/ethernet/ti/cpsw_new.c            |   2 -
->   drivers/net/ethernet/ti/icssg/icssg_common.c  |   1 -
->   drivers/net/ethernet/wangxun/libwx/wx_lib.c   |   2 -
->   drivers/net/veth.c                            |   3 +-
->   drivers/net/virtio_net.c                      |  16 +-
->   drivers/net/vmxnet3/vmxnet3_xdp.c             |   1 -
->   drivers/net/wireless/mediatek/mt76/dma.c      |   1 -
->   .../net/wireless/mediatek/mt76/mt7996/mac.c   |   1 -
->   drivers/net/wireless/mediatek/mt76/npu.c      |   1 -
->   drivers/net/wireless/mediatek/mt76/usb.c      |   1 -
->   drivers/net/xen-netfront.c                    |   1 -
->   include/linux/mm.h                            |   2 +-
->   include/linux/skbuff.h                        |  12 +-
->   include/linux/skbuff_ref.h                    |  60 +--
->   include/net/netmem.h                          |  39 +-
->   include/net/page_pool/helpers.h               |  46 ++-
->   net/core/datagram.c                           |   5 +
->   net/core/gro.c                                |   9 -
->   net/core/net_test.c                           | 369 +++++++++++-------
->   net/core/netmem_priv.h                        |  23 +-
->   net/core/page_pool.c                          |   8 +-
->   net/core/skbuff.c                             |  78 ++--
->   net/core/xdp.c                                |  13 +-
->   net/ipv4/esp4.c                               |  11 +-
->   net/ipv6/esp6.c                               |  11 +-
->   net/tls/tls_device.c                          |  14 +-
->   net/tls/tls_device_fallback.c                 |   6 +-
->   net/tls/tls_main.c                            |   4 +-
->   net/wireless/util.c                           |  31 +-
->   net/xfrm/trace_iptfs.h                        |   6 +-
->   net/xfrm/xfrm_iptfs.c                         |  16 +-
->   65 files changed, 418 insertions(+), 454 deletions(-)
-> 
-> 
-> base-commit: 7b6ab4dbc156e2f96419715130b3d5738a306c93
+Like (not even compile tested):
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+index abf319c..9423048 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+@@ -667,6 +667,53 @@ __naked void stack_arg_precision_fallback(void)
+ 	);
+ }
+
++/* Writes both ends of its frame, then reads args 9, 10 and the frame of the caller. */
++__naked __noinline __used
++static long priv_stack_10args(long a, long b, long c, long d, long e, long f, long g, long h,
++			      long i, long *j)
++{
++	asm volatile (
++		"r1 = 0;"
++		"*(u64 *)(r10 - 8) = r1;"
++		"*(u64 *)(r10 - 64) = r1;"
++		"r0 = *(u64 *)(r11 + 32);"
++		"r1 = *(u64 *)(r11 + 40);"
++		"r1 = *(u64 *)(r1 + 0);"
++		"r0 += r1;"
++		"exit;"
++	);
++}
++
++/*
++ * A frame of 64 bytes in a raw_tp prog goes to the private stack.
++ * arm64 and riscv64 pass args 9 and 10 on the kernel stack.
++ */
++SEC("raw_tp")
++__description("stack_arg: private stack in the caller and in the callee")
++__success __retval(890)
++__naked void stack_arg_priv_stack(void)
++{
++	asm volatile (
++		"r1 = 800;"
++		"*(u64 *)(r10 - 64) = r1;"
++		"r1 = r10;"
++		"r1 += -64;"
++		"*(u64 *)(r11 - 40) = r1;"
++		"*(u64 *)(r11 - 32) = 90;"
++		"*(u64 *)(r11 - 24) = 8;"
++		"*(u64 *)(r11 - 16) = 7;"
++		"*(u64 *)(r11 - 8) = 6;"
++		"r1 = 1;"
++		"r2 = 2;"
++		"r3 = 3;"
++		"r4 = 4;"
++		"r5 = 5;"
++		"call priv_stack_10args;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
+ #else
+
+ SEC("socket")
 
