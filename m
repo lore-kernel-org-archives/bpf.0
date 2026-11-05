@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793874269;
-	b=5cbtlvp60w1QcVGYNPUE5+wJbmqU30Zywhyhs/LwHUlCCxMrjEE3E2eq7mV6lXdCJXii
-	 eGxxKRzv4JZ3E8IjntlofcN/aHj20U7ofWjeYpyeUWhz+d/WqL2w/q7GIZR1zDD55iNa/
-	 W/Pr4gCA6FFeOSVBMKgLDklpkWlYhQwpESF8pQ8LAsCeNW3prFQLg27ijbG5HoM2GnjlH
-	 YS413O6N9lzrEk/9VkcUSjMI1yohJedSdg9RfjReeSLruKrox1o5dqtbgm9ZdXVT7xf5d
-	 GktE82YQx22lYInySRDrXzzf/u/oLErGMhWBL7uHAdNLC2kFINA2thtzIYDkfarpkIQ==
+	t=1793874278;
+	b=ScDM5sTc5hpW0SW4rZyRcCem7W/BL73w15seiZssLEcD3wk3/TbbqqsfxS4XfTEfqau0
+	 6t8GQMVf0hdd7lIwa+mY9eWwDg2gQ2m3Ir4SZzgzxvytsi6NwgSrF1c/pfjmlud9wSuHj
+	 w6Gk+zmokd9dkHiH2lwLb8BTgobK553+QBYQE7Cu9YSgZpNn7yp4MVfKETCf/X/rIUPcF
+	 XLjkmlwjqYbuEoVlxrU63cWGPUzccyoNwovmlOPajLP/Ib2b/1gb2M0j7aypDlMg8LWVc
+	 zBJtRtPdlbN9e8q5ysG7KxATCkE+pz2T0okKVGSjgA6v+pp+oJ6n1UTo2lrDb8t5i7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793874269;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793874278;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=aWC1fpeZM+QP/64/LlbIQvYUrFOSEHGeQ7yKHlmi7Q4=;
-	b=voqIu+sAbbLJaHGhCjgNs/UFtrU1US7j9mzbFktzfMwBxReu/vdDHXPLr21fXRH/+kwF
-	 CLc5Rwdfy44+UVhFTVLiJVHhdtPXa6lKE0ridclMPMxM3fcf13fz+MfEDUNoaIcmMClna
-	 VJqkdpYDpeSF4v6x3mvxFmHEZsXfFBvyYJn6fAqvbGDeXxtDx8AqwWrUFmRMEucUezMc+
-	 mReUYt/TL/FpXxj/NYg73HtOLI7SAxsoUg3xVAIL6JQbyTTjELVyQhamDoYqOC5JaACA5
-	 nvtjjLMuvQRHX4ZEapROTBafvp1loMt0wWcFDW/LpJCY7g6q5eX9Vzqgzq/b0AphvUQ==
+	bh=KpviBqlgyeWJdrpOQQK4620AQohGgJ+OsCjzKJgQy1I=;
+	b=jzl0MWqE3cJwaM3fvLMX94ZyAAlNABHo+gf9k38k6wZo0/6mz42Ub8DKsb+GjttSeMH+
+	 UuFr8WDJSb0ysNpiW6TGsw2MtarLBzCxCTQYg30XaaamuyWDzydp+FCgjnjlfvUpFiuvJ
+	 //mCNP+SoD1V6WtiZIdU83w9kBbCdaJSUyarcc2fAJkX0CzVxihJOTmhq/GMnsI7AAq0m
+	 e7N+K5LJ/yp9+w9IErdFf8/bJKoaQpPmDsQR7bxklBcX2H3sQtvI2L/fYbD0Y/9GZ2osQ
+	 Ak+ffCAY7YhOU/e0XbjYun94x+ULUmIsAZ5TQVxaNcKR8ZRg1uPC11d/5wwUlz66LIg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PvrlS2RW;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gyxk57mY;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDBB606A31B
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92560606A33D
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PvrlS2RW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB141F000C1;
-	Thu,  5 Nov 2026 10:24:25 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gyxk57mY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0351F00A17;
+	Thu,  5 Nov 2026 10:24:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793874268;
-	bh=aWC1fpeZM+QP/64/LlbIQvYUrFOSEHGeQ7yKHlmi7Q4=;
+	s=k20260515; t=1793874278;
+	bh=KpviBqlgyeWJdrpOQQK4620AQohGgJ+OsCjzKJgQy1I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=PvrlS2RWgoBlYHhRbQrzIuQyJVAFuCu+bZv9Cfk800sCPW8P+l4+/Yz0JFzGfU5pQ
-	 zMveaNA84cLq42MOcPiqkms5RcfFvLWJqrIGNO23P1AVPilD2XIKjbQtH3xZcvGZQY
-	 0WY8UNzV0GwPzVzV3RzOnbeiwTiWxFaziOCIJlJebLwtR4E3ROWmxxCe9h7Jsor361
-	 Rc48aftWaHsPmDYJVkBzl3JlDaAtXaf9Pbdve3awJTwgW2tSBiT05/w1uJ8k3GgZUf
-	 E5xVdoe4XqOzLs48iqhlw36NdIniUtjH4NzJtZNfoN1Ukhkt59TKQLZInXlvOu8Ji9
-	 nTkFjnQK88bGg==
+	b=Gyxk57mYIyIEdkkVmCrAfTFRs3GjysEwHwcTZ6DL3NXxmhBoFxbpzpQIWFWp4zqLF
+	 e6tBJ/sClz8ZlSQyJJifkWOQ2yV6uk4sennpvHqSdGYau1Jkf6GNqNYk1wBA+phZqG
+	 dUXcR06sMhUzCMXmK2RZXk4auIX7Y+7ig0U3BWlAKVtv4MU5VaNs/rGrp8GXuFGd4B
+	 WgmWPSCc0692HcWquEo3rDdy+VyL+K4YeiaTz297XpiOrCcjvo1xeHJ9HrxkO0mccA
+	 MA1qFCIBYc2LtKGIV0uihIAy+dAQJIJWeozBFks49dRMdbcvq884GJfL8ksiDZCR8e
+	 vI1qvLfo9BUew==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>
@@ -50,9 +50,9 @@ Cc: bpf@vger.kernel.org,
 	Lorenzo Stoakes <ljs@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Federico Di Pierro <nierro92@gmail.com>
-Subject: [PATCHv3 bpf-next 4/8] selftests/bpf: Test const kfunc memory arguments
-Date: Thu,  5 Nov 2026 11:23:38 +0100
-Message-ID: <20261105102343.311331-5-jolsa@kernel.org>
+Subject: [PATCHv3 bpf-next 5/8] selftests/bpf: Test user memory mmap kfuncs
+Date: Thu,  5 Nov 2026 11:23:39 +0100
+Message-ID: <20261105102343.311331-6-jolsa@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261105102343.311331-1-jolsa@kernel.org>
 References: <20261105102343.311331-1-jolsa@kernel.org>
@@ -67,141 +67,185 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Verify that const kfunc arguments accept read-only global data,
-writable stack data, and const scalar structs. Check that read-only
-data is rejected when passed to a writable memory argument.
+Add BPF selftests for bpf_user_anon_mmap and bpf_user_munmap from
+a sleepable uprobe. Check that created mappings have the requested
+permissions and that unmapped addresses are no longer mapped.
 
 Assisted-by: Codex:GPT-6
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- .../testing/selftests/bpf/prog_tests/kfunc_call.c  |  2 ++
- .../testing/selftests/bpf/progs/kfunc_call_fail.c  | 10 ++++++++++
- .../testing/selftests/bpf/progs/kfunc_call_test.c  | 14 ++++++++++++++
- .../testing/selftests/bpf/test_kmods/bpf_testmod.c | 10 ++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h   |  2 ++
- 5 files changed, 38 insertions(+)
+ .../selftests/bpf/prog_tests/user_mem.c       | 111 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/user_mem.c  |  43 +++++++
+ 2 files changed, 154 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/user_mem.c
+ create mode 100644 tools/testing/selftests/bpf/progs/user_mem.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index 0063e60d6f2f..f2152591982b 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -63,6 +63,7 @@ static struct kfunc_test_params kfunc_tests[] = {
- 	 */
- 	SYSCALL_NULL_CTX_FAIL(kfunc_syscall_test_fail, -EINVAL, "processed 4 insns"),
- 	SYSCALL_NULL_CTX_FAIL(kfunc_syscall_test_null_fail, -EINVAL, "processed 4 insns"),
-+	TC_FAIL(kfunc_call_test_mem_len_fail_readonly, 0, "write into map forbidden"),
- 	TC_FAIL(kfunc_call_test_get_mem_fail_rdonly, 0, "R0 cannot write into rdonly_mem"),
- 	TC_FAIL(kfunc_call_test_get_mem_fail_use_after_free, 0, "invalid mem access 'scalar'"),
- 	TC_FAIL(kfunc_call_test_get_mem_fail_oob, 0, "min value is outside of the allowed memory range"),
-@@ -82,6 +83,7 @@ static struct kfunc_test_params kfunc_tests[] = {
- 	TC_TEST(kfunc_call_test5_asm, 0),
- 	TC_TEST(kfunc_call_test_ref_btf_id, 0),
- 	TC_TEST(kfunc_call_test_get_mem, 42),
-+	TC_TEST(kfunc_call_test_const_mem, 0),
- 	SYSCALL_TEST(kfunc_syscall_test, 0),
- 	SYSCALL_NULL_CTX_TEST(kfunc_syscall_test_null, 0),
- 	TC_TEST(kfunc_call_test_static_unused_arg, 0),
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-index 7e93f7fb1329..bef956d3f89e 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-@@ -4,6 +4,8 @@
- #include <bpf/bpf_helpers.h>
- #include "../test_kmods/bpf_testmod_kfunc.h"
- 
-+static const char kfunc_mem_rodata[] = "read-only data";
+diff --git a/tools/testing/selftests/bpf/prog_tests/user_mem.c b/tools/testing/selftests/bpf/prog_tests/user_mem.c
+new file mode 100644
+index 000000000000..eadf668f7056
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/user_mem.c
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: GPL-2.0
 +
- static struct bpf_spin_lock kfunc_call_lock SEC(".data.A");
- 
- SEC("?tc")
-@@ -47,6 +49,14 @@ int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
- 	return 0;
- }
- 
-+SEC("?tc")
-+int kfunc_call_test_mem_len_fail_readonly(struct __sk_buff *skb)
++#include <test_progs.h>
++#include <sys/mman.h>
++#include <unistd.h>
++
++#include "user_mem.skel.h"
++#include "trace_helpers.h"
++
++enum {
++	USER_MEM_MMAP = 1,
++	USER_MEM_UNMAP,
++};
++
++static noinline void user_mem_trigger(void)
 +{
-+	bpf_kfunc_call_test_mem_len_pass1((void *)kfunc_mem_rodata,
-+					  sizeof(kfunc_mem_rodata));
++	asm volatile ("" ::: "memory");
++}
++
++static bool check_user_mem_vma(void *addr, unsigned long size, const char *perms)
++{
++	size_t start, end;
++	char vma_perms[5];
++	int err;
++
++	err = get_procmap_info(addr, &start, &end, vma_perms);
++	if (!ASSERT_OK(err, "user_mem_vma"))
++		return false;
++
++	/* VMA can be merged, so ensure it covers at least the requested range. */
++	if (!ASSERT_GE(end - (size_t)addr, size, "vma_size"))
++		return false;
++
++	return ASSERT_STREQ(vma_perms, perms, "vma_perms");
++}
++
++static bool check_user_mem_unmapped(void *addr)
++{
++	size_t start, end;
++	int err;
++
++	err = get_procmap_info(addr, &start, &end, NULL);
++	return ASSERT_EQ(err, -ESRCH, "user_mem_unmapped");
++}
++
++static bool user_mem_mmap(struct user_mem *skel, unsigned long len,
++			   unsigned long prot, unsigned long *addr)
++{
++	skel->bss->map_len = len;
++	skel->bss->map_prot = prot;
++	skel->bss->action = USER_MEM_MMAP;
++	user_mem_trigger();
++
++	/* vm_mmap encodes errors in the top MAX_ERRNO unsigned-long values. */
++	if (!ASSERT_LT(skel->bss->user_addr, -4095UL, "user_addr"))
++		return false;
++
++	*addr = skel->bss->user_addr;
++	return true;
++}
++
++static bool user_mem_munmap(struct user_mem *skel, unsigned long addr,
++			   unsigned long len)
++{
++	skel->bss->user_addr = addr;
++	skel->bss->map_len = len;
++	skel->bss->action = USER_MEM_UNMAP;
++	user_mem_trigger();
++
++	return ASSERT_OK(skel->bss->ret, "user_munmap");
++}
++
++static void test_mapping(struct user_mem *skel)
++{
++	long page_size = sysconf(_SC_PAGESIZE);
++	const unsigned long len = page_size * 3;
++	unsigned long addr = ~0UL;
++
++	if (!user_mem_mmap(skel, len, PROT_READ | PROT_WRITE, &addr))
++		goto out;
++	if (!check_user_mem_vma((void *)addr, len, "rw-p"))
++		goto out;
++	if (!user_mem_munmap(skel, addr, len))
++		goto out;
++	if (!check_user_mem_unmapped((void *)addr))
++		goto out;
++	addr = ~0UL;
++
++out:
++	if (addr != ~0UL)
++		munmap((void *)addr, len);
++}
++
++void test_user_mem(void)
++{
++	struct user_mem *skel;
++
++	skel = user_mem__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	skel->bss->monitored_pid = getpid();
++	if (!ASSERT_OK(user_mem__attach(skel), "attach"))
++		goto out;
++
++	if (test__start_subtest("mapping"))
++		test_mapping(skel);
++
++out:
++	user_mem__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/user_mem.c b/tools/testing/selftests/bpf/progs/user_mem.c
+new file mode 100644
+index 000000000000..e3b0689f5f2a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/user_mem.c
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++extern unsigned long bpf_user_anon_mmap(unsigned long len, unsigned long prot) __ksym;
++extern int bpf_user_munmap(unsigned long addr, unsigned long len) __ksym;
++
++enum {
++	USER_MEM_MMAP = 1,
++	USER_MEM_UNMAP,
++};
++
++int monitored_pid;
++int action;
++int ret;
++
++unsigned long user_addr;
++unsigned long map_len;
++unsigned long map_prot;
++
++SEC("uprobe.s//proc/self/exe:user_mem_trigger")
++int user_mem_test(struct pt_regs *ctx)
++{
++	if ((bpf_get_current_pid_tgid() >> 32) != monitored_pid)
++		return 0;
++
++	switch (action) {
++	case USER_MEM_MMAP:
++		user_addr = bpf_user_anon_mmap(map_len, map_prot);
++		break;
++	case USER_MEM_UNMAP:
++		ret = bpf_user_munmap(user_addr, map_len);
++		break;
++	}
++
 +	return 0;
 +}
-+
- SEC("?tc")
- int kfunc_call_test_get_mem_fail_rdonly(struct __sk_buff *skb)
- {
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-index 8e6560c31e78..4f4a6713aa6e 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-@@ -5,6 +5,9 @@
- #include "bpf_misc.h"
- #include "../test_kmods/bpf_testmod_kfunc.h"
- 
-+static const char kfunc_const_data[] = "read-only source";
-+static const struct prog_test_pass1 kfunc_const_struct = { .x0 = 1 };
-+
- static struct bpf_spin_lock kfunc_call_lock SEC(".data.A");
- 
- SEC("tc")
-@@ -208,6 +211,17 @@ int kfunc_call_test_pass(struct __sk_buff *skb)
- 	return 0;
- }
- 
-+SEC("tc")
-+int kfunc_call_test_const_mem(struct __sk_buff *skb)
-+{
-+	char stack_data[] = "read-write";
-+
-+	bpf_kfunc_call_test_const_mem(kfunc_const_data, sizeof(kfunc_const_data));
-+	bpf_kfunc_call_test_const_mem(stack_data, sizeof(stack_data));
-+	bpf_kfunc_call_test_const_struct(&kfunc_const_struct);
-+	return 0;
-+}
-+
- struct syscall_test_args {
- 	__u8 data[16];
- 	size_t size;
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 76fbe64755ef..41ff36f0ca77 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -1049,6 +1049,8 @@ BTF_ID_FLAGS(func, bpf_kfunc_arena_args5_test)
- BTF_ID_FLAGS(func, bpf_kfunc_arena_stack_arg_test)
- BTF_ID_FLAGS(func, bpf_kfunc_arena_mixed_test)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_const_mem)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_const_struct)
- BTF_ID_FLAGS(func, bpf_kfunc_dynptr_test)
- BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_nonzero_offset_test, KF_ACQUIRE)
- BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_zero_offset_test, KF_ACQUIRE)
-@@ -1552,6 +1554,14 @@ __bpf_kfunc void bpf_kfunc_call_test_mem_len_pass1(void *mem, int mem__sz)
- {
- }
- 
-+__bpf_kfunc void bpf_kfunc_call_test_const_mem(const void *mem, int mem__sz)
-+{
-+}
-+
-+__bpf_kfunc void bpf_kfunc_call_test_const_struct(const struct prog_test_pass1 *p)
-+{
-+}
-+
- __bpf_kfunc void bpf_kfunc_call_test_mem_len_fail1(void *mem, int len)
- {
- }
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index e9902e651d72..0a7df1798603 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -203,6 +203,8 @@ void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
- void bpf_kfunc_call_test_ref(struct prog_test_ref_kfunc *p) __ksym;
- 
- void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
-+void bpf_kfunc_call_test_const_mem(const void *mem, int mem__sz) __ksym;
-+void bpf_kfunc_call_test_const_struct(const struct prog_test_pass1 *p) __ksym;
- __u64 bpf_kfunc_arena_arg_test(__u64 *val__arena) __ksym;
- __u64 bpf_kfunc_arena_cap_test(__u64 *val__arena) __ksym;
- __u64 bpf_kfunc_arena_cap_nullable_test(__u64 *val__arena__nullable) __ksym;
 -- 
 2.43.0
 
