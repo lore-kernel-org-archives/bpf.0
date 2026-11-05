@@ -1,45 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793904839;
-	b=zIvBIah/dYe732zbE6EmMdWPLf0m93oT49xgFELDR+tnZjCwFkfp9dX8lM5fvXWs/fj+
-	 yOTCG/JpSgNyK7jKVCsgNVfUw6mX0ZQA7xUkgiY6KDZoAATwn1GjgLulq4187D9X2SJqk
-	 25pUC98KkSOfwcluTmyCop4jh1KlI8OooEx9jZRL4+8ttKadonyG+xPBm4Xzch8XZRT/g
-	 QbT+xvYXc13+eiG1jrr4h4ZaNYQ5gzRCyKUzpn/Gg4J5YShmNbgFx6ftvotKcwxrFTsqT
-	 QtOaSkxAtqMXq+MiuO2hySNZiiSdzvWS2cA+Xp7jfmYTSmncE5wT8v7CTpeVLR27uqA==
+	t=1793905264;
+	b=42CU5GB/L0BGS282QnpWStILfoo+CTysURQDeSyQAeFsFC+6QL99MKb9RZotciBCewiC
+	 ZzU4jJ/oawAV5ZPup57SWyzU82JNhmsyqIcX0dZ1h+CFnhgZm1jYQMqfAZ+qZsbb2Vyqj
+	 LY7VEV7b0OvSP1hoIteJ0S7j/U67iT9Wq+XHWKiNwf7t9cYifTq5jp9nnujzMrPg8ayMu
+	 Dgt5Gw74CaNiGRSJvAxwR1LOoGxTzv7F13aA/e7z2QHegjpP9Kka+SBlTqIu/yx40/XE7
+	 YVugz7JhZGPNX9sWZoqROlZpfcv0nbKvArMoB/n3349EUF3UesMgg4E/jUVjfiae4xw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793904839;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=itQu5PcPY232SJrrA0HaUUGql0mHTrMBDHhRtuHvsXo=;
-	b=kYiHOkQBTthqB9mBsdSLj/0n+A9s+kuWvY80NFbkIgfoW7+IRiNs/cXEctPfKnK9YHv7
-	 vVkDhxG7BYNuvyJpa6jTu6ZsrOXaZC5eOjk/uZfaDFZuXl+Q3U4fo4n/50az9EogyrJ5m
-	 j80L8HC4U/KN2rMu9eK6W+tv+oKMZoeJh7iUqqtBPb9GDfmKsBfbDFQRd9OxyTQW1s1HO
-	 LFIkYRYVQgy+LEQUTuCe/hYCq7LhwA4vVA9hYor4DXeL7t8BOSE3xq/x/tdRhrf9MxbQ3
-	 On8O/eoU+F044d6N0efYZI8aiW/XsT186bQmMkiA1vEDX5GlKT9uAE/6YnKn4+CL/XQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793905264;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
+	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=cNvHm4P49zGZ0AA9ASMVJBBbN+Qdiu12WvVmr/Br59g=;
+	b=AO8UAGZhHcxN1AtbJ6G9GNF82Uf8Hu+VPxKgYw3WzEqCuMdg42UvbpibZQxs3kTNlazk
+	 5isIYgSyLP5DxWFZhWgitI0HkWD3vAfaYtRKDi2/dJdfDrRG3Al8D410R8UZJ6MZ6jbUg
+	 m+9fgOzfqv01Ssj5EmpxdHFZ8MrTvFFuEbZU7w+lVWaCNRTP96UT7ktdURGVaMz08BZKv
+	 yVysdKix9CfDmNXnyVOfbRW3cyfivlqM4AoaUwlS4t0BpWBlP9SV9+MuARObsLIooKV19
+	 Ocqw22G4VEWyOpCD2HklNdCCQDZNUAxCQcFWOM9VfntyRiYGm6nsWR2V9Z0OkEpn8ag==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vua1vXL+;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=mVwNmf4S;
+	arc=none smtp.remote-ip=216.40.44.11
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196DA606A328;
-	Thu,  5 Nov 2026 18:53:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1263606A329;
+	Thu,  5 Nov 2026 19:01:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1263606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vua1vXL+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 205FC1F00A1C;
-	Thu,  5 Nov 2026 18:53:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793904838;
-	bh=itQu5PcPY232SJrrA0HaUUGql0mHTrMBDHhRtuHvsXo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Vua1vXL+7t7nGV6mXb1ezpiTvY0B1a0GwrzaBO9XZ8BPIjkPutOEApEayTFcSWK6Y
-	 wACIMDKS0DGjmyBLDFMEY9oQE7IEI4Ga7RT/dgHFp/vA/mJOxGJ6Fanwyct7lorH0Z
-	 ZROkwVGDqaPAFyvF5aVNDbYZjnmbZKQx/rKda3nlAFZQ6hb5f3fJSUkJb/HLKbeoD2
-	 A59ifRRuWsW4Q5LMF8VKkICeMgD8Ts//Db90i97BMa5Vbdqli67UZYl6ztoTsls538
-	 4Gxb2YEe6hMQWUFLepP3BpVAvdWaaauMLIlyqbEL8dyXmuw/r6HG+oUsTbKxPa4+iA
-	 UH/0uoHjfCFEw==
-Content-Type: multipart/mixed; boundary="===============3636885184756630589=="
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=mVwNmf4S
+Received: from omf04.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id 38E62120A7F;
+	Thu,  5 Nov 2026 19:01:00 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf04.hostedemail.com (Postfix) with ESMTPA id D07D620027;
+	Thu,  5 Nov 2026 19:00:57 +0000 (UTC)
+Date: Thu, 5 Nov 2026 14:00:56 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Vineet Gupta <vineet.gupta@linux.dev>
+Cc: Peter Zijlstra <peterz@infradead.org>, mhiramat@kernel.org,
+ mark.rutland@arm.com, mathieu.desnoyers@efficios.com, andrii@kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, kernel-team@meta.com, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] tracing: fgraph: Raise FTRACE_RETSTACK_ALLOC_SIZE
+ to 1024
+Message-ID: <20261105140056.111875ef@gandalf.local.home>
+In-Reply-To: <53ee72a4-a5f7-4a7d-8a0a-fc3fc8804d75@linux.dev>
+References: <20260922225526.1554758-1-vineet.gupta@linux.dev>
+	<20260922225526.1554758-2-vineet.gupta@linux.dev>
+	<20260924100040.GD4121339@noisy.programming.kicks-ass.net>
+	<1e223334-b371-487b-a60a-7f1f5c007f7e@linux.dev>
+	<20261105122648.67abbe1d@gandalf.local.home>
+	<53ee72a4-a5f7-4a7d-8a0a-fc3fc8804d75@linux.dev>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,81 +67,29 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <7fa310c2243ed68418183781564381babd057227650f47f20ee31aee04273a38@mail.kernel.org>
-In-Reply-To: <20261105180923.3441359-4-irogers@google.com>
-References: <20261105180923.3441359-4-irogers@google.com>
-Subject: Re: [RFC PATCH v3 3/3] bpftool: Prefer zlib-rs over zlib when available
-From: bot+bpf-ci@kernel.org
-To: irogers@google.com,peterz@infradead.org,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,jolsa@kernel.org,irogers@google.com,adrian.hunter@intel.com,qmo@kernel.org,ojeda@kernel.org,nathan@kernel.org,nsc@kernel.org
-Cc: boqun@kernel.org,gary@garyguo.net,bjorn3_gh@protonmail.com,lossin@kernel.org,a.hindborg@kernel.org,aliceryhl@google.com,tmgross@umich.edu,dakr@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com,linux-perf-users@vger.kernel.org,bpf@vger.kernel.org,rust-for-linux@vger.kernel.org,linux-kbuild@vger.kernel.org,llvm@lists.linux.dev,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu,  5 Nov 2026 18:53:58 +0000 (UTC)
-
---===============3636885184756630589==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: D07D620027
+X-Stat-Signature: nijojfznnj3s8kdiojgc86wnjfhogrsj
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+nm+5gLQ+/jQ61184zf/E+nKVeZtsLm/k=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=cNvHm4P49zGZ0AA9ASMVJBBbN+Qdiu12WvVmr/Br59g=; b=mVwNmf4SBa97XgOt0W+LBsdzkyAGomNG5f3kFlfo2cLPp17X6NbpjJ7FeyINp/Cb9sG/gMkUvqbIXPuvVioKcFs8pz2ngP1nrFU0CwWMLx15z8EhVsBwrvoL+XDwuv75841uOB+7TViLFS1vViwskjohD1kNzqXtcJYdULGUilA=
+X-HE-Tag: 1793905257-975753
+X-HE-Meta: U2FsdGVkX1+LHqlcgYP7t/pmkV2ynE3kMb2NTGO/kTaMvUBSeBvGzpu0I/wEj2vasu8haOHq2h/UWA0QaqeZARh3oIWLDYcepC876sn7JI/ChsNQoLRPIiHpBh4iNPmZlxDIVDyshTtYkG75cpLL+SlNdfBCHjF1E3Q4L8XOyaXK80xu3UyjP6EsZMniBb/cXyvZQvkAGRjaaxXZbIeg8SuiRGnqbYmbXLj+h7iTanUFH/p4Tr9aZmBKLz1R/J+dz3vMHSnb2367fpoK7KT0AJiKNCSNOAcj7XmG+7b5HuZvRKlM0s1+e58QlKqxIhuMMnWFHomVAP2bfquGXNSvbUOQ+GE7hfDE
 
-> bpftool: Prefer zlib-rs over zlib when available
+On Thu, 5 Nov 2026 09:56:07 -0800
+Vineet Gupta <vineet.gupta@linux.dev> wrote:
 
-TL;DR: Possible behaviour issue: bpftool ignores perf's NO_RUST/NO_ZLIB_RS, so
-"make -C tools/perf NO_RUST=1" may still build and link the bootstrap bpftool
-against zlib-rs via cargo.
+> I think you have some catching up to do still :-)
+> This is v1, we are currently at v4 [1] with Peter's suggestion and 
+> further split up for ease of backport and use of new rcu_scope 
+> constructs as suggested by Masami san. It has been Acked by Andrii [2] 
+> and Alexei [3]
 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
+Bah, this one wasn't superseded in patchwork, and I'm going from oldest to newest.
 
-[ ... ]
-
-> @@ -115,8 +119,20 @@ ifneq ($(SKIP_CRYPTO),1)
->    CRYPTO_LIBS := -lcrypto
->  endif
->  
-> +ifneq ($(CROSS_COMPILE),)
-> +  ifneq ($(MAKECMDGOALS),bootstrap)
-> +    ifneq ($(RUST_TARGET_FLAGS_$(ARCH)),)
-> +      RUST_FLAGS += --target=$(RUST_TARGET_FLAGS_$(ARCH))
-> +    else
-> +      NO_ZLIB_RS := 1
-> +    endif
-> +  else
-> +    NO_ZLIB_RS := 1
-> +  endif
-> +endif
-> +
->  ifeq ($(MAKECMDGOALS),bootstrap)
-> -FEATURE_TESTS := libelf-zstd
-> +FEATURE_TESTS := libelf-zstd $(if $(NO_ZLIB_RS),,zlib-rs) zlib
->  FEATURE_DISPLAY :=
->  else
-
-The commit message says bpftool stays aligned with tools/perf, and that
-zlib-rs is shared with the bootstrap bpftool built for perf BPF skeletons.
-In perf, zlib-rs is turned off when NO_RUST is set or rustc is not found:
-
-tools/perf/Makefile.config:
-    ifneq ($(NO_RUST), 0)
-      NO_ZLIB_RS := 1
-
-That NO_ZLIB_RS is a plain makefile variable in perf, so it does not reach
-the sub-make that tools/perf/bpf_skel.mak runs:
-
-    $(MAKE) -C ../bpf/bpftool OUTPUT=$(SKEL_TOOL_TMP_OUT)/ \
-        $(BPFTOOL_RUST_OUTPUT) bootstrap
-
-bpftool only looks at NO_ZLIB_RS and CROSS_COMPILE and never at NO_RUST.
-
-Can "make -C tools/perf NO_RUST=1" on a host that has cargo and the cargo
-registry installed still list zlib-rs in the bootstrap FEATURE_TESTS here,
-run cargo to build libz_rs.a, and link the bootstrap bpftool against it?
-
-Would it make sense to pass NO_ZLIB_RS=1 from bpf_skel.mak when perf has
-disabled zlib-rs, or to have bpftool honour NO_RUST=1?
+Sorry about that ;-)
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42083491750
---===============3636885184756630589==--
+-- Steve
