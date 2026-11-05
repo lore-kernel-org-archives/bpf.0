@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793911593;
-	b=kBtD/aLmg7S7yFm5rRwEafvTSnBn2WtECpCTlfY8/OPxKyHKVRwa0V4PflaSKnGDTno2
-	 66bDs/IIomkjgoKV5cqist32En9kcLOm3UA7iDt6RYo1WeQD8/xEm5AWIn1ILmiYvaC+P
-	 oh4/Uk4aOACZ0CO+/PyrcuY9cJ3r2xXoSSk3JYspgKjvxGPloPuxYzDzN8jRMWEwp8ubb
-	 4RHyDBZ4yX81fFwb+18U4U+QlJA0ojmoYuwWAoPkl/kkBQu0ydDIgHVCYXVc3YuaQuJdw
-	 4pa54o6a6PKDkhHy7ZsHsBd8+dbxnC9Tbm9KlUCUALdGGbiJJ0Opt0aQQA4hkABIOsQ==
+	t=1793911599;
+	b=Y/XbpI7HSki+khLdnNIl1CM3+ivGmXWR6RsSUmJI01JExBBTsy6I5IeKf8x1SPy+wMJD
+	 QOx+54T61ujidvGfmkQMuQdz77YjdQaSHLNEUoYgGjhHqqu8BNPIMBNjeGIIVQWJUc+rl
+	 BiFR/r2Yv3LX4p64EKKRMltNoH0JQ4q1M2jaQ8Us9Y7xQxW3IbObrZFDeDZJumcEFmCC7
+	 sGhGB/6bpo10pNjcoc96ORlC4539VoIVWnOchUM9u3qU4bwjK09C5GuqcvhJTkV5lyW12
+	 9Lr0h/c0FRvk27sdt/hXtfa1OkM4Jw1Jimd8jn8Kkq3dc25J7oQN0eF9Vm/Q3qM9ZYg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793911593;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793911599;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Bpvuv9X8GazXEETptONwhClCIYZzQ7yYv+B+opmzpc0=;
-	b=h3nTed2DAh9WU8pe0xz1eFN5mF0Urmrmteqw8/DPm4HwGHH99eb86FKooRxQG3vNJ6TA
-	 9IPqMlwkZCIml+58hR936x7Ut2Qoqh/fKMUeiaq7CiK7Su1eKBTMSzE76Z2j/D7LW1u0j
-	 OGn7lu5Wf9IDPdFkkvYzPyEjY4O540cd+rRmktN3NiFiNR0Eh+mgN12J4v+WyYAMKrAmn
-	 sCn052j1NuVktKXa09enJAI38OjjznN4c8ZIfWevpRWfv1rc+GVTkxnHTgL5jZH+lWcFX
-	 z5B8EIQJmZiXtcmTAXHQURssQmHzyuB7nHlNrJaDR4Z68Gh/ck/s9KQ8mSoa/lUCrVw==
+	bh=IHsyQWyHn8v1XGHoVoxlw1jGbMAqX4S+nWlIZKLjSqc=;
+	b=xhIeofu6N4z2y9sQWIR4j76e6c1DRnSyu/hvpXiYsAokSez966L1rbu2WEQ1xjGN5yQR
+	 Ytgye76E1/RvY+jIhsIXVba35K+/A9Xu+OPyHaYgKMf72QIdhhgdeQB+h6MVNaHgA05mV
+	 kMNGxJwmO8V1zOAqu2PNTl3AFhsEXSz6POjcCqEofqfk3VDOhX+Sr8t2QAQUMlvE3oPDL
+	 3+hIA3onFNh0mG9cLtYX2JmCcCF/wXOChGbUJH6CQLcHahKgyzHYf5TkXrOIPeZ3amofM
+	 0lbKzhNyJWvAQrESjmcCKdY0c161iarNtvBTf58Ew4xcU4VS8KBwAo6uzyZM5gyIRUQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gmraHZRY;
-	arc=none smtp.remote-ip=209.85.216.49
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EvKBS6i6;
+	arc=none smtp.remote-ip=209.85.210.180
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43990606A326
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 20:46:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43990606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0B7606A31B
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 20:46:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C0B7606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gmraHZRY
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3b094e649d3so1560244a91.0
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 12:46:33 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EvKBS6i6
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8a39e5161c1so1921644b3a.3
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 12:46:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793911593; x=1794516393; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793911599; x=1794516399; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Bpvuv9X8GazXEETptONwhClCIYZzQ7yYv+B+opmzpc0=;
-        b=gmraHZRYBhTF4gb86Ocq1mOUONncboV7/mdx1Ao1t6F1lLaW9mZG2XUwCfalAdB73S
-         IozOuPQOcnUtw2dQbYmSeh5PJECGpDGU/46VS73B28p1hEBaA+iVPcu82F+V+3jnwxR2
-         h5Tysaa3w6SAmVNUwjfcJaPp6f8kOCvOOErCJspGXCLRvaJMAkBiFHcPy8wHotuRFepe
-         +0/ttKpz04d2BtULjaNEyur6iqtNn8hT5X283rByqojf67pHPt/v56BwLGulPGPXvhpe
-         u0lO5QPNoC2VzZ1STpjg4LZmNwYEWOurO085BEQEVaYtNWrv6OLd2jeoEoY9EsvXmgye
-         b6gA==
+        bh=IHsyQWyHn8v1XGHoVoxlw1jGbMAqX4S+nWlIZKLjSqc=;
+        b=EvKBS6i6vtGKumzdKkG+pD2CiTrvFweSs2nSHkcpai/RK9rPw1bifOa4OZq8MZmVZN
+         7yKOYAxBBP4XroVVVw0phnvBVdVQMuHy167RpBHEb2p5EwP/cQGDDIF/IvZt7agcM3nD
+         gk0ZUIBJddHtLJZki136dpBJxh0KYvuzMhFgZNrY4ZHg27kNRmU4FYIwoMW7ZcwdZdrz
+         LqgcxtjQ5lEsnJiU802B709+PjBRYS6xjuyUFqwEiP3/QlK9pZbj/ISJZRtq07uRs9ey
+         fI4L2eDizbYfoXRmbaRUuuTOeLXfJHcXMvqRQ3g+FkAsFjyLcT7chKG7ZtXYF8t6ZdYy
+         gJBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793911593; x=1794516393;
+        d=1e100.net; s=20260707; t=1793911599; x=1794516399;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Bpvuv9X8GazXEETptONwhClCIYZzQ7yYv+B+opmzpc0=;
-        b=VSWg1VS8gA0AxRgTORV1RsVSPnX1PgifviFNETlpG764wBczF0iVortWk7EKdRpV1Y
-         qVhWjYPBx+ZQryXxSr0MsXZhY6jeVoJppDcSLBsOOSa30nGM3w5DwXNjxm3pftiYL+T5
-         ol571EJugIZE77vgS6S9le2pLaksFNTEdZ8df+awkcWXidR7mnJmdK9tMUjIyuxshpgF
-         UETqBwZAwiJ4EWIruaphM+9Lr5X0Ld3q1t6IR7hYeEZ/rZnnEJ4I1v5Gasu47Gs+Ma5R
-         PIY65LxfmiM+LjLIwAwJNiOpXxiHntk4zhesC3d1ofxXl4A+j6Wo4oOr81kxYpFc/GKM
-         qTFA==
-X-Gm-Message-State: APuU4Z9bXoy5q4EQULd1lysNAd9lRXhvUDmjTnlfQvR+eUeuGWb6NwdN
-	FeL8ushQk/fite1UONq6O61h+NZZlMUSEyfoLbqqqd0opr8LuPnQspHsCgOaqw==
-X-Gm-Gg: AYBFou1VJ/VB+UmF8nuL81WMtJFCpTRwha8b3kXAcadfpAJYKcv6x5XCbgkmYMb7OUE
-	EnLnXhAF4z5WeVtKOd/51yOckbjM5iBXg+9LIMDMURTKmXstoLo3KlspVH5mTH8FgQ9vZSLm5i0
-	ZebOBKW/zSJ0EtO5dRM6ddDDM1b4zaVgb/9NIuBSRQUsN9nHjBax7VYUvH631Wy+D+bVyyKgyP/
-	OCiVf5vRVvev9Qfvqt7ViIkNnKGf/8H7RsgXT2Ap0kj2VWtFBTSX5pHHl8go+aGjG1WOZiyC6/t
-	GBbEHV7H4rrFAWYcifeMsAS+UgYWiqr6RuBgz2DMxli5lWDkvQxVKa55N/PnvI0EJI8E1B3RV5E
-	2XvOUIfq30rwFh41YIsWDssgmQEirMxLNV0GvtIw6/Fl2fOgLQPzL325Y0Ki0tQT4VbmFPJL1Dz
-	Ba0cdI/mq/igcijQQK/mTYK3mwXRVyn62UlaYtmNLEdRi2lCQCz4vugF7ULLmhopzOOad0HwvL+
-	azpH2F17jMU2XO7GX2wC77XZe54UvgNwKMWsKVW8RZqgqDz9oP7SnLRVW1oqiYZlfqKbrN4ZogB
-	kcJPfGKXpqE2g92QRkmxuVmjkcy0Anv5vXIHv799pz4xXufX76F31p4pLpQBV0RE5Q0u/Cx5vqO
-	wxba0s/hGTgjtqW7N2BJ/bhZ7k1shwTHwt7xrdoMYHyWnhKXlKSu9WBSvPcz629ssKrYdaDd6C8
-	cAe6pUjOqaxgkot3W0iPA=
-X-Received: by 2002:a17:90b:568e:b0:3ad:aa1a:312e with SMTP id 98e67ed59e1d1-3b0db608f5fmr203811a91.3.1793911592295;
-        Thu, 05 Nov 2026 12:46:32 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0944eb1d1sm5497302a91.0.2026.11.05.12.46.31
+        bh=IHsyQWyHn8v1XGHoVoxlw1jGbMAqX4S+nWlIZKLjSqc=;
+        b=UJeR+HXJAQl9oTCDlrWj28hidYyWGfn/y8UFkNOvlFmeoDqnFWv/uksI7Hp+OWNAtp
+         VoCR+bm+ckqCdIjaaL+MljBypTZNCUC0i9jYRihxISIqzrZJt1WchumuPD3ZhQijapbG
+         oZyT40YTZbB3B6CGk03pRPwDul+/7Sc8CExq77eeI3U3XnZxEj2XQc7nHi8bftipi5o4
+         LQCbPE4sL/rRusMTiQSScY05MxYJCD1e2ylmdaW6FYPB9LrY51FnQjPzmTvsH/hsb89Q
+         0HlsU1rD4yJelBpgAvXX1xLyq5nWSTSkb+qbizUD09a7UsXzUT6eatiE47WxmIa68X3+
+         FO1w==
+X-Gm-Message-State: APuU4Z+9pGsBUT523+/eMAvtRs5a4iOjdioFtYyijXQEpwjRBPqSPFES
+	B5d+hXv6YtRg2hb46wgFJ0LTvE4NeW/RmU0ZajMn9YwhgXBG7Ro1YBmH5H+6lg==
+X-Gm-Gg: AYBFou3pUFzuuGfRx50pjnGrrtG4LKaXloZ4PnFJX4XEJB3hFMNrDUGDNqUVMkZOcIt
+	fX5TrWJ2dgCAsR5r0vHNS/fe3Dlt8F9QN69J1b4R/z9M+hV6ucLnzjoaRsHjXPJ/4SHMePNySbh
+	muDdgcEiXBNPV18j/UnhxN5RdffYwCAaVWF3LxH6KRifQJYS8S1kD0zv+S4BeRM2bnnzYQSYJvH
+	8Lhf/88qD2QMnVevadLdegBviu0LOITHhNtB1m2ENJkF6SJe6uBOv9q62cuwukjdmkAqKrpjHEi
+	uohPgf6Ul8w4k7XDxBNd/4ZGrNV+/7jCzdiEFtiCXFzMpZG4koF8vxjt8woIgQuZjXPaceRXNj+
+	lEw56mq9dgJy+PzaBaimzQ29vNkU/UU73ZYhbkryC/xaV7hLVMB2Lcp37Pis9402jGDt+wXZZKY
+	elVDlRvNH5eZssTEKR5OZfp54Tf9UxPENZaqx6budjZZEFiruaxQoQma5r5vgLr5IipnQMssgrz
+	zg29+5t7HSwl1Qx2C1opqmT8CdCfetXugAbJqJ8W1WkHw5xtJg7O+suUUWICbYr51ZcXYM3p+Ag
+	1YQnNDnnPSwMmpZHd4h7WSWTNWUV5TlsFohq7HNfZBRIVQogkTY+xuUoewtVG8TJ1O6WUoSyklU
+	9ME8lOspzT5F73Gfyk7Upr2Pk2ESFiP7wBj1CIsN7NTo7w7ikE2blXykrDEaUpMY5se9Kily+1w
+	==
+X-Received: by 2002:a05:6a00:4b01:b0:887:17f3:94f7 with SMTP id d2e1a72fcca58-8b377c8e7a7mr205456b3a.1.1793911598316;
+        Thu, 05 Nov 2026 12:46:38 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b35aa97f0bsm72532b3a.57.2026.11.05.12.46.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 12:46:31 -0800 (PST)
+        Thu, 05 Nov 2026 12:46:37 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 13/35] bpf: Decide which states are not joined
-Date: Thu,  5 Nov 2026 20:44:50 +0000
-Message-ID: <20261105204513.2230344-14-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 14/35] bpf: Merge the state that arrives into the set at an insn
+Date: Thu,  5 Nov 2026 20:44:51 +0000
+Message-ID: <20261105204513.2230344-15-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
 References: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
@@ -104,565 +104,323 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Cilium, nat.h, in tail_handle_snat_fwd_ipv4:
+scx_flow, flow_dispatch() is a row of blocks like this one:
 
-  if (ret < 0) ..; to_sport = state->to_sport;
+  if (likely(left) && likely(visits < (u32)FLOW_DISPATCH_MAX_VISIT)) {
+      if (nq0 > 0) {
+          node_moved = flow_move_one_hint(node_dsq, cpu, &visits, nq0);
+          if (node_moved > left)
+              node_moved = left;
+          left -= node_moved;
+      }
+  }
 
-(ret=-155, state=map_value_or_null) and (ret=0, state=map_value) meet in
-front of that. Numbers always have a join. But ret=[-155, 0] with
-map_value_or_null has ret=0 without state, as no path has. It passes the
-jump: "R3 invalid mem access 'map_value_or_null'".
+Each way through a block leaves other ranges in left, visits, node_moved.
+No check behind the block depends on the way. Today's verifier follows all
+paths: 70716 insns for a prog of 1117. With one state where the ways meet
+it takes 3115. flow_merge() puts a state S into the set at an insn:
 
-A join must not make up what a later check can see. A number is tested if
-a later jump compares it with a constant, or the verifier checks its range
-at a call or at exit. States that have a join stay apart if they differ in:
+  a state of the set covers S ?  ------ yes -->  drop S
+     | no
+  S covers a state T of the set ?  ---- yes -->  drop T
+     |
+  S has a join with a state T,  ------- yes -->  drop T, S = join(S, T),
+  and no rule refuses it ?                       start again
+     | no
+  add S to the set: it is new, the verifier goes on from it
 
- - A tested number, and the ranges leave a gap: -155 and 0, not 0 and 1.
-   113 progs of Cilium, profiler3 and test_seg6_loop without alu32.
- - Two tested numbers, each without a common value: (err >= 0, ret=0) and
-   (err < 0, ret=DROP). The join has err < 0 with ret=0.
- - A register that only one of them sets. scx_layered/layered_runnable:
-   'scoped_guard(rcu) { if (...) return result; nsid = ...; }' meets at the
-   unlock with a flag of the compiler, then reads nsid: "R7 !read_ok".
- - Two tested numbers, (0, x) and (y, 0). xdp_synproxy_kern and
-   test_tcp_custom_syncookie: 'if (hdr->ipv4) ... else if (hdr->ipv6) ...'
-   after the packet changed: "R1 type=scalar expected=fp, pkt, ...".
- - A constant that becomes a stack offset. bt_print(), 5 selftests of scx:
-   'if (... || depth >= BT_MAXLVL_PRINT) return 0; ind = stack[depth];'
-   A copy of depth is tested: "invalid variable-offset read from stack".
- - A constant that is added to a pointer. katran/tcdecapinfo, 20 or 40 in
-   'if (data + hdr_len + inner_ip_offset > data_end)'. With [20, 40] the
-   jump says nothing about data + hdr_len: "invalid access to packet".
- - A constant that a kfunc or helper must know. One call is made of
-   'c ? bpf_rdonly_cast(0, id) : bpf_rdonly_cast(0, 0)' in
-   mem_rdonly_untrusted/mixed_mem_type: "R2 must be a known constant".
- - The number of calls of the callback of bpf_loop(N, ...), N <= 8:
-   'bpf_loop(1, cb, &ctx, 0); return choice_arr[ctx.i];' in
-   verifier_iterating_callbacks: "invalid access to map value".
+A state is dropped only if a state of the set covers it. Thus the verified
+states cover each execution of the prog.
 
-The rules only refuse joins: no unsafe prog loads because of them. They
-cost states: the first one 10 % of Cilium's insns, K flags 2^K states. Thus
-most hold only while each limit is less than half used: flow_has_room().
+S can come around a cycle: to the head of a loop, to the first insn of
+a recursive subprog, from a callback to its helper. There a bound can grow
+by one step each time: i=[0,1], [0,2], ... Thus the join is a widening: it
+gives up the bound that grew. S and T differ in what the cycle changes, so
+the rules that refuse a join are off. These stay on:
+ - A constant that becomes a stack offset: bt_print() of scx has
+   'stack[depth++] = ind + 1' and 'ind = stack[depth]' in bpf_for().
+ - A constant that is added to a pointer, if a state of the set has it too.
+ - The calls of the callback of bpf_loop(N <= 8). What other callbacks come
+   back with is joined 4 times, then widened: selftest
+   verifier_iterating_callbacks/bpf_loop_iter_limit_nested needs both.
 
-The shape of a state is a filter in front of all that: hashes of its calls
-and loops, of what it holds, of the places, objects and constant offsets of
-its pointers. The load of test_cls_redirect_subprogs, 301 states at an
-insn, takes three times as long without the shape.
+States that cannot be joined are what is left of the paths. Limits on them
+replace 1M insns and 8192 jumps: 1024 at an insn, 16 * N + 4096 at a time,
+256 * N + 64K in all, for a prog of N insns. Then the load fails: -E2BIG.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/flow.c | 502 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 502 insertions(+)
+ kernel/bpf/flow.c | 261 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 261 insertions(+)
 
 diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index f17eb3467708..8b294a8748bb 100644
+index 8b294a8748bb..ad9c0187b463 100644
 --- a/kernel/bpf/flow.c
 +++ b/kernel/bpf/flow.c
-@@ -1642,3 +1642,505 @@ static bool flow_has_earlier_trips(const struct bpf_verifier_state *s)
- 	}
- 	return false;
+@@ -2144,3 +2144,264 @@ static bool flow_has_room(const struct bpf_verifier_env *env, u32 nr_states)
+ 	       env->flow->live_states < (BPF_FLOW_LIVE_PER_INSN * len + BPF_FLOW_LIVE_BASE) / 2 &&
+ 	       env->total_states < (BPF_FLOW_TOTAL_PER_INSN * len + BPF_FLOW_TOTAL_BASE) / 2;
  }
 +
-+static bool flow_two_consts(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
++/* The state of @set behind @t, the first one if @t is NULL, that @s may be related to */
++static struct flow_state *flow_next_related(struct bpf_verifier_env *env,
++					    const struct flow_set *set, struct flow_state *s,
++					    struct flow_state *t, bool places)
 +{
-+	return ra->type == SCALAR_VALUE && rb->type == SCALAR_VALUE &&
-+	       tnum_is_const(ra->var_off) && tnum_is_const(rb->var_off) &&
-+	       ra->var_off.value != rb->var_off.value;
++	t = t ? list_next_entry(t, node) : list_first_entry(&set->list, struct flow_state, node);
++	list_for_each_entry_from(t, &set->list, node)
++		if (flow_may_relate(env, t, s, places))
++			return t;
++	return NULL;
 +}
 +
-+/* Constants that have to stay constants, see flow_compute_need_const() */
-+static bool flow_needed_consts_differ(const struct bpf_flow *flow, enum flow_need_kind kind,
-+				      const struct bpf_verifier_state *a,
-+				      const struct bpf_verifier_state *b)
++static void flow_link(struct bpf_verifier_env *env, struct flow_set *set, struct flow_state *s)
 +{
-+	const struct flow_need *needs = flow->need[kind], *need;
-+	const struct bpf_stack_state *sa, *sb;
-+	const struct bpf_func_state *fa, *fb;
-+	u32 fr, i, nr;
-+
-+	if (!needs || a->curframe != b->curframe)
-+		return false;
-+	for (fr = 0; fr <= a->curframe; fr++) {
-+		/* the callers need what they need when the call returns */
-+		need = &needs[fr == a->curframe ? a->insn_idx : a->frame[fr + 1]->callsite + 1];
-+		fa = a->frame[fr];
-+		fb = b->frame[fr];
-+		for (i = BPF_REG_0; need->regs && i < BPF_REG_FP; i++)
-+			if ((need->regs & BIT(i)) && flow_two_consts(&fa->regs[i], &fb->regs[i]))
-+				return true;
-+		nr = min(bpf_stack_nr_slots(fa), bpf_stack_nr_slots(fb));
-+		for (i = 0; i < nr && i < 64 && need->slots >> i; i++) {
-+			sa = bpf_stack_slot(fa, i);
-+			sb = bpf_stack_slot(fb, i);
-+			if ((need->slots & BIT_ULL(i)) &&
-+			    bpf_is_spilled_scalar_reg(sa) && bpf_is_spilled_scalar_reg(sb) &&
-+			    flow_two_consts(&sa->spilled_ptr, &sb->spilled_ptr))
-+				return true;
-+		}
-+	}
-+	return false;
++	list_add_tail(&s->node, &set->list);
++	env->flow->nr_states[s->st.insn_idx]++;
 +}
 +
-+/* regsafe() and join_reg() say what each type needs */
-+static void flow_shape_ptr(struct flow_shape *sh, u32 place, const struct bpf_reg_state *reg)
++static void flow_sweep_trip(struct bpf_verifier_env *env, struct flow_state *t,
++			    const struct flow_state *s)
 +{
-+	u32 ids = (reg->id != 0) | (reg->parent_id != 0) << 1 | (reg->map_uid != 0) << 2;
-+	u32 len = offsetof(struct bpf_reg_state, var_off);
-+	bool has_off = false, var_off = false;
-+	u64 off = reg->var_off.value;
-+
-+	switch (base_type(reg->type)) {
-+	case NOT_INIT:
-+	case SCALAR_VALUE:
++	if (t->pending || !flow_earlier_trip(&t->st, &s->st))
 +		return;
-+	case PTR_TO_ARENA:
-+		/* the offset is not tracked */
-+		len = sizeof(reg->type);
-+		ids = 0;
-+		break;
-+	case PTR_TO_PACKET_META:
-+	case PTR_TO_PACKET:
-+		len = sizeof(reg->type);
-+		ids &= 1;
-+		/* behind the end of the packet, or at the end: the same in both states */
-+		if (reg->range < 0)
-+			ids |= -reg->range << 1;
-+		else
-+			sh->pkt_range += reg->range;
-+		if (reg->id) {
-+			/* displacements between pointers that share an id are kept */
-+			has_off = true;
-+			off = reg->r64.base;
-+		} else if (reg->range >= 0) {
-+			/* join_reg() takes two such constants for two places in the packet */
-+			has_off = true;
-+			var_off = !tnum_is_const(reg->var_off) || off > MAX_PACKET_OFF;
-+		}
-+		break;
-+	case PTR_TO_INSN:
-+		/* a range of offsets is a set of targets */
-+		ids = 0;
-+		break;
-+	case PTR_TO_MAP_KEY:
-+	case PTR_TO_MAP_VALUE:
-+	case PTR_TO_MEM:
-+	case PTR_TO_BUF:
-+	case PTR_TO_TP_BUFFER:
-+	case PTR_TO_STACK:
-+	case PTR_TO_BTF_ID:
-+		has_off = true;
-+		var_off = !tnum_is_const(reg->var_off);
-+		break;
-+	default:
-+		len = offsetof(struct bpf_reg_state, id);
-+	}
-+	sh->word[FLOW_LAYOUT] = jhash_1word(place << 1 | var_off, sh->word[FLOW_LAYOUT]);
-+	sh->word[FLOW_PTRS] = jhash2((const u32 *)reg, len / sizeof(u32),
-+				     sh->word[FLOW_PTRS] + ids);
-+	if (has_off && !var_off)
-+		sh->word[FLOW_OFFS] = jhash_2words(lower_32_bits(off), upper_32_bits(off),
-+						   sh->word[FLOW_OFFS]);
++	flow_unlink(env, t);
++	flow_free_state(env, t);
 +}
 +
-+/* stacksafe() and join_special_slot() say what each kind needs */
-+static void flow_shape_special(struct flow_shape *sh, u32 place, const struct bpf_stack_state *slot)
++/* States of earlier iterations than @s go away, see flow_earlier_trip() */
++static void flow_sweep_trips(struct bpf_verifier_env *env, struct flow_set *set,
++			     const struct flow_state *s)
 +{
-+	const struct bpf_reg_state *reg = &slot->spilled_ptr;
-+	u32 kind = slot->slot_type[BPF_REG_SIZE - 1] << 2 | (reg->id != 0);
-+	u32 *ptrs = &sh->word[FLOW_PTRS];
++	struct flow_state *t, *tn;
 +
-+	switch (slot->slot_type[BPF_REG_SIZE - 1]) {
-+	case STACK_DYNPTR:
-+		kind |= (reg->parent_id != 0) << 1;
-+		*ptrs = jhash_3words(kind, reg->dynptr.type, reg->dynptr.first_slot, *ptrs);
-+		break;
-+	case STACK_ITER:
-+		*ptrs = jhash_3words(lower_32_bits((unsigned long)reg->iter.btf),
-+				     upper_32_bits((unsigned long)reg->iter.btf),
-+				     reg->iter.btf_id, *ptrs + kind);
-+		*ptrs = jhash_3words(reg->type, reg->iter.state, reg->iter.loops, *ptrs);
-+		break;
-+	case STACK_IRQ_FLAG:
-+		*ptrs = jhash_2words(kind, reg->irq.kfunc_class, *ptrs);
-+		break;
-+	}
-+	sh->word[FLOW_LAYOUT] = jhash_1word(place << 1, sh->word[FLOW_LAYOUT]);
-+}
-+
-+/* The part of the shape that is made of the registers and the stack, when it is asked for */
-+static void flow_shape_places(struct bpf_verifier_env *env, struct flow_state *s)
-+{
-+	struct bpf_verifier_state *st = &s->st;
-+	const struct bpf_stack_state *slot;
-+	const struct bpf_func_state *frame;
-+	struct flow_shape *sh = &s->shape;
-+	u32 fr, i, args;
-+	u16 live;
-+
-+	sh->places = true;
-+	for (fr = 0; fr <= st->curframe; fr++) {
-+		frame = st->frame[fr];
-+		/* a state that does a call again is not cleaned, dead registers are not compared */
-+		live = env->insn_aux_data[bpf_frame_insn_idx(st, fr)].live_regs_before;
-+		for (i = BPF_REG_0; i < BPF_REG_FP; i++)
-+			if (live & BIT(i))
-+				flow_shape_ptr(sh, fr << 10 | i, &frame->regs[i]);
-+		for (i = 0; i < bpf_stack_nr_slots(frame); i++) {
-+			slot = bpf_stack_slot(frame, i);
-+			switch (slot->slot_type[BPF_REG_SIZE - 1]) {
-+			case STACK_SPILL:
-+				flow_shape_ptr(sh, fr << 10 | (i + 16), &slot->spilled_ptr);
-+				break;
-+			case STACK_DYNPTR:
-+			case STACK_ITER:
-+			case STACK_IRQ_FLAG:
-+				flow_shape_special(sh, fr << 10 | (i + 16), slot);
-+				break;
-+			}
-+		}
-+		/* incoming arguments are not compared with outgoing ones: other places */
-+		args = 16 + MAX_BPF_STACK_SLOTS;
-+		if (bpf_stack_args_are_incoming(frame))
-+			args += MAX_STACK_ARG_SLOTS;
-+		for (i = 0; i < frame->out_stack_arg_cnt; i++)
-+			flow_shape_ptr(sh, fr << 10 | (i + args), &frame->stack_arg_regs[i]);
-+	}
-+}
-+
-+/* The part of the shape that is not */
-+static void flow_shape_ctx(const struct bpf_verifier_state *st, struct flow_shape *sh)
-+{
-+	const struct bpf_reference_state *ref;
-+	const struct loop_stack_entry *entry;
-+	const struct bpf_func_state *frame;
-+	u32 chain = st->curframe, ctx, fr, i;
-+
-+	ctx = jhash_3words(st->in_sleepable | st->callers_unknown << 1 |
-+			   st->unwound << 2 | st->changed_pkt_data << 3 |
-+			   (st->active_irq_id != 0) << 4 | (st->active_lock_id != 0) << 5,
-+			   st->acquired_refs, st->active_locks, 0);
-+	ctx = jhash_2words(st->active_preempt_locks, st->active_rcu_locks, ctx);
-+	ctx = jhash_2words(lower_32_bits((unsigned long)st->active_lock_ptr),
-+			   upper_32_bits((unsigned long)st->active_lock_ptr), ctx);
-+	for (i = 0; i < st->acquired_refs; i++) {
-+		ref = &st->refs[i];
-+		ctx = jhash_1word(ref->type, ctx);
-+		if (ref->type != REF_TYPE_PTR && ref->type != REF_TYPE_IRQ)
-+			ctx = jhash_2words(lower_32_bits((unsigned long)ref->ptr),
-+					   upper_32_bits((unsigned long)ref->ptr), ctx);
-+	}
-+	for (fr = 0; fr <= st->curframe; fr++) {
-+		frame = st->frame[fr];
-+		chain = jhash_3words(frame->subprogno, frame->callsite, frame->loop_stack_cnt,
-+				     chain);
-+		ctx = jhash_2words(frame->entry_refs, frame->in_rcu_callback_fn, ctx);
-+		ctx = jhash_2words(frame->entry_rcu_locks, frame->entry_preempt_locks, ctx);
-+		for (i = 0; i < frame->loop_stack_cnt; i++) {
-+			entry = &frame->loop_stack[i];
-+			chain = jhash_1word(entry->loop_id << 1 | entry->apart, chain);
-+			ctx = jhash_3words(entry->counted << 2 | entry->guarded << 1 |
-+					   entry->terminates,
-+					   entry->max_header_count,
-+					   entry->counted ? entry->trip : 0, ctx);
-+		}
-+	}
-+	memset(sh, 0, sizeof(*sh));
-+	sh->word[FLOW_CHAIN] = chain;
-+	sh->word[FLOW_CTX] = ctx;
-+}
-+
-+/* Are the words up to @last the same? */
-+static __always_inline bool flow_same_shape(const struct flow_state *a, const struct flow_state *b,
-+					    enum flow_word last)
-+{
-+	u32 i;
-+
-+	for (i = 0; i <= last; i++)
-+		if (a->shape.word[i] != b->shape.word[i])
-+			return false;
-+	return true;
++	if (!flow_has_earlier_trips(&s->st))
++		return;
++	list_for_each_entry_safe(t, tn, &set->list, node)
++		if (flow_same_shape(t, s, FLOW_CHAIN))
++			flow_sweep_trip(env, t, s);
 +}
 +
 +/*
-+ * A state that arrives is compared with the states at the insn: is it within one of them, see
-+ * bpf_state_subsumes(), does it have a join with one of them, see bpf_states_join()? Most of
-+ * them have nothing to do with it. The shape of a state tells that before the registers are
-+ * compared or, for a join, copied. It has what must be the same in two states that are related:
-+ *
-+ * FLOW_CHAIN	the chain of calls and the loops that every frame is in
-+ * FLOW_CTX	what is known about every loop, the iteration of a counted one,
-+ *		the flags of the state and of its frames, locks and references
-+ * FLOW_LAYOUT	which registers, stack slots and stack arguments hold a pointer, a dynptr,
-+ *		an iterator or an irq flag, which of the pointers are at a constant offset
-+ * FLOW_PTRS	what the pointers point to and which of their ids are set, the kind of the others
-+ * FLOW_OFFS	the constant offsets
-+ *
-+ * Nothing about numbers is in it.
-+ *
-+ * States that differ in one of the first two words are not related. Neither are states of
-+ * the same layout that differ in one of the last two: a pointer is related to a pointer to the same
-+ * thing only, and two constant offsets are two places in it.
-+ * States of different layout may be related, whatever the last two words are: nothing in
-+ * a register or in a slot stands for a pointer there, and a range of offsets stands for a constant,
-+ * or is joined with it.
-+ *
-+ * A word is a hash. It is a filter and proves nothing: the states that get through it go
-+ * through all the comparisons. So it's fine to look at the first two words only: @places.
++ * Put *@ps into @set, one of the sets of states at its insn. Returns
++ * 1 if it is within a state of the set. It is gone then.
++ * 0 if it is in the set now, as it was or joined with states of the set.
++ * @cycle: it came around a cycle, what grew is forgotten.
 + */
-+static bool flow_may_relate(struct bpf_verifier_env *env, struct flow_state *t,
-+			    struct flow_state *s, bool places)
++static int flow_merge(struct bpf_verifier_env *env, struct flow_set *set,
++		      struct flow_state **ps, enum flow_cycle cycle)
 +{
-+	if (!flow_same_shape(t, s, FLOW_CTX))
-+		return false;
-+	if (!places)
-+		return true;
-+	if (!t->shape.places)
-+		flow_shape_places(env, t);
-+	if (!s->shape.places)
-+		flow_shape_places(env, s);
-+	return !flow_same_shape(t, s, FLOW_LAYOUT) || flow_same_shape(t, s, FLOW_OFFS);
-+}
++	struct bpf_flow *flow = env->flow;
++	struct flow_state *s = *ps, *t, *tn;
++	int insn_idx = s->st.insn_idx, err;
++	u32 *nr_states = &flow->nr_states[insn_idx];
++	bool places, widen_all, widen, offs_apart = false, offs_change = false;
++	/* the set of the states that enter a loop is a stop on the way, see bpf_flow_deliver() */
++	bool log = (env->log.level & BPF_LOG_LEVEL2) && set == &flow->states[insn_idx];
++	const char *what = NULL;
++	int prev = s->prev_insn_idx;
 +
-+/*
-+ * A pointer to the packet stands for one with at least as many checked bytes, and without
-+ * widening it's joined with one that has as many. In states of the same layout that holds for
-+ * the sums too. Returns 0 if the sums are the same, or say nothing.
-+ */
-+static int flow_cmp_pkt_range(const struct flow_state *t, const struct flow_state *s)
-+{
-+	if (!t->shape.places || !s->shape.places || !flow_same_shape(t, s, FLOW_LAYOUT) ||
-+	    t->shape.pkt_range == s->shape.pkt_range)
-+		return 0;
-+	return t->shape.pkt_range < s->shape.pkt_range ? -1 : 1;
-+}
++again:
++	if (signal_pending(current)) {
++		err = -EAGAIN;
++		goto err_free;
++	}
++	if (need_resched())
++		cond_resched();
 +
-+/*
-+ * bpf_loop(N, ...) with a small N: the calls of the callback are looked at one by one, like
-+ * the iterations of a loop that is walked. The call stops to enter the callback when
-+ * callback_depth gets to N.
-+ */
-+static bool flow_callback_depth_differs(struct bpf_verifier_env *env,
-+					const struct bpf_verifier_state *a,
-+					const struct bpf_verifier_state *b)
-+{
-+	u32 max = BPF_FLOW_MAX_CALLBACKS, fr;
-+	const struct bpf_func_state *fa, *fb;
-+	struct bpf_insn *insn;
-+
-+	if (a->curframe != b->curframe)
-+		return false;
-+	/* at the call, and in the callback and what it calls */
-+	for (fr = 0; fr <= a->curframe; fr++) {
-+		insn = &env->prog->insnsi[fr == a->curframe ? a->insn_idx :
-+					  a->frame[fr + 1]->callsite];
-+		if (!bpf_helper_call(insn) || insn->imm != BPF_FUNC_loop)
++	/* again after a join: an offset may not be a constant any more, a pointer may be gone */
++	flow_shape_ctx(&s->st, &s->shape);
++	places = *nr_states >= BPF_FLOW_MIN_SHAPES;
++	for (t = flow_next_related(env, set, s, NULL, places); t;
++	     t = flow_next_related(env, set, s, t, places)) {
++		if (flow_cmp_pkt_range(t, s) > 0 || !flow_trips_near(&t->st, &s->st) ||
++		    !flow_within(env, &t->st, &s->st))
 +			continue;
-+		fa = a->frame[fr];
-+		fb = b->frame[fr];
-+		if (fa->callback_depth != fb->callback_depth &&
-+		    fa->regs[BPF_REG_1].type == SCALAR_VALUE &&
-+		    reg_umax(&fa->regs[BPF_REG_1]) <= max &&
-+		    fb->regs[BPF_REG_1].type == SCALAR_VALUE &&
-+		    reg_umax(&fb->regs[BPF_REG_1]) <= max)
-+			return true;
++		if (env->log.level & BPF_LOG_LEVEL2)
++			verbose(env, "from %d to %d: within\n", prev, insn_idx);
++		err = flow_cycle_closed(env, &t->st, &s->st) ?:
++		      flow_unite(flow, s->st.flow_entry, t->st.flow_entry);
++		flow_free_state(env, s);
++		return err ?: 1;
 +	}
-+	return false;
-+}
 +
-+static const struct bpf_reg_state *flow_slot_number(const struct bpf_func_state *frame, u32 i)
-+{
-+	const struct bpf_stack_state *slot = bpf_stack_slot(frame, i);
++	flow_sweep_trips(env, set, s);
 +
-+	if (slot->slot_type[0] != STACK_SPILL || slot->slot_type[BPF_REG_SIZE - 1] != STACK_SPILL ||
-+	    slot->spilled_ptr.type != SCALAR_VALUE)
-+		return NULL;
-+	return &slot->spilled_ptr;
-+}
-+
-+/* Returns true when the answer is known */
-+static bool flow_null_pair(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb,
-+			   bool *a_null, bool *b_null)
-+{
-+	if (tnum_equals_const(ra->var_off, 0) && !tnum_is_const(rb->var_off)) {
-+		*a_null = true;
-+		if (reg_umin(rb) == 1 && reg_umax(rb) == U64_MAX)
-+			return true;
-+	}
-+	if (tnum_equals_const(rb->var_off, 0) && !tnum_is_const(ra->var_off)) {
-+		*b_null = true;
-+		if (reg_umin(ra) == 1 && reg_umax(ra) == U64_MAX)
-+			return true;
-+	}
-+	return *a_null && *b_null;
-+}
-+
-+/*
-+ * Two things of which one is there: "if (hdr->ipv4) ... else if (hdr->ipv6)". The one that
-+ * is not there is 0. What the other one is may be unknown, e.g. a pointer to the packet
-+ * after the packet was changed. (0, x) is not within (y, 0) and the join (?, ?) forgets that
-+ * it's one or the other.
-+ * The same for a number that was compared with 0: 0 on one path, not 0 on the other.
-+ *
-+ * Only where a jump ahead can see it: FLOW_NEED_JUMP, see flow_join_makes_up(). What no jump
-+ * looks at again sends no state another way, and every such number doubles the states.
-+ *
-+ *	for (i = 0; i < n; i++) { p = a[i]; if (!p) continue; put(p); }
-+ * a[] is on the stack. The jump finds out about the slot that p was filled from too. Nothing
-+ * looks at a[i] again, but the loop reads through a pointer that moves, so all of a[] is live
-+ * until the loop is done: 2^n states if they stay apart.
-+ * They don't, because FLOW_NEED_JUMP has only what is filled through r10, see flow_fp_slot().
-+ * It cannot tell a[i] from a[i + 1]. With what is filled through other pointers to the stack in
-+ * it, all of a[] is tested in all of the loop.
-+ */
-+static bool flow_null_differs(const struct bpf_flow *flow, const struct bpf_verifier_state *a,
-+			      const struct bpf_verifier_state *b)
-+{
-+	const struct bpf_func_state *fa, *fb;
-+	const struct bpf_reg_state *ra, *rb;
-+	const struct flow_need *need = flow->need[FLOW_NEED_JUMP];
-+	bool a_null = false, b_null = false;
-+	u32 i;
-+
-+	if (!need || a->curframe != b->curframe)
-+		return false;
-+	need += a->insn_idx;
-+	fa = a->frame[a->curframe];
-+	fb = b->frame[b->curframe];
-+	for (i = BPF_REG_0; i < BPF_REG_FP; i++) {
-+		ra = &fa->regs[i];
-+		rb = &fb->regs[i];
-+		if ((need->regs & BIT(i)) &&
-+		    ra->type == SCALAR_VALUE && rb->type == SCALAR_VALUE &&
-+		    flow_null_pair(ra, rb, &a_null, &b_null))
-+			return true;
-+	}
-+	for (i = 0; i < 64 && i < bpf_stack_nr_slots(fa) && i < bpf_stack_nr_slots(fb); i++) {
-+		if (!(need->slots & BIT_ULL(i)))
++	widen_all = cycle == FLOW_CYCLE;
++	for (t = flow_next_related(env, set, s, NULL, places); t; t = tn) {
++		tn = flow_next_related(env, set, s, t, places);
++		/*
++		 * Iterations that are kept apart have no join. Neither does a state take the place
++		 * of a state of another iteration that it covers: that one is done with, or has its
++		 * own way to go, see flow_cycle_closed().
++		 * The shape is a hash, and what follows goes through the frames of both.
++		 */
++		if (flow_trips_behind(&t->st, &s->st))
 +			continue;
-+		ra = flow_slot_number(fa, i);
-+		rb = flow_slot_number(fb, i);
-+		if (ra && rb && flow_null_pair(ra, rb, &a_null, &b_null))
-+			return true;
-+	}
-+	return false;
-+}
-+
-+static const struct bpf_reg_state *flow_number_at(const struct bpf_func_state *frame, u8 loc)
-+{
-+	const struct bpf_reg_state *reg;
-+
-+	if (loc <= BPF_REG_FP)
-+		reg = &frame->regs[loc];
-+	else if (loc - BPF_REG_FP - 1 < bpf_stack_nr_slots(frame) &&
-+		 bpf_is_spilled_scalar_reg(bpf_stack_slot(frame, loc - BPF_REG_FP - 1)))
-+		reg = &bpf_stack_slot(frame, loc - BPF_REG_FP - 1)->spilled_ptr;
-+	else
-+		return NULL;
-+	return reg->type == SCALAR_VALUE ? reg : NULL;
-+}
-+
-+/*
-+ * A register is set in one of the states and not in the other. Only live registers are in
-+ * a state, so something ahead may read it. The state in which it's not set doesn't get there:
-+ * a jump sends it another way. The join would not know which way to go, and would get
-+ * there without the register. There is nothing to gain from such a join but a state less.
-+ */
-+static bool flow_unset_differs(const struct bpf_verifier_state *a,
-+			       const struct bpf_verifier_state *b)
-+{
-+	u32 fr, i;
-+
-+	for (fr = 0; fr <= a->curframe; fr++)
-+		for (i = BPF_REG_0; i < BPF_REG_FP; i++)
-+			if ((a->frame[fr]->regs[i].type == NOT_INIT) !=
-+			    (b->frame[fr]->regs[i].type == NOT_INIT))
-+				return true;
-+	return false;
-+}
-+
-+static bool flow_disjoint(const struct bpf_reg_state *a, const struct bpf_reg_state *b)
-+{
-+	return cnum64_is_empty(cnum64_intersect(a->r64, b->r64)) ||
-+	       cnum32_is_empty(cnum32_intersect(a->r32, b->r32)) ||
-+	       ((a->var_off.value ^ b->var_off.value) & ~(a->var_off.mask | b->var_off.mask));
-+}
-+
-+/* The smallest range that has both has numbers that are in neither */
-+static bool flow_gap(const struct bpf_reg_state *a, const struct bpf_reg_state *b)
-+{
-+	if (cnum64_is_empty(cnum64_intersect(a->r64, b->r64)) &&
-+	    a->r64.size + b->r64.size + 1 > a->r64.size &&
-+	    cnum64_union(a->r64, b->r64).size > a->r64.size + b->r64.size + 1)
-+		return true;
-+	return cnum32_is_empty(cnum32_intersect(a->r32, b->r32)) &&
-+	       cnum32_union(a->r32, b->r32).size > (u64)a->r32.size + b->r32.size + 1;
-+}
-+
-+/*
-+ * Numbers always have a join. It must not make up what neither state has where a jump ahead
-+ * can see it. FLOW_NEED_JUMP has the registers and the stack slots that a jump ahead compares
-+ * with a constant, or the verifier does at a call or at the exit.
-+ *
-+ *	if (ret < 0) goto err; if (ret > 0) goto skip; use(p);
-+ * ret = [-2, -1] and ret = [1, 2], both without p, meet in front of that. [-2, 2] has 0, gets
-+ * through both jumps, and there is no p. So two ranges that leave a gap are not joined. Ranges
-+ * that touch, 0 and 1, -1 and 0, or have something in common make up no number.
-+ *
-+ *	err = update(); ret = err < 0 ? DROP : 0; ... if (err < 0) goto out; ... if (ret < 0) ...
-+ * (err >= 0, ret = 0) and (err < 0, ret = DROP) meet. The join has err < 0 with ret = 0. So
-+ * two numbers, each with nothing in common between the states, are not joined either.
-+ *
-+ *	fatal = err == -ENOMEM; ... if (fatal) bpf_set_retval(err);
-+ * (fatal = 0, err = 1) and (fatal = 1, err = -ENOMEM) meet. The same: the join has
-+ * fatal = 1 with err = 1, which bpf_set_retval() doesn't take.
-+ *
-+ * The states go on to the jumps on their own. Behind the last one the numbers are dead, and what
-+ * is left is joined.
-+ */
-+static bool flow_join_makes_up(const struct bpf_flow *flow, const struct bpf_verifier_state *a,
-+			       const struct bpf_verifier_state *b)
-+{
-+	const struct bpf_reg_state *ra, *rb;
-+	const struct flow_need *tested = flow->need[FLOW_NEED_JUMP], *need;
-+	u32 fr, i, id = 0;
-+	bool one = false;
-+
-+	if (!tested)
-+		return false;
-+	for (fr = 0; fr <= a->curframe; fr++) {
-+		/* the callers go on when the call returns */
-+		need = &tested[fr == a->curframe ? a->insn_idx : a->frame[fr + 1]->callsite + 1];
-+		for (i = BPF_REG_0; i < BPF_REG_FP + 1 + 64; i++) {
-+			if (i <= BPF_REG_FP ? !(need->regs & BIT(i)) :
-+					      !(need->slots & BIT_ULL(i - BPF_REG_FP - 1)))
-+				continue;
-+			ra = flow_number_at(a->frame[fr], i);
-+			rb = flow_number_at(b->frame[fr], i);
-+			if (!ra || !rb || !flow_disjoint(ra, rb))
-+				continue;
-+			if (flow_gap(ra, rb))
-+				return true;
-+			/* copies of a number are one number */
-+			if (one && (!id || id != (ra->id & ~BPF_ADD_CONST)))
-+				return true;
-+			one = true;
-+			id = ra->id & ~BPF_ADD_CONST;
++		widen = widen_all || (cycle == FLOW_CALLBACK_CYCLE &&
++				      max(s->joins, t->joins) >= BPF_FLOW_CALLBACK_JOINS);
++		if (!widen && flow_has_room(env, *nr_states) &&
++		    flow_null_differs(flow, &t->st, &s->st))
++			continue;
++		if (!widen && flow_needed_consts_differ(flow, FLOW_NEED_ARG, &t->st, &s->st))
++			continue;
++		if (flow_callback_depth_differs(env, &t->st, &s->st))
++			continue;
++		/* what grows in a loop is not replaced with what is larger, it is forgotten */
++		if (!widen && flow_cmp_pkt_range(s, t) <= 0 && flow_within(env, &s->st, &t->st)) {
++			err = flow_unite(flow, s->st.flow_entry, t->st.flow_entry);
++			if (err)
++				goto err_free;
++			/*
++			 * What a callback comes back with and covers what is there grew, like
++			 * what is joined with it. It counts, or nothing ends "*ctx += 1".
++			 */
++			s->joins = max(s->joins, t->joins) + (cycle == FLOW_CALLBACK_CYCLE);
++			flow_unlink(env, t);
++			flow_free_state(env, t);
++			what = what ?: "joined";
++			continue;
 +		}
++		if (!widen && flow_cmp_pkt_range(s, t))
++			continue;
++		if (!widen && flow_has_room(env, *nr_states) &&
++		    (flow_unset_differs(&t->st, &s->st) ||
++		     flow_join_makes_up(flow, &t->st, &s->st)))
++			continue;
++		/*
++		 * Around a loop too:
++		 *	u8 stack[10], depth = 0;
++		 *	loop {
++		 *		if (...) { if (depth >= 10) break; stack[depth++] = x; }
++		 *		else { depth--; if (depth >= 10) break; x = stack[depth]; }
++		 *	}
++		 * depth is in a 32-bit register. A compiler tests 'depth & 255' and computes it
++		 * anew for the index. What is found out about a copy says nothing about
++		 * a range, and everything about a constant.
++		 */
++		if (flow_has_room(env, *nr_states) &&
++		    flow_needed_consts_differ(flow, FLOW_NEED_STACK_OFF, &t->st, &s->st))
++			continue;
++		/*
++		 * Two states enter a loop, with the header at pkt + 34 and at pkt + 54. What comes
++		 * around the loop with 34 is for the state with 34. Next to 54 it looks like
++		 * a number that grew, and would be forgotten.
++		 */
++		if ((!widen || !offs_change) && flow_has_room(env, *nr_states) &&
++		    flow_needed_consts_differ(flow, FLOW_NEED_PTR_OFF, &t->st, &s->st)) {
++			offs_apart |= widen;
++			continue;
++		}
++		err = bpf_states_join(env, &flow->tmp, &t->st, &s->st, widen);
++		if (err < 0)
++			goto err_free;
++		if (err)
++			continue;
++		what = widen ? "widened" : "joined";
++		err = flow_unite(flow, s->st.flow_entry, t->st.flow_entry);
++		if (err)
++			goto err_free;
++		flow->tmp.flow_entry = t->st.flow_entry;
++		flow->tmp.last_insn_idx = s->prev_insn_idx;
++		s->joins = max(s->joins, t->joins) + 1;
++		bpf_free_verifier_state(&s->st, false);
++		s->st = flow->tmp;
++		memset(&flow->tmp, 0, sizeof(flow->tmp));
++		flow_unlink(env, t);
++		flow_free_state(env, t);
++		/* the join may be within, or have a join with, what is left in the set */
++		goto again;
 +	}
-+	return false;
++
++	/* No state has the offsets of what came around the loop: they are what changes in it */
++	if (offs_apart && !offs_change && !what) {
++		offs_change = true;
++		goto again;
++	}
++
++	if (*nr_states >= BPF_FLOW_MAX_STATES) {
++		verbose(env, "more than %d states that cannot be joined at insn %d\n",
++			BPF_FLOW_MAX_STATES, insn_idx);
++		err = -E2BIG;
++		goto err_free;
++	}
++	if (flow->live_states > BPF_FLOW_LIVE_PER_INSN * env->prog->len + BPF_FLOW_LIVE_BASE ||
++	    env->total_states >
++	    BPF_FLOW_TOTAL_PER_INSN * (u64)env->prog->len + BPF_FLOW_TOTAL_BASE) {
++		verbose(env, "too many states for %d insns: %d, %d at a time\n",
++			env->prog->len, env->total_states, flow->live_states);
++		err = -E2BIG;
++		goto err_free;
++	}
++	/*
++	 * The state is printed when its turn comes. That says enough about a state that
++	 * is new, and about a state that goes on to the next insn.
++	 */
++	if (prev >= 0 && insn_idx == prev + 1 + bpf_is_ldimm64(&env->prog->insnsi[prev]) &&
++	    what && !strcmp(what, "joined"))
++		what = NULL;
++	if (log && what)
++		verbose(env, "from %d to %d: %s\n", prev, insn_idx, what);
++	flow_link(env, set, s);
++	env->max_states_per_insn = max(env->max_states_per_insn, *nr_states);
++	return 0;
++
++err_free:
++	flow_free_state(env, s);
++	return err;
 +}
 +
-+/*
-+ * States that have a join are kept apart while there is room: half of every limit.
-+ * After that they are joined, which may lose what the prog needs, and does not run into the limit.
-+ */
-+static bool flow_has_room(const struct bpf_verifier_env *env, u32 nr_states)
++static struct flow_state *flow_new_state(struct bpf_verifier_env *env, int prev_insn_idx)
 +{
-+	u64 len = env->prog->len;
++	struct flow_state *s = kzalloc_obj(*s, GFP_KERNEL_ACCOUNT);
++	struct bpf_flow *flow = env->flow;
 +
-+	return nr_states < BPF_FLOW_MAX_STATES / 2 &&
-+	       env->flow->live_states < (BPF_FLOW_LIVE_PER_INSN * len + BPF_FLOW_LIVE_BASE) / 2 &&
-+	       env->total_states < (BPF_FLOW_TOTAL_PER_INSN * len + BPF_FLOW_TOTAL_BASE) / 2;
++	if (!s)
++		return NULL;
++	s->prev_insn_idx = prev_insn_idx;
++	s->seq = ++flow->seq;
++	env->total_states++;
++	flow->live_states++;
++	env->peak_states = max(env->peak_states, flow->live_states);
++	return s;
++}
++
++/* What @st holds is taken and @st is left empty. What doesn't matter at @insn_idx goes. */
++static struct flow_state *flow_arrive(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++				      int insn_idx, int prev_insn_idx, bool *enters)
++{
++	struct bpf_verifier_state *cur = env->cur_state;
++	int cur_idx = env->insn_idx, err;
++	struct flow_state *s;
++
++	if (insn_idx < 0 || insn_idx >= env->prog->len) {
++		verbose(env, "invalid insn idx %d insn_cnt %d\n", insn_idx, env->prog->len);
++		return ERR_PTR(-EFAULT);
++	}
++
++	s = flow_new_state(env, prev_insn_idx);
++	if (!s)
++		return ERR_PTR(-ENOMEM);
++	s->st = *st;
++	memset(st, 0, sizeof(*st));
++	s->st.insn_idx = insn_idx;
++	s->st.last_insn_idx = prev_insn_idx;
++
++	env->cur_state = &s->st;
++	env->insn_idx = insn_idx;
++	err = bpf_flow_loop_leave(env, enters);
++	if (!err)
++		err = bpf_clean_verifier_state(env, &s->st);
++	env->cur_state = cur;
++	env->insn_idx = cur_idx;
++	if (err) {
++		flow_free_state(env, s);
++		return ERR_PTR(err);
++	}
++	/* when the registers that it was shared with are dead, or are those of the caller */
++	bpf_clear_singular_ids(env, &s->st);
++	return s;
 +}
 -- 
 2.55.0
