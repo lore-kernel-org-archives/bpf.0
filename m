@@ -1,125 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.148.77
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793911482;
-	b=T4Cyfl0tTtH9AQIZ5LTP4q5eklPbjE9fN/yr3zjnXtjiiKNyOz+yh1DFeCGhyqEWRycD
-	 vpkHgAfCcdkGC+5ptCpJ62XiHqqYxQcVMjJzUgkxfyFWZ8/OiCUFkCllQCWDfxFmikO+D
-	 8CiX1l5McqI5DjjfBBpAmqXdgZYxor0aGBmFAKPzaJYzRv0xGSX/cAGqmhmtKMgIkLV5l
-	 1pBeuRwjd3K2OeOatN0apBT3opWpFThKHXYQYBRjVrnO7UQO0gzMXenFn3oeKV92mGmC2
-	 HU1TW6SBc3l/ZHwNUYNvqkKz3mR9QlSgi/32rkMbDvb+/xIP6ZL/FI9z/8g5cKGPlsg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793911482;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:MIME-Version:
-	 References:In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:
-	 Cc:Content-Type:Content-Transfer-Encoding:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=ao5vTyt0f88nNNdXkQb9TlB4+Hnk+6IPL5xnEoHdaVM=;
-	b=NZPeuhCw0ka7efpZ3MXFmBqDTKA/P5B5nGlZy6oTIrXYLMgpQKWSATRimI7SkVlMooZj
-	 421zDwbHSFiTEmno35a1OUcmFCFRrtctL6f9+iwIhD5hpjG/O6UGeichd1ejBv3wF2G8P
-	 JMPVzf+61ss2cOs3VCSL4h9iuZrJ3hsFsG49ZFqt6Ig5B6B1JfBJLbQTl0iN1XcA2dUiV
-	 hCgGQaAr/2eqDqE4EelQ8sZKjPtVt2GBMDcPWZKA01GCAOEJ/yANOavfe0BXy91tGSwPk
-	 cwZP1Ukuk7GH4u/8iw4kR7sWLfpk7wyEVlUU6LXWlwdLSdmzbGAD74a2UBBWgvhQplg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=crowdstrike.com;
-	spf=pass smtp.mailfrom=crowdstrike.com;
-	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=BJ6Vc4Bn;
-	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=google header.b=BG038r1d;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.148.77
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793911516;
+	b=vX2pCWEmWOLO71K4jW+yY+JbnsyaABdQGaRCtWweHai3tJtvWIxQeDtBkVHWzaIZue0Y
+	 XHiTuK1r8JIWVy6Dni/bhmkNwH28yZytpq+PBiQ5s1W5ESjer068FI9ob6Chi4vBMD2Bs
+	 URfouQapaj5leZY3Eay5PHmriEVxK06iqEu3rEQLlA4U2WuEUTqkGPzA4vr6A15ZjQUqj
+	 tOjK/6eGLjYKEqG/lw8PR9+f6xTtxAlnhJmZRBPn0CBOkE4dqINCHWpz/BV8evjSNFga1
+	 UIUfxt0tr4Fyx7hkU5/q5h23kkVVohGrA7VecvDonZtfUgCIdGhBstRtJrAUL2X+f6g==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793911516;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=jxMrgeHHX9V93x+I2ilGX+NqVCSsuK+9fgNH6KyUhC4=;
+	b=MDEvJUu6Jzd33Dqz9VjE4jRupqsEUaFy8BKQhKjk7kNpx8EtF8Rnvz4hTFrwenSBO7ET
+	 xuD3/RtcHWbaPnFuh5iIx8zwPdb8rK3eFNmmhxiO9xKmfbgrlJygRT6+dm4KUW4hRzLLB
+	 lhACt0hKLGj9oKNyBsDwr25FHk/cUjkF8GLk+ZCD5mYc191gRSkk0sEVhcWLj7Wrb86q4
+	 pFGbpF6rhWloPDpr0VcAtbKV8GuoR61OxgmYgc+Oj0CFurnm7raHgc8MTd0qIm7wlhDcB
+	 fY+VQa6qrZK8656vgekZKfZiO8ZAQIM2Zu+5rGgI2t7jhurLjqrg+2g0hNntfLb/CRQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=L0cYInY+;
+	arc=none smtp.remote-ip=209.85.215.176
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE9C606A326
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 20:44:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4BE9C606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5A0606A326
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 20:45:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B5A0606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=BJ6Vc4Bn;
-	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=google header.b=BG038r1d
-Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A5KNa8l3713451
-	for <bpf@vger.kernel.org>; Thu, 5 Nov 2026 20:44:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=ao5vTyt0f88nNNdXkQb9TlB4+Hnk+6IPL5xnEoHdaVM=; b=BJ6V
-	c4BntNkjkkda/UZwOgHQybgHbKBTf70duMytHISYD8fZlPFOC7pQ3KtB2H49YY2j
-	fA/Xq2vBz9pOEeGea+zUbDowvp595UQSG6MbSz2v/xM17+TQvdbo7pBRazaUJiJF
-	xbhLrxm25HQLAewoZEMRYxNz7Ir9g9dh1kKNDAImZI5bBoTGwpAnxLMwyvdr7hM0
-	Y1LqB5zisPwRkA1q0WkIIIgb6NSy/ZceUacOrW9yP8GnRvUoY95AedCtDVsnsjPJ
-	1sZFqgFcxfwGr+44douE2DzuTzn0AR1M2BMzjUmmXhjrjrFI9rT0YRzd3VJ0jmdf
-	JuXa6lwJwR+pJymZ5A==
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4hrpuhjma2-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 20:44:40 +0000 (GMT)
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c4048584447so64571466b.1
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 12:44:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793911479; cv=none;
-        d=google.com; s=arc-20260327;
-        b=M4+/Y7puHDqHbFU9nBwOA7v/MoIsnhLraqv/1A2TDqKhdYOCPJE4xj6r5vg+1N3v8d
-         WGmzHMcNWbYFm85TUFVEGS9EvnLvXlwC+iOfCop/CuePTrlETEB+1c7Vnzh9I0R6ktUM
-         ZRXhzZWJW9RtkEgZL+0ljMoBCbyICniaXDd/0lS+jGw4WGRpPI8pRRIwpW185H0B8q4R
-         8PognXmFK3zzN9E1SFGUzUMvcoNfq16cJMWSewLGYrM+zvsM4hp/yYN4FamThNyDqfDS
-         zdEIveQEiOzOpWB3jFyN51cM5tH5JK9Bpn0kh+ur/B4o3DPN19dV0RNHapZQWDgbPuNs
-         DD7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ao5vTyt0f88nNNdXkQb9TlB4+Hnk+6IPL5xnEoHdaVM=;
-        fh=efe9WvP7deMCcBq37hjMAaFA0j3hSsc7OtSIhgm/RlE=;
-        b=I8vaEZYwhheV6NYRX2/+ywEhYjZVs5ecfoP9/WbLDnk3cbUgx6qlfdRT8uRtq4J0iO
-         3dOldPi1tL2bLHoRwuBH40347dksvGgUjgU5elcsN51LTvgxZmOCYqbHOyNDhChPlSag
-         NZArRa5rCcaPsmCkXtl1+BKZyfweYr0pq2K2skaVaSf+/IGPj52WEj3WdwWCSN+0rxRP
-         QlM5zQdyht69Ios96JEXjZDh5W9ZQ0d+li3d4BUqo/7VS6TMxTsuVszRJLlqyizrRlvF
-         2EhpBbvU7+A+A0wQsV2+dvQE9mfueprekZIgixvgT/a5SoTnITgI9KUYU4u2bGBJqkMn
-         +isA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=L0cYInY+
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cdb2e0062bbso939181a12.1
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 12:45:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1793911479; x=1794516279; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ao5vTyt0f88nNNdXkQb9TlB4+Hnk+6IPL5xnEoHdaVM=;
-        b=BG038r1dKbdbDwE9apXSFD1bmbsBgKa2kmPasGPXI569Vpb38f6s379Sd2whmzKLC3
-         uALKWgsbCrDc7BwSbrY/4efKL8b1XwtzfUktWNGinx/dH5z3uDEm5g5iEdkWxDgaXILe
-         rjhEj4QpHqA8mFDhLsr9h/RYrxo5ra17zCxxX1p8jrYMAyjoa+Z0Y1VKpTww2Ku0QCN4
-         HMaWLL+0E+IaIJfoHGEaH8Q9KTIVrgKxXGt+4mY8/qEa8pZkFWiLFtx+sL+d+g6xwkU/
-         UCTVr3pNl9inYrdCO8Oza+rFEzs54SLnuhzHhLSFKJufNeyA2WLENvLzRcmMvnYnw18K
-         wFJA==
+        d=gmail.com; s=20260707; t=1793911515; x=1794516315; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jxMrgeHHX9V93x+I2ilGX+NqVCSsuK+9fgNH6KyUhC4=;
+        b=L0cYInY+nt8UVqfvbs163ME6aHBs5aFAes6F4j1dQdZn72sT2EwWHZjNufClu//yR7
+         +eVZ/YQDNr2J+x3r9RhAH9xrsWWhp3USwQOnfdgdP1h7muBPLx1+kCZKptU5GuBFiIi3
+         R+T0U7WlDC/bVVi6pmQZvY42n4rH6enqqRB7cpoicenvZbHaWFHF2AUjc1/yI2zcWFVm
+         tewD2RMd4D8XAWpIstXT0pAG7lThTscRKAqxUyx7l5Uk+38pUJv35M16NDevosl7i/TN
+         AxLk8bET7qpXg/nnIMQq6l+C/N8Axn6tJnhktTjEr61XL041jgftos3vlSApycaUHkj0
+         wCxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793911479; x=1794516279;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ao5vTyt0f88nNNdXkQb9TlB4+Hnk+6IPL5xnEoHdaVM=;
-        b=0w6bKClj8eIa6niwjU39k23EF3Hp/355cjSG//IKJUnXhnDgeZNw+SxDml/8r/ezT1
-         d/3G7jCmqyzMfH5//8KgxUnNTCios84CapnXZNxu7ru9XIZ33EUdOZn5JeUJGyg/Vf1s
-         Qq8/Yt5Pzh+W6e5KXwB0rcXhoQLNTrOlt1vYb7KyOS3gdZEEA2QDRXWaK6CcHgw5MvUg
-         yf0qsLZMAufOfjHdf9UTaRJaXATyHLgjaTOIoz6hgnL/Osn4SJE0o26lceTmQtB5j8yC
-         v9y1+ffLX8hrr6ECWCvd0CFnuTrSQ2K56kF/gYppLWshNFJ3FjFfpwxIOdC1kHMeP2q6
-         2O0w==
-X-Forwarded-Encrypted: i=1; AKwUvBzD3Y1zA6tAwnn1KqWw+H0CfXXYasOVEqkldGGH0osY4v7O6f+Xd9RRly3W5xUiG7Q5ntM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/p4nMmOMBygRVv0lkN6V4+qJfKkD7tJxXtgBlc8DKsRwFaOV9n
-	A0kbd6XkEWeUogjT+eJ1FI/bUxpoodKf+1Xtrh7KR6eIq3IN9RlyDcRS5kzSjGsk8HOBPkv2urs
-	Tit+ToBBc8bzaTmz0mnQnApTYd1nUArcMco1ULKLfImeDhd6aww8L778nEGjKAja1q7TQaYfSw7
-	+Vr2KCfej7h63kZvWu6WELxq7/jcVP
-X-Gm-Gg: AYBFou0NO+vW9ENS5EkKpIF5PDrVEcUFAnOplqTU6lrBrQEA3YtO79BtCcira2xdFJ4
-	G8WVG8l5oFylKL6i/qsZ4UrOEM+WRXGP3vsuaTYKCoClk5LZIAM9Mb7Sl9vpCf9yhiZcfQS2ogw
-	NCzHFr2GuKt4gXOanEy2be3h+faF4+c4FhwL9D7UGjNT0ovHMLFO/8A+sLEP4cILZFeTxXiLj87
-	Z4jfJgwcRJZQo9lZ1FN+/VXUl1FkM5FXXrMtNHgZZ2v+f6d4oa/MMlBJvXBme0i686TfyhIwbPv
-	Dg==
-X-Received: by 2002:a17:907:3d4b:b0:c46:645f:ced7 with SMTP id a640c23a62f3a-c4d3550b4e7mr52050566b.39.1793911478962;
-        Thu, 05 Nov 2026 12:44:38 -0800 (PST)
-X-Received: by 2002:a17:907:3d4b:b0:c46:645f:ced7 with SMTP id
- a640c23a62f3a-c4d3550b4e7mr52049066b.39.1793911478527; Thu, 05 Nov 2026
- 12:44:38 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793911515; x=1794516315;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jxMrgeHHX9V93x+I2ilGX+NqVCSsuK+9fgNH6KyUhC4=;
+        b=RMlrtLENJEf5lA7bm1aFEVHKyab9IUfU1UfCXl55d3Jw0oKGt0fxOMyDtH9yjXNa+U
+         nQtMcLvPeq7SBQzbNMVokdL1AAPUfYc8N295jVj+m4Ysh87VSvv0vWQCyfyU1+OELs/P
+         c8pbS64ueKxzwpu4eB9JQhVGhflOrSHnJky+oZ2CLBpdZZTrqXfZ1sbokkqdzjX61e71
+         uuQbj6EhWETcfXQkM63XqH3kX8Ln7+NVeeZr2J0zW1ik/XWV03S7yylWCurfGyzRBKXu
+         yNHDdtYDuVIsB7SPBNO4CWMcqpBH67ir5GRvVu9S0HWRCCEuYFDig8qBPbFl8+3aYfdz
+         G+xg==
+X-Gm-Message-State: APuU4Z8jdo+vCcVqgoF5gnRInNbCXmGhFWEY/Ndv40GKlitJDlAxwTOY
+	nRG6JNjVw1yrpfP0bKNsIFjcWx30PZM70TFuPLnGmXEoNSKVrjUtl4Gym0lvBA==
+X-Gm-Gg: AYBFou04x1sjdtCVK6AemNCW/P9ffMAVX4w2bUCVzOVn09MK73rZg5uVlXPyKzAcyuK
+	JvjG3tdraQ75JzN2SnfN1TC+GLWxdS4xHUymAmvEovpsXsI3mtrTXBt4JgzZx/N36Uh3DbAKd14
+	isYpPO07HWGJNfbxyqqIC4A84W13985iMxjQqeCvOFHL+twSWobmUwWSCAM7Ic6kfOxvw5tNQtt
+	qkJpMngeBp7afDLPXmTD1btUhRz+RGHVTrcRE4xxwVTWbJp7riiMjG2QJlwMaqJXteLPiqd6vqF
+	NzuUxiJWlngbhoJ2B7/xIg0BxLTTb5G6EW1oB+PRFFj30DwrWoRqrfXitrb6NoNfWduRrIxGYHO
+	op5GJ1rVDbLhtZ1rQg3PFGtcE4vO4RjiLmbUz80SRLcLu5D+r8/Kfp7tb+QmgaL7Qxvu4ykzoEN
+	kqQzLEUJjw2qJWHY1vdfOdSfw5iQz28XXOE+Wh8+Vpx/OI7A/NH49QQ7o768wkSC5nKY7ZB3lhr
+	7mezRrznZW20L26fyL0wQVCOjQE5Al4Gi2LWy3r4+cm1GJUTzfgX2+0CUlXdTg1lJT8Vcg1Z4hN
+	N+rNI1K9jhbt5J5OVYuYmzLFBixPrb+Nk244riijgwh8x7tldLO5Qg7M1GrQAhJMp4FhhozhGQ7
+	4j10/LCrHdIk2ce/mAoBJ705RXuXEsZSmoZXURUD74KoIkvd1SfUtxUFjXl4RsnbbjiYBVa9yBD
+	Y=
+X-Received: by 2002:a17:90a:e190:b0:3ac:a7ee:678c with SMTP id 98e67ed59e1d1-3b0db60a4f7mr246648a91.2.1793911514997;
+        Thu, 05 Nov 2026 12:45:14 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b328a04asm5039178a91.14.2026.11.05.12.45.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2026 12:45:14 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next v2 00/35] bpf: A verifier that joins states
+Date: Thu,  5 Nov 2026 20:44:37 +0000
+Message-ID: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -129,106 +96,288 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
- <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <CAPnbwjrB_je6jXt3BGD-1q1yFs_wFd-Yh9KzixKzLK_X3Stuag@mail.gmail.com>
- <DML75890DWIX.EYB690LPBM1O@gmail.com> <CAPnbwjpv3bkGAKVjc7Eywgo-H4X6uDLYPJWFuSakGs_sBdgr3w@mail.gmail.com>
- <DMM2FJ2SNYYO.24TEJ05OOR08E@gmail.com> <CAH=2mMABxvf+GNr7vUKNkGvyU-gmaXKMGNJHg4URUCW_eyuxGg@mail.gmail.com>
- <20261105122604.GB1779021@noisy.programming.kicks-ass.net>
-In-Reply-To: <20261105122604.GB1779021@noisy.programming.kicks-ass.net>
-From: Martin Kelly <martin.kelly@crowdstrike.com>
-Date: Thu, 5 Nov 2026 12:44:01 -0800
-X-Gm-Features: AclHuK-QbtNDfOwcT6C7zf6IVXI9cH4b0FGauUAGbW7YvuxTYSfVQ8tmszmGMLk
-Message-ID: <CAH=2mMBDMjex_oGm3Fj7F2P=kxgh79n7w4+hW7b1UsCCfx8V+w@mail.gmail.com>
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
- cause false recursion drops in trampoline progs
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Mike Bazov <mikeba@sentinelone.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
-        Thomas Gleixner <tglx@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA1MDA4MiBTYWx0ZWRfX7okfXdHrJECz
- zZcnzShAUwyvd9k2hLhJKxN8xGi2AXFCexLXYbv+C63VniRw8hpBSMpVe55YGv26eEGlARxSxcV
- qYJCuK9HeIIMrNqv/o04UBccsnlxKkmOc2pIIcKprM2ncibzBmll
-X-Proofpoint-GUID: G2tpPzVsZtXdku-qMgk072DGEKIOSZPP
-X-Proofpoint-ORIG-GUID: G2tpPzVsZtXdku-qMgk072DGEKIOSZPP
-X-Authority-Analysis: v=2.4 cv=Rc8FmFtv c=1 sm=1 tr=0 ts=6aeceab8 cx=c_pps
- a=D+UBI74RbQA8i2EYnbuvxw==:117 a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10
- a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
- a=2KvRFfd_T_-xjmS8C1aD:22 a=JfrnYn6hAAAA:8 a=3KWSPp3VrHgpKBhhfMwA:9
- a=QEXdDO2ut3YA:10 a=PsfoTyiJ_72bb7xyA04f:22 a=1CNFftbPRP8L7MoqJWF3:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA1MDA4MiBTYWx0ZWRfX7nN7434dDK0F
- fjZGrmNVFlUQKtxAqT7zdBRn9qoG+NS37htpRQF759WJj/0hf1AQ84343yB5xsHZq8+215Wu1LM
- /pEbZ7aY5hCMk4IQCeDT6vfJyey7AisRTHaeFThrpUh3cszeR0054q5cVjotCEkaj3La7GiunvO
- i+r7yURgD0Y5vwg9QTmVQJh6aht0jABUYVcJbDRc9QiOFsn03Lf7wXUJcULbYufSNOkqJad7Igl
- /QqQfXZte+AtXOzcRNVs4fzuOwUDUcRAYA9rnEjJav2u6xp3JO9YXuwyEKwZPLQ9ykI7LIWSEXt
- Kvu47MPu8yj7BGzabBG72Z7G4wkVgn8eDAd+mk7e7SCgqO2PFZfgJkLJ8pmXjbw9nN/7/9N6FFj
- PRboJZ4uZfsfZmfQVJT3iBvadt1ItJUiHCnZj7Eb0nwWF5bZcaIYLQKvjHRainQMhhVttV371Hs
- qa+cCx3rZygtGaKcEiQ==
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11957
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- clxscore=1015 phishscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610300000 definitions=main-2611050082
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 5, 2026 at 4:26=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
-> wrote:
-> This seems weird; your task-B bpf prog would never run due to the
-> prog_active thing.
+From: Alexei Starovoitov <ast@kernel.org>
 
-Sorry, I misspoke a bit. The issue we hit was a per-CPU array shared
-across different programs. Since prog->active is per program, this
-wasn't safe once programs were preempted.
+The verifier follows each path of a prog, and each branch can double the
+number of paths. The work grows with the paths, not with the prog:
+  insns processed                                    today    this series
+  rust-bpf  scx_beerland/beerland_init_task        1000001 *        17893
+  rust-bpf  scx_qmap/qmap_init_cids                 131088 *          196
+  scx       scx_eevdf/eevdf_dispatch                350041          15199
+  Cilium    bpf_host/cil_to_netdev, Oct 2026         64658           7472
+  * "BPF program is too large", "The sequence of 8193 jumps is too complex"
 
-> You've not mentioned your CONFIG_HZ setting? Anyway, something daft like
-> the below would make promotion less aggressive (also, clearly I couldn't
-> come up with a decent name for the intermediate step :-).
+Authors cut their progs until they fit. Nobody can cut core, alloc and the
+crates of Rust: of the 653 progs of https://github.com/4ast/rust-bpf 187
+load today, 170 hit one of these limits, 164 get "infinite loop detected"
+and 122 "recursive call". Now 648 load, and no corpus of C progs loses one.
+For rust-bpf both kernels have 4 kfuncs on top, see Numbers.
 
-The 7.1.5 system we tested had the below settings. The 7.0.9 system was
-the same other than CONFIG_HRTIMER_REARM_DEFERRED.
-CONFIG_HRTIMER_REARM_DEFERRED=3Dy
-CONFIG_PREEMPT_LAZY=3Dy
-CONFIG_PREEMPT_DYNAMIC=3Dy
-CONFIG_PREEMPT_RCU=3Dy
-CONFIG_HZ_1000=3Dy
-CONFIG_HZ=3D1000
-CONFIG_SCHED_HRTICK=3Dy
+The idea
+========
+Do not follow paths. Where paths meet, join their states: r1=1 and r1=5
+give r1=[1,5]. Repeat until no state changes. States stay apart only if
+they have no join, or if a later check depends on the difference.
+  loops      counted by scalar evolution: one state covers all iterations
+             walked: a state per iteration, while constants decide an exit
+             all other loops: join at the head, widen, add may_goto
+  subprogs   A static subprog is verified for the states at its entry, not
+             for each chain of calls. Recursion is the same, with widening.
+  run time   may_goto limits the time of loops and of recursion. r10 limits
+             the depth: it must be in the upper half of its kernel stack.
 
-The 7.1.5 system also had these:
-$ cat /sys/kernel/debug/sched/preempt
-full (lazy)
-$ grep -oE '(NO_)?HRTICK(_DL)?' /sys/kernel/debug/sched/features
-HRTICK
-HRTICK_DL
+What users see
+==============
+ - The limits of 1M processed insns and 8192 jumps are gone. The limits are
+   on states, for a prog of N insns: 1024 at an insn, 16 * N + 4096 at
+   a time, 256 * N + 64K in all.
+ - "infinite loop detected" is gone: the verifier adds may_goto. A loop
+   that has no exit gets "loop at insn N never exits".
+ - may_goto is also added to 5 progs of the table below that load today:
+   loop1, loop2, loop5, tcp_autolowat_enqueue_rcvq (GCC), chaos_enqueue.
+ - Recursion is allowed on x86-64 and arm64. Patch 22 lists the exceptions.
+ - All added may_goto of an invocation share its time slice of 250 ms. Then
+   the prog returns 0. A subprog that cannot unwind, or a frame that holds
+   a lock or a reference, leaves the loop. The stderr stream has the cause.
+ - A join loses the relation between scalars. This is rejected now:
+     if (c) { i = 3; n = 4; } else { i = 7; n = 8; }
+     x = arr[n - i];                                    n - i is [-3, 5]
+ - A cgroup_skb prog whose r0 can be 2 or 3 attaches to egress only. That
+   holds for a range too: 'return 1' and 'return 2' are joined to [1, 2].
+ - The log has no "mark_precise:", "N: safe", "depth=" and no scc column.
+   Level 2 shows "from 13 to 9: within", "joined" or "widened" where states
+   meet. The statistics line keeps its format: "limit 0", "mark_read 0".
+ - BPF_F_TEST_STATE_FREQ is accepted and has no effect.
 
-> I would strongly prefer all BPF programs that attach to known
-> preemptible sites to use a per-task recursion counter or something of
-> that sort.
+Numbers
+=======
+A: bpf-next 8424858a5de0. B: this series, the same objects. The selftests
+that the series adds or changes are not counted. None of them is lost.
 
-I agree; it seems to me with per-task + per-prog tracking, we could have
-arbitrary preemption without recursion_misses. The question is how to
-implement this efficiently.
+Corpus                 Progs  Lost  Gained  Insns  States   Mem  Time
+---------------------  -----  ----  ------  -----  ------  ----  ----
+selftests               3043     0       1   -63%   +120%  -18%  -27%
+selftests, no_alu32     2905     0       1   -66%    +86%  -27%  -34%
+selftests, cpuv4        2914     0       1   -64%    +96%  -27%  -32%
+selftests, bpf_gcc      2733     0       5   -69%    +96%  -16%  -24%
+37 builds of Cilium     5189     0       0   -75%    +11%   -6%  -31%
+sched-ext/scx            495     0       0   -89%    -34%  -66%  -67%
+scx, as BPF CI has it    428     0       0   -85%    -22%  -38%  -39%
+tools/sched_ext          240     0       0   -69%    +37%   +3%  -11%
+public progs of Meta     511     0       0   -85%    -35%  -55%  -48%
+all                    18458     0       8   -74%    +10%  -19%  -36%
 
-> ---
-> diff --git a/include/asm-generic/thread_info_tif.h b/include/asm-generic/=
-thread_info_tif.h
-[...]
+Progs load in A and in B. The per cent compare sums over these progs:
+75.1M -> 19.2M processed insns, 61 -> 39 s. Mem is mem_peak of veristat.
+Time is the best of 3 runs on kernels without debug options. B counts each
+state that arrives at a basic block as a state, A only those that it saves.
+Gained: loop3 in the 4 builds, 4 progs that A rejects only in GCC's code.
+Of the progs that take 1000 insns or more in B, two take over 5% more than
+in A. loop5, 82 -> 4182: a walk up to its limit of 4096 insns, then a join.
+res_spin_lock_test_held_lock_max, 2356 -> 4088: states that hold different
+numbers of locks have no join.
 
-We will test this with and without HRTICK on and let you know what it
-does to the miss rates.
+rust-bpf               Progs  load in A  load in B  B: insns   time
+16 schedulers            225         52        225      1.6M  1.9 s
+crates                   428        135        423      7.3M  9.4 s
+For rust-bpf A and B have the kfuncs of patches 30-31 of [1] on top. They
+are in no series now. No released compiler emits the code of rust-bpf.
 
-Thanks,
-Martin
+How to read the series
+======================
+Start with patch 7, the overview. Then 4-5, 13-14, 15, 17 and 19.
+  1-2    what is added to a prog: may_goto, the checks of recursion
+  3-5    union and widening of a range, join.c: the join of two states
+  6-10   data structures of flow.c, passes ahead of the main pass: order of
+         the insns, places for may_goto, what later checks depend on
+  11-14  the sets of states, iterations, what is not joined, the merge
+  15-18  how states move: edges, calls and exits, loops, added edges
+  19     the switch. The check of one insn against one state is the same.
+  20-22  more counted loops, static subprogs on their own, recursion
+  23-26  removal of pruning, precision tracking and SCCs: 3382 lines
+  27-28  callx: a pointer to one of a set of functions, live registers
+  29-35  selftests: 29-30 adjust tests, 31-35 add tests
+Each patch builds. Patches 1-18 add the code that patch 19 switches to.
+Some selftests fail from patch 19 to 29. flow.c has 2798 lines.
+
+Follow-ups
+==========
+ - Documentation/bpf/verifier.rst: the algorithm, with examples.
+ - Liveness: no spilled pointer is kept for reads that see only its bytes.
+ - No second pass over the prog when a loop gets may_goto late: half of the
+   insns for rust-bpf.
+ - bpf_prog_info tells that an invocation of the prog was cut short.
+
+v1 -> v2
+========
+v1 is part 3 of [1]. Its patches for the verifier of today and the time
+slice of may_goto are in bpf-next.
+ - Recursion: may_goto and r10, no per-cpu counters of bytes and calls.
+ - flow.c comes in 9 patches and join.c in 2. In v1 each was one patch.
+ - No public prog of Meta is lost (Ihor): widening goes to fixed stops, and
+   constants that are added to a pointer to the packet are not joined.
+ - A state is compared only with the states of a related shape (Ihor).
+ - bpf_iter_*_next() stops a loop only if the iterator was created before
+   the loop (Ihor). A loop with two entries is walked.
+ - Offloaded progs get neither may_goto nor recursion (Ihor).
+ - The failures of v1 in BPF CI (s390x, arm64, gcc) are fixed.
+
+[1] https://lore.kernel.org/bpf/20261026025943.404450-1-alexei.starovoitov@gmail.com/
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+
+Alexei Starovoitov (35):
+  bpf: Add may_goto to the loops that the verifier marks
+  bpf: Limit depth and time of recursive subprogs at run time
+  bpf: Add union and widening of the range of a register
+  bpf: Add join of registers and stack slots
+  bpf: Add join of verifier states
+  bpf: Tell which arguments of a call a join must leave alone
+  bpf: Add the data structures of the main pass over the control flow
+    graph
+  bpf: Order the insns, find what stops a loop and where may_goto can go
+  bpf: Find the registers that hold a number or a pointer to arena
+  bpf: Find the registers and stack slots that later checks depend on
+  bpf: Add the sets of states at an insn and the entries of functions
+  bpf: Compare states of different iterations of a loop
+  bpf: Decide which states are not joined
+  bpf: Merge the state that arrives into the set at an insn
+  bpf: Move states along edges, into loops and subprogs and out of them
+  bpf: Make the state after a call from the caller's state and an exit
+    state
+  bpf: Enter and leave loops in the main pass, build flow.c
+  bpf: Tell the passes over the graph where an added may_goto goes
+  bpf: Verify programs as a fixpoint over the control flow graph
+  bpf: Keep the count of a loop when a register has no closed form
+  bpf: Verify static subprogs on their own
+  bpf: Allow recursive subprogs
+  bpf: Remove is_state_visited(), bpf_compute_scc() and iter.depth
+  bpf: Remove precision tracking
+  bpf: Remove prune points, levels of state comparison and pop_stack()
+  bpf: Update comments about paths, pruning and explored states
+  bpf: Track a pointer to one of a set of functions
+  bpf: callx reads what the subprogs whose address is taken read
+  selftests/bpf: Adjust tests to log lines that are gone
+  selftests/bpf: Adjust tests to new verdicts, messages and order
+  selftests/bpf: Test states that are not joined
+  selftests/bpf: Test static subprogs that are verified on their own
+  selftests/bpf: Test loops that are counted, walked or widened
+  selftests/bpf: Test progs that run out of budget
+  selftests/bpf: Test callx of one of a set of functions
+
+ Documentation/bpf/bpf_design_QA.rst           |    7 +-
+ Documentation/bpf/kfuncs.rst                  |    2 +-
+ Documentation/bpf/linux-notes.rst             |    4 +-
+ include/linux/bpf.h                           |    6 +
+ include/linux/bpf_verifier.h                  |  526 ++--
+ include/linux/filter.h                        |   16 +
+ kernel/bpf/Makefile                           |    2 +-
+ kernel/bpf/backtrack.c                        | 1052 -------
+ kernel/bpf/cfg.c                              |  297 +-
+ kernel/bpf/const_fold.c                       |   14 +-
+ kernel/bpf/core.c                             |   19 +
+ kernel/bpf/diagnostics.c                      |   13 -
+ kernel/bpf/diagnostics.h                      |    1 -
+ kernel/bpf/fixups.c                           |  360 +++
+ kernel/bpf/flow.c                             | 2798 +++++++++++++++++
+ kernel/bpf/join.c                             |  650 ++++
+ kernel/bpf/liveness.c                         |  109 +-
+ kernel/bpf/log.c                              |   14 +-
+ kernel/bpf/loops.c                            |    8 +
+ kernel/bpf/scev.c                             |  166 +-
+ kernel/bpf/states.c                           | 1180 +------
+ kernel/bpf/verifier.c                         | 2669 ++++++++++------
+ .../bpf/prog_tests/bpf_verif_scale.c          |    4 +-
+ .../bpf/prog_tests/cgroup_skb_egress_ret.c    |   23 +
+ .../selftests/bpf/prog_tests/log_buf.c        |    4 +-
+ .../selftests/bpf/prog_tests/log_fixup.c      |    6 +-
+ .../selftests/bpf/prog_tests/reg_bounds.c     |    5 +-
+ .../selftests/bpf/prog_tests/verifier.c       |   19 +
+ .../selftests/bpf/progs/aggregate_ret_func.c  |   15 -
+ .../selftests/bpf/progs/aggregate_ret_kfunc.c |    7 -
+ ...f_qdisc_fail__invalid_dynptr_cross_frame.c |    4 +-
+ .../bpf/progs/cgroup_skb_egress_ret.c         |   12 +
+ .../bpf/progs/compute_live_registers.c        |    8 +-
+ .../selftests/bpf/progs/cpumask_failure.c     |    2 +-
+ .../testing/selftests/bpf/progs/dynptr_fail.c |    4 +-
+ .../selftests/bpf/progs/exceptions_assert.c   |   24 +-
+ tools/testing/selftests/bpf/progs/iters.c     |  114 +-
+ .../selftests/bpf/progs/iters_state_safety.c  |    8 +-
+ .../selftests/bpf/progs/iters_testmod_seq.c   |   12 +-
+ .../bpf/progs/mem_rdonly_untrusted.c          |   16 +-
+ .../selftests/bpf/progs/stack_arg_precision.c |   48 +-
+ .../selftests/bpf/progs/test_global_func15.c  |    5 -
+ .../selftests/bpf/progs/test_global_func3.c   |  125 +
+ .../selftests/bpf/progs/timer_failure.c       |    9 +-
+ .../selftests/bpf/progs/verifier_align.c      |   10 +-
+ .../selftests/bpf/progs/verifier_and.c        |    4 +-
+ .../bpf/progs/verifier_arena_stack.c          |   49 +
+ .../bpf/progs/verifier_array_access.c         |   14 +-
+ .../selftests/bpf/progs/verifier_bounds.c     |  114 +-
+ .../bpf/progs/verifier_bounds_deduction.c     |    2 +-
+ .../bpf/progs/verifier_bounds_step.c          |   73 +-
+ .../selftests/bpf/progs/verifier_budget.c     | 1873 +++++++++++
+ .../bpf/progs/verifier_calls_in_a_row.c       |  170 +
+ .../selftests/bpf/progs/verifier_callx.c      |  128 +-
+ .../selftests/bpf/progs/verifier_callx_many.c |  113 +
+ .../bpf/progs/verifier_callx_rodata.c         |  167 +-
+ .../selftests/bpf/progs/verifier_cfg.c        |    8 +-
+ .../bpf/progs/verifier_global_subprogs.c      |   11 +-
+ .../bpf/progs/verifier_helper_value_access.c  |    8 +-
+ .../selftests/bpf/progs/verifier_idoms.c      |    9 +-
+ .../bpf/progs/verifier_iterating_callbacks.c  |   70 +-
+ .../bpf/progs/verifier_jumps_ahead.c          |  555 ++++
+ .../bpf/progs/verifier_linked_scalars.c       |    7 +-
+ .../selftests/bpf/progs/verifier_live_stack.c |   37 +-
+ .../bpf/progs/verifier_liveness_exp.c         |    7 +-
+ .../selftests/bpf/progs/verifier_loop_as_is.c |  198 ++
+ .../bpf/progs/verifier_loop_hierarchy.c       |  125 +-
+ .../selftests/bpf/progs/verifier_loop_latch.c |    2 +-
+ .../selftests/bpf/progs/verifier_loop_need.c  |  320 ++
+ .../selftests/bpf/progs/verifier_loop_walk.c  |  197 ++
+ .../selftests/bpf/progs/verifier_loops1.c     |   16 +-
+ .../bpf/progs/verifier_map_ret_val.c          |    2 +-
+ .../bpf/progs/verifier_mem_size_reg.c         |   52 +-
+ .../selftests/bpf/progs/verifier_movsx.c      |    3 +-
+ .../selftests/bpf/progs/verifier_precision.c  |  186 +-
+ .../selftests/bpf/progs/verifier_ptr_off.c    |  225 ++
+ .../selftests/bpf/progs/verifier_scalar_ids.c |  329 +-
+ .../selftests/bpf/progs/verifier_scev.c       |  198 +-
+ .../bpf/progs/verifier_search_pruning.c       |   40 +-
+ .../selftests/bpf/progs/verifier_spill_fill.c |  224 +-
+ .../selftests/bpf/progs/verifier_spin_lock.c  |    4 +-
+ .../selftests/bpf/progs/verifier_stack_arg.c  |  139 +
+ .../selftests/bpf/progs/verifier_stack_ptr.c  |   13 +-
+ .../bpf/progs/verifier_subprog_callers.c      |  509 +++
+ .../bpf/progs/verifier_subprog_insn_stats.c   |   16 +-
+ .../bpf/progs/verifier_subprog_precision.c    |  353 +--
+ .../selftests/bpf/progs/verifier_tailcall.c   |   27 +
+ .../selftests/bpf/progs/verifier_uninit.c     |    2 +-
+ .../selftests/bpf/progs/verifier_unpriv.c     |   23 +-
+ .../bpf/progs/verifier_unpriv_perf.c          |    4 +-
+ .../bpf/progs/verifier_value_or_null.c        |    2 +-
+ .../bpf/progs/verifier_value_ptr_arith.c      |   61 +-
+ .../selftests/bpf/progs/verifier_var_off.c    |  206 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |   46 +-
+ .../testing/selftests/bpf/verifier/precise.c  |   69 +-
+ 95 files changed, 12210 insertions(+), 5197 deletions(-)
+ delete mode 100644 kernel/bpf/backtrack.c
+ create mode 100644 kernel/bpf/flow.c
+ create mode 100644 kernel/bpf/join.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_skb_egress_ret.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_skb_egress_ret.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_budget.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_calls_in_a_row.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx_many.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_jumps_ahead.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_as_is.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_need.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_walk.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_ptr_off.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_subprog_callers.c
+
+-- 
+2.55.0
+
