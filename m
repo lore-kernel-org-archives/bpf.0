@@ -1,84 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793887774;
-	b=nwGq9aTDyGvmteg2L7TVdPYQLXfE9YFNepSjs4ZzADpirAEeqUBR8eQle7k884H2Nuk4
-	 Od++CTwaW48XnFSJlp+gNe3VbFRmLSaCx3GbJq9q9XW29UNsJe1MXJh5VEAF+6l/PtrMC
-	 Vw/vzfUYuUtTsBf+PqU+glB6TJmX0b0pZoOpJnpRiHEo28w/TD/RqkXzo3ET5Kh/UK8QA
-	 JegXNhxuPjR5cJmcyXXxRRTTzFf2LYVj4GFHOVDs5vj7W/7TJI0EJZWoLDkR0oL79JWDV
-	 JpiZ1A1nVFvFw6XpSP5sbXytlxD6EXOdK/9dhGNbFQV7/e7siCo+xQfWAi2CAn41SAA==
+	t=1793889242;
+	b=iClRAPfNkKx1xAM0Q5z+r6dLeeR0c2KXT86gZAyZMpvjrWEENirzRKdg4bFRsVVh5/oB
+	 IRvNMG8H9dGNd0P6ARPGwspKN1+ylR0fEayPuJ8Up4tNOvtxU+xU2MxszmWdS/6MV2kyo
+	 f1gn6Oj5DjnNpG+Wrapz09/KdPNqkKfwvK76DPyC7d1VtJRYjeAEt68bTlZwr66MFggTZ
+	 o/+AgqQl1PpN6B45byMdmA6Csq6wsJqtD4fnNMGQrH3yMVk7V24PnH/oNu+zzLrO3Ay89
+	 VkwiVaVGU7JyxSBHLlwZdYTjofpQia0UP5nSQA2pmy2e2OVkkb5NGyr0MLQZCTfXE6Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793887774;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793889242;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=jzTzN1xi3wWq3rkQo05baaXe4YaAa7XUzbwyEbAc0TE=;
-	b=uxUmwi70sQwZrS1x9FV4zTXyZk11Qsgy+E2rvM28H2bmLJKhzZX8MrCs1gIDwntoMNFj
-	 QbwuOseC7PGAZuwMu4v/mvQwLJvLVD6AgLe6uyrvhNfSM4IWvSEOZ98ZWftG3auezHc9a
-	 q8olL0gsehlDvRno+PsaW1njrZWbG4YNBfoZqc2gx0RGAYoSeGViMkpeHyw8tCN5HM+Vd
-	 30QRRRcfXY6dF+gDTr/xuFbLQEuFupman80/5p8pLhtOPFSSlLngNkqFUP8xTdux3sIm5
-	 8hyhARlnHxWUEfQtM9xkNKU97GpZ39tZixwNC6yRU3HZAFJ4h/wuuZC4yKg6UB3IhgA==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=NdOrVzG3OCGSr60lMULw/RwF+DfcJzV9jGQLzrSIiVA=;
+	b=wLCZcADhvHQkESqFUqTL4oV9sGXMwptZJR85upm2GcVxv00FtbdzO+7bnFRPR3p/i+24
+	 ffM6os2tizn+pidMK675u9I8r/4q95qTstf5cKTnKc6WniRAf88e8/rJj5F18T6qTJto5
+	 6fn5KmRSQXEsU7evkRv4sfA5OXkMfPRIjTWdhfkzzVHhMReEQF0y792ETq5tdOTT8OSa0
+	 3DMqDOMDIROHm1HSnrgSy6v6tR0WELxeW5wKN0v1IZNmKYxEvdtN4et8JZpZcUhY4fm2l
+	 i1mUOSUO43tLLxQq1o4atFNpuD1YHFsSHlGOdN3rwd4dig2MGPKz6kj4/AzxvXgl+Ng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0cDOXOJ7;
-	arc=none smtp.remote-ip=74.125.224.47
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=RcItvQZW;
+	arc=none smtp.remote-ip=209.85.208.51
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7C7606A31B
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 14:09:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B7C7606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D12606A31B
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 14:34:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96D12606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0cDOXOJ7
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-67c00f291e1so984175d50.1
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 06:09:34 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=RcItvQZW
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6b408f2d936so2443299a12.1
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 06:34:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793887773; x=1794492573; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=jzTzN1xi3wWq3rkQo05baaXe4YaAa7XUzbwyEbAc0TE=;
-        b=0cDOXOJ7kU44pN3CSsJC7LBttdhxXbKwXqvZzda7pHXStgvvBzFoKR4rfQ6uRpzano
-         LqGpNPg3W+CWu4WnyQkkbdSjRVXu+jvbvdx7LlzpaLxR3UBCncfBpxp7F1bVC1zR+7KP
-         tOpqvK21hn3041JvnCXOIHZ1DQ5S6efh+xzD106W6QtWm527wUoE+KbI3Pdx4pboCUeH
-         J7c0+EJi+hdBXYKg14ZCJ4Ab8oTgUC5Gw4DUJ4Tani6wz1FCcrxCBb2CybU5Tt8NB3w9
-         r7i4x3Fi0TP87AzY+Xgmvr0Itmnv4T5QoEgJdD1/ShixhE8u4yftXQKAkHFGDsmbERx0
-         3s4A==
+        d=cloudflare.com; s=google09082023; t=1793889240; x=1794494040; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=NdOrVzG3OCGSr60lMULw/RwF+DfcJzV9jGQLzrSIiVA=;
+        b=RcItvQZWLu6oodSC2bv8dHfWDL0GIt2qmvKNPvNvKMjaJXxgv9Eyc45gGdT2/H5qMq
+         zJMGxlhwIroSZMhz6xRZojb0KdzZDU2epUyYSLcCd5+cR++B1GIvVW9p0ECeyzxaDkIK
+         hgp1RiILJ/MVeoe5wK8flNWnrnDvqJCAxSrFXAkIJdAWXJF6iuGgXYpQl+xHbDP9Ph/h
+         gukN0UgLTKmH8Axy2gPQvjp+G3thhc0hmclGfbgPV43mdB7r5td40U8/rH6stnGvfcqj
+         FdXpbwBKja6bkyyZNo1WXNfPZWsTij547pcq81hOSlQR86GDs6/xrkgDKeK0J2rOJpsx
+         FI4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793887773; x=1794492573;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jzTzN1xi3wWq3rkQo05baaXe4YaAa7XUzbwyEbAc0TE=;
-        b=0fbf7mVidjfGVV2PdP2nq/0J8lGlEwyCoirrMw2hL93Yd9Y8vSQ2mnVzxy8OvBMSLa
-         sGX1+p/IJ4MU0b8DJwlReJfSwoGs77/rBAvMucOV3fO3NW9MiIJMCvP4i9cZPYnx9oh1
-         XDGlVQa5g8Cd+apsOvdQpDyXspXlH3C2sFzs47q6hCIWu79EQdCrA0NhIpYmgjl0FC/a
-         w3A61xtdoNyL4mmEARZa77vDPf4ldDTS/YiR3L5AC8ajD7p9WZCuQqNTi1SgLJ7bHhAW
-         kVhofPOybkMdecPt+PESGvriQi3+kqWeZmEBzIeEpOEgCsQgv7qT9cS/1luSVNlz0x5b
-         5/HQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxcOdauMjVpol3os38zt9ZDmZZf7MPC/S2Ue3qR+yYyzmti+pmjJkGrzzF0Tnmz1fekV78=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+LV1ifoBGKHaONsD2bfoWoFdgR59xjfE4BaUM+qkDP5j1oMRRl
-	2364ZVhBPAx3ImTMetGAfqYIRzBy1ONTC2R71ZbMIeDL7obv6hc8qUHo
-X-Gm-Gg: AYBFou28R8BkM+8vZ4GgUq4V9lU3fEV/jZMABv6dSlQW56Z8DWLx76EYHpfIPgy7IqB
-	apMf1UpgJ0gh0rwd81vXK5JaJ9KiqZFv6EYygwOVVkAC1eN6Se/ikPVRfYR2wAEI7P5GL3WcjlY
-	tMwqtsh4QMIhfCRnCCZe1VTsOu5GGUyWV6oTgXFQV9VB0SsTwwMxQ3SDQzy61lTcDWsh5ruQwW1
-	gG6HONwxYZSvIFBDequPSCXHI3oGMux15YBQNFDv+wMxMAnAUdWLZbMHF6ntFmrOw/ptJpuBu4V
-	FxH+o+ncsNM1uVKG0yeW16wCztfWdAR/sHjZWIzsvSl+6+DV2J8MvfTBTEjaUMKDoml5EI0zeXw
-	VUmqbEKuuR/gMxDYNJUvWXk1hFdHbfp4AmQMTeJ3rjX4GN8GC+SPxA0l/E4BEgSa1I3KxBW03o8
-	a1teU42a1fHIcGx2+EZazJYdnUtE33U+2cWz6dC5KVOPjtiGrc7ojrqbdD193VPSgll1FaBaQjL
-	NVGum4+CBaX1/R68liC4xWASNEE25ntXl//l9qITtF9jDPFkXE3UWHh+5+fSJzAqnEm/ukXIQ0v
-	LcvJROfDH5xRBMCJrcXc3cTvo922n90IjQ==
-X-Received: by 2002:a05:690e:1444:b0:679:b98d:9b7f with SMTP id 956f58d0204a3-67ba4c82e34mr11758102d50.11.1793887773314;
-        Thu, 05 Nov 2026 06:09:33 -0800 (PST)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b309712e33sm40372397b3.4.2026.11.05.06.09.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Nov 2026 06:09:32 -0800 (PST)
+        d=1e100.net; s=20260707; t=1793889240; x=1794494040;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=NdOrVzG3OCGSr60lMULw/RwF+DfcJzV9jGQLzrSIiVA=;
+        b=l4InDoQAGy8PsCWzrkD1d0hWDf1vQg1yDDkUExdXa6BYmi3CRKeT14F/CuMFFofVcX
+         Ma5BRifxvSMKn2/6n0PORfYmxvQo4+iOBzvHolKsRW7FmfwqDiEK1wlimQ+LMb5A1Oji
+         5PgVdL8Ptp8hYR5z73qLAColfvAIhmS44a92rtWWnGrZZv6FiAx20ffE5hJC3jD/CQir
+         zfPshSHuS9VHpsWU44+hVD/z4gILCNQp/Qamz+bWrH3hSq6pgJ01RaScIwugl2rj5Jtt
+         G8iFSG/wkLqGQJcDOYK21Z4JNaw9DZRoYrf964gIE5YY1+NOuEawjJ6IhY1mxHCpODO7
+         /6pQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz5vUdeLuwa1rMjaWyMA4dbCETTn+cleupsJhYg9e3uWnT6Ixu6cvaKUxXgbadHaBMqjKo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/gGB1gpquo1Xy5kkOaa4GB9tUvHJFApudNJmPMbxIQJ9ZzorwF
+	YIeOJ0XDA+ijQIAkIQzoNBlfJByp1zeci1+XdpL1F6GUYB+QptXTs7f+YlCZXxyAkLY=
+X-Gm-Gg: AYBFou24HaM2eUVY1syvrXxIR8A5HlHZUEoWhUpzSX3kne9gHmdOgiR3YsZH69/CoXi
+	FhLw9HvMgn91KZXKYkIrmVVFliJfoQbuTwiqXg30xr83meZqfulfN6tn/U5SPJ5/QewUK60TNF5
+	L/oaPcbrIgeLqV2/0n2Suf0G5EtXuBDJhVnU1ZEsPEscVxdjRodkn7llnzMu8PcML9D8vTOe7BG
+	vSwfFbqcGj306NE1shVJRcmRSTqqtMz4Rm4Og5oVg5jPLn3kjRqBEdvIwzOnY6Ai2qFqYtOzfKZ
+	2glw9eLzMzYfM/u0bzRGbxWaKcb9m7p8jdd88jMRqb4HsxLFUMDrWDO48O6ARxz0Az6yMxBAD6/
+	sH0xdG58MEa/gGDMSvzpPoCobn3s+HNPjM67v6rM+6y71Ou2Uvg2tmISsMcLA17UKUmDpv6Q1Ad
+	FsUBG1zpUqDR6OVWzUlSBY5l3fSdg6TGzrCu/kN38P9VA2nwhD2IyFV8QvhWR6Uwu5s9pOKtsA2
+	ghHT3Aez+Jzs0SCzDeFWPVbMNI+X2FoIeIvi+J9uQzY8dtaHz3yX3ukddqiQV9vrruhebg6q9E5
+	Faf+SKs0SUd69YvldWEEn1qObTSW89M/I9TEnSeFh69eyDnQYFdgzYRIbcbSKo7bDET2
+X-Received: by 2002:a17:906:f59a:b0:c3f:7e8:235d with SMTP id a640c23a62f3a-c4ca792f92dmr1718115666b.5.1793889239960;
+        Thu, 05 Nov 2026 06:33:59 -0800 (PST)
+Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:b])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c4d0e466be0sm178671066b.54.2026.11.05.06.33.58
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 05 Nov 2026 06:33:59 -0800 (PST)
+From: Tianyi Gao <tianyi@cloudflare.com>
+To: netdev@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	toke@redhat.com,
+	lorenzo@kernel.org,
+	horms@kernel.org,
+	bpf@vger.kernel.org,
+	shuah@kernel.org,
+	hawk@kernel.org,
+	kernel-team@cloudflare.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	linux-kselftest@vger.kernel.org,
+	jiayuan.chen@linux.dev,
+	Tianyi Gao <tianyi@cloudflare.com>
+Subject: [PATCH net-next 0/3] veth: link RX queues to their NAPI instances
+Date: Thu,  5 Nov 2026 14:33:53 +0000
+Message-ID: <20261105143356.17062-1-tianyi@cloudflare.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,141 +110,55 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 05 Nov 2026 09:09:26 -0500
-Message-Id: <DMNC538FF7AS.2JZQJXNEZG6P6@gmail.com>
-Cc: "Simon Horman" <horms@kernel.org>, "Jakub Sitnicki"
- <jakub@cloudflare.com>, "Daniel Zahka" <daniel.zahka@gmail.com>, "Willem de
- Bruijn" <willemb@google.com>, <netdev@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>
-Subject: Re: [PATCH net v2 1/2] net: Make PSP skb extension survive packet
- scrubbing
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-To: "Wei Wang" <weiwan@google.com>, "David S . Miller"
- <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "Shuah Khan"
- <shuah@kernel.org>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20261030043145.2185700-1-weiwan@google.com>
- <20261030043145.2185700-2-weiwan@google.com>
-In-Reply-To: <20261030043145.2185700-2-weiwan@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri Oct 30, 2026 at 12:31 AM EDT, Wei Wang wrote:
-> skb_scrub_packet() drops all skb extensions unconditionally via
-> skb_ext_reset(). It runs on tunnel encap/decap (ip_tunnel_rcv, vxlan_rcv,
-> etc.) and virtual device forwarding/redirection (dev_forward_skb,
-> netkit_xmit, skb_do_redirect).
->
-> When a virtual device such as netkit is associated with a PSP device in
-> another network namespace via PSP_CMD_DEV_ASSOC, incoming PSP packets
-> decapsulated by psp_dev_rcv() lose their SKB_EXT_PSP extension when
-> scrubbed during redirection into the peer netns. Without SKB_EXT_PSP,
-> __psp_sk_rx_policy_check() rejects incoming TCP data segments at the
-> socket layer with SKB_DROP_REASON_PSP_INPUT.
->
-> Introduce a static skb_ext_scrub() helper in net/core/skbuff.c to
-> preserve SKB_EXT_PSP across skb_scrub_packet() while dropping all other
-> extensions. If SKB_EXT_PSP is not active, skb_ext_scrub() simply calls
-> skb_ext_reset(). If SKB_EXT_PSP is the only extension in the skb_ext
-> buffer, nothing needs to be scrubbed. Otherwise, save the PSP metadata,
-> reset the extension block, and re-add a fresh SKB_EXT_PSP extension (or
-> clear skb->decrypted if the allocation fails).
->
-> Fixes: 06c2dce2d0f6 ("psp: add new netlink cmd for dev-assoc and dev-disa=
-ssoc")
-> Link: https://lore.kernel.org/r/20260910-bpf-meta-inside-skb-ext-v2-3-0b2=
-1e42180b0@cloudflare.com
-> Reported-by: Daniel Zahka <daniel.zahka@gmail.com>
-> Closes: https://lore.kernel.org/netdev/DLODSKPY6ON6.1G6SP3CFFLCPJ@gmail.c=
-om/
-> Co-developed-by: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Wei Wang <weiwan@google.com>
-> ---
->  net/core/skbuff.c | 31 +++++++++++++++++++++++++++++--
->  1 file changed, 29 insertions(+), 2 deletions(-)
->
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 93c2f440b9ec..5c4a2e982ebc 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -6369,6 +6369,32 @@ bool skb_try_coalesce(struct sk_buff *to, struct s=
-k_buff *from,
->  }
->  EXPORT_SYMBOL(skb_try_coalesce);
-> =20
-> +static void skb_ext_scrub(struct sk_buff *skb)
-> +{
-> +#if IS_ENABLED(CONFIG_INET_PSP)
-> +	struct psp_skb_ext *pse =3D skb_ext_find(skb, SKB_EXT_PSP);
-> +
-> +	if (pse) {
-> +		struct skb_ext *ext =3D skb->extensions;
-> +		struct psp_skb_ext tmp =3D *pse;
+veth does not link its RX queues to their NAPI instances. queue-get
+therefore reports no napi-id for them. napi-get lists the NAPI instances
+of a veth, and their thread PIDs when NAPI is threaded. It does not show
+which RX queue each instance polls. Userspace cannot tell which NAPI
+thread to pin for a given queue, or which NAPI to change with napi-set.
 
-I would move the copy just before skb_ext_reset(skb), but it probably
-won't make a difference in the generated code.
+There is also no way to busy poll an AF_XDP socket bound to a veth
+queue. xsk_bind() takes the socket's NAPI ID from the RX queue, and a
+veth RX queue has none.
 
-> +
-> +		/* Nothing else to scrub if PSP is the only extension in ext. */
-> +		if (ext->chunks =3D=3D SKB_EXT_CHUNKSIZEOF(*ext) +
-> +				   skb_ext_type_len[SKB_EXT_PSP])
-> +			return;
-> +
-> +		skb_ext_reset(skb);
-> +		pse =3D skb_ext_add(skb, SKB_EXT_PSP);
-> +		if (pse)
-> +			memcpy(pse, &tmp, sizeof(*pse));
-> +		else
-> +			skb->decrypted =3D 0;
+Patch 1 is a cleanup to ease review of patch 2. veth_enable_xdp_range()
+adds the NAPI instances only to pass their napi_id to
+xdp_rxq_info_reg(), which no longer uses it. Patch 1 moves
+netif_napi_add() into the loop that enables the NAPI instances. It also
+removes the arguments and wrappers that came with adding the NAPI
+instances in two places.
 
-Agree with sashiko not to clear decrypted. It would at least prevent the
-skb from being forwarded cleartext back onto the network.
+Patch 2 calls netif_queue_set_napi() in veth_napi_enable_range(), after
+napi_enable(). In veth_napi_del_range(), it clears the link with NULL
+before napi_disable().
 
-> +		return;
-> +	}
-> +#endif
-> +	skb_ext_reset(skb);
-> +}
-> +
->  /**
->   * skb_scrub_packet - scrub an skb
->   *
-> @@ -6380,7 +6406,8 @@ EXPORT_SYMBOL(skb_try_coalesce);
->   * operations.
->   * skb_scrub_packet can also be used to clean a skb before injecting it =
-in
->   * another namespace (@xnet =3D=3D true). We have to clear all informati=
-on in the
-> - * skb that could impact namespace isolation.
-> + * skb that could impact namespace isolation. Note that PSP skb extensio=
-n is
-> + * preserved across packet scrubbing by design.
->   */
->  void skb_scrub_packet(struct sk_buff *skb, bool xnet)
->  {
-> @@ -6388,7 +6415,7 @@ void skb_scrub_packet(struct sk_buff *skb, bool xne=
-t)
->  	skb->skb_iif =3D 0;
->  	skb->ignore_df =3D 0;
->  	skb_dst_drop(skb);
-> -	skb_ext_reset(skb);
-> +	skb_ext_scrub(skb);
->  	nf_reset_ct(skb);
->  	nf_reset_trace(skb);
-> =20
+Patch 3 adds RX queue NAPI link checks to veth.sh. The napi-id of every
+RX queue must match a NAPI instance of the device. The queues must be
+linked only while NAPI is enabled. The checks run with GRO on and with
+XDP attached, and across RX channel changes and link down/up.
 
-The only thing I would say is that skb_ext_scrub() won't scale if a
-second extension comes along and wants the same treatment as PSP. In
-that case, either we could make a bitmap of "no scrub" extensions and
-then use the same approach of allocating a new ext block and copying
-them over, or the original approach of skb_ext_del() could be used after
-changing the reference counting scheme for the special extensions in the
-release path of __skb_ext_put(), but that is a more intrusive change.
+---
+While working on patch 1, I noticed a pre-existing race in
+veth_disable_xdp(). Jakub already pointed it out in [1] and suggested
+fixing it as part of Jiayuan's series. This series only drops an
+argument on that path. It does not depend on that fix. If the fix does
+not end up there, I can send a separate patch for it.
 
-I'm ok with the approach from a PSP perspective:
+[1] https://lore.kernel.org/all/20260917185814.0f944e78@kernel.org/
 
-Reviewed-by: Daniel Zahka <daniel.zahka@gmail.com>
+Tianyi Gao (3):
+  veth: refactor NAPI enable paths
+  veth: link RX queues to their NAPI instances
+  selftests: net: veth: test RX queue NAPI links
+
+ drivers/net/veth.c                  | 83 ++++++++---------------------
+ tools/testing/selftests/net/veth.sh | 79 ++++++++++++++++++++++++++-
+ 2 files changed, 99 insertions(+), 63 deletions(-)
+
+
+base-commit: 0822d2fe38262e8b55c5ea55c970022bca8dd2a9
+-- 
+2.56.0
+
