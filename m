@@ -1,63 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793905264;
-	b=42CU5GB/L0BGS282QnpWStILfoo+CTysURQDeSyQAeFsFC+6QL99MKb9RZotciBCewiC
-	 ZzU4jJ/oawAV5ZPup57SWyzU82JNhmsyqIcX0dZ1h+CFnhgZm1jYQMqfAZ+qZsbb2Vyqj
-	 LY7VEV7b0OvSP1hoIteJ0S7j/U67iT9Wq+XHWKiNwf7t9cYifTq5jp9nnujzMrPg8ayMu
-	 Dgt5Gw74CaNiGRSJvAxwR1LOoGxTzv7F13aA/e7z2QHegjpP9Kka+SBlTqIu/yx40/XE7
-	 YVugz7JhZGPNX9sWZoqROlZpfcv0nbKvArMoB/n3349EUF3UesMgg4E/jUVjfiae4xw==
+	t=1793907151;
+	b=TBdTxTOM9o6bX8Mn7a3rfPjuz2IpMM/6XLHYmxioUrVaor32uYfFbn74FEgG5bEEmFxs
+	 uyMTqqr5QQjdQNEHvTni7HFyAxWi75pc6oevjPbCjrXoRAM1OEfSbMXPaWA2C9qXUpDCk
+	 DbBCpmnawCq4ljFwXZ2LxC2AFhI4hgq9sJAQwABoEy3Xjhdxiio4ZngFboC8/G8SD4Wye
+	 ewnFQmhwSHbivP31JHoqAUdQgxLrZoHqOP6efTBzipOvaOCs8PzGDkkGg2wRdXTKQ9BFU
+	 Lc79uqKGQnqXIE+XrOpF0HI/phxPq3Ct/UsmPPhgkFgdVi0zDJYBfG3Hl9EqZdpGpXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793905264;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
-	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=cNvHm4P49zGZ0AA9ASMVJBBbN+Qdiu12WvVmr/Br59g=;
-	b=AO8UAGZhHcxN1AtbJ6G9GNF82Uf8Hu+VPxKgYw3WzEqCuMdg42UvbpibZQxs3kTNlazk
-	 5isIYgSyLP5DxWFZhWgitI0HkWD3vAfaYtRKDi2/dJdfDrRG3Al8D410R8UZJ6MZ6jbUg
-	 m+9fgOzfqv01Ssj5EmpxdHFZ8MrTvFFuEbZU7w+lVWaCNRTP96UT7ktdURGVaMz08BZKv
-	 yVysdKix9CfDmNXnyVOfbRW3cyfivlqM4AoaUwlS4t0BpWBlP9SV9+MuARObsLIooKV19
-	 Ocqw22G4VEWyOpCD2HklNdCCQDZNUAxCQcFWOM9VfntyRiYGm6nsWR2V9Z0OkEpn8ag==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793907151;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=ok9xK5+RVU2z7z4ZSozse27/W4AiAkS/EO9C5ir25mU=;
+	b=wnK5U3hWbwRdevAJGthwGh4HcgarY8ddNp6VFKQJzPv/vXFjuv4uKGL1IuWh4+3w1Ymw
+	 3txtgRmFSYSGCwqtAm+qD3iCb3SwDcbs979kLOrsyhNJj9V7T6e4IzimoO/QH3sXWoH0b
+	 a71+M8uTpDOjGx9i+DkL2ZNTEjreiNiGtaq8ptUSrMkzfJ6GgE66N466Ww1agLgZj2s4d
+	 Hr9hyBlgqPi0ONOGu56DN5/r3CB/+KIvwyalljt0Ng1NtzdFV+mQb+8tKhjwOMODdDaw8
+	 XM6ELZapoc7mIyoWpPKUMP6MTrzD9/MJu/IUhYyLglaIH6hmgC48DTnCbvZXDAcY4dg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=mVwNmf4S;
-	arc=none smtp.remote-ip=216.40.44.11
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JXEpCvgM;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1263606A329;
-	Thu,  5 Nov 2026 19:01:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1263606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D77606A6C4
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 19:32:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=mVwNmf4S
-Received: from omf04.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id 38E62120A7F;
-	Thu,  5 Nov 2026 19:01:00 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf04.hostedemail.com (Postfix) with ESMTPA id D07D620027;
-	Thu,  5 Nov 2026 19:00:57 +0000 (UTC)
-Date: Thu, 5 Nov 2026 14:00:56 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Vineet Gupta <vineet.gupta@linux.dev>
-Cc: Peter Zijlstra <peterz@infradead.org>, mhiramat@kernel.org,
- mark.rutland@arm.com, mathieu.desnoyers@efficios.com, andrii@kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, kernel-team@meta.com, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] tracing: fgraph: Raise FTRACE_RETSTACK_ALLOC_SIZE
- to 1024
-Message-ID: <20261105140056.111875ef@gandalf.local.home>
-In-Reply-To: <53ee72a4-a5f7-4a7d-8a0a-fc3fc8804d75@linux.dev>
-References: <20260922225526.1554758-1-vineet.gupta@linux.dev>
-	<20260922225526.1554758-2-vineet.gupta@linux.dev>
-	<20260924100040.GD4121339@noisy.programming.kicks-ass.net>
-	<1e223334-b371-487b-a60a-7f1f5c007f7e@linux.dev>
-	<20261105122648.67abbe1d@gandalf.local.home>
-	<53ee72a4-a5f7-4a7d-8a0a-fc3fc8804d75@linux.dev>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JXEpCvgM
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12FA81F0180A;
+	Thu,  5 Nov 2026 19:32:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793907150;
+	bh=ok9xK5+RVU2z7z4ZSozse27/W4AiAkS/EO9C5ir25mU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=JXEpCvgMvZTaNGm8wQu4y9NnL3PiXn40dik5btKpjiQjiQ500nJqAUxUmX/xkGPQN
+	 7aoOH1KU7q8QpIMjVeTCrAJL0pnDDhDOsMmrhDNdbr3GOSyV4+UNFE/J83HW2iM/QS
+	 x40zxJ0PvTQF02Xp6dHZwbJO4sPIf2B8ohaViSQt+RZSby+s0s9KBv/Eh3aaAEG4ep
+	 ved22ag41BHnovDpejindOF+sQnFqaEaEZu0ttzhS+yDELcBJALwZQ3Q/rHRxZNcFi
+	 EeGCQ+NaFsdNX1ANLt9fq9htAX0t1wW8p5OEuk53nLC3ttymuZEICt5lux7bIU7SMF
+	 Fb0ZERC673n7A==
+Content-Type: multipart/mixed; boundary="===============3645252185705630894=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,29 +49,92 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <9b551f0d5966ca8c834e49751d89d574b949086aff27c8031f8e30c558659b10@mail.kernel.org>
+In-Reply-To: <20261105184411.29248-1-emil@etsalapatis.com>
+References: <20261105184411.29248-1-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf v2] bpf: Use dedicated workqueue for freeing BPF programs
+From: bot+bpf-ci@kernel.org
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,daniel@iogearbox.net,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu,  5 Nov 2026 19:32:30 +0000 (UTC)
+
+--===============3645252185705630894==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: D07D620027
-X-Stat-Signature: nijojfznnj3s8kdiojgc86wnjfhogrsj
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+nm+5gLQ+/jQ61184zf/E+nKVeZtsLm/k=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=cNvHm4P49zGZ0AA9ASMVJBBbN+Qdiu12WvVmr/Br59g=; b=mVwNmf4SBa97XgOt0W+LBsdzkyAGomNG5f3kFlfo2cLPp17X6NbpjJ7FeyINp/Cb9sG/gMkUvqbIXPuvVioKcFs8pz2ngP1nrFU0CwWMLx15z8EhVsBwrvoL+XDwuv75841uOB+7TViLFS1vViwskjohD1kNzqXtcJYdULGUilA=
-X-HE-Tag: 1793905257-975753
-X-HE-Meta: U2FsdGVkX1+LHqlcgYP7t/pmkV2ynE3kMb2NTGO/kTaMvUBSeBvGzpu0I/wEj2vasu8haOHq2h/UWA0QaqeZARh3oIWLDYcepC876sn7JI/ChsNQoLRPIiHpBh4iNPmZlxDIVDyshTtYkG75cpLL+SlNdfBCHjF1E3Q4L8XOyaXK80xu3UyjP6EsZMniBb/cXyvZQvkAGRjaaxXZbIeg8SuiRGnqbYmbXLj+h7iTanUFH/p4Tr9aZmBKLz1R/J+dz3vMHSnb2367fpoK7KT0AJiKNCSNOAcj7XmG+7b5HuZvRKlM0s1+e58QlKqxIhuMMnWFHomVAP2bfquGXNSvbUOQ+GE7hfDE
 
-On Thu, 5 Nov 2026 09:56:07 -0800
-Vineet Gupta <vineet.gupta@linux.dev> wrote:
+> bpf: Use dedicated workqueue for freeing BPF programs
 
-> I think you have some catching up to do still :-)
-> This is v1, we are currently at v4 [1] with Peter's suggestion and 
-> further split up for ease of backport and use of new rcu_scope 
-> constructs as suggested by Masami san. It has been Acked by Andrii [2] 
-> and Alexei [3]
+TL;DR: Design question: the new bpf_prog_free workqueue uses max_active=1, so
+slow frees (rtnl_lock, cgroup_lock) may block all other BPF frees, delaying
+memory release. Would the default or WQ_PERCPU fit better?
 
-Bah, this one wasn't superseded in patchwork, and I'm going from oldest to newest.
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
 
-Sorry about that ;-)
+[ ... ]
+
+> @@ -3143,6 +3144,17 @@ static void bpf_free_used_btfs(struct bpf_prog_aux *aux)
+>  	kfree(aux->used_btfs);
+>  }
+>  
+> +struct workqueue_struct *bpf_prog_free_wq __ro_after_init;
+> +
+> +static int __init bpf_prog_free_wq_init(void)
+> +{
+> +	bpf_prog_free_wq = alloc_workqueue("bpf_prog_free", WQ_UNBOUND, 1);
+
+Is max_active=1 intended here?  With WQ_UNBOUND, max_active is split across
+NUMA nodes, with a per-node minimum of 1, so a single-node machine runs
+exactly one queued item at a time.
+
+Before this patch these items ran on system_percpu_wq with up to
+WQ_DFL_ACTIVE (1024) active items per CPU.  Several of the work functions
+sleep on locks unrelated to pack_mutex:
+
+bpf_prog_free_deferred()
+  bpf_prog_dev_bound_destroy()
+    rtnl_lock()
+
+bpf_prog_free_deferred()
+  bpf_cgroup_atype_put()
+    cgroup_lock()
+
+__bpf_tramp_image_put_deferred()
+  trampoline_lock(tr)
+
+bpf_prog_pack_free()
+  __purge_vmap_area_lazy()
+    flush_work()
+
+While one of these sleeps, every other queued free waits behind it,
+including the cBPF frees done on process exit with a seccomp filter
+(seccomp_filter_free() -> bpf_prog_destroy() -> bpf_prog_free()) and
+socket/tun/cls_bpf filter frees.  The memory, map/BTF/module references
+and JIT charge are only released once the queue drains.
+
+The vmalloc purge helpers are queued with schedule_work_on() on
+system_percpu_wq, not on bpf_prog_free_wq, so a default max_active of 0
+would also avoid the deadlock.  The cgroup_bpf_destroy_wq in
+kernel/bpf/cgroup.c uses alloc_workqueue(..., WQ_PERCPU, 1), which keeps
+one active item per CPU rather than one per node.
+
+The commit message doesn't say why system-wide serialization was chosen.
+Would 0 (the default) or WQ_PERCPU be a better fit here?
+
+>  	if (!bpf_prog_free_wq)
+>  		panic("Failed to allocate BPF program free workqueue\n");
+>  	return 0;
+>  }
+>  early_initcall(bpf_prog_free_wq_init);
+
+[ ... ]
 
 
--- Steve
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42089627629
+--===============3645252185705630894==--
