@@ -1,57 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.246.85.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793871713;
-	b=PqPFWSQ4danVOTafx6Z8+PenPIPXqfNOm7BGvvgS769Z3DHLqrFrnvmns7xd1AgRNgOP
-	 r3v2wkF7Os4zPOAFK/Ugl86EAAUvxJpFK5L8D17rOHw+nDH3CYWiEiUhEaH5OQ4c+5GEu
-	 xnPmjrZcaC5ShEPvOKK+QY99m31HvBf74wdMjfXj8SQoW5uFVgI3VRbI58VgKIUMRw3HU
-	 ma4vRdzUiv1saSgsZ4a3+WyiiBNPAuMmpxfHSg32ewUiKVdqGOE9BVa8aeTtSA7+rjUae
-	 9CDA/1kt3ocat08+GeLLsFGAOr4ZdHo9qYaDrkMR1EDBzk7vTA+R2k56p8RHxkxfKxw==
+	t=1793872460;
+	b=Bq2V+6b7WH6ImWOUI2LhgseudSjsl9M50upomXYAmewWwKIaEJ/bUcvk3t+lF9XBVun7
+	 evfKtq79RX5ZO/mH0fl0vX20dRyggVX/9D68L2AyEC0RhOR1I+yUNc4jln9ZJlhP8cQ80
+	 Eqg7KaYAPqAvc/m60Mc52RKhbEXFBh/twODdDiDnwE92dFNCpjYU25PXo0KyF8AVtYFQi
+	 g3yZ6tIJAB0dW1x9tXc89nqVG5XD/YQpd8unb6H4S2xsQj7BnojvnpQZJ6lF+kc5P2V/d
+	 KuhQ6vJ6mDLayPFOk1KkfDekp2BNvaEjtoUjQePlfHDAGZkmyZWavOeZobAkNozhM4A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793871713;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=/Y2n9N3wHarGbcQP7ckfFTp1WfkEHxeGHJzkmY+Ja/M=;
-	b=L763oNlGjzlVrI1kyUUiOcZ933/Os7BJILOATSPy4By4XceldyNIdoSPSu2nc+DMyrIf
-	 MgCoIzachVdvelU3+x5Z5dT6iRrwTS8iO6L9RV6dyiKCd0Ojg0puZC6X1PMDIZBBzPXFD
-	 z5HtRxCaeufMJIQTQiTg9/wcS9/p5KACsIonukI0mymGTe45TuvIzyk5xXNBhEV3tSYjM
-	 Q9IhOcMyoFf0UMCJkmOBBlzWVMYzI9x8XAqxtQ6nfelIaskdIo8LGiWIiJvRFr+oUfwyd
-	 KMbPfBXgg7ZybXyn458Xo+lJAWqfMLBOXB2YnebrVwYzpone8fJaq2pt+Wk7bE0ArNQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793872460;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Mime-Version:
+	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Subject:Cc:
+	 From:To:X-Mailer:References:In-Reply-To:X-Last-TLS-Session-Version;
+	bh=V6R4Z5QNn1TmY3Fb9b2cmHECgOA3rdSKsC6p62jeDtk=;
+	b=yFW6AHd19JMCgT8/5AuQEN0lXFeE1Ek73dFOGhM0m7zHSjw/lttjwRU1Y6ov359aKkQs
+	 12BniQZw8ghv438jSABATPBPiuyqihXpkxh3/XN24c5RKuIwBdBvD8u03kCtVyjkB4Fze
+	 q4WyAppM2r8s4vckeVMMj9RFOQKVx5OR4lx6t7SF355T1KUkAZR29/k7xT9Wgd3homrue
+	 et+RljBsWA3Ez020/18fXjwCz6oq+qoRqtpZD++L7Q+GgBZNywDjsHoFIis7pX2cmVmzg
+	 b2qUBcznhvrNC5/zwYClXl0kRyVIV4QkT54d6fyAXz+drPX7T74A9y3guRFJueeqVgw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A4qEBuzZ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Drud5Bh2;
+	arc=none smtp.remote-ip=185.246.85.4
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69DF7606A31B;
-	Thu,  5 Nov 2026 09:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46965606A31B
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 09:54:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46965606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A4qEBuzZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 180041F000C1;
-	Thu,  5 Nov 2026 09:41:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793871713;
-	bh=/Y2n9N3wHarGbcQP7ckfFTp1WfkEHxeGHJzkmY+Ja/M=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=A4qEBuzZUpdqYcqJxtZJz0HQHypx0ojZ1RZncVDsD1y+3eaE0yA5Q5eA4W13uSSrO
-	 DPXD7QigtpmgDV8uJAgJchiPPqGi3rETfIKKAzgEQBhxrPSBfuRbnOTBl5LRWMUKKr
-	 ukglWm2g0G7jez2kFZt/QSkRbaSGu7QCobEAI0YjRCiQ31wAAVmDB/zDi0P0BcjGG4
-	 W7910/WHeos4BkIp60BlHZkai6LVyOQAN4dotfAiEEnaV/ZpDGxpDNvPFauvGFkeEF
-	 K28fMZpvRT8t2t4k+WO0NKpn1a4SZou91Q+LpBfUYEZTJjIQlaoD3w7xv4XNpMFYPB
-	 Q481IZgaHJdXw==
-Message-ID: <sashiko-outbox-198772@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Test faulting build IDs
- from a sleepable raw tracepoint
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Feng Yang" <yangfeng59949@163.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-In-Reply-To: <20261105093212.826479-2-yangfeng59949@163.com>
-References: <20261105093212.826479-1-yangfeng59949@163.com>
- <20261105093212.826479-2-yangfeng59949@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Nov 2026 09:41:52 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=Drud5Bh2
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id B91AD4E40774;
+	Thu,  5 Nov 2026 09:54:11 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 72EC15FF85;
+	Thu,  5 Nov 2026 09:54:11 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4A14A10328E77;
+	Thu,  5 Nov 2026 10:54:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1793872446; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=V6R4Z5QNn1TmY3Fb9b2cmHECgOA3rdSKsC6p62jeDtk=;
+	b=Drud5Bh2kSmQFCtnnvVRBf9Bpw/2pvB6u2mFtC6kIBwe6l/lvVAABTN9MUisRt8dR8oay5
+	aYfk922o/+l+N+kukaDg+AwrL/pFqsQs0Hly8htVtM9x/9bO9YlofGTYafqV5KorPhIT5Z
+	+FiLICdmBKFIaOjNtXH+XT9IRaNw9xl7+YR1Mfqg7dqPAeGnz1mocGfIcbakHMLN4vKHPF
+	4q7PyuN7EsmOTeVhc43D0a1MC9+Hg1WjQBZZywg9EDJpLnBaPnDgqwXztVmcizl/XElOKF
+	4HRY5RITniyt7rrY097BUozGfWDDfcWlyiyPU+wkHICAd2wy5UYte9HbAUICmA==
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,142 +58,62 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 05 Nov 2026 10:54:02 +0100
+Message-Id: <DMN6PJC05X2R.2PXWV13VGT156@bootlin.com>
+Subject: Re: [PATCH bpf] selftests/bpf: Look up unpinned maps by ID in
+ bpftool_maps_access
+Cc: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ <qmo@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <ihor.solodrai@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Tianyi Chen" <hi@tychen.cc>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.22.0-0-gc2f86b7abde3
+References: <20261104183323.409412-1-hi@tychen.cc>
+In-Reply-To: <20261104183323.409412-1-hi@tychen.cc>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] selftests/bpf: race setting target_tgid before target_syscall
-- [Medium] selftests/bpf: unchecked signed-unsigned division in subtest_raw=
-_tp()
---
+Hi Tianyi,
 
-commit 2b4f6f5d972293b188ccb421c050655343b0d0ee
-Author: Feng Yang <yangfeng@kylinos.cn>
+On Wed Nov 4, 2026 at 7:33 PM CET, Tianyi Chen wrote:
+> The unpinned subtests pass "name prot_map" or "name not_prot_map" to
+> bpftool. Both maps are used by programs attached through trampolines,
+> which are freed only after RCU grace periods and hold their map
+> references until then. A run's maps therefore stay in the map ID table
+> after its skeleton is destroyed, for about 300 ms in an x86-64 VM.
+>
+> If the test runs again within that window, the name matches maps from
+> both runs, bpftool fails with "several maps match this handle", and
+> the unpinned subtests fail.
+>
+> Look up these maps by ID instead and drop the now unused map names.
+>
+> Fixes: 2d96bbdfd3b5 ("selftests/bpf: convert test_bpftool_map_access.sh i=
+nto test_progs framework")
+> Assisted-by: LLM
+> Signed-off-by: Tianyi Chen <hi@tychen.cc>
 
-selftests/bpf: Test faulting build IDs from a sleepable raw tracepoint
+I've reproduced locally in my VM the mentioned issue (and saw the
+"Error: several maps match this handle") with:
 
-This commit extends the build_id selftest with sleepable and non-sleepable
-raw tracepoint subtests on sys_enter to verify user stack build ID extracti=
-on
-when the build ID page is paged out.
+  while true; do ./test_progs -a bpftool_maps_access/unprotected_unpinned; =
+done
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/build_id.c b/tools/te=
-sting/selftests/bpf/prog_tests/build_id.c
-> index aec9c8d6bc96b..98e3d09981793 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/build_id.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/build_id.c
-[ ... ]
-> +static int run_uprobe_multi_syscall(struct test_build_id *skel)
-> +{
-> +	char c =3D 'x';
-> +	int pfd[2], status, err;
-> +	pid_t pid;
-> +
-> +	if (pipe(pfd))
-> +		return -errno;
-> +
-> +	pid =3D fork();
-> +	if (pid < 0) {
-> +		err =3D -errno;
-> +		close(pfd[0]);
-> +		close(pfd[1]);
-> +		return err;
-> +	}
-> +	if (pid =3D=3D 0) {
-> +		close(pfd[1]);
-> +		if (read(pfd[0], &c, 1) !=3D 1)
-> +			_exit(127);
-> +		close(pfd[0]);
-> +		execl("./uprobe_multi", "uprobe_multi", "paged-out-syscall", NULL);
-> +		_exit(127);
-> +	}
-> +
-> +	close(pfd[0]);
-> +	skel->bss->target_tgid =3D pid;
-> +	skel->bss->target_syscall =3D SYS_getpid;
+With your patch applied, I don't see the error anymore. The fix
+looks sane to me.
 
-[Severity: Medium]
-Can setting target_tgid before target_syscall in run_uprobe_multi_syscall()
-race with the child's read(pfd[0], &c, 1) on architectures where SYS_read i=
-s 0
-(such as x86_64)?
+Tested-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.co=
+m>
+Reviewed-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.=
+com>
 
-In subtest_raw_tp(), skel->bss is zero-initialized (so target_syscall is 0)
-and rawtp_sleepable or rawtp_nofault is already attached before calling
-run_uprobe_multi_syscall():
-
-subtest_raw_tp()
-  bpf_program__attach()
-  run_uprobe_multi_syscall()
-    fork()
-
-If the child enters sys_enter for read(pfd[0], &c, 1) after the parent stor=
-es
-skel->bss->target_tgid =3D pid but before skel->bss->target_syscall =3D SYS=
-_getpid
-becomes visible, rawtp_nofault or rawtp_sleepable in
-tools/testing/selftests/bpf/progs/test_build_id.c sees:
-
-	if ((u32)(bpf_get_current_pid_tgid() >> 32) !=3D (u32)target_tgid ||
-	    id !=3D target_syscall)
-		return 0;
-
-	/* Record only the first hit, a later getpid() must not overwrite it. */
-	if (res_rawtp_sleepable)
-		return 0;
-
-Because id =3D=3D 0 matches target_syscall =3D=3D 0, the program records th=
-e stack of
-the forked test_progs process before execl() and ignores the subsequent
-SYS_getpid in uprobe_multi, causing the uprobe_multi build ID assertion to
-fail. Should target_syscall be initialized before attaching or before setti=
-ng
-target_tgid?
-
-> +	if (write(pfd[1], &c, 1) !=3D 1) {
-[ ... ]
-> +static void subtest_raw_tp(bool sleepable)
-> +{
-[ ... ]
-> +	if (sleepable) {
-> +		res =3D skel->bss->res_rawtp_sleepable;
-> +		stack =3D skel->bss->stack_rawtp_sleepable;
-> +	} else {
-> +		res =3D skel->bss->res_rawtp_nofault;
-> +		stack =3D skel->bss->stack_rawtp_nofault;
-> +	}
-> +	frame_cnt =3D res / sizeof(struct bpf_stack_build_id);
-> +	if (env.verbosity >=3D VERBOSE_NORMAL)
-> +		print_stack(stack, frame_cnt);
-> +
-> +	ASSERT_GT(frame_cnt, 0, "frames");
-
-[Severity: Medium]
-If bpf_get_stack() returns a negative errno in res_rawtp_sleepable or
-res_rawtp_nofault, does dividing the signed int res by the unsigned size_t
-sizeof(struct bpf_stack_build_id) convert res to a large unsigned value bef=
-ore
-checking if it succeeded?
-
-On 32-bit architectures, where int and size_t are both 32-bit, a negative r=
-es
-such as -EFAULT (-14) becomes 0xfffffff2U / 32 =3D 134217727 in frame_cnt, =
-which
-passes ASSERT_GT(frame_cnt, 0, "frames") and overflows the 128-element
-stack_rawtp_sleepable or stack_rawtp_nofault array in print_stack(),
-stack_has_build_id(), and stack_has_ip(). Even on 64-bit targets, a failed
-ASSERT_GT(frame_cnt, 0, "frames") falls through to the subsequent stack che=
-cks
-instead of jumping to cleanup.
-
-Should subtest_raw_tp() check res before computing frame_cnt, matching
-subtest_sleepable() in the same file:
-
-	if (!ASSERT_GT(skel->bss->res_sleepable, 0, "res"))
-		goto cleanup;
-
-	stack =3D skel->bss->stack_sleepable;
-	frame_cnt =3D skel->bss->res_sleepable / sizeof(struct bpf_stack_build_id);
+Thanks, Alexis
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261105093212.8264=
-79-1-yangfeng59949@163.com?part=3D2
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
