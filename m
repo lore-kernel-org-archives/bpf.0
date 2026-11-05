@@ -1,101 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793889915;
-	b=NU+AePXvRl6AGIJcE/ehChQntKKNN9tZwUYgKGO0gPb9QKz88SVZPwbBECSYW8P7ZDoX
-	 J6HYPWYnZ0gpwftM9moOP0SfT6bPlQWYS0Kxj7G3IXwp+tbyeFcmrYUQbxrdTT4bMXD6A
-	 WiVmjBXEcZNVPO2PJ3b4G7qJhJyIJYkFQJNDHwZDcrZ4oUyq9JL0Qdhwz7y0EGDF6AxHW
-	 PqH46iNBwcM9KXQpQ8eHyxpO2fkc+dWcXdhpajMrZYHO8FL91QIT0L39mmcxq86BllSgM
-	 k5exuiyVEmkbYHWTSKGbK/ssx15ffg7wbpKRSRxX/6R2ucA3m3BqN0xldIaxokz9PJQ==
+	t=1793889998;
+	b=1n4RibDLnUAaDRS7/szNQbc28Q0Edc/rEVmq5OOOMGlm0jg4ED6XiWIKwKF6guVgvaBe
+	 UvAdKhr4QgmnTRZk8bcT4Qh/mZclO3h1Dp+lQaT4qIFVxrLacdTsmtr6YXIXC7vv+gjB9
+	 zbbgEXPLfsyxiG67sJdrHjAOD1Qct5Fn7Y656iOolH5mvluLj296BraDnM2nqbLcWjRRQ
+	 Y43+DLR1OjQcY9QibcDd+OpgLzzljXYaSko7045CFSt4ECfUACaJBZhwPMdeRpjRwil23
+	 H/asBDMiZ/KLHe0uOjjbu9FtJJN5hsEWSQ6SNNmUbaSr9UI6UjKSqkng/t1GvEWDwLA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793889915;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=i7BrofaPOZ9C35pnwUvUQZbjQnwmUAOZMnHWHwRv8+s=;
-	b=3DXmiZ0pjDM9Hgp4i69sIZgPv2jeYMe3P5unxME6xxeyHhlaiVjYjR2825odLUFrfG0F
-	 NoFW9l91zkMslFnSBTnYeg3p1CZlyXStdP4eABQmRDt50V+3H0Y7UrKAT6C7GIGJEliP/
-	 3/4VpwBjIUIcY30hCLCix3ITFljCAG3KkBqPdcH3xTP6RIUnC/+TcN+zMpr6DTk4YdILa
-	 9cGgJOjXq5qj+iHHYaRb2plJ7fy9bBBGrUDyqjnQYF2/uFecZ7zPnwizLpFqAxd+GoTHg
-	 tqCsGrjXLxqY2z7rJ0ugaRjTLEvWtX+IY6rchJPcCoNrW58dg0uk4qYYI01SC4ar6QQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793889998;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=sVQyqzffyPn/JePjwjFuckgqFqjcEu2veYv/4AtLt0w=;
+	b=GTpIMqhiu839Jyd+K9+aKs5mnuRbblkYNvKzX4fNhdusKy8LSvcHnaUcm4v4svYBpWDi
+	 K/TdSpWu3HL9OlvdFSNu9a/gapgyEeOCvnELFw7fIml/eiMmLt+VsnRHjqpFYFPFV3gOe
+	 WxrTbsVD1EHU+BBEb+6L/+krrLZwnrKP+wJ5A6A7sSFqSTV1BO+eedAKQvqwdgmtOmhOW
+	 ChntXLbtF+ZF1r2sb9X0ufdEDmp5xuUze9+Tgn1n9NDp5reMO7eV+uoaIQT5RgcNjZTht
+	 rvez/Ft0pQ2Bi6CmX74VO7iol0cqLDamaaUuFmwtg0myGFPDwOqsgpcxJW9kfZb8gpA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=networkplumber.org;
-	spf=pass smtp.mailfrom=networkplumber.org;
-	dkim=pass header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=DOtb7DVA;
-	arc=none smtp.remote-ip=209.85.208.46
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GI1pmYnj;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEA8606A32D
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 14:45:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDEA8606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F557606A31B;
+	Thu,  5 Nov 2026 14:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=networkplumber-org.20260707.gappssmtp.com header.i=@networkplumber-org.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=DOtb7DVA
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6b2237b596cso3975688a12.0
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 06:45:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20260707.gappssmtp.com; s=20260707; t=1793889913; x=1794494713; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=i7BrofaPOZ9C35pnwUvUQZbjQnwmUAOZMnHWHwRv8+s=;
-        b=DOtb7DVAE1KdSwUcKf+S7HY+4uPzSKWdw20wVji3De+y7UvPOcW1G3cyx4+Xjr1TSX
-         6uqn80eBvev/J1PyQz62Ck/u3AtHmahePqGSnhEXTR5kuMMs+e0kSitH/ILh0FWiu1bE
-         fhWQfaB8wdZg3/0yZkDYGizm2JtEiIrqbGVN7XTy53zADb869v6geSVzOf6J0x2/MFwK
-         CdWm+eyVIoAdA0qQuv1YylicA6WrKNyq/9+q1M1IntexK9UrIQrDRsMlH2wSnYMEZJMD
-         SD1Hgt8ND5lz4ooYUjbG3mxQMxPnkxem3PvvXlPHDSnNOzhyoKoCubfXAfuk6D+WSnv4
-         xmJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793889913; x=1794494713;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=i7BrofaPOZ9C35pnwUvUQZbjQnwmUAOZMnHWHwRv8+s=;
-        b=gOCupiKZ2wwhW3kOzCrRM7ifozwUR86we1m939vvd3RbtK45kfIduBa6zh9c+B5f8G
-         3qETK/ix++q/1mZ8uFGVTCPx2fI7UFF+hVCe1wPRZ8WQ7IreOJM8dv6TayrkA31K/YCR
-         5L1RWNHC92Q2BHEg3xbSUK7IkfXOKm3ruY412V3O6THO7jdIsy/uvcBdIpYdNAdEZ8dZ
-         +FRbFl2GUBA5LDG910yImTid+x4wNW5ejuGQy03wv368JsN9Kwsp4ULTdTzMbpS1dqV+
-         +Q/+JjyQp/XfRNN718UmG1qb8l2fs7u7jUsaDyfv9KuOCVFGYJy+8hwwCeFjed7ePEI3
-         PYaw==
-X-Forwarded-Encrypted: i=1; AKwUvBzsiKkiXd+PeJysJiwG/F5QZTD5w4splTXH93mCHJFVa0QclReTpNSO4/11EKWiRNmFCLo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z99E7fCps1TiYTKHDI8MyI59l24EyMYeNw5HiO1CARLALcqNjIL
-	U733n9Zz2jcyqjkm+ykMVfA4+/u7g0nBAjBLRQCiAO6sfsT6BuhfyHIwA6LlvXCaszU=
-X-Gm-Gg: AYBFou0KqEcnqLXnCGOAJkTZvGnLwev/01Q34EW9D3A1w1CJ4Svg2cqXQ1Nqk6dqz0v
-	XuHFRB49xkLDMhEi/KQn2jKlaxMbSl/4XJRDtfFu48rrUWi3EWkTs2IbL/yXR50BOn1JvRT3hsx
-	4MHD05ayFQjMKSr8QeAiP3S6HxprJJE/nEbksxZ3kyPSmwrHvFVTBRwOuxI/ha7pr/LqhxSw9np
-	vSfoc0SjkFiBTKROz2K5u2FW6eBxUwsHnaMTVWypRL0MIDf268axAf/iPSaLfbiUXFTaqHAsyGM
-	/GQGKW0+OAHNeGXZE2BDnUKUUwTGAYHqas9hjGbETUuu7cDaF5bZTyvs5R2j+HrX9/0gmBjwSdk
-	QgSa2K5tiRJiEaNcI0+++DsLg5a9+QG5PmgPhT4A8lHXCQtmagRwq/gV1ZG/RXFxqbQw3wCHUdi
-	8epxvsXLSVkiFFYU10FyzA3b0uiydfvEPXpb+5uV+Aj3aJrcNb/g+8kTaATbnf5i710uM/h/NOY
-	AiYRh8mPg4YcMm/sT1ERa7N91a+z1ktnqTaHTn96wfby8LlpDSMO/93qHmITyWVfi6JSy8G6ZNq
-	v/TLFulF++aG/3OMc9WoffG6SNix4CoX7/jSJrfok6yHKdMDWkgPrMqO1zD+WOmjWHU2hnDM/r5
-	heKlDblxKj41vHVbZkFBc+w9T+1xNaBx8D7XE
-X-Received: by 2002:a05:6402:4010:b0:6b5:82ad:18a4 with SMTP id 4fb4d7f45d1cf-6b582ad1997mr1243917a12.40.1793889913024;
-        Thu, 05 Nov 2026 06:45:13 -0800 (PST)
-Received: from stephen-xps.local (93.224-78-194.adsl-static.isp.belgacom.be. [194.78.224.93])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b55ac94e8bsm1697782a12.35.2026.11.05.06.45.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 06:45:12 -0800 (PST)
-Date: Thu, 5 Nov 2026 15:45:09 +0100
-From: Stephen Hemminger <stephen@networkplumber.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
- bpf@vger.kernel.org, dsahern@kernel.org, Willem de Bruijn
- <willemb@google.com>
-Subject: Re: [PATCH net-next] docs: netdev: fix iproute2 process
- documentation
-Message-ID: <20261105154509.1cedd84b@stephen-xps.local>
-In-Reply-To: <willemdebruijn.kernel.213e1d84478e4@gmail.com>
-References: <20261103033611.949104-1-willemdebruijn.kernel@gmail.com>
-	<20261103092226.2e8ab229@stephen-xps.local>
-	<willemdebruijn.kernel.a20ae72714a7@gmail.com>
-	<20261105143049.51af15a1@stephen-xps.local>
-	<willemdebruijn.kernel.213e1d84478e4@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GI1pmYnj
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD6D1F000C1;
+	Thu,  5 Nov 2026 14:46:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793889997;
+	bh=sVQyqzffyPn/JePjwjFuckgqFqjcEu2veYv/4AtLt0w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=GI1pmYnjC8MmiJ8PDAJYDITXxyfWY5LRI4X58LyejJtpPRM1uX5REyLF5Cy7PFilB
+	 orKyo+jKxW+L9WynsldKR/7T6Uat3azcd9Vhml9CyHQ3tTNaJQsPRwLq2fPHv0FFK6
+	 7g5OPBzuOVGHRp19qOM8mlYLTX1R183sV8UrRSaJ/ZhWpdRTt03gjnkfdAvN2QAYS5
+	 AscVW6QtIP2I0Ttjb52g5R1J6qnOXZIaeN1WJZ87jv9VRcSllvWkNaNpKaJUgf9x5F
+	 k5rgymGZW7IzVPmOIDc86T1FltiDnuQmn1BVVrsJAS4I6ziDWfoVeKrr1D/FuveNbB
+	 eybP58MbQstkg==
+Date: Thu, 5 Nov 2026 14:46:29 +0000
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	"Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 5/5] mm/khugepaged: drop/reacquire mmap read lock if
+ skipped enough VMAs
+Message-ID: <auyMmGmrW-6WhF4p@gremlin>
+References: <20261103-khugepaged-latency-fix-v1-0-a07ab16ac860@kernel.org>
+ <20261103-khugepaged-latency-fix-v1-5-a07ab16ac860@kernel.org>
+ <c05cb7a5-35b7-4364-9b7a-a87e54bf0ecf@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,36 +72,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c05cb7a5-35b7-4364-9b7a-a87e54bf0ecf@kernel.org>
 
-On Thu, 05 Nov 2026 08:46:22 -0500
-Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
+On Thu, Nov 05, 2026 at 11:28:47AM +0100, David Hildenbrand (Arm) wrote:
+> On 11/3/26 09:27, Lorenzo Stoakes (ARM) wrote:
+> >  mm/khugepaged.c | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> >
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index 216c4b8d28c4..b9c72ee8b421 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -66,6 +66,12 @@ static DEFINE_READ_MOSTLY_HASHTABLE(mm_slots_hash, MM_SLOTS_HASH_BITS);
+> >
+> >  static struct kmem_cache *mm_slot_cache __ro_after_init;
+> >
+> > +/*
+> > + * The number of VMAs with nothing to scan to walk before dropping and
+> > + * reacquiring the mmap_lock to relieve lock contention.
+> > + */
+> > +#define KHUGEPAGED_MAX_SKIP_BATCH 1024
+>
+> I don't quite enjoy this magic number.
 
-> Stephen Hemminger wrote:
-> > On Tue, 03 Nov 2026 09:44:53 -0500
-> > Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
-> >   
-> > > Stephen Hemminger wrote:  
-> > > > On Mon,  2 Nov 2026 22:35:56 -0500
-> > > > Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
-> > > >     
-> > > > > +
-> > > > > +Patches are tracked in patchwork under the netdevbpf project and delegated
-> > > > > +to 'shemminger' for further processing:
-> > > > > +    
-> > > > 
-> > > > Minor nit. David Ahern (dsa) handles the iproute-next patches.
-> > > > I stick to only iproute.     
-> > > 
-> > > I know, but there is no separate delegation in patchwork to David.
-> > > 
-> > > I assumed all iproute2 patches would get delegated to your patchwork
-> > > component. Is this not correct?  
-> > 
-> > Right now we correct it manually. Often patches target the wrong tree.  
-> 
-> This is not about the trees, but delegate on patchwork. There is no
-> delegate dsahern in the dropdown menu.
+Yeah, it's trying to find the least impactful way of saying 'we spent a lot of
+time in this loop' more or less.
 
-David is dsa in patchwork
+It was empirically figured out to be a good choice (and is very conservative,
+obviously).
+
+An alternative here would be to literally track how much time has been spent in
+the loop and if exceeded drop/reacquire lock? That felt icky though.
+
+Another option could be to check to see if cc->progress is, say, 1/4 of
+khugepage_pages_to_scan, and then drop/reacquire them?
+
+Since actual collapse drops the lock + exits the loop anyway that should work
+OK.
+
+>
+> Besides it saying nothing about "VMAS", so the name it self is pretty unclear.
+
+Ack.
+
+>
+> I was wondering whether we can give the "cc->progress += 1" a different weight.
+> Skipping VMAs seems to be more expensive than we thought.
+
+That could get tricky, the ineligible VMA rejections are all relatively quick
+and in any case we don't even check the budget until we reach an eligible one.
+
+The eligible ones being rejected potentially take longer but it could get
+complicated.
+
+>
+>
+> (Maybe we should also just say "skip after X" VMAs in general, whether we
+> skipped them or not?)
+
+Hmm yeah true, you might actually find an eligible VMA (spans a PMD) but then
+for one of a bunch of different reasons skip it and only cc->progress++, even
+though you maybe spent quite some time doing it.
+
+Could keep it simple, something like:
+
+	#define MAX_VMA_SCAN_BATCH	<whatever :)>
+
+	unsigned long nr_vmas_batch = 0;
+
+	...
+
+	for_each_vma(vmi, vma) {
+		unsigned long hstart, hend;
+
+		if (nr_vmas_batch++ >= khugepaged_pages_to_scan / 4) {
+			... drop + reacquire lock ...
+			nr_vmas_batch = 0;
+		}
+
+		...
+	}
+
+Maybe? Could also potentially only drop the lock if
+mmap_lock_is_contended()?
+
+--
+Cheers, Lorenzo
