@@ -1,45 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793832034;
-	b=U6QPPSD3Yk6wXh/c27GtOWGtgtUzDtpaGXzQtNspKvWGKTINPT80YulaGQAVwgTtrFfb
-	 R9v8zEzav8VC8gDul/MzsxLF/M+/PAl6GfEosKRZu6Ni6CJJK1lI6oOTwMKri/28zDVJN
-	 jnkX423H04yS5h21HBX2I2K9h6AX76go58moEyo0DBa8TXbyAO71ShFO6VCB41YUtujTX
-	 vrqiFRxXOhIb55zEpFzJeadEzDFnsRQrQCGex4NTX7x3162KiwzLniPDrKqn3edaq9exE
-	 utnPxxJGx5T9Sqw/8/8cgMzK5kWA46D50Ua116Gm5XfRN2N69EdTiSz79cLJqXdSajg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793832034;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=1KuwbhRYS8evU/5GR37yFGBoWIymzEOg/VrvKxMvfJo=;
-	b=WClfEBXnyLgCXqAAUGQaEdFuJk0eHoEczu5Az5nRPU4qA9bSBWkKhy6NJ2fyek7weJKy
-	 I9UrVQZ9sZWZoMqDIGiD8JWAwfiT8yJj+TcYBPsmux+8KQWQpmMxbsBKFBaBHuEJAX3Kx
-	 3mSE3Yzt6S+VtQcc5cVz6fuhepzsbxILwardjptnxSs+iKVYJyZ+xKc+3nFcwud/xtKtF
-	 UuhEsUC56rEOIYKJqy7/4BFku8unxntrtrRPfA8M2yC8KGaiwn0FReJWBJ33iHlirC15J
-	 CuQfiSzwGh7Rewid+UmxV18aOnLWhMhhL/7j1dyJbwFAGj6nKQLHWO1RDwg/hyjNHMQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=g5OuOeV+;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.218.48
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793837167;
+	b=wwbto0VQ3QZ1CzD+VZ7UpLGMjsgb/On8n4L14Gw8OJ8QuftCY11QgGpfORodbkjy3gpo
+	 pHtBDWbbgI6sujeZ02O4HLZuoglmL3jZpusN1DTHXJJbyzzWiT8gAaKPsur42aaZJLuF0
+	 ulQksuwEWpM+kMJC/bv9jWF8OlVeUtjBS7LQYATW0KzGt4u91xiyqfkgYTbgr7J1OTXlw
+	 kPbLQ8E+qWljgz+pMKo2nHfIyBzkkm/eJukIVfTNyO01DxlqrvV7GRbtJJUOBjrHyEOjj
+	 ITdGsUB51MzGO1h1LPFVBMPx2O5PmM3/TOwMW0TAcMHiEE+jkYzfOhTMIsJIfOFgPNQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793837167;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+	b=gLbFVQXptvyCK/ZnzFHWHhiZ2b5SXI9GhYy8FfkW8Mf4oiXIb/GiU9+6z29/7ZyVQnMO
+	 PEMTh6H5+8oZ72bTCyTvvgZfstrNgYqzzw/o23cpAWwVPFU+NnkLs9xy/gIXbCy1K6axh
+	 dCZRHuRLXVKSdC5cj1GV0L8pyPoFrMBhSZy7yxvIWsaVpZYMiO9Kwx8/eAhAhSkCIkof4
+	 pXSB9Ux9VTobiZTP14dFYSFTELMgsNSXO6xHSKwp8lTdnTlHU3JWzVgzTUNSkNkkJA9DS
+	 258jxf4LX7Qyh9pltTXac93U/B1uNgZw+2DGjLP9Cv1E8qfWbL5IgDR8FtHUNvrOpWA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UW7+Lg7r;
+	arc=fail smtp.remote-ip=209.85.218.48
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D319C606A31B
-	for <bpf@vger.kernel.org>; Wed,  4 Nov 2026 22:40:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E100B606A31B
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 00:06:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E100B606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=g5OuOeV+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA931F000C1;
-	Wed,  4 Nov 2026 22:40:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793832033;
-	bh=1KuwbhRYS8evU/5GR37yFGBoWIymzEOg/VrvKxMvfJo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=g5OuOeV+uC4XPhTlC/gGM8/rTSOrZyLoVFePjbf0/6gJUvOua/vTlYyvQqLmHom5J
-	 fA0GywvudeLs4UA/6AAWCsoZtuJ1CtU5M9sEBTlLKESbiGh0Sbx1JCZdAI1RCE30ER
-	 Ik+ArdX8s9gWUZujGh6dUhT4S3BDlmYU6B4NnUqTphUuXPJpuNbKXnfBa72BLg+22h
-	 MZxK8HuAaSfD91uwlH9+KAhbT2MYLLCbCsHw8TJhP8ucve6NvwI00q2HI174sGwUQz
-	 LHFe+tAZv6Yen4qdo4A70NfA2np3cPsgqbnW3HjLxZdp3Smf/sV/nTU+Pjl2UcnjBL
-	 NH2YYE6cqAlMA==
-Content-Type: multipart/mixed; boundary="===============9185524490659806987=="
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=UW7+Lg7r
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c4682977f9aso166302566b.1
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2026 16:06:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793837165; cv=none;
+        d=google.com; s=arc-20260327;
+        b=kIV46w5tZ63ev8/rWFx4UR+hOO/MHl2L701gKybieWvKrnwqhEVE5Tv515VrBqgnn8
+         e6c7AHZO356La2jZ3VuH4kvOp8R4AOiNcdG74PKReM0Bp6VSbloV4/jT5TYfUSuo8CEX
+         dCikq4WMMMMuRvFjGKHk8dlMg7JefoRbfLxFU44iUWWwnnnceFPxLcnbHbca0tQe2wqY
+         oSzY9vJRQief0MeZKbk7jVayORJacZt/o4gcnKhCoui8wBgHsMBWJAjQVGmA6a9e8Ofa
+         EfC3iYKD1LPi46ci1MUDOuBIrhy1Tq8B7Yn0PzhZdvf+OfsFCVR29ao62vPg2oKIStsT
+         4plw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+        fh=1C1wzk+LD30+/nOqfX3JiKQlEXqrNxKcipGrI2+k/jU=;
+        b=ZF0i6U2a+KyMB1V+QTF+L6tUPKZHzGaU3b7j0CE7AA8wbpZGjivdPb2TUZY3bVfbXW
+         gZip4rZRzoQXZtDxTZmsZbskX4nDTtmS732wqLmmFFc9/vZEVh4DQQTKHfIX1MZJYwJK
+         necPAwD3yZts4Zr9XulXp7Zi0M8xNCFw+XOljH4dehCPiV/Z/ztu18Rl80ruiRy2ZcVU
+         Fy3ywx3k5DW0NG526OgytoPgfYGEkxLZsnuBZdOe6MXDcbsD4thyB+h7d2LBfwPAX74C
+         5CG+x2m6doRtoGYd0qXI7q0C/pKKZaDXn9YcHQvXnqmIHB14qVYZVwitXMFe+lkm2bFw
+         2f7A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793837165; x=1794441965; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+        b=UW7+Lg7rFdK2cPOSHdibyhfqd0mNfE52oRphbaahRpCOHjIZJidko9tTbllyzCryjy
+         siNubT2yNT8UsddMzx39cRlaaf4u9pnE+6dIm/dTOyiVwyDFMyx/T503O/SAkgV4IgXs
+         efUG5InyQPdPjXkVj3FyrgQw8Tp3Uwud4aaLkD2TGlBzm2pE66Yo0XieOJu07M7lI+DV
+         gUkNX9hygDXotIY7g19Ob5YY4jcsnCTMlsFTY/Azp5LW+ukD9CKA5AAnTO8zpTJXxWqx
+         5Vgp8TB7FfNb2pRMsONUAcd0wfnBxqAeiMrEDvVnn/35z4BZWsrn2RkRHETiQqHGP/C3
+         KXdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793837165; x=1794441965;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rBao9fgm6zvnqMZ/xw9mMi296PqW8mAwycCLa5M4/yo=;
+        b=iVFwCPV97LYnRQwgxP8Cni28gtb0/uxxiOcj6oYN8atbv7fEpSssR8UNltFcKNMu4S
+         ZBQyxptd9fQ7LiBGP8Rp7226XzbtfOHiNKouI16ZCFLIiGaD/hVpOOcX2L7eVQDfLC/8
+         KtxiSUQ2XuOZakRklPG0KWfHhMgrju/xSzfJF6VPsuhvNVm7LLs+FR8HPiU1k6lI+UtQ
+         1dtckODZ1ohNMeeK3brB8KmLdzXRFJTfj4zj9FeFYeSuwYy+ABD7Dj9YivxIsmhvQGL/
+         ip1eyRnzYj5ZyZWxgnibzVRq9EeSnAsF1uHGk6rRUzA6p2W+SHQ0icIUQd2W6ZmXudMY
+         oGtw==
+X-Forwarded-Encrypted: i=1; AKwUvByd2rhsJ+koshtCyM1iezPoiVM9B1xXAzsMpWayrCku7xrJOVxIPsymy2+bCrt8lngxIMw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/JY4DrtgS99vQy6r822Ptjw1LRRIF4P1dJVQq9brKfy42Ag4QT
+	w9aW9Ofvtl56HU/ewEPfivYS3lwXuxDJI98tabBMnS2iV1AKUDRT+RSTMrUybhHR1aEtuMhhQ7j
+	nkluAnMU4BdObOGfCfs/Ga1bSHNZEUaJUdzGGV7mq
+X-Gm-Gg: AYBFou2msyTRikaLbwAzsOr4Bu0ZNn3hO1qXiQfJi846h7vYTVml/X0BrzUr3ErVsPZ
+	RrCi0X5JctQSezs3CkHP4kph3Abm+Nb2dDQAbPxRsiePjx1ZmDHMxoGMgsBMGDlCnY+oWol18f1
+	TYayDBasIg2J58IytS6nUc8GmrMw0UJbO6L6Xm6T80x5eEyMFn4Fopli1GM/zESJzD43ncTrRH6
+	bT5tRG+9sIIBrxNZDKX8oR985FX5ohxcT0UXH8wKfg5NvnDrtM5ZhX795QBopbdV6ePz9kcRLAK
+	op1vUMMhI2oLxt8/3ifv/8k78ZG4q34xNwkfbpSkeljce/q0Wx3bircz2Ja/VrMRGDaegySw2Ph
+	KkVkEFSHl3pD4DH3LCnnmV7s7yjZFat0/v2eOTVKqaPtkdnkdjGRPW0CqWLvUyiYZq+SiT64=
+X-Received: by 2002:a17:907:3351:b0:c4c:b560:2a71 with SMTP id
+ a640c23a62f3a-c4cb5603d9emr979541566b.36.1793837164883; Wed, 04 Nov 2026
+ 16:06:04 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,94 +104,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <a87dc20e1ec5a9b71efac37998600cdf8449e5cfbfdba8391138f2a79089c90e@mail.kernel.org>
-In-Reply-To: <20261104215523.1852636-9-alexei.starovoitov@gmail.com>
-References: <20261104215523.1852636-9-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 8/9] bpf: Bump MAX_CALL_FRAMES to 32
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  4 Nov 2026 22:40:33 +0000 (UTC)
+References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
+ <20261028134012.01d52e94@pumpkin> <CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
+ <20261030100215.6f8e0d4f@pumpkin> <CAG2KctqdPq6NmK6rB13s2bgM7kP2w4OMMy2hdp_OFMVYYhTnZA@mail.gmail.com>
+ <20261104142307.431fc12f@pumpkin>
+In-Reply-To: <20261104142307.431fc12f@pumpkin>
+From: Samuel Wu <wusamuel@google.com>
+Date: Wed, 4 Nov 2026 16:05:52 -0800
+X-Gm-Features: AclHuK8Z7yNuvzdyvQXTyXXmXbvszi-XVmOSWc_IPj379xX-z3zgWWYR8Kt4UgU
+Message-ID: <CAG2KctrY6GmVqsKP+fXYCsL6wDR4zp1kdRd7a7uOdCgg_JcMdQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============9185524490659806987==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Nov 4, 2026 at 6:23=E2=80=AFAM David Laight
+<david.laight.linux@gmail.com> wrote:
+>
+> On Tue, 3 Nov 2026 17:14:26 -0800
+> Samuel Wu <wusamuel@google.com> wrote:
+>
+> > On Fri, Oct 30, 2026 at 3:02=E2=80=AFAM David Laight
+> > <david.laight.linux@gmail.com> wrote:
+> > >
+> > > On Thu, 29 Oct 2026 15:05:45 -0700
+> > > Samuel Wu <wusamuel@google.com> wrote:
+> > [...]
+> > > > BY_NAME matches names exactly, like kallsyms_lookup_name(), so they
+> > > > would be different symbols at different addresses. Please correct m=
+e
+> > > > if I'm missing something here!
+> > >
+> > > Only that the user might really want one of the copies.
+> > > Sometimes there is only the copy.
+> >
+> > Good point. I'll have v3 add KALLSYMS_F_PREFIX + pos/next_pos
+> > pagination to cover these. A prefix query for "foo." also finds the
+> > copies when plain foo does not exist (expanded on this in my reply to
+> > Andrii's Oct 30 mail in this thread).
+>
+> I'm busy rebasing my patches - they got stamped all over :-(
+> I should get a v3 that applies by the end of the week.
+>
+> I will add a 'prefix' variant for you.
+> The 'next symbol matches' flag is exactly that (actually it is a
+> this symbol is a duplicate to avoid issues at the start of the array).
+> So in this case that application would always need to read
+> the next symbol (by name).
 
-> bpf: Bump MAX_CALL_FRAMES to 32
+Thanks, that would be helpful. For my v3, I'll keep the lower_bound()
+approach so the two series stay independent, but I can switch over
+once your series lands, so there is only one search over the name
+table.
 
-TL;DR: Raising MAX_CALL_FRAMES to 32 may let bpf2bpf chains plus tail calls
-overflow the kernel stack at run time, since the 256-byte check counts only
-BPF stack. The gap predates the patch, which doubles it.
+> I think it might be more sensible (less pitfalls later on) to return
+> the symbol number - not that of the next one.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+What pitfalls were you anticipating? If the current symbol's position
+is returned, userspace needs another ioctl() call and an -ENOENT
+check, to learn that there are no more matches. Alternatively,
+returning the next position means every call pays for a look-ahead,
+which for an unfiltered query walks the module symbols even when
+userspace only wants the first match.
 
-[ ... ]
-
-> @@ -6127,6 +6127,16 @@ static int check_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph
->  			goto out;
->  		}
->  
-> +		err = -EOPNOTSUPP;
-> +		if (dinfo[s].frame >= MAX_CALL_FRAMES_INTERP) {
-> +			if (!env->prog->jit_requested) {
-> +				verbose(env, "JIT is required for a call stack of more than %d frames\n",
-> +					MAX_CALL_FRAMES_INTERP);
-> +				goto out;
-> +			}
-> +			env->prog->jit_required = true;
-> +		}
-> +
->  		err = -EACCES;
->  		depth = dinfo[s].arena_depth + si[s].arena_stack_depth;
->  		if (depth > env->max_arena_stack_depth)
-
-Can the combination of 32 frames and tail calls overflow the kernel stack
-at run time?
-
-The only bound on bpf2bpf calls combined with tail calls is the rule in
-check_call_depth() that the summed BPF stack of the callers of a subprog
-that tail calls must stay below 256 bytes:
-
-    if (s && si[s].has_tail_call && depth >= 256) {
-
-That rule counts only BPF stack, not the kernel stack each JITed frame
-takes.  On x86-64 a tail_call_reachable subprog uses at least 32 bytes of
-kernel stack even with stack_depth 0 (the return address, push rbp in
-emit_prologue(), and push rax; push rax in emit_prologue_tail_call()).  A
-tail call unwinds only the frame that makes it, so the callers' frames stay
-on the stack while the next program runs, and the tail call counter is
-shared through tcc_ptr, so MAX_TAIL_CALL_CNT (33) tail calls can happen in
-one run.
-
-For example, main calls f1 .. f31, all static with no stack, and f31 calls
-bpf_tail_call() into a prog array slot holding the same program.  f31 is at
-frame index 31, below MAX_CALL_FRAMES, so it is accepted.
-dinfo[f31].depth is 0, so it passes the 256 check, and the program is
-JITed because jit_required is set.
-
-Each tail call level then keeps 31 frames * 32 bytes = 992 bytes.  After 33
-tail calls that is about 32.7K, twice the 16K THREAD_SIZE and IRQ_STACK_SIZE
-on x86-64 without KASAN.
-
-The gap existed before this patch, since with 16 frames the same
-construction keeps about 15 * 32 * 33 = 15.8K plus up to 33 * 240 bytes of
-BPF stack.  But doubling the frame limit doubles the term the 256-byte
-check does not count.
-
-The commit message does the stack arithmetic only for the verifier's
-analyze_subprog() recursion, not for runtime tail call chains.
-
-Would it make sense to limit tail_call_reachable chains to
-MAX_CALL_FRAMES_INTERP frames, or to add a per-frame cost to the 256-byte
-tail call check?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/41921975876
---===============9185524490659806987==--
+Andrii, do you have a preference between the two?
