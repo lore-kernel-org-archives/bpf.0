@@ -1,92 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793881029;
-	b=Z5BMEtH/92+JL9WLVppGLhG62oisAsUJCIOPUVubC8mrc97YRUS51Bf2WY2f2Xa5F5Rn
-	 UFrnGP2ray7TqY4h2u5J98po+O/RxJTpLCKn9vjO/11sExtuX8XfOFePUCuit3727ZNEH
-	 I53aoSB8yb338dI60Fle20okeY1x6oxhh3oAAYr11lqWeZRJvgZYel/AVDDeb8pf3HXDP
-	 pgqrkTzsEOB/bUJdji9Dm1bUyjr01d0zsnQmhKDnQ03uoRo9wrQpdKz/t+NOTwGP58Hfo
-	 07URSSGV1fFsw9k3frWDclXBtFasJ3eP9HmcS+BQip4cUhjSCYs3650+bxrLMBliNWw==
+	t=1793881573;
+	b=kHofzyQHmPSbcGXVGAsHcZbJIGXPHIfQOePk898Y+n0M8KuuZd9HbVt24ofXYIV0VrW9
+	 F/SKJ4gmY8lbu9Riv+AfUp0ulP0/ao5Yy0Nr3jfwWmu11bgIGI0sFqTOp/6Qm0RBqCF9N
+	 7gvCaCoJPrq9KryT7KkRRO+pV9XO+7WPwyVgX9cE1/YRKh+g89uG2L2sXyFngS8+H7nsQ
+	 jD91NtFOGd42I1whBuPKSttTfwl+U56K5lB2sL9mIFuD5iOLIt1jIAUCUKyBkpLmMX/fH
+	 Me9lBs1xFHY0z+Qq5o/yvc28kJsdgFA8oX3bLDLF6LCr+lpwWoJEqy1uqED0zZ2mHLQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793881029;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=f96Pxu+FTpHnnidUC9kHsSvMST/qKtUp9MInF1FSebU=;
-	b=RwlYZagDB+a64u5H5phdDyGytoFlYpeBdhYQD9wZb6u/It7o0lkJuO0JY8jEge/WMHUM
-	 KY/1jgiyrFapKuD8yrT5bGM0QmqUSdPqWdmxwah26x6S4OtuanRIFrltO1h5ZGSocwz3t
-	 LQ+OP4euDcig659NuXZdSF/q08Ujz+1nVqxsw03k6UdbBQPuhBpw+OXvTySnD3LPBb1ey
-	 sTg7rEp74CRTOTKBRO9txXtYoswrbE1yhqXlRnmobnxzhDrRcG1CUn5Owe4QpA6DQy3mf
-	 oI1tvEMerWKcyLc/aI+U9DyMpS4OiXRpgbItrWUhnFL8yY8K9gK9b5zjUB6cO0ht2Pw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793881573;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=SOhMdo0S3VoEznsmoM+S40XpUm7IcJEEZYZHmhkEm3g=;
+	b=Yp4PQWzKXc531xG5tB4d5MPqBI6X0I5E213uh+XDb7ATVWq76eN6JSejiGJG19C2H+T6
+	 NMrnANri3cywILqhyWtauS+sCItelBGKqIJ2W+rc1brRvIr+Vptn/u6PK/9cBaY2Q83bR
+	 /Sm8JxlyjSZfUX/TIkwqIIVdlq93bajxQTA8CYgE/1JwKN1mMe1eiMaHRwNseSFTriLH0
+	 NkuYY9+Qnoo8MSz0m/mbMbhgAD/PrjAmT3sPPN/28hpoDZdIhpNnnD9KTX9L/Pxr+wgQ+
+	 NMbc3CrfRvaO79d1H5sD7vc31ut1Nq03lB1ddwUTIapRxav1oRT3kxxXuyv0mXjEBmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PubjUOZF;
-	arc=none smtp.remote-ip=74.125.82.179
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=GfFR9ZA3;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D90606EEB9
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 12:17:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0D90606EEB9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979FB606A32C;
+	Thu,  5 Nov 2026 12:26:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 979FB606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PubjUOZF
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-36dbde64409so1417471eec.0
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 04:17:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793881028; x=1794485828; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=f96Pxu+FTpHnnidUC9kHsSvMST/qKtUp9MInF1FSebU=;
-        b=PubjUOZFIn6TfI8TFWd91gu5q+QFWOqi+Jh7QZAj/WHj8T1Fc4B9ftZue814hmpVB2
-         oxctTwvoS51/bTaBj3/EWaP7m2u/u6UFlfuao4p0OrG8NtvD1Y93AprVwSg/28QFyb1S
-         BgAoXwHkNHdiKh4po2KJOXc4m7Q1xHBfUio0wfleIEojSi0hWJpsSv/f5TgneiRzwOQO
-         EppY0eds20AbNdCpYqlxBJFLuXjdTjqyIunAR7bbwGRTYuEATbNkP1RLt7nBN7hajp5W
-         vZzLjuci5xFVsMslBiUpFYfhUljoERnRf8PrBNxlzdLmisrl5trDcDgWNyqszM01wzd3
-         WXNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793881028; x=1794485828;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=f96Pxu+FTpHnnidUC9kHsSvMST/qKtUp9MInF1FSebU=;
-        b=Fq0sRIH6epKmUzH0d0gkMZQidyF6r6UssXHhUI5z0kIn37tdUxfeGuiPeehVY76O0p
-         aVzyTngjFbu6tgoDMjZEbBkK4F3h6ScU+ZclgMTjZ2OGssYI6Awp72+RUazap1kj3cmg
-         C/q5IuYtH/Je24k00VqXM57xickN6k41nlNCbMR/ftFEvG1RTO9KjlBXGx7IR/EwfTNJ
-         +MhtHmOMGyhr39AHiYGLIvOJAnvDgwPuURBPMNaMaMhOIIFekZ5xlkylDxt5MRxJozxY
-         U0bnGwvEomkeQTIdftjKrZbhRWt7SFrHuUpll1q3/BzV9GirFyuQITBfyCkXJtm+GIDB
-         En3g==
-X-Gm-Message-State: APuU4Z+34xBsIK/xKzmneDxrStAGBx0S/36mxLSB7NDGbmwNNQUdDaI2
-	4wrdd9yBVGeq3us0uXaAdeTlI6vxWR/gLtOHk+1HF99VN/s7CUY5P8Ts+QHJ/oz/o6w=
-X-Gm-Gg: AYBFou33MXZCgV5XOIujmeLn1ZmIX9a7KZ0HBKdNd8UX/j29NijQBhimK43mO95/pa7
-	rodFA026Nj7lihBITnPGfRU5VypKC8UNmogqSDX/43mYpyuEz+g60+gfpAn9aA3nvdT/Nk0aAL8
-	YsEfLZJ4xyJVFfVe+FjNFgRbFF8P54SixWrF1psGcG7+cAObAlrN9MzItnBMyNX0UtfajWpbhMN
-	UN/CyfChnNbSgSN1rNsmdDGQkxXv7bEvkbuFaRtQelMjyuy9I2Dar3j+hcUrx9PUBnlbdtl9wEA
-	qL7/ccVRMkUQdaPNhSx7yGt09LUPkHrHQ8WkZVXTBN7tmszpsWccd0bcS8V3CGx22Xi6eIRrZUq
-	EBi1W5X0CjnwCc+vkjGIXhmwAWtpELnwT4dDnu3GsxuMMeHGh3TvQOJKiaavPi1ORwStNeedxV2
-	okv17zON7AaKlVg2cUMboQGecZBwsTEazQi/brLnIUR4phG8ad1pYsotq/4DqUL3Rr+IahuvNg/
-	CPD9kM0mry8haHXjaxEidocL7IPvuore5yVOEbKq1/7gmc/6o/3RCd5TVhPkJrCjSmX2OrjEqBj
-	OFyMcULJglc+ELv/hFVJS9Mv/9/6C8i9Ne+/G+PcrbRUZSzaH8AyLDe6WQ9M8SBg2/k=
-X-Received: by 2002:a05:7300:ec89:b0:36e:97b4:1071 with SMTP id 5a478bee46e88-36e97b4317emr1464294eec.14.1793881027670;
-        Thu, 05 Nov 2026 04:17:07 -0800 (PST)
-Received: from boogieman ([2409:40c0:28:cf7f:a8e0:3d30:1c1a:630f])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca3966daasm21534841eec.23.2026.11.05.04.17.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 04:17:07 -0800 (PST)
-From: Abhishek Khade <abhishekkhade69@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Abhishek Khade <abhishekkhade69@gmail.com>
-Subject: [PATCH] bpf: Add network namespace boundary inspection kfuncs
-Date: Thu,  5 Nov 2026 17:46:42 +0530
-Message-ID: <20261105121642.38019-1-abhishekkhade69@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=GfFR9ZA3
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=SOhMdo0S3VoEznsmoM+S40XpUm7IcJEEZYZHmhkEm3g=; b=GfFR9ZA3ZvPtPrpOktrGrpr2Bt
+	Nagr/IUr79PbLpTffvL0MrTMEavQra/op0vcEdvs1RByq9F77mvbQeA7wmSkHnYu7LI8IhkCwNIR6
+	+Rd0oPvbNImVxLFxX+v5G+TzzJuBKZNqYKCwjj0hhDLOrlswWRZKr+bHOaMvrUilqvTMVtgL+KdUD
+	0hh30vc+UcZwPq1reYlXZ9uyYH1Z8qGZLeMaim33Jx2WpodO/P3oza8r/Cwko9ass/6xpo+QLgoMP
+	M2+UUunbRr0diO2fG6jL0y1S28WUJ9Zvgtal7hXk9CmtyRgBRQCXg87gtXiAe7YZBe0CAJ0Gsyq5F
+	iuAhPVjQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xOwXd-000000086ip-3VmT;
+	Thu, 05 Nov 2026 12:26:05 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A547D3002F0; Thu, 05 Nov 2026 13:26:04 +0100 (CET)
+Date: Thu, 5 Nov 2026 13:26:04 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Martin Kelly <martin.kelly@crowdstrike.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Mike Bazov <mikeba@sentinelone.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
+	Thomas Gleixner <tglx@kernel.org>
+Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let
+ preemption cause false recursion drops in trampoline progs
+Message-ID: <20261105122604.GB1779021@noisy.programming.kicks-ass.net>
+References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
+ <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com>
+ <CAPnbwjrB_je6jXt3BGD-1q1yFs_wFd-Yh9KzixKzLK_X3Stuag@mail.gmail.com>
+ <DML75890DWIX.EYB690LPBM1O@gmail.com>
+ <CAPnbwjpv3bkGAKVjc7Eywgo-H4X6uDLYPJWFuSakGs_sBdgr3w@mail.gmail.com>
+ <DMM2FJ2SNYYO.24TEJ05OOR08E@gmail.com>
+ <CAH=2mMABxvf+GNr7vUKNkGvyU-gmaXKMGNJHg4URUCW_eyuxGg@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -96,297 +86,180 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAH=2mMABxvf+GNr7vUKNkGvyU-gmaXKMGNJHg4URUCW_eyuxGg@mail.gmail.com>
 
-eBPF tracing and networking programs frequently need to determine whether
-an execution event originates from the initial host network namespace
-(init_net) or an isolated container namespace, as well as extract the
-namespace inode identifier for correlation.
+On Wed, Nov 04, 2026 at 05:12:15PM -0800, Martin Kelly wrote:
+> We have noticed this issue independently in testing of our own security
+> agent and have hit the same false recursion skips on 7.0 and 7.1
+> kernels. More details and measurements below.
+> 
+> On Tue, Nov 3, 2026 at 6:24 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> > Today a fentry prog never runs twice at the same time on one cpu.
+> > Existing progs rely on that for their per-cpu maps.
+> >
+> >   task A, cpu 0                     task B, cpu 0
+> >   buf = lookup(&percpu_scratch)
+> >   fill buf
+> >   <preempted>
+> >                                     buf = lookup(&percpu_scratch)
+> >                                     fill buf
+> >                                     output(buf)
+> >   output(buf)   <- data of B
+> >
+> > A plain (*cnt)++ in a per-cpu map loses updates the same way.
+> > Today B is skipped and recursion_misses counts it.
+> > With the per-task check A sends a corrupted event and nothing counts it.
+> 
+> Our programs avoid writing to per-CPU arrays because of corruption on
+> PREEMPT_RT kernels, where trampolines have always been preemptible and
+> thus can corrupt these structures. So for us, an opt-in flag that allows
+> preemption (instead of skipping) would work well and not regress current
+> programs that don't opt in. A verifier scan for per-CPU arrays could
+> also work, but it would need to distinguish read-only vs write access to
+> those maps.
 
-Currently, dereferencing task->nsproxy->net_ns directly via BPF CO-RE
-presents safety and architectural challenges:
-1. nsproxy can be NULL during concurrent unshare or task exit teardown.
-2. Direct comparison against &init_net exposes host kernel addresses,
-   complicating verification and KASLR safety.
-3. Reading deep pointer chains without RCU synchronization can trigger
-   verifier rejections or race against namespace cleanup.
+This seems weird; your task-B bpf prog would never run due to the
+prog_active thing.
 
-Introduce three BPF kfuncs to safely inspect network namespace boundaries:
-- bpf_task_is_init_net(struct task_struct *task): Returns 1 if the task
-  belongs to the initial host network namespace, 0 otherwise.
-- bpf_task_get_netns_inum(struct task_struct *task): Returns the inode
-  number of the task's network namespace, or 0 on failure.
-- bpf_sock_is_init_net(struct sock *sk): Returns 1 if the socket belongs
-  to init_net, 0 otherwise.
+> In a process-heavy workload on a 2-vCPU VM (~1M fork+exec of
+> short-lived processes, ~606/second) we recorded the following number of
+> recursion_misses on a 7.0.9 and a 7.1.5 kernel. Both kernels use lazy
+> preemption with PREEMPT_RCU enabled. The miss rate has increased
+> significantly, which we suspect is due to the HRTICK change.
+> 
+>                                   7.0.9 (HRTICK off) 7.1.5 (HRTICK on)
+>                                   ================== =================
+> security_file_permission fentry   1 in 61,580        1 in 1,568
+> security_inode_getattr fentry     1 in 59,242        1 in 1,707
+> do_file_open fexit                1 in 813,983       1 in 2,503
+> sched_process_exec raw_tracepoint 1 in 1,000,816     1 in 500,408
+> 
+> The sched_process_exec raw_tp had few misses (1-2) but is included just
+> to show that raw_tp can have misses as well since tracepoints became
+> preemptible.
 
-These helpers are registered under generic_btf_ids with the KF_RCU flag,
-allowing safe invocation within RCU read-side critical sections across
-tracing, LSM, and socket programs.
+So HRTICK will still only set RESCHED_LAZY, which should not tickle
+preempt_enable() into a reschedule. RESCHED_LAZY is acted upon in only 2
+distinct spots:
 
-Add automated selftests under tools/testing/selftests/bpf validating host
-detection and container isolation via unshare(CLONE_NEWNET).
+ - return to userspace; it will reschedule.
+ - the periodic tick; it will upgrade RESCHED_LAZY to RESCHED.
 
-Signed-off-by: Abhishek Khade <abhishekkhade69@gmail.com>
+This would suggest you're seeing a lot of tick driven promotion. One
+reason could be due to HRTICK setting LAZY and the normal tick happening
+very shortly after it. 
+
+You've not mentioned your CONFIG_HZ setting? Anyway, something daft like
+the below would make promotion less aggressive (also, clearly I couldn't
+come up with a decent name for the intermediate step :-).
+
+
+> Possible approaches
+> ===
+> We don't have a preferred mechanism and are generally open to any
+> approach that would help reduce these recursion_misses. Whatever the
+> mechanism, it would be ideal to cover raw_tp programs too, since
+> a46023d5616e made those preemptible.
+> 
+> We'd be happy to help test or develop patches if needed.
+
+I would strongly prefer all BPF programs that attach to known
+preemptible sites to use a per-task recursion counter or something of
+that sort.
+
+This per-cpu active count stuff is quite mad; and I think I've told
+Alexei that plenty of times.
+
+
 ---
- kernel/bpf/helpers.c                          |  79 +++++++++++++
- .../selftests/bpf/prog_tests/netns_kfunc.c    | 104 ++++++++++++++++++
- .../selftests/bpf/progs/test_netns_kfunc.c    |  32 ++++++
- 3 files changed, 215 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/netns_kfunc.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_netns_kfunc.c
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 6788489a2..3584703d1 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -18,6 +18,9 @@
- #include <linux/pid_namespace.h>
- #include <linux/poison.h>
- #include <linux/proc_ns.h>
-+#include <linux/nsproxy.h>
-+#include <net/net_namespace.h>
-+#include <net/sock.h>
- #include <linux/sched/task.h>
- #include <linux/security.h>
- #include <linux/btf_ids.h>
-@@ -2991,6 +2994,77 @@ __bpf_kfunc long bpf_task_under_cgroup(struct task_struct *task,
- 	return ret;
+diff --git a/include/asm-generic/thread_info_tif.h b/include/asm-generic/thread_info_tif.h
+index 528e6fc7efe9..feed08b51a62 100644
+--- a/include/asm-generic/thread_info_tif.h
++++ b/include/asm-generic/thread_info_tif.h
+@@ -22,33 +22,35 @@
+ #define _TIF_NEED_RESCHED	BIT(TIF_NEED_RESCHED)
+ 
+ #ifdef HAVE_TIF_NEED_RESCHED_LAZY
+-# define TIF_NEED_RESCHED_LAZY	5	// Lazy rescheduling needed
++# define TIF_NEED_RESCHED_MEH	5
++# define _TIF_NEED_RESCHED_MEH	BIT(TIF_NEED_RESCHED_MEH)
++# define TIF_NEED_RESCHED_LAZY	6	// Lazy rescheduling needed
+ # define _TIF_NEED_RESCHED_LAZY	BIT(TIF_NEED_RESCHED_LAZY)
+ #endif
+ 
+ #ifdef HAVE_TIF_POLLING_NRFLAG
+-# define TIF_POLLING_NRFLAG	6	// idle is polling for TIF_NEED_RESCHED
++# define TIF_POLLING_NRFLAG	7	// idle is polling for TIF_NEED_RESCHED
+ # define _TIF_POLLING_NRFLAG	BIT(TIF_POLLING_NRFLAG)
+ #endif
+ 
+-#define TIF_USER_RETURN_NOTIFY	7	// notify kernel of userspace return
++#define TIF_USER_RETURN_NOTIFY	8	// notify kernel of userspace return
+ #define _TIF_USER_RETURN_NOTIFY	BIT(TIF_USER_RETURN_NOTIFY)
+ 
+-#define TIF_UPROBE		8	// breakpointed or singlestepping
++#define TIF_UPROBE		9	// breakpointed or singlestepping
+ #define _TIF_UPROBE		BIT(TIF_UPROBE)
+ 
+-#define TIF_PATCH_PENDING	9	// pending live patching update
++#define TIF_PATCH_PENDING	10	// pending live patching update
+ #define _TIF_PATCH_PENDING	BIT(TIF_PATCH_PENDING)
+ 
+ #ifdef HAVE_TIF_RESTORE_SIGMASK
+-# define TIF_RESTORE_SIGMASK	10	// Restore signal mask in do_signal()
++# define TIF_RESTORE_SIGMASK	11	// Restore signal mask in do_signal()
+ # define _TIF_RESTORE_SIGMASK	BIT(TIF_RESTORE_SIGMASK)
+ #endif
+ 
+-#define TIF_RSEQ		11	// Run RSEQ fast path
++#define TIF_RSEQ		12	// Run RSEQ fast path
+ #define _TIF_RSEQ		BIT(TIF_RSEQ)
+ 
+-#define TIF_HRTIMER_REARM	12       // re-arm the timer
++#define TIF_HRTIMER_REARM	13       // re-arm the timer
+ #define _TIF_HRTIMER_REARM	BIT(TIF_HRTIMER_REARM)
+ 
+ #endif /* _ASM_GENERIC_THREAD_INFO_TIF_H_ */
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 1c93da75226e..d5f9176e1a75 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -2117,7 +2117,9 @@ static inline void set_tsk_need_resched(struct task_struct *tsk)
+ 
+ static inline void clear_tsk_need_resched(struct task_struct *tsk)
+ {
+-	atomic_long_andnot(_TIF_NEED_RESCHED | _TIF_NEED_RESCHED_LAZY,
++	atomic_long_andnot(_TIF_NEED_RESCHED |
++			   _TIF_NEED_RESCHED_MEH |
++			   _TIF_NEED_RESCHED_LAZY,
+ 			   (atomic_long_t *)&task_thread_info(tsk)->flags);
  }
  
-+#ifdef CONFIG_NET
-+/**
-+ * bpf_task_is_init_net - check whether task belongs to initial network namespace
-+ * @task: the task to be tested
-+ *
-+ * Returns true if @task belongs to the initial network namespace (init_net),
-+ * or false otherwise (or if @task or its nsproxy is NULL).
-+ */
-+__bpf_kfunc bool bpf_task_is_init_net(const struct task_struct *task)
-+{
-+	struct nsproxy *nsproxy;
-+	struct net *net;
-+	bool ret = false;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 04b62c16fa8c..f8e225dc2504 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5854,8 +5854,17 @@ void sched_tick(void)
+ 	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
+ 	update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
+ 
+-	if (dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY))
+-		resched_curr(rq);
++	/*
++	 * Two-stage promotion of LAZY to RESCHED, ensuring there is at least
++	 * one full tick of respite.
++	 */
++	if (dynamic_preempt_lazy()) {
++		if (tif_test_bit(TIF_NEED_RESCHED_MEH))
++			resched_curr(rq);
 +
-+	if (!task)
-+		return false;
-+
-+	rcu_read_lock();
-+	nsproxy = rcu_dereference(task->nsproxy);
-+	if (nsproxy) {
-+		net = READ_ONCE(nsproxy->net_ns);
-+		ret = (net == &init_net);
++		else if (tif_test_bit(TIF_NEED_RESCHED_LAZY))
++			 set_thread_flag(TIF_NEED_RESCHED_MEH);
 +	}
-+	rcu_read_unlock();
-+
-+	return ret;
-+}
-+
-+/**
-+ * bpf_task_get_netns_inum - get inode number of task's network namespace
-+ * @task: the task to inspect
-+ *
-+ * Returns the inode number (inum) of @task's network namespace, or 0 if
-+ * @task, its nsproxy, or net_ns is NULL.
-+ */
-+__bpf_kfunc u32 bpf_task_get_netns_inum(const struct task_struct *task)
-+{
-+	struct nsproxy *nsproxy;
-+	struct net *net;
-+	u32 inum = 0;
-+
-+	if (!task)
-+		return 0;
-+
-+	rcu_read_lock();
-+	nsproxy = rcu_dereference(task->nsproxy);
-+	if (nsproxy) {
-+		net = READ_ONCE(nsproxy->net_ns);
-+		if (net)
-+			inum = net->ns.inum;
-+	}
-+	rcu_read_unlock();
-+
-+	return inum;
-+}
-+
-+/**
-+ * bpf_sock_is_init_net - check whether socket belongs to initial network namespace
-+ * @sk: the socket to be tested
-+ *
-+ * Returns true if @sk belongs to init_net, or false otherwise (or if @sk is NULL).
-+ */
-+__bpf_kfunc bool bpf_sock_is_init_net(const struct sock *sk)
-+{
-+	if (!sk)
-+		return false;
-+
-+	return net_eq(sock_net(sk), &init_net);
-+}
-+#endif /* CONFIG_NET */
-+
- BPF_CALL_2(bpf_current_task_under_cgroup, struct bpf_map *, map, u32, idx)
- {
- 	struct bpf_array *array = container_of(map, struct bpf_array, map);
-@@ -5151,6 +5225,11 @@ BTF_ID_FLAGS(func, bpf_cgroup_from_id, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_under_cgroup, KF_RCU)
- BTF_ID_FLAGS(func, bpf_task_get_cgroup1, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
- #endif
-+#ifdef CONFIG_NET
-+BTF_ID_FLAGS(func, bpf_task_is_init_net, KF_RCU)
-+BTF_ID_FLAGS(func, bpf_task_get_netns_inum, KF_RCU)
-+BTF_ID_FLAGS(func, bpf_sock_is_init_net, KF_RCU)
-+#endif
- BTF_ID_FLAGS(func, bpf_task_from_pid, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_from_vpid, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_throw)
-diff --git a/tools/testing/selftests/bpf/prog_tests/netns_kfunc.c b/tools/testing/selftests/bpf/prog_tests/netns_kfunc.c
-new file mode 100644
-index 000000000..3072f7ede
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/netns_kfunc.c
-@@ -0,0 +1,104 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Abhishek Khade */
-+
-+#define _GNU_SOURCE
-+#include <sched.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include <test_progs.h>
-+#include "test_netns_kfunc.skel.h"
-+
-+void test_netns_kfunc(void)
-+{
-+	struct test_netns_kfunc *skel;
-+	int pipefd[2];
-+	pid_t pid;
-+	int status = 0;
-+	u32 host_inum;
-+
-+	skel = test_netns_kfunc__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (!ASSERT_OK(test_netns_kfunc__attach(skel), "attach"))
-+		goto cleanup;
-+
-+	/* Test 1: Process running in initial network namespace */
-+	if (!ASSERT_OK(pipe(pipefd), "pipe_init"))
-+		goto cleanup;
-+
-+	pid = fork();
-+	if (!ASSERT_GE(pid, 0, "fork_host")) {
-+		close(pipefd[0]);
-+		close(pipefd[1]);
-+		goto cleanup;
-+	}
-+
-+	if (pid == 0) {
-+		close(pipefd[1]);
-+		if (read(pipefd[0], &status, sizeof(status)) < 0)
-+			exit(1);
-+		close(pipefd[0]);
-+		execlp("true", "true", NULL);
-+		exit(1);
-+	}
-+
-+	skel->bss->target_pid = pid;
-+	close(pipefd[0]);
-+	if (write(pipefd[1], &status, sizeof(status)) < 0) {
-+		close(pipefd[1]);
-+		waitpid(pid, NULL, 0);
-+		goto cleanup;
-+	}
-+	close(pipefd[1]);
-+	waitpid(pid, &status, 0);
-+
-+	ASSERT_EQ(skel->bss->inv_is_init_net, 1, "host_task_is_init_net");
-+	ASSERT_GT(skel->bss->inv_netns_inum, 0, "host_netns_inum_valid");
-+	host_inum = skel->bss->inv_netns_inum;
-+
-+	/* Reset state */
-+	skel->bss->inv_is_init_net = -1;
-+	skel->bss->inv_netns_inum = 0;
-+
-+	/* Test 2: Process running in a new network namespace */
-+	if (!ASSERT_OK(pipe(pipefd), "pipe_netns"))
-+		goto cleanup;
-+
-+	pid = fork();
-+	if (!ASSERT_GE(pid, 0, "fork_netns")) {
-+		close(pipefd[0]);
-+		close(pipefd[1]);
-+		goto cleanup;
-+	}
-+
-+	if (pid == 0) {
-+		close(pipefd[1]);
-+		if (read(pipefd[0], &status, sizeof(status)) < 0)
-+			exit(1);
-+		close(pipefd[0]);
-+
-+		if (unshare(CLONE_NEWNET) != 0)
-+			exit(1);
-+
-+		execlp("true", "true", NULL);
-+		exit(1);
-+	}
-+
-+	skel->bss->target_pid = pid;
-+	close(pipefd[0]);
-+	if (write(pipefd[1], &status, sizeof(status)) < 0) {
-+		close(pipefd[1]);
-+		waitpid(pid, NULL, 0);
-+		goto cleanup;
-+	}
-+	close(pipefd[1]);
-+	waitpid(pid, &status, 0);
-+
-+	ASSERT_EQ(skel->bss->inv_is_init_net, 0, "netns_task_not_init_net");
-+	ASSERT_GT(skel->bss->inv_netns_inum, 0, "child_netns_inum_valid");
-+	ASSERT_NEQ(skel->bss->inv_netns_inum, host_inum, "netns_inum_different");
-+
-+cleanup:
-+	test_netns_kfunc__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_netns_kfunc.c b/tools/testing/selftests/bpf/progs/test_netns_kfunc.c
-new file mode 100644
-index 000000000..3ad49f8ba
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_netns_kfunc.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Abhishek Khade */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "bpf_misc.h"
-+
-+bool bpf_task_is_init_net(const struct task_struct *task) __ksym;
-+u32 bpf_task_get_netns_inum(const struct task_struct *task) __ksym;
-+
-+pid_t target_pid;
-+int inv_is_init_net = -1;
-+u32 inv_netns_inum;
-+
-+SEC("tp_btf/sched_process_exec")
-+int BPF_PROG(on_exec, struct task_struct *task, u64 old_pid,
-+	     struct linux_binprm *bprm)
-+{
-+	pid_t pid = task->tgid;
-+
-+	if (pid != target_pid)
-+		return 0;
-+
-+	inv_is_init_net = bpf_task_is_init_net(task) ? 1 : 0;
-+	inv_netns_inum = bpf_task_get_netns_inum(task);
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.53.0
-
+ 
+ 	donor->sched_class->task_tick(rq, donor, 0);
+ 	if (sched_feat(LATENCY_WARN))
