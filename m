@@ -1,61 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793899616;
-	b=Qq9ppBqESj0cMNyoaDTBfetwwXQM/1mMTZEamY1hjQJW/4LVFSDfu/jBjq12OPA4HCBU
-	 rXrs7eliaMJRbXJWEl7UhJYxGQhpJsxU0QXXmnjU2x9vAVDHyxUEOKQZWIyPZLLsI0wZn
-	 IH50xfIpLt1AUnoiYaEHMDxJYAjz8JMey6TM4ObtZJCgafnYH3aPgs23EsNkU8cvQPNyK
-	 YluvU++C9LZ5E21OfTInxIEBK/3EXXZNLUWIp/MHMsnXin4fyziptyXbgekWnoGWzXuqD
-	 MGDDTs3x54wLsljyuGt1IyhxkNic04LJB4SQ7zORRZhbj6GVjhn9jgtnWPA6S1yRJng==
+	t=1793899947;
+	b=0UzeAUE2hMU6YzaHSsmSKsCuSWj/UNPkSXjnGUkvwmUQtlDGdSDlo0BrNJxvuJBbKTU3
+	 j/RAz47pV8AhuCmo5xhdwo2UfooKEVGsBWoLGDM9fU72X2SGEkWvo5IIGGl3lHebWtVhe
+	 cqc71EigjOmxBFl5t1UpxhxvrHnhq9sgQmXHR33CT/vHE9A/G3RBZPUvIB9aK6isAzCZQ
+	 zdfaVhDBNfhUzYj/Qyg+VIKzNvK1I/J5+/lhUqA6xmFPVUHN8fTeyZWXeDkYiCNpYOqAB
+	 pIkh+lAE1T0M4ugROwioTnwvN4YZFwZ2HmvZC52VmBo4XkILuc/wyk/tdsFcPWbebAA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793899616;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
-	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=pv7MklMh40uZcAi4SKZfbl5EAYBB+uiXBzpLsbSe1GE=;
-	b=rzXrNDkV6dMQbZk0A8zpt/0r+OlHh71PwCC5rtSDeCpC4lBuFXaj1WyLSb+EJNPCmRSC
-	 eelYbd49Q17q+1qx/VQRRZqBKH/ewXY86NN6CqVasXy6bdM0mo+1fpcb+7It4Gu3H5UDd
-	 aRTKamkujP5XlHnbQdqEonjsQMxvdeyplCT520SY81de0xClbYFgynxobvv/7wFajvddq
-	 gu4OqcjknNMVJsWaStP0n+Y1s0mvV4nW0eA8qjawjXOVHn9udB2DA9pdpgYWhLRzpPUhN
-	 L3eDiENBBhC0PclT7RKNcI8vt1Z/XOMB8Kd2BmTrOvGc4kUsMTPdPzaTEtrmoA/4Guw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793899947;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=lp0NGZovHOZFgM8Bydql0MxHwiduWzL/2fD0i5iRoF0=;
+	b=OmZdNsmZYzh2ErVOU3IRFnD5Ygi5/ubiVUEUGp1dRpaii9GdRubadkNpkg/OI1DfzA8C
+	 3KihSIn0TLsGPpfGudEFxYSvQL6T8++AEso48XQ9tQ+HkJHiMpCPeO55w+wXUs8jFc2Qc
+	 ERvr7+ycS+dnXJ9NYPDzsjzjSRXsinkW2Z9upEuooJV6NmsbtrMys+r6y0/JIA0qRjX7X
+	 +rfcQm37M1VNtfouxTUP+YCr0QvpdyCWbjYXC1puVqNyvX4wO170w+NTFcnxexJra5yet
+	 fmRlXPDueNrHByb96HdIQg427HQc9lLYaykn+THnAZyjVVrDzJQTnBkr71wVwlK73Jw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=RHfWCLgr;
-	arc=none smtp.remote-ip=216.40.44.15
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S5naOIGa;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC552606D803;
-	Thu,  5 Nov 2026 17:26:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC552606D803
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EDE8606A328;
+	Thu,  5 Nov 2026 17:32:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=RHfWCLgr
-Received: from omf01.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id B40781A0C0A;
-	Thu,  5 Nov 2026 17:26:52 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id 5DDF36000F;
-	Thu,  5 Nov 2026 17:26:50 +0000 (UTC)
-Date: Thu, 5 Nov 2026 12:26:48 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Vineet Gupta <vineet.gupta@linux.dev>
-Cc: Peter Zijlstra <peterz@infradead.org>, mhiramat@kernel.org,
- mark.rutland@arm.com, mathieu.desnoyers@efficios.com, andrii@kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, kernel-team@meta.com, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] tracing: fgraph: Raise FTRACE_RETSTACK_ALLOC_SIZE
- to 1024
-Message-ID: <20261105122648.67abbe1d@gandalf.local.home>
-In-Reply-To: <1e223334-b371-487b-a60a-7f1f5c007f7e@linux.dev>
-References: <20260922225526.1554758-1-vineet.gupta@linux.dev>
-	<20260922225526.1554758-2-vineet.gupta@linux.dev>
-	<20260924100040.GD4121339@noisy.programming.kicks-ass.net>
-	<1e223334-b371-487b-a60a-7f1f5c007f7e@linux.dev>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S5naOIGa
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE191F000C1;
+	Thu,  5 Nov 2026 17:32:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793899947;
+	bh=lp0NGZovHOZFgM8Bydql0MxHwiduWzL/2fD0i5iRoF0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=S5naOIGaaD2J0fiVVP8ceihDTb/hSIh1mWM1o667RDtp6/+xObpwQBZ19kvzL/RkW
+	 qJvNF0ER9qNGrIGt7dLJ8x/P/cPn9xBkYktmFMHojSuE9woerIFFDaHcQW0MY91/Zt
+	 uzfrlmSm6xgmbxCPVVyF8RZniWRputBS3ZZlAjIS3fzwDrg3H1Bd76xqI+1ADuFZ0D
+	 eZYLdlYiVzSAb9SZLJWFL1IQn60UG2llt4BhU+PNWCj8KdMvnyGTGREglZHswG+uFI
+	 3SzLukV9JdXhlkAxIcVYaMvYsREHcqd99Y0a+HKQjx0+uDjQb9hSTqShILpb0d33sD
+	 Q5pyDXzzvOK9w==
+Message-ID: <sashiko-outbox-199628@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 3/3] treewide: Use offsetofp()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Bence Csokas" <bence.csokas@arm.com>
+Cc: linux-rdma@vger.kernel.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org, linux-sound@vger.kernel.org, media-ci@linuxtv.org
+In-Reply-To: <20261105-offsetof-v1-3-4153f5c10edc@arm.com>
+References: <20261105-offsetof-v1-0-4153f5c10edc@arm.com>
+ <20261105-offsetof-v1-3-4153f5c10edc@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 05 Nov 2026 17:32:26 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,31 +59,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: 5DDF36000F
-X-Stat-Signature: 6d38fdaz4tpccretw3cu5fob64q9xee9
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18Y4DFtXkg4jsJZYBISd9ocbt9PHNYCMOA=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=pv7MklMh40uZcAi4SKZfbl5EAYBB+uiXBzpLsbSe1GE=; b=RHfWCLgrnx4ZxBIH2r6VcZ24XDAK/69saLUX/jGVp0l69uyPFkkq0WeCWSkgL10OXYnAU1ucQ2OfghwEK7IsYCvppdeMyO/3GE5HBISOAeDYIuyzbGJdIvzG2CrCoQ0mBjHaeE8ETynP6wIhnMy2C+g8ErmBzNDkTUTMcwuxFEI=
-X-HE-Tag: 1793899610-320862
-X-HE-Meta: U2FsdGVkX196ApTKk9z3YfX9TVkdxyThCeVOey5oiGGnblNR0vtupo1sCnJeFXkpA+lsfg/nxOW0Ze/w06Jw5JgIcSOEolRbWv5tNNLDILUXjhqq6WNqFPREk+mBYz04qFk6NKvY5hCTgXUTrfFg3HSILOjh+bjTnNDhuJZgJCMZVxw33zouJ87ekKPUazr5bW/jS4b7ikPpuziO1Vdm56194XyDemAtffZiF1kGknFBvEluljcUQ0ERGV8DO9wzvExfgDg4NnSWmFd3jnBlKhMyvqZMjpJCNh1fJQr2bumme3is7qyL5cvl+r8uMc+JgZjuU6Jgz7HGasXAGR3Pbh37Hxmi9Wo4TO87NhmOhmWmnt2wQaDBXTBGJlSk6cRuBEL99hNd+b0ejQudiWHHmVNfGXL4VNJdz5Z4FT01x2YwYKyM0G30yDFh53dc3fjcUbZm1E5kVN7a1XiO4vEJoA==
 
-On Fri, 25 Sep 2026 12:32:49 -0700
-Vineet Gupta <vineet.gupta@linux.dev> wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] treewide: offsetofp() duplicates existing struct_offset() helper
+--
 
-> For submission, would you take this up as reported-by me or do you 
-> prefer I send a v2 (your authorship and SoB etc) ? No big deal either 
-> ways just not sure what the std operating procedure is and nuances of 
-> all the tags etc.
+commit d78220885af6984fafc359340778dba58aea1b73
+Author: Bence Csokas <bence.csokas@arm.com>
 
-Please implement Peter's suggestion and send a v2 with the tags:
+treewide: Use offsetofp()
 
-Link: https://lore.kernel.org/all/20260924100040.GD4121339@noisy.programming.kicks-ass.net/
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
+This commit converts treewide uses of offsetof(typeof(*ptr), member) to the
+newly introduced offsetofp(ptr, member) macro via Coccinelle.
 
-Thanks,
+> diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
+> index 2365a6d8ca15f..83c204458d409 100644
+> --- a/drivers/dma-buf/dma-resv.c
+> +++ b/drivers/dma-buf/dma-resv.c
+> @@ -108,7 +108,7 @@ static struct dma_resv_list *dma_resv_list_alloc(unsi=
+gned int max_fences)
+>  		return NULL;
+> =20
+>  	/* Given the resulting bucket size, recalculated max_fences. */
+> -	list->max_fences =3D (size - offsetof(typeof(*list), table)) /
+> +	list->max_fences =3D (size - offsetofp(list, table)) /
+>  		sizeof(*list->table);
 
--- Steve
+[Severity: Low]
+This isn't a bug, but include/linux/overflow.h already provides
+struct_offset() with the exact same definition (introduced in commit
+f6ed9c5d3190 ("overflow: Introduce struct_offset() to get offset of
+member")):
+
+    #define struct_offset(p, member) (offsetof(typeof(*(p)), member))
+
+While include/linux/stddef.h now defines:
+
+    #define offsetofp(P, MEMBER) offsetof(typeof(*(P)), MEMBER)
+
+For example, dma_resv_list_alloc() in drivers/dma-buf/dma-resv.c already
+uses struct_size(list, table, max_fences) from include/linux/overflow.h just
+a few lines above.
+
+Could these conversions across the 39 modified files reuse struct_offset(),
+or should struct_offset() and offsetofp() be consolidated instead of keeping
+two identical macros?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261105-offsetof-v=
+1-0-4153f5c10edc@arm.com?part=3D3
