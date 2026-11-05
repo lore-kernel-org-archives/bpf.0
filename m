@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793874278;
-	b=ScDM5sTc5hpW0SW4rZyRcCem7W/BL73w15seiZssLEcD3wk3/TbbqqsfxS4XfTEfqau0
-	 6t8GQMVf0hdd7lIwa+mY9eWwDg2gQ2m3Ir4SZzgzxvytsi6NwgSrF1c/pfjmlud9wSuHj
-	 w6Gk+zmokd9dkHiH2lwLb8BTgobK553+QBYQE7Cu9YSgZpNn7yp4MVfKETCf/X/rIUPcF
-	 XLjkmlwjqYbuEoVlxrU63cWGPUzccyoNwovmlOPajLP/Ib2b/1gb2M0j7aypDlMg8LWVc
-	 zBJtRtPdlbN9e8q5ysG7KxATCkE+pz2T0okKVGSjgA6v+pp+oJ6n1UTo2lrDb8t5i7w==
+	t=1793874288;
+	b=M4gdWU30TkntpqZTEZoVU0yeyL7LtN6SwM2l6SfroWMOEcyaL3psns3qct2gQfhPok/Y
+	 nDxfWc/U93+cwy5VU+wVB8jbnR060yHdNUiqu7n/4Y1CemX6BwzLSwIIgVmFy9l6TQQ3a
+	 W+O+LfXh0McmVVGC1ZiZI4jAvx/m3v3IU0AGG/OLgZSKjJ2aKcx7cMRkliQ7AujP1cP6B
+	 AcaesMv6eoemopSW6SWD1qdMMErJI5CR4A53c9NYCk9EnOxCKvBZYD0jRp+m7EcKPpbfR
+	 0Ojj962cpMevZwPK7N9LCH+UTyuhfN3tqT03WfVHSnClhvG4NBiSjwL/Igl+AoCp4uw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793874278;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793874288;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=KpviBqlgyeWJdrpOQQK4620AQohGgJ+OsCjzKJgQy1I=;
-	b=jzl0MWqE3cJwaM3fvLMX94ZyAAlNABHo+gf9k38k6wZo0/6mz42Ub8DKsb+GjttSeMH+
-	 UuFr8WDJSb0ysNpiW6TGsw2MtarLBzCxCTQYg30XaaamuyWDzydp+FCgjnjlfvUpFiuvJ
-	 //mCNP+SoD1V6WtiZIdU83w9kBbCdaJSUyarcc2fAJkX0CzVxihJOTmhq/GMnsI7AAq0m
-	 e7N+K5LJ/yp9+w9IErdFf8/bJKoaQpPmDsQR7bxklBcX2H3sQtvI2L/fYbD0Y/9GZ2osQ
-	 Ak+ffCAY7YhOU/e0XbjYun94x+ULUmIsAZ5TQVxaNcKR8ZRg1uPC11d/5wwUlz66LIg==
+	bh=zmdWsLeDOwil7ZrDTJNt3Mwh5fQ18CiuyFvC+u7BoL0=;
+	b=PV14WpcPx6hHoZepClYazRXYygj4Vq3MOo2cHwrXTQF9Fv5vw6xrw8LBKAA8R8aWUgUp
+	 SNikrS90BBy30JderQW0Jwk4DNq8Io4ZG2hjXcwiGKen+RtGR7wOKdYL37eAXbV4aFn9A
+	 sYnCu0U7uaVLqZ0/sroks+kErarwYcyB/IkI8HG/2qM9GHACbCMDrubFlZ5E+kPDE4Teu
+	 u7vY1rpuEYbezaGiVpksn3RbzO22Ho3GRBdzUjg74q2HV0ylLWFOHUyk4k4Wc+FOPOUWX
+	 Z5OYs1+J4akx60RhHN7CFR83ZsO3+7AiGtSL2uJz4yGU/lSTmDVD0ibRQBsu1bSw4SA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gyxk57mY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TiGCrbcz;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92560606A33D
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309E2606A31B
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 10:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gyxk57mY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0351F00A17;
-	Thu,  5 Nov 2026 10:24:35 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TiGCrbcz
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46EFC1F000C1;
+	Thu,  5 Nov 2026 10:24:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793874278;
-	bh=KpviBqlgyeWJdrpOQQK4620AQohGgJ+OsCjzKJgQy1I=;
+	s=k20260515; t=1793874287;
+	bh=zmdWsLeDOwil7ZrDTJNt3Mwh5fQ18CiuyFvC+u7BoL0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Gyxk57mYIyIEdkkVmCrAfTFRs3GjysEwHwcTZ6DL3NXxmhBoFxbpzpQIWFWp4zqLF
-	 e6tBJ/sClz8ZlSQyJJifkWOQ2yV6uk4sennpvHqSdGYau1Jkf6GNqNYk1wBA+phZqG
-	 dUXcR06sMhUzCMXmK2RZXk4auIX7Y+7ig0U3BWlAKVtv4MU5VaNs/rGrp8GXuFGd4B
-	 WgmWPSCc0692HcWquEo3rDdy+VyL+K4YeiaTz297XpiOrCcjvo1xeHJ9HrxkO0mccA
-	 MA1qFCIBYc2LtKGIV0uihIAy+dAQJIJWeozBFks49dRMdbcvq884GJfL8ksiDZCR8e
-	 vI1qvLfo9BUew==
+	b=TiGCrbczGsGJs34yk5Ncj74By2pa+sJUxXs/vcpT3y76BnbA63mfaeNnerAwBcTNJ
+	 QJoJYdsWnAoyZ5ponPmjQ22qrep+ZyZeYT+06ZcUiHP6IoSqVi+z1ggL3AzYFXG/9v
+	 A7FNsBm7DQLmgJ2Pb29Iq1fFgzYRfx3eAXiERZ60P0QV4YPJbtjWTTPKnSV3WiEVj6
+	 LYzIEb3lOtxw0Y+xt6NSo6ZzaK0F2u+EnaDVyrAnj4RoaIZkhYXGUs6fnRhAeO4BV4
+	 0rdLAVUpBqhUl2aHcOMAstmbc8ULGUDCE+gUjfOSOODK+rwKvia5jAZdv7B9S9/bGT
+	 YJERp95yTRayw==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>
@@ -50,9 +50,9 @@ Cc: bpf@vger.kernel.org,
 	Lorenzo Stoakes <ljs@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Federico Di Pierro <nierro92@gmail.com>
-Subject: [PATCHv3 bpf-next 5/8] selftests/bpf: Test user memory mmap kfuncs
-Date: Thu,  5 Nov 2026 11:23:39 +0100
-Message-ID: <20261105102343.311331-6-jolsa@kernel.org>
+Subject: [PATCHv3 bpf-next 6/8] selftests/bpf: Test user memory page exec
+Date: Thu,  5 Nov 2026 11:23:40 +0100
+Message-ID: <20261105102343.311331-7-jolsa@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261105102343.311331-1-jolsa@kernel.org>
 References: <20261105102343.311331-1-jolsa@kernel.org>
@@ -67,185 +67,170 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add BPF selftests for bpf_user_anon_mmap and bpf_user_munmap from
-a sleepable uprobe. Check that created mappings have the requested
-permissions and that unmapped addresses are no longer mapped.
+Use bpf_copy_to_user from a uprobe to write architecture-specific
+instructions into user memory, then execute them on x86-64 and arm64.
+
+Test execution from a mapping created with read and execute permissions,
+and from individual pages made executable with mprotect.
 
 Assisted-by: Codex:GPT-6
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- .../selftests/bpf/prog_tests/user_mem.c       | 111 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/user_mem.c  |  43 +++++++
- 2 files changed, 154 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/user_mem.c
- create mode 100644 tools/testing/selftests/bpf/progs/user_mem.c
+ .../selftests/bpf/prog_tests/user_mem.c       | 75 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/user_mem.c  | 22 ++++++
+ 2 files changed, 97 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/user_mem.c b/tools/testing/selftests/bpf/prog_tests/user_mem.c
-new file mode 100644
-index 000000000000..eadf668f7056
---- /dev/null
+index eadf668f7056..e1748ffb1edf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/user_mem.c
 +++ b/tools/testing/selftests/bpf/prog_tests/user_mem.c
-@@ -0,0 +1,111 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <sys/mman.h>
-+#include <unistd.h>
-+
-+#include "user_mem.skel.h"
-+#include "trace_helpers.h"
-+
-+enum {
-+	USER_MEM_MMAP = 1,
-+	USER_MEM_UNMAP,
-+};
-+
-+static noinline void user_mem_trigger(void)
-+{
-+	asm volatile ("" ::: "memory");
-+}
-+
-+static bool check_user_mem_vma(void *addr, unsigned long size, const char *perms)
-+{
-+	size_t start, end;
-+	char vma_perms[5];
-+	int err;
-+
-+	err = get_procmap_info(addr, &start, &end, vma_perms);
-+	if (!ASSERT_OK(err, "user_mem_vma"))
-+		return false;
-+
-+	/* VMA can be merged, so ensure it covers at least the requested range. */
-+	if (!ASSERT_GE(end - (size_t)addr, size, "vma_size"))
-+		return false;
-+
-+	return ASSERT_STREQ(vma_perms, perms, "vma_perms");
-+}
-+
-+static bool check_user_mem_unmapped(void *addr)
-+{
-+	size_t start, end;
-+	int err;
-+
-+	err = get_procmap_info(addr, &start, &end, NULL);
-+	return ASSERT_EQ(err, -ESRCH, "user_mem_unmapped");
-+}
-+
-+static bool user_mem_mmap(struct user_mem *skel, unsigned long len,
-+			   unsigned long prot, unsigned long *addr)
-+{
-+	skel->bss->map_len = len;
-+	skel->bss->map_prot = prot;
-+	skel->bss->action = USER_MEM_MMAP;
-+	user_mem_trigger();
-+
-+	/* vm_mmap encodes errors in the top MAX_ERRNO unsigned-long values. */
-+	if (!ASSERT_LT(skel->bss->user_addr, -4095UL, "user_addr"))
-+		return false;
-+
-+	*addr = skel->bss->user_addr;
-+	return true;
-+}
-+
-+static bool user_mem_munmap(struct user_mem *skel, unsigned long addr,
-+			   unsigned long len)
+@@ -10,6 +10,7 @@
+ enum {
+ 	USER_MEM_MMAP = 1,
+ 	USER_MEM_UNMAP,
++	USER_MEM_COPY_INSNS,
+ };
+ 
+ static noinline void user_mem_trigger(void)
+@@ -91,6 +92,76 @@ static void test_mapping(struct user_mem *skel)
+ 		munmap((void *)addr, len);
+ }
+ 
++static bool user_mem_copy_insns(struct user_mem *skel, unsigned long addr)
 +{
 +	skel->bss->user_addr = addr;
-+	skel->bss->map_len = len;
-+	skel->bss->action = USER_MEM_UNMAP;
++	skel->bss->action = USER_MEM_COPY_INSNS;
 +	user_mem_trigger();
 +
-+	return ASSERT_OK(skel->bss->ret, "user_munmap");
++	return ASSERT_OK(skel->bss->ret, "user_write");
 +}
 +
-+static void test_mapping(struct user_mem *skel)
++static void test_execute_user_page(struct user_mem *skel)
 +{
 +	long page_size = sysconf(_SC_PAGESIZE);
-+	const unsigned long len = page_size * 3;
 +	unsigned long addr = ~0UL;
 +
-+	if (!user_mem_mmap(skel, len, PROT_READ | PROT_WRITE, &addr))
++#if !defined(__x86_64__) && !defined(__aarch64__)
++	test__skip();
++	return;
++#endif
++
++	if (!user_mem_mmap(skel, page_size, PROT_READ | PROT_EXEC, &addr))
++		return;
++	if (!check_user_mem_vma((void *)addr, page_size, "r-xp"))
 +		goto out;
-+	if (!check_user_mem_vma((void *)addr, len, "rw-p"))
++	if (!user_mem_copy_insns(skel, addr))
 +		goto out;
-+	if (!user_mem_munmap(skel, addr, len))
-+		goto out;
-+	if (!check_user_mem_unmapped((void *)addr))
-+		goto out;
-+	addr = ~0UL;
++
++	/* Execute user page. */
++	ASSERT_EQ(((int (*)(void))addr)(), 42, "execute_user_page");
 +
 +out:
 +	if (addr != ~0UL)
-+		munmap((void *)addr, len);
++		munmap((void *)addr, page_size);
 +}
 +
-+void test_user_mem(void)
++static void test_partial_exec(struct user_mem *skel)
 +{
-+	struct user_mem *skel;
++	long page_size = sysconf(_SC_PAGESIZE);
++	unsigned long addr = ~0UL;
 +
-+	skel = user_mem__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++#if !defined(__x86_64__) && !defined(__aarch64__)
++	test__skip();
++	return;
++#endif
++
++	if (!user_mem_mmap(skel, page_size * 3, PROT_READ | PROT_WRITE, &addr))
 +		return;
 +
-+	skel->bss->monitored_pid = getpid();
-+	if (!ASSERT_OK(user_mem__attach(skel), "attach"))
++	/* Copy instructions to middle page. */
++	if (!user_mem_copy_insns(skel, addr + page_size))
 +		goto out;
 +
-+	if (test__start_subtest("mapping"))
-+		test_mapping(skel);
++	/* Set +x to middle page. */
++	if (!ASSERT_OK(mprotect((void *)(addr + page_size), page_size,
++				PROT_READ | PROT_EXEC), "middle_page_mprotect"))
++		goto out;
++
++	if (!check_user_mem_vma((void *)addr, page_size, "rw-p") ||
++	    !check_user_mem_vma((void *)(addr + page_size), page_size, "r-xp") ||
++	    !check_user_mem_vma((void *)(addr + 2 * page_size), page_size, "rw-p"))
++		goto out;
++
++	/* Execute middle page. */
++	if (!ASSERT_EQ(((int (*)(void))(addr + page_size))(), 42, "execute_middle_page"))
++		goto out;
 +
 +out:
-+	user_mem__destroy(skel);
++	if (addr != ~0UL)
++		munmap((void *)addr, page_size * 3);
 +}
++
+ void test_user_mem(void)
+ {
+ 	struct user_mem *skel;
+@@ -105,6 +176,10 @@ void test_user_mem(void)
+ 
+ 	if (test__start_subtest("mapping"))
+ 		test_mapping(skel);
++	if (test__start_subtest("execute_user_page"))
++		test_execute_user_page(skel);
++	if (test__start_subtest("partial_exec"))
++		test_partial_exec(skel);
+ 
+ out:
+ 	user_mem__destroy(skel);
 diff --git a/tools/testing/selftests/bpf/progs/user_mem.c b/tools/testing/selftests/bpf/progs/user_mem.c
-new file mode 100644
-index 000000000000..e3b0689f5f2a
---- /dev/null
+index e3b0689f5f2a..3bbd5d2f02d6 100644
+--- a/tools/testing/selftests/bpf/progs/user_mem.c
 +++ b/tools/testing/selftests/bpf/progs/user_mem.c
-@@ -0,0 +1,43 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+extern unsigned long bpf_user_anon_mmap(unsigned long len, unsigned long prot) __ksym;
-+extern int bpf_user_munmap(unsigned long addr, unsigned long len) __ksym;
-+
-+enum {
-+	USER_MEM_MMAP = 1,
-+	USER_MEM_UNMAP,
+@@ -10,10 +10,13 @@ char _license[] SEC("license") = "GPL";
+ 
+ extern unsigned long bpf_user_anon_mmap(unsigned long len, unsigned long prot) __ksym;
+ extern int bpf_user_munmap(unsigned long addr, unsigned long len) __ksym;
++extern int bpf_copy_to_user(void *unsafe_ptr__ign, const void *src,
++			    u32 src__sz, u64 flags) __ksym;
+ 
+ enum {
+ 	USER_MEM_MMAP = 1,
+ 	USER_MEM_UNMAP,
++	USER_MEM_COPY_INSNS,
+ };
+ 
+ int monitored_pid;
+@@ -24,6 +27,22 @@ unsigned long user_addr;
+ unsigned long map_len;
+ unsigned long map_prot;
+ 
++#if defined(__TARGET_ARCH_x86)
++static const unsigned char insns[] = {
++	0xf3, 0x0f, 0x1e, 0xfa, /* endbr64 */
++	0xb8, 42, 0, 0, 0, 0xc3, /* mov $42, %eax; ret */
 +};
++#elif defined(__TARGET_ARCH_arm64)
++static const unsigned char insns[] = {
++	0x5f, 0x24, 0x03, 0xd5, /* bti c */
++	0x40, 0x05, 0x80, 0x52, /* mov w0, #42 */
++	0xc0, 0x03, 0x5f, 0xd6, /* ret */
++};
++#else
++/* The execute tests are skipped on other architectures. */
++static const unsigned char insns[] = { 0 };
++#endif
 +
-+int monitored_pid;
-+int action;
-+int ret;
-+
-+unsigned long user_addr;
-+unsigned long map_len;
-+unsigned long map_prot;
-+
-+SEC("uprobe.s//proc/self/exe:user_mem_trigger")
-+int user_mem_test(struct pt_regs *ctx)
-+{
-+	if ((bpf_get_current_pid_tgid() >> 32) != monitored_pid)
-+		return 0;
-+
-+	switch (action) {
-+	case USER_MEM_MMAP:
-+		user_addr = bpf_user_anon_mmap(map_len, map_prot);
+ SEC("uprobe.s//proc/self/exe:user_mem_trigger")
+ int user_mem_test(struct pt_regs *ctx)
+ {
+@@ -37,6 +56,9 @@ int user_mem_test(struct pt_regs *ctx)
+ 	case USER_MEM_UNMAP:
+ 		ret = bpf_user_munmap(user_addr, map_len);
+ 		break;
++	case USER_MEM_COPY_INSNS:
++		ret = bpf_copy_to_user((void *)user_addr, insns, sizeof(insns), 0);
 +		break;
-+	case USER_MEM_UNMAP:
-+		ret = bpf_user_munmap(user_addr, map_len);
-+		break;
-+	}
-+
-+	return 0;
-+}
+ 	}
+ 
+ 	return 0;
 -- 
 2.43.0
 
