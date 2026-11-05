@@ -1,93 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793904257;
-	b=c73rZqvWmHjj4aAx/ssYIdgZyWWey7eGJf1tLe0HhO1GZxr+qJEwsg6jamiA6D7ZxzVN
-	 ei23JktCgQ+Y2JlERsIViuohQSPr37uP5sCodRuNspR7RRA+As7xagvi7J1bk1Mq95Amo
-	 kUJNOPpyo+4wt6v3gJA1+x+Id1ht05nlFwIxcqtjrD/URygRuBHBHAo1dQx28EXG2eZwm
-	 sntE5JZRDtfOUl9FCAZL0Dkxh3y81+6Cw5g5+XVUoBRfOaxkXW5ro9O58zid0gGHuRJEd
-	 UXGg40LHxyF8ji96/ZotlSUnDJ9wKKGTE/CLaAEgBPcI61sXj3Na0Hh15GU4qnT4iag==
+	t=1793904315;
+	b=oEINbdXdY/q/yMFyE0gioplzlheGIqxWMSVzAhMI5yWv5AoX5IBUgQOSwZ43bOLX1dvt
+	 vgttwviJSGkAuYlyF0JQtsYT/lT/BjNm3m8rJ0nKTnq5tB2rXzE+UqetidVE+T54Pt0d/
+	 XKKWEL6Lvxy0euM6MJzFEZKYKgKuamopGtvxkf3AkmMdZ7MHIATqE7urWWzo0xmucCAyP
+	 qF+X1RFn8XaRupHfsP83ehlyAbIw2Grm2PlDUX1NdYGnPuN7pOML8oZslrBeVUVBLstgd
+	 FLGTDV8K1OULdVqvTVScfeBnTXW89iJu0y3eh7LkQbEfVgd8Kesz3rMbv2hTSdgaSXA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793904257;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793904315;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=fwgIaEnu4lR5bjgjsS9uV/+CSZcK02UoezLydhXsVrM=;
-	b=VBRDRo3yvAJcSEeeR7UiDj8hgEhb5XvwhGoymarDJpI+Pkb/38DgNN7xcJqsXeDeCLlk
-	 hYQcZAPD1tAkXG+SIO9QuyoNWRxI8/yLuE2AtUj5ZmsDtMTxybEVXIiIfr+c0f7hyG1kA
-	 We2wWGp4Thpx5/98DNldNER9eHLvTR1m3toW1+aiZyQBcXXJosWgWRo2FY068yHwDmhJ4
-	 oJ4pxsldi89PEzJDJUv6dH99lKc7aoAX4NhIMgDMfyxgGhaC7mGgEq2qXLGtIdzjRHK9P
-	 jHw2fsY/SuDTFhTSCTSzF2+oAuJkroRX7LyyI7G/mm7EE1m/yVs/KYPiGByBnIqZ5jg==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=gvY7HpZJ1wJ/upxJrw1i+mIWqu8jzDOOOqeDBLKjL5M=;
+	b=rGhu90OGn8gyk7rhQq5LGadYhDpo/kFzKiDuH5Xo+aOyz3RJRxlZDisMnQXF/o7ycD09
+	 ho3OjwWharjJrlCcv9J8WlCgh4w9XsCPAkOopIUokkiSYkON8mFS905Mbm4a39R+bE0sa
+	 VAeh0kYVkWQEHPxk7YrehjP6sS7t7ifQqD/9CeHrWMccCj8f2x2VqBIW9sfYTFfvieHwz
+	 oTF5VUg+RrMEqMi8OKwdi3W3725okQBfA3POiKP0blu3qa2pCNmNSrP+iF0rgiC2+XdQV
+	 OhLch5UptIT6IOtjXjNvEF4QUW6Ud1A8cpFt6Da5pir66ZfmfwweQffMlu60ODWjASA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=etsalapatis.com;
-	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=fldYahco;
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qM4CtkN0;
+	arc=none smtp.remote-ip=209.85.221.180
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F6F606A328
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 18:44:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0F6F606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B45606D811
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 18:45:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01B45606D811
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=fldYahco
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3b09a83d12aso1260503a91.2
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 10:44:16 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qM4CtkN0
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-5eaa5e03c47so907754e0c.0
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 10:45:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis.com; s=google; t=1793904256; x=1794509056; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793904314; x=1794509114; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fwgIaEnu4lR5bjgjsS9uV/+CSZcK02UoezLydhXsVrM=;
-        b=fldYahcopYbxcr+vhq/mCM3U1otmrhHOxmInN3Wt2VeVNza467s556iRSMQjIHTc0G
-         ZZBmfa8KqZm8DNCBR5wYtgqLHM4hmEi9QfD2xUeHYbAsWrOpvSe1yf+7W5u/cWoSnyhl
-         z++no6FYBm9W1HaKi3KF2IcJ68zRLNv9OqMZblWsqBad3yXj3SkEEFEWn30BHDlrtaJx
-         x3KX9JNsVXIcvw44HK7klRaXhow8xIC6KY501Qfqq42AXGaAkmZk9/NsMt+r9zIU11eW
-         vJgwkSgzHZIS0fH2ArT5eGKT+8PYljNwuMlmEu/VW2lqqE1VpELOYDXtco2pJoRfgIQA
-         Luvg==
+        bh=gvY7HpZJ1wJ/upxJrw1i+mIWqu8jzDOOOqeDBLKjL5M=;
+        b=qM4CtkN0+6SaYM48v0oHvvb0RMSanj49lvHL37QoD2pvY3sqNhx+oDfXzmJ/1RjGOf
+         Lz1dPvyUhVRT4p8Y7C7j+EEJ/ke2T/ZumfkIcB6syCQhhj9LjiGryDXSeuTFuStoWUDz
+         xQBpCIOasnS+/gDXKitCCVg9EQpa9E3rX9Ne5trHewfXj0iA9R4HlyumJ8SJTtsMzkir
+         /h77FF40+lDMsYSBKAmmpg2EeTPKgRBzH4V4l7gFhbq7kKxY4sOCXTHElc4lZnjT7t9S
+         3ZL1sEtQd2lfjlSjIK+2YLcMQU5j0HpZt3wDYSu0OAhFOLp9H5MDLCxbKbkkwPg+nR/5
+         UL+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793904256; x=1794509056;
+        d=1e100.net; s=20260707; t=1793904314; x=1794509114;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=fwgIaEnu4lR5bjgjsS9uV/+CSZcK02UoezLydhXsVrM=;
-        b=X6n4Qbd1k4qawoFWT3HKU6Izp/EpHDW2FzEs4kBHrgR3mkFjHMR96TiyIzc2cZneL6
-         97n2N7fU3URGHKVbESlOXMv8l1yF/lmzZr3WfzV8GN0KeF8M/Qj7M1L7Zwxnq0MWXQ6U
-         dSLeOZtUMDGOSwfxvhWROElbVF9K85pL/LFivNYaCohyONZGiKSw2FCDoSB75wTJLhc7
-         vGEQ1vYRuvRLXyuXZnVuoZTi0VvUI0EtDdtuSHS3GAPmn7HIPI7zNu48H4YfQXoMKV+1
-         HX5CEelT7BMDkO8kXjhwEWO0kPFB5T3UH479FnG4XRCypC78EMKqMwVCGSaexVWA1zU3
-         iMKQ==
-X-Gm-Message-State: APuU4Z/Jk6INpEKPT18LzJV9+KnHUk4/t0CVh7VLe6eEoVXYCYIth2UF
-	5Dk5eH3cGWUkVKyXMaUNSLrQE+T13Pf65jr4M2fiw6XCc3tMlMqnE7phoYJjbHAAxtClG2U0lAP
-	WfOkyr1g=
-X-Gm-Gg: AYBFou0vcBsopJW2sCFoZaUfD+/wuPgQlwAKVNYpxfWEiCAYcxDm4gP9//CnD98aDOc
-	/1u292yay5bpYgltLszcRAr/HkKRqVOw5R1AcH92rMxIG9GWoSeal1vLJQalhv4PZSBVhWxag0W
-	LtjFNx32KjgtRppHtRlGlm0lHE2LfelZuZ1f8TBLXr3Jx4MualyS5KGfRvtQFzyTz5Z2u0hubme
-	Oew832igoTUAUBn/N4tDzSSycvUhjM9XnkBSVbpRz1BY5rFQm9FtjgIWJYZvDOdkF0mFf5FexyN
-	+PjRSexJalmg1DKRmqC6+xYZ1MmsE5wXDWCsAIB6ctuvxMwxYX2dvU96F70YUCu+GIHiJLqy2xk
-	RjfuW8EIjbuF5Espzo2rw2BX2PwMXvML+eRXFS3mthyW3chv3SO6YbF8D+rtzAkIe4cSoXmfHDh
-	x78NDYs13cJvaFbwo4HgSpnn3qA3kbYS+Php0vMbteqbplwdNMJmY91VnEffSCwqufNQ+8cfMbj
-	66Wdf9LuUpBqFtTA0bqLfQrG9d1K/c7jrc2ehD9QbHQiG1czea1zYKDN37aBBe8xHMIeYZreYNM
-	t/RnbdnYbmJHcV2ob4j0BXlzMJKM9L2/r9Ih5LYmS+X0l2VLxis1JlSIPMqFSj+ZoDM=
-X-Received: by 2002:a17:90b:288c:b0:3b0:a385:5aaf with SMTP id 98e67ed59e1d1-3b0a3855c03mr4733060a91.39.1793904255675;
-        Thu, 05 Nov 2026 10:44:15 -0800 (PST)
-Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b3280378sm4749545a91.12.2026.11.05.10.44.14
+        bh=gvY7HpZJ1wJ/upxJrw1i+mIWqu8jzDOOOqeDBLKjL5M=;
+        b=YR8p0YFl7XC0Emmehi0/TNfH25+71+QAvLRZz5Uq3vuxMIZCpn+Fh2LLgbJz3H9Wd0
+         M+7P5hU80M+9qmVQMv41mtapClVvbaMwRsBGNXC2aeuPlUpYQqgGODTlKG/2TyhcB80O
+         GxoKrlUyBQV5ME0fsAGoXxGkYdLPvbGGRR0dAWwZe4zGr9FiALaslNMf1Ps64gXHMsfi
+         4YtioQDWS334MTaNhyZYnj7wt/IMo6ycDDmVxCaAo4wbumQuCZ2ClTeHK1xWlO7TGSA6
+         Hs/0FL3WqjINDa7esmKrgE5AFo35s6rtRTxHnRVv3gG9Fx4ZVBLw9KzyUCAC30kuOfUk
+         UZZQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzgUXh8VOqRLdHrtnpupDp9TSNKzFJK+pHXyu+2W6/fjNAwdpmX8RfiEhZ/ZUlp4Vg5Rw0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8pEQxrfk02zA9rh+Q1gv31yWWF9AebemSEK3UfEC3lp8U8rhiv
+	qwcce5L0b/vAQUwUOAjKxdTgZYwhHFAUa9eeTtRLPP2YVIJj6dL1RMk/
+X-Gm-Gg: AYBFou2DaLx+TJOzBGM8u9qSTvx+DUOVonghPLrTy3RfxANmtFlb6i9Q1Gbwuhr1Mos
+	AXSNCX8W1UptrBPsHtCaLWhU5wgqHHAtvvKlM3Jp0/pYQPB3frgaZlr8QHoiW1kIKfLHdpwHGrL
+	JXvA/aBY2q/8M6Y83phyggikOYX66gDpOavIa6x3ksewCFHOVY2CnSGDr7502KIGujshd/ilgK6
+	qsrtpV2YQeK1TNN3C12/C8jf1xLKivNJF9jfcbITMa8/ohUDEMXbJafWgCH6mByEV3lyUtpo5hi
+	7oLhqFZtjSKyZsKTv8pZE/DND/1PcueDykk4G9Wy5v4nj8WP4f6XN6iL5n0qUdlqd3dd5TyaX16
+	0seJzBw1FJ/7s5peZeeJodgw5e4hrPRQsXmw4ETqMJLw49WkcPFVYiU6JfeVLLdoYrVy+abPTno
+	xtWQqz6YpAgmet3fJnhAQMwPfFUeqFWZOXEuObItah/jRPWqj48YmoDeNmnockx4C5h2R0K/g6O
+	STxZkb3mamU9r+FEsV6AAGUwmsVQRxu8J55XO6Cn+nNemTZg/zNpAxavZxNPk3aD/daXMXWsl5x
+	Oc1k3VVwBGmBrOgOuHzZNxqYPD4ZqM5obEJ6YUhTwMmAXXQ1I8JnmHtv33w3j0j4mHw5wx4Ro8w
+	elLHLT7SifypZePDDmngEJCwQwOVm4CJErApMLHzvVF9yMBeneTkCNeMI7U+u1p6PSe9ugHLmOe
+	+XxdWvmCCzyluk12RsIA==
+X-Received: by 2002:a05:6102:3750:b0:7ca:9674:a58f with SMTP id ada2fe7eead31-7d286b2ed7amr2201319137.32.1793904313847;
+        Thu, 05 Nov 2026 10:45:13 -0800 (PST)
+Received: from willemb.c.googlers.com.com (223.230.150.34.bc.googleusercontent.com. [34.150.230.223])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5eca889381asm4989858e0c.0.2026.11.05.10.45.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 10:44:15 -0800 (PST)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	daniel@iogearbox.net,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf v2] bpf: Use dedicated workqueue for freeing BPF programs
-Date: Thu,  5 Nov 2026 18:44:11 +0000
-Message-ID: <20261105184411.29248-1-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.54.0
+        Thu, 05 Nov 2026 10:45:13 -0800 (PST)
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	bpf@vger.kernel.org,
+	stephen@networkplumber.org,
+	dsahern@kernel.org,
+	Willem de Bruijn <willemb@google.com>,
+	Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH net-next v2] docs: netdev: fix iproute2 process documentation
+Date: Thu,  5 Nov 2026 13:44:51 -0500
+Message-ID: <20261105184510.3230744-1-willemdebruijn.kernel@gmail.com>
+X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,159 +106,122 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-BPF program freeing currently runs from the system workqueue. With BPF
-program pack allocations, freeing the last program in a pack can take
-pack_mutex and call into execmem/vmalloc code to change page permissions.
-That path may queue a vmalloc purge helper to the same CPU and wait for it
-to finish.
+From: Willem de Bruijn <willemb@google.com>
 
-If enough other BPF program free workers are already active on that CPU,
-they can all block on pack_mutex and consume the system workqueue active
-slots. The worker holding pack_mutex then waits for the vmalloc purge work,
-but that purge work cannot run because the queue is full of pack_mutex
-waiters:
+The instructions on sending patches to iproute2 span both netdev and
+bpf docs, contain outdated references and miss some instructions.
+Address this:
 
-[   24.646667] INFO: task kworker/0:4:1291 blocked for more than 10 seconds.
-[   24.646669]       Not tainted 7.3.0-00001-gdeaa120a9b25-dirty #11
-[   24.646670] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[   24.646671] task:kworker/0:4     state:D stack:0     pid:1291  tgid:1291  ppid:2      task_flags:0x4208060 flags:0x00080000
-[   24.646675] Workqueue: events bpf_prog_free_deferred
-[   24.646678] Call Trace:
-[   24.646680]  <TASK>
-[   24.646686]  __schedule+0x5bc/0x1430
-[   24.646702]  schedule+0x3f/0x100
-[   24.646706]  schedule_timeout+0x106/0x110
-[   24.646711]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646713]  ? mark_held_locks+0x49/0x80
-[   24.646720]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646723]  ? lockdep_hardirqs_on_prepare+0xdc/0x190
-[   24.646726]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646732]  __wait_for_common+0xc1/0x1d0
-[   24.646735]  ? __pfx_schedule_timeout+0x10/0x10
-[   24.646748]  ? __flush_work+0x1f8/0x550
-[   24.646751]  __flush_work+0x309/0x550
-[   24.646759]  ? __pfx_wq_barrier_func+0x10/0x10
-[   24.646783]  __purge_vmap_area_lazy+0x3e4/0x440
-[   24.646796]  _vm_unmap_aliases+0x2d5/0x330
-[   24.646810]  change_page_attr_set_clr+0xb9/0x580
-[   24.646817]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646833]  set_memory_nx+0x3b/0x50
-[   24.646838]  __execmem_cache_free+0x35/0xb0
-[   24.646848]  execmem_free+0x98/0x160
-[   24.646864]  bpf_prog_pack_free+0x152/0x190
-[   24.646871]  bpf_jit_binary_pack_free+0x17/0x90
-[   24.646876]  bpf_jit_free+0x5e/0x130
-[   24.646882]  process_one_work+0x289/0x790
-[   24.646886]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646888]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   24.646902]  worker_thread+0x1b3/0x370
-[   24.646908]  ? __pfx_worker_thread+0x10/0x10
-[   24.646911]  kthread+0xf7/0x130
-[   24.646914]  ? __pfx_kthread+0x10/0x10
-[   24.646920]  ret_from_fork+0x293/0x300
-[   24.646923]  ? __pfx_kthread+0x10/0x10
-[   24.646927]  ret_from_fork_asm+0x1a/0x30
-[   24.646947]  </TASK>
+- Move all info to maintainer-netdev
+- Add a link in bpf_devel_QA to this location
+- Update URLs to git repositories
+- Update URLs to patchwork instance and delegates
+- Update subject prefix rules
+- Add suggestion to Cc: maintainers
+- Add pointer to iproute2 MAINTAINERS
+- Add pointer to iproute2 README.devel
 
-Move deferred freeing of BPF programs, program images, and trampoline
-images to a dedicated workqueue to avoid this deadlock.
-
-Fixes: 72210662c5a2 ("mm: vmalloc: offload free_vmap_area_lock lock")
-Reported-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Willem de Bruijn <willemb@google.com>
 ---
-v1 -> v2 (https://lore.kernel.org/bpf/20261102073439.6822-1-emil@etsalapatis.com/):
-
-- Rebase onto the current bpf tree and move RCU-delayed program-image
-  freeing to the dedicated workqueue after the upstream symbol-lifetime
-  change. (Alexei, Andrii)
-- Move deferred trampoline-image freeing to the same workqueue.
-  (Alexei, Andrii)
-- Set `max_active` to 1 to limit workers waiting on `pack_mutex`. (Alexei)
-- Correct the `Fixes:` tag to 72210662c5a2 ("mm: vmalloc: offload
-  free_vmap_area_lock lock"). (Alexei)
-- Drop the standalone stress selftest and send a single patch. (Andrii)
+v2:
+  - list separate patchwork delegates for iproute2 ('shemminger') and
+    iproute2-next ('dsa') (Stephen)
+  - Kept ast@kernel.org Ack, as no changes to the BPF portion
+v1: https://lore.kernel.org/netdev/20261103033611.949104-1-willemdebruijn.kernel@gmail.com/
 ---
- kernel/bpf/core.c       | 21 +++++++++++++++++++--
- kernel/bpf/trampoline.c |  4 +++-
- 2 files changed, 22 insertions(+), 3 deletions(-)
+ Documentation/bpf/bpf_devel_QA.rst          | 30 ++++--------------
+ Documentation/process/maintainer-netdev.rst | 35 +++++++++++++++++++++
+ 2 files changed, 41 insertions(+), 24 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 831f73f82599..5c0003fa3e29 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -24,6 +24,7 @@
- #include <linux/skbuff.h>
- #include <linux/static_call.h>
- #include <linux/vmalloc.h>
-+#include <linux/workqueue.h>
- #include <linux/prandom.h>
- #include <linux/bpf.h>
- #include <linux/btf.h>
-@@ -3143,6 +3144,17 @@ static void bpf_free_used_btfs(struct bpf_prog_aux *aux)
- 	kfree(aux->used_btfs);
- }
+diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
+index 4729efd657c3..888b29599761 100644
+--- a/Documentation/bpf/bpf_devel_QA.rst
++++ b/Documentation/bpf/bpf_devel_QA.rst
+@@ -304,31 +304,13 @@ downstream distributions.
  
-+struct workqueue_struct *bpf_prog_free_wq __ro_after_init;
+ Q: Do you accept patches as well for iproute2's BPF loader?
+ -----------------------------------------------------------
+-A: Patches for the iproute2's BPF loader have to be sent to:
++A: Patches for iproute2, including its BPF loader, are sent to
++netdev@vger.kernel.org. For details on iproute2 patch submission, see
++"Co-posting iproute2 patches" in Documentation/process/maintainer-netdev.rst.
+ 
+-  netdev@vger.kernel.org
+-
+-While those patches are not processed by the BPF kernel maintainers,
+-please keep them in Cc as well, so they can be reviewed.
+-
+-The official git repository for iproute2 is run by Stephen Hemminger
+-and can be found at:
+-
+-  https://git.kernel.org/pub/scm/linux/kernel/git/shemminger/iproute2.git/
+-
+-The patches need to have a subject prefix of '``[PATCH iproute2
+-master]``' or '``[PATCH iproute2 net-next]``'. '``master``' or
+-'``net-next``' describes the target branch where the patch should be
+-applied to. Meaning, if kernel changes went into the net-next kernel
+-tree, then the related iproute2 changes need to go into the iproute2
+-net-next branch, otherwise they can be targeted at master branch. The
+-iproute2 net-next branch will get merged into the master branch after
+-the current iproute2 version from master has been released.
+-
+-Like BPF, the patches end up in patchwork under the netdev project and
+-are delegated to 'shemminger' for further processing:
+-
+-  http://patchwork.ozlabs.org/project/netdev/list/?delegate=389
++While iproute2 BPF loader patches are not processed by the BPF kernel
++maintainers, please Cc bpf@vger.kernel.org and the BPF maintainers for
++review.
+ 
+ Q: What is the minimum requirement before I submit my BPF patches?
+ ------------------------------------------------------------------
+diff --git a/Documentation/process/maintainer-netdev.rst b/Documentation/process/maintainer-netdev.rst
+index df220a965438..6a0f27778213 100644
+--- a/Documentation/process/maintainer-netdev.rst
++++ b/Documentation/process/maintainer-netdev.rst
+@@ -363,6 +363,41 @@ to the mailing list, e.g.::
+ Posting as one thread is discouraged because it confuses patchwork
+ (as of patchwork 2.2.2).
+ 
++Co-posting iproute2 patches
++~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+static int __init bpf_prog_free_wq_init(void)
-+{
-+	bpf_prog_free_wq = alloc_workqueue("bpf_prog_free", WQ_UNBOUND, 1);
-+	if (!bpf_prog_free_wq)
-+		panic("Failed to allocate BPF program free workqueue\n");
-+	return 0;
-+}
-+early_initcall(bpf_prog_free_wq_init);
++The official git repositories for iproute2 are:
 +
- static void bpf_prog_free_images(struct work_struct *work)
- {
- 	struct bpf_prog_aux *aux;
-@@ -3198,7 +3210,7 @@ static void bpf_prog_free_deferred(struct work_struct *work)
- 	/* The symbols are looked up under rcu_read_lock() */
- 	INIT_RCU_WORK(&aux->rwork, bpf_prog_free_images);
- 	if (ksyms)
--		queue_rcu_work(system_percpu_wq, &aux->rwork);
-+		queue_rcu_work(bpf_prog_free_wq, &aux->rwork);
- 	else
- 		bpf_prog_free_images(&aux->rwork.work);
- }
-@@ -3211,7 +3223,12 @@ void bpf_prog_free(struct bpf_prog *fp)
- 		bpf_prog_put(aux->dst_prog);
- 	bpf_token_put(aux->token);
- 	INIT_WORK(&aux->work, bpf_prog_free_deferred);
--	schedule_work(&aux->work);
-+	/*
-+	 * A pack_mutex holder may wait for vmalloc work on system_percpu_wq.
-+	 * Keep program frees off that queue so mutex waiters cannot exhaust
-+	 * the active slots needed by the vmalloc work.
-+	 */
-+	queue_work(bpf_prog_free_wq, &aux->work);
- }
- 
- /* RNG for unprivileged user space with separated state from prandom_u32(). */
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 21d460866dfe..4eab33d1ad33 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -577,6 +577,8 @@ static void __bpf_tramp_image_put_deferred(struct work_struct *work)
- 	bpf_trampoline_put(tr);
- }
- 
-+extern struct workqueue_struct *bpf_prog_free_wq __ro_after_init;
++- iproute2: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git
++- iproute2-next: https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git
 +
- /* callback, fexit step 3 or fentry step 2 */
- static void __bpf_tramp_image_put_rcu(struct rcu_head *rcu)
- {
-@@ -584,7 +586,7 @@ static void __bpf_tramp_image_put_rcu(struct rcu_head *rcu)
++Patches for iproute2 must have a subject prefix of ``[PATCH iproute2]``
++or ``[PATCH iproute2-next]`` to indicate the target repository where the
++patch should be applied. If kernel changes target net-next or bpf-next,
++then the related iproute2 changes need to target iproute2-next, else they
++must target iproute2. The iproute2-next tree will be merged into the
++iproute2 tree after the current iproute2 version has been released.
++
++Patches are tracked in patchwork under the netdevbpf project. iproute2
++patches are delegated to 'shemminger' (Stephen Hemminger), iproute2-next
++patches to 'dsa' (David Ahern):
++
++- iproute2: https://patchwork.kernel.org/project/netdevbpf/list/?delegate=7961&state=*
++- iproute2-next: https://patchwork.kernel.org/project/netdevbpf/list/?delegate=123859&state=*
++
++Send patches to netdev@vger.kernel.org and always include the iproute2
++maintainers in the email Cc: list. See the MAINTAINERS file in the
++repository for email addresses and other details:
++
++  https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/MAINTAINERS
++
++For patches that target iproute2's BPF loader, also include
++bpf@vger.kernel.org and the BPF maintainers.
++
++For more information, see also README.devel in the repository:
++
++  https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/README.devel
++
+ Co-posting selftests
+ ~~~~~~~~~~~~~~~~~~~~
  
- 	im = container_of(rcu, struct bpf_tramp_image, rcu);
- 	INIT_WORK(&im->work, __bpf_tramp_image_put_deferred);
--	schedule_work(&im->work);
-+	queue_work(bpf_prog_free_wq, &im->work);
- }
- 
- /* callback, fexit step 2. Called after percpu_ref_kill confirms. */
 -- 
-2.54.0
+2.56.0.455.g6c5a503b38-goog
 
