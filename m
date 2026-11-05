@@ -1,100 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.54
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793914619;
-	b=15Uo8w2XSdCmSw1J/MyXGtDXPtePWJ2M8hEkGmOU2Kpse9hXJC1nRkInj5x28vVhO4B4
-	 OD0BzsfPUszD6dUvM/4m2171CDqKb2mrWDwRqtrNOvxmCS14OQHR1ZxPCg46YqdDtTZn7
-	 cbmnLUxUVOWQsJR/zfIQWHMYUpg0cAnYRKMcSVdfXzMnuhezeVZ3ExrGnKM5utEc7nmbn
-	 HR8401MUnRKBA3NYocbwCOPcHze7xP9JJMEXKY+1inoWh/qb3cdATK72QQhsQZwjMGSR5
-	 x0ej2Y3hzWX8WALLVaWv+MjYxHwBHJZbPv8vPOllBuv6Ojxnr5yyg6bVDH2JWS7xLHQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793914619;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=2E4Xme3iGj8AG7tp5kyRL4U0PVxMRPmUII8euE4aY4I=;
-	b=Go64JcBOzkXsgyuKKZJBJAMGMP04MrUasCt+b3wML9asMAegIkk12M0A8HfaA//JxohL
-	 7DKcRkrWydY6sC2hwtEGshgoPxlqZLY6BJOt8iYy0vrp0VI+o9/NLnm6j0f5CKSEzbD76
-	 /Ihx2/QG09qoE4cfaD0W9y/gyH/mjEmGu8NOH3NhU8rYlGS5voraYvr+yP6EA+yvps9Jb
-	 vEIRFxfi4KtqROePkBnhbkH5c6j/XiOrHhLS5Oxl1uVDnLJqTWvzhBCEwOgE6K1JjP3mz
-	 +TVbK3/SLXm5BogeKz4N1LpeBWP2xLO557iSedg8MMBkQTWQrdUC3AehdaDf2I59oUw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=qNV3YK2A;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.54
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793914806;
+	b=enXEWix+ZgytUWNRv0nhDSc6O4VLTJxiJls0TQGHQvRr6QiwEpRTq4owRbW7bYi+geKx
+	 zQtprGMybh9yIcnUAHOVwQhfqF1kLSfilj2THJ9Wml4hZo2qeqxSzpC7IlD7qsDeCMkm8
+	 wrL1yilkh8sk7JTkjozzTvj78iw6eUF6FGn/DiupBLAh080PtMcHVPlfq1qTl8THXzStz
+	 ZPGt6F4Ou9Xts0hRIzPp7XNhBU02f3x63RJum9TpebizTKVkrLeXgqAOWTtbkkauHfS36
+	 uz1+N1vPKCiSbp01gqxeuhhPM3LvWcEuEVW5MC/PC9eniTtNO1jQdPNNpze9TpX6Kxw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793914806;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=IEVA8xzeXeEh7eqhzQT8WFHbqnPjGyZ0iIwhmCRsBAs=;
+	b=tWtrQngYEaVGdRckv3mFz7UHBW1Vs9QRU27QRUjrtmQq4+GNEov2sOZqXtRByESXD8Ty
+	 d5V+NpM5GCtFs0tIfzWDqrvRh8pDN+GVfT36b1Iw9iFzyuYh2RoFKD/ueg0SMGy/W2E65
+	 tJN5mnNjbRBJgRoFUOiPAR6zuEs2MiN6uv4vGS8izbh6KSnyS2svXJok04fBGCXZarcqg
+	 /mQpk6Eq01Lyw25S882YHMkh/JxQIjt3ads/NNDAAj/xWz2s+sep7k9GhPEGGiaYjv6mL
+	 OkQbHSWpS1EkAXFI+wVJaEfinl+CDFLyLoiH8Nd4p1pePKm66nPpX1o66ylOwegRBwA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OzbYxF1I;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C965F606A334
-	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 21:36:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C965F606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 231F7606A328
+	for <bpf@vger.kernel.org>; Thu,  5 Nov 2026 21:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=qNV3YK2A
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c247f6687dcso407239066b.2
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 13:36:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793914612; cv=none;
-        d=google.com; s=arc-20260327;
-        b=FlXof0RuLbzpo1esqXKe+qhc4rX53m+IXtVVwgVvsZmESWx4cGqzR4PdxTDqZE2jNI
-         8C91VXS8WsT8+/S011D2dzOsv6jeJPUZYqATVVPnuzF3ylWsvVqzvOn/WL21+5HjVZlh
-         TRfywClWLIWtSy5E9ZpXlXktc5hgQsWgei9uLVv+MySRKhH1PEB6VzwjF0day298FfGA
-         MiMNzQ7jiNRIdNkyR1aTBPXjQER5UgwssO3ogl45XQX0QL7wHKAc/wkYJykD5bgKxGGs
-         Mxu4wHUncKkkLVJfqS+RW9hkGBCSClTuEKLicne0znA5YKGQbnGGqgJuBOrWg5CGjI6w
-         F1Kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2E4Xme3iGj8AG7tp5kyRL4U0PVxMRPmUII8euE4aY4I=;
-        fh=ok07m3FvHb3eNbKFLPdjJjsl4wKF1W9f87O0n8XdzjI=;
-        b=srfbTm7WFF71dCJWh9nOFnvRqHbHisP++lI904nkWzReUekd4Rez5qtiYa4xPIt1C+
-         g7W3+D/8ml5DAwi/9Dbd13+gJTro5FWFmP4qIkXILfgPIRD07neL7bgzSIaNN/kE4ZfR
-         tQDF54SDXNE3Y4ZdZ8DU1NqvDJdmBWKt7AJXzpP5EM7LHrrtncuJlYRATxgzanWRIO+Q
-         kPao9p7YtPhr1MtP0IO82UdFDoQmmy0W/a5E6kK3EzbOaQKIvZltM04opcDHTmVdDKTm
-         fuQCf1u6bH9kpGLERXKUNMfghqXcxSmF9g38dYk51TT1clChQmqPOrwjnX972yVw3K80
-         JM+w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793914612; x=1794519412; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2E4Xme3iGj8AG7tp5kyRL4U0PVxMRPmUII8euE4aY4I=;
-        b=qNV3YK2AvifU1tOsCQ8wk4axq2Bpnp9T4w05lcq35MoN1lflDph5Y1IYtTpLN9oiu1
-         oljv6zhoDl0Vdx6KwOE+YZ2XrvF12KIBahqeuzL0AI1Ihf1xglBIFGRlNFmbLRw1BvGj
-         cHOsnpHe5ExcVUNebf5XytYqgD/im+o9YfI2/bO5gRjiKXBfTL4w9S2eMuvmZ4trc6CA
-         kCNJxMHTFWh4eiUO3KMPLUXRVAjTsqzWtt3brnLtM+MWPucllL2IlplxbMf3C29B/5Fm
-         Zq9m93kWEpns5SBYbYB5Q3+CTVkb/fUXg2wz7C4TsaW16nXsgwuTB3NnvQNvu0l335c9
-         ZYPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793914612; x=1794519412;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2E4Xme3iGj8AG7tp5kyRL4U0PVxMRPmUII8euE4aY4I=;
-        b=f5e25wmhRKFcsuV/dwO3SFLmaI0BCqMUtDhemuVg316GClGvTJdDULxWemTdxuM5hR
-         yBUudp9zQ3IKtRTI0iB+h7QIYA7zWm+6XAoIlcYy4oHbvyuqyoAipSpEGqc1NOZpmD6Q
-         NttGObj2FpkuhfY3Ew0oPTk5nwczC2Trc0fx4Pi4lZVItg7dcfx+oatD7DJM+B6W+FjL
-         Qo5sw3cTqp5zcnfo3x6wB3axumSiu1l0Mi8ZsAd/fCBwaCuC8HAIg0arJ1DqIPhBEM7o
-         yfNHisebOyQjoyrMOGgVhzbVg/rppNtow+T74VhILrn5QcI9EmqWwqr2UV+noB5dTn8R
-         5d9w==
-X-Forwarded-Encrypted: i=1; AKwUvBxTdg1XuJyJClS6ZBYLqWFqghsmj/mN7D+2YbfRZ2AgebxM65U7pGfHKVs4L4fmdqjA+Pk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8ZMR9OfTO9bgCHSfz/ed5uX8GDAQvcczVpX7jz1+ldUkDG64Q5
-	+CAuyXkFa7y4oakntkyu2XeNMto78L1BqR5zSi9pGd5HHxS/c4eS97oKIe9n4urTsNxz4CWriU+
-	8PbBJu8b+ASyCp4Z/cnPpC34QOV6vJTi/F0fRzLQ5
-X-Gm-Gg: AYBFou1CwagmodnWtJeChnfRqoVC4kBRVWUqqIr7D/lNy5PuN7fs9HuxhD6PYeoFwHY
-	FMD7H948KpK1Wo0lCyZ82VeOp0kvEEDJYzOCQuOKS3CLPdHZ0uxLVbovHnwxLqe2JAW5bG0Ft9c
-	62f7mR+Vp6nQvRKY/D1YWHrQrcPUluXenEEm5EQI7UdTlKlSzv3Hbuc08jZE22bUXZutHVmHzbE
-	8oWHwBt4RWiR9bqRyGvHZB8s/l508j91WrbXqz7LHBVPx0QLlibiyhXMt1n9Vpf67xCPzUX+MXL
-	ZtDSj+OslDURK+/mbKKGkJljmZrejTiDQL1vIT5rQ7m1+FdJhAsaVtHrPwJ7Noa0Igx3Qp2a1ND
-	aUWeCK0GrwTZCuwoFtrZ7y7LOrsSh+AzNdQ7zYevokqMVHVwlKURtTZgLHDB69cDjV6qxhqs=
-X-Received: by 2002:a17:906:9f89:b0:c46:645f:cedf with SMTP id
- a640c23a62f3a-c4d3546bf6emr55329366b.15.1793914611758; Thu, 05 Nov 2026
- 13:36:51 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OzbYxF1I
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3DA1F0089F;
+	Thu,  5 Nov 2026 21:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793914805;
+	bh=IEVA8xzeXeEh7eqhzQT8WFHbqnPjGyZ0iIwhmCRsBAs=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=OzbYxF1IhQEjowXjejqhjvdKP/1lXi6NkVRInv2YEhxbk49UB1D3dO6FWpmfrYFfP
+	 a0sUItm7MGFeFTOqLEaTuY5VTWM4MARPBhhEC6QrR7qPNnSf64oALlyTvAEkkUUJKc
+	 NzcjdhIPdLw1qQVAz9COlMm7ciq7sQPvHSAQ4AD6DHE5el2gECIGCoFweX8J4Xbnee
+	 52ERo+MMLeTkd+ltGeQK0T8XqYyJ/JJF6k11oELtlv65e7ogHh93k5W+/YcJwolSLT
+	 ZLagtejU1BJ6DxOxIdPK5HjPO3LPW3kb5D/uQi0VrjcqiG3wHfYRq4dS0MN+eP1SPC
+	 pzGnTgKj8mvlA==
+Message-ID: <sashiko-outbox-200251@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 09/35] bpf: Find the registers that hold a
+ number or a pointer to arena
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261105204513.2230344-10-alexei.starovoitov@gmail.com>
+References: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
+ <20261105204513.2230344-10-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 05 Nov 2026 21:40:05 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,82 +59,218 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261023001603.560210-8-wusamuel@google.com> <20261023001603.560210-9-wusamuel@google.com>
- <20261028134012.01d52e94@pumpkin> <CAG2KctpGPHo-S3AEvBhK5HPUnDHfoJu6Z-r+cS1hQ4Ps=B3DmQ@mail.gmail.com>
- <20261030100215.6f8e0d4f@pumpkin> <CAG2KctqdPq6NmK6rB13s2bgM7kP2w4OMMy2hdp_OFMVYYhTnZA@mail.gmail.com>
- <20261104142307.431fc12f@pumpkin> <CAG2KctrY6GmVqsKP+fXYCsL6wDR4zp1kdRd7a7uOdCgg_JcMdQ@mail.gmail.com>
- <20261105083712.14847dcf@pumpkin>
-In-Reply-To: <20261105083712.14847dcf@pumpkin>
-From: Samuel Wu <wusamuel@google.com>
-Date: Thu, 5 Nov 2026 13:36:40 -0800
-X-Gm-Features: AclHuK-4-3cdEVpuwe7ZR8h4IzWEsLs5z4V7r2FIsMuL4z-PpEQaIZ0fXLkqICE
-Message-ID: <CAG2KctocE=kj2CO29D0tVmrBeWmCDYA6FhpHr-7ZbD63GM1CsQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 5, 2026 at 12:37=E2=80=AFAM David Laight
-<david.laight.linux@gmail.com> wrote:
->
-> On Wed, 4 Nov 2026 16:05:52 -0800
-> Samuel Wu <wusamuel@google.com> wrote:
->
-> > > I think it might be more sensible (less pitfalls later on) to return
-> > > the symbol number - not that of the next one.
-> >
-> > What pitfalls were you anticipating? If the current symbol's position
-> > is returned, userspace needs another ioctl() call and an -ENOENT
-> > check, to learn that there are no more matches. Alternatively,
-> > returning the next position means every call pays for a look-ahead,
-> > which for an unfiltered query walks the module symbols even when
-> > userspace only wants the first match.
->
-> I was thinking more of the kernel api.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Medium] bpf: misclassified 32-bit context loads in flow_loaded_kind()
+- [Medium] bpf: misclassified void * special kfuncs in flow_returned_kind()
+- [Medium] bpf: stack pointer spill via BPF_STORE_REL lost in flow_kinds_st=
+ep()
+--
 
-Ahh ok, makes more sense now. I misunderstood your previous reply to
-be about the ioctl(), not the internal kernel functions.
+commit d616e924eec822ed1af91bad97267316408cf00d
+Author: Alexei Starovoitov <ast@kernel.org>
 
-> The 'position' is just an array index.
-> So a 'read by symbol name' would return the array index of that symbol.
-> A 'read by symbol name index' would return the name (uncompressed) and
-> do the lookup (binary search and linear scan) to find the value.
->
-> I've used a bit in the 'sorted by name array' to indicate that the
-> symbol is a duplicate of the previous one.
-> So checking an 'exact match' for being a duplicate is cheap.
-> But for a partial match you start needing the name buffer to be in-out
-> on the read-by position request.
-> So you start needing 'read by position' and 'read by position with
-> name compare'.
-> It is likely that the caller will need to validate the name anyway.
+bpf: Find the registers that hold a number or a pointer to arena
 
-Got it, thanks for clarifying! That works with QUERY_BY_NAME in v3:
-- In the UAPI, the input query string
-(kallsyms_query_by_name.sym_name) and the output matched name
-(kallsyms_query_by_name ->kallsyms_sym.sym_name) are separate buffers,
-so the name buffer is not in-out.
-- In kernel/kallsyms.c, the vmlinux lookup only needs the two helpers
-you described:
-1. lookup by name/prefix -> index
-2. index -> uncompressed name + address
+This commit adds bpf_flow_compute_kinds() in kernel/bpf/flow.c to perform a
+forward dataflow pass before the main verification pass, identifying which
+registers and stack slots hold plain scalars/arena pointers, scalar-only map
+value pointers, or context pointers on every path reaching each instruction.
 
-> An 'interesting' idea would be an ioctl that returned the value of
-> the nth symbol along with the name of the n+1th.
-> That might get confusing though.
+> diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
+> index 0f5acdf1cb946..837d5054c2a3d 100644
+> --- a/kernel/bpf/flow.c
+> +++ b/kernel/bpf/flow.c
+> @@ -514,3 +514,310 @@ int bpf_flow_place_guards(struct bpf_verifier_env *=
+env)
 
-Agreed, it's simpler to have the ioctl() return a single symbol.
+[ ... ]
+
+> +/* What holds on both ways to an insn. Returns true if that is less than=
+ before. */
+> +static bool flow_kinds_meet(struct flow_kinds *to, const struct flow_kin=
+ds *from)
+> +{
+> +	unsigned long lost =3D 0;
+> +	int i, j;
+> +
+> +	for (i =3D 0; i < FLOW_KINDS; i++) {
+> +		for (j =3D 0; j < ARRAY_SIZE(to->is[i]); j++) {
+> +			lost |=3D to->is[i][j] & ~from->is[i][j];
+> +			to->is[i][j] &=3D from->is[i][j];
+> +		}
+> +	}
+> +	return lost;
+> +}
+
+[ ... ]
+
+> +/* What @insn loads through the register @base */
+> +static enum flow_kind flow_loaded_kind(struct bpf_verifier_env *env, con=
+st struct flow_kinds *k,
+> +				       const struct bpf_insn *insn, u8 base)
+> +{
+> +	struct bpf_insn_access_aux info =3D { .reg_type =3D SCALAR_VALUE };
+> +	int size =3D bpf_size_to_bytes(BPF_SIZE(insn->code));
+> +	bool tstamp =3D env->prog->tstamp_type_access, valid;
+> +
+> +	/* a number that is good for a load is an address in arena */
+> +	if (test_bit(base, k->is[FLOW_IS_VALUE]))
+> +		return FLOW_IS_PLAIN;
+> +	/* only the context has pointers that are shorter than a register */
+> +	if (!test_bit(base, k->is[FLOW_IS_CTX]))
+> +		return size < BPF_REG_SIZE ? FLOW_IS_PLAIN : FLOW_IS_OTHER;
+
+[Severity: Medium]
+Can flow_loaded_kind() in kernel/bpf/flow.c misclassify 32-bit context
+pointer loads (such as skb->data or xdp_md->data) as FLOW_IS_PLAIN when a
+register holds the context pointer on one incoming path and a non-context
+value on another?
+
+In bpf_flow_compute_kinds(), all bits in struct flow_kinds start as 1 and a=
+re
+intersected across predecessors in flow_kinds_meet() via bitwise AND:
+
+	to->is[i][j] &=3D from->is[i][j];
+
+As a result, test_bit(base, k->is[FLOW_IS_CTX]) is a must-analysis bit that
+is 1 only when base holds the unmodified context pointer on every path
+reaching the instruction, and becomes 0 whenever base may hold a non-context
+value on at least one path (for example, after a branch or across static
+subprogram callsites).
+
+However, flow_loaded_kind() checks !test_bit(base, k->is[FLOW_IS_CTX]) and
+returns FLOW_IS_PLAIN for size < BPF_REG_SIZE, treating a cleared bit in
+FLOW_IS_CTX as meaning that base cannot be a context pointer on any path.
+When a 32-bit context pointer field is loaded through such a register,
+flow_loaded_kind() marks the resulting packet pointer as FLOW_IS_PLAIN,
+allowing the main pass to join states with distinct packet offsets and reje=
+ct
+valid programs. In addition, when k->is[FLOW_IS_CTX] drops from 1 to 0 duri=
+ng
+the fixpoint loop, flow_loaded_kind() transitions its result for sub-8-byte
+non-scalar context loads from FLOW_IS_OTHER (0) back up to FLOW_IS_PLAIN (1=
+),
+making the transfer function non-monotone.
+
+> +	valid =3D env->ops->is_valid_access &&
+> +		env->ops->is_valid_access(insn->off, size, BPF_READ, env->prog, &info);
+> +	/* it notes what the prog reads, and this is a question */
+> +	env->prog->tstamp_type_access =3D tstamp;
+> +	return valid && info.reg_type =3D=3D SCALAR_VALUE ? FLOW_IS_PLAIN : FLO=
+W_IS_OTHER;
+> +}
+> +
+> +/* What a helper or a kfunc returns */
+> +static enum flow_kind flow_returned_kind(struct bpf_verifier_env *env, i=
+nt idx)
+> +{
+> +	struct bpf_insn_aux_data *aux =3D &env->insn_aux_data[idx];
+> +	struct bpf_insn *insn =3D &env->prog->insnsi[idx];
+> +	const struct bpf_func_proto *fn;
+> +	struct bpf_call_arg_meta meta;
+> +	const struct btf_type *t;
+> +
+> +	if (bpf_pseudo_kfunc_call(insn)) {
+> +		if (bpf_fetch_kfunc_arg_meta(env, insn->imm, insn->off, &meta) < 0)
+> +			return FLOW_IS_OTHER;
+> +		t =3D btf_type_skip_modifiers(meta.btf, meta.func_proto->type, NULL);
+> +		if (!btf_type_is_ptr(t))
+> +			return FLOW_IS_PLAIN;
+> +		/* void * is a number, unless the verifier knows the kfunc. Such kfunc=
+ may fail. */
+> +		t =3D btf_type_skip_modifiers(meta.btf, t->type, NULL);
+> +		return btf_type_is_void(t) && !(meta.kfunc_flags & KF_RET_NULL) ? FLOW=
+_IS_PLAIN :
+> +										  FLOW_IS_OTHER;
+
+[Severity: Medium]
+Does flow_returned_kind() in kernel/bpf/flow.c misclassify the return value
+of bpf_cast_to_kern_ctx() and bpf_rdonly_cast() as FLOW_IS_PLAIN?
+
+Both kfuncs have a void * return type in BTF, but neither has KF_RET_NULL s=
+et
+in common_btf_ids in kernel/bpf/helpers.c:
+
+	BTF_ID_FLAGS(func, bpf_cast_to_kern_ctx, KF_FASTCALL)
+	BTF_ID_FLAGS(func, bpf_rdonly_cast, KF_FASTCALL | KF_PERFMON)
+
+In kernel/bpf/verifier.c, check_special_kfunc() sets R0 for these calls to
+PTR_TO_BTF_ID (or PTR_TO_MEM):
+
+	} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_cast_to_kern_ctx]=
+)) {
+		mark_reg_known_zero(env, regs, BPF_REG_0);
+		regs[BPF_REG_0].type =3D PTR_TO_BTF_ID | PTR_TRUSTED;
+		regs[BPF_REG_0].btf =3D desc_btf;
+		regs[BPF_REG_0].btf_id =3D meta->ret_btf_id;
+	} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_rdonly_cast])) {
+
+Because KF_RET_NULL is not set on either kfunc, flow_returned_kind() returns
+FLOW_IS_PLAIN, which sets both FLOW_IS_PLAIN and FLOW_IS_VALUE on R0 and
+causes the returned pointer and any pointers loaded through it (via
+flow_loaded_kind() checking FLOW_IS_VALUE) to be treated as FLOW_IS_PLAIN,
+allowing states with different constant offsets to be joined.
+
+> +	}
+
+[ ... ]
+
+> +static bool flow_kinds_step(struct bpf_verifier_env *env, struct flow_ki=
+nds *kinds, u16 *ret,
+> +			    struct flow_kinds *k, int idx)
+> +{
+> +	struct bpf_subprog_info *sub =3D env->subprog_info;
+> +	struct bpf_insn *insn =3D &env->prog->insnsi[idx];
+> +	u8 class =3D BPF_CLASS(insn->code), op =3D BPF_OP(insn->code);
+> +	u8 dst =3D insn->dst_reg, src =3D insn->src_reg;
+> +	bool wide =3D BPF_SIZE(insn->code) =3D=3D BPF_DW && BPF_MODE(insn->code=
+) =3D=3D BPF_MEM &&
+> +		    !(insn->off % BPF_REG_SIZE);
+> +	bool lost =3D false;
+> +	u16 regs =3D U16_MAX;
+> +	int i, s;
+
+[ ... ]
+
+> +	} else if (class =3D=3D BPF_LDX) {
+> +		s =3D flow_mem_place(insn, src);
+> +		if (wide && s >=3D 0)
+> +			flow_kind_copy(k, dst, k, s);
+> +		else
+> +			flow_kind_set(k, dst, flow_loaded_kind(env, k, insn, src));
+> +	} else if (class =3D=3D BPF_STX || class =3D=3D BPF_ST) {
+> +		i =3D bpf_atomic_load_reg(insn);
+> +		if (i >=3D 0)
+> +			flow_kind_set(k, i, flow_loaded_kind(env, k, insn,
+> +						insn->imm =3D=3D BPF_LOAD_ACQ ? src : dst));
+> +		s =3D flow_mem_place(insn, dst);
+> +		if (class =3D=3D BPF_STX && wide && s >=3D 0)
+> +			flow_kind_copy(k, s, k, src);
+> +		else if (s >=3D 0)
+> +			flow_kind_set(k, s, FLOW_IS_PLAIN);
+
+[Severity: Medium]
+What happens in flow_kinds_step() in kernel/bpf/flow.c if a 64-bit pointer =
+is
+spilled to a stack slot using a store-release instruction (BPF_STX |
+BPF_ATOMIC | BPF_DW with imm =3D=3D BPF_STORE_REL)?
+
+In kernel/bpf/verifier.c, check_atomic_store() handles BPF_STORE_REL by
+calling check_store_reg(env, insn, true), which spills a pointer register to
+the stack on an aligned 8-byte write.
+
+In flow_kinds_step(), wide requires BPF_MODE(insn->code) =3D=3D BPF_MEM, wh=
+ich is
+false for BPF_ATOMIC instructions. When a 64-bit BPF_STORE_REL writes a
+non-arena pointer to a tracked stack slot (s >=3D 0), wide is false, so
+flow_kinds_step() takes the else branch and sets slot s to FLOW_IS_PLAIN
+instead of copying the kind from src. A subsequent 64-bit fill from that
+stack slot will then classify the reloaded pointer register as FLOW_IS_PLAIN
+(and similarly a 64-bit BPF_LOAD_ACQ from a stack slot will not copy the
+stack slot kind).
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261105204513.2230=
+344-1-alexei.starovoitov@gmail.com?part=3D9
