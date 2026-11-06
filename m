@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793937250;
-	b=I3hdXmsbIOyBIHpAXoofAamJpL8FMzjbKL0KvBS5MZPInjNZUwwPQ14DMGKyD4wKurgH
-	 A+b7FdRXG3cSvUY+NgGeQ6jc/Iu51O3V1y/vwilKDmOXpn+XIhKPsLf9rbZtleOgtqM3o
-	 taMmJJjRzdvlvc26bw+lE6sTPoCV0AjR+qebnfwPjr4TJVQC+a3bGXUlhlG0mmyeXnlD3
-	 /mfPlkeBucZVD4vQHe9RA7+osh1ilJiKbtwu5s0b8t8jHO7uVxCHuctvmnSiDwEV7q0eR
-	 9nMrTm7IlcN9sOz/83vyF9kTrqX8A2WzkE3PsZmfF+gTcWoQwQ/DnHfSXcYsa8Y/VCw==
+	t=1793937256;
+	b=HMNE6xoC7FjKf1risQ+/AnLCPbZDwNoZ2J2S3IqHJPnQmKGuBGOctO/cXmvs5eCtX5rr
+	 UGlrqF2yV/aCFC6LNDS20lQO11oZYEyVBQxUS+GavGAwf+9NhdEagjDFXetrb+bWKYhpY
+	 To1mRRszytGzEXhzjCo1yX61oIGz0aB61MwRRU+4Vyc2mOPvmTPbenFFiTmthciPPpqsg
+	 TzrYZIJt+LEkpI0vzg71hT8/LHOrCFdpz3YiXnFHh/uBdH/fWgWF3IagvuqGL0dGM6cY6
+	 jIpHdyN73CxGV7b/VmER+5Tlyl6cK0sFCkImEYr53dvzvU43VidFmLfAu+qHiECg8iw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793937250;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793937256;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=oL2TAr0ctsnRu2vU/884YYomTRPaWNC1Ipz0E5QvtwU=;
-	b=YTH9dxMnY2tq6UFclCuN5B1w3LJ8LygP2H34gdqHSO+9SEw1mhHsmpfoLvCg2sN/SDtc
-	 aTWUU1DgEqVDG5l+8vYHYruj8fSYFZaSXuB/43cORrGYSQQ/H2t9qviwfYMSJX4WfQ52J
-	 aKISmasHXeCp9Je9YaQpEvoPE9/A1U5FX1oEoLlDJsHCuBkYQZW3iFhe+i5SvTmolyuZV
-	 t04+M9UqiHZvgxE+tBs4zL/lreqqVf6bSqFCYSkdQW1fUwY3RCn7+GfVnUaj45m2npC+y
-	 Qrrf0gD1XAXQXVi+szjyNQfL/C+R36wa+kmdNLZvkdSiSVOOBSp2l+zauD5BRfarPfg==
+	bh=4jBz2XFH4Z3v8BWRwWMjuGwhLB1O1nk0VaKy3FBySCQ=;
+	b=q6v37DXy5oErtYniH1pPSd3nPvPELJBgzvKbE6GaBHvroKBx+3iV6uSls0Z+8OQip2T8
+	 PK4Yw5tjI+nmQ4pJ7QUgC24DxYy0CO1+JmUnRJj8JjdcZtarxc8SfKxJgVYjdD69UqG+P
+	 ei9ONdZewK4/X0ICfIUR6pB5bEyCazzJAyXjuPEnM0DIrKQ2Tarn/tOng6vlzpJyrHrWr
+	 2knqkrHOIl4hsZnyxoMz+TQP2Nx4YZuXZzxRAHbmmSYX3Xs7bwry9MPB6HLMYpViHfxQ4
+	 I8KU/V7I76GCb5st+SI4uOmdHIXktREwiZmR0PKSbmCU3etOoQDT2EZ8csjlEAJLN9Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VUx3UjCU;
-	arc=none smtp.remote-ip=209.85.216.50
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SOU0MjD1;
+	arc=none smtp.remote-ip=209.85.214.169
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36936606A31B
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 03:54:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 36936606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47258606A31B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 03:54:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47258606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VUx3UjCU
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3b0b3754f57so142810a91.0
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 19:54:10 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=SOU0MjD1
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e95bd1c14cso1796665ad.2
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 19:54:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793937249; x=1794542049; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793937256; x=1794542056; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=oL2TAr0ctsnRu2vU/884YYomTRPaWNC1Ipz0E5QvtwU=;
-        b=VUx3UjCUPDdfH1J7phyJeow34S0A0qlz6Mmv+ZVyzSMHJp8GKXqfxf/ceov4uHwuCV
-         MHRvGEQDzCuqUMkMJIjxOICg6BXR5a91ols7vbjgRnE/lQxQqv+wcgbGnELFB158zEqS
-         9LetOcnH9IiKygzJG68opZvP/rrLiZHocDzKC6MIKUAppmjd0baqzgdNoTa2JsQDIm8z
-         yeccWYICDUwvBuK5yMBtC7MA272f2FRWOryQPCa8TY4FfEcE4yz13NIVrs0NUWzhT/lx
-         CGuXPrQHU0uuVe9a71/K+MteSqSoUH8x4HpaDct/R1iRUAC6U3Ph27yPocROUGisDacy
-         7liA==
+        bh=4jBz2XFH4Z3v8BWRwWMjuGwhLB1O1nk0VaKy3FBySCQ=;
+        b=SOU0MjD1ozAZHH0vjiXXGp/9B8S8eoptRL0CW+b/mrkR+jFl9VUaF95Y3UYGcgFroB
+         7bNiM6au1pNkXqrjO49LM4AKhTHw7ucPqR4OUDUEnM+cqX+YyVtGGRaTJQI123VfTv4I
+         JmBRrFkWq6BA7WKAaz0eDUPO//DK7sCVSH9Dqpqp1xeSryNiHfCVyfbVd9ygRN4BNd2e
+         FNPBNOAMgpoDbmY6D/ZtM5cwoGIJnr1cmWdIybPakdFgud9sqkPEztmnLqYSLQjn0otE
+         4qoENX0Bj3i8AX603txIA6m3k1ycfwKv8vyTuA5arOSoaP4ltvZC6auPRgHZNQOCzjyM
+         QVtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793937249; x=1794542049;
+        d=1e100.net; s=20260707; t=1793937256; x=1794542056;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oL2TAr0ctsnRu2vU/884YYomTRPaWNC1Ipz0E5QvtwU=;
-        b=j1EOLv4lh/hRvH05iNzKGtOnB1WI+zjn9IzUEyc8cxcoQvgj0ppkaFjrZ/9TEvFIsq
-         Cc61UYONo0AQpwth/M7Wbm1N7QQ0MFk8TIt/SEpHFY4TT86VXTSRFmx3Bl6fEWaLbTsg
-         CebUa2UMJ5bnzu3tvdYI+OO4SVjWI9+d3aL27TaYjNCJOQOjXSnoG9xSlpVyjtMTLUIY
-         xxOn+As6Y+iIw9P1tWjXUf7syW76SuqHW9n1tXtXN9Z9RpEEilQDNbY9F5s0L8DXWOql
-         2QRT/S4J7nD1ubLBNSurNKP2vL8Np9ZnttQ/IPSXJ4idvxOJ6IA7+2z2C0DeVMY/g8zM
-         mYkA==
-X-Gm-Message-State: APuU4Z8ARcjLBgwdpsrjEVaSDiMP97kQH6JlJcXEK5iPybhqdmKbBh7q
-	tSnV4yEHbN9qJBbeARMbwZvLgtNmrzBhQ2c6eqMTre8eJAiTbBPT+g+BvGCcbA==
-X-Gm-Gg: AYBFou26nTu8x5zdMfrUeHVr3vKqB5boUVYmz+f38ArGkwGgNbiHp/XqAne6OOH7p3R
-	NCJcFEueKQ04XQZVxS0iXH0htTVtU6DcC0nw7AG6rPJPq1ZtTeu3KeOgw1GdGRZ0fsJGUEzW55I
-	swm+lp6KJKz9esiLh4ZUDIpCd3YWqDzEfkkfHf9OM7R3jC+6rLwQaSCLib0Apw/0MjJq++01os4
-	3QFkNiQsM49CLpFTMnyySPtJi63PZ2iYLNCTt35/7RZsyVnIhGzLdj+Ykfy1f7ccsSfTLJTJaAe
-	Af1jTuhD3hjbaonzznsivDbcO6/Jg5x9MHvr80Kg9rZmKZeVtXDiitUNW6Qpr/mXxya3nXwMn1r
-	9t7Xi/lppknDYJ3+5az+la6+E0dmUoJ3X4hEWwtqI0jQn5bB1LBtOyfnY9OhT4tlZMsim5HbjTJ
-	ACOoglvRvp0VDwW2v+Le9AI73kOr4VtWdXS+MdDyh2FqxFqP2YWoHBrlbrpEEAMQm7TwYxVfYoi
-	mWdE0p2aGXeNn7B3uDGxIfHf+IZFq7Yy1aUnjIENwq6ZQW4XWgafRVHM51v8dygNvIj7qFja73Y
-	7Rce93NxZKLfh+IIXTSZTVT0sqrgaaToyRByN3H+XYb2zdqpzAMuNIWEHo56k7rA3cZ7RNghOa8
-	lEkJrZvFeiVRV/ceuYuWjG7fZ8z7wPmSvTu3c+x8IEaSP3vidx1S20XYx5Yf6pSXoyvnDqanHhE
-	c=
-X-Received: by 2002:a17:90b:2891:b0:3ac:1c76:61c3 with SMTP id 98e67ed59e1d1-3b0db6f13e2mr1115191a91.27.1793937249578;
-        Thu, 05 Nov 2026 19:54:09 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b32b6507sm6606985a91.16.2026.11.05.19.54.09
+        bh=4jBz2XFH4Z3v8BWRwWMjuGwhLB1O1nk0VaKy3FBySCQ=;
+        b=nXFYzTWRIBG11u06J6xNUcJhtrnY/R79C2O2KPQyYj4vg9XLWJPUpo6MgWzLo9bRZI
+         B7WldS1rOtk5D9pv8ORtmtBcgKP6DseJSRV3KBGld41VEEncuRMMtPp+zvzbjiRL6m/3
+         hWzSMzmsa257YtOByWIjxCcfTTs1SSImxxjtvut+pAtMbnetkYSUNeEEUOd4Npv48CwS
+         YjEFkciuTXbfC3aHX9VvdUAEelIaQmbd5sTH7sXfIX5q55yxzsH+esJ25qg547F2qcCa
+         u9kVmSF4eQ4HoQxT6jLXCSu4sS4G6a8n8PuofDE/a+fvXkfp5i1skRJqL+MmmGOrZkVK
+         EFYg==
+X-Gm-Message-State: APuU4Z9LP3vNQdyMTjifGfRwKoOUN8Kp0IH7peFf0wnNU7CVvvm9cp6w
+	FghtkpEzKwqVOQDj3Yy8G7QguiUZvqhoDbcvZMTQej9JydEspLYcgru4GvH5Ow==
+X-Gm-Gg: AYBFou3MJrN3LbJq4aiZeZ1Lh6m6FRnlXJdFrhSXCnx5dzIx6be1Be2gb2immv/XWrJ
+	OWTe9DYjcqZOaJoLLZCRssP+uSjUXkzL19GXSqqOb05+hsVRllhPeNPijNOyGnMtf3ncS9trCRN
+	MXyhq45KOWUjqhxrKDKcwIFSabiL3PbSOwhGpRSd//xz7S9mVhPkUnXlpXTtFIqEC8bVRzP7UTV
+	c/BBZNbzZDzCzAwc5jRUOJSM32MOfB9CFpiQd4ucDJKzHCw1B7B6zm7G57FZAfCjR9mq8z4aPKQ
+	64vD45r5QITHjLGVq4PSGJavc2pWO5xe8O+BFEsJye2Y6cmN04UnPxEftsp/FHlyuXOJ2UOTEar
+	ijJF1W1PdLyvlKhDzjIRVXIwAutuSejUc/bFwEgdx9rWPwGJKaSg/IUIQTFUUfv8Un8JeWYrzgw
+	F/735ys3l9jrnrAXY/KEqyeDe2/1HyogjIffiQetLg89YTCSxlKSOcI+aTGAPYpHeONfJXzH6Rj
+	5vB3Qy5ZyKmAr8S/QV7xHXnwWZcEJ/5Rl1rTkAn9Qyq9RRFaPweXR7hj7U1oUqXqoTANl0tpgSe
+	vNOwRu8XroqbN2u9jWC5L/94JEeLG4MIDd9Jegkg2gKDi3u62yFFIvomeDPO9Skg2VAXQPNm2Y2
+	LleodsDd7dp8YaQYl7HXUhAGKdRrkJY4oQyLsvAZbgg5XCYgH1FOvgfIBFbiGqc6CFl5xl5FRdQ
+	==
+X-Received: by 2002:a17:903:2312:b0:2e9:9f14:c40 with SMTP id d9443c01a7336-2ed4062f470mr17699975ad.6.1793937255472;
+        Thu, 05 Nov 2026 19:54:15 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47d5f234sm1245125ad.46.2026.11.05.19.54.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 19:54:09 -0800 (PST)
+        Thu, 05 Nov 2026 19:54:15 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 30/45] bpf: Don't widen away a register that only the loop sets
-Date: Fri,  6 Nov 2026 03:50:54 +0000
-Message-ID: <20261106035111.3315285-31-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 31/45] bpf: A base that nothing is known about can be the context
+Date: Fri,  6 Nov 2026 03:50:55 +0000
+Message-ID: <20261106035111.3315285-32-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
 References: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
@@ -104,63 +104,60 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-  bpf_for(i, 0, 64) {
-          if (v[i] != want)
-                  continue;
-          last = bpf_get_prandom_u32();
-          found = true;
-  }
-  if (found)
-          bpf_printk("%llu", last);
+test_tcp_custom_syncookie.c and test_cls_redirect.c keep the context in
+a struct and read c->skb->data. A function that is not inlined and does
 
-clang 18 does not set 'last' in front of the loop. The state that enters
-the loop has found = 0 and no 'last'. The state that comes around has
-found = 1 and 'last'. At the loop head the two are widened into one state:
-found is 0 or 1, 'last' is not set. The prog loaded before states were
-joined, and is rejected now:
+  void *data = (void *)(long)c->skb->data;
+  void *end = (void *)(long)c->skb->data_end;
 
-  R7 !read_ok
+  if (data + (v6 ? 40 : 20) > end)
+          return 0;
+  return v6 ? *(u8 *)(data + 39) : *(u8 *)(data + 19);
 
-Where paths meet outside of a loop flow_unset_differs() keeps such states
-apart: nothing is gained from a join that loses a live register. Ask it at
-a loop head too. Like there, the rule holds while there is room for states
-at the insn.
+loaded before states were joined, and is rejected now:
 
-The progs of rust-bpf take 0.1% to 1.5% more insns, the progs of selftests,
-Cilium and sched-ext less than 0.1%.
+  invalid access to packet, off=19 size=1, R1(id=3,off=19,r=0)
+
+c->skb is loaded through a pointer to the stack of the caller.
+bpf_flow_compute_kinds() can't tell that it is the context, and took what
+a load of less than 8 bytes through such base gives for a number. Nothing
+kept 20 and 40 apart in front of 'r3 += r1' then. The same if the base is
+the context on some of the paths only.
+
+Ask is_valid_access() about such load also when the base is not known:
+4 bytes at the offset of data, data_meta or data_end can be a pointer.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/flow.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ kernel/bpf/flow.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index d5dbe417421a..6854e795e537 100644
+index 6854e795e537..51c7cce57b49 100644
 --- a/kernel/bpf/flow.c
 +++ b/kernel/bpf/flow.c
-@@ -2328,9 +2328,9 @@ static int flow_merge(struct bpf_verifier_env *env, struct flow_set *set,
- 		}
- 		if (!widen && flow_cmp_pkt_range(s, t))
- 			continue;
--		if (!widen && flow_has_room(env, *nr_states) &&
-+		if (flow_has_room(env, *nr_states) &&
- 		    (flow_unset_differs(&t->st, &s->st) ||
--		     flow_join_makes_up(flow, &t->st, &s->st)))
-+		     (!widen && flow_join_makes_up(flow, &t->st, &s->st))))
- 			continue;
- 		/*
- 		 * Around a loop too:
-@@ -2516,8 +2516,8 @@ static int flow_end_walk(struct bpf_verifier_env *env, struct flow_set *set, str
+@@ -708,13 +708,18 @@ static enum flow_kind flow_loaded_kind(struct bpf_verifier_env *env, const struc
+ 	/* a number that is good for a load is an address in arena */
+ 	if (test_bit(base, k->is[FLOW_IS_VALUE]))
+ 		return FLOW_IS_PLAIN;
+-	/* only the context has pointers that are shorter than a register */
+-	if (!test_bit(base, k->is[FLOW_IS_CTX]))
+-		return size < BPF_REG_SIZE ? FLOW_IS_PLAIN : FLOW_IS_OTHER;
++	if (size == BPF_REG_SIZE && !test_bit(base, k->is[FLOW_IS_CTX]))
++		return FLOW_IS_OTHER;
+ 	valid = env->ops->is_valid_access &&
+ 		env->ops->is_valid_access(insn->off, size, BPF_READ, env->prog, &info);
+ 	/* it notes what the prog reads, and this is a question */
+ 	env->prog->tstamp_type_access = tstamp;
++	/*
++	 * Only the context has pointers that are shorter than a register. A base that nothing is
++	 * known about can be the context: it came out of a struct, or only some paths have it.
++	 */
++	if (size < BPF_REG_SIZE)
++		return valid && info.reg_type != SCALAR_VALUE ? FLOW_IS_OTHER : FLOW_IS_PLAIN;
+ 	return valid && info.reg_type == SCALAR_VALUE ? FLOW_IS_PLAIN : FLOW_IS_OTHER;
+ }
  
- 	list_for_each_entry_reverse(t, &set->list, node) {
- 		/*
--		 * The rules that hold for what comes around a loop, see flow_merge(). And one
--		 * more: the iteration has set a register, see flow_unset_differs(). The join
-+		 * The rules that hold for what comes around a loop, see flow_merge(). One of
-+		 * them: the iteration has set a register, see flow_unset_differs(). The join
- 		 * would be without it.
- 		 */
- 		if (flow_trips_behind(&t->st, &s->st) ||
 -- 
 2.55.0
 
