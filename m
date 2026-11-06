@@ -1,55 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793939157;
-	b=txkg136C+kKs6U8F+n8H9OUIenEOow3i1QJ/Jre8HTnpWYq00DFeARvBdyozutPe4NIr
-	 EEJyWCr43k9Lzgh9BouGBsR+8M9+bH1yadN0717nOhRzDWWChYofd0XnHHA32yLZ8yS+3
-	 3Z64r1n/MfpB+Eh0uYOjgzZVbVZ2ch0a13msB3ofarZ+/FA9LTPfImvrRF1C30x4CTzx3
-	 2uHr4HRwd6tSaJQF+/7n7V5Cn1vwVdkhHodlJCkZye0cH3sLs/c0ZhXjtIxW1z4BVK0XM
-	 SH0pwO0LNbKGh5bQQhNw7IeUmvk+wrDmc30+FP4aD/w4/HFuxXVtgJGPVvuwm3lxduQ==
+	t=1793939194;
+	b=t7ogDT72rNPx2kzwyvmzUzPAt2/7DqmTOh50//4nZnoEpZCkKhNShVx9dt83xuFBYWRJ
+	 V0iNjnQFXZKMR6SjPe+a/xFVHoj31BpvAY1z91bS3Jbqx3JJm8WfG1eleDJBDNeA7C2VG
+	 q1dTRaP70b20FStLTrjQz8SSdcgwMpYLtQ8KgrLgWr76vxEjEtXUIQ0i9I8LFWRPTBn9h
+	 spd8vxoUmBwo/PUc4BXDkddRxezQymX4oa9Zg9io37YzbVH26dZZnpfuSNSm1gnGvaG/a
+	 eAAF/8Qc/R2oG58YMardnov6ob4efG6gYM2nkcqfCbr2NYe9UgunLhXpSEQEoT8SoyA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793939157;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793939194;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=cCY6hNVQJFK89SsysKQuAmCQuLX90zeOHtaAr1LFwGg=;
-	b=nGLShwha2g/86xmNLp+i40TiY4r1DxBHaC9cLJrC1w+nVLWQlQP/jd1GFvc9aZFdS3C+
-	 MBCBZis8uyjn8Ltbn+WlQfd9tacMsRf1ZZsYNXod/XoMiD0ZcX3yo3nyv0/CzEvNWjsld
-	 sl5nmk/5S3fbE6O1HrItvhBfXN9m3vW2q7XcMPipC6M04wZfI2JiXRoT/4HKAYuLGP0gO
-	 hv9nfCc05Fd4MZgtv3SZKqNZJ3FF1C7MzIs6Qyh8w5Y8rJRiTQQRhv/TKXDAuT69Yof5v
-	 g72NWIITt9q+Z8jWq90h4K79JrP3aP/1ZgxFh6bfbgjk37Lvk7dbgwUvgrQh7RPxh1w==
+	bh=1vcCAH6b6zre+Xzbwajcm0QD8cyEwAcsyiVrAU5UC+M=;
+	b=xqpqc2a3ynCxioEZxi5wKX6+hiXWno4g4t3xvV0R2sfV4FxIfB+iK80U/15mcdg8zp2B
+	 MbjySWGFQj/4sLZnUf2sih8qCCbDsYB/wzH2tkDiFfvrUKeVE5ZqMLE0n1CUgL6Y1R6tB
+	 jPsED3ELmYjH/IgZdHT/v531DM9uoPsflX75xLxh/Ls8n2aiM/NUhC8ijGcnmf2/15XiL
+	 jQ0WPabof07d63zdGhAUSGoiwq0IPnMO1QyMBZCQKn6NOGzZ0li1olsE49nWBttmvGYhs
+	 WBMIAnVgdnArR9MJvRG/SZ5XFFhJgVqAJnKhDN+kPqP+OmZy2ZdrXo13R2VVhulDoBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F+ZKZInp;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XiE0BruY;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621C3606A328
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9B6606A31B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:26:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F+ZKZInp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE4AF1F0089F;
-	Fri,  6 Nov 2026 04:25:56 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XiE0BruY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F7A61F0089F;
+	Fri,  6 Nov 2026 04:26:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793939157;
-	bh=cCY6hNVQJFK89SsysKQuAmCQuLX90zeOHtaAr1LFwGg=;
+	s=k20260515; t=1793939193;
+	bh=1vcCAH6b6zre+Xzbwajcm0QD8cyEwAcsyiVrAU5UC+M=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=F+ZKZInpNRefJv6oy93MgNch7KGoFW0oN8VPNUrbBTS0Z8sD8pbCK/RC4JfHiaff4
-	 xhblHI9U6+n3vUyUUfKAl3p/sjWaWBh2TqHMS//JRZOtsCNRB/gapJWR1GfagqhSRR
-	 yGYn07EcBbS718xruiV0SzSg4HNv36x8n8SKOfaQ6Bqz5/Z8j82qWDJxBYvmj6wDhy
-	 XoFJBl1qUyxrHEioiQpzwxDJI+y5rl65Y40FRclI403jA2tKu2iPLSqgwe80mts16O
-	 17Kdhxv0sWv5ONaqgPjyvCTBLx6RUGgs5JxJ5tS8ZpoPkdFP7hniskdGDBXtY3ubiW
-	 apOshX/DEP6aQ==
-Message-ID: <sashiko-outbox-200717@kernel.org>
+	b=XiE0BruYMTKILZbbDEHhHV0ikgP0IB1UuVjl6R64B+i2c05bOtn72c00XExxmBM+Y
+	 DgQqmgWXvb0+O1Cx8KY3TP9iopQzcjEVvBRf6oi1xjl1avi3vu7JV2Q08hTG+sTHSU
+	 dNcXRT9AtuMmFwZTQKOZ3k4BfuisOTKd01TzeKhFX8xs67uG8vqmV32F1iCuiGe3Bi
+	 qhwVyw16nV9OWg1PoYxCjktEub/Y37vT8QvBJZbcsBP/VAu0JH2dcwHHx84rD+WCNY
+	 3+k474cqAIsx/MV+t/IxBxI3SVNtJ79sYJz3R8pgNbuwEn9v9eJ5Nq839dAsOTLZxz
+	 uvwN7Hp1OJ1jw==
+Message-ID: <sashiko-outbox-200719@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 05/45] bpf: Add join of verifier states
+Subject: Re: [PATCH bpf-next v3 18/45] bpf: Tell the passes over the graph
+ where an added may_goto goes
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261106035111.3315285-6-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261106035111.3315285-19-alexei.starovoitov@gmail.com>
 References: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
- <20261106035111.3315285-6-alexei.starovoitov@gmail.com>
+ <20261106035111.3315285-19-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 06 Nov 2026 04:25:56 +0000
+Date: Fri, 06 Nov 2026 04:26:33 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,193 +60,158 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] bpf: asymmetric unallocated and poisoned stack handling in join_=
-func()
-- [Medium] bpf: join_reg() zeroing dst->delta breaks explore_alu_limits in =
-join_check()
-- [Medium] bpf: asymmetric out_stack_arg_cnt check in join_func() blocks va=
-lid joins
+- [High] bpf: missing head guard target edge in update_insn() stack liveness
+- [High] bpf: bpf_prune_dead_branches() folds jumps before head guards are =
+placed
 --
 
-commit 1d1d176d0db968688ddcdf9cb26ad2c24d9339f4
+commit dc67a790eecafbb6bb6ef2d65c1ca1f5bfcd6434
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Add join of verifier states
+bpf: Tell the passes over the graph where an added may_goto goes
 
-This commit adds the second half of kernel/bpf/join.c and enables building =
-it.
-It implements bpf_states_join() to merge two verifier states frame by frame=
- at
-a single instruction and verifies that the joined state subsumes both input=
-s.
+This commit places loop guards right after loop discovery so pre-passes over
+the control flow graph account for may_goto edges added at loop headers, and
+extends bpf_edge_leaves_loop() to propagate constants when identifying loop
+latches controlled by flags.
 
-> diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
-> index fe513b7a8e884..4da051767e1d9 100644
-> --- a/kernel/bpf/join.c
-> +++ b/kernel/bpf/join.c
-> @@ -398,3 +398,250 @@ static bool join_slot(struct bpf_join_state *js, st=
-ruct bpf_stack_state *ds,
->  	bpf_mark_reg_not_init(js->env, &ds->spilled_ptr);
->  	return true;
->  }
-> +
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> index 525c0faff1a66..6a2ee407412b8 100644
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
 
 [ ... ]
 
-> +static bool join_func(struct bpf_join_state *js, struct bpf_func_state *=
-fd,
-> +		      const struct bpf_func_state *fa, const struct bpf_func_state *fb,
-> +		      u16 live_regs, int pass)
-> +{
+> @@ -2780,6 +2796,7 @@ int bpf_compute_live_registers(struct bpf_verifier_=
+env *env)
+>  			u32 new_out =3D 0;
+>  			u32 new_in =3D 0;
+>  			u32 use;
+> +			int t;
+> =20
+>  			succ =3D bpf_insn_successors(env, insn_idx);
+>  			for (int s =3D 0; s < succ->cnt; ++s)
+> @@ -2794,6 +2811,10 @@ int bpf_compute_live_registers(struct bpf_verifier=
+_env *env)
+>  				use |=3D state[insn_idx + insns[insn_idx].imm + 1].in &
+>  				       mask_widen(GENMASK(BPF_REG_5, BPF_REG_1));
+>  			new_in =3D (new_out & ~live->def) | use;
+> +			/* may_goto that is added at the head of a loop goes there */
+> +			t =3D bpf_head_guard_target(env, insn_idx);
+> +			if (t >=3D 0)
+> +				new_in |=3D state[t].in;
+>  			if (new_out !=3D live->out || new_in !=3D live->in) {
+>  				live->in =3D new_in;
+>  				live->out =3D new_out;
 
-[ ... ]
+[Severity: High]
+As reported by Sashiko on v2 [1], bpf_compute_live_registers() unions
+state[t].in into new_in for t =3D bpf_head_guard_target(env, insn_idx), and
+compute_subprog_args() joins the forward pointer and spill state from the
+loop header into t, but does update_insn() in kernel/bpf/liveness.c also ne=
+ed
+to union FM_LIVE_BEFORE of t into new_before for stack slot liveness?
 
-> +	nslots_b =3D bpf_stack_nr_slots(fb);
-> +	for (i =3D 0; i < bpf_stack_nr_slots(fa); i++) {
-> +		const struct bpf_stack_state *sb =3D i < nslots_b ? bpf_stack_slot(fb,=
- i) : NULL;
-> +
-> +		js->place =3D MAX_BPF_REG + i;
-> +		if (!join_slot(js, bpf_stack_slot(fd, i), bpf_stack_slot(fa, i), sb, p=
-ass))
-> +			return false;
-> +	}
-> +	js->place =3D -1;
-> +	/* Slots that exist only in 'b' are STACK_INVALID in the result. */
-> +	for (i =3D bpf_stack_nr_slots(fa); pass =3D=3D 1 && i < nslots_b; i++) {
-> +		const struct bpf_stack_state *sb =3D bpf_stack_slot(fb, i);
-> +
-> +		if (slot_is_special(sb) ||
-> +		    (slot_has_spill(sb) && sb->spilled_ptr.type !=3D SCALAR_VALUE))
-> +			return false;
-> +	}
+In bpf_compute_subprog_arg_access() -> analyze_subprog() ->
+update_instance() -> update_insn(), backward stack liveness only inspects
+normal CFG successors:
 
-[Severity: Medium]
-As reported by Sashiko on v2 [1], how does bpf_states_join() -> join_func()=
- ->
-join_slot() handle stack slots when !env->allow_uninit_stack?
+kernel/bpf/liveness.c:update_insn() {
+	...
+	for (s =3D 0; s < succ->cnt; ++s) {
+		unsigned long *succ_live;
 
-First, in the loop over slots that exist only in fb (for i >=3D
-bpf_stack_nr_slots(fa)), join_func() only rejects special slots and non-sca=
-lar
-spills, without checking !js->env->allow_uninit_stack. If fb has a live
-initialized slot at i >=3D bpf_stack_nr_slots(fa) (such as a scalar STACK_S=
-PILL,
-STACK_MISC, or STACK_ZERO) while fa has allocated_stack <=3D i * 8, the join
-succeeds and leaves slot i unallocated in fd. If the program later reads sl=
-ot
-i under a condition that only holds along path b, won't
-check_stack_slot_within_bounds() falsely reject a valid program with -EACCES
-when !env->allow_uninit_stack?
-
-Second, when bpf_clean_verifier_state() marks dead stack slots in fa as
-STACK_POISON via __clean_func_state(), and slot i is unallocated in fb (so
-join_slot() substitutes invalid_slot with STACK_INVALID), join_slot() runs:
-
-	if (!js->env->allow_uninit_stack)
-		return !memcmp(sa->slot_type, sb->slot_type, sizeof(sa->slot_type));
-
-Won't memcmp() treat dead STACK_POISON bytes in sa and unallocated
-STACK_INVALID bytes in sb as unequal, causing dead stack slots to prevent a
-join when !env->allow_uninit_stack?
-
-> +
-> +	if (fa->out_stack_arg_cnt < fb->out_stack_arg_cnt)
-> +		return false;
-
-[Severity: Medium]
-As reported by Sashiko on v2 [2], should join_func() reject the join whenev=
-er
-fa->out_stack_arg_cnt < fb->out_stack_arg_cnt?
-
-Since out_stack_arg_cnt is an allocation high-water mark grown by
-grow_stack_arg_slots() in check_stack_arg_write(), it is not reset to 0 when
-invalidate_outgoing_stack_args() or bpf_flow_return() marks
-stack_arg_regs[0..out_stack_arg_cnt - 1] as NOT_INIT after a call returns.
-
-If state a reaches a loop header or branch target before any call with stack
-arguments (fa->out_stack_arg_cnt =3D=3D 0) and state b arrives after a call=
- with
-stack arguments whose slots are now NOT_INIT (fb->out_stack_arg_cnt > 0),
-won't this check prevent joining or widening the states even though slots at
-i >=3D fa->out_stack_arg_cnt are implicitly NOT_INIT in fa and fd?
-
-[ ... ]
-
-> +/* The result has to describe everything that an input describes */
-> +static int join_check(struct bpf_join_state *js, struct bpf_verifier_sta=
-te *dst,
-> +		      const struct bpf_verifier_state *in, const char *which)
-> +{
-> +	struct bpf_verifier_env *env =3D js->env;
-> +
-> +	if (bpf_state_subsumes(env, dst, (struct bpf_verifier_state *)in))
-> +		return 0;
-> +	/* check_ids() has no room left: that says nothing about the join */
-> +	if (env->idmap_scratch.cnt =3D=3D BPF_ID_MAP_SIZE)
-> +		return 1;
-> +	bpf_log(&env->log, "join:");
-> +	print_verifier_state(env, dst, dst->curframe, true);
-> +	bpf_log(&env->log, "input %s:", which);
-> +	print_verifier_state(env, in, in->curframe, true);
-> +	verifier_bug(env, "join of states at insn %u does not subsume input '%s=
-'",
-> +		     dst->insn_idx, which);
-> +	return -EFAULT;
-> +}
-
-[Severity: Medium]
-As reported by Sashiko on v2 [3], can bpf_states_join() trigger verifier_bu=
-g()
-in join_check() when env->explore_alu_limits is true?
-
-In join_reg() for SCALAR_VALUE:
-
-	case SCALAR_VALUE:
-		if (js->env->explore_alu_limits && !reg_value_equal(ra, rb))
-			return false;
-		if (pass =3D=3D 1) {
-			jid_note(js, ra->id, rb->id, scalar_link_consistent(ra, rb));
-			return true;
-		}
-		join_range(js, dst, ra, rb);
-		/* a link that exists on one side only is dropped */
-		if (ra->id && !jid_good(js, ra->id, rb->id)) {
-			dst->id =3D 0;
-			dst->delta =3D 0;
-		}
-		return true;
-
-Two SCALAR_VALUE registers ra and rb with equal ranges and the same non-zero
-delta pass reg_value_equal(ra, rb). If their IDs do not form a valid biject=
-ion
-across the state (so jid_good(js, ra->id, rb->id) is false in pass 2),
-join_reg() clears dst->id =3D 0 and dst->delta =3D 0.
-
-When join_check() subsequently calls bpf_state_subsumes() -> states_equal()=
- ->
-func_states_equal() -> regsafe(), regsafe() checks:
-
-	if (env->explore_alu_limits) {
-		return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) =3D=3D 0 &&
-		       check_scalar_ids(rold->id, rcur->id, idmap);
+		succ_live =3D rel_mask(fm, relative_idx(instance, succ->items[s]), FM_LIV=
+E_BEFORE);
+		for (w =3D 0; w < fm->words; w++)
+			new_after[w] |=3D succ_live[w];
 	}
+	...
+	for (w =3D 0; w < fm->words; w++) {
+		unsigned long new_before =3D (new_after[w] & ~must_write[w]) | may_read[w=
+];
+	...
+}
 
-Because delta lies before id in struct bpf_reg_state, won't memcmp() fail w=
-hen
-comparing dst->delta (0) against ra->delta (non-zero), causing join_check()=
- to
-hit verifier_bug() and return -EFAULT?
+If a stack slot in the current or caller frame is initialized before the
+loop, overwritten (FM_MUST_WRITE) on every normal CFG path through the loop
+to the exit t (or by the loop header instruction insn_idx itself), and then
+read at or after t, update_insn() clears its liveness bit via ~must_write[w]
+and leaves FM_LIVE_BEFORE as 0 at the loop header insn_idx.
 
-[1] https://lore.kernel.org/r/20261105204513.2230344-6-alexei.starovoitov@g=
-mail.com
-[2] https://lore.kernel.org/r/20261105204513.2230344-6-alexei.starovoitov@g=
-mail.com
-[3] https://lore.kernel.org/r/20261105204513.2230344-6-alexei.starovoitov@g=
-mail.com
+When a verifier state reaches insn_idx during the main pass,
+bpf_clean_verifier_state() -> clean_verifier_state() -> __clean_func_state()
+sees bpf_stack_slot_alive() as false, resets spilled_ptr to NOT_INIT, and
+marks the slot as STACK_POISON before the state is sent along the header
+may_goto edge to t. Can that cause valid stack reads at or after t to be
+rejected, or cause __clean_func_state() and join_slot() at t to mishandle
+spilled pointers or uninitialized stack slots that were prematurely poisoned
+at the loop header?
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 8c89bf67a8424..5af42d2dcab94 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -25219,6 +25219,21 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
+attr *attr, bpfptr_t uattr,
+>  	if (ret < 0)
+>  		goto skip_full_check;
+> =20
+> +	/*
+> +	 * It took the constants to remove dead branches and find the loops. No=
+w it's known
+> +	 * which edges the verifier may add, see bpf_head_guard_target(). What =
+follows
+> +	 * believes the constants.
+> +	 */
+> +	ret =3D bpf_flow_place_guards(env);
+> +	if (ret > 0)
+> +		ret =3D bpf_compute_const_regs(env);
+> +	if (ret < 0)
+> +		goto skip_full_check;
+
+[Severity: High]
+When bpf_flow_place_guards() returns a positive value and bpf_check()
+re-runs bpf_compute_const_regs(), what happens to conditional jumps at or
+after a head-guard target that were already rewritten in-place by
+bpf_prune_dead_branches() earlier in bpf_check()?
+
+Earlier in bpf_check(), the first bpf_compute_const_regs() pass and
+bpf_prune_dead_branches() run before bpf_compute_loops() and
+bpf_flow_place_guards():
+
+kernel/bpf/verifier.c:bpf_check() {
+	...
+	ret =3D bpf_compute_const_regs(env);
+	if (ret < 0)
+		goto skip_full_check;
+
+	ret =3D bpf_prune_dead_branches(env);
+	if (ret < 0)
+		goto skip_full_check;
+	...
+}
+
+At that point aux[h].guard_at_header is not yet set. If a register (or a
+read-only map load derived from it, such as r7 =3D=3D &ro on normal exits v=
+ersus
+r7 =3D=3D &rw at the loop header) resolves to a constant at the exit target=
+ t in
+the first bpf_compute_const_regs() pass, bpf_prune_dead_branches()
+permanently rewrites any conditional jump testing that constant at or after=
+ t
+into BPF_JMP_A(taken ? insn->off : 0) and recomputes the CFG postorder.
+
+Re-running bpf_compute_const_regs() after bpf_flow_place_guards() clears
+aux->const_reg_mask at t, but won't the in-place BPF_JMP_A instruction
+rewrites in env->prog->insnsi remain in effect when a state jumps from the
+loop header to t via may_goto?
+
+[1] https://lore.kernel.org/r/20261105204513.2230344-19-alexei.starovoitov@=
+gmail.com
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106035111.3315=
-285-1-alexei.starovoitov@gmail.com?part=3D5
+285-1-alexei.starovoitov@gmail.com?part=3D18
