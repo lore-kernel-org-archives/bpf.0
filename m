@@ -1,56 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793939686;
-	b=rf8yqauFSh4B0h6XPKkFxhHVcXgroxnDCYroKs9ijy18bU8RNEWjv9TFUcl5FB9LkFbj
-	 N6twz4HKBOp53nl1IDpBL7LqQ52jIW3ww30d+w7+JrZ+mJXC/8aUSXaWETMJLOIMlNLQ9
-	 BFdLfNcGW5OuFVw/70qf4EmNn0UPfjG+LR/kWbMZ+Zly2o/7ShfkLittYH3SXwdpp2Etc
-	 axRKVveplGuejsUySD5Lbs/kPScIcLrPnwdYxKAXzo4MNpa/zQ4AvQHLgqDYtjSGpt/Te
-	 gTlSMi3BZ6kphezl4oy67uRDH831fVAh0LfYFZOWCgET0tzD26elww9hmx7OMLcqrew==
+	t=1793939916;
+	b=ego1JnIinJ667GsMjjp2H/NQEbwPtw/QELBx/xXS/5uOuqQnD0l2fbxXUKWqpK+9sNP8
+	 +X3t/6XdldC5y/IdSOjIEf2c2RibEMYIHCn9dXX9eMUWOSBnSHF/I8/AVDu7YITArHQqb
+	 kIH4yH9N5cZGDg66bLrvEsCjIovQ3D77dfNcaz+IOBRM3wku52QF5vxyGcs6lfwilmSJV
+	 mzImm3XM/eZ0CV6cBh7ep3Ih8k+Q8luElDGlb35F9xCUZW0/udnb7bR8/S7xPQcwOtZZA
+	 BFwkMRYoXxlomLzssN4emDubMjcWOHrQv2xyDu9LH1kcmVFO6PNNS7E8qa8Twqdtwog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793939686;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=mOQrMiMrvYPxB4o63O1pdsi5gQP3q43je6D2ckl0Szs=;
-	b=LWeKw9aAqc/Jl5/mz2UES8rpnyu4kppHSOmmHtJM1IkD4jB8zQ2JQpt+ib1RAejmkS7N
-	 BWO68XuYGLMtMQs7jdqFYBKmhBUbkbRtsFGFekf26cv+3hI+yKk7ca8ASQp/rqnw1fhfJ
-	 KhTPQLqDVmcmYq8cNDjFt5CIfyVLLZU/bs0v0O6VrJbNQoZ5JIg4UnEOizQyzO98ET+Om
-	 aQwaNIYliTgnm0W47PmX6CDpFk2enY7FNp1DzAmr/W8lH0yx35Qp9vE/KKfLdHWNye1ae
-	 7BpuBLuNcV6Jf50fykZBXV/Yc+o9zglXG+X7fjRXliggEz04Nco0iaYTSGMzDtc417g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793939916;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=yHDyyjRCC7COU9V6N1infrP8W7l9zOY71rTlldikqZo=;
+	b=L0lZYqF67HxEUG8fUeVmDcd+i7BcQfbg65kzmyDttpHPOyAT1zW+OxlPaH3LuUxjvSg7
+	 xljC4hhliffcyTITkNExEpp3fdPe0cxgzBJ4E+SoBksiYEMjvVBz/PhkkOYuAB5SwgkLf
+	 lzXVVvZI4ihyerqgSEMM5plNzMaX18+5OiiQy80SGdzkQTi3mSbVxSJEHV+obord+DLL5
+	 fVb2/dX4L6fSAztpSEt8Rng83NblYUo6aQwBZby/l8zTBtNWf98DKoZMxoaBPsvPeBR8X
+	 2TKkRseg7yifMKpdJ8wZBYXvVSYKhupzNyrB/kLA88EEHzCi94iUwbF6gPQl/QVhIMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jLgaJ+ew;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fJsWbzXE;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F16606A326
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C83606A326
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:38:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jLgaJ+ew
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB811F008A2;
-	Fri,  6 Nov 2026 04:34:45 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fJsWbzXE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FAA51F0089F;
+	Fri,  6 Nov 2026 04:38:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793939686;
-	bh=mOQrMiMrvYPxB4o63O1pdsi5gQP3q43je6D2ckl0Szs=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=jLgaJ+eweHUuHc3RbO+k4TTe2lF0P0rirLV8vCsnEyFk7vk0844PJ1udf/rgZoTwT
-	 WOtbUhVpmD5dAWPa+7hdhbCNqXraYXgwr6hDe1WLCnBYNYLdCR7hlJVWPTD9t0JGrr
-	 JmPWPsB1Xz3EGikRrXLkVfmvMGDVJlHX3coejt+pMS6und7gzija4SelOYsMl2opZ3
-	 limHBZvChWelfat6RM7d28hS6qh3puyxcECq/0g9jN41glvA+34atw/N9PixxSn2Gb
-	 pUydhw70+kP76BdYICR/74xzB1EBszaZdHVdC98lQGtN5vDYT940pU1ZiNUnn6u0y4
-	 B1+/PjQNRhHjg==
-Message-ID: <sashiko-outbox-200735@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 16/45] bpf: Make the state after a call from
- the caller's state and an exit state
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261106035111.3315285-17-alexei.starovoitov@gmail.com>
-References: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
- <20261106035111.3315285-17-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 06 Nov 2026 04:34:45 +0000
+	s=k20260515; t=1793939915;
+	bh=yHDyyjRCC7COU9V6N1infrP8W7l9zOY71rTlldikqZo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=fJsWbzXEZ5EtKD8FSTHwF7uNJg831fCvZgKXABCoY85FhBRnCNSw/OU6LeNcJ8r5f
+	 /DW+RPMjZhd1bQbq9Dc35FoRZ020s45uJrFEfd9FKQOVFq+eGIFZw7ZKSujdpqYYFn
+	 Xt/Gfvn29rrHBQZ5otgPcZ0dRXVoCYfnxnqe3c8nu6FNqnMdLkEoobpR4OHfkpEK+W
+	 ujvc+KdmeDb9V7rRUPvaCm/sx8MQKkbFsB7jYATBoSEW4p6PAYRh99uTMBo5fmQ7y4
+	 CkFodEQqfvc2/Q7O2Ki4j51clt8spPgyJDAgjEdrZtqJTPHqpS09OpVYnGpY6lZf7e
+	 K4rV7kiKhdnjA==
+Content-Type: multipart/mixed; boundary="===============0407885057905434763=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,90 +48,87 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <04a6be16b4612e81d619f21ff0889d54fb4feb8c4fbc5c830c2ff75dc1fdc527@mail.kernel.org>
+In-Reply-To: <20261106035111.3315285-14-alexei.starovoitov@gmail.com>
+References: <20261106035111.3315285-14-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v3 13/45] bpf: Decide which states are not joined
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  6 Nov 2026 04:38:35 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: missing exit->speculative propagation in bpf_flow_return()
---
+--===============0407885057905434763==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 7ddf7363f0596e710519469bc5585f001bf30b01
-Author: Alexei Starovoitov <ast@kernel.org>
+> bpf: Decide which states are not joined
 
-bpf: Make the state after a call from the caller's state and an exit state
+TL;DR: flow_flag_regs() in flow.c marks registers tested against 0 or 1 with
+any operator (e.g. "if r < 0"), not only those telling 0 from 1; this
+needlessly keeps states apart and costs states, though not unsound. Fix
+comment or code?
 
-This commit introduces bpf_flow_return() and BPF_INHERITED_ID to construct
-the caller's post-call verifier state from the waiting caller state and the
-callee's exit state when verifying a static subprogram on its own. Held
-reference IDs are mapped to positional names at subprog entry and restored
-or refreshed upon return, falling back to caller-context verification if
-inherited references or locks were released.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 07a9097e3d4e1..d8543eb8bb195 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -11748,8 +11748,146 @@ static int push_callback_call(struct bpf_verifi=
-er_env *env, struct bpf_insn *ins
+> diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
+> --- a/kernel/bpf/flow.c
+> +++ b/kernel/bpf/flow.c
 
 [ ... ]
 
-> +int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_st=
-ate *caller,
-> +		    const struct bpf_verifier_state *exit, int call_idx)
+> @@ -568,6 +569,19 @@ static u16 flow_tested_regs(struct bpf_verifier_env *env, int idx)
+>  	return consts & BIT(insn->dst_reg) ? BIT(insn->src_reg) : 0;
+>  }
+>  
+> +/* A jump that compares a register with 0 or 1 */
+> +static u16 flow_flag_regs(struct bpf_verifier_env *env, int idx)
 > +{
-> +	struct bpf_func_state *frame =3D caller->frame[caller->curframe];
-> +	const struct bpf_func_state *callee =3D exit->frame[0];
-> +	struct bpf_idmap *idmap =3D &env->idmap_scratch;
-> +	u32 caller_rcu =3D caller->active_rcu_locks, caller_preempt =3D caller-=
->active_preempt_locks;
-> +	struct bpf_reference_state *held;
-> +	struct bpf_reg_state *reg;
-> +	u32 i, j, nregs, nheld, kept =3D 0, id;
-> +	int err;
+> +	struct bpf_insn *insn = &env->prog->insnsi[idx];
 > +
-> +	if (exit->unwound && !bpf_is_unwind_goto(&env->prog->insnsi[call_idx + =
-1])) {
-> +		verbose(env, "unwind_exit, but no unwind_goto after the call at insn %=
-d\n",
-> +			call_idx);
-> +		return -EINVAL;
-> +	}
-> +	caller->unwound =3D exit->unwound;
+> +	if (BPF_SRC(insn->code) != BPF_K || !bpf_insn_is_cond_jump(insn->code) ||
+> +	    BPF_OP(insn->code) == BPF_JCOND)
+> +		return 0;
+> +	if (BPF_OP(insn->code) == BPF_JSET ? !(insn->imm & 1) : (u32)insn->imm > 1)
+> +		return 0;
+> +	return BIT(insn->dst_reg);
+> +}
 
-[Severity: High]
-Should bpf_flow_return() also propagate exit->speculative to
-caller->speculative here?
+[ ... ]
 
-When !env->bypass_spec_v1, a non-speculative caller entering a static
-subprogram verified on its own has caller->speculative =3D=3D false. Inside=
- the
-subprogram, a statically predicted conditional branch or pointer ALU
-operation can spawn a speculative path via sanitize_speculative_path() ->
-push_stack(..., true) with speculative =3D true.
+> @@ -953,6 +967,15 @@ static u16 flow_base_regs(struct bpf_verifier_env *env, int idx)
+> + * FLOW_NEED_FLAG: those of which a jump tells 0 from 1, see flow_join_makes_up(). As they are,
+> + * extended, or masked: a bool is tested as "w1 &= 1; if w1 != 0". Not through a call.
 
-When that speculative path reaches BPF_EXIT, process_bpf_exit_full() ->
-exit_func_on_its_own() -> bpf_flow_exit() -> flow_apply_exit() calls
-bpf_flow_return() with exit->speculative =3D=3D true and caller->speculativ=
-e =3D=3D
-false, and then delivers the resulting state to call_idx + 1 with
-caller->speculative still false.
+The comment says FLOW_NEED_FLAG holds the registers of which a jump tells 0
+from 1, but flow_flag_regs() selects any conditional jump against an
+immediate of 0 or 1, whatever the operator.
 
-Because the post-call state loses its speculative flag:
+Eight operator/immediate pairs send 0 and 1 down the same branch: JSLT 0,
+JSGE 0, JLT 0, JGE 0, JGT 1, JLE 1, JSGT 1 and JSLE 1.  JSLT/JSGE 0 is the
+usual 'if (err < 0)' test.
 
-1. sanitize_mark_insn_seen() marks instructions reached only along the
-   callee's speculative exit path as seen, preventing sanitize_dead_code()
-   from patching architecturally dead instructions after the call.
+Take two states that meet where one has the register equal to 0 and the
+other equal to 1, with an 'if rX s< 0' in this block or the next.
+flow_needed_consts_differ(flow, FLOW_NEED_FLAG, ...) sees
+flow_two_consts(..., flag=true) return true, so flow_join_makes_up() keeps
+the states apart:
 
-2. If the speculative return value in R0/R2 triggers an unsafe operation in
-   the caller that would normally be recovered with a speculation barrier
-   via error_recoverable_with_nospec(err) && state->speculative in
-   do_check_block(), state->speculative is false, so no nospec barrier is
-   inserted and the program is rejected.
+    flow_join_makes_up()
+      flow_needed_consts_differ(flow, FLOW_NEED_FLAG, a, b)
 
-3. flow_merge() and bpf_states_join() can join this speculative return state
-   with the architectural return state, polluting the caller's architectural
-   return register bounds with speculative values.
+The FLOW_NEED_JUMP part would have let them join, and the join [0, 1] makes
+up nothing at that jump, because both values take the same branch.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106035111.3315=
-285-1-alexei.starovoitov@gmail.com?part=3D16
+This does not make verification unsound, since the rule only refuses joins,
+but it costs states (the commit message prices this rule at 2^K states for K
+flags).
+
+Should the comment say 'compares with 0 or 1', or should flow_flag_regs()
+leave out the operators for which 0 and 1 go the same way?
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42160076968
+--===============0407885057905434763==--
