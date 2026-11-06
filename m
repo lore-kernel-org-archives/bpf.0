@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.231.75
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793925298;
-	b=rXBBzrsMvqs7YIiG92A7Qah45k06QjF5M2YatmT19z3LN5XLh6o3oLayjbm8Fp5fV1Ly
-	 ujnO/rP09YT5JpBr/pOaVkngOSSwGuDxADdmwBJm8fJjwOnF2XqnJtzT+PDeqLt2ucDWJ
-	 qGwIbL/YLFHmuHokik4g8/4ovFs8clFABC9HMaC8QQYq50DPlyQvl+c2pqGeiY7w59Nzd
-	 RqfUb0adBzLCas8quyx+CeILfUaw+UOxvEzpjyR26LldeyUhwRhpcO1pHQDcbel9WjZ2h
-	 +JZSuHyr8GTaAUDO6+Lhz3hS8Xb2qhZ2LNbuy4kZumndV4cx1UnCwiG80njV5ytRj5g==
+	t=1793926981;
+	b=FMNzSNRi4dKa9CB5z9MIPsPrQwVnha3wKMbmdCVoUk4gSYVDBA42wNzNn+G4Y0BJwhrA
+	 oalEFyOjzs41jTVL6LgYHiPfbpVYVagdv3DZHC3p/aSp+hYSKvCIFBWGyoi69e4MVEjX4
+	 XpqiiGuMRnaN+H4PceNp5Ou76X2IlIr2tRCLzM6itniSZT12sf/uBKBCknLU2rgXA/iBG
+	 FGPFSYe6OBCcERAnS0b/kXeKZw9Fg7yd29rBsZkNIe2Y0gbl4srl91xDryxBnNq4G20fW
+	 tkTa59XNPgs6P0E2Pa1RgROQACs4YhiUYubMo36eCv5w7PIs1NJhSUYBS2YyaUOtTOw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793925298;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793926981;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=joC/8wv7Bo/QMhqz+nVODUPJosO+ewZ7/h6kL5DRILE=;
-	b=HclJVjmdlJTYNFNlNEqjiRje4R+YpdZGgyjIfma3ORXzQPGZMW/Ipmu2szoVJaZRWJnH
-	 WCOmLbU2DvJ6/ffmhyExhSMcrVVukIgrCi/dKBhzRXAYQ2w/SN4A6v0ni30eyjLfMHnYn
-	 E7l1+jT3RZyghfLnROs0Hvh4XqykL5i2w8wcrM/pOSV7TDsZscG9CRM+Qedj6sOmlvSWh
-	 aI29SkRpRpw1RSbZRBV4YxdqiVcHFRalNLUjs+I7dRYcd3wyVqnDAqPwRuxw7oEhSE3Yy
-	 tsm6nMrh9kqkWhxS5VaVUUrpFK6X7BhkOq1Lpw7AUcriHkfyirInqRR5YbYm4+9uZnA==
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=Y0u4IXihur+VBeVt1te8fOm9nT/EPcQisrR3rXoEPKw=;
+	b=EeFPT+KCJ6e+1dP+/xMMd6L6QQLQeepwfdbHx5Ikf1iR5KSQbE8olx6sbfktq1cD/e++
+	 E5tcirvnybt0UFIjB4D1NeEKq9saQR+F1MMmeh+n5pwU2inWlZzgUqrJoQAaWsvJw1HbP
+	 nBIc2gjRPsntCvgfLBjjs8eSTD6MPagE/TFBsePQITGigrKiY7YUZHDfkzmEaOsqLv83z
+	 Ni2Q/hvJzl7TdvCdirwCtbTNRmiyhlbjm4lJpu/7UpsPRr4bg0d20xYmvESfrD+sBbJS4
+	 ykn1WUhbfVzpQ6tSLynQyP+/cgpFYA5GcplFTuE0cgPfT5CGmCXBuVUvnv1pTPZWNuA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rZQriM4h;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.182
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=l1yXf6B+;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.231.75
+Received: from mail-oa2-f11.google.com (mail-oa2-f11.google.com [74.125.231.75])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62FE8606A31B
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 00:34:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62FE8606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22F4606A31B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 01:03:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C22F4606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rZQriM4h
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ed06b725fdso7352175ad.0
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 16:34:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793925298; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=l1yXf6B+
+Received: by mail-oa2-f11.google.com with SMTP id 586e51a60fabf-49e2cb73ba3so35532fac.1
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 17:03:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793926980; cv=none;
         d=google.com; s=arc-20260327;
-        b=rn9pPSgqjZlH37Vyv3TDaLOBYpzPgcTRZVQ9wQtq/BAS1PpYCMmpiLdOfE+roIlWjg
-         Iu1b+t4lMDnV4+S7r1fK7Rmepa6jFXQkLQ0gCnlX/Qhtt8FMaznTMBLdW3k4R+9Fh3bL
-         cwv8zGJtuZQMnHecxZJMOypFsqw+xTkrer6jPChgnp+J0EqXFFcNB6BgKVMFYwfW/CSw
-         n3AT7TNyLEc5pJyuGicrqYKlZTrqd4uhs03WpwJHFqWaP8d2Dl1EoiLscAOYDnEbKsip
-         tQzuZbLzQ6I2Ull4Vb2iCrADclzt0L3uVhWycYjonlThSx39Yhba3Tjq+TR0c8q0woI+
-         byyw==
+        b=Un1o5eZdIZ3AWATZcNRcxv6syfsMU3FIeD/kCkQOZEI1muaTGsTUZ41luQCQe2Cnun
+         IvZFLY+0/YJQBYqdVeDXUx6U+X/3mhSOmbbe+OL8mNbNyMAZovgmDAxx9+MbnL0SMbnZ
+         8wuYYPWN18zzojvRNQ8ZfHvhVlcqnBv2WtZsp8uSrWNwo7Hxl4wEmB6zOF3YvM+pYmu3
+         iVyu9t10zRyXE7l/SiwWFgu8vlQAuMp0CO8xUDE87n6+Y8l2B/ZovgpQrGlkM5NtzoNK
+         d0nfSbNZBOPHVXNyzX933F4M4vTfZPyslFfriJiXMc3xEz3KjSi+z45gob/K2NG6YUbp
+         VimQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=joC/8wv7Bo/QMhqz+nVODUPJosO+ewZ7/h6kL5DRILE=;
-        fh=WVSyKFRruosN1mevD+lDt8kE8as4sWkZnQPJI9Ayo50=;
-        b=XGAcWAP5FizrdAR0Cw7Ap3Gq4b7XLrJb6wctbeBE/V+6Tihso4XOEUvS3C+GA7sPim
-         hvCibYGhYm0diXVxsEbDdQ6YSRnj5h0Y1lk4SMlWK0+ElohYEiif37XzNUvspUH71tHD
-         Rs+a7Eh0WSAcFMul3rIWs2bundWX1OUgtXrmN0RW9kWpLJQRshPQKeZzoetBE+EFr/7u
-         d1j/zJTYRVjPt9QUyY1eux+Z8B0nTUhjE4osLDxD4AZqzLmPzHhZsxCAd/ViB0Lo1gkF
-         rbZ4ootgUwGyUGsa6t1M3kGGY+BoT0ROfbMuwawOedR2abnORD42vsRTLX2iG7a71ZsZ
-         rEug==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=Y0u4IXihur+VBeVt1te8fOm9nT/EPcQisrR3rXoEPKw=;
+        fh=wpCVcBTqSL/HpxlnD9LWwVHE9HDRfGKzi7/5aoA+nB8=;
+        b=EE/YyLZbQDQGMdeAX8ny1uRBpP/+FKxkM2ac4JsJ8ffnkc2Huep2g4kRcD2E4D8fNn
+         JDGHMMmG6tU3CwhAQ4vQXdC6jcCDmwf9yaSeYFH5P4jaByjjFYstzCYD92i3vCPuUcs6
+         kgNXhJjAvz5A1h2Iufm+BKNncJjrdld3YqPY/HxoxU8/PJDmNBdFYoxMPofheQefnqUM
+         hQ0sb0xRRM13eaNfVDX38ibdDIw5wuMi/Ff8lcmk0nkIgrRuIHC0jO6tQs7x+gJ1L1k+
+         G8SRh46LElkcCNodqQZ9QQ0jby9HiNNksFQBP2ODiBedJkmOhqT8c9YBE0BNv1vfnyA8
+         Om0g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793925298; x=1794530098; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=joC/8wv7Bo/QMhqz+nVODUPJosO+ewZ7/h6kL5DRILE=;
-        b=rZQriM4hrjrWZWsvSIEFDuhoAx1jB0X3BkZN4vpqTZ2v8huvMKr4Q9YUnG6KNCa4eN
-         j5TwjCtz8J4qJYaWUrYPBc8sqm6D2daDvv/2X8Do0u3o6Kij1EOaa2MAGkoDkWEfY7gm
-         9psIzEWNe2mgfH8l5GZgZ+XRt2wWrgrNKMoHQ5jl1ccfxeFYQ5D1CZFeljQhNskx4/K3
-         dW9vmx/c3+R8kjhgabCMdokopchoiXspVuQWVn9HwzG5dlyq53ucgAb/JIjDOAjPrHNy
-         hZwnyxngqb3Cy7dzorRVEBWIEtqqEwb9IspRk2jtEmfc0+hPfAULN/Gz9jdRDBOxR4aN
-         09hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793925298; x=1794530098;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20260707; t=1793926980; x=1794531780; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=joC/8wv7Bo/QMhqz+nVODUPJosO+ewZ7/h6kL5DRILE=;
-        b=OmTQ7gFDZ06ESmUVSe7U5Wiwpra49Fs4cTYG57jmyYSbcJqBhDXgKWVJcZE80WJWrP
-         yDWPV9KLg5SsUieH4VLre3HoBiFJ1MWG9Jq6ucB6ZTsG3mSaO8HyBvCZLxKeA1WzMHtL
-         d3h7JKjbi8maJYfVQyGTnIze+Eo4ycDvSjN42RCmQ3iPW7P/Zb8DqinLve4uqOIDrAId
-         tdUPwwfv2jxCNMfd9UOppe3zDdLL6E9MKT1/MD1kDimYeZsGE761cwP59JLsO9s9/oTL
-         UORTZcZw5RTYeW5B1ioJH52ATwVe6gelTbL7ixXJEFU+Yp4OYKBu4VoSXDayNqIYHllH
-         EtDw==
-X-Forwarded-Encrypted: i=1; AKwUvBxNRryLg6TZSeG+4C8KduhtYfmwk/ZgI5l2M9nKZstPeyRnOmCpGOOwqRyZcfGmIZL1Weo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/tfWHE1d1oQC47Dmu3g/cOCMb2wXoryk+0TdhBHJiYYpCvxBwr
-	U/EPcoUfG/VUrlgRaHoTL36yk1VsMGQ8Pb/9DLkAxi7YNNzwOu6gSp0as6f5BQhJ0ZkUkGN4osz
-	4j03lwko0YSAamimlAq4pvHWG+N4RFPk=
-X-Gm-Gg: AYBFou1+DIP2pNPojarEK8dmBKpOTvYtkCiuJk3r6JpQ3FHRPIh9ovYqi9JIGk/ejCc
-	WujggNaX5sq0/gNfTCsaKqGYx50oEBcUgsAfNWFZ+PsO7zUili4R+FAablUVuukOJaHQml6s5k6
-	b2XUw0Fzy2Jyzn1uWci0t7sQKNWMRULozP3MPiDz4Uy9IhLQa/761Ok3SIUxAs4oPoz2hsHrV5V
-	uuxuBMlhMYw3k7TFloxXBaDIhluCXwps8L6qppaWyqHYca3BMFupCEQGBOtMh8ib5+cB939qNPy
-	CmSlr9SH2XPQmC3neCeGkRKixDK8dLLijy6W6sKeQ/n2ueAMBgud5oz98NPsf19lQurcyzoHGOa
-	M15ZL8OWtArWKh1F/43xmbeadZYKzLjWRE5bytZiUhZd+hfkLVR7SzIsqajqRNo56ZOClYw0Tm9
-	p2wk4VR9ytC+yS0Z6vKPGPtGH22uuhJlGCjw==
-X-Received: by 2002:a17:903:178e:b0:2e9:95b9:4bcb with SMTP id
- d9443c01a7336-2ed40a99a24mr10149265ad.14.1793925297652; Thu, 05 Nov 2026
- 16:34:57 -0800 (PST)
+        bh=Y0u4IXihur+VBeVt1te8fOm9nT/EPcQisrR3rXoEPKw=;
+        b=l1yXf6B+BJVkocvHAW+3ubMtTVR1zzGaHTvpopNwPZSww6m6rQb5ZHR5IzxfQE1vwx
+         A4GP1blH726DVC1ucFjS9HpRpluTwCpoIKosHMcQlnPwbVlS0IOUB36q0oDR1xTiIbyV
+         conH6bULw93qo+4G2TLuNNiHliTfZBdlvS/0v3An/U1gYnd6ieD4pPFrG9OLqbl01e2i
+         h89mmK+AgZqxph2sS4OAJ+/oUj2cb3yerLGNZ9wcWMZgvt5J6nDag6yhfYEe1L+7JIe+
+         lI9s800eCgaFRewL69/RYqmF2LlQUhl+K8LsagJ8LLUz1ZWzziMJdGxvD2Dw3Ds/7G83
+         h5+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793926980; x=1794531780;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Y0u4IXihur+VBeVt1te8fOm9nT/EPcQisrR3rXoEPKw=;
+        b=WjlT6caZl5HBQpOAyl3lh+IpZy6WZ5PiLlmbrtDxYEY3HOMn3laYIByGk7XI0twDc2
+         LQd+fkstI26Mu+I0tCB+pzUDwBVUIxzLmyxKzenKpR1lt4/1FbIE6oiMF7lI+PuOeluZ
+         xFkahs+BkoqK3takuN2Xb6CtNAjohlHqwNj9uR8F2uhjrq7JTdkkZQgcNaWmCJPEAXu9
+         b0MRRcyal0C3lGV93JoNlzmQxUiyVqh9QenDCf6qqNW0/XKGKF/BCvY6/z/hNHk6DNFa
+         /eqku9eZoF5UMj4sdS5s36WqEOK+GAGIus5bg0+My+TeRXaKkh5vW26RzP3AEy0RbPTR
+         OdOA==
+X-Forwarded-Encrypted: i=1; AKwUvBx5LiRp9428BDFlRSzwXJ+Z7wCcwMtV5v/UmtEklR/CmR12qE4S/5C8zNkZTSaDEp8q4zs=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9nerql4mIYnZmOFmKbYHu2/la6qNxpiCinGZehLDa14H7blmLF
+	K3yi/0u7aMC2YyFVSyOQojuhtK0sQ/pJ+yDzDZ8XpP8SctObYqeb3/atztUoDWU0i95Aa+zGVHE
+	FKUmgAIkMDMkj8FKuBeaXisdvNi7GuVw=
+X-Gm-Gg: AYBFou2E7OroyfT6/8jyBnrxk0lrXlqGej3GT1F/G6YfZsNHQuBbDcye3AcCwRGkrwq
+	ufzIulZeuMzDCjxHScJ5uSzsuqWFZADyF3paR7QjzaqqD1pFOkxhQ7EjevVEhiAUbBQ62pnF7Io
+	jIjEsk+h73eyyG9EPiWegjdY7CmJhyZgfVhh2zhy0M/KlD90+FXXUocM3+QvdnxSQaP9yUDXuM9
+	D6Uyl0AF3h0Xn+eCwleaHW8L58DC+Fwavg5aO4JmwmvFoQ67/s1/s7pmm9jkYsm64QY47AFtpFM
+	npcWklNtM7zA0dngrMlAjIU5qn7RS7SPlXHzpb2bgOKy+wawNtBoGmNFvahb+NKEZExjsam5Rd/
+	MVxuqzLU/aS5lPYBqMQATg/0wE+5HoUgd2VDP3cvKhSzSEKPdBveBNKh6LwlmOhcfKCdAE4CPTl
+	X7DfDL1FxqBV+2FV7rLDzaUygbgh4ji3+mI21P4Zt9PppnROKZSgxIEQD6LwiYHXLuAn/W3HEbj
+	g==
+X-Received: by 2002:a05:6808:508a:b0:524:867f:641e with SMTP id
+ 5614622812f47-567e14c90f4mr843803b6e.13.1793926979673; Thu, 05 Nov 2026
+ 17:02:59 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,131 +105,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261105102343.311331-1-jolsa@kernel.org> <20261105102343.311331-2-jolsa@kernel.org>
-In-Reply-To: <20261105102343.311331-2-jolsa@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 5 Nov 2026 16:34:44 -0800
-X-Gm-Features: AclHuK9eYiok-N8ZQyQvOspr_LkgO-f8_ZJjrPwcoXmwuKUXqTqkf1TIAoFchbs
-Message-ID: <CAEf4BzbdBLb1cBeF0an386k=CmMYKdz=Or5mSjzy_F5SFOwsxg@mail.gmail.com>
-Subject: Re: [PATCHv3 bpf-next 1/8] bpf: Honor const on generic kfunc memory arguments
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Lorenzo Stoakes <ljs@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Federico Di Pierro <nierro92@gmail.com>
+References: <20261101103221.51534-1-dennylin0707@gmail.com>
+ <20261101103221.51534-3-dennylin0707@gmail.com> <CAEf4BzaES0KDyhHhk7UguLmRKVWxGoiEXhNvp7QHpeJSZSjbYA@mail.gmail.com>
+In-Reply-To: <CAEf4BzaES0KDyhHhk7UguLmRKVWxGoiEXhNvp7QHpeJSZSjbYA@mail.gmail.com>
+From: Hungyu Lin <dennylin0707@gmail.com>
+Date: Thu, 5 Nov 2026 17:02:48 -0800
+X-Gm-Features: AclHuK8tdnhaPwz3Y54kZitME7BnT6URzVYL1boyOfhhSrmlCGq8Mz92SAE1VKY
+Message-ID: <CAGEkeHf9d6BuQWsaqiresmbPNWAVZRbzZv03kfJisT6SQD8aAg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/3] bpftool: Preserve unsigned enum values in
+ data dumps
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: ast@kernel.org, bpf@vger.kernel.org, andrii@kernel.org, qmo@kernel.org, 
+	daniel@iogearbox.net, yonghong.song@linux.dev, eddyz87@gmail.com, 
+	ihor.solodrai@linux.dev, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 5, 2026 at 2:23=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> Mark generic kfunc memory arguments as read-only when their BTF pointer
-> type points to const data. Preserve that access mode when resolving
-> scalar structs to fixed-size memory.
->
-> Derive the memory access flag from the pointer's BTF type, and preserve i=
-t
-> when resolving scalar structs to fixed-size memory. Document that const
-> memory arguments require read access only.
->
-> Assisted-by: Codex:GPT-6
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  Documentation/bpf/kfuncs.rst |  4 ++++
->  kernel/bpf/verifier.c        | 24 +++++++++++++++++++++---
->  2 files changed, 25 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index 901c37504217..4f8dd7c1d785 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -137,6 +137,10 @@ argument as its size. By default, without __sz annot=
-ation, the size of the type
->  of the pointer is used. Without __sz annotation, a kfunc cannot accept a=
- void
->  pointer.
->
-> +The verifier checks such memory for read and write access. When the argu=
-ment
-> +is a pointer to const, like ``const void *mem``, the verifier checks it =
-for
-> +read access only, and read-only memory (e.g. ``.rodata``) can be passed.
-> +
->  2.3.2 __k Annotation
->  --------------------
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 6c93437f8db0..8f885d3acaa9 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -13237,6 +13237,22 @@ static bool is_kfunc_arg_const_mem_size(const st=
-ruct btf *btf,
->         return btf_param_match_suffix(btf, arg, "__szk");
->  }
->
-> +/* A kfunc only reads through 'const T *arg'. The compiler enforces it. =
-*/
-> +static enum bpf_type_flag kfunc_arg_mem_flag(const struct btf *btf,
-> +                                            const struct btf_param *arg)
-> +{
-> +       const struct btf_type *t =3D btf_type_skip_modifiers(btf, arg->ty=
-pe, NULL);
-> +       u32 id, ref_id;
-> +
-> +       btf_type_skip_modifiers(btf, t->type, &ref_id);
-> +       for (id =3D t->type; id !=3D ref_id; id =3D t->type) {
-> +               t =3D btf_type_by_id(btf, id);
-> +               if (btf_kind(t) =3D=3D BTF_KIND_CONST)
-> +                       return MEM_RDONLY;
-> +       }
+> how old by now are those btf produces that do not emit kflag=1 for
+> signed enums? should we even care at this point or just assume that
+> kflag is set correctly?
 
-quite weird implementation, skip modifier, and then re-walk
-modifiers... while not have a loop from t->type while
-btf_type_is_modifier() and if you find btf_kind(t) =3D=3D BTF_KIND_CONST
--> return true?
+LLVM 14 and earlier, and pahole before 1.24, for example. Signed
+enum kflag support was added in pahole 1.24 (August 2022) and
+LLVM 15 (September 2022), about four years ago.
 
+libbpf still clears enum kflag when loading BTF into kernels without
+enum64 support, though. bpftool map dump reads that BTF back from
+the kernel, so this also happens with newer compilers.
 
-> +       return MEM_WRITE;
-> +}
-> +
->  static bool is_kfunc_arg_constant(const struct btf *btf, const struct bt=
-f_param *arg)
->  {
->         return btf_param_match_suffix(btf, arg, "__k");
-> @@ -13618,7 +13634,8 @@ static int resolve_func_arg_type(struct bpf_verif=
-ier_env *env,
->                         PTR_ERR(resolve_ret));
->                 return -EINVAL;
->         }
-> -       *arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE |
-> +       *arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE |
-> +                   kfunc_arg_mem_flag(meta->btf, &args[arg]) |
->                     (*arg_type & (PTR_MAYBE_NULL | MEM_UNINIT));
->
->         return 0;
-> @@ -14170,7 +14187,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
-struct bpf_call_arg_meta *meta,
->                                 reg_arg_name(env, argno), btf_type_str(re=
-f_t), ref_tname);
->                         return -EINVAL;
->                 }
-> -               arg_type =3D ARG_PTR_TO_MEM | MEM_WRITE;
-> +               arg_type =3D ARG_PTR_TO_MEM | kfunc_arg_mem_flag(meta->bt=
-f, &args[arg]);
->         } else if (btf_type_is_struct(ref_t))
->                 /* A pointer to a struct without a size argument is class=
-ified as ARG_PTR_TO_BTF_ID */
->                 arg_type =3D ARG_PTR_TO_BTF_ID;
-> @@ -14195,7 +14212,8 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
-struct bpf_call_arg_meta *meta,
->                         return -EINVAL;
->                 }
->                 proto->arg_size[arg] =3D type_size;
-> -               arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE;
-> +               arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE |
-> +                          kfunc_arg_mem_flag(meta->btf, &args[arg]);
->         }
->
->         if (is_kfunc_arg_uninit(meta->btf, &args[arg]))
-> --
-> 2.43.0
->
+Dropping the legacy comparison would lose existing negative-enumerator
+name matches for 1-, 2- and 8-byte ENUMs in bpftool, and the 8-byte
+case in libbpf. In the proposed code, 4-byte ENUMs match through the
+helper with or without the legacy comparison.
+
+I'd keep the legacy comparison to preserve those existing name
+matches. Would you prefer to drop it and rely on kflag alone?
+
+Thanks,
+Hungyu
