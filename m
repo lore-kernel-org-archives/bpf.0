@@ -1,49 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793994610;
-	b=miOkmavpJNGMTH09+MTRzT2gTR31QEVRXZjOYG7l0E3/H95Fc2eo5HRp0BfajpnN1OJV
-	 PNbaPMh0g8I9Dhu81/QxJ14bFEPDnqT5CZe1JfTexpzhkRUgr82aIgQtCmXt/g1RDMPy6
-	 8zM1lZ8McsjaonNBBtNDWvwLqHFPHZGo3TfWZEHCtLpQEmqs5mQXgY00RaLNbHRFn7mG9
-	 yjNTykyFVmRtAC6LsWDYWeRqCnaTbP/nGejSaRRIIAAYdbTyU0rORb0lDsxvlhxeKJpM5
-	 pvr4h6nVH6ik2RkcDdQUlxJm+VKgEM9JWcRp10pvxoqsLjjLmM+gTn3NHEmI4xqG9cQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793994610;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=G7DBE2G+tp6095Q25BTCpcOqibBp5M5QObNMDI8L5dY=;
-	b=M9R4BfJVD4EAsdBhQ5+I7PPFbaLHm/FKUfE0wTeXxFCSbebWTt46UMcucNRNjKR/+GNV
-	 IWI+Pu1RYWmdWLes8DPHD9Ch0zm8MtxuLsk7PSXyXFjtN1bcoGMRX3WMZ7nLcrpEBmZTn
-	 GcTbA+ccESPTjCiBoytWVTUdaTG+x5iWvBR1DKOXYxE3AvJb28wOiIh/8v7f7/muRIDZn
-	 k0Dgr6YKBK1mGgJarWMstTJptTUMlhBz6IgdUoAT8RJBGwBq6owldoSiG273YEkjOLP7i
-	 fjhmwKSGdeIye+asWlmVBbho9Yp3wOLocbRQEvz/64YxyS0nUmR4ugyGVcvA0Y5ythQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZEZsYvGi;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.181
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793994718;
+	b=STIM6SI679YB6zyGmD7A8N3U3qKWYckG2qWmHQ3/z9yHariX3OijfKv69I0vLjOCMVSI
+	 KVn2Nf1pvB+6OpOaAFNGU8SI9H6xgmyj+0g1/zQLXafXW+woU2sYzPaWr/gyKNY8IoeAc
+	 GjV03D0yEzyHH/IEaRX6AelCkK5ZSr3a9uoEfOMfZ0iQAF1zYH0ksXB3GYhvlAltwK6ky
+	 8RmITrYHAnszEKYjVQk5KdRh35nooILbMgKIGFE5XcxGmc1LxiRyoOMaIOIpWNuDuZdns
+	 zUsM0djyZWUbxMK6NR2a6wqJvae2vJtqYk6jX/csMahx8yPC+UPqeVWGJl0kQTjuHVg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793994718;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=DjNVWR97LjF/tV9YPAfdBbtgPlmR3ehf5bmKolaVmy0=;
+	b=3JbvX29uZ7SL4gtsjUnAgxDJNucWV7CXZqfITzBUFkqSKz7KMNydj6AjisH5ISkyv4kD
+	 gsEzEta5WuTHdf3/cMc+UXaIHcF9TI80BRA4HFgY3w1PjRgMd973nYBd8SyUOqAJIeg6S
+	 Hy6qdtTf7nno2CL9mm7EBqYYQYzW5rCxsRheDfUThJ63+vauqPCbVwyScYqzsGxprrkah
+	 A1tqKHDhQuhbx6H4A27QXpNWX90Q9m9bAel4yp51/1ip11ygbTNOIRffPUmd7ZW2C+UId
+	 FjqcPAY2ZCut7HqK/uEcsArr6Cl9qWIldSwAlp7dxvP++sprnsqTbjAaiqpQG/nssVg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=z8YjoqGE;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.181
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDC6606A326;
-	Fri,  6 Nov 2026 19:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2991D606A332
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 19:51:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2991D606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZEZsYvGi
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67E431F008A1;
-	Fri,  6 Nov 2026 19:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793994609;
-	bh=G7DBE2G+tp6095Q25BTCpcOqibBp5M5QObNMDI8L5dY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ZEZsYvGihbEJSqiy5PwNDboHV1Tw/K6ieI2fJaAAULouPFRsYWnmpa4it8X25xZ8S
-	 2aiC/tbjjNe8e/OUbO7upWeY8xxA+7sF+yRy/aRDo2esfoaxozm/hkfFnfcLSQkLAE
-	 H2k9sCEOYfUMmNJ3F6Rz9svEOc4vr5zPAG8b5/4xraxC3r9fd9PGkcWGJhw1zGQtxf
-	 ka22+ax8crgHChENNY02W2KTthHR5tUMaeunjtuLhtqWs5BN4NxF4EooN53UoTUJzV
-	 2mFyWKT9hqiiUaO9Pjw5I5k/rMDTJSWu7YTxH1a5Exrbum/fE7nyR2lUIhJX/roUhe
-	 ylzvb2I+Sw0Gw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5E1473A41038;
-	Fri,  6 Nov 2026 19:50:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=z8YjoqGE
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ed08b07213so4168995ad.2
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 11:51:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793994717; cv=none;
+        d=google.com; s=arc-20260327;
+        b=XL90VYI0Do6xOa3MobTJwePunAZSJd/AcrZ92s8i12U7xdlq0hzenut2wZEY/9QARU
+         NHHm+KdV0JII58NMnTY6KTPCHBNe5O11FZSdL8ggDaK2wDOtM7Xln7B8WXqMo+zi2s9E
+         8+p/5qIY+fT1tUSMhhjzpBL3DxZsdb8B57fXlFHLKB8XNiV7pHynfA7RPmux+rPypuWz
+         etKJpTSP8vDVJUXiEwRVxlfhBRjzVy5aVSPPrKrSb8TvtDR0uLSGw0q+CpLiI3ga5mEJ
+         AL+rxXCnRS+4838ppjgqMPkzg/PKiP6ze53I0SBWK2ZrWMCg3RlOtEl6ON8QqqhGg30r
+         Uv/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=DjNVWR97LjF/tV9YPAfdBbtgPlmR3ehf5bmKolaVmy0=;
+        fh=TPQugRyjFGWekIC7YRCvEwDswSzk/2DgkCuJzFeWW6w=;
+        b=V73mxV1dLFn2KvJ39/Mi1rY2KqrvPUWEE+eb0uLf/izUs8SY3itrgohzGBcWXz9A5u
+         8ZxTeYsrNtEjjsekLEPPt1Bydm9SaBdIjgMNSsa/1w6dMq8iBr6gYEvrrKoU9/9wZh8F
+         1QgQ8iQWxa3dIOjmBgYxnG2SbBwcD2m7EHCNqshkkvwCpfJpkTSz+IBjf8Hhwqfi0xf4
+         VZ874sqyZxwe/ecAhQWFqaoz5Ly8ogevtMIeBM1cZUp+JwCUtegOVEFCwVmDO7KQESCB
+         l6JCCczCd89YERaLmkt3yg6OJjnEtOJ+cA6Ubsl4CRsbLB3OWJfQXHdJKDqz8qlICH70
+         aZPg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793994717; x=1794599517; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=DjNVWR97LjF/tV9YPAfdBbtgPlmR3ehf5bmKolaVmy0=;
+        b=z8YjoqGEgIUDAlZt3Vaeg2y+5DbnEccANsuUVA8aHkxqYnI343kQWvIU4rnYUh5PsK
+         R7ARPAs5bbVEtzTfjz0deCrcesSpLRu5B3YupA2rLCIG9RqRUlXlcK3F69PrxySJKudq
+         J7o7L+hmya/prsBGqo1XNXxCh6BriT5+OcU0764uZyIdVnOpNVG4m0J33K55AQrqP9A4
+         IRDMZzvJ6A9MIBvi7K+6ASPqr6AxKJgX06Z50f7qkXkylTX+Sk5kiQp822KIXWCdXXMh
+         RDePp5WF5QEKv0CPw8FNrbQsF6PnnF0Ilmv4tM1TKBJm9pyOnxWCt3p77ZlVhU9+Mn6F
+         gGqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793994717; x=1794599517;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=DjNVWR97LjF/tV9YPAfdBbtgPlmR3ehf5bmKolaVmy0=;
+        b=zwBDXACeLSvnAkWKDAm8PWIztteWEdDGH+jk3Mtfm2cJkLYVTpDMGo2GsD9Phqi9CG
+         1avfwxaXRbA2aqMulevwdxb8Rrf151fLMYkvwc9scBaxYJQvGaqHI6MxUYhqeZCgGduE
+         gkvw5lzStd5GzX/JC11iuihqyc0lRsKrYtBaSA0xsDfvfFsPWJwcw+H7uLpTcEyqIopE
+         mt5e1UUkniNPf/wHWnZu3MHIBi3KzihZ8qja58Jnb5m9drPYHBNFoKRlVGttyD5XWxYN
+         o3XaJ+7+1m9hhqvH8WCzr6R9SXDXIi/D9wbl3XWIyawD3PpMJSpqK4LbexHgab2aAT+f
+         3pmQ==
+X-Forwarded-Encrypted: i=1; AL+hErEseavBnH0Q+y8fh6jT/j/TTPA+2BQsEul7R8zb8CZ96WAgaJIPlr/UPVSNni3cjCzmK1A=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/t4EE5FUX2bzGxh7rf4KJ76zmo4ZMRaKE3Cl+aZGLqwUx2TYaj
+	PrscwxfZ0WpkfZsy97PYm43EwFmftDBwgZ2Mttl+NTdusyJQdtVSHy1z+jzmmzZllAK/czqm0Oq
+	Hv0OXmSXUOiWI09WcvQN1PthF5G9dNo4=
+X-Gm-Gg: AYBFou02JcQEFEdc20CkJcyReGtLbY6+JdRaZmAN7dI0zdeETI078TM2/IV1QWHbnVP
+	Brcb2nKk7qJarbtysY8thQoJzJYj+XHBobU7rJbDpUb5XIPpV9tAwUsftEyrMxr3B9gTL47v6w1
+	nQ8fiwZAXPB799Nq9RPnkQlv2ScbquusOEfUdwYGVvqrScm0QFE5V/btoo1gMhe5/HUZ7KPIFQK
+	PBDGA7NHXYe7sNKXFt0waceso+16cXjBnMNgS48p17T2fYgllhyuFDCJVvZwYsbV4c9vW4xoOyt
+	0ALftDDITUHdh+YI7A520KpOyp0CJvDB8jVMv+5BvmkiFZR3jUHk/z9DoN/5KloiIDyrWxwRZ/F
+	BNAVImwWHWpZIQHwg59F9id5I8MU1p8c4uCn48Uaam0rbHKCEW6tXSpMEYg0Yn2+t9ZZ6qJSjC4
+	PtssrJWV4+2tAllmXHY8WWENWnECVJNkekB16Ld5A=
+X-Received: by 2002:a17:903:19cc:b0:2ea:fb8b:258d with SMTP id
+ d9443c01a7336-2ed404dd21emr46673395ad.6.1793994717399; Fri, 06 Nov 2026
+ 11:51:57 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,65 +105,112 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v4 0/7] ipv4,ipv6: convert the getsockopt
- switches
- to sockopt_t
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179399460817.837391.9013486741760659942.git-patchwork-notify@kernel.org>
-Date: Fri, 06 Nov 2026 19:50:08 +0000
-References: <20261103-sockopt_expand_out_v2-v4-0-2d36da923578@debian.org>
-In-Reply-To: <20261103-sockopt_expand_out_v2-v4-0-2d36da923578@debian.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, sdf@fomichev.me, shuah@kernel.org,
- edumazet@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- david.laight.linux@gmail.com, kernel-team@meta.com
+References: <20261105102343.311331-1-jolsa@kernel.org> <20261105102343.311331-2-jolsa@kernel.org>
+ <CAEf4BzbdBLb1cBeF0an386k=CmMYKdz=Or5mSjzy_F5SFOwsxg@mail.gmail.com> <au3brpNZG2nANnha@krava>
+In-Reply-To: <au3brpNZG2nANnha@krava>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 6 Nov 2026 11:51:45 -0800
+X-Gm-Features: AclHuK_ptQ1JZ0aIAB-Tf1Sid3nwdJVHkGL304qYA1pDY1ULh37q1biQaKwvn0c
+Message-ID: <CAEf4Bzbrwbg+oD+Tx=uVEdQkAB=hWxYrgyEFuON8cUWwjQ-Ojw@mail.gmail.com>
+Subject: Re: [PATCHv3 bpf-next 1/8] bpf: Honor const on generic kfunc memory arguments
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Lorenzo Stoakes <ljs@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Federico Di Pierro <nierro92@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Fri, Nov 6, 2026 at 5:52=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
+>
+> On Thu, Nov 05, 2026 at 04:34:44PM -0800, Andrii Nakryiko wrote:
+>
+> SNIP
+>
+> > > +/* A kfunc only reads through 'const T *arg'. The compiler enforces =
+it. */
+> > > +static enum bpf_type_flag kfunc_arg_mem_flag(const struct btf *btf,
+> > > +                                            const struct btf_param *=
+arg)
+> > > +{
+> > > +       const struct btf_type *t =3D btf_type_skip_modifiers(btf, arg=
+->type, NULL);
+> > > +       u32 id, ref_id;
+> > > +
+> > > +       btf_type_skip_modifiers(btf, t->type, &ref_id);
+> > > +       for (id =3D t->type; id !=3D ref_id; id =3D t->type) {
+> > > +               t =3D btf_type_by_id(btf, id);
+> > > +               if (btf_kind(t) =3D=3D BTF_KIND_CONST)
+> > > +                       return MEM_RDONLY;
+> > > +       }
+> >
+> > quite weird implementation, skip modifier, and then re-walk
+> > modifiers... while not have a loop from t->type while
+> > btf_type_is_modifier() and if you find btf_kind(t) =3D=3D BTF_KIND_CONS=
+T
+> > -> return true?
+>
+> the intention was not to introduce another helper with modifier
+> classification, the tradeoff is 2 loops [1]
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+there is btf_type_is_modifier() helper, you just need to drop it's
+static qualifier. it's not so much about performance of extra loop,
+it's just harder to follow what's going on. it would be more
+straightforward to have a loop that goes over modifiers and check if
+it has seen const. that's all. but up to you.
 
-On Tue, 03 Nov 2026 03:00:59 -0800 you wrote:
-> This series continues the migration to sockopt_t, as described in [1].
-> do_ip_getsockopt() and do_ipv6_getsockopt() still take a sockptr_t pair,
-> and everything they forward to now takes a sockopt_t, so convert them
-> both.
-> 
-> Patch 1 settles what a negative optlen means on SOL_IPV6 before the
-> conversion makes it matter. do_ip_getsockopt() rejects it, but
-> do_ipv6_getsockopt() never has, and the int options answer it as 4.
-> Treat it as 4, as David Laight suggested, instead of failing callers
-> that rely on it.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v4,1/7] ipv6: treat a negative optlen as 4 in do_ipv6_getsockopt()
-    https://git.kernel.org/netdev/net-next/c/61270b859fb5
-  - [net-next,v4,2/7] net: cap sockopt_expand_out() at MAX_RW_COUNT
-    https://git.kernel.org/netdev/net-next/c/6de30bde94b3
-  - [net-next,v4,3/7] ipv6: mcast: convert ip6_mc_msfget() to sockopt_t
-    https://git.kernel.org/netdev/net-next/c/11762c7f2191
-  - [net-next,v4,4/7] ipv4: igmp: convert ip_mc_gsfget() to sockopt_t
-    https://git.kernel.org/netdev/net-next/c/d845b553c6dc
-  - [net-next,v4,5/7] ipv4: convert do_ip_getsockopt() to sockopt_t
-    https://git.kernel.org/netdev/net-next/c/67582bdf5349
-  - [net-next,v4,6/7] ipv6: convert do_ipv6_getsockopt() to sockopt_t
-    https://git.kernel.org/netdev/net-next/c/52f243f4ff04
-  - [net-next,v4,7/7] selftests: net: getsockopt_iter: cover ip and ipv6
-    https://git.kernel.org/netdev/net-next/c/47e7aaf680a4
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>
+> jirka
+>
+>
+> [1] https://lore.kernel.org/bpf/DMLRV3E28SC8.3FJZXLBLZI4DD@gmail.com/
+>
+> >
+> >
+> > > +       return MEM_WRITE;
+> > > +}
+> > > +
+> > >  static bool is_kfunc_arg_constant(const struct btf *btf, const struc=
+t btf_param *arg)
+> > >  {
+> > >         return btf_param_match_suffix(btf, arg, "__k");
+> > > @@ -13618,7 +13634,8 @@ static int resolve_func_arg_type(struct bpf_v=
+erifier_env *env,
+> > >                         PTR_ERR(resolve_ret));
+> > >                 return -EINVAL;
+> > >         }
+> > > -       *arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE |
+> > > +       *arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE |
+> > > +                   kfunc_arg_mem_flag(meta->btf, &args[arg]) |
+> > >                     (*arg_type & (PTR_MAYBE_NULL | MEM_UNINIT));
+> > >
+> > >         return 0;
+> > > @@ -14170,7 +14187,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *e=
+nv, struct bpf_call_arg_meta *meta,
+> > >                                 reg_arg_name(env, argno), btf_type_st=
+r(ref_t), ref_tname);
+> > >                         return -EINVAL;
+> > >                 }
+> > > -               arg_type =3D ARG_PTR_TO_MEM | MEM_WRITE;
+> > > +               arg_type =3D ARG_PTR_TO_MEM | kfunc_arg_mem_flag(meta=
+->btf, &args[arg]);
+> > >         } else if (btf_type_is_struct(ref_t))
+> > >                 /* A pointer to a struct without a size argument is c=
+lassified as ARG_PTR_TO_BTF_ID */
+> > >                 arg_type =3D ARG_PTR_TO_BTF_ID;
+> > > @@ -14195,7 +14212,8 @@ get_kfunc_arg_type(struct bpf_verifier_env *e=
+nv, struct bpf_call_arg_meta *meta,
+> > >                         return -EINVAL;
+> > >                 }
+> > >                 proto->arg_size[arg] =3D type_size;
+> > > -               arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WR=
+ITE;
+> > > +               arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE |
+> > > +                          kfunc_arg_mem_flag(meta->btf, &args[arg]);
+> > >         }
+> > >
+> > >         if (is_kfunc_arg_uninit(meta->btf, &args[arg]))
+> > > --
+> > > 2.43.0
+> > >
