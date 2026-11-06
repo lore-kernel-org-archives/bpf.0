@@ -1,57 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.230.114
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793944736;
-	b=DMTxlndILiK4AfaisxX8k6zz/9yyxM9JxuKUHS8YNHtJQhf4e8KK9EvrWao6KFkKa8dM
-	 cfD3x7o0HOL4c6Bb7JXZtq5i0DnFvulTIep0QXeOmS5ngBC1AAgbpmtKmj1VPlIGT+Toz
-	 FkIbHZ6fnkj4cikslQ+EC7CD4ugl1+jONR9ryw1oqz2/7xb5G9zeC38wKY8USZKNLs2GW
-	 AoHyMhm4nxPIdSc1BVuYUzxdrbM1LqoUJzAjq5e4nKGI7oDSYyubewd5H/IuEjxhOxSeN
-	 v/+LRO/3Idbqf1B01WghrhAkHT0Ys+AWnFU++bSBWjhUIC/5v1lNL0/RdNLB9ghzvmg==
+	t=1793946648;
+	b=fi1eF6XEFasZS9WSHERUbW8fJywMa7z3MLX3Q6dm27FiivKtMsRHtsV2kkLs5nIfv/AN
+	 TK37KBMv/DIpaqH93mQv96r1U1mHjwu+He9ILmwdFiKTYaoNe4om3a5w4Ak9w16l54cEb
+	 hadFZBFXOKANI6yAunVF2qX8K3BAE2JggkCmlxYlBU9AeSooh3FTCAOY5V2M3augDs5DQ
+	 MtdUf0u4r84NAL9VHPupJ3GjTYF239ZTsvje5sTSwT2UNfUTiwPbtMMxotgSkXpR7z8xM
+	 A96kUk627Z8/j0faw3S6Dep84AMhvcwWP0o+XdXThYyfv7oHsYvKt2UDHf6YO1Mf1GQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793944736;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=cipKFjt9RPtu3YfE6J+06NIAiV5UxpwFte+EsJYFS3U=;
-	b=pTR7ejlZVJ5CtGBAOY4xkqG78cGaBErBTf6weKU0x/W8vRhYP1eMvpDiV+79iAOoJRat
-	 FbPub5onH3AmhX6vcKZJSYO0SPEpu9QBTZ091dFUdMvt4GpX6De+wYmLKxFXrhRQrC7Y8
-	 02BuY1qyhcnwW09gjXOgjQ0a5qnJ0u+Ox0ywxe8N+/p/gvyXX57bsXunz5u1o8RK0oDZO
-	 rU6LouBmec7AN5QjOeGwkySs2geF/nvacFaE3tUkPqExIIIBEv2zznz515fQ0bXixkqnH
-	 D4lLjYZEXUCQCR1dg4TS0IacYKdPQ7IQe0r1jMkoXmzuMyW1Qlpf+r9S1wQXtXzbCdg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793946648;
+	h=DMARC-Filter:DKIM-Signature:References:Mime-Version:User-Agent:
+	 Subject:Date:Message-Id:Content-Type:In-Reply-To:
+	 Content-Transfer-Encoding:To:Cc:X-Original-From:From:
+	 X-Lms-Return-Path;
+	bh=mX+GdBvA4yT9OKqPBs6xrJW5OhdpJfdnYKs9cQ6hIug=;
+	b=OUYNFtc1tQwF8yMWn01cdBgxvxX+orAmOnxFclISPM/EuYuUpVnzGryNZ3CUZaRr0ifj
+	 iARumKgrAoa+U/9ILFxmiPy40Phas+5vD7K0ICp47E1wYbSlO2cn9QzRlKHHQInQCvzYN
+	 dttGL7KL1et7JBk8WuYhcwp4gn/QoXr5n7G9NZ09j+6i0I9c9abBh90wGvPnrDZKJ/TvX
+	 jtvxU+9s1VsU8aIowP8OEb8VGCe+di3Z1X0n3cM3v2emZoyd+MpESPCZG4C2VUz3Supr0
+	 RtK/fZyoXqx99S7/egFqDIdMVvYKRYfCsbBAx5G5ghl45KoX9tAS61Crdo/iXk67mug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZOGgu+dK;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=bytedance.com;
+	spf=pass smtp.mailfrom=bytedance.com;
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=p4sn5M9G;
+	arc=none smtp.remote-ip=209.127.230.114
+Received: from va-1-114.ptr.blmpb.com (va-1-114.ptr.blmpb.com [209.127.230.114])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADCB606A326;
-	Fri,  6 Nov 2026 05:58:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FAAC606A334
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 06:30:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6FAAC606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZOGgu+dK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE7291F0089F;
-	Fri,  6 Nov 2026 05:58:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793944736;
-	bh=cipKFjt9RPtu3YfE6J+06NIAiV5UxpwFte+EsJYFS3U=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZOGgu+dK0Pau3UJsjpB3ebqiuwb3xyz2GrPijAol9X3I5O1apxrD8J16doijjJkWX
-	 Wlh0wQZn5O6L2ZSmd0yR1bjX4Q4aB7d3bFU4AAO5iHZQEL66+w6pgv3dtOWakaXrpD
-	 xpS/DwILLqsjhdr3szzSQ9yz8aTEgdga3Qn+DzWIP0cKJDLp2ECBxaOaTBmgGJk0FA
-	 A653tX9KUUTt9Ad2I6zDXVby33axckWTTIiMO/0PSAf8OTQFG/VrgdJDGS8a6W5Sw6
-	 twHlhwS5vrFD96ki9oLZNEkIaGeWciE1fkgLaPWd6ubqtZKmg2Y10+RJ6wYZrCYT3v
-	 HQzqQUPXdjmAg==
-Message-ID: <sashiko-outbox-200872@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [Patch v6 15/20] perf/x86/intel: Refresh LBR stack for non-PEBS
- LBR events when needed
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Dapeng Mi" <dapeng1.mi@linux.intel.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261106043257.842864-16-dapeng1.mi@linux.intel.com>
-References: <20261106043257.842864-1-dapeng1.mi@linux.intel.com>
- <20261106043257.842864-16-dapeng1.mi@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 06 Nov 2026 05:58:55 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=p4sn5M9G
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1793946641; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=mX+GdBvA4yT9OKqPBs6xrJW5OhdpJfdnYKs9cQ6hIug=;
+ b=p4sn5M9GuxhrN8PCzUt033kH7bQaoLzYR9vIZD8nfrGq+NdhxIAl9vXxigrYX9OaCKiU2K
+ P2JmxymFPibPEM1J9jUR3hkqH/r5srmO9NDO52RLPHMD7OouLdX03dzFye3yKVgUDj94w9
+ 7L7WF8b5S/KuOyqCENe7tDYEiOLd+2rjq3c+YOCZaAoBzR/a4PUbidGIHljCQVDcNBHxN+
+ jYNE0PfkbKUlLb5M+HDHnrrziNoS10N6sqOD9/XVuuMY6FkaeajZlmh5kGSD4pvEWunGqI
+ BP3shM9w/2yubWH48m4xuu/fxNVL+kEwaRNKWEwvOGw2WAEgdXQyDHiigCk5ug==
+References: <20261103122816.48037-1-lizhe.67@bytedance.com> <0efbf4db1decd8e6bb6a5fcdcf897314@kernel.org> <03bceb67-d362-47a6-b555-ed5aa1f9bd3e@bytedance.com> <aurTz8SiB-nQ22lJ@gourry-fedora-PF4VCD3F>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,93 +53,138 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] mm/mempolicy: add per-cgroup weighted interleave controls
+Date: Fri, 6 Nov 2026 14:30:17 +0800
+Message-Id: <67fcd8db-269d-43f1-aea2-8c41165747d0@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <aurTz8SiB-nQ22lJ@gourry-fedora-PF4VCD3F>
+Content-Transfer-Encoding: 7bit
+To: "Gregory Price" <gourry@gourry.net>
+Cc: "Tejun Heo" <tj@kernel.org>, <hannes@cmpxchg.org>, <mkoutny@suse.com>, 
+	<akpm@linux-foundation.org>, <david@kernel.org>, <ziy@nvidia.com>, 
+	<joshua.hahnjy@gmail.com>, <ying.huang@linux.alibaba.com>, 
+	<ljs@kernel.org>, <liam@infradead.org>, <rppt@kernel.org>, 
+	<surenb@google.com>, <mhocko@suse.com>, <cgroups@vger.kernel.org>, 
+	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>, 
+	<bpf@vger.kernel.org>
+X-Original-From: Li Zhe <lizhe.67@bytedance.com>
+From: "Li Zhe" <lizhe.67@bytedance.com>
+X-Lms-Return-Path: <lba+26aed740f+481b53+vger.kernel.org+lizhe.67@bytedance.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] perf/x86/intel: unrefreshed or clobbered LBR stack on
-  indirect PEBS drain
---
+On 11/4/26 2:42 PM, Gregory Price wrote:
+> On Wed, Nov 04, 2026 at 10:44:46AM +0800, Li Zhe wrote:
+>> Does that distinction make the cgroup-scoped override acceptable? If not,
+>> could you suggest a better way to support this kind of administrative
+>> weight override without adding new mempolicy syscalls?
+>>
+> I'm a little confused why cgroup-anything is needed here when you could
+> just override the weight table / interleave functions.
+>
+> I don't particularly like the idea of bpf hooks for a single mempolicy
+> mode as opposed to something more generally useful - and I question
+> how useful task-mempolicies are in general for tiered memory systems
+> (they also affect kernel allocation placement, which is not great).
+>
+> You have many patch proposals recently trying to adjust the mempolicy
+> components and I think it might be helpful if we could chat a bit
+> about what big problems you're actually trying to solve.
+>
+> I get that you want better control over task/task-groups, i think that
+> can be useful - but I also know that demotion immediately mucks all
+> this placement logic up (and we can't check vma / task policies at
+> demotion time) so I question how realisitic the value of these
+> extensions will be.
 
-commit f13e61130af8b47007c91f048b386359760f05ad
-Author: Dapeng Mi <dapeng1.mi@linux.intel.com>
 
-perf/x86/intel: Refresh LBR stack for non-PEBS LBR events when needed
+Thanks for the feedback.
 
-This commit tracks whether the shared LBR stack has been refreshed during P=
-MI
-handling with a lbr_refreshed flag and removes the unconditional LBR read at
-PMI entry so the live LBR state is read on demand for non-PEBS LBR events a=
-nd
-re-read if PEBS draining overwrites it.
+Our target environment is a class of machines with both DRAM and CXL
+memory. On these machines, different services run together in different
+cgroups. For us, CXL memory has two main values: it increases the total
+memory capacity of the machine, and it lowers the memory cost for
+workloads that need a large resident memory footprint. DRAM is the
+faster but also more expensive tier, so the practical question becomes:
+how much DRAM does each workload really need, and how much of the rest
+can be placed on CXL memory?
 
-> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> index fbde874af6182..b267c68f94676 100644
-> --- a/arch/x86/events/intel/core.c
-> +++ b/arch/x86/events/intel/core.c
+ From our earlier testing, different workloads have different suitable
+DRAM/CXL ratios. By "suitable", I do not mean maintaining a fixed ratio
+for its own sake. I mean that, after using some CXL memory, the
+workload's important metrics, such as throughput, average latency, tail
+latency, or other SLOs, are still within an acceptable range.
 
-[ ... ]
+So the core problem I am trying to solve is: on a mixed DRAM/CXL memory
+machine, each workload in each cgroup should be able to run with its own
+suitable DRAM/CXL ratio, so that it can stay near its own
+performance/cost balance point.
 
-> @@ -4003,8 +4013,19 @@ static int handle_pmi_common(struct pt_regs *regs,=
- u64 status)
->  		 *
->  		 * The PEBS buffer has to be drained before handling the A-PMI
->  		 */
-> -		if (is_pebs_counter_event_group(event))
-> +		if (is_pebs_counter_event_group(event)) {
-> +			/*
-> +			 * PEBS counter sampling is only supported on adaptive PEBS
-> +			 * and arch-PEBS, both of which snapshot the LBR stack.
-> +			 * No explicit LBR refresh is needed here.
-> +			 */
->  			static_call(x86_pmu_drain_pebs)(regs, &data);
-> +			/*
-> +			 * Draining the PEBS buffer can overwrite the shared
-> +			 * LBR stack, so mark lbr_refreshed as false.
-> +			 */
-> +			lbr_refreshed =3D false;
-> +		}
-> =20
->  		last_period =3D event->hw.last_period;
-> =20
-> @@ -4013,8 +4034,14 @@ static int handle_pmi_common(struct pt_regs *regs,=
- u64 status)
-> =20
->  		perf_sample_data_init(&data, 0, last_period);
-> =20
-> -		if (has_branch_stack(event))
-> +		if (has_branch_stack(event)) {
-> +			if (!lbr_refreshed) {
-> +				intel_pmu_lbr_read(cpu_lbr_stack(cpuc),
-> +						   cpuc->lbr_counters);
-> +				lbr_refreshed =3D true;
-> +			}
->  			intel_pmu_lbr_save_brstack(&data, cpuc, event);
-> +		}
-> =20
->  		x86_pmu_clear_perf_regs(regs);
->  		x86_pmu_update_perf_regs(event, &data, regs, false);
+This is why a single system-wide weighted interleave table is not enough
+for our use case. Two co-located services may have completely different
+suitable DRAM/CXL ratios. The cgroup is also the more natural management
+unit for us, because resource isolation, charging, SLO monitoring, and
+userspace control logic are all organized by cgroup, not by individual
+task.
 
-[Severity: Medium]
-Can perf_event_overflow() still drain the PEBS buffer and clobber
-cpu_lbr_stack(cpuc) when is_pebs_counter_event_group(event) is false?
+I understand that Joshua's approach can solve part of this problem.
+However, based on the current discussion, that direction still seems to
+need more discussion before it can move forward upstream.
 
-When a non-PEBS event using PERF_SAMPLE_READ | PERF_FORMAT_GROUP is grouped
-with a PERF_X86_EVENT_AUTO_RELOAD PEBS LBR sibling (without
-PERF_X86_EVENT_PEBS_CNTR set on the leader), perf_event_overflow() ->
-perf_output_sample() -> perf_output_read_group() -> intel_pmu_read_event()
-calls intel_pmu_drain_pebs_buffer() before PERF_SAMPLE_BRANCH_STACK is
-written.  Draining pending PEBS records calls intel_pmu_store_pebs_lbrs(),
-which overwrites cpu_lbr_stack(cpuc) before the current non-PEBS sample
-copies data.br_stack and leaves lbr_refreshed set to true for any subsequent
-non-PEBS LBR events in the same PMI.
+Of course, initial allocation is not the whole story. Demotion and
+promotion will change the actual page placement over time, so I do not
+expect weighted interleave alone to provide long-term placement control.
+For long-term adjustment, using a userspace controller with
+memory.reclaim is a more natural and convenient way to adjust placement
+over time.
 
-In addition, because the unconditional intel_pmu_lbr_read() at PMI entry is
-removed, an indirect PEBS drain on pre-adaptive PEBS
-(!x86_pmu.intel_cap.pebs_baseline) when GLOBAL_STATUS_BUFFER_OVF_BIT is cle=
-ar
-will run intel_pmu_pebs_fixup_ip() against an unrefreshed
-cpu_lbr_stack(cpuc).
+The value of weighted interleave here is in the initial allocation
+phase. First, for bandwidth-sensitive workloads, it allows DRAM and CXL
+bandwidth to be used together from startup, instead of concentrating
+allocations on one tier first and relying on later reclaim or demotion to
+reshape the distribution. Second, it gives the container scheduler a
+more deterministic view of memory capacity, so the scheduler can place
+workloads based on the total memory capacity provided by both DRAM and
+CXL, rather than treating only DRAM as the schedulable capacity.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106043257.8428=
-64-1-dapeng1.mi@linux.intel.com?part=3D15
+In the long term, we want to maintain the target ratio through a dynamic
+control loop. Memory tiering promotes hot pages back to DRAM. A
+userspace controller observes each cgroup's per-tier memory footprint
+and workload metrics, decides whether the current ratio has deviated
+from the target, and then uses memory.reclaim to apply reclaim pressure
+to the source tier that should be relieved [1].
+
+The target ratio is not meant to be a strict hard limit. The userspace
+controller can adjust the policy based on workload metrics: when cost is
+the priority, it can keep more cold memory on CXL; when performance or
+SLO pressure becomes high, it can temporarily relax the ratio and allow
+the workload to use more DRAM. In other words, I am not trying to make
+demotion reinterpret task policy or VMA policy. I am trying to adjust
+the actual resident distribution at cgroup granularity through a
+userspace feedback loop.
+
+This is also the background for my other patchsets. The memory.reclaim
+source selector is intended to give the userspace controller a more
+precise actuator [1]. In our testing, this is an important capability for
+building the feedback loop.
+
+The sched/numa memory tiering patchset came from issues we found while
+testing this model [2]. Its goal is to make tiering promotion behavior
+adapt better to different scenarios, and to avoid tiering-only feedback
+being misused by the normal AutoNUMA task placement heuristic.
+
+I am not attached to the exact API shape in this RFC. If the
+per-cgroup weighted interleave BPF kfuncs are too narrow, or if you
+think there is a more general control plane, or a better control
+granularity, I am happy to adjust the direction.
+
+[1] 
+https://lore.kernel.org/all/20261102070440.16262-1-lizhe.67@bytedance.com/
+[2] 
+https://lore.kernel.org/all/20261028041253.74839-1-lizhe.67@bytedance.com/
+
+Thanks,
+Zhe
+
+>
+> ~Gregory
