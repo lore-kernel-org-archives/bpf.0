@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793939917;
-	b=eqNo+Zy9kA+WXdqezl5HwQYABPstgI5V4K8WTHU/xHlqVQ3lDhKqZqWxduphMyqMOHLO
-	 9YfND5GZrBGLzL9L9Bofws7OS+trZBDHGpjsXrxLkR3dur18OrCl1bgVTbr5v6eHDoBO+
-	 0wy5w6TrZH7sIYYDfWq1NPKUROAF1rttX2gRVat7OWwyddzUHLuc+ptKs6Sv44fSPwHHK
-	 JQKuIlBTZonTnN0k3jSNyVhSxZ5aPZt2/7+IBQeFLtZ4/u79Ue6FohmeJGLbif3pSozyG
-	 c3r6JLXEfCl/yaiT8McSNgdPsbPBCdZqS7EKvKEF87/TiTN6E7CQ0t65NMlojxKUWaA==
+	t=1793939919;
+	b=3TftAyM2UK6lU/j4q4SaU1MM2wd4pDFIdaIiPseeywoptfxflPlr7dK+w4aDRFtGqN2A
+	 ilvYrsOSYf7AHEnF1OFDeVnQthP5zkKR58qtsatqo4dSjWqBXPO5FQoo1XlW+d+JrvVAv
+	 CMZMZJ/hqQJCUrbbbfKPRhsnyCaXt4nLdYaynakuGS1situOU8GFqZ0vlEeWYxdXAz+pi
+	 Y2WIG33t7eGY0c1AsA5h1/b2W3sS9FDN41K7+aqVWlKxrNHK1GgIKk/ggI3zjl8UzdVN4
+	 S7NyNQLiLEa4+aYvyEYNXZJa7y1pNRcgCRZp35bNfu43ky/dpMoT/RhwC1a9Wt6QTAA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793939917;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793939919;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=+tt0W4639uJckaBvutkZdzsb/m9lflVaXgSzvKEDMy0=;
-	b=oyjgXVMtRLvTCnpohXZz0D+6rbzwY3RyKpeogZWreKzBblHAB+EKJyHY1NVuby+2t0RA
-	 jA4tZYaOQvcH0EvwwaLsIhghj0A45kodkGp4iPTxK5G/7822D7+LaXizZOZVQ6CmCLrEK
-	 wCQjDiJ4EoUU92RA7CEP80Yw3bMuwCGRCEjzT8Oa8HFUIIarh3HWQOxy1QA4lJiAomAIJ
-	 b3Reru0LZ/bVddQBoXSNVqymb3S00HFbSkRh2ECsnARWgSWTEkqGxPk0+4LoeTj2VGVdx
-	 oCKMaIXCfbzsxrQIhGBQSt2G0K/yxY8FlaGsfza9EZxLqeuutOkiM3HUvhbNV8WOtFg==
+	bh=WiCcvV4qip4upVSe3cZiFqFg5PP1cjCqZo/Xl3HDjO8=;
+	b=W3CNIEYyyh08vMmYDORlFjBaplSQ5OP7IvrFZD4WQMRzCHD6Z5fbiS76tolTwRBi8+Z4
+	 OgcJs8zsJ9vqAL3fOBy6LEVEWlJyuY0nL1spHKNFRwo+OqmQRV8aZBsAqVqzlslWdnw9v
+	 in999Ow/fMhuv/9Swc8IqYJGX6TbXXWwGUc5TIaEGH1LxVcggwdtG3LTX+iJSEVOHXCrO
+	 rA6z1krAGUNxBSsm6MqoGpljctkGl0x+YLA+9Z+X5Hrp2I1lY5+cMi92WbuYIw+m9dka3
+	 zyKqy2deZl9Su/SOxlJebznX2Jl3pjFM1lxMhgQNsT91QtdcxpIKAM+nzRK1HuQwVUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dWXQ0NTP;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SjghCHyS;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3A7606A32F
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:38:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8FD606A31B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:38:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dWXQ0NTP
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6E21F0089F;
-	Fri,  6 Nov 2026 04:38:36 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SjghCHyS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A37B21F0089F;
+	Fri,  6 Nov 2026 04:38:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793939917;
-	bh=+tt0W4639uJckaBvutkZdzsb/m9lflVaXgSzvKEDMy0=;
+	s=k20260515; t=1793939918;
+	bh=WiCcvV4qip4upVSe3cZiFqFg5PP1cjCqZo/Xl3HDjO8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=dWXQ0NTPk+EqrCNxDMVDSOKp0xI1lst5WAXxQUdGaZkuH0wjmvG0Gbpyp2VRvIE1V
-	 OzKqxVh6b+EZW96yviEfergH6gpfDLkKmcqD6EnpfyriQlDdqfDrHtFOO4pYgjTOdU
-	 qqXr6U6j6gvrtlx1ddM02hpd8LwXaeZRMj9taVc6hGAKtimnXS5teIyZ/MEnq1THfd
-	 69o+2YP4GjyxOuBp33NtNnh+QdoPdqq8sQimZ/hXKNrk/xNnCvdWOtze2wFpKIfm2R
-	 /dN54QuBYRDstOyMoCNyng/X25NIDDYbZTw0i5ASyH5SXerce4H15hECWZtpiMU2ag
-	 V7WjjC8aRmUTQ==
-Content-Type: multipart/mixed; boundary="===============1150289174205268579=="
+	b=SjghCHySrQddX7hi1ktnY1TLXr4POl0PPNmSeL5iTcbPObIqTPT8ASLQaQBhkMD9c
+	 CBgujOgHfZTXlt3iQDk00H3LoOP5ekipePoADrYEM8+sQ7Wsq1HB3BbwXnSqXxML/R
+	 5uqa4JSf9qMG3lsUu8Ur7Szp7yRXCYenXZTzyzo4o6udx3xu4nYKtB+JIgrW9L3mLT
+	 br4nYV64Prh+DM8KyM5RJ+8sDImHxKGvsKEQSe1V07S0ItEfiGafeReV0RwXBr9kY7
+	 BQdABUaFR/j5qvAZJ3ytggqtIC7cCNt62cTeJmTlIznPRnjE7Y0RZRY6vhmGr5iykL
+	 p/IHai3kJmIsg==
+Content-Type: multipart/mixed; boundary="===============4955819479308878304=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,89 +49,97 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <19e3280680aa046388274873789d649eac600b99eff2633376ba2a073fd30acd@mail.kernel.org>
-In-Reply-To: <20261106035111.3315285-37-alexei.starovoitov@gmail.com>
-References: <20261106035111.3315285-37-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v3 36/45] bpf: Keep the first iteration of a counted loop apart
+Message-Id: <ae59d5159d918dfd6bd3508851c0e44a080d7ef49c9591c9842ccb4c612e84c8@mail.kernel.org>
+In-Reply-To: <20261106035111.3315285-21-alexei.starovoitov@gmail.com>
+References: <20261106035111.3315285-21-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v3 20/45] bpf: Keep the count of a loop when a register has no closed form
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 04:38:36 +0000 (UTC)
+Date: Fri,  6 Nov 2026 04:38:38 +0000 (UTC)
 
---===============1150289174205268579==
+--===============4955819479308878304==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Keep the first iteration of a counted loop apart
+> bpf: Keep the count of a loop when a register has no closed form
 
-TL;DR: In bpf_compute_loop_iters(), treating loaded registers as fresh skips
-the walk decision for short loops, so the verifier may wrongly reject valid
-programs, such as a NULL-checked kptr loop.
+TL;DR: In bpf_flow_loop_enter(), a long counted loop whose register has no
+closed form may no longer fall back to flow_try_walk(), so programs that
+loaded before could be rejected (unbounded min value), until later patches.
 
-> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-> index 147a2fa9aea9..0cbf158dae6d 100644
-> --- a/kernel/bpf/scev.c
-> +++ b/kernel/bpf/scev.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -3520,7 +3546,23 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
->  			walk = true;
->  			continue;
->  		}
-> +		/*
-> +		 * What is loaded from memory in every iteration is the same kind of thing in all
-> +		 * of them. One iteration tells what. There is nothing more to find out when
-> +		 * iterations are looked at one by one.
-> +		 */
-> +		if (expr_is_fresh(env, header_env->reg2expr[r])) {
-> +			__set_bit(r, iters->fresh_regs);
-> +			continue;
-> +		}
->  		__set_bit(r, iters->forget_regs);
+> @@ -21630,8 +21630,22 @@ int bpf_flow_loop_enter(struct bpf_verifier_env *env, bool *backedge, bool *drop
+>  	if (err < 0)
+>  		return err;
+>  
+> -	/* @per_trip: the insns of one iteration, times the walks around the loop. */
+> +	/*
+> +	 * There is no summary of what the loop does to something that is live.
+> +	 * Go through the iterations one by one if that is not too long.
+> +	 * @per_trip: the insns of one iteration, times the walks around the loop.
+> +	 */
+>  	per_trip = flow_walk_factor(cur) * loop->nr_insns;
+> +	if (err == 2 && per_trip <= BPF_FLOW_MAX_WALK &&
+> +	    iters.max_header_count <= BPF_FLOW_MAX_WALK / (u32)per_trip) {
+> +		entry->max_header_count = iters.max_header_count;
+> +		entry->terminates = true;
+> +		entry->counted = true;
+> +		entry->apart = true;
+> +		return 0;
+> +	}
+> +	if (err == 2 && iters.spill_base)
+> +		err = 0;
+>  	/* The walk has to get to the end of the loop, so it is known to have one. Or not: */
+>  	if (!err) {
+>  		err = flow_try_walk(env, entry);
 
-Does this continue skip the walk decision for short loops?
+When bpf_compute_loop_iters() returns 2 because a register that a check
+depends on has no closed form, and the counted walk is longer than
+BPF_FLOW_MAX_WALK, this code no longer falls back to flow_try_walk().
+Unless spill_base is set, err stays 2 and the code goes on to
+bpf_widen_scev_regs(), which calls scev_forget_reg() and turns the needed
+scalar into an unknown scalar for all iterations.
 
-Before this patch, a live loop-carried register without a summary went into
-forget_regs, and if bpf_flow_is_needed() wanted it, walk was set to true and
-bpf_compute_loop_iters() returned 2, so the loop was walked iteration by
-iteration when it was short enough.
+Before this commit that register hit cant_widen, bpf_compute_loop_iters()
+returned 0, and the loop was walked by flow_try_walk().  If that walk gave
+up, the loop got a may_goto and the states at the head were joined, which
+keeps any bound that each iteration gives the value.
 
-Now a register whose reg2expr is only OPAQUE (any load that is not an fp
-spill fill, for example) never sets walk, so the function returns 1 even
-for a short loop.  The comment says there is nothing more to find out when
-iterations are looked at one by one, but that doesn't seem to hold when the
-loaded value is combined with other state.  For example:
+Can this reject programs that loaded before?  For example:
 
-    struct foo *t = NULL; int have = 0;
-    for (i = 0; i < 4; i++) {
-            if (have) sum += t->x;
-            t = v->kptr;              /* reg2expr OPAQUE -> fresh */
-            have = 0;
-            if (t && t->y > 100) have = 1;   /* reg2scev ANY(have, 0, 1) */
-    }
+  idx = 0;
+  for (i = 0; i < 100000; i++)
+          idx = table[idx];       /* u8 table[256] */
 
-Before, t is in forget_regs and used as a load base, so walk = true and the
-loop is walked with exact per-iteration states.  After, t is fresh, have is
-a widenable ANY, and err == 1, so entry->first is set.  The state coming
-back from the NULL path (t = scalar 0, have = 0) goes through
-bpf_widen_scev_regs(..., back = true), where union_any_reg() makes have
-[0, 1] while t is still scalar 0.  The next iteration takes "if (have)" and
-dereferences a scalar, so the program is rejected.
+Here idx has no closed form and bpf_flow_is_needed() reports it as needed,
+so the return value is 2.  per_trip is about 12 and max_header_count of
+100000 is larger than BPF_FLOW_MAX_WALK / 12, so the counted walk is
+skipped.  spill_base is not set, so idx goes through scev_forget_reg() and
+bpf_mark_reg_unknown_imprecise(), and then table + idx fails with "math
+between map_value pointer and register with unbounded min value".  Before,
+the join kept idx in [0, 255].  The same seems to apply to a value that a
+call returns in each iteration, such as bpf_get_prandom_u32() & 15 used as
+an index over 20000 iterations.
 
-A loop that loads from a frozen read-only map at an IV-dependent offset
-(cur = tbl[i], used in the next iteration) seems to lose precision the same
-way: the walk keeps each folded constant, while the summary folds only the
-first iteration.
+The commit message lists this as method 3 ("The walk is too long: an
+unknown scalar, as in 1.") but does not mention that such programs are now
+rejected.
 
-The follow-up commit 01f19b3a79be ("bpf: What a call returns in each
-iteration is like what the loop loads") makes call results fresh but keeps
-walking for them: "A call can return NULL in one iteration and set a flag
-with it, so a loop that is short enough is still walked first."  Should
-loads do the same, setting fresh_regs and still falling through to the
-bpf_flow_is_needed() / walk decision, so only loops too long to walk get
-the first-iteration split?
+Later commits in this series address this: 602c3e06835f ("bpf: Keep the
+first iteration of a counted loop apart") describes that "a prog that
+loaded before is rejected: math between map_value pointer and register with
+unbounded min value" and handles values loaded anew in each iteration, and
+01f19b3a79be ("bpf: What a call returns in each iteration is like what the
+loop loads") extends that to call results.  The fallback in
+bpf_flow_loop_enter() is unchanged at the end of the series, so is this
+commit bisect-clean for such programs?
 
 
 ---
@@ -139,4 +147,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42160076968
---===============1150289174205268579==--
+--===============4955819479308878304==--
