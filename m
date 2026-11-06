@@ -1,70 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793960604;
-	b=2XMg877nE3SCF7g+R/zdqc2CuaUm2XlsJKHlXNdHWS8wJuOXktjVebm+L8rAS2T18asy
-	 jxWEUUFJQ4//yrKwn3MhzHau/SEqGmLhBLm1QsQiAYmkgoFTn/JskgFrHaP5vF3o7Hr5S
-	 lt+qvh8HXCQvhYhvxOtHRQ8xZrixPjsdmYQAd3MgjHzyrrrGDcfLtncXodz+40X6v1KE3
-	 /ELX+HNoz6eC/iezlRO+jTAHI98IBQQzCaZPw778AjGQ2doFB29z74s/THgilhTAn3JLs
-	 qaIQHY4y4HB4m+iL4uXq9XuD020pgFwhbqShqtYBIrD4X7/TEHykGZVx+Ypzmd0Qvsg==
+	t=1793961089;
+	b=vcVB8k0m7kSibYTTwbKYncRKTvc6PYGafhzc6E2ZSEyR0PJvrbMhaUD3fiN1zJClimgH
+	 q2MvZGJMRaNqEsGxI63Whkw/dDLWEvB5NX7gIji3o9iH0AVgOnlXt5kzaVd6iqJnq7SSx
+	 wdkxp4b+I0EQ7mWQJBlJn2NoWspd2qHOuvJvA4p7rwYlo8RDgL9rn9REdXvlY5hP3RDy8
+	 YV6QOqaFstt41Ytbt39t0ailsZ02/6QecWA+GxGXHwwC+9wXBGFJA/UHB3jYiXMbgceiy
+	 C+7eK5OnQRuB1qGba/zyJUA6FPJ1cGN2hqn0U7o8B4VaUEclYvCp1O44/djI0pEQJ6w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793960604;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=QHkhU6EAbsXZ7AmpzBxQowBOt1s29rJkgVkoU0SR6nU=;
-	b=wESRSZJuChzSo77R1gTxrU74ABAnr7PgWCsx6JSa5FqlP2C6SBeizKcuWrzEwwMRNs/B
-	 3r7482eoUchHEpHAhLE5n5qT4njwwb+u40uTRRHKvRHgr3UPlQ9W1jDmT/a4suS1B6tM9
-	 andW1jqfAQ5WUSBKQxXYwonqsoMSRst/KAZqoFKdbn09pgGgSF0oRHikF4IOIFmsukY6s
-	 9tQZAD7zNpzMZ8LRcCsa5rJcnTjK+8+UTjN6QK3Fv/pjg1UKnr91yN7McNItRHTQ7dESO
-	 HinDFm9V08wHDatIQ5eKR5rH+f2RYDeAVfGV+CDDtsl8xBO7n95WMgOgXi6PY7F2MTg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793961089;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=ERIsxXnToKJjPsYdUFNi3i65e2yRcLhyRnRcNHkaRyw=;
+	b=SsKVZ+7dCFTz9Dmwhcy4qpOnenXAm0iNiU4NIwznRUVdesEjB2oQkKlYiDgVyMP3fl0d
+	 VE7OsTKQsHhiDZGhOB/a/r+Hwt2/dgfoi8XnP5muHkLodiZuj9rzYgiIdBDbItvK5/WoY
+	 4ECZdHeeaDn00zkSqt/ApSrnEZgjuOQAWL+tiqjtrWqsHEwZFw4DgjTEN96ydgVO5gW46
+	 3q6uHKZ3qILQ6IsWsHsjCyJOLL8mpGBPlLx4reYV6xMAXsCc6PQMpE8zEqZsys99zMTdB
+	 +IJWjhauGkYi/7hvcFK3OblnqiWYBFDVLDm5O6g/tPFKAgYaD82Ad37VAsrmAt8eKgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=ZLsRLZ1a;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YpbLuzHX;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69D1606A338;
-	Fri,  6 Nov 2026 10:23:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D69D1606A338
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55937606A334
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 10:31:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=ZLsRLZ1a
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=QHkhU6EAbsXZ7AmpzBxQowBOt1s29rJkgVkoU0SR6nU=; b=ZLsRLZ1anrIEDdWGhjYpyiK/iA
-	stiWlqIgtpykOSg/npvsMMEIWcrCsa49WAM+yVP5PYTni4AknOTHqSawa3r5C+44t5RcAUHC5vpZU
-	AHiHu493j0GqAQthcdJD7NwUvVDpel+omqbTqYdpwFUDpLXP9CwdRTOYOeaH/Zc8FSVBUtMg8HH0L
-	YbnL4o7xqEonndZFs+xIXKH41ZFQkbRim8n8g7l/3HxsWkiuURdkb+ParIWs66c5yGIyeqqFr1oUA
-	ScY0y7POJHlXOZATAM3cpj9L1k4aATiEQwXWyUXleyzWsgM/m6ErdiwHhpAP8fIEW+KamYr3TWw4A
-	Wa4GkOHA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xPH6K-00000002wMm-1vAL;
-	Fri, 06 Nov 2026 10:23:16 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 664C0300302; Fri, 06 Nov 2026 11:23:15 +0100 (CET)
-Date: Fri, 6 Nov 2026 11:23:15 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Radu Toader <radu.m.toader@gmail.com>
-Cc: mingo@redhat.com, tj@kernel.org, tglx@kernel.org, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	vschneid@redhat.com, kprateek.nayak@amd.com, void@manifault.com,
-	arighi@nvidia.com, changwoo@igalia.com, frederic@kernel.org,
-	anna-maria@linutronix.de, bigeasy@linutronix.de, joshdon@google.com,
-	haoluo@google.com, brho@google.com, linux-kernel@vger.kernel.org,
-	sched-ext@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH 2/2] softirq: Treat an interrupted idle task as idle in
- tick_irq_exit()
-Message-ID: <20261106102315.GT1813469@noisy.programming.kicks-ass.net>
-References: <20261106094343.174905-1-radu.m.toader@gmail.com>
- <20261106094343.174905-3-radu.m.toader@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YpbLuzHX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC6F1F008A1;
+	Fri,  6 Nov 2026 10:31:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793961088;
+	bh=ERIsxXnToKJjPsYdUFNi3i65e2yRcLhyRnRcNHkaRyw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=YpbLuzHXo+JgeFRtENkFZhUFl06/2blItGbQoWUK6AWxITP6mreUGx4GYxGSQeEzb
+	 ju0gEmRm6kNNA1rx073YoshQKyb2uRKI+zZap+lCG//q7SRMojrqdcVh4bmPVPNf69
+	 TQN29Wa8/zhCET6y5LZ1D6IBmr+i1wwQGj0fAu91OmF6ZBQIoGnVltaZsJPM/fyvj9
+	 v4dhn5B32aeYWqf4w7KAl8rmRRci7TisUZPhSBcDpokoZjyfe3lqOjunCO6jqyKss6
+	 y2Udz0VwLVlcXhJrUHVJvU3hlVxu2wIp3bhDLXW7WSnJBcqgbXctTxsbWQWSphzcZt
+	 2eVQrPjpVnHPg==
+Content-Type: multipart/mixed; boundary="===============4186881813985110582=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -74,40 +49,99 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261106094343.174905-3-radu.m.toader@gmail.com>
+Message-Id: <7cac6014eda1beb0bffef7cff25838a118608be41fb77cca81a645795fecfaf2@mail.kernel.org>
+In-Reply-To: <20261106095747.471718-9-luyun_611@163.com>
+References: <20261106095747.471718-9-luyun_611@163.com>
+Subject: Re: [PATCH bpf-next v2 8/8] selftests/bpf: Check bpf_timer value membership
+From: bot+bpf-ci@kernel.org
+To: luyun_611@163.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev
+Cc: yatsenko@meta.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  6 Nov 2026 10:31:28 +0000 (UTC)
 
-On Fri, Nov 06, 2026 at 09:43:43AM +0000, Radu Toader wrote:
-> diff --git a/kernel/softirq.c b/kernel/softirq.c
-> index 7fc2200392cd..e7d649c29c0c 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
-> @@ -738,8 +738,16 @@ static inline void tick_irq_exit(void)
->  #ifdef CONFIG_NO_HZ_COMMON
->  	int cpu = smp_processor_id();
->  
-> +	/*
-> +	 * Make sure that timer wheel updates are propagated. An interrupted
-> +	 * idle loop counts as idle even with runnable tasks queued on the
-> +	 * CPU: forced idle under core scheduling, and the tasks sched_ext
-> +	 * keeps on a CPU's run queue while its BPF scheduler holds them back.
-> +	 * idle_cpu() would skip the idle bookkeeping of tick_nohz_irq_exit()
-> +	 * for those, and with an unstable sched_clock the CPU's clock then
-> +	 * isn't resynchronized when it leaves the idle loop.
-> +	 */
-> +	if ((is_idle_task(current) && !need_resched()) || tick_nohz_full_cpu(cpu)) {
+--===============4186881813985110582==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-So is_idle_task() is also true for idle-injection tasks. I *think* that
-is also right in this case, but it wasn't mentioned.
+> selftests/bpf: Check bpf_timer value membership
 
-That is, we can have tasks that are not rq->idle for which
-is_idle_task()/PF_IDLE is true, those tasks will also 'run' an idle
-state, see play_idle_precise() and its users.
+TL;DR: Test-only nits, no bug found: the new bpf_timer membership selftest
+nearly duplicates the bpf_wq one, and its single-use macros could be plain
+functions or shared code.
 
->  		if (hardirq_count() == HARDIRQ_OFFSET)
->  			tick_nohz_irq_exit();
->  	}
-> -- 
-> 2.43.0
-> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_timer_membership.c b/tools/testing/selftests/bpf/prog_tests/bpf_timer_membership.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_timer_membership.c
+
+[ ... ]
+
+> +struct timer_case {
+> +	struct bpf_timer_membership *skel;
+> +	struct bpf_map *map;
+> +	struct bpf_program *prog;
+> +	bool array;
+> +	int fd;
+> +};
+> +
+> +static struct timer_case open_case(enum bpf_map_type type, __u32 flags)
+> +{
+> +	struct timer_case c = {};
+> +	int err;
+> +
+> +	c.skel = bpf_timer_membership__open();
+
+This isn't a bug, but this file matches prog_tests/bpf_wq_membership.c
+except for the renames (wq_case/timer_case, the skeleton names and the
+test entry point).  open_case(), run_cmd(), cb_count(), wait_cb(), seed(),
+drop_elem(), check_init_start(), subtest_live(), subtest_delete() and
+subtest_replace() are the same in both.
+
+Could the two tests share one host-side driver, for example one skeleton
+with a timer map and a wq map, or a shared header, instead of two copies?
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_timer_membership.c b/tools/testing/selftests/bpf/progs/bpf_timer_membership.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/bpf_timer_membership.c
+
+[ ... ]
+
+> +#define DEFINE_TIMER_MAP(map_sym, value_type)				\
+> +static int map_sym##_cb(void *map, int *key, void *value)		\
+> +{									\
+> +	value_type *v = value;						\
+> +									\
+> +	__sync_fetch_and_add(&cb_count[v->cookie & (CB_SLOTS - 1)], 1);	\
+> +	return 0;							\
+> +}									\
+> +									\
+> +SEC("syscall")								\
+> +int map_sym##_run(void *ctx)						\
+
+[ ... ]
+
+This isn't a bug, but DEFINE_TIMER_MAP is expanded only once, as
+DEFINE_TIMER_MAP(values, struct timer_value), and TIMER_DELETE_INIT is
+also used only once.  The userspace side switches the map type with
+bpf_map__set_type(), so a single map is all the program needs.
+
+The result is a program body of about 75 lines of backslash-continued
+macro text, and TIMER_DELETE_INIT quietly depends on a local named key in
+the caller.  The file is also nearly line-for-line the same as
+progs/bpf_wq_membership.c.
+
+Since DEFINE_TIMER_MAP is expanded only once, could values_cb() and
+values_run() be ordinary functions?  Alternatively, could the shared
+delete/replace logic go in a header used by both this file and
+bpf_wq_membership.c?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42200504781
+--===============4186881813985110582==--
