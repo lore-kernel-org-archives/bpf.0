@@ -1,72 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793927159;
-	b=hQ/K7/XM8woB8dWZ45/L91SNfWYGEN9Eg87ZQA9UTpVwwwg9otlR3ZXUaV6/zJqlES06
-	 KnvUSYnrwivg5616rejs91d35BOsLkyr+WYgWe0butFd/aJxsVHtDwcNZWgoT+kHHr+4+
-	 vRAdBlRPZiGDap8RxRQHV+AnY9EnzZ2/aM/BqDrSyiSKcQZncvWES+6SnrAZmPQ48g7pQ
-	 eCQ71AqAIlvQvHVlP7pjjs72bxK7bRB1ivmnYy2dkDjn+0G+lDxOZZOlyiPMgVD/EFsRP
-	 l0m8cGNhLWrjFPLoOlGNAstHDAxE8PWE7Htiz+8BnXDCD1OULZ5F1fbt8xA59U2zR4Q==
+	t=1793929381;
+	b=LEE1GsRwJFHVlpLznmQun/tKyGDioaa3yTVn+5EqKowdbVQWONZEY/iUQbdGcqDZUvzC
+	 evTFldSbbhhFMhviN/HyouUF8VWNPr2dmxAUaKOg1KutHfhJkJa1WBnTt5hZfnQnZC5QF
+	 4f86eNfgSbwnNIQwE8QcCBkmka/JkxqJ39BHKrkKn0O3VXd6qTW71NKKWw0PimAIrRSLe
+	 5r1HakdgOwLWlvR0GN79vjNLsYxHbvnB1T35wORiCWkpCcquO8haRnEmE+GGEwaJYkuRB
+	 qIptLn11Sv3lke5lPMiPAkUhUv9Oy4JSDKJ0CXyk8tjVlRGWsZHA3OwYmdwZzgOgTNw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793927159;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Spam-Info:X-Authority-Analysis:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=1480WziVmWzWLtrWo0QtqaZspgLV6+CWWBx6N5NDweo=;
-	b=UBwelx4l20c2p2bmCjnlTNFMijzHOd67jjPEjpDUyRG0cAMVvjYy5YU484wxND72bz1P
-	 Fy4taHNc/mHFi+NNpFKEOrYTXeSjGThjP5CbRhSBvGzBlJzI/ZQmvvP19MdlN7RmP7cAn
-	 IdR+vl2fHxa+WpS7AgDM5Di08381JNztTGzcUZuvNK3RefwqKw6hROmrC8w7URngfNmXR
-	 KDdUpmqpWurvEkfUvhjmImE+xzd713DesKTlC4Mz2/Tyf5YDiCDBI8wm59nvDQODybJfa
-	 pFoInIcEvXZBMkoOod+PV4sgHxmbcDRDS5ZayQBZ9W1cjv4ToSuAi6ET9lHk+JZiEJA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793929381;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=GjkzxdDNrHpcrRXQYuGZ1ch8vMOkUN2uuaOmdGbEb5Q=;
+	b=UqqVPOAkG0qGVfdhvDvbSESAOnnHe20L8SXFdIepmschr0ZyIrRZdDYEXrgqcPZ+mTBs
+	 AcZ8ONJdu691kqPKBjtRT/XdCjsJeZ2BFyzXelFchRMtx80boD2C9E63eHU46qq7amBv7
+	 eRGZnDJYi8N7hzT32fP5r+nr6Oc47areWlzeirn8T78ZcF80oHqlHothZoCtaItH57wCX
+	 TlIr1UEevaHWqx0l2XrCoQ0AsmXjRg9UeEw/qIL28x/WCl2egZN8A2fv0aMzmNT/FTMQg
+	 aXLb4kRwYDUZIl+QL9LVpuRi3L984dKbSk6B3FOtIuqV10tgM5uNyRG3KfFNSBZiEvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=crowdstrike.com;
-	spf=pass smtp.mailfrom=crowdstrike.com;
-	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=kEEnoX4I;
-	arc=none smtp.remote-ip=148.163.152.16
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Shi//a8+";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2257606A31B;
-	Fri,  6 Nov 2026 01:05:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E2257606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D45E606A31B;
+	Fri,  6 Nov 2026 01:43:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=kEEnoX4I
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6A5NhIhE2129198;
-	Fri, 6 Nov 2026 01:05:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:message-id:mime-version:subject:to; s=default; bh=1480WziVmWzWL
-	trWo0QtqaZspgLV6+CWWBx6N5NDweo=; b=kEEnoX4IndqgxzJuGtYJxYRAR5aEo
-	nyKW1gyX3sZApF3YU3m4f4N1pL51j0PS1e6MJEz0fDaPDUFOwXRyQ0zwFYhbOy2q
-	y6Arzk2HmzGRjpmHCVT2YZDH7qItk4Bz5SpmPyw8uDukqnTpXDLwA9y7jS47yWr4
-	O7uG85gRZLBzd+5BUCeLNXX7UzkVnNtKwGchKbPBgL1zQZxvJJs6zeurwwKew0iR
-	fu+yPeJZN3hSV0uH7tUKK3kLMaWRipwP3f7p3VDgjuTRSHAZNLCmFqzA0xK4XqIw
-	tZNz/DS1h8jtszBJg5x6k2oenNzVhJPVvuzQwSOhZdonlMj174Wpc7rVA==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4hs3qmg5nu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Nov 2026 01:05:39 +0000 (GMT)
-Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.53; Fri, 6 Nov 2026 01:05:37 +0000
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-To: <bpf@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-        <rostedt@goodmis.org>
-CC: <ast@kernel.org>, <daniel@iogearbox.net>, <song@kernel.org>,
-        <jolsa@kernel.org>, <mhiramat@kernel.org>, <stable@vger.kernel.org>,
-        <linux-open-source@crowdstrike.com>
-Subject: [PATCH bpf-next v2 0/2] ftrace, kprobes, bpf: mark trampoline/kprobe ftrace_ops permanent
-Date: Thu, 5 Nov 2026 20:05:33 -0500
-Message-ID: <20261106010535.2137162-1-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Shi//a8+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62DEE1F008A4;
+	Fri,  6 Nov 2026 01:43:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793929380;
+	bh=GjkzxdDNrHpcrRXQYuGZ1ch8vMOkUN2uuaOmdGbEb5Q=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Shi//a8+jokMV7YNWTI/vK0PThm2YAxJpcpyrErcuwvEbZuh1oFhsOrdrVFN1HL91
+	 1aBX6mluUAmejHcOMKu7aNIREc/+lXQa3bnM1bfuP98AHMrFk667P4WC/BOAojE2fQ
+	 jKYrUhJsYTEOVaW1iKQ+5N2ok6hcguPDNCwx2CI84/FhyM9xoNMLVPw6p54ptCT36N
+	 JXOCEEODbnEeEz4UploEdpA6UoGlw3W88K2WuGbNLjwsMH1xe1e7XtjCvXo8RCmnBd
+	 2dbBIeP9TAXk6C2lUTwFEGavH4DsJmY8iwxPGzoo9NogSXw7E3G0JMnWqSOgdLAXC8
+	 XnVqdY5VxQ/iA==
+Content-Type: multipart/mixed; boundary="===============0551742847628527584=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,69 +49,82 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH009.crowdstrike.sys (10.100.11.79) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA2MDAwMyBTYWx0ZWRfX0KZlk93YKuwF
- P80EQg9bBJN69Y+vzDNNi1SGLyaSPWYLHlpnXuyeE0Ek4VV7cXyPE/qt6XzMs6O05Q+2/tEWc0I
- m3hkX+KywR4OtpJVXwet3YG1vTWVAxPuvrwkdHLwQWNceyN+6LKiPFeKBizaAmFcfM+tIuLaOJe
- FX8znbVukGAllrlxIiIfISVL4Sbt5KSDdkldf2a0jX1FZnJVRkTliY7zGPV9HX7I67C52ngfsYb
- ovDTrQDW92idW2k38JUPxgvy7xvzKb5b92x1/kyO8XtTsP+Q9+aCm3goDPIUVscXskUDN/VC2zA
- owB0N+YJpbwVEYrMrovuFTdUmgeA2sQ++bWI9MhdTNs9Dowm6Ts/lAgfRnZopaPqavf3yIHlQeJ
- PveVTGtNOeESoAPD3jleahEdxED1ttGhHqbuoeoZEAoMAwB/KGIUSBP69ABe30lUUviXQsa2kMP
- hQWVnEYdnOQz1CKbvcw==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA2MDAwMyBTYWx0ZWRfX6apaQSpnqG9W
- wvTEwL/rdlZoZhXN4Emo/MYSwu0qGJc3bNBMrwXrANthVxXYoHv7/rLBRSbqBPNLZfC3tckmLfU
- 9NC4M/Toklo0pJR3keqtKKiRDxAietLhBG/hPEW73JU7ZrffWbGe
-X-Authority-Analysis: v=2.4 cv=JuVkP84C c=1 sm=1 tr=0 ts=6aed27e3 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22 a=VwQbUJbxAAAA:8
- a=pl6vuDidAAAA:8 a=pGLkceISAAAA:8 a=ksgJiKQuinou5blJ7t0A:9
-X-Proofpoint-ORIG-GUID: UrX2s4fLU8oSh_e5tl_nDV66CCf4hJgS
-X-Proofpoint-GUID: UrX2s4fLU8oSh_e5tl_nDV66CCf4hJgS
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11957
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 phishscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
- clxscore=1011 bulkscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611060003
+Message-Id: <cf7d9bcb8b837cf8cae8db37cb9a0f53b977e7c59df6de47e8f416222d5f7ed8@mail.kernel.org>
+In-Reply-To: <20261106010535.2137162-3-andrey.grodzovsky@crowdstrike.com>
+References: <20261106010535.2137162-3-andrey.grodzovsky@crowdstrike.com>
+Subject: Re: [PATCH bpf-next v2 2/2] kprobes: mark ftrace-based kprobe ops permanent
+From: bot+bpf-ci@kernel.org
+To: andrey.grodzovsky@crowdstrike.com,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,rostedt@goodmis.org
+Cc: ast@kernel.org,daniel@iogearbox.net,song@kernel.org,jolsa@kernel.org,mhiramat@kernel.org,stable@vger.kernel.org,linux-open-source@crowdstrike.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  6 Nov 2026 01:43:00 +0000 (UTC)
 
-This fixes a long-standing issue: kernel.ftrace_enabled=0 silently
-disables BPF trampolines (fentry/fexit) and ftrace-based
-kprobes/kretprobes. The write succeeds, the hook stops firing with no
-error, and re-enabling silently restores it. Livepatch already solved
-this for itself via FTRACE_OPS_FL_PERMANENT, which refuses to disable
-ftrace while a permanent ops is registered and refuses to register
-one while ftrace is disabled [1].
+--===============0551742847628527584==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This problem is already addressed by [2] in mainline, but for backport
-to stable Steven asked to avoid using that solution, as it was a
-user-visible behavior change rather than a bug fix. Instead he
-suggested we upstream this work and from there it goes to stable [3].
+> kprobes: mark ftrace-based kprobe ops permanent
 
-Changes since v1 [4]:
-  - Rebase onto latest bpf-next_base
-  - Add Acked-by from Jiri Olsa (patch 1), Masami Hiramatsu (patch 2)
-    and Steven Rostedt (both patches)
-  - Drop the selftest patch as it is irrelevant in mainline [5]
+TL;DR: Commit message only: the ftrace_enabled=0 problem seems unreachable in
+this tree, since the sysctl no longer clears it, so the patch has no effect
+here; changelog should say it targets only older stable kernels.
 
-[1] - https://lore.kernel.org/all/20191016113316.13415-1-mbenes@suse.cz/T/#u
-[2] - https://lore.kernel.org/all/20260806153000.4184871-1-andrey.grodzovsky@crowdstrike.com/
-[3] - https://lore.kernel.org/all/20260820182015.4272b7a4@fedora/
-[4] - https://lore.kernel.org/all/20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com/
-[5] - https://lore.kernel.org/all/CAOu3gNiaCgfPDjVJrt5hLkDuw9nU8-Om50MhZaP2U--91S9N+A@mail.gmail.com/
+>     kprobes: mark ftrace-based kprobe ops permanent
+>
+>     kernel.ftrace_enabled=0 silently disables ftrace-based
+>     kprobes/kretprobes: arming succeeds, the probe stops firing, and
+>     re-enabling restores it. Unlike trampolines, they never had this
+>     protection.
+>     kprobe_ftrace_ops and kprobe_ipmodify_ops are used only by
+>     ftrace-based kprobes, so FTRACE_OPS_FL_PERMANENT, as livepatch uses,
+>     is safe here.
+>     kprobe.multi, kretprobe.multi and kprobe.session (fprobe-based) are
+>     not covered: their return path shares the function-graph subops
+>     manager with unrelated tracers.
+>     Cc: stable@vger.kernel.org
+>     Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+>     Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>     Acked-by: Steven Rostedt <rostedt@goodmis.org>
 
-Andrey Grodzovsky (2):
-  bpf: mark trampoline ftrace_ops permanent
-  kprobes: mark ftrace-based kprobe ops permanent
+Is the problem described in the first paragraph still reachable in this
+tree?
 
- kernel/bpf/trampoline.c | 4 ++++
- kernel/kprobes.c        | 5 +++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+Commit b0c857049153 ("ftrace: deprecate disabling via ftrace_enabled
+sysctl") is an ancestor of this commit.  ftrace_enable_sysctl() now refuses
+to clear the flag:
 
--- 
-2.34.1
+    } else {
+        /*
+         * Disabling ftrace at runtime via this knob is deprecated.
+         */
+        ftrace_enabled = true;
+        pr_warn_once("The ftrace_enabled file is deprecated and no longer disables ftrace\n");
+        return -EOPNOTSUPP;
+    }
 
+That commit also removed is_permanent_ops_registered().  After it,
+ftrace_enabled is only 0 transiently: inside the sysctl handler under
+ftrace_lock (which every ftrace_startup() caller also holds), after
+ftrace_kill() (where ftrace_disabled already makes ftrace_startup() return
+-ENODEV), and in the kexec point-of-no-return paths.
+
+So the statement "kernel.ftrace_enabled=0 silently disables ftrace-based
+kprobes/kretprobes" does not hold here, and this patch has no observable
+effect in this tree.
+
+The v2 cover letter says the change is meant for stable kernels where the
+sysctl can still clear ftrace_enabled.  The commit message does not say
+this, so a reader of mainline history, or the stable team picking it up
+without a Fixes: tag, learns neither that mainline is unaffected nor which
+trees need it.
+
+Could the changelog say this is only needed for kernels without
+b0c857049153?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42143371906
+--===============0551742847628527584==--
