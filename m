@@ -1,83 +1,83 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793998337;
-	b=JtkNLdbqfdCyCf0c2/jve3gMH/QKz1R8sOhKryYGoajDnp9cEVFz9J9JFFZGsfmrzZyP
-	 k36vwHMlm2omVQRWMKwP00xrrvfbyPQmn7n6Yvs9q/ST3XAuk9NxxanCllsRw/1+9AV/d
-	 FAhE/M5q10X3w0j7LPeekfMEr95n1oYfy6YjmTwR7CtTwxRTd34FVdIOHfHOPVN6nWRfi
-	 RQJBVpXUyWIJ0JodhkOMWhqi6SVCEKaUjzBPbmgwT+jjHX2lDA1o/ELdNxL1OUpof+5fS
-	 5K6w9Y21UkgQGe/Nhjxel3g5hVg41le0boQVjIvGvtmDQyBlb8zDe6vW5EPkCa4CjDQ==
+	t=1793998343;
+	b=Hp2CRv0bp4ZHCfXwBCYDZIQigjbRZz/yB8oij+dsG2Q/ZFiMzeB4mu9lShxNB2QwMA6n
+	 69aDa/yFoq7Hi25raNZJF8tgrrAtddAjNAgdRgpo8C72AYKRY3qVCUzYvrRioC3hNg8+3
+	 1uo9k6ZdqeZoHu8v7shZBzpJORIzhQuKcbzgLd6GrcBuiONWtbtFC4+HOFzeySdTtclkw
+	 owtQdJGVZQTZzwHCTO85bSqQrQrhbh6Qx+4ZRHpniLjUOTVsvo/k9ER5Jb7xmlBVZMr7Z
+	 jVKjl6phce0DB8Ea5uRtxJH4iUyg80i6b7HTzj3224PGrh66VQC41sqMZSGEvvKlLDA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793998337;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793998343;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=qyl271xS4NaUQkQEDfJP7TOW84m77rHK/njFeThb4gM=;
-	b=1N8uU1T4bJoNa0JGeK4tBXLMUXBMNzweROR0FoYKlrc0w8XlKOfKkW2jR83JrZ+Puyqh
-	 YT2roIP+VsZ1zOhAIo5kZ0xp2Yp4t/fBIsM/tWw4hS/Zi366GiNnoxOmHGg5BljTf42kX
-	 3NrHpoutItDGcR4V6mLMChpoArpgFWPnvmxM2PZNP3EJMNJ2C9KoR3mrWGK5W/QOpz4Sp
-	 r7ivgiKyD96wlQTxKg2eiwATupXaeoTRtqTlggX1Tye+oq9fLReXM4IpOIOlgPO5oiUqy
-	 SzkdV7MOCHyIXqn1L+2ibklFTwKrLeyPnXa/FRrcCushlxuLVsn/bIwkjrjtt1WnOoQ==
+	bh=EBN/xCnp/8GohhExG8p2CJhgpS6H5k9nu5w5MsfDJqc=;
+	b=L0rhwogSBCU6z55a9EK1CaKImESms+55Hbye7AOw2UkTtCn1Xo1Zj5SbSH1z1rJpiFaB
+	 xYEz0J5gHpaskgIgUA3hM9R7upa/3zGEojUoM/VxG8FOk2K6WXZFoC00/jMMMIiplj5qk
+	 nYpydzLzaZGNh+OOANYL6c6Df1gm/wjY2Zs1jqPiYcPmHOU9PabkBaG+fKwbBI4ugy4GG
+	 XBbMR/Nh9KCtwIF92LMDtaYuXX9WmNGZEbNEvEVQn7f5WZYoR6R7XR8qFeBXXvL0U3a0k
+	 AJHglNV8S1fxtLuiSnIJXWjAld+Ss6q+lN86ZMA4UlN5LXX6/hwpqZs8j2oDORTHdZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B6JYYw9K;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rP47Yk3s;
 	arc=none smtp.remote-ip=209.85.128.52
 Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E564F606D80F
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:52:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E564F606D80F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB0D6082BEB
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:52:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5CB0D6082BEB
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B6JYYw9K
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4a2167bd087so10077325e9.3
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:52:09 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rP47Yk3s
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4a1b07c3c5fso10247735e9.1
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:52:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793998328; x=1794603128; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793998341; x=1794603141; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qyl271xS4NaUQkQEDfJP7TOW84m77rHK/njFeThb4gM=;
-        b=B6JYYw9KHytgcsKRViIv702sJvZ13LITWymvU2GUgmjrKUaq/34AS+ZLL3ysWVLSLI
-         RJXl9Q9YqcwzD2rlx6xKf6dx41WgKvGiW0uMLEcdV+iI0e/8Gykut8ZaYfLCJyn8McBU
-         Kf2E46f8OrV2dtE0E+bp5xnDsudqH9wlOvjwL+ctwbcd9xgdgJ/mhbqI6N36LWAHumFf
-         J7h3qs6oBplssT9Iw3Q2hQdl9yAGulkfQRG41NX6q4/AB7CjTkX4BR/v+oVPNwslm5uW
-         ZRL4V7Biv0wgO6T4HV6FI6te4JC76snnf4I5eGfuexdLqirM7sjzMDOYj+2Nz+m38+FF
-         /Lyg==
+        bh=EBN/xCnp/8GohhExG8p2CJhgpS6H5k9nu5w5MsfDJqc=;
+        b=rP47Yk3sh1K4+PEzUxNA97M14ZZ1QFYAELMiqRp/JrZR0X9MzKusAuPt+VhMR8dws+
+         RHh+qIw+8BTaLrvikt+u53rz+2vZrJ6eyWV2EGVfDizKKbvFdasba9clcWtownAA/TSB
+         TR2zBRZgiuPC1sqiokTfZyuzxufmB2FhgH5OGvKf8Ku2q0O+QG8hySe68LwmekOIzfle
+         ubEqvuenLKK0a9AvoyC+QWP6Joi4WPR07y6nfshhFK/IaxyhvyqV3ibfn0MtJ7LAARQF
+         EiyIDxcuZz2/noHCJFofagKVOf2D75cuJbqYcjI8/+7LbGV/4iBpG4FcPQeUSHog5A3n
+         6P4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793998328; x=1794603128;
+        d=1e100.net; s=20260707; t=1793998341; x=1794603141;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qyl271xS4NaUQkQEDfJP7TOW84m77rHK/njFeThb4gM=;
-        b=Gzr/IbKb95I7snhyo+MHwDruNcfAw/Kp0duwZ/QtAyA1KN12y3jdn8rPkHEp5G92A4
-         HPUI4KtsI7UC7/p75V3RjeuqtY92xzuUqJkLNV7mbi9a9pooVI9MeMXPZRuvA/twedj6
-         cASBhdjbwWALtjKfj/PeLIv0AqXtb8+YcBu64alnYD9G+de6MaXL2wbdMYyytx3p+MFe
-         6XoIH1lVyZ1B7vJCJzy5ggcSE2Gh8YSjwWG54dqLezfpTho0CDSemUBk42WeqPDs66th
-         0NSLfiDXO3v47XIbAin6LZukG675FHgowJo02r7OhX6ftfDZyrkMzZ+t7K31ziB8mcFy
-         Vftw==
-X-Forwarded-Encrypted: i=1; AKwUvBzfXiVp1rB1IE8tTKgkXuITdW9cvr/9lzOKw1Xakc0VUHsT7XRQL8BfzcVQdMsm+e0o8iU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+Qi1XvHx6jLTfeA+1qgwSEWi780a2k4Pava+gdsfiNskYTYzvk
-	lMfqHw4YmJ2HYMDZkwUjg8Mxo4Hw+5wS7TXxeX3y9lE/M37gqp5TdYNs
-X-Gm-Gg: AYBFou1DkvMMQTGrhmvyCaRZd9uT4hCqYsrev5tT6o/H7XfdjUgfHsVb9pvJJIxVVFb
-	MNjy/vXOz4sJWuzA7GE9dyKXrdKaz5PBJPtRD+8XtcZnc5Q0v/BS8KRdpMRenTNLyeakkmN+y0x
-	dsEBoHhsDSNwT/V4YH+jEXsT3ulNjZ/gxZVH/tECSR6yboND/iaPrR9IUxPp9DY+rmCxIkKOvTC
-	Vf9LimZ3+mzILDEX6ONQnh+ieFjPWbmXbfXU5BztsMLYBkfQw60BRfsyL7UY/IiZ+QluVzrkxP4
-	uSz3uTnbIBnqjVIlQjOxBdg0S1vutG01Fq2k66briJt0q5sV0y9EHWPr0N3Shktf0ZYOcY8vhRY
-	CZ/FOxo0JJVesPnUDIh467YqDOCFUmbET4HLjUHU87dke29bS+GzP8B6/jgXX9bPXkKgfQu/ikA
-	k7QF+LJR9guQ+LzvmRlrL9itpJShdH6A9CKJs44uUYryU1/k/EzHVUcwvqzQu6sQV4lZisGljdr
-	mkn5mCsab0MIZDHr5PoeY2UUqjZDlMEoDJjZD5fIcH4OuZW7vZHzISFPIlx/cNG2uaQNH+wvOE7
-	z7StfMzvrfk1IMPYMMlp6TLxZCIAnefJ9Mn5rroKMzrc76w=
-X-Received: by 2002:a05:600c:5289:b0:4a2:a6e:80f5 with SMTP id 5b1f17b1804b1-4b6dea695f8mr70229315e9.11.1793998328189;
-        Fri, 06 Nov 2026 12:52:08 -0800 (PST)
+        bh=EBN/xCnp/8GohhExG8p2CJhgpS6H5k9nu5w5MsfDJqc=;
+        b=gmMQKH9VVYDJX8GacWgMJx1QSkAkAz0ht67HnyYCPqqk9MDf5i1s8sS9Hvy61pAe1c
+         rdMIOLnEhhbY0sa59KbLfPZexobaWw/HQL6xTeHEd/QoXD8xnya+Fr/uMu8VxJzaMzai
+         ed2+BGa1WeAN3JXFZbbkFumrW/BpxeIZkEnujwpewhd3qC5dTVgRRwBJAXePds3euPiM
+         LRCzIkA7XQMFoam7CDZWessg2wUHLKzuNqoaNbej7OYh3beZn9Vj7pGwS7+FVFYjR/6c
+         YpjWie8m8FaavToXcwk19ZUYVL/GjozZLQkCOp9W9KTAcPiQJHle8nPTzlwJZAPliBr9
+         Yg5w==
+X-Forwarded-Encrypted: i=1; AKwUvByYNckaKHTNmCpuEg336UTKAUMlghWJsZ+3YW3fYlPbbwsiOxaMw0/RgNt+dyyZIU4fOdk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+5RZZ2gvUBTwF55gfc98F7ZcQ3ADH6XNMaG2l2vBBEMBIuIxlG
+	O4s6/Kpt3sziW6VoMOiIueWzVMrCglTcv+6itvXWQ2b6aLtLcFfSxfagw3F9Rg==
+X-Gm-Gg: AYBFou1Hmg11Lp3Pb2XI7054loOGAW7Fl/LESUa4FX+CzYpIm/e0SgEnvtCSIL6oEUE
+	JgI0naFmzWvNRwhxhkXeO28WgbCjT2PdHeO0Hs6z+JNAxut1rftwXbGGbeRoCB7QL7tabhpZrSh
+	D3QbWgv23Md4EcuW2l+5AlL2CzPWvWg2gf1KGMBbba7Y8QkChVyVuuU1O0NoZBwToMx508kBbKg
+	4iNblxD12DT6oLLblqchcZ7X3WrPSu8LNvqcWv+GOz4PtcGtkRjqM/x32CG8TxMUI3vLSLNnVTK
+	CrNY9y0YrEYbGPssq/hQkWccH3MjBoSk2EGCxTiLe0z27umCkf2G4IvoJAUgUGIbpoQ/8IDuAr+
+	ckIj4csXlYGd+O10b5EnELiJOTsWiomGbGaPEz3iD9GsndzCXlR/SYHY5NN1ctn6qrjv/12+Ubr
+	D7qTZcKuiJ4sOkLy8oiCMtYBkaf2U3jxTEZSOZarlebKWuB89q9q7dlatw/tUsUxmfXO0dPnlcV
+	EL1fj5YUsrtU8HgBK2DvJ5A132oVhNajpyqpiJ1Ch+UKJyt7yGhMWYU5psbEX+I3ni3dHXEYJKs
+	KMRafyhNSVLFH9gnAzzpUzR/uidZOSjhg/o/hPf5QssVaqo=
+X-Received: by 2002:a05:600c:608a:b0:4a2:1364:252a with SMTP id 5b1f17b1804b1-4b6db0d07dbmr63129425e9.3.1793998340666;
+        Fri, 06 Nov 2026 12:52:20 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7da62edb4sm9075425e9.1.2026.11.06.12.52.06
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7da62edb4sm9075425e9.1.2026.11.06.12.52.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 12:52:07 -0800 (PST)
+        Fri, 06 Nov 2026 12:52:20 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -97,9 +97,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v1 bpf-next 07/18] scripts: Add LLVM plugin infrastructure
-Date: Fri,  6 Nov 2026 21:02:56 +0000
-Message-ID: <20261106210314.1767267-7-a.s.protopopov@gmail.com>
+Subject: [PATCH v1 bpf-next 17/18] selftests/bpf: Enable bpf_scan_ir in the config
+Date: Fri,  6 Nov 2026 21:03:06 +0000
+Message-ID: <20261106210314.1767267-17-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: 20261106205523.1765622-1-a.s.protopopov@gmail.com
 References: <20261106210314.1767267-1-a.s.protopopov@gmail.com>
@@ -114,262 +114,36 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add scripts/llvm-plugins and the corresponding Makefiles and Kconfig for
-LLVM IR passes loaded with -fpass-plugin, similar to the GCC plugins.
-Individual plugins register their configuration and shared objects
-separately. No plugin is added yet.
-
-Use LLVM_CONFIG to obtain the host compiler and linker flags. Require
-llvm-config of the same major version as clang, which loads the plugins:
-unlike GCC, clang does not provide the headers for its plugins. Require
-also a host C++ compiler which accepts the headers and flags of
-llvm-config.
-
-Build plugins without linking LLVM component libraries; their LLVM
-symbols are resolved by the compiler loading the shared library. Include
-a generated header so objects are rebuilt when enabled plugins change.
-Track the headers of a plugin, LLVM ones included, with a dependency
-file, as the GCC plugins do.
-
-Export LLVM_PLUGINS_CFLAGS so vDSO, EFI stub and early boot builds can
-exclude the plugins, as they exclude the GCC plugins.
-
-Add the plugin infrastructure to the CLANG/LLVM BUILD SUPPORT entry in
-MAINTAINERS.
+The bpf_scan_ir plugin is off by default. Without it bpf_testmod has no
+fixtures for the plugin and fmodret_retval skips. Enable the plugin in
+the selftests config, so CI builds and tests it. Kconfig ignores the
+options with GCC and with clang older than 19.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- MAINTAINERS                           |  2 ++
- Makefile                              |  6 +++++-
- arch/Kconfig                          |  1 +
- arch/arm64/kernel/pi/Makefile         |  1 +
- arch/x86/boot/startup/Makefile        |  2 ++
- arch/x86/um/vdso/Makefile             |  2 +-
- drivers/firmware/efi/libstub/Makefile |  2 +-
- include/linux/compiler-version.h      |  5 +++++
- lib/vdso/Makefile.include             |  3 +++
- scripts/Makefile                      |  1 +
- scripts/Makefile.llvm-plugins         |  8 ++++++++
- scripts/llvm-plugins/Kconfig          | 17 +++++++++++++++++
- scripts/llvm-plugins/Makefile         | 21 +++++++++++++++++++++
- 13 files changed, 68 insertions(+), 3 deletions(-)
- create mode 100644 scripts/Makefile.llvm-plugins
- create mode 100644 scripts/llvm-plugins/Kconfig
- create mode 100644 scripts/llvm-plugins/Makefile
+ tools/testing/selftests/bpf/config | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 93abbb315065..02b6c8963c63 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6562,7 +6562,9 @@ C:	irc://irc.libera.chat/clangbuiltlinux
- F:	Documentation/kbuild/llvm.rst
- F:	include/linux/compiler-clang.h
- F:	scripts/Makefile.clang
-+F:	scripts/Makefile.llvm-plugins
- F:	scripts/clang-tools/
-+F:	scripts/llvm-plugins/
- K:	\b(?i:clang|llvm)\b
- 
- CLK API
-diff --git a/Makefile b/Makefile
-index f895752d4b05..2fcad8109572 100644
---- a/Makefile
-+++ b/Makefile
-@@ -457,10 +457,13 @@ endif
- 
- HOSTCC	= $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
- HOSTCXX	= $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)
-+LLVM_CONFIG ?= $(LLVM_PREFIX)llvm-config$(LLVM_SUFFIX)
- else
- HOSTCC	= gcc
- HOSTCXX	= g++
-+LLVM_CONFIG ?= llvm-config
- endif
-+export LLVM_CONFIG
- HOSTRUSTC = rustc
- HOSTPKG_CONFIG	= pkg-config
- 
-@@ -1211,10 +1214,11 @@ include-$(CONFIG_AUTOFDO_CLANG)	+= scripts/Makefile.autofdo
- include-$(CONFIG_PROPELLER_CLANG)	+= scripts/Makefile.propeller
- include-$(CONFIG_WARN_CONTEXT_ANALYSIS) += scripts/Makefile.context-analysis
- include-$(CONFIG_GCC_PLUGINS)	+= scripts/Makefile.gcc-plugins
-+include-$(CONFIG_LLVM_PLUGINS)	+= scripts/Makefile.llvm-plugins
- 
- include $(addprefix $(srctree)/, $(include-y))
- 
--# scripts/Makefile.gcc-plugins is intentionally included last.
-+# The compiler plugin Makefiles are intentionally included last.
- # Do not add $(call cc-option,...) below this line. When you build the kernel
- # from the clean source tree, the GCC plugins do not exist at this point.
- 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 1163736de1f9..4f1f36d3e82d 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1772,6 +1772,7 @@ config HAVE_GENERIC_TIF_BITS
- source "kernel/gcov/Kconfig"
- 
- source "scripts/gcc-plugins/Kconfig"
-+source "scripts/llvm-plugins/Kconfig"
- 
- config FUNCTION_ALIGNMENT_4B
- 	bool
-diff --git a/arch/arm64/kernel/pi/Makefile b/arch/arm64/kernel/pi/Makefile
-index a273ab5af805..5813bb75c992 100644
---- a/arch/arm64/kernel/pi/Makefile
-+++ b/arch/arm64/kernel/pi/Makefile
-@@ -10,6 +10,7 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
- 		   -D__DISABLE_EXPORTS -ffreestanding -D__NO_FORTIFY \
- 		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
- 		   $(CONFIG_CC_OPT_NO_ADDRSIG)
-+KBUILD_CFLAGS	:= $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
- 
- # this code may run with the MMU off so disable unaligned accesses
- CFLAGS_map_range.o += -mstrict-align
-diff --git a/arch/x86/boot/startup/Makefile b/arch/x86/boot/startup/Makefile
-index 5e499cfb29b5..7036e939097e 100644
---- a/arch/x86/boot/startup/Makefile
-+++ b/arch/x86/boot/startup/Makefile
-@@ -12,6 +12,8 @@ KBUILD_CFLAGS		+= -D__DISABLE_EXPORTS -mcmodel=small -fPIC \
- # disable ftrace hooks and LTO
- KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS))
- KBUILD_CFLAGS	:= $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS))
-+# LLVM plugins may add data with absolute addresses
-+KBUILD_CFLAGS	:= $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
- KASAN_SANITIZE	:= n
- KCSAN_SANITIZE	:= n
- KMSAN_SANITIZE	:= n
-diff --git a/arch/x86/um/vdso/Makefile b/arch/x86/um/vdso/Makefile
-index 7664cbedbe30..0e32c9ae2b5a 100644
---- a/arch/x86/um/vdso/Makefile
-+++ b/arch/x86/um/vdso/Makefile
-@@ -37,7 +37,7 @@ CFL := $(PROFILING) -mcmodel=small -fPIC -O2 -fasynchronous-unwind-tables -m64 \
-        $(filter -g%,$(KBUILD_CFLAGS)) -fno-stack-protector \
-        -fno-omit-frame-pointer -foptimize-sibling-calls
- 
--$(vobjs): KBUILD_CFLAGS += $(CFL)
-+$(vobjs): KBUILD_CFLAGS := $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
- 
- #
- # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index bbab12b8eb4b..6f69d5d67731 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -6,7 +6,7 @@
- # enabled, even if doing so doesn't break the build.
- #
- 
--cflags-y			:= $(KBUILD_CFLAGS)
-+cflags-y			:= $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
- 
- # x86 links the stub into the decompressor rather than the kernel proper, so
- # drop the kernel's code model, calling convention, and stack alignment, and
-diff --git a/include/linux/compiler-version.h b/include/linux/compiler-version.h
-index ac1665a98a15..e6a5a9f3fbcd 100644
---- a/include/linux/compiler-version.h
-+++ b/include/linux/compiler-version.h
-@@ -24,6 +24,11 @@
- #include <generated/gcc-plugins.h>
- #endif
- 
-+/* Rebuild objects when an LLVM plugin changes. */
-+#ifdef LLVM_PLUGINS
-+#include <generated/llvm-plugins.h>
-+#endif
-+
- /*
-  * If the randstruct seed itself changes (whether for GCC plugins or
-  * Clang), the entire tree needs to be rebuilt since the randomization of
-diff --git a/lib/vdso/Makefile.include b/lib/vdso/Makefile.include
-index cedbf15f8087..848d58296ba2 100644
---- a/lib/vdso/Makefile.include
-+++ b/lib/vdso/Makefile.include
-@@ -1,5 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+# vDSO code executes outside the kernel.
-+KBUILD_CFLAGS := $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
-+
- GENERIC_VDSO_MK_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
- GENERIC_VDSO_DIR := $(dir $(GENERIC_VDSO_MK_PATH))
- 
-diff --git a/scripts/Makefile b/scripts/Makefile
-index d7fbb7ca098b..bc5dacc29207 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -66,6 +66,7 @@ hostprogs += unifdef gen_packed_field_checks
- targets += module.lds
- 
- subdir-$(CONFIG_GCC_PLUGINS) += gcc-plugins
-+subdir-$(CONFIG_LLVM_PLUGINS) += llvm-plugins
- subdir-$(CONFIG_GENKSYMS) += genksyms
- subdir-$(CONFIG_GENDWARFKSYMS) += gendwarfksyms
- subdir-$(CONFIG_SECURITY_SELINUX) += selinux
-diff --git a/scripts/Makefile.llvm-plugins b/scripts/Makefile.llvm-plugins
-new file mode 100644
-index 000000000000..e18f4907b015
---- /dev/null
-+++ b/scripts/Makefile.llvm-plugins
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+LLVM_PLUGIN := $(llvm-plugin-y)
-+LLVM_PLUGINS_CFLAGS := $(strip $(addprefix -fpass-plugin=$(objtree)/scripts/llvm-plugins/, \
-+	$(LLVM_PLUGIN)) -DLLVM_PLUGINS)
-+export LLVM_PLUGIN LLVM_PLUGINS_CFLAGS
-+
-+KBUILD_CFLAGS += $(LLVM_PLUGINS_CFLAGS)
-diff --git a/scripts/llvm-plugins/Kconfig b/scripts/llvm-plugins/Kconfig
-new file mode 100644
-index 000000000000..37db99159b9c
---- /dev/null
-+++ b/scripts/llvm-plugins/Kconfig
-@@ -0,0 +1,17 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+menuconfig LLVM_PLUGINS
-+	bool "LLVM plugins"
-+	depends on CC_IS_CLANG
-+	depends on $(success,$(LLVM_CONFIG) --version)
-+	# The plugins are built against the headers of llvm-config and loaded
-+	# by clang, so both must come from the same LLVM release
-+	depends on $(success,test "$(shell,$(LLVM_CONFIG) --version 2>/dev/null | cut -d. -f1)" = "$(shell,$(CC) -dumpversion | cut -d. -f1)")
-+	# The host C++ compiler must accept the LLVM headers and flags
-+	depends on $(success,echo '#include <llvm/Config/llvm-config.h>' | $(HOSTCXX) $(shell,$(LLVM_CONFIG) --cxxflags 2>/dev/null) -x c++ -fsyntax-only -)
-+	default y
-+	help
-+	  LLVM plugins add compiler passes to kernel and module builds.
-+	  Building them requires LLVM development headers and llvm-config
-+	  of the same major version as clang. Each plugin has its own option
-+	  below and is built only if that option is enabled.
-diff --git a/scripts/llvm-plugins/Makefile b/scripts/llvm-plugins/Makefile
-new file mode 100644
-index 000000000000..a1f8503c8bcd
---- /dev/null
-+++ b/scripts/llvm-plugins/Makefile
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+always-y += $(LLVM_PLUGIN)
-+targets += $(LLVM_PLUGIN)
-+clean-files += *.so
-+
-+# Run llvm-config only to build a plugin, not when this Makefile is parsed
-+llvm_cxxflags = $(shell $(LLVM_CONFIG) --cxxflags)
-+llvm_ldflags = $(shell $(LLVM_CONFIG) --ldflags)
-+
-+quiet_cmd_llvm_plugin = HOSTCXX $@
-+      cmd_llvm_plugin = $(HOSTCXX) -Wp,-MD,$(depfile) $(KBUILD_HOSTCXXFLAGS) \
-+		$(llvm_cxxflags) -fPIC -shared $(KBUILD_HOSTLDFLAGS) -o $@ $< \
-+		$(llvm_ldflags)
-+
-+$(obj)/%.so: $(src)/%.cpp FORCE
-+	$(call if_changed_dep,llvm_plugin)
-+
-+$(obj)/../../include/generated/llvm-plugins.h: $(addprefix $(obj)/, $(LLVM_PLUGIN)) FORCE
-+	$(call if_changed,touch)
-+always-y += ../../include/generated/llvm-plugins.h
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 49dfe939467c..5461c32cd3cd 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -11,6 +11,7 @@ CONFIG_BPF_STREAM_PARSER=y
+ CONFIG_BPF_SYSCALL=y
+ # CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
+ CONFIG_CGROUP_BPF=y
++CONFIG_CLANG_PLUGIN_BPF_SCAN_IR=y
+ CONFIG_CRYPTO_HMAC=y
+ CONFIG_CRYPTO_MLDSA=y
+ CONFIG_CRYPTO_SHA256=y
+@@ -56,6 +57,7 @@ CONFIG_IPV6_TUNNEL=y
+ CONFIG_KEYS=y
+ CONFIG_LIRC=y
+ CONFIG_LIVEPATCH=y
++CONFIG_LLVM_PLUGINS=y
+ CONFIG_LWTUNNEL=y
+ CONFIG_LWTUNNEL_BPF=y
+ CONFIG_MEMCG=y
 -- 
 2.43.0
 
