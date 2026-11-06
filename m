@@ -1,82 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.99
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793988976;
-	b=tTghwcF6hdRFd2bINg0gfNaCYqkAGXe6xy8MZfgU/sz8QGvNRO2bcmsczdm61XVHR8Ip
-	 FcGa6hx/1ZLyxDWrRyH07484yLfyM3lveM2JIesuQE6FrCOUE69Yt5JcRZs4+P8yeG5uz
-	 k4NDhGaBCFs1EZJr60VKHQSWZRXzWTiMSFE0t1v8hvxva2OiXGoy2cSGKrNeyKQuDufVf
-	 /jGJ6NK1oqicXaScXlDoSkP+b/tjKhWAHXgj902wzC9rthPnFNTyvs0gKl3kklJeZM9B9
-	 iklgn+tjkQrPpxSkmW7UCKJCA8kt+CnLOZnJJAFZEz6lGPqmYUBZgFHridRLJwHnFGg==
+	t=1793989213;
+	b=Ejy29pAUH4e3afTgxvUwIFDXxkfgzylsb8OlS3jqLsuLhDK4p1EGI5PiYN+jBFGXIwzL
+	 7LTZOcN4SRphaz3Ui9jl6gYeOMf8jr7RwdBwMTpQ/R1cHXnd0OoGsSSgBpcXVbJUBcD1H
+	 wMpdjNl89MgyK8mAmSafIbftfxTGrG1d1z9djRDU7qO7F4pptssB4jvdQ3htAAE8OqblL
+	 EJnu81p7BwP/WDWDbklZ1u0Tcz+igdOt2uj5o1Bl9YIzXBr0T6jRQ+b7Z3nwKldPBlRqb
+	 97h+mWuE2VPPjjyJKfcJUAXOFyY+jaa0V1DxursgixhK6dTWKEtmvrFBRd6uc9vloAA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793988976;
-	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=oj7yyLGXka6snyLwwPDV89YPr2tF7hbTbrbYfPXXDNc=;
-	b=FdhHlAtPsCnPeUoWhRQ4XaOLNY2YLqyGIk38OmJn3ZYbhcv1ke1XPmDPMlAmzyfGqNZG
-	 ZgXtlWGM9dNRg7+GFYKDv8Tusu/EsHdJ14+fWa4/1CFLyU/gdZE2qB+EJ5xZKEb7XYHOK
-	 +VAon2DnvHb952ws6JxpEE5hfch4rnBjpCruLid5jdXi2q4cRttIAgnaDTvXplmvoNdvl
-	 jG/fw5z8HtV21sDdOnBIGd3soMLw/wOUAw/Xv5Eeh7YlH15JnVyjdEbmlvHP871WhmwDE
-	 jK8fA9OYwXVu1TL2X4kXaCMgU+Qb1xtHaTWfcQdFs/hj0uO1Amqtc7S6Kfequ1mhh1A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793989213;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=vVMMjsoejtuZj+6jaOVjoI+Z/1D0Mv2jKvwK7taNrxA=;
+	b=r1cv5VwKyFGIHHynOmeenJjdszxYu6m5aPtoFvSIMCs1gpfREAC9uOgg3bwWqxouZ883
+	 wsAtRmm86R8doSXgJa6i8zuXPEh/xV/v07iBhlJR2CIh2zo0FhtL7OodTiV61klNayqN+
+	 b+RU7ykWwsmelKlG5CXjs1ca0DaVuFBpraLPx9QEEa6Ys8s1OKS1tMUj0FE5bLya/Oy7g
+	 vS/nFtSe0KJa4F+GATANbP9jaGzbGyXFeK1eelokZFcvvTEhxeTaSQpiu9Oj+C60C4agZ
+	 yu65bg6laSKQ3QmlqkN+Dv4OITlr921gbJKexzZBudrr4rFMrtCH4ZGPy/OHgombskQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.alibaba.com;
-	spf=pass smtp.mailfrom=linux.alibaba.com;
-	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=T8bVa0HA;
-	arc=none smtp.remote-ip=115.124.30.99
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--weiwan.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=M77jK3Gd;
+	arc=none smtp.remote-ip=209.85.214.198
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F498606A329;
-	Fri,  6 Nov 2026 18:16:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F498606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D300606A337
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 18:20:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9D300606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--weiwan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=T8bVa0HA
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1793988972; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=oj7yyLGXka6snyLwwPDV89YPr2tF7hbTbrbYfPXXDNc=;
-	b=T8bVa0HANS3Twz08sAhyHtzokmQQYzTA/JpbpY/Sn0yZ6Se9G7MIIuQS1JUsaT7A9RYMLoq8RZjUxMjKL2Lb2rVhQE9aPy3n2DMfmetNZpiypB5a+pfuqNMxrUgof2z7hr9Qbv3H6ldhL8aH7aWOue7Sq9iWOBRa/g0MsLBXoHY=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=28;SR=0;TI=SMTPD_---0XECMC2V_1793988969;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XECMC2V_1793988969 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Sat, 07 Nov 2026 02:16:10 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	puranjay@kernel.org,
-	alexei.starovoitov@gmail.com
-Cc: eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	pulehui@huawei.com,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	luke.r.nels@gmail.com,
-	xi.wang@gmail.com,
-	shuah@kernel.org,
-	rgbi3307@gmail.com,
-	guoren@kernel.org,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 bpf-next 2/3] selftests/bpf: Enable private stack tests for riscv64
-Date: Sat,  7 Nov 2026 02:15:57 +0800
-Message-ID: <20261106181558.1564-3-cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261106181558.1564-1-cp0613@linux.alibaba.com>
-References: <20261106181558.1564-1-cp0613@linux.alibaba.com>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=M77jK3Gd
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2ed34e33913so5562145ad.0
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 10:20:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793989212; x=1794594012; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vVMMjsoejtuZj+6jaOVjoI+Z/1D0Mv2jKvwK7taNrxA=;
+        b=M77jK3GdF10MK0SFm6xKbtL4I00S0TgdZ1/xKISKVEwsLGZwbFJ5bkE2ZalS2qQ+HZ
+         e/gRLQ+TmqQtBTZ0nZkGwRkfBPJcDoulaP6hf1G0DgprojSww+q87VTESrOXgN9oMJqz
+         9S2bO4fxfoXa5ZYXnfnby+Runhw1YLjcmb/ssfDdRHSuVztt/GupfikH681rI4O5JMVf
+         uCLqpC2RUcmtYHzdtuI1Kc+UaOBbJJOTOH5XQr+Y1Ccr4AlB6oV0YlEVxDRACnCycsz2
+         wLThmIvFat6LnreBgVQ07hlVMVodSdAKEMskqAPxFztARFTEVSTaueF+TfUN6Q0epKnu
+         tx2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793989212; x=1794594012;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vVMMjsoejtuZj+6jaOVjoI+Z/1D0Mv2jKvwK7taNrxA=;
+        b=TH7sLCxifDL1gT+D86Sx6PZbbaXgePy+wQYLeJriF7KXaGMtiEOvyOU6R8kW0dKw7P
+         jqpNxJxVBhwkNoh+EoQKByNFyTJnYFivd5VJixQUaYupo9EvGyy5uevzqGrF7mWmNIyV
+         AeqfcL7oH4O+Vu6YddlBCYBZcimRS+48dkNNYXKjElk+KzsPHGmQAwzIg4nXUUpR3xoV
+         SgBY4IK3H63xP+E1ghtrEriCGWau5+AGR6EDA0HG/j128UjCNgQnYSWIxudDZwcfOR6r
+         uq/kkaZfylXzv38H0DDAYIbVYQ0eF9FNz6S+y6sSZjmnOVHGspwXeSTQAEkLOIA6gTEM
+         QUNw==
+X-Forwarded-Encrypted: i=1; AL+hErECZ4lT0kh5MVHUk7AJxaw9udjWq6SgBD53ekeKMyprSk3GHSPRz/9ZHpXX86KZzcfV3PM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/cAA8wdDtBQU8T6H4Oex0oUOdyFq/yLgRQxpeFOcffwwrbgzf0
+	QYk6ZP89mGiE6pJenuaMu0kSp/M+Zdt6g90VSAE7CaMfkwHHWspahj9ajNCsWkjxfulf6LtW7WO
+	ec8XSTA==
+X-Received: from pjqq12.prod.google.com ([2002:a17:90b:584c:b0:3ae:825a:57e3])
+ (user=weiwan job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3ec8:b0:3ac:ad90:7090
+ with SMTP id 98e67ed59e1d1-3b0db72df0fmr3414472a91.67.1793989211751; Fri, 06
+ Nov 2026 10:20:11 -0800 (PST)
+Date: Fri,  6 Nov 2026 18:20:06 +0000
+In-Reply-To: <20261106182007.374660-1-weiwan@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,128 +78,106 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20261106182007.374660-1-weiwan@google.com>
+X-Mailer: git-send-email 2.56.0.455.g6c5a503b38-goog
+Message-ID: <20261106182007.374660-2-weiwan@google.com>
+Subject: [PATCH net v3 1/2] net: Make PSP skb extension survive packet scrubbing
+From: Wei Wang <weiwan@google.com>
+To: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>
+Cc: Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Daniel Zahka <daniel.zahka@gmail.com>, Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, Wei Wang <weiwan@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-The RV64 JIT now supports the private stack. Allow the existing
-verifier and struct_ops private-stack tests to run on riscv64 and add
-the expected RV64 JITed instruction patterns.
+skb_scrub_packet() drops all skb extensions unconditionally via
+skb_ext_reset(). It runs on tunnel encap/decap (ip_tunnel_rcv, vxlan_rcv,
+etc.) and virtual device forwarding/redirection (dev_forward_skb,
+netkit_xmit, skb_do_redirect).
 
-Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
-Reviewed-by: Pu Lehui <pulehui@huawei.com>
+When a virtual device such as netkit is associated with a PSP device in
+another network namespace via PSP_CMD_DEV_ASSOC, incoming PSP packets
+decapsulated by psp_dev_rcv() lose their SKB_EXT_PSP extension when
+scrubbed during redirection into the peer netns. Without SKB_EXT_PSP,
+__psp_sk_rx_policy_check() rejects incoming TCP data segments at the
+socket layer with SKB_DROP_REASON_PSP_INPUT.
+
+Introduce a static skb_ext_scrub() helper in net/core/skbuff.c to
+preserve SKB_EXT_PSP across skb_scrub_packet() while dropping all other
+extensions. If SKB_EXT_PSP is not active, skb_ext_scrub() simply calls
+skb_ext_reset(). If SKB_EXT_PSP is the only extension in the skb_ext
+buffer, nothing needs to be scrubbed. Otherwise, save the PSP metadata,
+reset the extension block, and re-add a fresh SKB_EXT_PSP extension.
+
+Fixes: 06c2dce2d0f6 ("psp: add new netlink cmd for dev-assoc and dev-disassoc")
+Link: https://lore.kernel.org/r/20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com
+Reported-by: Daniel Zahka <daniel.zahka@gmail.com>
+Closes: https://lore.kernel.org/netdev/DLODSKPY6ON6.1G6SP3CFFLCPJ@gmail.com/
+Co-developed-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Wei Wang <weiwan@google.com>
+Reviewed-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
- .../bpf/prog_tests/struct_ops_private_stack.c |  3 +-
- .../bpf/progs/verifier_private_stack.c        | 41 ++++++++++++++++++-
- 2 files changed, 42 insertions(+), 2 deletions(-)
+ net/core/skbuff.c | 30 ++++++++++++++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-index 2b3ec2b79091..103179ff8733 100644
---- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-@@ -6,7 +6,8 @@
- #include "struct_ops_private_stack_recur.skel.h"
- #include "struct_ops_private_stack_large.skel.h"
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 93c2f440b9ec..ddbf0f3342ca 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -6369,6 +6369,31 @@ bool skb_try_coalesce(struct sk_buff *to, struct sk_buff *from,
+ }
+ EXPORT_SYMBOL(skb_try_coalesce);
  
--#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__)
-+#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__) || \
-+	(defined(__riscv) && __riscv_xlen == 64)
- static void test_private_stack(void)
++static void skb_ext_scrub(struct sk_buff *skb)
++{
++#if IS_ENABLED(CONFIG_INET_PSP)
++	struct psp_skb_ext *pse = skb_ext_find(skb, SKB_EXT_PSP);
++
++	if (pse) {
++		struct skb_ext *ext = skb->extensions;
++		struct psp_skb_ext tmp;
++
++		/* Nothing else to scrub if PSP is the only extension in ext. */
++		if (ext->chunks == SKB_EXT_CHUNKSIZEOF(*ext) +
++				   skb_ext_type_len[SKB_EXT_PSP])
++			return;
++
++		tmp = *pse;
++		skb_ext_reset(skb);
++		pse = skb_ext_add(skb, SKB_EXT_PSP);
++		if (pse)
++			memcpy(pse, &tmp, sizeof(*pse));
++		return;
++	}
++#endif
++	skb_ext_reset(skb);
++}
++
+ /**
+  * skb_scrub_packet - scrub an skb
+  *
+@@ -6380,7 +6405,8 @@ EXPORT_SYMBOL(skb_try_coalesce);
+  * operations.
+  * skb_scrub_packet can also be used to clean a skb before injecting it in
+  * another namespace (@xnet == true). We have to clear all information in the
+- * skb that could impact namespace isolation.
++ * skb that could impact namespace isolation. Note that PSP skb extension is
++ * preserved across packet scrubbing by design.
+  */
+ void skb_scrub_packet(struct sk_buff *skb, bool xnet)
  {
- 	struct struct_ops_private_stack *skel;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-index aa15361bcca5..3cde7b1af126 100644
---- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-@@ -8,7 +8,8 @@
- /* From include/linux/filter.h */
- #define MAX_BPF_STACK    512
+@@ -6388,7 +6414,7 @@ void skb_scrub_packet(struct sk_buff *skb, bool xnet)
+ 	skb->skb_iif = 0;
+ 	skb->ignore_df = 0;
+ 	skb_dst_drop(skb);
+-	skb_ext_reset(skb);
++	skb_ext_scrub(skb);
+ 	nf_reset_ct(skb);
+ 	nf_reset_trace(skb);
  
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)
- 
- struct elem {
- 	struct bpf_timer t;
-@@ -42,6 +43,14 @@ __jited("	mov	x0, #0x2a")
- __jited("	str	x0, [x27]")
- __jited("...")
- __jited("	ldp	x25, x27, [sp], {{.*}}")
-+__arch_riscv64
-+__jited("	addi	sp, sp, -0x20")
-+__jited("...")
-+__jited("	sd	s5, 0x10(sp)")
-+__jited("...")
-+__jited("	sd	a0, -0x100(s5)")
-+__jited("...")
-+__jited("	ld	s5, 0x10(sp)")
- __naked void private_stack_single_prog(void)
- {
- 	asm volatile ("			\
-@@ -60,6 +69,10 @@ __jited("	subq	$0x8, %rsp")
- __arch_arm64
- __jited("	mov	x25, sp")
- __jited("	sub	sp, sp, #0x10")
-+__arch_riscv64
-+__jited("	addi	sp, sp, -0x30")
-+__jited("...")
-+__jited("	addi	s5, sp, 0x10")
- __naked void no_private_stack_nested(void)
- {
- 	asm volatile ("			\
-@@ -153,6 +166,14 @@ __jited("	str	x0, [x27]")
- __jited("	bl	{{.*}}")
- __jited("...")
- __jited("	ldp	x25, x27, [sp], {{.*}}")
-+__arch_riscv64
-+__jited("	addi	sp, sp, -0x20")
-+__jited("...")
-+__jited("	sd	s5, 0x8(sp)")
-+__jited("...")
-+__jited("	sd	a0, -0x200(s5)")
-+__jited("...")
-+__jited("	ld	s5, 0x8(sp)")
- __naked void private_stack_nested_1(void)
- {
- 	asm volatile ("				\
-@@ -223,6 +244,16 @@ __jited("	bl	0x{{.*}}")
- __jited("	mov	x8, x0")
- __jited("	mov	x8, #0x0")
- __jited("	ldp	x25, x27, [sp], {{.*}}")
-+__arch_riscv64
-+__jited("func #1")
-+__jited("...")
-+__jited("	addi	sp, sp, -0x20")
-+__jited("...")
-+__jited("	sd	s5, 0x8(sp)")
-+__jited("...")
-+__jited("	sd	a0, -0x200(s5)")
-+__jited("...")
-+__jited("	ld	s5, 0x8(sp)")
- __naked void private_stack_callback(void)
- {
- 	asm volatile ("			\
-@@ -452,6 +483,10 @@ __arch_arm64
- __jited("	mrs	x10, TPIDR_EL{{[0-1]}}")
- __jited("	add	x27, x27, x10")
- __jited("	add	x25, x27, {{.*}}")
-+__arch_riscv64
-+__jited("	addi	sp, sp, -0x20")
-+__jited("...")
-+__jited("	sd	s5, 0x8(sp)")
- int private_stack_async_callback_1(void)
- {
- 	struct bpf_timer *arr_timer;
-@@ -481,6 +516,10 @@ __arch_x86_64
- __jited("	subq	$0x100, %rsp")
- __arch_arm64
- __jited("	sub	sp, sp, #0x100")
-+__arch_riscv64
-+__jited("	addi	sp, sp, -0x120")
-+__jited("...")
-+__jited("	addi	s5, sp, 0x100")
- int private_stack_async_callback_2(void)
- {
- 	struct bpf_timer *arr_timer;
 -- 
-2.50.1
+2.56.0.455.g6c5a503b38-goog
 
