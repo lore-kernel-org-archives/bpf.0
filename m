@@ -1,100 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.175
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793925209;
-	b=mmobtIKwaO/s2zhWRKRCseufsSlgEStoF5EIi/4C3GRoMrmfF75BEdBmWIFpdh7nq+zE
-	 4E5rqE5Cha88vPG04RtYnouepi2C58KXktElOqXU12Ndc07FbzX/44sMlK+n5TRfXybEb
-	 FCcdXQ2THl6wh1EnMpEZ+J9WO2URXF86fzOXX48wp78IfUnyowOa/Zdsehzo6aKm10JY1
-	 hpSNnKx+bAiZ3zHQx6+dYt6QawbOA/kEp6cIfWZ9XRceaP0KhocOl1GG9M02uotHfzB6z
-	 EbbyIw6M1BsezSNvTI+X/nMmthn47Gt2DMjKppq+aLMYUA3m3Q4FdsC8d9Aj2NLlPyA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793925209;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793925267;
+	b=o2LO67ng0nvpGIHVJvUB4wH29Xfp4q/gHk5YEJf8S46hxhIkSlkYwjXQ+sBEdePERDUp
+	 YWxtMIItcYVk/ynYujdfqh41YGW0bXWGnUIRKnu0IyzyLb1qJ3NJs49+xmyInijNyZZqY
+	 xU+9HPpGtOy0UIBn54IxwrR/R9VW8MZMSpBKfjdqF5NxVJYuV/zl6047YnKxpU5nzViF5
+	 6ANa5O4cDa5p19eubWzYKvRmZGctqIzLljzZtYY8iEme0wWgYqjCTn0xiNyiL3u4DqKjH
+	 7Uqy1X7w6c3Fn93f8SS6KHj9yGWVp8CrLhOGfR3ng5aiAmmCUvWlKiC3M7KRIqEcE8g==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793925267;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=SwtNDvLuC8dzEY+y1VuPyC8x8lvTjr4xeYCs0VMxuA0=;
-	b=bl8+I7yocOCJ2B+Y1R0/dIQyjQBEM7GIJSQJPG2DBvovjjmj6qwpSxWkUAAcx6E6oMv0
-	 vqUR6p++uF7PSglrnsXJSLJCP6NAu7KHIIZOF/53VChUDja3Q5O7TqWc8/KSCtGzIkhKj
-	 hE4a6j4i7WmxkBnwUYV1lF2C7bdGL5B80TN3+PkawEWXb0yF+Vp00c0qHq6FewNqFEvKN
-	 WpRS0fLNwokxUh0kxBGWdTU3R3t5Y9hthJgkL+AAvEpiSksEkR9Tacc2ukXQ2GgN43QGP
-	 zYoFF5s61QdJK1q1mo/bLmsOlG2I36Sh3qKgFmGsRpgCFVUYHBWEnz/g+PvypzAiULA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ywu+sHfE;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.175
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=K+Ut+xx++cvoD54kULsxZTzAT6QhGrXt9ToGo7GaMtg=;
+	b=wBYzlVO/s0D24ORWWr1Plor5HepykBmz6dWdzbTIBKdeUqQYMfWf0xbw2QrOLU2vlEUx
+	 LmbiTIEWeiDUFMWqUjFfObuatzRfriXcKvPkO8g1vFUYs1hKWj9OLYVY6jGP5k65h1rom
+	 EuUTB7A6wEt6sZSRxqPixHA4kI7q5j2lzsPSTHNAl2GR9GpGSdxpXnuBLA7nlWD0qAcZz
+	 ysIIcCu6T2aRqjFvhfhoeFCaMab1ZL3x4AtX0FY4WD7wnWo6TSmQo2wSYkwhqIvuC4+P9
+	 V7AWUXUuLVoLBl7u7YNz+/XIVHmojZeZUgpJ+KY/VCVupHgcCXUxJrX2G9kmU4Zm9Bg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Lc8IYh/J";
+	arc=none smtp.remote-ip=209.85.214.174
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FCF606A329
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 00:33:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76FCF606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88E2606A32F
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 00:34:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B88E2606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Ywu+sHfE
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-54492d8a988so6751cf.0
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 16:33:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793925208; cv=none;
-        d=google.com; s=arc-20260327;
-        b=SMZLcsMOBEmBwjPOMPGCkncpiMHW5b3bdEUM0kzq8FWTg1NjoJavGQsEr16C+sODuc
-         9wertVUasOqvL2QPEDQgPMnGjK7thgwKLRFHTJY53R4Hy4M2BuAv3sCQPpqCFu5O5UzO
-         bieXj6dW5M6r+ym6h0HTQxQc2HLTHZSNvJH5kwc5z95jgv2OpJU54VcAt/WjSYjTJBff
-         8SUKg789LYjMazq3iNupF/XJ1/rwsIji2IxrisKia0SUN8Ulp0AMAODm4BSiNHH4Lj7V
-         Jw0JL66fQ+MaLDm8720aUZH/sRBiE9aUmNvCfpLomCFatmvBIXqKhkQjQzdlunlFY1IK
-         EcLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=SwtNDvLuC8dzEY+y1VuPyC8x8lvTjr4xeYCs0VMxuA0=;
-        fh=f0wD1zSoPgrkmRnm7QQbzBphONSEJ4UGLO3Oj53QgX0=;
-        b=J0qbtbDYZjQJQ4KOdtfSKv7OiSbNVCzTbXXnjr7h+Ic45o0tEJs1jVhxf5T12D/b0E
-         8gmjfrGUpMH1+5ww83C9ldh6Yp4Ic214JQszkXYpF14rLxufY+Pd99C9EPzPuhZaEQ6r
-         RsTpHnlZs0Cm0AbQFyDhGjcSvu6v8qVpyd3/dTSKL1bFnjWYmgNtkBygMylItGvSvDaq
-         59kf259SxHBmrA6+eJeh8K3/+Sn5nXNqNwVSL8OTFd/4IHV3v4+kx/SZ+4WL84KKh2DT
-         Q97zFUaaf8v3mPS/c0sY/0hdK9MMbPFpihIBhv+pSEWZJWaJpomh6L3RnpH6E/7qUW99
-         njug==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Lc8IYh/J
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e946155442so581285ad.3
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 16:34:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793925208; x=1794530008; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20260707; t=1793925266; x=1794530066; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=SwtNDvLuC8dzEY+y1VuPyC8x8lvTjr4xeYCs0VMxuA0=;
-        b=Ywu+sHfEQDyswjTmGQokotF0uy7u7pCMR1FBPVPt/uNsbambe0jjQhrWBXTfquzB9N
-         GZiNFD1lNrI+2ZdS1Tv/9mkxSh4zUclo/6ejLOo1qkntPK9yqrWWXXyXztvxwgcxo34P
-         swCeIhL4ZNgjdIjw4H28L0g4fpaRDpvIgx+zfmvZiie+4msOl8OOKP5KfViJ3jVQpIee
-         axQztJfZmKw5NBT3LA1Dzunq0a0wGb6S8okE4abdMKE60zQWa4351nRk4RjQCjKBY/TV
-         8iO0zjweZMJabLuprxT9KX6flJRTA9R93M9WhgzMUf3ANqix4ArOKDfhKDBzVT8wAXGr
-         9Pow==
+        bh=K+Ut+xx++cvoD54kULsxZTzAT6QhGrXt9ToGo7GaMtg=;
+        b=Lc8IYh/JEFcZ5uh2Ls+Le80EEY2gnGXQdTVHDzN6DPOly4eHyo3KoZI3fDTzGoLoHR
+         xGGPgO2tDV8BwCERad176J71IXuf3spMJ8aBsRqrML3fYjIg27Jujv1DjrPkZuOnI4gW
+         OFk8WoT1iNo9K+KpPkTISsmb13lIOYUhem5F3+Nkihj8lPrvlVQV/oRXelqpzzn7kuWR
+         L9ZpYZ3VERSxO7skHMNzuf9AaYJkYqZra8BXqnVa4iySl0X4CFca/ZHzummiCnf/0nTZ
+         LZkUG+xRFmu4jIW2SFZR0tBailTDBsgEZ13gaZyytpb6WPKHLwfv3KEWqG5rH6RvxsVs
+         TZ7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793925208; x=1794530008;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1793925266; x=1794530066;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=SwtNDvLuC8dzEY+y1VuPyC8x8lvTjr4xeYCs0VMxuA0=;
-        b=d4PkBfoR/+IiZhx0u2CS6r2XE9phzoyvCv76gwtXTdjUctAf43gzKdEJpPeLRoGMfu
-         KniBno6ecWOwVC3zTzVFCmOL1rNq+JBWMv/v0b32CexEo75cmr6iIBgox+YivDHYmJ4z
-         yt2mlkRiekGJ8Vx/fVBR+iQ1Co3cwEl6oTbu3gV/Al43KaEhgRClyctoCTFi6RRSGmmy
-         TpAxngdToyXcp1ur5DRlj5pem0S72U4DXbAqXBVw0deltuDorvJC3CPWMNJ7DwdWFUon
-         NjZrsx/l/rIArObRrHv5BuGv3tAJxaYKQh+behPkbBSEJkMyWMUX6u6GFGQ1+evoGdOk
-         iHHA==
-X-Forwarded-Encrypted: i=1; AKwUvBwdnOS5a+jNUE2i/ewW2lfrJF5HKNC0E4Pf7yO0sKz0hSM5xYNN5rTpOkSGc9jmRJvD760=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8++uPL0oexUNt5g6paLxbHGHot3eH8JPUY6uc2/+sEDr+71mxK
-	rdkrlgLSFfSuAr2V/IFHHGxFxCPoofHjyxXhMzWSahnvqMYOOkeM9Dn5WvOwyZ0cauDlNGR5M02
-	2h4majVOGabdxpxexttsHcTbLS5IOfCPOajzFm4CNtzpnwoKk5VU66lYq
-X-Gm-Gg: AYBFou07BOWudaLBAADCgz9r0dDel1Zwpai5a/WpKN9VvpOSu1dLgoVICg+OEMjibjm
-	JltCA2mSaFTYvHBppO9R9F4e55Y8LjPxWiN2j7AuG4eEp75EV7TsPSmmHxaL97flRYEinVZy8b9
-	Ffn5ORLh+JPTkKBe7CNznPiujUWZApxzHnv+YSnsxZxMcIeACzPHVWs5TON4F5NdaaHMeqAxdXC
-	U7s9CyUVVUy4G+k0PYl7tDc6xY6/RfR601vTNoJhK3C5DwrLeZGdEuFDSW1Z06dUaFEdY4yQXmt
-	eIKOcBWxwb2n0PDX/7SyYVi//rRzvxaDCKl801x6ICgUXfwtXPyvQySX10fk1I29fBQkmf36PsE
-	3kUodIwkijx+8ymFyJfEq7UnYW/TI/MMfkgA=
-X-Received: by 2002:a05:622a:4012:b0:542:fc60:fe23 with SMTP id
- d75a77b69052e-54e1aca53b6mr6923411cf.3.1793925207042; Thu, 05 Nov 2026
- 16:33:27 -0800 (PST)
+        bh=K+Ut+xx++cvoD54kULsxZTzAT6QhGrXt9ToGo7GaMtg=;
+        b=0015Co4mgEUmKTxYh7Q0+zOKr+SqDApScRP9tOu0mhmDlq+xIW5ca8UffU5Dygad32
+         fBCU5oPsmlKksyKd2I+sT1XqYffcBpa3RqLxPfWL24deE6v3OEAI9NsqFwrrfubhRMXN
+         peutFMLUtdprHCF9LfTtb68PitUO97WNFIk7eWHa9sAjP4+qyysElj3KQF4IV09rkivR
+         qqTIbyEGiX95wgYm1zikJeu1la4PJBLcGrcHm754RTUCsggSjvS84COTYylGISddo+Pv
+         05q294o9sVKutQ8flO1t8dgTx3i8n9aqpRiWSurqVkbpveo5BRjrq4ZGHTWKLDi0pjBW
+         QN0A==
+X-Gm-Message-State: APuU4Z9mwh//tLZVcTodN9yKvUTF/nE/aF/MaCaPRjqpRdFIxmJOvG/c
+	0EvHmEWxL2HgJDvkIhKPVxxthw6MwDxArYj+l204ZrEp5heEitN0dGYHBdZCzQ==
+X-Gm-Gg: AYBFou1A4OxobdJ2nIHBZXwoZkWFpV0B4SMdhFOgWAkHXr2s+b6QM7mqYQiOh+cZlJi
+	Rs2+cidEZcnDLvd8k4EgkHnBfjAyKcmJy93o2LLYek/uYnEtphPmXZTcRqWY8rvNGETxiXlYFFU
+	6lSdBuEO4kcKFUSOtIGP70tglaAIoXi7bHamKsVW8a6EocdtW6tQyzb3n/6pJ1hrl9SvZFKI+JR
+	p8pp1G/1pb0ei5/gGGxJKnoQePuUml4kaukKFm9tfLRGHaY3xGi2jfBeLzDsn9XgKgBUwwg07z1
+	h9MyJoFzctcH0mBQsmWdvFShJFdfMqadQPZuYbEK5rdW3Pt10pC+oHt47OetV0hWYtsEzT5Q3O1
+	HJ4C+XrPS8Fe9i2MNgbjwmjliiFgcmoko/Z+X5xXTXjxvBvXc8JIU/FJtwD2IdOId4wVcH+kBbi
+	CNtArERRDfeO7opG7MXA33boz+JarwmHXQVZM7RJ43gysqx5I5UKZz7an8XnghXOA1F4OLox8id
+	m628o86+VaorWSw1+onQeuU5YSx8MJ6pIeZQiXubKWzyyiUzI84LHMERMPoMTPtS+VF+DhxUw3G
+	Rn5bpmWAdZBp+jIRcYdhkR0xRPXPblIPvLET7C1S7f7nAc4vy+RYL5BXvt4l6NIf99d0rIPYRtV
+	XcIOIq9qNWBckjJz7pH73E7y1eQ7dZFc67NLTgoANw3xRfx0QgC005DjT
+X-Received: by 2002:a17:902:e809:b0:2e9:5eee:e071 with SMTP id d9443c01a7336-2ed41c143a4mr13452565ad.57.1793925265801;
+        Thu, 05 Nov 2026 16:34:25 -0800 (PST)
+Received: from localhost ([153.61.198.246])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47da3e33sm344865ad.76.2026.11.05.16.34.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Nov 2026 16:34:25 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 06 Nov 2026 00:34:24 +0000
+Message-Id: <DMNPFLLMPZ4K.2G7GCW06P0T72@gmail.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v2 00/35] bpf: A verifier that joins states
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: <bpf@vger.kernel.org>
+In-Reply-To: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
+References: <20261105204513.2230344-1-alexei.starovoitov@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,108 +99,155 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261030043145.2185700-1-weiwan@google.com> <20261030043145.2185700-3-weiwan@google.com>
- <DMMQTFS3ULM2.3HSJGB1UT085M@gmail.com>
-In-Reply-To: <DMMQTFS3ULM2.3HSJGB1UT085M@gmail.com>
-From: Wei Wang <weiwan@google.com>
-Date: Thu, 5 Nov 2026 16:33:16 -0800
-X-Gm-Features: AclHuK9xp-pEOHgQDu3wgVgSsasOVenE5wfE8_PWHekQkM41Loq5TSIyXBPNcLU
-Message-ID: <CAEA6p_DCmSskWz5VUOQTmgcnsFDTKH3mSnOdxOxEJg2CU4k0vA@mail.gmail.com>
-Subject: Re: [PATCH net v2 2/2] selftests/net: psp: test bidirectional data transfer
-To: Daniel Zahka <daniel.zahka@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 4, 2026 at 1:26=E2=80=AFPM Daniel Zahka <daniel.zahka@gmail.com=
-> wrote:
->
-> On Fri Oct 30, 2026 at 12:31 AM EDT, Wei Wang wrote:
-> > _data_basic_send() and _data_basic_send_netkit_psp_assoc() currently
-> > only verify unidirectional data transmission from the test socket to
-> > psp_responder. As a result, they do not exercise the receive path for
-> > PSP-encrypted TCP data segments arriving at the test socket (such as
-> > packets redirected across a netkit interface associated via dev-assoc,
-> > which relies on SKB_EXT_PSP surviving packet scrubbing).
-> >
-> > Use the existing "data echo" command in psp_responder to verify that th=
-e
-> > test socket can also receive PSP-encrypted data from the peer in both
-> > _data_basic_send() and _data_basic_send_netkit_psp_assoc().
-> >
-> > Signed-off-by: Wei Wang <weiwan@google.com>
-> > ---
-> >  tools/testing/selftests/drivers/net/psp.py | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing=
-/selftests/drivers/net/psp.py
-> > index 473500901879..e507951b440b 100755
-> > --- a/tools/testing/selftests/drivers/net/psp.py
-> > +++ b/tools/testing/selftests/drivers/net/psp.py
-> > @@ -120,6 +120,12 @@ def _check_data_rx(cfg, exp_len):
-> >      ksft_eq(read_len, exp_len)
-> >
-> >
-> > +def _check_data_echo(cfg, s):
-> > +    _send_with_ack(cfg, b'data echo\0')
-> > +    s.settimeout(1.0)
->
-> I'm not a huge fan of setting the blocking timeout here. If we are going
-> to set a timeout it should be when the socket is created. Otherwise this
-> function has an unexpected side-effect. Another option is to use non
-> blocking reads with timeout like:
->
+There will be a v3.
 
-Will switch to non blocking reads in next version.
+Real bug is in patch 21.
+The callee gets wrong bounds, and an access out of bounds
+loads. It has to be clear_scalar_id().
 
-> def _recv_careful(s, target, timeout=3D2):
->     """Read exactly target bytes, tolerating short reads"""
->     data =3D b''
->     end =3D time.monotonic() + timeout
->     while time.monotonic() < end:
->         try:
->             data +=3D s.recv(target - len(data), socket.MSG_DONTWAIT)
->             if len(data) =3D=3D target:
->                 return data
->         except BlockingIOError:
->             time.sleep(0.001)
->     raise KsftFailEx(f"short read, got {len(data)} of {target} bytes")
->
->
-> def _req_echo(cfg, s):
->     """Ask the peer to echo, and check the reply arrives intact"""
->     _send_with_ack(cfg, b'data echo\0')
->     ksft_eq(_recv_careful(s, 5), b'echo\0')
->
-> > +    ksft_eq(s.recv(5), b'echo\0')
-> > +
-> > +
-> >  def _check_data_outq(s, exp_len, force_wait=3DFalse):
-> >      outq =3D 0
-> >      for _ in range(10):
-> > @@ -478,6 +484,7 @@ def _data_basic_send(cfg, version, ipver):
-> >
-> >      data_len =3D _send_careful(cfg, s, 100)
-> >      _check_data_rx(cfg, data_len)
-> > +    _check_data_echo(cfg, s)
-> >      _close_psp_conn(cfg, s)
-> >
-> >
-> > @@ -726,6 +733,7 @@ def _data_basic_send_netkit_psp_assoc(cfg, version,=
- ipver):
-> >
-> >          data_len =3D _send_careful(cfg, sock, 100)
-> >          _check_data_rx(cfg, data_len)
-> > +        _check_data_echo(cfg, sock)
-> >          _close_psp_conn(cfg, sock)
-> >
-> >
->
-> I'm ok with the approach overall. The coverage is sufficient for the
-> purposes of the series.
+patch  from     what
+-----  -------  ------------------------------------------------------
+1      sashiko  * Messages print the index of an insn after may_goto
+                  is added. It has to be orig_idx.
+4, 5   both     * join_reg() drops delta under explore_alu_limits.
+                  verifier_bug(), -EFAULT. No join in this case.
+                  It takes CAP_BPF without CAP_PERFMON.
+5, 19  sashiko    join_func() refuses a join when only 'b' has stack
+                  arguments. It costs one more state.
+9      both     * What bpf_rdonly_cast() and bpf_cast_to_kern_ctx()
+                  return counts as a number. A valid prog is rejected.
+9      sashiko  * ctx on one path only. The pointer to the packet
+                  counts as a number. The pass ends all the same:
+                  flow_kinds_meet() only clears bits.
+9      sashiko  * A pointer that store-release spills counts as a
+                  number after the fill. Load-acquire from a slot
+                  gives FLOW_IS_OTHER. That costs states at most.
+10     bpf-ci   * BPF_END | BPF_TO_BE counts as 'dst op= r0' in four
+                  tables. It costs insns where r0 is live.
+13     bpf-ci   * flow_join_makes_up() reads the ids of 'a' only.
+                  The join drops a link between two numbers.
+19     both     * bail_insn can be an exit that is dead code.
+                  r0 is not live there. A valid prog is rejected.
+19     bpf-ci   * A loop that only bpf_throw() ends has no exit.
+                  For the graph bpf_throw() returns, so what follows
+                  it is in the loop.
+19     bpf-ci   * The order of nospec and the added may_goto.
+                  Only without CAP_PERFMON.
+19     bpf-ci   * -ENOSPC at log level 1 for a prog that loads.
+                  See below.
+19     sashiko  * loop_guard stays when all is verified again.
+                  Harmless: 'r0 = 0; exit' that nobody jumps to.
+20     bpf-ci   * A register that only the loop sets stays NOT_INIT in
+                  the state that covers all iterations. A valid prog
+                  is rejected.
+21     both     * bpf_flow_return() drops 'speculative' of an exit.
+                  Stricter than it has to be. Without CAP_PERFMON.
+21     sashiko  * has_rcu_read_lock() is false in a static subprog
+                  that a timer callback calls. Stricter, too.
+22     bpf-ci   * Marks of recursion that only callx makes reject
+                  progs without recursion. No released kernel has
+                  callx.
+22     both     * A subprog that is not live keeps the mark. Its
+                  frame in arena takes room from the live ones.
+22     sashiko    The guard of a recursive subprog at a back edge to
+                  its first insn. The extra edge can only reject.
+
+Patches 2 and 22, both: the padding of a recursive frame comes after the
+check of the stack depth.
+Right. The check has to see it.
+
+Patch 2, bpf-ci: what comes after the check of r10.
+The lower half of the stack is the reserve for that. For this reason
+recursion is refused in tracing progs, in progs that call
+bpf_clone_redirect(), and for an extension of a subprog that is called in
+a recursion.
+
+Patch 19, bpf-ci: log level 1 and -ENOSPC.
+There are no paths, so there is no position to roll the log back to.
+Level 1 has the blocks of the pass, in the order of the pass.
+log_true_size tells the size. libbpf grows its own buffer on -ENOSPC.
+The follow-up: the log that is dropped when a prog is safe does not count.
+
+Not bugs, or not worth more code
+================================
+Patch 1, sashiko: 'gotol -1' that gets a guard.
+No. Its loop has no exit, so flow_place_guards() has no place for may_goto.
+loop_stack_push() rejects the prog: "loop at insn %d never exits".
+Same as for 'goto -1'.
+
+Patch 5, sashiko: join_func() and a slot that only one state has.
+Right. Only without CAP_PERFMON. Not worth it.
+
+Patches 18 and 19, sashiko: update_insn() has no edge to
+bpf_head_guard_target().
+That's deliberate. See the comment above bpf_head_guard_target(): stack
+that is dead at the head stays dead. A read of it at the target is
+rejected. guard_at_head_dead_slot in verifier_budget.c tests it.
+
+Patch 19, sashiko: loop_stack[].refs is stale after a release.
+Right, the count is stale. Not a leak. check_refs_taken_in_loop() only
+reports early. The reference stays in refs[] until it is released, and
+BPF_EXIT rejects it. The report comes one iteration later.
+Not worth more code.
+
+Patch 19, sashiko: a nospec exit and the states that the insn pushed.
+No. Today's do_check() goes to pop_stack() there and verifies them.
+The edge of check_loop_guard() has to be delivered: the added may_goto is
+in front of the barrier.
+
+Patch 19, sashiko: do_check_all() goes on after -EAGAIN, -ENOMEM, -EFAULT.
+Deliberate. A signal is still pending in the next round, and flow_merge()
+returns -EAGAIN for its first state.
+
+Patch 19, both: offloaded progs.
+Yes. A loop of an offloaded prog has to have a count. Not worth more code.
+
+Patch 21, bpf-ci: insns_total counts some insns twice.
+Yes. insns_total of a static subprog is an estimate. The main prog and
+global subprogs have exact numbers. Not worth more code.
+
+Patch 22, sashiko: compute_call_depth() is one frame short.
+Nobody knows how many frames a recursion has. The check of r10 limits them
+at run time. The arrays of MAX_CALL_FRAMES have their own checks.
+
+Patch 22, sashiko: the edge of an async callback in build_call_graph().
+Not from this series. bpf-next has the same is_async_cb test and the same
+"recursive call from" message.
+
+Patch 34, sashiko: 2^46 iterations in the interpreter.
+No. All may_goto of a subprog use one slot. BPF_MAX_LOOPS is stored there
+once, at the entry of the subprog.
+
+Patch 35, sashiko: __load_if_JITed() for callx_one_of_two_not_written.
+The test is built for x86-64, arm64 and riscv64. The selftests config has
+CONFIG_BPF_JIT_ALWAYS_ON=y there. Without JIT this file fails today.
+CAN_USE_CALLX is the same three archs plus indirect calls in C. This callx
+is in asm.
+
+Only in the middle of the series. Not worth it
+==============================================
+
+  patch  what
+  -----  ---------------------------------------------------------------
+  3      The prototypes of join.c and env->join are one patch early.
+  5      iter in bpf_reg_state is 8 bytes larger until patch 23.
+  9      addr_taken is set by patch 28. Its log says so.
+  17     per_trip is read first by patch 20. Only W=1 warns.
+  19     id_gen has no bound in patches 19 and 20. Patch 21 adds it.
+  29     The log does not say that for_u32_spills_u64_fill() has a new
+         prog.
+
+
+Nits. That bots should stop repoting
+====================================
+
+  patch  what
+  -----  ---------------------------------------------------------------
+  14     flow_merge() takes a double pointer. A plain one is enough.
+  15     The comment of bpf_flow_exit(): @st stays on the covered path.
+  30     __not_msg() in correlated_regs() has one line in its window.
+  31     Leftovers in SHAPE_MANY(), three redundant externs.
+  32     Dead 'r7 = r0' in TWO_INNER_MAPS, an unused __imm().
+  34     The comment of counts(). RUN_JITED(). loop_in_main() and
+         loop_in_main_rcu() leave the loop in the first trip.
