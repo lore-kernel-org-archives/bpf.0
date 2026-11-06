@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793997183;
-	b=Tz958/L0x3yAvPpgSNYIy4WiNYUGwcop857MZVyMvMNRq60mbUYEuG2INsGG9c79ob1r
-	 QOzYGY2GXWOhAqKe0V4tR+YgwVVQ7DXfjvf+Q9tsWD6DLYO8OEENiDQuG3xiSxPeKrfHL
-	 qCSIIl1yfu2+62LPeUc/H08adiK9Gh5mM2CVMWC2+VehPg5xU3XsHLlvL3Qx2/5heAnIl
-	 oqTEssjtMmLoNpPk62Qju3z8zjB7qkU0zLQKIt75aYDbbhnL39ZZ2cfhQ4wasVNuvwzby
-	 iJoR0oG+CMudnArtbKmPnxSQZz1KRqyzQANy9d8x+6fCHY3+S09D4q8xKRazGl97fFw==
+	t=1793997452;
+	b=B3uzhGaiD1NqIG66ulbV2HAsNwEQxFEw89+PH7EEzVV27FdMbIpm+SjBg04YD53d15B0
+	 ug9xHHF2D6tCab6PwO4Nf4bTGIWL/evOJDZDdvaxX3U2m8a6ccXdaNJTgEa5uRvnxpAO0
+	 LKkmBKJ71EwBVJnCD4s8rh/Lp/bTU2ojJuScxeItcwNRZnvndSj3mcdLwlUfFQj7pJOZA
+	 9y2HHJg9bZQvQjrEjZqhB4N+/p9TaeYd+c9pY8L4tqSJcJaPb0uqRGtZyv/gWuFe5yDz3
+	 diL08Q2mU4qRda06gKgj61tjucvPztPVr7VINpxMiG/aqP+nDxOSAmFihUa0m3rIONA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793997183;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793997452;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=jSfjFLoS/AgIEvntlVuKCAJJe1sMNPZnNiqjAgshnHg=;
-	b=Udt7+XgDO+EGchPcwb0w7G1lDqBKor2yK2Gaux4f95hoXaqPA9dWAhA75ubsebCG/QzQ
-	 8xo69dkFen02EETx1Cfsc+GnXGW6KrjXlNfRTyAO3b+5TEV1BQzR3RjSstHuV2w6OeTM7
-	 FkXGtX1R8IFOTMbb6JmVCurzKF1yUu5BADF1V2C5RdWURYLQpMghm19tZ6FGzNxoMSaEM
-	 WhYInbRuNIqEvzwV8UzmxewiaJO3o4YGg3Oc82dTKz6UsnTcqcXzh5vWCtxswXmyI+98U
-	 A7igd6PW2R0Xzo79Hw6kaUPqkrxMr0Gyi+zeHjCZfRg77FoCgg8o9hCdZtQfqA27Nsg==
+	bh=EY1CCjAh40VkNUX0mBVh+0Prbt7Y9Tl2VacOxDd/B3I=;
+	b=0zLC4n3RKA3Sud+Tag5WvXsztAIhcW9mEzieZyt3SxFTtmjb7Pqwp6IZ++msdmL2W3lk
+	 nmaHBPF97xn4Ux7VdG/izmSXWCE1NtopwzaWXmNEOyfUzx4ZsOzR3WhTuPhxP1Uqoe6LC
+	 VBQ2V/dmUrNwf7QRU9qUbmymTgY07Xahzlnq9nnYivm3mHbLUHVwIHxlm7wd8t4oYrJIg
+	 ly75H+M5D7m/XabY7EhVlzMyvwRKJwHew6FiMBTooU3LkbBe25c7ivpItHL386+kQBaWL
+	 M+VX+6LGyg9IjxXhF0zzbG+ATm/LZ8N/D6DHBrArcH2ZmL7ANHsBtJPreJQ/qvapEIg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oZ1HQcDr;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tn8Ii9OC;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A2F606A326
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A597F606A326
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oZ1HQcDr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829941F0089F;
-	Fri,  6 Nov 2026 20:33:02 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tn8Ii9OC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C9281F0089F;
+	Fri,  6 Nov 2026 20:37:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793997182;
-	bh=jSfjFLoS/AgIEvntlVuKCAJJe1sMNPZnNiqjAgshnHg=;
+	s=k20260515; t=1793997451;
+	bh=EY1CCjAh40VkNUX0mBVh+0Prbt7Y9Tl2VacOxDd/B3I=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oZ1HQcDrsw6Sg3Yj/fKX9Ikk9hBQOLSkAeQvHGHsiQwONxLDWCx4T89tIprPv9ySx
-	 35UjOqsBl3ow8702fwobmZ674chF7RsOTzo0DwDU4cdiQWPMNWO4V7P+7gKXWRHfjA
-	 lcKt5Y4UGt0DVMFtlwRh1zzJAf+V/uaJ/8vkPWje1YLxOkllN7kuH9VytE5PABiNDI
-	 SfhWRofMEKOQRfiMqCIXwl4jYsnov9UJH1JGB4pDYOue9jhlIw1qAXWoUnRCSwaiI0
-	 jnazrPxHi7g6kK2pDt2do7qnW3kHHaaWVT5d4Lcj7ayDSj1wLol37H//Af4WGTj5Uy
-	 /kVI/NVGSU7Og==
-Message-ID: <sashiko-outbox-202213@kernel.org>
+	b=Tn8Ii9OC28HSFgrPQyObOpoc7rx9w42kkD+iwBH6/CWr2QvgnnT1q6g/XKACxYwvh
+	 K3NpRfDV4pK8fsmYs5KvswX6V2GejC9g0tkh8Hrn4/ny4hACrgcXDd3hRgMfvR1rk4
+	 lGduxj8zMJ17D8t9yMizayOhwQs4QkGfD5OiYmsLAvTZVqEhgJy+ThkDXzUHmhDcUr
+	 dNPBn7iVir4TmZhwNBGofVgvhWGqtFKnVFlX1R/Txtr/3yfT+LjmJlnNOUBmVfUCMv
+	 4VhmuuqR+iqZ+mCQMKG4b/5bI4xDqwak2UUcLvhESmLCOOpYEQFN+gnuXpIjc5v3ze
+	 mvNdEaPYrGjuA==
+Message-ID: <sashiko-outbox-202238@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC bpf-next 3/7] libbpf: Support
- BPF_MAP_TYPE_STRUCT_OPS in bpf_gen__map_create()
+Subject: Re: [PATCH RFC bpf-next 1/7] bpf: Add
+ bpf_btf_get_struct_member_info() helper
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Siddharth Nayyar" <sidnayyar@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261106-lskel-struct-ops-v1-3-a4486ffc79cb@google.com>
+In-Reply-To: <20261106-lskel-struct-ops-v1-1-a4486ffc79cb@google.com>
 References: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
- <20261106-lskel-struct-ops-v1-3-a4486ffc79cb@google.com>
+ <20261106-lskel-struct-ops-v1-1-a4486ffc79cb@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 06 Nov 2026 20:33:02 +0000
+Date: Fri, 06 Nov 2026 20:37:30 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,79 +63,72 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Medium] libbpf: double byte-swap of BPF_F_VTYPE_BTF_OBJ_FD in
-  bpf_gen__map_create()
+- [Medium] bpf: 32-bit return value truncation in
+  bpf_btf_get_struct_member_info()
 --
 
-commit 504179d2d83634dc1591a224d0263ff3b4a9b9cf
+commit 053d54c272170ad0de7a256a743bef2e2fac76d1
 Author: Siddharth Nayyar <sidnayyar@google.com>
 
-libbpf: Support BPF_MAP_TYPE_STRUCT_OPS in bpf_gen__map_create()
+bpf: Add bpf_btf_get_struct_member_info() helper
 
-This commit adds support for BPF_MAP_TYPE_STRUCT_OPS maps in
-bpf_gen__map_create() when generating a BPF light skeleton, including
-handling kernel module BTF object FDs.
+This commit adds the bpf_btf_get_struct_member_info() helper for
+BPF_PROG_TYPE_SYSCALL programs to query struct member byte offsets and
+indices or struct sizes from vmlinux or module BTF.
 
-> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-> index 09713c39f71ec..6027a2762c352 100644
-> --- a/tools/lib/bpf/gen_loader.c
-> +++ b/tools/lib/bpf/gen_loader.c
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 228b93d4f8c94..8d9188dda34e0 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -9682,6 +9682,79 @@ const struct bpf_func_proto bpf_btf_find_by_name_k=
+ind_proto =3D {
+>  	.arg4_type	=3D ARG_ANYTHING,
+>  };
+> =20
+> +BPF_CALL_4(bpf_btf_get_struct_member_info, u32, btf_id, int, btf_obj_fd,
+> +	   const char *, name, int, name_sz)
+> +{
+> +	const struct btf_member *member;
+> +	const struct btf_type *t;
+> +	struct btf *btf;
+> +	long ret =3D -EINVAL;
+> +	u32 i;
 
 [ ... ]
 
-> @@ -543,6 +543,27 @@ void bpf_gen__map_create(struct bpf_gen *gen,
->  				stack_off(inner_map_fd));
->  		close_inner_map_fd =3D true;
->  		break;
-> +	case BPF_MAP_TYPE_STRUCT_OPS:
-> +		move_blob2blob(gen, attr_field(map_create_attr, value_size), 4,
-> +			       value_size);
-> +		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
-> +						 0, 0, 0, map_attr->btf_vmlinux_value_type_id));
-> +		emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, 0));
-> +		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
-> +						 0, 0, 0, map_create_attr));
-> +		emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
-> +				      offsetof(union bpf_attr, btf_vmlinux_value_type_id)));
-> +		emit(gen, BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32));
-> +		emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 4));
-> +		emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
-> +				      offsetof(union bpf_attr, value_type_btf_obj_fd)));
-> +		emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
-> +				      offsetof(union bpf_attr, map_flags)));
-> +		emit(gen, BPF_ALU32_IMM(BPF_OR, BPF_REG_0,
-> +					tgt_endian(BPF_F_VTYPE_BTF_OBJ_FD)));
-> +		emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
-> +				      offsetof(union bpf_attr, map_flags)));
-> +		break;
+> +	for_each_member(i, t, member) {
+> +		const char *mname =3D btf_name_by_offset(btf, member->name_off);
+> +
+> +		if (!mname || !*mname)
+> +			continue;
+> +		if (!strcmp(mname, name)) {
+> +			u32 moff;
+> +
+> +			if (__btf_member_bitfield_size(t, member)) {
+> +				ret =3D -EOPNOTSUPP;
+> +				goto out;
+> +			}
+> +			moff =3D __btf_member_bit_offset(t, member) / 8;
+> +			ret =3D moff | (((u64)i) << 32);
+> +			goto out;
+> +		}
+> +	}
+> +
+> +out:
+> +	btf_put(btf);
+> +	return ret;
+> +}
 
 [Severity: Medium]
-Does wrapping BPF_F_VTYPE_BTF_OBJ_FD in tgt_endian() double-swap the
-instruction immediate when generating a cross-endian light skeleton?
+Does storing the 64-bit return value in long ret truncate the upper 32
+bits on 32-bit architectures?
 
-Unlike data blob fields, emitted BPF instructions are built in host byte
-order and later byte-swapped in bpf_gen__finish() via bpf_insn_bswap()
-when gen->swapped_endian is set:
-
-tools/lib/bpf/gen_loader.c:bpf_gen__finish() {
-	...
-		if (gen->swapped_endian) {
-			struct bpf_insn *insn =3D (struct bpf_insn *)opts->insns;
-			int insn_cnt =3D opts->insns_sz / sizeof(struct bpf_insn);
-
-			for (i =3D 0; i < insn_cnt; i++)
-				bpf_insn_bswap(insn++);
-		}
-	...
-}
-
-Pre-swapping the immediate here causes bpf_insn_bswap() to swap insn->imm
-back to the wrong byte order, setting 0x00800000 instead of
-BPF_F_VTYPE_BTF_OBJ_FD (0x00008000) in attr.map_flags on the target and
-causing BPF_MAP_CREATE for kernel module struct_ops maps to fail with
--EINVAL.  Passing BPF_F_VTYPE_BTF_OBJ_FD directly without tgt_endian()
-avoids the double swap.
+Because long is 32 bits wide on 32-bit kernels, assigning
+moff | (((u64)i) << 32) to ret discards the member index i in the upper
+32 bits before returning, breaking callers such as struct_ops light
+skeletons when querying any member at index i > 0.  Declaring ret as s64
+would preserve both negative error codes and the full 64-bit value.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106-lskel-stru=
-ct-ops-v1-0-a4486ffc79cb@google.com?part=3D3
+ct-ops-v1-0-a4486ffc79cb@google.com?part=3D1
