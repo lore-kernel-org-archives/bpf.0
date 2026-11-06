@@ -1,92 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793937074;
-	b=jzkkr5GeFPayoOiXVRSRBkvZZio22z64bFgvunvBBGc98jaDa9afj9AFdOCDnE/rJ5G/
-	 NNojrJGtwes35AmDhtFar4By4PayyEjL1CWWuaZ99WPU5KoMj8JhZRoPUUSoakuOa9iEY
-	 dhTTcj5orkwiTSskRd4M1P9hlNOhe91HI7NqOWB0SO5FEG91yJCBJn2lzoJQTu8CZ8AmD
-	 RgS4CgVHnjow4E2OVL6fXpJbcY7YTJ8xwNYkfL/lz1eDtQeMew9qJ7/U6taBuIrrZVBuY
-	 muKgGWwUXyga/CIEEcKiZ3Knu9V1o0CQUWk2nGfVuhHDp710kAcem6XmnOq6l8KaMLw==
+	t=1793937080;
+	b=oNJ+zj9kPMzMeCLGJzSoAjEAeOa+b7Nffo2ZRB02rQryQqJ1XMlnGgWoDYFfiMyhaGor
+	 W2J0JKM7nvqYl+GXxAl9sZVtHzWVR2mLjXmNlOcPf4ljO94JyPYcESwHqLTbpPVMhhv6Y
+	 lXn6Zu1R2ploUkBCtXgDfai9JAoUDt4DIYOht1xPMrLxr736R5BsWJgPBW9hBO4Nsz7dF
+	 7IS2GYXkNAt6Si1YOR8l2It5vd4udfqaCNrkWNo9xbcPFPlwnppQolyz7sfDIqj512Xpl
+	 gPS1ruD+gTR0goiusi8ODDNzhxJLdScFwTOMw4mCWjLR2w5mo80WF3wkDmgFiUsgskg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793937074;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793937080;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=iu5ZfvNEswTUcluvRV21MVitsepA5hczbZlrIXZLQxY=;
-	b=eLW6+DQKAcsi+Vw1ESFJ6m3GnX5lviQmHKaipurT7JT4YGyZCsYGYQhwkCPvGJcwJTqr
-	 6ZVlk3TjcHouQXu/zhM9h6PjbjCKUmrEOFZVOphjLOXzLmdwhZwXisIYvSvY6geVOio+9
-	 foKmh+INrKM+zqXGycqqVqvONngyaDUg/0pI0pTwt2hq/1rl9FdxGitu7rDJpfVs98ei7
-	 KWaIdYj8PMD8JrNDEMxnFNYCwRHv3jxTJuxP5rCh/dDho9uHNfFRBNa1Bug//BSq+XSNQ
-	 POMeZFW8jBrG15ZXYugcol5O92uRn81W6bt/NloMlGv3GvYMtS1h4bu86kJx019lr/A==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=26Yv0i/thfoZxt+7mJnD4yQXYLRRASC3V9uRq6BSH4s=;
+	b=qUM3yzCShGjLTgBHBbWqAflzGonMyjdD3iZuee3fK+eKOVgKrG5t6x4CD2fxWhScBRHB
+	 L34K379eD2ANB9c8EjD9oJElXM5NXpOriPSPVZBhBc/ERLn7JTf1M6Dkb5Qe7XjjSorVt
+	 Azkne4rh/GGFutuojOVTKXhbA8bsjhGVL0pFMLqjUnoUnuVR9xhMdQW8fccBXvID/azBa
+	 IZxRGoF462xQcjI+N0M+LYDxJsAnuJWIvo7/iBvLLw83dIDn8Dnu6la/dGFMgzHW/oj84
+	 /w2uMF7UfVyKP4K+VBFVfwuadTIf6bgt0+eLo7zS7WO6go9QdsY1VVbDmx4RuHmV5xw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B0hzfhtz;
-	arc=none smtp.remote-ip=209.85.214.172
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gy0cjwNr;
+	arc=none smtp.remote-ip=209.85.216.53
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D305606A326
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 03:51:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D305606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C163606A31B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 03:51:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C163606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B0hzfhtz
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ed408b0d9dso697635ad.2
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 19:51:14 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gy0cjwNr
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3ada8bc2380so121544a91.3
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 19:51:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793937073; x=1794541873; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=iu5ZfvNEswTUcluvRV21MVitsepA5hczbZlrIXZLQxY=;
-        b=B0hzfhtzR//yWsFhGD4ursR/7myTrzxd02R11l/8oHYjYvUdxZqulk4KbV/RZQrVQE
-         WV0Xd8RowL/l4/gz7d2+3JhQ6EoasiOpLyb5bjJsMTFvDsmC0cVPQ4JWwu/1IMME7H5s
-         RyaYx9M5MMdBXjdo/p1GeJ97mafu9PKMnOQnoG5+7UDG93xOdaQZPcr8Icn1j4pePUg/
-         Rqxfv1woLr/QJ8q7bJfF+SUB1Z2dv5WOHlA+aFhN1bg3OaoxjBLwplcn0sgZ4Kszazfi
-         sA3pVqATCZ05ExX85c4+hfpZkCFC7MlOZaB4H7r6atm6Rggl0Sv6DRw2ISQUi2ohLcZm
-         xxvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793937073; x=1794541873;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793937080; x=1794541880; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=iu5ZfvNEswTUcluvRV21MVitsepA5hczbZlrIXZLQxY=;
-        b=V3JWXmZ7Hlwtn2KbVO3hW2ahW3/SykgusD3QrES7ac6xPt1qF9vPjQhCYrHYO2iGcf
-         X31vKt/Z08hgeL39k6j4XXpQIlmwX0/YUPqGe8VaoLI13VThm3ufMB0xAPkiuJTX/d3P
-         mxt7NdahTkFKAcNep234Q7DYusc4CbDUhMu1tHkYDJxsA3gN4p0WBaU9Ww8pr0Iusa4v
-         GTtBAFA22i+sQM944E48H8Km9lCqQ+Y0vY2KbI3M3e1WGH32waRbmA8r+7m7jifsYgpu
-         CRrJxMza0zuirDL8Rql4JuxsrpgTkKYdEd6udvh2/H+q1xsmWvkXlkEsL7ovSNG8ZtD/
-         Ksuw==
-X-Gm-Message-State: APuU4Z9fWS5hWhdn7HhcmykcWeRAivdjqplBNnR2yp805pHlhx5qeaDw
-	LB1P8CtchPQQWgUl+GfyMHD53R2OvMz1FBipOj47Cr5JREQdX3CUIakNG9r7tw==
-X-Gm-Gg: AYBFou0FurTphqrfg39kjNwioXn9n31iqcfqpKzogipKqprKSlzS38MXBaSq9Cr234t
-	85fQGr4g2D5l8CA5BIS9HrQDnZ8veB+o4KWpwAFkH/D8NFCrEgFxK0HgSJEbThn93G6OeiFlolh
-	2cUCVnO3QOQ5iBE+crQQJTPg0IXzocx9HjCV3Srv0jUIqunbByeYwy8aJgE+KRYvjlbrhPC1KZs
-	vrRAwdCfBZ7B3RjT+DL72e3NhOY1jGThszmrx9WxKic6lgzK+H+XTBQH2qgGIBhRc5d2sLcqEZ0
-	Gh/GKTEE2nFve4XWVQvlDU1fqvOHlCbOCI6AnN2V8UDLWC4NQV3pcUvyjsBsA8iDF80nCIq6Yyy
-	86QbClEr5YDv0IVHs+OgKK00WGXLmgwIfPZy8eoXolLPECVvsROIQXVKPDO7f5UBbCojnmZFLUA
-	Yhc/qOnziXxXKid2h4/iYQIRZ9wmm4ROPDHlpPiC9CtMJaS5F/xI+jQlOv5H2uDo6I4l2651QFy
-	0WxlA/lPwKdpD4TOt7N3g7J7mUIJaB6Fba4sKMfkRBLdpluKEskB25LAVygcf/n3qw5rMDHv2Vl
-	KBBQsng7a3JnH7X7s9I6OwG30Mrt7llRfmUbognAFZ/Z1IdpN2Xt6DSiYlmjM4N7heK73mAl0wc
-	G8lsIaukYSsJZZRgvPWxgZsBtPyxS6boTVK/SIUO3ypmo1uweD0XrhkJuaz0xER4PlhDdTaT0wg
+        bh=26Yv0i/thfoZxt+7mJnD4yQXYLRRASC3V9uRq6BSH4s=;
+        b=gy0cjwNrzPUtU7/6lKt9Itz+E0JDV0VITRMf/t4duw9a+sfsJ/cDXWA2GJvSj9oUSs
+         b5Tpcht2bRAdakS7gV7RI5QHokJNxMlTDYFbU0/49dVybB3MXjFQFsyGELInP4FCuhko
+         IRB3TfOIyzGINLwINHXsK5dWRw5nRUYqnCA5qnoKXmb5+FHr/gysqKBGZSlclbWHNdFg
+         MBjJTmXrpBmiiRSNbxbQOSS+/3liOloqTbSCdSs0+eRx+2HrqbZeLA1a0c5mxCzzRatP
+         nyVrBbkDqMAoql7GRE+J4S2iPVTKyUGTlrBrsfyENW/gyEpahWCn/jWN2CYPejcCpVTw
+         hEdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793937080; x=1794541880;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=26Yv0i/thfoZxt+7mJnD4yQXYLRRASC3V9uRq6BSH4s=;
+        b=drtEEcQgu8jUEw9pLqIy18CxZpCFDwKbS4rUUCAop5CQwm37D2NvFSr64eff2qwnZM
+         iWzIMQGBR9GVNp5SRbUqIeuOoQ8K7mbeg9qge5osimJ4DR0aSDVO8wmQzB63odO2qoao
+         mUtMXV0n804XhjJ/PFlDL3TInbEInzQla0SE+HlfB6AiIcyWZ4/ppdkFx5PDDlJ14dgq
+         fRHK/kYanM4rJQitgZafhDmvmxJO6RyfVpO4bb4WQoMZpV7XZAZ6KF3UGo7KROcCiZsx
+         iOsGP3wTCG41CTeqN3jonTBNrmjxjR1GZQDQw6RtUh/FNXt7a6rHOz3dRIrNn815Qo/k
+         VGZw==
+X-Gm-Message-State: APuU4Z9b+7GXdTbsoyYEn/3oOWIMooyQFd4UVoDYWCD8NzEtVQkOm1U4
+	Wcno1OvQ/W1uUA/8Ar9IJwm1R7kaWrqxrSoxXpds7o5IMHCr08jOXhCS46vJgA==
+X-Gm-Gg: AYBFou0AzmxVCTqAIbliR8bX8DNOUp53ZCc0xUhtLMpuCmJw3Qp4yUO68K7dxrqxQhs
+	o7z94XRd3reTsOKPjFHF9rlnl9YOb8dYlWIbZNGOJHMdtYUiXZe/xPwCIXPkoPCmx0Djr6W/fZy
+	GnfsJ458HDcrhEZUiZ/9R5zqW/wyslS7HxANchdrpCTQqp2vF+SMI/kBZFR9EADJJzi45mShf74
+	AVs8kKpcV3YSIaxSjycnQpxL2lM3pwNDvCtdvazUpY4Vk50WBX9YIIWHubmhH/48LIJcogTNeCX
+	20DbW+cFP77PjLv233rw7tKcACG+9YYWUmundgE8pRkkYGxS6Sl3HeobC1McoNrI8CcKh3MtOuf
+	FLrscJGXbTazYevpHCe/rQOQ4Xxivt4nIN16ZE9RGuO4LM6EQDhmAMlZrj3AfcUzzzJ/7Wi90WT
+	Jr9wH6f8S2h8Hc+SfS18/adRpmVSHO2rCBpTN0nurarVAXXqrGzaoxNaVJNt4zHeG77ekno5Cyv
+	4Soeej7IgUskv3ZcY1K8YHpiYWRaSyWZ19OVjXUUkP4192UuoKLTvRQq95x33cNjKu1IbOk+F5X
+	DR2PXB84PuD9lhNgWqHVDFTRjn5FDVz37blBNyoBCh+PSajpX1TisL+nR9Wdira1Jpsi74jJKSe
+	nyvqtXSEnOQpXyOD1lLlYgxIiS+CMpfD6GXhBP2DSP1/Ill2ivvohGPkBdyfiNz+v0sdYwKBmCw
 	==
-X-Received: by 2002:a17:903:41ce:b0:2dd:2b8:7198 with SMTP id d9443c01a7336-2ed412fc4f5mr18935045ad.6.1793937073257;
-        Thu, 05 Nov 2026 19:51:13 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed477a9301sm1201825ad.23.2026.11.05.19.51.12
+X-Received: by 2002:a17:90b:3892:b0:3ac:77c8:ac29 with SMTP id 98e67ed59e1d1-3b0db6d78bdmr1071310a91.15.1793937079299;
+        Thu, 05 Nov 2026 19:51:19 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0b313c143sm6027456a91.2.2026.11.05.19.51.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 19:51:12 -0800 (PST)
+        Thu, 05 Nov 2026 19:51:18 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 00/45] bpf: A verifier that joins states
-Date: Fri,  6 Nov 2026 03:50:24 +0000
-Message-ID: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 01/45] bpf: Add may_goto to the loops that the verifier marks
+Date: Fri,  6 Nov 2026 03:50:25 +0000
+Message-ID: <20261106035111.3315285-2-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
+References: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,319 +104,378 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The verifier follows each path of a prog, and each branch can double the
-number of paths. The work grows with the paths, not with the prog:
-  insns processed                                    today    this series
-  rust-bpf  scx_beerland/beerland_init_task        1000001 *        17893
-  rust-bpf  scx_qmap/qmap_init_cids                 131088 *          196
-  scx       scx_eevdf/eevdf_dispatch                350041          15199
-  Cilium    bpf_host/cil_to_netdev, Oct 2026         64658           7472
-  * "BPF program is too large", "The sequence of 8193 jumps is too complex"
+SpinLock::lock() of rust-bpf (scx_common.rs), here in central_enqueue:
 
-Authors cut their progs until they fit. Nobody can cut core, alloc and the
-crates of Rust: of the 653 progs of https://github.com/4ast/rust-bpf 187
-load today, 170 hit one of these limits, 164 get "infinite loop detected"
-and 122 "recursive call". Now 648 load, and no corpus of C progs loses one.
-For rust-bpf both kernels have 4 kfuncs on top, see Numbers.
+  while self.locked.compare_exchange(0, 1, Acquire, Relaxed).is_err() {
+      while self.locked.load(Relaxed) != 0 { core::hint::spin_loop(); }
+  }
 
-The idea
-========
-Do not follow paths. Where paths meet, join their states: r1=1 and r1=5
-give r1=[1,5]. Repeat until no state changes. States stay apart only if
-they have no join, or if a later check depends on the difference.
-  loops      counted by scalar evolution: one state covers all iterations
-             walked: a state per iteration, while constants decide an exit
-             all other loops: join at the head, widen, add may_goto
-  subprogs   A static subprog is verified for the states at its entry, not
-             for each chain of calls. Recursion is the same, with widening.
-  run time   may_goto limits the time of loops and of recursion. r10 limits
-             the depth: it must be in the upper half of its kernel stack.
+  infinite loop detected at insn 127
 
-What users see
-==============
- - The limits of 1M processed insns and 8192 jumps are gone. The limits are
-   on states, for a prog of N insns: 1024 at an insn, 16 * N + 4096 at
-   a time, 256 * N + 64K in all.
- - "infinite loop detected" is gone: the verifier adds may_goto. A loop
-   that has no exit gets "loop at insn N never exits".
- - may_goto is also added to 5 progs of the table below that load today:
-   loop1, loop2, loop5, tcp_autolowat_enqueue_rcvq (GCC), chaos_enqueue.
- - Recursion is allowed on x86-64 and arm64. Patch 22 lists the exceptions.
- - All added may_goto of an invocation share its time slice of 250 ms. Then
-   the prog returns 0. A subprog that cannot unwind, or a frame that holds
-   a lock or a reference, leaves the loop. The stderr stream has the cause.
- - A join loses the relation between scalars. This is rejected now:
-     if (c) { i = 3; n = 4; } else { i = 7; n = 8; }
-     x = arr[n - i];                                    n - i is [-3, 5]
- - A cgroup_skb prog whose r0 can be 2 or 3 attaches to egress only. That
-   holds for a range too: 'return 1' and 'return 2' are joined to [1, 2].
- - The log has no "mark_precise:", "N: safe", "depth=" and no scc column.
-   Level 2 shows "from 13 to 9: within", "joined" or "widened" where states
-   meet. The statistics line keeps its format: "limit 0", "mark_read 0".
- - BPF_F_TEST_STATE_FREQ is accepted and has no effect.
+111 of the 225 progs of the schedulers of rust-bpf get this message. Memory
+decides when the loop ends: no analysis finds a bound. The same holds for
+a lookup in a BTreeMap. C has bpf_for(), can_loop, bpf_loop(). Nobody can
+put them into core and alloc.
 
-Numbers
-=======
-A: bpf-next 8424858a5de0. B: this series, the same objects. The selftests
-that the series adds or changes are not counted. None of them is lost.
+With one state for all iterations the verifier can still show that each of
+them is safe. Then the kernel must stop the loop at run time. may_goto does
+that: after 250 ms it jumps to its target. That jump is a new edge in the
+prog, and must be verified. One target for all loops is not possible:
 
-Corpus                 Progs  Lost  Gained  Insns  States   Mem  Time
----------------------  -----  ----  ------  -----  ------  ----  ----
-selftests               3043     0       1   -63%   +120%  -18%  -27%
-selftests, no_alu32     2905     0       1   -66%    +86%  -27%  -34%
-selftests, cpuv4        2914     0       1   -64%    +96%  -27%  -32%
-selftests, bpf_gcc      2733     0       5   -69%    +96%  -16%  -24%
-37 builds of Cilium     5189     0       0   -75%    +11%   -6%  -31%
-sched-ext/scx            495     0       0   -89%    -34%  -66%  -67%
-scx, as BPF CI has it    428     0       0   -85%    -22%  -38%  -39%
-tools/sched_ext          240     0       0   -69%    +37%   +3%  -11%
-public progs of Meta     511     0       0   -85%    -35%  -55%  -48%
-all                    18458     0       8   -74%    +10%  -19%  -36%
+  lock(), see above                 pick_idle_cpu_in() of scx_p2dq.rs
+  Not to the exit of the loop:        let cores = core.then(..::idle_smt);
+  the caller goes on as if it         cpus.filter(..).find(..)
+  had the lock. Unwind instead:     Not out of the function: the code
+                                    after the loop releases the cpumask.
+  may_goto L
+  insn                              may_goto T
+  ...                               if ... goto T
+  last insn of the subprog
+  L: r0 = 0
+  unwind_exit, main prog: exit      T is outside of the loop
 
-Progs load in A and in B. The per cent compare sums over these progs:
-75.1M -> 19.2M processed insns, 61 -> 39 s. Mem is mem_peak of veristat.
-Time is the best of 3 runs on kernels without debug options. B counts each
-state that arrives at a basic block as a state, A only those that it saves.
-Gained: loop3 in the 4 builds, 4 progs that A rejects only in GCC's code.
-Of the progs that take 1000 insns or more in B, two take over 5% more than
-in A. loop5, 82 -> 4182: a walk up to its limit of 4096 insns, then a join.
-res_spin_lock_test_held_lock_max, 2356 -> 4088: states that hold different
-numbers of locks have no join.
+Thus the main pass selects the edge for each loop, verifies it, and
+records it in insn_aux_data. bpf_insert_loop_guards() adds the insns after
+the main pass. No code sets loop_guard in this patch: no prog changes.
+ - unwind_exit is for a subprog whose callers have cleanup code for it
+   (bail_unwinds): their destructors run, the code after the call does not.
+ - The inner loop of lock() goes around without a jump that leaves. Then
+   may_goto is at the loop head (guard_at_header): 142 of the 225 progs.
+ - may_goto has a 16-bit offset. If L is more than 2048 insns away it gets
+   'r0 = 0; exit' of its own, and one more jump in each iteration.
 
-rust-bpf               Progs  load in A  load in B  B: insns   time
-16 schedulers            225         52        225      1.6M  1.9 s
-crates                   428        135        423      7.3M  9.4 s
-For rust-bpf A and B have the kfuncs of patches 30-31 of [1] on top. They
-are in no series now. No released compiler emits the code of rust-bpf.
-
-How to read the series
-======================
-Start with patch 7, the overview. Then 4-5, 13-14, 15, 17 and 19.
-  1-2    what is added to a prog: may_goto, the checks of recursion
-  3-5    union and widening of a range, join.c: the join of two states
-  6-10   data structures of flow.c, passes ahead of the main pass: order of
-         the insns, places for may_goto, what later checks depend on
-  11-14  the sets of states, iterations, what is not joined, the merge
-  15-18  how states move: edges, calls and exits, loops, added edges
-  19     the switch. The check of one insn against one state is the same.
-  20-22  more counted loops, static subprogs on their own, recursion
-  23-26  removal of pruning, precision tracking and SCCs: 3382 lines
-  27-28  callx: a pointer to one of a set of functions, live registers
-  29-38  code that needs more than that: casts, the context in a struct,
-         subprogs that check for their caller, loops that are not counted
-  39-45  selftests: 39-40 adjust tests, 41-45 add tests
-Each patch builds. Patches 1-18 add the code that patch 19 switches to.
-Some selftests fail from patch 19 to 39.
-
-Follow-ups
-==========
- - Documentation/bpf/verifier.rst: the algorithm, with examples.
- - Liveness: no spilled pointer is kept for reads that see only its bytes.
- - No second pass over the prog when a loop gets may_goto late: half of the
-   insns for rust-bpf.
- - bpf_prog_info tells that an invocation of the prog was cut short.
-
-v2 -> v3
-========
- - A scalar argument of a static subprog loses delta together with its id.
-   v2 kept delta, took wrong bounds in the callee and let an access out of
-   bounds load (sashiko).
- - A loop with calls is walked for two iterations. v2 widened it at once
-   and rejected strobemeta.h with two maps or two strings.
- - The frame of a recursive subprog grows before the stack of a chain of
-   calls is checked, not after (bpf-ci, sashiko).
- - A loop that ends when a flag is false is counted by the jump that clears
-   the flag, also when code stands between that jump and the test. States
-   with 0 and 1 in a flag are not joined in front of its test.
- - Patches 29-38 are new. Each loads code that bpf-next loads and v2
-   rejects: casts, the context in a struct, r0 at a dead exit (bpf-ci,
-   sashiko), a register that only a loop sets (bpf-ci), loops that count
-   down in bytes, loop-carried values in long loops, and numbers that only
-   a jump of the loop stops (Ihor).
- - The numbers below are those of v2.
-
-v1 -> v2
-========
-v1 is part 3 of [1]. Its patches for the verifier of today and the time
-slice of may_goto are in bpf-next.
- - Recursion: may_goto and r10, no per-cpu counters of bytes and calls.
- - flow.c comes in 9 patches and join.c in 2. In v1 each was one patch.
- - No public prog of Meta is lost (Ihor): widening goes to fixed stops, and
-   constants that are added to a pointer to the packet are not joined.
- - A state is compared only with the states of a related shape (Ihor).
- - bpf_iter_*_next() stops a loop only if the iterator was created before
-   the loop (Ihor). A loop with two entries is walked.
- - Offloaded progs get neither may_goto nor recursion (Ihor).
- - The failures of v1 in BPF CI (s390x, arm64, gcc) are fixed.
-
-[1] https://lore.kernel.org/bpf/20261026025943.404450-1-alexei.starovoitov@gmail.com/
+Progs without such a loop get the same code. 174 of the 225 progs have one.
+An added may_goto costs what a may_goto of the prog costs. It is 10 insns,
+14 if no register is dead: thus it gets the live registers of the insn that
+follows it. That, and one L per subprog, not per loop: 6 % less jited code.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ include/linux/bpf_verifier.h |  33 ++++++
+ kernel/bpf/fixups.c          | 219 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c        |   4 +
+ 3 files changed, 256 insertions(+)
 
-Alexei Starovoitov (45):
-  bpf: Add may_goto to the loops that the verifier marks
-  bpf: Limit depth and time of recursive subprogs at run time
-  bpf: Add union and widening of the range of a register
-  bpf: Add join of registers and stack slots
-  bpf: Add join of verifier states
-  bpf: Tell which arguments of a call a join must leave alone
-  bpf: Add the data structures of the main pass over the control flow
-    graph
-  bpf: Order the insns, find what stops a loop and where may_goto can go
-  bpf: Find the registers that hold a number or a pointer to arena
-  bpf: Find the registers and stack slots that later checks depend on
-  bpf: Add the sets of states at an insn and the entries of functions
-  bpf: Compare states of different iterations of a loop
-  bpf: Decide which states are not joined
-  bpf: Merge the state that arrives into the set at an insn
-  bpf: Move states along edges, into loops and subprogs and out of them
-  bpf: Make the state after a call from the caller's state and an exit
-    state
-  bpf: Enter and leave loops in the main pass, build flow.c
-  bpf: Tell the passes over the graph where an added may_goto goes
-  bpf: Verify programs as a fixpoint over the control flow graph
-  bpf: Keep the count of a loop when a register has no closed form
-  bpf: Verify static subprogs on their own
-  bpf: Allow recursive subprogs
-  bpf: Remove is_state_visited(), bpf_compute_scc() and iter.depth
-  bpf: Remove precision tracking
-  bpf: Remove prune points, levels of state comparison and pop_stack()
-  bpf: Update comments about paths, pruning and explored states
-  bpf: Track a pointer to one of a set of functions
-  bpf: callx reads what the subprogs whose address is taken read
-  bpf: Don't take what bpf_core_cast() returns for a number
-  bpf: Don't widen away a register that only the loop sets
-  bpf: A base that nothing is known about can be the context
-  bpf: Keep the frames of the caller for a subprog that loads data_end
-  bpf: Keep the frames of the caller for ctx of struct_ops with a
-    reference
-  bpf: R0 is live at the exit that an added may_goto goes to
-  bpf: Keep the step of a number in the union of two ranges
-  bpf: Keep the first iteration of a counted loop apart
-  bpf: What a call returns in each iteration is like what the loop loads
-  bpf: Find where the jumps of a loop stop a number
-  selftests/bpf: Adjust tests to log lines that are gone
-  selftests/bpf: Adjust tests to new verdicts, messages and order
-  selftests/bpf: Test states that are not joined
-  selftests/bpf: Test static subprogs that are verified on their own
-  selftests/bpf: Test loops that are counted, walked or widened
-  selftests/bpf: Test progs that run out of budget
-  selftests/bpf: Test callx of one of a set of functions
-
- Documentation/bpf/bpf_design_QA.rst           |    7 +-
- Documentation/bpf/kfuncs.rst                  |    2 +-
- Documentation/bpf/linux-notes.rst             |    4 +-
- include/linux/bpf.h                           |    6 +
- include/linux/bpf_verifier.h                  |  577 +--
- include/linux/filter.h                        |   16 +
- kernel/bpf/Makefile                           |    2 +-
- kernel/bpf/backtrack.c                        | 1052 ------
- kernel/bpf/cfg.c                              |  297 +-
- kernel/bpf/const_fold.c                       |  134 +-
- kernel/bpf/core.c                             |   19 +
- kernel/bpf/diagnostics.c                      |   13 -
- kernel/bpf/diagnostics.h                      |    1 -
- kernel/bpf/fixups.c                           |  333 ++
- kernel/bpf/flow.c                             | 3302 +++++++++++++++++
- kernel/bpf/join.c                             |  664 ++++
- kernel/bpf/liveness.c                         |  114 +-
- kernel/bpf/log.c                              |   14 +-
- kernel/bpf/loops.c                            |  175 +-
- kernel/bpf/scev.c                             |  231 +-
- kernel/bpf/states.c                           | 1181 +-----
- kernel/bpf/verifier.c                         | 2942 +++++++++------
- .../bpf/prog_tests/bpf_verif_scale.c          |    4 +-
- .../bpf/prog_tests/cgroup_skb_egress_ret.c    |   23 +
- .../selftests/bpf/prog_tests/log_buf.c        |    4 +-
- .../selftests/bpf/prog_tests/log_fixup.c      |    6 +-
- .../selftests/bpf/prog_tests/reg_bounds.c     |    5 +-
- .../prog_tests/test_struct_ops_refcounted.c   |    2 +
- .../selftests/bpf/prog_tests/verifier.c       |   19 +
- .../selftests/bpf/progs/aggregate_ret_func.c  |   15 -
- .../selftests/bpf/progs/aggregate_ret_kfunc.c |    7 -
- ...f_qdisc_fail__invalid_dynptr_cross_frame.c |    4 +-
- .../bpf/progs/cgroup_skb_egress_ret.c         |   12 +
- .../bpf/progs/compute_live_registers.c        |    8 +-
- .../selftests/bpf/progs/cpumask_failure.c     |    2 +-
- .../testing/selftests/bpf/progs/dynptr_fail.c |    4 +-
- .../selftests/bpf/progs/exceptions_assert.c   |   24 +-
- tools/testing/selftests/bpf/progs/iters.c     |  114 +-
- .../selftests/bpf/progs/iters_state_safety.c  |    8 +-
- .../selftests/bpf/progs/iters_testmod_seq.c   |   12 +-
- .../bpf/progs/mem_rdonly_untrusted.c          |   16 +-
- .../selftests/bpf/progs/stack_arg_precision.c |   48 +-
- .../bpf/progs/struct_ops_refcounted_subprog.c |   30 +
- .../selftests/bpf/progs/test_global_func15.c  |    5 -
- .../selftests/bpf/progs/test_global_func3.c   |  125 +
- .../selftests/bpf/progs/timer_failure.c       |    9 +-
- .../selftests/bpf/progs/verifier_align.c      |   10 +-
- .../selftests/bpf/progs/verifier_and.c        |    4 +-
- .../bpf/progs/verifier_arena_stack.c          |   82 +
- .../bpf/progs/verifier_array_access.c         |   14 +-
- .../selftests/bpf/progs/verifier_bounds.c     |  114 +-
- .../bpf/progs/verifier_bounds_deduction.c     |    2 +-
- .../bpf/progs/verifier_bounds_step.c          |   73 +-
- .../selftests/bpf/progs/verifier_budget.c     | 1898 ++++++++++
- .../bpf/progs/verifier_calls_in_a_row.c       |  223 ++
- .../selftests/bpf/progs/verifier_callx.c      |  128 +-
- .../selftests/bpf/progs/verifier_callx_many.c |  113 +
- .../bpf/progs/verifier_callx_rodata.c         |  167 +-
- .../selftests/bpf/progs/verifier_cfg.c        |    8 +-
- .../bpf/progs/verifier_global_subprogs.c      |   11 +-
- .../bpf/progs/verifier_helper_value_access.c  |    8 +-
- .../selftests/bpf/progs/verifier_idoms.c      |    9 +-
- .../bpf/progs/verifier_iterating_callbacks.c  |   70 +-
- .../bpf/progs/verifier_jumps_ahead.c          |  670 ++++
- .../bpf/progs/verifier_linked_scalars.c       |    7 +-
- .../selftests/bpf/progs/verifier_live_stack.c |   37 +-
- .../bpf/progs/verifier_liveness_exp.c         |    7 +-
- .../selftests/bpf/progs/verifier_loop_as_is.c |  294 ++
- .../bpf/progs/verifier_loop_hierarchy.c       |  125 +-
- .../selftests/bpf/progs/verifier_loop_latch.c |   82 +-
- .../selftests/bpf/progs/verifier_loop_need.c  |  371 ++
- .../selftests/bpf/progs/verifier_loop_walk.c  |  306 ++
- .../selftests/bpf/progs/verifier_loops1.c     |   16 +-
- .../bpf/progs/verifier_map_ret_val.c          |    2 +-
- .../bpf/progs/verifier_mem_size_reg.c         |   52 +-
- .../selftests/bpf/progs/verifier_movsx.c      |    3 +-
- .../selftests/bpf/progs/verifier_precision.c  |  186 +-
- .../selftests/bpf/progs/verifier_ptr_off.c    |  279 ++
- .../selftests/bpf/progs/verifier_scalar_ids.c |  329 +-
- .../selftests/bpf/progs/verifier_scev.c       |  269 +-
- .../bpf/progs/verifier_search_pruning.c       |   40 +-
- .../selftests/bpf/progs/verifier_spill_fill.c |  224 +-
- .../selftests/bpf/progs/verifier_spin_lock.c  |    4 +-
- .../selftests/bpf/progs/verifier_stack_arg.c  |  181 +
- .../selftests/bpf/progs/verifier_stack_ptr.c  |   13 +-
- .../bpf/progs/verifier_subprog_callers.c      |  543 +++
- .../bpf/progs/verifier_subprog_insn_stats.c   |   16 +-
- .../bpf/progs/verifier_subprog_precision.c    |  353 +-
- .../selftests/bpf/progs/verifier_tailcall.c   |   27 +
- .../selftests/bpf/progs/verifier_uninit.c     |    2 +-
- .../selftests/bpf/progs/verifier_unpriv.c     |   23 +-
- .../bpf/progs/verifier_unpriv_perf.c          |    4 +-
- .../bpf/progs/verifier_value_or_null.c        |    2 +-
- .../bpf/progs/verifier_value_ptr_arith.c      |   61 +-
- .../selftests/bpf/progs/verifier_var_off.c    |  206 +-
- tools/testing/selftests/bpf/verifier/calls.c  |   46 +-
- .../testing/selftests/bpf/verifier/precise.c  |   69 +-
- 97 files changed, 14016 insertions(+), 5359 deletions(-)
- delete mode 100644 kernel/bpf/backtrack.c
- create mode 100644 kernel/bpf/flow.c
- create mode 100644 kernel/bpf/join.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_skb_egress_ret.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_skb_egress_ret.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_refcounted_subprog.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_budget.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_calls_in_a_row.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx_many.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_jumps_ahead.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_as_is.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_need.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_walk.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_ptr_off.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_subprog_callers.c
-
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index d6e41444ab14..7e268540dae9 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -815,6 +815,10 @@ struct bpf_insn_aux_data {
+ 	u64 cast_arena:1; /* addr_space_cast of an address in arena */
+ 	u64 cast_mov:1; /* addr_space_cast of a pointer that is not in arena, it's a move */
+ 	u64 bb_end:1; /* last instruction of a basic block */
++	u64 loop_guard:1; /* may_goto is added in front of this instruction */
++	u64 guard_place:1; /* it's the place for may_goto if the loop needs one */
++	u64 guard_at_header:1; /* there is no better place than the head of the loop */
++	u64 guard_no_unwind:1; /* it cannot unwind from here, at least sometimes */
+ 	u64 need_scev:1;
+ 	u64 alu_state:5; /* used in combination with alu_limit */
+ 	/* true if STX or LDX instruction is a part of a spill/fill
+@@ -878,6 +882,8 @@ struct bpf_insn_aux_data {
+ 	 * For a loop header, identifies the parent loop instead.
+ 	 */
+ 	s32 loop_header;
++	/* where may_goto in front of this instruction goes */
++	s32 guard_to;
+ 	/* additional information about the loop if this instruction is a loop header */
+ 	struct bpf_loop *loop;
+ };
+@@ -1021,6 +1027,8 @@ struct bpf_subprog_info {
+ 	 * a hidden pointer to the result, a pair in two registers, no dead arguments.
+ 	 */
+ 	bool stack_args_from_code: 1;
++	/* it can leave with unwind_exit: it has one, or unwind_goto follows every call of it */
++	bool bail_unwinds: 1;
+ 	u8 code_stack_args;
+ 	u16 stack_arg_cnt; /* incoming + max outgoing */
+ 	u16 max_out_stack_arg_cnt;
+@@ -1521,6 +1529,7 @@ void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab);
+ int mark_chain_precision(struct bpf_verifier_env *env, int regno);
+ 
+ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx);
++int bpf_insert_loop_guards(struct bpf_verifier_env *env);
+ bool bpf_edge_leaves_loop(struct bpf_verifier_env *env, int h, int n, int t);
+ bool bpf_jump_leaves_loop(struct bpf_verifier_env *env, int h, int n);
+ int bpf_split_cur_state(struct bpf_verifier_env *env);
+@@ -1845,6 +1854,30 @@ struct bpf_subprog_info *bpf_find_containing_subprog(struct bpf_verifier_env *en
+ const char *bpf_subprog_name(const struct bpf_verifier_env *env, int subprog);
+ int bpf_jmp_offset(struct bpf_insn *insn);
+ struct bpf_iarray *bpf_insn_successors(struct bpf_verifier_env *env, u32 idx);
++
++/*
++ * Where the program goes from may_goto and from the checks that the verifier adds:
++ * - May_goto in front of a jump goes where the jump goes, with the registers and the stack
++ *   as they are in front of the jump. bpf_insn_successors() has that edge.
++ * - A subprog that is out of budget goes to bail_insn, an exit. No such edge.
++ * - May_goto in front of the head of a loop goes to where the loops around it are left: from
++ *   @idx to what is returned here, -1 if there is none. No such edge either. The registers
++ *   and the stack are what they are in front of @idx.
++ *
++ * The main pass looks at the states that go there. What is computed from the graph before
++ * the main pass has to take these edges into account where the main pass believes it:
++ * - Against the direction of the edges, liveness: a register that is live at the target is
++ *   live at @idx. Stack that is dead at @idx stays dead: a read of it at the target is
++ *   rejected.
++ * - In the direction of the edges, bpf_compute_const_regs() and compute_subprog_args(): what
++ *   holds on all edges of the graph to the target doesn't hold on this one.
++ */
++static inline int bpf_head_guard_target(const struct bpf_verifier_env *env, int idx)
++{
++	const struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
++
++	return aux->guard_at_header ? aux->guard_to : -1;
++}
+ void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, const unsigned long *stack_mask);
+ bool bpf_subprog_is_global(const struct bpf_verifier_env *env, int subprog);
+ 
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index f95af2ca3591..6fd79c2fbdc1 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -587,6 +587,225 @@ static int bpf_adj_moved_insn(struct bpf_insn *insn, u32 delta)
+ 	return 0;
+ }
+ 
++static bool jumps_to_itself(const struct bpf_insn *insn)
++{
++	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
++
++	return (class == BPF_JMP || class == BPF_JMP32) && op != BPF_CALL && op != BPF_EXIT &&
++	       insn->code != (BPF_JMP32 | BPF_JA) && insn->off == -1;
++}
++
++/* How a subprog leaves when it is out of budget, see push_budget_exit() */
++static struct bpf_insn budget_exit_insn(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
++{
++	if (!sub->bail_unwinds)
++		return BPF_EXIT_INSN();
++	sub->can_unwind = true;
++	env->prog->jit_required = 1;
++	return BPF_RAW_INSN(BPF_JMP | BPF_EXIT, 0, BPF_UNWIND_EXIT, 0, 0);
++}
++
++/*
++ * may_goto has 16 bits for the offset, and what is between it and its target is going
++ * to grow: may_goto itself becomes 10 insns, 14 when it has to save a register.
++ */
++#define BPF_GUARD_NEAR	2048
++
++static bool guard_leaves_subprog(const struct bpf_insn_aux_data *aux)
++{
++	return aux->loop_guard && !aux->guard_no_unwind;
++}
++
++/*
++ * 'r0 = 0; exit' behind the last insn of the subprog, for all its guards that are near.
++ * Returns the number of insns that are going to be added.
++ */
++static int append_budget_exit(struct bpf_verifier_env *env, int s)
++{
++	struct bpf_subprog_info *sub = &env->subprog_info[s];
++	int last = (sub + 1)->start - 1, n = 0, i;
++	struct bpf_insn buf[4], *insn;
++
++	for (i = max_t(int, sub->start, last + 1 - BPF_GUARD_NEAR); i <= last; i++)
++		if (guard_leaves_subprog(&env->insn_aux_data[i]))
++			break;
++	if (i > last)
++		return 0;
++
++	buf[n++] = env->prog->insnsi[last];
++	buf[n++] = BPF_MOV64_IMM(BPF_REG_0, 0);
++	if (bpf_ret_reg_pair(env, s))
++		buf[n++] = BPF_MOV64_IMM(BPF_REG_2, 0);
++	buf[n++] = budget_exit_insn(env, sub);
++	insn = bpf_patch_list_add(env, last, buf, n);
++	return IS_ERR(insn) ? PTR_ERR(insn) : n - 1;
++}
++
++/*
++ * Add may_goto in front of the insns that the main pass marked, see
++ * check_loop_guard(). It verified the edge from the insn to where may_goto goes.
++ */
++int bpf_insert_loop_guards(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	int len = env->prog->len, i, r, s, to, n, jmp, err = 0;
++	struct bpf_insn *patch, *insn;
++	int *target, *leave, *moved;
++	bool indirect;
++	u16 *zero;
++	s64 off;
++
++	for (i = 0; i < len; i++)
++		if (aux[i].loop_guard)
++			break;
++	if (i == len)
++		return 0;
++
++	/*
++	 * Where the subprog has 'r0 = 0; exit', 0 if it has none. And how far that moved
++	 * the subprog: guard_to is from the time before.
++	 */
++	leave = kvcalloc(2 * env->subprog_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
++	if (!leave)
++		return -ENOMEM;
++	moved = leave + env->subprog_cnt;
++	for (s = 0; s < env->subprog_cnt && !err; s++) {
++		leave[s] = append_budget_exit(env, s);
++		if (leave[s] < 0)
++			err = leave[s];
++	}
++	/* A guard cannot jump into a patch that is in the list: 'r0 = 0' has no index yet. */
++	err = err ?: bpf_patch_list_commit(env);
++	if (err) {
++		kvfree(leave);
++		return err;
++	}
++	aux = env->insn_aux_data;
++	len = env->prog->len;
++	for (s = 0, n = 0; s < env->subprog_cnt; s++) {
++		moved[s] = n;
++		n += leave[s];
++		if (!leave[s])
++			continue;
++		i = env->subprog_info[s + 1].start;
++		leave[s] = i - leave[s];
++		/*
++		 * The list gives what is known about an insn to the last insn of its patch,
++		 * but for indirect_target. Here the original insn is the first one.
++		 */
++		indirect = aux[leave[s] - 1].indirect_target;
++		swap(aux[leave[s] - 1], aux[i - 1]);
++		aux[leave[s] - 1].indirect_target = indirect;
++		aux[i - 1].indirect_target = false;
++		/* the last insn may be dead code */
++		while (--i >= leave[s])
++			aux[i].seen = 1;
++	}
++
++	/* where the guard of the insn goes */
++	target = kvcalloc(len, sizeof(int), GFP_KERNEL_ACCOUNT);
++	zero = kvcalloc(len, sizeof(u16), GFP_KERNEL_ACCOUNT);
++	patch = kvcalloc(8, sizeof(*patch), GFP_KERNEL_ACCOUNT);
++	if (!target || !zero || !patch) {
++		err = -ENOMEM;
++		goto out;
++	}
++	for (i = 0; i < len; i++) {
++		s = bpf_find_containing_subprog(env, i) - env->subprog_info;
++		target[i] = aux[i].loop_guard ? aux[i].guard_to + moved[s] : -1;
++		if (guard_leaves_subprog(&aux[i])) {
++			/* see push_budget_exit() */
++			if (leave[s] && leave[s] - i <= BPF_GUARD_NEAR) {
++				target[i] = leave[s];
++			} else {
++				target[i] = -2;
++				zero[i] = BIT(BPF_REG_0);
++				if (bpf_ret_reg_pair(env, s))
++					zero[i] |= BIT(BPF_REG_2);
++			}
++		}
++	}
++
++	for (i = 0; i < len; i++) {
++		to = target[i];
++		if (to == -1)
++			continue;
++		/*
++		 *	may_goto to		or	may_goto +1
++		 *	insn				goto +N
++		 *					r0 = 0, ...
++		 *					exit
++		 *					insn
++		 */
++		n = 0;
++		if (zero[i]) {
++			patch[n++] = BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 1, 0);
++			patch[n++] = BPF_JMP_A(hweight16(zero[i]) + 1);
++			for (r = BPF_REG_0; r < BPF_REG_FP; r++)
++				if (zero[i] & BIT(r))
++					patch[n++] = BPF_MOV64_IMM(r, 0);
++		}
++		jmp = n++;
++		/* What is behind moves with this patch. The other patches are not there yet. */
++		if (to == -2)
++			off = 0;
++		else if (to > i)
++			off = to - i + n - jmp - 1;
++		else
++			off = to - (i + jmp) - 1;
++		if (off > S16_MAX || off < S16_MIN) {
++			verbose(env, "exit of the loop is too far from insn %d for may_goto\n", i);
++			err = -ERANGE;
++			break;
++		}
++		patch[jmp] = BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, off, 0);
++		if (to == -2)
++			patch[jmp] = budget_exit_insn(env, bpf_find_containing_subprog(env, i));
++		patch[n] = env->prog->insnsi[i];
++		/* A jump to itself is a back edge. It goes through may_goto like the others. */
++		if (jumps_to_itself(&patch[n]))
++			patch[n].off -= n;
++		else
++			err = bpf_adj_moved_insn(&patch[n], n);
++		if (err) {
++			verbose(env, "insn %d cannot be patched due to 16-bit range\n", i);
++			break;
++		}
++		n++;
++		insn = bpf_patch_list_add(env, i, patch, n);
++		if (IS_ERR(insn)) {
++			err = PTR_ERR(insn);
++			break;
++		}
++	}
++	err = err ?: bpf_patch_list_commit(env);
++	if (err)
++		goto out;
++	/*
++	 * bpf_do_misc_fixups() keeps the address of the count of may_goto in a register that is
++	 * dead at the may_goto. A new insn has no live_regs_before: all registers would be dead.
++	 * What is live in front of the insn is live in front of its guard. Nothing else is:
++	 *  - The guard of a jump goes where the jump goes.
++	 *  - What is live where the guard at the head of a loop goes is live at the head,
++	 *    see bpf_head_guard_target().
++	 *  - On the way out of the subprog R0, and R2 of a pair, are set to 0.
++	 */
++	aux = env->insn_aux_data;
++	for (i = 0, n = 0; i < len; i++) {
++		if (target[i] == -1)
++			continue;
++		r = zero[i] ? 3 + hweight16(zero[i]) : 1;
++		aux[i + n].live_regs_before = aux[i + n + r].live_regs_before;
++		n += r;
++	}
++out:
++	kvfree(leave);
++	kvfree(target);
++	kvfree(zero);
++	kvfree(patch);
++	return err;
++}
++
+ /* Clean up dynamically allocated fields of aux data for instructions [start, ...] */
+ void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
+ {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b7329d164771..46ce62879d2a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -24664,9 +24664,13 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (ret == 0 && env->callx_edges)
+ 		ret = sort_subprogs_topo(env);
+ 
++	/* the driver numbers the insns like the program that it was given */
+ 	if (ret == 0 && bpf_prog_is_offloaded(env->prog->aux))
+ 		ret = bpf_prog_offload_finalize(env);
+ 
++	if (ret == 0)
++		ret = bpf_insert_loop_guards(env);
++
+ skip_full_check:
+ 	kvfree(env->explored_states);
+ 
 -- 
 2.55.0
 
