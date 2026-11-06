@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793961093;
-	b=z9tdI679cx0YRd/hyV1Nd2E2qf5Ht1nCcoyvQwz0GeUtjDGdsqRIa3KivC4sy9i96Lam
-	 V7WxCpgtLK8FsswI8FShqZap+zYOxJr2gBWeLvhJqla5nBYpv7wOwOJFzCRdkSsmBVTbW
-	 C2blAVzIdVuq4xXtMMnHaG3hZgI82+evDO1KrCeuR6UEnM6kEB7hk1oCY0SVpnNLpDo24
-	 bLV0jJXqMWKgg2rahBoP9vHvZv7uW0rCbHizWVxjDKmHPtcEf/ApMt+p6TjgczYvRJT2+
-	 lUgcZSDxP8xJrCmf+w1vDfU6B0ZekK2R+rySenPrg0MrORVOneHXcjrv80myyBcq5Sg==
+	t=1793961094;
+	b=gIyiOws2Qg+lWTHHSl33jfaKQ0Qkr6oM3WfKxMb+mnRA0XyO3HFab/jgmaLsbazbcZF3
+	 f5h4se9bdyphNiyZqqSRUXd/p16jRr51xjTwY+IX3ctlbqUuVfRgNpS1gp5Px+ZieKpZx
+	 GcdF28or3aOoOnyrFDcw+kmBAAWO4OxCiJJXMtarP5hqn02XQrz+mB6vt8YP2NmNkkEqc
+	 leyAYbegzQtUEQbp2TWes8YU8RjFT+QZNMQczbmbHRafAT8BcH0suw4kwOWZsEYlY4kj9
+	 K6YJvbsaTlolgNYEVhE7inmPM1NRse0+BIKHBoI/WYCYMr8/bMh8l255QCczd+8nUbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793961093;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793961094;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=bdOl/n8yCttaUwy/7cbPLal3E6oXQPQKJPAZ4q/K8dw=;
-	b=G+CiulfV/MU8FS1YL/7XUHa9GBaRsm6fz0ueBi8qqq8csPoxDYinnLuKCSliiVWg4ppe
-	 GptfKi89R92sxvQRJgTKwR3lsmAm6O/zhs1LNYgFII129OYYO54IQrewK+nCm+v5wu9a5
-	 WQj3ISdqh7Zm1Nr7dgLf1Ls9dU0qqBeogeyFnL476J0fwTPxP9W+/cY0CDYz9ghg4hPB/
-	 znKPd/QTHEo4j4QFyHTmiYT3g4NcKFJMfQ87BGYu8I0QP+8VPl0Dg9TWRl0dYx9IGW9xu
-	 j7mTkdP8MHQtmQ4Ef2+X9KqhG9n68dANLcvSsfSIem/4jYyATDNW2UsyZtiIqlIscaQ==
+	bh=47Ntl1dLCap8ghJf1wKpG20qFI59QF+x/9vztni3aAM=;
+	b=fTSenhGS7Ain2dMj8QfvTd1FRQkGYd5A4uKNetTUbaGBrGfLVXP+EaLE66ozRXPB8nyp
+	 dTc2LfrZDqBmY4V/pDwWVBGaxo4u6XOZpusIk8SuKutHPpQEjc+ZuhXtuKvBzV9Jwy7z0
+	 u/0++LhH5ZHpIK8+LdWKZuOI+PdsMl/MX4iVsD3jdhfDtLhrZGbK/1EU1r8bMiGgbt9Sp
+	 6AzZoM5TehLjRn3d2mQ92OxCnGAVN9sb+ipKCUTVnPLXI296btZ0pDORgIWRdzXLx1ZSK
+	 vV+1vuioNcg7O0BnEEeiFxJHtQRwmdVxZAnP7HenpFmZ/+o5ePzQMU/ddqBJlJUN13A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jY4JNXcd;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QejfiyGw;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C518E606A32F
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 10:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B326606D801
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 10:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jY4JNXcd
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE11F1F0089F;
-	Fri,  6 Nov 2026 10:31:31 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QejfiyGw
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9E2C1F0089F;
+	Fri,  6 Nov 2026 10:31:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793961092;
-	bh=bdOl/n8yCttaUwy/7cbPLal3E6oXQPQKJPAZ4q/K8dw=;
+	s=k20260515; t=1793961094;
+	bh=47Ntl1dLCap8ghJf1wKpG20qFI59QF+x/9vztni3aAM=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=jY4JNXcdunIDk6ngA9Y9N/8skifvz4F4rlSnejd8NOFz+EkCAo4tFRBhzTpJhTGoM
-	 79J7hSr47pF/DriungwzOoBRTIbJz3T0F/PVXQdvOmdky/4xDPvEjqsM9CYQcH+B0G
-	 RtYmvigCV4q7OqDNMXkpxqTFcjJCFfDjA+zFQaDZerUtYrJmeXge/UPl9k1yOVuSx9
-	 CBpaedNFR4J47KLwzpWpDB+S19ibuV9xWiZQEshMQjwe/LbMU0ZGZ4YEXzJHJBbJRu
-	 V/63b7GoDy/d4GSd7I91tnVsORcD131P1g5Sd3Sr2+6vJ0CjQjqqVALxY43ya09Xkk
-	 7v4G+p5/iqPkw==
-Content-Type: multipart/mixed; boundary="===============7978934990594762189=="
+	b=QejfiyGw0ir0/+sS1P9ykH+dHZN88Vl/LILfB5O842kKoBJWUzEsQgds1SpLoe9xk
+	 9PZoM2Cdui64DaTWI7P4ZyR4vcKUs2Mlr4b3WSOqR2GiMMYUEUf3ung++fOb37sQdE
+	 IElUZua8Yo2Sy45nP1Eha5/Z99EaJhArI/pnfByxQA1kYdfEfzmz7zmGmeMWbKdYPf
+	 2B+cqRAYummcguvJMxkIHg5j5QRBXkJPX69jxik1BedY23iUAGgGaz2dP7NOe6wOMZ
+	 fMEP/nPu27j7f4jCB1OPgUU/vOUeifOoSso8phYpFWXA2zeRT8kodt0rVMLAd3W9ON
+	 jqFg0xKa9Qp/A==
+Content-Type: multipart/mixed; boundary="===============2531472142402089686=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,81 +49,104 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <1afc49e2331b659357e786542b82b5343f1456769214168f6e68f9d0e0ee74e1@mail.kernel.org>
-In-Reply-To: <20261106095747.471718-4-luyun_611@163.com>
-References: <20261106095747.471718-4-luyun_611@163.com>
-Subject: Re: [PATCH bpf-next v2 3/8] selftests/bpf: Check task work value membership
+Message-Id: <41d66c9d73a1a3da07356eb4fb72463d0dc4e473c32e426b1db0340e23d03c73@mail.kernel.org>
+In-Reply-To: <20261106095747.471718-8-luyun_611@163.com>
+References: <20261106095747.471718-8-luyun_611@163.com>
+Subject: Re: [PATCH bpf-next v2 7/8] bpf: Check bpf_timer value membership before use
 From: bot+bpf-ci@kernel.org
 To: luyun_611@163.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev
 Cc: yatsenko@meta.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 10:31:31 +0000 (UTC)
+Date: Fri,  6 Nov 2026 10:31:33 +0000 (UTC)
 
---===============7978934990594762189==
+--===============2531472142402089686==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Check task work value membership
+> bpf: Check bpf_timer value membership before use
 
-TL;DR: Test issue: LRU subtests with max_entries=2 and no CPU pinning may
-spuriously fail (-ENOENT) if the thread migrates and the LRU evicts the live
-key, with no kernel bug.
+TL;DR:
+- Timer membership check may mark LRU hash elements as referenced, so
+  self-re-arming idle timers could skew eviction
+- Nit: new -ENOENT doc line splits the -EPERM text and uses undefined terms
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_work_membership.c b/tools/testing/selftests/bpf/prog_tests/task_work_membership.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_work_membership.c
-
-[ ... ]
-
-> +static struct task_work_membership *open_test(enum bpf_map_type type, __u32 flags,
-> +					      bool use_signal)
-> +{
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
 
 [ ... ]
 
-> +	/* A full LRU map can evict the target while obtaining a candidate. */
-> +	if (type == BPF_MAP_TYPE_LRU_HASH) {
-> +		err = bpf_map__set_max_entries(skel->maps.values, 2);
-> +		if (!ASSERT_OK(err, "map_max_entries"))
-> +			goto fail;
-> +	}
+> @@ -5468,6 +5468,8 @@ union bpf_attr {
+>   *		**-EBUSY** if *timer* is already initialized.
+>   *		**-EINVAL** if invalid *flags* are passed.
+>   *		**-EPERM** if *timer* is in a map that doesn't have any user references.
+> + *		**-ENOENT** if the current map lookup does not return this value
+> + *		when the membership check is reached.
+>   *		The user space should either hold a file descriptor to a map with timers
+>   *		or pin such map in bpffs. When map is unpinned or file descriptor is
+>   *		closed all timers in the map will be cancelled and freed.
 
-Is max_entries = 2 enough to keep the common LRU from evicting the live
-key 0 in the lru_replace_* subtests (retired_value(BPF_MAP_TYPE_LRU_HASH,
-0, signal, true), REUSE_ROUNDS = 8)?
+This isn't a bug, but the new -ENOENT entry sits between the -EPERM line and
+the paragraph that explains -EPERM ("The user space should either hold a file
+descriptor to a map with timers or pin such map in bpffs...").
 
-htab_lru_map_update_elem() calls prealloc_lru_pop() before it looks up
-l_old.  With 2 elements, bpf_common_lru_populate() sets target_free to 1,
-and a node freed while pending on CPU P goes back to P's private
-free_llist, not to the global free list.
+In the generated bpf-helpers(7) text, that advice now reads as if it explains
+-ENOENT.
 
-If the test thread migrates between rounds, this sequence seems possible:
+The wording also relies on terms the helper description never defines ("this
+value", "the membership check").  Could the entry be placed before -EPERM and
+worded in user terms, for example that the map element containing *timer* was
+deleted or replaced?
 
-  insert_value() on CPU 0:
-    node A becomes key 0, pending on CPU 0; node B stays on the global
-    free list.
+The same text is copied into tools/include/uapi/linux/bpf.h.
 
-  thread moves to CPU 1, round 0 of update_then_schedule:
-    takes B from the global free list (B pending on CPU 1);
-    htab_lru_push_free(A) puts A on CPU 0's free_llist.
+[ ... ]
 
-  round 1, still on CPU 1:
-    prealloc_lru_pop() -> bpf_common_lru_pop_free() finds CPU 1's
-    free_llist empty and calls bpf_lru_list_pop_free_to_local(), which
-    flushes B to the global active list, finds the global free list empty
-    and calls __bpf_lru_list_shrink().  That force-shrinks the active
-    list and unlinks B, the live key 0, via htab_lru_map_delete_node().
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
-Back in htab_lru_map_update_elem(), lookup_elem_raw() then returns NULL and
-check_flags() returns -ENOENT for BPF_EXIST.  The program stores
-mutation_err = -ENOENT, so ASSERT_OK(skel->bss->mutation_err, "mutation")
-fails without any kernel bug.
+[ ... ]
 
-The test does not pin itself to a CPU, whereas test_lru_map.c uses
-sched_setaffinity() for this reason.  Could the LRU subtests pin the thread
-to one CPU, or size the map so the global free list cannot run empty within
-REUSE_ROUNDS rounds?
+> @@ -1575,8 +1574,7 @@ static int __bpf_async_set_callback(struct bpf_async_kern *async, void *callback
+>  		return -EINVAL;
+>  	if (!atomic64_read(&map->usercnt))
+>  		return -EPERM;
+> -	if (cb->type == BPF_ASYNC_TYPE_WQ &&
+> -	    !bpf_map_value_is_linked(map, cb->value))
+> +	if (!bpf_map_value_is_linked(map, cb->value))
+>  		return -EINVAL;
+>  
+>  	return bpf_async_update_prog_callback(cb, prog, callback_fn);
+
+With the WQ-only condition removed, every bpf_timer_init() that reaches the
+membership check and every bpf_timer_set_callback() now calls
+bpf_map_value_is_linked(), which does:
+
+    return map->ops->map_lookup_elem(map, key) == value;
+
+For BPF_MAP_TYPE_LRU_HASH, which may hold a BPF_TIMER, map_lookup_elem is
+htab_lru_map_lookup_elem() -> __htab_lru_map_lookup_elem(map, key, true),
+which calls bpf_lru_node_set_ref() on the element.
+
+Before this patch, bpf_timer_set_callback() had no effect on LRU state.
+
+A timer callback that re-arms itself with bpf_timer_set_callback() +
+bpf_timer_start(), as timer_mim.c's timer_cb1/timer_cb2 and timer.c's
+rearm() do, would now set the ref bit on its own element every period.
+__bpf_lru_list_rotate_inactive() and __bpf_lru_list_shrink_inactive() move
+referenced nodes back to the active list instead of evicting them.
+
+Can this make idle entries whose timers re-arm themselves look hot to the
+LRU, so that entries that are really in use get evicted first?
+
+The syscall lookup path avoids this side effect by using
+map->ops->map_lookup_elem_sys_only (htab_lru_map_lookup_elem_sys, mark=false)
+when it is present.  Could bpf_map_value_is_linked() use the non-marking
+lookup when it exists?
+
+The same helper already serves wq (7b56ce638391) and task work (36948ba24248)
+earlier in this series, and no later commit in the series changes this.
 
 
 ---
@@ -131,4 +154,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42200504781
---===============7978934990594762189==--
+--===============2531472142402089686==--
