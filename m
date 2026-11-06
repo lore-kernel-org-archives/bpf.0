@@ -1,49 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794005411;
-	b=yL+hcBTnTYaK20+TWR2ruDSJ74MTgS19C0cuUfn+TH4z3ucac6uAbsdbkvpfDdG9UoK+
-	 fHvnRTu0p7+EvHux+p07EqP4VEMoXHmtHOXBUvXznZHnQZNhZZbVzjbmZtEDXK1FVOznb
-	 CXHSL9DTRvu3a2TJFSECAAWvwxT1WooSV4G5IpdhN/FkNSIZzLa9GZk5Ym2L3Cl99rxJg
-	 +ylhJjIAH/BLw+8Sa+KoiAqKeiKbqv33P+LoeU06tz7IhkXp6cR/Ti4Jo+Eiaq0XllWWN
-	 XG9FFd2F7nFhaz8Us5wDtPVhF9t7oz8YjqNv/LZkloEZd/BKxvVdzhYANlwJpNctykw==
+	t=1794006730;
+	b=2OlFbOaKacy83Ht+IFM6VXfRhqgTaR9fNIoEJrcMxSB9VfQn33b9UOIFPO07WfCAL8B7
+	 dh4tNBerg9QXSsJWYW9pNiR1ooYy2/qM2kdOPoTk6EVjeNjzjMSVGGwrew3gqAQUvAbQq
+	 hso78rcEyeRKevNMRn2kWso4Q8BOgtpRnYRkA0aZvcJgjqBufyBupPVAfnhJ6JgZssetZ
+	 lq/XAUAsseq3ywbQyLVzOvskcWtBLs2VywFsOct1r9UUG2krlykI/VNgglFwpJcdJMAcV
+	 vQNSeL5tcnXRVAl1mkT5aEUFAL5v2S/sa3zC5IzDBCIEwXHikPG82JzhoYeGx4nVUIw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794005411;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=yjIkLHTE6zm8xxbw2Bckbdu3f+EsG+gHBYzTg0WRdpY=;
-	b=ts6xj+WrpE4M5MSHdmMIKVc0lo4ar7YyRKbX39jh0yB5iBmoq5ZXPnvlD+azrncnv9LX
-	 MHzSXigxTapF2HLklMHbePXkgTcFEgDPvEgKIAe8kQC9J7ikO7Aq6O/uiYPGbGhyhRVu3
-	 9NGB+TI6hffekhYxr5mk14nCGwaDk4LvYiH0zr1qsvCsArJslLKj543wxc3k3KhTtr5to
-	 q0rtqkINmaITSlfo8VDKpVcZkqs/FMNB2BW2M3+Cu51EXn9qV1x1eXav3ZYzVp7S7XzxX
-	 x3VO5/qJGFfvbj34hJx8LR5wVbNMN+MJyjK9QELAakDaj2CzDUq9gx6BeIpFAClNgoQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794006730;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=UbpFueGBEvU53Vb7/q/PLhrOg44UG6dCmPzDN0HPnNM=;
+	b=VPFEBEwVXiJpyzYdZjocStO9DfDFEjaoVMO6MyFmLSiXYG3vXGMet/r2o6zHRuw2N5fA
+	 4MdBmWwCj7IMzh9jANG6GyJ8Bx3byQxcJbds2je4w2/+/rRrCsAbtSD/8IPFl6itB+MIV
+	 iC/Kw5n+36s3mcGGBIUwTn4r0FG1yYgjNg4MVbLQegDCuimB5z/Plc9aKVuaO3NmU1PPA
+	 9T3NTx9aw9nRQpLzCaFQWw+y9plSjPh/CVhJJ63HqSdt4zujGBJIIgqDTOqgPHp3CRoUj
+	 jS+RGmXo/Qz8fV4AeIS2sDrX2/bNKKClv0GVwbMo0++/GeO4LzTM0/S6H1J7zh/yFDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JnnZKtOZ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CDuhJUnK;
+	arc=none smtp.remote-ip=91.218.175.30
+Received: from mta0.migadu.com (out-30.mta0.migadu.com [91.218.175.30])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933A6606D808;
-	Fri,  6 Nov 2026 22:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A133F606A32C
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 23:12:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A133F606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JnnZKtOZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B5081F008A3;
-	Fri,  6 Nov 2026 22:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794005411;
-	bh=yjIkLHTE6zm8xxbw2Bckbdu3f+EsG+gHBYzTg0WRdpY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=JnnZKtOZa3/cfMh3iYVX2tVx7OSygnq/Nhp2l+r+pWabLmQa2Y/or1MT3oJVSC4Ro
-	 shWimEUReWgSm0dOQhUgYd13ajHakbdMV47aYDArGgLjwhkTqGc+hcxNxGEul5EPMT
-	 D33xC6SpuWjLZdeJ/hQ8GKisZLWpdxs7pj4LleHSXAOnxv16tBCz3LGskmcJTgrdhL
-	 kIA0KwSI6/aKJm6W00iyOUsg3WPXFsCY3Q5qpnPZ0SS3zejLasxuPpDWMnvr+Xdb1G
-	 1zaCUZTg11IHUgn1HyYhE6g+HdYktNj5eFUCp9cm3yqHX4IxGNQkHAVzcRuLoID+3O
-	 +sGF866hkRxrQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 2100C3A55EC2;
-	Fri,  6 Nov 2026 22:50:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CDuhJUnK
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=LNw6d4GW0mbl2KSWZ2jOylagT+FVNJ4ieKN77f/dhjY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794006727; v=1; x=1794611527;
+ b=CDuhJUnKzabU0b8UvRoJ2bk8PxK6ucEH6vA8nMw3Up+EgoywyZa+umT7uPAjrL2UK/4MCuye
+ YTuG3LKinbahycxAmhqj7wwxhT0RPrurdBIrLg9/hb/6wCGiN4tCaHTPdZ5qzpnD56BtFt7wDBj
+ TZLRYIp4ue4rufUIdiLs7Lgk=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta11.migadu.com with ESMTPS id b8ac95d11857e0d1;
+	Fri, 06 Nov 2026 23:12:07 +0000
+X-Mizu-Trace-ID: b8ac95d11857e0d1
+X-Migadu-Flow: FLOW_OUT
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Amery Hung <ameryhung@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Nicholas Carlini <npc@anthropic.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf v1 0/4] bpf: Scope callback arguments to their frame
+Date: Fri,  6 Nov 2026 16:11:53 -0700
+Message-ID: <20261106231157.2840635-1-ihor.solodrai@linux.dev>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,41 +72,62 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] ipv6: Check the Home Address option again before its
- address is used
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179400540967.914342.6623391724463766435.git-patchwork-notify@kernel.org>
-Date: Fri, 06 Nov 2026 22:50:09 +0000
-References: <20261102064922.2636027-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261102064922.2636027-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, dsahern@kernel.org,
- idosch@nvidia.com, bpf@vger.kernel.org
 
-Hello:
+A callback-calling helper can pass its callback a pointer that is only
+valid for the callback invocation, and the verifier has no way to
+express that lifetime.
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Two helpers need fixing:
 
-On Mon,  2 Nov 2026 06:49:22 +0000 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> ipv6_dest_hao() checks the Home Address option and sets IP6CB(skb)->dsthao
-> to the offset of the destination options header. Later mip6_addr_swap() and
-> mip6_destopt_reject() call ipv6_find_tlv() with that offset and use the 16
-> address bytes. They assume that the same header is still there.
-> 
-> [...]
+  * bpf_user_ringbuf_drain() passes a CONST_PTR_TO_DYNPTR over a
+    sample it releases as soon as the callback returns. Saving this
+    pointer in callback_ctx leaves it pointing into reused kernel
+    stack and allows arbitrary kernel read and write since v7.3.
 
-Here is the summary with links:
-  - [net] ipv6: Check the Home Address option again before its address is used
-    https://git.kernel.org/netdev/net/c/30c71476d842
+  * bpf_for_each_map_elem() over an array or per-CPU array map passes
+    the address of a u32 held in bpf_for_each_array_elem()'s own frame,
+    leaking four bytes of kernel stack.
 
-You are awesome, thank you!
+Give the callback frame an id and make it both the id and the
+parent_id of such an argument, so that slices and clones descend from
+it. Invalidate the id and its descendants when the frame is popped.
+
+---
+
+v2->v3:
+  * Replace REF_TYPE_FRAME with a frame_id in bpf_func_state and drop
+    the preparation and refactoring patches (Alexei)
+  * Rebase on bpf, and add Fixes: tags
+v2: https://lore.kernel.org/r/20261009202759.50520-1-ihor.solodrai@linux.dev
+
+v1->v2:
+  * Add the refactoring patches: release frame references in one scan,
+    and fold diagnostics into the REF_TYPE_FRAME introduction
+  * Replace temporary argument mask and deferred register scan with
+    reference acquisition directly in the owning verifier state during
+    callback setup (Eduard)
+  * Reuse callback_park_dynptr() for the nested drain test
+v1: https://lore.kernel.org/r/20260922010333.1226537-1-ihor.solodrai@linux.dev
+
+---
+
+Ihor Solodrai (4):
+  bpf: Scope the bpf_user_ringbuf_drain() dynptr to its callback frame
+  selftests/bpf: Cover the user ringbuf callback dynptr lifetime
+  bpf: Scope the bpf_for_each_map_elem() array key to the callback frame
+  selftests/bpf: Cover callback-frame map key lifetime
+
+ include/linux/bpf.h                           |   2 +
+ include/linux/bpf_verifier.h                  |   2 +
+ kernel/bpf/arraymap.c                         |  19 ++-
+ kernel/bpf/states.c                           |   3 +
+ kernel/bpf/verifier.c                         |  16 +++
+ .../selftests/bpf/progs/user_ringbuf_fail.c   | 135 ++++++++++++++++++
+ .../bpf/progs/verifier_iterating_callbacks.c  |  91 ++++++++++++
+ 7 files changed, 266 insertions(+), 2 deletions(-)
+
+
+base-commit: 475a0cfd02f14d764023e926ac01fc7597134229
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.56.0
 
