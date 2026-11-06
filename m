@@ -1,94 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793937306;
-	b=GPxxrooY6ST/lTiGfJIgR9BUAukRmTIzDffGn6S5jYlqux/juvXiqgolPxWMeClR5KxO
-	 w7ALJ3An9mCkjFODiIM6CsFeIM9FreKPIVj3M3K2Pu3AYwLp5dnxSkD5g4Are6q1D0xjY
-	 8IpUz9jS+vJcp69wvzQeE/mlPc0qBUz4IkZr24dJDrOs3jhMCohjZrwzltZHsLxUNgwLu
-	 9DO7f2WXlnEJjgU9LePYTUiFQfcYYjdmKFs0Il7eAD9JV5D+Tgr6n5PjiEgPOFOXVeJNy
-	 k6D5ntP/2sHMGkAtAsWFPge6ACSynhPTZBDNnyWKosf9Pn4fbm/4xsvewZBzIGkI6tw==
+	t=1793937311;
+	b=aRN4OVJm/m1IxCQr+M2St7XOfsM3yHBZVTEbr/n6NDLlNV+e2tzBnzNKvBp+vemoViVr
+	 N0IJKZQnQL+YVUMVYqUM+V0HDOmhoxu9wBfDSXiMWP/Ur8qarIxix6hHXLTN13H/7T+EE
+	 uyiA8MQxeVzpYCB9f8uAHJfQxhS6cVbebUr8b6GkDx5AZAbdIguhqUBv4YdYAm6IljYFB
+	 y2CD6urMmcJjAQZPGmDee3XfGhB6Y5RZ+E4bUxjBgpUzX3dbxnTVCxPrfUIYEtNEul2Em
+	 WuAsUffbZlm3HDYK4tVjJZB77ag79Zzc88kP0nnPHyZUKAtU9sUO3xF2f1gMUyNwl2w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793937306;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793937311;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=gPX8r1hfQ09/Ikr09i+UqcLglCN5rIS7SNhqyT87dfc=;
-	b=aZxumGaSb1kppD+7rje/Z+L/09xbsgsKobwSDDArOu7PIFpbhri03XsbypRadr6GWnLF
-	 YPk7guxkApLDoDjPWNOrqP7o6hEwt+ukW4wmFoBKxfhN2GUHk7Ry7ZYpufD6YZjn0pwXW
-	 Sm8fFUKgKk9QactqKK8HVhCQmJmGgX5UW6uS2m9zreFNOaLKBl5PmQDs9PMDwpDEHBuk4
-	 iv/mrsQmmYPgLG6dUdjN13vbr8cqzO+5vYh0CO/IsSMjdNQH0Qy7I+LoeIYyKgWg6kH3/
-	 NrWuTjMOveBQE8nudYDjdVJI2xnQQDIsUL0NtPpUz5Ed+CnDslKrMrGSK7CrNq61QJQ==
+	 Content-Transfer-Encoding;
+	bh=53sPBx+nbuuvdrHBI1Oq2xyK/fYhkNDK1rQDzq93c5k=;
+	b=2SI7XPKSgizzV7qYkwcPc2q0QDvWnufVxoS/Off0BeS8m57T93UqdH4zAhZRXpX4Js06
+	 TsZ4c85eqgL4L+Ncv7Mhwdv+3XGgyqnIxohkKfTlzqQglAY+FnCF7EMUxpuC9cOrFd6cY
+	 QSIlNAB6BYZ2iQVAYl4bZejAqsQFe5ZU+D/AXlb1uEQahX3M8AtS/y8tCD8AMgZcdJ4Wa
+	 EwxgGq37o9Xw6qM4r4fpUq7TJxaN3/yAnGxZAPrmXmO7ScehUzzhmPa/WKLB1zu6YtMkz
+	 kfehd4eveqqxOnWpe8jlbZhHpDWvN6lG3Aee3hE42+26hScS5a7XlzGmL5XBdvqmSHw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=i3k7bUhd;
-	arc=none smtp.remote-ip=209.85.210.175
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qOxaer7T;
+	arc=none smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3649606A326
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 03:55:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3649606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EACB606A31B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 03:55:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1EACB606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=i3k7bUhd
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-89f85edd210so69526b3a.2
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 19:55:04 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qOxaer7T
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3b09c07b3d2so130467a91.3
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 19:55:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793937304; x=1794542104; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=gPX8r1hfQ09/Ikr09i+UqcLglCN5rIS7SNhqyT87dfc=;
-        b=i3k7bUhd20RIbmxz2ny8amN+UZ/PFJuA4a+dwX3AYtfFZQdkNsG1Sy0hPH5Zc+RKji
-         VCYf337JMyRmuuRo9XnPPZjUFIyhGLUYEBC/6hMCtPgU+R7ZKGbAo47xJtkIaHMlCh97
-         VVo7XhzZ0Z7S/cm+5dQZdbFZ7sfhpCAuQU0Ianj4rm/1hDX02iyOxswuDW8VktMH7XzQ
-         WVwLhhkc24lGTA9vIgoinV9br+/yiomUDjmbJRi/Pkl5Mh1modmoGtQs+qzyrnBQG2cN
-         v0xh7kkQVn/KLwOzWLhNBgH9LBrbamR9JTA6WbVu69DItKbJ1GANwhGD06SoeoPD3yKW
-         4g2A==
+        d=gmail.com; s=20260707; t=1793937309; x=1794542109; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=53sPBx+nbuuvdrHBI1Oq2xyK/fYhkNDK1rQDzq93c5k=;
+        b=qOxaer7TSjEz1vEeLdOT7Wy8T64exxBE4BpI1My31Ld5NFXldHCK12O4KszOnttctO
+         9g8o0O5dRxdSKCNAIENRbVl6xWcwdYKx80+Dl8RAih1TEA7MkjaAyGYTSzlsJ651tdsz
+         CsR5APNVpJgAPeNMEm09nULbG5Nsm1SAt1OP9yxq7kHyoSjbOrCC1ihD6Z+zbgTgjYJW
+         yteqOC5Vf+u7Cl5FEI+Z6U/nnSUQqMgPAMfXyMjUtqN1LMP1m3rd11WmFR6gyH33+ZG4
+         L9uWRLeG9gTPvxYafG1jlZ3OpzVPKz7kIvcpGq+vxbILktKo2u3/s8HiO7nx9pVwGr9R
+         +Vfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793937304; x=1794542104;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gPX8r1hfQ09/Ikr09i+UqcLglCN5rIS7SNhqyT87dfc=;
-        b=OzAACJ1DIR/9RCoWQ3+9TLjD0Ww4iDesLTtJaJ+/lVGxYLjxdOm9vDR+/lMcjA6nYS
-         T43i/Q6WhKbWFo0R5CDDrITf2vaPxJ6oHRggTXXmH4AM2kaRq3NT5sbUtq2laU9yt+ze
-         xIe7MFSKvCBcHHziheJ8PyASch9lmBAdgqLY94FQK0jrk3nvvmKrsP45jUp5JDdOUe2p
-         YOQuGkiVATYG5IRnHLvh6R0nR6NI8kJQ2o3Wg/FEYoyG776yu/MLt75stc8DRQ4S0GKj
-         OAETlrKvw/IaHrL60te5GW/4KBHIxMH3hJD3lK+gcbG/cXsUz77Zz7Dk2ipsty99J/MF
-         rCWw==
-X-Gm-Message-State: APuU4Z8riWQWUXpYG0G5vMSGOY9tkvdBHHfbd2ZTKqLXYygVufc8pVKw
-	YIg/HL6/Z21nJdBnJWmgLGO1cia5HEpK7mv+gzwlJRsrEc/ceQkBEGnWnfIDJg==
-X-Gm-Gg: AYBFou3nmTACinPzIwMir9qSwnlIvjbUyeg5SZNVg/GIQid2TaeuuFqHako3DGEpNNY
-	ixCcYSHTmaUH/NmrbuFFSpoEMyHN3e8+5U4zANMeW/+TVx87ZFkDAtnFRWB4Mg5oU4eGTz28bCG
-	O1R3wW/VioCdTlX5eINNNKldGFsAeMMJJb5mq1b3oxUOLHPWUntPo1MdjL3qMtNVr3QDh3YRSR5
-	jqrDGGZSgqIkJDAEzBImpynGek24SMctfZMP+7LeytDBiPT7T4Ven1oa27ouuPcbnyb/Xw3PCP2
-	2gcuVCx2eGHRprF7buzO6QMPfH9RkSxDq4Gqn+KcfqeaRXEsB7lz5HNyTlHfniGlaP+oDHAcPWo
-	B6OCNg/CLAP6gYX57ARyzJ1G8TGSJUr2sbfzXc1l41d39JpAQbWZ6CBi2/qU81nauX3v05fR//a
-	0s2kmjPy9bnk5Z5uGcqYyZkVhk6C/jM1De3iJakoe9haC1iojO3/vsoMiCGfEEUpZfxV/r5oGzr
-	FoH9kNqbSe60Mydj4zss/Pi8fdLEAY+x/4sochSWSVTPrklg0aqfbO5zBtwnSjxpR+yWMlzbBKF
-	0AfKhuXriFkz9cQRuxw1fjSZNHQ70zU0lOP1WRPNG0upxfSsZUSbw8xio23ZRIEDuI9Zf6l2kdd
-	Qe69qGX9ToRpDQp5XbyHKAdZpz9G6bksOaXnoQSUQkmADtwg8dhwOJFkUCX+zjnwfOYt28t3uVQ
-	==
-X-Received: by 2002:a17:90b:2ccf:b0:3ad:4a8b:c6fd with SMTP id 98e67ed59e1d1-3b0db6ee7c5mr1090439a91.28.1793937302299;
-        Thu, 05 Nov 2026 19:55:02 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0d7cb447esm1493692a91.17.2026.11.05.19.55.01
+        d=1e100.net; s=20260707; t=1793937309; x=1794542109;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=53sPBx+nbuuvdrHBI1Oq2xyK/fYhkNDK1rQDzq93c5k=;
+        b=Nqknj6gyJJpVE1ciLPM/c4MZ4g7hKsVhY/i6knwqibxT05UkOGgXcHcn9agip8oNFa
+         NsXHuan2l+S0S1BYiZxoLOxGtSQj5ysVeJHPj4tVD56hWd9V8O19Lg0Wc5Q5FruxkvRZ
+         IpkS2RoNHunkz8NT7Dh3to3jpvKLwbYTAHppDbVfSmMQscU+fL96d2TOkawnUSHlybOa
+         6eqd2BYIgwjP5h4zGSscz0cNsZhV2xajg1yluHU2cQHaEIYf73nV2XsjXPRF5atXgnTe
+         w7D+4CV4i2mqMlUDz+1I9MAEbnGuteq+3Nm4iuPeodIq2w+BWwNz15+JsT6iSzlMsmWj
+         5BCw==
+X-Gm-Message-State: APuU4Z/dgC5u93QzjVPlAWml+5yjexvl6Jge1EuNuQLBPKtD8Q4gNHJd
+	IuN0lnHDSzkLnnTA20q6QdGrJHOsF74FuKmkHlpC3VOZK+XNBtMvLJe+Fi/J8w==
+X-Gm-Gg: AYBFou2bhdJRD4bQG6rRuJW52ReX4f/xmN6ueoyGmk01jcOWftG17omq6GViDZP7cc3
+	KRCjLh7Yae7z4hNX1V4TSipZDb1aHMUnAn5c7ozzt26thHRruF6d2mWoGWqecWlSTuQPLqZGnDT
+	UvtXMhs87n9K6k4TFxLWMMOe9RQH9qbWOQOqPPMJ7PF3RpPzcjOohxfiHw7mDowOsTYic1ZIi0f
+	Ie5aZ5MFcxi5DdsJcE7uqnISK7GRmRlpn3WDGOagjPW6m+Enju7SlvxIUYsqiQ4BXcrDGamZORr
+	YcIshAsGq1kiE/T7Z/GsyNO9N3dATnzDv6bUyl8qjL+POO43QN8ULcuCjIegWbrq37E8FT9pm25
+	va0bTSXJDt7MAkzkp0fyQiWUw0YknvW4bRiuE49/cFMtbU0WvsLoBqliVU+ZdOjWQiyzQfNBayb
+	5je7JSDFENtDj4Fv9ZdGQn/viiohdUSsT9+5KuIBegMR+51t52YdIVhsvldxzToLkt6cYW84AcK
+	wTB3NJ1Th1dn+WXr4wsDYSN9VBidv7jGunX9wN6anwFAvEvuHR4HmQZCHmVWfKw+Pepwy10o4FQ
+	7WQBfbd7wVsGi6hv5yT2AESZwBYCgdxtf3OE5Pa8WGWqUjA0NDtnk3hoGPTv+VIMsHz4PWCeqWh
+	x7cVhFlJdsJWvh8OM3sijgYldLmxBhXvQ8rf+65a5XoMNXSzJq3zNFLIc8wx1q32yJRzFqd8GsG
+	ryjx+jcEHYgDi4t5aCpg/e
+X-Received: by 2002:a17:90b:39b0:b0:3ac:7842:bd50 with SMTP id 98e67ed59e1d1-3b0db6d42d2mr1183636a91.15.1793937308345;
+        Thu, 05 Nov 2026 19:55:08 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0d7c42932sm1517976a91.6.2026.11.05.19.55.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 19:55:01 -0800 (PST)
+        Thu, 05 Nov 2026 19:55:07 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 39/45] selftests/bpf: Adjust tests to log lines that are gone
-Date: Fri,  6 Nov 2026 03:51:03 +0000
-Message-ID: <20261106035111.3315285-40-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 40/45] selftests/bpf: Adjust tests to new verdicts, messages and order
+Date: Fri,  6 Nov 2026 03:51:04 +0000
+Message-ID: <20261106035111.3315285-41-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
 References: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
@@ -101,3209 +100,2282 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Without this patch 114 subtests of test_progs and 4 tests of test_verifier
-fail. Their progs get the old verdict, but the tests match lines of the
-verifier log that the kernel does not print any more. Keep the progs. Match
-the line of the new log that shows the same fact.
+Without this patch 143 subtests of test_progs and 3 tests of test_verifier
+fail. No prog that loaded is rejected. 25 progs that were rejected load.
 
-  [P] "bpf: Remove precision tracking"
-  [V] "bpf: Remove is_state_visited(), bpf_compute_scc() and iter.depth"
   [F] "bpf: Verify programs as a fixpoint over the control flow graph"
+  [O] "bpf: Verify static subprogs on their own"
+  [R] "bpf: Allow recursive subprogs"
 
-  the tests matched        they match now
-  -----------------------  ------------------------------------------------
-  [P] "mark_precise: ..",  The value of the scalar where the prog uses it:
-  462 lines                "R2=-8".
-  [V] "N: safe", 23 lines  "from M to N: within". If no state covers the
-                           other one: "joined", and the join.
-  [F] "id=1" of a scalar,  No id: the verifier clears an id that only one
-  12 lines                 live register has.
+  before                          now
+  ------------------------------  -----------------------------------------
+  "infinite loop detected",       [F] 19 progs load, most run and return 0:
+  "too large", "8193 jumps"       8 iter_remake_*, loop3.bpf.o, .. One
+                                  state covers all iterations, and may_goto
+                                  stops the loop.
+  the same, the loop has no exit  [F] "loop at insn N never exits": 6 progs
+  "recursive call from",          [R] 6 progs load: callx_*_recursion,
+  "frames is too deep"            bounded_recursion, .. It needs the JIT:
+                                  __arch_x86_64, __arch_arm64.
+  "header_count is [0..3]", then  [F] "[0..5]": two bounds are joined in
+  "[0..5]"                        front of a counted loop.
+  the fall-through is verified    flow_compute_order(): the target of
+  first                           a jump is. Swap the branches, or expect
+                                  the other one of two errors.
+  "0: R1=ctx() R10=fp0"           [F] "0: R10=fp0": only what is live
+  scc column, "depth=",           gone, "(limit 0)": the patches that
+  "(limit 1000000)"               remove the old pass
+  r1 is an argument               [O] only if the callee reads it
 
-The first row is verifier_precision.c, _subprog_precision.c, _spill_fill.c,
-_scalar_ids.c, stack_arg_precision.c and verifier/precise.c. The second row
-is verifier_bounds_step.c, _search_pruning.c, _live_stack.c: the tests of
-regsafe(), stacksafe() and range_within(). The target of a jump is verified
-before the fall-through. Thus the tests in which the first of two states
-must cover the second one swap their branches.
+The last row: the callees in verifier_live_stack.c and _liveness_exp.c read
+the pointer that they get. unsafe_on_2nd_iter also wrote 8 bytes to
+'char buf[4]', and the verifier finds that error first: the buffer gets
+8 bytes. bpf_loop_iter_limit_nested compares two sums with their maximum:
+the verifier knows their range, not the set of their values.
 
-Three verdicts change. short_loop1 was "too large". Now one state at the
-loop head covers all iterations, and it loads. 2 unprivileged progs of
-verifier_value_ptr_arith.c load: r1 = [0, 3] and r1 = [0, 7] are joined in
-front of 'r1 += r0', and the insn gets one limit for its mask. 8 progs are
-rejected as before, with a different message. BPF_F_TEST_STATE_FREQ has no
-effect. Remove it from the tests that change.
+New tests of [R] stand next to the old tests of the same limits. What it
+rejects: test_global_func3.c, verifier_tailcall.c,
+"calls: a timer callback calls the main prog", "arena stack: the kernel
+frame of a recursion counts in the depth of the stack". What runs:
+"arena stack: recursion ends in the stack", and
+callx_no_recursion_after_all, which gets no check at run time.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/progs/aggregate_ret_func.c  |  15 -
- .../selftests/bpf/progs/aggregate_ret_kfunc.c |   7 -
- .../testing/selftests/bpf/progs/dynptr_fail.c |   4 +-
- .../selftests/bpf/progs/exceptions_assert.c   |  24 +-
- .../selftests/bpf/progs/stack_arg_precision.c |  48 +--
- .../selftests/bpf/progs/test_global_func15.c  |   5 -
- .../bpf/progs/verifier_array_access.c         |  14 +-
- .../bpf/progs/verifier_bounds_deduction.c     |   2 +-
- .../bpf/progs/verifier_bounds_step.c          |  73 ++--
- .../bpf/progs/verifier_linked_scalars.c       |   7 +-
- .../selftests/bpf/progs/verifier_live_stack.c |  34 +-
- .../bpf/progs/verifier_map_ret_val.c          |   2 +-
- .../bpf/progs/verifier_mem_size_reg.c         |   8 +-
- .../selftests/bpf/progs/verifier_precision.c  | 186 +++------
- .../selftests/bpf/progs/verifier_scalar_ids.c | 329 +++++-----------
- .../bpf/progs/verifier_search_pruning.c       |  40 +-
- .../selftests/bpf/progs/verifier_spill_fill.c | 224 ++++-------
- .../selftests/bpf/progs/verifier_spin_lock.c  |   4 +-
- .../selftests/bpf/progs/verifier_stack_ptr.c  |  13 +-
- .../bpf/progs/verifier_subprog_precision.c    | 353 +++---------------
- .../bpf/progs/verifier_value_or_null.c        |   2 +-
- .../bpf/progs/verifier_value_ptr_arith.c      |   6 +-
- .../selftests/bpf/progs/verifier_var_off.c    |   3 -
- .../testing/selftests/bpf/verifier/precise.c  |  69 +---
- 24 files changed, 399 insertions(+), 1073 deletions(-)
+ .../bpf/prog_tests/bpf_verif_scale.c          |   4 +-
+ .../selftests/bpf/prog_tests/log_buf.c        |   4 +-
+ .../selftests/bpf/prog_tests/log_fixup.c      |   6 +-
+ .../selftests/bpf/prog_tests/reg_bounds.c     |   5 +-
+ ...f_qdisc_fail__invalid_dynptr_cross_frame.c |   4 +-
+ .../selftests/bpf/progs/cpumask_failure.c     |   2 +-
+ tools/testing/selftests/bpf/progs/iters.c     | 114 ++++++--------
+ .../selftests/bpf/progs/iters_state_safety.c  |   8 +-
+ .../selftests/bpf/progs/iters_testmod_seq.c   |  12 +-
+ .../bpf/progs/mem_rdonly_untrusted.c          |  16 +-
+ .../selftests/bpf/progs/test_global_func3.c   | 125 ++++++++++++++++
+ .../selftests/bpf/progs/timer_failure.c       |   9 +-
+ .../selftests/bpf/progs/verifier_align.c      |  10 +-
+ .../selftests/bpf/progs/verifier_and.c        |   4 +-
+ .../bpf/progs/verifier_arena_stack.c          |  82 +++++++++++
+ .../selftests/bpf/progs/verifier_bounds.c     |   6 +-
+ .../selftests/bpf/progs/verifier_callx.c      |  71 +++++++--
+ .../bpf/progs/verifier_callx_rodata.c         |   4 +-
+ .../selftests/bpf/progs/verifier_cfg.c        |   8 +-
+ .../bpf/progs/verifier_global_subprogs.c      |  11 +-
+ .../bpf/progs/verifier_helper_value_access.c  |   8 +-
+ .../selftests/bpf/progs/verifier_idoms.c      |   9 +-
+ .../bpf/progs/verifier_iterating_callbacks.c  |  17 ++-
+ .../selftests/bpf/progs/verifier_live_stack.c |   3 +-
+ .../bpf/progs/verifier_liveness_exp.c         |   7 +-
+ .../bpf/progs/verifier_loop_hierarchy.c       | 125 ++++++++--------
+ .../selftests/bpf/progs/verifier_loop_latch.c |   2 +-
+ .../selftests/bpf/progs/verifier_loops1.c     |  16 +-
+ .../selftests/bpf/progs/verifier_movsx.c      |   3 +-
+ .../selftests/bpf/progs/verifier_scev.c       | 139 ++++++++----------
+ .../bpf/progs/verifier_subprog_insn_stats.c   |  16 +-
+ .../selftests/bpf/progs/verifier_tailcall.c   |  27 ++++
+ .../selftests/bpf/progs/verifier_uninit.c     |   2 +-
+ .../selftests/bpf/progs/verifier_unpriv.c     |  23 +--
+ .../bpf/progs/verifier_unpriv_perf.c          |   4 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |  46 +++++-
+ 36 files changed, 615 insertions(+), 337 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_func.c b/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
-index f0077d951a25..2671323255cd 100644
---- a/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
-+++ b/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
-@@ -121,14 +121,6 @@ static __naked __noinline u128 static_agg_precise(void)
- SEC("tc")
- __load_if_JITed()
- __success __retval(0)
--__log_level(2)
--__msg("mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r6 stack= before 4: (07) r1 += -8")
--__msg("mark_precise: frame0: regs=r6 stack= before 3: (bf) r1 = r10")
--__msg("mark_precise: frame0: regs=r6 stack= before 2: (57) r6 &= 7")
--__msg("mark_precise: frame0: regs=r6 stack= before 1: (bf) r6 = r2")
--__msg("mark_precise: frame0: regs=r2 stack= before 12: (95) exit")
--__msg("mark_precise: frame1: regs=r2 stack= before 11: (b7) r2 = 4")
- __naked int aggregate_ret_static_precise(void)
- {
- 	asm volatile (
-@@ -150,13 +142,6 @@ __naked int aggregate_ret_static_precise(void)
- SEC("tc")
- __load_if_JITed()
- __success __retval(0)
--__log_level(2)
--__msg("mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r6 stack= before 4: (07) r1 += -8")
--__msg("mark_precise: frame0: regs=r6 stack= before 3: (bf) r1 = r10")
--__msg("mark_precise: frame0: regs=r6 stack= before 2: (57) r6 &= 7")
--__msg("mark_precise: frame0: regs=r6 stack= before 1: (bf) r6 = r2")
--__msg("mark_precise: frame0: regs=r2 stack= before 0: (85) call pc+9")
- __naked int aggregate_ret_global_precise(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
-index 0361a7b42c9b..102156175ba0 100644
---- a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
-@@ -31,13 +31,6 @@ SEC("tc")
- __arch_x86_64 __arch_arm64
- __load_if_JITed()
- __success __retval(0)
--__log_level(2)
--__msg("mark_precise: frame0: last_idx 7 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r6 stack= before 6: (07) r1 += -8")
--__msg("mark_precise: frame0: regs=r6 stack= before 5: (bf) r1 = r10")
--__msg("mark_precise: frame0: regs=r6 stack= before 4: (57) r6 &= 7")
--__msg("mark_precise: frame0: regs=r6 stack= before 3: (bf) r6 = r2")
--__msg("mark_precise: frame0: regs=r2 stack= before 2: (85) call bpf_kfunc_call_test_i128")
- __naked int aggregate_ret_kfunc_precise(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 3770ffdeaaaa..c6b239b78325 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -127,7 +127,7 @@ static int missing_release_callback_fn(__u32 index, void *data)
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+index 902a70d5afeb..2dc37090d7a4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+@@ -154,9 +154,9 @@ void test_verif_scale_loop2()
+ 	scale_test("loop2.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
+ }
  
- /* A callback cannot return with the last dynptr for a referenced resource. */
+-void test_verif_scale_loop3_fail()
++void test_verif_scale_loop3()
+ {
+-	scale_test("loop3.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, true /* fails */);
++	scale_test("loop3.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
+ }
+ 
+ void test_verif_scale_loop4()
+diff --git a/tools/testing/selftests/bpf/prog_tests/log_buf.c b/tools/testing/selftests/bpf/prog_tests/log_buf.c
+index d6f14a232002..4f821fdc4a02 100644
+--- a/tools/testing/selftests/bpf/prog_tests/log_buf.c
++++ b/tools/testing/selftests/bpf/prog_tests/log_buf.c
+@@ -125,7 +125,7 @@ static void obj_load_log_buf(void)
+ 	ASSERT_OK_PTR(strstr(libbpf_log_buf, "libbpf: prog 'bad_prog': -- BEGIN PROG LOAD LOG --"),
+ 		      "libbpf_log_correct");
+ 	ASSERT_STREQ(obj_log_buf, "", "obj_log__empty");
+-	ASSERT_STREQ(good_log_buf, "processed 4 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0\n",
++	ASSERT_STREQ(good_log_buf, "processed 4 insns (limit 0) max_states_per_insn 1 total_states 1 peak_states 1 mark_read 0\n",
+ 		     "good_log_ok");
+ 	ASSERT_STREQ(bad_log_buf, "", "bad_log_empty");
+ 
+@@ -179,7 +179,7 @@ static void bpf_prog_load_log_buf(void)
+ 	opts.log_level = 2;
+ 	fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, "good_prog", "GPL",
+ 			   good_prog_insns, good_prog_insn_cnt, &opts);
+-	ASSERT_OK_PTR(strstr(log_buf, "0: R1=ctx() R10=fp0"), "good_log_2");
++	ASSERT_OK_PTR(strstr(log_buf, "0: R10=fp0"), "good_log_2");
+ 	ASSERT_GE(fd, 0, "good_fd2");
+ 	if (fd >= 0)
+ 		close(fd);
+diff --git a/tools/testing/selftests/bpf/prog_tests/log_fixup.c b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
+index 90a98e23be61..89a7f5947081 100644
+--- a/tools/testing/selftests/bpf/prog_tests/log_fixup.c
++++ b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
+@@ -41,7 +41,7 @@ static void bad_core_relo(size_t log_buf_size, enum trunc_type trunc_type)
+ 				  "struct task_struct___bad.fake_field (0:1 @ offset 4)\n",
+ 				  "log_buf_part2");
+ 		ASSERT_HAS_SUBSTR(log_buf,
+-				  "max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0\n",
++				  "max_states_per_insn 1 total_states 1 peak_states 1 mark_read 0\n",
+ 				  "log_buf_end");
+ 		break;
+ 	case TRUNC_PARTIAL:
+@@ -50,7 +50,7 @@ static void bad_core_relo(size_t log_buf_size, enum trunc_type trunc_type)
+ 				  "struct task_struct___bad.fake_field (0:1 @ offset 4)\n",
+ 				  "log_buf_part2");
+ 		/* we shouldn't get full end of BPF verifier log */
+-		ASSERT_NULL(strstr(log_buf, "max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0\n"),
++		ASSERT_NULL(strstr(log_buf, "max_states_per_insn 1 total_states 1 peak_states 1 mark_read 0\n"),
+ 			    "log_buf_end");
+ 		break;
+ 	case TRUNC_FULL:
+@@ -58,7 +58,7 @@ static void bad_core_relo(size_t log_buf_size, enum trunc_type trunc_type)
+ 		ASSERT_NULL(strstr(log_buf, "struct task_struct___bad.fake_field (0:1 @ offset 4)\n"),
+ 			    "log_buf_part2");
+ 		/* we shouldn't get full end of BPF verifier log */
+-		ASSERT_NULL(strstr(log_buf, "max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0\n"),
++		ASSERT_NULL(strstr(log_buf, "max_states_per_insn 1 total_states 1 peak_states 1 mark_read 0\n"),
+ 			    "log_buf_end");
+ 		break;
+ 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+index 6231258b26cc..09f7930733be 100644
+--- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
++++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+@@ -1276,7 +1276,7 @@ static int parse_range_cmp_log(const char *log_buf, struct case_spec spec,
+ 		{true_pos + 1,  7, "R7=", true2_reg},
+ 	};
+ 	char buf[32];
+-	const char *p = log_buf, *q;
++	const char *p, *q;
+ 	int i, err;
+ 
+ 	for (i = 0; i < 4; i++) {
+@@ -1291,8 +1291,9 @@ static int parse_range_cmp_log(const char *log_buf, struct case_spec spec,
+ 		 * Different verifier passes may print
+ 		 *   18: (bf) r0 = r6
+ 		 * as well, but never followed by ';'.
++		 * The branches are in the log in the order the verifier looked at them.
+ 		 */
+-		q = p;
++		q = log_buf;
+ 		while ((q = strstr(q, buf)) != NULL) {
+ 			const char *s = q + strlen(buf);
+ 
+diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c
+index 2e23b8593af9..1d1684d2cf3b 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c
++++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c
+@@ -26,8 +26,10 @@ int BPF_PROG(invalid_dynptr_cross_frame, struct sk_buff *skb, struct Qdisc *sch,
+ 	bpf_dynptr_from_skb((struct __sk_buff *)skb, 0, &ptr);
+ 
+ 	hdr = bpf_dynptr_slice(&ptr, 0, NULL, sizeof(*hdr));
+-	if (!hdr)
++	if (!hdr) {
++		bpf_kfree_skb(skb);
+ 		return NET_XMIT_DROP;
++	}
+ 
+ 	free_skb(skb);
+ 
+diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/testing/selftests/bpf/progs/cpumask_failure.c
+index c89c88db39d1..715218d32105 100644
+--- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
++++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
+@@ -45,7 +45,7 @@ int BPF_PROG(test_alloc_no_release, struct task_struct *task, u64 clone_flags)
+ }
+ 
+ SEC("tp_btf/task_newtask")
+-__failure __msg("NULL pointer passed to trusted R1")
++__failure __msg("R1 type=scalar expected=ptr_, trusted_ptr_, rcu_ptr_")
+ int BPF_PROG(test_alloc_double_release, struct task_struct *task, u64 clone_flags)
+ {
+ 	struct bpf_cpumask *cpumask;
+diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
+index ae845ad747bf..b9677d30e692 100644
+--- a/tools/testing/selftests/bpf/progs/iters.c
++++ b/tools/testing/selftests/bpf/progs/iters.c
+@@ -47,7 +47,7 @@ int iter_err_unsafe_c_loop(const void *ctx)
+ }
+ 
  SEC("?raw_tp")
--__failure __msg("cannot overwrite referenced dynptr")
-+__failure __msg("Unreleased reference id=1")
- int ringbuf_missing_release_callback(void *ctx)
+-__failure __msg("unbounded memory access")
++__failure __msg("math between map_value pointer and register with unbounded min value is not allowed")
+ int iter_err_unsafe_asm_loop(const void *ctx)
  {
- 	bpf_loop(10, missing_release_callback_fn, NULL, 0);
-@@ -782,7 +782,7 @@ int dynptr_pruning_overwrite(struct __sk_buff *ctx)
- }
+ 	struct bpf_iter_num it;
+@@ -878,19 +878,15 @@ __naked int delayed_read_mark(void)
  
- SEC("?tc")
--__success __msg("12: safe") __log_level(2)
-+__success __msg("to 12: within") __log_level(2)
- int dynptr_pruning_stacksafe(struct __sk_buff *ctx)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_assert.c b/tools/testing/selftests/bpf/progs/exceptions_assert.c
-index e4abf4172fca..67b51f728af2 100644
---- a/tools/testing/selftests/bpf/progs/exceptions_assert.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions_assert.c
-@@ -29,32 +29,32 @@ check_assert(s64, ==, eq_llong_min, LLONG_MIN);
- __msg("R{{.}}=0x7fffffffffffffff")
- check_assert(s64, ==, eq_llong_max, LLONG_MAX);
- 
--__msg("R{{.}}=scalar(id=1,smax=0x7ffffffe)")
-+__msg("R{{.}}=scalar(smax=0x7ffffffe)")
- check_assert(s64, <, lt_pos, INT_MAX);
--__msg("R{{.}}=scalar(id=1,smax=-1,umin=0x8000000000000000,var_off=(0x8000000000000000; 0x7fffffffffffffff))")
-+__msg("R{{.}}=scalar(smax=-1,umin=0x8000000000000000,var_off=(0x8000000000000000; 0x7fffffffffffffff))")
- check_assert(s64, <, lt_zero, 0);
--__msg("R{{.}}=scalar(id=1,smax=0xffffffff7fffffff")
-+__msg("R{{.}}=scalar(smax=0xffffffff7fffffff")
- check_assert(s64, <, lt_neg, INT_MIN);
- 
--__msg("R{{.}}=scalar(id=1,smax=0x7fffffff)")
-+__msg("R{{.}}=scalar(smax=0x7fffffff)")
- check_assert(s64, <=, le_pos, INT_MAX);
--__msg("R{{.}}=scalar(id=1,smax=0)")
-+__msg("R{{.}}=scalar(smax=0)")
- check_assert(s64, <=, le_zero, 0);
--__msg("R{{.}}=scalar(id=1,smax=0xffffffff80000000")
-+__msg("R{{.}}=scalar(smax=0xffffffff80000000")
- check_assert(s64, <=, le_neg, INT_MIN);
- 
--__msg("R{{.}}=scalar(id=1,smin=umin=0x80000000,umax=0x7fffffffffffffff,var_off=(0x0; 0x7fffffffffffffff))")
-+__msg("R{{.}}=scalar(smin=umin=0x80000000,umax=0x7fffffffffffffff,var_off=(0x0; 0x7fffffffffffffff))")
- check_assert(s64, >, gt_pos, INT_MAX);
--__msg("R{{.}}=scalar(id=1,smin=umin=1,umax=0x7fffffffffffffff,var_off=(0x0; 0x7fffffffffffffff))")
-+__msg("R{{.}}=scalar(smin=umin=1,umax=0x7fffffffffffffff,var_off=(0x0; 0x7fffffffffffffff))")
- check_assert(s64, >, gt_zero, 0);
--__msg("R{{.}}=scalar(id=1,smin=0xffffffff80000001")
-+__msg("R{{.}}=scalar(smin=0xffffffff80000001")
- check_assert(s64, >, gt_neg, INT_MIN);
- 
--__msg("R{{.}}=scalar(id=1,smin=umin=0x7fffffff,umax=0x7fffffffffffffff,var_off=(0x0; 0x7fffffffffffffff))")
-+__msg("R{{.}}=scalar(smin=umin=0x7fffffff,umax=0x7fffffffffffffff,var_off=(0x0; 0x7fffffffffffffff))")
- check_assert(s64, >=, ge_pos, INT_MAX);
--__msg("R{{.}}=scalar(id=1,smin=0,umax=0x7fffffffffffffff,var_off=(0x0; 0x7fffffffffffffff))")
-+__msg("R{{.}}=scalar(smin=0,umax=0x7fffffffffffffff,var_off=(0x0; 0x7fffffffffffffff))")
- check_assert(s64, >=, ge_zero, 0);
--__msg("R{{.}}=scalar(id=1,smin=0xffffffff80000000")
-+__msg("R{{.}}=scalar(smin=0xffffffff80000000")
- check_assert(s64, >=, ge_neg, INT_MIN);
- 
- SEC("?tc")
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg_precision.c b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-index c9564776d733..6c6f58a67eff 100644
---- a/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-+++ b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-@@ -23,7 +23,7 @@ int __btf_kfunc_gen(struct __sk_buff *ctx)
- }
- 
- /*
-- * Test precision backtracking across bpf-to-bpf call for kfunc stack arg.
-+ * Test that the range of a stack arg is known across bpf-to-bpf call for kfunc stack arg.
-  * subprog_call_mem_kfunc receives a size as incoming stack arg (arg6)
-  * and forwards it as mem__sz (arg7) to bpf_kfunc_call_stack_arg_mem.
-  */
-@@ -52,52 +52,12 @@ static long subprog_call_mem_kfunc(long a, long b, long c, long d, long e, long
- }
- 
- SEC("tc")
--__description("stack_arg: precision backtracking across bpf2bpf call for kfunc")
-+__description("stack_arg: range across bpf2bpf call for kfunc")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("from 9 to 11: joined")
-+__msg("13: (79) r1 = *(u64 *)(r11 +8)        ; R1=scalar(smin=umin=smin32=umin32=4,smax=umax=smax32=umax32=6,var_off=(0x4; 0x2),step=0+2)")
- __btf_func_path("btf__stack_arg_precision.bpf.o")
--__msg("mark_precise: frame1: last_idx 26 first_idx 13 subseq_idx -1")
--__msg("mark_precise: frame1: regs= stack= before 25: (b7) r5 = 5")
--__msg("mark_precise: frame1: regs= stack= before 24: (b7) r4 = 4")
--__msg("mark_precise: frame1: regs= stack= before 23: (b7) r3 = 3")
--__msg("mark_precise: frame1: regs= stack= before 22: (b7) r2 = 2")
--__msg("mark_precise: frame1: regs= stack= before 21: (b7) r1 = 1")
--__msg("mark_precise: frame1: regs= stack= before 20: (7b) *(u64 *)(r11 -16) = r1")
--__msg("mark_precise: frame1: regs=r1 stack= before 19: (7b) *(u64 *)(r11 -8) = r2")
--__msg("mark_precise: frame1: regs=r1 stack= before 18: (07) r2 += -8")
--__msg("mark_precise: frame1: regs=r1 stack= before 17: (bf) r2 = r10")
--__msg("mark_precise: frame1: regs=r1 stack= before 16: (7b) *(u64 *)(r10 -8) = r2")
--__msg("mark_precise: frame1: regs=r1 stack= before 14: (18) r2 = 0x807060504030201")
--__msg("mark_precise: frame1: regs=r1 stack= before 13: (79) r1 = *(u64 *)(r11 +8)")
--__msg("mark_precise: frame1: parent state regs= stack=:  frame1: R10=fp0")
--__msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
--__msg("mark_precise: frame1: last_idx 11 first_idx 11 subseq_idx 13")
--__msg("mark_precise: frame1: regs= stack= before 11: (85) call pc+1")
--__msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
--__msg("mark_precise: frame0: last_idx 9 first_idx 7 subseq_idx 11")
--__msg("mark_precise: frame0: regs= stack= before 9: (05) goto pc+1")
--__msg("mark_precise: frame0: regs= stack= before 8: (7a) *(u64 *)(r11 -8) = 4")
--__msg("mark_precise: frame1: last_idx 26 first_idx 13 subseq_idx -1 ")
--__msg("mark_precise: frame1: regs= stack= before 25: (b7) r5 = 5")
--__msg("mark_precise: frame1: regs= stack= before 24: (b7) r4 = 4")
--__msg("mark_precise: frame1: regs= stack= before 23: (b7) r3 = 3")
--__msg("mark_precise: frame1: regs= stack= before 22: (b7) r2 = 2")
--__msg("mark_precise: frame1: regs= stack= before 21: (b7) r1 = 1")
--__msg("mark_precise: frame1: regs= stack= before 20: (7b) *(u64 *)(r11 -16) = r1")
--__msg("mark_precise: frame1: regs=r1 stack= before 19: (7b) *(u64 *)(r11 -8) = r2")
--__msg("mark_precise: frame1: regs=r1 stack= before 18: (07) r2 += -8")
--__msg("mark_precise: frame1: regs=r1 stack= before 17: (bf) r2 = r10")
--__msg("mark_precise: frame1: regs=r1 stack= before 16: (7b) *(u64 *)(r10 -8) = r2")
--__msg("mark_precise: frame1: regs=r1 stack= before 14: (18) r2 = 0x807060504030201")
--__msg("mark_precise: frame1: regs=r1 stack= before 13: (79) r1 = *(u64 *)(r11 +8)")
--__msg("mark_precise: frame1: parent state regs= stack=:  frame1: R10=fp0")
--__msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
--__msg("mark_precise: frame1: last_idx 11 first_idx 11 subseq_idx 13 ")
--__msg("mark_precise: frame1: regs= stack= before 11: (85) call pc+1")
--__msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
--__msg("mark_precise: frame0: last_idx 10 first_idx 10 subseq_idx 11 ")
--__msg("mark_precise: frame0: regs= stack= before 10: (7a) *(u64 *)(r11 -8) = 6")
- __naked void stack_arg_precision_bpf2bpf(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func15.c b/tools/testing/selftests/bpf/progs/test_global_func15.c
-index 201cc000b3f4..497f09dc8876 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func15.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func15.c
-@@ -24,12 +24,7 @@ int global_func15(struct __sk_buff *skb)
- }
- 
- SEC("cgroup_skb/ingress")
--__log_level(2) __flag(BPF_F_TEST_STATE_FREQ)
+ SEC("?raw_tp")
  __failure
--/* check that fallthrough code path marks r0 as precise */
--__msg("mark_precise: frame0: regs=r0 stack= before 2: (b7) r0 = 1")
--/* check that branch code path marks r0 as precise */
--__msg("mark_precise: frame0: regs=r0 stack= before 0: (85) call bpf_get_prandom_u32#7")
- __msg("At program exit the register R0 has ")
- __naked int global_func15_tricky_pruning(void)
+-__msg("math between fp pointer and register with unbounded")
++__msg("21: (79) r8 = *(u64 *)(r0 +0)")
++__msg("misaligned stack access off -33+0 size 8")
+ __naked int delayed_precision_mark(void)
  {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_array_access.c b/tools/testing/selftests/bpf/progs/verifier_array_access.c
-index 9333321c3ac8..825ff1c3ce43 100644
---- a/tools/testing/selftests/bpf/progs/verifier_array_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_array_access.c
-@@ -248,7 +248,7 @@ l0_%=:	exit;						\
- SEC("socket")
- __description("invalid map access into an array with no floor check")
- __failure __msg("R0 unbounded memory access")
--__failure_unpriv __msg_unpriv("R0 leaks addr")
-+__failure_unpriv __msg_unpriv("R0 unbounded memory access")
- __flag(BPF_F_ANY_ALIGNMENT)
- __naked void array_with_no_floor_check(void)
- {
-@@ -280,7 +280,7 @@ l0_%=:	exit;						\
- SEC("socket")
- __description("invalid map access into an array with a invalid max check")
- __failure __msg("invalid access to map value, value_size=48 off=44 size=8")
--__failure_unpriv __msg_unpriv("R0 leaks addr")
-+__failure_unpriv __msg_unpriv("R0 max value is outside of the allowed memory range")
- __flag(BPF_F_ANY_ALIGNMENT)
- __naked void with_a_invalid_max_check_1(void)
- {
-@@ -541,8 +541,7 @@ l0_%=:	exit;						\
+ 	/* This is equivalent to C program below.
+-	 * The test is similar to delayed_iter_mark but verifies that incomplete
+-	 * precision don't fool verifier.
+-	 * The call to bpf_iter_num_next() is reachable with r7 values -16 and -32.
+-	 * State with r7=-16 is visited first and follows r6 != 42 ... continue branch.
+-	 * At this point iterator next() call is reached with r7 that has no read
+-	 * and precision marks.
+-	 * Loop body with r7=-32 would only be visited if verifier would decide to continue
+-	 * with second loop iteration. Absence of precision mark on r7 might affect state
+-	 * equivalent logic used for iterator convergence tracking.
++	 * The test is similar to delayed_read_mark.
++	 * The call to bpf_iter_num_next() is reachable with r7 values -16 and -33.
++	 * The loop body with r7=-33 is only looked at if the verifier goes on
++	 * with the second iteration of the loop.
+ 	 *
+ 	 * r8 = 0
+ 	 * fp[-16] = 0
+@@ -899,7 +895,7 @@ __naked int delayed_precision_mark(void)
+ 	 * bpf_iter_num_new(&fp[-8], 0, 10)
+ 	 * while (bpf_iter_num_next(&fp[-8])) {
+ 	 *   if (r6 != 42) {
+-	 *     r7 = -32
++	 *     r7 = -33
+ 	 *     r6 = bpf_get_prandom_u32()
+ 	 *     continue;
+ 	 *   }
+@@ -957,22 +953,17 @@ __naked int delayed_precision_mark(void)
  
- SEC("socket")
- __description("valid map access into an array using constant without nullness")
--__success __retval(4) __log_level(2)
--__msg("mark_precise: frame0: regs= stack=-8 before {{[0-9]}}: ({{[a-f0-9]+}}) *(u32 *)(r10 -8) = {{(1|r[0-9])}}")
-+__success __retval(4)
- unsigned int an_array_with_a_constant_no_nullness(void)
- {
- 	/* Need 8-byte alignment for spill tracking */
-@@ -557,9 +556,7 @@ unsigned int an_array_with_a_constant_no_nullness(void)
- 
- SEC("socket")
- __description("valid multiple map access into an array using constant without nullness")
--__success __retval(8) __log_level(2)
--__msg("mark_precise: frame0: regs= stack=-8 before {{[0-9]}}: ({{[a-f0-9]+}}) *(u32 *)(r10 -16) = {{(0|r[0-9])}}")
--__msg("mark_precise: frame0: regs= stack=-8 before {{[0-9]}}: ({{[a-f0-9]+}}) *(u32 *)(r10 -8) = {{(1|r[0-9])}}")
-+__success __retval(8)
- unsigned int multiple_array_with_a_constant_no_nullness(void)
- {
- 	__u32 __attribute__((aligned(8))) key = 1;
-@@ -595,8 +592,7 @@ unsigned int an_array_with_a_32bit_constant_0_no_nullness(void)
- 
- SEC("socket")
- __description("valid map access into a pcpu array using constant without nullness")
--__success __retval(4) __log_level(2)
--__msg("mark_precise: frame0: regs= stack=-8 before {{[0-9]}}: ({{[a-f0-9]+}}) *(u32 *)(r10 -8) = {{(1|r[0-9])}}")
-+__success __retval(4)
- unsigned int a_pcpu_array_with_a_constant_no_nullness(void)
- {
- 	__u32 __attribute__((aligned(8))) key = 1;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c b/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c
-index 260a6df264e3..a474c9978a35 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds_deduction.c
-@@ -102,7 +102,7 @@ l0_%=:	r0 -= r1;					\
- SEC("socket")
- __description("check deducing bounds from const, 7")
- __failure __msg("dereference of modified ctx ptr")
--__msg_unpriv("R1 has pointer with unsupported alu operation")
-+__msg_unpriv("dereference of modified ctx ptr")
- __flag(BPF_F_ANY_ALIGNMENT)
- __naked void deducing_bounds_from_const_7(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-index d824a5d48a39..51b703058cf7 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-@@ -371,14 +371,17 @@ struct {
- 	__type(value, struct step_val);
- } step_map SEC(".maps");
- 
--/* Old register [4..130, step 2] should prune cur register [8..68, step 4]. */
-+/*
-+ * Register [8..68, step 4] is within register [4..130, step 2]: one state stands for both
-+ * and nothing is lost.
-+ */
- SEC("socket")
- __success __log_level(2)
- __msg("7: (27) r6 *= 4                       ; R6=scalar({{.*}}umin32=8,{{.*}}umax32=68,{{.*}},step=0+4)")
- __msg("10: (27) r7 *= 2                      ; R7=scalar({{.*}}umin32=4,{{.*}}umax32=130,{{.*}},step=0+2)")
- __msg("11: (25) if r0 > 0x2a goto pc+1")
--__msg("from 11 to 13: safe")
+ SEC("?raw_tp")
+ __failure
+-__msg("math between fp pointer and register with unbounded")
 -__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("13: R6=scalar({{.*}}umin32=4,{{.*}}umax32=130,{{.*}},step=0+2) R10=fp0")
-+__msg("processed 18 insns")
- __naked void step_prune_hit_multiple(void)
++__msg("misaligned stack access off -25+0 size 8")
+ __naked int loop_state_deps1(void)
  {
- 	asm volatile ("					\
-@@ -394,11 +397,11 @@ __naked void step_prune_hit_multiple(void)
- 	r7 += 2;					\
- 	r7 *= 2;					\
- 	if r0 > 42 goto 1f;	/* can't predict */	\
--	r6 = r7;		/* step=2 explored first, step=4 explored next */ \
-+	r6 = r7;		/* step=2 here, step=4 on the other path */ \
- 1:	r0 = r10;					\
- 	r6 = -r6;					\
- 	r0 += r6;					\
--	*(u8 *)(r0 + 0) = 7;	/* force r6 precise */	\
-+	*(u8 *)(r0 + 0) = 7;				\
- 	exit;						\
- "	:
- 	: __imm(bpf_get_prandom_u32)
-@@ -406,17 +409,16 @@ __naked void step_prune_hit_multiple(void)
+ 	/* This is equivalent to C program below.
+ 	 *
+ 	 * The case turns out to be tricky in a sense that:
+-	 * - states with c=-25 are explored only on a second iteration
+-	 *   of the outer loop;
+-	 * - states with read+precise mark on c are explored only on
+-	 *   second iteration of the inner loop and in a state which
+-	 *   is pushed to states stack first.
++	 * - c is -25 only on a second iteration of the outer loop;
++	 * - c is used only on a second iteration of the inner loop.
+ 	 *
+-	 * Depending on the details of iterator convergence logic
+-	 * verifier might stop states traversal too early and miss
+-	 * unsafe c=-25 memory access.
++	 * The verifier might stop too early and miss unsafe c=-25
++	 * memory access.
+ 	 *
+ 	 *   j = iter_new();		 // fp[-16]
+ 	 *   a = 0;			 // r6
+@@ -1082,23 +1073,18 @@ __naked int loop_state_deps1(void)
+ 
+ SEC("?raw_tp")
+ __failure
+-__msg("math between fp pointer and register with unbounded")
+-__flag(BPF_F_TEST_STATE_FREQ)
++__msg("34: (0f) r0 += r8")
++__msg("misaligned stack access off -25+0 size 8")
+ __naked int loop_state_deps2(void)
+ {
+ 	/* This is equivalent to C program below.
+ 	 *
+ 	 * The case turns out to be tricky in a sense that:
+-	 * - states with read+precise mark on c are explored only on a second
+-	 *   iteration of the first inner loop and in a state which is pushed to
+-	 *   states stack first.
+-	 * - states with c=-25 are explored only on a second iteration of the
+-	 *   second inner loop and in a state which is pushed to states stack
+-	 *   first.
++	 * - c is used only on a second iteration of the first inner loop;
++	 * - c is -25 only on a second iteration of the second inner loop.
+ 	 *
+-	 * Depending on the details of iterator convergence logic
+-	 * verifier might stop states traversal too early and miss
+-	 * unsafe c=-25 memory access.
++	 * The verifier might stop too early and miss unsafe c=-25
++	 * memory access.
+ 	 *
+ 	 *   j = iter_new();             // fp[-16]
+ 	 *   a = 0;                      // r6
+@@ -1259,49 +1245,38 @@ __naked int loop_state_deps2(void)
+ 
+ SEC("?raw_tp")
+ __failure
+-__msg("math between fp pointer and register with unbounded")
+-__flag(BPF_F_TEST_STATE_FREQ)
++__msg("misaligned stack access off -25+0 size 8")
+ __naked int loop_state_deps3(void)
+ {
+ 	/* This is equivalent to a C program below.
+ 	 *
+-	 *   if (random() != 24) {       // assume false branch is placed first
++	 *   if (random() != 24) {
+ 	 *     i = iter_new();           // fp[-8]
+ 	 *     while (iter_next(i));
+ 	 *     iter_destroy(i);
+ 	 *     return;
+ 	 *   }
+ 	 *
+-	 *   for (i = 10; i > 0; i--);   // increase dfs_depth for child states
++	 *   for (i = 10; i > 0; i--);
+ 	 *
+ 	 *   i = iter_new();             // fp[-8]
+ 	 *   b = -24;                    // r8
+-	 *   for (;;) {                  // checkpoint (L)
+-	 *     if (iter_next(i))         // checkpoint (N)
++	 *   for (;;) {
++	 *     if (iter_next(i))
+ 	 *       break;
+-	 *     if (random() == 77) {     // assume false branch is placed first
++	 *     if (random() == 77) {
+ 	 *       *(u64 *)(r10 + b) = 7;  // this is not safe when b == -25
+ 	 *       iter_destroy(i);
+ 	 *       return;
+ 	 *     }
+-	 *     if (random() == 42) {     // assume false branch is placed first
++	 *     if (random() == 42) {
+ 	 *       b = -25;
+ 	 *     }
+ 	 *   }
+ 	 *   iter_destroy(i);
+ 	 *
+-	 * In case of a buggy verifier first loop might poison
+-	 * env->cur_state->loop_entry with a state having 0 branches
+-	 * and small dfs_depth. This would trigger NOT_EXACT states
+-	 * comparison for some states within second loop.
+-	 * Specifically, checkpoint (L) might be problematic if:
+-	 * - branch with '*(u64 *)(r10 + b) = 7' is not explored yet;
+-	 * - checkpoint (L) is first reached in state {b=-24};
+-	 * - traversal is pruned at checkpoint (N) setting checkpoint's (L)
+-	 *   branch count to 0, thus making it eligible for use in pruning;
+-	 * - checkpoint (L) is next reached in state {b=-25},
+-	 *   this would cause NOT_EXACT comparison with a state {b=-24}
+-	 *   while 'b' is not marked precise yet.
++	 * What the verifier learned in the first two loops must not make it
++	 * take {b=-25} at the head of the third one for {b=-24}.
+ 	 */
+ 	asm volatile (
+ 		"call %[bpf_get_prandom_u32];"
+@@ -1884,7 +1859,6 @@ __naked int absent_mark_in_the_middle_state2(void)
  }
  
- /*
-- * Old register [0..189, step 3] should not prune cur register [0..30, step 2].
-- * Bounds and tnum containment allow pruning; step divisibility must prevent it.
-+ * Register [0..30, step 2] is not within register [0..189, step 3].
-+ * Bounds and tnum say that it is; step divisibility must prevent it.
-+ * The states are joined and the result has no step.
+ SEC("?raw_tp")
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __failure __msg("misaligned stack access off -31+0 size 8")
+ __naked int absent_mark_in_the_middle_state3(void)
+ {
+@@ -2014,8 +1988,8 @@ static int loop1_wrapper(void)
+  * but adapted for use with bpf_loop().
   */
- SEC("socket")
- __success __log_level(2)
- __msg("6: (27) r6 *= 2                       ; R6=scalar({{.*}}smin32=0,{{.*}}umax32=30,{{.*}},step=0+2)")
- __msg("8: (27) r7 *= 3                       ; R7=scalar({{.*}}smin32=0,{{.*}}umax32=189,{{.*}},step=0+3)")
- __msg("9: (25) if r0 > 0x2a goto pc+1")
--__msg("17: (95) exit")
--__msg("from 9 to 11: R6=scalar({{.*}},step=0+2)")
+ SEC("raw_tp")
 -__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("11: R6=scalar({{.*}}umax32=189,var_off=(0x0; 0xff)) R10=fp0")
- __naked void step_prune_miss_non_multiple(void)
- {
- 	asm volatile ("					\
-@@ -430,13 +432,13 @@ __naked void step_prune_miss_non_multiple(void)
- 	r7 &= 0x3f;					\
- 	r7 *= 3;					\
- 	if r0 > 42 goto 1f;	/* can't predict */	\
--	r6 = r7;		/* step=3 explored first, step=2 explored next */ \
-+	r6 = r7;		/* step=3 here, step=2 on the other path */ \
- 1:							\
- 	r2 = r10;					\
- 	r6 += 1;					\
- 	r6 = -r6;					\
- 	r2 += r6;					\
--	*(u8 *)(r2 + 0) = 7;	/* force r6 precise */	\
-+	*(u8 *)(r2 + 0) = 7;				\
- 	r0 = 0;						\
- 	exit;						\
- "	:
-@@ -445,17 +447,17 @@ __naked void step_prune_miss_non_multiple(void)
- }
- 
- /*
-- * Constant current register lying on the cached line: cached is {0,3,6,...}
-- * (step 3, base 0), current is the constant 6. range_within() takes the
-- * constant branch: imod(6, 3) == base 0, so cur is on the line and the
-- * (precise) state is pruned -> "safe".
-+ * Constant register lying on the line of the other state: that is {0,3,6,...}
-+ * (step 3, base 0), this is the constant 6. range_within() takes the
-+ * constant branch: imod(6, 3) == base 0, so the constant is on the line and
-+ * the state with the line stands for both.
-  */
- SEC("socket")
- __success __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
--__msg("14: (27) r1 *= 3")		/* cached path: step 3 line */
--__msg("16: (b7) r1 = 6")		/* current path: const 6, on the line */
--__msg("17: safe")			/* pruned at join: imod(6, 3) == 0 */
-+__msg("16: (b7) r1 = 6")		/* const 6, on the line */
-+__msg("14: (27) r1 *= 3")		/* step 3 line */
-+__msg("from 15 to 17: joined")
-+__msg("17: R1=scalar({{.*}},step=0+3) R7=")	/* imod(6, 3) == 0 */
- __naked void step_prune_hit_const_on_line(void)
- {
- 	asm volatile ("					\
-@@ -472,13 +474,13 @@ __naked void step_prune_hit_const_on_line(void)
- 	r1 = r6;					\
- 	r1 &= 0xff;					\
- 	if r6 > 0 goto l_cur_%=;			\
--	r1 *= 3;			/* old: step 3 */	\
-+	r1 *= 3;			/* step 3 */	\
- 	goto l_join_%=;					\
- l_cur_%=:						\
--	r1 = 6;				/* cur: const on line */	\
-+	r1 = 6;				/* const on line */	\
- l_join_%=:						\
- 	r0 = r7;					\
--	r0 += r1;			/* r1 forced precise */	\
-+	r0 += r1;					\
- 	r2 = *(u8 *)(r0 + 0);				\
- l_out_%=:						\
- 	r0 = 0;						\
-@@ -491,22 +493,21 @@ l_out_%=:						\
- }
- 
- /*
-- * Constant current register NOT on the cached line: cached is {0,3,6,...}
-- * (step 3, base 0), current is the constant 7. imod(7, 3) == 1 != base 0,
-- * so range_within() fails and the join is traversed again. A power-of-two
-+ * Constant register NOT on the line of the other state: that is {0,3,6,...}
-+ * (step 3, base 0), this is the constant 7. imod(7, 3) == 1 != base 0,
-+ * so range_within() fails and the states are joined. A power-of-two
-  * step is avoided on purpose: with step 3 the tnum is loose enough to admit
-  * 7, so imod() is
-  * the sole check that rejects it. No failure shape is possible here: 7 is
-- * within the line's bounds and tnum, and the cached line path already
-- * verifies the whole outro, so an eager prune could not miss an error.
-+ * within the line's bounds and tnum.
-  */
- SEC("socket")
- __success __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
--__msg("14: (27) r1 *= 3")		/* cached path: step 3 line */
--__msg("16: (b7) r1 = 7")		/* current path: const 7, off the line */
--/* not pruned: current continues past the join with the constant offset 7 */
--__msg("19: R0=map_value({{.*}}imm=7) R1=7")
-+__msg("16: (b7) r1 = 7")		/* const 7, off the line */
-+__msg("14: (27) r1 *= 3")		/* step 3 line */
-+/* the result stands for 7 too: it has no step */
-+__msg("from 15 to 17: joined")
-+__msg("17: R1=scalar({{.*}}var_off=(0x0; 0x3ff)) R7=")
- __naked void step_prune_miss_const_off_line(void)
- {
- 	asm volatile ("					\
-@@ -523,13 +524,13 @@ __naked void step_prune_miss_const_off_line(void)
- 	r1 = r6;					\
- 	r1 &= 0xff;					\
- 	if r6 > 0 goto l_cur_%=;			\
--	r1 *= 3;			/* old: step 3 */	\
-+	r1 *= 3;			/* step 3 */	\
- 	goto l_join_%=;					\
- l_cur_%=:						\
--	r1 = 7;				/* cur: const off line */	\
-+	r1 = 7;				/* const off line */	\
- l_join_%=:						\
- 	r0 = r7;					\
--	r0 += r1;			/* r1 forced precise */	\
-+	r0 += r1;					\
- 	r2 = *(u8 *)(r0 + 0);				\
- l_out_%=:						\
- 	r0 = 0;						\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-index d571fbfc86a3..caae67feaf5b 100644
---- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-@@ -668,12 +668,16 @@ __naked void add_const_base_id_pruning(void)
- 	call %[bpf_get_prandom_u32];				\
- 	r6 = r0;						\
- 	r6 &= 1;						\
--	if r6 >= 1 goto l_true_%=;				\
-+	if r6 < 1 goto l_false_%=;				\
-+	goto l_true_%=;						\
- 								\
-+l_false_%=:							\
- 	/* False branch (explored first, old state) */		\
- 	call %[bpf_get_prandom_u32];				\
- 	r2 = r0;						\
- 	r2 &= 0xff;		/* R2 = scalar(id=A) [0,255] */	\
-+	r4 = r0;						\
-+	r4 &= 0xff;		/* R4 = scalar [0,255], id=0 */	\
- 	r3 = r2;		/* R3 linked to R2 (id=A) */	\
- 	r3 += 10;		/* R3 id=A|ADD_CONST, delta=10 */\
- 	r6 = 0;							\
-@@ -703,6 +707,7 @@ l_merge_%=:							\
- 	r9 += r3;		/* fp-16+[0,5] vs fp-16+[0,255] */\
- 	*(u8*)(r9 + 0) = r6;	/* within 16B vs past fp */	\
- l_exit_%=:							\
-+	r4 = r4;		/* R4 is live at the merge */	\
- 	r0 = 0;							\
- 	exit;							\
- "	:
-diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-index 2ae5c60150dd..795956bd4f9f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-@@ -368,7 +368,6 @@ static __used __naked void arg_track_join_convergence_subprog(void)
- }
- 
- SEC("socket")
--__flag(BPF_F_TEST_STATE_FREQ)
- __log_level(2)
- /* fp0-8 consumed at insn 9, dead by insn 11. stack_def at insn 4 kills slots 0,1. */
- __msg("4: (7b) *(u64 *)(r10 -8) = r0        ; def: fp0-8")
-@@ -380,9 +379,9 @@ __msg("10: (b7) r0 = 0{{$}}")
- __msg("11: (05) goto pc+0{{$}}")
- __msg("12: (95) exit")
- /*
-- * Checkpoint at goto +0 fires because fp0-8 is dead → state pruning.
-+ * fp0-8 is dead after goto +0, so one state stands for both.
-  */
--__msg("12: safe")
-+__msg("from 11 to 12: within")
- __naked void caller_stack_pruning(void)
- {
- 	asm volatile (
-@@ -497,7 +496,6 @@ struct {
- 
- SEC("socket")
- __failure __msg("invalid read from stack R2 off=-4096 size=8")
--__flag(BPF_F_TEST_STATE_FREQ)
- __naked unsigned long caller_stack_write_tail_call(void)
- {
-         asm volatile (
-@@ -855,7 +853,7 @@ static __used __naked void maybe_clobber_key(void)
- 
- /*
-  * Demonstrate that subprog arg spill/reload breaks arg tracking,
-- * inflating caller stack liveness and preventing state pruning.
-+ * inflating caller stack liveness and keeping states apart.
-  *
-  * modifier2(fp-24) has two paths: one writes a scalar to *(r1+8)
-  * = caller fp-16, the other leaves it as zero.  After modifier2
-@@ -871,16 +869,15 @@ static __used __naked void maybe_clobber_key(void)
-  * the reader never touches it.
-  *
-  * Result: at modifier2's return point two states with different
-- * fp-16 values cannot be pruned.
-+ * fp-16 values are kept apart.
-  *
-- * With correct (or old dynamic) liveness fp-16 is dead at that
-- * point and the states prune → "6: safe" appears in the log.
-+ * With correct liveness fp-16 is dead at that point and one state is
-+ * within the other one.
-  */
- SEC("socket")
--__flag(BPF_F_TEST_STATE_FREQ)
- __log_level(2)
- __success
--__msg("6: safe")
-+__msg("from 16 to 6: within")
- __naked void spill_reload_inflates_stack_liveness(void)
- {
- 	asm volatile (
-@@ -1366,31 +1363,32 @@ __naked void half_spi_clean_preserves_stack_zero(void)
-  * conditional block with helper call and temporary stack spill,
-  * spill dead after merge.
-  *
-- * Path A (fall-through): spill r6 to fp-8 across helper call
-- * Path B (branch taken): skip the block entirely
-- * At merge (insn 6): fp-8 is dead (never read after merge)
-+ * Path A (branch taken, verified first): spill r6 to fp-8 across helper call
-+ * Path B (fall-through): skip the block entirely
-+ * At merge (insn 7): fp-8 is dead (never read after merge)
-  *
-  * Static liveness marks fp-8 dead at merge. clean_verifier_state()
-  * converts path A's STACK_SPILL to STACK_INVALID. Path B has
-- * STACK_INVALID. stacksafe() matches -> path B pruned -> "6: safe".
-+ * STACK_INVALID. stacksafe() matches -> one state stands for both paths.
-  */
- SEC("socket")
--__flag(BPF_F_TEST_STATE_FREQ)
- __success
- __log_level(2)
--__msg("6: safe")
-+__msg("from 3 to 7: within")
- __naked void dead_spill_at_merge_enables_pruning(void)
- {
- 	asm volatile (
- 	"call %[bpf_get_prandom_u32];"
- 	"r6 = 7;"
--	"if r0 != 0 goto l_skip%=;"
-+	"if r0 == 0 goto l_spill%=;"
-+	"goto l_skip%=;"
-+"l_spill%=:"
- 	/* conditional block: spill, call, reload */
- 	"*(u64 *)(r10 - 8) = r6;"
- 	"call %[bpf_get_prandom_u32];"
- 	"r6 = *(u64 *)(r10 - 8);"
- "l_skip%=:"
--	/* fp-8 dead. Path B pruned here -> "6: safe" */
-+	/* fp-8 dead. The states of both paths are the same here */
- 	"r0 = r6;"
- 	"exit;"
- 	:
-diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ret_val.c b/tools/testing/selftests/bpf/progs/verifier_map_ret_val.c
-index 1639628b832d..2b65ab508596 100644
---- a/tools/testing/selftests/bpf/progs/verifier_map_ret_val.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_map_ret_val.c
-@@ -83,7 +83,7 @@ l0_%=:	exit;						\
- SEC("socket")
- __description("sometimes access memory with incorrect alignment")
- __failure __msg("R0 invalid mem access")
--__msg_unpriv("R0 leaks addr")
-+__msg_unpriv("R0 invalid mem access")
- __flag(BPF_F_STRICT_ALIGNMENT)
- __naked void access_memory_with_incorrect_alignment_2(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c b/tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c
-index 7e24706a764e..aba9510a1c08 100644
---- a/tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c
-@@ -7,13 +7,9 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--/*
-- * The __szk size of a kfunc memory/size pair must be marked precise even when
-- * the nullable buffer is passed as NULL.
-- */
-+/* The __szk size of a kfunc memory/size pair when the nullable buffer is passed as NULL */
- SEC("?tc")
--__success __log_level(2)
--__msg("mark_precise: frame0: regs=r4 stack= before")
-+__success
- int dynptr_slice_null_buf_size_precise(struct __sk_buff *skb)
- {
- 	struct bpf_dynptr dptr;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/tools/testing/selftests/bpf/progs/verifier_precision.c
-index 71ac80a984d8..f0f9b62494ca 100644
---- a/tools/testing/selftests/bpf/progs/verifier_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
-@@ -16,10 +16,7 @@ struct {
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r1 = r10")
--__msg("mark_precise: frame0: regs=r2 stack= before 2: (55) if r2 != 0xfffffff8 goto pc+2")
--__msg("mark_precise: frame0: regs=r2 stack= before 1: (87) r2 = -r2")
--__msg("mark_precise: frame0: regs=r2 stack= before 0: (b7) r2 = 8")
-+__msg("1: (87) r2 = -r2                      ; R2=-8")
- __naked int bpf_neg(void)
- {
- 	asm volatile (
-@@ -36,10 +33,7 @@ __naked int bpf_neg(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r1 = r10")
--__msg("mark_precise: frame0: regs=r2 stack= before 2: (55) if r2 != 0x0 goto pc+2")
--__msg("mark_precise: frame0: regs=r2 stack= before 1: (d4) r2 = le16 r2")
--__msg("mark_precise: frame0: regs=r2 stack= before 0: (b7) r2 = 0")
-+__msg("1: (d4) r2 = le16 r2                  ; R2=0")
- __naked int bpf_end_to_le(void)
- {
- 	asm volatile (
-@@ -57,10 +51,7 @@ __naked int bpf_end_to_le(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r1 = r10")
--__msg("mark_precise: frame0: regs=r2 stack= before 2: (55) if r2 != 0x0 goto pc+2")
--__msg("mark_precise: frame0: regs=r2 stack= before 1: (dc) r2 = be16 r2")
--__msg("mark_precise: frame0: regs=r2 stack= before 0: (b7) r2 = 0")
-+__msg("1: (dc) r2 = be16 r2                  ; R2=0")
- __naked int bpf_end_to_be(void)
- {
- 	asm volatile (
-@@ -82,10 +73,7 @@ __naked int bpf_end_to_be(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r1 = r10")
--__msg("mark_precise: frame0: regs=r2 stack= before 2: (55) if r2 != 0x0 goto pc+2")
--__msg("mark_precise: frame0: regs=r2 stack= before 1: (d7) r2 = bswap16 r2")
--__msg("mark_precise: frame0: regs=r2 stack= before 0: (b7) r2 = 0")
-+__msg("1: (d7) r2 = bswap16 r2               ; R2=0")
- __naked int bpf_end_bswap(void)
- {
- 	asm volatile (
-@@ -104,10 +92,8 @@ __naked int bpf_end_bswap(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r3 = r10")
--__msg("mark_precise: frame0: regs=r2 stack= before 2: (db) r2 = load_acquire((u64 *)(r10 -8))")
--__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
--__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
-+__msg("2: (db) r2 = load_acquire((u64 *)(r10 -8)){{ *}}; R2=8 R10=fp0 fp-8=8")
-+__msg("4: (0f) r3 += r2                      ; R2=8 R3=fp8")
- __naked int bpf_load_acquire(void)
- {
- 	asm volatile (
-@@ -115,7 +101,7 @@ __naked int bpf_load_acquire(void)
- 	"*(u64 *)(r10 - 8) = r1;"
- 	".8byte %[load_acquire_insn];" /* r2 = load_acquire((u64 *)(r10 - 8)); */
- 	"r3 = r10;"
--	"r3 += r2;" /* mark_precise */
-+	"r3 += r2;"
- 	"r0 = 0;"
- 	"exit;"
- 	:
-@@ -126,10 +112,8 @@ __naked int bpf_load_acquire(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r1 stack= before 3: (bf) r2 = r10")
--__msg("mark_precise: frame0: regs=r1 stack= before 2: (79) r1 = *(u64 *)(r10 -8)")
--__msg("mark_precise: frame0: regs= stack=-8 before 1: (db) store_release((u64 *)(r10 -8), r1)")
--__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
-+__msg("1: (db) store_release((u64 *)(r10 -8), r1){{ *}}; R1=8 R10=fp0 fp-8=8")
-+__msg("4: (0f) r2 += r1                      ; R1=8 R2=fp8")
- __naked int bpf_store_release(void)
- {
- 	asm volatile (
-@@ -137,7 +121,7 @@ __naked int bpf_store_release(void)
- 	".8byte %[store_release_insn];" /* store_release((u64 *)(r10 - 8), r1); */
- 	"r1 = *(u64 *)(r10 - 8);"
- 	"r2 = r10;"
--	"r2 += r1;" /* mark_precise */
-+	"r2 += r1;"
- 	"r0 = 0;"
- 	"exit;"
- 	:
-@@ -150,24 +134,7 @@ __naked int bpf_store_release(void)
- #endif /* v4 instruction */
- 
- SEC("?raw_tp")
--__success __log_level(2)
--/*
-- * Without the bug fix there will be no history between "last_idx 3 first_idx 3"
-- * and "parent state regs=" lines. "R0=6" parts are here to help anchor
-- * expected log messages to the one specific mark_chain_precision operation.
-- *
-- * This is quite fragile: if verifier checkpointing heuristic changes, this
-- * might need adjusting.
-- */
--__msg("2: (47) r0 |= 0                       ; R0=6")
--__msg("3: (35) if r0 >= 0xa goto pc+1")
--__msg("mark_precise: frame0: last_idx 3 first_idx 3 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r0 stack= before 2: (47) r0 |= 0")
--__msg("mark_precise: frame0: regs=r0 stack= before 1: (07) r0 += 2")
--__msg("mark_precise: frame0: regs=r0 stack= before 4: (05) goto pc-4")
--__msg("mark_precise: frame0: regs=r0 stack= before 3: (35) if r0 >= 0xa goto pc+1")
--__msg("mark_precise: frame0: parent state regs= stack=:  R0=P4")
--__msg("3: R0=6")
-+__success
- __naked int state_loop_first_last_equal(void)
- {
- 	asm volatile (
-@@ -206,10 +173,6 @@ __success __log_level(2)
- __msg("8: (bd) if r2 <= r10 goto pc+3")
- __msg("9: (35) if r1 >= 0xffe3fff8 goto pc+0")
- __msg("10: (b5) if r2 <= 0x8 goto pc+0")
--__msg("mark_precise: frame1: last_idx 10 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame1: regs=r2 stack= before 9: (35) if r1 >= 0xffe3fff8 goto pc+0")
--__msg("mark_precise: frame1: regs=r2 stack= before 8: (bd) if r2 <= r10 goto pc+3")
--__msg("mark_precise: frame1: regs=r2 stack= before 7: (05) goto pc+0")
- __naked void bpf_cond_op_r10(void)
- {
- 	asm volatile (
-@@ -225,9 +188,6 @@ __success __log_level(2)
- __msg("3: (bf) r3 = r10")
- __msg("4: (bd) if r3 <= r2 goto pc+1")
- __msg("5: (b5) if r2 <= 0x8 goto pc+2")
--__msg("mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r2 stack= before 4: (bd) if r3 <= r2 goto pc+1")
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r3 = r10")
- __naked void bpf_cond_op_not_r10(void)
- {
- 	asm volatile (
-@@ -245,9 +205,6 @@ SEC("lsm.s/socket_connect")
- __success __log_level(2)
- __msg("0: (b7) r0 = 1                        ; R0=1")
- __msg("1: (84) w0 = -w0                      ; R0=0xffffffff")
--__msg("mark_precise: frame0: last_idx 2 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r0 stack= before 1: (84) w0 = -w0")
--__msg("mark_precise: frame0: regs=r0 stack= before 0: (b7) r0 = 1")
- __naked int bpf_neg_2(void)
+-__failure __msg("math between fp pointer and register with unbounded min value is not allowed")
++/* -32 or -31 */
++__failure __msg("misaligned stack access off (0xffffffffffffffe0; 0x1)+0 size 8")
+ __naked void absent_mark_in_the_middle_state4(void)
  {
  	/*
-@@ -280,9 +237,6 @@ SEC("lsm.s/socket_connect")
- __success __log_level(2)
- __msg("0: (b7) r0 = 1                        ; R0=1")
- __msg("1: (87) r0 = -r0                      ; R0=-1")
--__msg("mark_precise: frame0: last_idx 2 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r0 stack= before 1: (87) r0 = -r0")
--__msg("mark_precise: frame0: regs=r0 stack= before 0: (b7) r0 = 1")
- __naked int bpf_neg_4(void)
- {
- 	/*
-@@ -313,11 +267,8 @@ __naked int bpf_neg_5(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)")
--__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
--__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
-+__msg("3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2){{ *}}; R2=8 R10=fp0 fp-8=mmmmmmmm")
-+__msg("5: (0f) r3 += r2                      ; R2=8 R3=fp8")
- __naked int bpf_atomic_fetch_add_precision(void)
- {
- 	asm volatile (
-@@ -326,7 +277,7 @@ __naked int bpf_atomic_fetch_add_precision(void)
- 	"r2 = 0;"
- 	".8byte %[fetch_add_insn];"	/* r2 = atomic_fetch_add(*(u64 *)(r10 - 8), r2) */
- 	"r3 = r10;"
--	"r3 += r2;"			/* mark_precise */
-+	"r3 += r2;"
- 	"r0 = 0;"
- 	"exit;"
- 	:
-@@ -337,11 +288,8 @@ __naked int bpf_atomic_fetch_add_precision(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_xchg((u64 *)(r10 -8), r2)")
--__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
--__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
-+__msg("3: (db) r2 = atomic64_xchg((u64 *)(r10 -8), r2){{ *}}; R2=8 R10=fp0 fp-8=mmmmmmmm")
-+__msg("5: (0f) r3 += r2                      ; R2=8 R3=fp8")
- __naked int bpf_atomic_xchg_precision(void)
- {
- 	asm volatile (
-@@ -350,7 +298,7 @@ __naked int bpf_atomic_xchg_precision(void)
- 	"r2 = 0;"
- 	".8byte %[xchg_insn];"		/* r2 = atomic_xchg(*(u64 *)(r10 - 8), r2) */
- 	"r3 = r10;"
--	"r3 += r2;"			/* mark_precise */
-+	"r3 += r2;"
- 	"r0 = 0;"
- 	"exit;"
- 	:
-@@ -361,11 +309,8 @@ __naked int bpf_atomic_xchg_precision(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_or((u64 *)(r10 -8), r2)")
--__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
--__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
-+__msg("3: (db) r2 = atomic64_fetch_or((u64 *)(r10 -8), r2){{ *}}; R2=8 R10=fp0 fp-8=mmmmmmmm")
-+__msg("5: (0f) r3 += r2                      ; R2=8 R3=fp8")
- __naked int bpf_atomic_fetch_or_precision(void)
- {
- 	asm volatile (
-@@ -374,7 +319,7 @@ __naked int bpf_atomic_fetch_or_precision(void)
- 	"r2 = 0;"
- 	".8byte %[fetch_or_insn];"	/* r2 = atomic_fetch_or(*(u64 *)(r10 - 8), r2) */
- 	"r3 = r10;"
--	"r3 += r2;"			/* mark_precise */
-+	"r3 += r2;"
- 	"r0 = 0;"
- 	"exit;"
- 	:
-@@ -385,11 +330,8 @@ __naked int bpf_atomic_fetch_or_precision(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_and((u64 *)(r10 -8), r2)")
--__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
--__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
-+__msg("3: (db) r2 = atomic64_fetch_and((u64 *)(r10 -8), r2){{ *}}; R2=8 R10=fp0 fp-8=mmmmmmmm")
-+__msg("5: (0f) r3 += r2                      ; R2=8 R3=fp8")
- __naked int bpf_atomic_fetch_and_precision(void)
- {
- 	asm volatile (
-@@ -398,7 +340,7 @@ __naked int bpf_atomic_fetch_and_precision(void)
- 	"r2 = 0;"
- 	".8byte %[fetch_and_insn];"	/* r2 = atomic_fetch_and(*(u64 *)(r10 - 8), r2) */
- 	"r3 = r10;"
--	"r3 += r2;"			/* mark_precise */
-+	"r3 += r2;"
- 	"r0 = 0;"
- 	"exit;"
- 	:
-@@ -409,11 +351,8 @@ __naked int bpf_atomic_fetch_and_precision(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_xor((u64 *)(r10 -8), r2)")
--__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
--__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
-+__msg("3: (db) r2 = atomic64_fetch_xor((u64 *)(r10 -8), r2){{ *}}; R2=8 R10=fp0 fp-8=mmmmmmmm")
-+__msg("5: (0f) r3 += r2                      ; R2=8 R3=fp8")
- __naked int bpf_atomic_fetch_xor_precision(void)
- {
- 	asm volatile (
-@@ -422,7 +361,7 @@ __naked int bpf_atomic_fetch_xor_precision(void)
- 	"r2 = 0;"
- 	".8byte %[fetch_xor_insn];"	/* r2 = atomic_fetch_xor(*(u64 *)(r10 - 8), r2) */
- 	"r3 = r10;"
--	"r3 += r2;"			/* mark_precise */
-+	"r3 += r2;"
- 	"r0 = 0;"
- 	"exit;"
- 	:
-@@ -433,12 +372,8 @@ __naked int bpf_atomic_fetch_xor_precision(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r3 = r10")
--__msg("mark_precise: frame0: regs=r0 stack= before 4: (db) r0 = atomic64_cmpxchg((u64 *)(r10 -8), r0, r2)")
--__msg("mark_precise: frame0: regs= stack=-8 before 3: (b7) r2 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r0 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
--__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
-+__msg("4: (db) r0 = atomic64_cmpxchg((u64 *)(r10 -8), r0, r2){{ *}}; R0=8 R2=0 R10=fp0 fp-8=mmmmmmmm")
-+__msg("6: (0f) r3 += r0                      ; R0=8 R3=fp8")
- __naked int bpf_atomic_cmpxchg_precision(void)
- {
- 	asm volatile (
-@@ -448,7 +383,7 @@ __naked int bpf_atomic_cmpxchg_precision(void)
- 	"r2 = 0;"
- 	".8byte %[cmpxchg_insn];"	/* r0 = atomic_cmpxchg(*(u64 *)(r10 - 8), r0, r2) */
- 	"r3 = r10;"
--	"r3 += r0;"			/* mark_precise */
-+	"r3 += r0;"
- 	"r0 = 0;"
- 	"exit;"
- 	:
-@@ -457,19 +392,15 @@ __naked int bpf_atomic_cmpxchg_precision(void)
- 	: __clobber_all);
+@@ -2159,8 +2133,7 @@ static int loop_cb5(int i, __u64 *ctx)
  }
  
--/* Regression test for dual precision: Both the fetched value (r2) and
-- * a reread of the same stack slot (r3) are tracked for precision. After
-- * the atomic operation, the stack slot is STACK_MISC. Thus, the ldx at
-- * insn 4 does NOT set INSN_F_STACK_ACCESS. Precision for the stack slot
-- * propagates solely through the atomic fetch's load side (insn 3).
-+/*
-+ * Both the fetched value (r2) and a reread of the same stack slot (r3) are used.
-+ * The fetched value is known. After the atomic operation, the stack slot is
-+ * STACK_MISC, so what is reread is not.
-  */
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r2,r3 stack= before 4: (79) r3 = *(u64 *)(r10 -8)")
--__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)")
--__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
--__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
-+__msg("5: (bf) r4 = r2                       ; R2=8 R4=8")
-+__msg("6: (0f) r4 += r3                      ; R3=scalar() R4=scalar()")
- __naked int bpf_atomic_fetch_add_dual_precision(void)
- {
- 	asm volatile (
-@@ -482,7 +413,7 @@ __naked int bpf_atomic_fetch_add_dual_precision(void)
- 	"r4 += r3;"
- 	"r4 &= 7;"
- 	"r5 = r10;"
--	"r5 += r4;"			/* mark_precise */
-+	"r5 += r4;"
- 	"r0 = 0;"
- 	"exit;"
- 	:
-@@ -493,12 +424,8 @@ __naked int bpf_atomic_fetch_add_dual_precision(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r0,r3 stack= before 5: (79) r3 = *(u64 *)(r10 -8)")
--__msg("mark_precise: frame0: regs=r0 stack= before 4: (db) r0 = atomic64_cmpxchg((u64 *)(r10 -8), r0, r2)")
--__msg("mark_precise: frame0: regs= stack=-8 before 3: (b7) r2 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r0 = 8")
--__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
--__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
-+__msg("6: (bf) r4 = r0                       ; R0=8 R4=8")
-+__msg("7: (0f) r4 += r3                      ; R3=scalar() R4=scalar()")
- __naked int bpf_atomic_cmpxchg_dual_precision(void)
- {
- 	asm volatile (
-@@ -512,7 +439,7 @@ __naked int bpf_atomic_cmpxchg_dual_precision(void)
- 	"r4 += r3;"
- 	"r4 &= 7;"
- 	"r5 = r10;"
--	"r5 += r4;"			/* mark_precise */
-+	"r5 += r4;"
- 	"r0 = 0;"
- 	"exit;"
- 	:
-@@ -523,9 +450,7 @@ __naked int bpf_atomic_cmpxchg_dual_precision(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r1 stack= before 10: (57) r1 &= 7")
--__msg("mark_precise: frame0: regs=r1 stack= before 9: (db) r1 = atomic64_fetch_add((u64 *)(r0 +0), r1)")
--__not_msg("falling back to forcing all scalars precise")
-+__msg("9: (db) r1 = atomic64_fetch_add((u64 *)(r0 +0), r1){{ *}}; R0=map_value({{.*}}) R1=scalar()")
- __naked int bpf_atomic_fetch_add_map_precision(void)
- {
- 	asm volatile (
-@@ -540,7 +465,7 @@ __naked int bpf_atomic_fetch_add_map_precision(void)
- 	".8byte %[fetch_add_insn];"	/* r1 = atomic_fetch_add(*(u64 *)(r0 + 0), r1) */
- 	"r1 &= 7;"
- 	"r2 = r10;"
--	"r2 += r1;"			/* mark_precise */
-+	"r2 += r1;"
- 	"1: r0 = 0;"
- 	"exit;"
- 	:
-@@ -553,9 +478,7 @@ __naked int bpf_atomic_fetch_add_map_precision(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r0 stack= before 12: (57) r0 &= 7")
--__msg("mark_precise: frame0: regs=r0 stack= before 11: (db) r0 = atomic64_cmpxchg((u64 *)(r6 +0), r0, r1)")
--__not_msg("falling back to forcing all scalars precise")
-+__msg("11: (db) r0 = atomic64_cmpxchg((u64 *)(r6 +0), r0, r1){{ *}}; R0=scalar() R1=0")
- __naked int bpf_atomic_cmpxchg_map_precision(void)
- {
- 	asm volatile (
-@@ -572,7 +495,7 @@ __naked int bpf_atomic_cmpxchg_map_precision(void)
- 	".8byte %[cmpxchg_insn];"	/* r0 = atomic_cmpxchg(*(u64 *)(r6 + 0), r0, r1) */
- 	"r0 &= 7;"
- 	"r2 = r10;"
--	"r2 += r0;"			/* mark_precise */
-+	"r2 += r0;"
- 	"1: r0 = 0;"
- 	"exit;"
- 	:
-@@ -585,9 +508,7 @@ __naked int bpf_atomic_cmpxchg_map_precision(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r1 stack= before 10: (57) r1 &= 7")
--__msg("mark_precise: frame0: regs=r1 stack= before 9: (c3) r1 = atomic_fetch_add((u32 *)(r0 +0), r1)")
--__not_msg("falling back to forcing all scalars precise")
-+__msg("9: (c3) r1 = atomic_fetch_add((u32 *)(r0 +0), r1){{ *}}; R0=map_value({{.*}}) R1=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))")
- __naked int bpf_atomic_fetch_add_32bit_precision(void)
- {
- 	asm volatile (
-@@ -602,7 +523,7 @@ __naked int bpf_atomic_fetch_add_32bit_precision(void)
- 	".8byte %[fetch_add_insn];"	/* r1 = atomic_fetch_add(*(u32 *)(r0 + 0), r1) */
- 	"r1 &= 7;"
- 	"r2 = r10;"
--	"r2 += r1;"			/* mark_precise */
-+	"r2 += r1;"
- 	"1: r0 = 0;"
- 	"exit;"
- 	:
-@@ -615,9 +536,7 @@ __naked int bpf_atomic_fetch_add_32bit_precision(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r0 stack= before 12: (57) r0 &= 7")
--__msg("mark_precise: frame0: regs=r0 stack= before 11: (c3) r0 = atomic_cmpxchg((u32 *)(r6 +0), r0, r1)")
--__not_msg("falling back to forcing all scalars precise")
-+__msg("11: (c3) r0 = atomic_cmpxchg((u32 *)(r6 +0), r0, r1){{ *}}; R0=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff)) R1=0")
- __naked int bpf_atomic_cmpxchg_32bit_precision(void)
- {
- 	asm volatile (
-@@ -634,7 +553,7 @@ __naked int bpf_atomic_cmpxchg_32bit_precision(void)
- 	".8byte %[cmpxchg_insn];"	/* r0 = atomic_cmpxchg(*(u32 *)(r6 + 0), r0, r1) */
- 	"r0 &= 7;"
- 	"r2 = r10;"
--	"r2 += r0;"			/* mark_precise */
-+	"r2 += r0;"
- 	"1: r0 = 0;"
- 	"exit;"
- 	:
-@@ -648,11 +567,9 @@ __naked int bpf_atomic_cmpxchg_32bit_precision(void)
- /*
-  * Verification takes two paths: with r1 being scalar zero on path (1)
-  * and with r1 being some other scalar on path (2).
-- * Check that the verifier does not use checkpoints created
-- * on path (1) to prune path (2).
-+ * Check that the state of path (1) does not stand for path (2).
-  */
- SEC("?tc")
+ SEC("raw_tp")
 -__flag(BPF_F_TEST_STATE_FREQ)
- __failure __msg("R1 type=scalar expected=fp")
- __naked int null_mem_arg_zero_size(void)
+-__failure __msg("memory access is {{.*}} and is outside of the object of size 64")
++__failure __msg("invalid access to map value, value_size=64 off=402000 size=4")
+ __naked void loop_counter_precision_2nd_iter(void)
  {
-@@ -689,11 +606,9 @@ __weak int subprog_mem_arg(int *p)
+ 	asm volatile (
+@@ -2174,9 +2147,8 @@ __naked void loop_counter_precision_2nd_iter(void)
+ 		"r3 += -8;"
+ 		"r4 = 0;"
+ 		/*
+-		 * Explore with nr_loops=1 on a first path and nr_loops=2 on a second path.
+-		 * Buggy verifier did not propagate r1 precision properly,
+-		 * and thus checkpoints created for nr_loops=1 case matched nr_loops=2 case.
++		 * nr_loops is 1 on one path and 2 on the other.
++		 * The second call of the callback must not be lost.
+ 		 */
+ 		"call %[bpf_loop];"
+ 		"r0 = 0;"
+@@ -2190,12 +2162,12 @@ __naked void loop_counter_precision_2nd_iter(void)
+ 
  /*
-  * Verification takes two paths: with r1 being scalar zero on path (1)
-  * and with r1 being some other scalar on path (2).
-- * Check that the verifier does not use checkpoints created
-- * on path (1) to prune path (2).
-+ * Check that the state of path (1) does not stand for path (2).
+  * An iterator that is destroyed and created again inside its loop starts from
+- * the beginning and the loop never ends. In the first four progs the first
+- * prune point after bpf_iter_num_new() is the call of bpf_iter_num_next().
++ * the beginning and the loop never ends. bpf_iter_num_next() is not what stops such
++ * loop: the verifier adds may_goto. The progs spin until it's out of budget.
   */
- SEC("?raw_tp")
--__flag(BPF_F_TEST_STATE_FREQ)
- __failure __msg("R1 type=scalar expected=fp")
- __naked int null_mem_arg_global_subprog(void)
+ SEC("socket")
+ __description("iter: remake in the loop, jump to next")
+-__failure __msg("infinite loop detected")
++__success __retval(0)
+ __naked void iter_remake_jmp(void)
  {
-@@ -711,9 +626,8 @@ __naked int null_mem_arg_global_subprog(void)
- 		: __clobber_all);
+ 	asm volatile (
+@@ -2256,7 +2228,7 @@ __used __naked static void iter_remake(void)
+ 
+ SEC("socket")
+ __description("iter: remake in a callee, jump to next")
+-__failure __msg("infinite loop detected")
++__success __retval(0)
+ __naked void iter_remake_callee_jmp(void)
+ {
+ 	asm volatile (
+@@ -2295,7 +2267,7 @@ __naked void iter_remake_callee_jmp(void)
+ 
+ SEC("socket")
+ __description("iter: remake after next, jump to next")
+-__failure __msg("infinite loop detected")
++__success __retval(0)
+ __naked void iter_remake_after_next_jmp(void)
+ {
+ 	asm volatile (
+@@ -2336,7 +2308,7 @@ __naked void iter_remake_after_next_jmp(void)
+ 
+ SEC("socket")
+ __description("iter: two iterators, remake each after its next")
+-__failure __msg("infinite loop detected")
++__success __retval(0)
+ __naked void iter_remake_two_jmp(void)
+ {
+ 	asm volatile (
+@@ -2398,7 +2370,7 @@ __naked void iter_remake_two_jmp(void)
+ /* Same loops with a prune point in front of bpf_iter_num_next() */
+ SEC("socket")
+ __description("iter: remake in the loop")
+-__failure __msg("infinite loop detected")
++__success __retval(0)
+ __flag(BPF_F_TEST_STATE_FREQ)
+ __naked void iter_remake_inline(void)
+ {
+@@ -2439,7 +2411,7 @@ __naked void iter_remake_inline(void)
+ 
+ SEC("socket")
+ __description("iter: remake in a callee")
+-__failure __msg("infinite loop detected")
++__success __retval(0)
+ __flag(BPF_F_TEST_STATE_FREQ)
+ __naked void iter_remake_callee(void)
+ {
+@@ -2475,7 +2447,7 @@ __naked void iter_remake_callee(void)
+ 
+ SEC("socket")
+ __description("iter: remake after next")
+-__failure __msg("infinite loop detected")
++__success __retval(0)
+ __flag(BPF_F_TEST_STATE_FREQ)
+ __naked void iter_remake_after_next(void)
+ {
+@@ -2515,7 +2487,7 @@ __naked void iter_remake_after_next(void)
+ 
+ SEC("socket")
+ __description("iter: remake when drained")
+-__failure __msg("infinite loop detected")
++__success __retval(0)
+ __flag(BPF_F_TEST_STATE_FREQ)
+ __naked void iter_remake_drained(void)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/iters_state_safety.c b/tools/testing/selftests/bpf/progs/iters_state_safety.c
+index b2ba4609a31e..fa9604f0a173 100644
+--- a/tools/testing/selftests/bpf/progs/iters_state_safety.c
++++ b/tools/testing/selftests/bpf/progs/iters_state_safety.c
+@@ -30,7 +30,7 @@ int force_clang_to_emit_btf_for_externs(void *ctx)
+ 
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("fp-8=iter_num(id=1,state=active,depth=0)")
++__msg("fp-8=iter_num(id=1,state=active)")
+ int create_and_destroy(void *ctx)
+ {
+ 	struct bpf_iter_num iter;
+@@ -207,8 +207,8 @@ static __noinline void subprog_with_iter(void)
+ SEC("?raw_tp")
+ __failure
+ /* ensure there was a call to subprog, which might happen without __noinline */
+-__msg("returning from callee:")
+-__msg("Unreleased reference id=1")
++__msg("0: (85) call pc+2")
++__msg("Unreleased reference id=2 alloc_insn=7")
+ int leak_iter_from_subprog_fail(void *ctx)
+ {
+ 	subprog_with_iter();
+@@ -218,7 +218,7 @@ int leak_iter_from_subprog_fail(void *ctx)
+ 
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("fp-8=iter_num(id=1,state=active,depth=0)")
++__msg("fp-8=iter_num(id=1,state=active)")
+ int valid_stack_reuse(void *ctx)
+ {
+ 	struct bpf_iter_num iter;
+diff --git a/tools/testing/selftests/bpf/progs/iters_testmod_seq.c b/tools/testing/selftests/bpf/progs/iters_testmod_seq.c
+index d00888f6687a..88ce4b7a9c33 100644
+--- a/tools/testing/selftests/bpf/progs/iters_testmod_seq.c
++++ b/tools/testing/selftests/bpf/progs/iters_testmod_seq.c
+@@ -20,8 +20,8 @@ __s64 res_empty;
+ 
+ SEC("raw_tp/sys_enter")
+ __success __log_level(2)
+-__msg("fp-16=iter_testmod_seq(id=1,state=active,depth=0)")
+-__msg("fp-16=iter_testmod_seq(id=1,state=drained,depth=0)")
++__msg("fp-16=iter_testmod_seq(id=1,state=active)")
++__msg("fp-16=iter_testmod_seq(id=1,state=drained)")
+ __msg("call bpf_iter_testmod_seq_destroy")
+ int testmod_seq_empty(const void *ctx)
+ {
+@@ -38,8 +38,8 @@ __s64 res_full;
+ 
+ SEC("raw_tp/sys_enter")
+ __success __log_level(2)
+-__msg("fp-16=iter_testmod_seq(id=1,state=active,depth=0)")
+-__msg("fp-16=iter_testmod_seq(id=1,state=drained,depth=0)")
++__msg("fp-16=iter_testmod_seq(id=1,state=active)")
++__msg("fp-16=iter_testmod_seq(id=1,state=drained)")
+ __msg("call bpf_iter_testmod_seq_destroy")
+ int testmod_seq_full(const void *ctx)
+ {
+@@ -58,8 +58,8 @@ static volatile int zero = 0;
+ 
+ SEC("raw_tp/sys_enter")
+ __success __log_level(2)
+-__msg("fp-16=iter_testmod_seq(id=1,state=active,depth=0)")
+-__msg("fp-16=iter_testmod_seq(id=1,state=drained,depth=0)")
++__msg("fp-16=iter_testmod_seq(id=1,state=active)")
++__msg("fp-16=iter_testmod_seq(id=1,state=drained)")
+ __msg("call bpf_iter_testmod_seq_destroy")
+ int testmod_seq_truncated(const void *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c b/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
+index b5cf85e2a19a..c6c1c3767a75 100644
+--- a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
++++ b/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
+@@ -219,9 +219,9 @@ int mixed_mem_untrusted_btf_id_type(void *ctx)
+ 	 * returning 0.
+ 	 */
+ 	asm volatile (
+-	"r7 = %[p];"
+-	"if %[zero] != 0 goto +1;"
+ 	"r7 = %[q];"
++	"if %[zero] == 0 goto +1;"
++	"r7 = %[p];"
+ 	"r8 = *(u64 *)(r7 + 0);"
+ 	"%[v] = r8;"
+ 	: [v]"=r"(v)
+@@ -263,9 +263,9 @@ int mixed_mem_btf_id_type(void *ctx)
+ 	 * gotten on its own.
+ 	 */
+ 	asm volatile (
+-	"r7 = %[p];"
+-	"if %[zero] != 0 goto +1;"
+ 	"r7 = %[q];"
++	"if %[zero] == 0 goto +1;"
++	"r7 = %[p];"
+ 	"r8 = *(u32 *)(r7 + 0);"
+ 	"%[v] = r8;"
+ 	: [v]"=r"(v)
+@@ -305,9 +305,9 @@ int mixed_rdonly_mem_btf_id_type(void *ctx)
+ 	 * only its PTR_UNTRUSTED variant is.
+ 	 */
+ 	asm volatile (
+-	"r7 = %[p];"
+-	"if %[zero] != 0 goto +1;"
+ 	"r7 = %[q];"
++	"if %[zero] == 0 goto +1;"
++	"r7 = %[p];"
+ 	"r8 = *(u32 *)(r7 + 0);"
+ 	"%[v] = r8;"
+ 	: [v]"=r"(v)
+@@ -340,9 +340,9 @@ int mixed_mem_mem_type(void *ctx)
+ 	 * hence without the BPF_PROBE_MEM rewrite the other path needs.
+ 	 */
+ 	asm volatile (
+-	"r7 = %[q];"
+-	"if %[zero] == 0 goto +1;"
+ 	"r7 = %[p];"
++	"if %[zero] != 0 goto +1;"
++	"r7 = %[q];"
+ 	"r8 = *(u64 *)(r7 + 0);"
+ 	"%[v] = r8;"
+ 	: [v]"=r"(v)
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/tools/testing/selftests/bpf/progs/test_global_func3.c
+index b332704b395c..b916355c5e59 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func3.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
+@@ -205,6 +205,131 @@ int global_func3_32_frames(struct __sk_buff *skb)
+ 	return f31(skb);
  }
  
--/* Same as above, check that path with r3 == 0 does not prune the path with r3 != 0 */
-+/* Same as above, check that path with r3 == 0 does not stand for the path with r3 != 0 */
- SEC("?tc")
--__flag(BPF_F_TEST_STATE_FREQ)
- __failure __msg("R3 type=scalar expected=fp")
- int null_kfunc_arg_dynptr_slice(struct __sk_buff *skb)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-index 256547048cc4..9ea61b162736 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-@@ -11,27 +11,22 @@ struct {
- 	__type(value, long long);
- } map_hash_8b SEC(".maps");
- 
--/* Check that precision marks propagate through scalar IDs.
-+/* scalar in [0, max] that shares id with other registers, as it is in the log */
-+#define LINKED(id, max, mask) \
-+	"scalar(id=" id ",smin=smin32=0,smax=umax=smax32=umax32=" #max ",var_off=(0x0; " #mask "))"
-+#define ALONE(max, mask) \
-+	"scalar(smin=smin32=0,smax=umax=smax32=umax32=" #max ",var_off=(0x0; " #mask "))"
++volatile int again;
++
++static __attribute__ ((noinline))
++int calls_itself(struct __sk_buff *skb)
++{
++	if (again)
++		return (calls_itself(skb) >> 1) ^ 1;
++	return f16(skb);
++}
++
++#define FRAME(name, next)			\
++static __attribute__ ((noinline))		\
++int name(struct __sk_buff *skb)			\
++{						\
++	return next(skb);			\
++}
++
++FRAME(g1, calls_itself)
++FRAME(g2, g1)
++FRAME(g3, g2)
++FRAME(g4, g3)
++FRAME(g5, g4)
++FRAME(g6, g5)
++FRAME(g7, g6)
++FRAME(g8, g7)
++FRAME(g9, g8)
++FRAME(g10, g9)
++FRAME(g11, g10)
++FRAME(g12, g11)
++FRAME(g13, g12)
++FRAME(g14, g13)
++FRAME(g15, g14)
++FRAME(g16, g15)
 +
 +/*
-  * Registers r{0,1,2} have the same scalar ID.
-- * Range information is propagated for scalars sharing same ID.
-- * Check that precision mark for r0 causes precision marks for r{1,2}
-- * when range information is propagated for 'if <reg> <op> <const>' insn.
-+ * Range information is propagated for scalars sharing same ID
-+ * for 'if <reg> <op> <const>' insn.
-+ * The registers share the ID in the join of both branches too.
-  */
- SEC("socket")
- __success __log_level(2)
--/* first 'if' branch */
--__msg("6: (0f) r3 += r0")
--__msg("frame0: regs=r0 stack= before 4: (25) if r1 > 0x7 goto pc+0")
--__msg("frame0: parent state regs=r0,r1,r2 stack=:")
--__msg("frame0: regs=r0,r1,r2 stack= before 3: (bf) r2 = r0")
--/* second 'if' branch */
--__msg("from 4 to 5: ")
--__msg("6: (0f) r3 += r0")
--__msg("frame0: regs=r0 stack= before 5: (bf) r3 = r10")
--__msg("frame0: regs=r0 stack= before 4: (25) if r1 > 0x7 goto pc+0")
--/* parent state already has r{0,1,2} as precise */
--__msg("frame0: parent state regs= stack=:")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("4: (25) if r1 > 0x7 goto pc+0         ; R0=" LINKED("1", 7, 0x7) " R1=" LINKED("1", 7, 0x7) " R2=" LINKED("1", 7, 0x7))
-+__msg("5: R0=" LINKED("1", 255, 0xff) " R1=" LINKED("1", 255, 0xff) " R2=" LINKED("1", 255, 0xff))
- __naked void linked_regs_bpf_k(void)
- {
- 	asm volatile (
-@@ -42,9 +37,6 @@ __naked void linked_regs_bpf_k(void)
- 	"r1 = r0;"
- 	"r2 = r0;"
- 	"if r1 > 7 goto +0;"
--	/* force r0 to be precise, this eventually marks r1 and r2 as
--	 * precise as well because of shared IDs
--	 */
- 	"r3 = r10;"
- 	"r3 += r0;"
- 	/* Mark r1 and r2 as alive. */
-@@ -57,16 +49,14 @@ __naked void linked_regs_bpf_k(void)
- 	: __clobber_all);
++ * 16 frames above the subprog that calls itself and 16 below it. The call of it
++ * with nothing above it comes first.
++ */
++SEC("tc")
++__arch_x86_64
++__arch_arm64
++__failure __msg("the call stack of {{[0-9]+}} frames is too deep")
++int global_func3_frames_around_recursion(struct __sk_buff *skb)
++{
++	return calls_itself(skb) + g16(skb);
++}
++
++static __attribute__ ((noinline))
++int depth(int n)
++{
++	return n > 0 ? (depth(n - 1) + 1) & 255 : 0;
++}
++
++SEC("kprobe")
++__arch_x86_64
++__arch_arm64
++__failure __msg("recursive depth() in a tracing program")
++int global_func3_recursion_in_tracing_prog(void *ctx)
++{
++	return depth(again + 7);
++}
++
++__attribute__ ((noinline))
++int redirects(struct __sk_buff *skb, int n)
++{
++	int ret = n > 0 ? redirects(skb, n - 1) : 0;
++
++	return ret + bpf_clone_redirect(skb, 1, 0);
++}
++
++/* The prog would run again on top of the frames of its recursion */
++SEC("tc")
++__arch_x86_64
++__arch_arm64
++__failure __msg("recursive redirects() in a program that calls bpf_clone_redirect()")
++int global_func3_recursion_redirects(struct __sk_buff *skb)
++{
++	return redirects(skb, again + 7);
++}
++
++static __attribute__ ((noinline))
++int depth_to(int n, long *out)
++{
++	*out = depth(n);
++	return 0;
++}
++
++/* The pointer to the stack is left over in r2 at the call of depth(), which doesn't read r2 */
++SEC("tc")
++__arch_x86_64
++__arch_arm64
++__success __retval(7)
++int global_func3_recursion_stale_stack_pointer(struct __sk_buff *skb)
++{
++	long x = 0;
++
++	depth_to(again + 7, &x);
++	return x;
++}
++
++/* It writes to the stack of its caller, or a compiler hands down the value and no pointer */
++static __attribute__ ((noinline))
++long hands_down_its_stack(long *up, int n)
++{
++	long mine = n;
++
++	*up += 1;
++	if (n <= 0)
++		return mine;
++	return hands_down_its_stack(&mine, n - 1) + mine;
++}
++
++/* What a subprog does with the stack of its callers is not found for chains without an end */
++SEC("tc")
++__arch_x86_64
++__arch_arm64
++__failure
++__msg("recursive hands_down_its_stack() passes a pointer to the stack to hands_down_its_stack()")
++int global_func3_recursion_stack_pointer(struct __sk_buff *skb)
++{
++	long x = skb->len;
++
++	return hands_down_its_stack(&x, skb->mark & 7);
++}
++
+ #define PTR_FRAME(name, next)			\
+ static __attribute__ ((noinline))		\
+ long name(long *p)				\
+diff --git a/tools/testing/selftests/bpf/progs/timer_failure.c b/tools/testing/selftests/bpf/progs/timer_failure.c
+index 0538269101ca..84ea861575fc 100644
+--- a/tools/testing/selftests/bpf/progs/timer_failure.c
++++ b/tools/testing/selftests/bpf/progs/timer_failure.c
+@@ -43,14 +43,7 @@ static unsigned long timer_cb_ret_bad()
  }
  
--/* Registers r{0,1,2} share same ID when 'if r1 > ...' insn is processed,
-- * check that verifier marks r{1,2} as precise while backtracking
-- * 'if r1 > ...' with r0 already marked.
-+/*
-+ * Registers r{0,1,2} share same ID when 'if r1 > r3' insn is processed,
-+ * check that range information is propagated to all of them.
-  */
- SEC("socket")
- __success __log_level(2)
+ SEC("fentry/bpf_fentry_test1")
+-__log_level(2)
 -__flag(BPF_F_TEST_STATE_FREQ)
--__msg("frame0: regs=r0 stack= before 5: (2d) if r1 > r3 goto pc+0")
--__msg("frame0: parent state regs=r0,r1,r2,r3 stack=:")
--__msg("frame0: regs=r0,r1,r2,r3 stack= before 4: (b7) r3 = 7")
-+__msg("5: (2d) if r1 > r3 goto pc+0          ; R0=" LINKED("1", 7, 0x7) " R1=" LINKED("1", 7, 0x7) " R2=" LINKED("1", 7, 0x7))
-+__msg("6: R0=" LINKED("1", 255, 0xff) " R1=" LINKED("1", 255, 0xff) " R2=" LINKED("1", 255, 0xff))
- __naked void linked_regs_bpf_x_src(void)
- {
- 	asm volatile (
-@@ -78,9 +68,6 @@ __naked void linked_regs_bpf_x_src(void)
- 	"r2 = r0;"
- 	"r3 = 7;"
- 	"if r1 > r3 goto +0;"
--	/* force r0 to be precise, this eventually marks r1 and r2 as
--	 * precise as well because of shared IDs
--	 */
- 	"r4 = r10;"
- 	"r4 += r0;"
- 	/* Mark r1 and r2 as alive. */
-@@ -93,16 +80,11 @@ __naked void linked_regs_bpf_x_src(void)
- 	: __clobber_all);
- }
- 
--/* Registers r{0,1,2} share same ID when 'if r1 > r3' insn is processed,
-- * check that verifier marks r{0,1,2} as precise while backtracking
-- * 'if r1 > r3' with r3 already marked.
-- */
-+/* Same as linked_regs_bpf_x_src(), r3 is what is used after the jump. */
- SEC("socket")
- __success __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
--__msg("frame0: regs=r3 stack= before 5: (2d) if r1 > r3 goto pc+0")
--__msg("frame0: parent state regs=r0,r1,r2,r3 stack=:")
--__msg("frame0: regs=r0,r1,r2,r3 stack= before 4: (b7) r3 = 7")
-+__msg("5: (2d) if r1 > r3 goto pc+0          ; R0=" LINKED("1", 7, 0x7) " R1=" LINKED("1", 7, 0x7) " R2=" LINKED("1", 7, 0x7))
-+__msg("7: (0f) r4 += r3                      ; R3=7 R4=fp7")
- __naked void linked_regs_bpf_x_dst(void)
- {
- 	asm volatile (
-@@ -114,9 +96,6 @@ __naked void linked_regs_bpf_x_dst(void)
- 	"r2 = r0;"
- 	"r3 = 7;"
- 	"if r1 > r3 goto +0;"
--	/* force r0 to be precise, this eventually marks r1 and r2 as
--	 * precise as well because of shared IDs
--	 */
- 	"r4 = r10;"
- 	"r4 += r3;"
- 	/* Mark r1 and r2 as alive. */
-@@ -131,16 +110,13 @@ __naked void linked_regs_bpf_x_dst(void)
- }
- 
- /* Same as linked_regs_bpf_k, but break one of the
-- * links, note that r1 is absent from regs=... in __msg below.
-+ * links, note that r1 is absent from the first __msg below.
-  */
- SEC("socket")
- __success __log_level(2)
--__msg("7: (0f) r3 += r0")
--__msg("frame0: regs=r0 stack= before 6: (bf) r3 = r10")
--__msg("frame0: parent state regs=r0 stack=:")
--__msg("frame0: regs=r0 stack= before 5: (25) if r0 > 0x7 goto pc+0")
--__msg("frame0: parent state regs=r0,r2 stack=:")
--__flag(BPF_F_TEST_STATE_FREQ)
-+/* r1 is not there */
-+__msg("5: (25) if r0 > 0x7 goto pc+0         ; R0=" LINKED("1", 7, 0x7) " R2=" LINKED("1", 7, 0x7) "{{$}}")
-+__msg("8: (bf) r1 = r1                       ; R1=0")
- __naked void linked_regs_broken_link(void)
- {
- 	asm volatile (
-@@ -155,9 +131,6 @@ __naked void linked_regs_broken_link(void)
- 	 */
- 	"r1 = 0;"
- 	"if r0 > 7 goto +0;"
--	/* force r0 to be precise,
--	 * this eventually marks r2 as precise because of shared IDs
--	 */
- 	"r3 = r10;"
- 	"r3 += r0;"
- 	/* Mark r1 and r2 as alive. */
-@@ -170,50 +143,16 @@ __naked void linked_regs_broken_link(void)
- 	: __clobber_all);
- }
- 
--/* Check that precision marks propagate through scalar IDs.
-- * Use the same scalar ID in multiple stack frames, check that
-- * precision information is propagated up the call stack.
-+/*
-+ * Use the same scalar ID in multiple stack frames. A static function is verified
-+ * on its own: registers of the callers are not there when r1 is compared, so it has no ID.
-+ * They share their IDs after the calls like before, if there is more than one left.
-  */
- SEC("socket")
- __success __log_level(2)
--__msg("17: (0f) r2 += r1")
--/* Current state */
--__msg("frame2: last_idx 17 first_idx 14 subseq_idx -1 ")
--__msg("frame2: regs=r1 stack= before 16: (bf) r2 = r10")
--__msg("frame2: parent state regs=r1 stack=")
--__msg("frame1: parent state regs= stack=")
--__msg("frame0: parent state regs= stack=")
--/* Parent state */
--__msg("frame2: last_idx 13 first_idx 13 subseq_idx 14 ")
--__msg("frame2: regs=r1 stack= before 13: (25) if r1 > 0x7 goto pc+0")
--__msg("frame2: parent state regs=r1 stack=")
--/* frame1.r{6,7} are marked because mark_precise_scalar_ids()
-- * looks for all registers with frame2.r1.id in the current state
-- */
--__msg("frame1: parent state regs=r6,r7 stack=")
--__msg("frame0: parent state regs=r6 stack=")
--/* Parent state */
--__msg("frame2: last_idx 9 first_idx 9 subseq_idx 13")
--__msg("frame2: regs=r1 stack= before 9: (85) call pc+3")
--/* frame1.r1 is marked because of backtracking of call instruction */
--__msg("frame1: parent state regs=r1,r6,r7 stack=")
--__msg("frame0: parent state regs=r6 stack=")
--/* Parent state */
--__msg("frame1: last_idx 8 first_idx 7 subseq_idx 9")
--__msg("frame1: regs=r1,r6,r7 stack= before 8: (bf) r7 = r1")
--__msg("frame1: regs=r1,r6 stack= before 7: (bf) r6 = r1")
--__msg("frame1: parent state regs=r1 stack=")
--__msg("frame0: parent state regs=r6 stack=")
--/* Parent state */
--__msg("frame1: last_idx 4 first_idx 4 subseq_idx 7")
--__msg("frame1: regs=r1 stack= before 4: (85) call pc+2")
--__msg("frame0: parent state regs=r1,r6 stack=")
--/* Parent state */
--__msg("frame0: last_idx 3 first_idx 1 subseq_idx 4")
--__msg("frame0: regs=r1,r6 stack= before 3: (bf) r6 = r0")
--__msg("frame0: regs=r0,r1 stack= before 2: (bf) r1 = r0")
--__msg("frame0: regs=r0 stack= before 1: (57) r0 &= 255")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("13: (25) if r1 > 0x7 goto pc+0        ; R1=" ALONE(7, 0x7))
-+__msg("10: R0=0 R6=scalar(id={{.*}}umax32=255,{{.*}} R7=scalar(id={{.*}}umax32=255,")
-+__msg("5: R0=0 R6=" ALONE(255, 0xff))
- __naked void precision_many_frames(void)
- {
- 	asm volatile (
-@@ -254,11 +193,6 @@ void precision_many_frames__bar(void)
- 	"if r1 > 7 goto +0;"
- 	"r6 = 0;" /* mark r6 as live */
- 	"r7 = 0;" /* mark r7 as live */
--	/* force r1 to be precise, this eventually marks:
--	 * - bar frame r1
--	 * - foo frame r{1,6,7}
--	 * - main frame r{1,6}
--	 */
- 	"r2 = r10;"
- 	"r2 += r1;"
- 	"r0 = 0;"
-@@ -266,23 +200,13 @@ void precision_many_frames__bar(void)
- 	::: __clobber_all);
- }
- 
--/* Check that scalars with the same IDs are marked precise on stack as
-+/*
-+ * Check that range information is propagated to scalars with the same IDs on stack as
-  * well as in registers.
-  */
- SEC("socket")
- __success __log_level(2)
--__msg("12: (0f) r2 += r1")
--/* foo frame */
--__msg("frame1: regs=r1 stack= before 11: (bf) r2 = r10")
--__msg("frame1: regs=r1 stack= before 10: (25) if r1 > 0x7 goto pc+0")
--__msg("frame1: regs=r1 stack=-8,-16 before 9: (7b) *(u64 *)(r10 -16) = r1")
--__msg("frame1: regs=r1 stack=-8 before 8: (7b) *(u64 *)(r10 -8) = r1")
--__msg("frame1: regs=r1 stack= before 4: (85) call pc+3")
--/* main frame */
--__msg("frame0: regs=r1 stack=-8 before 3: (7b) *(u64 *)(r10 -8) = r1")
--__msg("frame0: regs=r1 stack= before 2: (bf) r1 = r0")
--__msg("frame0: regs=r0 stack= before 1: (57) r0 &= 255")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("10: (25) if r1 > 0x7 goto pc+0        ; R1=scalar({{.*}}umax32=7,{{.*}} fp-8=scalar({{.*}}umax32=7,{{.*}} fp-16=scalar({{.*}}umax32=7,")
- __naked void precision_stack(void)
- {
- 	asm volatile (
-@@ -311,10 +235,6 @@ void precision_stack__foo(void)
- 	"*(u64*)(r10 - 8) = r1;"
- 	"*(u64*)(r10 - 16) = r1;"
- 	"if r1 > 7 goto +0;"
--	/* force r1 to be precise, this eventually marks:
--	 * - foo frame r1,fp{-8,-16}
--	 * - main frame r1,fp{-8}
--	 */
- 	"r2 = r10;"
- 	"r2 += r1;"
- 	"r0 = *(u64*)(r10 - 8);"
-@@ -329,20 +249,9 @@ void precision_stack__foo(void)
- SEC("socket")
- __success __log_level(2)
- /* r{6,7} */
--__msg("12: (0f) r3 += r7")
--__msg("frame0: regs=r7 stack= before 11: (bf) r3 = r10")
--__msg("frame0: regs=r7 stack= before 9: (25) if r7 > 0x7 goto pc+0")
--/* ... skip some insns ... */
--__msg("frame0: regs=r6,r7 stack= before 3: (bf) r7 = r0")
--__msg("frame0: regs=r0,r6 stack= before 2: (bf) r6 = r0")
-+__msg("9: (25) if r7 > 0x7 goto pc+0         ; R6=" LINKED("1", 7, 0x7) " R7=" LINKED("1", 7, 0x7) "{{$}}")
- /* r{8,9} */
--__msg("13: (0f) r3 += r9")
--__msg("frame0: regs=r9 stack= before 12: (0f) r3 += r7")
--/* ... skip some insns ... */
--__msg("frame0: regs=r9 stack= before 10: (25) if r9 > 0x7 goto pc+0")
--__msg("frame0: regs=r8,r9 stack= before 7: (bf) r9 = r0")
--__msg("frame0: regs=r0,r8 stack= before 6: (bf) r8 = r0")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("10: (25) if r9 > 0x7 goto pc+0        ; R8=" LINKED("2", 7, 0x7) " R9=" LINKED("2", 7, 0x7) "{{$}}")
- __naked void precision_two_ids(void)
- {
- 	asm volatile (
-@@ -360,13 +269,11 @@ __naked void precision_two_ids(void)
- 	"r9 = r0;"
- 	/* clear r0 id */
- 	"r0 = 0;"
--	/* propagate equal scalars precision */
-+	/* propagate range information to equal scalars */
- 	"if r7 > 7 goto +0;"
- 	"if r9 > 7 goto +0;"
- 	"r3 = r10;"
--	/* force r7 to be precise, this also marks r6 */
- 	"r3 += r7;"
--	/* force r9 to be precise, this also marks r8 */
- 	"r3 += r9;"
- 	"r6 = r6;" /* mark r6 as live */
- 	"r8 = r8;" /* mark r8 as live */
-@@ -378,7 +285,6 @@ __naked void precision_two_ids(void)
- 
- SEC("socket")
- __success __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- /*
-  * check that r5 is unlinked after 'if', collect_linked_regs() can't tie
-  * more than 5 registers for a single insn and the register compared by
-@@ -386,9 +292,6 @@ __flag(BPF_F_TEST_STATE_FREQ)
-  */
- __msg("7: (25) if r5 > 0x7 goto pc+0         ; R5=scalar(smin=")
- __msg("12: (bf) r5 = r5                      ; R5=scalar(id=2")
--/* check that r{0-4} are marked precise after 'if' */
--__msg("frame0: regs=r0 stack= before 7: (25) if r5 > 0x7 goto pc+0")
--__msg("frame0: parent state regs=r0,r1,r2,r3,r4 stack=:")
- __naked void linked_regs_too_many_regs(void)
- {
- 	asm volatile (
-@@ -410,9 +313,6 @@ __naked void linked_regs_too_many_regs(void)
- 	"r4 = r4;"
- 	/* make r5 appear in the log */
- 	"r5 = r5;"
--	/* force r0 to be precise,
--	 * this would cause r{0-4} to be precise because of shared IDs
--	 */
- 	"r7 = r10;"
- 	"r7 += r0;"
- 	"r0 = 0;"
-@@ -424,10 +324,7 @@ __naked void linked_regs_too_many_regs(void)
- 
- SEC("socket")
- __failure __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
--__msg("regs=r7 stack= before 5: (3d) if r8 >= r0")
--__msg("parent state regs=r0,r7,r8")
--__msg("regs=r0,r7,r8 stack= before 4: (25) if r0 > 0x1")
-+__msg("5: (3d) if r8 >= r0 goto pc+3         ; R0=scalar(umin=1) R7=scalar(id=1,umax=0xfffffffffffffffe) R8=scalar(id=1,umax=0xfffffffffffffffe)")
- __msg("div by zero")
- __naked void linked_regs_broken_link_2(void)
- {
-@@ -438,13 +335,11 @@ __naked void linked_regs_broken_link_2(void)
- 	"call %[bpf_get_prandom_u32];"
- 	"if r0 > 1 goto +0;"
- 	/* r7.id == r8.id,
--	 * thus r7 precision implies r8 precision,
--	 * which implies r0 precision because of the conditional below.
-+	 * thus what is learned about r8 is learned about r7
- 	 */
- 	"if r8 >= r0 goto 1f;"
- 	/* break id relation between r7 and r8 */
- 	"r8 += r8;"
--	/* make r7 precise */
- 	"if r7 == 0 goto 1f;"
- 	"r0 /= 0;"
- "1:"
-@@ -455,13 +350,11 @@ __naked void linked_regs_broken_link_2(void)
- 	: __clobber_all);
- }
- 
--/* Check that mark_chain_precision() for one of the conditional jump
-- * operands does not trigger equal scalars precision propagation.
-- */
-+/* A conditional jump that is predicted says nothing new about its operands. */
- SEC("socket")
- __success __log_level(2)
--__msg("3: (25) if r1 > 0x100 goto pc+0")
--__msg("frame0: regs=r1 stack= before 2: (bf) r1 = r0")
-+__msg("3: (25) if r1 > 0x100 goto pc+0       ; R1=" LINKED("1", 255, 0xff) "{{$}}")
-+__msg("processed 6 insns")
- __naked void cjmp_no_linked_regs_trigger(void)
- {
- 	asm volatile (
-@@ -470,9 +363,7 @@ __naked void cjmp_no_linked_regs_trigger(void)
- 	"r0 &= 0xff;"
- 	/* tie r0.id == r1.id */
- 	"r1 = r0;"
--	/* the jump below would be predicted, thus r1 would be marked precise,
--	 * this should not imply precision mark for r0
--	 */
-+	/* the jump below is predicted */
- 	"if r1 > 256 goto +0;"
- 	"r0 = 0;"
- 	"exit;"
-@@ -497,7 +388,6 @@ __naked void cjmp_no_linked_regs_trigger(void)
-  */
- SEC("socket")
- __failure __msg("register with unbounded min value")
--__flag(BPF_F_TEST_STATE_FREQ)
- __naked void check_ids_in_regsafe(void)
- {
- 	asm volatile (
-@@ -539,12 +429,9 @@ __naked void check_ids_in_regsafe(void)
-  *   (2) r6{.id=B}, r7{.id=A}, r8{.id=B}
-  *
-  * Where (2) is not safe, as "r7 > 4" check won't propagate range for it.
-- * This example would be considered safe without changes to
-- * mark_chain_precision() to track scalar values with equal IDs.
-  */
- SEC("socket")
- __failure __msg("register with unbounded min value")
--__flag(BPF_F_TEST_STATE_FREQ)
- __naked void check_ids_in_regsafe_2(void)
- {
- 	asm volatile (
-@@ -595,24 +482,24 @@ __naked void check_ids_in_regsafe_2(void)
-  * If such IDs *are* generated the 'l1' below would be reached in
-  * two states:
-  *
-- *   (1) r1{.id=A}, r2{.id=A}
-- *   (2) r1{.id=C}, r2{.id=C}
-+ *   (1) r3{.id=A}, r4{.id=A}, which is there first
-+ *   (2) r3{.id=B}, r4{.id=C}
-  *
-- * Thus forcing 'if r1 == r2' verification twice.
-+ * and (2) is not within (1).
-  */
- SEC("socket")
- __success __log_level(2)
--__msg("14: (1d) if r3 == r4 goto pc+0")
--__msg("frame 0: propagating r3,r4")
--__msg("14: safe")
-+__msg("from 14 to 15: within")
-+__msg("15: (1d) if r3 == r4 goto pc+0        ; R3=0 R4=0")
- __msg("processed 18 insns")
--__flag(BPF_F_TEST_STATE_FREQ)
- __naked void no_scalar_id_for_const(void)
- {
- 	asm volatile (
- 	"call %[bpf_ktime_get_ns];"
- 	/* unpredictable jump */
--	"if r0 > 7 goto l0_%=;"
-+	"if r0 <= 7 goto l2_%=;"
-+	"goto l0_%=;"
-+"l2_%=:"
- 	/* possibly generate same scalar ids for r3 and r4 */
- 	"r1 = 0;"
- 	"r1 ^= r1;" /* prevent bpf_prune_dead_branches from folding the branch */
-@@ -629,7 +516,7 @@ __naked void no_scalar_id_for_const(void)
- 	"r3 = r1;"
- 	"r4 = r2;"
- "l1_%=:"
--	/* predictable jump, marks r3 and r4 precise */
-+	/* predictable jump */
- 	"if r3 == r4 goto +0;"
- 	"r0 = 0;"
- 	"exit;"
-@@ -641,17 +528,17 @@ __naked void no_scalar_id_for_const(void)
- /* Same as no_scalar_id_for_const() but for 32-bit values */
- SEC("socket")
- __success __log_level(2)
--__msg("14: (1e) if w3 == w4 goto pc+0")
--__msg("frame 0: propagating r3,r4")
--__msg("14: safe")
-+__msg("from 14 to 15: within")
-+__msg("15: (1e) if w3 == w4 goto pc+0        ; R3=0 R4=0")
- __msg("processed 18 insns")
--__flag(BPF_F_TEST_STATE_FREQ)
- __naked void no_scalar_id_for_const32(void)
- {
- 	asm volatile (
- 	"call %[bpf_ktime_get_ns];"
- 	/* unpredictable jump */
--	"if r0 > 7 goto l0_%=;"
-+	"if r0 <= 7 goto l2_%=;"
-+	"goto l0_%=;"
-+"l2_%=:"
- 	/* possibly generate same scalar ids for r3 and r4 */
- 	"w1 = 0;"
- 	"w1 ^= w1;" /* prevent bpf_prune_dead_branches from folding the branch */
-@@ -668,7 +555,7 @@ __naked void no_scalar_id_for_const32(void)
- 	"w3 = w1;"
- 	"w4 = w2;"
- "l1_%=:"
--	/* predictable jump, marks r3 and r4 precise */
-+	/* predictable jump */
- 	"if w3 == w4 goto +0;"
- 	"r0 = 0;"
- 	"exit;"
-@@ -677,20 +564,20 @@ __naked void no_scalar_id_for_const32(void)
- 	: __clobber_all);
- }
- 
--/* Check that unique scalar IDs are ignored when new verifier state is
-- * compared to cached verifier state. For this test:
-- * - cached state has no id on r1
-- * - new state has a unique id on r1
-+/*
-+ * Check that unique scalar IDs are ignored when a verifier state is
-+ * compared to the state that is there. For this test:
-+ * - the state that is there had a unique id on r1
-+ * - the state that arrives has no id on r1
-  */
- SEC("socket")
- __success __log_level(2)
- __msg("6: (25) if r6 > 0x7 goto pc+1")
- __msg("7: (57) r1 &= 255")
--__msg("8: (bf) r2 = r10")
--__msg("from 6 to 8: safe")
--__msg("processed 12 insns")
--__flag(BPF_F_TEST_STATE_FREQ)
--__naked void ignore_unique_scalar_ids_cur(void)
-+__msg("from 7 to 8: within")
-+__msg("8: R0=0 R1=" ALONE(255, 0xff))
-+__msg("processed 11 insns")
-+__naked void ignore_unique_scalar_ids_old(void)
- {
- 	asm volatile (
- 	"call %[bpf_ktime_get_ns];"
-@@ -706,8 +593,8 @@ __naked void ignore_unique_scalar_ids_cur(void)
- 	"r1 &= 0xff;"
- "l0_%=:"
- 	/* get here in two states:
--	 * - first: r1 has no id (cached state)
--	 * - second: r1 has a unique id (should be considered equivalent)
-+	 * - first: r1 has a unique id
-+	 * - second: r1 has no id (should be considered to be within the first)
- 	 */
- 	"r2 = r10;"
- 	"r2 += r1;"
-@@ -717,20 +604,20 @@ __naked void ignore_unique_scalar_ids_cur(void)
- 	: __clobber_all);
- }
- 
--/* Check that unique scalar IDs are ignored when new verifier state is
-- * compared to cached verifier state. For this test:
-- * - cached state has a unique id on r1
-- * - new state has no id on r1
-+/*
-+ * Check that unique scalar IDs are ignored when a verifier state is
-+ * compared to the state that is there. For this test:
-+ * - the state that is there has no id on r1
-+ * - the state that arrives has a unique id on r1
-  */
- SEC("socket")
- __success __log_level(2)
- __msg("6: (25) if r6 > 0x7 goto pc+1")
- __msg("7: (05) goto pc+1")
--__msg("9: (bf) r2 = r10")
--__msg("9: safe")
--__msg("processed 13 insns")
--__flag(BPF_F_TEST_STATE_FREQ)
--__naked void ignore_unique_scalar_ids_old(void)
-+__msg("from 7 to 9: within")
-+__msg("9: R0=0 R1=scalar(smin=smin32=0,smax=umax=smax32=umax32=255,var_off=(0x0; 0xff)) R10=fp0")
-+__msg("processed 12 insns")
-+__naked void ignore_unique_scalar_ids_cur(void)
- {
- 	asm volatile (
- 	"call %[bpf_ktime_get_ns];"
-@@ -748,8 +635,8 @@ __naked void ignore_unique_scalar_ids_old(void)
- 	"r1 &= 0xff;"
- "l0_%=:"
- 	/* get here in two states:
--	 * - first: r1 has a unique id (cached state)
--	 * - second: r1 has no id (should be considered equivalent)
-+	 * - first: r1 has no id
-+	 * - second: r1 has a unique id (should be considered to be within the first)
- 	 */
- 	"r2 = r10;"
- 	"r2 += r1;"
-@@ -759,16 +646,14 @@ __naked void ignore_unique_scalar_ids_old(void)
- 	: __clobber_all);
- }
- 
--/* Check that two registers with 0 scalar IDs in a verified state can be mapped
-- * to the same scalar ID in current state.
-+/*
-+ * Check that two registers with 0 scalar IDs in the state that is there can be mapped
-+ * to the same scalar ID in the state that arrives.
-  */
- SEC("socket")
- __success __log_level(2)
--/* The states should be equivalent on reaching insn 12.
-- */
--__msg("12: safe")
--__msg("processed 17 insns")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("from 10 to 11: within")
-+__msg("processed 15 insns")
- __naked void two_nil_old_ids_one_cur_id(void)
- {
- 	asm volatile (
-@@ -783,16 +668,14 @@ __naked void two_nil_old_ids_one_cur_id(void)
- 	"r7 *= 1;"
- 	"r0 = 0;"
- 	/* Maybe make r{6,7} IDs identical */
--	"if r6 > r7 goto l0_%=;"
--	"goto l1_%=;"
--"l0_%=:"
-+	"if r6 <= r7 goto l1_%=;"
- 	"r6 = r7;"
- "l1_%=:"
--	/* Mark r{6,7} precise.
-+	/*
- 	 * Get here in two states:
--	 * - first:  r6{.id=0}, r7{.id=0} (cached state)
-+	 * - first:  r6{.id=0}, r7{.id=0}
- 	 * - second: r6{.id=A}, r7{.id=A}
--	 * Verifier considers such states equivalent.
-+	 * Verifier considers the second one to be within the first one.
- 	 * Thus "exit;" would be verified only once.
- 	 */
- 	"r2 = r10;"
-@@ -804,18 +687,14 @@ __naked void two_nil_old_ids_one_cur_id(void)
- 	: __clobber_all);
- }
- 
--/* Check that two different scalar IDs in a verified state can't be
-- * mapped to the same scalar ID in current state.
-+/*
-+ * Check that two different scalar IDs in the state that is there can't be
-+ * mapped to the same scalar ID in the state that arrives.
-  */
- SEC("socket")
- __success __log_level(2)
--/* The exit instruction should be reachable from two states,
-- * use two matches and "processed .. insns" to ensure this.
-- */
--__msg("16: (95) exit")
--__msg("16: (95) exit")
--__msg("processed 22 insns")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__not_msg("from 10 to 11: within")
-+__msg("11: R0=0 R6=" ALONE(255, 0xff) " R7=" ALONE(255, 0xff))
- __naked void two_old_ids_one_cur_id(void)
- {
- 	asm volatile (
-@@ -830,24 +709,22 @@ __naked void two_old_ids_one_cur_id(void)
- 	"r9 = r0;"
- 	"r0 = 0;"
- 	/* Maybe make r{6,7} IDs identical */
--	"if r6 > r7 goto l0_%=;"
--	"goto l1_%=;"
--"l0_%=:"
-+	"if r6 <= r7 goto l1_%=;"
- 	"r6 = r7;"
- "l1_%=:"
--	/* Mark r{6,7} precise.
-+	/*
- 	 * Get here in two states:
--	 * - first:  r6{.id=A}, r7{.id=B} (cached state)
--	 * - second: r6{.id=A}, r7{.id=A}
--	 * Currently we don't want to consider such states equivalent.
--	 * Thus "exit;" would be verified twice.
-+	 * - first:  r6{.id=A}, r7{.id=B}
-+	 * - second: r6{.id=B}, r7{.id=B}
-+	 * Currently we don't want to consider the second one to be within
-+	 * the first one. Thus they are joined.
- 	 */
- 	"r2 = r10;"
- 	"r2 += r6;"
- 	"r2 += r7;"
- 	/*
- 	 * keep r8 and r9 live, otherwise r6->id and r7->id
--	 * will become singular and reset to zero before if r6 > r7
-+	 * will become singular and reset to zero before if r6 <= r7
- 	 */
- 	"r9 += r8;"
- 	"exit;"
-@@ -878,10 +755,6 @@ __log_level(2)
- __msg("4: (77) r1 >>= 32                     ; R1=0")
- __msg("5: (bf) r0 = r1                       ; R0=0 R1=0")
- __msg("6: (95) exit")
--__msg("from 3 to 4")
--__msg("4: (77) r1 >>= 32                     ; R1=0")
--__msg("5: (bf) r0 = r1                       ; R0=0 R1=0")
--__msg("6: (95) exit")
- /* Verify that statements to randomize upper half of r1 had not been
-  * generated.
-  */
-diff --git a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
-index f40e57251e94..9ff29a981a41 100644
---- a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
-@@ -96,7 +96,7 @@ l1_%=:	exit;						\
- SEC("socket")
- __description("varlen_map_value_access pruning")
- __failure __msg("R0 unbounded memory access")
--__failure_unpriv __msg_unpriv("R0 leaks addr")
-+__failure_unpriv __msg_unpriv("R0 unbounded memory access")
- __flag(BPF_F_ANY_ALIGNMENT)
- __naked void varlen_map_value_access_pruning(void)
- {
-@@ -110,8 +110,9 @@ __naked void varlen_map_value_access_pruning(void)
- 	if r0 == 0 goto l0_%=;				\
- 	r1 = *(u64*)(r0 + 0);				\
- 	w2 = %[max_entries];				\
--	if r2 s> r1 goto l1_%=;				\
--	w1 = 0;						\
-+	if r2 s<= r1 goto l3_%=;			\
-+	goto l1_%=;					\
-+l3_%=:	w1 = 0;						\
- l1_%=:	w1 <<= 2;					\
- 	r0 += r1;					\
- 	goto l2_%=;					\
-@@ -193,7 +194,7 @@ l0_%=:	exit;						\
- 
- SEC("tracepoint")
- __description("precision tracking for u32 spill/fill")
--__failure __msg("R0 min value is outside of the allowed memory range")
-+__failure __msg("invalid access to map value, value_size=8 off=32 size=4")
- __naked void tracking_for_u32_spill_fill(void)
- {
- 	asm volatile ("					\
-@@ -202,7 +203,7 @@ __naked void tracking_for_u32_spill_fill(void)
- 	w6 = 32;					\
- 	if r0 == 0 goto l0_%=;				\
- 	w6 = 4;						\
--l0_%=:	/* Additional insns to introduce a pruning point. */\
-+l0_%=:	/* Additional insns to have one more place where paths meet. */\
- 	call %[bpf_get_prandom_u32];			\
- 	r3 = 0;						\
- 	r3 = 0;						\
-@@ -239,28 +240,21 @@ __naked void for_u32_spills_u64_fill(void)
- 	call %[bpf_get_prandom_u32];			\
- 	r6 = r0;					\
- 	w7 = 0xffffffff;				\
--	/* Additional insns to introduce a pruning point. */\
--	r3 = 1;						\
--	r3 = 1;						\
--	r3 = 1;						\
--	r3 = 1;						\
-+	r9 = 0xffffffff ll;				\
-+	/* Additional insns to have a place where paths meet. */\
- 	call %[bpf_get_prandom_u32];			\
- 	if r0 == 0 goto l0_%=;				\
- 	r3 = 1;						\
--l0_%=:	w3 /= 0;					\
-+l0_%=:	r3 = 1;						\
- 	/* u32 spills, u64 fill */			\
- 	*(u32*)(r10 - 4) = r6;				\
- 	*(u32*)(r10 - 8) = r7;				\
- 	r8 = *(u64*)(r10 - 8);				\
- 	/* if r8 != X goto pc+1  r8 known in fallthrough branch */\
--	if r8 != 0xffffffff goto l1_%=;			\
-+	if r8 != r9 goto l1_%=;				\
- 	r3 = 1;						\
--l1_%=:	/* if r8 == X goto pc+1  condition always true on first\
--	 * traversal, so starts backtracking to mark r8 as requiring\
--	 * precision. r7 marked as needing precision. r6 not marked\
--	 * since it's not tracked.			\
--	 */						\
--	if r8 == 0xffffffff goto l2_%=;			\
-+l1_%=:	/* if r8 == X goto pc+1 */			\
-+	if r8 == r9 goto l2_%=;				\
- 	/* fails if r8 correctly marked unknown after fill. */\
- 	w3 /= 0;					\
- l2_%=:	r0 = 0;						\
-@@ -272,7 +266,8 @@ l2_%=:	r0 = 0;						\
- 
- SEC("socket")
- __description("allocated_stack")
--__success __msg("processed 15 insns")
-+/* every insn once: the state that wrote to the stack is within the state that did not */
-+__success __msg("processed 14 insns")
- __success_unpriv __msg_unpriv("") __log_level(1) __retval(0)
- __naked void allocated_stack(void)
- {
-@@ -337,12 +332,9 @@ l0_%=:	r1 = 42;					\
- 	: __clobber_all);
- }
- 
--/* Without checkpoint forcibly inserted at the back-edge a loop this
-- * test would take a very long time to verify.
-- */
-+/* The number of trips is not known */
- SEC("kprobe")
--__failure __log_level(4)
--__msg("BPF program is too large.")
-+__success
- __naked void short_loop1(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 4d1374885f6d..34c551f97e61 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -518,15 +518,6 @@ __msg("6: (71) r2 = *(u8 *)(r10 -1)          ; R2=0 R10=fp0 fp-8=0")
-  */
- __msg("10: (71) r2 = *(u8 *)(r10 -9)         ; R2=0 R10=fp0 fp-16=0")
- __msg("11: (0f) r1 += r2")
--__msg("mark_precise: frame0: last_idx 11 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r2 stack= before 10: (71) r2 = *(u8 *)(r10 -9)")
--__msg("mark_precise: frame0: regs= stack=-16 before 9: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs= stack=-16 before 8: (73) *(u8 *)(r1 +0) = r2")
--__msg("mark_precise: frame0: regs= stack=-16 before 7: (0f) r1 += r2")
--__msg("mark_precise: frame0: regs= stack=-16 before 6: (71) r2 = *(u8 *)(r10 -1)")
--__msg("mark_precise: frame0: regs= stack=-16 before 5: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs= stack=-16 before 4: (7b) *(u64 *)(r10 -16) = r0")
--__msg("mark_precise: frame0: regs=r0 stack= before 3: (b7) r0 = 0")
- __naked void partial_stack_load_preserves_zeros(void)
- {
- 	asm volatile (
-@@ -600,8 +591,6 @@ __success
- __msg("2: (62) *(u32 *)(r10 -4) = 0          ; R10=fp0 fp-8=0000????")
- __msg("4: (71) r2 = *(u8 *)(r10 -1)          ; R2=0 R10=fp0 fp-8=0000????")
- __msg("5: (0f) r1 += r2")
--__msg("mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r2 stack= before 4: (71) r2 = *(u8 *)(r10 -1)")
- __naked void partial_stack_load_preserves_partial_zeros(void)
- {
- 	asm volatile (
-@@ -637,7 +626,6 @@ __naked void partial_stack_load_preserves_partial_zeros(void)
- SEC("raw_tp")
- __log_level(2)
- __success
--__msg("mark_precise: frame0: regs= stack=-8")
- __msg("R2=0")
- __naked void stack_load_preserves_mixed_zero_and_zero_spill(void)
- {
-@@ -663,50 +651,21 @@ __naked void stack_load_preserves_mixed_zero_and_zero_spill(void)
- char two_byte_buf[2] SEC(".data.two_byte_buf");
- 
- SEC("raw_tp")
--__log_level(2) __flag(BPF_F_TEST_STATE_FREQ)
-+__log_level(2)
- __success
--/* make sure fp-8 is IMPRECISE fake register spill */
-+/* make sure fp-8 is fake register spill */
- __msg("3: (7a) *(u64 *)(r10 -8) = 1          ; R10=fp0 fp-8=1")
--/* and fp-16 is spilled IMPRECISE const reg */
-+/* and fp-16 is spilled const reg */
- __msg("5: (7b) *(u64 *)(r10 -16) = r0        ; R0=1 R10=fp0 fp-16=1")
- /* validate load from fp-8, which was initialized using BPF_ST_MEM */
- __msg("8: (79) r2 = *(u64 *)(r10 -8)         ; R2=1 R10=fp0 fp-8=1")
--__msg("9: (0f) r1 += r2")
--__msg("mark_precise: frame0: last_idx 9 first_idx 7 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r2 stack= before 8: (79) r2 = *(u64 *)(r10 -8)")
--__msg("mark_precise: frame0: regs= stack=-8 before 7: (bf) r1 = r6")
--/* note, fp-8 is precise, fp-16 is not yet precise, we'll get there */
--__msg("mark_precise: frame0: parent state regs= stack=-8:  R6=map_value(map=.data.two_byte_,ks=4,vs=2) R10=fp0 fp-8=P1 fp-16=1")
--__msg("mark_precise: frame0: last_idx 6 first_idx 3 subseq_idx 7")
--__msg("mark_precise: frame0: regs= stack=-8 before 6: (05) goto pc+0")
--__msg("mark_precise: frame0: regs= stack=-8 before 5: (7b) *(u64 *)(r10 -16) = r0")
--__msg("mark_precise: frame0: regs= stack=-8 before 4: (b7) r0 = 1")
--__msg("mark_precise: frame0: regs= stack=-8 before 3: (7a) *(u64 *)(r10 -8) = 1")
--__msg("10: R1=map_value(map=.data.two_byte_,ks=4,vs=2,imm=1) R2=1")
-+__msg("9: (0f) r1 += r2                      ; R1=map_value(map=.data.two_byte_,ks=4,vs=2,imm=1) R2=1")
- /* validate load from fp-16, which was initialized using BPF_STX_MEM */
- __msg("12: (79) r2 = *(u64 *)(r10 -16)       ; R2=1 R10=fp0 fp-16=1")
--__msg("13: (0f) r1 += r2")
--__msg("mark_precise: frame0: last_idx 13 first_idx 7 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r2 stack= before 12: (79) r2 = *(u64 *)(r10 -16)")
--__msg("mark_precise: frame0: regs= stack=-16 before 11: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs= stack=-16 before 10: (73) *(u8 *)(r1 +0) = r2")
--__msg("mark_precise: frame0: regs= stack=-16 before 9: (0f) r1 += r2")
--__msg("mark_precise: frame0: regs= stack=-16 before 8: (79) r2 = *(u64 *)(r10 -8)")
--__msg("mark_precise: frame0: regs= stack=-16 before 7: (bf) r1 = r6")
--/* now both fp-8 and fp-16 are precise, very good */
--__msg("mark_precise: frame0: parent state regs= stack=-16:  R6=map_value(map=.data.two_byte_,ks=4,vs=2) R10=fp0 fp-8=P1 fp-16=P1")
--__msg("mark_precise: frame0: last_idx 6 first_idx 3 subseq_idx 7")
--__msg("mark_precise: frame0: regs= stack=-16 before 6: (05) goto pc+0")
--__msg("mark_precise: frame0: regs= stack=-16 before 5: (7b) *(u64 *)(r10 -16) = r0")
--__msg("mark_precise: frame0: regs=r0 stack= before 4: (b7) r0 = 1")
--__msg("14: R1=map_value(map=.data.two_byte_,ks=4,vs=2,imm=1) R2=1")
-+__msg("13: (0f) r1 += r2                     ; R1=map_value(map=.data.two_byte_,ks=4,vs=2,imm=1) R2=1")
- __naked void stack_load_preserves_const_precision(void)
- {
- 	asm volatile (
--		/* establish checkpoint with state that has no stack slots;
--		 * if we bubble up to this state without finding desired stack
--		 * slot, then it's a bug and should be caught
--		 */
- 		"goto +0;"
- 
- 		/* fp-8 is const 1 *fake* register */
-@@ -716,7 +675,6 @@ __naked void stack_load_preserves_const_precision(void)
- 		"r0 = 1;"
- 		"*(u64 *)(r10 -16) = r0;"
- 
--		/* force checkpoint to check precision marks preserved in parent states */
- 		"goto +0;"
- 
- 		/* load single U64 from aligned FAKE_REG=1 slot */
-@@ -740,48 +698,21 @@ __naked void stack_load_preserves_const_precision(void)
- }
- 
- SEC("raw_tp")
--__log_level(2) __flag(BPF_F_TEST_STATE_FREQ)
-+__log_level(2)
- __success
- /* make sure fp-8 is 32-bit FAKE subregister spill */
- __msg("3: (62) *(u32 *)(r10 -8) = 1          ; R10=fp0 fp-8=????1")
--/* but fp-16 is spilled IMPRECISE zero const reg */
-+/* and fp-16 is spilled const reg */
- __msg("5: (63) *(u32 *)(r10 -16) = r0        ; R0=1 R10=fp0 fp-16=????1")
- /* validate load from fp-8, which was initialized using BPF_ST_MEM */
- __msg("8: (61) r2 = *(u32 *)(r10 -8)         ; R2=1 R10=fp0 fp-8=????1")
--__msg("9: (0f) r1 += r2")
--__msg("mark_precise: frame0: last_idx 9 first_idx 7 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r2 stack= before 8: (61) r2 = *(u32 *)(r10 -8)")
--__msg("mark_precise: frame0: regs= stack=-8 before 7: (bf) r1 = r6")
--__msg("mark_precise: frame0: parent state regs= stack=-8:  R6=map_value(map=.data.two_byte_,ks=4,vs=2) R10=fp0 fp-8=????P1 fp-16=????1")
--__msg("mark_precise: frame0: last_idx 6 first_idx 3 subseq_idx 7")
--__msg("mark_precise: frame0: regs= stack=-8 before 6: (05) goto pc+0")
--__msg("mark_precise: frame0: regs= stack=-8 before 5: (63) *(u32 *)(r10 -16) = r0")
--__msg("mark_precise: frame0: regs= stack=-8 before 4: (b7) r0 = 1")
--__msg("mark_precise: frame0: regs= stack=-8 before 3: (62) *(u32 *)(r10 -8) = 1")
--__msg("10: R1=map_value(map=.data.two_byte_,ks=4,vs=2,imm=1) R2=1")
-+__msg("9: (0f) r1 += r2                      ; R1=map_value(map=.data.two_byte_,ks=4,vs=2,imm=1) R2=1")
- /* validate load from fp-16, which was initialized using BPF_STX_MEM */
- __msg("12: (61) r2 = *(u32 *)(r10 -16)       ; R2=1 R10=fp0 fp-16=????1")
--__msg("13: (0f) r1 += r2")
--__msg("mark_precise: frame0: last_idx 13 first_idx 7 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r2 stack= before 12: (61) r2 = *(u32 *)(r10 -16)")
--__msg("mark_precise: frame0: regs= stack=-16 before 11: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs= stack=-16 before 10: (73) *(u8 *)(r1 +0) = r2")
--__msg("mark_precise: frame0: regs= stack=-16 before 9: (0f) r1 += r2")
--__msg("mark_precise: frame0: regs= stack=-16 before 8: (61) r2 = *(u32 *)(r10 -8)")
--__msg("mark_precise: frame0: regs= stack=-16 before 7: (bf) r1 = r6")
--__msg("mark_precise: frame0: parent state regs= stack=-16:  R6=map_value(map=.data.two_byte_,ks=4,vs=2) R10=fp0 fp-8=????P1 fp-16=????P1")
--__msg("mark_precise: frame0: last_idx 6 first_idx 3 subseq_idx 7")
--__msg("mark_precise: frame0: regs= stack=-16 before 6: (05) goto pc+0")
--__msg("mark_precise: frame0: regs= stack=-16 before 5: (63) *(u32 *)(r10 -16) = r0")
--__msg("mark_precise: frame0: regs=r0 stack= before 4: (b7) r0 = 1")
--__msg("14: R1=map_value(map=.data.two_byte_,ks=4,vs=2,imm=1) R2=1")
-+__msg("13: (0f) r1 += r2                     ; R1=map_value(map=.data.two_byte_,ks=4,vs=2,imm=1) R2=1")
- __naked void stack_load_preserves_const_precision_subreg(void)
- {
- 	asm volatile (
--		/* establish checkpoint with state that has no stack slots;
--		 * if we bubble up to this state without finding desired stack
--		 * slot, then it's a bug and should be caught
--		 */
- 		"goto +0;"
- 
- 		/* fp-8 is const 1 *fake* SUB-register */
-@@ -791,7 +722,6 @@ __naked void stack_load_preserves_const_precision_subreg(void)
- 		"r0 = 1;"
- 		"*(u32 *)(r10 -16) = r0;"
- 
--		/* force checkpoint to check precision marks preserved in parent states */
- 		"goto +0;"
- 
- 		/* load single U32 from aligned FAKE_REG=1 slot */
-@@ -1118,41 +1048,37 @@ l0_%=:	r1 >>= 32;					\
- 	: __clobber_all);
- }
- 
--/* stacksafe(): check if stack spill of an imprecise scalar in old state
-- * is considered equivalent to STACK_{MISC,INVALID} in cur state.
-+/*
-+ * stacksafe(): the state with a stack spill of a scalar is there (label 1 is
-+ * looked at first), the state with STACK_{MISC,INVALID} arrives.
-+ * The first one is within the second one, which stands for both.
-  */
- SEC("socket")
- __success __log_level(2)
-+__msg("8: R0=scalar() R10=fp0 fp-8=??mm??mm")
- __msg("8: (79) r1 = *(u64 *)(r10 -8)")
--__msg("8: safe")
--__msg("processed 11 insns")
--/* STACK_INVALID should prevent verifier in unpriv mode from
-- * considering states equivalent and force an error on second
-- * verification path (entry - label 1 - label 2).
-- */
-+__msg("processed 10 insns")
-+/* STACK_INVALID is an error in unpriv mode */
- __failure_unpriv
- __msg_unpriv("8: (79) r1 = *(u64 *)(r10 -8)")
--__msg_unpriv("9: (95) exit")
--__msg_unpriv("8: (79) r1 = *(u64 *)(r10 -8)")
- __msg_unpriv("invalid read from stack off -8+2 size 8")
--__flag(BPF_F_TEST_STATE_FREQ)
- __naked void old_imprecise_scalar_vs_cur_stack_misc(void)
- {
- 	asm volatile(
- 	/* get a random value for branching */
- 	"call %[bpf_ktime_get_ns];"
- 	"if r0 == 0 goto 1f;"
--	/* conjure scalar at fp-8 */
--	"r0 = 42;"
--	"*(u64*)(r10 - 8) = r0;"
--	"goto 2f;"
--"1:"
- 	/* conjure STACK_{MISC,INVALID} at fp-8 */
- 	"call %[bpf_ktime_get_ns];"
- 	"*(u16*)(r10 - 8) = r0;"
- 	"*(u16*)(r10 - 4) = r0;"
-+	"goto 2f;"
-+"1:"
-+	/* conjure scalar at fp-8 */
-+	"r0 = 42;"
-+	"*(u64*)(r10 - 8) = r0;"
- "2:"
--	/* read fp-8, should be considered safe on second visit */
-+	/* read fp-8, it's looked at once */
- 	"r1 = *(u64*)(r10 - 8);"
- 	"exit;"
- 	:
-@@ -1160,71 +1086,69 @@ __naked void old_imprecise_scalar_vs_cur_stack_misc(void)
- 	: __clobber_all);
- }
- 
--/* stacksafe(): check that stack spill of a precise scalar in old state
-- * is not considered equivalent to STACK_MISC in cur state.
-+/*
-+ * stacksafe(): check that the state with STACK_MISC is not considered to be
-+ * within the state with a stack spill of a known scalar, which is there.
-  */
- SEC("socket")
- __success __log_level(2)
--/* verifier should visit 'if r1 == 0x2a ...' two times:
-- * - once for path entry - label 2;
-- * - once for path entry - label 1 - label 2.
-- */
--__msg("if r1 == 0x2a goto pc+0")
--__msg("if r1 == 0x2a goto pc+0")
--__msg("processed 15 insns")
--__flag(BPF_F_TEST_STATE_FREQ)
-+/* what is loaded is not known to be 42 */
-+__msg("8: (79) r1 = *(u64 *)(r10 -8)         ; R1=scalar() R10=fp0 fp-8=mmmmmmmm")
-+__msg("9: (15) if r1 == 0x2a goto pc+0       ; R1=scalar()")
-+__msg("processed 12 insns")
- __naked void old_precise_scalar_vs_cur_stack_misc(void)
- {
- 	asm volatile(
- 	/* get a random value for branching */
- 	"call %[bpf_ktime_get_ns];"
- 	"if r0 == 0 goto 1f;"
--	/* conjure scalar at fp-8 */
--	"r0 = 42;"
--	"*(u64*)(r10 - 8) = r0;"
--	"goto 2f;"
--"1:"
- 	/* conjure STACK_MISC at fp-8 */
- 	"call %[bpf_ktime_get_ns];"
- 	"*(u64*)(r10 - 8) = r0;"
- 	"*(u32*)(r10 - 4) = r0;"
-+	"goto 2f;"
-+"1:"
-+	/* conjure scalar at fp-8 */
-+	"r0 = 42;"
-+	"*(u64*)(r10 - 8) = r0;"
- "2:"
--	/* read fp-8, should not be considered safe on second visit */
- 	"r1 = *(u64*)(r10 - 8);"
--	/* use r1 in precise context */
-+	/* the value of r1 matters */
- 	"if r1 == 42 goto +0;"
-+	/* r0 is dead where the states meet: they differ in fp-8 only */
-+	"r0 = 0;"
- 	"exit;"
- 	:
- 	: __imm(bpf_ktime_get_ns)
- 	: __clobber_all);
- }
- 
--/* stacksafe(): check if STACK_MISC in old state is considered
-- * equivalent to stack spill of a scalar in cur state.
-+/*
-+ * stacksafe(): check if the state with a stack spill of a scalar is considered
-+ * to be within the state with STACK_MISC, which is there.
-  */
- SEC("socket")
- __success  __log_level(2)
-+__msg("from 4 to 8: within")
- __msg("8: (79) r0 = *(u64 *)(r10 -8)")
--__msg("8: safe")
--__msg("processed 11 insns")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("processed 10 insns")
- __naked void old_stack_misc_vs_cur_scalar(void)
- {
- 	asm volatile(
- 	/* get a random value for branching */
- 	"call %[bpf_ktime_get_ns];"
- 	"if r0 == 0 goto 1f;"
-+	/* conjure scalar at fp-8 */
-+	"r0 = 42;"
-+	"*(u64*)(r10 - 8) = r0;"
-+	"goto 2f;"
-+"1:"
- 	/* conjure STACK_{MISC,INVALID} at fp-8 */
- 	"call %[bpf_ktime_get_ns];"
- 	"*(u16*)(r10 - 8) = r0;"
- 	"*(u16*)(r10 - 4) = r0;"
--	"goto 2f;"
--"1:"
--	/* conjure scalar at fp-8 */
--	"r0 = 42;"
--	"*(u64*)(r10 - 8) = r0;"
- "2:"
--	/* read fp-8, should be considered safe on second visit */
-+	/* read fp-8, it's looked at once */
- 	"r0 = *(u64*)(r10 - 8);"
- 	"exit;"
- 	:
-@@ -1232,21 +1156,16 @@ __naked void old_stack_misc_vs_cur_scalar(void)
- 	: __clobber_all);
- }
- 
--/* stacksafe(): check that STACK_MISC in old state is not considered
-- * equivalent to stack spill of a non-scalar in cur state.
-+/*
-+ * stacksafe(): the state with STACK_MISC is there, the state with a stack spill
-+ * of a non-scalar arrives. A program that may read uninitialized stack may
-+ * take a pointer for a number: the second state is within the first one.
-  */
- SEC("socket")
- __success  __log_level(2)
--/* verifier should process exit instructions twice:
-- * - once for path entry - label 2;
-- * - once for path entry - label 1 - label 2.
-- */
--__msg("8: (79) r1 = *(u64 *)(r10 -8)")
--__msg("9: (95) exit")
--__msg("from 2 to 7")
--__msg("8: safe")
--__msg("processed 11 insns")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("from 4 to 8: within")
-+__msg("8: (79) r1 = *(u64 *)(r10 -8)         ; R1=scalar()")
-+__msg("processed 10 insns")
- __naked void old_stack_misc_vs_cur_ctx_ptr(void)
- {
- 	asm volatile(
-@@ -1255,16 +1174,16 @@ __naked void old_stack_misc_vs_cur_ctx_ptr(void)
- 	/* get a random value for branching */
- 	"call %[bpf_ktime_get_ns];"
- 	"if r0 == 0 goto 1f;"
-+	/* conjure context pointer in fp-8 */
-+	"*(u64*)(r10 - 8) = r9;"
-+	"goto 2f;"
-+"1:"
- 	/* conjure STACK_MISC at fp-8 */
- 	"call %[bpf_ktime_get_ns];"
- 	"*(u64*)(r10 - 8) = r0;"
- 	"*(u32*)(r10 - 4) = r0;"
--	"goto 2f;"
--"1:"
--	/* conjure context pointer in fp-8 */
--	"*(u64*)(r10 - 8) = r9;"
- "2:"
--	/* read fp-8, should not be considered safe on second visit */
-+	/* read fp-8, it's looked at once */
- 	"r1 = *(u64*)(r10 - 8);"
- 	"exit;"
- 	:
-@@ -1310,35 +1229,34 @@ __naked void stack_noperfmon_spill_32bit_onto_64bit_slot(void)
- }
- 
- /*
-- * stacksafe(): check if 32-bit scalar spill in old state is considered
-- * equivalent to STACK_MISC in cur state.
-+ * stacksafe(): the state with a 32-bit spill of an unknown scalar is there, the
-+ * state with STACK_MISC arrives. The second one is within the first one.
-  * 32-bit scalar spill creates slot[0-3] = STACK_MISC, slot[4-7] = STACK_SPILL.
-  * Without 32-bit spill support in stacksafe(), the STACK_SPILL vs STACK_MISC
-- * mismatch at slot[4] causes pruning to fail.
-+ * mismatch at slot[4] says that it is not.
-  */
- SEC("socket")
- __success __log_level(2)
-+__msg("from 5 to 8: within")
- __msg("8: (79) r1 = *(u64 *)(r10 -8)")
--__msg("8: safe")
--__msg("processed 11 insns")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("processed 10 insns")
- __naked void old_imprecise_scalar32_vs_cur_stack_misc(void)
- {
- 	asm volatile(
- 	/* get a random value for branching */
- 	"call %[bpf_ktime_get_ns];"
- 	"if r0 == 0 goto 1f;"
--	/* conjure 32-bit scalar spill at fp-8 */
--	"r0 = 42;"
--	"*(u32*)(r10 - 8) = r0;"
--	"goto 2f;"
--"1:"
- 	/* conjure STACK_MISC at fp-8 */
- 	"call %[bpf_ktime_get_ns];"
- 	"*(u16*)(r10 - 8) = r0;"
- 	"*(u16*)(r10 - 6) = r0;"
-+	"goto 2f;"
-+"1:"
-+	/* conjure 32-bit scalar spill at fp-8 */
-+	"call %[bpf_ktime_get_ns];"
-+	"*(u32*)(r10 - 8) = r0;"
- "2:"
--	/* read fp-8, should be considered safe on second visit */
-+	/* read fp-8, it's looked at once */
- 	"r1 = *(u64*)(r10 - 8);"
- 	"exit;"
- 	:
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spin_lock.c b/tools/testing/selftests/bpf/progs/verifier_spin_lock.c
-index d9d7b05cf6d2..f4e7f47e4cdd 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spin_lock.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spin_lock.c
-@@ -469,9 +469,9 @@ l3_%=:	r1 = r7;					\
- 
- SEC("cgroup/skb")
- __description("spin_lock: regsafe() check_ids() similar id mappings")
--__success __msg("29: safe")
-+__success __msg("to 29: within")
- __failure_unpriv __msg_unpriv("")
--__log_level(2) __retval(0) __flag(BPF_F_TEST_STATE_FREQ)
-+__log_level(2) __retval(0)
- __naked void check_ids_similar_id_mappings(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-index e6a9021b197b..e9194a560fbd 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-@@ -587,14 +587,13 @@ __naked void stack_check_size_512_with_may_goto(void)
- #endif
- 
- /*
-- * Verify that old PTR_TO_STACK state is considered a super-set of
-- * new PTR_TO_STACK state when the new offset is within the old range,
-- * e.g. old [-72, -16] vs new {-16}.
-+ * Verify that a PTR_TO_STACK state is considered a super-set of
-+ * another PTR_TO_STACK state when the offset of that is within its range,
-+ * e.g. [-72, -16] vs {-16}.
-  */
- SEC("socket")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- /*
-  * r7 is widened to [-72, -16] at the loop header (insn 5),
-  * the loop body sees [-64, -8] after 'r7 += 8'.
-@@ -604,9 +603,9 @@ __msg("R7=fp(smin=smin32=-64,smax=smax32=-8")
- /* 'r7 = r8' sets r7 to fp-16; its ANY SCEV is not clamped. */
- __msg("R7=fp-16 R8=fp-16 loop_stack=5")
- __not_msg("clamping r7")
--/* back-edge state is pruned because {-16} is within [-72, -16]. */
--__msg("from 8 to 5: safe")
--__msg("processed 12 insns")
-+/* back-edge state goes no further because {-16} is within [-72, -16]. */
-+__msg("from 8 to 5: within")
-+__msg("processed 11 insns")
- __naked void stack_ptr_subrange_in_loop(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-index dc0c7034c04f..041b7a71fb3f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-@@ -39,31 +39,21 @@ static unsigned long callback_subprog()
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("7: (0f) r1 += r0")
--__msg("mark_precise: frame0: regs=r0 stack= before 6: (bf) r1 = r7")
--__msg("mark_precise: frame0: regs=r0 stack= before 5: (27) r0 *= 4")
--__msg("mark_precise: frame0: regs=r0 stack= before 11: (95) exit")
--__msg("mark_precise: frame1: regs=r0 stack= before 10: (bf) r0 = r1")
--__msg("mark_precise: frame1: regs=r1 stack= before 4: (85) call pc+5")
--__msg("mark_precise: frame0: regs=r1 stack= before 3: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
-+__msg("7: (0f) r1 += r0                      ; R0=12 R1=map_value(map=.data.vals,ks=4,vs=16,imm=12)")
- __naked int subprog_result_precise(void)
- {
- 	asm volatile (
- 		"r6 = 3;"
--		/* pass r6 through r1 into subprog to get it back as r0;
--		 * this whole chain will have to be marked as precise later
--		 */
-+		/* pass r6 through r1 into subprog to get it back as r0 */
- 		"r1 = r6;"
- 		"call identity_subprog;"
- 		/* now use subprog's returned value (which is a
--		 * r6 -> r1 -> r0 chain), as index into vals array, forcing
--		 * all of that to be known precisely
-+		 * r6 -> r1 -> r0 chain), as index into vals array
- 		 */
- 		"r0 *= 4;"
- 		"r1 = %[vals];"
--		/* here r0->r1->r6 chain is forced to be precise and has to be
--		 * propagated back to the beginning, including through the
-+		/*
-+		 * here r0 has to be known: the constant went through the
- 		 * subprog call
- 		 */
- 		"r1 += r0;"
-@@ -98,26 +88,18 @@ static unsigned long sneaky_fp_leaking_subprog()
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("6: (0f) r1 += r0")
--__msg("mark_precise: frame0: last_idx 6 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs=r0 stack= before 4: (27) r0 *= 4")
--__msg("mark_precise: frame0: regs=r0 stack= before 3: (57) r0 &= 3")
--__msg("mark_precise: frame0: regs=r0 stack= before 10: (95) exit")
--__msg("mark_precise: frame1: regs=r0 stack= before 9: (bf) r0 = (s8)r10")
--__msg("7: R0=scalar")
-+__msg("3: R0=scalar() R6=")
-+__msg("6: (0f) r1 += r0                      ; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4) R1=map_value(map=.data.vals,ks=4,vs=16,smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4)")
- __naked int fp_precise_subprog_result(void)
- {
- 	asm volatile (
- 		"call fp_leaking_subprog;"
- 		/* use subprog's returned value (which is derived from r10=fp
--		 * register), as index into vals array, forcing all of that to
--		 * be known precisely
-+		 * register, so it's unknown), as index into vals array
- 		 */
- 		"r0 &= 3;"
- 		"r0 *= 4;"
- 		"r1 = %[vals];"
--		/* force precision marking */
- 		"r1 += r0;"
- 		"r0 = *(u32 *)(r1 + 0);"
- 		"exit;"
-@@ -129,31 +111,18 @@ __naked int fp_precise_subprog_result(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("6: (0f) r1 += r0")
--__msg("mark_precise: frame0: last_idx 6 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs=r0 stack= before 4: (27) r0 *= 4")
--__msg("mark_precise: frame0: regs=r0 stack= before 3: (57) r0 &= 3")
--__msg("mark_precise: frame0: regs=r0 stack= before 11: (95) exit")
--__msg("mark_precise: frame1: regs=r0 stack= before 10: (bf) r0 = (s8)r1")
--/* here r1 is marked precise, even though it's fp register, but that's fine
-- * because by the time we get out of subprogram it has to be derived from r10
-- * anyways, at which point we'll break precision chain
-- */
--__msg("mark_precise: frame1: regs=r1 stack= before 9: (bf) r1 = r10")
--__msg("7: R0=scalar")
-+__msg("3: R0=scalar() R6=")
-+__msg("6: (0f) r1 += r0                      ; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4) R1=map_value(map=.data.vals,ks=4,vs=16,smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4)")
- __naked int sneaky_fp_precise_subprog_result(void)
- {
- 	asm volatile (
- 		"call sneaky_fp_leaking_subprog;"
- 		/* use subprog's returned value (which is derived from r10=fp
--		 * register), as index into vals array, forcing all of that to
--		 * be known precisely
-+		 * register, so it's unknown), as index into vals array
- 		 */
- 		"r0 &= 3;"
- 		"r0 *= 4;"
- 		"r1 = %[vals];"
--		/* force precision marking */
- 		"r1 += r0;"
- 		"r0 = *(u32 *)(r1 + 0);"
- 		"exit;"
-@@ -165,35 +134,25 @@ __naked int sneaky_fp_precise_subprog_result(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("9: (0f) r1 += r0")
--__msg("mark_precise: frame0: last_idx 9 first_idx 0")
--__msg("mark_precise: frame0: regs=r0 stack= before 8: (bf) r1 = r7")
--__msg("mark_precise: frame0: regs=r0 stack= before 7: (27) r0 *= 4")
--__msg("mark_precise: frame0: regs=r0 stack= before 5: (a5) if r0 < 0x4 goto pc+1")
--__msg("mark_precise: frame0: regs=r0 stack= before 4: (85) call pc+7")
-+__msg("9: (0f) r1 += r0                      ; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4) R1=map_value(map=.data.vals,ks=4,vs=16,smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4)")
- __naked int global_subprog_result_precise(void)
- {
- 	asm volatile (
- 		"r6 = 3;"
- 		/* pass r6 through r1 into subprog to get it back as r0;
--		 * given global_identity_subprog is global, precision won't
--		 * propagate all the way back to r6
-+		 * given global_identity_subprog is global, nothing is known
-+		 * about what it returns
- 		 */
- 		"r1 = r6;"
- 		"call global_identity_subprog;"
- 		/* now use subprog's returned value (which is unknown now, so
--		 * we need to clamp it), as index into vals array, forcing r0
--		 * to be marked precise (with no effect on r6, though)
-+		 * we need to clamp it), as index into vals array
- 		 */
- 		"if r0 < %[vals_arr_sz] goto 1f;"
- 		"r0 = %[vals_arr_sz] - 1;"
- 	"1:"
- 		"r0 *= 4;"
- 		"r1 = %[vals];"
--		/* here r0 is forced to be precise and has to be
--		 * propagated back to the global subprog call, but it
--		 * shouldn't go all the way to mark r6 as precise
--		 */
- 		"r1 += r0;"
- 		"r0 = *(u32 *)(r1 + 0);"
- 		"exit;"
-@@ -213,11 +172,9 @@ static unsigned long loop_callback_bad()
- 		"if r0 s> 1000 goto 1f;"
- 		"r0 = 0;"
- 	"1:"
--		"goto +0;" /* checkpoint */
-+		"goto +0;"
- 		/* bpf_loop() expects [0, 1] values, so branch above skipping
--		 * r0 = 0; should lead to a failure, but if exit instruction
--		 * doesn't enforce r0's precision, this callback will be
--		 * successfully verified
-+		 * r0 = 0; should lead to a failure
- 		 */
- 		"exit;"
- 		:
-@@ -228,14 +185,8 @@ static unsigned long loop_callback_bad()
- 
- SEC("?raw_tp")
- __failure __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
+ __failure
 -/* check that fallthrough code path marks r0 as precise */
--__msg("mark_precise: frame1: regs=r0 stack= before 11: (b7) r0 = 0")
--/* check that we have branch code path doing its own validation */
--__msg("from 10 to 12: frame1: R0=scalar(smin=umin=1001")
--/* check that branch code path marks r0 as precise, before failing */
--__msg("mark_precise: frame1: regs=r0 stack= before 9: (85) call bpf_get_prandom_u32#7")
--__msg("At callback return the register R0 has smin=1001 should have been in [0, 1]")
-+/* 0 of the fallthrough code path doesn't stand for what the branch code path has */
-+__msg("At callback return the register R0 has {{.*}} should have been in [0, 1]")
- __naked int callback_precise_return_fail(void)
+-__msg("mark_precise: frame0: regs=r0 stack= before")
+-__msg(": (85) call bpf_get_prandom_u32#7") /* anchor message */
+-/* check that branch code path marks r0 as precise */
+-__msg("mark_precise: frame0: regs=r0 stack= before ") __msg(": (85) call bpf_get_prandom_u32#7")
+ __msg("should have been in [0, 0]")
+ long BPF_PROG2(test_bad_ret, int, a)
  {
- 	asm volatile (
-@@ -256,41 +207,15 @@ __naked int callback_precise_return_fail(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--/* First simulated path does not include callback body,
-- * r1 and r4 are always precise for bpf_loop() calls.
-- */
- __msg("9: (85) call bpf_loop#181")
--__msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
--__msg("mark_precise: frame0: parent state regs=r4 stack=:")
--__msg("mark_precise: frame0: last_idx 8 first_idx 0 subseq_idx 9")
--__msg("mark_precise: frame0: regs=r4 stack= before 8: (b7) r4 = 0")
--__msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
--__msg("mark_precise: frame0: parent state regs=r1 stack=:")
--__msg("mark_precise: frame0: last_idx 8 first_idx 0 subseq_idx 9")
--__msg("mark_precise: frame0: regs=r1 stack= before 8: (b7) r4 = 0")
--__msg("mark_precise: frame0: regs=r1 stack= before 7: (b7) r3 = 0")
--__msg("mark_precise: frame0: regs=r1 stack= before 6: (bf) r2 = r8")
--__msg("mark_precise: frame0: regs=r1 stack= before 5: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs=r6 stack= before 4: (b7) r6 = 3")
--/* r6 precision propagation */
--__msg("14: (0f) r1 += r6")
--__msg("mark_precise: frame0: last_idx 14 first_idx 9")
--__msg("mark_precise: frame0: regs=r6 stack= before 13: (bf) r1 = r7")
--__msg("mark_precise: frame0: regs=r6 stack= before 12: (27) r6 *= 4")
--__msg("mark_precise: frame0: regs=r6 stack= before 11: (25) if r6 > 0x3 goto pc+4")
--__msg("mark_precise: frame0: regs=r0,r6 stack= before 10: (bf) r6 = r0")
--__msg("mark_precise: frame0: regs=r0 stack= before 9: (85) call bpf_loop")
--/* State entering callback body popped from states stack */
--__msg("from 9 to 17: frame1:")
- __msg("17: frame1: R10=fp0 cb")
- __msg("17: (b7) r0 = 0")
- __msg("18: (95) exit")
- __msg("returning from callee:")
- __msg("to caller at 9:")
--__msg("frame 0: propagating r1,r3,r4")
--__msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r1,r3,r4 stack= before 18: (95) exit")
--__msg("from 18 to 9: safe")
-+/* the callback changes nothing for the caller */
-+__msg("from 18 to 9: within")
-+__msg("14: (0f) r1 += r6                     ; R1=map_value(map=.data.vals,ks=4,vs=16,smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4) R6=scalar(smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4)")
- __naked int callback_result_precise(void)
- {
- 	asm volatile (
-@@ -309,9 +234,7 @@ __naked int callback_result_precise(void)
- 		"if r6 > 3 goto 1f;"
- 		"r6 *= 4;"
- 		"r1 = %[vals];"
--		/* here r6 is forced to be precise and has to be propagated
--		 * back to the bpf_loop() call, but not beyond
--		 */
-+		/* here the range of r6 has to be known */
- 		"r1 += r6;"
- 		"r0 = *(u32 *)(r1 + 0);"
- 	"1:"
-@@ -326,15 +249,7 @@ __naked int callback_result_precise(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("7: (0f) r1 += r6")
--__msg("mark_precise: frame0: last_idx 7 first_idx 0")
--__msg("mark_precise: frame0: regs=r6 stack= before 6: (bf) r1 = r7")
--__msg("mark_precise: frame0: regs=r6 stack= before 5: (27) r6 *= 4")
--__msg("mark_precise: frame0: regs=r6 stack= before 11: (95) exit")
--__msg("mark_precise: frame1: regs= stack= before 10: (bf) r0 = r1")
--__msg("mark_precise: frame1: regs= stack= before 4: (85) call pc+5")
--__msg("mark_precise: frame0: regs=r6 stack= before 3: (b7) r1 = 0")
--__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
-+__msg("7: (0f) r1 += r6                      ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
- __naked int parent_callee_saved_reg_precise(void)
- {
- 	asm volatile (
-@@ -348,9 +263,7 @@ __naked int parent_callee_saved_reg_precise(void)
- 
- 		"r6 *= 4;"
- 		"r1 = %[vals];"
--		/* here r6 is forced to be precise and has to be propagated
--		 * back to the beginning, handling (and ignoring) subprog call
--		 */
-+		/* here r6 has to be known: the subprog call doesn't change it */
- 		"r1 += r6;"
- 		"r0 = *(u32 *)(r1 + 0);"
- 		"exit;"
-@@ -362,13 +275,7 @@ __naked int parent_callee_saved_reg_precise(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("7: (0f) r1 += r6")
--__msg("mark_precise: frame0: last_idx 7 first_idx 0")
--__msg("mark_precise: frame0: regs=r6 stack= before 6: (bf) r1 = r7")
--__msg("mark_precise: frame0: regs=r6 stack= before 5: (27) r6 *= 4")
--__msg("mark_precise: frame0: regs=r6 stack= before 4: (85) call pc+5")
--__msg("mark_precise: frame0: regs=r6 stack= before 3: (b7) r1 = 0")
--__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
-+__msg("7: (0f) r1 += r6                      ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
- __naked int parent_callee_saved_reg_precise_global(void)
- {
- 	asm volatile (
-@@ -382,9 +289,7 @@ __naked int parent_callee_saved_reg_precise_global(void)
- 
- 		"r6 *= 4;"
- 		"r1 = %[vals];"
--		/* here r6 is forced to be precise and has to be propagated
--		 * back to the beginning, handling (and ignoring) subprog call
--		 */
-+		/* here r6 has to be known: the subprog call doesn't change it */
- 		"r1 += r6;"
- 		"r0 = *(u32 *)(r1 + 0);"
- 		"exit;"
-@@ -396,36 +301,14 @@ __naked int parent_callee_saved_reg_precise_global(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--/* First simulated path does not include callback body */
--__msg("12: (0f) r1 += r6")
--__msg("mark_precise: frame0: last_idx 12 first_idx 9")
--__msg("mark_precise: frame0: regs=r6 stack= before 11: (bf) r1 = r7")
--__msg("mark_precise: frame0: regs=r6 stack= before 10: (27) r6 *= 4")
--__msg("mark_precise: frame0: regs=r6 stack= before 9: (85) call bpf_loop")
--__msg("mark_precise: frame0: parent state regs=r6 stack=:")
--__msg("mark_precise: frame0: last_idx 8 first_idx 0 subseq_idx 9")
--__msg("mark_precise: frame0: regs=r6 stack= before 8: (b7) r4 = 0")
--__msg("mark_precise: frame0: regs=r6 stack= before 7: (b7) r3 = 0")
--__msg("mark_precise: frame0: regs=r6 stack= before 6: (bf) r2 = r8")
--__msg("mark_precise: frame0: regs=r6 stack= before 5: (b7) r1 = 1")
--__msg("mark_precise: frame0: regs=r6 stack= before 4: (b7) r6 = 3")
--/* State entering callback body popped from states stack */
--__msg("from 9 to 15: frame1:")
-+__msg("12: (0f) r1 += r6                     ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
- __msg("15: frame1: R10=fp0 cb")
- __msg("15: (b7) r0 = 0")
- __msg("16: (95) exit")
- __msg("returning from callee:")
- __msg("to caller at 9:")
--/* r1, r4 are always precise for bpf_loop(),
-- * r6 was marked before backtracking to callback body.
-- */
--__msg("frame 0: propagating r1,r3,r4,r6")
--__msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r1,r3,r4,r6 stack= before 16: (95) exit")
--__msg("mark_precise: frame1: regs= stack= before 15: (b7) r0 = 0")
--__msg("mark_precise: frame1: regs= stack= before 9: (85) call bpf_loop")
--__msg("mark_precise: frame0: parent state regs= stack=:")
--__msg("from 16 to 9: safe")
-+/* r6 is what it was before the callback */
-+__msg("from 16 to 9: within")
- __naked int parent_callee_saved_reg_precise_with_callback(void)
- {
- 	asm volatile (
-@@ -442,9 +325,7 @@ __naked int parent_callee_saved_reg_precise_with_callback(void)
- 
- 		"r6 *= 4;"
- 		"r1 = %[vals];"
--		/* here r6 is forced to be precise and has to be propagated
--		 * back to the beginning, handling (and ignoring) callback call
--		 */
-+		/* here r6 has to be known: the callback doesn't change it */
- 		"r1 += r6;"
- 		"r0 = *(u32 *)(r1 + 0);"
- 		"exit;"
-@@ -458,19 +339,7 @@ __naked int parent_callee_saved_reg_precise_with_callback(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("9: (0f) r1 += r6")
--__msg("mark_precise: frame0: last_idx 9 first_idx 6")
--__msg("mark_precise: frame0: regs=r6 stack= before 8: (bf) r1 = r7")
--__msg("mark_precise: frame0: regs=r6 stack= before 7: (27) r6 *= 4")
--__msg("mark_precise: frame0: regs=r6 stack= before 6: (79) r6 = *(u64 *)(r10 -8)")
--__msg("mark_precise: frame0: parent state regs= stack=-8:")
--__msg("mark_precise: frame0: last_idx 13 first_idx 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 13: (95) exit")
--__msg("mark_precise: frame1: regs= stack= before 12: (bf) r0 = r1")
--__msg("mark_precise: frame1: regs= stack= before 5: (85) call pc+6")
--__msg("mark_precise: frame0: regs= stack=-8 before 4: (b7) r1 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 3: (7b) *(u64 *)(r10 -8) = r6")
--__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
-+__msg("9: (0f) r1 += r6                      ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
- __naked int parent_stack_slot_precise(void)
- {
- 	asm volatile (
-@@ -492,9 +361,7 @@ __naked int parent_stack_slot_precise(void)
- 
- 		"r6 *= 4;"
- 		"r1 = %[vals];"
--		/* here r6 is forced to be precise and has to be propagated
--		 * back to the beginning, handling (and ignoring) subprog call
--		 */
-+		/* here r6 has to be known: the subprog call doesn't change it */
- 		"r1 += r6;"
- 		"r0 = *(u32 *)(r1 + 0);"
- 		"exit;"
-@@ -506,15 +373,7 @@ __naked int parent_stack_slot_precise(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("9: (0f) r1 += r6")
--__msg("mark_precise: frame0: last_idx 9 first_idx 0")
--__msg("mark_precise: frame0: regs=r6 stack= before 8: (bf) r1 = r7")
--__msg("mark_precise: frame0: regs=r6 stack= before 7: (27) r6 *= 4")
--__msg("mark_precise: frame0: regs=r6 stack= before 6: (79) r6 = *(u64 *)(r10 -8)")
--__msg("mark_precise: frame0: regs= stack=-8 before 5: (85) call pc+6")
--__msg("mark_precise: frame0: regs= stack=-8 before 4: (b7) r1 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 3: (7b) *(u64 *)(r10 -8) = r6")
--__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
-+__msg("9: (0f) r1 += r6                      ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
- __naked int parent_stack_slot_precise_global(void)
- {
- 	asm volatile (
-@@ -536,9 +395,7 @@ __naked int parent_stack_slot_precise_global(void)
- 
- 		"r6 *= 4;"
- 		"r1 = %[vals];"
--		/* here r6 is forced to be precise and has to be propagated
--		 * back to the beginning, handling (and ignoring) subprog call
--		 */
-+		/* here r6 has to be known: the subprog call doesn't change it */
- 		"r1 += r6;"
- 		"r0 = *(u32 *)(r1 + 0);"
- 		"exit;"
-@@ -550,38 +407,14 @@ __naked int parent_stack_slot_precise_global(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--/* First simulated path does not include callback body */
--__msg("14: (0f) r1 += r6")
--__msg("mark_precise: frame0: last_idx 14 first_idx 10")
--__msg("mark_precise: frame0: regs=r6 stack= before 13: (bf) r1 = r7")
--__msg("mark_precise: frame0: regs=r6 stack= before 12: (27) r6 *= 4")
--__msg("mark_precise: frame0: regs=r6 stack= before 11: (79) r6 = *(u64 *)(r10 -8)")
--__msg("mark_precise: frame0: regs= stack=-8 before 10: (85) call bpf_loop")
--__msg("mark_precise: frame0: parent state regs= stack=-8:")
--__msg("mark_precise: frame0: last_idx 9 first_idx 0 subseq_idx 10")
--__msg("mark_precise: frame0: regs= stack=-8 before 9: (b7) r4 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 8: (b7) r3 = 0")
--__msg("mark_precise: frame0: regs= stack=-8 before 7: (bf) r2 = r8")
--__msg("mark_precise: frame0: regs= stack=-8 before 6: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs= stack=-8 before 5: (7b) *(u64 *)(r10 -8) = r6")
--__msg("mark_precise: frame0: regs=r6 stack= before 4: (b7) r6 = 3")
--/* State entering callback body popped from states stack */
--__msg("from 10 to 17: frame1:")
-+__msg("14: (0f) r1 += r6                     ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
- __msg("17: frame1: R10=fp0 cb")
- __msg("17: (b7) r0 = 0")
- __msg("18: (95) exit")
- __msg("returning from callee:")
- __msg("to caller at 10:")
--/* r1, r4 are always precise for bpf_loop(),
-- * fp-8 was marked before backtracking to callback body.
-- */
--__msg("frame 0: propagating r1,r3,r4,fp-8")
--__msg("mark_precise: frame0: last_idx 10 first_idx 10 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r1,r3,r4 stack=-8 before 18: (95) exit")
--__msg("mark_precise: frame1: regs= stack= before 17: (b7) r0 = 0")
--__msg("mark_precise: frame1: regs= stack= before 10: (85) call bpf_loop#181")
--__msg("mark_precise: frame0: parent state regs= stack=:")
--__msg("from 18 to 10: safe")
-+/* fp-8 is what it was before the callback */
-+__msg("from 18 to 10: within")
- __naked int parent_stack_slot_precise_with_callback(void)
- {
- 	asm volatile (
-@@ -604,9 +437,7 @@ __naked int parent_stack_slot_precise_with_callback(void)
- 
- 		"r6 *= 4;"
- 		"r1 = %[vals];"
--		/* here r6 is forced to be precise and has to be propagated
--		 * back to the beginning, handling (and ignoring) subprog call
--		 */
-+		/* here r6 has to be known: the callback doesn't change fp-8 */
- 		"r1 += r6;"
- 		"r0 = *(u32 *)(r1 + 0);"
- 		"exit;"
-@@ -621,27 +452,18 @@ __naked int parent_stack_slot_precise_with_callback(void)
- __noinline __used
- static __u64 subprog_with_precise_arg(__u64 x)
- {
--	return vals[x]; /* x is forced to be precise */
-+	return vals[x]; /* x has to be known */
+@@ -80,7 +73,7 @@ static int timer_cb_infinite_loop(void *map, int *key, struct elem *val)
  }
  
- SEC("?raw_tp")
+ SEC("fentry/bpf_fentry_test1")
+-__failure __msg("infinite loop detected")
++__failure __msg("loop at insn {{[0-9]+}} never exits")
+ long BPF_PROG2(test_infinite_loop_cb, int, a)
+ {
+ 	struct bpf_timer *timer;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_align.c b/tools/testing/selftests/bpf/progs/verifier_align.c
+index 0083ef8b8ba7..aecc5279dbaf 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_align.c
++++ b/tools/testing/selftests/bpf/progs/verifier_align.c
+@@ -13,7 +13,7 @@
+ SEC("tc")
  __success __log_level(2)
--__msg("8: (0f) r2 += r1")
--__msg("mark_precise: frame1: last_idx 8 first_idx 0")
--__msg("mark_precise: frame1: regs=r1 stack= before 6: (18) r2 = ")
--__msg("mark_precise: frame1: regs=r1 stack= before 5: (67) r1 <<= 2")
--__msg("mark_precise: frame1: regs=r1 stack= before 2: (85) call pc+2")
--__msg("mark_precise: frame0: regs=r1 stack= before 1: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs=r6 stack= before 0: (b7) r6 = 3")
-+__msg("8: (0f) r2 += r1                      ; R1=12 R2=map_value(map=.data.vals,ks=4,vs=16,imm=12)")
- __naked int subprog_arg_precise(void)
+ __flag(BPF_F_ANY_ALIGNMENT)
+-__msg("0: R1=ctx() R10=fp0")
++__msg("0: R10=fp0")
+ __msg("0: {{.*}} R3=2")
+ __msg("1: {{.*}} R3=4")
+ __msg("2: {{.*}} R3=8")
+@@ -35,7 +35,7 @@ __naked void mov(void)
+ SEC("tc")
+ __success __log_level(2)
+ __flag(BPF_F_ANY_ALIGNMENT)
+-__msg("0: R1=ctx() R10=fp0")
++__msg("0: R10=fp0")
+ __msg("0: {{.*}}R3=1")
+ __msg("1: {{.*}}R3=2")
+ __msg("2: {{.*}}R3=4")
+@@ -69,7 +69,7 @@ __naked void shift(void)
+ SEC("tc")
+ __success __log_level(2)
+ __flag(BPF_F_ANY_ALIGNMENT)
+-__msg("0: R1=ctx() R10=fp0")
++__msg("0: R10=fp0")
+ __msg("0: {{.*}}R3=4")
+ __msg("1: {{.*}}R3=8")
+ __msg("2: {{.*}}R3=10")
+@@ -93,7 +93,7 @@ __naked void addsub(void)
+ SEC("tc")
+ __success __log_level(2)
+ __flag(BPF_F_ANY_ALIGNMENT)
+-__msg("0: R1=ctx() R10=fp0")
++__msg("0: R10=fp0")
+ __msg("0: {{.*}}R3=7")
+ __msg("1: {{.*}}R3=7")
+ __msg("2: {{.*}}R3=14")
+@@ -532,7 +532,7 @@ __msg("9: {{.*}} R6={{[^)]*}}var_off=(0x0; 0x3c)")
+ /* Adding 14 makes R6 be (4n+2) */
+ __msg("10: {{.*}} R6={{[^)]*}}var_off=(0x2; 0x7c)")
+ /* Subtracting from packet pointer overflows ubounds */
+-__msg("13: R5={{[^)]*}}var_off=(0xffffffffffffff82; 0x7c)")
++__msg("12: {{.*}} R5={{[^)]*}}var_off=(0xffffffffffffff82; 0x7c)")
+ /* New unknown value in R7 is (4n), >= 76 */
+ __msg("14: {{.*}} R7={{[^)]*}}var_off=(0x0; 0x7fc)")
+ /* Adding it to packet pointer gives nice bounds again */
+diff --git a/tools/testing/selftests/bpf/progs/verifier_and.c b/tools/testing/selftests/bpf/progs/verifier_and.c
+index 2b4fdca162be..fb64ea9928f1 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_and.c
++++ b/tools/testing/selftests/bpf/progs/verifier_and.c
+@@ -38,9 +38,9 @@ __naked void invalid_and_of_negative_number(void)
+ 	r1 &= -4;					\
+ 	r1 <<= 2;					\
+ 	r0 += r1;					\
+-l0_%=:	r1 = %[test_val_foo];				\
++	r1 = %[test_val_foo];				\
+ 	*(u64*)(r0 + 0) = r1;				\
+-	exit;						\
++l0_%=:	exit;						\
+ "	:
+ 	: __imm(bpf_map_lookup_elem),
+ 	  __imm_addr(map_hash_48b),
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_stack.c b/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
+index 1d676da4b5ea..b46e30a9c67f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
+@@ -199,6 +199,88 @@ __naked void call_through(void)
+ 	: __clobber_all);
+ }
+ 
++unsigned long first_r12, last_r12;
++
++/* 1024 bytes in the stack in arena, nothing in the kernel stack */
++static __naked __noinline __used long goes_down(void)
++{
++	asm volatile (
++	".8byte %[adj];"
++	".8byte %[mov];"	/* r1 = r12 */
++	"r2 = %[last_r12] ll;"
++	"*(u64 *)(r2 + 0) = r1;"
++	"call goes_down;"
++	"exit;"
++	:
++	: __imm_addr(last_r12),
++	  __imm_insn(adj, ADJ(1024)),
++	  __imm_insn(mov, MOV(BPF_REG_1))
++	: __clobber_all);
++}
++
++/* The check of a recursion looks at the kernel stack. It fails before 32K of arena are used. */
++SEC("syscall")
++__description("arena stack: recursion ends in the stack")
++__success __retval(1)
++__naked void recursion(void)
++{
++	asm volatile (
++	".8byte %[adj];"
++	".8byte %[mov];"	/* r1 = r12 */
++	"r2 = %[first_r12] ll;"
++	"*(u64 *)(r2 + 0) = r1;"
++	"call goes_down;"
++	"r1 = %[last_r12] ll;"
++	"r1 = *(u64 *)(r1 + 0);"
++	"r2 = %[first_r12] ll;"
++	"r2 = *(u64 *)(r2 + 0);"
++	"r1 -= r2;"
++	"r0 = 0;"
++	"if r1 < 8192 goto +2;"
++	"if r1 > 32736 goto +1;"
++	"r0 = 1;"
++	"exit;"
++	:
++	: __imm_addr(first_r12),
++	  __imm_addr(last_r12),
++	  __imm_insn(adj, ADJ(32)),
++	  __imm_insn(mov, MOV(BPF_REG_1))
++	: __clobber_all);
++}
++
++static __naked __noinline __used long large_frame(void)
++{
++	asm volatile (
++	"*(u64 *)(r10 - 1792) = 0;"
++	"r0 = 0;"
++	"exit;"
++	::: __clobber_all);
++}
++
++static __naked __noinline __used long goes_down_with_leaf(void)
++{
++	asm volatile (
++	".8byte %[adj];"
++	"call large_frame;"
++	"call goes_down_with_leaf;"
++	"exit;"
++	:
++	: __imm_insn(adj, ADJ(1024))
++	: __clobber_all);
++}
++
++/* goes_down_with_leaf() gets a frame in the kernel stack. What it calls comes on top. */
++SEC("syscall")
++__description("arena stack: the kernel frame of a recursion counts in the depth of the stack")
++__failure __msg("combined stack size of 3 calls is")
++__naked void recursion_above_large_frame(void)
++{
++	asm volatile (
++	"call goes_down_with_leaf;"
++	"exit;"
++	::: __clobber_all);
++}
++
+ SEC("syscall")
+ __description("arena stack: helpers don't change r12")
+ __success __retval(3)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index 05efa9f4a522..6fede778971c 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -1797,8 +1797,8 @@ l1_%=:	r0 = 1;				\
+ 
+ SEC("socket")
+ __description("jset on same register, scalar value unknown branch 1")
+-__msg("3: (b7) r0 = 0 {{.*}} R0=0")
+ __msg("5: (b7) r0 = 1 {{.*}} R0=1")
++__msg("3: (b7) r0 = 0 {{.*}} R0=0")
+ __success __log_level(2)
+ __naked void jset_on_same_register_3(void *ctx)
+ {
+@@ -1818,8 +1818,8 @@ l1_%=:	r0 = 1;				\
+ 
+ SEC("socket")
+ __description("jset on same register, scalar value unknown branch 2")
+-__msg("4: (b7) r0 = 0 {{.*}} R0=0")
+ __msg("6: (b7) r0 = 1 {{.*}} R0=1")
++__msg("4: (b7) r0 = 0 {{.*}} R0=0")
+ __success __log_level(2)
+ __naked void jset_on_same_register_4(void *ctx)
+ {
+@@ -1840,8 +1840,8 @@ l1_%=:	r0 = 1;				\
+ 
+ SEC("socket")
+ __description("jset on same register, scalar value unknown branch 3")
+-__msg("4: (b7) r0 = 0 {{.*}} R0=0")
+ __msg("6: (b7) r0 = 1 {{.*}} R0=1")
++__msg("4: (b7) r0 = 0 {{.*}} R0=0")
+ __success __log_level(2)
+ __naked void jset_on_same_register_5(void *ctx)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
+index f3f8ea67eb7e..afe4990cd027 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_callx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
+@@ -243,8 +243,7 @@ __naked void callx_scratches_args(void)
+ /* return value of the callee is tracked */
+ SEC("socket")
+ __success __log_level(2)
+-__msg("to caller at 4:")
+-__msg("R0=6")
++__msg("4: R0=6 R10=fp0")
+ __naked void callx_retval_is_tracked(void)
  {
  	asm volatile (
- 		"r6 = 3;"
- 		"r1 = r6;"
--		/* subprog_with_precise_arg expects its argument to be
--		 * precise, so r1->r6 will be marked precise from inside the
--		 * subprog
--		 */
-+		/* subprog_with_precise_arg needs to know its argument */
- 		"call subprog_with_precise_arg;"
- 		"r0 += r6;"
- 		"exit;"
-@@ -666,7 +488,7 @@ static __u64 subprog_spill_reg_precise(void)
- 		 * verifier log output)
- 		 */
- 		"*(u64 *)(r10 - 16) = r2;"
--		/* use both spills as return result to propagete precision everywhere */
-+		/* use both spills as return result */
- 		"r0 = *(u64 *)(r10 - 16);"
- 		"r2 = *(u64 *)(r1 + 0);"
- 		"r0 += r2;"
-@@ -676,32 +498,14 @@ static __u64 subprog_spill_reg_precise(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("10: (0f) r1 += r7")
--__msg("mark_precise: frame0: last_idx 10 first_idx 7 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r7 stack= before 9: (bf) r1 = r8")
--__msg("mark_precise: frame0: regs=r7 stack= before 8: (27) r7 *= 4")
--__msg("mark_precise: frame0: regs=r7 stack= before 7: (79) r7 = *(u64 *)(r10 -8)")
--__msg("mark_precise: frame0: parent state regs= stack=-8:  R8=map_value(map=.data.vals,ks=4,vs=16) R10=fp0 fp-8=P1")
--__msg("mark_precise: frame0: last_idx 18 first_idx 0 subseq_idx 7")
--__msg("mark_precise: frame0: regs= stack=-8 before 18: (95) exit")
--__msg("mark_precise: frame1: regs= stack= before 17: (0f) r0 += r2")
--__msg("mark_precise: frame1: regs= stack= before 16: (79) r2 = *(u64 *)(r1 +0)")
--__msg("mark_precise: frame1: regs= stack= before 15: (79) r0 = *(u64 *)(r10 -16)")
--__msg("mark_precise: frame1: regs= stack= before 14: (7b) *(u64 *)(r10 -16) = r2")
--__msg("mark_precise: frame1: regs= stack= before 13: (7b) *(u64 *)(r1 +0) = r2")
--__msg("mark_precise: frame1: regs=r2 stack= before 6: (85) call pc+6")
--__msg("mark_precise: frame0: regs=r2 stack= before 5: (bf) r2 = r6")
--__msg("mark_precise: frame0: regs=r6 stack= before 4: (07) r1 += -8")
--__msg("mark_precise: frame0: regs=r6 stack= before 3: (bf) r1 = r10")
--__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 1")
-+__msg("10: (0f) r1 += r7                     ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=4) R7=4")
- __naked int subprog_spill_into_parent_stack_slot_precise(void)
- {
- 	asm volatile (
- 		"r6 = 1;"
- 
- 		/* pass pointer to stack slot and r6 to subprog;
--		 * r6 will be marked precise and spilled into fp-8 slot, which
--		 * also should be marked precise
-+		 * r6 will be spilled into fp-8 slot
- 		 */
- 		"r1 = r10;"
- 		"r1 += -8;"
-@@ -716,8 +520,9 @@ __naked int subprog_spill_into_parent_stack_slot_precise(void)
- 
- 		"r7 *= 4;"
- 		"r1 = %[vals];"
--		/* here r7 is forced to be precise and has to be propagated
--		 * back to the beginning, handling subprog call and logic
-+		/*
-+		 * here r7 has to be known: it's what the subprog spilled into
-+		 * the stack slot of its caller
- 		 */
- 		"r1 += r7;"
- 		"r0 = *(u32 *)(r1 + 0);"
-@@ -730,32 +535,12 @@ __naked int subprog_spill_into_parent_stack_slot_precise(void)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("17: (0f) r1 += r0")
--__msg("mark_precise: frame0: last_idx 17 first_idx 0 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r0 stack= before 16: (bf) r1 = r7")
--__msg("mark_precise: frame0: regs=r0 stack= before 15: (27) r0 *= 4")
--__msg("mark_precise: frame0: regs=r0 stack= before 14: (79) r0 = *(u64 *)(r10 -16)")
--__msg("mark_precise: frame0: regs= stack=-16 before 13: (7b) *(u64 *)(r7 -8) = r0")
--__msg("mark_precise: frame0: regs=r0 stack= before 12: (79) r0 = *(u64 *)(r8 +16)")
--__msg("mark_precise: frame0: regs= stack=-16 before 11: (7b) *(u64 *)(r8 +16) = r0")
--__msg("mark_precise: frame0: regs=r0 stack= before 10: (79) r0 = *(u64 *)(r7 -8)")
--__msg("mark_precise: frame0: regs= stack=-16 before 9: (7b) *(u64 *)(r10 -16) = r0")
--__msg("mark_precise: frame0: regs=r0 stack= before 8: (07) r8 += -32")
--__msg("mark_precise: frame0: regs=r0 stack= before 7: (bf) r8 = r10")
--__msg("mark_precise: frame0: regs=r0 stack= before 6: (07) r7 += -8")
--__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r7 = r10")
--__msg("mark_precise: frame0: regs=r0 stack= before 21: (95) exit")
--__msg("mark_precise: frame1: regs=r0 stack= before 20: (bf) r0 = r1")
--__msg("mark_precise: frame1: regs=r1 stack= before 4: (85) call pc+15")
--__msg("mark_precise: frame0: regs=r1 stack= before 3: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 1")
-+__msg("17: (0f) r1 += r0                     ; R0=4 R1=map_value(map=.data.vals,ks=4,vs=16,imm=4)")
- __naked int stack_slot_aliases_precision(void)
- {
- 	asm volatile (
- 		"r6 = 1;"
--		/* pass r6 through r1 into subprog to get it back as r0;
--		 * this whole chain will have to be marked as precise later
--		 */
-+		/* pass r6 through r1 into subprog to get it back as r0 */
- 		"r1 = r6;"
- 		"call identity_subprog;"
- 		/* let's setup two registers that are aliased to r10 */
-@@ -777,11 +562,11 @@ __naked int stack_slot_aliases_precision(void)
- 		"r0 = *(u64 *)(r8 + 16);"
- 		"*(u64 *)(r7 - 8) = r0;"
- 		"r0 = *(u64 *)(r10 - 16);"
--		/* get ready to use r0 as an index into array to force precision */
-+		/* get ready to use r0 as an index into array */
- 		"r0 *= 4;"
- 		"r1 = %[vals];"
--		/* here r0->r1->r6 chain is forced to be precise and has to be
--		 * propagated back to the beginning, including through the
-+		/*
-+		 * here r0 has to be known: the constant went through the
- 		 * subprog call and all the stack spills and loads
- 		 */
- 		"r1 += r0;"
-@@ -789,7 +574,7 @@ __naked int stack_slot_aliases_precision(void)
- 		"exit;"
- 		:
- 		: __imm_ptr(vals)
--		: __clobber_common, "r6"
-+		: __clobber_common, "r6", "r7", "r8"
+@@ -541,9 +540,11 @@ static unsigned long self(void)
  	);
  }
  
-@@ -820,15 +605,11 @@ static unsigned long identity_tail_call(void)
- SEC("?raw_tp")
- __failure __log_level(2)
- __msg("13: (85) call bpf_tail_call#12")
--__msg("mark_precise: frame1: last_idx 13 first_idx 0 subseq_idx -1 ")
- __msg("returning from callee:")
- __msg("frame1: R0=scalar() R6=3 R10=fp0")
- __msg("to caller at 4:")
- __msg("R0=scalar() R6=map_value(map=.data.vals,ks=4,vs=16) R10=fp0")
- __msg("6: (0f) r1 += r0")
--__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs=r0 stack= before 4: (27) r0 *= 4")
--__msg("mark_precise: frame0: parent state regs=r0 stack=:  R0=Pscalar() R6=map_value(map=.data.vals,ks=4,vs=16) R10=fp0")
- __msg("math between map_value pointer and register with unbounded min value is not allowed")
- __naked int subprog_result_tail_call(void)
+-/* unbounded recursion is caught by the main verification pass */
++/* unbounded recursion is stopped at run time */
+ SEC("socket")
+-__failure __msg("frames is too deep")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
+ __naked void callx_unbounded_recursion(void)
  {
-@@ -860,36 +641,22 @@ static int ld_abs_subprog(void)
+ 	asm volatile (
+@@ -569,12 +570,10 @@ static unsigned long countdown(void)
+ 	);
+ }
+ 
+-/*
+- * The depth of the recursion is known to the main verification pass,
+- * but recursive calls are not allowed regardless.
+- */
+ SEC("socket")
+-__failure __msg("recursive call from countdown() to countdown()")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
+ __naked void callx_bounded_recursion(void)
+ {
+ 	asm volatile (
+@@ -621,7 +620,9 @@ static unsigned long pong(void)
+ }
+ 
+ SEC("socket")
+-__failure __msg("recursive call from")
++__arch_x86_64
++__arch_arm64
++__success
+ __naked void callx_mutual_recursion(void)
+ {
+ 	asm volatile (
+@@ -636,6 +637,49 @@ __naked void callx_mutual_recursion(void)
+ 		: __clobber_all);
+ }
+ 
++/* calls_arg(fn) { return fn(); } */
++__naked __noinline __used
++static unsigned long calls_arg(void)
++{
++	asm volatile (
++		"callx r1;"
++		"exit;"
++	);
++}
++
++__naked __noinline __used
++static unsigned long returns_7(void)
++{
++	asm volatile (
++		"r0 = 7;"
++		"exit;"
++	);
++}
++
++/*
++ * The address of calls_arg() is taken: its callx could call it. The main pass finds that it
++ * calls returns_7(). There is no cycle, so calls_arg() doesn't check the stack at run time.
++ */
++SEC("socket")
++__arch_x86_64
++__arch_arm64
++__success __retval(7)
++__xlated("...")
++__xlated("exit")
++__xlated("callx r1")
++__naked void callx_no_recursion_after_all(void)
++{
++	asm volatile (
++		"r2 = %[calls_arg] ll;"
++		"r1 = %[returns_7] ll;"
++		"callx r2;"
++		"exit;"
++		:
++		: __imm_addr(calls_arg),
++		  __imm_addr(returns_7)
++		: __clobber_all);
++}
++
+ __naked __noinline __used
+ static unsigned long use_stack_304(void)
+ {
+@@ -944,11 +988,8 @@ long long vals[] SEC(".data.vals") = {1, 2, 3, 4};
+ 
+ SEC("socket")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r0 stack= before 12: (95) exit")
+-__msg("mark_precise: frame1: regs=r0 stack= before 11: (bf) r0 = r1")
+-__msg("mark_precise: frame1: regs=r1 stack= before 4: (8d) callx r2")
+-__msg("mark_precise: frame0: regs=r1 stack= before 3: (bf) r1 = r6")
+-__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
++__msg("5: R0=3 R10=fp0")
++__msg("8: (0f) r1 += r0                      ; R0=24 R1=map_value(map=.data.vals,ks=4,vs=32,imm=24)")
+ __retval(4)
+ __naked void callx_precision(void)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+index 642071fa7498..8bb74b579203 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
++++ b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+@@ -669,7 +669,9 @@ static unsigned long selfcall(void)
+ }
+ 
+ SEC("socket")
+-__failure __msg("recursive call from selfcall() to selfcall()")
++__arch_x86_64
++__arch_arm64
++__success
+ __naked void callx_rodata_recursion(void)
+ {
+ 	asm volatile (
+diff --git a/tools/testing/selftests/bpf/progs/verifier_cfg.c b/tools/testing/selftests/bpf/progs/verifier_cfg.c
+index b429fa7a08f5..e97e89ba3d68 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_cfg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_cfg.c
+@@ -138,8 +138,8 @@ l0_%=:	r1 = r0;					\
+ 
+ SEC("socket")
+ __description("conditional loop")
+-__failure __msg("infinite loop detected")
+-__msg_unpriv("back-edge")
++__success
++__failure_unpriv __msg_unpriv("back-edge")
+ __naked void conditional_loop(void)
+ {
+ 	asm volatile ("					\
+@@ -175,7 +175,7 @@ l1_%=:	r8 += r4;					\
+ 
+ SEC("socket")
+ __description("unconditional loop after conditional jump")
+-__failure __msg("infinite loop detected")
++__failure __msg("loop at insn 2 never exits")
+ __failure_unpriv __msg_unpriv("back-edge from insn 3 to 2")
+ __naked void uncond_loop_after_cond_jmp(void)
+ {
+@@ -201,7 +201,7 @@ static unsigned long never_ending_subprog()
+ SEC("socket")
+ __description("unconditional loop after conditional jump")
+ /* infinite loop is detected *after* check_cfg() */
+-__failure __msg("infinite loop detected")
++__failure __msg("loop at insn 6 never exits")
+ __naked void uncond_loop_in_subprog_after_cond_jmp(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+index 5e8461b2167d..100d8307c3bd 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+@@ -557,12 +557,13 @@ __noinline int global_calls_loop(int x)
+ 
+ /*
+  * loop_cb_calls_static() -> static_calls_global() -> global_calls_loop() ->
+- * bpf_loop() -> loop_cb_calls_static() is an unbounded recursion that the
+- * main verification pass can't see, because it doesn't follow calls of global
+- * functions. None of the functions use stack.
++ * bpf_loop() -> loop_cb_calls_static() is an unbounded recursion through a global
++ * function and a helper. It's stopped at run time. None of the functions use stack.
+  */
+-SEC("?raw_tp")
+-__failure __msg("recursive call from global_calls_loop() to loop_cb_calls_static()")
++SEC("?socket")
++__arch_x86_64
++__arch_arm64
++__success
+ int recursion_via_global_func_and_callback(const void *ctx)
+ {
+ 	return loop_cb_calls_static(0, NULL);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c b/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c
+index c6603a118fdc..1b13d3a8dcfa 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c
++++ b/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c
+@@ -717,12 +717,12 @@ __naked void bounds_check_using_bad_access_1(void)
+ 	*(u64*)(r2 + 0) = r1;				\
+ 	r1 = %[map_hash_48b] ll;			\
+ 	call %[bpf_map_lookup_elem];			\
+-	if r0 == 0 goto l0_%=;				\
++	if r0 == 0 goto l1_%=;				\
+ 	r1 = r0;					\
+ 	r3 = *(u32*)(r0 + 0);				\
+ 	if r3 < 32 goto l1_%=;				\
+ 	r1 += r3;					\
+-l0_%=:	r0 = 0;						\
++	r0 = 0;						\
+ 	*(u8*)(r1 + 0) = r0;				\
+ 	r0 = 0;						\
+ 	exit;						\
+@@ -775,12 +775,12 @@ __naked void bounds_check_using_bad_access_2(void)
+ 	*(u64*)(r2 + 0) = r1;				\
+ 	r1 = %[map_hash_48b] ll;			\
+ 	call %[bpf_map_lookup_elem];			\
+-	if r0 == 0 goto l0_%=;				\
++	if r0 == 0 goto l1_%=;				\
+ 	r1 = r0;					\
+ 	r3 = *(u32*)(r0 + 0);				\
+ 	if r3 <= 32 goto l1_%=;				\
+ 	r1 += r3;					\
+-l0_%=:	r0 = 0;						\
++	r0 = 0;						\
+ 	*(u8*)(r1 + 0) = r0;				\
+ 	r0 = 0;						\
+ 	exit;						\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_idoms.c b/tools/testing/selftests/bpf/progs/verifier_idoms.c
+index fdee6bced77b..91d9f9aae8e9 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_idoms.c
++++ b/tools/testing/selftests/bpf/progs/verifier_idoms.c
+@@ -10,7 +10,7 @@
+  * The immediate dominator is printed by log_program() as the numeric column
+  * immediately before the "<insn#>:" field of every "Program dump" line:
+  *
+- *   Program dump (scc? loop_header? idom insn#: live_regs_before):
++ *   Program dump (loop_header? idom insn#: live_regs_before):
+  *            -1   0: ....... (b7) r0 = 0     <- idom(0) = -1 (subprog entry)
+  *             0   1: ....... (07) r0 += 1    <- idom(1) = 0
+  *             ^^^^^^
+@@ -307,17 +307,16 @@ __naked void entry_is_loop_header(void)
+ /*
+  * Self-loop: insn 1 is its own predecessor. idom(1) must be the pre-header
+  * (insn 0); the self-edge is ignored (idoms[pred] == -1 on the first pass, then
+- * idoms_intersect(a == b) short-circuits). Program is rejected later for an
+- * infinite loop, but the dump (and idoms) are printed before that.
++ * idoms_intersect(a == b) short-circuits). The loop can spin forever: the
++ * verifier adds may_goto to it.
+  */
+ SEC("socket")
+-__failure
++__success
+ __log_level(2)
+ __msg("Program dump")
+ __msg("{{.*}} -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
+ __msg("{{.*}}  0   1: {{.*}} (a5) if r0 < 0xa goto pc-1")
+ __msg("{{.*}}  1   2: {{.*}} (95) exit")
+-__msg("infinite loop detected")
+ __naked void self_loop(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+index 4dd98acc6436..a3e31aa25fe1 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
++++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+@@ -45,7 +45,7 @@ SEC("?raw_tp")
+ __failure __msg("R1 type=scalar expected=fp")
+ int unsafe_on_2nd_iter(void *unused)
+ {
+-	char buf[4];
++	char buf[8];
+ 	struct buf_context loop_ctx = { .buf = buf };
+ 
+ 	bpf_loop(100, unsafe_on_2nd_iter_cb, &loop_ctx, 0);
+@@ -94,7 +94,7 @@ static int loop_detection_cb(__u32 idx, struct num_context *ctx)
+ }
+ 
+ SEC("?raw_tp")
+-__failure __msg("infinite loop detected")
++__failure __msg("loop at insn {{[0-9]+}} never exits")
+ int loop_detection(void *unused)
+ {
+ 	struct num_context loop_ctx = { .i = 0 };
+@@ -246,10 +246,9 @@ int bpf_loop_iter_limit_nested(void *unused)
+ 	/* This makes 'c' zero, but neither clang nor verifier know it. */
+ 	c /= 10;
+ 	/* Make sure that verifier does not visit 'impossible' states:
+-	 * enumerate all possible callback visit masks.
++	 * one more call of any of the callbacks gives more than that.
+ 	 */
+-	if (a != 0 && a != 1 && a != 11 && a != 101 && a != 111 &&
+-	    b != 0 && b != 1 && b != 11 && b != 101 && b != 111)
++	if (a > 111 || b > 111)
+ 		asm volatile ("r0 /= 0;" ::: "r0");
+ 	return 1000 * a + b + c;
+ }
+@@ -291,9 +290,13 @@ static __naked void iter_limit_bug_cb(void)
+ 	);
+ }
+ 
++/*
++ * may_goto doesn't leave the loop, so it's not what stops it. The address is greater than 10:
++ * the loop spins until may_goto that the verifier adds ends the prog.
++ */
+ int tmp_var;
+ SEC("socket")
+-__failure __msg("infinite loop detected at insn 2")
++__success __retval(0)
+ __naked void jgt_imm64_and_may_goto(void)
+ {
+ 	asm volatile ("			\
+@@ -310,7 +313,7 @@ l0_%=:	.byte 0xe5; /* may_goto */	\
+ }
+ 
+ SEC("socket")
+-__failure __msg("infinite loop detected at insn 1")
++__success __retval(0)
+ __naked void may_goto_self(void)
+ {
+ 	asm volatile ("			\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+index 795956bd4f9f..32bab3cb3fcb 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+@@ -2844,7 +2844,7 @@ __naked void merge_preserves_may_write(void)
+ 	"if r0 == 0 goto 1f;"
+ 	/* chain A: r2 = map value (ARG_NONE, not stack) */
+ 	"r1 = r10;"
+-	"r1 += -16;"				/* unused fp anchor */
++	"r1 += -16;"				/* fp anchor */
+ 	"r2 = r0;"
+ 	"call mvs_mid;"
+ 	/* chain B: r2 = caller stack slot fp-8 */
+@@ -2872,6 +2872,7 @@ static __used __naked void mvs_leaf(void)
+ {
+ 	asm volatile (
+ 	"*(u64 *)(r2 + 0) = 42;"
++	"r0 = r1;"				/* a register that is not read is no argument */
+ 	"r0 = 0;"
+ 	"exit;"
+ 	::: __clobber_all);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_liveness_exp.c b/tools/testing/selftests/bpf/progs/verifier_liveness_exp.c
+index 72646fa2745e..3f2a60f19319 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_liveness_exp.c
++++ b/tools/testing/selftests/bpf/progs/verifier_liveness_exp.c
+@@ -32,8 +32,12 @@ char _license[] SEC("license") = "GPL";
+ 			"r1 += -" #off ";"	\
+ 			"call " #fn ";"
+ 
+-/* 50 calls, each with a distinct FP offset: -8, -16, ... -400 */
++/*
++ * 50 calls, each with a distinct FP offset: -8, -16, ... -400.
++ * The function reads r1 first: a register that the callee doesn't read is no argument.
++ */
+ #define CALLS_50(fn)							\
++	"r0 = r1;"							\
+ 	C(fn,   8) C(fn,  16) C(fn,  24) C(fn,  32) C(fn,  40)		\
+ 	C(fn,  48) C(fn,  56) C(fn,  64) C(fn,  72) C(fn,  80)		\
+ 	C(fn,  88) C(fn,  96) C(fn, 104) C(fn, 112) C(fn, 120)		\
+@@ -50,6 +54,7 @@ __naked __noinline __used
+ static unsigned long exp_sub7(void)
+ {
+ 	asm volatile (
++		"r0 = r1;"
+ 		"r0 = 0;"
+ 		"exit;"
+ 		::: __clobber_all);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
+index 0608e983d7fc..4f4e04d50bc7 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
++++ b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
+@@ -22,10 +22,10 @@ __success
+ __log_level(2)
+ __msg("loop at 1{{$}}")
+ __msg("Program dump")
+-__msg("         -1   0: {{.*}} (b7) r0 = 0")
+-__msg("  1       0   1: {{.*}} (07) r0 += 1")
+-__msg("  1   1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
+-__msg("          2   3: {{.*}} (95) exit")
++__msg("     -1   0: {{.*}} (b7) r0 = 0")
++__msg("      0   1: {{.*}} (07) r0 += 1")
++__msg("  1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
++__msg("      2   3: {{.*}} (95) exit")
+ __naked void loop_single(void)
+ {
+ 	asm volatile ("					\
+@@ -43,13 +43,13 @@ __log_level(2)
+ __msg("loop at 1{{$}}")
+ __msg("loop at 4{{$}}")
+ __msg("Program dump")
+-__msg("         -1   0: {{.*}} (b7) r0 = 0")
+-__msg("  2       0   1: {{.*}} (07) r0 += 1")
+-__msg("  2   1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
+-__msg("          2   3: {{.*}} (b7) r1 = 0")
+-__msg("  1       3   4: {{.*}} (07) r1 += 1")
+-__msg("  1   4   4   5: {{.*}} (a5) if r1 < 0xa goto pc-2")
+-__msg("          5   6: {{.*}} (95) exit")
++__msg("     -1   0: {{.*}} (b7) r0 = 0")
++__msg("      0   1: {{.*}} (07) r0 += 1")
++__msg("  1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
++__msg("      2   3: {{.*}} (b7) r1 = 0")
++__msg("      3   4: {{.*}} (07) r1 += 1")
++__msg("  4   4   5: {{.*}} (a5) if r1 < 0xa goto pc-2")
++__msg("      5   6: {{.*}} (95) exit")
+ __naked void loop_two_independent(void)
+ {
+ 	asm volatile ("					\
+@@ -70,13 +70,13 @@ __log_level(2)
+ __msg("loop at 1{{$}}")
+ __msg("loop at 3, nested in 1")
+ __msg("Program dump")
+-__msg("         -1   0: {{.*}} (b7) r0 = 0")
+-__msg("  1       0   1: {{.*}} (07) r0 += 1")			/* outer loop header */
+-__msg("  1   1   1   2: {{.*}} (b7) r1 = 0")			/* outer loop insn */
+-__msg("  1   1   2   3: {{.*}} (07) r1 += 1")			/* inner loop header */
+-__msg("  1   3   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")	/* inner loop insn */
+-__msg("  1   1   4   5: {{.*}} (a5) if r0 < 0xa goto pc-5")	/* outer loop insn */
+-__msg("          5   6: {{.*}} (95) exit")
++__msg("     -1   0: {{.*}} (b7) r0 = 0")
++__msg("      0   1: {{.*}} (07) r0 += 1")			/* outer loop header */
++__msg("  1   1   2: {{.*}} (b7) r1 = 0")			/* outer loop insn */
++__msg("  1   2   3: {{.*}} (07) r1 += 1")			/* inner loop header */
++__msg("  3   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")	/* inner loop insn */
++__msg("  1   4   5: {{.*}} (a5) if r0 < 0xa goto pc-5")	/* outer loop insn */
++__msg("      5   6: {{.*}} (95) exit")
+ __naked void loop_nested(void)
+ {
+ 	asm volatile ("					\
+@@ -95,12 +95,12 @@ SEC("socket")
+ __success
+ __log_level(2)
+ __msg("Program dump")
+-__msg("         -1   0: {{.*}} (85) call bpf_get_prandom_u32")
+-__msg("          0   1: {{.*}} (25) if r0 > 0x0 goto pc+2")
+-__msg("          1   2: {{.*}} (b7) r0 = 2")
+-__msg("          2   3: {{.*}} (05) goto pc+1")
+-__msg("          1   4: {{.*}} (b7) r0 = 3")
+-__msg("          1   5: {{.*}} (95) exit")
++__msg("     -1   0: {{.*}} (85) call bpf_get_prandom_u32")
++__msg("      0   1: {{.*}} (25) if r0 > 0x0 goto pc+2")
++__msg("      1   2: {{.*}} (b7) r0 = 2")
++__msg("      2   3: {{.*}} (05) goto pc+1")
++__msg("      1   4: {{.*}} (b7) r0 = 3")
++__msg("      1   5: {{.*}} (95) exit")
+ __naked void fwd_edges_no_loop(void)
+ {
+ 	asm volatile ("					\
+@@ -123,16 +123,16 @@ __msg("loop at 1{{$}}")
+ __msg("loop at 3, nested in 1")
+ __msg("loop at 6, nested in 1")
+ __msg("Program dump")
+-__msg("         -1   0: {{.*}} (b7) r0 = 0")
+-__msg("  1       0   1: {{.*}} (07) r0 += 1")
+-__msg("  1   1   1   2: {{.*}} (b7) r1 = 0")
+-__msg("  1   1   2   3: {{.*}} (07) r1 += 1")
+-__msg("  1   3   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")
+-__msg("  1   1   4   5: {{.*}} (b7) r2 = 0")
+-__msg("  1   1   5   6: {{.*}} (07) r2 += 1")
+-__msg("  1   6   6   7: {{.*}} (a5) if r2 < 0x5 goto pc-2")
+-__msg("  1   1   7   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
+-__msg("          8   9: {{.*}} (95) exit")
++__msg("     -1   0: {{.*}} (b7) r0 = 0")
++__msg("      0   1: {{.*}} (07) r0 += 1")
++__msg("  1   1   2: {{.*}} (b7) r1 = 0")
++__msg("  1   2   3: {{.*}} (07) r1 += 1")
++__msg("  3   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")
++__msg("  1   4   5: {{.*}} (b7) r2 = 0")
++__msg("  1   5   6: {{.*}} (07) r2 += 1")
++__msg("  6   6   7: {{.*}} (a5) if r2 < 0x5 goto pc-2")
++__msg("  1   7   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
++__msg("      8   9: {{.*}} (95) exit")
+ __naked void loop_nested_siblings(void)
+ {
+ 	asm volatile ("					\
+@@ -157,16 +157,16 @@ __msg("loop at 1{{$}}")
+ __msg("loop at 3, nested in 1")
+ __msg("loop at 5, nested in 3")
+ __msg("Program dump")
+-__msg("         -1   0: {{.*}} (b7) r0 = 0")
+-__msg("  1       0   1: {{.*}} (07) r0 += 1")
+-__msg("  1   1   1   2: {{.*}} (b7) r1 = 0")
+-__msg("  1   1   2   3: {{.*}} (07) r1 += 1")
+-__msg("  1   3   3   4: {{.*}} (b7) r2 = 0")
+-__msg("  1   3   4   5: {{.*}} (07) r2 += 1")
+-__msg("  1   5   5   6: {{.*}} (a5) if r2 < 0x3 goto pc-2")
+-__msg("  1   3   6   7: {{.*}} (a5) if r1 < 0x5 goto pc-5")
+-__msg("  1   1   7   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
+-__msg("          8   9: {{.*}} (95) exit")
++__msg("     -1   0: {{.*}} (b7) r0 = 0")
++__msg("      0   1: {{.*}} (07) r0 += 1")
++__msg("  1   1   2: {{.*}} (b7) r1 = 0")
++__msg("  1   2   3: {{.*}} (07) r1 += 1")
++__msg("  3   3   4: {{.*}} (b7) r2 = 0")
++__msg("  3   4   5: {{.*}} (07) r2 += 1")
++__msg("  5   5   6: {{.*}} (a5) if r2 < 0x3 goto pc-2")
++__msg("  3   6   7: {{.*}} (a5) if r1 < 0x5 goto pc-5")
++__msg("  1   7   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
++__msg("      8   9: {{.*}} (95) exit")
+ __naked void loop_three_levels(void)
+ {
+ 	asm volatile ("					\
+@@ -189,14 +189,14 @@ __success
+ __log_level(2)
+ __msg("loop at 1")
+ __msg("Program dump")
+-__msg("         -1   0: {{.*}} (b7) r0 = 0")
+-__msg("  1       0   1: {{.*}} (07) r0 += 1")
+-__msg("  1   1   1   2: {{.*}} (bf) r1 = r0")
+-__msg("  1   1   2   3: {{.*}} (25) if r1 > 0x5 goto pc+1")
+-__msg("  1   1   3   4: {{.*}} (b7) r1 = 1")
+-__msg("  1   1   3   5: {{.*}} (0f) r0 += r1")
+-__msg("  1   1   5   6: {{.*}} (a5) if r0 < 0x64 goto pc-6")
+-__msg("          6   7: {{.*}} (95) exit")
++__msg("     -1   0: {{.*}} (b7) r0 = 0")
++__msg("      0   1: {{.*}} (07) r0 += 1")
++__msg("  1   1   2: {{.*}} (bf) r1 = r0")
++__msg("  1   2   3: {{.*}} (25) if r1 > 0x5 goto pc+1")
++__msg("  1   3   4: {{.*}} (b7) r1 = 1")
++__msg("  1   3   5: {{.*}} (0f) r0 += r1")
++__msg("  1   5   6: {{.*}} (a5) if r0 < 0x64 goto pc-6")
++__msg("      6   7: {{.*}} (95) exit")
+ __naked void loop_with_if_else(void)
+ {
+ 	asm volatile ("					\
+@@ -217,15 +217,15 @@ __success
+ __log_level(2)
+ __msg("loop at 3, irreducible")
+ __msg("Program dump")
+-__msg("         -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
+-__msg("          0   1: {{.*}} (b7) r1 = 0")
+-__msg("          1   2: {{.*}} (25) if r0 > 0x5 goto pc+2")
+-__msg("  1       2   3: {{.*}} (b7) r1 = 1")
+-__msg("  1   3   3   4: {{.*}} (05) goto pc+1")
+-__msg("          2   5: {{.*}} (b7) r1 = 2")
+-__msg("  1   3   2   6: {{.*}} (0f) r0 += r1")
+-__msg("  1   3   6   7: {{.*}} (a5) if r0 < 0x10 goto pc-5")
+-__msg("          7   8: {{.*}} (95) exit")
++__msg("     -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
++__msg("      0   1: {{.*}} (b7) r1 = 0")
++__msg("      1   2: {{.*}} (25) if r0 > 0x5 goto pc+2")
++__msg("      2   3: {{.*}} (b7) r1 = 1")
++__msg("  3   3   4: {{.*}} (05) goto pc+1")
++__msg("      2   5: {{.*}} (b7) r1 = 2")
++__msg("  3   2   6: {{.*}} (0f) r0 += r1")
++__msg("  3   6   7: {{.*}} (a5) if r0 < 0x10 goto pc-5")
++__msg("      7   8: {{.*}} (95) exit")
+ __naked void loop_irreducible(void)
+ {
+ 	asm volatile ("					\
+@@ -244,10 +244,9 @@ __naked void loop_irreducible(void)
+ }
+ 
+ SEC("socket")
+-__failure
++__success
+ __log_level(2)
+ __msg("loop at 1")
+-__msg("infinite loop detected at insn 1")
+ __naked void loop_self(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_latch.c b/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
+index 6dd46edd8ed0..e8daf791b4c0 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
++++ b/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
+@@ -120,7 +120,7 @@ BAD("down from a range, one unsigned test, one too many")
+ LOOP(down_unsigned_range_bad, "if r7 > 2048 goto 9f;", "w7 += -1; if w7 < 2049 goto 1b;")
+ 
+ /* below 0 a 32-bit counter is 0xffffffff for a 64-bit jump */
+-BAD("down, a 64-bit test with a bound above 32 bits")
++NO_COUNT("down, a 64-bit test with a bound above 32 bits")
+ LOOP(down_unsigned_wide_bound, "w8 = 2047; r9 = 0x100000800 ll;", "w8 += -1; if r8 < r9 goto 1b;")
+ 
+ BAD("down, an unsigned and a signed 64-bit test")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_loops1.c b/tools/testing/selftests/bpf/progs/verifier_loops1.c
+index 48a966cda199..18067907579e 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_loops1.c
++++ b/tools/testing/selftests/bpf/progs/verifier_loops1.c
+@@ -123,7 +123,7 @@ l0_%=:	exit;						\
+ 
+ SEC("tracepoint")
+ __description("infinite loop after a conditional jump")
+-__failure __msg("program is too large")
++__failure __msg("loop at insn 2 never exits")
+ __naked void loop_after_a_conditional_jump(void)
+ {
+ 	asm volatile ("					\
+@@ -135,10 +135,11 @@ l0_%=:	exit;						\
+ "	::: __clobber_all);
+ }
+ 
+-SEC("tracepoint")
++SEC("xdp")
+ __description("bounded recursion")
+-__failure
+-__msg("recursive call from")
++__arch_x86_64
++__arch_arm64
++__success __retval(4)
+ __naked void bounded_recursion(void)
+ {
+ 	asm volatile ("					\
+@@ -163,7 +164,7 @@ l0_%=:	call bounded_recursion__1;			\
+ 
+ SEC("tracepoint")
+ __description("infinite loop in two jumps")
+-__failure __msg("loop detected")
++__failure __msg("loop at insn 1 never exits")
+ __naked void infinite_loop_in_two_jumps(void)
+ {
+ 	asm volatile ("					\
+@@ -174,9 +175,10 @@ l0_%=:	if r0 < 4 goto l1_%=;				\
+ "	::: __clobber_all);
+ }
+ 
+-SEC("tracepoint")
++/* It never ends on its own. may_goto that the verifier adds ends the prog. */
++SEC("xdp")
+ __description("infinite loop: three-jump trick")
+-__failure __msg("loop detected")
++__success __retval(0)
+ __naked void infinite_loop_three_jump_trick(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+index 195b27a51224..2f4a678c31c2 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+@@ -226,7 +226,8 @@ l0_%=:							\
+ 
+ SEC("socket")
+ __description("MOV32SX, S8, var_off u32_max")
+-__failure __msg("infinite loop detected")
++__success __log_level(2)
++__msg("w7 = (s8)w3 {{.*}}R7=scalar({{.*}}smin32=-128,smax32=127,var_off=(0x0; 0xffffffff))")
+ __failure_unpriv __msg_unpriv("back-edge from insn 2 to 0")
+ __naked void mov64sx_s32_varoff_1(void)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index 07c356fde68d..5e566933f7e4 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -8,6 +8,7 @@
+ #include "../../../include/linux/filter.h"
+ #include "bpf_misc.h"
+ #include "bpf_kfuncs.h"
++#include "bpf_compiler.h"
+ 
+ #define COND_TEST(name, _initial, _step, _bound, msg, body)                     \
+ SEC("xdp")                                                                      \
+@@ -238,7 +239,7 @@ __naked void meet_agrees(void)
+ }
+ 
+ SEC("xdp")
+-__failure
++__success __retval(0)
+ __log_level(2)
+ __msg_next("scev at header 1:")
+ __msg_next("  r6=(any r6 (+ r6 1)) / ?")
+@@ -1234,23 +1235,20 @@ RANGE_TEST(backedges_first_is_a_range, "", 0, 3, 1, 0, 2,
+ RANGE_TEST(backedges_two_variables, "", 0, 3, 1, 0, 1,
+ 	   BACKEDGES("r6 += 1; r7 += 1", "r9 & 1", "r6 < 3", "r7 < 6"),
+ 	   __msg("header_count is [0..6] ") __msg("widening r6 to 0..8 "))
+-/* Explore with a bound of 3 first, of 5 next. The second state is not equal to the first. */
++/* A bound of 3 and a bound of 5 are joined in front of the loop */
+ #define PRECISE_BOUND(reg)									\
+ 	"r4 = 2; r5 = 2; " reg " = 5; if r7 == 0 goto +1; " reg " = 3; r0 = 0;"		\
+ 	BACKEDGES("r6 += 1", "r9 & 1", "r6 < r4", "r6 < r5")
+-#define EXPLORED_TWICE										\
+-	__flag(BPF_F_TEST_STATE_FREQ)								\
+-	__msg("header_count is [0..3] ") __msg("header_count is [0..5] ")
+-RANGE_TEST(backedges_bound1_is_precise, "", 0, 0, 1, 0, 1, PRECISE_BOUND("r4"), EXPLORED_TWICE)
+-RANGE_TEST(backedges_bound0_is_precise, "", 0, 0, 1, 0, 1, PRECISE_BOUND("r5"), EXPLORED_TWICE)
++#define EXPLORED_ONCE	__msg("header_count is [0..5] ") __not_msg("header_count is [0..3] ")
++RANGE_TEST(backedges_bound1_is_precise, "", 0, 0, 1, 0, 1, PRECISE_BOUND("r4"), EXPLORED_ONCE)
++RANGE_TEST(backedges_bound0_is_precise, "", 0, 0, 1, 0, 1, PRECISE_BOUND("r5"), EXPLORED_ONCE)
+ 
+ SEC("xdp")
+ __success
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __msg("loop header at 1, header_count is 10 ")
+ __msg("loop header at 1, widening r0 to 0..9 step 1")
+-__msg("processed 5 insns")
++__msg("processed 4 insns")
+ __naked void post_cond_jlt(void)
+ {
+ 	asm volatile ("					\
+@@ -1262,8 +1260,8 @@ __naked void post_cond_jlt(void)
  }
  
  /*
-- * Buggy verifier did not properly backtrack early subprogram exit
-- * modelled for BPF_LD | BPF_ABS instruction, causing a segfault.
-+ * BPF_LD | BPF_ABS instruction is modelled as an early exit of the subprogram.
-+ * r7 is known on both paths.
-  */
- SEC("socket")
+- * Explore with r7=10 first, r7=4096 next.
+- * Should trigger invalid stack read if r7 is marked precise.
++ * r7 is 10 on one path to the loop and 4096 on the other.
++ * Should trigger invalid stack read if the larger one counts.
+  *
+  *   r0 = 0;
+  *   r6 = 0;
+@@ -1278,11 +1276,7 @@ __naked void post_cond_jlt(void)
+ SEC("xdp")
+ __failure
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+-__msg("loop header at 6, header_count is 10 ")
+-__msg("mark_precise: frame0: parent state regs=r6,r7 stack=:")
+-__msg("loop header at 6, widening r0 to 0..9 step 1")
+-__msg("loop header at 6, header_count is 4096 ")
++__msg("loop header at 6, header_count is [0..4096] ")
+ __msg("loop header at 6, widening r0 to 0..4095 step 1")
+ __msg("invalid variable-offset read from stack R2")
+ __naked void mark_bound_precise(void)
+@@ -1308,8 +1302,8 @@ __naked void mark_bound_precise(void)
+ }
+ 
+ /*
+- * Explore with r6=4086 first, r6=0 next.
+- * Should trigger invalid stack read if r6 is marked precise.
++ * r6 is 4086 on one path to the loop and 0 on the other.
++ * Should trigger invalid stack read if the smaller one counts.
+  *
+  *   r0 = 0;
+  *   r6 = bpf_get_prandom_u32() == 42 ? 4086 : 0;
+@@ -1323,11 +1317,7 @@ __naked void mark_bound_precise(void)
+ SEC("xdp")
+ __failure
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+-__msg("loop header at 5, header_count is 10 ")
+-__msg("mark_precise: frame0: parent state regs=r6 stack=:")
+-__msg("loop header at 5, widening r0 to 0..9 step 1")
+-__msg("loop header at 5, header_count is 4096 ")
++__msg("loop header at 5, header_count is [0..4096] ")
+ __msg("loop header at 5, widening r0 to 0..4095 step 1")
+ __msg("invalid variable-offset read from stack R2")
+ __naked void mark_base_precise(void)
+@@ -1541,7 +1531,7 @@ __msg("scev at header 1:")
+ __msg_next("r6=(+ r6 1) / (linear r6 1)")
+ __msg_next("*fp-8=(any *fp-8 7) / (any *fp-8 7)")
+ __msg("loop header at 1, widening r6 to 0..2 step 1")
+-__msg("2: (7a) *(u64 *)(r10 -8) = 7          ; R10=fp0 fp-8=7 loop_stack=1")
++__msg("3: (79) r0 = *(u64 *)(r10 -8)         ; R0=scalar() R10=fp0 loop_stack=1")
+ __naked void widen_any_unallocated_slot(void)
+ {
+ 	asm volatile ("					\
+@@ -1819,11 +1809,10 @@ BOUND_IN_MAP_TEST(bound_in_data, data_bound, 16)
+ SEC("xdp")
  __success
  __log_level(2)
--/* early exit path */
--__msg("3: (0f) r1 += r7")
--__msg("mark_precise: frame0: regs=r7 stack= before 2: (bf) r1 = r10")
--__msg("mark_precise: frame0: regs=r7 stack= before 9: (20) r0 = *(u32 *)skb[0]")
--__msg("mark_precise: frame1: regs= stack= before 8: (bf) r7 = r1")
--__msg("mark_precise: frame1: regs= stack= before 7: (bf) r6 = r1")
--__msg("mark_precise: frame1: regs= stack= before 1: (85) call pc+5")
--__msg("mark_precise: frame0: regs=r7 stack= before 0: (b7) r7 = -8")
--/* fallthrough path */
--__msg("3: (0f) r1 += r7")
--__msg("mark_precise: frame0: regs=r7 stack= before 2: (bf) r1 = r10")
--__msg("mark_precise: frame0: regs=r7 stack= before 10: (95) exit")
--__msg("mark_precise: frame1: regs= stack= before 9: (20) r0 = *(u32 *)skb[0]")
--__msg("mark_precise: frame1: regs= stack= before 8: (bf) r7 = r1")
--__msg("mark_precise: frame1: regs= stack= before 7: (bf) r6 = r1")
--__msg("mark_precise: frame1: regs= stack= before 1: (85) call pc+5")
--__msg("mark_precise: frame0: regs=r7 stack= before 0: (b7) r7 = -8")
-+/* the early exit and the exit of the subprogram give the same state */
-+__msg("from 10 to 2: within")
-+__msg("3: (0f) r1 += r7                      ; R1=fp-8 R7=-8")
- __naked int ld_abs_backtrack_both_paths(void)
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __msg("loop header at 3, header_count is 8")
+ __msg("loop header at 3, widening r0 to 2..9 step 1")
+ __msg("3: R0=scalar(smin=umin=smin32=umin32=2,smax=umax=smax32=umax32=9,{{.*}})")
+-__msg("processed 6 insns")
++__msg("processed 5 insns")
+ __naked void post_cond_jlt_with_base(void)
+ {
+ 	asm volatile ("					\
+@@ -1910,11 +1899,10 @@ NO_ZEXT32_TEST(arsh_by_32, 0x7ffffffe, "r7 <<= 32; r7 s>>= 32;")
+ SEC("xdp")
+ __success
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __msg("loop header at 1, header_count is 11")
+ __msg("loop header at 1, widening r0 to 0..10 step 1")
+ __msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=10,{{.*}})")
+-__msg("processed 5 insns")
++__msg("processed 4 insns")
+ __naked void post_cond_jle(void)
+ {
+ 	asm volatile ("					\
+@@ -1928,11 +1916,10 @@ __naked void post_cond_jle(void)
+ SEC("xdp")
+ __success
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __msg("loop header at 1, header_count is 10")
+ __msg("loop header at 1, widening r0 to 0..9 step 1")
+ __msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=9,{{.*}})")
+-__msg("processed 6 insns")
++__msg("processed 5 insns")
+ __naked void post_cond_jge(void)
+ {
+ 	asm volatile ("					\
+@@ -1947,11 +1934,10 @@ __naked void post_cond_jge(void)
+ SEC("xdp")
+ __success
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __msg("loop header at 1, header_count is 11")
+ __msg("loop header at 1, widening r0 to 0..10 step 1")
+ __msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=10,{{.*}})")
+-__msg("processed 6 insns")
++__msg("processed 5 insns")
+ __naked void pre_cond_jge(void)
+ {
+ 	asm volatile ("					\
+@@ -1966,7 +1952,6 @@ __naked void pre_cond_jge(void)
+ SEC("xdp")
+ __success
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __msg_next("scev at header 1:")
+ __msg_next("  r0=(+ r0 1) / (linear r0 1)")
+ __msg_next(" scev at latch 2:")
+@@ -1975,10 +1960,9 @@ __msg("loop header at 1, widening r0")
+ __msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,{{.*}})")
+ __msg("1: (07) r0 += 1                       ; R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,{{.*}})")
+ __msg("2: (55) if r0 != 0x3 goto pc-2")
+-__msg("3: (95) exit")
+ __msg("loop header at 1, clamping r0")
+-__msg("from 2 to 1: safe")
+-__msg("processed 5 insns")
++__msg("3: (95) exit")
++__msg("processed 4 insns")
+ __naked void post_cond_jne(void)
+ {
+ 	asm volatile ("					\
+@@ -1992,16 +1976,15 @@ __naked void post_cond_jne(void)
+ SEC("xdp")
+ __success
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __msg_next("scev at header 1:")
+ __msg_next("  r0=(+ r0 -1) / (linear r0 -1)")
+ __msg_next(" scev at latch 2:")
+ __msg_next("  r0=(+ r0 -1) / (linear (+ r0 -1) -1)")
+ __msg("loop header at 1, header_count is 3 ")
+ __msg("loop header at 1, widening r0 to 1..3 step 1")
+-__msg("1: R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,var_off=(0x0; 0x3)) loop_stack=1")
++__msg("1: R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,var_off=(0x0; 0x3)) R10=fp0 loop_stack=1")
+ __msg("loop header at 1, clamping r0 to 1..3 step 1")
+-__msg("processed 5 insns")
++__msg("processed 4 insns")
+ __naked void post_cond_jne_neg_step(void)
+ {
+ 	asm volatile ("					\
+@@ -2025,7 +2008,7 @@ __msg("loop header at 2, widening r1 to 0..4 step 1")
+ __msg("loop header at 2, widening r3 to 0..4 step 1")
+ __msg("3: (55) if r3 != 0x5 goto pc+1 {{.*}}; R3=5")
+ __msg("loop header at 2, clamping r3 to 0..4 step 1")
+-__msg("from 6 to 2: safe")
++__msg("from 6 to 2: within")
+ __naked void clamp_dependent_overshoot(void)
+ {
+ 	asm volatile ("					\
+@@ -2051,7 +2034,7 @@ __msg("loop header at 2, widening r1 to 0..4 step 1")
+ __msg("loop header at 2, widening r3 to 0..4 step 1")
+ __msg("3: (56) if w3 != 0x5 goto pc+1 {{.*}}; R3=5")
+ __msg("loop header at 2, clamping r3 to 0..4 step 1")
+-__msg("from 6 to 2: safe")
++__msg("from 6 to 2: within")
+ __naked void clamp_dependent_overshoot32(void)
+ {
+ 	asm volatile ("					\
+@@ -2070,7 +2053,6 @@ __naked void clamp_dependent_overshoot32(void)
+ SEC("xdp")
+ __success
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __msg_next("scev at header 1:")
+ __msg_next("  r0=(+ r0 1) / (linear r0 1)")
+ __msg_next(" scev at latch 1:")
+@@ -2081,11 +2063,10 @@ __msg("1: (15) if r0 == 0x3 goto pc+2        ; R0=scalar(smin=smin32=0,smax=umax
+ __msg("2: (07) r0 += 1                       ; R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,{{.*}})")
+ __msg("3: (05) goto pc-3")
+ __msg("loop header at 1, clamping r0")
+-__msg("1: safe")
+ __msg("from 1 to 4: R0=3")
+ __msg("4: R0=3")
+ __msg("4: (95) exit")
+-__msg("processed 6 insns")
++__msg("processed 5 insns")
+ __naked void pre_cond_je1(void)
+ {
+ 	asm volatile ("					\
+@@ -2100,7 +2081,6 @@ __naked void pre_cond_je1(void)
+ SEC("xdp")
+ __success
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __msg_next("scev at header 1:")
+ __msg_next("  r0=(zext32 (+ r0 1)) / (zext32 (linear r0 1))")
+ __msg_next(" scev at latch 2:")
+@@ -2109,10 +2089,9 @@ __msg("loop header at 1, widening r0")
+ __msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,{{.*}})")
+ __msg("1: (04) w0 += 1                       ; R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,{{.*}})")
+ __msg("2: (56) if w0 != 0x3 goto pc-2")
+-__msg("3: (95) exit")
+ __msg("loop header at 1, clamping r0")
+-__msg("from 2 to 1: safe")
+-__msg("processed 5 insns")
++__msg("3: (95) exit")
++__msg("processed 4 insns")
+ __naked void post_cond_jne32(void)
+ {
+ 	asm volatile ("					\
+@@ -2386,7 +2365,6 @@ __naked void loop_around_301_exits(void)
+ SEC("xdp")
+ __success
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __msg_next("scev at header 11:")
+ __msg_next("  r0=(+ r0 1) / (linear r0 1)")
+ __msg_next("  r1=(+ r1 2) / (linear r1 2)")
+@@ -2396,18 +2374,15 @@ __msg_next("  r1=(+ r1 2) / (linear (+ r1 2) 2)")
+ __msg("loop header at 11, widening r0")
+ __msg("loop header at 11, widening r1")
+ __msg("11: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=7,var_off=(0x0; 0x7)) R1=scalar(smin=smin32=0,smax=umax=smax32=umax32=14,var_off=(0x0; 0xe),step=0+2)")
+-/* loop exit */
+ __msg("16: (a5) if r0 < 0x8 goto pc-6")
+-__msg("exiting loop 11")
+-__msg("17: (95) exit")
+ /* second iteration */
+ __msg("loop header at 11, clamping r0")
+ __msg("loop header at 11, clamping r1")
+ /* iteration convergence */
+-__msg("from 16 to 11: safe")
+ __not_msg("{{^}}11:")
+-/* map lookup error path */
+-__msg("from 7 to 17: safe")
++/* loop exit */
++__msg("exiting loop 11")
++__msg("17: (95) exit")
+ __naked void correlated_regs(void)
+ {
+ 	asm volatile ("					\
+@@ -2441,15 +2416,14 @@ __naked void correlated_regs(void)
+  *     k += 1
+  *     k <<= 1   // make SCEV construction not possible
+  *     k >>= 1
+- * map[k] = 1    // make k precise
++ * map[k] = 1    // k has to be known
+  */
+ SEC("xdp")
+ __success
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __msg("19: (72) *(u8 *)(r4 +0) = 1           ; R4=map_value(id={{.*}},map=map,ks=4,vs=1024,imm=16)")
+ __not_msg("19: ")
+-__msg("processed 106 insns")
++__msg("processed 105 insns")
+ __naked void nested_loops_precise_var1(void)
+ {
+ 	asm volatile ("					\
+@@ -2488,8 +2462,7 @@ __log_level(2)
+ __msg("loop header at 2, header_count is 100 ")
+ __msg("loop header at 4, header_count is [0..100] ")
+ __msg("loop header at 6, header_count is [0..100] ")
+-__msg("processed 20 insns")
+-__flag(BPF_F_TEST_STATE_FREQ)
++__msg("processed 14 insns")
+ __naked void nested_loop_with_two_exits(void)
+ {
+ 	asm volatile ("					\
+@@ -2550,14 +2523,14 @@ __msg("loop at 5")
+ __msg("loop at 6, nested in 5")
+ __msg("loop at 11, irreducible")
+ __msg("loop at 12, nested in 11")
+-/* entry via if r0 == 5 goto d_%= false branch */
++/* entry via if r0 == 5 goto d_%= true branch */
+ __msg("loop header at 12, header_count is 3 ")
+ __msg("loop header at 12, widening r9 to 0..2 step 1")
+-__msg("12: R8=1 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,var_off=(0x0; 0x3)) loop_stack=11,12")
+-/* entry via if r0 == 5 goto d_%= true branch */
++/* entry via if r0 == 5 goto d_%= false branch */
+ __msg("loop header at 12, header_count is 3 ")
+ __msg("loop header at 12, widening r9 to 0..2 step 1")
+-__msg("from 8 to 12: R8=0 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,var_off=(0x0; 0x3)) R10=fp0 loop_stack=11,12")
++__msg("12: R8=0 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,var_off=(0x0; 0x3)) R10=fp0 iter(11)=0 loop_stack=11,12")
++__msg("12: R8=1 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,var_off=(0x0; 0x3)) R10=fp0 iter(11)=0 loop_stack=11,12")
+ __naked void enter_nested_loop_from_side(void)
+ {
+ 	asm volatile ("					\
+@@ -3037,7 +3010,7 @@ __log_level(2)
+ __flag(BPF_F_TEST_STATE_FREQ)
+ __msg("loop header at 3, widening r6 to 0..9 step 1")
+ __msg("loop header at 3, clamping r6 to 0..9 step 1")
+-__msg("12: safe")
++__msg("from 12 to 6: within")
+ __naked void clamp_callee_state_pruning(void)
+ {
+ 	asm volatile ("					\
+@@ -3204,11 +3177,14 @@ RANGE_TEST(spill32_first_is_a_range, "", 0, 3, 1, 6, 6,
+ RANGE_TEST(spill32_first_is_a_range_pre, "", 0, 3, 1, 6, 6,
+ 	   SPILL32_LOOP(SPILL32_LOAD "if r1 >= r7 goto 2f;" SPILL32_INC "goto 1b;"),
+ 	   SPILL32_COUNTED(7, "0..6"))
+-/* Explore with 2 in the slot first, with 0 next. The second state is not equal to the first. */
++/* 2 and 0 in the slot are joined in front of the loop */
+ RANGE_TEST(spill32_first_is_precise, "", 0, 0, 1, 0, 1,
+ 	   "if r7 == 0 goto +1; r6 = 2;" SPILL32_LOOP(SPILL32_INC "if w1 != 5 goto 1b;"),
+-	   __flag(BPF_F_TEST_STATE_FREQ)
+-	   __msg("header_count is [0..3] ") __msg("header_count is [0..5] "))
++	   __msg("header_count is [0..5] ") __not_msg("header_count is [0..3] "))
++/* The slot holds 64 bits when the loop starts. Nothing reads the high half: it's dead. */
++RANGE_TEST(spill32_first_is_64bit, "", 0, 0, 1, 5, 5,
++	   "*(u64 *)(r10 - 8) = r6; 1:" LIMIT_ITERATIONS SPILL32_INC "if w1 != w7 goto 1b;",
++	   SPILL32_COUNTED(5, "0..4"))
+ /* The counter makes the address of a spill. Such a loop is not summarized, as with a register. */
+ PARTIAL_SPILL_TEST(spill32_is_a_stack_offset, u32, 4,
+ 	"can't widen *fp-8, expr is (spill32 (+ *fp-8 8)), requires exact stack-offset tracking",
+@@ -3224,11 +3200,7 @@ PARTIAL_SPILL_TEST(spill32_unknown_is_a_stack_offset, u32, 1000000,
+ /* A step above S16_MAX has no range, as with a register */
+ PARTIAL_SPILL_TEST(spill32_large_step, u32, 4, "can't widen *fp-8, expr is (spill32 ",
+ 	SPILL32_0, SPILL32_LOAD "w1 += 0x8000; *(u32 *)(r10 - 8) = r1;")
+-/* No formula: the slot holds 64 bits when the loop starts, */
+-RANGE_TEST(spill32_first_is_64bit, "", 0, 0, 1, 5, 5,
+-	   "*(u64 *)(r10 - 8) = r6; 1:" LIMIT_ITERATIONS SPILL32_INC "if w1 != w7 goto 1b;",
+-	   NO_COUNT)
+-/* the load extends the sign, */
++/* No formula: the load extends the sign, */
+ RANGE_TEST(spill32_sext_load, "", 0, 0, 1, 5, 5,
+ 	   SPILL32_LOOP(SPILL32_INC "r1 = *(s32 *)(r10 - 8); if r1 != r7 goto 1b;"), NO_COUNT)
+ /* the sum is made from a different slot. */
+@@ -4299,12 +4271,23 @@ exit_%=:						\
+  *        } while (r8 < 3);
+  *    }
+  *    return 0;
++ *
++ * The outer loop gets may_goto in front of the jump that leaves it, the inner loop doesn't.
++ * At run time it's may_goto that ends the prog.
+  */
+ SEC("xdp")
+-__failure
+-__log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+-__msg("The sequence of 8193 jumps is too complex.")
++__success __retval(0)
++__xlated("call unknown")
++__xlated("...")
++__xlated("if r0 == 0x2a goto pc+4")
++__xlated("r8 = 0")
++__xlated("r8 += 1")
++__xlated("if r8 < 0x3 goto pc-2")
++__xlated("goto pc-{{[0-9]+}}")
++__xlated("r0 = 0")
++__xlated("exit")
++__xlated("r0 = 0")
++__xlated("exit")
+ __naked void nested_terminating_prune(void)
+ {
+ 	asm volatile ("					\
+@@ -4679,7 +4662,7 @@ __naked void widen_pkt_pointer_negative_offset(void)
+ 
+ /* The access is in the second iteration only: the verifier gets to it after the clamp */
+ SEC("tc")
+-__failure __msg("invalid access to packet, off=56 size=2, R6(id=3,off=56,r=56)")
++__failure __msg("invalid access to packet, off=56 size=2, R6(id={{[0-9]+}},off=56,r=56)")
+ __naked void clamp_pkt_pointer_step_lowers_umax(void)
  {
  	asm volatile (
- 		"r7 = -8;"
- 		"call ld_abs_subprog;"
- 		"r1 = r10;"
--		"r1 += r7;" /* mark r7 as precise */
-+		"r1 += r7;"
- 		"*(u64 *)(r1 + 0) = 0;"
- 		"r0 = 0;"
- 		"exit;"
-diff --git a/tools/testing/selftests/bpf/progs/verifier_value_or_null.c b/tools/testing/selftests/bpf/progs/verifier_value_or_null.c
-index 8ff668a242eb..2a5bdac24925 100644
---- a/tools/testing/selftests/bpf/progs/verifier_value_or_null.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_value_or_null.c
-@@ -183,7 +183,7 @@ l1_%=:	exit;						\
- SEC("socket")
- __description("invalid map access from else condition")
- __failure __msg("R0 unbounded memory access")
--__failure_unpriv __msg_unpriv("R0 leaks addr")
-+__failure_unpriv __msg_unpriv("R0 unbounded memory access")
- __flag(BPF_F_ANY_ALIGNMENT)
- __naked void map_access_from_else_condition(void)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_insn_stats.c b/tools/testing/selftests/bpf/progs/verifier_subprog_insn_stats.c
+index 8f6082fdb5c8..e7636b86cc29 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_subprog_insn_stats.c
++++ b/tools/testing/selftests/bpf/progs/verifier_subprog_insn_stats.c
+@@ -127,13 +127,13 @@ static __u64 stats_async_schedule(struct bpf_map *map, __u32 *key,
+ SEC("?raw_tp")
+ __success __log_level(4)
+ /*
+- * self: 9 + 7 + 2 = 18
+- * totals: leaf 2, scheduler 7, main root 18
++ * self: 8 + 7 + 2 = 17
++ * totals: leaf 2, scheduler 7, main root 17
+  */
+-__msg("subprog 0 (stats_async_direct) main insns_self 9 insns_total 18 stack 0")
++__msg("subprog 0 (stats_async_direct) main insns_self 8 insns_total 17 stack 0")
+ __msg("subprog {{[0-9]+}} (stats_async_schedule) static insns_self 7 insns_total 7 stack 0")
+ __msg("subprog {{[0-9]+}} (stats_async_leaf) static insns_self 2 insns_total 2 stack 0")
+-__msg("processed 18 insns")
++__msg("processed 17 insns")
+ __naked int stats_async_direct(void)
  {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-index b3b701b44550..f9ad07704578 100644
---- a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-@@ -225,8 +225,7 @@ l2_%=:	r0 = 1;						\
+ 	asm volatile (
+@@ -194,14 +194,14 @@ static __u64 stats_async_nested_schedule(struct bpf_map *map, __u32 *key,
+ SEC("?raw_tp")
+ __success __log_level(4)
+ /*
+- * self: 9 + 7 + 7 + 2 = 25
+- * totals: leaf 2, outer 7, scheduler 7, main root 25
++ * self: 8 + 7 + 7 + 2 = 24
++ * totals: leaf 2, outer 7, scheduler 7, main root 24
+  */
+-__msg("subprog 0 (stats_async_nested) main insns_self 9 insns_total 25 stack 0")
++__msg("subprog 0 (stats_async_nested) main insns_self 8 insns_total 24 stack 0")
+ __msg("subprog {{[0-9]+}} (stats_async_nested_schedule) static insns_self 7 insns_total 7 stack 0")
+ __msg("subprog {{[0-9]+}} (stats_async_outer) static insns_self 7 insns_total 7 stack 0")
+ __msg("subprog {{[0-9]+}} (stats_async_nested_leaf) static insns_self 2 insns_total 2 stack 0")
+-__msg("processed 25 insns")
++__msg("processed 24 insns")
+ __naked int stats_async_nested(void)
+ {
+ 	asm volatile (
+diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall.c b/tools/testing/selftests/bpf/progs/verifier_tailcall.c
+index 42b90b692dc5..5ba41dca35ea 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_tailcall.c
++++ b/tools/testing/selftests/bpf/progs/verifier_tailcall.c
+@@ -148,6 +148,33 @@ __naked void tail_call_caller_stack_ok(void)
+ "	::: __clobber_all);
+ }
  
++static __noinline int tail_calls(struct __sk_buff *skb)
++{
++	bpf_tail_call_static(skb, &jmp_table, 0);
++	return skb->len;
++}
++
++static __noinline int calls_itself(struct __sk_buff *skb, int n)
++{
++	int ret = 0;
++
++	if (n)
++		ret = calls_itself(skb, n - 1);
++	return ret + tail_calls(skb);
++}
++
++/* The frames of a subprog that calls itself stay on the stack too: up to a half of it. */
++SEC("tc")
++__description("tail call from subprog below a recursive subprog")
++__arch_x86_64
++__arch_arm64
++__failure
++__msg("tail_calls are not allowed when call stack of previous frames is {{[0-9]+}} bytes")
++int tail_call_below_recursion(struct __sk_buff *skb)
++{
++	return calls_itself(skb, 2);
++}
++
+ SEC("tc")
+ __description("tail call from subprog with 256 bytes of caller stack")
+ __failure
+diff --git a/tools/testing/selftests/bpf/progs/verifier_uninit.c b/tools/testing/selftests/bpf/progs/verifier_uninit.c
+index 691018a46049..345223a4525b 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_uninit.c
++++ b/tools/testing/selftests/bpf/progs/verifier_uninit.c
+@@ -9,7 +9,7 @@
  SEC("socket")
- __description("map access: known scalar += value_ptr unknown vs unknown (lt)")
--__success __failure_unpriv
--__msg_unpriv("R1 tried to add from different maps, paths or scalars")
-+__success __success_unpriv
- __retval(1)
- __naked void ptr_unknown_vs_unknown_lt(void)
+ __description("read uninitialized register")
+ __failure __msg("R2 !read_ok")
+-__msg("R2 has never been initialized on this path")
++__msg("R2 is not readable here. It may never have been initialized")
+ __failure_unpriv
+ __naked void read_uninitialized_register(void)
  {
-@@ -270,8 +269,7 @@ l2_%=:	r0 = 1;						\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+index b9d96366e656..87aeef7545a0 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+@@ -394,8 +394,8 @@ __naked void fill_of_different_pointers_stx(void)
+ 	r2 = r10;					\
+ 	r2 += -16;					\
+ 	*(u64*)(r6 + 0) = r2;				\
+-l0_%=:	if r1 != 0 goto l1_%=;				\
+-	*(u64*)(r6 + 0) = r1;				\
++	goto l1_%=;					\
++l0_%=:	*(u64*)(r6 + 0) = r1;				\
+ l1_%=:	r1 = *(u64*)(r6 + 0);				\
+ 	*(u32*)(r1 + %[__sk_buff_mark]) = r3;		\
+ 	r0 = 0;						\
+@@ -420,8 +420,8 @@ __naked void fill_of_different_pointers_st(void)
+ 	r2 = r10;					\
+ 	r2 += -16;					\
+ 	*(u64*)(r6 + 0) = r2;				\
+-l0_%=:	if r1 != 0 goto l1_%=;				\
+-	*(u64*)(r6 + 0) = r1;				\
++	goto l1_%=;					\
++l0_%=:	*(u64*)(r6 + 0) = r1;				\
+ l1_%=:	r1 = *(u64*)(r6 + 0);				\
+ 	.8byte %[st_mem];				\
+ 	r0 = 0;						\
+@@ -435,7 +435,8 @@ l1_%=:	r1 = *(u64*)(r6 + 0);				\
  
- SEC("socket")
- __description("map access: known scalar += value_ptr unknown vs unknown (gt)")
--__success __failure_unpriv
--__msg_unpriv("R1 tried to add from different maps, paths or scalars")
-+__success __success_unpriv
- __retval(1)
- __naked void ptr_unknown_vs_unknown_gt(void)
+ SEC("tc")
+ __description("unpriv: spill/fill of different pointers stx - ctx and sock")
+-__failure __msg("type=ctx expected=sock")
++/* bpf_sk_release(skb) is an error too: "type=ctx expected=sock". This one is found first. */
++__failure __msg("R1 invalid mem access 'sock_or_null'")
+ __naked void pointers_stx_ctx_and_sock(void)
  {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_var_off.c b/tools/testing/selftests/bpf/progs/verifier_var_off.c
-index 399884911ea5..d92215c5b923 100644
---- a/tools/testing/selftests/bpf/progs/verifier_var_off.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_var_off.c
-@@ -63,7 +63,6 @@ SEC("cgroup/skb")
- __description("variable-offset stack read preserves spilled zero")
- __success
- __log_level(2)
--__msg("mark_precise: frame0: regs= stack=-8")
- __msg("R3=0")
- __retval(0)
- __naked void stack_read_var_off_preserves_spilled_zero(void)
-@@ -89,7 +88,6 @@ SEC("cgroup/skb")
- __description("variable-offset stack read preserves spilled zero across slots")
- __success
- __log_level(2)
--__msg("mark_precise: frame0: regs= stack=-8,-16")
- __msg("R3=0")
- __retval(0)
- __naked void stack_read_var_off_preserves_spilled_zero_across_slots(void)
-@@ -116,7 +114,6 @@ SEC("cgroup/skb")
- __description("variable-offset stack read preserves partial spilled zero")
- __success
- __log_level(2)
--__msg("mark_precise: frame0: regs= stack=-8")
- __msg("R3=0")
- __retval(0)
- __naked void stack_read_var_off_preserves_partial_spilled_zero(void)
-diff --git a/tools/testing/selftests/bpf/verifier/precise.c b/tools/testing/selftests/bpf/verifier/precise.c
-index a9242103dc47..de9d35ed8a4b 100644
---- a/tools/testing/selftests/bpf/verifier/precise.c
-+++ b/tools/testing/selftests/bpf/verifier/precise.c
-@@ -36,26 +36,7 @@
+ 	asm volatile ("					\
+@@ -449,10 +450,10 @@ __naked void pointers_stx_ctx_and_sock(void)
+ 	r6 += -8;					\
+ 	r1 = r8;					\
+ 	/* if (skb == NULL) *target = sock; */		\
+-	if r1 == 0 goto l0_%=;				\
++	if r1 != 0 goto l0_%=;				\
+ 	*(u64*)(r6 + 0) = r2;				\
++	goto l1_%=;					\
+ l0_%=:	/* else *target = skb; */			\
+-	if r1 != 0 goto l1_%=;				\
+ 	*(u64*)(r6 + 0) = r1;				\
+ l1_%=:	/* struct __sk_buff *skb = *target; */		\
+ 	r1 = *(u64*)(r6 + 0);				\
+@@ -490,10 +491,10 @@ __naked void different_pointers_stx_leak_sock(void)
+ 	r6 += -8;					\
+ 	r1 = r8;					\
+ 	/* if (skb == NULL) *target = sock; */		\
+-	if r1 == 0 goto l0_%=;				\
++	if r1 != 0 goto l0_%=;				\
+ 	*(u64*)(r6 + 0) = r2;				\
++	goto l1_%=;					\
+ l0_%=:	/* else *target = skb; */			\
+-	if r1 != 0 goto l1_%=;				\
+ 	*(u64*)(r6 + 0) = r1;				\
+ l1_%=:	/* struct __sk_buff *skb = *target; */		\
+ 	r1 = *(u64*)(r6 + 0);				\
+@@ -526,8 +527,8 @@ __naked void stx_sock_and_ctx_read(void)
+ 	/* if (skb) *target = skb */			\
+ 	if r1 == 0 goto l0_%=;				\
+ 	*(u64*)(r6 + 0) = r1;				\
++	goto l1_%=;					\
+ l0_%=:	/* else *target = sock */			\
+-	if r1 != 0 goto l1_%=;				\
+ 	*(u64*)(r6 + 0) = r2;				\
+ l1_%=:	/* struct bpf_sock *sk = *target; */		\
+ 	r1 = *(u64*)(r6 + 0);				\
+@@ -565,8 +566,8 @@ __naked void stx_sock_and_ctx_write(void)
+ 	/* if (skb) *target = skb */			\
+ 	if r1 == 0 goto l0_%=;				\
+ 	*(u64*)(r6 + 0) = r1;				\
++	goto l1_%=;					\
+ l0_%=:	/* else *target = sock */			\
+-	if r1 != 0 goto l1_%=;				\
+ 	*(u64*)(r6 + 0) = r2;				\
+ l1_%=:	/* struct bpf_sock *sk = *target; */		\
+ 	r1 = *(u64*)(r6 + 0);				\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv_perf.c b/tools/testing/selftests/bpf/progs/verifier_unpriv_perf.c
+index 4d77407a0a79..5363093a4a5c 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_unpriv_perf.c
++++ b/tools/testing/selftests/bpf/progs/verifier_unpriv_perf.c
+@@ -17,8 +17,8 @@ __naked void fill_of_different_pointers_ldx(void)
+ 	r2 = r10;					\
+ 	r2 += %[__imm_0];				\
+ 	*(u64*)(r6 + 0) = r2;				\
+-l0_%=:	if r1 != 0 goto l1_%=;				\
+-	*(u64*)(r6 + 0) = r1;				\
++	goto l1_%=;					\
++l0_%=:	*(u64*)(r6 + 0) = r1;				\
+ l1_%=:	r1 = *(u64*)(r6 + 0);				\
+ 	r1 = *(u64*)(r1 + %[sample_period]);		\
+ 	r0 = 0;						\
+diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
+index f9d71e01ddf4..bb2b9e8c71df 100644
+--- a/tools/testing/selftests/bpf/verifier/calls.c
++++ b/tools/testing/selftests/bpf/verifier/calls.c
+@@ -455,8 +455,47 @@
+ 	BPF_EXIT_INSN(),
  	},
  	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
- 	.fixup_map_array_48b = { 1 },
--	.result = VERBOSE_ACCEPT,
--	.errstr =
--	"mark_precise: frame0: last_idx 26 first_idx 20\
--	mark_precise: frame0: regs=r2 stack= before 25\
--	mark_precise: frame0: regs=r2 stack= before 24\
--	mark_precise: frame0: regs=r2 stack= before 23\
--	mark_precise: frame0: regs=r2 stack= before 22\
--	mark_precise: frame0: regs=r2 stack= before 20\
--	mark_precise: frame0: parent state regs=r2 stack=:\
--	mark_precise: frame0: last_idx 19 first_idx 10\
--	mark_precise: frame0: regs=r2 stack= before 19\
--	mark_precise: frame0: regs=r9 stack= before 18\
--	mark_precise: frame0: regs=r8,r9 stack= before 17\
--	mark_precise: frame0: regs=r0,r9 stack= before 15\
--	mark_precise: frame0: regs=r0,r9 stack= before 14\
--	mark_precise: frame0: regs=r9 stack= before 13\
--	mark_precise: frame0: regs=r9 stack= before 12\
--	mark_precise: frame0: regs=r9 stack= before 11\
--	mark_precise: frame0: regs=r9 stack= before 10\
--	mark_precise: frame0: parent state regs= stack=:",
+-	.errstr = "recursive call",
++	.errstr = "calls itself",
++	.result = REJECT,
++},
++{
++	"calls: a timer callback calls the main prog",
++	.insns = {
++	/* bpf_timer_set_callback(bpf_map_lookup_elem(&timer_map, &(int){0}), cb); */
++	BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 4),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, 4),
++	BPF_RAW_INSN(0, 0, 0, 0, 0),
++	BPF_EMIT_CALL(BPF_FUNC_timer_set_callback),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	/* cb */
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, -14),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.fixup_map_timer = { 3 },
++	.errstr = "recursive call of the main program",
+ 	.result = REJECT,
++	/* libbpf makes the main prog global, and then the arguments of the call do not match */
++	.func_info = { { 0, 4 /* main_prog */ }, { 13, 5 /* cb */ } },
++	.func_info_cnt = 2,
++	.btf_strings = "\0int\0ctx\0main_prog\0cb",
++	.btf_types = {
++	/* 1: int            */ BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
++	/* 2: void*          */ BTF_PTR_ENC(0),
++	/* 3: int __(void *) */ BTF_FUNC_PROTO_ENC(1, 1),
++				BTF_FUNC_PROTO_ARG_ENC(5, 2),
++	/* 4: main_prog      */ BTF_FUNC_ENC(9, 3),
++	/* 5: cb             */ BTF_FUNC_ENC(19, 3),
++	BTF_END_RAW
++	}
+ },
+ {
+ 	"calls: conditional call",
+@@ -559,8 +598,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+-	.errstr = "infinite loop detected",
+-	.result = REJECT,
 +	.result = ACCEPT,
  },
  {
- 	"precise: test 2",
-@@ -95,24 +76,8 @@
+ 	"calls: using r0 returned by callee",
+@@ -812,7 +850,7 @@
+ 	BPF_EXIT_INSN(),
  	},
  	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
- 	.fixup_map_array_48b = { 1 },
--	.result = VERBOSE_ACCEPT,
-+	.result = ACCEPT,
- 	.flags = BPF_F_TEST_STATE_FREQ,
--	.errstr =
--	"26: (85) call bpf_probe_read_kernel#113\
--	mark_precise: frame0: last_idx 26 first_idx 22\
--	mark_precise: frame0: regs=r2 stack= before 25\
--	mark_precise: frame0: regs=r2 stack= before 24\
--	mark_precise: frame0: regs=r2 stack= before 23\
--	mark_precise: frame0: regs=r2 stack= before 22\
--	mark_precise: frame0: parent state regs=r2 stack=:\
--	mark_precise: frame0: last_idx 20 first_idx 20\
--	mark_precise: frame0: regs=r2 stack= before 20\
--	mark_precise: frame0: parent state regs=r2 stack=:\
--	mark_precise: frame0: last_idx 19 first_idx 17\
--	mark_precise: frame0: regs=r2 stack= before 19\
--	mark_precise: frame0: regs=r9 stack= before 18\
--	mark_precise: frame0: regs=r8,r9 stack= before 17\
--	mark_precise: frame0: parent state regs= stack=:",
- },
- {
- 	"precise: cross frame pruning",
-@@ -153,17 +118,7 @@
- 	},
- 	.prog_type = BPF_PROG_TYPE_XDP,
- 	.flags = BPF_F_TEST_STATE_FREQ,
--	.errstr = "mark_precise: frame0: last_idx 5 first_idx 5\
--	mark_precise: frame0: parent state regs=r4 stack=:\
--	mark_precise: frame0: last_idx 4 first_idx 2\
--	mark_precise: frame0: regs=r4 stack= before 4\
--	mark_precise: frame0: regs=r4 stack= before 3\
--	mark_precise: frame0: last_idx 5 first_idx 5\
--	mark_precise: frame0: parent state regs=r0 stack=:\
--	mark_precise: frame0: last_idx 4 first_idx 2\
--	mark_precise: frame0: regs=r0 stack= before 4\
--	5: R0=-1 R4=0",
--	.result = VERBOSE_ACCEPT,
-+	.result = ACCEPT,
- 	.retval = -1,
- },
- {
-@@ -182,23 +137,7 @@
- 	},
- 	.prog_type = BPF_PROG_TYPE_XDP,
- 	.flags = BPF_F_TEST_STATE_FREQ,
--	.errstr = "mark_precise: frame0: last_idx 7 first_idx 7\
--	mark_precise: frame0: parent state regs=r4 stack=:\
--	mark_precise: frame0: last_idx 6 first_idx 4\
--	mark_precise: frame0: regs=r4 stack= before 6: (b7) r0 = -1\
--	mark_precise: frame0: regs=r4 stack= before 5: (79) r4 = *(u64 *)(r10 -8)\
--	mark_precise: frame0: regs= stack=-8 before 4: (7b) *(u64 *)(r3 -8) = r0\
--	mark_precise: frame0: parent state regs=r0 stack=:\
--	mark_precise: frame0: last_idx 3 first_idx 3\
--	mark_precise: frame0: regs=r0 stack= before 3: (55) if r3 != 0x7b goto pc+0\
--	mark_precise: frame0: regs=r0 stack= before 2: (bf) r3 = r10\
--	mark_precise: frame0: regs=r0 stack= before 1: (57) r0 &= 255\
--	mark_precise: frame0: parent state regs=r0 stack=:\
--	mark_precise: frame0: last_idx 0 first_idx 0\
--	mark_precise: frame0: regs=r0 stack= before 0: (85) call bpf_get_prandom_u32#7\
--	mark_precise: frame0: last_idx 7 first_idx 7\
--	mark_precise: frame0: parent state regs= stack=:",
--	.result = VERBOSE_ACCEPT,
-+	.result = ACCEPT,
- 	.retval = -1,
+-	.errstr = "recursive call",
++	.errstr = "calls itself",
+ 	.result = REJECT,
  },
  {
 -- 
