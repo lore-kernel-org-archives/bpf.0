@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793939091;
-	b=JdVtyFRs0sTn4OgXDVld8mTr/C9c4BZbtIbMVRM+qjJcw+5O++6edWdLoEv6ITkV4BsU
-	 6iwg8ocm7fWIka27NhiOFxLLYAv1sh+8qffCjREmdZuaJ4RkyGSzBwGa1/MCJiPgqkmSU
-	 /KiT43r7fOElunNkvwVUJ46OiVJjZFLToN9W3EgMiLwJtW3BAOlpOSh4Aurh7c2OaTb7z
-	 OD9EyV7E4T6KUsMxRrQYQVjF+J/V4SoC1PbCZZwwWdSaaLESeAY9ru5mF2q5gkqKmRd/5
-	 tx3v+ziA1jDvVNvbnPYA6syjsqUBNZadNlDnw6OylLhN/3nuzg/E83+p5HEzhcmBbIg==
+	t=1793939093;
+	b=Ix3GBYb7ZCYqmrzmxQW8FA1nMPtVoh+5QQKFx/dmaQC97gOfN46fH0Qdy/pM3dz/FlBA
+	 lx3eZLcaaj6VqRMgLdj2ANM0263kLfR9a7xHXoV3Ou2EUh0QnlAGhoa1luFUJGCWcjfRU
+	 Oia9U4KHUOGQ53a64T/b4NZbFoEBYkCJpJxZFQ9WeATHQ7Wfzee6qD3sbydiCnAOdlDfu
+	 7Ey8NBPRjBQip9SCKdO3SbBcSJz2Nc2OzR3ZyNcSdDdCc8jrHau6nFnFEVmSlWdGLqDqw
+	 iGwvUJ4hgdxox3CSJ3VxTc5JNn+QUBj0365TtRVCZn9c9pwbtc/OCMZtW47laTKIOfQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793939091;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793939093;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=YFdBu6J9UXyqxeHFHX6P0OKPs4Y1BHcyeawN4JCMGrU=;
-	b=j/Z2BucUQjp+jZwn5ACRpyHsjFJXd1URCdQfoenVPRL14I8A2knH3JR6kyEQXES36EQX
-	 Tcu/K/SZ/P1rsSwSrxgKp5uqNKZvwb/qVcFjLHagQgGfAPQCVi4FWTbHAi6W8JazrS4OH
-	 /tLjcTGpKDqoDJNjC3zDNohofcfCSlvUSjZ65OXwY9HpuKLBpZ9WX4NsWMGBWstQZArf2
-	 m3UgUjbrZPeuAue+LPUNhaCKuZXEAwl1OpYgM/5L2NPcFgDa4UHRJzreAbs7JBPLBzqJF
-	 1D5R2r/Ixp2BtgExY9gZhc/jIbEJx9ccWog3pRMoGrZR3YXLfw5Em3MAcHsIjJ9BuHA==
+	bh=4ss322bpLq7NrDxU6M4ocdh8aO0fXOygWog6mbB2APo=;
+	b=iLT2PVBAqIIDBaqmIV/pOtPjnxbcJBbhxhxdzAQR3w0vM4Fam1Zj1ylmbkIDnD4JhQmU
+	 Xqpt7a5XFGLlEd0A6xKwUFrXChZdmlOwfA7IdfROr5uo+85pH1Tuk4353w6vhja7O4t3S
+	 J7sHicIuRMSvfORgCIbW2p0IntHffgzO/pFhhSSu1LRJ/VMKDIUPikNfy52/eSEObJsy6
+	 CkPWjd9LX4/+dZLWEw/+aRLJdphm32HA5Ff7EzHfZ+Q/HrM/NYLlx90uNw+eu8MkpUFbV
+	 AViTuQ0AcysZn60xyAp4krjc6ISzP/kIR1lTaMn8upamkZV3XiTcAwCM1aU6pMVvPiw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hFCM4ZWc;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gji+z5zF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76EF606A31B
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:24:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90946606A31B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:24:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hFCM4ZWc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F44B1F0089F;
-	Fri,  6 Nov 2026 04:24:50 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gji+z5zF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E06801F0089F;
+	Fri,  6 Nov 2026 04:24:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793939090;
-	bh=YFdBu6J9UXyqxeHFHX6P0OKPs4Y1BHcyeawN4JCMGrU=;
+	s=k20260515; t=1793939093;
+	bh=4ss322bpLq7NrDxU6M4ocdh8aO0fXOygWog6mbB2APo=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=hFCM4ZWcohZrW5FcDZtNaLJT3fIpHxbe1H1SMf+OJvsHbCGDcHEG/kCMeXtsPGHah
-	 XMKopxzazRDhDNoR4USLdu9reAQJGBY2ZlMgRNtMMGuk8+Rx5Rjn1tONvlwMKx5rd9
-	 EBEuMz59cSkeKNZolUvtUNUDuqMH36iEl94d+6YsBOUEiphl22g6NYRPD5P08WuiYE
-	 qGCJ+8Zn5YRuraI82u2HRJlduZIrJdxTOuZsXawPi8mhMZPoNNA7Lo2lOEeI/FJ8+f
-	 5gbl2iA/d5ucXa0Ask5+wiJI9cNdZCG14jWChoub9y9eJhBOXKX+o7FjIULqqApSWb
-	 dthmQ4g7Ejrnw==
-Content-Type: multipart/mixed; boundary="===============1109924140750832451=="
+	b=gji+z5zF5XTibgMa/18U2d2mb/u6xfDdnqt/cf230xe34vG+sL2J/zpXnJOpO8U8b
+	 esEeaynBmPnnPul9/yxb/fDQmX98n5w1Y4IyEi2OLKm0ZnY70uoDe+rwDaFOfuJa8i
+	 ICRDwQ8/e29VcIghDbDimJ8S6RrMPyQ6nVzH4EOzrlyYJgkMuTJTr+e2VyWMlmT6uY
+	 F5LBssuSKPS3oBr81h35h+dfu3yXChFeypf7aOkspL6VRP5+3zIvDXuWzm5ecS1v3F
+	 VjB+vSC41154BH7coVHvuGHvkiMPR8+Bf/Ajgl2j/dJsgHkYhI6StL/XTXPGpveQoi
+	 EPXO7t8tgbUtA==
+Content-Type: multipart/mixed; boundary="===============5226351768685160338=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,112 +49,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <f8bb7186e19cc1828d4873631823e81deb432abae859d867136959ce3fa9330b@mail.kernel.org>
-In-Reply-To: <20261106035111.3315285-15-alexei.starovoitov@gmail.com>
-References: <20261106035111.3315285-15-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v3 14/45] bpf: Merge the state that arrives into the set at an insn
+Message-Id: <60b55c76f3bea539ab7abb49ee63fa81ae7355d3e20662bc57d86cff380cb9de@mail.kernel.org>
+In-Reply-To: <20261106035111.3315285-34-alexei.starovoitov@gmail.com>
+References: <20261106035111.3315285-34-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v3 33/45] bpf: Keep the frames of the caller for ctx of struct_ops with a reference
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 04:24:50 +0000 (UTC)
+Date: Fri,  6 Nov 2026 04:24:52 +0000 (UTC)
 
---===============1109924140750832451==
+--===============5226351768685160338==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Merge the state that arrives into the set at an insn
+> bpf: Keep the frames of the caller for ctx of struct_ops with a reference
 
 TL;DR:
-- flow_merge() may widen away a register set only in the loop body, so the
-  verifier could reject valid programs; the fix is later in the series
-- commit message omits that states are also dropped by trip sweeping
+- Missing !sub->recursive check may make the verifier reject a recursive
+  subprog taking struct_ops ctx while a ref is held (frame-depth E2BIG)
+- Condition is broader than the __ref case: it fires for any held ref,
+  including sched_ext
 
-> diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-> --- a/kernel/bpf/flow.c
-> +++ b/kernel/bpf/flow.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> +		if (!widen && flow_cmp_pkt_range(s, t))
-> +			continue;
-> +		if (!widen && flow_has_room(env, *nr_states) &&
-> +		    (flow_unset_differs(&t->st, &s->st) ||
-> +		     flow_join_makes_up(flow, &t->st, &s->st)))
-> +			continue;
+> @@ -11586,9 +11586,13 @@ static u32 inherited_id(const struct bpf_verifier_state *state, u32 id)
+>  /* What func_is_on_its_own() asks of an argument, be it in a register or on the stack */
+> -static bool arg_needs_caller(const struct bpf_verifier_state *state,
+> +static bool arg_needs_caller(struct bpf_verifier_env *env, const struct bpf_verifier_state *state,
+>  			     const struct bpf_subprog_info *sub, const struct bpf_reg_state *reg)
+>  {
+> +	/* the id of a __ref argument is kept in ctx_arg_info[], see __check_ctx_access() */
+> +	if (reg->type == PTR_TO_CTX && state->acquired_refs &&
+> +	    env->prog->type == BPF_PROG_TYPE_STRUCT_OPS)
+> +		return true;
 
-When a state comes back to a loop head (cycle == FLOW_CYCLE), widen_all is
-true, so this check is skipped and flow_unset_differs() never runs.  Can a
-state where a live register is NOT_INIT then be widened with one where the
-register is set?
+Should this case also be limited by !sub->recursive, like the neighbouring
+cases that keep the caller?
 
-bpf_states_join() -> join_reg() makes the result NOT_INIT whenever either
-side is NOT_INIT:
+	if ((reg->type == PTR_TO_PACKET_END ||
+	     (reg->type == PTR_TO_PACKET && sub->loads_pkt_end)) && !sub->recursive)
+		return true;
+	/* or whether there is something to point to */
+	return type_may_be_null(reg->type) && !sub->recursive;
 
-  if (ra->type == NOT_INIT || rb->type == NOT_INIT) {
-          if (pass == 2 && ra->type != NOT_INIT)
-                  *dst = *rb;
-          return true;
-  }
+When func_is_on_its_own() returns false, check_static_func_call() calls
+setup_func_entry(), which pushes a new frame.  A recursive subprog that
+gets ctx and calls itself with ctx again still sees state->acquired_refs
+as non-zero, so every level of the recursion keeps the frames again, and
+states with a different curframe are never compared or joined.
 
-So the joined state at the loop head loses a register that only the loop
-body sets, and a later read of it fails.  For example:
+If the depth is not bounded by a constant, the descent only stops at the
+check in setup_func_entry():
 
-  bpf_for(i, 0, 64) {
-          if (v[i] != want)
-                  continue;
-          last = bpf_get_prandom_u32();
-          found = true;
-  }
-  if (found)
-          bpf_printk("%llu", last);
+	if (state->curframe + 1 >= MAX_CALL_FRAMES) {
+		verbose(env, "the call stack of %d frames is too deep\n", ...);
+		return -E2BIG;
 
-The state that enters has found = 0 and no 'last'.  The state that comes
-around has found = 1 and 'last'.  They are widened into found = [0,1] with
-'last' NOT_INIT, and the load fails with "R7 !read_ok".  The old verifier
-accepted this program.  Outside a loop, flow_unset_differs() keeps such
-states apart while flow_has_room() is true, but at a loop head it is not
-consulted.
+For example, a test_refcounted struct_ops prog holds task__ref from the
+start, and calls:
 
-The path is bpf_flow_deliver() -> flow_add() -> flow_merge(env,
-&flow->states[insn_idx], &s, backedge ? FLOW_CYCLE : cycle).  flow.c is not
-built at this commit, and the path becomes reachable in 58e4d8b43844 ("bpf:
-Verify programs as a fixpoint over the control flow graph").
+	static __noinline int depth(unsigned long long *ctx, int n)
+	{
+		return n > 0 ? depth(ctx, n - 1) : ctx[0] & 1;
+	}
 
-This is fixed later in the series by 37b41439b09a ("bpf: Don't widen away a
-register that only the loop sets"), which changes the condition to:
+with an unknown n.  depth() only reads the plain int at ctx[0].  Before
+this patch it was verified once on its own and the prog loaded.  Can this
+now be rejected?
 
-  if (flow_has_room(env, *nr_states) &&
-      (flow_unset_differs(&t->st, &s->st) ||
-       (!widen && flow_join_makes_up(flow, &t->st, &s->st))))
-          continue;
+The condition is also wider than the __ref case the commit message
+describes.  It fires for any BPF_PROG_TYPE_STRUCT_OPS prog that holds any
+entry in refs[], including bpf_spin_lock and IRQ-flag entries, since
+acquired_refs counts all REF_TYPE_* kinds.  That includes sched_ext
+programs, which have no __ref arguments, so ctx_arg_info[] never holds a
+ref_id there.
 
-Should that change be folded into this commit, so that no commit in the
-series rejects such programs?
-
-Regarding the commit message:
-
->     A state is dropped only if a state of the set covers it. Thus the verified
->     states cover each execution of the prog.
-
-The commit message says a state is dropped only if a state of the set covers
-it.  flow_merge() also drops states through flow_sweep_trips() ->
-flow_sweep_trip(), and no state covers those:
-
-  static void flow_sweep_trip(struct bpf_verifier_env *env, struct flow_state *t,
-                              const struct flow_state *s)
-  {
-          if (t->pending || !flow_earlier_trip(&t->st, &s->st))
-                  return;
-          flow_unlink(env, t);
-          flow_free_state(env, t);
-  }
-
-This removes states of earlier iterations of a loop whose iterations are kept
-apart.  The coverage argument still holds, because only states that are no
-longer pending are swept, so their successors were already explored.  But the
-changelog does not mention this second way to drop a state, or the
-not-pending condition that makes it safe.  Could the changelog mention it?
+Would it be better to add && !sub->recursive, and to check whether a
+ctx_arg_info[i].ref_id is still among state->refs rather than testing
+acquired_refs?
 
 
 ---
@@ -162,4 +139,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42160076968
---===============1109924140750832451==--
+--===============5226351768685160338==--
