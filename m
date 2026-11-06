@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793939928;
-	b=kkrSAbE7yRlYHX9WevL9tgDVe6zaIfV2lyu2nwA55839BIWyJdXb7+rKMuC6smVb9oAD
-	 WRAOv1G3+EWRk9BL2+M/wGKWPT5fR8lkK8zfGxNK2xip0qkbN8SjV4SM/Wny4T6M44Ia+
-	 3RwFQRfE2mMdXYyGQqJu4h6PkbaIDNhiyyGttYIEZYRBS8XlUUdDtPMsF6eTiwJO25v1Q
-	 MH5xkfd3xb/96HpumnGMy7paeCWWTpd7ANdZ5jh8AzxW2yiUBATh40kIcBBBs5k51qlPY
-	 G+ck/xCXnIIM+sRRu1c2tXXx7sdqqKtbU1+hA9ENjEy3q8OddPGhysGpfOVZ4ftGuWQ==
+	t=1793939930;
+	b=lEh/9XTpkEvRm7XQaq07hJF1wH0ngqZm+ybd+mTEQnnAECdVbzVO5uHwSCWbC5wfOUsg
+	 OvKD7aX4oH52+/IBDPDYel6aUn5d0sPCXwaWgCt5DhGEj3LgaflX3EOkNKSO04/bpQZFD
+	 Nxp9sPybrB5AnU0i0OPGJpM6CnSqSkixmh+L3spZ0mJGjuludXizawLkkXBmksGDbgeIG
+	 vZkDvR0odkF2osf6vbpFnMs7Cwmfx51ChuODRwhwtWorJRZYW/T+s4oDDJN7zH9wQ1AKM
+	 qE/deSDiS+/J1VJWNXcncq1CPOKvPtJUgCPjqi7WJK/LUV06geIRrD4ZKDGIPNlI6Tw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793939928;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793939930;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=fYrMb2a/FJaZxskYlQ7/sCAnuCRsT3RUzW80Qs42jFk=;
-	b=pBEz2vk+2bQvkl/FlcRnVb6JV9MBXtYT8/erlBIedZ6qDPxotZYuFIoY60V6DR0/RJvE
-	 O6f+je1YYvfKx8yBptOlssKOM/5k01ShCgKG6oUugPM9xx6lIK7mR338JtnGaePjdlrXN
-	 BRngDbm7+n+toPRJPxtaupfrLBxV8/xKae/4aeEddd+M68kQRVPvbYQgD1ZoJxXyx5TV+
-	 +MRzVLKHOByD/5qFJtEwGBlDtCLN2DKcUQqnCWGE//A+s8A0PEnsI2VN4600o9HygoVK1
-	 +keRk9qKww5bq8OGGhMECdQIM5c1XxCYW4eQz+Bpq2I4peMFwRSbky3T8nJF82+OJqQ==
+	bh=OQPZSE2R8dN+WeRk9uaK+EZ9+WoLAl6pj2nylwsh/Ps=;
+	b=FOogbDlLpjxp5bBNMRyrEn5HoQryt5w3Vd5z8p+DtwyoLWFiKrQk9zIizoSJBcsEW2Th
+	 2oAN46QXLssUIiKtoOL+nWYLaImie5IBiBNzRpc+9pHigNKe2poJ/qGiV+s5ZjT/QqmHj
+	 dmOZEZI6amtRNvlzNIOVoFKqiBWcLB7yg6ZmUs523J4aVcvV62FVoQ+W7mlnRiSM2xEZx
+	 Ok9BZ9vmPzkX2EaGIOPCXOifXiVaiK3nNFa/DSkIAcUnc0I11X+lyH2dPREK+b+MjcyeH
+	 kzgeuzXMzzkERGQc8eWEJkka1Lr50GFf6goauV5ZI2yW/zRQ+oqCQsgAIO9AKDsmZAg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eGiea4cv;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WFyl8yv4;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601BA606A31B
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA81606A31B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eGiea4cv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EAF31F0089F;
-	Fri,  6 Nov 2026 04:38:47 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WFyl8yv4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C8011F0089F;
+	Fri,  6 Nov 2026 04:38:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793939927;
-	bh=fYrMb2a/FJaZxskYlQ7/sCAnuCRsT3RUzW80Qs42jFk=;
+	s=k20260515; t=1793939929;
+	bh=OQPZSE2R8dN+WeRk9uaK+EZ9+WoLAl6pj2nylwsh/Ps=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=eGiea4cvISTqKUfWVkb5Eo7S3Op0lbzyuchDHVItLh/0BRusbO0TfmLLQF4nMmliq
-	 r4168vN1M0Vgc9B4oK6H7tvX+WYr7UMgKRiFVFGm/OFRhZhkMhd5j67HTrPg9dXErM
-	 3KNKPFaKyLTs7Bod5TSQbgbdXQS4ybN0InVi8wNTnoB1PszfCLhz8kPhjdzRkj9ixN
-	 hnsxV1tpAAyv6X9oqeJaM2QSToau4gM2PwuoVfAPTk3yJgn4xS7fsoBzRgHTmndvq1
-	 VrJsLD3/VjdDLjcajlnt+UhmuyeYc676XKgBaz6nn6TeK/4zMwwSNYQCFq0VK6qy5W
-	 5IRy/eaE9OinQ==
-Content-Type: multipart/mixed; boundary="===============2786048737656449612=="
+	b=WFyl8yv40GskbPfOCkJq/NR5XN4BWAMmi0uXeu3iw0hT3S7WscWC5FdOBhm3F4MAy
+	 Nowxev4WTTfAJ5vWTTkmLu+ZWrAGg/JUOqQyxPerK6GJebPwxkjct7Ka+wbsIDQ/YV
+	 V71w9g70omxLusIXSl/L8r2Z64Pyy0GxS9DReQb7JxiNWAaWSdeY2ZxodCngbDFPun
+	 2qibRn7YT/M3XOQo5juILOLpg+bAYNp8ncdMva6PlLeM1J8Yq+nye0UhURcg5cCD3r
+	 q3eGX9zi394JP4ZynTTK1bqyT6oDvQQg2foEbM9XTov1QSK3724TrJOcWel34Nr+YI
+	 Iv5VmngTj/6fw==
+Content-Type: multipart/mixed; boundary="===============8639904350596191187=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,63 +49,108 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <296829c85c2d9abb43246b67b546a749b5ab817515ce21ecdaa15d1a5ef9a44a@mail.kernel.org>
-In-Reply-To: <20261106035111.3315285-2-alexei.starovoitov@gmail.com>
-References: <20261106035111.3315285-2-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v3 01/45] bpf: Add may_goto to the loops that the verifier marks
+Message-Id: <c056ec4fb613b0adaf2d52d1400488548b97b42bf2cab9c841ca3782839fff6a@mail.kernel.org>
+In-Reply-To: <20261106035111.3315285-23-alexei.starovoitov@gmail.com>
+References: <20261106035111.3315285-23-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v3 22/45] bpf: Allow recursive subprogs
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 04:38:47 +0000 (UTC)
+Date: Fri,  6 Nov 2026 04:38:49 +0000 (UTC)
 
---===============2786048737656449612==
+--===============8639904350596191187==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Add may_goto to the loops that the verifier marks
+> bpf: Allow recursive subprogs
 
-TL;DR: Nits only in bpf_insert_loop_guards(): the scratch patch array could
-live on the stack instead of kvcalloc, and the to == -2 case writes patch[jmp]
-twice. No bugs reported.
+TL;DR:
+- Possible kernel stack overflow: a tail-calling fentry/fexit prog attached to
+  a recursive subprog isn't rejected at attach time
+- Nit: sort_subprogs_topo() callx walk looks like dead code
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-
-[ ... ]
-
-> +	patch = kvcalloc(8, sizeof(*patch), GFP_KERNEL_ACCOUNT);
-> +	if (!target || !zero || !patch) {
-> +		err = -ENOMEM;
-> +		goto out;
-> +	}
-
-this isn't a bug, but could patch be a small on-stack array, as
-append_budget_exit() does with its struct bpf_insn buf[4]?  It is a fixed
-scratch area of at most 6 insns, and the heap allocation adds an -ENOMEM
-path.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> +		if (to == -2)
-> +			off = 0;
-> +		else if (to > i)
-> +			off = to - i + n - jmp - 1;
-> +		else
-> +			off = to - (i + jmp) - 1;
-> +		if (off > S16_MAX || off < S16_MIN) {
-> +			verbose(env, "exit of the loop is too far from insn %d for may_goto\n", i);
-> +			err = -ERANGE;
-> +			break;
+> @@ -3529,9 +3529,9 @@ static int check_unwind_insns(struct bpf_verifier_env *env)
+>   * the current subprog to discover callees (direct subprogs and sync
+>   * callbacks).
+>   *
+> - * The callees of callx are not known before the main verification pass.
+> - * When callx is used the sort is repeated after it with the recorded callx
+> - * edges added to the call graph to reject recursion through indirect calls.
+> + * The callees of callx are not known before the main verification pass: callx
+> + * is no edge here. The order within a cycle is arbitrary. For recursion see
+> + * mark_recursive_subprogs() and check_recursion().
+>   */
+>  static int sort_subprogs_topo(struct bpf_verifier_env *env)
+
+This isn't a bug, but the updated comment says "callx is no edge here", while
+the body of sort_subprogs_topo() still has a callx walk:
+
+	if (bpf_is_callx(&insn[idx])) {
+		/* find a callee that is not explored yet */
+		callee = -1;
+		do {
+			callee = next_callx_callee(env, cur, callee + 1);
+		} while (callee >= 0 && color[callee] == 2);
+		if (callee < 0)
+			continue;
+
+bpf_check() no longer calls sort_subprogs_topo() after do_check_all(), so
+the only call left runs before the main pass.  env->callx_edges is only
+allocated by record_callx_edge(), which is reached from check_func_callx()
+and push_callback_call() during the main pass.
+
+Doesn't that mean next_callx_callee() always returns -1 here, and this
+branch always ends in continue?  Could it shrink to a plain continue, or be
+dropped, since bpf_pseudo_call() never matches a callx and the final else
+already does continue?
+
+[ ... ]
+
+> @@ -24240,6 +24445,11 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+>  			bpf_log(log, "Only fentry can attach to %s, which can unwind\n", tname);
+>  			return -EINVAL;
+>  		}
+> +		/* It can have tail calls, which are not allowed there, see check_call_depth() */
+> +		if (aux->func && aux->func[subprog]->aux->in_recursion && prog_extension) {
+> +			bpf_log(log, "Cannot replace %s, which is called in a recursion\n", tname);
+> +			return -EINVAL;
 > +		}
-> +		patch[jmp] = BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, off, 0);
-> +		if (to == -2)
-> +			patch[jmp] = budget_exit_insn(env, bpf_find_containing_subprog(env, i));
 
-this isn't a bug, but in the to == -2 case patch[jmp] is first written as a
-may_goto and then overwritten by budget_exit_insn() on the next line.  Could
-the exit insn be built directly in that case?
+This check rejects only extensions of a subprog that is called in a
+recursion.  Can a tracing program that does tail calls still attach there?
+
+An fentry program, or an fexit program when the target cannot unwind, can
+attach to a subprog with in_recursion set.  bpf_tail_call is in
+bpf_base_func_proto(), so such a program can use it.
+
+The trampoline runs the tracing program between one recursive frame and the
+next.  Any subprog with has_tail_call makes check_max_stack_depth() set
+NO_PRIV_STACK, so that chain runs on the kernel stack and by the 256-byte
+rule in check_call_depth() can take about 8K.
+
+The run-time check in bpf_insert_recursion_checks() only keeps r10 of a
+recursive subprog in the upper half of the stack.  Its comment says the
+lower half is for "the frame of the subprog, then what it calls", which is
+a chain that check_max_stack_depth() looked at together with that frame.  A
+trampoline followed by a tracing tail-call chain is not such a chain.
+
+With CAP_BPF and CAP_PERFMON on x86-64 with 16K stacks, a prog could
+recurse until r10 of R_k is just above THREAD_SIZE / 2, with each call of R
+going through the trampoline of an fentry program F that does tail calls.
+The stack would then hold about 8K of recursion, R_k's frame (up to
+stack_limit), the trampoline, and F's tail-call chain of about 8K or more,
+which exceeds THREAD_SIZE.
+
+Should the attach check also refuse tracing programs whose
+aux->tail_call_reachable is set (or that have no private stack) when the
+target subprog is in_recursion, the same way it refuses extensions?
 
 
 ---
@@ -113,4 +158,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42160076968
---===============2786048737656449612==--
+--===============8639904350596191187==--
