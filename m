@@ -1,73 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793996434;
-	b=n/ys9zuKGZdGkkeZuiMddq20IehqDlE7E1hR5gwaNG/apQwrHhjwZhR9smQH3HBrDKFz
-	 HHnvdN1iWGW6gigCCRnModKSg5G3IRa5O32Pc0Si08RtxR466rv/Efxc+P9Tqmkhpy+4X
-	 Mx6rbAT70GTYiYGGiOf/pNzM/s0IB5N2BcKjrC3TIBpkxxInqt21c2awRXctgrqO3EV0a
-	 PpoIqrPvjnpTy1JqQMuE1kdKI5CXVVvtlQGuHGh8zJA2ExwzLPRcmh9/wbuNu6JneBZA8
-	 C05q49G6gr2hX8YF/WT2pgtnlpCKdBPK5JOUVlDWd5T9lPCezx0gNBW7PF5gQy33G1Q==
+	t=1793997183;
+	b=Tz958/L0x3yAvPpgSNYIy4WiNYUGwcop857MZVyMvMNRq60mbUYEuG2INsGG9c79ob1r
+	 QOzYGY2GXWOhAqKe0V4tR+YgwVVQ7DXfjvf+Q9tsWD6DLYO8OEENiDQuG3xiSxPeKrfHL
+	 qCSIIl1yfu2+62LPeUc/H08adiK9Gh5mM2CVMWC2+VehPg5xU3XsHLlvL3Qx2/5heAnIl
+	 oqTEssjtMmLoNpPk62Qju3z8zjB7qkU0zLQKIt75aYDbbhnL39ZZ2cfhQ4wasVNuvwzby
+	 iJoR0oG+CMudnArtbKmPnxSQZz1KRqyzQANy9d8x+6fCHY3+S09D4q8xKRazGl97fFw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793996434;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Received:Date:In-Reply-To:Mime-Version:
-	 References:X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=YfQOM+3yZTei+Ooz1YE9OkOVcf05BkF1CaiX8rMXFmc=;
-	b=SMF0wENKLJiJNDe+dfmWN8P0Qg2gty7Nm2YVGPkvcjHMdmpyWVbuSeqgXSIgyeaOxMG5
-	 AwRjlPTXWosO8BKQCVqpqBRZ5EwyPs04CQcIAe9Dqb9Bb9ZsL49eX3R7YrDomsI7hcwuh
-	 FheqViOfkVX+x2SmjE9oWSRji18Y3rgQc/Nz0uRMteellFgt9itM8JP1S4Av5VSiadFxD
-	 zaUXbybjLPtJ6E+AtRm4C2ZGZS+ZqJjnF1Ju8V0tb2xThXiPHMqLl8N8GUIYxmoCxbZ/9
-	 /J2JyCvd8Ff462bROkAv1OquXHlPt9RzOqkCMfKeY81j6wzKhPEMn5cb5WmmqqJ967w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793997183;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=jSfjFLoS/AgIEvntlVuKCAJJe1sMNPZnNiqjAgshnHg=;
+	b=Udt7+XgDO+EGchPcwb0w7G1lDqBKor2yK2Gaux4f95hoXaqPA9dWAhA75ubsebCG/QzQ
+	 8xo69dkFen02EETx1Cfsc+GnXGW6KrjXlNfRTyAO3b+5TEV1BQzR3RjSstHuV2w6OeTM7
+	 FkXGtX1R8IFOTMbb6JmVCurzKF1yUu5BADF1V2C5RdWURYLQpMghm19tZ6FGzNxoMSaEM
+	 WhYInbRuNIqEvzwV8UzmxewiaJO3o4YGg3Oc82dTKz6UsnTcqcXzh5vWCtxswXmyI+98U
+	 A7igd6PW2R0Xzo79Hw6kaUPqkrxMr0Gyi+zeHjCZfRg77FoCgg8o9hCdZtQfqA27Nsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=qN9y1mA1;
-	arc=none smtp.remote-ip=209.85.210.197
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oZ1HQcDr;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B26606D810
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:20:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D0B26606D810
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A2F606A326
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=qN9y1mA1
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8a08903566dso24719b3a.0
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:20:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793996417; x=1794601217; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YfQOM+3yZTei+Ooz1YE9OkOVcf05BkF1CaiX8rMXFmc=;
-        b=qN9y1mA15Y6AtsUV5niq8H1hH3LKM0ifZb9qB6TPirQ5m7uJyyLYYYHuFaU9TRNgnp
-         txjU4pw0H8iYnjCmd46LQi63lPvs5mykCWNloMB1ulQkuO3BAYLW5oh3nZAWDwAFxH/U
-         4OJIN+WFbns52pRqOsP4z1An3zRVj3QkQQwkmBVDOhl0kzrrP0o+wEVbEZMl9ehuLazp
-         kTPYhb691x1jUmTL6kKwBH6+ni+Uib7RVTpMgxiNeFgOUc9fhoLqLRNSUDNt2Rg4roqq
-         3cfVpvLEcQ9A8MoLpP9TTFQ6qkA87pnPCvQdaVC9c8EtH2kjrrMaSGP2OuFf0Ic5QXRs
-         ikQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793996417; x=1794601217;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=YfQOM+3yZTei+Ooz1YE9OkOVcf05BkF1CaiX8rMXFmc=;
-        b=VMzOtv2bNgQllt7UUWzu4xPRtrA5LfXOkEIsadB0TN6OVjkeZ3BQqHFQLU4V68jd9k
-         y9xjfgN4zWOQEuznq4wjKlGEEr8mGg5pUxlqQBXC1+wY0RG/zXY+O0RdX8hfg/n7xYyQ
-         fDM+Bs8+NN10WWsREgNDhq4tQUiuVaNRX9UgnEYRyojq5dEU+xTxeJfCly7UkML44fb6
-         2BboZhO+fh7EoVWhVkT+5h/5cFueCDk/vXrtqkhMuV7Ajh3KU9c5SIkO/PmmcmrN4DJz
-         EOm6eAjBpyX3nU+kCA7gMc12OlwhFjHsLQVWvoNTn47GLbV6+dRmQ023oIUpm4DCl+zx
-         oCyA==
-X-Gm-Message-State: APuU4Z9RALEH0qFCiDMbpGntrltPYd5ZKGPnLBGgoYnYEhuZfL9MaNoS
-	xE43bwdkgZldCuWA7SCYGPtdOSyjEzWnv277uC154pZJm53+rhrGEYgagw7Fy7vRi171DUzTzsZ
-	k06IC/BosAXL6U41MtQ==
-X-Received: from pgbcq10.prod.google.com ([2002:a05:6a02:408a:b0:cc9:f7f0:57fc])
- (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:7d9f:b0:3e2:3584:c12c with SMTP id adf61e73a8af0-3edc1c447efmr74358637.2.1793996416538;
- Fri, 06 Nov 2026 12:20:16 -0800 (PST)
-Date: Fri, 06 Nov 2026 20:19:51 +0000
-In-Reply-To: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oZ1HQcDr
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829941F0089F;
+	Fri,  6 Nov 2026 20:33:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793997182;
+	bh=jSfjFLoS/AgIEvntlVuKCAJJe1sMNPZnNiqjAgshnHg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=oZ1HQcDrsw6Sg3Yj/fKX9Ikk9hBQOLSkAeQvHGHsiQwONxLDWCx4T89tIprPv9ySx
+	 35UjOqsBl3ow8702fwobmZ674chF7RsOTzo0DwDU4cdiQWPMNWO4V7P+7gKXWRHfjA
+	 lcKt5Y4UGt0DVMFtlwRh1zzJAf+V/uaJ/8vkPWje1YLxOkllN7kuH9VytE5PABiNDI
+	 SfhWRofMEKOQRfiMqCIXwl4jYsnov9UJH1JGB4pDYOue9jhlIw1qAXWoUnRCSwaiI0
+	 jnazrPxHi7g6kK2pDt2do7qnW3kHHaaWVT5d4Lcj7ayDSj1wLol37H//Af4WGTj5Uy
+	 /kVI/NVGSU7Og==
+Message-ID: <sashiko-outbox-202213@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC bpf-next 3/7] libbpf: Support
+ BPF_MAP_TYPE_STRUCT_OPS in bpf_gen__map_create()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Siddharth Nayyar" <sidnayyar@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261106-lskel-struct-ops-v1-3-a4486ffc79cb@google.com>
+References: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
+ <20261106-lskel-struct-ops-v1-3-a4486ffc79cb@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 06 Nov 2026 20:33:02 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,65 +60,82 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
-X-Mailer: b4 0.14.3
-Message-ID: <20261106-lskel-struct-ops-v1-4-a4486ffc79cb@google.com>
-Subject: [PATCH RFC bpf-next 4/7] libbpf: Support BPF_PROG_TYPE_STRUCT_OPS in bpf_gen__prog_load()
-From: Siddharth Nayyar <sidnayyar@google.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Giuliano Procida <gprocida@google.com>, 
-	Neill Kapron <nkapron@google.com>, "=?utf-8?q?Thi=C3=A9baud_Weksteen?=" <tweek@google.com>, 
-	Maxime Ripard <mripard@kernel.org>, Siddharth Nayyar <sidnayyar@google.com>
-Content-Type: text/plain; charset="utf-8"
 
-For BPF_PROG_TYPE_STRUCT_OPS programs in light skeletons, load_attr's
-expected_attach_type and attach_btf_id hold data blob offsets populated
-at runtime by bpf_gen__init_kern_struct_ops().
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] libbpf: double byte-swap of BPF_F_VTYPE_BTF_OBJ_FD in
+  bpf_gen__map_create()
+--
 
-Emit instructions in bpf_gen__prog_load() to copy the resolved member
-index into prog_load_attr.expected_attach_type and unpack the 64-bit
-(btf_obj_fd << 32) | kern_type_id value from load_attr->attach_btf_id
-into prog_load_attr.attach_btf_id and prog_load_attr.attach_btf_obj_fd.
+commit 504179d2d83634dc1591a224d0263ff3b4a9b9cf
+Author: Siddharth Nayyar <sidnayyar@google.com>
 
-Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
----
- tools/lib/bpf/gen_loader.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+libbpf: Support BPF_MAP_TYPE_STRUCT_OPS in bpf_gen__map_create()
 
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index 6027a2762c35..aaa491463521 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -1151,6 +1151,20 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- 		emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_0, BPF_REG_7,
- 				      offsetof(union bpf_attr, attach_btf_obj_fd)));
- 	}
-+	if (prog_type == BPF_PROG_TYPE_STRUCT_OPS) {
-+		move_blob2blob(gen, attr_field(prog_load_attr, expected_attach_type), 4,
-+			       load_attr->expected_attach_type);
-+		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
-+						 0, 0, 0, load_attr->attach_btf_id));
-+		emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_1, 0));
-+		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_0, BPF_PSEUDO_MAP_IDX_VALUE,
-+						 0, 0, 0, prog_load_attr));
-+		emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_0, BPF_REG_7,
-+				      offsetof(union bpf_attr, attach_btf_id)));
-+		emit(gen, BPF_ALU64_IMM(BPF_RSH, BPF_REG_7, 32));
-+		emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_0, BPF_REG_7,
-+				      offsetof(union bpf_attr, attach_btf_obj_fd)));
-+	}
- 	emit_relos(gen, insns_off);
- 	/* emit PROG_LOAD command */
- 	emit_sys_bpf(gen, BPF_PROG_LOAD, prog_load_attr, attr_size);
+This commit adds support for BPF_MAP_TYPE_STRUCT_OPS maps in
+bpf_gen__map_create() when generating a BPF light skeleton, including
+handling kernel module BTF object FDs.
 
--- 
-2.56.0.455.g6c5a503b38-goog
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> index 09713c39f71ec..6027a2762c352 100644
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
 
+[ ... ]
+
+> @@ -543,6 +543,27 @@ void bpf_gen__map_create(struct bpf_gen *gen,
+>  				stack_off(inner_map_fd));
+>  		close_inner_map_fd =3D true;
+>  		break;
+> +	case BPF_MAP_TYPE_STRUCT_OPS:
+> +		move_blob2blob(gen, attr_field(map_create_attr, value_size), 4,
+> +			       value_size);
+> +		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
+> +						 0, 0, 0, map_attr->btf_vmlinux_value_type_id));
+> +		emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, 0));
+> +		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
+> +						 0, 0, 0, map_create_attr));
+> +		emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
+> +				      offsetof(union bpf_attr, btf_vmlinux_value_type_id)));
+> +		emit(gen, BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, 32));
+> +		emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 4));
+> +		emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
+> +				      offsetof(union bpf_attr, value_type_btf_obj_fd)));
+> +		emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
+> +				      offsetof(union bpf_attr, map_flags)));
+> +		emit(gen, BPF_ALU32_IMM(BPF_OR, BPF_REG_0,
+> +					tgt_endian(BPF_F_VTYPE_BTF_OBJ_FD)));
+> +		emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
+> +				      offsetof(union bpf_attr, map_flags)));
+> +		break;
+
+[Severity: Medium]
+Does wrapping BPF_F_VTYPE_BTF_OBJ_FD in tgt_endian() double-swap the
+instruction immediate when generating a cross-endian light skeleton?
+
+Unlike data blob fields, emitted BPF instructions are built in host byte
+order and later byte-swapped in bpf_gen__finish() via bpf_insn_bswap()
+when gen->swapped_endian is set:
+
+tools/lib/bpf/gen_loader.c:bpf_gen__finish() {
+	...
+		if (gen->swapped_endian) {
+			struct bpf_insn *insn =3D (struct bpf_insn *)opts->insns;
+			int insn_cnt =3D opts->insns_sz / sizeof(struct bpf_insn);
+
+			for (i =3D 0; i < insn_cnt; i++)
+				bpf_insn_bswap(insn++);
+		}
+	...
+}
+
+Pre-swapping the immediate here causes bpf_insn_bswap() to swap insn->imm
+back to the wrong byte order, setting 0x00800000 instead of
+BPF_F_VTYPE_BTF_OBJ_FD (0x00008000) in attr.map_flags on the target and
+causing BPF_MAP_CREATE for kernel module struct_ops maps to fail with
+-EINVAL.  Passing BPF_F_VTYPE_BTF_OBJ_FD directly without tgt_endian()
+avoids the double swap.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106-lskel-stru=
+ct-ops-v1-0-a4486ffc79cb@google.com?part=3D3
