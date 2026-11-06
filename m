@@ -1,79 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1793936231;
-	b=xpYBhJx0fjCTkRGGjBpXocqfqU4gKrL3a+1XSJIxkaueEuo0qYllayDr7nJS9BzQTsSr
-	 CU5R3j9cuNuno3/rQP1Ey2clvzFx7eDrSJMesjDh5mv+lQpk2h+/AapbCdStsoM6UZH0C
-	 9DpP6jAu2yoAz6zObUGcHTCbvDW/2YOYMzEIbZkc2568ATEwA3yhLjON4iGrIgKt5vA2A
-	 rhGvqFThRMsk4a44oCcs67ylCFgMfWDf0x8SzJjXZkpqmPUEWC+aOcOx866w7v/SRNJwd
-	 2XxpPy+U9L1+I8fIHkU9bRPZPaB2V9v7LGDnOfHO4sTagJBVJdvxWQnRXg76lxMUCHQ==
+	b=Ql3G/bXMAEf0rBulGJ3YK/iFoXrM7qexlEMp66qJnwWplyohuhhbNvrZeUP9WvsnU9tX
+	 RikLgZJtfGE5lf6e3nRrOCvLU5FZSJFKcChGZOqcRUNtP18VDwfKGN0XNcq1PSsbezSmF
+	 2IrRjVOxw/NQwYINjJvNVA3Ke3GZkFIKY9KImN7UWMysd8qT7lM40rOSLcMZvSQBGWvqn
+	 eBfZS4jKy1szU7gB2EXUu566XJDjf+Hy3CG/8twtG+OmuKb9EqNabVBVylLDwQ2Z+PWSY
+	 UX3CE84WS192t5/lceyDTqa7B9bEMeYaaGXcBeUNAxEwte1WITLGjTNURDhyrrjcylQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793936231;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=76hWV+OVGnZnFr9U2L/ksGDotrMEpl3bfcMbRasEyC8=;
-	b=XqC400c/SSiB8x8T45cjED5G1CeMTIf1+4gAbMDxPy8kHwhBm40IlewzVKzX1ZLFxkaP
-	 baGGb9eDGi3l8QFiG2yA+m1Q5lnVA2x961PR9wudZLiamgdvjzXB2Q+KnRokypnhhIp99
-	 R6gd8R/WrNfD7rv+2lwoIEWaStsiigw6S64GjXsooxBmhr5xVHFBcLJ6zTv4KP4wbvoqc
-	 SKjIX140rQVQBKTeCJ6nbhmyUgeQ3KawLOO1mrheVc0uW6A2IIv+hZrGzpySA76ezBHA8
-	 0wsZkH8o3APjLWHOs/rRRdxr4u1OgZHsiumb9J0zl3f8eki8vGcokrgobjIDl8DGjhw==
+	bh=r19hLwk1xbMORfebL85hDFHFopvkh58U9aFCAcCzqPc=;
+	b=iGHDD5MtofxlsQUYU/PPcafHP/US84qlsgJCIIm5ZNCUL1hxP9JewdhninFWC603cl1A
+	 n4s8rQDLRmyqkk5prFnd1jb0F6phZnO8mHJVNeKQcIQwvsC6uDBiDaYQKNs6B/OA9LgXg
+	 oInjnCGObgsjncDkFEndbzaMy/kFMhTDPJGqUu0I0X1FLoSrmzK6yRzJc9fYExLwvFY9t
+	 USDiKdVKao3WOBhJaVuWFLHlaScC6oHNOALCq/8PaJChGStywJ1bZeUs2rSWmu0t+T569
+	 4lPM+43Wy9HwvQq9ZHLcT9NkgU14NOq68I5BTsqlho2sgPpkw9EWdr1cmaaQ7AhbuHw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hI5aAykh;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aO+Eb0vB;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF4B606A326;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4FD606A328;
 	Fri,  6 Nov 2026 03:37:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hI5aAykh
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aO+Eb0vB
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1793936231;
-	b=hHzN/JbMPDU7wlT7o4Pk6ngue4qpHbEywpDbi0LVNewk70qgRw3sQDfo2oWvUbhiwVD/
-	 Dldn+1JUJisx7BSISU7pD0tBGb042j7rp6dRxnv7Bc/Ohxb4p/kkrTDcST2FiLTnDW7rA
-	 vii5qOlMBTCpk6Oh4cVfATlxTlvetmq30sie0BtJSpOk6hCio10plfkyRk6Xo/nzaNRZ2
-	 DeT84kIrB3LtZ6vpQg71fGay38wtQN8+ahqYYVN3Uh/2IsmE964VwKOlMHa3gP/G9LXSp
-	 AmwP2OnJ7XlxYSdazlLV9Gf7Dt+9W7y+0a68x7p2oxRhB3C/hYGdwe6lESp/WI8h7gg==
+	b=1dTOj+rzmQGUvBRq/uas5tTYbY4NW4Z3CKxwObeSiAu+zSCkqg0yx70J89eCzO//880z
+	 KJ65n321Om8CCeOHu8JaN2pNVNt6dPL6YdcfjLI/6Py1CEwYFJJz5dHFicoEwfAvbOBFw
+	 UypDiTVE9qEbj+fsD/uEDlfPAQJg/bExAhdjdf6Y86yxXhbqBsB/OhVaOvux//s6VJGjO
+	 5xY0UO0Dx5PL4wqN23H9XYdfXLLhc9B+nU0pwiIqSCO8QW853RupIkv9EPzFqc4odHcAJ
+	 folNBqSsZP/ERBJyHUIfCwGMdTR8bDcy4hazKj8t/wuZ/I415UbpwJ7uqiN1UbqI20g==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1793936231;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=76hWV+OVGnZnFr9U2L/ksGDotrMEpl3bfcMbRasEyC8=;
-	b=xvmbMh/YSsjaRQxqfxebA9Bl5PP+tlUEIW6Bh2QfJ2Z9V1iDy7N/HmjvV1Gximfi+Rz4
-	 38Ay5iKsqjdZjpCvfOVdpm3jU+Y9bQpbUr3yerGlYaFeEjavXUMpTDZV1ipENh75+SVXV
-	 vNsVf/rIxvs3YNYA9Qn2BOPOagMD9Svy+Zm68+mZ6gr100pBpZhPKGhanB2l2sl6rnaC7
-	 GQkuqkb+hZPgN66i+R5U6Tba5R2Wm2/u0R6uqZPN7Ksm+EAY2zddtNqjXQ5LrkmjBmUwc
-	 bac0zhQ3l+XlPZUqzyjt6SsxJTi03vaI/InMOm3RZ1kS6pm5h2ne8QDU7WfO/QJcyUQ==
+	bh=r19hLwk1xbMORfebL85hDFHFopvkh58U9aFCAcCzqPc=;
+	b=BPXHMnmFztmjgJwVC3gcstmMcrOfy+VlU+DyQCWT0sx62yJWkbt2iHE33lDSX30g+4UP
+	 N53cp4iTfWJ/RkEVgmazSniA5B0NRQkN7WtRxi/w/0YVQf1yhIQ6WaAfF/leOn6tsrJci
+	 QqwC1wGoxaO8Ea89DP5Pe72dyen/ReAQdFkETSW8FWMF/EoRr+/QvrtNBAM9TJN16o25I
+	 GG0V1uCJ02rVNKq2ukZi21Yv87+4fUmqBy7R7aexbaHbQAWT+RKY/PAhWzTyjQLBM5Suq
+	 u7nkjQuyZvJBmQFO02SHY/KsPyPjdfeEOlPLVsXC72XD3ZEz0asSEpcV4Oq31Ra/JtQ==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 430871F008A1;
+	by smtp.kernel.org (Postfix) with ESMTPS id 42F141F0089F;
 	Fri,  6 Nov 2026 03:37:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1793936231;
-	bh=76hWV+OVGnZnFr9U2L/ksGDotrMEpl3bfcMbRasEyC8=;
+	bh=r19hLwk1xbMORfebL85hDFHFopvkh58U9aFCAcCzqPc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=hI5aAykhIbq1y16Tz/u2XnrlKgQnit1IaSOKoqsp/LZ9P7GJOjwzWH4AZ0Sf98g/s
-	 pIYQJW+oDJwlHNlc1wXxYhEzMYFrSZT2YvUqikvdDv2NVmMcAeMShIL7gf65aBA+Hh
-	 SmS6f4Vb75QcXgFvDyA+OJv/yD2yVsPQK31XnE/VTFsWZgt6SDehf20lWfALVcAVW6
-	 rqQYQ9CGLqouqoF+DRjZ1cvg2P2OVZmB3CwfYxiranDOYAlIVICZdiBDce11wXIKoD
-	 C1eETbrfO2ZEAFWdYjdQqvN3PT4gb/lwkqIXWT6ix+VIFOkUIGB0vb/aj4TDfBJf0w
-	 uFZNKUYElhOkA==
+	b=aO+Eb0vBMi6qe5Wfu2gsbGdCoMuGC/ysFWILqVLA8lw340wHNtUlbOSTsMJBk5Kgp
+	 cv6nWJ2ZN0jKO2+ZnrDB8/U82FuNAXcP6s4tsAgj6IDSjqjxr+C8zuEsYqwinu/Az0
+	 qNRdNybhsw0rRAdHjR+QNAFXBdZSVS81/GqqH3sYaACse6tIUG2462TOYbNUlPbChB
+	 +CN86p+T4mdzzMig+m6u0ASrMvDqXjgWj5QExA4HuXhkW2evIV3U0uP0Qwy0ea6IPT
+	 Nf/JVWG0Zrwon12qm0I9Uj31QWCuVukSIuZZiQ++Hk9sk9oqOvTznMVZmozjIR2Lgt
+	 vftDXfy8ICovw==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id B975745BA6;
+	by lkml.kernel.org (Postfix) with ESMTP id AA37145BA2;
 	Fri,  6 Nov 2026 03:37:09 +0000 (UTC)
 From: Jonathan Bastari Thamrin via B4 Relay <devnull+thamrinjonathan.gmail.com@kernel.org>
-Date: Fri, 06 Nov 2026 10:37:09 +0700
-Subject: [PATCH v2 2/2] selftests/bpf: Use memfd_create instead of mkstemp
- in d_path
+Date: Fri, 06 Nov 2026 10:37:08 +0700
+Subject: [PATCH v2 1/2] selftests/bpf: Replace d_path CHECK() with
+ ASSERT_*()
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,7 +84,7 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-dpath-memfd-v2-2-1dc0799b4aa6@gmail.com>
+Message-Id: <20261106-dpath-memfd-v2-1-1dc0799b4aa6@gmail.com>
 References: <20261106-dpath-memfd-v2-0-1dc0799b4aa6@gmail.com>
 In-Reply-To: <20261106-dpath-memfd-v2-0-1dc0799b4aa6@gmail.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -99,11 +99,11 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, 
  Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793936228; l=1757;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793936228; l=6246;
  i=thamrinjonathan@gmail.com; s=20261102; h=from:subject:message-id;
- bh=alou4cuIJ+oB76ZkZMUDEGCS67LRRaNUDOwQBWbIbMg=;
- b=g+JlCapFuWchf5QNuE7dfcj6YN5orNFWBIG7ivFHngGurbPwKuJWuiPHqAKyX2bOGCGyVsW7s
- Krx+xvbwCY5DXyn4Y0j2ZL9tTXEeuK/mCyjTAlhS6LhPF/QD554DB30
+ bh=R8N2L4ICFhJmCn73DM3mrKGFj9EOijoslMwaPUaBX3Y=;
+ b=TsEjPFItS5HeJbR9f5SIEGE1XlyNYISOO9KRRIGVCp4+eozLSfkUTujmPy08ZGXJt4G6mDhmo
+ V6U6jep2ItsBtm+e30DcLnEOvWhZB0sy7/IY5q6g5DV9kN1i/ueTKgv
 X-Developer-Key: i=thamrinjonathan@gmail.com; a=ed25519;
  pk=mr0q5PZVaUIrv8WvTxIfK7QVcAiRSYI8hOByBQL1ZRo=
 X-Endpoint-Received: by B4 Relay for thamrinjonathan@gmail.com/20261102
@@ -114,55 +114,166 @@ Content-Transfer-Encoding: 7bit
 
 From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
 
-check_mem_access currently creates a temp file in /dev/shm, which
-isn't mounted under vmtest.sh in local runs. This causes mkstemp
-to fail with ENOENT. The fix is similar to
-commit 47687a29b2c3 ("selftests/bpf: Use memfd_create instead of
-shm_open in cgroup_iter_memcg") where memfd_create gives a
-shmem-backed file with no mount needed while still reaching
-vfs_fallocate.
+The CHECK() macro is deprecated so each call is replaced with
+ASSERT_*().
 
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/d_path.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/d_path.c | 69 +++++++++----------------
+ 1 file changed, 24 insertions(+), 45 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
-index b7998606aa98..ec73291ef060 100644
+index 7665e1d28a64..b7998606aa98 100644
 --- a/tools/testing/selftests/bpf/prog_tests/d_path.c
 +++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
-@@ -4,6 +4,7 @@
- #include <sys/stat.h>
- #include <linux/sched.h>
- #include <sys/syscall.h>
-+#include <sys/mman.h>
+@@ -23,8 +23,6 @@
+ #endif
+ #endif
  
- #define MAX_PATH_LEN		128
- #define MAX_FILES		7
-@@ -201,7 +202,6 @@ static void test_d_path_check_types(void)
- static void test_d_path_mem_access(void)
- {
- 	int localfd = -1;
--	char path_template[] = "/dev/shm/d_path_loadgen.XXXXXX";
- 	struct test_d_path__bss *bss;
- 	struct test_d_path *skel;
+-static int duration;
+-
+ static struct {
+ 	__u32 cnt;
+ 	char paths[MAX_FILES][MAX_PATH_LEN];
+@@ -55,48 +53,48 @@ static int trigger_fstat_events(pid_t pid)
+ 	int ret = -1;
  
-@@ -211,13 +211,12 @@ static void test_d_path_mem_access(void)
+ 	/* unmountable pseudo-filesystems */
+-	if (CHECK(pipe(pipefd) < 0, "trigger", "pipe failed\n"))
++	if (!ASSERT_OK(pipe(pipefd), "pipe"))
+ 		return ret;
+ 	/* unmountable pseudo-filesystems */
+ 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+-	if (CHECK(sockfd < 0, "trigger", "socket failed\n"))
++	if (!ASSERT_OK_FD(sockfd, "socket"))
+ 		goto out_close;
+ 	/* mountable pseudo-filesystems */
+ 	procfd = open("/proc/self/comm", O_RDONLY);
+-	if (CHECK(procfd < 0, "trigger", "open /proc/self/comm failed\n"))
++	if (!ASSERT_OK_FD(procfd, "open /proc/self/comm"))
+ 		goto out_close;
+ 	devfd = open("/dev/urandom", O_RDONLY);
+-	if (CHECK(devfd < 0, "trigger", "open /dev/urandom failed\n"))
++	if (!ASSERT_OK_FD(devfd, "open /dev/urandom"))
+ 		goto out_close;
+ 	localfd = open("/tmp/d_path_loadgen.txt", O_CREAT | O_RDONLY, 0644);
+-	if (CHECK(localfd < 0, "trigger", "open /tmp/d_path_loadgen.txt failed\n"))
++	if (!ASSERT_OK_FD(localfd, "open /tmp/d_path_loadgen.txt"))
+ 		goto out_close;
+ 	/* bpf_d_path will return path with (deleted) */
+ 	remove("/tmp/d_path_loadgen.txt");
+ 	indicatorfd = open("/tmp/", O_PATH);
+-	if (CHECK(indicatorfd < 0, "trigger", "open /tmp/ failed\n"))
++	if (!ASSERT_OK_FD(indicatorfd, "open /tmp/"))
+ 		goto out_close;
  
+ 	ret = set_pathname(pipefd[0], pid);
+-	if (CHECK(ret < 0, "trigger", "set_pathname failed for pipe[0]\n"))
++	if (!ASSERT_GE(ret, 0, "set_pathname for pipe[0]"))
+ 		goto out_close;
+ 	ret = set_pathname(pipefd[1], pid);
+-	if (CHECK(ret < 0, "trigger", "set_pathname failed for pipe[1]\n"))
++	if (!ASSERT_GE(ret, 0, "set_pathname for pipe[1]"))
+ 		goto out_close;
+ 	ret = set_pathname(sockfd, pid);
+-	if (CHECK(ret < 0, "trigger", "set_pathname failed for socket\n"))
++	if (!ASSERT_GE(ret, 0, "set_pathname for socket"))
+ 		goto out_close;
+ 	ret = set_pathname(procfd, pid);
+-	if (CHECK(ret < 0, "trigger", "set_pathname failed for proc\n"))
++	if (!ASSERT_GE(ret, 0, "set_pathname for proc"))
+ 		goto out_close;
+ 	ret = set_pathname(devfd, pid);
+-	if (CHECK(ret < 0, "trigger", "set_pathname failed for dev\n"))
++	if (!ASSERT_GE(ret, 0, "set_pathname for dev"))
+ 		goto out_close;
+ 	ret = set_pathname(localfd, pid);
+-	if (CHECK(ret < 0, "trigger", "set_pathname failed for file\n"))
++	if (!ASSERT_GE(ret, 0, "set_pathname for file"))
+ 		goto out_close;
+ 	ret = set_pathname(indicatorfd, pid);
+-	if (CHECK(ret < 0, "trigger", "set_pathname failed for dir\n"))
++	if (!ASSERT_GE(ret, 0, "set_pathname for dir"))
+ 		goto out_close;
+ 
+ 	/* triggers vfs_getattr */
+@@ -128,11 +126,11 @@ static void attach_and_load(struct test_d_path **skel)
+ 	int err;
+ 
+ 	*skel = test_d_path__open_and_load();
+-	if (CHECK(!*skel, "setup", "d_path skeleton failed\n"))
++	if (!ASSERT_OK_PTR(*skel, "d_path skeleton"))
+ 		goto cleanup;
+ 
+ 	err = test_d_path__attach(*skel);
+-	if (CHECK(err, "setup", "attach failed: %d\n", err))
++	if (!ASSERT_OK(err, "attach"))
+ 		goto cleanup;
+ 
+ 	(*skel)->bss->my_pid = getpid();
+@@ -159,36 +157,18 @@ static void test_d_path_basic(void)
+ 	if (err < 0)
+ 		goto cleanup;
+ 
+-	if (CHECK(!bss->called_stat,
+-		  "stat",
+-		  "trampoline for security_inode_getattr was not called\n"))
++	if (!ASSERT_TRUE(bss->called_stat, "called_stat"))
+ 		goto cleanup;
+ 
+-	if (CHECK(!bss->called_close,
+-		  "close",
+-		  "trampoline for filp_close_sync was not called\n"))
++	if (!ASSERT_TRUE(bss->called_close, "called_close"))
+ 		goto cleanup;
+ 
+ 	for (int i = 0; i < MAX_FILES; i++) {
+-		CHECK(strncmp(src.paths[i], bss->paths_stat[i], MAX_PATH_LEN),
+-		      "check",
+-		      "failed to get stat path[%d]: %s vs %s\n",
+-		      i, src.paths[i], bss->paths_stat[i]);
+-		CHECK(strncmp(src.paths[i], bss->paths_close[i], MAX_PATH_LEN),
+-		      "check",
+-		      "failed to get close path[%d]: %s vs %s\n",
+-		      i, src.paths[i], bss->paths_close[i]);
++		ASSERT_STRNEQ(bss->paths_stat[i], src.paths[i], MAX_PATH_LEN, "stat path");
++		ASSERT_STRNEQ(bss->paths_close[i], src.paths[i], MAX_PATH_LEN, "close path");
+ 		/* The d_path helper returns size plus NUL char, hence + 1 */
+-		CHECK(bss->rets_stat[i] != strlen(bss->paths_stat[i]) + 1,
+-		      "check",
+-		      "failed to match stat return [%d]: %d vs %zd [%s]\n",
+-		      i, bss->rets_stat[i], strlen(bss->paths_stat[i]) + 1,
+-		      bss->paths_stat[i]);
+-		CHECK(bss->rets_close[i] != strlen(bss->paths_stat[i]) + 1,
+-		      "check",
+-		      "failed to match stat return [%d]: %d vs %zd [%s]\n",
+-		      i, bss->rets_close[i], strlen(bss->paths_close[i]) + 1,
+-		      bss->paths_stat[i]);
++		ASSERT_EQ(bss->rets_stat[i], strlen(bss->paths_stat[i]) + 1, "stat return");
++		ASSERT_EQ(bss->rets_close[i], strlen(bss->paths_stat[i]) + 1, "close return");
+ 	}
+ 
+ cleanup:
+@@ -232,15 +212,14 @@ static void test_d_path_mem_access(void)
  	bss = skel->bss;
  
--	localfd = mkstemp(path_template);
--	if (!ASSERT_OK_FD(localfd, "mkstemp"))
-+	localfd = memfd_create("d_path_loadgen", 0);
-+	if (!ASSERT_OK_FD(localfd, "memfd_create"))
+ 	localfd = mkstemp(path_template);
+-	if (CHECK(localfd < 0, "trigger", "mkstemp failed\n"))
++	if (!ASSERT_OK_FD(localfd, "mkstemp"))
  		goto cleanup;
  
- 	if (!ASSERT_OK(fallocate(localfd, 0, 0, 1024), "fallocate"))
+-	if (CHECK(fallocate(localfd, 0, 0, 1024) < 0, "trigger", "fallocate failed\n"))
++	if (!ASSERT_OK(fallocate(localfd, 0, 0, 1024), "fallocate"))
  		goto cleanup;
--	remove(path_template);
+ 	remove(path_template);
  
- 	if (!ASSERT_TRUE(bss->path_match_fallocate, "fallocate path"))
+-	if (CHECK(!bss->path_match_fallocate, "check",
+-		  "failed to read fallocate path"))
++	if (!ASSERT_TRUE(bss->path_match_fallocate, "fallocate path"))
  		goto cleanup;
+ 
+ cleanup:
 
 -- 
 2.56.0
