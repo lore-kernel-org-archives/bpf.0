@@ -1,95 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.98
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793988500;
-	b=4sRqlTvbjtQA4AWTg1Qdt1sMVd1K7LIRzn5DT1Fw1qdtyXPTQ/rMETv4kAwFgQEhxKKH
-	 H8HIX0NwATF8QI3zrEmZvfztQQYzsVr6HvOUeQvpynoY4Gd0qfOYJsZPwfUuBAtuEel1I
-	 4RLyiMm8QaaOznAlNQaiud3yGv+I8Xmtz4zkPbK+Ja/AOISxCFx+4aVufUuU4ywHjvCve
-	 vEitL+nF0gXv8XKkhNPYQ5ACCAm4+KjDop9VbrJtuvl1ZjCP9Q1FhiRWpLfFHJc4swCve
-	 UE4IN/OaxqrN3vaDcCmeg/7PD2ZKDx8LYGD17n90YCfZ4A08aXXR6WWedIIzlF8TPUA==
+	t=1793988975;
+	b=q7hDRRLXqNk3z1/Xpxrc+1yV7MF69bd5Yy8XNdovNakX5SnY9T/Ax/1/E0DQU3XeolJu
+	 4pOL6QGO7USCVClfRVbSmhxSvCxnfGUl3dR+JI1u41crMzSMlforZPQx6r3tddj7g2OOD
+	 4R9+8AjIqKrnP/6Tl2Ks5oVYtohrxaQJuwQJV+TUA1PgVcHD6dByFbmsv7QHBQYEUUV61
+	 TMypN89LMI5J/zc3Y4kJIUAp0j2B9tc0Q70C4v4nry3Z3nVeQ0E4yx73f/eF+E1xF7gfE
+	 eNAykLP+5C3Yba/idES2GcZM7QvwCuHOP2R+ifhtO1lb4oYhkkr+tbvXSLkYByFTWaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793988500;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=y2wF0KFzbTLe+cqzFbIObBj2RjK9rW7cuVbUfbsAFSE=;
-	b=jqZk6+f7/AbAQ8pTrEchkS58hBy+yrGmJOJUB4Ki/PVdxkUAYhh9uWToE2QnTcS4jLaz
-	 jE84aJx2dpgHvlD4gBeKLGtz8NnoaI/MYkCO2MIm8fF/PWBQl0OaFMm+PdCnGxZFJIL+z
-	 LYUYeUpW7dZOf/R/cOQNN3xuSUbfC3u1T4WQfSK3LSK8bQTLvR7atRr7HBqAWMpyY3wc9
-	 AwK/jNq4pdvalA5k4Kt51wv7jum5N8MsQJRw/hPobgelEhuvuaLxMWog78v8E9tOghOiA
-	 UOeNP7iJ9HUBEsbfkoxaMABKe/sORBU7gE6giZzkD1+ANrmLkbhdGAOxSitF0eaDtkQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793988975;
+	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Z6xIF9DHq6VFbu+5doxEig+9nQ+rB8oTNPXSiectAtI=;
+	b=gvEdBAM458BVNWLZo14Ia5tFxEwl/HXMyMkJLRnB6U07Bdrfv/DIECU3L64eDohgAxBT
+	 bAB4fE5wzOIzRWSMFTfNV/owakylXCn03Uix0qXAXsjCKJeEboKA+7ZAjzFIFRTn9nWoz
+	 eUsA9tbFlKoTGOCspML3ftzmF8EPqEyaS63InCOoKpeCk2jfNYjYmHWnikohuXNMw4do7
+	 icC6+5bnsDvfex9BxANMF9DOwBNQ7fyNW6w9DT1o1DQZRRTnlGLxJ96Etk0I6t6DGys8u
+	 8kkdBqAMvjWxkMjArSYgwqLG7k8q/O7pXwdltESfY6+L83Fi4lSZ1Flt/QE0+cubNwg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Z530XT+x;
-	arc=none smtp.remote-ip=74.125.82.181
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=linux.alibaba.com;
+	spf=pass smtp.mailfrom=linux.alibaba.com;
+	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=Rfj5wSUY;
+	arc=none smtp.remote-ip=115.124.30.98
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819EB606D814
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 18:08:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 819EB606D814
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F22D606A32C;
+	Fri,  6 Nov 2026 18:16:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F22D606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Z530XT+x
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-3700ed8dbe3so1208240eec.0
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 10:08:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793988499; x=1794593299; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=y2wF0KFzbTLe+cqzFbIObBj2RjK9rW7cuVbUfbsAFSE=;
-        b=Z530XT+xR5lm7nOvFmjjQBynvV9sCjoUFRgIDimqpt9vI1Ts1frETBvfKxKnkJQkIq
-         B6aNiWZxgpFviG8ebcSeQamz8nTNodLQM2fvoNF7cd1lqn79N0olGqKyhS5SHnuv0ygS
-         97h8G7swfqelGUm959VQGssT/5udxz5mJesAEe6Wgwp3SPYVITFYxXkzwIYb9+fbsnpf
-         FJLy0uRjNpp+FGkrdQTDl+Bfa7Nsx76PExyM0fEjPz/vDih6dF0ORrnXGDi8mR52SA9E
-         D1O1h/FqGPzjxgLGnFF333ajMsxCTQ8EcUYb8L33beKVtfkzL5OqzWSdJAkthh0NgMX5
-         zANw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793988499; x=1794593299;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=y2wF0KFzbTLe+cqzFbIObBj2RjK9rW7cuVbUfbsAFSE=;
-        b=dfLNFcvaf8Bfp1twQeZPg9BeQZY7lvcyedWkGqvpqIegFF5JGFuRHIoPCwPwKxOVAj
-         FFH1t/C+Z79LEF685p1f6WB9euYWKqbH1HBWUdm+zeEUlvDNPxhIODWLA0Ya4IVhlfT+
-         Qiqg0SwWVs4zLVU1A4uhxreNK38iNCo2h7Ygz3HMtDsAnx+rhHb37/KZCNbb1LMMIc6l
-         tFUMM84EsZxokC/guweQjNVFDUJJlVXdFPHdVKSIuCnmD1lxK+mq/L5U4YV+u8F9GbQH
-         4PTvrxNlQwHDSn7Y5UlfkhaprXesYyvLCJDJUlWw39e0+84uDQZFAYkq7mKTfKaGjlZ+
-         zBgg==
-X-Forwarded-Encrypted: i=1; AL+hErEomilPIxlFq/IaOBBeBr1/znfx0vkRTY4DVVumMqpxm1Uzb8Zk7uuHrJMkdZtDoJvSFLk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+G39ZOiOIHbbxE5vpKueI2T7vQJMsuCQhNunzgnUricAhmFVEK
-	GEjoj/lZ1HNil/btaxqiOVMUu5ftEbbwfp5vXbzs85EFUpw7+Quua+Mr5AmzBQdd
-X-Gm-Gg: AYBFou0sbxFX0TI9cBR22OV1SudBaFfI9pIgCEjNGZvzjh+oIWgEDj454QZHmuFCgdJ
-	47iEctzc0MKiEu83q2zCaXDAgGY3KZhphJOFsC7tfdalgbifoMgkMTjo7a0k1liM14ObeVZuE/g
-	tFkqeQSBW+riLkLsWwYOk8vtCzT13igzr8QJ7gyVlQD1A1B6DoZGKNxNJSC4/z10p5fV3YbilZd
-	huM6NrVSh/gEuPDSTepx9UB+eu+H2qID8JDmL3ueSdTYsUmROcRsiUYc4zctvHzh9/9lGd2B4sU
-	0+EwxoIVy7g88xzjP0iMvN+EmIKV+Y6bTBGfWCykyiFR26xLM2p+RQUTE6uoPZP09qQoDvyuaRD
-	oapIiqiEcwayED1LwX38/8K11q4iZeSah2EPqIkZvil8dMbVST+O8UUZdlcRVP+sNP9dJutBhZL
-	/50p3whDzK1DS+4wlmY1OoUc1kx2lsQNMqlDLiTFAoAWc3eXahTwxFjGh6eJqMaUYQVQi+1Zm+1
-	N80imn7Cj4RfdqbmSuxGvVJJ8pdHPDdclxPL/eu2trM6d2i7S4jAqG2lIll28dbXkeGpIfZiKDg
-	TtcpQjXVU3vxaUnBYv3XC/bPFz/xvM8kyar2zkFU29PgApC3eXVxm4fAchmNGUidtB3M
-X-Received: by 2002:a05:693c:68c3:b0:36e:2626:4ace with SMTP id 5a478bee46e88-36f7398b906mr4338097eec.5.1793988499062;
-        Fri, 06 Nov 2026 10:08:19 -0800 (PST)
-Received: from ?IPv6:2620:10d:c096:14a::1c6? ([2620:10d:c090:600::1:7f98])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36fa651e6b1sm18596199eec.3.2026.11.06.10.08.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 10:08:18 -0800 (PST)
-Message-ID: <6d9ffb229ca293c765fd550fb1e0ec988c26adb3.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 00/45] bpf: A verifier that joins states
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Date: Fri, 06 Nov 2026 11:08:14 -0700
-In-Reply-To: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
-References: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-3.fc44) 
+	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=Rfj5wSUY
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1793988970; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=Z6xIF9DHq6VFbu+5doxEig+9nQ+rB8oTNPXSiectAtI=;
+	b=Rfj5wSUYS27Pwbkr9EXiQNhmZZwYLt/DPkI+gYy7phy0J+TOMUjnMcjVFfTnaiDhgEIcDKjoPEG8d/4MKGCkKWRFaG2PXIf/BI94GphFZJoPccyNzWw1/ReBZOBdElQ/ZCG7HxWcYCfzpspaVk3eSUvmfcUie4+B4lE49E2tuq4=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=28;SR=0;TI=SMTPD_---0XECMC2K_1793988968;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XECMC2K_1793988968 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Sat, 07 Nov 2026 02:16:09 +0800
+From: Chen Pei <cp0613@linux.alibaba.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	bjorn@kernel.org,
+	puranjay@kernel.org,
+	alexei.starovoitov@gmail.com
+Cc: eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	pulehui@huawei.com,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	luke.r.nels@gmail.com,
+	xi.wang@gmail.com,
+	shuah@kernel.org,
+	rgbi3307@gmail.com,
+	guoren@kernel.org,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 bpf-next 1/3] riscv: bpf: Add BPF private stack support
+Date: Sat,  7 Nov 2026 02:15:56 +0800
+Message-ID: <20261106181558.1564-2-cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261106181558.1564-1-cp0613@linux.alibaba.com>
+References: <20261106181558.1564-1-cp0613@linux.alibaba.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,141 +86,285 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2026-11-06 at 03:50 +0000, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
->=20
-> The verifier follows each path of a prog, and each branch can double the
-> number of paths. The work grows with the paths, not with the prog:
->   insns processed                                    today    this series
->   rust-bpf  scx_beerland/beerland_init_task        1000001 *        17893
->   rust-bpf  scx_qmap/qmap_init_cids                 131088 *          196
->   scx       scx_eevdf/eevdf_dispatch                350041          15199
->   Cilium    bpf_host/cil_to_netdev, Oct 2026         64658           7472
->   * "BPF program is too large", "The sequence of 8193 jumps is too comple=
-x"
->=20
-> Authors cut their progs until they fit. Nobody can cut core, alloc and th=
-e
-> crates of Rust: of the 653 progs of https://github.com/4ast/rust-bpf 187
-> load today, 170 hit one of these limits, 164 get "infinite loop detected"
-> and 122 "recursive call". Now 648 load, and no corpus of C progs loses on=
-e.
-> For rust-bpf both kernels have 4 kfuncs on top, see Numbers.
->=20
-> The idea
-> =3D=3D=3D=3D=3D=3D=3D=3D
-> Do not follow paths. Where paths meet, join their states: r1=3D1 and r1=
-=3D5
-> give r1=3D[1,5]. Repeat until no state changes. States stay apart only if
-> they have no join, or if a later check depends on the difference.
->   loops      counted by scalar evolution: one state covers all iterations
->              walked: a state per iteration, while constants decide an exi=
-t
->              all other loops: join at the head, widen, add may_goto
->   subprogs   A static subprog is verified for the states at its entry, no=
-t
->              for each chain of calls. Recursion is the same, with widenin=
-g.
->   run time   may_goto limits the time of loops and of recursion. r10 limi=
-ts
->              the depth: it must be in the upper half of its kernel stack.
->=20
-> What users see
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->  - The limits of 1M processed insns and 8192 jumps are gone. The limits a=
-re
->    on states, for a prog of N insns: 1024 at an insn, 16 * N + 4096 at
->    a time, 256 * N + 64K in all.
->  - "infinite loop detected" is gone: the verifier adds may_goto. A loop
->    that has no exit gets "loop at insn N never exits".
->  - may_goto is also added to 5 progs of the table below that load today:
->    loop1, loop2, loop5, tcp_autolowat_enqueue_rcvq (GCC), chaos_enqueue.
->  - Recursion is allowed on x86-64 and arm64. Patch 22 lists the exception=
-s.
->  - All added may_goto of an invocation share its time slice of 250 ms. Th=
-en
->    the prog returns 0. A subprog that cannot unwind, or a frame that hold=
-s
->    a lock or a reference, leaves the loop. The stderr stream has the caus=
-e.
->  - A join loses the relation between scalars. This is rejected now:
->      if (c) { i =3D 3; n =3D 4; } else { i =3D 7; n =3D 8; }
->      x =3D arr[n - i];                                    n - i is [-3, 5=
-]
->  - A cgroup_skb prog whose r0 can be 2 or 3 attaches to egress only. That
->    holds for a range too: 'return 1' and 'return 2' are joined to [1, 2].
->  - The log has no "mark_precise:", "N: safe", "depth=3D" and no scc colum=
-n.
->    Level 2 shows "from 13 to 9: within", "joined" or "widened" where stat=
-es
->    meet. The statistics line keeps its format: "limit 0", "mark_read 0".
->  - BPF_F_TEST_STATE_FREQ is accepted and has no effect.
->=20
-> Numbers
-> =3D=3D=3D=3D=3D=3D=3D
-> A: bpf-next 8424858a5de0. B: this series, the same objects. The selftests
-> that the series adds or changes are not counted. None of them is lost.
->=20
-> Corpus                 Progs  Lost  Gained  Insns  States   Mem  Time
-> ---------------------  -----  ----  ------  -----  ------  ----  ----
-> selftests               3043     0       1   -63%   +120%  -18%  -27%
-> selftests, no_alu32     2905     0       1   -66%    +86%  -27%  -34%
-> selftests, cpuv4        2914     0       1   -64%    +96%  -27%  -32%
-> selftests, bpf_gcc      2733     0       5   -69%    +96%  -16%  -24%
-> 37 builds of Cilium     5189     0       0   -75%    +11%   -6%  -31%
-> sched-ext/scx            495     0       0   -89%    -34%  -66%  -67%
-> scx, as BPF CI has it    428     0       0   -85%    -22%  -38%  -39%
-> tools/sched_ext          240     0       0   -69%    +37%   +3%  -11%
-> public progs of Meta     511     0       0   -85%    -35%  -55%  -48%
-> all                    18458     0       8   -74%    +10%  -19%  -36%
->=20
-> Progs load in A and in B. The per cent compare sums over these progs:
-> 75.1M -> 19.2M processed insns, 61 -> 39 s. Mem is mem_peak of veristat.
-> Time is the best of 3 runs on kernels without debug options. B counts eac=
-h
-> state that arrives at a basic block as a state, A only those that it save=
-s.
-> Gained: loop3 in the 4 builds, 4 progs that A rejects only in GCC's code.
-> Of the progs that take 1000 insns or more in B, two take over 5% more tha=
-n
-> in A. loop5, 82 -> 4182: a walk up to its limit of 4096 insns, then a joi=
-n.
-> res_spin_lock_test_held_lock_max, 2356 -> 4088: states that hold differen=
-t
-> numbers of locks have no join.
->=20
-> rust-bpf               Progs  load in A  load in B  B: insns   time
-> 16 schedulers            225         52        225      1.6M  1.9 s
-> crates                   428        135        423      7.3M  9.4 s
-> For rust-bpf A and B have the kfuncs of patches 30-31 of [1] on top. They
-> are in no series now. No released compiler emits the code of rust-bpf.
->=20
-> How to read the series
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> Start with patch 7, the overview. Then 4-5, 13-14, 15, 17 and 19.
->   1-2    what is added to a prog: may_goto, the checks of recursion
->   3-5    union and widening of a range, join.c: the join of two states
->   6-10   data structures of flow.c, passes ahead of the main pass: order =
-of
->          the insns, places for may_goto, what later checks depend on
->   11-14  the sets of states, iterations, what is not joined, the merge
->   15-18  how states move: edges, calls and exits, loops, added edges
->   19     the switch. The check of one insn against one state is the same.
->   20-22  more counted loops, static subprogs on their own, recursion
->   23-26  removal of pruning, precision tracking and SCCs: 3382 lines
->   27-28  callx: a pointer to one of a set of functions, live registers
->   29-38  code that needs more than that: casts, the context in a struct,
->          subprogs that check for their caller, loops that are not counted
->   39-45  selftests: 39-40 adjust tests, 41-45 add tests
-> Each patch builds. Patches 1-18 add the code that patch 19 switches to.
-> Some selftests fail from patch 19 to 39.
+A program on a private stack keeps its BPF frames in a per-CPU area of
+its own rather than on the kernel stack of whichever context entered it.
+bpf_enable_priv_stack() grants that mode only once the JIT reports
+bpf_jit_supports_private_stack(), which riscv64 did not: programs there
+always ran on the kernel stack, and a struct_ops program that requires
+one was rejected with -EACCES.
 
-Hi Alexei,
+Allocate a per-CPU area of the verifier calculated depth plus a 16 byte
+guard region at each end, and point BPF_REG_FP (S5) at the top of it
+while leaving SP on the kernel stack. Every BPF stack access already
+goes through S5, and S5 is callee-saved with each subprog deriving its
+own, so nothing else in the JIT has to know about the private stack.
 
-regarding the Meta veristat failures. Please find distilled examples here:
-https://github.com/eddyz87/bpf/tree/ast-new-verifier-v3-meta-tests
-Applied as commits on top of your series.
-All slop but seem to add up.
+The outgoing stack argument area stays in the kernel frame: callers
+write it relative to SP, callees relative to RV_REG_FP, which the
+prologue sets to the caller's SP.
 
-...
+The per-CPU lookup is emitted after the tail call entry point: a program
+using a private stack can still be entered as a tail call target, and
+RV_TAILCALL_OFFSET is a constant added to the target's bpf_func, so what
+is in front of it must be the same size in every program.
+
+The base is materialized with absolute moves, as on arm64, x86-64 and
+powerpc64: the vmalloc'd per-CPU area is beyond an auipc pair from the
+JIT region, and riscv64 has no register holding the per-CPU offset, so
+the address of __per_cpu_offset is loaded too. emit_imm() is a choice
+there, not a requirement; emit_addr() as used by
+insn_is_mov_percpu_addr() would need an extra_pass argument and an error
+return in bpf_jit_build_prologue(), touching bpf_jit_comp32.c too. Both
+constants are fixed before the offset convergence loop, so the prologue
+length is stable across passes.
+
+The guard value follows arm64, x86-64 and powerpc64, and the 16 byte
+two-copy region at each end follows arm64 and powerpc64, since x86-64
+uses an 8 byte guard with a single copy. A jited program has them
+checked when it is freed, reporting the first corrupted CPU only;
+failure paths release the area unchecked since the image never ran,
+which also clears priv_stack_ptr for the later bpf_jit_free().
+
+RV32 does not declare support and keeps the existing kernel stack
+behaviour.
+
+Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
+---
+ arch/riscv/net/bpf_jit.h        |  2 +
+ arch/riscv/net/bpf_jit_comp64.c | 42 +++++++++++++++--
+ arch/riscv/net/bpf_jit_core.c   | 82 +++++++++++++++++++++++++++++----
+ 3 files changed, 114 insertions(+), 12 deletions(-)
+
+diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+index 21a190a6a6d9..dbe1ac8cd0de 100644
+--- a/arch/riscv/net/bpf_jit.h
++++ b/arch/riscv/net/bpf_jit.h
+@@ -14,6 +14,8 @@
+ 
+ #define RV_MAX_REG_ARGS		8
+ #define RV_EXTRA_STK_ARGS	(RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS)
++#define PRIV_STACK_GUARD_SZ	16
++#define PRIV_STACK_GUARD_VAL	0xEB9F12345678eb9fULL
+ 
+ /* verify runtime detection extension status */
+ #define rv_ext_enabled(ext) \
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 371405598faa..a7a7d2f9da85 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -2134,12 +2134,34 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 	return 0;
+ }
+ 
++static void emit_priv_stack_frame(struct rv_jit_context *ctx)
++{
++	u64 fp = (__force u64)ctx->prog->aux->priv_stack_ptr + PRIV_STACK_GUARD_SZ;
++
++	fp += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
++	emit_imm(RV_REG_S5, fp, ctx);
++#ifdef CONFIG_SMP
++	emit_lw(RV_REG_T1, offsetof(struct thread_info, cpu), RV_REG_TP, ctx);
++	emit_imm(RV_REG_T2, (u64)__per_cpu_offset, ctx);
++	emit_sh3add(RV_REG_T1, RV_REG_T1, RV_REG_T2, ctx);
++	emit_ld(RV_REG_T1, 0, RV_REG_T1, ctx);
++	emit_add(RV_REG_S5, RV_REG_S5, RV_REG_T1, ctx);
++#endif
++}
++
+ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+ {
++	bool priv_stack = ctx->prog->aux->priv_stack_ptr;
+ 	int i, stack_adjust = 0, store_offset, bpf_stack_adjust = ctx->stack_arg_sz;
+ 
+-	bpf_stack_adjust += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
+-	if (bpf_stack_adjust)
++	/*
++	 * With a private stack only the outgoing stack argument area is left in
++	 * this frame. It has to stay: the caller writes it relative to SP while
++	 * the callee reads it relative to RV_REG_FP, the caller's SP set below.
++	 */
++	if (!priv_stack)
++		bpf_stack_adjust += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
++	if (bpf_stack_adjust || priv_stack)
+ 		mark_fp(ctx);
+ 
+ 	if (seen_reg(RV_REG_RA, ctx))
+@@ -2217,7 +2239,16 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+ 
+ 	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+ 
+-	if (bpf_stack_adjust)
++	/*
++	 * Point BPF_REG_FP at the top of this CPU's private stack. A program
++	 * with one can still be entered as a tail call target, at
++	 * RV_TAILCALL_OFFSET, so this has to come after that entry point; the
++	 * offset is a constant added to the target's bpf_func, so everything in
++	 * front of it must also be the same size in every program.
++	 */
++	if (priv_stack)
++		emit_priv_stack_frame(ctx);
++	else if (bpf_stack_adjust)
+ 		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
+ 
+ 	ctx->stack_size = stack_adjust;
+@@ -2320,3 +2351,8 @@ bool bpf_jit_supports_hmul(void)
+ {
+ 	return true;
+ }
++
++bool bpf_jit_supports_private_stack(void)
++{
++	return true;
++}
+diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
+index f2497ec7d378..138e9fa90963 100644
+--- a/arch/riscv/net/bpf_jit_core.c
++++ b/arch/riscv/net/bpf_jit_core.c
+@@ -9,6 +9,7 @@
+ #include <linux/bpf.h>
+ #include <linux/filter.h>
+ #include <linux/memory.h>
++#include <linux/percpu.h>
+ #include <asm/text-patching.h>
+ #include <asm/cfi.h>
+ #include "bpf_jit.h"
+@@ -44,6 +45,60 @@ bool bpf_jit_needs_zext(void)
+ 	return true;
+ }
+ 
++static u32 priv_stack_size(struct bpf_prog *prog)
++{
++	return round_up(prog->aux->stack_depth, STACK_ALIGN) +
++	       2 * PRIV_STACK_GUARD_SZ;
++}
++
++static int alloc_priv_stack(struct bpf_prog *prog)
++{
++	u32 size = priv_stack_size(prog);
++	u32 end = (size - PRIV_STACK_GUARD_SZ) / sizeof(u64);
++	void __percpu *ptr;
++	int cpu, i;
++
++	ptr = __alloc_percpu_gfp(size, STACK_ALIGN, GFP_KERNEL);
++	if (!ptr)
++		return -ENOMEM;
++
++	for_each_possible_cpu(cpu) {
++		u64 *stack = per_cpu_ptr(ptr, cpu);
++
++		for (i = 0; i < PRIV_STACK_GUARD_SZ / sizeof(u64); i++) {
++			stack[i] = PRIV_STACK_GUARD_VAL;
++			stack[end + i] = PRIV_STACK_GUARD_VAL;
++		}
++	}
++	prog->aux->priv_stack_ptr = ptr;
++	return 0;
++}
++
++static void priv_stack_check_guard(struct bpf_prog *prog)
++{
++	u32 end = (priv_stack_size(prog) - PRIV_STACK_GUARD_SZ) / sizeof(u64);
++	int cpu;
++
++	for_each_possible_cpu(cpu) {
++		u64 *stack = per_cpu_ptr(prog->aux->priv_stack_ptr, cpu);
++
++		if (stack[0] != PRIV_STACK_GUARD_VAL ||
++		    stack[1] != PRIV_STACK_GUARD_VAL ||
++		    stack[end] != PRIV_STACK_GUARD_VAL ||
++		    stack[end + 1] != PRIV_STACK_GUARD_VAL) {
++			pr_err("bpf-jit: private stack overflow/underflow guard of prog %s corrupted on CPU %d\n",
++			       bpf_jit_get_prog_name(prog), cpu);
++			return;
++		}
++	}
++}
++
++static void free_priv_stack(struct bpf_prog *prog)
++{
++	free_percpu(prog->aux->priv_stack_ptr);
++	prog->aux->priv_stack_ptr = NULL;
++}
++
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_prog *prog)
+ {
+ 	unsigned int prog_size = 0, extable_size = 0;
+@@ -84,12 +139,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 			    round_up((stack_arg_cnt - RV_EXTRA_STK_ARGS) * 8, STACK_ALIGN) : 0;
+ 
+ 	ctx->prog = prog;
++	if (prog->aux->jits_use_priv_stack && alloc_priv_stack(prog))
++		goto out_free_hdr;
++
+ 	ctx->offset = kvzalloc_objs(int, prog->len);
+ 	if (!ctx->offset)
+-		goto out_offset;
++		goto out_free_hdr;
+ 
+ 	if (build_body(ctx, extra_pass, NULL))
+-		goto out_offset;
++		goto out_free_hdr;
+ 
+ 	for (i = 0; i < prog->len; i++) {
+ 		prev_ninsns += 32;
+@@ -104,7 +162,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 		ctx->prologue_len = ctx->ninsns;
+ 
+ 		if (build_body(ctx, extra_pass, ctx->offset))
+-			goto out_offset;
++			goto out_free_hdr;
+ 
+ 		ctx->epilogue_offset = ctx->ninsns;
+ 		bpf_jit_build_epilogue(ctx);
+@@ -124,7 +182,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 							  bpf_fill_ill_insns,
+ 							  bpf_prog_was_classic(prog));
+ 			if (!jit_data->ro_header)
+-				goto out_offset;
++				goto out_free_hdr;
+ 
+ 			/*
+ 			 * Use the image(RW) for writing the JITed instructions. But also save
+@@ -190,10 +248,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 			ctx->offset[i] = ctx->offset[i - 1];
+ 		ctx->offset[0] = ninsns_rvoff(ctx->prologue_len);
+ 		bpf_prog_update_insn_ptrs(prog, ctx->offset, jit_data->ro_image);
+-out_offset:
+-		kvfree(ctx->offset);
+-		kfree(jit_data);
+-		prog->aux->jit_data = NULL;
++		goto out_free_ctx;
+ 	}
+ 
+ 	return prog;
+@@ -209,7 +264,12 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 				   sizeof(jit_data->header->size));
+ 		bpf_jit_binary_pack_free(jit_data->ro_header, jit_data->header);
+ 	}
+-	goto out_offset;
++	free_priv_stack(prog);
++out_free_ctx:
++	kvfree(ctx->offset);
++	kfree(jit_data);
++	prog->aux->jit_data = NULL;
++	return prog;
+ }
+ 
+ u64 bpf_jit_alloc_exec_limit(void)
+@@ -261,6 +321,10 @@ void bpf_jit_free(struct bpf_prog *prog)
+ 		prog->bpf_func = (void *)prog->bpf_func - cfi_get_offset();
+ 		hdr = bpf_jit_binary_pack_hdr(prog);
+ 		bpf_jit_binary_pack_free(hdr, NULL);
++		if (prog->aux->priv_stack_ptr) {
++			priv_stack_check_guard(prog);
++			free_priv_stack(prog);
++		}
+ 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
+ 	}
+ 
+-- 
+2.50.1
+
