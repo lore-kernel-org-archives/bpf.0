@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.158
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.246
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793995062;
-	b=a4S4xpZuP+b9Q8QxK3jrB5PEbw3N1IkdgzTzlF42cuGtO1JEYVdDWqu+fsk1qhheAXhQ
-	 T9CK+MEe/q7NWVJQGh9oDTFGQH+ttdyY3Y8YVko9pH4IHI9gbFkTLABfaVeZ9xQFQ0Ng0
-	 QoqmmyamOeO6sZReuK7zywcYhDj4t7HUsMiDtDSyuSI/+sl0OPtM77PmMweG1vTOeLcPp
-	 hWxPHFaU2Of8edktkSrVmP1FKOASr/7z0bd/VEHpYHaLypj5OTmxMdcJhyk0rxOd3AE0G
-	 qjG5lmO4SQXLIexhfy3Xx88Nyoy4He84UMe1NtwoejDqE6nLriuEu68nZkn5qT0s+0A==
+	t=1793995065;
+	b=OqoXxTnGWyc4xy03pqiUJHzPSgF5vxHKdhmffLIGP4v/z0G3MmMErFFGVq993MIIlus1
+	 1hNe7Ub9e4iyd6ewuZ+bKfQoAIAtEF/vOLE82Bn4ISHDh38bpzWH1b1+yadruqT3qEaxB
+	 U1b7uraCNTLUbJcdYyQBFXFnPrIxG6kfNTStAy6lzHdrTo25oyCZkx/C+rEHElyMO5O2y
+	 OQ4OiWkSIxFhSfvqejyRrhfWjwLRZfbJxIE3Xvma1oaVNw96FwGBkJdLYVDWtRpwHqxt4
+	 rYxi1MVvCi4yzZ1g7kwvhkuvcohEs2bc7Xlibh+uzYsSCivQvEKT1AKc573KTW/Y+PA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793995062;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793995065;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=KWnNUPb6bEp72fmGwbJyL0sLEVfPbhwGjaRgMYtWXv0=;
-	b=mG8O+LkC4+roE9sPhybkauidrf2wJZXAxqYOn/7st87IDXLNnHEfr/y2V+2P4mUvP7OL
-	 mYDnG5FpBi3x70cTx4RN9L/vOqqy3teuBsfsTaDDhNjG6NCKIM2zhntNnS+F3zSixX6+c
-	 m8VmwRxH9GvkKAjLFd3YdcawPWLA6OUzzcCaSaDUKJEMofMvDBLMS50cY9IYQQ+dSLpZU
-	 hcY3YQxR8+E3RtGoq0mMA08hDAf8ispB2L638wYuvrFTNpg0Z3u+VNNXSCAulzI/GsJUV
-	 GA8AQF8Vp55V3ZAxl58bWJAzBNT7SrXKb1IlWqp62YFi46nwACXL/hYKOL9THbGyEEw==
+	bh=yR0wyjLXqswp1CQsrxga6re1CLg85kqI+4FeWhg45N4=;
+	b=iezRzJpg2qDmDdfPJCxatT9lF2yJuEPbzRD3NIe1qiTYPBRv/qdeWK+eY8v4lhNhMVYr
+	 agC8t32mSTZk2TstxLiVSzIxYmKtIzUA/oqsI7thngSd5g36oGGLCoJRZfc0S4qUsbvcM
+	 eOKjXKNSbVW7TsjrOhn0Jk7rmNlAZg8O9maQLte7BmCDouq8Wg0GXxI5u1SxlTVNeYzuu
+	 eCiaUiafBGeiHMnt6ZkED4Adm2c3fmgebxcbnVToJAucdoyraIr6DM+CK0W2yrgH0N5/I
+	 N4pX0f6bzgWRNGXZpz7yGycq5G20RVfY0psYX0eeUKhXmiDR/rqtmyi7jy5BUDBq5NQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hrKu5vSn;
-	arc=none smtp.remote-ip=91.218.175.158
-Received: from mta0.migadu.com (out-158.mta0.migadu.com [91.218.175.158])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JpZ6rNzr;
+	arc=none smtp.remote-ip=95.215.58.246
+Received: from mta1.migadu.com (out-246.mta1.migadu.com [95.215.58.246])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC55F606A330
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 19:57:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC55F606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C090606A329
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 19:57:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C090606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hrKu5vSn
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JpZ6rNzr
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=IL+c6glJ395w5+qEWtHJDTuyg1jMQ8ZP/husk8rWqQI=;
+DKIM-Signature: a=rsa-sha256; bh=d/lPlHCf8xyzPs/06b91N1R+2xTg7kkZvJXNBtHLknk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793995059; v=1; x=1794599859;
- b=hrKu5vSncTemWt1PMyl+Jllt/AMNkiTcHrP61jxZjiW5vHQlkR5S4HKdCObIPUK0iU7y6d1T
- nmQHpF+wZB+smRlP7gbyJ3phnshVdOuXlxYWX/csXnhq7BQ8V9Y2s6p9I2zxkBfhBXoasA/TKAp
- +qHczXG+YGt4dsL9JuYyno5A=
+ t=1793995062; v=1; x=1794599862;
+ b=JpZ6rNzrjjxoLuABHJf42RUCph0XaZ8YWMX7q0kqUlEs4xNZvn/WqM96NjDIyxAlk3QGf+qe
+ LxUzrLLgMmWmU9xVQrNjiLKjG58jG5zxOD1OWAFEjaZC5hQHmfZEiybif7cfRektV4GP72YeDdJ
+ q7CZd21Lu+nf2L5NAj+/NhQs=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id cb0fe7a4ac999ecd;
-	Fri, 06 Nov 2026 19:57:39 +0000
-X-Mizu-Trace-ID: cb0fe7a4ac999ecd
+Received: by mta12.migadu.com with ESMTPS id e803b596db9e8dc0;
+	Fri, 06 Nov 2026 19:57:42 +0000
+X-Mizu-Trace-ID: e803b596db9e8dc0
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -57,9 +57,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v1 2/3] libbpf: Drop btf_dump details from the BTF docs
-Date: Fri,  6 Nov 2026 12:57:29 -0700
-Message-ID: <20261106195730.2623973-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 3/3] bpftool: Replace the type tag override table with two checks
+Date: Fri,  6 Nov 2026 12:57:30 -0700
+Message-ID: <20261106195730.2623973-3-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261106195730.2623973-1-ihor.solodrai@linux.dev>
 References: <20261106195730.2623973-1-ihor.solodrai@linux.dev>
@@ -74,103 +74,77 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-btf.rst describes the BTF format, but commit fbafb695c5d2 ("libbpf: Let
-decl tags override how btf_dump renders type tags") and
-commit 79dcfd3e36a7 ("libbpf, bpftool, resolve_btfids: Dump kflagged
-BTF tags as is") added to it how btf_dump prints kflagged tags and decl
-tags on type tags. The comments of btf__add_type_attr() and
-btf__add_decl_attr() also prescribe what the string must contain,
-though it is arbitrary text that depends on the use case.
+btf_c_annotate_type_tags() looks each type tag up in a table of
+overrides. The table holds two fixed cases, the "address_space(1)"
+string of older kernel BTF and the plain "arena" tag, and is not
+expected to grow.
 
-Describe kflagged tags only as arbitrary annotations in both places.
-Keep a short note on the type tag override in btf_dump.c, whose comment
-pointed to btf.rst.
+Check for the two tags directly and drop the table.
+
+No functional change.
 
 Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/CAEf4BzYqq-o8SRTWyO=J6gBnSkZa=QYuEiBNuBEVndVsVYcExg@mail.gmail.com/
+Link: https://lore.kernel.org/bpf/CAEf4BzbpVnoqKnGAVKYRffraPpPWjnNFF2oFAnXmBkqd2V6vmg@mail.gmail.com/
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- Documentation/bpf/btf.rst | 21 ++++-----------------
- tools/lib/bpf/btf.c       |  6 ++----
- tools/lib/bpf/btf_dump.c  |  2 +-
- 3 files changed, 7 insertions(+), 22 deletions(-)
+ tools/bpf/bpftool/btf.c | 33 ++++++++++++---------------------
+ 1 file changed, 12 insertions(+), 21 deletions(-)
 
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index 99833048de60..b618812390e4 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -506,14 +506,9 @@ If ``info.kind_flag`` is 0, then this is a normal decl tag, and the
- ``name_off`` encodes btf_decl_tag attribute string.
- 
- If ``info.kind_flag`` is 1, then the decl tag represents an arbitrary
--annotation. ``name_off`` encodes the complete annotation string, which
--``btf_dump`` prints unchanged at the declaration. For example, an attribute
--specifier is encoded as ``__attribute__((aligned(4)))``, including the
--wrapper. A macro can be encoded as its identifier, leaving its definition
--to the generated header or its user.
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index c06b01f2c5b3..c51c2efde3ed 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -1096,38 +1096,29 @@ static struct sort_datum *sort_btf_c(const struct btf *btf)
+  * Kernel BTF keeps its type tags as the kernel expects them. Decl tags in
+  * the dump split choose how btf_dump prints them.
+  */
+-static const struct {
+-	bool kflag;
+-	const char *name;
+-	const char *override;
+-} btf_c_type_tags[] = {
+-	/* the arena attribute in older kernel BTF */
+-	{ true, "address_space(1)", "__attribute__((address_space(1)))" },
+-	/* __arena in include/linux/bpf_compiler_types.h */
+-	{ false, "arena", "__bpf_arena" },
+-};
 -
--``btf_dump`` also accepts decl tags that reference a ``type_tag``, as
--described under ``BTF_KIND_TYPE_TAG``.
-+annotation. ``name_off`` encodes the complete annotation string. For
-+example, an attribute specifier is encoded as
-+``__attribute__((aligned(4)))``, including the wrapper.
+ static int btf_c_annotate_type_tags(struct btf *btf)
+ {
+ 	__u32 i, cnt = btf__type_cnt(btf);
+-	size_t j;
+ 	int err;
  
- 2.2.18 BTF_KIND_TYPE_TAG
- ~~~~~~~~~~~~~~~~~~~~~~~~
-@@ -544,15 +539,7 @@ string.
+ 	for (i = 1; i < cnt; i++) {
+ 		const struct btf_type *t = btf__type_by_id(btf, i);
+-		const char *name;
++		const char *name, *attr;
  
- If ``info.kind_flag`` is 1, then the type tag represents an arbitrary
- annotation. As with decl tags, ``name_off`` encodes the complete annotation
--string, which ``btf_dump`` prints unchanged. An attribute specifier must
--include its wrapper, for example ``__attribute__((address_space(1)))``.
--
--``btf_dump`` prints decl tags that reference a type tag, with
--``btf_decl_tag.component_idx`` of ``-1``, in place of that type tag. They
--are printed the same way as decl tags on declarations. This lets a split
--BTF built for a C dump change how the type tags of its base BTF are
--printed, without modifying the base. The kernel rejects decl tags that
--reference type tags.
-+string, for example ``__attribute__((address_space(1)))``.
+ 		if (!btf_is_type_tag(t))
+ 			continue;
+ 		name = btf__name_by_offset(btf, t->name_off);
+-		for (j = 0; j < ARRAY_SIZE(btf_c_type_tags); j++) {
+-			if (btf_kflag(t) != btf_c_type_tags[j].kflag ||
+-			    strcmp(name, btf_c_type_tags[j].name))
+-				continue;
+-			err = btf__add_decl_attr(btf, btf_c_type_tags[j].override, i, -1);
+-			if (err < 0)
+-				return err;
+-		}
++		if (btf_kflag(t) && !strcmp(name, "address_space(1)"))
++			/* the arena attribute in older kernel BTF */
++			attr = "__attribute__((address_space(1)))";
++		else if (!btf_kflag(t) && !strcmp(name, "arena"))
++			/* __arena in include/linux/bpf_compiler_types.h */
++			attr = "__bpf_arena";
++		else
++			continue;
++		err = btf__add_decl_attr(btf, attr, i, -1);
++		if (err < 0)
++			return err;
+ 	}
  
- 2.2.19 BTF_KIND_ENUM64
- ~~~~~~~~~~~~~~~~~~~~~~
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 448ee6acf519..a4bf01403a43 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -3064,8 +3064,7 @@ int btf__add_type_tag(struct btf *btf, const char *value, int ref_type_id)
-  * Append new BTF_KIND_TYPE_TAG type with:
-  *   - *value*, non-empty/non-NULL tag value;
-  *   - *ref_type_id* - referenced type ID, it might not exist yet;
-- * The kind flag is set; btf_dump prints *value* unchanged.
-- * Attribute specifiers must include the __attribute__((...)) wrapper.
-+ * Set info->kflag to 1, indicating this tag is an arbitrary annotation
-  * Returns:
-  *   - >0, type ID of newly added BTF type;
-  *   - <0, on error.
-@@ -3400,8 +3399,7 @@ int btf__add_decl_tag(struct btf *btf, const char *value, int ref_type_id,
-  *   - *ref_type_id* - referenced type ID, it might not exist yet;
-  *   - *component_idx* - -1 for tagging reference type, otherwise struct/union
-  *     member or function argument index;
-- * The kind flag is set; btf_dump prints *value* unchanged.
-- * Attribute specifiers must include the __attribute__((...)) wrapper.
-+ * Set info->kflag to 1, indicating this tag is an arbitrary annotation
-  * Returns:
-  *   - >0, type ID of newly added BTF type;
-  *   - <0, on error.
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index fcd97aa90589..023047214b17 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -1597,7 +1597,7 @@ static void btf_dump_emit_type_chain(struct btf_dump *d,
- 			break;
- 		case BTF_KIND_TYPE_TAG:
- 			btf_dump_emit_mods(d, decls);
--			/* decl tags override the type tag, see btf.rst */
-+			/* decl tags on the type tag are printed in its place */
- 			if (btf_dump_emit_decl_tags(d, id, -1))
- 				break;
- 			name = btf_name_of(d, t->name_off);
+ 	return 0;
 -- 
 2.56.0
 
