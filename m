@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794000931;
-	b=0SVAYHIuSeeoitFcHf9SjxxYdtdgM9Q+rbRuzJ0IZTVUlHWV7vhlECmUqbjR0Gy2nCKr
-	 k27r2YIxxVmcBpge/TtkQKRkHmPSlxLyh14Gj2uXFOMUWOSWZm1C+apM6H+xlUgKTf28W
-	 OndSLAn7evg4cV5rKs0ADJ7X2cMQK3urriSCxz83PCl0cS3Gr0MWQMxnDBZ4v+E1N7O/C
-	 khc1dswoaDVnVi+BpppvD1F3d0VFEpcYgXrzsqvg4c5sZ0LZPAqdqSkTny3I+21nlOt4F
-	 Ke9vGHbi4fGmg73jXXNubNg9MDUHWQ817+KQ+DrbuFg4HfrYI/i2Scc8Pp67gQINfxw==
+	t=1794000933;
+	b=ldJWxPawOxmSEoxTm6hJgXiDAhlokGu59bs/pxsRYu3AjX+wsoTKJL6/5qvxToSxeYe2
+	 SN5XJYWuR3OsKuvQ+eTLdJ3cjWScPC3t13LyVyqgfPYim9IKsInyKfE34yL9ymwEVcoOb
+	 9//di//UDuGBHd4ZiN2VfMaOScQYS94owQ9VKXScANGoClMYhQJVlvibXmp9CQHiaHBB5
+	 IAXqYOOYpN559H//Vs1vBgZRoBZuh27pXhbtGKHvLVVcDXybJtEtKK4gvj+gbC7x2uaCf
+	 w+l6T2BQJj+RW4D+/GshHG9OX7N/qRBqEQLPY8OM56No8m+RLruaXI6fFXuCoLj3/KA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794000931;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794000933;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=qDLkoWqq+lnN8FRxhDSjiq97CllCMlGCEUvlKkMFITU=;
-	b=RZmY7PCJ/0NGcjdoxB45/+/rUFpZuxUXD7uJqzY98Z3Xf4bDr13hqMZDtclpL+jvvj89
-	 bYcxmzvCMnHsGKnw25YaCWCd4AHfiP/JYeaU+sODSouPzzUBy83G6FoWyoX+IFOsSMFk8
-	 klHCptUsgxulccyREXNV4CMBhGf13WqRIJapa/8W0KGAoFArr9OkeHVXidUjYD14C+jvd
-	 8ezJRyJ/Q4e0iwFew1Y9j+ZC4T/0gGsWn8gowDSYjWsAmKz8EMNl8D/+d/vyRCSIpxsxN
-	 XDfXvwGRXIVOhJVlEa+em2DLKAYcuh0Dgcq3eXYWVx5N8LsQ9XfFgxOThNPHIVgSl1A==
+	bh=YCrphLt+9lCeh1bH3KOey/f2cVCez/Zl2KmCh4eHz/U=;
+	b=xtEhumBTuvV154vsQlps+ZkfIQss8imhjUGqwozI95ho4u4/q6U7wuUIMtI8+uosF/77
+	 PNo1rQ1HND77X3lq9VVyMmwBkhSXcqJzq02+a4O5B3Cj73A2o41TBJLcmOSs0u2HH0OwL
+	 mAvBxxzsscbNsFh+5J2TbfC2niqs8OysjMBD1KRMlAqQBIVJivl6ZoOqud3HzMNLrANSx
+	 8ox6IxuhJrYpTbjIhXWqc0hb3+58zr6XpQb1if/ESu7SHfCDmPpj1/zHmaGqJPnnWuWn0
+	 R8nLKTidnPxRm9Ro8UqldHkFs/xstCYWui0vz89J2NoucOqmhrkGg4t2hDrgZwuzcrQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LWM7+BZW;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YGbRg0F4;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F071E606A326;
-	Fri,  6 Nov 2026 21:35:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1CC606A32D;
+	Fri,  6 Nov 2026 21:35:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LWM7+BZW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE901F008A1;
-	Fri,  6 Nov 2026 21:35:30 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YGbRg0F4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE4021F008A3;
+	Fri,  6 Nov 2026 21:35:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794000930;
-	bh=qDLkoWqq+lnN8FRxhDSjiq97CllCMlGCEUvlKkMFITU=;
+	s=k20260515; t=1794000932;
+	bh=YCrphLt+9lCeh1bH3KOey/f2cVCez/Zl2KmCh4eHz/U=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=LWM7+BZWo6iB6FYAPzh0c/+NneA4GRu00bxhDJbxx+KsyGVaZCU3IVa8cp4XiE+pm
-	 LGAiwqoxt8y8T9N2ttrNTgzhRWhihRAFHIE0Yg5CMHMzwS6p+jMaR9lNGv1d1hzB26
-	 7PDkiEPOMz7U76jloU3dflVbupZLSSU5Hs75fKrEF602NzW90+T+xY7rEkv64CwW//
-	 XkpwN75Td98j9LFc9zZ0RUf6rqpbFrbyALdw2GBmYppgYjktuqX8r8+79U/U97uDu5
-	 0kv7/i7SJhZVEJaFpHGegILnDJaITpjqBHfbFGHu0tIsuAhh7COAqu2zhKtWTl6mEZ
-	 XorYv27XlxjRQ==
-Content-Type: multipart/mixed; boundary="===============1772708986620951677=="
+	b=YGbRg0F41PUeI6U1VB61IFDc8uQNuFTxVQxpVKhKZyixmwszu4wizS9V51MFROTT3
+	 q2vF2V0uis5EtYVc2fuYEfoWap9412nnWnDEpiHHrnfzLC17eZvsKJ3fwF0VI+S/a8
+	 9OuhfDuEgAOMg66amf/kzkqGiWoycfLe0l3P0z6y8D8AsIAhZLA8hBt0D+hX3BUKOA
+	 9S4Ftmk875Ztf+saOUyQ6x9Ek4TRzC7I+ioyriZGDOFS2Ww02xjS0KzQ3ohQSQSGKF
+	 texNKi2k8Y3mgl/8k8hk9jhRK3o4525C92vgMopncLNYq5JC+UFO11XjGCqXh8CUzt
+	 iRw2uhJf08I7Q==
+Content-Type: multipart/mixed; boundary="===============8578933871088959199=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,51 +49,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <23cbf06b46fa6d1cdfa3a9bbcd247deec22de8efbe5d1b2fff4cb89177171d56@mail.kernel.org>
-In-Reply-To: <20261106210314.1767267-17-a.s.protopopov@gmail.com>
-References: <20261106210314.1767267-17-a.s.protopopov@gmail.com>
-Subject: Re: [PATCH v1 bpf-next 17/18] selftests/bpf: Enable bpf_scan_ir in the config
+Message-Id: <148800382a0df555432654e0021a940d6bcd283955b5e1ec88ba885d4f28cfff@mail.kernel.org>
+In-Reply-To: <20261106210314.1767267-18-a.s.protopopov@gmail.com>
+References: <20261106210314.1767267-18-a.s.protopopov@gmail.com>
+Subject: Re: [PATCH v1 bpf-next 18/18] bpftool: List and show fmod_ret targets
 From: bot+bpf-ci@kernel.org
 To: a.s.protopopov@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,almagui@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,brauner@kernel.org,kpsingh@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,sashal@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
 Cc: a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 21:35:30 +0000 (UTC)
+Date: Fri,  6 Nov 2026 21:35:31 +0000 (UTC)
 
---===============1772708986620951677==
+--===============8578933871088959199==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Enable bpf_scan_ir in the config
+> bpftool: List and show fmod_ret targets
 
-TL;DR: Commit message only: the list of cases where Kconfig ignores the plugin
-options looks incomplete (other arches, missing matching llvm-config), so "CI
-builds and tests it" may not hold and fmodret_retval may silently skip.
+TL;DR: Nit only: in bpftool fmodret.c collect_targets(), the
+TAG_FMODRET_RETVAL lookup may be unneeded, since the only caller's list path
+doesn't appear to read ->retval.
 
->     selftests/bpf: Enable bpf_scan_ir in the config
->
->     The bpf_scan_ir plugin is off by default. Without it bpf_testmod has no
->     fixtures for the plugin and fmodret_retval skips. Enable the plugin in
->     the selftests config, so CI builds and tests it. Kconfig ignores the
->     options with GCC and with clang older than 19.
->     Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+> diff --git a/tools/bpf/bpftool/fmodret.c b/tools/bpf/bpftool/fmodret.c
+> new file mode 100644
+> index 000000000000..0d2714ef861e
+> --- /dev/null
+> +++ b/tools/bpf/bpftool/fmodret.c
 
-Is the list of conditions in the last sentence complete?  The commit message
-says Kconfig ignores the options "with GCC and with clang older than 19", and
-that CI "builds and tests it".
+[ ... ]
 
-scripts/llvm-plugins/Kconfig has more conditions.  LLVM_PLUGINS needs
-CC_IS_CLANG, a working $(LLVM_CONFIG), an llvm-config with the same major
-version as $(CC), and a $(HOSTCXX) that accepts the LLVM headers.
-CLANG_PLUGIN_BPF_SCAN_IR needs X86_64 || ARM64, DEBUG_INFO_BTF, !LTO_CLANG and
-CLANG_VERSION >= 190000.
+> +/* Return the fmod_ret targets of BTF, sorted by BTF ID */
+> +static int collect_targets(const struct btf *btf, struct fmodret_entry **targets,
+> +			   size_t *target_cnt)
+> +{
 
-So config.s390x, config.ppc64el and config.riscv64 never get the plugin, and a
-clang >= 19 host without a matching llvm-dev drops both options silently.  In
-those cases the build succeeds, bpf_testmod is built without the
-bpf_testmod_retval*.o objects, and fmodret_retval reports SKIP.
+[ ... ]
 
-Could the message list the full set of conditions, or say that "CI builds and
-tests it" only holds when a matching llvm-config is available?
+> +	/* The other tags mark functions which are already targets */
+> +	for (id = start_id; cnt && id < nr_types; id++) {
+> +		const struct btf_type *t = btf__type_by_id(btf, id);
+> +		struct fmodret_entry key = {};
+> +
+> +		key.btf_id = tag_func(btf, t, TAG_FMODRET_SLEEPABLE);
+> +		if (key.btf_id) {
+> +			entry = bsearch(&key, entries, cnt, sizeof(*entries), cmp_entry);
+> +			if (entry)
+> +				entry->sleepable = true;
+> +			continue;
+> +		}
+> +		key.btf_id = tag_func(btf, t, TAG_FMODRET_RETVAL);
+> +		if (key.btf_id) {
+> +			entry = bsearch(&key, entries, cnt, sizeof(*entries), cmp_entry);
+> +			if (entry)
+> +				entry->retval = btf__name_by_offset(btf, t->name_off) +
+> +						strlen(TAG_FMODRET_RETVAL);
+> +		}
+> +	}
+
+This isn't a bug, but is the TAG_FMODRET_RETVAL lookup in collect_targets()
+needed?
+
+collect_targets() has a single caller, list_btf(), and list_target() does
+not seem to read ->retval or ->target from the entries.  It looks like the
+second loop would only need to handle the TAG_FMODRET_SLEEPABLE tag.
 
 
 ---
@@ -101,4 +118,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42294987431
---===============1772708986620951677==--
+--===============8578933871088959199==--
