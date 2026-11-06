@@ -1,55 +1,83 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793976344;
-	b=naESM0V3eRfG2sAPp583aYNTUlzYzou3XjUN8wficBbIMOvD2hNSB2v5HN1HZcRZ9h6c
-	 27aMQEE6bNG6Qm2wmaNG14oEpXRUWhQZN/up9nAA9N/B3KnMSYAaHLmvdcH4UKIFORrzy
-	 ru2CV8PGRa4YXATOUExtjDsGZUs3qJ1nPGDoVnYkYhku3bCpadOEVj4P3PGOVtpE8UYFO
-	 vUAXSNvcKabmmjWuyIOgx2DWCaFDX29JqM4xLFcJTlQ5n8iTZml5REfDm8h3edKqVAOJ6
-	 EWDN8g7vU4PH6ewQPgIHfWEc6pxNqzFv+Gsd2ixZkp2kgzIAK7RN4WKzAmgQ0sMdoPA==
+	t=1793977725;
+	b=tXrU4MUjO+lVCzUkI7VSc47ZEQnbRb8/PmzVQv81hKIcTevbuJxBVeMkIa6pG+Oikb+F
+	 YELZB/Fv1WI2KwdZs3IP/cByArUqM2Rg61mUAvqT7R5bbzr0LatBKpc3cHdsXQ1GsMrHT
+	 jagaaOEPXSJ6MVnKGf01wT6H45Cxl1H5fznqcKbCOE8lyYk+qtYnaLSNR9PLBYe5Vhpku
+	 HfpC2U3r/r7OhQThh118blrTnDvqT/kxhsGiC61hlTfgTIM9rbrtEMaa6WfTcjMj/v12r
+	 J2MkQOgTsbWA0ZRoimqUd0FRqhnsOhGZd/2ZVKjPsrwhxqP5OLB3vqGyxsKcDLK7FYg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793976344;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=D8oZmxNlOKsm/Rp//d88vLIxrb2bjb3rSm4pQQTcZQA=;
-	b=w5S0ON/SP7vsbOYk06yCsJqyksv3jE5ebLjKn6JjtkJc97HevJgMs54nl/3M1fJnw4ge
-	 jSsoaR3DfCLX6pdfT2C3sqxkSeXTxSrPCvtltyBI/AsX9kqvlsc7FYYr75AH0e0G2lCz5
-	 Von15MWrIaGRDw5cYy0Mn0Ked/UMPGg7jjt8Os6vSm7H26QtyStfxQjpWAP+2C+04MP3w
-	 lU8gd1RoJqqdrBUX3WgNrI/9IkPM2mDsSQPS/FATiT2HDT7110BUaGEhfuPgofEuhrI6a
-	 WnoE9QFccJm9CAV6Aye7utEgeHAZc4bcXqOcopXyum6n4jQFrJLvLQEY8134nZXdNuw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793977725;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=v7luENhdcXtYyU0R/Y6sABRqCwShaCT3Ig7woROEwb4=;
+	b=Qk7dD3ex24Sro034JNMrNktroD4zvDt6Yvw/GF/AGuLmxRWqSabPAo5ibMxUEs/OyNFq
+	 MAc89GST2M5n/0RVOA65YjwK4/vI8uodmupCYeccmdAHrWX7bGdb1hX4+Z1S+JdNDAqt9
+	 Kng7Mfgvv95LsgCsipwP2Iu3qs8PR65wvVfJpnuUax+GhGRnQU0XOQaCOOZWG7zODOPeY
+	 q36psc7rrt8WI9lnWJ8cS41ralaxUDkQtKmZkGYS2mpW9AzHYgrZyVieYwwMSOX0zDjQm
+	 c9qKxwP8S7p4TrUNTmxROicoDb90LWpEldz/rrvGGxim75jcp3YaSU1wrPDzR4Lt0mw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O694iKXS;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fXvCipBJ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE97606A32C
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 14:45:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 36CB9606A326;
+	Fri,  6 Nov 2026 15:08:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O694iKXS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49C821F00902
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 14:45:44 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fXvCipBJ
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 109811F0089F;
+	Fri,  6 Nov 2026 15:08:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793976344;
-	bh=D8oZmxNlOKsm/Rp//d88vLIxrb2bjb3rSm4pQQTcZQA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=O694iKXSJRyqv5P7AKWdMgVg7eGV5VUqteLay04fKbnkp91vwNvnX16VRNjlaStw3
-	 cYtFjfmZ90GRSfquVrpsyY1tr+Yv6Evr1KB2h1m6vRaKpmtfUSrJPyVWym4MxdqrWL
-	 8q2sl2nGqfQDnO8FMEngOW/krdseih27x3q7S/qgWv8Ts7HxFQ48RXc6IT0arBV2og
-	 FIzuqpHAOh/vi6Sf5lVzXlbRa/p1DdM6szpZxDSM5h8QToI/Im8Uo8TFS39fHaVYaF
-	 O1FnA3169YX/JYR2T8P8EwJa677u0bM37kegN4iE9hwZmiNx/qntsGTAAh/IxUkJKE
-	 /YjKJ14GC5Tuw==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6b596569640so1074743a12.1
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 06:45:44 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErFrdsxk7t+PZNkG1XsdW4itIi1tgT6CZmQHRxGoCycBxTbguoPCDYHFhrC1AhOSt76GbDs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8+MKbpiB0EyyPUQQ1J5bznZQH9ePG7+ofTj9fRPHXtr0ccRpf3
-	kIqyZL3wmZUnQIlQgyI+c0BrXvGTC4fsmsi74RqvP6Y+/vKaWpfckdVz7BL09SgieU7YSCEFaTq
-	9ANcYv0VdNq8kYOtoWznDEUyQFLDNvzU=
-X-Received: by 2002:a05:6402:3207:b0:6b6:e808:96f7 with SMTP id
- 4fb4d7f45d1cf-6b6e80899eemr1325905a12.3.1793976342883; Fri, 06 Nov 2026
- 06:45:42 -0800 (PST)
+	s=k20260515; t=1793977724;
+	bh=v7luENhdcXtYyU0R/Y6sABRqCwShaCT3Ig7woROEwb4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=fXvCipBJm/D+UzqzI+MRQ3AzYnnEfS3G7Jm3VFG6y9hXucyt1KRKi5KM85qYZuv6a
+	 LIxIt1Y19buaYSXf+ts2NicK+/DJ+jGQnrgLJjUO3PSmW2m5NSJhvFxmTcoc8S/PUO
+	 22FE8ziTtDiLbjwcWIa/X3Cg0tdYClmThVazhigDEmCWO/NpnPEGPcw7NPfVBzqb+5
+	 YzcbbGj19nYvlG61eoIbFCpzjrDYo0MbbJ9E7jk9rw7A+ZFqQvx34/8bQ241pCGfFf
+	 nzzO1rOy+1V9dHDJLTKLPdnzAMEmdYwGXiHuDvMmkItozOcSzss64p746xDw5ywOSy
+	 Wr8zW71lRhMKg==
+Date: Fri, 6 Nov 2026 17:08:40 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Hannes Reinecke <hare@suse.de>
+Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
+Message-ID: <au3teLK-KHmBW6Wo@kernel.org>
+References: <20261105031401.956609-1-jarkko@kernel.org>
+ <20261105031401.956609-3-jarkko@kernel.org>
+ <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,53 +87,33 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261102072808.23080-3-yangtiezhu@loongson.cn>
- <c3b8e6ae47164ab1a643a1730f0600993de03c8a30e35122a9812ac73d807697@mail.kernel.org>
- <1276eb14-b851-aee7-36ad-d61e2ddd9ba4@loongson.cn>
-In-Reply-To: <1276eb14-b851-aee7-36ad-d61e2ddd9ba4@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Fri, 6 Nov 2026 22:45:32 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4GyC5=PvF5yvYnoBpUpU3VTuE8kdNUnApNqvN4vHZfhg@mail.gmail.com>
-X-Gm-Features: AclHuK_E27SlHuF9Up4hvhe95PGG3OxpyR3ULOjCKnQ_VAfUevX4tHqFUb9HhkY
-Message-ID: <CAAhV-H4GyC5=PvF5yvYnoBpUpU3VTuE8kdNUnApNqvN4vHZfhg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] LoongArch: BPF: Use beqz and bnez instructions for trampoline
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: bot+bpf-ci@kernel.org, hengqi.chen@gmail.com, loongarch@lists.linux.dev, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org, 
-	andrii@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org, 
-	eddyz87@gmail.com, yonghong.song@linux.dev, mason@kernel.org, 
-	ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
 
-On Tue, Nov 3, 2026 at 10:27=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
->
-> On 2026/11/2 =E4=B8=8B=E5=8D=883:53, bot+bpf-ci@kernel.org wrote:
-> >> LoongArch: BPF: Use beqz and bnez instructions for trampoline
-> >
-> > TL;DR: Commit message only: the claimed branch-overflow risk looks impo=
-ssible,
-> > since trampolines fit in one page and the old code behaved identically,=
- so the
-> > Fixes: and Cc: stable tags may not be justified.
->
-> ...
->
-> > Could the changelog drop the overflow-risk wording, or describe the cha=
-nge
-> > as a cleanup, and could the Fixes: and Cc: stable tags be reconsidered =
-given
-> > that stable-kernel-rules requires a fix for a real bug?
->
-> Will update the commit message and remove the 'Fixes' and 'Cc: stable'
-> tags. If no more comments, I will send out v2 next week.
-Fixes can be removed but I suggest keep Cc: stable, the overflow risk
-actually exists.
+On Fri, Nov 06, 2026 at 09:21:32AM +0100, Hannes Reinecke wrote:
+> reason why siphash has been chosen?
+> Would there be a chance to make this configurable?
+> I do see slight complications when running in secure environments
+> (ie FIPS-certified environments) where most of the hash functions
+> might not be available ...
 
-Huacai
+SipHash came originall along with [1].
 
->
-> Thanks,
-> Tiezhu
->
+If we retracted back a step back i.e., use the assigned indices then the
+security properties of SipHash would not be relevant.
+
+> 
+> Cheers,
+> 
+> Hannes
+> -- 
+> Dr. Hannes Reinecke                  Kernel Storage Architect
+> hare@suse.de                                +49 911 74053 688
+> SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+> HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+
+[1] https://lore.kernel.org/keyrings/20261013231251.56170-1-kylebot@openai.com/
+
+Br, Jarkko
