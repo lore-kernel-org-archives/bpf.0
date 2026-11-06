@@ -1,66 +1,66 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.20
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793940155;
-	b=ceFqJZFwbc6MbzvJhzHsnJKo0JKhLl20K48b3cXIuuZKs4XFd3+GxX4312s5mGzuakjO
-	 s6chajoDDicQ8NBoI19S6HosL02Jjullt79Yn/0Bnz6lP+lKjCsw1Ec5kHBMl4zl3iwTP
-	 Osgfdh2RYvJK0pCN35bRVbXriIXDC58my7azkWiCGaLILz0yjCgQxovedUh8VdRZBr5QG
-	 jx9l1Y4AZ8BR7YZpUGCJU2/RsF6OATEJyH6tWUO0Z0zenJ/LUwvn6VgsiW8JVBiNYaobl
-	 o/qcc3bh1diUmV+cd+m6UWcxpEYKQwLZEc+sldSx9NWvET/dVxuV5fqegA/4nSzB70A==
+	t=1793940156;
+	b=IcTMld1eZmUFNkvix/GqKX+EXATJiU4kvGFYLiuREPfyeHr5QpjXbliqxSkacYUAKJSp
+	 VmmJUgDKbGoNf3pwqlBjHVJxdzE1gkmr7dJZUR8z0mSO6LV1K6AjLJtcKCe/iKirF3OiG
+	 VB0q8Jd70pgyIXwazZ8ebt1oRZoCcpskPdPbgqRRotVDQOQ7Y5lScOslh3OeRxJgimDUm
+	 KU+oPesJOE1DGFaMYT+3GrohXj+AD2wryMwUVFhVW1ie10ldLa1AqoATRRLh8e9pimI4K
+	 vPYxbQAIy31JbNemVQg6kPXGUzG5s4CYXsCsEgFUF/tD5LSDVzJSYnufobJ9FCBO5Vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793940155;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793940156;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:To:Cc:Subject:
 	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=taJtOGUMeiimV9wFe4AQrYsuvv75Pc5faUl+H/TilkI=;
-	b=vNUKAhM6zM1UXT/Ml5V3nyP6tJTv2AUPmUCfePRLwYwl7+kZ9E+yF9SQLrN+iV8cLGnB
-	 YuT3ku46V8L8ztQ/Yr01DXO8YFEyx5xZq77VghzfbFZZyhuEriNKDqhMAQlnvksjLkJVg
-	 5G27Zfdj1T2dO8DnwepzU6ErvK5hRkt8XJlYPFynrfZ2oiKdSZiFIrrpbatt3ZGmik2Zu
-	 RS3TlrC/OXBYMN5bbxX7hITPS+nwypKYNndIDI7vMw+T/uCUramgo8ii8b5qtSkDyyfEj
-	 YWq3/gpgvhmT42scfUDDUW/pwcLG1P2YU8HP9h961kFECgXdvpdYNcPlEb4cFHuV1jQ==
+	bh=fGvX3/a0vC7nlTjAHSMPcYCuo1tQSG8MJBCHqXDvNlw=;
+	b=G2B5XIlfEM63vdFLKNoyiN/8hPV4FPquvxF0vPX4IuUateR9iIyJlqvZ1HAxPe8+FSn3
+	 Z94TIEAS5HzQCkZ8IgIBb6acQb2Ymd/BkNMVoqP60N4atnUnB2B0Ah9e5eOrr1+WEiVXV
+	 vPH/QGZOxz63+RUpV+uL1f4s0UQHDL66vmSR+0cS3zDbEDFBPW1JhGB2LnT2D+PRntroF
+	 u4c4zKayno39CwSXi1fZDqqCm86ARoGjRqy1sEddxqLnFYJ4VKBdN8xPJgEYDllBacJyi
+	 Z77WwjNbL06F3i1SC4zaihOY7pDxzg4hQh7ogAkweM8E0Z0BG2FNm/OVkjtjmoIr7bQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.intel.com;
 	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=F0WVUMw5;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=g2q+sw2C;
 	arc=none smtp.remote-ip=198.175.65.20
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C06606A31B;
-	Fri,  6 Nov 2026 04:42:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8C06606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8067E606A338;
+	Fri,  6 Nov 2026 04:42:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8067E606A338
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=F0WVUMw5
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=g2q+sw2C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793940155; x=1825476155;
+  t=1793940157; x=1825476157;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=TiOVDnEH50imV1Sr3EH4VGEy/pGz3iluGdUCzzy5yiE=;
-  b=F0WVUMw50oJf3/DBVcxVxZXQFmwO1F0uN0RjqBiTlBmpuGqdoASI9nAe
-   Bl8ndgb6cxxY72WIkm0S5RRSTHtUZYnwYD7fRLHmLm5lGy0lm4qLzUsae
-   uz2Gpb7LUJ3WWInPTM/O9LHkAamkcH2jdnKHVre4EpBnAAO33JIZx5e0H
-   TROVv0ESs8aIInZVPnBgXX7u0qkewzo9lhlOHAwMFtGejVNrEPRmb/dST
-   cDzFeP51ynkovHKCyWcJH3cEpxOOY5rLV0mFxla5g/gkrz7/QL44Mdirb
-   3uT6IE/QQTg5YQHW/bCkZDCfVKU6nfmGuGC++I5ANWrwhIlqhnEZzfjDy
-   A==;
-X-CSE-ConnectionGUID: vmo9FWPZTWSk4gOvGQwhOQ==
-X-CSE-MsgGUID: ZmR7sx1tQ8SsLfnnHZgxkg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11957"; a="2780906"
+  bh=anigBFNvLZFvrEcI1RE7HwrxHGo2njaEoqKnElay2RA=;
+  b=g2q+sw2CSiulqDqjncBvMe3dLFb7eqd/uDf3DRm/v3ySZmbBl71v/nOd
+   GRhDgBo3mQUNQyuxNEidBT0/vtre9bPyUnyxT5NPtqoXP2gkzXtb8b5mj
+   t7/sTLiYWZs9BoaHGPrHjODhwvzYkxgkXcxI5++ijh+jE9zZkZaJ32lAW
+   DTf55tYDIQyseQMlvJRsNQOzc8j+KbU5G3T+ZebfHf0yoV1TG5fUCtZYu
+   jhfCES/hM7TIGC2eJwG3JxT3LTQNJ/+gL/Hy6s5MIUxCiRaa3oI3pkhjm
+   XB7QokC0w0IFyFEFhv2qA9VGmyVOxwTULIwvWJYYkWZzcBq2dXX0r9dCe
+   w==;
+X-CSE-ConnectionGUID: 1rqMSTZ3Q7W9cJl4SsvGVw==
+X-CSE-MsgGUID: P3XALOGyShmFhEcEXEhezA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11957"; a="2780947"
 X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="2780906"
+   d="scan'208";a="2780947"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 20:41:45 -0800
-X-CSE-ConnectionGUID: d1KUa6ruSpCntXcRQHXhhg==
-X-CSE-MsgGUID: Qu2Sp1/lRK2u+YsaTfPvbA==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 20:41:54 -0800
+X-CSE-ConnectionGUID: IQwJY9/CSl2DmnoLrUVLaA==
+X-CSE-MsgGUID: klv1oIh7RXyIy6UmSgTv4Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="7222994"
+   d="scan'208";a="7223012"
 Received: from spr.sh.intel.com ([10.112.229.196])
-  by orviesa001.jf.intel.com with ESMTP; 05 Nov 2026 20:41:40 -0800
+  by orviesa001.jf.intel.com with ESMTP; 05 Nov 2026 20:41:49 -0800
 From: Dapeng Mi <dapeng1.mi@linux.intel.com>
 To: Peter Zijlstra <peterz@infradead.org>,
 	Ingo Molnar <mingo@redhat.com>,
@@ -84,9 +84,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Falcon Thomas <thomas.falcon@intel.com>,
 	Xudong Hao <xudong.hao@intel.com>,
 	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: [Patch v6 14/20] perf/x86/amd: Refresh LBR stack in PMI only when LBR users are active
-Date: Fri,  6 Nov 2026 12:32:51 +0800
-Message-Id: <20261106043257.842864-15-dapeng1.mi@linux.intel.com>
+Subject: [Patch v6 16/20] perf/x86/intel: Remove dead lbr_pebs_users
+Date: Fri,  6 Nov 2026 12:32:53 +0800
+Message-Id: <20261106043257.842864-17-dapeng1.mi@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261106043257.842864-1-dapeng1.mi@linux.intel.com>
 References: <20261106043257.842864-1-dapeng1.mi@linux.intel.com>
@@ -101,33 +101,52 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Refreshing the LBR stack in the PMI handler is unnecessary when no LBR
-users are active. This adds avoidable overhead and hurts performance.
+The lbr_pebs_users accounting is no longer used, so remove the dead
+field and the related code paths that maintain it.
 
-Limit the LBR stack refresh to the PMI path only when LBR users are
-present.
-
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Cc: "Sandipan Das <sandipan.das@amd.com>"
 Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
 ---
- arch/x86/events/amd/core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/events/intel/lbr.c  | 5 -----
+ arch/x86/events/perf_event.h | 1 -
+ 2 files changed, 6 deletions(-)
 
-diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index 160102a46b18..f0425e369837 100644
---- a/arch/x86/events/amd/core.c
-+++ b/arch/x86/events/amd/core.c
-@@ -988,7 +988,8 @@ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index 27e4be839926..3500cf3518f4 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -617,8 +617,6 @@ void intel_pmu_lbr_add(struct perf_event *event)
+ 	 * be 'new'. Conversely, a new event can get installed through the
+ 	 * context switch path for the first time.
+ 	 */
+-	if (x86_pmu.intel_cap.pebs_baseline && event->attr.precise_ip > 0)
+-		cpuc->lbr_pebs_users++;
+ 	perf_sched_cb_inc(event->pmu);
+ 	if (!cpuc->lbr_users++ && !event->total_time_running)
+ 		intel_pmu_lbr_reset();
+@@ -688,11 +686,8 @@ void intel_pmu_lbr_del(struct perf_event *event)
+ 	if (event->hw.flags & PERF_X86_EVENT_LBR_SELECT)
+ 		cpuc->lbr_select = 0;
  
- 	/* Read branch records */
- 	if (x86_pmu.lbr_nr) {
--		amd_pmu_lbr_read();
-+		if (cpuc->lbr_users > 0)
-+			amd_pmu_lbr_read();
- 		status &= ~GLOBAL_STATUS_LBRS_FROZEN;
- 	}
+-	if (x86_pmu.intel_cap.pebs_baseline && event->attr.precise_ip > 0)
+-		cpuc->lbr_pebs_users--;
+ 	cpuc->lbr_users--;
+ 	WARN_ON_ONCE(cpuc->lbr_users < 0);
+-	WARN_ON_ONCE(cpuc->lbr_pebs_users < 0);
+ 	perf_sched_cb_dec(event->pmu);
  
+ 	/*
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index fa0af528cd1e..0213e2a8efff 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -526,7 +526,6 @@ struct cpu_hw_events {
+ 	 * Intel LBR bits
+ 	 */
+ 	int				lbr_users;
+-	int				lbr_pebs_users;
+ 	u64				__lbr_stack[LBR_STACK_SIZE / sizeof(u64)];
+ 	u64				lbr_counters[MAX_LBR_ENTRIES]; /* branch stack extra */
+ 	union {
 -- 
 2.34.1
 
