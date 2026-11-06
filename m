@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793998330;
-	b=mbybRhs5tZ+hJswplWUMIGDsRx3n5nJSkf/iucOcgmT5dBvyitYi/HsB4UCppGRESJCM
-	 xoEXZjzhfKmLVH+MN0POABSdP9THehadHsxtSpRD8+9uyr5dQYi2JL4zeWCSp+7IN0GPC
-	 +e6U81I3aVn9Dcky9EkA4vUSqgNegtyXjaIgjwXcDnKbyRXAay/kFmI1k75FEKNQDUMe6
-	 JEIpnxr9ULQ3QqEJXbGcBX1iQtVfqcIBPn441HwY9W7N1iY5dFO+Gzb22vA0eenlvgkJl
-	 RWEBRfj0g6gsaBd3hZIYscBlt1s4D6Z9/eZ2auz8zHZE5oY72bZ+o+7W3fLIX/wx6Uw==
+	t=1793998333;
+	b=X9vGJq8m4JD/1yRLxgZES7xL4lPycTOMogW0wsEavsSYrEnfUWrZQIha0HOAZyT9rFvU
+	 G9fRPks3sbKBMLgdrVe1b1Fsd7sCF6+gBFX6Kst11HL/kQ9cv6ZywZ7QyUNQfJ67zqRli
+	 rwCLhbNelTTMl+Cv1LHOXxPrn0TUWvfoOp5eUZKwPOdKOvmwNGXMemHwtvkCIZJ4mzPEO
+	 8LM4W7zW1LSzzhj5cMPWDhv50hHOyU/kwVRmMqWp1zsrElmelld5nsMOPbZtXUcKYX2Ag
+	 +Z5wDNKg2py3O+c0qfZowWJX1wZYmV1dTnUO1WxP8aq3Gw1B0iXtH/Uyb528OvYwlpA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793998330;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793998333;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=9Y3kCsYcaDY5qwLaKX26SOy2iD45ozQ8Dc5QEanJuFg=;
-	b=RKF92wdY2pheRAOhdL2TRK3mqHLj50fM05yTQgX7mWWbCjmNQ5OSTEUsv0i76sNDa5YZ
-	 X30b622kUDCe7UEhZ5lh+VeK+4oNCO1VB5CaL5SCXMnThkLysKE8qYDZbTcWgl8/CCkhZ
-	 FXNqN9LEt7d/WYyHeURHyxFJuvQvj+myb5HbYrkE2XbtI4vPNpK5UFLXgBtmTd24Y1O1/
-	 2vEO/vlQIr/QupshDgPIgh2LMLVrekTma+Zz2tPJwQAHMKZZIrdE0MBCS5pNC77kVmGqE
-	 bHLDm7RR5+/BSUS7JjumfqOICMQ4n9PmOTpkznKSJmiN6UFMGbTmKtZPDUuJJe5Ugjg==
+	bh=ilvmL95xJlpNSKLk5utHXZ1bIs/yE6trPAs8lvP1p2U=;
+	b=4cgPuOQFlOL3hAFHQvzH1bHBuIBc9mReSpB2znp6kdQ704FGxFtg2fv3Fwffvyhsesvy
+	 9sdz9rrNwYnS2TOHZGWn/IBQrbgoNbDnFbftEPzfo5+74G85RzV1piRrF0ZgQLN9NKhSI
+	 dK9Sq5IIKdrnvu8AzehrOp4snQguFsW0bA/j8fyWGuZ7N47gXkFM2hYl+YH64kW4Jbrjv
+	 TuXS7SattMBBGPP9rt4ikEwYHuf7HOFE/jxlVgTRyKRlsi1etH4LSY5VSplWeiwYHEjpB
+	 2tOXO0fYsv0HzwapvQl2GWCH+FKo5ns3dVlj8k2DtVRsHOB7nZp1UGEbJTjeAMCPVlA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bVisYJNG;
-	arc=none smtp.remote-ip=209.85.128.48
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="xVAN/nCI";
+	arc=none smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC95606D804
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:52:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BCC95606D804
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2288606D81C
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:52:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C2288606D81C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bVisYJNG
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a35ac4475dso9873935e9.2
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:52:04 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xVAN/nCI
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a35ac4475dso9874745e9.2
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:52:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793998323; x=1794603123; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793998331; x=1794603131; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=9Y3kCsYcaDY5qwLaKX26SOy2iD45ozQ8Dc5QEanJuFg=;
-        b=bVisYJNGBs8pSIw7foQqwmdbAgIV850KX+5PaI7yMzRed2ltACVOYDdcqXMRHIuXyW
-         tAewCJJS2lN+Vi22e0W8VPMvb0/LImy3fgs3bcDai03OrFd0YBhwLhIKpJhEhheoSOG6
-         XodFeLqbwxVPSrQ/oVGQbsQ6Gq5RvGvdoR4VznBpOuFsbxoALbW9uY6Z/7zoqcwV0PQT
-         aoHKOtrYMrn3hBWb5A13UC0galAjUe7iEuIiZL4D/Vm+5VdGA/2kgJkHvGCHzqCVqgtT
-         cDT1akPZb6XmIkBcJfW8ScLjMc3i8zdQDzfbLkBGcZCtqRlMRfaSy8d+6iFJcPLpxGoK
-         1YbQ==
+        bh=ilvmL95xJlpNSKLk5utHXZ1bIs/yE6trPAs8lvP1p2U=;
+        b=xVAN/nCIKdYJ2+3aL27TP7qAv7zJYln2Xp0lPkZedNJ3738+fmw+kJPXLtyAM8wnI/
+         x83SyUbh62/Rh10qNa5QI3lxpigATb99Z7Rw1iUIZzssG7DW7PO3AlFXjECBskWtW/ub
+         jACrGrQQ2YTSUAueo98NI1SUSINSbxN3Fyb1cNI4uK5g+4OS10gtOBwAcgR70W3M35lL
+         1qGVjZtaLM1cpQnFL8KWQTg3KX4Brx5d4VZzRyGEmcgVhN/Q+bzuP/jXNz0MTsvoYcPe
+         bi5NaF8LNI22+X2HkHCdcnpZpHjEuESN3hnfBJZ1EHqG2KCXjnBOMtrzl6Dcau/C4OhT
+         0sJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793998323; x=1794603123;
+        d=1e100.net; s=20260707; t=1793998331; x=1794603131;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9Y3kCsYcaDY5qwLaKX26SOy2iD45ozQ8Dc5QEanJuFg=;
-        b=1V4Th+LQse0Op7YUvGhcHhYSQjH4RwJDJW1yOlIGzx9tXNLNkYRfMovvPne7GG9Jgo
-         ckragHIlBZP5ZtaB/3/qw7owDgeYVLrIzC7Ep1qJsIR9hnYrL1NDj0DBK7Unjuh5LB/C
-         6FdYUMxg7YlQYwcZY3Mgq/Ft2D/MuA91Af98ZwDtfvJK3NGUMfA2Q42KNi2zVYVCCvNM
-         ykY0Wv6Zsuo1bbYZYBslmrSL4HdpskFr/Eoy5AefyJ3eaadfbQ6KKFB22zxOdl2dM0N1
-         CRpfSjkLhz2xCgpf3+J1NkPCgLkVUwxqZvoUcebsx5eLPhHpMMt1z6rzbzWHekJQkdfo
-         gNWA==
-X-Forwarded-Encrypted: i=1; AKwUvBwSWOccuo55EnZAfN+2X37IMIW+sw3Cc5a9FWymIFJy3knGmmG+nzp9dKRIEKcfb5uJttk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+1ud5QfkXoijc8kJkzRwf5kWgBqjb/wStSkAnhD81K0RyDFZw8
-	Uvl3MNpEgWhqSDScaHSaCzlcr5g0uJ+kMLILc8AHs3FPqVKzbcWDPR2L
-X-Gm-Gg: AYBFou0D+qWtCvi91/MBqZNnB7OkM7gDmnqVp0QSKHjZrl47IaioHauMGUUy0JH53PB
-	IGNQmX7B0Tz6rAncra7jaaDSAJ7WtX4LtlyEzCvSRKlfgcy0hTv80x1j1MptxfP7rl6TNLEchgf
-	qMlL0VWUt1RFZAMsxBBT09lGaP2EUMGBHJXrZJzMotm762SK29zC3EfMfXAnBBVjNWfo+DIUzU6
-	oLQmhJ9KwtQOho8VDNhzOAPitnDVdV5HNX5CXo7ExIcLKFiNpzJA9REs6d976Rtgziw+3VxI1Wn
-	kpzPHJoR8jsFltJY5cz+xHhRjvUdFwFyzr9cyH3FAYs/CoBzOAicnrmGZMj4vC9zYRb2QDhehLq
-	WTZuA/GYMhBOzvj8kTxv7lizTTk1/a/Nr9ZwgrJg6kMKI8/aza2RPIe8yYwKDuv1l90HaLbRH7a
-	IxlGMB1JFspzPdE81ABEnAV7l/jlq4gMFdfBPwnfeqYZWxuUW4djDmkig31xljlZOvHBbEvQRHW
-	YroHBvcRnpVPU0yhVBLDjYoz6agp8f1YtvPefSKH5AtX65g4TfonmO1GWoKn+j90NmMxNB8xvek
-	cdlL39m6c+VRT3oZgNz3A7Yr4yoVA8msPFgfB0ADWhIXReA=
-X-Received: by 2002:a05:600c:529a:b0:4a6:42cc:bf6c with SMTP id 5b1f17b1804b1-4b6de789187mr58252605e9.7.1793998323166;
-        Fri, 06 Nov 2026 12:52:03 -0800 (PST)
+        bh=ilvmL95xJlpNSKLk5utHXZ1bIs/yE6trPAs8lvP1p2U=;
+        b=vrldOtc8eqhElQbP2Z0JSirXUYDXUC8HYl2JlT0pfyjsEtsmDvhFl2bc6L19qjLv1C
+         v8RJ1UKuprou5+71GG4/WAy+FBLAzJ3l/d0CpG4xIBBHk4CVGvL7IJ8HRm3LtcXHFPyo
+         a5lTNP4URjj11xfrd8Pw6Tnmacb4SyaOtuD7lusKW9D1Yfdx0WO94GGE0twqQRkeQhkH
+         Rl2sTIeqI3sFkvc6B5Gl8K+0QT9zqucvPSAVGBJMJLHLLQUNNo7jJOoSG53k/NW4W/hj
+         7aiM5ItPAeQUMnrignfIZKVSq+j1cSlui3F0oFVkVv0iqd6txf8P/JCgL1Jot4yuvSx1
+         gDmg==
+X-Forwarded-Encrypted: i=1; AKwUvBwZVWAR2bdjw5BLzqs1AZEO+IztgcA0RCAujXQ8NE9CN8bzkXxNL4gHcEmAb0OkkjqTLcs=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+nGeLWYnuA/vd2xn4sB32xxxPB8YnOolMySzeDrYRBo4m5C1QI
+	1DBu1d/3l2dtQIMTXxM4Mg9ljKtjljiC9195WRa19oOC0S0uSnuoxI2U
+X-Gm-Gg: AYBFou0r7rsOwwRetp4mDzu6IFpgLiGjN20ppZN9qZB8iipjITx0Q3IQkng1TljakfI
+	AR+ypjQ1XPs6hWbp+sTGK67Z86kY9Wi1jgNv4G0dR0K7pyj79xGGTUxQF0KCG4HbUQSBGbqTqgj
+	Xk1L7eG6qd+jYgzIyaN4itMAG1BaUnkwbK2qr5UxTrYvvclNftUrXTs9IChsmy+O56rGAUHdiSO
+	ibMFFKw3arfzHCxbs94Wl6L1p5+QSfz5orgR3d28v/Q4HeO2O9dDP/tgD/2HNvJEykaYeIEPMUI
+	0pGerfDKhOOFTA7rsjl7CLmHGDq6AgIU4k8TVqQwYYtdpLAwhZO9JaiiXOtUokU8vOW6lTLK1jO
+	gh3BOejmovgZUXNLlZgeb5/EFg1UonJrJ+jm/s3/h9B11gjjhZWnSczR3KWqf2r0ove9d+h8WC0
+	AEUpghJ3E/8jOkocM63/xaYCJVtwXWk+bwimSMgEQHFaadVfrw1NEEjR9fKfA2zsEwMAh66PB/N
+	z8FDlo5fwd3sAbcOoVpkEl4LAckE+S9S/kOtqoxWbJeS4mW04+jZG2HXSI6Kn0Z/NIic0kWag6Z
+	NxuXm3o3B1GPuDJ9wcx/b/ALwTTO9GwL61SShy/8KyTwg5A=
+X-Received: by 2002:a05:600c:4e14:b0:4a9:18f4:925e with SMTP id 5b1f17b1804b1-4b6df8c9443mr62643145e9.18.1793998331176;
+        Fri, 06 Nov 2026 12:52:11 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7da62edb4sm9075425e9.1.2026.11.06.12.52.02
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7da62edb4sm9075425e9.1.2026.11.06.12.52.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 12:52:02 -0800 (PST)
+        Fri, 06 Nov 2026 12:52:10 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -97,9 +97,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v1 bpf-next 03/18] bpf: Build fmod_ret target sets from BTF decl tags
-Date: Fri,  6 Nov 2026 21:02:52 +0000
-Message-ID: <20261106210314.1767267-3-a.s.protopopov@gmail.com>
+Subject: [PATCH v1 bpf-next 09/18] bpf: Find fmod_ret candidates in bpf_scan_ir
+Date: Fri,  6 Nov 2026 21:02:58 +0000
+Message-ID: <20261106210314.1767267-9-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: 20261106205523.1765622-1-a.s.protopopov@gmail.com
 References: <20261106210314.1767267-1-a.s.protopopov@gmail.com>
@@ -114,184 +114,176 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Mark functions tagged with the "bpf_fmodret{,_sleepable}" decl tags
-(added by resolve_btfids) as fmodret targets. Add the KF_SLEEPABLE flag
-for the latter.
+Find the functions which can become fmod_ret targets: functions which
+return a 32 or 64 bit integer and have a path from the entry without
+observable side effects (a clean path) which returns an error. A
+fmod_ret program which returns this error instead of calling the
+function then behaves like the path. List the errors in the record of
+the function, sorted and unique.
 
-Do this for vmlinux at fs_initcall and for a module before its BTF
-becomes visible to anyone else, so nothing can look at the set while it
-is built.
+Take only the blocks which no dirty path reaches: after a dirty path
+joins a clean one, a branch may depend on what the dirty path did. Only
+the block of the return may also be reached by dirty paths, as it
+returns the same constant on all paths.
 
-The IDs come from the BTF after relocation, so they are final. Unlike
-the IDs of a set registered by a module, they must not be relocated, and
-the set is installed directly instead of through btf_populate_kfunc_set().
-(The register_btf_fmodret_id_set() keeps working, it will be removed by
-a later patch.)
-
-The set shares kfunc_set_tab with the kfunc sets, but its flags only say
-how a target may be attached. Skip it in btf_kfunc_check_flag(), so a
-kfunc which is also an fmod_ret target keeps its own flags, such as
-KF_IMPLICIT_ARGS. Otherwise btf_attach_func_proto() finds the flags of
-such a kfunc inconsistent and attaching to it fails.
+For now an error must be a constant returned by a clean path. The
+following changes find more of the errors.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- kernel/bpf/btf.c | 114 ++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 113 insertions(+), 1 deletion(-)
+ scripts/llvm-plugins/bpf_scan_ir.cpp | 117 ++++++++++++++++++++++++++-
+ 1 file changed, 113 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 61d2df6776a9..2c45e5fa1d7b 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -9307,6 +9307,8 @@ enum {
- };
+diff --git a/scripts/llvm-plugins/bpf_scan_ir.cpp b/scripts/llvm-plugins/bpf_scan_ir.cpp
+index 6700896749d4..6828fa73717d 100644
+--- a/scripts/llvm-plugins/bpf_scan_ir.cpp
++++ b/scripts/llvm-plugins/bpf_scan_ir.cpp
+@@ -3,11 +3,17 @@
  
- #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+static int btf_register_fmodret_tags(struct btf *btf);
+ #include "../bpf/fmodret_metadata.h"
+ 
++#include <algorithm>
++#include "llvm/ADT/SmallPtrSet.h"
+ #include "llvm/ADT/SmallVector.h"
+ #include "llvm/Config/llvm-config.h"
+ #include "llvm/IR/Analysis.h"
++#include "llvm/IR/BasicBlock.h"
++#include "llvm/IR/CFG.h"
+ #include "llvm/IR/Constants.h"
+ #include "llvm/IR/GlobalVariable.h"
++#include "llvm/IR/Instructions.h"
++#include "llvm/IR/IntrinsicInst.h"
+ #include "llvm/IR/Module.h"
+ #include "llvm/IR/PassManager.h"
+ #include "llvm/Passes/PassBuilder.h"
+@@ -22,9 +28,114 @@ using namespace llvm;
+ 
+ namespace {
+ 
++static constexpr int MaxErrno = 4095;
 +
- struct btf_module {
- 	struct list_head list;
- 	struct module *module;
-@@ -9476,6 +9478,15 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 			}
- 			goto out;
- 		}
-+		/*
-+		 * Do this before the BTF is visible to anyone else. A failure
-+		 * is not fatal: the module loads, but without fmod_ret targets.
-+		 */
-+		err = btf_register_fmodret_tags(btf);
-+		if (err)
-+			pr_warn("failed to register fmod_ret targets of module [%s]: %d\n",
-+				mod->name, err);
-+
- 		err = btf_alloc_id(btf);
- 		if (err) {
- 			btf_free(btf);
-@@ -10100,7 +10111,9 @@ u32 *btf_kfunc_flags(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_p
- }
+ /* The errors which clean paths of a function return */
+ using ReturnValues = SmallVector<int64_t, 8>;
  
- /*
-- * Check a single KF_* @flag on a kfunc across all of its hook sets.
-+ * Check a single KF_* @flag on a kfunc across all of its hook sets. The set of
-+ * fmod_ret targets is not one of them: its flags only say how a target may be
-+ * attached, and a kfunc which is also a target keeps its own flags.
-  * Returns:
-  *   * 1 if @flag is set
-  *   * 0 if @flag is not set
-@@ -10115,6 +10128,8 @@ int btf_kfunc_check_flag(const struct btf *btf, u32 kfunc_btf_id, u32 flag)
- 	u32 *flags;
- 
- 	for (hook = 0; hook < BTF_KFUNC_HOOK_MAX; hook++) {
-+		if (hook == BTF_KFUNC_HOOK_FMODRET)
-+			continue;
- 		flags = btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
- 		if (!flags)
- 			continue;
-@@ -10182,6 +10197,103 @@ int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
- }
- EXPORT_SYMBOL_GPL(register_btf_kfunc_id_set);
- 
-+/*
-+ * Targets of fmod_ret programs are marked in BTF by resolve_btfids, see
-+ * BTF_SET8_FMODRET. A "bpf_fmodret" decl tag on a function makes it a target.
-+ * A target which sleepable programs may attach to also has a
-+ * "bpf_fmodret_sleepable" tag, which never comes without "bpf_fmodret".
-+ */
-+#define BTF_FMODRET_TAG			"bpf_fmodret"
-+#define BTF_FMODRET_SLEEPABLE_TAG	"bpf_fmodret_sleepable"
-+
-+/* Return the function which T tags with decl tag NAME, or 0 */
-+static u32 btf_fmodret_tag_func(const struct btf *btf, const struct btf_type *t,
-+				const char *name)
++/* Return true and set N if V is an errno constant */
++static bool errnoConstant(const Value *V, int64_t &N)
 +{
-+	const struct btf_type *func;
++	auto *C = dyn_cast<ConstantInt>(V);
 +
-+	if (!btf_type_is_decl_tag(t) || btf_type_decl_tag(t)->component_idx != -1)
-+		return 0;
-+	if (strcmp(btf_name_by_offset(btf, t->name_off), name))
-+		return 0;
-+	func = btf_type_by_id(btf, t->type);
-+	if (!func || !btf_type_is_func(func))
-+		return 0;
-+	return t->type;
++	if (!C || (C->getBitWidth() != 32 && C->getBitWidth() != 64))
++		return false;
++
++	N = C->getSExtValue();
++	return N >= -MaxErrno && N < 0;
 +}
 +
-+/* Build the set of fmod_ret targets of BTF from its decl tags */
-+static int btf_register_fmodret_tags(struct btf *btf)
++static bool cleanInstruction(const Instruction &I)
 +{
-+	u32 id, func_id, nr_types = btf_nr_types(btf), cnt = 0;
-+	struct btf_kfunc_set_tab *tab;
-+	struct btf_id_set8 *set;
-+
-+	for (id = btf_start_id(btf); id < nr_types; id++)
-+		cnt += !!btf_fmodret_tag_func(btf, btf_type_by_id(btf, id), BTF_FMODRET_TAG);
-+	if (!cnt)
-+		return 0;
-+
-+	set = kmalloc(struct_size(set, pairs, cnt), GFP_KERNEL | __GFP_NOWARN);
-+	if (!set)
-+		return -ENOMEM;
-+	set->flags = 0;
-+	set->cnt = 0;
-+	for (id = btf_start_id(btf); id < nr_types; id++) {
-+		func_id = btf_fmodret_tag_func(btf, btf_type_by_id(btf, id), BTF_FMODRET_TAG);
-+		if (!func_id)
-+			continue;
-+		set->pairs[set->cnt].id = func_id;
-+		set->pairs[set->cnt].flags = 0;
-+		set->cnt++;
-+	}
-+	sort(set->pairs, set->cnt, sizeof(set->pairs[0]), btf_id_cmp_func, NULL);
-+
-+	/* Each sleepable tag marks a function which is already in the set */
-+	for (id = btf_start_id(btf); id < nr_types; id++) {
-+		struct btf_id_set8_pair *pair;
-+
-+		func_id = btf_fmodret_tag_func(btf, btf_type_by_id(btf, id),
-+					       BTF_FMODRET_SLEEPABLE_TAG);
-+		if (!func_id)
-+			continue;
-+		pair = btf_id_set8_entry(set, func_id);
-+		if (pair)
-+			pair->flags |= KF_SLEEPABLE;
-+	}
-+
-+	tab = btf->kfunc_set_tab;
-+	if (!tab) {
-+		tab = kzalloc_obj(*tab, GFP_KERNEL | __GFP_NOWARN);
-+		if (!tab) {
-+			kfree(set);
-+			return -ENOMEM;
++	if (auto *Intrinsic = dyn_cast<IntrinsicInst>(&I)) {
++		switch (Intrinsic->getIntrinsicID()) {
++		case Intrinsic::assume:
++		case Intrinsic::lifetime_start:
++		case Intrinsic::lifetime_end:
++		case Intrinsic::invariant_start:
++		case Intrinsic::invariant_end:
++			return true;
++		default:
++			break;
 +		}
-+		btf->kfunc_set_tab = tab;
 +	}
-+	if (tab->sets[BTF_KFUNC_HOOK_FMODRET]) {
-+		kfree(set);
-+		return -EEXIST;
-+	}
-+	tab->sets[BTF_KFUNC_HOOK_FMODRET] = set;
-+	return 0;
++	return !I.mayHaveSideEffects();
 +}
 +
-+static int __init btf_fmodret_tags_init(void)
++static bool cleanBB(BasicBlock *BB)
 +{
-+	struct btf *btf;
-+	int err;
-+
-+	btf = btf_get_module_btf(NULL);
-+	if (IS_ERR_OR_NULL(btf))
-+		return PTR_ERR_OR_ZERO(btf);
-+
-+	err = btf_register_fmodret_tags(btf);
-+	btf_put(btf);
-+	return err;
++	for (Instruction &I : *BB) {
++		if (!cleanInstruction(I))
++			return false;
++	}
++	return true;
 +}
-+fs_initcall(btf_fmodret_tags_init);
 +
- /* This function must be invoked only from initcalls/module init functions */
- int register_btf_fmodret_id_set(const struct btf_kfunc_id_set *kset)
- {
++/* Add the errors which clean paths of F are known to return to VALUES */
++static void cleanReturnValues(Function &F, ReturnValues &Values)
++{
++	SmallPtrSet<BasicBlock *, 32> CleanBBs;
++	SmallVector<BasicBlock *, 32> Worklist;
++	bool Changed;
++
++	/* The clean blocks which the entry reaches through clean blocks */
++	if (cleanBB(&F.getEntryBlock())) {
++		CleanBBs.insert(&F.getEntryBlock());
++		Worklist.push_back(&F.getEntryBlock());
++	}
++	while (!Worklist.empty()) {
++		BasicBlock *BB = Worklist.pop_back_val();
++
++		for (BasicBlock *Successor : successors(BB)) {
++			if (!CleanBBs.contains(Successor) && cleanBB(Successor)) {
++				CleanBBs.insert(Successor);
++				Worklist.push_back(Successor);
++			}
++		}
++	}
++
++	/*
++	 * Keep the blocks which only clean paths reach: after a dirty path joins
++	 * a clean one, a branch may depend on what the dirty path did
++	 */
++	do {
++		Changed = false;
++		for (BasicBlock &BB : F) {
++			if (!CleanBBs.contains(&BB))
++				continue;
++			for (BasicBlock *Pred : predecessors(&BB)) {
++				if (!CleanBBs.contains(Pred)) {
++					CleanBBs.erase(&BB);
++					Changed = true;
++					break;
++				}
++			}
++		}
++	} while (Changed);
++
++	/*
++	 * The returns of the clean blocks which only clean paths reach or which
++	 * one of them branches to. Dirty paths may also reach the latter, but
++	 * the returned constant is the same on all paths.
++	 */
++	for (BasicBlock &BB : F) {
++		auto *Return = dyn_cast<ReturnInst>(BB.getTerminator());
++		bool Entered = CleanBBs.contains(&BB);
++		int64_t N;
++
++		if (!Return || !Return->getReturnValue() || !cleanBB(&BB))
++			continue;
++		for (BasicBlock *Pred : predecessors(&BB))
++			Entered |= CleanBBs.contains(Pred);
++		if (!Entered)
++			continue;
++		if (errnoConstant(Return->getReturnValue(), N))
++			Values.push_back(N);
++	}
++	llvm::sort(Values);
++	Values.erase(std::unique(Values.begin(), Values.end()), Values.end());
++}
++
+ struct FunctionDescription {
+ 	Function *Fn;
+ 	unsigned Flags;
+@@ -86,10 +197,8 @@ public:
+ 				Flags |= FMODRET_FN_WEAK;
+ 			if (Ret->isIntegerTy(64))
+ 				Flags |= FMODRET_FN_RET64;
+-			/*
+-			 * Nothing finds the values yet. A weak definition always
+-			 * has a record, see fmodret_metadata.h.
+-			 */
++			cleanReturnValues(F, Values);
++			/* A weak definition always has a record, see fmodret_metadata.h */
+ 			if (!Values.empty() || (Flags & FMODRET_FN_WEAK))
+ 				Descriptions.push_back({&F, Flags, std::move(Values)});
+ 		}
 -- 
 2.43.0
 
