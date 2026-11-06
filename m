@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794001812;
-	b=sNEfEjMtDiBaTNjis+6RJ3S55rzLx4X48YzxgecI9xJo3WVtpgLegU4VGijItF/H0bdn
-	 aUdOXRqvmmBRbj3omHVu3fwe78dzj4NXa5AQtRDioi3SuLQgfGvWoDIdYYBSy/+s0ooDk
-	 FQO5wC1N1f3fOFgWIoOwdEFdtj003ONVGHRPie/G6XOV/2sVi/37CRtpnBhJ3g9zWVyjg
-	 YLGLZBQZLP3dVRWS2Sf1ZiDjmgCdLFMxOd0xOSzc6nsF60CUA92MQ2ZH0o8uWPB9Pxorm
-	 SaqR1bnDWDE6clltzQAWP3zXti5jsnvhpgC1UU0JqxjvJrJW4lM/5725sHblPi7OSqg==
+	t=1794001810;
+	b=EFih82nYq3aI2j5e+kn2LOwasOL7JSK2JWpz0AtTaBLIKULMLlY/zqIOqsBM70NR8qCu
+	 e+k4oDTocvUXAPq3F92zVjcMC2ELD6vjg3qI1PXpPCs5V33MzCdLZ3k15EFLuB5Im0icJ
+	 yM/0khBeHx8Dzf+CaURGDoSg9+HPrVyV7akgX/cv/L25GwSrSpyDfGhr0u+hGttXmuYTC
+	 2PHdGbXJzkyJHAdWKLgC575HgljKOrsr1uJJgYvZR6i9e3vsbyz9HzehONqOH0kq74rqn
+	 ff1mNjF234XvFgU8zo28zaS5dShFtyWp22ubwOXc6qb/g6TIZa7mZHAmQmPsxT333tA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794001812;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794001810;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=qyD4/QNMYslZrvex6UggevvD+mzpPjAON1auD7GtOww=;
-	b=JHDiayJlIjfdFvEI7it5Qq+/v1f7t+VY4gk5tHZq7h7RqaJIA/2B1kL9pOFhfcE535hE
-	 pUfvvPF6/mPb9xdygEPxoOiKuTVezkzHLYkuRhWGJ8rNDYzM31kApzgT5w8gtbdf0YyDk
-	 4FIni9Fvw2AyqUcKGXgRdh/VpLKX3gsjc23YFrWOJg7tlKE2A7oG+a6FhwwsKuOiegBB0
-	 ao66KbQIyHCMoS/j/ijGzGwTRecmhpUjluTSroJLqVjA+5W9qLCzQqSpjh96/YqbJGP00
-	 ZnupHSv/431pvmNBpfty1Rk9wOkD8gv5DtFfxpEonnnFAhi2liEOBLyJz1Q5niv9kJw==
+	bh=OEIOUgJgHHV6uUAH0FBN/4ZE/TGE/hgbL46gynN5elI=;
+	b=yApLH7ISKGBxBitC6ibP4GYdGiU15En6o8hqGVs3ExVxPqV707hK+1dcdIptP2nIdAUu
+	 +NduCFW8sdA4PAQIgSc7HYokCkKNHPz0U78RQC0nAlEdpobDuDliztcKmu3ucWxcDELp4
+	 CE4Z9oF8Rz7mzizhOOCStdYnelTbcl60ijHJFxpJhvjBciJ0yhwixJdFp0tYsmLAFftBG
+	 I0AgLfUeJVgN9vsoPLTLyVNCu6H7Kkkz87p+o3a2PYrd048pIvpiQmK2MTtvvSBiMLG3T
+	 sc4COFokI/tBLuXsD0oL7M2AQE9+uyzCxCEeWWipd+QYxE6Blq2mgJpsaI2i7mgq0Yw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZliuqbHi;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ECSXNYZN;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A34606A33B;
-	Fri,  6 Nov 2026 21:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A44606A330;
+	Fri,  6 Nov 2026 21:50:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZliuqbHi
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84B231F0089F;
-	Fri,  6 Nov 2026 21:50:11 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ECSXNYZN
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09441F008A3;
+	Fri,  6 Nov 2026 21:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794001811;
-	bh=qyD4/QNMYslZrvex6UggevvD+mzpPjAON1auD7GtOww=;
+	s=k20260515; t=1794001810;
+	bh=OEIOUgJgHHV6uUAH0FBN/4ZE/TGE/hgbL46gynN5elI=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ZliuqbHiTp4hOSJgd46BNKEuRxFQO284wkTv506CQdYNSwWaaJRqaXucF1FnJ0Tvd
-	 p60pHUuXDzNqoCqgfF9IbpGd5UUfhPyXvnooGQF9uP1A/VP4JxZZLYukx5fxe1V3AO
-	 rc+nl0xTJ9xcRNkgusW54Ye/pPaJ7YDkixLe6uw1ufkR32J0pZfLLQB0cjeOvFxbbN
-	 yq1kqaIh5y5PRg5wWznDqOJJcLjqcXbqWz1VY5fZS9NfvUnkSjXpRNSl6miNtu6a8L
-	 YxVo+JjQ39XqfQBq79TayWqteqDNaD0Xa8NsBiD/9VsyIPRZtEDoyb6OExwx3DfdC9
-	 JH3hymS34yBOg==
-Content-Type: multipart/mixed; boundary="===============1506488348552457952=="
+	b=ECSXNYZNV5KUmPnYOTiGm32urfXYjslzx/+uVDXqYRwi67ATdnCjfFyS9E6nWBzSe
+	 wAbptU7Fd4lGwmgido7PJJhJa24ecVgWhWFotibef5loohFUm7Ra3Yy2l23aa6tEzt
+	 deBnYodcJAUyJ5NA2Gtov9+TxkB8olDilsZq7M/35i5etbYwHC/SgioDjjaE/xOP4a
+	 oPFiV3kRhgtAUg6OKi2U0ndmAyCHgF7P/LsmZsaBlLrKAJB9KMscEsT/NPen0U0O5/
+	 x4e68dhyND24QhoIiezvV0l/XeW6moCRJV7QR2XKjdbAM495L2aHkcJV+gx8GQrX39
+	 5Q8cQWBdFQl/w==
+Content-Type: multipart/mixed; boundary="===============3583234012145170803=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,119 +49,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <82dc259cd905abb5ad4fcbb8151553fb8680d4d71b1e52babd3e2d588a90656b@mail.kernel.org>
-In-Reply-To: <20261106210314.1767267-15-a.s.protopopov@gmail.com>
-References: <20261106210314.1767267-15-a.s.protopopov@gmail.com>
-Subject: Re: [PATCH v1 bpf-next 15/18] resolve_btfids: Tag fmod_ret candidates as targets
+Message-Id: <8b7031053a1e8023c64c8c33203f67f4215142ba84cdbab9d77c89050766c106@mail.kernel.org>
+In-Reply-To: <20261106210314.1767267-16-a.s.protopopov@gmail.com>
+References: <20261106210314.1767267-16-a.s.protopopov@gmail.com>
+Subject: Re: [PATCH v1 bpf-next 16/18] selftests/bpf: Test fmod_ret candidates found by bpf_scan_ir
 From: bot+bpf-ci@kernel.org
 To: a.s.protopopov@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,almagui@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,brauner@kernel.org,kpsingh@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,sashal@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
 Cc: a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 21:50:11 +0000 (UTC)
+Date: Fri,  6 Nov 2026 21:50:09 +0000 (UTC)
 
---===============1506488348552457952==
+--===============3583234012145170803==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> resolve_btfids: Tag fmod_ret candidates as targets
+> selftests/bpf: Test fmod_ret candidates found by bpf_scan_ir
 
-TL;DR: Nits only in resolve_btfids fmodret.c: duplicated alias-walk code in
-mark_traceable_function(), its unused bool return, and possibly obsolete
-section names (.meminit, .cpuinit, .devinit) in section_cannot_be_attached().
+TL;DR: Nits only in the selftests: a fmod_ret test program's name may
+misdescribe its target, and some includes in bpf_testmod_retval.c may be
+unused.
 
-> diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfids/fmodret.c
+> diff --git a/tools/testing/selftests/bpf/progs/fmodret_retval.c b/tools/testing/selftests/bpf/progs/fmodret_retval.c
 > new file mode 100644
 > --- /dev/null
-> +++ b/tools/bpf/resolve_btfids/fmodret.c
+> +++ b/tools/testing/selftests/bpf/progs/fmodret_retval.c
 
 [ ... ]
 
-> +static bool mark_traceable_function(struct elf_function_list *list,
-> +				    Elf64_Section shndx, GElf_Addr address,
-> +				    enum ftrace_site_kind kind)
+> +/* Declared targets and the static rules are not restricted */
+> +SEC("fmod_ret/bpf_testmod_retval_declared")
+> +__success
+> +int BPF_PROG(declared_any, int ret)
 > +{
-> +	size_t left = 0;
-> +	size_t right = list->nr;
-> +	size_t first;
-> +	size_t i;
-> +	bool found = false;
-
-[ ... ]
-
-> +	if (first != SIZE_MAX) {
-> +		while (first && list->functions[first - 1].shndx == shndx &&
-> +		       list->functions[first - 1].value ==
-> +						list->functions[first].value)
-> +			first--;
-> +		for (i = first; i < list->nr &&
-> +		     list->functions[i].shndx == shndx &&
-> +		     list->functions[i].value ==
-> +					list->functions[first].value; i++) {
-> +			list->functions[i].traceable = true;
-> +			found = true;
-> +		}
-> +		return found;
-> +	}
-> +	if (kind == FTRACE_SITE_PATCHABLE || !left)
-> +		return false;
+> +	return -1;
+> +}
 > +
-> +	/* The nearest preceding function owns the call site. */
-> +	first = left - 1;
-> +	if (list->functions[first].shndx != shndx)
-> +		return false;
-> +	while (first && list->functions[first - 1].shndx == shndx &&
-> +	       list->functions[first - 1].value == list->functions[first].value)
-> +		first--;
-> +	for (i = first; i < list->nr &&
-> +	     list->functions[i].shndx == shndx &&
-> +	     list->functions[i].value == list->functions[first].value; i++) {
-> +		if (!function_contains(&list->functions[i], address))
-> +			continue;
-> +		list->functions[i].traceable = true;
-> +		found = true;
-> +	}
-> +	return found;
+> +SEC("fmod_ret/bpf_modify_return_test")
+> +__success
+> +int BPF_PROG(static_rule_any, int a, int *b, int ret)
+> +{
+> +	return -1;
 > +}
 
-This isn't a bug, but mark_traceable_function() has two near-identical blocks
-that walk back to the first alias at a (shndx, value) pair and then loop
-forward over the aliases.  The second differs only by the
-function_contains() test.
+This isn't a bug, but bpf_modify_return_test() is in the
+bpf_test_modify_return_ids BTF_FMODRET set, so it looks like a declared
+target rather than one allowed by check_attach_modify_return().
 
-Could the walk back use function_at(list, shndx, list->functions[first].value),
-with one forward loop that takes the containment test as a condition?  Then
-the two copies would not need to be kept in sync.
-
-Also, this isn't a bug, but is the bool return of mark_traceable_function()
-meant for something, such as a -v count of unmatched ftrace sites?  None of
-its callers in mark_relocated_ftrace_sites() and read_ftrace_site_range()
-read the value, so could it return void and drop 'found'?
+Would a name like declared_vmlinux_any fit better, or was this meant to
+attach to something the static rules allow?
 
 [ ... ]
 
-> +static bool section_cannot_be_attached(const char *name)
-> +{
-> +	return section_prefix(name, ".init.text") ||
-> +	       section_prefix(name, ".exit.text") ||
-> +	       section_prefix(name, ".noinstr.text") ||
-> +	       section_prefix(name, ".meminit.text") ||
-> +	       section_prefix(name, ".memexit.text") ||
-> +	       section_prefix(name, ".cpuinit.text") ||
-> +	       section_prefix(name, ".cpuexit.text") ||
-> +	       section_prefix(name, ".devinit.text") ||
-> +	       section_prefix(name, ".devexit.text");
-> +}
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
 
-This isn't a bug, but are .meminit.text, .memexit.text, .cpuinit.text,
-.cpuexit.text, .devinit.text and .devexit.text still emitted anywhere?
+[ ... ]
 
-In include/linux/init.h, __meminit is now either empty or __init, and the
-__cpuinit/__devinit annotations were removed.  Neither vmlinux.lds.h nor
-scripts/module.lds.S places these sections, and modpost lists only
-.init.text and .exit.text as init/exit text.
+> +#include <linux/atomic.h>
+> +#include <linux/btf.h>
+> +#include <linux/btf_ids.h>
+> +#include <linux/compiler.h>
+> +#include <linux/err.h>
+> +#include <linux/errno.h>
+> +#include <linux/error-injection.h>
+> +#include <linux/mutex.h>
+> +#include <linux/rcupdate.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/types.h>
 
-If they are gone, could section_cannot_be_attached() be reduced to
-.init.text, .exit.text and .noinstr.text?
+This isn't a bug, but are linux/mutex.h, linux/rcupdate.h and linux/btf.h
+still needed here, or are they left over from earlier fixtures?
+
+[ ... ]
 
 
 ---
@@ -169,4 +130,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42294987431
---===============1506488348552457952==--
+--===============3583234012145170803==--
