@@ -1,50 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.230.114
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.96
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793946648;
-	b=fi1eF6XEFasZS9WSHERUbW8fJywMa7z3MLX3Q6dm27FiivKtMsRHtsV2kkLs5nIfv/AN
-	 TK37KBMv/DIpaqH93mQv96r1U1mHjwu+He9ILmwdFiKTYaoNe4om3a5w4Ak9w16l54cEb
-	 hadFZBFXOKANI6yAunVF2qX8K3BAE2JggkCmlxYlBU9AeSooh3FTCAOY5V2M3augDs5DQ
-	 MtdUf0u4r84NAL9VHPupJ3GjTYF239ZTsvje5sTSwT2UNfUTiwPbtMMxotgSkXpR7z8xM
-	 A96kUk627Z8/j0faw3S6Dep84AMhvcwWP0o+XdXThYyfv7oHsYvKt2UDHf6YO1Mf1GQ==
+	t=1793946982;
+	b=jsfvuz6ZweJCtF/qwCZU67kHlWnyq7jQmGQoByKiq165aJ010SEAdmVsmOQjSqAMsrey
+	 kq5dl5PAgx6n388ORaggzdmgE717Hj4SMWQiQbH6SqrYjKXA4XeSGatWLy11QhQi3DZdY
+	 IYJccU6BX1s/7qF+SlXMYtUr2DMf8cY4TTJTzro3OuZmKt95ok1l0N6EqRBiXRfTe3zez
+	 jQR9YTqkRP5vpb4ISI2xSEcfPcz83oAFteR4TkmUNaOTKEZFBcEdCL7d91KDScRo7sETl
+	 g+RzB1MxlxrD37Fz5WrhZ2WjRgfjfYBxiVMUS32ym3CvBjyNtS6mYCyFrzEQ6s08CvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793946648;
-	h=DMARC-Filter:DKIM-Signature:References:Mime-Version:User-Agent:
-	 Subject:Date:Message-Id:Content-Type:In-Reply-To:
-	 Content-Transfer-Encoding:To:Cc:X-Original-From:From:
-	 X-Lms-Return-Path;
-	bh=mX+GdBvA4yT9OKqPBs6xrJW5OhdpJfdnYKs9cQ6hIug=;
-	b=OUYNFtc1tQwF8yMWn01cdBgxvxX+orAmOnxFclISPM/EuYuUpVnzGryNZ3CUZaRr0ifj
-	 iARumKgrAoa+U/9ILFxmiPy40Phas+5vD7K0ICp47E1wYbSlO2cn9QzRlKHHQInQCvzYN
-	 dttGL7KL1et7JBk8WuYhcwp4gn/QoXr5n7G9NZ09j+6i0I9c9abBh90wGvPnrDZKJ/TvX
-	 jtvxU+9s1VsU8aIowP8OEb8VGCe+di3Z1X0n3cM3v2emZoyd+MpESPCZG4C2VUz3Supr0
-	 RtK/fZyoXqx99S7/egFqDIdMVvYKRYfCsbBAx5G5ghl45KoX9tAS61Crdo/iXk67mug==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793946982;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=HSkq7GM/C7a8WzdehCU5wxcvtBC9C9CoJO/ODOkIDzs=;
+	b=PfBmVOkD+V9Yp92CA38tI22uK03MIYvQh6/awo9c89JjWFRKAvig5G5r2o//ri4jnldj
+	 OeE8fJY4YSBKsiXwDEt6tIMjEnyFXunEkeoAmhcFDjAYEzis+EUoxWy4l2OurQcf2tJVB
+	 oLXZSgrVIuZLJJ4d05EJNQ1iqjzT6VbtlA0xhjr+Y28eEGDYm0ubXjSUjNPle9f4dkp1D
+	 cTjJ3kH9MsXy8CdbOgM0mhgiZtG+ezWYMJ4liU4YRvsQbL4zpO33EEOn2c9bDEb7MQ0Hd
+	 TuLO1H0zFOfNouS/V8Fkx73Wi7u2UZ7/RVdABChBfZ3Th1COUhCre4+QxgDVi2yEAPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bytedance.com;
-	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=p4sn5M9G;
-	arc=none smtp.remote-ip=209.127.230.114
-Received: from va-1-114.ptr.blmpb.com (va-1-114.ptr.blmpb.com [209.127.230.114])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=1g4.org;
+	spf=pass smtp.mailfrom=1g4.org;
+	dkim=pass header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=KtTxaRmA;
+	arc=none smtp.remote-ip=185.70.43.96
+Received: from mail-4396.protonmail.ch (mail-4396.protonmail.ch [185.70.43.96])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FAAC606A334
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 06:30:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6FAAC606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68096606A328;
+	Fri,  6 Nov 2026 06:36:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68096606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1g4.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=p4sn5M9G
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=2212171451; d=bytedance.com; t=1793946641; h=from:subject:
- mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
- mime-version:in-reply-to:message-id;
- bh=mX+GdBvA4yT9OKqPBs6xrJW5OhdpJfdnYKs9cQ6hIug=;
- b=p4sn5M9GuxhrN8PCzUt033kH7bQaoLzYR9vIZD8nfrGq+NdhxIAl9vXxigrYX9OaCKiU2K
- P2JmxymFPibPEM1J9jUR3hkqH/r5srmO9NDO52RLPHMD7OouLdX03dzFye3yKVgUDj94w9
- 7L7WF8b5S/KuOyqCENe7tDYEiOLd+2rjq3c+YOCZaAoBzR/a4PUbidGIHljCQVDcNBHxN+
- jYNE0PfkbKUlLb5M+HDHnrrziNoS10N6sqOD9/XVuuMY6FkaeajZlmh5kGSD4pvEWunGqI
- BP3shM9w/2yubWH48m4xuu/fxNVL+kEwaRNKWEwvOGw2WAEgdXQyDHiigCk5ug==
-References: <20261103122816.48037-1-lizhe.67@bytedance.com> <0efbf4db1decd8e6bb6a5fcdcf897314@kernel.org> <03bceb67-d362-47a6-b555-ed5aa1f9bd3e@bytedance.com> <aurTz8SiB-nQ22lJ@gourry-fedora-PF4VCD3F>
+	dkim=pass (2048-bit key, unprotected) header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=KtTxaRmA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1g4.org;
+	s=protonmail; t=1793946975; x=1794206175;
+	bh=HSkq7GM/C7a8WzdehCU5wxcvtBC9C9CoJO/ODOkIDzs=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=KtTxaRmAXOyIoVXeeIsPjLsZ7swy2hG7y7mFLGdW3kC4jInBu2uCOIGKiCL2j2cLg
+	 WF4DuioBfuVqDw4aN6snsDEyTm1tiayWlpR3kozsr1eh+3y3PyOiSwx3XY/1AOpQs7
+	 NQO+RsY1frOV3eciiO/9siXk7BO3quAkrOTuo+iNCOUdCV8QN0fjfkDTcZoTjrys9Y
+	 gTnqH/oHMr1IahYsENwILs7hdmkLe+LJpxX2XTMiMnzWFcQ6W5UpbIKnw3o6vTKhEl
+	 E8+o2QgowLpMlPvRQofkryAAiVRybcZtBx1gXEmvDedoFQERxAAUZNpeRq64FdQr/0
+	 HqDTdU2+cqr6A==
+Date: Fri, 06 Nov 2026 06:36:05 +0000
+To: Ding Meng <meng.ding@siemens.com>
+From: Paul Moses <p@1g4.org>
+Cc: netdev@vger.kernel.org, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Richard Cochran <richardcochran@gmail.com>, florian.bezdeka@siemens.com, jan.kiszka@siemens.com, wq.wang@siemens.com, gerhard@engleder-embedded.com, Jason Xing <kerneljasonxing@gmail.com>, Simon Horman <horms@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, Mathieu Desnoyers
+	<mathieu.desnoyers@efficios.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] net: mark skb NAPI IDs independently of busy polling
+Message-ID: <KPhGx8a4LdMBr3rj5NRNGc_DxDUpjoDXn1RDkAisaWwvTg_MoClMGQ0iCyrMM6Ev21UbYwHrlCBPZ-xJUx0NbOMhSY1o8MlozwhRUSs15SQ=@1g4.org>
+In-Reply-To: <eqrkw7wsawjtbvjkndmpik7jryb2sau6fdsu4njw6twn2lcfp3@k67o5wav5f5m>
+References: <20261105071706.7043-1-meng.ding@siemens.com> <Tif4BSB0H3l8O1bLzRnhCE9hUYhsz6G3MIhQAgYZImUx1_8YwnCyzy89IV6OSTsXdHDT6fFf7rEL1qfRFJC9OPDHRlhl3cgNJyyE_mVlHWM=@1g4.org> <eqrkw7wsawjtbvjkndmpik7jryb2sau6fdsu4njw6twn2lcfp3@k67o5wav5f5m>
+Feedback-ID: 8253658:user:proton
+X-Pm-Message-ID: 98fcd52a7ec1792cf8bb61aff9005d55238b06cf
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,138 +64,318 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] mm/mempolicy: add per-cgroup weighted interleave controls
-Date: Fri, 6 Nov 2026 14:30:17 +0800
-Message-Id: <67fcd8db-269d-43f1-aea2-8c41165747d0@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-In-Reply-To: <aurTz8SiB-nQ22lJ@gourry-fedora-PF4VCD3F>
-Content-Transfer-Encoding: 7bit
-To: "Gregory Price" <gourry@gourry.net>
-Cc: "Tejun Heo" <tj@kernel.org>, <hannes@cmpxchg.org>, <mkoutny@suse.com>, 
-	<akpm@linux-foundation.org>, <david@kernel.org>, <ziy@nvidia.com>, 
-	<joshua.hahnjy@gmail.com>, <ying.huang@linux.alibaba.com>, 
-	<ljs@kernel.org>, <liam@infradead.org>, <rppt@kernel.org>, 
-	<surenb@google.com>, <mhocko@suse.com>, <cgroups@vger.kernel.org>, 
-	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>, 
-	<bpf@vger.kernel.org>
-X-Original-From: Li Zhe <lizhe.67@bytedance.com>
-From: "Li Zhe" <lizhe.67@bytedance.com>
-X-Lms-Return-Path: <lba+26aed740f+481b53+vger.kernel.org+lizhe.67@bytedance.com>
-
-On 11/4/26 2:42 PM, Gregory Price wrote:
-> On Wed, Nov 04, 2026 at 10:44:46AM +0800, Li Zhe wrote:
->> Does that distinction make the cgroup-scoped override acceptable? If not,
->> could you suggest a better way to support this kind of administrative
->> weight override without adding new mempolicy syscalls?
->>
-> I'm a little confused why cgroup-anything is needed here when you could
-> just override the weight table / interleave functions.
->
-> I don't particularly like the idea of bpf hooks for a single mempolicy
-> mode as opposed to something more generally useful - and I question
-> how useful task-mempolicies are in general for tiered memory systems
-> (they also affect kernel allocation placement, which is not great).
->
-> You have many patch proposals recently trying to adjust the mempolicy
-> components and I think it might be helpful if we could chat a bit
-> about what big problems you're actually trying to solve.
->
-> I get that you want better control over task/task-groups, i think that
-> can be useful - but I also know that demotion immediately mucks all
-> this placement logic up (and we can't check vma / task policies at
-> demotion time) so I question how realisitic the value of these
-> extensions will be.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 
-Thanks for the feedback.
 
-Our target environment is a class of machines with both DRAM and CXL
-memory. On these machines, different services run together in different
-cgroups. For us, CXL memory has two main values: it increases the total
-memory capacity of the machine, and it lowers the memory cost for
-workloads that need a large resident memory footprint. DRAM is the
-faster but also more expensive tier, so the practical question becomes:
-how much DRAM does each workload really need, and how much of the rest
-can be placed on CXL memory?
 
- From our earlier testing, different workloads have different suitable
-DRAM/CXL ratios. By "suitable", I do not mean maintaining a fixed ratio
-for its own sake. I mean that, after using some CXL memory, the
-workload's important metrics, such as throughput, average latency, tail
-latency, or other SLOs, are still within an acceptable range.
 
-So the core problem I am trying to solve is: on a mixed DRAM/CXL memory
-machine, each workload in each cgroup should be able to run with its own
-suitable DRAM/CXL ratio, so that it can stay near its own
-performance/cost balance point.
+On Thursday, November 5th, 2026 at 11:50 PM, Ding Meng <meng.ding@siemens.c=
+om> wrote:
 
-This is why a single system-wide weighted interleave table is not enough
-for our use case. Two co-located services may have completely different
-suitable DRAM/CXL ratios. The cgroup is also the more natural management
-unit for us, because resource isolation, charging, SLO monitoring, and
-userspace control logic are all organized by cgroup, not by individual
-task.
+> On Thu, Nov 05, 2026 at 10:29:51PM +0000, Paul Moses wrote:
+> >
+> >
+> >
+> >
+> > On Thursday, November 5th, 2026 at 1:19 AM, Ding Meng <meng.ding@siemen=
+s.com> wrote:
+> >
+> > > Commit 97dc7cd92ac6 ("ptp: Support late timestamp determination")
+> > > added support for deferring RX timestamp conversion to
+> > > ndo_get_tstamp(). When the timestamp is consumed, get_timestamp()
+> > > uses the skb's NAPI ID to find the device that owns the timestamp
+> > > cookie and invoke its callback.
+> > >
+> > > Commit e68b6e50fa35 ("udp: enable busy polling for all sockets")
+> > > gated NAPI ID bookkeeping with CONFIG_NET_RX_BUSY_POLL. As a result,
+> > > when busy polling is disabled, the skb may not carry a usable NAPI ID=
+.
+> > > The device lookup then fails, so the driver callback is not invoked.
+> > > get_timestamp() falls back to hwtstamp, which does not contain the
+> > > converted timestamp, resulting in an incorrect RX hardware timestamp.
+> > >
+> > > Record skb NAPI IDs independently of busy-poll support to support
+> > > drivers that use deferred timestamp conversion and future driver
+> > > features that need to look up a device by its NAPI ID.
+> > >
+> > > Signed-off-by: Ding Meng <meng.ding@siemens.com>
+> > > Reviewed-by: Florian Bezdeka <florian.bezdeka@siemens.com>
+> > > ---
+> > > In the discussion of the issue reported at
+> > > https://lore.kernel.org/netdev/20260630112056.885071-1-meng.ding@siem=
+ens.com/
+> > > this previous patch added an igc-specific fallback for configurations
+> > > with CONFIG_NET_RX_BUSY_POLL disabled. It populated skb's hwtstamp
+> > > field with a timestamp converted using the default hardware timer,
+> > > allowing get_timestamp() to return it without invoking ndo_get_tstamp=
+().
+> > > But Jakub Kicinski noted that the proposed fix appeared to be a
+> > > driver-specific workaround for a generic problem. The engleder driver
+> > > would also be affected by the same issue.
+> > >
+> > > This patch introduces a new configuration option to enable NAPI ID
+> > > bookkeeping independently of busy polling. The option is enabled
+> > > whenever busy polling is enabled, preserving the existing behavior.
+> > > It is also selected by the igc and engleder drivers, ensuring that
+> > > skbs carry a NAPI ID even when busy polling is disabled.
+> > >
+> > > Another approach considered was to require drivers using deferred
+> > > timestamp conversion, such as igc and engleder, to enable busy pollin=
+g.
+> > > However, this would introduce an unnecessary dependency between two
+> > > independent features: hardware timestamp reporting should not require
+> > > busy polling to be enabled.
+> > >
+> > > Timestamping has been tested only with igc; it has not been tested
+> > > with engleder.
+> > >
+> > >  Documentation/networking/timestamping.rst | 11 ++++++++---
+> > >  drivers/net/ethernet/engleder/Kconfig     |  1 +
+> > >  drivers/net/ethernet/intel/Kconfig        |  1 +
+> > >  include/linux/skbuff.h                    |  4 ++--
+> > >  include/net/busy_poll.h                   |  2 +-
+> > >  include/trace/events/net.h                |  2 +-
+> > >  net/Kconfig                               |  4 ++++
+> > >  net/core/filter.c                         |  2 +-
+> > >  net/core/skbuff.c                         |  2 +-
+> > >  9 files changed, 20 insertions(+), 9 deletions(-)
+> > >
+> > > diff --git a/Documentation/networking/timestamping.rst b/Documentatio=
+n/networking/timestamping.rst
+> > > index 2162c4f2b28a6..dbe40a1972639 100644
+> > > --- a/Documentation/networking/timestamping.rst
+> > > +++ b/Documentation/networking/timestamping.rst
+> > > @@ -278,9 +278,14 @@ SOF_TIMESTAMPING_OPT_PKTINFO:
+> > >    packets with hardware timestamps. The message contains struct
+> > >    scm_ts_pktinfo, which supplies the index of the real interface whi=
+ch
+> > >    received the packet and its length at layer 2. A valid (non-zero)
+> > > -  interface index will be returned only if CONFIG_NET_RX_BUSY_POLL i=
+s
+> > > -  enabled and the driver is using NAPI. The struct contains also two
+> > > -  other fields, but they are reserved and undefined.
+> > > +  interface index will be returned only if CONFIG_SKB_MARK_NAPI_ID i=
+s
+> > > +  enabled and the driver is using NAPI. This hidden configuration is
+> > > +  selected automatically by busy-poll support and by drivers that ne=
+ed
+> > > +  skb NAPI IDs to resolve deferred hardware timestamps. Drivers that
+> > > +  use deferred timestamp conversion must select it so the networking
+> > > +  stack can find the device and call its timestamp callback even whe=
+n
+> > > +  busy polling is disabled. The struct contains also two other field=
+s,
+> > > +  but they are reserved and undefined.
+> > >
+> > >  SOF_TIMESTAMPING_OPT_TX_SWHW:
+> > >    Request both hardware and software timestamps for outgoing packets
+> > > diff --git a/drivers/net/ethernet/engleder/Kconfig b/drivers/net/ethe=
+rnet/engleder/Kconfig
+> > > index 3df6bf476ae7e..9700a243bea11 100644
+> > > --- a/drivers/net/ethernet/engleder/Kconfig
+> > > +++ b/drivers/net/ethernet/engleder/Kconfig
+> > > @@ -22,6 +22,7 @@ config TSNEP
+> > >  =09depends on PTP_1588_CLOCK_OPTIONAL
+> > >  =09select PHYLIB
+> > >  =09select PAGE_POOL
+> > > +=09select SKB_MARK_NAPI_ID
+> > >  =09help
+> > >  =09  Support for the Engleder TSN endpoint Ethernet MAC IP Core.
+> > >
+> > > diff --git a/drivers/net/ethernet/intel/Kconfig b/drivers/net/etherne=
+t/intel/Kconfig
+> > > index 780f113986ea8..7fb63f351fc20 100644
+> > > --- a/drivers/net/ethernet/intel/Kconfig
+> > > +++ b/drivers/net/ethernet/intel/Kconfig
+> > > @@ -376,6 +376,7 @@ config IGC
+> > >  =09depends on PCI
+> > >  =09depends on PTP_1588_CLOCK_OPTIONAL
+> > >  =09depends on ETHTOOL_NETLINK
+> > > +=09select SKB_MARK_NAPI_ID
+> > >  =09help
+> > >  =09  This driver supports Intel(R) Ethernet Controller I225-LM/I225-=
+V
+> > >  =09  family of adapters.
+> > > diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> > > index 6787fcf6ac3e4..164c862f7a403 100644
+> > > --- a/include/linux/skbuff.h
+> > > +++ b/include/linux/skbuff.h
+> > > @@ -1059,7 +1059,7 @@ struct sk_buff {
+> > >  =09=09=09__u16=09vlan_tci;
+> > >  =09=09};
+> > >  =09};
+> > > -#if defined(CONFIG_NET_RX_BUSY_POLL) || defined(CONFIG_XPS)
+> > > +#if defined(CONFIG_SKB_MARK_NAPI_ID) || defined(CONFIG_XPS)
+> > >  =09union {
+> > >  =09=09unsigned int=09napi_id;
+> > >  =09=09unsigned int=09sender_cpu;
+> > > @@ -1267,7 +1267,7 @@ static inline bool skb_pkt_type_ok(u32 ptype)
+> > >   */
+> > >  static inline unsigned int skb_napi_id(const struct sk_buff *skb)
+> > >  {
+> > > -#ifdef CONFIG_NET_RX_BUSY_POLL
+> > > +#ifdef CONFIG_SKB_MARK_NAPI_ID
+> > >  =09return skb->napi_id;
+> > >  #else
+> > >  =09return 0;
+> > > diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
+> > > index 6e172d0f6ef5f..f7c0e62c6a7d7 100644
+> > > --- a/include/net/busy_poll.h
+> > > +++ b/include/net/busy_poll.h
+> > > @@ -130,7 +130,7 @@ static inline void sk_busy_loop(struct sock *sk, =
+int nonblock)
+> > >  static inline void __skb_mark_napi_id(struct sk_buff *skb,
+> > >  =09=09=09=09      const struct gro_node *gro)
+> > >  {
+> > > -#ifdef CONFIG_NET_RX_BUSY_POLL
+> > > +#ifdef CONFIG_SKB_MARK_NAPI_ID
+> > >  =09/* If the skb was already marked with a valid NAPI ID, avoid over=
+writing
+> > >  =09 * it.
+> > >  =09 */
+> > > diff --git a/include/trace/events/net.h b/include/trace/events/net.h
+> > > index dbc2c5598e35a..99ed7645242eb 100644
+> > > --- a/include/trace/events/net.h
+> > > +++ b/include/trace/events/net.h
+> > > @@ -208,7 +208,7 @@ DECLARE_EVENT_CLASS(net_dev_rx_verbose_template,
+> > >
+> > >  =09TP_fast_assign(
+> > >  =09=09__assign_str(name);
+> > > -#ifdef CONFIG_NET_RX_BUSY_POLL
+> > > +#ifdef CONFIG_SKB_MARK_NAPI_ID
+> > >  =09=09__entry->napi_id =3D napi_id_valid(skb->napi_id) ?
+> > >  =09=09=09=09   skb->napi_id : 0;
+> > >  #else
+> > > diff --git a/net/Kconfig b/net/Kconfig
+> > > index 76ab44aa439a6..8fa7586dc08ca 100644
+> > > --- a/net/Kconfig
+> > > +++ b/net/Kconfig
+> > > @@ -346,9 +346,13 @@ config CGROUP_NET_CLASSID
+> > >  =09  Cgroup subsystem for use as general purpose socket classid mark=
+er that is
+> > >  =09  being used in cls_cgroup and for netfilter matching.
+> > >
+> > > +config SKB_MARK_NAPI_ID
+> > > +=09bool
+> > > +
+> > >  config NET_RX_BUSY_POLL
+> > >  =09bool
+> > >  =09default y if !PREEMPT_RT || (PREEMPT_RT && !NETCONSOLE)
+> > > +=09select SKB_MARK_NAPI_ID
+> > >
+> > >  config BQL
+> > >  =09bool
+> > > diff --git a/net/core/filter.c b/net/core/filter.c
+> > > index b7ac145b68b1f..e2218c18622b8 100644
+> > > --- a/net/core/filter.c
+> > > +++ b/net/core/filter.c
+> > > @@ -10274,7 +10274,7 @@ static u32 bpf_convert_ctx_access(enum bpf_ac=
+cess_type type,
+> > >  =09=09break;
+> > >
+> > >  =09case offsetof(struct __sk_buff, napi_id):
+> > > -#if defined(CONFIG_NET_RX_BUSY_POLL)
+> > > +#if defined(CONFIG_SKB_MARK_NAPI_ID)
+> > >  =09=09*insn++ =3D BPF_LDX_MEM(BPF_W, si->dst_reg, si->src_reg,
+> > >  =09=09=09=09      bpf_target_off(struct sk_buff, napi_id, 4,
+> > >  =09=09=09=09=09=09     target_size));
+> > > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> > > index eb9fcc4b1fd1a..386a32cdc0cc8 100644
+> > > --- a/net/core/skbuff.c
+> > > +++ b/net/core/skbuff.c
+> > > @@ -1581,7 +1581,7 @@ static void __copy_skb_header(struct sk_buff *n=
+ew, const struct sk_buff *old)
+> > >  #ifdef CONFIG_NETWORK_SECMARK
+> > >  =09CHECK_SKB_FIELD(secmark);
+> > >  #endif
+> > > -#ifdef CONFIG_NET_RX_BUSY_POLL
+> > > +#ifdef CONFIG_SKB_MARK_NAPI_ID
+> > >  =09CHECK_SKB_FIELD(napi_id);
+> > >  #endif
+> > >  #ifdef CONFIG_XPS
+> > >
+> > > base-commit: d135ab453a7400a34930bdda1ef4bdc8acfac80e
+> > > --
+> > > 2.47.3
+> > >
+> > >
+> >
+> > Are you sure this does not make the preexisting timestamp lifetime
+> > issue more pathological? I think it needs to be fixed now as well.
+> > It was the last item mentioned by Sashiko in your review if I
+> > remember correctly.
+> >
+> > Paul
+>=20
+> The hardware timestamp lifetime issue may indeed exist,
+> but it is independent of this patch. Even if that issus is fixed,
+> we still need to obtain the netdevice from the skb, so the decoupling
+> configuration introduced by this patch is still necessary.
+>=20
+> Ding Meng
+>=20
 
-I understand that Joshua's approach can solve part of this problem.
-However, based on the current discussion, that direction still seems to
-need more discussion before it can move forward upstream.
+Your patch changes non busy poll kernels from returning the raw cookie=20
+pointer to dereferencing that cookie just like busy poll already did.
 
-Of course, initial allocation is not the whole story. Demotion and
-promotion will change the actual page placement over time, so I do not
-expect weighted interleave alone to provide long-term placement control.
-For long-term adjustment, using a userspace controller with
-memory.reclaim is a more natural and convenient way to adjust placement
-over time.
+So I guess that's an improvement? My apathy has reached a threshold
+where that sounds good to me.
 
-The value of weighted interleave here is in the initial allocation
-phase. First, for bandwidth-sensitive workloads, it allows DRAM and CXL
-bandwidth to be used together from startup, instead of concentrating
-allocations on one tier first and relying on later reclaim or demotion to
-reshape the distribution. Second, it gives the container scheduler a
-more deterministic view of memory capacity, so the scheduler can place
-workloads based on the total memory capacity provided by both DRAM and
-CXL, rather than treating only DRAM as the schedulable capacity.
+The big question is why does igc alone need core modification to properly=
+=20
+store Timer 1. Seemed like an intel question so I digress.
 
-In the long term, we want to maintain the target ratio through a dynamic
-control loop. Memory tiering promotes hot pages back to DRAM. A
-userspace controller observes each cgroup's per-tier memory footprint
-and workload metrics, decides whether the current ratio has deviated
-from the target, and then uses memory.reclaim to apply reclaim pressure
-to the source tier that should be relieved [1].
+Good luck and have fun
 
-The target ratio is not meant to be a strict hard limit. The userspace
-controller can adjust the policy based on workload metrics: when cost is
-the priority, it can keep more cold memory on CXL; when performance or
-SLO pressure becomes high, it can temporarily relax the ratio and allow
-the workload to use more DRAM. In other words, I am not trying to make
-demotion reinterpret task policy or VMA policy. I am trying to adjust
-the actual resident distribution at cgroup granularity through a
-userspace feedback loop.
 
-This is also the background for my other patchsets. The memory.reclaim
-source selector is intended to give the userspace controller a more
-precise actuator [1]. In our testing, this is an important capability for
-building the feedback loop.
+[    7.971832] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[    7.971852] BUG: KASAN: use-after-free in igc_ptp_rx_pktstamp+0x12c/0x19=
+0
+[    7.972002] Read of size 4 at addr ffff88800549c008 by task test/197
+[    7.972013]=20
+[    7.972041] CPU: 0 UID: 65534 PID: 197 Comm: test Not tainted 7.3.0-nobu=
+sy-patched-20261105+ #1 PREEMPT_RT=20
+[    7.972064] Call Trace:
+[    7.972103]  <TASK>
+[    7.972122]  dump_stack_lvl+0x43/0x60
+[    7.972215]  print_address_description+0x55/0x1d0
+[    7.972265]  ? igc_ptp_rx_pktstamp+0x12c/0x190
+[    7.972285]  print_report+0x58/0x70
+[    7.972295]  kasan_report+0x130/0x170
+[    7.972356]  ? igc_ptp_rx_pktstamp+0x12c/0x190
+[    7.972366]  igc_ptp_rx_pktstamp+0x12c/0x190
+[    7.972375]  __sock_recv_timestamp+0x72b/0xe10
+[    7.972451]  __sock_recv_cmsgs+0x168/0x3c0
+[    7.972461]  udp_recvmsg+0x4c9/0xb40
+[    7.972525]  ? __pfx_inet_recvmsg+0x10/0x10
+[    7.972546]  sock_recvmsg+0x125/0x170
+[    7.972556]  ____sys_recvmsg+0x167/0x3b0
+[    7.972567]  __sys_recvmsg+0x14c/0x1b0
+[    7.972578]  ? do_syscall_64+0x115/0x310
+[    7.972660]  do_syscall_64+0xdb/0x310
+[    7.972671]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[    7.972697] RIP: 0033:0x20af4c
+[    7.972726] Code: be 01 00 00 00 0f 05 c3 cc cc cc cc cc cc 4d 89 cb 48 =
+89 f8 4c 8b 4c 24 08 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 d8 0f 05 <c3=
+> cc cc cc e9 db ff ff ff cc cc cc c3 cc cc cc cc cc cc cc 55 41
+[    7.972744] RSP: 002b:00007ffd6dcb7308 EFLAGS: 00000246 ORIG_RAX: 000000=
+000000002f
+[    7.972775] RAX: ffffffffffffffda RBX: 00007ffd6dcb73a0 RCX: 00000000002=
+0af4c
+[    7.972783] RDX: 0000000000000000 RSI: 00007ffd6dcb7320 RDI: 00000000000=
+00003
+[    7.972790] RBP: 0000000000000003 R08: 0000000000000000 R09: 00000000000=
+00000
+[    7.972796] R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000=
+00230
+[    7.972802] R13: 00007ffd6dcb73e0 R14: 0000000000000000 R15: 00007ffd6dc=
+b75e0
+[    7.972812]  </TASK>
 
-The sched/numa memory tiering patchset came from issues we found while
-testing this model [2]. Its goal is to make tiering promotion behavior
-adapt better to different scenarios, and to avoid tiering-only feedback
-being misused by the normal AutoNUMA task placement heuristic.
 
-I am not attached to the exact API shape in this RFC. If the
-per-cgroup weighted interleave BPF kfuncs are too narrow, or if you
-think there is a more general control plane, or a better control
-granularity, I am happy to adjust the direction.
 
-[1] 
-https://lore.kernel.org/all/20261102070440.16262-1-lizhe.67@bytedance.com/
-[2] 
-https://lore.kernel.org/all/20261028041253.74839-1-lizhe.67@bytedance.com/
-
-Thanks,
-Zhe
-
->
-> ~Gregory
