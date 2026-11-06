@@ -1,79 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.181
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794002245;
-	b=BmaQRmd+ASxwyQ1jz7u6xpg5nC5CbwhcBedxOliYbxwtdPOhGX3nsmBqUVsWS0oimsyU
-	 pcQsXa0yxmsl8EM2ZItdoIk7uai5dwkN8ouDwJnveHW+yMkJekde+O76qSJVzbRBOh2wZ
-	 sI4ikxsP9w6uOSy7S5EKBMV582IIlPbLSvlGwXTfPDLvjS+J8x8eOpDj501GrRwomhuJt
-	 ALSIYT8MboBbUWJOLMjB01SNjfs/FdwJE1xwadvqXvL2kF+pTwU393zwNGecrEGI5wZ/f
-	 +eTJqRH+gyOtHEczHuaIHzIXbbIzWuL0whpifC0DDtHtMJU97qS1emlzwdUzvUkTHXA==
+	t=1794002899;
+	b=tPAYvBrzcgfA7AQcwvkSzhYhVVpFfos8TnfZpa5bnisFOVb5UtpAsU0oAAEdt3VS4GfI
+	 WhziKaO4z/2SH+qE28nLADo38BbgiJI4rCmLttQMivcyJ0dJLQG38QDxqBQDgWib20WwZ
+	 hOl3wpWxIqSZ5tAjhCs9eHcQkowgPkkt/yW7SfAJKtw6GHmcLKh/TmQPAsV4niS9qmIPt
+	 GAOPA68d58kOO0SN9Wsu7iE03uuerX/5SR8LtwRGIGvwEkgUABkrmqwIpb/qPJEjmYEJL
+	 FzchAFgWdjmYB0ELpiqkmfCCEPjh+AM+/BRZl86ycrkLnVEoTsy2FAmLEJl+bdlWp7g==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794002245;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=uJnC3E5LSZQKM5Vic0qZdHZV/eCxeajn03COeeAIM5w=;
-	b=qAZQ7hQbqtJLKzjEMrSzcCQTDfwnc0TecTPhCw1IOy8K+4gTjGf5VhuIsZkmVHbzS2fE
-	 8tQ3xyEU70oVlhIT6nTdvFhnxeErUj9pFQ/356PCHxSUWa6fM6OUhOv9pqSCtRpbOI7tH
-	 9Lq3ehmzZMlDjbWJAglRb75JVSOOGvZ+AsLQTLk2nKVZmQlz5Dv/Dyb21E7WN1b/pJ7Ji
-	 Z8xOI9D+Uzba9LlotdeStrK+eaAAcqtm8PGjdS64BH+1q10pKxygSuD5oUv9ExbXihxkP
-	 ccamStqxeuFSpWe+w8h4rPkTXhw9qzoHSxfA8DhDhNEHK2e+rqotReJ2lDTcXrC8aaw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794002899;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=FqFmqkkFKN4ZfUBPlXX1uRJGzP51Rl5pjkFD5VZ5PcI=;
+	b=JGuRBpTcHyVZXERTPELv/gHFYwo3mQp0BRCefSjTtdpCWGn19Tuv42TkoK0ac+/pZIkK
+	 TevGfef5yVUjlnRPvTvLfwWwHldwIQV8/NcDcCuO6+/LQp9U0IaQfCTZ4D1SlB2r67IYe
+	 bCKaeCDeenkJaWuwkkMXSkKNjFdB1ZIKRTPV6QYAapP93sn9+Bhc4pT82V6d0FFb+Jcp5
+	 nKr1dupDL2p5Zh8g2SJ+PbSlORcHhJZe0nUtvng+BTwqoEOYdiy26jgnpBmwnBtiTh4Z7
+	 qI1l5KsK6DItscIPBbNl1FzzESkRcBFijG571wya6iAfLxbjqrAP9+iu200rHdGb/Vw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BUgFrV7s;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C10606A32C;
-	Fri,  6 Nov 2026 21:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BUgFrV7s
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1794002245;
-	b=OjlMyTJzUD8nqrnvbrCMdB1iRHJMUuirtQUqTvdk9zGDsffC98Mvju3mPAeihhiuiLya
-	 PQqgVqE15HIODJgKV9IckZegLXU85g3LDuVdjcPPqfPGtw/IX7UEKEApq3D9ktrF50C4w
-	 Z8Cx+d3H7sWE9YA1HNG/Jce1ZJVtNoP1h7P6G/HZyZtD5sqJj2FBipVmmUTev6p2mxZeA
-	 5mrezzSlSsWuW/SdENrl9+HDSA8cHLzODlZX+u6/hNjFSzxPETq05tCO3Q4VHJIYmMBIY
-	 5nzqF7H4QL06MD80aQGamRPt+deUH9EzYgb7bu/jEbwGIn2zmTOdz6ZnTBZgmtNOrsg==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794002245;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=uJnC3E5LSZQKM5Vic0qZdHZV/eCxeajn03COeeAIM5w=;
-	b=jVbxYwMzgHAlAQ6fjEjfhZTZxGCoOXU1HFliZiRbQAg7j250PJAwgazLFEuzzFjTF99n
-	 ABxvzhXDQhHj3y/hLltnqPmKQgBmjc5ofP8VzFKXfBcvr83ZxIWoQhzumqH1018Reqaru
-	 pGM3DbDUhoiIL3KOt74TF1oL8TSngDzLbqOUtbAuUDy2uLapLbXD16VxLZosB2kDEljvN
-	 B6jXVy7ShwzXU9gZfRCGuAwS2fRigj5ry1DPFvqmxgZwIsAq2I/b09M+N+b6I+XqAX5ZA
-	 4pQWQQ8FtdOQfgfNVE/5TOjMElDa+qUAS7YDSsL4NSkFne+Vl3dC8Rd8+YQH3Sc3fMQ==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="b2/N2EGe";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.181
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 069141F008A3;
-	Fri,  6 Nov 2026 21:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794002245;
-	bh=uJnC3E5LSZQKM5Vic0qZdHZV/eCxeajn03COeeAIM5w=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=BUgFrV7sPcMJWKgGRACQVDniM09V1FgZXrXU7NddC6hiqGlmdVe/m9uuvli8iMQwN
-	 /GBJN3eV+a9BdzAc6zdH4FGRORxDmqkLKeZO6etMuyAcw1A4RM6Rd7Xy/Z4MeK/H3F
-	 GlOlU78uygyBx7HGUNAlEHVC7HpRlBMM4SK7Nu4acG0e4dqkGq3Ni/3fRztQorYqwe
-	 fB+S9ig+f5Y4JuRPALIa1EiLr0sue0hY7L/XLnAjlL3N9yeUc4Ff/yWiq0hrw2WGeI
-	 OY8yxls3iDjsKFiaaIdtWLUhKB0A8Ize1qOkns57LppliiUAnYNjH7KI9uN8Q5y+Ir
-	 aq6CH5vo9Am5g==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 6F3BD478A9;
-	Fri,  6 Nov 2026 21:57:23 +0000 (UTC)
-From: Jerome Mohm via B4 Relay <devnull+jrmmhm.kernel.eldare.de@kernel.org>
-Date: Fri, 06 Nov 2026 22:57:21 +0100
-Subject: [PATCH net v4 1/2] vsock/bpf: release sock lock while waiting for
- data in recvmsg
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE2F606A326
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 22:08:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CFE2F606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b2/N2EGe
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2e9995ce866so8008015ad.0
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 14:08:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794002898; cv=none;
+        d=google.com; s=arc-20260327;
+        b=nIeOBQ+fArypYPBbzFvX0in16msFBdHuJXMZVrpYT1cFco3acOQ2XXhdpzPy5AfV1K
+         sBkoi/R7Isp3usy9BOYraXPrksbQFtYOLA1mqYPgzoCnlz0pCQ3LKZ/xjW7CqMNewFtq
+         yaVJcFxIsns3X/MVqANauKAByYQdS4PW48eblGBRXR7XrafJ68fTd7dyiuu3CnKt2WMz
+         3y42S6lHlqkC6Cw4EYlPtwKSrxnL82HyAE2UekDBSw63jhxzfZxe3yS5P0qyy4emvW1X
+         4va+iW7zmVoJvJFFMqwWOgV/DkRzT42zaKqmWFnS6lLIGXiJXKqILd6e6o62w0iQ2yo8
+         aRlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=FqFmqkkFKN4ZfUBPlXX1uRJGzP51Rl5pjkFD5VZ5PcI=;
+        fh=9PwdZro75oUXOS5wqfLaqPCm/ma4/mp7NhvKyPSBilk=;
+        b=apE4JFW/KfkVR7qlquvihDNpcoxVffF0pkm8+WHu09wk8/0gLJuELsnDzWFZAwjIyE
+         uFtZRcBXlYNbK9bSt5tpa7Wk4b+RViIpgfeJ39SHl/LFu3zbxgs7fDlEVL7R/UFptuQE
+         z3dRwhW703WHJlMALAvWPmSjdEfXUV5AHSD75ICV1m19FShLabyN68hDq3LAvrjHEZdh
+         QgVNcHjmGxaHVsZsugYATqm3UBz8pJHn49yVszY8hmljqc+b2v1aKogAw8wzpJdHiIGu
+         etvdLQdhSkRwfnw5y6LktrO34Noomzde619lXl1FhsT+C5nR389N2mW597EwIMs2aK3f
+         c9KA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794002898; x=1794607698; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=FqFmqkkFKN4ZfUBPlXX1uRJGzP51Rl5pjkFD5VZ5PcI=;
+        b=b2/N2EGedXLlXAmGy3seM65ririhay+J1WlirQfYoIUcuzkaIkl40FHJgakuZm17yG
+         nAUDoFDfOaFJ2QMk1EmeGmZdPADqd8uhJznVwiRoEa7b9qPw5NO5xVYpVn9firQ/kOPr
+         Mm37HnJIN8yf1x8+h31XvbSyn7wQFbQpPyf6/L9n14w9o7d/7pNuhwTPUw9cFq2U/wtQ
+         WAIKhZ8O3jGTIIm/CeEJihiD58ppPZeCsmi0UP0AXYkJFrklaGSOGsTD0bocfuGE2dJl
+         7rUrLFZbQygqs4qQRSuVhMdfq3MebiGXFEAym6kvd+/cthwIi5tgaGStlIqGdBN7e4SM
+         hnFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794002898; x=1794607698;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=FqFmqkkFKN4ZfUBPlXX1uRJGzP51Rl5pjkFD5VZ5PcI=;
+        b=QrT2B0ffxX2sY32UKS873oAxYk6HfQuSv9NC9ZPJRmbr97hyewrnCWKKCyRdi4oTF0
+         wYA3vnobFbFY/+KqciUCwxTkR7esKQjrmtfBrxhEdNmUCsghyiSPlPhbDsllql5sWelU
+         2TjbkrW+ZO+V+EvnNSAXtbFxEaM+UgK4T9gXsq4fTWYLFZD8Nmi9LUnHhZVwiVVbb/je
+         yti1SQ9tFUIhIgZq/SwMVfFOObgXrYVnhVB3RPBaJRvK01ZqGfyLbxfAmcG94zLkmdjk
+         A8JQryYoh3fMUkA5AMZ7FsSyc+BWM2drjRulzac2GF4sihTA4SS5CSeG5rU0hP5lO/mu
+         OqMA==
+X-Forwarded-Encrypted: i=1; AL+hErHkkURL/4g6d5zMjeSBJt7+pHRno0KX9KwA9FBwlgJxrkNwZr5kKd7fiUpVekAPJATGv8M=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9GF744O9ycfIszeTLEtNpKlXg16R8B9YH/9EFow8FsY4qwrAhr
+	c3PfPP60bdIbPRjen3ruxP+s7WI1+XzEt89QqJ/JUh8w0pqfog0x+Lu6gv7wzzZYkQkL8l/+XrN
+	FKhf2wkDKbfV7GDM3uDG+OMwpFeYAqW0=
+X-Gm-Gg: AYBFou3vQFkw2pdb5UQ/MY9Qr9J7MJZBllZTE4TMKLQfnPzop2VcfY6b1r/UOjuLjPW
+	1zSBRKvZkRjka34FFJhemlZIDwFUtUpY+/YVLlpJjVbtE5YqmnS+jbFeYenKs3MzwTrGOmJjC4Z
+	9elKJJTM4mHuaqya8u9zG5oRhRsG1THDoyVpHot1vPKaFy/+WK6nEHuYheFIffFVoRBaJoAd4qd
+	d8xtMOc0R9KRZY1OoHoFOxmgCxqamrCXa5znEo5GVu8NOrgQmAFdnuRkzktB94KfgYS0v3ppg8t
+	2Pl5ilo0tXx7XiIkuIQ/8ZXUbLMsTPETHoy290QTW5gEFx7uiy0ETIxVINwU6K/TQ1jXGDuDcWk
+	TTF77yQAZipn9WNNk/ghmwp7f5Wk9LAAu6u3g1Lkf8hAOh4N2EB8MwWOTqAau39quickKVyJvpQ
+	9MDlh6VeKmjiGvAg4FPNHfYBnojuVHJLVA0z5ZMms=
+X-Received: by 2002:a17:902:cf03:b0:2e9:5eee:e087 with SMTP id
+ d9443c01a7336-2ed41c0b3cemr44187095ad.43.1794002898049; Fri, 06 Nov 2026
+ 14:08:18 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,167 +105,150 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261106-kbh3-1-022-fix-v2-v4-1-c7d36703814d@eldare.de>
-References: <20261106-kbh3-1-022-fix-v2-v4-0-c7d36703814d@eldare.de>
-In-Reply-To: <20261106-kbh3-1-022-fix-v2-v4-0-c7d36703814d@eldare.de>
-To: Stefano Garzarella <sgarzare@redhat.com>, 
- Bobby Eshleman <bobbyeshleman@meta.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Michal Luczaj <mhal@rbox.co>, virtualization@lists.linux.dev, 
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- stable@vger.kernel.org, Jerome Mohm <jrmmhm.kernel@eldare.de>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1794002242; l=4767;
- i=jrmmhm.kernel@eldare.de; s=20260928; h=from:subject:message-id;
- bh=tMncr/t2BZDCVu+DkSDka364ua2a05eGFszh7At9iJI=;
- b=AYg1/w4e3WXm2lKA1GWiOSiVmfBY81KRkcGtQraSUK/I77t97ELFZHMRkMqAmkZdyUrfpA9pF
- h8X5oc7IjtJDad5dcC3ygPR5QHkyl9yFm+Qqi4sswW66P7Mw3RnGoSq
-X-Developer-Key: i=jrmmhm.kernel@eldare.de; a=ed25519;
- pk=xRCxNXbnNottaHpmvPDAOC9NuMJxqKo24abkehKRVlo=
-X-Endpoint-Received: by B4 Relay for jrmmhm.kernel@eldare.de/20260928 with
- auth_id=1075
-X-Original-From: Jerome Mohm <jrmmhm.kernel@eldare.de>
-Reply-To: jrmmhm.kernel@eldare.de
-Content-Transfer-Encoding: 7bit
+References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
+ <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
+ <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com> <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
+ <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com> <CAPnbwjrX-ywbcgNQSZKE2jiggEOSVCRVw9OLfaksihiVSCoqvw@mail.gmail.com>
+In-Reply-To: <CAPnbwjrX-ywbcgNQSZKE2jiggEOSVCRVw9OLfaksihiVSCoqvw@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 6 Nov 2026 14:08:05 -0800
+X-Gm-Features: AclHuK_HFrsL2zSNs8yVxrqbEw7XSZavKhtUuOEmL2ac3ue5Zeg2-SW1ecbr29Y
+Message-ID: <CAEf4Bza0XDMTxxZeukwRXjvoOOruY49q66xBXnYnuncbeo_Oiw@mail.gmail.com>
+Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
+ cause false recursion drops in trampoline progs
+To: Mike Bazov <mikeba@sentinelone.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, JP Kobryn <jp.kobryn@linux.dev>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Jerome Mohm <jrmmhm.kernel@eldare.de>
+(resending as plain text, hopefully)
 
-vsock_bpf_recvmsg() holds lock_sock() while vsock_msg_wait_data() sleeps
-in wait_woken(). The transport delivers data in
-virtio_transport_recv_pkt(), which takes the same lock, so the reader
-and the delivery worker deadlock: recv() hangs until a signal or
-SO_RCVTIMEO, and all vsock rx handled by that worker stops.
+On Thu, Nov 5, 2026 at 3:35=E2=80=AFPM Mike Bazov <mikeba@sentinelone.com> =
+wrote:
+>
+> On Thu Nov 5, 2026 at 5:14 AM UTC, Alexei Starovoitov wrote:
+>    > Also try NO_HRTICK in /sys/kernel/debug/sched/features.
+>    > That may be decent workaround for now.
+>
+>    The 7.0 numbers I posted were already with NO_HRTICK, and either way
+>    our agent runs on customer machines, so changing scheduler settings
+>    there isn't an option for us.
+>
+>    > hmm. you really cannot tolerate that small drop? it's tracing at the=
+ end.
+>
+>    For security monitoring each skip is an event we never see, and the on=
+e
+>    we miss can be exactly the one that shows an attack. For stateful
+>    protocol parsing, one skipped sendmsg/recvmsg can desync the parser fo=
+r
+>    the rest of that connection.
+>
+>    > let's try to think how per-task counter would work.
+>    > I'm guessing 128 connections is 128 threads servicing them,
+>    > so 200 cpus will be hammering the same per-task counter which will
+>    > cause real perf loss.
+>    > Gotta do better than per-task.
+>    > Also it needs to be per-task + per-prog. How will it look like?
+>
+>    On Thu, Nov 05, 2026 at 01:26 PM Peter Zijlstra wrote:
+>    > I would strongly prefer all BPF programs that attach to known
+>    > preemptible sites to use a per-task recursion counter or something o=
+f
+>    > that sort.
+>
 
-Release the lock around wait_woken(), as unix_bpf and tcp_bpf release
-theirs. That alone ends the deadlock but makes a blocking recv()
-return -EAGAIN early: the reader is also woken without data, for
-example by a credit update. So the wait also loops until data arrives
-or one of the native exits applies: a socket error, a local or peer
-shutdown, a socket that is no longer connected, the timeout or a
-pending signal. The loop alone, with the lock still held, keeps the
-deadlock, so the fix needs both halves and stays one patch.
+I agree, per-cpu recursion counter doesn't work given most of BPF
+programs only disable migration, not preemption (even if
+non-sleepable).
 
-For a non-blocking read, a socket error, a peer shutdown and a socket
-that is not connected are now reported before -EAGAIN, as on the native
-path. A blocking read interrupted by a signal returns sock_intr_errno()
-instead of -EAGAIN. A recv() that starts after a virtio transport reset
-returns -ECONNRESET until SO_ERROR has read the error, where the native
-path returns -ENOTCONN.
+>    This is what I have in mind for v2:
+>
+>    - Every trampoline and raw_tp run already has a run ctx on the running
+>      task's stack. Add the prog pointer to it, and link the task's active
+>      run ctxs through one new pointer in task_struct (other prog types
+>      don't touch it), so each task has a short list of the progs it is
+>      currently inside.
 
-The deadlock was found with the help of Anthropic's Claude; Sashiko
-reviews of two earlier sockmap patches had already noted it as a
-pre-existing issue. The other cases were reported by the netdev Sashiko
-review. Each was reproduced in a VM with a vsock socket in a sockmap,
-without kernel changes or error injection; the reset case unbinds the
-guest's virtio-vsock device. With the series applied they behave as on
-a native socket, except for the reset case above, and the vsock
-vmtest.sh single-VM tests and the BPF sockmap test_progs pass.
+hm, funny how AI figured out run_ctx, but didn't figure out that we
+already chain them and we do have that pointer in current->bpf_ctx...
 
-Fixes: 634f1a7110b4 ("vsock: support sockmap")
-Cc: stable@vger.kernel.org
-Signed-off-by: Jerome Mohm <jrmmhm.kernel@eldare.de>
----
- net/vmw_vsock/vsock_bpf.c | 68 +++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 54 insertions(+), 14 deletions(-)
+but yes, I think this is the only practical approach for per-task
+recursion check. performance-wise it should be ok as normally we
+shouldn't have nested bpf program executions, so the hot path will be
+quick.
 
-diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
-index 9049d2648646..6d96ff03f28c 100644
---- a/net/vmw_vsock/vsock_bpf.c
-+++ b/net/vmw_vsock/vsock_bpf.c
-@@ -34,24 +34,63 @@ static bool vsock_has_data(struct sock *sk, struct sk_psock *psock)
- 	return vsock_sk_has_data(sk, psock);
- }
- 
--static bool vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long timeo)
-+/* Returns 1 if data is ready, 0 on EOF/shutdown, or a negative error. */
-+static int vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long timeo)
- {
--	bool ret;
-+	struct vsock_sock *vsk = vsock_sk(sk);
-+	int ret;
- 
- 	DEFINE_WAIT_FUNC(wait, woken_wake_function);
- 
--	if (sk->sk_shutdown & RCV_SHUTDOWN)
--		return true;
--
--	if (!timeo)
--		return false;
--
- 	add_wait_queue(sk_sleep(sk), &wait);
- 	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
--	ret = vsock_has_data(sk, psock);
--	if (!ret) {
--		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
--		ret = vsock_has_data(sk, psock);
-+	while (1) {
-+		if (vsock_has_data(sk, psock)) {
-+			ret = 1;
-+			break;
-+		}
-+
-+		/* Stop on a socket error, as vsock_connectible_wait_data()
-+		 * does, so that recv() returns it; the checks below would
-+		 * end the wait with 0 or -ENOTCONN instead.
-+		 */
-+		if (sk->sk_err) {
-+			ret = -sk->sk_err;
-+			break;
-+		}
-+
-+		if ((sk->sk_shutdown & RCV_SHUTDOWN) ||
-+		    (vsk->peer_shutdown & SEND_SHUTDOWN)) {
-+			ret = 0;
-+			break;
-+		}
-+
-+		/* virtio_vsock_reset_sock() sets no shutdown bits, and
-+		 * SO_ERROR clears sk_err: check the state the way
-+		 * __vsock_connectible_recvmsg() does.
-+		 */
-+		if (sk->sk_state != TCP_ESTABLISHED) {
-+			ret = sock_flag(sk, SOCK_DONE) ? 0 : -ENOTCONN;
-+			break;
-+		}
-+
-+		if (!timeo) {
-+			ret = -EAGAIN;
-+			break;
-+		}
-+
-+		release_sock(sk);
-+		timeo = wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
-+		lock_sock(sk);
-+
-+		/* With a signal pending, wait_woken() returns at once, so
-+		 * without this check the loop would spin until the timeout,
-+		 * or forever without one.
-+		 */
-+		if (signal_pending(current)) {
-+			ret = sock_intr_errno(timeo);
-+			break;
-+		}
- 	}
- 	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
- 	remove_wait_queue(sk_sleep(sk), &wait);
-@@ -101,9 +140,10 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
- 	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
- 	while (copied == 0) {
- 		long timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-+		int data = vsock_msg_wait_data(sk, psock, timeo);
- 
--		if (!vsock_msg_wait_data(sk, psock, timeo)) {
--			copied = -EAGAIN;
-+		if (data <= 0) {
-+			copied = data;
- 			break;
- 		}
- 
+>    - On entry, walk only the current task's list. If the prog is already
+>      there, it's real recursion (the same task, or an irq/nmi on top of i=
+t,
+>      since current doesn't change there): skip it, as today. Otherwise pu=
+sh
+>      the entry, run the prog, and pop it on exit.
+>    - A preempted task's entry stays on its own list, so another task on
+>      the same cpu is no longer blocked by it.
+>    - Cost: the list is empty unless the task is genuinely nested, so the
+>      check is one load and one predictable branch, with no atomics and
+>      nothing shared between tasks or cpus. The walk is capped (e.g. 8),
+>      which also bounds nesting depth. It also works across sleep for
+>      sleepable progs.
+>
+>    To keep the per-cpu guarantee for existing progs:
 
--- 
-2.56.0
+I don't think per-cpu "guarantee" was ever there. per-program/per-cpu
+recursion protection only "protected" (by dropping event, effectively,
+so-so tradeoff) a case when per-cpu map is used exclusively from
+single BPF program. But even then, there are BPF program types (like,
+I believe raw tracepoint programs) that intentionally didn't have
+recursion protection.
 
+Realistically, you have to have some allowance for having nested
+per-cpu map uses, e.g., in wprof I maintain a small stack of per-cpu
+values, see stack_trace_scratch and embedded atomic st_cnt counter in
+[0].
 
+That's all to say that I don't think there is a need to keep
+guarantees. If per-cpu map is used naively today it works ok most of
+the time, but not all of the time.
+
+  [0] https://github.com/anakryiko/wprof/blob/master/src/wprof.bpf.c#L574
+
+>    - Make it opt-in: a prog load flag for fentry/fexit and raw_tp progs
+>      (like BPF_F_SLEEPABLE) saying the prog may run concurrently on one
+>      cpu, and that it doesn't rely on per-cpu exclusivity for its own dat=
+a
+>      (per-cpu scratch buffers etc.).
+>    - Flagged progs get no private stack. The verifier could also enforce
+>      parts of the per-cpu promise if you prefer.
+>    - Unflagged progs keep today's prog->active check, so existing progs
+>      see no change.
+>
+>    What do you think?
+>
+
+I'm actually wondering if we should re-evaluate the whole per-program
+recursion protection. I think this was added to prevent deadlocks
+inside bpf's maps and other internals. but we have switched to
+rq_spin_lock since then, so that shouldn't be a reason.
+
+Perhaps we should just get rid of that whole per-program recursion
+protection and just make sure that a) BPF program can protect itself,
+if necessary (with naive per-cpu check, I did that trick in retsnoop,
+[1], because it was, and probably still is, possible to attach BPF
+program to kernel functions that shouldn't be attachable by BPF,
+leading to all sorts of issues; but I digress), and b) just make sure
+that BPF maps and other functionality doesn't get deadlocked if
+another BPF program got preempted in the same code path.
+
+I didn't do any analysis if that's already the case (for b)), but
+let's discuss if this is an option at all?
+
+  [1] https://github.com/anakryiko/retsnoop/blob/master/src/mass_attach.bpf=
+.c#L229-L243
+
+>    Mike
