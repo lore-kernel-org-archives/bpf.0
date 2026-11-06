@@ -1,71 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793952554;
-	b=zU/MPHS+PQPuS8UqDV1PdOBtyi99mfM+36o6DYvv807y56o+wQX/Zh6Z2o69QHfh4dDy
-	 tAmj+qm3P0v6/j4YYQ1JjE+e/4AwGZrUF4KtBnMIwEV8Pc1SR/rFyyCaLoI+HQswYf5IV
-	 DsC4TGA1X/5+dwEU3hWqfQ+YFhuaMau77QDAtr2NVydJUxXIa7k0zky3Ouo44rZ3/KVtW
-	 FW3xcOD25WHhqqSEFC/HbsChuveZE+gtqCWIX/DODq5bGZ1pgau1JG1UXacyVU/mxcDPP
-	 PHcAEiWT95UBdc/FRFgy4pcHGxGzsNbnw+g+PE84iLx1QIPR+T4Mf79bA8V3FE2fCqg==
+	t=1793953296;
+	b=pW7R3jbVw7vt2EgJ16PlVPHk+jtqXTxFp5JMrJiouDu9PbMPtYkhNuj+RvnTuSOfalOd
+	 c2waUkdeeyzn1lq2snBpkJdDbDbSS5itf+6yQAeTXYEiz5cbzFwLIKuowhDj1FImOh76I
+	 UqYDvuFl71SrIbQZNl8h2JZ1NJ/+g88dQ96+wkO1Wv9CYEsPqc7RgV4bA9M805jVGRLqB
+	 P3s68vHTH4DO186tL0sJ0p5klqFq4w0T/e2aeUp02YXd3fRDYoL7fMSjQReOnOoVeoZJx
+	 n1b+TbVWOhNgcYqwApVc7uNv5ezU7tp0gkypOq3ba22eCt9nUu+XYhkTvJENTPKmrtw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793952554;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=4B0+96Ua9JUPRUU6V7nXApJ0tB80K/PeVAZmqbV7vJI=;
-	b=21vAbv6qcGqwCccpIJNkJ0ApC2wuBikCk2yZ2HUvSNZvCgEW2I4ATio4vr3QxN4lPJ3h
-	 MxQqP6Y9O/batCxtK15qW0+t9jBgUaS1a87FokzWezEpjWJuPgCZ3pMvaytJ/FiiG2SaA
-	 Qp8RvHoMwZ+gmMNqdjsvxcEUHJNqj0/QkQAVzAuHpmyxK87j7oueU4E0/iB/1adv2WK0s
-	 XrrRGOU9CoO6pa4ER+sVZUyZAQltS231qMAiKZyP+ow+rBmPf0AGf37NICAbi5h719Uch
-	 Bta16gbsaBO8KAlU0BYElV0DdhTZ8XiOrN8QqI1nDvADY6LPfgkEpVQAArvsDHXgxvA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793953296;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-Rspamd-Queue-Id:X-Spam-Level:
+	 X-Rspamd-Server:X-Rspamd-Action:X-Spam-Flag:X-Spamd-Result:
+	 X-Spam-Score;
+	bh=Z2Ju1cQkbqfSchQm4ea439mNBOoXAWoCo7WUPi9dWQU=;
+	b=aBcHWfxI1f7ilVUOdxAxgwLMZPe9F2EoQAJTtCXiait9LCftuRwOvDAJPYovS7Z4EVLe
+	 wzNHFBy77BRb5MAniPdAHgo+cN6yyFG4tNETgY2Q91vOKF49OeptGIPx/7KwIIqAtnzK1
+	 UHRx1JGO7GdYxPbDK3sCtS4Ye7/gbp5XFV6Vm/FmqCvLk91tpn+PUzL+7nGg7QsVMQJo8
+	 KnP7sPBMAUJg65x/GmsQEjgQBGO3voErGFZpfU9yusiroUqGi/cz9dDOIFcinnW/t//b7
+	 6hOYuWSkL4exGPK+RT5Bc5cdugL2pVxdUjpSnknvA9fb9ip7U9mQ/VmearsNKyL3dtg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=H6CvvIYg;
-	arc=none smtp.remote-ip=220.197.31.3
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=V4e5eAoA;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b="3u/TIF1Q";
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=U40lI6F8;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=epjkPEdS;
+	arc=none smtp.remote-ip=195.135.223.131
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F508606A331;
-	Fri,  6 Nov 2026 08:09:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F508606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24135606A330;
+	Fri,  6 Nov 2026 08:21:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24135606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=H6CvvIYg
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=4B
-	0+96Ua9JUPRUU6V7nXApJ0tB80K/PeVAZmqbV7vJI=; b=H6CvvIYgt8gjIIm6SE
-	3AuJwyZCjX4/cCemQ4J6irtPXCNGpnMudZgC+cTfnByMiL4RjsUTNZuHtyf2eceJ
-	ySHm0VzXRul9DIZs7yP3H9RCe6Rm5ZybD6Nq/cLsMM2SPktxfTAo2jSoipJQaNLa
-	eZOx6zvo/pUgo92RiU79Nw4kY=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3v47Siu1qAmURFg--.23264S2;
-	Fri, 06 Nov 2026 16:07:48 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: song@kernel.org,
-	jolsa@kernel.org,
-	ihor.solodrai@linux.dev,
-	kpsingh@kernel.org,
-	matt@bobrowski.net,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	yonghong.song@linux.dev,
-	emil@etsalapatis.com,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com
-Cc: bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v5 1/2] bpf: Add sleepable version of bpf_get_stack in raw_tp_prog_func_proto and tp_prog_func_proto
-Date: Fri,  6 Nov 2026 16:07:45 +0800
-Message-Id: <20261106080746.661431-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (1024-bit key, unprotected) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=V4e5eAoA;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=3u/TIF1Q;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=U40lI6F8;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=epjkPEdS
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id EE3591FB93;
+	Fri,  6 Nov 2026 08:21:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1793953294; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z2Ju1cQkbqfSchQm4ea439mNBOoXAWoCo7WUPi9dWQU=;
+	b=V4e5eAoAEcrMVPiURQAjginCIXmCcDDV6As0NtqHDwA3yiK2awePWJ2CRTFLJBufcxbk6v
+	SWzt9hdEwkjKuP0L4WA90U3T9tQf68Bif5DvttfMuIsjdaMyfpNdO3eEvnGgn2x/tpalY5
+	np0yi/68rs46xpFXejPNMswmeEoi0D8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1793953294;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z2Ju1cQkbqfSchQm4ea439mNBOoXAWoCo7WUPi9dWQU=;
+	b=3u/TIF1Qfg3BoZVshE9rOBJ2ON+ybz08g6+kZZxQqx99cgMBDykCtrbAARoGIZzGPl9BCj
+	e0CXdI0JHfJE23Aw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=U40lI6F8;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=epjkPEdS
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1793953293; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z2Ju1cQkbqfSchQm4ea439mNBOoXAWoCo7WUPi9dWQU=;
+	b=U40lI6F8wEBaSZ2brkRKY7emrMDprR6jHx07Go8XDqIDYEHXrXq5EDXDND/575qJEzvkT6
+	B7BU9RQ0+et4qoMWcBW52+8AzfnQB3J76HxGc1jcVyTFa6gmjl+GjTNgwNvyK9olKYpZZ6
+	rFi5WEZILTdEJxtTuHKBKgVltpgX+Mo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1793953293;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z2Ju1cQkbqfSchQm4ea439mNBOoXAWoCo7WUPi9dWQU=;
+	b=epjkPEdSL4wtMOZoeFcoy1kEE4pRVcMJ3AYKhXn+8eoImry0vFoijUAhqv85m3cIcLDM0g
+	mWN/aMxISNozc8DA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F035D132C9;
+	Fri,  6 Nov 2026 08:21:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id JRMLKwyO7WqXcQAAD6G6ig
+	(envelope-from <hare@suse.de>); Fri, 06 Nov 2026 08:21:32 +0000
+Message-ID: <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
+Date: Fri, 6 Nov 2026 09:21:32 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -75,159 +108,131 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
+To: Jarkko Sakkinen <jarkko@kernel.org>, David Howells <dhowells@redhat.com>
+Cc: bpf@vger.kernel.org, dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
+ keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-security-module@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Benjamin Marzinski
+ <bmarzins@redhat.com>, Daniel Borkmann <daniel@iogearbox.net>,
+ Dongliang Mu <dzm91@hust.edu.cn>, Eduard Zingerman <eddyz87@gmail.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Eric Biggers <ebiggers@kernel.org>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, James Morris <jmorris@namei.org>,
+ Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Mike Snitzer <snitzer@kernel.org>,
+ Mikulas Patocka <mpatocka@redhat.com>, Paul Moore <paul@paul-moore.com>,
+ Randy Dunlap <rdunlap@infradead.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
+ "Theodore Y. Ts'o" <tytso@mit.edu>, Yanteng Si <si.yanteng@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+References: <20261105031401.956609-1-jarkko@kernel.org>
+ <20261105031401.956609-3-jarkko@kernel.org>
+Content-Language: en-US
+From: Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20261105031401.956609-3-jarkko@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3v47Siu1qAmURFg--.23264S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Gr1fKw4kKF1kZFW3uF43Awb_yoW7KFyDpF
-	9IyF1akrs5X3ySqrZxGw1qvFy5G3ykX3y8KryxC34a9r1UZr18tFy7KF4agF1rur97W342
-	v3W0qrsFkw40va7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07ja4E_UUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8RXtZmrtitVdHAAA32
+X-Rspamd-Queue-Id: EE3591FB93
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-13.50 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_TWELVE(0.00)[38];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,redhat.com,kernel.org,linux-foundation.org,iogearbox.net,hust.edu.cn,gmail.com,etsalapatis.com,linux.dev,namei.org,lwn.net,paul-moore.com,infradead.org,hallyn.com,linuxfoundation.org,mit.edu];
+	DKIM_TRACE(0.00)[suse.de:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DWL_DNSWL_BLOCKED(0.00)[suse.de:dkim];
+	R_RATELIMIT(0.00)[to_ip_from(RL3deh5x9onbckmuwxjk3fsykq)];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -13.50
 
-From: Feng Yang <yangfeng@kylinos.cn>
+On 11/5/26 4:14 AM, Jarkko Sakkinen wrote:
+> The keyrings subsystem is the sole user of assoc_array. It has over 1700
+> lines of code, no test suite, and a long history of bugs, with LLMs now
+> finding more.
+> 
+> This unfortunate outcome has evolved over time by large from the shortage
+> of in-kernel callers, time bandwidth and 3rd party contributors.
+> 
+> What the keyrings needs is just a generic key-value store, which performs
+> well with sparse key sets.
+> 
+> Replace struct assoc_array in struct key with struct keyring_index:
+> 
+> - keyring_index: holds an rhashtable for direct lookups, an RCU-protected
+>    list of keyring_link entries for stable walks, the active link count, and
+>    an rcu_work item for deferred teardown.
+> - keyring_link: links a key into a keyring's hash table and list, caching
+>    its 32-bit SipHash digest rehashed with jhash by rhashtable.
+> 
+> Correspondingly, struct assoc_array_edit is replaced by struct keyring_edit
+> for delivering transient state across link operations.
+> 
+> Other behavioral changes:
+> 
+> - KEYCTL_READ and sibling-keyring searches follow list order instead of
+>    hash order: keyrings are prepended, other keys are appended, and
+>    replacing a matching key retains its position.
+> - key_unlink(), keyring_clear(), keyring_revoke(), and keyring_gc() no
+>    longer allocate memory.
+> - keyring_index_free() uses queue_rcu_work() instead of call_rcu() because
+>    rhashtable_destroy() may sleep.
+> 
+> Suggested-by: Eric Biggers <ebiggers@kernel.org>
+> Co-developed-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+>   include/keys/keyring-type.h |   1 -
+>   include/linux/key-type.h    |   1 -
+>   include/linux/key.h         |  28 +-
+>   security/keys/Kconfig       |   1 -
+>   security/keys/internal.h    |  14 +-
+>   security/keys/key.c         |  22 +-
+>   security/keys/keyring.c     | 986 ++++++++++++++++--------------------
+>   security/keys/request_key.c |   8 +-
+>   8 files changed, 465 insertions(+), 596 deletions(-)
+> 
+While I am pretty much in favour with this approach, is there a specific
+reason why siphash has been chosen?
+Would there be a chance to make this configurable?
+I do see slight complications when running in secure environments
+(ie FIPS-certified environments) where most of the hash functions
+might not be available ...
 
-bpf_get_stack() has two implementations.  bpf_get_stack() passes
-may_fault == false and resolves build IDs with build_id_parse_nofault(),
-so an IP whose backing file page is not resident falls back to
-BPF_STACK_BUILD_ID_IP.  bpf_get_stack_sleepable() passes may_fault == true
-and uses build_id_parse_file(), which faults the page in and returns a real
-build ID.
+Cheers,
 
-Only kprobe/uprobe programs are routed to the sleepable implementation
-today, so the other program types that can be sleepable keep losing
-build IDs for non-resident pages:
-
- - tracing_prog_func_proto() serves BPF_TRACE_ITER, fentry/fexit/fmod_ret
-   and BPF_TRACE_RAW_TP programs, and falls back to
-   raw_tp_prog_func_proto() for BPF_FUNC_get_stack, which is also the
-   get_func_proto() of BPF_PROG_TYPE_RAW_TRACEPOINT and is reached by
-   BPF_PROG_TYPE_LSM and BPF_PROG_TYPE_SYSCALL through the default cases
-   of bpf_lsm_func_proto() and syscall_prog_func_proto().
-
- - tp_prog_func_proto() serves BPF_PROG_TYPE_TRACEPOINT programs.
-
-Route them to bpf_get_stack_sleepable() as well and mark the new
-prototypes might_sleep, as
-commit 9d02927fdf4e ("bpf: Mark faultable stack helpers as sleepable")
-did for the faultable stack helper prototypes.
-
-The verifier then rejects bpf_get_stack() from these program types
-marked sleepable whenever in_sleepable_context() is false:
-inside bpf_rcu_read_lock(), bpf_preempt_disable(), and so on. This also
-covers calls that do not pass BPF_F_USER_BUILD_ID and would not sleep;
-such programs load today. This is consistent with the existing constraints.
-
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
-v5: selftest: Remove fork-related code, use getpgid. Thanks, Andrii
-Nakryiko.
-
-v4: Update commit messages. Test modification: limit capture to one hit, add s390 flags.
-https://lore.kernel.org/all/20261105093212.826479-1-yangfeng59949@163.com/
-
-v3: Add selftest. Update commit messages.
-https://lore.kernel.org/all/20261104083833.971911-1-yangfeng59949@163.com/
-
-v2: Move regs onto the stack.
-https://lore.kernel.org/all/20261102073714.1103088-1-yangfeng59949@163.com/
-
-v1: https://lore.kernel.org/all/20261028093548.790977-1-yangfeng59949@163.com/
----
- kernel/trace/bpf_trace.c | 54 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 52 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 2aec56d7f3d3..1229ee06dd71 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -84,6 +84,7 @@ static struct bpf_raw_event_map *bpf_get_raw_tracepoint_module(const char *name)
- 
- u64 bpf_get_stackid(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- u64 bpf_get_stack(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
-+u64 bpf_get_stack_sleepable(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- 
- static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
- 				  u64 flags, const struct btf **btf,
-@@ -1477,6 +1478,26 @@ static const struct bpf_func_proto bpf_get_stack_proto_tp = {
- 	.arg4_type	= ARG_ANYTHING,
- };
- 
-+BPF_CALL_4(bpf_get_stack_tp_sleepable, void *, tp_buff, void *, buf, u32, size,
-+	   u64, flags)
-+{
-+	struct pt_regs *regs = *(struct pt_regs **)tp_buff;
-+
-+	return bpf_get_stack_sleepable((unsigned long) regs, (unsigned long) buf,
-+				       (unsigned long) size, flags, 0);
-+}
-+
-+static const struct bpf_func_proto bpf_get_stack_proto_tp_sleepable = {
-+	.func		= bpf_get_stack_tp_sleepable,
-+	.gpl_only	= true,
-+	.might_sleep	= true,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_CTX,
-+	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
-+	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
-+	.arg4_type	= ARG_ANYTHING,
-+};
-+
- static const struct bpf_func_proto *
- tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -1486,7 +1507,8 @@ tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	case BPF_FUNC_get_stackid:
- 		return &bpf_get_stackid_proto_tp;
- 	case BPF_FUNC_get_stack:
--		return &bpf_get_stack_proto_tp;
-+		return prog->sleepable ? &bpf_get_stack_proto_tp_sleepable
-+				       : &bpf_get_stack_proto_tp;
- 	case BPF_FUNC_get_attach_cookie:
- 		return &bpf_get_attach_cookie_proto_trace;
- 	default:
-@@ -1716,6 +1738,33 @@ static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
- 	.arg4_type	= ARG_ANYTHING,
- };
- 
-+BPF_CALL_4(bpf_get_stack_raw_tp_sleepable, struct bpf_raw_tracepoint_args *, args,
-+	   void *, buf, u32, size, u64, flags)
-+{
-+	/*
-+	 * Don't take a per-CPU bpf_raw_tp_regs slot here: those slots are a
-+	 * LIFO nest counter and are vulnerable to slot overwrite and
-+	 * corruption across sleep.  Sleepable programs never run in
-+	 * IRQ/NMI context, so a local pt_regs is sufficient.
-+	 */
-+	struct pt_regs regs = {};
-+
-+	perf_fetch_caller_regs(&regs);
-+	return bpf_get_stack_sleepable((unsigned long) &regs, (unsigned long) buf,
-+				       (unsigned long) size, flags, 0);
-+}
-+
-+static const struct bpf_func_proto bpf_get_stack_proto_raw_tp_sleepable = {
-+	.func		= bpf_get_stack_raw_tp_sleepable,
-+	.gpl_only	= true,
-+	.might_sleep	= true,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_CTX,
-+	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
-+	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
-+	.arg4_type	= ARG_ANYTHING,
-+};
-+
- static const struct bpf_func_proto *
- raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -1725,7 +1774,8 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	case BPF_FUNC_get_stackid:
- 		return &bpf_get_stackid_proto_raw_tp;
- 	case BPF_FUNC_get_stack:
--		return &bpf_get_stack_proto_raw_tp;
-+		return prog->sleepable ? &bpf_get_stack_proto_raw_tp_sleepable
-+				       : &bpf_get_stack_proto_raw_tp;
- 	case BPF_FUNC_get_attach_cookie:
- 		return &bpf_get_attach_cookie_proto_tracing;
- 	default:
+Hannes
 -- 
-2.25.1
-
+Dr. Hannes Reinecke                  Kernel Storage Architect
+hare@suse.de                                +49 911 74053 688
+SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
+HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
