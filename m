@@ -1,86 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793993446;
-	b=AlN2pXMXuowmMs/5BmneMqywZRMzhMLICZFkgh8QOWOI9rIa2avNZwUyvhaDgQBJNE3m
-	 ULSdfSM57lDALIY5WLIGP/T/MVX5Lm8fx3mHkWqZDCoiGHtpLkCmDJ8lG0gwaUUY0Cwdg
-	 U5XF7mQbuKQEmU0RouQUXEbk+xPv3w2gojEXnM1e2MM3gmxUiqETKX+PCm1zQtIvlg3s0
-	 ddFgBiJLJ6CO4TW2779Ibd+U8523eII/XC2DBwD3gpJV3w6wjl6Uty5lBP55dIiyQLbUf
-	 XoQJm2J890Baw1uRH7dYYFuwgObRsA9FOTF9uLw3oOpsslLRqXJ3+K2dUwHaNJkOTlQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793993446;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=XmljEirP7g8E1aEpXYghzNW+MUBxa4234sIME/mYPkk=;
-	b=KoEjuKAKnZzTMmGq4rVPec8Jp3QL0S/h2OMYwKc3EvLbXL93Klbxaw1MStGksYEILmoi
-	 /j2rpmNywz7N03df3MmsLEBcuHyiwkVFbcStUs6ijZxUqG2mJs0TGuBPkuL7Rigz5jU13
-	 tqDL2uYO9FnaqcVwzSQGsIFh8Osk4sU0YiNiIxrXq/mJ9ZAZymh/VIo6MaxCxZ0FSKpH2
-	 xmvL/QDRb5SJgRe/yezV7yYDJiFgKOstCAGriG4d7GPpcxmTY+8/Iccfcd34khFoy8Q3j
-	 d2e7fVhs4Vnd7AQb4XlLLvOWZlEj4M717VHpqJs8SNESD5nw4Qlbd/6vyN+cZ/m1tZA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fRgb09PY;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.49
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793993601;
+	b=1h5bNS9n8gvbLYQsORfNAv/GIDhEq0Jp5Z24o1ocO07HToG73xU9fOOlXCO3uP6HZkHj
+	 HkoyUsxF0MKpFKAp4f78tVQ7gPEgN0Z0K/rKQBi78ji7bMWKwAzi2wGpY3MxV4vd2OPoJ
+	 yk8srAzeMjpFFkx8CuVShyNnATXqLa7uWHtUAwlo91E5SRGlVQ3vCxc01M94EH5jjrdVB
+	 jzC5+9hOOTro9OqHNf65sLyyLParODuYZXcKEJek8DnqC54H4JDZaJL/to+6QoM2oTGAC
+	 jT7n0tMMAFy6c17IDuJb2+/uXiK0CygM04t5qqIWGBJzHGW0lMSFsW1Tyuk995JUSYw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793993601;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=WASkhr+Unco/i3EllWy4fEDfIef6kYtQba3wH4Yi4vg=;
+	b=wuxPZCu+cCUo6epk4nkkTv983TsffITV1q9GIvUB0oI5iIbuNL8VJb2rbYOHJycySYtf
+	 hH7lTq7GboA9aL2zjRl+lAHHPKXrPNbj1DWXffScMoB2pjfazXGWQMGR98+uGFPV3uTyy
+	 S0QMw8IBxZb57pHHknrcB/MqRg2rooCIl/4obntaWes3ROt3D6KF39ej1RLCXP0RonRBO
+	 UjzFC99h5QhrbjJPGR+gMkle7ZHvvRQB4MNwuBHJMp/KBWVdLknKkqFu+5E8OPWTnzgVl
+	 gZKTDLIVcpJTJr3n+JnVbua3dmJEnwgUuYOgpb6iwDud1IH7FyOwHXAMu5GFUaVLyqA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="PTOVU/vt";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.49
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 9BBEC606A326;
-	Fri,  6 Nov 2026 19:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD10B606A32C
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 19:33:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CD10B606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fRgb09PY
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 89B181F0089F;
-	Fri,  6 Nov 2026 19:30:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793993445;
-	bh=XmljEirP7g8E1aEpXYghzNW+MUBxa4234sIME/mYPkk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fRgb09PYkaD6Phe8rymtD/OPdc3FEe5j7zptW9rqLEPiPGLt0uWIFNbksQ4JPPiQZ
-	 5WfFSlfOba/9Z/vwhRBxda9lXAmsvDNfxor5Em6lhAabuhK76HA5hjm51SebDcki+8
-	 a1p9eTkai4Ru7VKPtmdHMqDGBxt1SWHPZi7tB5xxS9JLePshmf9r47FNN1Akj639C4
-	 7uFyGvtNEP0qWBaT0RLU6kOfd8a79he64DQLSkYrv7ht0PnqOVA8H/004KNo1Fijlc
-	 J1VxpLGH1T7xTP4zpflSiCn/6oeBV5o6mb0faebPG9zFzPZwsNFEmpMKwVea6ITRse
-	 Vu6lbY0ezf8BQ==
-Date: Fri, 6 Nov 2026 21:30:41 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Hannes Reinecke <hare@suse.de>, David Howells <dhowells@redhat.com>,
-	bpf@vger.kernel.org, dm-devel@lists.linux.dev,
-	fsverity@lists.linux.dev, keyrings@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <au4q4Wh7PK1-Ge9P@kernel.org>
-References: <20261105031401.956609-1-jarkko@kernel.org>
- <20261105031401.956609-3-jarkko@kernel.org>
- <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
- <20261106090516.GA1973@sol>
- <93e6b4e6-43c3-462d-b57c-26676aec85ec@suse.de>
- <au4k69xNBUjsNErr@kernel.org>
- <20261106191920.GA3383096@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PTOVU/vt
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3b094e649d3so632632a91.0
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 11:33:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793993600; cv=none;
+        d=google.com; s=arc-20260327;
+        b=M8FBk6ZyUhi8D3i2L7fu2fMZT3fVfGN/pa2HnoyxzuZ6fwFOUSgJFRPR5w6EDa4seM
+         ojo0gDHSmi4C5lRvk04uN49JYSx/LH3j2q9BbJUjhGnTJOLp90AKBkvAmGOB+cx256t3
+         frIlPYgA6Hjus9EcXw2ElgeiU+nF67BjRMp7S1ckB2+QHoabQLD9eOmEldaSGyP6PBDN
+         6vBeVRl34l6vG1Isb3uK0yMIcFVELTXzUmj6E2EbHRV68/8rVigkDEFGWzd9qrcmXXWz
+         DvV1IrKSiZt3Ru1cEysGsf6CdDYdynyOVqgIrx8iWbNIfAwuQoZ/Gw7CnTQWuDP/QG8C
+         qDtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WASkhr+Unco/i3EllWy4fEDfIef6kYtQba3wH4Yi4vg=;
+        fh=7lYXQCouJTLVlcmDW55apHWXku5/PusDmkljLIPXiOs=;
+        b=hEWzunUpIqTfI+o511g2vMapJ591Y1XJtuUGOv+cektu0iqmjTgqcLFVgoDqR84F9e
+         C/2Upj1evNwQ2JVOb4waItpMs0RsQMDx2lZqdplXbAIxbaxGOvWnlBqfvWZOlSjMTaKK
+         aJFZDYk+yHERHf7xzyBWKDp3Sq2qQ3F/KWaMJaQWrBap8j+YS2prThYrz5kt7qyoZcnv
+         zupKYQc+IjHMaXNaiFGspBqlX5020q8HfA9h/yBIvR12ovN5Dp4lAYSoCkw8Veza+R7K
+         60qIKhNp1VMiKWPeQZGWH8+2cTKrFz46Aq+6XsFJtFjD0rOqzckP3CpYlhTfZKptFFMQ
+         yggQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793993600; x=1794598400; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=WASkhr+Unco/i3EllWy4fEDfIef6kYtQba3wH4Yi4vg=;
+        b=PTOVU/vtLVZodS0aOcFhbpPojR0zuZKWzH68M+LgwxhUiMUUV3OwAyiTQVlrcMUxnw
+         5JHwdxmXVMsluwjPwApczHspB1hZrE0pKL/8rrvoFqdMiAAIy/MuK/FDLY/YlGrgdoOY
+         jxkOm4zP18LMj/UG5TtK2Sbm6RkPSaVEOsrTsblHURQnq9i+o8BdEGcq0vnh65KC4pua
+         t8qO68S7cQUlzZGrCjEamaURGUFfAElVnw+yN5jGhpynX4i2G4J6wYWvFEyWHFgm6twr
+         X1h0Mzbrfv9Aol8EK2bqGug92Yy85UqYnHSA3uCYJGOwgKYOYLZQImW0f6cOgC9KFbL1
+         gmQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793993600; x=1794598400;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WASkhr+Unco/i3EllWy4fEDfIef6kYtQba3wH4Yi4vg=;
+        b=U+7zJgv5O4Csu3n4v5h7wjKx5IaZSG7WVC+k3D+iNiT8i3LkWFQ//BSoExWC5Z9Ftt
+         Dvh5Pu1/nt7AtSOb/TLL0VPoaN5Qb72gZdE3jYfTF3RaRDn+lJrOhquuANBfRh9LLPCx
+         FhazMau3uM9nmrC8MB5dgQ/deQ1frIbTy+1/i4ngr95iZQCHQ+sK4vFecuqhIwn7rGAk
+         OZy7bYrsGWrbPYKX0AgBsCwoJGQ/3CVUV9ePNzySDjil2mlvOJMrzBrX1XWY2FN3/A86
+         ZPBFwrt8S2SNBLYQVPH0WmtW4+2xL6kMaLX5axmg3KAy3nrWKEH4qOiS5IRTQJURO+Wa
+         iN1Q==
+X-Forwarded-Encrypted: i=1; AL+hErFhTE9NMAmCCYaLonwRy/KAPmhONKO9uNMLoK7ffE182BcKQJB2BR7sOYVpPmhlfDKkmTs=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8F2L3gH6MA7JobNXNi/15XYvEGdL4qWCvJJg2IVqtiSZHJldaA
+	OkzcNgXM9D3TpXJSIUN/q/wkiEB/w5pZ7RbugWEeqA+bcc7Wk+v3wLkFcFqjCRY3yVszyn7otvD
+	PL75/mGI/xT905jjBWYxDv0g2FYO2AGEfU9cf8hc=
+X-Gm-Gg: AYBFou1pValv2zTlNxodHDHl4WwGfA3zmWGLA7ga++7wRq6PpQf6mlBhlCpguFyRodg
+	nRwOX/LalLFvc7ykbNMgbfLTjQ7HGc2pfkv6Pg6KTcuERK/DtFWX0tmNZLa3DgGos07QqNfxSg0
+	Mutrchk91AaPAeeeGVqVlhTQR46kF8M137f2kBDgSckJosSuZ4G26Y2pvGg8GwVfQUmAIa23bng
+	1fowrfAA6A3ZiUTPfmIPMXa7FN+n9kki6gcBu4gz8EBP67eBfkv2Sfhs2eJ6WTFpXW4o3y32IIj
+	uh2aBWkY6Ruxck8vBpnQhjNSjju8J1/aQZgPkPwBzpSwqPRC62r3pJ7x7Kmj13puLh5kOIxj6oB
+	w26oVPe3CH9aIJnEyX5cZTT3TP8EOdvhkjjj5DDPZM2kJTzuCYVrfrUp3z3ocPKErEquRSl3KCh
+	Iy+L0=
+X-Received: by 2002:a17:90b:39ac:b0:3b0:9cc6:62bc with SMTP id
+ 98e67ed59e1d1-3b0db6ebd52mr3469969a91.37.1793993600100; Fri, 06 Nov 2026
+ 11:33:20 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -90,66 +105,137 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261106191920.GA3383096@google.com>
+References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
+ <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
+In-Reply-To: <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 6 Nov 2026 11:33:07 -0800
+X-Gm-Features: AclHuK9gXDhZeKl8Js7bG-wUcnzU8mjlehe58_riZeQRtc97_9zHpsNN_OoiZ0w
+Message-ID: <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
+Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
+ breaks BPF LSMs
+To: Paul Moore <paul@paul-moore.com>, Daan De Meyer <daan@amutable.com>
+Cc: roblabla <linux@roblab.la>, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, paul.mabileau@harfanglab.fr, 
+	linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 06, 2026 at 07:19:20PM +0000, Eric Biggers wrote:
-> On Fri, Nov 06, 2026 at 09:05:15PM +0200, Jarkko Sakkinen wrote:
-> > On Fri, Nov 06, 2026 at 02:02:11PM +0100, Hannes Reinecke wrote:
-> > > On 11/6/26 10:05 AM, Eric Biggers wrote:
-> > > > On Fri, Nov 06, 2026 at 09:21:32AM +0100, Hannes Reinecke wrote:
-> > > > > While I am pretty much in favour with this approach, is there a specific
-> > > > > reason why siphash has been chosen?
-> > > > 
-> > > > SipHash is the preferred choice for secure hash tables.  It is secure,
-> > > > performs well on short inputs, and doesn't require special instructions.
-> > > > See Documentation/security/siphash.rst
-> > > > 
-> > > > > Would there be a chance to make this configurable?
-> > > > > I do see slight complications when running in secure environments
-> > > > > (ie FIPS-certified environments) where most of the hash functions
-> > > > > might not be available ...
-> > > > 
-> > > > SipHash support is available even when the kernel is booted with fips=1,
-> > > > so there's no issue there.  It's already widely used in the kernel for
-> > > > hash tables, and that hasn't blocked FIPS certifications either.
-> > > > 
-> > > Ah, right. Thanks for the information. Just wanted to cross-check here.
-> > > 
-> > > > Side note: fips=1 actually has little do with security, and in some
-> > > > cases it actually decreases security.  See for example
-> > > > https://lore.kernel.org/linux-crypto/20261026183332.11402-1-ebiggers@kernel.org/
-> > > > where I'm fixing a vulnerability caused by fips=1.
-> > > > 
-> > > Oh, I am fully aware. FIPS is more a rubber-stamp than anything else.
-> > > Unfortunately, a pretty powerful one.
-> > 
-> > Just representing this as an option but in the current mainline indices
-> > are used instead of addresses, and thus it would be also an option to
-> > just jhash across the board, if that part is retained (now it is being
-> > removed).
-> > 
-> > On plus side, any security bugs in cryptography would not be a concern
-> > of keyrings.
-> 
-> SipHash is also useful for resistance against denial-of-service attacks,
-> where a user puts all their keys in one hash bucket.
-> 
-> As I mentioned, it's already used for secure hash tables elsewhere in
-> the kernel.  That is what it's for; see
-> Documentation/security/siphash.rst.  It's very fast as well, so if you
-> are thinking of cryptography as being something very slow and hard to
-> use, that is not what this is (or ever needed to be).
-> 
-> Let's just use it and not over-complicate things.
+On Fri, Nov 6, 2026 at 7:41=E2=80=AFAM Paul Moore <paul@paul-moore.com> wro=
+te:
+>
+> On Fri, Nov 6, 2026 at 8:39=E2=80=AFAM roblabla <linux@roblab.la> wrote:
+> >
+> > Hello,
+> > First of all, I'm sorry if I'm sending this email to the wrong mailing =
+lists, it's my first time reporting a linux issue ^^'.
+>
+> Hi,
+>
+> It looks like you sent this email to the right people/lists, well done
+> on the first hurdle :)
+>
+> > In commit 16959c469f232f5c76cfb628297cafbf6dbdba79 (lsm: expose mount i=
+dmaps to inode hooks), merged in 7.4-rc1, a new argument was added in posit=
+ion 0 of various inode-related `security_` functions. Specifically, it adde=
+d this argument to inode_create, inode_link, inode_symlink, inode_mkdir, in=
+ode_mknod and inode_permission.
+> >
+> > This has the immediate effect of breaking eBPF LSM programs relying on =
+these hooks that were compiled with BPF CO-RE and using BPF_CORE_READ.
+>
+> ...
+>
+> > Now, I'm not sure how the Linux Kernel treats eBPF LSM hooks - if they'=
+re considered part of the userspace that shouldn't be broken. My understand=
+ing is that kprobes are not part of the Linux Kernel stability guarantees, =
+for rather obvious reasons (they allow watching the internals of the kernel=
+) - but I'm not sure if this extends to the LSM Hooks. I assume not. Still,=
+ this kind of breakage is really painful for us, and I hope we can find a s=
+olution.
+>
+> Like kprobes, the LSM hooks are intentionally not part of any stable
+> API promise.  While we try not to needlessly churn the LSM hooks, we
+> reserve the right to modify parameters, the LSM callbacks associated
+> with a hook, and even the basic hook semantics from one kernel release
+> to another.  The reasoning is very similar to that of kprobes: the LSM
+> hooks are linked to kernel internals and thus need the ability to
+> change as the kernel changes.
+>
+> LSMs that need to provide a stable API must provide an abstraction
+> layer between the LSM hook callbacks and their stable API.  The LSM
+> framework is not responsible for the stability of individual LSM APIs.
+>
+> > Could we fix this type of breakage by making sure new arguments are onl=
+y added at the _end_ of the LSM hooks signatures,
+>
+> I'm sorry, but I can't make that promise at the LSM framework layer.
+> It is impossible to predict how the kernel internals will continue to
+> evolve and thus I can't promise how the LSM hooks and callbacks will
+> need to change as a result.
 
-I'm pretty much non-opionated when it comes to this detail. I just
-merely represent all the possible if anything comes up to mind. DoS
-protection that you explained was not something I did even consider so
-that seals it for me.
+Yeah, I think that's a reasonable stance and we went through similar
+discussion about tracepoints not being stable APIs, no questions about
+that. But I'm wondering if it's not too late (as far as I understand,
+this hasn't gotten into final release just yet), would it be ok to
+just move newly added argument to be the last ones? We had similar
+problem in not too distant past with one of scheduler tracepoints,
+where new argument was added in the middle of argument list, and that
+causes just unnecessary friction when using BPF with old and new
+kernels. We did move the argument to the end and resolved this
+(without really mandating any stability guarantees).
 
-> 
-> - Eric
+So, in short, would it be possible to send a follow up to Daan's
+commit and move `struct mnt_idmap *idmap` to the end of LSM argument
+list?
 
-Br, Jarkko
+>
+> Regarding the specifics of how the BPF LSM has dealt with this in the
+> past, and any plans for the future, I'll let others speak to that;
+> hopefully they will have some tricks you can use to make these
+> transitions easier.
+>
+
+(this is answer to roblabla, I don't think you, Paul, should care)
+
+The answer here is nuanced. On one hand, libbpf and kernel (BPF
+verifier) don't really know exactly what BPF program assumes argument
+types are. libbpf-provided BPF_PROG() macro that everyone is using
+with BPF LSM just assumes user specifies correct sequence and types of
+arguments, and libbpf just provides a bit of syntactic sugar with
+casting untyped input arguments (they are just "u64" types) into
+expected types. So it's not easy to detect this automatically neither
+in libbpf nor in BPF verifier.
+
+Having said that, there is a way to handle this, although ugly and
+*everyone* using specific LSMs would need to do this on their own.
+Instead of using convenience BPF_PROG() macro to define BPF program,
+you just use raw `u64 ctx[]` access, and then cast ctx[0] to either
+`struct mnt_idmap *` on new kernel, or `struct dentry *` on old
+kernel. And you do that for all arguments. E.g., something like this
+
+SEC("...")
+int my_prog(u64 ctx[])
+{
+    bool new_kernel =3D ...;
+    struct mnt_idmap *idmap =3D new_kernel ? bpf_core_cast(ctx[0],
+struct mnt_idmap) : NULL;
+    struct dentry *old_dentry =3D bpf_core_cast(new_kernel ? ctx[1] : ctx[0=
+]);
+    ... and so on ...
+}
+
+How you determine "new_kernel" can be done in various ways as well, I
+don't want to overburden this email with details, but it's doable as
+well.
+
+
+so, tl;dr, it's possible to handle this LSM signature change, but it's
+painful and requires knowing about breakage and doing a bunch of extra
+plumbing.
+
+ideally, if it's just a new argument addition, it should go to the end
+of arg list and then all these issues go away
+
+> --
+> paul-moore.com
