@@ -1,45 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793995843;
-	b=MaP048rLOkgO5N+29trIOkw+4HpFNHS45dk7LhpNJTZDzR0BVMnJ2XfIgRrSJVv5xmMl
-	 9SY3/i0+8yZcS1STWNwJKwa8fXcqF+OFzRXRL02vZGPz8jbasvQ/HtsMMPh3COFveudYV
-	 ZrQoA0CRm7j5ix7j2/0t5/qNFOiqyipwVwQOo2b3leGsU1Hfc56pCaV+BAxz0YrmBZsvz
-	 gpLqbmE/zpeKvtUFsqpZt1nkeEBR1mSmhw/yf2hZWZSM6UYfCzbwBxMFa4yzEJTJ9AAkx
-	 pV2gVXTWLSebFZhAY9KikWL3vOFLXfBIRJz+GvNXkXO3c3nbcPhaOaGRO5VSLCtvqgA==
+	t=1793996410;
+	b=fBtiqaXQJjkfUdfOj86kqk14wdALWtwnjhyUZYLntgN3h8RXMgRIPKq31/cIUbQ4cZYY
+	 lLBcn24PcQYXHFL1QzM1nnrNgESMaXYDHWFnWATMWDf/LHHSXy2NQ2MLXu8vlsN9BRaM9
+	 CObKjIB2JhYpCS91Ye3BV8upV00k/CfLeiduXEtPR2JznJZy/7VZsWHCGGLD6GcDMHrm2
+	 JZ+zsPsbIGd0IAnj6hW+h/lIrfue5t7KW/AqkzI+8FOe6T8y9AeGWT8LRZCFPSyTcAjv5
+	 1usxkVj5G+1ntmwfO4cTNF70dJ9bYQmytX18K9btQ8g3fdoPpEmCig7JkA5JXTSrL1A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793995843;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=mQgknlMcFh7YkLQGDtcBN7DE0e8P0JWuuv3aI+pCJYQ=;
-	b=4jOuS/pkFmwd1FMIsacolnwm3bqY9TIm5PXK/pdirO1nLERUxP9sH3X5pz7CUepEufDv
-	 ZJZtnAW++zoJiI6Kcw6CdjXsa2yWLCr8ODG4jRnIiqCfO0vXwD9eNgD/z6RFKVquiVJmZ
-	 Ogw1JVwTKruwnpNawfL8+6KUQDOFkTBAqkrZpj8EIIM4O9u3vlA91gMj4d4lwPcs1GbhS
-	 p/jgBzfBgaVBJ3gNYh8VjIaglo9tl4L51oLrCfFXQbgR1k1oYhst02rD7Xs1ojej4Zhc3
-	 cQ8bxnXJDmZyOmn6dTHlY+gcqE8xHyvfW4XIL5cmOqr8N7qV1umAm1zJ409TV9XcKig==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793996410;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Received:Date:Mime-Version:X-B4-Tracking:
+	 X-Change-Id:X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=2YbFKs9nRA6MfgMEJuRTCHwLHgaje7B0LRpZLEgpNVg=;
+	b=k4EmS2C6EKczka/jALfI5OSrCiJaGiO+hWHlFkrIXP5uroQEELJFpMIc90uSh/CcxLZT
+	 u/k32N3rIv/lmnCs1RG5HT5SPduaoG0hrbXLEesW7qzaU41xFlGBREn3alWNJRRt3RpXr
+	 TcL28oFBjULER1a3DtVgU8Z1cJwQBgacPWCV3BTTRHzSHowsxPzLAgtdamQsK15tWBwAx
+	 bdOJxUOg/fu+mAPSCHGeqgHJcz85vY6g0h8Ne5opaLhlTwQPM986sZPvsF+rOXx0WyJGK
+	 EtnGvCZVVBUehKspZ6UPVmT/mawWCkL514yRiA31XJJK55yiPqgKd7L16oYWqQ1PKjA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RnUdqwU6;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oQqnp485;
+	arc=none smtp.remote-ip=209.85.210.198
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343B5606A326;
-	Fri,  6 Nov 2026 20:10:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB83606A32F
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:20:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EEB83606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RnUdqwU6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47EDC1F0089F;
-	Fri,  6 Nov 2026 20:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793995842;
-	bh=mQgknlMcFh7YkLQGDtcBN7DE0e8P0JWuuv3aI+pCJYQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=RnUdqwU69JoRUt8RZUa4ecesZuW7rHh2EHuIQp68p38g3KmbYSlVv9nHAMpiRx1SO
-	 p9QxX95BJI8O2DoAVbKQjIud2xDDHvE58beRPR6kAoNDBWaAE9WQa0n33CJWPfwAEB
-	 i2i9Qjmqnk7TK4R2kf9J4UytS9J20gvwU8DhjifZHc2taGEJNw2dEZnzWZI0f6mmhC
-	 1GrHuRqdcjXF86swcy7V9fSYe+CzfBe0Bc8n2aXE8p0RTXwuzbklxuVeMEeoX34Xvp
-	 i4pxiPm+pNVaO6YfEq4rI/XFl98fmsRX41iQv8R2Xoqd/p2WE7aXtKcNGPs6mpUf/O
-	 nJE05GLp5WewA==
-Content-Type: multipart/mixed; boundary="===============1898950710558378953=="
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oQqnp485
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-8a05c820ecbso1269448b3a.0
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:20:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793996409; x=1794601209; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2YbFKs9nRA6MfgMEJuRTCHwLHgaje7B0LRpZLEgpNVg=;
+        b=oQqnp48505ul8fce1kiykiCLp2RBCB0id+7wMmH30erQLzA8JQmunrOmBs4cSNdOnp
+         2iNKZqJWYUFQZ47unpZxxxX0f/iH/7ULrKTrrYMEEjQsDlWVORyHPyVBhvS8rCmZ/fhN
+         o7jT9adJGO14Qrl6r6L2xIM8t5Xg5yR/AaxTHGoKVbTTau2on1yr7YC6/P2TG8xvPXoC
+         FEMJZeADDOVyBg6XKdFgSjHTGG3FBAt4N4dQGuCI2/yuf2umK2hUZCoKNeGRw0pPFTnS
+         bcVkwTCIxGxdl78z4+gT0PSaYM3vIYomHZeF4LisCxXaNA4K5aqLiA0ut714gukBKsye
+         MUgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793996409; x=1794601209;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2YbFKs9nRA6MfgMEJuRTCHwLHgaje7B0LRpZLEgpNVg=;
+        b=1f7ldu+zUPvuiSkEbZ/D9HQIKwlLTF5eVHvgk93iYZED3bcuUcEBQB9Ol/cSE43M5P
+         w4ygSyrq0eZoYGXsWXr5ci70KBCvH2WL/Z/QLu6lOHb+rb4StYBhIEzru+jL0yb3EeV4
+         EXEGHBY+nl/qAbN8eWxBNo+5CNfvhFSQgYAyhIz4fnhn8rhYI4euOdfPbfqJEx2xZWkO
+         Wz9t2iTiAZN8UknUInGAdRlXBLp6aoQ6xYBUTxU66lqCFbgD6GlRovLViiLeZkiGzk+F
+         WT6JjT53hr0q8cvl1aUMisGudSEsfH0Y6pNkKuSDhZ389z8YEoca/YVebu+T0g6SSioY
+         /2uw==
+X-Gm-Message-State: APuU4Z+9+ilVYi0cmmHZ/BL8Cz6yo4f6ZwKS9+j2/I4hXmOBWtSudq43
+	ozyf2Px+DS/EURPMQ3p4MBeiFAGjxgbOfXrtDGIntN1L4Z+4uxrwZoE89jVvEHfwBt7Tlkwz4VQ
+	hfsEQ/y2FX/eNQ2IREw==
+X-Received: from pfhx2.prod.google.com ([2002:a05:6a00:1882:b0:89f:5522:3f42])
+ (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:139c:b0:8a6:58cb:eeaa with SMTP id d2e1a72fcca58-8b37bb5f095mr3365577b3a.36.1793996408786;
+ Fri, 06 Nov 2026 12:20:08 -0800 (PST)
+Date: Fri, 06 Nov 2026 20:19:47 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,139 +74,150 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <f043064ddbaa8d0c3bd479100993d6f157076ed25b1ab98b78c05bb2f1effae8@mail.kernel.org>
-In-Reply-To: <20261106094343.174905-2-radu.m.toader@gmail.com>
-References: <20261106094343.174905-2-radu.m.toader@gmail.com>
-Subject: Re: [PATCH 1/2] sched_ext: Add scx_tickbug, a scheduler that holds a task on an idle CPU
-From: bot+bpf-ci@kernel.org
-To: radu.m.toader@gmail.com,peterz@infradead.org,mingo@redhat.com,tj@kernel.org,tglx@kernel.org
-Cc: juri.lelli@redhat.com,vincent.guittot@linaro.org,dietmar.eggemann@arm.com,rostedt@goodmis.org,bsegall@google.com,mgorman@suse.de,vschneid@redhat.com,kprateek.nayak@amd.com,void@manifault.com,arighi@nvidia.com,changwoo@igalia.com,frederic@kernel.org,anna-maria@linutronix.de,bigeasy@linutronix.de,joshdon@google.com,haoluo@google.com,brho@google.com,linux-kernel@vger.kernel.org,sched-ext@lists.linux.dev,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 20:10:42 +0000 (UTC)
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAGM27moC/x2MQQrCMBAAv1L27MJmLQW9Cn2AV/FQ040uljRko
+ xRK/27qcQZmVjDJKgbnZoUsXzWdYwV3aMC/hvgU1LEyMHHnHDFO9pYJreSPLzgnQzrSiVpufRg YapayBF3+yxtc+8vuHilglKXAfdt+OM0/UHMAAAA=
+X-Change-Id: 20261102-lskel-struct-ops-03090424cfa2
+X-Mailer: b4 0.14.3
+Message-ID: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
+Subject: [PATCH RFC bpf-next 0/7] bpf: Support struct_ops in light skeletons
+From: Siddharth Nayyar <sidnayyar@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Giuliano Procida <gprocida@google.com>, 
+	Neill Kapron <nkapron@google.com>, "=?utf-8?q?Thi=C3=A9baud_Weksteen?=" <tweek@google.com>, 
+	Maxime Ripard <mripard@kernel.org>, Siddharth Nayyar <sidnayyar@google.com>
+Content-Type: text/plain; charset="utf-8"
 
---===============1898950710558378953==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+BPF light skeletons (bpftool gen skeleton -L) compile BPF object loading
+into a self-contained BPF_PROG_TYPE_SYSCALL loader program (gen_loader)
+embedded in a C header, removing any runtime dependency on libbpf or
+userspace BTF parsing. Currently, light skeletons do not support
+BPF_MAP_TYPE_STRUCT_OPS maps or BPF_PROG_TYPE_STRUCT_OPS programs
+because preparing a struct_ops map normally relies on libbpf parsing the
+target vmlinux or kernel module BTF in userspace to resolve type IDs,
+struct sizes, member byte offsets, and member indices.
 
-> sched_ext: Add scx_tickbug, a scheduler that holds a task on an idle CPU
+This series adds BPF_MAP_TYPE_STRUCT_OPS support for link-based
+(SEC(".struct_ops.link")) maps in light skeletons across both vmlinux
+and kernel module BTF targets:
 
-TL;DR:
-- Possible starvation of a task pinned to the target CPU until the sched_ext
-  watchdog unloads the scheduler
-- Question whether this debug scheduler belongs in tree
-- README tense and a sleepable-comment nit
+- Patch 1 adds a new bpf_btf_get_struct_member_info() helper for
+  BPF_PROG_TYPE_SYSCALL programs to query a struct's byte size (when the
+  member name is NULL) or a named member's byte offset and member index
+  from vmlinux or module BTF at load time.
+- Patches 2-5 wire up struct_ops initialization, map creation, program
+  loading, and map update in libbpf's gen_loader. At runtime, the loader
+  program resolves the kernel wrapper type bpf_struct_ops_<name> and
+  target <name> struct BTF IDs (and module BTF FDs) via
+  bpf_btf_find_by_name_kind(), queries struct sizes and member
+  offsets/indices via bpf_btf_get_struct_member_info(), constructs the
+  kernel vdata buffer in the loader data blob, passes the resolved BTF
+  metadata to BPF_MAP_CREATE and BPF_PROG_LOAD, and populates the
+  callback program FDs before issuing BPF_MAP_UPDATE_ELEM.
+- Patch 6 teaches bpftool to generate per-map skel_link_create() attach
+  functions and skel__attach() / skel__detach() plumbing for BPF_F_LINK
+  struct_ops maps in light skeletons, skips gen_st_ops_shadow() so the
+  light skeleton ctx layout is preserved, and rejects non-link
+  struct_ops maps.
+- Patch 7 adds light skeleton struct_ops selftests covering both vmlinux
+  (tcp_congestion_ops) and bpf_testmod (bpf_testmod_ops, including a
+  subset struct with reordered members, scalar fields, detach, and
+  re-attachment).
 
-> sched_ext: Add scx_tickbug, a scheduler that holds a task on an idle CPU
+Adding a new BPF helper and alternative kfunc approach
+======================================================
+I am aware that BPF helpers have been frozen for several years in favor
+of kfuncs. I propose adding bpf_btf_get_struct_member_info() as a BPF
+helper (restricted exclusively to BPF_PROG_TYPE_SYSCALL loader programs,
+alongside bpf_btf_find_by_name_kind()) because, to my knowledge, there
+is no better way to enable struct_ops support in light skeletons.
 
-Tejun Heo replied to the posting of this patch:
+Before settling on a BPF helper, I explored an alternative approach
+using a kfunc, which hit a roadblock. Calling a kfunc directly from the
+light skeleton loader program is not possible because kfunc calls
+(BPF_PSEUDO_KFUNC_CALL) require the target kfunc's BTF ID in insn->imm
+when the loader program itself is loaded, whereas light skeletons ship
+pre-generated loader bytecode without userspace BTF resolution. Although
+I was able to resolve a kfunc's BTF ID at runtime via
+bpf_btf_find_by_name_kind() and patch and load a separate BPF program to
+run the kfunc and gather struct_ops member info, running that program
+from the light skeleton loader required re-enabling BPF_PROG_TEST_RUN in
+bpf_sys_bpf(). Calling BPF_PROG_TEST_RUN from BPF programs was
+explicitly disabled in commit 86f44fcec22c ("bpf: Disallow bpf programs
+call prog_run command.") because the verifier cannot perform sufficient
+validation of the bpf_attr->test.ctx_in pointer.
 
-> this scheduler is more of an one-off debug code and I'm not sure we want
-> to carry this in tree. Maybe put it in a github gist or sth and point to
-> it from the fix patch?
+Non-link struct_ops support
+===========================
+I have not enabled non-link struct_ops programs/maps (SEC(".struct_ops")
+without BPF_F_LINK) in this series, though I intend to enable them in
+the future and can extend this series to support them if maintainers
+deem it necessary.
 
-I didn't see a reply to this.  Is the plan still to carry scx_tickbug in
-tools/sched_ext?
+I left non-link struct_ops out for now because in light skeletons,
+BPF_MAP_UPDATE_ELEM runs inside the loader program during skel__load().
+For non-link struct_ops maps, BPF_MAP_UPDATE_ELEM immediately registers
+and activates the struct_ops callbacks in the kernel before
+skel__attach() is called, prevents re-attaching after detach, and would
+leak an active registration if a later step in the loader program fails
+(since loader cleanup only closes FDs via bpf_sys_close() rather than
+issuing BPF_MAP_DELETE_ELEM). Supporting non-link struct_ops will
+require deferring BPF_MAP_UPDATE_ELEM to userspace skel__attach().
 
-> diff --git a/tools/sched_ext/README.md b/tools/sched_ext/README.md
-> --- a/tools/sched_ext/README.md
-> +++ b/tools/sched_ext/README.md
+AI assistance and testing
+=========================
+This series (code, selftests, commit messages, and cover letter) was
+developed interactively with an AI coding assistant (Google Gemini),
+with me guiding the design step by step across each patch and reviewing
+all changes.
 
-[ ... ]
+The series was built with clang/LLVM and tested in a QEMU x86_64 VM
+using test_progs (covering the new struct_ops_lskel selftests for both
+vmlinux tcp_congestion_ops and bpf_testmod_ops, as well as existing
+struct_ops and light skeleton tests), along with manual verification of
+loading and inspecting a struct_ops light skeleton via bpftool.
 
-> +This is a test scheduler, not a policy. It exists so that the idle-time
-> +bookkeeping skipped by an interrupt taken in that state can be measured.
+Feedback on the overall approach and on introducing this
+BPF_PROG_TYPE_SYSCALL helper is very welcome.
 
-The README says the scheduler measures the bookkeeping skipped by an
-interrupt in that state, which matches tick_irq_exit() at this commit.  The
-next commit in the series, 24b81cae8220 ("softirq: Treat an interrupted idle
-task as idle in tick_irq_exit()"), changes the gate so that skip no longer
-happens, and does not update this README.
-
-Meanwhile the header comment in scx_tickbug.bpf.c already says
-"tick_irq_exit() used to ask idle_cpu()", which is past tense.
-
-Could the README say that the scheduler reproduces the condition handled by
-the tick_irq_exit() change and can be used to check it, and could the README
-and the BPF header comment use the same tense?
-
-> diff --git a/tools/sched_ext/scx_tickbug.bpf.c b/tools/sched_ext/scx_tickbug.bpf.c
-> --- /dev/null
-> +++ b/tools/sched_ext/scx_tickbug.bpf.c
-
-[ ... ]
-
-> +void BPF_STRUCT_OPS(tickbug_dispatch, s32 cpu, struct task_struct *prev)
-> +{
-[ ... ]
-> +	if (cpu == target_cpu) {
-> +		if (release_now) {
-> +			release_now = false;
-> +			if (release_one())
-> +				return;
-> +		}
-> +
-> +		/*
-> +		 * Leave @target_cpu in the idle loop for as long as it is
-> +		 * holding something. Taking shared work here would end the
-> +		 * idle stretch under test, and the hold reported for the task
-> +		 * would cover time the CPU spent running.
-> +		 */
-> +		if (nr_held_now)
-> +			return;
-> +	}
-
-Can this starve an untagged task that is pinned to @target_cpu?
-
-tickbug_enqueue() sends everything except per-CPU kthreads and
-SCX_ENQ_LAST tasks to SHARED_DSQ, which includes a user task pinned with
-something like taskset -c 0.  While nr_held_now is non-zero, the early
-return above skips:
-
-    scx_bpf_dsq_move_to_local(SHARED_DSQ, 0);
-
-and no other CPU can consume that task, because it fails
-task_allowed_on_cpu() there.
-
-nr_held_now can stay non-zero at every dispatch when two tagged tasks hand
-off to each other.  For example, A wakes B and blocks; B's wakeup on
-@target_cpu is held, so nr_held_now is 1; ops.dispatch(target_cpu) returns
-early and the CPU idles; the timer releases B, B wakes A, A is held, B
-blocks, and so on.
-
-The pinned task would then sit on the runnable list until the watchdog
-(timeout_ms of 5000) raises SCX_EXIT_ERROR_STALL and unloads the scheduler,
-which doesn't match the commit message's "the machine stays usable".
-
-Would sending any task with nr_cpus_allowed == 1 to SCX_DSQ_LOCAL, as is
-done for per-CPU kthreads, address this?
-
-[ ... ]
-
-> +s32 BPF_STRUCT_OPS(tickbug_init_task, struct task_struct *p,
-> +		   struct scx_init_task_args *args)
-> +{
-> +	struct task_ctx *tctx;
-> +
-> +	/* Sleepable, so this allocation can use GFP_KERNEL. */
-> +	tctx = bpf_task_storage_get(&task_ctx_stor, p, 0,
-> +				    BPF_LOCAL_STORAGE_GET_F_CREATE);
-
-This isn't a bug, but is this comment accurate?  tickbug_init_task() is
-declared with BPF_STRUCT_OPS(), not BPF_STRUCT_OPS_SLEEPABLE() as scx_qmap
-and scx_sdt do for their init_task, so the program isn't sleepable.
-
-Also, since commit 136deea435dc ("bpf: Remove gfp_flags plumbing from
-bpf_local_storage_update()"), bpf_task_storage_get() allocates with
-bpf_map_kmalloc_nolock() regardless of sleepability.
-
-Should the comment be dropped, or should the op be declared with
-BPF_STRUCT_OPS_SLEEPABLE() if sleepability was intended?
-
-
+Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Siddharth Nayyar (7):
+      bpf: Add bpf_btf_get_struct_member_info() helper
+      libbpf: Implement bpf_gen__init_kern_struct_ops() for light skeletons
+      libbpf: Support BPF_MAP_TYPE_STRUCT_OPS in bpf_gen__map_create()
+      libbpf: Support BPF_PROG_TYPE_STRUCT_OPS in bpf_gen__prog_load()
+      libbpf: Implement bpf_gen__struct_ops_update_elem() for light skeletons
+      bpftool: Generate attach and detach for struct_ops in light skeletons
+      selftests/bpf: Add light skeleton struct_ops tests
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42280840441
---===============1898950710558378953==--
+ include/linux/bpf.h                                |   1 +
+ include/uapi/linux/bpf.h                           |  13 +
+ kernel/bpf/btf.c                                   |  73 +++++
+ kernel/bpf/syscall.c                               |   2 +
+ tools/bpf/bpftool/gen.c                            |  71 ++++-
+ tools/include/uapi/linux/bpf.h                     |  13 +
+ tools/lib/bpf/bpf_gen_internal.h                   |   7 +
+ tools/lib/bpf/gen_loader.c                         | 297 ++++++++++++++++++++-
+ tools/lib/bpf/libbpf.c                             |  59 ++--
+ tools/lib/bpf/libbpf_internal.h                    |  26 ++
+ tools/testing/selftests/bpf/Makefile.skel          |   3 +-
+ .../selftests/bpf/prog_tests/struct_ops_lskel.c    | 122 +++++++++
+ tools/testing/selftests/bpf/progs/struct_ops_mod.c |  51 ++++
+ .../selftests/bpf/progs/struct_ops_vmlinux.c       |  42 +++
+ 14 files changed, 747 insertions(+), 33 deletions(-)
+---
+base-commit: 3e18218484126afb9da722080659c038cb2256ab
+change-id: 20261102-lskel-struct-ops-03090424cfa2
+
+Best regards,
+-- 
+Siddharth Nayyar <sidnayyar@google.com>
+
