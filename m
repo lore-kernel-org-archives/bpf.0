@@ -1,45 +1,82 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793955003;
-	b=5EVTh+hqLQt6WmYygJhS4WhRtnfUp749lhNkr8PB+bh9/mFSmKCgTLc59V+8gsbDEkAB
-	 39N0q5/v7D5fzxr9rUR/bF30qVaMA7SHdBSDM+2mG7u3xEknKQbZ1vYC+u9tOnGECAk5j
-	 /QOSm6z/4uMMhxajyhK8FyroFonPBJuhZGtHK6cZHQNN4kIqinMffeH9KeQZvXmibENKV
-	 p7kbteOGnDMcV69rOtN9kw4e+rPSI3cgrrnwFfIiifoG0CTCf26uZBx8lLRsrJeK5E5vV
-	 jZzNlJ7mNgCVPsu4kToGd083RShYBj8eqt4qF5QN+31aUXwTIhnh7hwyIRa24Z39EuA==
+	t=1793955920;
+	b=QslAtVg8k012F9h7lILIyb4/GdIl+TCOH6UGJgHdY2Qgup1/O8Jf2/oMF2hyXAzy4t/W
+	 ITTcG1gWdcnQX3AkQ5S0qWN1mpp6zn+d5iMcGpgLfSZIxshXMyACG+GCjghrOnVzUNhaP
+	 ugEkjIHlDZjTgA9NB0tFKvY0V248re+87G+eHgJA21Gw1ju64P/Wr56uoZcqaqL0Skc+1
+	 5tRqt/fAQoiw9HCBfivZMwqEL7PFC3xmY1NS7JnMJS5pto3Q442u0E1rWKWFGktASK2YP
+	 GuRXC12+5uL08nro4EBFtN0fdIqiUiQd0jNcTuwlDaPptLmglppFPjumL+8SYPhGyhg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793955003;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=SdF3Rp3aXseTSt7FOhdZEwPXaenKJclgaNBdiWfNt5U=;
-	b=qvrJzTZZTGSynD0/9eDesFyV3+XirR38DSmMh9NhZenWFD+NYvbi6CW5/haLGsCdggrV
-	 2DDn1Ky5EuL3BPQqrMqPwPWrmhv/e+V/MD9cnVFyDNZV6De4HKQVMaFmlqiVGgqFEVC+h
-	 BBu3AnIILQWRYmS005kXbNlRjV7FqE4IbZEpfNnIhlzfXkZFWx1zeID70dtxyG5K6WM/n
-	 eGUAAoOtgypVl6fxrwnnCuBuEUiJf0NvF6UlH6EDeirQmCVfZaKmbQWhKUAFBnA1wxeay
-	 HqMyFY4ZG90UJSYlg/gEEFyQfunIdhwKvOPJguRkauyix+LT+np9uqr9V69AhgMJ9dQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793955920;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=sTFwFHk0E64AYEEUcX8t7DWdOvQ6PLUQ/fthkL753Io=;
+	b=co3HGuB1ydbjedHMG5rirmR+goTF/au2ACxaLnTdW8qaXLngHNdgmEIanEbwwUx5nZQD
+	 IC/36H7XT/Qap51CtoS4lwUzEKk9pjAt5qxwpgIHPC2lqZaL7TZToLBnOPX2FmYFiq1Vq
+	 IlEAhNh8HDuIN2diHPLer3lBqvV0TQ4+ibT2ffQ/Q+6Ff595bh3l1tvqHO1S83zQOEX+i
+	 TBws8thjLpnrIemWglyC9dZKwiege9q2Pbt8H6hRzMLpIycCcAZmGyErkMLbVFibYJhG1
+	 LI0QDT6Ajyi1/+EdD4g0MWVVkm4QddlNrdKZ48pb0GQJ5jUEzb5clKoYduK0vxdC76g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rv1daKAp;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NxG4Yq28;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E1B606A32E;
-	Fri,  6 Nov 2026 08:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A18606A326;
+	Fri,  6 Nov 2026 09:05:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rv1daKAp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C18A1F0089F;
-	Fri,  6 Nov 2026 08:50:02 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NxG4Yq28
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C19F1F0089F;
+	Fri,  6 Nov 2026 09:05:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793955003;
-	bh=SdF3Rp3aXseTSt7FOhdZEwPXaenKJclgaNBdiWfNt5U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Rv1daKApPZsdy9p1MlRmXzwhKibB2xD8VaT/OpYZnlacG+jl0nEQ0gEmN+zeytTcG
-	 CD/KxGsG2A4chKOxahUbbr1vQwpvOf7OJo2L6Ig3JVTtWqkufmJNb6X8NxqF2ERut7
-	 N95K0Rju33TmZZ51i2IXNDJXZHsLvRG1FJ0lfZOTlqKj3fKKWdAMveS2GbLQqvfZPD
-	 3zE63W5EZmFkOJns0gdqXyu+Se/qis+aOLsBvdhB4J/ULoSCpmU3tRU+2/RUcDCMjQ
-	 zLat+wKlQjj+33KDQjdNfMq6BeY+Qsd5+T/nzoc7N8Ok9+ZN839+nGFubyeNv9oAEX
-	 BtCZVQtsOXcEQ==
-Content-Type: multipart/mixed; boundary="===============0514556948363618847=="
+	s=k20260515; t=1793955920;
+	bh=sTFwFHk0E64AYEEUcX8t7DWdOvQ6PLUQ/fthkL753Io=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=NxG4Yq28SBZ5pvwkOA2iAYG11qXpnj0/U/4mz8TRCJco0CmfcWsGatdxSJUI7EvJS
+	 APt/LCv5vmGrIstmtMDjefq9lAL6ZUkRdKAesed25zP6/6QYUzdu5k/UIsj8cOqjKW
+	 wxJgUyASJmfcUYRwu5Yxh+FSnuQu58iHYvNrMYjFgkGWoEygoLgJZz4v5OwDareFN7
+	 P1KpTDQ5mDTNlKcKNH37py/9Td+Amts88a/QdlKwM1JOBVjQm39I3NT1MlE26jZJHR
+	 WNphDN7M+CtPeL4Zq1+PqjL231Yj7MhdwF3uERuy/5ORsvDjS8hh73L5dk+n2nQwZV
+	 4H79poaACgWhg==
+Date: Fri, 6 Nov 2026 01:05:16 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: Hannes Reinecke <hare@suse.de>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
+Message-ID: <20261106090516.GA1973@sol>
+References: <20261105031401.956609-1-jarkko@kernel.org>
+ <20261105031401.956609-3-jarkko@kernel.org>
+ <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,98 +86,30 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <b7b3f0926c35e8192180326438de9b6c119125a50ffb23b8d5754f31f47a999c@mail.kernel.org>
-In-Reply-To: <20261106080746.661431-1-yangfeng59949@163.com>
-References: <20261106080746.661431-1-yangfeng59949@163.com>
-Subject: Re: [PATCH bpf-next v5 1/2] bpf: Add sleepable version of bpf_get_stack in raw_tp_prog_func_proto and tp_prog_func_proto
-From: bot+bpf-ci@kernel.org
-To: yangfeng59949@163.com,song@kernel.org,jolsa@kernel.org,ihor.solodrai@linux.dev,kpsingh@kernel.org,matt@bobrowski.net,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,emil@etsalapatis.com,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com
-Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 08:50:02 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <27015846-0161-4700-b810-4643e1f7b63a@suse.de>
 
---===============0514556948363618847==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Fri, Nov 06, 2026 at 09:21:32AM +0100, Hannes Reinecke wrote:
+> While I am pretty much in favour with this approach, is there a specific
+> reason why siphash has been chosen?
 
-> bpf: Add sleepable version of bpf_get_stack in raw_tp_prog_func_proto and tp_prog_func_proto
+SipHash is the preferred choice for secure hash tables.  It is secure,
+performs well on short inputs, and doesn't require special instructions.
+See Documentation/security/siphash.rst
 
-TL;DR: Marking the new sleepable bpf_get_stack prototypes might_sleep may make
-the verifier reject sleepable programs that load today, e.g. calls inside
-rcu_read_lock regions, even without BPF_F_USER_BUILD_ID.
+> Would there be a chance to make this configurable?
+> I do see slight complications when running in secure environments
+> (ie FIPS-certified environments) where most of the hash functions
+> might not be available ...
 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
+SipHash support is available even when the kernel is booted with fips=1,
+so there's no issue there.  It's already widely used in the kernel for
+hash tables, and that hasn't blocked FIPS certifications either.
 
-[ ... ]
+Side note: fips=1 actually has little do with security, and in some
+cases it actually decreases security.  See for example
+https://lore.kernel.org/linux-crypto/20261026183332.11402-1-ebiggers@kernel.org/
+where I'm fixing a vulnerability caused by fips=1.
 
-> @@ -1725,7 +1774,8 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->  	case BPF_FUNC_get_stackid:
->  		return &bpf_get_stackid_proto_raw_tp;
->  	case BPF_FUNC_get_stack:
-> -		return &bpf_get_stack_proto_raw_tp;
-> +		return prog->sleepable ? &bpf_get_stack_proto_raw_tp_sleepable
-> +				       : &bpf_get_stack_proto_raw_tp;
->  	case BPF_FUNC_get_attach_cookie:
->  		return &bpf_get_attach_cookie_proto_tracing;
->  	default:
-
-Can this make sleepable programs that load today fail to load?
-
-The new prototypes set .might_sleep = true, and check_helper_call() rejects
-such a helper whenever in_sleepable_context() is false:
-
-    if (fn->might_sleep && !in_sleepable_context(env)) {
-            verbose(env, "sleepable helper %s#%d in %s\n", ...);
-            ...
-            return -EINVAL;
-    }
-
-in_sleepable_context() is false inside bpf_rcu_read_lock(),
-bpf_preempt_disable(), bpf_local_irq_save() and lock regions, and inside
-rcu callbacks such as bpf_for_each_map_elem() on hash maps and
-bpf_find_vma().
-
-Before this patch the same call resolved to bpf_get_stack_proto_raw_tp or
-bpf_get_stack_proto_tp, which do not set might_sleep and never fault.  For
-example:
-
-    SEC("lsm.s/file_open")
-    int prog(void *ctx) {
-            bpf_rcu_read_lock();
-            bpf_get_stack(ctx, buf, sizeof(buf), 0);
-            bpf_rcu_read_unlock();
-            return 0;
-    }
-
-loads today and would be rejected with "sleepable helper bpf_get_stack#67 in
-rcu_read_lock region".
-
-The call chain is bpf_lsm_func_proto() -> tracing_prog_func_proto() ->
-raw_tp_prog_func_proto().  The same applies to sleepable raw_tp,
-tracepoint, fentry/fexit/fmod_ret, fsession and iter programs.  It also
-applies to every BPF_PROG_TYPE_SYSCALL program, since check_attach_btf_id()
-forces those to be sleepable.
-
-The rejection happens even when BPF_F_USER_BUILD_ID is not passed, so the
-helper could not sleep in those calls.
-
-The commit message acknowledges this ("such programs load today") and cites
-commit 9d02927fdf4e as precedent.  That commit fixed prototypes that could
-actually sleep in non-sleepable regions, whereas here the old prototypes
-were correct.
-
-The verifier already records per-insn non-sleepable call sites in
-env->insn_aux_data[insn_idx].non_sleepable, and specialize_kfunc() uses
-that to pick bpf_arena_alloc_pages_non_sleepable().  Could the non-faulting
-implementation be selected the same way at fixup time for call sites that
-are not always sleepable, instead of rejecting them?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42188184517
---===============0514556948363618847==--
+- Eric
