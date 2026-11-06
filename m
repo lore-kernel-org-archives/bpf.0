@@ -1,96 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793940170;
-	b=kxX96UilDJmrSWKWWMAQhWG1jPNbH9q9FSbFaBGMMTt5wMHqP6XwG27SxjCuq5yyGNgk
-	 6S5Zh/dmHt6iwqdSbfRhidSeUeuuyu/NxW6y/CVg2W2NNWYzVBePxgSFSIPd+imEALfZ3
-	 9zOUDfa8GBYdxKdKSeeSOgLMnhro9JBYxQVFS/dsMuSvA+4qzPzVrK0yL6ANQqznlGiFf
-	 fvEDCv/2Wxn6NiRpgAOb5a6kcP/Uvs8ER0ayR2vJMJ5JnhZg9PubygbkfCtr6eFQ5hTS6
-	 9nDiXifzwT0HHB9Q92fd2rjWcdgyrsB04fJT+XsHy7NN5hXdaMSUQUNIa3I/0dmTLtQ==
+	t=1793940593;
+	b=MXz2M2gltdnIA5gce/V/Q00X/pAh/BBoHIH7zuNG7Roc9bwGWvqoHjvi3Pv3arXuuhDM
+	 4eObTDNHW/d28XwPtBWMLARjhBlXQzpUk0Z7rBeIrY6hyQzkTiRMvtDAYS1DqC34dEbgv
+	 3NhVk8MJVEqsXCPceRZcHOrq5EhLwBrPD5pqW3iN6MpscMfnPTilmwF7gbSta82HqmB+5
+	 PGDEHDDpXDIFNXroAd6yUfKWsxB/xNJNFvXukk1w11yMx3n3lMCeQj8iHN3wMHF780fbI
+	 Qh47U0O/fWETpnAEzo4P+elDTO875I27g8UDqPrTiMCiYP3vM736CD0LYUkozL8X9Xg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793940170;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:To:Cc:Subject:
-	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=mGYz6T1YNtMToOuFFVV8f16Yx1jlDiaTue13r3kuigI=;
-	b=WBs/DhXNtglPX2izeFrNy9+Ojy1mx1wD0nNC8HjqtdBho0uHjQJTZjTmL6ec8JZ5sSAi
-	 vGjeTdmxJuEwTcXEPRUyAL1z6YqiONNNRFqVmX29S77Zo/UhCoa/JG+KUGc2mTbyyfK5l
-	 P+uCk9N8k+Bh3zivNGKPB6jLUi9SVNRa5vdVkclRz7k9lwRA0RGfMdQXxFamcw8PzBn5R
-	 l6aKkMN32vbLAk9NHEMGA3uNjcBm9CYPFvIbnS5oGTmk4P6/OXImQSTlDV9xUHmbk2C0o
-	 1FydS4kUnxVjwhU2LkA7DZWF3dQPdAHiINX997bngslvCQfGp+YECowuB/jGWmRGgUQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793940593;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=zjkdK5WQIF85WZ1IAE+DDAiDdjJ9qi8NtmjMhGkm5Zk=;
+	b=3S5MgKfnwIkiNsi0iVH8JFDdj04Ct08kGgt+6Y6AokJm2J+szX5yL+r7Bowg91j7FPoZ
+	 7XvVHYzUOcTJ9h3XC3opj2qbGd7+ibN12yqm34op0JuM0CdkZnvbh/D83QTCS3oUCzpFa
+	 w8DcjNfWo/kopMwJ5ykzd6kNxS7TK0tBbL8wuoPCR0+J9jCqsnXgKgjigtTklzIXQitGW
+	 7Dtu6/fLqxtsKw1FtbXAszPPO4QtCqDbPlPcIFOMQVCq2W+isTsPASbin86I5u3h9a4mu
+	 TVGa+JkjTWfW9Szrr4eEBkJ/ShEneFWn5P4C3zuZKDmm7xYiO8B7sQtx4VM2Im24QKA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=fv8ssbJE;
-	arc=none smtp.remote-ip=198.175.65.20
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YJnyCocB;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 437A4606A333;
-	Fri,  6 Nov 2026 04:42:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 437A4606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB6C606A331
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=fv8ssbJE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793940158; x=1825476158;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AutAiSLbDQHs4raNcef64NvICMZipClIevHqdZQdR4U=;
-  b=fv8ssbJE6vHJcnc79LmfTISR0ayWQRofUg/WZ4glMwz6s0HGxv9o1Wlh
-   jS78lhOT3B0tl9SDpNEQp8Mjf846x7+S7p0II/CuAl9vdonQmMyHC0nuk
-   HTr8AZ9yLURGiRobaisw2bFUBgbY7tkSFNP7rNDHJHEzyDfdBple3IQIH
-   suQIm18BN1a7peSNxxC57L8cCNeds3BeF6WDqsBfifyc4sLIYKJmtnB9u
-   023WScTkeeDCPaz/6C/YCw+BxUEnOqeK/cjaOtWeyron7r1U58nyosMyt
-   092TCWm9AJnEpzIHs4zuFpVH1N9Z7pE0gncaBCXrV1tsxuUcVTQTK7UDV
-   g==;
-X-CSE-ConnectionGUID: UGYCLwCuT9mmxiFxsFw8kA==
-X-CSE-MsgGUID: ajLWMGCHSOmnulMJ4LVkZA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11957"; a="2780953"
-X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="2780953"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 20:41:58 -0800
-X-CSE-ConnectionGUID: 2KDr0F2OTvmYWp5n3Lzqlw==
-X-CSE-MsgGUID: S3n3Rm5nQvmQ3iQ5RWi6Eg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
-   d="scan'208";a="7223021"
-Received: from spr.sh.intel.com ([10.112.229.196])
-  by orviesa001.jf.intel.com with ESMTP; 05 Nov 2026 20:41:53 -0800
-From: Dapeng Mi <dapeng1.mi@linux.intel.com>
-To: Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Andi Kleen <ak@linux.intel.com>,
-	Eranian Stephane <eranian@google.com>,
-	Sandipan Das <sandipan.das@amd.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Ananth Narayan <ananth.narayan@amd.com>
-Cc: linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Dapeng Mi <dapeng1.mi@intel.com>,
-	Zide Chen <zide.chen@intel.com>,
-	Falcon Thomas <thomas.falcon@intel.com>,
-	Xudong Hao <xudong.hao@intel.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	Sashiko <sashiko-bot@kernel.org>
-Subject: [Patch v6 17/20] perf/x86/intel: Clear raw LBR counters in the LBR stack
-Date: Fri,  6 Nov 2026 12:32:54 +0800
-Message-Id: <20261106043257.842864-18-dapeng1.mi@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261106043257.842864-1-dapeng1.mi@linux.intel.com>
-References: <20261106043257.842864-1-dapeng1.mi@linux.intel.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YJnyCocB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E871F008A1;
+	Fri,  6 Nov 2026 04:49:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793940592;
+	bh=zjkdK5WQIF85WZ1IAE+DDAiDdjJ9qi8NtmjMhGkm5Zk=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=YJnyCocBFaBvmHkduh+Zo9IlcQC+X4e7jVtHQATCp0y/i1Db572HbDoWoVl0Nmfyn
+	 oiQjccbD+kJjFnjpTnFJgiEhiz/l5b8KzFVjVQZDalyFNG0HD8vvw3xa/83iqUWeS2
+	 oZxyv6Nkt6GpWLHlhCulkwim+lqq9J/+9okV1iGys7CyMRmk6nGjDDV8mS1hv3Llue
+	 MADckBhACuS3VYM6lUWjtWS3DydJKRGgdGtBlkHxEKlc4BNhkfseJIigpvnVTs30Q7
+	 M3sVdqQ+McW2tRo2jl9l0LWHbZ7vrgu6vLMg2LpDICv+Zy/Yf/SvOmZFhe7DiDYR4L
+	 us28P3FYPO5Jw==
+Message-ID: <sashiko-outbox-200769@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 27/45] bpf: Track a pointer to one of a set
+ of functions
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261106035111.3315285-28-alexei.starovoitov@gmail.com>
+References: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
+ <20261106035111.3315285-28-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 06 Nov 2026 04:49:52 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,82 +59,118 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Raw LBR counters are currently stored in the reserved fields of the LBR
-stack even when no LBR event needs them.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: unconditional R1-R5 split in do_check_insn() causes state e=
+xplosion
+--
 
-If an LBR counter event is present, it clears the raw LBR counters while
-processing the stack, but those counters can be leaked to userspace when
-no LBR event requires them. Clear the raw LBR counters when no LBR event
-uses them.
+commit 75a36349ee42f80ce6f3c17dd0dfc5718a853221
+Author: Alexei Starovoitov <ast@kernel.org>
 
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Fixes: 33744916196b ("perf/x86/intel: Support branch counters logging")
-Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
----
- arch/x86/events/intel/core.c |  1 +
- arch/x86/events/intel/lbr.c  | 13 +++++++++++++
- arch/x86/events/perf_event.h |  2 ++
- 3 files changed, 16 insertions(+)
+bpf: Track a pointer to one of a set of functions
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index b267c68f9467..707bff285ed7 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -2835,6 +2835,7 @@ __intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries,
- 		(struct perf_branch_stack *)bpf->__lbr_stack;
- 
- 	intel_pmu_lbr_read(lbr_stack, bpf->counters);
-+	intel_pmu_lbr_clear_counters(lbr_stack);
- 	cnt = min_t(unsigned int, cnt, lbr_stack->nr);
- 
- 	memcpy(entries, lbr_stack->entries,
-diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-index 3500cf3518f4..fbc053ebbeaf 100644
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -987,6 +987,18 @@ static void intel_pmu_lbr_counters_reorder(struct cpu_hw_events *cpuc,
- 	}
- }
- 
-+void intel_pmu_lbr_clear_counters(struct perf_branch_stack *lbr_stack)
-+{
-+	int i;
-+
-+	if (!(x86_pmu.flags & PMU_FL_BR_CNTR))
-+		return;
-+
-+	/* reserved field stores raw branch counters, clear it. */
-+	for (i = 0; i < lbr_stack->nr; i++)
-+		lbr_stack->entries[i].reserved = 0;
-+}
-+
- void intel_pmu_lbr_save_brstack(struct perf_sample_data *data,
- 				struct cpu_hw_events *cpuc,
- 				struct perf_event *event)
-@@ -997,6 +1009,7 @@ void intel_pmu_lbr_save_brstack(struct perf_sample_data *data,
- 		return;
- 	}
- 
-+	intel_pmu_lbr_clear_counters(cpu_lbr_stack(cpuc));
- 	perf_sample_save_brstack(data, event, cpu_lbr_stack(cpuc), NULL);
- }
- 
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index 0213e2a8efff..a4e53c99eaf5 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -1984,6 +1984,8 @@ void intel_pmu_store_pebs_lbrs(struct lbr_entry *lbr);
- 
- void intel_pebs_init(void);
- 
-+void intel_pmu_lbr_clear_counters(struct perf_branch_stack *lbr_stack);
-+
- void intel_pmu_lbr_save_brstack(struct perf_sample_data *data,
- 				struct cpu_hw_events *cpuc,
- 				struct perf_event *event);
--- 
-2.34.1
+This commit tracks a pointer read from a function table as a single
+register state representing a set of target functions (func_set) instead
+of branching states at the load instruction. The function set is later
+expanded into individual function targets when a callx instruction or a
+helper/kfunc call requires a specific function.
 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 437a3fc03d0bf..41500f03b41be 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -12028,13 +12072,93 @@ static int check_func_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+[ ... ]
+> +/* The insn needs to know the function: go on with each function of the =
+set. */
+> +static int split_func_set(struct bpf_verifier_env *env, int regno)
+> +{
+> +	struct bpf_reg_state *reg =3D reg_state(env, regno);
+> +	struct bpf_verifier_state *branch;
+> +	struct bpf_func_set *set;
+> +	u32 i;
+> +
+> +	if (reg->type !=3D PTR_TO_FUNC || !reg->func_set)
+> +		return 0;
+> +	set =3D env->func_sets[reg->func_set - 1];
+> +	reg->func_set =3D 0;
+> +	for (i =3D 0; i < set->cnt; i++) {
+> +		reg->subprogno =3D set->subprog[i];
+> +		if (i =3D=3D set->cnt - 1)
+> +			break;
+> +		branch =3D push_stack(env, env->insn_idx, env->insn_idx, false);
+> +		if (IS_ERR(branch))
+> +			return PTR_ERR(branch);
+> +	}
+> +	return 0;
+> +}
+[ ... ]
+> @@ -20952,6 +21068,12 @@ static int do_check_insn(struct bpf_verifier_env=
+ *env, bool *do_print_state)
+>  				return check_func_callx(env, insn, &env->insn_idx);
+>  			if (insn->src_reg =3D=3D BPF_PSEUDO_CALL)
+>  				return check_func_call(env, insn, &env->insn_idx);
+> +			/* a callback is one function */
+> +			for (i =3D BPF_REG_1; i <=3D BPF_REG_5; i++) {
+> +				err =3D split_func_set(env, i);
+> +				if (err)
+> +					return err;
+> +			}
+>  			if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL)
+>  				return check_kfunc_call(env, insn, &env->insn_idx);
+>  			return check_helper_call(env, insn, &env->insn_idx);
+
+[Severity: Medium]
+In do_check_insn(), split_func_set() is called unconditionally across all
+registers BPF_REG_1 through BPF_REG_5 before every kfunc and helper call,
+without checking whether the register is actually a callback argument or
+even live at env->insn_idx.
+
+Within a basic block, helper and kfunc calls that do not invoke synchronous
+callbacks do not have a flow point set, so do_check_block() steps into the
+call instruction without running bpf_flow_deliver() or
+bpf_clean_verifier_state():
+
+  do_check_block()
+    do_check_insn()
+      split_func_set()
+
+If a caller-saved register in R1..R5 was loaded with a func_set of size N
+earlier in the block and copied to a callee-saved register R6..R9 or
+spilled to the stack before a helper or kfunc call that does not overwrite
+that register, the dead register still holds PTR_TO_FUNC with reg->func_set
+set when reaching the call.
+
+In that case, split_func_set() clones env->cur_state N - 1 times onto
+env->head at env->insn_idx. After env->cur_state finishes the call,
+flow_drain() delivers those N - 1 states to env->insn_idx, allocating N - 1
+flow_state objects, cleaning the dead register in flow_arrive(), and queuing
+a duplicate pending state at env->insn_idx that re-verifies the call and the
+rest of the basic block a second time.
+
+Furthermore, if a second register in R1..R5 is marked live in
+live_regs_before at the call while also holding a func_set, looping over
+BPF_REG_1..BPF_REG_5 splits both registers and produces all N * N
+combinations at env->insn_idx. For example, bpf_timer_set_callback_proto
+sets arg3_type =3D ARG_PTR_TO_PROG_AUX, which causes bpf_get_call_summary()=
+ to
+set arg_slot_cnt =3D 3 and compute_insn_live_regs() to mark R3 live in
+live_regs_before even though the BPF program only passes R1 and R2. If a
+program loads a callback from a table of N >=3D 33 functions into R3 and
+copies r2 =3D r3 before calling bpf_timer_set_callback(), splitting both R2
+and R3 creates N * N >=3D 1089 unjoinable states at env->insn_idx, exceeding
+BPF_FLOW_MAX_STATES (1024) in flow_merge() and failing verification with
+-E2BIG.
+
+Should split_func_set() only be invoked for registers that correspond to
+actual callback arguments (such as inside check_func_arg() /
+process_kf_arg_ptr_to_func(), or gated on the call prototype and
+live_regs_before)?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106035111.3315=
+285-1-alexei.starovoitov@gmail.com?part=3D27
