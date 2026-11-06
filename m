@@ -1,56 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.20
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793939942;
-	b=F7FxJqbkEJ3PT/6mcG77ASuFlidlFg+kbEQnzzvb1f3k3FMeSv5Bxsktn1nHDr13I2BO
-	 7qkTDQvAzm7FRZkuUU216BcDIaOl5eQOXs5jYFaFUezbk9pl3WWJjYaq1cUsn0TnJzmcI
-	 r0y65+RUBlIs80cSI/SqreeT8QuvX8LdhKq/+RbtNM59maUftI6gitpG5EZldEJl43B+E
-	 dF2yzZD9yswbgmVcAQ57Bso0bXsIROZLUDsYz+oR657L33XxTU0iB3JPr65/LE7SqFc/g
-	 kCG/h03bQ/vsrhzurhSw8I1QpmMGsydVpHDUYt8dvOhk5CXMzAMRfDqRJTa8Ej21iow==
+	t=1793940042;
+	b=rC5sbdbfBdypHTRn8QOINd/MX5wVhqqo4VsfQr/N/51Yq5+pBWpf/cHhE/TSEidQf+3Q
+	 3Jo7abQ6nVb7SuQzjgBKmDycIdYS7aS+GjL9ofKgeB7AfPFPOv3onWlhAWCwFSqcovO+t
+	 +CR/DO2jNnO2Raqb9VNLn4yoEFGN76jfpRbcPRDNY4a87ndMAK/wbYUwpB5vMVdK6CEoe
+	 lnF68bcIfConvVT/c74Tyv5X9XRHhOEQcZ3PhygxkCLClUjocDn3wXpGlLIufbzshBm1E
+	 NcBkpEP/SewPaIJ8WjSrkfYrOnrDtA7KaevKmet2FC8JFRpHAfCF3bwysGKEo7DEd8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793939942;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=VOJjBzn4AV9PRW1uo3Xv8K0iClZahjuRJTiWVNiR7qU=;
-	b=zzfksmLJ1kBEsrGugazZESTLgf7sNGKfYv6XO3brS9m4VpIsJuOqO5oHDbUF+raDBsr5
-	 xBwQRgNf9ZIPc7pmka2O6tFSzZrGByXHOGFSXb6rd6T53Ewgn0+kDpXunwIZOZfqUSgm6
-	 f6k1FFVXuvT2sbPyTL0B4DEgDwBLBRZ2ADsKDTuullTQSkEkD+5IH0t8obrN6+TcNJMHq
-	 AJN4/qhdVuWAZFr/ypzwIy2cjcF/rh+FaqipWvOx7txdFGgwokOncMaXejXXpzSCmwTKf
-	 98pdfamsdc1q9v1GNbOTAiVf2OhKeEvLB79kq+LiqhJP37KKUzbzk1IIuuDiEZ6izdA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793940042;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:To:Cc:Subject:
+	 Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=38xsRjUVpTk5MTWYXOKfHxRiYMYC1FW8wR80sH53ays=;
+	b=0/gmp0nrj4ZEhWPjhNYVrM80KBKpZoN1RsJ1mbt0GHsbZGfZRQj65qh42FD5M/Uq33M7
+	 NWn6Gxx5jY0b5XKzmKmZ2yvMhjhSuTLiMydzjL9sAAPCRXiaHWsYTcygaVtmOOY9hJbQc
+	 zQXKzL+cixfpFA0CcyAFsLzwGjicH7/Ze3Tx2zfsYQCGtRj2Gp1saY/jVL14ViCk0D0Yh
+	 wflhzqp0K5KsZDbzYD/K4xo+4FLlaSEsi4xmMY0DyFHpflq5v1Gncpw+xzkpcQ4OeuqlT
+	 XPgbPk2q1pE9kOqwJ1iKf8BNM4qul/9aMKiq94sUoQsDaJ1GZk+20a6wUxP11eXg/3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZfeGFUdK;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.intel.com;
+	spf=pass smtp.mailfrom=linux.intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=N4dZLN5c;
+	arc=none smtp.remote-ip=198.175.65.20
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A9CC606A326
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:39:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADCF606A31B;
+	Fri,  6 Nov 2026 04:40:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9ADCF606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZfeGFUdK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 821CE1F008A1;
-	Fri,  6 Nov 2026 04:39:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793939941;
-	bh=VOJjBzn4AV9PRW1uo3Xv8K0iClZahjuRJTiWVNiR7qU=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=ZfeGFUdKf2IRCb4jM4Z1hrui+nAwDsOZcomP4bnKNKqFmiL3rHMsjlZ30yHHHfk+v
-	 0denOCh3T38J1SoYbFnPH5Flc+nuV352ilJqadowF07neZdA/fRDqpf8/OkETInLaS
-	 SkIHRAnw0BtughvJeUonHwp/ZA04c20CSoMM4I1SyiCfP8izq6e17yCuC83DAL6Nnh
-	 6XcwSE0TombIFCIWoHI+YnFlZm1r3dCu1rkFx9e+1k5PYNIM6x8D9zobSggVgwV4Eo
-	 30whZ87YZ9KFiOKMrIGVwQrqx8bh9hyaVwjfytitMaIHSQBRxSuLVVNtBm6VrufllF
-	 Ex4/4gg8eJ4hg==
-Message-ID: <sashiko-outbox-200746@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 04/45] bpf: Add join of registers and stack
- slots
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261106035111.3315285-5-alexei.starovoitov@gmail.com>
-References: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
- <20261106035111.3315285-5-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 06 Nov 2026 04:39:01 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=N4dZLN5c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793940042; x=1825476042;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yUmvJS23SZ9gjuUYLE7qxDR+CEmbJJZlZ9g9vdHfK98=;
+  b=N4dZLN5c2qAS7h+27beC7KLl55u4mwGJZCu5haUHDQu/dST0gfnuBV1V
+   s45evkjnobfJlDkawNlYokfaiYE5lkCpgouMkFsigcOqle/Ilvgen4Iuf
+   2OMmEe/1JpNfvh6ysd9jYfFK7VjqsCCi1e4WcpcuF+owzdVflR1kzLvvM
+   Vk3U97Dx6CKfJu37lxZ45yki7Qs9+5QYw5CyvrZWr/mNNq6g+usc1UTbU
+   s0a+nfJPHm3S3+TeP59DRQ922iuHwSO7o4NEPO3UIFNCgkf0vjuT+4RSv
+   lZ2myoFqfYopF+Qnx/cgRXf/llL/vOpiPEYRn6HGMDHzvF+0mlBF7yN4T
+   Q==;
+X-CSE-ConnectionGUID: h24fZhCORvmjEoCjHkH9Sw==
+X-CSE-MsgGUID: njBbnrPeTCOO2+raDhT8ig==
+X-IronPort-AV: E=McAfee;i="6800,10657,11957"; a="2780731"
+X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
+   d="scan'208";a="2780731"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2026 20:40:40 -0800
+X-CSE-ConnectionGUID: cXotcSjCRTeRS3FAMHIR+g==
+X-CSE-MsgGUID: j+tgGIM3Rg+sR+YqBbu63A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,197,1787036400"; 
+   d="scan'208";a="7222801"
+Received: from spr.sh.intel.com ([10.112.229.196])
+  by orviesa001.jf.intel.com with ESMTP; 05 Nov 2026 20:40:35 -0800
+From: Dapeng Mi <dapeng1.mi@linux.intel.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Eranian Stephane <eranian@google.com>,
+	Sandipan Das <sandipan.das@amd.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Ananth Narayan <ananth.narayan@amd.com>
+Cc: linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Dapeng Mi <dapeng1.mi@intel.com>,
+	Zide Chen <zide.chen@intel.com>,
+	Falcon Thomas <thomas.falcon@intel.com>,
+	Xudong Hao <xudong.hao@intel.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>
+Subject: [Patch v6 00/20] perf/x86: Fix multiple LBR sampling issues 
+Date: Fri,  6 Nov 2026 12:32:37 +0800
+Message-Id: <20261106043257.842864-1-dapeng1.mi@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,109 +95,139 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: join_reg() zeroes dst->delta under explore_alu_limits, fail=
-ing regsafe()
---
+This patch series fixes several x86 LBR sampling issues discovered during
+review and debugging. Most of them are related to BPF LBR snapshotting
+support.
 
-commit 909a8651c00556d259164c0f04d677d2fd83cfc0
-Author: Alexei Starovoitov <ast@kernel.org>
+The series originally targeted the BPF stack out-of-bounds access issue,
+but additional problems were found during debugging and code review,
+including:
+- PMU and LBR being re-enabled unconditionally at BPF snapshotting exit,
+  even when they had already been disabled before BPF snapshotting on both
+  AMD and Intel.
+- LBR not being fully frozen in the PMI handler on Intel, which allows
+  branches in the PMI path to pollute the BPF LBR snapshot.
+- BPF snapshotting overwriting the cached LBR stack of PEBS LBR events on
+  Intel.
+- PEBS LBR events overwriting the LBR stack of non-PEBS LBR events on
+  Intel when both overflow in the same PMI.
+- LBR counter events reporting zero counters on Intel when multiple
+  LBR counter events overflow in the same PMI.
 
-bpf: Add join of registers and stack slots
 
-This commit adds the first half of verifier state joining in
-kernel/bpf/join.c to merge scalar registers, pointer variable offsets, IDs,
-and stack slots across execution paths, along with linear register tracking
-in kernel/bpf/scev.c for loop widening.
+Patch layout:
+- Patch 01: Add a sanity check to ensure the LBR stack does not exceed
+  MAX_LBR_ENTRIES.
+- Patch 02: Validate that hardware LBR data has actually been stored in
+  the XSAVE area before parsing it.
+- Patch 03-04: Fix the potential LBR stack out-of-bounds access issue on
+  AMD and Intel separately.
+- Patch 05-08: Fix the incorrect PMU and LBR re-enabling issue
+  in perf_snapshot_branch_stack() for AMD and Intel separately.
+- Patch 09: Freeze LBR throughout the PMI processing period and ensure
+  all LBR events observe a consistent LBR stack in the PMI handler.
+- Patch 10: Add counted bounds tracking for perf_branch_stack{}.
+- Patch 11-12: Add a dedicated LBR stack for BPF LBR snapshotting to avoid
+  overwriting the default LBR stack of other LBR events.
+- Patch 13: Ensure perf_snapshot_branch_stack() snapshots the live
+  hardware LBR data instead of the cached PEBS LBR stack.
+- Patch 14: Refresh LBR stack in PMI only when LBR users are active for
+  AMD.
+- Patch 15: Prevent PEBS LBR data from overwriting non-PEBS LBR data when
+  both overflow in the same PMI.
+- Patch 16: Remove dead lbr_pebs_users and relative code.
+- Patch 17-18: Ensure LBR counters are not dropped when multiple LBR
+  counter events overflow in the same PMI.
+- Patch 19: Clamp the parsed PEBS LBR stack depth to x86_pmu.lbr_nr to
+  avoid LBR stack out-of-bounds access.
+- Patch 20: Fix the shared LBR stack depth truncation issue.
 
-> diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
-> new file mode 100644
-> index 0000000000000..fe513b7a8e884
-> --- /dev/null
-> +++ b/kernel/bpf/join.c
 
-[ ... ]
+Changes in v6:
+- Patch 01: Move LBR stack depth validation into common
+  init_hw_perf_events(). (Peter)
+- Patch 10: New patch, add __counted_by() tracking for flexible array
+  entries[] of perf_branch_stack{}. (Peter)
+- Patch 14: Refresh LBR stack only when LBR users are active for AMD.
+  (Peter)
+- Patch 15: Refactor code to ensure no duplicated LBR stack reading.
+  (Peter)
+- Patch 16: New patch, remove dead lbr_pebs_users.
 
-> +static bool join_reg(struct bpf_join_state *js, struct bpf_reg_state *ds=
-t,
-> +		     const struct bpf_reg_state *ra, const struct bpf_reg_state *rb, i=
-nt pass)
-> +{
-> +	if (ra->type =3D=3D NOT_INIT || rb->type =3D=3D NOT_INIT) {
-> +		if (pass =3D=3D 2 && ra->type !=3D NOT_INIT)
-> +			*dst =3D *rb;
-> +		return true;
-> +	}
-> +
-> +	if (ra->type !=3D rb->type)
-> +		return false;
-> +
-> +	switch (base_type(ra->type)) {
-> +	case SCALAR_VALUE:
-> +		if (js->env->explore_alu_limits && !reg_value_equal(ra, rb))
-> +			return false;
-> +		if (pass =3D=3D 1) {
-> +			jid_note(js, ra->id, rb->id, scalar_link_consistent(ra, rb));
-> +			return true;
-> +		}
-> +		join_range(js, dst, ra, rb);
-> +		/* a link that exists on one side only is dropped */
-> +		if (ra->id && !jid_good(js, ra->id, rb->id)) {
-> +			dst->id =3D 0;
-> +			dst->delta =3D 0;
-> +		}
-> +		return true;
+Changes in v5:
+- Patch 02: Clear xsave->header.xfeatures before calling the xsaves
+  instructuion to read LBR states.
+- Patch 05-18: New patches to fix newly discovered issues described above.
 
-[Severity: Medium]
-As reported by bot+bpf-ci@kernel.org on v2 [1], in join_reg() in
-kernel/bpf/join.c, can dropping an unmatched or inconsistent scalar ID link
-under js->env->explore_alu_limits cause the resulting state to fail the
-subsumption check in regsafe()?
+Changes in v4:
+- Patch 01: Disable LBR if parsed x86_pmu.lbr_nr exceeds
+  MAX_LBR_ENTRIES (Sashiko).
+- Patch 05: New patch, which always snapshots live hardware LBR stack
+  for BPF path (Sashiko).
 
-When js->env->explore_alu_limits is true and two SCALAR_VALUE registers ra
-and rb have identical values prior to id (so reg_value_equal(ra, rb) is tru=
-e)
-with a non-zero constant delta (ra->delta =3D=3D rb->delta !=3D 0), pass 2 =
-of
-join_reg() zeroes dst->id and dst->delta if jid_good(js, ra->id, rb->id)
-returns false (for example, when one side has BPF_ADD_CONST64 and the other
-has BPF_ADD_CONST32, or when the base ID is paired with a different partner
-in another register).
+Changes in v3:
+- Patch 01: A new patch to ensure x86_pmu.lbr_nr not to exclude
+  MAX_LBR_ENTRIES (Internal Sashiko).
+- Patch 03: Clean cached LBR stack when reseting hardware LBR registers,
+  which prevents stale LBR stack leakage.
+- Patch 04: Don't reset cached LBR stack if all LBR events are PEBS
+  events. This ensures PEBS captured LBR stack isn't cleared (Sashiko).
 
-However, in struct bpf_reg_state in include/linux/bpf_verifier.h, the delta
-field is located before id:
+Changes in v2:
+- Include a fix for Intel LBR.
+- Add Tested-by from Dapeng to the Intel fix.
+  https://lore.kernel.org/all/eb6c7bda-0dcf-4fac-ad69-9f5b24abc21b@linux.intel.com/
 
-struct bpf_reg_state {
-	enum bpf_reg_type type;
-	s32 delta;
-	...
-	u32 id;
-};
+History:
+v5: https://lore.kernel.org/all/20261029043914.1395147-1-dapeng1.mi@linux.intel.com/
+v4: https://lore.kernel.org/all/20261021050711.4043703-1-dapeng1.mi@linux.intel.com/
+v3: https://lore.kernel.org/all/20261019070836.2972403-1-dapeng1.mi@linux.intel.com/
+v2: https://lore.kernel.org/all/cover.1792064123.git.sandipan.das@amd.com/
+v1: https://lore.kernel.org/all/20261007181002.4005262-1-sandipan.das@amd.com/
 
-When bpf_state_subsumes() checks the joined state via states_equal() ->
-regsafe() in kernel/bpf/states.c, the explore_alu_limits path compares all
-fields prior to id with memcmp():
+Dapeng Mi (19):
+  perf/x86: Disable LBR if x86_pmu.lbr_nr exceeds MAX_LBR_ENTRIES
+  perf/x86/intel: Validate LBR XSAVE state before updating LBR stack
+  perf/x86/intel/lbr: Limit branch snapshots to valid entries
+  perf/x86: Add lbr_enabled to track LBR state
+  perf/x86/amd: Avoid re-enabling PMU and LBR for BPF when disabled
+  perf/x86/intel: Add helper to enable PMU without LBR
+  perf/x86/intel: Avoid re-enabling PMU and LBR for BPF when disabled
+  perf/x86/intel: Keep LBR frozen throughout PMI handling
+  perf: Add counted-bounds tracking for perf_branch_stack
+  perf/x86/intel: Allow LBR read helpers to operate on explicit stacks
+  perf/x86/intel: Use a dedicated LBR stack for BPF snapshotting
+  perf/x86/intel: Always snapshot live hardware LBR state for BPF
+  perf/x86/amd: Refresh LBR stack in PMI only when LBR users are active
+  perf/x86/intel: Refresh LBR stack for non-PEBS LBR events when needed
+  perf/x86/intel: Remove dead lbr_pebs_users
+  perf/x86/intel: Clear raw LBR counters in the LBR stack
+  perf/x86/intel: Refill LBR stack for LBR counter events in PMI handler
+  perf/x86/intel: Pass LBR stack size into store_lbr()
+  perf/core: Don't overwrite shared LBR stack depth
 
-	case SCALAR_VALUE:
-		if (env->explore_alu_limits) {
-			return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) =3D=3D 0 &&
-			       check_scalar_ids(rold->id, rcur->id, idmap);
-		}
+Sandipan Das (1):
+  perf/x86/amd/lbr: Limit branch snapshots to valid entries
 
-Because dst->delta was cleared to 0 while ra->delta and rb->delta are
-non-zero, memcmp() returns non-zero and regsafe() returns false, triggering=
- a
-verifier bug warning and failing verification with -EFAULT.
+ arch/powerpc/perf/core-book3s.c |  43 +++++---
+ arch/x86/events/amd/brs.c       |   7 +-
+ arch/x86/events/amd/core.c      |  21 ++--
+ arch/x86/events/amd/lbr.c       |  48 +++++----
+ arch/x86/events/core.c          |   8 +-
+ arch/x86/events/intel/core.c    | 130 ++++++++++++++++++++----
+ arch/x86/events/intel/ds.c      |  20 ++--
+ arch/x86/events/intel/lbr.c     | 170 +++++++++++++++++++-------------
+ arch/x86/events/perf_event.h    |  45 +++++++--
+ drivers/perf/arm_brbe.c         |   5 +
+ include/linux/perf_event.h      |  15 ++-
+ kernel/events/core.c            |   8 +-
+ 12 files changed, 365 insertions(+), 155 deletions(-)
 
-When js->env->explore_alu_limits is set and ra->delta !=3D 0, should join_r=
-eg()
-refuse to join the scalars if jid_good(js, ra->id, rb->id) is false?
 
-[1] https://lore.kernel.org/r/ee77c73bff0b56a40098080a5335d5fd5e4d8592ac15a=
-fe769c1c4661f026576@mail.kernel.org
+base-commit: 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4
+-- 
+2.34.1
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106035111.3315=
-285-1-alexei.starovoitov@gmail.com?part=3D4
