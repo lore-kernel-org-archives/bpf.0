@@ -1,65 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793980693;
-	b=yj3kEdLrHK0gLIN42FXv4bCpt2IgtAO3Vz5njEj0JMhOKEq/NT0Zihh9c9t5F2D2PwSF
-	 fWxfHiDDN/mkc3Tciig5Mf1JDgjjAs5pihvVhVbhAG38gzo+ntp4uqchRDhz4K4Dp6gpP
-	 NX0ikRat73FXc/q2+FJopVdqhwFrGr2s1ffyHoz/vGJsAd0SuFnJkO8YGkVwo+IGPh96S
-	 41M4msofL+Oi3vboG+92jJOya9Q5c2L1Y7eyGSdCjRKnD7UMDsvYMIvHKc2ZlJjIB7PLT
-	 3q6tHyibIV5hk8tupJ/Je3k+GrrS/ZUiumn7Ug5lFIAT25Kq6kXEC0I4L52EJvOLKCA==
+	t=1793983249;
+	b=ejGiljLld8Zddnbzsm42cX4KvooPE63XlT4EJ9RGDZAbc0nP70DF3+pqos4VNMieQZxf
+	 8D8KgfJi4siq4MrtgV3mgR8nQjOMpv4/CEPtAJo+9cypBe+oaC+DFkP8PXBm0u3Jnx66k
+	 0yp1X7B2YwT68Xvvathilxv7FZ8wnNez/BUHe1u/29fhps+11DKFZl+HLx4ckf0hRhGfD
+	 52xuYcxwjyk5UxYOKYpTcXKQ2ZsUBSre+KPfGLQWw/FAagkH1SgPgwMQZNplvYpDfrDn5
+	 yBi/8+IZkVsrp9hcFmP2XK3sjoN3iR1X8IiEzRf/A5ZwGEiiAJ+V5f3ntvqDM7YTmwQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793980693;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-Debian-User;
-	bh=m/XHSoz1deN/ONmn+rJC+0iAtRvNH3rJU7syscPU2ow=;
-	b=w7sWe7Fq59DiqleqEFKXvIJEYF42veWiRK0WbQST00eFh8MnFJc0g0vBVyNzrkLJ5OLW
-	 zfDi+PU7Jt+pthTCVUIuKvBkgyOvjsWe/WpgxtlALiMFNqE5net0s3AjKLVN2ZCV5GyuE
-	 wFEwyvNhlDiGMPErfz232LRErkeC+Dv9Ug7njQkuy+pfKBeYz6I9FlpAHxNpUHXvWzcNi
-	 hYfDMwEX4pk9K2BRyYKVE9dKNWhXvUKPs8q3P+VfTAMdU+Ko5q9n90dtKi7x6r9L7Og2i
-	 aFrOxgDxegpN9wCsLCA3EgNo1ATAA8DZpvVIDF5dpaDv7M5yDXtLfVK/crD0tJKc6eQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793983249;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=jdUDizQKTDCa3Qjtv9mCwryFOohmeoK7V56vVKZZs0c=;
+	b=bdQOtQf6sCzs8QaMVgveRtIhkiiM5kBfNqMrYLLeMhKGt7fboB7wLnJk1JCxKZH0z28/
+	 zeBM/zfeL7mWm6sAEfT6fhy12wbtnH557uTGCKg9tbk3HLZHzU+reM5v7SQXwNsI8Zyjp
+	 jVq8ek+KyyzHMx9Ae5syTDHRaqwyumitxbcte4ZpT13iAnSnnqLo2uAFBva3cphCq2AGw
+	 JqZbII+qhC0D+Td+EyXjY0zs6RPcX85P0wUoQ99oVGhmwRQuCE8L4pUCTo6LqpSM8fy6j
+	 ZnhPjuzNB/q/RIxClkDIRZHlGKLulAGR7kCkCzKzZpQdG4P+k+r30c1uWiJwxNTUAhA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=debian.org;
-	spf=pass smtp.mailfrom=debian.org;
-	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=elwkYRr0;
-	arc=none smtp.remote-ip=82.195.75.108
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nvza7tyF;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4DE606A326;
-	Fri,  6 Nov 2026 15:58:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7D4DE606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911C3606A32F
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 16:40:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=elwkYRr0
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=m/XHSoz1deN/ONmn+rJC+0iAtRvNH3rJU7syscPU2ow=; b=elwkYRr0dqg+hDAASsQPtUIwGn
-	K0oJEdbmDZYspUHyxDb2AkXDlVbNXc9F35rCmsoNBQkPr3f3zhxcp13P0Rm5EAkB+lXs8f6jSWZtG
-	TnsAfnbI6v6gVz7/hQxvmXm60oOZoC5XFxmmwiYiiALZh0CgDvAeTuTNmEPCXX/+gzkP1NvQwDMND
-	OQHrReVMGPaXJtzmUPncXiMdtUsJfMxpTd6MhFGmqJM7XDAiCeGCxlhlENF/kJmbNi4Re3cNxCQJv
-	Y7Bw3r2IDnAFORObDNd0w+d9MAoht/D4Vf02jHxoIS2MtUfPUQOioHqXm2zBpzJPmvm4w++Vq+os6
-	gbGnBUpw==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1xPMKM-009Od9-1i;
-	Fri, 06 Nov 2026 15:58:06 +0000
-Date: Fri, 6 Nov 2026 07:58:01 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, acme@kernel.org
-Cc: kuniyu@google.com, netdev@vger.kernel.org, llvm@lists.linux.dev, 
-	ast@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org, kuba@kernel.org, 
-	tj@kernel.org
-Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
- clang KCSAN
-Message-ID: <au347UiVUe5oUuxM@gmail.com>
-References: <au27Y9m78_3EH2v1@gmail.com>
- <a69dd097-7e71-41f0-9a6b-eda001773236@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nvza7tyF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 457781F008A3;
+	Fri,  6 Nov 2026 16:40:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793983249;
+	bh=jdUDizQKTDCa3Qjtv9mCwryFOohmeoK7V56vVKZZs0c=;
+	h=From:To:Cc:Subject:Date;
+	b=nvza7tyFLU+w3wnTkOyggEkxpzrV/x58muYx/tYacCuI0RIqyAvoSzeMk7zXhJQYR
+	 4nis5qqjZNc2GCyj+mM1wbv2tPh73lLCGLWSYjyfz7TDfRFoJyZ1kZO2Pm0BKq9Cae
+	 4PvCwapjJ9KbqIEgDN0NLTaIHREXayxwDM04O8M4jC7UPSxNLS5II7jcvDj23AEsX7
+	 UukNUW1EMW0wUROFdaYpGZQJUiyJmMpk4LK1p5M9rB69Ugyi7v7EO9rUrZUJFnS41U
+	 uiYp4J2trM9sPLcJqUCSEmJfVE6ma0JUuv0bh/l33S77OSECJIYh7MbHSDABJ6aXKv
+	 MvQ+ftDpVKTsQ==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	HyeongJun An <sammiee5311@gmail.com>,
+	Christian Simon <simon@swine.de>
+Subject: [PATCHv2 bpf-next 0/2] bpf: Disable private stacks for uprobe programs
+Date: Fri,  6 Nov 2026 17:40:41 +0100
+Message-ID: <20261106164043.546879-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,30 +63,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a69dd097-7e71-41f0-9a6b-eda001773236@linux.dev>
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 06, 2026 at 09:16:24PM +0800, Jiayuan Chen wrote:
-> Thanks for the report !
-> 
-> 
-> On 11/6/26 7:38 PM, Breno Leitao wrote:
-> > My arm64 KCSAN builds of linux-next fail since next-20261015, because
-> > bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
-> >
-> >   WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
-> >   WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
-> >   Failed to generate BTF for vmlinux
-> >   Try to disable CONFIG_DEBUG_INFO_BTF
-> >   make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
-> 
-> 
-> 
-> Has pahole fixed this issue?
+hi,
+uprobe programs can be preempted and re-entered on the same CPU. Since
+the private stack is shared per program and CPU, a nested invocation can
+overwrite the preempted invocation's stack.
 
-I don't think so, see the line below:
+This patch disables private stacks for KPROBE programs except kprobe multi
+and kprobe-session programs, identified by the BPF_TRACE_KPROBE_MULTI and
+BPF_TRACE_KPROBE_SESSION attach types. Standard kprobes lack an attach type,
+and uprobes use different attach types or none, so they run without private
+stacks.
 
-> > This is clang 22.1.3 and pahole 1.31 (current pahole master behaves the
-> > same),
+It also rejects multi and session programs through the perf-event attach
+path, which lacks their required run context and could allow a uprobe to
+reach a private-stack tail-call target [1].
+
+thanks,
+jirka
+
+
+v1: https://lore.kernel.org/bpf/20261103093400.112178-1-jolsa@kernel.org/
+
+v2 changes:
+- drop the BPF_TRACE_UPROBE attach type and fail perf event kprobe
+  attach for kprobe-multi/uprobe-multi [Alexei]
+
+
+[1] https://lore.kernel.org/bpf/aus-b8Lo2oCw_cGd@krava/
+---
+Jiri Olsa (2):
+      bpf: Reject multi kprobe programs in perf event attach
+      bpf: Disable private stacks for untagged kprobe programs
+
+ kernel/bpf/verifier.c                                      |  9 +++++++
+ kernel/events/core.c                                       | 13 ++++++++--
+ tools/testing/selftests/bpf/progs/verifier_large_stack.c   |  2 +-
+ tools/testing/selftests/bpf/progs/verifier_private_stack.c | 38 +++++++++++++++++++++++++++--
+ 4 files changed, 57 insertions(+), 5 deletions(-)
