@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793983249;
-	b=ejGiljLld8Zddnbzsm42cX4KvooPE63XlT4EJ9RGDZAbc0nP70DF3+pqos4VNMieQZxf
-	 8D8KgfJi4siq4MrtgV3mgR8nQjOMpv4/CEPtAJo+9cypBe+oaC+DFkP8PXBm0u3Jnx66k
-	 0yp1X7B2YwT68Xvvathilxv7FZ8wnNez/BUHe1u/29fhps+11DKFZl+HLx4ckf0hRhGfD
-	 52xuYcxwjyk5UxYOKYpTcXKQ2ZsUBSre+KPfGLQWw/FAagkH1SgPgwMQZNplvYpDfrDn5
-	 yBi/8+IZkVsrp9hcFmP2XK3sjoN3iR1X8IiEzRf/A5ZwGEiiAJ+V5f3ntvqDM7YTmwQ==
+	t=1793983263;
+	b=GL7cxC+hL6sf/aAkRsxcGiAYAlGFjRZumzolLmBJDFg3G85XZoSXNK2XqOR6EjyLiFgU
+	 K6jmyExlgOT0f6MVzwEmzvSib78YayVCPyc+ioVwr7jZHlNroxT3RashpixRHp2DB8S8v
+	 j6CASJk/4aqwHwznOpHtBr/++VkoS7ZwLX4qJ19e6hIQ3X7LvGgwV2nxjl4PpQXyoylY6
+	 8V+CpVyqZ5LkhQICM5tA3hda5ycSI/cleLQ5BITP7fv74CNtxt5cCTeruKgTWFkAmUz8M
+	 lvh/TUeab88kYcyyvw/BniUDmgYTq1YRfd2A/y5h6amYWC/9Ikjm/nI/ghCwDo60i5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793983249;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793983263;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=jdUDizQKTDCa3Qjtv9mCwryFOohmeoK7V56vVKZZs0c=;
-	b=bdQOtQf6sCzs8QaMVgveRtIhkiiM5kBfNqMrYLLeMhKGt7fboB7wLnJk1JCxKZH0z28/
-	 zeBM/zfeL7mWm6sAEfT6fhy12wbtnH557uTGCKg9tbk3HLZHzU+reM5v7SQXwNsI8Zyjp
-	 jVq8ek+KyyzHMx9Ae5syTDHRaqwyumitxbcte4ZpT13iAnSnnqLo2uAFBva3cphCq2AGw
-	 JqZbII+qhC0D+Td+EyXjY0zs6RPcX85P0wUoQ99oVGhmwRQuCE8L4pUCTo6LqpSM8fy6j
-	 ZnhPjuzNB/q/RIxClkDIRZHlGKLulAGR7kCkCzKzZpQdG4P+k+r30c1uWiJwxNTUAhA==
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=B5s+xEa+l5XBQhp2x1G0zMPbHIDwO/b9xJzQCiLFwZs=;
+	b=WOY39cr5Bc8Ulv87omeqr8Dnmjjs0G/qSMWl8n4XJGCUKoQ/Wq+6oZjVWqhbR0neQ+8w
+	 /qepTHAAGjnVNKGsXWvg4Hw96f/c7IxEALQGeX6luLq/KAM7npF0vIoJVnLNVu4p5tm6Z
+	 wtGv2Kl62ve9A99sCkhVXu4PzaVcRqY4FhLlhvUCf03jn1RJQ9z5fCEVX5NIWwud3/Yjs
+	 wpsiZGkLTu4Ovc5J/ayxuBJRZwU/ld5thT2JW5QuQqj/ydmFkMtM3gzvdTm162f0U7sZ6
+	 APpQGrjiK3qf2nHuqnn9DNQjaHSgmvAu2clLbPSJaCW4F+0BVbuz7WZ7/XYFXRnIbrw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nvza7tyF;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jJSFzShZ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 911C3606A32F
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 16:40:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24AEE606A32C
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 16:41:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nvza7tyF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 457781F008A3;
-	Fri,  6 Nov 2026 16:40:46 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jJSFzShZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF5401F0089F;
+	Fri,  6 Nov 2026 16:40:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793983249;
-	bh=jdUDizQKTDCa3Qjtv9mCwryFOohmeoK7V56vVKZZs0c=;
-	h=From:To:Cc:Subject:Date;
-	b=nvza7tyFLU+w3wnTkOyggEkxpzrV/x58muYx/tYacCuI0RIqyAvoSzeMk7zXhJQYR
-	 4nis5qqjZNc2GCyj+mM1wbv2tPh73lLCGLWSYjyfz7TDfRFoJyZ1kZO2Pm0BKq9Cae
-	 4PvCwapjJ9KbqIEgDN0NLTaIHREXayxwDM04O8M4jC7UPSxNLS5II7jcvDj23AEsX7
-	 UukNUW1EMW0wUROFdaYpGZQJUiyJmMpk4LK1p5M9rB69Ugyi7v7EO9rUrZUJFnS41U
-	 uiYp4J2trM9sPLcJqUCSEmJfVE6ma0JUuv0bh/l33S77OSECJIYh7MbHSDABJ6aXKv
-	 MvQ+ftDpVKTsQ==
+	s=k20260515; t=1793983262;
+	bh=B5s+xEa+l5XBQhp2x1G0zMPbHIDwO/b9xJzQCiLFwZs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=jJSFzShZ4zi13TL8l0R1XDF5Ae9R3PMW13kvuQMTVwrQEkvgVGaQERo4SmFy8W8e6
+	 kHe89MRlVt4uROpTXa3FLo9AmStxHDmBvyIigbmGltXxoE16O5OZZFglOonc+2Figh
+	 DdzOHlMopShAjF32PqEQAQWZhWN1BkvYeG4TThIK8r0j5fV2daBz+dB7ghcAvlIH2W
+	 +0i8pdwHuTIdqqG+p0xQGGG2fAtZ/VP6r038OVbCIx+H091xae6fBfDKeLByuX9na9
+	 /hKXbBtdUrzwyyRiirqVd+WvtUYpKukM79NP1hFo4EYIU3etOHpJhzZBTb+jMpRDoA
+	 IPlARCSm4hC9Q==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -50,10 +50,12 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yonghong.song@linux.dev>,
 	HyeongJun An <sammiee5311@gmail.com>,
 	Christian Simon <simon@swine.de>
-Subject: [PATCHv2 bpf-next 0/2] bpf: Disable private stacks for uprobe programs
-Date: Fri,  6 Nov 2026 17:40:41 +0100
-Message-ID: <20261106164043.546879-1-jolsa@kernel.org>
+Subject: [PATCHv2 bpf-next 1/2] bpf: Reject multi kprobe programs in perf event attach
+Date: Fri,  6 Nov 2026 17:40:42 +0100
+Message-ID: <20261106164043.546879-2-jolsa@kernel.org>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261106164043.546879-1-jolsa@kernel.org>
+References: <20261106164043.546879-1-jolsa@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,40 +67,47 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-hi,
-uprobe programs can be preempted and re-entered on the same CPU. Since
-the private stack is shared per program and CPU, a nested invocation can
-overwrite the preempted invocation's stack.
+PERF_EVENT_IOC_SET_BPF allows attaching multi and session kprobe or
+uprobe programs through the standard perf event path. These programs
+require attach-specific run context, which this path does not provide.
+Attaching them can also let a uprobe reach a private-stack program
+through a tail call.
 
-This patch disables private stacks for KPROBE programs except kprobe multi
-and kprobe-session programs, identified by the BPF_TRACE_KPROBE_MULTI and
-BPF_TRACE_KPROBE_SESSION attach types. Standard kprobes lack an attach type,
-and uprobes use different attach types or none, so they run without private
-stacks.
+Reject multi and session programs in __perf_event_set_bpf_prog().
+Keep the existing sleepable-program check for standard kprobe and
+uprobe programs.
 
-It also rejects multi and session programs through the perf-event attach
-path, which lacks their required run context and could allow a uprobe to
-reach a private-stack tail-call target [1].
-
-thanks,
-jirka
-
-
-v1: https://lore.kernel.org/bpf/20261103093400.112178-1-jolsa@kernel.org/
-
-v2 changes:
-- drop the BPF_TRACE_UPROBE attach type and fail perf event kprobe
-  attach for kprobe-multi/uprobe-multi [Alexei]
-
-
-[1] https://lore.kernel.org/bpf/aus-b8Lo2oCw_cGd@krava/
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (2):
-      bpf: Reject multi kprobe programs in perf event attach
-      bpf: Disable private stacks for untagged kprobe programs
+ kernel/events/core.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
- kernel/bpf/verifier.c                                      |  9 +++++++
- kernel/events/core.c                                       | 13 ++++++++--
- tools/testing/selftests/bpf/progs/verifier_large_stack.c   |  2 +-
- tools/testing/selftests/bpf/progs/verifier_private_stack.c | 38 +++++++++++++++++++++++++++--
- 4 files changed, 57 insertions(+), 5 deletions(-)
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 457d75ea7142..919f43cdb473 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -11835,9 +11835,18 @@ static int __perf_event_set_bpf_prog(struct perf_event *event,
+ 	    (is_syscall_tp && prog->type != BPF_PROG_TYPE_TRACEPOINT))
+ 		return -EINVAL;
+ 
+-	if (prog->type == BPF_PROG_TYPE_KPROBE && prog->sleepable && !is_uprobe)
++	if (prog->type == BPF_PROG_TYPE_KPROBE) {
+ 		/* only uprobe programs are allowed to be sleepable */
+-		return -EINVAL;
++		if (prog->sleepable && !is_uprobe)
++			return -EINVAL;
++
++		/* only standard kprobe/uprobe programs are allowed to attach */
++		if (prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI ||
++		    prog->expected_attach_type == BPF_TRACE_KPROBE_SESSION ||
++		    prog->expected_attach_type == BPF_TRACE_UPROBE_MULTI ||
++		    prog->expected_attach_type == BPF_TRACE_UPROBE_SESSION)
++			return -EINVAL;
++	}
+ 
+ 	if (prog->type == BPF_PROG_TYPE_TRACEPOINT && prog->sleepable) {
+ 		/*
+-- 
+2.43.0
+
