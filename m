@@ -1,75 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.149.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793965128;
-	b=WunU/f8aEv7H2D15u1C0X7EtHcRDKLWHI/oTaanzK6RyNNkm9BTsalj30W6WkgRTLpOL
-	 TXsEY1iZRBpgrbskaZOIv9wbrAvy833/Q2HdlJK+3NuJpKY2YsEUO68szBBWH8u7Hl2FO
-	 rhFP+DnyzWwRlJa1IKJNGLzTJtWfoIGQXvkbmL4HwySgUzasIjlQlUD9Ey0fCREoUCCo6
-	 zcHg8cKKmzHHi9t+KTRRFYGQVtx/TjQyblTrG8Lt5bV2IHIPrPu8UXBP0Z/4BrWppbNVV
-	 NdqLQPp9MvRV9psZpQiaHzz6D3jDt6fYzl1AkISFrqbG5ci1dWsmWlFqUdedZ106wNA==
+	t=1793965293;
+	b=EAh6JlbGvqq+vFDevEr0kbsZ+H8ZG8u6uDa041AArnhQjRRg+ozk+4oWM+py9ez0q+tT
+	 ZXubcQEV4xykmp//UmM4I0cdsNVO99RwsHrbKCMKzzXqufd1bgllWzuNm6ZLJrfqvkpdk
+	 dtAj97gujyL6Ego9Nryt7WgcdADipR7iH0F0DxO8Rij7O4dHa+VryDttD2Fns1I23fqEy
+	 b5rKEPVb7EOdgQkfI9SQHACEwxhHfIgGNQKjrxWD5D+zV/5NiWoRX4X2CGGn8WsVqHkzu
+	 N4PZkSNlvIr75QhA+mwx0DX5Nx0ViG+NrNWwL+8Dxmq2PBSkaEN+hXa24nGQw4/WCSg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793965128;
-	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:MIME-Version:Content-Type:Content-Disposition;
-	bh=/jfLHbBsiNk6pHzafuB3Dsviz9dVAGhH/4U+1XXEIc0=;
-	b=WFLMxkEnUOKyPWxftzjw7guVCoIdyagt21z6lEgoYV/B1baTm8Q79uHiNNX4OdowMQUp
-	 vBlADjKYte/rFDVrd+dmalMd8Z5Zbm/FOYTF49tIEcJWCelbGBTjED0B9WZnHtjT7lQGJ
-	 S0a6zVMTlyV4P3uYFSpgUSGJPehu7v2Iyx5j+Hpnbw6eV22n8gYPzirOnTbhcU7UXelIT
-	 anMTEb0uyTEzcD0AZ+qU1EjU6hF7ELDqNKeLgkqGQ2YvHSr+2GjdUQCR3ps9N6Dg8eJvF
-	 ahHzu0Ik2sLdXO4AwS9e+fhWZ9auBgx6dX8bt6MMrZvOJYpQJcb8Mea1Z6dMOoyYmGQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793965293;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=6JqcFZw2DreE50hImFuQgRUSPI0sEWGLexA8Fi5Q35c=;
+	b=2OVnDvYBK1oCsi7FWCS/LPbSai348eYE53HekSmJzjOsByxkQm0DN4r59+a7rvTFXgwv
+	 9LgOqEqdnlqoWnK2L9oWI2zsn9VFMqbe2IXj0AnGz1FQe18CfomB3oOTlXhLqJnMXWl86
+	 NMSTy93Bk/A9Eygg9KMsIn7D6/PSwv5EssMGVTbasPaKgfAujjut+gsY/q59FmUU3Effc
+	 hogsqW8MCH7thhdlRMiGY5UMogg36g6ubNM8Pfx8XrEjE32HvSkOT4k+hbc35FFtMQPJT
+	 rtyw0PyyWDT5CJ/VliDAleKLsoorTqfYcRAqTro6Nz52cAvHA585EFZWBIr70cOjfHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=debian.org;
-	spf=pass smtp.mailfrom=gmail.com;
-	arc=none smtp.remote-ip=74.125.224.46
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=akamai.com;
+	spf=pass smtp.mailfrom=akamai.com;
+	dkim=pass header.d=akamai.com header.i=@akamai.com header.a=rsa-sha256 header.s=apr2026.eng header.b="Xqd2BA/8";
+	arc=none smtp.remote-ip=67.231.149.131
+Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [67.231.149.131])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8818E606A335
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 11:38:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8818E606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-67bf3c6654fso504011d50.1
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 03:38:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793965126; x=1794569926;
-        h=content-disposition:content-type:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/jfLHbBsiNk6pHzafuB3Dsviz9dVAGhH/4U+1XXEIc0=;
-        b=EddXhpqx3fXLkXQTQcqdgn+S9gJgw4VoYIbzNHCI9+s2TFVhDUgriqrnfEhWE7Buzi
-         PxsOQMVddO9cSGUoOEKAv5EOB2lfSkUS4nPmnjMN5x+ATn7P2HLMk17SP1lvW7yGr5n/
-         3eviginUHzZim7+PP5rgJSsYYpoVkKlJRJerF7ORjspRQP5ZHDiqaxcdFAjnvhgTTSoU
-         XV5dZlm+HPaNACTSbTVhUbTSXn++DtEIj8EMVhOPr/HLkBZsWlNR+CYRhT24eyvVwiHR
-         KBtJnnG265AZgKd456i2xU8QzG9G5CE1ZmzIFff0xngg/aQw+Q8qqbvQZ6woKdh5UXim
-         lp/Q==
-X-Forwarded-Encrypted: i=1; AL+hErGDfCPlRcoNMzDDHEczUXeE2gXA2feqQVWXh3eXXkqHLuIrcxyOB8waFz2TTLURh1dUPTI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/8efDV4BVJivDpfvYxaoJB93ilxls5x0hooTAa6Wv4CvejkkVk
-	ui6kxoU6ZO73KqWK4s/i2G/j+tuw8tjLIAvOc2wgpxttFYJ7zEeiN0mEh8cAOA==
-X-Gm-Gg: AYBFou2rzhyKLSdfCjg5/K5i22YJo9sUy7z6G6WI17lBQYjMkCTyleyJiNSS+V/JKoe
-	QtgNZEnh3XOZOmcNKLnU2rwEqALMdU+FQKAgZwdx0hbY2ryAtxStLxpNZqUp7DnV1HRwq1E3obG
-	vtdfXs0YnVZlq4XpWckKbho6ekzQoK2neueenbhIOzsRNpDCaPkMNqz6m1k/9xQA13Qemz/++z8
-	OnHV0AVRy00vMDzLQafWtrKWTq6UQM8FI5Apd3fNJBMpUbAtcjClly3OGpUQJm8QLEp+jVomsOK
-	kl2G7vWX3kK5BnhBEH074pBth/YhnWOl9A5zzSPFNlCMfE2B80LJ/iPzXfpTKchz/a3uFezGKL9
-	2QcB5yU/E1uZMunnGBHJVFBe6Y2vD8p3wujGZpHw+PXHtE4ohbrrsLyBR2p49Z6HanuB3+ykDJ3
-	6gPYnNONgi4J+tuXx3HiCQvkfSmjPpFyhBauoKQ2tUyYzStGsXU71IDRtsfbkJIQGlog8TV4uA1
-	dsWPxy/oK76B/7redOBAhzafe1NaDY6BpPtQ6jVpePZeNsshPB/lXcU+//RhVs3cAyj/x+1AEgL
-	AYyEW0RBQO9JuJxxcxzubE0n+H1dSL1TLpTkEFl1
-X-Received: by 2002:a05:690e:b8e:b0:67c:1da0:6bd8 with SMTP id 956f58d0204a3-67c1da07981mr297045d50.68.1793965126563;
-        Fri, 06 Nov 2026 03:38:46 -0800 (PST)
-Received: from gmail.com ([2a03:2880:24ff:5e::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b33f8221absm16709167b3.27.2026.11.06.03.38.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 03:38:45 -0800 (PST)
-Date: Fri, 6 Nov 2026 03:38:44 -0800
-From: Breno Leitao <leitao@debian.org>
-To: kuniyu@google.com, netdev@vger.kernel.org, llvm@lists.linux.dev
-Cc: ast@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org, 
-	kuba@kernel.org, tj@kernel.org
-Subject: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
- clang KCSAN
-Message-ID: <au27Y9m78_3EH2v1@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2E1606A329;
+	Fri,  6 Nov 2026 11:41:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B2E1606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=akamai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=akamai.com header.i=@akamai.com header.a=rsa-sha256 header.s=apr2026.eng header.b=Xqd2BA/8
+Received: from pps.filterd (m0050093.ppops.net [127.0.0.1])
+	by m0050093.ppops.net-00190b01. (8.18.1.11/8.18.1.11) with ESMTP id 6A63ZOSF982660;
+	Fri, 6 Nov 2026 11:41:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=apr2026.eng; bh=6JqcFZw2DreE50hImFuQ
+	gRUSPI0sEWGLexA8Fi5Q35c=; b=Xqd2BA/89bmWdvaTFptK1org502yaTinBIFH
+	+DlbrKdyTmKIzLMncP+O466NCzaiWt7dQLaPUWtE4DbFJBAOZ0nToGSVjCw5tAsA
+	1fhbbStLM+delM/W6KkcRHaa39r/Y7GbBPMICZpE69F9iBG82KeYoJ3Sp5ZJ7vJR
+	Sqy6xKJoN4oMnvMqb6a5klTsZKStrP1xB5H651cnYviH+RKzXmwYO0stsDSpp5MR
+	ZDe1cpR9GtoMHt8RIwV7eLAXuj4yY2BgtfbZlu3y4uUwcAZBYigfF73rs0QBtEFF
+	7fRNkDNpla/ygOIdME65GgVp43lMdodrW87hicn4AK5nrFqE7A==
+Received: from prod-mail-ppoint6 (prod-mail-ppoint6.akamai.com [184.51.33.61])
+	by m0050093.ppops.net-00190b01. (PPS) with ESMTPS id 4hrey5ty49-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 06 Nov 2026 11:41:10 +0000 (GMT)
+Received: from pps.filterd (prod-mail-ppoint6.akamai.com [127.0.0.1])
+	by prod-mail-ppoint6.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 6A6BZeaD006231;
+	Fri, 6 Nov 2026 06:41:09 -0500
+Received: from prod-mail-relay02.akamai.com ([172.27.118.35])
+	by prod-mail-ppoint6.akamai.com (PPS) with ESMTP id 4hs3una43f-1;
+	Fri, 06 Nov 2026 06:41:09 -0500 (EST)
+Received: from [127.0.1.1] (muc-lhv4ep.munich.corp.akamai.com [172.29.0.215])
+	by prod-mail-relay02.akamai.com (Postfix) with ESMTP id 71C0A83;
+	Fri,  6 Nov 2026 11:41:07 +0000 (UTC)
+From: Max Boone <mboone@akamai.com>
+Date: Fri, 06 Nov 2026 12:40:55 +0100
+Subject: [PATCH net-next] net: lwtunnel: use GFP_KERNEL in build_state
+ paths
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -79,64 +76,189 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261106-build-state-use-gfp-kernel-v1-1-18084382f878@akamai.com>
+X-B4-Tracking: v=1; b=H4sIAMa87WoC/x3MQQqDMBAF0KvIrDuQWCy1VyldGPNjh8pUMlEE8
+ e4NXb7NO8iQBUaP5qCMTUy+WuEvDY3vQSewxGpqXXvz3nUcVpkjWxkKeDXwlBb+ICtmHq9df4+
+ +dyEFqsGSkWT/509SFFbshV7n+QOOl99udgAAAA==
+X-Change-ID: 20261105-build-state-use-gfp-kernel-c3598d190bfb
+To: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+        Justin Iurman <justin.iurman@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: Donald Sharp <sharpd@nvidia.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Max Boone <mboone@akamai.com>,
+        Debabrata Banerjee <dbanerje@akamai.com>,
+        Nick Hudson <nhudson@akamai.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1793965267; l=4428;
+ i=mboone@akamai.com; s=20260317; h=from:subject:message-id;
+ bh=LJP5KneWils/U/2yCjDE5joxzXA50czLgi/CoNddHkU=;
+ b=CzpEqdWibOlncF0n9BKTV1FMFsXu0NAAzWIED5xUqpNW7e/ctavs6AzOQ6jVXqpX9Hku0CCW7
+ eiphS3gHuMVBtFARadIfrNHQUZNdI7qbKpnISqBkwt3dBQ3T2pYDHMe
+X-Developer-Key: i=mboone@akamai.com; a=ed25519;
+ pk=jWdC/h5H2KWQCiC2kpr/puMVX0mJmP9W5sM8YTGBXA4=
+X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11957
+ signatures=596817
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ malwarescore=0 lowpriorityscore=0 suspectscore=0 spamscore=0 phishscore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2611040000
+ definitions=main-2611060046
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTA2MDA0NiBTYWx0ZWRfX+2gdTpzq+Q6S
+ DTawaMSb50DCinsIn5mCc1pP648mrWw/Ujfi9/fBzndWZIGFUnV+3u4wiTlJP0kPiENuk8wHATE
+ M4lUGSgPf3uNcWwG0B1KLIehFA8jL3I=
+X-Proofpoint-GUID: TCIrFhySC1P4xMTTBKrOhaESz6hGIorH
+X-Authority-Analysis: v=2.4 cv=e5KT2qp/ c=1 sm=1 tr=0 ts=6aedbcd6 cx=c_pps
+ a=WPLAOKU3JHlOa4eSsQmUFQ==:117 a=WPLAOKU3JHlOa4eSsQmUFQ==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Ifg-1AOnLHOf1gn6spyb:22 a=d4nn1RXdvEacMIURMw2s:22 a=X7Ea-ya5AAAA:8
+ a=Yl7yAlAd151cMgl_QPEA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTA2MDA0NiBTYWx0ZWRfX1DitL39BG4vN
+ yxCy9pOCDp2qfu+IeAGEjkwFbUGWA0nBvX81AbcAmIEOBC6OmomeumYMkvSsH4HFn11ZCe6YbVp
+ CEEPZvpGY3Gxk0nAxtQgvgu7enV8GoLGIv72Z9OlSS5e7MHb1ywvoo+ZlAWmhB3VBDQxOhNsVcc
+ DODRe4ITwlap4Hvf/IkwX8iOLNBgBZgBJunzsCiC6YDiEoG4OY0GS86AnrEdoJrS0FmIhL7LpAh
+ AHCWDlvtRl/8VpDHVhZbR1UfgzOE92r1P2nbf3XU4Jy4HXEqWWKpk7ahW+faQvN0vnsI/Yob7o1
+ +uaQ8SbCDdnhM8GtveoeFFX3uhAMIBX5tL+bKZD5LvL2wxyz+yQaw2rlBQJ0dU6XQO8k1dayldF
+ GhoCsyImTGf9HMUCRZiZiRwq6WAkTYybhPb0+iHNxcBIt360qXbcvXs8On0ry7WySPMEY5MbNUM
+ QDPlsuublZIYEcCUTVg==
+X-Proofpoint-ORIG-GUID: TCIrFhySC1P4xMTTBKrOhaESz6hGIorH
+X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11957
+ signatures=596817
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1011 bulkscore=0 adultscore=0 suspectscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611060046
 
-My arm64 KCSAN builds of linux-next fail since next-20261015, because
-bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
+Since 3d25eabbbf67 ("ip_tunnel: Add dst_cache support in lwtunnel_state
+of ip tunnel"), build_state runs outside RCU and all its callers can
+sleep, but paths still use GFP_ATOMIC.
 
-  WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
-  WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
-  Failed to generate BTF for vmlinux
-  Try to disable CONFIG_DEBUG_INFO_BTF
-  make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
+For dst caches, that limits allocation to populated percpu pages. A
+large burst of SRv6 nexthops outruns the refill worker and will fail
+with -ENOMEM despite there being free memory:
 
-This is clang 22.1.3 and pahole 1.31 (current pahole master behaves the
-same), with CONFIG_KCSAN=y, CONFIG_DEBUG_INFO_BTF=y and CONFIG_WERROR=y.
-v7.4-rc1 is affected as well. With pahole 1.31, the same config without
-KCSAN builds fine.
+  percpu: allocation failed, size=40 align=8 atomic=1, atomic alloc
+failed, no space left
 
-The kfunc came with 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust
-sk->sk_rcvlowat."), and 201a454df948 ("resolve_btfids: Fix the
---fatal_warnings exit status") made the missing BTF fatal with
-CONFIG_WERROR. Without CONFIG_WERROR the kernel builds, but bpf_tcp_ops
-is never registered:
+Batching 20000 RTM_NEWNEXTHOP under QEMU gave 10-109 failures per run
+before, none after.
 
-  initcall __bpf_tcp_ops_init+0x0/0x70 returned -22 after 302 usecs
+This commit converts the allocations reached through ops->build_state()
+and are called after the rcu_read_unlock():
 
-This seems similar to pahole behaviour sched_ext hit with a bool
-argument, discussed in [2] and worked around in f2f095c87603
-("sched_ext: Work around pahole 1.32 dropping
-scx_bpf_task_set_lazy_resched() from BTF").
+  - ila_build_state(), ioam6_build_state(), rpl_build_state(),
+    seg6_build_state(): build_state ops
+  - bpf_parse_prog(): only called from bpf_build_state()
+  - lwtunnel_state_alloc(): only called from build_state ops (also
+    affects mpls, ip/ip6 tunnel, xfrmi and seg6_local)
 
-Here the argument is an int that clang reassigns, its location list has
-no DW_OP_entry_value, and pahole 1.31 drops it as well, so staying on
-pahole 1.31 does not help.
+Signed-off-by: Max Boone <mboone@akamai.com>
+Reviewed-by: Debabrata Banerjee <dbanerje@akamai.com>
+Reviewed-by: Nick Hudson <nhudson@akamai.com>
+---
+ net/core/lwt_bpf.c        | 2 +-
+ net/core/lwtunnel.c       | 2 +-
+ net/ipv6/ila/ila_lwt.c    | 2 +-
+ net/ipv6/ioam6_iptunnel.c | 2 +-
+ net/ipv6/rpl_iptunnel.c   | 2 +-
+ net/ipv6/seg6_iptunnel.c  | 4 ++--
+ 6 files changed, 7 insertions(+), 7 deletions(-)
 
-Not reassigning the parameter is a workaround for me, with any pahole: clang
-then describes @rcvlowat in w1 from the entry, the kfunc is back in BTF,
-and __bpf_tcp_ops_init() returns 0 (tested in virtme):
-
-diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
-index 2ba73dd6c52cce..1afa6bd7f508ef 100644
---- a/net/ipv4/bpf_tcp_ops.c
-+++ b/net/ipv4/bpf_tcp_ops.c
-@@ -370,10 +370,9 @@ __bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat,
- 	if (moff == offsetof(struct bpf_tcp_ops, dequeue_rcvq))
- 		wakeup = true;
-
--	if (rcvlowat < 0)
--		rcvlowat = INT_MAX;
--
--	return __tcp_set_rcvlowat(sk, rcvlowat, wakeup);
-+	/* Reassigning @rcvlowat can make pahole drop this kfunc from BTF. */
-+	return __tcp_set_rcvlowat(sk, rcvlowat < 0 ? INT_MAX : rcvlowat,
-+				  wakeup);
+diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+index da49364ec63d..6d1059ff0c49 100644
+--- a/net/core/lwt_bpf.c
++++ b/net/core/lwt_bpf.c
+@@ -359,7 +359,7 @@ static int bpf_parse_prog(struct nlattr *attr, struct bpf_lwt_prog *prog,
+ 	if (!tb[LWT_BPF_PROG_FD] || !tb[LWT_BPF_PROG_NAME])
+ 		return -EINVAL;
+ 
+-	prog->name = nla_memdup(tb[LWT_BPF_PROG_NAME], GFP_ATOMIC);
++	prog->name = nla_memdup(tb[LWT_BPF_PROG_NAME], GFP_KERNEL);
+ 	if (!prog->name)
+ 		return -ENOMEM;
+ 
+diff --git a/net/core/lwtunnel.c b/net/core/lwtunnel.c
+index 8223c44f10c8..f2f4d1ace0e9 100644
+--- a/net/core/lwtunnel.c
++++ b/net/core/lwtunnel.c
+@@ -70,7 +70,7 @@ struct lwtunnel_state *lwtunnel_state_alloc(int encap_len)
+ {
+ 	struct lwtunnel_state *lws;
+ 
+-	lws = kzalloc(sizeof(*lws) + encap_len, GFP_ATOMIC);
++	lws = kzalloc(sizeof(*lws) + encap_len, GFP_KERNEL);
+ 
+ 	return lws;
  }
+diff --git a/net/ipv6/ila/ila_lwt.c b/net/ipv6/ila/ila_lwt.c
+index 7bb9edc5c28c..01fd78a232e7 100644
+--- a/net/ipv6/ila/ila_lwt.c
++++ b/net/ipv6/ila/ila_lwt.c
+@@ -228,7 +228,7 @@ static int ila_build_state(struct net *net, struct nlattr *nla,
+ 		return -ENOMEM;
+ 
+ 	ilwt = ila_lwt_lwtunnel(newts);
+-	ret = dst_cache_init(&ilwt->dst_cache, GFP_ATOMIC);
++	ret = dst_cache_init(&ilwt->dst_cache, GFP_KERNEL);
+ 	if (ret) {
+ 		kfree(newts);
+ 		return ret;
+diff --git a/net/ipv6/ioam6_iptunnel.c b/net/ipv6/ioam6_iptunnel.c
+index cfb2c41634a0..3093446ad89a 100644
+--- a/net/ipv6/ioam6_iptunnel.c
++++ b/net/ipv6/ioam6_iptunnel.c
+@@ -166,7 +166,7 @@ static int ioam6_build_state(struct net *net, struct nlattr *nla,
+ 		return -ENOMEM;
+ 
+ 	ilwt = ioam6_lwt_state(lwt);
+-	err = dst_cache_init(&ilwt->cache, GFP_ATOMIC);
++	err = dst_cache_init(&ilwt->cache, GFP_KERNEL);
+ 	if (err)
+ 		goto free_lwt;
+ 
+diff --git a/net/ipv6/rpl_iptunnel.c b/net/ipv6/rpl_iptunnel.c
+index 4e10adcd70e8..838ede10a79d 100644
+--- a/net/ipv6/rpl_iptunnel.c
++++ b/net/ipv6/rpl_iptunnel.c
+@@ -102,7 +102,7 @@ static int rpl_build_state(struct net *net, struct nlattr *nla,
+ 
+ 	rlwt = rpl_lwt_lwtunnel(newts);
+ 
+-	err = dst_cache_init(&rlwt->cache, GFP_ATOMIC);
++	err = dst_cache_init(&rlwt->cache, GFP_KERNEL);
+ 	if (err) {
+ 		kfree(newts);
+ 		return err;
+diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
+index 0d39a38a5dd2..7c64680e4632 100644
+--- a/net/ipv6/seg6_iptunnel.c
++++ b/net/ipv6/seg6_iptunnel.c
+@@ -833,11 +833,11 @@ static int seg6_build_state(struct net *net, struct nlattr *nla,
+ 
+ 	slwt = seg6_lwt_lwtunnel(newts);
+ 
+-	err = dst_cache_init(&slwt->cache_input, GFP_ATOMIC);
++	err = dst_cache_init(&slwt->cache_input, GFP_KERNEL);
+ 	if (err)
+ 		goto err_free_newts;
+ 
+-	err = dst_cache_init(&slwt->cache_output, GFP_ATOMIC);
++	err = dst_cache_init(&slwt->cache_output, GFP_KERNEL);
+ 	if (err)
+ 		goto err_destroy_input;
+ 
 
- __bpf_kfunc_end_defs();
+---
+base-commit: 0822d2fe38262e8b55c5ea55c970022bca8dd2a9
+change-id: 20261105-build-state-use-gfp-kernel-c3598d190bfb
 
-Would this be acceptable?
+Best regards,
+-- 
+Max Boone <mboone@akamai.com>
 
-[1] https://lore.kernel.org/all/DLRKT5MG6W2P.2V1P0QD4GQEKY@gmail.com/
-[2] https://lore.kernel.org/all/7c139810be5ffc9764ed4236efc28794@kernel.org/
