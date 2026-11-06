@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793939096;
-	b=U3BtRjrKCtPs/xqB8Tb/MU0Ia7FRNIr3wI3WJnxkEt/De4EI9Gf0xfTCrnXzl2Aveky9
-	 skYAl1+V8cA6c8dN3F7qpFmyYMYIyCw+tRQxqSAnLzUM9fKoT9FD5ZJ0OzepLwzWW20sv
-	 8P7H0mT0217p6/gxjlSd3uO/UDtzEIPCE2TWbpgxNt9xFJeMfzpD8I8NwcHB3rGJ2kT4D
-	 gJP3BQaqlEWriaPQSbimYHHQd0idWxGoXLgVFUoTwDLwDf3b9+N8xicIT+fV71uIVA+eh
-	 1wd4GBJpoGKZxs5wYl9G4ZgnuR6dX4Orc+rJeHGwoGYz3Df8YgM4E63IZu4gm5r3xjw==
+	t=1793939099;
+	b=yUl4dDApJR9dSJ03VXnx1teZk9T6WNdgrbwuFQUz9jxbp+WYm39Im3CD6yN+4FpQLo6O
+	 vyBgVRO+qF3PeVJrnU6b2yGM+2OtK4upPM7pLcwoQ927lWQcyRByZW7EL1L01HFtkCO2m
+	 ikj7Ah/mYWitdZolk0mqeIe1h8BEjXgfX0elfGJOMOMui3y45HNV30JsDAMnSShN0l/cT
+	 Ov39Ul6AeABmQhAiR4l7FkOGoMPvCyCDGSnsLKs2TCvgYTNDcWK1XXlfAe3urGn+u5BdY
+	 nnuUVSehfHENAVYwo4h/WTdR98x4xh5PZiTyKPXNvQpXlSlA5X7siGcAHfqLB1n7exA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793939096;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793939099;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=K3YC03LXMBHnrltgz0YXpshx7mYyhApaQ7YnoTjGfXQ=;
-	b=Mu+7e5pOgVlkKKk82L6H7GP6Kbels3AsTu1/wzSrmfyw1vIiHRJIMHoFCTg1AyJ46vhx
-	 FB5aI+yy1SHoUpt0JUl2tzMmk95aaE1tYiU0M7GF+uulsQ3hvdROm/nEHA+qPZGOxWq/E
-	 rzXOURxvzWX/vCvaOhcgeeVizug3ERCsAqYoCUYa01b8s3duMpuobIFHZ1BDHgoZ3p4aO
-	 w2mmnDzbTt+BTi4M+sUCBUR1E4rL9eTwuNNCDun2JNqb1ZTy4Mu3tDJ32eylvSv9knCrc
-	 fEb6S7oc6/Ph/uT6FPrTOLQLdtG1lEbP/C74nLyqUN0lCHx0RFSDVqDNhUQ4lLLCAuw==
+	bh=s/kqWwMzu7vCKvkJd7pVuZMkiI+rgg/+sJKmDC5EIa4=;
+	b=FszGay8Ykzip8Pb/jDrok95EWN3zidJuDpPkLDEY93DHdEwopr5gP2jD77p/mo7FyQsx
+	 ntrEswf85PYZB2jFZbZvdMt3XaeVjNjcFTXJlnxX9w6wBJQV14l1HPXf2KzDAI1DiWaO7
+	 7M2+X2987oAZPd9AkuJyINvkMO0UU8Yv7vWGaxY7ZoUbOyP0Jw5NQxFLrcTOYYdbFi6Nk
+	 74hf9XkE4yraSyZzWFokcfEIzSTdi0OCmN1Bp3kG3YjkxJ8daH75VKOGNGnccV1y9GZlp
+	 iQVLsmCOmHS1EvaeJ74cDiukYx7NvRRmXqr/dtIQkLaukpEaYRoF4xTwwNxJxBws8tw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=boluBaJk;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AmUUSmxK;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81EDC606A31B
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7EA606A31B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:24:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=boluBaJk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A14E1F0089F;
-	Fri,  6 Nov 2026 04:24:56 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AmUUSmxK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0AAF1F0089F;
+	Fri,  6 Nov 2026 04:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793939096;
-	bh=K3YC03LXMBHnrltgz0YXpshx7mYyhApaQ7YnoTjGfXQ=;
+	s=k20260515; t=1793939098;
+	bh=s/kqWwMzu7vCKvkJd7pVuZMkiI+rgg/+sJKmDC5EIa4=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=boluBaJki0IUJrmpdrPzINSyxsy4hBqsJokWytFToy0ucNR81Ir2bmN5NNZ2vqL0J
-	 n+iNZThoteG7xnhvft1ovfvixKRwx8YmgU+MYE7QfywpQXLcVyPOtq5WWd5EClQqsM
-	 Obc1FQaVBqDcgMK2WdgX5SPquy3Qe4/iOD0lHq0dQnmU5QnWC1O8gf+BBX1mDEksZa
-	 3PWeLVorP8eKD+ie75uUWW/+GWr7/jbKDYsw26pLr8g8e0maMSwfh7xN1j7Z3uD/q/
-	 e2iYUV5mL4ZQOV21EyrfswuICt21q7NAQaa/TFWH7xwBN4u3DdcJm85A2+Mzg30uW0
-	 6GA6yqEtSFujw==
-Content-Type: multipart/mixed; boundary="===============9020079507517317093=="
+	b=AmUUSmxK2ZaQYzB1TE0m5084irZNMwWH6P9/UoclRaNt4W19+flgd0eP6mtt56EKi
+	 AulUaLgudkA7dsaHHIu1o84L1+oCWnTEfATwKJPXnkuvp/QhSuMzvnRuJ8gm8jJYzT
+	 s4N1bntqaEKvOgr4Xa/t/TKZdbDTJWLkVOH+rhkMVl24Sxbpfij51SY0XnUEVhMxdi
+	 bfrBUAPxwGRs0aQPOFbIbskfDoiUY2VWKbBRLiYo8GaY+sIlUZFWoafKou+qT5yfMR
+	 0O2HtXRS0nhXXMoTF5bIJNlTdjzyS3zdZqixwQ5Ik4V8YpF30S9RFb2maCXTrCdEzq
+	 /hseWfqUzX3OA==
+Content-Type: multipart/mixed; boundary="===============1877315600829698008=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,128 +49,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <c5cd652a5014ef6157278403838481eb2f4a8c5add5e6de5a2837b3121f30074@mail.kernel.org>
-In-Reply-To: <20261106035111.3315285-33-alexei.starovoitov@gmail.com>
-References: <20261106035111.3315285-33-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v3 32/45] bpf: Keep the frames of the caller for a subprog that loads data_end
+Message-Id: <644690e38c45a876ca35660ae89e8ebda63cf971fad497ab5fc84aa325bc983e@mail.kernel.org>
+In-Reply-To: <20261106035111.3315285-25-alexei.starovoitov@gmail.com>
+References: <20261106035111.3315285-25-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v3 24/45] bpf: Remove precision tracking
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 04:24:56 +0000 (UTC)
+Date: Fri,  6 Nov 2026 04:24:58 +0000 (UTC)
 
---===============9020079507517317093==
+--===============1877315600829698008==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Keep the frames of the caller for a subprog that loads data_end
+> bpf: Remove precision tracking
 
-TL;DR:
-- loads_pkt_end isn't propagated to callers, so valid programs may be rejected
-  when data_end is loaded through a nested subprog
-- A subprog loading data and data_end without passing a packet pointer may
-  also be rejected; testing it in func_is_on_its_own() is suggested
-
-> diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-> --- a/kernel/bpf/flow.c
-> +++ b/kernel/bpf/flow.c
-
-[ ... ]
-
-> @@ -714,6 +714,8 @@ static enum flow_kind flow_loaded_kind(struct bpf_verifier_env *env, const struc
->  		env->ops->is_valid_access(insn->off, size, BPF_READ, env->prog, &info);
->  	/* it notes what the prog reads, and this is a question */
->  	env->prog->tstamp_type_access = tstamp;
-> +	if (valid && info.reg_type == PTR_TO_PACKET_END)
-> +		bpf_find_containing_subprog(env, insn - env->prog->insnsi)->loads_pkt_end = true;
-
-loads_pkt_end is set only on the subprog whose insn loads data_end, and
-nothing passes it up the call graph.  The sibling flags changes_pkt_data,
-might_sleep and might_throw are propagated to every caller by
-merge_callee_effects() in bpf_check_cfg().
-
-Can the program from the commit message still be rejected if has() is
-called through one more static subprog?
-
-  static __noinline bool has(struct xdp_md *ctx, void *p, u32 n)
-  {
-          return p + n <= (void *)(long)ctx->data_end;
-  }
-  static __noinline int parse(struct xdp_md *ctx, void *p)
-  {
-          return has(ctx, p, 14);
-  }
-  ...
-  void *p = (void *)(long)ctx->data;
-  if (!parse(ctx, p))
-          return XDP_DROP;
-  return *(char *)(p + 13) ? XDP_PASS : XDP_DROP;
-
-At the call of parse(), arg_needs_caller() sees r1 as PTR_TO_CTX and r2 as
-PTR_TO_PACKET with id 0.  parse()->loads_pkt_end is false, so parse() is
-verified on its own with only its own frame.
-
-Inside that pass has() keeps the frames, but find_good_pkt_pointers() can
-only widen the registers of parse() and has().  The main prog's r6 is not
-in that state, and the code that rebuilds the caller's state from the exit
-state copies back only R0 and the references.  So r6 keeps r=0 and the load
-fails with the same error as in the commit message:
-
-  invalid access to packet, off=13 size=1, R6(id=0,off=13,r=0)
-
-Before the series, static subprogs were always verified in the caller's
-frames, so this program loaded.
-
-loads_pkt_end is computed in bpf_flow_compute_kinds(), after
-bpf_check_cfg() has run merge_callee_effects(), so propagating it would
-need its own pass after the kinds are computed, for example over
-env->subprog_topo_order, callees first.
-
-[ ... ]
+TL;DR: Nit only: in check_stack_read_fixed_off(), the first two branches are
+now identical after insn_flags removal, so the if/else chain could possibly
+collapse into one mark_reg_stack_read() call.
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -11602,7 +11602,8 @@ static bool arg_needs_caller(const struct bpf_verifier_state *state,
->  	if (reg_is_pkt_pointer(reg) && reg->id)
->  		return true;
->  	/* it checks how much of the packet is there, for the caller */
-> -	if (reg->type == PTR_TO_PACKET_END && !sub->recursive)
-> +	if ((reg->type == PTR_TO_PACKET_END ||
-> +	     (reg->type == PTR_TO_PACKET && sub->loads_pkt_end)) && !sub->recursive)
->  		return true;
->  	/* or whether there is something to point to */
->  	return type_may_be_null(reg->type) && !sub->recursive;
 
-This condition keeps the caller's frames only if a PTR_TO_PACKET is one of
-the arguments, but find_good_pkt_pointers() widens every register in every
-frame with the same type and id as dst_reg.  A subprog that loads both
-data and data_end therefore widens every id-0 packet pointer the caller
-holds, whether or not it was passed:
+[ ... ]
 
-  static __noinline bool has(struct xdp_md *ctx, u32 n)
-  {
-          return (void *)(long)ctx->data + n <= (void *)(long)ctx->data_end;
-  }
-  ...
-  void *p = (void *)(long)ctx->data;
-  if (!has(ctx, 14))
-          return XDP_DROP;
-  return *(char *)(p + 13) ? XDP_PASS : XDP_DROP;
+> @@ -4356,18 +4174,13 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
+>
+>  				if (spill_cnt == size &&
+>  				    tnum_is_const(reg->var_off) && reg->var_off.value == 0) {
+> -					__mark_reg_const_zero(env, &state->regs[dst_regno]);
+> -					/* this IS register fill, so keep insn_flags */
+> +					__mark_reg_const_zero(&state->regs[dst_regno]);
+>  				} else if (zero_cnt == size) {
+>  					/* similarly to mark_reg_stack_read(), preserve zeroes */
+> -					__mark_reg_const_zero(env, &state->regs[dst_regno]);
+> -					insn_flags = 0; /* not restoring original register state */
+> +					__mark_reg_const_zero(&state->regs[dst_regno]);
+>  				} else {
+> -					err = mark_reg_stack_read(env, reg_state, off, off + size,
+> -								  dst_regno);
+> -					if (err)
+> -						return err;
+> -					insn_flags = 0; /* not restoring original register state */
+> +					mark_reg_stack_read(env, reg_state, off, off + size,
+> +							    dst_regno);
+>  				}
 
-Here has()->loads_pkt_end is set, but its live arguments are r1 as
-PTR_TO_CTX and r2 as a scalar, so arg_needs_caller() returns false for
-each of them.  has() is then verified without main's frames, the compare
-does not reach main's r6, and p + 13 is rejected.  Before the series this
-program loaded.
+This isn't a bug, but now that insn_flags is gone, the first two branches
+have the same body, and mark_reg_stack_read() already produces a const
+zero in both of those cases.
 
-Would it be better to test loads_pkt_end once in func_is_on_its_own(), for
-example:
-
-  if (sub->loads_pkt_end && !sub->recursive)
-          return false;
-
-rather than ANDing it with the type of each argument?
+Could the if/else chain be replaced by a single call to
+mark_reg_stack_read(env, reg_state, off, off + size, dst_regno)?
 
 
 ---
@@ -178,4 +110,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42160076968
---===============9020079507517317093==--
+--===============1877315600829698008==--
