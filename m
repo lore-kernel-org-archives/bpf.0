@@ -1,102 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793973171;
-	b=uR0p+UpQhVvwjI5zFwFvotCPK48XT+VD/zVRthV8ohCQgkdLDfr4ENoQKLNTA6pvU+ch
-	 sdfv0CYAnanI1WTLM5s55Y/I6JyFpwvq3bA5JH4JniSthnFWhZ7QK1Q7saTcmp32lRYQi
-	 Jw9nwy/Hh2s33i6AgXfky66M0pj86+hzFZPRsMYTJPKTsw8RCe3oaG0CCNtoLW86TEKoE
-	 Vvgv9yT/LtwjiACyK7FXCh8MkZG0fXC+kglh+nxalCOCT/QEp4tUMgCjFQTgPhp2LvAje
-	 rBdhQZrGb2hJ+d3+F88zn71H2hHtGzf+qpWhUWWc6fUyPai4xGt6Tu/ILJK12z0qmiQ==
+	t=1793975311;
+	b=Ay5TmSG9+rU/LL7/SwHza3VFMVZrS1wDPshGXMpVa1XRrkHD33tVVuANR023MgXSU+Vm
+	 kLpceISJ7lVUp5yWPx1SqvfWNbh4evSQdiBsw0t4IzNJcjHJpFWuQWegihVFT1bSJgy4V
+	 FffNU1OqdsVSY9kFn3TwUTpO/C9F5xbkvjdRnxLVKowxPYbHU3TdMe4DDCqj23OmJFaCx
+	 z00kwEtwody4b5tGrPfjVfz45tvJvLU9cs5s57Nuqzfzd7MInIzT8I8A2fsC2g2hGBWrs
+	 E5unmeRt6aBZU0vg9CoIcDaxCHuTMJBsva0xVsm5+cmdQd2qsPHwLG4LHlHx21mzrBw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793973171;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793975311;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=PcC4IPdf1ihtWsu+EfJlFBQAiBAyUnEQfCqCotWg6Gc=;
-	b=jXpKtjtusn+/HxiZm6dKvcOxHiRd2UUZ1iV9QRByouEOBYVSwwtieH7F10qD2Yk7AvBQ
-	 v1PXZUa2tM0U/Jsgi90uNzCKdXkZzMzdp6o7YF3l5J9m7RcqJyQmMwcMzJzrF07nIrKVE
-	 TJcLdJxt43zvGsNEiAXMPxxTA4FCPAxGnIwjwTte9JwpgfrRc0Gqo/CUR8fCtpOnMviN8
-	 yaTgRR1AVlKTXSKuVbYQC2CV6LGH+mHqhVYAMSiu2ggwGMCvg1AbKX0T2zuckDNfH0x4g
-	 2uwluJb9LCRS7KNgiY42rZ5rAwm7p14Fn38RAdbajKNaCN3yK8UjVixz+i7ta9nafAQ==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Xi81y1XZW609wk/sWs6sIq2iQGR+N/bC4UAGbPKuq4A=;
+	b=QiDo7j7oJ/YCXn7IQ4XcPrK9FZr3he2Vq+Lik2NoHR0vt3565gTub75JoyRVVI4BLwhy
+	 B7WCcwVHm7t9qp3+twKUexdsHRv5qxGSqQjnNvaLiXDFIXvDPjwuV29XXGCC43D5yMsZf
+	 OeEb8hBt0u/WDYvNKKpmID9E95tZx2SFitR9BLQ4zUZyt9QEew6/Z1VmKHAoRyLMl5Wbs
+	 g/JOrybxccbCouK/a2ioCx4HqGtEJLhrlTKBzZUwkyfK+YTg1R8ebKWcKvOmxWyg2KsLa
+	 4apscwuh6RDMt/jJvv+FHkv8XIRDoUWFTLZ1id3OouNIasY07izlkJxFUH6a2N8ca3g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PBFEJUKL;
-	arc=none smtp.remote-ip=209.85.221.41
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nNYKqIju;
+	arc=none smtp.remote-ip=209.85.215.174
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C22606A326
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 13:52:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B2C22606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20C3606A32E
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 14:28:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B20C3606A32E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PBFEJUKL
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-48e47347279so393308f8f.1
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 05:52:50 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nNYKqIju
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cdb681db419so241395a12.1
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 06:28:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793973169; x=1794577969; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PcC4IPdf1ihtWsu+EfJlFBQAiBAyUnEQfCqCotWg6Gc=;
-        b=PBFEJUKLxuXricYMj+U3UnG32j5Rcsp+vdhlY7xQsRhRCxbtroD4ZRIQlFUlf1NPHF
-         dlDcKVVAPMzdgq2Eo/WlMzDXZW6RU7bRf2ibrb3bGlTeqPz0tcXV013Dn4hNVTbo5SJ4
-         w8Ap/n+Bic5T3iQigUadZTY1GNVhmZtUa5Oe+JSMUsJyRk19AhXLpcDTSlQJSs+4zoSd
-         G6Ko3lYcnXg28xVZIYzq3fMD/sziWcCvOKZ0eQCJ/6HGx+wzCpcoiuZ4mIFhjbyJuHtV
-         o+2jQnkqlk6KVMcjjDeCtlJmrKCNsLe1XY4kyLULXirx3i/NBqCZs3Iyx/2s693deZot
-         b90Q==
+        d=gmail.com; s=20260707; t=1793975310; x=1794580110; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Xi81y1XZW609wk/sWs6sIq2iQGR+N/bC4UAGbPKuq4A=;
+        b=nNYKqIjuEjYDx86pC7gLB0wWbCMP9LeWFfMYAVHzNUuU/cQ05fgm3jn6d3knZMEAkl
+         6NeW6BaecfNO0mrlQFVYHb2m8dLyginJlZRTPDeWO/3W7JSr6GW6dJzXIAei90z5+J6e
+         wLcCS701vrX7XfCit1mIWsChOnsLt+tHikk+Q6H74y38mcnbwavdihXJC/hHGxsIzmIq
+         Ubr5W59mPIf3aszrbISHaFrfuTBna8uTy/N7xhWyKhCA1D0U4WDHqGuPOQY5dN19rFC6
+         wI1WoDriOvIRhlvKhVkjOAYVeuO2qENksJtYhO9JWB5ashZE6mUENfRa0VMER/Tj0pmp
+         gx5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793973169; x=1794577969;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PcC4IPdf1ihtWsu+EfJlFBQAiBAyUnEQfCqCotWg6Gc=;
-        b=2mu2oKQv3HXUvs7T7S7blgKYi7OMgupxQnoqPhW3gLKSs5sY/Bn5/FNMD18F4BRtaK
-         tZlWDW9qI3KCLtspPAceDTnH4PGMFv+/gLAkD2yMud7nNGTkNoAAOrqahzd94Ops3En1
-         Q/uZ/QHn39cY3ixKYwAiYGmVbkHb1Cp67bm6h9mwApCTBdp03IRuew8dDUykYAXxJRUA
-         TRi/CWU5mdda/L+5tPdmfxvgBgxUA1VADtIuwf1eLvf2AoK4D0k/8Jq74pBEQxk41XmI
-         Cdch307DRIAuOzjh8rw2+H57LXk08P2GkRz/Wz3kw290UQK+dIZUFdOoSb2RnnjM+NC3
-         711g==
-X-Forwarded-Encrypted: i=1; AL+hErGMNjpYq/aixiqtgS1o1CHG1VWW/vQGkRXCKfDTAHoBMTkBH3nXK2I7WTTO+qVBFIGH7qk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+PZZrNhMK/BxwLZ3XXFlaaNGU4QBDCAUgoH7Qb/bOywcmzhhT5
-	XGBdHzQ0u3oNHHprPotDv9O91q2vIDBvssueXr/Wz5IjQvftRHEMHUkw
-X-Gm-Gg: AYBFou13ZxaKZMc9uz/I0NCHd4VIbO80xlJ5HXJxzgKdP7aySdS7lVOvaC/biTAUwK8
-	aH+pQPqre2SFa4ItsNQZOboSDGf759Bveoo51tDgcGby+op4+xkvYwlcjpesoAOoU8+Q3+6avRJ
-	hsXftMN57c93K0iZA7a/VJhYFrUjIZXlVh3ALjDT/f7811Z8RZ4jp/f4D9dkFyF0jAFw3+JApa1
-	thlqkSS1LaexpKf9qsO8KAmXNBNdX6lNryg0hIwENhDK70b2TQ22Sp1j/ZU/8MiioUS3cftypZs
-	51kh5nlxEKpAQa4AXPg5+K56It36fP+TRaViKvQOY00AAYwb7jrsly00D9hKTDyewO+KDfNtW6Y
-	2tc3e3BaLEEd0ye5kDMX2tsR/pL1wlPEroOjK3Jx4AbeG7oebMHPqqVjfgFWzfEfPy7Sh/RMnt2
-	2Pb5qb8+RnhPGo2g+UshUkd8khpgbI4wRTvp9rOqijCKxpOXRJiIFL0TtQ4GTwM6zU0n5MZkfz8
-	bqPCK5k/mqfrPt3GEJgLZURU78QeaEeixSeHgCmByoLacVOD/ihCjKYJqWjFkmlBOhFQPOis6lY
-	yvTkA/yAnWpVwL0=
-X-Received: by 2002:a5d:5c84:0:b0:48c:7386:af18 with SMTP id ffacd0b85a97d-4927b092b8bmr5141147f8f.8.1793973168740;
-        Fri, 06 Nov 2026 05:52:48 -0800 (PST)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-492d7701bfasm3877363f8f.40.2026.11.06.05.52.48
+        d=1e100.net; s=20260707; t=1793975310; x=1794580110;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Xi81y1XZW609wk/sWs6sIq2iQGR+N/bC4UAGbPKuq4A=;
+        b=jr7hCpykyq9RwMOnGRnoTnKmsakkmRS1nt9ArndaDlgU0HkOBIEalNxv1exABizKU+
+         2c9WEaMaKYrFUdcEk3l9Ry/wjbWFnklua90nIMgDceZGy9uFwtFBC5uUfCTUH+nGBd05
+         dus3bMuwsuL1R6tZixk8CVl6vgLGTAJELVRpJfqcsgsjsLfoHrhoSTROG7b0IpRLE+Sv
+         xDBPz/frg3esPCLfIihBUdQqSqi9CxBCqZouaGO7HdvsveW4L8MK13n00kd12L2drrkL
+         I/GT5puv2rnMxwquUQeoYwG5vtQRyskI0y3UcAAAF15LF8n3+zw05kLdPU/IVb8vB31g
+         OXcg==
+X-Forwarded-Encrypted: i=1; AKwUvBwkoY3jLHyjNCOJ2+ZWY+PJV7V1zQ5Nj6rgE+YMTyXlOxhn+RWZp8g213wOXQCwMzys3IY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/6jgspOoYWS05sWUKa+9Z4YQS9uCMAV4jpFA24z6KbAwaPeHYH
+	Q/cuYYyFhmU0GitHmvVYe+P3SIv3S630g1Is2u4Nd8BDKfL2954yKm2I
+X-Gm-Gg: AYBFou3Qnr2+LWRnbWdiKWha2a0E1vdLzjapVTxp3LVy8bL3UyuCZh16DJF1Y7l7lHI
+	7Wp7PAkSMvk4xUbIlCJfd+GNhdoRNtD6Dcdaln+c8er5vSklQbyN8fka6ThOFR8REdckWwrL1JW
+	MV55DxgLVM7mfQIRoObo5p4ilW2fEcaw4yVXHfSgBpip9yoHnfwrzm78y+Q0TzKP3thFCA3odYw
+	N7x0lQhU+4BLVrXtZTdWjIY2fGyB62QTjYnBoBeTWJEmaClMjUZspNnW0r9SW63jSF3EX5eWtRH
+	xOBnZcr54TbXwel7nZE891WuA++BnPgZ6QF0/o7G10XEj6RGcsG/SThsqVCI4ma1wo5IltaiyEv
+	kSd/y3OGouseC+UoaDNMsZo9SPVguxXxiehM3zUkPpNuCGMiMgGgGCnyG/ufxEI43m6JwNnLMw0
+	qTFxgMtpv6rA1OZKqHNUwuZRy7ocPF0esp8juC5SaJA6YsCyCr18ZgnKTa/piJTokPngMrqZhzz
+	lRr0gn/8ZyxpY+/OL1qjlzXjdS+YOHwXI2AYaq5XFZ1sfVyU8HbyL1i9rbci6g5AKtDVMMwCqZ4
+	a6jXGKLupVohrl6ZUvRFteQePrfvq1zOe2Y4as9nhqyFBx3tJQsH
+X-Received: by 2002:a05:6a21:4ead:b0:3de:2fbc:c391 with SMTP id adf61e73a8af0-3eb9830cb5cmr4470055637.7.1793975309829;
+        Fri, 06 Nov 2026 06:28:29 -0800 (PST)
+Received: from DESKTOP-31QBR7C ([103.120.166.86])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb70aa6878sm634384a12.28.2026.11.06.06.28.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 05:52:48 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 6 Nov 2026 14:52:46 +0100
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-	linux-mm@kvack.org, Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Federico Di Pierro <nierro92@gmail.com>
-Subject: Re: [PATCHv3 bpf-next 1/8] bpf: Honor const on generic kfunc memory
- arguments
-Message-ID: <au3brpNZG2nANnha@krava>
-References: <20261105102343.311331-1-jolsa@kernel.org>
- <20261105102343.311331-2-jolsa@kernel.org>
- <CAEf4BzbdBLb1cBeF0an386k=CmMYKdz=Or5mSjzy_F5SFOwsxg@mail.gmail.com>
+        Fri, 06 Nov 2026 06:28:29 -0800 (PST)
+From: Rahad Bhuiya <rahadbhuiya2021@gmail.com>
+To: tj@kernel.org,
+	void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com
+Cc: sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Rahad Bhuiya <rahadbhuiya2021@gmail.com>
+Subject: [PATCH bpf-next] sched_ext: Reset task fields on exit of an SCX_TASK_READY task
+Date: Fri,  6 Nov 2026 20:28:18 +0600
+Message-ID: <20261106142818.1475-1-rahadbhuiya2021@gmail.com>
+X-Mailer: git-send-email 2.55.0.windows.3
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,78 +99,46 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzbdBLb1cBeF0an386k=CmMYKdz=Or5mSjzy_F5SFOwsxg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 05, 2026 at 04:34:44PM -0800, Andrii Nakryiko wrote:
+Commit a298fd5f4ee8 ("sched_ext: Fix use-after-free of a NONE rescuee
+leaving its sched while running") moved the reset of SCX-managed fields
+out of scx_disable_task() into scx_reset_task_fields() so that it can be
+invoked on every path where a task leaves its scheduler's control,
+including tasks in SCX_TASK_NONE.
 
-SNIP
+However, in __scx_disable_and_exit_task(), an exiting task in state
+SCX_TASK_READY (e.g., a forked task that was initialized via
+ops.init_task() but never enabled under an ext_sched_class before exiting,
+or a disabled task) currently breaks out of the state switch without
+calling scx_reset_task_fields().
 
-> > +/* A kfunc only reads through 'const T *arg'. The compiler enforces it. */
-> > +static enum bpf_type_flag kfunc_arg_mem_flag(const struct btf *btf,
-> > +                                            const struct btf_param *arg)
-> > +{
-> > +       const struct btf_type *t = btf_type_skip_modifiers(btf, arg->type, NULL);
-> > +       u32 id, ref_id;
-> > +
-> > +       btf_type_skip_modifiers(btf, t->type, &ref_id);
-> > +       for (id = t->type; id != ref_id; id = t->type) {
-> > +               t = btf_type_by_id(btf, id);
-> > +               if (btf_kind(t) == BTF_KIND_CONST)
-> > +                       return MEM_RDONLY;
-> > +       }
-> 
-> quite weird implementation, skip modifier, and then re-walk
-> modifiers... while not have a loop from t->type while
-> btf_type_is_modifier() and if you find btf_kind(t) == BTF_KIND_CONST
-> -> return true?
+Consequently, its managed fields (vtime, slice, reenqueue flags, and
+watchdog runnable_at reset) are not reset, violating the invariant that a
+task leaving its scheduler's control starts clean.
 
-the intention was not to introduce another helper with modifier
-classification, the tradeoff is 2 loops [1]
+Call scx_reset_task_fields() in the SCX_TASK_READY case of
+__scx_disable_and_exit_task() to ensure consistent cleanup across all exit
+paths.
 
-jirka
+Fixes: a298fd5f4ee8 ("sched_ext: Fix use-after-free of a NONE rescuee leaving its sched while running")
+Signed-off-by: Rahad Bhuiya <rahadbhuiya2021@gmail.com>
+---
+ kernel/sched/ext/ext.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index f74ffb3b1aca..b57a7989f304 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -4728,6 +4728,7 @@ void __scx_disable_and_exit_task(struct scx_sched *sch, struct task_struct *p)
+ 		args.cancelled = true;
+ 		break;
+ 	case SCX_TASK_READY:
++		scx_reset_task_fields(task_rq(p), p);
+ 		break;
+ 	case SCX_TASK_ENABLED:
+ 		scx_disable_task(sch, p);
+-- 
+2.55.0.windows.3
 
-[1] https://lore.kernel.org/bpf/DMLRV3E28SC8.3FJZXLBLZI4DD@gmail.com/
-
-> 
-> 
-> > +       return MEM_WRITE;
-> > +}
-> > +
-> >  static bool is_kfunc_arg_constant(const struct btf *btf, const struct btf_param *arg)
-> >  {
-> >         return btf_param_match_suffix(btf, arg, "__k");
-> > @@ -13618,7 +13634,8 @@ static int resolve_func_arg_type(struct bpf_verifier_env *env,
-> >                         PTR_ERR(resolve_ret));
-> >                 return -EINVAL;
-> >         }
-> > -       *arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE |
-> > +       *arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE |
-> > +                   kfunc_arg_mem_flag(meta->btf, &args[arg]) |
-> >                     (*arg_type & (PTR_MAYBE_NULL | MEM_UNINIT));
-> >
-> >         return 0;
-> > @@ -14170,7 +14187,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
-> >                                 reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
-> >                         return -EINVAL;
-> >                 }
-> > -               arg_type = ARG_PTR_TO_MEM | MEM_WRITE;
-> > +               arg_type = ARG_PTR_TO_MEM | kfunc_arg_mem_flag(meta->btf, &args[arg]);
-> >         } else if (btf_type_is_struct(ref_t))
-> >                 /* A pointer to a struct without a size argument is classified as ARG_PTR_TO_BTF_ID */
-> >                 arg_type = ARG_PTR_TO_BTF_ID;
-> > @@ -14195,7 +14212,8 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
-> >                         return -EINVAL;
-> >                 }
-> >                 proto->arg_size[arg] = type_size;
-> > -               arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE;
-> > +               arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE |
-> > +                          kfunc_arg_mem_flag(meta->btf, &args[arg]);
-> >         }
-> >
-> >         if (is_kfunc_arg_uninit(meta->btf, &args[arg]))
-> > --
-> > 2.43.0
-> >
