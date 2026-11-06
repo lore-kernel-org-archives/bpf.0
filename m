@@ -1,53 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793986359;
-	b=vj+jfHnFTDH1dY7vQS07dHALRg+N81dNrhQjRqUW0mbaECbQ7hFB75iGfo83tx3hvPka
-	 zzy9pzdED/E9GUr2NFPzXA2MMjDi2Pv33J37v0o3/TUH/InzjPP2kgVnTBHxOpswxwk7n
-	 Z8sc6hUl0Rd172cs3iybjQrTkilI7nNSqjIhLxrjn+VBfuVw1T2fFXSugtvRHGWV84zVS
-	 GjGVZuy7QkC19WDKmGpIyZvE5SLqdeL+OTFQA34i1Q48eJdrmG20fYVRLL9H2kG9Vr1Tw
-	 dfxjzJiTIW/LTmDxuo1KCnpdduqvGXNon5T0aUB5G60t+XJOsmgMUnaZTvv/T+Q9Sow==
+	t=1793987411;
+	b=h8p+OWQcrSYYiE/sP9ahULT92RjoePRqRF1WiAF5/z8byza1U2cRyAOpAhn3cps7Ik3b
+	 +EQsHI7zxCJD5iv4SHfUeaR0seD3EmpozKPAspCIXQ6dbBzoAPBrEnUSN40r8H4Ppn7R/
+	 MQ0ma4iVSfwJVHXRhTs/jNUEey10SX6S3ulZCysX//3xNe9QD9LgNzEQr/nOpW/iKIf3H
+	 1w8Lqfm1sMilWgg27SAD1INXiVw9iBKUExnNhMG1qrJoiq2JlIdQxwjoGUMo9cFkHTpT/
+	 X32tQVqUCfHO4Q7hNtr3zDtnsg5AINJQkz16xYegvAkGQpmXGWKUKnG4/JQx8lDRNsA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793986359;
-	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=ybZChZ9rAXXJpYgVjjNMXpb0KllCBOdJmkiYdEAub2w=;
-	b=wJ5/jecRoGyRTb3w0PAcvsqNxq2CIP7K/HAFXBrdDlShojpwU8OX+Z7/bUIpy8Hi5aaO
-	 aP4Sbmewcl5/WJO+N554WLabSLUwQL5Q4SCW0n1Z+SH3pUIP6jgjHKrYvXD3ZHnrRFw3J
-	 t6z9FKlMEysfsGU52AkFmaAOaXtF+5/sxVA0SJVTNF++lF863I2fvuop/mmsnA5RLY/2m
-	 A/6ek1MfOq7G12mKKWjqZDdPstE6c3slt0a8UZ/h8+3BwlBHYO/aBaKjsfl0hIUewtxev
-	 cTjBIeW9I+TKFknqoTKVS8rQpjURw6nI+Hdlc/eOdPAsyAO8cDA0fPQOPppaAj0fDEg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793987411;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=d7CKOwG8Ski72r+somzqJ25VMQ24bGvKPynp0n3Ef2Y=;
+	b=hQdy7G0AA2OafgsOue2bKJ6YfcragLfFlPDDMw2S2ErDDr8rNxbqFaS4acoaH7LPTT9y
+	 P9Rk16+a9HYBmnu8OKk29rBzHxEnlWsaTKH6+8UyL96SPv7ZePIL5Dg96xRB8jZHpnYd4
+	 VbAjYotygzlvtK1tX9IYwJ3F0S94L/H0SisDtHmLhealf6xLoTB478O/Q0AbkixLG605i
+	 F5LYD5UWMkiR2bn1PWnWVxnWW+jJloDnqFYgRVumKpkksf6kQKj30hNfFqagrhR54S09I
+	 rKMxWHV1Z9vHvPhqwmHGvGNdXNa+8gTTRgKwD7EO4lfn8EVR4aqufUfKdu+ABfm4tuQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Jf3kisSZ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VWB+cvf2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA001606A32C;
-	Fri,  6 Nov 2026 17:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0108606A326
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 17:50:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Jf3kisSZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E95E1F008A2;
-	Fri,  6 Nov 2026 17:32:39 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VWB+cvf2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B1AC1F0089F;
+	Fri,  6 Nov 2026 17:50:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793986359;
-	bh=ybZChZ9rAXXJpYgVjjNMXpb0KllCBOdJmkiYdEAub2w=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Jf3kisSZKUNQEmo4gG2lyzj11wxrXhVhlZ9uxM6uQcpiKNxiBQgZUvTs42wXPkBRh
-	 sdmu9pmR0qfc8PqeGFoHcF/YCDwRr7JBszTRd9qZJeE9l7bX1a8GUcpcJ++xMyljKg
-	 VqXgKCtEHSkpfj+j9Akjs1bUGCkaqiXNA+VBj4LXSUafSzIML90uC/l1K2iPx4tdY+
-	 W2EfU+NipLJDld7o8CbhfPKuNRrJ69qEa8zeMYTOPbrUjcly8ZUZJIKviq41nimBTO
-	 QkdprJA8+M0o/OJuFW12dxmyxKs3/hCW5PVubhJr/F6h3qxc/HpunevXPtIxM5tOGV
-	 KfYN3qziIb6ZA==
-Date: Fri, 06 Nov 2026 07:32:38 -1000
-Message-ID: <1ee462ef3e697e999011e4a0cd2864bd@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Rahad Bhuiya <rahadbhuiya2021@gmail.com>
-Cc: void@manifault.com, arighi@nvidia.com, changwoo@igalia.com, sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next] sched_ext: Reset task fields on exit of an SCX_TASK_READY task
-In-Reply-To: <20261106142818.1475-1-rahadbhuiya2021@gmail.com>
-References: <20261106142818.1475-1-rahadbhuiya2021@gmail.com>
+	s=k20260515; t=1793987410;
+	bh=d7CKOwG8Ski72r+somzqJ25VMQ24bGvKPynp0n3Ef2Y=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=VWB+cvf2gt3qnaTpo2Z7N67wP7yVGB2WkvcfSQj+ggHkF1E+QZMR4KnUUFWN/BJZA
+	 5ohsBoZIUzp5wLyHcGDbuSMye0bkcIh5qlHhX/vzHxtVIxMf2EKsWsnMuMDtUKZ4nQ
+	 I/SJiBrOe9Kbg+teM3iS53y53/bRYXz7yoqcIsHbaKxLMmzTpQEc9Maf1RV/VcNRUq
+	 wdoOpGpmaCdeUKn6corxemmVL77UNuu6VLjTAV1KNh1OuP6C/RadoAHy3g4A+z0Xdi
+	 UM0dFlHHEsh+8/N6RiYwjABDJoDk3Dl1dviqP5gGWEvDDGht+PjvBLCtyFYY5EtIoo
+	 taTzcB+iQjCug==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5E0D43A41012;
+	Fri,  6 Nov 2026 17:50:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,49 +53,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCHv2 bpf-next 0/2] bpf: Disable private stacks for uprobe
+ programs
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179398740917.777046.9211090722200142386.git-patchwork-notify@kernel.org>
+Date: Fri, 06 Nov 2026 17:50:09 +0000
+References: <20261106164043.546879-1-jolsa@kernel.org>
+In-Reply-To: <20261106164043.546879-1-jolsa@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ bpf@vger.kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, sammiee5311@gmail.com,
+ simon@swine.de
 
-Hello, Rahad.
+Hello:
 
-On Fri, Nov 06, 2026 at 08:28:18PM +0600, Rahad Bhuiya wrote:
-> However, in __scx_disable_and_exit_task(), an exiting task in state
-> SCX_TASK_READY (e.g., a forked task that was initialized via
-> ops.init_task() but never enabled under an ext_sched_class before exiting,
-> or a disabled task) currently breaks out of the state switch without
-> calling scx_reset_task_fields().
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Neither example has anything to reset. A forked task which exits while
-READY goes through sched_ext_dead() and is freed. A task disabled from
-ENABLED is already reset: both callers of scx_disable_task(), the
-ENABLED case here and switched_from_scx(), call scx_reset_task_fields()
-right after it.
+On Fri,  6 Nov 2026 17:40:41 +0100 you wrote:
+> hi,
+> uprobe programs can be preempted and re-entered on the same CPU. Since
+> the private stack is shared per program and CPU, a nested invocation can
+> overwrite the preempted invocation's stack.
+> 
+> This patch disables private stacks for KPROBE programs except kprobe multi
+> and kprobe-session programs, identified by the BPF_TRACE_KPROBE_MULTI and
+> BPF_TRACE_KPROBE_SESSION attach types. Standard kprobes lack an attach type,
+> and uprobes use different attach types or none, so they run without private
+> stacks.
+> 
+> [...]
 
-A READY task is on a sched but outside the ext class. RT and DL tasks
-are always in that state, and so are non-SCHED_EXT tasks under a partial
-switch. The sched's BPF code can still write such a task's dsq_vtime and
-slice, and because the READY exit doesn't reset them, they carry over
-when the task moves to another sched.
+Here is the summary with links:
+  - [PATCHv2,bpf-next,1/2] bpf: Reject multi kprobe programs in perf event attach
+    https://git.kernel.org/bpf/bpf-next/c/6a6beb501ee7
+  - [PATCHv2,bpf-next,2/2] bpf: Disable private stacks for untagged kprobe programs
+    https://git.kernel.org/bpf/bpf-next/c/0eaeda0d2075
 
-For example, an RT task in a cgroup owned by sub-sched A gets its
-dsq_vtime set by A's ops.cgroup_move(), as scx_flatcg does. If the task
-is then moved to a cgroup owned by sub-sched B and later switches to
-SCHED_NORMAL, B's ops.enable() sees the dsq_vtime from A's clock.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Can you rewrite the description around that case?
 
-> Fixes: a298fd5f4ee8 ("sched_ext: Fix use-after-free of a NONE rescuee leaving its sched while running")
-
-a298fd5f4ee8 didn't change the READY case. It was a bare break before
-and after. The gap goes back to 5771e79e461e ("sched_ext: Reset
-dsq_vtime and slice when a task leaves SCX"), which put the reset only
-on the ENABLED path, so that'd be the one to point at if the patch keeps
-a Fixes tag.
-
-sched_ext patches go through the sched_ext tree, not bpf-next. Can you
-repost with the above updated?
-
-Thanks.
-
---
-tejun
