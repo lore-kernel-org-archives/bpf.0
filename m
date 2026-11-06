@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793998337;
-	b=xL2saF87+Zr0gZtqEnm6xFboz3uEEMVVgwflOdkWmdE462JxX+uO71PTY7tcMwiJ9w3T
-	 iiqTrpdO1hKWfCTRbF3m+1PFpZDd0cr10ZW8PjGHST2Eoq8TI9jez+xilcxK9HMLhBhfr
-	 iA/ajyMjQm7feAW+Sr2yPkF+P1g3s3n4ymUvudZirabflFJsGxmfQLfQpO6NeRK+4vePI
-	 Z+AzJBNOFgF/Rdn44SS/rleOLvqNL4Vex1h9h+p8X6KGK1S3Sa9EtNRsuvA9G3/bFj1w7
-	 hn5kwYmX7D0pfL/pIR+VXohuK4lbIwmjnuaXSCq14OwdAyf+t+5OR0j+lKPPotymtKQ==
+	t=1793998342;
+	b=vRZ6WcCUMpLnypy8XGNee7ZaNMEiNjvLXqYGjBI9zicJlZBuaSc3j3dkZBQes6VjDCD6
+	 j/AzWWS2lzF/FRhnhs/uf3XGE/PnDrqa1Al2SX3vNKmaYmuAPjwtFscOZsQAnYLg+gStL
+	 Tz4VClp8QqzpF3EFcaVVykBbPh/c27Zv8acl8t790hLkyDPifCGoETghXbLuJmDUlU5rx
+	 wMgtKA7tfHzhwgBoWLAO8F2+Gsr0aaz8DGMThutE5YC4Gdx+iidCAt5V7FWeLXED1PkmR
+	 4R/ROSiygo1ySvYVnWdOBgXI9chXW6zleykSO+jEjIM4FAZLeqMXFUQsRddW/gSGj/g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793998337;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793998342;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=BSQmYSj7ASxOoDycCnlWcf5b/d2VgwavVPobGw9DT/I=;
-	b=EhXhRFsKMpAVDjrN7/cGPFeTatCkQFPDJwKMmhWGvqJjbKdPSAaKLvN6gbNs03Gg0X1i
-	 kohjFU9WSskox48YeRMlHh3lVLa+ohjb+QgcglwHEu6cA2HE5P9WJJ0S7VwSmmies0C5h
-	 QhUV2Dh/vBUpNy/Jjl7zgMHzxmEEgyt3vFS7XaaiBDEeUgarSYIbXaVG5qWrtK+3I4IXD
-	 vf+4AjZOkHYm3GYIxRkSyL6SJ8NwW9pM7h0jk7NtA31mNBdpOIG0GjOpUEVCXB/O2doab
-	 XorRyKauT7te6hU/hJbN35zMeeQtR/fQUicyVlg2fGAP+4jGoO6WcI7AbtVLOHFN9CQ==
+	bh=rnRMS6NrjaAL6KS8KVB6qlnbH88zRv1HcCnzXNaTbv0=;
+	b=zDdIwJ9zBKcVrANq+YfkWH64w4YQGJ8Prw1HGXKcarU/2PTuNnYlNCrPr4Dg+wFqB2du
+	 I9yRb8ieK5MNV9iVeR9G/SdCCIcEN2Lf3TcxiPx7ByYN8c22ZV6b/vqND244pX7kl+seY
+	 u7vMgmM1XS4DAuZsAssRzN+OS7cCbKNVYP+vpxtELkFh9NYdtDTe62wKzpip16O0qyUGL
+	 EMjAdMgwFvma+3YTCUjVBf2AR+PJ10qOZSjMfGIgQ7UZ3r7TDfove/F61z7jH0VMab13R
+	 9Xj+uHYRLzylApCLn9sxqguLdBoCbFcreP0Rm5jrnGbLSl5CmWOOB8G53LakxlfvO1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=r0o5Fivu;
-	arc=none smtp.remote-ip=209.85.128.48
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=W0LjKxRI;
+	arc=none smtp.remote-ip=209.85.128.46
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7CE606EEB4
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:52:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C7CE606EEB4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB353606A33B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:52:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB353606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=r0o5Fivu
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a215e64962so12453565e9.1
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:52:16 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=W0LjKxRI
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a20bde60a0so9969675e9.3
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:52:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793998335; x=1794603135; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793998329; x=1794603129; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BSQmYSj7ASxOoDycCnlWcf5b/d2VgwavVPobGw9DT/I=;
-        b=r0o5FivuOBbRNSBaLuN+M5IlG8cmSnTkuKxppCmc5tyXsxaRalK2kJmwnDSAVr0NRp
-         KKRTPcJZ30LMsbkFyKq9Q5vuYCyalMIoSUI02XsbZpSPYbjlSWxCvdJuCfQSsnARYKP1
-         j5+h3XmgT5OU9IthA+qWsy3JfXm0SUdFcEvASUsb2wwgsSW170MVRlisA0X8qyEfIR4J
-         DkdWK7kjptQi3cSySnyl437h8M2JrhC6W9bVJzD+HbwxmHPaUANpFlLxnRqrLGL7rwVF
-         XFqxaa0/l3p1CXYllaMBYIwl5N6ARDkcSH/4Oxs0wuAskM3f4b+kaZRnNYgpruLO+fOz
-         iugw==
+        bh=rnRMS6NrjaAL6KS8KVB6qlnbH88zRv1HcCnzXNaTbv0=;
+        b=W0LjKxRIg31sAsAp6UpbOM47kfrowESSmLcDdTW/VhA7JNhylVIJ6mjj+UIP8l18cy
+         YEZgpDgt2l0q3eJk7fxZvFqTxePg65wFY03g+kGH1cRjG5Hy4Ts1uOZxd1z+/GAN7FPM
+         Al/Vwf4RziyGlZPrgJ1Fvlob1cQvXvoKhxmELkXh9r7yfGDJ6Rr7p2e9tOaZAERApLVn
+         tmhH8pQdvVX8j+p+GKiwSIE4DC6iVquGE3BH4OT5++t7d9u0ORnZvkjtoub+Erby2vGf
+         Nptyrrc4y5LMs8EtuAGE2i7ZCyd/ctxLhfRblfP1zUyrfRb/PQjN3SPSX10v6wR6c0Ru
+         oszQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793998335; x=1794603135;
+        d=1e100.net; s=20260707; t=1793998329; x=1794603129;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BSQmYSj7ASxOoDycCnlWcf5b/d2VgwavVPobGw9DT/I=;
-        b=aIXBlAjAjazeFb/sIgyEOC5y8LgiK662Kz36EetSbD+4jzYsHSdPq9Ly9ouy00yykB
-         gFLA0CbZUAYFbHcDkJmrAPe248TA/X1ly+Rg69xgP6qpBKDSHsiCts8qpuSaA32DkqKr
-         Ji8o9+NEEBko/pP68OimmYSA0mxwNAWr8Qb3dbqZqDIlCvMbFGLkfZTaGZXI88JxfWBO
-         D4THIzL0YwWEGSCg02uVbAUol685yY+IFAhAAOkbmBqiYCbnZMOM15HQMOQCjjwE3QfT
-         BW+cjyD42UbVHv48dYqAxrgCnSHXbrSk4ll9XdFY4JslwvMJ/Yc5qrwv8nXG/QKSmlnA
-         g9yQ==
-X-Forwarded-Encrypted: i=1; AKwUvByPWe209ToJ7zezhjScqXe8rmYzs1wxV2GpX0o/QpYAz4nSH8AMMeAtyzYyqp6HJcwr5kM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+alvSB4jyVtGGN68KPnLeK/Dp+7bMvamN/KfS5st8X2h7/UTQt
-	gCiZZ4Fv07xDDayqBmMNwdGcfdigB+Sf+18qkKLP/bl/eq1e+nCuG84A
-X-Gm-Gg: AYBFou3nryN1lipqdhS+vBmiCSYIiT/BS8NO2PnUj1qFoTRXl23K41LAUtph17L5D+H
-	8gDfWkh9hRqy+icA86SBJRmUIL5YOQNAhz4NucwUdqF0R5B35/szoDw5jgCEStBQz22F+pHoT6D
-	V8TG7wNHaZU8HLuo29YNwDmG7faP2LR132Y0AO9uM93L7vj/9YMpQxKXa0WBHlHceLUFIlS0WVH
-	s+mc9PZc6ce9l8Vo1SnXNPTqrqCyfYJk1bjB+NBk3Ju8/SErJev4H2qGsJyqkE61xtra3Q2Uj9l
-	NnXifW/zCTyclsgn9xqNWI3uLtO4NcljADRsA/cFEr3m1ZpSVJ8zUk3HP7JJvCGkRwDwOC+8Nlm
-	lQ1NAe0ZcpfJek5Ei0v8ZPw+rWJGwLfxyRb0ntCj9dPXYUNxhdGAAton7W6wo5zzSte9vVURBna
-	hHCFlIObePszy2qYIp3V6VYTHsvSzHfk0zUwnlW29LokFyArgmfAYm+g3qV4mwy9doUdOWBB6Pn
-	oai2V6lPPZsTcIZPp445vRMWovsLpyh/NmmOFP9uYZKSvwWUmB78ja9pri7Srh5cjX6+S8yRENk
-	MXS+78TnI/TiaovxxHpOYcrYVQSCBHCgR6Z30/LoSdVsb7g=
-X-Received: by 2002:a05:600c:3e8d:b0:4a8:cb23:f71b with SMTP id 5b1f17b1804b1-4b6df5eaac6mr63442635e9.18.1793998335216;
-        Fri, 06 Nov 2026 12:52:15 -0800 (PST)
+        bh=rnRMS6NrjaAL6KS8KVB6qlnbH88zRv1HcCnzXNaTbv0=;
+        b=vSaE8G0TNpxL60ET9mAjQA9i1DO/dwvN2PoZNARG1EG1ZsZ1Cou+yr02A6kSNl5JaW
+         exwwAk9FkMb2W9DQo+Mz6OWvOducMrDWbjU/Bhbs5l/Kz0ROL3rHjzvRu62gf3n3cBq5
+         fcwTtdxcHQthgKAeuSv70IWFJzBFrqIBDP+cmOY/hZ5IY6eZ/Nth3+SFjU6+2iM2osmC
+         ECjXAgX5cgiwfSVutk/v9GrmzFT5q8ehgdyS2sCV5+JXzaAR4KjT/r3zLQRLipQegnHi
+         cabfdk4ImoZ4jcTvoOexfklyirXBSwd8/sWC4MhhqSYjc5hFmxbBCh/M0o3VshrrnwIy
+         a23g==
+X-Forwarded-Encrypted: i=1; AKwUvBzmhiczPKKTL79Zhv8CvQCDO1dgDed3Blw9YunZjPZXiETfvBmfvzKiZL6M4kZ91x4KyFA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8tENyKjRzrLcaiqwuXikestO9akyiqwqGRB3nHX5p5jiTwz4UI
+	Z9N1gxp1bmpY5f+cs/+HDiyo0+pV/6FAA/YRs2bzn+GQh/6RhE1ebmfU
+X-Gm-Gg: AYBFou0ba0AhaXHP4mm5uHdnyd+bOQ38ZES+UFvDDY6OuQfazsmVeBFiBv0cQbqzsEJ
+	3096ZRA62fOzRVPG4XiA1m5ky4sSnu2gdGqu4gblkJrwcr8PJmmSHmgIuPZMDud51UkwfIXz64M
+	FP1iNchNd7enEw0oqf4amaCm+Dea1ty0ZI5SwDPVd1mR57iDKi02VqYTXAarDUT3Rk5fIOYgGCP
+	nRTvmHEK4602tJ12FOT7wZhQo9LGnFP6E9c+Qs+d1c5Iiht0mlzezYl4o2SZ4dKicQH0wbLHdgK
+	GcVabGH2xm8cLijYt+fa1gl2pFirk367g5LFIhVI4HkySKHq3ts3NrTIPb1RnxjnCF+0viENNdv
+	QsXlmSDZwGZHO5VR5Ygn4nn+jazIFWsLLprJr9s/GU5PUh5da6n9Agec1tkVXTWILViylrPsWA/
+	M2Dg/UN4Ws/T+eQjNwL32YMaGfl5Gc48FeWEUK/uH588e1PGi2achNtWkjN1666n4nZQ4Hamezn
+	PhN0vaJP0CBaPJL2tifvoYZd9VE/zGpouxNQKGIuBFauJo7ekWWm5Fak+c/JN46tlAPf43tQxHl
+	JpY7vwM+tpopxTfLu2mSoglndFfVq240r7OycV5xBc/ptaI=
+X-Received: by 2002:a05:600c:46d1:b0:4a6:b49f:9ae5 with SMTP id 5b1f17b1804b1-4b6dfe8f492mr65228495e9.34.1793998329247;
+        Fri, 06 Nov 2026 12:52:09 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7da62edb4sm9075425e9.1.2026.11.06.12.52.14
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7da62edb4sm9075425e9.1.2026.11.06.12.52.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 12:52:14 -0800 (PST)
+        Fri, 06 Nov 2026 12:52:08 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -97,9 +97,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v1 bpf-next 13/18] bpf: Check the return values of fmod_ret programs on found targets
-Date: Fri,  6 Nov 2026 21:03:02 +0000
-Message-ID: <20261106210314.1767267-13-a.s.protopopov@gmail.com>
+Subject: [PATCH v1 bpf-next 08/18] bpf: Add the bpf_scan_ir LLVM plugin
+Date: Fri,  6 Nov 2026 21:02:57 +0000
+Message-ID: <20261106210314.1767267-8-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: 20261106205523.1765622-1-a.s.protopopov@gmail.com
 References: <20261106210314.1767267-1-a.s.protopopov@gmail.com>
@@ -114,254 +114,402 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A later patch lets resolve_btfids make the functions found by bpf_scan_ir
-fmod_ret targets. Each of them gets a "bpf_fmodret_retval:" decl tag with
-the values it returns on paths without side effects, for example
-"bpf_fmodret_retval:-22,-12". Returning such a value instead of calling
-the function looks to the callers like a real failure.
+Add a new bpf_scan_ir.cpp LLVM plugin selected by the new
+CONFIG_CLANG_PLUGIN_BPF_SCAN_IR option. The new plugin depends on
+DEBUG_INFO_BTF, as the information it produces eventually ends up in
+kernel/module BTF. It needs LLVM 19 or later and supports only x86_64
+and arm64. For now LTO_CLANG is not supported. It is a planned
+follow-up. The new pass runs after optimization over the IR of the
+kernel and modules.
 
-Read the tag when an fmod_ret program is loaded and check at every exit
-that the program returns 0 or one of these values.
+The purpose of this plugin is to gather information about functions,
+which can be targets for BPF fmodret programs (have paths without side
+effects which return errors). The records about functions are stored in
+the new .BTF_fmodret_candidates section which is created by plugin and
+later is processed by the resolve_btfids tool. The actual plugin logic is
+added in the following commits.
 
-A function which the static rules allow keeps today's behaviour. So do
-the functions declared in BTF_FMODRET sets, which have no such tag.
+Keep .BTF_fmodret_candidates and its relocations in the temporary BTF
+link and discard it before the later links, so the build-only function
+references do not create runtime relocations. Keep it in modules until
+their BTF is generated and remove it then, also when BTF generation is
+skipped. Without module BTF, discard it at the module link. Let modpost
+accept the section. Let objtool skip its relocations in IBT validation:
+a record has the address of its function, which is not an indirect
+branch target. The vDSO, the EFI stub and the early boot code are built
+without the plugins, so position-independent startup objects do not
+contain the absolute function pointers of the records.
 
-Only a kernel function has such a tag, so do not look for it when the
-target is a BPF program. Remember the values in the program, and do not
-let an extension replace an fmod_ret program with restricted return
-values: it could return any value. Check this at load and when an
-extension is attached to another program later. Do not allow tail calls
-in such a program either: the program it jumps to returns for it, and a
-program array does not check the values it may return.
+The record format and the linker script are in scripts/bpf, so a future
+GCC plugin can share them.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- include/linux/bpf.h   |   6 ++
- kernel/bpf/syscall.c  |   1 +
- kernel/bpf/verifier.c | 146 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 153 insertions(+)
+ MAINTAINERS                          |   7 ++
+ include/asm-generic/vmlinux.lds.h    |   3 +-
+ scripts/Makefile.llvm-plugins        |   2 +
+ scripts/Makefile.modfinal            |   1 +
+ scripts/Makefile.vmlinux             |   3 +
+ scripts/bpf/fmodret.lds              |   6 ++
+ scripts/bpf/fmodret_metadata.h       |  29 ++++++
+ scripts/gen-btf.sh                   |   4 +-
+ scripts/link-vmlinux.sh              |   7 ++
+ scripts/llvm-plugins/Kconfig         |  16 ++++
+ scripts/llvm-plugins/bpf_scan_ir.cpp | 126 +++++++++++++++++++++++++++
+ scripts/mod/modpost.c                |   1 +
+ scripts/module.lds.S                 |   5 ++
+ tools/objtool/check.c                |   1 +
+ 14 files changed, 209 insertions(+), 2 deletions(-)
+ create mode 100644 scripts/bpf/fmodret.lds
+ create mode 100644 scripts/bpf/fmodret_metadata.h
+ create mode 100644 scripts/llvm-plugins/bpf_scan_ir.cpp
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index b011acc22c50..69387de119a6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1967,6 +1967,12 @@ struct bpf_prog_aux {
- 	const struct btf_type *attach_func_proto;
- 	/* function name for valid attach_btf_id */
- 	const char *attach_func_name;
-+	/*
-+	 * The values which an fmod_ret program may return besides 0, from the
-+	 * "bpf_fmodret_retval:" tag of its target, or NULL
-+	 */
-+	s64 *fmodret_retvals;
-+	u32 fmodret_retval_cnt;
- 	struct bpf_prog **func;
- 	struct bpf_prog_aux *main_prog_aux;
- 	/* main prog: there when the prog has timed may_goto */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 9004f2673ccf..0a78f66a1622 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2490,6 +2490,7 @@ static void __bpf_prog_put_noref(struct bpf_prog *prog, bool deferred)
- 	module_put(prog->aux->mod);
- 	kfree(prog->aux->kfunc_tab);
- 	kfree(prog->aux->ctx_arg_info);
-+	kfree(prog->aux->fmodret_retvals);
- 	if (prog->aux->attach_btf)
- 		btf_put(prog->aux->attach_btf);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 02b6c8963c63..dfbb45ecc716 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5064,6 +5064,13 @@ S:	Supported
+ F:	arch/x86/net/
+ X:	arch/x86/net/bpf_jit_comp32.c
  
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b7329d164771..a9da29a11963 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13329,6 +13329,14 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 	}
++BPF [COMPILER PLUGINS]
++M:	Anton Protopopov <a.s.protopopov@gmail.com>
++L:	bpf@vger.kernel.org
++S:	Maintained
++F:	scripts/bpf/
++F:	scripts/llvm-plugins/bpf_*
++
+ BPF [CORE]
+ M:	Alexei Starovoitov <ast@kernel.org>
+ M:	Daniel Borkmann <daniel@iogearbox.net>
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index f8254a88e05d..4e18758b5ffc 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -886,7 +886,8 @@
+ 		KLP_SYMID
  
- 	if (func_id == BPF_FUNC_tail_call) {
-+		/*
-+		 * The program which a tail call jumps to returns for this one,
-+		 * and a program array does not check the values it may return.
-+		 */
-+		if (env->prog->aux->fmodret_retvals) {
-+			verbose(env, "tail calls are not allowed in fmod_ret programs with restricted return values\n");
-+			return -EINVAL;
-+		}
- 		if (env->cur_state->curframe) {
- 			struct bpf_verifier_state *branch;
+ #define MODINFO								\
+-		.modinfo (INFO) : { KEEP(*(.modinfo)) }
++		.modinfo (INFO) : { KEEP(*(.modinfo)) }	\
++		.BTF_fmodret_candidates 0 (INFO) : { KEEP(*(.BTF_fmodret_candidates)) }
  
-@@ -19887,6 +19895,73 @@ static bool program_returns_void(struct bpf_verifier_env *env)
- 	return false;
- }
+ #ifdef CONFIG_GENERIC_BUG
+ #define BUG_TABLE							\
+diff --git a/scripts/Makefile.llvm-plugins b/scripts/Makefile.llvm-plugins
+index e18f4907b015..9ff364f4db59 100644
+--- a/scripts/Makefile.llvm-plugins
++++ b/scripts/Makefile.llvm-plugins
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
  
++llvm-plugin-$(CONFIG_CLANG_PLUGIN_BPF_SCAN_IR) += bpf_scan_ir.so
++
+ LLVM_PLUGIN := $(llvm-plugin-y)
+ LLVM_PLUGINS_CFLAGS := $(strip $(addprefix -fpass-plugin=$(objtree)/scripts/llvm-plugins/, \
+ 	$(LLVM_PLUGIN)) -DLLVM_PLUGINS)
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index 01a37ec872b9..042c31e3bdfb 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -42,6 +42,7 @@ quiet_cmd_btf_ko = BTF [M] $@
+       cmd_btf_ko = 							\
+ 	if [ ! -f $(objtree)/vmlinux ]; then				\
+ 		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
++		$(OBJCOPY) --remove-section=.BTF_fmodret_candidates $@;	\
+ 	else	\
+ 		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
+ 	fi;
+diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
+index 95b523fe4f9e..c8651454c3d3 100644
+--- a/scripts/Makefile.vmlinux
++++ b/scripts/Makefile.vmlinux
+@@ -73,6 +73,9 @@ vmlinux.unstripped: scripts/link-vmlinux.sh vmlinux.o .vmlinux.export.o $(KBUILD
+ ifdef CONFIG_DEBUG_INFO_BTF
+ vmlinux.unstripped: $(RESOLVE_BTFIDS) $(srctree)/scripts/gen-btf.sh
+ endif
++ifdef CONFIG_CLANG_PLUGIN_BPF_SCAN_IR
++vmlinux.unstripped: $(srctree)/scripts/bpf/fmodret.lds
++endif
+ 
+ ifdef CONFIG_BUILDTIME_TABLE_SORT
+ vmlinux.unstripped: scripts/sorttable
+diff --git a/scripts/bpf/fmodret.lds b/scripts/bpf/fmodret.lds
+new file mode 100644
+index 000000000000..6bdfde9e7679
+--- /dev/null
++++ b/scripts/bpf/fmodret.lds
+@@ -0,0 +1,6 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++SECTIONS {
++	/DISCARD/ : {
++		*(.BTF_fmodret_candidates)
++	}
++}
+diff --git a/scripts/bpf/fmodret_metadata.h b/scripts/bpf/fmodret_metadata.h
+new file mode 100644
+index 000000000000..209f266f89a3
+--- /dev/null
++++ b/scripts/bpf/fmodret_metadata.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef FMODRET_METADATA_H
++#define FMODRET_METADATA_H
++
 +/*
-+ * A function which the build found by analysing its code has a
-+ * "bpf_fmodret_retval:" decl tag with the values it returns on paths without
-+ * side effects, for example "bpf_fmodret_retval:-22,-12". See the comment at
-+ * the top of tools/bpf/resolve_btfids/main.c. An fmod_ret program attached to
-+ * it may return only these values, or 0 to call the function.
++ * The records which the BPF compiler plugins write to .BTF_fmodret_candidates
++ * for resolve_btfids, one for each function with values and for each weak
++ * definition. If a function has two weak definitions, the record of the one
++ * which loses the link would describe the body of the other, so both need a
++ * record to make the function ambiguous. A record is packed, target-endian and
++ * aligned to the target pointer size:
++ *
++ *	u32 magic, version, size, flags;
++ *	ptr function;
++ *	u32 nr_values, reserved;
++ *	s64 values[nr_values];
++ *
++ * The values are the errors which clean paths of the function return, sorted
++ * and unique.
 + */
-+#define BTF_FMODRET_RETVAL_TAG "bpf_fmodret_retval:"
++#define FMODRET_META_MAGIC 0x46524d32U
++#define FMODRET_META_VERSION 1U
++#define FMODRET_META_HEADER_SIZE(ptr_size) (24 + (ptr_size))
++#define FMODRET_META_VALUE_SIZE 8
 +
-+/* Parse the next value of the list at *LIST and move *LIST past it */
-+static int fmodret_retval_next(const char **list, s64 *value)
-+{
-+	const char *end = strchrnul(*list, ',');
-+	size_t len = end - *list;
-+	char buf[24];
++#define FMODRET_FN_WEAK (1U << 0)
++#define FMODRET_FN_RET64 (1U << 1)
 +
-+	if (!len || len >= sizeof(buf) || (*end && !end[1]))
-+		return -EINVAL;
-+	memcpy(buf, *list, len);
-+	buf[len] = 0;
-+	*list = *end ? end + 1 : end;
-+	return kstrtos64(buf, 10, value);
-+}
-+
-+static bool fmodret_retval_allowed(const struct bpf_prog_aux *aux, u64 value)
-+{
-+	const struct btf_type *t;
-+	u32 i;
-+
-+	/* "w0 = -22" zero-extends, the caller of an int function sees -22 */
-+	t = btf_type_skip_modifiers(aux->attach_btf, aux->attach_func_proto->type, NULL);
-+	if (t->size == 4 && !upper_32_bits(value))
-+		value = (s32)value;
-+	if (!value)
-+		return true;
-+	for (i = 0; i < aux->fmodret_retval_cnt; i++) {
-+		if (aux->fmodret_retvals[i] == (s64)value)
-+			return true;
-+	}
-+	return false;
-+}
-+
-+/* The program must return a constant: 0 or one of the values of the tag */
-+static int check_fmodret_retval(struct bpf_verifier_env *env, int regno,
-+				const char *exit_ctx, const char *reg_name)
-+{
-+	const struct bpf_prog_aux *aux = env->prog->aux;
-+	struct bpf_reg_state *reg = reg_state(env, regno);
-+	int err;
-+	u32 i;
-+
-+	if (reg->type == SCALAR_VALUE) {
-+		err = mark_chain_precision(env, regno);
-+		if (err)
-+			return err;
-+		if (tnum_is_const(reg->var_off) &&
-+		    fmodret_retval_allowed(aux, reg->var_off.value))
-+			return 0;
-+	}
-+
-+	verbose(env, "%s the register %s must be a constant, it should be 0 or one of", exit_ctx, reg_name);
-+	for (i = 0; i < aux->fmodret_retval_cnt; i++)
-+		verbose(env, "%s%lld", i ? "," : " ", aux->fmodret_retvals[i]);
-+	verbose(env, "\n");
-+	return -EINVAL;
-+}
-+
- static int check_return_code(struct bpf_verifier_env *env, int regno, const char *reg_name)
++#endif
+diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
+index b17f1189298a..5bca864631e0 100755
+--- a/scripts/gen-btf.sh
++++ b/scripts/gen-btf.sh
+@@ -120,7 +120,9 @@ gen_btf_o()
+ 
+ embed_btf_data()
  {
- 	const char *exit_ctx = "At program exit";
-@@ -19943,6 +20018,9 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
- 	if (prog_type == BPF_PROG_TYPE_CGROUP_SKB && (env->prog->expected_attach_type == BPF_CGROUP_INET_EGRESS))
- 		enforce_attach_type_range = tnum_range(2, 3);
+-	${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF ${ELF_FILE}
++	# resolve_btfids has consumed the compiler plugin records of the module
++	${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF \
++		--remove-section=.BTF_fmodret_candidates ${ELF_FILE}
  
-+	if (env->prog->aux->fmodret_retvals)
-+		return check_fmodret_retval(env, regno, exit_ctx, reg_name);
+ 	# a module might not have a .BTF_ids or .BTF.base section
+ 	btf_base="${ELF_FILE}.BTF.base"
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index d5710e900bd4..f39e2d1f1400 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -89,6 +89,13 @@ vmlinux_link()
+ 		ldlibs=
+ 	fi
+ 
++	if is_enabled CONFIG_CLANG_PLUGIN_BPF_SCAN_IR; then
++		if [ "${output}" = ".tmp_vmlinux1" ]; then
++			ldflags="${ldflags} ${wl}--emit-relocs"
++		else
++			ldflags="${ldflags} ${wl}--script=${srctree}/scripts/bpf/fmodret.lds"
++		fi
++	fi
+ 	ldflags="${ldflags} ${wl}--script=${objtree}/${KBUILD_LDS}"
+ 
+ 	# The kallsyms linking does not need debug symbols included.
+diff --git a/scripts/llvm-plugins/Kconfig b/scripts/llvm-plugins/Kconfig
+index 37db99159b9c..c4d62ae5f65d 100644
+--- a/scripts/llvm-plugins/Kconfig
++++ b/scripts/llvm-plugins/Kconfig
+@@ -15,3 +15,19 @@ menuconfig LLVM_PLUGINS
+ 	  Building them requires LLVM development headers and llvm-config
+ 	  of the same major version as clang. Each plugin has its own option
+ 	  below and is built only if that option is enabled.
 +
- 	if (!return_retval_range(env, &range))
- 		return 0;
- 
-@@ -22874,6 +22952,58 @@ static int check_attach_modify_return(unsigned long addr, const char *func_name)
- 
- #endif /* CONFIG_FUNCTION_ERROR_INJECTION */
- 
-+/*
-+ * Programs attached to a function found by the analysis may return only the
-+ * values of its "bpf_fmodret_retval:" tag. A function which the static rules
-+ * allow stays unrestricted.
-+ */
-+static int fmodret_retval_init(struct bpf_verifier_env *env, u32 btf_id,
-+			       unsigned long addr, const char *tname)
++if LLVM_PLUGINS
++
++config CLANG_PLUGIN_BPF_SCAN_IR
++	bool "Scan optimized LLVM IR for BPF"
++	depends on X86_64 || ARM64
++	depends on DEBUG_INFO_BTF
++	depends on !LTO_CLANG
++	depends on CLANG_VERSION >= 190000
++	help
++	  Find the functions which return errors on paths without side
++	  effects and describe them in .BTF_fmodret_candidates for
++	  resolve_btfids. The section is discarded from the final kernel
++	  and modules.
++
++endif
+diff --git a/scripts/llvm-plugins/bpf_scan_ir.cpp b/scripts/llvm-plugins/bpf_scan_ir.cpp
+new file mode 100644
+index 000000000000..6700896749d4
+--- /dev/null
++++ b/scripts/llvm-plugins/bpf_scan_ir.cpp
+@@ -0,0 +1,126 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* bpf_scan_ir: optimizer-last LLVM IR analysis for BPF. */
++
++#include "../bpf/fmodret_metadata.h"
++
++#include "llvm/ADT/SmallVector.h"
++#include "llvm/Config/llvm-config.h"
++#include "llvm/IR/Analysis.h"
++#include "llvm/IR/Constants.h"
++#include "llvm/IR/GlobalVariable.h"
++#include "llvm/IR/Module.h"
++#include "llvm/IR/PassManager.h"
++#include "llvm/Passes/PassBuilder.h"
++#if __has_include("llvm/Plugins/PassPlugin.h")
++#include "llvm/Plugins/PassPlugin.h"
++#else
++#include "llvm/Passes/PassPlugin.h"
++#endif
++#include "llvm/Transforms/Utils/ModuleUtils.h"
++
++using namespace llvm;
++
++namespace {
++
++/* The errors which clean paths of a function return */
++using ReturnValues = SmallVector<int64_t, 8>;
++
++struct FunctionDescription {
++	Function *Fn;
++	unsigned Flags;
++	ReturnValues Values;
++};
++
++static void emitDescriptions(Module &M, ArrayRef<FunctionDescription> Functions)
 +{
-+	struct bpf_prog_aux *aux = env->prog->aux;
-+	const struct btf *btf = aux->attach_btf;
-+	const struct btf_type *t = btf_type_by_id(btf, btf_id);
-+	s64 *retvals = NULL;
-+	const char *values, *list;
-+	u32 cnt, size = 0;
-+	s64 v;
++	auto *I32 = Type::getInt32Ty(M.getContext());
++	auto *I64 = Type::getInt64Ty(M.getContext());
++	unsigned PtrSize = M.getDataLayout().getPointerSize();
++	auto N = [&](unsigned V) -> Constant * { return ConstantInt::get(I32, V); };
 +
-+	if (!check_attach_modify_return(addr, tname))
-+		return 0;
-+	values = btf_find_decl_tag_value(btf, t, -1, BTF_FMODRET_RETVAL_TAG);
-+	if (IS_ERR(values))
-+		return PTR_ERR(values) == -ENOENT ? 0 : PTR_ERR(values);
++	for (const auto &F : Functions) {
++		unsigned Size = FMODRET_META_HEADER_SIZE(PtrSize) +
++				F.Values.size() * FMODRET_META_VALUE_SIZE;
++		SmallVector<Constant *, 16> Fields = {
++			N(FMODRET_META_MAGIC), N(FMODRET_META_VERSION), N(Size), N(F.Flags),
++			F.Fn, N(F.Values.size()), N(0),
++		};
 +
-+	t = btf_type_by_id(btf, t->type);
-+	t = t ? btf_type_skip_modifiers(btf, t->type, NULL) : NULL;
-+	if (t && (btf_type_is_int(t) || btf_is_any_enum(t)))
-+		size = t->size;
-+	if (size != 4 && size != 8)
-+		goto invalid;
-+
-+	for (list = values, cnt = 1; *list; list++)
-+		cnt += *list == ',';
-+	retvals = kmalloc_array(cnt, sizeof(*retvals), GFP_KERNEL_ACCOUNT);
-+	if (!retvals)
-+		return -ENOMEM;
-+	for (list = values, cnt = 0; *list;) {
-+		if (fmodret_retval_next(&list, &v) || v >= 0 || (size == 4 && v < S32_MIN))
-+			goto invalid;
-+		retvals[cnt++] = v;
++		for (int64_t V : F.Values)
++			Fields.push_back(ConstantInt::getSigned(I64, V));
++		Constant *Record = ConstantStruct::getAnon(M.getContext(), Fields, true);
++		auto *GV = new GlobalVariable(M, Record->getType(), true, GlobalValue::PrivateLinkage,
++					      Record, "fmodret.function." + F.Fn->getName());
++		GV->setSection(".BTF_fmodret_candidates");
++		GV->setAlignment(M.getDataLayout().getPointerABIAlignment(0));
++		appendToUsed(M, {GV});
 +	}
-+	if (!cnt)
-+		goto invalid;
-+
-+	aux->fmodret_retvals = retvals;
-+	aux->fmodret_retval_cnt = cnt;
-+	return 0;
-+
-+invalid:
-+	kfree(retvals);
-+	verbose(env, "invalid %s%s tag of %s()\n", BTF_FMODRET_RETVAL_TAG, values, tname);
-+	return -EINVAL;
 +}
 +
- static bool is_tracing_multi_id(const struct bpf_prog *prog, u32 btf_id)
- {
- 	return is_tracing_multi(prog->expected_attach_type) && bpf_multi_func_btf_id[0] == btf_id;
-@@ -23283,6 +23413,15 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			bpf_log(log, "Cannot extend fentry/fexit/fsession\n");
- 			return -EINVAL;
- 		}
-+		/*
-+		 * An extension could return any value for an fmod_ret program
-+		 * whose return values are restricted. This is also checked when
-+		 * an extension is attached to another program than at load.
-+		 */
-+		if (prog_extension && tgt_prog->aux->fmodret_retvals) {
-+			bpf_log(log, "Cannot extend an fmod_ret program with restricted return values\n");
-+			return -EINVAL;
++#if LLVM_VERSION_MAJOR >= 24
++class BpfScanIRPass : public RequiredPassInfoMixin<BpfScanIRPass>
++#else
++class BpfScanIRPass : public PassInfoMixin<BpfScanIRPass>
++#endif
++{
++public:
++	PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM)
++	{
++		// Avoid emitting duplicate descriptions if bpf_scan_ir runs again
++		// on the same module.
++		if (M.getNamedMetadata("bpf_scan_ir.done"))
++			return PreservedAnalyses::all();
++
++		SmallVector<FunctionDescription, 32> Descriptions;
++
++		for (Function &F : M) {
++			if (F.isIntrinsic() || F.isDeclaration() || F.hasAvailableExternallyLinkage())
++				continue;
++			Type *Ret = F.getReturnType();
++			unsigned Flags = 0;
++			ReturnValues Values;
++
++			if (!Ret->isIntegerTy(32) && !Ret->isIntegerTy(64))
++				continue;
++			if (F.isWeakForLinker())
++				Flags |= FMODRET_FN_WEAK;
++			if (Ret->isIntegerTy(64))
++				Flags |= FMODRET_FN_RET64;
++			/*
++			 * Nothing finds the values yet. A weak definition always
++			 * has a record, see fmodret_metadata.h.
++			 */
++			if (!Values.empty() || (Flags & FMODRET_FN_WEAK))
++				Descriptions.push_back({&F, Flags, std::move(Values)});
 +		}
- 	} else {
- 		if (prog_extension) {
- 			bpf_log(log, "Cannot replace kernel functions\n");
-@@ -23662,6 +23801,13 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 		return -EINVAL;
- 	}
- 
-+	/* Only a kernel function has a "bpf_fmodret_retval:" tag */
-+	if (prog->expected_attach_type == BPF_MODIFY_RETURN && !tgt_prog) {
-+		ret = fmodret_retval_init(env, btf_id, tgt_info.tgt_addr, tgt_info.tgt_name);
-+		if (ret)
-+			return ret;
++		if (Descriptions.empty())
++			return PreservedAnalyses::all();
++		emitDescriptions(M, Descriptions);
++		M.getOrInsertNamedMetadata("bpf_scan_ir.done");
++
++		PreservedAnalyses PA;
++		PA.preserve<FunctionAnalysisManagerModuleProxy>();
++		PA.preserveSet<CFGAnalyses>();
++		return PA;
 +	}
 +
- 	/*
- 	 * We don't get trampoline for tracing_multi programs at this point,
- 	 * it's done when tracing_multi link is created.
++	static bool isRequired() { return true; }
++};
++
++} // namespace
++
++extern "C" LLVM_ATTRIBUTE_WEAK PassPluginLibraryInfo llvmGetPassPluginInfo()
++{
++	return {
++		LLVM_PLUGIN_API_VERSION,
++		"bpf_scan_ir",
++		"1.0",
++		[](PassBuilder &PB) {
++			PB.registerOptimizerLastEPCallback(
++				[](ModulePassManager &MPM, OptimizationLevel, auto...) {
++					MPM.addPass(BpfScanIRPass());
++				   }
++			);
++		}
++	};
++}
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 75374c64b8cc..3bae98549228 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -772,6 +772,7 @@ static const char *const section_white_list[] =
+ 	".llvm.call-graph-profile",	/* call graph */
+ 	"__llvm_covfun",
+ 	"__llvm_covmap",
++	".BTF_fmodret_candidates",
+ 	".klp.symid",			/* objtool --klp-symids */
+ 	NULL
+ };
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index d0f200428957..e6ba499dc876 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -27,6 +27,11 @@ SECTIONS {
+ 	__ex_table		0 : ALIGN(4) { KEEP(*(__ex_table)) }
+ 
+ 	__patchable_function_entries 0 : { *(__patchable_function_entries) }
++#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++	.BTF_fmodret_candidates	0 (INFO) : { KEEP(*(.BTF_fmodret_candidates)) }
++#else
++	/DISCARD/ : { *(.BTF_fmodret_candidates) }
++#endif
+ 
+ 	.init.klp_funcs		0 : ALIGN(8) { KEEP(*(.init.klp_funcs)) }
+ 	.init.klp_objects	0 : ALIGN(8) { KEEP(*(.init.klp_objects)) }
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 931c5c412f15..e6120bee4505 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -4657,6 +4657,7 @@ static int validate_ibt(struct objtool_file *file)
+ 		    !strcmp(sec->name, "__jump_table")			||
+ 		    !strcmp(sec->name, ".init.klp_funcs")		||
+ 		    !strcmp(sec->name, "__mcount_loc")			||
++		    !strcmp(sec->name, ".BTF_fmodret_candidates")	||
+ 		    !strcmp(sec->name, ".llvm.call-graph-profile")	||
+ 		    !strcmp(sec->name, ".llvm_bb_addr_map")		||
+ 		    !strcmp(sec->name, "__tracepoints")			||
 -- 
 2.43.0
 
