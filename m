@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793940802;
-	b=3euG7zcQVuWWTOj9dS03rkw8G3+jjYHwrK/LLqyl2JhY3v6XqTEqeZX2RA7bq6s+57Z5
-	 MUDxxUK6SKyaZ0wywUUal2av/vnbU/fwZg8rRRqG42L034rMzvnA5mWpoFeHg5UZjUlJm
-	 +kugXrn+5ZpQVafO3ka6fN1/hyG3wy5jlIJ+LtPe3Fpkw6xRfEX511X4OK91aOIGz+NVy
-	 knbDlrJlyz63mwVMgELfGCZyXVApaFRyDmVPiiNZYv4g3rVqp3k2VZXPCbUyj+tFIbnAE
-	 KI75eAgo6M/RPqFz6QzAzY9i/8C+iLoZyQ4svg98ILhf6hYPpbdpL2ZhVpNYuVbmJrw==
+	t=1793940959;
+	b=AxM1UjkUXowYqaTLrQmCcCnP6g0x1a1I8f1yigTrsI9qaXl1jHefIlAGJaWPkkk7pahC
+	 ynzoxnl+bXRrBuzjIWGOC01Ws6ZVtKp0oLs5uC00QmrE694tCPf4N6Oomrx2IouyJW1uV
+	 hqoWMnNV3P7IKruUpPzonPAETe6L05sQo62BFlz9GRgvH1lUiGEiWne+bC5mYdIM3e6j9
+	 lU0rN7FxyKKv7ZDKihY6XwURoLX/864ljLc2wIos6ENsRLUjGX5MUmyvYhFOAgfMUVYV9
+	 f4BkNYjQySdBhGQXzsINr27kEFxNw/ycnEfT4fFTF8ghd7+Eoyfk+3YLnhW1bSiLL8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793940802;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793940959;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=f50S8LhDHJtSH3D2Oqf5TEc0LMm1TysfoxN+Z8pCh9Y=;
-	b=ERdNs5oztYupL6j4tjn+PpE8zS+TnOQYuIP/InrL8C7tKS9Ao22GIMXzy2RPu5C3hI9+
-	 zde3foih0dxuDTFqgHrRDF7XcJoNifmPxK5kXNlUB4nFfDMoa8lavXVFh2JdDMSW+NUJs
-	 8XgeeUJ2IKvhXil8tIt7iAtcjK6y9Tgz/nluOJVS8X3jRqRR7BKLMEcFJv1uK/ZCIUtzi
-	 vmwnTqcxlvZ9s8RxDRjUlMYWAY97bUw3EWDqvVEN1qBHXToEwwaurdGMWwoFySRPDn+xy
-	 lWDnY8VCE5t69meoBNLOoDJutX5oG1vHH2UdYwDwtAOz/e9PtgzFRfQ38gsv479A2HA==
+	bh=KLvkwZRa6hwMcN/vOTx5oBmLhbTRFW1LdDCbU6C5d2E=;
+	b=Nm2Pz9zAzajZQZXnpbTpH4bKh8C+5QJivS8F+MRhJp3SpKZv3WCiHmr4TvbFlVVA5QqT
+	 Jj8R3elBa5kvmaYlW8pVQPdnqEZiUPv8MxHCpOaiLL4r8KTbtdwopFcTRKD4yR1Mapz06
+	 2oyinIrnqECH6KW60g8v9IGxz0EvHw0RzcDygoaqd5LxWbdP5UbpLmc4YqHjyQDXjKmhd
+	 FrNOy9QzPNk5b5zE/NMNEjqb9XEUXjUjTUyR+F4PC1MzI1e2TBEd5XA2sP5YK8rnFg+Xk
+	 RjRYRT9faFQI65U33htWqHpvMT2SqoHmP66tlYyvivRjyUeOZlke6z4CqmxBE16PuQA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=okBppRsn;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MY1K2f4r;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150B2606A31B
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AA61606A31B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 04:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=okBppRsn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DD661F008A1;
-	Fri,  6 Nov 2026 04:53:21 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MY1K2f4r
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC571F008A1;
+	Fri,  6 Nov 2026 04:55:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793940801;
-	bh=f50S8LhDHJtSH3D2Oqf5TEc0LMm1TysfoxN+Z8pCh9Y=;
+	s=k20260515; t=1793940959;
+	bh=KLvkwZRa6hwMcN/vOTx5oBmLhbTRFW1LdDCbU6C5d2E=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=okBppRsnh1mgZ0Y5zIxmlYMw6TmZS7T8ofLAha/XtZxLlkmg9ilGclul73mtsbQoS
-	 aT40ruR3vdGddBZni7NPzHoaB0rStzhUQZGbqmv0xsdxdyPheeW+7JpVUd6/T5Q4c/
-	 124N8kdBJwMuNcM7IDIZ5xKVJ1HzbOkMtwuYO5z1CvaQIcov+Z0YD0bWKbUJPW/M+b
-	 s9ro9k9oCl/QPpXROFcGxJVze1eruwPEOx+iKFDet32nQZGLoxU6A3DeuW9XWrUZyA
-	 REF39+6I1Bmh5d6uTywa6MclBJgI/rs0C6UePagQfsRhHfPaiUjDGdHvvKiso0XMvP
-	 OH6Dyeyz8sLxg==
-Message-ID: <sashiko-outbox-200776@kernel.org>
+	b=MY1K2f4rT5EHy48TfBF9BKFkfrbudUyVqWuekpsZviEECvVZPm2sWgWEWFRbBDiHG
+	 31ZzyQ9XdYk3FH6eaFfwfEmdaaDVcoQIYm4qONJ0ki3pnSMjVBii+jTK4LuFGsXMxb
+	 b7/3E2xbVyO8jSzIiQ2H7ou2rTRPVH00gXNtcrYKUA5mFivBIeLlL/Jo42tXcWMcUl
+	 0gX+9EWts+c4b2MaawBO3mks2/8rVXUCu8WI67Bqb1Xr52jcC1MTTckA9ERW8g7HdG
+	 ywvCaWSraN2xlWC3KTnojq09bELCJ+oo1MS2TIrOGJVxhNzv638MNHa5Eb3nmGl7co
+	 0qTxPjjCi3Kfg==
+Message-ID: <sashiko-outbox-200780@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 21/45] bpf: Verify static subprogs on their
- own
+Subject: Re: [PATCH bpf-next v3 19/45] bpf: Verify programs as a fixpoint
+ over the control flow graph
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261106035111.3315285-22-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261106035111.3315285-20-alexei.starovoitov@gmail.com>
 References: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
- <20261106035111.3315285-22-alexei.starovoitov@gmail.com>
+ <20261106035111.3315285-20-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 06 Nov 2026 04:53:21 +0000
+Date: Fri, 06 Nov 2026 04:55:58 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,278 +60,422 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 6 potential issue(=
 s) to consider:
-- [High] bpf: bpf_flow_return() drops speculative state flag on callee exit
-- [Medium] bpf: call_func_on_its_own() loses async callback context in fram=
-e[0]
-- [Medium] bpf: add_insns_of_callees() double-counts insns and misses callx=
- edges
-- [Medium] bpf: bpf_flow_return() lazy fallback leaves stale post-call stat=
-es
+- [High] bpf: missing bpf_head_guard_target() edge in update_insn() and nee=
+d_const
+- [High] bpf: missing loop_stack refs update in release_reference_state()
+- [Medium] bpf: join_func() and func_states_equal() reject post-call stack =
+arg states
+- [Medium] bpf: unreset loop_guard flag and ignored fatal errors in do_chec=
+k_all()
+- [Medium] bpf: do_check_block() mishandles nospec ordering with check_loop=
+_guard()
+- [Medium] bpf: check_loop_guard() rejects offloaded progs during patience =
+walk
 --
 
-commit 34bdfd07d4f78d7029c50c8aec27497f8117e123
+commit 2c82419db13e7e33be1c8b05f84811e97169e868
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Verify static subprogs on their own
+bpf: Verify programs as a fixpoint over the control flow graph
 
-This commit verifies eligible static subprograms in a single standalone fra=
-me
-rather than in the call frames of their callers, joining states at the
-subprogram entry and applying exit states to all waiting call sites.
+This commit replaces path-by-path exploration in the BPF verifier with a
+fixpoint iteration over the control flow graph that joins states at merge
+points. It also adds loop guard injection and bounded patience walks for
+loops without statically known trip counts.
+
+> diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
+> index c4a6384d34bce..62115e396635a 100644
+> --- a/kernel/bpf/flow.c
+> +++ b/kernel/bpf/flow.c
+> @@ -1024,7 +1024,7 @@ static int flow_compute_need_const(struct bpf_verif=
+ier_env *env, struct flow_nee
+>  		if (jump)
+>  			gen[i] =3D flow_tested_regs(env, i);
+>  		else if (flag)
+> -			gen[i] =3D flow_flag_regs(env, i);
+> +			gen[i] =3D bpf_flow_flag_regs(env, i);
+
+[Severity: High]
+As reported by Sashiko on v2 [1], when a loop has no dominating exit
+condition and flow_place_guards() places a guard at the loop header h with
+aux[h].guard_at_header =3D true and aux[h].guard_to =3D t, check_loop_guard=
+()
+pushes the state at h along a synthetic BPF_GUARD_LEAVES_LOOP edge to t when
+aux->guard_no_unwind is true (for example, when a lock, reference, or RCU
+read lock is held across the loop).
+
+While bpf_compute_const_regs(), analyze_subprog(), bpf_flow_compute_kinds(),
+and bpf_compute_live_registers() account for t =3D bpf_head_guard_target(en=
+v,
+idx), update_insn() in kernel/bpf/liveness.c and flow_compute_need_const() =
+in
+kernel/bpf/flow.c only propagate across bpf_insn_successors(env, idx):
+
+kernel/bpf/liveness.c:update_insn() {
+	succ =3D bpf_insn_successors(env, insn_idx);
+	if (succ->cnt =3D=3D 0)
+		return false;
+
+	/* All instructions of one frame array share the same mask width */
+	for (s =3D 0; s < succ->cnt; ++s) {
+		unsigned long *succ_live;
+
+		succ_live =3D rel_mask(fm, relative_idx(instance, succ->items[s]), FM_LIV=
+E_BEFORE);
+		for (w =3D 0; w < fm->words; w++)
+			new_after[w] |=3D succ_live[w];
+	}
+}
+
+If a stack slot holds a value or spilled kernel pointer before entering loop
+header h, is overwritten on all normal in-loop CFG paths to t (setting
+FM_MUST_WRITE), and is read at or after t, update_insn() does not union
+FM_LIVE_BEFORE from t =3D bpf_head_guard_target(env, h) into new_before at =
+h,
+leaving the slot marked dead at h.
+
+When a state arrives at h in bpf_flow_deliver() -> flow_arrive(),
+bpf_clean_verifier_state() clears the dead slot's spilled_ptr to NOT_INIT a=
+nd
+marks slot_type as STACK_POISON before check_loop_guard() pushes that state
+from h to t. At t, reading the slot fails with a false-positive poisoned sl=
+ot
+error when !env->allow_uninit_stack, or if env->allow_uninit_stack is true
+and the header guard state joins at t with a normal loop-exit state where t=
+he
+slot was overwritten with a scalar, join_slot() in kernel/bpf/join.c turns
+STACK_MISC/STACK_ZERO + STACK_POISON into STACK_INVALID. Can this allow
+check_stack_read_fixed_off() at t to read back the unoverwritten kernel
+pointer spilled before h as an unbounded SCALAR_VALUE when the header
+may_goto guard triggers at runtime, and should update_insn() and
+flow_compute_need_const() also propagate from bpf_head_guard_target()?
+
+[ ... ]
+
+> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+> index 9d3a86b5820e9..4b2506f3e3e27 100644
+> --- a/kernel/bpf/states.c
+> +++ b/kernel/bpf/states.c
+
+[ ... ]
+
+> @@ -999,9 +1026,19 @@ static bool func_states_equal(struct bpf_verifier_e=
+nv *env, struct bpf_func_stat
+>  	if (!old->no_stack_arg_load && cur->no_stack_arg_load)
+>  		return false;
+
+[Severity: Medium]
+As reported by Sashiko on v2 [2], every function frame starts with
+no_stack_arg_load =3D false and out_stack_arg_cnt =3D 0, and do_check_insn(=
+) only
+calls end_stack_arg_loads() on BPF_CALL when bpf_in_stack_arg_cnt() is
+non-zero.
+
+When a path writes an outgoing stack argument in check_stack_arg_write(),
+end_stack_arg_loads() sets state->no_stack_arg_load =3D true and
+grow_stack_arg_slots() increases state->out_stack_arg_cnt. After the call
+finishes, invalidate_outgoing_stack_args() resets all state->stack_arg_regs=
+[i]
+to NOT_INIT, but state->out_stack_arg_cnt remains at its grown value.
+
+When this post-call state arrives at a loop header or merge point where an
+earlier pre-call state (with fa->out_stack_arg_cnt =3D=3D 0 and
+fa->no_stack_arg_load =3D=3D false) is stored:
+
+1. func_states_equal() rejects !old->no_stack_arg_load &&
+   cur->no_stack_arg_load even when the subprogram has no incoming stack
+   arguments.
+2. join_func() in kernel/bpf/join.c rejects fa->out_stack_arg_cnt <
+   fb->out_stack_arg_cnt:
+
+kernel/bpf/join.c:join_func() {
+	if (fa->out_stack_arg_cnt < fb->out_stack_arg_cnt)
+		return false;
+}
+
+Does this prevent joining, widening, and state subsumption whenever a call
+with stack arguments occurs inside a loop or on one side of a branch?
+
+[ ... ]
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 103f368035638..b61166f670945 100644
+> index 5af42d2dcab94..4801e9ac0089d 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -11840,6 +11843,180 @@ static void account_current_path(struct bpf_ver=
-ifier_env *env);
-
-[ ... ]
-
-> +static bool func_is_on_its_own(struct bpf_verifier_env *env, struct bpf_=
-verifier_state *state,
-> +			       int subprog)
-> +{
-> +	struct bpf_func_state *caller =3D state->frame[state->curframe];
-> +	struct bpf_subprog_info *sub =3D &env->subprog_info[subprog];
-> +	u16 live =3D env->insn_aux_data[sub->start].live_regs_before;
-> +	u32 i;
-> +
-> +	if (sub->changes_pkt_data || sub->has_tail_call || sub->has_ld_abs ||
-> +	    sub->is_cb || sub->is_async_cb || sub->is_exception_cb)
-> +		return false;
-> +	if (state->speculative)
-> +		return false;
-> +	if (sub->releases_inherited &&
-> +	    (state->acquired_refs || state->active_rcu_locks || state->active_p=
-reempt_locks))
-> +		return false;
-
-[Severity: Medium]
-What happens if a static subprogram verified on its own has multiple exit
-paths, or is called from two sites whose entries are merged, where one exit
-leaves caller-held references, locks, or packet data intact while a later
-exit releases an inherited resource or changes packet data?
-
-In kernel/bpf/flow.c:flow_apply_exit(), each exit state is applied to waiti=
-ng
-callers as it arrives:
-
-	err =3D bpf_copy_verifier_state(&st, &w->st);
-	if (!err)
-		err =3D bpf_flow_return(env, &st, &x->st, call_idx);
-	if (!err)
-		err =3D bpf_flow_deliver(env, &st, call_idx + 1, call_idx);
-	bpf_free_verifier_state(&st, false);
-	if (err !=3D 1)
-		return err;
-
-When an earlier non-releasing exit reaches flow_apply_exit() (or is applied
-via flow_do_united() when two entry states are joined by flow_merge()), a
-post-call state is delivered to call_idx + 1 while w remains on entry->call=
-s.
-
-When a subsequent exit reaches bpf_flow_return() and sets
-sub->releases_inherited =3D true (or sub->changes_pkt_data =3D true), retur=
-ning 1
-re-queues w at call_idx for in-frame verification, but any post-call states
-already delivered to call_idx + 1 from earlier exits are not retracted. Can
-those stale post-call states continue executing in the caller and trigger
-false check_resource_leak() failures at program exit?
-
-[ ... ]
-
-> +static int call_func_on_its_own(struct bpf_verifier_env *env, int subpro=
-g, int insn_idx)
-> +{
-> +	u16 live =3D env->insn_aux_data[env->subprog_info[subprog].start].live_=
-regs_before;
-> +	struct bpf_verifier_state *state =3D env->cur_state;
-> +	struct bpf_func_state *caller =3D state->frame[state->curframe], *calle=
-e;
-> +	struct bpf_verifier_state entry =3D {};
-> +	int i, err;
-> +
-> +	callee =3D kzalloc_obj(*callee, GFP_KERNEL_ACCOUNT);
-> +	if (!callee)
-> +		return -ENOMEM;
-> +	entry.frame[0] =3D callee;
-> +	entry.in_sleepable =3D state->in_sleepable;
-> +	entry.callers_unknown =3D state->callers_unknown;
-> +	init_func_state(env, callee, BPF_MAIN_FUNC, 0, subprog);
-> +	/* the frame that says so is not there when the function is verified */
-> +	callee->in_rcu_callback_fn =3D in_rcu_callback(env);
-
-[Severity: Medium]
-As reported by Sashiko on v2 [1], when a non-sleepable async callback
-scheduled from a global subprogram verified with env->no_rcu_read_lock =3D=
-=3D true
-calls a static subprogram verified on its own, call_func_on_its_own() repla=
-ces
-entry.frame[0] with callee and only sets callee->in_rcu_callback_fn.
-
-Because push_async_cb() sets async_cb->frame[0]->in_async_callback_fn =3D t=
-rue
-and async_cb->frame[0]->callback_ret_range rather than in_rcu_callback_fn,
-has_rcu_read_lock() relies on state->frame[0]->in_async_callback_fn:
-
-	if (state->active_rcu_locks || in_rcu_callback(env))
-		return true;
-	if (in_sleepable(env))
-		return false;
-	return !env->no_rcu_read_lock || state->frame[0]->in_async_callback_fn;
-
-And check_return_code() (which check_kfunc_call() invokes for bpf_throw()
-during do_check_all()) also checks frame->in_async_callback_fn and
-frame->callback_ret_range on env->cur_state->frame[0].
-
-Should call_func_on_its_own() also preserve state->frame[0]->in_async_callb=
-ack_fn
-and state->frame[0]->callback_ret_range on callee so RCU read-lock tracking
-and async callback return-range checks are not lost inside the standalone
-callee frame?
-
-[ ... ]
-
-> +/* The current state is at exit of a function that is verified on its ow=
-n. */
-> +static int exit_func_on_its_own(struct bpf_verifier_env *env)
-> +{
-> +	struct bpf_verifier_state *state =3D env->cur_state;
-> +	struct bpf_func_state *callee =3D state->frame[0];
-> +	u32 i, nregs;
-> +	int err;
-> +
-> +	nregs =3D bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
-> +	for (i =3D 0; i < nregs; i++) {
-> +		if (callee->regs[ret_regs[i]].type !=3D PTR_TO_STACK)
-> +			continue;
-> +		verbose(env, "cannot return stack pointer to the caller\n");
-> +		return -EINVAL;
-> +	}
-> +	state->unwound |=3D bpf_is_unwind_exit(&env->prog->insnsi[env->insn_idx=
-]);
-> +
-> +	/* Invalidate callee-local dynptrs and their slices before the frame go=
-es away. */
-> +	err =3D destroy_dynptrs_in_stack_slots(env, callee, 0,
-> +					     callee->allocated_stack / BPF_REG_SIZE - 1);
-> +	if (err)
-> +		return err;
-> +
-> +	account_current_path(env);
-> +	err =3D bpf_flow_exit(env, state, env->insn_idx);
-> +	return err ?: PROCESS_BPF_EXIT;
-> +}
+> @@ -1605,9 +1617,14 @@ static int acquire_irq_state(struct bpf_verifier_e=
+nv *env, int insn_idx)
+> =20
+>  static void release_reference_state(struct bpf_verifier_state *state, in=
+t idx)
+>  {
+> -	int last_idx;
+> +	int last_idx, fr;
+>  	size_t rem;
+> =20
+> +	/* the frames that were entered with it don't hold it ever since */
+> +	for (fr =3D 0; fr <=3D state->curframe; fr++)
+> +		if (idx < state->frame[fr]->entry_refs)
+> +			state->frame[fr]->entry_refs--;
 
 [Severity: High]
-As reported by bot+bpf-ci@kernel.org on v2 [2], when speculation mitigation=
- is
-active (!env->bypass_spec_v1 or !env->bypass_spec_v4), a static subprogram
-entered with state->speculative =3D=3D false can spawn speculative paths in=
-side
-the callee via check_cond_jmp_op(), sanitize_ptr_alu(), or
-check_unwind_goto().
+As reported by Sashiko on v2 [3], loop_stack_push() records
+env->cur_state->acquired_refs in loop_stack[cnt].refs when entering a loop,
+and check_refs_taken_in_loop() scans from i =3D entry->refs to
+st->acquired_refs at loop backedges to ensure references acquired inside the
+loop are still held in a register or stack slot.
 
-When such a speculative path reaches BPF_EXIT, process_bpf_exit_full() rout=
-es
-it through exit_func_on_its_own() -> bpf_flow_exit() -> flow_apply_exit() ->
-bpf_flow_return(). In bpf_flow_return(), caller->unwound is copied from
-exit->unwound, but exit->speculative is not propagated to caller->speculati=
-ve:
+When release_reference_state() removes state->refs[idx] and shifts the
+remaining entries down with memmove(), it decrements
+state->frame[fr]->entry_refs if idx < entry_refs, but it does not decrement
+state->frame[fr]->loop_stack[l].refs when idx < loop_stack[l].refs.
 
-	if (exit->unwound && !bpf_is_unwind_goto(&env->prog->insnsi[call_idx + 1])=
-) {
-		verbose(env, "unwind_exit, but no unwind_goto after the call at insn %d\n=
-",
-			call_idx);
-		return -EINVAL;
-	}
-	caller->unwound =3D exit->unwound;
-
-In addition, in kernel/bpf/flow.c:flow_merge(), a non-speculative state t->=
-st
-can subsume a speculative state s->st via flow_within() ->
-bpf_state_subsumes() and unite their flow_entry sets via flow_unite().
-
-Could this cause speculative return states to resume in the caller as
-non-speculative architectural paths (marking dead instructions as seen in
-sanitize_mark_insn_seen() and failing the state->speculative check on
-recoverable errors in do_check_block()) or cross-unite distinct call entrie=
-s?
+If a program acquires a reference before entering a loop, releases that
+pre-loop reference inside the loop, and then acquires a new reference inside
+the loop and leaks it before taking the backedge, memmove() shifts the
+in-loop reference down to index entry->refs - 1 while entry->refs stays
+unchanged. Can this cause check_refs_taken_in_loop() to miss the leaked
+in-loop reference at the backedge, and should loop_stack_safe() in
+kernel/bpf/states.c also check old_stack[i].refs =3D=3D cur_stack[i].refs to
+match join_loop_stack()?
 
 [ ... ]
 
-> @@ -23452,6 +23641,37 @@ static int do_check_all(struct bpf_verifier_env =
-*env)
->  	}
+> @@ -21581,14 +21663,174 @@ int bpf_flow_loop_enter(struct bpf_verifier_en=
+v *env, bool *backedge, bool *drop
+
+[ ... ]
+
+> +static int check_loop_guard(struct bpf_verifier_env *env)
+> +{
+> +	struct bpf_insn_aux_data *aux =3D &env->insn_aux_data[env->insn_idx];
+> +	struct bpf_verifier_state *branch;
+> +	struct bpf_func_state *frame =3D cur_func(env);
+> +	struct loop_stack_entry *entry;
+> +	struct bpf_loop *loop;
+> +	int h, err;
+> +
+> +	h =3D bpf_loop_at_index(env, env->insn_idx);
+> +	/* The callback came back to the helper that calls it: the program is n=
+ot in front of it. */
+> +	if (h < 0 || !frame->loop_stack_cnt || frame->callback_depth)
+> +		return 0;
+> +	loop =3D env->insn_aux_data[h].loop;
+> +	entry =3D &frame->loop_stack[frame->loop_stack_cnt - 1];
+> +	if (loop->rt_bounded || !env->insn_aux_data[env->insn_idx].guard_place =
+||
+> +	    entry->loop_id !=3D h)
+> +		return 0;
+> +	if (verifier_bug_if(!entry->terminates && !entry->guarded, env,
+> +			    "nothing stops the loop at %d", h))
+> +		return -EFAULT;
+> +	if (!entry->guarded && !bpf_loop_walk_may_give_up(entry))
+> +		return 0;
+> +
+> +	/* the device runs the insns that the driver was given, without may_got=
+o */
+> +	if (bpf_prog_is_offloaded(env->prog->aux)) {
+> +		verbose(env, "loop at insn %d has no known bound in an offloaded progr=
+am\n", h);
+> +		return -EINVAL;
+> +	}
+
+[Severity: Medium]
+As reported by bot+bpf-ci@kernel.org on v2 [4], when bpf_compute_loop_iters=
+()
+returns 0 and bpf_flow_loop_enter() starts a patience walk via
+flow_try_walk(), entry->apart =3D true, entry->terminates =3D true,
+entry->counted =3D false, and entry->guarded remains false unless the walk =
+later
+gives up.
+
+Because bpf_loop_walk_may_give_up(entry) is true during the walk, doesn't
+check_loop_guard() reject offloaded programs with -EINVAL on the very first
+iteration of the walk, before the walk has a chance to reach the end of the
+loop without needing may_goto?
+
+[ ... ]
+
+> @@ -21747,6 +21937,10 @@ static int do_check(struct bpf_verifier_env *env)
+>  		if (state->speculative && insn_aux->nospec)
+>  			goto process_bpf_exit;
+> =20
+> +		err =3D check_loop_guard(env);
+> +		if (err)
+> +			return err;
+> +
+>  		err =3D do_check_insn(env, &do_print_state);
+>  		if (error_recoverable_with_nospec(err) && state->speculative) {
+>  			/* Prevent this speculative path from ever reaching the
+> @@ -21768,19 +21962,9 @@ static int do_check(struct bpf_verifier_env *env)
+>  		}
+> =20
+>  		if (state->speculative && insn_aux->nospec_result) {
+> -			/* If we are on a path that performed a jump-op, this
+> -			 * may skip a nospec patched-in after the jump. This can
+> -			 * currently never happen because nospec_result is only
+> -			 * used for the write-ops
+> -			 * `*(size*)(dst_reg+off)=3Dsrc_reg|imm32` and helper
+> -			 * calls. These must never skip the following insn
+> -			 * (i.e., bpf_insn_successors()'s opcode_info.can_jump
+> -			 * is false). Still, add a warning to document this in
+> -			 * case nospec_result is used elsewhere in the future.
+> -			 *
+> -			 * All non-branch instructions have a single
+> -			 * fall-through edge. For these, nospec_result should
+> -			 * already work.
+> +			/*
+> +			 * All non-branch instructions have a single fall-through
+> +			 * edge. For these, nospec_result should already work.
+>  			 */
+>  			if (verifier_bug_if((BPF_CLASS(insn->code) =3D=3D BPF_JMP ||
+>  					     BPF_CLASS(insn->code) =3D=3D BPF_JMP32) &&
+> @@ -21790,23 +21974,40 @@ static int do_check(struct bpf_verifier_env *en=
+v)
+>  process_bpf_exit:
+>  			account_current_path(env);
+>  			mark_verifier_state_scratched(env);
+> -			err =3D bpf_update_branch_counts(env, env->cur_state);
+> -			if (err)
+> -				return err;
+> -			err =3D pop_stack(env, &prev_insn_idx, &env->insn_idx,
+> -					pop_log);
+> -			if (err < 0) {
+> -				if (err !=3D -ENOENT)
+> -					return err;
+> -				break;
+> -			} else {
+> -				do_print_state =3D true;
+> -				continue;
+> -			}
+> +			bpf_free_verifier_state(state, false);
+> +			memset(state, 0, sizeof(*state));
+> +			return flow_drain(env);
+> +		}
+
+[Severity: Medium]
+As reported by bot+bpf-ci@kernel.org on v2 [5], when bpf_insert_loop_guards=
+()
+prepends a may_goto sequence in front of a guarded instruction,
+patch_list_adj_aux() in kernel/bpf/fixups.c copies old->nospec onto the last
+instruction of the patch (the original instruction after may_goto), so at
+runtime the injected may_goto executes before the BPF_ST_NOSPEC() barrier.
+
+In do_check_block(), however, the early exit on state->speculative &&
+insn_aux->nospec runs before check_loop_guard(env), and do_check_all() does
+not clear insn_aux->nospec across rounds. Once insn_aux->nospec is set on t=
+he
+guarded instruction, won't subsequent speculative states reaching it jump to
+process_bpf_exit before check_loop_guard() and skip verifying the speculati=
+ve
+may_goto branch?
+
+Conversely, when insn_aux->nospec is not yet set and do_check_insn() fails
+with a recoverable error on a speculative path, jumping to process_bpf_exit
+calls flow_drain(env), which delivers any states pushed onto env->head by t=
+he
+failed do_check_insn() call (such as other_branch pushed in
+check_cond_jmp_op() before regs_bounds_sanity_check_branches() fails, or
+callback states pushed in push_callback_call() before a later check fails).
+Shouldcheck_loop_guard() run before the insn_aux->nospec check, and should
+states pushed by a failed speculative do_check_insn() be discarded instead =
+of
+drained?
+
+[ ... ]
+
+> @@ -23196,6 +23400,44 @@ static int do_check_main(struct bpf_verifier_env=
+ *env)
+>  	return ret;
 >  }
 > =20
 > +/*
-> + * What it took to verify a static subprog on its own is not in insns_to=
-tal of its callers.
-> + * Add it, once per caller. The main prog and global subprogs have all o=
-f it already.
+> + * What stops a loop is assumed before the main pass and checked in it, =
+see flow_is_bound(). The
+> + * main prog and global functions may get to the same loop. It has may_g=
+oto for all of them or
+> + * for none, so all are done again when the assumption doesn't hold, wha=
+tever came out.
+> + * The same when a loop gets may_goto, or its may_goto gets another way =
+out, and what went through
+> + * the loop before is not there any more, see bpf_flow_loop_gets_guards(=
+).
+> + *
+> + * A round that is dropped counts as paths that never run. What it found=
+ out about the insns, the
+> + * subprogs and the prog stays. Each of these is made for more than one =
+state that gets to an insn:
+> + * it grows to the safe side, or another value is refused, or the last o=
+ne that gets there sets it.
+> + * Where the round got to is dropped with its verdict: the passes that f=
+ollow take an insn that was
+> + * seen for one that passed its checks, and a function that is called ha=
+s to be safe.
 > + */
-> +static void add_insns_of_callees(struct bpf_verifier_env *env)
+> +static int do_check_all(struct bpf_verifier_env *env)
 > +{
-> +	struct bpf_subprog_info *si =3D env->subprog_info;
-> +	struct bpf_insn *insn =3D env->prog->insnsi;
-> +	int *added, i, j, s, c;
+> +	struct bpf_func_info_aux *sub_aux;
+> +	u64 log_pos =3D env->log.end_pos;
+> +	int i, ret;
 > +
-> +	added =3D kvcalloc(env->subprog_cnt, sizeof(*added), GFP_KERNEL_ACCOUNT=
-);
-> +	if (!added)
-> +		return;
-> +	/* callees first */
-> +	for (i =3D 0; i < env->subprog_cnt; i++) {
-> +		s =3D env->subprog_topo_order[i];
-> +		if (!s || bpf_subprog_is_global(env, s))
-> +			continue;
-> +		for (j =3D si[s].start; j < si[s + 1].start; j++) {
-> +			if (!bpf_pseudo_call(&insn[j]))
-> +				continue;
-> +			c =3D bpf_find_subprog(env, j + insn[j].imm + 1);
-> +			if (c <=3D 0 || c =3D=3D s || !si[c].on_its_own || added[c] =3D=3D s)
-> +				continue;
-> +			added[c] =3D s;
-> +			si[s].insns_total +=3D si[c].insns_total;
+> +	for (;;) {
+> +		bpf_flow_new_round(env);
+> +		ret =3D do_check_main(env);
+> +		ret =3D ret ?: do_check_subprogs(env);
+> +		if (!(env->restart && bpf_flow_loops_lost_bound(env)) && !env->guards_=
+late)
+> +			return ret;
+> +		/* the log is dropped when a function is found to be safe */
+> +		bpf_vlog_reset(&env->log, min(log_pos, env->log.end_pos));
+> +		for (i =3D 0; i < env->prog->len; i++)
+> +			env->insn_aux_data[i].seen =3D 0;
+> +		for (i =3D 1; env->prog->aux->func_info && i < env->subprog_cnt; i++) {
+> +			sub_aux =3D subprog_aux(env, i);
+> +			memset(sub_aux->called, 0, sizeof(sub_aux->called));
+> +			memset(sub_aux->verified, 0, sizeof(sub_aux->verified));
+> +			sub_aux->called_with_pkt_ptrs =3D false;
 > +		}
 > +	}
-> +	kvfree(added);
 > +}
 
 [Severity: Medium]
-As reported by bot+bpf-ci@kernel.org on v2 [3], if a static subprogram c is
-verified in-frame for one call from s (or falls back to in-frame verificati=
-on
-when bpf_flow_return() returns 1, or across a do_check_all() restart where
-on_its_own is not cleared) and is also verified on its own for another call,
-prepare_func_exit() -> account_processed_insns() has already added the
-in-frame instructions of c into both si[c].insns_total and si[s].insns_tota=
-l.
-When add_insns_of_callees() then adds the full si[c].insns_total to
-si[s].insns_total, won't the in-frame portion be counted twice in
-si[s].insns_total?
+As reported by Sashiko on v2 [6], when do_check_all() restarts verification
+for a new round, it clears env->insn_aux_data[i].seen =3D 0 and calls
+bpf_flow_new_round(env), which resets guard_edge_dropped and no_guard_edges,
+but neither resets env->insn_aux_data[i].loop_guard =3D false (or
+env->total_states).
 
-Also, since check_func_callx() calls check_static_func_call() and can verify
-indirect targets on their own via call_func_on_its_own(), does
-add_insns_of_callees() need to account for callx edges in env->callx_edges =
-in
-addition to bpf_pseudo_call() instructions?
+If bpf_flow_guard_edge() sets aux[i].loop_guard =3D true during round 1 on a
+path or static subprogram that becomes unreachable in round 2,
+bpf_insert_loop_guards() and append_budget_exit() in kernel/bpf/fixups.c wi=
+ll
+still see aux[i].loop_guard =3D=3D true even though aux[i].seen =3D=3D 0, p=
+atching
+may_goto at a dead instruction and setting seen =3D 1 on the appended budget
+exit instructions of an otherwise dead subprogram.
 
-[1] https://lore.kernel.org/r/20261105204513.2230344-22-alexei.starovoitov@=
+In addition, if a fatal error such as -EAGAIN, -ENOMEM, -EFAULT, or -E2BIG
+occurs after env->guards_late or env->restart was set earlier in the round,
+won't do_check_all() ignore ret, reset the verifier log, and start another
+round instead of returning the error immediately?
+
+[1] https://lore.kernel.org/r/20261105204513.2230344-20-alexei.starovoitov@=
 gmail.com
-[2] https://lore.kernel.org/r/fbc6a76bd8cb0b115a602fe1f8064612f09afac8924a2=
-3ae5d64cf4e7fe68b43@mail.kernel.org
-[3] https://lore.kernel.org/r/fbc6a76bd8cb0b115a602fe1f8064612f09afac8924a2=
-3ae5d64cf4e7fe68b43@mail.kernel.org
+[2] https://lore.kernel.org/r/20261105204513.2230344-20-alexei.starovoitov@=
+gmail.com
+[3] https://lore.kernel.org/r/20261105204513.2230344-20-alexei.starovoitov@=
+gmail.com
+[4] https://lore.kernel.org/r/30511ed9caaa7fab02343ad6adbd72f0c7d689b7ae89d=
+4b0c37bdf2beb45a414@mail.kernel.org
+[5] https://lore.kernel.org/r/30511ed9caaa7fab02343ad6adbd72f0c7d689b7ae89d=
+4b0c37bdf2beb45a414@mail.kernel.org
+[6] https://lore.kernel.org/r/20261105204513.2230344-20-alexei.starovoitov@=
+gmail.com
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106035111.3315=
-285-1-alexei.starovoitov@gmail.com?part=3D21
+285-1-alexei.starovoitov@gmail.com?part=3D19
