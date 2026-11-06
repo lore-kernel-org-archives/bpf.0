@@ -1,54 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.145
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794007946;
-	b=QgxoDOVPDf/iA/ouPbs6qgleazViHYGeOnFi3ytBEFjuvO2H5ZgWF7q9KqfT0YGn0m4A
-	 Pg25lEpi6lG41G6yUPqSA/18kbjG4Hs21ZGmFxxpDpGxYemsCa0KDtyRH/+ASPpxj6Ev7
-	 Uyc+rEHhJkp8uE4kiJE/zltBExhymfeQyoRsjM3UOZjcIh9aj0YnSLcMI1USj8gHmRdGJ
-	 ATTQkHl5NdGf8VQdaDLMh978SFa9laXSmmbZpZXvgj10r6tM48CasI9Z0KCVK1/PYXgWm
-	 WPzrG0yxxl/6b9zI8vhHpw0445V1kG8Lnyqt7Pry7gf0OlaOuB2rN1RQ3hJn5hiUqcw==
+	t=1794008904;
+	b=YNbU/71mlXvpmq3U9mbVlLfUD9nq16X9VzVxadGH1vBANrcbJa26mr2+x8DkibuuN7qj
+	 g1DDSPBVcb1GFXpjsxE648EE8cOLXlTiYU0xLfle8g3crwWbfF3UqMoVy1teqlMiD68/a
+	 tE0Y6Wuj0TjxSOlSPMR0I7RFtsDHE/rjTdpWhrw8Mdop/smFPVtPYEcJsZPKjboyzHasF
+	 LugM5ebBXjgg2+luUp0C5N6OCYKx1I9v3fGevFrqZ7IOzbv2g7GG35+VjeAwwqZa2uDVj
+	 ncFrHtX+kk/9IzRn70ba8rLtYXR6mDrEdjUjY2vRxyePggkNzC3eJXjGN28R9eieHAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794007946;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:From:To:Cc:References:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=3PSRJAyzJjXTa91c20Ghv5zF6aqkJV/QWmUyUDslx4s=;
-	b=LQYOMm9U9HQkeeusnv4oIRTYTj6ta/FCc0KTKNscFLqk75R3OI6F0SHgFZuTWoUaa+pO
-	 SiptMRksH7eYDS2SGPFnp+tIKvDkGnysjwT9NhnwxTQm8c66iPSmbJ4xgGf6cQciy//fv
-	 mWJm4cli74mGMO2IFyLIczI9TC4Grt54NIVSiwucHCvEq8QV39VYye0DK+K7AAv5v1Eq+
-	 nzoqrUKNNXmjBiGSaQxrRWestZ8QXYVHDCAkAtj3GBrjr9hXTpKxHj5HwA3389qnEoYUf
-	 l1NQEUtg5SuI3bbEYJ+q79RmqKf2AYpbn9+PfsQjNDVpm5sbWHwHKoiuf6vOP1YHsIg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794008904;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=Fkhiwzjq6tTnUNfhVS7G+yzPvYlfj3npjXysyXhl7xE=;
+	b=GGUjBS/2q7XLAK3Lw/7Zo0dDAcolLoqPIGJW2oaaOK8ePlxZk7hapf/ah1lml1wntlGS
+	 QDakrO9J5mcMiIj7DPXwTKB/ImSWoUaGIu4j450FFdJ3SpXYlAVIJOcXDejVvsJNPYHvU
+	 eBHI3ywEQE8QOzbhyE3xlBnMuABkC9uzlKx+RusBQj3ZCu0x3QrGbgZ4zYXTIJ6fGx5sO
+	 ZG+j2pwPqRg6EAaRP5Am8WGyXQJZJbHddaxEVwqdGJKltNy6S+fmh1jEoTZ/MQ234KDIF
+	 4l0Ug3OnTSAcY0N+AO9PjL3ZuJuimbz4OOmkT2YeCFJyrUc8gG6cfYaPATimISPuQtQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=w20Nyvub;
-	arc=none smtp.remote-ip=91.218.175.145
-Received: from mta0.migadu.com (out-145.mta0.migadu.com [91.218.175.145])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j413AkXO;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39717606A326
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 23:32:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 39717606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE97606A32C
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 23:48:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=w20Nyvub
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Z2txFjSrT7htQrPD/Z0Mmx5hKSX2xlJyM5Bx1Cc6DUA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794007941; v=1; x=1794612741;
- b=w20Nyvub3XWEAW5gfIgLhNaMRbDGc0Rcvf3uiFC/gL+BrwaBNmaFFp4cJJjePeEHACrdp6sW
- KpKnsDw8n/Y+4pmKskh2G1z2PQxzatb/ElNf8NFl+LILbTtVDnB91X/S7NR6PvfTiTfkdtB4g52
- 6i8o8PlnPLenW3dqsFuQNE1Q=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 69da4acccb4a837c;
-	Fri, 06 Nov 2026 23:32:21 +0000
-X-Mizu-Trace-ID: 69da4acccb4a837c
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2785198b-ca41-4cee-9dba-bc0c1e6e8f25@linux.dev>
-Date: Fri, 6 Nov 2026 16:32:15 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j413AkXO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C6A91F0089F;
+	Fri,  6 Nov 2026 23:48:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794008903;
+	bh=Fkhiwzjq6tTnUNfhVS7G+yzPvYlfj3npjXysyXhl7xE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=j413AkXOfoyQpGU8h8A8EbnCXF6z7JS8FzXfTtUU2WvxQzT0rnEXWROwffbYmzC2f
+	 oU+4S/SMFYVXlFC4ZJJeENLJrz8Z3Oo+rltAJaNN0S4GZOhROfElBqRjMlXE+n6J25
+	 oPqx/u3lveRQLIj7zTwTYNrqQs0zrNhCd5ORbrFGoErRLyrg08MNrAVV/melC+bX7e
+	 s4OSH8Chj2Bj1AU4WB55qjdBeommUkWsBSiRSFD2oVZ5Y/wRky29kHNDDUcf7fWAPk
+	 I/J16PyGXlJhkuj48HVSiwyNlIdZZM2mTfAlJkHyylk9ZK8g1pijGlaF6bUGlNuBUK
+	 9Lzdws/+XTsEw==
+Message-ID: <sashiko-outbox-202390@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 2/2] bpf: Rely on callback frame
+ initialization defaults
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261106232110.2867412-2-ihor.solodrai@linux.dev>
+References: <20261106232110.2867412-1-ihor.solodrai@linux.dev>
+ <20261106232110.2867412-2-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 06 Nov 2026 23:48:22 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,61 +60,72 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v1 0/4] bpf: Scope callback arguments to their frame
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Amery Hung <ameryhung@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>,
- Nicholas Carlini <npc@anthropic.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20261106231157.2840635-1-ihor.solodrai@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20261106231157.2840635-1-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 11/6/26 4:11 PM, Ihor Solodrai wrote:
-> [...]
-> 
-> Ihor Solodrai (4):
->   bpf: Scope the bpf_user_ringbuf_drain() dynptr to its callback frame
->   selftests/bpf: Cover the user ringbuf callback dynptr lifetime
->   bpf: Scope the bpf_for_each_map_elem() array key to the callback frame
->   selftests/bpf: Cover callback-frame map key lifetime
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [Critical] bpf: missing callback dynptr invalidation in
+  prepare_func_exit() [1]
+--
 
-Alexei, if this lands first, your pending verifier rewrite will need a
-hunk like the one pasted below. Or the other way around.
+commit 468e6b1f0288b436ee1abb6fdbf7f6a231d967b2
+Author: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-Without it, a join can link a value to the wrong callback frame.
+bpf: Rely on callback frame initialization defaults
 
-diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
-index cc4494aef187..92b94e18c873 100644
---- a/kernel/bpf/join.c
-+++ b/kernel/bpf/join.c
-@@ -464,6 +464,9 @@ static bool join_func(struct bpf_join_state *js, struct bpf_func_state *fd,
- 			return false;
- 		if (!join_loop_stack(fa, fb))
- 			return false;
-+		jid_note(js, fa->frame_id, fb->frame_id, true);
-+	} else if (!jid_strict_ok(js, fa->frame_id, fb->frame_id)) {
-+		return false;
- 	}
- 
- 	for (i = 0; i < MAX_BPF_REG; i++) {
+This commit removes redundant NOT_INIT register resets and default return
+range assignments from BPF verifier callback state setters, relying on the
+defaults already set by init_func_state().
 
-> 
->  include/linux/bpf.h                           |   2 +
->  include/linux/bpf_verifier.h                  |   2 +
->  kernel/bpf/arraymap.c                         |  19 ++-
->  kernel/bpf/states.c                           |   3 +
->  kernel/bpf/verifier.c                         |  16 +++
->  .../selftests/bpf/progs/user_ringbuf_fail.c   | 135 ++++++++++++++++++
->  .../bpf/progs/verifier_iterating_callbacks.c  |  91 ++++++++++++
->  7 files changed, 266 insertions(+), 2 deletions(-)
-> 
-> 
-> base-commit: 475a0cfd02f14d764023e926ac01fc7597134229
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 389488e4e7a74..831a9c0f8c458 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
+[ ... ]
+
+> @@ -12126,15 +12110,9 @@ static int set_user_ringbuf_callback_state(struc=
+t bpf_verifier_env *env,
+>  	 *			  callback_ctx, u64 flags);
+>  	 * callback_fn(const struct bpf_dynptr_t* dynptr, void *callback_ctx);
+>  	 */
+> -	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_0]);
+>  	mark_dynptr_cb_reg(env, &callee->regs[BPF_REG_1], BPF_DYNPTR_TYPE_LOCAL=
+);
+>  	callee->regs[BPF_REG_2] =3D caller->regs[BPF_REG_3];
+> =20
+> -	/* unused */
+> -	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_3]);
+> -	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
+> -	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
+> -
+>  	callee->in_callback_fn =3D true;
+>  	callee->callback_ret_range =3D retval_range(0, 1);
+>  	return 0;
+
+[Severity: Critical]
+This problem wasn't introduced by this patch [1], but can the
+callback dynptr in R1 or a slice derived from it escape into a caller's
+stack frame via R2 (callback_ctx)?
+
+mark_dynptr_cb_reg() initializes R1 as a CONST_PTR_TO_DYNPTR with a fresh
+id and parent_id set to 0.  When callback_ctx points into an outer stack
+frame, check_stack_write_fixed_off() only blocks spilling PTR_TO_STACK
+into a caller's frame, so the callback can spill R1, spill a PTR_TO_MEM
+slice derived from R1, or clone R1 into the caller's stack via
+bpf_dynptr_clone().
+
+On callback return, prepare_func_exit() calls
+destroy_dynptrs_in_stack_slots() only on the callee's own stack frame and
+never invalidates references tied to R1's id in outer frames.  Because the
+underlying struct bpf_dynptr_kern lives on the kernel C stack of
+bpf_user_ringbuf_drain() and the sample is released after each callback
+invocation, the escaped dynptr or slice remains accessible in the caller
+after bpf_user_ringbuf_drain() returns, leading to kernel stack
+use-after-return and use-after-release of user ring buffer samples.
+
+[1] https://sashiko.dev/#/bug/linux-05b65197-996a-40dd-bf7b-7710de2720b4
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106232110.2867=
+412-1-ihor.solodrai@linux.dev?part=3D2
