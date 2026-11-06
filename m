@@ -1,64 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793965020;
-	b=vyzUyPF1LQauStylwp7KhsjSwBD56uxT99HpVDqFnHvjSmHWrDpks9HjHVs9AMzVcPqL
-	 R+j0Gp6bRKWEkh7JFuq+4UJHbU5kUK3BEmjcUlkdsDW/hQjykJ3QnxOFGopJCfuVG6+ez
-	 4CD0rnYZAzeSL+HJg+LgYgtphYrsvUMZHeXKLi5JsFcVLGdW2ymanUtZWzunDgDmh0bn5
-	 C4IN4kBdGk+2bRf+lANt0IWjYmBpPWdLo9RPdboexxkdGuirdz2/pFiwdsjezsboYR+Ls
-	 8e2PwFwCqUfd8MpQuCahS+arwRbw2h6zBqXodJb0HpCNHw5VEcQSNaJYJ0PDOR6rYDA==
+	t=1793965128;
+	b=WunU/f8aEv7H2D15u1C0X7EtHcRDKLWHI/oTaanzK6RyNNkm9BTsalj30W6WkgRTLpOL
+	 TXsEY1iZRBpgrbskaZOIv9wbrAvy833/Q2HdlJK+3NuJpKY2YsEUO68szBBWH8u7Hl2FO
+	 rhFP+DnyzWwRlJa1IKJNGLzTJtWfoIGQXvkbmL4HwySgUzasIjlQlUD9Ey0fCREoUCCo6
+	 zcHg8cKKmzHHi9t+KTRRFYGQVtx/TjQyblTrG8Lt5bV2IHIPrPu8UXBP0Z/4BrWppbNVV
+	 NdqLQPp9MvRV9psZpQiaHzz6D3jDt6fYzl1AkISFrqbG5ci1dWsmWlFqUdedZ106wNA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793965020;
-	h=DMARC-Filter:DKIM-Signature:DKIM-Signature:Date:From:To:CC:Subject:
-	 In-Reply-To:References:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=LsG010wFX4LfYov4otAxRQz5shuNP8OrzTqH27+uU04=;
-	b=Oi7sr+2aOe6qH1Wp7+Q4qhjjwutwdxTUmapzX2a7oFAGqFgW1tKE24ca2G83AXW/mK9/
-	 LOxVIE2PrBxS0Ldqta9QsmwVHKziHOaNlAWzft8REz9hYagyv9WGPzrpfIzBbKx3mMYmf
-	 5nzGurWeBPtDhjFbwR1R/cch3STLrbdASfNMtVjR1W52F82KZGkSv9ylYVI3OGaFYSPpi
-	 IG1G+N2hxOA9YbjWAjj0RkcdcuCMin9TkhHHi3hP0my/UyYY3AypU4F2X3RLECdnYXmg+
-	 cevSGsjdu/Ri9YA893M3TdkKygs51CmueqEgqyTbJbpkmfUfTGABxSigoD1W1LDoTGQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793965128;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:MIME-Version:Content-Type:Content-Disposition;
+	bh=/jfLHbBsiNk6pHzafuB3Dsviz9dVAGhH/4U+1XXEIc0=;
+	b=WFLMxkEnUOKyPWxftzjw7guVCoIdyagt21z6lEgoYV/B1baTm8Q79uHiNNX4OdowMQUp
+	 vBlADjKYte/rFDVrd+dmalMd8Z5Zbm/FOYTF49tIEcJWCelbGBTjED0B9WZnHtjT7lQGJ
+	 S0a6zVMTlyV4P3uYFSpgUSGJPehu7v2Iyx5j+Hpnbw6eV22n8gYPzirOnTbhcU7UXelIT
+	 anMTEb0uyTEzcD0AZ+qU1EjU6hF7ELDqNKeLgkqGQ2YvHSr+2GjdUQCR3ps9N6Dg8eJvF
+	 ahHzu0Ik2sLdXO4AwS9e+fhWZ9auBgx6dX8bt6MMrZvOJYpQJcb8Mea1Z6dMOoyYmGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=mainlining.org;
-	spf=pass smtp.mailfrom=mainlining.org;
-	dkim=pass header.d=mainlining.org header.i=@mainlining.org header.a=rsa-sha256 header.s=202507r header.b=hxhcxg8X;
-	dkim=pass header.d=mainlining.org header.i=@mainlining.org header.a=ed25519-sha256 header.s=202507e header.b=8L6Av8tC;
-	arc=none smtp.remote-ip=5.75.144.95
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=fail header.from=debian.org;
+	spf=pass smtp.mailfrom=gmail.com;
+	arc=none smtp.remote-ip=74.125.224.46
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12D3606C6C9;
-	Fri,  6 Nov 2026 11:36:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E12D3606C6C9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mainlining.org header.i=@mainlining.org header.a=rsa-sha256 header.s=202507r header.b=hxhcxg8X;
-	dkim=pass header.d=mainlining.org header.i=@mainlining.org header.a=ed25519-sha256 header.s=202507e header.b=8L6Av8tC
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1793964997; bh=LsG010wFX4LfYov4otAxRQz
-	5shuNP8OrzTqH27+uU04=; b=hxhcxg8XWNsXD/4lRzhQdmLZ1jEz2JvpjFlg3ElaO6tO8MkKm6
-	1Y827wB2HE7IPOkXz3M5RJIvcesXDneasFotHKaDVWrHYeLuKg1Esbvmuiqp8BNFZ8XBJw7eRYF
-	c2abZRsF8mZjUQsx96+ojnhj2JbqjHfA3IlBSrpxJ0GjttTeiUBfOfCV6Za7vTp1v1/w6RrI76V
-	TVN4uyqAZADw2H/nZKUVEzsRpg81HwnfEnuXNQIvulDFG8Twhaok+Cui5X/nRlgqpip8FaN9nvE
-	nsNzuNwGzJIe8Lp9wg5Dn+caI6zFEXqivuJLsPyxvfXHnKDVckKPybHpjUeZhFdZh3g==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1793964997; bh=LsG010wFX4LfYov4otAxRQz
-	5shuNP8OrzTqH27+uU04=; b=8L6Av8tCGUyhtOYwdYpuuQdXqMVQ/3ELRWVGKb36u5Msmbmiti
-	5ab8ryPVklCkEKnAkgw65PGTxw7udUqnpJAQ==;
-Date: Fri, 06 Nov 2026 11:36:36 +0000
-From: Bradley Morgan <brads@mainlining.org>
-To: Andrea Parri <parri.andrea@gmail.com>, Kees Cook <kees@kernel.org>
-CC: Tycho Andersen <tycho@kernel.org>, Cong Wang <cwang@multikernel.io>,
- Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Sargun Dhillon <sargun@sargun.me>, Hui Peng <benquike@gmail.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org
-Subject: Re: [PATCH 0/4] seccomp: fix user-notification state transitions
-In-Reply-To: <20261106113253.78866-1-parri.andrea@gmail.com>
-References: <20261104103736.71956-1-parri.andrea@gmail.com> <20261106113253.78866-1-parri.andrea@gmail.com>
-Message-ID: <8D7553DC-3134-4C3B-AC05-2BCF96A59005@mainlining.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8818E606A335
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 11:38:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8818E606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-67bf3c6654fso504011d50.1
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 03:38:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793965126; x=1794569926;
+        h=content-disposition:content-type:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/jfLHbBsiNk6pHzafuB3Dsviz9dVAGhH/4U+1XXEIc0=;
+        b=EddXhpqx3fXLkXQTQcqdgn+S9gJgw4VoYIbzNHCI9+s2TFVhDUgriqrnfEhWE7Buzi
+         PxsOQMVddO9cSGUoOEKAv5EOB2lfSkUS4nPmnjMN5x+ATn7P2HLMk17SP1lvW7yGr5n/
+         3eviginUHzZim7+PP5rgJSsYYpoVkKlJRJerF7ORjspRQP5ZHDiqaxcdFAjnvhgTTSoU
+         XV5dZlm+HPaNACTSbTVhUbTSXn++DtEIj8EMVhOPr/HLkBZsWlNR+CYRhT24eyvVwiHR
+         KBtJnnG265AZgKd456i2xU8QzG9G5CE1ZmzIFff0xngg/aQw+Q8qqbvQZ6woKdh5UXim
+         lp/Q==
+X-Forwarded-Encrypted: i=1; AL+hErGDfCPlRcoNMzDDHEczUXeE2gXA2feqQVWXh3eXXkqHLuIrcxyOB8waFz2TTLURh1dUPTI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/8efDV4BVJivDpfvYxaoJB93ilxls5x0hooTAa6Wv4CvejkkVk
+	ui6kxoU6ZO73KqWK4s/i2G/j+tuw8tjLIAvOc2wgpxttFYJ7zEeiN0mEh8cAOA==
+X-Gm-Gg: AYBFou2rzhyKLSdfCjg5/K5i22YJo9sUy7z6G6WI17lBQYjMkCTyleyJiNSS+V/JKoe
+	QtgNZEnh3XOZOmcNKLnU2rwEqALMdU+FQKAgZwdx0hbY2ryAtxStLxpNZqUp7DnV1HRwq1E3obG
+	vtdfXs0YnVZlq4XpWckKbho6ekzQoK2neueenbhIOzsRNpDCaPkMNqz6m1k/9xQA13Qemz/++z8
+	OnHV0AVRy00vMDzLQafWtrKWTq6UQM8FI5Apd3fNJBMpUbAtcjClly3OGpUQJm8QLEp+jVomsOK
+	kl2G7vWX3kK5BnhBEH074pBth/YhnWOl9A5zzSPFNlCMfE2B80LJ/iPzXfpTKchz/a3uFezGKL9
+	2QcB5yU/E1uZMunnGBHJVFBe6Y2vD8p3wujGZpHw+PXHtE4ohbrrsLyBR2p49Z6HanuB3+ykDJ3
+	6gPYnNONgi4J+tuXx3HiCQvkfSmjPpFyhBauoKQ2tUyYzStGsXU71IDRtsfbkJIQGlog8TV4uA1
+	dsWPxy/oK76B/7redOBAhzafe1NaDY6BpPtQ6jVpePZeNsshPB/lXcU+//RhVs3cAyj/x+1AEgL
+	AYyEW0RBQO9JuJxxcxzubE0n+H1dSL1TLpTkEFl1
+X-Received: by 2002:a05:690e:b8e:b0:67c:1da0:6bd8 with SMTP id 956f58d0204a3-67c1da07981mr297045d50.68.1793965126563;
+        Fri, 06 Nov 2026 03:38:46 -0800 (PST)
+Received: from gmail.com ([2a03:2880:24ff:5e::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b33f8221absm16709167b3.27.2026.11.06.03.38.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Nov 2026 03:38:45 -0800 (PST)
+Date: Fri, 6 Nov 2026 03:38:44 -0800
+From: Breno Leitao <leitao@debian.org>
+To: kuniyu@google.com, netdev@vger.kernel.org, llvm@lists.linux.dev
+Cc: ast@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org, 
+	kuba@kernel.org, tj@kernel.org
+Subject: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
+ clang KCSAN
+Message-ID: <au27Y9m78_3EH2v1@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,25 +79,64 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 6 November 2026 11:32:49 GMT, Andrea Parri <parri.andrea@gmail.com>
-wrote:
->I've reconsidered my earlier plan to send patch 4 on its own, and I'm
->dropping this series.  Patches 1-3 go as discussed with Tycho.  For
->patch 4, it looks possible for a signal during a RECV whose copy then
->fails to make the target return EINTR even with RESTART_BEFORE_RECV
->alone.  I don't plan to pursue this further.  If anyone wants to pick it
->up, the fix could be limited to RESTART_BEFORE_RECV filters, leaving the
->others unchanged.
+My arm64 KCSAN builds of linux-next fail since next-20261015, because
+bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
 
-Your dropping the entire series?
+  WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
+  WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
+  Failed to generate BTF for vmlinux
+  Try to disable CONFIG_DEBUG_INFO_BTF
+  make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
 
->
->Thanks,
->  Andrea
->
+This is clang 22.1.3 and pahole 1.31 (current pahole master behaves the
+same), with CONFIG_KCSAN=y, CONFIG_DEBUG_INFO_BTF=y and CONFIG_WERROR=y.
+v7.4-rc1 is affected as well. With pahole 1.31, the same config without
+KCSAN builds fine.
 
---- Thanks!
+The kfunc came with 5f549c1e49f3 ("bpf: tcp: Add kfunc to adjust
+sk->sk_rcvlowat."), and 201a454df948 ("resolve_btfids: Fix the
+--fatal_warnings exit status") made the missing BTF fatal with
+CONFIG_WERROR. Without CONFIG_WERROR the kernel builds, but bpf_tcp_ops
+is never registered:
+
+  initcall __bpf_tcp_ops_init+0x0/0x70 returned -22 after 302 usecs
+
+This seems similar to pahole behaviour sched_ext hit with a bool
+argument, discussed in [2] and worked around in f2f095c87603
+("sched_ext: Work around pahole 1.32 dropping
+scx_bpf_task_set_lazy_resched() from BTF").
+
+Here the argument is an int that clang reassigns, its location list has
+no DW_OP_entry_value, and pahole 1.31 drops it as well, so staying on
+pahole 1.31 does not help.
+
+Not reassigning the parameter is a workaround for me, with any pahole: clang
+then describes @rcvlowat in w1 from the entry, the kfunc is back in BTF,
+and __bpf_tcp_ops_init() returns 0 (tested in virtme):
+
+diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
+index 2ba73dd6c52cce..1afa6bd7f508ef 100644
+--- a/net/ipv4/bpf_tcp_ops.c
++++ b/net/ipv4/bpf_tcp_ops.c
+@@ -370,10 +370,9 @@ __bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat,
+ 	if (moff == offsetof(struct bpf_tcp_ops, dequeue_rcvq))
+ 		wakeup = true;
+
+-	if (rcvlowat < 0)
+-		rcvlowat = INT_MAX;
+-
+-	return __tcp_set_rcvlowat(sk, rcvlowat, wakeup);
++	/* Reassigning @rcvlowat can make pahole drop this kfunc from BTF. */
++	return __tcp_set_rcvlowat(sk, rcvlowat < 0 ? INT_MAX : rcvlowat,
++				  wakeup);
+ }
+
+ __bpf_kfunc_end_defs();
+
+Would this be acceptable?
+
+[1] https://lore.kernel.org/all/DLRKT5MG6W2P.2V1P0QD4GQEKY@gmail.com/
+[2] https://lore.kernel.org/all/7c139810be5ffc9764ed4236efc28794@kernel.org/
