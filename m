@@ -1,56 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793969095;
-	b=49i/HfjnePXYAKXIRLr0HZArT6EAq9E2zU/hgamUuDBrYF/xRc/V65bto4NF+f5Oksph
-	 qdV2d8zyBxsngtPOKdPuq6+Fpcv6We6ynbDgS4LVtXZk67wQMyPk4g4FkcAylaJabU9Bz
-	 2nuMOFDPlCYNMGdXePFj2y8/J9rnboP4gZlX7zbXUc4Ym/QfEUzfebDSEU0dD0j3T0nLx
-	 DrKblTIpyAuw4Jb9+0tHzKLtwF39vTW9+IAI9rzlDlCN4h8YHHy7+bB0djdh1OfeaEFVG
-	 EQgxjS5Td92jWiGrb7b3B8K3ksTlFq1R7U/tzYICufhWCbqlVYhTPN3RHuZou1KNKdA==
+	t=1793969330;
+	b=lvFu3Xzo0OEY/Yr3UyJXbO6NAVGXGIXRcAWC60U1KB8alelPmPINeAVi7FWPiyj2fceM
+	 9nPa0hQ3l6KrCQJqyhgegw2ySTEdhPym8Fv8wPL0W2wSdpYcw2GiMncMnntFmBrhxQqjN
+	 w63+SkRx38FQ2UFqdyiVMCrjEd8CzsXVStPHCI1vE3wN8yW+98DoDtZQqdz+naG9HfeDS
+	 tdOKftZaM9vdCsyuASthpsr5LGloxS/GBFso7+6bNuTWktbtU334kJuwMo1tbcJ2f+Ym/
+	 U/GxfXNQ2PSD81BuQwDGqcfYc3/wftQ4UBiLR5sXTX5biv5wiLaFQBdt5VVSTEdOVNA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793969095;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793969330;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=2hEhmCtSs/8Z6r6FWqcdALadPIzK432yBaG7cvpOShM=;
-	b=VSccTYyVae7pAtVqnfNj1OgiHRZKPllkfKsenUOHwyKFidnpXZMuoVLLDJvrLHjalJ1r
-	 PDq2ZgtCWJsSDQujtGPgcuVYFyFr60hJmadR6Uh2FmJqGWru71OOiG1EFy0HrduxLQp6Y
-	 P5zSUhXK5Ux8v82GG9JwCvoR9wDFw/W8rgRpLFFAF2nRf2wYm1OORQqLk4y1okV0zuxKP
-	 9V1qqD9hvEFmFoIoRwkf8YGDuewFS4KsQcAcVmSK6xctyq3UZMuTQCHopTXCGt+WvWEEa
-	 smWeRzeK6nq/WrgmHldiV0H7Md6AR0rG4U4DdW3s7O55ubXb6loTEEmaQxQtCl8aQ9Q==
+	bh=9cgLQkSD3EpnSnQB67qSlMTeWBqxRmaPXyw033TkaEw=;
+	b=3g2eQ/cJzvuWej51UhZ8B83X8a4U59sVVsX+zn+HN4/iURJh4Vfl7zAhhJFqiSvXPA2Q
+	 T8mD5JMd4AIS3/qZKEsg+RHEalrC8kWlK5ggIZdxnoRccM3Ji7wljNGKbNObUJYXsmU4g
+	 pt8L1Rbhanz/vTi2qHdLcnPwzcmyO3iXv9MCWL9dN5vyq272vEguNyI1UAprGUVa24gAV
+	 EsIGssJRwIyq+W1Eqzj0d3iCyE1XcNGMGuScCacBOkWbk1L+U9BaxlNSCwnSYx/reXLc/
+	 I4Nx7G6w5TMP28F7DZQywOVq2aSSHSzAcHPL211bvO0vzvz5Qv5iMQRgBK6IbeNKzqw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XdurMwRx;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RMKWWG+C;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45680606A326
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 12:44:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09216606A329
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 12:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XdurMwRx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFE091F0089F;
-	Fri,  6 Nov 2026 12:44:54 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RMKWWG+C
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A14B31F0089F;
+	Fri,  6 Nov 2026 12:48:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793969095;
-	bh=2hEhmCtSs/8Z6r6FWqcdALadPIzK432yBaG7cvpOShM=;
+	s=k20260515; t=1793969329;
+	bh=9cgLQkSD3EpnSnQB67qSlMTeWBqxRmaPXyw033TkaEw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XdurMwRxfoX+KpD1GipkQbk2E50PcaNLjjXineOw8ZzBfI73AbgWo2CYwUO/WMArk
-	 qQLnzvjAnlynr6uXFd9QxB34aBycHC4/L/PGdqN3INDc9dCQlh8XtERs5U50uOVWys
-	 a0qVfWlsISGmLVGjKJps1dOPO/ng0I8nSFh+N5r8WXHEsyHWRGcWwNVuWGsM4isCj3
-	 sXSgIAaS5fCp5n8aOu1zOEpwao7Gn+k2bsKrUWJJ7J9u4Eg4HYKuSJIvBcnj1dUiOQ
-	 jZdh65B47cVhOeCmFvyqZmkNxBB7w0k9Iqq57nLgGvBSJUEMwvX/bitPQxZdRCQitE
-	 orFw9uEEa6NWw==
-Message-ID: <sashiko-outbox-201410@kernel.org>
+	b=RMKWWG+CPv0IGdQjzK0LJoST+OZF1Dv3THQtAQIQNvZqtIQcidFmeyQTbIJj24n+k
+	 KE8w1hNY/cDi1ZOa0EpSZoLaX5z/4pgbnY9GYh6E93B4veV02gmjn3iBYokM0BIgPL
+	 SW0zJZAnjCYvX7+tsb4Zm0/2RdV8GhmqQQ+kBnBUMjzAouchNx4h2TBTBnPd+6atgn
+	 XMBS0NwKnuq8tPMHNn0VIFI+9F1UgXMJWESDfsGjSXn5m/yEar6nqi84LCW2LdSj72
+	 4zpqeDx6lxeMP1YnIqjoRlfOWOvHQMQB3D1LJdUWCene5+9NpHY0LLbdS/5QMA9Vq1
+	 YhfV+NgYa+5hA==
+Message-ID: <sashiko-outbox-201414@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v13 3/4] selftests/bpf: add iocost cost model test
+Subject: Re: [RFC PATCH v13 1/4] blk-iocost: add BPF struct_ops cost model
+ support
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Tao Cui" <cui.tao@linux.dev>
 Cc: bpf@vger.kernel.org, tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com
-In-Reply-To: <20261106122356.3224638-4-cui.tao@linux.dev>
+In-Reply-To: <20261106122356.3224638-2-cui.tao@linux.dev>
 References: <20261106122356.3224638-1-cui.tao@linux.dev>
- <20261106122356.3224638-4-cui.tao@linux.dev>
+ <20261106122356.3224638-2-cui.tao@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 06 Nov 2026 12:44:54 +0000
+Date: Fri, 06 Nov 2026 12:48:49 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,60 +63,119 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Medium] selftests/bpf: pread() in serial_test_iocost_model_streams()
-  hits page cache
+- [Medium] blk-iocost: stale autop timestamps in ioc_cost_model_write()
 --
 
-commit 371817062abb0b837764b9a93458f77eb2057dd2
+commit dbe8a0cfe21679fa0e7f03924d92bf48ea6f4959
 Author: Tao Cui <cuitao@kylinos.cn>
 
-selftests/bpf: add iocost cost model test
+blk-iocost: add BPF struct_ops cost model support
 
-This commit adds BPF selftests and two example struct_ops cost models for
-blk-iocost using a configfs-backed null_blk device.
+This commit adds BPF struct_ops support (iocost_model_ops) to allow custom
+per-device IO cost models in blk-iocost.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tool=
-s/testing/selftests/bpf/prog_tests/iocost_model.c
-> new file mode 100644
-> index 0000000000000..a714507c040e3
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
+> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+> index 1c1fe07a96eaf..876f819d2586f 100644
+> --- a/block/blk-iocost.c
+> +++ b/block/blk-iocost.c
+
 [ ... ]
-> +void serial_test_iocost_model_streams(void)
+
+> @@ -2976,10 +3036,40 @@ static void ioc_rqos_queue_depth_changed(struct r=
+q_qos *rqos)
+>  	spin_unlock_irq(&ioc->lock);
+>  }
+> =20
+> +/* Called by .unreg and by device removal, whichever is first. */
+> +static void ioc_detach_model(struct ioc *ioc)
 > +{
-[ ... ]
-> +		devfd =3D open(path, O_RDONLY);
-> +		if (ASSERT_OK(devfd < 0 ? -errno : 0, "open_dev_ms")) {
-> +			char iobuf[4096];
-> +			unsigned long long u1 =3D 0, u2 =3D 0;
+> +#ifdef CONFIG_BLK_CGROUP_IOCOST_BPF
+> +	const struct iocost_model_ops *ops =3D ioc->attached;
 > +
-> +			ASSERT_OK(read_cost_usage("/iocost_ms",
-> +						  dev, &u1), "cost_usage_pre");
-> +			for (i =3D 0; i < 500; i++)
-> +				(void)read(devfd, iobuf, sizeof(iobuf));
-> +			/*
-> +			 * Two interleaved sequential streams: exercise the
-> +			 * stream table, not just a single cursor.
-> +			 */
-> +			for (i =3D 0; i < 200; i++) {
-> +				(void)pread(devfd, iobuf, sizeof(iobuf),
-> +									(i + 1) * sizeof(iobuf));
-> +				(void)pread(devfd, iobuf, sizeof(iobuf),
-> +									(1 << 20) +
-> +									(i + 1) * sizeof(iobuf));
-> +			}
+> +	lockdep_assert_held(&ioc->rqos.disk->queue->rq_qos_mutex);
+> +
+> +	if (!ops)
+> +		return;
+> +
+> +	spin_lock_irq(&ioc->lock);
+> +	rcu_assign_pointer(ioc->model, NULL);
+> +	ioc->attached =3D NULL;
+> +	ioc->attached_link =3D NULL;
+> +	/*
+> +	 * stepping resumes with the timestamps at their pre-attach
+> +	 * values, which would immediately satisfy the 10s cooldown;
+> +	 * start it fresh instead
+> +	 */
+> +	ioc->autop_too_fast_at =3D 0;
+> +	ioc->autop_too_slow_at =3D 0;
+> +	spin_unlock_irq(&ioc->lock);
+> +
+> +	/* calc_cost() can still run. The map is freed after an RCU gp. */
+> +	bpf_struct_ops_put(ops);
+> +#endif
+> +}
+
+[ ... ]
+
+> @@ -3632,7 +3725,11 @@ static ssize_t ioc_cost_model_write(struct kernfs_=
+open_file *of, char *input,
+>  			continue;
+>  		case COST_MODEL:
+>  			match_strlcpy(buf, &args[0], sizeof(buf));
+> -			if (strcmp(buf, "linear"))
+> +			if (!strcmp(buf, "linear"))
+> +				model =3D NULL;
+> +			else if (!strcmp(buf, "bpf") && ioc->attached)
+> +				model =3D ioc->attached;
+> +			else
+>  				goto unlock;
+>  			continue;
+>  		}
+> @@ -3652,6 +3749,7 @@ static ssize_t ioc_cost_model_write(struct kernfs_o=
+pen_file *of, char *input,
+>  	} else {
+>  		ioc->user_cost_model =3D false;
+>  	}
+> +	rcu_assign_pointer(ioc->model, model);
+>  	ioc_refresh_params(ioc, true);
 
 [Severity: Medium]
-Do these interleaved pread() calls get satisfied from the block device page
-cache without reaching iocost_ms_calc_cost()?
+Can switching back to model=3Dlinear via io.cost.model evaluate stale
+ioc->autop_too_fast_at and ioc->autop_too_slow_at timestamps and trigger an
+immediate profile step?
 
-Because devfd is opened without O_DIRECT, the preceding 500 sequential
-4096-byte read() calls populate the page cache for bytes [0, 2048000).
-Both pread() streams read within that cached range ([4096, 823296) and
-[1052672, 1871872)), so no interleaved bios are submitted to the block
-layer and the multi-stream slot table is not exercised while the
-subsequent assertions pass from the initial read() loop alone.
+ioc_bpf_reg() attaches the BPF model without clearing those timestamps, and
+while the BPF model is active ioc_autop_idx() returns early so they remain =
+at
+their pre-attach values.  Although ioc_detach_model() zeroes them on detach,
+writing model=3Dlinear to io.cost.model sets ioc->model to NULL before call=
+ing
+ioc_refresh_params(ioc, true), where ioc_refresh_params_disk() calls
+ioc_autop_idx() before zeroing autop_too_fast_at and autop_too_slow_at:
+
+block/blk-iocost.c:ioc_refresh_params_disk() {
+    ...
+	idx =3D ioc_autop_idx(ioc, disk);
+	p =3D &autop[idx];
+
+	if (idx =3D=3D ioc->autop_idx && !force)
+		return false;
+
+	if (idx !=3D ioc->autop_idx) {
+		atomic64_set(&ioc->vtime_rate, VTIME_PER_USEC);
+		ioc->vtime_base_rate =3D VTIME_PER_USEC;
+	}
+
+	ioc->autop_idx =3D idx;
+	ioc->autop_too_fast_at =3D 0;
+	ioc->autop_too_slow_at =3D 0;
+    ...
+}
+
+Because ioc->model is already NULL when ioc_autop_idx() runs, a pre-attach
+timestamp older than AUTOP_CYCLE_NSEC (10s) immediately steps ioc->autop_idx
+and resets vtime_rate without waiting for the cooldown.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106122356.3224=
-638-1-cui.tao@linux.dev?part=3D3
+638-1-cui.tao@linux.dev?part=3D1
