@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793937262;
-	b=utanYebqvRThwH7tdSVCugSuDdDwpal1hLXxTajU1GzSKJ9GSnRsxmPsj6VmQvDDfiDM
-	 F3aX/hWtmPPVJDeD8THNZhhtisQFgg9YFfDCoI7aSnRP/JjpcWd5U3uuS/i5UAwFq743q
-	 hkUjIVB+Ez0pYs0jLJIqy6F5P7x8OuBgP8XV1LumMWfldPqE/FGkNHKgjF36C5dYsJvB8
-	 1AeMiwESMhcD4dVEH9CQ9E+MQwzry3yghwFPPnjcioK4pSUzECwddvIdsuLVts51TUtZD
-	 RxMh5h8k9XN2HhMEzlnrlEY/Klb4oHGTjVk8/A7SYI2/ekqXgZ7gnI3jmq0CsAdAOmQ==
+	t=1793937268;
+	b=N8Xim19j6fYuU1Exgtz+mVxWVSl1bGuChxv0sW+E2UfWUj/Ho3z/q+MTXMwEQhXWmJDn
+	 iFQ5cYSJkAHmjx+UueNoAAWOyGNzwf8VvCNYSZYrEpL+tCNIeg+fd2SClOqcUuEMKeBG1
+	 yY3lTyODw7PfVEBuEJP+hErA2vnHsk2nZGmgTd/3l5U2JcZFcqh+6JucXUqHx1dpA7HXQ
+	 swL3NfYMT0MrqH74yocm1llFqrbg5Xi1rWcwaA1nIfF8L/68wxzvHYe3dpV5CEarTk+hC
+	 e/Fh+52sw4KTZUm/HG4C1mOXcjxhmUfsQ+qz7LO0Q0QufIAsnA5Xq9CYsxfR52Vkv2g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793937262;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793937268;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=K8XlO7Z2TIKLNft26mUYqmF8LUcyor+5X6I9Eqo6pUg=;
-	b=1wK6FxSl1Dpd5YgfWASVorrNyEZH6grPou42CTAFgrmhj99hABw7VM3tR9Jl4OOK2opq
-	 fPVpVa3d0Wd7ZD0GmK1FdSyER4289uciKmlx5tdoyRSD/1tgbpdP1KItxCl//coMVswcX
-	 k9YN/TjdlNdux4Pb6Of5UAvpitPNisMbim9Z/ryfxv/dmqa7zv6CVzYBHQQazcP4bOkt2
-	 k/HaDB5iEr3WbEvthkvxhOHtIxRfVwyj1pfiyKx0Q9alsHXU7hiHsEbbi05EzFAoCaVAu
-	 EDxsG/P8M1U7HezOVfucYTjIF7HJ7Z3LWFbqSvM8ps0f2w/VqWvswKEBxfEO3fg11lA==
+	bh=miZxgVLEaVzohTaN7akh6QIt/8LMQ8OllIrcu7R0zy8=;
+	b=zDvEpoVRN0iQbAcsChMDkLXB5KJTZbQhPUrpQ5uXPp2hsESrdBf+hBIkKWSzaM04GEjz
+	 GvxVfaojf1NqUXpPAFJgexFd7ijcGpGWVTIpWEBsJ7rf5++bedphAGtjPCKKDpgwQb9Cf
+	 I5IruA5hlJfppx5rLAmiAzCif/lxPUmL9ALyT9ztH73im0sKkniMRbigbbJJ1Q2hqAHh4
+	 EwlYKJ0kvtUzo/fxEY2DpFzmUqlta26Q40ElUMTZIRbzvQxitbTOZUF8eow6RWtpour5g
+	 bqdPj5+Qgd9Hh3EGSo4Q7oBwo+DEmuPPRbYqzaIa7TE4nbwvf7aYMe/oPqFoevtJsAQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NjxF4fEN;
-	arc=none smtp.remote-ip=209.85.216.47
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hIevt4qR;
+	arc=none smtp.remote-ip=209.85.214.182
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BCB606A31B
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 03:54:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43BCB606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BF1606A31B
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 03:54:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E9BF1606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=NjxF4fEN
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3ae7626d14aso105509a91.2
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 19:54:22 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hIevt4qR
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e9d1114320so1634905ad.3
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2026 19:54:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793937262; x=1794542062; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793937267; x=1794542067; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=K8XlO7Z2TIKLNft26mUYqmF8LUcyor+5X6I9Eqo6pUg=;
-        b=NjxF4fENLxFO0tAmdy3brLo/eHsDNx4TONT94rgqI5db2m0z0wK1leuzAR+JvEdtnC
-         AcIn94yMCe0gLK9BpadNyphDh5DeQ8+o1HNHLAnNFgjHEBRhOjZi1/HrGHVheXrFL2Qq
-         hn8BgFka1RExDnCsgpYBbBDCfK+Y3hByfJ1IiXPfSJKHsFW3vSaOCnRIhqFJwRIw0qe4
-         hjChxXKQLil5tg96BGii8oiwcEtRwNl3N7qelKKUfnaeCeJrDyQNo8vb81oxwyIxRMpx
-         Rxv97+deekKMy+/LnPyWiEtd8+rSC8VHAD6jAmVqYVziJY9VOXIXHzPrw08N8b9cpFGH
-         DPOQ==
+        bh=miZxgVLEaVzohTaN7akh6QIt/8LMQ8OllIrcu7R0zy8=;
+        b=hIevt4qRQ4km0LbkzQvTiDd8mHeo97Jew6niOv28gjchjE4omtiYth6cHwVDgtyvp3
+         CYWYBHfTYEIefxkYN6OPNDUOAfb1PCM8vANMf6sa0A6Q35Hpt6jXaOGB53yvTRPu9aXu
+         t1DTIfIDmpjecli2jcJTNHUopObwSlu2FBRkO6zJyDZhSnI45ZGtCiL/JupC6kexx7GY
+         ILLsmvCdPPNWt2djW8zc1syGipuhoFuQ1HlDejhFi4sJ7xFjQgoanlp6XmWTQIM/vav9
+         W3MX4YPC1LqC9Bgtk05EVGKCZoJxHVcNtzUNpOE2HrTQ5853NuVnPKQI8XJKwP2MwvCf
+         LtkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793937262; x=1794542062;
+        d=1e100.net; s=20260707; t=1793937267; x=1794542067;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=K8XlO7Z2TIKLNft26mUYqmF8LUcyor+5X6I9Eqo6pUg=;
-        b=MUPNgzYduByfsdLh9PE/T/Q7S5o8Xck4m7yJbnz9ORHqVgqAaQNv+har0D2sidV5em
-         R83toXGUJTYNytZFeNMVXRlNTu3s0nJPWJjliX5/JdYTLKKOB3mG9qTkSs11qYr1TwRP
-         owe+IiYAAPIzNaW4DXZdflEXqLMvecCHn0I511lsYMx4/w87j1kwBm0QaDnspQpKOix7
-         au0g5V1RevVRWosDuOQXpKevgVDzhVoH210P12v6wPwqAsPFAHuvfJmgNz89WuGfdT5f
-         NE4RtexQMWebI0tiWZtVeBI91hJ6JZhJ9wKSaEH1zTxqgSK+H+4o0llwbVnMtXVxl5SD
-         umjw==
-X-Gm-Message-State: APuU4Z/0Q7YejmLkVN+ExCoiyAG0rAiySE3KhNdAYlQwhul72g509DEu
-	yZN8ZAgFkK86TA0w6ZkyT28i17wMJhDJDayLGLuY7kSc4l96DzEmCD67iJp6xg==
-X-Gm-Gg: AYBFou25Y0Jwkpx+2fANHeXqdOKLKu0qkxKM/vfSeMZpL23tM00Huex3a83Z4GQfHp3
-	IREu62z8hsIZ8WyzA6dAElhuZZHSeCAX9iFM2tNGXP7Sng0Xxd7zqO0N22svqeP23lr5Pw0zckP
-	iEi9tKbsNddNpQaq7AEadJCwnBjcNvcvcYCg2TbfQ2Kvb2NhIuCYs8iLvbzo49nn3fCuOzBJQzm
-	q6d/QNq7Tb3jWhxgREBBQvrUtLo7xFLfGXpe/RdZ98jQ0zk04VHoR86cyLixBK9c5JaeZ6VfgMh
-	kJziZqztSDAMBYEt01UZe3a15q/1/hiZKaFLsBODrBW2Q2Orp8y5L24PcdzSu8jY7UbS6zkiJDy
-	2YxZQUruN8NUIR2IyfcwWmWSntkPMGeSnUgY/BOxd8vZ+5xpRzy8LF5/boIV2RXsPqhaCxJXaAW
-	4Lnip41UBb4lJaP2sosiRZ9mE692964eN93upSfqbgtSnqFfE/TaEhjKptjsD4TQ+gGppKzEBgh
-	E37gISNyg9JCAIp7CQbb9F9H3lECngmTAafpIhkP6FSpUMS8/wi5F61nXp6Kado9KayzYGaE2OM
-	pUGIxnXugmkAFAC11Y1eXBQiXboZyGMS+IqyXfUSDXjvm1RTj7Z5WGlsSVwGY9dV63cH5e5W+WO
-	65RM8ecQR6uLta4upISeFs6ReLIfRwhzgJfy2FkXjAvz8mShEozH7YTchszIQtaJ9o6AYC0j5XA
+        bh=miZxgVLEaVzohTaN7akh6QIt/8LMQ8OllIrcu7R0zy8=;
+        b=yLj1IBaXlm3/TAp83iuu862LZKE9lU6n+NSv4OcVh/4ImJzMNFTqQOWkyz6xw56tJA
+         nS2SkQHVXfNiReIvTHbDQeT2Mj4brgGMn5C+TUEqeQ0f7fuMsMDoFpYMvCs3y4imAjKH
+         ykjoG2xnajcxVV+pd4WHO+REQ+a0rTb+PgZqR+YJ0Q22WteJ6PoFehosWVVvhqTSpesZ
+         eVGrdXj7laQACk4ThKA2ETYmT3teNhuWqaRGxaCemwUiG2i7Jo/9MG1fwbaCrqThDdVO
+         pxfGclYtw+74p2bhJz7jyGdkCzRKPghawAaT7j3azI6zhacw2vhJQGAlG+nuzFkgeIcS
+         qptw==
+X-Gm-Message-State: APuU4Z+KZ+Uzd7K/t8bH1Dop5gVCFhxh+3+RZWBP7rqjKZDYtnElrj/b
+	Vp41as5Kg9U6LcUC4W2cCoaqv2sZOnu6297dZ/Qe2YYd81p3bKhxhA8D8uZ3/g==
+X-Gm-Gg: AYBFou2KPVlnz9dX+Rq9XjpMndJm2NH0O9hmdhNhEncLTEp08TXd7gchj48Cf3FFDus
+	KiEpGwrvqb3y+fVCClk48in58f36KN/V3yWcAQKFUbWHL6G5k0nZttCq/NNE4pUjznNAMHQncfr
+	cRzNOsCBq7xpE7uxpEnJW7gyjQhOxwqjgoofQNA7raFHdWJrOkqQvxBFDKIm38BTx+xsVKRjUfA
+	++T83b54YRj7i97qxl5ke75B+m+0E1SwIvILT8/KL/AJR8t058cdWTdF2AyOKwFA0Jtx9FpuKSi
+	Ul2BlZ+nQu+XVfTtb7JRnipst1Lz70qrZ+4iL/WckIzB1s8S4GT8XCqVr65FuXophZ39g3OW9K0
+	bsuT00OOYS2xxVD370fbsNiUg5M2vMfgEqXjjYBpadaXOiYm2tvnyxKMczDM6uBzU5+ZjyCVP/G
+	sqLRlVfvzmOGlKnbgjN0LM1JdgYyOkdWSYo8+tq1+5CIvGNALXSmNjDKzUKfsmlaa2Yn/s4W7ho
+	MQvCeNfsJv0NJygoOjxyHnmGeZRodPMKsk38XM8Zg/WgFlhp99TadKHSiPMWrghJqDDEXZ07Pts
+	amoJtxKJtfLE0yFrGpBiEw6KeQ76HEskAtfxigK5eRGvB6C48XTXjmhUnMzOEuRAHjM2eOTOMi5
+	4E9Zarxga4lwLtaDvrEEWYX738xKnMjOJyuz+FnvxWSH5Wzm2FxDrZd0IuB5X443sDSo5OmUo7w
 	==
-X-Received: by 2002:a17:90b:1dcd:b0:3ab:f38:2b41 with SMTP id 98e67ed59e1d1-3b0db703cdemr1157276a91.39.1793937261356;
-        Thu, 05 Nov 2026 19:54:21 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0e4ee855csm14067a91.4.2026.11.05.19.54.20
+X-Received: by 2002:a17:902:ce90:b0:2ed:1b02:f6f2 with SMTP id d9443c01a7336-2ed412fc84dmr18443535ad.6.1793937267131;
+        Thu, 05 Nov 2026 19:54:27 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47d88fabsm1157315ad.63.2026.11.05.19.54.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2026 19:54:21 -0800 (PST)
+        Thu, 05 Nov 2026 19:54:26 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v3 32/45] bpf: Keep the frames of the caller for a subprog that loads data_end
-Date: Fri,  6 Nov 2026 03:50:56 +0000
-Message-ID: <20261106035111.3315285-33-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 33/45] bpf: Keep the frames of the caller for ctx of struct_ops with a reference
+Date: Fri,  6 Nov 2026 03:50:57 +0000
+Message-ID: <20261106035111.3315285-34-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
 References: <20261106035111.3315285-1-alexei.starovoitov@gmail.com>
@@ -104,79 +104,75 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-  static __noinline bool has(struct xdp_md *ctx, void *p, u32 n)
+  static __noinline int pid_of(unsigned long long *ctx)
   {
-          return p + n <= (void *)(long)ctx->data_end;
+          struct task_struct *task = (void *)ctx[1];
+
+          return task->pid;
   }
 
-  void *p = (void *)(long)ctx->data;
+  SEC("struct_ops/test_refcounted")
+  int refcounted(unsigned long long *ctx)
+  {
+          int pid = pid_of(ctx);
 
-  if (!has(ctx, p, 14))
-          return XDP_DROP;
-  return *(char *)(p + 13) ? XDP_PASS : XDP_DROP;
+          bpf_task_release((void *)ctx[1]);
+          return pid & 1;
+  }
 
-has() checks how much of the packet is there, for its caller. A static
-subprog that is verified on its own has no registers of the caller, so
-the range that the compare finds does not get to r6 of the caller:
+An argument with __ref, like the skb of Qdisc_ops.enqueue, is a reference
+that the prog holds from the start. __check_ctx_access() looks for the id
+in ctx_arg_info[] among the references of the state. A static subprog that
+is verified on its own has names in place of these ids:
 
-  invalid access to packet, off=13 size=1, R6(id=0,off=13,r=0)
+  invalid bpf_context access off=8. Reference may already be released
 
-The prog loaded before static subprogs were verified on their own. It still
-loads if data_end is an argument of has(): arg_needs_caller() keeps the
-frames of the caller for such a call.
-
-Do the same for a call that passes a pointer to the packet to a subprog
-that loads data_end from the context. bpf_flow_compute_kinds() asks
-is_valid_access() about each load through the context, and notes it in
-bpf_subprog_info.loads_pkt_end.
+The prog loaded before static subprogs were verified on their own. Keep the
+frames of the caller when the context of a struct_ops prog is passed while
+a reference is held.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h | 2 ++
- kernel/bpf/flow.c            | 2 ++
- kernel/bpf/verifier.c        | 3 ++-
- 3 files changed, 6 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 78a787aaba44..4c0939d91fde 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1020,6 +1020,8 @@ struct bpf_subprog_info {
- 	bool stack_args_from_code: 1;
- 	/* it releases what its caller holds, so it's verified in the context of such caller */
- 	bool releases_inherited: 1;
-+	/* it loads the end of the packet from the context */
-+	bool loads_pkt_end: 1;
- 	/* a call of it was verified on its own: its insns are not in insns_total of the caller */
- 	bool on_its_own: 1;
- 	/* it can leave with unwind_exit: it has one, or unwind_goto follows every call of it */
-diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index 51c7cce57b49..a14490511a25 100644
---- a/kernel/bpf/flow.c
-+++ b/kernel/bpf/flow.c
-@@ -714,6 +714,8 @@ static enum flow_kind flow_loaded_kind(struct bpf_verifier_env *env, const struc
- 		env->ops->is_valid_access(insn->off, size, BPF_READ, env->prog, &info);
- 	/* it notes what the prog reads, and this is a question */
- 	env->prog->tstamp_type_access = tstamp;
-+	if (valid && info.reg_type == PTR_TO_PACKET_END)
-+		bpf_find_containing_subprog(env, insn - env->prog->insnsi)->loads_pkt_end = true;
- 	/*
- 	 * Only the context has pointers that are shorter than a register. A base that nothing is
- 	 * known about can be the context: it came out of a struct, or only some paths have it.
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2a0d5a280a1a..1fa37faa8e69 100644
+index 1fa37faa8e69..8e7875e8bebf 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -11602,7 +11602,8 @@ static bool arg_needs_caller(const struct bpf_verifier_state *state,
- 	if (reg_is_pkt_pointer(reg) && reg->id)
- 		return true;
- 	/* it checks how much of the packet is there, for the caller */
--	if (reg->type == PTR_TO_PACKET_END && !sub->recursive)
-+	if ((reg->type == PTR_TO_PACKET_END ||
-+	     (reg->type == PTR_TO_PACKET && sub->loads_pkt_end)) && !sub->recursive)
- 		return true;
- 	/* or whether there is something to point to */
- 	return type_may_be_null(reg->type) && !sub->recursive;
+@@ -11586,9 +11586,13 @@ static u32 inherited_id(const struct bpf_verifier_state *state, u32 id)
+ }
+ 
+ /* What func_is_on_its_own() asks of an argument, be it in a register or on the stack */
+-static bool arg_needs_caller(const struct bpf_verifier_state *state,
++static bool arg_needs_caller(struct bpf_verifier_env *env, const struct bpf_verifier_state *state,
+ 			     const struct bpf_subprog_info *sub, const struct bpf_reg_state *reg)
+ {
++	/* the id of a __ref argument is kept in ctx_arg_info[], see __check_ctx_access() */
++	if (reg->type == PTR_TO_CTX && state->acquired_refs &&
++	    env->prog->type == BPF_PROG_TYPE_STRUCT_OPS)
++		return true;
+ 	/* only the ids of what is held have names */
+ 	if (reg->type != SCALAR_VALUE &&
+ 	    ((reg->id && !inherited_id(state, reg->id)) ||
+@@ -11637,7 +11641,7 @@ static bool func_is_on_its_own(struct bpf_verifier_env *env, struct bpf_verifier
+ 		if (caller->regs[i].type == PTR_TO_STACK ||
+ 		    base_type(caller->regs[i].type) == CONST_PTR_TO_DYNPTR)
+ 			return false;
+-		if (arg_needs_caller(state, sub, &caller->regs[i]))
++		if (arg_needs_caller(env, state, sub, &caller->regs[i]))
+ 			return false;
+ 	}
+ 	/* callx of one function of a set asks before it is checked that the arguments are there */
+@@ -11645,7 +11649,7 @@ static bool func_is_on_its_own(struct bpf_verifier_env *env, struct bpf_verifier
+ 		if (caller->stack_arg_regs[i].type == PTR_TO_STACK ||
+ 		    base_type(caller->stack_arg_regs[i].type) == CONST_PTR_TO_DYNPTR)
+ 			return false;
+-		if (arg_needs_caller(state, sub, &caller->stack_arg_regs[i]))
++		if (arg_needs_caller(env, state, sub, &caller->stack_arg_regs[i]))
+ 			return false;
+ 	}
+ 	return true;
 -- 
 2.55.0
 
