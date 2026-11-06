@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793998342;
-	b=vRZ6WcCUMpLnypy8XGNee7ZaNMEiNjvLXqYGjBI9zicJlZBuaSc3j3dkZBQes6VjDCD6
-	 j/AzWWS2lzF/FRhnhs/uf3XGE/PnDrqa1Al2SX3vNKmaYmuAPjwtFscOZsQAnYLg+gStL
-	 Tz4VClp8QqzpF3EFcaVVykBbPh/c27Zv8acl8t790hLkyDPifCGoETghXbLuJmDUlU5rx
-	 wMgtKA7tfHzhwgBoWLAO8F2+Gsr0aaz8DGMThutE5YC4Gdx+iidCAt5V7FWeLXED1PkmR
-	 4R/ROSiygo1ySvYVnWdOBgXI9chXW6zleykSO+jEjIM4FAZLeqMXFUQsRddW/gSGj/g==
+	t=1793998337;
+	b=JtkNLdbqfdCyCf0c2/jve3gMH/QKz1R8sOhKryYGoajDnp9cEVFz9J9JFFZGsfmrzZyP
+	 k36vwHMlm2omVQRWMKwP00xrrvfbyPQmn7n6Yvs9q/ST3XAuk9NxxanCllsRw/1+9AV/d
+	 FAhE/M5q10X3w0j7LPeekfMEr95n1oYfy6YjmTwR7CtTwxRTd34FVdIOHfHOPVN6nWRfi
+	 RQJBVpXUyWIJ0JodhkOMWhqi6SVCEKaUjzBPbmgwT+jjHX2lDA1o/ELdNxL1OUpof+5fS
+	 5K6w9Y21UkgQGe/Nhjxel3g5hVg41le0boQVjIvGvtmDQyBlb8zDe6vW5EPkCa4CjDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793998342;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793998337;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=rnRMS6NrjaAL6KS8KVB6qlnbH88zRv1HcCnzXNaTbv0=;
-	b=zDdIwJ9zBKcVrANq+YfkWH64w4YQGJ8Prw1HGXKcarU/2PTuNnYlNCrPr4Dg+wFqB2du
-	 I9yRb8ieK5MNV9iVeR9G/SdCCIcEN2Lf3TcxiPx7ByYN8c22ZV6b/vqND244pX7kl+seY
-	 u7vMgmM1XS4DAuZsAssRzN+OS7cCbKNVYP+vpxtELkFh9NYdtDTe62wKzpip16O0qyUGL
-	 EMjAdMgwFvma+3YTCUjVBf2AR+PJ10qOZSjMfGIgQ7UZ3r7TDfove/F61z7jH0VMab13R
-	 9Xj+uHYRLzylApCLn9sxqguLdBoCbFcreP0Rm5jrnGbLSl5CmWOOB8G53LakxlfvO1A==
+	bh=qyl271xS4NaUQkQEDfJP7TOW84m77rHK/njFeThb4gM=;
+	b=1N8uU1T4bJoNa0JGeK4tBXLMUXBMNzweROR0FoYKlrc0w8XlKOfKkW2jR83JrZ+Puyqh
+	 YT2roIP+VsZ1zOhAIo5kZ0xp2Yp4t/fBIsM/tWw4hS/Zi366GiNnoxOmHGg5BljTf42kX
+	 3NrHpoutItDGcR4V6mLMChpoArpgFWPnvmxM2PZNP3EJMNJ2C9KoR3mrWGK5W/QOpz4Sp
+	 r7ivgiKyD96wlQTxKg2eiwATupXaeoTRtqTlggX1Tye+oq9fLReXM4IpOIOlgPO5oiUqy
+	 SzkdV7MOCHyIXqn1L+2ibklFTwKrLeyPnXa/FRrcCushlxuLVsn/bIwkjrjtt1WnOoQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=W0LjKxRI;
-	arc=none smtp.remote-ip=209.85.128.46
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B6JYYw9K;
+	arc=none smtp.remote-ip=209.85.128.52
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB353606A33B
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:52:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB353606A33B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E564F606D80F
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:52:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E564F606D80F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=W0LjKxRI
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a20bde60a0so9969675e9.3
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:52:10 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B6JYYw9K
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4a2167bd087so10077325e9.3
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:52:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793998329; x=1794603129; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793998328; x=1794603128; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=rnRMS6NrjaAL6KS8KVB6qlnbH88zRv1HcCnzXNaTbv0=;
-        b=W0LjKxRIg31sAsAp6UpbOM47kfrowESSmLcDdTW/VhA7JNhylVIJ6mjj+UIP8l18cy
-         YEZgpDgt2l0q3eJk7fxZvFqTxePg65wFY03g+kGH1cRjG5Hy4Ts1uOZxd1z+/GAN7FPM
-         Al/Vwf4RziyGlZPrgJ1Fvlob1cQvXvoKhxmELkXh9r7yfGDJ6Rr7p2e9tOaZAERApLVn
-         tmhH8pQdvVX8j+p+GKiwSIE4DC6iVquGE3BH4OT5++t7d9u0ORnZvkjtoub+Erby2vGf
-         Nptyrrc4y5LMs8EtuAGE2i7ZCyd/ctxLhfRblfP1zUyrfRb/PQjN3SPSX10v6wR6c0Ru
-         oszQ==
+        bh=qyl271xS4NaUQkQEDfJP7TOW84m77rHK/njFeThb4gM=;
+        b=B6JYYw9KHytgcsKRViIv702sJvZ13LITWymvU2GUgmjrKUaq/34AS+ZLL3ysWVLSLI
+         RJXl9Q9YqcwzD2rlx6xKf6dx41WgKvGiW0uMLEcdV+iI0e/8Gykut8ZaYfLCJyn8McBU
+         Kf2E46f8OrV2dtE0E+bp5xnDsudqH9wlOvjwL+ctwbcd9xgdgJ/mhbqI6N36LWAHumFf
+         J7h3qs6oBplssT9Iw3Q2hQdl9yAGulkfQRG41NX6q4/AB7CjTkX4BR/v+oVPNwslm5uW
+         ZRL4V7Biv0wgO6T4HV6FI6te4JC76snnf4I5eGfuexdLqirM7sjzMDOYj+2Nz+m38+FF
+         /Lyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793998329; x=1794603129;
+        d=1e100.net; s=20260707; t=1793998328; x=1794603128;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=rnRMS6NrjaAL6KS8KVB6qlnbH88zRv1HcCnzXNaTbv0=;
-        b=vSaE8G0TNpxL60ET9mAjQA9i1DO/dwvN2PoZNARG1EG1ZsZ1Cou+yr02A6kSNl5JaW
-         exwwAk9FkMb2W9DQo+Mz6OWvOducMrDWbjU/Bhbs5l/Kz0ROL3rHjzvRu62gf3n3cBq5
-         fcwTtdxcHQthgKAeuSv70IWFJzBFrqIBDP+cmOY/hZ5IY6eZ/Nth3+SFjU6+2iM2osmC
-         ECjXAgX5cgiwfSVutk/v9GrmzFT5q8ehgdyS2sCV5+JXzaAR4KjT/r3zLQRLipQegnHi
-         cabfdk4ImoZ4jcTvoOexfklyirXBSwd8/sWC4MhhqSYjc5hFmxbBCh/M0o3VshrrnwIy
-         a23g==
-X-Forwarded-Encrypted: i=1; AKwUvBzmhiczPKKTL79Zhv8CvQCDO1dgDed3Blw9YunZjPZXiETfvBmfvzKiZL6M4kZ91x4KyFA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8tENyKjRzrLcaiqwuXikestO9akyiqwqGRB3nHX5p5jiTwz4UI
-	Z9N1gxp1bmpY5f+cs/+HDiyo0+pV/6FAA/YRs2bzn+GQh/6RhE1ebmfU
-X-Gm-Gg: AYBFou0ba0AhaXHP4mm5uHdnyd+bOQ38ZES+UFvDDY6OuQfazsmVeBFiBv0cQbqzsEJ
-	3096ZRA62fOzRVPG4XiA1m5ky4sSnu2gdGqu4gblkJrwcr8PJmmSHmgIuPZMDud51UkwfIXz64M
-	FP1iNchNd7enEw0oqf4amaCm+Dea1ty0ZI5SwDPVd1mR57iDKi02VqYTXAarDUT3Rk5fIOYgGCP
-	nRTvmHEK4602tJ12FOT7wZhQo9LGnFP6E9c+Qs+d1c5Iiht0mlzezYl4o2SZ4dKicQH0wbLHdgK
-	GcVabGH2xm8cLijYt+fa1gl2pFirk367g5LFIhVI4HkySKHq3ts3NrTIPb1RnxjnCF+0viENNdv
-	QsXlmSDZwGZHO5VR5Ygn4nn+jazIFWsLLprJr9s/GU5PUh5da6n9Agec1tkVXTWILViylrPsWA/
-	M2Dg/UN4Ws/T+eQjNwL32YMaGfl5Gc48FeWEUK/uH588e1PGi2achNtWkjN1666n4nZQ4Hamezn
-	PhN0vaJP0CBaPJL2tifvoYZd9VE/zGpouxNQKGIuBFauJo7ekWWm5Fak+c/JN46tlAPf43tQxHl
-	JpY7vwM+tpopxTfLu2mSoglndFfVq240r7OycV5xBc/ptaI=
-X-Received: by 2002:a05:600c:46d1:b0:4a6:b49f:9ae5 with SMTP id 5b1f17b1804b1-4b6dfe8f492mr65228495e9.34.1793998329247;
-        Fri, 06 Nov 2026 12:52:09 -0800 (PST)
-Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7da62edb4sm9075425e9.1.2026.11.06.12.52.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=qyl271xS4NaUQkQEDfJP7TOW84m77rHK/njFeThb4gM=;
+        b=Gzr/IbKb95I7snhyo+MHwDruNcfAw/Kp0duwZ/QtAyA1KN12y3jdn8rPkHEp5G92A4
+         HPUI4KtsI7UC7/p75V3RjeuqtY92xzuUqJkLNV7mbi9a9pooVI9MeMXPZRuvA/twedj6
+         cASBhdjbwWALtjKfj/PeLIv0AqXtb8+YcBu64alnYD9G+de6MaXL2wbdMYyytx3p+MFe
+         6XoIH1lVyZ1B7vJCJzy5ggcSE2Gh8YSjwWG54dqLezfpTho0CDSemUBk42WeqPDs66th
+         0NSLfiDXO3v47XIbAin6LZukG675FHgowJo02r7OhX6ftfDZyrkMzZ+t7K31ziB8mcFy
+         Vftw==
+X-Forwarded-Encrypted: i=1; AKwUvBzfXiVp1rB1IE8tTKgkXuITdW9cvr/9lzOKw1Xakc0VUHsT7XRQL8BfzcVQdMsm+e0o8iU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+Qi1XvHx6jLTfeA+1qgwSEWi780a2k4Pava+gdsfiNskYTYzvk
+	lMfqHw4YmJ2HYMDZkwUjg8Mxo4Hw+5wS7TXxeX3y9lE/M37gqp5TdYNs
+X-Gm-Gg: AYBFou1DkvMMQTGrhmvyCaRZd9uT4hCqYsrev5tT6o/H7XfdjUgfHsVb9pvJJIxVVFb
+	MNjy/vXOz4sJWuzA7GE9dyKXrdKaz5PBJPtRD+8XtcZnc5Q0v/BS8KRdpMRenTNLyeakkmN+y0x
+	dsEBoHhsDSNwT/V4YH+jEXsT3ulNjZ/gxZVH/tECSR6yboND/iaPrR9IUxPp9DY+rmCxIkKOvTC
+	Vf9LimZ3+mzILDEX6ONQnh+ieFjPWbmXbfXU5BztsMLYBkfQw60BRfsyL7UY/IiZ+QluVzrkxP4
+	uSz3uTnbIBnqjVIlQjOxBdg0S1vutG01Fq2k66briJt0q5sV0y9EHWPr0N3Shktf0ZYOcY8vhRY
+	CZ/FOxo0JJVesPnUDIh467YqDOCFUmbET4HLjUHU87dke29bS+GzP8B6/jgXX9bPXkKgfQu/ikA
+	k7QF+LJR9guQ+LzvmRlrL9itpJShdH6A9CKJs44uUYryU1/k/EzHVUcwvqzQu6sQV4lZisGljdr
+	mkn5mCsab0MIZDHr5PoeY2UUqjZDlMEoDJjZD5fIcH4OuZW7vZHzISFPIlx/cNG2uaQNH+wvOE7
+	z7StfMzvrfk1IMPYMMlp6TLxZCIAnefJ9Mn5rroKMzrc76w=
+X-Received: by 2002:a05:600c:5289:b0:4a2:a6e:80f5 with SMTP id 5b1f17b1804b1-4b6dea695f8mr70229315e9.11.1793998328189;
         Fri, 06 Nov 2026 12:52:08 -0800 (PST)
+Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7da62edb4sm9075425e9.1.2026.11.06.12.52.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Nov 2026 12:52:07 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -97,9 +97,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v1 bpf-next 08/18] bpf: Add the bpf_scan_ir LLVM plugin
-Date: Fri,  6 Nov 2026 21:02:57 +0000
-Message-ID: <20261106210314.1767267-8-a.s.protopopov@gmail.com>
+Subject: [PATCH v1 bpf-next 07/18] scripts: Add LLVM plugin infrastructure
+Date: Fri,  6 Nov 2026 21:02:56 +0000
+Message-ID: <20261106210314.1767267-7-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: 20261106205523.1765622-1-a.s.protopopov@gmail.com
 References: <20261106210314.1767267-1-a.s.protopopov@gmail.com>
@@ -114,402 +114,262 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a new bpf_scan_ir.cpp LLVM plugin selected by the new
-CONFIG_CLANG_PLUGIN_BPF_SCAN_IR option. The new plugin depends on
-DEBUG_INFO_BTF, as the information it produces eventually ends up in
-kernel/module BTF. It needs LLVM 19 or later and supports only x86_64
-and arm64. For now LTO_CLANG is not supported. It is a planned
-follow-up. The new pass runs after optimization over the IR of the
-kernel and modules.
+Add scripts/llvm-plugins and the corresponding Makefiles and Kconfig for
+LLVM IR passes loaded with -fpass-plugin, similar to the GCC plugins.
+Individual plugins register their configuration and shared objects
+separately. No plugin is added yet.
 
-The purpose of this plugin is to gather information about functions,
-which can be targets for BPF fmodret programs (have paths without side
-effects which return errors). The records about functions are stored in
-the new .BTF_fmodret_candidates section which is created by plugin and
-later is processed by the resolve_btfids tool. The actual plugin logic is
-added in the following commits.
+Use LLVM_CONFIG to obtain the host compiler and linker flags. Require
+llvm-config of the same major version as clang, which loads the plugins:
+unlike GCC, clang does not provide the headers for its plugins. Require
+also a host C++ compiler which accepts the headers and flags of
+llvm-config.
 
-Keep .BTF_fmodret_candidates and its relocations in the temporary BTF
-link and discard it before the later links, so the build-only function
-references do not create runtime relocations. Keep it in modules until
-their BTF is generated and remove it then, also when BTF generation is
-skipped. Without module BTF, discard it at the module link. Let modpost
-accept the section. Let objtool skip its relocations in IBT validation:
-a record has the address of its function, which is not an indirect
-branch target. The vDSO, the EFI stub and the early boot code are built
-without the plugins, so position-independent startup objects do not
-contain the absolute function pointers of the records.
+Build plugins without linking LLVM component libraries; their LLVM
+symbols are resolved by the compiler loading the shared library. Include
+a generated header so objects are rebuilt when enabled plugins change.
+Track the headers of a plugin, LLVM ones included, with a dependency
+file, as the GCC plugins do.
 
-The record format and the linker script are in scripts/bpf, so a future
-GCC plugin can share them.
+Export LLVM_PLUGINS_CFLAGS so vDSO, EFI stub and early boot builds can
+exclude the plugins, as they exclude the GCC plugins.
+
+Add the plugin infrastructure to the CLANG/LLVM BUILD SUPPORT entry in
+MAINTAINERS.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- MAINTAINERS                          |   7 ++
- include/asm-generic/vmlinux.lds.h    |   3 +-
- scripts/Makefile.llvm-plugins        |   2 +
- scripts/Makefile.modfinal            |   1 +
- scripts/Makefile.vmlinux             |   3 +
- scripts/bpf/fmodret.lds              |   6 ++
- scripts/bpf/fmodret_metadata.h       |  29 ++++++
- scripts/gen-btf.sh                   |   4 +-
- scripts/link-vmlinux.sh              |   7 ++
- scripts/llvm-plugins/Kconfig         |  16 ++++
- scripts/llvm-plugins/bpf_scan_ir.cpp | 126 +++++++++++++++++++++++++++
- scripts/mod/modpost.c                |   1 +
- scripts/module.lds.S                 |   5 ++
- tools/objtool/check.c                |   1 +
- 14 files changed, 209 insertions(+), 2 deletions(-)
- create mode 100644 scripts/bpf/fmodret.lds
- create mode 100644 scripts/bpf/fmodret_metadata.h
- create mode 100644 scripts/llvm-plugins/bpf_scan_ir.cpp
+ MAINTAINERS                           |  2 ++
+ Makefile                              |  6 +++++-
+ arch/Kconfig                          |  1 +
+ arch/arm64/kernel/pi/Makefile         |  1 +
+ arch/x86/boot/startup/Makefile        |  2 ++
+ arch/x86/um/vdso/Makefile             |  2 +-
+ drivers/firmware/efi/libstub/Makefile |  2 +-
+ include/linux/compiler-version.h      |  5 +++++
+ lib/vdso/Makefile.include             |  3 +++
+ scripts/Makefile                      |  1 +
+ scripts/Makefile.llvm-plugins         |  8 ++++++++
+ scripts/llvm-plugins/Kconfig          | 17 +++++++++++++++++
+ scripts/llvm-plugins/Makefile         | 21 +++++++++++++++++++++
+ 13 files changed, 68 insertions(+), 3 deletions(-)
+ create mode 100644 scripts/Makefile.llvm-plugins
+ create mode 100644 scripts/llvm-plugins/Kconfig
+ create mode 100644 scripts/llvm-plugins/Makefile
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 02b6c8963c63..dfbb45ecc716 100644
+index 93abbb315065..02b6c8963c63 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -5064,6 +5064,13 @@ S:	Supported
- F:	arch/x86/net/
- X:	arch/x86/net/bpf_jit_comp32.c
+@@ -6562,7 +6562,9 @@ C:	irc://irc.libera.chat/clangbuiltlinux
+ F:	Documentation/kbuild/llvm.rst
+ F:	include/linux/compiler-clang.h
+ F:	scripts/Makefile.clang
++F:	scripts/Makefile.llvm-plugins
+ F:	scripts/clang-tools/
++F:	scripts/llvm-plugins/
+ K:	\b(?i:clang|llvm)\b
  
-+BPF [COMPILER PLUGINS]
-+M:	Anton Protopopov <a.s.protopopov@gmail.com>
-+L:	bpf@vger.kernel.org
-+S:	Maintained
-+F:	scripts/bpf/
-+F:	scripts/llvm-plugins/bpf_*
-+
- BPF [CORE]
- M:	Alexei Starovoitov <ast@kernel.org>
- M:	Daniel Borkmann <daniel@iogearbox.net>
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index f8254a88e05d..4e18758b5ffc 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -886,7 +886,8 @@
- 		KLP_SYMID
+ CLK API
+diff --git a/Makefile b/Makefile
+index f895752d4b05..2fcad8109572 100644
+--- a/Makefile
++++ b/Makefile
+@@ -457,10 +457,13 @@ endif
  
- #define MODINFO								\
--		.modinfo (INFO) : { KEEP(*(.modinfo)) }
-+		.modinfo (INFO) : { KEEP(*(.modinfo)) }	\
-+		.BTF_fmodret_candidates 0 (INFO) : { KEEP(*(.BTF_fmodret_candidates)) }
- 
- #ifdef CONFIG_GENERIC_BUG
- #define BUG_TABLE							\
-diff --git a/scripts/Makefile.llvm-plugins b/scripts/Makefile.llvm-plugins
-index e18f4907b015..9ff364f4db59 100644
---- a/scripts/Makefile.llvm-plugins
-+++ b/scripts/Makefile.llvm-plugins
-@@ -1,5 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
-+llvm-plugin-$(CONFIG_CLANG_PLUGIN_BPF_SCAN_IR) += bpf_scan_ir.so
-+
- LLVM_PLUGIN := $(llvm-plugin-y)
- LLVM_PLUGINS_CFLAGS := $(strip $(addprefix -fpass-plugin=$(objtree)/scripts/llvm-plugins/, \
- 	$(LLVM_PLUGIN)) -DLLVM_PLUGINS)
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 01a37ec872b9..042c31e3bdfb 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -42,6 +42,7 @@ quiet_cmd_btf_ko = BTF [M] $@
-       cmd_btf_ko = 							\
- 	if [ ! -f $(objtree)/vmlinux ]; then				\
- 		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
-+		$(OBJCOPY) --remove-section=.BTF_fmodret_candidates $@;	\
- 	else	\
- 		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
- 	fi;
-diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-index 95b523fe4f9e..c8651454c3d3 100644
---- a/scripts/Makefile.vmlinux
-+++ b/scripts/Makefile.vmlinux
-@@ -73,6 +73,9 @@ vmlinux.unstripped: scripts/link-vmlinux.sh vmlinux.o .vmlinux.export.o $(KBUILD
- ifdef CONFIG_DEBUG_INFO_BTF
- vmlinux.unstripped: $(RESOLVE_BTFIDS) $(srctree)/scripts/gen-btf.sh
+ HOSTCC	= $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+ HOSTCXX	= $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)
++LLVM_CONFIG ?= $(LLVM_PREFIX)llvm-config$(LLVM_SUFFIX)
+ else
+ HOSTCC	= gcc
+ HOSTCXX	= g++
++LLVM_CONFIG ?= llvm-config
  endif
-+ifdef CONFIG_CLANG_PLUGIN_BPF_SCAN_IR
-+vmlinux.unstripped: $(srctree)/scripts/bpf/fmodret.lds
-+endif
++export LLVM_CONFIG
+ HOSTRUSTC = rustc
+ HOSTPKG_CONFIG	= pkg-config
  
- ifdef CONFIG_BUILDTIME_TABLE_SORT
- vmlinux.unstripped: scripts/sorttable
-diff --git a/scripts/bpf/fmodret.lds b/scripts/bpf/fmodret.lds
-new file mode 100644
-index 000000000000..6bdfde9e7679
---- /dev/null
-+++ b/scripts/bpf/fmodret.lds
-@@ -0,0 +1,6 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+SECTIONS {
-+	/DISCARD/ : {
-+		*(.BTF_fmodret_candidates)
-+	}
-+}
-diff --git a/scripts/bpf/fmodret_metadata.h b/scripts/bpf/fmodret_metadata.h
-new file mode 100644
-index 000000000000..209f266f89a3
---- /dev/null
-+++ b/scripts/bpf/fmodret_metadata.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef FMODRET_METADATA_H
-+#define FMODRET_METADATA_H
-+
-+/*
-+ * The records which the BPF compiler plugins write to .BTF_fmodret_candidates
-+ * for resolve_btfids, one for each function with values and for each weak
-+ * definition. If a function has two weak definitions, the record of the one
-+ * which loses the link would describe the body of the other, so both need a
-+ * record to make the function ambiguous. A record is packed, target-endian and
-+ * aligned to the target pointer size:
-+ *
-+ *	u32 magic, version, size, flags;
-+ *	ptr function;
-+ *	u32 nr_values, reserved;
-+ *	s64 values[nr_values];
-+ *
-+ * The values are the errors which clean paths of the function return, sorted
-+ * and unique.
-+ */
-+#define FMODRET_META_MAGIC 0x46524d32U
-+#define FMODRET_META_VERSION 1U
-+#define FMODRET_META_HEADER_SIZE(ptr_size) (24 + (ptr_size))
-+#define FMODRET_META_VALUE_SIZE 8
-+
-+#define FMODRET_FN_WEAK (1U << 0)
-+#define FMODRET_FN_RET64 (1U << 1)
-+
+@@ -1211,10 +1214,11 @@ include-$(CONFIG_AUTOFDO_CLANG)	+= scripts/Makefile.autofdo
+ include-$(CONFIG_PROPELLER_CLANG)	+= scripts/Makefile.propeller
+ include-$(CONFIG_WARN_CONTEXT_ANALYSIS) += scripts/Makefile.context-analysis
+ include-$(CONFIG_GCC_PLUGINS)	+= scripts/Makefile.gcc-plugins
++include-$(CONFIG_LLVM_PLUGINS)	+= scripts/Makefile.llvm-plugins
+ 
+ include $(addprefix $(srctree)/, $(include-y))
+ 
+-# scripts/Makefile.gcc-plugins is intentionally included last.
++# The compiler plugin Makefiles are intentionally included last.
+ # Do not add $(call cc-option,...) below this line. When you build the kernel
+ # from the clean source tree, the GCC plugins do not exist at this point.
+ 
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 1163736de1f9..4f1f36d3e82d 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1772,6 +1772,7 @@ config HAVE_GENERIC_TIF_BITS
+ source "kernel/gcov/Kconfig"
+ 
+ source "scripts/gcc-plugins/Kconfig"
++source "scripts/llvm-plugins/Kconfig"
+ 
+ config FUNCTION_ALIGNMENT_4B
+ 	bool
+diff --git a/arch/arm64/kernel/pi/Makefile b/arch/arm64/kernel/pi/Makefile
+index a273ab5af805..5813bb75c992 100644
+--- a/arch/arm64/kernel/pi/Makefile
++++ b/arch/arm64/kernel/pi/Makefile
+@@ -10,6 +10,7 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
+ 		   -D__DISABLE_EXPORTS -ffreestanding -D__NO_FORTIFY \
+ 		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
+ 		   $(CONFIG_CC_OPT_NO_ADDRSIG)
++KBUILD_CFLAGS	:= $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
+ 
+ # this code may run with the MMU off so disable unaligned accesses
+ CFLAGS_map_range.o += -mstrict-align
+diff --git a/arch/x86/boot/startup/Makefile b/arch/x86/boot/startup/Makefile
+index 5e499cfb29b5..7036e939097e 100644
+--- a/arch/x86/boot/startup/Makefile
++++ b/arch/x86/boot/startup/Makefile
+@@ -12,6 +12,8 @@ KBUILD_CFLAGS		+= -D__DISABLE_EXPORTS -mcmodel=small -fPIC \
+ # disable ftrace hooks and LTO
+ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS))
+ KBUILD_CFLAGS	:= $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS))
++# LLVM plugins may add data with absolute addresses
++KBUILD_CFLAGS	:= $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
+ KASAN_SANITIZE	:= n
+ KCSAN_SANITIZE	:= n
+ KMSAN_SANITIZE	:= n
+diff --git a/arch/x86/um/vdso/Makefile b/arch/x86/um/vdso/Makefile
+index 7664cbedbe30..0e32c9ae2b5a 100644
+--- a/arch/x86/um/vdso/Makefile
++++ b/arch/x86/um/vdso/Makefile
+@@ -37,7 +37,7 @@ CFL := $(PROFILING) -mcmodel=small -fPIC -O2 -fasynchronous-unwind-tables -m64 \
+        $(filter -g%,$(KBUILD_CFLAGS)) -fno-stack-protector \
+        -fno-omit-frame-pointer -foptimize-sibling-calls
+ 
+-$(vobjs): KBUILD_CFLAGS += $(CFL)
++$(vobjs): KBUILD_CFLAGS := $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
+ 
+ #
+ # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index bbab12b8eb4b..6f69d5d67731 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -6,7 +6,7 @@
+ # enabled, even if doing so doesn't break the build.
+ #
+ 
+-cflags-y			:= $(KBUILD_CFLAGS)
++cflags-y			:= $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
+ 
+ # x86 links the stub into the decompressor rather than the kernel proper, so
+ # drop the kernel's code model, calling convention, and stack alignment, and
+diff --git a/include/linux/compiler-version.h b/include/linux/compiler-version.h
+index ac1665a98a15..e6a5a9f3fbcd 100644
+--- a/include/linux/compiler-version.h
++++ b/include/linux/compiler-version.h
+@@ -24,6 +24,11 @@
+ #include <generated/gcc-plugins.h>
+ #endif
+ 
++/* Rebuild objects when an LLVM plugin changes. */
++#ifdef LLVM_PLUGINS
++#include <generated/llvm-plugins.h>
 +#endif
-diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
-index b17f1189298a..5bca864631e0 100755
---- a/scripts/gen-btf.sh
-+++ b/scripts/gen-btf.sh
-@@ -120,7 +120,9 @@ gen_btf_o()
++
+ /*
+  * If the randstruct seed itself changes (whether for GCC plugins or
+  * Clang), the entire tree needs to be rebuilt since the randomization of
+diff --git a/lib/vdso/Makefile.include b/lib/vdso/Makefile.include
+index cedbf15f8087..848d58296ba2 100644
+--- a/lib/vdso/Makefile.include
++++ b/lib/vdso/Makefile.include
+@@ -1,5 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- embed_btf_data()
- {
--	${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF ${ELF_FILE}
-+	# resolve_btfids has consumed the compiler plugin records of the module
-+	${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF \
-+		--remove-section=.BTF_fmodret_candidates ${ELF_FILE}
++# vDSO code executes outside the kernel.
++KBUILD_CFLAGS := $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
++
+ GENERIC_VDSO_MK_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+ GENERIC_VDSO_DIR := $(dir $(GENERIC_VDSO_MK_PATH))
  
- 	# a module might not have a .BTF_ids or .BTF.base section
- 	btf_base="${ELF_FILE}.BTF.base"
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index d5710e900bd4..f39e2d1f1400 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -89,6 +89,13 @@ vmlinux_link()
- 		ldlibs=
- 	fi
+diff --git a/scripts/Makefile b/scripts/Makefile
+index d7fbb7ca098b..bc5dacc29207 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -66,6 +66,7 @@ hostprogs += unifdef gen_packed_field_checks
+ targets += module.lds
  
-+	if is_enabled CONFIG_CLANG_PLUGIN_BPF_SCAN_IR; then
-+		if [ "${output}" = ".tmp_vmlinux1" ]; then
-+			ldflags="${ldflags} ${wl}--emit-relocs"
-+		else
-+			ldflags="${ldflags} ${wl}--script=${srctree}/scripts/bpf/fmodret.lds"
-+		fi
-+	fi
- 	ldflags="${ldflags} ${wl}--script=${objtree}/${KBUILD_LDS}"
- 
- 	# The kallsyms linking does not need debug symbols included.
+ subdir-$(CONFIG_GCC_PLUGINS) += gcc-plugins
++subdir-$(CONFIG_LLVM_PLUGINS) += llvm-plugins
+ subdir-$(CONFIG_GENKSYMS) += genksyms
+ subdir-$(CONFIG_GENDWARFKSYMS) += gendwarfksyms
+ subdir-$(CONFIG_SECURITY_SELINUX) += selinux
+diff --git a/scripts/Makefile.llvm-plugins b/scripts/Makefile.llvm-plugins
+new file mode 100644
+index 000000000000..e18f4907b015
+--- /dev/null
++++ b/scripts/Makefile.llvm-plugins
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++LLVM_PLUGIN := $(llvm-plugin-y)
++LLVM_PLUGINS_CFLAGS := $(strip $(addprefix -fpass-plugin=$(objtree)/scripts/llvm-plugins/, \
++	$(LLVM_PLUGIN)) -DLLVM_PLUGINS)
++export LLVM_PLUGIN LLVM_PLUGINS_CFLAGS
++
++KBUILD_CFLAGS += $(LLVM_PLUGINS_CFLAGS)
 diff --git a/scripts/llvm-plugins/Kconfig b/scripts/llvm-plugins/Kconfig
-index 37db99159b9c..c4d62ae5f65d 100644
---- a/scripts/llvm-plugins/Kconfig
-+++ b/scripts/llvm-plugins/Kconfig
-@@ -15,3 +15,19 @@ menuconfig LLVM_PLUGINS
- 	  Building them requires LLVM development headers and llvm-config
- 	  of the same major version as clang. Each plugin has its own option
- 	  below and is built only if that option is enabled.
-+
-+if LLVM_PLUGINS
-+
-+config CLANG_PLUGIN_BPF_SCAN_IR
-+	bool "Scan optimized LLVM IR for BPF"
-+	depends on X86_64 || ARM64
-+	depends on DEBUG_INFO_BTF
-+	depends on !LTO_CLANG
-+	depends on CLANG_VERSION >= 190000
-+	help
-+	  Find the functions which return errors on paths without side
-+	  effects and describe them in .BTF_fmodret_candidates for
-+	  resolve_btfids. The section is discarded from the final kernel
-+	  and modules.
-+
-+endif
-diff --git a/scripts/llvm-plugins/bpf_scan_ir.cpp b/scripts/llvm-plugins/bpf_scan_ir.cpp
 new file mode 100644
-index 000000000000..6700896749d4
+index 000000000000..37db99159b9c
 --- /dev/null
-+++ b/scripts/llvm-plugins/bpf_scan_ir.cpp
-@@ -0,0 +1,126 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* bpf_scan_ir: optimizer-last LLVM IR analysis for BPF. */
++++ b/scripts/llvm-plugins/Kconfig
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0-only
 +
-+#include "../bpf/fmodret_metadata.h"
++menuconfig LLVM_PLUGINS
++	bool "LLVM plugins"
++	depends on CC_IS_CLANG
++	depends on $(success,$(LLVM_CONFIG) --version)
++	# The plugins are built against the headers of llvm-config and loaded
++	# by clang, so both must come from the same LLVM release
++	depends on $(success,test "$(shell,$(LLVM_CONFIG) --version 2>/dev/null | cut -d. -f1)" = "$(shell,$(CC) -dumpversion | cut -d. -f1)")
++	# The host C++ compiler must accept the LLVM headers and flags
++	depends on $(success,echo '#include <llvm/Config/llvm-config.h>' | $(HOSTCXX) $(shell,$(LLVM_CONFIG) --cxxflags 2>/dev/null) -x c++ -fsyntax-only -)
++	default y
++	help
++	  LLVM plugins add compiler passes to kernel and module builds.
++	  Building them requires LLVM development headers and llvm-config
++	  of the same major version as clang. Each plugin has its own option
++	  below and is built only if that option is enabled.
+diff --git a/scripts/llvm-plugins/Makefile b/scripts/llvm-plugins/Makefile
+new file mode 100644
+index 000000000000..a1f8503c8bcd
+--- /dev/null
++++ b/scripts/llvm-plugins/Makefile
+@@ -0,0 +1,21 @@
++# SPDX-License-Identifier: GPL-2.0-only
 +
-+#include "llvm/ADT/SmallVector.h"
-+#include "llvm/Config/llvm-config.h"
-+#include "llvm/IR/Analysis.h"
-+#include "llvm/IR/Constants.h"
-+#include "llvm/IR/GlobalVariable.h"
-+#include "llvm/IR/Module.h"
-+#include "llvm/IR/PassManager.h"
-+#include "llvm/Passes/PassBuilder.h"
-+#if __has_include("llvm/Plugins/PassPlugin.h")
-+#include "llvm/Plugins/PassPlugin.h"
-+#else
-+#include "llvm/Passes/PassPlugin.h"
-+#endif
-+#include "llvm/Transforms/Utils/ModuleUtils.h"
++always-y += $(LLVM_PLUGIN)
++targets += $(LLVM_PLUGIN)
++clean-files += *.so
 +
-+using namespace llvm;
++# Run llvm-config only to build a plugin, not when this Makefile is parsed
++llvm_cxxflags = $(shell $(LLVM_CONFIG) --cxxflags)
++llvm_ldflags = $(shell $(LLVM_CONFIG) --ldflags)
 +
-+namespace {
++quiet_cmd_llvm_plugin = HOSTCXX $@
++      cmd_llvm_plugin = $(HOSTCXX) -Wp,-MD,$(depfile) $(KBUILD_HOSTCXXFLAGS) \
++		$(llvm_cxxflags) -fPIC -shared $(KBUILD_HOSTLDFLAGS) -o $@ $< \
++		$(llvm_ldflags)
 +
-+/* The errors which clean paths of a function return */
-+using ReturnValues = SmallVector<int64_t, 8>;
++$(obj)/%.so: $(src)/%.cpp FORCE
++	$(call if_changed_dep,llvm_plugin)
 +
-+struct FunctionDescription {
-+	Function *Fn;
-+	unsigned Flags;
-+	ReturnValues Values;
-+};
-+
-+static void emitDescriptions(Module &M, ArrayRef<FunctionDescription> Functions)
-+{
-+	auto *I32 = Type::getInt32Ty(M.getContext());
-+	auto *I64 = Type::getInt64Ty(M.getContext());
-+	unsigned PtrSize = M.getDataLayout().getPointerSize();
-+	auto N = [&](unsigned V) -> Constant * { return ConstantInt::get(I32, V); };
-+
-+	for (const auto &F : Functions) {
-+		unsigned Size = FMODRET_META_HEADER_SIZE(PtrSize) +
-+				F.Values.size() * FMODRET_META_VALUE_SIZE;
-+		SmallVector<Constant *, 16> Fields = {
-+			N(FMODRET_META_MAGIC), N(FMODRET_META_VERSION), N(Size), N(F.Flags),
-+			F.Fn, N(F.Values.size()), N(0),
-+		};
-+
-+		for (int64_t V : F.Values)
-+			Fields.push_back(ConstantInt::getSigned(I64, V));
-+		Constant *Record = ConstantStruct::getAnon(M.getContext(), Fields, true);
-+		auto *GV = new GlobalVariable(M, Record->getType(), true, GlobalValue::PrivateLinkage,
-+					      Record, "fmodret.function." + F.Fn->getName());
-+		GV->setSection(".BTF_fmodret_candidates");
-+		GV->setAlignment(M.getDataLayout().getPointerABIAlignment(0));
-+		appendToUsed(M, {GV});
-+	}
-+}
-+
-+#if LLVM_VERSION_MAJOR >= 24
-+class BpfScanIRPass : public RequiredPassInfoMixin<BpfScanIRPass>
-+#else
-+class BpfScanIRPass : public PassInfoMixin<BpfScanIRPass>
-+#endif
-+{
-+public:
-+	PreservedAnalyses run(Module &M, ModuleAnalysisManager &MAM)
-+	{
-+		// Avoid emitting duplicate descriptions if bpf_scan_ir runs again
-+		// on the same module.
-+		if (M.getNamedMetadata("bpf_scan_ir.done"))
-+			return PreservedAnalyses::all();
-+
-+		SmallVector<FunctionDescription, 32> Descriptions;
-+
-+		for (Function &F : M) {
-+			if (F.isIntrinsic() || F.isDeclaration() || F.hasAvailableExternallyLinkage())
-+				continue;
-+			Type *Ret = F.getReturnType();
-+			unsigned Flags = 0;
-+			ReturnValues Values;
-+
-+			if (!Ret->isIntegerTy(32) && !Ret->isIntegerTy(64))
-+				continue;
-+			if (F.isWeakForLinker())
-+				Flags |= FMODRET_FN_WEAK;
-+			if (Ret->isIntegerTy(64))
-+				Flags |= FMODRET_FN_RET64;
-+			/*
-+			 * Nothing finds the values yet. A weak definition always
-+			 * has a record, see fmodret_metadata.h.
-+			 */
-+			if (!Values.empty() || (Flags & FMODRET_FN_WEAK))
-+				Descriptions.push_back({&F, Flags, std::move(Values)});
-+		}
-+		if (Descriptions.empty())
-+			return PreservedAnalyses::all();
-+		emitDescriptions(M, Descriptions);
-+		M.getOrInsertNamedMetadata("bpf_scan_ir.done");
-+
-+		PreservedAnalyses PA;
-+		PA.preserve<FunctionAnalysisManagerModuleProxy>();
-+		PA.preserveSet<CFGAnalyses>();
-+		return PA;
-+	}
-+
-+	static bool isRequired() { return true; }
-+};
-+
-+} // namespace
-+
-+extern "C" LLVM_ATTRIBUTE_WEAK PassPluginLibraryInfo llvmGetPassPluginInfo()
-+{
-+	return {
-+		LLVM_PLUGIN_API_VERSION,
-+		"bpf_scan_ir",
-+		"1.0",
-+		[](PassBuilder &PB) {
-+			PB.registerOptimizerLastEPCallback(
-+				[](ModulePassManager &MPM, OptimizationLevel, auto...) {
-+					MPM.addPass(BpfScanIRPass());
-+				   }
-+			);
-+		}
-+	};
-+}
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 75374c64b8cc..3bae98549228 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -772,6 +772,7 @@ static const char *const section_white_list[] =
- 	".llvm.call-graph-profile",	/* call graph */
- 	"__llvm_covfun",
- 	"__llvm_covmap",
-+	".BTF_fmodret_candidates",
- 	".klp.symid",			/* objtool --klp-symids */
- 	NULL
- };
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index d0f200428957..e6ba499dc876 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -27,6 +27,11 @@ SECTIONS {
- 	__ex_table		0 : ALIGN(4) { KEEP(*(__ex_table)) }
- 
- 	__patchable_function_entries 0 : { *(__patchable_function_entries) }
-+#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+	.BTF_fmodret_candidates	0 (INFO) : { KEEP(*(.BTF_fmodret_candidates)) }
-+#else
-+	/DISCARD/ : { *(.BTF_fmodret_candidates) }
-+#endif
- 
- 	.init.klp_funcs		0 : ALIGN(8) { KEEP(*(.init.klp_funcs)) }
- 	.init.klp_objects	0 : ALIGN(8) { KEEP(*(.init.klp_objects)) }
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 931c5c412f15..e6120bee4505 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -4657,6 +4657,7 @@ static int validate_ibt(struct objtool_file *file)
- 		    !strcmp(sec->name, "__jump_table")			||
- 		    !strcmp(sec->name, ".init.klp_funcs")		||
- 		    !strcmp(sec->name, "__mcount_loc")			||
-+		    !strcmp(sec->name, ".BTF_fmodret_candidates")	||
- 		    !strcmp(sec->name, ".llvm.call-graph-profile")	||
- 		    !strcmp(sec->name, ".llvm_bb_addr_map")		||
- 		    !strcmp(sec->name, "__tracepoints")			||
++$(obj)/../../include/generated/llvm-plugins.h: $(addprefix $(obj)/, $(LLVM_PLUGIN)) FORCE
++	$(call if_changed,touch)
++always-y += ../../include/generated/llvm-plugins.h
 -- 
 2.43.0
 
