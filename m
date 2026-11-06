@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794000933;
-	b=ldJWxPawOxmSEoxTm6hJgXiDAhlokGu59bs/pxsRYu3AjX+wsoTKJL6/5qvxToSxeYe2
-	 SN5XJYWuR3OsKuvQ+eTLdJ3cjWScPC3t13LyVyqgfPYim9IKsInyKfE34yL9ymwEVcoOb
-	 9//di//UDuGBHd4ZiN2VfMaOScQYS94owQ9VKXScANGoClMYhQJVlvibXmp9CQHiaHBB5
-	 IAXqYOOYpN559H//Vs1vBgZRoBZuh27pXhbtGKHvLVVcDXybJtEtKK4gvj+gbC7x2uaCf
-	 w+l6T2BQJj+RW4D+/GshHG9OX7N/qRBqEQLPY8OM56No8m+RLruaXI6fFXuCoLj3/KA==
+	t=1794001812;
+	b=sNEfEjMtDiBaTNjis+6RJ3S55rzLx4X48YzxgecI9xJo3WVtpgLegU4VGijItF/H0bdn
+	 aUdOXRqvmmBRbj3omHVu3fwe78dzj4NXa5AQtRDioi3SuLQgfGvWoDIdYYBSy/+s0ooDk
+	 FQO5wC1N1f3fOFgWIoOwdEFdtj003ONVGHRPie/G6XOV/2sVi/37CRtpnBhJ3g9zWVyjg
+	 YLGLZBQZLP3dVRWS2Sf1ZiDjmgCdLFMxOd0xOSzc6nsF60CUA92MQ2ZH0o8uWPB9Pxorm
+	 SaqR1bnDWDE6clltzQAWP3zXti5jsnvhpgC1UU0JqxjvJrJW4lM/5725sHblPi7OSqg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794000933;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794001812;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=YCrphLt+9lCeh1bH3KOey/f2cVCez/Zl2KmCh4eHz/U=;
-	b=xtEhumBTuvV154vsQlps+ZkfIQss8imhjUGqwozI95ho4u4/q6U7wuUIMtI8+uosF/77
-	 PNo1rQ1HND77X3lq9VVyMmwBkhSXcqJzq02+a4O5B3Cj73A2o41TBJLcmOSs0u2HH0OwL
-	 mAvBxxzsscbNsFh+5J2TbfC2niqs8OysjMBD1KRMlAqQBIVJivl6ZoOqud3HzMNLrANSx
-	 8ox6IxuhJrYpTbjIhXWqc0hb3+58zr6XpQb1if/ESu7SHfCDmPpj1/zHmaGqJPnnWuWn0
-	 R8nLKTidnPxRm9Ro8UqldHkFs/xstCYWui0vz89J2NoucOqmhrkGg4t2hDrgZwuzcrQ==
+	bh=qyD4/QNMYslZrvex6UggevvD+mzpPjAON1auD7GtOww=;
+	b=JHDiayJlIjfdFvEI7it5Qq+/v1f7t+VY4gk5tHZq7h7RqaJIA/2B1kL9pOFhfcE535hE
+	 pUfvvPF6/mPb9xdygEPxoOiKuTVezkzHLYkuRhWGJ8rNDYzM31kApzgT5w8gtbdf0YyDk
+	 4FIni9Fvw2AyqUcKGXgRdh/VpLKX3gsjc23YFrWOJg7tlKE2A7oG+a6FhwwsKuOiegBB0
+	 ao66KbQIyHCMoS/j/ijGzGwTRecmhpUjluTSroJLqVjA+5W9qLCzQqSpjh96/YqbJGP00
+	 ZnupHSv/431pvmNBpfty1Rk9wOkD8gv5DtFfxpEonnnFAhi2liEOBLyJz1Q5niv9kJw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YGbRg0F4;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZliuqbHi;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1CC606A32D;
-	Fri,  6 Nov 2026 21:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A34606A33B;
+	Fri,  6 Nov 2026 21:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YGbRg0F4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE4021F008A3;
-	Fri,  6 Nov 2026 21:35:31 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZliuqbHi
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84B231F0089F;
+	Fri,  6 Nov 2026 21:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794000932;
-	bh=YCrphLt+9lCeh1bH3KOey/f2cVCez/Zl2KmCh4eHz/U=;
+	s=k20260515; t=1794001811;
+	bh=qyD4/QNMYslZrvex6UggevvD+mzpPjAON1auD7GtOww=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=YGbRg0F41PUeI6U1VB61IFDc8uQNuFTxVQxpVKhKZyixmwszu4wizS9V51MFROTT3
-	 q2vF2V0uis5EtYVc2fuYEfoWap9412nnWnDEpiHHrnfzLC17eZvsKJ3fwF0VI+S/a8
-	 9OuhfDuEgAOMg66amf/kzkqGiWoycfLe0l3P0z6y8D8AsIAhZLA8hBt0D+hX3BUKOA
-	 9S4Ftmk875Ztf+saOUyQ6x9Ek4TRzC7I+ioyriZGDOFS2Ww02xjS0KzQ3ohQSQSGKF
-	 texNKi2k8Y3mgl/8k8hk9jhRK3o4525C92vgMopncLNYq5JC+UFO11XjGCqXh8CUzt
-	 iRw2uhJf08I7Q==
-Content-Type: multipart/mixed; boundary="===============8578933871088959199=="
+	b=ZliuqbHiTp4hOSJgd46BNKEuRxFQO284wkTv506CQdYNSwWaaJRqaXucF1FnJ0Tvd
+	 p60pHUuXDzNqoCqgfF9IbpGd5UUfhPyXvnooGQF9uP1A/VP4JxZZLYukx5fxe1V3AO
+	 rc+nl0xTJ9xcRNkgusW54Ye/pPaJ7YDkixLe6uw1ufkR32J0pZfLLQB0cjeOvFxbbN
+	 yq1kqaIh5y5PRg5wWznDqOJJcLjqcXbqWz1VY5fZS9NfvUnkSjXpRNSl6miNtu6a8L
+	 YxVo+JjQ39XqfQBq79TayWqteqDNaD0Xa8NsBiD/9VsyIPRZtEDoyb6OExwx3DfdC9
+	 JH3hymS34yBOg==
+Content-Type: multipart/mixed; boundary="===============1506488348552457952=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,68 +49,119 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <148800382a0df555432654e0021a940d6bcd283955b5e1ec88ba885d4f28cfff@mail.kernel.org>
-In-Reply-To: <20261106210314.1767267-18-a.s.protopopov@gmail.com>
-References: <20261106210314.1767267-18-a.s.protopopov@gmail.com>
-Subject: Re: [PATCH v1 bpf-next 18/18] bpftool: List and show fmod_ret targets
+Message-Id: <82dc259cd905abb5ad4fcbb8151553fb8680d4d71b1e52babd3e2d588a90656b@mail.kernel.org>
+In-Reply-To: <20261106210314.1767267-15-a.s.protopopov@gmail.com>
+References: <20261106210314.1767267-15-a.s.protopopov@gmail.com>
+Subject: Re: [PATCH v1 bpf-next 15/18] resolve_btfids: Tag fmod_ret candidates as targets
 From: bot+bpf-ci@kernel.org
 To: a.s.protopopov@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,almagui@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,brauner@kernel.org,kpsingh@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,sashal@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
 Cc: a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 21:35:31 +0000 (UTC)
+Date: Fri,  6 Nov 2026 21:50:11 +0000 (UTC)
 
---===============8578933871088959199==
+--===============1506488348552457952==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpftool: List and show fmod_ret targets
+> resolve_btfids: Tag fmod_ret candidates as targets
 
-TL;DR: Nit only: in bpftool fmodret.c collect_targets(), the
-TAG_FMODRET_RETVAL lookup may be unneeded, since the only caller's list path
-doesn't appear to read ->retval.
+TL;DR: Nits only in resolve_btfids fmodret.c: duplicated alias-walk code in
+mark_traceable_function(), its unused bool return, and possibly obsolete
+section names (.meminit, .cpuinit, .devinit) in section_cannot_be_attached().
 
-> diff --git a/tools/bpf/bpftool/fmodret.c b/tools/bpf/bpftool/fmodret.c
+> diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfids/fmodret.c
 > new file mode 100644
-> index 000000000000..0d2714ef861e
 > --- /dev/null
-> +++ b/tools/bpf/bpftool/fmodret.c
+> +++ b/tools/bpf/resolve_btfids/fmodret.c
 
 [ ... ]
 
-> +/* Return the fmod_ret targets of BTF, sorted by BTF ID */
-> +static int collect_targets(const struct btf *btf, struct fmodret_entry **targets,
-> +			   size_t *target_cnt)
+> +static bool mark_traceable_function(struct elf_function_list *list,
+> +				    Elf64_Section shndx, GElf_Addr address,
+> +				    enum ftrace_site_kind kind)
 > +{
+> +	size_t left = 0;
+> +	size_t right = list->nr;
+> +	size_t first;
+> +	size_t i;
+> +	bool found = false;
 
 [ ... ]
 
-> +	/* The other tags mark functions which are already targets */
-> +	for (id = start_id; cnt && id < nr_types; id++) {
-> +		const struct btf_type *t = btf__type_by_id(btf, id);
-> +		struct fmodret_entry key = {};
-> +
-> +		key.btf_id = tag_func(btf, t, TAG_FMODRET_SLEEPABLE);
-> +		if (key.btf_id) {
-> +			entry = bsearch(&key, entries, cnt, sizeof(*entries), cmp_entry);
-> +			if (entry)
-> +				entry->sleepable = true;
-> +			continue;
+> +	if (first != SIZE_MAX) {
+> +		while (first && list->functions[first - 1].shndx == shndx &&
+> +		       list->functions[first - 1].value ==
+> +						list->functions[first].value)
+> +			first--;
+> +		for (i = first; i < list->nr &&
+> +		     list->functions[i].shndx == shndx &&
+> +		     list->functions[i].value ==
+> +					list->functions[first].value; i++) {
+> +			list->functions[i].traceable = true;
+> +			found = true;
 > +		}
-> +		key.btf_id = tag_func(btf, t, TAG_FMODRET_RETVAL);
-> +		if (key.btf_id) {
-> +			entry = bsearch(&key, entries, cnt, sizeof(*entries), cmp_entry);
-> +			if (entry)
-> +				entry->retval = btf__name_by_offset(btf, t->name_off) +
-> +						strlen(TAG_FMODRET_RETVAL);
-> +		}
+> +		return found;
 > +	}
+> +	if (kind == FTRACE_SITE_PATCHABLE || !left)
+> +		return false;
+> +
+> +	/* The nearest preceding function owns the call site. */
+> +	first = left - 1;
+> +	if (list->functions[first].shndx != shndx)
+> +		return false;
+> +	while (first && list->functions[first - 1].shndx == shndx &&
+> +	       list->functions[first - 1].value == list->functions[first].value)
+> +		first--;
+> +	for (i = first; i < list->nr &&
+> +	     list->functions[i].shndx == shndx &&
+> +	     list->functions[i].value == list->functions[first].value; i++) {
+> +		if (!function_contains(&list->functions[i], address))
+> +			continue;
+> +		list->functions[i].traceable = true;
+> +		found = true;
+> +	}
+> +	return found;
+> +}
 
-This isn't a bug, but is the TAG_FMODRET_RETVAL lookup in collect_targets()
-needed?
+This isn't a bug, but mark_traceable_function() has two near-identical blocks
+that walk back to the first alias at a (shndx, value) pair and then loop
+forward over the aliases.  The second differs only by the
+function_contains() test.
 
-collect_targets() has a single caller, list_btf(), and list_target() does
-not seem to read ->retval or ->target from the entries.  It looks like the
-second loop would only need to handle the TAG_FMODRET_SLEEPABLE tag.
+Could the walk back use function_at(list, shndx, list->functions[first].value),
+with one forward loop that takes the containment test as a condition?  Then
+the two copies would not need to be kept in sync.
+
+Also, this isn't a bug, but is the bool return of mark_traceable_function()
+meant for something, such as a -v count of unmatched ftrace sites?  None of
+its callers in mark_relocated_ftrace_sites() and read_ftrace_site_range()
+read the value, so could it return void and drop 'found'?
+
+[ ... ]
+
+> +static bool section_cannot_be_attached(const char *name)
+> +{
+> +	return section_prefix(name, ".init.text") ||
+> +	       section_prefix(name, ".exit.text") ||
+> +	       section_prefix(name, ".noinstr.text") ||
+> +	       section_prefix(name, ".meminit.text") ||
+> +	       section_prefix(name, ".memexit.text") ||
+> +	       section_prefix(name, ".cpuinit.text") ||
+> +	       section_prefix(name, ".cpuexit.text") ||
+> +	       section_prefix(name, ".devinit.text") ||
+> +	       section_prefix(name, ".devexit.text");
+> +}
+
+This isn't a bug, but are .meminit.text, .memexit.text, .cpuinit.text,
+.cpuexit.text, .devinit.text and .devexit.text still emitted anywhere?
+
+In include/linux/init.h, __meminit is now either empty or __init, and the
+__cpuinit/__devinit annotations were removed.  Neither vmlinux.lds.h nor
+scripts/module.lds.S places these sections, and modpost lists only
+.init.text and .exit.text as init/exit text.
+
+If they are gone, could section_cannot_be_attached() be reduced to
+.init.text, .exit.text and .noinstr.text?
 
 
 ---
@@ -118,4 +169,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42294987431
---===============8578933871088959199==--
+--===============1506488348552457952==--
