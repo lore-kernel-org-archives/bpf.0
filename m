@@ -1,101 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.51
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794002899;
-	b=tPAYvBrzcgfA7AQcwvkSzhYhVVpFfos8TnfZpa5bnisFOVb5UtpAsU0oAAEdt3VS4GfI
-	 WhziKaO4z/2SH+qE28nLADo38BbgiJI4rCmLttQMivcyJ0dJLQG38QDxqBQDgWib20WwZ
-	 hOl3wpWxIqSZ5tAjhCs9eHcQkowgPkkt/yW7SfAJKtw6GHmcLKh/TmQPAsV4niS9qmIPt
-	 GAOPA68d58kOO0SN9Wsu7iE03uuerX/5SR8LtwRGIGvwEkgUABkrmqwIpb/qPJEjmYEJL
-	 FzchAFgWdjmYB0ELpiqkmfCCEPjh+AM+/BRZl86ycrkLnVEoTsy2FAmLEJl+bdlWp7g==
+	t=1794003546;
+	b=TmfcMNhK0o6SBVfnQbsSfWS1StCXvUV0DtyitOGVK16J0aTr0s/6U7y3YohaB5vBfHh0
+	 UkH9eoMARrwPsdX65uYu7cWKt3byat5fGbBRg04bsw7A8ZlVX3/UC4l8sS40w58JDZfHM
+	 ObTvKUWCP7tgNnLanGt9RodPlic0WKhKuth4fLylTzA443wIhr27tJANkgANI17unLAOv
+	 lvTdQR3U2Rz4inGXKOWDsgEMfnMpZs0ppE6+IEj30tXiorqoRZh8jEFpLTabDvLHHxWfS
+	 IUtsrDrKJEJr8mC5du3DQaqrXLScuxMjTkhZssD5RsmYhiUB6G3XyZ6eH/QBir+RuIw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794002899;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794003546;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=FqFmqkkFKN4ZfUBPlXX1uRJGzP51Rl5pjkFD5VZ5PcI=;
-	b=JGuRBpTcHyVZXERTPELv/gHFYwo3mQp0BRCefSjTtdpCWGn19Tuv42TkoK0ac+/pZIkK
-	 TevGfef5yVUjlnRPvTvLfwWwHldwIQV8/NcDcCuO6+/LQp9U0IaQfCTZ4D1SlB2r67IYe
-	 bCKaeCDeenkJaWuwkkMXSkKNjFdB1ZIKRTPV6QYAapP93sn9+Bhc4pT82V6d0FFb+Jcp5
-	 nKr1dupDL2p5Zh8g2SJ+PbSlORcHhJZe0nUtvng+BTwqoEOYdiy26jgnpBmwnBtiTh4Z7
-	 qI1l5KsK6DItscIPBbNl1FzzESkRcBFijG571wya6iAfLxbjqrAP9+iu200rHdGb/Vw==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=NNajVt+0M0PzjiwueKiARTrUiAHd31zL0sfh+MHCcug=;
+	b=ZDmdSUmqwmrxeV/pG7BzRZL/4O0tzirZtLHDdZzkIRAzTv/SlzjJaxTD/69/+ahOG95J
+	 1PPNarTwRKKvOwuNP2qd9vkbMnBnkD9h/39fxEvrJBfpRV49X2u9GTY8D1ZL6gVUHIq1c
+	 /6fbvBWIGnz6veuwmeMvSrrGffzHfrCHLrASyu7TiZsc7YXaFLgmE2qV+uagbyhYMURdi
+	 WWdSNTbwG7sNK/sU5Buh+hQvF4KEsUf4rCOozSKMye9q40NOaR85nPDRowB0FaK1NN2wf
+	 tad8L+IPIGg8/3aDHXRYzxRNjIAgfE6Bcv1V9Qan6mM3a27SxbRT+xKRO039LyjDY7w==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="b2/N2EGe";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.181
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	dmarc=none header.from=etsalapatis.com;
+	spf=pass smtp.mailfrom=etsalapatis.com;
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=q+zAZUHw;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.51
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE2F606A326
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 22:08:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CFE2F606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDEF606A331
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 22:19:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EDDEF606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b2/N2EGe
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2e9995ce866so8008015ad.0
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 14:08:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794002898; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=q+zAZUHw
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-6774639a8a4so1070692d50.0
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 14:19:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794003545; cv=none;
         d=google.com; s=arc-20260327;
-        b=nIeOBQ+fArypYPBbzFvX0in16msFBdHuJXMZVrpYT1cFco3acOQ2XXhdpzPy5AfV1K
-         sBkoi/R7Isp3usy9BOYraXPrksbQFtYOLA1mqYPgzoCnlz0pCQ3LKZ/xjW7CqMNewFtq
-         yaVJcFxIsns3X/MVqANauKAByYQdS4PW48eblGBRXR7XrafJ68fTd7dyiuu3CnKt2WMz
-         3y42S6lHlqkC6Cw4EYlPtwKSrxnL82HyAE2UekDBSw63jhxzfZxe3yS5P0qyy4emvW1X
-         4va+iW7zmVoJvJFFMqwWOgV/DkRzT42zaKqmWFnS6lLIGXiJXKqILd6e6o62w0iQ2yo8
-         aRlQ==
+        b=TR4lV2cju6ZdivUC1UfagwAyPzkuO/bsF5anjPG8nzMs/0O0TK6joeadbKbp8WunIn
+         BOfLMMn4T1Pcd4AZ6rFpDSDlAad1zbixI1IOjytqDGRIpw0ioQtwpbZNJwrZ/XusXRMM
+         LMz+S7/7qmYfkOlU1FwWdBV28A3lwYkaNqeU/EqfEMUBhDybA5/d+FBz0t1erfLJ1JRO
+         hwx0vtE2/iPn/g7GHmJM5wHyxyt336sRDUGNtKK+2BK4ZYwcWKDD8PjBYbXnMO7NvaKm
+         Y8UAH0yVcSsfyb9v0H+MQbHdHTZfZLjDxmxOOco6MN3BKbgC5vhKiboILfVqqpBg7Akk
+         JHJA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=FqFmqkkFKN4ZfUBPlXX1uRJGzP51Rl5pjkFD5VZ5PcI=;
-        fh=9PwdZro75oUXOS5wqfLaqPCm/ma4/mp7NhvKyPSBilk=;
-        b=apE4JFW/KfkVR7qlquvihDNpcoxVffF0pkm8+WHu09wk8/0gLJuELsnDzWFZAwjIyE
-         uFtZRcBXlYNbK9bSt5tpa7Wk4b+RViIpgfeJ39SHl/LFu3zbxgs7fDlEVL7R/UFptuQE
-         z3dRwhW703WHJlMALAvWPmSjdEfXUV5AHSD75ICV1m19FShLabyN68hDq3LAvrjHEZdh
-         QgVNcHjmGxaHVsZsugYATqm3UBz8pJHn49yVszY8hmljqc+b2v1aKogAw8wzpJdHiIGu
-         etvdLQdhSkRwfnw5y6LktrO34Noomzde619lXl1FhsT+C5nR389N2mW597EwIMs2aK3f
-         c9KA==;
+        bh=NNajVt+0M0PzjiwueKiARTrUiAHd31zL0sfh+MHCcug=;
+        fh=rBgo+NZkEDlI/mj5sFFe2AhXFLUrO82xK7AtsziifKY=;
+        b=O/d6dd6GqCtQ204matDVsTuLEzyOZfZdei+5wpxzWa2U6gmFpXFDn8v+LQxkApNCbl
+         UKD82CpeBcqQWHaE+RgP3FcE7lPmwnYV6hMeG3ImJcOcWr1MSldTklHPL6VzdXqDXkL4
+         EZwdvytsPImqEeEglUojuQdbD9AiLWh7VXT8kKQ1qXAVtfx7hgPCLoF5++u9oktYkifs
+         i6YRir+vdpfb7szIB/qiYUg7C3w06SC1lu9grLlsBBExAFTYBAjBEmV4IVzFps2ywES0
+         KkLxCU1P9NBEFxARFw1BZxGGSbsNNmhdyFPaSsw2G4kJozijKq+ol/1ULOpNLUEuYPtA
+         P4dA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794002898; x=1794607698; darn=vger.kernel.org;
+        d=etsalapatis.com; s=google; t=1794003545; x=1794608345; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=FqFmqkkFKN4ZfUBPlXX1uRJGzP51Rl5pjkFD5VZ5PcI=;
-        b=b2/N2EGedXLlXAmGy3seM65ririhay+J1WlirQfYoIUcuzkaIkl40FHJgakuZm17yG
-         nAUDoFDfOaFJ2QMk1EmeGmZdPADqd8uhJznVwiRoEa7b9qPw5NO5xVYpVn9firQ/kOPr
-         Mm37HnJIN8yf1x8+h31XvbSyn7wQFbQpPyf6/L9n14w9o7d/7pNuhwTPUw9cFq2U/wtQ
-         WAIKhZ8O3jGTIIm/CeEJihiD58ppPZeCsmi0UP0AXYkJFrklaGSOGsTD0bocfuGE2dJl
-         7rUrLFZbQygqs4qQRSuVhMdfq3MebiGXFEAym6kvd+/cthwIi5tgaGStlIqGdBN7e4SM
-         hnFg==
+        bh=NNajVt+0M0PzjiwueKiARTrUiAHd31zL0sfh+MHCcug=;
+        b=q+zAZUHwqrdjdzzP2qNR+3qD7gfpn/01ThEMJOr0HcNhH2VkYTAxHLkXYMYHY7727C
+         nP6pbGfH2oWou9dNntm5s7XxGdRujN2Mfb6y7mZM9w/RjsceyEFllnGh8ezqdN/1c6zq
+         HsEMnJ9x7kVdMifTfVBz1VN0G6ay4jsNtxNrExUTev4/Ds9z4fXq5xfPqkKJcflcbJDy
+         HiEKDdmU4OWinHisTJlkaLip+mS9hyCySSWCCe72n1m+eQKSpzxIWUnoZgN9ThPK106f
+         Hx+D5y6eSINkBHjBjtcAu/1MPI6iSWEd+nsh+W4qn1TRS9HqvVbuBqwFa/i5MbcE8Sk5
+         M/MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794002898; x=1794607698;
+        d=1e100.net; s=20260707; t=1794003545; x=1794608345;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FqFmqkkFKN4ZfUBPlXX1uRJGzP51Rl5pjkFD5VZ5PcI=;
-        b=QrT2B0ffxX2sY32UKS873oAxYk6HfQuSv9NC9ZPJRmbr97hyewrnCWKKCyRdi4oTF0
-         wYA3vnobFbFY/+KqciUCwxTkR7esKQjrmtfBrxhEdNmUCsghyiSPlPhbDsllql5sWelU
-         2TjbkrW+ZO+V+EvnNSAXtbFxEaM+UgK4T9gXsq4fTWYLFZD8Nmi9LUnHhZVwiVVbb/je
-         yti1SQ9tFUIhIgZq/SwMVfFOObgXrYVnhVB3RPBaJRvK01ZqGfyLbxfAmcG94zLkmdjk
-         A8JQryYoh3fMUkA5AMZ7FsSyc+BWM2drjRulzac2GF4sihTA4SS5CSeG5rU0hP5lO/mu
-         OqMA==
-X-Forwarded-Encrypted: i=1; AL+hErHkkURL/4g6d5zMjeSBJt7+pHRno0KX9KwA9FBwlgJxrkNwZr5kKd7fiUpVekAPJATGv8M=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9GF744O9ycfIszeTLEtNpKlXg16R8B9YH/9EFow8FsY4qwrAhr
-	c3PfPP60bdIbPRjen3ruxP+s7WI1+XzEt89QqJ/JUh8w0pqfog0x+Lu6gv7wzzZYkQkL8l/+XrN
-	FKhf2wkDKbfV7GDM3uDG+OMwpFeYAqW0=
-X-Gm-Gg: AYBFou3vQFkw2pdb5UQ/MY9Qr9J7MJZBllZTE4TMKLQfnPzop2VcfY6b1r/UOjuLjPW
-	1zSBRKvZkRjka34FFJhemlZIDwFUtUpY+/YVLlpJjVbtE5YqmnS+jbFeYenKs3MzwTrGOmJjC4Z
-	9elKJJTM4mHuaqya8u9zG5oRhRsG1THDoyVpHot1vPKaFy/+WK6nEHuYheFIffFVoRBaJoAd4qd
-	d8xtMOc0R9KRZY1OoHoFOxmgCxqamrCXa5znEo5GVu8NOrgQmAFdnuRkzktB94KfgYS0v3ppg8t
-	2Pl5ilo0tXx7XiIkuIQ/8ZXUbLMsTPETHoy290QTW5gEFx7uiy0ETIxVINwU6K/TQ1jXGDuDcWk
-	TTF77yQAZipn9WNNk/ghmwp7f5Wk9LAAu6u3g1Lkf8hAOh4N2EB8MwWOTqAau39quickKVyJvpQ
-	9MDlh6VeKmjiGvAg4FPNHfYBnojuVHJLVA0z5ZMms=
-X-Received: by 2002:a17:902:cf03:b0:2e9:5eee:e087 with SMTP id
- d9443c01a7336-2ed41c0b3cemr44187095ad.43.1794002898049; Fri, 06 Nov 2026
- 14:08:18 -0800 (PST)
+        bh=NNajVt+0M0PzjiwueKiARTrUiAHd31zL0sfh+MHCcug=;
+        b=Zt3LW0yGJu1BR4Cnk6/ZKoTx/jIiMrUjiFZW4gMZvTV+AtK2Jsql1aShu+VbdFrJqz
+         YdvpS5+F5ub6nDg7DwvEljLwyN+w9QHbmfGKvcZ2Jfdn7F9OAlFKMAmpqJiflx1Qw7R7
+         ATcDQiWHgDFCVA4gZKmoJp9IrqsSPWzNNNwN4eJkfghkZ9FK7tJNRx3yCYJecxe3GqMv
+         GPVYJRQwr0+KGpNpozleT95JWDr94Q9bwKckVTO2VuyOB6l4s5Fsmy4sVLuaE6Y7gPza
+         XRE9btEnj4r0WLm5EAhwp5xuQilcbpUyXiEjlU0tuiXGgDgRWM25tmdbpofCTWdZSpVB
+         /eEQ==
+X-Gm-Message-State: APuU4Z/0wblH9vNw3MyIBDg4hywblx8ZLeB1C6HJIDIuvq1j72vgP3S3
+	Nid0lO9O26qyzJNkD+PNVNQLa4ldBgEcjuMY70bZu1OfdEQgmReWdIN9mtBmQn41dXB0L0V9Pk+
+	I2xRqhIeXCFZmNNutXXsuJ/ib1c8sTW3ngRkTEyC7oA==
+X-Gm-Gg: AYBFou0mJ9JMbII3kdl7KxyIN0dkcvSACY5I4/nycBrvGslIkjzlwqkwGnvDfiscqd5
+	wWHBJ/PPjASmKPQ6+W9Sdm6PQVmE8RpHcljmRbuPj1mGmmpt7iCuwaPQGZMbCn4j1tW3W6AxQ/4
+	ay5DcEMdYbpxDMjkOAujzrV39735ZdGdWsH4uc17WkdUATyPC2wRIV0FIkZcakAEelXT4KhMSnJ
+	sVWKxnRcXqfg3ryoBiQMeNDiMrf1fbCLrIt3ejIGhuHjmCDjfrGYUP7aKYjLeY4YnvPxb1+Yyr9
+	xPMs7UbGjDi/gbYNGl0dkDOyWmTGFx38KWxm98ecrp8M1+mZ8JmQjzhgL8u4dBtGkH3gQZ7YSkB
+	mzb/0vfy4weqEtcOvt4hpep9SHYTRvohK8itNBW/oS85tFgksQljO0UV7Lddo8+FOSLn/EIBu1b
+	sDv03OYKQya5S0
+X-Received: by 2002:a05:690c:e3ce:b0:89a:63da:fa8b with SMTP id
+ 00721157ae682-8b3419af93cmr18261487b3.70.1794003544651; Fri, 06 Nov 2026
+ 14:19:04 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,150 +104,114 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
- <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
- <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com> <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
- <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com> <CAPnbwjrX-ywbcgNQSZKE2jiggEOSVCRVw9OLfaksihiVSCoqvw@mail.gmail.com>
-In-Reply-To: <CAPnbwjrX-ywbcgNQSZKE2jiggEOSVCRVw9OLfaksihiVSCoqvw@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 6 Nov 2026 14:08:05 -0800
-X-Gm-Features: AclHuK_HFrsL2zSNs8yVxrqbEw7XSZavKhtUuOEmL2ac3ue5Zeg2-SW1ecbr29Y
-Message-ID: <CAEf4Bza0XDMTxxZeukwRXjvoOOruY49q66xBXnYnuncbeo_Oiw@mail.gmail.com>
-Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
- cause false recursion drops in trampoline progs
-To: Mike Bazov <mikeba@sentinelone.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, JP Kobryn <jp.kobryn@linux.dev>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261105184411.29248-1-emil@etsalapatis.com> <9b551f0d5966ca8c834e49751d89d574b949086aff27c8031f8e30c558659b10@mail.kernel.org>
+In-Reply-To: <9b551f0d5966ca8c834e49751d89d574b949086aff27c8031f8e30c558659b10@mail.kernel.org>
+From: Emil Tsalapatis <emil@etsalapatis.com>
+Date: Fri, 6 Nov 2026 22:18:51 +0000
+X-Gm-Features: AclHuK_8CwsNKDHv1nik7iZ1fpSn4qelK0TDPqZP_rQL59BE4HDCZZtooxXxzYQ
+Message-ID: <CABFh=a4UX7O8SPnfuQk7PjBzDxo1joGdtVBQxNPz02ZbLctRsQ@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] bpf: Use dedicated workqueue for freeing BPF programs
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, daniel@iogearbox.net, martin.lau@kernel.org, 
+	yonghong.song@linux.dev, mason@kernel.org, ihor.solodrai@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-(resending as plain text, hopefully)
-
-On Thu, Nov 5, 2026 at 3:35=E2=80=AFPM Mike Bazov <mikeba@sentinelone.com> =
-wrote:
+On Thu, Nov 5, 2026 at 7:32=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 >
-> On Thu Nov 5, 2026 at 5:14 AM UTC, Alexei Starovoitov wrote:
->    > Also try NO_HRTICK in /sys/kernel/debug/sched/features.
->    > That may be decent workaround for now.
+> > bpf: Use dedicated workqueue for freeing BPF programs
 >
->    The 7.0 numbers I posted were already with NO_HRTICK, and either way
->    our agent runs on customer machines, so changing scheduler settings
->    there isn't an option for us.
+> TL;DR: Design question: the new bpf_prog_free workqueue uses max_active=
+=3D1, so
+> slow frees (rtnl_lock, cgroup_lock) may block all other BPF frees, delayi=
+ng
+> memory release. Would the default or WQ_PERCPU fit better?
 >
->    > hmm. you really cannot tolerate that small drop? it's tracing at the=
- end.
+> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> > --- a/kernel/bpf/core.c
+> > +++ b/kernel/bpf/core.c
 >
->    For security monitoring each skip is an event we never see, and the on=
-e
->    we miss can be exactly the one that shows an attack. For stateful
->    protocol parsing, one skipped sendmsg/recvmsg can desync the parser fo=
-r
->    the rest of that connection.
+> [ ... ]
 >
->    > let's try to think how per-task counter would work.
->    > I'm guessing 128 connections is 128 threads servicing them,
->    > so 200 cpus will be hammering the same per-task counter which will
->    > cause real perf loss.
->    > Gotta do better than per-task.
->    > Also it needs to be per-task + per-prog. How will it look like?
+> > @@ -3143,6 +3144,17 @@ static void bpf_free_used_btfs(struct bpf_prog_a=
+ux *aux)
+> >       kfree(aux->used_btfs);
+> >  }
+> >
+> > +struct workqueue_struct *bpf_prog_free_wq __ro_after_init;
+> > +
+> > +static int __init bpf_prog_free_wq_init(void)
+> > +{
+> > +     bpf_prog_free_wq =3D alloc_workqueue("bpf_prog_free", WQ_UNBOUND,=
+ 1);
 >
->    On Thu, Nov 05, 2026 at 01:26 PM Peter Zijlstra wrote:
->    > I would strongly prefer all BPF programs that attach to known
->    > preemptible sites to use a per-task recursion counter or something o=
-f
->    > that sort.
+> Is max_active=3D1 intended here?  With WQ_UNBOUND, max_active is split ac=
+ross
+> NUMA nodes, with a per-node minimum of 1, so a single-node machine runs
+> exactly one queued item at a time.
 >
-
-I agree, per-cpu recursion counter doesn't work given most of BPF
-programs only disable migration, not preemption (even if
-non-sleepable).
-
->    This is what I have in mind for v2:
+> Before this patch these items ran on system_percpu_wq with up to
+> WQ_DFL_ACTIVE (1024) active items per CPU.  Several of the work functions
+> sleep on locks unrelated to pack_mutex:
 >
->    - Every trampoline and raw_tp run already has a run ctx on the running
->      task's stack. Add the prog pointer to it, and link the task's active
->      run ctxs through one new pointer in task_struct (other prog types
->      don't touch it), so each task has a short list of the progs it is
->      currently inside.
-
-hm, funny how AI figured out run_ctx, but didn't figure out that we
-already chain them and we do have that pointer in current->bpf_ctx...
-
-but yes, I think this is the only practical approach for per-task
-recursion check. performance-wise it should be ok as normally we
-shouldn't have nested bpf program executions, so the hot path will be
-quick.
-
->    - On entry, walk only the current task's list. If the prog is already
->      there, it's real recursion (the same task, or an irq/nmi on top of i=
-t,
->      since current doesn't change there): skip it, as today. Otherwise pu=
-sh
->      the entry, run the prog, and pop it on exit.
->    - A preempted task's entry stays on its own list, so another task on
->      the same cpu is no longer blocked by it.
->    - Cost: the list is empty unless the task is genuinely nested, so the
->      check is one load and one predictable branch, with no atomics and
->      nothing shared between tasks or cpus. The walk is capped (e.g. 8),
->      which also bounds nesting depth. It also works across sleep for
->      sleepable progs.
+> bpf_prog_free_deferred()
+>   bpf_prog_dev_bound_destroy()
+>     rtnl_lock()
 >
->    To keep the per-cpu guarantee for existing progs:
-
-I don't think per-cpu "guarantee" was ever there. per-program/per-cpu
-recursion protection only "protected" (by dropping event, effectively,
-so-so tradeoff) a case when per-cpu map is used exclusively from
-single BPF program. But even then, there are BPF program types (like,
-I believe raw tracepoint programs) that intentionally didn't have
-recursion protection.
-
-Realistically, you have to have some allowance for having nested
-per-cpu map uses, e.g., in wprof I maintain a small stack of per-cpu
-values, see stack_trace_scratch and embedded atomic st_cnt counter in
-[0].
-
-That's all to say that I don't think there is a need to keep
-guarantees. If per-cpu map is used naively today it works ok most of
-the time, but not all of the time.
-
-  [0] https://github.com/anakryiko/wprof/blob/master/src/wprof.bpf.c#L574
-
->    - Make it opt-in: a prog load flag for fentry/fexit and raw_tp progs
->      (like BPF_F_SLEEPABLE) saying the prog may run concurrently on one
->      cpu, and that it doesn't rely on per-cpu exclusivity for its own dat=
-a
->      (per-cpu scratch buffers etc.).
->    - Flagged progs get no private stack. The verifier could also enforce
->      parts of the per-cpu promise if you prefer.
->    - Unflagged progs keep today's prog->active check, so existing progs
->      see no change.
+> bpf_prog_free_deferred()
+>   bpf_cgroup_atype_put()
+>     cgroup_lock()
 >
->    What do you think?
+> __bpf_tramp_image_put_deferred()
+>   trampoline_lock(tr)
+>
+> bpf_prog_pack_free()
+>   __purge_vmap_area_lazy()
+>     flush_work()
+>
+> While one of these sleeps, every other queued free waits behind it,
+> including the cBPF frees done on process exit with a seccomp filter
+> (seccomp_filter_free() -> bpf_prog_destroy() -> bpf_prog_free()) and
+> socket/tun/cls_bpf filter frees.  The memory, map/BTF/module references
+> and JIT charge are only released once the queue drains.
+>
+> The vmalloc purge helpers are queued with schedule_work_on() on
+> system_percpu_wq, not on bpf_prog_free_wq, so a default max_active of 0
+> would also avoid the deadlock.  The cgroup_bpf_destroy_wq in
+> kernel/bpf/cgroup.c uses alloc_workqueue(..., WQ_PERCPU, 1), which keeps
+> one active item per CPU rather than one per node.
+>
+> The commit message doesn't say why system-wide serialization was chosen.
+> Would 0 (the default) or WQ_PERCPU be a better fit here?
 >
 
-I'm actually wondering if we should re-evaluate the whole per-program
-recursion protection. I think this was added to prevent deadlocks
-inside bpf's maps and other internals. but we have switched to
-rq_spin_lock since then, so that shouldn't be a reason.
+I think WQ_PERCPU is a valid tradeoff between 0 and WQ_UNBOUND/1. We don't
+want unnecessary contention, but we also don't want spurious implicit conte=
+ntion
+between unrelated tasks (e.g., some work item waiting on the RTNL lock
+is blocking
+unrelated free operations). The fact that the items get queued to the
+CPU queueing
+the item is also fine and an improvement over sending it to a per-NUMA queu=
+e.
 
-Perhaps we should just get rid of that whole per-program recursion
-protection and just make sure that a) BPF program can protect itself,
-if necessary (with naive per-cpu check, I did that trick in retsnoop,
-[1], because it was, and probably still is, possible to attach BPF
-program to kernel functions that shouldn't be attachable by BPF,
-leading to all sorts of issues; but I digress), and b) just make sure
-that BPF maps and other functionality doesn't get deadlocked if
-another BPF program got preempted in the same code path.
+@Alexei wdyt?
 
-I didn't do any analysis if that's already the case (for b)), but
-let's discuss if this is an option at all?
-
-  [1] https://github.com/anakryiko/retsnoop/blob/master/src/mass_attach.bpf=
-.c#L229-L243
-
->    Mike
+> >       if (!bpf_prog_free_wq)
+> >               panic("Failed to allocate BPF program free workqueue\n");
+> >       return 0;
+> >  }
+> >  early_initcall(bpf_prog_free_wq_init);
+>
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/420896=
+27629
