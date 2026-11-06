@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793999686;
-	b=J2ID9v9+NvgGgUBrdJuRf9+znOWSTm663ATHt2zmW7mnW7kcSsueXhIIHXL8Fo5gVb0/
-	 ifrgFTYmfxisqxKxR+WEi6ecQkWNDUbjxCt0qmLn9Xg+GlCBs4v0LaAYv+F01hmz5Ez0b
-	 yg5Led59AQxDraZ+3pYY/6tKFI/E5kENeH/NlzvdCp2zOWm0anQhEhxEKSI1veomaQq1c
-	 OdBVaiu3vn5ETKfQRLBYAhaNsZzCrEP+5fAOmd9oky6yTWz0HNF1EehPeggqvPsQgVALq
-	 /nLuSNprrdx9Q66KmBNHCQ5g2NMtKUlz4BtzBVJFnh1QcphSL7gD+mIWuTkEJD+0s6w==
+	t=1793999853;
+	b=TFhBl4F091WQsO1vV3w9nxSpHsDaFMA0yqrat8aCtqoqOM5MUobbQ6cQXnxEInftm+qL
+	 CSZTxDogI7td+7v8/wLmvnmxvrVpza88JeMPKyBh1CTXfzb3e7BiasOEEj2xJGbMq14fP
+	 A8ZfYbYv7VqoJ2zSi3guZqeqb4F7E+s+Gk2JZjOgF+POqjsvzo/g6mV1u+8kXMgM33HqP
+	 Ww5+9ev0D4YztbEFmCrpTAhtS3VJJ9jU364e95aUif4RREg/fgLu546Q7zfXKEVNtr/D0
+	 LDMUHizcLeBN4e8vJUdy9YHhANJlwelcn06pKvBj3I37RiLl6PcgVIla6QV/sNR04bw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793999686;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793999853;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=ngy3RUdS/H3H13OrG3SfTkRnA1e82pwnbyH7ubF7QgY=;
-	b=CHYiY2m9/B/o5ZaMXcW0m5veYsJNCL+YiMqWFMIY5aCZWpS2udSnq/gEnSlEXxwhd1+L
-	 4zccs2w5bixIJmm7JWFSWTDlbWwDo7a4LXb1GJ3NhoMfRZ0rd3ZD+eR+ph5VX7FRsgNVt
-	 +EhlkGKs6s+gCOch5veOumbIGQ0JT57fBdQuMTnyWuJevJ3ZI7QmraVpRcPD9y1RLOR+H
-	 h30Wu/hKYC0LcrXrZjHyB9MqkK/rl4uUWRhKB7Nlf645Ga1kekvwZgktkhorS+J0EV5zZ
-	 YnrGam8aezFjxPlOxEBqYgjAufsSoe0iUUmZNB5kYJ97QMZ/5ponCnXMLlBw1HbyG3Q==
+	bh=ZTLeySFmFiYGYJVi7j0aEJUnoMsu86CIQTKV6yT7czA=;
+	b=aubUatBsmw1Jpf7c/sG5GyXRR7DId19AT6VMp57hzK9tEIdEYzd+FOUrwjXUMDeXSCY/
+	 wK0gR3C6ZukrvWG2QcmHTeh73rc8HEo4fwlOpJGzlnfFqccZriM6OVZzjcWxW2Gkc+vKR
+	 VQR72iaxMd4+FFuSf00x5EaF4Rgp9jE1N+EY2jwFVIn+6cvwJJ/QegM1p8o6n+nTFoAFm
+	 dIsc//X59m8yyRbo+7PEFIMO3WIi7+zozwHycI7Yr99vOBwzJQ5Ahjb8d60QhswhuqBeY
+	 1A6++oFY2/kpxYciw2FTGlOQcH7V/qAEJE2SYHJk/MxM4vczI2aNevNkBJv0xuWltgg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HMQqpDbw;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=URYOt31T;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0670E606A329
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 21:14:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965AF606A326
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 21:17:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HMQqpDbw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC62D1F0089F;
-	Fri,  6 Nov 2026 21:14:45 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=URYOt31T
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A3141F0089F;
+	Fri,  6 Nov 2026 21:17:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793999685;
-	bh=ngy3RUdS/H3H13OrG3SfTkRnA1e82pwnbyH7ubF7QgY=;
+	s=k20260515; t=1793999853;
+	bh=ZTLeySFmFiYGYJVi7j0aEJUnoMsu86CIQTKV6yT7czA=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=HMQqpDbwXar97qY5ykKI9GpXZe4GyQgiWQ0Jb8CmrLi73JI7J4cFRe/yH771S9n8j
-	 nm7m1/WLCJ9boxfxCvhk64PM8iUe2reFJkgybxeMKJxCYqD4tpGtVUD8XV8m5i4wLw
-	 7eQqwwyEA9dLS6kiaIwXDPJM9DHNKGF89xn8BY4SF3WegFdBJOvYDEXqpPmdZkV0Zv
-	 1jo/3qM0sDRQ5J33Jp1Jcq+26rM+PtBYF9YzoTXAEN79gLO8FQwdfe/NuBlooHuISS
-	 DODkkpYxtSON5oxXhV8fhiBxoN8gXlGbgnHIrXfxJ5z/hLyvgag25OnI1pwOw76vHM
-	 gKh8tssCRzoaA==
-Message-ID: <sashiko-outbox-202290@kernel.org>
+	b=URYOt31Tmq/mX/kvW84zQ0xEIrxjbOt8N0HAfdJU/rJW9rYtgx00MYEfw+oBkjDWQ
+	 ltGRTkuSXX/N0sTJUDIprh8m1K09fmZ3KLMDD/vwK74NEaO1180223kbsNxnuuAlRB
+	 u2AH28dfgxFbZc13ExTp5UasziW1QYpuP7SmAY3aCT7OxhfQkuhC7FVTz/QG4oMpdo
+	 CDJqY7H27hl/pLaeZ18c11/rfCB2Q76vVxAa/KnUkgbLXPJm77LsApbZHL9lf1otSm
+	 e8koxu+/UjGMyix57eezpgASnN+6JUyOc/fyvqLj0C52cn7ntPfrjdHSUslpZYOsUT
+	 Q9uS1T0rp9byw==
+Message-ID: <sashiko-outbox-202293@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1 bpf-next 15/18] resolve_btfids: Tag fmod_ret
- candidates as targets
+Subject: Re: [PATCH v1 bpf-next 13/18] bpf: Check the return values of
+ fmod_ret programs on found targets
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Anton Protopopov" <a.s.protopopov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261106210314.1767267-15-a.s.protopopov@gmail.com>
+In-Reply-To: <20261106210314.1767267-13-a.s.protopopov@gmail.com>
 References: <20261106210314.1767267-1-a.s.protopopov@gmail.com>
- <20261106210314.1767267-15-a.s.protopopov@gmail.com>
+ <20261106210314.1767267-13-a.s.protopopov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 06 Nov 2026 21:14:45 +0000
+Date: Fri, 06 Nov 2026 21:17:32 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,96 +60,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] bpf: resolve_btfids: choose_functions() skips records on
-  duplicate names
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [Critical] bpf: use-after-free in check_helper_call() [1]
 --
 
-commit 592223df16723596e1694e3167578ff1cfdd0320
+commit f5e3bd12bcf921a0d31fb8a40c17694ea46d4300
 Author: Anton Protopopov <a.s.protopopov@gmail.com>
 
-resolve_btfids: Tag fmod_ret candidates as targets
+bpf: Check the return values of fmod_ret programs on found targets
 
-This commit reads candidate records from .BTF_fmodret_candidates in
-resolve_btfids, filters eligible traceable functions, and emits
-bpf_fmodret and bpf_fmodret_retval: BTF declaration tags for them.
+This commit parses the "bpf_fmodret_retval:" BTF decl tag on fmod_ret
+target functions and verifies that attached fmod_ret programs only return
+0 or one of the specified error values, while disallowing tail calls and
+freplace extensions on such programs.
 
-> diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfid=
-s/fmodret.c
-> new file mode 100644
-> index 0000000000000..1c29ab9a8616a
-> --- /dev/null
-> +++ b/tools/bpf/resolve_btfids/fmodret.c
-
-[ ... ]
-
-> +/* Choose the targets among the functions and describe them in RESULT */
-> +static int choose_functions(struct elf_function_list *functions, const s=
-truct btf *btf,
-> +			    const struct btf_func *btf_funcs, size_t nr_btf_funcs,
-> +			    const unsigned char *buf, size_t ptr_size,
-> +			    unsigned int encoding, struct fmodret_retvals *result,
-> +			    struct fmodret_stats *stats, int verbose)
-> +{
-> +	size_t i =3D 0, j;
-> +
-> +	qsort(functions->functions, functions->nr, sizeof(*functions->functions=
-),
-> +	      cmp_elf_function_name);
-> +	for (i =3D 0; i < functions->nr; i =3D j) {
-> +		const struct elf_function *f =3D &functions->functions[i];
-> +		size_t record =3D chosen_record(f);
-> +		const char *reason =3D NULL;
-> +		unsigned int flags =3D 0;
-> +		struct fmodret_retval *r;
-> +		__u32 size;
-> +		int id =3D 0;
-> +
-> +		for (j =3D i + 1; j < functions->nr; j++)
-> +			if (strcmp(f->name, functions->functions[j].name))
-> +				break;
-> +
-> +		if (!f->nr_strong && !f->nr_weak)
-> +			continue;
-> +		if (record =3D=3D NO_FUNCTION) {
-> +			stats->ambiguous_body++;
-> +			reason =3D "ambiguous-body";
-> +			goto rejected;
-> +		}
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1b58a1796a2e4..71fbb30e4d768 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -13338,6 +13338,14 @@ static int check_helper_call(struct bpf_verifier=
+_env *env, struct bpf_insn *insn
+>  	}
+> =20
+>  	if (func_id =3D=3D BPF_FUNC_tail_call) {
 > +		/*
-> +		 * A strong definition without values has no record. If it
-> +		 * replaced a weak one, only the record of the weak one points
-> +		 * to its body.
+> +		 * The program which a tail call jumps to returns for this one,
+> +		 * and a program array does not check the values it may return.
 > +		 */
-> +		if (!f->nr_strong && !f->weak_symbol) {
-> +			stats->overridden++;
-> +			reason =3D "overridden-weak";
-> +			goto rejected;
+> +		if (env->prog->aux->fmodret_retvals) {
+> +			verbose(env, "tail calls are not allowed in fmod_ret programs with re=
+stricted return values\n");
+> +			return -EINVAL;
 > +		}
-> +		if (!read_elf_value(buf + record + 16 + ptr_size, 4, encoding))
-> +			continue;
-> +		stats->with_values++;
-> +		flags =3D read_elf_value(buf + record + 12, 4, encoding);
-> +		if (j - i !=3D 1) {
-> +			stats->ambiguous_name++;
-> +			reason =3D "ambiguous-name";
-> +			goto rejected;
-> +		}
+>  		if (env->cur_state->curframe) {
+>  			struct bpf_verifier_state *branch;
+> =20
 
-[Severity: Low]
-Does choose_functions() skip candidate records on functions[i + 1 .. j - 1]
-when multiple ELF functions share the same name?
+[Severity: Critical]
+This problem wasn't introduced by this patch, but in check_helper_call(),
+can passing an RCU-protected or iterator-yielded pointer to a pointer-cast
+helper such as bpf_skc_to_tcp_sock() drop its lifetime constraints on
+regs[BPF_REG_0] [1]?
 
-add_record() attaches each record only to the functions at that specific
-location, and choose_functions() then groups all functions with the same
-name into [i, j) and advances with i =3D j.  If functions[i] (the lowest
-address instance, such as a static helper in another translation unit) has
-no record or zero values, the continue statements skip the rest of the
-group before reaching the j - i !=3D 1 check, leaving stats->with_values and
-stats->ambiguous_name undercounted and omitting the verbose rejection log
-for records on functions[i + 1 .. j - 1].
+kernel/bpf/verifier.c:check_helper_call() {
+	...
+	if (is_ptr_cast_function(func_id) &&
+	    find_reference_state(env->cur_state, meta.ref_obj.id)) {
+		...
+		regs[BPF_REG_0].type &=3D ~PTR_MAYBE_NULL;
+		regs[BPF_REG_0].id =3D meta.ref_obj.id;
+	}
+	...
+}
+
+RET_PTR_TO_BTF_ID initializes regs[BPF_REG_0] without propagating MEM_RCU or
+parent_id from the input argument, and the cast block above only runs when
+find_reference_state() finds an acquired reference.  Because RCU-protected
+and iterator-yielded pointers are tracked via MEM_RCU or parent_id rather
+than a reference state, regs[BPF_REG_0] is left as an unconstrained
+PTR_TO_BTF_ID.  When the iterator advances or bpf_rcu_read_unlock() is
+called, the parent pointer is invalidated while the cast pointer remains
+trusted, allowing a use-after-free.
+
+[1] https://sashiko.dev/#/bug/linux-97cfbde4-a454-41bd-bdcf-b13a51d2adaa
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106205523.1765=
-622-1-a.s.protopopov@gmail.com?part=3D15
+622-1-a.s.protopopov@gmail.com?part=3D13
