@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.71
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793996419;
-	b=nW2Mz9AKzCBeVitmZ+stX8QmX20DOqO3yFnvGdT5X+KL4vhLFlikarFlWhd0RAvWhHir
-	 vooMgDDxm2KrXeZHxVoi+X3jm3MM7+bg4RFuN1YaARoGPfmfHFNYesO7bB/qWQYWRvKVu
-	 tckQacXSNn+kUG/yCj6+2H7vLc0Hclix0foHSE9+KxtJ7YsG0kqJSDTy/k2wbbvkmrQkx
-	 C20F1II4A4YhKSjPI80pJ1ISy/G2gW9HXPhKMsh68YT+JRqf1FpMUHfX42EuIYfoXQ3/c
-	 fomsbtEqWvLbh0QG14fHUXz93AhSbPI/SBaSZluBr/4Fl+co1TThqnE1u+6bNYr4AEw==
+	t=1793996421;
+	b=r+fNgY230sz7y+t/VWYaHbe7zSnj1Yg1q8MISiA2jGC8vMSDyFyuo6O17aD+/tSGyncf
+	 6iX4TCCubaS2a3y/2h/jYTMZVrBoKNDB+vqDk1QZ3yJUGZPpw/rNLUdOuCjtJNC6+3G3f
+	 8wzxh+FMUFUQ+kFHm+6ADBnwk8Db9J1luQ3fKn5usMUzIK0QF91E2Y8Of3oQUcdcrMFvl
+	 4sQCoH/QjjIzWrIK7tWjy19lvoln9/z7xc1Jp1sOOChP0HAzo18+V758J+y/VEcypTysw
+	 On57K8lx94XODS8zwNyzcp9N56P2P86q4ciBCbwCPYtLF6WH95Tt39TtL33Lp4FjUzA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793996419;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793996421;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Received:Date:In-Reply-To:Mime-Version:
 	 References:X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=XvewwKO9ZZowV/2pm8Mo5VjBvQePCjGPnCvF9vdLwAA=;
-	b=JirxEoFk57vt/K8PYHIT3Vt+c8Sgg6Ip7WHS1pFYhlXCRpTpwV38QhUf9ScsmWndADna
-	 fP6/yf0goJvVsZR1w7DimHss8zlWr/bnhc3/a7iozBfHgFepuInGiUAZICtAyigJVKEBP
-	 C5nj0RUwCpVVSJI7q+Ab2rRgVgLuCAmW6+1AVOiR57FKES9Pmv+Qxf1sHL7NkFW+Hx8sz
-	 OCuJVc+yKTQXzthoYf2KAeAEw2k7E040Ti3fHDDj4eWbGqU3TfMLL6ucdX97HBUvKBhum
-	 wyaFftxm/geXv1PFq5MnqI5AcThOq9BOjCqDKQxo0eaEnxBuVUPNDTGaarrt8f2JRDQ==
+	bh=wYRpy/O7KBx8gWbkCOvTZNiGZUKxKn/aaUwwAjHzOcQ=;
+	b=dG720VxMUTAV/7rniEaD9Vw90htsGjVlR7KsKq3tqSNOol5I8AUlpMFG/lsMtOjpbf2U
+	 qIdfKWqjDGWOZSF2rFUuayoKvdncfW9xlGP7Nwk29FLwbfF1ZqrNRRatUcSawSTvHe0QA
+	 AuVyhO/rhkrgNTxga4nf9WZHJIr9zV8jekHv72qmtY0JKaYGzK4NQLppt4lXSkJZjhEXe
+	 C7vFwkgdAYMtDLCHgnNdJO/c0pGRLuBu1g+s/smL6t+gDx3LjWi3XyJ5hcwoaAwszz9AM
+	 dR5vOh42agkG/lgxnRz/59yObVHyv9RsFEud9+VsRnytk6BY0CdeZWChOrgWIBNHzpw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=PpL+wePa;
-	arc=none smtp.remote-ip=209.85.216.71
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=YlscIqfh;
+	arc=none smtp.remote-ip=209.85.215.198
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84916606A326
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:20:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 84916606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE00606A339
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:20:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5EE00606A339
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=PpL+wePa
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3b0a13ae043so1419336a91.0
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:20:19 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=YlscIqfh
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cd66551e02cso1101607a12.2
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:20:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793996419; x=1794601219; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1793996421; x=1794601221; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=XvewwKO9ZZowV/2pm8Mo5VjBvQePCjGPnCvF9vdLwAA=;
-        b=PpL+wePa/Xpr9zYKCeBqYVHtUiYhe4jAZUSrV8ZqMjJEw6CZxDAdV7gFQUHuQUp2RE
-         r2TcQV6fF39O1TnkPwLWD4eDX61yOTq2GopdS2ip2qe1jd0EcvIa+Iuq0KBCbPCBGfRl
-         hfKaLp80YonEXgeKALAfdnk0ctGVN2BBJs6VTpaEsW9kRnk5N776/XuF+nok3mbCQhWO
-         yITqFhJRvULfIJkhYZj91ffA1Wo1+5nrCsx/9nSmrYwEFxViq0GWQLaqEmZqqu2d/PmT
-         re9Ixv9BFoMJF/+UaxgyY+L53fNux1B8N/lHe9GYIa8BhWINmW4Wn5ECgqKKB+5HvIm+
-         zL5Q==
+        bh=wYRpy/O7KBx8gWbkCOvTZNiGZUKxKn/aaUwwAjHzOcQ=;
+        b=YlscIqfhbVnCLNXoHezz7lXtxhhaPr/5sO/KCNaPP+1Karteu+j1JKjalE22EoGs8h
+         9u9E/2KnXV+Q0aRVOFIpiARkNxi8LmUVdNCWhNSgOm1FsxdTzAUGCmAUQwRRLDe17ITb
+         DE5suTx50BRrfH6qP36VQiQwuB7MQgoYnOYHgE5eZHRH7Lz1NENI4D69VQIps0DMwadG
+         C+/pOTSPqlyKwZJM7N+gl7IHlOSCbEfgCW5c/lxZ1bvc2gve3/miAE4sqahtTcWG7wY8
+         sahpn0IbOc2u2j60gvMXlX/qIKq0FLLFnv9PruVupn3xWmxsUg2QcR1gP0PiMRrNshOd
+         jbJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793996419; x=1794601219;
+        d=1e100.net; s=20260707; t=1793996421; x=1794601221;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=XvewwKO9ZZowV/2pm8Mo5VjBvQePCjGPnCvF9vdLwAA=;
-        b=iNRFMLP529AP2ipIZSlV9x5BUAEua58HIlv7q6G7JMlQ3A7qptWc1ODD+07PeyhC/z
-         oFvcRc00rKw7yI61CnGzmcnFxvS/TDFDauvkKgNwUu4JeaNdTIYf0QFeMwxhBt7NiUZe
-         3ECGf4LTA7KW5Jb59ZbyYPS+ksJHsjKiuAp2cHhitPcHwjZZ5QWDyP9jen/e0Gm4hDry
-         P9KZ0nnxEzp+RQ7yaCg5HjPYuGgV5t4MdmuTb92TGYzbZUekCFgrIeAmjIZtm7Qfg5j5
-         pqdP89sIuUeYhCbSX3veGOQKkaEx8HrEyDtPjYVUhR7wlRIdcB15NlzjhP0nAzHykD9b
-         nfBg==
-X-Gm-Message-State: APuU4Z/tGAN0EwljdX/rixwxGY1HbxrAWju9G7KzDkuuJk2HHPGFH3Xu
-	Cgx1cddl5/osILTRgHotcPH6RsHuZUQ71Wp9lMQ/TbHGcWYV606Z8PI5X0BQ5NRXwTSyD0KbDMT
-	Py60+lYIhuTMI4KvyDg==
-X-Received: from pgca2-n1.prod.google.com ([2002:a05:6a02:6382:10b0:cc7:a4ca:364])
+        bh=wYRpy/O7KBx8gWbkCOvTZNiGZUKxKn/aaUwwAjHzOcQ=;
+        b=wVkiOxQR5RJfZjOnfKAFzc8x+Awvy1D04BDSxYIfmCiWkMmWNIVPLpxgs23xrFdWoQ
+         DCRuhW4XQwF1QNBGWi9Hkq0NKim8gyI0Hg9BFgFcEYl9Qo3BORQobq+H5h5aWR7k9Ia7
+         q8RH/wWa6Bkz/TIez4utnLlWAmjPNUCSLsZ/7rpgfdHHFcqk58pzr4JbZnY3FG4DjWVs
+         d4cxze+CP9LTXycwV3hjjfhRlMy/MIZwyMcMc2+Joje/ZImyHxLkdrxG73Ojo6qTJvJb
+         mdMgPqh78OjNnPSCRsGguXorKTCV88UFVNmDgBRTiLAZC6HGc2XfO9LfWcmxNyCS8xP6
+         +JlQ==
+X-Gm-Message-State: APuU4Z8190vbCXUNDRSi9Ban3Ho71vBy2VJZBFRcMfcto9QzJ3aRr68v
+	elElzapjrTN8OHFw7MsUHiwtUIoTaFL2+YBp92/XhXA/HgZO9dY70sIIBNVTh7YDBcpxOU/mHw3
+	TEmE4QUf3mlcm6tc5Mg==
+X-Received: from pfo19.prod.google.com ([2002:a05:6a00:2f3:b0:88f:9775:7fcd])
  (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:2792:b0:3ac:8897:7b92 with SMTP id 98e67ed59e1d1-3b0db70d34fmr3358993a91.57.1793996418673;
- Fri, 06 Nov 2026 12:20:18 -0800 (PST)
-Date: Fri, 06 Nov 2026 20:19:52 +0000
+ 2002:a05:6a20:da05:b0:3e1:8890:8400 with SMTP id adf61e73a8af0-3ebb297f700mr3991183637.15.1793996420375;
+ Fri, 06 Nov 2026 12:20:20 -0800 (PST)
+Date: Fri, 06 Nov 2026 20:19:53 +0000
 In-Reply-To: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,9 +79,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261106-lskel-struct-ops-v1-0-a4486ffc79cb@google.com>
 X-Mailer: b4 0.14.3
-Message-ID: <20261106-lskel-struct-ops-v1-5-a4486ffc79cb@google.com>
-Subject: [PATCH RFC bpf-next 5/7] libbpf: Implement bpf_gen__struct_ops_update_elem()
- for light skeletons
+Message-ID: <20261106-lskel-struct-ops-v1-6-a4486ffc79cb@google.com>
+Subject: [PATCH RFC bpf-next 6/7] bpftool: Generate attach and detach for
+ struct_ops in light skeletons
 From: Siddharth Nayyar <sidnayyar@google.com>
 To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -96,152 +96,143 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Maxime Ripard <mripard@kernel.org>, Siddharth Nayyar <sidnayyar@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-Add bpf_gen__struct_ops_update_elem() in gen_loader.c and call it from
-bpf_object_prepare_struct_ops() when generating a light skeleton.
+Update codegen_attach_detach() to iterate over BPF_MAP_TYPE_STRUCT_OPS
+maps with BPF_F_LINK set. Generate dedicated per-map attach functions
+calling skel_link_create(), chain them in skel__attach(), and close the
+corresponding link FDs with skel_closenz() in skel__detach().
 
-Once all programs are loaded, bpf_gen__struct_ops_update_elem():
-1. Closes the attach_btf_obj_fd stored in the upper 32 bits of
-   st_ops->type_id_off.
-2. Copies each callback program's FD from the loader stack into
-   st_ops->kern_vdata_off at the dynamic kernel member offset stored in
-   st_ops->kern_func_off[i].
-3. Emits BPF_MAP_UPDATE_ELEM to populate the struct_ops map with the
-   prepared kern_vdata.
+Also skip gen_st_ops_shadow() when generating light skeletons so
+skel->struct_ops is not emitted between skel->maps and skel->progs,
+preserving the ctx layout expected by bpf_gen__finish().
+
+Finally, reject struct_ops maps without BPF_F_LINK in light skeletons.
+Because the loader program runs BPF_MAP_UPDATE_ELEM during skel__load(),
+non-link struct_ops maps would register prematurely before
+skel__attach() and leak in the kernel if a later load step fails.
 
 Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
 ---
- tools/lib/bpf/bpf_gen_internal.h |  3 +++
- tools/lib/bpf/gen_loader.c       | 58 ++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.c           | 16 ++++++++---
- tools/lib/bpf/libbpf_internal.h  |  2 ++
- 4 files changed, 76 insertions(+), 3 deletions(-)
+ tools/bpf/bpftool/gen.c | 71 ++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 67 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
-index b424410e8839..cd603f82f6ec 100644
---- a/tools/lib/bpf/bpf_gen_internal.h
-+++ b/tools/lib/bpf/bpf_gen_internal.h
-@@ -88,5 +88,8 @@ void bpf_gen__init_kern_struct_ops(struct bpf_gen *gen, struct btf *btf,
- 				   struct bpf_struct_ops *st_ops,
- 				   __u32 *vtype_id_off,
- 				   unsigned int *val_sz_off);
-+void bpf_gen__struct_ops_update_elem(struct bpf_gen *gen, int map_idx,
-+				     struct btf *btf,
-+				     struct bpf_struct_ops *st_ops);
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index ee680f7c2116..98e92a34326b 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -569,6 +569,8 @@ static void codegen_asserts(struct bpf_object *obj, const char *obj_name)
+ static void codegen_attach_detach(struct bpf_object *obj, const char *obj_name)
+ {
+ 	struct bpf_program *prog;
++	struct bpf_map *map;
++	char ident[256];
  
- #endif
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index aaa491463521..6dcba83dcc09 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -1573,3 +1573,61 @@ void bpf_gen__init_kern_struct_ops(struct bpf_gen *gen, struct btf *btf,
- 		}
+ 	bpf_object__for_each_program(prog, obj) {
+ 		const char *tp_name;
+@@ -608,6 +610,30 @@ static void codegen_attach_detach(struct bpf_object *obj, const char *obj_name)
+ 			", bpf_program__name(prog));
  	}
- }
-+
-+void bpf_gen__struct_ops_update_elem(struct bpf_gen *gen, int map_idx,
-+				     struct btf *btf,
-+				     struct bpf_struct_ops *st_ops)
-+{
-+	int attr_size = offsetofend(union bpf_attr, flags);
-+	const struct btf_type *type;
-+	union bpf_attr attr;
-+	int key, zero = 0;
-+	__u32 i;
-+
-+	/* 1. Close attach_btf_obj_fd (upper 32 bits of st_ops->type_id_off) */
-+	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_0, BPF_PSEUDO_MAP_IDX_VALUE,
-+					 0, 0, 0, st_ops->type_id_off));
-+	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, 0));
-+	emit(gen, BPF_ALU64_IMM(BPF_RSH, BPF_REG_1, 32));
-+	__emit_sys_close(gen);
-+
-+	/* 2. Populate prog_fd into kern_vdata for all callback members */
-+	type = btf__type_by_id(btf, st_ops->type_id);
-+	for (i = 0; i < btf_vlen(type); i++) {
-+		struct bpf_program *prog = st_ops->progs[i];
-+		int prog_idx, off_slot;
-+
-+		if (!prog)
+ 
++	bpf_object__for_each_map(map, obj) {
++		if (!get_map_ident(map, ident, sizeof(ident)))
++			continue;
++		if (bpf_map__type(map) != BPF_MAP_TYPE_STRUCT_OPS)
++			continue;
++		if (!(bpf_map__map_flags(map) & BPF_F_LINK))
 +			continue;
 +
-+		prog_idx = bpf_program_idx(prog);
-+		off_slot = st_ops->kern_func_off[i];
-+
-+		/* R2 = dynamic kernel member offset from off_slot */
-+		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
-+						 0, 0, 0, off_slot));
-+		emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, 0));
-+		emit(gen, BPF_JMP_IMM(BPF_JLE, BPF_REG_2,
-+				      KERN_VDATA_MAX_SIZE - sizeof(__u64), 2));
-+		emit(gen, BPF_MOV64_IMM(BPF_REG_7, -E2BIG));
-+		emit_check_err(gen);
-+
-+		/* R1 = kern_vdata_off + offset */
-+		emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
-+						 0, 0, 0, st_ops->kern_vdata_off));
-+		emit(gen, BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_2));
-+
-+		/* R0 = prog_fd from stack (stack_off(prog_fd[prog_idx])) */
-+		emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_10,
-+				      stack_off(prog_fd[prog_idx])));
-+
-+		/* Store prog_fd (R0) into kern_vdata + offset (R1) */
-+		emit(gen, BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, 0));
++		codegen("\
++			\n\
++			\n\
++			static inline int					    \n\
++			%1$s__%2$s__attach(struct %1$s *skel)			    \n\
++			{							    \n\
++				int map_fd = skel->maps.%2$s.map_fd;		    \n\
++				int fd = skel_link_create(map_fd, 0, BPF_STRUCT_OPS);\n\
++										    \n\
++				if (fd > 0)					    \n\
++					skel->links.%2$s_fd = fd;		    \n\
++				return fd;					    \n\
++			}							    \n\
++			", obj_name, ident);
 +	}
 +
-+	/* 3. Emit BPF_MAP_UPDATE_ELEM command for struct_ops map */
-+	memset(&attr, 0, attr_size);
-+	key = add_data(gen, &zero, sizeof(zero));
-+	emit_map_update_elem(gen, map_idx, &attr, attr_size, key,
-+			     st_ops->kern_vdata_off, KERN_VDATA_MAX_SIZE);
-+}
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7754d6640167..d00ff5f8b0b0 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9772,9 +9772,14 @@ static int bpf_object_prepare_struct_ops(struct bpf_object *obj)
- 		if (!map->autocreate)
- 			continue;
- 
--		err = bpf_map_prepare_vdata(map);
--		if (err)
--			return err;
-+		if (obj->gen_loader) {
-+			bpf_gen__struct_ops_update_elem(obj->gen_loader, i,
-+							obj->btf, map->st_ops);
-+		} else {
-+			err = bpf_map_prepare_vdata(map);
-+			if (err)
-+				return err;
-+		}
+ 	codegen("\
+ 		\n\
+ 									    \n\
+@@ -625,6 +651,20 @@ static void codegen_attach_detach(struct bpf_object *obj, const char *obj_name)
+ 			", obj_name, bpf_program__name(prog));
  	}
  
- 	return 0;
-@@ -10720,6 +10725,11 @@ int bpf_program__set_expected_attach_type(struct bpf_program *prog,
- 	return 0;
- }
- 
-+int bpf_program_idx(const struct bpf_program *prog)
-+{
-+	return prog - prog->obj->programs;
-+}
++	bpf_object__for_each_map(map, obj) {
++		if (!get_map_ident(map, ident, sizeof(ident)))
++			continue;
++		if (bpf_map__type(map) != BPF_MAP_TYPE_STRUCT_OPS)
++			continue;
++		if (!(bpf_map__map_flags(map) & BPF_F_LINK))
++			continue;
 +
- __u32 bpf_program__flags(const struct bpf_program *prog)
- {
- 	return prog->prog_flags;
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 845d6557c922..94c3a4019b11 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -317,6 +317,8 @@ struct bpf_struct_ops {
- 	__u32 type_id;
- };
- 
-+int bpf_program_idx(const struct bpf_program *prog);
++		codegen("\
++			\n\
++				ret = ret < 0 ? ret : %1$s__%2$s__attach(skel);   \n\
++			", obj_name, ident);
++	}
 +
- int parse_btf_map_def(const char *map_name, struct btf *btf,
- 		      const struct btf_type *def_t, bool strict,
- 		      struct btf_map_def *map_def, struct btf_map_def *inner_def);
+ 	codegen("\
+ 		\n\
+ 			return ret < 0 ? ret : 0;			    \n\
+@@ -642,6 +682,20 @@ static void codegen_attach_detach(struct bpf_object *obj, const char *obj_name)
+ 			", bpf_program__name(prog));
+ 	}
+ 
++	bpf_object__for_each_map(map, obj) {
++		if (!get_map_ident(map, ident, sizeof(ident)))
++			continue;
++		if (bpf_map__type(map) != BPF_MAP_TYPE_STRUCT_OPS)
++			continue;
++		if (!(bpf_map__map_flags(map) & BPF_F_LINK))
++			continue;
++
++		codegen("\
++			\n\
++				skel_closenz(skel->links.%1$s_fd);	    \n\
++			", ident);
++	}
++
+ 	codegen("\
+ 		\n\
+ 		}							    \n\
+@@ -1323,8 +1377,15 @@ static int do_skeleton(int argc, char **argv)
+ 			continue;
+ 		}
+ 
+-		if (bpf_map__type(map) == BPF_MAP_TYPE_STRUCT_OPS)
++		if (bpf_map__type(map) == BPF_MAP_TYPE_STRUCT_OPS) {
++			if (use_loader && !(bpf_map__map_flags(map) & BPF_F_LINK)) {
++				p_err("struct_ops map '%s' requires BPF_F_LINK for light skeleton",
++				      bpf_map__name(map));
++				err = -ENOTSUP;
++				goto out;
++			}
+ 			attach_map_cnt++;
++		}
+ 
+ 		map_cnt++;
+ 	}
+@@ -1385,9 +1446,11 @@ static int do_skeleton(int argc, char **argv)
+ 	}
+ 
+ 	btf = bpf_object__btf(obj);
+-	err = gen_st_ops_shadow(obj_name, btf, obj);
+-	if (err)
+-		goto out;
++	if (!use_loader) {
++		err = gen_st_ops_shadow(obj_name, btf, obj);
++		if (err)
++			goto out;
++	}
+ 
+ 	if (prog_cnt) {
+ 		printf("\tstruct {\n");
 
 -- 
 2.56.0.455.g6c5a503b38-goog
