@@ -1,45 +1,53 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793985467;
-	b=xgM+1g6KJvgZgb3f9bW8lHmGMaqyw/tpHZPoSFsJjqGqk6tCvkJOqVauutMvAxDx/q46
-	 TE6aRFOXn3g3GTTeg7k5KWDUxafrwgZgnl0s55iZO3X9IpB2oJudlx1LOe2HRVEtXS/Tu
-	 fGWfNWWpsH7o/jkzy12bu2TPLt7D8TXlFDtqt8EqvWFGl5opl4r/xwe2qotB+Eb1loDeC
-	 BDVRgvAP4wYdmZjcehx8tJAuZFSbyAsqonevX5VNldIsJ/BSZi2WyfEbc7SI0C1q5i13F
-	 NOTc/tBWWDfVyXWwZtql36O5E27vzi+FSqUi58Yvu+BOBzOuJmj8mVBbVuExVUFed0A==
+	t=1793986359;
+	b=vj+jfHnFTDH1dY7vQS07dHALRg+N81dNrhQjRqUW0mbaECbQ7hFB75iGfo83tx3hvPka
+	 zzy9pzdED/E9GUr2NFPzXA2MMjDi2Pv33J37v0o3/TUH/InzjPP2kgVnTBHxOpswxwk7n
+	 Z8sc6hUl0Rd172cs3iybjQrTkilI7nNSqjIhLxrjn+VBfuVw1T2fFXSugtvRHGWV84zVS
+	 GjGVZuy7QkC19WDKmGpIyZvE5SLqdeL+OTFQA34i1Q48eJdrmG20fYVRLL9H2kG9Vr1Tw
+	 dfxjzJiTIW/LTmDxuo1KCnpdduqvGXNon5T0aUB5G60t+XJOsmgMUnaZTvv/T+Q9Sow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793985467;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=DyMei4abpdDzbQhv2Ifx2fXVyvazWyjj/OdbvGY9UQc=;
-	b=cTIqkgkqz7TBFhyRKXX9hVWKFWJwy1VLWIcyBJ7vwo72nBV0w65VNta26b5xZXt3wZIl
-	 fkE08UxCnJ4NI/Vbc2bF4zoOIM33XsUuxwqSBPrBbQy/kw4AcEJ5m4dJV126v2DpPcXyt
-	 TLzxaGVV0pMs/srMgNgw0GVIUO6kZDJ0H3WLETxZACfTf/GMyQPXgtHQyBSKkyFEtdUqu
-	 rnb2PC47ZYjCWAeeNsFdZPvr9I5Jh6Wlo+BC6GkovSv4XmwA2Q0Y1n7vE1Wd0Y9h052ug
-	 ADklADH71r3iLQh4ESP3EWTip8pfhPjpsDGNUPYA+CejmjHvEzOPM9lI995y4UYAplg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793986359;
+	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=ybZChZ9rAXXJpYgVjjNMXpb0KllCBOdJmkiYdEAub2w=;
+	b=wJ5/jecRoGyRTb3w0PAcvsqNxq2CIP7K/HAFXBrdDlShojpwU8OX+Z7/bUIpy8Hi5aaO
+	 aP4Sbmewcl5/WJO+N554WLabSLUwQL5Q4SCW0n1Z+SH3pUIP6jgjHKrYvXD3ZHnrRFw3J
+	 t6z9FKlMEysfsGU52AkFmaAOaXtF+5/sxVA0SJVTNF++lF863I2fvuop/mmsnA5RLY/2m
+	 A/6ek1MfOq7G12mKKWjqZDdPstE6c3slt0a8UZ/h8+3BwlBHYO/aBaKjsfl0hIUewtxev
+	 cTjBIeW9I+TKFknqoTKVS8rQpjURw6nI+Hdlc/eOdPAsyAO8cDA0fPQOPppaAj0fDEg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kKTlBCaE;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Jf3kisSZ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39277606A332
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 17:17:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA001606A32C;
+	Fri,  6 Nov 2026 17:32:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kKTlBCaE
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A29511F0089F;
-	Fri,  6 Nov 2026 17:17:46 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Jf3kisSZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E95E1F008A2;
+	Fri,  6 Nov 2026 17:32:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793985467;
-	bh=DyMei4abpdDzbQhv2Ifx2fXVyvazWyjj/OdbvGY9UQc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=kKTlBCaEkXoeTCISoDSpxEHX/WbScwOHJyp9+vLYo9IuUGBqO9coUr6zpY9zUeG4g
-	 9S6gVIgcOH0oZbvCmXXWHfPdQ3p14M/TcbEME0OzEOVbFb7uxv5MH7bxMrj00hKRzp
-	 nHPjF+5chET/Ga8Ti26ByMEv1s5Hv/BItuHCMYZJp3iAPaL/DqxIeNR9EGyK5V/Tjs
-	 Pn/NNMja6AFTS+AJUIVCMc4G3Eov/M9hV2BMnYLtiZNTxIGD2qKjNSr0ITMTxac3YY
-	 mW/w6wTqbK+rUQL8DhlfruI1qFqPrr0ijwKC2+Jb05tB79Zc/mb9eUQ0KOQm2ATmzW
-	 4RG2QE9DcBNHQ==
-Content-Type: multipart/mixed; boundary="===============6092167187052590773=="
+	s=k20260515; t=1793986359;
+	bh=ybZChZ9rAXXJpYgVjjNMXpb0KllCBOdJmkiYdEAub2w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Jf3kisSZKUNQEmo4gG2lyzj11wxrXhVhlZ9uxM6uQcpiKNxiBQgZUvTs42wXPkBRh
+	 sdmu9pmR0qfc8PqeGFoHcF/YCDwRr7JBszTRd9qZJeE9l7bX1a8GUcpcJ++xMyljKg
+	 VqXgKCtEHSkpfj+j9Akjs1bUGCkaqiXNA+VBj4LXSUafSzIML90uC/l1K2iPx4tdY+
+	 W2EfU+NipLJDld7o8CbhfPKuNRrJ69qEa8zeMYTOPbrUjcly8ZUZJIKviq41nimBTO
+	 QkdprJA8+M0o/OJuFW12dxmyxKs3/hCW5PVubhJr/F6h3qxc/HpunevXPtIxM5tOGV
+	 KfYN3qziIb6ZA==
+Date: Fri, 06 Nov 2026 07:32:38 -1000
+Message-ID: <1ee462ef3e697e999011e4a0cd2864bd@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Rahad Bhuiya <rahadbhuiya2021@gmail.com>
+Cc: void@manifault.com, arighi@nvidia.com, changwoo@igalia.com, sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next] sched_ext: Reset task fields on exit of an SCX_TASK_READY task
+In-Reply-To: <20261106142818.1475-1-rahadbhuiya2021@gmail.com>
+References: <20261106142818.1475-1-rahadbhuiya2021@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,91 +57,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <c5a67b62f878af7cd0492bfd739e9f6a74b6749f6552d486a1e887f8b183f0a7@mail.kernel.org>
-In-Reply-To: <20261106164043.546879-3-jolsa@kernel.org>
-References: <20261106164043.546879-3-jolsa@kernel.org>
-Subject: Re: [PATCHv2 bpf-next 2/2] bpf: Disable private stacks for untagged kprobe programs
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: bpf@vger.kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,sammiee5311@gmail.com,simon@swine.de,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  6 Nov 2026 17:17:46 +0000 (UTC)
-
---===============6092167187052590773==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 
-> bpf: Disable private stacks for untagged kprobe programs
+Hello, Rahad.
 
-TL;DR: Disabling private stacks for classic kprobe programs may make
-previously loadable programs fail verification (-EACCES) once frames count
-combined against the stack limit, e.g. on powerpc64; the commit message
-doesn't mention it.
+On Fri, Nov 06, 2026 at 08:28:18PM +0600, Rahad Bhuiya wrote:
+> However, in __scx_disable_and_exit_task(), an exiting task in state
+> SCX_TASK_READY (e.g., a forked task that was initialized via
+> ops.init_task() but never enabled under an ext_sched_class before exiting,
+> or a disabled task) currently breaks out of the state switch without
+> calling scx_reset_task_fields().
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+Neither example has anything to reset. A forked task which exits while
+READY goes through sched_ext_dead() and is freed. A task disabled from
+ENABLED is already reset: both callers of scx_disable_task(), the
+ENABLED case here and switched_from_scx(), call scx_reset_task_fields()
+right after it.
 
-[ ... ]
+A READY task is on a sched but outside the ext class. RT and DL tasks
+are always in that state, and so are non-SCHED_EXT tasks under a partial
+switch. The sched's BPF code can still write such a task's dsq_vtime and
+slice, and because the READY exit doesn't reset them, they carry over
+when the task moves to another sched.
 
-> @@ -5749,6 +5749,15 @@ static enum priv_stack_mode bpf_enable_priv_stack(struct bpf_prog *prog)
->  	 */
->  	switch (prog->type) {
->  	case BPF_PROG_TYPE_KPROBE:
-> +		/*
-> +		 * Uprobes are preemptible and lack recursion protection. Classic
-> +		 * kprobe and uprobe progs have no expected attach type, so enable
-> +		 * private stacks only for kprobe.multi and kprobe.session progs.
-> +		 */
-> +		if (prog->expected_attach_type != BPF_TRACE_KPROBE_MULTI &&
-> +		    prog->expected_attach_type != BPF_TRACE_KPROBE_SESSION)
-> +			return NO_PRIV_STACK;
-> +		fallthrough;
+For example, an RT task in a cgroup owned by sub-sched A gets its
+dsq_vtime set by A's ops.cgroup_move(), as scx_flatcg does. If the task
+is then moved to a cgroup owned by sub-sched B and later switches to
+SCHED_NORMAL, B's ops.enable() sees the dsq_vtime from A's clock.
 
-Classic SEC("kprobe"), kretprobe and ksyscall programs run through
-trace_call_bpf(), which has cant_sleep() and the per-CPU bpf_prog_active
-guard, so they never had the re-entry problem.  They lose private stacks
-only because they cannot be told apart from uprobes.
+Can you rewrite the description around that case?
 
-Does this change which classic kprobe programs the verifier accepts?
-check_call_depth() treats a frame separately when private stacks are on:
+> Fixes: a298fd5f4ee8 ("sched_ext: Fix use-after-free of a NONE rescuee leaving its sched while running")
 
-    if (si[s].priv_stack_mode == PRIV_STACK_ADAPTIVE) {
-            depth = round_up_stack_depth(env, si[s].stack_depth);
-            ...
-            continue;
-    }
-    depth = dinfo[s].depth + subprog_stack_size(env, s);
-    ...
-    if (depth > env->stack_limit) {
-            verbose(env, "combined stack size of %d calls is %d. Too large\n", ...
+a298fd5f4ee8 didn't change the READY case. It was a bare break before
+and after. The gap goes back to 5771e79e461e ("sched_ext: Reset
+dsq_vtime and slice when a task leaves SCX"), which put the reset only
+on the ENABLED path, so that'd be the one to point at if the patch keeps
+a Fixes tag.
 
-subprog_stack_size() returns 0 for an ADAPTIVE frame, so before this patch
-the frames of a kprobe program were not added together.  Now they are, and
-a program that loaded before can fail with -EACCES.
+sched_ext patches go through the sched_ext tree, not bpf-next. Can you
+repost with the above updated?
 
-For example, on powerpc64 bpf_jit_supports_private_stack() returns
-IS_ENABLED(CONFIG_PPC64) and there is no bpf_jit_supports_large_stack(), so
-bpf_prog_stack_limit() returns MAX_BPF_STACK (512).  A SEC("kprobe")
-program with a 512-byte main frame calling a subprog with a 32-byte frame
-used to load, and would now fail with "combined stack size of 2 calls is
-544. Too large".  This is the shape of the "Private stack, subtree >
-MAX_BPF_STACK" selftest that this patch moves to kprobe.multi.
+Thanks.
 
-On x86-64 and arm64 the limit becomes MAX_BPF_STACK_JIT (2048) combined,
-where it used to be 2048 per frame.  If this is backported to a tree
-without MAX_BPF_STACK_JIT, x86-64 and arm64 would fall back to 512
-combined for these programs.
-
-The commit message does not mention that existing classic kprobe programs
-can now fail verification, or that users need to move to kprobe.multi or
-kprobe.session to keep the larger stack budget.  Is this rejection
-intended?  If so, could the changelog say so?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42256932632
---===============6092167187052590773==--
+--
+tejun
