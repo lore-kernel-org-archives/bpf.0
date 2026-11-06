@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793998328;
-	b=yFCYcjO+goIwxc1keJX4sPhAzoDMdkC0EF/ZIDGfI41FOXrnqYz+KwxVqlRC0vf0YWUu
-	 r/q5MEbr/jJGrjZZvLKBFKazBRS/XDHddS/TtqhPUTf/DtvtqNrH1xg+BM9eEIzFGTd1Y
-	 kbDwE8VtHDIH+ryqnP6Ct9GihxOT0a+SO4LQHOvRrnNDDc5A8mvTZUSUkWPuAEdeUy8jT
-	 lhNOaB0qkCkHGQRpBeQlUmxMobkEHgME6eQwuq3QeqE+BgFkzSDeRGC/T1HXOln3SlSj/
-	 sf3LaAYsvqi82rydFNsI/qyRe3QGfHxpuaejCdnI2c2jV946lZPhphT/5+T3EVmsI4g==
+	t=1793998330;
+	b=mbybRhs5tZ+hJswplWUMIGDsRx3n5nJSkf/iucOcgmT5dBvyitYi/HsB4UCppGRESJCM
+	 xoEXZjzhfKmLVH+MN0POABSdP9THehadHsxtSpRD8+9uyr5dQYi2JL4zeWCSp+7IN0GPC
+	 +e6U81I3aVn9Dcky9EkA4vUSqgNegtyXjaIgjwXcDnKbyRXAay/kFmI1k75FEKNQDUMe6
+	 JEIpnxr9ULQ3QqEJXbGcBX1iQtVfqcIBPn441HwY9W7N1iY5dFO+Gzb22vA0eenlvgkJl
+	 RWEBRfj0g6gsaBd3hZIYscBlt1s4D6Z9/eZ2auz8zHZE5oY72bZ+o+7W3fLIX/wx6Uw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793998328;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793998330;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=HNNUOPHHRYuxX8ALTNMCrNB0wz+vFOtJtbEqpRjOoKE=;
-	b=ht81c5k7ZAezoF5hpZVv3/Xz7c19OF0gBVKJswH5OYaqi1vyrXu57+3CW5eOOPSsu5HW
-	 0l8fRGK/PP+Y09JinocAe8u9DhkzZdUjaG2jWirNYYziLIxX9zkCZ+GXqsscI3f7hBlHX
-	 uf0Uu4NwnptKY3A5pmM+ydY62VuqJDwX1F6OJw9iBs7mHhl6ZhzXBAHy5/hKp2PADq7gm
-	 /iZZFe/SDjxF2+lYhklUIDRrOWKGk62fqOv9fHRoaCxJkIX5TjLy5jfU3gRQn4B5t+G9N
-	 fgAVLwqDuUHfFvac4PkL9jNTN3teLMsmg9LnKhmxhlcGl7rFUpvW+wGi7KZ1vAY6lUA==
+	bh=9Y3kCsYcaDY5qwLaKX26SOy2iD45ozQ8Dc5QEanJuFg=;
+	b=RKF92wdY2pheRAOhdL2TRK3mqHLj50fM05yTQgX7mWWbCjmNQ5OSTEUsv0i76sNDa5YZ
+	 X30b622kUDCe7UEhZ5lh+VeK+4oNCO1VB5CaL5SCXMnThkLysKE8qYDZbTcWgl8/CCkhZ
+	 FXNqN9LEt7d/WYyHeURHyxFJuvQvj+myb5HbYrkE2XbtI4vPNpK5UFLXgBtmTd24Y1O1/
+	 2vEO/vlQIr/QupshDgPIgh2LMLVrekTma+Zz2tPJwQAHMKZZIrdE0MBCS5pNC77kVmGqE
+	 bHLDm7RR5+/BSUS7JjumfqOICMQ4n9PmOTpkznKSJmiN6UFMGbTmKtZPDUuJJe5Ugjg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yYJ7WAfN;
-	arc=none smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bVisYJNG;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB1B606D80E
-	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:52:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EEB1B606D80E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC95606D804
+	for <bpf@vger.kernel.org>; Fri,  6 Nov 2026 20:52:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BCC95606D804
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yYJ7WAfN
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a35d5d4a20so11192305e9.2
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:52:07 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bVisYJNG
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a35ac4475dso9873935e9.2
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 12:52:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793998326; x=1794603126; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793998323; x=1794603123; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HNNUOPHHRYuxX8ALTNMCrNB0wz+vFOtJtbEqpRjOoKE=;
-        b=yYJ7WAfNTO5tjRImOOntLjaogzJzpPVq15mqX+gfJaSPOl3HCTXgz/opq27jeW7nlT
-         +75Gi70VA4fJMV5Qg/WB7KMP0VbHxWehdp0p+o0vK5IWrStn83wqqInGIlym3EeFtUaU
-         xDLG429chQ2U1yn38q+053HC6lTBwbYhuOneDFz6FnBpDsXvAnexdCvuO2cfte3aH9j+
-         SEZLwEoF9EL+4ps7ova8DSGX5g6Ab1SxFNG4kvt00T1vqXwkVvBkELx0AGO1Kr5p9qAS
-         CoCF2yQ0Jdk50wZ698CzGG2kISwZV/cDhAgUGstGlTaPqjmJUimixEMkZlydGmKppH8+
-         v0dg==
+        bh=9Y3kCsYcaDY5qwLaKX26SOy2iD45ozQ8Dc5QEanJuFg=;
+        b=bVisYJNGBs8pSIw7foQqwmdbAgIV850KX+5PaI7yMzRed2ltACVOYDdcqXMRHIuXyW
+         tAewCJJS2lN+Vi22e0W8VPMvb0/LImy3fgs3bcDai03OrFd0YBhwLhIKpJhEhheoSOG6
+         XodFeLqbwxVPSrQ/oVGQbsQ6Gq5RvGvdoR4VznBpOuFsbxoALbW9uY6Z/7zoqcwV0PQT
+         aoHKOtrYMrn3hBWb5A13UC0galAjUe7iEuIiZL4D/Vm+5VdGA/2kgJkHvGCHzqCVqgtT
+         cDT1akPZb6XmIkBcJfW8ScLjMc3i8zdQDzfbLkBGcZCtqRlMRfaSy8d+6iFJcPLpxGoK
+         1YbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793998326; x=1794603126;
+        d=1e100.net; s=20260707; t=1793998323; x=1794603123;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HNNUOPHHRYuxX8ALTNMCrNB0wz+vFOtJtbEqpRjOoKE=;
-        b=nNyHv2AzcmKk2AwlXDL8sds4xaWosw8d2Ldl777d7aqDr2ChdwOKiy0q5fj8Juv410
-         zT/RR+edN9QM1UPRv7UzDPnzPjIO/FPZYjRWbC1AU1EiWzgKhCX+Pzi77NrZkTeMvSRo
-         HPBMgaTLAYGznEGW2SCSVvSao+zO5yXlozvaKHeMBgiPpITlfO0XyuOwEX1H0QIP4pTg
-         WjKlmyr9wdOCpubkuThlzxUZlcfkoaoEQK6okl3nuBVr0ZEYfXkleIvjtvyGo7cmyGYq
-         3BBdBwHXYLNXifog21scbeboTc0hlT1OhS6PEnvbNoF+1mzL7MNses6DoUyvuTMGJ+LJ
-         AZRw==
-X-Forwarded-Encrypted: i=1; AKwUvBz8w7sadaVLwxkKYlQYth2vCH5JzagymaQ14ao24o1X7eXBVCCC7xkMDGepXEl4pOrCG/8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z90/8tKJy8U5QHftnMYe/fV2wJTOEZ1W1J092mkzuct8Nw7IcAX
-	a/SqpJnXSuv3mRzu7ud5QarmubAr9KhDWR8o74c3XS/YRLPNUX+YfrAD
-X-Gm-Gg: AYBFou3A21e8TBigQHFMPZVHKsa3rFoT11kJxNwdWDT0C1dHNmlLUR5zhID0zDiev2X
-	zwlmjZiCj+8LZQdlg0PAJFi5SFXmz0shgv8QTGNBl+nJ9xllpMKEaSDcRh31W0BRIwPzKbg7TsT
-	I9fZ0L5wGQrSWt7R3KUv2BMdC/Ckuey3GFoJfHbnj/BE1pWksO+tFDl9l+oBLk/TubU9OY5n7EG
-	wy8ERThIwEj+GKA/y07IO0aOjxKHEXU1Eq4dtdgNX2lM6iHHrnF1u0bCRltVcD1JJxBDiefwdpv
-	4S6kNEtBUe1ZJEbpdIbhd5V09NbRxJNbBPIgjtB2pKmh95zGplyemTs20gyG+y4tME3y++dcgBJ
-	SWkI7DgF8m1tPJ3SIvekginC949Bh+QVvXF1jbGDbUqeV+BWlaVWYZlHn6jqYtOaVWWmXQwFLNt
-	Nhxh6bljnPGrfcFwPFyG7kGb1kr5XZw+EEUqjzEX6Kgp+LO9eAS40N34Y6zqXlADdP7yksCyGZn
-	tVRwzaeiGDEFlIRcTaCU54xUWE35ebNGZLML0t4oOnXwA5JV1GLjpkC0krUNfWulOPJkHH+pVKE
-	+K6oEqC1Z1EF22VvRkn8aDehs/JjDPyV1ny7vZhBFz7fZTI=
-X-Received: by 2002:a05:600c:4f4a:b0:4a2:1196:db0e with SMTP id 5b1f17b1804b1-4b6e017248dmr63509255e9.30.1793998326226;
-        Fri, 06 Nov 2026 12:52:06 -0800 (PST)
+        bh=9Y3kCsYcaDY5qwLaKX26SOy2iD45ozQ8Dc5QEanJuFg=;
+        b=1V4Th+LQse0Op7YUvGhcHhYSQjH4RwJDJW1yOlIGzx9tXNLNkYRfMovvPne7GG9Jgo
+         ckragHIlBZP5ZtaB/3/qw7owDgeYVLrIzC7Ep1qJsIR9hnYrL1NDj0DBK7Unjuh5LB/C
+         6FdYUMxg7YlQYwcZY3Mgq/Ft2D/MuA91Af98ZwDtfvJK3NGUMfA2Q42KNi2zVYVCCvNM
+         ykY0Wv6Zsuo1bbYZYBslmrSL4HdpskFr/Eoy5AefyJ3eaadfbQ6KKFB22zxOdl2dM0N1
+         CRpfSjkLhz2xCgpf3+J1NkPCgLkVUwxqZvoUcebsx5eLPhHpMMt1z6rzbzWHekJQkdfo
+         gNWA==
+X-Forwarded-Encrypted: i=1; AKwUvBwSWOccuo55EnZAfN+2X37IMIW+sw3Cc5a9FWymIFJy3knGmmG+nzp9dKRIEKcfb5uJttk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+1ud5QfkXoijc8kJkzRwf5kWgBqjb/wStSkAnhD81K0RyDFZw8
+	Uvl3MNpEgWhqSDScaHSaCzlcr5g0uJ+kMLILc8AHs3FPqVKzbcWDPR2L
+X-Gm-Gg: AYBFou0D+qWtCvi91/MBqZNnB7OkM7gDmnqVp0QSKHjZrl47IaioHauMGUUy0JH53PB
+	IGNQmX7B0Tz6rAncra7jaaDSAJ7WtX4LtlyEzCvSRKlfgcy0hTv80x1j1MptxfP7rl6TNLEchgf
+	qMlL0VWUt1RFZAMsxBBT09lGaP2EUMGBHJXrZJzMotm762SK29zC3EfMfXAnBBVjNWfo+DIUzU6
+	oLQmhJ9KwtQOho8VDNhzOAPitnDVdV5HNX5CXo7ExIcLKFiNpzJA9REs6d976Rtgziw+3VxI1Wn
+	kpzPHJoR8jsFltJY5cz+xHhRjvUdFwFyzr9cyH3FAYs/CoBzOAicnrmGZMj4vC9zYRb2QDhehLq
+	WTZuA/GYMhBOzvj8kTxv7lizTTk1/a/Nr9ZwgrJg6kMKI8/aza2RPIe8yYwKDuv1l90HaLbRH7a
+	IxlGMB1JFspzPdE81ABEnAV7l/jlq4gMFdfBPwnfeqYZWxuUW4djDmkig31xljlZOvHBbEvQRHW
+	YroHBvcRnpVPU0yhVBLDjYoz6agp8f1YtvPefSKH5AtX65g4TfonmO1GWoKn+j90NmMxNB8xvek
+	cdlL39m6c+VRT3oZgNz3A7Yr4yoVA8msPFgfB0ADWhIXReA=
+X-Received: by 2002:a05:600c:529a:b0:4a6:42cc:bf6c with SMTP id 5b1f17b1804b1-4b6de789187mr58252605e9.7.1793998323166;
+        Fri, 06 Nov 2026 12:52:03 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7da62edb4sm9075425e9.1.2026.11.06.12.52.05
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7da62edb4sm9075425e9.1.2026.11.06.12.52.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 12:52:05 -0800 (PST)
+        Fri, 06 Nov 2026 12:52:02 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -97,9 +97,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v1 bpf-next 06/18] selftests/bpf: Test fmod_ret BTF decl tags and attach permission
-Date: Fri,  6 Nov 2026 21:02:55 +0000
-Message-ID: <20261106210314.1767267-6-a.s.protopopov@gmail.com>
+Subject: [PATCH v1 bpf-next 03/18] bpf: Build fmod_ret target sets from BTF decl tags
+Date: Fri,  6 Nov 2026 21:02:52 +0000
+Message-ID: <20261106210314.1767267-3-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: 20261106205523.1765622-1-a.s.protopopov@gmail.com
 References: <20261106210314.1767267-1-a.s.protopopov@gmail.com>
@@ -114,183 +114,184 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check that resolve_btfids tags the fmod_ret targets of vmlinux and of
-bpf_testmod with "bpf_fmodret", that only bpf_fentry_test1 has the
-"bpf_fmodret_sleepable" tag, and that a function which is not a target
-has none.
+Mark functions tagged with the "bpf_fmodret{,_sleepable}" decl tags
+(added by resolve_btfids) as fmodret targets. Add the KF_SLEEPABLE flag
+for the latter.
 
-Load minimal fmod_ret programs to check that the kernel builds its
-target set from the tags: a target loads, a function which is not a
-target does not, and sleepable programs load only for the sleepable
-target.
+Do this for vmlinux at fs_initcall and for a module before its BTF
+becomes visible to anyone else, so nothing can look at the set while it
+is built.
+
+The IDs come from the BTF after relocation, so they are final. Unlike
+the IDs of a set registered by a module, they must not be relocated, and
+the set is installed directly instead of through btf_populate_kfunc_set().
+(The register_btf_fmodret_id_set() keeps working, it will be removed by
+a later patch.)
+
+The set shares kfunc_set_tab with the kfunc sets, but its flags only say
+how a target may be attached. Skip it in btf_kfunc_check_flag(), so a
+kfunc which is also an fmod_ret target keeps its own flags, such as
+KF_IMPLICIT_ARGS. Otherwise btf_attach_func_proto() finds the flags of
+such a kfunc inconsistent and attaching to it fails.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- .../selftests/bpf/prog_tests/fmodret_tags.c   | 155 ++++++++++++++++++
- 1 file changed, 155 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fmodret_tags.c
+ kernel/bpf/btf.c | 114 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 113 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fmodret_tags.c b/tools/testing/selftests/bpf/prog_tests/fmodret_tags.c
-new file mode 100644
-index 000000000000..62efe11af826
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/fmodret_tags.c
-@@ -0,0 +1,155 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 61d2df6776a9..2c45e5fa1d7b 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -9307,6 +9307,8 @@ enum {
+ };
+ 
+ #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++static int btf_register_fmodret_tags(struct btf *btf);
 +
-+#include <test_progs.h>
-+#include <linux/filter.h>
-+#include <bpf/btf.h>
+ struct btf_module {
+ 	struct list_head list;
+ 	struct module *module;
+@@ -9476,6 +9478,15 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 			}
+ 			goto out;
+ 		}
++		/*
++		 * Do this before the BTF is visible to anyone else. A failure
++		 * is not fatal: the module loads, but without fmod_ret targets.
++		 */
++		err = btf_register_fmodret_tags(btf);
++		if (err)
++			pr_warn("failed to register fmod_ret targets of module [%s]: %d\n",
++				mod->name, err);
 +
-+#define TAG_FMODRET		"bpf_fmodret"
-+#define TAG_FMODRET_SLEEPABLE	"bpf_fmodret_sleepable"
-+
-+static bool func_has_tag(const struct btf *btf, const char *func, const char *tag)
-+{
-+	int func_id, id, nr_types;
-+
-+	func_id = btf__find_by_name_kind(btf, func, BTF_KIND_FUNC);
-+	if (func_id < 0)
-+		return false;
-+
-+	nr_types = btf__type_cnt(btf);
-+	for (id = 1; id < nr_types; id++) {
-+		const struct btf_type *t = btf__type_by_id(btf, id);
-+
-+		if (!btf_is_decl_tag(t) || t->type != func_id ||
-+		    btf_decl_tag(t)->component_idx != -1)
+ 		err = btf_alloc_id(btf);
+ 		if (err) {
+ 			btf_free(btf);
+@@ -10100,7 +10111,9 @@ u32 *btf_kfunc_flags(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_p
+ }
+ 
+ /*
+- * Check a single KF_* @flag on a kfunc across all of its hook sets.
++ * Check a single KF_* @flag on a kfunc across all of its hook sets. The set of
++ * fmod_ret targets is not one of them: its flags only say how a target may be
++ * attached, and a kfunc which is also a target keeps its own flags.
+  * Returns:
+  *   * 1 if @flag is set
+  *   * 0 if @flag is not set
+@@ -10115,6 +10128,8 @@ int btf_kfunc_check_flag(const struct btf *btf, u32 kfunc_btf_id, u32 flag)
+ 	u32 *flags;
+ 
+ 	for (hook = 0; hook < BTF_KFUNC_HOOK_MAX; hook++) {
++		if (hook == BTF_KFUNC_HOOK_FMODRET)
 +			continue;
-+		if (!strcmp(btf__name_by_offset(btf, t->name_off), tag))
-+			return true;
-+	}
+ 		flags = btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
+ 		if (!flags)
+ 			continue;
+@@ -10182,6 +10197,103 @@ int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
+ }
+ EXPORT_SYMBOL_GPL(register_btf_kfunc_id_set);
+ 
++/*
++ * Targets of fmod_ret programs are marked in BTF by resolve_btfids, see
++ * BTF_SET8_FMODRET. A "bpf_fmodret" decl tag on a function makes it a target.
++ * A target which sleepable programs may attach to also has a
++ * "bpf_fmodret_sleepable" tag, which never comes without "bpf_fmodret".
++ */
++#define BTF_FMODRET_TAG			"bpf_fmodret"
++#define BTF_FMODRET_SLEEPABLE_TAG	"bpf_fmodret_sleepable"
 +
-+	return false;
++/* Return the function which T tags with decl tag NAME, or 0 */
++static u32 btf_fmodret_tag_func(const struct btf *btf, const struct btf_type *t,
++				const char *name)
++{
++	const struct btf_type *func;
++
++	if (!btf_type_is_decl_tag(t) || btf_type_decl_tag(t)->component_idx != -1)
++		return 0;
++	if (strcmp(btf_name_by_offset(btf, t->name_off), name))
++		return 0;
++	func = btf_type_by_id(btf, t->type);
++	if (!func || !btf_type_is_func(func))
++		return 0;
++	return t->type;
 +}
 +
-+static void test_vmlinux_tags(void)
++/* Build the set of fmod_ret targets of BTF from its decl tags */
++static int btf_register_fmodret_tags(struct btf *btf)
++{
++	u32 id, func_id, nr_types = btf_nr_types(btf), cnt = 0;
++	struct btf_kfunc_set_tab *tab;
++	struct btf_id_set8 *set;
++
++	for (id = btf_start_id(btf); id < nr_types; id++)
++		cnt += !!btf_fmodret_tag_func(btf, btf_type_by_id(btf, id), BTF_FMODRET_TAG);
++	if (!cnt)
++		return 0;
++
++	set = kmalloc(struct_size(set, pairs, cnt), GFP_KERNEL | __GFP_NOWARN);
++	if (!set)
++		return -ENOMEM;
++	set->flags = 0;
++	set->cnt = 0;
++	for (id = btf_start_id(btf); id < nr_types; id++) {
++		func_id = btf_fmodret_tag_func(btf, btf_type_by_id(btf, id), BTF_FMODRET_TAG);
++		if (!func_id)
++			continue;
++		set->pairs[set->cnt].id = func_id;
++		set->pairs[set->cnt].flags = 0;
++		set->cnt++;
++	}
++	sort(set->pairs, set->cnt, sizeof(set->pairs[0]), btf_id_cmp_func, NULL);
++
++	/* Each sleepable tag marks a function which is already in the set */
++	for (id = btf_start_id(btf); id < nr_types; id++) {
++		struct btf_id_set8_pair *pair;
++
++		func_id = btf_fmodret_tag_func(btf, btf_type_by_id(btf, id),
++					       BTF_FMODRET_SLEEPABLE_TAG);
++		if (!func_id)
++			continue;
++		pair = btf_id_set8_entry(set, func_id);
++		if (pair)
++			pair->flags |= KF_SLEEPABLE;
++	}
++
++	tab = btf->kfunc_set_tab;
++	if (!tab) {
++		tab = kzalloc_obj(*tab, GFP_KERNEL | __GFP_NOWARN);
++		if (!tab) {
++			kfree(set);
++			return -ENOMEM;
++		}
++		btf->kfunc_set_tab = tab;
++	}
++	if (tab->sets[BTF_KFUNC_HOOK_FMODRET]) {
++		kfree(set);
++		return -EEXIST;
++	}
++	tab->sets[BTF_KFUNC_HOOK_FMODRET] = set;
++	return 0;
++}
++
++static int __init btf_fmodret_tags_init(void)
 +{
 +	struct btf *btf;
++	int err;
 +
-+	btf = btf__load_vmlinux_btf();
-+	if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
-+		return;
++	btf = btf_get_module_btf(NULL);
++	if (IS_ERR_OR_NULL(btf))
++		return PTR_ERR_OR_ZERO(btf);
 +
-+	ASSERT_TRUE(func_has_tag(btf, "bpf_modify_return_test", TAG_FMODRET), "modify_return_test");
-+	ASSERT_TRUE(func_has_tag(btf, "bpf_modify_return_test2", TAG_FMODRET),
-+		    "modify_return_test2");
-+	ASSERT_TRUE(func_has_tag(btf, "bpf_modify_return_test_tp", TAG_FMODRET),
-+		    "modify_return_test_tp");
-+	ASSERT_TRUE(func_has_tag(btf, "bpf_fentry_test1", TAG_FMODRET), "fentry_test1");
-+	ASSERT_TRUE(func_has_tag(btf, "update_socket_protocol", TAG_FMODRET),
-+		    "update_socket_protocol");
-+
-+	/* Only bpf_fentry_test1 is a sleepable target */
-+	ASSERT_TRUE(func_has_tag(btf, "bpf_fentry_test1", TAG_FMODRET_SLEEPABLE),
-+		    "fentry_test1_sleepable");
-+	ASSERT_FALSE(func_has_tag(btf, "bpf_modify_return_test", TAG_FMODRET_SLEEPABLE),
-+		     "modify_return_test_sleepable");
-+	ASSERT_FALSE(func_has_tag(btf, "bpf_modify_return_test2", TAG_FMODRET_SLEEPABLE),
-+		     "modify_return_test2_sleepable");
-+	ASSERT_FALSE(func_has_tag(btf, "bpf_modify_return_test_tp", TAG_FMODRET_SLEEPABLE),
-+		     "modify_return_test_tp_sleepable");
-+	ASSERT_FALSE(func_has_tag(btf, "update_socket_protocol", TAG_FMODRET_SLEEPABLE),
-+		     "update_socket_protocol_sleepable");
-+
-+	/* A function which is not a target has no tag */
-+	ASSERT_GT(btf__find_by_name_kind(btf, "bpf_fentry_test2", BTF_KIND_FUNC), 0,
-+		  "fentry_test2_exists");
-+	ASSERT_FALSE(func_has_tag(btf, "bpf_fentry_test2", TAG_FMODRET), "fentry_test2");
-+	ASSERT_FALSE(func_has_tag(btf, "bpf_fentry_test2", TAG_FMODRET_SLEEPABLE),
-+		     "fentry_test2_sleepable");
-+
-+	btf__free(btf);
++	err = btf_register_fmodret_tags(btf);
++	btf_put(btf);
++	return err;
 +}
++fs_initcall(btf_fmodret_tags_init);
 +
-+static void test_module_tags(void)
-+{
-+	struct btf *vmlinux_btf, *module_btf;
-+
-+	if (!env.has_testmod) {
-+		test__skip();
-+		return;
-+	}
-+
-+	vmlinux_btf = btf__load_vmlinux_btf();
-+	if (!ASSERT_OK_PTR(vmlinux_btf, "btf__load_vmlinux_btf"))
-+		return;
-+	module_btf = btf__load_module_btf("bpf_testmod", vmlinux_btf);
-+	if (!module_btf && errno == ENOENT) {
-+		printf("%s:SKIP:bpf_testmod has no BTF\n", __func__);
-+		test__skip();
-+		goto out;
-+	}
-+	if (!ASSERT_OK_PTR(module_btf, "btf__load_module_btf"))
-+		goto out;
-+
-+	ASSERT_TRUE(func_has_tag(module_btf, "bpf_testmod_trampoline_count_test", TAG_FMODRET),
-+		    "trampoline_count_test");
-+	ASSERT_FALSE(func_has_tag(module_btf, "bpf_testmod_trampoline_count_test",
-+				  TAG_FMODRET_SLEEPABLE), "trampoline_count_test_sleepable");
-+	ASSERT_FALSE(func_has_tag(module_btf, "bpf_testmod_fentry_test1", TAG_FMODRET),
-+		     "testmod_fentry_test1");
-+
-+	btf__free(module_btf);
-+out:
-+	btf__free(vmlinux_btf);
-+}
-+
-+/* Load a minimal fmod_ret program which attaches to function BTF_ID */
-+static int load_fmod_ret(int btf_id, __u32 prog_flags)
-+{
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts,
-+		.expected_attach_type = BPF_MODIFY_RETURN,
-+		.prog_flags = prog_flags,
-+		.attach_btf_id = btf_id,
-+	);
-+
-+	return bpf_prog_load(BPF_PROG_TYPE_TRACING, NULL, "GPL", insns, ARRAY_SIZE(insns), &opts);
-+}
-+
-+static void check_load(const char *func, __u32 prog_flags, bool allowed, const char *name)
-+{
-+	int btf_id, fd;
-+
-+	btf_id = libbpf_find_vmlinux_btf_id(func, BPF_MODIFY_RETURN);
-+	if (!ASSERT_GT(btf_id, 0, func))
-+		return;
-+	fd = load_fmod_ret(btf_id, prog_flags);
-+	if (allowed)
-+		ASSERT_GE(fd, 0, name);
-+	else
-+		ASSERT_LT(fd, 0, name);
-+	if (fd >= 0)
-+		close(fd);
-+}
-+
-+static void test_attach_permission(void)
-+{
-+	check_load("bpf_modify_return_test", 0, true, "target");
-+	check_load("bpf_fentry_test1", 0, true, "sleepable_target");
-+	check_load("bpf_fentry_test2", 0, false, "not_a_target");
-+
-+	check_load("bpf_fentry_test1", BPF_F_SLEEPABLE, true, "sleepable_prog_sleepable_target");
-+	check_load("bpf_modify_return_test", BPF_F_SLEEPABLE, false,
-+		   "sleepable_prog_nonsleepable_target");
-+}
-+
-+void test_fmodret_tags(void)
-+{
-+	if (test__start_subtest("vmlinux"))
-+		test_vmlinux_tags();
-+	if (test__start_subtest("module"))
-+		test_module_tags();
-+	if (test__start_subtest("attach_permission"))
-+		test_attach_permission();
-+}
+ /* This function must be invoked only from initcalls/module init functions */
+ int register_btf_fmodret_id_set(const struct btf_kfunc_id_set *kset)
+ {
 -- 
 2.43.0
 
