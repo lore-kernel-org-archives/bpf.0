@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022702;
-	b=5i8rM4QaRHdYIdPrT+RREqJ1OwzfnE7fK0Ke4jrr1pNmQROdYTGVhE12ayN7ry0eOP5S
-	 NTeamGgW6pojpc6d6y0+GUR5ofoWoak2bTFDJL+oTIYzcIJYFeWv5GVlt2Y5JuWJu4puh
-	 axinQxaXAw8FiEIPhtVHezB6A5PoYT33/nY29i9uuqhatv1IUWf1tH3D3as6XHHL30nn7
-	 XKk3UOecNL4V6OrMpMeb9W76uwh9/2elChD0UsRauSYG/ePtr5jfUp6WWHLnbxuuqRrQe
-	 c/qnSofsbr4Pvzzp//gmLZWuYfb2H82tdQkD75Ov/+r2Fd72Ko4za1MzdgLslOn2BtA==
+	t=1794022708;
+	b=LoJbxdsGI4mhkJA+L0E71NstMvsgK87w81g+2Rx0IU2c7mcO0Hb7o7TnZzj3BWszHIL8
+	 tx+MLgzCS4n8sruJw5s/LFFBiKR1uNkvy3VnUN5gYrLkLA/77ipuoz2FV3Vcs9EdHDlIb
+	 A+Yi6arN6my2UytudAeqOXVEGodtas26NBAxjitraltEYL/OJALfSKVQNxVtJg3/4T8yk
+	 grE4dYjP6Kr5rtOF1Lfgt7wQUYDM4vYSnoAnHyYoiexfFK/BiFfWn97/9e/PfUr8B2Qq5
+	 SeU8oTC8MjrmANENqRHqsgsD5YtnR8cWrS7oSROSMItDPejCkYjIJGonifs7xr6hvwQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022702;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022708;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Icb5WHmpev+5C+tDPzer6/En0TMok2+H9fCw1XDuxFk=;
-	b=iCA2Z2eVK7FC20yInvt+XtRwKZUGG9/l4xDpqmTub3XIm+tT9WOBlk9NwR50w9ubpz7v
-	 JKbycWecCumYY5Ttfc9qwBEQ+7G0mqWMb7ERStCGDbyHE7cCpFOi6554aifWYtNas+TRN
-	 3vd6nXC/1uPl3kt7vum58V/fvygUEbl0VZ2/vB9jcvUN2FKDokCZ+tRcxFf47Z0ztErEY
-	 3l5pxPNDbmEzxSG8oVwuCtfOXEufog8GLs92k4t7BewLQXGrb3R5TWEBCR3j7bJz9Zt4G
-	 jiUuiPUpT/zqwKcO6t47imoIecjBspwOM3W22gU2Syj7nCmgTrStJ49tL/NFRKS2sOQ==
+	bh=TlRGQhZUGfmsumGLL+6gjl2myb0nThdw8OnaMGOl8r0=;
+	b=LtNiTN+Bln3h1vEKU+zekc4o0PPGuqark9zEK5WiYxBeYz3lKniEl+/p2yqhouqRY87B
+	 OcXSgVIfoY4Pbh/fwcGW0rC8oBqBh/OF3mvT+Y0HkDDUqHxEMKmd3HClShqFvfkbN74oD
+	 h0s9wIkEA+x2orPA3wJW/QDF7bC+xSQFLGUBbsPKYHbMCwhV1YtrNmEfYcxg413T8G9y/
+	 rsP10tePPjxCAlWDMg2ex9VR0SL4rKVUtkjwJ7El+BPccd7CB6poe0uqDYR3BC1vLSX4u
+	 QUzutMFOQkBcrX8ecFR5f41vWYVI9NlnlqeTVPhStHHL5LvQEEL1+OhmDWFMB1Zjw3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xVXZupBJ;
-	arc=none smtp.remote-ip=209.85.216.43
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MZgUBUX8;
+	arc=none smtp.remote-ip=209.85.214.174
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61F6606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:38:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E61F6606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B2E606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:38:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F3B2E606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xVXZupBJ
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ac78f4c10bso606523a91.1
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:38:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MZgUBUX8
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e942864693so7329975ad.1
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:38:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794022701; x=1794627501; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794022707; x=1794627507; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Icb5WHmpev+5C+tDPzer6/En0TMok2+H9fCw1XDuxFk=;
-        b=xVXZupBJlLgsUagl/ZD2/tdjQXKMNOOTc5eK+pb3W8nyt4z+7U0uFmn1DCgpMQjIbf
-         4UGGNK9EWqUDdiHBuAuv+kpm8bljH/1iIPSHsoHAaMDWWrIkEBOL0SFAQYmWCF9Pj0uk
-         ZSAR0CgDcBC4ktMfS83+FDc9BWXy4m9ZxLcQl1ujVQBhPW1e+lUVlvl4io/lzM88Gddr
-         zLjkuZnAIyK0OwxH4gPHUniPP64hxINEZ2SrXbg+Gf7N00LsNQkSXtOC04X2kkbDP3ew
-         6RrGJoz2xmFJdFTaepLV9Q7ul2t5L2C3YAByxAd+8bBE35VRHzTOcm4ynV1ZyF18UdIp
-         c6Tw==
+        bh=TlRGQhZUGfmsumGLL+6gjl2myb0nThdw8OnaMGOl8r0=;
+        b=MZgUBUX86fpnGe/Ap3aKr8OnGrMxgfzSgA5RowJFhCrVxMNCDFeAKJmq/i0hg+2/pY
+         YgiUjcfdu+hr0HKJqYkLIsSQMrbHaIVwZOXKNIIhwFAHQJ3Kr/CJDGv2HxOsXvpV2B4W
+         yN+PFFAPW8seagTf/m570B5bykJxFObosuZCFJHUHxR6uELaOLQNjTCb5/QkLlxVRpgh
+         rau4n8oBk886PdTMUkaeWI9WbFId1eU/ftORPA90rgCl4FjfB61cv99RbNre1ekrCngL
+         eY8XwNjhq5RY9ifOkzICagQOVrmRh2ie95Q3Ck/2gHLHBN6okdFsnASkeUeL2bnJAKsW
+         oSuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022701; x=1794627501;
+        d=1e100.net; s=20260707; t=1794022707; x=1794627507;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Icb5WHmpev+5C+tDPzer6/En0TMok2+H9fCw1XDuxFk=;
-        b=xKxXP7jM+6pDfKBivoj2Vn2WUGPD9ht7pUv4sd+kB6+rROkLPU47kWuvlqfx55ilSC
-         XWMjHbcTsWlPzaAdYgyfXpU4zIhXRYHq3fOZdDwFNU3QWloxsiXPDN1LyQUn+YMyFYXf
-         f9hniLXBenAFI5RN3cVVHxMN4YknA44RIlFPd3Li3hrR+eEN81tDGL0CDLBFRwRx8VBj
-         94kGmpm/s8zoYtNLw1xomgrtzjJiCNgY/FBHcozml4SYSxDrDAOoz1hEDrSJx5Yuk6ai
-         7loc2WznXJZ6hUZeCrXXM/RcRt4Tot9cyg06U4mZY1q0D9z1RsPExF4teWY71UZGunCi
-         5QZA==
-X-Gm-Message-State: APuU4Z9WSdDFWKU21zBZks43IvlFiFs7qWdnwt3pAfqJf92/AH1VXFIA
-	7E0/5864yNVl+XggSRJ7XxqGHqWWbEyHli7H4oe+z+DCUtiX9J4BFUgAutLWCw==
-X-Gm-Gg: AYBFou14HT1UMg4OLNToGXqEaHNJGNtGLtXYWCsnkjPBEbmGMzXzr2Mh8mGC7STZJAz
-	16SyiTUbpSWemJn0ECtbuAW4WhhMiMLbYN6FUVHUzVQQh+4Gs8YpGKnZhd2Cv49HHI5GGx/3PpT
-	nD+F0Y+2pvLhsAAo24ZDushMyvgvNu3dT/37EE4bt/78YLK/N1ilIHyJEUrIu3TdjaxoUQGe++Q
-	EMdst6w3c5Dknis9VAohmap8Ec5HagN/uVUJny/Pry6tszsg9AhXsbsNlXsqc2QtU1G9Fg8VgNb
-	dJS+6DAb6OstGSu5Wmy/8mxK2Sev1U05WY0uQIPjvK05vbizr8HBDzPWR7Awx3VYRYRFNRKfrxj
-	FGnhoHYO77Pga/Ssy69WNKzgIm9CkaHGAqT6c8+Qstnl90lTgcDazFQWMNloP3BBc1Eo0xIzXW4
-	layApmCLsmUvbBetU4u1NtHkkeiZNZ92FcEmWeCe5MQn6mjk+ghET2uP2nlp3G1fWzJqTVgJPnq
-	CIpjC+Vd4/CMBPLPmoyBhb0Nw3wyF293U8js97zdyAgM6TXrPoK6Yzf/lLdT+fvmTwCYzWd91Ed
-	qDGv7Q6dzDrcp1nMZb4TM03yeF36it5967XLsagCAdbD8zhnd92SNfnaj/j2opWvtiqmFvHUvUb
-	NXOyAAfopk603dJmO5oHAXtiwDP0zd8VsCoGbpfDPkRKoVK+j/6VeHs4YghrU2dJSnTgUOhl8xA
+        bh=TlRGQhZUGfmsumGLL+6gjl2myb0nThdw8OnaMGOl8r0=;
+        b=YqXP2uv0yyGYKnkwT6o1p18b6Wdj6K/gTGVpZ2Df1+3NgNaM6GxDZaeM0jAXF47ZuK
+         bVjf9kZC4YnyEf7gezzrfzcVnOqIAiWzPcVYuNrLvuFrSQuREjt0bNVmJRhfQXExSg4P
+         dbO3EK+ct0Jb/D+U7q4xi2XxZPUSEwfGP5JSlB/OVfNnD+OHUvIC32Ze3VRpCRHlVkCr
+         Ilx5o0cjdVhypufg4O/oZqKW+LYkgj+zcQzb6sLQ4SEIqH6qZYNzgLduf6UhzLe4pnQ4
+         y/36Dax+gIZ3hYIPo2PI8NKCbgaE3ThLybZhzvK2AQc07J8vd8HrGxP1LYY8wdc0pOK0
+         PpLQ==
+X-Gm-Message-State: APuU4Z/1hPVHTGaS4OrtNixstUzZtJRhDOEbDEuThSmI155iAjtYpPCE
+	3LpA6VMh/1qVIg0sknY0Hx22rUIuwJoWIqczX4Z5Y6xxTIw2SDavINuucvW0Iw==
+X-Gm-Gg: AYBFou2pXr9Og0+K8q9o4wcgICS+fHpK+Z4ckDX62GjbV9Qd0R1lgD6DGT5WoVm0C9N
+	aaQi2h90Ub5Aa1iV4jRigVfYVo7rOZxp7eyVaSfRH2okuEz6cqcSN7/NM5voT5HdDG7saffVLjC
+	Ish2NQGLcWA7Q4NXL7Ex76R0LAOVo0GDBxsF3FwUDeNOxU1uH4P005gu3WBCQ5542NNKYZsXw9V
+	07UPT5jH1W3+6kwCnOa50FQ9dkFLlyPUCBlikcUHpmVY1/vFoPf7aA+28TlHvNX3WKmYzOEvjDb
+	JseuGdUsDjYaUVyhiGclyBfY2ELhTQxoLi/07hEAgmedrX5h6kFRVciVlKPrzT97KQQafb40bZl
+	ZcGuFwpQ2EwLbtUQOO04NCbWDayIrT09mEADGwLgyaEBJfjoHyqDD1uMV1oWd2KI81UQBnIJKfP
+	xti6d2PI/OdNzMe/hLg4jIlkE/UcVebfWnijXlqidky0bNlEIu6efQLY6z9FxcPUif0Ps6irEnB
+	rTiOQSWWkxu5+gRxoar+7cc1U12GsPZga3/zsXawOtm/7iRYFLoicPDCnX4NTjKvsE9wLMX7jaL
+	3F38PbpmA9ACK2A7+xSE+P9zZN4HT7CebwRGOlNaSNg5gHR5RoJhlHrBV2yjw+5vsr/CIDPg5fu
+	S2Vwt/o+pWVCYEKhynujSHiZTUpkwVI/DIkdadEOEFF/ijPMpbLhStA6CM9mWwF0VMbFFpUYOmQ
 	==
-X-Received: by 2002:a17:90b:33d2:b0:3a0:e4ce:31fd with SMTP id 98e67ed59e1d1-3b0db6d367bmr4317055a91.10.1794022700913;
-        Fri, 06 Nov 2026 19:38:20 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed477a9067sm10430965ad.15.2026.11.06.19.38.18
+X-Received: by 2002:a17:903:37c6:b0:2ed:2a1d:e36d with SMTP id d9443c01a7336-2ed40c7b5e1mr51071685ad.36.1794022706951;
+        Fri, 06 Nov 2026 19:38:26 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47d5f226sm10219685ad.44.2026.11.06.19.38.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 19:38:18 -0800 (PST)
+        Fri, 06 Nov 2026 19:38:26 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v4 03/46] bpf: Add union and widening of the range of a register
-Date: Sat,  7 Nov 2026 03:37:11 +0000
-Message-ID: <20261107033758.1547725-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v4 04/46] bpf: Add join of registers and stack slots
+Date: Sat,  7 Nov 2026 03:37:12 +0000
+Message-ID: <20261107033758.1547725-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
@@ -104,212 +104,612 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-format_cgrp_path() of scx_layered, prog layered_runnable:
+ipv6_hdrlen_offset() of Cilium skips extension headers, unrolled:
 
-  u32 len = 0;
-  bpf_for(level, 1, max_level + 1) {
-          if (level > 1 && len < MAX_PATH - 1)
-                  path[len++] = '/';
-          ...
-          len += ret - 1;
+  for (i = 0; i < IPV6_MAX_HEADERS; i++) {
+          int hdrlen = ipv6_skip_exthdr(ctx, &newnh, l3_off + len);
+          ...  8, (opthdr->hdrlen + 2) << 2 or (opthdr->hdrlen + 1) << 3
+          len += hdrlen;
   }
 
-The verifier follows each path, and its work grows with the number of
-paths. To make it grow with the size of the prog, the states that meet at
-an insn must become one state. Then the loop head has one state for all
-iterations. len in it is the union of what arrives: 0 from above, more
-after each pass through the loop, and the passes do not end. Widening ends
-them: the bound that moved is put far out at once, and the jumps in the
-loop make the range small again. The compiler tests len in 32 bits:
+The verifier follows each path. Three lengths for each header: the insn
+behind this loop is verified 76 times, and each time the rest of the prog
+follows, where more paths fork. tail_nodeport_nat_ingress_ipv6 of bpf_xdp,
+as of May 2026, has 4095 insns, the verifier processes 182050.
 
-  len at the head  after 'if w7 > 0xffe'    path[len++] = '/'
-  [0, S64_MAX]     [0, 0x7fffffff00000ffe]  R2 unbounded memory access
-  [0, U32_MAX]     [0, 4094]                ok
+Add the join of two states: one state that covers the two. Here hdrlen is
+[8, 2048]. A caller that replaces two states with their join verifies the
+code that follows one time. This prog: 3 times in place of 76, 7932 insns.
+This is the first half of join.c: ids, registers, stack slots.
 
-A 32-bit compare cannot bring back what widening to 64 bits threw away.
-Thus bpf_reg_widen_range() moves a bound to the nearest of a few stops: 0,
-S32_MAX, U32_MAX, S64_MAX above it, 0, S32_MIN, S64_MIN below. A stop is
-a guess, and a guess that fails costs one more pass. No jump holds sum in
-'sum += a[i]; if (sum == 77) ..'. After S32_MAX it can still have 32 bits:
-U32_MAX holds it. A bound that was at S32_MAX, U32_MAX or S32_MIN and
-leaves 32 bits gets no other stop: [0, S64_MAX] wraps in the next pass. The
-number is unknown: btree_set_ops of rust-bpf, 251722 -> 230969 insns.
+Only numbers are joined: scalars, and the variable offsets of pointers. A
+join loses information. Where the prog needs it there is no join, and the
+caller keeps the two states:
+ - map value + 8 and map value + 16: two fields, not a range
+   scx_rusty: create_save_cpumask(&kptr) for three kptrs in .data
+   "R1 doesn't have constant offset. kptr has to be at the constant offset"
+ - packet pointers that are checked up to different ends
+   Cilium: l4_csum_replace(ctx, l4_off + csum->offset, ..)
+   "invalid access to packet": 206 progs of bpf_xdp in 37 builds of Cilium
+ - a scalar and a pointer, pointers to two objects: of no use to a prog
 
-rusty_dispatch of rust-bpf: 'r9 += 1; if r9 < r8 goto' with r8 from memory.
-2, [2, S32_MAX], [2, U32_MAX], unknown: 4 passes. Scalar evolution knows
-that each iteration adds a constant to r9: @linear. Such a number goes on
-until it wraps. It is unknown at once, or [0, U32_MAX] if it is computed in
-32 bits: 2 passes, 788 -> 536 insns.
+Each path makes its own ids. An id in the join stands for a pair: the id
+in state a and the id in state b. The pairs must be one to one, as in
+check_ids(). If not, a scalar loses its id, and a pointer has no join.
+ - 'bpf_for(i, 0, 10) sum += i;' of iters_num: each bpf_iter_num_next()
+   returns a pointer with a new id. If ids had to be equal, the main pass
+   says "more than 1024 states that cannot be joined at insn 16".
+ - scx_pandemonium: 'if (.. && (u32)src_cpu < MAX_CPUS) pair_warm_ns[..]'
+   tests r5 and indexes with its copy in fp-88. Paths meet between copy
+   and test. A join without ids: "R3 unbounded memory access".
 
-bpf_reg_union_range() is the union, without the reg_bounds_sync() of
-bpf_reg_union(): an input is not always in sync. It keeps the step of
-a number. clang counts 'for (i = n; i >= 0; i--) sum += a[i];' in bytes:
-'r2 += -4; if r2 != -4 goto'. n is a range, so '!=' gives no count. r2
-stops at -4 only because it is a multiple of 4. a + s * k and b + t * k are
-both of the form a + gcd(s, t, a - b) * k. A step gives way to one of its
-divisors only: it needs no widening. Nothing calls this code yet.
+With 'widen', at a loop head, a scalar that grew is widened. If each
+iteration adds a constant to it, it becomes an unknown scalar of 64 or 32
+bits at once: scev_compute_linear_regs() sets linear_regs, linear32_regs of
+struct bpf_loop for that. So does sum of bpf_for() above: it is a register
+plus or minus something (expr_is_sum()), and no jump of the loop depends on
+it (tested_regs). 0, [0, S32_MAX], [0, U32_MAX], unknown are 4 passes
+through the body, this is 2: 59 -> 43 insns. If a jump depends on the sum
+the stops stay. A pointer whose offset grew has no join: no later
+comparison gives it a bound.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  11 ++++
- kernel/bpf/verifier.c        | 108 +++++++++++++++++++++++++++++++++++
- 2 files changed, 119 insertions(+)
+ include/linux/bpf_verifier.h |  11 +
+ kernel/bpf/join.c            | 400 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/scev.c            |  75 +++++++
+ 3 files changed, 486 insertions(+)
+ create mode 100644 kernel/bpf/join.c
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 2f935061b8fd..79faf084cbcd 100644
+index 79faf084cbcd..749ebb1ad489 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1341,6 +1341,7 @@ struct bpf_verifier_env {
- 	struct bpf_iarray *gotox_tmp_buf;
- 	int *idoms;
- 	struct scev *scev;
-+	struct bpf_join_state *join;
+@@ -760,6 +760,17 @@ struct bpf_loop {
+ 	 * loops.
+ 	 */
+ 	unsigned long store_base_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
++	/*
++	 * Loop-entry registers used to compute the operands of conditional jumps, in this and
++	 * nested loops.
++	 */
++	unsigned long tested_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
++	/*
++	 * what gets a constant added in every iteration, in 64 and in 32 bits. A sum that is
++	 * not among tested_regs is taken for that too: nothing stops it either
++	 */
++	unsigned long linear_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
++	unsigned long linear32_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
  };
  
- static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_env *env, int subprog)
-@@ -1531,6 +1532,13 @@ void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab);
- int mark_chain_precision(struct bpf_verifier_env *env, int regno);
- 
- int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx);
+ struct bpf_insn_aux_data {
+diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
+new file mode 100644
+index 000000000000..fe513b7a8e88
+--- /dev/null
++++ b/kernel/bpf/join.c
+@@ -0,0 +1,400 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Join of verifier states.
++ *
++ * bpf_states_join(dst, a, b) computes the state that describes every concrete
++ * state described by 'a' or by 'b'. With @widen a number that is larger in the
++ * result than in 'a' gets the bound that moved put further out, so that a sequence
++ * of states at a loop head ends. A pointer whose offset is larger has no join.
++ *
++ * Numbers and offsets of pointers are joined. A pointer and a number, pointers
++ * to different objects, different references and locks are not: there is no
++ * join and the states stay apart.
++ *
++ * The contract is checked on every call: both inputs have to be within the
++ * result, see bpf_state_subsumes(). A violation is a verifier bug.
++ *
++ * Inputs have to be at the same insn and cleaned with
++ * bpf_clean_verifier_state(): dead registers and stack slots are the same on
++ * both sides then, but for dynptrs, iterators and irq flags: they stay.
++ */
++#include <linux/bpf.h>
++#include <linux/bpf_verifier.h>
++#include <linux/cnum.h>
++#include <linux/tnum.h>
++#include <linux/filter.h>
++#include <linux/slab.h>
 +
-+/* join.c */
-+int bpf_states_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
-+		    const struct bpf_verifier_state *a, const struct bpf_verifier_state *b,
-+		    bool widen);
-+void bpf_join_free(struct bpf_verifier_env *env);
++struct join_idpair {
++	u32 a;
++	u32 b;
++	bool bad;
++};
 +
- int bpf_insert_loop_guards(struct bpf_verifier_env *env);
- bool bpf_edge_leaves_loop(struct bpf_verifier_env *env, int h, int n, int t);
- bool bpf_jump_leaves_loop(struct bpf_verifier_env *env, int h, int n);
-@@ -2059,6 +2067,9 @@ void bpf_trim_pkt_range(struct bpf_reg_state *reg, s64 smax);
- int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 		      struct cnum64 r64, struct cnum32 r32, u16 base, u16 step);
- bool bpf_reg_union_compatible(const struct bpf_reg_state *a, const struct bpf_reg_state *b);
-+void bpf_reg_union_range(struct bpf_reg_state *acc, const struct bpf_reg_state *src);
-+void bpf_reg_forget_range(struct bpf_reg_state *reg);
-+void bpf_reg_widen_range(struct bpf_reg_state *reg, const struct bpf_reg_state *old, int linear);
- int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
- 		  const struct bpf_reg_state *src);
- 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c16a20ab664d..801e4607a462 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18189,6 +18189,114 @@ bool bpf_reg_union_compatible(const struct bpf_reg_state *a, const struct bpf_re
- 	       a->id == b->id && a->parent_id == b->parent_id && a->map_uid == b->map_uid;
- }
- 
-+/* Nothing is known about the number or the variable part of the offset anymore. */
-+void bpf_reg_forget_range(struct bpf_reg_state *reg)
++struct bpf_join_state {
++	struct bpf_verifier_env *env;
++	struct join_idpair pairs[BPF_ID_MAP_SIZE];
++	u32 npairs;
++	bool pairs_overflow;
++	bool widen;
++	/* the states came around this loop in the frame that is joined, NULL if not */
++	const struct bpf_loop *loop;
++	/* the register or stack slot that is joined, as scalar evolution numbers it, or -1 */
++	int place;
++};
++
++static struct bpf_join_state *join_state(struct bpf_verifier_env *env)
 +{
-+	reg->var_off = tnum_unknown;
-+	__mark_reg_unbounded(reg);
-+	reg_step_reset(reg);
++	if (!env->join) {
++		env->join = kvzalloc_obj(*env->join, GFP_KERNEL_ACCOUNT);
++		if (env->join)
++			env->join->env = env;
++	}
++	return env->join;
++}
++
++void bpf_join_free(struct bpf_verifier_env *env)
++{
++	kvfree(env->join);
++	env->join = NULL;
 +}
 +
 +/*
-+ * @reg is what @old became after a trip around a cycle, @old included. The end
-+ * of the range that moved is going to move again. Put it where it may come
-+ * to rest. There are few such places, so this is done a few times at most.
-+ * It's put at the nearest of these places: every value between the range and the place is
-+ * made up, and the program is checked with it. Wherever it's put, the range only gets larger.
-+ * @linear: every iteration adds a constant to it, in that many bits. Then nothing but a jump
-+ * stops it. It goes on until it wraps, and is any number of that many bits.
++ * An id in the result stands for the pair (id in 'a', id in 'b'). For the
++ * result to be within both inputs the pairs have to form a bijection,
++ * see check_ids(). The first pass over all locations records the pairs. An id
++ * seen with two partners makes all pairs it takes part in bad.
++ * The second pass keeps the id of 'a' for good pairs.
 + */
-+void bpf_reg_widen_range(struct bpf_reg_state *reg, const struct bpf_reg_state *old, int linear)
++static void jid_mark_bad(struct bpf_join_state *js, u32 a, u32 b)
 +{
-+	bool moved = reg->r64.base != old->r64.base || reg->r64.size != old->r64.size ||
-+		     reg->r32.base != old->r32.base || reg->r32.size != old->r32.size;
-+	s64 min = reg_smin(reg), max = reg_smax(reg);
++	u32 i;
 +
-+	/* Only the step got weaker. It comes to rest without help, see below. */
-+	if (!moved && reg->var_off.value == old->var_off.value &&
-+	    reg->var_off.mask == old->var_off.mask)
++	for (i = 0; i < js->npairs; i++)
++		if ((a && js->pairs[i].a == a) || (b && js->pairs[i].b == b))
++			js->pairs[i].bad = true;
++}
++
++static void jid_note(struct bpf_join_state *js, u32 ida, u32 idb, bool consistent)
++{
++	u32 a = ida & ~BPF_ADD_CONST, b = idb & ~BPF_ADD_CONST;
++	struct join_idpair *p;
++	bool other = false;
++	u32 i;
++
++	if (!a || !b)
 +		return;
-+
-+	if (linear && (max > reg_smax(old) || min < reg_smin(old))) {
-+		if (linear == 64 || min < 0 || max > U32_MAX) {
-+			bpf_reg_forget_range(reg);
++	for (i = 0; i < js->npairs; i++) {
++		p = &js->pairs[i];
++		if (p->a == a && p->b == b) {
++			if (!consistent)
++				jid_mark_bad(js, a, b);
 +			return;
 +		}
-+		min = 0;
-+		max = U32_MAX;
++		if (p->a == a || p->b == b)
++			other = true;
 +	}
-+	if (max > reg_smax(old))
-+		max = max <= 0 ? 0 :
-+		      max <= S32_MAX ? S32_MAX :
-+		      max <= U32_MAX ? U32_MAX : S64_MAX;
-+	if (min < reg_smin(old))
-+		min = min >= 0 ? 0 :
-+		      min >= S32_MIN ? S32_MIN : S64_MIN;
-+	if (min == S64_MIN && max == S64_MAX) {
-+		bpf_reg_forget_range(reg);
++	if (other) {
++		jid_mark_bad(js, a, b);
++		consistent = false;
++	}
++	if (js->npairs == ARRAY_SIZE(js->pairs)) {
++		js->pairs_overflow = true;
 +		return;
 +	}
-+	/*
-+	 * A fixed stop is a guess. A number of 32 bits that gets past S32_MAX comes to rest at
-+	 * U32_MAX. What gets past S32_MAX, U32_MAX or S32_MIN and out of 32 bits is stopped by
-+	 * nothing:
-+	 *	sum += a[i]; if (sum == 77) ...
-+	 * It wraps in the next pass, and the other bound is gone as well.
-+	 */
-+	if ((max == S64_MAX && (reg_smax(old) == S32_MAX || reg_smax(old) == U32_MAX)) ||
-+	    (min == S64_MIN && reg_smin(old) == S32_MIN)) {
-+		bpf_reg_forget_range(reg);
-+		return;
-+	}
-+	/* every part has to include what it did before, hence no reg_bounds_sync() */
-+	reg->r64 = cnum64_union(reg->r64, cnum64_from_srange(min, max));
-+	if (min >= 0 && max <= U32_MAX) {
-+		reg->r32 = cnum32_union(reg->r32, cnum32_from_urange(min, max));
-+		reg->var_off = tnum_union(reg->var_off, tnum_range(min, max));
-+	} else if (min >= S32_MIN && max <= S32_MAX) {
-+		reg->r32 = cnum32_union(reg->r32, cnum32_from_srange(min, max));
-+		reg->var_off = tnum_unknown;
-+	} else {
-+		reg->r32 = CNUM32_UNBOUNDED;
-+		reg->var_off = min >= 0 ? tnum_union(reg->var_off, tnum_range(min, max))
-+					: tnum_unknown;
-+	}
-+	/*
-+	 * No range moved: the known bits or the step got weaker. The step comes to rest without
-+	 * help: it gives way to one of its divisors only.
-+	 *	off = n * 4; do { sum += *(u32 *)(a + off); off -= 4; } while (off != -4);
-+	 * counts on "a multiple of 4".
-+	 */
-+	if (moved)
-+		reg_step_reset(reg);
++	p = &js->pairs[js->npairs++];
++	p->a = a;
++	p->b = b;
++	p->bad = !consistent;
 +}
 +
-+void bpf_reg_union_range(struct bpf_reg_state *acc, const struct bpf_reg_state *src)
++static bool jid_good(struct bpf_join_state *js, u32 ida, u32 idb)
 +{
-+	bool acc_const = cnum64_is_const(acc->r64), src_const = cnum64_is_const(src->r64);
-+	/* A constant is its own base. Its step is 0: every number divides 0. */
-+	s64 a = acc_const ? cnum64_smin(acc->r64) : acc->base;
-+	s64 b = src_const ? cnum64_smin(src->r64) : src->base;
-+	u16 step = gcd(acc_const ? 0 : acc->step, src_const ? 0 : src->step);
-+	s64 diff;
++	u32 a = ida & ~BPF_ADD_CONST, b = idb & ~BPF_ADD_CONST;
++	u32 i;
 +
-+	acc->r64 = cnum64_union(acc->r64, src->r64);
-+	acc->r32 = cnum32_union(acc->r32, src->r32);
-+	acc->var_off = tnum_union(acc->var_off, src->var_off);
-+
-+	/* a + s * k and b + t * k are both of the form a + gcd(s, t, a - b) * k */
-+	if (check_sub_overflow(a, b, &diff) || (!step && (diff > U16_MAX || diff < -U16_MAX)))
-+		step = 1;
-+	else
-+		step = (step ? gcd(step, imod(diff, step)) : abs(diff)) ?: 1;
-+	acc->step = step;
-+	acc->base = imod(a, step);
-+	/*
-+	 * No reg_bounds_sync(): every part of the result has to include that
-+	 * part of both inputs, and an input is not always in sync.
-+	 */
++	if (!a || !b || js->pairs_overflow)
++		return false;
++	if ((ida ^ idb) & BPF_ADD_CONST)
++		return false;
++	for (i = 0; i < js->npairs; i++)
++		if (js->pairs[i].a == a && js->pairs[i].b == b)
++			return !js->pairs[i].bad;
++	return false;
 +}
 +
- /*
-  * Extends acc's scalar range to include src's scalar range.
-  * Caller must ensure that other kinds of metadata is compatible.
++/* Ids that have to match: both zero, or a good pair */
++static bool jid_strict_ok(struct bpf_join_state *js, u32 ida, u32 idb)
++{
++	if (!ida && !idb)
++		return true;
++	return jid_good(js, ida, idb);
++}
++
++static bool range_equal(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
++{
++	return ra->r64.base == rb->r64.base && ra->r64.size == rb->r64.size &&
++	       ra->r32.base == rb->r32.base && ra->r32.size == rb->r32.size &&
++	       ra->var_off.value == rb->var_off.value && ra->var_off.mask == rb->var_off.mask &&
++	       ra->base == rb->base && ra->step == rb->step;
++}
++
++/* Does every iteration add a constant to what is in the place? In 64 or in 32 bits, 0 if not */
++static int join_place_is_linear(const struct bpf_join_state *js)
++{
++	if (!js->loop || js->place < 0 || js->place >= BPF_SCEV_REGS_NUM)
++		return 0;
++	return test_bit(js->place, js->loop->linear_regs) ? 64 :
++	       test_bit(js->place, js->loop->linear32_regs) ? 32 : 0;
++}
++
++/*
++ * Join of the range of two registers of the same type, numbers or pointers
++ * with variable offset. @dst is a copy of @ra. Returns false if there is no join.
++ */
++static bool join_range(struct bpf_join_state *js, struct bpf_reg_state *dst,
++		       const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
++{
++	if (range_equal(ra, rb))
++		return true;
++	bpf_reg_union_range(dst, rb);
++	if (!js->widen || range_equal(dst, ra))
++		return true;
++	/*
++	 * The bound of a number that grows around a cycle is put where it may come to rest. If
++	 * that is far out the number gets a bound again from the next comparison. The offset of
++	 * a pointer doesn't: there is no access through a pointer at an offset that is not
++	 * known. So there is nothing to gain from that join. If the offset stops to grow
++	 * the next state is within the last one.
++	 */
++	if (dst->type != SCALAR_VALUE)
++		return false;
++	bpf_reg_widen_range(dst, ra, join_place_is_linear(js));
++	return true;
++}
++
++static bool reg_fixed_part_equal(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
++{
++	return !memcmp(ra, rb, offsetof(struct bpf_reg_state, var_off));
++}
++
++static bool reg_value_equal(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
++{
++	return !memcmp(ra, rb, offsetof(struct bpf_reg_state, id));
++}
++
++static bool scalar_link_consistent(const struct bpf_reg_state *ra, const struct bpf_reg_state *rb)
++{
++	if ((ra->id ^ rb->id) & BPF_ADD_CONST)
++		return false;
++	if ((ra->id & BPF_ADD_CONST) && ra->delta != rb->delta)
++		return false;
++	return true;
++}
++
++/*
++ * Join two registers, regsafe() documents what each type needs.
++ * Pass 1 records id pairs, pass 2 computes @dst, which is a copy of @ra on entry.
++ * Returns false if there is no join.
++ */
++static bool join_reg(struct bpf_join_state *js, struct bpf_reg_state *dst,
++		     const struct bpf_reg_state *ra, const struct bpf_reg_state *rb, int pass)
++{
++	if (ra->type == NOT_INIT || rb->type == NOT_INIT) {
++		if (pass == 2 && ra->type != NOT_INIT)
++			*dst = *rb;
++		return true;
++	}
++
++	if (ra->type != rb->type)
++		return false;
++
++	switch (base_type(ra->type)) {
++	case SCALAR_VALUE:
++		if (js->env->explore_alu_limits && !reg_value_equal(ra, rb))
++			return false;
++		if (pass == 1) {
++			jid_note(js, ra->id, rb->id, scalar_link_consistent(ra, rb));
++			return true;
++		}
++		join_range(js, dst, ra, rb);
++		/* a link that exists on one side only is dropped */
++		if (ra->id && !jid_good(js, ra->id, rb->id)) {
++			dst->id = 0;
++			dst->delta = 0;
++		}
++		return true;
++	case PTR_TO_MAP_KEY:
++	case PTR_TO_MAP_VALUE:
++	case PTR_TO_MEM:
++	case PTR_TO_BUF:
++	case PTR_TO_TP_BUFFER:
++		if (!reg_fixed_part_equal(ra, rb))
++			return false;
++		/*
++		 * Two places in an object are two pointers: what is at a place
++		 * and how much is left behind it is lost in a range of them.
++		 */
++		if (!js->widen && tnum_is_const(ra->var_off) && tnum_is_const(rb->var_off) &&
++		    ra->var_off.value != rb->var_off.value)
++			return false;
++		break;
++	case PTR_TO_PACKET_META:
++	case PTR_TO_PACKET:
++		if ((ra->range < 0 || rb->range < 0) && ra->range != rb->range)
++			return false;
++		/* how much of the packet was checked goes with numbers elsewhere in the state */
++		if (!js->widen && ra->range != rb->range)
++			return false;
++		/*
++		 * Displacements between pointers that share an id are kept. No id is an id too:
++		 * the start of the packet plus a constant, see find_good_pkt_pointers().
++		 */
++		if (ra->r64.base != rb->r64.base)
++			return false;
++		if (pass == 1) {
++			jid_note(js, ra->id, rb->id, true);
++			return true;
++		}
++		if (!jid_strict_ok(js, ra->id, rb->id))
++			return false;
++		if (rb->range != ra->range)
++			dst->range = min(ra->range, rb->range);
++		return join_range(js, dst, ra, rb);
++	case PTR_TO_ARENA:
++		/* The offset is not tracked. */
++		return true;
++	case PTR_TO_INSN:
++		if (!reg_fixed_part_equal(ra, rb))
++			return false;
++		return pass == 1 || join_range(js, dst, ra, rb);
++	default:
++		if (!reg_value_equal(ra, rb))
++			return false;
++		break;
++	}
++
++	if (pass == 1) {
++		jid_note(js, ra->id, rb->id, true);
++		jid_note(js, ra->parent_id, rb->parent_id, true);
++		jid_note(js, ra->map_uid, rb->map_uid, true);
++		return true;
++	}
++	if (!jid_strict_ok(js, ra->id, rb->id) ||
++	    !jid_strict_ok(js, ra->parent_id, rb->parent_id) ||
++	    !jid_strict_ok(js, ra->map_uid, rb->map_uid))
++		return false;
++	return join_range(js, dst, ra, rb);
++}
++
++static bool slot_is_special(const struct bpf_stack_state *s)
++{
++	u8 t = s->slot_type[BPF_REG_SIZE - 1];
++
++	return t == STACK_DYNPTR || t == STACK_ITER || t == STACK_IRQ_FLAG;
++}
++
++static bool stype_is_invalid(u8 t)
++{
++	return t == STACK_INVALID || t == STACK_POISON;
++}
++
++static bool slot_has_spill(const struct bpf_stack_state *s)
++{
++	int i;
++
++	for (i = 0; i < BPF_REG_SIZE; i++)
++		if (s->slot_type[i] == STACK_SPILL)
++			return true;
++	return false;
++}
++
++static bool join_special_slot(struct bpf_join_state *js, const struct bpf_stack_state *sa,
++			      const struct bpf_stack_state *sb, int pass)
++{
++	const struct bpf_reg_state *ra = &sa->spilled_ptr, *rb = &sb->spilled_ptr;
++
++	if (memcmp(sa->slot_type, sb->slot_type, sizeof(sa->slot_type)))
++		return false;
++	switch (sa->slot_type[BPF_REG_SIZE - 1]) {
++	case STACK_DYNPTR:
++		if (ra->dynptr.type != rb->dynptr.type ||
++		    ra->dynptr.first_slot != rb->dynptr.first_slot)
++			return false;
++		break;
++	case STACK_ITER:
++		if (ra->type != rb->type || ra->iter.btf != rb->iter.btf ||
++		    ra->iter.btf_id != rb->iter.btf_id || ra->iter.state != rb->iter.state ||
++		    ra->iter.loops != rb->iter.loops)
++			return false;
++		break;
++	case STACK_IRQ_FLAG:
++		if (ra->irq.kfunc_class != rb->irq.kfunc_class)
++			return false;
++		break;
++	}
++	if (pass == 1) {
++		jid_note(js, ra->id, rb->id, true);
++		jid_note(js, ra->parent_id, rb->parent_id, true);
++		return true;
++	}
++	return jid_strict_ok(js, ra->id, rb->id) &&
++	       jid_strict_ok(js, ra->parent_id, rb->parent_id);
++}
++
++/*
++ * Join of one 8 byte stack slot, @ds is a copy of @sa on entry.
++ * stacksafe() documents which slot is within which.
++ */
++static bool join_slot(struct bpf_join_state *js, struct bpf_stack_state *ds,
++		      const struct bpf_stack_state *sa, const struct bpf_stack_state *sb, int pass)
++{
++	static const struct bpf_stack_state invalid_slot;
++	bool a_ptr, b_ptr;
++	u8 res[BPF_REG_SIZE];
++	int i;
++
++	if (!sb)
++		sb = &invalid_slot;
++
++	if (slot_is_special(sa) || slot_is_special(sb))
++		return join_special_slot(js, sa, sb, pass);
++
++	if (!memcmp(sa->slot_type, sb->slot_type, sizeof(sa->slot_type)) &&
++	    sa->slot_type[BPF_REG_SIZE - 1] == STACK_SPILL)
++		return join_reg(js, &ds->spilled_ptr, &sa->spilled_ptr, &sb->spilled_ptr, pass);
++
++	a_ptr = slot_has_spill(sa) && sa->spilled_ptr.type != SCALAR_VALUE;
++	b_ptr = slot_has_spill(sb) && sb->spilled_ptr.type != SCALAR_VALUE;
++	/* a pointer and something else */
++	if (a_ptr || b_ptr)
++		return false;
++
++	/* the prog can't read uninitialized stack: slots of different kinds have no join */
++	if (!js->env->allow_uninit_stack)
++		return !memcmp(sa->slot_type, sb->slot_type, sizeof(sa->slot_type));
++
++	/* scalar spills, MISC, ZERO, INVALID, POISON: no ids are kept */
++	if (pass == 1)
++		return true;
++
++	for (i = 0; i < BPF_REG_SIZE; i++) {
++		u8 x = sa->slot_type[i], y = sb->slot_type[i];
++
++		if (x == STACK_SPILL)
++			x = STACK_MISC;
++		if (y == STACK_SPILL)
++			y = STACK_MISC;
++		if (stype_is_invalid(x) && stype_is_invalid(y))
++			res[i] = sa->slot_type[i];
++		else if (stype_is_invalid(x) || stype_is_invalid(y))
++			res[i] = STACK_INVALID;
++		else if (x == y)
++			res[i] = x;
++		else
++			res[i] = STACK_MISC;
++	}
++	memcpy(ds->slot_type, res, sizeof(res));
++	bpf_mark_reg_not_init(js->env, &ds->spilled_ptr);
++	return true;
++}
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index bb1c67176d78..9629a6bf80b1 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -1220,6 +1220,22 @@ static void collect_store_base_regs(struct bpf_verifier_env *env,
+ 			or_expr_regs(env, cur_env->reg2expr[r], mask);
+ }
+ 
++/*
++ * Record the loop-entry registers that the operands of the conditional jump at 'idx' are
++ * computed from, best effort like or_expr_regs().
++ */
++static void collect_tested_regs(struct bpf_verifier_env *env, struct env *cur_env, int idx,
++				unsigned long *mask)
++{
++	struct bpf_insn *insn = &env->prog->insnsi[idx];
++
++	if (!bpf_insn_is_cond_jump(insn->code) || BPF_OP(insn->code) == BPF_JCOND)
++		return;
++	or_expr_regs(env, cur_env->reg2expr[insn->dst_reg], mask);
++	if (BPF_SRC(insn->code) == BPF_X)
++		or_expr_regs(env, cur_env->reg2expr[insn->src_reg], mask);
++}
++
+ /* Find the topmost loop header containing idx inside cur_header, or -1 if none. */
+ static int topmost_nested_loop(struct bpf_verifier_env *env, int idx, int cur_header)
+ {
+@@ -1325,6 +1341,7 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
+ 			return -ENOMEM;
+ 		/* The freshly allocated environment has all expressions unknown. */
+ 		bitmap_fill(cur_loop->store_base_regs, REGS_NUM);
++		bitmap_fill(cur_loop->tested_regs, REGS_NUM);
+ 		header_env->empty = false;
+ 		return 0;
+ 	}
+@@ -1364,6 +1381,9 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
+ 			/* Pull the nested loop's stack-store base dependencies up. */
+ 			for_each_set_bit(r, nested_loop->store_base_regs, BPF_SCEV_REGS_NUM)
+ 				or_expr_regs(env, cur_env->reg2expr[r], cur_loop->store_base_regs);
++			/* And what its jumps depend on. */
++			for_each_set_bit(r, nested_loop->tested_regs, BPF_SCEV_REGS_NUM)
++				or_expr_regs(env, cur_env->reg2expr[r], cur_loop->tested_regs);
+ 			forget_non_invariants(env, cur_env, idx);
+ 			if (log_level2)
+ 				log_env_changes(env, LOG_AT_TRANSFER, old_env, cur_env, idx);
+@@ -1386,6 +1406,7 @@ static int compute_scev_for_loop(struct bpf_verifier_env *env, int cur_header)
+ 				if (log_level2)
+ 					memcpy(old_env, cur_env, sizeof(*old_env));
+ 				collect_store_base_regs(env, cur_env, idx, cur_loop->store_base_regs);
++				collect_tested_regs(env, cur_env, idx, cur_loop->tested_regs);
+ 				err = transfer(env, cur_env, idx);
+ 				if (err)
+ 					goto out;
+@@ -1676,6 +1697,57 @@ static int compute_header_scevs(struct bpf_verifier_env *env, struct env *header
+ 	}
+ 	return 0;
+ }
++
++/*
++ * 'sum += a[i]', 'if (..) { len -= n; len -= 2; }': is 'id', what an iteration makes of
++ * register 'r', the register plus or minus something, or the register as it was?
++ * 'low32': it's computed in 32 bits.
++ */
++static bool expr_is_sum(struct scev *scev, u32 id, u32 r, bool low32, int depth)
++{
++	u32 a, b;
++
++	if (is_reg(scev, id, &a))
++		return a == r;
++	if (!depth--)
++		return false;
++	if (low32 && is_zext32(scev, id, &a))
++		return expr_is_sum(scev, a, r, low32, depth);
++	if (is_any(scev, id, &a, &b))
++		return expr_is_sum(scev, a, r, low32, depth) &&
++		       expr_is_sum(scev, b, r, low32, depth);
++	if (is_add(scev, id, &a, &b) && expr_is_sum(scev, b, r, low32, depth))
++		return true;
++	return (is_add(scev, id, &a, &b) || is_binop(scev, BPF_SUB, id, &a, &b)) &&
++	       expr_is_sum(scev, a, r, low32, depth);
++}
++
++/*
++ * Find the registers and stack slots that nothing but a jump stops: what gets a constant added in
++ * every iteration of the loop, and a sum that no jump of the loop depends on.
++ */
++static void scev_compute_linear_regs(struct scev *scev, struct bpf_loop *loop,
++				     struct env *header_env)
++{
++	u32 r, same, base, slope, id;
++	bool low32;
++	int bits;
++
++	for (r = 0; r < REGS_NUM; r++) {
++		id = header_env->reg2expr[r];
++		bits = 0;
++		if (is_linear_or_linear32(scev, header_env->reg2scev[r], &base, &slope, &low32) &&
++		    is_reg(scev, base, &same) && same == r)
++			bits = low32 ? 32 : 64;
++		/* what the loop leaves alone is no sum */
++		else if (!is_reg(scev, id, &same) && !test_bit(r, loop->tested_regs))
++			bits = expr_is_sum(scev, id, r, false, EXPR_STACK_DEPTH) ? 64 :
++			       expr_is_sum(scev, id, r, true, EXPR_STACK_DEPTH) ? 32 : 0;
++		if (bits)
++			__set_bit(r, bits == 32 ? loop->linear32_regs : loop->linear_regs);
++	}
++}
++
+ static int instantiate_header_scevs(struct scev *scev, u32 id, void *priv)
+ {
+ 	u32 reg, *reg2scev = priv;
+@@ -1784,6 +1856,9 @@ int bpf_compute_scev(struct bpf_verifier_env *env)
+ 					   find_loop_env(scev, header, idx));
+ 		if (err)
+ 			return err;
++		if (aux[idx].loop)
++			scev_compute_linear_regs(scev, aux[idx].loop,
++						 find_header_env(scev, header));
+ 	}
+ 
+ 	for (i = 0; i < env->prog->len; i++)
 -- 
 2.55.0
 
