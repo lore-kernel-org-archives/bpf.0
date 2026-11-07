@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022805;
-	b=SnVyqRx0JQpYjk3pobQtMoWsN0zylyF532JhTAGuSeDbsDyi78AqXRTlLwH66Ih7o11C
-	 i2bLRg0rnI9slKVKOW5e6JqqIfkLrex9J1+vhnBl27kpAAheQdB/KG4KT4zHh7LAAHoJD
-	 kd3cwWfymtY0Ie1JDZkKE96P9X/MTBYsGLC7TVTuOHgpLBarcKqlgP4osQu3dGGvGeM+n
-	 zFE50oyUwxkge6n1ytYp8il9is/AYLsDVvHP6/92HkN1dcL3thERvr6clsyBN8/4xLI/H
-	 oz2UL8YUz88BIv6RYpbeAz7aR5910GAdR/3ylHUKFLUoBeyiHATcEe6MLfomo8uRrpQ==
+	t=1794022811;
+	b=l6h/T/5oUFs0OoJOWQFSu/uhHIHTLQE1DDMdZt8YuyyaDZC5+faXrNhHJQbvxaDpUrVD
+	 j52eiPXoHqnJRRaipyQrwnYK7ftEsNRvZeGWCfHEg8CHP6fJ1PhpCwPvePn29VAjS1Og7
+	 g4rVsVzV4Y1o6EXNFag8Bk8A7BabGD+Ri+5pgw2lzUNomuDMDMDJFdTz0mNYP6oMjUdCl
+	 KQq2XgcGJcF7gLqAzEbdSNr/xyDOYweja5OqT5SzXH0WKq0GlaiUxxFIxUD6YA8fqxcAo
+	 OptZZFi/kKhSebz7t5tETwHGPTrSJuMrZhcov8sJucgSuhL/whkIkGywV57r4csw+Rg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022805;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022811;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=xsmQP/jAoaQMeVmbKTW7ViGPcdAJoJipzQ6hKyJYB4s=;
-	b=y0ZSJJRursufIoS9fSxEy/wur+hPCu+SGU+ENKkzQXzl8wN28JX6iHILKoncSYapJjGn
-	 EiTmZeP/BjEYgQSeN0yS6bolhlmv8H7oI+Bj+a0e01p302IxCkQlJgRa0vkQlv7/61ofl
-	 N/PH0FMRZE52xnsFSacMZFOle28dh22qZwQv6lbcHb7hNHXnmyrOe9Q9SHsNEDxhKU2tf
-	 GTvZvCqczyj1vuSXihGJJi+qxUmJCknAjgI6NsVp5ALqrts57eCGqn693a8zgZiPqvayr
-	 zj9gtnuUHB5oagFKgTzZChA6dbiv+t+oe5L3E++UzEfvLYiSvtv8gT1jQrQvmWWbEHA==
+	bh=D3eBtQ9J2NltkAdx0n7WwQujmnctlZYa49/htv1Baq4=;
+	b=dsc4oaZaERuyILSZiJMT3PZhS53js1wTDhUxm4ssXhQojTe0Edsdku1Hpjm4uKZjhWxO
+	 vFEupKxOw94O55/OjotO1LocadEVhFkpm5Ll9SV9cjWvtXsO2GLVla9iJeP3PjyqHbanZ
+	 b0TAHPJ/1v0jXkQg60IDzq3Oa6+rnTf2+s1r1+iGzsUSHg8uMGnv84BqA8afDGoyh8mbJ
+	 IVjC53HeGZ6xRsb/ozmo/OgXy6CAeDxJQAm+8FwykP0O0ieE7hxMTAa8IPtW3QPNNTn6J
+	 j42Gj4LS7E+tboRutBA7WvV2jivbLESNxiIAMp8buZuvWoy32xD/nBOJ3eWEXnyU8kA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sp41G1s5;
-	arc=none smtp.remote-ip=209.85.214.174
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cGe8HCML;
+	arc=none smtp.remote-ip=209.85.214.172
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2144E606A336
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:40:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2144E606A336
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06428606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:40:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 06428606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=sp41G1s5
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e9d7791b00so9122805ad.0
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:40:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cGe8HCML
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2e942864693so7334745ad.1
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:40:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794022804; x=1794627604; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794022810; x=1794627610; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=xsmQP/jAoaQMeVmbKTW7ViGPcdAJoJipzQ6hKyJYB4s=;
-        b=sp41G1s5ptFplNp8H8nPUj0RgwsAaElwgmJn/UEMcZlFEBKAeGxpVL3HAPyXVbXngq
-         GJK3H0uGXF8vnwxaCK2KylVEYk4aYXB2vDj5O1D1sQ5Mkuh+uZm96VeKZimGnJ6mKdZR
-         7lSbv6qeAw0EiI3ExObbqIMsyR4Tyc0TglHIroieHf4iJFBViQRr7Q0ul8kRu37Zz1Bt
-         8YnU2Vi7Y3zjpdCt+KpYEyJeNHI/c66H4zej8NbpQwKDmvQ9W2CUVRNFjYzEkEFHDduP
-         jIL9TCBLkDbCXB9u2yF8nmXsuBpD4ErT2K8whwxsBqqitSJirkZhxp+H0t1Fd/b91O4x
-         reLA==
+        bh=D3eBtQ9J2NltkAdx0n7WwQujmnctlZYa49/htv1Baq4=;
+        b=cGe8HCMLui1/m8uhRks9bLWnIKjzriIngVkqUMjDCQQygr6dycMC7raBGByXxJRE4l
+         OTAs3OUCBfZn9ni5l6nWj+uDMWRl5QRncOif/vf8swfvmpBLhs/miUjDtP8GiIaXcpTw
+         HFwOPSYW5qdEzJxDe8bLev/zeVi92Lk667T352tJz6eBrjgqd03eX0w6YWGodIot2D8f
+         6nm8xpn5DTqsV5PwNABa9T9zYp+pZwfFd2gaHXsgMZEEsbuh5yg2dl1avi446J/XKpFG
+         cM0PaAm0VvtLDdJzNHO+aMRdNYcGqFJpE6QX1RfLzkRnHqyPawV3gIEAA9sO9MGxZy+3
+         ZaSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022804; x=1794627604;
+        d=1e100.net; s=20260707; t=1794022810; x=1794627610;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xsmQP/jAoaQMeVmbKTW7ViGPcdAJoJipzQ6hKyJYB4s=;
-        b=drJ7je9h5lnxXhLtujEYFaqmin7UFSeL4XT3NRqUOWxz4ybeYmF9UuquxygpW0PAfx
-         8qG8ZqfZ7ZnCcrQFQqqmYC6aBAIUrPBJOZSTC3QirHbGTh3nsWxvqWfSNkyDh5i2y4Cj
-         gJyndH7dl2xbHQEBCOUkZrnkK7iiifRtRQ9TvEn2eaWK+FnTb9sSryrq7aSUpZCbYMwf
-         YS1i8NJNHUTdGMJuq/a2UngvRC1U5kDgUyDR50HhPuX5WDv3nwSIWvfJqNR3zZVfCgFB
-         85my505syI4wZYgIumtgyif3Gfcxfd5vWb32hNjG+u+/hoJsfa7MHorCt7rVMVRnuL6k
-         d1rQ==
-X-Gm-Message-State: APuU4Z98wC3ojjnaYT5Gkj2rc7kmeyIi0Rs5wnlB3gucoYQznTnGfWFI
-	bme2UPisCU3pntWJPylAmQtdAmEFyGs8MkYnG+DG2rWYauJyARjpa6KHFqcbtQ==
-X-Gm-Gg: AYBFou1DWUlTj9j0tLY/tjCD4Uo+lVJmKcUpTleTBIwpcl/c/zXMr8I1jRlKKvDo61l
-	CKUMaOBPaI9WW8vtjJRGmTgfezU7L5Qwbg/3GvNMgn5hbI4iiPsxCa40mgoxVf4c9hAiQJ6e023
-	vcdugcCk3GIc2yu8KDwbT35ri6oIjEdgYNrX3k2ohHKMMfCS4IJJu1i6MyhHfldzGoSKiroywPn
-	DjxSck8fmj2bh88Vc5F/qXlXBPptnpc0KnhD3Efv8iCXcBTlpIxm0YBKeFzSPu0Dui0PNNsAZS5
-	3LsPhkha7650rsYfxyAA0sWSC7h2UQOBAXhnxtQzH5iwV38JG34y3AXcPYDJdpjjjTJqIqQ5emE
-	k62+aO3WIFTIpzW/UbU2h3kP+jCXUD5HJ0LHWxQhsioK/1WlxpcezQ4wxGXJCMW+d/EzQTQ9Xma
-	dIz56Nhysda8ELXkhacylbguHPC3lODlIhVdz/GKaj0/pNLZTKlkHqKBD8YQu7XBD5VgdxCU1QY
-	2gxkdWw19EYiPGpzvMTU6h1ISbMvMmruu5Hcm4pFadquikc+0zEqF162Pkv4az0YE+N/MX6LPcR
-	MzaDFlXVFYMnV5nK7pKuyYNI+TXZjM90goRWk+IOGikMcS4KRG8vMr1xn3jlWXMpd0w3VykrESw
-	rlAdst5pCbQqRnVX9U3U6FlU+VoYsyWdo6mrly5pLSUfmR0C3r0uKzschRlx0R+sBIHlmI/bWws
-	YpvgQFAYShcpNuinwGJlc=
-X-Received: by 2002:a17:90b:4a84:b0:3ac:d19e:85f1 with SMTP id 98e67ed59e1d1-3b0db72e112mr4305478a91.53.1794022804138;
-        Fri, 06 Nov 2026 19:40:04 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b105864390sm1415684a91.6.2026.11.06.19.40.03
+        bh=D3eBtQ9J2NltkAdx0n7WwQujmnctlZYa49/htv1Baq4=;
+        b=e8JjC/eMbcgpy61u74zzfFl1DBxTys7y0T4Ga2booOAO6MGVJBpbX/ik0Zri1eWR+F
+         O6/+OVH4cQuy9C90YeJIjeHRuWeLB5IoyA2sPVMRam62yxxVTQyb1OV+2nuF0iMBip0X
+         MY+LkRmC71YO/sZxWpx6EoZfH3sxMYXgVLdFatMkm2IM0Z8QEciLB9R3YW8MD02HmZNo
+         lQBrvpuJeAt5DhcjCUdBg4f8/0PEaq0llORJx/2Nig/Eh9q241vvH3+VWMX8OL9ygeiQ
+         HcFFmwZgpq5B2m5KxHZA/gISZ2GGK87D+Q2AHufdvbgp28Gl+4ksgILBddA/5qNy/ftE
+         Nckw==
+X-Gm-Message-State: APuU4Z+GfjbfTyV83XCF3MeXpbB8iO8Y0edfnCojo8rOAOP61afKAbj2
+	xpG/8JWGGTeucpgE18xL55FdrY8yDOCJAW21t8o4X47tULjD8c3D6ROli1Jbuw==
+X-Gm-Gg: AYBFou0hlv8TPvwqJjdSFnPV49KYqAsf+hU9SZXI3CvlFnf9p5GWWyNajTVPv3hQzI1
+	Ztp0cRRyX6reQy74a9jin7IKCleExYv86feKpdrtjfGMcmFD6oem0BYIn5xtqXWWk+EfpI3QQEU
+	vJCLXQTKdWJ7WvxAc9uaZNyLGs2PJFX5Y5KHgWkREbjJAC5jBfxUWvyzpvVYJXDX0QgNejO62YV
+	xPfNtHKHs+sqq9lQevqME+KvQxNHWMHAcwhJr7UmXHGKGmKSxz6XV5mtRVnig27g+QvKfBdecev
+	bZSabQYDwDiYbijADIC1bnd6kYj+bOoHzVxO+clv0F5qAGteZJKs7ZXW1XHxLeEz5EhBzdR2Jf4
+	mgJHe8n2hDnxV0/GzQTAHqph9r3tfBl+z3bAqkpT+jA1gBK7QJI6MS5L2PMjFnKo4vz9i91b3+7
+	F9GWjXDl3PLBSxGaoMnvFeYe6X9AjvlHloTt4++4Ldf+BbbgZO7PfEvg5BE0iC4lj5esei8DTdK
+	0IbkcGj7wDPULrKqu0jQf/I48ZTY7qWujLV/6ZZ3OZA+jdSSN81Lwq6a+qDfU90Q5IalhTsgV5F
+	NozwKzYNzsENgks5UBc0NO1oUPH1QsIFSzj3bNPMTbr0294Q+1HiRttJJRCXXjPp3cbLLOquPGR
+	V5s7qWRDlzmcpfEdBEt6ubuj6c9ENrxE32S2ld3eJ7AD8JBdHjqoQ0fLfbDvZjJPn3d9BcjyA0d
+	y5z8OB4N4qM+7M9tGy36eo
+X-Received: by 2002:a17:902:ef49:b0:2ed:3e3d:f0ea with SMTP id d9443c01a7336-2ed40aca6fdmr57869325ad.20.1794022809958;
+        Fri, 06 Nov 2026 19:40:09 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47da165dsm10351495ad.73.2026.11.06.19.40.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 19:40:03 -0800 (PST)
+        Fri, 06 Nov 2026 19:40:09 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v4 20/46] bpf: Keep the count of a loop when a register has no closed form
-Date: Sat,  7 Nov 2026 03:37:28 +0000
-Message-ID: <20261107033758.1547725-21-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v4 21/46] bpf: Verify static subprogs on their own
+Date: Sat,  7 Nov 2026 03:37:29 +0000
+Message-ID: <20261107033758.1547725-22-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
@@ -104,245 +104,362 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Selftest pyperf600_nounroll, a profiler that reads the stack of Python:
-  for (int i = 0; i < STACK_MAX_LEN; ++i) {                  /* 600 */
-      if (!frame_ptr || !get_frame_data(..., &frame, &sym))
-          break;
-      ...
-      event->stack[i] = *symbol_id;
-      frame_ptr = frame.f_back;
-  }
-i is an induction variable: 600 iterations, i = [0, 599]. get_frame_data()
-fills frame and sym, which are on the stack, in each iteration. These slots
-have no closed form, "can't widen *fp-64, expr is ?", and scalar evolution
-gives no count for the full loop. Then i is not known either. The main pass
-goes through the 600 iterations, 153987 insns, and adds a may_goto without
-need. pyperf600, the same loop unrolled 150 times, and strobemeta are
-rejected: "math between map_value pointer and register with unbounded .."
-So are res_spin_lock_test_held_lock_max and scx_lavd/lavd_dispatch.
+Selftest test_verif_scale1, 90 times in a row, jhash() is static noinline:
+  ptr = data + i;
+  if (ptr + nh_off > data_end)
+      break;
+  ctx->tc_index = jhash(ptr, nh_off, ctx->cb[0] + i++);
+The verifier verifies a static subprog in the frames of its callers. States
+with different frames have no join: each insn of jhash() has a state for
+each way to it: "more than 1024 states that cannot be joined at insn 903".
+In Rust each function of core and alloc is a static subprog: 30 tests of
+rust-bpf are rejected too.
 
-Let the count decide what it knows about: induction variables get their
-range from it, and the loop needs no may_goto. bpf_compute_loop_iters()
-reports the registers and slots without a closed form in forget_regs, and
-bpf_flow_loop_enter() selects a method:
+Verify a static subprog for the states at its first insn. The entry state
+has one frame, with the arguments and nothing of the callers. It arrives at
+the first insn like each state at an insn: dropped, joined or added. The
+call waits. Each exit state goes to all calls that wait for this entry.
 
-1. No check depends on the value, bpf_flow_is_needed(): the bytes of sym,
-   a hash, a checksum. It stays what it is when the loop is entered. What
-   comes back to the head is joined with it and widened, as in a loop
-   without a count. pyperf600_nounroll: 1281 insns, no may_goto.
+  2: call f  --- { r1=scalar } --->  +---------------------+
+  7: call f  --- { r1=scalar } --->  | f: verified 1 time  |
+  3: ...     <-- { r0=[0,7] } -----  |                     |
+  8: ...     <-- { r0=[0,7] } -----  +---------------------+
 
-2. A check depends on it. Selftest strobemeta_nounroll1:
-     for (int i = 0; i < STROBE_MAX_STRS; ++i)               /* 25 */
-         payload_off = read_str_var(cfg, i, .., data, payload_off);
-   read_str_var() reads a string to &data->payload[off] and returns off or
-   off + len. payload_off is loop-carried, but the step is not a constant:
-   "(any r8 (+ r8 ?))". Walk the loop: each iteration has its own state,
-   with [0, i] in it. The count tells where the walk ends. The limit is
-   100000 insns. 17 progs of the selftests (strobemeta, profiler2,
-   linked_list, xdp_synproxy) and scx_lavd/lavd_dispatch need it. A pointer
-   and a slot that does not hold one full register always count as needed.
+test_verif_scale1: 50765 insns, today 530362.
 
-3. The walk is too long: as in 1. Widening moves only the bound that grows:
-     for (i = 0; i < 100; i++) for (j = 0; j < 100; j++) {
-         if (*(volatile __u64 *)v == 1) continue;
-         if (n < 8) v[n++] = 0; }                            /* long n */
-   n is [0, S32_MAX] at the head. As an unknown scalar: "math between ..".
+The entry state has what a check asks the frames of the callers for: the
+references and locks that they hold, sleepable, rcu callback.
+inherited_id() gives what is held a name, an id that depends only on its
+position, from 2^29: calls that differ only in ids share an entry. 27 progs
+of the schedulers of rust-bpf call core::fmt while they hold a reference.
+All other ids stay below 2^28: "too many ids". A scalar argument loses its
+id and its delta. The frames of the callers stay, func_is_on_its_own(), if
+ - an argument is a pointer to the stack or a dynptr: it is their memory,
+ - an argument is a pointer with the id of something that is not held: the
+   id of its NULL check, or of a variable offset into the packet,
+ - an argument can be NULL or is the end of the packet: the subprog does
+   a check for the caller. So does a subprog that loads data_end itself:
+   'bool has(ctx, p, n) { return p + n <= (void *)(long)ctx->data_end; }'.
+   On its own it leaves 'if (has(ctx, p, 14)) x = p[13];' without a range,
+ - it gets the context of a struct_ops prog that holds a reference: an
+   argument with __ref is found by its id, not by a name. Otherwise:
+   "invalid bpf_context access off=8. Reference may already be released",
+ - the subprog is a callback, changes packet data, has a tail call or
+   LD_ABS, or releases what the caller holds.
+BPF_LOG_STATS adds its insns to each caller: verifier_subprog_insn_stats.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  4 ++
- kernel/bpf/scev.c            | 73 ++++++++++++++++++++++++++++--------
- kernel/bpf/verifier.c        | 16 +++++++-
- 3 files changed, 76 insertions(+), 17 deletions(-)
+ include/linux/bpf_verifier.h |   3 +
+ kernel/bpf/verifier.c        | 229 ++++++++++++++++++++++++++++++++++-
+ 2 files changed, 231 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 83cd9983a0b2..485c2abee665 100644
+index 485c2abee665..993d8241f6f3 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -353,6 +353,8 @@ struct bpf_loop_iters {
- 	u32 min_header_count;   /* min number of times header is executed */
- 	u32 max_header_count;   /* max number of times header is executed */
- 	unsigned long precise_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
-+	/* live, changed by the loop, no summary of how: left to the join at the head */
-+	unsigned long forget_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
- 	/* [0, max] at the entry, and the loop only clears bits */
- 	unsigned long mask_regs[BITS_TO_LONGS(BPF_SCEV_REGS_NUM)];
- 	/*
-@@ -362,6 +364,8 @@ struct bpf_loop_iters {
- 	 */
- 	int iv_reg;
- 	struct cnum64 iv_range;
-+	/* a pointer to the stack that stores go through moves in the loop */
-+	bool spill_base;
- };
- 
- /* Where may_goto that the verifier adds goes, see check_loop_guard() */
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index d62e087f811d..677b64a63be4 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -2025,8 +2025,10 @@ scev_reg_for_read(struct bpf_verifier_env *env, const struct bpf_func_state *st,
- 
- /*
-  * Materialize a writable value in the current state, growing its stack if needed.
-- * This does not go through check_stack_write(). The callers skip is_unbound_scev_reg() slots,
-- * thus the buffer of a live dynptr slice, see bpf_reg_state::buf, does not become a spill here.
-+ * This does not go through check_stack_write(). The buffer of a live dynptr slice, see
-+ * bpf_reg_state::buf, does not become a spill here. The callers skip the slots that are
-+ * is_unbound_scev_reg() when the loop is entered. A slot that a call in the loop may write
-+ * has no description: it is in forget_regs, and they skip these too.
+@@ -1213,6 +1213,9 @@ struct bpf_id_pair {
+  *   check_ids() and jid_note() do not rename it. So two calls share a state at the entry, and what
+  *   comes out for it, only if the same places have the same names.
+  * - bpf_flow_return() puts the ids of the call that waits back. All other ids get new values.
++ * - What comes out has the ranges of all calls that share the state at the entry. So a name is good
++ *   for what holds whatever the ranges are: the same object. Other ids have no name: a number
++ *   loses its id, any other argument keeps the frames of the caller, see arg_needs_caller().
+  * - env->id_gen stays below BPF_MAX_ID. So no id is a name or has a bit of BPF_ADD_CONST.
   */
- static int scev_reg_for_write(struct bpf_verifier_env *env, struct bpf_func_state *st,
- 			      u32 r, struct bpf_reg_state **out)
-@@ -3403,7 +3405,7 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
- 	struct bpf_loop *loop;
- 	int insn_idx = st->insn_idx;
- 	u64 until, false_until;
--	bool same = true;
-+	bool same = true, walk = false;
- 	int err, i;
- 	u32 r;
+ #define BPF_INHERITED_ID	0x20000000
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0a315a88e355..3c3d1c8ea452 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1822,6 +1822,7 @@ int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
+ 	dst_state->in_sleepable = src->in_sleepable;
+ 	dst_state->callers_unknown = src->callers_unknown;
+ 	dst_state->unwound = src->unwound;
++	dst_state->changed_pkt_data = src->changed_pkt_data;
+ 	dst_state->flow_entry = src->flow_entry;
+ 	dst_state->insn_idx = src->insn_idx;
+ 	dst_state->curframe = src->curframe;
+@@ -11301,6 +11302,8 @@ static void clear_all_pkt_pointers(struct bpf_verifier_env *env)
+ 			mark_reg_invalid(env, reg);
+ 		}
+ 	}));
++	if (env->cur_state->flow_entry)
++		env->cur_state->changed_pkt_data = true;
+ }
  
-@@ -3496,10 +3498,12 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
+ static bool holds_pkt_pointers(struct bpf_verifier_env *env)
+@@ -11849,6 +11852,185 @@ static void account_current_path(struct bpf_verifier_env *env);
+  * BPF_INHERITED_ID + the position for the function, and put back at the return.
+  */
+ 
++/* 0 if it is not held */
++static u32 inherited_id(const struct bpf_verifier_state *state, u32 id)
++{
++	int i;
++
++	/* the first one: a lock in an object that the caller owns has the id of the reference */
++	for (i = 0; id && i < state->acquired_refs; i++)
++		if (state->refs[i].id == id)
++			return BPF_INHERITED_ID + i;
++	return 0;
++}
++
++/* What func_is_on_its_own() asks of an argument, be it in a register or on the stack */
++static bool arg_needs_caller(struct bpf_verifier_env *env, const struct bpf_verifier_state *state,
++			     const struct bpf_subprog_info *sub, const struct bpf_reg_state *reg)
++{
++	/* the id of a __ref argument is kept in ctx_arg_info[], see __check_ctx_access() */
++	if (reg->type == PTR_TO_CTX && state->acquired_refs &&
++	    env->prog->type == BPF_PROG_TYPE_STRUCT_OPS)
++		return true;
++	/* only the ids of what is held have names */
++	if (reg->type != SCALAR_VALUE &&
++	    ((reg->id && !inherited_id(state, reg->id)) ||
++	     (reg->parent_id && !inherited_id(state, reg->parent_id)) ||
++	     (reg->map_uid && !inherited_id(state, reg->map_uid))))
++		return true;
++	/*
++	 * Pointers to the packet that share an id have ranges of the same size, see
++	 * find_good_pkt_pointers(). What comes out of the function has the range of all calls.
++	 */
++	if (reg_is_pkt_pointer(reg) && reg->id)
++		return true;
++	/* it checks how much of the packet is there, for the caller */
++	if ((reg->type == PTR_TO_PACKET_END ||
++	     (reg->type == PTR_TO_PACKET && sub->loads_pkt_end)) && !sub->recursive)
++		return true;
++	/* or whether there is something to point to */
++	return type_may_be_null(reg->type) && !sub->recursive;
++}
++
++static bool func_is_on_its_own(struct bpf_verifier_env *env, struct bpf_verifier_state *state,
++			       int subprog)
++{
++	struct bpf_func_state *caller = state->frame[state->curframe];
++	struct bpf_subprog_info *sub = &env->subprog_info[subprog];
++	u16 live = env->insn_aux_data[sub->start].live_regs_before;
++	u32 i;
++
++	if (sub->changes_pkt_data || sub->has_tail_call || sub->has_ld_abs ||
++	    sub->is_cb || sub->is_async_cb || sub->is_exception_cb)
++		return false;
++	if (state->speculative)
++		return false;
++	if (sub->releases_inherited &&
++	    (state->acquired_refs || state->active_rcu_locks || state->active_preempt_locks))
++		return false;
++	/* what must not be done in that callback is refused by looking at the frames */
++	if (in_rbtree_lock_required_cb(env))
++		return false;
++	/* there are that many names for what is held, and bpf_flow_return() has room for them */
++	if (state->acquired_refs > BPF_ID_MAP_SIZE / 2)
++		return false;
++	for (i = BPF_REG_1; i <= BPF_REG_5; i++) {
++		if (!(live & BIT(i)))
++			continue;
++		if (caller->regs[i].type == PTR_TO_STACK ||
++		    base_type(caller->regs[i].type) == CONST_PTR_TO_DYNPTR)
++			return false;
++		if (arg_needs_caller(env, state, sub, &caller->regs[i]))
++			return false;
++	}
++	for (i = 0; i < bpf_in_stack_arg_cnt(sub); i++) {
++		if (caller->stack_arg_regs[i].type == PTR_TO_STACK ||
++		    base_type(caller->stack_arg_regs[i].type) == CONST_PTR_TO_DYNPTR)
++			return false;
++		if (arg_needs_caller(env, state, sub, &caller->stack_arg_regs[i]))
++			return false;
++	}
++	return true;
++}
++
++static int call_func_on_its_own(struct bpf_verifier_env *env, int subprog, int insn_idx)
++{
++	u16 live = env->insn_aux_data[env->subprog_info[subprog].start].live_regs_before;
++	struct bpf_verifier_state *state = env->cur_state;
++	struct bpf_func_state *caller = state->frame[state->curframe], *callee;
++	struct bpf_verifier_state entry = {};
++	int i, err;
++
++	callee = kzalloc_obj(*callee, GFP_KERNEL_ACCOUNT);
++	if (!callee)
++		return -ENOMEM;
++	entry.frame[0] = callee;
++	entry.in_sleepable = state->in_sleepable;
++	entry.callers_unknown = state->callers_unknown;
++	init_func_state(env, callee, BPF_MAIN_FUNC, 0, subprog);
++	/* the frame that says so is not there when the function is verified */
++	callee->in_rcu_callback_fn = in_rcu_callback(env);
++	for (i = BPF_REG_1; i <= BPF_REG_5; i++)
++		if (live & BIT(i))
++			callee->regs[i] = caller->regs[i];
++	err = grow_stack_arg_slots(env, callee, bpf_in_stack_arg_cnt(&env->subprog_info[subprog]));
++	if (err) {
++		bpf_free_verifier_state(&entry, false);
++		return err;
++	}
++	for (i = 0; i < callee->out_stack_arg_cnt; i++)
++		callee->stack_arg_regs[i] = caller->stack_arg_regs[i];
++
++	err = copy_reference_state(&entry, state);
++	if (err) {
++		bpf_free_verifier_state(&entry, false);
++		return err;
++	}
++	for (i = 0; i < entry.acquired_refs; i++) {
++		/* the id of a lock is the id of the pointer to it, which may have none */
++		entry.refs[i].id = inherited_id(state, entry.refs[i].id);
++		if (entry.refs[i].type == REF_TYPE_PTR)
++			entry.refs[i].parent_id = inherited_id(state, entry.refs[i].parent_id);
++	}
++	entry.active_irq_id = inherited_id(state, entry.active_irq_id);
++	entry.active_lock_id = inherited_id(state, entry.active_lock_id);
++	callee->entry_refs = entry.acquired_refs;
++	callee->entry_rcu_locks = entry.active_rcu_locks;
++	callee->entry_preempt_locks = entry.active_preempt_locks;
++	for (i = BPF_REG_1; i <= BPF_REG_5; i++) {
++		/* what a scalar is linked to stays with the caller, so does the delta to it */
++		if (callee->regs[i].type == SCALAR_VALUE)
++			clear_scalar_id(&callee->regs[i]);
++		callee->regs[i].id = inherited_id(state, callee->regs[i].id);
++		callee->regs[i].parent_id = inherited_id(state, callee->regs[i].parent_id);
++		callee->regs[i].map_uid = inherited_id(state, callee->regs[i].map_uid);
++	}
++	for (i = 0; i < callee->out_stack_arg_cnt; i++) {
++		if (callee->stack_arg_regs[i].type == SCALAR_VALUE)
++			clear_scalar_id(&callee->stack_arg_regs[i]);
++		callee->stack_arg_regs[i].id = inherited_id(state, callee->stack_arg_regs[i].id);
++		callee->stack_arg_regs[i].parent_id =
++			inherited_id(state, callee->stack_arg_regs[i].parent_id);
++		callee->stack_arg_regs[i].map_uid =
++			inherited_id(state, callee->stack_arg_regs[i].map_uid);
++	}
++
++	account_current_path(env);
++	env->subprog_info[subprog].on_its_own = true;
++	err = bpf_flow_call(env, state, &entry, subprog, insn_idx);
++	bpf_free_verifier_state(&entry, false);
++	/* the call waits, there is nothing to go on with */
++	return err ?: PROCESS_BPF_EXIT;
++}
++
++/* The current state is at exit of a function that is verified on its own. */
++static int exit_func_on_its_own(struct bpf_verifier_env *env)
++{
++	struct bpf_verifier_state *state = env->cur_state;
++	struct bpf_func_state *callee = state->frame[0];
++	u32 i, nregs;
++	int err;
++
++	nregs = bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
++	for (i = 0; i < nregs; i++) {
++		if (callee->regs[ret_regs[i]].type != PTR_TO_STACK)
++			continue;
++		verbose(env, "cannot return stack pointer to the caller\n");
++		return -EINVAL;
++	}
++	state->unwound |= bpf_is_unwind_exit(&env->prog->insnsi[env->insn_idx]);
++
++	/* Invalidate callee-local dynptrs and their slices before the frame goes away. */
++	err = destroy_dynptrs_in_stack_slots(env, callee, 0,
++					     callee->allocated_stack / BPF_REG_SIZE - 1);
++	if (err)
++		return err;
++
++	account_current_path(env);
++	err = bpf_flow_exit(env, state, env->insn_idx);
++	return err ?: PROCESS_BPF_EXIT;
++}
++
+ static u32 fresh_id(struct bpf_verifier_env *env, struct bpf_idmap *idmap, u32 id)
+ {
+ 	u32 flags = id & BPF_ADD_CONST, i;
+@@ -12012,6 +12194,9 @@ static int check_static_func_call(struct bpf_verifier_env *env, int subprog,
  	if (err)
  		return err;
  
-+	bitmap_zero(iters->forget_regs, REGS_NUM);
- 	bitmap_zero(iters->mask_regs, REGS_NUM);
-+	iters->spill_base = false;
- 	header_env = find_header_env(scev, insn_idx);
- 	for (r = 0; r < REGS_NUM; r++) {
--		struct bpf_reg_state *reg;
-+		struct bpf_reg_state *reg = NULL;
- 		u32 ra, r_scev, r_expr;
- 		bool spill_base = false;
++	if (func_is_on_its_own(env, state, subprog))
++		return call_func_on_its_own(env, subprog, *insn_idx);
++
+ 	/*
+ 	 * For regular function entry setup new frame and continue
+ 	 * from that frame.
+@@ -20957,6 +21142,9 @@ static int process_bpf_exit_full(struct bpf_verifier_env *env,
+ {
+ 	struct bpf_func_state *cur_frame = cur_func(env);
  
-@@ -3546,13 +3550,14 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
++	if (!exception_exit && !env->cur_state->curframe && env->cur_state->flow_entry)
++		return exit_func_on_its_own(env);
++
+ 	/* We must do check_reference_leak here before
+ 	 * prepare_func_exit to handle the case when
+ 	 * state->curframe > 0, it may be a callback function,
+@@ -21937,6 +22125,12 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+ 		if (need_resched())
+ 			cond_resched();
  
- 		reg = scev_reg_for_linear(cur_func, r);
- 		/*
--		 * The offset of a pointer to arena is not tracked: what enters the loop stands
--		 * for all iterations. If the loop makes something else of it the state that
--		 * returns to the head is not covered by the state at the head, and the body is
--		 * verified again from that state.
-+		 * The offset of a pointer to arena is not tracked, so there is nothing to lose.
-+		 * If the loop makes something else of it the state that returns to the head
-+		 * is not covered by the state at the head.
- 		 */
--		if (reg && reg->type == PTR_TO_ARENA)
-+		if (reg && reg->type == PTR_TO_ARENA) {
-+			__set_bit(r, iters->forget_regs);
- 			continue;
++		/* no insn makes as many ids as there are from here to BPF_INHERITED_ID */
++		if (env->id_gen >= BPF_MAX_ID) {
++			verbose(env, "too many ids\n");
++			return -E2BIG;
 +		}
- 		/* If SCEV for r is (linear <reg> <slope>) */
- 		if (reg && is_simple_linear(scev, r_scev, &coefs) && is_widenable_reg_type(reg)) {
- 			/* 32-bit ALU operations on pointers convert them to scalars */
-@@ -3601,10 +3606,30 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
- 				bpf_log(log, ", requires exact stack-offset tracking");
- 			bpf_log(log, "\n");
- 		}
--		return 0;
-+		/* the count stands, it is this one that is not known in the loop */
-+		if (spill_base) {
-+			iters->spill_base = true;
-+			walk = true;
-+			continue;
-+		}
-+		__set_bit(r, iters->forget_regs);
-+		/*
-+		 * Only a walk through the iterations tells what it is in each of them. That is not
-+		 * worth it for a number that nothing looks at: a sum, a hash, what a call leaves in
-+		 * r1 - r5. What comes back to the head is joined with what entered then. A pointer,
-+		 * or a slot that holds something else than a register, has no such join.
-+		 */
-+		if (!reg || (reg->type != SCALAR_VALUE && reg->type != NOT_INIT) ||
-+		    bpf_flow_is_needed(env, insn_idx, r)) {
-+			walk = true;
-+			continue;
-+		}
-+		if (log->level & BPF_LOG_LEVEL2)
-+			bpf_log(log, "loop header at %d, nothing looks at it\n", insn_idx);
++
+ 		env->prev_insn_idx = prev_insn_idx;
+ 		if (env->insn_idx >= insn_cnt) {
+ 			verbose(env, "invalid insn idx %d insn_cnt %d\n",
+@@ -23532,6 +23726,37 @@ static int do_check_all(struct bpf_verifier_env *env)
  	}
- 
--	return 1;
-+	/* 2: the count is known, what some of the live registers are is not and it matters */
-+	return walk ? 2 : 1;
- }
- 
- /* bpf_compute_loop_iters() checked that every leaf can be unioned into acc. */
-@@ -3649,6 +3674,11 @@ static int union_any_reg(struct bpf_verifier_env *env, struct bpf_func_state *lo
- 	return 0;
  }
  
 +/*
-+ * Make @st, which is at the head of a counted loop, stand for all iterations. @loop_entry is the
-+ * state that entered the loop and @iters is what bpf_compute_loop_iters() says about it.
-+ * @st is a copy of @loop_entry.
++ * What it took to verify a static subprog on its own is not in insns_total of its callers.
++ * Add it, once per caller. The main prog and global subprogs have all of it already.
 + */
- int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
- 			struct bpf_verifier_state *loop_entry, struct bpf_loop_iters *iters)
- {
-@@ -3679,16 +3709,27 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
- 		if (!scev_reg_alive(env, st, r))
- 			continue;
- 
-+		/*
-+		 * It stays what it is in @st. What comes back to the head is joined with it and
-+		 * widened to where the jumps of the loop stop it, like in a loop without a count.
-+		 * NULL or not is all that is known about a pointer to arena.
-+		 */
-+		if (test_bit(r, iters->forget_regs)) {
-+			reg = scev_reg_for_linear(cur_func, r);
-+			if (reg && reg->type == PTR_TO_ARENA) {
-+				bpf_reg_forget_range(reg);
-+				mark_scev_reg_scratched(env, r);
-+			}
-+			continue;
-+		}
++static void add_insns_of_callees(struct bpf_verifier_env *env)
++{
++	struct bpf_subprog_info *si = env->subprog_info;
++	struct bpf_insn *insn = env->prog->insnsi;
++	int *added, i, j, s, c;
 +
- 		r_expr = header_env->reg2scev[r];
- 		spill32 = spill32_counter(scev, cur_func, r_expr, r, &coefs);
--		if (!spill32 && (is_unbound_scev_reg(env, cur_func, r) ||
-+		/* @iters says nothing about a register that is not known in @loop_entry */
-+		if (!spill32 && (is_unbound_scev_reg(env, entry_func, r) ||
- 				 is_const_scev_reg(env, insn_idx, r)))
- 			continue;
- 
--		reg = scev_reg_for_linear(cur_func, r);
--		if (reg && reg->type == PTR_TO_ARENA)
--			continue;
--
- 		if (test_bit(r, iters->mask_regs)) {
- 			/* The range stays. It's no longer equal to the registers with its id. */
- 			err = scev_reg_for_write(env, cur_func, r, &reg);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0e35f4454c80..0a315a88e355 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21680,8 +21680,22 @@ int bpf_flow_loop_enter(struct bpf_verifier_env *env, bool *backedge, bool *drop
- 	if (err < 0)
- 		return err;
- 
--	/* @per_trip: the insns of one iteration, times the walks around the loop. */
-+	/*
-+	 * There is no summary of what the loop does to something that is live.
-+	 * Go through the iterations one by one if that is not too long.
-+	 * @per_trip: the insns of one iteration, times the walks around the loop.
-+	 */
- 	per_trip = flow_walk_factor(cur) * loop->nr_insns;
-+	if (err == 2 && per_trip <= BPF_FLOW_MAX_WALK &&
-+	    iters.max_header_count <= BPF_FLOW_MAX_WALK / (u32)per_trip) {
-+		entry->max_header_count = iters.max_header_count;
-+		entry->terminates = true;
-+		entry->counted = true;
-+		entry->apart = true;
-+		return 0;
++	added = kvcalloc(env->subprog_cnt, sizeof(*added), GFP_KERNEL_ACCOUNT);
++	if (!added)
++		return;
++	/* callees first */
++	for (i = 0; i < env->subprog_cnt; i++) {
++		s = env->subprog_topo_order[i];
++		if (!s || bpf_subprog_is_global(env, s))
++			continue;
++		for (j = si[s].start; j < si[s + 1].start; j++) {
++			if (!bpf_pseudo_call(&insn[j]))
++				continue;
++			c = bpf_find_subprog(env, j + insn[j].imm + 1);
++			if (c <= 0 || c == s || !si[c].on_its_own || added[c] == s)
++				continue;
++			added[c] = s;
++			si[s].insns_total += si[c].insns_total;
++		}
 +	}
-+	if (err == 2 && iters.spill_base)
-+		err = 0;
- 	/* The walk has to get to the end of the loop, so it is known to have one. Or not: */
- 	if (!err) {
- 		err = flow_try_walk(env, entry);
++	kvfree(added);
++}
++
+ static void print_verification_stats(struct bpf_verifier_env *env)
+ {
+ 	/* Skip over hidden subprogs which are not verified. */
+@@ -25603,10 +25828,12 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 		goto skip_full_check;
+ 
+ 	ret = do_check_all(env);
+-
+ 	/* reject recursion through the callx edges found by the main pass */
+ 	if (ret == 0 && env->callx_edges)
+ 		ret = sort_subprogs_topo(env);
++	/* while the calls are what they are in the program */
++	if (env->log.level & BPF_LOG_STATS)
++		add_insns_of_callees(env);
+ 
+ 	/* the driver numbers the insns like the program that it was given */
+ 	if (ret == 0 && bpf_prog_is_offloaded(env->prog->aux))
 -- 
 2.55.0
 
