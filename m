@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794024733;
-	b=P3KuoQ847vlP/34EBJc/rVqktZp3KNjgv0eM8GeH3XpSbDoidNRCWw8RmcW5jXPnL3pk
-	 Jy4bGUO4xp7o2PX0wRxsFVkAfd0yrAYF0aVA7I92dekgA1W/0Jv/xT2tWVNEQ4diqkjl6
-	 Lfpsm+hokg56ffkP5YZhd4+NhpXqaA4gWZm5fIBeR/DZ6mwWv1aNKPElyYBYCUR9EYkYs
-	 gupCG3/dxQX+G7pV6cxqDZZ3o40hqcjX3Wv1DeVaDYg6fr6fjn2sg7WxIvX594e3kcDVQ
-	 2iKB1YDd+nVkqOYwwhRPKGRGdlVgpP58M+CzHR4NYmeaZKXA+cTm3Z2L6TRNvwUqIuw==
+	t=1794024769;
+	b=2IcS5kg+lXOllC9FuoIASSbcNCwVsEfhosFzhfDNHAYfzX0FD2OQe6G6AfWyb2rS9gvt
+	 l7Z202XQ+PUFAE3rhtnEw/Wuwjb97ZWScv0IBMf26+qOYPma9OK52/2gwltmVeGGWIt7O
+	 2f5cWZwtVhYnHGCNpqfCJQYwdgIwODuBOnBcWlXZ5wHi0jd7oDXIPS/PlBYW4r3EPBqYN
+	 vk5wtNJ5BGw8Y5AM0cgez+/0o71mPa4hmYA/EmxyjoSlDOnacqIG0ibnc1l5kPlcEzYRP
+	 haD3nzMOVbjrOrlKw+r0zrjewj/yJekiJtFtws1pBlLOEb+Hcgubh1i3IPia15m0hxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794024733;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794024769;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Y0SogXKs8SRMzLzS5AU7M7xO8kuSusgx8QTxE/KLmKo=;
-	b=484ntn0D8iwfOL8G5V6yT5VT933RbXqp64mO3Q952hZC7yz2f2W2nI50A7B+KsJNiqzb
-	 fcsS2ZYb13H047svCmSYesqfd1w0hz5AB4HANXwmBbzXCUA7FcWg0AH4teMJuRVzJryYz
-	 PvOMSjF3jTyL/ldecsv6DnxKdrrX/dNs4uGGablqz0M329XSQX7jqKg+zV8/d8wCDwzWg
-	 D7/4loaf3lfCNI+uobeYJaju/UD8CHJcpzTj1M+MBzzQiHFjJWaotsMXIoNws/gbqZC9J
-	 wdtUH8hqPUOJlhfNpPWrOvQaQ+5vNZ6O5x6r6Cehvjqs1T5ieaK/IYo9AgxfwDrCxKg==
+	bh=gbHyeHI7Gci9tefWdhSW3PDeNvXzrdXlxOjTYdmMSHc=;
+	b=H+cyPc8uppWn8L6QFqwWhT2DCNANZ0WNdsEkR1WgbAlkJ9TXYJjJ3ISC+AaCyXi7jiOt
+	 /4SfoEgM3qiHix5SFq+tDirCX/g65lwE1eVySZooqvvKRuLlT7z29ITQmf7HGs3jL/N1a
+	 +XJH/+mlS1+Y/FngxnTULcMmzEthfg89/ZZauUUU2QJCFt0R/Zf1ylFAsaw8BqfEghqH/
+	 kugy4hOvaUOE6RwjB6ED1AmDoLiCaM6weQ7W7leEUuvpgQraT66/yLNFBoo8qnaZHCcZT
+	 aMmVV+JLVC4tfSjMOp1XFX8G6ZKWPQvSayC50N53Ye5p/1uouCM2KoeNkWAqnNCY14Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CnK1OxH6;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UstlTFxp;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36191606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 04:12:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B69606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 04:12:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CnK1OxH6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 991651F0089F;
-	Sat,  7 Nov 2026 04:12:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UstlTFxp
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54C811F0089F;
+	Sat,  7 Nov 2026 04:12:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794024732;
-	bh=Y0SogXKs8SRMzLzS5AU7M7xO8kuSusgx8QTxE/KLmKo=;
+	s=k20260515; t=1794024768;
+	bh=gbHyeHI7Gci9tefWdhSW3PDeNvXzrdXlxOjTYdmMSHc=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=CnK1OxH6mqB8heePbV36ujDrgmEzHvXxuRKP4QuT2+Wz7LE8oPZAZPxc7RpyC0Xmx
-	 fuw+AEluQ8ZEvBjTxi2g8bHQafGdWKNM/ojiY/VRTaPK2f3iswys7ytckrCl1XZplP
-	 3+MzoZ6FgzUU0HLcFdklsaLyKHTdgkAaKBU3UJ4M0EwUSwhFdwz2XjsuhLTAxxj8J8
-	 7CKn9sMnvnoSB8QUnMpBX+jOQmiCu20daCttT1L6f/XhLyMBMkzk3Gk5QefaHQIiJa
-	 pV/BtiVjV0/YdaTDWj5CZoK0oN3UVU65ij4dShpFETYk9vXiyEchv9iSJ6HOmAwxJt
-	 wxtnnQYMLyw/Q==
-Message-ID: <sashiko-outbox-202560@kernel.org>
+	b=UstlTFxptaztM47JpSUJuSGv89eYQGu1W851Pmc9dZMVKxlNGjhdnxEj/iiyWjkVp
+	 UX/4VM6MwMthtvPTngJ63s4fLsYjX5R2XdG0n+sn5z2VruEV5pWApg5c2gjpoYJy/u
+	 QCk5U6UzHB5ruqPFy47zHCmer9CVfm0jvk3PU0JHvr4Ksf8E+S8acM7DeAgvYr74rV
+	 njkTy6fz34qY/S92d+iypydk/IaxOxyDMPPOjzxyZmVOem37VbKjbtNmgJBfpMQdip
+	 sZQW8eN8Mr0qWfxsjlawMMXyAJROz1328PPBhyah9nbtovgeMl1QdTfgHfcFn2waI9
+	 iK5h4fhIyphRA==
+Message-ID: <sashiko-outbox-202561@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 01/46] bpf: Add may_goto to the loops that
- the verifier marks
+Subject: Re: [PATCH bpf-next v4 16/46] bpf: Make the state after a call from
+ the caller's state and an exit state
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261107033758.1547725-2-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261107033758.1547725-17-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
- <20261107033758.1547725-2-alexei.starovoitov@gmail.com>
+ <20261107033758.1547725-17-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 07 Nov 2026 04:12:12 +0000
+Date: Sat, 07 Nov 2026 04:12:47 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,73 +62,61 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Low] bpf: bpf_insert_loop_guards() logs shifted insn index instead of
-  orig_idx
+- [High] bpf: missing exit->speculative propagation in bpf_flow_return()
 --
 
-commit 4c080c1282306b111e989d48659533beacc7c4d9
+commit 96816fe78c2229631b095b8d13a8d312f8d07492
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Add may_goto to the loops that the verifier marks
+bpf: Make the state after a call from the caller's state and an exit state
 
-This commit introduces bpf_insert_loop_guards() to insert may_goto
-instructions and subprogram exit sequences for loops marked by the
-verifier during the main pass.
+This commit adds bpf_flow_return() and BPF_INHERITED_ID to construct the
+caller's post-call verifier state from the waiting caller state and the
+callee's exit state when verifying a static subprogram on its own.
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index f95af2ca3591b..6fd79c2fbdc1e 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -587,6 +587,225 @@ static int bpf_adj_moved_insn(struct bpf_insn *insn=
-, u32 delta)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index d42c67d6d70b2..5e66d6768fcf7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11757,8 +11757,146 @@ static int push_callback_call(struct bpf_verifi=
+er_env *env, struct bpf_insn *ins
 [ ... ]
-> +int bpf_insert_loop_guards(struct bpf_verifier_env *env)
+> +int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_st=
+ate *caller,
+> +		    const struct bpf_verifier_state *exit, int call_idx)
 > +{
-[ ... ]
-> +	for (s =3D 0; s < env->subprog_cnt && !err; s++) {
-> +		leave[s] =3D append_budget_exit(env, s);
-> +		if (leave[s] < 0)
-> +			err =3D leave[s];
+> +	struct bpf_func_state *frame =3D caller->frame[caller->curframe];
+> +	const struct bpf_func_state *callee =3D exit->frame[0];
+> +	struct bpf_idmap *idmap =3D &env->idmap_scratch;
+> +	u32 caller_rcu =3D caller->active_rcu_locks, caller_preempt =3D caller-=
+>active_preempt_locks;
+> +	struct bpf_reference_state *held;
+> +	struct bpf_reg_state *reg;
+> +	u32 i, j, nregs, nheld, kept =3D 0, id;
+> +	int err;
+> +
+> +	if (exit->unwound && !bpf_is_unwind_goto(&env->prog->insnsi[call_idx + =
+1])) {
+> +		verbose(env, "unwind_exit, but no unwind_goto after the call at insn %=
+d\n",
+> +			call_idx);
+> +		return -EINVAL;
 > +	}
-> +	/* A guard cannot jump into a patch that is in the list: 'r0 =3D 0' has=
- no index yet. */
-> +	err =3D err ?: bpf_patch_list_commit(env);
-[ ... ]
-> +		if (off > S16_MAX || off < S16_MIN) {
-> +			verbose(env, "exit of the loop is too far from insn %d for may_goto\n=
-", i);
-> +			err =3D -ERANGE;
-> +			break;
-> +		}
-> +		patch[jmp] =3D BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, off, 0);
-> +		if (to =3D=3D -2)
-> +			patch[jmp] =3D budget_exit_insn(env, bpf_find_containing_subprog(env,=
- i));
-> +		patch[n] =3D env->prog->insnsi[i];
-> +		/* A jump to itself is a back edge. It goes through may_goto like the =
-others. */
-> +		if (jumps_to_itself(&patch[n]))
-> +			patch[n].off -=3D n;
-> +		else
-> +			err =3D bpf_adj_moved_insn(&patch[n], n);
-> +		if (err) {
-> +			verbose(env, "insn %d cannot be patched due to 16-bit range\n", i);
-> +			break;
-> +		}
+> +	caller->unwound =3D exit->unwound;
 
-[Severity: Low]
-Should these two verbose() messages log aux[i].orig_idx instead of i?
+[Severity: High]
+Should bpf_flow_return() also propagate exit->speculative to
+caller->speculative?
 
-The earlier bpf_patch_list_commit() call inserts append_budget_exit()
-sequences at the end of subprograms, which shifts instruction indices i in
-later subprograms away from their original positions in the user-supplied
-program.
-
-In addition, calling bpf_insert_loop_guards() in bpf_check() before
-check_max_stack_depth() shifts the raw instruction indices reported by
-check_exception_cb(), check_recursion(), and check_callbacks() when
-check_max_stack_depth() rejects a program.
+When a subprogram verified on its own spawns a speculative path via
+sanitize_speculative_path() that reaches BPF_EXIT, caller->speculative is
+false in the waiting caller state.  Leaving caller->speculative false on
+return treats the speculative return path as architectural execution in the
+caller: instructions reached only along that path are marked seen (skipping
+dead-code sanitization), speculative return bounds in R0/R2 are joined into
+the caller's architectural state, and recoverable speculative errors in the
+caller are rejected instead of being mitigated with a speculation barrier.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261107033758.1547=
-725-1-alexei.starovoitov@gmail.com?part=3D1
+725-1-alexei.starovoitov@gmail.com?part=3D16
