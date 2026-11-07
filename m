@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022811;
-	b=l6h/T/5oUFs0OoJOWQFSu/uhHIHTLQE1DDMdZt8YuyyaDZC5+faXrNhHJQbvxaDpUrVD
-	 j52eiPXoHqnJRRaipyQrwnYK7ftEsNRvZeGWCfHEg8CHP6fJ1PhpCwPvePn29VAjS1Og7
-	 g4rVsVzV4Y1o6EXNFag8Bk8A7BabGD+Ri+5pgw2lzUNomuDMDMDJFdTz0mNYP6oMjUdCl
-	 KQq2XgcGJcF7gLqAzEbdSNr/xyDOYweja5OqT5SzXH0WKq0GlaiUxxFIxUD6YA8fqxcAo
-	 OptZZFi/kKhSebz7t5tETwHGPTrSJuMrZhcov8sJucgSuhL/whkIkGywV57r4csw+Rg==
+	t=1794022817;
+	b=ostZ8XDrhylT3vMMsrvhD6lV2xzhIhlsF52n8jdRNYUoxReVu8j6Xs1BQ/mu/wbkgM9U
+	 A+PpJZC2evvndmbHUOX8yPcuuO2kaU5+zqrjg8qwGdfwusLsRFpyOujAF9hzhwKpNI7L4
+	 48lHgpKuFx0eNkok16SZt2pI9PFvcD29Uk97FqwFyY+sNbX1OeK0hn5htAQ5/dxCTJVJT
+	 ilErmNkFreFO2xauhdtyP25pmiNzTUaccBcm+Ygcl5aPiH6rken/M97aNko84TqkDulJx
+	 qQN8a3GtYGbdnwF2F6/QYLRI0H+9PMBXKm2cX3VLsYcjM6TH2eQyUbmTPBcOGjUgZwA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022811;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022817;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=D3eBtQ9J2NltkAdx0n7WwQujmnctlZYa49/htv1Baq4=;
-	b=dsc4oaZaERuyILSZiJMT3PZhS53js1wTDhUxm4ssXhQojTe0Edsdku1Hpjm4uKZjhWxO
-	 vFEupKxOw94O55/OjotO1LocadEVhFkpm5Ll9SV9cjWvtXsO2GLVla9iJeP3PjyqHbanZ
-	 b0TAHPJ/1v0jXkQg60IDzq3Oa6+rnTf2+s1r1+iGzsUSHg8uMGnv84BqA8afDGoyh8mbJ
-	 IVjC53HeGZ6xRsb/ozmo/OgXy6CAeDxJQAm+8FwykP0O0ieE7hxMTAa8IPtW3QPNNTn6J
-	 j42Gj4LS7E+tboRutBA7WvV2jivbLESNxiIAMp8buZuvWoy32xD/nBOJ3eWEXnyU8kA==
+	bh=Oxfx9cOhof2y6fyxSgxJrjYm8Vb0C2yMGW64KQEtyC4=;
+	b=vzOzS6GUyk/BA3SDf3XtOGPBVvuKUwRqaQkdB9EgWR8mfWlevflUuSGXFWO7k9WFGBib
+	 gyCKJOWqCcY4YSJ1+/rb5sE2xd4h/gjb6IY+lCSVQWbt4SP6hGQDQ1HuIOT1B3QAFFXmU
+	 OzhfuRsa742Ekk/aoTZWJIn0exBSAZV5swvfryCVFIrRlKw+JqRO0FuzuoS7IEP6Bvmwz
+	 yRM6cPcVhOo92mp7owZ+FQRPcscjIN0eTjtA5r34/xziqsgzAQXVVW/JqI1YoWFwsrVB/
+	 OwTAZjXvNdsKa5/YcvL7jhbpnvRxpj0mfd+O+jeRvGiHwI4i6R0DcAuYGpGWG1ID+7w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cGe8HCML;
-	arc=none smtp.remote-ip=209.85.214.172
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=heiipZ80;
+	arc=none smtp.remote-ip=209.85.216.44
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06428606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:40:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 06428606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EE4606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:40:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0EE4606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cGe8HCML
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2e942864693so7334745ad.1
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:40:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=heiipZ80
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ad2b3b1c02so760439a91.1
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:40:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794022810; x=1794627610; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794022816; x=1794627616; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=D3eBtQ9J2NltkAdx0n7WwQujmnctlZYa49/htv1Baq4=;
-        b=cGe8HCMLui1/m8uhRks9bLWnIKjzriIngVkqUMjDCQQygr6dycMC7raBGByXxJRE4l
-         OTAs3OUCBfZn9ni5l6nWj+uDMWRl5QRncOif/vf8swfvmpBLhs/miUjDtP8GiIaXcpTw
-         HFwOPSYW5qdEzJxDe8bLev/zeVi92Lk667T352tJz6eBrjgqd03eX0w6YWGodIot2D8f
-         6nm8xpn5DTqsV5PwNABa9T9zYp+pZwfFd2gaHXsgMZEEsbuh5yg2dl1avi446J/XKpFG
-         cM0PaAm0VvtLDdJzNHO+aMRdNYcGqFJpE6QX1RfLzkRnHqyPawV3gIEAA9sO9MGxZy+3
-         ZaSQ==
+        bh=Oxfx9cOhof2y6fyxSgxJrjYm8Vb0C2yMGW64KQEtyC4=;
+        b=heiipZ80FPc4IToY+7/t9S60zxSrqIaDUYq8Um+McKsSHJ54PM00Sa5jtI0Hl5sNVm
+         yO5aVgg2/e/ykm+r1q9b3zUz9vZyDekCXbTX8o6bneS51vFLYv03p+AR8/mc+r1Gt0qG
+         ZaVDSRNyw1t7MeiP4bCubWq6iGbqwP/nLT4889QzEyXX3VJPTLgdRJppgS8bPDYQ54St
+         dZ7j+E9eHnjLgRQsDMAxJh8MRddWpwEpAxRC2lG9VR6TEgYfa+JaNbg6TQodrAT6rz8S
+         zbFjXj/NAAHQz0XNoYjQghmtnYXLUZA+h91oNh4AmgLDS+GFEOGb5CaMD934/MI1Tfah
+         pLBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022810; x=1794627610;
+        d=1e100.net; s=20260707; t=1794022816; x=1794627616;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=D3eBtQ9J2NltkAdx0n7WwQujmnctlZYa49/htv1Baq4=;
-        b=e8JjC/eMbcgpy61u74zzfFl1DBxTys7y0T4Ga2booOAO6MGVJBpbX/ik0Zri1eWR+F
-         O6/+OVH4cQuy9C90YeJIjeHRuWeLB5IoyA2sPVMRam62yxxVTQyb1OV+2nuF0iMBip0X
-         MY+LkRmC71YO/sZxWpx6EoZfH3sxMYXgVLdFatMkm2IM0Z8QEciLB9R3YW8MD02HmZNo
-         lQBrvpuJeAt5DhcjCUdBg4f8/0PEaq0llORJx/2Nig/Eh9q241vvH3+VWMX8OL9ygeiQ
-         HcFFmwZgpq5B2m5KxHZA/gISZ2GGK87D+Q2AHufdvbgp28Gl+4ksgILBddA/5qNy/ftE
-         Nckw==
-X-Gm-Message-State: APuU4Z+GfjbfTyV83XCF3MeXpbB8iO8Y0edfnCojo8rOAOP61afKAbj2
-	xpG/8JWGGTeucpgE18xL55FdrY8yDOCJAW21t8o4X47tULjD8c3D6ROli1Jbuw==
-X-Gm-Gg: AYBFou0hlv8TPvwqJjdSFnPV49KYqAsf+hU9SZXI3CvlFnf9p5GWWyNajTVPv3hQzI1
-	Ztp0cRRyX6reQy74a9jin7IKCleExYv86feKpdrtjfGMcmFD6oem0BYIn5xtqXWWk+EfpI3QQEU
-	vJCLXQTKdWJ7WvxAc9uaZNyLGs2PJFX5Y5KHgWkREbjJAC5jBfxUWvyzpvVYJXDX0QgNejO62YV
-	xPfNtHKHs+sqq9lQevqME+KvQxNHWMHAcwhJr7UmXHGKGmKSxz6XV5mtRVnig27g+QvKfBdecev
-	bZSabQYDwDiYbijADIC1bnd6kYj+bOoHzVxO+clv0F5qAGteZJKs7ZXW1XHxLeEz5EhBzdR2Jf4
-	mgJHe8n2hDnxV0/GzQTAHqph9r3tfBl+z3bAqkpT+jA1gBK7QJI6MS5L2PMjFnKo4vz9i91b3+7
-	F9GWjXDl3PLBSxGaoMnvFeYe6X9AjvlHloTt4++4Ldf+BbbgZO7PfEvg5BE0iC4lj5esei8DTdK
-	0IbkcGj7wDPULrKqu0jQf/I48ZTY7qWujLV/6ZZ3OZA+jdSSN81Lwq6a+qDfU90Q5IalhTsgV5F
-	NozwKzYNzsENgks5UBc0NO1oUPH1QsIFSzj3bNPMTbr0294Q+1HiRttJJRCXXjPp3cbLLOquPGR
-	V5s7qWRDlzmcpfEdBEt6ubuj6c9ENrxE32S2ld3eJ7AD8JBdHjqoQ0fLfbDvZjJPn3d9BcjyA0d
-	y5z8OB4N4qM+7M9tGy36eo
-X-Received: by 2002:a17:902:ef49:b0:2ed:3e3d:f0ea with SMTP id d9443c01a7336-2ed40aca6fdmr57869325ad.20.1794022809958;
-        Fri, 06 Nov 2026 19:40:09 -0800 (PST)
+        bh=Oxfx9cOhof2y6fyxSgxJrjYm8Vb0C2yMGW64KQEtyC4=;
+        b=otx/BuhSJ5dwZM16bqZU0A8YwiBjNw0MhmEVw/iN1HtRftGZ6VLj4FWbtX1oQXvDWl
+         L1F9ekdmGlQA3llx4faiUz8heulpMGnYwVSljXTCDfF53J0J/0WWMavbHdsIJi4OUA85
+         nnyHW7V0QfMuTM7VQkw+dY6mSU8PsUdlADBbFi8bJkT9G1zKvsoiSW43fTOdIZuTmzXE
+         GMkutDtdI82q45V3I31QdINo54LMNWBI3WxYnay49PuM/HrcHfuTquCxWwGrvLnT0XNl
+         ilU/MBxnoZJTritKa1wQSoNrI3fiJuB+dugQF+8InsFezbzmzptiu3IHOO2WU9OCmRr0
+         LXmw==
+X-Gm-Message-State: APuU4Z8ZXCobjBCn8jvRDCTvr16fm3E9j30t4I1k5Q5MiYVPkVH7u0yE
+	BpPJccEp3M4c8ytW3voa34BURN2tL4YHqHB1EOKWjSmgvlJp1dXzRA3ZWew9Xg==
+X-Gm-Gg: AYBFou3tLdNVJIdrxCH/oPKHQqj0n3YeRZXGtV6n+0P2xucl5WDxPIieGyKCmLITzHO
+	scjKNwF5pohP+SSqEkdFUgQIP+VHnQjshqX820aVVUO3K0WUAhYz+q8g0AGZj/XvuCOLE5CzaXX
+	wic9gw0JOQiMzDBAbXUWGBGU2przrAhvyUMHT5nC0D/yfcqxydpnq6cLwsm1/du3gSKUfo4wv7h
+	8156gBrz/GZPv6DixvcBEDvkQyxUq+iFJ81D4Ido05Fp4/2666sK7Dwr9nDA/7mE6C4LAAk8QJd
+	1lRuE8bx0QtrBGlrXcxhlzBxdmCITIUjE0n3EmD4nVOTlSZJTP5ktZoMByEDm2rgY0yo6KBMLu4
+	yMROhlY7ZjfOpDVEvQTd4cgtjb65srxAAnKElAiu7zXaseCxUJOZ7HDjB5TzVJqE9Zf8eXnRdu6
+	ZwXb71JLvEnQdrHfgOG3p8Egru5saaj+cKtpZJgtFfB/Sqw2z+CJNmYzc+vqMaMSdwuUPAwRjgU
+	XjElIU3h0FPrL5fRHfKZrgjhX4KUyiL2cmB+6sk2kIShGKnfF+tC9MJZfsADgEbWv3eUsAuQfzW
+	wKE5Kyysunr1AicBF4ARxA4WtonyCCrQueuxoQSNZYmYAkv5KKqi6/c/9WQOSO/AO2+7eQiDMWa
+	lTyF8rmNcB4H3t5WhTdhp6cF9T9Z4lkYq/4gUqXVSWdwqpK16GTx4Kz3YiT6nUv0YskR8thsmEw
+	==
+X-Received: by 2002:a17:90b:57ce:b0:3b0:d0c5:c10f with SMTP id 98e67ed59e1d1-3b0db6d6d19mr4408076a91.11.1794022815959;
+        Fri, 06 Nov 2026 19:40:15 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47da165dsm10351495ad.73.2026.11.06.19.40.09
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b105864bffsm1423538a91.3.2026.11.06.19.40.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 19:40:09 -0800 (PST)
+        Fri, 06 Nov 2026 19:40:15 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v4 21/46] bpf: Verify static subprogs on their own
-Date: Sat,  7 Nov 2026 03:37:29 +0000
-Message-ID: <20261107033758.1547725-22-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v4 22/46] bpf: Allow recursive subprogs
+Date: Sat,  7 Nov 2026 03:37:30 +0000
+Message-ID: <20261107033758.1547725-23-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
@@ -104,362 +104,682 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Selftest test_verif_scale1, 90 times in a row, jhash() is static noinline:
-  ptr = data + i;
-  if (ptr + nh_off > data_end)
-      break;
-  ctx->tc_index = jhash(ptr, nh_off, ctx->cb[0] + i++);
-The verifier verifies a static subprog in the frames of its callers. States
-with different frames have no join: each insn of jhash() has a state for
-each way to it: "more than 1024 states that cannot be joined at insn 903".
-In Rust each function of core and alloc is a static subprog: 30 tests of
-rust-bpf are rejected too.
+  candidates.sort_unstable_by(|a, b| b.0.cmp(&a.0));    scx_rusty.rs
 
-Verify a static subprog for the states at its first insn. The entry state
-has one frame, with the arguments and nothing of the callers. It arrives at
-the first insn like each state at an insn: dropped, joined or added. The
-call waits. Each exit state goes to all calls that wait for this entry.
+quicksort() of the core library calls itself, and rusty_tick is rejected:
+"recursive call from quicksort<..>() to quicksort<..>()". The same for
+progs that drop a list, a tree or an Arc of a parent, that use BTreeMap,
+serde_json or regex-automata: 100 of the 225 progs of the schedulers of
+rust-bpf and 100 of its 437 tests have a subprog that gets to itself.
+A verifier that follows each chain of calls has no choice: there is no
+last chain.
 
-  2: call f  --- { r1=scalar } --->  +---------------------+
-  7: call f  --- { r1=scalar } --->  | f: verified 1 time  |
-  3: ...     <-- { r0=[0,7] } -----  |                     |
-  8: ...     <-- { r0=[0,7] } -----  +---------------------+
+  depth(n) { return n ? (depth(n - 1) + 1) & 255 : 0; }
 
-test_verif_scale1: 50765 insns, today 530362.
+The main pass verifies a static subprog for its entry states, and a call
+waits for the exit states. A call of a subprog that is in progress waits
+like each other call. The first insn of a recursive subprog is like a loop
+head: the entry states are joined with widening. So are the exit states.
 
-The entry state has what a check asks the frames of the callers for: the
-references and locks that they hold, sleepable, rcu callback.
-inherited_id() gives what is held a name, an id that depends only on its
-position, from 2^29: calls that differ only in ids share an entry. 27 progs
-of the schedulers of rust-bpf call core::fmt while they hold a reference.
-All other ids stay below 2^28: "too many ids". A scalar argument loses its
-id and its delta. The frames of the callers stay, func_is_on_its_own(), if
- - an argument is a pointer to the stack or a dynptr: it is their memory,
- - an argument is a pointer with the id of something that is not held: the
-   id of its NULL check, or of a variable offset into the packet,
- - an argument can be NULL or is the end of the packet: the subprog does
-   a check for the caller. So does a subprog that loads data_end itself:
-   'bool has(ctx, p, n) { return p + n <= (void *)(long)ctx->data_end; }'.
-   On its own it leaves 'if (has(ctx, p, 14)) x = p[13];' without a range,
- - it gets the context of a struct_ops prog that holds a reference: an
-   argument with __ref is found by its id, not by a name. Otherwise:
-   "invalid bpf_context access off=8. Reference may already be released",
- - the subprog is a callback, changes packet data, has a tail call or
-   LD_ABS, or releases what the caller holds.
-BPF_LOG_STATS adds its insns to each caller: verifier_subprog_insn_stats.
+    main prog: call depth          entry state { r1=5 }
+                  v
+  +-->  first insn of depth()      join with widening: { r1=[0,5] }
+  |        ...
+  +---  call depth(n - 1)          entry state { r1=[0,4] }, the call waits
+           ^
+        exit of depth()            goes to all calls that wait
+
+How deep the calls go and how many there are is not known. Thus each
+subprog on a cycle of the call graph gets the checks of
+"bpf: Limit depth and time of recursive subprogs at run time". When a check
+fails the subprog returns 0. This is a new edge, and
+check_recursion_guard() verifies it.
+linux-notes.rst says 'recursive calls are limited at run time' now.
+
+mark_recursive_subprogs() finds the cycles before the main pass: callx can
+call each subprog whose address is taken, a helper calls its callback. The
+main pass finds what callx calls. A mark that it does not confirm is
+dropped, and the subprog gets no check.
+
+Still rejected: a call of the main prog; recursion in an extension, in an
+offloaded prog, with a tail call, LD_ABS or bpf_clone_redirect(), in
+a kprobe prog, or in a prog that gets a private stack without a request,
+like raw_tp and fentry progs; an extension of a subprog that is called in
+a recursion; a pointer to the stack as an argument of a call between
+recursive subprogs. In the static limit on the stack of a chain of calls
+a recursion counts as one frame, the last one.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |   3 +
- kernel/bpf/verifier.c        | 229 ++++++++++++++++++++++++++++++++++-
- 2 files changed, 231 insertions(+), 1 deletion(-)
+ Documentation/bpf/linux-notes.rst |   4 +-
+ kernel/bpf/cfg.c                  |  43 ++++-
+ kernel/bpf/liveness.c             |  40 ++++-
+ kernel/bpf/verifier.c             | 283 ++++++++++++++++++++++++++----
+ 4 files changed, 320 insertions(+), 50 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 485c2abee665..993d8241f6f3 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1213,6 +1213,9 @@ struct bpf_id_pair {
-  *   check_ids() and jid_note() do not rename it. So two calls share a state at the entry, and what
-  *   comes out for it, only if the same places have the same names.
-  * - bpf_flow_return() puts the ids of the call that waits back. All other ids get new values.
-+ * - What comes out has the ranges of all calls that share the state at the entry. So a name is good
-+ *   for what holds whatever the ranges are: the same object. Other ids have no name: a number
-+ *   loses its id, any other argument keeps the frames of the caller, see arg_needs_caller().
-  * - env->id_gen stays below BPF_MAX_ID. So no id is a name or has a bit of BPF_ADD_CONST.
-  */
- #define BPF_INHERITED_ID	0x20000000
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0a315a88e355..3c3d1c8ea452 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1822,6 +1822,7 @@ int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
- 	dst_state->in_sleepable = src->in_sleepable;
- 	dst_state->callers_unknown = src->callers_unknown;
- 	dst_state->unwound = src->unwound;
-+	dst_state->changed_pkt_data = src->changed_pkt_data;
- 	dst_state->flow_entry = src->flow_entry;
- 	dst_state->insn_idx = src->insn_idx;
- 	dst_state->curframe = src->curframe;
-@@ -11301,6 +11302,8 @@ static void clear_all_pkt_pointers(struct bpf_verifier_env *env)
- 			mark_reg_invalid(env, reg);
- 		}
- 	}));
-+	if (env->cur_state->flow_entry)
-+		env->cur_state->changed_pkt_data = true;
+diff --git a/Documentation/bpf/linux-notes.rst b/Documentation/bpf/linux-notes.rst
+index 6c036b54a29f..12f0dc43e154 100644
+--- a/Documentation/bpf/linux-notes.rst
++++ b/Documentation/bpf/linux-notes.rst
+@@ -36,8 +36,8 @@ In both cases only static functions can be referenced. Therefore all functions
+ that can be called indirectly are known to the verifier before it starts to
+ analyze the program, and ``callx`` is verified as a direct call of every
+ function that ``dst`` may point to at that instruction. The same rules apply:
+-the calls can not be recursive, and the depth of the call chain and its
+-combined stack size are limited.
++the depth of the call chain and its combined stack size are limited, and
++recursive calls are limited at run time.
+ 
+ Calling helper or kernel functions through a register, indirect calls of global
+ functions, and tail calls in functions that are called via ``callx`` are not
+diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+index 2ee950e9ac82..04c1c98ba248 100644
+--- a/kernel/bpf/cfg.c
++++ b/kernel/bpf/cfg.c
+@@ -75,21 +75,28 @@ static void mark_subprog_might_throw(struct bpf_verifier_env *env, int off)
+ 	subprog->might_throw = true;
  }
  
- static bool holds_pkt_pointers(struct bpf_verifier_env *env)
-@@ -11849,6 +11852,185 @@ static void account_current_path(struct bpf_verifier_env *env);
-  * BPF_INHERITED_ID + the position for the function, and put back at the return.
+-/* 't' is an index of a call-site.
++/*
++ * 't' is an index of a call-site.
+  * 'w' is a callee entry point.
+  * Eventually this function would be called when env->cfg.insn_state[w] == EXPLORED.
+- * Rely on DFS traversal order and absence of recursive calls to guarantee that
+- * callee's effect marks would be correct at that moment.
++ * DFS traversal order guarantees that callee's effect marks are correct at that
++ * moment, unless the callee calls one of its callers: see close_callee_effects().
++ * Returns true if the marks of the caller changed.
   */
+-static void merge_callee_effects(struct bpf_verifier_env *env, int t, int w)
++static bool merge_callee_effects(struct bpf_verifier_env *env, int t, int w)
+ {
+ 	struct bpf_subprog_info *caller, *callee;
  
-+/* 0 if it is not held */
-+static u32 inherited_id(const struct bpf_verifier_state *state, u32 id)
-+{
-+	int i;
-+
-+	/* the first one: a lock in an object that the caller owns has the id of the reference */
-+	for (i = 0; id && i < state->acquired_refs; i++)
-+		if (state->refs[i].id == id)
-+			return BPF_INHERITED_ID + i;
-+	return 0;
-+}
-+
-+/* What func_is_on_its_own() asks of an argument, be it in a register or on the stack */
-+static bool arg_needs_caller(struct bpf_verifier_env *env, const struct bpf_verifier_state *state,
-+			     const struct bpf_subprog_info *sub, const struct bpf_reg_state *reg)
-+{
-+	/* the id of a __ref argument is kept in ctx_arg_info[], see __check_ctx_access() */
-+	if (reg->type == PTR_TO_CTX && state->acquired_refs &&
-+	    env->prog->type == BPF_PROG_TYPE_STRUCT_OPS)
-+		return true;
-+	/* only the ids of what is held have names */
-+	if (reg->type != SCALAR_VALUE &&
-+	    ((reg->id && !inherited_id(state, reg->id)) ||
-+	     (reg->parent_id && !inherited_id(state, reg->parent_id)) ||
-+	     (reg->map_uid && !inherited_id(state, reg->map_uid))))
-+		return true;
-+	/*
-+	 * Pointers to the packet that share an id have ranges of the same size, see
-+	 * find_good_pkt_pointers(). What comes out of the function has the range of all calls.
-+	 */
-+	if (reg_is_pkt_pointer(reg) && reg->id)
-+		return true;
-+	/* it checks how much of the packet is there, for the caller */
-+	if ((reg->type == PTR_TO_PACKET_END ||
-+	     (reg->type == PTR_TO_PACKET && sub->loads_pkt_end)) && !sub->recursive)
-+		return true;
-+	/* or whether there is something to point to */
-+	return type_may_be_null(reg->type) && !sub->recursive;
-+}
-+
-+static bool func_is_on_its_own(struct bpf_verifier_env *env, struct bpf_verifier_state *state,
-+			       int subprog)
-+{
-+	struct bpf_func_state *caller = state->frame[state->curframe];
-+	struct bpf_subprog_info *sub = &env->subprog_info[subprog];
-+	u16 live = env->insn_aux_data[sub->start].live_regs_before;
-+	u32 i;
-+
-+	if (sub->changes_pkt_data || sub->has_tail_call || sub->has_ld_abs ||
-+	    sub->is_cb || sub->is_async_cb || sub->is_exception_cb)
+ 	caller = bpf_find_containing_subprog(env, t);
+ 	callee = bpf_find_containing_subprog(env, w);
++	if (caller->changes_pkt_data >= callee->changes_pkt_data &&
++	    caller->might_sleep >= callee->might_sleep &&
++	    caller->might_throw >= callee->might_throw)
 +		return false;
-+	if (state->speculative)
-+		return false;
-+	if (sub->releases_inherited &&
-+	    (state->acquired_refs || state->active_rcu_locks || state->active_preempt_locks))
-+		return false;
-+	/* what must not be done in that callback is refused by looking at the frames */
-+	if (in_rbtree_lock_required_cb(env))
-+		return false;
-+	/* there are that many names for what is held, and bpf_flow_return() has room for them */
-+	if (state->acquired_refs > BPF_ID_MAP_SIZE / 2)
-+		return false;
-+	for (i = BPF_REG_1; i <= BPF_REG_5; i++) {
-+		if (!(live & BIT(i)))
-+			continue;
-+		if (caller->regs[i].type == PTR_TO_STACK ||
-+		    base_type(caller->regs[i].type) == CONST_PTR_TO_DYNPTR)
-+			return false;
-+		if (arg_needs_caller(env, state, sub, &caller->regs[i]))
-+			return false;
-+	}
-+	for (i = 0; i < bpf_in_stack_arg_cnt(sub); i++) {
-+		if (caller->stack_arg_regs[i].type == PTR_TO_STACK ||
-+		    base_type(caller->stack_arg_regs[i].type) == CONST_PTR_TO_DYNPTR)
-+			return false;
-+		if (arg_needs_caller(env, state, sub, &caller->stack_arg_regs[i]))
-+			return false;
-+	}
+ 	caller->changes_pkt_data |= callee->changes_pkt_data;
+ 	caller->might_sleep |= callee->might_sleep;
+ 	caller->might_throw |= callee->might_throw;
 +	return true;
-+}
-+
-+static int call_func_on_its_own(struct bpf_verifier_env *env, int subprog, int insn_idx)
-+{
-+	u16 live = env->insn_aux_data[env->subprog_info[subprog].start].live_regs_before;
-+	struct bpf_verifier_state *state = env->cur_state;
-+	struct bpf_func_state *caller = state->frame[state->curframe], *callee;
-+	struct bpf_verifier_state entry = {};
-+	int i, err;
-+
-+	callee = kzalloc_obj(*callee, GFP_KERNEL_ACCOUNT);
-+	if (!callee)
-+		return -ENOMEM;
-+	entry.frame[0] = callee;
-+	entry.in_sleepable = state->in_sleepable;
-+	entry.callers_unknown = state->callers_unknown;
-+	init_func_state(env, callee, BPF_MAIN_FUNC, 0, subprog);
-+	/* the frame that says so is not there when the function is verified */
-+	callee->in_rcu_callback_fn = in_rcu_callback(env);
-+	for (i = BPF_REG_1; i <= BPF_REG_5; i++)
-+		if (live & BIT(i))
-+			callee->regs[i] = caller->regs[i];
-+	err = grow_stack_arg_slots(env, callee, bpf_in_stack_arg_cnt(&env->subprog_info[subprog]));
-+	if (err) {
-+		bpf_free_verifier_state(&entry, false);
-+		return err;
-+	}
-+	for (i = 0; i < callee->out_stack_arg_cnt; i++)
-+		callee->stack_arg_regs[i] = caller->stack_arg_regs[i];
-+
-+	err = copy_reference_state(&entry, state);
-+	if (err) {
-+		bpf_free_verifier_state(&entry, false);
-+		return err;
-+	}
-+	for (i = 0; i < entry.acquired_refs; i++) {
-+		/* the id of a lock is the id of the pointer to it, which may have none */
-+		entry.refs[i].id = inherited_id(state, entry.refs[i].id);
-+		if (entry.refs[i].type == REF_TYPE_PTR)
-+			entry.refs[i].parent_id = inherited_id(state, entry.refs[i].parent_id);
-+	}
-+	entry.active_irq_id = inherited_id(state, entry.active_irq_id);
-+	entry.active_lock_id = inherited_id(state, entry.active_lock_id);
-+	callee->entry_refs = entry.acquired_refs;
-+	callee->entry_rcu_locks = entry.active_rcu_locks;
-+	callee->entry_preempt_locks = entry.active_preempt_locks;
-+	for (i = BPF_REG_1; i <= BPF_REG_5; i++) {
-+		/* what a scalar is linked to stays with the caller, so does the delta to it */
-+		if (callee->regs[i].type == SCALAR_VALUE)
-+			clear_scalar_id(&callee->regs[i]);
-+		callee->regs[i].id = inherited_id(state, callee->regs[i].id);
-+		callee->regs[i].parent_id = inherited_id(state, callee->regs[i].parent_id);
-+		callee->regs[i].map_uid = inherited_id(state, callee->regs[i].map_uid);
-+	}
-+	for (i = 0; i < callee->out_stack_arg_cnt; i++) {
-+		if (callee->stack_arg_regs[i].type == SCALAR_VALUE)
-+			clear_scalar_id(&callee->stack_arg_regs[i]);
-+		callee->stack_arg_regs[i].id = inherited_id(state, callee->stack_arg_regs[i].id);
-+		callee->stack_arg_regs[i].parent_id =
-+			inherited_id(state, callee->stack_arg_regs[i].parent_id);
-+		callee->stack_arg_regs[i].map_uid =
-+			inherited_id(state, callee->stack_arg_regs[i].map_uid);
-+	}
-+
-+	account_current_path(env);
-+	env->subprog_info[subprog].on_its_own = true;
-+	err = bpf_flow_call(env, state, &entry, subprog, insn_idx);
-+	bpf_free_verifier_state(&entry, false);
-+	/* the call waits, there is nothing to go on with */
-+	return err ?: PROCESS_BPF_EXIT;
-+}
-+
-+/* The current state is at exit of a function that is verified on its own. */
-+static int exit_func_on_its_own(struct bpf_verifier_env *env)
-+{
-+	struct bpf_verifier_state *state = env->cur_state;
-+	struct bpf_func_state *callee = state->frame[0];
-+	u32 i, nregs;
-+	int err;
-+
-+	nregs = bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
-+	for (i = 0; i < nregs; i++) {
-+		if (callee->regs[ret_regs[i]].type != PTR_TO_STACK)
-+			continue;
-+		verbose(env, "cannot return stack pointer to the caller\n");
-+		return -EINVAL;
-+	}
-+	state->unwound |= bpf_is_unwind_exit(&env->prog->insnsi[env->insn_idx]);
-+
-+	/* Invalidate callee-local dynptrs and their slices before the frame goes away. */
-+	err = destroy_dynptrs_in_stack_slots(env, callee, 0,
-+					     callee->allocated_stack / BPF_REG_SIZE - 1);
-+	if (err)
-+		return err;
-+
-+	account_current_path(env);
-+	err = bpf_flow_exit(env, state, env->insn_idx);
-+	return err ?: PROCESS_BPF_EXIT;
-+}
-+
- static u32 fresh_id(struct bpf_verifier_env *env, struct bpf_idmap *idmap, u32 id)
- {
- 	u32 flags = id & BPF_ADD_CONST, i;
-@@ -12012,6 +12194,9 @@ static int check_static_func_call(struct bpf_verifier_env *env, int subprog,
- 	if (err)
- 		return err;
+ }
  
-+	if (func_is_on_its_own(env, state, subprog))
-+		return call_func_on_its_own(env, subprog, *insn_idx);
-+
- 	/*
- 	 * For regular function entry setup new frame and continue
- 	 * from that frame.
-@@ -20957,6 +21142,9 @@ static int process_bpf_exit_full(struct bpf_verifier_env *env,
- {
- 	struct bpf_func_state *cur_frame = cur_func(env);
- 
-+	if (!exception_exit && !env->cur_state->curframe && env->cur_state->flow_entry)
-+		return exit_func_on_its_own(env);
-+
- 	/* We must do check_reference_leak here before
- 	 * prepare_func_exit to handle the case when
- 	 * state->curframe > 0, it may be a callback function,
-@@ -21937,6 +22125,12 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
- 		if (need_resched())
- 			cond_resched();
- 
-+		/* no insn makes as many ids as there are from here to BPF_INHERITED_ID */
-+		if (env->id_gen >= BPF_MAX_ID) {
-+			verbose(env, "too many ids\n");
-+			return -E2BIG;
-+		}
-+
- 		env->prev_insn_idx = prev_insn_idx;
- 		if (env->insn_idx >= insn_cnt) {
- 			verbose(env, "invalid insn idx %d insn_cnt %d\n",
-@@ -23532,6 +23726,37 @@ static int do_check_all(struct bpf_verifier_env *env)
- 	}
+ enum {
+@@ -534,6 +541,33 @@ static int visit_func_ptrs_insn(int t, struct bpf_verifier_env *env,
+ 	return DONE_EXPLORING;
  }
  
 +/*
-+ * What it took to verify a static subprog on its own is not in insns_total of its callers.
-+ * Add it, once per caller. The main prog and global subprogs have all of it already.
++ * A subprog that calls one of its callers is EXPLORED before that caller is: it
++ * took the marks that the caller had so far, and so did everybody who called it
++ * since. Merge again at every call until nothing changes.
 + */
-+static void add_insns_of_callees(struct bpf_verifier_env *env)
++static void close_callee_effects(struct bpf_verifier_env *env)
++{
++	struct bpf_insn *insn = env->prog->insnsi;
++	struct bpf_func_ptr *ptrs;
++	bool changed;
++	u32 cnt, j;
++	int t;
++
++	do {
++		changed = false;
++		for (t = 0; t < env->prog->len; t++) {
++			if (bpf_pseudo_call(&insn[t]) || bpf_pseudo_func(&insn[t]))
++				changed |= merge_callee_effects(env, t, t + insn[t].imm + 1);
++			ptrs = insn_func_ptrs(env, t, &cnt);
++			for (j = 0; j < cnt; j++)
++				changed |= merge_callee_effects(env, t, ptrs[j].xlated_off);
++			if (bpf_is_ldimm64(&insn[t]))
++				t++;
++		}
++	} while (changed);
++}
++
+ /* Visits the instruction at index t and returns one of the following:
+  *  < 0 - an error occurred
+  *  DONE_EXPLORING - the instruction was fully explored
+@@ -759,6 +793,7 @@ int bpf_check_cfg(struct bpf_verifier_env *env)
+ 		}
+ 	}
+ 	ret = 0; /* cfg looks good */
++	close_callee_effects(env);
+ 	env->prog->aux->changes_pkt_data = env->subprog_info[0].changes_pkt_data;
+ 	env->prog->aux->might_sleep = env->subprog_info[0].might_sleep;
+ 
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index 60296eb880db..318db60ae230 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -2354,6 +2354,7 @@ static int analyze_subprog(struct bpf_verifier_env *env,
+ 		struct func_instance *callee_instance;
+ 		int callee, target;
+ 		int caller_reg, cb_callee_reg;
++		u16 live;
+ 
+ 		j = idx - start; /* relative index within this subprog */
+ 		memset(callee_args, 0, MAX_AT_TRACK_REGS * sizeof(*callee_args));
+@@ -2369,11 +2370,17 @@ static int analyze_subprog(struct bpf_verifier_env *env,
+ 			if (callee < 0 || bpf_subprog_is_global(env, callee))
+ 				continue;
+ 
+-			/* Build entry args: R1-R5 and stack args from at_in at call site */
++			/*
++			 * Build entry args: R1-R5 and stack args from at_in at call site.
++			 * What is left over in a register that the callee doesn't read is no arg.
++			 */
++			live = env->insn_aux_data[target].live_regs_before;
+ 			for (int r = BPF_REG_1; r <= BPF_REG_5; r++)
+-				callee_args[r] = info[subprog].at_in[j][r];
++				callee_args[r] = live & BIT(r) ? info[subprog].at_in[j][r] : none;
+ 			for (int r = 0; r < MAX_STACK_ARG_SLOTS; r++)
+-				callee_args[MAX_BPF_REG + r] = info[subprog].at_in[j][MAX_BPF_REG + r];
++				callee_args[MAX_BPF_REG + r] =
++					r < bpf_in_stack_arg_cnt(&env->subprog_info[callee]) ?
++					info[subprog].at_in[j][MAX_BPF_REG + r] : none;
+ 		} else if (bpf_calls_callback(env, idx)) {
+ 			callee = find_callback_subprog(env, insn, idx, &caller_reg, &cb_callee_reg);
+ 			if (callee == -2) {
+@@ -2408,6 +2415,17 @@ static int analyze_subprog(struct bpf_verifier_env *env,
+ 		if (!has_fp_args(callee_args))
+ 			continue;
+ 
++		/*
++		 * at_in[] is kept per subprog and the snapshot of the stack per call insn:
++		 * the walk must not enter a subprog that it has not left.
++		 */
++		if (env->subprog_info[subprog].recursive && env->subprog_info[callee].recursive) {
++			verbose(env, "recursive %s() passes a pointer to the stack to %s()\n",
++				bpf_subprog_name(env, subprog), bpf_subprog_name(env, callee));
++			err = -EINVAL;
++			goto out_free;
++		}
++
+ 		if (depth == MAX_CALL_FRAMES - 1) {
+ 			verbose(env, "%s() passes a pointer to the stack to %s()\n",
+ 				bpf_subprog_name(env, subprog), bpf_subprog_name(env, callee));
+@@ -2781,14 +2799,15 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
+ 			compute_insn_live_regs(env, &insns[i], &state[i], ret_reg_pair);
+ 	}
+ 
+-	/* Forward pass: resolve stack access through FP-derived pointers */
+-	err = bpf_compute_subprog_arg_access(env);
+-	if (err)
+-		goto out;
+-
+ 	changed = true;
+ 	while (changed) {
+ 		changed = false;
++		/* a cycle of calls takes a round for each link */
++		if (signal_pending(current)) {
++			err = -EAGAIN;
++			goto out;
++		}
++		cond_resched();
+ 		for (i = 0; i < env->cfg.cur_postorder; ++i) {
+ 			int insn_idx = env->cfg.insn_postorder[i];
+ 			struct insn_live_regs *live = &state[insn_idx];
+@@ -2843,6 +2862,11 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
+ 			insn_aux[env->subprog_info[i].bail_insn].live_regs_before |=
+ 				BIT(BPF_REG_0) | (bpf_ret_reg_pair(env, i) ? BIT(BPF_REG_2) : 0);
+ 
++	/*
++	 * Forward pass: resolve stack access through FP-derived pointers.
++	 * It looks at live_regs_before of the callees.
++	 */
++	err = bpf_compute_subprog_arg_access(env);
+ out:
+ 	kvfree(state);
+ 	return err;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3c3d1c8ea452..ef68796c04dd 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3441,7 +3441,7 @@ static int check_subprogs(struct bpf_verifier_env *env)
+ /*
+  * The callee of callx is known to the main verification pass only, which
+  * records the 'caller' -> 'callee' edge of the call graph for the checks
+- * that follow it: absence of recursion and the maximum stack depth.
++ * that follow it: recursion that was not seen coming and the maximum stack depth.
+  */
+ static int record_callx_edge(struct bpf_verifier_env *env, int caller, int callee)
+ {
+@@ -3529,9 +3529,9 @@ static int check_unwind_insns(struct bpf_verifier_env *env)
+  * the current subprog to discover callees (direct subprogs and sync
+  * callbacks).
+  *
+- * The callees of callx are not known before the main verification pass.
+- * When callx is used the sort is repeated after it with the recorded callx
+- * edges added to the call graph to reject recursion through indirect calls.
++ * The callees of callx are not known before the main verification pass: callx
++ * is no edge here. The order within a cycle is arbitrary. For recursion see
++ * mark_recursive_subprogs() and check_recursion().
+  */
+ static int sort_subprogs_topo(struct bpf_verifier_env *env)
+ {
+@@ -3591,20 +3591,19 @@ static int sort_subprogs_topo(struct bpf_verifier_env *env)
+ 				}
+ 				if (color[callee] == 2)
+ 					continue;
+-				if (color[callee] == 1) {
+-					if (bpf_pseudo_func(&insn[idx]))
+-						continue;
+-					verbose(env, "recursive call from %s() to %s()\n",
+-						bpf_subprog_name(env, cur),
+-						bpf_subprog_name(env, callee));
+-					bpf_diag_program_structure(
+-						env, idx, "recursive subprogram call",
+-						"Rewrite the recursion as an explicit bounded loop, or split the logic so subprogram calls do not form a cycle.",
+-						"This bpf2bpf call would make the subprogram call graph recursive. "
+-						"The verifier requires a finite, acyclic call graph so it can bound stack depth and analysis.");
++				/*
++				 * The call that is its own target never returns. It is
++				 * also what libbpf leaves in place of a call that it
++				 * could not resolve.
++				 */
++				if (bpf_pseudo_call(&insn[idx]) && insn[idx].imm == -1) {
++					verbose(env, "call at insn %d calls itself\n", idx);
+ 					ret = -EINVAL;
+ 					goto out;
+ 				}
++				/* recursion: the order within the cycle is arbitrary */
++				if (color[callee] == 1)
++					continue;
+ 				color[callee] = 1;
+ 				dfs_stack[top++] = callee;
+ 				pushed = true;
+@@ -5860,7 +5859,8 @@ static void close_call_graph(unsigned long *calls, int cnt)
+  *
+  * What follows for a subprog from its callers, or from what it calls, is computed
+  * over this graph and not by a walk of one chain of calls after another: the
+- * number of chains grows exponentially.
++ * number of chains grows exponentially, and there is no end to them when subprogs
++ * call themselves.
+  */
+ struct bpf_call_graph {
+ 	int cnt; /* subprogs */
+@@ -5870,6 +5870,7 @@ struct bpf_call_graph {
+ 	unsigned long *live; /* what the kernel calls and what that gets to */
+ 	unsigned long *in_cb; /* callbacks and what they get to */
+ 	unsigned long *in_async_cb; /* async callbacks and what they get to */
++	unsigned long *in_recursion; /* recursive subprogs and what they get to */
+ 	unsigned long *tail_calls; /* subprogs that have a tail call */
+ 	unsigned long *arena_sp; /* subprogs that count on r12 of the caller */
+ };
+@@ -5900,14 +5901,15 @@ static int build_call_graph(struct bpf_verifier_env *env, struct bpf_call_graph
+ 
+ 	cg->cnt = cnt;
+ 	cg->words = words;
+-	cg->calls = kvcalloc((2 * cnt + 5) * words, sizeof(long), GFP_KERNEL_ACCOUNT);
++	cg->calls = kvcalloc((2 * cnt + 6) * words, sizeof(long), GFP_KERNEL_ACCOUNT);
+ 	if (!cg->calls)
+ 		return -ENOMEM;
+ 	cg->reach = cg->calls + cnt * words;
+ 	cg->live = cg->reach + cnt * words;
+ 	cg->in_cb = cg->live + words;
+ 	cg->in_async_cb = cg->in_cb + words;
+-	cg->tail_calls = cg->in_async_cb + words;
++	cg->in_recursion = cg->in_async_cb + words;
++	cg->tail_calls = cg->in_recursion + words;
+ 	cg->arena_sp = cg->tail_calls + words;
+ 
+ 	for (s = 0; s < cnt; s++) {
+@@ -5942,6 +5944,8 @@ static int build_call_graph(struct bpf_verifier_env *env, struct bpf_call_graph
+ 			add_reach(cg, cg->in_cb, s);
+ 		if (si[s].is_async_cb)
+ 			add_reach(cg, cg->in_async_cb, s);
++		if (test_bit(s, subprog_reach(cg, s)))
++			add_reach(cg, cg->in_recursion, s);
+ 		if (si[s].has_tail_call)
+ 			__set_bit(s, cg->tail_calls);
+ 	}
+@@ -5984,20 +5988,47 @@ static int check_exception_cb(struct bpf_verifier_env *env, struct bpf_call_grap
+ 	return 0;
+ }
+ 
++static bool bpf_prog_reenters_datapath(const struct bpf_prog *prog);
++
+ /*
+- * The DFS of sort_subprogs_topo() follows the address of a function like a call, and
+- * tolerates a cycle only when such address closes it, since it doesn't know what it is
+- * taken for. Such cycle counts as a recursion, unless the function is an async callback:
+- * its address is not an edge of the graph. The main verification pass limits the
+- * depth of the recursion, but it doesn't follow calls of global functions.
++ * Every subprog on a cycle has to check the stack at run time. mark_recursive_subprogs()
++ * didn't see the cycle coming when a helper got the callback from a table of
++ * functions, or from another subprog. A subprog that it marked for callx, which turned out
++ * to call something else, needs no check.
+  */
+ static int check_recursion(struct bpf_verifier_env *env, struct bpf_call_graph *cg)
+ {
+ 	int j, s;
+ 
+ 	for_each_set_bit(s, cg->live, cg->cnt) {
+-		if (!test_bit(s, subprog_reach(cg, s)))
++		if (!test_bit(s, subprog_reach(cg, s))) {
++			env->subprog_info[s].recursive = false;
+ 			continue;
++		}
++		if (env->subprog_info[s].recursive) {
++			/*
++			 * These progs run on top of other progs. Their frames belong in the
++			 * private stack, which has room for one frame of a subprog. A kprobe prog
++			 * that can be attached to a uprobe has no private stack, and is no better.
++			 */
++			if ((bpf_enable_priv_stack(env->prog) != NO_PRIV_STACK ||
++			     env->prog->type == BPF_PROG_TYPE_KPROBE) &&
++			    !env->prog->aux->priv_stack_requested) {
++				verbose(env, "recursive %s() in a tracing program\n",
++					bpf_subprog_name(env, s));
++				return -EINVAL;
++			}
++			/* It runs on top of its own frames. The half of the stack is not enough. */
++			if (bpf_prog_reenters_datapath(env->prog)) {
++				verbose(env, "recursive %s() in a program that calls bpf_clone_redirect()\n",
++					bpf_subprog_name(env, s));
++				return -EINVAL;
++			}
++			if (bpf_prog_has_invocation_budget(env->prog))
++				continue;
++			verbose(env, "JIT does not support recursive calls\n");
++			return -EOPNOTSUPP;
++		}
+ 		/* the last call of the cycle */
+ 		for_each_set_bit(j, subprog_reach(cg, s), cg->cnt)
+ 			if (test_bit(s, subprog_calls(cg, j)))
+@@ -6006,9 +6037,9 @@ static int check_recursion(struct bpf_verifier_env *env, struct bpf_call_graph *
+ 			bpf_subprog_name(env, j), bpf_subprog_name(env, s));
+ 		bpf_diag_program_structure(
+ 			env, find_call_insn(env, j, s), "recursive subprogram call",
+-			"Rewrite the recursion as an explicit bounded loop, or split the logic so subprogram calls do not form a cycle.",
+-			"This call or callback would make the subprogram call graph recursive. "
+-			"The verifier requires a finite, acyclic call graph so it can bound stack depth and analysis.");
++			"Load the address of the callback in the subprogram that passes it to the helper, or rewrite the recursion as a loop.",
++			"This call or callback closes a cycle of the call graph that was not seen before the main pass: "
++			"the callback comes from a table of functions or from another subprogram. Nothing checks the stack.");
+ 		return -EINVAL;
+ 	}
+ 	return 0;
+@@ -6123,7 +6154,8 @@ static int subprog_stack_size(struct bpf_verifier_env *env, int s)
+ 
+ /*
+  * A subprog is entered with no more than what one of its callers is entered with plus
+- * the frame of that caller. The graph has no cycles, so this comes to an end.
++ * the frame of that caller. Not when both are recursive: the callee checks the stack at run
++ * time. A cycle adds nothing, so this comes to an end.
+  */
+ static void compute_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph *cg,
+ 			       struct bpf_subprog_call_depth_info *dinfo)
+@@ -6143,11 +6175,17 @@ static void compute_call_depth(struct bpf_verifier_env *env, struct bpf_call_gra
+ 		for_each_set_bit(s, cg->live, cg->cnt) {
+ 			if (dinfo[s].depth < 0)
+ 				continue;
+-			depth = dinfo[s].depth + subprog_stack_size(env, s);
+-			arena_depth = dinfo[s].arena_depth + si[s].arena_stack_depth;
+ 			for_each_set_bit(j, subprog_calls(cg, s), cg->cnt) {
+ 				callee = &dinfo[j];
+-				frame = bpf_subprog_is_global(env, j) ? 0 : dinfo[s].frame + 1;
++				depth = dinfo[s].depth;
++				arena_depth = dinfo[s].arena_depth;
++				if (!si[s].recursive || !si[j].recursive) {
++					depth += subprog_stack_size(env, s);
++					arena_depth += si[s].arena_stack_depth;
++				}
++				frame = dinfo[s].frame + !si[j].recursive;
++				if (bpf_subprog_is_global(env, j))
++					frame = 0;
+ 				if (depth <= callee->depth && arena_depth <= callee->arena_depth &&
+ 				    frame <= callee->frame)
+ 					continue;
+@@ -6274,6 +6312,10 @@ static int check_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph
+ 		 * of caller's stack as shown on the example above.
+ 		 */
+ 		depth = dinfo[s].depth;
++		/* nor of the frames of recursive subprogs, see bpf_insert_recursion_checks() */
++		si[s].in_recursion = test_bit(s, cg->in_recursion);
++		if (si[s].in_recursion)
++			depth += THREAD_SIZE / 2;
+ 		if (s && si[s].has_tail_call && depth >= 256) {
+ 			verbose(env,
+ 				"tail_calls are not allowed when call stack of previous frames is %d bytes. Too large\n",
+@@ -6311,6 +6353,151 @@ static int check_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph
+ 	return err;
+ }
+ 
++/*
++ * The address of the callback at @idx goes nowhere but to a helper that keeps it for
++ * later: a timer, a work queue, call_rcu.
++ */
++static bool func_is_kept_for_later(struct bpf_verifier_env *env, int idx, int end)
++{
++	struct bpf_insn *insn = env->prog->insnsi;
++	u8 class, reg = insn[idx].dst_reg;
++	int i;
++
++	if (reg < BPF_REG_1 || reg > BPF_REG_5)
++		return false;
++	for (i = idx + 2; i < end; i++) {
++		class = BPF_CLASS(insn[i].code);
++		if (class == BPF_JMP || class == BPF_JMP32)
++			return bpf_is_async_callback_calling_insn(&insn[i]);
++		if (insn[i].dst_reg == reg)
++			return false;
++		if (bpf_is_ldimm64(&insn[i]))
++			i++;
++		else if (insn[i].src_reg == reg)
++			return false;
++	}
++	return false;
++}
++
++/*
++ * Find the subprogs on cycles of the call graph. It is not known yet what callx
++ * calls: it may be any subprog whose address is taken. A subprog that is
++ * marked for no reason is treated like a recursive one all the same.
++ */
++static int mark_recursive_subprogs(struct bpf_verifier_env *env)
 +{
 +	struct bpf_subprog_info *si = env->subprog_info;
 +	struct bpf_insn *insn = env->prog->insnsi;
-+	int *added, i, j, s, c;
++	int cnt = env->subprog_cnt, words = BITS_TO_LONGS(cnt);
++	unsigned long *calls, *taken, *callx;
++	bool plain_callx = false;
++	int i, j, s, err = 0;
 +
-+	added = kvcalloc(env->subprog_cnt, sizeof(*added), GFP_KERNEL_ACCOUNT);
-+	if (!added)
-+		return;
-+	/* callees first */
-+	for (i = 0; i < env->subprog_cnt; i++) {
-+		s = env->subprog_topo_order[i];
-+		if (!s || bpf_subprog_is_global(env, s))
-+			continue;
-+		for (j = si[s].start; j < si[s + 1].start; j++) {
-+			if (!bpf_pseudo_call(&insn[j]))
-+				continue;
-+			c = bpf_find_subprog(env, j + insn[j].imm + 1);
-+			if (c <= 0 || c == s || !si[c].on_its_own || added[c] == s)
-+				continue;
-+			added[c] = s;
-+			si[s].insns_total += si[c].insns_total;
++	/* calls + s * words: the subprogs that s calls */
++	calls = kvcalloc((cnt + 2) * words, sizeof(long), GFP_KERNEL_ACCOUNT);
++	if (!calls)
++		return -ENOMEM;
++	taken = calls + cnt * words;
++	callx = taken + words;
++
++	for (s = 0; s < cnt; s++) {
++		for (i = si[s].start; i < si[s + 1].start; i++) {
++			if (bpf_is_callx(&insn[i])) {
++				__set_bit(s, callx);
++				if (!bpf_is_unwind_goto(&insn[i + 1]))
++					plain_callx = true;
++			}
++			if (bpf_pseudo_call(&insn[i]) || bpf_pseudo_func(&insn[i])) {
++				j = bpf_find_subprog(env, i + insn[i].imm + 1);
++				if (j < 0)
++					continue;
++				/*
++				 * The first insns of the main prog are for the kernel. A call from
++				 * an async callback is on no cycle.
++				 */
++				if (!j && bpf_pseudo_call(&insn[i])) {
++					verbose(env, "recursive call of the main program\n");
++					kvfree(calls);
++					return -EINVAL;
++				}
++				/* the helper that calls a callback doesn't expect it to unwind */
++				if (bpf_pseudo_func(&insn[i]) || !bpf_is_unwind_goto(&insn[i + 1]))
++					si[j].plain_call = true;
++				/*
++				 * The helper that takes a callback calls it, or keeps it: the
++				 * callback that arms itself again doesn't call itself.
++				 */
++				if (bpf_pseudo_call(&insn[i]) ||
++				    !func_is_kept_for_later(env, i, si[s + 1].start))
++					__set_bit(j, calls + s * words);
++				if (bpf_pseudo_func(&insn[i]))
++					__set_bit(j, taken);
++			}
++			if (bpf_is_ldimm64(&insn[i]))
++				i++;
 +		}
 +	}
-+	kvfree(added);
++	for (i = 0; i < env->func_ptr_cnt; i++) {
++		j = bpf_find_subprog(env, env->func_ptrs[i].xlated_off);
++		if (j >= 0)
++			__set_bit(j, taken);
++	}
++	for_each_set_bit(s, callx, cnt)
++		bitmap_or(calls + s * words, calls + s * words, taken, cnt);
++
++	/*
++	 * Callers of a global subprog look at can_unwind before the subprog is verified.
++	 * The main prog returns to the kernel.
++	 */
++	for (s = 0; s < cnt; s++) {
++		if (plain_callx && test_bit(s, taken))
++			si[s].plain_call = true;
++		si[s].bail_unwinds = si[s].can_unwind ||
++				     (s && !si[s].plain_call && !bpf_subprog_is_global(env, s) &&
++				      bpf_jit_supports_unwind() &&
++				      !bpf_prog_is_offloaded(env->prog->aux));
++	}
++
++	close_call_graph(calls, cnt);
++
++	for (s = 0; s < cnt; s++) {
++		if (!test_bit(s, calls + s * words))
++			continue;
++		err = -EINVAL;
++		if (!s) {
++			verbose(env, "recursive call of the main program\n");
++			break;
++		}
++		/*
++		 * Each call of the function that it replaces is an invocation of its own: a
++		 * loop in the prog that it extends gets a new time slice each time.
++		 */
++		if (env->prog->type == BPF_PROG_TYPE_EXT) {
++			verbose(env, "recursive %s() in an extension\n", bpf_subprog_name(env, s));
++			break;
++		}
++		/* the device runs the insns that the driver was given, without the checks */
++		if (bpf_prog_is_offloaded(env->prog->aux)) {
++			verbose(env, "recursive %s() in an offloaded program\n",
++				bpf_subprog_name(env, s));
++			break;
++		}
++		if (si[s].has_tail_call || si[s].has_ld_abs) {
++			verbose(env, "recursive %s() cannot have %s\n", bpf_subprog_name(env, s),
++				si[s].has_tail_call ? "tail calls" : "LD_ABS");
++			break;
++		}
++		if (si[s].bail_insn < 0) {
++			verbose(env, "recursive %s() has no exit\n", bpf_subprog_name(env, s));
++			break;
++		}
++		si[s].recursive = true;
++		err = 0;
++	}
++	kvfree(calls);
++	return err;
 +}
 +
- static void print_verification_stats(struct bpf_verifier_env *env)
+ static int check_max_stack_depth(struct bpf_verifier_env *env)
  {
- 	/* Skip over hidden subprogs which are not verified. */
-@@ -25603,10 +25828,12 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	enum priv_stack_mode priv_stack_mode = PRIV_STACK_UNKNOWN;
+@@ -6351,10 +6538,11 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ 		 * All async_cb subprogs use normal kernel stack. If a particular
+ 		 * subprog appears in both main prog and async_cb subtree, that
+ 		 * subprog will use normal kernel stack to avoid potential nesting.
++		 * The private stack has room for one frame of a subprog.
+ 		 * x86-64 uses R9 for both private stack frame pointer and arg6.
+ 		 */
+ 		if (priv_stack_mode != PRIV_STACK_ADAPTIVE || test_bit(s, cg.in_async_cb) ||
+-		    (IS_ENABLED(CONFIG_X86_64) && si[s].stack_arg_cnt)) {
++		    si[s].recursive || (IS_ENABLED(CONFIG_X86_64) && si[s].stack_arg_cnt)) {
+ 			si[s].priv_stack_mode = NO_PRIV_STACK;
+ 			continue;
+ 		}
+@@ -22106,6 +22294,21 @@ static int flow_drain(struct bpf_verifier_env *env)
+ 	return err;
+ }
+ 
++/*
++ * A subprog on a cycle of the call graph checks the stack at run time, see
++ * bpf_insert_recursion_checks(). When there is no room, or the time slice is over, it leaves
++ * at once with 0 in place of the result: it unwinds if it can, see bail_unwinds, otherwise
++ * it returns and callers have to be fine with that.
++ */
++static int check_recursion_guard(struct bpf_verifier_env *env)
++{
++	struct bpf_subprog_info *sub = &env->subprog_info[cur_func(env)->subprogno];
++
++	if (!sub->recursive || env->insn_idx != sub->start)
++		return 0;
++	return push_budget_exit(env);
++}
++
+ /* Process the current state until it gets to the start of a basic block. */
+ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+ {
+@@ -22229,6 +22432,10 @@ static int do_check_block(struct bpf_verifier_env *env, int prev_insn_idx)
+ 		if (err)
+ 			return err;
+ 
++		err = check_recursion_guard(env);
++		if (err)
++			return err;
++
+ 		err = do_check_insn(env, &do_print_state);
+ 		if (error_recoverable_with_nospec(err) && state->speculative) {
+ 			/* Prevent this speculative path from ever reaching the
+@@ -24325,6 +24532,11 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			bpf_log(log, "Only fentry can attach to %s, which can unwind\n", tname);
+ 			return -EINVAL;
+ 		}
++		/* It can have tail calls, which are not allowed there, see check_call_depth() */
++		if (aux->func && aux->func[subprog]->aux->in_recursion && prog_extension) {
++			bpf_log(log, "Cannot replace %s, which is called in a recursion\n", tname);
++			return -EINVAL;
++		}
+ 		conservative = aux->func_info_aux[subprog].unreliable;
+ 		if (prog_extension) {
+ 			if (aux->func_info_aux[subprog].linkage != BTF_FUNC_GLOBAL ||
+@@ -25757,10 +25969,12 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
++	ret = sort_subprogs_topo(env);
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
+-	ret = sort_subprogs_topo(env);
++	/* what no JIT can run is reported first */
++	ret = mark_recursive_subprogs(env);
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
+@@ -25828,9 +26042,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
  		goto skip_full_check;
  
  	ret = do_check_all(env);
--
- 	/* reject recursion through the callx edges found by the main pass */
- 	if (ret == 0 && env->callx_edges)
- 		ret = sort_subprogs_topo(env);
-+	/* while the calls are what they are in the program */
-+	if (env->log.level & BPF_LOG_STATS)
-+		add_insns_of_callees(env);
- 
- 	/* the driver numbers the insns like the program that it was given */
- 	if (ret == 0 && bpf_prog_is_offloaded(env->prog->aux))
+-	/* reject recursion through the callx edges found by the main pass */
+-	if (ret == 0 && env->callx_edges)
+-		ret = sort_subprogs_topo(env);
+ 	/* while the calls are what they are in the program */
+ 	if (env->log.level & BPF_LOG_STATS)
+ 		add_insns_of_callees(env);
 -- 
 2.55.0
 
