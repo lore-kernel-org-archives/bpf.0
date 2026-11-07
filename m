@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022720;
-	b=GCS8bPk2rVhG6XbCzUdEG2karrX0SMAomRJ8w5sdKqbQ/+xfJ0XZw570kgeBfAMq+OhG
-	 PtoEvePgvLtCgFAgY4kRtEW61gMkIrdsc37QjWCN0YYKfsn6UAJ0+LKxNQKsvjJZ/R394
-	 n2s/QXpcAr6m78SAmzO7wSEWNOdJd3UKu+Wtw7BdFPGeWcJ5X0+wel2ISHxghJv0uzK4S
-	 ENxl9q1zFIJUtVZGqlTUY10vFP4mMY5shdWpj/yXbVKrVfhyK6fAtraYlrTBDVlE4m2RM
-	 c0T1dacwE4UfnRlzZy+UXqa2HNZFkkyA+hSZSsPtMPKfDGG2ORoGkeJBAOxqYnqEvzQ==
+	t=1794022726;
+	b=CQ/XmTaIOsgmX2N150U4ycA8I/ViIypeZ2v3HCynIIUsByzHlGmUulMoRzbATdPOkQlO
+	 lm1PZ0W6NTYKaRndRo0MAfsqgKian+M4+Y9aW9BY5xbauxi7MnmbN8/bjogu9YdtzjmRw
+	 TzxANGvIHLZUnP5nLpa/ElecQ2t1AUhtVgP9cNKieckxsakCODmWa590yRQsTmrMG48t9
+	 Kr1y+QGRkZFRTvGBYaKr5dyFAgzdgLyXTeZJf9/qSoqDc9lddV7Pqe1QioY3pQYtGe8va
+	 cTZaC5ykxI4hZvdgmlriJzHL7isXWWZAFB6a3FMXUW2RBeGwUBNKET34hntU0uI1+LA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022720;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022726;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=LzRCDaV1RWIHS2HYSp9n+7PHsg0zF+xoiDpuL0ERjTA=;
-	b=RbeEzQf1l8ZutANk8h6pQbE/oaQ/PbLaNAilTk9dY8iBqtu1DSOiDjN1aDimB+fxwoGe
-	 bu8a3PTx9tEtKBd4eqRDA6VdzX5dJZXK6imVG3BAp/zUyM3oOMKc6yNUJiBbzbOFE+y4i
-	 BrT563gVn8vKoFqp2wCRoQY7d7xr6uwqrFtPVbCaZ/OdlxcLQRJKuVmLeHdQBseJtGG8y
-	 F+0TgPtrenPreK2P25WZhKzjdW0LtI3XQ4Kk6mzvbkvk4jo1eZnOPvt0xJHb+gXFcQRxO
-	 l2JeuQMFHVjTFUAin0Z+4G4ARRou/mVxZDhyJAVOioCp5JuJVB9d0p3InL47bptWmsg==
+	bh=dxyY/J+db74GZB14Falgfk+ndVyxCu15I2o8HjB7kUc=;
+	b=1NJNk7KCXDkkTms5eZxhWglfyZkEk94PB5VUfLP1Iu0eW1NBAtgt8o7Lat7MeUs8W+R0
+	 5GezRbtWgdfghMsLdnI9NQb7cuujZgnx56fNtXw9898KZq3P72T5HrdiTHBMi0HPvsOe8
+	 5TrxyxgUQxHCS35tPwwehTtUVWAMcH/u3V9uiQwal0Iij2msni+jdF2SE7sHzjM97C4Li
+	 tsBM5oCGqrH4kyH9PSBel4iyOfBaZ7d+LWu7PTVGVExfgKO9j+lnel8Lm47gXTuI8ABAm
+	 V6eIwbqHHSwIvaAv4T0AagslVyWl08lOoVuUUZFJvAXNEZpP+dN2DzRia0w3WxCTJng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="z7/ZEyFq";
-	arc=none smtp.remote-ip=209.85.214.174
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f+VZhDWW;
+	arc=none smtp.remote-ip=209.85.210.172
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C5B606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:38:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8C5B606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0912B606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:38:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0912B606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=z7/ZEyFq
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e9d7791b00so9117135ad.0
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:38:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f+VZhDWW
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8a06454116eso626261b3a.1
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:38:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794022719; x=1794627519; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794022725; x=1794627525; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=LzRCDaV1RWIHS2HYSp9n+7PHsg0zF+xoiDpuL0ERjTA=;
-        b=z7/ZEyFq4yYP9Ht7OcSSD9UxBQNML1h3IDE7371dbCa2WpRbb2tVCFL+Q0V3winYGh
-         BoJZ+Wvl/uYtGSCb/1TDPpca2EaDmb+kshwvidzn7zCxLKVZBpOg4NwQI86rfZAxKFHj
-         Bhmk0sAR/XH/NlzAH53gbcUMt0kJwvkIinU1Au5SrftonRAPTjV0d2Ka5o9THfBAWEId
-         hYmHp6W3aBC0NfuFmlHhVzXkDRnQ6qCGtFolq4uUgWfabYRpSFT37BU0FOGb32SRKuQ+
-         OUaOhMNXyuWumIrjdYD9+u79V7vhCceop6jdvn4Rsykizghpc33Mu3ez5JDjE00CNtx8
-         SKUQ==
+        bh=dxyY/J+db74GZB14Falgfk+ndVyxCu15I2o8HjB7kUc=;
+        b=f+VZhDWW1awJ9vpQUFPFb8CL6GAl/KJyskA7BHFMvVVmNFams2f+0moGN/a0TSC+0T
+         9WwZ0yUsyfVPxnjdt9PtxLMriFgGwotMz0KFOS+dGAigdHVP/WsU/scQPFEYngwwpqqW
+         Ocyt+3jefqbJrwsOn0ff6meOFn5MKn9ltO/f4IUMt1Nk/Kf6nRWPPN2+SunUzHSiWXqF
+         Sc6cunSmMGNXmwIBM7UAF8Phgt7YtN7HEuypc0D29zzy8xi/rxj2uQ+UFoCEtkUvlPUh
+         9uM/yYIxQylsH9aIPd/nvUxSwZyOjT5ECMLGqTVbjsuvM3wiWWJvRCpJruvewbyKUgKa
+         IMIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022719; x=1794627519;
+        d=1e100.net; s=20260707; t=1794022725; x=1794627525;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=LzRCDaV1RWIHS2HYSp9n+7PHsg0zF+xoiDpuL0ERjTA=;
-        b=qqYGjKBDWA9xV9Fy0zmY4UljUbUX4ZuP/JQZ/sQBDdJT4/U427qHoUtZUwk/D8NDB8
-         6OMU+4ve/7Aff2eps3/V3gFGZWjEjmHBXVBBrq6YhVH+fL69grwAnVQMdUkCf7xHJMby
-         Xd+EalN2ktIlKkYt3ajoLsfJMrhIa2OEHG1njPCOSUm3Xou0x6nHXmOK9PXS4FzKSXCV
-         XSGR6/J7EAtFTNlnauvMeGY+ZCbxgqIZOFmad5OKD2cTkt3hnnBjRgBen2kco5RI6EjA
-         y3frs7O016meqq9OgTjgaIAMtqm6MwnnQWjjHpHFXgolmBdobG2fBqNamtsVes+qhrr9
-         2EMQ==
-X-Gm-Message-State: APuU4Z8rELmx1zwvg31EQtklvwB/PUkZlCUI39iKGypbu3kQQC4wgLpP
-	8jHtOYKRu6/7/3SDddb7rDYDzA/ipEjhFWKENouMX6nZNASG57z7hryw8mFpjw==
-X-Gm-Gg: AYBFou042VGn/N0qxiADBll+v1RXKNYtQvqoz4epWhnbgy1djBMCFMJf2l3tSiNMqE5
-	cz8K2zibeprXqm3VTPgOXgjL1x4g1KJCmknBv+lw6grnkw5c0ubk0LjMxfj76qi3tIhSoEDnQzO
-	UrLeqYc76J3ZQwh8tGtzsq17GjZW40Cl/UIRP81p/CCqG7xQSejEyBZ+hVmNGy79RNkIMQdWd5V
-	RKJwa75+khpwKaWQbFkLiGvejw7SFiVfklS46P6lnmu8bbqybG9eWoHEmn9sbeq3yytvEb5o3XU
-	maLVka4+C13a1/3FV56knX19PR0LWwGpYlGzClIG5gcPNrvlfJ8ogsisJMoA/oRhWDYLuH4IigH
-	w3rA36lQN9g83zB5d5B2O1Th2hQmKwNfiq0TRCvS32UPkONFrSgN4MNI/G0D6YSOJXAt8aY8fNg
-	uqBefLpeDdo3JJjZ0ezDbq2hcPXhyBPV7dLxPzH6BQOeuR7FCnapn1NptFsxq0L3WaU5cWa/fDf
-	hmk6Awkp/GLUmr91J/MIm8s+eE80iMRNy1S/oB1Z2c9dpMhCvt3fR0hdXt52O7WfGKEphjXTU1V
-	r0goMUWf/qAH9lRSdB5MPRRqksRz1Bag/8MYH7K4ovdTrm6TKn/HYQeldE4hdsveIF7gurcxrWn
-	FFpdbD2m5020D35ZnIB7c13JElWotYpSmBGwr4yKKz3YD9cYprUktswuQdn79qazvxxC8ciJoYP
-	U=
-X-Received: by 2002:a17:90b:1a91:b0:3ae:521e:767f with SMTP id 98e67ed59e1d1-3b0db705cb0mr4136558a91.36.1794022718855;
-        Fri, 06 Nov 2026 19:38:38 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b105817ce1sm1491021a91.9.2026.11.06.19.38.38
+        bh=dxyY/J+db74GZB14Falgfk+ndVyxCu15I2o8HjB7kUc=;
+        b=BuCqN4CCWcsnVdPNlhGBOB86GHsjuqcjdvKKHwljAcWzOp/S0zbiJgqJb93FMRMdao
+         vPSYoC2bsOLjg+Cewdi1MHqbI8H2qLLKjJ5erq0M5yNCCgQYOt3KGddT6QdKo9sx3cW4
+         GyOph4q8e9IUfo4mp9srxVCYHvJ8dm68nbz4VA93l/ZlBd4sqD2noPb8Oe5XsJy+TOFS
+         ZM7TKdRftYkAUKM7n78RgAN/Fu8apiPbj+zDkz6EPcRs58H+smPpr8t2BypJCPKppSl6
+         fZiDrNkOdJJNFjbZYRL/ndcqkTEuriHcyBUtuP64z1tZYHTpZ9d+SXtVVjledcZZb5wu
+         lwTg==
+X-Gm-Message-State: APuU4Z+O5zYQrpmbQH7KODLNjD3Cu0GzJFriUGgA/QBNAqD07X3ao6Ud
+	cbA+CSqcW6BM764twMj2bMERqA9ZIrcYvdIHlpz70BEQ4g5IHcXRrsxqKqNcOg==
+X-Gm-Gg: AYBFou1CY6EOIjxzJ2oOX9sBV8ad92K0VNoozcNU5CdNaLUJ3KCPIB0PzczGsr/PgpM
+	Fd/US3gCJlOj25cZiOGwuc6CPYVkO4BB8xnWvvhVFTWQWHYd6b6POCQt18dol3nqJAExX2/pfkR
+	aO3wW2etA1RfvYcOo54Xm8ANuUV5WLohFJaxgQ3q0qz6CkFOeXSPg//pewi8u/ggr1ofuSDpAAN
+	LoQKDCSK4Tc8G5C8yevRUC/DhU2xmylzP37uPz9yhzO+aJSq3R3SP+no3WejJTLZDSHqUG0JdKo
+	PVwbnCGoj/eSONowDE/VarSlR+KEsvlo1ii8lsTnbbry6AWzbhEJJqzLi0Y39EDvS+aN+XjlwA3
+	Dfgp6fwp78LTyevnB1a31NXIoQs+Sd34Cgh4fUNLNrtxDwq7S5RDpL3Wr1t69edfeZZmCvLONOS
+	8GXXpQ1kvkmqRfzEKJJmExRA87R6E7VJH4kaXEmyxFUvuP23LEoBRTcD0pDI4lBaoDZtC34Z79X
+	Gmmo5h9TiSrrhNI0EvBqv02PAphi2PanRG1CIMBgpx5Qi9tsfRWfUN06tiK/X6NqyamKEUX5Iv2
+	3MRJCbx/oBRPPLmlQRqid6XBmpJ0t16fcKyRCA/tKrFrth/5k2cUjOM6tdkRVAK/P578+GzGSrl
+	yX81SdVRXtsspzg+2V3h1TV9uJn2enznRMR9VhTZzTY2ZUvnPvRS+Sr7b9vwyM9ZTLDgPbnAfIA
+	==
+X-Received: by 2002:a05:6a00:140b:b0:8a0:3336:4b45 with SMTP id d2e1a72fcca58-8b37aa9f637mr4522457b3a.12.1794022725031;
+        Fri, 06 Nov 2026 19:38:45 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b356c2c5a5sm1078565b3a.7.2026.11.06.19.38.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 19:38:38 -0800 (PST)
+        Fri, 06 Nov 2026 19:38:44 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v4 06/46] bpf: Tell which arguments of a call a join must leave alone
-Date: Sat,  7 Nov 2026 03:37:14 +0000
-Message-ID: <20261107033758.1547725-7-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v4 07/46] bpf: Add the data structures of the main pass over the control flow graph
+Date: Sat,  7 Nov 2026 03:37:15 +0000
+Message-ID: <20261107033758.1547725-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
@@ -104,151 +104,244 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-get_some_addr() of the selftest mem_rdonly_untrusted:
+The verifier follows each path of a prog from the entry to exit. It ends a
+path early only where an earlier path left a state that covers the current
+one. A live value that differs from path to path defeats that. Then the
+work grows with the number of paths, not with the size of the prog:
 
-  if (bpf_get_prandom_u32())
-          return bpf_rdonly_cast(0, bpf_core_type_id_kernel(struct sock));
-  else
-          return bpf_rdonly_cast(0, 0);
+  for b in bytes { h = (h ^ *b as u64).wrapping_mul(0x100000001b3); }
 
-The compiler makes one call of the two, with r2 = 0 or the type id. The
-paths meet in front of the call, and a join makes a range of two constants:
+In this FNV hash h is a new number in each iteration, so no state covers
+the next one. Branches that set different values do the same to C code.
 
-  R2 must be a known constant
+  insns processed                                     today   this series
+  rust-bpf   hash_fnv_bytes                         1000001 *         160
+  rust-bpf   scx_qmap/qmap_init_cids                 131088 *         196
+  selftests  test_verif_scale3/balancer_ingress      821107         57155
+  scx        scx_eevdf/eevdf_dispatch                350041         15322
+  Cilium     bpf_host/cil_to_netdev, Oct 2026         64658          7538
+  * "BPF program is too large", "The sequence of 8193 jumps is too complex"
 
-cil_sock4_connect() and cil_sock4_sendmsg() of Cilium's bpf_sock:
+flow.c is a new main pass: a data-flow analysis over the control flow
+graph that runs to a fixpoint. Where two paths meet, it joins their states
+into one state that covers both: r1=1 and r1=5 give r1=[1,5]. At the head
+of a loop it widens what grows: h becomes an unknown scalar, and one more
+pass over the body ends the loop. A join can lose a fact that a later check
+depends on. Thus a basic block has a set of states, not one state:
 
-  if (err == -EHOSTUNREACH || err == -ENOMEM) {
-          try_set_retval(err);
+  a state arrives at a basic block        the verifier
+  a state of the set covers it            drops it
+  it has a join with a state of the set   replaces that state with the join
+  all other cases                         adds it to the set
 
-The compiler decides the 'if' where err is set, and keeps a flag. All
-paths meet, then the flag is tested. In the join err is [-113, 1]:
+The verifier verifies a block with each new state of its set and sends the
+results to the successors of the block. The pass ends when no set has a new
+state. The check of one insn does not change.
 
-  At bpf_set_retval the register R1 has .. should have been in [-4095, 0]
+Add the head comment, the limits and the data structures:
 
-The progs are valid. A pass that joins states must know, ahead of a call,
-which registers it must not join.
+  struct flow_state   a state in a set, or the state of a call that waits
+  struct flow_set     the states at one insn
+  struct flow_entry   the calls that wait for a subprog, its exit states
+  struct flow_need    what the checks after an insn depend on
 
-antistall_set() of scx_layered:
-
-  bpf_for_each(scx_dsq, __p, dsq_id, 0) {
-
-bpf_iter_scx_dsq_next() ends this loop: it needs no may_goto. The pass that
-finds the places for may_goto must know that, before the main pass sets
-is_iter_next in insn_aux_data. With may_goto in each such loop layered_init
-and mitosis_init are rejected on the added edge, and the schedulers in
-tools/sched_ext take 48 % more insns.
-
-  bpf_call_const_arg_regs()    a helper or a kfunc takes only a known
-                               constant in these registers
-  bpf_call_checked_arg_regs()  it compares them with a range: sizes of
-                               memory, the argument of bpf_set_retval()
-  bpf_insn_is_iter_next()      the call is bpf_iter_*_next()
-
-The first two go by the types of the arguments in struct bpf_func_proto,
-like check_func_arg(), for r1 - r5. bpf_set_retval() is checked elsewhere
-and is added by hand. Nothing calls the three in this patch.
+The limits are on states and grow with the prog. For a prog of N insns:
+1024 at an insn, 16 * N + 4096 at a time, 256 * N + 64K in all.
+Nothing builds flow.c until its last function is there.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  3 ++
- kernel/bpf/verifier.c        | 62 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 65 insertions(+)
+ kernel/bpf/flow.c | 181 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 181 insertions(+)
+ create mode 100644 kernel/bpf/flow.c
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 922f01ee8136..7fda41a4bf25 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1614,6 +1614,9 @@ int bpf_states_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst
- void bpf_join_free(struct bpf_verifier_env *env);
- 
- int bpf_insert_loop_guards(struct bpf_verifier_env *env);
-+u16 bpf_call_const_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn);
-+u16 bpf_call_checked_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn);
-+bool bpf_insn_is_iter_next(struct bpf_verifier_env *env, struct bpf_insn *insn);
- bool bpf_edge_leaves_loop(struct bpf_verifier_env *env, int h, int n, int t);
- bool bpf_jump_leaves_loop(struct bpf_verifier_env *env, int h, int n);
- int bpf_insert_recursion_checks(struct bpf_verifier_env *env);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 801e4607a462..ea6dd39982f2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9215,6 +9215,13 @@ static bool arg_type_is_mem_size(enum bpf_arg_type type)
- 	return type == ARG_MEM_SIZE || type == ARG_MEM_SIZE_OR_ZERO;
- }
- 
-+/* A number that check_func_arg() takes only when it is a known constant */
-+static bool arg_type_is_const(enum bpf_arg_type type)
-+{
-+	return type == ARG_CONST_SCALAR || type == ARG_CONST_MEM_SIZE ||
-+	       type == ARG_CONST_ALLOC_SIZE_OR_ZERO;
-+}
+diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
+new file mode 100644
+index 000000000000..01681957855d
+--- /dev/null
++++ b/kernel/bpf/flow.c
+@@ -0,0 +1,181 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * The main pass of the verifier as a fixpoint over the control flow graph.
++ *
++ * Every insn that starts a basic block has a set of states. The state that
++ * arrives there is
++ * - dropped, if it is within a state of the set,
++ * - joined with a state of the set, if there is a join, see bpf_states_join(),
++ *   that doesn't make up what neither of them has, see flow_join_makes_up(),
++ * - added to the set otherwise.
++ * What is new in the set is pending. Pending states are processed in the order
++ * of the program in which a loop is done with before what follows it, see
++ * flow_compute_order(). The pass ends when nothing is pending.
++ *
++ * Loops. The state that enters a loop is made to stand for all iterations with
++ * what scalar evolution knows about the loop, see bpf_flow_loop_enter().
++ * The state that comes back to the loop head is expected to be within it.
++ * If it is not, the two are joined, what grew is forgotten, and the loop is
++ * done again.
++ *
++ * Functions. A static function that gets nothing but numbers and pointers to
++ * what is not the stack is verified on its own, for the states at its entry
++ * and not for every chain of calls. The call waits. What comes out of the
++ * function goes to all calls that wait for the states it comes from.
++ */
++#include <linux/bpf.h>
++#include <linux/bpf_verifier.h>
++#include <linux/filter.h>
++#include <linux/jhash.h>
++#include <linux/rbtree.h>
++#include <linux/slab.h>
 +
- static bool arg_type_is_raw_mem(enum bpf_arg_type type)
- {
- 	/*
-@@ -15379,6 +15386,61 @@ bpf_helper_stack_access_bytes(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	return info;
- }
- 
-+/* insn_aux_data->is_iter_next is not there before the main pass */
-+bool bpf_insn_is_iter_next(struct bpf_verifier_env *env, struct bpf_insn *insn)
-+{
-+	struct bpf_call_arg_meta meta;
-+
-+	return bpf_pseudo_kfunc_call(insn) &&
-+	       !bpf_fetch_kfunc_arg_meta(env, insn->imm, insn->off, &meta) &&
-+	       bpf_is_iter_next_kfunc(&meta);
-+}
++#define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
 +
 +/*
-+ * check_func_arg() goes by the types of the arguments in the proto of a helper or a kfunc.
-+ * So does what has to be known ahead of the call: the registers with arguments of a kind.
++ * States at an insn that have no join: kinds of values, references, chains of calls.
++ * A state that arrives is compared with those that it may be related to, see flow_may_relate().
++ * At worst that is all of them, and the work is the square of it.
 + */
-+static u16 call_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn,
-+			 bool (*is)(enum bpf_arg_type type))
-+{
-+	const struct btf_func_model *fm = NULL;
-+	const struct bpf_func_proto *fn;
-+	struct bpf_kfunc_desc *desc;
-+	u32 i, slot = 0;
-+	u16 mask = 0;
++#define BPF_FLOW_MAX_STATES	1024
++/*
++ * All states in the sets at a time: that many for every insn of the prog, and some. Not counted:
++ * calls that wait, what came out of a function, the states that loops were entered with.
++ */
++#define BPF_FLOW_LIVE_PER_INSN	16
++#define BPF_FLOW_LIVE_BASE	4096
++/* All states that were ever there. It bounds the work by the size of the prog. */
++#define BPF_FLOW_TOTAL_PER_INSN	256
++#define BPF_FLOW_TOTAL_BASE	65536
++/*
++ * What comes out of a function is joined that many times. Then it is widened, like what
++ * comes back to a loop head: the exit states have to stop changing.
++ */
++#define BPF_FLOW_MAX_JOINS	16
++/* With fewer states at an insn it's faster to compare them than to look at their shapes. */
++#define BPF_FLOW_MIN_SHAPES	8
++/* bpf_loop() with that many iterations at most is walked. */
++#define BPF_FLOW_MAX_CALLBACKS	8
++/* What a callback returns to the helper with is joined that many times before it is widened. */
++#define BPF_FLOW_CALLBACK_JOINS	4
 +
-+	if (bpf_pseudo_kfunc_call(insn)) {
-+		desc = find_kfunc_desc(env->prog, insn->imm, insn->off);
-+		if (!desc)
-+			return 0;
-+		fn = &desc->proto;
-+		fm = &desc->func_model;
-+	} else if (bpf_get_helper_proto(env, insn->imm, &fn) < 0) {
-+		return 0;
-+	}
-+	for (i = 0; i < ARRAY_SIZE(fn->arg_type) && fn->arg_type[i] != ARG_UNUSED &&
-+		    slot < MAX_BPF_FUNC_REG_ARGS; i++) {
-+		if (is(fn->arg_type[i]))
-+			mask |= BIT(BPF_REG_1 + slot);
-+		slot += fm ? btf_func_model_arg_slots(fm, i) : 1;
-+	}
-+	return mask;
-+}
++enum flow_cycle {
++	FLOW_NO_CYCLE,
++	/* what grew is forgotten */
++	FLOW_CYCLE,
++	/* after a while. A flag that a callback sets doesn't grow any further. */
++	FLOW_CALLBACK_CYCLE,
++};
 +
-+/* The registers in which the helper or the kfunc takes nothing but a known constant */
-+u16 bpf_call_const_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn)
-+{
-+	return call_arg_regs(env, insn, arg_type_is_const);
-+}
++/* See flow_may_relate() */
++enum flow_word {
++	FLOW_CHAIN,
++	FLOW_CTX,
++	FLOW_LAYOUT,
++	FLOW_PTRS,
++	FLOW_OFFS,
++	FLOW_SHAPE_WORDS,
++};
 +
-+/* The registers in which it takes a number that has to be in a range */
-+u16 bpf_call_checked_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn)
-+{
-+	if (bpf_helper_call(insn) && insn->imm == BPF_FUNC_set_retval)
-+		return BIT(BPF_REG_1);
-+	return call_arg_regs(env, insn, arg_type_is_mem_size);
-+}
++struct flow_shape {
++	u32 word[FLOW_SHAPE_WORDS];
++	/* how much of the packet is checked, the sum over the pointers to the packet */
++	u32 pkt_range;
++	/* what comes after FLOW_CTX is computed */
++	bool places;
++};
 +
- /*
-  * Describe a kfunc's stack access through argument slot @arg (0-based).
-  * As for helpers, must_write describes destruction of prior verifier state,
++struct flow_state {
++	struct bpf_verifier_state st;
++	/* states at the insn, see struct flow_set, calls of struct flow_entry */
++	struct list_head node;
++	struct rb_node rb;		/* pending states */
++	int prev_insn_idx;
++	u32 seq;
++	struct flow_shape shape;
++	u16 joins;
++	bool pending;
++	/* the order of pending states, see flow_set_pending() */
++	u8 key_len;
++	u32 key[MAX_CALL_FRAMES + 1];
++};
++
++/* what came out of a function that is verified on its own */
++struct flow_exit {
++	struct list_head node;
++	struct bpf_verifier_state st;
++	u16 joins;
++};
++
++/*
++ * Every call that waits makes an entry of the function: the state at its first insn and what
++ * becomes of it. Entries whose states met are one set: what comes out of the function for one of
++ * them is for the calls of all of them. One entry stands for the set and has its lists.
++ */
++struct flow_entry {
++	struct flow_entry *up;		/* towards the one that stands for the set: up == itself */
++	struct list_head calls;		/* struct flow_state: the calls that wait */
++	struct list_head exits;		/* struct flow_exit: what came out */
++};
++
++struct flow_func {
++	int exit_idx;			/* all exits are compared as if they were here */
++};
++
++/* States at an insn, in the order in which they came. */
++struct flow_set {
++	struct list_head list;
++};
++
++struct flow_united {
++	u32 a, b;
++};
++
++struct flow_kept {
++	struct list_head node;
++	struct bpf_verifier_state st;
++};
++
++/* What the checks ahead of an insn look at, see enum flow_need_kind */
++struct flow_need {
++	u64 slots;			/* of the stack, fp-8 is bit 0 */
++	u16 regs;
++};
++
++/* see flow_compute_need_const() */
++enum flow_need_kind {
++	FLOW_NEED_ARG,
++	FLOW_NEED_STACK_OFF,
++	FLOW_NEED_PTR_OFF,
++	FLOW_NEED_JUMP,
++	FLOW_NEED_VALUE_OFF,
++	FLOW_NEED_BASE,
++	FLOW_NEED_JUMP_ALU,
++	FLOW_NEED_KINDS,
++};
++
++struct bpf_flow {
++	/* computed once */
++	u32 len;			/* of the prog during the pass */
++	u32 nr_funcs;
++	u32 *pos;			/* place of the insn in the order */
++	u32 *rank;			/* callers go first */
++	struct flow_need *need[FLOW_NEED_KINDS];
++	unsigned long *point;		/* insn starts a basic block */
++	unsigned long *keep;		/* states that were processed are compared with */
++
++	/* of the pass */
++	struct flow_set *states;	/* per insn */
++	struct flow_set *enter;		/* per insn: the states that enter the loop at its head */
++	u32 *nr_states;			/* per insn: the two sets are counted together */
++	struct rb_root_cached pending;
++	struct flow_func *funcs;
++	struct flow_entry **entries;	/* bpf_verifier_state.flow_entry is the index, 0 is none */
++	u32 entry_cnt, entry_cap;
++	struct flow_united *united;
++	u32 united_cnt, united_cap;
++	struct list_head kept;
++	struct bpf_verifier_state tmp;
++	u32 seq;
++	u32 live_states;
++};
 -- 
 2.55.0
 
