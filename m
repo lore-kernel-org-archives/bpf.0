@@ -1,55 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.151
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794027496;
-	b=xg0ZK4K0UEumktqKsg0/EqaAYIYLw6HTbS9s3pqktAwmVltb+u/+iShngaDo4OoEixcs
-	 bF/eweakieR67TbFlJWqX47pauWURfWlMHeaogd+Zj/+7+ujgYvEqWGIuiXwvBWxgq4Md
-	 1IQ0hKvrTnY71jJPj9RNSWvsYddJ81bS2ijElG8u3kWsgxbq3xl5eY8LtZkP+HAfNyovj
-	 QTdsJTXYWxAPcX7TkCUl8kHNr0XHZmzEmIeALbxvDISMS/IScWqU5jciGNrHmZOt6DPmY
-	 UZyV2hrGwyeOpR/o8xdYrhFB5K1+L6zlsy8Rihto0fhvMzTkSgK/DU0ZM85gWLbH/BQ==
+	t=1794027494;
+	b=m/ZB55983oFFsnodQ9cYYIAZc5FPE+kkbzYj8piftKyB5DuzTXtcyTt7BrqHhq034Nuc
+	 fl6NF7c7szjuUTnLJwvTeRv1gK2ga7KwVX9olyIe1supcCfKcG/Ehifw3Vkb3cni+dEdD
+	 I39mrSGcxlb8PhHJ6PU/VCUEXBqkR+RIRkHgQvZR7fA/LCFCKn2fmEz84kVbGYDG9LrWX
+	 YjB3hlNEZ7nO+RuTxS57/o7yDm2AEn5suBhy3hBxEzC4CG3d/tfWgpBZt8nB3xndSD9Dw
+	 4oGl6HxFzI+/FAy10+UwTGl0/0yyZ8aQD5RlGL2G2JC+nD8jw+DRsU+XK57I1E2/4fg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794027496;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794027494;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=k/8YzMNiVPZlBUW40yrliXFv9KTnhM76PNAu4E7vSnw=;
-	b=NgMdF5/VMZpJY+OD62lUH1L8IS4JAikEoILoOZ87SQUQkmGOTEcOu0231JCxus4X4TUY
-	 CSb+rfhCuKr7adHb31FXPyCahHHbQnq7htemulv6jIUxWslxl1NbKJDmqGb6i+Lhyz4dF
-	 0HAfZ5VzRFXoGZCbS3FSZDX6TSboQr1lxn97LLDDLZY+w7mDwkNtBzRjThbPHWEWWijXY
-	 8nJ8sugaq8INYTjorSE8+j6gFJjvvp1gHSNFJEYGTx1fRicmvQatbZJHbUcpSQyeae2B4
-	 of64YV+sVYTGL+LTbmhqtUK0BbMSKmCh97cw1iFE4czg6W5m6dupMONr5NnVxGR5STA==
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=TjJfxDxxVg+dnFXyzUyU8v0lNKHjR9TDaES/0qqPSJY=;
+	b=GyLzzm2UpFPKlBEkl8D6oFwi8I+bZJDarE7Tp2W4WdmvWyA+k32ylY3eDbPc4z+kwQUA
+	 1XVnjPeDJd2p8jn9fVi8EMQPLj2kciMCTnJD/rfA7TFtIIy73Sc9RVFU0LTGG3GiSxHNw
+	 zh6KVkDO421/pAYkeGRl8kvUnr2lK7em5THhqjO7wMWnNVjf2PVnAQ1AhUDSqPJlV85pz
+	 852uXxIshBitkbBXxQYFANaCz73qJXAtwz/VH77ZZqKQrYQbio0rIVby9ubLrWuT+UmQz
+	 dfx0VCNHL2z+fUT6CghSVUNwchkY/4cQbLJbtbuj4KkH7Ur0rrtG2Zr1z8KMa7Ibyhw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=SaDZMVKj;
-	arc=none smtp.remote-ip=111.22.67.151
-Received: from cmccmta8.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 608A5606A32E;
-	Sat,  7 Nov 2026 04:58:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 608A5606A32E
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=XOSJ4bbN;
+	arc=none smtp.remote-ip=111.22.67.137
+Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD051606A326;
+	Sat,  7 Nov 2026 04:58:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD051606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=SaDZMVKj
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=XOSJ4bbN
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=SaDZMVKjyMlf0KH9q3yyUhjZ520K80NGBM605AVOIOvReWJidJ6up7qUNoOfajiiVWjPrc3r+voXz
-	 wSKmOHc7MqUsMjZuOD73E8VIsp54HSXT6QDlKvJCfWBFlCas2sDMvIEO9cYrI1FK0XjvpXNQUy267D
-	 ONOHuHo1OVLe1tuU=
+	b=XOSJ4bbNdngtvTUhpWu01KWnZ6inyNGFFKwblXcHP5uxiL9R5zVCtUZGGUHNrloB0SCwJH/21baZr
+	 fsQg1SDcFnOFRKR/nhY5jiedtcQRMQ61+2LTOZlrhMm1nHSsbDNkBCvdpj9VRnNV0CKVm/VQ6CO6Ql
+	 eOXuuH8BhoDqwNMA=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee66aeeafd8612-82043;
-	Sat, 07 Nov 2026 12:58:06 +0800 (CST)
-X-RM-TRANSID:2ee66aeeafd8612-82043
+	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee86aeeafd25ca-5553b;
+	Sat, 07 Nov 2026 12:58:00 +0800 (CST)
+X-RM-TRANSID:2ee86aeeafd25ca-5553b
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
-Received:from  (unknown[74.82.203.40])
-	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee36aeeafb3fe6-3a4df;
-	Sat, 07 Nov 2026 12:58:06 +0800 (CST)
-X-RM-TRANSID:2ee36aeeafb3fe6-3a4df
+Received:from openEuler-24.03.03 (unknown[74.82.203.40])
+	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee36aeeafb3fe6-3a4a9;
+	Sat, 07 Nov 2026 12:58:00 +0800 (CST)
+X-RM-TRANSID:2ee36aeeafb3fe6-3a4a9
 From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 To: "Michael S. Tsirkin" <mst@redhat.com>,
 	Jason Wang <jasowangio@gmail.com>,
@@ -69,12 +69,10 @@ Cc: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net 1/2] virtio_net: Don't DMA map the kernel image for the AF_XDP TX header
-Date: Sat,  7 Nov 2026 21:57:02 +0900
-Message-ID: <20261107125723.33547-2-yanhaishuang@cmss.chinamobile.com>
+Subject: [PATCH net 0/2] virtio_net: AF_XDP zero-copy fixes for arm64 and suspend
+Date: Sat,  7 Nov 2026 21:57:01 +0900
+Message-ID: <20261107125723.33547-1-yanhaishuang@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261107125723.33547-1-yanhaishuang@cmss.chinamobile.com>
-References: <20261107125723.33547-1-yanhaishuang@cmss.chinamobile.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -86,90 +84,39 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-virtnet_xsk_pool_enable() DMA maps the static xsk_hdr, which lives in
-the kernel image. On arm64 the kernel image is mapped in the vmalloc
-area, so when the device uses the DMA API the mapping is rejected:
+Two AF_XDP zero-copy fixes for virtio_net.
 
-  virtio_net virtio0: rejecting DMA map of vmalloc memory
-  WARNING: drivers/virtio/virtio_ring.c:3882 ...
+Patch 1: on arm64, binding a zero-copy socket fails with -ENOMEM and a
+"rejecting DMA map of vmalloc memory" warning whenever the device uses
+the DMA API (e.g. VIRTIO_F_ACCESS_PLATFORM), because the static TX
+header lives in the kernel image, which arm64 maps in the vmalloc area.
 
-and binding an AF_XDP zero-copy socket fails with -ENOMEM. Even where
-the mapping succeeds, the header shares cache lines with unrelated data.
+Patch 2: freeze frees the rx/tx queues while the sockets stay bound in
+the xsk core. The driver state of the pools is leaked, and closing the
+socket after resume hits a "Missing register" warning and a NULL
+pointer dereference in xp_dma_unmap().
 
-Allocate the all-zero header per send queue when the pool is enabled
-and free it when it is disabled.
+Testing used KASAN kernels with a small /init that binds an
+XDP_ZEROCOPY socket to eth0 queue 0, runs one suspend cycle with
+pm_test=devices and closes the socket, on virtio-net-pci with
+iommu_platform=on,disable-legacy=on:
 
-Fixes: 21a4e3ce6dc7 ("virtio_net: xsk: bind/unbind xsk for tx")
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
----
- drivers/net/virtio_net.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
+- x86_64, QEMU/KVM on bare metal and nested inside a KVM guest:
+  - without the series: WARNING + KASAN null-ptr-deref + oops on close
+    (patch 1 does not apply to x86, binding works there)
+  - with both patches:  no warnings
+- A full x86_64 guest kernel with the series passed virtio-net ping,
+  a 100MB HTTP download with checksum check and suspend cycles.
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index dd2c41ef6fbe..4f5d8812f75b 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -315,6 +315,8 @@ struct send_queue {
- 
- 	struct xsk_buff_pool *xsk_pool;
- 
-+	/* All-zero header shared by the AF_XDP packets sent on this queue */
-+	struct virtio_net_common_hdr *xsk_hdr;
- 	dma_addr_t xsk_hdr_dma_addr;
- };
- 
-@@ -500,8 +502,6 @@ struct virtio_net_common_hdr {
- 	};
- };
- 
--static struct virtio_net_common_hdr xsk_hdr;
--
- static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf);
- static void virtnet_sq_free_unused_buf_done(struct virtqueue *vq);
- static int virtnet_xdp_handler(struct bpf_prog *xdp_prog, struct xdp_buff *xdp,
-@@ -5971,11 +5971,21 @@ static int virtnet_xsk_pool_enable(struct net_device *dev,
- 	if (!rq->xsk_buffs)
- 		return -ENOMEM;
- 
--	hdr_dma = virtqueue_map_single_attrs(sq->vq, &xsk_hdr, vi->hdr_len,
-+	/*
-+	 * Don't map a static header: the kernel image is not in the linear
-+	 * map on all architectures (e.g. arm64), so it can't be DMA mapped.
-+	 */
-+	sq->xsk_hdr = kzalloc_obj(*sq->xsk_hdr);
-+	if (!sq->xsk_hdr) {
-+		err = -ENOMEM;
-+		goto err_free_buffs;
-+	}
-+
-+	hdr_dma = virtqueue_map_single_attrs(sq->vq, sq->xsk_hdr, vi->hdr_len,
- 					     DMA_TO_DEVICE, 0);
- 	if (virtqueue_map_mapping_error(sq->vq, hdr_dma)) {
- 		err = -ENOMEM;
--		goto err_free_buffs;
-+		goto err_free_hdr;
- 	}
- 
- 	err = xsk_pool_dma_map(pool, dma_dev, 0);
-@@ -6004,6 +6014,9 @@ static int virtnet_xsk_pool_enable(struct net_device *dev,
- err_xsk_map:
- 	virtqueue_unmap_single_attrs(rq->vq, hdr_dma, vi->hdr_len,
- 				     DMA_TO_DEVICE, 0);
-+err_free_hdr:
-+	kfree(sq->xsk_hdr);
-+	sq->xsk_hdr = NULL;
- err_free_buffs:
- 	kvfree(rq->xsk_buffs);
- 	return err;
-@@ -6032,6 +6045,8 @@ static int virtnet_xsk_pool_disable(struct net_device *dev, u16 qid)
- 
- 	virtqueue_unmap_single_attrs(sq->vq, sq->xsk_hdr_dma_addr,
- 				     vi->hdr_len, DMA_TO_DEVICE, 0);
-+	kfree(sq->xsk_hdr);
-+	sq->xsk_hdr = NULL;
- 	kvfree(rq->xsk_buffs);
- 
- 	return err;
+Haishuang Yan (2):
+  virtio_net: Don't DMA map the kernel image for the AF_XDP TX header
+  virtio_net: Keep AF_XDP zero-copy pools bound across suspend
+
+ drivers/net/virtio_net.c | 70 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 66 insertions(+), 4 deletions(-)
+
+
+base-commit: 37dfd0efbfffc20a57e41c2eb349ac49b1ca1ff8
 -- 
 2.43.0
 
