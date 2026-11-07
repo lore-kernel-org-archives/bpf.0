@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794071031;
-	b=qrhwh3qILnuBTjiAFZjKFbUTTnr0RCuVFUggHXLbzjdOjstpbt53+HbaCR8GVyXcTgh8
-	 vRomdrwdrZ1UTckBG6IoQUgT5Ov+kXqVIgL8sruT7C9AEpN9eEPA/KmroTK+oLxz1aMq+
-	 t/b4YjfHwH0v0kuiuLydM22UZhyxrqO+KiDH1660JmZIfb1nkp8ilVNGt/znsFqMdDWit
-	 ttxvNjgGeundH8UsI4EE4EPcHB5B/jw8RKSxAj7yh0s/ibaM5h8uEAbF2vgjlx+mLLsU5
-	 XzhSZy1wO5MPPkH+vHewYD0q7d6tE4x7Tf8u1ytnMW5NMuVwLGCyP2KeRcSH8yg0YQQ==
+	t=1794071037;
+	b=cKQsdcajgAu1mKS1FNos9X/lKtAMczpKDxRaSGIXwsInHzQoiRndb6nJYljqgykuau5r
+	 oi/YqcbIT4dlHAMY4j3a91I8cvMdEok7h22QHesYOq56tJM5OAB4E4f3eCggXCNQW0EWQ
+	 bVCYs+RsIE1bKI/sRIuYXUhfcitY0mBAxsRUPN5SnyPBwqaXQHI6upJmKvhsvsE/Fsy6z
+	 gklC7RmH1Cdqsk1ikRxZDvm3LBb4q4H+ZNOm1Dt1pRBkmYTYht3aaYwLuxQ4K1SRp3QxZ
+	 IvYZ3H7Y3IAuGQPbtOkEMk8Zb+NOrs2724eV2fAoKGzj+7E/np8QRURJpIeDiMDmkjA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794071031;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794071037;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=8WS576eCdE4W3OYOUuC8uitFLqIQHpoBJ+GUuWM9vA4=;
-	b=aM7+SVJBfxn3XjKqjlpUfORbGdjggTUpjzfnyGk3L+JPRx84Ak5QftnE1N1C385c0Mwe
-	 tjUhT9Cl2DDLOA/+1SST1QHTLc6j8cKw0+3ZYvmCJ/KqmSgEpcjrVn0944yLTUBqBxMDd
-	 mIPGkVJGC2pGnqInIcDuVs39busOxGeUS9hzp8AHx6+Z9TpC1LKB8D1vKmpJqs+odcKy3
-	 dqDhASCxU92vVKkgr1nJpcgVrvkSh1S/vjcjykFtkChMth4ddUfYD3Ol3S9H+lNnb415t
-	 97ERJt2HBVv2Y8BKghgk4xcBI7CmghFxeKdnnpDfZZM+Gj8t+z1vAzE/2fpevW0M5ow==
+	bh=a61JwjnxKGRSd43XgWGH6Kd+4jztQXz3+tYtxQyCkm8=;
+	b=3MIT+KVTrAheXAonSt40GGBE4cULHaDAIXAbXyI4882oobJKYmv9MPiA3r3IemVX64RC
+	 hPw67EAGJe0DeLbnvyqLDMD1Ra7bXDcqzwqlbM35JRK88+L/OUCAr0SbqWUnX/iTyr0Ze
+	 09d5rGY/NUPSNxgwLCnt13ZbqGjHrqfxDg5D5TFBQD9Ba2knS6zdHfWXqtrn1nOWnGxq9
+	 BretHJXM63M/VLGtw6s1nZhYlFT9SfYti+vhV4/P6GJUZGuq/qJ7RmmXRRd+w66o46GxY
+	 xIN6T5CwRG/YpiR8RGgxv+9P3zAvOPR+QLCo4PK/cclNFnxZH+8eoqVX8HN8HvI9Apw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vD4xb9eo;
-	arc=none smtp.remote-ip=209.85.210.174
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xNdDfVpU;
+	arc=none smtp.remote-ip=209.85.215.182
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14960606A32D
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:03:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14960606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34086606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:03:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34086606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vD4xb9eo
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8b29b83fdf1so647182b3a.2
-        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:03:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xNdDfVpU
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd69954c755so1103001a12.3
+        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:03:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794071030; x=1794675830; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794071036; x=1794675836; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8WS576eCdE4W3OYOUuC8uitFLqIQHpoBJ+GUuWM9vA4=;
-        b=vD4xb9eoGEniLa7o9nP8Stcc1lm7gZZdMN+SIu2Pp7lXmVBAhlUEfcSGZxsahRcEYN
-         MGvgBRQgi0gFa7u5EHtVC0aCBDuOARw7JGtR/uKomEjfD912pWDYeJwx8WbcpqJMemwL
-         gH+M/Ks3q/Jzm7XMeXL3voNTJadWRI/pLG+mXl09tGXTgOt3whUsMfkPn6ULWpxQ2Yj1
-         xO2Ctf/Z1ck/EM+Ck0fMVwHvKfoCIOGbntkv/RUuIwiM9cRy14uNSUVTGXihyNBABdXR
-         41Ydt2E9uUxK261niCZ93BWkmrJpprKzgEKwa1wkLddEH5nUQYhmjwVp+5PpqQErbON5
-         ArVA==
+        bh=a61JwjnxKGRSd43XgWGH6Kd+4jztQXz3+tYtxQyCkm8=;
+        b=xNdDfVpUfFRGBVKzQVzP0a77IDi1NJCAuMhIqRpi9V27zLQrl1aL9uIYfgbBrrGu3b
+         IjxIdhmOpwqu+w4e34o4C/YOM1e6CFRUJ5K5Kln3PmGcne2FHhHkRpK4+KhKAjnX1wjV
+         a3WVuFSjTmljfIOc1jYyXJf6ltfadBZql4htLNyCtm4kNkKrVyDXcc1Jh2puN99Zu8XP
+         cJ/mETBu4b2zfNSuegOCb0VgO89r97L9xATwgh2E/vYkYAZng+NEAgrx1L/GweA8fdPx
+         SRJYXvmQFJBkPWEKZIT2gw+4wC9UWDUYmjYw2aqB6zPzLJOnHDW8VceUgNYuP+G2MiSL
+         7aBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794071030; x=1794675830;
+        d=1e100.net; s=20260707; t=1794071036; x=1794675836;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8WS576eCdE4W3OYOUuC8uitFLqIQHpoBJ+GUuWM9vA4=;
-        b=TR3HVxbM0xdMhBUW5IUJ4/Nf0MO4u5fzXYm+LzSDeu9tq08NZtp//IrvXFYqqI24ok
-         aoVkSeoQPrNro/9DeBSBYu5TJiVLtjqgrNNOKuoMe+/p/3SSGPfDaAp/43tTCuNV1kqO
-         ISb61Irvgg3kKeucGJ/idZVsH2hIT2ZICwujNSV34dqjGiwMeoHvj9jXQWOXUZxnGBNC
-         lGH+J86iRnqyJxV5AjxRkqIJY8zqfIcg2xH4DeI5+AdHwDbPmfZJqqaweZ2EqUh70uVk
-         G/WXQYqgzxMtLmC6GSyVz4stljPOB+FuLmtL43iAPuxx21iJjo81EbIux7XKe7OvpNzK
-         vq4Q==
-X-Gm-Message-State: APuU4Z/YuzoXL4+SLj6qYkACv2vXPXdQCJhAP8RsD6fLcaMVVQBkEp8/
-	ap15MJeQOsH3UuYRaNqjHVD/mDXEA89ZRA+SyMj5zxKTKQPJsLEX0fX0e2MLzg==
-X-Gm-Gg: AYBFou1A5M4lBaVlKse7pmuYhJhTjQkQUMUtDGgMLRKwPFndABfwpev0bzwWqGYyKGJ
-	gIovxipmkKqZE6gCRGkxhjW2GfWHjeVuIDurPBfxpcK0Q1z+AAAGe+6Ep0E4CXuY+lLxFfK+B1e
-	1m2MrkWhOSZSWjBjKxohjl7pyUwJ9YRSLYmXn7wZExXI43rj0vZ48WkvSVmqNMgXFZPSHX8mEr8
-	Xab++80pQCw5pgrvxhYxJQhI3OTRI13N5kXtJZDtFnaHVn5nXXyi/xAvUXkrX3cbOwkGJ2/JAS1
-	QX+6Y/1CdSN0fgd9ZU4v3Q/ITA4gFBhKvRFO4a8rQGDPiMiRAFVEkb2BnmNUuzFTuJfd7Kofoi1
-	05e1qE6GmRcJIHwYZpbp1TAFlBgRiVDv3OYCT+d0/xmkxlDwA0DBPw6Lv88+OruqFl4JswA1atr
-	Jq7e2pYejOPmO48vEabWO/7Ab+BVq4n0ktLyzmrIKwHeAIQ8TMStbgqFxkL/lpmE7v3CCj1Ghre
-	DjuNNQ9DaoCB3RZU43jkDFFUZsHseKUviPYxLjTj8bFgehY9Iin2hnddanhe+rAAG4yKCDcUNgs
-	B9N4JnPyyHg6adBGyvxUUh4lpIbawpNN7oJBA36skaktIFFvSKlRaIctSmq0S/UWbBxWRNS/GQZ
-	W0HCqzj7M85Zj+EPEIiahXni1kC8iAHLBrGOFY9eibm5brRhb1f9OkMy6eA7ZnoAT4fjJ4XAZeg
+        bh=a61JwjnxKGRSd43XgWGH6Kd+4jztQXz3+tYtxQyCkm8=;
+        b=0SMI3UUe5+NPO5ivY8S2d49iLdNGZLp8gAOaRgY5rkQMdajU8ikid9FWZBZSVKkEkD
+         ozHF/gqclg5c9vGS6De7jpYrnWtNKHKK2+shaLcItX1C1S58swqPXrtaTWWHYcpmql8Q
+         n+5Q/WZtLI308x6WcQ43gQ1D2UwJvHDX6X4BTebHeWGwJUZSaGwlJ01Im29t9Rn8bTFR
+         LLNYxxATxdXKzdbUpRvJn459yp80HrrO0Ut9P6SUVATg31Jw2PuR5Ww/JUgnbq2pHJT6
+         HURbnnx8AOo8Zbvw74APf856kJZTM37YwVTiQA6rzVnZFqrtj5Xwjs+xLyYMiHbzTaW5
+         urbQ==
+X-Gm-Message-State: APuU4Z9ZhfPAPXoRiOOGi/ATnMT0R2qJpPtw5d7PAnCz8ax12JUDA7WF
+	Z1XI1PUx15+MTw7Da3vVZ6rzeeIWg+39BcDR8PN7lDWzFIE5a5i37qiC9cmvaA==
+X-Gm-Gg: AYBFou3sQJwRZeya/mKCkwi5Cy6zE255AK21A8oPKp4SF7J31K834H3HRH/gP3AR/Ie
+	7wtNRHRFp8IxtrNZUtJirTQ6i8Db3wENASlM3hRTMWrfpNhUw+v9VMZ9oquiwwyhn4vhRQ0u+nb
+	wYYz2MQp7HVQLFdLtUNqLe4Lhe6yIe5DmeY/U1SKcs58ni2tadXWFsyp9RIQqwopIPyzxdNRNsV
+	U676AYIzFop+ydKHt5lccvZYjYflTzeWguCKeBnAQ7mkOS7wqLNDLWqjK+dWeCYfqnPMGWl4Zez
+	QkZAo8nbwm+jJESJQzXxnNRYZIZeUkOMVJf25OSLhz9KBj7S4bUen/9Y2O+hx8zHT5RhfN0+FOx
+	4LK1RvDRm8RW7BEr8xm30liPMjhi2m9h64AT021/PU1aSTiGZIPwwUeUwbXEZtlppCrXqZBPwYL
+	P/X4RGskqgGNGGyhM1w15r1hFne8GF4Cdt09qb5Gd7JCDFbRb3W7SMZLtROoT4Jwjbuscc7i9Bh
+	Lc8kR0jy41oyHcNsy/Fvaod3ymNK+7XvzalFSjSoizrnfYzr22rKp8whEr/aXPx9bJ6v3qKezad
+	Qp5P5TDhLWqk2LYEQ5GHfGTWJt0Z6X4vK9vSNf/V5PYmmHMDVa+GImCboXdF6nOKHwWbbZ2lyvZ
+	2H7dlqkSHAhcikVOuYaOUeYfHMPybKsxdgmbb5/6GnPLXooPEa+6KRKOcu0wyFFgdHFMWrpegsA
 	==
-X-Received: by 2002:a17:902:d54f:b0:2e9:7dda:bfc7 with SMTP id d9443c01a7336-2ed40e05c74mr62206475ad.66.1794071030282;
-        Sat, 07 Nov 2026 09:03:50 -0800 (PST)
+X-Received: by 2002:a17:90b:3944:b0:3ae:5572:c4e2 with SMTP id 98e67ed59e1d1-3b0db6fb52bmr4919364a91.57.1794071036456;
+        Sat, 07 Nov 2026 09:03:56 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47d837fesm13279475ad.65.2026.11.07.09.03.49
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1057fda58sm4190502a91.7.2026.11.07.09.03.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 09:03:49 -0800 (PST)
+        Sat, 07 Nov 2026 09:03:55 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 5/9] selftests/bpf: Expect GCC's first error in test_alloc_double_release
-Date: Sat,  7 Nov 2026 17:03:02 +0000
-Message-ID: <20261107170306.2831028-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 6/9] selftests/bpf: Skip plain_c_arena_race without zap_vma_range() in BTF
+Date: Sat,  7 Nov 2026 17:03:03 +0000
+Message-ID: <20261107170306.2831028-7-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
 References: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
@@ -104,39 +104,41 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-test_alloc_double_release has two errors: it releases the cpumask twice
-and it does not check create_cpumask() for NULL. The test expects the
-message for the first one:
+plain_c_arena_race has the fentry prog of arena_race.c. libbpf looks for
+its target, zap_vma_range(), in the BTF of vmlinux. When the function is
+not there the load fails:
 
-  R1 type=scalar expected=ptr_, trusted_ptr_, rcu_ptr_
+  failed to find kernel BTF type ID of 'zap_vma_range': -ESRCH
 
-GCC gives the path with NULL its own copy of the two calls. The verifier
-gets there first and says:
+prog_tests/arena_race.c skips the subtests that need the prog in this
+case. Do the same for the plain C form. The kernels of BPF CI have the
+function: no job fails today.
 
-  Possibly NULL pointer passed to trusted R1
-
-The prog is rejected with both compilers. Expect GCC's message with GCC.
-
-Fixes: dd43eeaf99eb ("selftests/bpf: Adjust tests to new verdicts, messages and order")
+Fixes: b5ae07f77d27 ("selftests/bpf: Test progs without bpf_for(), zero, can_loop and such")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/cpumask_failure.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/plain_c.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-index 715218d32105..2a58209eb8be 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
-+++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-@@ -45,7 +45,12 @@ int BPF_PROG(test_alloc_no_release, struct task_struct *task, u64 clone_flags)
+diff --git a/tools/testing/selftests/bpf/prog_tests/plain_c.c b/tools/testing/selftests/bpf/prog_tests/plain_c.c
+index bfadbbfd436a..ebdcf2275dbe 100644
+--- a/tools/testing/selftests/bpf/prog_tests/plain_c.c
++++ b/tools/testing/selftests/bpf/prog_tests/plain_c.c
+@@ -119,7 +119,16 @@ void test_plain_c_arena_list(void)
+ 		arena_list_add_del();
  }
  
- SEC("tp_btf/task_newtask")
-+#ifdef __clang__
- __failure __msg("R1 type=scalar expected=ptr_, trusted_ptr_, rcu_ptr_")
-+#else
-+/* no check for NULL either: in GCC's layout the verifier gets there first */
-+__failure __msg("NULL pointer passed to trusted R1")
-+#endif
- int BPF_PROG(test_alloc_double_release, struct task_struct *task, u64 clone_flags)
- {
- 	struct bpf_cpumask *cpumask;
+-void test_plain_c_arena_race(void) { RUN(arena_race); }
++void test_plain_c_arena_race(void)
++{
++	/* prog_tests/arena_race.c: the target of fentry */
++	if (libbpf_find_vmlinux_btf_id("zap_vma_range", BPF_TRACE_FENTRY) <= 0) {
++		test__skip();
++		return;
++	}
++	RUN(arena_race);
++}
++
+ void test_plain_c_arena_strsearch(void) { RUN(arena_strsearch); }
+ 
+ void test_plain_c_bpf_ma_ttrace(void)
