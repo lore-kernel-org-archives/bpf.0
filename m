@@ -1,56 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794017788;
-	b=nBCfP3wYwvTPh6Tykq1MHpO/SCguHLGACix807/BfjeNrCG01/6BUR2telUZtaxaJPcm
-	 xgzNsaO0oQu7WG3Zdtvlbj0EJvrXfF7zvoBxFJ5/AN/ktPFHfUmzZkytRwL7wd9sPum9t
-	 cuEG2JtjLKCS+coZqPioT/bPHb9vw1Q/KsbitEolASHwx48gwxtQ5ZNbUttJyx30Oqf6l
-	 Rf6N4HJ94C/ZVSZUiwkQ145rtq6TqP7QXIdQL0GpBK9EAccWZ0AMFtu6FDvC6/p9Bhx7l
-	 UZkABaUzxVbycPclrmyFI+12gkNHCuYqLXt6BDv0sZoHPK5LkR8i2GXai5XoUIcGThA==
+	t=1794019661;
+	b=UsavpOZ5JcO3xfhRguHQatTAMUyad2TBccKP9V0QoFFblaHotmYOkmdSLUUMUD2zshWQ
+	 b68ZbTd4WCLUnZs50IqP8aQAQLL6eQlIrmWY4zmtuoJD9PRt7AxMIBT6qwgfL0ELYum+O
+	 Ifuavgq9g7w0f3Lq+OfWE9b0jsT4L8k/dBRWle7vdcXjdXsqldrEkHhUIbevcSk11eoFe
+	 zwvn7MgaezP7I7h2NBJy87H/+S76ADJOm+Qk5Tp/UJY6jM1+Yku4O1QHfbIvYYJwO1JB+
+	 kRW/0F6JXBGFTBonEfEBolBEkHf5XxYpdS6U/55Z3U0N9+MrxYHpatW90Cd/fZNDt/Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794017788;
-	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
-	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
-	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=blAcGwT6RrU9VkPRjXupRrOhmEXz2ix0BTNPVck3W3E=;
-	b=exVnkRbBIqn3TDTwfvWbnngHt1t1iMA0YHxJ7zqib+a8ybuT8udqSzYAzAbNofIFIEUw
-	 83R4i0sCNBeyGZ3pZHDHqvNW7/POjeHMpDc8PgpjtjqmynP/aHEjC0FYH/xQEeS/kwk47
-	 dnVibN90lbW7UfG8QGvZ8o0QzTDFXHhBYcO3A1px/XgQC+SlVveI7sEz3CBwugBXky9lD
-	 0O0O5kxPbUd6bpARLCbKt7GShhOSX+ZU+5I9+YKNsdWHlAZaZy+z+ElihShQTHffQsWvf
-	 yoCHUbzF42oI1aLi4BKtMzfvAgzpHx2EN9gpMA6njVr86h0ibEEUl2IY/rNOz71u3UQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794019661;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=tT62JfT4hQHGP/AW1QdzzQoq0p5KaNWuEo556/tSKYk=;
+	b=w7jmHvp8NFdAoukJUVZRtkHqlrIx4c7mJFYxJIWpbYnxfbrlqTPlviqOjbiE4C2qwcsy
+	 xkUdMNM7O1qrmdTox0q9j4GTzOn/L/LV4grGOqwtKKj852a2/sSQqcmXKNLrifnDWgN2U
+	 DrMzPpxhW6udV59pEO2BA/aaNT9bh1k1ExoFviLoup9CFnkA3e3xaw4+nHCKPuaZLhOec
+	 vf096Ar4I0r8BfsLe0dtu2Q2sE2RT0wtYJTbcQEys0KBM1l3sY+fuoamPTBXluCA8QOQe
+	 ttbth4n1Z2As73/ikKKWPu3GnOXF9bRtaB9hgPLVg++vyBcpdlj37aNlMr6i1VYw34A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E7CD606A326;
-	Sat,  7 Nov 2026 02:16:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E7CD606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8AxS_D4ie5qOEwdAA--.19238S3;
-	Sat, 07 Nov 2026 10:16:24 +0800 (CST)
-Received: from [127.0.0.1] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAxX8_zie5qfOEyAA--.38436S2;
-	Sat, 07 Nov 2026 10:16:20 +0800 (CST)
-Subject: Re: [PATCH v1 2/2] LoongArch: BPF: Use beqz and bnez instructions for
- trampoline
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: bot+bpf-ci@kernel.org, hengqi.chen@gmail.com, loongarch@lists.linux.dev,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
- eddyz87@gmail.com, yonghong.song@linux.dev, mason@kernel.org,
- ihor.solodrai@linux.dev
-References: <20261102072808.23080-3-yangtiezhu@loongson.cn>
- <c3b8e6ae47164ab1a643a1730f0600993de03c8a30e35122a9812ac73d807697@mail.kernel.org>
- <1276eb14-b851-aee7-36ad-d61e2ddd9ba4@loongson.cn>
- <CAAhV-H4GyC5=PvF5yvYnoBpUpU3VTuE8kdNUnApNqvN4vHZfhg@mail.gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <20f7051a-4f56-7122-c241-93948c465dc9@loongson.cn>
-Date: Sat, 7 Nov 2026 10:16:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GbqICgbJ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304C2606A326;
+	Sat,  7 Nov 2026 02:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GbqICgbJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B58501F008A1;
+	Sat,  7 Nov 2026 02:47:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794019661;
+	bh=tT62JfT4hQHGP/AW1QdzzQoq0p5KaNWuEo556/tSKYk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=GbqICgbJCKIrlAOBvtaBwMdvdRD6lY+lOJMrouVF8M6r381PGh0q6MXevli9kvWlK
+	 LFtL/xMEcrMdlG3BiJSLytTx5xYiaYu54u6Ru6O5rUGdEJ6ousGB/5MxdJ0pIYzFo3
+	 zPReBdADLnhvPZFwsVPs1adFWa4S9fGxdHG2k/t0ASH7QP3jY+Y7ocRUqH0my3osV7
+	 fZ2OeqOZhkb8HezlbDplGEhDGlqUAS5uDVChVzzjlbrq23lPOnh6LT5ArfYsjoUlr4
+	 R/wjEZdV2sIuxcFGngv2INru6uMgy/T+3rC8jSDhHev42tYJ8CH/fpf+RTzAxKXnYs
+	 E28RkEdyMQlow==
+Content-Type: multipart/mixed; boundary="===============8730462656901357163=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,58 +49,97 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H4GyC5=PvF5yvYnoBpUpU3VTuE8kdNUnApNqvN4vHZfhg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxX8_zie5qfOEyAA--.38436S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Kw4DJr1DJw1fArW3ZFWrJFc_yoW8JFWDpw
-	s5JF17KF95tr47Zrs2y3yFga4Fkw1IvFW7W3W5CFyrGw1rAr1IqrWxWryS9FyUXr1I9F1F
-	vFyvqFWkWa1UZFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l
-	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxV
-	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-	4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUceOJUUUUU
+Message-Id: <d190f90d01988652195bf5ced90396d7ad07425705bd274d73140016d6a6c129@mail.kernel.org>
+In-Reply-To: <20261107020725.36675-4-dennylin0707@gmail.com>
+References: <20261107020725.36675-4-dennylin0707@gmail.com>
+Subject: Re: [PATCH bpf-next v4 3/3] selftests/bpf: Cover enum signedness in data dumps and map fields
+From: bot+bpf-ci@kernel.org
+To: dennylin0707@gmail.com,ast@kernel.org,bpf@vger.kernel.org
+Cc: andrii@kernel.org,qmo@kernel.org,daniel@iogearbox.net,yonghong.song@linux.dev,eddyz87@gmail.com,ihor.solodrai@linux.dev,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,dennylin0707@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat,  7 Nov 2026 02:47:40 +0000 (UTC)
 
-On 11/6/26 10:45 PM, Huacai Chen wrote:
-> On Tue, Nov 3, 2026 at 10:27 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>
->> On 2026/11/2 下午3:53, bot+bpf-ci@kernel.org wrote:
->>>> LoongArch: BPF: Use beqz and bnez instructions for trampoline
->>>
->>> TL;DR: Commit message only: the claimed branch-overflow risk looks impossible,
->>> since trampolines fit in one page and the old code behaved identically, so the
->>> Fixes: and Cc: stable tags may not be justified.
->>
->> ...
->>
->>> Could the changelog drop the overflow-risk wording, or describe the change
->>> as a cleanup, and could the Fixes: and Cc: stable tags be reconsidered given
->>> that stable-kernel-rules requires a fix for a real bug?
->>
->> Will update the commit message and remove the 'Fixes' and 'Cc: stable'
->> tags. If no more comments, I will send out v2 next week.
-> Fixes can be removed but I suggest keep Cc: stable, the overflow risk
-> actually exists.
+--===============8730462656901357163==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Since the branch overflow is technically impossible under the current
-1-page limit of BPF trampoline, I plan to drop the Fixes and Cc: stable
-tags in v2 to align with standard upstream cleanup rules.
+> selftests/bpf: Cover enum signedness in data dumps and map fields
 
-If you still prefer to backport this for architecture-level defense,
-please feel free to append the Cc: stable tag when applying the patch.
+TL;DR: The wide_unknown btf_dump test only checks for digits, so it may pass
+even when libbpf prints a truncated 32-bit value; a possible crash on 32-bit
+hosts is also raised.
 
-Thanks,
-Tiezhu
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+> --- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
 
+[ ... ]
+
+> +static void test_btf_dump_enum_values(void)
+> +{
+
+[ ... ]
+
+> +		/*
+> +		 * Wider data must not match an enumerator through its low 32 bits.
+> +		 * Check numeric output without requiring an exact value.
+> +		 */
+> +		{ "wide_unknown", 8, 0xffffffffLL,
+> +		  { .u64 = 0x1ffffffffULL }, NULL },
+> +	};
+
+[ ... ]
+
+> +		if (cases[i].expected) {
+> +			ASSERT_STREQ(str, cases[i].expected, cases[i].name);
+> +		} else {
+> +			ASSERT_NEQ(str[0], '\0', cases[i].name);
+> +			ASSERT_EQ(strspn(str, "0123456789"), strlen(str),
+> +				  cases[i].name);
+> +		}
+
+Does the wide_unknown case actually guard against the low 32 bits being
+shown?
+
+The check only requires the output to consist of digits, which also
+passes when libbpf prints the truncated value.  In btf_dump_enum_data()
+the fallback for an unmatched BTF_KIND_ENUM value is:
+
+    __s64 value;
+    ...
+    btf_dump_type_values(d, is_signed ? "%d" : "%u", value);
+
+The value is an __s64 but the format is %d or %u.  For an 8-byte enum
+holding 0x1ffffffff, x86-64 would print "4294967295", which is the low 32
+bits and equals the VALUE enumerator (0xffffffff).  That is the situation
+the comment and the commit message say this case guards against, yet the
+test passes.
+
+The bpftool counterpart (enum_wide_unknown in bpftool_map_dump.c) requires
+"8589934591", and passes because btf_dumper_enum() uses jsonw_uint() with
+a __u64.
+
+On 32-bit hosts the 64-bit argument takes two vararg slots, so the high
+word would be consumed as the char * for the "%s" appended by
+btf_dump_type_values().  Could that crash test_progs in this subtest?
+
+Related, in existing code: the macro expands to
+
+    is_signed ? "%d" : "%u" "%s%s"
+
+so string literal concatenation applies only to the unsigned branch, and
+signed unmatched values (and the ENUM64 "%lldLL" branch) are printed
+without the delimiter and newline.  This was not introduced here; it
+dates from d90ec262b35b ("libbpf: Add enum64 support for btf_dump").
+
+Would it make sense to have the libbpf fallback print a 64-bit value (for
+example separate %lld/%llu calls with a long long cast) so that this case
+can require "8589934591" as the bpftool test does?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42329238242
+--===============8730462656901357163==--
