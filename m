@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022744;
-	b=J/VZr2C84im7V+QLk0nWcaNJqHmOU8G6ydskMSeq0og91pkhek/1GlQ2qKCKpQimNgm6
-	 doaDlKGX+t98EGKIzz2O5g0tA095LeBkDaP1yebMHthpKD2X5F0hd+Kttux4liDr1owss
-	 R+Zv6dwVAAOROsZ+MEikFAKf44E6z9IQDu6/TtM8sUygUKKtd1yrDABTaxSAcodim1E9U
-	 nDB4GGCABzUZHHi+JyUKILNBR+NV6KF08W1pdCV2GdcjAM2I/SvRMPgRjpnThaAqxcDMf
-	 5fSbk9dGpHhKA6km80GdkY3MqXWhW+a1UgaUTKcaHV2QOL4ZVwQEu9vi9R0xe5SywKg==
+	t=1794022750;
+	b=jwOplwAtHn4mkjh7B2Lxhm3dgGK+OjgeXcUFUw2BejOVkrACqHYjYpWr/my/ITF6wdu9
+	 ghB+zALdFU6bXLEjBZUG5cYHElW6L1YtuFMvKOfkW1iO4W14m1FJom0ZmiivRjiEKDOP/
+	 WwK98bIVBSMbuqC8dmpcw44kfLT7JaSRRf+NdtK4Kwk7qIx7demrkqWhb3NvGvVe/1RMD
+	 ip3F3VVg9g9jxPcKXqdbufIg4WsKmhaSsC2x8dWncvBPIUrl+MlKEnwBrHaqlBIyxN1rw
+	 +E6SCV/5XEGR3FdgZF3e1mmL+ZZg9OeFEK/1HydtpiP2ak6DZz1kiNHP5iNHwtDhHUA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022744;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022750;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=poRZR80NvQ54Cj0h9+3yJFrvm9NSquLiq8PdTf10E0Y=;
-	b=Fh5N1S4iyP5w6RENolGye4B61F9zhUUcMQo++i/1d6gMPWh539O6JUTLLvUuA7Co3RIT
-	 BOWH9mtsrh0jOhfNpE76GLM4VPMemsZeY5pQcp+9zDjmuEUHmJtupWKkhYf1VbXu6kUe7
-	 qRachlk2HGKHbzb2pmjQzhLWTY9frucNAJWgDoZQHXGtr7a5hcNF5Eqf6tUWtUodtfAxR
-	 sL4uY21vnzUXskbNiIc8N6kGPjxckdQ9AEmAiao6uyQ+63kyWTzTMsb5ZsnocsKBDcST1
-	 zQUxfyO+zce9KCpL5X6cxNu0EXR7PaZEp6+9epPvRwhfWsS2B12nVLFQP93BRPrKASA==
+	bh=OWxwQNVn5bg0ClfD56UMbqBHzyQ7/paQIisdapffxFU=;
+	b=SNVZwtT7Iq/QtqnPZroX7LtbyzLH4skfPZNU9coVXLgHpbrG+ntVw0Qmy3nQmrhR1awl
+	 tuoCpEMn9ECbCzFPBE0iB0IxRZtjlWb8gGuCLriHuP4I4KIvS/vZRpCpJDtLbAvdrjVOj
+	 duSQZ6cZx4BwMfekt1REs84TNfOXcCx25Gt6DE5wjm1DQ4rjAhSKgeA0jSZ92oMSARXkN
+	 zEEaYsSyYXNDLlphbuYL1zf/rzdJZ37yspTqX7K1kxmIpcCd/wVYUiEvLmvZjkh134UpE
+	 1NIcGrNUTKhxiMowhgAxlB/KjhifY+Xmt1PWIfMdBmG7yKcDuDj9OAOT9D8UOFclP4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XAWFbavw;
-	arc=none smtp.remote-ip=209.85.214.179
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="y9r4Jof/";
+	arc=none smtp.remote-ip=209.85.216.53
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590D4606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:39:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 590D4606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E79606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:39:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 37E79606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XAWFbavw
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2e987a2ba0cso7182895ad.3
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:39:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=y9r4Jof/
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3b0e61a4decso887256a91.2
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:39:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794022744; x=1794627544; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794022749; x=1794627549; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=poRZR80NvQ54Cj0h9+3yJFrvm9NSquLiq8PdTf10E0Y=;
-        b=XAWFbavw2I4GLfkrGYgwGy0niXcQLzBvVrYTIXQHQ5zMB4gAeYlt6owTupzAC1P106
-         3/Ihdl+wnGDzW5I1SYuDNhpBsca36tCyybGkfZg/1U2+OXXaW7l0z1OItSS5UaadmB3P
-         AtgCeuNqVla2rVFypJ17QckeR9buLvpO4ZOfcWUZlxtVGV2ch2O5ymPKjrIWKtDI2oUe
-         xXjFZ3ti1OGbQcixYDsdGUApCtVe6r01DvUilxMVIqrE+vkDDsvQ2vtYo+GZdAtS0b07
-         282A2x03d0FjpbVlImNZ/fUULsotiLQRRRnR8I81Gcbdg1aam+alfj+T7rZn7Xj6Abjh
-         0Xgg==
+        bh=OWxwQNVn5bg0ClfD56UMbqBHzyQ7/paQIisdapffxFU=;
+        b=y9r4Jof/e3XUTvg9dcn4wu2ZkfyNt4qtAu5nvq9Ao8ox7v42APxnqdOs4pYYg6FjNP
+         hlnGddDqLmPyc5nhVFLiJbtdADllY/Fpp4pynC+3Y3aAhPsRvKovA/RtVtAuzqwN8LfO
+         FqHnhJ6feP3GpZj7/kNy2e2YJK+959cmlbqABFcOa32/o3q9mbZVKr7NLoqMOi2mJwPD
+         0DSqHbUwt5amPM0PiNe2L+hyklZIPlBBRNeLiDtmXOfaMduDtmiaJyegQhKFwPtzBnQ9
+         P2ZhvOO3B+ssHzf0fN5YMEe/+N708+9YnpyxDmoySFxncDUdAC7RIkP6bgKSIioSV1w6
+         0cFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022744; x=1794627544;
+        d=1e100.net; s=20260707; t=1794022749; x=1794627549;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=poRZR80NvQ54Cj0h9+3yJFrvm9NSquLiq8PdTf10E0Y=;
-        b=nrau4Wr1jcpHdY4dS+7rS5vfi3aGDEFlH8qfO+o1vlDqqbfoikZLUuVpyOsnXlKVxw
-         PX1DLndxHTj+dro0VsUfs3pPjUNIwcFYLVoxi0W5w3d/YmLkoUP5F9kEEZgTtrHS4vYU
-         Y1WsOs/C3OpYKgUXZZ4kSFVpL0ZeELp5JSoCEUtlYgG63v3T4qYdkczXpsMzVJrKpC2g
-         rKlTUn9kMgX7s902Mq1ve7OCULTLDdtmhsZMXYKW9PLyw52xEUeT/H48ff2VomYpMe5t
-         TgDwbi8/Xdfdg01X38RHE9X/Hh6RsEWadztLbMQtsYccDo9ez2puEF+MGCPFLIR04IRw
-         uy/w==
-X-Gm-Message-State: APuU4Z/0Tph/8CmAXrhrndVLqktTdstUK1ifKaT8ftf+bGQJspx8AyX5
-	FJEhdlo7BFgi/7hHh3YssrLjyEj4xWXyFk86qbOHtpYe9/lBU+nGcgrStCja1g==
-X-Gm-Gg: AYBFou3avDkLykRGiaBwaB22zIN+WddAtJ51aqt7DnrIQm/kKzhAClTAYiR8xnrCm5Q
-	JDWmUmZXzy6twIIYHfWnA9FzCYMAGg3lBO5yiQpU+Q1nj9oDaPkO3e/jfDtzERerFJwYuNw4UDd
-	AqH7wRlB1TfxL6Q4mgJvUHdQSmW/6lss2oivvwCSakI4LFjwMa8qYVM9WwD4wdwroBImmF9Pll9
-	YCftHvT74Kv/S9gqKkXQOcqzgcr3FmNn+JftyFy2ZfDsHaA9XUaZgLQ53ns1oxMUf2oX3/rJgvN
-	U3KICSLuLBvREHo3GFdWmtNrRiF5yNXZRnsWI7ssIQHQta+M4RHM+YO/98OGkiFQhNfndnZuHxm
-	voUidbNiqq4ZYKyZjIUMLUqiQlSZS0FFL9N4hcIZkLPfnxbd2ByrvTwtUZ0DgH4j+fF+A7YOj9f
-	xuLLGIagAhJMrXtzXA9Xc7j6i+H9gFarIAsf54XeHBhPPMGiWqwZZrgTr0bZ/xqdKgCEDoE056l
-	Wb6EUQpCcx120ATjatQe3tugp22wpygb2eUpCs3ChstiNOOEMgFNhAY/3lnF2CXVvxdjpuIZI+C
-	xFk4rNXDVAz5nOd1Dq45Pg+fRDb6RL7Ce8u5/5L+878k2VR1TkcUrum5WnOdnHqh2/ejlQJiq4x
-	X02Uda9Z0BQQkRvv6AITxGUObkzEyHO1qUEwMeZQnYXBzzD8gZ7EL64Bruy8gG3487bIrxm2Uzw
-	==
-X-Received: by 2002:a17:902:ef46:b0:2df:9d04:403b with SMTP id d9443c01a7336-2ed40c020b5mr56274225ad.32.1794022743379;
-        Fri, 06 Nov 2026 19:39:03 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed477a9403sm10138475ad.12.2026.11.06.19.39.02
+        bh=OWxwQNVn5bg0ClfD56UMbqBHzyQ7/paQIisdapffxFU=;
+        b=oNyCD6NtT0CGSUq45PgQlQI8xjXkS49Mr+W/uK3YOyg9aoDgf+ooIaRwBoWHzwu43E
+         Zm8jid/AU1vfDOsepdFgY7j5kdlTGl2n6rzZlzaHpqRPPGUkpeBjh/0AWbtlQQcRx4PO
+         d/nWsEtbCFaz/wuC7AhVrc8OmtLMxMeMlxBJU5QDwXKIXIto6rsu/WyPLxvqKR2qz6zo
+         bGoTtcfTe6YIrCJXjQnIe0Uomymiy2W38tscAI4493VpHxDIcODYox96lQkXX/FP+B68
+         4xoRJGnkhNgISLbjEgRGEIRBMQExjiwGOXibSNrl7ZhWkVAwvgK8Pcx8iH/w8Ba81nzM
+         caHA==
+X-Gm-Message-State: APuU4Z9y7DigqfZMIgzCRePODWpB86SIMx1DfVhp8WzkZydUxULj7rj3
+	mvz+7V0NrzqbV0mtP1+3IDixmqG6tpGIHwEOmQ97ib/wcOPbm1r4bWQr8g56ow==
+X-Gm-Gg: AYBFou3+rONymIqvGL1iBFaVzP90jHE6UQ5J43KQ3Q4kfVDKj99KSRLOjwusJd6N2fH
+	g1MXgA1RA2jISKYgOnOYPsHcy8AsDIntMHK84xo/UpxVZ26rlRik00qsh5mAaqQp8lGEfFrOR13
+	ZGQX5pw2AZ0qhuTbCA0jFdhpYVbJnYHgDA60Xsjcge1kbb+M1yvUwmN76b1+2T67wqhNUToEvHl
+	9RvrOt7RN2LrHiZRcZDfW9C1MENGvF+BtCdOQ7MNYnxI63vOCsOXD2zOzJxJGLnzc1l1f0MatHh
+	d5fsjn5w1HzDdHu3QAenXUtvGAnuswpSP3/yuhymOrBXgKslPhL8xJ01hpPCR3pllzyRGvErmN+
+	OkpAcaMl4zqPXMPAfV4Cuf96swGBF6Q9xhBh3abug7uLSsm1k+7ExBh8utbYfcqMGSNlNshV1ZF
+	hOpVlUEbgnl471HoUYTFBenQ8wNbuTv9nImOCeT+nLrYKVle7N4Dltyrr4SAl4MZxeIeG9nuCF0
+	ZwgKwLiZxTc4XnrFOZ+65NLDT3QUvSyx6SdRGEnuVVONsL79yinhFqt3DkOgREyqJUORC1euYRR
+	tr7IIURU2afjWPqQywR5Zg7gTTwr6aC3foJWl3ipEseBoukHQtyYDBwEzlLpPYeIMwocYV0NgRp
+	s00d5SQTVWcOqCcOGDoaY/CdJEc6j3E7PWmCYdFxBWbPw4ASKEWLyN3gWYN4c7GY2Iix06BLQRb
+	Q=
+X-Received: by 2002:a17:90b:1801:b0:3ab:884b:65b7 with SMTP id 98e67ed59e1d1-3b0db6d3f55mr4508863a91.25.1794022749259;
+        Fri, 06 Nov 2026 19:39:09 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1054a0475sm1441629a91.0.2026.11.06.19.39.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 19:39:02 -0800 (PST)
+        Fri, 06 Nov 2026 19:39:08 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v4 10/46] bpf: Find the registers and stack slots that later checks depend on
-Date: Sat,  7 Nov 2026 03:37:18 +0000
-Message-ID: <20261107033758.1547725-11-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v4 11/46] bpf: Add the sets of states at an insn and the entries of functions
+Date: Sat,  7 Nov 2026 03:37:19 +0000
+Message-ID: <20261107033758.1547725-12-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
@@ -104,50 +104,50 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The join of two constants is not a constant, and some checks need one. The
-two states meet before the insn that checks. Thus the verifier must know,
-where they meet, that a later check depends on a register or a stack slot.
-A table per kind of check, FLOW_NEED_*, tells the rules that refuse a join:
+Selftest test_verif_scale1 has these lines 90 times. jhash() is static:
 
-ARG        an argument that must be a constant
-    if (x) return bpf_rdonly_cast(0, ID); return bpf_rdonly_cast(0, 0);
-  The compiler makes one call of it: "R2 must be a known constant" in
-  selftest mem_rdonly_untrusted/mixed_mem_type.
-STACK_OFF  an add to a pointer to the stack
-    if (... || depth >= BT_MAXLVL_PRINT) return 0; ind = stack[depth];
-  The compiler tests one copy of depth and adds another. bt_print() of scx:
-  "invalid variable-offset read from stack R3"
-PTR_OFF    an add to a pointer to the packet, the context, a kernel object,
-           a map value that is read-only or has a timer, a lock, a pointer
-    if (data + hdr_len + inner_ip_offset > data_end) return TC_ACT_UNSPEC;
-    inner_protocol = inner_iph->protocol;
-  With [20, 40] as the offset the test tells nothing about data + hdr_len:
-  "invalid access to packet, off=48 size=1" in katran/tcdecapinfo.
-JUMP       a jump that compares with a constant, an argument or a return
-           value that the verifier compares with a range
-    if (ret < 0) ..; to_sport = state->to_sport;
-  ret is a negative constant where state can be NULL. As a part of a range
-  it passes the test: "R3 invalid mem access 'map_value_or_null'" in
-  tail_handle_snat_fwd_ipv4 of Cilium.
+  ptr = data + i;
+  if (ptr + nh_off > data_end) break;
+  ctx->tc_index = jhash(ptr, nh_off, ctx->cb[0] + i++);
 
-Three more tables are only for bpf_flow_is_needed(): does a check depend
-on a value that a counted loop changes and that has no closed form? If not,
-the value is widened at the loop head, and the verifier has no reason to
-walk the iterations one by one:
+Today the verifier verifies jhash() again for each state at each call:
+530362 insns. The main pass verifies a static subprog for the states at its
+first insn, and the call waits for the states at the exits. Each call that
+waits makes an entry. Its number is in the entry state and in all states
+that come from it. 4095 states arrive at the 90 calls. At the first insn of
+jhash() a state of a different call covers 4005 of them. Then each exit
+state is for the calls of the two:
 
-    for (int i = 0; i < STACK_MAX_LEN; ++i) {
-      if (!frame_ptr || !get_frame_data(frame_ptr, pidData, &frame, &sym))
+  call A  -->  entry 1  --+
+                          +-->  one set: calls { A, B }, exit states
+  call B  -->  entry 2  --+
 
-Each iteration fills the 24 stack slots of sym anew, and no check looks at
-them. pyperf600_nounroll takes 1281 insns, 154K with a walk of all 600.
+Thus the entries are disjoint sets, with union and find: 50765 insns. If
+they stay apart, the main pass hits its limit of states at an insn:
+"more than 1024 states that cannot be joined at insn 903". The same for
+pandemonium_enqueue of scx_pandemonium and 100 of the 225 progs of the
+schedulers of rust-bpf.
 
-VALUE_OFF  PTR_OFF, STACK_OFF, and an offset in each other map value
-BASE       the address of a load or a store
-JUMP_ALU   JUMP, and the values that the tested value is calculated from
+All new states are in one tree. flow_set_pending() gives them an order:
+ 1. Callers are before the subprogs that they call: all calls get to
+    a subprog before it is verified.
+ 2. Then the position of the call in each frame, then of the insn. Thus
+    a callee that keeps the frames of its callers, like a callback, is
+    complete before the code after the call.
+ 3. A walk verifies a loop iteration by iteration, as today. An iteration
+    is complete before the next one:
 
-flow_compute_need_const() goes backward through the control flow graph
-until nothing changes, like the calculation of live registers. A use that
-it misses can reject a valid prog. It cannot accept an unsafe prog.
+  for (int i = 0; i < MAX_AFFINITY_CANDIDATES; i++) {
+      if (*val >= nr_cpu_ids) continue;
+      if (++checked >= affinity_search_online) break;
+
+'continue' is a back edge in the middle of the loop. By position alone it
+runs ahead through all iterations, and each is done again when the rest of
+the one before it arrives: pandemonium_select_cpu, 130073 insns, not 26758.
+
+bpf_flow_prepare() marks the insns where a state goes into a set, and those
+where a second state can arrive. Only there the set keeps a state that the
+verifier used: to keep them all doubles the peak of states of Cilium, scx.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
@@ -155,343 +155,336 @@ Signed-off-by: Alexei Starovoitov <ast@kernel.org>
  1 file changed, 324 insertions(+)
 
 diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index f039cc949854..f5a91552b090 100644
+index f5a91552b090..3996220f89f0 100644
 --- a/kernel/bpf/flow.c
 +++ b/kernel/bpf/flow.c
-@@ -515,6 +515,74 @@ int bpf_flow_place_guards(struct bpf_verifier_env *env)
- 	return ret;
- }
- 
-+/* The slot that @insn spills to or fills from, if it's one that struct flow_need has a bit for */
-+static int flow_fp_slot(const struct bpf_insn *insn, u8 base)
-+{
-+	u8 mode = BPF_MODE(insn->code);
-+
-+	if (base != BPF_REG_FP || (mode != BPF_MEM && mode != BPF_MEMSX) ||
-+	    insn->off >= 0 || insn->off < -64 * BPF_REG_SIZE || insn->off % BPF_REG_SIZE)
-+		return -1;
-+	return -insn->off / BPF_REG_SIZE - 1;
-+}
-+
-+/*
-+ * A number is added to a pointer to the stack. A store at an offset that is not known
-+ * forgets what the slots it may hit hold, pointers above all.
-+ */
-+static u16 flow_stack_off_regs(struct bpf_verifier_env *env, int idx)
-+{
-+	u16 ptrs = env->insn_aux_data[idx].stack_ptrs;
-+	struct bpf_insn *insn = &env->prog->insnsi[idx];
-+	u8 op = BPF_OP(insn->code);
-+
-+	if (BPF_CLASS(insn->code) != BPF_ALU64 || BPF_SRC(insn->code) != BPF_X ||
-+	    (op != BPF_ADD && op != BPF_SUB))
-+		return 0;
-+	if ((ptrs & BIT(insn->dst_reg)) && !(ptrs & BIT(insn->src_reg)))
-+		return BIT(insn->src_reg);
-+	if (op == BPF_ADD && (ptrs & BIT(insn->src_reg)) && !(ptrs & BIT(insn->dst_reg)))
-+		return BIT(insn->dst_reg);
-+	return 0;
-+}
-+
-+/*
-+ * A jump that compares a register with a constant, which may be in the other register.
-+ * A call does the same: the verifier compares a size, or what bpf_set_retval() takes,
-+ * with what is allowed. So does the exit of the prog, see flow_compute_need_const().
-+ */
-+static u16 flow_tested_regs(struct bpf_verifier_env *env, int idx)
-+{
-+	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
-+	u16 consts = aux->const_reg_mask | aux->const_reg_wide_mask;
-+	struct bpf_insn *insn = &env->prog->insnsi[idx];
-+	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
-+
-+	if (bpf_helper_call(insn) || bpf_pseudo_kfunc_call(insn))
-+		return bpf_call_checked_arg_regs(env, insn);
-+	if ((class != BPF_JMP && class != BPF_JMP32) ||
-+	    op == BPF_JA || op == BPF_CALL || op == BPF_EXIT || op == BPF_JCOND)
-+		return 0;
-+	if (BPF_SRC(insn->code) == BPF_K || (consts & BIT(insn->src_reg)))
-+		return BIT(insn->dst_reg);
-+	return consts & BIT(insn->dst_reg) ? BIT(insn->src_reg) : 0;
-+}
-+
-+/* With or without sign extension */
-+static bool flow_is_copy(const struct bpf_insn *insn)
-+{
-+	return BPF_OP(insn->code) == BPF_MOV && BPF_SRC(insn->code) == BPF_X && !insn->imm &&
-+	       (!insn->off || insn->off == 8 || insn->off == 16 || insn->off == 32);
-+}
-+
-+static bool flow_is_shift(const struct bpf_insn *insn)
-+{
-+	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
-+
-+	return (class == BPF_ALU || class == BPF_ALU64) &&
-+	       (op == BPF_LSH || op == BPF_RSH || op == BPF_ARSH);
-+}
-+
- /*
-  * The places of a function that hold a value: the registers, the arguments on the stack that it
-  * got and those that it hands over, the slots of the stack that struct flow_need has a bit for.
-@@ -828,3 +896,259 @@ int bpf_flow_compute_kinds(struct bpf_verifier_env *env)
- 	kvfree(ret);
- 	return err;
+@@ -1152,3 +1152,327 @@ bool bpf_flow_is_needed(struct bpf_verifier_env *env, int idx, u32 r)
+ 	}
+ 	return false;
  }
 +
-+/*
-+ * A number is added to what may be a pointer whose offset the verifier looks at:
-+ * - An object of the kernel, the context, a socket take a known offset only.
-+ * - The packet: the offset was compared with the end of the packet before the states met.
-+ * - The value of a map that has a timer, a lock, a pointer in the middle.
-+ * - The value of a read-only map: what is loaded from a known offset is known.
-+ * Not a value that holds nothing but numbers. Only the lowest and the highest offset
-+ * count there, and the join of two constants has both. @any_value: that one too.
-+ */
-+static u16 flow_ptr_off_regs(struct bpf_verifier_env *env, int idx, bool any_value)
++int bpf_flow_prepare(struct bpf_verifier_env *env)
 +{
-+	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
-+	struct bpf_insn *insn = &env->prog->insnsi[idx];
-+	u16 both = BIT(insn->dst_reg) | BIT(insn->src_reg), ptrs;
-+	u8 op = BPF_OP(insn->code);
-+
-+	if (BPF_CLASS(insn->code) != BPF_ALU64 || BPF_SRC(insn->code) != BPF_X ||
-+	    (op != BPF_ADD && op != BPF_SUB) || (aux->stack_ptrs & both))
-+		return 0;
-+	ptrs = both & ~(any_value ? aux->plain_regs : aux->value_regs);
-+	if (op == BPF_SUB)
-+		ptrs &= BIT(insn->dst_reg);
-+	/* the one that may be the pointer makes the other one the number */
-+	return ptrs && ptrs != both ? both ^ ptrs : ptrs;
-+}
-+
-+/* The base of a load or a store, unless it's a number or a pointer to arena for sure */
-+static u16 flow_base_regs(struct bpf_verifier_env *env, int idx)
-+{
-+	struct bpf_insn *insn = &env->prog->insnsi[idx];
-+	u8 class = BPF_CLASS(insn->code);
-+	u16 regs = 0;
-+
-+	if (class == BPF_LDX || bpf_atomic_is_load_acq(insn))
-+		regs = BIT(insn->src_reg);
-+	else if (class == BPF_ST || class == BPF_STX)
-+		regs = BIT(insn->dst_reg);
-+	return regs & ~env->insn_aux_data[idx].plain_regs & GENMASK(BPF_REG_9, BPF_REG_0);
-+}
-+
-+/*
-+ * Some arguments of kfuncs and helpers have to be known constants: the id of a type,
-+ * the size of what is reserved in a ring buffer, the size of a slice of a dynptr.
-+ * A compiler makes one call of
-+ *	if (x) p = bpf_rdonly_cast(q, ID); else p = bpf_rdonly_cast(q, 0);
-+ * and one store of
-+ *	if (x) a[n++] = p; else b[m++] = p;
-+ * where a and b are on the stack.
-+ * and one load of
-+ *	x = ipv6 ? *(u16 *)(pkt + 54) : *(u16 *)(pkt + 34);	y = z ? task->pid : task->tgid;
-+ * The join of two constants is not a constant. Find the registers and the slots of the stack
-+ * that end up in such arguments, or in offsets in the stack or from a pointer,
-+ * like live registers are found: backwards, until nothing changes.
-+ * States in which they differ are not joined.
-+ * Nothing depends on it but what is known: it's fine to miss a store through a pointer.
-+ *
-+ * FLOW_NEED_JUMP: those that a jump ahead compares with a constant, see flow_join_makes_up().
-+ * As they are, or extended: without 32-bit insns a compiler tests
-+ *	r7 = r8; r7 <<= 32; r7 >>= 32;
-+ * and goes on with r8.
-+ * A slot that is filled through another pointer to the stack than r10 is not one of them, and
-+ * flow_null_differs() counts on that.
-+ *
-+ * The last three kinds keep no states apart. They are for bpf_flow_is_needed(), which asks
-+ * whether anything ahead looks at a number that a loop changes from iteration to iteration.
-+ * FLOW_NEED_VALUE_OFF: FLOW_NEED_PTR_OFF, and the offset in a map value that holds nothing but
-+ * numbers. It has to be in the value. It can be an argument, or what a function returns:
-+ *	return v->hist[count_bits(x)];
-+ * So can an offset in the stack. FLOW_NEED_STACK_OFF doesn't follow it through a return, so this
-+ * table has it too.
-+ * FLOW_NEED_BASE: the base of a load or a store, as it is, behind a cast, moved by a constant:
-+ *	p = NULL; for (i = 0; i < 3; i++) { if (p) n += p->len; p = next(); }
-+ * FLOW_NEED_JUMP_ALU: FLOW_NEED_JUMP, and what the tested number is made of step by step:
-+ *	for (i = 0; i < 3; i++) x /= 10; if (x < 8) ...
-+ * In x op= y that is x. y is not followed.
-+ * What is stored through a pointer to the stack other than r10 counts as tested. It's a result
-+ * for the caller, and no table follows it from the store to the fill:
-+ *	count_bits(x, &n); return v->hist[n];
-+ * These two go through callx, to every function whose address is taken.
-+ */
-+static int flow_compute_need_const(struct bpf_verifier_env *env, struct flow_need **pneed,
-+				   enum flow_need_kind kind)
-+{
-+	struct bpf_insn *insns = env->prog->insnsi, *insn;
-+	struct flow_need in, out, *need;
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct bpf_insn *insns = env->prog->insnsi;
++	/* the rest is for loops */
++	int len = env->prog->len, kinds = FLOW_NEED_VALUE_OFF, i, s, err;
 +	struct bpf_iarray *succ;
-+	bool jump = kind == FLOW_NEED_JUMP || kind == FLOW_NEED_JUMP_ALU;
-+	bool callx = kind == FLOW_NEED_BASE || kind == FLOW_NEED_JUMP_ALU;
-+	bool changed = true, any = false, keep, from_src, reg;
-+	int i, s, idx, slot, err = 0;
-+	u16 *gen, callx_regs = 0, pair = BIT(BPF_REG_0) | BIT(BPF_REG_2);
-+	u8 *ret, class, op;
++	struct bpf_flow *flow;
++	u8 *preds;
 +
-+	need = kvcalloc(env->prog->len, sizeof(*need), GFP_KERNEL_ACCOUNT);
-+	gen = kvcalloc(env->prog->len, sizeof(u16), GFP_KERNEL_ACCOUNT);
-+	/* the callers need what the subprog returns: r0, and r2 of a pair */
-+	ret = kvcalloc(env->subprog_cnt, sizeof(u8), GFP_KERNEL_ACCOUNT);
-+	*pneed = need;
-+	if (!need || !gen || !ret) {
-+		kvfree(gen);
-+		kvfree(ret);
++	flow = kzalloc_obj(*flow, GFP_KERNEL_ACCOUNT);
++	if (!flow)
++		return -ENOMEM;
++	env->flow = flow;
++	INIT_LIST_HEAD(&flow->kept);
++	flow->pending = RB_ROOT_CACHED;
++
++	flow->pos = kvcalloc(len, sizeof(u32), GFP_KERNEL_ACCOUNT);
++	flow->rank = kvcalloc(env->subprog_cnt + 1, sizeof(u32), GFP_KERNEL_ACCOUNT);
++	flow->point = kvcalloc(BITS_TO_LONGS(len), sizeof(long), GFP_KERNEL_ACCOUNT);
++	flow->keep = kvcalloc(BITS_TO_LONGS(len), sizeof(long), GFP_KERNEL_ACCOUNT);
++	flow->states = kvmalloc_array(len, sizeof(*flow->states), GFP_KERNEL_ACCOUNT);
++	flow->enter = kvmalloc_array(len, sizeof(*flow->enter), GFP_KERNEL_ACCOUNT);
++	flow->nr_states = kvcalloc(len, sizeof(u32), GFP_KERNEL_ACCOUNT);
++	flow->funcs = kvcalloc(env->subprog_cnt + 1, sizeof(*flow->funcs), GFP_KERNEL_ACCOUNT);
++	preds = kvcalloc(len, 1, GFP_KERNEL_ACCOUNT);
++	if (!flow->pos || !flow->rank || !flow->point || !flow->keep || !flow->states ||
++	    !flow->enter ||
++	    !flow->nr_states || !flow->funcs || !preds) {
++		kvfree(preds);
 +		return -ENOMEM;
 +	}
-+	for (i = 0; i < env->prog->len; i++) {
-+		if (jump)
-+			gen[i] = flow_tested_regs(env, i);
-+		else if (kind == FLOW_NEED_STACK_OFF)
-+			gen[i] = flow_stack_off_regs(env, i);
-+		else if (kind == FLOW_NEED_PTR_OFF || kind == FLOW_NEED_VALUE_OFF)
-+			gen[i] = flow_ptr_off_regs(env, i, kind == FLOW_NEED_VALUE_OFF);
-+		else if (kind == FLOW_NEED_BASE)
-+			gen[i] = flow_base_regs(env, i);
-+		else if (bpf_helper_call(&insns[i]) || bpf_pseudo_kfunc_call(&insns[i]))
-+			gen[i] = bpf_call_const_arg_regs(env, &insns[i]);
-+		if (kind == FLOW_NEED_JUMP_ALU && BPF_CLASS(insns[i].code) == BPF_STX &&
-+		    insns[i].dst_reg != BPF_REG_FP &&
-+		    (env->insn_aux_data[i].stack_ptrs & BIT(insns[i].dst_reg)))
-+			gen[i] = BIT(insns[i].src_reg);
-+		if (kind == FLOW_NEED_VALUE_OFF)
-+			gen[i] |= flow_stack_off_regs(env, i);
-+		any |= gen[i];
++	for (i = 0; i < len; i++) {
++		INIT_LIST_HEAD(&flow->states[i].list);
++		INIT_LIST_HEAD(&flow->enter[i].list);
 +	}
-+	if (jump) {
-+		/* the verifier compares what the prog and its callbacks return with a range */
-+		ret[0] = BIT(BPF_REG_0);
-+		for (i = 0; i < env->prog->len; i++) {
-+			if (!bpf_pseudo_func(&insns[i]))
-+				continue;
-+			s = bpf_find_subprog(env, i + insns[i].imm + 1);
-+			if (s >= 0)
-+				ret[s] = BIT(BPF_REG_0);
++	for (i = 0; i <= env->subprog_cnt; i++)
++		flow->funcs[i].exit_idx = -1;
++	/* from here on there is something for bpf_flow_reset() to look at */
++	flow->len = len;
++	flow->nr_funcs = env->subprog_cnt + 1;
++
++	/* subprog_topo_order[] has callees first */
++	for (i = 0; i < env->subprog_cnt; i++)
++		flow->rank[env->subprog_topo_order[i]] = env->subprog_cnt - i;
++
++	for (i = 0; i < len; i++) {
++		succ = bpf_insn_successors(env, i);
++		iarray_for_each(s, succ) {
++			if (preds[s] < 2)
++				preds[s]++;
++			if (aux[i].bb_end)
++				__set_bit(s, flow->point);
 +		}
-+		any = true;
-+	}
-+	while (any && changed) {
-+		changed = false;
-+		if (signal_pending(current)) {
-+			err = -EAGAIN;
-+			break;
-+		}
-+		cond_resched();
-+		for (s = 0; callx && s < env->subprog_cnt; s++)
-+			if (env->subprog_info[s].addr_taken)
-+				callx_regs |= need[env->subprog_info[s].start].regs;
-+		for (i = 0; i < env->cfg.cur_postorder; i++) {
-+			idx = env->cfg.insn_postorder[i];
-+			insn = &insns[idx];
-+			class = BPF_CLASS(insn->code);
-+			succ = bpf_insn_successors(env, idx);
-+			out.regs = 0;
-+			out.slots = 0;
-+			for (s = 0; s < succ->cnt; s++) {
-+				out.regs |= need[succ->items[s]].regs;
-+				out.slots |= need[succ->items[s]].slots;
-+			}
-+			in = out;
-+			if (class == BPF_JMP && BPF_OP(insn->code) == BPF_CALL) {
-+				in.regs &= ~GENMASK(BPF_REG_5, BPF_REG_0);
-+				if (bpf_is_callx(insn))
-+					in.regs |= callx_regs & GENMASK(BPF_REG_5, BPF_REG_1);
-+				s = idx + insn->imm + 1;
-+				if (bpf_pseudo_call(insn) &&
-+				    !bpf_subprog_is_global(env, bpf_find_subprog(env, s))) {
-+					if (kind != FLOW_NEED_PTR_OFF)
-+						in.regs |= need[s].regs &
-+							   GENMASK(BPF_REG_5, BPF_REG_1);
-+					s = bpf_find_subprog(env, s);
-+					/*
-+					 * Not for an index where states are kept apart: that is
-+					 * one of many numbers.
-+					 */
-+					if ((kind == FLOW_NEED_ARG || kind == FLOW_NEED_VALUE_OFF ||
-+					     jump) &&
-+					    (out.regs & pair & ~ret[s])) {
-+						ret[s] |= out.regs & pair;
-+						changed = true;
-+					}
-+				}
-+			} else if (insn->code == (BPF_JMP | BPF_EXIT)) {
-+				s = bpf_find_containing_subprog(env, idx) - env->subprog_info;
-+				in.regs |= ret[s];
-+			} else if (class == BPF_LDX || class == BPF_LD) {
-+				slot = class == BPF_LDX ? flow_fp_slot(insn, insn->src_reg) : -1;
-+				if (slot >= 0 && (out.regs & BIT(insn->dst_reg)))
-+					in.slots |= BIT_ULL(slot);
-+				in.regs &= ~BIT(insn->dst_reg);
-+			} else if (class == BPF_STX || class == BPF_ST) {
-+				slot = flow_fp_slot(insn, insn->dst_reg);
-+				if (slot >= 0 && (out.slots & BIT_ULL(slot))) {
-+					in.slots &= ~BIT_ULL(slot);
-+					if (class == BPF_STX)
-+						in.regs |= BIT(insn->src_reg);
-+				}
-+			} else if ((class == BPF_ALU || class == BPF_ALU64) &&
-+				   (out.regs & BIT(insn->dst_reg))) {
-+				op = BPF_OP(insn->code);
-+				reg = BPF_SRC(insn->code) == BPF_X;
-+				/* the result is known when what it is made of is */
-+				keep = op != BPF_MOV;
-+				from_src = reg;
-+				if (jump)
-+					from_src = flow_is_copy(insn);
-+				if (kind == FLOW_NEED_JUMP)
-+					keep = flow_is_shift(insn) && !reg;
-+				if (kind == FLOW_NEED_BASE) {
-+					keep = !reg && (op == BPF_ADD || op == BPF_SUB);
-+					from_src = reg && op == BPF_MOV;
-+				}
-+				if (!keep)
-+					in.regs &= ~BIT(insn->dst_reg);
-+				if (from_src)
-+					in.regs |= BIT(insn->src_reg);
-+			}
-+			in.regs |= gen[idx];
-+			if (in.regs != need[idx].regs || in.slots != need[idx].slots) {
-+				need[idx] = in;
-+				changed = true;
++		/* where the callees come back to */
++		if (bpf_pseudo_call(&insns[i]) || bpf_is_callx(&insns[i])) {
++			if (i + 1 < len) {
++				__set_bit(i + 1, flow->point);
++				__set_bit(i + 1, flow->keep);
 +			}
 +		}
++		if (aux[i].calls_callback) {
++			__set_bit(i, flow->point);
++			__set_bit(i, flow->keep);
++		}
++		if (aux[i].loop) {
++			__set_bit(i, flow->point);
++			__set_bit(i, flow->keep);
++			kinds = FLOW_NEED_KINDS;
++		}
++		if (bpf_is_ldimm64(&insns[i]))
++			i++;
 +	}
-+	/*
-+	 * An offset that is an argument: not through the call, see above, and not where the calls
-+	 * meet. A function would be looked at once for each offset that it's called with.
-+	 */
-+	for (s = 0; kind == FLOW_NEED_PTR_OFF && s < env->subprog_cnt; s++)
-+		need[env->subprog_info[s].start].regs = 0;
-+	kvfree(gen);
-+	kvfree(ret);
-+	if (!any) {
-+		kvfree(need);
-+		*pneed = NULL;
++	for (i = 0; i < len; i++)
++		if (preds[i] > 1)
++			__set_bit(i, flow->keep);
++	for (i = 0; i < env->subprog_cnt; i++) {
++		__set_bit(env->subprog_info[i].start, flow->point);
++		__set_bit(env->subprog_info[i].start, flow->keep);
 +	}
++	kvfree(preds);
++
++	err = flow_compute_order(env, flow);
++	if (err)
++		return err;
++	for (i = 0; !err && i < kinds; i++)
++		err = flow_compute_need_const(env, &flow->need[i], i);
 +	return err;
 +}
 +
-+/*
-+ * Does anything ahead of the insn at @idx look at what @r holds there? @r is a register or a stack
-+ * slot of the function as scev.c counts them. See flow_compute_need_const(): it's a guess.
-+ */
-+bool bpf_flow_is_needed(struct bpf_verifier_env *env, int idx, u32 r)
++static void flow_free_state(struct bpf_verifier_env *env, struct flow_state *s)
 +{
-+	const struct flow_need *need;
++	bpf_free_verifier_state(&s->st, false);
++	kfree(s);
++	env->flow->live_states--;
++}
++
++/* What a pass leaves behind. */
++void bpf_flow_reset(struct bpf_verifier_env *env)
++{
++	struct bpf_flow *flow = env->flow;
++	struct flow_state *s, *sn;
++	struct flow_kept *k, *kn;
++	struct flow_exit *x, *xn;
++	struct flow_entry *e;
 +	int i;
 +
-+	/* no table has a bit for it */
-+	if (r >= MAX_BPF_REG + 64)
-+		return true;
-+	for (i = 0; i < FLOW_NEED_KINDS; i++) {
-+		need = env->flow->need[i];
-+		if (need && (r < MAX_BPF_REG ? need[idx].regs & BIT(r) :
-+					       need[idx].slots & BIT_ULL(r - MAX_BPF_REG)))
-+			return true;
++	if (!flow || !flow->states || !flow->enter)
++		return;
++	for (i = 0; i < flow->len; i++) {
++		list_for_each_entry_safe(s, sn, &flow->states[i].list, node) {
++			list_del(&s->node);
++			flow_free_state(env, s);
++		}
++		list_for_each_entry_safe(s, sn, &flow->enter[i].list, node) {
++			list_del(&s->node);
++			flow_free_state(env, s);
++		}
++		flow->nr_states[i] = 0;
 +	}
-+	return false;
++	flow->pending = RB_ROOT_CACHED;
++	for (i = 0; i < flow->nr_funcs && flow->funcs; i++)
++		flow->funcs[i].exit_idx = -1;
++	for (i = 1; i <= flow->entry_cnt; i++) {
++		e = flow->entries[i];
++		list_for_each_entry_safe(s, sn, &e->calls, node) {
++			bpf_free_verifier_state(&s->st, false);
++			kfree(s);
++		}
++		list_for_each_entry_safe(x, xn, &e->exits, node) {
++			bpf_free_verifier_state(&x->st, false);
++			kfree(x);
++		}
++		kfree(e);
++	}
++	list_for_each_entry_safe(k, kn, &flow->kept, node) {
++		bpf_free_verifier_state(&k->st, false);
++		kfree(k);
++	}
++	INIT_LIST_HEAD(&flow->kept);
++	bpf_free_verifier_state(&flow->tmp, false);
++	memset(&flow->tmp, 0, sizeof(flow->tmp));
++	flow->entry_cnt = 0;
++	flow->united_cnt = 0;
++}
++
++void bpf_flow_free(struct bpf_verifier_env *env)
++{
++	struct bpf_flow *flow = env->flow;
++	int i;
++
++	if (!flow)
++		return;
++	bpf_flow_reset(env);
++	kvfree(flow->pos);
++	kvfree(flow->rank);
++	for (i = 0; i < FLOW_NEED_KINDS; i++)
++		kvfree(flow->need[i]);
++	kvfree(flow->point);
++	kvfree(flow->keep);
++	kvfree(flow->states);
++	kvfree(flow->enter);
++	kvfree(flow->nr_states);
++	kvfree(flow->funcs);
++	kvfree(flow->entries);
++	kvfree(flow->united);
++	kfree(flow);
++	env->flow = NULL;
++}
++
++bool bpf_flow_is_point(struct bpf_verifier_env *env, int insn_idx)
++{
++	return test_bit(insn_idx, env->flow->point);
++}
++
++/* A copy of @st that lives as long as the pass. */
++struct bpf_verifier_state *bpf_flow_keep_state(struct bpf_verifier_env *env,
++					       const struct bpf_verifier_state *st)
++{
++	struct flow_kept *k = kzalloc_obj(*k, GFP_KERNEL_ACCOUNT);
++
++	if (!k)
++		return NULL;
++	list_add(&k->node, &env->flow->kept);
++	if (bpf_copy_verifier_state(&k->st, st))
++		return NULL;
++	return &k->st;
++}
++
++/*
++ * Both are in a loop whose iterations are kept apart: an iteration is done with before
++ * the next one begins. A back edge in the middle of the loop would run ahead otherwise and
++ * leave the rest of every iteration behind, see flow_earlier_trip(). The state that stands
++ * for all iterations comes last.
++ */
++static int flow_cmp_trips(const struct bpf_func_state *fa, const struct bpf_func_state *fb)
++{
++	const struct loop_stack_entry *ea, *eb;
++	u32 i, ta, tb;
++
++	for (i = 0; i < fa->loop_stack_cnt && i < fb->loop_stack_cnt; i++) {
++		ea = &fa->loop_stack[i];
++		eb = &fb->loop_stack[i];
++		if (ea->loop_id != eb->loop_id)
++			break;
++		ta = ea->apart ? ea->trip : U32_MAX;
++		tb = eb->apart ? eb->trip : U32_MAX;
++		if (ta != tb)
++			return ta < tb ? -1 : 1;
++	}
++	return 0;
++}
++
++static bool flow_less(struct rb_node *na, const struct rb_node *nb)
++{
++	const struct flow_state *a = rb_entry(na, struct flow_state, rb);
++	const struct flow_state *b = rb_entry(nb, struct flow_state, rb);
++	int cmp;
++	u32 i;
++
++	for (i = 0; i < a->key_len && i < b->key_len; i++) {
++		/* key[i] is the place in frame[i - 1] */
++		if (i) {
++			cmp = flow_cmp_trips(a->st.frame[i - 1], b->st.frame[i - 1]);
++			if (cmp)
++				return cmp < 0;
++		}
++		if (a->key[i] != b->key[i])
++			return a->key[i] < b->key[i];
++	}
++	if (a->key_len != b->key_len)
++		return a->key_len < b->key_len;
++	return a->seq < b->seq;
++}
++
++/*
++ * Callers first, so that the calls of a function get to it before it is looked
++ * at. Then by the place of the call in every frame: what is called in the frames of
++ * its callers is done with before what follows the call. What follows the call of
++ * a function that is verified on its own goes on with every state that comes out.
++ */
++static void flow_set_pending(struct bpf_flow *flow, struct flow_state *s)
++{
++	const struct bpf_verifier_state *st = &s->st;
++	u32 i;
++
++	s->key[0] = flow->rank[st->frame[0]->subprogno];
++	/* the place in the function makes the rank of the function redundant below */
++	for (i = 0; i < st->curframe && i + 2 < ARRAY_SIZE(s->key); i++)
++		s->key[i + 1] = flow->pos[st->frame[i + 1]->callsite];
++	s->key[i + 1] = flow->pos[st->insn_idx];
++	s->key_len = i + 2;
++	s->pending = true;
++	rb_add_cached(&s->rb, &flow->pending, flow_less);
++}
++
++static void flow_unlink(struct bpf_verifier_env *env, struct flow_state *s)
++{
++	struct bpf_flow *flow = env->flow;
++
++	if (s->pending)
++		rb_erase_cached(&s->rb, &flow->pending);
++	s->pending = false;
++	list_del(&s->node);
++	flow->nr_states[s->st.insn_idx]--;
++}
++
++/* The entry that stands for the set that entry @id is in */
++static struct flow_entry *flow_entry_find(struct bpf_flow *flow, u32 id)
++{
++	struct flow_entry *e = flow->entries[id];
++
++	while (e->up != e) {
++		e->up = e->up->up;
++		e = e->up;
++	}
++	return e;
++}
++
++static int flow_entry_new(struct bpf_flow *flow)
++{
++	struct flow_entry **entries, *e;
++	u32 cap;
++
++	if (flow->entry_cnt + 1 >= flow->entry_cap) {
++		cap = max(64U, flow->entry_cap * 2);
++		entries = kvrealloc(flow->entries, cap * sizeof(*entries), GFP_KERNEL_ACCOUNT);
++		if (!entries)
++			return -ENOMEM;
++		flow->entries = entries;
++		flow->entry_cap = cap;
++	}
++	e = kmalloc_obj(*e, GFP_KERNEL_ACCOUNT);
++	if (!e)
++		return -ENOMEM;
++	e->up = e;
++	INIT_LIST_HEAD(&e->calls);
++	INIT_LIST_HEAD(&e->exits);
++	flow->entries[++flow->entry_cnt] = e;
++	return flow->entry_cnt;
++}
++
++/* It delivers states, so it is done when nothing is in the middle of that. */
++static int flow_unite(struct bpf_flow *flow, u32 a, u32 b)
++{
++	struct flow_united *u;
++	u32 cap;
++
++	if (!a || !b || flow_entry_find(flow, a) == flow_entry_find(flow, b))
++		return 0;
++	if (flow->united_cnt == flow->united_cap) {
++		cap = max(16U, flow->united_cap * 2);
++		u = kvrealloc(flow->united, cap * sizeof(*u), GFP_KERNEL_ACCOUNT);
++		if (!u)
++			return -ENOMEM;
++		flow->united = u;
++		flow->united_cap = cap;
++	}
++	u = &flow->united[flow->united_cnt++];
++	u->a = a;
++	u->b = b;
++	return 0;
 +}
 -- 
 2.55.0
