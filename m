@@ -1,98 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794081222;
-	b=Ueh2KjvFKcd+hKACl6hcddxn7A6O/w2iP0ROLfaL7kpmjAq8Kp5lZcEMdHyIDYrc/BsL
-	 +/e4q1z8SP/A6b5bR1UvcZoh+8sdLHXhcoKb8cS+ZX5xFo+Qmeq8iV28ksyWUzH0Xv43L
-	 nXzIGItkAKVON8hVlWMV6e7R4t8cyDhVyjRn3HwaOyKCcjccTVNji5e9pZj0kLJ95ZYEQ
-	 8j5/3jQAUv9CCEu6tQ6Dmf5iqH3oOUgn/BCk2ClYqRofzYHTqjAquQScQcvUXvHqDU899
-	 TQTTSQ3/WgoSOs4FhNtlcsAp7OvnrNq5BapbKE9kcHMiQlqmLPwoMqtyvP+46xSRGig==
+	t=1794081391;
+	b=D1vVfAvUJpLbbAKRHVjbGz4GdPt8jqsYlJrVJYV8P0ZHKGMm/ZT4WHf6hh6UDY+lZBpD
+	 1laLFErnG9Gl0QNtn8y52onTa7s9VMzQFueEYqg+kSHJmRnYxwI/8oj5RLcvg8U3DamEG
+	 xscEHwRiM8QWUrM+qsWuKjsf9WmAyKM//0CPSVV1GbHN3FIMuZP/FWMRP8wEeyrLyKVS7
+	 Mj/2Bt+uO772jvA6A3vq8jJ3V+kVbC+xex0dvATiEz7gsA/BpULnaxSc7Tmn1fpfJ9T/t
+	 rnZCBoh6wj3pvMD79xoKq7rqNL4WuZLQggTK4micWM3X40E55zz22wS0wMxwBtVCwDw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794081222;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=aDZ68c9QI8zugnRRjirZtU0A/GBNiwDPbLZHWfZlZRw=;
-	b=OfS+yf8xFfnnVJNOf1Jfuuxh1xSapPkacHEmdnKE9mT7vOjfYpxYbCJ9Z4UZ0p94zDhT
-	 0tBmQW30XVwcxIzV3jYRuWPb3tXjmVUIAWXpWUmX9bJlu39nn4wOVrK1L4uQJpWPo5uxK
-	 wj20BJ85arA9YCZzcRSjLUpGWIC1EqVqCxUnCLU1z/JAsDsHcec28eB0erN2L1Rct+9ep
-	 pbvA45cgaQ18zTb4RnyZ3zleszsn0Tq9qwsOUt/c1Chz74P4MDYaekNRnkBmfj8pl/2K0
-	 ekvwr14yDd3QdBKxBB0W/olFeZelbwqzo2NvcaSJflpa1tps0j6edGFpIkvfQvY/uAg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794081391;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=l3mgB4Ev1EUFaUriPeIG+9VrVzzDcSV4X6hThy1L/KU=;
+	b=4zmTDMcVUZMrh4BProCOPtslsagLz3II23vEHqM08ToM5TNu327UuF9MeG054NOpRpwC
+	 spGyYQv2NGd9pN9kexybuXvPmGhEVHlaaXosbRsBN8kTD5qtN3UpB8DvkwOoAhmbBizal
+	 XjiY2Sw+EnAClpPxFgCNZm9WSLqFrIyKvo366rqXFGX467ergxhUOiKgJBaGbo43GjBoa
+	 gC4WPw1GbBKT48hV7AZJI7xEHuZSAc8r+J9Dw9bljKf1ogC62NGxXbU1kA28a+Dnv3NdS
+	 E+e+2yUYtvTVHDo32vmP3/6geIB/ERFNoJirZvjjyXQf9U+q3ztULOzCpGOBVsglS0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wkvIjMIr;
-	arc=none smtp.remote-ip=209.85.216.52
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="leSV/12c";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCDF606A32D
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 19:53:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8DCDF606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id A29B3606A326;
+	Sat,  7 Nov 2026 19:56:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wkvIjMIr
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3b0ae87069dso791135a91.2
-        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 11:53:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794081222; x=1794686022; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=aDZ68c9QI8zugnRRjirZtU0A/GBNiwDPbLZHWfZlZRw=;
-        b=wkvIjMIrogDMoWYdXmOlA0m2ERQp6Apu2EDVk3l6utD+jFd+Lh/6heMm8d2Vl4P2GO
-         Fb//gs3EZ5+tKC6gqcGpI35P5tz4YxTxnlRxdHBinNVWuoy5CI1B70uiykPZpsjCPtdj
-         A9M+TK4D5Jk3st+YO1jRLF1wPe38KqD0a08HjrJusVX/HjbzlrjMmMyQeVm2D/cpwINs
-         NLE5t2eEqEn4bc5saN0SQs7Wt06rdRyyuq+RLg8XiAJT1kAZqg0EmyoHQ3asfczQK5Pq
-         KsOlFtUSGmvCJyF4Gw66Uz33KgWrdFDC+FYk60/BOnpWpp/CglWF8QSGVGDTNk0OeUkv
-         a4IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794081222; x=1794686022;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aDZ68c9QI8zugnRRjirZtU0A/GBNiwDPbLZHWfZlZRw=;
-        b=AB0myclR92XpJZv+aom4MenvJPd0OJGLN1kuoFuav8a8zkytrvTP+Lx6mRiMooy5/X
-         Nor4gHpCeUVPtyzRo08t/2yAhoMRt4VZ5ichrqEmdcSJ+2VeyX1j6dXIreBBbcLn5aSt
-         BNLos4Cfgq3iZLteZivmBkqtrUIB4eETo1Z/K8ufR09+UHZx49VbQJz7K+3H4zvrNwzA
-         pxphT0CAhBbJNwxuzvWCDMywYfZNhobVLcRiMFcPiuymtQioqaHzy3+cLaucwjoEeuCe
-         i1sDRUkEVXYIs3g2yUZ9F+3Q9SHc4F2yzfMMQ8w4psRfhYKkQLRE835lFqDOesVbaBEU
-         WicQ==
-X-Gm-Message-State: APuU4Z9vSDSG1gt0WuLsLuJaFIoBuRgnpDy+uKEo3J+QbrsaNmvTllNd
-	6n1bRB7pDTKN5Ax+7vPCZjMe7XDbwc6NQOhJ2VP+9oylrHhJhWnfFhQr
-X-Gm-Gg: AYBFou3PgIH+3oq2MVj4OY80nCiZSuwoaMPfdUMXtL/0O7k/ovX6bOUaLsmfoZARnPH
-	Ernl7Taff5aG3F3xP93Ryk1ScQh+fWrluCoJM3Di30B09zbtM6h86YqaKTESiVC1b0QEaVLK3nr
-	9LeivqS5YhG+5imfWLukb49qhSpcvDd+f38hWHHuyNPBZ+iT/77Kkq95ZWIkyYypUigFz14p2cD
-	NOOAwAPqttzWGIFtoMskbbgugkfcZduPMIn3JQ+gEZJA6uE+yivDammBtLbmu9o97AQftGbujqs
-	2iLUDNxnSMszHxJukyeo9uCFK5h7cI0/nYr+LYEMOBaRjkEady0Vxu7O2fkWRYZoGwGp3JGuFkt
-	/h1YhJ5MXtC/uP9RUbVr+/L3BNUbaaqLgerP6t8NAz5/HOcLTz4/dCtpzvjLPBi+6cY1of8NIM/
-	rnmqMDfz5T+ZFWvuFxLv3X7wpLKEW+T7VJr7hQO6P4VlcxkQYgQ+9EWICKzmJp3FMImWrRtwMAL
-	Mbuln7W+p2UiwJw0F3oy9IHcNpL3nYt58UNtZtM5mbSY3c1nLSsi35qNCfL54klFkve0ADvOMpt
-	TzQjeMgxOsxhYMmQnNA2RgxKgmLV2vvZvrQ6CsAPIKEsiVCKTyXd981IPSC1fwO5qISGZ4q+q8A
-	NRJAVtMFkgGJ/cjXGO4t6STHj1IqnfDoLkg==
-X-Received: by 2002:a17:90b:554d:b0:3ac:bfa7:b079 with SMTP id 98e67ed59e1d1-3b0db5edb73mr6825490a91.7.1794081221674;
-        Sat, 07 Nov 2026 11:53:41 -0800 (PST)
-Received: from localhost ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b126385c62sm226598a91.8.2026.11.07.11.53.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Nov 2026 11:53:41 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 07 Nov 2026 19:53:40 +0000
-Message-Id: <DMP8PQQ4S8F9.15Q6N6B56KY39@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: Reject writable map iterators on read-only and
- frozen maps
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "AdetsGithub" <adethyasrinivasan@outlook.com>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-In-Reply-To: <LO2P302MB0197FAF0305A94F7575CA700BC752@LO2P302MB0197.GBRP302.PROD.OUTLOOK.COM>
-References: <LO2P302MB0197FAF0305A94F7575CA700BC752@LO2P302MB0197.GBRP302.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=leSV/12c
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 7FD6A1F008A1;
+	Sat,  7 Nov 2026 19:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794081390;
+	bh=l3mgB4Ev1EUFaUriPeIG+9VrVzzDcSV4X6hThy1L/KU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=leSV/12cBRy5fFcCFsRBWNkXIR0ERlrLFhtwXLb1n/ecETUzHpRNRWUyRA1J+xHik
+	 qACbuwpkCO6p/u2nJ4qyTXwnpt6b/IgZacIRpaDSpbOldL36wXquNYcAzvBhnCRfbs
+	 w1v84aCAMcZa4RlWh4NiWKFQWPtdQtewvbwAP7mdXrQEwRCIISmwmc5HSEbpdEKOsz
+	 6lsrqfQHC2R+YJFvAkNz8rLjugqlc1wGElNloDVwvWoJxnF+x8/EvDegd/8F86GVoG
+	 qZBY/X7U9wsGSxXjsEKlqcDZqa3wrVlLkxDcK+JIya+LoGUkk9Q4+1L8ejdmKZzHDD
+	 q6X9Trx77B4Cw==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ignat Korchagin <ignat@linux.win>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: [PATCH v6 1/3] KEYS: Introduce keyring_is_empty()
+Date: Sat,  7 Nov 2026 21:56:02 +0200
+Message-ID: <20261107195605.3929659-2-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261107195605.3929659-1-jarkko@kernel.org>
+References: <20261107195605.3929659-1-jarkko@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,53 +93,108 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 07, 2026 at 06:14 AM AdetsGithub <adethyasrinivasan@outlook.com> wrote:
-> The bpf_map_elem and bpf_sk_storage_map iterators pass the live element
-> value (ctx->value) to the iterator program as a writable buffer
-> (PTR_TO_BUF | PTR_MAYBE_NULL) for all non-percpu map types. Since
+Introduce keyring_is_empty() in order to decouple for BPF, dm-verity and
+fs-verity how keyring internally manages the keys.
 
-Way too long.
-With CAP_BPF and CAP_PERFMON an iterator prog writes into a frozen
-BPF_F_RDONLY_PROG array.
-The verifier treats the content of such array as constants.
-That's all that needs to be said.
+Reviewed-by: Eric Biggers <ebiggers@kernel.org>
+Reviewed-by: Ignat Korchagin <ignat@linux.win>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/md/dm-verity-verify-sig.c                      |  2 +-
+ fs/verity/signature.c                                  |  2 +-
+ include/linux/key.h                                    |  1 +
+ kernel/bpf/keys.c                                      |  2 +-
+ security/keys/keyring.c                                | 10 ++++++++++
+ .../selftests/dm-verity/test-dm-verity-keyring.sh      |  2 +-
+ 6 files changed, 15 insertions(+), 4 deletions(-)
 
-check_map_load() doesn't exist.
-bpftool map dump doesn't use iterators.
+diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
+index 0c65c7a31da8..bd5143aae4fa 100644
+--- a/drivers/md/dm-verity-verify-sig.c
++++ b/drivers/md/dm-verity-verify-sig.c
+@@ -153,7 +153,7 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+ 	if (ret != -ENOKEY && ret != -EKEYREJECTED)
+ 		return ret;
+ 
+-	if (dm_verity_keyring->keys.nr_leaves_on_tree &&
++	if (!keyring_is_empty(dm_verity_keyring) &&
+ 	    dm_verity_keyring->restrict_link)
+ 		ret = verify_pkcs7_signature(root_hash, root_hash_len,
+ 					     sig_data, sig_len,
+diff --git a/fs/verity/signature.c b/fs/verity/signature.c
+index 2f49c5d9d987..b45b39b829b2 100644
+--- a/fs/verity/signature.c
++++ b/fs/verity/signature.c
+@@ -70,7 +70,7 @@ int fsverity_verify_signature(const struct fsverity_info *vi,
+ 		return 0;
+ 	}
+ 
+-	if (fsverity_keyring->keys.nr_leaves_on_tree == 0) {
++	if (keyring_is_empty(fsverity_keyring)) {
+ 		/*
+ 		 * The ".fs-verity" keyring is empty, due to builtin signatures
+ 		 * being supported by the kernel but not actually being used.
+diff --git a/include/linux/key.h b/include/linux/key.h
+index 420412aab926..9ff10b780865 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -439,6 +439,7 @@ extern int restrict_link_reject(struct key *keyring,
+ 				struct key *restriction_key);
+ 
+ extern int keyring_clear(struct key *keyring);
++bool keyring_is_empty(const struct key *keyring);
+ 
+ extern key_ref_t keyring_search(key_ref_t keyring,
+ 				struct key_type *type,
+diff --git a/kernel/bpf/keys.c b/kernel/bpf/keys.c
+index bffc356839ac..24e0416abc99 100644
+--- a/kernel/bpf/keys.c
++++ b/kernel/bpf/keys.c
+@@ -29,7 +29,7 @@ struct bpf_key *bpf_lookup_keyring(void)
+ 
+ 	if (!bpf_keyring)
+ 		return NULL;
+-	if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
++	if (keyring_is_empty(bpf_keyring) ||
+ 	    !READ_ONCE(bpf_keyring->restrict_link))
+ 		return NULL;
+ 
+diff --git a/security/keys/keyring.c b/security/keys/keyring.c
+index 5281da9d5bf7..ac48d6204915 100644
+--- a/security/keys/keyring.c
++++ b/security/keys/keyring.c
+@@ -443,6 +443,16 @@ static void keyring_destroy(struct key *keyring)
+ 	assoc_array_destroy(&keyring->keys, &keyring_assoc_array_ops);
+ }
+ 
++/**
++ * keyring_is_empty - Check whether a keyring is empty
++ * @keyring: The keyring to check.
++ */
++bool keyring_is_empty(const struct key *keyring)
++{
++	return READ_ONCE(keyring->keys.nr_leaves_on_tree) == 0;
++}
++EXPORT_SYMBOL(keyring_is_empty);
++
+ /*
+  * Describe a keyring for /proc.
+  */
+diff --git a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
+index 1f9601ef22f8..792449d356cf 100755
+--- a/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
++++ b/tools/testing/selftests/dm-verity/test-dm-verity-keyring.sh
+@@ -746,7 +746,7 @@ test_keyring_inactive_when_empty() {
+     log_info "TEST: Verify dm-verity keyring is inactive when sealed empty"
+ 
+     # When keyring_unsealed=0, the keyring is sealed immediately while empty
+-    # This means it should NOT be used for verification (nr_leaves_on_tree=0)
++    # An empty keyring should NOT be used for verification.
+ 
+     log_info "Keyring state (should be empty and sealed):"
+     list_keyring_keys
+-- 
+2.47.3
 
-> Fixes: 8d0358f6e8b3 ("bpf: Keep iterator programs off special map fields")
-> Fixes: d3cc2ab546ad ("bpf: Implement bpf iterator for array maps")
-> Fixes: d6c4503cc296 ("bpf: Implement bpf iterator for hash maps")
-> Fixes: 5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map")
-
-Wrong tags.
-8d0358f6e8b3 only added a check.
-sk_storage maps cannot have BPF_F_RDONLY_PROG.
-Keep d3cc2ab546ad and d6c4503cc296. Drop the other two.
-Don't add a5cbe05a6673 that bpf-ci proposed. In that commit
-bpf_iter_check_map() returns -EINVAL for every map.
-
-
-> B) Patched 7.4.0-rc1 -- writable iterator rejected with -EACCES on all phases:
->   ./test_progs -v -t frozen_rdonly_iter_write
-
-Pls add a selftest as patch 2. Not this one. It fails on a fixed kernel.
-dump_bpf_array_map() in progs/bpf_iter_bpf_array_map.c writes into
-ctx->value. Attach it to an array with BPF_F_RDONLY_PROG, like
-"attach_oob_write_iter" in test_bpf_sk_storage_map().
-The attach succeeds today. With the fix it returns -EACCES.
-
-
-> +	if ((map->map_flags & BPF_F_RDONLY_PROG) || READ_ONCE(map->frozen))
-> +		return -EACCES;
-
-bpf-ci is right.
-BPF_MAP_FREEZE stops the writes from the syscall side only.
-Progs can write into a frozen map.
-See BPF_MAP_FREEZE in uapi/linux/bpf.h.
-bpf_map_is_rdonly() needs BPF_F_RDONLY_PROG, so the flag alone closes
-the hole. The flag never changes, so there is no race with map_freeze().
-Drop the map->frozen part here and in the comment.
-
-pw-bot: cr
