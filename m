@@ -1,102 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794017359;
-	b=GVtxoEQuPMnBsgILjroHWCgibIi3zSvzAsgbM+FNGJ7UFLR85VgxnYeAGZzKh3oMDJne
-	 D1O403skmRk4fUUYw/wxjFrrLMxs5IFoU0nB22Rl4Ogcq4sbYr8Gwt9cZDyIIzy/Qcpae
-	 PQ2p97Vxk1QE3jAo4suw+J6v9+1WjfBwPR8fckl/HRmNCytMYGFVWMMl6o7PUsFmMuomA
-	 bRFuS4AlCCHuNblSNZX3BAz+KUGYg6xjvD3tTvXndK1L2M7z18JA/uyTqWSI7jMaDPUvq
-	 S4h+06r4cmw4gDYa4PXG1MC8xzt6CHqF28ME+Ce/tDmG9ja5TA2XNKR2tREpEIpVu1A==
+	t=1794017715;
+	b=ETsBgVVeyAl0zrqSiO4CvC6VnJV8rNhWWCFN97AhrtehgTE/TUlAT9nd61uiVNK8Wf1C
+	 heqbY1phAWE7JawG6KiTMUPjGUMyOMWpskbgLG5vK1ZsV4L5s54AjD9q320BIv9lleySQ
+	 cx4iyuLeOuuSupJevAryODpRcxfpkuILS1ctOECy4MISpwQhwKTfFsFC7JhKaON9OQu/a
+	 tcmwshnGX/OHBwmttniOqe8o+PZ5TdA3JlEKM1XNTLfWJz6+93dNFex9+0mmUEsBP4TpG
+	 bP6cnntn1YBjRIALkaEilDXGbhSVp8YOz5/J/0fsTLAcP9zEFL/SnbRqTa+2D01+5xA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794017359;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794017715;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=oWCm5sO2ZJcIfwM/bU9hgd9OcLaoRmJrQ2OQCAcOYQw=;
-	b=XrNmHboiKCBfTSM1jJDQsm2hr3th6xsYMpnMSSRhaPV5KcQjvdaCROanYzRAv8Cq8RH5
-	 150lUxeJkA8BeDYU4aU0bTD6cJhtZAz3m7eXSjZJvzzk1xRjjWZR1as3XJSHK2ss5KsFl
-	 ebc2wo721/uAfzEMvjCpvmmTM49rHhPMS9G/QEgOlFrsSSr14QF/yYJHm3DTKNb+YWi+U
-	 otQ4778d9BvSHPWUrjaO6KOwtomiIca+0E4hYksoJH3VAD0j5CKx7itB+eHducnLt3Sr5
-	 xzS7bSF+Y1FrW/p4Rp/HUWf3E9ExYAQsPBLhm2CMkFsxSvWuVLp7Rn6CsXNwDQKxFTA==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=dc9ewNRLy/KDUCgVc1zw7V1amTwtToITL8ldPoKTuCM=;
+	b=fF2jKTMtP/gaLd8ORspum3GZ/rcOxLmOwfW4tVLOjOfp1EXLNF/glhmk1GuxxHpxu2LJ
+	 NAgftXzUsRwiXGLMvFGwMT5ZsgWVxf9+/tJrrguJObi1NFkazbST+JVS5jHTzDNs8jeBp
+	 D2bWDc7lxP6hRlMuO0APUnMCDYAFtrS2h6ZSkuzxSLZqUn2fgyciejC84rt5i/Mj4JfTH
+	 rOSqmNAnEUltUU8BbTTPwvnWuvYkRsKz6tsD577tqEYKCI9Wqjowgv6lR4oubD4HEb2g2
+	 z1Bpgfn6woy0aYswqJCqrqO0GYrnyKTsuXJTFJ/XT25QuHghoD9cq+K3xD6wDBPF+sw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H+8vyume;
-	arc=none smtp.remote-ip=209.85.216.48
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rIaRJUt1;
+	arc=none smtp.remote-ip=209.85.221.48
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721F9606A335
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 02:09:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 721F9606A335
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793EA606A334
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 02:15:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 793EA606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H+8vyume
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3b0e61a4decso852583a91.2
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 18:09:19 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rIaRJUt1
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-49134c8509fso1032880f8f.1
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 18:15:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794017359; x=1794622159; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=oWCm5sO2ZJcIfwM/bU9hgd9OcLaoRmJrQ2OQCAcOYQw=;
-        b=H+8vyume+obI271XmNk+PDu48Q19jOLc/Va8iCJp+YPAfevLZPbtqZKst6ucyXtfSw
-         SesmJ3do6CgH0DvagS2lCWl//emQ8A8R9ws51AQTEijOWlvGxTR2vpKj7HFj7HUNesAD
-         Iz/tqmsd4wcjINMkFThPdh82py3fh0hdETwaSNa/7BESxLI2fFYv4JdsIe5+Yh+iNqwi
-         GuQQxgL9obB3jiEMRpDE9NQASENmDbDCM9g7vOrH4FzP3N/mV41LFrwuOV+fbmrRkUkI
-         PlnkIn5ku0EaxwHF2d31ktU40mx5GyEtw9tUQotInc5smSPvSCczAu0/CGscJ/0+rKLR
-         LO6Q==
+        d=gmail.com; s=20260707; t=1794017714; x=1794622514; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=dc9ewNRLy/KDUCgVc1zw7V1amTwtToITL8ldPoKTuCM=;
+        b=rIaRJUt1BdlbukYtOlgR3hm025ZNxYq1nfZwPggR6pcX4cUfW1bglCbWsHSd+L52tV
+         HfldkHEXIy5xOOmVeJNMVbBwBw/0j4C6+rZLgGNL8So6zZuq8zzQtJ/0cXKKtAFvpDBU
+         2myzL2JNjUfhwPRdmFOizDPdbiphF2ebjRezj6BBWKc5zDn11Y5oQAnVNvto5HDh8hNc
+         9kiZFkhTNmnO1W4Dcf6YFvC11fLhCvlKM0AWrovMXtIeWKuEpJdEkTHpR4tAs8bD+X8G
+         Msz2L5oR6NOlBGlsoHP4dK42na52GbDAMsKSIW3MX/S4RmPwd02Akx3FVcKEZVYTPj59
+         A8MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794017359; x=1794622159;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oWCm5sO2ZJcIfwM/bU9hgd9OcLaoRmJrQ2OQCAcOYQw=;
-        b=zDdDYC0lVpJpmTodKM2+IjCtzmReY5nyHRjjiNAf+L1wSLq7h7M3KP0tRW9ro8mKsw
-         OJEBMAbrWnOzdXu3qFFet9OktyFQ9WAko0RXXrFtU5Wi1uyNZ5bCMXFthPqxqms08iPN
-         Mp5PaOL8WE1k4KLBCvWmLwfYyVA3o8K54aHCfTSZ7jebyrC9/UsjtgKJ9Akb+w7Pc1wp
-         A3Cto3D6HXxyY3VnNn3emkm7SkZ6TGYKpnBDN5ptCUSkijc8mz7IbwXuYu0x1E27W83Q
-         tED6o3We5zvf+8Knx7cujspiTbBSeA3/NG5uzC29MhA6T18ff3lKbwbUhvZqyTYBFNPz
-         /S+g==
-X-Forwarded-Encrypted: i=1; AL+hErEjLGuumMVstjmKKfX4h63HG6HDV5PnIRtU3mt71UqdIrpduA6QNfmzjQhmEQIpd87pCTk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8fogQv2QQsIimdpsI12KazV65XjIFYJ095wvyMtWp+RoJKpVJe
-	Kp08cUBypDHHaAYQm+uJoko+0p2j8YNlGTwaIr5dqBsIPLbdZ8WiyuJV
-X-Gm-Gg: AYBFou2Jhdb/xV93KnohsY46GBDiUKeJvYjbntuxsIJkGMJkyEESPw4QPu106FjO0Br
-	Tiul0kynxoMF0u39pD1OLcuMt4x7zf1NePWN5PpDL7UhalJ7ySni0kjBdFaxVv1RzjgS2ZFmZwr
-	WWUn3ZMdIXcweh28LOKcVaju7hcxD30igU2YO9nnGXp/WuRinZ0IOTaYrqVULfEBVkqKXvK4a4x
-	m08P3zGezTmBuFpeoQFFMLprySOing7ZAE5TuNuw77C8GW9UZK6NtbRo2G3j4nlXP9wh0MHL847
-	PwQaYz6ZmEZj1OHp5hFjSPiETQX2iOlZ0dBh4bhxSkjYGBH4OKlNJz3Vn63LOct1RHRVAJtn3OE
-	ffj/dN2XfcLNPbFV0f19ZPFBiJPxPE3WoBpL842X3uSUqqKWKy+n5aBkbCfKAFLJ/DDnBmShC1J
-	ZTjNN6cN/smVvDbWNt9AKizbchq6/+4EVOX9Tx/8rhrXawUr/kR5BrUGfNT4oEbbxj6ga4xa2Pf
-	vd+usBC50zisqCVVF29NKTuDgPDqfRxg2XwMlKwah3zyiIkx2UmK3Mb/uKHCWBjqllxiz6BXIio
-	I0eCkXlYZ0fdOGhmxOCo5jGF/tjVwRGq5XECMxKPyDoo23CzdRfb63HB34AGruY8/9SgwHq+2OM
-	5jqWk3gxf+Tfcqbq7YFNfGm7TzNQdBf/LRA==
-X-Received: by 2002:a17:90b:1a91:b0:3b0:ae41:2707 with SMTP id 98e67ed59e1d1-3b0db6fe133mr4547927a91.45.1794017358501;
-        Fri, 06 Nov 2026 18:09:18 -0800 (PST)
-Received: from localhost ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b105864375sm1156571a91.4.2026.11.06.18.09.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Nov 2026 18:09:18 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 07 Nov 2026 02:09:17 +0000
-Message-Id: <DMOM2SFCFHYK.3BT44IQ90X9UB@gmail.com>
-Cc: "Michal Luczaj" <mhal@rbox.co>, <virtualization@lists.linux.dev>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH net v4 1/2] vsock/bpf: release sock lock while waiting
- for data in recvmsg
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <jrmmhm.kernel@eldare.de>, "Stefano Garzarella" <sgarzare@redhat.com>,
- "Bobby Eshleman" <bobbyeshleman@meta.com>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>
-In-Reply-To: <20261106-kbh3-1-022-fix-v2-v4-1-c7d36703814d@eldare.de>
-References: <20261106-kbh3-1-022-fix-v2-v4-0-c7d36703814d@eldare.de> <20261106-kbh3-1-022-fix-v2-v4-1-c7d36703814d@eldare.de>
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20260707; t=1794017714; x=1794622514;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=dc9ewNRLy/KDUCgVc1zw7V1amTwtToITL8ldPoKTuCM=;
+        b=UXztSuvKUOd6eS2/AqqYX1QhsrMRBBu/ODcBBXc9qwVTOaiq5mNI+E0wiozoObvnLs
+         vndauWUAzIMnQeDWboWgTYyJPnV6vlbnLZqj0RnUojR7R/PLvbcYHehJfSV4uMfDdL7o
+         U1RxzF55Irf9GuhPzP39INFbX0KuE5hCFYUf1TfSWgYTZs93ho/sBiNYqI9PlyvDAvRh
+         seKHDOt2PaWWR1HjDQ1vdDyz81INKzBN8OimtymskQDzSUxoXn5r6FVTToadOD9TY3co
+         Ar81H03OflxrdoVUc6wigp0JfC/SO90pc7VpoARAbmEEylbI/LGOtaenNkdxLBFWGiw4
+         n6PQ==
+X-Forwarded-Encrypted: i=1; AL+hErHAmewaLx3pJqXnPJraHQleb6aG0IiuWh4GfsGqZq84YpLQDxcvVaBJ9KxJ9pSqWZ+Gkgs=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+Fkgb6T8w4HeRkJ6tbDkMTQ/MFkp8vRA3YkIEe5KbBQ7UT5gS1
+	dqF62srsoKNjpwJJkkuDe14MBVMb/GV75BPXIPn2gpvTKLjmdZ/m3p7h
+X-Gm-Gg: AYBFou1G11GvZ8m7iIWd1itx4rOTOwsxloqcJGMCkzE1NZnoRD29kVguLMRRJ573xxe
+	2uRv5ny5bC2/Efahp5VpMoQoXPaDKDP6C9ySKF4rnya+j2UY/4eC12Z8h59fHelUQXuGFbU853f
+	aYB92sdDOS5asQfaVNKwXhSUK6ja/QfT0ZPnYnAtAS9uwst2fAk0pLva+XgtPp1htxtpwthKKBY
+	URfxBXJR/W9CnR/r3VHrBf5hyjW7wlGZXIk6DjFZBaXzZmbndLWMT94thg5ZgULWzkjnePrMri4
+	V/PUXMzNMjEsvmNrBCcQJT9jc+q3cxruqJOCSE7xa5n3ha6NzngjBTNByx4jP0Ioa3epmAEOsFk
+	F0aVQ3UngCBQg+G1U/8qpHff/8ZQIxOQH4tMLOhwzpoe4bwhXwtt2s7oSnXQ4alQAkzFeZMLIqX
+	Ay8FoJ9jnIZI2+qhrrsQlBaY+xoXo68LBfy5ftUOnX2sNbtSEhA9+bTheJdblhhGKIn753TCF2S
+	+7qyyypcFGOlkjFswJ5rIG+nJ9fUJyMRCHgG1+xM2GZ9yhjBN1tDedM11a+C9OYByMGIX/JMUHf
+	CicJOwW5Wu6iVWSpTwe1CtFGvvtrItnDfG8r1rZDHFfbBwrsh2xkuTx7PQItqkigD44YIn6AQdy
+	AHzd36LW+4ztowSdK+Xs41ys=
+X-Received: by 2002:a05:6000:41c3:b0:48b:108:48cf with SMTP id ffacd0b85a97d-49275b1bcfamr7936541f8f.25.1794017713547;
+        Fri, 06 Nov 2026 18:15:13 -0800 (PST)
+Received: from localhost.localdomain ([86.124.84.219])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-492d7cc5f11sm6367449f8f.49.2026.11.06.18.15.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Nov 2026 18:15:13 -0800 (PST)
+From: Radu Toader <radu.m.toader@gmail.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: peterz@infradead.org,
+	mingo@redhat.com,
+	tglx@kernel.org,
+	void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com,
+	linux-kernel@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 1/2] sched_ext: Add scx_tickbug, a scheduler that holds a task on an idle CPU
+Date: Sat,  7 Nov 2026 02:15:06 +0000
+Message-ID: <20261107021509.968928-1-radu.m.toader@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <au4HhnJoKvJ6GPJT@slm.duckdns.org>
+References: <20261106094343.174905-1-radu.m.toader@gmail.com> <20261106094343.174905-2-radu.m.toader@gmail.com> <au4HhnJoKvJ6GPJT@slm.duckdns.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,118 +105,40 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 06, 2026 at 01:57 PM Jerome Mohm via B4 Relay <devnull+jrmmhm.kernel.eldare.de@kernel.org> wrote:
-> example by a credit update. So the wait also loops until data arrives
-> or one of the native exits applies: a socket error, a local or peer
-> shutdown, a socket that is no longer connected, the timeout or a
-> pending signal. The loop alone, with the lock still held, keeps the
-> deadlock, so the fix needs both halves and stays one patch.
+On Fri, Nov 06, 2026 at 06:59:50AM -1000, Tejun Heo wrote:
+> Thanks for catching the bug. However, this scheduler is more of an one-off
+> debug code and I'm not sure we want to carry this in tree. Maybe put it in a
+> github gist or sth and point to it from the fix patch?
 
-No need for a 2nd copy of the return values.
-The old code returns true on RCV_SHUTDOWN. The psock queue is empty, so
-the caller goes to __vsock_recvmsg(), which picks the return value.
-tcp_bpf, udp_bpf and unix_bpf do the same.
-Do it for sk_err, peer_shutdown and sk_state too.
-__vsock_recvmsg() doesn't wait in any of these states.
-It handles len == 0, MSG_OOB and MSG_ERRQUEUE as well.
+Fair enough. v2 is the one-line fix on its own.
 
-The copy differs from a socket that is not in a sockmap in four cases.
-The diff differs in one, the last row:
+Rather than a gist, the fix points at the v1 posting of this patch in
+the archive, so the link cannot rot and needs no account:
 
-  recv()                          no sockmap    this series   the diff
-  ------------------------------  ------------  ------------  -----------
-  after a virtio reset            -ENOTCONN     -ECONNRESET   -ENOTCONN
-  after a reset, len == 0         -ENOTCONN     0             -ENOTCONN
-  after a reset, MSG_OOB          -ENOTCONN     -EOPNOTSUPP   -ENOTCONN
-  after peer shutdown, SO_INQ on  0 + SCM_INQ   0             0 + SCM_INQ
-  asleep when the reset comes     -ECONNRESET   -ECONNRESET   -ENOTCONN
+  https://lore.kernel.org/lkml/20261106094343.174905-2-radu.m.toader@gmail.com/
 
-Instead of patches 1 and 2 (compile tested only):
+One offer before I drop it entirely. tools/testing/selftests/sched_ext
+already carries nohz_tick, which asserts that a finite-slice EXT task
+restarts the scheduler tick after an idle interval on a NOHZ_FULL CPU.
+The condition this scheduler holds could be asserted there as a selftest
+instead of carried as an example scheduler in tools/sched_ext. If a
+regression guard for this is worth having I will post it separately; if
+not, the archive link is enough and I will leave it alone.
 
-diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
-index 9049d26..3cf017d 100644
---- a/net/vmw_vsock/vsock_bpf.c
-+++ b/net/vmw_vsock/vsock_bpf.c
-@@ -34,24 +34,34 @@ static bool vsock_has_data(struct sock *sk, struct sk_psock *psock)
- 	return vsock_sk_has_data(sk, psock);
- }
+Either way, the reproducer turned out to have a bug of its own, which
+the CI review found on the same posting: an untagged task pinned to the
+target CPU starved in the shared DSQ, because the target CPU stops
+consuming that DSQ while it is holding something and no other CPU may
+take a task pinned there. With two tagged tasks handing off it could sit
+until the watchdog unloaded the scheduler, which contradicts the "the
+machine stays usable" claim in the commit message. Dispatching anything
+with nr_cpus_allowed == 1 to its local DSQ fixes it. Noting it here in
+case someone takes the thing out of the archive.
 
--static bool vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long timeo)
-+/* __vsock_recvmsg() doesn't wait in these states and knows what to return. */
-+static bool vsock_rx_done(struct sock *sk)
- {
--	bool ret;
--
--	DEFINE_WAIT_FUNC(wait, woken_wake_function);
-+	return sk->sk_err || sk->sk_state != TCP_ESTABLISHED ||
-+	       (sk->sk_shutdown & RCV_SHUTDOWN) ||
-+	       (vsock_sk(sk)->peer_shutdown & SEND_SHUTDOWN);
-+}
+Thanks for the quick look.
 
--	if (sk->sk_shutdown & RCV_SHUTDOWN)
--		return true;
-+static int vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long timeo)
-+{
-+	int ret = 0;
-
--	if (!timeo)
--		return false;
-+	DEFINE_WAIT_FUNC(wait, woken_wake_function);
-
- 	add_wait_queue(sk_sleep(sk), &wait);
- 	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
--	ret = vsock_has_data(sk, psock);
--	if (!ret) {
--		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
--		ret = vsock_has_data(sk, psock);
-+	while (!vsock_has_data(sk, psock) && !vsock_rx_done(sk)) {
-+		if (!timeo) {
-+			ret = -EAGAIN;
-+			break;
-+		}
-+		if (signal_pending(current)) {
-+			ret = sock_intr_errno(timeo);
-+			break;
-+		}
-+		release_sock(sk);
-+		timeo = wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
-+		lock_sock(sk);
- 	}
- 	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
- 	remove_wait_queue(sk_sleep(sk), &wait);
-@@ -80,6 +90,9 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
- 	struct vsock_sock *vsk;
- 	int copied;
-
-+	if (unlikely(!len || (flags & (MSG_OOB | MSG_ERRQUEUE))))
-+		return __vsock_recvmsg(sk, msg, len, flags);
-+
- 	psock = sk_psock_get(sk);
- 	if (unlikely(!psock))
- 		return __vsock_recvmsg(sk, msg, len, flags);
-@@ -102,10 +115,9 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
- 	while (copied == 0) {
- 		long timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-
--		if (!vsock_msg_wait_data(sk, psock, timeo)) {
--			copied = -EAGAIN;
-+		copied = vsock_msg_wait_data(sk, psock, timeo);
-+		if (copied)
- 			break;
--		}
-
- 		if (sk_psock_queue_empty(psock)) {
- 			release_sock(sk);
-
-[...]
-
-> guest's virtio-vsock device. With the series applied they behave as on
-> a native socket, except for the reset case above, and the vsock
-> vmtest.sh single-VM tests and the BPF sockmap test_progs pass.
-
-None of these tests sleeps in vsock_msg_wait_data().
-The sockmap tests call select() before recv() or pass MSG_DONTWAIT.
-vmtest.sh doesn't use sockmap.
-
-pw-bot: cr
+Disclosure: this reply was written by Claude Opus 5 (Claude Code) and
+sent on my behalf, in the same session as the patch; the patch changelog
+carries the same note.
