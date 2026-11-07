@@ -1,64 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.38
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794074385;
-	b=tG/y8rI/cAA7q0Jh6vQP0aUv1iAWAj5fqU19S3vYQyyFwhLgb1CIExqdB5K6iovDZw/U
-	 Ny9LJSG2F4ElUxDRcuxVuJeZb//ytis2nderrHEI7TnWtOiP/PAuO8IZ61lvT354sRo80
-	 lR3qeG/eEZG5GD0bEpFIaSonBagbh0cbvfpFwuOXLsXTEN6sfoDxvn+zD/c9PGvAZLd4j
-	 5Dd2si0RmY7+CtlaKIY7UtrBvDWJm8S2scVAY+5VaW1x/JV9p71QBZf3vpbwWwuCkkfcP
-	 Tji11wX0wZ39fD+7F12ipSBxtsSQKc8wGil3jDr4vjPUUEwtgAIBc44MsBD7NS+bvMw==
+	t=1794074388;
+	b=ZM0NyZQQ+dbQcxZ8+3Aink/N3w/7jNBnMaDe54IFJEvXmlVPPzfDvTJcDN2EgbKD31o0
+	 /GCpHGsRk0yvoCH1ZDufPlJuQ9WWKDthZKvIa/xq0SCq8Ur6CfJaZcVOXn6h7GcrstiFk
+	 bGnWCFaog5Wwe0tNoidQwdHBgvroaBaSY0PfQWnwiPqXjl3TUo7tV9Vnwk+X9j9UQT/8N
+	 Vb/We7yXRXsiuhbDOTwglGezqpA/BgGr09qKOMi+g/AvCdddWwTREyvtUpFDaVcOCP/ri
+	 /D9DFO0MJpld3qEs2L9Z8mXJ0gP5sqblFxXYYXxTqUWXGu5n/Xxwl6JHX9oDTLZJ1ow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794074385;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794074388;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
-	bh=hAVvC8vR2vBGPxoDQZWFQGt78GnzQvCqPY56LF4FZtY=;
-	b=xfdJwEydPb5Ms/xpLTf8XjqJSQEyY/fY98d/kyuHmcgnguVGZOH0S6MLTaXD2Ksz8QpY
-	 Q4IOpY/qp5yu07D/Lq4aGlsGxsiPdnywQunADun0BNMDAEo0GkyL8zXp/JH6oII1J6sCF
-	 pe0G2jgRRWp+ai/DZ4rRWoG+RFAXVuStPf95xOec6gx7VKFzYOkV8g8FGHs/l+AL6YK4e
-	 wP8qmdUYt9tI8B00Ph/E3dziYYFMoXIzq2su2/829Lnb3Kg2qAvDpXrFU6x9OXW14sn7t
-	 BVKVeQjcYV7+TmO0V8JpSAsL02cIztjw1/3jrUZKStEoJt+c0+cuCiLMuHp7JbiSo9Q==
+	bh=mYH1R7Aw1iVn3adjIX8WOzgpUmMHsc4YqOxn33DMKdI=;
+	b=vQ2+kfEQKsm/yDK96up8C3iG4nzBfa57iK3cgXYdFb37Iasy47Pao3+rGJggekEErVGl
+	 WI+XUhGXyVrTvt0YyoC1lHtYVjRctlvn//AGpHNs4WXAcA0vMUjM41tjhVCS19I2P/IXg
+	 wvhuBIHmWRPf7hBcdpHC54gFkwQ7iKv/o/JdWwXTf5NlblzaO/ZfGMcM9ozEE93NO/E8b
+	 nESx9vANDfBzQ228IVCSYS71h2yY+lePk+Sk3PL5lkkjTdrEJdo+ZQFMTyW/j9lRSG4+I
+	 1aFq61BU7cXyPRamy0fioePFXToA2BJ8Epxt8Ymu4SAvpmd5Ea6+jC6daJr1BzSrokQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=rbox.co;
 	spf=pass smtp.mailfrom=rbox.co;
-	dkim=pass header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=TwF4N8si;
+	dkim=pass header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=ApioPmNb;
 	arc=none smtp.remote-ip=185.226.149.38
 Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E09606D823;
-	Sat,  7 Nov 2026 17:59:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57E09606D823
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC141606A33B;
+	Sat,  7 Nov 2026 17:59:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC141606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=TwF4N8si
+	dkim=pass (2048-bit key, unprotected) header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=ApioPmNb
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1xPkhM-007oTy-Sh; Sat, 07 Nov 2026 18:59:28 +0100
+	id 1xPkhN-007oU7-A0; Sat, 07 Nov 2026 18:59:29 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=hAVvC8vR2vBGPxoDQZWFQGt78GnzQvCqPY56LF4FZtY=; b=TwF4N8sivqjwKkX5iFCFEdaGQY
-	DCKlitYFllpArna8Ly5GqytdumjLupii/oA5s/x86OCMoYRDFvGvp/XqOglyn7PyIoHKrZPA8SRqb
-	OeiCkorrf8uxE0+A9tMZXGabIz+lG5UO4g4sSQO1U0S7X5SmALkGh5vfJ3xTnmZiQa6Hp9qmn4RVL
-	cGdRS6DTOvheqwrBVezNibDwtirfUngw50vB+eHhXY18BhUrKqdKdTT1KusXVXH60ArkH8kTPmFem
-	HMOi1M8ksa7WBcminsv1VRnCQo4mwiyknK3ndlYYfBHpLkn4bQzP0B0I8qCdrWMiiffQm2XG2LGpI
-	MCLHfSaQ==;
+	bh=mYH1R7Aw1iVn3adjIX8WOzgpUmMHsc4YqOxn33DMKdI=; b=ApioPmNb4g0URfQcNo+bHmOHqK
+	lTCpz72XYQOXsE8r37ukCxxZ4ct+0WxzIa4l00p+FMV/HJL8SiVqkyr/c/Fhwg6MoDLA8xmdJgHqs
+	CX2Z7ubgIt1YCHwDT2M+n5A19z2aLGCnBS3FG0OhL/t68ExBOyWnq/tFFhBey0b298x39vlMdFml9
+	3VxLa23xI+dNwM9Vjboi9zM1sy+ZJYFp0v3ZYCD5kjRnaGn5TBWZ/Uq6F90pJT+bxFEZW/l3cGHtp
+	5i4D+qUGhYfc0qz03AFQUrrk6KZ3iFHcRIZGqic9cWP8Da+UVZzyQ9U4MbuRzJxTyKmwsPDlak+3J
+	KmWPG5TA==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1xPkhB-0006ae-1h; Sat, 07 Nov 2026 18:59:17 +0100
+	id 1xPkhB-0006ar-Ri; Sat, 07 Nov 2026 18:59:18 +0100
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1xPkh8-007LnK-14;
-	Sat, 07 Nov 2026 18:59:14 +0100
+	id 1xPkh9-007LnK-Hh;
+	Sat, 07 Nov 2026 18:59:15 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Date: Sat, 07 Nov 2026 18:58:28 +0100
-Subject: [PATCH bpf-next v3 6/8] bpf: Mark bpf_iter__sockmap::sk as
- PTR_TRUSTED
+Date: Sat, 07 Nov 2026 18:58:29 +0100
+Subject: [PATCH bpf-next v3 7/8] selftests/bpf: Add iter/sockmap
+ bpf_sock_destroy() negative test
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,7 +70,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261107-sockmap-update-limit-iter-v3-6-7c0bad1ad036@rbox.co>
+Message-Id: <20261107-sockmap-update-limit-iter-v3-7-7c0bad1ad036@rbox.co>
 References: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
 In-Reply-To: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -95,29 +95,33 @@ Cc: Michal Luczaj <mhal@rbox.co>, bpf@vger.kernel.org,
  netdev@vger.kernel.org, linux-doc@vger.kernel.org
 X-Mailer: b4 0.15.2
 
-In preparation for plain-PTR_TO_BTF_ID removal: allow calling bpf helpers
-with sk provided by iter/sockmap.
+bpf_sock_destroy() is restricted to socket-locked iters, TCP and UDP.
+Fail attempting it from iter/sockmap.
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://msgid.link/DM92JCFA4X4U.30MTDH0KCPTJ@gmail.com
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/core/sock_map.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/sock_destroy_prog_fail.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index efe49551caba..1a8478b03c24 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -1993,7 +1993,7 @@ static struct bpf_iter_reg sock_map_iter_reg = {
- 		{ offsetof(struct bpf_iter__sockmap, key),
- 		  PTR_TO_BUF | PTR_MAYBE_NULL | MEM_RDONLY },
- 		{ offsetof(struct bpf_iter__sockmap, sk),
--		  PTR_TO_BTF_ID_OR_NULL },
-+		  PTR_TO_BTF_ID_OR_NULL | PTR_TRUSTED },
- 	},
- };
+diff --git a/tools/testing/selftests/bpf/progs/sock_destroy_prog_fail.c b/tools/testing/selftests/bpf/progs/sock_destroy_prog_fail.c
+index dd6850b58e25..7b9f5779a184 100644
+--- a/tools/testing/selftests/bpf/progs/sock_destroy_prog_fail.c
++++ b/tools/testing/selftests/bpf/progs/sock_destroy_prog_fail.c
+@@ -20,3 +20,14 @@ int BPF_PROG(trace_tcp_destroy_sock, struct sock *sk)
+ 	return 0;
+ }
  
++SEC("iter/sockmap")
++__failure __msg("calling kernel function bpf_sock_destroy is not allowed")
++int iter_sockmap_destroy(struct bpf_iter__sockmap *ctx)
++{
++	struct sock *sk = ctx->sk;
++
++	if (sk)
++		bpf_sock_destroy((struct sock_common *)sk);
++
++	return 0;
++}
 
 -- 
 2.56.0
