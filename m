@@ -1,99 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.49
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794021236;
-	b=imw/GJlXJnK+minkB1CAIKxbTil+6pGR8ySd8ZAA8Q6YI8nEheuZhXBHLfa1pHtEWcJd
-	 SoHoUzGlDV00UmJcmfDHUavDPkpTDwmU/Mgk2I9ilY/H+PlFJfFWV7J1ACGevcsGVQ4IA
-	 DfcO3dx/IJKeMbGi035tA9EdPuYm6cISDxt3JMic4Y2TcKM37c/YtIhqvxza0wpHj7Aao
-	 Bdq0UURy3bLjdz512fTQV+AB4PUgaERVuwbOelrMo+TOLUwSLxlQWPrcbCQcfoAU2sDz+
-	 I1f4cNRrXg3OCMJsd9e6yMlWMN7IWEZvKFNyByi13b0K9PDML6ekLaURJ3P0vOvfZMA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794021236;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=oRpf6L6W1qrmOGUB2ywqgKb8dbORXdYECHA3ikhVQCU=;
-	b=qDZOtzNDUcn6SVSAGhLJrtWsJ5faO0mBfelQAoeeqOzt8A8V51DgtC9hSmID7tzLPC5t
-	 aSq7Zdu8OMOISnicfXg82iaWRxL1TSSlWqJPn/zjPNPHiuXPqqL5QztuBVPVVYLd4Z9bq
-	 GI+wZISf18G/Aq11U4Pnxa7zig4zPN8O/RRAw6CTZIHVNJzjhD/YA98Oyp1K/KKwdxW4N
-	 XS78gm3XUIU1532k3grBHlVwXNCdZPTbnj1tHAzox8utfiSFoqVo8H8svF3UdoIiAqyeA
-	 wbKljORyzqBFs7YN6OivbV4Jw3Tt+IQgVZ9rlkh4aYWhG750MTfO70qHfU6NVcjmKZA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="K5/xSYU2";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.49
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794021954;
+	b=Szaw+CvR0NhGLftBcaJqa0DSrLZywNPOrvvws5TS84WLoHKnBDU+JaUMk51T02k+1sdU
+	 JGUYpOgRg0mHOaWeN3WWSU8VDHe+TZlouNW2astW/7S2GtfsWEqIZeopnLslFXNUv3awY
+	 rUYesTQaorfBbrGua5SG/1ybjnU6qDny46rSafla52mE/brCAtu2s975LH+ibqG1Zhg7T
+	 2xhed/VJi4os1xjR2ZfKwoSlbvA7QtX9TAqsnzgGvtHX3z9jDRHP5/ieyJ7RwDdbhvdT6
+	 jzOO0qYX0n1GQ68kdrC2ZcuZXkQnR3rlh0VervsfnND6QI3prLITTIiMOd1xmHVv7Hw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794021954;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=mxiid2hy6pGN9sHLzXHLOnDequd95SafDDGiZTsr7dg=;
+	b=C0JEKT4X6BLJQ6Doi84hmzpbXcH3OzfOu6dp+ZhIe6LMh+LF9mvpVIVAkpa3iA3/a1uS
+	 xOAhRZLL2ptouO2TliVTqK4Ei6zCTnzRLuwFunMUIvh8UL1eSVYV3W2NuNj8wYmhs9CJh
+	 QnZtsEDrgwM04tQbu58lld90B8B9ZIECCqSc6n+NkSHyOieCh8R5Cl+v3/49XQwWyRIl7
+	 v9F/vjAEFcfMdqho/k95AnfkGFS37JGbpRj4flxUUVjGMy+4/370CHbjs7VqkoA8Nlveg
+	 KGnUIP7WF8hBuyxtXTZt6llAagde5y8ZOEbvSFLvMkfYwIaTXmwxLwgBY+Lmh+9ggKw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WTV0w40J;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A5FC606A32E
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:13:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A5FC606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C39606A326;
+	Sat,  7 Nov 2026 03:25:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=K5/xSYU2
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-c169ae1cb26so45003266b.1
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:13:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794021234; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Ry0uJjsIewfQu+IVKmevtdqmwOZW/wjYyviNEDhykHgvQsVZFBhS7++CZiee2sWFqU
-         zkcx1DdOHQ9mgglVOzAL3Gq0jsytaqlBFtXbfoFF+4H53w90FghHLDSKuTfqfeIhn0xM
-         5FLAadxDzFOu87ZH17JpI1vRTTnFAimK2pnv5UYpqXyTB5wZeo8ArcRC7xRNG2+wmo9i
-         0CAx+XeNtn+Ct03CwkWPEJijm6b7Olnclbwrd+6K8QOP9Q04QmkLcDz2txcIJvdP/+OI
-         722ZJSYRx2nu/wSq7dsZUzkpe0am0J1PT8oen+Kk+/ZwzBew3/YOZXgcCxvnbPb7yRcf
-         ahCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=oRpf6L6W1qrmOGUB2ywqgKb8dbORXdYECHA3ikhVQCU=;
-        fh=hWCrXtAC6V9xhBhx0d1fYfDqWqqwLpLzQYRFKMwBM/A=;
-        b=Y9+auHNEb4CSZM3iETuakznlXywT0h9ndOm8X2W4AOOAwBUAbdstE7t0F9GO4Ul+XO
-         q5GuY//LVg/XRaGLkYd4XqvYN6xlGoyveqqgc21O6YPA8TQvVa1PryUvYrDKe9YHtBS+
-         wzxP3ho5y15/zPRbuppn9aX9PBBDeCtQHTj7us9fs9/OOoxCrJqWoPCvVifhVzPITcxH
-         6GOntMBN+NQdmtA4ox782pVHNBMuojwojD0N0DfLgUgBdl+IwoMMAVelzk1IOekWa4il
-         nIk/jyakZMmxme1lnmR2hKt6QHOIbWBPMJeORfyfAFUZ1Bz++gVJ21vdbxwxIb/Y230t
-         25rw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794021234; x=1794626034; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=oRpf6L6W1qrmOGUB2ywqgKb8dbORXdYECHA3ikhVQCU=;
-        b=K5/xSYU2sTp+9F3Ssc9dMvDglneH6jUV7uspfeiii9TYyO072Qw+6C37+H2BuqkWhv
-         4rseU2AYAVe4zjHmf0l6pCh7AK5v/CIYQC/ejfCs4DvYqK+kQOJqajhjMCEatzHYNUvQ
-         gfRiiZd87mSWTSTX3Xc/Q/VNX+3fTAXEM54dMFBptzvI+h/iN+vLCb/DZOm7Sb5iV45p
-         2r1wL6zEAzXVmcSmcQ3RIuZcM/htexTLwdbXmAfWmJ+b6mrIuA8sA3+ogMk7BMgA55G3
-         +V3fAM9PBOvMP6b964JFduPMQPJVNzLOmEBClMyhd1REGDF4dW8Ov33ous0HAIWn63Uu
-         TPqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794021234; x=1794626034;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oRpf6L6W1qrmOGUB2ywqgKb8dbORXdYECHA3ikhVQCU=;
-        b=UpIjKtvgFmuKgfVMAg9IFRY0e2dRE/vyD1QA534IRoUCRvQ3e/R5DC7+Mh66L7YtUi
-         PhP8H1D7F770/Sb7FjHu0H1B/Mi0e9MMn7GlAGdiR+VgOP7FLEDA6x1TcIuB5Wlq+TyU
-         aGTTnReOm89H87sdqSvsLKspZfQQ3CnkmpdkMPwoW1FHJ4893s+0+vHx1cnal/DU2OCY
-         k0iLzSMnbhYicG8xljnUxweI33Upjf8yrnOuNvRMN4YEfh6LpPuLR33nLXjSdyLC53B9
-         FDFThrTroeBl0Z+xyPBNqaXrq5voJ84w7zRJvIqDcga3BCUli6RiNBlcmOZTowddgF2D
-         UAzQ==
-X-Forwarded-Encrypted: i=1; AL+hErFSZ8ZQXXihYmh6af0eBzpS7P1QGsTdpB+08QNT0n9AKTFdc3YYRzK3SvkmrM1uLUgoNZQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Xr9AX08plfcCKD6/2DqIsvcRURQmcaCky2kf/iNS9GGjn+8EC
-	WHl7s/Iey3FsG0XoZjGZ6xFGezpPczMSniOLSFaYdfzryuhA08QlXdCdtak4quIK44dbBrwmnUs
-	jhwQycWDcoVgB7H909YQT6HujvexVbaovT9kHOUdY
-X-Gm-Gg: AYBFou3w+W4fLfrOyaca94pufuw6QEpuj94XUlLxewFTOPjD8dPZ2cMNxRMNqUolNbH
-	2zGAEywavLglszBhkN6jiXWNIenM3jx7YBCbb8hJxl733uLTjP4LLnaWQ6ZJl0i84FMOfPDH7lZ
-	9e/vvAB0BzOJ/mxbM3J9VDn6oHyzNng4neDEpEKB/kcau3YrqiaLtVzoHwOfdsW9CeEyAKyQSI3
-	cQLV9OSwYHEz/pkqH/r8CxWM6P/WSDctayWwiPYKMDSIPSHJuQUtiDeF+W1I7lUj4Slh4PmsfEo
-	XVH9N9XveJIR/bIIsErjmvIjs1bFss0Qj0lagSMgwcaAW2lNDN6yLv8w9jsgpvP9Ru2oI6FNtqQ
-	ROHPY0/tzWvLYO9UKaqrOe1G4E2DZhPYp2CvoXADbDP9kVocX4dHIV99emMA3/69OTPE=
-X-Received: by 2002:a17:907:d22:b0:c3f:2:6faa with SMTP id a640c23a62f3a-c4d523bb4f1mr41862966b.1.1794021233358;
- Fri, 06 Nov 2026 19:13:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WTV0w40J
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 026E51F008A1;
+	Sat,  7 Nov 2026 03:25:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794021954;
+	bh=mxiid2hy6pGN9sHLzXHLOnDequd95SafDDGiZTsr7dg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=WTV0w40JxOBYdPzpa4f7DZkdspPxJBrVgTAa2OuCLgZcV/4Is1JOIsvWQHgSMTG3N
+	 yAx7GXtZEyPCSzTK3upClUnUturM7qpNFJ0wGrZc/lRaHpvWCEu89O8ezuyM8AOQyz
+	 tQkDJJ/XXrUhR304CiG20Oa/KQYRie9eRYY1+BNJqxpfsCqEkMR46yB/iGnIyjZSo0
+	 oiZxSpMuEdK5nA3WicHMzdCsjuULm9JDM2uH/D5M0B01EP2oqVB0jFWwpPGCBBcVBn
+	 f0+UWuYKYGVnHACBvulPRgJuLqPquUHyDT925XPpJRdwbxPFGS9VKMqtf0yKfKUZum
+	 cMIhensA1gW7Q==
+Date: Fri, 6 Nov 2026 19:25:51 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
+Message-ID: <20261107032551.GA1990@sol>
+References: <20261105031401.956609-1-jarkko@kernel.org>
+ <20261105031401.956609-3-jarkko@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,86 +84,83 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261106114551.212675-1-amaan.cheval@gmail.com> <20261106114551.212675-2-amaan.cheval@gmail.com>
-In-Reply-To: <20261106114551.212675-2-amaan.cheval@gmail.com>
-From: Joshua Washington <joshwash@google.com>
-Date: Fri, 6 Nov 2026 19:13:41 -0800
-X-Gm-Features: AclHuK9hqj7STkrMrTFdH3gqq3iNgCshZou6dOEEbH9VmQvXrAu4YpDfrgJPse8
-Message-ID: <CALuQH+VtASWP=w9ibTJ7ioYxWrS5sgi9yCZMVK0D831_A-zusw@mail.gmail.com>
-Subject: Re: [PATCH net v4 1/2] gve: block XDP on the DQO-QPL queue format
-To: Amaan Cheval <amaan.cheval@gmail.com>
-Cc: netdev@vger.kernel.org, hramamurthy@google.com, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
-	bcf@google.com, jordanrhee@google.com, przemyslaw.kitszel@intel.com, 
-	maciej.fijalkowski@intel.com, pkaligineedi@google.com, maolson@google.com, 
-	csully@google.com, willemb@google.com, yangchun@google.com, npl@google.com, 
-	awogbemila@google.com, shailend@google.com, nktgrg@google.com, 
-	maxyuan@google.com, bpf@vger.kernel.org, john.fastabend@gmail.com, 
-	hawk@kernel.org, sdf@fomichev.me, daniel@iogearbox.net, ast@kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261105031401.956609-3-jarkko@kernel.org>
 
-On Fri, Nov 6, 2026 at 3:46=E2=80=AFAM Amaan Cheval <amaan.cheval@gmail.com=
-> wrote:
->
-> Commit d8a8ca14c937 ("gve: add XDP_TX and XDP_REDIRECT support for DQ
-> RDA") enabled XDP on DQO-RDA by dropping the queue_format check from
-> verify_xdp_configuration(), which until then refused every format but
-> GQI-QPL. Nothing replaced it for DQO-QPL: gve_set_netdev_xdp_features()
-> advertises no XDP features there and gve_xdp_xmit() rejects it, but the
-> core only checks that ndo_bpf exists, so a native XDP program, and an
-> AF_XDP socket on top of it, can still be attached on DQO-QPL.
->
-> The DQO-QPL RX path was never written for that. Its page accounting
-> assumes the driver keeps a reference of its own across every handoff:
-> gve_xdp_done_dqo() passes the buffer to xdp_do_redirect() and then
-> recycles it with gve_reuse_buffer(), so a redirect target that releases
-> the buffer synchronously, such as an AF_XDP socket in copy mode, can
-> drop the page's last reference when pagecnt_bias runs out. The page is
-> then freed while it is still DMA-mapped and registered in the QPL, and
-> the driver posts it back to the device.
->
-> Refuse XDP program setup on DQO-QPL in gve_verify_xdp_configuration(),
-> matching the features the driver advertises. A zero-copy XSK pool bind
-> is already refused by the core for the same reason, and a copy-mode
-> bind never reaches the driver and is harmless without a program.
->
-> Fixes: d8a8ca14c937 ("gve: add XDP_TX and XDP_REDIRECT support for DQ RDA=
-")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Amaan Cheval <amaan.cheval@gmail.com>
-> ---
->  drivers/net/ethernet/google/gve/gve_main.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
-ernet/google/gve/gve_main.c
-> index 2437cd8ba633..4e9e692a0ed0 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -1723,6 +1723,12 @@ static int gve_verify_xdp_configuration(struct net=
-_device *dev,
->         struct gve_priv *priv =3D netdev_priv(dev);
->         u16 max_xdp_mtu;
->
-> +       if (priv->queue_format =3D=3D GVE_DQO_QPL_FORMAT) {
+On Thu, Nov 05, 2026 at 05:14:00AM +0200, Jarkko Sakkinen wrote:
+> The keyrings subsystem is the sole user of assoc_array. It has over 1700
+> lines of code, no test suite, and a long history of bugs, with LLMs now
+> finding more.
+> 
+> This unfortunate outcome has evolved over time by large from the shortage
+> of in-kernel callers, time bandwidth and 3rd party contributors.
+> 
+> What the keyrings needs is just a generic key-value store, which performs
+> well with sparse key sets.
+> 
+> Replace struct assoc_array in struct key with struct keyring_index:
+> 
+> - keyring_index: holds an rhashtable for direct lookups, an RCU-protected
+>   list of keyring_link entries for stable walks, the active link count, and
+>   an rcu_work item for deferred teardown.
+> - keyring_link: links a key into a keyring's hash table and list, caching
+>   its 32-bit SipHash digest rehashed with jhash by rhashtable.
+> 
+> Correspondingly, struct assoc_array_edit is replaced by struct keyring_edit
+> for delivering transient state across link operations.
+> 
+> Other behavioral changes:
+> 
+> - KEYCTL_READ and sibling-keyring searches follow list order instead of
+>   hash order: keyrings are prepended, other keys are appended, and
+>   replacing a matching key retains its position.
+> - key_unlink(), keyring_clear(), keyring_revoke(), and keyring_gc() no
+>   longer allocate memory.
+> - keyring_index_free() uses queue_rcu_work() instead of call_rcu() because
+>   rhashtable_destroy() may sleep.
+> 
+> Suggested-by: Eric Biggers <ebiggers@kernel.org>
+> Co-developed-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Thanks for implementing this!
+Reviewed-by: Eric Biggers <ebiggers@kernel.org>
 
-Minor suggestion: Can we check based on dev->xdp_features
-(NETDEV_XDP_ACT_BASIC) instead?
+But one comment below.
 
-> +               NL_SET_ERR_MSG_MOD(extack,
-> +                                  "XDP is not supported in DQO QPL queue=
- format.");
-> +               return -EOPNOTSUPP;
-> +       }
-> +
->         if (dev->features & NETIF_F_GRO_HW) {
->                 NL_SET_ERR_MSG_MOD(extack,
->                                    "XDP is not supported when HW-GRO is o=
-n.");
-> --
-> 2.47.3
->
+> +		do {
+> +			ret = rhashtable_insert_fast(&links->ht, &link->node,
+> +						     keyring_link_params);
+> +			if (ret == -EBUSY)
+> +				fsleep(100);
+> +		} while (ret == -EBUSY);
+> +		if (ret < 0) {
+> +			key_payload_reserve(keyring,
+> +					    keyring->datalen - KEYQUOTA_LINK_BYTES);
+> +			goto error;
+> +		}
+
+I don't think the retry loop is actually sufficient or desirable here
+(though it would be very rare for it to be reached).  It gets reached
+when there are too many elements in one rhashtable chain.  However,
+we're already pre-hashing with SipHash, and the rhashtable level hash is
+passed only the 32-bit SipHash.  Suppose we reach this case because the
+SipHash values collided: then rhashtable's rehashing would never reduce
+the chain length, and the -EBUSY would last forever.
+
+I think the right solution is to just set '.insecure_elasticity = true'
+in the rhashtable_params, to disable the chain length checks.  Those
+checks make no sense when we're using SipHash anyway.
+
+Then the retry loop would not be needed.
+
+(And even for rhashtable users who aren't using SipHash, like
+fs/verity/, hard-failing insertions if the hash chains gets too long
+seems wrong.  I mean, imagine if the kernel started refusing to do file
+operations if one of the hash chains in the VFS hash tables happened to
+get too long...  But I guess rhashtable was designed for towards
+networking users who are able to just drop the data without much issue.
+Plus it predates SipHash existing.)
+
+- Eric
