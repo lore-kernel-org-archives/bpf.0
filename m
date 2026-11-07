@@ -1,61 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.37
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794074383;
-	b=qxLYHnoQ+TIGqJY8wv75P6obUIMGkCrPd4L9tcytFWqE7ab6o0qXcUiJHpR45KwuD0no
-	 5Q+0en7Kc9+4ikCa5HeWofZzloiUG9j05TS46Ty+lzAhLGojuHv3lVM36A2DT00dUnvZR
-	 K8iGk3f+c2wh5E+UyHRogG6qkvSBPfV7d6pcGqhfuRn4LV6lFnoOVIanek+XCT0c/jNSK
-	 pkg/n3WEd47KiFIHt8pDUE2rqzEu2xqd+tvQUl5xSAy40BbI48MIbV4ahTGnv/wf9ugQd
-	 dvs5W/Nr14NDkFVJhoMLZCoQWuJo3NwPdg2cKpSA57pAY/Pmw16i6UelK1awcoOg1eg==
+	b=vz13mwikPPVqIz41HrDtmPKBHRSRxx5m76B2+FI/4BW4ukkZiu9RNAQmyYfk3HVoxy2w
+	 vSnuDR2l1Rk3AA8gchWKmfwxKeZVX7faAhwWjxaz3MA6Asiv6LFG6t4ovSZzt1UQbI+2S
+	 pCI4BI3ucDvB3pLahxpXprHaF2COt8hWfQ51TzzhmA/rk0p1gXQOHQgN+46NqxxsOP46L
+	 IhekLzc68N/vd5tEKRW2F3JD7eryHtMmQm7HAUwBjeuszKPhETdJHS0zkjItpDHbkBaYC
+	 FtrrcLF9Sb9qVoyaaH2I/cyncQY2AR7NV54LAuIcCBd4qImvooYylZMMK8t6XuRueww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794074383;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:Subject:
-	 Date:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer;
-	bh=8lVLvxc8Qs6BngpHaRFwnA/hdSpn+KLdbrSSp8PidEc=;
-	b=1vxedvK3bOm31p9mMZYzp5Si8ROI7DF9DswqVZNGfKZuK1pJ1yyFbR26dfYt79gEBCB7
-	 mk08YN4M81MnEX/ZgM+WWHpVC4bfQkYrlt8+gTDkSHKG3NgzJUwcXiQvF8tzcylqkEDrf
-	 KJTiM6EOYjQ5Qh0rVu8thE8suhr+/UCkjbR1itzpBCAnjOgehvpcwnT5+U4hUogrqyKEi
-	 oK+Tdx7YZkGuFowLDtFKNMKRei78/TS8kBS1WXkfcfPY+1k11ACtz6UkFJkwopVwEC3yt
-	 APC1VVo8Y7iEQyQqJOJDFOSlsUhdbXzbPJ/xaYP0Hrq3GW7caSLHybhaFabE7AyXy2w==
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:Date:
+	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer;
+	bh=+sOGB5lb2oiDR2pVte8gE4CcBLvveiaJEtksFCZ6wwI=;
+	b=3QoRDEoheqVEm8EjFlaFC3z9CxadzOgGaooK+shyEMFhe9G2JGr0FZeu1hMFwp2Jxo7P
+	 Bg0BdqzxxkShnWZAFNyKgl1CgzGrVSZOy1z6VtBd/CMDl7RSXlwpCnyWdEvgUX72KvJKs
+	 pO4oUiwdzsfE5xJzHjIPKMGkFpsEZWPhAKjEoZefWw0VzyMQ1UZWQB/E8hfcyKputrLGp
+	 TYCNi0nkhILMpCdp1aSV45KilG2tz1pl/rLBtpvWYLOyx5eWAtsSOUbPvCGAFhY8Ob6Lt
+	 ElNi7q8ttOksDWA0erFEzjZnsbwb4qCD2BAX9aBmOkfyF8ehNf2tV/yuYFvE9Ioui0Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=rbox.co;
 	spf=pass smtp.mailfrom=rbox.co;
+	dkim=pass header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=xDY+Dzg7;
 	arc=none smtp.remote-ip=185.226.149.37
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25E4606A32E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26EE606A330;
 	Sat,  7 Nov 2026 17:59:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A25E4606A32E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A26EE606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=xDY+Dzg7
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1xPkhN-007j5e-4c; Sat, 07 Nov 2026 18:59:29 +0100
+	id 1xPkhN-007j5l-G9; Sat, 07 Nov 2026 18:59:29 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-Id:Date:Subject:From; bh=8lVLvxc8Qs6BngpHaRFwnA/hdSpn+KLdbrSSp8PidEc=
-	; b=inpLAybUUeGEXVpxpjf2xkIg/S8TV16mUpOyCBS1FjTk0Ae7d+3SYOqHNxhi+qwcnSEhXie8N
-	Wm7dOcChwdhYCegGVfc4ML8ZKqz6RbnBcbiAV6766WYadGmRHP2lNRIMvcKnWE6lMoDO44kNav1OI
-	BMOjNr/W/Ic2AmYZQLyIC7y8y59GNoi0ER+BkM/FYRsmdP2fjaJRaxtzEvoCVq41R3b/gT8BnMG9I
-	nAqMJ+ZpxhT7nENW2OGq+Ks/qzWeZGDZIEaajt8rJY9eDtWNPir4U5vs73VyNLtq2HpE9lEMAeMWn
-	j6bayALldb+08aGxMLa859NJWFnpFpSc1ZwBsw==;
+	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=+sOGB5lb2oiDR2pVte8gE4CcBLvveiaJEtksFCZ6wwI=; b=xDY+Dzg720FHSgO6gJscshGB1F
+	iEGBF5XtYLBoeSPg+5+9pG5Q9MHbDH1wNhh9Vu5PZkvD6D2n8uCqrwkbNhi1/u1CK6If6e002EwNu
+	1L9VrG03D+8cQBxGQsFim8qs3gH7STN1ZA8RTvT3M908BXtVm/OAptwK4WHlZu7ES/tNGfTD+rkHL
+	hM09NtFYZyPqgwAq1DWMF1XMeen1Ftt2ctJbn+7eIPdnFSbvCLP22aVTNddSWr+mfLOHgronrVV1p
+	m+getDbUhjameJbwET2jR9yBoSjmr466DK1bi2sMtKMzd4rzxs9q5C5ka3Tpjukp//322RUfNRt3x
+	yrSc/AAA==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1xPkhB-0006ai-A7; Sat, 07 Nov 2026 18:59:17 +0100
+	id 1xPkhC-0006az-Og; Sat, 07 Nov 2026 18:59:18 +0100
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1xPkgy-007LnK-Th;
-	Sat, 07 Nov 2026 18:59:05 +0100
+	id 1xPkhB-007LnK-1s;
+	Sat, 07 Nov 2026 18:59:17 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Subject: [PATCH bpf-next v3 0/8] bpf, sockmap: Restrict iter-context
- sockmap updates to sockmap iterators
-Date: Sat, 07 Nov 2026 18:58:22 +0100
-Message-Id: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
+Date: Sat, 07 Nov 2026 18:58:30 +0100
+Subject: [PATCH bpf-next v3 8/8] bpf: Fix "unresolved symbol
+ tcp_request_sock" build error
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,11 +70,9 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/32Oyw6CMBBFf8V07Zg+pFhX/odx0ZZBRoWSthCM4
- d9FXLhzeXPnnjMvljASJnbcvFjEkRKFbglqu2G+sd0VgaolM8mlFpwfIAV/b20PQ1/ZjPCgljJ
- QxggVV2hlUZuyLNiy7yPWNK3sM3N9DR1OmV2+TRrcDX3+oD+3DaUc4nN9YxTr4msU+o9xFMBBq
- tqava5cYfAUXZh2PqyWUf44gst/HLlw0Girld8rp8yPM8/zG0I5NR0kAQAA
-X-Change-ID: 20261008-sockmap-update-limit-iter-d03ea25f9775
+Message-Id: <20261107-sockmap-update-limit-iter-v3-8-7c0bad1ad036@rbox.co>
+References: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
+In-Reply-To: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -91,92 +92,45 @@ To: Alexei Starovoitov <ast@kernel.org>,
  Randy Dunlap <rdunlap@infradead.org>, Stanislav Fomichev <sdf@fomichev.me>
 Cc: Michal Luczaj <mhal@rbox.co>, bpf@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
- Sashiko <sashiko-bot@kernel.org>
+ netdev@vger.kernel.org, linux-doc@vger.kernel.org
 X-Mailer: b4 0.15.2
 
-Follow-up to Sashiko's report [1] and the decision to restrict which
-iterator may perform sockmap updates [2]. Series started short: remove
-about-to-be-stale test, restrict updates, add a negative test. Then it
-expanded: mark bpf_iter__sockmap::sk as PTR_TRUSTED, restrict
-bpf_sock_destroy() callers to iter/{tcp,udp}, few little tweaks.
+CONFIG_WERROR=y CONFIG_NET=y CONFIG_INET=n build fails:
 
-[1]: https://msgid.link/20260626205814.BAC3C1F000E9@smtp.kernel.org
-[2]: https://msgid.link/87echn2fhd.fsf@cloudflare.com
+    WARN: resolve_btfids: unresolved symbol tcp_request_sock
+    Failed to generate BTF for vmlinux
+    Try to disable CONFIG_DEBUG_INFO_BTF
+    make[2]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
+    make[1]: *** [.../Makefile:1379: vmlinux] Error 2
+    make: *** [Makefile:248: __sub-make] Error 2
+
+Handle it in the style of commit d82a532a6115 ("bpf: Fix "unresolved
+symbol" build error with resolve_btfids"): force BTF generation.
 
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
-Changes in v3:
-- Drop RFC prefix
-- Update bpf_iter_reg::feature docs
-- Fix tcp_request_sock BTF build error
-- Restrict allowed callers of bpf_sock_destroy() to iter/{tcp,udp} (Alexei)
-- Link to v2: https://patch.msgid.link/20261102-sockmap-update-limit-iter-v2-0-e96a63c43b39@rbox.co
-
-Changes in v2:
-- Commit 7cc639dc45c5 ("bpf: Don't take an extension for an iterator
-  program") and commit b83bacf2161d ("bpf: Don't take a program with a
-  target program for an iterator") landed. Drop the redundant
-  env->prog->type check.
-- Mark bpf_iter__sockmap::sk as PTR_TRUSTED (Alexei)
-- Link to v1: https://patch.msgid.link/20261016-sockmap-update-limit-iter-v1-0-23fa946db59e@rbox.co
-
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Shuah Khan <shuah@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>
-To: Eric Dumazet <edumazet@kernel.org>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Willem de Bruijn <willemb@google.com>
-To: Jakub Sitnicki <jakub@cloudflare.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: "David S. Miller" <davem@davemloft.net>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Simon Horman <horms@kernel.org>
-To: Jonathan Corbet <corbet@lwn.net>
-To: Shuah Khan <skhan@linuxfoundation.org>
-To: Randy Dunlap <rdunlap@infradead.org>
-To: Stanislav Fomichev <sdf@fomichev.me>
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
-
+Technically, since tcp_request_sock embedds inet_request_sock there's no
+need to explicitly emit for inet_.
 ---
-Michal Luczaj (8):
-      selftests/bpf: Remove sockmap update from bpf_iter_unix
-      bpf, sockmap: Restrict iter-context sockmap updates to iter/sockmap
-      selftests/bpf: Add negative test for sockmap update from non-sockmap iter
-      bpf, docs: Document BPF_ITER_NOSLEEP
-      bpf: Restrict bpf_sock_destroy() to iter/{tcp,udp}
-      bpf: Mark bpf_iter__sockmap::sk as PTR_TRUSTED
-      selftests/bpf: Add iter/sockmap bpf_sock_destroy() negative test
-      bpf: Fix "unresolved symbol tcp_request_sock" build error
+ net/core/filter.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- Documentation/bpf/bpf_iterators.rst                       | 12 +++++++++---
- kernel/bpf/verifier.c                                     |  4 +++-
- net/core/filter.c                                         | 15 ++++++++++++++-
- net/core/sock_map.c                                       |  2 +-
- tools/testing/selftests/bpf/progs/bpf_iter_unix.c         | 10 ----------
- .../testing/selftests/bpf/progs/sock_destroy_prog_fail.c  | 11 +++++++++++
- .../testing/selftests/bpf/progs/verifier_sockmap_mutate.c | 14 ++++++++++++++
- 7 files changed, 52 insertions(+), 16 deletions(-)
----
-base-commit: 2d0b457611c06304138754a05e0873cc18acfb7e
-change-id: 20261008-sockmap-update-limit-iter-d03ea25f9775
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 6a67bc2a0c4b..b86529dead65 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -12391,6 +12391,10 @@ const struct bpf_func_proto bpf_skc_to_tcp_timewait_sock_proto = {
+ 
+ BPF_CALL_1(bpf_skc_to_tcp_request_sock, struct sock *, sk)
+ {
++	/* Ensure BTF for the structs exists even with CONFIG_INET=n. */
++	BTF_TYPE_EMIT(struct inet_request_sock);
++	BTF_TYPE_EMIT(struct tcp_request_sock);
++
+ #ifdef CONFIG_INET
+ 	if (sk && sk->sk_prot == &tcp_prot && sk->sk_state == TCP_NEW_SYN_RECV)
+ 		return (unsigned long)sk;
 
-Best regards,
---  
-Michal Luczaj <mhal@rbox.co>
+-- 
+2.56.0
 
