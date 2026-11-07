@@ -1,60 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=79.135.107.171
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794046272;
-	b=S8cu5XnTxRblvDblvYyS+qbBGeUGz8jl8PGkS43nY6aB+bge7h+kFGFPbfDljM+J/X52
-	 11cd8UJZjnXl30JBP6NB35JnRj3QLsLTnlb1FRgM0WWoVxDouVkVrQ3YoAq3W4HpjBoUX
-	 HW/l434cBOJvFUyPvAqwWbmdaUK/Mxa+apVdbTSHDIx09RMy6pAgGJ0B3DEA6DwwioOvU
-	 CmsCqYIwvuxd6EfYV+Yt9qXzS90ZL9JrTK9jiAMMi0Hx02wbrXISTRhPWQQNKkA/LU2/m
-	 FJkUoUMZUIoy1PhKp5KvI0CKdcr9W4tZ7MG7TecFqDQT61A6/iZzDyW/sUIikQUoxrg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794046272;
-	h=DMARC-Filter:DKIM-Signature:Date:Subject:In-Reply-To:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:From:To:Cc:Message-ID:
-	 References:X-SimpleLogin-Type:X-SimpleLogin-EmailLog-ID:
-	 X-SimpleLogin-Want-Signing;
-	bh=D8qnkZYaP8QEiEnWStUV7Ol/+8QaugHXvxXWg6fF5ic=;
-	b=XQxEqdnXlgG9ruQGMAR0ouRemF/hLwW+kL3dk+Jfr9ZebOi18saInKAXrLw6FRdjJfdq
-	 soPJLiOUPtKRwcAn6+i0g303WbNHSW3VqSN04B5A5CQbipvcP7RgmHGf8v62i76LGPsfT
-	 X/YhcqkdXnkO8q26AozqXv04g5J3YGGTMJ4bXIh5Ce+U8/ZWhGAUZqzekeSC0feKItCjO
-	 7O3T6Al+aPesS46aDtjvMTieJkEmmVTM8MBeWHykOTW9G4ZpR+r97D6KAyQn1gN7vJsql
-	 n0bvYZOtdy36VHuDFmXYzEH97aR5ooKIwOFdPOIwtbGfqYNw5Rqk/VkU9mBisjGFDcA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=eldare.de;
-	spf=pass smtp.mailfrom=eldare.de;
-	dkim=pass header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b="q+//nBJo";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=79.135.107.171
-Received: from mail-107171.simplelogin.co (mail-107171.simplelogin.co [79.135.107.171])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794052015;
+	b=JfKj3BMMGlimWmYufyHMviZBe7QJza1bxYnJp0Zm9vP+FQLEboLKi/zl7ciCADoaplIy
+	 kDMDujJSQSGnS7FEbvDMB9vXC+vJ8pygfQkKI6wdj4HNkzKdnLw+aHiaqH+c1nRSFsQ32
+	 eOitqB5g/oEn9BaE0OwNm2ARFZm11tkofw5pw3qaNk7jfU8miDRXlbLS6IXvH4sgTFNHN
+	 qkyxmpeSkSv3o9PfmFZ40n/HAImgPMiQIX69gwMI3hWqTB8Y/nJ4nt+tjAU7ILYQfD4NA
+	 JSCLe1J5/fZTEX7r37mKkV96rSK5Nqr7+xB23V/SxDgk8rD9mbRTlBshIfEE5dbqWPA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794052015;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=jZXJGG+XZZO3Qp+1TwL7dRA/Q33bpl+vjZqHobSzTvQ=;
+	b=NxbA2vQ9YE43xIUVOlcoFAxK4+SuVO/OK0N/iW2Eds7iBVY9yiCwUxMtmkJuzwY9cQpU
+	 0GPGuSqpKbCyUCCuXr32KVSnE69Mb5xJYW3YW53DDoru3Buc8ymuKsu8hgDAmh8cdVAPA
+	 RGQxdSxy9z1Qb3nOyZQ0TBkyahPtAiOkrJ0SzOxmBfeKOqvyTSlfsn8HitIRpJHQjncye
+	 n51BHrrfK12GbFHLBmMZFzcCVpg1W1+pt3YuW3L1RHebiCX/AHq5sSL/qs7zE8hRKEQ53
+	 YIkChQRuliywMoaj1Ccsnwl4RGxCBjp6x2lsnn6FFl1J3CuqoRjRnPs003PzQmRY3ug==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cOCudJyX;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4952E606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 10:11:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4952E606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=eldare.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eldare.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E179606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 11:46:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b=q+//nBJo
-ARC-Seal: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626; t=1794046269;
-	cv=none; b=inMcURBaUnnmiFzBKA0XFDIgVEEXX6wZRINKCIAG6GakaHqeqKniiZkuGe2Hl77ebLtKhQp6gQyV2RBapiDzNs8B4QAMYgxtUtkPgoTH9yB88cTo30qmi5A88N/P9LkXEs/KkS6Ci0ch8L6tCyq7ui22YvPEKZIGNkzxk0Qz4dxnsGhzhSHdevDx/to6ttjyx66JrdfkeiczcGjyrqrF6DxVz4Y86bBOFXKDDHL8ik3cZ9+1gyEfkKrPLBstzbOg2smHdoRhn3WgqZ25M8z4/KIg68uOK1RfT2KzfW+LudGYMAzsLH7kwL/uXLtbfpleusZci3sWuuxna41qcgJ9UQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626;
-	t=1794046269; c=relaxed/simple;
-	bh=jVDqDvrRQsAZ22D6DF6i3XHA4gMN1HWL8uRQDdFvR2U=;
-	h=Date:Subject:In-Reply-To:From:To:Cc:References; b=LzapzOb5NdiOrSUdwgDyf+5xQCwbWMDd4DY56oaTxXK+EAAVDN2u6ldDaBdJsyL7hTTxv6RrLXnE54UDt2aEGapXY0CyEg5mCxCoS+rzKBA3Sv7zJQHipU0di43i19gE7nP8LeslauPhr+yrzoaD6Pe+MSwzlqFUb0QCKtBstU9dFXe0ffhvONP/XMWd4fEw33EFx8jfSfwp36sBU5+2h0KcvUzJ3X+BOpTkuEGLoivu+JksELgFaCOKWsr2PDtnMrlzy9mAXuLC97l6trOfwUY1RGmJ8WeKCOvFPrtpooEws93grPUv/yGIXgqoZq45kUukBsm3CbR7t/YQjuKj3w==
-ARC-Authentication-Results: i=1; mail.protonmail.ch
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=eldare.de; s=dkim;
-	t=1794046269;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=D8qnkZYaP8QEiEnWStUV7Ol/+8QaugHXvxXWg6fF5ic=;
-	b=q+//nBJoIM/k20Tl2DfPZ86y9MIYto7smEAAHF+Mbho6wezvb9NVx3efTxHoM1gM4akVOI
-	GImpZhMCtnE4iNLR79mmLuSp0jX/7jMu3/UPo6mh4+B4EBOA28fiegBaHurnZ259ukBvPl
-	vktk03EjoFqtNdVvf+8M0AA6ZnzelbU=
-Date: Sat, 07 Nov 2026 10:11:02 +0000
-Subject: Re: [PATCH net v4 1/2] vsock/bpf: release sock lock while waiting for
- data in recvmsg
-In-Reply-To: <DMOM2SFCFHYK.3BT44IQ90X9UB@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cOCudJyX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88F91F0089F;
+	Sat,  7 Nov 2026 11:46:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794052015;
+	bh=jZXJGG+XZZO3Qp+1TwL7dRA/Q33bpl+vjZqHobSzTvQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=cOCudJyXiSXPOwAH4GdJXKgfGFwjs6uNnaMH8We1QF4Py/5rYC/aTx7qDQ1mPj36B
+	 McOSGfWnpSKRXFftcTmTJe9vaLxW9ER2fXcl9nJGSrHc4bnGG2VD6j8Q6IA19g/4t+
+	 aG2EvirZvqKuXuPwXPgg6QjZ2c6ny+VEvJcWcaDMqsb4WMvekuqwDLjiWoQYK9/6Tl
+	 8p4zMn8lGihJMsAoncD+NQ3BBJTd2gNNit4wmRsP3feQL9O/YZIxcAfKYFUsUgUTzi
+	 Gek6HihpBVIVS8XkCaqmlknD0pCvUwRx3mYEUvxc2hI6nNv+RwkLysVhxsvj4Pokm3
+	 rXoe3xEqlLaIg==
+Message-ID: <sashiko-outbox-202865@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v4 1/2] gve: block XDP on the DQO-QPL queue format
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Amaan Cheval" <amaan.cheval@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261106114551.212675-2-amaan.cheval@gmail.com>
+References: <20261106114551.212675-1-amaan.cheval@gmail.com>
+ <20261106114551.212675-2-amaan.cheval@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 07 Nov 2026 11:46:54 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,55 +59,71 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From: jrmmhm.kernel@eldare.de
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,Bobby Eshleman
- <bobbyeshleman@meta.com>,"David S. Miller" <davem@davemloft.net>,Eric Dumazet
- <edumazet@kernel.org>,Jakub  Kicinski <kuba@kernel.org>,Paolo Abeni
- <pabeni@redhat.com>,Simon  Horman <horms@kernel.org>,"Michael S. Tsirkin"
- <mst@redhat.com>,Michal Luczaj
- <mhal@rbox.co>,virtualization@lists.linux.dev,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,stable@vger.kernel.org
-Message-ID: <179404626756.7.5004773530941890450.1753698952@eldare.de>
-References: <20261106-kbh3-1-022-fix-v2-v4-0-c7d36703814d@eldare.de>
- <20261106-kbh3-1-022-fix-v2-v4-1-c7d36703814d@eldare.de>
- <DMOM2SFCFHYK.3BT44IQ90X9UB@gmail.com>
-X-SimpleLogin-Type: Reply
-X-SimpleLogin-EmailLog-ID: 1753699014
-X-SimpleLogin-Want-Signing: yes
 
-On Sat, 07 Nov 2026 02:09:17 +0000, Alexei Starovoitov wrote:
-> No need for a 2nd copy of the return values.
-[...]
->   recv()                          no sockmap    this series   the diff
->   ------------------------------  ------------  ------------  -----------
->   after a virtio reset            -ENOTCONN     -ECONNRESET   -ENOTCONN
->   after a reset, len =3D=3D 0         -ENOTCONN     0             -ENOTCO=
-NN
->   after a reset, MSG_OOB          -ENOTCONN     -EOPNOTSUPP   -ENOTCONN
->   after peer shutdown, SO_INQ on  0 + SCM_INQ   0             0 + SCM_INQ
->   asleep when the reset comes     -ECONNRESET   -ECONNRESET   -ENOTCONN
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] gve: gve_verify_xdp_configuration() fails to reject
+  GVE_GQI_RDA_FORMAT
+--
 
-Agreed. I ran your diff in a guest with the reproducers of this series:
-the deadlock, the dataless wakeup, signal, timeout, peer shutdown,
-MSG_ERRQUEUE and MSG_OOB cases behave as with v4, with no KASAN, lockdep
-or hung task report. In the first four rows of your table the sockmap
-socket now returns exactly what a native one returns.
+commit effd5965643e22a2856ad20f55eafb8449ee0b34
+Author: Amaan Cheval <amaan.cheval@gmail.com>
 
-The last row is confirmed as well. I'd accept that and say so in the
-commit message, since it only changes which error a reader of an
-already reset connection sees.
+gve: block XDP on the DQO-QPL queue format
 
-> None of these tests sleeps in vsock_msg_wait_data().
-> The sockmap tests call select() before recv() or pass MSG_DONTWAIT.
-> vmtest.sh doesn't use sockmap.
+This commit rejects XDP program attachment on the GVE_DQO_QPL_FORMAT
+queue format in gve_verify_xdp_configuration().
 
-Right. v5 won't cite them as coverage of this change.
+> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
+ernet/google/gve/gve_main.c
+> index 2437cd8ba6331..4e9e692a0ed0a 100644
+> --- a/drivers/net/ethernet/google/gve/gve_main.c
+> +++ b/drivers/net/ethernet/google/gve/gve_main.c
+> @@ -1723,6 +1723,12 @@ static int gve_verify_xdp_configuration(struct net=
+_device *dev,
+>  	struct gve_priv *priv =3D netdev_priv(dev);
+>  	u16 max_xdp_mtu;
+> =20
+> +	if (priv->queue_format =3D=3D GVE_DQO_QPL_FORMAT) {
+> +		NL_SET_ERR_MSG_MOD(extack,
+> +				   "XDP is not supported in DQO QPL queue format.");
+> +		return -EOPNOTSUPP;
+> +	}
 
-v5 will be a single patch based on your diff, with your Suggested-by.
+[Severity: Medium]
+Should gve_verify_xdp_configuration() also reject GVE_GQI_RDA_FORMAT (or
+any queue format other than GVE_GQI_QPL_FORMAT and GVE_DQO_RDA_FORMAT)?
 
-Thanks,
-Jerome
+Before d8a8ca14c937 ("gve: add XDP_TX and XDP_REDIRECT support for DQ
+RDA"), verify_xdp_configuration() rejected every queue format except
+GVE_GQI_QPL_FORMAT, and gve_set_netdev_xdp_features() only advertises XDP
+features on GVE_GQI_QPL_FORMAT and GVE_DQO_RDA_FORMAT.
 
+With only GVE_DQO_QPL_FORMAT blocked here, attaching an XDP program on a
+running GVE_GQI_RDA_FORMAT interface passes validation and enters
+gve_set_xdp() -> gve_configure_rings_xdp() -> gve_adjust_config(). After
+gve_close() tears down the existing queues, gve_queues_start() ->
+gve_reg_xdp_info() takes the !gve_is_qpl(priv) branch:
+
+drivers/net/ethernet/google/gve/gve_main.c:gve_reg_xdp_info() {
+	...
+		else if (gve_is_qpl(priv))
+			err =3D xdp_rxq_info_reg_mem_model(&rx->xdp_rxq,
+							 MEM_TYPE_PAGE_SHARED,
+							 NULL);
+		else
+			err =3D xdp_rxq_info_reg_mem_model(&rx->xdp_rxq,
+							 MEM_TYPE_PAGE_POOL,
+							 rx->dqo.page_pool);
+	...
+}
+
+Because GQI rings do not allocate rx->dqo.page_pool,
+xdp_rxq_info_reg_mem_model() returns -EINVAL, causing gve_adjust_config()
+to call gve_queues_mem_remove() and leave the interface with all queues
+disabled and priv->tx_cfg.num_xdp_queues non-zero so subsequent
+gve_open() calls also fail.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106114551.2126=
+75-1-amaan.cheval@gmail.com?part=3D1
