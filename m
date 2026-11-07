@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794071010;
-	b=PEtmkVJiiFNCBwWiQbIyueDN2eoe7XKmwdmySO37oHM9AdWg0bDYpEn/PRqY3hsf64xe
-	 nDtXBx48Am+iF6UCw3WLKdxsjg81F0QO0uwA6I0zf2vHKbdjXIPZPJWsWwafoCIGdRAP9
-	 GhxiEY0jG9ozScHqjXgCDYgrPkw50nXG2c6dL4oMLA6pINEfp2InvFA9tmTkP+nTI9xSK
-	 O/86RRiHfOhm384ASXcvV++Kyg38GoaN3uNxlIiOhnldjMxluKRpjMwpR51GppOwgtMTa
-	 wIQW7FcTEDFCIsK4f5HE1oc0WW32Ld7ndO5EfB5pNSzjzJSB0pj4zORPtuSa3IjYqDg==
+	t=1794071019;
+	b=FTeBOUF6F9JS4E0pKF8HNtM0Pr7C6DhRyEjvN0gitlKqFB765zI1cszmCQwySfttxODd
+	 PuRLiwM8CxAqrESLgbKUrc6qenQqhGHG966s75DT9EW5bz4FolQqhNJ3rutZhZBhkPr1y
+	 ndtKRP8k4wVlDb1z1pN0kYEp0/PgPTA0F+hnddCJYwS5b8j2NkAlPvqRPtnf3HfxN1JIY
+	 2aPaw9TzFjflu5Gue7fuSVZZ1PY9LS0cgIBA7fKtM/HZG8UZF9Fc2Gg1B9S9bKM2/oXpf
+	 gEu4+MrHqyVL8LhV5vqQc5693IAh90kReoufjh73G/qUOUNW4YUmDFqMIBWZFxkp/tQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794071010;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794071019;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=59Af186DmXB8XzwtNA3MbwIJzB3ec+dgTez6hv69W1E=;
-	b=eu3VRP67FVZyPucCAHDwAXZ8i8UYyFR92WPwMkGwLVdI14K7tuVP8iTNPBVCIuXSVE6K
-	 ksy3Y8LIrhEaPatyUFCzcTLR3BI+CLUbEV3+oQcUg5UD5CP6h6hGynGq5vZqS+C1VYVTu
-	 dg5kQJ87DOfAnnl+EfGSUqBoFQpNl6HVvADUVVn5zlAI128tvvubttpxvgcCNknRJ8agX
-	 KU6ctLrNzx6499HsnySYfLk2LDxECeWq/2a73RI+n+70mwGv4/JVk+hHKoo7agxyjRBHk
-	 U2M8LlAI9fnPgq0tm91Y2up7VEM4H/PWIBXKyPBnY2ohzFWadVHW77AV8nv5Sa0/fHw==
+	bh=Nz8L7ZO59Tsj8/ksCe4aovZHdoavAt4I7KkG9jbaYAY=;
+	b=SMsUlIi1du6sa+I4V2xB45rFAiTvNQiaqBuNzEEIof5cdUltWdRf8i0Mgh8tWD9Epqm3
+	 Rlq1ZhShIlIUhR3XtkVlYHrONEJVea/mAUpN15xp7Lly4liJkbVbujFq47b1jG0Ye9nTJ
+	 uvRv3Z1F3Toheh/VKGNb9Fej2QkNqiZCtJ7Jvt5W2pXIbkcWpLrCIMwOSze3SyUIt13OG
+	 3y8FvbAlBdTPMxSk/+ZJT3dZJUmOisR1FROGTzh+QtuWy9qtN83IhGIxX/uhQnqZ5E4Ad
+	 Lyaq1GM4u/PfgI9i49zL2s2v5IGGIGN7OV76OIjh2+MXBqZOu9IUxnjShJybsjF1iLQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y9RIHpOq;
-	arc=none smtp.remote-ip=209.85.214.174
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CF0nWxUa;
+	arc=none smtp.remote-ip=209.85.210.172
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D0B606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:03:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54D0B606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5634606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:03:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5634606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y9RIHpOq
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e985106c0cso12485925ad.2
-        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:03:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CF0nWxUa
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-89f28c3ac7bso613734b3a.0
+        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:03:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794071010; x=1794675810; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794071018; x=1794675818; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=59Af186DmXB8XzwtNA3MbwIJzB3ec+dgTez6hv69W1E=;
-        b=Y9RIHpOqpZFly3knEdOZ1YsLCe0JMQ/GqRReVrHLeIPyaqWNItRSkRF9JLxMP5/21F
-         W88q2tj0BDZTiVb5z7xDLEmSypeutPoSLK5xQhtPzlqhmAOyilgVPt5EqF/43VSNaLbz
-         BAqkxTSO38frExSgf4ZtQWjQrDoFy4zEQ7DG5Ea4mrD/s/z9BVDVSu0Nuwkmqf5mfvJh
-         hCsj6skiC7vtdBZ/uRWxAxvkvRDVveVQjDV0TJBiye+I0OIZLB1nnRTpQS9haMbzbpRW
-         WNj+bOydfk6QJnRSLvsfafio5H3sFDQcy8hUj+ghf8T9yCh+q1YR2kk7gwV3jk9gR2dM
-         VgsA==
+        bh=Nz8L7ZO59Tsj8/ksCe4aovZHdoavAt4I7KkG9jbaYAY=;
+        b=CF0nWxUa7MZ3ZHVAlg9iNiWsfUX6fU2mAXFAVkr3PrRt5EY7fOR9d6CWNEBBfdAu7d
+         tmQgOFKB9ofQvdFf1pwVf6JVGKKEz6sOEmJKDVJwlt9gO4esaE1cK5sbtaA+qjxckAKQ
+         glyHfl43WB18rWdhn8fe94v1OmOd9LaXRw29icfrYluq4lVojnxun9fVPWB8Vty41siE
+         83AVaS0KuTvhCYRLObYJefSWzmeA34oBHA2sfONxKN6MVH2FzLkxDirTaOPAu7sxFace
+         gYJfTZPvDgMl9o6c1CANLn9uNzfYFYZRSVgu2VhrY6P0CTs5xMesHUYsAeD6PyqKSenF
+         iBEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794071010; x=1794675810;
+        d=1e100.net; s=20260707; t=1794071018; x=1794675818;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=59Af186DmXB8XzwtNA3MbwIJzB3ec+dgTez6hv69W1E=;
-        b=2WjfoNXLniMGuKYPvx172MWVz1SO03FmSG12ONoBZd2h9QTn13plWau9T6tVy9DgWu
-         Zsa1Jz0jYYhbHVywqoDYzyPmqmy9SNNg/UNHe+oZg71N7gzLW8SETXMvvUnggCUDSVE6
-         BE2BhJmG3I+PZtDaxAWne/9pkyFFpPcBbm5CbHlNYe8Vc8wVczhYJDUwblyjNmkLH1Qh
-         XIL3e/98Z5ivF3mOayttZCb/9FIpoZn1xB0TzEZEPAwe22TTSKFtkTqsSYjr8YrHHYMm
-         fM5UP1XygWXFePzZ7lDLDJVyqS2uFMRSxi9Gw7X6dVV0Ve6cLsxccBTOGykOzPELNwdP
-         eDow==
-X-Gm-Message-State: APuU4Z8KBplnbh9aPMHf5iSoAgm5hHiXBZ0jvPaZ78TzrzOoGjHkekEY
-	WDpfOkh5JSOVSQlI6ElFBtXz2pVRbDNYhGsXcoknEmXiWKU+YX5FNVTGCd00jA==
-X-Gm-Gg: AYBFou11WUr1Rlxyj/j45C3iScrCG7GtTIaAGyD7dIt52K7ZZwW0xsshZWzHstivhoX
-	GdtBeVUCvv2hAnWS0fxEnUR6bKuGjZR3VHfN8pOibu924DUgkfonWAsGu4xWIrhHg8WVJjUszzA
-	MjcA8XRP5mgvolZk/DgmCDU16QYSEC0KnXVWAXfFl90dRnFS/hctTb6AdzQfZXASRTPxbd0fGLC
-	Gf1PGwGZZuN9Y8gA+YoEW5CprxUBeaF7OLcHTGD009Ev5LPJ2+lGXHdStNQiG2wk6QFxrCxXvYa
-	Yb0EwNFBfEwxOgNRdKHU+bXZtcaJ0E1ITEFoH3Nyl4S8Xr5uoQm2YYtmicgylUeliKcTzsKBU0m
-	dd1z4WCyFEvT+ImUFzB3mPwdofXreb5k6g/KxI0jls8gD/ANeymAOEi09X9gnERPZURUX59GS+/
-	6KU2INAEnMF1QipQZnfMQ/5+MHy2DP8+bTSXCcoBCaGP3bv0M8XGtQriMxnlEMCFesTm8+GmY72
-	IpYySg1ns4jz6/SsbU/SLd913ObYntTl1MPWm5Xpbd29D3xy3VpFLNd1SCl98vDoukaSRqgVY9h
-	xGBPgW+0znbngvEduPzl0oxKr2sIfgN3u28XJiH+dMH6lwkA3GZqceQI6vgoqceEvgsIckDhVet
-	ajsHT2cUFnppHxNH3RPvMzOpT/rjmYywxlirvXduHaA4WeayjTsn+7Oa/VpKBLHXuBMpWrjoX4w
+        bh=Nz8L7ZO59Tsj8/ksCe4aovZHdoavAt4I7KkG9jbaYAY=;
+        b=aEWKxqbTaoPLq3wzjP7PHGwgoTQXD/bNnGlGONLL3JzC4cQ/7Mtuofgy35eEQJeZoQ
+         GniJXfFF1iETuJuiR9+7nnnZpU+6Op1Rs6QmH/rSDS2vr5DpkpW1WPhJiG1CZLucym9h
+         pOTdVU1MWMPfFzXngm132GW7JCyp7rl4/0TJVEUPsWwW439MuDyXdTeB6Vc8Po3fNzM+
+         trJu7UTPrkF9B9/Vw8mwjsruGWuZOrxUY0vr+voM/6VbH/30Vsk/tHvbATzyMTBmF0gU
+         VrEXRYdncwEOqXT6y/jGY95LsDSZdBerY1G4+pMzWUGqmYQS2NjL0PiNrwhP7snIWR+8
+         u2yw==
+X-Gm-Message-State: APuU4Z8Sny6d/b7qau1EBPAxLG++id+B8aH7kvvkHyg9/EQ4zD5IIg6+
+	lB9f6ic6H0WcnGcgY6PKeK0Ut/fliw2K973cD5Og0MIRsa3wOODBsBd7iV/mTg==
+X-Gm-Gg: AYBFou199YXEg+Lemav1kb2lDou7eyfXEXIW2+8s/vVifwsfkGq0pa+IaRCAaCPSrOO
+	SAJ3ipdQ35tPhl6fdW0akbh7xNHV6ZaW83zNNvMH+aakeLTYwF9/bk+aeqzLdBevnfe9mgiz++L
+	bSPOllX94lua2dKnADMDTemgsPdFiH2Q7HcKdh/GdMCZP+WfZ6jnUmKcKgwds7Qap3AfIuUcwuf
+	yO6b9+B37SHxB9IcsV/d9QmHJSKnLbUqppKdqnNHaBSHO5I321GotjPYHKmAWNAsUiEYOI0s8no
+	AKJqziTabWKt7PCaBTq1U4aiGSuVmr7VkByLqwNcPxyLzil4g/GyUc23YDC2E7JITUlDQip17Ww
+	SrgSh9LUVLwiedq16xvPilbKOjqzchTPKW6tnHgWmigYVmtdYLMtTFR/llz65VvQDYPL/GYYFLa
+	ev5WyTmVNr8OCBIwCNCRJh7l8AaplisolfZ/o/IdVSvGqg3YQpM9wHmTkA/DcrUSuc+MxKXt3Yn
+	TaMNKH2sh08GeaEieh7PQODsIDSrQl5V14Q7tuNQ9U+4VL/ZpEtQsHK5mDygGFE8CvAXAE8dRFr
+	0SK7VM3ux1Rgc+dN65CqqHTJa+gmXuj/Xdu5oblnTqVzkpClCxs6KpG3C0G7uzr1f01MhMGQ+mD
+	/FM+4KH24cNwvUh28tYBuyy1Jk0cfydvF9Wg8ue+M16CeZqy4ICSTUGSIhsGzi0nssGgegj9Pcg
 	==
-X-Received: by 2002:a17:90a:f489:b0:3b1:21d9:4c3d with SMTP id 98e67ed59e1d1-3b121daabd4mr245285a91.39.1794071009611;
-        Sat, 07 Nov 2026 09:03:29 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b10588225asm3799772a91.8.2026.11.07.09.03.27
+X-Received: by 2002:a05:6a00:1256:b0:874:708d:b620 with SMTP id d2e1a72fcca58-8b37b478b80mr5454841b3a.30.1794071018120;
+        Sat, 07 Nov 2026 09:03:38 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b35921deb7sm1315018b3a.12.2026.11.07.09.03.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 09:03:28 -0800 (PST)
+        Sat, 07 Nov 2026 09:03:35 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 2/9] selftests/bpf: Test a number that wraps in front of the jump that counts
-Date: Sat,  7 Nov 2026 17:02:59 +0000
-Message-ID: <20261107170306.2831028-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 3/9] selftests/bpf: Skip the stack walker of verifier_loop_latch with GCC
+Date: Sat,  7 Nov 2026 17:03:00 +0000
+Message-ID: <20261107170306.2831028-4-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
 References: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
@@ -104,47 +104,44 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A number goes up by 3. In front of the jump that counts the loop it moves
-over S64_MAX in one pair of progs and by S64_MAX in the other. The store
-behind the jump takes it as an index. In the progs that have to be rejected
-the store is one byte behind the value at run time.
+The GCC BPF jobs of BPF CI fail in:
 
+  verifier_loop_latch/latch: frames of a stack walker
+
+The test is about the outer loop: 'if (frames == 8) break;' counts it, so
+out[idx + j] stays within the 256 words of the value. GCC unrolls the
+inner loop
+
+  for (j = 0; j < n; j++)
+          out[idx + j] = b + c + d + e;
+
+by 8, walks 'out' with a pointer and ends the loop with 'if r9 != r5',
+where both registers point into the map value. The verifier finds no
+count for that and says:
+
+  invalid access to map value, value_size=2048 off=2048 size=8
+
+Skip the prog with GCC, as plain_c_verifier_loop_as_is.c does for the
+same reason. The prog with nine frames is rejected with both compilers:
+it stays.
+
+Fixes: d0a8c63bfc66 ("selftests/bpf: Test loops that are counted, walked or widened")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/progs/verifier_loop_latch.c | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ tools/testing/selftests/bpf/progs/verifier_loop_latch.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_latch.c b/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
-index 12c1cb2f0384..8b9a2853ea05 100644
+index 8b9a2853ea05..35bb3e16db3d 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
-@@ -117,6 +117,29 @@ LOOP(behind_moved, "w8 = 0; r9 = r6; r9 += 2043;", MOVED(4) "goto 1b;")
- BAD("a store behind the jump that counts, the pointer has moved too far")
- LOOP(behind_moved_bad, "w8 = 0; r9 = r6; r9 += 2044;", MOVED(4) "goto 1b;")
+@@ -206,6 +206,9 @@ int name(void *ctx)								\
+ }
  
-+/*
-+ * A number goes up by 3 and has moved in front of the jump. At the store it is @first or
-+ * @first + 3. Moved over S64_MAX it has another residue: 2^64 is not a multiple of 3. It keeps
-+ * the range of all three iterations then.
-+ */
-+#define NUM(by, back, first, off)						\
-+	"r3 = " #by " ll; r9 += r3; if w8 == 2 goto 9f; r2 = r9; r3 = " #first " ll; r2 -= r3;" \
-+	"r2 += r5; *(u8 *)(r2 + " #off ") = r1; r3 = " #back " ll; r9 += r3; w8 += 1; goto 1b;"
-+#define OVER(off)	NUM(100, -97, 0x8000000000000031, off)
-+#define FAR(off)	NUM(0x7fffffffffffffff, 0x8000000000000004, 0x7ffffffffffffffa, off)
-+
-+OK("behind the jump that counts, a number has moved over S64_MAX", "3")
-+LOOP(moved_over, "w8 = 0; r5 = r6; r9 = 0x7fffffffffffffcd ll;", OVER(2041))
-+
-+BAD("behind the jump that counts, a number has moved over S64_MAX, too far")
-+LOOP(moved_over_bad, "w8 = 0; r5 = r6; r9 = 0x7fffffffffffffcd ll;", OVER(2045))
-+
-+OK("behind the jump that counts, a number has moved by S64_MAX", "3")
-+LOOP(moved_far, "w8 = 0; r5 = r6; r9 = -5;", FAR(2044))
-+
-+BAD("behind the jump that counts, a number has moved by S64_MAX, one too far")
-+LOOP(moved_far_bad, "w8 = 0; r5 = r6; r9 = -5;", FAR(2045))
-+
- OK("a store behind the jump that counts two back edges", "5")
- LOOP(behind_two, "w8 = 0; r9 = r6; r9 += 2044;", AT_TOP(4) "if r7 == 7 goto 1b; goto 1b;")
+ OK("frames of a stack walker", "[0..9]") __retval(256)
++#ifndef __clang__
++__skip("GCC unrolls the inner loop")
++#endif
+ FRAMES(eight_frames, 8)
  
+ BAD("frames of a stack walker, one too many")
