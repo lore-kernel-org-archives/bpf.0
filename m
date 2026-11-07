@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022920;
-	b=uICqXvjAbCQXVlbyVLEeBg4C1EkT2NWBi0vYn+M6/k5b0f6NKi52Az27PqHx/wb2+6jz
-	 ZsERFiPwAIakLD8IacDcuvmMEyncKDrnBmOfdv5ShcA2HzHO0djov+0vYgAMRNGWG4P7s
-	 np/nxq2+aL+up8ohwYvSmpAvDZCzslEE9S/6Pfw1zH3Iv4llJxY4Z7waH4ADbgfNeTYyJ
-	 0xVOa5NZTL7eqhrp/lnKyWTUKkh9HXnD+OzFf1zhQgl89YbSytLA6O5pTqLWTZtnqa2NM
-	 qyZSUBhFHNK2EqFB0tMsTflfvZkJqLf3XPQGlBTAOZ2YWXuw8NhLwQb5AeIeM8JI4bw==
+	t=1794022925;
+	b=2es9WvOAZ2evCuMZThCuzLkzxYznDRtAoZdqIU9IJmgQAnLeuI5FS4omYWwHKDDhsIB1
+	 oI3ByR/K519OHrk+GV9gq8VgJv8y0nRBsIfZi9QTjyE2kvUtJXXdl9vpyKStiVwb35C5p
+	 lPv5sgzUjMu70ULAXlZvOpLLeNuFnCMQhUpWePBRKXjPwNS5zzvw/zto7l6+nLPQVGPd2
+	 f4RsfmILEYNNRg5z+Km86GBnhOnsQOXlRrAA4mg2P+owOvPnLBtM6obrPuYJZLa7fSeD2
+	 ss8V8AsFberqUUTsVqY4T1OhnPzP8hZcqbF6RWKZ0MTvC+9o0ePXgCVCZAoiHzVwIyg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022920;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022925;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=gKqtCP0NvK1mxsjRXaXZlg7EMoaKERXyq0N7WHNEqEo=;
-	b=01ddMYA253JLpSFEmkNwTqj/lHyPBquZGAm3Iqzt64JUP86mtRtE4fvNo4LM3Os4nVpG
-	 qGxluhl8D67t2pQJ6O2WR2eibhAItct36BkjbPNc6Qlpm858jSvyfvaRTbyhodCtlD59Q
-	 Ls954Ci7TpMz8rPk2GoHEhwYMLrZvp+MpmRybRtWp3qW2/iFYa5s2r/oQK6YcmXv5aoQM
-	 O87dMA+y2CrfrbgdstRvec9o0r6EH82S+Fr1u1+QBtSo0rmTl3Jdn2SVHf9S9YXmS+zMD
-	 J7U3Ar2TRxwZHnQcDxpFpoJSN8wv2tHYuGhj0NJYuhe7Gi1kX3f6Oa8/Pm8QDazl/+w==
+	bh=1ejrGJ/GEUPg0LTxNeyfThJWIhnj8s/kDTqhMt3VH98=;
+	b=1WGWETevxhf0igz3+slsiBOGBR9Zbfqus0q/g4QZHvVlDexnfRrFK7QEYCEjqAA8Uc3K
+	 F28WWyjvzTjWf48GE+/t9TsR9y3IUVkZpu1E9TfNhgXFtrUSlabzSgGtOCot+R1KGBVp7
+	 QlP07/Aji2JY/CQgDtDL60FyFZShgfxmUyp+h0G0rcsIivOG+A0jIRF/DRq115AWwgoFo
+	 to+xUTsFodNaepjmJDX1odQHU3YSYKrTm5+b1rFUy0xhSnvTC6oXcd2z85ZH3CzNl8zJO
+	 fTfefs7NUVRivVbpYzT0a6+5cc0KGVyyAdqu5nl3IKfT+KzEVoki3uNPB8d8YcpT3QQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ia0PZ23s;
-	arc=none smtp.remote-ip=209.85.214.175
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="I/386h7I";
+	arc=none smtp.remote-ip=209.85.210.171
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2497C606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:41:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2497C606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB854606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:42:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB854606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ia0PZ23s
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ed0b03ce3eso4764665ad.3
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:41:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I/386h7I
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8b32bc605d9so512614b3a.2
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:42:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794022918; x=1794627718; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794022924; x=1794627724; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gKqtCP0NvK1mxsjRXaXZlg7EMoaKERXyq0N7WHNEqEo=;
-        b=ia0PZ23sxuN3bQKfssHAj2FuMrr7RxmK8BDyjXstmymY9Vxeknni7TRb8QhImuxz5r
-         0NXHMbh86r2+CqBCy1BolryXpHf1ojetMLc1if6sW+00qMmtwqQJu5y01l1NbeZ03PJ8
-         G9vYQ4WxXBOlkRN/KT4oIXjN5IHcOAEx+hPgUzeunGScHU/TKNBhYiJIbR5UTwNj1Hsl
-         nXsfplCw+D8KZzcS31Ke30WAmtxeVnvZnYBnTuKvBieD7c54nXgkqz/tilWsnTolxxcG
-         5xwVIdEwOdAkBZU3/3CTJooHcQPGDS9zzE8fWEc16PGY/GcKQeRzU62062Q16Bycn0v/
-         xDng==
+        bh=1ejrGJ/GEUPg0LTxNeyfThJWIhnj8s/kDTqhMt3VH98=;
+        b=I/386h7IBOKBIauYDYrkFeSQezPc2XX6TdPkTcFNhMf1gN6rswjxDUaGDi3NvaJfPk
+         gv5/l1jXql+PkwkK/3O1Hls+XKbxZtG9oV3NABdQBMqwLEEtCideD9T4hrIwGFjJT37o
+         JGMpIyar/mVy6IPWPsKtg5rAy5KBsRNwby4/YrgKNzkdB8y4ELuHfr/wiMTz5CujdfQj
+         56IhF2s0bf0WFuZkWAPUpFtGHd2A3v61/r5gLQ/vffFxYk6+iP/zMe1eHQHIbYhvW95S
+         0sHpUKqytvlHF/u8fRaeisFtYg8Oju+7tLedrXPgk7BVDtCFrwHxbFWvzs7XMA9kHiDJ
+         PAqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022918; x=1794627718;
+        d=1e100.net; s=20260707; t=1794022924; x=1794627724;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gKqtCP0NvK1mxsjRXaXZlg7EMoaKERXyq0N7WHNEqEo=;
-        b=DySHZ5HVPfpmBlyJU/gpGVq1RPVz5E4EJ1CDuXxagwtbad0kwzNA/0/zTstig2tAtF
-         PbfyJF13Vc82O4Ml40DaSlzsKnWirndwaSEreduifU+mhE4BDZF5xTR0w76nG/OKSSoB
-         hpogmz0EcH3L60IGzfrVABeJQDD/mVcuGGAWb/DngCpBTSP/u5m8Z+6sxr+MqU9OEZIb
-         s5RPMegJgUhARMyd3sYXqpD1OOSvIsWUKGsaMq1RvWTjf9OYLqrcZ0D47tFjzgF6RDcf
-         10e7vXP6EuLaLE9YdyQopuOuSijs87Kcpr8S08xzvZabG/NxKE6e131GE3DNkfxijmk+
-         l5ww==
-X-Gm-Message-State: APuU4Z9mUfuDFuZnvIVORFk2ErV9folgBmrXG5e/E7ZDujdCtoAo/xVV
-	U12p8sp1sm4LMjVrZKQzDZO+qwONRpV27+APldXoTogwPxdXvJRtxiUBk0J5dg==
-X-Gm-Gg: AYBFou0gTUoBfwdffT1Pl8saJIkyaZJVDh1yveuiLl7u4PKjWLZi3LcROXZ0/0hmi5M
-	/xYunQwR6fP9oBWfZIauoClNWLtt0aNPjpJSR8HBLDluo+iNVk4X7QwCA3PdLD1o/+ov78N2Bxo
-	A9XvsIYE/72LoJUqSRqh6pgVYaSMvt4iB6jmitncZQyDi9hwzQhHJCb/U+7pPuAb3Z3BBVpQBe1
-	kug3Fxz4Fr3UdqxZwGQ30xFMh35GKgOylxvTdffv0otRSh+DpGlm4QG+Mf4aeAdXZlKXTbSMGBs
-	KeAAuxBqQAaeMo/rd5S/tySPR/fQX1Y5uqSHLt5v9IvPkR3/iNCX3W5Q3cGtT8LlvHrjqXX4gat
-	7oA8xL9YKJyq4qqrJp7vESfV1bekBpmdhG2Ynfrz779rBZuYiFWXWE3G76HOosOgbfq72OYBSxz
-	giiHkr3ruBHFA0NaGdF8y6QG+BcdkceHSb5EGEWx+FVEIPaXOUm8QY+6sFtGtEpLWQTNjnVrDX0
-	aTm8urzJdzzDi/4k1mEFvEkc5B4w5D/V31jLfbIATHJ4HO8BjpC5fddkzk8aCcNmw8hMCh1jb3l
-	EiFx771GaxOxMK3y0ZMQjHAzQTRa78G0iqKN3TzUqb0KqTfmA2SPCxz45C4T3umPsQ9Ekv71923
-	zwutEbmMvnOW8SZP9r11E3dNfBWo1lU5F/9k0zduqbTYuVml1VS7YR2OUwTHALhKqs+EEiIojDw
+        bh=1ejrGJ/GEUPg0LTxNeyfThJWIhnj8s/kDTqhMt3VH98=;
+        b=v/e+kua0MDpbjYUCYnRC46sytJBlK9oDq8xFJ6E5/E09bSh4UgAeIAQAiMQoOvsOXs
+         p+Z8KK3Gx0+80fQymW6jVf9i4/OozzY75Itd8Ym/2bOwT/JBJ8rXpHu0AdhVt4pLFmWq
+         iDwFmdb5jcOCVxEgYeikfLFc/+26s6/tlBK4s0HnhdKcP2tsKPiZLXcJ+k/h0FPndNwg
+         I5tmZrUrM3YddoNv+3/vr4w/hnAdzkLhjIFqJGqBDk2VjkrS7sHzt4qe2bCJJkZFVnXb
+         IKchfceJYzaHA6/086jEcOsPxl5cuIUjtVNhajbkX+WkygUtveaf5wxev+nD6JHtnen4
+         7p7A==
+X-Gm-Message-State: APuU4Z+deoxdAhByB0xmSKRIpcHpOJQpYgZH8pctEXSd3M+elQXqjOkz
+	lSDLiRCOenqrtx4ifQv8eurGPq0iIAZKxZsH2MBsTxSaCSChoBK4wcAEb757qQ==
+X-Gm-Gg: AYBFou1yr9EitviRHk6gEcJqK+R0hDK8b7dQyMQW96xsO+IGDD8NKGUba+ocPbA9gZX
+	l4lokPeTV35Cv9ZrlCE5dtbSq9zMfufqDyJjnvbWvuue5uetc7Dzh+etHGw784M8wi2hV0ObcE0
+	LVuNbm3qtqCYbk3jriAfHeeppH91QxhN5IOM/wcQmmUmc3FZUP6BzZbC4qKK7bKRm2SpkyJkFtl
+	9FzzyNjm35FT0DOdqO4qWodyMjG1o3J+ohhR2/j9iQ8F4ItkUmU0PirXrB1ajd6gRYCdqtLkR/i
+	nefdXbozx2w3vjI4GorwVYnNdk3VUWNCoZxkjY7qOm8g6f01gbjsCCj/LQx07N5kWMaMgZfAVnF
+	S8jQEcwXDVHO3N875QJTwH92i6rm57+Yq3e1eCV/2xctcrkTgxncR+ydTYd9fib4UtosVL/gAuK
+	eDfO4TDBobCvRiulDuxMXzZozjY04T4eEXrvpa05/rMeHadibNvvZUePRowJO4rw9VbVhYmiMg/
+	0oHcTc3WUBFaMPmDm/Uhb+kx8FxGljqnvP+XmeSth6P9Pno0iolyBeZew56oQZl7eS7b7wdN9ws
+	J7oxSLafiaBPd+Cyasqgyx7WspC4f05sK2HqSfYglZ64Jf8niaHJ85vSSlNnU0cWXtlg337CDxf
+	0Q6dpL5dihh9jphiw5GsRlPo1TFdwEI3FGSfDmXZKWABf5Pt1M51oUTI9h+A4gRoKjoslVpyRHA
 	==
-X-Received: by 2002:a17:90b:4acc:b0:3b0:cc3e:68b5 with SMTP id 98e67ed59e1d1-3b0db69fde7mr4691033a91.21.1794022917385;
-        Fri, 06 Nov 2026 19:41:57 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b10583f3f2sm1375145a91.13.2026.11.06.19.41.56
+X-Received: by 2002:a17:90b:3c8e:b0:3ab:de4:7fa5 with SMTP id 98e67ed59e1d1-3b0db71d9f8mr4477349a91.56.1794022923299;
+        Fri, 06 Nov 2026 19:42:03 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b101e3e513sm1041613a91.4.2026.11.06.19.42.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 19:41:56 -0800 (PST)
+        Fri, 06 Nov 2026 19:42:02 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v4 39/46] selftests/bpf: Adjust tests to new verdicts, messages and order
-Date: Sat,  7 Nov 2026 03:37:47 +0000
-Message-ID: <20261107033758.1547725-40-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v4 40/46] selftests/bpf: Test states that are not joined
+Date: Sat,  7 Nov 2026 03:37:48 +0000
+Message-ID: <20261107033758.1547725-41-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
@@ -104,2280 +104,1528 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Without this patch 143 subtests of test_progs and 3 tests of test_verifier
-fail. No prog that loaded is rejected. 25 progs that were rejected load.
+  ret = lookup(&p);      /* ret = -ENOENT and p is not set, or */
+  if (ret < 0)           /* ret = 0 and p is set               */
+          goto drop;
+  use(p);
 
+When the compiler inlines lookup(), the two states meet in front of the
+jump. A verifier that follows paths keeps them apart and loads the prog.
+Their join, ret = [-2, 0], gets to use(p) without p. Thus the verifier does
+not join states when a check ahead can depend on the difference. Each test
+has one such difference, in the form that a real prog has.
+
+  [J] "bpf: Add join of registers and stack slots"
+  [K] "bpf: Find the registers that hold a number or a pointer to arena"
+  [A] "bpf: Find the registers and stack slots that later checks depend on"
+  [N] "bpf: Decide which states are not joined"
+  [M] "bpf: Merge the state that arrives into the set at an insn"
   [F] "bpf: Verify programs as a fixpoint over the control flow graph"
-  [O] "bpf: Verify static subprogs on their own"
-  [R] "bpf: Allow recursive subprogs"
 
-  before                          now
-  ------------------------------  -----------------------------------------
-  "infinite loop detected",       [F] 19 progs load, most run and return 0:
-  "too large", "8193 jumps"       8 iter_remake_*, loop3.bpf.o, .. One
-                                  state covers all iterations, and may_goto
-                                  stops the loop.
-  the same, the loop has no exit  [F] "loop at insn N never exits": 6 progs
-  "recursive call from",          [R] 6 progs load: callx_*_recursion,
-  "frames is too deep"            bounded_recursion, .. It needs the JIT:
-                                  __arch_x86_64, __arch_arm64.
-  "header_count is [0..3]", then  [F] "[0..5]": two bounds are joined in
-  "[0..5]"                        front of a counted loop.
-  the fall-through is verified    flow_compute_order(): the target of
-  first                           a jump is. Swap the branches, or expect
-                                  the other one of two errors.
-  "0: R1=ctx() R10=fp0"           [F] "0: R10=fp0": only what is live
-  scc column, "depth=",           gone, "(limit 0)": the patches that
-  "(limit 1000000)"               remove the old pass
-  r1 is an argument               [O] only if the callee reads it
+  verifier_..     the two states differ in                   as in
+  --------------  -----------------------------------------  --------------
+  jumps_ahead.c   [N] a number that a jump ahead tests, the  Cilium,
+                  ranges have a gap: -155 and 0              profiler,
+                  [N] two such numbers that go together      test_seg6_loop
+                  [N] a register that only one state sets
+                  [N] 0 or not 0, in one of two slots        xdp_synproxy
+                  [N] a flag, 0 and 1, that a jump in this
+                  block or the next one tests
+                  [M] a register that only a loop sets
+  ptr_off.c       [A] a constant that is added to a pointer
+                  [J] how much of the packet is checked
+                  [K] the offset of one of two fields behind
+                  bpf_core_cast(), bpf_cast_to_kern_ctx()
+                  [K] 20 or 40 bytes of a packet whose       test_cls_
+                  context was in a struct                    redirect
+  var_off.c       [A] a constant offset in the stack
+  mem_size_reg.c  [A] a size that a helper or a kfunc must
+                  know
 
-The last row: the callees in verifier_live_stack.c and _liveness_exp.c read
-the pointer that they get. unsafe_on_2nd_iter also wrote 8 bytes to
-'char buf[4]', and the verifier finds that error first: the buffer gets
-8 bytes. bpf_loop_iter_limit_nested compares two sums with their maximum:
-the verifier knows their range, not the set of their values.
+States that stay multiply. The verifier must join what no check can tell
+apart: -134 and -135 ([N]), NULL or not in an array that a loop reads
+(bpfjailer), an offset in a map value that has only numbers ([K]). 20 flags
+and 12 offsets give 2^20 and 2^12 states: the rules apply only while less
+than half of each limit on states is used ([N]). 4 calls that each return
+one of 33 numbers give 33^4: bpf_flow_exit() widens an exit state that was
+joined 16 times.
 
-New tests of [R] stand next to the old tests of the same limits. What it
-rejects: test_global_func3.c, verifier_tailcall.c,
-"calls: a timer callback calls the main prog", "arena stack: the kernel
-frame of a recursion counts in the depth of the stack". What runs:
-"arena stack: recursion ends in the stack", and
-callx_no_recursion_after_all, which gets no check at run time.
+[F]: maybe_fork_scalars() makes -1 and 0 of [-1, 0]. The state with 0 must
+not go back to an insn where [-1, 0] covers it (verifier_bounds.c). 1 and 2
+are joined at exit: a prog that can return 2 must not attach to ingress
+(cgroup_skb_egress_ret.c).
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../bpf/prog_tests/bpf_verif_scale.c          |   4 +-
- .../selftests/bpf/prog_tests/log_buf.c        |   4 +-
- .../selftests/bpf/prog_tests/log_fixup.c      |   6 +-
- .../selftests/bpf/prog_tests/reg_bounds.c     |   5 +-
- ...f_qdisc_fail__invalid_dynptr_cross_frame.c |   4 +-
- .../selftests/bpf/progs/cpumask_failure.c     |   2 +-
- tools/testing/selftests/bpf/progs/iters.c     | 114 ++++++--------
- .../selftests/bpf/progs/iters_state_safety.c  |   8 +-
- .../selftests/bpf/progs/iters_testmod_seq.c   |  12 +-
- .../bpf/progs/mem_rdonly_untrusted.c          |  16 +-
- .../selftests/bpf/progs/test_global_func3.c   | 125 ++++++++++++++++
- .../selftests/bpf/progs/timer_failure.c       |   9 +-
- .../selftests/bpf/progs/verifier_align.c      |  10 +-
- .../selftests/bpf/progs/verifier_and.c        |   4 +-
- .../bpf/progs/verifier_arena_stack.c          |  82 +++++++++++
- .../selftests/bpf/progs/verifier_bounds.c     |   6 +-
- .../selftests/bpf/progs/verifier_callx.c      |  71 +++++++--
- .../bpf/progs/verifier_callx_rodata.c         |   4 +-
- .../selftests/bpf/progs/verifier_cfg.c        |   8 +-
- .../bpf/progs/verifier_global_subprogs.c      |  11 +-
- .../bpf/progs/verifier_helper_value_access.c  |   8 +-
- .../selftests/bpf/progs/verifier_idoms.c      |   9 +-
- .../bpf/progs/verifier_iterating_callbacks.c  |  17 ++-
- .../selftests/bpf/progs/verifier_live_stack.c |   3 +-
- .../bpf/progs/verifier_liveness_exp.c         |   7 +-
- .../bpf/progs/verifier_loop_hierarchy.c       | 125 ++++++++--------
- .../selftests/bpf/progs/verifier_loop_latch.c |   2 +-
- .../selftests/bpf/progs/verifier_loops1.c     |  16 +-
- .../selftests/bpf/progs/verifier_movsx.c      |   3 +-
- .../selftests/bpf/progs/verifier_scev.c       | 139 ++++++++----------
- .../bpf/progs/verifier_subprog_insn_stats.c   |  16 +-
- .../selftests/bpf/progs/verifier_tailcall.c   |  27 ++++
- .../selftests/bpf/progs/verifier_uninit.c     |   2 +-
- .../selftests/bpf/progs/verifier_unpriv.c     |  23 +--
- .../bpf/progs/verifier_unpriv_perf.c          |   4 +-
- tools/testing/selftests/bpf/verifier/calls.c  |  46 +++++-
- 36 files changed, 615 insertions(+), 337 deletions(-)
+ .../bpf/prog_tests/cgroup_skb_egress_ret.c    |  23 +
+ .../selftests/bpf/prog_tests/verifier.c       |   4 +
+ .../bpf/progs/cgroup_skb_egress_ret.c         |  12 +
+ .../selftests/bpf/progs/verifier_bounds.c     | 108 +++
+ .../bpf/progs/verifier_jumps_ahead.c          | 670 ++++++++++++++++++
+ .../bpf/progs/verifier_mem_size_reg.c         |  48 ++
+ .../selftests/bpf/progs/verifier_ptr_off.c    | 279 ++++++++
+ .../selftests/bpf/progs/verifier_var_off.c    | 203 ++++++
+ 8 files changed, 1347 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_skb_egress_ret.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_skb_egress_ret.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_jumps_ahead.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_ptr_off.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-index 902a70d5afeb..2dc37090d7a4 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-@@ -154,9 +154,9 @@ void test_verif_scale_loop2()
- 	scale_test("loop2.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
- }
- 
--void test_verif_scale_loop3_fail()
-+void test_verif_scale_loop3()
- {
--	scale_test("loop3.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, true /* fails */);
-+	scale_test("loop3.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
- }
- 
- void test_verif_scale_loop4()
-diff --git a/tools/testing/selftests/bpf/prog_tests/log_buf.c b/tools/testing/selftests/bpf/prog_tests/log_buf.c
-index d6f14a232002..4f821fdc4a02 100644
---- a/tools/testing/selftests/bpf/prog_tests/log_buf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/log_buf.c
-@@ -125,7 +125,7 @@ static void obj_load_log_buf(void)
- 	ASSERT_OK_PTR(strstr(libbpf_log_buf, "libbpf: prog 'bad_prog': -- BEGIN PROG LOAD LOG --"),
- 		      "libbpf_log_correct");
- 	ASSERT_STREQ(obj_log_buf, "", "obj_log__empty");
--	ASSERT_STREQ(good_log_buf, "processed 4 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0\n",
-+	ASSERT_STREQ(good_log_buf, "processed 4 insns (limit 0) max_states_per_insn 1 total_states 1 peak_states 1 mark_read 0\n",
- 		     "good_log_ok");
- 	ASSERT_STREQ(bad_log_buf, "", "bad_log_empty");
- 
-@@ -179,7 +179,7 @@ static void bpf_prog_load_log_buf(void)
- 	opts.log_level = 2;
- 	fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, "good_prog", "GPL",
- 			   good_prog_insns, good_prog_insn_cnt, &opts);
--	ASSERT_OK_PTR(strstr(log_buf, "0: R1=ctx() R10=fp0"), "good_log_2");
-+	ASSERT_OK_PTR(strstr(log_buf, "0: R10=fp0"), "good_log_2");
- 	ASSERT_GE(fd, 0, "good_fd2");
- 	if (fd >= 0)
- 		close(fd);
-diff --git a/tools/testing/selftests/bpf/prog_tests/log_fixup.c b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-index 90a98e23be61..89a7f5947081 100644
---- a/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-@@ -41,7 +41,7 @@ static void bad_core_relo(size_t log_buf_size, enum trunc_type trunc_type)
- 				  "struct task_struct___bad.fake_field (0:1 @ offset 4)\n",
- 				  "log_buf_part2");
- 		ASSERT_HAS_SUBSTR(log_buf,
--				  "max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0\n",
-+				  "max_states_per_insn 1 total_states 1 peak_states 1 mark_read 0\n",
- 				  "log_buf_end");
- 		break;
- 	case TRUNC_PARTIAL:
-@@ -50,7 +50,7 @@ static void bad_core_relo(size_t log_buf_size, enum trunc_type trunc_type)
- 				  "struct task_struct___bad.fake_field (0:1 @ offset 4)\n",
- 				  "log_buf_part2");
- 		/* we shouldn't get full end of BPF verifier log */
--		ASSERT_NULL(strstr(log_buf, "max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0\n"),
-+		ASSERT_NULL(strstr(log_buf, "max_states_per_insn 1 total_states 1 peak_states 1 mark_read 0\n"),
- 			    "log_buf_end");
- 		break;
- 	case TRUNC_FULL:
-@@ -58,7 +58,7 @@ static void bad_core_relo(size_t log_buf_size, enum trunc_type trunc_type)
- 		ASSERT_NULL(strstr(log_buf, "struct task_struct___bad.fake_field (0:1 @ offset 4)\n"),
- 			    "log_buf_part2");
- 		/* we shouldn't get full end of BPF verifier log */
--		ASSERT_NULL(strstr(log_buf, "max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0\n"),
-+		ASSERT_NULL(strstr(log_buf, "max_states_per_insn 1 total_states 1 peak_states 1 mark_read 0\n"),
- 			    "log_buf_end");
- 		break;
- 	}
-diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-index 6231258b26cc..09f7930733be 100644
---- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-@@ -1276,7 +1276,7 @@ static int parse_range_cmp_log(const char *log_buf, struct case_spec spec,
- 		{true_pos + 1,  7, "R7=", true2_reg},
- 	};
- 	char buf[32];
--	const char *p = log_buf, *q;
-+	const char *p, *q;
- 	int i, err;
- 
- 	for (i = 0; i < 4; i++) {
-@@ -1291,8 +1291,9 @@ static int parse_range_cmp_log(const char *log_buf, struct case_spec spec,
- 		 * Different verifier passes may print
- 		 *   18: (bf) r0 = r6
- 		 * as well, but never followed by ';'.
-+		 * The branches are in the log in the order the verifier looked at them.
- 		 */
--		q = p;
-+		q = log_buf;
- 		while ((q = strstr(q, buf)) != NULL) {
- 			const char *s = q + strlen(buf);
- 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c
-index 2e23b8593af9..1d1684d2cf3b 100644
---- a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c
-@@ -26,8 +26,10 @@ int BPF_PROG(invalid_dynptr_cross_frame, struct sk_buff *skb, struct Qdisc *sch,
- 	bpf_dynptr_from_skb((struct __sk_buff *)skb, 0, &ptr);
- 
- 	hdr = bpf_dynptr_slice(&ptr, 0, NULL, sizeof(*hdr));
--	if (!hdr)
-+	if (!hdr) {
-+		bpf_kfree_skb(skb);
- 		return NET_XMIT_DROP;
-+	}
- 
- 	free_skb(skb);
- 
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-index c89c88db39d1..715218d32105 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
-+++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-@@ -45,7 +45,7 @@ int BPF_PROG(test_alloc_no_release, struct task_struct *task, u64 clone_flags)
- }
- 
- SEC("tp_btf/task_newtask")
--__failure __msg("NULL pointer passed to trusted R1")
-+__failure __msg("R1 type=scalar expected=ptr_, trusted_ptr_, rcu_ptr_")
- int BPF_PROG(test_alloc_double_release, struct task_struct *task, u64 clone_flags)
- {
- 	struct bpf_cpumask *cpumask;
-diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
-index ae845ad747bf..b9677d30e692 100644
---- a/tools/testing/selftests/bpf/progs/iters.c
-+++ b/tools/testing/selftests/bpf/progs/iters.c
-@@ -47,7 +47,7 @@ int iter_err_unsafe_c_loop(const void *ctx)
- }
- 
- SEC("?raw_tp")
--__failure __msg("unbounded memory access")
-+__failure __msg("math between map_value pointer and register with unbounded min value is not allowed")
- int iter_err_unsafe_asm_loop(const void *ctx)
- {
- 	struct bpf_iter_num it;
-@@ -878,19 +878,15 @@ __naked int delayed_read_mark(void)
- 
- SEC("?raw_tp")
- __failure
--__msg("math between fp pointer and register with unbounded")
-+__msg("21: (79) r8 = *(u64 *)(r0 +0)")
-+__msg("misaligned stack access off -33+0 size 8")
- __naked int delayed_precision_mark(void)
- {
- 	/* This is equivalent to C program below.
--	 * The test is similar to delayed_iter_mark but verifies that incomplete
--	 * precision don't fool verifier.
--	 * The call to bpf_iter_num_next() is reachable with r7 values -16 and -32.
--	 * State with r7=-16 is visited first and follows r6 != 42 ... continue branch.
--	 * At this point iterator next() call is reached with r7 that has no read
--	 * and precision marks.
--	 * Loop body with r7=-32 would only be visited if verifier would decide to continue
--	 * with second loop iteration. Absence of precision mark on r7 might affect state
--	 * equivalent logic used for iterator convergence tracking.
-+	 * The test is similar to delayed_read_mark.
-+	 * The call to bpf_iter_num_next() is reachable with r7 values -16 and -33.
-+	 * The loop body with r7=-33 is only looked at if the verifier goes on
-+	 * with the second iteration of the loop.
- 	 *
- 	 * r8 = 0
- 	 * fp[-16] = 0
-@@ -899,7 +895,7 @@ __naked int delayed_precision_mark(void)
- 	 * bpf_iter_num_new(&fp[-8], 0, 10)
- 	 * while (bpf_iter_num_next(&fp[-8])) {
- 	 *   if (r6 != 42) {
--	 *     r7 = -32
-+	 *     r7 = -33
- 	 *     r6 = bpf_get_prandom_u32()
- 	 *     continue;
- 	 *   }
-@@ -957,22 +953,17 @@ __naked int delayed_precision_mark(void)
- 
- SEC("?raw_tp")
- __failure
--__msg("math between fp pointer and register with unbounded")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("misaligned stack access off -25+0 size 8")
- __naked int loop_state_deps1(void)
- {
- 	/* This is equivalent to C program below.
- 	 *
- 	 * The case turns out to be tricky in a sense that:
--	 * - states with c=-25 are explored only on a second iteration
--	 *   of the outer loop;
--	 * - states with read+precise mark on c are explored only on
--	 *   second iteration of the inner loop and in a state which
--	 *   is pushed to states stack first.
-+	 * - c is -25 only on a second iteration of the outer loop;
-+	 * - c is used only on a second iteration of the inner loop.
- 	 *
--	 * Depending on the details of iterator convergence logic
--	 * verifier might stop states traversal too early and miss
--	 * unsafe c=-25 memory access.
-+	 * The verifier might stop too early and miss unsafe c=-25
-+	 * memory access.
- 	 *
- 	 *   j = iter_new();		 // fp[-16]
- 	 *   a = 0;			 // r6
-@@ -1082,23 +1073,18 @@ __naked int loop_state_deps1(void)
- 
- SEC("?raw_tp")
- __failure
--__msg("math between fp pointer and register with unbounded")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("34: (0f) r0 += r8")
-+__msg("misaligned stack access off -25+0 size 8")
- __naked int loop_state_deps2(void)
- {
- 	/* This is equivalent to C program below.
- 	 *
- 	 * The case turns out to be tricky in a sense that:
--	 * - states with read+precise mark on c are explored only on a second
--	 *   iteration of the first inner loop and in a state which is pushed to
--	 *   states stack first.
--	 * - states with c=-25 are explored only on a second iteration of the
--	 *   second inner loop and in a state which is pushed to states stack
--	 *   first.
-+	 * - c is used only on a second iteration of the first inner loop;
-+	 * - c is -25 only on a second iteration of the second inner loop.
- 	 *
--	 * Depending on the details of iterator convergence logic
--	 * verifier might stop states traversal too early and miss
--	 * unsafe c=-25 memory access.
-+	 * The verifier might stop too early and miss unsafe c=-25
-+	 * memory access.
- 	 *
- 	 *   j = iter_new();             // fp[-16]
- 	 *   a = 0;                      // r6
-@@ -1259,49 +1245,38 @@ __naked int loop_state_deps2(void)
- 
- SEC("?raw_tp")
- __failure
--__msg("math between fp pointer and register with unbounded")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("misaligned stack access off -25+0 size 8")
- __naked int loop_state_deps3(void)
- {
- 	/* This is equivalent to a C program below.
- 	 *
--	 *   if (random() != 24) {       // assume false branch is placed first
-+	 *   if (random() != 24) {
- 	 *     i = iter_new();           // fp[-8]
- 	 *     while (iter_next(i));
- 	 *     iter_destroy(i);
- 	 *     return;
- 	 *   }
- 	 *
--	 *   for (i = 10; i > 0; i--);   // increase dfs_depth for child states
-+	 *   for (i = 10; i > 0; i--);
- 	 *
- 	 *   i = iter_new();             // fp[-8]
- 	 *   b = -24;                    // r8
--	 *   for (;;) {                  // checkpoint (L)
--	 *     if (iter_next(i))         // checkpoint (N)
-+	 *   for (;;) {
-+	 *     if (iter_next(i))
- 	 *       break;
--	 *     if (random() == 77) {     // assume false branch is placed first
-+	 *     if (random() == 77) {
- 	 *       *(u64 *)(r10 + b) = 7;  // this is not safe when b == -25
- 	 *       iter_destroy(i);
- 	 *       return;
- 	 *     }
--	 *     if (random() == 42) {     // assume false branch is placed first
-+	 *     if (random() == 42) {
- 	 *       b = -25;
- 	 *     }
- 	 *   }
- 	 *   iter_destroy(i);
- 	 *
--	 * In case of a buggy verifier first loop might poison
--	 * env->cur_state->loop_entry with a state having 0 branches
--	 * and small dfs_depth. This would trigger NOT_EXACT states
--	 * comparison for some states within second loop.
--	 * Specifically, checkpoint (L) might be problematic if:
--	 * - branch with '*(u64 *)(r10 + b) = 7' is not explored yet;
--	 * - checkpoint (L) is first reached in state {b=-24};
--	 * - traversal is pruned at checkpoint (N) setting checkpoint's (L)
--	 *   branch count to 0, thus making it eligible for use in pruning;
--	 * - checkpoint (L) is next reached in state {b=-25},
--	 *   this would cause NOT_EXACT comparison with a state {b=-24}
--	 *   while 'b' is not marked precise yet.
-+	 * What the verifier learned in the first two loops must not make it
-+	 * take {b=-25} at the head of the third one for {b=-24}.
- 	 */
- 	asm volatile (
- 		"call %[bpf_get_prandom_u32];"
-@@ -1884,7 +1859,6 @@ __naked int absent_mark_in_the_middle_state2(void)
- }
- 
- SEC("?raw_tp")
--__flag(BPF_F_TEST_STATE_FREQ)
- __failure __msg("misaligned stack access off -31+0 size 8")
- __naked int absent_mark_in_the_middle_state3(void)
- {
-@@ -2014,8 +1988,8 @@ static int loop1_wrapper(void)
-  * but adapted for use with bpf_loop().
-  */
- SEC("raw_tp")
--__flag(BPF_F_TEST_STATE_FREQ)
--__failure __msg("math between fp pointer and register with unbounded min value is not allowed")
-+/* -32 or -31 */
-+__failure __msg("misaligned stack access off (0xffffffffffffffe0; 0x1)+0 size 8")
- __naked void absent_mark_in_the_middle_state4(void)
- {
- 	/*
-@@ -2159,8 +2133,7 @@ static int loop_cb5(int i, __u64 *ctx)
- }
- 
- SEC("raw_tp")
--__flag(BPF_F_TEST_STATE_FREQ)
--__failure __msg("memory access is {{.*}} and is outside of the object of size 64")
-+__failure __msg("invalid access to map value, value_size=64 off=402000 size=4")
- __naked void loop_counter_precision_2nd_iter(void)
- {
- 	asm volatile (
-@@ -2174,9 +2147,8 @@ __naked void loop_counter_precision_2nd_iter(void)
- 		"r3 += -8;"
- 		"r4 = 0;"
- 		/*
--		 * Explore with nr_loops=1 on a first path and nr_loops=2 on a second path.
--		 * Buggy verifier did not propagate r1 precision properly,
--		 * and thus checkpoints created for nr_loops=1 case matched nr_loops=2 case.
-+		 * nr_loops is 1 on one path and 2 on the other.
-+		 * The second call of the callback must not be lost.
- 		 */
- 		"call %[bpf_loop];"
- 		"r0 = 0;"
-@@ -2190,12 +2162,12 @@ __naked void loop_counter_precision_2nd_iter(void)
- 
- /*
-  * An iterator that is destroyed and created again inside its loop starts from
-- * the beginning and the loop never ends. In the first four progs the first
-- * prune point after bpf_iter_num_new() is the call of bpf_iter_num_next().
-+ * the beginning and the loop never ends. bpf_iter_num_next() is not what stops such
-+ * loop: the verifier adds may_goto. The progs spin until it's out of budget.
-  */
- SEC("socket")
- __description("iter: remake in the loop, jump to next")
--__failure __msg("infinite loop detected")
-+__success __retval(0)
- __naked void iter_remake_jmp(void)
- {
- 	asm volatile (
-@@ -2256,7 +2228,7 @@ __used __naked static void iter_remake(void)
- 
- SEC("socket")
- __description("iter: remake in a callee, jump to next")
--__failure __msg("infinite loop detected")
-+__success __retval(0)
- __naked void iter_remake_callee_jmp(void)
- {
- 	asm volatile (
-@@ -2295,7 +2267,7 @@ __naked void iter_remake_callee_jmp(void)
- 
- SEC("socket")
- __description("iter: remake after next, jump to next")
--__failure __msg("infinite loop detected")
-+__success __retval(0)
- __naked void iter_remake_after_next_jmp(void)
- {
- 	asm volatile (
-@@ -2336,7 +2308,7 @@ __naked void iter_remake_after_next_jmp(void)
- 
- SEC("socket")
- __description("iter: two iterators, remake each after its next")
--__failure __msg("infinite loop detected")
-+__success __retval(0)
- __naked void iter_remake_two_jmp(void)
- {
- 	asm volatile (
-@@ -2398,7 +2370,7 @@ __naked void iter_remake_two_jmp(void)
- /* Same loops with a prune point in front of bpf_iter_num_next() */
- SEC("socket")
- __description("iter: remake in the loop")
--__failure __msg("infinite loop detected")
-+__success __retval(0)
- __flag(BPF_F_TEST_STATE_FREQ)
- __naked void iter_remake_inline(void)
- {
-@@ -2439,7 +2411,7 @@ __naked void iter_remake_inline(void)
- 
- SEC("socket")
- __description("iter: remake in a callee")
--__failure __msg("infinite loop detected")
-+__success __retval(0)
- __flag(BPF_F_TEST_STATE_FREQ)
- __naked void iter_remake_callee(void)
- {
-@@ -2475,7 +2447,7 @@ __naked void iter_remake_callee(void)
- 
- SEC("socket")
- __description("iter: remake after next")
--__failure __msg("infinite loop detected")
-+__success __retval(0)
- __flag(BPF_F_TEST_STATE_FREQ)
- __naked void iter_remake_after_next(void)
- {
-@@ -2515,7 +2487,7 @@ __naked void iter_remake_after_next(void)
- 
- SEC("socket")
- __description("iter: remake when drained")
--__failure __msg("infinite loop detected")
-+__success __retval(0)
- __flag(BPF_F_TEST_STATE_FREQ)
- __naked void iter_remake_drained(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/iters_state_safety.c b/tools/testing/selftests/bpf/progs/iters_state_safety.c
-index b2ba4609a31e..fa9604f0a173 100644
---- a/tools/testing/selftests/bpf/progs/iters_state_safety.c
-+++ b/tools/testing/selftests/bpf/progs/iters_state_safety.c
-@@ -30,7 +30,7 @@ int force_clang_to_emit_btf_for_externs(void *ctx)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("fp-8=iter_num(id=1,state=active,depth=0)")
-+__msg("fp-8=iter_num(id=1,state=active)")
- int create_and_destroy(void *ctx)
- {
- 	struct bpf_iter_num iter;
-@@ -207,8 +207,8 @@ static __noinline void subprog_with_iter(void)
- SEC("?raw_tp")
- __failure
- /* ensure there was a call to subprog, which might happen without __noinline */
--__msg("returning from callee:")
--__msg("Unreleased reference id=1")
-+__msg("0: (85) call pc+2")
-+__msg("Unreleased reference id=2 alloc_insn=7")
- int leak_iter_from_subprog_fail(void *ctx)
- {
- 	subprog_with_iter();
-@@ -218,7 +218,7 @@ int leak_iter_from_subprog_fail(void *ctx)
- 
- SEC("?raw_tp")
- __success __log_level(2)
--__msg("fp-8=iter_num(id=1,state=active,depth=0)")
-+__msg("fp-8=iter_num(id=1,state=active)")
- int valid_stack_reuse(void *ctx)
- {
- 	struct bpf_iter_num iter;
-diff --git a/tools/testing/selftests/bpf/progs/iters_testmod_seq.c b/tools/testing/selftests/bpf/progs/iters_testmod_seq.c
-index d00888f6687a..88ce4b7a9c33 100644
---- a/tools/testing/selftests/bpf/progs/iters_testmod_seq.c
-+++ b/tools/testing/selftests/bpf/progs/iters_testmod_seq.c
-@@ -20,8 +20,8 @@ __s64 res_empty;
- 
- SEC("raw_tp/sys_enter")
- __success __log_level(2)
--__msg("fp-16=iter_testmod_seq(id=1,state=active,depth=0)")
--__msg("fp-16=iter_testmod_seq(id=1,state=drained,depth=0)")
-+__msg("fp-16=iter_testmod_seq(id=1,state=active)")
-+__msg("fp-16=iter_testmod_seq(id=1,state=drained)")
- __msg("call bpf_iter_testmod_seq_destroy")
- int testmod_seq_empty(const void *ctx)
- {
-@@ -38,8 +38,8 @@ __s64 res_full;
- 
- SEC("raw_tp/sys_enter")
- __success __log_level(2)
--__msg("fp-16=iter_testmod_seq(id=1,state=active,depth=0)")
--__msg("fp-16=iter_testmod_seq(id=1,state=drained,depth=0)")
-+__msg("fp-16=iter_testmod_seq(id=1,state=active)")
-+__msg("fp-16=iter_testmod_seq(id=1,state=drained)")
- __msg("call bpf_iter_testmod_seq_destroy")
- int testmod_seq_full(const void *ctx)
- {
-@@ -58,8 +58,8 @@ static volatile int zero = 0;
- 
- SEC("raw_tp/sys_enter")
- __success __log_level(2)
--__msg("fp-16=iter_testmod_seq(id=1,state=active,depth=0)")
--__msg("fp-16=iter_testmod_seq(id=1,state=drained,depth=0)")
-+__msg("fp-16=iter_testmod_seq(id=1,state=active)")
-+__msg("fp-16=iter_testmod_seq(id=1,state=drained)")
- __msg("call bpf_iter_testmod_seq_destroy")
- int testmod_seq_truncated(const void *ctx)
- {
-diff --git a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c b/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
-index b5cf85e2a19a..c6c1c3767a75 100644
---- a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
-+++ b/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
-@@ -219,9 +219,9 @@ int mixed_mem_untrusted_btf_id_type(void *ctx)
- 	 * returning 0.
- 	 */
- 	asm volatile (
--	"r7 = %[p];"
--	"if %[zero] != 0 goto +1;"
- 	"r7 = %[q];"
-+	"if %[zero] == 0 goto +1;"
-+	"r7 = %[p];"
- 	"r8 = *(u64 *)(r7 + 0);"
- 	"%[v] = r8;"
- 	: [v]"=r"(v)
-@@ -263,9 +263,9 @@ int mixed_mem_btf_id_type(void *ctx)
- 	 * gotten on its own.
- 	 */
- 	asm volatile (
--	"r7 = %[p];"
--	"if %[zero] != 0 goto +1;"
- 	"r7 = %[q];"
-+	"if %[zero] == 0 goto +1;"
-+	"r7 = %[p];"
- 	"r8 = *(u32 *)(r7 + 0);"
- 	"%[v] = r8;"
- 	: [v]"=r"(v)
-@@ -305,9 +305,9 @@ int mixed_rdonly_mem_btf_id_type(void *ctx)
- 	 * only its PTR_UNTRUSTED variant is.
- 	 */
- 	asm volatile (
--	"r7 = %[p];"
--	"if %[zero] != 0 goto +1;"
- 	"r7 = %[q];"
-+	"if %[zero] == 0 goto +1;"
-+	"r7 = %[p];"
- 	"r8 = *(u32 *)(r7 + 0);"
- 	"%[v] = r8;"
- 	: [v]"=r"(v)
-@@ -340,9 +340,9 @@ int mixed_mem_mem_type(void *ctx)
- 	 * hence without the BPF_PROBE_MEM rewrite the other path needs.
- 	 */
- 	asm volatile (
--	"r7 = %[q];"
--	"if %[zero] == 0 goto +1;"
- 	"r7 = %[p];"
-+	"if %[zero] != 0 goto +1;"
-+	"r7 = %[q];"
- 	"r8 = *(u64 *)(r7 + 0);"
- 	"%[v] = r8;"
- 	: [v]"=r"(v)
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/tools/testing/selftests/bpf/progs/test_global_func3.c
-index b332704b395c..b916355c5e59 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func3.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
-@@ -205,6 +205,131 @@ int global_func3_32_frames(struct __sk_buff *skb)
- 	return f31(skb);
- }
- 
-+volatile int again;
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_skb_egress_ret.c b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_egress_ret.c
+new file mode 100644
+index 000000000000..e261caac35e6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_egress_ret.c
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "cgroup_helpers.h"
++#include "cgroup_skb_egress_ret.skel.h"
 +
-+static __attribute__ ((noinline))
-+int calls_itself(struct __sk_buff *skb)
++void test_cgroup_skb_egress_ret(void)
 +{
-+	if (again)
-+		return (calls_itself(skb) >> 1) ^ 1;
-+	return f16(skb);
++	struct cgroup_skb_egress_ret *skel;
++	int cg, fd;
++
++	cg = test__join_cgroup("/cgroup_skb_egress_ret");
++	if (!ASSERT_OK_FD(cg, "join_cgroup"))
++		return;
++	skel = cgroup_skb_egress_ret__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		goto out;
++	fd = bpf_program__fd(skel->progs.one_or_two);
++	ASSERT_EQ(bpf_prog_attach(fd, cg, BPF_CGROUP_INET_INGRESS, 0), -EINVAL, "ingress");
++	ASSERT_OK(bpf_prog_attach(fd, cg, BPF_CGROUP_INET_EGRESS, 0), "egress");
++	cgroup_skb_egress_ret__destroy(skel);
++out:
++	close(cg);
 +}
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index d41339ef00d8..2f34a34e3d54 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -69,6 +69,7 @@
+ #include "verifier_iterating_callbacks.skel.h"
+ #include "verifier_jeq_infer_not_null.skel.h"
+ #include "verifier_jit_convergence.skel.h"
++#include "verifier_jumps_ahead.skel.h"
+ #include "verifier_kfunc_packet_access.skel.h"
+ #include "verifier_kfunc_uninit.skel.h"
+ #include "verifier_kfunc_uninit_multi.skel.h"
+@@ -107,6 +108,7 @@
+ #include "verifier_precision.skel.h"
+ #include "verifier_prevent_map_lookup.skel.h"
+ #include "verifier_private_stack.skel.h"
++#include "verifier_ptr_off.skel.h"
+ #include "verifier_ptr_to_buf.skel.h"
+ #include "verifier_raw_stack.skel.h"
+ #include "verifier_raw_tp_writable.skel.h"
+@@ -267,6 +269,7 @@ void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
+ void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_callbacks); }
+ void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_not_null); }
+ void test_verifier_jit_convergence(void)      { RUN(verifier_jit_convergence); }
++void test_verifier_jumps_ahead(void)          { RUN(verifier_jumps_ahead); }
+ void test_verifier_kfunc_packet_access(void)  { RUN_TESTS(verifier_kfunc_packet_access); }
+ void test_verifier_kfunc_uninit(void)         { RUN_TESTS(verifier_kfunc_uninit); }
+ void test_verifier_kfunc_uninit_multi(void)   { RUN_TESTS(verifier_kfunc_uninit_multi); }
+@@ -317,6 +320,7 @@ void test_verifier_percpu_addr(void)          { RUN(verifier_percpu_addr); }
+ void test_verifier_precision(void)            { RUN(verifier_precision); }
+ void test_verifier_prevent_map_lookup(void)   { RUN(verifier_prevent_map_lookup); }
+ void test_verifier_private_stack(void)        { RUN(verifier_private_stack); }
++void test_verifier_ptr_off(void)              { RUN(verifier_ptr_off); }
+ void test_verifier_ptr_to_buf(void)           { RUN(verifier_ptr_to_buf); }
+ void test_verifier_raw_stack(void)            { RUN(verifier_raw_stack); }
+ void test_verifier_raw_tp_writable(void)      { RUN(verifier_raw_tp_writable); }
+diff --git a/tools/testing/selftests/bpf/progs/cgroup_skb_egress_ret.c b/tools/testing/selftests/bpf/progs/cgroup_skb_egress_ret.c
+new file mode 100644
+index 000000000000..107f61d77538
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/cgroup_skb_egress_ret.c
+@@ -0,0 +1,12 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
 +
-+#define FRAME(name, next)			\
-+static __attribute__ ((noinline))		\
-+int name(struct __sk_buff *skb)			\
-+{						\
-+	return next(skb);			\
-+}
-+
-+FRAME(g1, calls_itself)
-+FRAME(g2, g1)
-+FRAME(g3, g2)
-+FRAME(g4, g3)
-+FRAME(g5, g4)
-+FRAME(g6, g5)
-+FRAME(g7, g6)
-+FRAME(g8, g7)
-+FRAME(g9, g8)
-+FRAME(g10, g9)
-+FRAME(g11, g10)
-+FRAME(g12, g11)
-+FRAME(g13, g12)
-+FRAME(g14, g13)
-+FRAME(g15, g14)
-+FRAME(g16, g15)
-+
-+/*
-+ * 16 frames above the subprog that calls itself and 16 below it. The call of it
-+ * with nothing above it comes first.
-+ */
-+SEC("tc")
-+__arch_x86_64
-+__arch_arm64
-+__failure __msg("the call stack of {{[0-9]+}} frames is too deep")
-+int global_func3_frames_around_recursion(struct __sk_buff *skb)
++/* Only a prog at egress returns 2. At exit the verifier has 1 and 2 in one state. */
++SEC("cgroup_skb/egress")
++int one_or_two(struct __sk_buff *skb)
 +{
-+	return calls_itself(skb) + g16(skb);
++	return skb->len > 100 ? 2 : 1;
 +}
 +
-+static __attribute__ ((noinline))
-+int depth(int n)
-+{
-+	return n > 0 ? (depth(n - 1) + 1) & 255 : 0;
-+}
-+
-+SEC("kprobe")
-+__arch_x86_64
-+__arch_arm64
-+__failure __msg("recursive depth() in a tracing program")
-+int global_func3_recursion_in_tracing_prog(void *ctx)
-+{
-+	return depth(again + 7);
-+}
-+
-+__attribute__ ((noinline))
-+int redirects(struct __sk_buff *skb, int n)
-+{
-+	int ret = n > 0 ? redirects(skb, n - 1) : 0;
-+
-+	return ret + bpf_clone_redirect(skb, 1, 0);
-+}
-+
-+/* The prog would run again on top of the frames of its recursion */
-+SEC("tc")
-+__arch_x86_64
-+__arch_arm64
-+__failure __msg("recursive redirects() in a program that calls bpf_clone_redirect()")
-+int global_func3_recursion_redirects(struct __sk_buff *skb)
-+{
-+	return redirects(skb, again + 7);
-+}
-+
-+static __attribute__ ((noinline))
-+int depth_to(int n, long *out)
-+{
-+	*out = depth(n);
-+	return 0;
-+}
-+
-+/* The pointer to the stack is left over in r2 at the call of depth(), which doesn't read r2 */
-+SEC("tc")
-+__arch_x86_64
-+__arch_arm64
-+__success __retval(7)
-+int global_func3_recursion_stale_stack_pointer(struct __sk_buff *skb)
-+{
-+	long x = 0;
-+
-+	depth_to(again + 7, &x);
-+	return x;
-+}
-+
-+/* It writes to the stack of its caller, or a compiler hands down the value and no pointer */
-+static __attribute__ ((noinline))
-+long hands_down_its_stack(long *up, int n)
-+{
-+	long mine = n;
-+
-+	*up += 1;
-+	if (n <= 0)
-+		return mine;
-+	return hands_down_its_stack(&mine, n - 1) + mine;
-+}
-+
-+/* What a subprog does with the stack of its callers is not found for chains without an end */
-+SEC("tc")
-+__arch_x86_64
-+__arch_arm64
-+__failure
-+__msg("recursive hands_down_its_stack() passes a pointer to the stack to hands_down_its_stack()")
-+int global_func3_recursion_stack_pointer(struct __sk_buff *skb)
-+{
-+	long x = skb->len;
-+
-+	return hands_down_its_stack(&x, skb->mark & 7);
-+}
-+
- #define PTR_FRAME(name, next)			\
- static __attribute__ ((noinline))		\
- long name(long *p)				\
-diff --git a/tools/testing/selftests/bpf/progs/timer_failure.c b/tools/testing/selftests/bpf/progs/timer_failure.c
-index 0538269101ca..84ea861575fc 100644
---- a/tools/testing/selftests/bpf/progs/timer_failure.c
-+++ b/tools/testing/selftests/bpf/progs/timer_failure.c
-@@ -43,14 +43,7 @@ static unsigned long timer_cb_ret_bad()
- }
- 
- SEC("fentry/bpf_fentry_test1")
--__log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __failure
--/* check that fallthrough code path marks r0 as precise */
--__msg("mark_precise: frame0: regs=r0 stack= before")
--__msg(": (85) call bpf_get_prandom_u32#7") /* anchor message */
--/* check that branch code path marks r0 as precise */
--__msg("mark_precise: frame0: regs=r0 stack= before ") __msg(": (85) call bpf_get_prandom_u32#7")
- __msg("should have been in [0, 0]")
- long BPF_PROG2(test_bad_ret, int, a)
- {
-@@ -80,7 +73,7 @@ static int timer_cb_infinite_loop(void *map, int *key, struct elem *val)
- }
- 
- SEC("fentry/bpf_fentry_test1")
--__failure __msg("infinite loop detected")
-+__failure __msg("loop at insn {{[0-9]+}} never exits")
- long BPF_PROG2(test_infinite_loop_cb, int, a)
- {
- 	struct bpf_timer *timer;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_align.c b/tools/testing/selftests/bpf/progs/verifier_align.c
-index 0083ef8b8ba7..aecc5279dbaf 100644
---- a/tools/testing/selftests/bpf/progs/verifier_align.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_align.c
-@@ -13,7 +13,7 @@
- SEC("tc")
- __success __log_level(2)
- __flag(BPF_F_ANY_ALIGNMENT)
--__msg("0: R1=ctx() R10=fp0")
-+__msg("0: R10=fp0")
- __msg("0: {{.*}} R3=2")
- __msg("1: {{.*}} R3=4")
- __msg("2: {{.*}} R3=8")
-@@ -35,7 +35,7 @@ __naked void mov(void)
- SEC("tc")
- __success __log_level(2)
- __flag(BPF_F_ANY_ALIGNMENT)
--__msg("0: R1=ctx() R10=fp0")
-+__msg("0: R10=fp0")
- __msg("0: {{.*}}R3=1")
- __msg("1: {{.*}}R3=2")
- __msg("2: {{.*}}R3=4")
-@@ -69,7 +69,7 @@ __naked void shift(void)
- SEC("tc")
- __success __log_level(2)
- __flag(BPF_F_ANY_ALIGNMENT)
--__msg("0: R1=ctx() R10=fp0")
-+__msg("0: R10=fp0")
- __msg("0: {{.*}}R3=4")
- __msg("1: {{.*}}R3=8")
- __msg("2: {{.*}}R3=10")
-@@ -93,7 +93,7 @@ __naked void addsub(void)
- SEC("tc")
- __success __log_level(2)
- __flag(BPF_F_ANY_ALIGNMENT)
--__msg("0: R1=ctx() R10=fp0")
-+__msg("0: R10=fp0")
- __msg("0: {{.*}}R3=7")
- __msg("1: {{.*}}R3=7")
- __msg("2: {{.*}}R3=14")
-@@ -532,7 +532,7 @@ __msg("9: {{.*}} R6={{[^)]*}}var_off=(0x0; 0x3c)")
- /* Adding 14 makes R6 be (4n+2) */
- __msg("10: {{.*}} R6={{[^)]*}}var_off=(0x2; 0x7c)")
- /* Subtracting from packet pointer overflows ubounds */
--__msg("13: R5={{[^)]*}}var_off=(0xffffffffffffff82; 0x7c)")
-+__msg("12: {{.*}} R5={{[^)]*}}var_off=(0xffffffffffffff82; 0x7c)")
- /* New unknown value in R7 is (4n), >= 76 */
- __msg("14: {{.*}} R7={{[^)]*}}var_off=(0x0; 0x7fc)")
- /* Adding it to packet pointer gives nice bounds again */
-diff --git a/tools/testing/selftests/bpf/progs/verifier_and.c b/tools/testing/selftests/bpf/progs/verifier_and.c
-index 2b4fdca162be..fb64ea9928f1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_and.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_and.c
-@@ -38,9 +38,9 @@ __naked void invalid_and_of_negative_number(void)
- 	r1 &= -4;					\
- 	r1 <<= 2;					\
- 	r0 += r1;					\
--l0_%=:	r1 = %[test_val_foo];				\
-+	r1 = %[test_val_foo];				\
- 	*(u64*)(r0 + 0) = r1;				\
--	exit;						\
-+l0_%=:	exit;						\
- "	:
- 	: __imm(bpf_map_lookup_elem),
- 	  __imm_addr(map_hash_48b),
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_stack.c b/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
-index 1d676da4b5ea..b46e30a9c67f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena_stack.c
-@@ -199,6 +199,88 @@ __naked void call_through(void)
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index 6fede778971c..28d48e5fbc4f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -2159,6 +2159,74 @@ l0_%=:	r0 = 0;						\
  	: __clobber_all);
  }
  
-+unsigned long first_r12, last_r12;
-+
-+/* 1024 bytes in the stack in arena, nothing in the kernel stack */
-+static __naked __noinline __used long goes_down(void)
++/*
++ * -1 and 0 meet at the insn that forks. The state with [-1, 0] is kept there. The
++ * pushed state is within it, so it's not there that it is pushed to.
++ */
++SEC("socket")
++__description("maybe_fork_scalars: AND where paths meet rejects OOB")
++__failure __msg("invalid access to map value")
++__naked void and_scalar_fork_at_join_rejects_oob(void)
 +{
-+	asm volatile (
-+	".8byte %[adj];"
-+	".8byte %[mov];"	/* r1 = r12 */
-+	"r2 = %[last_r12] ll;"
-+	"*(u64 *)(r2 + 0) = r1;"
-+	"call goes_down;"
-+	"exit;"
-+	:
-+	: __imm_addr(last_r12),
-+	  __imm_insn(adj, ADJ(1024)),
-+	  __imm_insn(mov, MOV(BPF_REG_1))
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_hash_8b] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r9 = r0;					\
++	r1 = *(u64*)(r9 + 0);				\
++	r6 = -1;					\
++	if r1 == 0 goto l1_%=;				\
++	r6 = 0;						\
++l1_%=:	r6 &= 8;					\
++	/* r6 is 8 (current) or 0 (pushed) */		\
++	r6 ^= 8;					\
++	/* pushed path: r6 = 8, OOB for value_size=8 */	\
++	r9 += r6;					\
++	r0 = *(u8*)(r9 + 0);				\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_8b)
 +	: __clobber_all);
 +}
 +
-+/* The check of a recursion looks at the kernel stack. It fails before 32K of arena are used. */
-+SEC("syscall")
-+__description("arena stack: recursion ends in the stack")
-+__success __retval(1)
-+__naked void recursion(void)
++SEC("socket")
++__description("maybe_fork_scalars: 32-bit AND of a 32-bit range where paths meet rejects OOB")
++__failure __msg("invalid access to map value")
++__naked void and32_scalar32_fork_at_join_rejects_oob(void)
 +{
-+	asm volatile (
-+	".8byte %[adj];"
-+	".8byte %[mov];"	/* r1 = r12 */
-+	"r2 = %[first_r12] ll;"
-+	"*(u64 *)(r2 + 0) = r1;"
-+	"call goes_down;"
-+	"r1 = %[last_r12] ll;"
-+	"r1 = *(u64 *)(r1 + 0);"
-+	"r2 = %[first_r12] ll;"
-+	"r2 = *(u64 *)(r2 + 0);"
-+	"r1 -= r2;"
-+	"r0 = 0;"
-+	"if r1 < 8192 goto +2;"
-+	"if r1 > 32736 goto +1;"
-+	"r0 = 1;"
-+	"exit;"
-+	:
-+	: __imm_addr(first_r12),
-+	  __imm_addr(last_r12),
-+	  __imm_insn(adj, ADJ(32)),
-+	  __imm_insn(mov, MOV(BPF_REG_1))
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_hash_8b] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	r9 = r0;					\
++	r1 = *(u64*)(r9 + 0);				\
++	w6 = -1;					\
++	if r1 == 0 goto l1_%=;				\
++	r6 = 0;						\
++l1_%=:	w6 &= 8;					\
++	/* r6 is 8 (current) or 0 (pushed) */		\
++	r6 ^= 8;					\
++	/* pushed path: r6 = 8, OOB for value_size=8 */	\
++	r9 += r6;					\
++	r0 = *(u8*)(r9 + 0);				\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_8b)
 +	: __clobber_all);
 +}
 +
-+static __naked __noinline __used long large_frame(void)
-+{
-+	asm volatile (
-+	"*(u64 *)(r10 - 1792) = 0;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+static __naked __noinline __used long goes_down_with_leaf(void)
-+{
-+	asm volatile (
-+	".8byte %[adj];"
-+	"call large_frame;"
-+	"call goes_down_with_leaf;"
-+	"exit;"
-+	:
-+	: __imm_insn(adj, ADJ(1024))
-+	: __clobber_all);
-+}
-+
-+/* goes_down_with_leaf() gets a frame in the kernel stack. What it calls comes on top. */
-+SEC("syscall")
-+__description("arena stack: the kernel frame of a recursion counts in the depth of the stack")
-+__failure __msg("combined stack size of 3 calls is")
-+__naked void recursion_above_large_frame(void)
-+{
-+	asm volatile (
-+	"call goes_down_with_leaf;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
- SEC("syscall")
- __description("arena stack: helpers don't change r12")
- __success __retval(3)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index 05efa9f4a522..6fede778971c 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -1797,8 +1797,8 @@ l1_%=:	r0 = 1;				\
- 
- SEC("socket")
- __description("jset on same register, scalar value unknown branch 1")
--__msg("3: (b7) r0 = 0 {{.*}} R0=0")
- __msg("5: (b7) r0 = 1 {{.*}} R0=1")
-+__msg("3: (b7) r0 = 0 {{.*}} R0=0")
- __success __log_level(2)
- __naked void jset_on_same_register_3(void *ctx)
- {
-@@ -1818,8 +1818,8 @@ l1_%=:	r0 = 1;				\
- 
- SEC("socket")
- __description("jset on same register, scalar value unknown branch 2")
--__msg("4: (b7) r0 = 0 {{.*}} R0=0")
- __msg("6: (b7) r0 = 1 {{.*}} R0=1")
-+__msg("4: (b7) r0 = 0 {{.*}} R0=0")
- __success __log_level(2)
- __naked void jset_on_same_register_4(void *ctx)
- {
-@@ -1840,8 +1840,8 @@ l1_%=:	r0 = 1;				\
- 
- SEC("socket")
- __description("jset on same register, scalar value unknown branch 3")
--__msg("4: (b7) r0 = 0 {{.*}} R0=0")
- __msg("6: (b7) r0 = 1 {{.*}} R0=1")
-+__msg("4: (b7) r0 = 0 {{.*}} R0=0")
- __success __log_level(2)
- __naked void jset_on_same_register_5(void *ctx)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
-index f3f8ea67eb7e..afe4990cd027 100644
---- a/tools/testing/selftests/bpf/progs/verifier_callx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
-@@ -243,8 +243,7 @@ __naked void callx_scratches_args(void)
- /* return value of the callee is tracked */
- SEC("socket")
- __success __log_level(2)
--__msg("to caller at 4:")
--__msg("R0=6")
-+__msg("4: R0=6 R10=fp0")
- __naked void callx_retval_is_tracked(void)
- {
- 	asm volatile (
-@@ -541,9 +540,11 @@ static unsigned long self(void)
- 	);
+ /*
+  * The insn that forks is the head of a loop that scalar evolution counted. The state with
+  * [-1, 0] is kept there, and the state with 0 that is split off is within it.
+@@ -2200,6 +2268,46 @@ l0_%=:	r0 = 0;						\
+ 	: __clobber_all);
  }
  
--/* unbounded recursion is caught by the main verification pass */
-+/* unbounded recursion is stopped at run time */
- SEC("socket")
--__failure __msg("frames is too deep")
-+__arch_x86_64
-+__arch_arm64
++#define FORK						\
++	"r6 = *(u64*)(r9 + 0);"				\
++	"r6 s>>= 63;"					\
++	"r6 &= 4;"					\
++	"*(u64*)(r9 + 0) = r6;"
++#define FORK4 FORK FORK FORK FORK
++
++/*
++ * The pushed states of one block that don't differ in what is live are one state: 16 forks
++ * are not 2^16 states.
++ */
++SEC("socket")
++__description("maybe_fork_scalars: 16 forks in a block")
 +__success __retval(0)
- __naked void callx_unbounded_recursion(void)
- {
- 	asm volatile (
-@@ -569,12 +570,10 @@ static unsigned long countdown(void)
- 	);
- }
- 
--/*
-- * The depth of the recursion is known to the main verification pass,
-- * but recursive calls are not allowed regardless.
-- */
- SEC("socket")
--__failure __msg("recursive call from countdown() to countdown()")
-+__arch_x86_64
-+__arch_arm64
-+__success __retval(0)
- __naked void callx_bounded_recursion(void)
- {
- 	asm volatile (
-@@ -621,7 +620,9 @@ static unsigned long pong(void)
- }
- 
- SEC("socket")
--__failure __msg("recursive call from")
-+__arch_x86_64
-+__arch_arm64
-+__success
- __naked void callx_mutual_recursion(void)
- {
- 	asm volatile (
-@@ -636,6 +637,49 @@ __naked void callx_mutual_recursion(void)
- 		: __clobber_all);
- }
- 
-+/* calls_arg(fn) { return fn(); } */
-+__naked __noinline __used
-+static unsigned long calls_arg(void)
++__log_level(4)
++__msg("processed {{[0-9][0-9]?[0-9]?}} insns")
++__naked void and_scalar_16_forks_in_a_block(void)
 +{
 +	asm volatile (
-+		"callx r1;"
++	"r1 = 0;"
++	"*(u64*)(r10 - 8) = r1;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"r1 = %[map_hash_8b] ll;"
++	"call %[bpf_map_lookup_elem];"
++	"if r0 == 0 goto l0_%=;"
++	"r9 = r0;"
++	FORK4 FORK4 FORK4 FORK4
++"l0_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_8b)
++	: __clobber_all);
++}
++
++#undef FORK4
++#undef FORK
++
+ /*
+  * Last jump can be detected as always taken because the intersection of R5 and
+  * R7 32bit tnums produces a constant that isn't within R7's s32 bounds.
+diff --git a/tools/testing/selftests/bpf/progs/verifier_jumps_ahead.c b/tools/testing/selftests/bpf/progs/verifier_jumps_ahead.c
+new file mode 100644
+index 000000000000..66d8a7c4a6a0
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_jumps_ahead.c
+@@ -0,0 +1,670 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "../../../include/linux/filter.h"
++#include "bpf_misc.h"
++
++/*
++ * A join must not make up what neither state has where a jump ahead can see it:
++ *	ret = lookup(&p);
++ *	if (ret < 0)
++ *		goto drop;
++ *	use(p);
++ * When lookup() is inlined (ret = -ENOENT, p is not set) and (ret = 0, p is set) meet in front of
++ * the jump.
++ */
++
++SEC("socket")
++__description("jumps ahead: a register is set when ret is 0")
++__success __retval(0)
++__naked void ret_and_register(void)
++{
++	asm volatile (
++		"call %[bpf_get_prandom_u32];"
++		"w6 = -2;"
++		"if r0 == 0 goto 1f;"
++		"r8 = 0;"
++		"w6 = 0;"
++	"1:"
++		"w7 = 0;"
++		"if w6 s< 0 goto 2f;"
++		"r0 = r8;"
 +		"exit;"
++	"2:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32)
++		: __clobber_all
 +	);
 +}
 +
-+__naked __noinline __used
-+static unsigned long returns_7(void)
++SEC("socket")
++__description("jumps ahead: a register is not set and ret doesn't tell")
++__failure __msg("R8 !read_ok")
++__naked void ret_does_not_tell(void)
 +{
 +	asm volatile (
-+		"r0 = 7;"
++		"call %[bpf_get_prandom_u32];"
++		"w6 = 1;"
++		"if r0 == 0 goto 1f;"
++		"r8 = 0;"
++		"w6 = 0;"
++	"1:"
++		"w7 = 0;"
++		"if w6 s< 0 goto 2f;"
++		"r0 = r8;"
 +		"exit;"
++	"2:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32)
++		: __clobber_all
 +	);
 +}
 +
 +/*
-+ * The address of calls_arg() is taken: its callx could call it. The main pass finds that it
-+ * calls returns_7(). There is no cycle, so calls_arg() doesn't check the stack at run time.
++ * As in bpf_host.o of cilium:
++ *	err = helper();
++ *	ret = err < 0 ? -155 : 0;
++ *	if (err < 0)
++ *		goto out;
++ *	...
++ * out:
++ *	if (ret < 0)
++ *		goto drop;
++ * The states differ in what two jumps look at, and in nothing else.
++ * (err < 0, ret = 0) is neither of them.
 + */
 +SEC("socket")
-+__arch_x86_64
-+__arch_arm64
-+__success __retval(7)
-+__xlated("...")
-+__xlated("exit")
-+__xlated("callx r1")
-+__naked void callx_no_recursion_after_all(void)
++__description("jumps ahead: two numbers that go together")
++__success
++__naked void two_numbers(void)
 +{
 +	asm volatile (
-+		"r2 = %[calls_arg] ll;"
-+		"r1 = %[returns_7] ll;"
-+		"callx r2;"
++		"call %[bpf_get_prandom_u32];"
++		"w6 = 0;"
++		"if w0 s> -1 goto 1f;"
++		"w6 = -155;"
++	"1:"
++		"w7 = 0;"
++		"if w0 s< 0 goto 2f;"
++		"r0 = 0;"
++		"exit;"
++	"2:"
++		"if w6 s< 0 goto 3f;"
++		"r0 = r8;"
++	"3:"
++		"r0 = 0;"
 +		"exit;"
 +		:
-+		: __imm_addr(calls_arg),
-+		  __imm_addr(returns_7)
++		: __imm(bpf_get_prandom_u32)
++		: __clobber_all
++	);
++}
++
++/* -134 and -135 go the same way */
++SEC("socket")
++__description("jumps ahead: states that go the same way are joined")
++__success __log_level(2)
++__msg("from 4 to 7: joined")
++__msg("7: R6=scalar({{.*}}smin32=-135,smax32=-134{{.*}}) R10=fp0")
++__msg("from 6 to 7: R6=0 R8=0 R10=fp0")
++__naked void same_way(void)
++{
++	asm volatile (
++		"call %[bpf_get_prandom_u32];"
++		"w6 = -134;"
++		"if r0 == 1 goto 1f;"
++		"w6 = -135;"
++		"if r0 == 2 goto 1f;"
++		"r8 = 0;"
++		"w6 = 0;"
++	"1:"
++		"w7 = 0;"
++		"if w6 s< 0 goto 2f;"
++		"r0 = r8;"
++		"exit;"
++	"2:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32)
++		: __clobber_all
++	);
++}
++
++/*
++ *	ret = idx < 8 ? 0 : -EINVAL;
++ *	if (ret < 0)
++ *		goto drop;
++ *	use(buf[idx]);
++ * 0 and -EINVAL leave a gap, so the states are not joined, and idx keeps its range.
++ */
++SEC("socket")
++__description("jumps ahead: ret vouches for the range of another number")
++__success
++__naked void ret_and_range(void)
++{
++	asm volatile (
++		"r1 = 0;"
++		"*(u64 *)(r10 - 8) = r1;"
++		"call %[bpf_get_prandom_u32];"
++		"r7 = r0;"
++		"w6 = 0;"
++		"if r7 < 8 goto 1f;"
++		"w6 = -22;"
++	"1:"
++		"w8 = 0;"
++		"if w6 s< 0 goto 2f;"
++		"r1 = r10;"
++		"r1 += -8;"
++		"r1 += r7;"
++		"r0 = *(u8 *)(r1 + 0);"
++		"exit;"
++	"2:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32)
++		: __clobber_all
++	);
++}
++
++/*
++ *	ok = i < 8 && x == 2;
++ *	if (x == 7)
++ *		n++;
++ *	if (ok)
++ *		use(buf[i]);
++ * A compiler keeps ok in a register: "w6 &= 1; if w6 == 0". (ok = 0, i >= 8), (ok = 1, i < 8) and
++ * (ok = 0, i < 8) meet in front of "if (x == 7)". 0 and 1 leave no gap, and i < 8 comes with
++ * either. They are not joined when the jump that tells 0 from 1 ends this basic block or the next.
++ */
++#define FLAG_SET(max, no, yes)			\
++	"r1 = 0;"				\
++	"*(u64 *)(r10 - 8) = r1;"		\
++	"call %[bpf_get_prandom_u32];"		\
++	"r7 = r0;"				\
++	"call %[bpf_get_prandom_u32];"		\
++	"w6 = " #no ";"				\
++	"if r7 > " #max " goto +3;"		\
++	"w6 = " #yes ";"			\
++	"if r0 == 2 goto +1;"			\
++	"w6 = " #no ";"
++#define FLAG_USE(unless)				\
++	"if " #unless " goto +4;"		\
++	"r1 = r10;"				\
++	"r1 += -8;"				\
++	"r1 += r7;"				\
++	"r0 = *(u8 *)(r1 + 0);"
++#define FLAG_PROG(name, max, no, yes, rest)	\
++__naked void name(void)				\
++{						\
++	asm volatile (				\
++	FLAG_SET(max, no, yes)			\
++	rest					\
++	"exit;"					\
++	:: __imm(bpf_get_prandom_u32) : __clobber_all); \
++}
++
++SEC("socket")
++__description("jumps ahead: a flag, another jump, the test of the flag")
++__success
++FLAG_PROG(flag_next_block, 7, 0, 1, "if r0 != 7 goto +1; r0 = 0; w6 &= 1;" FLAG_USE(w6 == 0))
++
++SEC("socket")
++__description("jumps ahead: a flag that says too much")
++__failure __msg("invalid variable-offset read from stack R1")
++FLAG_PROG(flag_next_block_bad, 8, 0, 1, "if r0 != 7 goto +1; r0 = 0; w6 &= 1;" FLAG_USE(w6 == 0))
++
++/* "f = i < 8 ? in[i] : 0; ... if (f) use(buf[i]);" A compiler makes a flag of "f == 0" */
++SEC("socket")
++__description("jumps ahead: a flag that is 1 for no")
++__success
++FLAG_PROG(flag_for_no, 7, 1, 0, "if r0 != 7 goto +1; r0 = 0; w6 &= 1;" FLAG_USE(w6 != 0))
++
++SEC("socket")
++__description("jumps ahead: a flag is tested twice")
++__success
++FLAG_PROG(flag_twice, 7, 0, 1, FLAG_USE(w6 == 0) "r0 = 0;" FLAG_USE(w6 == 0))
++
++SEC("socket")
++__description("jumps ahead: the other value of a flag that is tested twice")
++__failure __msg("math between fp pointer and register with unbounded min value")
++FLAG_PROG(flag_twice_bad, 7, 0, 1, FLAG_USE(w6 == 0) "w6 ^= 1;" FLAG_USE(w6 == 0))
++
++SEC("socket")
++__description("jumps ahead: a flag is spilled, filled, copied and extended")
++__success
++FLAG_PROG(flag_moves, 7, 0, 1, "*(u64 *)(r10 - 16) = r6; r1 = *(u64 *)(r10 - 16);"
++			       "r2 = r1; r2 <<= 32; r2 >>= 32;" FLAG_USE(r2 == 0))
++
++/* if and else: two ends of basic blocks on every way to the test */
++SEC("socket")
++__description("jumps ahead: the test of a flag is too far")
++__success __log_level(2)
++__msg("from 8 to 10: joined")
++FLAG_PROG(flag_too_far, 7, 0, 1, "if r0 != 7 goto +2; r0 = 0; goto +1; r0 = 1;"
++				 "if w6 == 0 goto +1; r0 = 2;")
++
++SEC("socket")
++__description("jumps ahead: the jump tests another register than the flag")
++__success __log_level(2)
++__msg("from 8 to 10: joined")
++FLAG_PROG(flag_not_tested, 7, 0, 1, "if r0 == 1 goto +1; r0 = r6;")
++
++/* the first values of a counter */
++SEC("socket")
++__description("jumps ahead: 1 and 2 are no flag")
++__success __log_level(2)
++__msg("from 8 to 10: joined")
++FLAG_PROG(flag_1_and_2, 7, 1, 2, "if w6 == 1 goto +1; r0 = 0;")
++
++/*
++ * A register that is set in one state and not in the other: these states are not joined,
++ * whatever it is that tells them apart later.
++ */
++SEC("socket")
++__description("set or not: a register is set when a flag is 1, flag + 4 is tested")
++__success
++__naked void flag_add(void)
++{
++	asm volatile (
++	"call %[bpf_get_prandom_u32];"
++	"r6 = 0;"
++	"if r0 == 0 goto 1f;"
++	"r8 = 0;"
++	"r6 = 1;"
++"1:"
++	"r1 = r6;"
++	"r1 += 4;"
++	"if r1 != 5 goto 2f;"
++	"r0 = r8;"
++	"exit;"
++"2:"
++	"r0 = 0;"
++	"exit;"
++	:: __imm(bpf_get_prandom_u32) : __clobber_all);
++}
++
++/* The first iteration sets r7 and the flag. The states meet at the head of the loop. */
++SEC("socket")
++__description("set or not: a loop sets a register and a flag")
++__success
++__naked void set_in_a_loop(void)
++{
++	asm volatile (
++	"r6 = 0;"
++"1:"
++	".8byte %[may_goto];"
++	"if r6 == 0 goto 2f;"
++	"r8 = r7;"
++"2:"
++	"call %[bpf_get_prandom_u32];"
++	"r7 = r0;"
++	"r6 = 1;"
++	"goto 1b;"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32),
++	  __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 6, 0))
++	: __clobber_all);
++}
++
++/*
++ * 20 flags, 0 or 5, all are looked at later: 2^20 ways, and 0 and 5 leave a gap.
++ * States are kept apart while there is room. After that they are joined.
++ */
++#define PICK_FLAG(slot)					\
++	"call %[bpf_get_prandom_u32];"			\
++	"r1 = 0;"					\
++	"if r0 == 0 goto +1;"				\
++	"r1 = 5;"					\
++	"*(u64*)(r10 - " #slot ") = r1;"
++#define USE_FLAG(slot)					\
++	"r1 = *(u64*)(r10 - " #slot ");"		\
++	"if r1 == 0 goto +1;"				\
++	"r6 += 1;"
++
++SEC("socket")
++__description("jumps ahead: 20 flags that leave a gap")
++__success
++__naked void many_flags_gap(void)
++{
++	asm volatile (
++	"r6 = 0;"
++	PICK_FLAG(8) PICK_FLAG(16) PICK_FLAG(24) PICK_FLAG(32) PICK_FLAG(40) PICK_FLAG(48)
++	PICK_FLAG(56) PICK_FLAG(64) PICK_FLAG(72) PICK_FLAG(80) PICK_FLAG(88) PICK_FLAG(96)
++	PICK_FLAG(104) PICK_FLAG(112) PICK_FLAG(120) PICK_FLAG(128) PICK_FLAG(136) PICK_FLAG(144)
++	PICK_FLAG(152) PICK_FLAG(160)
++	USE_FLAG(8) USE_FLAG(16) USE_FLAG(24) USE_FLAG(32) USE_FLAG(40) USE_FLAG(48)
++	USE_FLAG(56) USE_FLAG(64) USE_FLAG(72) USE_FLAG(80) USE_FLAG(88) USE_FLAG(96)
++	USE_FLAG(104) USE_FLAG(112) USE_FLAG(120) USE_FLAG(128) USE_FLAG(136) USE_FLAG(144)
++	USE_FLAG(152) USE_FLAG(160)
++	"r0 = r6;"
++	"exit;"
++	:: __imm(bpf_get_prandom_u32) : __clobber_all);
++}
++
++/* 33 numbers, each with an exit of its own */
++static __naked __noinline __used int ret_exits(void)
++{
++	asm volatile (
++	"call %[bpf_get_prandom_u32];"
++	"r1 = r0;"
++	"if r1 != 0 goto +2; r0 = 0; exit;"
++	"if r1 != 1 goto +2; r0 = 3; exit;"
++	"if r1 != 2 goto +2; r0 = 6; exit;"
++	"if r1 != 3 goto +2; r0 = 9; exit;"
++	"if r1 != 4 goto +2; r0 = 12; exit;"
++	"if r1 != 5 goto +2; r0 = 15; exit;"
++	"if r1 != 6 goto +2; r0 = 18; exit;"
++	"if r1 != 7 goto +2; r0 = 21; exit;"
++	"if r1 != 8 goto +2; r0 = 24; exit;"
++	"if r1 != 9 goto +2; r0 = 27; exit;"
++	"if r1 != 10 goto +2; r0 = 30; exit;"
++	"if r1 != 11 goto +2; r0 = 33; exit;"
++	"if r1 != 12 goto +2; r0 = 36; exit;"
++	"if r1 != 13 goto +2; r0 = 39; exit;"
++	"if r1 != 14 goto +2; r0 = 42; exit;"
++	"if r1 != 15 goto +2; r0 = 45; exit;"
++	"if r1 != 16 goto +2; r0 = 48; exit;"
++	"if r1 != 17 goto +2; r0 = 51; exit;"
++	"if r1 != 18 goto +2; r0 = 54; exit;"
++	"if r1 != 19 goto +2; r0 = 57; exit;"
++	"if r1 != 20 goto +2; r0 = 60; exit;"
++	"if r1 != 21 goto +2; r0 = 63; exit;"
++	"if r1 != 22 goto +2; r0 = 66; exit;"
++	"if r1 != 23 goto +2; r0 = 69; exit;"
++	"if r1 != 24 goto +2; r0 = 72; exit;"
++	"if r1 != 25 goto +2; r0 = 75; exit;"
++	"if r1 != 26 goto +2; r0 = 78; exit;"
++	"if r1 != 27 goto +2; r0 = 81; exit;"
++	"if r1 != 28 goto +2; r0 = 84; exit;"
++	"if r1 != 29 goto +2; r0 = 87; exit;"
++	"if r1 != 30 goto +2; r0 = 90; exit;"
++	"if r1 != 31 goto +2; r0 = 93; exit;"
++	"r0 = 99;"
++	"exit;"
++	:: __imm(bpf_get_prandom_u32) : __clobber_all);
++}
++
++/* 33^4 ways: not all of them are looked at */
++SEC("socket")
++__description("jumps ahead: one of 33 numbers out of a function, 4 times")
++__success
++__naked void rets_33_4_times(void)
++{
++	asm volatile (
++	"call ret_exits; r6 = r0;"
++	"call ret_exits; r7 = r0;"
++	"call ret_exits; r8 = r0;"
++	"call ret_exits; r9 = r0;"
++	"r0 = 0;"
++	"if r6 != 3 goto +1; r0 += 1;"
++	"if r7 != 6 goto +1; r0 += 1;"
++	"if r8 != 9 goto +1; r0 += 1;"
++	"if r9 != 12 goto +1; r0 += 1;"
++	"exit;"
++	::: __clobber_all);
++}
++
++#define PICK_ANY(slot)					\
++	"call %[bpf_get_prandom_u32];"			\
++	"r0 <<= 32;"					\
++	"r7 = r0;"					\
++	"call %[bpf_get_prandom_u32];"			\
++	"r0 |= r7;"					\
++	"*(u64*)(r10 - " #slot ") = r0;"
++
++/*
++ * As in bpfj_jailer_free() of bpfjailer:
++ *	for (i = 0; i < 8; i++) {
++ *		p = a[i];
++ *		if (!p)
++ *			continue;
++ *		put(p);
++ *	}
++ * The jump finds out about a[i] too, which nothing looks at again. All of a[] is live while
++ * the loop goes on, because it is read through a pointer that moves. The states have to be
++ * joined behind the jump, or there are 2^8 of them. They are, because a slot that is filled
++ * through another register than r10 doesn't count as one that a jump ahead looks at.
++ */
++SEC("socket")
++__description("0 or not: an array on the stack that a loop goes through")
++__success __log_level(4)
++__msg("max_states_per_insn {{[0-9]}} total_states")
++__naked void array_of_nulls(void)
++{
++	asm volatile (
++	"r6 = 0;"
++	PICK_ANY(8) PICK_ANY(16) PICK_ANY(24) PICK_ANY(32)
++	PICK_ANY(40) PICK_ANY(48) PICK_ANY(56) PICK_ANY(64)
++	"r8 = r10;"
++	"r8 += -64;"
++	"r7 = 0;"
++"1:"
++	"r1 = *(u64*)(r8 + 0);"
++	"if r1 == 0 goto 2f;"
++	"r6 += 1;"
++"2:"
++	"r8 += 8;"
++	"r7 += 1;"
++	"if r7 < 8 goto 1b;"
++	"r0 = r6;"
++	"exit;"
++	:: __imm(bpf_get_prandom_u32) : __clobber_all);
++}
++
++/*
++ * As in xdp_synproxy_kern.c: hdr->ipv4 or hdr->ipv6 is there, the other one is 0.
++ *	if (hdr->ipv4) ... else if (hdr->ipv6) ...
++ * (0, x) and (y, 0) are not joined: (?, ?) has both, and r9 is not set.
++ */
++SEC("socket")
++__description("0 or not: one of two things is there")
++__success
++__naked void one_of_two(void)
++{
++	asm volatile (
++	PICK_ANY(8)
++	"r6 = r0;"
++	"r7 = 0;"
++	"call %[bpf_get_prandom_u32];"
++	"if r0 == 0 goto 1f;"
++	"r7 = r6;"
++	"r6 = 0;"
++"1:"
++	"r0 = 0;"
++	"if r6 == 0 goto 2f;"
++	"if r7 == 0 goto 2f;"
++	"r0 = r9;"
++"2:"
++	"exit;"
++	:: __imm(bpf_get_prandom_u32) : __clobber_all);
++}
++
++/*
++ * As in bpf_sock.o of cilium:
++ *	err = xlate();
++ *	if (err == -EHOSTUNREACH || err == -ENOMEM) {
++ *		bpf_set_retval(err);
++ *		return 0;
++ *	}
++ *	return 1;
++ * A compiler computes the condition where err is set. 0 and 1 touch, and it's not a jump that
++ * looks at err.
++ */
++SEC("cgroup/connect4")
++__description("jumps ahead: a flag goes together with what bpf_set_retval() takes")
++__success
++__naked void flag_and_retval(void)
++{
++	asm volatile (
++		"call %[bpf_get_prandom_u32];"
++		"w8 = 0;"
++		"w1 = 1;"
++		"if r0 == 0 goto 1f;"
++		"w8 = 1;"
++		"w1 = -113;"
++	"1:"
++		"w0 = 1;"
++		"if w8 == 0 goto 2f;"
++		"call %[bpf_set_retval];"
++		"w0 = 0;"
++	"2:"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32), __imm(bpf_set_retval)
++		: __clobber_all
++	);
++}
++
++char buf[8];
++
++/* As in test_seg6_loop.c without 32-bit insns: the copy is tested, the original is used */
++SEC("socket")
++__description("jumps ahead: the jump looks at a copy that two shifts extend")
++__success
++__naked void extended_copy(void)
++{
++	asm volatile (
++		"call %[bpf_get_prandom_u32];"
++		"r8 = 0;"
++		"if r0 == 0 goto 1f;"
++		"r8 = 5;"
++	"1:"
++		"r7 = r8;"
++		"r7 <<= 32;"
++		"r7 >>= 32;"
++		"if r7 == 0 goto 2f;"
++		"r8 += -5;"
++		"r1 = %[buf] ll;"
++		"r1 += r8;"
++		"r0 = *(u8 *)(r1 + 0);"
++		"exit;"
++	"2:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32), __imm_addr(buf)
++		: __clobber_all
++	);
++}
++
++static __naked __noinline __used __u64 index_or_minus_1(void)
++{
++	asm volatile (
++		"call %[bpf_get_prandom_u32];"
++		"r1 = r0;"
++		"r0 = 0xffffffff ll;"
++		"if r1 > 7 goto 1f;"
++		"r0 = r1;"
++	"1:"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32)
++		: __clobber_all
++	);
++}
++
++/*
++ * As in profiler.inc.h without 32-bit insns:
++ *	int index = find();
++ *	if (index == -1)
++ *		return 0;
++ *	use(array[index]);
++ * The numbers meet at the exit of find(). -1 doesn't fit in the jump, it is in a register.
++ */
++SEC("socket")
++__description("jumps ahead: the caller looks at what the function returns")
++__success
++__naked void caller_looks(void)
++{
++	asm volatile (
++		"call index_or_minus_1;"
++		"r0 <<= 32;"
++		"r1 = r0;"
++		"r1 >>= 32;"
++		"r2 = 0xffffffff ll;"
++		"if r1 == r2 goto 1f;"
++		"r0 s>>= 32;"
++		"r1 = %[buf] ll;"
++		"r1 += r0;"
++		"r0 = *(u8 *)(r1 + 0);"
++		"exit;"
++	"1:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(buf)
++		: __clobber_all
++	);
++}
++
++/*
++ * A state that arrives is compared with the states that it may be related to. Its shape tells:
++ * the same pointers in the same places at the same constant offsets. These states are related
++ * and don't look alike. They have to find each other.
++ */
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, char[48]);
++} shape_map SEC(".maps");
++
++/*
++ * 16 states with R9 at 16 places of the stack get to "1:". With that many states at an insn
++ * their shapes are looked at. Then comes one more, which @last makes of the 16th. The two are
++ * related and don't have the same shape.
++ */
++#define SHAPE_16_PLACES	"8,16,24,32,40,48,56,64,72,80,88,96,104,112,120,128"
++#define SHAPE_MANY(first, last, use)					\
++	asm volatile (							\
++		first							\
++		"r1 = 0;"						\
++		".irp off," SHAPE_16_PLACES ";"				\
++		"*(u64 *)(r10 - \\off) = r1;"				\
++		".endr;"						\
++		"call %[bpf_get_prandom_u32];"				\
++		"r6 = r0;"						\
++		"call %[bpf_get_prandom_u32];"				\
++		"r7 = r0;"						\
++		"r7 &= 1;"						\
++		".irp off," SHAPE_16_PLACES ";"				\
++		"r9 = r10;"						\
++		"r9 += -\\off;"						\
++		"if r6 == \\off goto 1f;"				\
++		".endr;"						\
++		last							\
++	"1:"								\
++		use							\
++		"r0 = *(u64 *)(r9 + 0);"				\
++	"2:"								\
++		"r0 = 0;"						\
++		"exit;"							\
++		:							\
++		: __imm(bpf_get_prandom_u32), __imm(bpf_map_lookup_elem),	\
++		  __imm_addr(shape_map),				\
++		  __imm_const(data, offsetof(struct __sk_buff, data)),	\
++		  __imm_const(data_end, offsetof(struct __sk_buff, data_end))	\
++		: __clobber_all						\
++	)
++
++SEC("socket")
++__description("shape: nothing in a register stands for a pointer")
++__success __log_level(2)
++__msg("processed 135 insns")
++__naked void shape_unset(void)
++{
++	SHAPE_MANY("",
++		   "r8 = r10;",
++		   "if r7 < 2 goto +1;"
++		   "r0 = *(u64 *)(r8 - 8);");
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c b/tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c
+index aba9510a1c08..5a4a29b30b7a 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c
+@@ -2,11 +2,59 @@
+ 
+ #include <vmlinux.h>
+ #include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
+ #include "bpf_misc.h"
+ #include "bpf_kfuncs.h"
+ 
+ char _license[] SEC("license") = "GPL";
+ 
++/*
++ * A size that has to be a known constant is one of two constants, and a compiler makes one call
++ * of the two. The constants must not be joined on the way to the call.
++ */
++SEC("?tc")
++__description("one of two constants: __szk, the header of IPv4 or of IPv6")
++__success
++int dynptr_slice_two_sizes(struct __sk_buff *skb)
++{
++	char buf[sizeof(struct ipv6hdr)];
++	__u32 sz = sizeof(struct iphdr);
++	struct bpf_dynptr dptr;
++	__u8 *p;
++
++	bpf_dynptr_from_skb(skb, 0, &dptr);
++
++	if (skb->protocol != bpf_htons(0x0800))
++		sz = sizeof(struct ipv6hdr);
++	p = bpf_dynptr_slice(&dptr, 14, buf, sz);
++	if (p)
++		return p[0] >> 4;
++	return 0;
++}
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++	__uint(max_entries, 4096);
++} ringbuf SEC(".maps");
++
++SEC("?tc")
++__description("one of two constants: the size of bpf_ringbuf_reserve()")
++__success
++int ringbuf_reserve_two_sizes(struct __sk_buff *skb)
++{
++	__u32 sz = 8;
++	char *p;
++
++	if (skb->len > 100)
++		sz = 16;
++	p = bpf_ringbuf_reserve(&ringbuf, sz, 0);
++	if (!p)
++		return 0;
++	p[7] = 1;
++	bpf_ringbuf_discard(p, 0);
++	return 0;
++}
++
+ /* The __szk size of a kfunc memory/size pair when the nullable buffer is passed as NULL */
+ SEC("?tc")
+ __success
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ptr_off.c b/tools/testing/selftests/bpf/progs/verifier_ptr_off.c
+new file mode 100644
+index 000000000000..260f7ea50b9f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_ptr_off.c
+@@ -0,0 +1,279 @@
++// SPDX-License-Identifier: GPL-2.0
++/* One of two constants is added to a pointer. A compiler makes one add and one load of it. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++#include "bpf_misc.h"
++#include "bpf_kfuncs.h"
++
++struct with_timer {
++	int before[4];
++	struct bpf_timer timer;
++	int after[4];
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct with_timer);
++} timers SEC(".maps");
++
++__u64 in_bss[8];
++
++#define __imm_pkt								\
++	__imm_const(data, offsetof(struct __sk_buff, data)),			\
++	__imm_const(data_end, offsetof(struct __sk_buff, data_end))
++
++/*
++ *	len = v6 ? 40 : 20;
++ *	if (data + len > data_end) return 0;
++ *	if (v6) use(data[39]);
++ * 1 and 2 touch, so nothing else keeps the states apart.
++ */
++SEC("tc")
++__description("offset of a pointer: the length of a header goes with its kind")
++__success __retval(0)
++__naked void pkt_len_and_kind(void)
++{
++	asm volatile (
++	"r6 = r1;"
++	"call %[bpf_get_prandom_u32];"
++	"r8 = 1;"
++	"r9 = 20;"
++	"if r0 == 0 goto 1f;"
++	"r8 = 2;"
++	"r9 = 40;"
++"1:	r1 = *(u32 *)(r6 + %[data]);"
++	"r3 = *(u32 *)(r6 + %[data_end]);"
++	"r2 = r1;"
++	"r2 += r9;"
++	"if r2 > r3 goto 2f;"
++	"if r8 != 2 goto 2f;"
++	"r0 = *(u8 *)(r1 + 39);"
++"2:	r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32), __imm_pkt
++	: __clobber_all);
++}
++
++/* The same with c->skb->data: the context comes out of a struct on the stack */
++SEC("tc")
++__description("offset of a pointer: the packet of a context that was in a struct")
++__success __retval(0)
++__naked void pkt_of_ctx_in_struct(void)
++{
++	asm volatile (
++	"*(u64 *)(r10 - 8) = r1;"
++	"r7 = r10;"
++	"r7 += -8;"
++	"call %[bpf_get_prandom_u32];"
++	"r8 = 1;"
++	"r9 = 20;"
++	"if r0 == 0 goto 1f;"
++	"r8 = 2;"
++	"r9 = 40;"
++"1:	r6 = *(u64 *)(r7 + 0);"
++	"r1 = *(u32 *)(r6 + %[data]);"
++	"r3 = *(u32 *)(r6 + %[data_end]);"
++	"r2 = r1;"
++	"r2 += r9;"
++	"if r2 > r3 goto 2f;"
++	"if r8 != 2 goto 2f;"
++	"r0 = *(u8 *)(r1 + 39);"
++"2:	r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32), __imm_pkt
++	: __clobber_all);
++}
++
++/* data - 1 or data + 30000. A range of the two plus 1 would vouch for 30001 bytes behind data. */
++SEC("tc")
++__description("offset of a pointer: one of two places, none of them in the packet")
++__failure __msg("invalid access to packet, off=30000 size=1, R1(id=0,off=30000,r=0)")
++__naked void pkt_two_places(void)
++{
++	asm volatile (
++	"r6 = r1;"
++	"call %[bpf_get_prandom_u32];"
++	"r1 = *(u32 *)(r6 + %[data]);"
++	"r3 = *(u32 *)(r6 + %[data_end]);"
++	"r2 = r1;"
++	"if r0 == 0 goto 1f;"
++	"r2 += 30000;"
++	"goto 2f;"
++"1:	r2 += -1;"
++"2:	r2 += 1;"
++	"if r2 > r3 goto 3f;"
++	"r0 = *(u8 *)(r1 + 30000);"
++"3:	r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32), __imm_pkt
++	: __clobber_all);
++}
++
++/* A range of offsets would go over the timer */
++SEC("socket")
++__description("offset of a pointer: in front of a timer or behind it")
++__success __retval(0)
++__naked void around_timer(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u32 *)(r10 - 4) = r1;"
++	"r2 = r10;"
++	"r2 += -4;"
++	"r1 = %[timers] ll;"
++	"call %[bpf_map_lookup_elem];"
++	"if r0 == 0 goto 2f;"
++	"r6 = r0;"
++	"call %[bpf_get_prandom_u32];"
++	"r1 = %[before];"
++	"if r0 == 0 goto 1f;"
++	"r1 = %[after];"
++"1:	r6 += r1;"
++	"r0 = *(u32 *)(r6 + 0);"
++"2:	r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32), __imm(bpf_map_lookup_elem), __imm_addr(timers),
++	  __imm_const(before, offsetof(struct with_timer, before[3])),
++	  __imm_const(after, offsetof(struct with_timer, after[0]))
++	: __clobber_all);
++}
++
++/* Nothing looks at the offset but for its ends: the states are joined */
++SEC("socket")
++__description("offset of a pointer: a map value that holds nothing but numbers")
++__success __retval(0) __log_level(2)
++__msg("from 4 to 5: R1=scalar({{.*}}smin32=umin32=8,smax=umax=smax32=umax32=48{{.*}}) R10=fp0")
++__msg("max_states_per_insn 1 ")
++__naked void plain_value(void)
++{
++	asm volatile (
++	"call %[bpf_get_prandom_u32];"
++	"r1 = 8;"
++	"r2 = 0;"
++	"if r0 == 0 goto 1f;"
++	"r1 = 48;"
++"1:	r6 = %[in_bss] ll;"
++	"r6 += r1;"
++	"r0 = *(u64 *)(r6 + 0);"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32), __imm_addr(in_bss)
++	: __clobber_all);
++}
++
++const volatile struct {
++	int size;
++	int kind;
++} cfgs[2] = { { 8, 1 }, { 32, 2 } };
++
++/* What is at a known offset of a read-only map is known */
++SEC("tc")
++__description("offset of a pointer: one of two elements of a read-only map")
++__success
++int size_of_two(struct __sk_buff *skb)
++{
++	char buf[32];
++
++	return bpf_skb_load_bytes(skb, 0, buf, (skb->mark ? &cfgs[0] : &cfgs[1])->size);
++}
++
++/* The prototypes of the two kfuncs say void *. The verifier makes a pointer to a struct of it. */
++SEC("tc")
++__description("offset of a pointer: one of two fields behind bpf_core_cast()")
++__success
++int field_behind_core_cast(struct __sk_buff *skb)
++{
++	struct task_struct *task = bpf_core_cast((void *)bpf_get_current_task(), struct task_struct);
++
++	return skb->mark ? task->pid : task->tgid;
++}
++
++SEC("tc")
++__description("offset of a pointer: one of two fields behind bpf_cast_to_kern_ctx()")
++__success
++int field_behind_kern_ctx(struct __sk_buff *ctx)
++{
++	struct sk_buff *skb = bpf_cast_to_kern_ctx(ctx);
++
++	return ctx->mark ? skb->len : skb->data_len;
++}
++
++static __naked __noinline __used void random(void)
++{
++	asm volatile (
++	"call %[bpf_get_prandom_u32];"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * Two states enter the loop, one with each offset. r9 is not what it was when they come around.
++ * Each of them is joined with the state at the head of the loop that it comes from.
++ */
++SEC("tp_btf/sched_switch")
++__description("offset of a pointer: two offsets enter a loop")
++__success
++__naked void two_offsets_in_a_loop(void)
++{
++	asm volatile (
++	"r6 = *(u64 *)(r1 + 8);"
++	"call %[bpf_get_prandom_u32];"
++	"r7 = %[pid];"
++	"if r0 == 0 goto 1f;"
++	"r7 = %[tgid];"
++"1:	r9 = 0;"
++"2:	if r9 == 7 goto 3f;"
++	"r1 = r6;"
++	"r1 += r7;"
++	"r0 = *(u32 *)(r1 + 0);"
++	"call random;"
++	"r9 = r0;"
++	"goto 2b;"
++"3:	r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32),
++	  __imm_const(pid, offsetof(struct task_struct, pid)),
++	  __imm_const(tgid, offsetof(struct task_struct, tgid))
++	: __clobber_all);
++}
++
++/* The offset is what changes in the loop: it's forgotten, and the loop ends */
++SEC("tc")
++__description("offset of a pointer: the offset changes in a loop")
++__success
++__naked void offset_changes_in_a_loop(void)
++{
++	asm volatile (
++	"r6 = r1;"
++	"r7 = 0;"
++"1:	r1 = *(u32 *)(r6 + %[data]);"
++	"r2 = *(u32 *)(r6 + %[data_end]);"
++	"r7 &= 0xff;"
++	"r1 += r7;"
++	"r3 = r1;"
++	"r3 += 4;"
++	"if r3 > r2 goto 2f;"
++	"r0 = *(u32 *)(r1 + 0);"
++"2:	call %[bpf_get_prandom_u32];"
++	"r7 += 3;"
++	"if r0 != 7 goto 1b;"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32), __imm_pkt
++	: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_var_off.c b/tools/testing/selftests/bpf/progs/verifier_var_off.c
+index d92215c5b923..4cfdedca8890 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_var_off.c
++++ b/tools/testing/selftests/bpf/progs/verifier_var_off.c
+@@ -12,6 +12,13 @@ struct {
+ 	__type(value, long long);
+ } map_hash_8b SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, long long);
++} map_array_8b SEC(".maps");
++
+ SEC("lwt_in")
+ __description("variable-offset ctx access")
+ __failure __msg("variable ctx access var_off=(0x0; 0x4)")
+@@ -310,6 +317,202 @@ __naked void stack_write_clobbers_spilled_regs(void)
+ 	: __clobber_all);
+ }
+ 
++/*
++ * if (x) a[0] = p; else a[1] = p; with one store. The paths meet in front of it.
++ * The offset is known on each of them.
++ */
++SEC("tc")
++__description("pointer is spilled at one of two offsets")
++__success __retval(0)
++__naked void ptr_at_one_of_two_offsets(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u32*)(r10 - 4) = r1;				\
++	r2 = r10;					\
++	r2 += -4;					\
++	r1 = %[map_array_8b] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l2_%=;				\
++	r6 = r0;					\
++	r1 = 0;						\
++	*(u64*)(r10 - 16) = r1;				\
++	*(u64*)(r10 - 24) = r1;				\
++	call %[bpf_get_prandom_u32];			\
++	r7 = 0;						\
++	r8 = 1;						\
++	if r0 > 100 goto l0_%=;				\
++	r7 = 8;						\
++	r8 = 2;						\
++l0_%=:	r2 = r10;					\
++	r2 += -24;					\
++	r2 += r7;					\
++	*(u64*)(r2 + 0) = r6;				\
++	if r8 != 1 goto l1_%=;				\
++	r3 = *(u64*)(r10 - 24);				\
++	r0 = *(u64*)(r3 + 0);				\
++	exit;						\
++l1_%=:	r3 = *(u64*)(r10 - 16);				\
++	r0 = *(u64*)(r3 + 0);				\
++	exit;						\
++l2_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_array_8b)
++	: __clobber_all);
++}
++
++#define PICK_OFF(slot)					\
++	"call %[bpf_get_prandom_u32];"			\
++	"r1 = 0;"					\
++	"if r0 > 100 goto +1;"				\
++	"r1 = 8;"					\
++	"*(u64*)(r10 - " #slot ") = r1;"
++
++#define USE_OFF(slot)					\
++	"r1 = *(u64*)(r10 - " #slot ");"		\
++	"r2 = r10;"					\
++	"r2 += -16;"					\
++	"r2 += r1;"					\
++	"*(u64*)(r2 + 0) = r0;"
++
++/* 4096 combinations of offsets that are known: not all of them are looked at */
++SEC("tc")
++__description("12 times one of two offsets")
++__success __retval(0)
++__naked void many_offsets(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64*)(r10 - 8) = r1;"
++	"*(u64*)(r10 - 16) = r1;"
++	PICK_OFF(24) PICK_OFF(32) PICK_OFF(40) PICK_OFF(48)
++	PICK_OFF(56) PICK_OFF(64) PICK_OFF(72) PICK_OFF(80)
++	PICK_OFF(88) PICK_OFF(96) PICK_OFF(104) PICK_OFF(112)
++	USE_OFF(24) USE_OFF(32) USE_OFF(40) USE_OFF(48)
++	USE_OFF(56) USE_OFF(64) USE_OFF(72) USE_OFF(80)
++	USE_OFF(88) USE_OFF(96) USE_OFF(104) USE_OFF(112)
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++extern int bpf_iter_num_new(struct bpf_iter_num *it, int start, int end) __ksym;
++extern int *bpf_iter_num_next(struct bpf_iter_num *it) __ksym;
++extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __ksym;
++
++/* The verifier doesn't know what is in there */
++unsigned long zero;
++
++#define ITER_NEW	"r1 = r10; r1 += -24; w2 = 0; w3 = 100; call %[bpf_iter_num_new];"
++#define ITER_NEXT	"r1 = r10; r1 += -24; call %[bpf_iter_num_next];"
++#define ITER_DESTROY	"r1 = r10; r1 += -24; call %[bpf_iter_num_destroy];"
++#define __imm_iter	__imm(bpf_iter_num_new), __imm(bpf_iter_num_next), \
++			__imm(bpf_iter_num_destroy)
++
++/*
++ *	u8 stack[10], depth = 0;
++ *	loop {
++ *		if (x) { if (depth >= 10) break; stack[depth++] = 1; }
++ *		else { depth--; if (depth >= 10) break; y = stack[depth]; }
++ *	}
++ * depth is in a 32-bit register. 'depth & 255' is tested, and computed anew for the index.
++ */
++#define PUSH_OR_POP					\
++		"r1 = *(u64 *)(r6 + 0);"		\
++		"if r1 == 0 goto 2f;"			\
++		"w7 = w8;"				\
++		"w7 &= 255;"				\
++		"if w7 > 9 goto 9f;"			\
++		"r1 = r8;"				\
++		"r1 &= 255;"				\
++		"r2 = r10;"				\
++		"r2 += -10;"				\
++		"r2 += r1;"				\
++		"*(u8 *)(r2 + 0) = r1;"			\
++		"w8 += 1;"				\
++		"goto 1b;"				\
++	"2:"						\
++		"w8 += -1;"				\
++		"w2 = w8;"				\
++		"w2 &= 255;"				\
++		"if w2 > 9 goto 9f;"			\
++		"r2 = r8;"				\
++		"r2 &= 255;"				\
++		"r3 = r10;"				\
++		"r3 += -10;"				\
++		"r3 += r2;"				\
++		"r9 = *(u8 *)(r3 + 0);"			\
++		"goto 1b;"
++
++SEC("tc")
++__description("depth of a stack on the stack: a copy is tested")
++__success __retval(0)
++__naked void depth_copy_is_tested(void)
++{
++	asm volatile (
++		"r6 = %[zero] ll;"
++		"r1 = 0;"
++		"*(u64 *)(r10 - 8) = r1;"
++		"*(u64 *)(r10 - 16) = r1;"
++		"w8 = 0;"
++		ITER_NEW
++	"1:"
++		ITER_NEXT
++		"if r0 == 0 goto 9f;"
++		PUSH_OR_POP
++	"9:"
++		ITER_DESTROY
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_addr(zero), __imm_iter
 +		: __clobber_all);
 +}
 +
- __naked __noinline __used
- static unsigned long use_stack_304(void)
- {
-@@ -944,11 +988,8 @@ long long vals[] SEC(".data.vals") = {1, 2, 3, 4};
- 
- SEC("socket")
- __success __log_level(2)
--__msg("mark_precise: frame0: regs=r0 stack= before 12: (95) exit")
--__msg("mark_precise: frame1: regs=r0 stack= before 11: (bf) r0 = r1")
--__msg("mark_precise: frame1: regs=r1 stack= before 4: (8d) callx r2")
--__msg("mark_precise: frame0: regs=r1 stack= before 3: (bf) r1 = r6")
--__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
-+__msg("5: R0=3 R10=fp0")
-+__msg("8: (0f) r1 += r0                      ; R0=24 R1=map_value(map=.data.vals,ks=4,vs=32,imm=24)")
- __retval(4)
- __naked void callx_precision(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-index 642071fa7498..8bb74b579203 100644
---- a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-@@ -669,7 +669,9 @@ static unsigned long selfcall(void)
- }
- 
- SEC("socket")
--__failure __msg("recursive call from selfcall() to selfcall()")
-+__arch_x86_64
-+__arch_arm64
-+__success
- __naked void callx_rodata_recursion(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/verifier_cfg.c b/tools/testing/selftests/bpf/progs/verifier_cfg.c
-index b429fa7a08f5..e97e89ba3d68 100644
---- a/tools/testing/selftests/bpf/progs/verifier_cfg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_cfg.c
-@@ -138,8 +138,8 @@ l0_%=:	r1 = r0;					\
- 
- SEC("socket")
- __description("conditional loop")
--__failure __msg("infinite loop detected")
--__msg_unpriv("back-edge")
-+__success
-+__failure_unpriv __msg_unpriv("back-edge")
- __naked void conditional_loop(void)
- {
- 	asm volatile ("					\
-@@ -175,7 +175,7 @@ l1_%=:	r8 += r4;					\
- 
- SEC("socket")
- __description("unconditional loop after conditional jump")
--__failure __msg("infinite loop detected")
-+__failure __msg("loop at insn 2 never exits")
- __failure_unpriv __msg_unpriv("back-edge from insn 3 to 2")
- __naked void uncond_loop_after_cond_jmp(void)
- {
-@@ -201,7 +201,7 @@ static unsigned long never_ending_subprog()
- SEC("socket")
- __description("unconditional loop after conditional jump")
- /* infinite loop is detected *after* check_cfg() */
--__failure __msg("infinite loop detected")
-+__failure __msg("loop at insn 6 never exits")
- __naked void uncond_loop_in_subprog_after_cond_jmp(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index 5e8461b2167d..100d8307c3bd 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -557,12 +557,13 @@ __noinline int global_calls_loop(int x)
- 
- /*
-  * loop_cb_calls_static() -> static_calls_global() -> global_calls_loop() ->
-- * bpf_loop() -> loop_cb_calls_static() is an unbounded recursion that the
-- * main verification pass can't see, because it doesn't follow calls of global
-- * functions. None of the functions use stack.
-+ * bpf_loop() -> loop_cb_calls_static() is an unbounded recursion through a global
-+ * function and a helper. It's stopped at run time. None of the functions use stack.
-  */
--SEC("?raw_tp")
--__failure __msg("recursive call from global_calls_loop() to loop_cb_calls_static()")
-+SEC("?socket")
-+__arch_x86_64
-+__arch_arm64
-+__success
- int recursion_via_global_func_and_callback(const void *ctx)
- {
- 	return loop_cb_calls_static(0, NULL);
-diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c b/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c
-index c6603a118fdc..1b13d3a8dcfa 100644
---- a/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c
-@@ -717,12 +717,12 @@ __naked void bounds_check_using_bad_access_1(void)
- 	*(u64*)(r2 + 0) = r1;				\
- 	r1 = %[map_hash_48b] ll;			\
- 	call %[bpf_map_lookup_elem];			\
--	if r0 == 0 goto l0_%=;				\
-+	if r0 == 0 goto l1_%=;				\
- 	r1 = r0;					\
- 	r3 = *(u32*)(r0 + 0);				\
- 	if r3 < 32 goto l1_%=;				\
- 	r1 += r3;					\
--l0_%=:	r0 = 0;						\
-+	r0 = 0;						\
- 	*(u8*)(r1 + 0) = r0;				\
- 	r0 = 0;						\
- 	exit;						\
-@@ -775,12 +775,12 @@ __naked void bounds_check_using_bad_access_2(void)
- 	*(u64*)(r2 + 0) = r1;				\
- 	r1 = %[map_hash_48b] ll;			\
- 	call %[bpf_map_lookup_elem];			\
--	if r0 == 0 goto l0_%=;				\
-+	if r0 == 0 goto l1_%=;				\
- 	r1 = r0;					\
- 	r3 = *(u32*)(r0 + 0);				\
- 	if r3 <= 32 goto l1_%=;				\
- 	r1 += r3;					\
--l0_%=:	r0 = 0;						\
-+	r0 = 0;						\
- 	*(u8*)(r1 + 0) = r0;				\
- 	r0 = 0;						\
- 	exit;						\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_idoms.c b/tools/testing/selftests/bpf/progs/verifier_idoms.c
-index fdee6bced77b..91d9f9aae8e9 100644
---- a/tools/testing/selftests/bpf/progs/verifier_idoms.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_idoms.c
-@@ -10,7 +10,7 @@
-  * The immediate dominator is printed by log_program() as the numeric column
-  * immediately before the "<insn#>:" field of every "Program dump" line:
-  *
-- *   Program dump (scc? loop_header? idom insn#: live_regs_before):
-+ *   Program dump (loop_header? idom insn#: live_regs_before):
-  *            -1   0: ....... (b7) r0 = 0     <- idom(0) = -1 (subprog entry)
-  *             0   1: ....... (07) r0 += 1    <- idom(1) = 0
-  *             ^^^^^^
-@@ -307,17 +307,16 @@ __naked void entry_is_loop_header(void)
- /*
-  * Self-loop: insn 1 is its own predecessor. idom(1) must be the pre-header
-  * (insn 0); the self-edge is ignored (idoms[pred] == -1 on the first pass, then
-- * idoms_intersect(a == b) short-circuits). Program is rejected later for an
-- * infinite loop, but the dump (and idoms) are printed before that.
-+ * idoms_intersect(a == b) short-circuits). The loop can spin forever: the
-+ * verifier adds may_goto to it.
-  */
- SEC("socket")
--__failure
-+__success
- __log_level(2)
- __msg("Program dump")
- __msg("{{.*}} -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
- __msg("{{.*}}  0   1: {{.*}} (a5) if r0 < 0xa goto pc-1")
- __msg("{{.*}}  1   2: {{.*}} (95) exit")
--__msg("infinite loop detected")
- __naked void self_loop(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-index 4dd98acc6436..a3e31aa25fe1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-@@ -45,7 +45,7 @@ SEC("?raw_tp")
- __failure __msg("R1 type=scalar expected=fp")
- int unsafe_on_2nd_iter(void *unused)
- {
--	char buf[4];
-+	char buf[8];
- 	struct buf_context loop_ctx = { .buf = buf };
- 
- 	bpf_loop(100, unsafe_on_2nd_iter_cb, &loop_ctx, 0);
-@@ -94,7 +94,7 @@ static int loop_detection_cb(__u32 idx, struct num_context *ctx)
- }
- 
- SEC("?raw_tp")
--__failure __msg("infinite loop detected")
-+__failure __msg("loop at insn {{[0-9]+}} never exits")
- int loop_detection(void *unused)
- {
- 	struct num_context loop_ctx = { .i = 0 };
-@@ -246,10 +246,9 @@ int bpf_loop_iter_limit_nested(void *unused)
- 	/* This makes 'c' zero, but neither clang nor verifier know it. */
- 	c /= 10;
- 	/* Make sure that verifier does not visit 'impossible' states:
--	 * enumerate all possible callback visit masks.
-+	 * one more call of any of the callbacks gives more than that.
- 	 */
--	if (a != 0 && a != 1 && a != 11 && a != 101 && a != 111 &&
--	    b != 0 && b != 1 && b != 11 && b != 101 && b != 111)
-+	if (a > 111 || b > 111)
- 		asm volatile ("r0 /= 0;" ::: "r0");
- 	return 1000 * a + b + c;
- }
-@@ -291,9 +290,13 @@ static __naked void iter_limit_bug_cb(void)
- 	);
- }
- 
-+/*
-+ * may_goto doesn't leave the loop, so it's not what stops it. The address is greater than 10:
-+ * the loop spins until may_goto that the verifier adds ends the prog.
-+ */
- int tmp_var;
- SEC("socket")
--__failure __msg("infinite loop detected at insn 2")
-+__success __retval(0)
- __naked void jgt_imm64_and_may_goto(void)
- {
- 	asm volatile ("			\
-@@ -310,7 +313,7 @@ l0_%=:	.byte 0xe5; /* may_goto */	\
- }
- 
- SEC("socket")
--__failure __msg("infinite loop detected at insn 1")
-+__success __retval(0)
- __naked void may_goto_self(void)
- {
- 	asm volatile ("			\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-index 795956bd4f9f..32bab3cb3fcb 100644
---- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-@@ -2844,7 +2844,7 @@ __naked void merge_preserves_may_write(void)
- 	"if r0 == 0 goto 1f;"
- 	/* chain A: r2 = map value (ARG_NONE, not stack) */
- 	"r1 = r10;"
--	"r1 += -16;"				/* unused fp anchor */
-+	"r1 += -16;"				/* fp anchor */
- 	"r2 = r0;"
- 	"call mvs_mid;"
- 	/* chain B: r2 = caller stack slot fp-8 */
-@@ -2872,6 +2872,7 @@ static __used __naked void mvs_leaf(void)
- {
- 	asm volatile (
- 	"*(u64 *)(r2 + 0) = 42;"
-+	"r0 = r1;"				/* a register that is not read is no argument */
- 	"r0 = 0;"
- 	"exit;"
- 	::: __clobber_all);
-diff --git a/tools/testing/selftests/bpf/progs/verifier_liveness_exp.c b/tools/testing/selftests/bpf/progs/verifier_liveness_exp.c
-index 72646fa2745e..3f2a60f19319 100644
---- a/tools/testing/selftests/bpf/progs/verifier_liveness_exp.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_liveness_exp.c
-@@ -32,8 +32,12 @@ char _license[] SEC("license") = "GPL";
- 			"r1 += -" #off ";"	\
- 			"call " #fn ";"
- 
--/* 50 calls, each with a distinct FP offset: -8, -16, ... -400 */
-+/*
-+ * 50 calls, each with a distinct FP offset: -8, -16, ... -400.
-+ * The function reads r1 first: a register that the callee doesn't read is no argument.
-+ */
- #define CALLS_50(fn)							\
-+	"r0 = r1;"							\
- 	C(fn,   8) C(fn,  16) C(fn,  24) C(fn,  32) C(fn,  40)		\
- 	C(fn,  48) C(fn,  56) C(fn,  64) C(fn,  72) C(fn,  80)		\
- 	C(fn,  88) C(fn,  96) C(fn, 104) C(fn, 112) C(fn, 120)		\
-@@ -50,6 +54,7 @@ __naked __noinline __used
- static unsigned long exp_sub7(void)
- {
- 	asm volatile (
-+		"r0 = r1;"
- 		"r0 = 0;"
- 		"exit;"
- 		::: __clobber_all);
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
-index 0608e983d7fc..4f4e04d50bc7 100644
---- a/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_loop_hierarchy.c
-@@ -22,10 +22,10 @@ __success
- __log_level(2)
- __msg("loop at 1{{$}}")
- __msg("Program dump")
--__msg("         -1   0: {{.*}} (b7) r0 = 0")
--__msg("  1       0   1: {{.*}} (07) r0 += 1")
--__msg("  1   1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
--__msg("          2   3: {{.*}} (95) exit")
-+__msg("     -1   0: {{.*}} (b7) r0 = 0")
-+__msg("      0   1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
-+__msg("      2   3: {{.*}} (95) exit")
- __naked void loop_single(void)
- {
- 	asm volatile ("					\
-@@ -43,13 +43,13 @@ __log_level(2)
- __msg("loop at 1{{$}}")
- __msg("loop at 4{{$}}")
- __msg("Program dump")
--__msg("         -1   0: {{.*}} (b7) r0 = 0")
--__msg("  2       0   1: {{.*}} (07) r0 += 1")
--__msg("  2   1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
--__msg("          2   3: {{.*}} (b7) r1 = 0")
--__msg("  1       3   4: {{.*}} (07) r1 += 1")
--__msg("  1   4   4   5: {{.*}} (a5) if r1 < 0xa goto pc-2")
--__msg("          5   6: {{.*}} (95) exit")
-+__msg("     -1   0: {{.*}} (b7) r0 = 0")
-+__msg("      0   1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (a5) if r0 < 0xa goto pc-2")
-+__msg("      2   3: {{.*}} (b7) r1 = 0")
-+__msg("      3   4: {{.*}} (07) r1 += 1")
-+__msg("  4   4   5: {{.*}} (a5) if r1 < 0xa goto pc-2")
-+__msg("      5   6: {{.*}} (95) exit")
- __naked void loop_two_independent(void)
- {
- 	asm volatile ("					\
-@@ -70,13 +70,13 @@ __log_level(2)
- __msg("loop at 1{{$}}")
- __msg("loop at 3, nested in 1")
- __msg("Program dump")
--__msg("         -1   0: {{.*}} (b7) r0 = 0")
--__msg("  1       0   1: {{.*}} (07) r0 += 1")			/* outer loop header */
--__msg("  1   1   1   2: {{.*}} (b7) r1 = 0")			/* outer loop insn */
--__msg("  1   1   2   3: {{.*}} (07) r1 += 1")			/* inner loop header */
--__msg("  1   3   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")	/* inner loop insn */
--__msg("  1   1   4   5: {{.*}} (a5) if r0 < 0xa goto pc-5")	/* outer loop insn */
--__msg("          5   6: {{.*}} (95) exit")
-+__msg("     -1   0: {{.*}} (b7) r0 = 0")
-+__msg("      0   1: {{.*}} (07) r0 += 1")			/* outer loop header */
-+__msg("  1   1   2: {{.*}} (b7) r1 = 0")			/* outer loop insn */
-+__msg("  1   2   3: {{.*}} (07) r1 += 1")			/* inner loop header */
-+__msg("  3   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")	/* inner loop insn */
-+__msg("  1   4   5: {{.*}} (a5) if r0 < 0xa goto pc-5")	/* outer loop insn */
-+__msg("      5   6: {{.*}} (95) exit")
- __naked void loop_nested(void)
- {
- 	asm volatile ("					\
-@@ -95,12 +95,12 @@ SEC("socket")
- __success
- __log_level(2)
- __msg("Program dump")
--__msg("         -1   0: {{.*}} (85) call bpf_get_prandom_u32")
--__msg("          0   1: {{.*}} (25) if r0 > 0x0 goto pc+2")
--__msg("          1   2: {{.*}} (b7) r0 = 2")
--__msg("          2   3: {{.*}} (05) goto pc+1")
--__msg("          1   4: {{.*}} (b7) r0 = 3")
--__msg("          1   5: {{.*}} (95) exit")
-+__msg("     -1   0: {{.*}} (85) call bpf_get_prandom_u32")
-+__msg("      0   1: {{.*}} (25) if r0 > 0x0 goto pc+2")
-+__msg("      1   2: {{.*}} (b7) r0 = 2")
-+__msg("      2   3: {{.*}} (05) goto pc+1")
-+__msg("      1   4: {{.*}} (b7) r0 = 3")
-+__msg("      1   5: {{.*}} (95) exit")
- __naked void fwd_edges_no_loop(void)
- {
- 	asm volatile ("					\
-@@ -123,16 +123,16 @@ __msg("loop at 1{{$}}")
- __msg("loop at 3, nested in 1")
- __msg("loop at 6, nested in 1")
- __msg("Program dump")
--__msg("         -1   0: {{.*}} (b7) r0 = 0")
--__msg("  1       0   1: {{.*}} (07) r0 += 1")
--__msg("  1   1   1   2: {{.*}} (b7) r1 = 0")
--__msg("  1   1   2   3: {{.*}} (07) r1 += 1")
--__msg("  1   3   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")
--__msg("  1   1   4   5: {{.*}} (b7) r2 = 0")
--__msg("  1   1   5   6: {{.*}} (07) r2 += 1")
--__msg("  1   6   6   7: {{.*}} (a5) if r2 < 0x5 goto pc-2")
--__msg("  1   1   7   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
--__msg("          8   9: {{.*}} (95) exit")
-+__msg("     -1   0: {{.*}} (b7) r0 = 0")
-+__msg("      0   1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (b7) r1 = 0")
-+__msg("  1   2   3: {{.*}} (07) r1 += 1")
-+__msg("  3   3   4: {{.*}} (a5) if r1 < 0x5 goto pc-2")
-+__msg("  1   4   5: {{.*}} (b7) r2 = 0")
-+__msg("  1   5   6: {{.*}} (07) r2 += 1")
-+__msg("  6   6   7: {{.*}} (a5) if r2 < 0x5 goto pc-2")
-+__msg("  1   7   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
-+__msg("      8   9: {{.*}} (95) exit")
- __naked void loop_nested_siblings(void)
- {
- 	asm volatile ("					\
-@@ -157,16 +157,16 @@ __msg("loop at 1{{$}}")
- __msg("loop at 3, nested in 1")
- __msg("loop at 5, nested in 3")
- __msg("Program dump")
--__msg("         -1   0: {{.*}} (b7) r0 = 0")
--__msg("  1       0   1: {{.*}} (07) r0 += 1")
--__msg("  1   1   1   2: {{.*}} (b7) r1 = 0")
--__msg("  1   1   2   3: {{.*}} (07) r1 += 1")
--__msg("  1   3   3   4: {{.*}} (b7) r2 = 0")
--__msg("  1   3   4   5: {{.*}} (07) r2 += 1")
--__msg("  1   5   5   6: {{.*}} (a5) if r2 < 0x3 goto pc-2")
--__msg("  1   3   6   7: {{.*}} (a5) if r1 < 0x5 goto pc-5")
--__msg("  1   1   7   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
--__msg("          8   9: {{.*}} (95) exit")
-+__msg("     -1   0: {{.*}} (b7) r0 = 0")
-+__msg("      0   1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (b7) r1 = 0")
-+__msg("  1   2   3: {{.*}} (07) r1 += 1")
-+__msg("  3   3   4: {{.*}} (b7) r2 = 0")
-+__msg("  3   4   5: {{.*}} (07) r2 += 1")
-+__msg("  5   5   6: {{.*}} (a5) if r2 < 0x3 goto pc-2")
-+__msg("  3   6   7: {{.*}} (a5) if r1 < 0x5 goto pc-5")
-+__msg("  1   7   8: {{.*}} (a5) if r0 < 0xa goto pc-8")
-+__msg("      8   9: {{.*}} (95) exit")
- __naked void loop_three_levels(void)
- {
- 	asm volatile ("					\
-@@ -189,14 +189,14 @@ __success
- __log_level(2)
- __msg("loop at 1")
- __msg("Program dump")
--__msg("         -1   0: {{.*}} (b7) r0 = 0")
--__msg("  1       0   1: {{.*}} (07) r0 += 1")
--__msg("  1   1   1   2: {{.*}} (bf) r1 = r0")
--__msg("  1   1   2   3: {{.*}} (25) if r1 > 0x5 goto pc+1")
--__msg("  1   1   3   4: {{.*}} (b7) r1 = 1")
--__msg("  1   1   3   5: {{.*}} (0f) r0 += r1")
--__msg("  1   1   5   6: {{.*}} (a5) if r0 < 0x64 goto pc-6")
--__msg("          6   7: {{.*}} (95) exit")
-+__msg("     -1   0: {{.*}} (b7) r0 = 0")
-+__msg("      0   1: {{.*}} (07) r0 += 1")
-+__msg("  1   1   2: {{.*}} (bf) r1 = r0")
-+__msg("  1   2   3: {{.*}} (25) if r1 > 0x5 goto pc+1")
-+__msg("  1   3   4: {{.*}} (b7) r1 = 1")
-+__msg("  1   3   5: {{.*}} (0f) r0 += r1")
-+__msg("  1   5   6: {{.*}} (a5) if r0 < 0x64 goto pc-6")
-+__msg("      6   7: {{.*}} (95) exit")
- __naked void loop_with_if_else(void)
- {
- 	asm volatile ("					\
-@@ -217,15 +217,15 @@ __success
- __log_level(2)
- __msg("loop at 3, irreducible")
- __msg("Program dump")
--__msg("         -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
--__msg("          0   1: {{.*}} (b7) r1 = 0")
--__msg("          1   2: {{.*}} (25) if r0 > 0x5 goto pc+2")
--__msg("  1       2   3: {{.*}} (b7) r1 = 1")
--__msg("  1   3   3   4: {{.*}} (05) goto pc+1")
--__msg("          2   5: {{.*}} (b7) r1 = 2")
--__msg("  1   3   2   6: {{.*}} (0f) r0 += r1")
--__msg("  1   3   6   7: {{.*}} (a5) if r0 < 0x10 goto pc-5")
--__msg("          7   8: {{.*}} (95) exit")
-+__msg("     -1   0: {{.*}} (85) call bpf_get_prandom_u32#7")
-+__msg("      0   1: {{.*}} (b7) r1 = 0")
-+__msg("      1   2: {{.*}} (25) if r0 > 0x5 goto pc+2")
-+__msg("      2   3: {{.*}} (b7) r1 = 1")
-+__msg("  3   3   4: {{.*}} (05) goto pc+1")
-+__msg("      2   5: {{.*}} (b7) r1 = 2")
-+__msg("  3   2   6: {{.*}} (0f) r0 += r1")
-+__msg("  3   6   7: {{.*}} (a5) if r0 < 0x10 goto pc-5")
-+__msg("      7   8: {{.*}} (95) exit")
- __naked void loop_irreducible(void)
- {
- 	asm volatile ("					\
-@@ -244,10 +244,9 @@ __naked void loop_irreducible(void)
- }
- 
- SEC("socket")
--__failure
-+__success
- __log_level(2)
- __msg("loop at 1")
--__msg("infinite loop detected at insn 1")
- __naked void loop_self(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_latch.c b/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
-index 6dd46edd8ed0..e8daf791b4c0 100644
---- a/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
-@@ -120,7 +120,7 @@ BAD("down from a range, one unsigned test, one too many")
- LOOP(down_unsigned_range_bad, "if r7 > 2048 goto 9f;", "w7 += -1; if w7 < 2049 goto 1b;")
- 
- /* below 0 a 32-bit counter is 0xffffffff for a 64-bit jump */
--BAD("down, a 64-bit test with a bound above 32 bits")
-+NO_COUNT("down, a 64-bit test with a bound above 32 bits")
- LOOP(down_unsigned_wide_bound, "w8 = 2047; r9 = 0x100000800 ll;", "w8 += -1; if r8 < r9 goto 1b;")
- 
- BAD("down, an unsigned and a signed 64-bit test")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loops1.c b/tools/testing/selftests/bpf/progs/verifier_loops1.c
-index 48a966cda199..18067907579e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_loops1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_loops1.c
-@@ -123,7 +123,7 @@ l0_%=:	exit;						\
- 
- SEC("tracepoint")
- __description("infinite loop after a conditional jump")
--__failure __msg("program is too large")
-+__failure __msg("loop at insn 2 never exits")
- __naked void loop_after_a_conditional_jump(void)
- {
- 	asm volatile ("					\
-@@ -135,10 +135,11 @@ l0_%=:	exit;						\
- "	::: __clobber_all);
- }
- 
--SEC("tracepoint")
-+SEC("xdp")
- __description("bounded recursion")
--__failure
--__msg("recursive call from")
-+__arch_x86_64
-+__arch_arm64
-+__success __retval(4)
- __naked void bounded_recursion(void)
- {
- 	asm volatile ("					\
-@@ -163,7 +164,7 @@ l0_%=:	call bounded_recursion__1;			\
- 
- SEC("tracepoint")
- __description("infinite loop in two jumps")
--__failure __msg("loop detected")
-+__failure __msg("loop at insn 1 never exits")
- __naked void infinite_loop_in_two_jumps(void)
- {
- 	asm volatile ("					\
-@@ -174,9 +175,10 @@ l0_%=:	if r0 < 4 goto l1_%=;				\
- "	::: __clobber_all);
- }
- 
--SEC("tracepoint")
-+/* It never ends on its own. may_goto that the verifier adds ends the prog. */
-+SEC("xdp")
- __description("infinite loop: three-jump trick")
--__failure __msg("loop detected")
-+__success __retval(0)
- __naked void infinite_loop_three_jump_trick(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-index 195b27a51224..2f4a678c31c2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-@@ -226,7 +226,8 @@ l0_%=:							\
- 
- SEC("socket")
- __description("MOV32SX, S8, var_off u32_max")
--__failure __msg("infinite loop detected")
-+__success __log_level(2)
-+__msg("w7 = (s8)w3 {{.*}}R7=scalar({{.*}}smin32=-128,smax32=127,var_off=(0x0; 0xffffffff))")
- __failure_unpriv __msg_unpriv("back-edge from insn 2 to 0")
- __naked void mov64sx_s32_varoff_1(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index abe2b1911079..d89ffe90c6bc 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -8,6 +8,7 @@
- #include "../../../include/linux/filter.h"
- #include "bpf_misc.h"
- #include "bpf_kfuncs.h"
-+#include "bpf_compiler.h"
- 
- #define COND_TEST(name, _initial, _step, _bound, msg, body)                     \
- SEC("xdp")                                                                      \
-@@ -238,7 +239,7 @@ __naked void meet_agrees(void)
- }
- 
- SEC("xdp")
--__failure
-+__success __retval(0)
- __log_level(2)
- __msg_next("scev at header 1:")
- __msg_next("  r6=(any r6 (+ r6 1)) / ?")
-@@ -1234,23 +1235,20 @@ RANGE_TEST(backedges_first_is_a_range, "", 0, 3, 1, 0, 2,
- RANGE_TEST(backedges_two_variables, "", 0, 3, 1, 0, 1,
- 	   BACKEDGES("r6 += 1; r7 += 1", "r9 & 1", "r6 < 3", "r7 < 6"),
- 	   __msg("header_count is [0..6] ") __msg("widening r6 to 0..8 "))
--/* Explore with a bound of 3 first, of 5 next. The second state is not equal to the first. */
-+/* A bound of 3 and a bound of 5 are joined in front of the loop */
- #define PRECISE_BOUND(reg)									\
- 	"r4 = 2; r5 = 2; " reg " = 5; if r7 == 0 goto +1; " reg " = 3; r0 = 0;"		\
- 	BACKEDGES("r6 += 1", "r9 & 1", "r6 < r4", "r6 < r5")
--#define EXPLORED_TWICE										\
--	__flag(BPF_F_TEST_STATE_FREQ)								\
--	__msg("header_count is [0..3] ") __msg("header_count is [0..5] ")
--RANGE_TEST(backedges_bound1_is_precise, "", 0, 0, 1, 0, 1, PRECISE_BOUND("r4"), EXPLORED_TWICE)
--RANGE_TEST(backedges_bound0_is_precise, "", 0, 0, 1, 0, 1, PRECISE_BOUND("r5"), EXPLORED_TWICE)
-+#define EXPLORED_ONCE	__msg("header_count is [0..5] ") __not_msg("header_count is [0..3] ")
-+RANGE_TEST(backedges_bound1_is_precise, "", 0, 0, 1, 0, 1, PRECISE_BOUND("r4"), EXPLORED_ONCE)
-+RANGE_TEST(backedges_bound0_is_precise, "", 0, 0, 1, 0, 1, PRECISE_BOUND("r5"), EXPLORED_ONCE)
- 
- SEC("xdp")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __msg("loop header at 1, header_count is 10 ")
- __msg("loop header at 1, widening r0 to 0..9 step 1")
--__msg("processed 5 insns")
-+__msg("processed 4 insns")
- __naked void post_cond_jlt(void)
- {
- 	asm volatile ("					\
-@@ -1262,8 +1260,8 @@ __naked void post_cond_jlt(void)
- }
- 
- /*
-- * Explore with r7=10 first, r7=4096 next.
-- * Should trigger invalid stack read if r7 is marked precise.
-+ * r7 is 10 on one path to the loop and 4096 on the other.
-+ * Should trigger invalid stack read if the larger one counts.
-  *
-  *   r0 = 0;
-  *   r6 = 0;
-@@ -1278,11 +1276,7 @@ __naked void post_cond_jlt(void)
- SEC("xdp")
- __failure
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
--__msg("loop header at 6, header_count is 10 ")
--__msg("mark_precise: frame0: parent state regs=r6,r7 stack=:")
--__msg("loop header at 6, widening r0 to 0..9 step 1")
--__msg("loop header at 6, header_count is 4096 ")
-+__msg("loop header at 6, header_count is [0..4096] ")
- __msg("loop header at 6, widening r0 to 0..4095 step 1")
- __msg("invalid variable-offset read from stack R2")
- __naked void mark_bound_precise(void)
-@@ -1308,8 +1302,8 @@ __naked void mark_bound_precise(void)
- }
- 
- /*
-- * Explore with r6=4086 first, r6=0 next.
-- * Should trigger invalid stack read if r6 is marked precise.
-+ * r6 is 4086 on one path to the loop and 0 on the other.
-+ * Should trigger invalid stack read if the smaller one counts.
-  *
-  *   r0 = 0;
-  *   r6 = bpf_get_prandom_u32() == 42 ? 4086 : 0;
-@@ -1323,11 +1317,7 @@ __naked void mark_bound_precise(void)
- SEC("xdp")
- __failure
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
--__msg("loop header at 5, header_count is 10 ")
--__msg("mark_precise: frame0: parent state regs=r6 stack=:")
--__msg("loop header at 5, widening r0 to 0..9 step 1")
--__msg("loop header at 5, header_count is 4096 ")
-+__msg("loop header at 5, header_count is [0..4096] ")
- __msg("loop header at 5, widening r0 to 0..4095 step 1")
- __msg("invalid variable-offset read from stack R2")
- __naked void mark_base_precise(void)
-@@ -1541,7 +1531,7 @@ __msg("scev at header 1:")
- __msg_next("r6=(+ r6 1) / (linear r6 1)")
- __msg_next("*fp-8=(any *fp-8 7) / (any *fp-8 7)")
- __msg("loop header at 1, widening r6 to 0..2 step 1")
--__msg("2: (7a) *(u64 *)(r10 -8) = 7          ; R10=fp0 fp-8=7 loop_stack=1")
-+__msg("3: (79) r0 = *(u64 *)(r10 -8)         ; R0=scalar() R10=fp0 loop_stack=1")
- __naked void widen_any_unallocated_slot(void)
- {
- 	asm volatile ("					\
-@@ -1819,11 +1809,10 @@ BOUND_IN_MAP_TEST(bound_in_data, data_bound, 16)
- SEC("xdp")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __msg("loop header at 3, header_count is 8")
- __msg("loop header at 3, widening r0 to 2..9 step 1")
- __msg("3: R0=scalar(smin=umin=smin32=umin32=2,smax=umax=smax32=umax32=9,{{.*}})")
--__msg("processed 6 insns")
-+__msg("processed 5 insns")
- __naked void post_cond_jlt_with_base(void)
- {
- 	asm volatile ("					\
-@@ -1910,11 +1899,10 @@ NO_ZEXT32_TEST(arsh_by_32, 0x7ffffffe, "r7 <<= 32; r7 s>>= 32;")
- SEC("xdp")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __msg("loop header at 1, header_count is 11")
- __msg("loop header at 1, widening r0 to 0..10 step 1")
- __msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=10,{{.*}})")
--__msg("processed 5 insns")
-+__msg("processed 4 insns")
- __naked void post_cond_jle(void)
- {
- 	asm volatile ("					\
-@@ -1928,11 +1916,10 @@ __naked void post_cond_jle(void)
- SEC("xdp")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __msg("loop header at 1, header_count is 10")
- __msg("loop header at 1, widening r0 to 0..9 step 1")
- __msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=9,{{.*}})")
--__msg("processed 6 insns")
-+__msg("processed 5 insns")
- __naked void post_cond_jge(void)
- {
- 	asm volatile ("					\
-@@ -1947,11 +1934,10 @@ __naked void post_cond_jge(void)
- SEC("xdp")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __msg("loop header at 1, header_count is 11")
- __msg("loop header at 1, widening r0 to 0..10 step 1")
- __msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=10,{{.*}})")
--__msg("processed 6 insns")
-+__msg("processed 5 insns")
- __naked void pre_cond_jge(void)
- {
- 	asm volatile ("					\
-@@ -1966,7 +1952,6 @@ __naked void pre_cond_jge(void)
- SEC("xdp")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __msg_next("scev at header 1:")
- __msg_next("  r0=(+ r0 1) / (linear r0 1)")
- __msg_next(" scev at latch 2:")
-@@ -1975,10 +1960,9 @@ __msg("loop header at 1, widening r0")
- __msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,{{.*}})")
- __msg("1: (07) r0 += 1                       ; R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,{{.*}})")
- __msg("2: (55) if r0 != 0x3 goto pc-2")
--__msg("3: (95) exit")
- __msg("loop header at 1, clamping r0")
--__msg("from 2 to 1: safe")
--__msg("processed 5 insns")
-+__msg("3: (95) exit")
-+__msg("processed 4 insns")
- __naked void post_cond_jne(void)
- {
- 	asm volatile ("					\
-@@ -1992,16 +1976,15 @@ __naked void post_cond_jne(void)
- SEC("xdp")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __msg_next("scev at header 1:")
- __msg_next("  r0=(+ r0 -1) / (linear r0 -1)")
- __msg_next(" scev at latch 2:")
- __msg_next("  r0=(+ r0 -1) / (linear (+ r0 -1) -1)")
- __msg("loop header at 1, header_count is 3 ")
- __msg("loop header at 1, widening r0 to 1..3 step 1")
--__msg("1: R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,var_off=(0x0; 0x3)) loop_stack=1")
-+__msg("1: R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,var_off=(0x0; 0x3)) R10=fp0 loop_stack=1")
- __msg("loop header at 1, clamping r0 to 1..3 step 1")
--__msg("processed 5 insns")
-+__msg("processed 4 insns")
- __naked void post_cond_jne_neg_step(void)
- {
- 	asm volatile ("					\
-@@ -2025,7 +2008,7 @@ __msg("loop header at 2, widening r1 to 0..4 step 1")
- __msg("loop header at 2, widening r3 to 0..4 step 1")
- __msg("3: (55) if r3 != 0x5 goto pc+1 {{.*}}; R3=5")
- __msg("loop header at 2, clamping r3 to 0..4 step 1")
--__msg("from 6 to 2: safe")
-+__msg("from 6 to 2: within")
- __naked void clamp_dependent_overshoot(void)
- {
- 	asm volatile ("					\
-@@ -2051,7 +2034,7 @@ __msg("loop header at 2, widening r1 to 0..4 step 1")
- __msg("loop header at 2, widening r3 to 0..4 step 1")
- __msg("3: (56) if w3 != 0x5 goto pc+1 {{.*}}; R3=5")
- __msg("loop header at 2, clamping r3 to 0..4 step 1")
--__msg("from 6 to 2: safe")
-+__msg("from 6 to 2: within")
- __naked void clamp_dependent_overshoot32(void)
- {
- 	asm volatile ("					\
-@@ -2070,7 +2053,6 @@ __naked void clamp_dependent_overshoot32(void)
- SEC("xdp")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __msg_next("scev at header 1:")
- __msg_next("  r0=(+ r0 1) / (linear r0 1)")
- __msg_next(" scev at latch 1:")
-@@ -2081,11 +2063,10 @@ __msg("1: (15) if r0 == 0x3 goto pc+2        ; R0=scalar(smin=smin32=0,smax=umax
- __msg("2: (07) r0 += 1                       ; R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,{{.*}})")
- __msg("3: (05) goto pc-3")
- __msg("loop header at 1, clamping r0")
--__msg("1: safe")
- __msg("from 1 to 4: R0=3")
- __msg("4: R0=3")
- __msg("4: (95) exit")
--__msg("processed 6 insns")
-+__msg("processed 5 insns")
- __naked void pre_cond_je1(void)
- {
- 	asm volatile ("					\
-@@ -2100,7 +2081,6 @@ __naked void pre_cond_je1(void)
- SEC("xdp")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __msg_next("scev at header 1:")
- __msg_next("  r0=(zext32 (+ r0 1)) / (zext32 (linear r0 1))")
- __msg_next(" scev at latch 2:")
-@@ -2109,10 +2089,9 @@ __msg("loop header at 1, widening r0")
- __msg("1: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,{{.*}})")
- __msg("1: (04) w0 += 1                       ; R0=scalar(smin=umin=smin32=umin32=1,smax=umax=smax32=umax32=3,{{.*}})")
- __msg("2: (56) if w0 != 0x3 goto pc-2")
--__msg("3: (95) exit")
- __msg("loop header at 1, clamping r0")
--__msg("from 2 to 1: safe")
--__msg("processed 5 insns")
-+__msg("3: (95) exit")
-+__msg("processed 4 insns")
- __naked void post_cond_jne32(void)
- {
- 	asm volatile ("					\
-@@ -2386,7 +2365,6 @@ __naked void loop_around_301_exits(void)
- SEC("xdp")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __msg_next("scev at header 11:")
- __msg_next("  r0=(+ r0 1) / (linear r0 1)")
- __msg_next("  r1=(+ r1 2) / (linear r1 2)")
-@@ -2396,18 +2374,15 @@ __msg_next("  r1=(+ r1 2) / (linear (+ r1 2) 2)")
- __msg("loop header at 11, widening r0")
- __msg("loop header at 11, widening r1")
- __msg("11: R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=7,var_off=(0x0; 0x7)) R1=scalar(smin=smin32=0,smax=umax=smax32=umax32=14,var_off=(0x0; 0xe),step=0+2)")
--/* loop exit */
- __msg("16: (a5) if r0 < 0x8 goto pc-6")
--__msg("exiting loop 11")
--__msg("17: (95) exit")
- /* second iteration */
- __msg("loop header at 11, clamping r0")
- __msg("loop header at 11, clamping r1")
- /* iteration convergence */
--__msg("from 16 to 11: safe")
- __not_msg("{{^}}11:")
--/* map lookup error path */
--__msg("from 7 to 17: safe")
-+/* loop exit */
-+__msg("exiting loop 11")
-+__msg("17: (95) exit")
- __naked void correlated_regs(void)
- {
- 	asm volatile ("					\
-@@ -2441,15 +2416,14 @@ __naked void correlated_regs(void)
-  *     k += 1
-  *     k <<= 1   // make SCEV construction not possible
-  *     k >>= 1
-- * map[k] = 1    // make k precise
-+ * map[k] = 1    // k has to be known
-  */
- SEC("xdp")
- __success
- __log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
- __msg("19: (72) *(u8 *)(r4 +0) = 1           ; R4=map_value(id={{.*}},map=map,ks=4,vs=1024,imm=16)")
- __not_msg("19: ")
--__msg("processed 106 insns")
-+__msg("processed 105 insns")
- __naked void nested_loops_precise_var1(void)
- {
- 	asm volatile ("					\
-@@ -2488,8 +2462,7 @@ __log_level(2)
- __msg("loop header at 2, header_count is 100 ")
- __msg("loop header at 4, header_count is [0..100] ")
- __msg("loop header at 6, header_count is [0..100] ")
--__msg("processed 20 insns")
--__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("processed 14 insns")
- __naked void nested_loop_with_two_exits(void)
- {
- 	asm volatile ("					\
-@@ -2550,14 +2523,14 @@ __msg("loop at 5")
- __msg("loop at 6, nested in 5")
- __msg("loop at 11, irreducible")
- __msg("loop at 12, nested in 11")
--/* entry via if r0 == 5 goto d_%= false branch */
-+/* entry via if r0 == 5 goto d_%= true branch */
- __msg("loop header at 12, header_count is 3 ")
- __msg("loop header at 12, widening r9 to 0..2 step 1")
--__msg("12: R8=1 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,var_off=(0x0; 0x3)) loop_stack=11,12")
--/* entry via if r0 == 5 goto d_%= true branch */
-+/* entry via if r0 == 5 goto d_%= false branch */
- __msg("loop header at 12, header_count is 3 ")
- __msg("loop header at 12, widening r9 to 0..2 step 1")
--__msg("from 8 to 12: R8=0 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,var_off=(0x0; 0x3)) R10=fp0 loop_stack=11,12")
-+__msg("12: R8=0 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,var_off=(0x0; 0x3)) R10=fp0 iter(11)=0 loop_stack=11,12")
-+__msg("12: R8=1 R9=scalar(smin=smin32=0,smax=umax=smax32=umax32=2,var_off=(0x0; 0x3)) R10=fp0 iter(11)=0 loop_stack=11,12")
- __naked void enter_nested_loop_from_side(void)
- {
- 	asm volatile ("					\
-@@ -3037,7 +3010,7 @@ __log_level(2)
- __flag(BPF_F_TEST_STATE_FREQ)
- __msg("loop header at 3, widening r6 to 0..9 step 1")
- __msg("loop header at 3, clamping r6 to 0..9 step 1")
--__msg("12: safe")
-+__msg("from 12 to 6: within")
- __naked void clamp_callee_state_pruning(void)
- {
- 	asm volatile ("					\
-@@ -3204,11 +3177,14 @@ RANGE_TEST(spill32_first_is_a_range, "", 0, 3, 1, 6, 6,
- RANGE_TEST(spill32_first_is_a_range_pre, "", 0, 3, 1, 6, 6,
- 	   SPILL32_LOOP(SPILL32_LOAD "if r1 >= r7 goto 2f;" SPILL32_INC "goto 1b;"),
- 	   SPILL32_COUNTED(7, "0..6"))
--/* Explore with 2 in the slot first, with 0 next. The second state is not equal to the first. */
-+/* 2 and 0 in the slot are joined in front of the loop */
- RANGE_TEST(spill32_first_is_precise, "", 0, 0, 1, 0, 1,
- 	   "if r7 == 0 goto +1; r6 = 2;" SPILL32_LOOP(SPILL32_INC "if w1 != 5 goto 1b;"),
--	   __flag(BPF_F_TEST_STATE_FREQ)
--	   __msg("header_count is [0..3] ") __msg("header_count is [0..5] "))
-+	   __msg("header_count is [0..5] ") __not_msg("header_count is [0..3] "))
-+/* The slot holds 64 bits when the loop starts. Nothing reads the high half: it's dead. */
-+RANGE_TEST(spill32_first_is_64bit, "", 0, 0, 1, 5, 5,
-+	   "*(u64 *)(r10 - 8) = r6; 1:" LIMIT_ITERATIONS SPILL32_INC "if w1 != w7 goto 1b;",
-+	   SPILL32_COUNTED(5, "0..4"))
- /* The counter makes the address of a spill. Such a loop is not summarized, as with a register. */
- PARTIAL_SPILL_TEST(spill32_is_a_stack_offset, u32, 4,
- 	"can't widen *fp-8, expr is (spill32 (+ *fp-8 8)), requires exact stack-offset tracking",
-@@ -3224,11 +3200,7 @@ PARTIAL_SPILL_TEST(spill32_unknown_is_a_stack_offset, u32, 1000000,
- /* A step above S16_MAX has no range, as with a register */
- PARTIAL_SPILL_TEST(spill32_large_step, u32, 4, "can't widen *fp-8, expr is (spill32 ",
- 	SPILL32_0, SPILL32_LOAD "w1 += 0x8000; *(u32 *)(r10 - 8) = r1;")
--/* No formula: the slot holds 64 bits when the loop starts, */
--RANGE_TEST(spill32_first_is_64bit, "", 0, 0, 1, 5, 5,
--	   "*(u64 *)(r10 - 8) = r6; 1:" LIMIT_ITERATIONS SPILL32_INC "if w1 != w7 goto 1b;",
--	   NO_COUNT)
--/* the load extends the sign, */
-+/* No formula: the load extends the sign, */
- RANGE_TEST(spill32_sext_load, "", 0, 0, 1, 5, 5,
- 	   SPILL32_LOOP(SPILL32_INC "r1 = *(s32 *)(r10 - 8); if r1 != r7 goto 1b;"), NO_COUNT)
- /* the sum is made from a different slot. */
-@@ -4298,12 +4270,23 @@ exit_%=:						\
-  *        } while (r8 < 3);
-  *    }
-  *    return 0;
-+ *
-+ * The outer loop gets may_goto in front of the jump that leaves it, the inner loop doesn't.
-+ * At run time it's may_goto that ends the prog.
-  */
- SEC("xdp")
--__failure
--__log_level(2)
--__flag(BPF_F_TEST_STATE_FREQ)
--__msg("The sequence of 8193 jumps is too complex.")
-+__success __retval(0)
-+__xlated("call unknown")
-+__xlated("...")
-+__xlated("if r0 == 0x2a goto pc+4")
-+__xlated("r8 = 0")
-+__xlated("r8 += 1")
-+__xlated("if r8 < 0x3 goto pc-2")
-+__xlated("goto pc-{{[0-9]+}}")
-+__xlated("r0 = 0")
-+__xlated("exit")
-+__xlated("r0 = 0")
-+__xlated("exit")
- __naked void nested_terminating_prune(void)
- {
- 	asm volatile ("					\
-@@ -4678,7 +4661,7 @@ __naked void widen_pkt_pointer_negative_offset(void)
- 
- /* The access is in the second iteration only: the verifier gets to it after the clamp */
- SEC("tc")
--__failure __msg("invalid access to packet, off=56 size=2, R6(id=3,off=56,r=56)")
-+__failure __msg("invalid access to packet, off=56 size=2, R6(id={{[0-9]+}},off=56,r=56)")
- __naked void clamp_pkt_pointer_step_lowers_umax(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_insn_stats.c b/tools/testing/selftests/bpf/progs/verifier_subprog_insn_stats.c
-index 8f6082fdb5c8..e7636b86cc29 100644
---- a/tools/testing/selftests/bpf/progs/verifier_subprog_insn_stats.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_subprog_insn_stats.c
-@@ -127,13 +127,13 @@ static __u64 stats_async_schedule(struct bpf_map *map, __u32 *key,
- SEC("?raw_tp")
- __success __log_level(4)
- /*
-- * self: 9 + 7 + 2 = 18
-- * totals: leaf 2, scheduler 7, main root 18
-+ * self: 8 + 7 + 2 = 17
-+ * totals: leaf 2, scheduler 7, main root 17
-  */
--__msg("subprog 0 (stats_async_direct) main insns_self 9 insns_total 18 stack 0")
-+__msg("subprog 0 (stats_async_direct) main insns_self 8 insns_total 17 stack 0")
- __msg("subprog {{[0-9]+}} (stats_async_schedule) static insns_self 7 insns_total 7 stack 0")
- __msg("subprog {{[0-9]+}} (stats_async_leaf) static insns_self 2 insns_total 2 stack 0")
--__msg("processed 18 insns")
-+__msg("processed 17 insns")
- __naked int stats_async_direct(void)
- {
- 	asm volatile (
-@@ -194,14 +194,14 @@ static __u64 stats_async_nested_schedule(struct bpf_map *map, __u32 *key,
- SEC("?raw_tp")
- __success __log_level(4)
- /*
-- * self: 9 + 7 + 7 + 2 = 25
-- * totals: leaf 2, outer 7, scheduler 7, main root 25
-+ * self: 8 + 7 + 7 + 2 = 24
-+ * totals: leaf 2, outer 7, scheduler 7, main root 24
-  */
--__msg("subprog 0 (stats_async_nested) main insns_self 9 insns_total 25 stack 0")
-+__msg("subprog 0 (stats_async_nested) main insns_self 8 insns_total 24 stack 0")
- __msg("subprog {{[0-9]+}} (stats_async_nested_schedule) static insns_self 7 insns_total 7 stack 0")
- __msg("subprog {{[0-9]+}} (stats_async_outer) static insns_self 7 insns_total 7 stack 0")
- __msg("subprog {{[0-9]+}} (stats_async_nested_leaf) static insns_self 2 insns_total 2 stack 0")
--__msg("processed 25 insns")
-+__msg("processed 24 insns")
- __naked int stats_async_nested(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall.c b/tools/testing/selftests/bpf/progs/verifier_tailcall.c
-index 42b90b692dc5..5ba41dca35ea 100644
---- a/tools/testing/selftests/bpf/progs/verifier_tailcall.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_tailcall.c
-@@ -148,6 +148,33 @@ __naked void tail_call_caller_stack_ok(void)
- "	::: __clobber_all);
- }
- 
-+static __noinline int tail_calls(struct __sk_buff *skb)
-+{
-+	bpf_tail_call_static(skb, &jmp_table, 0);
-+	return skb->len;
-+}
-+
-+static __noinline int calls_itself(struct __sk_buff *skb, int n)
-+{
-+	int ret = 0;
-+
-+	if (n)
-+		ret = calls_itself(skb, n - 1);
-+	return ret + tail_calls(skb);
-+}
-+
-+/* The frames of a subprog that calls itself stay on the stack too: up to a half of it. */
 +SEC("tc")
-+__description("tail call from subprog below a recursive subprog")
-+__arch_x86_64
-+__arch_arm64
-+__failure
-+__msg("tail_calls are not allowed when call stack of previous frames is {{[0-9]+}} bytes")
-+int tail_call_below_recursion(struct __sk_buff *skb)
++__description("depth of a stack on the stack: no bound")
++__failure __msg("invalid write to stack R2 off=0 size=1")
++__naked void depth_without_a_bound(void)
 +{
-+	return calls_itself(skb, 2);
++	asm volatile (
++		"r1 = 0;"
++		"*(u64 *)(r10 - 8) = r1;"
++		"*(u64 *)(r10 - 16) = r1;"
++		"w8 = 0;"
++		ITER_NEW
++	"1:"
++		ITER_NEXT
++		"if r0 == 0 goto 9f;"
++		"r1 = r8;"
++		"r1 &= 255;"
++		"r2 = r10;"
++		"r2 += -10;"
++		"r2 += r1;"
++		"*(u8 *)(r2 + 0) = r1;"
++		"w8 += 1;"
++		"goto 1b;"
++	"9:"
++		ITER_DESTROY
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_iter
++		: __clobber_all);
 +}
 +
- SEC("tc")
- __description("tail call from subprog with 256 bytes of caller stack")
- __failure
-diff --git a/tools/testing/selftests/bpf/progs/verifier_uninit.c b/tools/testing/selftests/bpf/progs/verifier_uninit.c
-index 691018a46049..345223a4525b 100644
---- a/tools/testing/selftests/bpf/progs/verifier_uninit.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_uninit.c
-@@ -9,7 +9,7 @@
- SEC("socket")
- __description("read uninitialized register")
- __failure __msg("R2 !read_ok")
--__msg("R2 has never been initialized on this path")
-+__msg("R2 is not readable here. It may never have been initialized")
- __failure_unpriv
- __naked void read_uninitialized_register(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index 1d255b04565d..62f998216d4b 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -394,8 +394,8 @@ __naked void fill_of_different_pointers_stx(void)
- 	r2 = r10;					\
- 	r2 += -16;					\
- 	*(u64*)(r6 + 0) = r2;				\
--l0_%=:	if r1 != 0 goto l1_%=;				\
--	*(u64*)(r6 + 0) = r1;				\
-+	goto l1_%=;					\
-+l0_%=:	*(u64*)(r6 + 0) = r1;				\
- l1_%=:	r1 = *(u64*)(r6 + 0);				\
- 	*(u32*)(r1 + %[__sk_buff_mark]) = r3;		\
- 	r0 = 0;						\
-@@ -420,8 +420,8 @@ __naked void fill_of_different_pointers_st(void)
- 	r2 = r10;					\
- 	r2 += -16;					\
- 	*(u64*)(r6 + 0) = r2;				\
--l0_%=:	if r1 != 0 goto l1_%=;				\
--	*(u64*)(r6 + 0) = r1;				\
-+	goto l1_%=;					\
-+l0_%=:	*(u64*)(r6 + 0) = r1;				\
- l1_%=:	r1 = *(u64*)(r6 + 0);				\
- 	.8byte %[st_mem];				\
- 	r0 = 0;						\
-@@ -435,7 +435,8 @@ l1_%=:	r1 = *(u64*)(r6 + 0);				\
- 
- SEC("tc")
- __description("unpriv: spill/fill of different pointers stx - ctx and sock")
--__failure __msg("type=ctx expected=sock")
-+/* bpf_sk_release(skb) is an error too: "type=ctx expected=sock". This one is found first. */
-+__failure __msg("R1 invalid mem access 'sock_or_null'")
- __naked void pointers_stx_ctx_and_sock(void)
- {
- 	asm volatile ("					\
-@@ -449,10 +450,10 @@ __naked void pointers_stx_ctx_and_sock(void)
- 	r6 += -8;					\
- 	r1 = r8;					\
- 	/* if (skb == NULL) *target = sock; */		\
--	if r1 == 0 goto l0_%=;				\
-+	if r1 != 0 goto l0_%=;				\
- 	*(u64*)(r6 + 0) = r2;				\
-+	goto l1_%=;					\
- l0_%=:	/* else *target = skb; */			\
--	if r1 != 0 goto l1_%=;				\
- 	*(u64*)(r6 + 0) = r1;				\
- l1_%=:	/* struct __sk_buff *skb = *target; */		\
- 	r1 = *(u64*)(r6 + 0);				\
-@@ -490,10 +491,10 @@ __naked void different_pointers_stx_leak_sock(void)
- 	r6 += -8;					\
- 	r1 = r8;					\
- 	/* if (skb == NULL) *target = sock; */		\
--	if r1 == 0 goto l0_%=;				\
-+	if r1 != 0 goto l0_%=;				\
- 	*(u64*)(r6 + 0) = r2;				\
-+	goto l1_%=;					\
- l0_%=:	/* else *target = skb; */			\
--	if r1 != 0 goto l1_%=;				\
- 	*(u64*)(r6 + 0) = r1;				\
- l1_%=:	/* struct __sk_buff *skb = *target; */		\
- 	r1 = *(u64*)(r6 + 0);				\
-@@ -526,8 +527,8 @@ __naked void stx_sock_and_ctx_read(void)
- 	/* if (skb) *target = skb */			\
- 	if r1 == 0 goto l0_%=;				\
- 	*(u64*)(r6 + 0) = r1;				\
-+	goto l1_%=;					\
- l0_%=:	/* else *target = sock */			\
--	if r1 != 0 goto l1_%=;				\
- 	*(u64*)(r6 + 0) = r2;				\
- l1_%=:	/* struct bpf_sock *sk = *target; */		\
- 	r1 = *(u64*)(r6 + 0);				\
-@@ -565,8 +566,8 @@ __naked void stx_sock_and_ctx_write(void)
- 	/* if (skb) *target = skb */			\
- 	if r1 == 0 goto l0_%=;				\
- 	*(u64*)(r6 + 0) = r1;				\
-+	goto l1_%=;					\
- l0_%=:	/* else *target = sock */			\
--	if r1 != 0 goto l1_%=;				\
- 	*(u64*)(r6 + 0) = r2;				\
- l1_%=:	/* struct bpf_sock *sk = *target; */		\
- 	r1 = *(u64*)(r6 + 0);				\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv_perf.c b/tools/testing/selftests/bpf/progs/verifier_unpriv_perf.c
-index 4d77407a0a79..5363093a4a5c 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv_perf.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv_perf.c
-@@ -17,8 +17,8 @@ __naked void fill_of_different_pointers_ldx(void)
- 	r2 = r10;					\
- 	r2 += %[__imm_0];				\
- 	*(u64*)(r6 + 0) = r2;				\
--l0_%=:	if r1 != 0 goto l1_%=;				\
--	*(u64*)(r6 + 0) = r1;				\
-+	goto l1_%=;					\
-+l0_%=:	*(u64*)(r6 + 0) = r1;				\
- l1_%=:	r1 = *(u64*)(r6 + 0);				\
- 	r1 = *(u64*)(r1 + %[sample_period]);		\
- 	r0 = 0;						\
-diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-index f9d71e01ddf4..bb2b9e8c71df 100644
---- a/tools/testing/selftests/bpf/verifier/calls.c
-+++ b/tools/testing/selftests/bpf/verifier/calls.c
-@@ -455,8 +455,47 @@
- 	BPF_EXIT_INSN(),
- 	},
- 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "recursive call",
-+	.errstr = "calls itself",
-+	.result = REJECT,
-+},
++/* BTF FUNC records are not generated for kfuncs referenced from inline assembly */
++void __kfunc_btf_root(void)
 +{
-+	"calls: a timer callback calls the main prog",
-+	.insns = {
-+	/* bpf_timer_set_callback(bpf_map_lookup_elem(&timer_map, &(int){0}), cb); */
-+	BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 4),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, 4),
-+	BPF_RAW_INSN(0, 0, 0, 0, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_timer_set_callback),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	/* cb */
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, -14),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.fixup_map_timer = { 3 },
-+	.errstr = "recursive call of the main program",
- 	.result = REJECT,
-+	/* libbpf makes the main prog global, and then the arguments of the call do not match */
-+	.func_info = { { 0, 4 /* main_prog */ }, { 13, 5 /* cb */ } },
-+	.func_info_cnt = 2,
-+	.btf_strings = "\0int\0ctx\0main_prog\0cb",
-+	.btf_types = {
-+	/* 1: int            */ BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
-+	/* 2: void*          */ BTF_PTR_ENC(0),
-+	/* 3: int __(void *) */ BTF_FUNC_PROTO_ENC(1, 1),
-+				BTF_FUNC_PROTO_ARG_ENC(5, 2),
-+	/* 4: main_prog      */ BTF_FUNC_ENC(9, 3),
-+	/* 5: cb             */ BTF_FUNC_ENC(19, 3),
-+	BTF_END_RAW
-+	}
- },
- {
- 	"calls: conditional call",
-@@ -559,8 +598,7 @@
- 	BPF_EXIT_INSN(),
- 	},
- 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--	.errstr = "infinite loop detected",
--	.result = REJECT,
-+	.result = ACCEPT,
- },
- {
- 	"calls: using r0 returned by callee",
-@@ -812,7 +850,7 @@
- 	BPF_EXIT_INSN(),
- 	},
- 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "recursive call",
-+	.errstr = "calls itself",
- 	.result = REJECT,
- },
- {
++	bpf_iter_num_new(0, 0, 0);
++	bpf_iter_num_next(0);
++	bpf_iter_num_destroy(0);
++}
++
+ SEC("sockops")
+ __description("indirect variable-offset stack access, unbounded")
+ __failure __msg("invalid unbounded variable-offset write to stack R4")
 -- 
 2.55.0
 
