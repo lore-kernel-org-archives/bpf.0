@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794025738;
-	b=I0RuIEPuD9skl1XrfE/9yQMpBTFJOfdKfmk5asdmbVmYC10DSUA4KVpq35OehgYZ+km2
-	 qxk3B09PgiGQzOL8i5H4Z3KZVTk4fu+kraXn4AZbjnEogfig8tfBQQawujES4pkmKvVWY
-	 hcRwiBWavvrlgna/eXBT83qxpBiZr320CQ2CuDqPy+m2QXGgEl2O8usEnVkIZI1IH9LQk
-	 fHIJLuV15a49F/6ZsJZvExM2NCmKNLV6PgBY8OZ89WWPW0PPW4PojZKqkpKPwbFT+8BHa
-	 vClbnhs2Azdk7hfIhx6xjzpDXs1w+fM+030xiVajhFt3iqm4SfIFHBIXucDvPM+OE5g==
+	t=1794025905;
+	b=3igt6q9Okx4DJC2fsb8SLr4soeSYI0w+tbi5ORuve7lKKMCGEngRM4HjT+q3kU2hYDqj
+	 58wqv8hzxAmdMA28hdyOhOgK1kpEJ5FJsZr/Fk+pEFwHmZ3hNsHDK4z0quRMnYefHInQV
+	 nqxyXytqEYx01tavIyPoC8u4VqonzypcqhGfvNin9OIUdBjI2HFlNjEw/yPvkC8JfeaHA
+	 WQZnkpf9FgqZQWJx0YgjfD5gPZSWIf+DpDKZtil3WRFPg1tHWFeb1ZBXKuCbwUS7Lyypb
+	 BKPFHtiV4vl7q8asaMcMRj59MQ4Qq1CSda11vpdUJScDUqo2L6FkZQgJomj6ao7tKfg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794025738;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794025905;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=GuObg2zm/I15sekktpBQYBiHT89xgfrDPY0IhJ4lANs=;
-	b=oDYmNvw34cPwqg2CvhoGUHXPq0PARNWZSd2gZJ2lOQDF8qaCZkiVMNxUY8GSRv3MglRL
-	 1/z5W7oQ+/F+SUx7fz+T1pHBgSKWKm0A/06oeH8tMUP2mT0bU93dPXBoP8qQNpc2hKh78
-	 aw5Fwq/cKdZNUsx0L0KKfVNVHST/DZm3L60UfaDgsAgnWUrRL0LiAgoq1hTe+WheRUpcf
-	 4S4RACFGEXZpAz04AjclzG+7Wwh1QQj9Ul0Mm/0G8KceiU1ArLmaQoDQLCb5MTvHjdR4G
-	 NLIfZMHh8+oL5fvMxFE1VRVmQNrtRewTUKwTZ2jOr86e7kgqPiSsb7l9PpEHSR9ahYQ==
+	bh=Shn+Yvm/RP4pdGU9OALSPgihDQtUiLxmzzVvfpQb2H8=;
+	b=OFwOD/zqtqrGZABd6or1ni8g25/qu0hOYfzg58x8gGL7+GFtcjXv+ZMAB0d/F22aB4KD
+	 sIqz75wsSUNXiHsZV3XmY8rLUUJxdEflFh1PHzte2qoois6X7C8YhMD8wnVmosRKLQEDX
+	 hto754EEZ0pFTJ0v8HFeewA/+Af02zmZFUKHwIC4XPN2HYH4wLhslhBOn4q3qOxMGaHGf
+	 3rEo9B+5HlaYvVwBdhB1tYwQ8oKon232SZmfGmj93Nwvg339wHMLXoFo3Ds/LaSUpohE8
+	 nE/s0u40EYnqek9vNCejzhDq7lTpQ2q/vzqXMf8V5TrWtOj9F6rOuBKqqhvltZ/Qdyw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CQcBdgmz;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="gcs/dihq";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D6E606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 04:28:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9330C606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 04:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CQcBdgmz
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 241111F0089F;
-	Sat,  7 Nov 2026 04:28:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gcs/dihq
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 031FA1F008A1;
+	Sat,  7 Nov 2026 04:31:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794025737;
-	bh=GuObg2zm/I15sekktpBQYBiHT89xgfrDPY0IhJ4lANs=;
+	s=k20260515; t=1794025905;
+	bh=Shn+Yvm/RP4pdGU9OALSPgihDQtUiLxmzzVvfpQb2H8=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=CQcBdgmzhOEyjOOX0N6chYNKvJV4AkHkeCFs2bI5gmNZOhEpcRHXfC0gzK+4Uah1S
-	 cVDtXC18M4dv07p+8RcG8MVUSwP0W3rbQhtue0cCLeNom1hcTC6xj47m2YGkVWX6Uc
-	 fMnrUI45ONaDguqCKaddXQHBsmX9Tqguovg4ltJ/h+rOSiBKv4POHCvSd+V3vx00Lm
-	 l2j7mrHFyGA/IH06+bXZme7079AZzGQk0/uuvnoHCqtLzCdJWrmaVv3nvyFdArnH5h
-	 QcdG/8uxY2Fldf2jF2sd731SkH4xbEMxV1GWuSR53UcAD/xZ9/8nQ5epbClwsb88gF
-	 ueAaac5u641Xw==
-Message-ID: <sashiko-outbox-202582@kernel.org>
+	b=gcs/dihqtEE3JknlApRCl8Kyp7nCgKO9iA3Q5sV7U4eM89gZSPzKdVZF5ZrHUv3tj
+	 r7hIaw8DDrcsIIZGaRh+KzvtHXz6oT8s24D4C2UzpEpIZJI9QrqLVehUzFjQNTq0vh
+	 aNBbwk2LD6g4FR4EyXOALRdsjMEbcLy+jQ57T4k9OXmAZFWKDjILPzdtdQp48UvwPN
+	 9xz58DXQ0NAABNup7//hiBLUu9f+YwovtOSOIQMAWL9eeRzdClfCUgiol0Vyjrngiv
+	 pG96wwxTvm1sHDj1WcTe+EyCIMoWqvTUPNYJ6ZjVsCBlFcsl0THn52zBVxK2VfdEbi
+	 8uBPCPr7P0HSA==
+Message-ID: <sashiko-outbox-202584@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 32/46] bpf: A loop is one iteration shorter
- behind the jump that counts it
+Subject: Re: [PATCH bpf-next v4 27/46] bpf: Track a pointer to one of a set
+ of functions
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261107033758.1547725-33-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261107033758.1547725-28-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
- <20261107033758.1547725-33-alexei.starovoitov@gmail.com>
+ <20261107033758.1547725-28-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 07 Nov 2026 04:28:56 +0000
+Date: Sat, 07 Nov 2026 04:31:44 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,73 +62,67 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [High] bpf: signed overflow and stride corruption on moved in
-  bpf_clamp_scev_regs()
+- [Medium] bpf: unconditional R1-R5 split in do_check_insn() causes
+  state explosion
 --
 
-commit bb719964b0079686d30154660558b2b4d7792c19
+commit 5fe8c15ac1cfee1e78fee4f0e12cfb386fffa7e1
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: A loop is one iteration shorter behind the jump that counts it
+bpf: Track a pointer to one of a set of functions
 
-This commit narrows the SCEV-derived register ranges by one iteration on the
-fall-through path behind a loop-counting exit jump, including registers to
-which the current iteration has already added a constant offset.
+This commit defers splitting verifier states when loading function pointers
+from a read-only map table by representing the loaded register as a set of
+possible functions until a callx or callback helper/kfunc requires a single
+target.
 
-> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-> index 06f485853df13..4ce8ad5d5a279 100644
-> --- a/kernel/bpf/scev.c
-> +++ b/kernel/bpf/scev.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7769b4bd14673..a5c3e86f3f87f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -3878,8 +3910,22 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *e=
-nv, struct bpf_func_state *cur
->  			continue;
->  clamp:
->  		linear_bounds(entry_reg, max_header_count, &coefs, &bounds);
-> -		if (r =3D=3D entry->iv_reg)
-> +		if (r =3D=3D entry->iv_reg && !moved)
->  			iv_bounds(&bounds, entry->iv_range);
-> +		if (moved) {
-> +			bounds.r64 =3D cnum64_add(bounds.r64, cnum64_from_srange(moved, moved=
-));
-> +			bounds.base =3D imod(bounds.base + moved, bounds.step);
-> +		}
+> @@ -21009,6 +21125,12 @@ static int do_check_insn(struct bpf_verifier_env=
+ *env, bool *do_print_state)
+>  				return check_func_callx(env, insn, &env->insn_idx);
+>  			if (insn->src_reg =3D=3D BPF_PSEUDO_CALL)
+>  				return check_func_call(env, insn, &env->insn_idx);
+> +			/* a callback is one function */
+> +			for (i =3D BPF_REG_1; i <=3D BPF_REG_5; i++) {
+> +				err =3D split_func_set(env, i);
+> +				if (err)
+> +					return err;
+> +			}
+>  			if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL)
+>  				return check_kfunc_call(env, insn, &env->insn_idx);
+>  			return check_helper_call(env, insn, &env->insn_idx);
 
-[Severity: High]
-Can shifting bounds by moved here corrupt bounds.base and bounds.step when
-bounds.step is not a power of two?
+[Severity: Medium]
+Can splitting all of R1 through R5 before every helper and kfunc call cause
+an N * N state explosion or unnecessary state cloning?
 
-When entry_reg is a constant scalar, linear_bounds() sets bounds.step to
-|slope| (up to S16_MAX) and tracks the signed congruence x mod step =3D=3D =
-base.
-If adding moved to cnum64_smin(bounds.r64) or cnum64_smax(bounds.r64) wraps
-s64, 64-bit addition shifts the signed values by +/- 2^64, which is not a
-multiple of a non-power-of-two step, so the wrapped range in bounds.r64 no
-longer has remainder imod(bounds.base + moved, bounds.step).  Passing the
-mismatched bounds.base and bounds.step to bpf_set_reg_range() ->
-cnum64_intersect_linear() can then narrow reg to a bogus constant that the
-register never holds at runtime, or collapse it to CNUM64_EMPTY and hit
-verifier_bug().
+When a function set of size N is loaded into R3 and copied to R2 before
+calling bpf_timer_set_callback(), both R2 and R3 are marked live in
+live_regs_before because bpf_timer_set_callback_proto declares a third
+ARG_PTR_TO_PROG_AUX argument.  Splitting R2 and R3 independently produces
+N * N combinations at the call instruction instead of the N states produced
+before this patch, exceeding BPF_FLOW_MAX_STATES (1024) for N >=3D 33 and
+rejecting the program with -E2BIG.
 
-In addition, bounds.base + moved is evaluated in signed 64-bit arithmetic a=
-nd
-can overflow s64 when moved is near S64_MAX (with bounds.base > 0), unlike
-scalar_step_add():
+In addition, non-sync-callback helper and kfunc calls inside a basic block
+are not flow points, so dead caller-saved registers in R1 through R5 have
+not been scrubbed by bpf_clean_verifier_state() when do_check_insn() runs.
+If a dead register in R1 through R5 still holds a func_set of size N,
+split_func_set() pushes N - 1 states onto env->head at env->insn_idx,
+inflating env->total_states and re-verifying the call and the rest of the
+basic block.
 
-kernel/bpf/verifier.c:scalar_step_add() {
-	...
-	if (check_add_overflow(reg_smin(reg), amount, &tmp) ||
-	    check_add_overflow(reg_smax(reg), amount, &tmp)) {
-		reg_step_reset(dst_reg);
-		return;
-	}
-
-	dst_reg->base =3D (reg->base + imod(amount, reg->step)) % reg->step;
-	dst_reg->step =3D reg->step;
-}
+Splitting only when checking an argument that expects a function pointer (s=
+uch
+as in process_kf_arg_ptr_to_func() and the ARG_PTR_TO_FUNC path in
+check_func_arg()) would avoid splitting unrelated or dead registers.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261107033758.1547=
-725-1-alexei.starovoitov@gmail.com?part=3D32
+725-1-alexei.starovoitov@gmail.com?part=3D27
