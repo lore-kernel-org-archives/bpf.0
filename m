@@ -1,49 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794075017;
-	b=Ez1+En1+GSqIHUkTBZCFRvNoHGN1UNl0aHTawiV7ZoFZrHUlPdxQlX6EeLYAc+1BXOak
-	 mIcLQOQhsZl1CKlchA0dGGtaf/8XdZ+VkSmJPuIRXeOt8/s4jnhGrGEo9Z+X5gZJ2GcOo
-	 8wPcBSqBNIAYw/aS0z/rqjHsHgn+07ugxeOBYuGzlnxIomkZ2UCfZ+UglGLcgh/FodfFb
-	 RzQ5zINWEnYdq2Eo4s6CZo6pDRVKuSMWa3w4z9ZOkJkgFUfX2GOEwhFXzJ0kIMLz2MsHR
-	 ivR5Q0ELUc79QTeMX1ub2CthK4cpSONz1UTBFdWNewLXoGET+JU43rCzIXM5YmlEuaw==
+	t=1794075287;
+	b=ilIPy4af8sxrRVfWC1xk6mvFECF41qomvQ/M2aUgRSXHHOHo1qBC8jC/mc5E2tmbN+Pm
+	 MfHCMC6MpUOXwTGv4PLx3N/rLPDkxdBB76UBSC4v/nnojIfcVGbGynDwg5F/4rYJzfv66
+	 sadiaadMHAnFeJh+CN3HGQEQhF+zigwz5zgnAZ5V8vQa80ujg8vUOzkRnclvP2nls/QXb
+	 2aB12A0t7tgKjiXIo+v4oiu9H4pG683sDAtnH1M81NTGnqDceouRUomZCbrw0i2V1M+au
+	 kgWE7FSze/yDyWUpOdzKXlptRgZZqVLL+gTFwZSZ9QT9G2zm7H4ZcBNvQOJrEA3bNsw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794075017;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=9jsv9HnflSYK6/4J9yP8x3RxgcRdAfizh/Us1gIqPQA=;
-	b=2sLlPP3Ljhi9u5emYQdWf0QaU7jXKbqkRdN4OwUHc1++478TSMWxkYrW/lkqlH39Czoz
-	 RDUlNfVKYuAYrgkntrZ2AhZX9nWr5hG9Bvvn6VtMCrKzQDpsfl9HMLEu1QZFWcSOcXGBf
-	 DBVOiqMJ3kb6DmVJzGUiDDQ1lbnYnjrZIeNAZHaF1M8NXPnsn1i/0foykU3icolyg2+YS
-	 HuKqh3vUaTwPTX474/YvTs76qq0PcABzWDvpgeXg34SahE28H9KtVRWFsBBOfQ6XJD00Z
-	 /ySZTxH8RSXRMxCaaXaM4mFk+l/ZlkiGpM/U0DKfTADj30p9ymuO4+83HYDdwXnuRiw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794075287;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=YBgyTGpLz+UzZ96usEbkTKncVqN/Kx6pvQ0ZnvD9D1M=;
+	b=2mnoScOd2Zb/UVs0VM+SoLGqsg9y/A8BNWUvvyH5+HLPgacVREjQuWtBJ7bZsLTdMdN0
+	 je/wvha1ascmtS5oqG932D1s+wRvb3rWXYSC5kMzuSFNbn5l7yVDxfOWmbRAzR5PtkAW2
+	 DEtOE5PpY5NGhHR6HRqNUDwsxHSyksIhKcIKGYcYSbY4wVORxlwHn07bKXnQcfxqk92k3
+	 Eo8UMWMkeIoXsZYk7jUf9ceWzmo80klfCcX+/7O6ilflCflhgrVfY/rGISgp/rtY+GNj1
+	 MepbMl48SatEVzD9/+y0xuVOaE65T3Ib7XXiWNezyaQNn1TC/vUR7RZyScfc2iySAWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OgoIfzVs;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lbmCvqcZ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A42C606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 18:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E3D606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 18:14:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OgoIfzVs
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4F7D1F0089F;
-	Sat,  7 Nov 2026 18:10:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lbmCvqcZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F2A1F0089F;
+	Sat,  7 Nov 2026 18:14:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794075016;
-	bh=9jsv9HnflSYK6/4J9yP8x3RxgcRdAfizh/Us1gIqPQA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=OgoIfzVsQ0CA1/la3sKH4/ZyWvyrvp53tLxot98HIjiPp8ilspV6of9jNlawLPMuE
-	 x0RWVcAUGljFhZZkHX9t00VaWM6dbs+5VJScoL8kNUFqrQZ4RV7kdey+iWDQksW/fW
-	 e644HLy5Y0WDsOmD1pR6FKFOqQKV41LW5oFH4CcO2035qU5w1YPbDQMW7WdfQ29C45
-	 iFDARgIoBhEqCdEHV4PKfAw4gHlaVEgeWlsuReVcQc25R1GxXfWRe6yeQo3EX2nq0l
-	 hB3VXN3IbzOM1Vo4ZnszTr3mbC7Y7QnH35SWldlxboGyqyzDPK67aQMN0rqdbu1NRN
-	 PXTNV/32pQMuw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9B2CF380821F;
-	Sat,  7 Nov 2026 18:10:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1794075287;
+	bh=YBgyTGpLz+UzZ96usEbkTKncVqN/Kx6pvQ0ZnvD9D1M=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=lbmCvqcZl9pl7KKn4M4zyYgdnI6IvhN5yJNgOxiinLho8xESh0WATiimYGiJIOBFE
+	 rld+K6UBNnrq5OwgqFiMM0AEXIJ2zi88MqYCOXeMUcy2iENNqK5/cCwq/3OmImFtg+
+	 mVDEP1X+tT8loukf0QKA28RrgCCC8tKwYuHuQhpTmsA6m7kIkfVvQbU3IoqQlni3Vc
+	 4Rve8EKs7kVz12Qfg9TJaktUj4QMLhwLbcxTAyZIDvd1Ug7T2ElW5GMtsZQ6Rh4Sit
+	 7t5USiSNuN1NZW5/U389IIFKHArvH9UUsf9PyB71uIbSHOSo0ezoK0253FeSd4k7FU
+	 I/2TOW2ltyYuQ==
+Message-ID: <sashiko-outbox-203160@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 8/8] bpf: Fix "unresolved symbol
+ tcp_request_sock" build error
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Michal Luczaj" <mhal@rbox.co>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261107-sockmap-update-limit-iter-v3-8-7c0bad1ad036@rbox.co>
+References: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
+ <20261107-sockmap-update-limit-iter-v3-8-7c0bad1ad036@rbox.co>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 07 Nov 2026 18:14:46 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -52,65 +60,43 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/9] bpf: Fixes for the verifier that joins
- states
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179407501534.1275874.8791571297081875215.git-patchwork-notify@kernel.org>
-Date: Sat, 07 Nov 2026 18:10:15 +0000
-References: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com
 
-Hello:
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] bpf: missing Fixes: trailer for tcp_request_sock BTF build fix
+--
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+commit 96ec9bcc071c52f5537149bdc9a41b81773ef3e6
+Author: Michal Luczaj <mhal@rbox.co>
 
-On Sat,  7 Nov 2026 17:02:57 +0000 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> Fixes for commit 2d0b457611c0 ("Merge branch
-> 'bpf-a-verifier-that-joins-states'"), from review and from BPF CI.
-> 
-> 1-2  A number that wraps in front of the jump that counts a loop gets
->      a wrong residue behind the jump. The verifier then checks numbers
->      that the register never has.
-> 3-4  Two of the new tests fail in BPF CI: one with GCC BPF, one on s390x.
-> 5-7  The same kind, no job shows it today: a message with GCC, a target of
->      fentry that is not in BTF, five tests with an arena that run at the
->      same time under KASAN.
-> 8-9  Valid progs that throw one of several error codes are rejected.
-> 
-> [...]
+> bpf: Fix "unresolved symbol tcp_request_sock" build error
+>
+> CONFIG_WERROR=3Dy CONFIG_NET=3Dy CONFIG_INET=3Dn build fails:
+>
+>     WARN: resolve_btfids: unresolved symbol tcp_request_sock
+>     Failed to generate BTF for vmlinux
+>     Try to disable CONFIG_DEBUG_INFO_BTF
+>     make[2]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
+>     make[1]: *** [.../Makefile:1379: vmlinux] Error 2
+>     make: *** [Makefile:248: __sub-make] Error 2
+>
+> Handle it in the style of commit d82a532a6115 ("bpf: Fix "unresolved
+> symbol" build error with resolve_btfids"): force BTF generation.
+>
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
 
-Here is the summary with links:
-  - [bpf-next,1/9] bpf: Leave a number alone that wraps in front of the jump that counts
-    https://git.kernel.org/bpf/bpf-next/c/914dd83543fc
-  - [bpf-next,2/9] selftests/bpf: Test a number that wraps in front of the jump that counts
-    https://git.kernel.org/bpf/bpf-next/c/589b23cbc6c6
-  - [bpf-next,3/9] selftests/bpf: Skip the stack walker of verifier_loop_latch with GCC
-    https://git.kernel.org/bpf/bpf-next/c/ce4b64ed8b22
-  - [bpf-next,4/9] selftests/bpf: Skip plain_c_test_wakeup_source without the kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/f567c4b7af18
-  - [bpf-next,5/9] selftests/bpf: Expect GCC's first error in test_alloc_double_release
-    https://git.kernel.org/bpf/bpf-next/c/98cc0b224608
-  - [bpf-next,6/9] selftests/bpf: Skip plain_c_arena_race without zap_vma_range() in BTF
-    https://git.kernel.org/bpf/bpf-next/c/57c57a40807a
-  - [bpf-next,7/9] selftests/bpf: Run the plain C tests with an arena serially
-    https://git.kernel.org/bpf/bpf-next/c/b992d6ed7531
-  - [bpf-next,8/9] bpf: A join must leave the cookie of bpf_throw() alone
-    https://git.kernel.org/bpf/bpf-next/c/ed10b8a49c39
-  - [bpf-next,9/9] selftests/bpf: Test a flag that goes with the cookie of bpf_throw()
-    https://git.kernel.org/bpf/bpf-next/c/d877bd038cc6
+[Severity: Low]
+Commit fce557bcef11 ("bpf: Make btf_sock_ids global") exposed btf_sock_ids
+to resolve_btfids under CONFIG_NET=3Dy, and commit a90765c6f603 ("tcp: move
+reqsk_fastopen_remove to net/ipv4/tcp_fastopen.c") moved the last
+CONFIG_NET=3Dy user of struct tcp_request_sock into a file built only under
+CONFIG_INET=3Dy.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Should this include a Fixes: tag?
 
+  Fixes: a90765c6f603 ("tcp: move reqsk_fastopen_remove to net/ipv4/tcp_fas=
+topen.c")
 
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261107-sockmap-up=
+date-limit-iter-v3-0-7c0bad1ad036@rbox.co?part=3D8
