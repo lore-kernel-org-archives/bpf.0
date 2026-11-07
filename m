@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794071037;
-	b=cKQsdcajgAu1mKS1FNos9X/lKtAMczpKDxRaSGIXwsInHzQoiRndb6nJYljqgykuau5r
-	 oi/YqcbIT4dlHAMY4j3a91I8cvMdEok7h22QHesYOq56tJM5OAB4E4f3eCggXCNQW0EWQ
-	 bVCYs+RsIE1bKI/sRIuYXUhfcitY0mBAxsRUPN5SnyPBwqaXQHI6upJmKvhsvsE/Fsy6z
-	 gklC7RmH1Cdqsk1ikRxZDvm3LBb4q4H+ZNOm1Dt1pRBkmYTYht3aaYwLuxQ4K1SRp3QxZ
-	 IvYZ3H7Y3IAuGQPbtOkEMk8Zb+NOrs2724eV2fAoKGzj+7E/np8QRURJpIeDiMDmkjA==
+	t=1794071043;
+	b=h9vkqOm5hrG9DVaMU/wIVYvayYFfzQwkIxeCCwy9FMEbIVP+SgBI6MpZttqe/QCJjCro
+	 zZyp5Y2jqoKXDpsnihyAu3GwhJYJO0/M3UgXkeRG+jkJ1R8MS38j8XxWBh/OU66pXyJMK
+	 nmeS/SGTJ7edygEhdEfZNIChHPxyhSK6cE3TTx2QyhmhUDpPpf1L17+lE6CAtaL6KvrgD
+	 Rb6O7y4uj/LQLPanZnWWG98fSYIQ2cYUBPhcYaQomR1iQs+tC52F38T1NeMVsNi9fI78w
+	 sqagYrsW6aBgvmqbzWIwdyaOzrHgsqb01KhQm8M1iMZRfSfSC+8tL4y8kDxgS4Q/9JQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794071037;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794071043;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=a61JwjnxKGRSd43XgWGH6Kd+4jztQXz3+tYtxQyCkm8=;
-	b=3MIT+KVTrAheXAonSt40GGBE4cULHaDAIXAbXyI4882oobJKYmv9MPiA3r3IemVX64RC
-	 hPw67EAGJe0DeLbnvyqLDMD1Ra7bXDcqzwqlbM35JRK88+L/OUCAr0SbqWUnX/iTyr0Ze
-	 09d5rGY/NUPSNxgwLCnt13ZbqGjHrqfxDg5D5TFBQD9Ba2knS6zdHfWXqtrn1nOWnGxq9
-	 BretHJXM63M/VLGtw6s1nZhYlFT9SfYti+vhV4/P6GJUZGuq/qJ7RmmXRRd+w66o46GxY
-	 xIN6T5CwRG/YpiR8RGgxv+9P3zAvOPR+QLCo4PK/cclNFnxZH+8eoqVX8HN8HvI9Apw==
+	bh=kqhdeyKuOkovqn//VXnBgsOuPRUZHvK+ad8DLR+9EFo=;
+	b=v4rKYXubPlmYdXs2QYC3+NV2v3g+wF2jlJPaCEjMythVvOOLHA61+VDrBVpJ16p0zz7P
+	 Ged6VCk5rzRzh6bkapDEcPPdhypxqg2zEiPxE2rpC/UYcb/LMzgDAS7OlfkYZxc1YpIMD
+	 +yBuy2eZcbreBO/feqwUb/KftnSeR5wYp7h4iijkI83mWou8W63du1bGaNTcS3P8IO2Bh
+	 QpbDfGduMd1o8rUt6YhFfi3dQrqlbIxAqBhwhgnkh4XOU47++HClz5CCfvmAyBOi2aXY2
+	 b0Yo6tgoFmuqEgn7n0RKP7K2fUZ9G/9m/RTR3m3z2+KZQorrtLmJzS5O0cCwZi5FVTQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xNdDfVpU;
-	arc=none smtp.remote-ip=209.85.215.182
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lwv9YRmu;
+	arc=none smtp.remote-ip=209.85.214.182
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34086606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:03:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34086606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C325606A32D
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:04:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C325606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xNdDfVpU
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd69954c755so1103001a12.3
-        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:03:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=lwv9YRmu
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e8da6ef7ddso9143135ad.3
+        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:04:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794071036; x=1794675836; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794071043; x=1794675843; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=a61JwjnxKGRSd43XgWGH6Kd+4jztQXz3+tYtxQyCkm8=;
-        b=xNdDfVpUfFRGBVKzQVzP0a77IDi1NJCAuMhIqRpi9V27zLQrl1aL9uIYfgbBrrGu3b
-         IjxIdhmOpwqu+w4e34o4C/YOM1e6CFRUJ5K5Kln3PmGcne2FHhHkRpK4+KhKAjnX1wjV
-         a3WVuFSjTmljfIOc1jYyXJf6ltfadBZql4htLNyCtm4kNkKrVyDXcc1Jh2puN99Zu8XP
-         cJ/mETBu4b2zfNSuegOCb0VgO89r97L9xATwgh2E/vYkYAZng+NEAgrx1L/GweA8fdPx
-         SRJYXvmQFJBkPWEKZIT2gw+4wC9UWDUYmjYw2aqB6zPzLJOnHDW8VceUgNYuP+G2MiSL
-         7aBw==
+        bh=kqhdeyKuOkovqn//VXnBgsOuPRUZHvK+ad8DLR+9EFo=;
+        b=lwv9YRmuvth92B6hLiu1JjMN5bClt7jx5Q6xhqo5XD8BMg3V9chnycCRgA3liYyC4e
+         i7Uq9pRcrc9PBSOcAZ2F5qsF8nrzoRqcaY5PCP+Pq4SjJQ7HvEcZokwxpql5NCe2Ek2O
+         BUgB3UVJHV02laDIJdEntZB/P4msOy5ZjS3PsKnQCzEPfwB2vsK/ggPLd4DOoL/uM5BL
+         nBL5sL92ox0sZkmo1L/uk6SsqXdciSx6hhoYZ4jEX/rxCSEv+bEE7Z7f+dwbOu+YxpAW
+         x/XDE9x8Fq6nQLyf2sAVK48KAZbJJRT1BKEUs3orOM1od868xIjbdUnkQ6R0ZXdJylXn
+         +cdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794071036; x=1794675836;
+        d=1e100.net; s=20260707; t=1794071043; x=1794675843;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=a61JwjnxKGRSd43XgWGH6Kd+4jztQXz3+tYtxQyCkm8=;
-        b=0SMI3UUe5+NPO5ivY8S2d49iLdNGZLp8gAOaRgY5rkQMdajU8ikid9FWZBZSVKkEkD
-         ozHF/gqclg5c9vGS6De7jpYrnWtNKHKK2+shaLcItX1C1S58swqPXrtaTWWHYcpmql8Q
-         n+5Q/WZtLI308x6WcQ43gQ1D2UwJvHDX6X4BTebHeWGwJUZSaGwlJ01Im29t9Rn8bTFR
-         LLNYxxATxdXKzdbUpRvJn459yp80HrrO0Ut9P6SUVATg31Jw2PuR5Ww/JUgnbq2pHJT6
-         HURbnnx8AOo8Zbvw74APf856kJZTM37YwVTiQA6rzVnZFqrtj5Xwjs+xLyYMiHbzTaW5
-         urbQ==
-X-Gm-Message-State: APuU4Z9ZhfPAPXoRiOOGi/ATnMT0R2qJpPtw5d7PAnCz8ax12JUDA7WF
-	Z1XI1PUx15+MTw7Da3vVZ6rzeeIWg+39BcDR8PN7lDWzFIE5a5i37qiC9cmvaA==
-X-Gm-Gg: AYBFou3sQJwRZeya/mKCkwi5Cy6zE255AK21A8oPKp4SF7J31K834H3HRH/gP3AR/Ie
-	7wtNRHRFp8IxtrNZUtJirTQ6i8Db3wENASlM3hRTMWrfpNhUw+v9VMZ9oquiwwyhn4vhRQ0u+nb
-	wYYz2MQp7HVQLFdLtUNqLe4Lhe6yIe5DmeY/U1SKcs58ni2tadXWFsyp9RIQqwopIPyzxdNRNsV
-	U676AYIzFop+ydKHt5lccvZYjYflTzeWguCKeBnAQ7mkOS7wqLNDLWqjK+dWeCYfqnPMGWl4Zez
-	QkZAo8nbwm+jJESJQzXxnNRYZIZeUkOMVJf25OSLhz9KBj7S4bUen/9Y2O+hx8zHT5RhfN0+FOx
-	4LK1RvDRm8RW7BEr8xm30liPMjhi2m9h64AT021/PU1aSTiGZIPwwUeUwbXEZtlppCrXqZBPwYL
-	P/X4RGskqgGNGGyhM1w15r1hFne8GF4Cdt09qb5Gd7JCDFbRb3W7SMZLtROoT4Jwjbuscc7i9Bh
-	Lc8kR0jy41oyHcNsy/Fvaod3ymNK+7XvzalFSjSoizrnfYzr22rKp8whEr/aXPx9bJ6v3qKezad
-	Qp5P5TDhLWqk2LYEQ5GHfGTWJt0Z6X4vK9vSNf/V5PYmmHMDVa+GImCboXdF6nOKHwWbbZ2lyvZ
-	2H7dlqkSHAhcikVOuYaOUeYfHMPybKsxdgmbb5/6GnPLXooPEa+6KRKOcu0wyFFgdHFMWrpegsA
+        bh=kqhdeyKuOkovqn//VXnBgsOuPRUZHvK+ad8DLR+9EFo=;
+        b=exTFovBEtQE43rvM5lqMfmQV7LWO7WoZj7jf6oXfIxdKki8+THozwdQ0Zz9OCmRhQi
+         cc1OCTKUvpm1MhnFwiIru36x5kgzDx54O/qklSPYo+ja3wRBll8ZVAb9MA2DHUJV6d+R
+         J1JT3rHdfdbcJc/GeR6mXHFOwbYjb6acaEyq3KcpFnlIC2YyyFrSSrrdUagNTFa0PZ4M
+         UqKE0d306jUn213EXg8NtKwSUnpisVSZdi8xfsVIRGNrGqjrQECcdrSEZrrtU29EWlA3
+         B0UIdmFox9GiUo5l5Hb72VJjnsNzlH7cJEpSRLOaFHsE2Kb0x0rQBTciBZ3NLqz3eZBs
+         wsbg==
+X-Gm-Message-State: APuU4Z8i86RxgBHUOM37Aj7aE4TbbF89RDfhOfyoJ2eFfVZDH72ZoJWv
+	u808spnWWI19+7v7oPV0RpZvHKI6I0fMg6PyEj26EbHzqOM1bsXmbia1HLLnbw==
+X-Gm-Gg: AYBFou1ilVi++Rn7YAAWtiYLYLCTC6K5/M+PqhPaohCK0chlQumIGQpSpQAfjgtHB22
+	0J45KqR0MQ/Y9j/LLk8409pyGB9Wppq740JDAo2gA2Fr0yKrmik3C4z0/qad1s2Fplf6MmxpSH7
+	U1y+JxhE22/hTIQaUum9FTDCDXo1rkk679KuiuoLgJkd7ZlyfU3n7NNxM94BiZ6poB1JpwTqR+j
+	N8buQQSZksQda6pPtawVb0q1u5CnVnmW3UBmxN6kLFCdiSf6B8TcJXg6UZzev5Tnarsqs2PzAE8
+	v6UUAeRaCsdxYEYZMePbsJsm2jU10VCsUkwSXhJ965oV4btmGvi0+VMHH29TbY//zn6KCNnKr2i
+	O+3HzQLXbRp5rCbHvMLVPR3w2WVXklNOd8DXVX4YeQhJdcbwhHzvFjQovm9M+y+gawtWfcPq7hV
+	MRXMUuYUB63RLf0V3BN9XYmx2xx+w/TI+wICdlbqluvOAgEBBB8SHnkOJqfeueoyqQp3DQi6ahD
+	0Bz1Gk2jtQ1JHPnaVwYCb5x71302QH+WdYs1QrTIQ6GA1uE6aDh0JLnTTUCrZpUkckQccWcdMlq
+	F1PHHNNNDhRf2r3d4UhZxkzQJRr4bDVObRugm7TJlvAtffZtSUKlFSVUOrv+Kw7n+zbOCIN0kEI
+	0I9DvgUpHuGDyYjyZs91OLRTf8GuhCEBkWO4k5xavPG5VPuKhmKUplHGUWB5lO3fidmDL0VPA8g
 	==
-X-Received: by 2002:a17:90b:3944:b0:3ae:5572:c4e2 with SMTP id 98e67ed59e1d1-3b0db6fb52bmr4919364a91.57.1794071036456;
-        Sat, 07 Nov 2026 09:03:56 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1057fda58sm4190502a91.7.2026.11.07.09.03.55
+X-Received: by 2002:a17:902:ea0a:b0:2ed:3c60:7be with SMTP id d9443c01a7336-2ed40e78b39mr66150095ad.59.1794071042529;
+        Sat, 07 Nov 2026 09:04:02 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47d40fe4sm13554485ad.35.2026.11.07.09.04.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 09:03:55 -0800 (PST)
+        Sat, 07 Nov 2026 09:04:01 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 6/9] selftests/bpf: Skip plain_c_arena_race without zap_vma_range() in BTF
-Date: Sat,  7 Nov 2026 17:03:03 +0000
-Message-ID: <20261107170306.2831028-7-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 7/9] selftests/bpf: Run the plain C tests with an arena serially
+Date: Sat,  7 Nov 2026 17:03:04 +0000
+Message-ID: <20261107170306.2831028-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
 References: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
@@ -104,41 +104,62 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-plain_c_arena_race has the fentry prog of arena_race.c. libbpf looks for
-its target, zap_vma_range(), in the BTF of vmlinux. When the function is
-not there the load fails:
+Commit a14f9ba080c1 ("selftests/bpf: Run arena tests serially") made
+arena_htab, arena_list, arena_strsearch and the other arena tests serial.
+With KASAN every arena takes 512 MB of shadow memory while it lives, and
+several arenas at a time exhaust the memory of a small CI VM.
 
-  failed to find kernel BTF type ID of 'zap_vma_range': -ESRCH
+The plain C forms of these tests make the same arenas. Their names are next
+to each other, so test_progs -j gives them to its workers at the same time.
+In a KASAN VM with 4 cpus and 5G
 
-prog_tests/arena_race.c skips the subtests that need the prog in this
-case. Do the same for the plain C form. The kernels of BPF CI have the
-function: no job fails today.
+  ./test_progs -j -t plain_c
+
+leaves 0.4G of memory available at its lowest point. Make the five tests
+whose prog file has an arena map serial: 2.4G stay available.
+
+plain_c_arena_race has no arena. It stays parallel.
 
 Fixes: b5ae07f77d27 ("selftests/bpf: Test progs without bpf_for(), zero, can_loop and such")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/plain_c.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/plain_c.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/plain_c.c b/tools/testing/selftests/bpf/prog_tests/plain_c.c
-index bfadbbfd436a..ebdcf2275dbe 100644
+index ebdcf2275dbe..6d165afd38f6 100644
 --- a/tools/testing/selftests/bpf/prog_tests/plain_c.c
 +++ b/tools/testing/selftests/bpf/prog_tests/plain_c.c
-@@ -119,7 +119,16 @@ void test_plain_c_arena_list(void)
- 		arena_list_add_del();
+@@ -109,10 +109,11 @@ static void dynptr_run(void)
+ 	plain_c_dynptr_success__destroy(skel);
  }
  
--void test_plain_c_arena_race(void) { RUN(arena_race); }
-+void test_plain_c_arena_race(void)
-+{
-+	/* prog_tests/arena_race.c: the target of fentry */
-+	if (libbpf_find_vmlinux_btf_id("zap_vma_range", BPF_TRACE_FENTRY) <= 0) {
-+		test__skip();
-+		return;
-+	}
-+	RUN(arena_race);
-+}
-+
- void test_plain_c_arena_strsearch(void) { RUN(arena_strsearch); }
+-void test_plain_c_arena_htab(void) { RUN(arena_htab); }
+-void test_plain_c_arena_htab_asm(void) { RUN(arena_htab_asm); }
++/* Files with an arena map are serial, as prog_tests/arena_*.c: 512 MB of KASAN shadow per arena */
++void serial_test_plain_c_arena_htab(void) { RUN(arena_htab); }
++void serial_test_plain_c_arena_htab_asm(void) { RUN(arena_htab_asm); }
+ 
+-void test_plain_c_arena_list(void)
++void serial_test_plain_c_arena_list(void)
+ {
+ 	RUN(arena_list);
+ 	if (test__start_subtest("run"))
+@@ -129,7 +130,7 @@ void test_plain_c_arena_race(void)
+ 	RUN(arena_race);
+ }
+ 
+-void test_plain_c_arena_strsearch(void) { RUN(arena_strsearch); }
++void serial_test_plain_c_arena_strsearch(void) { RUN(arena_strsearch); }
  
  void test_plain_c_bpf_ma_ttrace(void)
+ {
+@@ -173,7 +174,7 @@ void test_plain_c_test_wakeup_source(void)
+ }
+ 
+ void test_plain_c_tracing_stack_arg_tailcall_tgt(void) { RUN(tracing_stack_arg_tailcall_tgt); }
+-void test_plain_c_verifier_arena_large(void) { RUN(verifier_arena_large); }
++void serial_test_plain_c_verifier_arena_large(void) { RUN(verifier_arena_large); }
+ void test_plain_c_verifier_iterating_callbacks(void) { RUN(verifier_iterating_callbacks); }
+ void test_plain_c_verifier_loop_as_is(void) { RUN(verifier_loop_as_is); }
+ void test_plain_c_xdp_lb_bench(void) { RUN(xdp_lb_bench); }
