@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022781;
-	b=WfiwwXCkv9YbbUR6Qs7Fub/m5Me7aIWErEg8oMWz9vCbfkTGmAC1eDrbj12drpaW4iim
-	 6Y5upy+swlVf0kP/zkqevoYb/HNl8B6Mo0PdZGvR+LxBQ+8bX5/t+ef/Os13bjdLUfYO+
-	 w7V9CG9+XbLM9tNDzEixTyMHgH275Z5qJ1u8gH/rluoMZ/AHOsUgdwI77tHNzNbYNtBPX
-	 moQnAMibMGrbTg7edif8SMUaJfjnBXtC2qD3BKgZIIjNScvsM/Z4JKPpxbBcuRo87+EgE
-	 TQZQp8sDJ8LKggKAcqMP8yKkqvQvL0YpiM8PQQGDQXfgzFfMK94qeo+TJb7MYlMQTpA==
+	t=1794022787;
+	b=FdwoD6reOgtpOjsgBJBRQTwefWK7rqc6oOMM3WNIsGThkmEAx7YB3tuTg9gLl75Qy2aH
+	 8IPsqT+yGuS+C6VLk6HvTlf+Sq5QwGApIsJR7+9F/eQkHCO+Odt4kei+A2W0TeGHTLAJC
+	 VGS88feHLZY/DwaFE7dU708X7yRWuTuMI5FQq+KxOiV8pVnZBpxyJ6tz5YANRajFS/afb
+	 iiCOf04UKE3bulJooRddOW/qGGfFaHZJhwSJtkiC4y/Q9hJTpsgFMIWKyLZ0XikvxpIeJ
+	 koISkhyJLLtX5d19E3dv8Td0zMtQlnmC66HXnUTbT24Fg1CsV0ZD/jPRgNiucbGSsfw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022781;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022787;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=uTX+JvI/+JsXsJXHtnCey6YTzan1OAbEuLbgl3i6XqY=;
-	b=OejpruVV7lgGdvXetxKW8Wzosu7U9KcDvqZEsADcwy6+gfcBr57rGinKpH0YllFSfOyY
-	 /LH8Rbn3Lq9Fwx9AWleEqJyvrq1HS6JFz8/R6Q6Fyxjq21R3/ZtBLaVtmTdKNDDiQqhsE
-	 uXcjNQdoxAUJRehDPiYlo9vxPnXGYt041EBRfHbXLN5iU8I4eyiTvIWqaRVOdTzkTRePN
-	 vU1P40VmUEo5zW9pfagfimfoM7JjdKqIlPNrmK1DxoNM4H0P8V9MMCM/NFpJtAIw34RoX
-	 a9SS9LUDRag/xc5AeOQnahNzj+aJMfNkmUtBlOfFW/o+SNzaCb4Bj7NIENFF4yqmunA==
+	bh=hF22pKu2eZYmqcQhF9F2bkIfnB+u4qsA+Bm5sKPC7tQ=;
+	b=ScVk7StN+8Ky+oijq0X+DlF0Y+D2Qxg1BgGnac5HMWXVB+YjDwhjDePQpAUXNDqEV2au
+	 6/Nn1S2u0mx8LkKth37F8S3lF3C/fUpyvGI6/FAUFRiEdLxrtMlFk/w4Y2BhbNaNVVnBs
+	 r+L76KW/khWxQ36TP0La8vRKRd1FN1mPnYBjimTkr+G6peLKs8xdE5gaxKeJn2N+sFIho
+	 Es6GbdZ3PdNiZ3vY+iJ919m+6h7HKXYsL8tawsJLyT9jVBmLQuriVillxTNwYP0EF77v/
+	 HcA7B8HY5sckgLWC6dmud0aefxLy9uJHBdzURsg7tiluUih49578/yrgv3Bj4qOWgEw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IxqKU9tQ;
-	arc=none smtp.remote-ip=209.85.216.43
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XqHWTzyz;
+	arc=none smtp.remote-ip=209.85.214.182
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03EF1606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:39:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 03EF1606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3971A606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:39:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3971A606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IxqKU9tQ
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ac91ac8924so718576a91.1
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:39:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XqHWTzyz
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ed1e9ae5a8so4391605ad.1
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:39:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794022780; x=1794627580; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794022786; x=1794627586; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=uTX+JvI/+JsXsJXHtnCey6YTzan1OAbEuLbgl3i6XqY=;
-        b=IxqKU9tQ7H7eKB2UWoJjN9mSg2Ixx/9ZAYHRGxWJB0HIS5XaboqnJmB6hol5HbFkVl
-         Pdz090vHz3TwsV4r6dattq2wTRbo0mRHmxpAXH7Q8J0G8VkuLL20vXY4dC2BxZ/z1JoR
-         Q4EuZBdxl8kZ560IH8mgrTrhARcCidVdNy5HNCo3d0JgIzPyIxGwgCHmG2BQPkMan7HQ
-         nA9JrbfWz9Pqf11llyiXI750aDE/XJ/lGfWUn7JBQWgBW2RdyS8sNy3HXv/jFl8IaRUa
-         ErIKgbM83gMkeIE764RYpGv8pv/PKhqdvI0VuC/i1G4N8pHtC7eS1e+1Dm/osqZmhUAP
-         uzIA==
+        bh=hF22pKu2eZYmqcQhF9F2bkIfnB+u4qsA+Bm5sKPC7tQ=;
+        b=XqHWTzyzACT3yZB4Mc5ZAdK3KTV5rwUBQhhByhqLg3m4l8bm7RfUTf/Qfqe8HtYdMM
+         S9wLkCEP2GZn5xXiP+9WM/KnX37Jb/9RtubxZY4bSXqvftPzNvvJyLsNEqcBOCZNgMdU
+         aM3GwwImM5yiGwBUqVv5E9OfKCy3EyBrOjcF99kQYYSPLXKO+ELIxS8eGtl+tD7jbIv8
+         NJKo8Nxa9gSDRT5UmeEhK8z8Z/nCw+zTlxZjU/au0GE8mnwee71dJiM1HXIJy1VvXagT
+         h1IzX8yFZmptarvoZ5Plb2m47RnkQlbCs89+4l6JqoRN6Npj5dpOu61w9vp20JjZYljI
+         jzNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022780; x=1794627580;
+        d=1e100.net; s=20260707; t=1794022786; x=1794627586;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uTX+JvI/+JsXsJXHtnCey6YTzan1OAbEuLbgl3i6XqY=;
-        b=wthsFBD2ri/Fu1Gnd+FVNzFQwPf5uhxq7wpEYyEpQKwF7OoHvowbfSKp9NK7AMEMHp
-         PpXgowncR6du+l2T1r3gA+0Wpm+FXkR9cN+anCMY7QDoE2Wi1EqR6DbuFXAyiNVdkLlR
-         //0m6WN4TNSPs/018FyPsnObqZcVlVYF6cSNfZ0LhfmCCTwmw1et4zipKjmozcvMXXC6
-         KBogYuTQF+Fe3nRr6UE/UdPSC4CPYBVDc/8bKuTXIwAWEeIm+P1XEzLbAUcYZFelBlh5
-         6q3DgCIDY0PLF4p0EgdlAhf8OF50nzqOjml2jhWZHltb+OoX2GIxGI+dCUuEhXUIN6bI
-         zu/A==
-X-Gm-Message-State: APuU4Z82mqCtUzoeK9cknbPfdRcf6cE/Rn9j06zACoafReFMjgVP3Z8A
-	ncG/RojhEH4O0svkHE7Dv3bvMFVtWaOtt8fMi2OyOl1m+hFRSl9rRziqTpRl4Q==
-X-Gm-Gg: AYBFou0nxvhi8/mJCT5nf2QOzoRKTslCruEtWbmF6Pz0QYDf7wI1lckoq3y1e3XsQBu
-	VSgTEixBxCSG/vZdTFleOx96lNczP7oTYlzZ3gj3KXoiMZs95ZAYqvkKOaiSJK9iRoj3p8O0LKC
-	N3E/eDctMg5dwsep2KIcVRMbMrrFiFekMxpx8QQfF7KCYFJsY22XtXstoukMZAqu7FInk13WA94
-	410sKV1UV5qlZpL1KxdXCcZDP9bta54l5oYlM+TVVKS3NuabmLDOdCNYFzCzpP/4uV4kRnwcv3x
-	463jbdPAtbf5saRFDUOjIR2y6ZQ4p0dQMTrQzPAkYIdhP5qvxUsKTkieVDuauFlyq8jh/ws2w7Y
-	iK7EhGVPm/CWN+6JaMkjD+3ykKyhyOo6s5svsPexCyse5+pNY+W4QXxCfDJyK7IDjLhPzoG7K4l
-	0WUWpnJS/v11lqws3sgvtHyuOzM1b9CuCRU7OQBi3RcPrxtrNDm3e7yFWpMB8JtSuPMY43nM7ZQ
-	FKX5WUl3iSWjnL4KudrhueC8r3Yz8Q8YzejcJaFsgBkGDs9TofhjVvTYXq3+iGkTGJDXb13esFB
-	TfFoxhIY1sJ9qIEodTcSwEy+/QaJUQqD3O3E+bYhTYLoocGfjw5tNmXqeXbVQDPGCl5F7MRf8yQ
-	WpQGWccgQgeoXMpyQHAFXHYnmc09hRTblhMer8kFzD3ImqontpKvVaY+08rqu/++epjajuoAPYQ
+        bh=hF22pKu2eZYmqcQhF9F2bkIfnB+u4qsA+Bm5sKPC7tQ=;
+        b=bSxdJYaeEAeBkI/OBrkFJotQpNioLXRgrG5UPD0lbqUli8Q8jxhj6ppO5hCRnLwm+d
+         Q2SsveuY9ySwgBjh3nx2scUCv/+uuJKpx947s6hgy13vepr4JItb+j+U6p4Cm4gkAyY8
+         usB/zu3VH0U2nCsU3WMXdZM1eZmYKN8CTwHGfl1umrG5cCIu0KuJLUt8jQAQ5HGoBoV7
+         ghfnOW43A4PAoMN+ZP5X0Lgf7birgFpmtit8GIaAHkhrCTjPiJhGM7fzSDWiKi+ZiGpV
+         G+HTe0O2NaQbXLwoCYNhvzBN9kqlhMzf/L+K55eRjtGYQ2mYNJTel8EHMWI/Rwz+xAEn
+         i/Zw==
+X-Gm-Message-State: APuU4Z8b2o3p8Ca8B27rxt3LTFU7srfb79hFlCjL0QiVuHHh/w3LkvTi
+	LRNpkh+MgWAldQsk9w8q9iD0WqYJ+zdTbanIN9WsgFoPHz7l5pWZWTW/rfAZWg==
+X-Gm-Gg: AYBFou1LEo/g9eC66oY/5+6wT5tIj0QBe8OdRaRw79qai31gIEKdHqSJNEddQZt/8v7
+	yQWtlHGJBUqHCkK1OHQu3Oy75OtnGYRFR2M34eX/rmf+AjJ2dTTMsgxVPXZ2Ybdvlu3zWtxQIdV
+	yfGif8Vw8EcvnL6sKiKfLPuq7shKceXgwyAWiO6ltBEN5bSu0M5HyEB+ZSEkVIywkXuVmsb1wkb
+	xNahNKCpcq10Fdbn/mtbAkb9SMso+sdamadOgQMjzES9fyhShI7Jx6D3pt4KevxIjCrC6wogDvd
+	EpzZhyS0JuhGpWMnIPMIaJxpGx0FGshpwXf6XCvYnI+dNC2FUeQcmoqOS9Wp9c6VZ1RJJJhjqWD
+	sOUQW8W72+ESIG4Nh13BJ4gyxakhC9uwsFHeX+JD/qeArqTPqhg2WJE9dxPOIExH4Jm/bUhTXxd
+	ZqRkT+a2eULYQKmEwupfKKZssc+09Z2l4b9oKxbzv2gala41K+g9DDenwjv/QpJyg3acD1RkLx+
+	WnLMyT4Q8xXemwwduiiLZgGH7HeTHvhsbx+/iNWwa1AV+5u1HwtzyFRp89Tk1tqt/q2rMGg7QP2
+	+qxvantkVvjJJzXQ9ESv95DmoBtHkIs32wHVNMnOKbAZ9PM/Ml0bA5Ns67DBYTXy80HY8z/8wIY
+	U9MvIWDjrkW6EvaPer2nOEOpKl7Chp/BlXibSFMfJ1e9SHaae3IYILkfvk7RpuVG6/mFvN0cRmw
 	==
-X-Received: by 2002:a17:90b:270e:b0:3ac:b6eb:e0dd with SMTP id 98e67ed59e1d1-3b0db70914dmr4090700a91.50.1794022780051;
-        Fri, 06 Nov 2026 19:39:40 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b10584b66bsm1416496a91.14.2026.11.06.19.39.39
+X-Received: by 2002:a17:90b:5390:b0:3a4:8c41:fab6 with SMTP id 98e67ed59e1d1-3b0db700909mr4611150a91.46.1794022786081;
+        Fri, 06 Nov 2026 19:39:46 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed477a7c73sm10178645ad.22.2026.11.06.19.39.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 19:39:39 -0800 (PST)
+        Fri, 06 Nov 2026 19:39:45 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v4 16/46] bpf: Make the state after a call from the caller's state and an exit state
-Date: Sat,  7 Nov 2026 03:37:24 +0000
-Message-ID: <20261107033758.1547725-17-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v4 17/46] bpf: Enter and leave loops in the main pass, build flow.c
+Date: Sat,  7 Nov 2026 03:37:25 +0000
+Message-ID: <20261107033758.1547725-18-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
@@ -104,282 +104,519 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-match_one() of scx_layered runs in three nested bpf_for() loops and calls
-a static subprog, get_pid_nr_ns():
+The main pass joins the states that meet at an insn. At the head of a loop
+with a join alone real progs are rejected. bpf_flow_loop_enter() has three
+methods for a state that enters a loop, and tries them in this order:
+1. Count. scx_lavd/lavd_dispatch:
+  for (int j = 0; j < LAVD_CPDOM_MAX_NR; j++) {
+      ...
+      cpdom_id = get_neighbor_id(cpdomc, i, j);
+Scalar evolution finds at most 128 iterations. The state gets j = [0, 127]
+and covers all of them: one pass through the body, no may_goto, as today.
 
-  scoped_guard(rcu) { ... nspid = get_pid_nr_ns(p_pid, pid_ns);
+2. Walk: each iteration has its own state. Selftest netif_receive_skb:
+  for (i = 0; i < len; i++) {
+      delta = s1[i] - s2[i];
+      if (delta || s1[i] == 0 || s2[i] == 0)
+          break;
+The compiler tests 'i - 9 < 247', unsigned: no count. After a join i is
+unknown: "math between map_value pointer and register with unbounded .."
+In a walk i is a constant and decides its test.
+flow_try_walk() starts a walk. It goes on while each iteration but the
+first decides a jump that leaves the loop, for at most 4096 insns, or two
+iterations of a longer loop. A loop with calls gets two iterations: its
+size says nothing about the subprogs that it calls. strobemeta.h with
+NO_UNROLL, SUBPROGS and two maps:
+  for (int i = 0; i < STROBE_MAX_MAPS; ++i)
+      payload_off = read_map_var(cfg, i, ..., data, payload_off);
+The compiler makes a flag of i: no count. Only a walk bounds payload_off.
+A loop with two entries is walked whatever its jumps do. bpfjailer:
+  for (int i = BPFJ_MAX_POD_PER_PID - 1; i >= 0; --i) {
+      if (i >= num_pods)
+          continue;
+The compiler copies the test in front of the loop and jumps into its
+middle. Scalar evolution says "unsupported loop: irreducible". With a join
+14 progs get a may_goto in a loop of 8 iterations.
 
-It is verified for the states at its first insn, not for each chain of
-calls. One exit state is the result for all calls that wait:
+3. Join, widen, add may_goto. Test hash_fnv_bytes of rust-bpf:
+  for b in bytes {
+      h = (h ^ *b as u64).wrapping_mul(0x100000001b3);
+The length is unknown and h differs in each iteration. Today that is
+"BPF program is too large. Processed 1000001 insn". Now the walk ends in
+the second iteration, flow.c widens h to an unknown scalar, and the state
+that returns next is covered: 160 insns. That shows that each iteration is
+safe, not that the loop ends. Thus the loop gets a may_goto. If there is
+no place for one: "loop at insn N never exits".
 
-  2: call f  --- { r1=scalar } --->  +---------------------+
-  7: call f  --- { r1=scalar } --->  | f: verified 1 time  |
-  3: ...     <-- { r0=[0,7] } -----  |                     |
-  8: ...     <-- { r0=[0,7] } -----  +---------------------+
-
-That works only if calls that differ in ids give the same entry state. Here
-the callers hold three iterators, and each bpf_iter_num_new() has a new id.
-What is held is a part of the entry state: it decides what the subprog may
-do. In the subprog the id of refs[i] of the caller becomes a name,
-BPF_INHERITED_ID + i. A name stands for one object of the caller. Thus
-check_ids() and the join do not rename it: it is equal only to itself.
-
-If a call with something held keeps the frames of the callers instead,
-layered_runnable takes 5219 insns, not 4459, and recursion has no end.
-core::fmt of Rust is recursive, and progs format a message while they hold
-a reference. 27 progs of the schedulers of rust-bpf fail:
-"the call stack of 33 frames is too deep".
-
-bpf_flow_return() makes the state after the call:
- - r0, and r2 of a pair, come from the exit state. r1-r5 and the outgoing
-   stack arguments are not set.
- - What is held is what the caller held and what the subprog took. The
-   names become the ids of the caller again.
- - All other ids get new values for each call. If not, two calls in
-   sequence return the same object.
-
-Selftest test_spin_lock, lock_static_subprog_unlock():
-
-  bpf_spin_lock(&lockA);
-  ret = static_subprog_unlock(ctx);
-
-An exit state does not tell what a release does to the caller. Thus the
-frame counts what it holds without interruption since its entry. If that is
-less than the caller held, the function returns 1, and the call is verified
-again with the frames of the caller. Also: rcu_read_lock, preempt_lock. The
-same if it changed the packet through a function that is its argument.
+bpf_flow_loop_leave() removes the loops that an edge leaves. flow.c and
+the two functions call each other, so flow.o is built from here on, and
+do_check() does not use it yet. A loop that leaks a reference in each
+iteration has no fixpoint: check_refs_taken_in_loop() rejects a state that
+returns to the head with a reference that no register and no slot holds.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  18 +++++
- kernel/bpf/join.c            |   3 +
- kernel/bpf/states.c          |   4 +
- kernel/bpf/verifier.c        | 138 +++++++++++++++++++++++++++++++++++
- 4 files changed, 163 insertions(+)
+ include/linux/bpf_verifier.h |  80 +++++++++++
+ kernel/bpf/Makefile          |   2 +-
+ kernel/bpf/verifier.c        | 262 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 343 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 700f5bb41f83..75f5c30027f8 100644
+index 75f5c30027f8..6745c92ad586 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -1100,6 +1100,8 @@ struct bpf_subprog_info {
- 	 * a hidden pointer to the result, a pair in two registers, no dead arguments.
- 	 */
- 	bool stack_args_from_code: 1;
-+	/* it releases what its caller holds, so it's verified in the context of such caller */
-+	bool releases_inherited: 1;
- 	/* it loads the end of the packet from the context */
- 	bool loads_pkt_end: 1;
- 	/* it can leave with unwind_exit: it has one, or unwind_goto follows every call of it */
-@@ -1134,6 +1136,20 @@ struct bpf_id_pair {
- 	u32 cur;
+@@ -364,6 +364,13 @@ struct bpf_loop_iters {
+ 	struct cnum64 iv_range;
  };
  
-+/*
-+ * A function that is verified on its own, see func_is_on_its_own(), has no ids of its caller.
-+ * It has names for the ids of what is held: BPF_INHERITED_ID + i is the id of refs[i] at the call.
-+ * - A name depends only on the place. Each id in the state at the entry is replaced with its name.
-+ *   The ids of the caller can be names that it got from its own caller: they are replaced too.
-+ * - A name stands for the same thing in all states of the function. It is equal only to itself:
-+ *   check_ids() and jid_note() do not rename it. So two calls share a state at the entry, and what
-+ *   comes out for it, only if the same places have the same names.
-+ * - bpf_flow_return() puts the ids of the call that waits back. All other ids get new values.
-+ * - env->id_gen stays below BPF_MAX_ID. So no id is a name or has a bit of BPF_ADD_CONST.
-+ */
-+#define BPF_INHERITED_ID	0x20000000
-+#define BPF_MAX_ID		(BPF_INHERITED_ID / 2)
++/* Where may_goto that the verifier adds goes, see check_loop_guard() */
++enum bpf_guard_edge {
++	BPF_NO_GUARD_EDGE,
++	BPF_GUARD_LEAVES_SUBPROG,
++	BPF_GUARD_LEAVES_LOOP,
++};
 +
- struct bpf_idmap {
- 	u32 tmp_id_gen;
- 	u32 cnt;
-@@ -1615,6 +1631,8 @@ int bpf_states_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst
+ struct loop_stack_entry {
+ 	struct bpf_verifier_state *entry_state;
+ 	u32 min_header_count;
+@@ -379,6 +386,10 @@ struct loop_stack_entry {
+ 	u32 apart:1;
+ 	/* max_header_count follows from the state at the entry, not from patience */
+ 	u32 counted:1;
++	/* the walk goes on for as long as each iteration decides a jump that leaves the loop */
++	u32 probe:1;
++	/* this one did */
++	u32 decided:1;
+ 	/*
+ 	 * How many times the state came back to the head of the loop. With @apart that is
+ 	 * the iteration that it is in. A state that stands for many iterations is a join, and has
+@@ -387,6 +398,17 @@ struct loop_stack_entry {
+ 	u32 trip;
+ 	/* the number of references that the state had when it entered the loop */
+ 	u32 refs;
++	/*
++	 * Which of the states that entered the loop this one comes from. What comes back to
++	 * the head is for that state, see flow_merge(). A join has the number of one of the two.
++	 */
++	u32 entry_id;
++	/*
++	 * A walk on patience: which one it is, and how many insns may be looked at in it, see
++	 * env->walk_insns. The size of the loop says nothing about the functions that it calls.
++	 */
++	u32 walk_id;
++	u32 walk_patience;
+ 	int iv_reg;
+ 	struct cnum64 iv_range;
+ };
+@@ -447,6 +469,8 @@ struct bpf_func_state {
+ 	 *                           | number of simulations is tracked in frame N
+ 	 */
+ 	u32 callback_depth;
++	/* Which of the states that got to the call this one comes from, see flow_merge() */
++	u32 callback_entry_id;
+ 	/* Instructions processed in this frame and callees on the current path. */
+ 	u32 insns_subtotal;
+ 	/*
+@@ -603,6 +627,11 @@ struct bpf_verifier_state {
+ 	 * and their packet pointers are not in the state, see bpf_flow_return().
+ 	 */
+ 	bool changed_pkt_data;
++	/*
++	 * Not zero in a function that is verified on its own: the call that the
++	 * state at its entry came from, see bpf_flow_call().
++	 */
++	u32 flow_entry;
+ 
+ 	/*
+ 	 * First and last insn idx of this verifier state.
+@@ -807,8 +836,23 @@ struct bpf_loop {
+ 	bool exits_overflow;
+ 	/* @exits of a loop in this one is cut. Then @exits of this loop can lack exits too. */
+ 	bool nested_exits_overflow;
++	/* every trip goes through an insn that stops the loop, see flow_is_bound() */
++	bool rt_bounded;
++	/* insns in the loop, nested loops included */
++	u32 nr_insns;
++	/*
++	 * a walk on patience whose jumps were all decided, or the two trips of a loop with calls,
++	 * didn't get to the end of the loop: there is no other try
++	 */
++	bool walk_failed;
++	/* functions of the program are called in the loop */
++	bool has_calls;
++	/* not rt_bounded: there are places for may_goto, see guard_to in bpf_insn_aux_data */
++	bool has_guards;
+ 	/* and it is going to be there, see bpf_flow_loop_gets_guards() */
+ 	bool guarded;
++	/* a state went through it without the edges of may_goto, see bpf_flow_loop_gets_guards() */
++	bool no_guard_edges;
+ 	/*
+ 	 * Loop-entry registers used to compute stack addresses for loads,
+ 	 * stores and calls requiring fixed stack offsets, in this and nested
+@@ -868,6 +912,9 @@ struct bpf_insn_aux_data {
+ 	DECLARE_BITMAP(may_write_mask, MAX_BPF_STACK_SLOTS);
+ 	DECLARE_BITMAP(live_stack_before, MAX_BPF_STACK_SLOTS);
+ 	u16 stack_ptrs; /* bitmask of regs that may hold a frame pointer here (arg_track) */
++	/* regs that hold a number or a pointer to arena; that, or a pointer to a plain map value */
++	u16 plain_regs;
++	u16 value_regs;
+ 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+ 	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
+ 	u64 nospec:1; /* do not execute this instruction speculatively */
+@@ -885,6 +932,7 @@ struct bpf_insn_aux_data {
+ 	u64 guard_place:1; /* it's the place for may_goto if the loop needs one */
+ 	u64 guard_at_header:1; /* there is no better place than the head of the loop */
+ 	u64 guard_no_unwind:1; /* it cannot unwind from here, at least sometimes */
++	u64 guard_edge_dropped:1; /* an edge of may_goto from here was dropped */
+ 	u64 need_scev:1;
+ 	u64 alu_state:5; /* used in combination with alu_limit */
+ 	/* true if STX or LDX instruction is a part of a spill/fill
+@@ -1068,6 +1116,7 @@ struct bpf_subprog_info {
+ 	bool can_unwind: 1; /* has unwind_exit */
+ 	bool recursive: 1; /* on a cycle of the call graph */
+ 	bool in_recursion: 1; /* recursive, or a recursive subprog gets to it */
++	bool addr_taken: 1; /* callx calls nothing else */
+ 	bool via_callx: 1; /* callx calls it */
+ 	bool tail_call_reachable: 1;
+ 	bool has_ld_abs: 1;
+@@ -1283,6 +1332,11 @@ struct bpf_verifier_env {
+ 	bool test_state_freq;		/* test verifier with different pruning frequency */
+ 	bool test_reg_invariants;	/* fail verification on register invariants violations */
+ 	bool uses_arena_sp;		/* the program has insns with BPF_REG_ARENA_SP */
++	bool restart;			/* see bpf_flow_next_is_no_bound() */
++	bool guards_late;		/* see bpf_flow_loop_gets_guards() */
++	u32 loop_entry_cnt;		/* see loop_stack_entry.entry_id, callback_entry_id */
++	u32 walk_cnt;			/* see loop_stack_entry.walk_id */
++	u32 *walk_insns;		/* the insns that were looked at in each of them */
+ 	u32 max_arena_stack_depth;	/* of all call chains */
+ 	struct bpf_verifier_state *cur_state; /* current verifier state */
+ 	/* Search pruning optimization, array of list_heads for
+@@ -1430,6 +1484,7 @@ struct bpf_verifier_env {
+ 	struct bpf_iarray *gotox_tmp_buf;
+ 	int *idoms;
+ 	struct scev *scev;
++	struct bpf_flow *flow;
+ 	struct bpf_join_state *join;
+ };
+ 
+@@ -1631,6 +1686,31 @@ int bpf_states_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst
  		    bool widen);
  void bpf_join_free(struct bpf_verifier_env *env);
  
-+int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *caller,
-+		    const struct bpf_verifier_state *exit, int call_idx);
++/* flow.c */
++int bpf_flow_prepare(struct bpf_verifier_env *env);
++void bpf_flow_reset(struct bpf_verifier_env *env);
++void bpf_flow_free(struct bpf_verifier_env *env);
++bool bpf_flow_is_point(struct bpf_verifier_env *env, int insn_idx);
++struct bpf_verifier_state *bpf_flow_keep_state(struct bpf_verifier_env *env,
++					       const struct bpf_verifier_state *st);
++int bpf_flow_deliver(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++		     int insn_idx, int prev_insn_idx);
++int bpf_flow_guard_edge(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
++			int insn_idx, int prev_insn_idx, enum bpf_guard_edge edge);
++int bpf_flow_next(struct bpf_verifier_env *env, int *prev_insn_idx);
++int bpf_flow_call(struct bpf_verifier_env *env, struct bpf_verifier_state *caller,
++		  struct bpf_verifier_state *entry, int subprog, int call_idx);
++int bpf_flow_exit(struct bpf_verifier_env *env, struct bpf_verifier_state *st, int exit_idx);
++void bpf_flow_next_is_no_bound(struct bpf_verifier_env *env, int insn_idx, int h);
++bool bpf_flow_loops_lost_bound(struct bpf_verifier_env *env);
++void bpf_flow_loop_gets_guards(struct bpf_verifier_env *env, int h);
++void bpf_flow_new_round(struct bpf_verifier_env *env);
++int bpf_flow_place_guards(struct bpf_verifier_env *env);
++int bpf_flow_compute_kinds(struct bpf_verifier_env *env);
++bool bpf_flow_is_needed(struct bpf_verifier_env *env, int idx, u32 r);
++/* verifier.c, for flow.c */
++int bpf_flow_loop_leave(struct bpf_verifier_env *env, bool *enters);
++int bpf_flow_loop_enter(struct bpf_verifier_env *env, bool *backedge, bool *drop, bool *ends_walk);
+ int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *caller,
+ 		    const struct bpf_verifier_state *exit, int call_idx);
  int bpf_insert_loop_guards(struct bpf_verifier_env *env);
- u16 bpf_call_const_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn);
- u16 bpf_call_checked_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *insn);
-diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
-index 4da051767e1d..0110e5f85003 100644
---- a/kernel/bpf/join.c
-+++ b/kernel/bpf/join.c
-@@ -84,6 +84,9 @@ static void jid_note(struct bpf_join_state *js, u32 ida, u32 idb, bool consisten
- 
- 	if (!a || !b)
- 		return;
-+	/* a name of what the caller has, see BPF_INHERITED_ID */
-+	if (a != b && (a | b) >= BPF_INHERITED_ID)
-+		consistent = false;
- 	for (i = 0; i < js->npairs; i++) {
- 		p = &js->pairs[i];
- 		if (p->a == a && p->b == b) {
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 4136a708a78e..9d3a86b5820e 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -350,6 +350,10 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
- 	if (old_id == 0) /* cur_id == 0 as well */
- 		return true;
- 
-+	/* a name of what the caller has, see BPF_INHERITED_ID */
-+	if (((old_id | cur_id) & ~BPF_ADD_CONST) >= BPF_INHERITED_ID)
-+		return old_id == cur_id;
-+
- 	for (i = 0; i < idmap->cnt; i++) {
- 		if (map[i].old == old_id)
- 			return map[i].cur == cur_id;
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 3e0b096cfc9f..ab3ba42596ec 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -11,7 +11,7 @@ obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_
+ obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
+ obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o
+-obj-$(CONFIG_BPF_SYSCALL) += fixups.o cfg.o states.o backtrack.o check_btf.o join.o
++obj-$(CONFIG_BPF_SYSCALL) += fixups.o cfg.o states.o backtrack.o check_btf.o join.o flow.o
+ obj-${CONFIG_BPF_LSM}	  += bpf_inode_storage.o
+ obj-$(CONFIG_BPF_SYSCALL) += disasm.o mprog.o
+ obj-$(CONFIG_BPF_JIT) += trampoline.o
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d42c67d6d70b..5e66d6768fcf 100644
+index 5e66d6768fcf..5faea922699a 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -11757,8 +11757,146 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+@@ -21368,6 +21368,268 @@ static int handle_loop_entry_exit(struct bpf_verifier_env *env)
  	return 0;
  }
  
-+
- static int process_bpf_exit_full(struct bpf_verifier_env *env,
- 				 bool *do_print_state, bool exception_exit);
-+static void account_current_path(struct bpf_verifier_env *env);
-+
 +/*
-+ * The function can be verified on its own, for the state at its entry, when
-+ * what it does depends on its arguments only and it cannot get to what its
-+ * callers have: nothing points to their stack.
++ * The current state came back to the head of a loop. If it has a reference more than the states
++ * that are there it is neither within one of them nor joined with one. It goes around again:
++ *	bpf_for(i, 0, n) { if (!p) p = bpf_ringbuf_reserve(...); ... }
++ * That ends when the loop stops taking references, or when there is no place left to keep them.
++ * A reference that no live register and no live stack slot holds cannot be released any more.
++ * There is nothing to wait for.
 + *
-+ * What the callers hold, references, locks and so on, is a part of that state:
-+ * it matters for what the function may do. Calls that differ in ids only
-+ * have to get to the same state, so the ids of what is held are replaced with
-+ * BPF_INHERITED_ID + the position for the function, and put back at the return.
++ * Only what was taken in the loop is looked at. New references are added at the end. What callers
++ * hold is not in the state of a function that is verified on its own.
 + */
-+
-+static u32 fresh_id(struct bpf_verifier_env *env, struct bpf_idmap *idmap, u32 id)
++static int check_refs_taken_in_loop(struct bpf_verifier_env *env,
++				    const struct loop_stack_entry *entry)
 +{
-+	u32 flags = id & BPF_ADD_CONST, i;
-+
-+	id &= ~BPF_ADD_CONST;
-+	if (!id)
-+		return 0;
-+	for (i = 0; i < idmap->cnt; i++)
-+		if (idmap->map[i].old == id)
-+			return idmap->map[i].cur | flags;
-+	if (idmap->cnt == BPF_ID_MAP_SIZE)
-+		return 0;
-+	idmap->map[idmap->cnt].old = id;
-+	idmap->map[idmap->cnt].cur = ++env->id_gen;
-+	return idmap->map[idmap->cnt++].cur | flags;
-+}
-+
-+/*
-+ * @caller waits at the call at @call_idx and @exit is what came out of the
-+ * function. Make @caller what it is after the call.
-+ * Returns 1 if the call has to be verified in the context of the caller.
-+ */
-+int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *caller,
-+		    const struct bpf_verifier_state *exit, int call_idx)
-+{
-+	struct bpf_func_state *frame = caller->frame[caller->curframe];
-+	const struct bpf_func_state *callee = exit->frame[0];
-+	struct bpf_idmap *idmap = &env->idmap_scratch;
-+	u32 caller_rcu = caller->active_rcu_locks, caller_preempt = caller->active_preempt_locks;
-+	struct bpf_reference_state *held;
++	u32 mask = (1 << STACK_SPILL) | (1 << STACK_DYNPTR) | (1 << STACK_ITER);
++	struct bpf_verifier_state *st = env->cur_state;
++	struct bpf_stack_state *stack;
++	struct bpf_func_state *frame;
 +	struct bpf_reg_state *reg;
-+	u32 i, j, nregs, nheld, kept = 0, id;
-+	int err;
++	bool held;
++	int i, j, id;
 +
-+	if (exit->unwound && !bpf_is_unwind_goto(&env->prog->insnsi[call_idx + 1])) {
-+		verbose(env, "unwind_exit, but no unwind_goto after the call at insn %d\n",
-+			call_idx);
++	for (i = entry->refs; i < st->acquired_refs; i++) {
++		if (st->refs[i].type != REF_TYPE_PTR)
++			continue;
++		id = st->refs[i].id;
++		held = false;
++		for (j = 0; j < st->acquired_refs; j++)
++			if (st->refs[j].type == REF_TYPE_PTR && st->refs[j].parent_id == id)
++				held = true;
++		bpf_for_each_reg_in_vstate_mask(st, frame, reg, stack, mask, ({
++			if (reg->id == id || reg->parent_id == id)
++				held = true;
++		}));
++		if (held)
++			continue;
++		verbose(env, "Unreleased reference id=%d alloc_insn=%d\n", id, st->refs[i].insn_idx);
++		verbose(env, "nothing holds it in the next iteration of the loop at insn %d\n",
++			entry->loop_id);
 +		return -EINVAL;
-+	}
-+	caller->unwound = exit->unwound;
-+
-+	/*
-+	 * bpf_check_cfg() takes the subprog that loads the address of a function for the
-+	 * one that calls it. This one got the address from its caller. What it means for
-+	 * the packet pointers of the caller is found out in the context of the caller.
-+	 */
-+	if (exit->changed_pkt_data) {
-+		env->subprog_info[callee->subprogno].changes_pkt_data = true;
-+		return 1;
-+	}
-+
-+	for (i = 0; i < CALLER_SAVED_REGS; i++)
-+		bpf_mark_reg_not_init(env, &frame->regs[caller_saved[i]]);
-+	for (i = 0; i < frame->out_stack_arg_cnt; i++)
-+		bpf_mark_reg_not_init(env, &frame->stack_arg_regs[i]);
-+
-+	/* what is held now is what was held at the call and what the function took */
-+	held = caller->refs;
-+	nheld = caller->acquired_refs;
-+	caller->refs = NULL;
-+	caller->acquired_refs = 0;
-+	err = copy_reference_state(caller, exit);
-+	if (err) {
-+		kfree(held);
-+		return err;
-+	}
-+
-+	/*
-+	 * The same state comes out for every call. Ids in it have to be new
-+	 * every time, or two calls in a row return the same object.
-+	 */
-+	idmap->cnt = 0;
-+	for (i = 0; i < nheld; i++) {
-+		idmap->map[idmap->cnt].old = BPF_INHERITED_ID + i;
-+		idmap->map[idmap->cnt++].cur = held[i].id;
-+	}
-+	/*
-+	 * What is taken is added at the end. What is released leaves no hole. Only what the
-+	 * function held all the time is kept: the state at its exit looks the same when it
-+	 * released a lock and took it again, or took another lock that has no id either.
-+	 */
-+	for (i = 0; i < nheld && i < callee->entry_refs; i++) {
-+		/* see inherited_id() */
-+		for (j = 0; held[j].id != held[i].id; j++)
-+			;
-+		id = held[i].id ? BPF_INHERITED_ID + j : 0;
-+		if (caller->refs[i].id != id || caller->refs[i].type != held[i].type)
-+			break;
-+		caller->refs[i] = held[i];
-+		kept++;
-+	}
-+	kfree(held);
-+	/* What it means for the caller is found out in the context of the caller. */
-+	if (kept != nheld || callee->entry_rcu_locks < caller_rcu ||
-+	    callee->entry_preempt_locks < caller_preempt) {
-+		if (env->log.level & BPF_LOG_LEVEL2)
-+			verbose(env, "func#%d releases what its caller holds at insn %d\n",
-+				callee->subprogno, call_idx);
-+		env->subprog_info[callee->subprogno].releases_inherited = true;
-+		return 1;
-+	}
-+	nregs = bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
-+	for (i = 0; i < nregs; i++) {
-+		reg = &frame->regs[ret_regs[i]];
-+		*reg = callee->regs[ret_regs[i]];
-+		reg->id = fresh_id(env, idmap, reg->id);
-+		reg->parent_id = fresh_id(env, idmap, reg->parent_id);
-+		reg->map_uid = fresh_id(env, idmap, reg->map_uid);
-+	}
-+	/* those that were held are the first */
-+	for (i = nheld; i < caller->acquired_refs; i++) {
-+		caller->refs[i].id = fresh_id(env, idmap, caller->refs[i].id);
-+		if (caller->refs[i].type == REF_TYPE_PTR)
-+			caller->refs[i].parent_id = fresh_id(env, idmap, caller->refs[i].parent_id);
-+	}
-+	caller->active_irq_id = fresh_id(env, idmap, caller->active_irq_id);
-+	caller->active_lock_id = fresh_id(env, idmap, caller->active_lock_id);
-+	/* fresh_id() had no room for an id, or there are no ids left */
-+	if (idmap->cnt == BPF_ID_MAP_SIZE || env->id_gen >= BPF_MAX_ID) {
-+		verbose(env, "too many ids at the call at insn %d\n", call_idx);
-+		return -E2BIG;
 +	}
 +	return 0;
 +}
- 
- /*
-  * Call of a static subprog. The callee is verified in the context of
++
++/* How many insns it may take to go through the iterations of a loop one by one. */
++#define BPF_FLOW_MAX_WALK	100000
++/* The same when it is not known that the walk gets to the end of the loop. */
++#define BPF_FLOW_MAX_TRY	4096
++
++/* How many times the current insn is looked at because of the loops around it that are walked. */
++static u64 flow_walk_factor(const struct bpf_verifier_state *st)
++{
++	const struct loop_stack_entry *e;
++	u64 factor = 1;
++	u32 fr, i;
++
++	for (fr = 0; fr <= st->curframe; fr++) {
++		for (i = 0; i < st->frame[fr]->loop_stack_cnt; i++) {
++			e = &st->frame[fr]->loop_stack[i];
++			/* the walk of a loop with two entries pays as it goes, see env->walk_insns */
++			if (e->counted || e->probe)
++				factor = min_t(u64, factor * max(e->max_header_count, 1U), U32_MAX);
++		}
++	}
++	return factor;
++}
++
++/*
++ * The current state enters the loop of @entry, for which there is no count. It's found out on the
++ * way whether the loop has an end: the walk goes on for as long as the jumps that leave the loop
++ * are decided. Returns 1 if the iterations are kept apart from now on, 0 if that takes too long.
++ */
++static int flow_try_walk(struct bpf_verifier_env *env, struct loop_stack_entry *entry)
++{
++	struct bpf_loop *loop = env->insn_aux_data[entry->loop_id].loop;
++	u64 factor = flow_walk_factor(env->cur_state);
++	u32 patience, *walk_insns;
++
++	patience = env->allow_uninit_stack && !loop->rt_bounded &&
++		   (!loop->has_calls || loop->has_guards) ? BPF_FLOW_MAX_TRY : 0;
++	if (loop->walk_failed)
++		patience = 0;
++	/* Two trips for a loop of any length. Many a loop is left in the second one. */
++	if (patience && factor == 1)
++		patience = max_t(u64, patience, 2ULL * loop->nr_insns);
++	if (factor * loop->nr_insns > patience)
++		return 0;
++	entry->max_header_count = max(patience / (u32)(factor * loop->nr_insns), 1U);
++	/*
++	 * A compiler makes a flag of the counter of
++	 *	for (i = 0; i < 2; i++) off += f(i);
++	 * and there is nothing to count. In the second trip the flag decides the jump.
++	 * A loop with calls gets these two trips, whatever they take, and no more: its size says
++	 * nothing about the functions that it calls. It gets may_goto at once, so that nothing is
++	 * done again when the second trip comes back to the head.
++	 */
++	if (loop->has_calls) {
++		entry->max_header_count = min(entry->max_header_count, 2U);
++		patience = U32_MAX;
++		bpf_flow_loop_gets_guards(env, entry->loop_id);
++		entry->guarded = true;
++	}
++	entry->terminates = true;
++	/* scalar evolution has nothing to say about a loop with two entries */
++	entry->probe = !loop->irreducible;
++	entry->walk_id = env->walk_cnt + 1;
++	if (is_power_of_2(entry->walk_id)) {
++		walk_insns = kvrealloc(env->walk_insns, 2 * entry->walk_id * sizeof(u32),
++				       GFP_KERNEL_ACCOUNT);
++		if (!walk_insns)
++			return -ENOMEM;
++		env->walk_insns = walk_insns;
++	}
++	env->walk_cnt++;
++	env->walk_insns[entry->walk_id] = 0;
++	entry->walk_patience = patience;
++	entry->apart = true;
++	return 1;
++}
++
++/*
++ * The current state gets to env->insn_idx. Leave the loops that the insn is not in.
++ * @enters: the insn is the head of a loop that the state is not in yet.
++ */
++int bpf_flow_loop_leave(struct bpf_verifier_env *env, bool *enters)
++{
++	struct bpf_func_state *frame = cur_func(env);
++	int err;
++
++	err = loop_stack_pop(env);
++	if (err)
++		return err;
++	*enters = env->insn_aux_data[env->insn_idx].loop &&
++		  (!frame->loop_stack_cnt ||
++		   frame->loop_stack[frame->loop_stack_cnt - 1].loop_id != env->insn_idx);
++	return 0;
++}
++
++/*
++ * Enter the loops that env->insn_idx is in.
++ *
++ * When the number of iterations follows from the state that enters a loop at its head
++ * induction variables get the ranges that they have in that many iterations, and the loop
++ * needs no may_goto.
++ * The rest of the state is left as it is. What comes back to the head is joined with it.
++ * @ends_walk: the state came back to the head and is the last one that is kept apart from
++ * the states of other iterations.
++ */
++int bpf_flow_loop_enter(struct bpf_verifier_env *env, bool *backedge, bool *drop, bool *ends_walk)
++{
++	struct bpf_verifier_state *cur = env->cur_state, *entry_state;
++	const struct bpf_insn *insn = &env->prog->insnsi[env->insn_idx];
++	struct bpf_func_state *frame = cur_func(env);
++	struct loop_stack_entry *entry;
++	struct bpf_loop_iters iters;
++	struct bpf_loop *loop;
++	bool pushed, decided;
++	u32 trip;
++	u64 per_trip;
++	int err;
++
++	err = loop_stack_push(env, &pushed);
++	if (err)
++		return err;
++
++	if (frame->loop_stack_cnt == 0)
++		return 0;
++
++	entry = &frame->loop_stack[frame->loop_stack_cnt - 1];
++	if (env->insn_idx != entry->loop_id)
++		return 0;
++
++	/*
++	 * No edge goes from a call to itself: the call goes on with one function of a set, see
++	 * split_func_set(), in the same iteration.
++	 */
++	if (!pushed && cur->last_insn_idx == env->insn_idx &&
++	    BPF_CLASS(insn->code) == BPF_JMP && BPF_OP(insn->code) == BPF_CALL)
++		return 0;
++
++	/* The callback came back to the helper that calls it, in the same iteration. */
++	if (frame->callback_depth)
++		return 0;
++
++	/* If nothing was pushed and env->insn_idx is a loop header, we've taken a backedge. */
++	if (!pushed) {
++		if (!entry->apart) {
++			entry->trip++;
++			*backedge = true;
++			return check_refs_taken_in_loop(env, entry) ?: maybe_clamp_scev_regs(env);
++		}
++		loop = env->insn_aux_data[env->insn_idx].loop;
++		/* the next iteration is another kind of state, there is no cycle */
++		trip = entry->trip;
++		decided = !entry->probe || entry->decided || !trip;
++		entry->decided = false;
++		if (decided && ++entry->trip < entry->max_header_count &&
++		    (entry->counted ||
++		     env->walk_insns[entry->walk_id] <= entry->walk_patience))
++			return 0;
++		/* there is no such iteration at run time */
++		if (entry->counted) {
++			*drop = true;
++			return 0;
++		}
++		/*
++		 * The walk doesn't get to the end of the loop. From now on what comes back to
++		 * the head is joined with what is there. The loop gets may_goto.
++		 */
++		if (!loop->rt_bounded && !loop->has_guards) {
++			verbose(env, "loop at insn %d never exits\n", env->insn_idx);
++			return -EINVAL;
++		}
++		if (!loop->rt_bounded)
++			bpf_flow_loop_gets_guards(env, env->insn_idx);
++		/* the jumps were decided, it's the loop that is too long. Or it had its two trips */
++		if (decided || loop->has_calls)
++			loop->walk_failed = true;
++		/* the iteration that it went through: its state is at the head */
++		entry->trip = trip;
++		*ends_walk = true;
++		return 0;
++	}
++
++	loop = env->insn_aux_data[env->insn_idx].loop;
++	err = bpf_compute_loop_iters(env, cur, &iters);
++	if (err < 0)
++		return err;
++
++	/* @per_trip: the insns of one iteration, times the walks around the loop. */
++	per_trip = flow_walk_factor(cur) * loop->nr_insns;
++	/* The walk has to get to the end of the loop, so it is known to have one. Or not: */
++	if (!err) {
++		err = flow_try_walk(env, entry);
++		if (err)
++			return err < 0 ? err : 0;
++		if (!loop->rt_bounded && !loop->has_guards) {
++			verbose(env, "loop at insn %d never exits\n", env->insn_idx);
++			return -EINVAL;
++		}
++		if (!loop->rt_bounded) {
++			bpf_flow_loop_gets_guards(env, env->insn_idx);
++			entry->guarded = true;
++		}
++		return 0;
++	}
++
++	/* What the ranges are derived from for as long as the loop is looked at. */
++	entry_state = bpf_flow_keep_state(env, cur);
++	if (!entry_state)
++		return -ENOMEM;
++
++	entry->min_header_count = iters.min_header_count;
++	entry->max_header_count = iters.max_header_count;
++	entry->iv_reg = iters.iv_reg;
++	entry->iv_range = iters.iv_range;
++	entry->entry_state = entry_state;
++	entry->terminates = true;
++	err = bpf_widen_scev_regs(env, cur, entry_state, &iters);
++	return err < 0 ? err : 0;
++}
++
+ static int do_check(struct bpf_verifier_env *env)
+ {
+ 	bool pop_log = !(env->log.level & BPF_LOG_LEVEL2);
 -- 
 2.55.0
 
