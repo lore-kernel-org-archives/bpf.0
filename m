@@ -1,92 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794074303;
-	b=WbQu1XLk6jo587Xofw8X/uvnnvq7pwDUuzgh4mx+xtzIScxKMai4GN3gK9y1QINzVCyV
-	 0wqXrpebO5d4W7tlydXlR0eijNOC9UQnLkktBwUKsA7N6e2infx7t8pNzvCi+n7Z4qMP3
-	 IURai7z21q4LJZAXOSyqh135mdZ2DNG94iWbxVgidrccE6VFZ5/BHW0AvbXLvjkp7pQrk
-	 7C5e574OjLCEcl/20NhCDVhLMsSPUBit1D5IRckFjViSeteBsipBcpuFMkoDGXV1vH1R+
-	 dpUX22P8C5KLxleqN1jHR1PVa6LWshPEcpZ3Q2LmtkcGT/rb5+19v/PUq8FGCIL1anA==
+	t=1794074309;
+	b=3t0f5/zJPGx0nA5796fUSSU5t8xmJOkvRBjRfeuXbUkMpj3dhbGoioZlj3x1GIfkuAB/
+	 d0Nu3z1YF9z1XP4oLjwP8EDxhFuV7A4+wWb+Q+TJAfB0wkKubsqYrV3yy4fxdVru+J69u
+	 nkPwp+3rdD/KOw5yLqAalsz2DkNvzYae2S5Nv17O7VM0+tYwUMOTd3JkWk42IQmyij98u
+	 2A4wLQ/2AET0RZwNnr3qBy0mLhqU5TCk+GBdZXTJhDAKJGgVEsRfC6C7lM+xKeGX34YZu
+	 mRcpu+dI+xUlJVWxmhCN4jGIk+na+gYNXaESN2V6Ghu+hOY28KojEt2T2Fe+2JYkvHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794074303;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794074309;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=kzlgeXobqqMdio3cFqxdeY+diTghMM9m+bQTqmAb2ZU=;
-	b=gLcoeQw9+MbNPD+GyHKQICrPQpBkhjVfXZWRyDzXNtgNYtp0LPPRduFS/z60cwLcwoKh
-	 Yv+bIg/OaW4FHlTefMJlUIt7DpxlR9KWFzIG2PWnXj2Cn80aVi0U82XssQlNaxOAsdyRh
-	 FFt+4pfZVAYSD3PzoDhV1tmHGyl+3n0j7bUV2qGNrCegs8qrRniJ+Tt1AOeKg5Q7GdDKM
-	 vQEZwX7AX889PnAxm6wP3xtJk9B3v0mJLf/k3F2byvkSqldG+gvHsIBg/BeHUoXDPX0IR
-	 rZYE3Lj4hx+HN46e67WHskm4Jf5/1uikGJvbPUNCgfNnLUHTi7KuvHoVONg1N8mg6gA==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=nugVOIIJtSLhCPS80KFyBXrcNmpq1tVrJlbt9177XRU=;
+	b=0cWbhvOw+hg2fnFVoJCRN0IEH8vMZUXpr9kww/PDAvtj0RB/gskvdTcDZjjRpmHBZiua
+	 KNfkZLk0YuIYueabbvI38WCghdiOKUx2WMbgOiazx/Lyr3ujRXKTjx/XG9462jGerFJrl
+	 oK2Ku9WUzSzHwIhf0VtN5Jv5QUSzE0yeqirGHG2k1keOCOdSm7rOHZQQuTR/6EkJs8CIO
+	 DlwpCvAaRmPPRFk8Ms0cEHUGAU9abjdho6eB9hjQy6DUvKw/s24+dsP9jUoJTvl7T+FRK
+	 /OcBgzuvN9KwXQRCBPPyK13KnR7iSeDPui7QC+dOBW5jAcMIR/pviQEirKfmj4bIBZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FZD5ZJxa;
-	arc=none smtp.remote-ip=209.85.216.41
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=udxUO5Uw;
+	arc=none smtp.remote-ip=209.85.216.43
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F58E606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:58:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0F58E606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADCA606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:58:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4ADCA606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FZD5ZJxa
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3b0e0e65adbso823231a91.3
-        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:58:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=udxUO5Uw
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ae7626d14aso933826a91.2
+        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:58:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794074302; x=1794679102; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kzlgeXobqqMdio3cFqxdeY+diTghMM9m+bQTqmAb2ZU=;
-        b=FZD5ZJxaQKfIzSzrbBDMKhBrrV5L8vEP/BgYkYAJpYN7W3FPB6nCd8qL8Svh7kpPLO
-         p9nE7ctYxzDfhg/A3EayGrkRUGbRfWbm3jG9SNPR9d6hc/uBqfT2qkp11c3jp9mLLVo1
-         IbrfpHtIAGxgy28AeE+24uaCiXwsbvd3e7pWOl50vN7Z54RIo5FbwLQxVYLA6Da3BTbI
-         iMMEg0PjfqqXi8BF9Yw2KFhuUtPD0sPkalvlslzT+Vi706GkFc/EyHxVk9YD+G4pHwbP
-         Hu96yxqp/pzIm4o/u9ZRAiTak7NlKHqiohlvYEIc6LU4VyJUq7qhMX3u4GBS3d4hwm0U
-         l4+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794074302; x=1794679102;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1794074308; x=1794679108; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=kzlgeXobqqMdio3cFqxdeY+diTghMM9m+bQTqmAb2ZU=;
-        b=RNMaI2FzokbAmlb7H8ToHQLH80gbAs59fi6enzgnwYWpYDoVmUm0Hq+ue3uHRO34yO
-         sWDkwo8+pcJgzPhX3ACgxntmRZS1Y7dEy5nZXtm2dF25kEKAeiO0rSPBH+5sbEkdQ+eP
-         QuM4WGsYi77jO+fAm2uMJ+txNSHlKZOEYj14n3Fyh8mDc7J1cZ0ZSVU8BnqktCQ2potg
-         Lio8cAwFeJXQGYdMzv/g6Ju//QVneXnyefkQTrXQHjziflE9YQql/ek6xr212cgeWREU
-         GRrtHov4HBlznopWYst9qdunikF4tkVn9hzM/XhlqH7ioKPyDpdqUGoxKmxexBc/+A2J
-         6uPg==
-X-Gm-Message-State: APuU4Z/KqB9fLLTM8kCXUeZUZNRYe7hED7WxSg/GNFIBxBXoiXi/w/7u
-	qPCBOT4YSSCSbIrZ4/hxe1WwCb+aon6hBRn+QMfbY0gZEI/NzOBVWL2jtPQpBA==
-X-Gm-Gg: AYBFou3zEe9seK0004fzpVLb/PnmjFOYuc1wUA/QwtsvaGjomSc/3lJxFopCAYttQb0
-	OfT5qnX8yOOlYlbQ0DE8Avj1SG665gUyyUoZmSqth2lAJQvFdY2cjt2M6HVaehVZWPcpan+VEwL
-	FY9EU0CdbXblqBt4/zjgMoFkKm/+6J1KDa/foRlgdBzrJ3Br7ggnal2JeTno0AOkpi1HLI/ET48
-	mUzdI7I5NRKRTcQWuOLRjGkWMddvgCG6ERtHBNBMGszoFQDgZ8moK7mnZ+lqKvHqw5xEC3fGo1V
-	6NkDW730oe3J7toeiQ1UpVmwuAhkSDDHQDt5PsC05/e8Gs7891M5F3uoEoUdnIH3pPtZY5xzmM8
-	IDKkCROYz/Fcph1l93o9jLiYC3sOZX7EV+pEmROwicjvVMhPzc53io0Vm00LDtB0Sa9ZLt1/wNP
-	77k3ZKmSJ4NrG2+F9n15xe3Ayo332Hg25vTCd4F+b1F+XSMKVmCdQYDm1e9K3HkfrJnegroG8I+
-	ekRj5JJAOmIOjs15oj2eCATxOqI7EMlAH06FwFQDPn/gMkoQm0zerKWgt3bJkTuenGSY7Q+2Fni
-	Xj7T7/L6Tmy0e3gh+nSsZq7iR1l0fkjax8fr34/W1aL90k/GbH3kk+S07e56ELkew1VF/jqxInI
-	p5lZ7HdNzWXAlmwj2yY9qwyJoG14tYdMTTpkoilFuHMxnTmnc1D7mirBFnhSyjoYc4r+bTE6+LA
-	==
-X-Received: by 2002:a17:90b:3b52:b0:3ab:33b6:2c27 with SMTP id 98e67ed59e1d1-3b0db6d6f67mr5882157a91.23.1794074302331;
-        Sat, 07 Nov 2026 09:58:22 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1057ef145sm3970765a91.6.2026.11.07.09.58.21
+        bh=nugVOIIJtSLhCPS80KFyBXrcNmpq1tVrJlbt9177XRU=;
+        b=udxUO5UwF8Dyd2CKryw09+zN+OnjX5ckWqTezxslNkxhtLZyQirLcRw138+RcFBB5H
+         LSUNX14V8aFT/cH/4a7YtpjXp1Qt01/bou20hA9firV7dUMQ/IqJH9xsOpYEXnjf6i+m
+         YU8EaoA8MBy7WaHQvNuamKrUfXbxNY4ivyrPjl3wXjPl8zPWzVSOTeF0cfdl0AGQcgp4
+         hl5IgqapEHSYobiBaAr8ucs7YA5Wgi6Uy5SNh2nSSNhyR9O0x+vUmCcmwNCC4LDEZ/NL
+         qzdZ8ykt59Z/NQbCOBwVY6+fAMAo5LPOnTV3AyZ7/jFcI0GzN+3NGUp9VY+Mz8tJ+BKX
+         2s6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794074308; x=1794679108;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nugVOIIJtSLhCPS80KFyBXrcNmpq1tVrJlbt9177XRU=;
+        b=pG0nfxa5hMvmB766GKSwULlA9YF4m7222lDOeAu3++LMbPnCP5lrQ1QoRYb63Mj+z6
+         OA6BkHiWoMv+uTWbA5iC2hIUjI0/rODutl2zqW3vrX3GbL9sPv/pNQkELXabY8HhO0F3
+         0Bgrr00SMZzu5A7tcywmbhGHClxPLKQYnzfXx1Q2jWxNKwryKsGjahRj4czrtTYddXDV
+         Yk0T0jwyTX2TUHyCjjqr9e7qctX0CWVCuUm3rs/ugkFJDXJ61l75wAFHGh/TB3uguRk1
+         9fVRNhfyGmGbeii7/+8AquZdsImiyCEVY6XcLNPbqGhR6OzTwNNq3tqbaEnhWJfQTcm3
+         jp8g==
+X-Gm-Message-State: APuU4Z/R69/K3u6y/Bi3fDCIEtp/LTHM2MxhpnsIEuvVXRQ+z4By/rPI
+	0/nsNi21dCbMR8Or0GA/BY7DG8AwtVIYm8bsG7DEdwGGPUoNa4nzW5AlOskdTA==
+X-Gm-Gg: AYBFou3JkYX2PjhPucAAzGYbl9fn0bOHr84Rt3AWOaZJTYgJBhykjPLlR5KTxPc0a1X
+	r4ixpPJcb/7gGueMInnmNQxRkO8pfOJ9cL/TgSWuKryR60nWWmmlSFRf8BrKWGGA6mKgBOZxfb6
+	2yZRszh3l7y8Jish+FS10Qpg4DKfBSvmDaqbVjkjsubp+v22LdWGKkURahFgMlsJEeP2eZ2P8+X
+	BLrD8dJPpCtPdPY9gcSpmONtB/IX/58Z6yS1qHNXqWhmZcuY2dFLzTE1Ws4IPKHetgj6oBWCmK0
+	Gp5hPBnX+Ao+s9UJF6gL0Hc9a+uCm9vSWbFnRRb3ajAwUK43H2c+Gac9zVxsZDt7bGEfUjz6k3l
+	/LbUIouqzae1mhReuek+XLtKChsaopNtbhJwF5wnYBI5QVsaGNjGtdmOj0E+TKCs/4kypkE9+m1
+	irmoprYKV+4vPriRTqhU2A/Rs2IUzEM+6itVftR3TNrx4N+1P6iXRwytlWIFOD17R4BK6a5OjXg
+	tkSA59vdkAO54kK/0xm8I8hmR9QISxO9CIyVFU/zrXf+IL6zHp75ea6g2a4Sg4ZuKDBiHl9fgYk
+	EBj5mqT1btGxnOnC26BOPDfr3IZ6fHEEoLbXKM5T3vvgNaFrqR8jL9NuvVDMYn1NtcT5YKkIgQZ
+	qvAwy/Bqawboey7l8A9iJT1PGLvoPWP6Vnt5qqu9oXoC/v2fCyaoGnG/8Fk8KksZEtSG2S5OcV2
+	mNH3+4UNDnMFtl4+RO9xWh
+X-Received: by 2002:a17:90b:2c86:b0:3ac:7449:40b4 with SMTP id 98e67ed59e1d1-3b0db7085aemr6171906a91.45.1794074308356;
+        Sat, 07 Nov 2026 09:58:28 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b101bc56fbsm1956969a91.2.2026.11.07.09.58.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 09:58:21 -0800 (PST)
+        Sat, 07 Nov 2026 09:58:27 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 1/2] bpf: Walk a short loop for what it loads if something looks at it
-Date: Sat,  7 Nov 2026 17:58:18 +0000
-Message-ID: <20261107175819.3707050-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Test short loops that carry what they load
+Date: Sat,  7 Nov 2026 17:58:19 +0000
+Message-ID: <20261107175819.3707050-2-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261107175819.3707050-1-alexei.starovoitov@gmail.com>
+References: <20261107175819.3707050-1-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,80 +104,174 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-  for (i = 0; i < 64; i++) {
-          if (have)
-                  sum += t->pid;
-          t = v->task;                  /* __kptr: a task or NULL */
-          have = t && t->prio > 100;
-  }
+A loop of 4 iterations loads a number and sets a flag if the number is a
+valid index. The next iteration tests the flag only. Another loop takes the
+index of the next iteration from a table in .rodata. Both load if the loop
+is walked. Each has a twin that reads past the end of the map value.
 
-t is loaded anew in each iteration. The first iteration of such a loop is
-verified on its own, and the states that return to the loop head stand for
-the other iterations. There have becomes [0, 1], also next to t == NULL:
+A loop that fills a stack slot with what it loads is not walked if the slot
+is only copied later: 17 insns for 40 iterations.
 
-  R2 invalid mem access 'scalar'
+The two tests of a first iteration that is kept apart get 100000
+iterations. 10 are walked now.
 
-  for (i = 0; i < 64; i++) {
-          sum += a[cur];                /* u8 a[16] */
-          cur = order[i];               /* static const u8 order[64] */
-  }
-
-cur is order[0] after the first iteration and a byte after the next one:
-
-  R4 unbounded memory access, make sure to bounds check any such access
-
-Both load if the verifier goes through the iterations one by one: have goes
-with t, each order[i] is a constant. It did so before the first iteration
-was kept apart, and it still does for what a call returns.
-
-Do the same for what is loaded and then looked at: t is the base of a load,
-cur is an offset. A stack slot that the loop fills and that is only copied
-later is no reason for a walk. test_rbtree_remove_many_noalloc() of
-libarena is walked again: 22060 -> 27699 insns.
-
-Fixes: df9b13a441c9 ("bpf: Keep the first iteration of a counted loop apart")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/scev.c     | 9 +++++----
- kernel/bpf/verifier.c | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ .../selftests/bpf/progs/verifier_loop_need.c  | 95 +++++++++++++++++++
+ .../selftests/bpf/progs/verifier_scev.c       | 14 +--
+ 2 files changed, 102 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 5415fcf9df2f..2a7d0c59f73b 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -3749,13 +3749,14 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
- 		}
- 		/*
- 		 * What is loaded from memory or returned by a call in every iteration is the same
--		 * kind of thing in all of them. One iteration tells what. There is nothing more
--		 * to find out when iterations are looked at one by one. But for what goes with it:
--		 * a call returns NULL and a flag is set. So a walk comes first for a call.
-+		 * kind of thing in all of them. One iteration tells what. A walk through the
-+		 * iterations tells more: what goes with it, like a flag that is set if it's not
-+		 * NULL, and each number of a table in .rodata. So a walk comes first. What is
-+		 * loaded is often a leftover in a stack slot: not if nothing looks at it.
- 		 */
- 		if (expr_is_fresh(env, header_env->reg2expr[r], &call)) {
- 			__set_bit(r, iters->fresh_regs);
--			if (!call)
-+			if (!call && !bpf_flow_is_needed(env, insn_idx, r))
- 				continue;
- 		} else {
- 			__set_bit(r, iters->forget_regs);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 09a44723bb2e..479c52cc2f56 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21636,7 +21636,7 @@ int bpf_flow_loop_enter(struct bpf_verifier_env *env, bool *backedge, bool *drop
- 	entry->entry_state = entry_state;
- 	entry->terminates = true;
- 	/*
--	 *	idx = 0; for (i = 0; i < 100; i++) idx = table[idx];
-+	 *	idx = 0; for (i = 0; i < 100000; i++) idx = table[idx];
- 	 * What the loop makes of idx is not known before its body is looked at, and what idx is
- 	 * at the entry goes with i == 0 only. So the state goes through the first iteration as
- 	 * it is. The state that comes back to the head has idx in 0..255.
+diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_need.c b/tools/testing/selftests/bpf/progs/verifier_loop_need.c
+index 281f94bfeb47..cfc98aeb155b 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_loop_need.c
++++ b/tools/testing/selftests/bpf/progs/verifier_loop_need.c
+@@ -346,6 +346,101 @@ __naked void read_in_the_first_iteration(void)
+ 	SUM_OF_PREV(1, 40, "*(u64 *)(r10 - 8) = r9;");
+ }
+ 
++/*
++ *	for (i = 0; i < 4; i++) { if (ok) sum += v[x]; x = *v; ok = x <= max; }
++ * x is loaded in every iteration and ok goes with it. One state for all iterations has both values
++ * of ok for each x.
++ */
++#define LOADED_WITH_FLAG(max)						\
++	asm volatile (							\
++	"r6 = %[vals] ll;"						\
++	"r7 = 0;"							\
++	"r8 = 0;"							\
++	"r9 = 0;"							\
++"1:	if r9 == 0 goto 2f;"						\
++	"r1 = r6;"							\
++	"r1 += r8;"							\
++	"r0 = *(u8 *)(r1 + 0);"						\
++"2:	r8 = *(u64 *)(r6 + 0);"						\
++	"r9 = 0;"							\
++	"if r8 > " #max " goto 3f;"					\
++	"r9 = 1;"							\
++"3:	r7 += 1;"							\
++	"if r7 < 4 goto 1b;"						\
++	"r0 = 0;"							\
++	"exit;"								\
++	:: __imm_addr(vals) : __clobber_all)
++
++OK("a short loop is walked for the flag that goes with what it loads")
++__naked void loaded_with_flag(void)
++{
++	LOADED_WITH_FLAG(63);
++}
++
++BAD("the flag is set for a number that is too large")
++__msg("invalid access to map value")
++__naked void loaded_with_wrong_flag(void)
++{
++	LOADED_WITH_FLAG(64);
++}
++
++/*
++ *	for (i = 0; i < 4; i++) { sum += v[x]; x = table[i]; }
++ * The table is in .rodata: in a walk each x is a known number.
++ */
++const u8 in_vals[4] = { 8, 16, 56, 255 }, past_vals[4] = { 8, 16, 57, 0 };
++
++#define INDEX_FROM_RODATA(table)					\
++	asm volatile (							\
++	"r6 = %[vals] ll;"						\
++	"r7 = 0;"							\
++	"r8 = 0;"							\
++"1:	r1 = r6;"							\
++	"r1 += r8;"							\
++	"r0 = *(u64 *)(r1 + 0);"					\
++	"r1 = %[" #table "] ll;"					\
++	"r1 += r7;"							\
++	"r8 = *(u8 *)(r1 + 0);"						\
++	"r7 += 1;"							\
++	"if r7 < 4 goto 1b;"						\
++	"r0 = 0;"							\
++	"exit;"								\
++	:: __imm_addr(vals), __imm_addr(table) : __clobber_all)
++
++OK("a short loop is walked for the numbers that it loads from .rodata")
++__naked void index_from_rodata(void)
++{
++	INDEX_FROM_RODATA(in_vals);
++}
++
++BAD("a number from .rodata is too large")
++__msg("invalid access to map value")
++__naked void index_from_rodata_too_large(void)
++{
++	INDEX_FROM_RODATA(past_vals);
++}
++
++/* A slot holds a leftover pointer. The loop fills it with what it loads. It's only copied later. */
++OK("no walk for what the loop loads if nothing looks at it")
++__log_level(2) __msg("processed 17 insns")
++__naked void leftover_in_a_slot(void)
++{
++	asm volatile (
++	"r6 = %[vals] ll;"
++	"*(u64 *)(r10 - 8) = r6;"
++	"r7 = 0;"
++"1:	if r7 >= 40 goto 2f;"
++	"r1 = *(u64 *)(r6 + 0);"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r7 += 1;"
++	"goto 1b;"
++"2:	r1 = *(u64 *)(r10 - 8);"
++	"*(u64 *)(r6 + 0) = r1;"
++	"r0 = 0;"
++	"exit;"
++	:: __imm_addr(vals) : __clobber_all);
++}
++
+ /* What a call returns is made anew in every iteration, like what is loaded */
+ OK("a long loop carries what a call returns")
+ int call_in_a_long_loop(void *ctx)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index c1aede6fa4ae..5c9c832fbbe0 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -4411,17 +4411,17 @@ __naked void post_cond_jlt32_copy(void)
+ }
+ 
+ /*
+- * The loop loads r6 again in every iteration. It's 0 at the entry and a byte in all iterations
+- * but the first one: the first iteration is verified on its own, the state that comes back to
+- * the head stands for the rest.
++ * The loop loads r6 again in every iteration, and is too long for a walk. r6 is 0 at the entry and
++ * a byte in all iterations but the first one: the first iteration is verified on its own, the state
++ * that comes back to the head stands for the rest.
+  */
+ SEC("socket")
+ __success __retval(0)
+ __log_level(2)
+-__msg("header_count is 10 ")
++__msg("header_count is 100000 ")
+ __msg("can't widen r6, expr is _")
+ __not_msg("widening r8")
+-__msg("clamping r8 to 0..9 step 1")
++__msg("clamping r8 to 0..0x1869f step 1")
+ __naked void index_loaded_in_previous_iteration(void)
+ {
+ 	asm volatile ("					\
+@@ -4439,7 +4439,7 @@ __naked void index_loaded_in_previous_iteration(void)
+ 	r0 = *(u8 *)(r1 + 0);				\
+ 	r6 = *(u8 *)(r7 + 0);				\
+ 	r8 += 1;					\
+-	if r8 < 10 goto 1b;				\
++	if r8 < 100000 goto 1b;				\
+ 2:	r0 = 0;						\
+ 	exit;						\
+ "	:
+@@ -4473,7 +4473,7 @@ __naked void first_iteration_loads_less(void)
+ 	goto 3f;					\
+ 2:	r6 = *(u16 *)(r7 + 0);				\
+ 3:	r8 += 1;					\
+-	if r8 < 10 goto 1b;				\
++	if r8 < 100000 goto 1b;				\
+ 4:	r0 = 0;						\
+ 	exit;						\
+ "	:
 -- 
 2.55.0
 
