@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022694;
-	b=R3tRTdyeXccuOuTtJovnFqLfvuwr8ZJU1/k9gGOv8gJhK51idlO2R1+MGnpAl3eLtU9s
-	 MgrUGLpWQe0gt1iu+nP5wkDl07p4EZBdG9csmiBqbhjq9jgwyRjQFQqyHnXQFN8v8k9Rw
-	 CLu7Dvf1N+IRDWBx7cyg3UDyep4FsAYiSQD/MEV7X5ByMIUdCQJJI43RqIv44mbyBW95S
-	 PwerXomaiYkWG7O6++C4fJaIhq0eUTwgC5da7SKIWMBu/zPlPufTUQLVyF0zR22oaalLz
-	 q45fx063ugEPI/CvFokWGrOda2czcRFdmUufKvxpuRiP+E0dyTfyVOmbWgLSuQVBw7Q==
+	t=1794022702;
+	b=5i8rM4QaRHdYIdPrT+RREqJ1OwzfnE7fK0Ke4jrr1pNmQROdYTGVhE12ayN7ry0eOP5S
+	 NTeamGgW6pojpc6d6y0+GUR5ofoWoak2bTFDJL+oTIYzcIJYFeWv5GVlt2Y5JuWJu4puh
+	 axinQxaXAw8FiEIPhtVHezB6A5PoYT33/nY29i9uuqhatv1IUWf1tH3D3as6XHHL30nn7
+	 XKk3UOecNL4V6OrMpMeb9W76uwh9/2elChD0UsRauSYG/ePtr5jfUp6WWHLnbxuuqRrQe
+	 c/qnSofsbr4Pvzzp//gmLZWuYfb2H82tdQkD75Ov/+r2Fd72Ko4za1MzdgLslOn2BtA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022694;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022702;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=sxWuRoxBLNSs8RmDK6ssrgW79QF3acSGzgnJZqwjxqg=;
-	b=MSFd5D0KNkBWarygUAza8Qhgs5xUP79Tbb6IHiY5a2adZxdeFlPSk1O1LoyQWclotELu
-	 1hbgsIwjsfqS2WrCiehWXCVx15FTagF8Cl+1mOZTOpEqvtVah8vYyhDq87C+Q38JMQ48L
-	 w3ItiX6UMfeWeMkVPYESNTVW2sNYxsWPTrGOvJ9wDDhWajOt956h4A8BfmjmUMAdIUP5d
-	 DbZXXrc42n50PqUEPUov8wjP+q6ANhJWgUyzGrW9h//NbjBNMP9UyVL5ghQFt1MzOrAJA
-	 dyLTJC5YLiQR73Kd60gOp8IQG4O1lKkBK5UbQ5DAFSa4x4eCAuiS93xx0lGykMXIJXQ==
+	bh=Icb5WHmpev+5C+tDPzer6/En0TMok2+H9fCw1XDuxFk=;
+	b=iCA2Z2eVK7FC20yInvt+XtRwKZUGG9/l4xDpqmTub3XIm+tT9WOBlk9NwR50w9ubpz7v
+	 JKbycWecCumYY5Ttfc9qwBEQ+7G0mqWMb7ERStCGDbyHE7cCpFOi6554aifWYtNas+TRN
+	 3vd6nXC/1uPl3kt7vum58V/fvygUEbl0VZ2/vB9jcvUN2FKDokCZ+tRcxFf47Z0ztErEY
+	 3l5pxPNDbmEzxSG8oVwuCtfOXEufog8GLs92k4t7BewLQXGrb3R5TWEBCR3j7bJz9Zt4G
+	 jiUuiPUpT/zqwKcO6t47imoIecjBspwOM3W22gU2Syj7nCmgTrStJ49tL/NFRKS2sOQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Gnmb/TX1";
-	arc=none smtp.remote-ip=209.85.214.173
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xVXZupBJ;
+	arc=none smtp.remote-ip=209.85.216.43
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB7FA606A334
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:38:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB7FA606A334
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61F6606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:38:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E61F6606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Gnmb/TX1
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ed1414df17so4865425ad.2
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:38:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xVXZupBJ
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ac78f4c10bso606523a91.1
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:38:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794022693; x=1794627493; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794022701; x=1794627501; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=sxWuRoxBLNSs8RmDK6ssrgW79QF3acSGzgnJZqwjxqg=;
-        b=Gnmb/TX1o+r9iOMVJEDYGFQAQEyDaY4Dd6g5+HvNV1XLJwykpZ9sQ9TU9gJsqVy3aX
-         IuvAmBbKwzVuHX4DEaRRj8abE6zuM541k56ld1lyljmQLxf1Fsaf1i7wAAm3wOhtWMRr
-         g42eZu/6qTw5ba9Qm+2T9PzJPD6DXnDY73ccoaRMxKV/I31rKjiIvEBLvvs5mbcS3u2i
-         EZsGsTC8mYYEauBkhl4mMmDlRRhUn+F5omgzIWTAOguAPn7JG+ZoTaaJibpkb/k1XU9K
-         9wWn1B8AJB3+QpgkdkBw0IODoiX83dbDP5zUzQ2UKHDFcLcpJGt0Eb4T1KHc9rnolR9S
-         VTHg==
+        bh=Icb5WHmpev+5C+tDPzer6/En0TMok2+H9fCw1XDuxFk=;
+        b=xVXZupBJlLgsUagl/ZD2/tdjQXKMNOOTc5eK+pb3W8nyt4z+7U0uFmn1DCgpMQjIbf
+         4UGGNK9EWqUDdiHBuAuv+kpm8bljH/1iIPSHsoHAaMDWWrIkEBOL0SFAQYmWCF9Pj0uk
+         ZSAR0CgDcBC4ktMfS83+FDc9BWXy4m9ZxLcQl1ujVQBhPW1e+lUVlvl4io/lzM88Gddr
+         zLjkuZnAIyK0OwxH4gPHUniPP64hxINEZ2SrXbg+Gf7N00LsNQkSXtOC04X2kkbDP3ew
+         6RrGJoz2xmFJdFTaepLV9Q7ul2t5L2C3YAByxAd+8bBE35VRHzTOcm4ynV1ZyF18UdIp
+         c6Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022693; x=1794627493;
+        d=1e100.net; s=20260707; t=1794022701; x=1794627501;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=sxWuRoxBLNSs8RmDK6ssrgW79QF3acSGzgnJZqwjxqg=;
-        b=bvXuHh/G/XKwsH3433HB34Ok3ujYa7K8Ue+8TqPrnRJN+5XFSBhh+t7+lgt1jQqtXu
-         2GJDedKyI/AC9WlQPx1DZ07X9/XoNsDd3Wipqd+KeE2OLBk3toU2z/DWQUZtNWAtRqKf
-         aZ/90pi9tToIhSEwngNrBQbeZHYDGk5tzL5pGo3due3qhSEUBE8ypuHGekCe+519uaQ5
-         nkCh7yFA7xzSY+RHw4MpNcKSxlLvFlq9H8qGJrazn0IO0MoZ38eqiHMrDtOwLJEkrFMC
-         6nHGD6BHv93ck1WUI4GBYHyAfcjGegwgrNexrzqMOi9OZB0LCIIVsCO5huyrqlc27PgA
-         N6uw==
-X-Gm-Message-State: APuU4Z+QgRgKh24fhUK5Bg/nKSZfrbO/cdV7WbkSJRfXpJ9uh2lt5um/
-	/JyDyR+7MEKLcEPnnpIi1OVAVk2ZDyJo7fNmqa0all/o/S2EguAHElXfASmt2w==
-X-Gm-Gg: AYBFou2aerhRjEDutNZGBIXY4Y0kDu9YZ/7fGw7+8HfgShg0a0h/62B233jSLn46/+H
-	GwyqJna7bpI4caMf6dFz2/cVxGlz3aQMKc18eOLzuul9etigotgXwyrtIVWO2EMwuTq60o5CVO4
-	tS698+4niaJcfYgAy2H73/2TLwZhtmsq0s2IcaAIXXJTAFXuUHwPK1x5iwXKLU2MbnbxfTaWWaS
-	3B8WKGR2KXQM2xd+pHj0bd/DvvzTbIR9MuxoK4vtSp4YWw4I44R/0J24G3hxXqdD9TS6JPVa71l
-	RB1b6b5PzyWcCUVZYmEcLYlUkeUe2Le8FVy7rCQH444zb8vbgi9Au/kstmNfJwAaCm57Mh8zXLY
-	7dtPhvhwj/10WbqSc7Jv5DCawTBmGBtKtXl7lhZG/02PiJij3g0asRZVh7YqmqxcFAadWtO83Mk
-	OUOvadSkuOYIoYPvYYa1zv2v3OaThisDLoXiexNybYsVc5A1Eub1reJSvTVuBRJGP0I0Vyd692k
-	kc2aNcYPZtCxgymBNa2n+ofqIk/27KZ1X0nvCqE5v/whDCTUSxLGgaA52bLffYkkL44zckZySMq
-	CknwMNsihUWIjP3Os9tV/rpMNVUdN2re+cI7u4mLeDpDzeugF4FSJhcWp5pKyzdppPYkCP2umER
-	0FHCCQ0GG7VzS1qH6tnzypTWsnNiZGmlkhsm1/QejDu4iT31LmSNecb273dZHDznBdukBFYmzcw
+        bh=Icb5WHmpev+5C+tDPzer6/En0TMok2+H9fCw1XDuxFk=;
+        b=xKxXP7jM+6pDfKBivoj2Vn2WUGPD9ht7pUv4sd+kB6+rROkLPU47kWuvlqfx55ilSC
+         XWMjHbcTsWlPzaAdYgyfXpU4zIhXRYHq3fOZdDwFNU3QWloxsiXPDN1LyQUn+YMyFYXf
+         f9hniLXBenAFI5RN3cVVHxMN4YknA44RIlFPd3Li3hrR+eEN81tDGL0CDLBFRwRx8VBj
+         94kGmpm/s8zoYtNLw1xomgrtzjJiCNgY/FBHcozml4SYSxDrDAOoz1hEDrSJx5Yuk6ai
+         7loc2WznXJZ6hUZeCrXXM/RcRt4Tot9cyg06U4mZY1q0D9z1RsPExF4teWY71UZGunCi
+         5QZA==
+X-Gm-Message-State: APuU4Z9WSdDFWKU21zBZks43IvlFiFs7qWdnwt3pAfqJf92/AH1VXFIA
+	7E0/5864yNVl+XggSRJ7XxqGHqWWbEyHli7H4oe+z+DCUtiX9J4BFUgAutLWCw==
+X-Gm-Gg: AYBFou14HT1UMg4OLNToGXqEaHNJGNtGLtXYWCsnkjPBEbmGMzXzr2Mh8mGC7STZJAz
+	16SyiTUbpSWemJn0ECtbuAW4WhhMiMLbYN6FUVHUzVQQh+4Gs8YpGKnZhd2Cv49HHI5GGx/3PpT
+	nD+F0Y+2pvLhsAAo24ZDushMyvgvNu3dT/37EE4bt/78YLK/N1ilIHyJEUrIu3TdjaxoUQGe++Q
+	EMdst6w3c5Dknis9VAohmap8Ec5HagN/uVUJny/Pry6tszsg9AhXsbsNlXsqc2QtU1G9Fg8VgNb
+	dJS+6DAb6OstGSu5Wmy/8mxK2Sev1U05WY0uQIPjvK05vbizr8HBDzPWR7Awx3VYRYRFNRKfrxj
+	FGnhoHYO77Pga/Ssy69WNKzgIm9CkaHGAqT6c8+Qstnl90lTgcDazFQWMNloP3BBc1Eo0xIzXW4
+	layApmCLsmUvbBetU4u1NtHkkeiZNZ92FcEmWeCe5MQn6mjk+ghET2uP2nlp3G1fWzJqTVgJPnq
+	CIpjC+Vd4/CMBPLPmoyBhb0Nw3wyF293U8js97zdyAgM6TXrPoK6Yzf/lLdT+fvmTwCYzWd91Ed
+	qDGv7Q6dzDrcp1nMZb4TM03yeF36it5967XLsagCAdbD8zhnd92SNfnaj/j2opWvtiqmFvHUvUb
+	NXOyAAfopk603dJmO5oHAXtiwDP0zd8VsCoGbpfDPkRKoVK+j/6VeHs4YghrU2dJSnTgUOhl8xA
 	==
-X-Received: by 2002:a17:902:fc8d:b0:2e9:740c:36c with SMTP id d9443c01a7336-2ed40dcd41amr52095645ad.41.1794022692982;
-        Fri, 06 Nov 2026 19:38:12 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed477a7c52sm10173675ad.20.2026.11.06.19.38.12
+X-Received: by 2002:a17:90b:33d2:b0:3a0:e4ce:31fd with SMTP id 98e67ed59e1d1-3b0db6d367bmr4317055a91.10.1794022700913;
+        Fri, 06 Nov 2026 19:38:20 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed477a9067sm10430965ad.15.2026.11.06.19.38.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 19:38:12 -0800 (PST)
+        Fri, 06 Nov 2026 19:38:18 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v4 02/46] bpf: Limit depth and time of recursive subprogs at run time
-Date: Sat,  7 Nov 2026 03:37:10 +0000
-Message-ID: <20261107033758.1547725-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v4 03/46] bpf: Add union and widening of the range of a register
+Date: Sat,  7 Nov 2026 03:37:11 +0000
+Message-ID: <20261107033758.1547725-4-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
@@ -104,366 +104,212 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Rust recurses where C has a loop. scx_flatcg.rs of rust-bpf has
+format_cgrp_path() of scx_layered, prog layered_runnable:
 
-  struct CgrpCtx { parent: Option<Arc<CgrpCtx>>, ... }
+  u32 len = 0;
+  bpf_for(level, 1, max_level + 1) {
+          if (level > 1 && len < MAX_PATH - 1)
+                  path[len++] = '/';
+          ...
+          len += ret - 1;
+  }
 
-The drop of the last Arc of a cgroup drops the Arc of its parent:
-Arc::drop_slow() calls itself, and 8 of the 15 progs are rejected:
-"recursive call from drop_slow<..>() to drop_slow<..>()". quicksort() under
-sort_unstable_by() in scx_rusty.rs, BTreeMap, serde_json and regex-automata
-recurse too: 100 of the 225 progs of the schedulers of rust-bpf, 100 of its
-437 tests. The verifier cannot know how deep the calls go, or how many
-there are.
+The verifier follows each path, and its work grows with the number of
+paths. To make it grow with the size of the prog, the states that meet at
+an insn must become one state. Then the loop head has one state for all
+iterations. len in it is the union of what arrives: 0 from above, more
+after each pass through the loop, and the passes do not end. Widening ends
+them: the bound that moved is put far out at once, and the jumps in the
+loop make the range small again. The compiler tests len in 32 bits:
 
-Limit both at run time. Each subprog on a cycle of the call graph starts
-with two checks:
+  len at the head  after 'if w7 > 0xffe'    path[len++] = '/'
+  [0, S64_MAX]     [0, 0x7fffffff00000ffe]  R2 unbounded memory access
+  [0, U32_MAX]     [0, 4094]                ok
 
-  entry:  may_goto bail                                 limits the time
-          if (r10 is in the upper half of the stack)    limits the depth
-                  goto body
-          bpf_prog_report_recursion()
-  bail:   r0 = 0; exit
-  body:   ...
+A 32-bit compare cannot bring back what widening to 64 bits threw away.
+Thus bpf_reg_widen_range() moves a bound to the nearest of a few stops: 0,
+S32_MAX, U32_MAX, S64_MAX above it, 0, S32_MIN, S64_MIN below. A stop is
+a guess, and a guess that fails costs one more pass. No jump holds sum in
+'sum += a[i]; if (sum == 77) ..'. After S32_MAX it can still have 32 bits:
+U32_MAX holds it. A bound that was at S32_MAX, U32_MAX or S32_MIN and
+leaves 32 bits gets no other stop: [0, S64_MAX] wraps in the next pass. The
+number is unknown: btree_set_ops of rust-bpf, 251722 -> 230969 insns.
 
-Both are needed. The depth does not limit the time:
+rusty_dispatch of rust-bpf: 'r9 += 1; if r9 < r8 goto' with r8 from memory.
+2, [2, S32_MAX], [2, U32_MAX], unknown: 4 passes. Scalar evolution knows
+that each iteration adds a constant to r9: @linear. Such a number goes on
+until it wraps. It is unknown at once, or [0, U32_MAX] if it is computed in
+32 bits: 2 passes, 788 -> 536 insns.
 
-  int fib(int n) { return n < 2 ? n : fib(n - 1) + fib(n - 2); }
-
-fib(90) is never deeper than 90 frames and makes 10^19 calls. There is no
-loop in it, so no may_goto of a loop bounds it. The cycle is in the call
-graph, and it goes through the first insn of fib(). With may_goto there
-fib(90) ends after 250 ms, the time slice that the loops and recursions of
-an invocation share. The time does not limit the depth:
-'int f(int n) { return f(n + 1) + 1; }' is out of stack in less than 1 ms.
-
-r10 is an address in the kernel stack that the prog runs on. Thus the check
-sees all that is in this stack, not only the frames of this prog, without
-per-cpu state. On arm64 a stack is aligned to its size: one bit of r10
-tells the half. On x86-64 r10 is compared with the tops of the task stack
-and the irq stack. In any other stack, like in an NMI that interrupts the
-kernel, the check fails. Other archs get no recursion. The stack in arena
-has no check: the verifier makes the frame in the kernel stack so large
-that a half of that stack is full before the stack in arena. It does so in
-check_call_depth(): the limit on the stack of a chain of calls has to see
-the frames that the JIT gets.
-
-No subprog is marked as recursive yet. A call runs 12 more insns on x86-64
-(17 on the irq stack), 8 on arm64: +0.2 to +0.5 nsec on x86-64.
+bpf_reg_union_range() is the union, without the reg_bounds_sync() of
+bpf_reg_union(): an input is not always in sync. It keeps the step of
+a number. clang counts 'for (i = n; i >= 0; i--) sum += a[i];' in bytes:
+'r2 += -4; if r2 != -4 goto'. n is a range, so '!=' gives no count. r2
+stops at -4 only because it is a multiple of 4. a + s * k and b + t * k are
+both of the form a + gcd(s, t, a - b) * k. A step gives way to one of its
+divisors only: it needs no widening. Nothing calls this code yet.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h          |   2 +
- include/linux/bpf_verifier.h |   3 +
- include/linux/filter.h       |  16 +++++
- kernel/bpf/core.c            |  19 ++++++
- kernel/bpf/fixups.c          | 113 +++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c        |  49 +++++++++++++++
- 6 files changed, 202 insertions(+)
+ include/linux/bpf_verifier.h |  11 ++++
+ kernel/bpf/verifier.c        | 108 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 119 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index b011acc22c50..cdf3c9b90987 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1944,6 +1944,8 @@ struct bpf_prog_aux {
- 	bool has_prologue;
- 	bool might_sleep;
- 	bool can_unwind;
-+	/* frames of recursive subprogs can be on the stack when it is called */
-+	bool in_recursion;
- 	bool kprobe_write_ctx;
- 	/* has insns that work with the arena base, see bpf_prog_has_arena_insns() */
- 	bool uses_arena_insns;
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 7e268540dae9..2f935061b8fd 100644
+index 2f935061b8fd..79faf084cbcd 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -995,6 +995,8 @@ struct bpf_subprog_info {
- 	bool has_tail_call: 1;
- 	bool might_throw: 1;
- 	bool can_unwind: 1; /* has unwind_exit */
-+	bool recursive: 1; /* on a cycle of the call graph */
-+	bool in_recursion: 1; /* recursive, or a recursive subprog gets to it */
- 	bool via_callx: 1; /* callx calls it */
- 	bool tail_call_reachable: 1;
- 	bool has_ld_abs: 1;
-@@ -1532,6 +1534,7 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx);
+@@ -1341,6 +1341,7 @@ struct bpf_verifier_env {
+ 	struct bpf_iarray *gotox_tmp_buf;
+ 	int *idoms;
+ 	struct scev *scev;
++	struct bpf_join_state *join;
+ };
+ 
+ static inline struct bpf_func_info_aux *subprog_aux(struct bpf_verifier_env *env, int subprog)
+@@ -1531,6 +1532,13 @@ void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab);
+ int mark_chain_precision(struct bpf_verifier_env *env, int regno);
+ 
+ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx);
++
++/* join.c */
++int bpf_states_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst,
++		    const struct bpf_verifier_state *a, const struct bpf_verifier_state *b,
++		    bool widen);
++void bpf_join_free(struct bpf_verifier_env *env);
++
  int bpf_insert_loop_guards(struct bpf_verifier_env *env);
  bool bpf_edge_leaves_loop(struct bpf_verifier_env *env, int h, int n, int t);
  bool bpf_jump_leaves_loop(struct bpf_verifier_env *env, int h, int n);
-+int bpf_insert_recursion_checks(struct bpf_verifier_env *env);
- int bpf_split_cur_state(struct bpf_verifier_env *env);
- int bpf_update_branch_counts(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
+@@ -2059,6 +2067,9 @@ void bpf_trim_pkt_range(struct bpf_reg_state *reg, s64 smax);
+ int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 		      struct cnum64 r64, struct cnum32 r32, u16 base, u16 step);
+ bool bpf_reg_union_compatible(const struct bpf_reg_state *a, const struct bpf_reg_state *b);
++void bpf_reg_union_range(struct bpf_reg_state *acc, const struct bpf_reg_state *src);
++void bpf_reg_forget_range(struct bpf_reg_state *reg);
++void bpf_reg_widen_range(struct bpf_reg_state *reg, const struct bpf_reg_state *old, int linear);
+ int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
+ 		  const struct bpf_reg_state *src);
  
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index a58ad2318412..61448be53f8d 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1401,6 +1401,21 @@ bool bpf_jit_supports_large_stack(void);
- bool bpf_jit_supports_timed_may_goto(void);
- bool bpf_jit_supports_fsession(void);
- 
-+/*
-+ * Whether a recursion in @prog can be limited at run time:
-+ *  - r10 tells how much of the kernel stack is used, on the architectures whose stacks
-+ *    emit_stack_check() knows.
-+ *  - All may_goto of the prog share one time slice. That is the timed form, which only JITed
-+ *    progs get, see bpf_do_misc_fixups(). The other form counts in each frame.
-+ *  - A walk of the stack finds the prog when there is no room, to tell user space, see
-+ *    bpf_prog_report_recursion().
-+ */
-+static inline bool bpf_prog_has_invocation_budget(const struct bpf_prog *prog)
-+{
-+	return (IS_ENABLED(CONFIG_X86_64) || IS_ENABLED(CONFIG_ARM64)) && prog->jit_requested &&
-+	       bpf_jit_supports_timed_may_goto() && bpf_jit_supports_exceptions();
-+}
-+
- struct bpf_jit_arg_abi {
- 	/* Argument registers of the kernel convention. */
- 	u8 nr_arg_regs;
-@@ -1438,6 +1453,7 @@ u64 arch_bpf_timed_may_goto(void);
- u64 bpf_check_timed_may_goto(struct bpf_timed_may_goto *);
- void bpf_timed_may_goto_save(const struct bpf_prog *prog, struct bpf_timed_may_goto *saved);
- void bpf_timed_may_goto_restore(const struct bpf_prog *prog, struct bpf_timed_may_goto *saved);
-+u64 bpf_prog_report_recursion(void);
- bool bpf_helper_changes_pkt_data(enum bpf_func_id func_id);
- 
- static inline bool bpf_dump_raw_ok(const struct cred *cred)
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 8e2fb66940c7..f88a1c041a7a 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3956,6 +3956,25 @@ static noinline void bpf_prog_report_may_goto_violation(void)
- #endif
- }
- 
-+/* Called by a recursive subprog that finds no room, see bpf_insert_recursion_checks() */
-+u64 bpf_prog_report_recursion(void)
-+{
-+#ifdef CONFIG_BPF_SYSCALL
-+	struct bpf_stream_stage ss;
-+	struct bpf_prog *prog;
-+
-+	prog = bpf_prog_find_from_stack();
-+	/* The calls that follow get here too. One report is enough until user space reads it. */
-+	if (!prog || atomic_read(&prog->aux->stream[BPF_STDERR - 1]->capacity))
-+		return 0;
-+	bpf_stream_stage(ss, prog, BPF_STDERR, ({
-+		bpf_stream_printk(ss, "ERROR: No room in the stack for a call of a recursive function\n");
-+		bpf_stream_dump_stack(ss);
-+	}));
-+#endif
-+	return 0;
-+}
-+
- u64 bpf_check_timed_may_goto(struct bpf_timed_may_goto *p)
- {
- 	u64 time = ktime_get_mono_fast_ns();
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 6fd79c2fbdc1..3413c7addca8 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -806,6 +806,118 @@ int bpf_insert_loop_guards(struct bpf_verifier_env *env)
- 	return err;
- }
- 
-+/*
-+ * if (r10 is in the upper half of the kernel stack) goto +@off
-+ *
-+ * r10 of a subprog without a private stack is an address in the kernel stack that it runs on.
-+ * arm64: the stacks of tasks, of interrupts and of SDEI events have THREAD_SIZE bytes and are
-+ * aligned to twice that size. One bit of an address tells the half.
-+ * x86-64: the stack for interrupts is aligned to a page only. But the cpu has the top of the stack
-+ * of the task and the top of its stack for interrupts. In any other stack (NMI, #DB, #MC, #DF,
-+ * #VC) the check fails: they have half of the size.
-+ * R0 has nothing at the entry of a subprog.
-+ */
-+static int emit_stack_check(struct bpf_insn *buf, int off)
-+{
-+	int n = 0;
-+
-+#if defined(CONFIG_X86_64) && !defined(CONFIG_UML)
-+	const void __percpu *top[] = { &cpu_current_top_of_stack, &hardirq_stack_ptr };
-+	int i;
-+
-+	static_assert(IRQ_STACK_SIZE == THREAD_SIZE);
-+	for (i = 0; i < 2; i++) {
-+		buf[n++] = BPF_MOV64_IMM(BPF_REG_0, (u32)(__force unsigned long)top[i]);
-+		buf[n++] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
-+		buf[n++] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0);
-+		buf[n++] = BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG_10);
-+		buf[n++] = BPF_JMP_IMM(BPF_JLT, BPF_REG_0, THREAD_SIZE / 2, i ? off : off + 5);
-+	}
-+#else
-+	buf[n++] = BPF_JMP_IMM(BPF_JSET, BPF_REG_10, THREAD_SIZE / 2, off);
-+#endif
-+	return n;
-+}
-+
-+/*
-+ * How deep a recursion goes is not known, so it is limited at run time. In the same
-+ * spirit as may_goto: the program goes on for as long as there is room and takes a way
-+ * out that was verified when there is none.
-+ *
-+ * Every subprog on a cycle of the call graph begins with:
-+ *
-+ *	may_goto bail;
-+ *	if (r10 is in the upper half of the kernel stack) goto body;
-+ *	bpf_prog_report_recursion();
-+ * bail:
-+ *	r0 = 0;
-+ *	exit;
-+ * body:
-+ *
-+ * It is the stack as it is: whatever is there is counted, be it the callers of the prog in the
-+ * kernel, another prog, a trampoline or a helper that calls a callback. An invocation in
-+ * another stack has nothing to do with it.
-+ *
-+ * The lower half is for what is below r10: the frame of the subprog, then what it calls.
-+ * That is the next recursive subprog, which doesn't get past its check, or a chain of calls that
-+ * check_max_stack_depth() looked at together with that frame.
-+ *
-+ * A subprog that calls itself twice doesn't have to go deep to go on forever: hence may_goto.
-+ * Once the time slice of the invocation is over every call returns at once, and the frames
-+ * that are there come to an end.
-+ */
-+int bpf_insert_recursion_checks(struct bpf_verifier_env *env)
-+{
-+	struct bpf_subprog_info *si = env->subprog_info;
-+	struct bpf_insn buf[24], nop = BPF_JMP_A(0), *insn;
-+	bool found = false;
-+	int s, n, jmp, err;
-+
-+	for (s = 1; s < env->subprog_cnt; s++)
-+		found |= si[s].recursive;
-+	if (!found)
-+		return 0;
-+	env->prog->jit_required = 1;
-+
-+	for (s = 1; s < env->subprog_cnt; s++) {
-+		if (!si[s].recursive)
-+			continue;
-+		n = 0;
-+		/* The exit drops the frame in the stack in arena. Take it before the check. */
-+		if (is_arena_sp_adj(&env->prog->insnsi[si[s].start])) {
-+			buf[n++] = env->prog->insnsi[si[s].start];
-+			/* one insn for one: done at once, the list copies the nop */
-+			insn = bpf_patch_list_add(env, si[s].start, &nop, 1);
-+			if (IS_ERR(insn))
-+				return PTR_ERR(insn);
-+		}
-+		jmp = n++;
-+		n += emit_stack_check(buf + n, bpf_ret_reg_pair(env, s) ? 4 : 3);
-+		/* The arguments are not needed any more */
-+		buf[n++] = BPF_EMIT_KERNEL_CALL(bpf_prog_report_recursion);
-+		buf[jmp] = BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, n - jmp - 1, 0);
-+		buf[n++] = BPF_MOV64_IMM(BPF_REG_0, 0);
-+		if (bpf_ret_reg_pair(env, s))
-+			buf[n++] = BPF_MOV64_IMM(BPF_REG_2, 0);
-+		buf[n++] = budget_exit_insn(env, &si[s]);
-+		/* calls get to the check, jumps to the first insn do not */
-+		err = bpf_patch_list_insert(env, si[s].start, buf, n);
-+		if (err)
-+			return err;
-+	}
-+	err = bpf_patch_list_commit(env);
-+	if (err)
-+		return err;
-+	/* may_goto keeps the address of its count in a register that is dead: R0 */
-+	for (s = 1; s < env->subprog_cnt; s++) {
-+		if (!si[s].recursive)
-+			continue;
-+		n = si[s].start + is_arena_sp_adj(&env->prog->insnsi[si[s].start]);
-+		env->insn_aux_data[n].live_regs_before = (u16)~BIT(BPF_REG_0);
-+	}
-+	return 0;
-+}
-+
- /* Clean up dynamically allocated fields of aux data for instructions [start, ...] */
- void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
- {
-@@ -1878,6 +1990,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		func[i]->aux->changes_pkt_data = env->subprog_info[i].changes_pkt_data;
- 		func[i]->aux->might_sleep = env->subprog_info[i].might_sleep;
- 		func[i]->aux->can_unwind = env->subprog_info[i].can_unwind;
-+		func[i]->aux->in_recursion = env->subprog_info[i].in_recursion;
- 		func[i]->aux->token = prog->aux->token;
- 		if (!i)
- 			func[i]->aux->exception_boundary = env->seen_exception;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index eb51f7f04153..c16a20ab664d 100644
+index c16a20ab664d..801e4607a462 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -6112,6 +6112,47 @@ static void compute_call_depth(struct bpf_verifier_env *env, struct bpf_call_gra
- 	} while (changed);
+@@ -18189,6 +18189,114 @@ bool bpf_reg_union_compatible(const struct bpf_reg_state *a, const struct bpf_re
+ 	       a->id == b->id && a->parent_id == b->parent_id && a->map_uid == b->map_uid;
  }
  
-+/*
-+ * The stack in arena has no check of its own, see bpf_insert_recursion_checks(). A frame
-+ * of a recursive subprog takes at least the same part of a half of the kernel stack as of the
-+ * room in the stack in arena: there is room in arena for the frames that pass the check. The
-+ * last of them and the one that doesn't pass come on top.
-+ *
-+ * Returns 1 when frames in the kernel stack grew.
-+ */
-+static int pad_recursive_frames(struct bpf_verifier_env *env, struct bpf_call_graph *cg,
-+				struct bpf_subprog_call_depth_info *dinfo)
++/* Nothing is known about the number or the variable part of the offset anymore. */
++void bpf_reg_forget_range(struct bpf_reg_state *reg)
 +{
-+	struct bpf_subprog_info *si = env->subprog_info;
-+	u32 arena_frame = 0, depth = 0, room, frame;
-+	int s;
-+
-+	for_each_set_bit(s, cg->live, cg->cnt) {
-+		depth = max_t(u32, depth, dinfo[s].arena_depth + si[s].arena_stack_depth);
-+		if (si[s].recursive)
-+			arena_frame = max(arena_frame, si[s].arena_stack_depth);
-+	}
-+	if (!arena_frame)
-+		return 0;
-+	if (depth + 2 * arena_frame >= BPF_ARENA_STACK_MAX)
-+		goto no_room;
-+	room = BPF_ARENA_STACK_MAX - depth - 2 * arena_frame;
-+	env->max_arena_stack_depth = BPF_ARENA_STACK_MAX;
-+
-+	for_each_set_bit(s, cg->live, cg->cnt) {
-+		if (!si[s].recursive)
-+			continue;
-+		frame = DIV_ROUND_UP(si[s].arena_stack_depth * (THREAD_SIZE / 2), room);
-+		if (frame > env->stack_limit)
-+			goto no_room;
-+		si[s].stack_depth = max(si[s].stack_depth, frame);
-+	}
-+	return 1;
-+no_room:
-+	verbose(env, "no room in the stack in arena for recursion\n");
-+	return -EACCES;
++	reg->var_off = tnum_unknown;
++	__mark_reg_unbounded(reg);
++	reg_step_reset(reg);
 +}
 +
- static int check_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph *cg)
- {
- 	struct bpf_subprog_info *si = env->subprog_info;
-@@ -6122,6 +6163,11 @@ static int check_call_depth(struct bpf_verifier_env *env, struct bpf_call_graph
- 	if (!dinfo)
- 		return -ENOMEM;
- 	compute_call_depth(env, cg, dinfo);
-+	err = pad_recursive_frames(env, cg, dinfo);
-+	if (err < 0)
-+		goto out;
-+	if (err)
-+		compute_call_depth(env, cg, dinfo);
- 
- 	for_each_set_bit(s, cg->live, cg->cnt) {
- 		/* A caller of it is over a limit. That one is reported, not what it calls. */
-@@ -24696,6 +24742,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (ret == 0)
- 		ret = bpf_optimize_bpf_loop(env);
- 
-+	if (ret == 0)
-+		ret = bpf_insert_recursion_checks(env);
++/*
++ * @reg is what @old became after a trip around a cycle, @old included. The end
++ * of the range that moved is going to move again. Put it where it may come
++ * to rest. There are few such places, so this is done a few times at most.
++ * It's put at the nearest of these places: every value between the range and the place is
++ * made up, and the program is checked with it. Wherever it's put, the range only gets larger.
++ * @linear: every iteration adds a constant to it, in that many bits. Then nothing but a jump
++ * stops it. It goes on until it wraps, and is any number of that many bits.
++ */
++void bpf_reg_widen_range(struct bpf_reg_state *reg, const struct bpf_reg_state *old, int linear)
++{
++	bool moved = reg->r64.base != old->r64.base || reg->r64.size != old->r64.size ||
++		     reg->r32.base != old->r32.base || reg->r32.size != old->r32.size;
++	s64 min = reg_smin(reg), max = reg_smax(reg);
 +
- 	if (ret == 0)
- 		bpf_lower_cast_mov(env);
- 
++	/* Only the step got weaker. It comes to rest without help, see below. */
++	if (!moved && reg->var_off.value == old->var_off.value &&
++	    reg->var_off.mask == old->var_off.mask)
++		return;
++
++	if (linear && (max > reg_smax(old) || min < reg_smin(old))) {
++		if (linear == 64 || min < 0 || max > U32_MAX) {
++			bpf_reg_forget_range(reg);
++			return;
++		}
++		min = 0;
++		max = U32_MAX;
++	}
++	if (max > reg_smax(old))
++		max = max <= 0 ? 0 :
++		      max <= S32_MAX ? S32_MAX :
++		      max <= U32_MAX ? U32_MAX : S64_MAX;
++	if (min < reg_smin(old))
++		min = min >= 0 ? 0 :
++		      min >= S32_MIN ? S32_MIN : S64_MIN;
++	if (min == S64_MIN && max == S64_MAX) {
++		bpf_reg_forget_range(reg);
++		return;
++	}
++	/*
++	 * A fixed stop is a guess. A number of 32 bits that gets past S32_MAX comes to rest at
++	 * U32_MAX. What gets past S32_MAX, U32_MAX or S32_MIN and out of 32 bits is stopped by
++	 * nothing:
++	 *	sum += a[i]; if (sum == 77) ...
++	 * It wraps in the next pass, and the other bound is gone as well.
++	 */
++	if ((max == S64_MAX && (reg_smax(old) == S32_MAX || reg_smax(old) == U32_MAX)) ||
++	    (min == S64_MIN && reg_smin(old) == S32_MIN)) {
++		bpf_reg_forget_range(reg);
++		return;
++	}
++	/* every part has to include what it did before, hence no reg_bounds_sync() */
++	reg->r64 = cnum64_union(reg->r64, cnum64_from_srange(min, max));
++	if (min >= 0 && max <= U32_MAX) {
++		reg->r32 = cnum32_union(reg->r32, cnum32_from_urange(min, max));
++		reg->var_off = tnum_union(reg->var_off, tnum_range(min, max));
++	} else if (min >= S32_MIN && max <= S32_MAX) {
++		reg->r32 = cnum32_union(reg->r32, cnum32_from_srange(min, max));
++		reg->var_off = tnum_unknown;
++	} else {
++		reg->r32 = CNUM32_UNBOUNDED;
++		reg->var_off = min >= 0 ? tnum_union(reg->var_off, tnum_range(min, max))
++					: tnum_unknown;
++	}
++	/*
++	 * No range moved: the known bits or the step got weaker. The step comes to rest without
++	 * help: it gives way to one of its divisors only.
++	 *	off = n * 4; do { sum += *(u32 *)(a + off); off -= 4; } while (off != -4);
++	 * counts on "a multiple of 4".
++	 */
++	if (moved)
++		reg_step_reset(reg);
++}
++
++void bpf_reg_union_range(struct bpf_reg_state *acc, const struct bpf_reg_state *src)
++{
++	bool acc_const = cnum64_is_const(acc->r64), src_const = cnum64_is_const(src->r64);
++	/* A constant is its own base. Its step is 0: every number divides 0. */
++	s64 a = acc_const ? cnum64_smin(acc->r64) : acc->base;
++	s64 b = src_const ? cnum64_smin(src->r64) : src->base;
++	u16 step = gcd(acc_const ? 0 : acc->step, src_const ? 0 : src->step);
++	s64 diff;
++
++	acc->r64 = cnum64_union(acc->r64, src->r64);
++	acc->r32 = cnum32_union(acc->r32, src->r32);
++	acc->var_off = tnum_union(acc->var_off, src->var_off);
++
++	/* a + s * k and b + t * k are both of the form a + gcd(s, t, a - b) * k */
++	if (check_sub_overflow(a, b, &diff) || (!step && (diff > U16_MAX || diff < -U16_MAX)))
++		step = 1;
++	else
++		step = (step ? gcd(step, imod(diff, step)) : abs(diff)) ?: 1;
++	acc->step = step;
++	acc->base = imod(a, step);
++	/*
++	 * No reg_bounds_sync(): every part of the result has to include that
++	 * part of both inputs, and an input is not always in sync.
++	 */
++}
++
+ /*
+  * Extends acc's scalar range to include src's scalar range.
+  * Caller must ensure that other kinds of metadata is compatible.
 -- 
 2.55.0
 
