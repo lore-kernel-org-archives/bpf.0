@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794071003;
-	b=rdbF7i5JOUfqa3xd1HgHhY/MQWQW8QzghQN8Bf1WWqiCjUKU/mU+zPAJ2yfg/4IKQRE6
-	 VF8eMpUTvDdhueJH0IiiBWH3TPPC1S/MDxaj0d+DUWTF1/N/8wQWdaQpejNuy0B61F9yT
-	 roGE9XgOU/frHyYLnS7dnYmUHYis/LnAyHXFfcdO4Q7vFCLrGnjJk4Lp77wkYs3hfthM2
-	 AAfS4U1PnnWwovnnNYVRaZOpknJsLXhMoKAA3BxzPRP9oQoDBVn/uT+UElRoHCQ7zoXcI
-	 ccdDwKedEN5KuM7DxPT5UyQGqel+bKlbTOGg+SElQFR84Yusm18a0YreocHLcfLF9zw==
+	t=1794071010;
+	b=PEtmkVJiiFNCBwWiQbIyueDN2eoe7XKmwdmySO37oHM9AdWg0bDYpEn/PRqY3hsf64xe
+	 nDtXBx48Am+iF6UCw3WLKdxsjg81F0QO0uwA6I0zf2vHKbdjXIPZPJWsWwafoCIGdRAP9
+	 GhxiEY0jG9ozScHqjXgCDYgrPkw50nXG2c6dL4oMLA6pINEfp2InvFA9tmTkP+nTI9xSK
+	 O/86RRiHfOhm384ASXcvV++Kyg38GoaN3uNxlIiOhnldjMxluKRpjMwpR51GppOwgtMTa
+	 wIQW7FcTEDFCIsK4f5HE1oc0WW32Ld7ndO5EfB5pNSzjzJSB0pj4zORPtuSa3IjYqDg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794071003;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794071010;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Dgy57A+ykqvklf6t9ZJQ83dCSHOT7MP3eEX1mnAE9/w=;
-	b=EzFMH1YaYjraERrL0r21Ior/hWMa+fT1Ado/bNhjpku9LYd1UuPi0uHBA69NZQUO6Gt/
-	 vyK1Q6dlGH1dr/yg/X4VPmBqp6lYpAMjtTVFBEFWfTinWdlmjhTFFjRywYsAZWAOUgJDX
-	 496baljHQA3Cepkcaker7nJX3cEngvIVx8us4WlC0b665lDy87F5uv1fYNps5S7Me/Zid
-	 ySWbg4jF1eJ6QITDJ5q/Oy6F/0L/qiDMQSqlmlUX4Wd1SLbTHzw/47loI6PFEuecMyTFh
-	 OUbzJi91bX0QVKE9U1IJRySnUSc3mrWVElnQfY3HEUHEjpCP3eADbtubOYwU/0GKNVw==
+	bh=59Af186DmXB8XzwtNA3MbwIJzB3ec+dgTez6hv69W1E=;
+	b=eu3VRP67FVZyPucCAHDwAXZ8i8UYyFR92WPwMkGwLVdI14K7tuVP8iTNPBVCIuXSVE6K
+	 ksy3Y8LIrhEaPatyUFCzcTLR3BI+CLUbEV3+oQcUg5UD5CP6h6hGynGq5vZqS+C1VYVTu
+	 dg5kQJ87DOfAnnl+EfGSUqBoFQpNl6HVvADUVVn5zlAI128tvvubttpxvgcCNknRJ8agX
+	 KU6ctLrNzx6499HsnySYfLk2LDxECeWq/2a73RI+n+70mwGv4/JVk+hHKoo7agxyjRBHk
+	 U2M8LlAI9fnPgq0tm91Y2up7VEM4H/PWIBXKyPBnY2ohzFWadVHW77AV8nv5Sa0/fHw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Xu00u8yx;
-	arc=none smtp.remote-ip=209.85.216.47
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y9RIHpOq;
+	arc=none smtp.remote-ip=209.85.214.174
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46574606A32C
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:03:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46574606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D0B606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:03:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54D0B606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Xu00u8yx
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3b0a2a44a0cso1238013a91.1
-        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:03:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y9RIHpOq
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e985106c0cso12485925ad.2
+        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:03:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794071002; x=1794675802; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794071010; x=1794675810; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Dgy57A+ykqvklf6t9ZJQ83dCSHOT7MP3eEX1mnAE9/w=;
-        b=Xu00u8yxdYXMKFd5KgisrlnDZ9zgNPGhP8y9hoY8EWhys+nmY+ELwXq10Vd1+Bd6FR
-         iEVws7XpQanVAqt4gn3RWDz7vKerrizWfEnFIVlgz186cCFu6guGZcIAJnWzP2dOEJTO
-         /j1bkf/I80L8Bfj8n9wG4+9MNbkguWV9NeTmg4O6Iua6MRgRwW1sG4z6zn5QHiSTl3G5
-         tUm+K9O7f2llRVhcpvr1DscvS94/BDAGVvSUE9tIzAgoYqwUxCd5qlHJZ4heI8WhVlaa
-         iCsrnht5x1d8Ybm3ipEtyocDl5kxpplzFQ85iDChsTbtLv2gAiF+GND/E4HGAOcTD0xB
-         aKaw==
+        bh=59Af186DmXB8XzwtNA3MbwIJzB3ec+dgTez6hv69W1E=;
+        b=Y9RIHpOqpZFly3knEdOZ1YsLCe0JMQ/GqRReVrHLeIPyaqWNItRSkRF9JLxMP5/21F
+         W88q2tj0BDZTiVb5z7xDLEmSypeutPoSLK5xQhtPzlqhmAOyilgVPt5EqF/43VSNaLbz
+         BAqkxTSO38frExSgf4ZtQWjQrDoFy4zEQ7DG5Ea4mrD/s/z9BVDVSu0Nuwkmqf5mfvJh
+         hCsj6skiC7vtdBZ/uRWxAxvkvRDVveVQjDV0TJBiye+I0OIZLB1nnRTpQS9haMbzbpRW
+         WNj+bOydfk6QJnRSLvsfafio5H3sFDQcy8hUj+ghf8T9yCh+q1YR2kk7gwV3jk9gR2dM
+         VgsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794071002; x=1794675802;
+        d=1e100.net; s=20260707; t=1794071010; x=1794675810;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Dgy57A+ykqvklf6t9ZJQ83dCSHOT7MP3eEX1mnAE9/w=;
-        b=d3o4OfmgJ/sDIdWEYwkrj0/qymraJfpULouFGR/1CJywgFpVkYH/r3VvKDGievNVJ0
-         6sfzXl6nPJLByiWGmZgBF209wuAQMUHH74OcG59bmj8REFNIWaE7GQGLsEuX0xG1BOU/
-         EY3dCYHy7mXVoXIWZ/f+yUjaetgkMhsgof8MUKEl8txnLKyrMW3Uh+yYEzuyIXFucF8j
-         1z5MBRlwVZvl5flHc9NuWJBtvEoQQyZBIikWLYXWO4ZgZ82xuyrwha9C+tZ35ETw1S8D
-         TLGLU77wZG+kUU8d5nKYsMC2dyQFqZLlScoGWE+isJRMorRqsEs7mLl1qAxBu8EKtuhR
-         ciug==
-X-Gm-Message-State: APuU4Z8IWcXQ0hUIUtdjzRur57l7POljlQkQb5EcaQIgLC0IT5AE24qv
-	biOTQahPPmt+4XJ8HK8McD/3+hT/eI5JRqZoBpU7jurmlM3T+sY2nXUDFdUzIg==
-X-Gm-Gg: AYBFou09psc9aIOMToR4Aac5tkUFMce0mAiQ5gGL/cdozvu7Y01PZWAES4WAdGE4ag0
-	QMt+6cuGD71BlARkbPPRmDKGnYlWoh41gC2CBIe0Zsj5W87EvaCit1Zcj6W38/+VOb3cXu7qbIP
-	CXpGsRlPWYUGxTQprooZ9z9uaDuGv7yV93vjhHpbWkgqOvsXuL+7HH4VI+Yobm85HXDKXg4wiZQ
-	VekY7nMkIAKlRli24/OW0XeL9KZHO2Hw1QQ5OtU97wvNxy00FFHc1R6PmoEF6M/8eKuMfEmNLcR
-	vDjVG6owXC6i1k17nX6EIJAq25v2pzpqaGUBLMOKLuJ+L8qqEs3SeEXNvCYrdrp54EejtPhZkA4
-	hQpczVENikM6zMZK+7UdImTTfRQA3ZCdxx8ft2lq1B/B3tPDGxy1XfebLwRnUYDTiUzMlaj/4kG
-	i0FKHMTcbb749jgZ8nE834G6y14fow1PQ4IAk8U30xfZKLChP2u/4AowQHlANjKD3Q9QUS7Nfre
-	SILqf/AuCSJkSxObqA9+je6+SUjyTVBL2A/ClUxVzMdydlZ1VfzmAA4jOfZIDNbOVc8fvhYJ7hR
-	9RtqSUFr8j5g5C8xpBquM665JTBSD/yo7ECnXyKHb2izAXQWSgtlK1KbBSC/Ez7yGm7h75eIUtM
-	f2TqIGSuD3WHLBmkkpv0LI9eXTxwj1DETxqWDm63iHk5SUFJB4iIsHvnQJp1g1+et3e6Elv8Sjw
+        bh=59Af186DmXB8XzwtNA3MbwIJzB3ec+dgTez6hv69W1E=;
+        b=2WjfoNXLniMGuKYPvx172MWVz1SO03FmSG12ONoBZd2h9QTn13plWau9T6tVy9DgWu
+         Zsa1Jz0jYYhbHVywqoDYzyPmqmy9SNNg/UNHe+oZg71N7gzLW8SETXMvvUnggCUDSVE6
+         BE2BhJmG3I+PZtDaxAWne/9pkyFFpPcBbm5CbHlNYe8Vc8wVczhYJDUwblyjNmkLH1Qh
+         XIL3e/98Z5ivF3mOayttZCb/9FIpoZn1xB0TzEZEPAwe22TTSKFtkTqsSYjr8YrHHYMm
+         fM5UP1XygWXFePzZ7lDLDJVyqS2uFMRSxi9Gw7X6dVV0Ve6cLsxccBTOGykOzPELNwdP
+         eDow==
+X-Gm-Message-State: APuU4Z8KBplnbh9aPMHf5iSoAgm5hHiXBZ0jvPaZ78TzrzOoGjHkekEY
+	WDpfOkh5JSOVSQlI6ElFBtXz2pVRbDNYhGsXcoknEmXiWKU+YX5FNVTGCd00jA==
+X-Gm-Gg: AYBFou11WUr1Rlxyj/j45C3iScrCG7GtTIaAGyD7dIt52K7ZZwW0xsshZWzHstivhoX
+	GdtBeVUCvv2hAnWS0fxEnUR6bKuGjZR3VHfN8pOibu924DUgkfonWAsGu4xWIrhHg8WVJjUszzA
+	MjcA8XRP5mgvolZk/DgmCDU16QYSEC0KnXVWAXfFl90dRnFS/hctTb6AdzQfZXASRTPxbd0fGLC
+	Gf1PGwGZZuN9Y8gA+YoEW5CprxUBeaF7OLcHTGD009Ev5LPJ2+lGXHdStNQiG2wk6QFxrCxXvYa
+	Yb0EwNFBfEwxOgNRdKHU+bXZtcaJ0E1ITEFoH3Nyl4S8Xr5uoQm2YYtmicgylUeliKcTzsKBU0m
+	dd1z4WCyFEvT+ImUFzB3mPwdofXreb5k6g/KxI0jls8gD/ANeymAOEi09X9gnERPZURUX59GS+/
+	6KU2INAEnMF1QipQZnfMQ/5+MHy2DP8+bTSXCcoBCaGP3bv0M8XGtQriMxnlEMCFesTm8+GmY72
+	IpYySg1ns4jz6/SsbU/SLd913ObYntTl1MPWm5Xpbd29D3xy3VpFLNd1SCl98vDoukaSRqgVY9h
+	xGBPgW+0znbngvEduPzl0oxKr2sIfgN3u28XJiH+dMH6lwkA3GZqceQI6vgoqceEvgsIckDhVet
+	ajsHT2cUFnppHxNH3RPvMzOpT/rjmYywxlirvXduHaA4WeayjTsn+7Oa/VpKBLHXuBMpWrjoX4w
 	==
-X-Received: by 2002:a17:90b:33ce:b0:3ab:7031:d962 with SMTP id 98e67ed59e1d1-3b0db70e4femr5439328a91.41.1794071002394;
-        Sat, 07 Nov 2026 09:03:22 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b10583c8b5sm4178611a91.12.2026.11.07.09.03.18
+X-Received: by 2002:a17:90a:f489:b0:3b1:21d9:4c3d with SMTP id 98e67ed59e1d1-3b121daabd4mr245285a91.39.1794071009611;
+        Sat, 07 Nov 2026 09:03:29 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b10588225asm3799772a91.8.2026.11.07.09.03.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 09:03:18 -0800 (PST)
+        Sat, 07 Nov 2026 09:03:28 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 1/9] bpf: Leave a number alone that wraps in front of the jump that counts
-Date: Sat,  7 Nov 2026 17:02:58 +0000
-Message-ID: <20261107170306.2831028-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 2/9] selftests/bpf: Test a number that wraps in front of the jump that counts
+Date: Sat,  7 Nov 2026 17:02:59 +0000
+Message-ID: <20261107170306.2831028-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
 References: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
@@ -104,59 +104,47 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-	for (i = 0, n = first; ; i++, n -= 97) {
-		n += 100;
-		if (i == 2)
-			break;
-		use(n);
-	}
+A number goes up by 3. In front of the jump that counts the loop it moves
+over S64_MAX in one pair of progs and by S64_MAX in the other. The store
+behind the jump takes it as an index. In the progs that have to be rejected
+the store is one byte behind the value at run time.
 
-n is linear at the jump that counts: 'first + 100 + 3 * k'. Behind the jump
-bpf_clamp_scev_regs() gives it the range of one iteration less. When first
-is a constant it gets the step 3 and the residue '(first + 100) mod 3' too.
-When first + 100 goes over S64_MAX the signed value is 2^64 less. 2^64 is
-not a multiple of 3, so the residue is another one. reg_bounds_sync()
-rounds the range to numbers that n never is and drops the numbers that it
-is. What takes n as an index is checked for the wrong numbers.
-
-scalar_step_add() drops the step of a sum that can wrap. Set no range at
-all in this case. The register keeps what the state has. That went through
-scalar_step_add(), and it has the low bits of n, which bpf_set_reg_range()
-forgets.
-
-'bounds.base + moved' can overflow s64 when n itself doesn't wrap. Add the
-residues, as scalar_step_add() does.
-
-Fixes: a00c8eafb381 ("bpf: A loop is one iteration shorter behind the jump that counts it")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/scev.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ .../selftests/bpf/progs/verifier_loop_latch.c | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 5415fcf9df2f..6a9d16ab37f3 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -3992,7 +3992,7 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
- 	struct env *header_env;
- 	struct bounds bounds;
- 	u32 r, r_scev;
--	s64 moved;
-+	s64 moved, sum;
- 	int err;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_latch.c b/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
+index 12c1cb2f0384..8b9a2853ea05 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
++++ b/tools/testing/selftests/bpf/progs/verifier_loop_latch.c
+@@ -117,6 +117,29 @@ LOOP(behind_moved, "w8 = 0; r9 = r6; r9 += 2043;", MOVED(4) "goto 1b;")
+ BAD("a store behind the jump that counts, the pointer has moved too far")
+ LOOP(behind_moved_bad, "w8 = 0; r9 = r6; r9 += 2044;", MOVED(4) "goto 1b;")
  
- 	if (entry_state->curframe != cur_func_state->frameno) {
-@@ -4044,8 +4044,12 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
- 		if (coefs.base_reg == entry->iv_reg && !moved)
- 			iv_bounds(&bounds, entry->iv_range);
- 		if (moved) {
-+			/* a sum that can wrap has another residue, see scalar_step_add() */
-+			if (check_add_overflow(cnum64_smin(bounds.r64), moved, &sum) ||
-+			    check_add_overflow(cnum64_smax(bounds.r64), moved, &sum))
-+				continue;
- 			bounds.r64 = cnum64_add(bounds.r64, cnum64_from_srange(moved, moved));
--			bounds.base = imod(bounds.base + moved, bounds.step);
-+			bounds.base = (bounds.base + imod(moved, bounds.step)) % bounds.step;
- 		}
- 		if (behind) {
- 			/* jumps on the way may have told more */
++/*
++ * A number goes up by 3 and has moved in front of the jump. At the store it is @first or
++ * @first + 3. Moved over S64_MAX it has another residue: 2^64 is not a multiple of 3. It keeps
++ * the range of all three iterations then.
++ */
++#define NUM(by, back, first, off)						\
++	"r3 = " #by " ll; r9 += r3; if w8 == 2 goto 9f; r2 = r9; r3 = " #first " ll; r2 -= r3;" \
++	"r2 += r5; *(u8 *)(r2 + " #off ") = r1; r3 = " #back " ll; r9 += r3; w8 += 1; goto 1b;"
++#define OVER(off)	NUM(100, -97, 0x8000000000000031, off)
++#define FAR(off)	NUM(0x7fffffffffffffff, 0x8000000000000004, 0x7ffffffffffffffa, off)
++
++OK("behind the jump that counts, a number has moved over S64_MAX", "3")
++LOOP(moved_over, "w8 = 0; r5 = r6; r9 = 0x7fffffffffffffcd ll;", OVER(2041))
++
++BAD("behind the jump that counts, a number has moved over S64_MAX, too far")
++LOOP(moved_over_bad, "w8 = 0; r5 = r6; r9 = 0x7fffffffffffffcd ll;", OVER(2045))
++
++OK("behind the jump that counts, a number has moved by S64_MAX", "3")
++LOOP(moved_far, "w8 = 0; r5 = r6; r9 = -5;", FAR(2044))
++
++BAD("behind the jump that counts, a number has moved by S64_MAX, one too far")
++LOOP(moved_far_bad, "w8 = 0; r5 = r6; r9 = -5;", FAR(2045))
++
+ OK("a store behind the jump that counts two back edges", "5")
+ LOOP(behind_two, "w8 = 0; r9 = r6; r9 += 2044;", AT_TOP(4) "if r7 == 7 goto 1b; goto 1b;")
+ 
