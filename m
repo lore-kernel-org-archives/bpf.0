@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022948;
-	b=qoFUT68Y7xBkIgK/yeRvaIBB4C7sicybc/IdtICKZDcoGhCUkBwn8xMgHjwzRP9i3sJK
-	 fyDL0dDdZwgHKI8O3MEo9tODJiWsLSaN9JL9BkwIoIyDOqR619pb9wx6N/SE/vLXy75P2
-	 9nW01d9ZPyGzwpxlh7lVdfMwd5yJQpZ+PfYpHZmbu5eQpdDbrOIeB61dAMJpSmH+2MYc2
-	 VazEIT9PJrV/chsxQx1B9uNrAI/vPMPC73b24GJqPqfFlZ6ystD3+aXNXlkQq5TybVQFD
-	 xrbhujQYNt/iFOfk49yqYVxlD4JbkWM5spQaXPzE7VwoY0tJcfQil84Yprdb2qa9hPw==
+	t=1794022956;
+	b=BHorgHgfDtzWmNPTsk5ooJKIoX/jv6VD9M+ubZN95PdiATzQ2POnKlxxG1Na1RkusxEC
+	 Vn8KU7YtPOUMLLc6fvELSFZQ7J/ZAuXYt1UtY3jZXim2tiYmnab2Qhuq35jXdQZM+Dxvd
+	 PRk+gOFRWWorq1qFf3P9xT6oZ/A/AU/BFi1yumbuxLMLTTEQz/VJHM38G/XJ8zLJ2KqG5
+	 Qut27xAPiW6YCsCLTqdyo0n31kF3lZwsMt1HTz7ctfHqmn1PYvPL24Y9Hw1kVZzw27lu8
+	 igpAFyEjvMa45VjdqKzs6EHt1c+twkZlg3XuL9c/0TYZcC98WgG94pgCrBSGstpa3NA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022948;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022956;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=WwWOGk6WVXWAhLHD5U4ek0d1QqUkvZ56LpfJM1aTanY=;
-	b=PFQY4FORNlB8hUGCaCsKNKXgduyv84qfY9YyRyTxA0ZAZlXjeIxMhI7V5dcad9Bdnihs
-	 B78sYPPJP4r2ggUlE3eeBJJOYTrs3+iAxBQ5R1/WvEhgTqNsZLUbQy4nJ4lDJHH+IvzGf
-	 Xqppx38rmbGo3v0ASerj7n3bBUBtJKXQmnJ9M/nq/8ahPdj7oBQGla5UHRh52T+iggnpj
-	 UJaifLzXN7A6Gv6T6Ut7xvmxy+f5at2dpFTQpjxBPEh3DNwPl46I/y88IytD/jOrTNhiX
-	 fbRIiQ3x5DC13pAUO7PyolYm0CEZ5ZtOAFBTzZe4OVhaoKjm927RcCiQ1gOgZJjwx1g==
+	bh=Ejgg5dk6kBoLHasQOXXF+Ig5p0SCWEyfxGJ6HN8wKSM=;
+	b=Ks1QgkVe8/rNAyV3CS0HKju5rHotvJ37dznCT7dEcvMb4X7SZBziU7+CUfmCvFAbdf2e
+	 2SIGCoYFp/GZ/g7ml+A0kDc9KN7+nBjR1X0LCNwtTewL2UqNaFTapoNXYbosX2UN49yYl
+	 Shi3/s0bxLyBNsZB/nJZHBt2fNsQBemQyLiC1VZQhd31y7X9XROu+ANAvuRX1dTRNwr0P
+	 EUZC07S//SAGOrI/obwhL+8SNBeypPQ8HParSO/RdNhPyBi2JZoE2M34JXRSEd72vn2Hd
+	 GWeHUl6w9DC3ByTaUkX2EdOeq/FXuDyBA7RyeDDPaTFszIG2zFdNpbicBmTpblBC9dQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=a9VnRJJU;
-	arc=none smtp.remote-ip=209.85.214.182
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="dFm/4TdA";
+	arc=none smtp.remote-ip=209.85.215.176
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583BB606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:42:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 583BB606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51543606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:42:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51543606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=a9VnRJJU
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e985106c0cso9734975ad.2
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:42:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dFm/4TdA
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cdb681de50eso508709a12.2
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:42:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794022948; x=1794627748; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794022955; x=1794627755; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=WwWOGk6WVXWAhLHD5U4ek0d1QqUkvZ56LpfJM1aTanY=;
-        b=a9VnRJJUFnLSR5DuG2FVkJnwUCw4ZwNcIFDSHhO3bwsfG0LX/Wp6FnCyxIC8FCHO30
-         xYB+CM9TAALs8EuqQJF16qyraEvi/4hNPiBk4RSgHzooBlpRewgNyioBPfk/u+QKh0Q4
-         lxbLiXBW1M7jUKoq3ErZDQCuE0VZbsD53pEomF9VJXyqv35nKH3Ik2FOWajGNkfWEfZ3
-         SdnVFkUnCDp+LtBMmPjVkjScV7bfFP4Hh6rU3nV4UZr1H7dt5Y76PVjol5obpDbY15A9
-         R4yX47NdBPCSf/O9Q1PfCuRKFpr/gdOZIuO/mVKzvlxspx9Z/MRbnIa2IPPAC70BNiY2
-         9GYQ==
+        bh=Ejgg5dk6kBoLHasQOXXF+Ig5p0SCWEyfxGJ6HN8wKSM=;
+        b=dFm/4TdAOi4ALwEwfMFug2kqMrMVmnD7zyivE1fMVdyN8qT9gRSmeTWaoze+FIqWmG
+         uWNHdM5YNsR+wL5YUmBETZhGP4D+smrNxFZ32S+UzPypTzU8mu7YFEe+MBdvFuerpJyI
+         oxGr2BvpXwSXySKChBYllsxP9qUWjCLdzw/0EZaRJlK9AyINfEqvx3+p60Tbwj8+BQr2
+         bvA+UPx3hVNJYTSsLe9UqWFKeKadslB0lUybf+pYM7eAD5N19z4z+q7+VcXj+g2qdNn4
+         oByilzmMxBdFQjWfYHFfh+B0ad8RXB0X1PWQIpXVood1TEvnxK9aHWrysts4djNbntJ6
+         KHVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022948; x=1794627748;
+        d=1e100.net; s=20260707; t=1794022955; x=1794627755;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=WwWOGk6WVXWAhLHD5U4ek0d1QqUkvZ56LpfJM1aTanY=;
-        b=NWDncDh0X87FtW2vwve9cQmpouAG/gkkBtdt4Avg4mwHB8+R9r8sGpgUcjzohXd4Zv
-         e2BxAmaNYTggyRuJtJFdS+gRinOnnN2ADxwnLdiWv556I2Xf2XoJi7DM3XH9Sf1PzBvh
-         NoQa6C6vnlf1fZxH/OwJAMv+xd/J0Z0CrgUZeLjohDp1DRfZR5FtGd5yZC9KG1Lj1+cX
-         tHZl+1q23UiGvEOgBL3UYxZqcRjyAtFgx2DW5tyRRFzN8SfwzTOqxqu2+1wylW081owV
-         7sb2f4Wnbhoh3IfYcbeyIdPKn35s9OcxFAL3W4s7OwgW2GEam2Ubz4/vJBsnMA7wnmZP
-         IEaA==
-X-Gm-Message-State: APuU4Z9u5+6ORe69yzsjjs/RhyEoyC6BwbxLL9Hb5QT5mo5EtWTbUxg3
-	QN9OQb8yvI2Kqt7YHevYRPMKQtj08f7X4p8tkFL3cZ8CO6XzXR9x5Nlzr7Bgzw==
-X-Gm-Gg: AYBFou1pbGJjMejASCyT8DMZH1mFsRxPhESpIOQ4tXn7Z1F9ueb4+p33qaeuBeLbA4y
-	jkHadTuUn366PumfmeadjtXt4Uily2kc6/c75uF6WfKnuuLIbc/KvgDbjnLa2bYqjKhSjjyxPap
-	nnWo4dJeqAQeU+YjPi0X3VKfKDAVQIVJjImtRHNlgmxPq3OdLA59Nmk/pbmq/OnmCh0AQI5Pmix
-	1S5Uj9U1HBQaYUZSI/kAA9fgKM7b7vNTEIMz6Ujz6zx1ehGnXUMgGerwGYzj+XxlByd8Nx65VcQ
-	q3lEq2lK04fxnkQqewrdLRaWAQuIU6m6rvPelGd8YUEljKVtPhlJxiK3xabYMeiNEsqcDaRBJrA
-	TDRqR0pQRuGeLTF5P5MG4xM7hzQwSmK1MoO0O6EXG7FUaKm7oBNJ56qc6l9wiaXAV7R14Bh27rW
-	ucZDGPbAdA6bOOvvhtdlUCkj3NxBYq/RVxj/mPQBbx67T4Bi+tjU6WAb1gVI7S78OoXK6mBVJJT
-	k5Ud4M1sWimu0jpxy9Wg6LRahAk0XdEfhtsVqas4eylVBMmbq2/2bRmb8Sh6kx9/GUG4h4n4NrA
-	xccqRX0P8xE3Jc7qnVa5GQ93ILWmYjNBAWsPXnRVf/Jp5uCO58MOLWTokM5zs5E025YOoQhY2JA
-	6lX7Kz1PoSF0vbwvDhL7klwYJl+ANrKFlg37Ji2xmJ+8FVNviA5mO1M4CCmXwbB2v/qMjPSQKkA
-	==
-X-Received: by 2002:a17:903:32cf:b0:2d6:e9f3:9305 with SMTP id d9443c01a7336-2ed41284f14mr54111745ad.5.1794022947425;
-        Fri, 06 Nov 2026 19:42:27 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47d88fabsm10103865ad.63.2026.11.06.19.42.26
+        bh=Ejgg5dk6kBoLHasQOXXF+Ig5p0SCWEyfxGJ6HN8wKSM=;
+        b=Yc0aBI0Sfr5vBQedcyPWGp3x0MR0I68MMCdDdFj8TSrcR1akqRR42JcngG3Sxs+Ef2
+         ce82WLRbnZs3V8I+qxTxbrf+zM6aXhGtJ4AEhyGrSAJVYhNuK6OePGVixlhjyso/IJc+
+         znZMHV+xs/AoASNeBGP0bP0X7Ckov7eRi4yHp9fGg+TUoy/4wmIcAlAnCHjPHuosGMRc
+         89gBa396C1hrpXpZ4jIn1bF8uVNb6BpjWszDRaKBGudMzmlnxfm3P1adZnfDHz3FRf3L
+         CyPuKhodQ8vEjt1ayv09s6EcGwwJaphx8YfuRXxSzOoQLIJLxHSrFY+jsq/NEdzgSeoL
+         Ygkg==
+X-Gm-Message-State: APuU4Z/M1vnAsi9jwZ5SIZ6fCVPKAgKEQLjlZlXjqOvLmldgEE/1LjVK
+	X9A5xadY1/EjdGWMkR02waM1EPgSiorOdXR5fvV7J2QbGXNlSr+85axHUMXu/g==
+X-Gm-Gg: AYBFou0VhgA70p/u8Mv+ejF+E//yObqNaQYe5lQyBnNpz3SnwZdrZSD2Yn6BzzMW+Sr
+	7x1EzyxnsO6O3lblCGWLoBPgzUYQ/4NTr/5YnRLbZQKqvIn21TOsFBSlkHEWFARH6JkXJPS3yYd
+	WBg/y0e6FInwXjG62qu2UDyCvyVS3urjoOXv1vfAEOywJiZqlFAS6ze9EOwAE/k1wma0CiRQ7Va
+	oO01t4fVMPfwup/2htOitEEYvllwJ5HEW4S4wvLyoNsCv8cREh/5sFlTntc+I48t0VHKVl2KTZG
+	J8khGL0rp4BMiyU3HoEHL/tgkOZm454pYxKLosVKvRmUC7+MQvxSLxdWvCeY8iTPs/ojtvdUyEu
+	BNdgEKZgj+xFUqy2XSZDoPo5ZRM40WxZM4V35lh1ZYsVXQNE5IuyGDdPkknT6rthi2AehG4Wq8o
+	V8tQXxPq46TmbmLBbLcL79c7dntUigeNhDfuLBQLr+xbkt949qG+jyiL2EIeQKTLdon9wlcA2hR
+	u1BefJEyDy07+goYO5aGhysuXXsgbFpmHTel0asLjBl7o+T6ajIUdXNc9m4TrEMVE805FCrMjZp
+	uA3O5Mo2b5npTZ4YVkonlvJDRl88uhta3B0O63dyYgPj5kgCMtp16KPdZLS7Nun1jgg3j5W3gXP
+	ANZIZQDzKD2VcJUA9xgkOTak5GWWbaTPee8RflZPef5iVv8oyW85CkwlHmHZyXI1g66ZylWU4pZ
+	s=
+X-Received: by 2002:a17:90b:1f86:b0:3ab:ab5a:ef06 with SMTP id 98e67ed59e1d1-3b0db6d42ddmr4817724a91.12.1794022955258;
+        Fri, 06 Nov 2026 19:42:35 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1058a7e3dsm1594755a91.11.2026.11.06.19.42.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 19:42:26 -0800 (PST)
+        Fri, 06 Nov 2026 19:42:34 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v4 44/46] selftests/bpf: Test callx of one of a set of functions
-Date: Sat,  7 Nov 2026 03:37:52 +0000
-Message-ID: <20261107033758.1547725-45-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v4 45/46] selftests/bpf: Test pointers that become numbers and subprogs that return void
+Date: Sat,  7 Nov 2026 03:37:53 +0000
+Message-ID: <20261107033758.1547725-46-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
@@ -104,415 +104,250 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-'ops[i](x)' in C, and each '{}' of a format string in Rust, is a load from
-a table of functions at a variable offset, and callx. The load gives one
-register that points to one of N functions.
+Three patches let an insn pass that was refused. The prog is rejected where
+it uses the result for more than it is.
 
-  [S] "bpf: Track a pointer to one of a set of functions"
-  [L] "bpf: callx reads what the subprogs whose address is taken read"
+"bpf: Allow tail calls and LD_ABS in subprogs that return void":
+verifier_tailcall.c, verifier_ld_ind.c. A subprog that returns void has
+a tail call: it loads. Its caller counts on the 1 that the subprog leaves
+in r0 when the tail call is not taken: rejected, r0 is what the other prog
+returns. The same for LD_ABS, which returns 0 when it fails. A subprog that
+returns a pointer is refused with the message of check_btf_func().
 
-  file, test                     the rule that it pins
-  -----------------------------  ------------------------------------------
-  verifier_callx_rodata.c, callx_rodata_..
-   one_of_two                    [S] The log has R2=func(one_of=2). callx
-                                 calls the function that the index selects.
-   callback_one_of_two           [S] bpf_loop() gets the register: each
-                                 function is verified as the callback.
-   one_of_two_at_loop_head       [S] callx is the head of a loop. The prog
-                                 is unsafe in the fourth iteration with one
-                                 of the two functions: rejected.
-  verifier_callx_many.c, callx_rodata_..
-   400_functions                 [S] 3 states that have no join get to the
-                                 load: 3 states at an insn. One state for
-                                 each function is 1200, the limit is 1024.
-   4400_sets                     [S] More than 4096 sets: rejected.
-  verifier_stack_arg.c
-   callx_one_of_two_not_written  [S] The caller does not store the stack
-                                 arguments that both functions take:
-                                 rejected.
-  verifier_callx.c
-   callx_reads_declared_args     [L] r2 is live at callx: the callee does
-                                 not read it, but its BTF declares it.
+"bpf: A part of a pointer that is spilled is a number":
+verifier_spill_fill.c. 4 bytes of ctx are spilled and filled: a number with
+CAP_PERFMON, 'invalid size of register spill' without. Both halves are
+spilled and filled as one: the value is that of ctx, a load through it is
+rejected. ctx is spilled, then 4 bytes of ctx are stored over the spill:
+the slot has the same bytes as before and is not a spilled pointer any
+more.
 
-one_of_two, 400_functions and 4400_sets fail without [S], and
-callx_reads_declared_args fails without [L]. The other three tests pass in
-both cases. They examine the places where a set becomes one function.
-
-libbpf adds the functions of a table to each prog of the object that has
-callx. Thus the 400 functions are in a file of their own.
+"bpf: 32-bit add to a pointer and pointer op pointer make a number":
+verifier_value_illegal_alu.c. 'w0 += 1' on a pointer to a map value loads
+with CAP_PERFMON and is refused without. 'r1 = r10; r1 |= r10' has the
+value of r10: a store through it is rejected.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_callx.c      |  24 ++++
- .../selftests/bpf/progs/verifier_callx_many.c | 113 ++++++++++++++++++
- .../bpf/progs/verifier_callx_rodata.c         | 112 +++++++++++++++++
- .../selftests/bpf/progs/verifier_stack_arg.c  |  54 +++++++++
- 5 files changed, 305 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx_many.c
+ .../selftests/bpf/progs/verifier_ld_ind.c     | 15 ++++
+ .../selftests/bpf/progs/verifier_spill_fill.c | 47 +++++++++++++
+ .../selftests/bpf/progs/verifier_tailcall.c   | 69 +++++++++++++++++++
+ .../bpf/progs/verifier_value_illegal_alu.c    | 38 ++++++++++
+ 4 files changed, 169 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 71ccd1e94bb2..0db43480cd99 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -39,6 +39,7 @@
- #include "verifier_call_large_imm.skel.h"
- #include "verifier_calls_in_a_row.skel.h"
- #include "verifier_callx.skel.h"
-+#include "verifier_callx_many.skel.h"
- #include "verifier_callx_rodata.skel.h"
- #include "verifier_cfg.skel.h"
- #include "verifier_cgroup_inv_retcode.skel.h"
-@@ -246,6 +247,7 @@ void test_verifier_btf_unreliable_prog(void)  { RUN(verifier_btf_unreliable_prog
- void test_verifier_call_large_imm(void)       { RUN(verifier_call_large_imm); }
- void test_verifier_calls_in_a_row(void)       { RUN(verifier_calls_in_a_row); }
- void test_verifier_callx(void)                { RUN_JITED(verifier_callx); }
-+void test_verifier_callx_many(void)           { RUN_JITED(verifier_callx_many); }
- void test_verifier_callx_rodata(void)         { RUN_JITED(verifier_callx_rodata); }
- void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
- void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_retcode); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
-index 5f0d9e545656..a2bc466791f3 100644
---- a/tools/testing/selftests/bpf/progs/verifier_callx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
-@@ -985,6 +985,30 @@ __naked void callx_callee_reads_caller_stack_nested(void)
- 		: __clobber_all);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
+index b31a5e558409..0071dc466668 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
+@@ -319,6 +319,21 @@ __naked void ld_abs_void_subprog(void)
+ 	::: __clobber_all);
  }
  
-+__naked __noinline __used
-+static unsigned long reads_one_of_two(long a, long b)
++SEC("socket")
++__description("ld_abs: void return subprog, early exit on ld_abs failure")
++__failure __msg("R9 !read_ok")
++__naked void ld_abs_void_subprog_early_exit(void)
 +{
 +	asm volatile (
-+		"r0 = r1;"
-+		"exit;"
-+		::: __clobber_all);
++	"call ldabs_void_subprog;"
++	"if r0 != 0 goto l_exit_%=;"
++	"r0 = r9;"
++	"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	::: __clobber_all);
 +}
 +
-+/* r2 is live at callx: the BTF of the callee, which a tracer counts on, declares it */
-+SEC("socket")
-+__success __retval(1) __log_level(2)
-+__msg(".123...... (8d) callx r3")
-+__naked void callx_reads_declared_args(void)
-+{
-+	asm volatile (
-+		"r1 = 1;"
-+		"r2 = 2;"
-+		"r3 = reads_one_of_two ll;"
-+		"callx r3;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+
- /* registers that are constant before callx are not constant after it */
- SEC("socket")
- __success __retval(1)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_many.c b/tools/testing/selftests/bpf/progs/verifier_callx_many.c
-new file mode 100644
-index 000000000000..23c8948c24b8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx_many.c
-@@ -0,0 +1,113 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * callx through a table of many functions. libbpf appends the functions that read-only
-+ * data points to to every prog of the object that has callx, hence a file of its own.
-+ */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "../../../include/linux/filter.h"
-+
-+#ifdef CAN_USE_CALLX
-+
-+/*
-+ * Read-only data with pointers to functions, where the compiler puts tables
-+ * of functions, structures of operations and vtables. libbpf resolves
-+ * a pointer to the offset of the function in the program and the kernel
-+ * recognizes it by that value.
-+ */
-+#define DATA(SECTION, NAME, ...)				\
-+	".pushsection " SECTION ",@progbits;"			\
-+	".balign 8;"						\
-+	#NAME "_%=:"						\
-+	__VA_ARGS__						\
-+	".type " #NAME "_%=, @object;"				\
-+	".size " #NAME "_%=, .-" #NAME "_%=;"			\
-+	".popsection;"
-+
-+#define RODATA(NAME, ...) DATA(".rodata,\"a\"", NAME, __VA_ARGS__)
-+
-+#define REP10(M, p) M(p##0) M(p##1) M(p##2) M(p##3) M(p##4) M(p##5) M(p##6) M(p##7) M(p##8) M(p##9)
-+#define REP100(M, p) REP10(M, p##0) REP10(M, p##1) REP10(M, p##2) REP10(M, p##3) REP10(M, p##4) \
-+		     REP10(M, p##5) REP10(M, p##6) REP10(M, p##7) REP10(M, p##8) REP10(M, p##9)
-+#define REP400(M) REP100(M, 0) REP100(M, 1) REP100(M, 2) REP100(M, 3)
-+
-+#define MANY_FUNC(n)						\
-+__naked __noinline __used static unsigned long many##n(void)	\
-+{								\
-+	asm volatile ("r0 = r1; r0 += 1; exit;");		\
-+}
-+#define MANY_QUAD(n) ".quad many" #n ";"
-+
-+REP400(MANY_FUNC)
-+
-+/* many<n> or what is 'mask' bytes behind it in the table: 400 sets that were not there before */
-+#define SET_LOAD(n) "r2 = *(u64 *)(r7 + 8 * (1" #n " - 1000));"
-+#define SETS400(mask) "r7 = r6; r7 &= " #mask "; r7 += r8;" REP400(SET_LOAD)
-+
-+SEC("socket")
-+__failure __msg("more than 4096 sets of functions")
-+__naked void callx_rodata_4400_sets(void)
-+{
-+	asm volatile (
-+		RODATA(twice, REP400(MANY_QUAD) REP400(MANY_QUAD))
-+		"call %[bpf_get_prandom_u32];"
-+		"r6 = r0;"
-+		"r8 = twice_%= ll;"
-+		SETS400(8) SETS400(16) SETS400(32) SETS400(64) SETS400(128) SETS400(256)
-+		SETS400(512) SETS400(1024) SETS400(2048) SETS400(24) SETS400(40)
-+		"r1 = 10;"
-+		"callx r2;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_all);
-+}
-+
-+/* 3 states that have no join get to a table of 400 functions: 3 states, and not 1200 */
-+SEC("socket")
-+__success __retval(11)
-+__naked void callx_rodata_400_functions(void)
-+{
-+	asm volatile (
-+		RODATA(big, REP400(MANY_QUAD))
-+		"r7 = r1;"
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 == 1 goto 1f;"
-+		"r7 = r10;"
-+		"if r0 == 2 goto 1f;"
-+		"r7 = 0;"
-+	"1:"
-+		"call %[bpf_get_prandom_u32];"
-+		"r0 &= 511;"
-+		"if r0 > 399 goto 2f;"
-+		"r0 <<= 3;"
-+		"r2 = big_%= ll;"
-+		"r2 += r0;"
-+		"r2 = *(u64 *)(r2 + 0);"
-+		"r1 = 10;"
-+		"callx r2;"
-+		"if r7 != 0 goto +0;"
-+		"exit;"
-+	"2:"
-+		"r0 = 11;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_all);
-+}
-+
-+#else
-+
-+SEC("socket")
-+__skip("callx needs arch JIT and compiler support")
-+__success
-+int dummy(void *ctx)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-index 2e7e65949497..3545c2a2e8f1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-@@ -171,6 +171,118 @@ __naked void callx_rodata_array_of_structs(void)
- 		: __clobber_all);
+ __naked __noinline __used
+ static void ldind_void_subprog(void)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 34c551f97e61..0baa8e06b8d1 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -171,6 +171,53 @@ __naked void check_corrupted_spill_fill_msb(void)
+ "	::: __clobber_all);
  }
  
-+/* one state with one of two functions, and not two states */
 +SEC("socket")
-+__success __retval(11)
-+__log_level(2)
-+__msg("r2 = *(u64 *)(r2 +0)          ; R2=func(one_of=2)")
-+__naked void callx_rodata_one_of_two(void)
++__description("32-bit spill of a pointer")
++__success __failure_unpriv __msg_unpriv("invalid size of register spill")
++__retval(0)
++__naked void spill_32bit_of_pointer(void)
 +{
-+	asm volatile (
-+		FUNC_TABLE2(tbl, add1, add2)
-+		"call %[bpf_get_prandom_u32];"
-+		"r6 = r0;"
-+		"r6 &= 1;"
-+		"r3 = r6;"
-+		"r3 <<= 3;"
-+		"r2 = tbl_%= ll;"
-+		"r2 += r3;"
-+		"r2 = *(u64 *)(r2 + 0);"
-+		"r1 = 10;"
-+		"callx r2;"
-+		"r0 -= r6;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_all);
++	asm volatile ("					\
++	*(u32*)(r10 - 8) = r1;				\
++	r0 = *(u32*)(r10 - 8);				\
++	r0 -= r0;					\
++	exit;						\
++"	::: __clobber_all);
 +}
 +
-+__naked __noinline __used
-+static unsigned long loop_cb_stop(void)
-+{
-+	asm volatile (
-+		"r0 = 1;"
-+		"exit;"
-+	);
-+}
-+
-+__naked __noinline __used
-+static unsigned long loop_cb_go_on(void)
-+{
-+	asm volatile (
-+		"r0 = 0;"
-+		"exit;"
-+	);
-+}
-+
-+/* a helper needs to know the callback */
 +SEC("socket")
-+__success __retval(0)
-+__naked void callx_rodata_callback_one_of_two(void)
++__description("32-bit spills of both halves of a pointer")
++__failure __msg("R0 invalid mem access 'scalar'")
++__failure_unpriv __msg_unpriv("invalid size of register spill")
++__naked void spill_32bit_of_pointer_twice(void)
 +{
-+	asm volatile (
-+		FUNC_TABLE2(cbs, loop_cb_stop, loop_cb_go_on)
-+		"call %[bpf_get_prandom_u32];"
-+		"r0 &= 1;"
-+		"r0 <<= 3;"
-+		"r2 = cbs_%= ll;"
-+		"r2 += r0;"
-+		"r2 = *(u64 *)(r2 + 0);"
-+		"r6 = r2;"
-+		"r1 = 2;"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"call %[bpf_loop];"
-+		/* libbpf resolves the pointers for progs that have callx */
-+		"callx r6;"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32), __imm(bpf_loop)
-+		: __clobber_all);
++	asm volatile ("					\
++	*(u32*)(r10 - 8) = r1;				\
++	r1 >>= 32;					\
++	*(u32*)(r10 - 4) = r1;				\
++	/* R0 has the value of R1(ctx). It's a number */\
++	r0 = *(u64*)(r10 - 8);				\
++	r0 = *(u32*)(r0 + 0);				\
++	exit;						\
++"	::: __clobber_all);
 +}
 +
-+__naked __noinline __used
-+static unsigned long not_three(void)
-+{
-+	asm volatile (
-+		"r0 = 0;"
-+		"if r1 != 3 goto +1;"
-+		"r10 = 0;"
-+		"exit;"
-+	);
-+}
-+
-+/*
-+ * callx is the head of a loop whose iterations are looked at one by one, because of r1.
-+ * The states with one function each are in the iteration of the state with both.
-+ */
 +SEC("socket")
-+__failure __msg("frame pointer is read only")
-+__naked void callx_rodata_one_of_two_at_loop_head(void)
++__description("32-bit spill of a pointer over its 64-bit spill")
++__failure __msg("R0 invalid mem access 'scalar'")
++__failure_unpriv __msg_unpriv("attempt to corrupt spilled")
++__naked void spill_32bit_of_pointer_over_spill(void)
 +{
-+	asm volatile (
-+		FUNC_TABLE2(tbl, add1, not_three)
-+		"call %[bpf_get_prandom_u32];"
-+		"r0 &= 1;"
-+		"r0 <<= 3;"
-+		"r6 = tbl_%= ll;"
-+		"r6 += r0;"
-+		"r6 = *(u64 *)(r6 + 0);"
-+		"r7 = 0;"
-+		"r1 = 0;"
-+	"l_%=:"
-+		"callx r6;"
-+		"r7 += 1;"
-+		"r1 = r7;"
-+		"if r7 < 4 goto l_%=;"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_all);
++	asm volatile ("					\
++	*(u64*)(r10 - 8) = r1;				\
++	/* the same bytes. The spill of R1(ctx) is gone */\
++	*(u32*)(r10 - 8) = r1;				\
++	r0 = *(u64*)(r10 - 8);				\
++	r0 = *(u32*)(r0 + 0);				\
++	exit;						\
++"	::: __clobber_all);
 +}
 +
- /* and the data of the element that the index selects can be read */
- SEC("socket")
- __success __retval(16)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-index e3f5e4d14b75..c642675dd92b 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -572,6 +572,60 @@ __naked void null_check_of_stack_arg(void)
+ SEC("tc")
+ __description("Spill and refill a u32 const scalar.  Offset to skb->data")
+ __success __retval(0)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall.c b/tools/testing/selftests/bpf/progs/verifier_tailcall.c
+index 5ba41dca35ea..81be4ef8c321 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_tailcall.c
++++ b/tools/testing/selftests/bpf/progs/verifier_tailcall.c
+@@ -50,6 +50,75 @@ static int subprog_tail_call(void)
  	: __clobber_all);
  }
  
-+static __naked __noinline __used long adds_arg6_arg7(long a, long b, long c, long d, long e,
-+						     long f, long g)
++__used __naked
++static void void_subprog_tail_call(void)
 +{
-+	asm volatile (
-+	"r0 = *(u64 *)(r11 + 8);"
-+	"r1 = *(u64 *)(r11 + 16);"
-+	"r0 += r1;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+static __naked __noinline __used long subs_arg6_arg7(long a, long b, long c, long d, long e,
-+						     long f, long g)
-+{
-+	asm volatile (
-+	"r0 = *(u64 *)(r11 + 8);"
-+	"r1 = *(u64 *)(r11 + 16);"
-+	"r0 -= r1;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: callx of one of two functions, args are not written")
-+__failure __msg("callee expects 7 args, stack arg1 is not initialized")
-+__naked void callx_one_of_two_not_written(void)
-+{
-+	asm volatile (
-+	".pushsection .rodata,\"a\",@progbits;"
-+	".balign 8;"
-+"two_funcs_%=:"
-+	".quad adds_arg6_arg7;"
-+	".quad subs_arg6_arg7;"
-+	".type two_funcs_%=, @object;"
-+	".size two_funcs_%=, .-two_funcs_%=;"
-+	".popsection;"
-+	"call %[bpf_get_prandom_u32];"
-+	"r0 &= 1;"
-+	"r0 <<= 3;"
-+	"r2 = two_funcs_%= ll;"
-+	"r2 += r0;"
-+	"r6 = *(u64 *)(r2 + 0);"
-+	"r1 = 1;"
-+	"r2 = 2;"
-+	"r3 = 3;"
-+	"r4 = 4;"
-+	"r5 = 5;"
-+	"callx r6;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32)
++	asm volatile ("			\
++	r2 = %[jmp_table] ll;		\
++	r3 = 0;				\
++	call %[bpf_tail_call];		\
++	r0 = 1;				\
++	exit;				\
++"	:
++	: __imm(bpf_tail_call),
++	  __imm_addr(jmp_table)
 +	: __clobber_all);
 +}
 +
- /* r1 - r5 and all 19 slots. Its prototype has no parameters: what it takes is seen in its code. */
- __naked __noinline __used
- static unsigned long subprog_24args(void)
++SEC("tc")
++__description("tail call in a subprog that returns void")
++__success
++__naked void tail_call_in_void_subprog(void)
++{
++	asm volatile ("			\
++	call void_subprog_tail_call;	\
++	r0 = 0;				\
++	exit;				\
++"	::: __clobber_all);
++}
++
++/* r0 is what the other program returns when the tail call is taken */
++SEC("tc")
++__description("tail call in a subprog that returns void, the caller counts on r0")
++__failure __msg("R9 !read_ok")
++__naked void tail_call_in_void_subprog_r0(void)
++{
++	asm volatile ("			\
++	call void_subprog_tail_call;	\
++	if r0 == 1 goto +1;		\
++	r0 = r9;			\
++	r0 = 0;				\
++	exit;				\
++"	::: __clobber_all);
++}
++
++__used __naked
++static void *ptr_subprog_tail_call(void)
++{
++	asm volatile ("			\
++	r2 = %[jmp_table] ll;		\
++	r3 = 0;				\
++	call %[bpf_tail_call];		\
++	r0 = 0;				\
++	exit;				\
++"	:
++	: __imm(bpf_tail_call),
++	  __imm_addr(jmp_table)
++	: __clobber_all);
++}
++
++SEC("tc")
++__description("tail call in a subprog that returns a pointer")
++__failure __msg("tail_call is only allowed in functions that return 'int' or 'void'")
++__naked void tail_call_in_ptr_subprog(void)
++{
++	asm volatile ("			\
++	call ptr_subprog_tail_call;	\
++	r0 = 0;				\
++	exit;				\
++"	::: __clobber_all);
++}
++
+ /* The exception callback has no ctx, so its tail call can only be dead code */
+ __used __noinline
+ int exception_cb_tail_call(__u64 cookie)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+index 455f2399492b..2fcc0d08f9e7 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
++++ b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+@@ -330,6 +330,44 @@ l0_%=:	r0 = 0;						\
+ 	: __clobber_all);
+ }
+ 
++SEC("socket")
++__description("32-bit add to a pointer")
++__success __retval(0)
++__failure_unpriv __msg_unpriv("R0 32-bit pointer arithmetic prohibited")
++__naked void ptr_add32(void)
++{
++	asm volatile ("					\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r1 = %[map_hash_48b] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto l0_%=;				\
++	w0 += 1;					\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_48b)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("or of two pointers")
++__failure __msg("R1 invalid mem access 'scalar'")
++__failure_unpriv __msg_unpriv("R1 pointer |= pointer prohibited")
++__naked void ptr_or_ptr(void)
++{
++	asm volatile ("					\
++	r1 = r10;					\
++	r1 |= r10;					\
++	r0 = 0;						\
++	*(u64*)(r1 - 8) = r0;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
+ SEC("flow_dissector")
+ __description("flow_keys illegal alu op with variable offset")
+ __failure __msg("R7 pointer arithmetic on flow_keys prohibited")
 -- 
 2.55.0
 
