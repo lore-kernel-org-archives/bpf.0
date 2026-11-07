@@ -1,56 +1,81 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794052015;
-	b=JfKj3BMMGlimWmYufyHMviZBe7QJza1bxYnJp0Zm9vP+FQLEboLKi/zl7ciCADoaplIy
-	 kDMDujJSQSGnS7FEbvDMB9vXC+vJ8pygfQkKI6wdj4HNkzKdnLw+aHiaqH+c1nRSFsQ32
-	 eOitqB5g/oEn9BaE0OwNm2ARFZm11tkofw5pw3qaNk7jfU8miDRXlbLS6IXvH4sgTFNHN
-	 qkyxmpeSkSv3o9PfmFZ40n/HAImgPMiQIX69gwMI3hWqTB8Y/nJ4nt+tjAU7ILYQfD4NA
-	 JSCLe1J5/fZTEX7r37mKkV96rSK5Nqr7+xB23V/SxDgk8rD9mbRTlBshIfEE5dbqWPA==
+	t=1794055457;
+	b=AbnIDA58KFwxpR2O7rbp+q6JGQfh86T58qC+iCWj0D7FwX5UPYBU1YJEUhHLRHNETSnx
+	 RejsgBStFOfLFq8v6eMynwCs+eQ6wM6cRC9T6S9hF0C6u6Qzc+oHgP3w3VF5Ze4mq/xtx
+	 0gMotb79vJVo9BXy5GjjJsJgQ9AV5HuzuGlQIrS7SsGKeILpP5fFWg3HYH83Y03BfIU+H
+	 s9w6XwxrOCa3fCI3hwXnJ/ui/WC1y5FVV+JAK6VzPYSq0kGmew6aafLgckif6+ssjg5uL
+	 TeVjH9UidYcH4F67yVM1ARu8t5Zhf7BJLQ0gT6gU7VrdckSIpPw1JWEsaFC0GtSRdug==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794052015;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=jZXJGG+XZZO3Qp+1TwL7dRA/Q33bpl+vjZqHobSzTvQ=;
-	b=NxbA2vQ9YE43xIUVOlcoFAxK4+SuVO/OK0N/iW2Eds7iBVY9yiCwUxMtmkJuzwY9cQpU
-	 0GPGuSqpKbCyUCCuXr32KVSnE69Mb5xJYW3YW53DDoru3Buc8ymuKsu8hgDAmh8cdVAPA
-	 RGQxdSxy9z1Qb3nOyZQ0TBkyahPtAiOkrJ0SzOxmBfeKOqvyTSlfsn8HitIRpJHQjncye
-	 n51BHrrfK12GbFHLBmMZFzcCVpg1W1+pt3YuW3L1RHebiCX/AHq5sSL/qs7zE8hRKEQ53
-	 YIkChQRuliywMoaj1Ccsnwl4RGxCBjp6x2lsnn6FFl1J3CuqoRjRnPs003PzQmRY3ug==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794055457;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=dzBwFs2TljpOP5elYmUhvLnbOuXM3QGLPguMHu8Knu4=;
+	b=G0YdbdlyaxA2aKdszaI1WsBtao1QelFu9QxsAUm+ai9es+iXtjzkD1Vtd2f4lz+z8HKt
+	 N75f7OU6EYiIUSoAjiSa0M7QbmrQObkVniLDKvNP4ohMH6gY8jyCAToXDtMnrvVqJrznS
+	 ReUR58xvrXOnYFPmu5hAk2BmsmkepgDUaf9kaO9xOANBL7au8gkB7uL/zbQJ10Z/sAoSb
+	 VLfEd3GZkivRxURstoZcNoq+KDwQBPhaKVNlJgNbDqLd+97uWNFZpm76zGoo2GflbyAG2
+	 VaMEAsSpzJyQ0D9MMfdBRNq2/MM78A8Ju3Xp5+t5/bhRw9XLaQlWd65trugMxmz4uRw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cOCudJyX;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=egCKZgvR;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E179606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 11:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 2E64D606A32C;
+	Sat,  7 Nov 2026 12:44:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cOCudJyX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88F91F0089F;
-	Sat,  7 Nov 2026 11:46:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=egCKZgvR
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 076321F0089F;
+	Sat,  7 Nov 2026 12:44:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794052015;
-	bh=jZXJGG+XZZO3Qp+1TwL7dRA/Q33bpl+vjZqHobSzTvQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cOCudJyXiSXPOwAH4GdJXKgfGFwjs6uNnaMH8We1QF4Py/5rYC/aTx7qDQ1mPj36B
-	 McOSGfWnpSKRXFftcTmTJe9vaLxW9ER2fXcl9nJGSrHc4bnGG2VD6j8Q6IA19g/4t+
-	 aG2EvirZvqKuXuPwXPgg6QjZ2c6ny+VEvJcWcaDMqsb4WMvekuqwDLjiWoQYK9/6Tl
-	 8p4zMn8lGihJMsAoncD+NQ3BBJTd2gNNit4wmRsP3feQL9O/YZIxcAfKYFUsUgUTzi
-	 Gek6HihpBVIVS8XkCaqmlknD0pCvUwRx3mYEUvxc2hI6nNv+RwkLysVhxsvj4Pokm3
-	 rXoe3xEqlLaIg==
-Message-ID: <sashiko-outbox-202865@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v4 1/2] gve: block XDP on the DQO-QPL queue format
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Amaan Cheval" <amaan.cheval@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261106114551.212675-2-amaan.cheval@gmail.com>
-References: <20261106114551.212675-1-amaan.cheval@gmail.com>
- <20261106114551.212675-2-amaan.cheval@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 07 Nov 2026 11:46:54 +0000
+	s=k20260515; t=1794055456;
+	bh=dzBwFs2TljpOP5elYmUhvLnbOuXM3QGLPguMHu8Knu4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=egCKZgvR+uM5AdIYnxZkn5qTtOFRr/D3N+7/N7RqicbOfSHrHL2dAv65ZHdA46cvx
+	 H8Aju+BdzWVMfOnqof3bfkSW/intUk7fd7I5A+IhhLXuhZM296Pxee0SYLQ13Ljivm
+	 K4B2f7/mN5ZO7OdxLMTCLSdZHpB9AiwG02mU5KZUvzE21CFWbQ5GYBn2SQCTfKJA/z
+	 Ykpgc4X8/HTtlJ8M3qUB4wDiITeiFk2tMFC2NSwRpGI5uzZOb9Ws0T0UgPYBdAoJWh
+	 0zfw15CJ8okfY7ZIxpgcJ4vg46Zh0SNJrTZdSWnmXTnp9TXAFLf08v4ziCE1Ykqwmi
+	 R7jztThEgO3YA==
+Date: Sat, 7 Nov 2026 14:44:12 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
+Message-ID: <au8dHKGIv2tr_Xom@kernel.org>
+References: <20261105031401.956609-1-jarkko@kernel.org>
+ <20261105031401.956609-3-jarkko@kernel.org>
+ <20261107032551.GA1990@sol>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,71 +84,39 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261107032551.GA1990@sol>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] gve: gve_verify_xdp_configuration() fails to reject
-  GVE_GQI_RDA_FORMAT
---
+On Fri, Nov 06, 2026 at 07:25:51PM -0800, Eric Biggers wrote:
+> I don't think the retry loop is actually sufficient or desirable here
+> (though it would be very rare for it to be reached).  It gets reached
+> when there are too many elements in one rhashtable chain.  However,
+> we're already pre-hashing with SipHash, and the rhashtable level hash is
+> passed only the 32-bit SipHash.  Suppose we reach this case because the
+> SipHash values collided: then rhashtable's rehashing would never reduce
+> the chain length, and the -EBUSY would last forever.
+> 
+> I think the right solution is to just set '.insecure_elasticity = true'
+> in the rhashtable_params, to disable the chain length checks.  Those
+> checks make no sense when we're using SipHash anyway.
 
-commit effd5965643e22a2856ad20f55eafb8449ee0b34
-Author: Amaan Cheval <amaan.cheval@gmail.com>
+Thanks, this is a valid suggestion. I  was thinking about having maximum
+retries but this is much better idea. I'll address this as you proposed.
 
-gve: block XDP on the DQO-QPL queue format
 
-This commit rejects XDP program attachment on the GVE_DQO_QPL_FORMAT
-queue format in gve_verify_xdp_configuration().
+> 
+> Then the retry loop would not be needed.
+> 
+> (And even for rhashtable users who aren't using SipHash, like
+> fs/verity/, hard-failing insertions if the hash chains gets too long
+> seems wrong.  I mean, imagine if the kernel started refusing to do file
+> operations if one of the hash chains in the VFS hash tables happened to
+> get too long...  But I guess rhashtable was designed for towards
+> networking users who are able to just drop the data without much issue.
+> Plus it predates SipHash existing.)
+> 
+> - Eric
 
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
-ernet/google/gve/gve_main.c
-> index 2437cd8ba6331..4e9e692a0ed0a 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -1723,6 +1723,12 @@ static int gve_verify_xdp_configuration(struct net=
-_device *dev,
->  	struct gve_priv *priv =3D netdev_priv(dev);
->  	u16 max_xdp_mtu;
-> =20
-> +	if (priv->queue_format =3D=3D GVE_DQO_QPL_FORMAT) {
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "XDP is not supported in DQO QPL queue format.");
-> +		return -EOPNOTSUPP;
-> +	}
-
-[Severity: Medium]
-Should gve_verify_xdp_configuration() also reject GVE_GQI_RDA_FORMAT (or
-any queue format other than GVE_GQI_QPL_FORMAT and GVE_DQO_RDA_FORMAT)?
-
-Before d8a8ca14c937 ("gve: add XDP_TX and XDP_REDIRECT support for DQ
-RDA"), verify_xdp_configuration() rejected every queue format except
-GVE_GQI_QPL_FORMAT, and gve_set_netdev_xdp_features() only advertises XDP
-features on GVE_GQI_QPL_FORMAT and GVE_DQO_RDA_FORMAT.
-
-With only GVE_DQO_QPL_FORMAT blocked here, attaching an XDP program on a
-running GVE_GQI_RDA_FORMAT interface passes validation and enters
-gve_set_xdp() -> gve_configure_rings_xdp() -> gve_adjust_config(). After
-gve_close() tears down the existing queues, gve_queues_start() ->
-gve_reg_xdp_info() takes the !gve_is_qpl(priv) branch:
-
-drivers/net/ethernet/google/gve/gve_main.c:gve_reg_xdp_info() {
-	...
-		else if (gve_is_qpl(priv))
-			err =3D xdp_rxq_info_reg_mem_model(&rx->xdp_rxq,
-							 MEM_TYPE_PAGE_SHARED,
-							 NULL);
-		else
-			err =3D xdp_rxq_info_reg_mem_model(&rx->xdp_rxq,
-							 MEM_TYPE_PAGE_POOL,
-							 rx->dqo.page_pool);
-	...
-}
-
-Because GQI rings do not allocate rx->dqo.page_pool,
-xdp_rxq_info_reg_mem_model() returns -EINVAL, causing gve_adjust_config()
-to call gve_queues_mem_remove() and leave the interface with all queues
-disabled and priv->tx_cfg.num_xdp_queues non-zero so subsequent
-gve_open() calls also fail.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261106114551.2126=
-75-1-amaan.cheval@gmail.com?part=3D1
+Br, Jarkko
