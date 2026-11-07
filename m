@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794025189;
-	b=IyVIer18rzKpxQqic/NQ0xEE8lzCbo/LW6xFAbVQylDdRp2a1wBNhj/MbtHoEXB0kQOU
-	 i2Bf9WthFn9WvJf6bcNvi99Uxjh5Eiv1bVNM4sG7r8OHA/RXlm0uVee/0vEvVRD7IdhwV
-	 gVzIOR2HhlcOuVkaPtLZXykSf+oHR1ZpO8/qCXKgEaPEpB+2LsO9n4vg65Ms/MqW6TZd7
-	 A+dn97EXzfkK/1w3FOXajRJJH5bnHDJoAFuhJzSzg7KIz4lkEse1LlgXr4yJW6HKa7fvc
-	 nOsMBM796SjAnJ5b6m1IwFgMxSYoCDpLaQxtWJVJVIhMHt1xhZ9XhY1O46V7jdfN4cw==
+	t=1794025191;
+	b=HwV+gTRL1CLSPRdYTMQl1wIO1YQEFNl8FQ3ha+Npj2VmOq2c0Kk7cEMmMs+IbigCBH1a
+	 5w1zTVFP13QYqkyQdBWqf2LsWpntyqUhv6rdDoCVsWZZVPufW6lHiVS5MeUb22rPCllpl
+	 LXBAC4Yp5zL71sBNNixWI32b56rfompnSwcZD7ODRn6mdSGKa0T0Qn7X6F79mGk+j9xIC
+	 Zl/hIwAjDydFDZVMcCd3IXa3oCZsdMEW1VtyE4CGXXSaWxXOgNVtsN239wep00mwLaHer
+	 UCtzb8aL3V3ZZdMpWYuCZO6hkRE9XHGVL1n/hiYyXPU1QVSSdepbzKdb0bpynFNi3yA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794025189;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794025191;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=ku/UEQAb7LiN8XRk7qECDwqucihhsWNByqWCK1HRm90=;
-	b=K+6oj8kjkGKknng4FXXyTSqNZazKPk+/WfzRT+4mPHlphvJRCzyRbU7tOtbk8yfi2+tY
-	 H+ABcjWq/WmozdVnipu2eVyrZ1zPuIbr4x/viFhRfd9xd4pvwt4QLH2V70JDkcPb2c2+e
-	 VTY4Bjy/gIUpS9ySSsRWkJZtNl9ftRnq/b1s2KiRlvQcEG3MBS55ySLRpAbwEvHZsfY17
-	 ObS2gAJs7LEn1Z+hlXIJDfvTKs5cpECdvZCyTdYInwmPQcyUsy8hRt7dsB3lIMrtZ3n5j
-	 +WbcCraUX3HkUpStruj9a+K/gClHLulp9jcEvVg4TKU9wVcvAslleey+zuMmIUH7toQ==
+	bh=LpoYeX1ZOnSWzxA9T8Is7xUj6P5sERnfo+uCIm3SR4E=;
+	b=n39EGKdH9WpWTtd6OLb8kOdAHqjaqgN+6zTJBM+1oC+eObry1lNDsmg+gd0o529U5P29
+	 +0jPTJ/mJqtuh98t1v565/lBDNtBnX447WYg1pmafW+OjaMkYHVkUOEMMZZPKtfqxdx78
+	 irJ+RPnK+BaxegNYP+M+pnRrTjGMgamm3Wt/4TMqXy9V+KEKWSNImT8vEgeei4zyBVwNV
+	 YkewejAM8pgLG2SMy2IVg/KNNmSFcMY+JoKdyU2j8PCdlg7KvnJHd5G65KPP2D1YZ6v15
+	 jxZKOvSpkT/uKOqP6l/F2uFPRYFyQubQoEOHwXWKhgbZoOcK3s8MfuNsGYOEp3RrSpA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kZAou2Jw;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FhGfQtgn;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9C9606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 04:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF893606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 04:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kZAou2Jw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC2B1F0089F;
-	Sat,  7 Nov 2026 04:19:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FhGfQtgn
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D051F0089F;
+	Sat,  7 Nov 2026 04:19:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794025188;
-	bh=ku/UEQAb7LiN8XRk7qECDwqucihhsWNByqWCK1HRm90=;
+	s=k20260515; t=1794025190;
+	bh=LpoYeX1ZOnSWzxA9T8Is7xUj6P5sERnfo+uCIm3SR4E=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=kZAou2JwU2LCSGUogbybtp/O5+IHt1WhKyH9Lo0v+4DJH6znlvwufkLNQj8Y9KGTc
-	 8lk37uNZmidjAvOBRiH3/h9zu90eDfF/Km8QsSjaQUWg3ikPJMQ8CPeoP+rJMDbr/Z
-	 T0x1inKjUL9kU+RsE5ODdsrBln5X5F0es7D4w+Vo6LyOfc/QP7i0P/sg9n9v6jEcVs
-	 XvLjlNzyMl9bhoKrVEcll5M3SCLXkVa1eNKU5ZgcyL8fEUc/uTkBXAD94FECartApy
-	 JxAdbMpdm84ocVWemrnc38N14dm1PwEUQ1REBM3TSEdZYGUd5O9FJ4OacPuWW3QuoQ
-	 3Ucyza/mymGyQ==
-Content-Type: multipart/mixed; boundary="===============5162376912718975019=="
+	b=FhGfQtgnu7XwM3qC41Y9tgb98uncs0NUrxM2vb4Bwtq0h+mH9hA+flq8FqEaFvSJb
+	 NpgEIWrczHhhlT8UhYKiKI1nilPCjHFJK/ae0AoFlcIogpIyEqQL7tgk9cfigGzIKx
+	 GZ3yn56aEKw1/btgpcSNSjIpNyOtmHykvX/2sRQ+Yhupo2l9GxsatRbE5/toJlRQPK
+	 7YZQnnuLfiNVEs6mqbmxqLe9KpHUqv3ElMBGloGBiCDBtg5wN/3IZSf4jEQe8Sf3xa
+	 iLeqMfNA3KmDc0ROJDX/QojJsncDmfrAmjlhdc58c55RIE/n2dNqAt54jcR7sJsuOs
+	 FYLRnjhfIr2Vg==
+Content-Type: multipart/mixed; boundary="===============8323629463649473276=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,67 +49,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <e97ef2e8cc0107846c8df26cec99ef8f7f1537ea3b932ba5a75e12371390aafc@mail.kernel.org>
-In-Reply-To: <20261107033758.1547725-33-alexei.starovoitov@gmail.com>
-References: <20261107033758.1547725-33-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v4 32/46] bpf: A loop is one iteration shorter behind the jump that counts it
+Message-Id: <edee5aacb1b472eb4130a443aef2252d4882b9dc52c6bf55f5b25964002418dd@mail.kernel.org>
+In-Reply-To: <20261107033758.1547725-4-alexei.starovoitov@gmail.com>
+References: <20261107033758.1547725-4-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v4 03/46] bpf: Add union and widening of the range of a register
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat,  7 Nov 2026 04:19:48 +0000 (UTC)
+Date: Sat,  7 Nov 2026 04:19:50 +0000 (UTC)
 
---===============5162376912718975019==
+--===============8323629463649473276==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: A loop is one iteration shorter behind the jump that counts it
+> bpf: Add union and widening of the range of a register
 
-TL;DR: Possible s64 wrap when adding "moved" in bpf_clamp_scev_regs() may
-leave a wrong base/step, so the verifier could drop values a register can
-really hold; scalar_step_add() resets the step in this case.
+TL;DR: Not a bug, but bpf_reg_union_range() duplicates the union lines of
+bpf_reg_union() and computes the step differently; the review asks whether
+bpf_reg_union() could reuse it so the step logic lives in one place.
 
-> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-> --- a/kernel/bpf/scev.c
-> +++ b/kernel/bpf/scev.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -3887,7 +3933,8 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
->  clamp:
->  		linear_bounds(entry_reg, max_header_count, &coefs, &bounds);
-> -		if (r == entry->iv_reg)
-> +		if (r == entry->iv_reg && !moved)
->  			iv_bounds(&bounds, entry->iv_range);
-> +		if (moved) {
-> +			bounds.r64 = cnum64_add(bounds.r64, cnum64_from_srange(moved, moved));
-> +			bounds.base = imod(bounds.base + moved, bounds.step);
-> +		}
+> +void bpf_reg_union_range(struct bpf_reg_state *acc, const struct bpf_reg_state *src)
+> +{
+> +	bool acc_const = cnum64_is_const(acc->r64), src_const = cnum64_is_const(src->r64);
+> +	/* A constant is its own base. Its step is 0: every number divides 0. */
+> +	s64 a = acc_const ? cnum64_smin(acc->r64) : acc->base;
+> +	s64 b = src_const ? cnum64_smin(src->r64) : src->base;
+> +	u16 step = gcd(acc_const ? 0 : acc->step, src_const ? 0 : src->step);
+> +	s64 diff;
+> +
+> +	acc->r64 = cnum64_union(acc->r64, src->r64);
+> +	acc->r32 = cnum32_union(acc->r32, src->r32);
+> +	acc->var_off = tnum_union(acc->var_off, src->var_off);
 
-Can this wrap in a way that leaves bounds.base wrong?  linear_bounds() only
-rules out signed overflow of entry + slope * (n - 1), not of the extra
-"+ moved".  cnum64_add() wraps modulo 2**64, so if entry + moved + slope * k
-crosses S64_MAX or S64_MIN, the signed value is off by 2**64.
+this isn't a bug, but these three union lines repeat the ones in
+bpf_reg_union() word for word, and the step is then computed with a
+different rule (gcd(s, t, a - b) here, versus gcd(s, t) with a fallback to
+step 1 when the bases disagree in bpf_reg_union()).
 
-When the entry is a constant, step is |slope|, which need not be a power of
-two.  Then 2**64 mod step is not 0, and the residue computed by
+Could bpf_reg_union() be written as the compatibility check plus
+bpf_reg_union_range() plus reg_bounds_sync() and the sanity check, so the
+step-union logic lives in one place?
 
-    bounds.base = imod(bounds.base + moved, bounds.step);
-
-no longer matches the values in bounds.r64.
-
-scalar_step_add() in kernel/bpf/verifier.c handles this case: it calls
-check_add_overflow() on reg_smin()/reg_smax() and resets the step if the add
-can wrap, noting that keeping the step "requires 2**64 mod s = 0".
-
-bpf_set_reg_range() installs the new base/step as is, replacing what the
-register had, and reg_bounds_sync() then uses base/step to round smin/smax to
-values congruent to base.  The intersection with reg->r64 does not help,
-because base/step are replaced rather than intersected.  Could this drop
-values the register can really hold?
-
-Should this fall back to step = 1, base = 0 (or skip the register) when adding
-moved to the bounds can overflow s64, as scalar_step_add() does?
+[ ... ]
 
 
 ---
@@ -117,4 +105,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42335829855
---===============5162376912718975019==--
+--===============8323629463649473276==--
