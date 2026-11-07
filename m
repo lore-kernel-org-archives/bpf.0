@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794071025;
-	b=2nJfbgCQzStQzEHnfYrfqwLVgfoTEaXMRzdCnItRjdaDt3TwT17WXTBe6Xis6fzpE48s
-	 w8sFer6hMhB3Q4TIgZgoE8K9otZ9Ib5DfVeIhvc+yfS2BQd3aGOSUffrbGKLcVD91CS4f
-	 C0ZNddNCFS9hSqeHzmcSZpdyMzxYTmdyrcGjXMKsksPQGCCFwpG5HiYrCsopFhnRx+2SV
-	 226+H5BAHlWjXxzj2/7YID3a7E3CnuAIHhNySE/eKjzr97rGRXbNtHI99+cRadTjQRVSI
-	 8ThmIISE3RhCULLvhVSrLxVQ/SCCeNyhYHLw6Plt11aOhGXBhu78neNtBn5AYqj4sMA==
+	t=1794071031;
+	b=qrhwh3qILnuBTjiAFZjKFbUTTnr0RCuVFUggHXLbzjdOjstpbt53+HbaCR8GVyXcTgh8
+	 vRomdrwdrZ1UTckBG6IoQUgT5Ov+kXqVIgL8sruT7C9AEpN9eEPA/KmroTK+oLxz1aMq+
+	 t/b4YjfHwH0v0kuiuLydM22UZhyxrqO+KiDH1660JmZIfb1nkp8ilVNGt/znsFqMdDWit
+	 ttxvNjgGeundH8UsI4EE4EPcHB5B/jw8RKSxAj7yh0s/ibaM5h8uEAbF2vgjlx+mLLsU5
+	 XzhSZy1wO5MPPkH+vHewYD0q7d6tE4x7Tf8u1ytnMW5NMuVwLGCyP2KeRcSH8yg0YQQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794071025;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794071031;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=ktsPQBErMfZdOvhkTqNaOVoFzAUNXkcUP43BGaLyjvk=;
-	b=BM6wMdh6yIozgyPF1Uz7XaFthfI7TQTFn7pOiae/TEXMBuClaR39mf7FlLaNqSW43OZS
-	 MjwLSeq3EPHz/QUNMgpOJfZxl0lwLvb7Id98ONCMm9zliykVAAFZ+MBxps3q/K8BdyReb
-	 9PgMkyXdbxKmxndiV7lMGY05zPx41TpHLY5cGUAX8m2iIs6PwOGkTO/Bdlz5hWFasMrnY
-	 u4qUOyH+JHVmhqY3cv7KdGQj9FNU+6tKaeNODqbirIC5KHhiDIexCVPT0o8OIjnLvKyJr
-	 BxYhzPIi9Lgv7z7QgepCyii8mP8iqa79VurEkdFm3yFoNaoaAt0OWO0JrdnJPPMpzpw==
+	bh=8WS576eCdE4W3OYOUuC8uitFLqIQHpoBJ+GUuWM9vA4=;
+	b=aM7+SVJBfxn3XjKqjlpUfORbGdjggTUpjzfnyGk3L+JPRx84Ak5QftnE1N1C385c0Mwe
+	 tjUhT9Cl2DDLOA/+1SST1QHTLc6j8cKw0+3ZYvmCJ/KqmSgEpcjrVn0944yLTUBqBxMDd
+	 mIPGkVJGC2pGnqInIcDuVs39busOxGeUS9hzp8AHx6+Z9TpC1LKB8D1vKmpJqs+odcKy3
+	 dqDhASCxU92vVKkgr1nJpcgVrvkSh1S/vjcjykFtkChMth4ddUfYD3Ol3S9H+lNnb415t
+	 97ERJt2HBVv2Y8BKghgk4xcBI7CmghFxeKdnnpDfZZM+Gj8t+z1vAzE/2fpevW0M5ow==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OGe6H3Jd;
-	arc=none smtp.remote-ip=209.85.216.45
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vD4xb9eo;
+	arc=none smtp.remote-ip=209.85.210.174
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB83F606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:03:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB83F606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14960606A32D
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:03:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 14960606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OGe6H3Jd
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b10ca4e3f9so177368a91.0
-        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:03:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vD4xb9eo
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8b29b83fdf1so647182b3a.2
+        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:03:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794071024; x=1794675824; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794071030; x=1794675830; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ktsPQBErMfZdOvhkTqNaOVoFzAUNXkcUP43BGaLyjvk=;
-        b=OGe6H3JdrqQLL2fbTIifLovyrgV2FII2+ytiN1hv60qG2AqBLoUbSjDRmhvlaFroij
-         NEJV1vMxu0IJSBRzsSpaYgJoBnAamZj2na+39QvMinIup3uvEHuS1vEcOBPqVIkh+dSV
-         L/xWSSK+R+UIHAQaPnlcELw/5YsprnJdLML/dy1K8ZjwnTUlpG991jfIkfV1U0YTqJKR
-         A/P9kT7FVeLCv6o1oew5KvfmjoE6zdDiEMaP9ssnLiKGNE0RJvKcCz90QVH+OMAWBs4s
-         tEA9c260qGX25ZeK6a1Q7rldrfZ6W+qo6Y+o7OPRiVmv1XKrPSXACJPbtbUQRTnS/oPO
-         r4tw==
+        bh=8WS576eCdE4W3OYOUuC8uitFLqIQHpoBJ+GUuWM9vA4=;
+        b=vD4xb9eoGEniLa7o9nP8Stcc1lm7gZZdMN+SIu2Pp7lXmVBAhlUEfcSGZxsahRcEYN
+         MGvgBRQgi0gFa7u5EHtVC0aCBDuOARw7JGtR/uKomEjfD912pWDYeJwx8WbcpqJMemwL
+         gH+M/Ks3q/Jzm7XMeXL3voNTJadWRI/pLG+mXl09tGXTgOt3whUsMfkPn6ULWpxQ2Yj1
+         xO2Ctf/Z1ck/EM+Ck0fMVwHvKfoCIOGbntkv/RUuIwiM9cRy14uNSUVTGXihyNBABdXR
+         41Ydt2E9uUxK261niCZ93BWkmrJpprKzgEKwa1wkLddEH5nUQYhmjwVp+5PpqQErbON5
+         ArVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794071024; x=1794675824;
+        d=1e100.net; s=20260707; t=1794071030; x=1794675830;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ktsPQBErMfZdOvhkTqNaOVoFzAUNXkcUP43BGaLyjvk=;
-        b=W6BuzxtGtyT/F/KxPn1O5bdq93E0CZL6vYLW901mZgfvf+bzsgoJC3YL677ivCV7xb
-         2pQVD/FMJQDsg7pCgBcpJyGt6ogMRoA+W63zqRLNbBOd/0lqovcEhr3nCyoXVPJESQ33
-         CfwVgfE7N2OyGPIir35OrG2+FfhaceA0EjETHlTNH4QwccN5IqhhYPfR9LM+ckEUmLOU
-         R0/zgo/udmUjfQHQ+Wl5feD9MBAPDH8t5WrMVlbh91Vo810nZ+6F8NMPJNFeJLf+xrCL
-         gvdjDkLQh9mknleSidaUlvHsgqVPWOyy1EPlLI6YzxdpnFxb+fiOw3U+6PxyFBKZhpnV
-         tfhw==
-X-Gm-Message-State: APuU4Z+ljrUzyC4CRwbc0SJZFke8vFh/x/Hn9LnF35r5dLglbo4kNx2y
-	d8yL0PM8zLjhlebuIiBoroGphq2vbOPuFnUVSS7IQh2l9Ysdj3jhmkTdr/eyUw==
-X-Gm-Gg: AYBFou3ZCme6AOKA28ZNI9uJwFlW5NFjKEdTYDkvjFu2M3Gf2Sg3LkzJp7rh+RlaBrC
-	ivHjAj0jOddj1DYHq2wn5pp2xp19Is2kjVBoZNgF/DikhtlKkpspW/I9JtvnMpVxOFq6AQYqaSk
-	mqQ8qD9OBAgpXxnr5iDbCPWExZPCb7enbUcJ0be0Rf0Rn0aVptAjYdCmNna6TpK5yObKHgBJTNg
-	Uv/wCTIMv9smmwwNi/xs7jsz85jWD/KQRWpzykWMKWg/2TDQX5MuFEnYcDdXBLJMJu3yJ9bojsP
-	tZUVdNPhAzWsLuSe/ENSQA4Tx2tBW2xTW3NdfxVqXxrN0Qiecl4YtiI+ewDPZZJS3+lf0jgoKj+
-	XBjITIhMJbeYvAn/3HAxRx8X6IKGgspYAC3J7rbJWHcNwJrCXBcpvp/n/r1I59MM16nEheTWScj
-	ogsyRjyEg0VSyzv94TmJ0b5M3flOGp1GmCKLhGtZZML4thcuQ0CV747kVw2qgoi+jA3ufF4wypi
-	YL2pQcOyiUrNCjzhakO6Tu4jkqWArP6QKz4on3ZKxvIBZqiqTJS06wOJa//yvdqaA3n3fIXXUfu
-	luSOE1YCrTszAquNQ6s7dmnCEWM9CeOZVf/vQI0XdjBYDTpMKHp5PvTXnp3Wjl8ezv/9tv0SEki
-	4vFCckpKUaexKRA/l2l6YarF94w2C9vtV/m5KQpN+BH4kLIljYZgVy3fXJmfSBk5Eh0r3vqeN+g
+        bh=8WS576eCdE4W3OYOUuC8uitFLqIQHpoBJ+GUuWM9vA4=;
+        b=TR3HVxbM0xdMhBUW5IUJ4/Nf0MO4u5fzXYm+LzSDeu9tq08NZtp//IrvXFYqqI24ok
+         aoVkSeoQPrNro/9DeBSBYu5TJiVLtjqgrNNOKuoMe+/p/3SSGPfDaAp/43tTCuNV1kqO
+         ISb61Irvgg3kKeucGJ/idZVsH2hIT2ZICwujNSV34dqjGiwMeoHvj9jXQWOXUZxnGBNC
+         lGH+J86iRnqyJxV5AjxRkqIJY8zqfIcg2xH4DeI5+AdHwDbPmfZJqqaweZ2EqUh70uVk
+         G/WXQYqgzxMtLmC6GSyVz4stljPOB+FuLmtL43iAPuxx21iJjo81EbIux7XKe7OvpNzK
+         vq4Q==
+X-Gm-Message-State: APuU4Z/YuzoXL4+SLj6qYkACv2vXPXdQCJhAP8RsD6fLcaMVVQBkEp8/
+	ap15MJeQOsH3UuYRaNqjHVD/mDXEA89ZRA+SyMj5zxKTKQPJsLEX0fX0e2MLzg==
+X-Gm-Gg: AYBFou1A5M4lBaVlKse7pmuYhJhTjQkQUMUtDGgMLRKwPFndABfwpev0bzwWqGYyKGJ
+	gIovxipmkKqZE6gCRGkxhjW2GfWHjeVuIDurPBfxpcK0Q1z+AAAGe+6Ep0E4CXuY+lLxFfK+B1e
+	1m2MrkWhOSZSWjBjKxohjl7pyUwJ9YRSLYmXn7wZExXI43rj0vZ48WkvSVmqNMgXFZPSHX8mEr8
+	Xab++80pQCw5pgrvxhYxJQhI3OTRI13N5kXtJZDtFnaHVn5nXXyi/xAvUXkrX3cbOwkGJ2/JAS1
+	QX+6Y/1CdSN0fgd9ZU4v3Q/ITA4gFBhKvRFO4a8rQGDPiMiRAFVEkb2BnmNUuzFTuJfd7Kofoi1
+	05e1qE6GmRcJIHwYZpbp1TAFlBgRiVDv3OYCT+d0/xmkxlDwA0DBPw6Lv88+OruqFl4JswA1atr
+	Jq7e2pYejOPmO48vEabWO/7Ab+BVq4n0ktLyzmrIKwHeAIQ8TMStbgqFxkL/lpmE7v3CCj1Ghre
+	DjuNNQ9DaoCB3RZU43jkDFFUZsHseKUviPYxLjTj8bFgehY9Iin2hnddanhe+rAAG4yKCDcUNgs
+	B9N4JnPyyHg6adBGyvxUUh4lpIbawpNN7oJBA36skaktIFFvSKlRaIctSmq0S/UWbBxWRNS/GQZ
+	W0HCqzj7M85Zj+EPEIiahXni1kC8iAHLBrGOFY9eibm5brRhb1f9OkMy6eA7ZnoAT4fjJ4XAZeg
 	==
-X-Received: by 2002:a17:90a:d446:b0:3b0:9cc6:62ba with SMTP id 98e67ed59e1d1-3b0db70adc6mr5381985a91.38.1794071024055;
-        Sat, 07 Nov 2026 09:03:44 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1057b17f8sm3891545a91.1.2026.11.07.09.03.43
+X-Received: by 2002:a17:902:d54f:b0:2e9:7dda:bfc7 with SMTP id d9443c01a7336-2ed40e05c74mr62206475ad.66.1794071030282;
+        Sat, 07 Nov 2026 09:03:50 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed47d837fesm13279475ad.65.2026.11.07.09.03.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 09:03:43 -0800 (PST)
+        Sat, 07 Nov 2026 09:03:49 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 4/9] selftests/bpf: Skip plain_c_test_wakeup_source without the kfuncs
-Date: Sat,  7 Nov 2026 17:03:01 +0000
-Message-ID: <20261107170306.2831028-5-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 5/9] selftests/bpf: Expect GCC's first error in test_alloc_double_release
+Date: Sat,  7 Nov 2026 17:03:02 +0000
+Message-ID: <20261107170306.2831028-6-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
 References: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
@@ -104,46 +104,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The s390x jobs of BPF CI fail in:
+test_alloc_double_release has two errors: it releases the cpumask twice
+and it does not check create_cpumask() for NULL. The test expects the
+message for the first one:
 
-  plain_c_test_wakeup_source/iterate_wakeupsources
+  R1 type=scalar expected=ptr_, trusted_ptr_, rcu_ptr_
 
-The prog calls bpf_wakeup_sources_get_head(), _read_lock() and
-_read_unlock(). They are in drivers/base/power/wakeup.c, which is built
-with CONFIG_PM_SLEEP. s390 has no suspend and no hibernation, so its kernel
-does not have the kfuncs and the load fails:
+GCC gives the path with NULL its own copy of the two calls. The verifier
+gets there first and says:
 
-  libbpf: extern (func ksym) 'bpf_wakeup_sources_get_head': not found in kernel or module BTFs
+  Possibly NULL pointer passed to trusted R1
 
-prog_tests/wakeup_source.c skips when bpf_wakeup_sources_get_head() is not
-in the BTF of vmlinux. Do the same for the plain C form of its prog.
+The prog is rejected with both compilers. Expect GCC's message with GCC.
 
-Fixes: b5ae07f77d27 ("selftests/bpf: Test progs without bpf_for(), zero, can_loop and such")
+Fixes: dd43eeaf99eb ("selftests/bpf: Adjust tests to new verdicts, messages and order")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/plain_c.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/cpumask_failure.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/plain_c.c b/tools/testing/selftests/bpf/prog_tests/plain_c.c
-index b7305118a454..bfadbbfd436a 100644
---- a/tools/testing/selftests/bpf/prog_tests/plain_c.c
-+++ b/tools/testing/selftests/bpf/prog_tests/plain_c.c
-@@ -152,7 +152,17 @@ void test_plain_c_tailcall_bpf2bpf_hierarchy1(void) { RUN(tailcall_bpf2bpf_hiera
- void test_plain_c_tailcall_bpf2bpf_hierarchy2(void) { RUN(tailcall_bpf2bpf_hierarchy2); }
- void test_plain_c_tailcall_bpf2bpf_hierarchy3(void) { RUN(tailcall_bpf2bpf_hierarchy3); }
- void test_plain_c_tailcall_callback(void) { RUN(tailcall_callback); }
--void test_plain_c_test_wakeup_source(void) { RUN(test_wakeup_source); }
-+
-+void test_plain_c_test_wakeup_source(void)
-+{
-+	/* prog_tests/wakeup_source.c: the kfuncs are there with CONFIG_PM_SLEEP */
-+	if (libbpf_find_vmlinux_btf_id("bpf_wakeup_sources_get_head", BPF_TRACE_FENTRY) <= 0) {
-+		test__skip();
-+		return;
-+	}
-+	RUN(test_wakeup_source);
-+}
-+
- void test_plain_c_tracing_stack_arg_tailcall_tgt(void) { RUN(tracing_stack_arg_tailcall_tgt); }
- void test_plain_c_verifier_arena_large(void) { RUN(verifier_arena_large); }
- void test_plain_c_verifier_iterating_callbacks(void) { RUN(verifier_iterating_callbacks); }
+diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/testing/selftests/bpf/progs/cpumask_failure.c
+index 715218d32105..2a58209eb8be 100644
+--- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
++++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
+@@ -45,7 +45,12 @@ int BPF_PROG(test_alloc_no_release, struct task_struct *task, u64 clone_flags)
+ }
+ 
+ SEC("tp_btf/task_newtask")
++#ifdef __clang__
+ __failure __msg("R1 type=scalar expected=ptr_, trusted_ptr_, rcu_ptr_")
++#else
++/* no check for NULL either: in GCC's layout the verifier gets there first */
++__failure __msg("NULL pointer passed to trusted R1")
++#endif
+ int BPF_PROG(test_alloc_double_release, struct task_struct *task, u64 clone_flags)
+ {
+ 	struct bpf_cpumask *cpumask;
