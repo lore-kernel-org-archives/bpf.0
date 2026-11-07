@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022876;
-	b=DJRkkoiZSGzdhO2Z/bkNZrHgu5uRsD3RB5d3RSWiVte3CnVZNNrebr8wLF3/D79dVx+L
-	 G0cXvvxjD1tgK/uVEHpTuGHi0aio8A/9h9tLSWfjVhRpX3Jw1lf3CFvP29MczIdsSczQ9
-	 2fwUZDmHSaSgmN7k7aiSbNTZMPBO1XJofsO3to8UnLbPxoC1zjA8zpJ5bEe/Mlx8ymDn6
-	 E9PYoxXsxk2OWE2UpEuhrK+JnbAsihUUx6HwojYt08bXU9jO7sTxOS4xESz4fuTUWqbzs
-	 yvhY7WVXEif3QUjG67MvJjf1J/1a5J7WBbjMGR3+VIQBu9YjmRr9BM5XA5iog1ePFLw==
+	t=1794022882;
+	b=NVjz/SaF3TVBzrzc7K9V+NLhUbijemp+mSy4h2CNjOPhm8sUotqkHQ08Gb9rm4ZJ2vkT
+	 Q0VW0gKCbw81WmT1TZEBFkeviiXef8eVtB0SFdFGwchY848VKpTJTTEl31EcyuRqaGKGk
+	 DuCxOwkFJ3hG/ozWyX3gcEimHgmWKeia4Q8oEUMr3yZMvS70QjQoKKwwra+XqzAVisRbC
+	 Gnpcsc95ZU0vS9gqtiTAHAEBJ+bp7+2JHcrp1SUi80GS9zh4xmixgTiAkgKuu/MyxJoWz
+	 IdThz4D7havhdsN/wNF6/zvAkpBcsb2kAbo4hK/1bDcST8VEvGVhy4IG4ilWOT0gJcQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022876;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022882;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=QuVycvgdkAGlLGbaOtyRIBnejX8JeeRtm6Epx8L8emI=;
-	b=ea0n8l3oz8bKsD92+3NbKaekBM9YO6Qxx5+iBGC+y03QpGK/umYOA/P9RQN1ErwQWkcv
-	 KO1NinkS3NgIBSDcM1Sl5UqamnaRS3ChzAEaOYXuAqlw2pF/Yc+TS62vLXkimnacXyD46
-	 fD40x7oSvO8KGvO4xbJpVYpqYn3MYADPRGCLGFL5BNIQXcS7+GAJzJQJ7StQQ72kzPuk8
-	 R6hBkktAXEtoTCiCXjIHnRExmA7Q3Ph5cq4Zrjg5GBEIVyuSxllpRWAcVdxtK5k7v+uxX
-	 35HV6me5YzlX/L+46rsiBJ9n8KLOugDU4CRHoZMZ05hM8tJ4NtVsfTmlU8VHzq8ZWEg==
+	bh=oVV7M+9ql1Vuta+qBcIHmClb+GuKrUnopdmhw950Y40=;
+	b=DwM58no7mnWHv/o9aMJVOO//1VIr8geZoQ//5tSzk3MmuotgTsCailJm3cwKcLKah7go
+	 Tep4lMPBeb8fPrwXjG3c0gH1J+Ez7PcUHdnWoxbTmfh9Ey7NXmJZUK+rxEFWzRsDFn3cH
+	 vJNEd4U1l4rL1DzXmevdaCaN6ez5WHtVuktosErCVJiyvmJKKtuqtQfMNQOHvYrAPtPUe
+	 Sc4wqE9tsAdILUCmDtTEg+odZVdQ13LTdfgVx19BPQhwOFYC0RCVB8SO6uxOm9bHwPirb
+	 43GF7q+IBKCHEwZF7CCL9d4dTN0Iof0HNQVPW3uOpFX2HKHojxIt/GuWA+bEwfxAvTw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="q/mK0rvC";
-	arc=none smtp.remote-ip=209.85.210.182
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GhLoxPYZ;
+	arc=none smtp.remote-ip=209.85.215.178
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C822606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:41:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C822606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6920A606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:41:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6920A606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q/mK0rvC
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8a089dfee18so122406b3a.1
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:41:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GhLoxPYZ
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cd3310348d2so89270a12.1
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:41:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794022875; x=1794627675; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794022882; x=1794627682; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=QuVycvgdkAGlLGbaOtyRIBnejX8JeeRtm6Epx8L8emI=;
-        b=q/mK0rvCDeite7QtWQ8NmuDTUru+ywrKhpi2WzZvgnoxIbgXkcje5tL7i/ujvu/pF3
-         cU3yc+0RShLJrsE3nTR7s0h881rX/7EiVR/4pr8JNUOZNuU+ijZp5d3jRhXjSmV/yTED
-         aGRleMBwcJ/pyIpyo0571IWttOYUinw+ip4apHIU217KkCO+TM6C/5ghFb5iHgwJUCGO
-         /rfSTl6PJ/Y/olJUFEe7ZrmIWeo2e2LLlh03cZVHJBhk5fyaRe9KH7Clx4EWlQxHoCD7
-         TrCV64dvBmckLL9WEiSCHXDcX0ORinm2rdBLkVzl2SY9krLsnaEQ/2DsOcXxdeZqcvyv
-         94Xw==
+        bh=oVV7M+9ql1Vuta+qBcIHmClb+GuKrUnopdmhw950Y40=;
+        b=GhLoxPYZ5BjFUus9WKd8pN464HQdSA65zf0uCB6PztVErb0RQ9jpQEcGoFX44l0mHZ
+         cIAhp6+pf/Sbp9tQpBYHzJUXtEbUGTHTeJ1wJCJs1GI/8iwhKIWf1OLiC4ZTSYZEt0jL
+         W1SrZbOsOqkptDXo49LHln0ft41a1vLDHIOFLtwi2JCSFs7+Fs/bmdhJDaK7GrD96eOg
+         NzG4woJd4tfcJEFP8uaK9Bq2YWSUvHAJkoR8JVXhg7vUCtmDgGVI6g0qBbbPEzN3nbHW
+         bVQ5UOLGQ6JMuzfXp7SxopcKMC5COJIrZcItULoG5oygOFqyO/icezjnUkL8ZBrdinSC
+         4FPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022875; x=1794627675;
+        d=1e100.net; s=20260707; t=1794022882; x=1794627682;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QuVycvgdkAGlLGbaOtyRIBnejX8JeeRtm6Epx8L8emI=;
-        b=rQux8eq7NVxHGtywp6LEDbhAnbOTu1SVs0rssTYgprM/1im9sGgocVUmPCotDmw379
-         y5vIc0yyTRrZtZPdRPPFBfpQ4kkPCRSOvcA0MTBskBQ8BnKWoEOdqvBC4bMRTc5BVDDU
-         YIZJeufTx/gQ21OVllVodt/uEuXJ8wElj3BB7VNpSkcB13uKrEooSf/LvbmX7oToIeG1
-         cnhptkFBXoYjbuYn999oXMmrxpDxGxZw+MjiShgyaqxxODQ6A9EQwMHpOfmN5Tr6e72E
-         Fv1sMa646LZCkrwtvYa5vXiVETJdOufJmu8RDCzZaDJ8xEUYhl3CVaztBFmjFID42nQE
-         gm8A==
-X-Gm-Message-State: APuU4Z8jYkkJKCrmSQsIX2EUy1ePdbzkq2Dk6mQObQDU47QpSmBehGr3
-	1DKNrFGvTQA/D7rD+OALVHBB+sLi6MJVdFP2mUrUebynHo01ZI1HlmG//Zwm1w==
-X-Gm-Gg: AYBFou1B55MXyPZw2VXQNRiwHOockGNca6GOMisKbzwLdlVJRTGylZqXAzcJQ1GtdJu
-	WB3mHtoJKASJDie1ol0U9KTZ7/PR1QN7yUks7cXSWeQpc2KKWIvRdTVlmyqPs6mtf4v5F/XKyS8
-	MN7JOI0vPyLet2lIi9s6t2+68jGb4/jV0Db/ZeczEiRekgjtttilBYiy/Cw6R5vttMSUWDMkhjt
-	kajn+wyoTWcN/zuaFdoeryCTFGrYE/yDlTy90Oe2Jb2XNEYuyldDDM6a+NZK7AdUHefJpufvh30
-	IdUTvQqCuhUuC/rbcJ5aFb4PhSjV79G0E+9K3XFd1vsY79sLw2K/aCMr7fGkJon/Drs1ir+F5Xf
-	aYKKSswif8Ajs0PFW6AQwJFx9c4U8Wui3SGlFWdcjLR/0l1sKNSfwsoaBeeJcBGcesvpWUCjd0M
-	gx3qG8Qar/h0DAvAPpYDTcrbMsGQu6ElpCvRbzOa5ax09A7npYit685kxZXrtDYCCNSOg+2q5au
-	kxpcwNB4fkYdc0e6aRgPlTdmKx3TRKMJ/qvNzaGQVs4z8zZ6WRZTe7Anh4v7kFUAbGiDXuoX574
-	q5nnM3IWv9xA9AqxagGRimGVbraYh0kwJyZbSBWmxc5TbbmzKqRjrbbrWGGA1BJ3gvXIvAufYSy
-	lym0K7ir5Kt7qdS3sE8WXMY7HAq0m63yX0cjywxVvr0aqDEYslcVFkZaAkBU4CPmOeR08ciH+nQ
+        bh=oVV7M+9ql1Vuta+qBcIHmClb+GuKrUnopdmhw950Y40=;
+        b=laxLMI52vHHEp6sB6HPjfnpBfIL3/7zemKehoEdHdY5RYOYwW/72D4gfasdT700WyX
+         E16+Tu8Tzhgtj8axbJ0zk5k2qypSi1xXzCEIRhqUQHT/zroBw9WCJXgHsfDd5QnQXq/x
+         XCKFtDF17+lglUTjy7C/zqQTnj15bEVyR53LBnDujnrRhPsGjuLU026qBBgERxtxdipY
+         Yz3y/TMkGtHN2GHTDhdblA6EOGLxH0KLpNjIaxVECF2FvO6QkHY/Zk02BXoIF0JgsWWz
+         SWZzM6S089eAKNFfl6GHUCIhJ4QQEA6A+Hn7LqXRrEZv7yxexMJGVJNuXvyS9nCCovEc
+         hFuQ==
+X-Gm-Message-State: APuU4Z+7aRupCgKvUrqiwe3SvAvHdRoxzxq7OZBZpr19l0CqrtvDIYT7
+	g0Dy6KpqXWibusnp+gxxigyFLJoSc/FUpma4XkKpUPCVBzWh9bbS9PuC4luyig==
+X-Gm-Gg: AYBFou2Z3ly8uTxxJvwQihodq1siBk2e567miRraRPdEJjaSXxtleSYfcNOfeYvqZMI
+	snTcRqJOr9ZbMasVtviZFF38QepSLfyZU4eTBynzLLGyxvUAksJMuikguEY9l519brO9amMaHo3
+	bb2q1eOU2zqjcl7zVYiZ3mzRhnuGXqtqFzYlsLVGBNmOuHEXLpPIz9DYqX1FX6eq5DkxVj0u5Gy
+	4Td46rEAGrf7bt7/ZJkfejunOxRg4+NprjPVLChqURYqx7TudKUakh6bwfd7A962mq0p77a5y5t
+	K8956RaYmqZZkOoAH6H5eF9lkRNO9U+0DlOSYAxCIeIMloWYQhvuPlwPLqNdTj9WQH4X4Hrk7Fp
+	nXCSwqurxlgP/vHn4ETc1Ce6zpEcIE8RuVlq7l+2eVULY45B0l2XVuAZb9HU6r/ydWX4EkttRsN
+	SF76rTckSTRf+uBb3PBGhDP9Zp35ZIzE/idV9lCS47VkL744LbVOnq6eB/mYM8Tgasu69O8LnGy
+	N/WL+D7E/2mTQxizA6mq4ynh44RfdJqzRWFAvv1NugXOj7NYslDDOQooQmpXEfN/dUDrCtaF16i
+	OJeNiKO6Ocb1pMznuVQUgU13ebbDgc8tQzz16nrIaQ9Sa8uCs57OHYRB1yS7W5GaCQCCj2O40iv
+	V7BVd3RiN7GBmLNAsPBViQYN4lJvXrA5DYuK5+mSvOAKyG5pAeBJUGpQmhiDPvfN7DC5rDLiLDg
 	==
-X-Received: by 2002:a05:6a00:2e1a:b0:884:831e:d0e3 with SMTP id d2e1a72fcca58-8b4e5c2b9c0mr653887b3a.17.1794022875345;
-        Fri, 06 Nov 2026 19:41:15 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b359ddaf39sm1095855b3a.41.2026.11.06.19.41.14
+X-Received: by 2002:a17:90b:4a06:b0:3ab:8288:b8ce with SMTP id 98e67ed59e1d1-3b106314922mr724263a91.24.1794022881596;
+        Fri, 06 Nov 2026 19:41:21 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1058a7e3dsm1590485a91.11.2026.11.06.19.41.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 19:41:14 -0800 (PST)
+        Fri, 06 Nov 2026 19:41:20 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v4 32/46] bpf: A loop is one iteration shorter behind the jump that counts it
-Date: Sat,  7 Nov 2026 03:37:40 +0000
-Message-ID: <20261107033758.1547725-33-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v4 33/46] bpf: Give the places of a back edge to the jumps that count
+Date: Sat,  7 Nov 2026 03:37:41 +0000
+Message-ID: <20261107033758.1547725-34-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
@@ -104,223 +104,195 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-	#pragma clang loop unroll_count(3)
-	for (i = 0; i < 250; i++) {
-		if (!bpf_get_prandom_u32())
+A stack walker reads a few words per frame, leaves the loop when a read
+fails, and appends up to 32 words per frame:
+
+	bpf_for(i, 0, 100) {
+		if (frames == 8)
 			break;
-		out[i] = bpf_get_prandom_u32();
+		if (READ(a) || READ(b) || READ(c) || READ(d) || READ(e))
+			break;
+		n = 32 - (a & 1);
+		for (j = 0; j < n; j++)
+			out[idx + j] = b + c + d + e;
+		idx += n;
+		frames++;
 	}
 
-is rejected with
-'invalid access to map value, value_size=1000 off=1000 size=4'.
-250 is 83 * 3 + 1. The compiler makes a loop of three copies of the body
-and leaves it behind the first copy in iteration 84:
+'R1 unbounded memory access': only 'frames == 8' limits idx, and nothing
+looks at that jump. A back edge has four places for the jumps that leave
+the loop and dominate it. The nearest ones take them: the NULL test of
+bpf_iter_num_next() and three statuses. None of them counts.
 
-	l: ...; *(u32 *)(r6 - 4) = w0;
-	   if r7 == 251 goto out;
-	   ...; *(u32 *)(r6 + 0) = w0;
-	   ...; *(u32 *)(r6 + 4) = w0;
-	   r6 += 12; r7 += 3; goto l;
+Scalar evolution knows which jumps test a counter. Collect the jumps again
+when it is done and pass over the others. The latch keeps its place. The
+search ends at the head of the loop, as for a loop with less than four such
+jumps. Every jump that is kept tells iterations in which the back edge is
+not taken, so any choice is sound.
 
-The loop is counted. At its head r6 gets the offsets of all 84 iterations:
-4 to 1000. The jump narrows r7, which it tests. It says nothing about r6:
-the two stores behind it are checked with an offset that they never see.
+The loop has 9 iterations at most. idx has no closed form, so they are
+looked at one by one: idx is 0, [31, 32], [62, 64] .. [217, 224].
+pyperf.h with STACK_MAX_LEN 250 and UNROLL_COUNT 8 leaves its loops from
+the second of 8 copies of the body: 59713 -> 2877 insns.
 
-A state that goes on in the loop behind the jump that counts is not in the
-last iteration. Give the range of one iteration less to what is linear at
-the jump: r6 is 4 to 988. Only for a jump that leaves the loop itself. An
-edge that leaves by way of a flag stays in the loop for a while, with the
-last iteration: no shorter range behind a jump that has such an edge.
+A jump can leave the loop by way of a flag. These jumps are known before
+scalar evolution starts, so mark_latches() asks for the SCEV of each.
+  do { ..; more = ++i < 256 && v->in[i & 63];
+       if (READ(a) || READ(b) || READ(c)) break; } while (more);
+The four places went to jumps that are nearer to the back edge:
+"R1 unbounded memory access", 12562 insns on bpf-next. Now 63.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  5 ++-
- kernel/bpf/scev.c            | 59 ++++++++++++++++++++++++++++++++----
- kernel/bpf/verifier.c        |  9 ++++--
- 3 files changed, 64 insertions(+), 9 deletions(-)
+ include/linux/bpf_verifier.h |  2 ++
+ kernel/bpf/loops.c           | 27 ++++++++++++++++++++-------
+ kernel/bpf/scev.c            | 24 ++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 7 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 85404ef790ef..61f133e4d72f 100644
+index 61f133e4d72f..656ed55b96ec 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -365,6 +365,8 @@ struct bpf_loop_iters {
- 	 */
- 	int iv_reg;
- 	struct cnum64 iv_range;
-+	/* a jump that counts: it leaves the loop in the last iteration, if not before. Or -1 */
-+	int count_insn;
- 	/* a pointer to the stack that stores go through moves in the loop */
- 	bool spill_base;
- };
-@@ -426,6 +428,7 @@ struct loop_stack_entry {
- 	u32 walk_patience;
- 	int iv_reg;
- 	struct cnum64 iv_range;
-+	int count_insn;
- };
+@@ -716,6 +716,7 @@ struct bpf_backedge {
+ 	 * Conditional jumps within the loop that dominate 'from' and have
+ 	 * a successor outside the loop, nearest first. latches[0] is the
+ 	 * latch; the remaining entries are additional exit conditions.
++	 * After scalar evolution: those that test a counter, see bpf_scev_jump_counts().
+ 	 * One of them may leave the loop by way of a flag, see bpf_edge_leaves_loop().
+ 	 * Each usable condition tells iterations in which the back edge is
+ 	 * not taken, so keeping only a subset is sound.
+@@ -2212,6 +2213,7 @@ bool bpf_is_nested_loop(struct bpf_verifier_env *env, int inner_header, int oute
+ int bpf_init_scev(struct bpf_verifier_env *env);
+ void bpf_free_scev(struct bpf_verifier_env *env);
+ int bpf_compute_scev(struct bpf_verifier_env *env);
++int bpf_scev_jump_counts(struct bpf_verifier_env *env, int header, int n, bool taken_leaves);
  
- /* The state is in a walk on patience, which may not get to the end of the loop */
-@@ -2216,6 +2219,6 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
- 			struct bpf_verifier_state *loop_entry, struct bpf_loop_iters *iters,
- 			bool back);
- int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *st, u32 insn_idx,
--			const struct loop_stack_entry *entry);
-+			const struct loop_stack_entry *entry, bool behind);
- 
- #endif /* _LINUX_BPF_VERIFIER_H */
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 06f485853df1..4ce8ad5d5a27 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -3470,6 +3470,13 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
- 		return 0;
- 	}
- 
-+	/*
-+	 * It leaves the loop itself: a flag does that later. If one edge does the one and the
-+	 * other edge the other, the last iteration goes on behind the jump as well.
-+	 */
-+	iters->count_insn = bpf_jump_leaves_loop(env, insn_idx, first.insn_idx) &&
-+			    aux[first.insn_idx].edge_leaves != 3 ? first.insn_idx : -1;
-+
- 	if (iters->max_header_count == 0) {
- 		if (log->level & BPF_LOG_LEVEL2)
- 			bpf_log(log, "loop header at %d, 0 iterations count\n", insn_idx);
-@@ -3822,12 +3829,31 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *env, struct bpf_verifier_state
- 	return 1;
- }
- 
-+/* (linear (+ rX imm) slope): the iteration has added a constant to rX so far */
-+static bool is_moved_linear(struct scev *scev, u32 id, struct linear_coefs *out, s64 *moved)
-+{
-+	u32 base, slope, l, r;
-+
-+	out->spill32 = false;
-+	return is_linear_or_linear32(scev, id, &base, &slope, &out->zext32) && !out->zext32 &&
-+	       is_add(scev, base, &l, &r) && is_reg(scev, l, &out->base_reg) &&
-+	       is_imm(scev, r, moved) && is_simple_slope(scev, slope, &out->slope);
-+}
-+
-+/*
-+ * The state came back to the head of a counted loop. Or, with @behind, it goes on in the loop
-+ * behind the jump that counts. That jump leaves the loop in the last iteration, so this is
-+ * not the last one:
-+ *	for (i = 0; ; i++, p += 8) { if (i == 4) break; *p = 0; }
-+ * At the head p is up to 32 bytes from where it was, at the store up to 24. The jump tells that
-+ * about i only. It holds for all that is linear at the jump.
-+ */
- int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur_func_state, u32 insn_idx,
--			const struct loop_stack_entry *entry)
-+			const struct loop_stack_entry *entry, bool behind)
+ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+ 			   struct bpf_loop_iters *iters);
+diff --git a/kernel/bpf/loops.c b/kernel/bpf/loops.c
+index 0f3b0411003b..ce6cef5e1c15 100644
+--- a/kernel/bpf/loops.c
++++ b/kernel/bpf/loops.c
+@@ -307,18 +307,19 @@ int bpf_loop_at_index(struct bpf_verifier_env *env, u32 idx)
+ /*
+  * Collect conditional jumps within n's loop that dominate 'n' and leave
+  * the loop on one edge, see bpf_edge_leaves_loop(), nearest first.
++ * A jump that cannot count the iterations takes no place, see bpf_scev_jump_counts().
+  */
+-static void find_dominating_conditions(struct bpf_verifier_env *env, int n,
+-				       struct bpf_backedge *backedge)
++static int find_dominating_conditions(struct bpf_verifier_env *env, int n,
++				      struct bpf_backedge *backedge)
  {
- 	struct bpf_verifier_state *entry_state = entry->entry_state;
- 	struct bpf_func_state *entry_st = entry_state->frame[entry_state->curframe];
--	u32 max_header_count = entry->max_header_count;
-+	u32 max_header_count = entry->max_header_count - behind;
- 	struct bpf_verifier_log *log = &env->log;
- 	struct bpf_reg_state *reg, *entry_reg;
- 	struct scev *scev = env->scev;
-@@ -3835,6 +3861,7 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
- 	struct env *header_env;
- 	struct bounds bounds;
- 	u32 r, r_scev;
-+	s64 moved;
- 	int err;
+ 	struct bpf_insn *insns = env->prog->insnsi;
+ 	bool t_exits_loop, f_exits_loop;
+ 	int *idoms = env->idoms;
+-	int n_loop;
++	int n_loop, counts;
  
- 	if (entry_state->curframe != cur_func_state->frameno) {
-@@ -3843,16 +3870,21 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
- 		return -EFAULT;
- 	}
- 
--	header_env = find_header_env(scev, insn_idx);
-+	header_env = find_loop_env(scev, insn_idx, behind ? entry->count_insn : insn_idx);
-+	if (!max_header_count)
+ 	n_loop = bpf_loop_at_index(env, n);
+ 	if (idoms_intersect(env, n, n_loop) != n_loop)
+-		return;
 +		return 0;
- 	for (r = 0; r < REGS_NUM; r++) {
- 		r_scev = header_env->reg2scev[r];
-+		moved = 0;
- 		entry_reg = spill32_counter(scev, entry_st, r_scev, r, &coefs);
- 		reg = spill32_counter(scev, cur_func_state, r_scev, r, &coefs);
- 		if (entry_reg && reg)
- 			goto clamp;
- 
- 		/* If SCEV for r is (linear <reg> <slope>)*/
--		if (!is_simple_linear(scev, r_scev, &coefs) || coefs.base_reg != r)
-+		if ((!is_simple_linear(scev, r_scev, &coefs) &&
-+		     !(behind && is_moved_linear(scev, r_scev, &coefs, &moved))) ||
-+		    coefs.base_reg != r)
- 			continue;
- 
- 		entry_reg = scev_reg_for_linear(entry_st, r);
-@@ -3878,8 +3910,22 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
- 			continue;
- clamp:
- 		linear_bounds(entry_reg, max_header_count, &coefs, &bounds);
--		if (r == entry->iv_reg)
-+		if (r == entry->iv_reg && !moved)
- 			iv_bounds(&bounds, entry->iv_range);
-+		if (moved) {
-+			bounds.r64 = cnum64_add(bounds.r64, cnum64_from_srange(moved, moved));
-+			bounds.base = imod(bounds.base + moved, bounds.step);
-+		}
-+		if (behind) {
-+			/* jumps on the way may have told more */
-+			bounds.r64 = cnum64_intersect(bounds.r64, reg->r64);
-+			bounds.r32 = cnum32_intersect(bounds.r32, reg->r32);
-+			if (type_is_pkt_pointer(reg->type) || cnum64_is_empty(bounds.r64) ||
-+			    cnum32_is_empty(bounds.r32) ||
-+			    (cnum64_is_subset(bounds.r64, reg->r64) &&
-+			     cnum32_is_subset(bounds.r32, reg->r32)))
-+				continue;
-+		}
- 		if (log->level & BPF_LOG_LEVEL2) {
- 			bpf_log(log, "loop header at %d, clamping ", insn_idx);
- 			log_reg(env, r);
-@@ -3887,7 +3933,8 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
- 			log_bounds(env, &bounds);
- 			bpf_log(log, "\n");
+ 	while (n >= 0) {
+ 		if (is_cond_jmp_insn(&insns[n]) && bpf_loop_at_index(env, n) == n_loop) {
+ 			t_exits_loop = bpf_edge_leaves_loop(env, n_loop, n, n + insns[n].off + 1);
+@@ -326,22 +327,32 @@ static void find_dominating_conditions(struct bpf_verifier_env *env, int n,
+ 			/* latches[0] is the latch: it has to leave the loop itself */
+ 			if ((t_exits_loop || f_exits_loop) &&
+ 			    (backedge->latches_cnt || bpf_jump_leaves_loop(env, n_loop, n))) {
++				counts = !backedge->latches_cnt ? 1 :
++					 bpf_scev_jump_counts(env, n_loop, n, t_exits_loop);
++				if (counts < 0)
++					return counts;
++				if (!counts)
++					goto next;
+ 				if (backedge->latches_cnt == MAX_LATCHES)
+-					return;
++					return 0;
+ 				if (t_exits_loop)
+ 					backedge->taken_leaves |= BIT(backedge->latches_cnt);
+ 				backedge->latches[backedge->latches_cnt++] = n;
+ 			}
  		}
--		scratch_widened_reg_id(env, reg);
-+		if (!behind)
-+			scratch_widened_reg_id(env, reg);
- 		/*
- 		 * The range of a packet pointer goes together with its id and with the offsets
- 		 * that it had in the compare with pkt_end. Both are replaced here. What holds for
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fa7aa8218218..afb5b9dd18b4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21329,7 +21329,7 @@ static int maybe_clamp_scev_regs(struct bpf_verifier_env *env)
- 	if (!entry->terminates)
- 		return 0;
- 
--	return bpf_clamp_scev_regs(env, frame, env->insn_idx, entry);
-+	return bpf_clamp_scev_regs(env, frame, env->insn_idx, entry, false);
++next:
+ 		if (n == n_loop)
+ 			break;
+ 		n = idoms[n];
+ 	}
++	return 0;
  }
  
  /*
-@@ -21501,8 +21501,12 @@ int bpf_flow_loop_enter(struct bpf_verifier_env *env, bool *backedge, bool *drop
- 		return 0;
+  * Without @flags: the jumps that leave a loop themselves. That tells where the verifier may add
+  * may_goto. It takes the constants that hold with these edges to follow a flag.
++ * Once more after scalar evolution, which knows the jumps that count. The flags that were found
++ * are remembered.
+  */
+ int bpf_find_latches(struct bpf_verifier_env *env, bool flags)
+ {
+@@ -377,8 +388,10 @@ int bpf_find_latches(struct bpf_verifier_env *env, bool flags)
+ 			 */
+ 			if (bpf_loop_at_index(env, backedge->from) != i)
+ 				continue;
+-			find_dominating_conditions(env, backedge->from, backedge);
+-			for (k = 1; k < backedge->latches_cnt; k++)
++			err = find_dominating_conditions(env, backedge->from, backedge);
++			if (err)
++				return err;
++			for (k = 1; flags && k < backedge->latches_cnt; k++)
+ 				if ((env->log.level & BPF_LOG_LEVEL2) &&
+ 				    !bpf_jump_leaves_loop(env, i, backedge->latches[k]))
+ 					bpf_log(&env->log, "loop at %d, exit by way of a flag at %d\n",
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index 4ce8ad5d5a27..64903ab738a0 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -1452,6 +1452,10 @@ static void mark_latches(struct bpf_verifier_env *env)
+ 	int i, j, k, from;
  
- 	entry = &frame->loop_stack[frame->loop_stack_cnt - 1];
--	if (env->insn_idx != entry->loop_id)
-+	if (env->insn_idx != entry->loop_id) {
-+		/* the jump that counts didn't leave the loop */
-+		if (entry->entry_state && !entry->apart && cur->last_insn_idx == entry->count_insn)
-+			return bpf_clamp_scev_regs(env, frame, entry->loop_id, entry, true);
- 		return 0;
-+	}
+ 	for (i = 0; i < len; i++) {
++		/* An exit by way of a flag. It may have no place yet, see bpf_scev_jump_counts() */
++		if (aux[i].edge_leaves &&
++		    can_compute_loop_scev(aux[bpf_loop_at_index(env, i)].loop))
++			aux[i].need_scev = true;
+ 		loop = aux[i].loop;
+ 		if (!loop)
+ 			continue;
+@@ -1864,6 +1868,11 @@ int bpf_compute_scev(struct bpf_verifier_env *env)
+ 						 find_header_env(scev, header));
+ 	}
  
- 	/*
- 	 * No edge goes from a call to itself: the call goes on with one function of a set, see
-@@ -21623,6 +21627,7 @@ int bpf_flow_loop_enter(struct bpf_verifier_env *env, bool *backedge, bool *drop
- 	entry->max_header_count = iters.max_header_count;
- 	entry->iv_reg = iters.iv_reg;
- 	entry->iv_range = iters.iv_range;
-+	entry->count_insn = iters.count_insn;
- 	entry->entry_state = entry_state;
- 	entry->terminates = true;
- 	/*
++	/* Now it's known which jumps test a counter: the places of a back edge are for them */
++	err = bpf_find_latches(env, false);
++	if (err)
++		return err;
++
+ 	if (env->log.level & BPF_LOG_LEVEL2) {
+ 		err = log_scevs(env);
+ 		if (err)
+@@ -2190,6 +2199,21 @@ static int match_linear_latch(struct bpf_verifier_env *env,
+ 	return false;
+ }
+ 
++/*
++ * Can the jump at @n tell the number of iterations of the loop at @header? The status of a call
++ * and a NULL test cannot. 1 as long as scalar evolution has not looked at the program.
++ */
++int bpf_scev_jump_counts(struct bpf_verifier_env *env, int header, int n, bool taken_leaves)
++{
++	struct linear_latch latch;
++
++	if (!env->scev)
++		return 1;
++	if (!find_loop_env(env->scev, header, n))
++		return 0;
++	return match_linear_latch(env, header, n, taken_leaves, &latch);
++}
++
+ /* What is known about a scalar or about the offset of a pointer. */
+ struct scev_value {
+ 	u64 umin, umax;
 -- 
 2.55.0
 
