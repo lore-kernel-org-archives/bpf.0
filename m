@@ -1,45 +1,132 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.217.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794063000;
-	b=abOMACnJjcSmfXGPzbjX6YUjnBQSO9VnDB2r9AmNV/vV6VUnsV303JYGEa3RXtY/0eUa
-	 hEMC7Ve5j3PC4NnQwD/e3Lrt7PNSDT1/8MSSlfvSmAlUMiJ90HpP7jLRNOeeYFWihQVQz
-	 2Gc7fij2V7UrFw97/2xubi+JflfKSelYEi7e4gRL3WMb6Z4kMTQ2JdqoEb8yDdfw9jJOR
-	 WyhLAXxrDhBcK6yMXrbH56xo2SMlRZYyuwdRTghs+7+abIEbQFTJu/9qIaOM8Dt4oL9f7
-	 DKJ9zQkFDJRiKAjMkkbBE495KTtW3xNjdyu8+KBGG1jYwYVRudhPu3+6Re9rn4y3fyQ==
+	t=1794063071;
+	b=FOzwG5Y4Be6/36l8A/EzjB9WKFwLxKKMjTm4HK4xKRTEMAhWGkgEdWu9R34xJDmCPr22
+	 vvhIk8bMpBnxEL8gYL2H+wFAgxyegbA7vXf5ElxiXKa76UcBUb1U6s6MQPAtsUWs7rqh+
+	 JdpnGVoPaYYOom97rQYfEoIZDdfYSn5vIdeurQLI5QQSJQz88K9SAB3LjiZXscja/uR8j
+	 ADr6EGWro5ohgh0cV4e8LH227z6S2aMtlsUIUue1sdhmdGGw7zbXC27mEcQXLeZVB2Xbj
+	 JWsFvUwvs3vfmYShxWxOv0mX5nlhiBFLqAzw1D6Z6+jL3oA2slhTBAzm1OXpZ0cEdJQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794063000;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=WuMnn9MTDjSA06vLFW9SC+VwJuL0y+R4oCYeZYKUpdM=;
-	b=b9fOCEdm29/xz0Q6ggavIkQgdsPRZ0RL7XoHZnYu3wXGJlFNPaRXs0X5qjDJ8s4Oa9Cs
-	 3ZVBcTVQVfh75wENNwqJD3rmjwGrO3R6NXhP7TCehRWykjXV0XmgTqZJoTHIM/vG1zL+m
-	 uTwxsyriT4WMmniDHG8haKTEh0ACTrOHU6UKlqXGi9/zNhuVJBZxdhJM1Nws5IbsczHnp
-	 lxbDqQwtY6J/BtsIHjSoOEXb6wIcfuY4QlX3qcnb/nOvvfIW2OiQd744TXCsxdN8iqLAW
-	 SEB4bAG1yphn81TkTqDPYjn09mx4Z8+TLFF8ld1XcEDOl8j+jJvqnbjSHWSRxlhzfQg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794063071;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=TiUGdurgArXkHoJfkLsRhbw1Pz03rQ/EVAWVD4W2NTI=;
+	b=24DddBJKJ2mMzIQTp8QL/PxYupI1m0D5qtyHvt42k5koCwWDEVtDz0lMhzowbhjjNU+u
+	 xbtxMZXd+fgDEVg5rUua6BkwX8MYiSLH2xqMlJysMuKTZXWytU661Bk3X5hbfNrdj0aXx
+	 TACvUO4cOF9QjpW2ArN0M+8ZzlGlSrZ9+q+G6BVAqbmZzgN+BYnw990vfLWrCHzer1ZXI
+	 lNhOzfFlqAw8ci2nPSmcMU8egn/dxPxmI18QWjlS6Q0UKLfwNx+CEnwN3erIt1WEhF6oE
+	 /fvlJ0e3E5JneMnmCBaqXVScg/MZhQfKr/8OkT1PwK54x0kIlHayxU9yelVdKUetAdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ap1Ht96P;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GMmnpEp8;
+	arc=none smtp.remote-ip=209.85.217.45
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA7C4606D810;
-	Sat,  7 Nov 2026 14:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7AAB606EE80
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 14:51:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B7AAB606EE80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ap1Ht96P
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 314781F008A4;
-	Sat,  7 Nov 2026 14:49:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794062999;
-	bh=WuMnn9MTDjSA06vLFW9SC+VwJuL0y+R4oCYeZYKUpdM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ap1Ht96PoZhMMH2OnnhfM//OSqLg7C/GqN04YCWPaZWG8kD2KVot+wQvwxMxCXNL8
-	 2nz3nAI1+kO7pcWWcCkoRzuHCvHbaCXnH0JPf3GwRxvAUfZNAw7x6lUB8nY4shmtoV
-	 CbBH/l+2F+ERb+gLMEGOPJITT67HjiwH7g2mAGibJn1g7bCfoFgR+HXyQWWwjM2iIi
-	 bpe9GZMffcMbLUKEIAX9wDmD53vSMYmkk/8aL7G2BtfKZP8QkA9GpndWmUPBtdzHEk
-	 j06BZYtE3+2J7C1AYubnqHCVxWhzHjYMRn6qnF1ZfQ6mJv/sIxIBJ4Q5w271usHINA
-	 jZxI/ldSvKt9Q==
-Content-Type: multipart/mixed; boundary="===============9163831857622064988=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GMmnpEp8
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-7cc91ddf447so507071137.2
+        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 06:51:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794063070; x=1794667870; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=TiUGdurgArXkHoJfkLsRhbw1Pz03rQ/EVAWVD4W2NTI=;
+        b=GMmnpEp8of2xPaPuVAQPWKFigGoxcgA2aR9nmMX8ZNpJmmZa9wenRFjcQYhqzF+O4f
+         awBenfwbtU48GdXYiFGvMF05ZuPd2YRwUd/bKYVmg2+fpVvWyXk3/cOqljzGB7EFuehQ
+         jSFMjTS1HImQQbpOAIch75CU0lfTskRBtkH/rJuM0AjpjE/P3P8J+DQI87qBktK8nXt/
+         aSxf7BEmuWBin/5d4x52nfaZrhJOPIOJV6hOYMw3nmjeLfBW19C/l5v/LtsaIoX84Xvv
+         xUVgNd0DsgIXX3J/pesSgSTgnV0kJtmqYWA9OozHAL2Ef726Xk7KoMfu60bGOWnp30qP
+         G0sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794063070; x=1794667870;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TiUGdurgArXkHoJfkLsRhbw1Pz03rQ/EVAWVD4W2NTI=;
+        b=m+AyM2znVyiYPzT5nRWiY5hIPMr2/unO2bjFYejgq68MQ4DEzLrVL6XXAkcS4RgFFu
+         RTSvRKDKT6yeEGDOmId0IKCNxPu7iRVD3LfWs89/IUUQUprGYrNAfYaQ3vN5/dmeTHJl
+         H8Aw6QdrHuODQm0tRgVODtLjdKqZkqNnzUqvp+QASQaoe9dOfasx/WhKXGmH9by4M+nK
+         rMUnpr9wToaZ0QvEsciHXrU3ZgFAzaY6stc1EL4syiPNq2BDpEU7r/f4Wx5QCP5/ew9P
+         5R0zovu5DUEKrNxUbDccEQxW1APEiz5th6IJuaM4jIeKNP2Eoss83NduLHYQ9+PvYPPR
+         uRCw==
+X-Forwarded-Encrypted: i=1; AL+hErH0kqFYXDPVd0FBntRzMAS4GNHmqK2mk/lTxfyFoEeHx3TS4WaLC4dqpmspbOtDYx1q7uU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9p3toUso8KO4tQLbI23NxWuA4JweAoR64BDdeisJo0lI4lA9Bo
+	Gz+RGd9btjmxyoT8Y756lpI+l2nHEKh568mCSqhQSCZSQPbgqbGA/aBR
+X-Gm-Gg: AYBFou2AK8cOh8cxMjQD3OB164N5X0CUXTSxQBho+4EjNepVy5O004/NyM0+nSR+Aek
+	FWabUiZInW+MZyGbaPtVzwTlkhBYvyYdn6GZfFarDF1ca3IEeBpzOg6APu6XVJCIafiKV0cS9Zk
+	TSGP9YWpjMyhiJgbSOJ6WDGICzOiZeRPy5BDssgmp7LWczicla+uPrCNkTrVc56B1mfrIimLgq8
+	F4bxBmEY2Xg3lEN+xtSw4XjxAhPfzCGDjRQtHITDXfCUJJY+YFPt9auHmd4DJF4awc79mY7l8lC
+	BSRFvaXE3nVcSYWi0eja1gFUOdSVBMm6YxVHs2lWvFWjjISG9BuPYvn3l4SyYcwBc9owPaVi+s3
+	maq3AjvvJNstiFxUvbUkyT2RsrsmI7uiL5DGFk/qcnqCF52ao6/QpFLN3z7wpRM9+e1ckhg+DeU
+	INGwMaiyd3lRT0mhA3ZwqOr7yUx+wpMjOhHbHPc0CFO4xFxxgXu3uCzndgPPsINONggeIZPDhAz
+	hPr8w/9Qe6wnskiU5JsMtI/CQWTR2r4BGz1mgbd4M5ATfnFkDhQiz3XTamTdoK5akROsPHh0+t+
+	/aTCIy/jPpAb15l8epwxGW1V944iri7dyfGY+UPRoh6bJ62/VSgBWwrdIM9tdPb4kyBUxuEDJCi
+	lVx93nfAzB4BzFC7mLcozJVcYvGjM08dLzxKED3CgFZMiSKk1MRhbder5mH0LHr/Oa0KpTsUeEZ
+	AWgxpXKFUT6qVq7yi6
+X-Received: by 2002:a05:6102:4bca:b0:7c3:8150:83e7 with SMTP id ada2fe7eead31-7d2a154169emr2304378137.9.1794063068607;
+        Sat, 07 Nov 2026 06:51:08 -0800 (PST)
+Received: from gmail.com (223.230.150.34.bc.googleusercontent.com. [34.150.230.223])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-99badbceebdsm4199060241.3.2026.11.07.06.51.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Nov 2026 06:51:07 -0800 (PST)
+Date: Sat, 07 Nov 2026 09:51:07 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Tianyi Gao <tianyi@cloudflare.com>, 
+ netdev@vger.kernel.org, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Eric Dumazet <edumazet@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+ Simon Horman <horms@kernel.org>, 
+ David Keogh <dkeogh@amazon.com>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ David Woodhouse <dwmw2@infradead.org>, 
+ Dragos Tatulea <dtatulea@nvidia.com>, 
+ Nimrod Oren <noren@nvidia.com>, 
+ Alasdair McWilliam <alasdair@mcwilliam.dev>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ Magnus Karlsson <magnus.karlsson@intel.com>, 
+ David Ahern <dsahern@kernel.org>, 
+ Ido Schimmel <idosch@nvidia.com>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Donald Hunter <donald.hunter@gmail.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, 
+ Breno Leitao <leitao@debian.org>, 
+ =?UTF-8?B?QXNiasO4cm4gU2xvdGggVMO4bm5lc2Vu?= <ast@fiberby.net>, 
+ Danielle Ratson <danieller@nvidia.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, 
+ bpf@vger.kernel.org, 
+ linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ kernel-team@cloudflare.com, 
+ nh-open-source@amazon.com, 
+ Tianyi Gao <tianyi@cloudflare.com>
+Message-ID: <willemdebruijn.kernel.1d64e7848503b@gmail.com>
+In-Reply-To: <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
+References: <cover.1794020868.git.tianyi@cloudflare.com>
+ <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
+Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
+ LL_ALLOC_SPACE()
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,176 +136,116 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <f55c7b6bd45c263bc9551f742b10ebafa6573bb3a4460ef146d6518db847caba@mail.kernel.org>
-In-Reply-To: <LO2P302MB0197FAF0305A94F7575CA700BC752@LO2P302MB0197.GBRP302.PROD.OUTLOOK.COM>
-References: <LO2P302MB0197FAF0305A94F7575CA700BC752@LO2P302MB0197.GBRP302.PROD.OUTLOOK.COM>
-Subject: Re: [PATCH bpf] bpf: Reject writable map iterators on read-only and frozen maps
-From: bot+bpf-ci@kernel.org
-To: adethyasrinivasan@outlook.com,yonghong.song@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,adethyasrinivasan@outlook.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat,  7 Nov 2026 14:49:59 +0000 (UTC)
-
---===============9163831857622064988==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-> bpf: Reject writable map iterators on read-only and frozen maps
+Tianyi Gao wrote:
+> From: David Keogh <dkeogh@amazon.com>
+> 
+> Programs attached at TC egress commonly push additional headers onto a
+> packet, for example to encapsulate it. When the packet does not carry
+> enough headroom the BPF helpers reallocate the head, which costs an
+> allocation and a copy per packet.
+> 
+> Locally generated UDP, raw and AF_PACKET traffic is allocated with
+> exactly LL_RESERVED_SPACE() of headroom, which only covers the
+> link-layer header and the driver's needed_headroom. An administrator can
+> only ask for more headroom at allocation time if the driver supports it,
+> as netkit does with IFLA_NETKIT_HEADROOM. veth does not.
+> 
+> Add a tx_extra_headroom field to struct net_device for that purpose,
 
-TL;DR:
-- Rejecting all frozen maps for writable iterators may change uapi behaviour;
-  BPF_F_RDONLY_PROG alone seems to close the hole
-- Frozen check is racy: map_freeze() after attach still lets the iterator
-  write
-- Fixes tags look wrong
+Main high level concern is just adding an extra field. What's next,
+do we need to add a field extra_extra_headroom?
 
->     bpf: Reject writable map iterators on read-only and frozen maps
->
->     The bpf_map_elem and bpf_sk_storage_map iterators pass the live element
->     value (ctx->value) to the iterator program as a writable buffer
->     (PTR_TO_BUF | PTR_MAYBE_NULL) for all non-percpu map types. Since
->     commit 8d0358f6e8b3 ("bpf: Keep iterator programs off special map
->     fields"), bpf_iter_map_check_value_write() checks on Linux 7.4.0-rc1
->     whether a writable iterator program (prog->aux->max_rdwr_write > 0)
->     overlaps special BTF fields in map->record, but does not check whether
->     the target map has BPF_F_RDONLY_PROG set or has been frozen via
->     BPF_MAP_FREEZE (map->frozen).
->
->     As a result, a writable bpf_map_elem iterator can be attached to a
->     frozen BPF_F_RDONLY_PROG map (such as a .rodata BPF_MAP_TYPE_ARRAY or
->     BPF_MAP_TYPE_HASH) and triggered via read(iter_fd) to mutate its elements
->     in place after dependent BPF programs have already been verified.
->
->     Why this breaks verifier soundness:
->     1. Constant folding (check_map_load / const_fold.c): When
->        bpf_map_is_rdonly(map) is true ((map->map_flags & BPF_F_RDONLY_PROG)
->        && READ_ONCE(map->frozen) && !bpf_map_write_active(map)), the verifier
->        folds direct loads from single-entry array maps into compile-time
->        scalar constants (__mark_reg_known). Overwriting the frozen element
->        via a bpf_map_elem iterator causes the runtime value to diverge from
->        the verifier's folded constant, bypassing bounds checks on pointer
->        arithmetic (PTR_TO_MAP_VALUE += scalar) in already-loaded programs
->        and enabling out-of-bounds map reads and writes.
->     2. Indirect subprogram calls (find_subprog / callx): Function pointer
->        tables in frozen BPF_F_RDONLY_PROG maps are resolved to live kernel
->        JIT addresses at load time. Mutating the frozen slot via a
->        bpf_map_elem iterator redirects indirect callx targets at runtime
->        (or crashes the kernel at an arbitrary RIP such as RIP = 0x0).
->
->     Threat model evaluation (Documentation/process/threat-model.rst):
->     Triggering this issue requires attaching a tracing iterator program
->     (BPF_PROG_TYPE_TRACING / BPF_TRACE_ITER), which requires CAP_BPF and
->     CAP_PERFMON (or CAP_SYS_ADMIN, or a delegated BPF token). In deployments
->     where CAP_BPF + CAP_PERFMON or a BPF token is granted without full root /
->     CAP_SYS_ADMIN, the BPF verifier is the boundary preventing out-of-bounds
->     kernel memory access and arbitrary kernel RIP control.
->
->     In bpf_iter_map_check_value_write(), return 0 early when
->     !prog->aux->max_rdwr_write so read-only iterators (such as bpftool map
->     dump) remain permitted, and reject maps with
->     (map->map_flags & BPF_F_RDONLY_PROG) or READ_ONCE(map->frozen) with
->     -EACCES before checking map->record.
->
->     Fixes: 8d0358f6e8b3 ("bpf: Keep iterator programs off special map fields")
->     Fixes: d3cc2ab546ad ("bpf: Implement bpf iterator for array maps")
->     Fixes: d6c4503cc296 ("bpf: Implement bpf iterator for hash maps")
->     Fixes: 5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map")
->     Signed-off-by: Adethya Srinivasan <adethyasrinivasan@outlook.com>
->
+> together with LL_ALLOC_SPACE() and LL_ALLOC_SPACE_EX(). These add the
 
-The Fixes: tag 8d0358f6e8b3 ("bpf: Keep iterator programs off special map
-fields") only added bpf_iter_map_check_value_write() as a check for special
-BTF fields.  It did not introduce the writable value buffer.
+Since this already changes callers from LL_RESERVED_SPACE to
+LL_ALLOC_SPACE, could this additional use case be integrated more in
+the struct fields and helpers that are already there?
 
-That buffer (PTR_TO_RDWR_BUF_OR_NULL for the value ctx arg) came from
-a5cbe05a6673 ("bpf: Implement bpf iterator for map elements") for array and
-hash maps, and from 5ce6e77c7edf for sk storage.  The d3cc2ab546ad and
-d6c4503cc296 tags are also indirect, since those commits did not expose a
-writable value to programs.
+Admittedly, I did not spend much time looking at that deeply, and you
+likely did, so the answer is no. But I want to poke a little at that
+before we add yet another optional length field.
 
-Should the tags be:
-
-  Fixes: a5cbe05a6673 ("bpf: Implement bpf iterator for map elements")
-  Fixes: 5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map")
-
-with the 8d0358f6e8b3, d3cc2ab546ad and d6c4503cc296 tags dropped?
-
-> diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-> --- a/kernel/bpf/map_iter.c
-> +++ b/kernel/bpf/map_iter.c
-
-[ ... ]
-
-> @@ -109,7 +109,13 @@ int bpf_iter_map_check_value_write(const struct bpf_prog *prog,
->  	const struct btf_field *field;
->  	u32 i;
->  
-> -	if (IS_ERR_OR_NULL(rec) || !prog->aux->max_rdwr_write)
-> +	if (!prog->aux->max_rdwr_write)
-> +		return 0;
+> extra reservation to the header length before the HH_DATA_MOD alignment,
+> so the alignment of the link-layer header does not change.
+> 
+> The new macros are intended only for sites that allocate new packets.
+> LL_RESERVED_SPACE() keeps its current meaning and remains the threshold
+> used when checking whether an existing packet must be expanded, so the
+> extra reservation never forces a reallocation on its own: packets that
+> already have enough room for the headers being pushed, such as TCP
+> segments built with MAX_TCP_HEADER, are left alone.
+> 
+> Keep the extra reservation separate from needed_headroom so that driver
+> updates of their own requirement do not clobber it and so that it can
+> be cleared independently. Place the field in the padding that follows
+> needed_headroom, which keeps it in the TX read-mostly cacheline group.
+> 
+> The field is not set anywhere yet. A later patch exposes it through
+> rtnetlink.
+> 
+> Also remove LL_RESERVED_SPACE_EXTRA(). It has had no user since
+> commit 6d5431555de0 ("caif: remove CAIF NETWORK LAYER"). It could add
+> the extra headroom, but it reads dev->hard_header_len itself. AF_PACKET
+> must use the value that it read once, see commit 03390aa32e66 ("packet:
+> use consistent hard_header_len in non-ring send paths").
+> LL_ALLOC_SPACE_EX() takes the header length as an argument instead.
+> 
+> Signed-off-by: David Keogh <dkeogh@amazon.com>
+> [tianyi: remove LL_RESERVED_SPACE_EXTRA()]
+> Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
+> ---
+> checkpatch --strict reports "Macro argument reuse 'dev'" for
+> LL_ALLOC_SPACE_EX() and LL_ALLOC_SPACE(). It reports the same for
+> LL_RESERVED_SPACE().
+> ---
+>  .../networking/net_cachelines/net_device.rst  |  1 +
+>  include/linux/netdevice.h                     | 36 +++++++++++++++++--
+>  net/core/dev.c                                |  2 ++
+>  3 files changed, 36 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/networking/net_cachelines/net_device.rst b/Documentation/networking/net_cachelines/net_device.rst
+> index 8eceaa80b686..a7e311fb7875 100644
+> --- a/Documentation/networking/net_cachelines/net_device.rst
+> +++ b/Documentation/networking/net_cachelines/net_device.rst
+> @@ -35,6 +35,7 @@ unsigned_short                      gflags
+>  unsigned_short                      hard_header_len             read_mostly         read_mostly         ip6_xmit(tx);gro_list_prepare(rx)
+>  unsigned_int                        mtu                         read_mostly                             ip_finish_output2
+>  unsigned_short                      needed_headroom             read_mostly                             LL_RESERVED_SPACE/ip_finish_output2
+> +unsigned_short                      tx_extra_headroom           read_mostly                             LL_ALLOC_SPACE/__ip_append_data
+>  unsigned_short                      needed_tailroom
+>  netdev_features_t                   features                    read_mostly         read_mostly         HARD_TX_LOCK,netif_skb_features,sk_setup_caps(tx);netif_elide_gro(rx)
+>  netdev_features_t                   hw_features
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 435be7880d7e..98d1501d6fee 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -311,9 +311,24 @@ struct hh_cache {
+>  	  & ~(HH_DATA_MOD - 1)) + HH_DATA_MOD)
+>  #define LL_RESERVED_SPACE(dev) \
+>  	LL_RESERVED_SPACE_EX(dev, (dev)->hard_header_len)
+> -#define LL_RESERVED_SPACE_EXTRA(dev,extra) \
+> -	((((dev)->hard_header_len + READ_ONCE((dev)->needed_headroom) + (extra)) \
+> -	  & ~(HH_DATA_MOD - 1)) + HH_DATA_MOD)
 > +
-> +	if ((map->map_flags & BPF_F_RDONLY_PROG) || READ_ONCE(map->frozen))
-> +		return -EACCES;
+> +/*
+> + * Headroom to reserve when allocating a locally generated packet for
+> + * transmission through a device. On top of LL_RESERVED_SPACE() this adds
+> + * the administrator-configured tx_extra_headroom, folded in before the
+> + * alignment so that the link-layer header placement does not change.
+> + *
+> + * Only use this for new allocations. Code that checks whether an existing
+> + * packet has enough headroom must keep using LL_RESERVED_SPACE(), so that
+> + * the extra reservation can never force a reallocation by itself.
+> + */
+> +#define LL_ALLOC_SPACE_EX(dev, hlen) \
+> +	LL_RESERVED_SPACE_EX(dev, (hlen) + READ_ONCE((dev)->tx_extra_headroom))
+> +#define LL_ALLOC_SPACE(dev) \
+> +	LL_ALLOC_SPACE_EX(dev, (dev)->hard_header_len)
 > +
-> +	if (IS_ERR_OR_NULL(rec))
->  		return 0;
->  
->  	for (i = 0; i < rec->cnt; i++) {
 
-Is rejecting every frozen map intended here?  The READ_ONCE(map->frozen) test
-changes uapi behaviour, since frozen alone has never made a map read-only for
-BPF programs.  include/uapi/linux/bpf.h says for BPF_MAP_FREEZE:
-
-    Write operations from eBPF programs are still possible for a frozen map.
-
-check_map_access_type() takes write permission from bpf_map_flags_to_cap(),
-which only looks at BPF_F_RDONLY_PROG and BPF_F_WRONLY_PROG.  Both soundness
-problems described in the commit message go through bpf_map_is_rdonly():
-
-    return (map->map_flags & BPF_F_RDONLY_PROG) &&
-           READ_ONCE(map->frozen) &&
-           !bpf_map_write_active(map);
-
-That requires BPF_F_RDONLY_PROG, so the map_flags test alone closes the hole.
-
-For example, an array or hash map created without BPF_F_RDONLY_PROG and then
-frozen accepted a bpf_map_elem iterator that stores into ctx->value before this
-patch.  Now BPF_LINK_CREATE fails with -EACCES via:
-
-    bpf_iter_attach_map() -> bpf_iter_map_check_prog() ->
-        bpf_iter_map_check_value_write()
-
-while any other tracing or XDP program can still write the same frozen map.
-
-If the intent is to keep frozen maps from being written through iterators, the
-check is only sampled at attach and link update, without map->freeze_mutex, and
-attach does not raise map->writecnt.  So map_freeze() run after the link is
-created still succeeds:
-
-    mutex_lock(&map->freeze_mutex);
-    if (bpf_map_write_active(map)) {
-        err = -EBUSY;
-    ...
-    WRITE_ONCE(map->frozen, true);
-
-and the existing link keeps writing the frozen map on every read(iter_fd).
-bpf_map_mmap() handles this by taking freeze_mutex and calling
-bpf_map_write_active_inc() for writable mappings.
-
-For the sk_storage iterator, bpf_local_storage_map_alloc_check() only allows
-BPF_F_NO_PREALLOC | BPF_F_CLONE, so such a map never has BPF_F_RDONLY_PROG and
-bpf_map_is_rdonly() is never true for it.  The only change for that iterator is
-the frozen-only rejection.
-
-Should the check be limited to BPF_F_RDONLY_PROG, matching
-check_map_access_type() and bpf_map_is_rdonly()?  If rejecting frozen maps is
-intended, would it need the same freeze_mutex / writecnt handshake that
-bpf_map_mmap() uses, along with a rationale in the changelog?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42382469691
---===============9163831857622064988==--
+If having to modify/add these helpers, it's probably a good time to
+switch to actual, type safe and readable, functions instead.
