@@ -1,56 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794025109;
-	b=n2Pt400QZIcF+YVCFRSATbh3FybVzkzlRbzB+s0pNR1xiFQrS8/JNl5HeGEHriCZc7+8
-	 mv2PPm7Yq1KgWhfsm0mBLtvyugZ2t1V8qqS8tg9PPJkzm1POi/XO7BijlpzGwt9yHMjl0
-	 eQl5R8GzyMBAPGV6UfIE/U/d2jSHPpcp4Lm4AHmQDeTZZEPTsNCGMc7EVfPa/6TMM3+fk
-	 7+9aWN7sqhh1R/HB1w/04ZKeqenvPsWFhkhVPPhXQtTwlNQpFb5+DbAeo4Jm2YIBb6SmV
-	 X0V8sIpngqoF+ZCPzIiFti8/z2FDMU7yYSkpjAnL3UJTvGl2NiaV/ty9AlASprdmwxA==
+	t=1794025189;
+	b=IyVIer18rzKpxQqic/NQ0xEE8lzCbo/LW6xFAbVQylDdRp2a1wBNhj/MbtHoEXB0kQOU
+	 i2Bf9WthFn9WvJf6bcNvi99Uxjh5Eiv1bVNM4sG7r8OHA/RXlm0uVee/0vEvVRD7IdhwV
+	 gVzIOR2HhlcOuVkaPtLZXykSf+oHR1ZpO8/qCXKgEaPEpB+2LsO9n4vg65Ms/MqW6TZd7
+	 A+dn97EXzfkK/1w3FOXajRJJH5bnHDJoAFuhJzSzg7KIz4lkEse1LlgXr4yJW6HKa7fvc
+	 nOsMBM796SjAnJ5b6m1IwFgMxSYoCDpLaQxtWJVJVIhMHt1xhZ9XhY1O46V7jdfN4cw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794025109;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=OGz5Mc0MppHaFbNwUrne2f8BSiENJVaHiXUlSAvj9YU=;
-	b=5UCAl6M5OmsrHFB4mpuPBZQ4RrbXrfPdfzS9tj9rZ1CjzPmW+3MC8Nmh3ApR4IZ6R/qF
-	 KWdBkS2su8KBBzi7P1B19lQO6lW5rJJwdQp6UWbNMByeTwLj93+iAodDWY+86m7JPM9LZ
-	 JItf2GVgx5DPmfgyhjZ05H1GpJDmP1meM12qp5DvRusBDXvLxxkZrX4w9BoaOlNFK1xLY
-	 sYj+51RiJjXTJ/zQiU4IxMslIj9XJmj2o11XRwzgzd671kCuK4DpSB++/Ro2zUzEabd34
-	 hWT2Y6/xjGLmGkQE1G+j4LuWQIzMd3aPkeUDksP1Awd1Z7qeAyMYxdNfXEdJg0xe/lA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794025189;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=ku/UEQAb7LiN8XRk7qECDwqucihhsWNByqWCK1HRm90=;
+	b=K+6oj8kjkGKknng4FXXyTSqNZazKPk+/WfzRT+4mPHlphvJRCzyRbU7tOtbk8yfi2+tY
+	 H+ABcjWq/WmozdVnipu2eVyrZ1zPuIbr4x/viFhRfd9xd4pvwt4QLH2V70JDkcPb2c2+e
+	 VTY4Bjy/gIUpS9ySSsRWkJZtNl9ftRnq/b1s2KiRlvQcEG3MBS55ySLRpAbwEvHZsfY17
+	 ObS2gAJs7LEn1Z+hlXIJDfvTKs5cpECdvZCyTdYInwmPQcyUsy8hRt7dsB3lIMrtZ3n5j
+	 +WbcCraUX3HkUpStruj9a+K/gClHLulp9jcEvVg4TKU9wVcvAslleey+zuMmIUH7toQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BNy5pyAv;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kZAou2Jw;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2635606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 04:18:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9C9606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 04:19:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BNy5pyAv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6670A1F0089F;
-	Sat,  7 Nov 2026 04:18:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kZAou2Jw
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC2B1F0089F;
+	Sat,  7 Nov 2026 04:19:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794025108;
-	bh=OGz5Mc0MppHaFbNwUrne2f8BSiENJVaHiXUlSAvj9YU=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=BNy5pyAvnj/bqLPd6KrDZ9bxySk2Dd7vlkEppr8wLZ4izkO+bpI7+FAfmiTVM08oW
-	 PO5bxy/c/0ChMynEhIbNacXvBIHEAbQOyLvGF8ixnzPv0GC22S9Ns6eKYToHrUlqmE
-	 phmXxDJ/rBKCAafFiKf+xdUGb9YsX5WFj/Nfnlj/JFsdVH48BBc0kYuiIV0jeQQVvZ
-	 MNS0KMCvPYMQww+zrH+D88KJWxghLwLfmJ+zY/4Okv7Z2pyG/ppGItylRViAXbC7vP
-	 q1wevBz8NoKUWQxsqKccYGHa5tsPbgUyRdjWLF+CrfC4rJNpDifHRFICmgu3R87xQb
-	 mI4sTRC4i11iw==
-Message-ID: <sashiko-outbox-202568@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 04/46] bpf: Add join of registers and stack
- slots
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261107033758.1547725-5-alexei.starovoitov@gmail.com>
-References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
- <20261107033758.1547725-5-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 07 Nov 2026 04:18:28 +0000
+	s=k20260515; t=1794025188;
+	bh=ku/UEQAb7LiN8XRk7qECDwqucihhsWNByqWCK1HRm90=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=kZAou2JwU2LCSGUogbybtp/O5+IHt1WhKyH9Lo0v+4DJH6znlvwufkLNQj8Y9KGTc
+	 8lk37uNZmidjAvOBRiH3/h9zu90eDfF/Km8QsSjaQUWg3ikPJMQ8CPeoP+rJMDbr/Z
+	 T0x1inKjUL9kU+RsE5ODdsrBln5X5F0es7D4w+Vo6LyOfc/QP7i0P/sg9n9v6jEcVs
+	 XvLjlNzyMl9bhoKrVEcll5M3SCLXkVa1eNKU5ZgcyL8fEUc/uTkBXAD94FECartApy
+	 JxAdbMpdm84ocVWemrnc38N14dm1PwEUQ1REBM3TSEdZYGUd5O9FJ4OacPuWW3QuoQ
+	 3Ucyza/mymGyQ==
+Content-Type: multipart/mixed; boundary="===============5162376912718975019=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,120 +48,73 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <e97ef2e8cc0107846c8df26cec99ef8f7f1537ea3b932ba5a75e12371390aafc@mail.kernel.org>
+In-Reply-To: <20261107033758.1547725-33-alexei.starovoitov@gmail.com>
+References: <20261107033758.1547725-33-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v4 32/46] bpf: A loop is one iteration shorter behind the jump that counts it
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat,  7 Nov 2026 04:19:48 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] bpf: join_reg() zeroes dst->delta under explore_alu_limits,
-  failing regsafe()
-- [Medium] bpf: loss of STACK_POISON in join_slot() when joining stack
-  slots
---
+--===============5162376912718975019==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit b2b35d77649236d79410bf6f82762993660918fc
-Author: Alexei Starovoitov <ast@kernel.org>
+> bpf: A loop is one iteration shorter behind the jump that counts it
 
-bpf: Add join of registers and stack slots
+TL;DR: Possible s64 wrap when adding "moved" in bpf_clamp_scev_regs() may
+leave a wrong base/step, so the verifier could drop values a register can
+really hold; scalar_step_add() resets the step in this case.
 
-This commit introduces state joining for registers and stack slots, along
-with SCEV tracking of linear registers for loop-head widening.
-
-> diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
-> new file mode 100644
-> index 0000000000000..fe513b7a8e884
-> --- /dev/null
-> +++ b/kernel/bpf/join.c
+> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+> --- a/kernel/bpf/scev.c
+> +++ b/kernel/bpf/scev.c
 
 [ ... ]
 
-> +static bool join_reg(struct bpf_join_state *js, struct bpf_reg_state *ds=
-t,
-> +		     const struct bpf_reg_state *ra, const struct bpf_reg_state *rb, i=
-nt pass)
-> +{
-> +	if (ra->type =3D=3D NOT_INIT || rb->type =3D=3D NOT_INIT) {
-> +		if (pass =3D=3D 2 && ra->type !=3D NOT_INIT)
-> +			*dst =3D *rb;
-> +		return true;
-> +	}
-> +
-> +	if (ra->type !=3D rb->type)
-> +		return false;
-> +
-> +	switch (base_type(ra->type)) {
-> +	case SCALAR_VALUE:
-> +		if (js->env->explore_alu_limits && !reg_value_equal(ra, rb))
-> +			return false;
-> +		if (pass =3D=3D 1) {
-> +			jid_note(js, ra->id, rb->id, scalar_link_consistent(ra, rb));
-> +			return true;
+> @@ -3887,7 +3933,8 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *env, struct bpf_func_state *cur
+>  clamp:
+>  		linear_bounds(entry_reg, max_header_count, &coefs, &bounds);
+> -		if (r == entry->iv_reg)
+> +		if (r == entry->iv_reg && !moved)
+>  			iv_bounds(&bounds, entry->iv_range);
+> +		if (moved) {
+> +			bounds.r64 = cnum64_add(bounds.r64, cnum64_from_srange(moved, moved));
+> +			bounds.base = imod(bounds.base + moved, bounds.step);
 > +		}
-> +		join_range(js, dst, ra, rb);
-> +		/* a link that exists on one side only is dropped */
-> +		if (ra->id && !jid_good(js, ra->id, rb->id)) {
-> +			dst->id =3D 0;
-> +			dst->delta =3D 0;
-> +		}
-> +		return true;
 
-[Severity: Medium]
-As reported by bot+bpf-ci@kernel.org on v2 [1], when js->env->explore_alu_l=
-imits
-is set, can zeroing dst->delta here make the joined register fail regsafe()
-against ra and rb?
+Can this wrap in a way that leaves bounds.base wrong?  linear_bounds() only
+rules out signed overflow of entry + slope * (n - 1), not of the extra
+"+ moved".  cnum64_add() wraps modulo 2**64, so if entry + moved + slope * k
+crosses S64_MAX or S64_MIN, the signed value is off by 2**64.
 
-When ra and rb have matching non-zero deltas (BPF_ADD_CONST) and identical
-ranges, reg_value_equal(ra, rb) succeeds, but if !jid_good(js, ra->id, rb->=
-id)
-drops the link in pass 2 (for instance, when one path sets BPF_ADD_CONST64
-and the other sets BPF_ADD_CONST32, or on an ID pairing conflict), dst->del=
-ta
-is cleared to 0.  Because s32 delta sits before id in struct bpf_reg_state,
-regsafe() under explore_alu_limits compares delta via memcmp(...,
-offsetof(struct bpf_reg_state, id)), causing bpf_state_subsumes() to fail,
-triggering verifier_bug() and rejecting the program with -EFAULT.
+When the entry is a constant, step is |slope|, which need not be a power of
+two.  Then 2**64 mod step is not 0, and the residue computed by
 
-[ ... ]
+    bounds.base = imod(bounds.base + moved, bounds.step);
 
-> +static bool join_slot(struct bpf_join_state *js, struct bpf_stack_state =
-*ds,
-> +		      const struct bpf_stack_state *sa, const struct bpf_stack_state *=
-sb, int pass)
-> +{
+no longer matches the values in bounds.r64.
 
-[ ... ]
+scalar_step_add() in kernel/bpf/verifier.c handles this case: it calls
+check_add_overflow() on reg_smin()/reg_smax() and resets the step if the add
+can wrap, noting that keeping the step "requires 2**64 mod s = 0".
 
-> +	for (i =3D 0; i < BPF_REG_SIZE; i++) {
-> +		u8 x =3D sa->slot_type[i], y =3D sb->slot_type[i];
-> +
-> +		if (x =3D=3D STACK_SPILL)
-> +			x =3D STACK_MISC;
-> +		if (y =3D=3D STACK_SPILL)
-> +			y =3D STACK_MISC;
-> +		if (stype_is_invalid(x) && stype_is_invalid(y))
-> +			res[i] =3D sa->slot_type[i];
-> +		else if (stype_is_invalid(x) || stype_is_invalid(y))
-> +			res[i] =3D STACK_INVALID;
+bpf_set_reg_range() installs the new base/step as is, replacing what the
+register had, and reg_bounds_sync() then uses base/step to round smin/smax to
+values congruent to base.  The intersection with reg->r64 does not help,
+because base/step are replaced rather than intersected.  Could this drop
+values the register can really hold?
 
-[Severity: Medium]
-Does this overwrite STACK_POISON with STACK_INVALID when joining a poisoned
-stack byte with STACK_INVALID, STACK_MISC, STACK_ZERO, or a scalar
-STACK_SPILL?
+Should this fall back to step = 1, base = 0 (or skip the register) when adding
+moved to the bounds can overflow s64, as scalar_step_add() does?
 
-For example, when only the low 4-byte half of a slot is live,
-__clean_func_state() leaves the dead upper half of a 64-bit constant-zero
-scalar spill as STACK_SPILL in one state while marking it STACK_POISON in
-another.  Degrading STACK_SPILL to STACK_MISC and joining it with
-STACK_POISON produces STACK_INVALID, which allows subsequent reads of dead
-poisoned stack slots to succeed under allow_uninit_stack instead of being
-rejected.  Checking whether x =3D=3D STACK_POISON or y =3D=3D STACK_POISON =
-first and
-setting res[i] =3D STACK_POISON would preserve poison tracking while remain=
-ing
-compatible with stacksafe().
 
-[1] https://lore.kernel.org/r/ee77c73bff0b56a40098080a5335d5fd5e4d8592ac15a=
-fe769c1c4661f026576@mail.kernel.org
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261107033758.1547=
-725-1-alexei.starovoitov@gmail.com?part=3D4
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42335829855
+--===============5162376912718975019==--
