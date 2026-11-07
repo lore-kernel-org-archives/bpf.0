@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794022894;
-	b=tRVpyd5gDwmNbp5jFDl56fISNzmSGakU9kUpG5q04pOpqwAfyrBtXKexJV3s1cs2g+lF
-	 JYgDK3tsmjM34iJ+WUm6OHykq8ZXk2p6noK0bcuG7TUa0Hle9ywk/Rf+gNfX4j6QFnJpw
-	 OgP45OzSgwKeWVXbdyC+LepCGiaGJf796QGWLW6CXmFM3piZ8qVry40r+eKIcQ3uKH2JL
-	 0qhLcd8bQECcttboluWaQ4l4NUJCYB8DJAtxpQJvzzysxvPtwi116abZ7gD50JS2iP2sY
-	 sACNgDSfJpE8uVw5PaW6b7xxpfrRLGAAFvqtBGjaKrbwNfuoVnmtjOOqAVkknxVofjA==
+	t=1794022900;
+	b=rh5x5T3yuM9J35AoCTAqGXd6+T6Hfg6PGpKjtv1+jpzzeNofAjlJkRdm6jq5J65aCuOe
+	 AglUJUyEEjhPYGlTHeSnk2a5xTeC5BFKzPVpzMLWtXTHzPM8ZOtC8MMCfEe9pFSpGLgIs
+	 RMcEU1WFoHFeKB0xwuyHYiMBfdw5mAIKLpqyEythGrbpQBstPOxpngh2lWpcec7bNjUlO
+	 N/tSmWhWMVFXd4+Y8ZZ5JPRizNVdXpZIjIDDL3jP2sXk4ugR7wRa1YrPhF7fvz9flhCkq
+	 ZH6oCtA+Srj6gULdCUB4efCGsPe//oqeg7dP+QKVFuNPv6w3YJ8gv1sOHVGP9kti5jw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794022894;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794022900;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=vVqsDKq+IateAeQjTGq3ovtOBLwcp1pUpF9ZdLgni1A=;
-	b=bf2oeU9ah0IYgPmfiSCMdQndP3j/tQyodRaLOea+FVWCajDrlPjlNHMYQYhGERfXGRJR
-	 fyI8mGmm35XKfkLigrVGi6hRAfGUnkh35FEB0FxvpykJD3UrlEZTwJ/9tFhU7fxMEp4uf
-	 Gh6IpOIHpfTArU6i70cDUHgqDOFIwlZbrfNhTmPW2tDPU8RSkY8WECxk37r+BqMKqfOxs
-	 +CdioBuVZZb7fg1fZhKCoe5dA1S2JIAlR5WOfjoW02ac2GfrGrdC1v1f33PLryB0cjZDe
-	 9xa2PlexAMtYyU8Rgq5gYXP9Qvbmnlxf8VnpVLJBQu+HZTW8cKogTlPpq25TMH8xzBw==
+	bh=n9+L363wjpVGEQ+6oxIr0eZhtQwT8+ovBDPJGqXsaKM=;
+	b=JYu84V0kcnLxBkBFrtYOExVW/3jXI0Gkh8rY6ltzBoT4rJb5BsFLHlP9MQXWsZRpotdv
+	 8ZMrNK6/Wsz2t3edXEb18obDEzmX9Y8Ea4TV5GxX5Q7/cDEJmwcZF0pNjJAr0OqsMANEC
+	 kSdDw1seKvPugG5i5NIOnQYieJfaPAiLZSiE3VaF5IwOOI8xlHSBpS89yj4odhRS5LC73
+	 vK8hiI0DOTgnKpt4Bg89WZzvrSXpEjaqBsRb5G2Gw9tLLxzQ2zmU4b0DLshWyEdZxQ4B6
+	 61I4WnWtApZKaamAv3daFi5mkpjbNjMN9UrFJwJtKMN7idV/DG/O8/uGgWvYa2FL5Yw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hzv9CkBO;
-	arc=none smtp.remote-ip=209.85.215.181
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QVrkq0Ff;
+	arc=none smtp.remote-ip=209.85.216.46
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44780606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:41:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44780606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F747606A32C
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 03:41:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F747606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hzv9CkBO
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cdac6d19ddaso522025a12.2
-        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:41:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QVrkq0Ff
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3b10ca4e3f9so8623a91.0
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2026 19:41:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794022893; x=1794627693; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794022900; x=1794627700; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vVqsDKq+IateAeQjTGq3ovtOBLwcp1pUpF9ZdLgni1A=;
-        b=hzv9CkBOBNgzOS3ymH0Jf5boG0wiYPl75NuujbfUmQo+RePu92PI15TkGEdJeNgh8F
-         3JMwjcdVx35KTbQ7ZmPpg36AaSPQMsymKtOmYYSl6afKstzXILzO/kOofoQImvQBPlxb
-         xSalbm6PsHz0BZIh84Kvs1lIS4kWZhNNZXV7lhlr7NVecCF/zFgylozP9EDpwFCOfIsM
-         DW/MVmdL0+uMlOpxUF9xmwcKG4xXaWVYV71PuuRE5Y6mS9EnCGTwaOC+FKC/7CiunQNi
-         dbVqSHCWUR5a6GwKB4YUZqaa1d28E8pCjVpWtG9CidiTqJ19MNMW3ttwq8iDDbkBciV5
-         QFCw==
+        bh=n9+L363wjpVGEQ+6oxIr0eZhtQwT8+ovBDPJGqXsaKM=;
+        b=QVrkq0FfYmJp4aXar5LpYQ7q2LFuHwzM03C8JoyAI1GmGthUpvEOxdz+I9ZhHVizAA
+         eKkN/2AvP5pyXr+Wa8GZbm7EIobN1V/lIv1Y7W4RPO+6Sdt+L04T7PTBw7QYsPT2uvIX
+         nipY7lK6WTjMNqyr2BzQsDG4Wn9TiQ5HlgB83xcG2bd+jZCvM31TVs1Wrj2LOuP2duw3
+         jBWsJUXf5G5QD97qJYOVf94+6I8zAf6Kjs/44MliTBBO32RNXtK4/r3dBofgciGbe8QE
+         SxV5NF2t6gST7CU54fPUkNo6J/j4FdB+GAzS28lB68Tuxnk8YBEmAyq7a5SL3ZW5hPga
+         H+nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794022893; x=1794627693;
+        d=1e100.net; s=20260707; t=1794022900; x=1794627700;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vVqsDKq+IateAeQjTGq3ovtOBLwcp1pUpF9ZdLgni1A=;
-        b=x8mzFuh15f9AGi1QoAhhHi4So9FhvM5DX8HECgOATq1kYxffn9Q6vxqFDNf2OLosCQ
-         W+Cqsfb7miS1qWu65BVBoMr18BPcrAIgtAJaH1Tt37gijZQ5tnOjhhCgCj+357EtVuC+
-         BtMrVwqMmvsSCaEusBoWdiMv/i/DHRQErCCm8nqzQ4JgxTLCVmS7E0nlHv7IamyID/Xu
-         jJdIGjkG46Q5fuT2QhvUa9A7i4LhPDKqqW+JWb2S7g/RtwEdYh15ufBn71CbljuWSrgD
-         vLwJ3fvgmhZPj7zIHyoResTqfRILjtTj1rmaY2LJr8DOZKOzRPtg33D6b0QaxJDd+hWV
-         PDdw==
-X-Gm-Message-State: APuU4Z9B5ZGDsSNkYHQ0lwHkaw1VGOd4kVUgd705CY5jE+n7mGbBP5r8
-	cjAs1b1vmi87HjczpTFbBfqunp28mbAE8hf2G+FjNpIyz40xnvj5dsbbgJ+LMQ==
-X-Gm-Gg: AYBFou1BpFOlWRF/HYX1IZWSx2mPWfASuyuVr+D23DR1JEbXfcfjJk0cQrq13mE+z8y
-	8ba7OWE8g9rNps9e1BUBW/zWPzf3x3rodCCyI09rlkTnuPn8x2d/pbzlZpkaHQ2lDLqjoEBlqIA
-	Hg68IfBB0XBrRd1hP1WkYWIfwDWGhpz/xzJQAD0iBGa5xmAz9WU8oyJKJZX4rJyCDLihlM21+5Y
-	I7QUGKMexVqUmlp1d1gO8Sc0W/NiW+9ZoYTdctnUSeAb3xNUvkC+wgaZJ0K6pbkioQ52mw/1ei+
-	ELb8nyH5XzxGZ+FRCsptwDe1D5ub9CJrl8JxIqU4ERsTiE+LlEdfmVoqeSDy3U9OHfRITTXXzeI
-	BqSU58k/6joGtITMb9tCDHNW5x6C3+2bYwyUXu1CNHqc5+Y5u7JeOVYoUdHcG8wpX0dEL3uN4iP
-	Y6nrrBssDgjJ0fPZXGvCfEb5wNfTnEL1fgFnaPuzBn7N4WXCPvSwXfMinjPfZZqRzK46bvyH0nR
-	OaeaajDsJN316lfl6wuViHWusr1CsRBdl6J4LGJsj4DNXay8pmkG7m9QWr4Qnpzxmle1wlyENdw
-	pqefzaHg4/2NSls0mqQWHLverhkWPUBUWS984fHyQ5KanTw7sZHIbpyq3OTPt/SW+aCm2BN7Gii
-	9aJfhEKfDEMz4CjWO4uj/9CTJ4iMX74G+JTXWS9/mNgnE/WxwnRk7BZiN3csaqkDrS1RpBFceHh
-	/xDlsLLbeXm89I1Rs9Qpy3
-X-Received: by 2002:a17:90b:5107:b0:3ad:8a14:bc73 with SMTP id 98e67ed59e1d1-3b0db6e8f4fmr4136381a91.50.1794022893503;
-        Fri, 06 Nov 2026 19:41:33 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b0fc23b547sm1267041a91.0.2026.11.06.19.41.32
+        bh=n9+L363wjpVGEQ+6oxIr0eZhtQwT8+ovBDPJGqXsaKM=;
+        b=WsaycazSf7g6lYu610ikTaYwV6J6TjTEMBbEE2ZK0iRyjhpw9REAjpvha/7H1dV/Uz
+         AE/8oTeh//dXWLk9tkIvvRXlAnfMNFSL6LRsX6dLlX7xx0QHwMUedtFWfFCe7ySsJHMj
+         80uQKkUDxO9aVcxRU0EWyDubHSnA/g8x9SCL+41m/NXOBpTc00LcjpPfEdIkHJ4dBxZv
+         SQF63KBuyTyLgR2UlnwSDhjaW1lFW/iraNIzS6Q15LAsOobFqpiMMeC/Ivm79NxiWCUy
+         zQ9t4tQYxMR34ULCMh0n9PUWkZNcusJwa1OWAbekS1zXtKHAYEeuVX33fDBUj/b1BjWv
+         U7gw==
+X-Gm-Message-State: APuU4Z8NJuuN1ygwO/NMleMWUQI90iLJOyHwKl0qw6ajkVaoe8UBgJPy
+	E8eZlf8SG28LZ6jYoIDvMbPs7Dpf1lIRQT0W8aO1yLO9p67xj9r+C4YpOlrHPg==
+X-Gm-Gg: AYBFou3UibsiYoBE5nb2BUzbmdMHoXVv4/rdTZzNedviLuUin2cSnOS+REnSkBriwmQ
+	IGgt7c33yikeHM7qqIXqC/aCdxBRkgJUVDkBKiNsyLAbLM4WRf8oqBziNx0LAlIjAMtwPPYG0+a
+	L7kBVoTk4GDmYM7HR9NjoGTYqsU207hi9Ylo609DTyq2CB0yEFgD7X9tTRhgwoSx3lY87+gDEjk
+	5hUA9xQIN2AcW0PagtE8So8eVY//h4UuxoNbQITJnvTXD9On5Q2uiiVKfNcYG+JWPZoJe7GrJoP
+	ubBWk1aXEIIakvKzF1DzHXWZtFIy9bT5iE/06IJ3uH0xHic2ZI3q+nQTQE//whQ8P0gWvSY5mee
+	1yc8m7JaLJ234+LZnUZDpuusUAR0WeH69eAysx3s3j8QKfOKo8vtoPtwm8pSDnXraj1/Gltf0Oi
+	94FO9gVm5Fsgg4UgAK0gcZQPUSdf2qdRvd3seCkFoNqNsSb2ycJ8kIN3V3i6a3QWe4xBk2/3dbT
+	2gPumxDsJ5hY/tGKZooblIxhXIwQmTjcIIPGvIyhTe/PoI1cB6a8mfZuzkjeCvQwpsV2Vljrn9e
+	DXW30RPALZ4vIR3WSbBRytT1Sa5aaZZhhkY7sHmMxNH1XB3bfj+PBJQE01LJrbsDrPkIV4wPKh3
+	dknP79G7QJNzTjH7MQBfzl0ECqQJcOkUDVW/m3n6yxyNjnt6+XjnxYW7a7YAXQi9kzAdybZpTvA
+	yCMjweGjPZ8hs+e8D7gGs=
+X-Received: by 2002:a17:90b:1d05:b0:3ac:96a3:77d5 with SMTP id 98e67ed59e1d1-3b0db70ac05mr3684933a91.36.1794022899349;
+        Fri, 06 Nov 2026 19:41:39 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1057c3db1sm1542957a91.4.2026.11.06.19.41.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2026 19:41:32 -0800 (PST)
+        Fri, 06 Nov 2026 19:41:39 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v4 35/46] bpf: Allow tail calls and LD_ABS in subprogs that return void
-Date: Sat,  7 Nov 2026 03:37:43 +0000
-Message-ID: <20261107033758.1547725-36-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v4 36/46] bpf: A part of a pointer that is spilled is a number
+Date: Sat,  7 Nov 2026 03:37:44 +0000
+Message-ID: <20261107033758.1547725-37-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
 References: <20261107033758.1547725-1-alexei.starovoitov@gmail.com>
@@ -104,118 +104,97 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-  static __noinline int subprog_tail(struct __sk_buff *skb)
-  {
-          bpf_tail_call_static(skb, &jmp_table, 0);
-          return 0;
-  }
+xdp->data is a u32 in C and a pointer to the packet for the verifier.
+test_dynptr_copy_xdp_overlap() of dynptr_success.c makes a length of it:
 
-LLVM 23 writes the signature that a function has after optimization
-into BTF. The callers know the constant, nobody reads r0, the function
-returns 'void' there, and the prog is rejected before the first insn is
-looked at:
+  void *data_end = (void *)(long)xdp->data_end;
+  void *data = (void *)(long)xdp->data;
+  __u32 off = data_end - data - 1000;
 
-  tail_call is only allowed in functions that return 'int'.
+  if (fill_xdp(&ptr, off, 1300)) ...
+  err = bpf_dynptr_copy(&ptr, off + 100, &ptr, off, 1200);
+  if (check_xdp(&ptr, off + 100, 1200, off)) ...
 
-Commit be1d838b88e4 ("selftests/bpf: Keep int return type for tailcall
-subprogs") hides the constant from the compiler with barrier_var() and
-__sink(). Without them 6 progs of tailcall_bpf2bpf2.c,
-tailcall_bpf2bpf_hierarchy[123].c, tailcall_callback.c and
-tracing_stack_arg_tailcall_tgt.c are rejected. Everybody else who has
-a tail call in a subprog has to find the same trick.
+fill_xdp() and check_xdp() are inlined loops. With plain
+'for (i = 0; i < n; i++)' in place of their bpf_for() no register is left
+for off. The compiler keeps the u32 that it loaded on the stack and
+subtracts once more behind the first loop:
 
-The rule is from commit 09b28d76eac4 ("bpf: Add abnormal return
-checks."). A tail call that is taken and LD_ABS that fails return to
-the caller with a number in r0. The verifier did not look at that
-return, so the type of the function had to promise a number.
-Now it does look: check_helper_call() goes back to the caller with an
-unknown r0, check_ld_abs() with 0, and r0 is not set behind the call of
-a global function that returns void. A caller that reads r0 is checked
-with what is there:
+  0: r7 = *(u32 *)(r1 +0)          ; R7=pkt(r=0)
+  8: *(u32 *)(r10 -48) = r7
+  invalid size of register spill
 
-  call void_subprog_tail_call      ; r0 = 1 if the tail call is not taken
-  if r0 == 1 goto +1
-  r0 = r9                          ; R9 !read_ok
+No loop is looked at. The three test_dynptr_copy_xdp_overlap*() progs are
+rejected like that, with clang 18 and with today's clang.
 
-So let 'void' through. A function that returns a pointer or a struct is
-refused as before.
+With CAP_PERFMON the prog may see the value of a pointer. It can store
+4 bytes of it into a map value, or shift it, and has a number. The stack
+is the only place that refuses. Treat the store like a store of any
+other data: the bytes are STACK_MISC, what was spilled in the slot is
+gone. Whatever is filled from the slot is a number, also when it has the
+value of the pointer:
 
-Two tests of verifier_ld_ind pin the rule for void. They load now.
+  *(u32 *)(r10 - 8) = r1
+  r1 >>= 32
+  *(u32 *)(r10 - 4) = r1
+  r0 = *(u64 *)(r10 - 8)
+  r0 = *(u32 *)(r0 + 0)            ; R0 invalid mem access 'scalar'
+
+Nothing changes without CAP_PERFMON.
+
+dynptr/slice_buf_narrow_spill stores 4 bytes of a slice into the buffer
+of the slice. It is rejected by the next insn, which reads through the
+slice. Update the expected message.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/check_btf.c                           | 10 +++++++---
- .../selftests/bpf/progs/verifier_ld_ind.c        | 16 ++++++++--------
- 2 files changed, 15 insertions(+), 11 deletions(-)
+ kernel/bpf/verifier.c                           | 9 +++++++--
+ tools/testing/selftests/bpf/progs/dynptr_fail.c | 5 ++---
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/check_btf.c b/kernel/bpf/check_btf.c
-index 4c1ed842f661..8a3f2421331e 100644
---- a/kernel/bpf/check_btf.c
-+++ b/kernel/bpf/check_btf.c
-@@ -183,15 +183,19 @@ static int check_btf_func(struct bpf_verifier_env *env,
- 		/* Already checked func_proto */
- 		func_proto = btf_type_by_id(btf, type->type);
- 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index afb5b9dd18b4..8dff321ea723 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3798,8 +3798,13 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 		__mark_reg_known(tmp_reg, insn->imm);
+ 		tmp_reg->type = SCALAR_VALUE;
+ 		save_register_state(env, state, spi, tmp_reg, size);
+-	} else if (reg && is_pointer_regtype(reg->type)) {
+-		/* register containing pointer is being spilled into stack */
++	} else if (reg && is_pointer_regtype(reg->type) &&
++		   (size == BPF_REG_SIZE || !env->allow_ptr_leaks)) {
 +		/*
-+		 * LD_ABS that fails and a tail call that is taken return to the caller
-+		 * with a number in r0, whatever the type is. 'void' says nothing about r0.
++		 * register containing pointer is being spilled into stack.
++		 * A part of it is a number, which is fine when the program
++		 * may see values of pointers anyway.
 +		 */
- 		ret_type = btf_type_skip_modifiers(btf, func_proto->type, NULL);
--		scalar_return =
-+		scalar_return = btf_type_is_void(ret_type) ||
- 			btf_type_is_small_int(ret_type) || btf_is_any_enum(ret_type);
- 		if (i && !scalar_return && env->subprog_info[i].has_ld_abs) {
--			verbose(env, "LD_ABS is only allowed in functions that return 'int'.\n");
-+			verbose(env, "LD_ABS is only allowed in functions that return 'int' or 'void'.\n");
- 			goto err_free;
- 		}
- 		if (i && !scalar_return && env->subprog_info[i].has_tail_call) {
--			verbose(env, "tail_call is only allowed in functions that return 'int'.\n");
-+			verbose(env, "tail_call is only allowed in functions that return 'int' or 'void'.\n");
- 			goto err_free;
- 		}
+ 		if (size != BPF_REG_SIZE) {
+ 			verbose_linfo(env, insn_idx, "; ");
+ 			verbose(env, "invalid size of register spill\n");
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+index 3770ffdeaaaa..7f8a38c37d9e 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -1343,7 +1343,6 @@ __naked int name(void)					\
  
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
-index 32989f981fb6..b31a5e558409 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
-@@ -291,8 +291,8 @@ int ld_ind_global_subprog_ok(struct __sk_buff *skb)
- }
+ /* Not in the line of SLICE_BUF_TEST(): the log of the verifier has a copy of that line */
+ #define SLICE_BUF_INVALID __failure __msg("R7 invalid mem access 'scalar'")
+-#define SLICE_BUF_POINTER __failure __msg("invalid size of register spill")
  
- /*
-- * ld_{abs,ind} in subprogs require scalar (int) return type in BTF.
-- * A test with void return must be rejected.
-+ * ld_{abs,ind} in subprogs require scalar (int) or void return type in BTF.
-+ * The failure return is modeled for a void subprog too.
-  */
- __naked __noinline __used
- static void ldabs_void_subprog(void)
-@@ -308,9 +308,9 @@ static void ldabs_void_subprog(void)
- }
+ SLICE_BUF_TEST(slice_buf_first_byte, SLICE_BUF_INVALID,
+ 	SLICE_BUF(12, 4)
+@@ -1375,8 +1374,8 @@ SLICE_BUF_TEST(slice_buf_var_off, SLICE_BUF_INVALID,
+ 	SLICE_BUF_CHECK
+ 	"*(u64 *)(r10 - 8) = 0;")
  
- SEC("socket")
--__description("ld_abs: reject void return subprog")
--__failure __msg("LD_ABS is only allowed in functions that return 'int'")
--__naked void ld_abs_void_subprog_reject(void)
-+__description("ld_abs: void return subprog")
-+__success
-+__naked void ld_abs_void_subprog(void)
- {
- 	asm volatile (
- 	"call ldabs_void_subprog;"
-@@ -334,9 +334,9 @@ static void ldind_void_subprog(void)
- }
+-/* the slice is a pointer when it is stored to its buffer, and invalid after that */
+-SLICE_BUF_TEST(slice_buf_narrow_spill, SLICE_BUF_POINTER,
++/* the slice is a pointer when a part of it is stored to its buffer, and invalid after that */
++SLICE_BUF_TEST(slice_buf_narrow_spill, SLICE_BUF_INVALID,
+ 	SLICE_BUF(8, 8)
+ 	"*(u32 *)(r10 - 8) = r7;")
  
- SEC("socket")
--__description("ld_ind: reject void return subprog")
--__failure __msg("LD_ABS is only allowed in functions that return 'int'")
--__naked void ld_ind_void_subprog_reject(void)
-+__description("ld_ind: void return subprog")
-+__success
-+__naked void ld_ind_void_subprog(void)
- {
- 	asm volatile (
- 	"call ldind_void_subprog;"
 -- 
 2.55.0
 
