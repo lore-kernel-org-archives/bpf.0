@@ -1,80 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794084133;
-	b=QhvuhvshrTL+oJqEwDjvFYoy5N5D1us+K6SlqIwUc3B8DA1f5JKM3gkVWCEn/Xlt7rcD
-	 cLDdgmblvgFZNBbeMpdvu/hIJlElBxVz9kpxtZ7qlupzmASiBbG9bNU0wnCTpM/cVplSZ
-	 ql4YCAEKVbgxVqQe4HJdRbySqRCzdBcHrVNlL2gRWq+Gt+nCt17NFdn7eL+P8yRTAFqk9
-	 xaseRpi6wvcWzyDwwipxRvhwU0f8Cc0skFwaPStHXxeDCAyPR0xKIUu+uOyk485vsOO/I
-	 ZIwTc+Qn52LaeyxC/ITTsfnVuKyqQoYYazJemTvRK/hpHhPlUTMFOTxNkyV0VjbGqHw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794084133;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=vt9E+5gU7NQ+Wi6z2HfmB+6KsnzMwitmxcnzRralzow=;
-	b=K8Up2qhvAWN6iqi+8zLohCs0N7EStequwm2WhLeqCvRHIH3JFYOYXGLLlnwZehQc1ZnR
-	 d/qAU2cOjltseNaiTE87mxguZdqoG1UMuM29rKYBFCoa70+MHTngX78+bCsGJdjqQtL4b
-	 lWyeQRPyXF8BbrxjQ9CSYefsS+1YoiBKC3WkVW4EvkuqEBFobSP8W3WI2rW/xsQ+3N78q
-	 JlELn9ECrvZqpMBw0RIgU9hU1u0SoFe8CKo2IJZQa9w3BgKkXHbehdlVwYrkgsoGb3HOA
-	 zneznpffKSwauq4VivCLz941Tj/CQD5Gz7QGSBEE5xSHxfM3SYB0/PAmsv9Es8Gl9lA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QdgeqcGm;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.49
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794087143;
+	b=DYw8CkV7d2TOgiZe2DKvqjQpQWEEs14QFvy/K7/7gla10rw7CjKGBUeyvdgTTzxmXCuD
+	 QcQIiP3QOilFxLeDd+AweOqaHskZPj5tSM4zoK7VP566zISOdBdMBZAzvWbYlMR/QbwRF
+	 mZx8Qoi8Yeqc31soy6DEGaLzozyqdlJZLKuMWzCrV/ehR+6lioZwbFi7znJEOBD5hLa0q
+	 b/JnjJaXdY90t9hUXJnMlmNbAOyuQSdn7n5/VpTmUkFOLJXGSWsPoNwKXq/CV+ksqTJuE
+	 vu+vwroYgpnUYwJVHVk5WAlWAAGmX2pLRP85O13vJ6OBCLJLuS2bKKTrnqAfakg6JzA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794087143;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=fAClDdVa5D4N7PoudPRt5yaNj6K+a1j7ORktYRxzeHM=;
+	b=pCioUML0XfSObPADwRCiwfnnZPwXkJB79CXDRkhI42APgCWdcXOnDKaCfzhbHBGgSIoa
+	 n6WBpV2oBvFnlVY1Bcr9WEnNl2+HbE9BH1bvVAmVom2wCKfu+kflCULpg8X7AixPzloQd
+	 3asNnA1WgqUYmKUbB9Ef9xeM2PVTa4hBHCLu8Wa7VH1Fw183d2rHLCwkppbYTeaZofmhC
+	 0LFeCcczDwCI45jCsbXzQ/jhaW00xp3dR/DlRDAZ6CLPffIgqp8rLsB8mWpWB2m4N8URY
+	 BVoQoT/HLkuUVaVj/zuquEpmju64HF+afhQO3ntLqLZV2QTUWiLN77fVimhOMGvbxIQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=sentinelone.com;
+	spf=pass smtp.mailfrom=sentinelone.com;
+	dkim=pass header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=FE4M6Z2d;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.49
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A167606A32E;
-	Sat,  7 Nov 2026 20:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C56A606A32C
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 21:32:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9C56A606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sentinelone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sentinelone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QdgeqcGm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10651F0089F;
-	Sat,  7 Nov 2026 20:42:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794084133;
-	bh=vt9E+5gU7NQ+Wi6z2HfmB+6KsnzMwitmxcnzRralzow=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=QdgeqcGm7aLjvMwhDXbnVrXyrjxTJoRQkqRIsDjcoduMOTEL8GCNOFQSiDbwYCCXA
-	 bdiOlqUv4nmV7s8TUKhpFnqxqC6DSKCS1JUo3diwp71Rk0vlgv1Nh8kEE+kDsic1tz
-	 A+Jb5V3672/95emWmClD9muYAGY/rWdyjIttmwrc+GYxS6MurZyD0azH7QdvjXiOYE
-	 GXdd+qElL0kyHa09o4qK64HoO7MAQfsV8IpmBzQ6+Res9Ewlsf0DCXIDsQqqLpTLm2
-	 O/+ktjWajqgRw+TV+MG2JVz5d1/6q6chhmKGj+4z5BEqZwVpkAS+1MglhWGlk1QczL
-	 LwZyEhkdgqX/A==
-Date: Sat, 7 Nov 2026 12:42:10 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
-	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
-	keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ignat Korchagin <ignat@linux.win>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [PATCH v6 0/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <20261107204210.GG6049@quark>
-References: <20261107195605.3929659-1-jarkko@kernel.org>
- <au-FkAtC4Gcw7Bkb@kernel.org>
+	dkim=pass (2048-bit key) header.d=sentinelone.com header.i=@sentinelone.com header.a=rsa-sha256 header.s=google header.b=FE4M6Z2d
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3afc7b51abfso6910a91.2
+        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 13:32:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794087142; cv=none;
+        d=google.com; s=arc-20260327;
+        b=RkpaKhmmFTj8vezVL4UOKyHcNz8XOuLTI79IuI+4G4Md0S9aKavnoZOd25jnI/F3mm
+         DhFQFFKgpSMzLahDIk4dZsTwHDVyPKcw0jfwwp2Ot7f03+ouUCpEOHRzog5z8BO+1h5+
+         M9fHHUM13uUuiikWcGePEM3hN0eGxxVYg7zMI4znL/hGdw+TWWS7iQwwPRAw8xQF+ptA
+         39qNrD+VjyVl6f8MaTnlo6jaU92RoCnwm0acUBR6txNAIvQ0ROcviE0CfQtWsTVgANNx
+         FHnorYchizdpk+nUO8DRStocKlAPMFDzw5B7YOoLd7QwKb6smUI1mNZj3CILAgWxegwJ
+         VJAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=fAClDdVa5D4N7PoudPRt5yaNj6K+a1j7ORktYRxzeHM=;
+        fh=0Mf5Pp6OLq76vbj3snaqXv1QPoRArMhKaR2Fpmwl6Vw=;
+        b=Djw8UJ0N8KkwzkcVQ0eoHjn4O2bO4dxsOE+POuJkiSblQMieCf8WKOh80IRX1hwBOn
+         bGLCu3y9G5c/XoUeEQYCKBk/fvS8FxX+ZyAZ/Z+Kl9cVKjlUZJChVEDXH41pA3E+j4JH
+         pVRfTK0bQE9F+ekEPz66F4m4+IYj08xXnjRM4u+NwIZiTncviaApyq2UiZLp0RlONfLT
+         uDRh3GM+LZVFUAckCqjHF1B+lCNyTc64zdbTweF77WSXnHiWkVoGWjyYMD4rAzlzoF7G
+         3NSzNQao///Yur5MHjGAFYKTmFZ81TdRnNYlInXVk0VNNaGjW3T2TiFFQqZCuS3K8Ihu
+         /f6g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sentinelone.com; s=google; t=1794087142; x=1794691942; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fAClDdVa5D4N7PoudPRt5yaNj6K+a1j7ORktYRxzeHM=;
+        b=FE4M6Z2dKnhEWsud6rEQ6kWuD+HailDfVd/JSa0GXgCdcPn/l2WszEIk9XGPSqeT0q
+         GbQ8fn0qxiCAjHSNLQ8UEr47fIuqLuWD9yVjm1xLIt14/XsoVbxZC0+NWjeXjUu9SxyH
+         6eQKrG1KNgkAACTm8Bcor7Ml+W5azJissuwxAA/4bqBbsvRDWR8viHkGdrYgmiJ1kzwg
+         xl84zqI8urOELJQ9lWk/bskTrvjGrog+67v8Y2Mtp+BRPny0bsTNNQSG7QSZeVkfxRbI
+         9oDRmImLfydYBBDo4Ndiptq+f+JzZzTM9nGBU1/WVhium6lA7JGNpiDMmPpzKWwDIurI
+         iGzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794087142; x=1794691942;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=fAClDdVa5D4N7PoudPRt5yaNj6K+a1j7ORktYRxzeHM=;
+        b=czRqK3hi6/DtKYhf4el7Em1cRyd0tNtzuympDnet6CkRp32fhu2lFi5/HV8Y3QhQHD
+         qjktcmBF4vUoxwY4Xc3spPUxQ8tW9xOK1dOgE8tanqPUmMz6A7CRxFUscY8um8IwTA8z
+         vsHtuSPANnvse3H9fcZg46x9UaqykGIbmDMpGxgs3pIPgP6aq5cDyNnCB0ATOCfB3Ol3
+         oGZzw+DH86HT5pJ5qhB5R7Hxgy/huN58tL6ORwr0dWL9O3R32rHqPTOmRbJ4kh0Tbe+y
+         RRrNEq1b4MxQfsWowD29+wB7eRYi61MOq1+eeI0ZTX8URzYFVHSXS9p5D/I7y6P5IodV
+         CCXA==
+X-Forwarded-Encrypted: i=1; AL+hErEDSTG4etTW//NDkq19aHHGMKifH+hqC45MVtrcErGe5EN+MH8xcksM0XcvRKrEohm8fzs=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/zzpLYJ7TIcyAEks/9vTK6HbYYbGfjkT4mMRZHmCOpNEe6Z6Sz
+	d2JT68LsX+CU/vRbsUycVs1kUywHnqta5AUoPl4UjcQsFS6GxDpG3Grop7PVqGdGDBrvPHBOmEp
+	lrSasP7DivR/+J8gNn1hego6GmwzM3C8ClT/H1Z/7dA==
+X-Gm-Gg: AYBFou2vVwZVNo/Oqktt1xDLj4Nw21rNkVkGnaS8TRKpBwKdk2Ti9JFuHX4HSjJdR5H
+	LtyP53iN/IijJb4U6ab9IZhNu360fyPekhPJJliHba7b9BlY88EfuzjFVaVQCmINHaIOkcyw+w8
+	YpnUQc097lXHeQSZdFysZWOQMQVSQzsTkPwHFdxT7Ab7H44hmfY+oHjsHiQ6r4+bKWmFZyWUzGp
+	P4vvdBU5VX1GUD6yIFcqjEL6Ye05pokV2jLhr1Ty5OzBhIKkDDUawMP3xXtvYATtz+xATdhxYyG
+	dgkZ79AxEmfqnP0pWnGNwj17539Hb2laWXO9SD8AYv5kjpX9C45YEJvC4RieoZhzz9jINVc/Gk2
+	qhBP3ftaH4/8n0uICmJ6pIwk/uepfC8xZDg==
+X-Received: by 2002:a17:90b:388d:b0:3a8:9db2:a59 with SMTP id
+ 98e67ed59e1d1-3b0db013fbamr10127781a91.0.1794087141883; Sat, 07 Nov 2026
+ 13:32:21 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,74 +103,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <au-FkAtC4Gcw7Bkb@kernel.org>
+References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
+ <DMIIV9CE0PN4.309YUGIXQUZNF@gmail.com> <e3f63654-0f7c-462b-b58d-05f3164fe340@linux.dev>
+ <DMM2G9OX9ACV.231CHJEPK0OHU@gmail.com> <CAPnbwjpQBR-KHwOMG2bo1uhdp22ZW_O5sUj3=vjazVu=Rdnb7A@mail.gmail.com>
+ <DMN0RC27TJRM.3KUSPS9QTBV4G@gmail.com> <CAPnbwjrX-ywbcgNQSZKE2jiggEOSVCRVw9OLfaksihiVSCoqvw@mail.gmail.com>
+ <CAEf4Bza0XDMTxxZeukwRXjvoOOruY49q66xBXnYnuncbeo_Oiw@mail.gmail.com>
+In-Reply-To: <CAEf4Bza0XDMTxxZeukwRXjvoOOruY49q66xBXnYnuncbeo_Oiw@mail.gmail.com>
+From: Mike Bazov <mikeba@sentinelone.com>
+Date: Sat, 7 Nov 2026 23:32:27 +0200
+X-Gm-Features: AclHuK8VaELpN_xVEw5v6aYLhDqxLEvH5z7CzGWzlbUdtSKDEKr2aOOzYpF-uoo
+Message-ID: <CAPnbwjpZRmzJFXDa=thc188ZNru2xCBrCsc1WO5mNDzRRQZJBg@mail.gmail.com>
+Subject: Re: [EXT.MSG] Re: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption
+ cause false recursion drops in trampoline progs
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, JP Kobryn <jp.kobryn@linux.dev>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	peterz@infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Nov 07, 2026 at 10:09:52PM +0200, Jarkko Sakkinen wrote:
-> On Sat, Nov 07, 2026 at 09:56:01PM +0200, Jarkko Sakkinen wrote:
-> > The keyrings subsystem is the sole user of assoc_array. It has over 1700
-> > lines of code, no test suite, and a long history of bugs, with LLMs now
-> > finding more.
-> > 
-> > This unfortunate outcome has evolved over time by large from the shortage
-> > of in-kernel callers, time bandwidth and 3rd party contributors.
-> > 
-> > What the keyrings subsystem needs is just a generic key-value store, which
-> > performs well with sparse key sets. Replace assoc_array with an
-> > rhashtable-backed keyring index and remove assoc_array from the kernel.
-> 
-> Sashiko: https://sashiko.dev/#/patchset/20261107195605.3929659-1-jarkko%40kernel.org
-> 
-> Not addressing this as only one patch changed and the change was
-> exactly:
-> 
-> diff --git a/security/keys/keyring.c b/security/keys/keyring.c
-> index 772fa0e35f9d..6761c6801edc 100644
-> --- a/security/keys/keyring.c
-> +++ b/security/keys/keyring.c
-> @@ -12,7 +12,6 @@
->  #include <linux/security.h>
->  #include <linux/seq_file.h>
->  #include <linux/err.h>
-> -#include <linux/delay.h>
->  #include <linux/jhash.h>
->  #include <linux/user_namespace.h>
->  #include <linux/nsproxy.h>
-> @@ -101,6 +100,7 @@ static const struct rhashtable_params keyring_link_params = {
->         .min_size               = 4,
->         .nelem_hint             = 3,
->         .automatic_shrinking    = true,
-> +       .insecure_elasticity    = true,
->  };
-> 
->  static struct keyring_index *keyring_index_locked(const struct key *keyring)
-> @@ -1225,12 +1225,8 @@ int __key_link_begin(struct key *keyring,
->                 if (ret < 0)
->                         goto error;
-> 
-> -               do {
-> -                       ret = rhashtable_insert_fast(&links->ht, &link->node,
-> -                                                    keyring_link_params);
-> -                       if (ret == -EBUSY)
-> -                               fsleep(100);
-> -               } while (ret == -EBUSY);
-> +               ret = rhashtable_insert_fast(&links->ht, &link->node,
-> +                                            keyring_link_params);
->                 if (ret < 0) {
->                         key_payload_reserve(keyring,
->                                             keyring->datalen - KEYQUOTA_LINK_BYTES);
-> 
-> So I don't think there are any real issue with the patch set, except I
-> will need to rebase the commits to the latest mainline.
+On Fri, Nov 6, 2026 at 2:08 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+> hm, funny how AI figured out run_ctx, but didn't figure out that we
+> already chain them and we do have that pointer in current->bpf_ctx...
 
-It looks good to me now too, but it would be good to get a Sashiko run
-on the latest version.  Sashiko hasn't run since v3, as it failed to
-apply the series.  You should base the series on a commit in either
-mainline or linux-next, and pass the '--base' option to 'git
-format-patch' so it adds a 'base-commit' line.
+right, good point, v2 would walk the existing current->bpf_ctx chain instead of
+adding a new task_struct pointer
 
-(The only reason I've been able to apply it myself for review is that I
-went out of my way to find your keys-rhashtable branch in git.)
+> That's all to say that I don't think there is a need to keep
+> guarantees. If per-cpu map is used naively today it works ok most of
+> the time, but not all of the time.
 
-- Eric
+Alexei was concerned about existing progs relying on it.
+
+> Perhaps we should just get rid of that whole per-program recursion
+> protection and just make sure that a) BPF program can protect itself,
+> if necessary
+
+If we drop the recursion check and go with a), protection is up to
+each bpf program author, so wouldn't a careless one be able to panic the
+kernel? A prog as simple as this one triggers itself:
+
+struct {
+      __uint(type, BPF_MAP_TYPE_HASH);
+      __uint(max_entries, 1);
+      __type(key, int);
+      __type(value, long);
+} m SEC(".maps");
+
+SEC("fentry/htab_map_delete_elem")
+int on_delete(__u64 *ctx)
+{
+      int k = 0;
+
+      if ((void *)ctx[0] == (void *)&m)
+              bpf_map_delete_elem(&m, &k);
+      return 0;
+}
+
+Without the check it would keep going until the stack overflows
+
+Mike
