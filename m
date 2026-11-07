@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794025983;
-	b=45xrDYpdBpH18/T9Wjbp7WA7DgVpywjZ431bTVi+NswCVoSEg6mGMhUUthu++qZUxxy2
-	 IGJwjfeVHbIw93qImvjx44i0iLj3/vxnk6mHVH/fmOSsHQWKx4ZJyNBhhljI5gmz5ebhJ
-	 YmlRIyup9B4v/T8nYG8LRWBpB7npiIplk+5BMSX3/XmpVo0Em4pWANgdhyhJPfsKgCW7u
-	 3Bn73o7FtevEMEIJv9ABHDJFwmm4MOsLmxvkuZpekjH8W2bsvynNiVQU8J/h6VOo3Nhnf
-	 1G/8gPc0P7IZsl+KIm74r7bWnzKIuC1OcYr/pRl9e2Up0aa8hfYz3LpFnbtb0xq/H1Q==
+	t=1794025985;
+	b=txNkliZZuKVcC3R4HCDW0OqiqvPASdwyJaX2HPQTtZgj5+UPLLcaV4SroT91HQAVjjqt
+	 aoJUa/XM9aurj2LbVNzdG+rkQoRnmgmuuP0ZoR5roZRZvlgK3wtwbItQHkxDlIMPp98xg
+	 oWBZZDj4TFjraG47kSDeFHPPVhX+XChstbwKX40gKV9fmtA++UJHYowmiIGlP/DkYYHCQ
+	 Gz++qfojoqkiD2jDeYLExeSFTkR/Ot4uVnu6LwnZzr2kH9Zp/QXO/rRwSkBVmy2gkfY6K
+	 ZKD9XUw/x0Y1ueQxtNR0xhnNXM0dUk4eAl1GNyLYl+jMZGHbttZBdGQOmrqlxrlw6Gw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794025983;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794025985;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=wR0sCJ6o1ska6lY7mh4DqklMTifm5mPn+uw2Ndz+WlE=;
-	b=xFGMYtciDVA3JWF9QVoq83/WoMVWwduZZyRm8nDJ3PL8wCvOdrOTvr1mwOHB6VZzegwj
-	 7390kx5ajG5ETsAt7TBdPW4j296xkl0d4smEUrEWSWkE75WXmW4QYhbedzkk6CZFXpwpd
-	 o5ueDvEVjyx+h+zm9YGR3rU8G5958wc0qYiqB8dROS82yqIBAiGt+p9fc1ay+SIH2ol6q
-	 XvMhEgLXi+fPltX3AAUYyrBFbrH1yO2mKcVW9iQlZsfn8XgpUtCE0fbXV/8IpwbIs10jc
-	 QcwGuTOgqw29gsE8svZMn+qVPZKY1SjwbqjokHIRD35zaZJi3iHLOa3Cle/urhgSs/A==
+	bh=9kqEuqUnbPu02Bub1iYMi8hYFci1L9J2d80l8/bpoRo=;
+	b=XR+mP9jgmbeJpBhAB3N+5bZzADOwvhSdSeHL1cF31vZUZ0QF1JbSY/wIqc0PDMpiFbfi
+	 chCZtvBSqbP3ngL/oyGav66bLpF6a4Nba3p1v0n49ZdM3WsmSHZnyfWGvsUTA2ff8gr8P
+	 dxKX9pQuTc070tmvda2CeuKZc5J41ByAZ1AiNAfp3bUACKkV9c3UWk7o/s0ctF7JmatEY
+	 HNKQWb6SZiI1jc0qcF9ddSjcgc3GH+kZfxPdWCUlS/tjUrOojJON4ubmE8krCr0oXkXtO
+	 zy2PE5lCGCzvlWl8D7UrwmVz50sUkUJYSOkXuQTrABJOjoLAULbIydVldeATNMTg4ww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CqWfcFXo;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ceuj8HA4;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD381606A32C
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 04:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12199606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 04:33:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CqWfcFXo
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28FE51F0089F;
-	Sat,  7 Nov 2026 04:33:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ceuj8HA4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 702A41F0089F;
+	Sat,  7 Nov 2026 04:33:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794025982;
-	bh=wR0sCJ6o1ska6lY7mh4DqklMTifm5mPn+uw2Ndz+WlE=;
+	s=k20260515; t=1794025984;
+	bh=9kqEuqUnbPu02Bub1iYMi8hYFci1L9J2d80l8/bpoRo=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=CqWfcFXoBDpqh0x3Kla5w8Si7vdjSi59lqY2o+8SZYuOrDGCmxoANI7RPn18B6Ks3
-	 y1mXJXoIrYKusH9EfCN7lXwFHkSxazV30B4Le8TjvVNNyF/X1Q9Fz7nCh9/YLbPV2z
-	 MwTxxtq2NxbG1mAxRfwcJBJgNdmh/lgyTKwz/zyUbqxIZ92ptRtnm8UQLe05t6z8wC
-	 uQvSlf/SSD7kpdsvFSRRmCy5QAIQSJ0hCc2MsgBoauG8DtRHYRX1PaOALrORR9j1qb
-	 f+3H38c7S1AjTvjRa/SGxAwECVH12Nv+9EcFjbzi5GBOCiYDhCfiBsFiWXDHmedcZi
-	 VnPs5X0Q09Btg==
-Content-Type: multipart/mixed; boundary="===============3960911691898126970=="
+	b=Ceuj8HA47+EgOU11CrUP3JVzywDyRwpPx0fmJWg15FkrDcmDGLbdILEF5YJXV6DzK
+	 bKNpCKAkS25PDR9erpEaq6kcHQSuVPhPaDrGFihEyx2A0FUoN26wZDjBHTjYQlc6vf
+	 IcS+wlH++wmcxnAI0+B7Gm3q4FAbCD6rzN4dVBTBQtWVWmyOzsuGhUR//6veyMR9Od
+	 5SogF4sgIC9v1gn1DGR9a+z6C4q8sBDpaq+kVyiKGYuKFG/Z/1Gso6R1zuryCHdAXo
+	 +Hrv0GOFmuTmxNrw8ogeWmKw9/duU5Eq/udW6wIM7+d67H73sts9TN0hCite1Azebl
+	 wBgrun+rQQ90g==
+Content-Type: multipart/mixed; boundary="===============5145106238266065474=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,87 +49,259 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <a4c9be4f4465e947201813726ba6eeefc022ff1d8121d7e1d5daccc699e983a1@mail.kernel.org>
-In-Reply-To: <20261107033758.1547725-23-alexei.starovoitov@gmail.com>
-References: <20261107033758.1547725-23-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v4 22/46] bpf: Allow recursive subprogs
+Message-Id: <c8433390be7e9e39a545779f4c918dac491ab9cae03f807ecd4d4127940548a2@mail.kernel.org>
+In-Reply-To: <20261107033758.1547725-20-alexei.starovoitov@gmail.com>
+References: <20261107033758.1547725-20-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v4 19/46] bpf: Verify programs as a fixpoint over the control flow graph
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat,  7 Nov 2026 04:33:02 +0000 (UTC)
+Date: Sat,  7 Nov 2026 04:33:04 +0000 (UTC)
 
---===============3960911691898126970==
+--===============5145106238266065474==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Allow recursive subprogs
+> bpf: Verify programs as a fixpoint over the control flow graph
 
-TL;DR: The new liveness check for stack pointers passed between recursive
-subprogs may wrongly reject programs that loaded before, because provisional
-recursive marks from callx edges can be false cycles.
+TL;DR:
+- Unwind-exit as bail_insn may let verifier accept programs where caller sees
+  r0=0 after may_goto bail (possible NULL deref/OOB)
+- Callback reference-release rule may reject previously loadable programs
+- Loop-exit check may wrongly reject programs; offloaded loops possibly
+  rejected
 
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -2408,6 +2415,17 @@ static int analyze_subprog(struct bpf_verifier_env *env,
->  		if (!has_fp_args(callee_args))
->  			continue;
+> @@ -3456,13 +3479,23 @@ static int next_callx_callee(struct bpf_verifier_env *env, int caller, int from)
+>  static int check_unwind_insns(struct bpf_verifier_env *env)
+>  {
+>  	struct bpf_insn *insn = env->prog->insnsi;
+>  	bool seen = false;
+>  	int i;
 >  
-> +		/*
-> +		 * at_in[] is kept per subprog and the snapshot of the stack per call insn:
-> +		 * the walk must not enter a subprog that it has not left.
-> +		 */
-> +		if (env->subprog_info[subprog].recursive && env->subprog_info[callee].recursive) {
-> +			verbose(env, "recursive %s() passes a pointer to the stack to %s()\n",
-> +				bpf_subprog_name(env, subprog), bpf_subprog_name(env, callee));
-> +			err = -EINVAL;
-> +			goto out_free;
+> +	for (i = 0; i < env->subprog_cnt; i++)
+> +		env->subprog_info[i].bail_insn = -1;
+> +
+>  	for (i = 0; i < env->prog->len; i++, insn++) {
+> +		if (bpf_is_ldimm64(insn)) {
+> +			i++;
+> +			insn++;
+> +			continue;
+> +		}
+> +		if (insn->code == (BPF_JMP | BPF_EXIT))
+> +			bpf_find_containing_subprog(env, i)->bail_insn = i;
+>  		if (bpf_is_unwind_exit(insn)) {
+>  			bpf_find_containing_subprog(env, i)->can_unwind = true;
+>  			seen = true;
+>  		}
+>  		if (!bpf_is_unwind_goto(insn))
+>  			continue;
+
+Can bail_insn end up pointing at an unwind_exit here?  The test
+insn->code == (BPF_JMP | BPF_EXIT) also matches an unwind_exit, since
+bpf_is_unwind_exit() is the same code with src_reg == BPF_UNWIND_EXIT.
+
+push_budget_exit() later pushes a state to sub->bail_insn and sets
+branch->unwound = sub->bail_unwinds.  Nothing in this commit assigns
+bail_unwinds, so it is always false.  But when bail_insn is an unwind_exit,
+prepare_func_exit() unwinds anyway:
+
+    if (bpf_is_unwind_exit(&env->prog->insnsi[*insn_idx]) || state->unwound) {
+        ...
+        state->unwound = true;
+
+so the caller is verified only at the unwind_goto landing pad.
+
+The insns that are inserted after the main pass do something else.
+bpf_insert_loop_guards() -> append_budget_exit() -> budget_exit_insn()
+emits:
+
+    if (!sub->bail_unwinds)
+        return BPF_EXIT_INSN();
+
+That is a plain 'r0 = 0; exit'.  The subprog returns normally, unwind_goto
+emits no branch in the JIT, and the caller continues after the call with
+r0 = 0.  The verifier never checked that path with r0 = 0.
+
+Consider a static subprog whose last exit is an unwind_exit, with a loop
+whose header guard reaches code that reads a register the head does not
+set (the glob_match() case from the commit message).  check_loop_guard() ->
+guard_reads_unset_reg() sets guard_unset_reg, budget_can_unwind() returns
+true through or_exit, and push_budget_exit() is called.  If the normal
+exits return a non-NULL PTR_TO_MAP_VALUE and the caller dereferences r0
+right after 'call; unwind_goto', or return [1, N] and the caller uses
+r0 - 1 as an index, the program loads.  When may_goto runs out of budget
+the caller then dereferences NULL or accesses memory out of bounds.  This
+needs CAP_BPF and a JIT with unwind support.  The fall-through after
+unwind_goto is only a speculative path, and not followed at all when
+bypass_spec_v1 is set.
+
+The commit message says "A subprog that holds nothing is left with
+'r0 = 0; exit' then. Its caller is verified with 0."  Is that true for
+this case?
+
+If the unwind_exit is dead code for a caller that has no unwind_goto, the
+same state would instead get a spurious "unwind_exit, but no unwind_goto
+after the call" rejection.
+
+Would skipping unwind exits when choosing bail_insn, for example
+'insn->code == (BPF_JMP | BPF_EXIT) && !bpf_is_unwind_exit(insn)', keep the
+stand-in neutral whatever bail_unwinds says?  b9dc59a51bf3 ("bpf: Allow
+recursive subprogs") later sets bail_unwinds = can_unwind || ..., which
+makes the two agree again, but this commit and the next two
+(bc7d16f2f77e, 6a00b2a0a6a9) have the mismatch, which matters for
+bisection.  The same mismatch shows up in push_budget_exit() and in
+check_loop_guard() below, where a LEAVES_SUBPROG guard edge is verified as
+an unwind but emitted as a plain return.
+
+[ ... ]
+
+> @@ -12558,12 +12642,22 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+>  	if (callee->in_callback_fn) {
+>  		if (r0->type != SCALAR_VALUE) {
+>  			verbose(env, "R0 not a scalar value\n");
+>  			return -EACCES;
+>  		}
+>  
+> +		/* It's called any number of times: what it takes it has to release. */
+> +		for (i = callee->entry_refs; i < state->acquired_refs; i++) {
+> +			if (state->refs[i].type != REF_TYPE_PTR)
+> +				continue;
+> +			verbose(env, "Unreleased reference id=%d alloc_insn=%d\n",
+> +				state->refs[i].id, state->refs[i].insn_idx);
+> +			bpf_diag_leak(env, state->refs[i].id, state->refs[i].insn_idx, *insn_idx);
+> +			return -EINVAL;
 > +		}
 > +
+>  		/* we are going to rely on register's precise value */
+>  		err = mark_chain_precision(env, BPF_REG_0);
+>  		if (err)
+>  			return err;
 
-Can this reject programs that loaded before this commit?
+Is it intended to bring back the rule that a synchronous callback must
+release every REF_TYPE_PTR reference it acquires?  ae6e3a273f59 ("bpf:
+Drop special callback reference handling") removed that rule on purpose,
+because callbacks are verified as called an unknown number of times.
 
-bpf_compute_live_registers() runs after mark_recursive_subprogs(), but the
-recursive marks are only provisional at that point.  Since callx targets are
-not known before the main pass, mark_recursive_subprogs() treats every
-subprog that contains callx as calling every subprog whose address is taken:
+A program like this used to load:
 
-    for_each_set_bit(s, callx, cnt)
-        bitmap_or(calls + s * words, calls + s * words, taken, cnt);
+  static int cb(u32 i, struct ctx *c)
+  {
+      if (!c->t)
+          c->t = bpf_task_acquire(task);
+      return 0;
+  }
+  ...
+  bpf_loop(n, cb, &ctx, 0);
+  if (ctx.t)
+      bpf_task_release(ctx.t);
 
-The taken set includes plain bpf_loop() callbacks and every entry of a
-read-only function pointer table.  check_recursion() only drops the wrong
-marks after do_check_all(), which is too late for this check.
+On the iteration that acquires, refs[entry_refs] is the task reference, so
+the new loop rejects it with "Unreleased reference".
 
-For example:
+The fixpoint does not seem to need this rule for soundness.  States with
+different refs[] are never joined (refsafe() and join.c compare them), so
+a callback that leaks on every call still hits the state limits or the
+leak check at the main exit.
 
-    static int bar(void *p);                         /* only entry of a RO func table */
-    static int helper(int *p) { return tbl[0](p); }  /* callx, always calls bar */
-    static int cb(u64 i, void *ctx) { int x = 0; return helper(&x); }
-    prog: bpf_loop(1, cb, NULL, 0);
+The "What user space sees" list in the commit message does not mention
+this change in which programs are accepted.  Should the commit message say
+so, or should the check be narrowed?
 
-cb is in taken (pseudo_func) and helper contains callx, so the provisional
-graph has the cycle cb -> helper -> cb and both get recursive = true.
-analyze_subprog(cb) then sees a pseudo_call to helper with an FP-derived r1,
-which is live at helper's entry because callx reads r1-r5.  The load fails
-with "recursive cb() passes a pointer to the stack to helper()".
+[ ... ]
 
-The parent commit accepts this program, because sort_subprogs_topo() knew no
-callx edges before the main pass and the re-sort after it found no cycle.
+> @@ -21243,13 +21359,32 @@ static int loop_stack_push(struct bpf_verifier_env *env, bool *pushed)
+>  	if (!frame->loop_stack)
+>  		return -ENOMEM;
+>  	loop_stack = frame->loop_stack;
+>  
+>  	for (; num_missing; num_missing--, cnt++) {
+>  		h = missing_headers[num_missing - 1];
+> -		loop_stack[cnt] = (struct loop_stack_entry){ .loop_id = h };
+> +		/* wherever it is entered: a loop can have more than one entry */
+> +		if (!aux[h].loop->exits_cnt) {
+> +			verbose(env, "loop at insn %d never exits\n", h);
+> +			return -EINVAL;
+> +		}
 
-The check does not seem to be needed for the reason its comment gives.
-analyze_subprog() only follows bpf_pseudo_call edges and the constant
-callbacks of find_callback_subprog(), never callx, so a cycle that depends on
-a callx edge cannot make the walk re-enter a subprog and free
-info[subprog].at_in while it is in use.
+Can exits_cnt be zero for a loop that does have an exit?  struct bpf_loop
+documents that @exits can be incomplete:
 
-Would it work to test for a cycle in the graph that analyze_subprog()
-actually walks (pseudo_call plus sync callback edges) instead of using the
-provisional recursive marks?
+    /* @exits of a loop in this one is cut. Then @exits of this loop can
+       lack exits too. */
+    bool nested_exits_overflow;
+
+In the exit computation in kernel/bpf/loops.c, once the innermost loop of
+an insn has overflowed (more than MAX_LOOP_EXITS == 256 exits), later
+edges from that insn are not recorded for any loop:
+
+    iarray_for_each(s, succ) {
+        if (aux[iloop].loop->exits_overflow)
+            break;
+        ...
+        for (t = iloop; t >= 0 && t != sloop; t = aux[t].loop_header) {
+            ...
+            err = add_exit(aux[t].loop, i, s);
+
+So an outer 'for (;;)' loop that is left only from the body of a nested
+loop with more than 256 exits (a large switch, or a gotox whose shared
+jump table leaves the inner loop), where those jumps come after the
+overflow point, ends up with exits_cnt == 0 and nested_exits_overflow set.
+
+Such a loop can still be walked to its end by flow_try_walk(), or guarded
+at a dominating jump that leaves it, since flow_set_guard() uses loop
+membership and not @exits.  Before this check the program could load.  Now
+it is rejected the first time a state enters the loop, with a message that
+is not true.
+
+Should the check be skipped when @exits may be cut, for example
+'!aux[h].loop->exits_cnt && !aux[h].loop->nested_exits_overflow'?  The
+code at the end of the series (d39416384f5a) is the same, so no later
+commit changes this.
+
+[ ... ]
+
+> @@ -21627,59 +21710,238 @@ int bpf_flow_loop_enter(struct bpf_verifier_env *env, bool *backedge, bool *drop
+
+[ ... ]
+
+> +	if (!entry->guarded && !bpf_loop_walk_may_give_up(entry))
+> +		return 0;
+> +
+> +	/* the device runs the insns that the driver was given, without may_goto */
+> +	if (bpf_prog_is_offloaded(env->prog->aux)) {
+> +		verbose(env, "loop at insn %d has no known bound in an offloaded program\n", h);
+> +		return -EINVAL;
+> +	}
+
+Does this reject offloaded programs with a loop that the walk would have
+accepted?
+
+For a loop that SCEV does not count, flow_try_walk() sets entry->apart and
+entry->terminates and leaves entry->guarded at loop->guarded, which is
+false at first.  At this commit entry->counted is never set, so
+bpf_loop_walk_may_give_up() (apart && terminates && !counted) is true.
+The early return is not taken, and the offload check returns -EINVAL on
+the first trip, before the walk has decided anything.
+
+That contradicts the commit message ("counted, or walked to its end:
+nothing is added").  It is also a regression against the parent commit,
+where do_check() followed the paths of such a bounded loop and accepted
+the program, and NFP supports backward jumps.
+
+When the program is not offloaded, the edges pushed here are dropped by
+bpf_flow_guard_edge() while the loop has no may_goto.  For offloaded
+programs, would it be enough to reject once entry->guarded is set?
+flow_end_walk() copies loop->guarded into entry->guarded when a walk gives
+up, so a loop that really needs may_goto would still be rejected on the
+next pass through the guard place.  The check is the same at the end of
+the series (d39416384f5a).
 
 
 ---
@@ -137,4 +309,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42335829855
---===============3960911691898126970==--
+--===============5145106238266065474==--
