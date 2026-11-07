@@ -1,93 +1,93 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794071050;
-	b=pFe+dPX20pYW5+6gfRwKyqMZ7n2BUaRSMFlhPGNhsu2RAvcRUSisoy8vYoHhA/+PGCw+
-	 SYKgoNT6P+g6gHpWLoYjC4xW3Pslcz6v++woO9JUdPHJn9X/3gvSYzZiCL/afvmROBiy1
-	 giPTemEllBpdGPVvIHqC27jth824PLwCWMPOWmfCJqUG7KZwGs7w9UFm7yIgM5JBsGUI+
-	 k726JDvK8rnHhgNjyS8KCX1yxkxV9FbaVX06N1RjNY+M0CXNggQ5uqrcTqksHVzVAP4XZ
-	 dP2GiWHGTNyz8P2QyB99UACz+Xl8mekEInon05T82ZR5Z+cXU5yyIQxerZxPG+4d1vg==
+	t=1794071056;
+	b=qA4lbfsVBSWv30a2WlETJzNstFIW4lPGU9bUPllFrO9fZ9Ob14HsKcL2kwkWZw/k5f3H
+	 fhDs3AwOT/Woynmn+i/o8p3ErKiXgVtu5G1d1B9J+lmt7yYpkaGsqVWuwt9PBF6qz8m4X
+	 dB2Ursayg+ey4cpdyfNTEwciWtpQ+zByUtPAQ7jPHolset3pBI5XzPmyvbqFFlyO4pFXE
+	 Ya83K7cgriT9vllN2tE7Lqas/XMq8JyIAzTQKfX7O4FcvESGLWhe5kdP7Vn/6AV0Vc0bU
+	 p04yIGYYeLf4YeX9luIy7YW1GRewigVDsjehLhfwWaVrOfGAGt5X6cQppKLOb5J2ckg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794071050;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794071056;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=ihA4ZU9Br3oBTtmmN4TVr9IlYGBzz62xotzn6RhGBwk=;
-	b=YOA56AWImofHeJqd4DlHu6mK5eGOdfRL1WBDZkhwvdyHjToBKSGYjAo9MBd6hZnrvFTb
-	 DSL0T1i+aTruZUAwo41oAFakMEi1xp8aWXpELavnoVHiX8wdzuCGGBgQtcxFPJG/JQuDy
-	 OINLsll41HPZPXMxPlpTjOzj3bz3CpgNkDOxKJHsDAWp9aOPWf7XCaSKzCp8UZf7v1KpA
-	 XZu1DzCTX7w6hr13nDTIEB0pNS/bWFIvI0LhngzgkGIPqPW4McvfAZ7spr8SLs8UkbUNp
-	 v9/PWD1QJ3xBBexZd/PjaCznKaix4bfWGqsEHh+qYUOTrJqL8fbXHjyr3v+fpsIVERQ==
+	bh=vwIyfqPnulvMVf4jDzYiwgaTswaxhVcjhYAlGURzjIA=;
+	b=m1W5dEQrcboDFSjKE6b0DvoyztN+q1RxryCuTH9IKP7Vo1DYJu4ATQNbM2NIiOzwID9J
+	 BXg67Ak0KKLJ0glbcGU/zcHkHApgYUDDxz+wM4KaO02CuSd81MesMju4Gt2IGWzwxRjU4
+	 Ee112aSFRjLsw/WbcC30/RX6r+9J8+oDmGtvSX5iCyMcipFHlh07Bs4+SWoOlBkjf79Ik
+	 zhkVGVE+BVB47ThXO9Py58/xcZO1fs15/bIS6GztbkW5UXuRAMLMA4tESpdlj3G5f1gLW
+	 LKwBcSsjdpYH8Y3/pu1QelCkKBlrwUZz7HbC7FbLorsWKgVhU7FjusmGB7gQ5x4RD/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vzp1PUXT;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h3NlqlqR;
 	arc=none smtp.remote-ip=209.85.216.53
 Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE1D606A326
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:04:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DEE1D606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A177E606A326
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 17:04:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A177E606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vzp1PUXT
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3ae1d0caaedso747540a91.2
-        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:04:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=h3NlqlqR
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3ac9f49b984so340125a91.1
+        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 09:04:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794071049; x=1794675849; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794071055; x=1794675855; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ihA4ZU9Br3oBTtmmN4TVr9IlYGBzz62xotzn6RhGBwk=;
-        b=vzp1PUXT2Eekck+HbhiwHY+u5Ll+RFgffqaFNpqhyk+uDEcAmPqw35C0IQ64aBOvnI
-         NISQQ3mkz2P8Saz0S1SJx+/HilKMHsmseSRRyFDjBhT2de2v9ksszP1nYud89UgP/t4b
-         910ZSGZSINun1HiLtjLiZOcfJHr3oZqMimKjyiVtY3ByjuSir4ZN7kzNAF7jY3/U3PU/
-         BhaPmbZHCO82Dvk5XOud/ZBD+ljh5wCmzOluBcngdqyiUHn+D+m9Wsf0DDiz1h2f1q9n
-         BSDEYGXGTYpRdLh9TcUsnUR/kk8JTfmhHCeZpGRSiVEV1/Uw96Y84PUFeod5Q80WzZGg
-         0I8Q==
+        bh=vwIyfqPnulvMVf4jDzYiwgaTswaxhVcjhYAlGURzjIA=;
+        b=h3NlqlqR9inlgm+LClbMzE8mSdM/pp/pxflzkv0rHMv6oqeqjhh3J0eFdOpmU9O+qZ
+         yVPnAcqGOoDmlEORF9uqkVw1f+Lo/eEYJOxaDD7YsYVMgZRv9epAeyGVg3zo4Fx7Ph1a
+         y9dUGG+fWW/EyVrkX07yFccRFtzDQeMiBfcBZNZJGYgv9DlCsqvJd9ranDClv1dg969I
+         9LQW+6R6uXIfFWzGt3YqOCUc0jyFoE2bd5lRbdUI3oaqAgQwcGhjB/XRDzBVxB06oXXE
+         +nH4w227CqQqwIEeL6JeiBG/uz/OMRzXEaEnDRPZ8g23ejULrCw5W4DkEyQcvpA3ZutU
+         8IXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794071049; x=1794675849;
+        d=1e100.net; s=20260707; t=1794071055; x=1794675855;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ihA4ZU9Br3oBTtmmN4TVr9IlYGBzz62xotzn6RhGBwk=;
-        b=CYspTN1Ury3Nn1GW17ft+o3K+gM1PxPRGwLqnaI7BfzsF2zKESyBKm8AKSjk8B/DNg
-         LUdj5n3lmfmPcHvplSaFlLrHmCDKuK2Q1PSGiUW06iiE7RmLT6WdadcnKb1iPPNdrNoJ
-         fIN8OmvBhL4Y3CjKDNqAZSVuHMLF/9Pv4ZGdU58GbK+DB0wzti+OqDUxRSevknr9Otsf
-         d1ba+lNHM6QUK88wH+Tp00EpCWilrh7yLNIy3uzTsFuW1ZpxJzOX1ldlG+GexGM2dTP4
-         faTlHs1TBrCqpAmyeMoP8ou8x9g0Xmk1eblg+nAC1umvnn96TBVB/KJhSSwbKh+xMTHE
-         JruQ==
-X-Gm-Message-State: APuU4Z/dDChKVudrX1eMjC47V5nfET9lI7ptbpzsC3j4xjZMcyMoPlZ1
-	Tpxb5x/mrNnyP9zeGPnju3vZmifWPLxerF4PUcj7U2j6zkPZjG38xWNpTMAXCw==
-X-Gm-Gg: AYBFou0RfbdKSWnxTGQ8CZsxqnO05oKyEvGLItnePVlZPMSlH77YDQFp3Ju14V4+gVx
-	bYwBZLjr0vbUOvl2NAfsa7Mgl70d7SF0udJDd01S2T4/Mpas+pPbasRwVZXNBqh4xjyyMe/O16g
-	x/DedPX2uZJARU43VAVWpr8yoqL19mUdMb+E4pOVyfrGM/hbfr04lGBE8a0JO91ZQar78eo/X/t
-	vZxPx21j12MInwo5cpfNvYwJ4g1m43U+dWemDlfZ1pSsTh563DJko+MqkRZaVgGO0poosLpHDKw
-	pwYKOYLTK05icXnIZTB7xpjmkeCoKB2fP9H8z6/HtXEU1ceIEwdTASVVUNv1eLxaUgy3Bs8ZdLX
-	yIVfPde60APSKHLR4AOQzvBzMmzvwedH0bK1yF772llXxhLKuvP2NaNXgIaWv/8U0xjF0Sp4ywV
-	u6P3Vqlq+DGeLijJXwkvWajfnprFfspWFZBNOccU71Bext5qEqBVa9S+SEm5lkKbiXiPS4/7alU
-	pNO+ElPMEWz/8rQ+T+lzPJBU3PAO2kHGIGMAfCQNCyZY9W01o4yfp7yHmcvyUGoFLKP57xDgHQk
-	gb3bb4NBjUE7CqIPVI8Rx+cmiTfkjXNGyZ31AHtiqYR5Wgw9hAc4nF7Vme0CMgPXdgZQBmjBl5s
-	0CjrjpaEOd7YK+IlXOD8uyB37z89pYhtj1dE4vF7QCR0bpYdL2qQIOCngMURcZOH7tNKWLZPyXg
-	==
-X-Received: by 2002:a17:90b:1a91:b0:3ae:521e:767f with SMTP id 98e67ed59e1d1-3b0db705cb0mr5430167a91.36.1794071048714;
-        Sat, 07 Nov 2026 09:04:08 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b105817ce1sm4011234a91.9.2026.11.07.09.04.07
+        bh=vwIyfqPnulvMVf4jDzYiwgaTswaxhVcjhYAlGURzjIA=;
+        b=xEZ3LCWgB6FTyXMMTJLwVRu24GPbL3VrlwRgfiHJYYBYFWSNH9nYEDD3OjTreAmOov
+         CslAjGBP330apnCj1e6qfyYqzfaA5tuNUL7Ns+ht3sZMTTj94Wm60jT/sBhcUu3cXzq3
+         hwz4fUm/3G41F+rmiv+Nn9J/j3zkaSGDI91VbRSpM8tfgu3E24t7b/8QMjsV1DsSIBQT
+         btvaAliqUA15LWkzmxnLCJ6wACqlYxThKuWvxILy2YKG5XjVWdRya4IRZypZ6fcoUmRy
+         LvJfV22kgNEHcGSsSmUtA1ZYxbBvEcbpGv73SrDlkn7tvN/+UTr6y46ahQNgdssq/zgR
+         o5CA==
+X-Gm-Message-State: APuU4Z/9PBXKmmwGT2rE5pNoqW4WBC76kFADOnQ3JZhbT1lb2BfP3bwO
+	8AzJvMtydIeDsAsiJhioOsAxdNAghzpeP9KhVLBJz0z2sytUf0t7uxp5qT7vIw==
+X-Gm-Gg: AYBFou0+deecNDdx5roJuPE1X5Xk4WO8D0qY/g1tqvsiiTDCx5fMup3Zn3qlrTYjpUE
+	qEOVXTp7M9FMdpXJvyQi1stKAbRckSX3AqXJx3D1ZVQnlBYxyRG6g6oae4MVLUP6/dLpnKW/D+Q
+	4nGOlUJfE+EAWToSBnyrTMi9Hb1PJu8rOrBQITmP+D5k91aC9EDF6jBOmoDZrCLcGphFNghXltD
+	e+IWUtA9cJGJxmeI86FYAKxrQ4rQsfPiKT2S8l/ZWgs1hA1vQA4FF1nQUylGVTvismMKoh9hmhd
+	bboG8LyosdrnsjuitZT7AQ4sbXH21a3S1gwv+88uzn/DNu9D6mr2pueSuu7j5fXqWAzUNZfdxWB
+	XHUHul1a67o7TijqkzaZoRSWFErkRp4YrNrn+l5vAe3qiP0Yk6jMOp6+wIUi3TvpfZbovqpSEdx
+	W5ngjIco+24p29BbXiGLFCjfSsmtEAQtqEGsWsZYdlIHo6yig+5ydPbv/IdCEI4ENak6F0YXumE
+	Oai068GDYfVCRfurFDRWmHk7g9skKgFqQOtA7XORIjpKGXoSB/QyhDh6yzDJVOwN2sA+EP2NOMl
+	AWBJqnV/GXDq7FVQ6jIAj1rj4Z6sh1f2ZvdVmlzT0g14hsrF23TVDUC6TP5IVBRJ9JrvPynPZpq
+	i45qEFJ+RiwkYRqJ5D5PtO5pAaGhGekun6B9dxN2keLOBm+7/wHJGX1BhiFdMNUlcls91PSIFMr
+	vLScLahJZ8D4VCq22R2lc=
+X-Received: by 2002:a17:90b:3e48:b0:3a6:d850:bf16 with SMTP id 98e67ed59e1d1-3b106314940mr1742187a91.23.1794071054716;
+        Sat, 07 Nov 2026 09:04:14 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b105854fa9sm4315104a91.15.2026.11.07.09.04.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Nov 2026 09:04:08 -0800 (PST)
+        Sat, 07 Nov 2026 09:04:14 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 8/9] bpf: A join must leave the cookie of bpf_throw() alone
-Date: Sat,  7 Nov 2026 17:03:05 +0000
-Message-ID: <20261107170306.2831028-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 9/9] selftests/bpf: Test a flag that goes with the cookie of bpf_throw()
+Date: Sat,  7 Nov 2026 17:03:06 +0000
+Message-ID: <20261107170306.2831028-10-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
 References: <20261107170306.2831028-1-alexei.starovoitov@gmail.com>
@@ -104,70 +104,85 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-An LSM prog without an exception callback:
-
-  err = policy(file);     /* 1: no rule, 2: audit, 0, -EPERM, -EACCES */
-  count(a); count(b); count(c);
   if (err == -EPERM || err == -EACCES)
           bpf_throw(err);
-  return 0;
 
-The compiler decides the 'if' where err is set, and keeps a flag. All
-paths meet, then the flag is tested. In the join err is [-13, 2]:
+An LSM prog, no exception callback. The compiler keeps the condition in a
+flag. Two jumps are between the place where the paths meet and the test of
+the flag. That is too far for the rule that keeps 0 and 1 of a flag apart.
+In the second prog the flag goes with the number that the prog must not
+return.
 
-  At program exit the register R1 has .. should have been in [-4095, 0]
-
-The prog is valid, and it loaded when the verifier followed each path. It
-has the shape of cil_sock4_connect() of Cilium, with bpf_throw() in place
-of bpf_set_retval().
-
-Without an exception callback the prog returns the cookie. Thus
-check_kfunc_call() compares r1 of bpf_throw() with the range of the prog
-type, like r0 at exit. That check is not in check_func_arg() either. Add r1
-to bpf_call_checked_arg_regs() by hand, like r1 of bpf_set_retval(). States
-in which the flag and the cookie differ are not joined then.
-
-The same table tells whether something looks at a number that a short loop
-counts. This prog loads too:
-
-  for (i = 0; i < 3; i++)
-          if (hit(i))
-                  n++;
-  bpf_throw(n);           /* cgroup_skb/egress takes [0, 3] */
-
-Fixes: af6bda3802af ("bpf: Tell which arguments of a call a join must leave alone")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/flow.c     | 4 ++--
- kernel/bpf/verifier.c | 3 +++
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ .../bpf/progs/verifier_jumps_ahead.c          | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index dc3f2f0afaea..e6d1817ffa57 100644
---- a/kernel/bpf/flow.c
-+++ b/kernel/bpf/flow.c
-@@ -549,8 +549,8 @@ static u16 flow_stack_off_regs(struct bpf_verifier_env *env, int idx)
- 
- /*
-  * A jump that compares a register with a constant, which may be in the other register.
-- * A call does the same: the verifier compares a size, or what bpf_set_retval() takes,
-- * with what is allowed. So does the exit of the prog, see flow_compute_need_const().
-+ * A call does the same: the verifier compares a size, or what bpf_set_retval() or bpf_throw()
-+ * takes, with what is allowed. So does the exit of the prog, see flow_compute_need_const().
-  */
- static u16 flow_tested_regs(struct bpf_verifier_env *env, int idx)
- {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 09a44723bb2e..4093411498d6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -15614,6 +15614,9 @@ u16 bpf_call_checked_arg_regs(struct bpf_verifier_env *env, struct bpf_insn *ins
- {
- 	if (bpf_helper_call(insn) && insn->imm == BPF_FUNC_set_retval)
- 		return BIT(BPF_REG_1);
-+	/* without an exception callback the prog returns what bpf_throw() takes */
-+	if (bpf_is_throw_kfunc(insn) && !env->exception_callback_subprog)
-+		return BIT(BPF_REG_1);
- 	return call_arg_regs(env, insn, arg_type_is_mem_size);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_jumps_ahead.c b/tools/testing/selftests/bpf/progs/verifier_jumps_ahead.c
+index 66d8a7c4a6a0..de3252b59970 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_jumps_ahead.c
++++ b/tools/testing/selftests/bpf/progs/verifier_jumps_ahead.c
+@@ -523,6 +523,63 @@ __naked void flag_and_retval(void)
+ 	);
  }
  
++extern void bpf_throw(__u64 cookie) __ksym;
++
++/* BTF FUNC records are not generated for kfuncs referenced from inline assembly */
++void __kfunc_btf_root(void)
++{
++	bpf_throw(0);
++}
++
++/*
++ *	err = policy();
++ *	count(a); count(b);
++ *	if (err == -EPERM || err == -EACCES)
++ *		bpf_throw(err);
++ *	return 0;
++ * There is no exception callback: the prog returns err. The jump that looks at the flag is too
++ * far ahead to keep 0 and 1 of the flag apart.
++ */
++#define FLAG_AND_COOKIE(name, no, yes)			\
++__arch_x86_64 __arch_arm64 __arch_s390x			\
++__naked void name(void)					\
++{							\
++	asm volatile (					\
++		"call %[bpf_get_prandom_u32];"		\
++		"w8 = " #no ";"				\
++		"r9 = 1;"				\
++		"if r0 == 0 goto 1f;"			\
++		"w8 = " #yes ";"			\
++		"r9 = -13;"				\
++	"1:"						\
++		"call %[bpf_get_prandom_u32];"		\
++		"if r0 == 0 goto +1;"			\
++		"r7 = r0;"				\
++		"call %[bpf_get_prandom_u32];"		\
++		"if r0 == 0 goto +1;"			\
++		"r7 = r0;"				\
++		"if w8 == 0 goto 2f;"			\
++		"r1 = r9;"				\
++		"call %[bpf_throw];"			\
++	"2:"						\
++		"r0 = 0;"				\
++		"exit;"					\
++		:					\
++		: __imm(bpf_get_prandom_u32), __imm(bpf_throw)	\
++		: __clobber_all				\
++	);						\
++}
++
++SEC("lsm/file_permission")
++__description("jumps ahead: a flag goes together with what bpf_throw() takes")
++__success
++FLAG_AND_COOKIE(flag_and_cookie, 0, 1)
++
++SEC("lsm/file_permission")
++__description("jumps ahead: a flag goes together with what bpf_throw() does not take")
++__failure __msg("At program exit the register R1 has smin=1 smax=1 should have been in [-4095, 0]")
++FLAG_AND_COOKIE(flag_and_bad_cookie, 1, 0)
++
+ char buf[8];
+ 
+ /* As in test_seg6_loop.c without 32-bit insns: the copy is tested, the original is used */
