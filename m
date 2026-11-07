@@ -1,70 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.54.127.77
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794057187;
-	b=I9c9yhxSePVihS62TgWxKMy3tLxLt8cPJu+6pQ2d2TMzjRhMDj6ScIvgC7XDWPUmXFEZ
-	 bKRW8uWZ8efsS/PTTMo79espJXwNZJUav3mFdl0tS4F1QsZLXhpnTGe3aenbK615sXgam
-	 Tg/IharZUKg/YAONLXuNcitvh/GirLy0nXIrrh7K9B0JJ70S3fFCEGiS4KrO8IV7clHHn
-	 5+Bs7KApVHCgpYpRkN9xHMgZc64DR1a++bhSPvXuiEV7IukUhMhkDv3PXudmjAu8nliMv
-	 vv9hIAntSOeznysQc4zbkkl5iiAoNMQ9ezSAeDBawCbmCoJeQ4j33rRHx8SrQLICKCg==
+	t=1794057749;
+	b=ehJTLV3BZMqXjyb8iX49wZ802eJr+gX9xumiFv8ucClaUcbxbNZNxHCo91o30y/z5xAa
+	 7H2h5R/kpLEKZMzllj9BOTQ1fVO2QU6l4IbAH9rINCdX/ImI1TKQ3SMKm9mzvSQva3r6K
+	 U8a09md5IEuQfIHVqhIzpm0dY5ACzA0buT4c9awhFPgCOWBPUlh1Cpn+SAdpMlep+I3WA
+	 sbN9vm1MiC1YYigIWvXuLocLi4HUi5j35w+n7Djh8dIcwqcFqeR7fmSq8nmgc2blKFugk
+	 8NdzUmKkKVGpa1WjJ9X0aIhsPRjOLETMp7/E8ezqBsaPOn3/Jgo04hS0K6WOEQV4xRA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794057187;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:In-Reply-To:References:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:X-Envelope-From;
-	bh=8eYCv6BK5RvT4W8fjZT8lKb3F197VD0DZTz3XVRDtgM=;
-	b=0+7E2Kj815uwbR0WQQWIs2B/dyhNpiqBMC2CI/DIds5+nRZyalevyEXAbdjlJRrRCuyz
-	 ZNggISx51MfGkUUhB2IyaJdd+ptYniB+P4OF819un6vYP9YKgnobjztflYZ+95186AbV4
-	 Ez+k497GSfCRtdlp/6nCVNZW/F6po6w1NNeaaY6s9mEsl6TN2sE4yX1EWDqRmInwdpKnL
-	 9N3dygtPOs0HUn4s4qtOncgPejSuRLfnqBxUPJMPb0a08Qeg/8ruLUlQGqvAo5tCx2vqL
-	 nqejLXnOjRdohHjeochBSChU3U2X0vlq/alEs+Gzs0eHZ0f4bzCIiQKyHC4BCAbfzWQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794057749;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=HyBEC+Coz7KfomMbkGNYnA+yub51FbLpN4zbRJpkAIo=;
+	b=aSl7JrWu+OHrijv1dJLPxHYG42sdv3vRgcuwxF41X4CeCN1tdvm56ThtE2G6D4EBRQzi
+	 Q+qnqUw+DVmaogakCaHPYoitihY4hfQz9fQtTXSH0g+L6Sc1PRc2PFQMOz0TNWwbs2tD6
+	 Yw64p/XdUAF4zE1bXCQqH227evvyYbxDk+zzcEBi5hX/fnaedFpTV5Rp8q3pEJwNEWCs3
+	 0ns7d1clWcakspGWaWsoxudE7g9AvSoOfLpnZ8Azei4Kk+wisiuJUa+uzSP+q37TbFj24
+	 ixhYrS6ytB30a1tUIuYQVopA9hVc4vHeD7daY7rXyXUn4Tr6fYwgIwld4mpr8v6AoQw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=tychen.cc;
-	spf=pass smtp.mailfrom=tychen.cc;
-	dkim=pass header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b="WmZmfS/E";
-	arc=none smtp.remote-ip=198.54.127.77
-Received: from out-zbxj-a77.jellyfish.systems (out-zbxj-a77.jellyfish.systems [198.54.127.77])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h1CLnd4A;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EE9606A32C
-	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 13:13:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49EE9606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6DE606A32D
+	for <bpf@vger.kernel.org>; Sat,  7 Nov 2026 13:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.a=rsa-sha256 header.s=spacemail header.b=WmZmfS/E
-Received: from [10.18.116.108] (ec2-52-197-241-54.ap-northeast-1.compute.amazonaws.com [52.197.241.54])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4jMGgG0tBcz2x99;
-	Sat, 07 Nov 2026 13:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1794057165;
-	bh=8eYCv6BK5RvT4W8fjZT8lKb3F197VD0DZTz3XVRDtgM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WmZmfS/Efi59PKXICsPFIg61izwlVwGRjDyiJ+7INGktvuU8J/b+vb+ubkdMFkfpW
-	 zXoLr4ZQdcXHbBRDAqstEt9XYmjMfKIMiV6y+3eVITDru14q7vSdD8emdvFI/tZ6J6
-	 CRWp6ab0HtN+6kb4XxVzutzg8X8ciDEeo5UXDEemA0aNc41eZy9tUQjhM1twZkmIm2
-	 DBf+WscKQgXy8zmPVDtRef922vbf/djG+PvHFOpqdnQK+YHvZlXBxQ/RmIdAp8tgtC
-	 uB+mF7ndcygp+yf+ccr67kzuhEPrLiMS7b8uLKumltl/O45/VmB61R2blOgP5xpRlZ
-	 NYsmmbDrtsKxQ==
-From: Tianyi Chen <hi@tychen.cc>
-To: bot+bpf-ci@kernel.org
-Cc: hi@tychen.cc, bpf@vger.kernel.org, qmo@kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, ihor.solodrai@linux.dev, linux-kselftest@vger.kernel.org,
- shuah@kernel.org, daniel@iogearbox.net, ast@kernel.org,
- alexei.starovoitov@gmail.com, martin.lau@kernel.org, yonghong.song@linux.dev,
- mason@kernel.org
-Subject: Re: [PATCH bpf-next v9 1/2] bpftool: Use batch lookups for map dumps
-Date: Sat, 07 Nov 2026 22:12:40 +0900
-Message-ID:
- <179405716056.245416.10251936908462372924.rhash-batch-review@tychen.cc>
-In-Reply-To: <33b057d852c258c157f6aa31e45083418944efe0efaad1d72bcb5513205a67f6@mail.kernel.org>
-References:
- <7a728136ad18840c94836ec1ce988f8bc2fcfb35.1793821981.git.hi@tychen.cc> <33b057d852c258c157f6aa31e45083418944efe0efaad1d72bcb5513205a67f6@mail.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h1CLnd4A
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F12751F0089F;
+	Sat,  7 Nov 2026 13:22:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794057749;
+	bh=HyBEC+Coz7KfomMbkGNYnA+yub51FbLpN4zbRJpkAIo=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=h1CLnd4A+vMuab07obcvPx9quoy6jqFS0+uEXsyGDcwUwnIahahMoorvvr8zHZOA+
+	 qOyDTmAuldBbHBm0BAJ3I4FgqCDhY94XOIEeIxm0L37mzeKWnvDCucN6RAaWTROuZN
+	 etrarkNjeAJRQ8ovsqlL6cyAMKVAOdTGQyxWM0siadhRU+4WVMDqkSCMjTmhpdJxzZ
+	 WBwxNo+z262M7BfQRrf1JHcykj50mxBRJihvkwUDBtzXiwWVTU2l4VuJ34o2aFMcFR
+	 goA9+7MsWzRpyZSAJc/q1+vScTFidm6Z2SAnP+EsiK4Iaim9T91y6UX2zX7306AMcc
+	 VsnGgC7EjL8/A==
+Message-ID: <sashiko-outbox-202908@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Cover RHASH batch cursor loss
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tianyi Chen" <hi@tychen.cc>, bpf@vger.kernel.org
+In-Reply-To: <4b4cccc3b706a54ef42ba3c09b40954883661e6a.1794056839.git.hi@tychen.cc>
+References: <cover.1794056839.git.hi@tychen.cc>
+ <4b4cccc3b706a54ef42ba3c09b40954883661e6a.1794056839.git.hi@tychen.cc>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 07 Nov 2026 13:22:28 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,23 +58,52 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-X-Envelope-From: hi@tychen.cc
 
-Hi,
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] selftests/bpf: standalone rhash_batch.c file instead of
+  extending rhash.c
+--
 
-> For BPF_MAP_TYPE_RHASH, can the kernel return -ENOENT before the real end
-> of the map, so that this code silently produces a short dump?
+commit bf9586f48a54e730e2740cce0745ca08b2ddac63
+Author: Tianyi Chen <hi@tychen.cc>
 
-Yes, I reproduced it with a thread deleting and reinserting the first
-key. The dump returned success after printing one entry while the other
-63 keys were still present.
+selftests/bpf: Cover RHASH batch cursor loss
 
-I've sent a separate RHASH fix to return -EAGAIN for this case:
-https://lore.kernel.org/r/cover.1794056839.git.hi@tychen.cc
+This commit adds BPF selftests covering normal completion, missing input
+cursors, and concurrent deletions for BPF_MAP_TYPE_RHASH batch lookup and
+lookup-and-delete operations.
 
-With that fix, the existing bpftool fallback handles the race, so I've
-left the batch series unchanged.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/rhash_batch.c b/tools=
+/testing/selftests/bpf/prog_tests/rhash_batch.c
+> new file mode 100644
+> index 0000000000000..bba9062afd123
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/rhash_batch.c
 
-Thanks,
-Tianyi
+[ ... ]
+
+> +void test_rhash_batch(void)
+> +{
+> +	if (test__start_subtest("lookup"))
+> +		test_batch(false, false);
+> +	if (test__start_subtest("lookup_delete"))
+> +		test_batch(true, false);
+> +	if (test__start_subtest("lost_lookup_cursor"))
+> +		test_batch(false, true);
+> +	if (test__start_subtest("lost_delete_cursor"))
+> +		test_batch(true, true);
+> +	if (test__start_subtest("concurrent_delete"))
+> +		test_concurrent_delete();
+> +}
+
+[Severity: Low]
+This isn't a bug, but could these subtests be added to test_rhash() in
+tools/testing/selftests/bpf/prog_tests/rhash.c instead of introducing a
+separate file?  rhash.c already houses userspace map syscall and iteration
+subtests for BPF_MAP_TYPE_RHASH, and rhash_batch.c does not load a separate
+BPF program skeleton.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794056839.gi=
+t.hi@tychen.cc?part=3D2
