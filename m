@@ -1,64 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794166098;
-	b=FhHSFegFO8uapulpyZ7XrckSaI/ZnNf6HUKvpgD/pnoK+sePs/DTwQ+e16GwC6ItMadX
-	 KExwrRQ12E+veqE/pdLg3JcLnqSFLyVXWe/4Hqdi2EpW3VMNAj/6QUFZJnHFDTmPE7KXk
-	 FasqGhzPWTT/2lugETg2DyBnqf+QaVmlFgK/NcWICHeLUdGTryy4IIgYa7vF9UJIUl158
-	 AuXyxwh3cgvNttI8sJmUZYuFKWFIGol0GFtXwZP5F3JXpnTcdvReej3KNVz4tTvdJgOaY
-	 1EeruC83/qZ8Gl83wYAyjL2zH1NhdlKqu4Ccm3xLu6EGTktQl35a9zn1J4l+b3ceF9g==
+	t=1794166102;
+	b=ssDty2vd7qFlsV/Z1477E+DDsn05PkQi7V5mhzoYZBVjYXnCiPQxpPLDsO8fb0oD8z7R
+	 gSgtqumqe4NJHZAfkdTGKa8nLw37WE899IkU+IP8NHI1zgwH+ebKAxbc3xoqV2HxXBzYX
+	 JlEs8ShuxJrycST204t3QDmjzRNfGFUdWTgV6of8eUFPpfoLm2r8hsrThBlpotzSYBLNE
+	 zQuiVUJqSlBVzVmTxoTpSPqMjmhAIEM9cLxoDHLOKbsjmlzreNjXn3sgc2f30i85AlVb5
+	 wLxnda+yod1W6H1k1jcsW5ymZ//6jhz+cJSh05Y0cWX/C9JVF2dteZdbM4GJHQsZyZQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794166098;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794166102;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Virus-Scanned;
-	bh=UZHz/YYF40ysOlO1P8FkK9mGRHSPy23ea68RgH6tOkk=;
-	b=rVDI5e4LCmGV3PowdbAKw44zLYkI9rFaWm1XCi8lZuBRiCfvyYEra+9xF8NT+cdxpz3b
-	 P6xHioyP2cMi18TYpKnxjY+D2B9bmnqLljzxroEYro3L3VeyGSqlmb2k63EfVOEz4aqyj
-	 OOHcBrUN7cbbAIyC77r1WDjGGFunIiMwe4IAWwjVbFAJwOiWjl+VmxF/EiTgtSQiOBTrT
-	 4rw39tTOfPUZi321cWEKVOF5ZcU3eLrR7aq7Rjnst4hBeIcsHiXKYQUXLVewg1v5DKiTI
-	 K/lboCs2eUZuqmFzR+xU3mDKxmcbIwi3ND48D2mLGPdsA7s3Z1YaBCCcbqDkNzyXEKw==
+	bh=pTnDMGCMrZKR1B9ZQq3EXtLdxGpgUidHEc3HuTP2vKo=;
+	b=UPjknhjMyzoPH8zf3Te4GS2eectyD3zrbAN9qbxstKuEeVudGfTqtBdISH22nlmZHo+F
+	 VlxWno0i9cfxbiMXVubUo9+S9XraGdfp60dWHqDFDxOxq+EE3YdNmVpkqTCric9sMdMdH
+	 qn9wvACj9p585v+oMxcw8q9Yrv3e34V48LgKcKo2dEkL5Y824eG+VMXiQfTyWbhJ+b2jB
+	 kuzP+DJnSNIOE4XLJ1VLq1oqIfx8N7ATXQyY3GMYZav9pyZo8YSRpqy04WcG5gQ3p8EtT
+	 +sAvpKxBRMYcTKphOKugxJs2r/smGe+qFYZ0+ra7OYy7bFhbiXkGJ6BDwABxbQKUzew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=iogearbox.net;
 	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=egzg3BvI;
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=DlXSb5JG;
 	arc=none smtp.remote-ip=213.133.104.62
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD5C606A31C
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 19:28:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AD5C606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D011606A31C
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 19:28:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6D011606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=egzg3BvI
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=DlXSb5JG
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=UZHz/YYF40ysOlO1P8FkK9mGRHSPy23ea68RgH6tOkk=; b=egzg3BvINTwo2whysWzG07HM7f
-	VMubJK/kS8X04Db268lArTVGfN38U0e4d6yJ3CrsLhF7lIWMyL521qDhpfsTm4obAWDnTG4JaQomc
-	EyEn+nmCVMQWsh3g2e5z79tmJgFDYlLypWWNXBiXpB2rtMP0xBUHEwhOWP72Rg3PH/Co97sb8Ypwi
-	V1XfTjU+F70mUVGw2Z0iBrzGFW0DVKozofxw0h0PDETQMBvy0708rb/+b+sBwjQP/zdvaq5smWHW2
-	bNAup/z/witCRBOBx80fATLa9taGvbKCX+UVcUC6PkAzq3fFCsYIq+p9/9jg7fXofEKgdhQNazfc+
-	7ukjy9rA==;
+	bh=pTnDMGCMrZKR1B9ZQq3EXtLdxGpgUidHEc3HuTP2vKo=; b=DlXSb5JGFBfJfD3NeYCx0b6EBl
+	iRHSE53L6LmYgG0ARlEKhpI/QPPH4eBShTI6Qi/CZXjG9z5zhbGbEXibEC3rHrHSj+wKeEpZjAdTT
+	PcJzAt4KBNLdr4shJNuucrvcDA7BBSk3jRZjGRD6o60VixLGUD/ORqg/sLygSaQMrVYygBiE0yuR1
+	ys+yPLyrXk4TfpynJx03GckVm2ae0w+YXNJlkqPjLBjLcUS1QnLeKl/8vqSg3KYW9RaHNS+c3Q+rX
+	AFlpXhDkd91n1Hn+/YZnIgb+bq6ZcgkqaDf/5Ou4p5SIdHoJ99Q8mp5ue3Dda56fAaeBAIGQAha1b
+	uHGWhQfQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1xQ8Yq-000PrN-06;
-	Sun, 08 Nov 2026 20:28:16 +0100
+	id 1xQ8Yu-000Prh-15;
+	Sun, 08 Nov 2026 20:28:20 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: ast@kernel.org
 Cc: puranjay@kernel.org,
 	memxor@gmail.com,
 	xukuohai@huaweicloud.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 17/24] bpf, arm64: Materialize immediates with fewer instructions
-Date: Sun,  8 Nov 2026 20:26:43 +0100
-Message-ID: <0da11680b3d4524536f633f2e33d847f7db7035d.1794165614.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 18/24] bpf, arm64: Shorten the tail call sequence
+Date: Sun,  8 Nov 2026 20:26:44 +0100
+Message-ID: <5f7973c448f56ec92f8984076ada417ca06615d5.1794165614.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1794165614.git.daniel@iogearbox.net>
 References: <cover.1794165614.git.daniel@iogearbox.net>
@@ -74,147 +74,127 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.6/28177/Sun Nov  8 07:23:52 2026)
 
-A 32-bit immediate with a zero or all-ones low half often took two
-moves where a single shifted movz or movn does. A bitmask immediate,
-32 or 64 bits, took two or more moves where a single orr does.
+The tail call sequence moved the offsets of max_entries, ptrs and
+bpf_func, and the tail call limit, into a temporary first, although
+they all fit the immediate forms. It also zero extended and shifted the
+index in separate instructions before the load. Use the immediate forms
+and a register offset load with UXTW #3 instead.
 
-A 64-bit immediate with a repeated 16-bit chunk now takes one orr of
-that chunk replicated, if that is a bitmask immediate, plus a movk for
-each other chunk. The verifier's magic numbers for dividing by 3, 5, 15
-and 17 have that form.
+That saves six instructions per tail call. A64_LDR64() loses its last
+user and is removed.
 
-Before/after for w1 = 0x10000, r1 = 0x7fffffff, r1 = 0xffffffff00000000 ll
-and r1 = 0xcccccccccccccccd ll:
+Before/after for the checks and the lookup of a tail call:
 
-  52800000  mov w0, #0x0
-  72a00020  movk w0, #0x1, lsl #16
-  52a00020  mov w0, #0x10000
+  5280088a  mov w10, #0x44
+  b86a682a  ldr w10, [x1, x10]
+  2a0203e2  mov w2, w2
+  6b0a005f  cmp w2, w10
+  54000282  b.hs ...
+  5280042a  mov w10, #0x21
+  f940034c  ldr x12, [x26]
+  eb0a019f  cmp x12, x10
+  54000202  b.hs ...
+  9100058c  add x12, x12, #0x1
+  5280440a  mov w10, #0x220
+  8b0a002a  add x10, x1, x10
+  d37df04b  lsl x11, x2, #3
+  f86b694b  ldr x11, [x10, x11]
+  b400014b  cbz x11, ...
 
-  d29fffe0  mov x0, #0xffff
-  f2afffe0  movk x0, #0x7fff, lsl #16
-  b2407be0  mov x0, #0x7fffffff
-
-  d2ffffe0  mov x0, #0xffff000000000000
-  f2dfffe0  movk x0, #0xffff, lsl #32
-  b2607fe0  mov x0, #0xffffffff00000000
-
-  d2f99980  mov x0, #0xcccc000000000000
-  f2d99980  movk x0, #0xcccc, lsl #32
-  f2b99980  movk x0, #0xcccc, lsl #16
-  f29999a0  movk x0, #0xcccd
-  b202e7e0  mov x0, #0xcccccccccccccccc
-  f29999a0  movk x0, #0xcccd
+  b940442a  ldr w10, [x1, #68]
+  6b0a005f  cmp w2, w10
+  54000202  b.hs ...
+  f940034c  ldr x12, [x26]
+  f100859f  cmp x12, #0x21
+  540001a2  b.hs ...
+  9100058c  add x12, x12, #0x1
+  9108802a  add x10, x1, #0x220
+  f862594b  ldr x11, [x10, w2, uxtw #3]
+  b400012b  cbz x11, ...
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- arch/arm64/net/bpf_jit_comp.c | 75 ++++++++++++++++++++++++++++++-----
- 1 file changed, 65 insertions(+), 10 deletions(-)
+ arch/arm64/net/bpf_jit.h      |  3 ++-
+ arch/arm64/net/bpf_jit_comp.c | 27 +++++++++++++++------------
+ 2 files changed, 17 insertions(+), 13 deletions(-)
 
+diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
+index 882404b884e1..16c690c6cae9 100644
+--- a/arch/arm64/net/bpf_jit.h
++++ b/arch/arm64/net/bpf_jit.h
+@@ -63,7 +63,8 @@
+ #define A64_LS_REG(Rt, Rn, Rm, size, type) \
+ 	A64_LS_REG_EXT(Rt, Rn, Rm, UXTX, 0, size, type)
+ #define A64_LDR32(Wt, Xn, Xm) A64_LS_REG(Wt, Xn, Xm, 32, LOAD)
+-#define A64_LDR64(Xt, Xn, Xm) A64_LS_REG(Xt, Xn, Xm, 64, LOAD)
++/* Xt = *(Xn + ((u32)Wm << 3)) */
++#define A64_LDR64_UXTW3(Xt, Xn, Wm) A64_LS_REG_EXT(Xt, Xn, Wm, UXTW, 3, 64, LOAD)
+ 
+ /* Load/store register (immediate offset) */
+ #define A64_LS_IMM(Rt, Rn, imm, size, type) \
 diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 5a88740d9d0c..62d2f70cc412 100644
+index 62d2f70cc412..a79c401c5262 100644
 --- a/arch/arm64/net/bpf_jit_comp.c
 +++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -125,24 +125,47 @@ static inline void emit_u32_data(const u32 data, struct jit_ctx *ctx)
- 	ctx->idx++;
- }
+@@ -909,13 +909,20 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx)
+ 	__le32 *branch2 = NULL;
+ 	__le32 *branch3 = NULL;
  
-+/*
-+ * A 32-bit immediate, sign extended for the 64-bit variant: one movz, movn or
-+ * orr where one encodes it, else a movz or movn and a movk.
-+ */
- static inline void emit_a64_mov_i(const int is64, const int reg,
- 				  const s32 val, struct jit_ctx *ctx)
- {
- 	u16 hi = val >> 16;
- 	u16 lo = val & 0xffff;
-+	u32 insn;
-+
-+	if (hi == 0xffff) {
-+		emit(A64_MOVN(is64, reg, (u16)~lo, 0), ctx);
-+		return;
-+	}
-+	if (!hi) {
-+		emit(A64_MOVZ(is64, reg, lo, 0), ctx);
-+		return;
-+	}
-+	/* The 64-bit variant has the upper half set or clear with the sign */
-+	if (!lo && (!is64 || !(hi & 0x8000))) {
-+		emit(A64_MOVZ(is64, reg, hi, 16), ctx);
-+		return;
-+	}
-+	if (lo == 0xffff && (!is64 || (hi & 0x8000))) {
-+		emit(A64_MOVN(is64, reg, (u16)~hi, 16), ctx);
-+		return;
-+	}
-+
-+	insn = A64_ORR_I(is64, reg, A64_ZR, val);
-+	if (insn != AARCH64_BREAK_FAULT) {
-+		emit(insn, ctx);
-+		return;
-+	}
- 
- 	if (hi & 0x8000) {
--		if (hi == 0xffff) {
--			emit(A64_MOVN(is64, reg, (u16)~lo, 0), ctx);
--		} else {
--			emit(A64_MOVN(is64, reg, (u16)~hi, 16), ctx);
--			if (lo != 0xffff)
--				emit(A64_MOVK(is64, reg, lo, 0), ctx);
--		}
-+		emit(A64_MOVN(is64, reg, (u16)~hi, 16), ctx);
-+		emit(A64_MOVK(is64, reg, lo, 0), ctx);
- 	} else {
- 		emit(A64_MOVZ(is64, reg, lo, 0), ctx);
--		if (hi)
--			emit(A64_MOVK(is64, reg, hi, 16), ctx);
-+		emit(A64_MOVK(is64, reg, hi, 16), ctx);
- 	}
- }
- 
-@@ -170,10 +193,42 @@ static inline void emit_a64_mov_i64(const int reg, const u64 val,
- {
- 	u64 nrm_tmp = val, rev_tmp = ~val;
- 	bool inverse;
--	int shift;
-+	u32 insn;
-+	int shift, blocks;
- 
- 	if (!(nrm_tmp >> 32))
- 		return emit_a64_mov_i(0, reg, (u32)val, ctx);
-+	if ((s64)(s32)val == (s64)val)
-+		return emit_a64_mov_i(1, reg, (s32)val, ctx);
-+
-+	/* A bitmask immediate in a single orr */
-+	insn = A64_ORR_I(1, reg, A64_ZR, val);
-+	if (insn != AARCH64_BREAK_FAULT)
-+		return emit(insn, ctx);
+-	/* if (index >= array->map.max_entries)
++	/* The struct offsets fit the immediate forms, the count fits cmp */
++	BUILD_BUG_ON(offsetof(struct bpf_array, map.max_entries) % 4 ||
++		     offsetof(struct bpf_array, map.max_entries) > 0xfff * 4);
++	BUILD_BUG_ON(offsetof(struct bpf_array, ptrs) > 0xfff);
++	BUILD_BUG_ON(offsetof(struct bpf_prog, bpf_func) % 8 ||
++		     offsetof(struct bpf_prog, bpf_func) > 0xfff * 8);
++	BUILD_BUG_ON(MAX_TAIL_CALL_CNT > 0xfff);
 +
 +	/*
-+	 * A 16-bit chunk occurring more than once whose replication is a
-+	 * bitmask immediate comes from one orr, with a movk for each of
-+	 * the other chunks, when that beats the moves of the chunks.
-+	 */
-+	blocks = min(i64_i16_blocks(nrm_tmp, true), i64_i16_blocks(nrm_tmp, false));
-+	for (shift = 0; shift < 64; shift += 16) {
-+		u16 chunk = val >> shift;
-+		int i, n = 0;
-+
-+		for (i = 0; i < 64; i += 16)
-+			n += (u16)(val >> i) == chunk;
-+		if (n < 2 || 1 + 4 - n >= blocks)
-+			continue;
-+		insn = A64_ORR_I(1, reg, A64_ZR, chunk * 0x0001000100010001ULL);
-+		if (insn == AARCH64_BREAK_FAULT)
-+			continue;
-+		emit(insn, ctx);
-+		for (i = 0; i < 64; i += 16)
-+			if ((u16)(val >> i) != chunk)
-+				emit(A64_MOVK(1, reg, (u16)(val >> i), i), ctx);
-+		return;
-+	}
++	 * if ((u32)index >= array->map.max_entries)
+ 	 *     goto out;
+ 	 */
+ 	off = offsetof(struct bpf_array, map.max_entries);
+-	emit_a64_mov_i64(tmp, off, ctx);
+-	emit(A64_LDR32(tmp, r2, tmp), ctx);
+-	emit(A64_MOV(0, r3, r3), ctx);
++	emit(A64_LDR32I(tmp, r2, off), ctx);
+ 	emit(A64_CMP(0, r3, tmp), ctx);
+ 	branch1 = ctx->image + ctx->idx;
+ 	emit(A64_NOP, ctx);
+@@ -924,9 +931,8 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx)
+ 	 * if ((*tail_call_cnt_ptr) >= MAX_TAIL_CALL_CNT)
+ 	 *     goto out;
+ 	 */
+-	emit_a64_mov_i64(tmp, MAX_TAIL_CALL_CNT, ctx);
+ 	emit(A64_LDR64I(tcc, ptr, 0), ctx);
+-	emit(A64_CMP(1, tcc, tmp), ctx);
++	emit(A64_CMP_I(1, tcc, MAX_TAIL_CALL_CNT), ctx);
+ 	branch2 = ctx->image + ctx->idx;
+ 	emit(A64_NOP, ctx);
  
- 	inverse = i64_i16_blocks(nrm_tmp, true) < i64_i16_blocks(nrm_tmp, false);
- 	shift = max(round_down((inverse ? (fls64(rev_tmp) - 1) :
+@@ -938,10 +944,8 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx)
+ 	 *     goto out;
+ 	 */
+ 	off = offsetof(struct bpf_array, ptrs);
+-	emit_a64_mov_i64(tmp, off, ctx);
+-	emit(A64_ADD(1, tmp, r2, tmp), ctx);
+-	emit(A64_LSL(1, prg, r3, 3), ctx);
+-	emit(A64_LDR64(prg, tmp, prg), ctx);
++	emit(A64_ADD_I(1, tmp, r2, off), ctx);
++	emit(A64_LDR64_UXTW3(prg, tmp, r3), ctx);
+ 	branch3 = ctx->image + ctx->idx;
+ 	emit(A64_NOP, ctx);
+ 
+@@ -959,8 +963,7 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx)
+ 
+ 	/* goto *(prog->bpf_func + prologue_offset); */
+ 	off = offsetof(struct bpf_prog, bpf_func);
+-	emit_a64_mov_i64(tmp, off, ctx);
+-	emit(A64_LDR64(tmp, prg, tmp), ctx);
++	emit(A64_LDR64I(tmp, prg, off), ctx);
+ 	emit(A64_ADD_I(1, tmp, tmp, sizeof(u32) * PROLOGUE_OFFSET), ctx);
+ 	emit(A64_BR(tmp), ctx);
+ 
 -- 
 2.43.0
 
