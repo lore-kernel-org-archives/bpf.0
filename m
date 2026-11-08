@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794135921;
-	b=R1HnXIMRHiawOmWUR9NN8ucemC+pHDcSo0HtVIk5GKWLgjJAC6YhUAFCbniR6yL1vklL
-	 n/BTjUOFtMUJEvwPFdrm9rFgYQOrWnlETupvrZqPNWrbHaxdH6nJIeuEQfAxpgeECXIxV
-	 z5hG3jPGfDRsJDU2CSMNTnyikt5+XsxkzqHbCi5Lg9J8p4CeWTjDlsCbqfJC8PoBGJst8
-	 q67sIea+bf+j33sS0pD/3trv9cYAdCSLRRh8QWvb5BBZRGZeJ6KAYxUAvtxjFuuTT4oHv
-	 K7//Nheup29QB0GXibUno492/3vGmB7PRi/nozBxrhCsPuJFgQCLR0xrMglb+nv1YQw==
+	t=1794135942;
+	b=y2Le4W0Or8bX4mySROC2sO7sDRJpy8+qw1KcbTDrJuGCjA20eS8Vl+295u/sbdoaBGq6
+	 Z3WJAJqLPlNH6mq7eEQPcZSHv5OaLmhiNqsncvpSCFawH0FtVYwtg+N6Qh0Rp6KGRaDKr
+	 xyUkVyRgkiGJc65wMwSHh1n6ZSNY53UIBPUwlNf/rOtLzk7ofCu4XvpP1WcqT4t5pW6c4
+	 /+vb4Pd6VyiSDK0h2KyJ14UpKipAO1s0PtCDX9jYlM9MgMPv+ciTzn5DW/ewhktFkt3JE
+	 svRj7oJqN71hSZMHX6JrVxmWRditOEh7bRAW37mNBTUbtjFltq+PYQrbW/sCMKcksEQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794135921;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794135942;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=UknItJXowOcjQfrYZmm9v6E5iZPTnDdyntGmdyqaylQ=;
-	b=xScc+Fa1dk8SHbtt789iQ0ayE3n0p+4hM0+PFhhOWvul98WfLTvBBRAgeJIaFwG11x4x
-	 TEgV+bEJjt3Q/FPCIeffLadShKjUh4qod//rrTmObZMNYrk8pjT6cpTxN6PEOAOPo2C5P
-	 Aw+DleVScm8VM2wvwX0z2As1EZ75gMvuRPps1qORR8TpXN27e8v/GnC+kdVwXpc464HbR
-	 IFJ8VsW8lmp21hqVpyC2nxY3UAf+WSPIUuHH5l76cijjgs6KvFXjJpLthYaNYGNMQDN7p
-	 qVNxRc8+tx/NnB5ZwuHWfUUCMfIVQxDjNWuHl1+zMzTgZ6vpFXme0r/sFoFJQLXXClg==
+	bh=moiGcSV9g6fEFglU5jjTd2VsTAmD/aUVb3CUOrfKCF0=;
+	b=FbGnyABuFu9OU8Ckd232wOCUBVe8LR2Erq1G8fr2YWvNYILQu6sMB5K22WZVywR7uQt7
+	 FE33kHDRSYTB3d4+Grep86RpdFg/mVocx1lAzuHGzsH6pHl9NFcON64+/VuM81XYBAPfi
+	 SEl9ZE82FAYMqnzKVagucijDsfGN2rb7S+BfjqSNFVRF15QiZNYbKImROKI2GGX6g7XFx
+	 Rgz92XOa8TZfWJxeksv37GeU6zpBxfXOZVxLBt7PSsZWC0Gl9/q/XMTVje1xAHhe020/+
+	 i2USs1exvA9+L8GNGHwX1rd/3BZDuPhTGwOy3kPBNfApFBR8LDraP5kt6YZOzgaYHog==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bytedance.com;
 	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=X8RG1YEQ;
-	arc=none smtp.remote-ip=209.85.215.182
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=ZWbJMoeP;
+	arc=none smtp.remote-ip=209.85.216.45
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BBD606A330
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 11:05:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95BBD606A330
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F931606A321
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 11:05:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F931606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=X8RG1YEQ
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cdb9d5c1c8eso6716a12.0
-        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 03:05:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=ZWbJMoeP
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ada4c06b7bso12439a91.2
+        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 03:05:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1794135920; x=1794740720; darn=vger.kernel.org;
+        d=bytedance.com; s=google; t=1794135941; x=1794740741; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=UknItJXowOcjQfrYZmm9v6E5iZPTnDdyntGmdyqaylQ=;
-        b=X8RG1YEQHmGAZM/Jv48JSZs3BEY/Tko/9y54MRkbchXqmp3AU4CFUZOFZ8iaO+1nP/
-         JMkF6xu0vSGmnqg9asKzumEsYp7fSGttJPyZRj4ZOe1aM0QpyuUBsPtnKovH+NzztAlP
-         nW+EEUsT/nXkTx74mnV3rmiaKn8ql5uGrH/HW5/oj4VN+SXNFeptOsXdFFl/0lB8JdEe
-         vKVOnA5b1yutDVMH7UCYIbd79nSxnEJjIWfb1V+c9HB0mufSCFrRrvKXj1YSW09vqgOo
-         GnhlKAvfJHqnFKmddpvZ/HgDP6sunqi/ozLYScs1JI8/2YdBVhA2NvJgEhhy8cwvLW3o
-         GnVg==
+        bh=moiGcSV9g6fEFglU5jjTd2VsTAmD/aUVb3CUOrfKCF0=;
+        b=ZWbJMoeP8ogmGUR/5kPE1A8dncneDCEgt6H2HY95exqVJWpKDCJ4xJ0/Yv5PV9x54j
+         yPhKOp4e9Vt+5oYVid3eE9VVf0shBy7pSEoEVvMrkZ3QJ2GAZaVutry29aBTTQ8KCLxe
+         94wsY68MsqpoLKd4ftPQlUo/T1VKmRpv/irkX1SjRkM2Q14jk7ljjp8X/VtHQjm5E7AK
+         v9HxLEypuDXUC4xB8Qr88INcSLtBCUSvdMaVVzvsYbQ0zgr1UNijrzeO2t9bm3WmL9xS
+         KGxknbpDFsQ1d6ar+EqAjjkDuWp4i76Qtd6Vfqmr9FS8lvwsxpIL+wau0Je0157QOssU
+         Yv1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794135920; x=1794740720;
+        d=1e100.net; s=20260707; t=1794135941; x=1794740741;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=UknItJXowOcjQfrYZmm9v6E5iZPTnDdyntGmdyqaylQ=;
-        b=QQF/WlHBuymc+KTGKe3WH4LMNbgHXauoS8UqrZ762genHLXMSSSX8ImmSzjEoWfrSg
-         R4rYjd9aM2LUshinX8/3eT2ajV3wPjgGxKEsREOcg8eaWxLRbDLiwl2Sj1qXeQJXPTg9
-         2t/4wZxVP8dOvM9Sb/n2fvv7AKQctGNw20bFmKvD5mU1Iq/Xw1a8SLVRoC0m/ARMgc3n
-         d3EUwXl+A/4p3YmJmHSXKu39fsK7JhEZCmsUxTBPRESJfLDfBDeMJ4e7AMFVvTvXyHJS
-         wnduE8CNHVsSE730Ji8TGLssPd1C2ojlJUR+rbDmBc3SJ+fhRtDT3VBSXe5TjTZfuVPl
-         uDWw==
-X-Forwarded-Encrypted: i=1; AL+hErGYRqrrZO4LBJh9SVGgS3o+TmX4VeP8lYH9D+zVP3aLee5v3DyG8pQ2KnNpimFhO5Eu3mU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8ej2yM+zIx+SykK2dgzceuN60IEWyzZHT2pumP4QGQqr98clmM
-	1f4R1CdfWzh0N6TgSzX2dFYfZ92ntNpWzSceUJpai9rY9yZTNCRCRE81RipBPd12Uz0=
-X-Gm-Gg: AYBFou0b/Kv6TtrLorES/8sz0sDDpW0dnhSEHKyCrr+ASYuw/9HD5VCVdiAMslhAzal
-	g/YGKB4BcnBWCFIYlIYkXz2wrMzFGVSB0NZBp5bgWdoS9KvAeRQ6mglUrfkNAxqzSE9n0FRahH2
-	6UPgw5qYjKfbIjLFl6VKGG8LDPnwI9gnv6xAE/hWeBk+EHknp05VlQhl+3T3D34+SRpIRlsC8xR
-	TVPRzs8x+E8Fns1Mux9cpUDoqbqzKYDqyomReRpRJ3FYoi4d+qxhunmaA5hiGqn4N70c/uJrIow
-	SsakxICtv76mnWYpa2RxFhZ7sjCKn3ccpbeXHMWob21vqe2401QBL8CRrE5lgmucBvt6tOxndMz
-	c1KkrRzgyNnZvkzBpcTmuZPTgoM1vqO+/w6V5LNluzl8cgzGkItqRPwiU0yNW/vF7g4Hw6kIRrQ
-	acKTN6ne4ard8YK63FRYeWLueEtHCtG5Iwrpq0av51TBC6OLa1Nv/XpVktpnGoCHK6MEMuIGjoq
-	23plK4rXKKkeRcSmfswla3+lwOSM3ZNgfHhPD0gcJxD0z1Uac2GSR6pd7HFIwTWgWRfj6O+lCHL
-	+BBIbUQdZCVX3nip9hjnOHypoGy0g8JAVxUQoWTNXbFxAdJVUYhMYwm8m9oAa2c=
-X-Received: by 2002:a17:90b:39cc:b0:3a6:e901:e79b with SMTP id 98e67ed59e1d1-3b12d3e6f4dmr989964a91.15.1794135919750;
-        Sun, 08 Nov 2026 03:05:19 -0800 (PST)
+        bh=moiGcSV9g6fEFglU5jjTd2VsTAmD/aUVb3CUOrfKCF0=;
+        b=DCI8LlyaypDCtIaA/tpp1Z3rPop5UMqphhuUmFG8t0HdtKAmPVGSi0+dei/yQHkgk7
+         +CxKHpCf5/Oyys4TwWXdIb9AmkOjCkf6a5TdLWyZJbjMp0gQuUPfWgJybEC3yim4nLFy
+         7MFg6/hJsOjDbFxQwF++N94Zcsd1bcIk3tGECAfcIu77RyJZwksGKt6buDPlHf9nuuw/
+         pUb4LmdctIewrr0cWUH3ve8RHPX3PuYP2V/cS6JygWv5OKLgFFQlVAD0jtlaGepp27oy
+         v9tlzJtqG6mbWkyygZ/0mcC6YlOCwaDGav6P05dDmprSPVCI+0pqMJZpYW6DUsXrCp+L
+         35sg==
+X-Forwarded-Encrypted: i=1; AL+hErHEW1q54K2oWiStf9jXjTU5sccUw+Ep0A6YmWZTG4fiFjXKp7r00u4i1fhLihX36aP2pLk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+8wOTzH4WmBzr53bPHrQRFUxsbddtpTWJKZoWJ2HbRSJGUd+Ma
+	6o8I052zhFDHXNFMuQphWKMyToyKVlRmqYdoVBbTx0V8tdctzqTU1H61/CDIVdvg3dk=
+X-Gm-Gg: AYBFou1DjMKJgWqwcrqPAGn9CB/KaFHD8EdJBFYgobkEz4SM1QhHlLfNpuBAak33D55
+	v3RPLGPiy1in/l7kZHfYujwxtnCK0LDHtKcO6YQGF+xuLB5KQI+GqZAZXMMAlT960JlCOha3giI
+	LJQHbqtkSm3LIx5AqlV6pdCbpVFS7YIFcwcL5xSTlyuoTv5E0HCOCKSD+y/GXZDwASmZGFCKmN/
+	HdSZpzmu+2vNnJ/8CY9SMpAh6SHCNF7EQhlAmvUFEvGjZtPeFXAva22HN41jzKlOINZx4j+Xtb7
+	1rS8HMx4UEbRFx+6NVaFMeyjIgDXG/Wyd9KuekMQ41SjarB5p9I/uEzVHzy6ogLJGfHx7a18jKO
+	AtU95H0YJtH5mZyZtHMei/ZonufJd0Ka5iiRJb9eNfu+RY8kc8iMNGpP9M+f3/2OPL4/l/KKKfT
+	imLZK4jH1Jtns2TL5RGIbVnLKY7WS+Xw9Q/ox+q/upyqSu1beAyoira85fhbhTz/wng0GRgiO1X
+	xhlLGiWh8sAto1NJzr800TQ+CJ/xgtz3I7Mv0r4eNEYre6oq//oKrSgj6vYy5tamZTyhNDkJPBD
+	3+3nGwQJOxHQ8gdUBAxh7p2AOI5AmRQgvSsPlSgrlff1COh+KbRpn6UueEUnEZs=
+X-Received: by 2002:a17:90a:e7c9:b0:39e:4c7f:7308 with SMTP id 98e67ed59e1d1-3b12d37ecffmr886982a91.31.1794135940233;
+        Sun, 08 Nov 2026 03:05:40 -0800 (PST)
 Received: from localhost.localdomain ([139.177.225.233])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1278918f4sm2609818a91.6.2026.11.08.03.05.01
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1278918f4sm2609818a91.6.2026.11.08.03.05.20
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 08 Nov 2026 03:05:18 -0800 (PST)
+        Sun, 08 Nov 2026 03:05:36 -0800 (PST)
 From: Yunhui Cui <cuiyunhui@bytedance.com>
 To: pjw@kernel.org,
 	palmer@dabbelt.com,
@@ -131,9 +131,9 @@ To: pjw@kernel.org,
 	ihor.solodrai@linux.dev,
 	broonie@kernel.org,
 	cuiyunhui@bytedance.com
-Subject: [PATCH v9 1/3] riscv: implement this_cpu operations
-Date: Sun,  8 Nov 2026 19:04:04 +0800
-Message-Id: <20261108110406.97495-2-cuiyunhui@bytedance.com>
+Subject: [PATCH v9 2/3] riscv: store percpu offset into thread_info
+Date: Sun,  8 Nov 2026 19:04:05 +0800
+Message-Id: <20261108110406.97495-3-cuiyunhui@bytedance.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 In-Reply-To: <20261108110406.97495-1-cuiyunhui@bytedance.com>
 References: <20261108110406.97495-1-cuiyunhui@bytedance.com>
@@ -148,600 +148,195 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-RISC-V has no asm/percpu.h, so this_cpu_*() read-modify-write
-operations use generic implementations that disable local interrupts.
+RISC-V currently derives the current per-CPU offset from the CPU number
+and __per_cpu_offset[]. Cache it in thread_info so per-CPU accesses can
+load the offset directly.
 
-Implement RISC-V-specific this_cpu operations with preemption disabled
-to keep accesses on the current CPU. Native-width read-modify-write
-operations use relaxed AMOs, while 8-bit and 16-bit read-modify-write
-operations use Zabha when available or a local 32-bit LR/SC sequence
-otherwise.
+Initialize the cached offset for the boot and secondary CPUs, and
+propagate it across context switches. Set it before each secondary CPU
+startup, including parallel bringup and CPU hotplug.
 
-Link: https://lore.kernel.org/r/20260826010748.zphu3wh2hlm4t4o2@offworld
-Tested-by: Davidlohr Bueso <dave@stgolabs.net>
+Link: https://lists.riscv.org/g/tech-privileged/topic/risc_v_tech_arch_review/113437553?page=2
+Link: https://lore.kernel.org/r/20260826012457.ig3rfmji7vywf6kc@offworld
 Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
 ---
- arch/riscv/include/asm/percpu.h | 569 ++++++++++++++++++++++++++++++++
- 1 file changed, 569 insertions(+)
- create mode 100644 arch/riscv/include/asm/percpu.h
+ arch/riscv/include/asm/asm.h         |  6 +-----
+ arch/riscv/include/asm/percpu.h      |  5 +++++
+ arch/riscv/include/asm/switch_to.h   |  9 +++++++++
+ arch/riscv/include/asm/thread_info.h |  3 ++-
+ arch/riscv/kernel/asm-offsets.c      |  2 +-
+ arch/riscv/kernel/smpboot.c          | 10 +++++++++-
+ arch/riscv/net/bpf_jit_comp64.c      |  9 +--------
+ 7 files changed, 28 insertions(+), 16 deletions(-)
 
+diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
+index b8bf842d4c136..06ac38f733b0a 100644
+--- a/arch/riscv/include/asm/asm.h
++++ b/arch/riscv/include/asm/asm.h
+@@ -92,11 +92,7 @@
+ 
+ #ifdef CONFIG_SMP
+ .macro asm_per_cpu dst sym tmp
+-	lw    \tmp, TASK_TI_CPU_NUM(tp)
+-	slli  \tmp, \tmp, RISCV_LGPTR
+-	la    \dst, __per_cpu_offset
+-	add   \dst, \dst, \tmp
+-	REG_L \tmp, 0(\dst)
++	REG_L \tmp, TASK_TI_PCPU_OFFSET(tp)
+ 	la    \dst, \sym
+ 	add   \dst, \dst, \tmp
+ .endm
 diff --git a/arch/riscv/include/asm/percpu.h b/arch/riscv/include/asm/percpu.h
-new file mode 100644
-index 0000000000000..280b122b9fe69
---- /dev/null
+index 280b122b9fe69..2a3ddc3538869 100644
+--- a/arch/riscv/include/asm/percpu.h
 +++ b/arch/riscv/include/asm/percpu.h
-@@ -0,0 +1,569 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
+@@ -9,9 +9,12 @@
+ #include <asm/alternative-macros.h>
+ #include <asm/cmpxchg.h>
+ #include <asm/cpufeature-macros.h>
++#include <asm/current.h>
+ #include <asm/hwcap.h>
+ #include <asm/irqflags.h>
+ 
++#include <linux/thread_info.h>
 +
-+#ifndef __ASM_PERCPU_H
-+#define __ASM_PERCPU_H
+ #define PERCPU_RW_OPS(sz)						\
+ static inline unsigned long __percpu_read_##sz(void *ptr)		\
+ {									\
+@@ -557,6 +560,8 @@ static inline u128 __percpu_generic_cmpxchg128(void *ptr, u128 old_val,
+ })
+ #endif
+ 
++#define __my_cpu_offset (((struct thread_info *)current)->pcpu_offset)
 +
-+#include <linux/bits.h>
-+#include <linux/preempt.h>
-+
-+#include <asm/alternative-macros.h>
-+#include <asm/cmpxchg.h>
-+#include <asm/cpufeature-macros.h>
-+#include <asm/hwcap.h>
-+#include <asm/irqflags.h>
-+
-+#define PERCPU_RW_OPS(sz)						\
-+static inline unsigned long __percpu_read_##sz(void *ptr)		\
-+{									\
-+	return READ_ONCE(*(u##sz *)ptr);				\
-+}									\
-+									\
-+static inline void __percpu_write_##sz(void *ptr, unsigned long val)	\
-+{									\
-+	WRITE_ONCE(*(u##sz *)ptr, (u##sz)val);				\
-+}
-+
-+PERCPU_RW_OPS(8)
-+PERCPU_RW_OPS(16)
-+PERCPU_RW_OPS(32)
-+
-+#ifdef CONFIG_64BIT
-+PERCPU_RW_OPS(64)
-+#endif
-+
-+/*
-+ * Use a real destination register instead of x0 even when the result is
-+ * unused. Implementations may execute rd=x0 AMOs at a memory controller
-+ * without returning the old value to the CPU. Value-returning AMOs are
-+ * more likely to execute near the CPU, for example in the L1 cache. This
-+ * better suits per-CPU data, which is typically accessed repeatedly by
-+ * the same CPU.
-+ *
-+ * https://lore.kernel.org/r/e7d539ed-ced0-4b96-8ecd-048a5b803b85@paulmck-laptop
-+ */
-+#define __PERCPU_AMO_OP_CASE(sfx, name, sz, amo_insn)			\
-+static inline void							\
-+__percpu_##name##_amo_case_##sz(void *ptr, unsigned long val)		\
-+{									\
-+	u##sz tmp;							\
-+									\
-+	asm volatile (							\
-+		"amo" #amo_insn #sfx " %[tmp], %[val], %[ptr]"	\
-+		: [ptr] "+A" (*(u##sz *)ptr), [tmp] "=r" (tmp)	\
-+		: [val] "r" ((u##sz)(val)));				\
-+}
-+
-+__PERCPU_AMO_OP_CASE(.w, add, 32, add)
-+__PERCPU_AMO_OP_CASE(.w, and, 32, and)
-+__PERCPU_AMO_OP_CASE(.w, or, 32, or)
-+
-+#ifdef CONFIG_64BIT
-+__PERCPU_AMO_OP_CASE(.d, add, 64, add)
-+__PERCPU_AMO_OP_CASE(.d, and, 64, and)
-+__PERCPU_AMO_OP_CASE(.d, or, 64, or)
-+#endif
-+
-+static inline u32 __percpu_add_return_amo_case_32(void *ptr, unsigned long val)
+ #undef PERCPU_RW_OPS
+ #undef __PERCPU_AMO_OP_CASE
+ #undef PERCPU_8_16_GET_SHIFT
+diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
+index 123c89b694e87..b4a4d4a44f25d 100644
+--- a/arch/riscv/include/asm/switch_to.h
++++ b/arch/riscv/include/asm/switch_to.h
+@@ -89,6 +89,14 @@ static inline void __switch_to_envcfg(struct task_struct *next)
+ 			:: "r" (next->thread.envcfg) : "memory");
+ }
+ 
++static inline void __switch_to_pcpu_offset(struct task_struct *prev,
++					   struct task_struct *next)
 +{
-+	register u32 ret;
-+
-+	asm volatile ("amoadd.w %[ret], %[val], %[ptr]"
-+		: [ptr] "+A" (*(u32 *)ptr), [ret] "=r" (ret)
-+		: [val] "r" ((u32)(val)));
-+
-+	return ret + val;
++#ifdef CONFIG_SMP
++	next->thread_info.pcpu_offset = prev->thread_info.pcpu_offset;
++#endif
 +}
 +
-+#ifdef CONFIG_64BIT
-+static inline u64 __percpu_add_return_amo_case_64(void *ptr, unsigned long val)
+ extern struct task_struct *__switch_to(struct task_struct *,
+ 				       struct task_struct *);
+ 
+@@ -125,6 +133,7 @@ do {							\
+ 	if (switch_to_should_flush_icache(__next))	\
+ 		local_flush_icache_all();		\
+ 	__switch_to_envcfg(__next);			\
++	__switch_to_pcpu_offset(__prev, __next);		\
+ 	((last) = __switch_to(__prev, __next));		\
+ } while (0)
+ 
+diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+index 55019fdfa9eca..f10ba62b61016 100644
+--- a/arch/riscv/include/asm/thread_info.h
++++ b/arch/riscv/include/asm/thread_info.h
+@@ -53,6 +53,7 @@
+ struct thread_info {
+ 	unsigned long		flags;		/* low level flags */
+ 	int                     preempt_count;  /* 0=>preemptible, <0=>BUG */
++	int			cpu;
+ 	/*
+ 	 * These stack pointers are overwritten on every system call or
+ 	 * exception.  SP is also saved to the stack it can be recovered when
+@@ -60,8 +61,8 @@ struct thread_info {
+ 	 */
+ 	long			kernel_sp;	/* Kernel stack pointer */
+ 	long			user_sp;	/* User stack pointer */
+-	int			cpu;
+ 	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
++	unsigned long		pcpu_offset;
+ #ifdef CONFIG_SHADOW_CALL_STACK
+ 	void			*scs_base;
+ 	void			*scs_sp;
+diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+index a75f0cfea1e9f..f4f7ee976cd94 100644
+--- a/arch/riscv/kernel/asm-offsets.c
++++ b/arch/riscv/kernel/asm-offsets.c
+@@ -38,6 +38,7 @@ void asm_offsets(void)
+ 	OFFSET(TASK_THREAD_SUM, task_struct, thread.sum);
+ 
+ 	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
++	OFFSET(TASK_TI_PCPU_OFFSET, task_struct, thread_info.pcpu_offset);
+ 	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+ 	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+ 	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+@@ -50,7 +51,6 @@ void asm_offsets(void)
+ 	OFFSET(TASK_TI_A2, task_struct, thread_info.a2);
+ #endif
+ 
+-	OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
+ #ifdef CONFIG_RISCV_USER_CFI
+ 	OFFSET(TASK_TI_CFI_STATE, task_struct, thread_info.user_cfi_state);
+ 	OFFSET(TASK_TI_USER_SSP, task_struct, thread_info.user_cfi_state.user_shdw_stk);
+diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+index a9de2dae804c6..6431914d21165 100644
+--- a/arch/riscv/kernel/smpboot.c
++++ b/arch/riscv/kernel/smpboot.c
+@@ -175,6 +175,10 @@ void __init setup_smp(void)
+ 
+ static int start_secondary_cpu(int cpu, struct task_struct *tidle)
+ {
++	/* The idle task is reused across CPU hotplug. */
++	tidle->thread_info.cpu = cpu;
++	tidle->thread_info.pcpu_offset = per_cpu_offset(cpu);
++
+ 	if (cpu_ops->cpu_start)
+ 		return cpu_ops->cpu_start(cpu, tidle);
+ 
+@@ -190,7 +194,6 @@ int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *tidle)
+ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
+ {
+ 	int ret;
+-	tidle->thread_info.cpu = cpu;
+ 
+ 	ret = start_secondary_cpu(cpu, tidle);
+ 	if (!ret) {
+@@ -208,6 +211,11 @@ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
+ }
+ #endif
+ 
++void __init smp_prepare_boot_cpu(void)
 +{
-+	register u64 ret;
-+
-+	asm volatile ("amoadd.d %[ret], %[val], %[ptr]"
-+		: [ptr] "+A" (*(u64 *)ptr), [ret] "=r" (ret)
-+		: [val] "r" ((u64)(val)));
-+
-+	return ret + val;
-+}
-+#endif
-+
-+#define PERCPU_8_16_GET_SHIFT(ptr)	(((unsigned long)(ptr) & 0x3) * BITS_PER_BYTE)
-+#define PERCPU_8_16_GET_MASK(sz)	GENMASK((sz) - 1, 0)
-+#define PERCPU_8_16_GET_PTR32(ptr)	((u32 *)((unsigned long)(ptr) & ~0x3))
-+
-+static inline void __percpu_add_amo_case_8(void *ptr, unsigned long val)
-+{
-+	u8 tmp;
-+
-+	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&
-+	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {
-+		asm volatile (".option push\n"
-+			".option arch, +zabha\n"
-+			"amoadd.b %[tmp], %[val], %[ptr]\n"
-+			".option pop"
-+			: [ptr] "+A" (*(u8 *)ptr), [tmp] "=r" (tmp)
-+			: [val] "r" ((u8)(val & PERCPU_8_16_GET_MASK(8))));
-+	} else {
-+		u32 *ptr32 = PERCPU_8_16_GET_PTR32(ptr);
-+		const unsigned long shift = PERCPU_8_16_GET_SHIFT(ptr);
-+		const u32 mask = PERCPU_8_16_GET_MASK(8) << shift;
-+		const u8 val_trunc = val & PERCPU_8_16_GET_MASK(8);
-+		u32 old, new;
-+		u8 field;
-+
-+		asm volatile ("0: lr.w %0, %2\n"
-+			"and %3, %0, %4\n"
-+			"srl %3, %3, %5\n"
-+			"add %3, %3, %6\n"
-+			"and %3, %3, %8\n"
-+			"sll %3, %3, %5\n"
-+			"and %1, %0, %7\n"
-+			"or %1, %1, %3\n"
-+			"sc.w %1, %1, %2\n"
-+			"bnez %1, 0b\n"
-+			: "=&r"(old), "=&r"(new), "+A"(*ptr32), "=&r"(field)
-+			: "r"(mask), "r"(shift), "r"(val_trunc), "r"(~mask),
-+			  "r"(PERCPU_8_16_GET_MASK(8)));
-+	}
++	__my_cpu_offset = per_cpu_offset(smp_processor_id());
 +}
 +
-+static inline void __percpu_add_amo_case_16(void *ptr, unsigned long val)
-+{
-+	u16 tmp;
-+
-+	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&
-+	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {
-+		asm volatile (".option push\n"
-+			".option arch, +zabha\n"
-+			"amoadd.h %[tmp], %[val], %[ptr]\n"
-+			".option pop"
-+			: [ptr] "+A" (*(u16 *)ptr), [tmp] "=r" (tmp)
-+			: [val] "r" ((u16)(val & PERCPU_8_16_GET_MASK(16))));
-+	} else {
-+		u32 *ptr32 = PERCPU_8_16_GET_PTR32(ptr);
-+		const unsigned long shift = PERCPU_8_16_GET_SHIFT(ptr);
-+		const u32 mask = PERCPU_8_16_GET_MASK(16) << shift;
-+		const u16 val_trunc = val & PERCPU_8_16_GET_MASK(16);
-+		u32 old, new;
-+		u16 field;
-+
-+		asm volatile ("0: lr.w %0, %2\n"
-+			"and %3, %0, %4\n"
-+			"srl %3, %3, %5\n"
-+			"add %3, %3, %6\n"
-+			"and %3, %3, %8\n"
-+			"sll %3, %3, %5\n"
-+			"and %1, %0, %7\n"
-+			"or %1, %1, %3\n"
-+			"sc.w %1, %1, %2\n"
-+			"bnez %1, 0b\n"
-+			: "=&r"(old), "=&r"(new), "+A"(*ptr32), "=&r"(field)
-+			: "r"(mask), "r"(shift), "r"(val_trunc), "r"(~mask),
-+			  "r"(PERCPU_8_16_GET_MASK(16)));
-+	}
-+}
-+
-+static inline void __percpu_and_amo_case_8(void *ptr, unsigned long val)
-+{
-+	u8 tmp;
-+
-+	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&
-+	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {
-+		asm volatile (".option push\n"
-+			".option arch, +zabha\n"
-+			"amoand.b %[tmp], %[val], %[ptr]\n"
-+			".option pop"
-+			: [ptr] "+A" (*(u8 *)ptr), [tmp] "=r" (tmp)
-+			: [val] "r" ((u8)(val & PERCPU_8_16_GET_MASK(8))));
-+	} else {
-+		u32 *ptr32 = PERCPU_8_16_GET_PTR32(ptr);
-+		const unsigned long shift = PERCPU_8_16_GET_SHIFT(ptr);
-+		const u32 mask = PERCPU_8_16_GET_MASK(8) << shift;
-+		const u8 val_trunc = val & PERCPU_8_16_GET_MASK(8);
-+		u32 old, new;
-+		u8 field;
-+
-+		asm volatile ("0: lr.w %0, %2\n"
-+			"and %3, %0, %4\n"
-+			"srl %3, %3, %5\n"
-+			"and %3, %3, %6\n"
-+			"and %3, %3, %8\n"
-+			"sll %3, %3, %5\n"
-+			"and %1, %0, %7\n"
-+			"or %1, %1, %3\n"
-+			"sc.w %1, %1, %2\n"
-+			"bnez %1, 0b\n"
-+			: "=&r"(old), "=&r"(new), "+A"(*ptr32), "=&r"(field)
-+			: "r"(mask), "r"(shift), "r"(val_trunc), "r"(~mask),
-+			  "r"(PERCPU_8_16_GET_MASK(8)));
-+	}
-+}
-+
-+static inline void __percpu_and_amo_case_16(void *ptr, unsigned long val)
-+{
-+	u16 tmp;
-+
-+	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&
-+	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {
-+		asm volatile (".option push\n"
-+			".option arch, +zabha\n"
-+			"amoand.h %[tmp], %[val], %[ptr]\n"
-+			".option pop"
-+			: [ptr] "+A" (*(u16 *)ptr), [tmp] "=r" (tmp)
-+			: [val] "r" ((u16)(val & PERCPU_8_16_GET_MASK(16))));
-+	} else {
-+		u32 *ptr32 = PERCPU_8_16_GET_PTR32(ptr);
-+		const unsigned long shift = PERCPU_8_16_GET_SHIFT(ptr);
-+		const u32 mask = PERCPU_8_16_GET_MASK(16) << shift;
-+		const u16 val_trunc = val & PERCPU_8_16_GET_MASK(16);
-+		u32 old, new;
-+		u16 field;
-+
-+		asm volatile ("0: lr.w %0, %2\n"
-+			"and %3, %0, %4\n"
-+			"srl %3, %3, %5\n"
-+			"and %3, %3, %6\n"
-+			"and %3, %3, %8\n"
-+			"sll %3, %3, %5\n"
-+			"and %1, %0, %7\n"
-+			"or %1, %1, %3\n"
-+			"sc.w %1, %1, %2\n"
-+			"bnez %1, 0b\n"
-+			: "=&r"(old), "=&r"(new), "+A"(*ptr32), "=&r"(field)
-+			: "r"(mask), "r"(shift), "r"(val_trunc), "r"(~mask),
-+			  "r"(PERCPU_8_16_GET_MASK(16)));
-+	}
-+}
-+
-+static inline void __percpu_or_amo_case_8(void *ptr, unsigned long val)
-+{
-+	u8 tmp;
-+
-+	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&
-+	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {
-+		asm volatile (".option push\n"
-+			".option arch, +zabha\n"
-+			"amoor.b %[tmp], %[val], %[ptr]\n"
-+			".option pop"
-+			: [ptr] "+A" (*(u8 *)ptr), [tmp] "=r" (tmp)
-+			: [val] "r" ((u8)(val & PERCPU_8_16_GET_MASK(8))));
-+	} else {
-+		u32 *ptr32 = PERCPU_8_16_GET_PTR32(ptr);
-+		const unsigned long shift = PERCPU_8_16_GET_SHIFT(ptr);
-+		const u32 mask = PERCPU_8_16_GET_MASK(8) << shift;
-+		const u8 val_trunc = val & PERCPU_8_16_GET_MASK(8);
-+		u32 old, new;
-+		u8 field;
-+
-+		asm volatile ("0: lr.w %0, %2\n"
-+			"and %3, %0, %4\n"
-+			"srl %3, %3, %5\n"
-+			"or %3, %3, %6\n"
-+			"and %3, %3, %8\n"
-+			"sll %3, %3, %5\n"
-+			"and %1, %0, %7\n"
-+			"or %1, %1, %3\n"
-+			"sc.w %1, %1, %2\n"
-+			"bnez %1, 0b\n"
-+			: "=&r"(old), "=&r"(new), "+A"(*ptr32), "=&r"(field)
-+			: "r"(mask), "r"(shift), "r"(val_trunc), "r"(~mask),
-+			  "r"(PERCPU_8_16_GET_MASK(8)));
-+	}
-+}
-+
-+static inline void __percpu_or_amo_case_16(void *ptr, unsigned long val)
-+{
-+	u16 tmp;
-+
-+	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&
-+	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {
-+		asm volatile (".option push\n"
-+			".option arch, +zabha\n"
-+			"amoor.h %[tmp], %[val], %[ptr]\n"
-+			".option pop"
-+			: [ptr] "+A" (*(u16 *)ptr), [tmp] "=r" (tmp)
-+			: [val] "r" ((u16)(val & PERCPU_8_16_GET_MASK(16))));
-+	} else {
-+		u32 *ptr32 = PERCPU_8_16_GET_PTR32(ptr);
-+		const unsigned long shift = PERCPU_8_16_GET_SHIFT(ptr);
-+		const u32 mask = PERCPU_8_16_GET_MASK(16) << shift;
-+		const u16 val_trunc = val & PERCPU_8_16_GET_MASK(16);
-+		u32 old, new;
-+		u16 field;
-+
-+		asm volatile ("0: lr.w %0, %2\n"
-+			"and %3, %0, %4\n"
-+			"srl %3, %3, %5\n"
-+			"or %3, %3, %6\n"
-+			"and %3, %3, %8\n"
-+			"sll %3, %3, %5\n"
-+			"and %1, %0, %7\n"
-+			"or %1, %1, %3\n"
-+			"sc.w %1, %1, %2\n"
-+			"bnez %1, 0b\n"
-+			: "=&r"(old), "=&r"(new), "+A"(*ptr32), "=&r"(field)
-+			: "r"(mask), "r"(shift), "r"(val_trunc), "r"(~mask),
-+			  "r"(PERCPU_8_16_GET_MASK(16)));
-+	}
-+}
-+
-+static inline u8 __percpu_add_return_amo_case_8(void *ptr, unsigned long val)
-+{
-+	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&
-+	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {
-+		register u8 ret;
-+
-+		asm volatile (".option push\n"
-+			".option arch, +zabha\n"
-+			"amoadd.b %[ret], %[val], %[ptr]\n"
-+			".option pop"
-+			: [ptr] "+A"(*(u8 *)ptr), [ret] "=r"(ret)
-+			: [val] "r"((u8)(val & PERCPU_8_16_GET_MASK(8))));
-+		return ret + (u8)(val & PERCPU_8_16_GET_MASK(8));
-+	}
-+
-+	{
-+		u32 *ptr32 = PERCPU_8_16_GET_PTR32(ptr);
-+		const unsigned long shift = PERCPU_8_16_GET_SHIFT(ptr);
-+		const u32 mask = PERCPU_8_16_GET_MASK(8) << shift;
-+		const u32 inv_mask = ~mask;
-+		const u8 val_trunc = val & PERCPU_8_16_GET_MASK(8);
-+		u32 old, new, field;
-+
-+		asm volatile ("0: lr.w %0, %3\n"
-+			"and %1, %0, %4\n"
-+			"srl %1, %1, %5\n"
-+			"add %1, %1, %6\n"
-+			"and %1, %1, %7\n"
-+			"sll %1, %1, %5\n"
-+			"and %2, %0, %8\n"
-+			"or %2, %2, %1\n"
-+			"sc.w %2, %2, %3\n"
-+			"bnez %2, 0b\n"
-+			: "=&r"(old), "=&r"(field), "=&r"(new), "+A"(*ptr32)
-+			: "r"(mask), "r"(shift), "r"(val_trunc),
-+			  "r"(PERCPU_8_16_GET_MASK(8)), "r"(inv_mask));
-+		return field >> shift;
-+	}
-+}
-+
-+static inline u16 __percpu_add_return_amo_case_16(void *ptr, unsigned long val)
-+{
-+	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&
-+	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {
-+		register u16 ret;
-+
-+		asm volatile (".option push\n"
-+			".option arch, +zabha\n"
-+			"amoadd.h %[ret], %[val], %[ptr]\n"
-+			".option pop"
-+			: [ptr] "+A"(*(u16 *)ptr), [ret] "=r"(ret)
-+			: [val] "r"((u16)(val & PERCPU_8_16_GET_MASK(16))));
-+		return ret + (u16)(val & PERCPU_8_16_GET_MASK(16));
-+	}
-+
-+	{
-+		u32 *ptr32 = PERCPU_8_16_GET_PTR32(ptr);
-+		const unsigned long shift = PERCPU_8_16_GET_SHIFT(ptr);
-+		const u32 mask = PERCPU_8_16_GET_MASK(16) << shift;
-+		const u32 inv_mask = ~mask;
-+		const u16 val_trunc = val & PERCPU_8_16_GET_MASK(16);
-+		u32 old, new, field;
-+
-+		asm volatile ("0: lr.w %0, %3\n"
-+			"and %1, %0, %4\n"
-+			"srl %1, %1, %5\n"
-+			"add %1, %1, %6\n"
-+			"and %1, %1, %7\n"
-+			"sll %1, %1, %5\n"
-+			"and %2, %0, %8\n"
-+			"or %2, %2, %1\n"
-+			"sc.w %2, %2, %3\n"
-+			"bnez %2, 0b\n"
-+			: "=&r"(old), "=&r"(field), "=&r"(new), "+A"(*ptr32)
-+			: "r"(mask), "r"(shift), "r"(val_trunc),
-+			  "r"(PERCPU_8_16_GET_MASK(16)), "r"(inv_mask));
-+		return field >> shift;
-+	}
-+}
-+
-+/*
-+ * Put arch_cmpxchg_relaxed() behind a function boundary to isolate its macro
-+ * locals from those at the call site. asm-generic implements
-+ * this_cpu_try_cmpxchg_N() using this_cpu_cmpxchg_N() and a local named __old.
-+ * RISC-V's _arch_cmpxchg() also declares __old, so expanding it in the caller's
-+ * scope would turn its initializer into "__old = (__old)" and read the
-+ * uninitialized inner variable.
-+ *
-+ * __always_inline avoids an out-of-line call.
-+ * _pcp_protect_cmpxchg_return() provides the instrument_atomic_read_write()
-+ * hook that cmpxchg_relaxed() would otherwise provide.
-+ */
-+#define PERCPU_CMPXCHG_OP(sz)						\
-+static __always_inline unsigned long					\
-+__percpu_cmpxchg_case_##sz(void *ptr, unsigned long old,		\
-+			   unsigned long new)				\
-+{									\
-+	return arch_cmpxchg_relaxed((u##sz *)ptr, (u##sz)old,		\
-+				    (u##sz)new);			\
-+}
-+
-+PERCPU_CMPXCHG_OP(8)
-+PERCPU_CMPXCHG_OP(16)
-+PERCPU_CMPXCHG_OP(32)
-+
-+#ifdef CONFIG_64BIT
-+PERCPU_CMPXCHG_OP(64)
-+#endif
-+
-+#define _pcp_protect(op, pcp, ...)					\
-+({									\
-+	preempt_disable_notrace();					\
-+	op(raw_cpu_ptr(&(pcp)), __VA_ARGS__);				\
-+	preempt_enable_notrace();					\
-+})
-+
-+#define _pcp_protect_return(op, pcp, args...)				\
-+({									\
-+	typeof(pcp) __retval;						\
-+	preempt_disable_notrace();					\
-+	__retval = (typeof(pcp))op(raw_cpu_ptr(&(pcp)), ##args);	\
-+	preempt_enable_notrace();					\
-+	__retval;							\
-+})
-+
-+#define _pcp_protect_cmpxchg_return(op, pcp, old, new)			\
-+({									\
-+	typeof(pcp) __retval;						\
-+	typeof(pcp) *__pcp_ptr;						\
-+									\
-+	preempt_disable_notrace();					\
-+	__pcp_ptr = raw_cpu_ptr(&(pcp));				\
-+	instrument_atomic_read_write(__pcp_ptr, sizeof(*__pcp_ptr));	\
-+	__retval = (typeof(pcp))op(__pcp_ptr, (unsigned long)(old),	\
-+				     (unsigned long)(new));		\
-+	preempt_enable_notrace();					\
-+	__retval;							\
-+})
-+
-+#define this_cpu_read_1(pcp)		_pcp_protect_return(__percpu_read_8, pcp)
-+#define this_cpu_read_2(pcp)		_pcp_protect_return(__percpu_read_16, pcp)
-+#define this_cpu_read_4(pcp)		_pcp_protect_return(__percpu_read_32, pcp)
-+
-+#ifdef CONFIG_64BIT
-+#define this_cpu_read_8(pcp)		_pcp_protect_return(__percpu_read_64, pcp)
-+#endif
-+
-+#define this_cpu_write_1(pcp, val)	_pcp_protect(__percpu_write_8, pcp, (unsigned long)val)
-+#define this_cpu_write_2(pcp, val)	_pcp_protect(__percpu_write_16, pcp, (unsigned long)val)
-+#define this_cpu_write_4(pcp, val)	_pcp_protect(__percpu_write_32, pcp, (unsigned long)val)
-+
-+#ifdef CONFIG_64BIT
-+#define this_cpu_write_8(pcp, val)	_pcp_protect(__percpu_write_64, pcp, (unsigned long)val)
-+#endif
-+
-+#define this_cpu_add_1(pcp, val)	_pcp_protect(__percpu_add_amo_case_8, pcp, val)
-+#define this_cpu_add_2(pcp, val)	_pcp_protect(__percpu_add_amo_case_16, pcp, val)
-+#define this_cpu_add_4(pcp, val)	_pcp_protect(__percpu_add_amo_case_32, pcp, val)
-+
-+#ifdef CONFIG_64BIT
-+#define this_cpu_add_8(pcp, val)	_pcp_protect(__percpu_add_amo_case_64, pcp, val)
-+#endif
-+
-+#define this_cpu_add_return_1(pcp, val)		\
-+_pcp_protect_return(__percpu_add_return_amo_case_8, pcp, val)
-+
-+#define this_cpu_add_return_2(pcp, val)		\
-+_pcp_protect_return(__percpu_add_return_amo_case_16, pcp, val)
-+
-+#define this_cpu_add_return_4(pcp, val)		\
-+_pcp_protect_return(__percpu_add_return_amo_case_32, pcp, val)
-+
-+#ifdef CONFIG_64BIT
-+#define this_cpu_add_return_8(pcp, val)		\
-+_pcp_protect_return(__percpu_add_return_amo_case_64, pcp, val)
-+#endif
-+
-+#define this_cpu_and_1(pcp, val)	_pcp_protect(__percpu_and_amo_case_8, pcp, val)
-+#define this_cpu_and_2(pcp, val)	_pcp_protect(__percpu_and_amo_case_16, pcp, val)
-+#define this_cpu_and_4(pcp, val)	_pcp_protect(__percpu_and_amo_case_32, pcp, val)
-+
-+#ifdef CONFIG_64BIT
-+#define this_cpu_and_8(pcp, val)	_pcp_protect(__percpu_and_amo_case_64, pcp, val)
-+#endif
-+
-+#define this_cpu_or_1(pcp, val)	_pcp_protect(__percpu_or_amo_case_8, pcp, val)
-+#define this_cpu_or_2(pcp, val)	_pcp_protect(__percpu_or_amo_case_16, pcp, val)
-+#define this_cpu_or_4(pcp, val)	_pcp_protect(__percpu_or_amo_case_32, pcp, val)
-+
-+#ifdef CONFIG_64BIT
-+#define this_cpu_or_8(pcp, val)	_pcp_protect(__percpu_or_amo_case_64, pcp, val)
-+#endif
-+
-+#define this_cpu_xchg_1(pcp, val)	_pcp_protect_return(xchg_relaxed, pcp, val)
-+#define this_cpu_xchg_2(pcp, val)	_pcp_protect_return(xchg_relaxed, pcp, val)
-+#define this_cpu_xchg_4(pcp, val)	_pcp_protect_return(xchg_relaxed, pcp, val)
-+
-+#ifdef CONFIG_64BIT
-+#define this_cpu_xchg_8(pcp, val)	_pcp_protect_return(xchg_relaxed, pcp, val)
-+#endif
-+
-+#define this_cpu_cmpxchg_1(pcp, o, n)					\
-+	_pcp_protect_cmpxchg_return(__percpu_cmpxchg_case_8, pcp, o, n)
-+
-+#define this_cpu_cmpxchg_2(pcp, o, n)					\
-+	_pcp_protect_cmpxchg_return(__percpu_cmpxchg_case_16, pcp, o, n)
-+
-+#define this_cpu_cmpxchg_4(pcp, o, n)					\
-+	_pcp_protect_cmpxchg_return(__percpu_cmpxchg_case_32, pcp, o, n)
-+
-+#ifdef CONFIG_64BIT
-+#define this_cpu_cmpxchg_8(pcp, o, n)					\
-+	_pcp_protect_cmpxchg_return(__percpu_cmpxchg_case_64, pcp, o, n)
-+
-+#define this_cpu_cmpxchg64(pcp, o, n)	this_cpu_cmpxchg_8(pcp, o, n)
-+#endif
-+
-+#ifdef system_has_cmpxchg128
-+static inline u128 __percpu_generic_cmpxchg128(void *ptr, u128 old_val,
-+						      u128 new_val)
-+{
-+	unsigned long flags;
-+	u128 *p = ptr;
-+	u128 ret;
-+
-+	flags = arch_local_irq_save();
-+	ret = *p;
-+	if (ret == old_val)
-+		*p = new_val;
-+	arch_local_irq_restore(flags);
-+
-+	return ret;
-+}
-+
-+#define this_cpu_cmpxchg128(pcp, o, n)					\
-+({									\
-+	u128 old__ = (o), new__ = (n), ret__;				\
-+	typeof(pcp) *ptr__;						\
-+									\
-+	preempt_disable_notrace();					\
-+	ptr__ = raw_cpu_ptr(&(pcp));					\
-+	if (system_has_cmpxchg128())					\
-+		ret__ = cmpxchg128_local(ptr__, old__, new__);		\
-+	else								\
-+		ret__ = __percpu_generic_cmpxchg128(ptr__, old__, new__); \
-+	preempt_enable_notrace();					\
-+	ret__;								\
-+})
-+#endif
-+
-+#undef PERCPU_RW_OPS
-+#undef __PERCPU_AMO_OP_CASE
-+#undef PERCPU_8_16_GET_SHIFT
-+#undef PERCPU_8_16_GET_MASK
-+#undef PERCPU_8_16_GET_PTR32
-+#undef PERCPU_CMPXCHG_OP
-+
-+#include <asm-generic/percpu.h>
-+
-+#endif /* __ASM_PERCPU_H */
-
-base-commit: ddfe51b0a0f5dc9e415cc2c8ad8db17532dd426b
+ void __init smp_cpus_done(unsigned int max_cpus)
+ {
+ }
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 371405598faa7..fa6ce5613c4d6 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -1466,15 +1466,8 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 			if (rd != rs)
+ 				emit_mv(rd, rs, ctx);
+ #ifdef CONFIG_SMP
+-			/* Load current CPU number in T1 */
+-			emit_lw(RV_REG_T1, offsetof(struct thread_info, cpu),
++			emit_ld(RV_REG_T1, offsetof(struct thread_info, pcpu_offset),
+ 				RV_REG_TP, ctx);
+-			/* Load address of __per_cpu_offset array in T2 */
+-			emit_addr(RV_REG_T2, (u64)&__per_cpu_offset, extra_pass, ctx);
+-			/* Get address of __per_cpu_offset[cpu] in T1 */
+-			emit_sh3add(RV_REG_T1, RV_REG_T1, RV_REG_T2, ctx);
+-			/* Load __per_cpu_offset[cpu] in T1 */
+-			emit_ld(RV_REG_T1, 0, RV_REG_T1, ctx);
+ 			/* Add the offset to Rd */
+ 			emit_add(rd, rd, RV_REG_T1, ctx);
+ #endif
 -- 
 2.39.5
 
