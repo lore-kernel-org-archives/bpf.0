@@ -1,55 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794129877;
-	b=5sgkBaMfTezJSNamMFBbeYtnWfAoiBnDv+yBU/cwc1kgYSU5Xb98r6Ajb+ObPRTOVOcJ
-	 pXozCSqD7G5pGi7emR8/q7N3gfmawjDUmagQQPYkvynsGlHWpt/vcXLrgvTJP8zUGGDWU
-	 yPKs68pkbjGSicgdWVOy7X7goa4/KVw3Z8ZhE/vyWDWeyMvNrNGkT6XvayjZs4Qk6+17r
-	 EIZfqMhKyapEa2wQvdCZhJnqgsyVaCAbGMlooBwb220GvH5/8ZsmpxNnYTNGVU9BcEiji
-	 1IGUrTUBFTphmt0ci53sPvh9R55ieETzJWRCMxu38L+cd/DgpQEYpPLZ5P+bwlBCh4Q==
+	t=1794129875;
+	b=cfXW3u9jMulZWL4juXtzF0mbq9+QQYLwTBFKVGqdXCgVf/XHNsQVIMOxD2ZYDYhQ7HX3
+	 dTWUazDzoPCibX1a/JnZWGQ750ARPKgkMYcxJb/N6q6TC7+ODtrqc8rDyLqyDXzO+1xON
+	 lsEB0Gz/c8c8Lq7XoT7/e83jGlGPlHfxgq74sfzk4+31dmohaUs0GGTvBxF9ujrN/MpZD
+	 daBjOpOFBW4AEZANyysvLFgvOUxTV3kABBSLIAuEJoyhhaxOa/x4fGHYSGX4Uzzn3DbZ9
+	 XHZ18YjnCBHUCM8YGFX9vfOZ4u571MsNFGMPTqA56H15Qe8EBg7LXi/Xfalsi+5HRww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794129877;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794129875;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
 	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=PnzH+B+BQHmWRcHqdfcGVVstdJf8NJtY2FdKLBnT8BA=;
-	b=u6lnBriWkO/IT/STdue0S/unIpFazF26IJziWxRfj3101nifgJXw4MpwYUb4sD8mmCpU
-	 0O90y2NgWTguoJBIAELATahep/ldP6/6MWbZHGG0kX9hfV2ntTcV686i3FLXoFkTefb1H
-	 IarGBA/ODuCibrlAGdfTNHehT5Zd8uXncWKE1qWSHyvoZZi5LGP2ZvszB2e5xJGTBTgaH
-	 xDqV2z+WSDloBkPs5nkDjo/YiPQDevqArn1b/Lp6omGiVBANsw2wnxeZOpSRlzixFy0AN
-	 GCSqeDF/6NXYd8rnrPTZQXW8CorV9L4W1ecyRAYy+a4OF3fRUk+XP7opC8DVKhATlrg==
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=j8rq9WD1PWSJfzNjdvpugwztGTtxU4BUg3rNiZ2tRAM=;
+	b=HM3ftjnT7Clo+sb61zpD86IhyixSdSvbABFeam1p84uYQaZ6ysQHchZoLqNNoWs7T9Bc
+	 oymAuRHKfN3n+ayfPnq478a1Y5/UuhKORt5PTMhd/VojIkxfQpEYWiNH3Bod6wfLr0ZRb
+	 nr1jotW+gVZV03bYOpmEBKXzebIb8PUcwjrQTjOnZ21zpGkFJ/Bj/EeNt9+mtt8XCutVK
+	 p53c2buVFuUCwb1Q79BMrzapowsfg0kiln5aUjPIlXZAH7gtJI6MJ9NX7tQU26eHsr4oB
+	 sjWitzOYncwP/38ovKjzEape2V38dhvq+09wn0aGiMjUvq6jGCl2x3AGrUD3jX51AWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=P6HdDUCZ;
-	arc=none smtp.remote-ip=111.22.67.137
-Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F36D5606A321;
-	Sun,  8 Nov 2026 09:24:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F36D5606A321
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=tK8QjT2N;
+	arc=none smtp.remote-ip=111.22.67.139
+Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DAA606A322;
+	Sun,  8 Nov 2026 09:24:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1DAA606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=P6HdDUCZ
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=tK8QjT2N
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=P6HdDUCZ2dodrGT4fxgKTi+gcM2AkdrIy1MRstIFj6tiyIi5AAWFz+a1KqJgaNoDq3kdT/LXsx/Ol
-	 8lpjzTROB9Pi98FQQudt3FpG6rLUHyHcUubKzESAblFP6B7rF2p4zESaYABsJ7axqy7o0Q+xxQxy2i
-	 OhHS1Qcf+NsKrn+M=
+	b=tK8QjT2NhGmyW4wmOO8RrBskFx5hXGRg9xwQtBhc/8hgQCR1MVmMHh7y3w2pikytdDaCu87d5ldS2
+	 K8li6vmXmuoohPvT7aO4VNHVQntXl1cGSzPPX3dJBrmhnEPI6BG6G/KfxcJJrNZs6qau8mhhzK1yAV
+	 jZxkiMqF6PnZxl1U=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee46af03fcbe3e-5aacf;
-	Sun, 08 Nov 2026 17:24:27 +0800 (CST)
-X-RM-TRANSID:2ee46af03fcbe3e-5aacf
+	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee96af03fc6296-c043a;
+	Sun, 08 Nov 2026 17:24:31 +0800 (CST)
+X-RM-TRANSID:2ee96af03fc6296-c043a
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
-Received:from openEuler-24.03.03 (unknown[74.82.203.40])
-	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee76af03fc1270-639dd;
-	Sun, 08 Nov 2026 17:24:26 +0800 (CST)
-X-RM-TRANSID:2ee76af03fc1270-639dd
+Received:from  (unknown[74.82.203.40])
+	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee76af03fc1270-639ea;
+	Sun, 08 Nov 2026 17:24:31 +0800 (CST)
+X-RM-TRANSID:2ee76af03fc1270-639ea
 From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 To: "Michael S. Tsirkin" <mst@redhat.com>,
 	Jason Wang <jasowangio@gmail.com>,
@@ -69,12 +69,12 @@ Cc: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/2] virtio_net: Don't DMA map the kernel image for the AF_XDP TX header
-Date: Mon,  9 Nov 2026 02:23:54 +0900
-Message-ID: <20261108172417.56607-1-yanhaishuang@cmss.chinamobile.com>
+Subject: Re: [PATCH net 2/2] virtio_net: Keep AF_XDP zero-copy pools bound across suspend
+Date: Mon,  9 Nov 2026 02:23:55 +0900
+Message-ID: <20261108172417.56607-2-yanhaishuang@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <179411647562.994134.8636776015987575971@kernel.org>
-References: <20261107125723.33547-1-yanhaishuang@cmss.chinamobile.com> <20261107125723.33547-2-yanhaishuang@cmss.chinamobile.com> <179411647562.994134.8636776015987575971@kernel.org>
+In-Reply-To: <179411647719.994134.8428591729717130295@kernel.org>
+References: <20261107125723.33547-1-yanhaishuang@cmss.chinamobile.com> <20261107125723.33547-3-yanhaishuang@cmss.chinamobile.com> <179411647719.994134.8428591729717130295@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,23 +84,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 08, 2026 at 05:41:15AM +0000, netdev-bot+sashiko@kernel.org wrote:
-> > and binding an AF_XDP zero-copy socket fails with -ENOMEM. Even where
-> > the mapping succeeds, the header shares cache lines with unrelated data.
->
-> [Severity: Low]
-> Does the second sentence here match what the patch does? It reads as
-> though the patch also gives the header its own cache line.
+On Sun, Nov 08, 2026 at 05:41:17AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> - [High] virtnet_xsk_pools_unbind() calls virtnet_xsk_pool_disable() for
+>   pools whose AF_XDP sockets are still XSK_BOUND.
+> - [High] virtio_net: stale DMA addresses in free_list after unaligned XSK
+>   pool rebind
+> - [High] virtio_net: uninitialized xsk_hdr_dma_addr used in
+>   virtnet_xsk_pool_enable()
+> - [Medium] virtnet_xsk_pools_unbind()
+>   (drivers/net/virtio_net.c:6063-6072) loops over max_queue_pairs and…
 
-[ ... ]
+Thanks, I went through all four against the code and they all hold.
 
-> Could this sentence be dropped, or reworded so it doesn't suggest the
-> patch provides cache-line isolation?
+The three High ones come from the same mistake: the patch reuses
+virtnet_xsk_pool_disable()/enable(), which assume the socket is
+already unbound, while the sockets are still bound and the device is
+still running. That opens the window against the RX path redirecting
+to the socket, unmaps and remaps the pool behind buffers sitting on
+its free_list, and lets TX NAPI run before xsk_hdr_dma_addr is set.
 
-Agreed. The header is only mapped DMA_TO_DEVICE, so the sentence
-doesn't describe a real problem, and the patch doesn't change it
-anyway. I'll drop it in v2.
+For v2 I'll stop unmapping and remapping the pool across suspend.
+Freeze will keep the pool DMA mapping and only stash the driver's
+per-queue xsk state after virtnet_freeze_down() has stopped NAPI, and
+restore will attach it to the new queues before virtnet_open(). That
+should remove all three problems instead of patching each one.
+
+The Medium one is right too. A pool can be left bound on a queue at
+or above curr_queue_pairs after native XDP is detached. As noted, that
+comes from virtnet_xdp_set() not checking for bound pools, which
+predates this patch. I'll fix it there as a separate patch in the
+series, so suspend no longer has to handle that case.
+
+v2 will be retested with KASAN for both aligned and unaligned pools.
+
+pw-bot: cr
 
 
