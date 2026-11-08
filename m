@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794117767;
-	b=jKDhajpqd5CwUdiohCqX/K5WXmyjCpAMw0+csjhvtv1ymFPq287mJrh3cX9wqsyFkxlV
-	 0yMf2D1ep/ros4MRptOquuBPV6qw5YHOZkLBaiG6OdVyXVoAIsnnQ5PU/aBiPKZCvyYIH
-	 DgyY6dFqcnBrd2MS3F9CRaO0CnDWvwC2PDHnJH+2mKCSy6Vu5KEisH4eAisrxfUlq0M0W
-	 C7+fwnueWx4dmqCDQN6sdv5iNQWPPwAH2NufbXbuk1SV7zhJq0x57qqBkbKKp83/pKWMi
-	 yXzakA+u1nJpELPe67SfxLyXjBHSBk2YtzfxOlFLY5fAwBOPFF0ZohKo4uEnZ8FyWUA==
+	t=1794117817;
+	b=Z9MBvmJOvpJi6qCTFhumS/4JxpnJnlEdKU+eVSrvbEISqVdYDFyWeDvugf03dE74HZEZ
+	 v3L4uDaH1FAmgcnrUR/+o50TFb5So1iezzVfNWweV/CV9l9Lo5LcC6STByEVesgqvQtO5
+	 yCLskXwMrMd3+YjaA4OE7McNNR8fzJ0KFHxCJH/bjuvRTbTeclhXYCn+3k/Ljx96vij/l
+	 sxgse/CATCkrVKFTdvNYiis9danXOm5JdKzDU2GNeutqhwjfJ7UpVY769L033V6l5sBvR
+	 JLHjZ9Zz2scEkhDeLQo1rEI0b3byYrMFYmZvpPwNc91ZDDiiA+qhTKinUioZD3TPfOQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794117767;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794117817;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=UuTezmgm0nwGJO0HrodwpRqkq+69BJc87Weux93Kal4=;
-	b=V3A3odMO31DMQG4wCNXAzVqtqLr555bXn5m8tLV+BpflT9iXcuhJZOj2qw60KKcEz3xK
-	 2dsmGAw/F7UfzJMX/JBfQE4tbkmwblgaGePXL0/IdCUHZvJzutbB3lUWth66VnfQ1+kVF
-	 un3jueXF+U51RPocbvkK3QEru+19n+PUrEXUYHc6qBM7v47L0JNoD9CtWen2pIkHSRP8a
-	 ZY3dWc2Qb2D3VQFziGXxwOK7lB5H7JWWBuMZurY/o0GtEslBiVfWyE5lq17WtsbDDIh5W
-	 USY3Yh2DKniicuLFtBKpnFYZsnLBFDWt9CGABNWniYKpRLJ1xYGVlanrvs5MJdGo5Lw==
+	bh=pn04r+CxxQfFBcY2E/mrXMo112h8EUm1UiRUAJTxpSs=;
+	b=DS6x81bMOqK58EHutLC8A0SG+yXJ2F2XEVaOSZfKgWw+VqVR/QnvtB7/zRqee+H//+Xu
+	 gG+iUyCloBrq/q2gdbv06z40lxVSx9WFOm2lmPXW47AZU0Z9b/UJKAXf73holHjenK0J1
+	 HBYB/734rZouYMqy9Mg74wRnEU47qxQOWb9niombS3p3uW2EU6EYxRTPzAJXVKhTPKRTa
+	 E9WawrIW8GVJsVRiEfBHjMx2/d67mkyG8j+6gtTLSpVh95dMfRrJTOi/FecAOIDpPYl2S
+	 C95wD9VtYVCvbEO0e3UZgZFQoqzTIIO3qvgKipZjbJqTfjY70h79E2KFoKszYOpntgw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=evNrMhPH;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fsZo+zLR;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1C6606A31C
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 06:02:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDD1606A31A
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 06:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=evNrMhPH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6911F0089F;
-	Sun,  8 Nov 2026 06:02:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fsZo+zLR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 033901F0089F;
+	Sun,  8 Nov 2026 06:03:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794117766;
-	bh=UuTezmgm0nwGJO0HrodwpRqkq+69BJc87Weux93Kal4=;
+	s=k20260515; t=1794117817;
+	bh=pn04r+CxxQfFBcY2E/mrXMo112h8EUm1UiRUAJTxpSs=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=evNrMhPHvhYJxZxKRBE6yF4F5ONTFFj/IDGk7BCx7T4MD0o+haAxFgBuGDtdtd6fD
-	 B952mdQczbrPdLjMtpRDU0uP+gyLO4VcKGtt7e5/yS83+Jgd5sv6pJxidBGMqzbXVN
-	 OLf7XRgxhBm3xhEHOJbMFUt4FQLO6mdYWK0y0RQWkpjZ6zThQluZCxNFPCrwGvbUHH
-	 ZRLEZv/Bulu0WZdl825+2VBekLiOt3nZSdm2zy41kcpdVF9D9s7Dk2lPACDbpVVKOg
-	 oLZcl9Qe+dEea6XL39THP+cBSyYlSbc7jZuwAZcMZ1fsYlH7Aso20O+42SErV/79gv
-	 Mv9X52PEhblFw==
-Message-ID: <sashiko-outbox-203594@kernel.org>
+	b=fsZo+zLRV5EFMPM5ef5SgjlrS9T6ogpRbKtLnJYMEyslZS53be2KEHkte8nPVRmRx
+	 a1XHvhgDxnGrnJnwqzplirF2d4yaSMrqnmqgUHL+VN2ClmzBHQo0hcJ0VP9tviICre
+	 3wugTHWFOP97cZn1zqhY/FPN1/YDvcVpRgblcIJqll/giKeaYL7atdoTDCwqn9qUnK
+	 lur4KNSsyLYGxOyh5/LLc1yZ1zoKWXL6MQQ7PX9cpdUsI1MVCAboF2xKMP2+NqHMk4
+	 6mvx+xxAIl4SMkZ2Y1vjglNwZmGRJKy7DRABp9zQOulrZYz+DvLQJ3dqw+NrX2gbvc
+	 Cu74DBoM0aqnw==
+Message-ID: <sashiko-outbox-203595@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2] bpf: Keep one basic block in the level 1
- log and print the way to it
+Subject: Re: [PATCH bpf-next 1/2] bpf: Take the end of the verifier log out
+ and append it later
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261108053937.4134138-3-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261108053937.4134138-2-alexei.starovoitov@gmail.com>
 References: <20261108053937.4134138-1-alexei.starovoitov@gmail.com>
- <20261108053937.4134138-3-alexei.starovoitov@gmail.com>
+ <20261108053937.4134138-2-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 08 Nov 2026 06:02:45 +0000
+Date: Sun, 08 Nov 2026 06:03:36 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,161 +60,106 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] bpf: preserve flow->from across subprogram calls in
-  bpf_flow_call()
-- [Low] bpf: clear env->prev_log_pos when resetting level 1 log in
-  do_check()
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] bpf: rolling log window corruption and bad NUL cut in
+  bpf_vlog_unstash()
 --
 
-commit 436e80edd288c8e9b5661dd9e9cfd3aca7f99381
+commit 77a6b70f8e6a46314ce083390eb008b9b5d0b118
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Keep one basic block in the level 1 log and print the way to it
+bpf: Take the end of the verifier log out and append it later
 
-This commit rewinds the level 1 verifier log before each basic block and
-reconstructs and prints the path of basic blocks leading to a rejected block
-on verification failure.
+This commit adds bpf_vlog_stash() and bpf_vlog_unstash() to copy the tail
+of the verifier log out of the user buffer, reset the log position, and
+append the stashed text later.
 
-> diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-> index e6d1817ffa57d..c9458b3ad114a 100644
-> --- a/kernel/bpf/flow.c
-> +++ b/kernel/bpf/flow.c
-[ ... ]
-> @@ -2883,6 +2886,7 @@ static struct flow_state *flow_new_state(struct bpf=
-_verifier_env *env, int prev_
->  		return NULL;
->  	s->prev_insn_idx =3D prev_insn_idx;
->  	s->seq =3D ++flow->seq;
-> +	s->from =3D flow->from;
->  	env->total_states++;
->  	flow->live_states++;
->  	env->peak_states =3D max(env->peak_states, flow->live_states);
-> @@ -3308,8 +3312,11 @@ int bpf_flow_next(struct bpf_verifier_env *env, in=
-t *prev_insn_idx)
-> =20
->  	env->insn_idx =3D s->st.insn_idx;
->  	*prev_insn_idx =3D s->prev_insn_idx;
-> -	if (test_bit(s->st.insn_idx, flow->keep))
-> +	if (test_bit(s->st.insn_idx, flow->keep)) {
-> +		flow->from =3D s->seq;
->  		return bpf_copy_verifier_state(env->cur_state, &s->st);
-> +	}
-> +	flow->from =3D s->from;
->  	*env->cur_state =3D s->st;
->  	memset(&s->st, 0, sizeof(s->st));
->  	s->st.insn_idx =3D env->insn_idx;
-> @@ -3317,3 +3324,89 @@ int bpf_flow_next(struct bpf_verifier_env *env, in=
-t *prev_insn_idx)
->  	flow_free_state(env, s);
->  	return 0;
+> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+> index 1253118dfd051..84659a757b43c 100644
+> --- a/kernel/bpf/log.c
+> +++ b/kernel/bpf/log.c
+> @@ -177,6 +177,53 @@ void bpf_vlog_reset(struct bpf_verifier_log *log, u6=
+4 new_pos)
+>  		log->ubuf =3D NULL;
 >  }
-> +
-> +/* A basic block on the way to the block that is rejected, up to the ins=
-n that leads on */
-> +struct flow_step {
-> +	const struct flow_state *s;	/* the state at its head, if one is kept */
-> +	int head, last;
-> +};
-> +
+> =20
 > +/*
-> + * The state at @head with that @seq. If it is gone a state that came la=
-ter took its place:
-> + * the last one then.
+> + * Take what was written since @pos out of the log. bpf_vlog_unstash() a=
+ppends it to what is
+> + * written in between. The text is in the buffer of the user and nowhere=
+ else. What the buffer
+> + * doesn't hold, the start of the text if it's rolling and the end if it=
+'s fixed, is counted.
 > + */
-> +static const struct flow_state *flow_find_state(const struct bpf_flow *f=
-low, int head, u32 seq)
+> +int bpf_vlog_stash(struct bpf_verifier_log *log, u64 pos, struct bpf_vlo=
+g_stash *stash)
 > +{
-> +	const struct list_head *list =3D &flow->states[head].list;
-> +	const struct flow_state *s;
+> +	u64 from =3D max(pos, log->start_pos), to =3D log->end_pos, i;
+> +	u32 off, n;
 > +
-> +	if (!test_bit(head, flow->keep))
-> +		return NULL;
-> +	list_for_each_entry(s, list, node)
-> +		if (s->seq =3D=3D seq)
-> +			return s;
-> +	return list_empty(list) ? NULL : list_last_entry(list, struct flow_stat=
-e, node);
+> +	if (!log->ubuf)
+> +		from =3D to;
+> +	else if (log->level & BPF_LOG_FIXED)
+> +		to =3D clamp(log->len_total - 1ULL, from, to);
+> +	stash->lost_start =3D from - pos;
+> +	stash->lost_end =3D log->end_pos - to;
+> +	stash->len =3D to - from;
+> +	/* as large as the buffer at worst: fail before the OOM killer is calle=
+d */
+> +	stash->buf =3D kvzalloc(stash->len, GFP_KERNEL_ACCOUNT | __GFP_NOWARN |=
+ __GFP_RETRY_MAYFAIL);
+> +	if (!stash->buf)
+> +		return -ENOMEM;
+> +	/* two pieces if it wraps around */
+> +	for (i =3D from; i < to && log->ubuf; i +=3D n) {
+> +		div_u64_rem(i, log->len_total, &off);
+> +		n =3D min(to - i, log->len_total - off);
+> +		if (copy_from_user(stash->buf + (i - from), log->ubuf + off, n))
+> +			log->ubuf =3D NULL;
+> +	}
+> +	bpf_vlog_reset(log, pos);
+> +	return 0;
 > +}
+> +
+> +void bpf_vlog_unstash(struct bpf_verifier_log *log, struct bpf_vlog_stas=
+h *stash)
+> +{
+> +	u64 i, n;
+> +
+> +	log->end_pos +=3D stash->lost_start;
+> +	for (i =3D 0; i < stash->len; i +=3D n) {
+> +		n =3D min(stash->len - i, sizeof(log->kbuf) - 1);
+> +		bpf_log(log, "%.*s", (int)n, stash->buf + i);
+> +		cond_resched();
+> +	}
 
 [Severity: Medium]
-Does flow_find_state() look up the caller's basic block with a callee seque=
-nce
-number after a call to a static subprogram that is verified on its own?
+Can advancing log->end_pos by stash->lost_start without updating
+log->start_pos leave an unwritten gap inside the rolling log window?
 
-When bpf_flow_call() parks the waiting caller state w, it does not save
-w->from =3D flow->from.  Verifying the callee then overwrites flow->from wi=
-th
-the callee's kept state sequence numbers, and flow_apply_exit() creates the
-resumed caller state at call_idx + 1 (or call_idx) via flow_new_state() usi=
-ng
-that overwritten flow->from:
+When a rolling log has wrapped past pos (log->start_pos > pos),
+bpf_vlog_stash() records stash->lost_start =3D log->start_pos - pos and cal=
+ls
+bpf_vlog_reset(log, pos), which resets both log->start_pos and log->end_pos
+to pos.  After intermediate text is logged up to E1, bpf_vlog_unstash()
+adds stash->lost_start to log->end_pos (advancing it to E2) without
+writing to log->ubuf in [E1, E2) or advancing log->start_pos.
 
-kernel/bpf/flow.c:flow_apply_exit() {
-	...
-	if (!err)
-		err =3D bpf_flow_deliver(env, &st, call_idx + 1, call_idx);
-	bpf_free_verifier_state(&st, false);
-	if (err !=3D 1)
-		return err;
-	...
-	s =3D flow_new_state(env, w->st.last_insn_idx);
-	...
-}
+This relies on the replay loop emitting log->len_total - 1 bytes so
+bpf_verifier_vlog() pushes log->start_pos up to E2.  If the loop emits
+fewer bytes (for example, because another thread wrote a zero byte into the
+user buffer, or bpf_vlog_reset() earlier shrank log->end_pos -
+log->start_pos below log->len_total - 1), log->start_pos stays below E2 and
+bpf_vlog_finalize() rotates the NUL terminator at E1 and stale bytes in
+[E1, E2) into the middle of the caller's log buffer.
 
-If verification later fails in the caller, bpf_flow_print_way() steps back =
-to
-call_idx carrying the callee's seq in from.  When multiple states were kept=
- at
-the caller's basic block, s->seq =3D=3D seq never matches in flow_find_stat=
-e(),
-so it falls back to list_last_entry() and prints the wrong state and incomi=
-ng
-edge for the caller.  Saving flow->from in w->from in bpf_flow_call() and
-restoring flow->from =3D w->from in flow_apply_exit() would preserve the
-caller's sequence number across the call.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fd333b1063c3d..20b1b9ff574c7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -22049,7 +22057,15 @@ static int do_check(struct bpf_verifier_env *env)
->  			break;
->  		/* What is known about how the state came to be is not kept with it. */
->  		bpf_diag_event_log_restore(env, 0);
-> +		/* Neither is the text: the level 1 log has one basic block at a time.=
- */
-> +		if (level1) {
-> +			bpf_vlog_reset(&env->log, log_pos);
-> +			env->prev_linfo =3D NULL;
-> +		}
-
-[Severity: Low]
-Should this also reset env->prev_log_pos =3D 0 when rewinding env->log?
-
-When a previous function verification pass leaves a small env->prev_log_pos
-that happens to match log_pos after do_check_common() prints the "Validating
-<func>() func#<n>..." header line for a global subprogram, print_insn_state=
-()
-on the first instruction of the basic block sees
-env->prev_log_pos =3D=3D env->log.end_pos:
-
-kernel/bpf/log.c:print_insn_state() {
-	if (env->prev_log_pos && env->prev_log_pos =3D=3D env->log.end_pos) {
-		/* remove new line character */
-		bpf_vlog_reset(&env->log, env->prev_log_pos - 1);
-		verbose(env, "%*c;", bpf_vlog_alignment(env->prev_insn_print_pos), ' ');
-	} else {
-		verbose(env, "%d:", env->insn_idx);
-	}
-	...
-}
-
-That strips the trailing newline from the "Validating ..." header line and
-appends the initial state inline with a semicolon instead of printing
-"<insn_idx>:".
+In addition, because the replay loop formats stash->buf in chunks of
+sizeof(log->kbuf) - 1 bytes via "%.*s", a zero byte in one chunk only
+truncates that chunk in vscnprintf() instead of cutting the rest of
+stash->buf, while still advancing log->end_pos by fewer than stash->len
+bytes.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261108053937.4134=
-138-1-alexei.starovoitov@gmail.com?part=3D2
+138-1-alexei.starovoitov@gmail.com?part=3D1
