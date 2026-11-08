@@ -1,115 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794168330;
-	b=WF9TMc5iKzr3XUFTY+vwDiBszu3u0ebRZ+xiEftE4xmgANpU8zWwqd+hx7o/1fp+3J1P
-	 OUK00vphQVAtjhJ1PE4NcSadEGSA0QSogLf2RP0lCftd6+0b1FyDshCFBRhF2A9YEfVhV
-	 i0xRw4V7rBoCEF6xFPZdXDQQyFIZTdjw0XgIgv4IK5ZnDIN2d11WAzcVxW4FRcu3XLiyn
-	 uP/Pq+5m8kSbL94vJ5/CA8fTuf9R57rG7bY3gtmKkN7Hg7urI6XubrfvGbMGjE9tqszNc
-	 TsgZTKEVQZX3uOcFxHfReWXkIsNCr1UxKLwnrBFihXWKc4KsbjqJOo+stgnwSS378gQ==
+	t=1794173578;
+	b=ZJXBkJfERajjRZu/+TB+IUDtHUW1y/519yVAEwINC2prLn8fIW68mXhQibHl8hjij6pZ
+	 pgDw8i32cZqGIKDcGQNcKyC1JWmDuzjPMQv+RtocoF1xxff0jpb7yEh4qI0lq0Ya6yxJ1
+	 micUSvfO+pZf2ST+F89JnPw7AtanuPGxunOLuRdDOvQdDKi9U8UJupWsjGhr6JcPMuyk/
+	 1TrIV9M1oeQXfznZwD3dHq9XRD+Zpz0sai8KhABNXQInB45eCxphPyZe0OTa84O/YrjnP
+	 GwLCT3cnOaz0Ck8Nw+GJauACbR06N+Bf3srcr54YRkXoLrX5Ma7ETjERmMrsgKJqU+w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794168330;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794173578;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=NsI7ZZLkYjCZutUVEg7TJNtNpCk2xGDMbVs7o+8cm3Y=;
-	b=RAcuakNDqKE5QFfwJaI3YEEzxsBWBXhItDq5iqF8Jxu0eLKCbPK2oFhBA/LeWpYPw1O3
-	 vT3MwvLmsfbTr1nf+6/CSCz5XAdgL/xps+DCNm3M0kH2vM5spg4xstfq4pkN3SlAsCSef
-	 aykoJaykVtVi+5MUnyXivWDc1/4xHMrLw45/zDeZPTgD75RHMhziriZsJwdsRh4NFm3Pw
-	 iZxn6TUlhR2TialIGCm3ZxjbLgMilPLqIT35kCBUlnDHPQhkAfcYUCY0D0fx1CDPehh+X
-	 AWFYkSjvJjAZ/D9Gio97m5t6JYEzv70FTVDaqjKGtQ1Fa8gBHmGJ0jM9YJuY+YTJN6g==
+	bh=2zV+j1o90j03z3/bSKQRAMr2OAwRnzRNXDWN23pKxKc=;
+	b=xzJ04v8GecShNOeJJUUBuhN4TcN7izN4W3jB07/qXW960SgiBaix7AImfd+kM6s6GD21
+	 wefEYn44NJ8NSdUzYyv4C/VpMN+XskFSrXP/yqUz0LvMH5HTBpHLb0AhyxcU48rXkOvwt
+	 R7llbNX4vGPcOVqMLHG0QMe4d+ANgYNuqk93+BOZPS40Zvod417wAkqtGaFY+Sa1JmbF+
+	 e8UcVDv83RB6bW8YwtniT0L10GQa06121FcOtrqlbCQTQi0A+CAWtjCHR/J3rThEML8mL
+	 s2AO9qQMEFVshhXTRRKBI8jQXrundgec0LmD8Vh9r1puqehZfWMoptbZk5nO6dvdI6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ib7c6P66;
-	arc=none smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=g1thKR+m;
+	arc=none smtp.remote-ip=209.85.221.42
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B4C606A31C
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 20:05:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44B4C606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D86606A31C
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 21:32:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F3D86606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ib7c6P66
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a59100fa83so1606045e9.0
-        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 12:05:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=g1thKR+m
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-490d59c3edaso182160f8f.1
+        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 13:32:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794168329; x=1794773129; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794173576; x=1794778376; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NsI7ZZLkYjCZutUVEg7TJNtNpCk2xGDMbVs7o+8cm3Y=;
-        b=ib7c6P66JcABRQVIYvbAfEuMzOdspSzPtZfn7p5hZaB2Rr9aWYVjAA8lHghOcTHkfP
-         W1IBKWn61CtXgoJPbCEozcqCpgRPGxULcN94D7ITtmHErVGmr3isoGCQ02nfNqhbH+4n
-         lUM22s4MKp/l6fyffg7/TutUQVALjesHSFnC4w+1WVPSvW0J5rknAYGDJAl4xvCRXDT5
-         fBdxAtmJXU6SiF6lguNdvRiiwtq6Km8nyFGsRU6Tq+7fwVjsnnI/ZpxcJdUfsPAfNVOr
-         BXFpKVyK/3a7Qj/Qjq4EwXbAdcjWWztzIsYea9a0P/MiY6n2EtEGPByGhhhA0f0X0qYJ
-         P5GA==
+        bh=2zV+j1o90j03z3/bSKQRAMr2OAwRnzRNXDWN23pKxKc=;
+        b=g1thKR+m3D3E2+c4hjI7QL3t50zazlEow2f3cU3NWSOcbViKGU+bFhuwrFyNJLKhd2
+         zHYXQnPFcPXe+OTWCNJAX5Doukw0IgV0+hx6/2omnjkeERyku7Qd1BPmTfG2Ec2vQYCj
+         jBrOKkbpvQg6C2Qm/j7T6X8EjF/sd57iirCc6AnfscRPrdsjvNwASYBi0OE8oqXwYdCi
+         zJl7umWLxRBDsqPH+gl3WB/UhcHVkpQHMEdZEB7hHpJ+Hv7UTPn8Nlv6LyoVls54rMcg
+         mIo87yVqR5TSb6XzD5jEPo2n6Qli47aCR0sHQax0ubMztuUql/507jGMoGih3Wy2gIqR
+         MqCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794168329; x=1794773129;
+        d=1e100.net; s=20260707; t=1794173576; x=1794778376;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NsI7ZZLkYjCZutUVEg7TJNtNpCk2xGDMbVs7o+8cm3Y=;
-        b=A1el5Zkl73VApcnrvQqVSO8pt+wnekET7gfRplI8NIOx3cCVGoZglEj7R2omSobW9j
-         IeW5F5n/mw8YHj3SxWdt4bvt0TAjbAb3ZG96nUYBz+QA4k5YBIWYgxMVfssRZbl0ELmW
-         Q0nr3fWcRnZBpuAo+pDYqKyHIZz6CivF5p3K5Byw1ceHPqE2rpajznGoSfdFEkN+lB1F
-         Hx0A8HOo2G+hD6z3THuaHG9wHxOlWJ3tA5kQV3lD0GjWwtX1TEmyIUHem8M/rRHoKhoo
-         ywOBcAHUJIDU6ip4HAnukgQy4sMRnuy+2vOPE6d8uO6mV9jxSyyN1G0s3i6MPGexVLId
-         ehRw==
-X-Forwarded-Encrypted: i=1; AL+hErFVIt3AFtn/c2H6e/h8iuh0s4cdAhVLE8eg3puLSaeGCsdnxT+X0iGDJTqoYbHO6IT4WDM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/hkYO0GZ2R1LkILUnORRtRN6W0lCghYJF/lvMRZayYAui1WAQ/
-	TccABUCMZYW66VL7eUZfU3tHGgECnODX22zG6SPRD+nTcjKVmUjwhybj
-X-Gm-Gg: AYBFou1b3VFhrA2W74TAgwcdEAgHMsV962AxyEtWZ6b+dnj+pd/v8sbabv+K6detVgp
-	NfJyg2PgbwUzpIlwlRtA9smNBYJNtBYcF/3wnCM7TD2WN39OGayvDDKRuo5JT5oCDIOePTeRPyU
-	KgrgWJhhfS7m0KJ7LUaAmmTzHmPDKpOHO6qBLbVudnkH58oCSSw2VhDESgVVumBOgP2rbZAqgeP
-	at18DyZOOXtTCbPZg5y8i2Oau8wdJbUGlnkj0nwCKyJFJwk1477xroyxJbt84wjq0a0iQtX1/9x
-	ThoQrb/q+4Dg2rZShjDMGzMWsKwApCllGDuIbs7waakZvo4qvYBdtQZ3K8FYGZQXtSlOfUXkLXX
-	Om0fD7ZnoZ+YTUbwCLEXhhPZbUYUAdXWQczGJeu+BO923m3qh96gQptPq+mz6q2YKys56LB7tKg
-	6PChykp+MMVFaFuzS3kHs4JJwCuVHb74Q8MU8kRTLRjsx9K587hpsQNH3B24ZchtvIziP3w+6Dl
-	8TPgizXiMRCQVNDNECtUJJMLXZCl7bppYa+ISTcdHSuZLiRCyJ2WBly8Nr5aQZAN1I57Ja7xx+4
-	UzQ3iMixZDe+Yjzd/HDMg4y+W9AxhSn3CSEUZZiujHP50AOjBQ3a3aajNUPcbOYYLIyIWsciCx0
-	jQtF9C01+yA==
-X-Received: by 2002:a05:600c:1c0c:b0:49f:ce78:3562 with SMTP id 5b1f17b1804b1-4b963c69d23mr43591205e9.19.1794168328561;
-        Sun, 08 Nov 2026 12:05:28 -0800 (PST)
+        bh=2zV+j1o90j03z3/bSKQRAMr2OAwRnzRNXDWN23pKxKc=;
+        b=GVeCB/k1QahlZpQOJnICqeNNUSp2TDSz+e8VKquzUX4OguOF3n3rTWagmT56Kx2LtT
+         n19p5vSrbfzbxdT6N7PP3RxhZfGKQyudZekkYKgE7o9mYAoAQ8YVQZXmuHnuM5ahWYZQ
+         WWDsTj7wV5Ye+SREKSdhSfC/rrbf5Lk3XYYrq1+05s1krXKdV1Uh0Djre3qGU8gD+uwY
+         nppPDeCq7Qo3FYpNAleOH1mY3ZKHRh0xBJnQXsjT992Y/b9kzTN67ih9qI8ApHdfGyVH
+         Fz8Z1/3FzVaXlfpxmgsnoVcHfT1f4N6lwAdbbmi6gFm44mGkxLK/Fbz2x4NtLPAdtwuG
+         v09g==
+X-Forwarded-Encrypted: i=1; AL+hErEgbyRygxL2wb6Wss2DIatkv5hAzZ7x5dgPhP3feDjhLz14uJLHgWBhmFoHPtnvxkg8Nf0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+ePnoq0QL2sE8/v/14UpK7eHM1LqlbePk2lg8bTdd6r+rLm9iH
+	LyGEc20IMgKgxhFeogOrEyS4UdQ0WBjmUxaXqK8VNDP3uy4qoqzwx50E
+X-Gm-Gg: AYBFou3p/S4e9yPbPUgRtHNLud/kIxCCA1iVFgdhK4+eaYIovotzgp13lM5UqcpGrdg
+	iAWMbRU2Ll+4tM70S2ZArElEYP6EStcZimd3qFeKU8TELQNATW/TnzodaUtpff6hjVzBfS2a2OA
+	LUcFZFg2yqU+tlP7WBfDkbLg+zVto718vEvKSZsFK9vrYxozeigki3pL7/97DtmxwnrwGZWknBc
+	FtRb1O3ukejak5NkPoF/qnPgyHcnG/t8P5pANPjzNKp/9IZ39N7Qw3rdPqPhao0luhlNTet6Fmk
+	dKu2JHlJgXVCw3WC9VjTzpjal2jPT/WS+C28Y4wtpEH/+DKH4STWHHNmSXcq1xYsyWoudVa+L1j
+	HdHyLuqOC+GNYbb4vHsYaTzFdwqxM8TXyQ3L/bh91FdKpueDYQzPfHl9jXAK97qs+MXUVlO1xlT
+	4HMPQgSSpIo4+dD4AFUE0xbJyalZKPA16A6kNqtZaP3zqr8sVfy/vi3TqzfS4k/4WNJNZ1Bdf+Q
+	ta3oeJLNfRvq22WBKnct1KxI+FZZlzGNL2y2ENmD4cWhwS4mdNIt0VUhZbAfg3xUdcFmgDESSwO
+	XvHiexW8Iqf/dH9NeDTeARlaB6sPR1J2r1mcnmVHUggE4Gf47kJjISbVmDqM6bZt
+X-Received: by 2002:a05:6000:26c8:b0:48f:bbb5:61c2 with SMTP id ffacd0b85a97d-4958852d3b8mr5479500f8f.4.1794173576292;
+        Sun, 08 Nov 2026 13:32:56 -0800 (PST)
 Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49597186ec5sm5768522f8f.33.2026.11.08.12.05.27
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49597371cc4sm5861840f8f.36.2026.11.08.13.32.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2026 12:05:28 -0800 (PST)
-Date: Sun, 8 Nov 2026 20:05:26 +0000
+        Sun, 08 Nov 2026 13:32:56 -0800 (PST)
+Date: Sun, 8 Nov 2026 21:32:54 +0000
 From: David Laight <david.laight.linux@gmail.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Hannes Reinecke <hare@suse.de>, Jarkko Sakkinen <jarkko@kernel.org>,
- David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
- dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
- keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-security-module@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>, Andrew
- Morton <akpm@linux-foundation.org>, Andrii Nakryiko <andrii@kernel.org>,
- Benjamin Marzinski <bmarzins@redhat.com>, Daniel Borkmann
- <daniel@iogearbox.net>, Dongliang Mu <dzm91@hust.edu.cn>, Eduard Zingerman
- <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, James Morris <jmorris@namei.org>, Jiri Olsa
- <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Kumar Kartikeya
- Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Mike
- Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Paul
- Moore <paul@paul-moore.com>, Randy Dunlap <rdunlap@infradead.org>, "Serge
- E. Hallyn" <serge@hallyn.com>, Shuah Khan <skhan@linuxfoundation.org>, Song
- Liu <song@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, Yanteng Si
- <si.yanteng@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, Linus
- Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v5 2/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <20261108200526.43579e2a@pumpkin>
-In-Reply-To: <20261106090516.GA1973@sol>
-References: <20261105031401.956609-1-jarkko@kernel.org>
-	<20261105031401.956609-3-jarkko@kernel.org>
-	<27015846-0161-4700-b810-4643e1f7b63a@suse.de>
-	<20261106090516.GA1973@sol>
+To: Yunhui Cui <cuiyunhui@bytedance.com>
+Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ alex@ghiti.fr, dennis@kernel.org, tj@kernel.org, cl@gentwo.org,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, bjorn@kernel.org,
+ pulehui@huawei.com, puranjay@kernel.org, thuth@redhat.com,
+ ajones@ventanamicro.com, ben.dooks@codethink.co.uk,
+ rkrcmar@ventanamicro.com, samuel.holland@sifive.com, zong.li@sifive.com,
+ conor.dooley@microchip.com, tglx@kernel.org, debug@rivosinc.com,
+ seanwascoding@gmail.com, andybnac@gmail.com, menglong8.dong@gmail.com,
+ cyrilbur@tenstorrent.com, wangruikang@iscas.ac.cn, atishp@rivosinc.com,
+ apatel@ventanamicro.com, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
+ arnd@arndb.de, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+ morbo@google.com, justinstitt@google.com, qingfang.deng@siflower.com.cn,
+ linux-arch@vger.kernel.org, llvm@lists.linux.dev, dave@stgolabs.net,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, broonie@kernel.org
+Subject: Re: [PATCH v9 1/3] riscv: implement this_cpu operations
+Message-ID: <20261108213254.67805ef0@pumpkin>
+In-Reply-To: <20261108110406.97495-2-cuiyunhui@bytedance.com>
+References: <20261108110406.97495-1-cuiyunhui@bytedance.com>
+	<20261108110406.97495-2-cuiyunhui@bytedance.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -123,20 +117,22 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 6 Nov 2026 01:05:16 -0800
-Eric Biggers <ebiggers@kernel.org> wrote:
+On Sun,  8 Nov 2026 19:04:04 +0800
+Yunhui Cui <cuiyunhui@bytedance.com> wrote:
 
-> Side note: fips=1 actually has little do with security, and in some
-> cases it actually decreases security.  See for example
-> https://lore.kernel.org/linux-crypto/20261026183332.11402-1-ebiggers@kernel.org/
-> where I'm fixing a vulnerability caused by fips=1.
+> RISC-V has no asm/percpu.h, so this_cpu_*() read-modify-write
+> operations use generic implementations that disable local interrupts.
+> 
+> Implement RISC-V-specific this_cpu operations with preemption disabled
+> to keep accesses on the current CPU. 
 
-Then there is the 'fips compliant' server we used for routing 911 calls between
-TDM and VoIP.
-Any kind of PCIe error gets routed out the the motherboard management module
-which then proceeds to inform the kernel with an NMI.
-At which point Linux crashes.
-The NMI is too late to stop the kernel having to handle the ~0 from a read.
-And even happens when there is no driver using that device.
+Have you looked at some of the schemes (I think arm64 has the latest,
+but also s390) that do most per-cpu ops without disabling preemption.
+In particular they save the pre-emption check when pre-emption
+is enabled.
+
+Basically the code tells the scheduler which register contains the
+per-cpu data so that it can be 'magically' flipped during a context
+switch.
 
 David
