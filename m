@@ -1,64 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794166044;
-	b=QzKv2HkBedy7NBFYQHOfnipEZoekTdt4P1nVKVQtngrVXDRz2I2L0GGsTRYY/nWJpet+
-	 Hix25WMW3uvDOvSOM1xIpFCrXE2/TIHBe2UU168e+6xouVKd7mmVcfHWj+8gdEl+oMP/a
-	 1Ro9gWacMubyz+PFoIjqMHdCtl4PJc4IRbcz0jRP5LPiNtmaBFY82kEi2vO5YmcupqOex
-	 BSP/c1Mkwz23PMojtKvgFtk2GZuFKw1JRXLkNKYhJExb+93hrS5ywvPbgoqq7xeO/AI2c
-	 ec+7Hp37rdChxsRbJRL/ZUQlkpQSMT4+laSjp/GBZoMSZe7PYQhXiFh+ul+ELEsAXzQ==
+	t=1794166050;
+	b=WMGiQEYmiCMu9EZ2402WvDFHHfcFVGBqZYO5uBbuw7Ozba8kfCo7d6Sq84Inwmmro7Uc
+	 rjm9/KUOKekfywLPwgyyttl/OTiwOjKYWZ3TQ/6gwdNzYO4HND6+OlAvnGOFVykl+Bh8d
+	 FgUGgPw/+U+AXmdB2+FNmDmO9/KqfeCmV+ExFU7Bxw2aqP/3Sg7jc6a2U5pxUY+vP9t1P
+	 csH2VEbbVnYz/11u1iqVfwgsWoQNvwfgXGo6+wrFvY81hqcalHOy530ZeAlbOwr0Vt/I4
+	 td69r5vrOFBDNqNA0FqU6/o+xKbq/C/94vvRTnWPDcY1Xu4+R/v3v+HPgI5CUDq8TtA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794166044;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794166050;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Virus-Scanned;
-	bh=6OLkz6il/59o/6C9lXwuQrRhIF+33c0EWzY6IaM0qZU=;
-	b=jJhOJXcYIN+uzMP6fOlyLcQ88OFk5E/AS9NywdLDq5jYOJ3gusu7TXTkLczlKCxuEcnq
-	 beKqX52FEGif3URSETSJp26nrgAPJAEuwhQ+XV2MEasFgKmjpXkO23e4xBz1vY+yO74lM
-	 eIeIefVY7jSE6IfkSX57PTmK+zsxf9M+ULRyFOZ0dY6jBFI1v8m+iydXPp55TzvT6dEv3
-	 iN+UqJ6Kz5sN4nC1wLga9gvhv1lXpL9xkz64Ge9/cAWl8G9sbDAgXQmH/cX9qGoaqDPal
-	 FX2YYFCWAXIFFdTCasA5awk0FNhglQ2VZmM9ghWjzIU230LcttkJGpSUzHRbWkL+Kig==
+	bh=cOt2cvZ2cQTKBaS/0Ted1zNorQsn3aqx0swRwP7+56E=;
+	b=ctfIiD6L/K6SGQicDeBnEhcjSG0kPQVQ4WORmAeTK2TpLKtpwe5wAbW7wWadGEk/itpY
+	 ALzUaYjsbvX7mAvb5YsAF7mcb7jIzokW97SiOSgesf/FU6v/bW05p6R2kcBpx5DEfjEHj
+	 Qcvxc0gkIlkB4vtO8RXvB6DoMpA5gmAYzgOKBJCm9+9FIRphTozAwTr66BKgWyzJhOFb+
+	 XXBzhYhQCjN4C74A634N3vkP8ruBwUhO1pXpSZaCGqmF7DJ1T3EIGtW4kmyag4UuSUK/r
+	 VS/KI3qh04sOxj8B1zIhGvGv79nmKJVcsip1dud38W1Mb2w3crL8MwJX69NluwUR3Ew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=iogearbox.net;
 	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=IWGfvvMv;
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=RMpwBPPL;
 	arc=none smtp.remote-ip=213.133.104.62
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359F5606A320
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 19:27:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 359F5606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8DBC606A31C
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 19:27:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B8DBC606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=IWGfvvMv
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=RMpwBPPL
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=6OLkz6il/59o/6C9lXwuQrRhIF+33c0EWzY6IaM0qZU=; b=IWGfvvMvbo/HZOcOMlzK8hhW+3
-	y4vgc8vty3rmtIFCG4qB0Oh1Qj8N8tHSusWj9RoWyTMpPSWvSBBl5bt4fB2JeqeVgTbRAGLV/3Hy3
-	07zs9728UejDXtbMBny2c6cNh+Cm3unldlLqTjftP3KrzVSdyBVviO6T27KEBJUfzW7M2PiW2BNLt
-	0wn4b+qofsfhjrWiswylEzkFl7Oid59XC26pwOXnwogTPlDeFM3LMI2Kg14gnpwV03brytMLgFXkh
-	hzyaq5iB3k5KbZVsnM8fR8be/TeAN/FA8zATevGF4td47/jkEmC9vtzyUS2R/Uuj6twrdY9GqEseu
-	z8byFuJw==;
+	bh=cOt2cvZ2cQTKBaS/0Ted1zNorQsn3aqx0swRwP7+56E=; b=RMpwBPPLm0gIHKaVUO8kWmw7Q7
+	ze0si6Y6k3rx31TiTLh17kGbJqlruybffW3AY7XeW4C0gHQggzYmHE2eflBkXRgYqNrFzLsHpN6g1
+	5cg5eJk8nK6HQ9OwWmSnutiLCJguVGi7L1eZsxp2Cn04rQQ1O2rjR5qOuUDekhH+T/1BbcMbEf0RY
+	P4sXqrzSkrGqlsRNI1tBknJpc2MlD2fgv3nPRfWV6dRa8Tm+SKlepIPCD3YhkQ4KK6mDYUJAtW+pt
+	MO3WlNrTbHqN8/mWFVvEhIzGNYQzC/ogFS1vZAZG8Dc38QoeJQYfAhesx5tHN3B+Gwofzv3R1IlEB
+	WOPCip4Q==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1xQ8Xx-000Phy-35;
-	Sun, 08 Nov 2026 20:27:22 +0100
+	id 1xQ8Y3-000Pj1-1G;
+	Sun, 08 Nov 2026 20:27:28 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: ast@kernel.org
 Cc: puranjay@kernel.org,
 	memxor@gmail.com,
 	xukuohai@huaweicloud.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 05/24] arm64, insn: Reject sign extending loads of 64 bits
-Date: Sun,  8 Nov 2026 20:26:31 +0100
-Message-ID: <c3b4128577d93ae25be8800db562d4bbcaa76a9f.1794165614.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 06/24] bpf, arm64: Keep the ll/sc atomics address apart from the old value
+Date: Sun,  8 Nov 2026 20:26:32 +0100
+Message-ID: <48822456403635c57d6cd67e115f28473dac62ad.1794165614.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1794165614.git.daniel@iogearbox.net>
 References: <cover.1794165614.git.daniel@iogearbox.net>
@@ -74,52 +74,62 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.6/28177/Sun Nov  8 07:23:52 2026)
 
-With the 64-bit size, the encoding of LDRSB, LDRSH and LDRSW becomes
-PRFM. So when asked for a 64-bit sign extending load, the load and
-store encoders returned a prefetch instead of failing. The BPF JIT
-never asks for one, as BPF_MEMSX has no BPF_DW form, but return
-AARCH64_BREAK_FAULT as for other invalid operands.
+With a zero offset, the ll/sc fetching atomics use dst_reg directly as
+the address. They load the old value into src_reg, or into r0 for
+cmpxchg, and then store through dst_reg. If that register is dst_reg
+itself, the load overwrites the address, and the store then uses the
+old value as its address. The verifier rejects such programs, but the
+JIT should not rely on that.
 
-Before/after for a 64-bit sign extending load from x1 + 8 into x0:
+Copy the address into a temporary when the register receiving the old
+value is the address register. The LSE forms are not affected.
 
-  f9800420  prfm pldl1keep, [x1, #8]
-  d4202000  brk #0x100
+Before/after for r1 = atomic_fetch_add((u64 *)(r1 + 0), r1) without LSE:
+
+  aa0003e9  mov x9, x0
+  c85f7c00  ldxr x0, [x0]
+  8b09000b  add x11, x0, x9
+  c80cfc0b  stlxr w12, x11, [x0]
+  35ffffac  cbnz w12, ...
+  d5033bbf  dmb ish
+
+  aa0003ea  mov x10, x0
+  aa0003e9  mov x9, x0
+  c85f7d40  ldxr x0, [x10]
+  8b09000b  add x11, x0, x9
+  c80cfd4b  stlxr w12, x11, [x10]
+  35ffffac  cbnz w12, ...
+  d5033bbf  dmb ish
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- arch/arm64/lib/insn.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/arm64/net/bpf_jit_comp.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
-index dc483d1b8bd5..48a481aa9656 100644
---- a/arch/arm64/lib/insn.c
-+++ b/arch/arm64/lib/insn.c
-@@ -389,6 +389,12 @@ u32 aarch64_insn_gen_load_store_reg(enum aarch64_insn_register reg,
- 		insn = aarch64_insn_get_ldr_reg_value();
- 		break;
- 	case AARCH64_INSN_LDST_SIGNED_LOAD_REG_OFFSET:
-+		/* With the size of 64 bits this encodes PRFM */
-+		if (size == AARCH64_INSN_SIZE_64) {
-+			pr_err("%s: invalid size for a signed load %d\n",
-+			       __func__, size);
-+			return AARCH64_BREAK_FAULT;
-+		}
- 		insn = aarch64_insn_get_signed_ldr_reg_value();
- 		break;
- 	case AARCH64_INSN_LDST_STORE_REG_OFFSET:
-@@ -437,6 +443,12 @@ u32 aarch64_insn_gen_load_store_imm(enum aarch64_insn_register reg,
- 		insn = aarch64_insn_get_ldr_imm_value();
- 		break;
- 	case AARCH64_INSN_LDST_SIGNED_LOAD_IMM_OFFSET:
-+		/* With the size of 64 bits this encodes PRFM */
-+		if (size == AARCH64_INSN_SIZE_64) {
-+			pr_err("%s: invalid size for a signed load %d\n",
-+			       __func__, size);
-+			return AARCH64_BREAK_FAULT;
-+		}
- 		insn = aarch64_insn_get_signed_load_imm_value();
- 		break;
- 	case AARCH64_INSN_LDST_STORE_IMM_OFFSET:
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index cb17e6daaea4..fa57783d7014 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -888,6 +888,7 @@ static int emit_ll_sc_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 	const s32 imm = insn->imm;
+ 	const s16 off = insn->off;
+ 	const bool isdw = BPF_SIZE(code) == BPF_DW;
++	const int load_reg = bpf_atomic_load_reg(insn);
+ 	u8 reg = dst;
+ 	s32 jmp_offset;
+ 
+@@ -901,6 +902,11 @@ static int emit_ll_sc_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 		emit_a64_add_i(1, tmp, reg, tmp, off, ctx);
+ 		reg = tmp;
+ 	}
++	/* The load of the old value must not clobber the address */
++	if (load_reg >= 0 && bpf2a64[load_reg] == reg) {
++		emit(A64_MOV(1, tmp, reg), ctx);
++		reg = tmp;
++	}
+ 
+ 	if (imm == BPF_ADD || imm == BPF_AND ||
+ 	    imm == BPF_OR || imm == BPF_XOR) {
 -- 
 2.43.0
 
