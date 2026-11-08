@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794135942;
-	b=y2Le4W0Or8bX4mySROC2sO7sDRJpy8+qw1KcbTDrJuGCjA20eS8Vl+295u/sbdoaBGq6
-	 Z3WJAJqLPlNH6mq7eEQPcZSHv5OaLmhiNqsncvpSCFawH0FtVYwtg+N6Qh0Rp6KGRaDKr
-	 xyUkVyRgkiGJc65wMwSHh1n6ZSNY53UIBPUwlNf/rOtLzk7ofCu4XvpP1WcqT4t5pW6c4
-	 /+vb4Pd6VyiSDK0h2KyJ14UpKipAO1s0PtCDX9jYlM9MgMPv+ciTzn5DW/ewhktFkt3JE
-	 svRj7oJqN71hSZMHX6JrVxmWRditOEh7bRAW37mNBTUbtjFltq+PYQrbW/sCMKcksEQ==
+	t=1794135960;
+	b=y7+/ECkeiGCZlHrzmFKUBv1PMaLawOspBfEUNBe0fHVSqc+l4kd/bWEjz7jpZWETl3N4
+	 Dj1heSpCW59hCvyHJ0rxAiTjeEK/s8NkWNF9UaDgNon0hrmMAlHF+0uTZ8TZf4IEImRy6
+	 ULC206vlosSv/5clFKtcBWq5i2/iKHzzRGkpaSTzH8TDwtxYtZQgN6avqaZZjWkzGM9ML
+	 HJplVfso5GCVkLxQlWBAlCWcAGPI2XhGE15B62Kj3zuOVTz0/R7gku+J4TsfRYzIETud4
+	 VGK2NaEDLSFmz4FeQo0ZL05eo01g0W8NIaxQ9DQ7rFJQiIaBh2kPtSMomXuJvbPSlng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794135942;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794135960;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=moiGcSV9g6fEFglU5jjTd2VsTAmD/aUVb3CUOrfKCF0=;
-	b=FbGnyABuFu9OU8Ckd232wOCUBVe8LR2Erq1G8fr2YWvNYILQu6sMB5K22WZVywR7uQt7
-	 FE33kHDRSYTB3d4+Grep86RpdFg/mVocx1lAzuHGzsH6pHl9NFcON64+/VuM81XYBAPfi
-	 SEl9ZE82FAYMqnzKVagucijDsfGN2rb7S+BfjqSNFVRF15QiZNYbKImROKI2GGX6g7XFx
-	 Rgz92XOa8TZfWJxeksv37GeU6zpBxfXOZVxLBt7PSsZWC0Gl9/q/XMTVje1xAHhe020/+
-	 i2USs1exvA9+L8GNGHwX1rd/3BZDuPhTGwOy3kPBNfApFBR8LDraP5kt6YZOzgaYHog==
+	bh=XnCYVNofTC0C6ktldCAu6GTGzm+Q8FA6+tvEuphsY/w=;
+	b=fadl3LbANsFs0mHzq+U6casEB9hfgKrBKnNvHEajwNriDK8f06yLxd65gqd2EQ5Ytlol
+	 xvHI9i+GJmTgaPbsgl+k4Dn/m99K3q7Qpsddbzm/CorfVa+crpbCKIg+LM6hgp8cmj4AT
+	 LifZ2QkJoCkwzMIYACKfhu4DPIxBpGShhUegwnC0znMGUWtK8G+PCvRCAgxCA/cjbsHfY
+	 2xkDjDO97K7g3Vs0wXlMf0JuVzw7ArAjLpdD8WeRYXZttw7zI1qQ69mgk0H/dUbopH/hs
+	 3wbIF7VujclkSy9BvehIEX9/08jHMis4iW+d+NsEez5P0YL4DCmE+z9Bjd81rav7GAw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=bytedance.com;
 	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=ZWbJMoeP;
-	arc=none smtp.remote-ip=209.85.216.45
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b="bhi6t/Je";
+	arc=none smtp.remote-ip=209.85.215.173
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F931606A321
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 11:05:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F931606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43443606A333
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 11:06:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43443606A333
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=ZWbJMoeP
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ada4c06b7bso12439a91.2
-        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 03:05:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=bhi6t/Je
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cd60c5da24cso5969a12.0
+        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 03:06:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1794135941; x=1794740741; darn=vger.kernel.org;
+        d=bytedance.com; s=google; t=1794135960; x=1794740760; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=moiGcSV9g6fEFglU5jjTd2VsTAmD/aUVb3CUOrfKCF0=;
-        b=ZWbJMoeP8ogmGUR/5kPE1A8dncneDCEgt6H2HY95exqVJWpKDCJ4xJ0/Yv5PV9x54j
-         yPhKOp4e9Vt+5oYVid3eE9VVf0shBy7pSEoEVvMrkZ3QJ2GAZaVutry29aBTTQ8KCLxe
-         94wsY68MsqpoLKd4ftPQlUo/T1VKmRpv/irkX1SjRkM2Q14jk7ljjp8X/VtHQjm5E7AK
-         v9HxLEypuDXUC4xB8Qr88INcSLtBCUSvdMaVVzvsYbQ0zgr1UNijrzeO2t9bm3WmL9xS
-         KGxknbpDFsQ1d6ar+EqAjjkDuWp4i76Qtd6Vfqmr9FS8lvwsxpIL+wau0Je0157QOssU
-         Yv1A==
+        bh=XnCYVNofTC0C6ktldCAu6GTGzm+Q8FA6+tvEuphsY/w=;
+        b=bhi6t/JeDBfQCUXNCuYRksQv2qWkciS/u1/5/yspUL/F73vw4nOHcnPeGYEcwCD3TZ
+         Do5dJSxzQ+fWQqld0igPAKgZ0+NrQ1FfbPYZMXbHhC2VfnnNfMZTEp7WBbZWtOUVVOr7
+         mkG6IOmpRzXEGivw2x0s2dsCoUxJ6Lh9u9uWdrhAL+vurQh3BOyLhhmuqDjEfQ1TSXTu
+         9urqZCq/rBP4rr5tUicOBaeNqC7DGEqbbsRmy3lD2vtRs7uBKCvYEQ7uqH0JXUJODPRv
+         NpyePZ0faGJyAcJm/l7ZELRLiQCQsWnyCWcLj7QEQ/5S0Jx8tjSBk0Lk7wb9LWRpVhC9
+         ebTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794135941; x=1794740741;
+        d=1e100.net; s=20260707; t=1794135960; x=1794740760;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=moiGcSV9g6fEFglU5jjTd2VsTAmD/aUVb3CUOrfKCF0=;
-        b=DCI8LlyaypDCtIaA/tpp1Z3rPop5UMqphhuUmFG8t0HdtKAmPVGSi0+dei/yQHkgk7
-         +CxKHpCf5/Oyys4TwWXdIb9AmkOjCkf6a5TdLWyZJbjMp0gQuUPfWgJybEC3yim4nLFy
-         7MFg6/hJsOjDbFxQwF++N94Zcsd1bcIk3tGECAfcIu77RyJZwksGKt6buDPlHf9nuuw/
-         pUb4LmdctIewrr0cWUH3ve8RHPX3PuYP2V/cS6JygWv5OKLgFFQlVAD0jtlaGepp27oy
-         v9tlzJtqG6mbWkyygZ/0mcC6YlOCwaDGav6P05dDmprSPVCI+0pqMJZpYW6DUsXrCp+L
-         35sg==
-X-Forwarded-Encrypted: i=1; AL+hErHEW1q54K2oWiStf9jXjTU5sccUw+Ep0A6YmWZTG4fiFjXKp7r00u4i1fhLihX36aP2pLk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+8wOTzH4WmBzr53bPHrQRFUxsbddtpTWJKZoWJ2HbRSJGUd+Ma
-	6o8I052zhFDHXNFMuQphWKMyToyKVlRmqYdoVBbTx0V8tdctzqTU1H61/CDIVdvg3dk=
-X-Gm-Gg: AYBFou1DjMKJgWqwcrqPAGn9CB/KaFHD8EdJBFYgobkEz4SM1QhHlLfNpuBAak33D55
-	v3RPLGPiy1in/l7kZHfYujwxtnCK0LDHtKcO6YQGF+xuLB5KQI+GqZAZXMMAlT960JlCOha3giI
-	LJQHbqtkSm3LIx5AqlV6pdCbpVFS7YIFcwcL5xSTlyuoTv5E0HCOCKSD+y/GXZDwASmZGFCKmN/
-	HdSZpzmu+2vNnJ/8CY9SMpAh6SHCNF7EQhlAmvUFEvGjZtPeFXAva22HN41jzKlOINZx4j+Xtb7
-	1rS8HMx4UEbRFx+6NVaFMeyjIgDXG/Wyd9KuekMQ41SjarB5p9I/uEzVHzy6ogLJGfHx7a18jKO
-	AtU95H0YJtH5mZyZtHMei/ZonufJd0Ka5iiRJb9eNfu+RY8kc8iMNGpP9M+f3/2OPL4/l/KKKfT
-	imLZK4jH1Jtns2TL5RGIbVnLKY7WS+Xw9Q/ox+q/upyqSu1beAyoira85fhbhTz/wng0GRgiO1X
-	xhlLGiWh8sAto1NJzr800TQ+CJ/xgtz3I7Mv0r4eNEYre6oq//oKrSgj6vYy5tamZTyhNDkJPBD
-	3+3nGwQJOxHQ8gdUBAxh7p2AOI5AmRQgvSsPlSgrlff1COh+KbRpn6UueEUnEZs=
-X-Received: by 2002:a17:90a:e7c9:b0:39e:4c7f:7308 with SMTP id 98e67ed59e1d1-3b12d37ecffmr886982a91.31.1794135940233;
-        Sun, 08 Nov 2026 03:05:40 -0800 (PST)
+        bh=XnCYVNofTC0C6ktldCAu6GTGzm+Q8FA6+tvEuphsY/w=;
+        b=ksDX6hj67RvYe8lEeZYEG9bG2SBeuHaMpND7gr4G79lJa+94FKSBzWrT97iJsxxLa5
+         7aO+h2Rtdm/R7R1uolkfFYFM8aXjyXqPDHYuMmrsvR/jV0jKs2cbZ45moQzQfQuma+1c
+         rgzxCFa0E165qKGDhUg3XUgfZskdCv/aM+fCxsjtsB/1o0BKrPHykpeUpbGMQE23zegQ
+         C2gJDsTgJ+erENPljtnNn6zpdAbhcW3x4j0pSdhRzdmSibFduWiZ+zXK+kF1Ag3+hdjc
+         LHND8XDD052pgRkf98qFTwSbdOQ0NDW8W9DMlVbwS3kqdpVzO01jg2J3Q9NxSweAaHjI
+         tehA==
+X-Forwarded-Encrypted: i=1; AL+hErEUfXkxh5fwM7c2yFEwr8q9PtJZr4/OZVu5gmb1j+MG3R8qKgOKy5+a6/y03AJx5DY3c9Y=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/0zwqTLvEYR0NyCzg+lxo2ycDQKXiDFw1wGQ1e45mtf3e12Ejz
+	qyP+UQpOnzCgTOt+8LVfsCdj4hUPdWnE6k8XdlJmIuOY9R4fchVhVd2B9VcCj/zmQRI=
+X-Gm-Gg: AYBFou37ddIn0f393Qq2zgnroawZwDq0+u0Qo+lVrluTb9hZ8Hu6d+8z1Lf+8HtKRZX
+	EQWVfBz0nhQls5tXzZscSEfXZwZF/wuRFzSTDj4UhbbvjRkGNRq1ZAMQFC0AwjJgnkDYgy4pX3S
+	wQphPy8xFQmNvDYEpydUcDr09zTtC2Hi+4t9LYkajJR9TvUfCa97uRsQEJJYRJMPxmzIW8jnKw8
+	S6KnAZUNqmojilL095JX0QI2z3DPmkZmcq8nyyhC5RuW4mXSZ4Zn5ZsPYdxmsz7+hLi0a4vWf3U
+	D4m42LsL94hdLs89LQf3VM1BI03b/GH5KJ+kTnJJ+bkFvvh9txjIigWct/AUePctR6vJrjCOHG+
+	bTYZaXoI/KElQBOv/E/EkL6g2VVrsbOuoEvv23U+7f+TmP9YvMSc+PNcl++LjM4wQKQjoO5o+8G
+	Djd479iqSZMMp+HH0DvGRJhuJvW71fHHPvgjIiH1ZS99Bsd4b335tlmU2TJ0sReLrWU+Mz6wQbR
+	SNN22Y+covAfvfIYj7AwBIaSDVq9m9MTnDF9q5gx0YTTSWLo+jolZA294M2PFKIfG9RPx2wbeef
+	gE2Bex6IokLtvCo/IqIfhVHlghL8DeaKnB6rZln6mzvHAnAggt/ruv5+mnLsb+o=
+X-Received: by 2002:a17:90b:3b8b:b0:3b0:9317:5842 with SMTP id 98e67ed59e1d1-3b12d43f8c0mr1076560a91.48.1794135959430;
+        Sun, 08 Nov 2026 03:05:59 -0800 (PST)
 Received: from localhost.localdomain ([139.177.225.233])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1278918f4sm2609818a91.6.2026.11.08.03.05.20
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1278918f4sm2609818a91.6.2026.11.08.03.05.40
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 08 Nov 2026 03:05:36 -0800 (PST)
+        Sun, 08 Nov 2026 03:05:57 -0800 (PST)
 From: Yunhui Cui <cuiyunhui@bytedance.com>
 To: pjw@kernel.org,
 	palmer@dabbelt.com,
@@ -131,9 +131,9 @@ To: pjw@kernel.org,
 	ihor.solodrai@linux.dev,
 	broonie@kernel.org,
 	cuiyunhui@bytedance.com
-Subject: [PATCH v9 2/3] riscv: store percpu offset into thread_info
-Date: Sun,  8 Nov 2026 19:04:05 +0800
-Message-Id: <20261108110406.97495-3-cuiyunhui@bytedance.com>
+Subject: [PATCH v9 3/3] riscv: select HAVE_CMPXCHG_LOCAL
+Date: Sun,  8 Nov 2026 19:04:06 +0800
+Message-Id: <20261108110406.97495-4-cuiyunhui@bytedance.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 In-Reply-To: <20261108110406.97495-1-cuiyunhui@bytedance.com>
 References: <20261108110406.97495-1-cuiyunhui@bytedance.com>
@@ -148,195 +148,30 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-RISC-V currently derives the current per-CPU offset from the CPU number
-and __per_cpu_offset[]. Cache it in thread_info so per-CPU accesses can
-load the offset directly.
+Now that RISC-V provides this_cpu_cmpxchg(), select
+HAVE_CMPXCHG_LOCAL so mm/vmstat.c and lib/percpu_counter.c can use
+this_cpu_try_cmpxchg() instead of serializing per-CPU counter updates
+with local_irq_save() and local_irq_restore().
 
-Initialize the cached offset for the boot and secondary CPUs, and
-propagate it across context switches. Set it before each secondary CPU
-startup, including parallel bringup and CPU hotplug.
-
-Link: https://lists.riscv.org/g/tech-privileged/topic/risc_v_tech_arch_review/113437553?page=2
-Link: https://lore.kernel.org/r/20260826012457.ig3rfmji7vywf6kc@offworld
+Suggested-by: Davidlohr Bueso <dave@stgolabs.net>
+Link: https://lore.kernel.org/r/20260826010748.zphu3wh2hlm4t4o2@offworld
 Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
 ---
- arch/riscv/include/asm/asm.h         |  6 +-----
- arch/riscv/include/asm/percpu.h      |  5 +++++
- arch/riscv/include/asm/switch_to.h   |  9 +++++++++
- arch/riscv/include/asm/thread_info.h |  3 ++-
- arch/riscv/kernel/asm-offsets.c      |  2 +-
- arch/riscv/kernel/smpboot.c          | 10 +++++++++-
- arch/riscv/net/bpf_jit_comp64.c      |  9 +--------
- 7 files changed, 28 insertions(+), 16 deletions(-)
+ arch/riscv/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-index b8bf842d4c136..06ac38f733b0a 100644
---- a/arch/riscv/include/asm/asm.h
-+++ b/arch/riscv/include/asm/asm.h
-@@ -92,11 +92,7 @@
- 
- #ifdef CONFIG_SMP
- .macro asm_per_cpu dst sym tmp
--	lw    \tmp, TASK_TI_CPU_NUM(tp)
--	slli  \tmp, \tmp, RISCV_LGPTR
--	la    \dst, __per_cpu_offset
--	add   \dst, \dst, \tmp
--	REG_L \tmp, 0(\dst)
-+	REG_L \tmp, TASK_TI_PCPU_OFFSET(tp)
- 	la    \dst, \sym
- 	add   \dst, \dst, \tmp
- .endm
-diff --git a/arch/riscv/include/asm/percpu.h b/arch/riscv/include/asm/percpu.h
-index 280b122b9fe69..2a3ddc3538869 100644
---- a/arch/riscv/include/asm/percpu.h
-+++ b/arch/riscv/include/asm/percpu.h
-@@ -9,9 +9,12 @@
- #include <asm/alternative-macros.h>
- #include <asm/cmpxchg.h>
- #include <asm/cpufeature-macros.h>
-+#include <asm/current.h>
- #include <asm/hwcap.h>
- #include <asm/irqflags.h>
- 
-+#include <linux/thread_info.h>
-+
- #define PERCPU_RW_OPS(sz)						\
- static inline unsigned long __percpu_read_##sz(void *ptr)		\
- {									\
-@@ -557,6 +560,8 @@ static inline u128 __percpu_generic_cmpxchg128(void *ptr, u128 old_val,
- })
- #endif
- 
-+#define __my_cpu_offset (((struct thread_info *)current)->pcpu_offset)
-+
- #undef PERCPU_RW_OPS
- #undef __PERCPU_AMO_OP_CASE
- #undef PERCPU_8_16_GET_SHIFT
-diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
-index 123c89b694e87..b4a4d4a44f25d 100644
---- a/arch/riscv/include/asm/switch_to.h
-+++ b/arch/riscv/include/asm/switch_to.h
-@@ -89,6 +89,14 @@ static inline void __switch_to_envcfg(struct task_struct *next)
- 			:: "r" (next->thread.envcfg) : "memory");
- }
- 
-+static inline void __switch_to_pcpu_offset(struct task_struct *prev,
-+					   struct task_struct *next)
-+{
-+#ifdef CONFIG_SMP
-+	next->thread_info.pcpu_offset = prev->thread_info.pcpu_offset;
-+#endif
-+}
-+
- extern struct task_struct *__switch_to(struct task_struct *,
- 				       struct task_struct *);
- 
-@@ -125,6 +133,7 @@ do {							\
- 	if (switch_to_should_flush_icache(__next))	\
- 		local_flush_icache_all();		\
- 	__switch_to_envcfg(__next);			\
-+	__switch_to_pcpu_offset(__prev, __next);		\
- 	((last) = __switch_to(__prev, __next));		\
- } while (0)
- 
-diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-index 55019fdfa9eca..f10ba62b61016 100644
---- a/arch/riscv/include/asm/thread_info.h
-+++ b/arch/riscv/include/asm/thread_info.h
-@@ -53,6 +53,7 @@
- struct thread_info {
- 	unsigned long		flags;		/* low level flags */
- 	int                     preempt_count;  /* 0=>preemptible, <0=>BUG */
-+	int			cpu;
- 	/*
- 	 * These stack pointers are overwritten on every system call or
- 	 * exception.  SP is also saved to the stack it can be recovered when
-@@ -60,8 +61,8 @@ struct thread_info {
- 	 */
- 	long			kernel_sp;	/* Kernel stack pointer */
- 	long			user_sp;	/* User stack pointer */
--	int			cpu;
- 	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
-+	unsigned long		pcpu_offset;
- #ifdef CONFIG_SHADOW_CALL_STACK
- 	void			*scs_base;
- 	void			*scs_sp;
-diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-index a75f0cfea1e9f..f4f7ee976cd94 100644
---- a/arch/riscv/kernel/asm-offsets.c
-+++ b/arch/riscv/kernel/asm-offsets.c
-@@ -38,6 +38,7 @@ void asm_offsets(void)
- 	OFFSET(TASK_THREAD_SUM, task_struct, thread.sum);
- 
- 	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
-+	OFFSET(TASK_TI_PCPU_OFFSET, task_struct, thread_info.pcpu_offset);
- 	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
- 	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
- 	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
-@@ -50,7 +51,6 @@ void asm_offsets(void)
- 	OFFSET(TASK_TI_A2, task_struct, thread_info.a2);
- #endif
- 
--	OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
- #ifdef CONFIG_RISCV_USER_CFI
- 	OFFSET(TASK_TI_CFI_STATE, task_struct, thread_info.user_cfi_state);
- 	OFFSET(TASK_TI_USER_SSP, task_struct, thread_info.user_cfi_state.user_shdw_stk);
-diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-index a9de2dae804c6..6431914d21165 100644
---- a/arch/riscv/kernel/smpboot.c
-+++ b/arch/riscv/kernel/smpboot.c
-@@ -175,6 +175,10 @@ void __init setup_smp(void)
- 
- static int start_secondary_cpu(int cpu, struct task_struct *tidle)
- {
-+	/* The idle task is reused across CPU hotplug. */
-+	tidle->thread_info.cpu = cpu;
-+	tidle->thread_info.pcpu_offset = per_cpu_offset(cpu);
-+
- 	if (cpu_ops->cpu_start)
- 		return cpu_ops->cpu_start(cpu, tidle);
- 
-@@ -190,7 +194,6 @@ int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *tidle)
- int __cpu_up(unsigned int cpu, struct task_struct *tidle)
- {
- 	int ret;
--	tidle->thread_info.cpu = cpu;
- 
- 	ret = start_secondary_cpu(cpu, tidle);
- 	if (!ret) {
-@@ -208,6 +211,11 @@ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
- }
- #endif
- 
-+void __init smp_prepare_boot_cpu(void)
-+{
-+	__my_cpu_offset = per_cpu_offset(smp_processor_id());
-+}
-+
- void __init smp_cpus_done(unsigned int max_cpus)
- {
- }
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 371405598faa7..fa6ce5613c4d6 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1466,15 +1466,8 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			if (rd != rs)
- 				emit_mv(rd, rs, ctx);
- #ifdef CONFIG_SMP
--			/* Load current CPU number in T1 */
--			emit_lw(RV_REG_T1, offsetof(struct thread_info, cpu),
-+			emit_ld(RV_REG_T1, offsetof(struct thread_info, pcpu_offset),
- 				RV_REG_TP, ctx);
--			/* Load address of __per_cpu_offset array in T2 */
--			emit_addr(RV_REG_T2, (u64)&__per_cpu_offset, extra_pass, ctx);
--			/* Get address of __per_cpu_offset[cpu] in T1 */
--			emit_sh3add(RV_REG_T1, RV_REG_T1, RV_REG_T2, ctx);
--			/* Load __per_cpu_offset[cpu] in T1 */
--			emit_ld(RV_REG_T1, 0, RV_REG_T1, ctx);
- 			/* Add the offset to Rd */
- 			emit_add(rd, rd, RV_REG_T1, ctx);
- #endif
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index bde1f1885038f..458ef01e926a4 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -155,6 +155,7 @@ config RISCV
+ 	select HAVE_ARCH_VMAP_STACK if MMU && 64BIT
+ 	select HAVE_ASM_MODVERSIONS
+ 	select HAVE_BUILDTIME_MCOUNT_SORT
++	select HAVE_CMPXCHG_LOCAL
+ 	select HAVE_CONTEXT_TRACKING_USER
+ 	select HAVE_DEBUG_KMEMLEAK
+ 	select HAVE_DMA_CONTIGUOUS if MMU
 -- 
 2.39.5
 
