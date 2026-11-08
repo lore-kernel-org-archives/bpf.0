@@ -1,100 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.46
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794126475;
-	b=BG0C1ILotKxy7Kerwmlys1YvrjhPySNjaDK2vQq61NLCHbpkYfsnCW/IWw8On9wjSBPe
-	 ErLx9Nwmzub4laYDimv+6ELNnwsfyjEbwwK2wi5Mzl6bpybghcNMdf8tfd1XjTya+RXaQ
-	 kmbsU8IRj6UN8ErQ9YPtiGjekkUavdgzIopyU/sVib0kFgg/Waqg64UdJkI5H8JiTpq38
-	 d8F9vtHRLfetP8bsjdpM+P8mLWZkuy8N2gvibHbZOL9BKMndIGOEU5OztCUAB7cRsx5+l
-	 O3tHmx6LP2pagisV7r5G6Q+r6+eYGuXCeeup63m1RyRQZ0CCiXQ+sZ0sgWh3Pz70yOg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794126475;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=LHJ/s2pok+cQGyJRZxhcYGZiYXJmh71TKyHNP9sAFZs=;
-	b=Yb0aANNCt2RTJNSFwUf1J3msgs+51u4UbTgdw2RwL+y8DAyDZDYKVlQQKk9m+pn9+zoq
-	 odArW9J2B3GaRupveGju/3fkUeh9f8jgIof3NjB2n6YclvguhD3t4GBTfkSYm6gRMOdCq
-	 +Biy+M08+ARZmSlSRAtOWuzjLnWA3XrhVTEGMgbpRpMvl2smvalIc9PvOico9OTkXjeFC
-	 4KtJ8pmZIRtMgk1PsY2OtbIQeKGl+Tq3ESIhaLCELf66mmlRqHzGEHaMmNU0o/+x6KFMj
-	 MIRu2blOKG1SKDHnPc5dv4qFzNF/VqaVLkYWXJgRGaZso7kirwt35VtMFHCvqUg/gqA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bytedance.com;
-	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=St7c8hWs;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.46
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD9F606A322
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 08:27:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4AD9F606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794129877;
+	b=5sgkBaMfTezJSNamMFBbeYtnWfAoiBnDv+yBU/cwc1kgYSU5Xb98r6Ajb+ObPRTOVOcJ
+	 pXozCSqD7G5pGi7emR8/q7N3gfmawjDUmagQQPYkvynsGlHWpt/vcXLrgvTJP8zUGGDWU
+	 yPKs68pkbjGSicgdWVOy7X7goa4/KVw3Z8ZhE/vyWDWeyMvNrNGkT6XvayjZs4Qk6+17r
+	 EIZfqMhKyapEa2wQvdCZhJnqgsyVaCAbGMlooBwb220GvH5/8ZsmpxNnYTNGVU9BcEiji
+	 1IGUrTUBFTphmt0ci53sPvh9R55ieETzJWRCMxu38L+cd/DgpQEYpPLZ5P+bwlBCh4Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794129877;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=PnzH+B+BQHmWRcHqdfcGVVstdJf8NJtY2FdKLBnT8BA=;
+	b=u6lnBriWkO/IT/STdue0S/unIpFazF26IJziWxRfj3101nifgJXw4MpwYUb4sD8mmCpU
+	 0O90y2NgWTguoJBIAELATahep/ldP6/6MWbZHGG0kX9hfV2ntTcV686i3FLXoFkTefb1H
+	 IarGBA/ODuCibrlAGdfTNHehT5Zd8uXncWKE1qWSHyvoZZi5LGP2ZvszB2e5xJGTBTgaH
+	 xDqV2z+WSDloBkPs5nkDjo/YiPQDevqArn1b/Lp6omGiVBANsw2wnxeZOpSRlzixFy0AN
+	 GCSqeDF/6NXYd8rnrPTZQXW8CorV9L4W1ecyRAYy+a4OF3fRUk+XP7opC8DVKhATlrg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=P6HdDUCZ;
+	arc=none smtp.remote-ip=111.22.67.137
+Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F36D5606A321;
+	Sun,  8 Nov 2026 09:24:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F36D5606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=St7c8hWs
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-847ac7ccd85so138432a34.3
-        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 00:27:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794126473; cv=none;
-        d=google.com; s=arc-20260327;
-        b=BYMKdq1s9i+aEg6WXkLRFXy4TCMlK1tWUwHZxQtVfT1di5JTUxT45tvbmd9tBF72Uv
-         Q6ErAHfa/U0riMJsvFOX/cD4Wtfeugk4YWiVFGqjvOVEiqoGAa4+Vc3evf4f4xZiih9M
-         1F3gXsJ+47HPolZ3DhFlXrurDwRd5oIQFb8gWygVLTMpWEUxXxRFxK1MT8Om2IVLhuQg
-         dLaEeENS6/yWFHv5eErfcSX6ebY+L4RgxfWsB015OfIJiNSJfhGB/aVyAkEa/pDSI8qq
-         KxTQPMH46e3yDxj3XPpSXTrX5HBQCdDmdzyFfzLjvYpM5J8A/A/zNteysaV5vqsPiwmu
-         Qhpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LHJ/s2pok+cQGyJRZxhcYGZiYXJmh71TKyHNP9sAFZs=;
-        fh=lLXYhlSYqwGfixXwYgMws5YudlQjCwJrf6ALvTgqu2A=;
-        b=BozwhCyRzFr+UkxLvloPkAcyvLSxw+BXw4S8u/Zl5OU4ln0ViBhEY2JwajaLwlDb/5
-         KRUJy6/91KT1paXTdEU8PVdJZG2gjMxA/ksm8Zf7ipmZJNm3M7F6C1XWvM7mHrxuYDsc
-         zLWP0oVIxpZCsWSF49QRn8ZeEx4SDFwvJKx02sl4cE6DIkdnZwYmOO8gf759wh6iNGrX
-         58XWVjdEtPpV077NbRjVyXMTLPFchWXN8nbipdDtUcuOMX3dexJsDEXGpvlgqIpMulv+
-         XIMFIkQwCj91aYTIFiSGXQ3HeqoLmTyFfcLTkfdq+momqI9k7MXzVWjMd/xR7z5eQiOM
-         4FYQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=P6HdDUCZ
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1794126473; x=1794731273; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=LHJ/s2pok+cQGyJRZxhcYGZiYXJmh71TKyHNP9sAFZs=;
-        b=St7c8hWshA690BLsea/7BSBugBcIPmsC0glB0voRD2wLUW70KfdQBUU82HHi5IRjr7
-         z56tvSXxO1k85jcc++z8ES41Q6kydj4961RV0ExG1dSATkUI96WMEFdbtuZ/uJiU0E4f
-         sJbamRQSOtSkMP7mMaa3SqKo2pWxEgS06n6KbdpHnvPOXyltZ7DeNe91P+i7920+mkXd
-         +k6pD3Jt7DdAL5DVvc3UKESlsjdRBdEY3TJcTvTuQoTWpSu7nBH1mG4ItkP+bOjggYO1
-         0T5qtkI90Ftgd/l3g55HZcwUAvMh/oeB228IuwKF23qu6bqDxE2v2q9r3iFR6M1R5/Mq
-         lzAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794126473; x=1794731273;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LHJ/s2pok+cQGyJRZxhcYGZiYXJmh71TKyHNP9sAFZs=;
-        b=UbRH4Ny0nqCDLRYfQ0HNAy08lnvosf0VucpfBxJzPXdnLbslreLIMfoyzmV41/KF+S
-         u2YMErOXP5kv0TpfaHPjHTT75LzKTHKnD9nxj67CCztOmjPo+sHS5ZqJ60cB/1ZD/vov
-         XQVwiu1WUADsUDJ4SrP7k58ZLukcdSvm7k6lGAQK6lcyAR9TMpZnT956mmC44yESXp4h
-         nhpwP/LIeMAwpaOZ0V1VKoXfjvwrTkiZrrrHKJRjR+8g3mAHpvyHj2SaWbZeytKh3zmJ
-         c1xggsDyHWf18/OK6QFrAvM/qftqj0yhMiYyFFHAJgUdWZzeCShl8ZuaQz/HyWpkTjOU
-         j3Ow==
-X-Forwarded-Encrypted: i=1; AKwUvBwJUMjE7Bf/SR/1LWD5nHCaZcyhlfBrqb6+LcJ00y1F+FSgysOyNzlmdnUyXpZRlHRWIEU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8tqZkmcgwrIOjDbu1mTJv958UM+5dwdF5ZyRPdxy3hWVZttwXD
-	b5t4ukPG5p15J+mlW5I6EJtr6In+uIsWli64AnwPmSQrcW0d6oztys+ZKoRS/TVy3vjZLE84mdl
-	LLT4OT9qAZzgp+yJNKqreiJfzZLx2FPWNYiWotHnGsA==
-X-Gm-Gg: AYBFou2BCRlR797jRW5M1WDMv17q6d7hgSSjOUj2nKyPf5kCE6I155c1hEi7YMcmnZX
-	VVNMAZAdXhFPcm14uJ8NkEnTY61k2TOzUazB7gvtMuUpHx22DVao+RBfZVOGhJ5MTNIhQ193K0a
-	Ycxql0dApGjUalzqICzJwNrTIcBUT6ogniZRWDIhQfAT12SffRzhg653yM23AutM/Cv9g3fNGJp
-	mHz0ozUK/l1XTp+EqILgCbGPNhDztPNiPQ5WBlolCWRDN8iUqZybus1o8JpgRyIJv5Qi8UAwr8f
-	DI4EzYsVNGOTA1ISCeh9eCV+H3x0kr/J6hgmmkC3YpiZTiUpnEHdoeQwoo4xYwpRgS9bIhBG9hh
-	J4w7IE2oYKw2ILXljNWYSd3ugxAUWmL5DOf5UsCmyPHT3
-X-Received: by 2002:a05:6830:71a3:b0:80c:d34f:5f5a with SMTP id
- 46e09a7af769-85f5075a36fmr645255a34.19.1794126472981; Sun, 08 Nov 2026
- 00:27:52 -0800 (PST)
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=P6HdDUCZ2dodrGT4fxgKTi+gcM2AkdrIy1MRstIFj6tiyIi5AAWFz+a1KqJgaNoDq3kdT/LXsx/Ol
+	 8lpjzTROB9Pi98FQQudt3FpG6rLUHyHcUubKzESAblFP6B7rF2p4zESaYABsJ7axqy7o0Q+xxQxy2i
+	 OhHS1Qcf+NsKrn+M=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee46af03fcbe3e-5aacf;
+	Sun, 08 Nov 2026 17:24:27 +0800 (CST)
+X-RM-TRANSID:2ee46af03fcbe3e-5aacf
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from openEuler-24.03.03 (unknown[74.82.203.40])
+	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee76af03fc1270-639dd;
+	Sun, 08 Nov 2026 17:24:26 +0800 (CST)
+X-RM-TRANSID:2ee76af03fc1270-639dd
+From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+To: "Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowangio@gmail.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	netdev@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 1/2] virtio_net: Don't DMA map the kernel image for the AF_XDP TX header
+Date: Mon,  9 Nov 2026 02:23:54 +0900
+Message-ID: <20261108172417.56607-1-yanhaishuang@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <179411647562.994134.8636776015987575971@kernel.org>
+References: <20261107125723.33547-1-yanhaishuang@cmss.chinamobile.com> <20261107125723.33547-2-yanhaishuang@cmss.chinamobile.com> <179411647562.994134.8636776015987575971@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,65 +84,23 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20260703122832.15984-1-cuiyunhui@bytedance.com>
- <20260703122832.15984-4-cuiyunhui@bytedance.com> <87bjcnlrbv.ffs@fw13>
-In-Reply-To: <87bjcnlrbv.ffs@fw13>
-From: yunhui cui <cuiyunhui@bytedance.com>
-Date: Sun, 8 Nov 2026 16:27:42 +0800
-X-Gm-Features: AclHuK-No24RzFz5kz6KGOgepjfUU9hWv2-yH0FoZIN8FZ2Py9-_ynkukYR0a6s
-Message-ID: <CAEEQ3w=B4p-_4pg3ffrkSA_AXuz86FCd-w4FSB50HoijcSL74w@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v8 3/3] riscv: store percpu offset into thread_info
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, 
-	dennis@kernel.org, tj@kernel.org, cl@gentwo.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, bjorn@kernel.org, pulehui@huawei.com, puranjay@kernel.org, 
-	thuth@redhat.com, ajones@ventanamicro.com, ben.dooks@codethink.co.uk, 
-	rkrcmar@ventanamicro.com, samuel.holland@sifive.com, zong.li@sifive.com, 
-	conor.dooley@microchip.com, debug@rivosinc.com, seanwascoding@gmail.com, 
-	andybnac@gmail.com, menglong8.dong@gmail.com, cyrilbur@tenstorrent.com, 
-	wangruikang@iscas.ac.cn, atishp@rivosinc.com, apatel@ventanamicro.com, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, bpf@vger.kernel.org, arnd@arndb.de, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	qingfang.deng@siflower.com.cn, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Thomas,
+On Sun, Nov 08, 2026 at 05:41:15AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> > and binding an AF_XDP zero-copy socket fails with -ENOMEM. Even where
+> > the mapping succeeds, the header shares cache lines with unrelated data.
+>
+> [Severity: Low]
+> Does the second sentence here match what the patch does? It reads as
+> though the patch also gives the header its own cache line.
 
-On Sat, Jul 4, 2026 at 5:02=E2=80=AFAM Thomas Gleixner <tglx@kernel.org> wr=
-ote:
->
-> On Fri, Jul 03 2026 at 20:28, Yunhui Cui wrote:
-> > +
-> >  extern struct task_struct *__switch_to(struct task_struct *,
-> >                                      struct task_struct *);
-> >
-> > @@ -122,6 +129,7 @@ do {                                               =
-       \
-> >       if (switch_to_should_flush_icache(__next))      \
-> >               local_flush_icache_all();               \
-> >       __switch_to_envcfg(__next);                     \
-> > +     __switch_to_pcpu_offset(__next);                \
->
-> Why do you want to go through the indirection of current:
->
-> > +static inline void __switch_to_pcpu_offset(struct task_struct *next)
-> > +{
-> > +#ifdef CONFIG_SMP
-> > +     next->thread_info.pcpu_offset =3D __my_cpu_offset;
-> > +#endif
-> > +}
->
-> instead of using __prev->.....offset, which is right there available?
->
+[ ... ]
 
-Agreed. current is __prev at this point, and both forms compile to the
-same load/store sequence. Passing __prev explicitly is clearer, so I will
-copy its pcpu_offset directly to __next.
+> Could this sentence be dropped, or reworded so it doesn't suggest the
+> patch provides cache-line isolation?
 
-Thanks,
-Yunhui
+Agreed. The header is only mapped DMA_TO_DEVICE, so the sentence
+doesn't describe a real problem, and the patch doesn't change it
+anyway. I'll drop it in v2.
+
+
