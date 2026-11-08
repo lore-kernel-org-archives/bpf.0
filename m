@@ -1,94 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794154092;
-	b=taDaQMSAql0GG/acsU+Q1ss4dog0qQsrQyU6G3HXPaRuuDhvpNxZYXkQTso2jZNorj76
-	 +T7H51NQX5MwNmcrrt4/BqQv67DuUkOzz/aH+v4JJrFKnwkhFboUJy1tfgiTueLlgv8nW
-	 tybuT4G7tWA6Qpg3vwtG9Y7GdY4LtycZGnNQp9HzatCQ62ObBI7FRDIXgi3j2OXJW9LAu
-	 APd81oNWOjQfGP5j7/SWGmbRmsnLJBD/O0jEaSTamVPOGEQbvUD5qjhKYKLlM/UGcz9p0
-	 U1ql/yu89LeEhqcOYRRnvm/SwfdNIRSFl1l8MLAuRTO6L2otmqWgIjbl+EGET4x9Lcg==
+	t=1794154113;
+	b=S18Nvcfj4hZfYVZ9DSrdTrQ2lS8ylXF+o8e5czAZgUIJD84ZzXFJAUL6s82NvAkmpbtd
+	 x0di7IrXTItBF/T0KhTu37ATEmP1/7bSt/Fu/4fHIjOtJTDvF1Py/H2oDyjLSjbeizuma
+	 npY0OMHKgkS7DeMQcqzDj9QMw+rrk8RXOZZKpl5ciidpbOA/WzXWJ8FXb9/5BTSntrwkN
+	 Gc9czPtH5IQi89WKhck1uXDxXUukkT3RZD+uQQUfEPA2F/ClU91GIGsWYdDMQX8af+Pl3
+	 vw+moowuEgCIAL2VG6cbJsZZVc/nYcy7seMpBcD7e0JWme9JDD7nKO14be4K0/qrnSg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794154092;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794154113;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Content-Type:Date:Message-Id:Subject:From:To:In-Reply-To:References:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=gF2UiTKBERb0gFccvMdAM8b4z2m27E7dn9beS0qNAqg=;
-	b=dU/aEl19lpfbHeEGHElpyrCic8v+A0Kj5gv7RBsJgOukOPL5ijBtDoFqs0k1PgVUs1xf
-	 vJrEf63FPtjWz25Brk4t12aUUM5HzmaYFzUa29dZAAc645C4j3YNSxuJvv/LbvqUs25yH
-	 /MbMArqR1eXEWh7gdpJbAKWQylp/YmmVzMTAp6R1T8Gfl77MK/kj5NUo0MZ17K+QLPiLk
-	 yNFpvyGlxff0pYKDzBnuatSylXM+VoDqjP3zN7YT7LLgY8ZKDln4akM4rvYKwBruJFpx/
-	 ylhMS80lXFexstMCmGqcw1TYNxQBQrxYycZt7NeY0hqp3J5w59G+RqZ6Y05fdCYFVHg==
+	bh=NOeGCapXsRsus++SJZpGsxfNcw1CzTDVFljcgsUPEu8=;
+	b=JzFN5S/chRMbsy4BwXb03VwbaNiP/a4IFTDAw3xpjEWYVngNhUYXIQMxM76Hhut4zSUo
+	 VZ4j+rDrOQjaRFgAmBFHscGQ5pVWxMZf4UifZMQnkK0kO+tqY5ZH405u9mIT5b/2F96hP
+	 bEtVY+dwVqdf63Ib2eEsk9YoZio81Pl/b/m63pKkWutHwgOYvEp7lpYwjpMzIxbhcsdVW
+	 T1lq/zpidz3ZwA7j87tT4/zOBUyHnfAmlRGP6U7BGxqRCSxZPHqZ79ot0rjVCkSyKqqj6
+	 8TqxGHd+tzcZMM/vr3d8x8JHAE7uOrLIA14rbK2s5WwkqaBRabC60S/GfMYWScJVurA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bigxoCBq;
-	arc=none smtp.remote-ip=209.85.210.175
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aGYSDAtE;
+	arc=none smtp.remote-ip=209.85.215.180
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69258606A31C
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 16:08:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69258606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C9C606A320
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 16:08:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 33C9C606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bigxoCBq
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8a0880a46e7so42184b3a.1
-        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 08:08:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aGYSDAtE
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cc4aa0246b7so23498a12.3
+        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 08:08:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794154092; x=1794758892; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794154112; x=1794758912; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:message-id:date:content-type:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gF2UiTKBERb0gFccvMdAM8b4z2m27E7dn9beS0qNAqg=;
-        b=bigxoCBqluRe7zlT3MR7RJIsnECUJI3FdZv3rCv76QjJCngByd9Q+ElvIgpZ77vAf+
-         ZpHpLWeoU6Bi80lad7Gfc7qVOxdUwg6zdZ8b0lIlzG9wOs5agPLoc5q+N3243grdeDKg
-         Gq0jXx/ypfNOFLcg3bF9cTs3bBAe3sNB0AGOiw2QmxNI8tIxnGEwTEfMNFOzSnmklxIP
-         fczIgHcW1K0nZYy1RIRfilpkNKhu//kx8MglKKJ4t4iWn8HX7mb1OC7vChuo/xqOLPKM
-         OscaaeBEH/6Jjqm28tQOLDDQwigisvFG7smcn5Qp1945lE5DkJApJJCJeasCK02SPko4
-         JPCA==
+        bh=NOeGCapXsRsus++SJZpGsxfNcw1CzTDVFljcgsUPEu8=;
+        b=aGYSDAtEdlBLfdaNDrcA4Lv8CMszBAHg16mNQpcopnzWybzcqIHqW0yCy/+4zfnM19
+         W/muVidveSVd83mrRsuS+F29SJLVcWR/wjHW56T9whTSpjcAfZsl4Igbuin4y8IyS1th
+         Hb6953t1MIY8NOAV83aMqqFiduQR+KT7cTbruQuaTR88m+jX/S1qv7tTcOgYnvGabmQF
+         ZhKaMYT/vDudq5/iBKApAe4rSenQc0c5/ADS8fGP6ddflvI+graBxqYVJSq2OvKPwT5U
+         P6E1Jt8NSbel5pMcBEpmUJYSYU4LtF0edYuUDzaZ+iImfbWwYDy6ox6O/eqnxEnUv6dp
+         F3nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794154092; x=1794758892;
+        d=1e100.net; s=20260707; t=1794154112; x=1794758912;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gF2UiTKBERb0gFccvMdAM8b4z2m27E7dn9beS0qNAqg=;
-        b=zSEd2npMbmkYPPQwmLDYYcieqycdtaAS0J68dYqXCWLyXk0G7n2yQcIV2rRbDko0u8
-         hPcPqTwVXI7BQzQCGjP9DYvo5YiKx6XhpWPaQR10MLsTSIDy1i0icdEEupJ/Ldn+kuHY
-         y8WOv8S6XBKlxoHvS0obURYfx177040lkXs38xYQ3b06kvlp5B8Cp70cd6GdO8yGTXkQ
-         bI8yoWy+7B8L1vM4WBIX6fil/g8ybZg1fee8TYt7+HB+rqiOdonnbwjENfobKxbA8fm6
-         ksRu2DowRf+piOacjZdQZiGjWpP16Ca4WY7fxsrCdyPdchf2C98COPPgv1d0QQuUvCvh
-         aE4g==
-X-Forwarded-Encrypted: i=1; AL+hErGGu1gPsmkP6J0NHa2GRo/3Omt4Dd/EJhnrXMEHpkommVuYFWHFDdOj29UN/ZGnzyGS84g=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+2mlg7vThIdo+dBUPxKn/mhdfYtAwqxRBA/HfBNOPESiojYmMq
-	AYDtxnHjTZYeJnhp+ki9L+Yyr9Urfvv92+hkUAxqNvx0FeoKh/srs5/HWCXy2w==
-X-Gm-Gg: AYBFou27lEJdKeSgSy7aN0k+HrWMCLMtw11sYcWma2fnkcqHwvLkwOhtzvXzQCWix97
-	kYCBiVVYNqAVuThu2NmrhL4w0pDGgIBMcBrIuAgIoDj/27Lw12co9djHmuszn+icsL33ojcNjmV
-	+quzkihlVtKHhJWE72lSWoc7LOb00+9aDjCxB1KLa53gTciJpJEeiP3ZoamItt0H9Pd9hY25Upx
-	NTT2+W8QchQNLlKXMlkshhJqSfuTqcKoMjucAs5TQ7MKyZYzVt7IC797wgtcp719W9ihSz6tJW5
-	4Z0CB5suTil97PtJ39swwzCwpET8oJN88S2eJn7h7xndG2l28aP4pPJxTVm1dGMpvvd2AlUpsgi
-	BYE17+C1Zuo8NdqqbjQUrWU/Y5p8VcYshzGFdFzN+i21h7nSouMGKcJ5cOgem6exC43TBz4iGNL
-	6HkMwGdgDMYBhwilq0GIgqakILriqhdLKcRv/Q+WbvGgaVtR5OHhS1hOJfmSDkusCV32KO3xIO2
-	BWxhBI5XLnnB1cGcUO5A10HZeiQNGO4riIrr5CcnWPh/Mub9SC9pfGEvqN1FdzJuxjx+ird0jAr
-	NABRU3Y4b07xn4/RpUqDgKAKxSvTHuBTvBz1tJTfFf4AMA0Aefdq7dknV501GrMLClq7A0LoKTF
-	5yLHvSQRLwBYlD7WzUHpCQyRC6u/nxaRuqiin
-X-Received: by 2002:a05:6a00:1f04:b0:8b7:6ffa:f201 with SMTP id d2e1a72fcca58-8b76ffaf409mr630203b3a.29.1794154091558;
-        Sun, 08 Nov 2026 08:08:11 -0800 (PST)
-Received: from localhost ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b64a1e6232sm610885b3a.52.2026.11.08.08.08.10
+        bh=NOeGCapXsRsus++SJZpGsxfNcw1CzTDVFljcgsUPEu8=;
+        b=vqngpTz7pG3auysutz/eFqJC9Ty4RaJbN07P3Rr1KBWbmGqYcZLsqymOIJJKyxv+b/
+         xuzAuZyQyxRvG24R6s4Y6fgyoXDA3JGqIqiPkYEDVfOAfPpT8iL3t9DDTiNQJwkXx8ft
+         4k5mAuNZNhwMnJU14bmrfV5Spvb3EXNutkLVKH71o+PNSfhH1tXTMwTBU/gZJ8CswD81
+         JY1qu9IUkMJWO8IaD2/exQ4CPI0Hksd7NM2gMq1pQvIhWv443xI68A6yxa4fUo1pbeG9
+         hbq2FSa/Rn5EY7itEUXSVuR5ZZjjBTfPj9RXKVvTUdJgEYowvOFyl6EWs/2eXiFrDf21
+         1HSQ==
+X-Forwarded-Encrypted: i=1; AL+hErGNK1wXTbUKNDFZS0cZMXkyhqVETCCns15PEvLmUkiV+BAC/4ckWMns7xnT/FgSqetlnMY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+YxPjRtzlQWEZ/RkZDIhp+ea17LqVD24kfjmwBcQmy+IzyZ75s
+	B/5eZOgnAgTgC3naXtRcIg1Pe5I+E/bdK5l0HkeH1A1IVhZ8GEOXfbVsb89SRA==
+X-Gm-Gg: AYBFou1R8vLU9oPL/v//qDvaa+RGS/EZ8a1mRwQD9uG08a1u4nascFL/7h+Pvfn3avo
+	1+B5/8JAdI9PEuptOZkLoQwlHq83IVrLALtiFc8YcT/SQlWKIR6dxN6iN9+cTDSrUOaYuHhMhZm
+	2dHGyjZZgKNJ+Opof0a5qe/zYzgUvq8eLqe6kaeg8SJjMy4Ptr6HyArwJ9cjbgQFLumoxaOFgiq
+	8kFp21DIl6AQkKFjX2W8GAxa7eiFJjoWLc0UD826RoJ13s+wofFmM4YyX5Rb0PR+QKcAvJlfHgr
+	2wAK3vuIskhSrKRXqyv+KpXFCAMzAHgUFYwN+xMbeZ28XPnlgYPcPkhiEQxzjPPqo40DDiXNzil
+	nKzKK8ct4NlclUTTvuRO+zK7U1vsDObTfGDomlx5y1y1/+3sCFxRyasqzR2Eff3Icil20BilF4E
+	1cgwfa7IfuopsZBsY6W66xVH+kM6f6eWhAW/PEKiBX4ItsGcK4iO7J3kFs8p/ibMK5r61Pu7GBK
+	7O3nMY4EkxXz13KTtw+4rU+OCERnxvidNBlieDrq5dov+vfTMQmTLDXKj88VWGfgxH8xlitT563
+	lvHWQyhORUBxOy4/rEHAx9EsmVeV5RSxSlp8hK9QQMfTZkWCj4JEaveeZJzJGYVTEAMkbf+eRg+
+	WOrW6bq8Vy/e/b7qzMd+EZ/+r0K5vhmHPljU=
+X-Received: by 2002:a17:90b:184c:b0:3b0:a4d1:6d7a with SMTP id 98e67ed59e1d1-3b12d33d28amr1278110a91.31.1794154112257;
+        Sun, 08 Nov 2026 08:08:32 -0800 (PST)
+Received: from localhost ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1058a7b29sm7405174a91.10.2026.11.08.08.08.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Nov 2026 08:08:10 -0800 (PST)
+        Sun, 08 Nov 2026 08:08:31 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 08 Nov 2026 16:08:10 +0000
-Message-Id: <DMPYJMM21F1F.1EB1E016WALBH@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Take the end of the verifier log out
- and append it later
+Date: Sun, 08 Nov 2026 16:08:31 +0000
+Message-Id: <DMPYJW83DBZV.2HJY5R042YSW2@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] bpf: Keep one basic block in the level 1
+ log and print the way to it
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 To: <sashiko-reviews@lists.linux.dev>, <bpf@vger.kernel.org>
-In-Reply-To: <sashiko-outbox-203595@kernel.org>
-References: <20261108053937.4134138-1-alexei.starovoitov@gmail.com> <20261108053937.4134138-2-alexei.starovoitov@gmail.com> <sashiko-outbox-203595@kernel.org>
+In-Reply-To: <sashiko-outbox-203594@kernel.org>
+References: <20261108053937.4134138-1-alexei.starovoitov@gmail.com> <20261108053937.4134138-3-alexei.starovoitov@gmail.com> <sashiko-outbox-203594@kernel.org>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -100,38 +100,41 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Sat, Nov 07, 2026 at 10:03 PM sashiko-bot@kernel.org <sashiko-bot@kernel.org> wrote:
->> +	log->end_pos += stash->lost_start;
->> +	for (i = 0; i < stash->len; i += n) {
->> +		n = min(stash->len - i, sizeof(log->kbuf) - 1);
->> +		bpf_log(log, "%.*s", (int)n, stash->buf + i);
+On Sat, Nov 07, 2026 at 10:02 PM sashiko-bot@kernel.org <sashiko-bot@kernel.org> wrote:
+>> @@ -2883,6 +2886,7 @@ static struct flow_state *flow_new_state(struct bpf_verifier_env *env, int prev_
+>>  	s->seq = ++flow->seq;
+>> +	s->from = flow->from;
 >
 > [Severity: Medium]
-> Can advancing log->end_pos by stash->lost_start without updating
-> log->start_pos leave an unwritten gap inside the rolling log window?
+> Does flow_find_state() look up the caller's basic block with a callee sequence
+> number after a call to a static subprogram that is verified on its own?
 [...]
-> This relies on the replay loop emitting log->len_total - 1 bytes so
-> bpf_verifier_vlog() pushes log->start_pos up to E2.  If the loop emits
-> fewer bytes (for example, because another thread wrote a zero byte into the
-> user buffer, or bpf_vlog_reset() earlier shrank log->end_pos -
-> log->start_pos below log->len_total - 1), log->start_pos stays below E2 and
+> If verification later fails in the caller, bpf_flow_print_way() steps back to
+> call_idx carrying the callee's seq in from.  When multiple states were kept at
+> the caller's basic block, s->seq == seq never matches in flow_find_state(),
+> so it falls back to list_last_entry() and prints the wrong state and incoming
+> edge for the caller.
 
-No. Not a bug.
-do_check() moves the log back to log_pos in front of each block, so
-start_pos <= log_pos there.
-lost_start != 0 means that the block rolled over log_pos. The buffer is
-full then: stash->len == len_total - 1.
-At level 1 the only bpf_vlog_reset() inside a block is the one in
-print_insn_state(). It takes one '\n' out, and verbose() in the next line
-fills the buffer again.
-So the replay moves start_pos to E2.
+Not a bug. It's a limitation.
+When the seq is not at that insn flow_find_state() takes the last state
+there. With one state at the insn that's the right one.
+With several states the way can show the edge of another state.
+The way is a help for the reader. Nothing depends on it.
+Level 2 has all states.
 
-A thread that writes zeros into the buffer damages its own log.
-It's already explained in the commit log.
+>> +		if (level1) {
+>> +			bpf_vlog_reset(&env->log, log_pos);
+>> +			env->prev_linfo = NULL;
+>> +		}
+>
+> [Severity: Low]
+> Should this also reset env->prev_log_pos = 0 when rewinding env->log?
 
-> In addition, because the replay loop formats stash->buf in chunks of
-> sizeof(log->kbuf) - 1 bytes via "%.*s", a zero byte in one chunk only
-> truncates that chunk in vscnprintf() instead of cutting the rest of
-
-Not an issue. Only another thread of the caller puts a zero byte there.
-Less text comes back then.
+No. Not from this patch.
+Inside a function every prev_log_pos is larger than log_pos.
+The rewind cannot make them equal.
+The case that you describe is the first block of a global function.
+The log is at log_pos already and this bpf_vlog_reset() does nothing.
+prev_log_pos is stale there without the patch too: do_check_common()
+does bpf_vlog_reset(&env->log, 0) after the previous function.
+The two have to match to the byte, and a newline is all that is lost.
