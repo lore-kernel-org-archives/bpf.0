@@ -1,64 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794166090;
-	b=VTytNoR1wH0mke3YrhuvQDL/cT6ox+kYGpVJ16ChUwTxm70gSAYnpMsKo03JyJWjbx7H
-	 D/Td9imYCW/ruvbx4v/2MzYYbxgn2Qut1BSznIaCa8lXkQwn5elXGrajPtQHuDUn+VuoI
-	 rhd0Fb4EifMx8qx8kHu5G1wbpTBCJdxrGAw30STsdrj5J8jHbTogL/cYbNqiRsfnygdu4
-	 rAfEkI8H2xbIRW7D7wCuhdi0xiRAY7lIwVE2h+8cYt3xv3o3HBej1QsTx82mQQwBoqxwV
-	 JcsmUfh5P3vAoQUgtVqPyTKBLaruaeE/PViwuQdR3hVA4Fq3Ev5W2P5hdO7DEG3gSTQ==
+	t=1794166094;
+	b=jQ8tRgeMVUuk6g/STetDqvxAQAL1Y65cA1rFQlz62BOfhbUFr5nZJBWNJwRdna0xdwX7
+	 QwTdS1o/ihL1gCBf+vqKpJCJeKksiWHaRQ+uB813gbHdB/44PuVRekvf+ZQYoYPKFmlX8
+	 Y0nDw8fLVLkKvHzBlDkzG53+UUO1VcIvaimKWvWtqZYBqh9BNWMAsk7jXMKEmyQO/jyg/
+	 0MX2J+sAp9yJ4y6hnYPp3u7QtiiiltiPBoKIvy62HBW59Yna1RP9FDN9PRmGWPDYAMPh4
+	 FvF/WsVSwmxIiyztxxM9DTqomeHR7Y4cPar8hC1nsev8XQRqktl35q2wwZrNQ9XmaTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794166090;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794166094;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Virus-Scanned;
-	bh=S+vyTw2VWykbBBqOe9AKhrQSOD9LSvPZKjMnj6y9IVY=;
-	b=CKsrIgnGypxWGm2plnwTFfX6s0aG5Q3i+81X/9YZIGPbiuGB6Z7j5yJP4X/q9jPEhRru
-	 OmoQDyftEpfOgjOmAIr0Y/NxdW9X2YyD8D9J4Jmk1b8lBBKh3FErVbi4TEhJ4PJZ98uZC
-	 qiKvwQfVw1cGgif2EHqssFQNgPNwB5sC9q3jeaOcli/ZqiMNW1/pV6nRpmUjUc02AA0EJ
-	 /vga8m7aqN9chVFZag3I3tkLIr92dqjTKwubqXP2WT0Rmy79isgMLMea8L7GA7VjIVjZA
-	 GHhcX1ZqT5YSWlyT4yGcWOCFMZlsnK4HZlQ3filyYdj/NSAsEgftuH81+hzOVgQM9WQ==
+	bh=XxHfSjYWPj/DntxO/hPPNxeUfYeeYJdsGFtO8ooE0U0=;
+	b=Gio6crgzJzc07CVTor4uXcoepeUTneXMOgJlJZzun1s0oiW+G3Kfo6zOMs/073yM8loT
+	 utU8PpJzDoZYC0VxgEuXtgsZjL4f9RSScnsWyH1nctmn5HoZlW3GkXuyQplC0eXO9e0YC
+	 +cit2IwdlN6A5WNsQC24F0mDDHSS1MfI6oixmOvfvzVpefEMYlG2QNtfXoYNWFvPhPEzu
+	 rhvHLL4F6YyjxsgzCfg+6PUKQfhYGZsCXSzpZQNFH9d9bM1LRMCcJ9U/0y+k9utR5e2mx
+	 MRVIQOOW69D5CybFdfYvd5vhfPm/sgdnUeIIrA6TVOasLffuStp028VWtKxhcAqxv4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=iogearbox.net;
 	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=CswSQiSv;
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=HSZEB0C0;
 	arc=none smtp.remote-ip=213.133.104.62
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2F5606A31C
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 19:28:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F2F5606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940F6606A31C
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 19:28:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 940F6606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=CswSQiSv
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=HSZEB0C0
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=S+vyTw2VWykbBBqOe9AKhrQSOD9LSvPZKjMnj6y9IVY=; b=CswSQiSvx8+iOzZkZYHf4MJ96I
-	W8XYGtlEEJHQzAwDvnnEjhdyir7nTYiEGdz4sRIcXGYg5LGg0YKWIeNoSitSeRTQ+6s7EbaLi/0se
-	eG223QTfV+B2n1fu/rdvOiIPe0UWGadXVJRqgnQLuLKbvlCRCpYuRttRHUZBAWSjx/6YQOzJhNm6Y
-	3yqGnetXW9Kh0YKZk/jlWLlRWRrC92qSykK3sGKuCktLkBCE3gBVDSfVNcj/D6LEoV/iNhV+/h4o0
-	4UV7TTrLTzUdVuYbFSkE8f9KoeuX7UG2c7J5EfDypRauXm4Frlg+6uuNHcvgQJSO4UV+vjLKwtpxa
-	mfgG9Ahw==;
+	bh=XxHfSjYWPj/DntxO/hPPNxeUfYeeYJdsGFtO8ooE0U0=; b=HSZEB0C00u7iLfNUln8uhYSoZd
+	UcLyeNqQXBINkQO+6DJgnkFHXxXgiEQun9HdVJsateHibIlDMXB8AXDvtNDKo0SEC6cedgQf9c4vI
+	uwnH6wpHjDilmP0ei0lyhavmdnLuXM9oAKMEoD9QMJqEHooVs5J7CJPqzg9JzIQyM40F6ffRrA1M1
+	7hJ/MdAjwXPcQZksX0ihiCCx2HWtg03+cqCrgmzvaxY8lYgLnfvfqil0c8a9WqGPfTaxjhB3UPX93
+	S1ppZLtbiOkRDuUt+ERRLpEyoGOuBeoVRudxFoBmojlm1ZOn/vUM8TRsr6aKW12ft8x+IvMPY/X4E
+	37kqT2eQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1xQ8Yg-000PqV-38;
-	Sun, 08 Nov 2026 20:28:07 +0100
+	id 1xQ8Yl-000Pqz-1e;
+	Sun, 08 Nov 2026 20:28:12 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: ast@kernel.org
 Cc: puranjay@kernel.org,
 	memxor@gmail.com,
 	xukuohai@huaweicloud.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 15/24] bpf, arm64: Zero extend the arena offset in register offset accesses
-Date: Sun,  8 Nov 2026 20:26:41 +0100
-Message-ID: <ac8f9bf5349238dc16ff7ee4214286f5e5d33d6d.1794165614.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 16/24] bpf, arm64: Adjust compares with unencodable immediates by one
+Date: Sun,  8 Nov 2026 20:26:42 +0100
+Message-ID: <087e9606132fb246b8e05b65ccaf67a524e7fecc.1794165614.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1794165614.git.daniel@iogearbox.net>
 References: <cover.1794165614.git.daniel@iogearbox.net>
@@ -74,243 +74,151 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.6/28177/Sun Nov  8 07:23:52 2026)
 
-An arena access added the 32-bit arena offset register to the arena
-base with a 64-bit add. That relies on the verifier to keep the upper
-32 bits zero, and any slip there would let the access escape the 4GB
-arena.
+cmp and cmn take a 12-bit immediate, optionally shifted left by 12.
+LLVM turns x <= C into x < C + 1 and x >= C into x > C - 1, so a
+compare against a power of two reaches the JIT as one against a power
+of two plus one, or against a mask. Those often do not encode and
+needed a mov.
 
-Use the register offset form with UXTW instead. It zero extends the
-offset as part of the access, which keeps the access within the arena
-and its guard pages. Without an immediate offset, this saves the add.
-With one, the add moves to the base, and an offset that does not fit
-the add immediate needs an extra mov.
+When the immediate does not encode but its neighbour C - 1 or C + 1
+does, compare against the neighbour and adjust the condition. This
+covers <, <=, > and >=, both signed and unsigned.
 
-The atomics and load-acquire/store-release have no register offset
-form. For them, add the arena offset to the base with UXTW instead.
+Before/after for if r1 < 4097 goto ... and if r1 > 65535 goto ...:
 
-Update the arm64 expectations of the Arena LDSX Disasm test in
-verifier_ldsx to the new form.
+  d282002a  mov x10, #0x1001
+  eb0a001f  cmp x0, x10
+  54000043  b.lo ...
+  f140041f  cmp x0, #0x1, lsl #12
+  54000049  b.ls ...
 
-Before/after for r0 = *(u64 *)(r1 + 0) and r0 = *(u64 *)(r1 + 8) in the
-arena:
-
-  8b1c000b  add x11, x0, x28
-  f9400168  ldr x8, [x11]
-  f8604b88  ldr x8, [x28, w0, uxtw]
-
-  8b1c000b  add x11, x0, x28
-  f9400568  ldr x8, [x11, #8]
-  9100238b  add x11, x28, #0x8
-  f8604968  ldr x8, [x11, w0, uxtw]
+  d29fffea  mov x10, #0xffff
+  eb0a001f  cmp x0, x10
+  54000048  b.hi ...
+  f140401f  cmp x0, #0x10, lsl #12
+  54000042  b.hs ...
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- arch/arm64/net/bpf_jit_comp.c                 | 90 +++++++++++++------
- .../selftests/bpf/progs/verifier_ldsx.c       | 24 ++---
- 2 files changed, 75 insertions(+), 39 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 83 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 77 insertions(+), 6 deletions(-)
 
 diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 083d8c383f5b..fb56b439ee20 100644
+index fb56b439ee20..5a88740d9d0c 100644
 --- a/arch/arm64/net/bpf_jit_comp.c
 +++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -461,6 +461,26 @@ static void emit_ldst(const u8 code, const u8 rt, const u8 rn, const s32 off,
- 	}
+@@ -481,6 +481,73 @@ static void emit_arena_ldst(const u8 code, const u8 rt, const u8 reg, const s32
+ 					     a64_ldst_type(code, A64_LDST_REG)), ctx);
  }
  
 +/*
-+ * Load or store at the arena base, plus off added into tmp_addr, plus reg zero
-+ * extended from 32 bits in the access, which keeps it in the arena and its
-+ * guard whatever the upper bits of reg hold.
++ * Compare against C - 1 or C + 1 with the adjusted condition when C does not
++ * encode, for the masks and powers of two plus one that LLVM's x >= C to
++ * x > C - 1 and x <= C to x < C + 1 bring here.
 + */
-+static void emit_arena_ldst(const u8 code, const u8 rt, const u8 reg, const s32 off,
-+			    const u8 tmp_addr, const u8 tmp, struct jit_ctx *ctx)
++static bool adjust_cmp_imm(u8 *op, s32 *imm)
 +{
-+	u8 base = bpf2a64[ARENA_VM_START];
-+	int scale;
++	s64 c = *imm;
++	u8 new_op;
 +
-+	if (off) {
-+		emit_a64_add_i(1, tmp_addr, base, tmp, off, ctx);
-+		base = tmp_addr;
++	switch (*op) {
++	case BPF_JLT:
++	case BPF_JGE:
++		if (!c)
++			return false;
++		fallthrough;
++	case BPF_JSLT:
++	case BPF_JSGE:
++		c--;
++		break;
++	case BPF_JGT:
++	case BPF_JLE:
++		if (c == -1)
++			return false;
++		fallthrough;
++	case BPF_JSGT:
++	case BPF_JSLE:
++		c++;
++		break;
++	default:
++		return false;
 +	}
-+	emit(aarch64_insn_gen_load_store_reg(rt, base, reg, AARCH64_INSN_EXTEND_UXTW,
-+					     0, a64_ldst_size(code, &scale),
-+					     a64_ldst_type(code, A64_LDST_REG)), ctx);
++	/* Past a signed limit the neighbor does not fit the 32-bit immediate */
++	if (c != (s32)c || (!is_addsub_imm(c) && !is_addsub_imm(-(u32)c)))
++		return false;
++
++	switch (*op) {
++	case BPF_JLT:
++		new_op = BPF_JLE;
++		break;
++	case BPF_JGE:
++		new_op = BPF_JGT;
++		break;
++	case BPF_JSLT:
++		new_op = BPF_JSLE;
++		break;
++	case BPF_JSGE:
++		new_op = BPF_JSGT;
++		break;
++	case BPF_JGT:
++		new_op = BPF_JGE;
++		break;
++	case BPF_JLE:
++		new_op = BPF_JLT;
++		break;
++	case BPF_JSGT:
++		new_op = BPF_JSGE;
++		break;
++	default:
++		new_op = BPF_JSLT;
++		break;
++	}
++	*op = new_op;
++	*imm = c;
++	return true;
 +}
 +
  /* generated main prog prologue:
   *      bti c // if CONFIG_ARM64_BTI_KERNEL
   *      mov x9, lr
-@@ -846,6 +866,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	const u8 dst = bpf2a64[insn->dst_reg];
- 	const u8 src = bpf2a64[insn->src_reg];
- 	const u8 tmp = bpf2a64[TMP_REG_1];
-+	const u8 tmp2 = bpf2a64[TMP_REG_2];
- 	u8 reg;
- 
- 	switch (imm) {
-@@ -860,12 +881,21 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 		return -EINVAL;
- 	}
- 
--	if (off) {
--		emit_a64_add_i(1, tmp, reg, tmp, off, ctx);
--		reg = tmp;
--	}
-+	/*
-+	 * The arena base with the offset first and the arena offset zero
-+	 * extended onto it, see emit_arena_ldst()
-+	 */
- 	if (arena) {
--		emit(A64_ADD(1, tmp, reg, arena_vm_base), ctx);
-+		u8 base = arena_vm_base;
-+
-+		if (off) {
-+			emit_a64_add_i(1, tmp, base, tmp, off, ctx);
-+			base = tmp;
-+		}
-+		emit(A64_ADD_UXTW(tmp2, base, reg), ctx);
-+		reg = tmp2;
-+	} else if (off) {
-+		emit_a64_add_i(1, tmp, reg, tmp, off, ctx);
- 		reg = tmp;
- 	}
- 
-@@ -919,17 +949,27 @@ static int emit_lse_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	const u8 src = bpf2a64[insn->src_reg];
- 	const u8 tmp = bpf2a64[TMP_REG_1];
- 	const u8 tmp2 = bpf2a64[TMP_REG_2];
-+	const u8 tmp3 = bpf2a64[TMP_REG_3];
- 	const bool isdw = BPF_SIZE(code) == BPF_DW;
- 	const bool arena = BPF_MODE(code) == BPF_PROBE_ATOMIC;
- 	const s16 off = insn->off;
- 	u8 reg = dst;
- 
--	if (off) {
--		emit_a64_add_i(1, tmp, reg, tmp, off, ctx);
--		reg = tmp;
--	}
-+	/*
-+	 * The arena base with the offset first and the arena offset zero
-+	 * extended onto it, see emit_arena_ldst()
-+	 */
- 	if (arena) {
--		emit(A64_ADD(1, tmp, reg, arena_vm_base), ctx);
-+		u8 base = arena_vm_base;
-+
-+		if (off) {
-+			emit_a64_add_i(1, tmp, base, tmp, off, ctx);
-+			base = tmp;
-+		}
-+		emit(A64_ADD_UXTW(tmp3, base, reg), ctx);
-+		reg = tmp3;
-+	} else if (off) {
-+		emit_a64_add_i(1, tmp, reg, tmp, off, ctx);
- 		reg = tmp;
- 	}
- 
-@@ -1564,7 +1604,6 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 	const u8 tmp = bpf2a64[TMP_REG_1];
- 	const u8 tmp2 = bpf2a64[TMP_REG_2];
- 	const u8 tmp3 = bpf2a64[TMP_REG_3];
--	const u8 arena_vm_base = bpf2a64[ARENA_VM_START];
- 	const s16 off = insn->off;
- 	const s32 imm = insn->imm;
+@@ -1609,6 +1676,8 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
  	const int i = insn - ctx->prog->insnsi;
-@@ -2062,11 +2101,6 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 	case BPF_LDX | BPF_PROBE_MEM32SX | BPF_B:
- 	case BPF_LDX | BPF_PROBE_MEM32SX | BPF_H:
- 	case BPF_LDX | BPF_PROBE_MEM32SX | BPF_W:
--		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32 ||
--		    BPF_MODE(insn->code) == BPF_PROBE_MEM32SX) {
--			emit(A64_ADD(1, tmp2, src, arena_vm_base), ctx);
--			src = tmp2;
--		}
- 		off_adj = off;
- 		if (BPF_MODE(insn->code) == BPF_PROBE_MEM ||
- 		    BPF_MODE(insn->code) == BPF_PROBE_MEMSX) {
-@@ -2086,7 +2120,11 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 			emit(A64_MOVZ(1, dst, 0, 0), ctx);
- 			emit(A64_B(2), ctx);
+ 	const bool is64 = BPF_CLASS(code) == BPF_ALU64 ||
+ 			  BPF_CLASS(code) == BPF_JMP;
++	u8 jmp_op = BPF_OP(code);
++	s32 cmp_imm = imm;
+ 	u8 jmp_cond;
+ 	s32 jmp_offset;
+ 	u32 a64_insn;
+@@ -1886,7 +1955,7 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
+ emit_cond_jmp:
+ 		jmp_offset = bpf2a64_offset(i, off, ctx);
+ 		check_imm19(jmp_offset);
+-		switch (BPF_OP(code)) {
++		switch (jmp_op) {
+ 		case BPF_JEQ:
+ 			jmp_cond = A64_COND_EQ;
+ 			break;
+@@ -1948,12 +2017,14 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
+ 	case BPF_JMP32 | BPF_JSLT | BPF_K:
+ 	case BPF_JMP32 | BPF_JSGE | BPF_K:
+ 	case BPF_JMP32 | BPF_JSLE | BPF_K:
+-		if (is_addsub_imm(imm)) {
+-			emit(A64_CMP_I(is64, dst, imm), ctx);
+-		} else if (is_addsub_imm(-(u32)imm)) {
+-			emit(A64_CMN_I(is64, dst, -imm), ctx);
++		if (!is_addsub_imm(imm) && !is_addsub_imm(-(u32)imm))
++			adjust_cmp_imm(&jmp_op, &cmp_imm);
++		if (is_addsub_imm(cmp_imm)) {
++			emit(A64_CMP_I(is64, dst, cmp_imm), ctx);
++		} else if (is_addsub_imm(-(u32)cmp_imm)) {
++			emit(A64_CMN_I(is64, dst, -cmp_imm), ctx);
+ 		} else {
+-			emit_a64_mov_i(is64, tmp, imm, ctx);
++			emit_a64_mov_i(is64, tmp, cmp_imm, ctx);
+ 			emit(A64_CMP(is64, dst, tmp), ctx);
  		}
--		emit_ldst(code, dst, src, off_adj, tmp, ctx);
-+		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32 ||
-+		    BPF_MODE(insn->code) == BPF_PROBE_MEM32SX)
-+			emit_arena_ldst(code, dst, src, off, tmp2, tmp, ctx);
-+		else
-+			emit_ldst(code, dst, src, off_adj, tmp, ctx);
- 
- 		ret = add_exception_handler(insn, ctx, dst);
- 		if (ret)
-@@ -2117,14 +2155,13 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_W:
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_DW:
--		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32) {
--			emit(A64_ADD(1, tmp3, dst, arena_vm_base), ctx);
--			dst = tmp3;
--		}
- 		/* A zero comes from the zero register, any other imm through a register */
- 		if (imm)
- 			emit_a64_mov_i(1, tmp, imm, ctx);
--		emit_ldst(code, imm ? tmp : A64_ZR, dst, off, tmp2, ctx);
-+		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32)
-+			emit_arena_ldst(code, imm ? tmp : A64_ZR, dst, off, tmp3, tmp2, ctx);
-+		else
-+			emit_ldst(code, imm ? tmp : A64_ZR, dst, off, tmp2, ctx);
- 
- 		ret = add_exception_handler(insn, ctx, DONT_CLEAR);
- 		if (ret)
-@@ -2145,11 +2182,10 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_W:
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_DW:
--		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32) {
--			emit(A64_ADD(1, tmp2, dst, arena_vm_base), ctx);
--			dst = tmp2;
--		}
--		emit_ldst(code, src, dst, off, tmp, ctx);
-+		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32)
-+			emit_arena_ldst(code, src, dst, off, tmp2, tmp, ctx);
-+		else
-+			emit_ldst(code, src, dst, off, tmp, ctx);
- 
- 		ret = add_exception_handler(insn, ctx, DONT_CLEAR);
- 		if (ret)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-index 8084a428d9e2..232082428cb9 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-@@ -274,18 +274,18 @@ __jited("movslq	0x10(%rdi,%r12), %r15")
- __jited("movswq	0x18(%rdi,%r12), %r15")
- __jited("movsbq	0x20(%rdi,%r12), %r15")
- __arch_arm64
--__jited("add	x11, x8, x28")
--__jited("ldrsw	x21, [x11, #0x10]")
--__jited("add	x11, x8, x28")
--__jited("ldrsh	x21, [x11, #0x18]")
--__jited("add	x11, x8, x28")
--__jited("ldrsb	x21, [x11, #0x20]")
--__jited("add	x11, x0, x28")
--__jited("ldrsw	x22, [x11, #0x10]")
--__jited("add	x11, x0, x28")
--__jited("ldrsh	x22, [x11, #0x18]")
--__jited("add	x11, x0, x28")
--__jited("ldrsb	x22, [x11, #0x20]")
-+__jited("add	x11, x28, #0x10")
-+__jited("ldrsw	x21, [x11, w8, uxtw]")
-+__jited("add	x11, x28, #0x18")
-+__jited("ldrsh	x21, [x11, w8, uxtw]")
-+__jited("add	x11, x28, #0x20")
-+__jited("ldrsb	x21, [x11, w8, uxtw]")
-+__jited("add	x11, x28, #0x10")
-+__jited("ldrsw	x22, [x11, w0, uxtw]")
-+__jited("add	x11, x28, #0x18")
-+__jited("ldrsh	x22, [x11, w0, uxtw]")
-+__jited("add	x11, x28, #0x20")
-+__jited("ldrsb	x22, [x11, w0, uxtw]")
- __arch_riscv64
- __jited("add	t2, t6, s7")
- __jited("lw	s3, 0x10(t2)")
+ 		goto emit_cond_jmp;
 -- 
 2.43.0
 
