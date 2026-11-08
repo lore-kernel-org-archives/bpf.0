@@ -1,61 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.7
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794088834;
-	b=H8CtcSQYgirDW34bbmbsiP6ePUU1gK6LwyUGOV0lPedHsHggU3/7r4l1bNU6y6aeUjxZ
-	 UfX7HQGJ+DBSYNU7sVx5zI88WyKh5kkYTW7pgJ1thfBvXkDtgQwt4PUVdvjaBlLr8JRtU
-	 IzmsXjxczGK2g7uRbsr+PDgpo6d96RudG7WZfrUgnHhGzNcaNJwaCwwW8D3mE0btfQeUZ
-	 1p3xzbD8AnuaiSXjjaEELiWsMr8teWv0a977N8NwnRYaTzCKGukm0W3a446yUuo9SGYxB
-	 8mvuTvnbZSwB+yKOzH702Qbu2x5cvb66evyfxDDn0okwOPK+ZPAXP+Y8TOm7O6WC43w==
+	t=1794106619;
+	b=SR+ZBX/Ntmt3EgLZLfg+rQiI+wlGsdXKhhbp38cLu9xAci6Dlsvc0gG+X62bQFMhATn7
+	 8Gyqk3Qb5+9l7brl8sWa/YRBFk9L95KNxswgBJbgF9dIxpBFTPnVRvRjwMpEbJCORaEDr
+	 tqfi5wCXNmXP2+YDLNXr3Q655dt5idqkq1152AjhkUT2HkrslMsJtjPR8K23KohgWUXoA
+	 wBbRi2FWAd3cdfXTlYEnt4MG84vn6+1aHQmdFYkRewWexgbXasFx0FZ3jZaE2nDLRe0WO
+	 QngVSu1HxyQ57ZPDXjnKVKxXBaLy/7ETWLNCCKcntkGVANfpbmaro32rHDRzjoyhRYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794088834;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=VNZGPeMP1H9NcfpnWuuufaSVsJdMZpOEEwuaOwBXqj4=;
-	b=aN/XUuySm6Wz/iCXAQxnlJbONmZb1J7fYsw2mtQCTMIIqSbswElKZmXz9H0hjQ7pUqRe
-	 RgEMOOSBm/7Mr6aU9zFEE7vnX8kLWoBE+oVPxAfBwRJNcVJ0PE6z2ipmUnhD7H3x8zzO8
-	 NKvNos/XNGKz3O+7HsbtfVCy7W4pzBPeDtZnvGt99smz2/73bcH9N13xRff7wmu1Zd9PD
-	 o3vRNHGmbegB6ScEIKKSEca79Z89EKxTSDt2gxVMFP0IYiO8zKDEodVYQzLjV7xPGjiOm
-	 XG9nAP7rEJvhb2W1In68OGBP4VdMxNvOxIB7ikhG9Gkj0MZN9jmT1NVemnZbAtgwsTw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794106619;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=E04mLJ5cyGn2rFsBTUMJxpaTlzNgjDYYX4TRN56eccw=;
+	b=aTNRVk8+IF/YFnievoYJFDS4wswnHZ14Le9bVxB41JP8gQpK1Ppjk7kPQMqndRe/vB9L
+	 wJ7MnHDjDwe8Grx4ST4Jnfsfq0wjwyRFC/k06/k9sk2XXrbNlB7VVpoWdZ0Ul2/0vKALF
+	 SjquG6poF4PFq4N5/iweoVZib/teQsh40mLQLCK5WkbO89lEsOKYr90Ha2rQqw5aZUFvd
+	 V+Kx/tgol13+tweAxQN39XuZZCFVgUsxunRJadiO6J7Uu8VdFaM3+KrQqhjyQL2mvRrCK
+	 DgR7I2hHnU6mGxXk8O8FfGGuvY0GFJB9gNg5TF7IO2NAQjUSOMUTQXY0ua7tvz16qXg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oGHLEmqq;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q8e7WddY;
+	arc=none smtp.remote-ip=74.125.229.7
+Received: from mail-dy2-f7.google.com (mail-dy2-f7.google.com [74.125.229.7])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8610D606A32C;
-	Sat,  7 Nov 2026 22:00:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C9E606A31D
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 02:56:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66C9E606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oGHLEmqq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0BA1F0089F;
-	Sat,  7 Nov 2026 22:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794088834;
-	bh=VNZGPeMP1H9NcfpnWuuufaSVsJdMZpOEEwuaOwBXqj4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=oGHLEmqqvLjB/zQImYzHgqmIyidOSEwO86DvsCkcCp89QbT8EeaxtBOACUiP93jRX
-	 c3imQlcSm5oF0xRt1O1Omwe8e5xKJ3o2FnHB8lylBs+Sl7BJFh7oA+VklXWtsM89F7
-	 Y3QfGjLijluCfjfP2E9TR796nYx/A18o2oNZqR55r7k8tZ2uS4dup1drDSapiBGi9R
-	 B5MRiHq31BPnaAqAEF4TAQxsrxX/3DQPyLXlCMPR9wveL+CFdZ+lc6y1eSqXazF2JY
-	 pHe9FY0TDUAgag/2MCOUjPesmSbhonY6uK1KsgnuFeaH80ZTJQ6QyYzYFyeGjwGAzc
-	 e/l9O76Ki8Ftg==
-Subject: Re: [PATCH net v4 1/2] vsock/bpf: release sock lock while waiting for
- data in recvmsg
-From: netdev-bot+sashiko@kernel.org
-To: jrmmhm.kernel@eldare.de
-Cc: sgarzare@redhat.com, bobbyeshleman@meta.com, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- mst@redhat.com, mhal@rbox.co, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- stable@vger.kernel.org
-Date: Sat, 07 Nov 2026 22:00:32 +0000
-Message-ID: <179408883290.994134.2349835219799185998@kernel.org>
-In-Reply-To: <20261106-kbh3-1-022-fix-v2-v4-1-c7d36703814d@eldare.de>
-References: <20261106-kbh3-1-022-fix-v2-v4-1-c7d36703814d@eldare.de>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Q8e7WddY
+Received: by mail-dy2-f7.google.com with SMTP id 5a478bee46e88-36c9b5c6faaso103643eec.0
+        for <bpf@vger.kernel.org>; Sat, 07 Nov 2026 18:56:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794106618; x=1794711418; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=E04mLJ5cyGn2rFsBTUMJxpaTlzNgjDYYX4TRN56eccw=;
+        b=Q8e7WddYBnWleL3P47dR3Wp7PPUMMoIn1ju+iqiDFeTnRaX40Njq0tIFZtyVpGGg3Y
+         TWs8vMZ1MrtKD+HkSkZM+WWm417y3jImr1XnZd/LxS9i6i1pyBydBLNYZUubGacSRTqI
+         oJaA//jEzdTCGzPZRd0mcoQh7AMwaYpyVJ2hdNDvfanp5eAy3A8ObebMD9ELGSFnMYah
+         QLjj7MxggM8zyQc+6HvxvlgsMif09/xkJ8lrp9LZfLmc1zd4F1IEyRe4CqZ0iCXpEE9k
+         ezBmisvubRRtft+FiMHDQvLORK5f7AMqA4YXx5IC7EHU7B6TvmY6MdObhdyPDppAmeL4
+         zx7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794106618; x=1794711418;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=E04mLJ5cyGn2rFsBTUMJxpaTlzNgjDYYX4TRN56eccw=;
+        b=f9DtIlAjVyHou2n6v4iARqCdj55TrNFymOFc1G42PdMZPcyPjO8OWMH8/QYeXtX56d
+         H0MfmNm3EaFBKaNdviylm/NpwmU24SUn49q48RT8Ob5vQjvEMQobhov5LsTL9i2yk4a8
+         +Khyd3KGNjsquBgcs+1gK9ZHRC2yi29MF9oQGjvALDTj3Qg0kblBpe4KDODV0H47NY2r
+         nvQMql9QfSYeYFdJOxQ6qTisNQPPfrqgyY01XE3/yTkmofRgMZ2mDLVPH+9L+5EnlYK3
+         LGK3R9FGSqFYHp0ADKkAYXPLRrwHHrtMhH+w7qQ2pMPDc7jh35rzLL3dVUOSd35urSM4
+         iZtQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzMgVB0TxA8meU0jgtWq5KdhTNV0NeheGIsuAYQYl4e1ZNlAT7aCC/iI4Nu5/TMn/5DHFc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8gaCd/bd9Y1rAsLCjrx6fT/mGFInYmBreut027SZcqD63kalc4
+	Y43sZ7DPxNPGgs2F5iQHmW3Axag1QR1OhiW8/kaDFQZMKrABVwsvF8Xy
+X-Gm-Gg: AYBFou2ah63DQwQ/9Vk2bNL6FTj6FcFwwgiFke/mn9rsrfWakNeU/3tMKtfL5OX3xEL
+	D5pfIv5xMtBCqMe06ow3jJDSLi04ipfRXL3mHiUfQABMDCib3rpjjyDJK2K4jxiatg6vyqywMkb
+	GWeZbw//C/YUCNLen+b9L8RkmgBnyclDVhkxyoPP5HSIKUA0iXnKd3NxPe5rROxfsa2f6p3R022
+	OhUTasD1CDTTpjwfReeRFXUok+aPnreU7/OPGMoFFPrGnrC6Jtz8lWY0g7hsb4Y9GEEH1yDeOhy
+	vifS4XaSVGwP4wcFkJbccZQHtxGwko5aV/zyaTEp+s77lEJGvL+qc8v7KYiNdKAAwKytwzWS9zg
+	wU+qikHxo2B2ex5Vx/VqtIXleJbkjM/VCHSau/pErarVLDPl4gqw6Q/4/tUiS4cxRMDX12ykz2U
+	Fz1UCTfekgHQdNIZzMCawiuuVN1Gj1ME0N0rWQf5MXRuHQoZ3xUeLTjgi/QG4I7Lkr85uwqHrn1
+	WUDkYRhL8xv5bFL8DYAFRQC1T6GCII2jCqv/dGBmk7dvGq5SVPVhrJgJqjRZO5KUNLLe9z4Q1kL
+	ph8BCbo3tPdOBVMzMQgo84sfwqmN1UWPRYIiojqBe4UEpmJ+M5raLQvXxviFa2XPmxz9KU+8lIa
+	kUd9olEfHtG8j7e46GHTvc0pe/jppbnNYt1Oefw==
+X-Received: by 2002:a05:701b:2812:b0:1a0:b8f5:872d with SMTP id a92af1059eb24-1b39fe2dd6cmr598906c88.4.1794106618351;
+        Sat, 07 Nov 2026 18:56:58 -0800 (PST)
+Received: from localhost.localdomain ([98.148.34.5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b3773ea50asm2241202c88.23.2026.11.07.18.56.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Nov 2026 18:56:57 -0800 (PST)
+From: Hungyu Lin <dennylin0707@gmail.com>
+To: ast@kernel.org,
+	bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	qmo@kernel.org,
+	daniel@iogearbox.net,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hungyu Lin <dennylin0707@gmail.com>
+Subject: [PATCH bpf-next v5 0/3] Normalize enum values in libbpf and bpftool
+Date: Sun,  8 Nov 2026 02:56:29 +0000
+Message-ID: <20261108025632.10799-1-dennylin0707@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,136 +104,57 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+This series fixes enum signedness in libbpf and bpftool data dumps
+using the shared btf_enum_value() helper suggested by Alexei. It also
+uses the helper for enum-backed map fields, where sign extension can
+change the requested map_extra value.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Ordinary enums are interpreted according to kflag. When kflag is
+clear, values are treated as unsigned, including BTF from producers
+that did not record signedness.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+The helper returns __u64, consistent with btf_enum64_value(). bpftool
+casts to __s64 at signed numeric output. CO-RE relocation handling is
+left for a separate change.
 
-- [Medium] The commit message says that with the series applied the
-  reproduced cases 'behave as on a native socket, except for the reset…
+Changes in v5:
+- Keep patches 1 and 2 and the map_extra test unchanged.
+- Adopt the bpftool and libbpf tests posted by Alexei in the v4 review.
 
---
+Tested on arm64 (Linux 6.12.68, GCC 13.3, Clang 18.1). libbpf and
+bpftool build with -Werror under both compilers. With patch 3 alone,
+the new bpftool_map_dump/enum and map_extra/enum32_high subtests and
+the expanded enum_data subtest in btf_dump fail. With the full series,
+all 25 subtests pass. The 22 unchanged existing subtests pass in both
+cases.
 
-vsock/bpf: release sock lock while waiting for data in recvmsg
+v4: https://lore.kernel.org/bpf/20261107020725.36675-1-dennylin0707@gmail.com/
+v3: https://lore.kernel.org/bpf/20261101103221.51534-1-dennylin0707@gmail.com/
 
-This patch fixes a deadlock in vsock_bpf_recvmsg(). The function held
-lock_sock() while it slept in wait_woken(), and the transport needs that
-lock to deliver data. The lock is now released around wait_woken(), and
-the wait loops until data arrives or one of the native exit conditions
-applies (socket error, shutdown, not connected, timeout or signal).
+Thanks,
+Hungyu
 
-> diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
-> index 9049d26486460..6d96ff03f28c4 100644
-> --- a/net/vmw_vsock/vsock_bpf.c
-> +++ b/net/vmw_vsock/vsock_bpf.c
+Hungyu Lin (3):
+  libbpf: Normalize enum values according to signedness
+  bpftool: Preserve unsigned enum values in data dumps
+  selftests/bpf: Cover enum signedness in data dumps and map fields
 
-[ ... ]
+ tools/bpf/bpftool/btf_dumper.c                | 23 ++++--
+ tools/lib/bpf/btf.h                           |  6 ++
+ tools/lib/bpf/btf_dump.c                      |  2 +-
+ tools/lib/bpf/libbpf.c                        |  2 +-
+ .../bpf/prog_tests/bpftool_map_dump.c         | 76 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/btf_dump.c       | 20 +++++
+ .../selftests/bpf/prog_tests/map_extra.c      | 19 +++++
+ .../selftests/bpf/progs/test_map_extra.c      | 12 +++
+ 8 files changed, 150 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/map_extra.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_map_extra.c
 
-> +	while (1) {
-> +		if (vsock_has_data(sk, psock)) {
-> +			ret = 1;
-> +			break;
-> +		}
-> +
-> +		/* Stop on a socket error, as vsock_connectible_wait_data()
-> +		 * does, so that recv() returns it; the checks below would
-> +		 * end the wait with 0 or -ENOTCONN instead.
-> +		 */
-> +		if (sk->sk_err) {
-> +			ret = -sk->sk_err;
-> +			break;
-> +		}
 
-[Severity: Medium]
-Does this match the native path for SOCK_SEQPACKET as well as
-SOCK_STREAM?
-
-vsock_connectible_wait_data() stops on sk_err, but it returns 0 rather
-than the error:
-
-net/vmw_vsock/af_vsock.c:vsock_connectible_wait_data() {
-    ...
-		if (sk->sk_err != 0 ||
-		    (sk->sk_shutdown & RCV_SHUTDOWN) ||
-		    (vsk->peer_shutdown & SEND_SHUTDOWN)) {
-			break;
-		}
-    ...
-}
-
-Only __vsock_stream_recvmsg() converts that into -sk->sk_err afterwards.
-__vsock_seqpacket_recvmsg() returns the 0 directly:
-
-	err = vsock_connectible_wait_data(sk, &wait, timeout, NULL, 0);
-	if (err <= 0)
-		goto out;
-
-With this patch, vsock_bpf_recvmsg() passes the return value through
-unchanged (copied = data). sock_map accepts vsock SOCK_SEQPACKET sockets.
-
-Take a SEQPACKET socket in a sockmap with a reader blocked in recv(). If
-virtio_vsock_reset_sock() runs and sets sk_err = ECONNRESET, the reader
-gets -ECONNRESET here, while a native socket returns 0. The same applies
-to other sk_err values, such as EPIPE from sk_psock_report_error().
-
-The check order also differs from __vsock_connectible_recvmsg(). That
-function checks the state and transport first, then returns 0 on a local
-RCV_SHUTDOWN before it waits:
-
-	if (sk->sk_shutdown & RCV_SHUTDOWN) {
-		err = 0;
-		goto out;
-	}
-
-This loop checks sk_err before RCV_SHUTDOWN. So a socket that is still
-TCP_ESTABLISHED, has done a local SHUT_RD and has a pending sk_err would
-return -sk_err from the BPF path but 0 natively.
-
-The commit message says:
-
-    With the series applied they behave as on
-    a native socket, except for the reset case above
-
-and the code comment claims parity with vsock_connectible_wait_data().
-Neither holds for SEQPACKET, or for the SHUT_RD plus sk_err case.
-
-Returning the error may be the better behaviour. If so, could the commit
-message and comment say so? The alternative is to follow the native
-semantics for each socket type. The later patch in the series ("vsock/bpf:
-fix zero-length, MSG_OOB and MSG_ERRQUEUE reads in recvmsg") does not
-change vsock_msg_wait_data(), so the difference is still there at the end
-of the series.
-
-> +
-> +		if ((sk->sk_shutdown & RCV_SHUTDOWN) ||
-> +		    (vsk->peer_shutdown & SEND_SHUTDOWN)) {
-> +			ret = 0;
-> +			break;
-> +		}
-
-[ ... ]
-
-> @@ -101,9 +140,10 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
->  	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
->  	while (copied == 0) {
->  		long timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-> +		int data = vsock_msg_wait_data(sk, psock, timeo);
->  
-> -		if (!vsock_msg_wait_data(sk, psock, timeo)) {
-> -			copied = -EAGAIN;
-> +		if (data <= 0) {
-> +			copied = data;
->  			break;
->  		}
-
-[ ... ]
-
+base-commit: 3e18218484126afb9da722080659c038cb2256ab
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261106-kbh3-1-022-fix-v2-v4-0-c7d36703814d%40eldare.de
+2.43.0
+
