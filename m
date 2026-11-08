@@ -1,64 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794166050;
-	b=WMGiQEYmiCMu9EZ2402WvDFHHfcFVGBqZYO5uBbuw7Ozba8kfCo7d6Sq84Inwmmro7Uc
-	 rjm9/KUOKekfywLPwgyyttl/OTiwOjKYWZ3TQ/6gwdNzYO4HND6+OlAvnGOFVykl+Bh8d
-	 FgUGgPw/+U+AXmdB2+FNmDmO9/KqfeCmV+ExFU7Bxw2aqP/3Sg7jc6a2U5pxUY+vP9t1P
-	 csH2VEbbVnYz/11u1iqVfwgsWoQNvwfgXGo6+wrFvY81hqcalHOy530ZeAlbOwr0Vt/I4
-	 td69r5vrOFBDNqNA0FqU6/o+xKbq/C/94vvRTnWPDcY1Xu4+R/v3v+HPgI5CUDq8TtA==
+	t=1794166054;
+	b=UgUPo+7s1g+ipb4gQXCAQyBEJBUlZ2rNG/DepuFNEXbiTnWC0VIvpAoT3KVf5UUUSrre
+	 er15upDrY+otMSR4p45KwSVfG48Dru7Jmy/DjHXp9ACDMGCufdBkOKz1NY6uZvJ/CSRF1
+	 aJLewSfp4mspdh1J6tiFrUpNrLN+zfz8+e3Tl1ns6FsZgGZwGwqHcrWA7wVkMw4Jbwbkg
+	 m9NegftE06YX6PKvsVS6YINbrOBICMz+lfxUixU3CgxxZWcbhR6NRyMVjK9IgAKvJBFYQ
+	 n9/eRZg7CoG9yEvM63pZRhJtoi3MlKGOhPPTDl5TlLPJ0LpQfVFpOjHbkabrHPSRPvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794166050;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794166054;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Virus-Scanned;
-	bh=cOt2cvZ2cQTKBaS/0Ted1zNorQsn3aqx0swRwP7+56E=;
-	b=ctfIiD6L/K6SGQicDeBnEhcjSG0kPQVQ4WORmAeTK2TpLKtpwe5wAbW7wWadGEk/itpY
-	 ALzUaYjsbvX7mAvb5YsAF7mcb7jIzokW97SiOSgesf/FU6v/bW05p6R2kcBpx5DEfjEHj
-	 Qcvxc0gkIlkB4vtO8RXvB6DoMpA5gmAYzgOKBJCm9+9FIRphTozAwTr66BKgWyzJhOFb+
-	 XXBzhYhQCjN4C74A634N3vkP8ruBwUhO1pXpSZaCGqmF7DJ1T3EIGtW4kmyag4UuSUK/r
-	 VS/KI3qh04sOxj8B1zIhGvGv79nmKJVcsip1dud38W1Mb2w3crL8MwJX69NluwUR3Ew==
+	bh=BrjfaYsn8jGO/lX5TEsq7rFH6mIu6GGCV33oDhkiSfk=;
+	b=db5xXsCo2fLPxvm+MJYQ1kaAEL15Q2RuvKN8K46mzUWBX3aIIY25z0gr+t4bYDit3SUK
+	 xWWywBX4icTtKuPIsf5v+WXVX5nLPYQ5E36PKxKiNNKqALPsauFOjLxetXaNRvzMYSknM
+	 Hhb/YQ7xJdmxrLMTGFpv49buZr4aMFlqfdfCy12DFzlvf5GAO6qOa0T/oCgn6cqnKjuU4
+	 hZTvypjKgS3sQf7ZbS/m6+dXem7Fz42K0mrRjGnRyyuAyTD1mY+at0PqY3QAVzVDGW75K
+	 321j5fRgzuYwGt7xF5rZ6eS7p3sdgx6ZWttCisrlUVrpOcWLucYHKhhS5iFDN9ln8Kw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=iogearbox.net;
 	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=RMpwBPPL;
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=Sdd+ukRI;
 	arc=none smtp.remote-ip=213.133.104.62
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8DBC606A31C
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 19:27:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B8DBC606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F9F606A31C
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 19:27:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 40F9F606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=RMpwBPPL
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=Sdd+ukRI
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=cOt2cvZ2cQTKBaS/0Ted1zNorQsn3aqx0swRwP7+56E=; b=RMpwBPPLm0gIHKaVUO8kWmw7Q7
-	ze0si6Y6k3rx31TiTLh17kGbJqlruybffW3AY7XeW4C0gHQggzYmHE2eflBkXRgYqNrFzLsHpN6g1
-	5cg5eJk8nK6HQ9OwWmSnutiLCJguVGi7L1eZsxp2Cn04rQQ1O2rjR5qOuUDekhH+T/1BbcMbEf0RY
-	P4sXqrzSkrGqlsRNI1tBknJpc2MlD2fgv3nPRfWV6dRa8Tm+SKlepIPCD3YhkQ4KK6mDYUJAtW+pt
-	MO3WlNrTbHqN8/mWFVvEhIzGNYQzC/ogFS1vZAZG8Dc38QoeJQYfAhesx5tHN3B+Gwofzv3R1IlEB
-	WOPCip4Q==;
+	bh=BrjfaYsn8jGO/lX5TEsq7rFH6mIu6GGCV33oDhkiSfk=; b=Sdd+ukRIo646A3NTxqD2TceUr9
+	qtVRcfTaHexxZ00QnqI0G6vGuHVWFr9LUN5GpL/9PkENtvsD8Ta6cUnbJSJc8X6KIK4JV9R4vY3/s
+	cxv1nSeB8cAJGujh0A83I/UBYVh6MgPaTWZqHXBwLr9xJg9cutEOmsFN0TYl2Bw25pifWjUMEWLYt
+	XR7RKPjOafHtR9DIEYdH5sHpKikXuqmv1m3iKuIQaZJd4XvqPZS1b4+v0fGPTQbT3qGhJ/4xPqyxk
+	764bWPcOWOaawMuMAwVfrMZktsdM+3G8T68DDS8cO0CoCAJ6dlhdgIFKDL/ar+9Y10R8CP3iafNd+
+	JRBsaXiA==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1xQ8Y3-000Pj1-1G;
-	Sun, 08 Nov 2026 20:27:28 +0100
+	id 1xQ8Y8-000Pjh-0F;
+	Sun, 08 Nov 2026 20:27:32 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: ast@kernel.org
 Cc: puranjay@kernel.org,
 	memxor@gmail.com,
 	xukuohai@huaweicloud.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 06/24] bpf, arm64: Keep the ll/sc atomics address apart from the old value
-Date: Sun,  8 Nov 2026 20:26:32 +0100
-Message-ID: <48822456403635c57d6cd67e115f28473dac62ad.1794165614.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 07/24] bpf, arm64: Measure backward branches from the branch itself
+Date: Sun,  8 Nov 2026 20:26:33 +0100
+Message-ID: <88f0520fdea7ffdf1ccdc2d5867272b95e6d4c1f.1794165614.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1794165614.git.daniel@iogearbox.net>
 References: <cover.1794165614.git.daniel@iogearbox.net>
@@ -74,62 +74,45 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.6/28177/Sun Nov  8 07:23:52 2026)
 
-With a zero offset, the ll/sc fetching atomics use dst_reg directly as
-the address. They load the old value into src_reg, or into r0 for
-cmpxchg, and then store through dst_reg. If that register is dst_reg
-itself, the load overwrites the address, and the store then uses the
-old value as its address. The verifier rejects such programs, but the
-JIT should not rely on that.
+bpf2a64_offset() takes the position of a branch from the offset of the
+next BPF instruction, which the current pass has not set yet:
 
-Copy the address into a temporary when the register receiving the old
-value is the address register. The LSE forms are not affected.
+  - In the sizing pass that offset is still 0, so a branch back gets
+    the target's instruction index plus one as its offset. This exceeds
+    the imm19 maximum of 2^18 - 1 instructions once the target is at
+    index 2^18 - 1 or later, i.e. 4 bytes short of 1MB into the image,
+    and check_imm19() fails the program.
+  - In the second pass it still holds the value from the first pass,
+    so a branch back is overestimated by however much the code in
+    front of it shrank.
 
-Before/after for r1 = atomic_fetch_add((u64 *)(r1 + 0), r1) without LSE:
+For a branch back, take ctx->idx instead, which is the position of the
+branch in every pass.
 
-  aa0003e9  mov x9, x0
-  c85f7c00  ldxr x0, [x0]
-  8b09000b  add x11, x0, x9
-  c80cfc0b  stlxr w12, x11, [x0]
-  35ffffac  cbnz w12, ...
-  d5033bbf  dmb ish
-
-  aa0003ea  mov x10, x0
-  aa0003e9  mov x9, x0
-  c85f7d40  ldxr x0, [x10]
-  8b09000b  add x11, x0, x9
-  c80cfd4b  stlxr w12, x11, [x10]
-  35ffffac  cbnz w12, ...
-  d5033bbf  dmb ish
-
+Fixes: 2589726d12a1 ("bpf: introduce bounded loops")
+Fixes: ddbe9ec55039 ("bpf, arm64: Jit BPF_CALL to direct call when possible")
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
  arch/arm64/net/bpf_jit_comp.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
 diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index cb17e6daaea4..fa57783d7014 100644
+index fa57783d7014..3403f4327de8 100644
 --- a/arch/arm64/net/bpf_jit_comp.c
 +++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -888,6 +888,7 @@ static int emit_ll_sc_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	const s32 imm = insn->imm;
- 	const s16 off = insn->off;
- 	const bool isdw = BPF_SIZE(code) == BPF_DW;
-+	const int load_reg = bpf_atomic_load_reg(insn);
- 	u8 reg = dst;
- 	s32 jmp_offset;
- 
-@@ -901,6 +902,11 @@ static int emit_ll_sc_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 		emit_a64_add_i(1, tmp, reg, tmp, off, ctx);
- 		reg = tmp;
- 	}
-+	/* The load of the old value must not clobber the address */
-+	if (load_reg >= 0 && bpf2a64[load_reg] == reg) {
-+		emit(A64_MOV(1, tmp, reg), ctx);
-+		reg = tmp;
-+	}
- 
- 	if (imm == BPF_ADD || imm == BPF_AND ||
- 	    imm == BPF_OR || imm == BPF_XOR) {
+@@ -267,6 +267,12 @@ static inline int bpf2a64_offset(int bpf_insn, int off,
+ {
+ 	/* BPF JMP offset is relative to the next instruction */
+ 	bpf_insn++;
++	/*
++	 * A branch back counts from itself, as the offsets from the next
++	 * instruction on are not yet those of this pass.
++	 */
++	if (off < 0)
++		return ctx->offset[bpf_insn + off] - ctx->idx;
+ 	/*
+ 	 * Whereas arm64 branch instructions encode the offset
+ 	 * from the branch itself, so we must subtract 1 from the
 -- 
 2.43.0
 
