@@ -1,142 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794135960;
-	b=y7+/ECkeiGCZlHrzmFKUBv1PMaLawOspBfEUNBe0fHVSqc+l4kd/bWEjz7jpZWETl3N4
-	 Dj1heSpCW59hCvyHJ0rxAiTjeEK/s8NkWNF9UaDgNon0hrmMAlHF+0uTZ8TZf4IEImRy6
-	 ULC206vlosSv/5clFKtcBWq5i2/iKHzzRGkpaSTzH8TDwtxYtZQgN6avqaZZjWkzGM9ML
-	 HJplVfso5GCVkLxQlWBAlCWcAGPI2XhGE15B62Kj3zuOVTz0/R7gku+J4TsfRYzIETud4
-	 VGK2NaEDLSFmz4FeQo0ZL05eo01g0W8NIaxQ9DQ7rFJQiIaBh2kPtSMomXuJvbPSlng==
+	t=1794137954;
+	b=1RFxk6WzPD0ip7Ma8TOgwRbe17NoMUEgluXHN3oLg8FXdMOQ9O9s1uZuBsWy04sGLfVu
+	 JEUX84b/LwZp8lYcNyGrWd/lpgFgYhRlqpSX+k6SrececpfbQMb/vsIv3B/+6vVTR3xEX
+	 rGYFi7bMUlnrWXPwJO+Mjeap5ePHPLoWsE72Wgzev/BqH1h5wJhbZ4S3uZsLDyoqC4G/u
+	 jeS6nxgdh3I5yNh7Ii+hmi7fnt5tHj75udQJAPAl6bcQkVvVKGTc4qOOBx45+ZoM8571y
+	 B/TVi9N4CbyERsW2eGIjrRihGfFYMxDMeVlUTazCaAe17rqFUCvCnFnfzxa4IJGf1tw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794135960;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=XnCYVNofTC0C6ktldCAu6GTGzm+Q8FA6+tvEuphsY/w=;
-	b=fadl3LbANsFs0mHzq+U6casEB9hfgKrBKnNvHEajwNriDK8f06yLxd65gqd2EQ5Ytlol
-	 xvHI9i+GJmTgaPbsgl+k4Dn/m99K3q7Qpsddbzm/CorfVa+crpbCKIg+LM6hgp8cmj4AT
-	 LifZ2QkJoCkwzMIYACKfhu4DPIxBpGShhUegwnC0znMGUWtK8G+PCvRCAgxCA/cjbsHfY
-	 2xkDjDO97K7g3Vs0wXlMf0JuVzw7ArAjLpdD8WeRYXZttw7zI1qQ69mgk0H/dUbopH/hs
-	 3wbIF7VujclkSy9BvehIEX9/08jHMis4iW+d+NsEez5P0YL4DCmE+z9Bjd81rav7GAw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794137954;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=k/JlVhtdHW1N7+kfk+zWcbzIZHLZh0ZrTv2A0uour0Y=;
+	b=TBi7eVnYJe8TgFK2z+N+ScLqUz8WmL3SCaQgtrznJ/oVVRGQtjGHoGZgo3oYGAv2ZKbF
+	 9HSCZsnA89bac5fQL8XMU2muu0dRpVzJVPEDugCHyWjbhh4WZmVfSDC9NTFb77OlTYJuV
+	 +M7NLeMNCZ8b02obNPkSIhFB7yE7xGBCTzeL+86tV7NnVB4/bHKgoE8VlEY68qVocLM6Z
+	 FHSaZTdaBKYMSG5IM3EIlDDMUQ+z8Bzoc7b0Lq4JMNqQAFJ/9mtCt05UqQenLrVhAtRU3
+	 dCxdgCrpt8qrKeZiD5fCKOCZ5DzKdma59OsmZQVbjN7yhop7yMOtwfhfNErYJqufL/w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bytedance.com;
-	spf=pass smtp.mailfrom=bytedance.com;
-	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b="bhi6t/Je";
-	arc=none smtp.remote-ip=209.85.215.173
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43443606A333
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 11:06:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43443606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=bQ0UtJQT;
+	arc=none smtp.remote-ip=111.22.67.139
+Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCCB8606A31C;
+	Sun,  8 Nov 2026 11:39:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DCCB8606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=google header.b=bhi6t/Je
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cd60c5da24cso5969a12.0
-        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 03:06:00 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=bQ0UtJQT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1794135960; x=1794740760; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=XnCYVNofTC0C6ktldCAu6GTGzm+Q8FA6+tvEuphsY/w=;
-        b=bhi6t/JeDBfQCUXNCuYRksQv2qWkciS/u1/5/yspUL/F73vw4nOHcnPeGYEcwCD3TZ
-         Do5dJSxzQ+fWQqld0igPAKgZ0+NrQ1FfbPYZMXbHhC2VfnnNfMZTEp7WBbZWtOUVVOr7
-         mkG6IOmpRzXEGivw2x0s2dsCoUxJ6Lh9u9uWdrhAL+vurQh3BOyLhhmuqDjEfQ1TSXTu
-         9urqZCq/rBP4rr5tUicOBaeNqC7DGEqbbsRmy3lD2vtRs7uBKCvYEQ7uqH0JXUJODPRv
-         NpyePZ0faGJyAcJm/l7ZELRLiQCQsWnyCWcLj7QEQ/5S0Jx8tjSBk0Lk7wb9LWRpVhC9
-         ebTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794135960; x=1794740760;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=XnCYVNofTC0C6ktldCAu6GTGzm+Q8FA6+tvEuphsY/w=;
-        b=ksDX6hj67RvYe8lEeZYEG9bG2SBeuHaMpND7gr4G79lJa+94FKSBzWrT97iJsxxLa5
-         7aO+h2Rtdm/R7R1uolkfFYFM8aXjyXqPDHYuMmrsvR/jV0jKs2cbZ45moQzQfQuma+1c
-         rgzxCFa0E165qKGDhUg3XUgfZskdCv/aM+fCxsjtsB/1o0BKrPHykpeUpbGMQE23zegQ
-         C2gJDsTgJ+erENPljtnNn6zpdAbhcW3x4j0pSdhRzdmSibFduWiZ+zXK+kF1Ag3+hdjc
-         LHND8XDD052pgRkf98qFTwSbdOQ0NDW8W9DMlVbwS3kqdpVzO01jg2J3Q9NxSweAaHjI
-         tehA==
-X-Forwarded-Encrypted: i=1; AL+hErEUfXkxh5fwM7c2yFEwr8q9PtJZr4/OZVu5gmb1j+MG3R8qKgOKy5+a6/y03AJx5DY3c9Y=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/0zwqTLvEYR0NyCzg+lxo2ycDQKXiDFw1wGQ1e45mtf3e12Ejz
-	qyP+UQpOnzCgTOt+8LVfsCdj4hUPdWnE6k8XdlJmIuOY9R4fchVhVd2B9VcCj/zmQRI=
-X-Gm-Gg: AYBFou37ddIn0f393Qq2zgnroawZwDq0+u0Qo+lVrluTb9hZ8Hu6d+8z1Lf+8HtKRZX
-	EQWVfBz0nhQls5tXzZscSEfXZwZF/wuRFzSTDj4UhbbvjRkGNRq1ZAMQFC0AwjJgnkDYgy4pX3S
-	wQphPy8xFQmNvDYEpydUcDr09zTtC2Hi+4t9LYkajJR9TvUfCa97uRsQEJJYRJMPxmzIW8jnKw8
-	S6KnAZUNqmojilL095JX0QI2z3DPmkZmcq8nyyhC5RuW4mXSZ4Zn5ZsPYdxmsz7+hLi0a4vWf3U
-	D4m42LsL94hdLs89LQf3VM1BI03b/GH5KJ+kTnJJ+bkFvvh9txjIigWct/AUePctR6vJrjCOHG+
-	bTYZaXoI/KElQBOv/E/EkL6g2VVrsbOuoEvv23U+7f+TmP9YvMSc+PNcl++LjM4wQKQjoO5o+8G
-	Djd479iqSZMMp+HH0DvGRJhuJvW71fHHPvgjIiH1ZS99Bsd4b335tlmU2TJ0sReLrWU+Mz6wQbR
-	SNN22Y+covAfvfIYj7AwBIaSDVq9m9MTnDF9q5gx0YTTSWLo+jolZA294M2PFKIfG9RPx2wbeef
-	gE2Bex6IokLtvCo/IqIfhVHlghL8DeaKnB6rZln6mzvHAnAggt/ruv5+mnLsb+o=
-X-Received: by 2002:a17:90b:3b8b:b0:3b0:9317:5842 with SMTP id 98e67ed59e1d1-3b12d43f8c0mr1076560a91.48.1794135959430;
-        Sun, 08 Nov 2026 03:05:59 -0800 (PST)
-Received: from localhost.localdomain ([139.177.225.233])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1278918f4sm2609818a91.6.2026.11.08.03.05.40
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 08 Nov 2026 03:05:57 -0800 (PST)
-From: Yunhui Cui <cuiyunhui@bytedance.com>
-To: pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	dennis@kernel.org,
-	tj@kernel.org,
-	cl@gentwo.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	bjorn@kernel.org,
-	pulehui@huawei.com,
-	puranjay@kernel.org,
-	thuth@redhat.com,
-	ajones@ventanamicro.com,
-	ben.dooks@codethink.co.uk,
-	rkrcmar@ventanamicro.com,
-	samuel.holland@sifive.com,
-	zong.li@sifive.com,
-	conor.dooley@microchip.com,
-	tglx@kernel.org,
-	debug@rivosinc.com,
-	seanwascoding@gmail.com,
-	andybnac@gmail.com,
-	menglong8.dong@gmail.com,
-	cyrilbur@tenstorrent.com,
-	wangruikang@iscas.ac.cn,
-	atishp@rivosinc.com,
-	apatel@ventanamicro.com,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=bQ0UtJQT/dgIUSZd+hfA3NZf90pdvg1CzJBYIsVuOR7Ut1tMz7kobpi19EQRoqDCtgJOzK6NuFQjt
+	 15Eu87YHioxIv59a8eyvESMPUgXDaB0OiFpOgD88QVyth3hm0AmZhXHJnECELvR9ckSrMdwcPfTX6U
+	 qqHppyYQcZzVHTWc=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee56af05f5da3a-b8eb3;
+	Sun, 08 Nov 2026 19:39:09 +0800 (CST)
+X-RM-TRANSID:2ee56af05f5da3a-b8eb3
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from openEuler-24.03.03 (unknown[74.82.203.40])
+	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea6af05f47e53-6669c;
+	Sun, 08 Nov 2026 19:39:09 +0800 (CST)
+X-RM-TRANSID:2eea6af05f47e53-6669c
+From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+To: "Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowangio@gmail.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	netdev@vger.kernel.org,
+	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org,
-	arnd@arndb.de,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	qingfang.deng@siflower.com.cn,
-	linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev,
-	dave@stgolabs.net,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	broonie@kernel.org,
-	cuiyunhui@bytedance.com
-Subject: [PATCH v9 3/3] riscv: select HAVE_CMPXCHG_LOCAL
-Date: Sun,  8 Nov 2026 19:04:06 +0800
-Message-Id: <20261108110406.97495-4-cuiyunhui@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20261108110406.97495-1-cuiyunhui@bytedance.com>
-References: <20261108110406.97495-1-cuiyunhui@bytedance.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net v2 0/3] virtio_net: AF_XDP zero-copy fixes for arm64 and suspend
+Date: Mon,  9 Nov 2026 04:38:36 +0900
+Message-ID: <20261108193845.73621-1-yanhaishuang@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -148,30 +84,77 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that RISC-V provides this_cpu_cmpxchg(), select
-HAVE_CMPXCHG_LOCAL so mm/vmstat.c and lib/percpu_counter.c can use
-this_cpu_try_cmpxchg() instead of serializing per-CPU counter updates
-with local_irq_save() and local_irq_restore().
+Three AF_XDP zero-copy fixes for virtio_net.
 
-Suggested-by: Davidlohr Bueso <dave@stgolabs.net>
-Link: https://lore.kernel.org/r/20260826010748.zphu3wh2hlm4t4o2@offworld
-Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
----
- arch/riscv/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Patch 1: on arm64, binding a zero-copy socket fails with -ENOMEM and a
+"rejecting DMA map of vmalloc memory" warning whenever the device uses
+the DMA API (e.g. VIRTIO_F_ACCESS_PLATFORM), because the static TX
+header lives in the kernel image, which arm64 maps in the vmalloc area.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index bde1f1885038f..458ef01e926a4 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -155,6 +155,7 @@ config RISCV
- 	select HAVE_ARCH_VMAP_STACK if MMU && 64BIT
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_BUILDTIME_MCOUNT_SORT
-+	select HAVE_CMPXCHG_LOCAL
- 	select HAVE_CONTEXT_TRACKING_USER
- 	select HAVE_DEBUG_KMEMLEAK
- 	select HAVE_DMA_CONTIGUOUS if MMU
+Patch 2: removing XDP can leave a zero-copy pool bound to a queue above
+curr_queue_pairs. Closing the socket then fails in the driver, and the
+queue is refilled from the freed pool.
+
+Patch 3: freeze frees the rx/tx queues while the sockets stay bound in
+the xsk core. The driver state of the pools is leaked, and closing the
+socket after resume hits a "Missing register" warning and a NULL
+pointer dereference in xp_dma_unmap(). v2 keeps the pools DMA mapped
+across suspend and only moves the driver state to the new queues.
+
+Freeze also drops the XDP program of virtio_net, so it has to be
+attached again after resume. That is an older issue and this series
+does not change it.
+
+Testing used x86_64 KASAN kernels in QEMU/KVM (q35, intel-iommu,
+virtio-net-pci with iommu_platform=on, x-pcie-pm-init=off) with a
+small /init that binds an XDP_ZEROCOPY socket, redirects to it with an
+XSKMAP program, and sends an ARP request through the TX ring and waits
+for the reply on the RX ring, before suspend and after each of two
+suspend cycles (pm_test=devices), then closes the socket:
+
+- net: no TX or RX on the socket after resume, and an oops when it is
+  closed. With a socket bound to an XDP queue and XDP removed, closing
+  it gives "Failed to disable zero-copy!" and a KASAN use-after-free in
+  xp_alloc_batch().
+- v1: passes with an aligned umem, but with an unaligned umem nothing
+  is received after resume. The XDP queue case behaves as on net.
+- v2: all cases pass, without warnings, also with an unaligned umem and
+  with a suspend cycle between removing XDP and closing the socket.
+
+The test program is not part of the series; I can send it if useful.
+Patch 1 is unchanged since v1, where it was tested on arm64 (QEMU TCG,
+virt) with a KASAN kernel; arm64 was not tested again for v2. Real
+hibernation and multiqueue traffic were not tested.
+
+The issues were found with the help of an AI coding assistant.
+
+Changes in v2:
+- Patch 1: drop the sentence about cache lines from the changelog
+  (Sashiko).
+- New patch 2, for a pool left on a queue above curr_queue_pairs
+  (Sashiko).
+- Patch 3: keep the pools DMA mapped across suspend and set the driver
+  state up on the new queues before NAPI is enabled, instead of
+  disabling and enabling the pools while their sockets are still bound
+  (Sashiko). This avoids a race with the RX path on freeze, stale DMA
+  addresses with an unaligned umem, and transmitting before the TX
+  header is mapped on restore.
+- Rebased on net 30c71476d842.
+
+v1: https://lore.kernel.org/netdev/20261107125723.33547-1-yanhaishuang@cmss.chinamobile.com/
+
+Haishuang Yan (3):
+  virtio_net: Don't DMA map the kernel image for the AF_XDP TX header
+  virtio_net: Disable AF_XDP pools on queues above curr_queue_pairs
+  virtio_net: Keep AF_XDP zero-copy pools bound across suspend
+
+ drivers/net/virtio_net.c | 177 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 166 insertions(+), 11 deletions(-)
+
+
+base-commit: 30c71476d842b094651bd7712f6c8ee8716147d0
 -- 
-2.39.5
+2.43.0
+
+
 
