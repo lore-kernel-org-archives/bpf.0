@@ -1,55 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794137954;
-	b=1RFxk6WzPD0ip7Ma8TOgwRbe17NoMUEgluXHN3oLg8FXdMOQ9O9s1uZuBsWy04sGLfVu
-	 JEUX84b/LwZp8lYcNyGrWd/lpgFgYhRlqpSX+k6SrececpfbQMb/vsIv3B/+6vVTR3xEX
-	 rGYFi7bMUlnrWXPwJO+Mjeap5ePHPLoWsE72Wgzev/BqH1h5wJhbZ4S3uZsLDyoqC4G/u
-	 jeS6nxgdh3I5yNh7Ii+hmi7fnt5tHj75udQJAPAl6bcQkVvVKGTc4qOOBx45+ZoM8571y
-	 B/TVi9N4CbyERsW2eGIjrRihGfFYMxDMeVlUTazCaAe17rqFUCvCnFnfzxa4IJGf1tw==
+	t=1794137966;
+	b=KtlaBXULGrCjvuzZ+UoH4t1d46GF3giXai4dKjFLkn0uXbcidr9qoKCviue2WUXfa0lq
+	 zzivlWwbhmYMItmfX/BHxY/5G8yESw3NQn3t5KpjLQUYKOlEEjTUzT6G2Kon2v5sbEegf
+	 6wVb0J5V1fZBwR6Vycj0VvnwSRkvMeMnsb3+SGkieDk8Ur26BXF1lCgYUmEmi8Rx+FgwO
+	 HMXeu38daWA7MFWuET9RMnqnVpuWsY1F2Fo8dCKe1B5jGzbhvQcS6z8U6Ro8cndIMrOOh
+	 XebFgJzLkHAl0KpZQinVigLz5Qr1Vqzo/U+AWJcFo4pRU+2U8mBE36HGG9SnOwd+scg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794137954;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794137966;
 	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
 	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=k/JlVhtdHW1N7+kfk+zWcbzIZHLZh0ZrTv2A0uour0Y=;
-	b=TBi7eVnYJe8TgFK2z+N+ScLqUz8WmL3SCaQgtrznJ/oVVRGQtjGHoGZgo3oYGAv2ZKbF
-	 9HSCZsnA89bac5fQL8XMU2muu0dRpVzJVPEDugCHyWjbhh4WZmVfSDC9NTFb77OlTYJuV
-	 +M7NLeMNCZ8b02obNPkSIhFB7yE7xGBCTzeL+86tV7NnVB4/bHKgoE8VlEY68qVocLM6Z
-	 FHSaZTdaBKYMSG5IM3EIlDDMUQ+z8Bzoc7b0Lq4JMNqQAFJ/9mtCt05UqQenLrVhAtRU3
-	 dCxdgCrpt8qrKeZiD5fCKOCZ5DzKdma59OsmZQVbjN7yhop7yMOtwfhfNErYJqufL/w==
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=LbzaqQGFmzrDNLY8pfpPf7Z7ukRfAz9YQL2MzccnQJY=;
+	b=VtNsUH/4I8yQMsYzvhUq8j9srTfQ9L1yOIAVpSN1dMwkh9J0THeHVxZBiflTrhis9aXa
+	 4J8NO+7zjNIvp8BHhFArpDEPoRt6X4V7XH/fNJXIycsm1xH6R8fQ+jYy2X10FqxlcVPgW
+	 XiGVWd8Jgeee11uBvETSjivmTXonr3tE8bX+DL2HQXRRg7KpX+XymNwwjVophiof6fiqh
+	 UdERq1o/+h6q/uS3dzlLwlkj8LeL6s0/yifYh2Tw3YXj8K5aEkW3HSRe6SY6c65rRVFCh
+	 FvXCvPDjWzo3CVzDyFy/bEsah8uBZEfm8oTkRnlOhEHkSKRk2PIL0wXQ1vLD9wEkTqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cmss.chinamobile.com;
 	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=bQ0UtJQT;
-	arc=none smtp.remote-ip=111.22.67.139
-Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCCB8606A31C;
-	Sun,  8 Nov 2026 11:39:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DCCB8606A31C
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=wiBVD7RO;
+	arc=none smtp.remote-ip=111.22.67.137
+Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B537606A322;
+	Sun,  8 Nov 2026 11:39:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1B537606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=bQ0UtJQT
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=wiBVD7RO
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=cmss.chinamobile.com; s=default; l=0;
 	h=from:subject:message-id:to:cc:mime-version;
 	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=bQ0UtJQT/dgIUSZd+hfA3NZf90pdvg1CzJBYIsVuOR7Ut1tMz7kobpi19EQRoqDCtgJOzK6NuFQjt
-	 15Eu87YHioxIv59a8eyvESMPUgXDaB0OiFpOgD88QVyth3hm0AmZhXHJnECELvR9ckSrMdwcPfTX6U
-	 qqHppyYQcZzVHTWc=
+	b=wiBVD7RO7vUK0oBpN0ac38KJ7wJbcRvrh/w5YKiLxmSMFOrki9TdC1kOVnsnfwz6aXQQYgPO6YxC/
+	 dtt4PfPTo/VsstzvT8N5yBY8iFMBPDNQR86fWfukc7Jv5SoBKT10RQw80brLLlIqGNwuXY/6h9YW/V
+	 kYT2p/5iW9da6y/s=
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee56af05f5da3a-b8eb3;
-	Sun, 08 Nov 2026 19:39:09 +0800 (CST)
-X-RM-TRANSID:2ee56af05f5da3a-b8eb3
+	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee46af05f6a4c3-5b154;
+	Sun, 08 Nov 2026 19:39:24 +0800 (CST)
+X-RM-TRANSID:2ee46af05f6a4c3-5b154
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
-Received:from openEuler-24.03.03 (unknown[74.82.203.40])
-	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea6af05f47e53-6669c;
-	Sun, 08 Nov 2026 19:39:09 +0800 (CST)
-X-RM-TRANSID:2eea6af05f47e53-6669c
+Received:from  (unknown[74.82.203.40])
+	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea6af05f47e53-666c9;
+	Sun, 08 Nov 2026 19:39:23 +0800 (CST)
+X-RM-TRANSID:2eea6af05f47e53-666c9
 From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 To: "Michael S. Tsirkin" <mst@redhat.com>,
 	Jason Wang <jasowangio@gmail.com>,
@@ -69,10 +69,12 @@ Cc: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 0/3] virtio_net: AF_XDP zero-copy fixes for arm64 and suspend
-Date: Mon,  9 Nov 2026 04:38:36 +0900
-Message-ID: <20261108193845.73621-1-yanhaishuang@cmss.chinamobile.com>
+Subject: [PATCH net v2 2/3] virtio_net: Disable AF_XDP pools on queues above curr_queue_pairs
+Date: Mon,  9 Nov 2026 04:38:38 +0900
+Message-ID: <20261108193845.73621-3-yanhaishuang@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261108193845.73621-1-yanhaishuang@cmss.chinamobile.com>
+References: <20261108193845.73621-1-yanhaishuang@cmss.chinamobile.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,75 +86,53 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Three AF_XDP zero-copy fixes for virtio_net.
+With an XDP program attached, virtnet_xdp_set() adds nr_cpu_ids queue
+pairs for XDP_TX and raises curr_queue_pairs and real_num_rx_queues to
+match. virtnet_xsk_pool_enable() accepts any queue below
+curr_queue_pairs, so an AF_XDP zero-copy socket can be bound to one of
+them.
 
-Patch 1: on arm64, binding a zero-copy socket fails with -ENOMEM and a
-"rejecting DMA map of vmalloc memory" warning whenever the device uses
-the DMA API (e.g. VIRTIO_F_ACCESS_PLATFORM), because the static TX
-header lives in the kernel image, which arm64 maps in the vmalloc area.
+When the program is removed, the queue count goes down again while the
+pool stays bound to the driver. When the socket is closed afterwards,
+virtnet_xsk_pool_disable() rejects the queue with -EINVAL, and the core
+frees the pool anyway:
 
-Patch 2: removing XDP can leave a zero-copy pool bound to a queue above
-curr_queue_pairs. Closing the socket then fails in the driver, and the
-queue is refilled from the freed pool.
+  WARNING: net/xdp/xsk_buff_pool.c:160 at xp_disable_drv_zc+0x1ee/0x260
+  BUG: KASAN: slab-use-after-free in xp_alloc_batch+0x930/0xb40
+  Read of size 8 at addr ffff8880028eb400 by task ksoftirqd/0/14
+   xp_alloc_batch+0x930/0xb40
+   try_fill_recv+0xb27/0x26e0
 
-Patch 3: freeze frees the rx/tx queues while the sockets stay bound in
-the xsk core. The driver state of the pools is leaked, and closing the
-socket after resume hits a "Missing register" warning and a NULL
-pointer dereference in xp_dma_unmap(). v2 keeps the pools DMA mapped
-across suspend and only moves the driver state to the new queues.
+as rq->xsk_pool still points to it and the queue is refilled from it.
 
-Freeze also drops the XDP program of virtio_net, so it has to be
-attached again after resume. That is an older issue and this series
-does not change it.
+Removing XDP must not fail, so let virtnet_xsk_pool_disable() accept
+any queue the driver has, below max_queue_pairs. The receive and send
+queues above curr_queue_pairs still exist, so they are unbound as usual.
 
-Testing used x86_64 KASAN kernels in QEMU/KVM (q35, intel-iommu,
-virtio-net-pci with iommu_platform=on, x-pcie-pm-init=off) with a
-small /init that binds an XDP_ZEROCOPY socket, redirects to it with an
-XSKMAP program, and sends an ARP request through the TX ring and waits
-for the reply on the RX ring, before suspend and after each of two
-suspend cycles (pm_test=devices), then closes the socket:
+This was pointed out by the Sashiko review of v1 of this series, and
+reproduced in QEMU by binding a socket to an XDP queue, removing XDP
+and closing the socket.
 
-- net: no TX or RX on the socket after resume, and an oops when it is
-  closed. With a socket bound to an XDP queue and XDP removed, closing
-  it gives "Failed to disable zero-copy!" and a KASAN use-after-free in
-  xp_alloc_batch().
-- v1: passes with an aligned umem, but with an unaligned umem nothing
-  is received after resume. The XDP queue case behaves as on net.
-- v2: all cases pass, without warnings, also with an unaligned umem and
-  with a suspend cycle between removing XDP and closing the socket.
+Fixes: 09d2b3182c8e ("virtio_net: xsk: bind/unbind xsk for rx")
+Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+---
+ drivers/net/virtio_net.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-The test program is not part of the series; I can send it if useful.
-Patch 1 is unchanged since v1, where it was tested on arm64 (QEMU TCG,
-virt) with a KASAN kernel; arm64 was not tested again for v2. Real
-hibernation and multiqueue traffic were not tested.
-
-The issues were found with the help of an AI coding assistant.
-
-Changes in v2:
-- Patch 1: drop the sentence about cache lines from the changelog
-  (Sashiko).
-- New patch 2, for a pool left on a queue above curr_queue_pairs
-  (Sashiko).
-- Patch 3: keep the pools DMA mapped across suspend and set the driver
-  state up on the new queues before NAPI is enabled, instead of
-  disabling and enabling the pools while their sockets are still bound
-  (Sashiko). This avoids a race with the RX path on freeze, stale DMA
-  addresses with an unaligned umem, and transmitting before the TX
-  header is mapped on restore.
-- Rebased on net 30c71476d842.
-
-v1: https://lore.kernel.org/netdev/20261107125723.33547-1-yanhaishuang@cmss.chinamobile.com/
-
-Haishuang Yan (3):
-  virtio_net: Don't DMA map the kernel image for the AF_XDP TX header
-  virtio_net: Disable AF_XDP pools on queues above curr_queue_pairs
-  virtio_net: Keep AF_XDP zero-copy pools bound across suspend
-
- drivers/net/virtio_net.c | 177 ++++++++++++++++++++++++++++++++++++---
- 1 file changed, 166 insertions(+), 11 deletions(-)
-
-
-base-commit: 30c71476d842b094651bd7712f6c8ee8716147d0
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 4f5d8812f75b..f9d227060375 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -6030,7 +6030,8 @@ static int virtnet_xsk_pool_disable(struct net_device *dev, u16 qid)
+ 	struct send_queue *sq;
+ 	int err;
+ 
+-	if (qid >= vi->curr_queue_pairs)
++	/* Removing XDP can leave the pool on a queue above curr_queue_pairs */
++	if (qid >= vi->max_queue_pairs)
+ 		return -EINVAL;
+ 
+ 	sq = &vi->sq[qid];
 -- 
 2.43.0
 
