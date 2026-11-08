@@ -1,80 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794137972;
-	b=eAQ6riO5qCIfI9QG+KPtIYctTaGccgAadAdQI6y6QAKZqNPtKAVy2/LTGw8sPAN8hQaW
-	 IY5C1wTCbP6yuzSpr5DprpFgI3EP7D/vAiJka0k7q9tyhefa9/D351ItQ+ad1XJoqATp7
-	 8MtcI/JgPe9nzhkxav/0IRkYRQkWqoDIoZaK+OOx7IGDV35G7BjaKeEgqDNCKCymFRdag
-	 CzyYB4IpSHRDt3NkR6MN7jNHSsa6b8EMX/8l4uBGtPgAa+X8TRWex1cJEtsYs7WlNzYVz
-	 iZ9rWG0woF2/P+ORIK/TyPHhx03G0Wj1ESmEh7o3RwA/101kbELTw6qp3nFcQNH7huQ==
+	t=1794138213;
+	b=kLck+PX4DT2d348S9KJn/2XPvsiVv+Oi01teofhCWr6PQx1A/9t44V4Gr9L5rrw6WyPA
+	 pTb9pj+Lv9kGptcHE0zsojh0zNOvsgt5YNyGr1pGjMMNsFg4N/eDW5e8hvgeq6uqNipWV
+	 CEQsVP81q+0PetEXGJkquZTjELFWLStBMD4zK36ZOKviC0bWaK+0u4Qr3pfJ0HxIDANaO
+	 fHbkrkY5CuYlTQedswc6jrzqQ3LNbCcYYBWSVwz+teJVbNyakNNdPU8X4yrnUE2IciNhM
+	 u0JRXaCk/nCwtotZ/ZB/8BKxssc1r70kDYyvi8Kb8JWBxJAw2vnUUbPH5PvHYNiDNMQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794137972;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=YI+QK96xKMFwFE4sByJjvSpEiF0SUOoelmRtxJdJZqo=;
-	b=DzTyCAwW9T+2JKzb7d7n94FkLikcUz0E2AOtCgsirQutH036CghphzvH8+DJMydQtgIF
-	 CngKAHRUMV6oJEe19V1RjzYyvdBqcUp8wPpi7taQ4EDeF6MlietKWOoFf0EOaWfdmvipA
-	 SZCWSmbqZSUyTXrvjazoi1/3YImzNKHApsyQzjLnMDid3G71VOuc7Fo0JDwflGVBtJWHj
-	 LqF+pQUPhiTwMZ/zwGlcUxCFYRIvMmzpcr8wKrFFYLf7XWaePp71qP9/7d3r0EXN4SdLw
-	 wOZYP2NtXZAJlyYcRvN3EEdtAdv1bih+utNDQdAelzTxOwIRaJ/fXo7ElnIIXzkNPHQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794138213;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=VwQGFsaaCoMROSPE2Da/1tMfn7BcmAloMkj2bJskjEI=;
+	b=lgrslsNE8cdsV7OntdmyEN3mUoX/5x5ptOoefMATDApSfIyaxyNdT3so/skJLNw1mEZe
+	 XRht8OpzYZgBgV5m37ET7l7olMzSO4wgQkgoGCaJjsfmC4QtiJa0utrETANroKyJcNOWO
+	 SqxtIJ+WZjCwP7BusKTenCfBuFjX5bA+a4pgSwJAr/aKbfYuJlH2IwVZBg3Gl9ECto0qy
+	 JC9Q1d2boH7FVQtn9PSlhF/ba+X5Ouau7ERo0NJy0NjJRbbxNjWrndGS5NtfKffj3G/xD
+	 ffuwlJe3nCP9nZ9tDgLvMymrI1so3kmZuAm2NX5wAi4miQ6825SzGkr3t+VHaG9PR8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=WHFiWLPc;
-	arc=none smtp.remote-ip=111.22.67.139
-Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857A5606A32A;
-	Sun,  8 Nov 2026 11:39:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 857A5606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S0cw5gtW;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECC4606A31C
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 11:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=WHFiWLPc
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=WHFiWLPcp/qEP9VqwRM22BotBJx+p+jvBvs2luGpaDiHO+IJzqfTqp/v8Ijkm7gvf9zjnlnHGi68X
-	 yKVDcRmEFqblpH6C3LZzwJhvgcuE2EiUo7TAvdNCxhT0d/SeBeeDBOwUi99xdaw2G0bL2pHsiE4jy7
-	 GnRUhOakAvV8PzDY=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app01-12001 (RichMail) with SMTP id 2ee16af05f6cd92-9705a;
-	Sun, 08 Nov 2026 19:39:29 +0800 (CST)
-X-RM-TRANSID:2ee16af05f6cd92-9705a
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from  (unknown[74.82.203.40])
-	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea6af05f47e53-666cf;
-	Sun, 08 Nov 2026 19:39:29 +0800 (CST)
-X-RM-TRANSID:2eea6af05f47e53-666cf
-From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To: "Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowangio@gmail.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	netdev@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 3/3] virtio_net: Keep AF_XDP zero-copy pools bound across suspend
-Date: Mon,  9 Nov 2026 04:38:39 +0900
-Message-ID: <20261108193845.73621-4-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261108193845.73621-1-yanhaishuang@cmss.chinamobile.com>
-References: <20261108193845.73621-1-yanhaishuang@cmss.chinamobile.com>
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S0cw5gtW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8753C1F0089F;
+	Sun,  8 Nov 2026 11:43:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794138212;
+	bh=VwQGFsaaCoMROSPE2Da/1tMfn7BcmAloMkj2bJskjEI=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=S0cw5gtW/h9wOfpi24c0z4XXuiTegGbNkIAjQrt++QxS99ghrd3J8Kjn2UokX7how
+	 K6pRsO6eavp4mb/tlvZYnEp+IavUbQOxbBMFR1UYa1Uk63F3i2fms+alNUOuGQ8ivO
+	 HW2uA/5z3dYQUubfN7n29Gyff6QIpuWu6ad1gJr21bN7rBsmEJ9CrZw58xOnEn/fVo
+	 l2P05CqSaYSPPGMGKhVDsHUGfGkYlahiE9mts6LvxG7V+G6w3RQi9ARq982fiiW34t
+	 pG64Uy9lv9nvE7RJMq28VoRTIvRDFkGkmACgsabYqrxFbMHFHLhpVGtKikFiIGFGa1
+	 uoONW16Tdyznw==
+Message-ID: <sashiko-outbox-203699@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v9 1/3] riscv: implement this_cpu operations
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yunhui Cui" <cuiyunhui@bytedance.com>, pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, dennis@kernel.org, tj@kernel.org, cl@gentwo.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, bjorn@kernel.org, pulehui@huawei.com, puranjay@kernel.org, thuth@redhat.com, ajones@ventanamicro.com, ben.dooks@codethink.co.uk, rkrcmar@ventanamicro.com, samuel.holland@sifive.com, zong.li@sifive.com, conor.dooley@microchip.com, tglx@kernel.org, debug@rivosinc.com, seanwascoding@gmail.com, andybnac@gmail.com, menglong8.dong@gmail.com, cyrilbur@tenstorrent.com, wangruikang@iscas.ac.cn, atishp@rivosinc.com, apatel@ventanamicro.com, linux-mm@kvack.org, bpf@vger.kernel.org, arnd@arndb.de, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, qingfang.deng@siflower.com.cn, dave@stgolabs.net, emil@etsalapatis.com
+ , ihor.solodrai@linux.dev, broonie@kernel.org
+In-Reply-To: <20261108110406.97495-2-cuiyunhui@bytedance.com>
+References: <20261108110406.97495-1-cuiyunhui@bytedance.com>
+ <20261108110406.97495-2-cuiyunhui@bytedance.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 08 Nov 2026 11:43:30 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,246 +59,87 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-virtnet_freeze() frees the receive and send queues and virtnet_restore()
-allocates new ones, but AF_XDP sockets stay bound to the device in the
-xsk core. Whatever the driver set up for a zero-copy pool is lost on
-freeze: the pool's DMA mapping, the xsk_buffs array, the TX header and
-its mapping are leaked, and the queue comes back with no pool. When the
-socket is closed afterwards, the core asks the driver to disable the
-pool again:
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] riscv: percpu: typeof(pcp) retains __percpu and const qualifiers
+  in locals
+--
 
-  WARNING: net/core/xdp.c:140 ... Missing register, driver bug
-  BUG: KASAN: null-ptr-deref in xp_dma_unmap
-  Read of size 8 at addr 0000000000000090
+commit 9753271dee3a084b7bff8ad7ad29d76cb64e49f4
+Author: Yunhui Cui <cuiyunhui@bytedance.com>
 
-as virtnet_xsk_pool_disable() unregisters an xdp_rxq_info that was
-never registered and passes the NULL rq->xsk_pool to
-xsk_pool_dma_unmap().
+riscv: implement this_cpu operations
 
-Keep the pools DMA mapped across suspend, as the DMA device does not
-change, and only move the driver state of a pool from the old queues to
-the new ones. On freeze, release it in remove_vq_common() once the
-device is reset and the posted buffers are back in the pool. On restore,
-set it up again before virtnet_open() fills the queues and enables NAPI.
+This commit implements RISC-V-specific this_cpu operations using preemption
+disablement and relaxed AMOs (or 32-bit LR/SC for 8-bit and 16-bit accesses
+when Zabha is unavailable).
 
-If that fails for a queue, the pool is left DMA mapped and
-virtnet_xsk_pool_disable() only unmaps it when the socket is closed. A
-pool left above curr_queue_pairs by removing XDP is not set up again,
-so it is unmapped on freeze.
+Link: https://lore.kernel.org/r/20260826010748.zphu3wh2hlm4t4o2@offworld
 
-This was found by code review of the suspend path and reproduced in
-QEMU by running a suspend cycle with an AF_XDP socket bound, not in
-production.
+> diff --git a/arch/riscv/include/asm/percpu.h b/arch/riscv/include/asm/per=
+cpu.h
+> new file mode 100644
+> index 0000000000000..280b122b9fe69
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/percpu.h
 
-Fixes: 09d2b3182c8e ("virtio_net: xsk: bind/unbind xsk for rx")
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
----
- drivers/net/virtio_net.c | 151 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 145 insertions(+), 6 deletions(-)
+[ ... ]
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index f9d227060375..d9c920f42126 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -5774,6 +5774,8 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
- }
- 
- static int init_vqs(struct virtnet_info *vi);
-+static void virtnet_xsk_pools_release(struct virtnet_info *vi);
-+static void virtnet_xsk_pools_attach(struct virtnet_info *vi);
- 
- static int virtnet_restore_up(struct virtio_device *vdev)
- {
-@@ -5790,13 +5792,13 @@ static int virtnet_restore_up(struct virtio_device *vdev)
- 
- 	virtio_device_ready(vdev);
- 
--	if (netif_running(vi->dev)) {
--		rtnl_lock();
-+	rtnl_lock();
-+	virtnet_xsk_pools_attach(vi);
-+	if (netif_running(vi->dev))
- 		err = virtnet_open(vi->dev);
--		rtnl_unlock();
--		if (err)
--			goto err_destroy_pools;
--	}
-+	rtnl_unlock();
-+	if (err)
-+		goto err_destroy_pools;
- 
- 	netif_tx_lock_bh(vi->dev);
- 	netif_device_attach(vi->dev);
-@@ -5808,6 +5810,7 @@ static int virtnet_restore_up(struct virtio_device *vdev)
- err_destroy_pools:
- 	virtio_reset_device(vdev);
- 	free_unused_bufs(vi);
-+	virtnet_xsk_pools_release(vi);
- 	virtnet_destroy_page_pools(vi);
- 	virtnet_del_vqs(vi);
- 	return err;
-@@ -6038,6 +6041,13 @@ static int virtnet_xsk_pool_disable(struct net_device *dev, u16 qid)
- 	rq = &vi->rq[qid];
- 
- 	pool = rq->xsk_pool;
-+	if (!pool) {
-+		/* Binding it again on restore failed, only the DMA map is left */
-+		pool = xsk_get_pool_from_qid(dev, qid);
-+		if (pool)
-+			xsk_pool_dma_unmap(pool, 0);
-+		return 0;
-+	}
- 
- 	err = virtnet_rq_bind_xsk_pool(vi, rq, NULL);
- 	err |= virtnet_sq_bind_xsk_pool(vi, sq, NULL);
-@@ -6053,6 +6063,133 @@ static int virtnet_xsk_pool_disable(struct net_device *dev, u16 qid)
- 	return err;
- }
- 
-+/*
-+ * Freeze frees the receive and send queues, but the AF_XDP sockets stay
-+ * bound and the xsk core keeps their pools. Release only the driver state
-+ * of the zero-copy pools here, once the device is reset and the buffers
-+ * posted to it are back in the pools. The pools stay DMA mapped, since the
-+ * DMA device is still the same after restore and the buffers on their free
-+ * lists keep their DMA addresses.
-+ *
-+ * A pool left above curr_queue_pairs by removing XDP is not bound again
-+ * on restore, so unmap it as well.
-+ */
-+static void virtnet_xsk_pools_release(struct virtnet_info *vi)
-+{
-+	int i;
-+
-+	for (i = 0; i < vi->max_queue_pairs; i++) {
-+		struct receive_queue *rq = &vi->rq[i];
-+		struct send_queue *sq = &vi->sq[i];
-+
-+		if (rq->xsk_pool) {
-+			if (i >= vi->curr_queue_pairs)
-+				xsk_pool_dma_unmap(rq->xsk_pool, 0);
-+			xdp_rxq_info_unreg(&rq->xsk_rxq_info);
-+			kvfree(rq->xsk_buffs);
-+			rq->xsk_buffs = NULL;
-+			rq->xsk_pool = NULL;
-+		}
-+
-+		if (sq->xsk_pool) {
-+			virtqueue_unmap_single_attrs(sq->vq, sq->xsk_hdr_dma_addr,
-+						     vi->hdr_len, DMA_TO_DEVICE, 0);
-+			kfree(sq->xsk_hdr);
-+			sq->xsk_hdr = NULL;
-+			sq->xsk_pool = NULL;
-+		}
-+	}
-+}
-+
-+/* Set up the driver state of a still DMA mapped pool on a new queue pair. */
-+static int virtnet_xsk_pool_attach(struct virtnet_info *vi, u16 qid,
-+				   struct xsk_buff_pool *pool)
-+{
-+	struct receive_queue *rq = &vi->rq[qid];
-+	struct send_queue *sq = &vi->sq[qid];
-+	struct device *dma_dev;
-+	dma_addr_t hdr_dma;
-+	int err;
-+
-+	dma_dev = virtqueue_dma_dev(rq->vq);
-+	if (!rq->page_pool || !dma_dev || dma_dev != virtqueue_dma_dev(sq->vq))
-+		return -EINVAL;
-+
-+	rq->xsk_buffs = kvzalloc_objs(*rq->xsk_buffs,
-+				      virtqueue_get_vring_size(rq->vq));
-+	if (!rq->xsk_buffs)
-+		return -ENOMEM;
-+
-+	sq->xsk_hdr = kzalloc_obj(*sq->xsk_hdr);
-+	if (!sq->xsk_hdr) {
-+		err = -ENOMEM;
-+		goto err_free_buffs;
-+	}
-+
-+	hdr_dma = virtqueue_map_single_attrs(sq->vq, sq->xsk_hdr, vi->hdr_len,
-+					     DMA_TO_DEVICE, 0);
-+	if (virtqueue_map_mapping_error(sq->vq, hdr_dma)) {
-+		err = -ENOMEM;
-+		goto err_free_hdr;
-+	}
-+
-+	err = xdp_rxq_info_reg(&rq->xsk_rxq_info, vi->dev, qid,
-+			       rq->napi.napi_id);
-+	if (err < 0)
-+		goto err_unmap_hdr;
-+
-+	err = xdp_rxq_info_reg_mem_model(&rq->xsk_rxq_info,
-+					 MEM_TYPE_XSK_BUFF_POOL, NULL);
-+	if (err < 0)
-+		goto err_unreg;
-+
-+	xsk_pool_set_rxq_info(pool, &rq->xsk_rxq_info);
-+
-+	sq->xsk_hdr_dma_addr = hdr_dma;
-+	sq->xsk_pool = pool;
-+	rq->xsk_pool = pool;
-+
-+	return 0;
-+
-+err_unreg:
-+	xdp_rxq_info_unreg(&rq->xsk_rxq_info);
-+err_unmap_hdr:
-+	virtqueue_unmap_single_attrs(sq->vq, hdr_dma, vi->hdr_len,
-+				     DMA_TO_DEVICE, 0);
-+err_free_hdr:
-+	kfree(sq->xsk_hdr);
-+	sq->xsk_hdr = NULL;
-+err_free_buffs:
-+	kvfree(rq->xsk_buffs);
-+	rq->xsk_buffs = NULL;
-+	return err;
-+}
-+
-+/*
-+ * On restore, set the zero-copy pools up again on the new queues before
-+ * they are filled and their NAPI is enabled.
-+ */
-+static void virtnet_xsk_pools_attach(struct virtnet_info *vi)
-+{
-+	struct xsk_buff_pool *pool;
-+	int i, err;
-+
-+	ASSERT_RTNL();
-+
-+	for (i = 0; i < vi->curr_queue_pairs; i++) {
-+		pool = xsk_get_pool_from_qid(vi->dev, i);
-+		if (!pool || !pool->umem->zc)
-+			continue;
-+
-+		/* The pool stays DMA mapped until it is disabled */
-+		err = virtnet_xsk_pool_attach(vi, i, pool);
-+		if (err)
-+			netdev_warn(vi->dev,
-+				    "failed to bind AF_XDP pool to queue %d: %d\n",
-+				    i, err);
-+	}
-+}
-+
- static int virtnet_xsk_pool_setup(struct net_device *dev, struct netdev_bpf *xdp)
- {
- 	if (xdp->xsk.pool)
-@@ -7208,6 +7345,8 @@ static void remove_vq_common(struct virtnet_info *vi)
- 	/* Free unused buffers in both send and recv, if any. */
- 	free_unused_bufs(vi);
- 
-+	virtnet_xsk_pools_release(vi);
-+
- 	/*
- 	 * Rule of thumb is netdev_tx_reset_queue() should follow any
- 	 * skb freeing not followed by netdev_tx_completed_queue()
--- 
-2.43.0
+> +#define _pcp_protect_return(op, pcp, args...)				\
+> +({									\
+> +	typeof(pcp) __retval;						\
+> +	preempt_disable_notrace();					\
+> +	__retval =3D (typeof(pcp))op(raw_cpu_ptr(&(pcp)), ##args);	\
+> +	preempt_enable_notrace();					\
+> +	__retval;							\
+> +})
+> +
+> +#define _pcp_protect_cmpxchg_return(op, pcp, old, new)			\
+> +({									\
+> +	typeof(pcp) __retval;						\
+> +	typeof(pcp) *__pcp_ptr;						\
+> +									\
+> +	preempt_disable_notrace();					\
+> +	__pcp_ptr =3D raw_cpu_ptr(&(pcp));				\
+> +	instrument_atomic_read_write(__pcp_ptr, sizeof(*__pcp_ptr));	\
+> +	__retval =3D (typeof(pcp))op(__pcp_ptr, (unsigned long)(old),	\
+> +				     (unsigned long)(new));		\
+> +	preempt_enable_notrace();					\
+> +	__retval;							\
+> +})
 
+[ ... ]
 
+> +#define this_cpu_cmpxchg128(pcp, o, n)					\
+> +({									\
+> +	u128 old__ =3D (o), new__ =3D (n), ret__;				\
+> +	typeof(pcp) *ptr__;						\
+> +									\
+> +	preempt_disable_notrace();					\
+> +	ptr__ =3D raw_cpu_ptr(&(pcp));					\
+> +	if (system_has_cmpxchg128())					\
+> +		ret__ =3D cmpxchg128_local(ptr__, old__, new__);		\
+> +	else								\
+> +		ret__ =3D __percpu_generic_cmpxchg128(ptr__, old__, new__); \
+> +	preempt_enable_notrace();					\
+> +	ret__;								\
+> +})
 
+[Severity: Low]
+Should _pcp_protect_return(), _pcp_protect_cmpxchg_return(), and
+this_cpu_cmpxchg128() use TYPEOF_UNQUAL(pcp) instead of typeof(pcp) for
+their local variables and pointers?
+
+typeof(pcp) retains the __percpu address-space and const qualifiers from
+pcp.  Because raw_cpu_ptr() strips __percpu via PERCPU_PTR() (since commit
+6a39fe05ecaa ("percpu: use TYPEOF_UNQUAL() in *_cpu_ptr() accessors")),
+declaring __pcp_ptr and ptr__ with typeof(pcp) * leaves them in the
+__percpu address space and triggers sparse address-space mismatch warnings
+on assignment from raw_cpu_ptr() and when passing them to helpers taking
+regular pointers.  Retaining const on __retval also causes a build error if
+this_cpu_read() is used on a const per-CPU variable.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261108110406.9749=
+5-1-cuiyunhui@bytedance.com?part=3D1
