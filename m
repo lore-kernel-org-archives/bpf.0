@@ -1,98 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.230.74
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794151762;
-	b=nBKYOl++lLpPQcNhQkjttbzf79UUvZP/lxSfPY0PqncbyI5ilgjDCrkzcHmWu+TwAAMT
-	 VY4vVhYesS54K55ji1rkz4OmxtCe1pJRuygO+ov5T3Wc4yFh9WsxFbYSRD6SNZXmq40o1
-	 RSctvfIVKS7uzZvycXnQ29m4OE5M/Dr9zX+KYwwJLY5EpMjSOBtl/EzA5zY2K+F4guHz9
-	 aBHta7+cmidCu73LvndAES42Dnx3ItubrK6pS9nB6rJvXbGyRmOHSPIjTgjjeBKgwrCz4
-	 SikaLd0xYqxJR06DjfOHCmiQHkuyzQIuoc4bwcsllPiuyRckyLR8ynTu4xS/AuN+hxQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794151762;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.201
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794151800;
+	b=voL/yOOUab4cg6ZdFtmNqVGFl9E0iuLsQDSkuWlNnBBmOQGJSn8dVQS/DLNIZFBlyFz5
+	 n0cUxDFxiUMDhXYf7ChfSzVproqs324WgJfrIB2B/LJ1E9IaIb1C/hDVU90UbuUHbCcKF
+	 SxUQp+O8NnmUpjwrPcTlf08LnP4U5CEirp0+BuF/UCVoyDZMQIzBJhY/Fv7413rZK484g
+	 JWUxilGpjfMdy4sxTuOYfztFYdWmRMrt1EyOjWF48jm9LMOX8/fugDOc98U/srSCBA3t9
+	 rLo0krgmsoVPDNDWZfElds/UZyle5vJpFuzSqO/es5F0fO3aUUQ9KLsL8dWEzMWCcvQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794151800;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type;
-	bh=XD5dIdS5uh0CV3gpIfb2MNY/50x7izzcf/NiFrLXOKw=;
-	b=2LugNpdxQzw8nHpcysuNqBK/y4YoC0KtGIMNr6N0QdU5BNvP+nG3VFxZ5vplaJUkeGi/
-	 2obnVAipsOjLhMXez6RC2Z9X0BcbwI8gTjuRKMnsbFdzPRwSE1CbJaDx1VH1FPpHyOpgz
-	 Q3mdxMl7oLbwScI0iUxYeUNcstjFabyeogOeDcPf1uxVoHfXerwVWJ4lqhEmpwjcfRiZ/
-	 Bj1IATv/t2d5WWtBOh3GjdTM/37OqtpX7zjiJDGXt7zAgijqJS421qM59aLIncy47Eyyd
-	 Qz7zCmkhBRDWKVEm5nJC0tNgY2bdzthXFZXz4/MzBClF4nWofGbpvyci0Ts0eM27/NQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=3n+mXMU4cMbINOJYAicimrbprQcsEkmwXcrE/1+wz7Q=;
+	b=IaEnzG5o5f2fveN7igeET/Cr1dDQho9ds6zqITJO6FqSsiw/v9HMJyueLMMdc6Mk2F4u
+	 xLwxLsoJYRpFVPcMt8EiqTNvVfm6w0oDRY+EBJZ5qpWBimkcRQXQCqXbXAtvtCh06F/Bi
+	 l4CPq/XMnf30/CVmjlnfNmRGSzPZYKjcW3Ovz8j8yb/kFNtvBUow+OI7vCCujaUoPBvgT
+	 ZNIxd2YhoEzDE6oebSgKiBY9jPPDPG87Et3Ah3yIfiwghjs617U4y8nHlZ3WaDA5c/uqM
+	 o7SrmNKwgIDN3sQLgzPOvV9rjE0Ih3M0cMdMtJQzYrhenV+EuyOQSMmH/Lad7XHOCdg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vKtcUz5t;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.230.74
-Received: from mail-lr2-f10.google.com (mail-lr2-f10.google.com [74.125.230.74])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PMcRX1Fm;
+	arc=none smtp.remote-ip=74.125.227.201
+Received: from mail-pi2-f9.google.com (mail-pi2-f9.google.com [74.125.227.201])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C2B606A31C
-	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 15:29:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95C2B606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD0E606A31C
+	for <bpf@vger.kernel.org>; Sun,  8 Nov 2026 15:29:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9FD0E606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vKtcUz5t
-Received: by mail-lr2-f10.google.com with SMTP id 38308e7fff4ca-3acff0d1090so1537911fa.0
-        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 07:29:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794151760; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Uwas2Psy+N8TaRd7mbrm6ce3xwZBHC5lpmDHENAqzTiwHVjxgtbIducWx2fe6OEWue
-         /5Samdvi0dnF1pbMVTB5Nb9Su7UtyK7FCSFFnpdinjZYC02HM4EjZ6W6UME4N7x47co4
-         34JrC/qJ+CA2DOdW9MlZegIAcZyZpVCk4miS3+3dsbZKkSHXcoez9d5H/FrK5nYWu2X0
-         uMxWPF5SHTW1qwzmt7zAmvCultR9vl1GX9kZf8MwhXYOCK4bxCYcSU4mn4f1wRUOg6jy
-         TBx3zoNRUlTKigWRapJEv5iO1GYsIEB10rjg+aImlclMv1l/an9QskBOUEzyUP4nplyi
-         iJcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=XD5dIdS5uh0CV3gpIfb2MNY/50x7izzcf/NiFrLXOKw=;
-        fh=t8fSlha0kbvYnp344UcqxpAoQjsWz96gblH5i935t7c=;
-        b=KWeJ8M1q7Cfppu9CiARbAfTC/MB9hYbTgrjE78R3KZA6ZV+kYVrMQ9zrfhu9bnE4bo
-         NYlS5W2mDOBbOvUiprYaiseF22eDxkERF36OUSQ8qkF6NKTK5Xz9VKBSP2mhloUfXt7G
-         W+ql8WGXjEnRSu0K4+z26P8dYiNy+YHzTGBgTtGoV0q7TNjtgWmou6S2qoTPxMm5y3B+
-         ncocplcRapEWiAJzAO9rm2S7FzBaaS0LorBZNM3RduFzjW9r2reFKhIDkRFsLokxroA1
-         xXTiooK5ssWdMoNh4ScBS10J9vy88JO1ZV1iOzZKjveN0E0U41CaUH6D6O8AFNHypXT2
-         E+Bw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PMcRX1Fm
+Received: by mail-pi2-f9.google.com with SMTP id 41be03b00d2f7-cdb8dad8ea5so42565a12.1
+        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 07:29:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794151760; x=1794756560; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XD5dIdS5uh0CV3gpIfb2MNY/50x7izzcf/NiFrLXOKw=;
-        b=vKtcUz5tpbla9oZ3FOYtRWT9dcLtMf9ZC09vK+yGnOWcjNqBYw5arfxGJGSq7gCgdj
-         msKdr2VrrDzS9guB11bcYMPvzYjtSxXqiPPkMk/k5p1mjp3YjZePwJVAmCPeiCMKp1NJ
-         AWdb3uLcnBzKR4gMQciZOwzIleQwYg3Z9muCmL2qpSDm8uj7+gUULrna68zKUM3k0+qV
-         VwNgFq+VU9R8f1TcF7koGke3wwsdR7NeLm05emsaR5HriN7BxsZQxdanVlYhRFhqzYMv
-         G3SXaJDqD1agCEdY8UQqYXURyYiijI1ZrS41d1M+hGkNC+XRwn7FET4JBHCu/LnUHnIV
-         7z+Q==
+        d=gmail.com; s=20260707; t=1794151799; x=1794756599; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3n+mXMU4cMbINOJYAicimrbprQcsEkmwXcrE/1+wz7Q=;
+        b=PMcRX1FmtM9bIDkiBXVCsveKT3v9yWtWsNkdQ423u2J1flAJsMrfQOsN9L4SVrjfY6
+         +A8F/ihcKh1ks69ugb+wHxXWDcaOdGAqcJ8PUZ6E7YXAM5Fcmm9CMmxxlvoOJk8HVr7D
+         LUY1JPeDTNQKfqeCmDMLDcmdg2drJmU+NMUZ49auKniHOdPHSGWbodHvKqCK4TnAqs/L
+         uPePlWellESTc1+KGChqm1Kj1nTE7vSZTDbA6LCUDvrjMp93AXNMrRqhqhW4D0izu3my
+         kjs5PJobs4ieIwk8Dz+0nhs5PDoH7fGU6PG/t+bWSK13K+7y5tA1b8aONc/ygKQcWMon
+         e4Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794151760; x=1794756560;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=XD5dIdS5uh0CV3gpIfb2MNY/50x7izzcf/NiFrLXOKw=;
-        b=Lo0RnJeRRvRYOJkenepQmpEPeumnw9QgBNzBggg8L/PoLcyySIzqMhDj97JffCbUoT
-         +R8GvVRpg+AtL6VhKgC9BjHI22T7c+v+PqsRhNoZs+991gUTEkyzUU3WQqz2DlF6uULn
-         I8k3KIIkPaQhBdGzp2Ur3l6CaoC3drRbdx3lPOqEOBpsaRjI4A4LvBTjgf7EKFabd/A6
-         Ww+UlUxTjGu31oRxPat/JgI4NsDqmX/cwYgL+ryEgvs7H/z7GQIEGoCRl56Ap+yxYPei
-         ojL4q/Ly0wlUwZEN/7LYkE8OZMcjXIX1zwqCV6H9dX+tYtWSJ735rnNYCK7d42fXCV5j
-         0zJw==
-X-Gm-Message-State: APuU4Z+JSdfKU+uCvfjp1qmHX2zAjtFmIk7iQILDq8+a/6cpCIXw43EG
-	ugfJiJ9mEUrDfW2tXo/d6WvbkLLbnod9bAasYhdu6gxSkiCkJvBN5CUH5IsvMglOLhIcMfpoZY1
-	eLnfdLn13krZ7Pw5wqMba+S9aiUwiMV4=
-X-Gm-Gg: AYBFou2rUcWbZsBg4sL7rGU6FfblUONgkpJfSFy9wgf5K32xowxyL98/zKEEPp4i3Dj
-	ggxHO52nc2DlKJn9G/4NNV7aiMUDeAdKlfPcPEhfDHafpoXLM9RTteA9ISv/7gpWkhxfdB5SKOa
-	pb8WwuqwtTMV0Tqe6cL4X3eWDpQI8c9CNwfGWAilWkxzN6/26rr1MwHE8/qx4KykL0BMi8HSi+7
-	lGxc2hxKjd9/TxYaXbezYmtONLDEUeNhEAhjoBK5WvTAC1zGVm7wesGBzLkU8nqyL2m+qUTGZB3
-	fLMOAwXDPs9iwMjvQYXLvWyRaO8znOHKVYpyGpYou4UecRJc3pC/56AfMEZoT8nL7pC+Juu765+
-	QDKS+mIK9QGCKcFhXQrIsDzkr2IEtP1FGALIf0w==
-X-Received: by 2002:a05:6512:4402:b0:5c1:4c4a:f026 with SMTP id
- 2adb3069b0e04-5c14c4af0c8mr343875e87.4.1794151759470; Sun, 08 Nov 2026
- 07:29:19 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794151799; x=1794756599;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=3n+mXMU4cMbINOJYAicimrbprQcsEkmwXcrE/1+wz7Q=;
+        b=RtK0FEPW/OujrAhpz8vtYKLlRD4DxnKMZ3THeb0WadUDnQte19YHnB3o7s01uq1doy
+         D7LFjQL8BArPvNRnchifVHid9Pp1YNqV+Wp7GN3Z38FugJtENNBPaVgQygo9f8TVuj8b
+         8XgTePjXSotEkfP243Uqf7yJZWVy4dttILnSnaV8S/t9J8ixIiHSQ4kHYp/OxR9IKAxz
+         XbQ1ycrkmEiys18csnA4JkrkIVEUIPtXNAwy+IuvLudVs9W7Z+SL+FBdik/ug2799mVU
+         OCOgpJrWG6ZUK7FxcqLqEmIRIsbhd7UCIRR9XbLkgeUclnby6ppW88KmMLQShjiXcrfs
+         4B9w==
+X-Gm-Message-State: APuU4Z+YkV82gnwb+rtFPycKpR6A3PPw9nJECm9EiqEkO/a6IeOM50u3
+	tqoq5GW5vW1KfA6xBnirie2EbggKPV0mH9BQX7fn/R+GvTE4QfyBiUOTkxzjOV9MWosKPw==
+X-Gm-Gg: AYBFou1x2rHSVKH5lVju39EyrrdQYj5G4raGIIsnjRTdyTsag8IcKgkekwvSinRSxLo
+	t9J9pQiF0o8nboeUOu9IUhpnaUh/0msAH7MDjuSbleiDU6TG2Fr3cP9C2lPj/ajKjrjSeqLxQxm
+	EzzoPK4a4ZXDqwPRh5mnTp7yIFKK2KgvDaIun50aMS10E0cB85L+GiANk1Ty8M/9c8mSE5gmS2D
+	3OsMQnm8yc4DIbO4sqd2P4hzi6+fzkkQqxGFOajAOl/wTSBiUypxO1la1hILwiIMzYwGKtxWwSS
+	VcBHS7jLDGiaJ0faTSKFohAmaNSYa0/+GGPBFsXx6ghAoKGOCdzyMS7vf9oQBUbNiJtqJgYwfOr
+	+rr319YUqtDt9XyIIM4tgJLgPvBBLW0qTisBgAsJajx+v4HHiD9co6HBM6o1Djm1SMybf+lH9H0
+	yY4Lam3e/uL3vZ8NN17FAy2c9D5BsREXFtD4HciPSeBYFnhNn64SKoXXXHRl4tHTvnFeKyuAeKl
+	7ynfyN+sqBL0lbO26N59otPnkh+UPKQxtXJL7/OojQZ3sJDC8O5X9zGAIbR0tdoQNzug7hc1LMa
+	K5SLOnCkEe+LAzU4YAaqLbszZUrO9vTaN6OAW8/d9TvObfYn+AXbxELxLpJhiqIGjMC9
+X-Received: by 2002:a17:903:1a4e:b0:2e8:7686:4d46 with SMTP id d9443c01a7336-2ed83770297mr15555625ad.34.1794151798800;
+        Sun, 08 Nov 2026 07:29:58 -0800 (PST)
+Received: from J4f-Laptop.localdomain ([183.36.237.113])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ed8174bdfdsm4321175ad.73.2026.11.08.07.29.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Nov 2026 07:29:57 -0800 (PST)
+From: Shihuang Liu <shlomojune6@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	Shihuang Liu <shlomojune6@gmail.com>
+Subject: [PATCH bpf v2] bpf: Check variable-offset accesses against special fields
+Date: Sun,  8 Nov 2026 23:29:41 +0800
+Message-ID: <20261108152941.7363-1-shlomojune6@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,77 +102,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261107135419.81491-1-shlomojune6@gmail.com> <DMP4ZP50NN1A.3CMXK8Y0G0YO2@gmail.com>
-In-Reply-To: <DMP4ZP50NN1A.3CMXK8Y0G0YO2@gmail.com>
-From: J4f J4f <shlomojune6@gmail.com>
-Date: Sun, 8 Nov 2026 23:29:06 +0800
-X-Gm-Features: AclHuK9-F4EovTPpk0JWgypYXddFCBYw42HYVqgiVkR3iyO_CqGKHd1JkbMxDsg
-Message-ID: <CAE_LbwmXuXZmBj8VDxDTKrnmYs_vtTLNKmUb4Q+5SKRNqqD=jQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: fix special field check with variable offset access
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Sun, 8 Nov 2026 at 00:58, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sat, Nov 07, 2026 at 05:54 AM Shihuang Liu <shlomojune6@gmail.com> wrote:
-> > btf_struct_access() rejects direct access to special fields (kptr,
-> > spin_lock, list/rbtree nodes, ...) of program allocated objects, but
-> > for variable offset access the check is done at min_off only, while
-> > the whole [min_off, max_off] range can be reached at runtime. A read
-> > leaks the pointer; a write corrupts the refcounted pointer and crashes
-> > the release path (bpf_obj_free_fields -> bpf_mem_free_rcu).
-Right.
-I'll rewrite that part.
+btf_struct_access() rejects direct access to special fields (kptr,
+spin_lock, list/rbtree nodes, ...) of program allocated objects, but
+for a variable offset it only checks min_off.
 
-> Not the whole range.
-> The code at check_variable_offset: keeps the access inside one array.
-> reg->step has to be a multiple of the element size.
-> Every access lands on the same member of some element.
-> btf_repeat_fields() repeats the special fields for every element.
-> So with BTF from a compiler the check at min_off is enough.
->
-> I think it takes hand-made BTF with members that overlap:
->
->   struct node {
->           u64 arr[4];              offset 0, size 32
->           struct foo __kptr *p;    offset 8
->   };
->
-> btf_struct_check_meta() only rejects offsets that go down.
-> A store to arr[i], i in [0, 3], passes the check at offset 0 and hits p.
->
-> Is that how you got there? Explain in commit log.
-Yes, exactly. The PoC uses
+With compiler-generated BTF the check at min_off is enough: the
+register cannot take every value in [min_off, max_off], since
+check_variable_offset() keeps the access inside one array with a
+step that is a multiple of the element size, and btf_repeat_fields()
+repeats the special fields for every element.  Every reachable
+offset therefore selects the same member of some element.
 
-struct evil {
-int a[4]; /* offset 0, size 16 */
-struct foo __kptr *p; /* offset 8, overlaps a[2..3] */
-};
+The check breaks for hand-written BTF with overlapping members.
+btf_struct_check_meta() only rejects offsets that go backwards, so
+this layout is accepted:
 
-> Also drop "A read leaks the pointer".
-> check_ptr_to_btf_access() allows these loads with CAP_PERFMON only.
-Will drop it.
+  struct node {
+          int arr[4];             /* offset 0, size 16 */
+          struct foo __kptr *p;   /* offset 8 */
+  };
 
-> > -                     if (off < offset + field->size && offset < off + size) {
-> > +                     if (min_off < (s64)offset + field->size &&
-> > +                         (s64)offset < max_off + size) {
->
-> This rejects a prog that loads today:
->
->   struct elem { u64 data; struct foo __kptr *p; };
->   struct node { struct elem arr[4]; struct foo __kptr *q; };
->
->   n->arr[i].data = 1;      i in [0, 3], step 16
->
-> pw-bot: cr
-Agreed.
+A 4-byte store to arr[i], i in [0, 3], passes the check at offset 0 and
+overwrites p at run time when i == 2 or 3; the release path
+(bpf_obj_free_fields()) then frees the corrupted pointer.
 
-Sending v2 shortly.
+Check every offset the register can take (min_off + k * step)
+against the record.  Constant offsets keep the existing check.
+Since only reachable offsets are checked, accesses that stay on a
+non-special member of every element (e.g. a store to arr[i].data
+with step == sizeof(elem)) keep working.
 
-Thanks,
-Shihuang
+Fixes: 89e72f81a455 ("bpf: Varying offset access support for PTR_TO_BTF_ID pointers")
+Link: https://lore.kernel.org/bpf/20261107135419.81491-1-shlomojune6@gmail.com/
+Signed-off-by: Shihuang Liu <shlomojune6@gmail.com>
+---
+Changes since v1:
+- Check only the reachable offsets (min_off + k * step) instead of the
+  whole [min_off, max_off + size) range
+- Rework the commit message
+
+ kernel/bpf/btf.c | 42 +++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 35 insertions(+), 7 deletions(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 8bf39098ba97a..738625d8e5879 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -8056,6 +8056,21 @@ error:
+ 	return -EINVAL;
+ }
+ 
++static bool btf_field_is_accessed(const struct bpf_reg_state *reg,
++				  s64 min_off, s64 max_off, int size,
++				  const struct btf_field *field)
++{
++	s64 first, last;
++
++	first = max_t(s64, min_off, (s64)field->offset - size + 1);
++	last = min_t(s64, max_off, (s64)field->offset + field->size - 1);
++	if (first > last)
++		return false;
++
++	first += imod(min_off - first, reg->step);
++	return first <= last;
++}
++
+ int btf_struct_access(struct bpf_verifier_log *log,
+ 		      const struct bpf_reg_state *reg,
+ 		      int _off, int size, enum bpf_access_type atype __maybe_unused,
+@@ -8091,15 +8106,28 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 		if (!meta)
+ 			break;
+ 		rec = meta->record;
++		if (min_off == max_off) {
++			for (i = 0; i < rec->cnt; i++) {
++				struct btf_field *field = &rec->fields[i];
++				u32 offset = field->offset;
++
++				if (off < offset + field->size && offset < off + size) {
++					bpf_log(log, "direct access to %s is disallowed\n",
++						btf_field_type_name(field->type));
++					return -EACCES;
++				}
++			}
++			break;
++		}
++
+ 		for (i = 0; i < rec->cnt; i++) {
+ 			struct btf_field *field = &rec->fields[i];
+-			u32 offset = field->offset;
+-			if (off < offset + field->size && offset < off + size) {
+-				bpf_log(log,
+-					"direct access to %s is disallowed\n",
+-					btf_field_type_name(field->type));
+-				return -EACCES;
+-			}
++
++			if (!btf_field_is_accessed(reg, min_off, max_off, size, field))
++				continue;
++			bpf_log(log, "direct access to %s is disallowed\n",
++				btf_field_type_name(field->type));
++			return -EACCES;
+ 		}
+ 		break;
+ 	}
