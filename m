@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794207971;
-	b=5pPJh8NA7K+92T3Ihd5BX51Z9QHxfIiv2Fc8qQOf05C+JksBOACEvIQIP5wf0XUvhjSL
-	 ZNJ4Mglu+0tcePHZWG8eUmvxuudRhS7UO5FBnxOZwsHInORRiqNuI0WqXe9xdrHWQa/Sb
-	 ixd9oMAuZrSZ1Z/sKAjPMqYlK+jjv8LCLpiZdkKrwi4mLy5pof5OkOwLzaN+SyDnTkD8n
-	 s1gAF2wu9nNz72NG3iwbSvJphGCms+0TYyJcwUxmp58r8xOWnctrlv5a0TOxnvrjNi7Mx
-	 pqg1ooDZ5yXyAwrJMwYMyMMc62k7ZdJe4/qCkCdm/vVg3D7YRrh0oH/q1PMgJfoM6cA==
+	t=1794208108;
+	b=QGPqM6MdpeBTwswtI0PpqFheQ86mbqp7R97ZaCeX4X5SgJs06TZP1q4Gfxt0RoIm5Nfc
+	 p5gwunzIzYxTQL25103VCxv+eJX0lLAXR1QKZQgPw/+6zfPyh1SoFU5feCkkoviZ5fKbR
+	 9pOONGyF5c/kXA5b0Rh6LU1bH+TzkLR8y9Uti3lhD8Q/g31zMD60v4GCCfw0qJT3rcOsr
+	 kqgHHKDfJTfzRsMmhYc8DLgFYnmkBeT3aQp75Fs6Pe79q1weoQ4tgge8dz6sluxrjvIh3
+	 O/hQ16kyHzEQLv2Srp8wa7uIPsBWLgVsU0IUcAJtrlQwLvlN5FFuUX+Ufzjz69u5SpA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794207971;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794208108;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=a95y8aSKz++4h1LuwQsejlcsQS9skrV6KZI0mprESRU=;
-	b=oO1yRYmkZ/ltq3aUsTe9O1ArpBycPkDgNltOstVJaCGH0Q5UPpYVSkE1jbva9X5riflP
-	 jUvrx9VFjE8TCfpKRwp/yUmOINC6TG6nZRPiVqZjfZ4wzng/m0f+QTdIB+IquRvlw73av
-	 b9aOVIMcOZg02YbAyGCQvKIHJK4gWgexRBi7K/N5d/5v/RODju3JAiXskooJE/I57kwQe
-	 RhF/OzoC9+qUlU4dEe9BsymFx4ITU7JG+7tUFNojJb8vF29JkwMRUEVYlE1uKCOybBm1R
-	 m/PvjE6CYR+tA0Lqg/C8XiZdo1uBjT22KPBNFabZcy6wTW55pTQcVZDy9c3oJKu9FKw==
+	bh=PUJIHGy6vNrPOSKoKL8LnIUQhbXPd1YZ+0eesCmWEM8=;
+	b=EKCRwlnOgjdiSG5hYfiDtUOCr1+UtratNhBCltzqswVtYDdVZdimHxTc9pOslagW3qWI
+	 WYcaKqcWBEtfEoBZclSKGrLtY4Y4kP9TLMWPcwQlG8v6Afoa1IwCIQSXXkIeVV5nsJZlU
+	 ZXhzmadw6G3KYzcdEN1Lldn1caFDSvxIeL7URK3hwcYwbd/5bc6wtT27IXdWbYVEisyyp
+	 yBLb2L1hLJfGOrhBV4/Gj9cbYzgk2x9WK6iOO2DF+KWsQ6nvIogtTWd5MP+kPByNzJXBy
+	 xRCjHvksB/GEyspSVpNJz76GMq2QPhqDEYZ7DPKsY0gQomx70yGejHbFsM/ungPz54A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HNQnUiRd;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CnAs+Inv;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4614606A322
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 07:06:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1812F606A31C
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 07:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HNQnUiRd
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD0471F008A1;
-	Mon,  9 Nov 2026 07:06:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CnAs+Inv
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7076D1F0089F;
+	Mon,  9 Nov 2026 07:08:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794207969;
-	bh=a95y8aSKz++4h1LuwQsejlcsQS9skrV6KZI0mprESRU=;
+	s=k20260515; t=1794208107;
+	bh=PUJIHGy6vNrPOSKoKL8LnIUQhbXPd1YZ+0eesCmWEM8=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=HNQnUiRdVw5RCP1T9OSOj6j4+tKeFNPy0JL2PPcDBtW+FJAKvRRDSzeEhz1TokIWC
-	 7M1UOoXMpUub1oZnoBxQCf0hZeLOEx3S3AUlu2VTAtXNigofjgfFS0Bkpe6V88KQBr
-	 NZ0+TTDh3e+HjYmuOCtB0LWDrEmO/H0hdYJFVtKEOQN4q56Te2DzZVzg2Cc40ObbPU
-	 9vTI1yYmRarj0RODDq1xmeUKgCayx0D+tx68troCCywf7Qvf49c+hyqBU5e7zHuX3i
-	 jS19TqpMWYfCPBpxrSRc3mu5+crgtu1VUjvYbIbMkrEVoSIhpUB01F17MOrWvFX3m8
-	 JCJdiVTjA8glw==
-Message-ID: <sashiko-outbox-204525@kernel.org>
+	b=CnAs+Inv9UPqRLHYZJWEXtCg/LAUe92N14BlimGmh36PWzx98nacXupHQmf5oaitN
+	 0oHr62rQ+ui9OgDYYRDJsrC+79gHuuKl2ZIydYN0JkioZ4VoXKk2smZArYu8mYH5Ts
+	 AqEI9q0gSu9w2wMvg7OqBHdZvrcZlieSfuP2YkNUSMTTxPa5MGGNrlCMfe9MSUkNDh
+	 WLBvW6zS9XzDO+YzbHnYtRpzYwK0WQsN16gFWKy49jrpT5aEAv366J64EZQ9OeRjEQ
+	 oL9vEHHmVyavqSGXGhOhefJUIrbByCpPB3N4Ama++HCO08IyqgLoaJcdohXNcwNxbj
+	 QEMYseFF2ZKAg==
+Message-ID: <sashiko-outbox-204528@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 22/26] bpf: Remove scalar ids from regsafe()
+Subject: Re: [PATCH bpf-next 21/26] bpf: Stop assigning ids to scalars
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261109064715.2382452-23-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261109064715.2382452-22-alexei.starovoitov@gmail.com>
 References: <20261109064715.2382452-1-alexei.starovoitov@gmail.com>
- <20261109064715.2382452-23-alexei.starovoitov@gmail.com>
+ <20261109064715.2382452-22-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Nov 2026 07:06:09 +0000
+Date: Mon, 09 Nov 2026 07:08:27 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,76 +62,67 @@ Precedence: list
 Thank you for your contribution! Sashiko AI review found no new issues
 in this patch, but noticed 1 related pre-existing issue it does not
 introduce:
-- [Critical] bpf: alpha-renaming of struct_ops ctx_arg_info ref_id in
-  check_ids() [1]
+- [Critical] bpf: missing arena pointer scalar check in
+  adjust_reg_min_max_vals() [1]
 --
 
-commit 4ddf1d7e2a622751a128b84cb218611e091c605f
+commit 3c630c864568ebd00223455e2f9580fa8ae14a89
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Remove scalar ids from regsafe()
+bpf: Stop assigning ids to scalars
 
-This commit removes check_scalar_ids() and the scalar ID comparison logic f=
-rom
-regsafe(), as scalar registers no longer carry IDs.
+This commit stops assigning and maintaining IDs and constant deltas on
+scalar registers and stack slots in the BPF verifier, as scalar evolution
+and flow joining now handle linked-register refinement and copy detection.
 
-> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-> index b606763496552..48359e789faad 100644
-> --- a/kernel/bpf/states.c
-> +++ b/kernel/bpf/states.c
-> @@ -58,7 +58,7 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bp=
-f_idmap *idmap)
->  		return true;
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 103e83cd23ef0..3d1be990123ba 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -18226,10 +18150,8 @@ static int adjust_reg_min_max_vals(struct bpf_ve=
+rifier_env *env,
+>  	struct bpf_func_state *state =3D vstate->frame[vstate->curframe];
+>  	struct bpf_reg_state *regs =3D state->regs, *dst_reg, *src_reg;
+>  	struct bpf_reg_state *ptr_reg =3D NULL, off_reg =3D {0};
+> -	bool alu32 =3D (BPF_CLASS(insn->code) !=3D BPF_ALU64);
+>  	struct bpf_insn_aux_data *aux =3D cur_aux(env);
+>  	u8 opcode =3D BPF_OP(insn->code);
+> -	int err;
 > =20
->  	/* a name of what the caller has, see BPF_INHERITED_ID */
-> -	if (((old_id | cur_id) & ~BPF_ADD_CONST) >=3D BPF_INHERITED_ID)
-> +	if ((old_id | cur_id) >=3D BPF_INHERITED_ID)
->  		return old_id =3D=3D cur_id;
+>  	dst_reg =3D &regs[insn->dst_reg];
+>  	if (BPF_SRC(insn->code) =3D=3D BPF_X)
 
 [Severity: Critical]
-This problem wasn't introduced by this patch, but can check_ids() [1]
-map an unrelated reference ID in cur->refs[] to a struct_ops __ref context
-argument's fixed aux->ctx_arg_info[i].ref_id during refsafe()?
+This problem wasn't introduced by this patch, but can the PTR_TO_ARENA
+fast-path in adjust_reg_min_max_vals() allow pointer-to-pointer arithmetic
+and leak kernel addresses [1]?
 
-In do_check_common(), the verifier acquires a reference for each __ref
-struct_ops context argument and stores the literal ID in
-aux->ctx_arg_info[i].ref_id, while BPF_REG_1 (PTR_TO_CTX) keeps id =3D=3D 0.
-When the program later loads that argument from PTR_TO_CTX, btf_ctx_access()
-populates info->ref_id from ctx_arg_info[i].ref_id, and __check_ctx_access()
-checks whether that literal ID is still in env->cur_state->refs[]:
-
-kernel/bpf/verifier.c:__check_ctx_access() {
+kernel/bpf/verifier.c:adjust_reg_min_max_vals() {
 	...
-		if (base_type(info->reg_type) =3D=3D PTR_TO_BTF_ID) {
-			if (info->ref_id &&
-			    !find_reference_state(env->cur_state, info->ref_id)) {
-				verbose(env, "invalid bpf_context access off=3D%d. Reference may alread=
-y be released\n",
-					off);
-				return -EACCES;
-			}
-		}
-	...
+	/* Case where at least one operand is an arena. */
+	if (dst_reg->type =3D=3D PTR_TO_ARENA || (src_reg && src_reg->type =3D=3D =
+PTR_TO_ARENA)) {
+		...
+		if (dst_reg->type !=3D PTR_TO_ARENA)
+			*dst_reg =3D *src_reg;
+		...
+		/* Any arithmetic operations are allowed on arena pointers */
+		return 0;
+	}
 }
 
-Because ctx_arg_info[i].ref_id is a normal ID below BPF_INHERITED_ID and is
-not anchored to PTR_TO_CTX, refsafe() -> check_ids() allows alpha-renaming =
-it.
-If an earlier branch keeps the initial context reference (id =3D 1) and a l=
-ater
-branch releases id =3D 1, acquires an unrelated reference (id =3D 2), and r=
-eaches
-the same pruning point with PTR_TO_CTX still live, check_ids() maps cur_id =
-=3D 2
-to old_id =3D 1 and prunes the second branch.  If the code after the merge =
-point
-reloads the __ref argument from PTR_TO_CTX, the second path uses or releases
-the already-released context object, causing a use-after-free, double free,=
- or
-reference leak.
+When one operand is PTR_TO_ARENA and the other is a kernel pointer such as
+PTR_TO_MAP_VALUE, this block overwrites dst_reg's state with the
+PTR_TO_ARENA state and returns 0 before reaching the pointer-to-pointer
+checks below.  A program can then use addr_space_cast on the resulting
+PTR_TO_ARENA register to turn the truncated 32-bit kernel pointer value
+into a scalar, bypassing !env->allow_ptr_leaks.
 
-[1] https://sashiko.dev/#/bug/linux-3dbabad3-179e-4dd4-a907-20f15cf47b12
+[1] https://sashiko.dev/#/bug/linux-d1a28821-a6c7-4535-946a-d82f1ba22e63
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109064715.2382=
-452-1-alexei.starovoitov@gmail.com?part=3D22
+452-1-alexei.starovoitov@gmail.com?part=3D21
