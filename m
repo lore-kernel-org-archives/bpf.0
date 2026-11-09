@@ -1,101 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.46
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794217146;
-	b=G/fCS8JNEbpIc1jiu2S50CB9luFwekBZMEGro3Tzb1qxrS29jipItHK5j4YnKUh9ocLx
-	 radNIw6L0dwXXM1bSkSGzgP4xifXjpBdrmQpo0w+5b4Ovr2EonrxhedlUJRmhCANIY8vG
-	 IW/Rz3vtF0sKhJzmsR7x6nExeSShuTazEpQsUsAMESQ1q7utd6KE8TUA1wO5Ma0oRHSqt
-	 eiQw8JYUYbA2mSldt25lFgODJjfhSlnJnAPpq1s/0mOy3EQtx1Lt2NJWgqYkfm3d8W4o0
-	 DJ17uToaD0Enff4+ygNxhRqG7K9s73FdDDjkYOWxx/tSBp8t4MJ+mAxHc4TDs7SdG2w==
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=74.125.230.73
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1794217639;
+	b=2Yi7h5A/8JtN8JceFWYFRx5ED91FFTTW5PQ82VCyjzTGaRQO9/OOjJCzcKvVW58+jxkF
+	 KI+FgaMtZTZAjvjBLeNM0hfgk9d1HV7qXPLhqSkq2d/APjbMZX9H/TYSgmpsG2BfnDsn/
+	 /srrUD7jtITEoOVC5uH7OeJZYiq0n2gUDRQHOlilXAO4Z+3+H0o4WWtRyPrT116Ja7jhX
+	 9I3/G9RkMmBbMeq0aYb/MouDLJS4qIfT6ihx1VBG9eWMF8BIRda4FmygW4XdkhNIWGymE
+	 fFjay5nrDXr/GS3WlajXxUKHi5zIV0r2HMHVdxBDBghT1ItHx6BH1fTs0aNIhrXWlOw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794217146;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794217639;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Bt2kTkjGKfcd8zMvx1shHZytI48P75SXp34GvUI4/fg=;
-	b=4zT8caF7EE1oPR6nmtlBcufssiN7PTUTJahiw4ImHzeJp2UkQmZmZLlpi5UFBiAdinXa
-	 t/17zzZ6hKIVtbDmm7/9kUmARd3UCRII5QQbzBkbzSdyQPsX26TLqDVsdTeLzELxok05b
-	 k2+xgPnDNkLZWEMo7VWP4zfMgO18l/R/e7kwraSH3ALT3DqX7cskcPevn5/1jkf+k+Sol
-	 ZX47JS5IUwyMHQzyKTDsW9/rOEQGFSQB4PpYLc+LOCkS5XOajzhJ9ysBSF0Yy2qjdmc5V
-	 BEbqrZOFM6SiNwcO5zmcRfELBP9vcF1fftl60xaAeG/1XI7ahZ9PAp/YQvFkoJysD/Q==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=uIE3M/acZsAUW4GpaFjQKu2t6slRnu1XdH0mtkmeVOw=;
+	b=WTPHDCliSl4IZOxCI5D3O6duGnWWXLY0/TrvJYwIse0BJpB2ap/CIRDsmPmR7L33d9pr
+	 dwSg75MKLXMJOkzoWt5lurDFZ/FwhFCPhg1kC72V4YWSXxFVL8IGuOM2HibMrcdPNWYtj
+	 atezHuM0o2Gctmd8cGtOd6Yp+ac1Rje3tzX1ggLioK9InxsnNWmSvPPIxSfja44ozBIkl
+	 ZtB4s2gyhAMuFrd854Rx2GGuowxnLm/KoUtIK+gip0f+sHq+3G8/Fnt/Gw32IpzIcP6Lx
+	 +BbXxrMJZs0rv0qsi1nWHUbUcWGaNG9tmEFBtGtUW7FQ27ZFTPcDsevC3+Ac7okbtuA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Ez/Z55b0";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.46
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LvCZ7BOz;
+	arc=fail smtp.remote-ip=74.125.230.73
+Received: from mail-lr2-f9.google.com (mail-lr2-f9.google.com [74.125.230.73])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0985D606A323
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 09:39:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0985D606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8948606A32A
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 09:47:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8948606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ez/Z55b0
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-4ad5b52f0a7so439930fac.1
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 01:39:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794217145; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LvCZ7BOz
+Received: by mail-lr2-f9.google.com with SMTP id 38308e7fff4ca-3ad31c004d8so5717021fa.1
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 01:47:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794217637; cv=none;
         d=google.com; s=arc-20260327;
-        b=sKkUnnEXxhDulSwDFO7ZYGAD01hz2Ks7rOxYFD8sxyueYEBEdK0+dOQOaUQI4QRS0+
-         X9N7I1Ton1RM3Aoo9G9njMscnY3mf3gs+szXGOuDKYT4zxsNiI5w1fIb0cYP2W1DDyu3
-         8uxDFYIi29rTyx7seyHPGCCtefHPpstcwfJ3w4vDhZnltfj/C+rc6fWF2la7ef0JgfaP
-         /mCOs7AQpEEWtBSMyEc7JKw5KDrtWxGJ/kOuarnvKJz8YYzG4UocIs6QNrd93WKdav2h
-         pg7qU+vioKMh8lnCe+/y1gq9wmH3adt2kpN7ZEjFomclOuD9bZxV2G22VHjA8dWD7LyO
-         tVPw==
+        b=eID+xjI9e0ODrBhSiT1SPDxgHxt+5taYYVA3bZx66uPOLoVuuPlvQ4Ef9S5DX82YRn
+         YfDY7gcfS4n1gU2K+g62nH2xE1GfaGnOXk9XxaoXVNUz5wt5ehdy16+UyVoVuBjj1T9D
+         62hcYlV42sOo6swfOF0P604e38qlqzeKNSejJJZjdbsXl9IT5IjeWGlQNHBhtb9d3FsI
+         jvJfwT8A781tRS1tPclPUmDz/JnOCCjh3sK4FRV41dI6lk9LUo7zhwfBGqyd60rTTfod
+         e6/F8p9ca3SpEDEGFWd/LS6oE/AOOzFVEzlRPCstVBPPlyI6d/yiQHqQsqhoaXKDRRxD
+         v13w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Bt2kTkjGKfcd8zMvx1shHZytI48P75SXp34GvUI4/fg=;
-        fh=OdB2oufQ+acfXl/PRNVyLdamfs/v8PFpdgRxoK3B/6A=;
-        b=MBu8R/z1GAeteRKYY1Fi4W9KvydWkBLI93MiZucnupnCZD8THWMs344Xvfl3G35bc1
-         mOD4HUS/s4QFoim+Cc9ESYkDtY2EVpCX1M4WiVClW7KLCwJwUI6HjTpTXSJ397mNhf3x
-         GSBuofxId0QNXtCvBCeAcXwItavLNfhgpopQnLNSd2+DV5V77HiPDnTgAC8TJEpnenOc
-         hVBEfCTeCMROIOrnlFD54OeAwgNxFpr9ECmd/P85cEebFloDox4uwidHl9zhUwUcbgyQ
-         PqALfqG6/9lIQIxC2VIfD3FvwISW4kgGE4ETb0fg0KQiduD9fCyRAabo7W986iqE6ZcT
-         6HpQ==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=uIE3M/acZsAUW4GpaFjQKu2t6slRnu1XdH0mtkmeVOw=;
+        fh=t8fSlha0kbvYnp344UcqxpAoQjsWz96gblH5i935t7c=;
+        b=NoLwl0GZxavnWSVePJITjh6TxnHto8qebPhz6/geCAHOiu0LU+xsHPjun8lgImhKxv
+         nac2PP3ExchyKybYJnalqZFyR+gyR+BCM976Qw5Je+eh0tViYQd3prbhTbTLV7SW7K0l
+         1mCiw9jnydJr8hnzjJ6xPlUlz8Gvt9B+VesCozWxiLpxBUz9TW2Is4HzANeMfiluDGno
+         lVHoHv0mw3uf+JmtLZRb/G5O+lJ4BZu1NOTitUSPa3KsgRFKBsRiiaDlFucBZfgbxitL
+         M7QokQ0mf86wTofele/L+J5KbFo49bDosbI5s2n0jTMFlDyCKTjyerouAlavAtpWNl7R
+         RhDA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794217145; x=1794821945; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Bt2kTkjGKfcd8zMvx1shHZytI48P75SXp34GvUI4/fg=;
-        b=Ez/Z55b0uswFCCrOov466Vti5izMG1v2RfIprz1liD212lvlAPN/9oxAdWhDg8/HNo
-         hRWSJkAfaoWCJV9ylz1pMAI4Im1eai8Bz2J7SNqnmNttW4mOzZXW/RNk5dwQcwPU18q2
-         75/965pmobYanJrT/00PyCd01etzF7VJNN5PdoYALtWwGKJ7yf4bGFy01E6aOM4G9vJX
-         PWCB2pPCGQ5kmudjm2rrRMbIBGZ3X/Q+hh0qoTWNhHgH3sg2OKQ1J9mkXdeR0soyUnUT
-         oK4d4EoG2w6Fti24nb/9i+6XfjKQSiMsQJZ2EKY2yg41a89atwJ6KA/NBWy/R6jeI/mN
-         9zLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794217145; x=1794821945;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20260707; t=1794217637; x=1794822437; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Bt2kTkjGKfcd8zMvx1shHZytI48P75SXp34GvUI4/fg=;
-        b=a7eppw8PtE/uoV5sX/O9VfYT/RharV6g29BjHC9n6Z52YShk4aGe87+19wn5NJaY9y
-         H0Dbfk27lgjX+aHcnBu+HBG932fStjBsRzAAoXdAbmjSRfjLQAledNwFVdd9NFC1fzfw
-         jO7UjkjMMX+Kc/WGT2SsPn0GaxH+Z/nynWsnzYyZwi4A67TIiTAF+0W/HXIRlnd3NTLV
-         cPxvBbL0nTsRv01wf1YBLYVEoNmNNyflmaa4s0FgrUOz3wFEkf40u01CJ+muirKaQEJZ
-         xufhHzpmW4rZoe1jH6SQlUoAFEVsvMbyhaJ9I1/bt6E2k2Wqe4lU/H4+qAQPuD/vzbS+
-         Pgyw==
-X-Forwarded-Encrypted: i=1; AL+hErHJ1BmXcNLwx/tDbYWJH555BxOUzbsxDEmXdYZnvPzHpG5YrpjNJu3ft57/MDnT5LX6IgE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z862cXJzlxMN70rcIO23jNE0HqFcozixCFGdJb22uyMwT2pJgOz
-	+H4RJQBqkrO/hHe2nvH/+Zgwf4t4s3oT27Q9uvHCgMZZdWgyn0PndCS3XkhDflK5Zy2PnRpqPvd
-	QfQ2c9WsVQv4kFF9CLu6IVryhS8x70uw=
-X-Gm-Gg: AYBFou3F7VXAQbWhGEdjgFxnpg9VDPTyfFlr03H8clEZw7AGx0EQEdfwNKricQ4GLxZ
-	Jmj2SMXFl9ZJgKvjmKc1nCutZcnVR9uOSnp3OzOIHFeL4BtPS+wZGigBpkA8GHyGD6mfOhAbcfY
-	JN735jGec9Z+x+6IMC0VqzreU6O6DRoNyxdZAosyASPuJu7mn6U3KbMgYldDxfDvQKO1CxClONJ
-	wQN2Vs0DBcz5InOpNAzj4nMHMe6okwRipvNccSexDu3H9dlUHOWska42x1QYF16gPoWjKBxlUYS
-	B2a5dBQJAEeCtlYUQ4yByKsgUev0nOhA/HfjOoeVTg05JMAGsiZyDsWz9vtWc25PEGbJybnUq9S
-	nuxvkX+zLdWaJrdPuXdMtH4h0U8AA6zpTnbE6HdQBoeSYD8mHF8ATpiS7LcOMlMmtrVD+PfjEnv
-	qIGs9pzHnX8rKGgw==
-X-Received: by 2002:a05:6871:b09:b0:499:c554:b635 with SMTP id
- 586e51a60fabf-4adec9a0521mr1832827fac.28.1794217144641; Mon, 09 Nov 2026
- 01:39:04 -0800 (PST)
+        bh=uIE3M/acZsAUW4GpaFjQKu2t6slRnu1XdH0mtkmeVOw=;
+        b=LvCZ7BOz7L9xsFF9pIIYU0sJoAffENWr47gDWv9IWQ1QEmHfxPMJ4fHFpO65igbwf/
+         btyP0wpGhrftCX2USHUqY8YlBNGJkg0OaDQj0LqTiFwa/TBM7O7Ya9JKfp7rcSj/HMyI
+         ZT1NvOPJKy4aewilbFWsFh4ysRqbsG0iCR8syaIJxOaIDBTYzSkgz6A/WGgN7ZOaIPMH
+         n1oH5rr2ocBwrWAJ1eBVXoNhNCPTTpCsbyJCzRgR7IkC5rKKwDt13Th2lIk6SJ9J55EI
+         xAnpnen4dOuv90Afp2v4f3foX+cesBt5tUBinsHcr/99PLjD07UYl0mekEOyOSpI9cB5
+         PxlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794217637; x=1794822437;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=uIE3M/acZsAUW4GpaFjQKu2t6slRnu1XdH0mtkmeVOw=;
+        b=ump2+SdfVW7Vrpqsyn4pfGKzyDSWptCDSdHKbMQkDVhegmBELBj1444m3ta0KbZNYd
+         BZPdZRGFN25xwQDPewA99cYL9Vbdaozv8Xd5K62gL/k9Do8XOFGR0tm6xke3A6Fc8gSL
+         zXm6akXAcFBox9IEBdHNMN8thI6LUj1BGqRQdT89jvPFrRIYy3WGVeAmMUoPj14ghw3O
+         uKu3bkBpz3VdeHbyfy0Y4jwLzN/1IS5wOoOqFnVLnlDNGlXr7kEcBCTy78FdD08lubFG
+         E2JoFifAslBOm3POniSO7NWTUOTCc4eVWv8nsjF7/TS+qVjtbvCENb2jaYABUgLgnc5+
+         irFw==
+X-Gm-Message-State: APuU4Z+tz+HZEZmK0MDQJA/H/vrt18iGEAgmK9BTlRUWtHputOmjZi0M
+	cLWY3FyLNt/lvNm3px6GhlupKDXprv2Ti33pAG+jUES1EMiNjqxJQLCJVeSSw4TB0ptzDZaHQsV
+	UY0ZZAqISumDLps2QIvCJetooPhksY2A=
+X-Gm-Gg: AYBFou3PDE0m70Q7ziwCU+zzZGtsISVZhyuLzfzC60DjBFgBfVJlFZXPp42hlD53BK7
+	Ed0Z95+qRZtT1sggC/MJfz7MsiF+sXtiKcfl3vWXNHxvr8BuXRtkmo5rx0CfflNapbdKtTadqtX
+	eyuKFRiCEp4uV5GbcaVoOdqkplhxJ/18LKcd7ymRwbx/9NgYxHYWjBMgNNiisgagcbw9SW520Tv
+	INli0WSMw9ZSgXLSXqT+1wMmu7Ehw0ECQI0booPRjeQ2Wo35iGR0rwc6fCyp+0VqCAdMhXotuRO
+	nQ1x6A7K5Qsx8HLUtA9DzcjACX9gIOjbKeZCMvb6HGe4FQP6FbLO9zg9gy+uPxffrr5n/2iRZRU
+	VlYl1xn1uy7vThUbQOVG8Mp7eHQHWrpAuaiKgbw==
+X-Received: by 2002:a05:6512:3ca6:b0:5c0:a57:2cc5 with SMTP id
+ 2adb3069b0e04-5c14bf8d68bmr915317e87.3.1794217636586; Mon, 09 Nov 2026
+ 01:47:16 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,93 +102,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261106114551.212675-1-amaan.cheval@gmail.com>
- <20261106114551.212675-2-amaan.cheval@gmail.com> <CALuQH+VtASWP=w9ibTJ7ioYxWrS5sgi9yCZMVK0D831_A-zusw@mail.gmail.com>
-In-Reply-To: <CALuQH+VtASWP=w9ibTJ7ioYxWrS5sgi9yCZMVK0D831_A-zusw@mail.gmail.com>
-From: Amaan Cheval <amaan.cheval@gmail.com>
-Date: Mon, 9 Nov 2026 15:08:53 +0530
-X-Gm-Features: AclHuK8ZY94zA-0byUQ__DrC9NeVtoJKfHv6SKapSVwO8ABChRUHJeGPjboSxYY
-Message-ID: <CAG+wEg3VCFnPMkkXVLBNgSNra2YBSZAM-Q--AEQvA597z7X5MA@mail.gmail.com>
-Subject: Re: [PATCH net v4 1/2] gve: block XDP on the DQO-QPL queue format
-To: Joshua Washington <joshwash@google.com>
-Cc: netdev@vger.kernel.org, hramamurthy@google.com, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
-	bcf@google.com, jordanrhee@google.com, przemyslaw.kitszel@intel.com, 
-	maciej.fijalkowski@intel.com, pkaligineedi@google.com, maolson@google.com, 
-	csully@google.com, willemb@google.com, yangchun@google.com, npl@google.com, 
-	awogbemila@google.com, shailend@google.com, nktgrg@google.com, 
-	maxyuan@google.com, bpf@vger.kernel.org, john.fastabend@gmail.com, 
-	hawk@kernel.org, sdf@fomichev.me, daniel@iogearbox.net, ast@kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20261108152941.7363-1-shlomojune6@gmail.com> <DMPYM1AW7KEU.3RX07MQ1JMR39@gmail.com>
+In-Reply-To: <DMPYM1AW7KEU.3RX07MQ1JMR39@gmail.com>
+From: J4f J4f <shlomojune6@gmail.com>
+Date: Mon, 9 Nov 2026 17:47:05 +0800
+X-Gm-Features: AclHuK-9V7GyigGbUP33a-mJIWhckUNjthd9aaYGGc_zn8e-Id1zaC-hC2qKmZo
+Message-ID: <CAE_Lbwn14J=hsjARLPUKAGQZmEUVXfit6fnEgk5m7g8xADRnAA@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] bpf: Check variable-offset accesses against
+ special fields
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	ihor.solodrai@linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 7, 2026 at 8:43=E2=80=AFAM Joshua Washington <joshwash@google.c=
-om> wrote:
+On Mon, 9 Nov 2026 at 00:11, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Fri, Nov 6, 2026 at 3:46=E2=80=AFAM Amaan Cheval <amaan.cheval@gmail.c=
-om> wrote:
-> >
-> > Commit d8a8ca14c937 ("gve: add XDP_TX and XDP_REDIRECT support for DQ
-> > RDA") enabled XDP on DQO-RDA by dropping the queue_format check from
-> > verify_xdp_configuration(), which until then refused every format but
-> > GQI-QPL. Nothing replaced it for DQO-QPL: gve_set_netdev_xdp_features()
-> > advertises no XDP features there and gve_xdp_xmit() rejects it, but the
-> > core only checks that ndo_bpf exists, so a native XDP program, and an
-> > AF_XDP socket on top of it, can still be attached on DQO-QPL.
-> >
-> > The DQO-QPL RX path was never written for that. Its page accounting
-> > assumes the driver keeps a reference of its own across every handoff:
-> > gve_xdp_done_dqo() passes the buffer to xdp_do_redirect() and then
-> > recycles it with gve_reuse_buffer(), so a redirect target that releases
-> > the buffer synchronously, such as an AF_XDP socket in copy mode, can
-> > drop the page's last reference when pagecnt_bias runs out. The page is
-> > then freed while it is still DMA-mapped and registered in the QPL, and
-> > the driver posts it back to the device.
-> >
-> > Refuse XDP program setup on DQO-QPL in gve_verify_xdp_configuration(),
-> > matching the features the driver advertises. A zero-copy XSK pool bind
-> > is already refused by the core for the same reason, and a copy-mode
-> > bind never reaches the driver and is harmless without a program.
-> >
-> > Fixes: d8a8ca14c937 ("gve: add XDP_TX and XDP_REDIRECT support for DQ R=
-DA")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Amaan Cheval <amaan.cheval@gmail.com>
-> > ---
-> >  drivers/net/ethernet/google/gve/gve_main.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/e=
-thernet/google/gve/gve_main.c
-> > index 2437cd8ba633..4e9e692a0ed0 100644
-> > --- a/drivers/net/ethernet/google/gve/gve_main.c
-> > +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> > @@ -1723,6 +1723,12 @@ static int gve_verify_xdp_configuration(struct n=
-et_device *dev,
-> >         struct gve_priv *priv =3D netdev_priv(dev);
-> >         u16 max_xdp_mtu;
-> >
-> > +       if (priv->queue_format =3D=3D GVE_DQO_QPL_FORMAT) {
+> On Sun, Nov 08, 2026 at 07:29 AM Shihuang Liu <shlomojune6@gmail.com> wrote:
+> > Check every offset the register can take (min_off + k * step)
+> > against the record.  Constant offsets keep the existing check.
 >
-> Thanks for implementing this!
+> No need for the helper and the second loop.
+> reg->step is never 0. ___mark_reg_known() sets it to 1 and
+> reg_bounds_sanity_check() reports 0 as a verifier bug.
+> So a constant offset is the k == 0 case of the same check.
 >
-> Minor suggestion: Can we check based on dev->xdp_features
-> (NETDEV_XDP_ACT_BASIC) instead?
+> Something like this (compile tested only):
+>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 8bf3909..2265362 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -8094,7 +8094,12 @@ int btf_struct_access(struct bpf_verifier_log *log,
+>                 for (i = 0; i < rec->cnt; i++) {
+>                         struct btf_field *field = &rec->fields[i];
+>                         u32 offset = field->offset;
+> -                       if (off < offset + field->size && offset < off + size) {
+> +                       /* An access at 'lo' or above ends after the start of the field. */
+> +                       s64 lo = max(min_off, (s64)offset - size + 1);
+> +
+> +                       /* Round up to min_off + k * step. The step is never 0. */
+> +                       lo += imod(min_off - lo, reg->step);
+> +                       if (lo <= max_off && lo < offset + field->size) {
+>                                 bpf_log(log,
+>                                         "direct access to %s is disallowed\n",
+>                                         btf_field_type_name(field->type));
+>
+>
+> The store to arr[i] from the commit log. It loads today. With the fix
+> the verifier says "direct access to kptr is disallowed".
+> clang can't emit such BTF. Compile the struct with p at offset 16.
+> After __open() move p to offset 8 in bpf_object__btf(), then load.
+>
+> The store to arr[i].data from my reply to v1. It has to keep loading.
+>
+> pw-bot: cr
+Thanks for the review and the suggestion.
 
-Thank you, yes, I'll respin.
+Sending v3 shortly.
 
->
-> > +               NL_SET_ERR_MSG_MOD(extack,
-> > +                                  "XDP is not supported in DQO QPL que=
-ue format.");
-> > +               return -EOPNOTSUPP;
-> > +       }
-> > +
-> >         if (dev->features & NETIF_F_GRO_HW) {
-> >                 NL_SET_ERR_MSG_MOD(extack,
-> >                                    "XDP is not supported when HW-GRO is=
- on.");
-> > --
-> > 2.47.3
-> >
+Thanks,
+Shihuang
