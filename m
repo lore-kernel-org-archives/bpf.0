@@ -1,46 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794248881;
-	b=ljCtiQ8jC/A6vvGpmUbD7Dfv871ypEdUhgfJU5jFlnQ0HMYiyuJ8WHavLvXguhfoQ508
-	 hYuz1/9vDphgAoZyA05Zc1bjD6sRoTI/1BP9ZoCLd2pyQBuuBlqcn3rX0r3yjrpk1f0ap
-	 tpXpdWyyt53HM4t+qABCB3IgqfUaazQ0CbpcUTN2shDFOf4wjo+Hh0la5e+2QpV9USVrr
-	 eDuFySvgwY4mnen47y4hge22PV6KX0aGdUz4finGBQzNMP8XZ4v9bUgYctEcpr9QpwQDO
-	 Uo+XRojKcXNFoMidNcJ/cpX/72hlmnS0NAuVC0d503GbCbmcQnimB2zIvvjAd6GSxpA==
+	b=d7aC6W4U7ldNNkgmX5lStKHrG5Op9y8IhNRBWb2jiMx6tOSOCJ2UHIxlNbMTOJZCLmIy
+	 DdZ5WfnrHU7us+ABDRENC250d34pe91CqjS3WKkkO6ZcxOMg/2fjDo07NBoKMIek45EQh
+	 Du4W4drLfE/F110ecTZFYeu6LV5rAVJhsu6xTbWBjLi+xqSXcUUQoqOk9maPk30jzUS5z
+	 utU3RL4tfWYdX9LIlLYSVQ+2BVlnTnkEUUUJIBNn9srlB8yzJifh4JVv+7aBJMgnRnyEC
+	 AO6wORhmBlqNlEXBOukpfkxOHbWCnreOafqK1qaUoytOST4h3VfMgrY1G/AgkaEAuzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794248881;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=xT0VWH2oGpx/VesD0XIgBgKoF+CwszVu2kX1aVKxe3M=;
-	b=aBpbmdByBUVXsvESha8kkeFEXtm/XaANzllvokDhpyf2bzRNpFsWE3Z1Ri9DyaZZRYnq
-	 ugsNMqWQJ0iBm4eGdyq4I5nu+6ZgCOhcm0ZYtdyYOyfiuexEVsexHrWbtyfKo/M79wNcq
-	 fsGoKNULT33P5IlWtlVvf1SwPFoHa3ekc5XDu60TyUtdyWG9+SWJDbIdiQuAd2gCdhFvi
-	 vE94ftdiuFrQMlZffR/M7l2VjJld2WusdNgia3npTLvuWePT5I4lKGLY6p6e7RbUGl4gj
-	 4QbQyK1BmlDgI+kcxK+KyZ39fHrseHR0+S+x64sAjfwnrsi1W0KTVX/lUd6PRlOrB6Q==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=mDWFweHSaiLpPshCS+h0q+iQaBu+Lgc9eGDx2KfwrFI=;
+	b=uVYwA4jaOr+z997c5TkRfoIiiImU+XgUDOr4uGAUAvnmImGVfKBnI7BRfZmzwqIK9hfQ
+	 gycc9cRq9FKi4fK+ynX73/Z5iNG3tUUOgVp4rsgreKyEiyk8YB11RTOnb1Aao9S3BrozO
+	 Ds32fBCx4ilFTkWB2RB4WxfTYSEAjh+KkaAG3q9uXdyLQoI50ldcvnwIF1d0krJCvjQhS
+	 0TsYw+ZmFFF9BQSu0jwrHkSd/1ng9CWHJkhhZKyG4y8FmpQ2lARGCiMAJ98MWwyZ3Wnp7
+	 YWmrRK4os6wALCemxxhEUoABdFy4mrCVbrIVibl8tr4Yt9RPlKD0GWMhfo7pU7DPZlg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=arm.com;
 	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=bItqaciL;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=YcqTCjTp;
 	arc=none smtp.remote-ip=217.140.110.172
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED19B606CC7D;
-	Mon,  9 Nov 2026 18:28:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ED19B606CC7D
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E7E4606CC67;
+	Mon,  9 Nov 2026 18:28:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7E7E4606CC67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=bItqaciL
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=YcqTCjTp
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4BCCC1477;
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E91191758;
 	Mon,  9 Nov 2026 10:27:57 -0800 (PST)
 Received: from fedora (LJ9QCPV96V.austin.arm.com [10.118.150.23])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 33C813F85F;
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D12233F882;
 	Mon,  9 Nov 2026 10:28:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794248880; bh=pQ69fjyhIdbhS3s2N3dwrtnXKaezlpGT3cAPdCuJcjA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=bItqaciLLopJWotTEoxGYzymdYWEkK21VaOJHjFrpxqMuu7MI5qjzSKoXY3bYMp1+
-	 SU95lJZFg61/Gxy+Ue2xKgw0WjjVIf8iItqOhiVfcgvVPWa7LUkoSupjknwpr9aEik
-	 ZBhooShOLNsBijcZR/AMkhrq+G1o7uk0Al6u2euw=
+	t=1794248880; bh=J7EaISQeGY9QzQfcJ7AujRJOKPOkfJhuRA/a7kt8pXY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=YcqTCjTpFZ8v6r5DSW9z3y4VFfKrCU486QOfw2utAPO7Lhg521/Zg0JVwjXE6iex7
+	 DwNxAI8qtYwO86gLXzWJqinLT83xKK7mvVfoU8Nf2hr3n/T6WeL+U1GsA6jzJhvO5j
+	 7FvCMN5ZkHFdu/UbWO3y3dbd3XI5/e1RP1ERV9Mc=
 From: Bill Roberts <bill.roberts@arm.com>
 To: "H. Peter Anvin" <hpa@zytor.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -54,10 +55,12 @@ Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Bill Roberts <bill.roberts@arm.com>
-Subject: [PATCH v5 0/6] x86: Support shstk via prctl
-Date: Mon,  9 Nov 2026 12:27:52 -0600
-Message-ID: <20261109182758.252223-1-bill.roberts@arm.com>
+Subject: [PATCH v5 3/6] selftests/x86: add shadow stack lock test
+Date: Mon,  9 Nov 2026 12:27:55 -0600
+Message-ID: <20261109182758.252223-4-bill.roberts@arm.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261109182758.252223-1-bill.roberts@arm.com>
+References: <20261109182758.252223-1-bill.roberts@arm.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,56 +72,87 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is a continuation of:
-  https://lore.kernel.org/lkml/20260916095224.1533971-1-bill.roberts@arm.com/
+The shadow stack selftests do not currently verify that locking
+a feature prevents subsequent changes to its enabled state.
 
-FWIW, x86 maintainers and Rick, I structured this series so that the
-initial bug fixes and additional test (patches 1-3) can be taken
-independently of the prctl() enablement. If there are concerns with
-the remaining patches that require further work, this allows the
-fixes and additional test to be merged without waiting for the
-rest of the series.
+Add a test that locks the WRSS feature while enabled and verifies
+that attempting to disable it fails with -EPERM.
 
-History:
-  - v1: Initial patches
-  - v2: NAKed by author
-    - Refactor the test suite
-  - v3:
-    - Fix an existing fork bug pointed out by Sashiko
-    - Fix a state rollback issue
-    - Fix Makefile dependencies
-    - Add a test for shadow stack state locking
-    - Refactor the arch_prctl and prctl tests into separate entry
-      points using a shared test implementation
-  - v4:
-    - Fix rollback state logic
-  - v5:
-    - Expand commit messages to explain behavior and implementation
-      rationale
-    - Move unsigned long status to the beginning of the function
-    - Shorten the comment in arch_set_shadow_stack_status()
-    - Rewrite the WRSS comment in imperative mood
-    - Remove an unrelated whitespace change in test_shadow_stack.c
+Despite WRSS being locked, this allows the existing code in main()
+to disable shadow stack before returning to prevent a SIGSEGV from
+a shadow stack underflow. This is why shadow stack enable is not
+locked.
 
-Bill Roberts (6):
-  selftests/x86: fix Makefile dependencies
-  selftests/x86: fix fork bug
-  selftests/x86: add shadow stack lock test
-  x86/shstk: support via prctl
-  selftests/x86: support header files in extra-files
-  selftests/x86: add generic prctl shadow stack test
+Signed-off-by: Bill Roberts <bill.roberts@arm.com>
+---
+ .../testing/selftests/x86/test_shadow_stack.c | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
- arch/x86/kernel/shstk.c                       |   80 +
- tools/testing/selftests/x86/Makefile          |   12 +-
- tools/testing/selftests/x86/shadow_stack.c    | 1287 +++++++++++++++++
- tools/testing/selftests/x86/shadow_stack.h    |   14 +
- .../testing/selftests/x86/test_shadow_stack.c | 1167 +--------------
- .../selftests/x86/test_shadow_stack_prctl.c   |   12 +
- 6 files changed, 1406 insertions(+), 1166 deletions(-)
- create mode 100644 tools/testing/selftests/x86/shadow_stack.c
- create mode 100644 tools/testing/selftests/x86/shadow_stack.h
- create mode 100644 tools/testing/selftests/x86/test_shadow_stack_prctl.c
-
+diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
+index b52c5420c137..e047f1ceae0a 100644
+--- a/tools/testing/selftests/x86/test_shadow_stack.c
++++ b/tools/testing/selftests/x86/test_shadow_stack.c
+@@ -1060,9 +1060,28 @@ int test_ptrace(void)
+ 	return 1;
+ }
+ 
++static int test_locking(void)
++{
++
++	if (ARCH_PRCTL(ARCH_SHSTK_LOCK, ARCH_SHSTK_WRSS)) {
++		printf("[FAIL]\tCould not lock Shadow stack write\n");
++		return 1;
++	}
++
++	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_WRSS) != -EPERM) {
++		printf("[FAIL]\tCould change Shadow stack write after lock\n");
++		return 1;
++	}
++
++	printf("[OK]\tShadow stack locking\n");
++
++	return 0;
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	int ret = 0;
++	unsigned long status = 0;
+ 
+ 	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
+ 		printf("[SKIP]\tCould not enable Shadow stack\n");
+@@ -1079,12 +1098,31 @@ int main(int argc, char *argv[])
+ 		return 1;
+ 	}
+ 
++	/* Note: test_shadow_stack_lock() needs write enabled */
+ 	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS)) {
+ 		printf("[SKIP]\tCould not enable WRSS\n");
+ 		ret = 1;
+ 		goto out;
+ 	}
+ 
++	if (ARCH_PRCTL(ARCH_SHSTK_STATUS, &status)) {
++		printf("[FAIL]\tCould not get Shadow stack status\n");
++		ret = 1;
++		goto out;
++	}
++
++	if (status != (ARCH_SHSTK_WRSS|ARCH_SHSTK_SHSTK)) {
++		printf("[FAIL]\tStatus not as expected, got 0x%lx status, wanted: 0x%llx\n",
++			status, (ARCH_SHSTK_WRSS|ARCH_SHSTK_SHSTK));
++		ret = 1;
++		goto out;
++	}
++
++	if (test_locking()) {
++		ret = 1;
++		goto out;
++	}
++
+ 	/* Should have succeeded if here, but this is a test, so double check. */
+ 	if (!get_ssp()) {
+ 		printf("[FAIL]\tShadow stack disabled\n");
 -- 
 2.55.0
 
