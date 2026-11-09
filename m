@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794210333;
-	b=QHo/djOL4NjMxr4Aor26DTegZBnK3TlmnNMafazETnFAF7D7oUnaOqFfWn7dLyt3cX1O
-	 wZWnigRnFPo/vLYsZcK/XROWAoWWl2eQdbw9GelIca5Z132Jx+2J8hlUVlWP1xsb0LZZ0
-	 LlGBKko2wekxnGcOJqdWrOpc1za5FNwTEWtULeuAD04L/2RAIOLJqNoBSvvMZxCYzC3H0
-	 h+OVx5PiuDAswbWPBkHseybhVr6lQNKabla65oE+0F/iFznfMD87+z6ltkSiWcdTb8Zmw
-	 Oq0MvRfLrdf0M6fcv+2hQgjdqjVOnXnGZQ1TZLLYBGlO55y8OmfehCo49VlHeOCl1xg==
+	t=1794210336;
+	b=DEU5qqM+MBBWUjl1aNujNGrbIEezSgjCgwUVUjMWDubcnovnBA7H8QbzRcwV9+qiudwX
+	 MDGSsGaDSPjgD+qir8WNoKRrwa4WE+Uj9+l1gCMwjF8mXkv6GDohuyej7xmzsi75Xz2mm
+	 orGLibPeOcCpA6vxXmmXadxmt/eJ2f8iGehbyH2lRd5A5v5M4JgRNBIimi3wt9OOI43W8
+	 sjG0DfjGqRufAIIkNz41Xp0mMXmhM0d/e/au8aQv11QGWPPNUdLZBnNMv35wi38PWKXrm
+	 W29eVCRuCpSWU3fMMCRVRnevorAgUT9QK44Dq46xKqzjN1VJ22F950OIwe+Z0JJtz+Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794210333;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794210336;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=u4Z2LXzuCyuzyR/xK6Pc8Xy3RlKyEJiqw9JzQLPjKJg=;
-	b=p8cmRoh1NPW8Ldrj8Fp3aEf4A5KD9TEaA5ep2keK1CQdMbnV2P4Ndo10Dio25C6xy/i4
-	 tkk499DxOp2w1P/Cb3WMR27Eq76wXPlloeZD13/MeYnYEts2Z1B4vQDEVLoVfm0HGqIc8
-	 UUZHBYHFUuRIQcJUTJfCuEz1a7VcKzPtKJaGZT9nX8n7HmnUzIElq9TqBzqx2TnhwwZGV
-	 CioRvM/fdhfkoxNR/+9SUikSIqDpKWlO04TgLflphNJaIaJPNSfk0i2DLs1TpxXOQzBTg
-	 MGq5Jgg3XRL7O2gL9yKd1BcY/e3+5dwuIj2rjCENUEwGaRCbrGSn3fciyA5cWVhGJhA==
+	bh=mQiRmGiF8PMhpMrZ48ZYZrWpSaElWCNANH3Hbqdb80Y=;
+	b=sZDIVOxtPPUvV33sciD+wWsYzLueT1jL1JMm5djowrpU+EMevz9hi+L6jKoa4dtv6gEj
+	 9MAXeKXeXv79YER64sQ0BVcQNqjgmXfKxVJiZQdsFQMibQedlFYSn11e2YRvbmDKW+l49
+	 5p1AYWP1L0O+I9a6jTv07qympoZYUYxm4fWB+B5VjpoTavrciCNJFqFu+g4IhwKyUB+l/
+	 KAwZFXAweO+AHZV0crnLfY06Ou/pumwwylL/IlJhWAouXsRMM0ULbWKRiuhOyjxLhrk1S
+	 Ax9jQNKbly4Qe3hB1UKDZounOa1bx6YcB3NzCthuWpJvYwwHqD9HVxGmrl6ElcfY86w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eeKd7Tpj;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SnBwDXJx;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA99606A31C
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 07:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15516606A31C
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 07:45:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eeKd7Tpj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 627711F008A1;
-	Mon,  9 Nov 2026 07:45:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SnBwDXJx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA04C1F0089F;
+	Mon,  9 Nov 2026 07:45:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794210332;
-	bh=u4Z2LXzuCyuzyR/xK6Pc8Xy3RlKyEJiqw9JzQLPjKJg=;
+	s=k20260515; t=1794210335;
+	bh=mQiRmGiF8PMhpMrZ48ZYZrWpSaElWCNANH3Hbqdb80Y=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=eeKd7TpjyeNsCPUQ2umYO2NflIv17oX5dkl0W9bh0bSwlCI2uaqtfmBK5pdVvlvdd
-	 IyHNLe0rjmOcmNdJbTrEbQJ/iVio9g/RpdOiRsJYZZ2VZ10/GuTkVOg6CNKv9taU7H
-	 spJB+Y/BqEOb+dJKIhncl7KZ8dWkUBO2H21A5MMs4GNJ1PpfdMgnSdQWD3igMbsurh
-	 n/OvncGwx06/3hvALgoJ3QPJF8VkoYtj3jvLeEWILNg6/wC/Z02dwZdNGARWJlO6Hw
-	 inr5GeULPb6plry/RGZmCwhBTblIPrGNGZYiEBecUOQO58JKK18kZgHQ6K0bdrD0Q/
-	 xadWSFUjlkmMg==
-Content-Type: multipart/mixed; boundary="===============3972863191089283906=="
+	b=SnBwDXJxhhmb2BNYVDC/OiotFv1Z5EVFCpyNdcUiozCINU3yhb1wAuKnA9nFsS1JE
+	 /2pGzS6jJP095fz7l6rIRFwLMXHXKlJKqpYA5p1HsKnpW2DgprnVGg9KNPTnL2dIwy
+	 R/eYlIGhzJEepXqFvkuaC7WtL6MnytPM7j+G/Zq+F2+0ypKh3Yz/xbpdNCdPdCjBIk
+	 XJrcFsTCl8753rYtal3pEAhYz9K9TPYWGMng/Zip2FLDfINUjdi+IqX8SwlazXNy5w
+	 GvOd90Pzqg/pxM2opIJkSe+f/K9BphG7KUzO2OWbEjZVfjoh7X49top144oMpT3CA5
+	 DQLlbJWEQ+CLA==
+Content-Type: multipart/mixed; boundary="===============3238441288265326375=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,107 +49,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <ca9e91234e5433236dd09abd76c3a02152b5fc5cf4b02b645786d91080dc752f@mail.kernel.org>
-In-Reply-To: <20261109064715.2382452-7-alexei.starovoitov@gmail.com>
-References: <20261109064715.2382452-7-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 06/26] bpf: Give SSA names to the values that scalar evolution does not track
+Message-Id: <e66de86420674857f51a844d16fe0a4dcb344446353d69c2e255dcc5209d2765@mail.kernel.org>
+In-Reply-To: <20261109064715.2382452-13-alexei.starovoitov@gmail.com>
+References: <20261109064715.2382452-13-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 12/26] bpf: Refine registers linked by scalar evolution at conditional jumps
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  9 Nov 2026 07:45:32 +0000 (UTC)
+Date: Mon,  9 Nov 2026 07:45:35 +0000 (UTC)
 
---===============3972863191089283906==
+--===============3238441288265326375==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Give SSA names to the values that scalar evolution does not track
+> bpf: Refine registers linked by scalar evolution at conditional jumps
 
-TL;DR: Contrary to "no verdict changes", new per-load SSA defs may keep join
-expressions distinct, so mk_any() can overflow and lose linear-register info,
-possibly causing extra verifier state exploration.
+TL;DR: The new verifier_bug_if() slice_slots check may wrongly reject a valid
+privileged program (with a WARN splat) when a bpf_dynptr_slice_rdwr() buffer
+has a variable stack offset with gaps between tracked offsets.
 
-> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-> --- a/kernel/bpf/scev.c
-> +++ b/kernel/bpf/scev.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -1016,14 +1174,23 @@ static int mk_any(struct scev *scev, int a, int b)
->  			if (expr->op == ANY) {
->  				if (!expr_stack_push(scev, expr->params[1]) ||
->  				    !expr_stack_push(scev, expr->params[0]))
-> -					return UNKNOWN_EXPR_ID;
-> +					return expr_with_def(scev, UNKNOWN_EXPR_ID, def);
->  			} else {
->  				for (j = 0; j < ids_buf_sz; j++) {
->  					if (same_exprs(scev, scev->ids_buf[j], id))
->  						goto next;
-> +					/* two defs of one shape: the shape without a def */
-> +					other = &scev->exprs[scev->ids_buf[j]];
-> +					if (other->op != expr->op || other->imm != expr->imm)
-> +						continue;
-> +					id = expr_with_def(scev, id, no_def);
-> +					if (id < 0)
-> +						return id;
-> +					scev->ids_buf[j] = id;
-> +					goto next;
->  				}
->  				if (ids_buf_sz == ARRAY_SIZE(scev->ids_buf))
-> -					return UNKNOWN_EXPR_ID;
-> +					return expr_with_def(scev, UNKNOWN_EXPR_ID, def);
->  				scev->ids_buf[ids_buf_sz++] = id;
->  			}
+> @@ -16054,6 +16060,12 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_call_arg
+>  		regs[BPF_REG_0].buf = meta->slice_buf;
+>  		if (meta->slice_buf.size)
+>  			env->seen_stack_slice = true;
+> +		if (verifier_bug_if(meta->slice_buf.size &&
+> +				    !type_is_rdonly_mem(regs[BPF_REG_0].type) &&
+> +				    !bpf_scev_in_slice_slots(env, meta->slice_buf.off,
+> +							     meta->slice_buf.size),
+> +				    env, "slice buffer is not in scev slice_slots"))
+> +			return -EFAULT;
 
-The commit message says "Op and operands stay, so the code that analyzes
-loops matches what it matched" and "no verdict changes".  Is that true for a
-join whose incoming values are composite expressions that differ only in the
-defs of their leaves?
+Can this verifier_bug_if() fire for a valid privileged program whose
+bpf_dynptr_slice_rdwr() buffer has a variable stack offset?
 
-Before this patch every non-FP load was OPAQUE_EXPR_ID.  maybe_load_fp() now
-gives each load its own def via forget_reg(..., OPAQUE_EXPR_ID, idx).  So
-(+ r6 _) built on two paths used to be one id and join() skipped it because
-same_exprs() was true.  Now it is two ids, (+ r6 %r2.a) and (+ r6 %r2.b).
+bpf_scev_in_slice_slots() requires every slot in [off, off + size) to be
+set in scev->slice_slots:
 
-The new "two defs of one shape" check in mk_any() compares only the top-level
-op and imm.  For (+ r6 %r2.a) against (+ r6 %r2.b) the params differ, so
-both are kept as separate ANY operands.  Only bare leaves (_ or ?) are folded
-back.
+    for (spi = bpf_get_spi(off + size - 1); spi <= bpf_get_spi(off); spi++)
+            if (!test_bit(spi, env->scev->slice_slots))
+                    return false;
 
-Consider a counted loop with a 9-way branch in the body:
+check_kfunc_call() passes the hull of a variable-offset buffer:
 
-  H:  if r7 >= 100 goto out
-      if r9 == 1 goto C1 ... if r9 == 8 goto C8; goto C9
-  Ck: r2 = *(u64 *)(r8 + 8*k)   ; maybe_load_fp -> %r2.idx_k
-      r6 += r2                  ; (+ r6 %r2.idx_k)
-      goto J
-  J:  r7 += 1; goto H
+    meta.slice_buf.off = reg_smin(buf);
+    meta.slice_buf.size = reg_smax(buf) - reg_smin(buf) + meta.arg_constant.value;
 
-With r6 live at J, joins 2 to 8 build an ANY with up to 8 distinct operands.
-At the 9th join ids_buf is full, so mk_any() returns
-expr_with_def(scev, UNKNOWN_EXPR_ID, phi_def(J, r6)), which is '?'.  The old
-code kept (+ r6 _) at J and at the header.
+find_slice_slots() builds slice_slots only from bpf_may_write_mask() of the
+call insns.  Liveness keeps up to MAX_ARG_OFFSETS exact offsets for a stack
+pointer, and record_stack_access_off() marks may_write only for the slots
+those offsets cover, not for the gaps between them.  The existing
+check_may_write_mask() accepts this on purpose ("Without @fixed_off the range
+can be wider than the mask: two offsets become a range at a join point"), so
+for a variable offset it needs only one set bit, while
+bpf_scev_in_slice_slots() needs all of them.
 
-scev_compute_linear_regs() then calls expr_is_sum() on
-header_env->reg2expr[r6].  It used to get (+ r6 _) and return true, setting
-r6 in loop->linear_regs.  Now it gets an UNKNOWN op and returns false, so the
-bit is not set.  join_place_is_linear() passes that bit to
-bpf_reg_widen_range().  With linear == 64 the range was forgotten at once;
-with 0 it now climbs through S32_MAX, U32_MAX and S64_MAX, which takes extra
-rounds of state exploration.
+A privileged program can get such a range, since is_widenable_reg_type()
+accepts PTR_TO_STACK and union_any_reg() widens at a loop header:
 
-A smaller form of the same effect: each two-operand phi of such values adds
-one ANY level that was not there before.  That uses up the depth budget of
-expr_is_sum(), expr_is_fresh() and expr_loses_bits_only() (EXPR_STACK_DEPTH /
-depth > 8) sooner.  Five consecutive if/else blocks of the form
-'if (c) sum += a[i]; else sum += b[i];' that the compiler does not merge
-could be enough to run out of depth where the old expression did not.
+    r6 = r10 - 32; r7 = r10 - 16;      // fp-32..fp-8 initialized
+    loop (counted by r8):
+      r1 = &dynptr; r2 = 0; r3 = r7; r4 = 8;
+      call bpf_dynptr_slice_rdwr
+      r7 = r6
 
-Should the duplicate check compare the expressions with their defs stripped
-all the way down, or should a phi that overflows fall back to the def-less
-expression the old code would have built, so that existing loop analysis
-keeps its results?  The same mk_any() code is unchanged at the end of the
-series (a2b3b75fc03a).
+At the header r7 is widened to fp-32..fp-16 with var_off (0x..e0; 0x10).
+Liveness sees r3 in {-16, -32}, so the call's may_write_mask has the slots
+for fp-32 and fp-16 but not the one for fp-24.  check_stack_range_initialized()
+passes, then bpf_scev_in_slice_slots(env, -32, 24) finds the fp-24 slot clear
+and the program is rejected with "verifier bug: slice buffer is not in scev
+slice_slots" (plus a WARN_ONCE splat on CONFIG_DEBUG_KERNEL).
+
+The gap slot cannot actually be written through the slice, since the buffer
+is at one of the offsets liveness tracked, so scev stays sound without this
+check.
+
+Should this test only the offsets the call could write, the way
+check_may_write_mask() does for !fixed_off, or only run when the buffer
+offset is a constant (tnum_is_const())?
 
 
 ---
@@ -157,4 +140,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42577197491
---===============3972863191089283906==--
+--===============3238441288265326375==--
