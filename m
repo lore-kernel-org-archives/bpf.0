@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.219
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.140
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794233365;
-	b=T4ANpHWn+bFFEs+tRfc2LPHBJW71mJMblOt8WvdXQm+utW7hypJO1B3yrYPnTu/YoM9x
-	 tLau8MmWs+TcHjAIGA8PISVAQDF4bOk/Tad48DQl1ZcH17pqocThPoEYoEcFoBGC2YTRS
-	 kh5KpeYIVdRS0f6/cWD56/QBASvZBBzDqroZQxzje6hNOj6IivI7/F75yrkOZLrJxhcy3
-	 YM8fYb1QPyg7nBvAnmzJ5Y4cFzptCOIPFsB3ioRuOz7zDV+CM8C21SEFTVneHiuzF6cTc
-	 Ek+VW9ovsg+4aMsfw/UGpjqrr1bHnHcTO/LH4KS3EUby8+3HoBORyx1o/TFonVXVk6Q==
+	t=1794233372;
+	b=KOFzcTr+6Uy4zgL2ppxR/hP5uD/Pbpoiif5Fdkv/VCn/sXY+INWleSL8NmVrMyXAbWy7
+	 u2i/0ffuDdsIYrggTYSiGKUMLiLIBGxrBLybVcXy33PB5nTbinSH9nWgckZOn8GHsYmRN
+	 F+qNDT+b0k0hhWkND5Q4dWy8WFp24pHAe4dST2ajks90MzNL58+ODpstDZpDbqNivhrJV
+	 QFhyZpH3MimMAfWqGU9jua+xzanR0OjXK+PXt+3eMiReXqw+31S5ovS3m1pt378CfqSSv
+	 K7i3fLgXzZn58sgg/6raueSnRRaKaxsh/9ptKIawL77Y9VBEupasaEXUlneehSY3ccA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794233365;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794233372;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=u7TsLdtgk4LWC1lUXMsOMIYHtzQPWQQhl7MK38/q4Eo=;
-	b=x2W0EIgKJTiw7H1ZViB9dseRTAdjp+knyDdYBj9xIPLiZXW7VWLIzLziGc552Yz1Xdsk
-	 G9z2DHibvQA5SxiLe6wGMFlAuXKK1kskXbM7fMFaP9OykTQtHY9oyp/4tUEdnD5q+df57
-	 HZyJHJm4F4ElbCqGO7YjBYYr9je5oclLXQFgYr3/tsTopVPoNCP2YGXBjz1cKT2xfhSev
-	 xrJU8vvjA1+m8m6f3/PqHzuIIGu3OEz1CrysYJh+dT1xSDkiIIbpUk4SD5YpHHU21Ldsp
-	 Nkhtc9hfZBYhWIhCTGMUTGpIqknwgqxGcK/K9++B3bV1LnL7VE65fhsaFBfjO0kKuQw==
+	bh=/awfiZZk7QPGufy8TRdN1/JQqHmSNpfJagJzHwdZqbY=;
+	b=hJEK0sW2baDSmjNZwI01pUeHjFPlVdhIlsSNq0j/AbaKi1VOvjSatIjCttITUie1qO28
+	 /v8UsYiOpLmiKkzuOaoc1rSvAXjRLeDNR8yAC9Tm3B2uPIubLya6j1hEl/SL8UH5rJOta
+	 r6TEyzAqpGkrZ2wmfwF1wq3SbgpfkSJjA5NNRXVqxC9qgMJFStnsb3WEicKVtaZ+IfIi3
+	 Sji5C8rQ8Zts7LN2rdvDkU1bLNg/3J1g3N5WDBkMkWl0eYq81iTcKAeM9SVbIDNrwESTJ
+	 3CN4L3GF5WJNCO0FYII/4i1IduOldeGfB/vAoijBnyECgs/PatE6lfK/JvzVhQYBfFA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SVYlI002;
-	arc=none smtp.remote-ip=91.218.175.219
-Received: from mta0.migadu.com (out-219.mta0.migadu.com [91.218.175.219])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=oRczrJXs;
+	arc=none smtp.remote-ip=95.215.58.140
+Received: from mta1.migadu.com (out-140.mta1.migadu.com [95.215.58.140])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131C6606A321
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 14:09:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 131C6606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495C2606D82B
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 14:09:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 495C2606D82B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SVYlI002
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=oRczrJXs
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uL34otuXneMNkgVk69W35A0N6pkFsqt9VsOR9HNVZqc=;
+DKIM-Signature: a=rsa-sha256; bh=i9yHM4eoQyP1lSutaH5lL/yiuOISfz8NsblbFKDkohI=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794233363; v=1; x=1794838163;
- b=SVYlI002bTQ07DrMfsb4BDht/ipXeF3/AhJdDqt7Y8C/uHhixdE96O/FJRNpjUrfSez4UwUC
- PkdX4KmuOe4H3HEuh54ToQTjToOXI4Fs05jgTbmhgoILSaRdDxEI+eV19YPE6RyOqq29LTn2+6+
- Nho8wIXu/e6KexndvbBQsVzs=
+ t=1794233369; v=1; x=1794838169;
+ b=oRczrJXs2W37oRRvJJFJIhizM9UNScQreK1xGJA+ezjA40mb8CcXdZsCq7/Re5xFXtfPDpn4
+ qcWmxULuvqZlP6gYc0BlolQZsyDfUI22mzWBXJ0+kN9Ywv0qX6PnVbzWfujRiOFYmpRqcEX21fI
+ IAsz8Ja8GWZpET6HUAePF6Yo=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 942069c1ecef47fb;
-	Mon, 09 Nov 2026 14:09:23 +0000
-X-Mizu-Trace-ID: 942069c1ecef47fb
+Received: by smtp.migadu.com with ESMTPS id d5b5477812c6c27f;
+	Mon, 09 Nov 2026 14:09:29 +0000
+X-Mizu-Trace-ID: d5b5477812c6c27f
 X-Migadu-Flow: FLOW_OUT
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
@@ -72,9 +72,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH bpf-next 6/9] selftests/bpf: Verify tracing link_create logs
-Date: Mon,  9 Nov 2026 22:08:13 +0800
-Message-ID: <20261109140816.5196-7-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 7/9] selftests/bpf: Verify tracing_multi link_create logs
+Date: Mon,  9 Nov 2026 22:08:14 +0800
+Message-ID: <20261109140816.5196-8-leon.hwang@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261109140816.5196-1-leon.hwang@linux.dev>
 References: <20261109140816.5196-1-leon.hwang@linux.dev>
@@ -89,36 +89,35 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check the error code, log message, and reported log size for invalid
-tracing and freplace link creation parameters. Cover reattachment and
-attach-target checks, including incompatible kprobe_write_ctx settings.
+Check the error code, log message, and reported log size for a zero or
+excessive count, missing IDs, invalid flags, and a nonzero target FD.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- .../selftests/bpf/prog_tests/tracing_link.c   | 275 ++++++++++++++++++
- 1 file changed, 275 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_link.c
+ .../selftests/bpf/prog_tests/tracing_link.c   | 102 ++++++++++++++++++
+ 1 file changed, 102 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_link.c b/tools/testing/selftests/bpf/prog_tests/tracing_link.c
-new file mode 100644
-index 000000000000..1b64cb3e9983
---- /dev/null
+index 1b64cb3e9983..6f22a21be946 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_link.c
 +++ b/tools/testing/selftests/bpf/prog_tests/tracing_link.c
-@@ -0,0 +1,275 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+#include "fentry_recursive.skel.h"
-+#include "priv_freplace_prog.skel.h"
-+#include "xdp_dummy.skel.h"
-+#include "kprobe_write_ctx.skel.h"
+@@ -5,6 +5,7 @@
+ #include "priv_freplace_prog.skel.h"
+ #include "xdp_dummy.skel.h"
+ #include "kprobe_write_ctx.skel.h"
++#include "tracing_multi_fail.skel.h"
+ 
+ static void test_fentry_link_create_log(int target_fd, __u32 target_btf_id, int cookie,
+ 					enum bpf_attach_type attach_type,
+@@ -273,3 +274,104 @@ void test_tracing_link_log(void)
+ 	if (test__start_subtest("invalid_kprobe_write_ctx"))
+ 		test_log_invalid_kprobe_write_ctx();
+ }
 +
-+static void test_fentry_link_create_log(int target_fd, __u32 target_btf_id, int cookie,
-+					enum bpf_attach_type attach_type,
-+					bool reattach, const char *msg)
++static void test_tracing_multi_link_create_log(int target_fd, __u32 flags, const __u32 *ids,
++					       __u32 cnt, int err_exp, const char *msg)
 +{
-+	struct fentry_recursive *skel = NULL;
-+	struct xdp_dummy *target;
++	struct tracing_multi_fail *skel;
 +	char log_buf[128] = {};
 +	int err, fd, prog_fd;
 +	LIBBPF_OPTS(bpf_log_opts, log_opts,
@@ -128,134 +127,22 @@ index 000000000000..1b64cb3e9983
 +	);
 +	LIBBPF_OPTS(bpf_link_create_opts, opts,
 +		    .log_opts = &log_opts,
-+		    .target_btf_id = target_btf_id,
-+		    .tracing.cookie = cookie,
++		    .flags = flags,
++		    .tracing_multi.ids = ids,
++		    .tracing_multi.cnt = cnt,
 +	);
 +
-+	target = xdp_dummy__open_and_load();
-+	if (!ASSERT_OK_PTR(target, "xdp_dummy__open_and_load"))
++	skel = tracing_multi_fail__open();
++	if (!ASSERT_OK_PTR(skel, "tracing_multi_fail__open"))
 +		return;
 +
-+	skel = fentry_recursive__open();
-+	if (!ASSERT_OK_PTR(skel, "fentry_recursive__open"))
++	bpf_program__set_autoload(skel->progs.test_fentry_s, false);
++	err = tracing_multi_fail__load(skel);
++	if (!ASSERT_OK(err, "tracing_multi_fail__load"))
 +		goto out;
 +
-+	err = bpf_program__set_attach_target(skel->progs.recursive_attach,
-+					     bpf_program__fd(target->progs.xdp_dummy_prog),
-+					     "xdp_dummy_prog");
-+	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
-+		goto out;
-+
-+	err = fentry_recursive__load(skel);
-+	if (!ASSERT_OK(err, "fentry_recursive__load"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(skel->progs.recursive_attach);
-+	if (reattach) {
-+		/* Consume the initial target saved when the program was loaded. */
-+		fd = bpf_link_create(prog_fd, 0, BPF_TRACE_FENTRY, &opts);
-+		if (!ASSERT_GE(fd, 0, "bpf_link_create first"))
-+			goto out;
-+
-+		close(fd);
-+		memset(log_buf, 0, sizeof(log_buf));
-+		log_opts.true_size = 0;
-+	}
-+
-+	fd = bpf_link_create(prog_fd, target_fd, attach_type, &opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_link_create")) {
-+		close(fd);
-+		goto out;
-+	}
-+
-+	ASSERT_EQ(fd, -EINVAL, "err");
-+	ASSERT_STREQ(log_buf, msg, "log_buf");
-+	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
-+
-+out:
-+	fentry_recursive__destroy(skel);
-+	xdp_dummy__destroy(target);
-+}
-+
-+static void test_log_invalid_attach_type(void)
-+{
-+	const char *msg = "Invalid attach_type.\n";
-+
-+	test_fentry_link_create_log(0, 0, 0, BPF_XDP, false, msg);
-+}
-+
-+static void test_log_tgt_prog_fd_only(void)
-+{
-+	const char *msg = "tgt_prog_fd and btf_id must be both set or both unset.\n";
-+
-+	test_fentry_link_create_log(-1, 0, 1, BPF_TRACE_FENTRY, false, msg);
-+}
-+
-+static void test_log_tgt_prog_fd_disallowed(void)
-+{
-+	const char *msg = "tgt_prog_fd is only allowed for freplace prog.\n";
-+
-+	test_fentry_link_create_log(-1, 1, 0, BPF_TRACE_FENTRY, false, msg);
-+}
-+
-+static void test_log_invalid_attach_btf(void)
-+{
-+	const char *msg = "Invalid attach_btf.\n";
-+
-+	test_fentry_link_create_log(0, 0, 1, BPF_TRACE_FENTRY, true, msg);
-+}
-+
-+static void test_freplace_link_create_log(int target_fd, __u32 target_btf_id, int err_exp,
-+					  bool reattach, const char *msg)
-+{
-+	struct priv_freplace_prog *skel = NULL;
-+	char log_buf[256] = {};
-+	struct xdp_dummy *xdp;
-+	int err, fd, prog_fd;
-+	LIBBPF_OPTS(bpf_log_opts, log_opts,
-+		    .buf = log_buf,
-+		    .size = sizeof(log_buf),
-+		    .level = 1,
-+	);
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .log_opts = &log_opts,
-+		    .target_btf_id = target_btf_id,
-+	);
-+
-+	xdp = xdp_dummy__open_and_load();
-+	if (!ASSERT_OK_PTR(xdp, "xdp_dummy__open_and_load"))
-+		return;
-+
-+	skel = priv_freplace_prog__open();
-+	if (!ASSERT_OK_PTR(skel, "priv_freplace_prog__open"))
-+		goto out;
-+
-+	err = bpf_program__set_attach_target(skel->progs.new_xdp_prog2,
-+					     bpf_program__fd(xdp->progs.xdp_dummy_prog),
-+					     "xdp_dummy_prog");
-+	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
-+		goto out;
-+
-+	err = priv_freplace_prog__load(skel);
-+	if (!ASSERT_OK(err, "priv_freplace_prog__load"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(skel->progs.new_xdp_prog2);
-+	if (reattach) {
-+		/* Consume the initial target saved when the program was loaded. */
-+		fd = bpf_link_create(prog_fd, 0, 0, &opts);
-+		if (!ASSERT_GE(fd, 0, "bpf_link_create first"))
-+			goto out;
-+
-+		close(fd);
-+		memset(log_buf, 0, sizeof(log_buf));
-+		log_opts.true_size = 0;
-+	}
-+
-+	if (!target_fd && target_btf_id)
-+		target_fd = bpf_program__fd(xdp->progs.xdp_dummy_prog);
-+
-+	fd = bpf_link_create(prog_fd, target_fd, 0, &opts);
++	prog_fd = bpf_program__fd(skel->progs.test_fentry);
++	fd = bpf_link_create(prog_fd, target_fd, BPF_TRACE_FENTRY_MULTI, &opts);
 +	if (!ASSERT_LT(fd, 0, "bpf_link_create")) {
 +		close(fd);
 +		goto out;
@@ -266,120 +153,67 @@ index 000000000000..1b64cb3e9983
 +	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
 +
 +out:
-+	priv_freplace_prog__destroy(skel);
-+	xdp_dummy__destroy(xdp);
++	tracing_multi_fail__destroy(skel);
 +}
 +
-+static void test_log_invalid_target_fd(void)
++static void test_multi_log_zero_count(void)
 +{
-+	const char *msg = "Invalid tgt_prog_fd.\n";
++	const char *msg = "tracing_multi.cnt cannot be zero.\n";
++	__u32 id = 0;
 +
-+	test_freplace_link_create_log(-1, 1, -EBADF, false, msg);
++	test_tracing_multi_link_create_log(0, 0, &id, 0, -EINVAL, msg);
 +}
 +
-+static void test_log_reattach_without_target(void)
++static void test_multi_log_missing_ids(void)
 +{
-+	const char *msg = "Only allow re-attach for tracing and lsm progs.\n";
++	const char *msg = "tracing_multi.ids must be set.\n";
 +
-+	test_freplace_link_create_log(0, 0, -EINVAL, true, msg);
++	test_tracing_multi_link_create_log(0, 0, NULL, 1, -EINVAL, msg);
 +}
 +
-+static void test_log_invalid_target_btf_id(void)
++static void test_multi_log_excessive_count(void)
 +{
-+	const char *msg = "attach_btf_id 4294967295 is invalid\n";
++	const char *msg = "tracing_multi.cnt is too large.\n";
++	__u32 id = 0;
 +
-+	test_freplace_link_create_log(0, ~0U, -EINVAL, false, msg);
++	test_tracing_multi_link_create_log(0, 0, &id, INT_MAX, -E2BIG, msg);
 +}
 +
-+#ifdef __x86_64__
-+static void test_log_invalid_kprobe_write_ctx(void)
++static void test_multi_log_invalid_flags(void)
 +{
-+	struct kprobe_write_ctx *skel_kprobe, *skel_freplace = NULL;
-+	struct bpf_program *prog_kprobe, *prog_freplace;
-+	const char *msg = "Invalid kprobe_write_ctx.\n";
-+	int err, prog_fd, btf_id, fd;
-+	char log_buf[128] = {};
-+	LIBBPF_OPTS(bpf_log_opts, log_opts,
-+		    .buf = log_buf,
-+		    .size = sizeof(log_buf),
-+		    .level = 1,
-+	);
-+	LIBBPF_OPTS(bpf_link_create_opts, link_opts,
-+		    .log_opts = &log_opts,
-+	);
++	const char *msg = "Invalid flags.\n";
++	__u32 id = 0;
 +
-+	skel_kprobe = kprobe_write_ctx__open();
-+	if (!ASSERT_OK_PTR(skel_kprobe, "kprobe_write_ctx__open kprobe"))
-+		return;
-+
-+	prog_kprobe = skel_kprobe->progs.kprobe_dummy;
-+	bpf_program__set_autoload(prog_kprobe, true);
-+
-+	err = kprobe_write_ctx__load(skel_kprobe);
-+	if (!ASSERT_OK(err, "kprobe_write_ctx__load kprobe"))
-+		goto out;
-+
-+	skel_freplace = kprobe_write_ctx__open();
-+	if (!ASSERT_OK_PTR(skel_freplace, "kprobe_write_ctx__open freplace"))
-+		goto out;
-+
-+	prog_freplace = skel_freplace->progs.freplace_kprobe;
-+	bpf_program__set_autoload(prog_freplace, true);
-+
-+	prog_fd = bpf_program__fd(skel_kprobe->progs.kprobe_write_ctx);
-+	bpf_program__set_attach_target(prog_freplace, prog_fd, "kprobe_write_ctx");
-+
-+	err = kprobe_write_ctx__load(skel_freplace);
-+	if (!ASSERT_OK(err, "kprobe_write_ctx__load freplace"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(prog_kprobe);
-+	btf_id = btf__find_by_name_kind(bpf_object__btf(skel_kprobe->obj), "kprobe_dummy",
-+					BTF_KIND_FUNC);
-+	if (!ASSERT_GT(btf_id, 0, "btf__find_by_name_kind"))
-+		goto out;
-+
-+	link_opts.target_btf_id = btf_id;
-+	fd = bpf_link_create(bpf_program__fd(prog_freplace), prog_fd, 0, &link_opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_link_create")) {
-+		close(fd);
-+		goto out;
-+	}
-+
-+	ASSERT_EQ(fd, -EINVAL, "err");
-+	ASSERT_STREQ(log_buf, msg, "log_buf");
-+	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
-+
-+out:
-+	kprobe_write_ctx__destroy(skel_freplace);
-+	kprobe_write_ctx__destroy(skel_kprobe);
++	test_tracing_multi_link_create_log(0, 1, &id, 1, -EINVAL, msg);
 +}
-+#else
-+static void test_log_invalid_kprobe_write_ctx(void)
++
++static void test_multi_log_invalid_target_fd(void)
 +{
++	const char *msg = "Invalid target_fd.\n";
++	__u32 id = 0;
++
++	test_tracing_multi_link_create_log(-1, 0, &id, 1, -EINVAL, msg);
++}
++
++void test_tracing_multi_link_log(void)
++{
++#ifndef __x86_64__
 +	test__skip();
-+}
++	return;
 +#endif
 +
-+void test_tracing_link_log(void)
-+{
-+	if (test__start_subtest("invalid_attach_type"))
-+		test_log_invalid_attach_type();
-+	if (test__start_subtest("tgt_prog_fd_only"))
-+		test_log_tgt_prog_fd_only();
-+	if (test__start_subtest("tgt_prog_fd_disallowed"))
-+		test_log_tgt_prog_fd_disallowed();
-+	if (test__start_subtest("invalid_attach_btf"))
-+		test_log_invalid_attach_btf();
++	if (test__start_subtest("zero_count"))
++		test_multi_log_zero_count();
++	if (test__start_subtest("missing_ids"))
++		test_multi_log_missing_ids();
++	if (test__start_subtest("excessive_count"))
++		test_multi_log_excessive_count();
++	if (test__start_subtest("invalid_flags"))
++		test_multi_log_invalid_flags();
 +	if (test__start_subtest("invalid_target_fd"))
-+		test_log_invalid_target_fd();
-+	if (test__start_subtest("reattach_without_target"))
-+		test_log_reattach_without_target();
-+	if (test__start_subtest("invalid_target_btf_id"))
-+		test_log_invalid_target_btf_id();
-+	if (test__start_subtest("invalid_kprobe_write_ctx"))
-+		test_log_invalid_kprobe_write_ctx();
++		test_multi_log_invalid_target_fd();
 +}
++
 -- 
 2.55.0
 
