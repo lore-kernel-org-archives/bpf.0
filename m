@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794248352;
-	b=rOfIz/RMR2gUpTcaWmypWlvOkzZ6DYMmzTDjOyTWRB8TTrU1XD0QVZ2hp0ZNBeq0ZBHu
-	 eJmQjlazgQfJHuGHqr1LCP6oy7ViL4csAWBC7S388QrTglu/1uGG69AOYBR2d9htmX2kI
-	 H86GGZn8cuBpcDWiuhMiz1Vp02A7pzr4EXjghjp3Q2ZnVZyq2bd9OyQ8XHCd7Ts5jHnUB
-	 IuY2ug+2N+T1TRvWOKcnjlpdLqrpLsTwA4CS7Ck+rT1QFD7DijqxZ1cAa4ksUrnhh37EK
-	 YRTxJ3PF1kwBpWsKs4a+08WRdqEIzEvlXY6UzivMORCmqB9DgpKV5oOXQRUXEqf5E3Q==
+	t=1794248460;
+	b=OPU0tsI7FR5taTB0GATVr6R7C18dOjyhIPNbL+RwbUogvYMDp1zbH2lPjIMU4Dt23A0A
+	 U28xNyXl/NEzBifxi8htAnav7wSX0ajlAhap/kOjsnd4wa1YIIpkN9vdMuK5py3SqWAth
+	 Ca1OF2MGnHRFTJjibeP16nKZPhiSIhz5Edq9AnmPmF+HORU77+BD+KjX2nxZCra+53YXC
+	 vBCa2V9H/HlbRXtfHhdUXvGy/SaQcJahTpQ7HzsmcPQPMe+f0zY1nSwUK8vH+T9s4icfP
+	 4bO68Y4TP4xhj9Gr/svKhof0k5BwkapUwhpwvnyjxcOHUo6zYGGWwUb0DO0z9EnzWAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794248352;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794248460;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=ze5Ez45dpI/3W58jQlo9WmoRmJZK5BlJaZyFSUVnITM=;
-	b=MVy9IPc4dWv+FQvx51ZC9snEvuBCtV9Z2QG6AxGN/cHmbPwAjvjbwb9uQfKeBe9gZKos
-	 uyq9h7YdqkDONTcsvTySl2rzjh23ElXmn3cObh8LnpxcIZS9UvZ3Q0vtsxVfDaa8/5tCB
-	 Z5v/MNJnt98S/BIrw3aVCHZuoys1z7K/KimuETWvm5QvaYpdn7OIgcT2PZE/3NiJxSHvu
-	 eEAddJbpCmSpqN1IouJJ2Ny/Gg+vMTHpUhLHWVaeRTva2tEb5stuUKKbZZX8m4mOneQmg
-	 sPPrOeHoMGFbpvM4+D6WbdgYdybk3CHne1lvQxDTv2kDlmygzr0E8fs7e9CE5qG2BMw==
+	bh=d/MfMlM8XGgAJJIuusCwscxzvQuKTLjHmuXDzRYpdVE=;
+	b=5FhTlxJfdZd/fFcXTHPWgcE+IBVzkCgVGFYa0V7gsuNDmsfiu2zKfUw/jqaEuOiGppeZ
+	 kkFfSLAi9v1R38SYb+6As45VOgvH94SwuQ8vw2n8Vnzjo1uuhd6M6hxB3+u5FMgrsmADA
+	 8HRBrQ/iNzc3ORvPYmOl69V6xNNW+S5Hg7pmyQ4BJfgSiH5MRKFoRbzOtF/dH/7HJS8eW
+	 E4Kv9AvUaJL8I95Q7sKNi0ylRPgIXYFzADHba52v7wo+//tN2FGRkJdOBvc35Aarawdsc
+	 BI7ttea84HBwAZnyTQ/jWX6LUS/dg+RkBeQ2Ibu1UZpyxGreiuUmF/IuWyONS4dcPBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=etsalapatis.com;
 	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=GVieBLN4;
-	arc=none smtp.remote-ip=209.85.214.175
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=fm00xD7W;
+	arc=none smtp.remote-ip=209.85.216.48
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FFC606A321
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 18:19:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 78FFC606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D4660A261E
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 18:21:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 74D4660A261E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=GVieBLN4
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ed11653a91so5011175ad.2
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 10:19:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=fm00xD7W
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3b0d0b80fb9so719661a91.1
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 10:21:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis.com; s=google; t=1794248351; x=1794853151; darn=vger.kernel.org;
+        d=etsalapatis.com; s=google; t=1794248460; x=1794853260; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ze5Ez45dpI/3W58jQlo9WmoRmJZK5BlJaZyFSUVnITM=;
-        b=GVieBLN4DseWsXUNvz5cLB59JFQt4b8sTRnc9+2LeEJkETlzA8CUE/yCDW22wn+Dtp
-         ug0ZOc0rfmSUIw8/bY3Ac1nWmhHKsd1hCdm77SB9fUzMfcj+mWyKVm7wVEQ9eGfkz3y4
-         w9Z+K3wTRlp2lMA+g4yDDVhvSqDEVoXGeTwuUjXQzLZvEPLEg3QVy7Mt54fkWxSU4KV9
-         CreyeOq1dpFe0kQoLi7kV3mZAyP5bIpai32117P6Mk37dHoanJnBypZ/2w9aMG39ixAO
-         d1iAlX0MLZVRYhgjTLebyXwAmwfsbnDYfovgA206F35HaLuId9CYFIe2W14ML7tbhu+h
-         8cWw==
+        bh=d/MfMlM8XGgAJJIuusCwscxzvQuKTLjHmuXDzRYpdVE=;
+        b=fm00xD7W1Wn2w/btYALEo0HtCrwTF0ZVdCYxqxDk5wOx4tx8nqPUQ4i2taa25lVqHh
+         qX0VrGXqPIQSBfhpe1VV8Sf44GpLG34F4JI76IRzzTbxCqAzc4DoF+p2HKH/Hkjoj0UT
+         ootem1scc8siRqH4tlUDkap4pwXXpHsoyLriUUxcsRW0lSTLIkwYH6mA3GqOQfRW5miM
+         nMByFK7o8LEhTj1PvvPtjkgf0EFgGNU54xVemGlc67+DeKhCJhxVEaff3OAExncC9fh1
+         7f52kVjDl8QBGXsCcKE58u9QYX3JPmcftb/x6oDUpnFZgdX36N+Af2Uo961HdZhTB6Sc
+         zLVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794248351; x=1794853151;
+        d=1e100.net; s=20260707; t=1794248460; x=1794853260;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ze5Ez45dpI/3W58jQlo9WmoRmJZK5BlJaZyFSUVnITM=;
-        b=OgGBV1JpTxWaUysQYXpmHTPF7VL2Zq0XOIdDEAWBtMi6/pqqTQN/A9PDAlQLMk2Tar
-         kjLZ7GVm+OzybtTxWmPMSU2xryYhVxyvzisPh5zadCC7UDBJ/9Kh6KgLiN60+VHD2YCG
-         X0dynSvOx3H83qgBnPIuoatrmt3bqhtCGyt8lPrKuC3lYjEd2k+GBuqCS2t7VPUkYFvx
-         TyQ8/PkMIFQIWbWOqZwPZ6ZE+vFmqmqdC/WPsQOxbaHaKs4O3nYeDUZR6DkGAp4gFbTi
-         +zVzmD1LAADfGKcGyh+0ymUUZ/HWSujjQKz5GrYQdj+Axf7FyB1idjeOaZK2IEdDstCs
-         kiSA==
-X-Gm-Message-State: APuU4Z/KuQWv9u5ClscfHYYNvQ+8tL9aP8bAxcR35rwiFQ0y6sKNgf/i
-	LcuzhcYq8GqMEZg72oi/QObMFlUqf6K8eSD8gU1P1j3Ywc1rLPTYIU4QwHnKkvQpWl6vvp2nwxr
-	b0hFe2DE=
-X-Gm-Gg: AYBFou3c7Ciddh5zfQlK9n6OOAwv7WL/5iXxZZ4eGWLPxvGfVohTAtUEeu+FJs0aRrG
-	fmqHMBViuvKecIG9jHif3qJ/atOUldhyCmSwDFIEbQ6fWS4iyMlPzLesmY6aPV8ieOw4n9U4HYK
-	5y71EgoBApok2Gy0rMYAKktDqltCkvSuTuKtu1V9N5ljMQoS5eqVg6TDjVNu3gZdtVPq9OplDNN
-	VxDPISe8606owy0uStXqHIOju2+tH/hCJC0aLuaBBvdgVSXeIH/e0Erq2K/1gmSeOR4iiC1ThyU
-	yJNXQDkLHI2kWvOAybhs0fJEIpCEAJ3lbFqf4iPBv9ZM3U0gAH04G6o59j4mBCAwG+IaRCBvzFu
-	U5ckYV7UqvfvT0wEPSa8j2s9fqpqVOI8Y+pCmlZ274NAplqCo+GdOe8ucpOjAmsOjnkD6BEi32Z
-	cvzo8ChMFjJfOnVQPtXmrrbHMaCdapZJmm/+6C6phl/bM91720vNQyLIZB4E5K45iZC+tordQqu
-	WTljhCsUTRtfs/en0OpTBNOuS2xIPSpJgONbJFOvizqVQO3/IZopuY1aatRg3nx+wTnNY+Yesmp
-	Bu6w/fx2o6F6b3HmkVkacsENmhpoHRytc3Sgna790gcFXZI6rrLKd5yv6AfQ5BWtt+AMdikzr/4
-	MomLYLF4PkPPERsy/OUqbpTcUbtLHKwG2XJvqLCsX6i0XST+j
-X-Received: by 2002:a17:90b:4a8d:b0:3a4:bd4e:6d15 with SMTP id 98e67ed59e1d1-3b166f9ebc9mr440133a91.34.1794248350724;
-        Mon, 09 Nov 2026 10:19:10 -0800 (PST)
+        bh=d/MfMlM8XGgAJJIuusCwscxzvQuKTLjHmuXDzRYpdVE=;
+        b=vG2ieZv2KHrHZTfowAUSeisuG0icwMXJTfWFOsr5C2mKDW4PsL5BuRtcPFV7t4s32G
+         7v1NuaYFBHb5dlSzBJinD/Fh09WhFa80C2394MD7xfY9aSSctps1+IhV10t4qF6C1dio
+         76IrE1WgCIhIVdDIv5HTx3Q6YvMcITGHpZ6hZHWHhvguMUwPm3rGKzHfwTpPH051Q4s+
+         oD5LmBeUK91jeE27Iu6Gckx0WVxS7GoQC2qlAvueaP3Ul19m4PxxKvVaHGeYb7y/f2TJ
+         KVulfoS5OysTvaKzUOzXEUoTxU+MGM3NnYMGw4GWSvIoO0j46IV8x2VgO+lwy0CefKGC
+         mCAQ==
+X-Gm-Message-State: APuU4Z8INgMzE44ck7kqp7GfnG3Rsq5nBV1SB2Dt9X7CKG8w0veiCzMt
+	sfQ0/KN/T6RFF5Z04MYELiIiqARS7JJH9X62a29HNisK45bO1eJd42wa/W5WXXkZPa23E0aa0Ie
+	SeVKQonA=
+X-Gm-Gg: AYBFou3EuQhpdOOWih/5n5Xn9WMeecMdXT/Zx0UltpUZMuC7tjh1o3h2I3GPHS1VKGq
+	2Lq1DO6xN52YXcD2lgID5nqE7xKfgTG1xhXFdmKsH90TsV8wXnQaPbGLoG2bKEXWgfz9aJhuBnx
+	d4MJxxIN57eDrn7wMV79hKSPHpAgZE1ONVDx2x8lE9Gw31njOryNultSQQNQHQdvnS9bljeTCYk
+	ICC9+qO9WPxq3XVaqfirZi55C6IJGC1gKcxkxCefQ+L71NT9OccEIuLxNmDYiKPtxqdnFFKGAf2
+	FEWpWnCX+osXQyDBp4auC96461EgcJhreGm1RV4ViJr5YDD/Oo0OZ3X64B4MD50QKoNJyx6tQ1A
+	onGajM8d6KqKWUiXbyAMLtgMrxbtDdn9iM/RTVkfRfoXmGTal9MjS6If7Sgoq43/OFvRjSQEf38
+	KnTNjEoLZlkiGOSnXifQnXxWUgJxPJrApbVL5nGlsFUnBqdmNR9lGIVhsGpaZb4MDerZhGUILvK
+	bVzXGRtLKO68JG/54U8jgriXWbLP/nMYyCNFquDDovm8r0zBWkPR/PFSlJiHLjIQV4592OscMzb
+	TVLNNOXoFbmUr9Q5NxQ3VppFrfbCbC239QG2eFk9wJ5v1QYp1bzFiUlqG0ndwzncEE4/ajzgwQM
+	fLwT5l4pEPiN0BYlTBXgWPhDY7hU=
+X-Received: by 2002:a17:90a:e7cd:b0:3ad:c482:ae9a with SMTP id 98e67ed59e1d1-3b166b42013mr473591a91.1.1794248459724;
+        Mon, 09 Nov 2026 10:20:59 -0800 (PST)
 Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b16769b937sm481075a91.4.2026.11.09.10.19.09
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b1676e2974sm474860a91.9.2026.11.09.10.20.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 10:19:10 -0800 (PST)
+        Mon, 09 Nov 2026 10:20:59 -0800 (PST)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -87,12 +87,12 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: add arena fault recovery tests
-Date: Mon,  9 Nov 2026 18:19:06 +0000
-Message-ID: <20261109181906.7350-3-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v4 1/9] selftests/bpf: libarena: Add bulk buddy allocation helpers
+Date: Mon,  9 Nov 2026 18:20:46 +0000
+Message-ID: <20261109182055.7581-2-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261109181906.7350-1-emil@etsalapatis.com>
-References: <20261109181906.7350-1-emil@etsalapatis.com>
+In-Reply-To: <20261109182055.7581-1-emil@etsalapatis.com>
+References: <20261109182055.7581-1-emil@etsalapatis.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,279 +104,323 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Test the arena fault handling code with two new selftests.
-The first one confirms that a program without an arena (and
-by extension a code path that doesn't involve BPF at all)
-properly recovers after accessing an unbacked arena page.
-The second test deploys the same configuration for a program
-that has its own arena map.
+The buddy allocator currently allocates and frees one object at a time.
+Callers that need a group of equal-sized objects consequently take the
+allocator lock and repeat the same split operations for every object.
+
+Add buddy_alloc_bulk(), which obtains one block and divides it into a
+power-of-two number of independently freeable objects. Add
+buddy_free_bulk() to free an arbitrary array of objects while holding the
+allocator lock once. Bulk frees cannot avoid coalescing each object
+independently, but they still amortize lock acquisition.
+
+buddy_free_bulk() fails only when its arguments are invalid or it cannot
+take the allocator lock, in which case nothing was freed. Objects that
+cannot be freed are reported individually, so a caller can tell from the
+return value alone whether the array still owns its objects.
+
+The per-CPU caches added later use this interface to populate a cache with
+one trip through the central allocator.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- .../selftests/bpf/prog_tests/arena_fault.c    | 100 ++++++++++++++++++
- .../testing/selftests/bpf/progs/arena_fault.c |  65 ++++++++++++
- .../selftests/bpf/progs/arena_fault_noarena.c |  17 +++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  22 ++++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |   3 +
- 5 files changed, 207 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fault.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_fault.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_fault_noarena.c
+ .../bpf/libarena/include/libarena/buddy.h     |   6 +
+ .../selftests/bpf/libarena/src/buddy.bpf.c    | 148 ++++++++++++++----
+ 2 files changed, 125 insertions(+), 29 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_fault.c b/tools/testing/selftests/bpf/prog_tests/arena_fault.c
-new file mode 100644
-index 000000000000..8bde1f67e4b4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_fault.c
-@@ -0,0 +1,100 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include "arena_fault.skel.h"
-+#include "arena_fault_noarena.skel.h"
-+
-+static int run_syscall_prog(struct bpf_program *prog, const char *name)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	int err;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-+	if (!ASSERT_OK(err, name))
-+		return -1;
-+	if (!ASSERT_OK(opts.retval, name))
-+		return -1;
-+	return 0;
-+}
-+
-+static void test_wrong_arena(void)
-+{
-+	struct arena_fault *fault_skel = NULL;
-+	struct arena_fault *stash_skel = NULL;
-+
-+	stash_skel = arena_fault__open();
-+	if (!ASSERT_OK_PTR(stash_skel, "open_stash"))
-+		return;
-+
-+	if (stash_skel->data->skip) {
-+		test__skip();
-+		goto out;
-+	}
-+	if (!ASSERT_OK(arena_fault__load(stash_skel), "load_stash"))
-+		goto out;
-+
-+	fault_skel = arena_fault__open_and_load();
-+	if (!ASSERT_OK_PTR(fault_skel, "open_load_fault"))
-+		goto out;
-+
-+	if (run_syscall_prog(stash_skel->progs.stash_and_free, "stash_and_free"))
-+		goto out;
-+	run_syscall_prog(fault_skel->progs.fault_stashed_wrong_arena,
-+			 "fault_stashed_wrong_arena");
-+
-+out:
-+	if (stash_skel && bpf_program__fd(stash_skel->progs.clear_stashed) >= 0)
-+		run_syscall_prog(stash_skel->progs.clear_stashed, "clear_stashed");
-+	arena_fault__destroy(fault_skel);
-+	arena_fault__destroy(stash_skel);
-+}
-+
-+static void test_no_arena(void)
-+{
-+	struct arena_fault_noarena *fault_skel = NULL;
-+	struct arena_fault *stash_skel = NULL;
-+
-+	stash_skel = arena_fault__open();
-+	if (!ASSERT_OK_PTR(stash_skel, "open_stash"))
-+		return;
-+
-+	if (stash_skel->data->skip) {
-+		test__skip();
-+		goto out;
-+	}
-+	if (!ASSERT_OK(arena_fault__load(stash_skel), "load_stash"))
-+		goto out;
-+
-+	fault_skel = arena_fault_noarena__open_and_load();
-+	if (!ASSERT_OK_PTR(fault_skel, "open_load_noarena"))
-+		goto out;
-+
-+	if (run_syscall_prog(stash_skel->progs.stash_and_free, "stash_and_free"))
-+		goto out;
-+	run_syscall_prog(fault_skel->progs.fault_stashed_noarena,
-+			 "fault_stashed_noarena");
-+
-+out:
-+	if (stash_skel && bpf_program__fd(stash_skel->progs.clear_stashed) >= 0)
-+		run_syscall_prog(stash_skel->progs.clear_stashed, "clear_stashed");
-+	arena_fault_noarena__destroy(fault_skel);
-+	arena_fault__destroy(stash_skel);
-+}
-+
-+void serial_test_arena_fault(void)
-+{
-+#if !defined(__x86_64__) && !defined(__aarch64__)
-+	test__skip();
-+	return;
-+#endif
-+
-+	if (!env.has_testmod) {
-+		test__skip();
-+		return;
-+	}
-+
-+	if (test__start_subtest("wrong_arena"))
-+		test_wrong_arena();
-+	if (test__start_subtest("no_arena"))
-+		test_no_arena();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/arena_fault.c b/tools/testing/selftests/bpf/progs/arena_fault.c
-new file mode 100644
-index 000000000000..89fde45217dc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/arena_fault.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define BPF_NO_KFUNC_PROTOTYPES
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_arena_common.h"
-+#include "../test_kmods/bpf_testmod_kfunc.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 2);
-+} arena SEC(".maps");
-+
-+u64 __arena arena_pad;
-+volatile u64 observed;
-+
-+#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
-+bool skip SEC(".data") = false;
-+#else
-+bool skip = true;
-+#endif
-+
-+SEC("syscall")
-+int stash_and_free(void *ctx)
-+{
-+#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
-+	u64 __arena *val;
-+
-+	val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (!val)
-+		return 1;
-+
-+	*val = 42;
-+	bpf_test_arena_fault_stash((u64 *)val);
-+	bpf_arena_free_pages(&arena, val, 1);
-+#endif
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int fault_stashed_wrong_arena(void *ctx)
-+{
-+#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
-+	u64 __arena *val;
-+
-+	val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (!val)
-+		return 1;
-+
-+	*val = 1;
-+	observed = bpf_test_arena_fault_load_stashed();
-+	bpf_arena_free_pages(&arena, val, 1);
-+#endif
-+	return observed != 0;
-+}
-+
-+SEC("syscall")
-+int clear_stashed(void *ctx)
-+{
-+	bpf_test_arena_fault_clear_stashed();
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/arena_fault_noarena.c b/tools/testing/selftests/bpf/progs/arena_fault_noarena.c
-new file mode 100644
-index 000000000000..7bb0e6dbd260
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/arena_fault_noarena.c
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define BPF_NO_KFUNC_PROTOTYPES
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "../test_kmods/bpf_testmod_kfunc.h"
-+
-+volatile u64 observed;
-+
-+SEC("syscall")
-+int fault_stashed_noarena(void *ctx)
-+{
-+	observed = bpf_test_arena_fault_load_stashed();
-+	return observed != 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 76fbe64755ef..f33a7345f9ce 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -344,6 +344,25 @@ __bpf_kfunc u64 bpf_kfunc_arena_mixed_test(u64 *a__arena, u64 *b__arena__nullabl
- 	return *a__arena + (b__arena__nullable ? *b__arena__nullable : 0);
+diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
+index 90674ac077df..4c96307e2a2d 100644
+--- a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
++++ b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
+@@ -76,8 +76,14 @@ struct buddy {
+ int buddy_init(struct buddy __arena *buddy);
+ int buddy_destroy(struct buddy __arena *buddy);
+ int buddy_free(struct buddy __arena *buddy, void __arena *free);
++int buddy_free_bulk(struct buddy __arena *buddy, void __arena * __arena *addrs,
++	size_t naddrs);
+ void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size);
+ void __arena *buddy_alloc_nogrow(struct buddy __arena *buddy, size_t size);
+ int buddy_grow(struct buddy __arena *buddy, size_t nr_chunks);
++int buddy_alloc_bulk(struct buddy __arena *buddy, size_t size, size_t norder,
++	void __arena * __arena *out);
++int buddy_alloc_bulk_nogrow(struct buddy __arena *buddy, size_t size, size_t norder,
++	void __arena * __arena *out);
+ 
+ #endif /* __BPF__  */
+diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+index d12c8924a0ad..514d0a59eaff 100644
+--- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+@@ -628,7 +628,7 @@ __weak int buddy_destroy(struct buddy __arena *buddy)
+ 	return 0;
  }
  
-+static u64 *arena_fault_stashed_ptr;
-+
-+__bpf_kfunc void bpf_test_arena_fault_stash(u64 *ptr__arena)
-+{
-+	WRITE_ONCE(arena_fault_stashed_ptr, ptr__arena);
-+}
-+
-+__bpf_kfunc u64 bpf_test_arena_fault_load_stashed(void)
-+{
-+	u64 *ptr = READ_ONCE(arena_fault_stashed_ptr);
-+
-+	return ptr ? READ_ONCE(*ptr) : U64_MAX;
-+}
-+
-+__bpf_kfunc void bpf_test_arena_fault_clear_stashed(void)
-+{
-+	WRITE_ONCE(arena_fault_stashed_ptr, NULL);
-+}
-+
- __bpf_kfunc void bpf_kfunc_dynptr_test(struct bpf_dynptr *ptr,
- 				       struct bpf_dynptr *ptr__nullable)
+-__weak u64 buddy_chunk_alloc(struct buddy_chunk __arena *chunk, int order_req)
++__weak u64 buddy_chunk_alloc(struct buddy_chunk __arena *chunk, int order_req, int order_allocs)
  {
-@@ -1048,6 +1067,9 @@ BTF_ID_FLAGS(func, bpf_kfunc_arena_cap_nullable_test)
- BTF_ID_FLAGS(func, bpf_kfunc_arena_args5_test)
- BTF_ID_FLAGS(func, bpf_kfunc_arena_stack_arg_test)
- BTF_ID_FLAGS(func, bpf_kfunc_arena_mixed_test)
-+BTF_ID_FLAGS(func, bpf_test_arena_fault_stash)
-+BTF_ID_FLAGS(func, bpf_test_arena_fault_load_stashed)
-+BTF_ID_FLAGS(func, bpf_test_arena_fault_clear_stashed)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
- BTF_ID_FLAGS(func, bpf_kfunc_dynptr_test)
- BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_nonzero_offset_test, KF_ACQUIRE)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index e9902e651d72..9ec69fd57d98 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -212,6 +212,9 @@ __u64 bpf_kfunc_arena_args5_test(__u64 *a__arena, __u64 *b__arena,
- __u64 bpf_kfunc_arena_stack_arg_test(__u64 a, __u64 b, __u64 c, __u64 d, __u64 e,
- 				     __u64 *f__arena) __ksym;
- __u64 bpf_kfunc_arena_mixed_test(__u64 *a__arena, __u64 *b__arena__nullable) __ksym;
-+void bpf_test_arena_fault_stash(__u64 *ptr__arena) __ksym;
-+__u64 bpf_test_arena_fault_load_stashed(void) __ksym;
-+void bpf_test_arena_fault_clear_stashed(void) __ksym;
- int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size) __ksym;
- int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
- int *bpf_kfunc_call_test_acq_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
+ 	struct buddy_header __arena *header, *tmp_header, *next_header;
+ 	u32 idx, tmpidx, retidx;
+@@ -636,7 +636,7 @@ __weak u64 buddy_chunk_alloc(struct buddy_chunk __arena *chunk, int order_req)
+ 	u64 order = 0;
+ 	u64 i;
+ 
+-	for (order = order_req; order < BUDDY_CHUNK_NUM_ORDERS && can_loop; order++) {
++	for (order = order_req + order_allocs; order < BUDDY_CHUNK_NUM_ORDERS && can_loop; order++) {
+ 		if (chunk->freelists[order] != BUDDY_CHUNK_ITEMS)
+ 			break;
+ 	}
+@@ -658,11 +658,19 @@ __weak u64 buddy_chunk_alloc(struct buddy_chunk __arena *chunk, int order_req)
+ 
+ 	header->prev_index = BUDDY_CHUNK_ITEMS;
+ 	header->next_index = BUDDY_CHUNK_ITEMS;
+-	if (idx_set_order(chunk, retidx, order_req))
+-		return (u64)NULL;
++	/*
++	 * For a bulk allocation, record the allocation state and size
++	 * of each item separately so each can be freed independently.
++	 */
++	for (i = zero, idx = retidx; i < (1U << order_allocs) && can_loop; i++) {
++		if (idx_set_order(chunk, idx, order_req))
++			return (u64)NULL;
+ 
+-	if (idx_set_allocated(chunk, retidx, true))
+-		return (u64)NULL;
++		if (idx_set_allocated(chunk, idx, true))
++			return (u64)NULL;
++
++		idx += 1U << order_req;
++	}
+ 
+ 	/*
+ 	 * Do not unpoison the address yet, will be done by the caller
+@@ -673,7 +681,7 @@ __weak u64 buddy_chunk_alloc(struct buddy_chunk __arena *chunk, int order_req)
+ 		return (u64)NULL;
+ 
+ 	/* If we allocated from a larger-order chunk, split the buddies. */
+-	for (i = order_req; i < order && can_loop; i++) {
++	for (i = order_req + order_allocs; i < order && can_loop; i++) {
+ 		/*
+ 		 * Flip the bit for the current order (the bit is guaranteed
+ 		 * to be 0, so just add 1 << i).
+@@ -706,14 +714,14 @@ __weak u64 buddy_chunk_alloc(struct buddy_chunk __arena *chunk, int order_req)
+ }
+ 
+ /* Scan the existing chunks for available memory. */
+-static u64 buddy_alloc_from_existing_chunks(struct buddy __arena *buddy, int order)
++static u64 buddy_alloc_from_existing_chunks(struct buddy __arena *buddy, int order, int norder)
+ {
+ 	struct buddy_chunk __arena *chunk;
+ 	u64 address;
+ 
+ 	for (chunk = buddy->first_chunk; chunk != NULL && can_loop;
+ 	     chunk = chunk->next) {
+-		address = buddy_chunk_alloc(chunk, order);
++		address = buddy_chunk_alloc(chunk, order, norder);
+ 		if (address)
+ 			return address;
+ 	}
+@@ -725,7 +733,8 @@ static u64 buddy_alloc_from_existing_chunks(struct buddy __arena *buddy, int ord
+  * Try an allocation from a newly allocated chunk. Also
+  * incorporate the chunk into the linked list.
+  */
+-static u64 buddy_alloc_from_new_chunk(struct buddy __arena *buddy, struct buddy_chunk __arena *chunk, int order)
++static u64 buddy_alloc_from_new_chunk(struct buddy __arena *buddy, struct buddy_chunk __arena *chunk,
++		int order, int norder)
+ {
+ 	unsigned long flags;
+ 	u64 address;
+@@ -733,7 +742,6 @@ static u64 buddy_alloc_from_new_chunk(struct buddy __arena *buddy, struct buddy_
+ 	if (buddy_lock(buddy, flags))
+ 		return (u64)NULL;
+ 
+-
+ 	/*
+ 	 * Add the chunk into the allocator and try
+ 	 * to allocate specifically from that chunk.
+@@ -741,34 +749,35 @@ static u64 buddy_alloc_from_new_chunk(struct buddy __arena *buddy, struct buddy_
+ 	chunk->next = buddy->first_chunk;
+ 	buddy->first_chunk = chunk;
+ 
+-	address = buddy_chunk_alloc(buddy->first_chunk, order);
++	address = buddy_chunk_alloc(buddy->first_chunk, order, norder);
+ 
+ 	buddy_unlock(buddy, flags);
+ 
+ 	return (u64)address;
+ }
+ 
+-static __always_inline
+-void __arena *buddy_alloc_maygrow(struct buddy __arena *buddy, size_t size, bool grow)
++static void __arena *buddy_alloc_memory(struct buddy __arena *buddy, size_t size,
++		int order, size_t norder, bool grow)
+ {
+ 	void __arena *address = NULL;
++	u8 __arena *object;
+ 	struct buddy_chunk __arena *chunk;
++	unsigned int alloc_size;
++	unsigned int i, offset;
+ 	unsigned long flags;
+-	int order;
+ 
+ 	if (!buddy)
+ 		return NULL;
+ 
+-	order = size_to_order(size);
+-	if (order >= BUDDY_CHUNK_NUM_ORDERS || order < 0) {
+-		arena_stderr("invalid order %d (sz %lu)\n", order, size);
++	if (order < 0 || order >= BUDDY_CHUNK_NUM_ORDERS || norder >= BUDDY_CHUNK_NUM_ORDERS - order) {
++		arena_stderr("invalid order %d (norder %lu) (sz %lu)\n", order, norder, size);
+ 		return NULL;
+ 	}
+ 
+ 	if (buddy_lock(buddy, flags))
+ 		return NULL;
+ 
+-	address = (u8 __arena *)buddy_alloc_from_existing_chunks(buddy, order);
++	address = (u8 __arena *)buddy_alloc_from_existing_chunks(buddy, order, norder);
+ 	buddy_unlock(buddy, flags);
+ 	if (address)
+ 		goto done;
+@@ -779,23 +788,30 @@ void __arena *buddy_alloc_maygrow(struct buddy __arena *buddy, size_t size, bool
+ 	/* Get a new chunk. */
+ 	chunk = buddy_chunk_get(buddy);
+ 	if (chunk)
+-		address = (u8 __arena *)buddy_alloc_from_new_chunk(buddy, chunk, order);
++		address = (u8 __arena *)buddy_alloc_from_new_chunk(buddy, chunk, order, norder);
+ 
+ done:
+ 	/* If we failed to allocate memory, return NULL. */
+ 	if (!address)
+ 		return NULL;
+ 
++	alloc_size = BUDDY_MIN_ALLOC_BYTES << order;
++
+ 	/*
+-	 * Unpoison exactly the amount of bytes requested. If the
+-	 * data is smaller than the header, we must poison any
+-	 * unused bytes that were part of the header.
++	 * Unpoison exactly the requested bytes in each allocation. Keep
++	 * the padding between the requested size and the rounded buddy
++	 * allocation poisoned.
+ 	 */
+-	if (size < BUDDY_HEADER_OFF + sizeof(struct buddy_header __arena))
+-		asan_poison(address + BUDDY_HEADER_OFF, BUDDY_POISONED,
+-			    sizeof(struct buddy_header __arena));
++	for (i = zero, offset = zero; i < (1U << norder) && can_loop; i++, offset += alloc_size) {
++		object = (u8 __arena *)address + offset;
+ 
+-	asan_unpoison(address, size);
++		if (size < BUDDY_HEADER_OFF + sizeof(struct buddy_header __arena))
++			asan_poison(object + BUDDY_HEADER_OFF,
++				    BUDDY_POISONED,
++				    sizeof(struct buddy_header __arena));
++
++		asan_unpoison(object, size);
++	}
+ 
+ 	return address;
+ }
+@@ -803,13 +819,13 @@ void __arena *buddy_alloc_maygrow(struct buddy __arena *buddy, size_t size, bool
+ __weak
+ void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size)
+ {
+-	return buddy_alloc_maygrow(buddy, size, true);
++	return buddy_alloc_memory(buddy, size, size_to_order(size), 0, true);
+ }
+ 
+ __weak
+ void __arena *buddy_alloc_nogrow(struct buddy __arena *buddy, size_t size)
+ {
+-	return buddy_alloc_maygrow(buddy, size, false);
++	return buddy_alloc_memory(buddy, size, size_to_order(size), 0, false);
+ }
+ 
+ __weak
+@@ -838,6 +854,43 @@ int buddy_grow(struct buddy __arena *buddy, size_t nr_chunks)
+ 	return 0;
+ }
+ 
++static int buddy_alloc_bulk_memory(struct buddy __arena *buddy, size_t size, size_t norder,
++				   void __arena * __arena *out, bool grow)
++{
++	void __arena *address;
++	unsigned int i, off;
++	unsigned int step;
++	int order;
++
++	if (!buddy || !out || norder >= BUDDY_CHUNK_NUM_ORDERS)
++		return -EINVAL;
++
++	order = size_to_order(size);
++	address = buddy_alloc_memory(buddy, size, order, norder, grow);
++	if (!address)
++		return -ENOMEM;
++
++	step = BUDDY_MIN_ALLOC_BYTES << order;
++	for (i = zero, off = zero; i < (1U << norder) && can_loop; i++, off += step)
++		out[i] = &address[off];
++
++	return 0;
++}
++
++__weak
++int buddy_alloc_bulk(struct buddy __arena *buddy, size_t size, size_t norder,
++		void __arena * __arena *out)
++{
++	return buddy_alloc_bulk_memory(buddy, size, norder, out, true);
++}
++
++__weak
++int buddy_alloc_bulk_nogrow(struct buddy __arena *buddy, size_t size, size_t norder,
++			    void __arena * __arena *out)
++{
++	return buddy_alloc_bulk_memory(buddy, size, norder, out, false);
++}
++
+ static __always_inline int buddy_free_unlocked(struct buddy __arena *buddy, u64 addr)
+ {
+ 	struct buddy_header __arena *header, *buddy_header;
+@@ -941,3 +994,40 @@ __weak int buddy_free(struct buddy __arena *buddy, void __arena *addr)
+ 
+ 	return ret;
+ }
++
++/*
++ * Fails only when the arguments are invalid or the buddy lock cannot be taken.
++ * Nothing is freed in either case. Objects that buddy_free_unlocked() rejects
++ * are reported there.
++ */
++__weak int buddy_free_bulk(struct buddy __arena *buddy, void __arena * __arena *addrs, size_t naddrs)
++{
++	unsigned long flags;
++	unsigned int i;
++	int ret;
++
++	if (!buddy)
++		return -EINVAL;
++
++	if (!naddrs)
++		return 0;
++
++	if (!addrs)
++		return -EINVAL;
++
++	ret = buddy_lock(buddy, flags);
++	if (ret)
++		return ret;
++
++	for (i = zero; i < naddrs && can_loop; i++) {
++		/* NULL pointers are ignored. */
++		if (!addrs[i])
++			continue;
++
++		buddy_free_unlocked(buddy, (u64)addrs[i]);
++	}
++
++	buddy_unlock(buddy, flags);
++
++	return 0;
++}
 -- 
 2.52.0
 
