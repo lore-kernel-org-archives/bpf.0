@@ -1,57 +1,75 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794198315;
-	b=ksZsqbZHfKUbcrBtaifOgK/KlvXUsjIZVc39S4FYq3XtJgQfpnbcickngWHhCfyJDnAA
-	 8Wg5p/Sg7uzJheyhWJ7wDq3aUAl99rGZI/ylCp2BUhHCjMsz8N0LaoX8nqnUa9Z7HdeQc
-	 +LWhpCMAw/VOvZHnx6SolDGSwbS6l12SygcvUXA+kkegLmlv4hq5/Cw1ewIdPsJNlWclq
-	 7c8fr4asLzzlDT2c5SjnOG2TPfAVBCc2jZ2nLiZXqXQs1COgbjWSK1Jhir38mWJiKu0eQ
-	 29DWXywvP7OVC+Pkg2iZ+c3NQRSs4y5ITE0qhoMAudt0RlAth+xM1C8jr+TpB365msQ==
+	t=1794200240;
+	b=RvoXjOcVQsJpi7HsELUtGRWjdjMTrD9aPoxS49XAYbe7cS4PwhgAAbcT8kVSqJ9XueIm
+	 CmLB3YUa+7eG5y472hxK6PFBxdx5YjM/CgYntSeay62aYGRbSFNG41UJLguep98pDREvq
+	 1MvXpo2Vu6yNp7Ezw6Qs1g4sxviDbWPvG+futIEpbWXkd8LMux85Vp41J2Kzq3oIe3pe7
+	 kEFg1IoOupqLaeIYQi71bDp/AmU4RzfpV3IWJacMvI6WZeQS1Ezu8LHQ3Mbw4/gAcO11y
+	 f73HGhkXHQSMGzKB/ah6/6wYCXOZ+ANww7t5/Kf/4bj071WIqKHHc57ex0jc3MtYMig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794198315;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=TUVanLa/FUCoicRrrGBPn0JruLFhDIfpxy5nVpA/f3w=;
-	b=q0Byi9BFT3h7KWHPeFqttNVI0UiZCsIHaK/lnj4IGxU+w8eQN98GTCv+6Y2+bjug4Pmo
-	 Cgt1H8bNYYX7CenE5nffVTY6mjl4mDBrXIa5U5q3DJ/ViAatYAo4JDByUutDSNzKQrNT5
-	 NC+7y5Fm+u4A1o5tuu+KcS5TWliGv2OmSGYO+sEiydu2nl6xX/dViKaLc/52C8NO8yt0x
-	 RgRRuoz1objf32/jiXhM3ZeY52Y72qEwtEDbEnRdiZMpda/jyyPKhk9SE66rbvRNN+fmN
-	 qRdUF7YwmKw6QWoiRgGJXgpl0Lq8EKNvHMEjOBiV2AI5B00EpRUZ34/vEr+vAl4eQ1w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794200240;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=1zNWv97CstwBNheuwZjrwa0R2kSphitL/TC9zaG/Pkw=;
+	b=5I8CaGX1GH5jYGYPckR5ml3qqf5XKCAF94bWniQ81Pid+rFT6ttfSJU76cAcDXHefZ/3
+	 H6qCDYeDkO70IgqE+F39ofsDnROI4PNReBeymGIoJ0WBKiuMtee3WR54r93nvIhFVVFpS
+	 DY4TpwAm/QiVSSOKPsPjeA90KvoH8IRcBlgBWmiCPrCN7Hj6AJjR2F4irM10F1k6/QIDD
+	 /MUVskKkwPp4j4Tan7bCs8v2vF7NulRvPlEobJ3YDYBksAluLbTEw4j9SAH0zY1H+MM/a
+	 wBlvUFKCyPxVF06JbuUDkmNf9QPd1u+LNYenW+rZjI86ccyilxamuNZ+PiIe1Ug8mJQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CZQp5fCH;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N95gnPXL;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B21C606A31C
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 04:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8C1606A31C;
+	Mon,  9 Nov 2026 04:57:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CZQp5fCH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A101F008A1;
-	Mon,  9 Nov 2026 04:25:14 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N95gnPXL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1152D1F0089F;
+	Mon,  9 Nov 2026 04:57:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794198315;
-	bh=TUVanLa/FUCoicRrrGBPn0JruLFhDIfpxy5nVpA/f3w=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CZQp5fCH6nvA8RVhYcejsXaUBluxKz1OshXAAdQfUXf5SEGN1kZmSQIbKMSzeyZoe
-	 avLLb1ri1Cbn3NGUt8qWe1bgT6hiUOSuYrA/zmk8BbRdjdeuhAclgKXTOKzbqrtwVP
-	 /RGPFbYZo+b0PPxXc9Um5S+EyiApo8Lwdy8tx5AcwZLY++re8RMG6B96Mu7gf7YZDy
-	 jH6fxOw+F+dWzatf4t0H2hPvmVWtV1VNLx1sfHgzY4NS+uYQ486E0/WRPtcDruhL+n
-	 pMuyaHiGSKIJO4NiqvDlvMNr9ctXvBEWfgefn1Vg2BIVHpht4R2F3k+G8dP4c6W+LF
-	 BxB1SgfzzLD/g==
-Message-ID: <sashiko-outbox-204403@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/2] selftests/bpf: Skip jit_insns_arena
- tests if not supported
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261109041207.15221-2-yangtiezhu@loongson.cn>
-References: <20261109041207.15221-1-yangtiezhu@loongson.cn>
- <20261109041207.15221-2-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Nov 2026 04:25:14 +0000
+	s=k20260515; t=1794200240;
+	bh=1zNWv97CstwBNheuwZjrwa0R2kSphitL/TC9zaG/Pkw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=N95gnPXLnpzv+UXjUpQJCQWPHnwlMCE3wfy8ChEdK4EBt37m07f/VDaAK11B2doNk
+	 DpoWmXLnxhO33o2Rq+cqHz/6ZzWH2CI/Ab9KsOobE+JX3xVTT75wULQ2YLb5lYadTv
+	 +fFW0HXQF2FStsCCbpdQMoIzPuinc28mvJ1Y1CAH9pGxmXXd/uDtWLoWkaXjWZicqs
+	 mS9AeVlEqfs/uy+GFLoSw+lYuFZeng03TFRq82FCbwpVaVIMxga88hFuR1VVt/SdGJ
+	 eiHwh7d2xs2CsPWvXC0GvHjOLiQhcO88/PK///+rvCTcwyZTUyTAhdgOWPFu3GN5ch
+	 aDiNcK/jSWjDg==
+Date: Mon, 9 Nov 2026 12:37:00 +0800
+From: Jisheng Zhang <jszhang@kernel.org>
+To: yunhui cui <cuiyunhui@bytedance.com>
+Cc: David Laight <david.laight.linux@gmail.com>, pjw@kernel.org,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	dennis@kernel.org, tj@kernel.org, cl@gentwo.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+	yonghong.song@linux.dev, jolsa@kernel.org, bjorn@kernel.org,
+	pulehui@huawei.com, puranjay@kernel.org, thuth@redhat.com,
+	ajones@ventanamicro.com, ben.dooks@codethink.co.uk,
+	rkrcmar@ventanamicro.com, samuel.holland@sifive.com,
+	zong.li@sifive.com, conor.dooley@microchip.com, tglx@kernel.org,
+	debug@rivosinc.com, seanwascoding@gmail.com, andybnac@gmail.com,
+	menglong8.dong@gmail.com, cyrilbur@tenstorrent.com,
+	wangruikang@iscas.ac.cn, atishp@rivosinc.com,
+	apatel@ventanamicro.com, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	bpf@vger.kernel.org, arnd@arndb.de, nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com, morbo@google.com,
+	justinstitt@google.com, qingfang.deng@siflower.com.cn,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev, dave@stgolabs.net,
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, broonie@kernel.org
+Subject: Re: [External] Re: [PATCH v9 1/3] riscv: implement this_cpu
+ operations
+Message-ID: <avFN7LbSK0q1gsB6@xhacker>
+References: <20261108110406.97495-1-cuiyunhui@bytedance.com>
+ <20261108110406.97495-2-cuiyunhui@bytedance.com>
+ <20261108213254.67805ef0@pumpkin>
+ <CAEEQ3w=5QwwvMJFJkpS51APoBjhed6oriCkvcieRdUFWrKtmSg@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,54 +78,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEEQ3w=5QwwvMJFJkpS51APoBjhed6oriCkvcieRdUFWrKtmSg@mail.gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] selftests/bpf: incomplete jit_insns_arena skip list in
-  test_jit_insns()
---
+On Mon, Nov 09, 2026 at 11:47:43AM +0800, yunhui cui wrote:
+> Hi David,
+> 
+> On Mon, Nov 9, 2026 at 5:33 AM David Laight
+> <david.laight.linux@gmail.com> wrote:
+> >
+> > On Sun,  8 Nov 2026 19:04:04 +0800
+> > Yunhui Cui <cuiyunhui@bytedance.com> wrote:
+> >
+> > > RISC-V has no asm/percpu.h, so this_cpu_*() read-modify-write
+> > > operations use generic implementations that disable local interrupts.
+> > >
+> > > Implement RISC-V-specific this_cpu operations with preemption disabled
+> > > to keep accesses on the current CPU.
+> >
+> > Have you looked at some of the schemes (I think arm64 has the latest,
+> > but also s390) that do most per-cpu ops without disabling preemption.
+> > In particular they save the pre-emption check when pre-emption
+> > is enabled.
+> >
+> > Basically the code tells the scheduler which register contains the
+> > per-cpu data so that it can be 'magically' flipped during a context
+> > switch.
+> 
+> Many thanks for pointing this out and suggesting this optimization. This
+> is a very useful suggestion. In the common case no preemption or migration
+> occurs, so the preemption bookkeeping and reschedule check are unnecessary
+> overhead.
+> 
+> Implementing this scheme for RISC-V will require additional changes beyond
+> the current series. If this series is otherwise acceptable, I would like
+> to land the current this_cpu_* support first and then prepare a follow-up
+> series using this approach.
 
-commit 5301df7df06ac60c33f099fbdfa02a082cfa0c99
-Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+Hi Yunhui and David,
 
-selftests/bpf: Skip jit_insns_arena tests if not supported
+During the merge window but before rc1, I implemented a riscv POC
+following arm64's preemptible this cpu scheme. Each operation records
+its per-cpu pointer, offset and address registers. Exception entry saves
+and clears this state, and a noinstr c helper repairs the saved offset
+and address registers on exception return after any migration.
 
-This commit probes for BPF_MAP_TYPE_ARENA support in test_jit_insns() and
-skips the jit_insns_arena subtests when arena maps are not supported.
+However, my PoC is based on current percpu offset.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/jit_insns.c b/tools/t=
-esting/selftests/bpf/prog_tests/jit_insns.c
-> index 0aaab23a2eef8..e8a0e5ec2d6bf 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/jit_insns.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
-> @@ -3688,7 +3688,14 @@ static void test_tail_call(void)
-> =20
->  void test_jit_insns(void)
->  {
-> -	RUN_TESTS(jit_insns_arena);
-> +	if (libbpf_probe_bpf_map_type(BPF_MAP_TYPE_ARENA, NULL)) {
-> +		RUN_TESTS(jit_insns_arena);
-> +	} else {
-> +		if (test__start_subtest("arena_zero_off"))
-> +			test__skip();
-> +		if (test__start_subtest("cast_to_user"))
-> +			test__skip();
-> +	}
+I planed to sent it out last Sunday, but then I found Yunhui sent
+his percpu series(which is up to v9, I didn't know this before) on Sat.
+So I hold on the sending.
 
-[Severity: Low]
-Does this else branch miss the remaining subtests in jit_insns_arena?
+Now would it make sense to rebase the PoC on Yunhui's series patch2 and
+patch3, especially the percpu offset optimization? I can post an RFC
+with this rebased implementation.
 
-Commit a9fee553d3db ("selftests/bpf: Extend the JIT instruction tests for
-arm64 encodings") added arena_offsets (built on all architectures) as well =
-as
-arena_offsets_ldsx, arena_offsets_atomics, and arena_acq_rel to
-tools/testing/selftests/bpf/progs/jit_insns_arena.c.  When BPF_MAP_TYPE_ARE=
-NA
-is unsupported, those subtests are silently omitted rather than registered =
-and
-marked skipped, so targeted runs such as ./test_progs -a
-jit_insns/arena_offsets match zero subtests.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109041207.1522=
-1-1-yangtiezhu@loongson.cn?part=3D1
+Thanks
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
