@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.75
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794253659;
-	b=QQXOZ9evivBj58iunliUunOWKZZ6f5T7VlaCa0tHYSi8/rJCCOrPlJogy2XJTuM5KtHB
-	 8dEAEqBq148pZczIFKiS4OAloQ7Qz5F6Ohj9StYKexhwLrrui3TJmiyunpPypIAc6rk0r
-	 y3CrY52M1+Lr6igRQlIaWV5LxnAaF7cTPitFCxE3FUAFzYx59uL4udKel3PajYiy90QIO
-	 4tEMqy9OK+WhwGwQ3xV+SqXENn5WHVBzOfCMBtmmu1AdidEwZ5EDZ0hW8zR60jzHmabCy
-	 YNqU/VcdUUTTum/e7bARgC8C544zc0jXokScm0xLBhj7pN0jkR/X/ao0W3lKY4eo6xA==
+	t=1794253661;
+	b=v6wTRYrBaQYjVqRI9IKYFQDrD66zO/c9Hyw01WtFeGLf0mNOkgCqqlQIE0M845RbdLrG
+	 /8OK8s7/DP2zcRxMZHqvuNDRME0WyhVXcUYNtoWoVmrQLOcQOvuRqCr87up0IgHAIYvZU
+	 JZbpVJz5j5FwDhNoSNaON2sveEp9RrmocZGRHqDRwUocRaUqZ2e1P5hu2Z0wFZqruYx8w
+	 RLLnbrl7n50dTyDkHNTg31VAmxZSemsdQyWo7cquXz38Cccc7C3zO2KPnykBGCUT5sed5
+	 Ure47PXBOYPFco7ESvcZEEv3n+zLtmxkwRU9UrsTmWvGbz2dZXpPo0S6Z/Ccepu+wng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794253659;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794253661;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=QonYSPCEGPZ3jMgnrlvYYEEq7OVaztKleqa/IGAXRqM=;
-	b=m3kRwcjMKxChEDix7GbQQ4+47S6jvZfTemlDm9jtVmPeTN5HpXrNezDU3uZqFLPsmR4C
-	 57e8ag7+Lp4gkG6PzV53KNMCcMDWdmT2DTewlLaXa1QNY1Rw68oYiMVoNa7WwVK0h1tYj
-	 7vLmJd/t0K1RyyYacW5qfNPMciGbWw3F82BNvb0x2k5u40DKHFQAduewh0svNMF2JfIZW
-	 UAgLCksNO0hvWgm6S51rbjUznIJTyoMSfKXe+qbSO+FYqkqoO+kXzTWJGht77fKdXT5vQ
-	 MdxRr3J52qWta5lrBetKxeirRF3bAxdXN9WPo20XaQk7pYCB8+EWscgjIoP0cEA7DVw==
+	bh=0zxpl6DdVTMwJc2uXon23RrZSAOJzayhuFJpYVewKqI=;
+	b=KpZ6izHf1xJsp3i5194tYfCi/X5lUGPnyq6BYo0zKS3Wgjm57MtW3p2HtqqW/eOryZ3c
+	 iuldRtfV3SFDSH2wW1/Rd7pkVJORuk/oJaKfAFwfiF/7THa23NJKcbugGGxPteIu1YOsB
+	 0lnG1Cn0BwlRtEN5R9bCEijUJUE+i+5tHyceC8/AVlkyHiiAMWUXb4uFRZpvtwsWD6XfQ
+	 wa+qHt7hMSq4RbDXo/dz0XWm37qGVPir2Omcmyffy5n+rBVG8CREtaAx4jV/Z7YjAxKVW
+	 1w4kUCK7OswPTB+07TpSSCRB2GMlQLQNNzdX6DUxVOzaFbg/iLMHS+LvqOq8SLCEQpA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EPcgqXEH;
-	arc=none smtp.remote-ip=74.125.225.137
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XIHX8Jiv;
+	arc=none smtp.remote-ip=74.125.225.75
+Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616AD606A321
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 19:47:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 616AD606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF48606A321
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 19:47:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1DF48606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EPcgqXEH
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-4ad5d6045d4so6196225e9.0
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 11:47:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XIHX8Jiv
+Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-4901ac93584so671429f8f.0
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 11:47:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794253658; x=1794858458; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794253659; x=1794858459; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=QonYSPCEGPZ3jMgnrlvYYEEq7OVaztKleqa/IGAXRqM=;
-        b=EPcgqXEH56hhyI6vuRxJ+arUKTr9lGHeqCw2YEj3qY0UErHGVFM7LrHrO7itC2SGf7
-         qo4pHGrzniSPPNMmjZn/EUDoQbW6wWi5iZ9bt6dWbPTsXO/ujlRFAUUnqKLs3MooO11v
-         5AYMIqmjh2RziTyYWMtGlrfNpeHfLF/NMuXPmt2lEdV3pq4JJO28ovPWZocWDymt3gY1
-         T15R7atiALE5YlHPEnwzyZpdoW/NvDOBqmN0/UBaYtqXR6gu+k2nbB1nnnmtOzxsa+Jg
-         fb/55fpkdqY9JpL8XxRZWUaIpUGR0/W4oBG9p4pVYlb/cZPZF5nlky29gDK3ZeGtRf4V
-         Am4g==
+        bh=0zxpl6DdVTMwJc2uXon23RrZSAOJzayhuFJpYVewKqI=;
+        b=XIHX8JivsFcKquuHCmYKZ7N8W3Vp4HjuMsTlEZZ0Er+8HL7WTochQ2Nxhw2rd5rU/Y
+         TkRcQJcQYYz4Y3V+bk9/llkWvnzTBcNnF0zJ4uibO0L24/ouTrBNYP/kgaPPEAqIwXSR
+         YVT+MMd7caAWLPOD0kKmojTQ/Df68vTFg+m3P03mwIFBj4SrTV+f3+AxRB/qjPDXRYdo
+         hEqDTi3JdqyHBnuS69yHy+WecRMXR5zjtexjDO6vuZi34P4BdjHAqcU01WtHwhlc7Ux8
+         o/w59OQBohdQws+uVfd+KjGK5ojID1PrMam7hNhgn9pgqGr/YLyWIDmPKq+6dJHWpYgd
+         9iQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794253658; x=1794858458;
+        d=1e100.net; s=20260707; t=1794253659; x=1794858459;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QonYSPCEGPZ3jMgnrlvYYEEq7OVaztKleqa/IGAXRqM=;
-        b=A61UNOn8YONUSeON5HJEyd7GpSu0TecHyPjMnM/lgWVxBg1f4b6Oh5dcbMH76xfiV1
-         4UwF52Fp17Q1EpIXLmxPv0+Pbvqte9x3rlas0AF+OqDLOK+u1Vlrq6f/gkYOtEIFl68q
-         Lku1cm46fCo0allLIqdBvi5S/FhZjfuqjJZCtfyraVz3acIQw8dzMra5EI0mhLO4jUci
-         E3LhwIG3KX87Nj8a2cakLnyelLA3i0YGfGS3NAl7f8NhaV1c2dnDwJLl9W3jGSEC2SZn
-         wF/4YirRDSy/o8EBXc7712jMEsD6ZhEtRotDft9dYdnA5QBhnwheuKjMJiUfMySKO6RG
-         IeQg==
-X-Gm-Message-State: APuU4Z/LSfXpHK4cIEAWer5OfGOq9p0I+xKH+43CyAqPIccMWaJ4FK83
-	qBVCrHdjTle8B9ZkASEECwuQ94TgwCMQMMlXAj7hMZMrP2bqYqcTn1FFB5vTesOf
-X-Gm-Gg: AYBFou1IUH7Bw6mtrPpoY2S73pmGOHm4pXYBZ0kKzyXyzHnn4j+DWDfIHlzFjHuaO07
-	s516lHoK7LY7XmV6RYyvz+8GI0Xi3lSZ3EbO+qNyB6UoZKx1OeD6eMRNJEQZIFnQ83wOvMrV9bW
-	Z5Isct/C7saHQ6CBS5V24Fq9ZGEv4jnkjrqXNN8zQGhwQkcsLXvTzhdQC7+7+UnVQjFJ3SSbwpV
-	wLjm1Ln9826b55WgcmkDU9nl9kmQESCr1TtKf+YUEOlkES1x+nzK5Sv3H1SLVWmo9B481aJ5Fbw
-	7X8FkivhZxQvwaG+fqvJbv8oObz0osaM+XMHJ36K5MzLKpjhmqOqSVmoDn2ct477YhViFDObhEa
-	vIFHJF8JjiRV21pTsXIP7WizHpuEngjhhUnULz7F0kdLtS/bnl61g6MQMCSEpeza53A6RPA7y9V
-	2wCHs3ZNKuDpVTicmGf+oE7UPQXFZPgS5mBqYKLaMkucKx5Pv2bhLbgCNCM0F+dUXH0fCVnHsw3
-	6qnVHljFUb+hn9iXKrT/H6MbHH7VwU5ZOKuVk/71LdIOdzDBA88A4R8rVe5gEcu4GGzjlmMRgmm
-	+H22D0G+K6Ut8AMD2jIQL8zRh/njK2g0u9iTjdG0dekGFWah/8YtV1tEDEi3Lup4braOYjMU/tF
-	SpL3y8DZgsfm7iPO+HI7kLvHLRkfKUjnSZaSaEnf4Cnx1pRRQnUDRDXHTcEeOehQll/44
-X-Received: by 2002:a05:600c:c4a3:b0:4a2:8c5:5e5 with SMTP id 5b1f17b1804b1-4ba02341354mr4798905e9.7.1794253657654;
-        Mon, 09 Nov 2026 11:47:37 -0800 (PST)
+        bh=0zxpl6DdVTMwJc2uXon23RrZSAOJzayhuFJpYVewKqI=;
+        b=UVglmx+VYWrjI4dnk6rwEn9qxJkEyUp5k3/wNPPXOi49DMI3WSILDkqpN1i1D1/D3K
+         oyxt3T5Gor5lLTPiNJh9VHqZK3VA7bY2+2pbLBus6aE8nIIHBvic4uKrxtMe5JBIq33q
+         AWp0x5St2tXKQm7pCZxeRLo+NJZMal9jrEdbeRuo2iHn6a3M3bdHw85/qWi2ft0J8qlk
+         ZWb93OQQX3upGDWlw9r6uET2CKfpoYASFL2StnZXVid8Kheap8akwB7drV61TPB2bCOp
+         8b2yA9gh1khPGMowlDgzX0M87B1Q9Tb/1xAa2kPft7IZvX4I1x3RQOBATnXYO1xz+qLP
+         ybEQ==
+X-Gm-Message-State: APuU4Z/JjOfViy0CGdzNEIrRX6xq+6HEB4uFlnPbC5yFp/MHk9a4pSVV
+	u+zyPzhHrqISZL0612zMfTYjF/d6yDDDaCAky2KHPsxmyWMX5paeKpzYIduaj+mq
+X-Gm-Gg: AYBFou0WpdLVRpa/kN4fQ+1pGaUbV0NJw4D2ms+y532ZEyayEwY/9napJSggPYoFBrC
+	Lno0K6H+dfSUxXnCvihRheIKydY9JIZaUwHLQ/do9kfZcA0SLbacq/LLHQPaKyw5UonbosVEaP1
+	E8QhiMdyaAzYhLGSPwK558SQI6TWu1H1MMclMnMg7hHVMVLNBPN2JLBdgCADVMHQkseS9KPXMph
+	4kSsf9sjTaTHUsREn9H9/QgiSGskaNepsPXhvbKiuqjtnlREUQrnKC3k3NNdZG5RqcJOX8gEILI
+	gOkCDqSZy8fvDoJ1u/PQRVVzAzTaQKk5DastE9UZdEXGziet5Hn+/qq/zil4MapMsN2g+Fcc1a8
+	u7VDp/xEDUhLqBqNiv7KMgupgShL9r02H8Kbdz+cMvu+9NkAyjS6eKDBALUBiZH5gBVUdqqsLKt
+	S7ZYRqhR3jR1dhj6nrOfHFuHABGjfydor+b1fz/sNSeIxSf9IGkhgaXpoiIb8NA6LqQImO9eUC5
+	SLd6vD5NR+NWgERApTkGKzpyHsAu8FW/6/ZYqlndciapV6pqzYeZJF/wu+MPMjaeUhSpfA1NCh8
+	7cwWBcoc0AFCg8uZDdxxPbZWxyy/4/l1V6me0HdYA0NOTktp7JvY/SH/TqRFK+3cAVroyhUIhZj
+	7UQbPO11WjOgq4FEgtCo5ikbpj9SwCitNmHUz+5cpv6fsPfjxvn/dxWPsLrsYESaHefPm
+X-Received: by 2002:a05:6000:186e:b0:491:49c2:3b3 with SMTP id ffacd0b85a97d-49830b97c51mr911170f8f.51.1794253659370;
+        Mon, 09 Nov 2026 11:47:39 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fea9eesm17309405e9.11.2026.11.09.11.47.36
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49835859246sm786922f8f.20.2026.11.09.11.47.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 11:47:36 -0800 (PST)
+        Mon, 09 Nov 2026 11:47:38 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Tamir Duberstein <tamird@kernel.org>,
@@ -89,9 +89,9 @@ Cc: Tamir Duberstein <tamird@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 2/6] libbpf: Prevent NULL callback crash
-Date: Mon,  9 Nov 2026 20:47:28 +0100
-Message-ID: <bb94029254fe2b51e2a0ed6721d4554dcb1c909b.1794253561.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 3/6] libbpf: Reject overwrite callback use
+Date: Mon,  9 Nov 2026 20:47:29 +0100
+Message-ID: <626df9a9eafa8758824d5a5a8ae0285d9e90c258.1794253561.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794253561.git.memxor@gmail.com>
 References: <cover.1794253561.git.memxor@gmail.com>
@@ -104,158 +104,73 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4910; i=memxor@gmail.com; h=from:subject:message-id; bh=gIkPw/iJj34TfMl6o8ISKgl9u35iSc/oNtxSXYxwZfM=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeuT0q/K88vLomWe9QeVnBGe+XJjoZt7YITTlLs1atM3c jtzydR2lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCLiOowMO7ZpXLvUf7r1zcY3 64Ry1R5bbt20bt6pS19C+m/eW3SA+xvD/wJGP7uJygz+4YGuommih12iXHKa37EIJTytmuySvm0 eAwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2235; i=memxor@gmail.com; h=from:subject:message-id; bh=QXVLsKOseyYH9dABleytyAxOPG4C4EW8Uw4waELt8iw=; b=kA0DAAoWRy03e2NUL4MByyZiAGryIvuhG6petmzLGzN03sK3JWifq/v201VELtmteOeMc+qHN Yh1BAAWCgAdFiEEdP++AjPIeftRPaYLRy03e2NUL4MFAmryIvsACgkQRy03e2NUL4OFDwD+JQGY 3y6XhWwWCF6Bk1gAZULcd87trdAXiVoCrx3bRwAA/i+2jVDLe3Wejpj2dicF7iWPIf9IP99UTm8 tfAOjTd8K
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
 From: Tamir Duberstein <tamird@kernel.org>
 
-ring_buffer__new() and ring_buffer__add() allow a NULL sample
-callback. When callback-based consumption reaches such a ring, it calls
-through the NULL function pointer and crashes.
+BPF_F_RB_OVERWRITE can advance overwrite_pos past consumer_pos.
+Callback traversal does not read overwrite_pos, so after the producer
+laps the consumer it can treat overwritten data as a record header.
 
-Check every ring before manager polling or consumption so a missing
-callback returns -EINVAL before the manager waits or consumes another
-ring. Check the selected ring before direct per-ring consumption. Perform
-both checks before honoring a zero record bound so invalid callback use
-always reports the error.
+An earlier proposal [0] copied the readable window before invoking
+callbacks. Review concluded that callbacks are a poor fit because
+copying penalizes zero-copy users and the API cannot report skipped
+records.
 
-Fixes: bf99c936f947 ("libbpf: Add BPF ring buffer support")
+Record the map flag and reject callback consumption with -EOPNOTSUPP.
+
+Link: https://lore.kernel.org/bpf/CAEf4Bzaq5drHWChXoRBnrmkb6reAsSVj8r=uByFSup31FMA7hw@mail.gmail.com
+Fixes: feeaf1346f80 ("bpf: Add overwrite mode for BPF ring buffer")
 Signed-off-by: Tamir Duberstein <tamird@kernel.org>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/lib/bpf/libbpf.h  | 11 +++++------
- tools/lib/bpf/ringbuf.c | 43 ++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 43 insertions(+), 11 deletions(-)
+ tools/lib/bpf/libbpf.h  | 1 +
+ tools/lib/bpf/ringbuf.c | 4 ++++
+ 2 files changed, 5 insertions(+)
 
 diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index a8a23c135c17..1c45648fa578 100644
+index 1c45648fa578..49f1120f4021 100644
 --- a/tools/lib/bpf/libbpf.h
 +++ b/tools/lib/bpf/libbpf.h
-@@ -1628,18 +1628,17 @@ LIBBPF_API int ring__map_fd(const struct ring *r);
-  *
-  * @param r A ringbuffer object.
-  * @return The number of records consumed (or INT_MAX, whichever is less), or
-- * a negative number if any of the callbacks return an error.
-+ * a negative error code on failure.
-  */
- LIBBPF_API int ring__consume(struct ring *r);
+@@ -1541,6 +1541,7 @@ struct ring_buffer;
+ struct ring;
+ struct user_ring_buffer;
  
- /**
-- * @brief **ring__consume_n()** consumes up to a requested amount of items from
-- * a ringbuffer without event polling.
-+ * @brief **ring__consume_n()** consumes up to a requested number of records
-+ * from a ringbuffer without event polling.
-  *
-  * @param r A ringbuffer object.
-- * @param n Maximum amount of items to consume.
-- * @return The number of items consumed, or a negative number if any of the
-- * callbacks return an error.
-+ * @param n Maximum number of records to consume.
-+ * @return The number of records consumed, or a negative error code on failure.
-  */
- LIBBPF_API int ring__consume_n(struct ring *r, size_t n);
++/* Callback-based consumption is unsupported for BPF_F_RB_OVERWRITE maps. */
+ typedef int (*ring_buffer_sample_fn)(void *ctx, void *data, size_t size);
  
+ struct ring_buffer_opts {
 diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index 6e88ac209298..b7fde7d0a0fd 100644
+index b7fde7d0a0fd..78fcb3df243f 100644
 --- a/tools/lib/bpf/ringbuf.c
 +++ b/tools/lib/bpf/ringbuf.c
-@@ -231,6 +231,26 @@ static inline int roundup_len(__u32 len)
- 	return (len + 7) / 8 * 8;
- }
+@@ -30,6 +30,7 @@ struct ring {
+ 	unsigned long *producer_pos;
+ 	unsigned long mask;
+ 	int map_fd;
++	bool overwrite;
+ };
  
-+static int ringbuf_validate(const struct ring *r)
-+{
-+	if (unlikely(!r->sample_cb))
-+		return -EINVAL;
-+	return 0;
-+}
-+
-+static int ringbuf_validate_callbacks(const struct ring_buffer *rb)
-+{
-+	int i, err;
-+
-+	for (i = 0; i < rb->ring_cnt; i++) {
-+		err = ringbuf_validate(rb->rings[i]);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
- static int64_t ringbuf_process_ring(struct ring *r, size_t n)
+ struct ring_buffer {
+@@ -118,6 +119,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+ 	r->sample_cb = sample_cb;
+ 	r->ctx = ctx;
+ 	r->mask = info.max_entries - 1;
++	r->overwrite = info.map_flags & BPF_F_RB_OVERWRITE;
+ 
+ 	/* Map writable consumer page */
+ 	tmp = mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
+@@ -233,6 +235,8 @@ static inline int roundup_len(__u32 len)
+ 
+ static int ringbuf_validate(const struct ring *r)
  {
- 	int *len_ptr, len, err;
-@@ -240,6 +260,9 @@ static int64_t ringbuf_process_ring(struct ring *r, size_t n)
- 	bool got_new_data;
- 	void *sample;
- 
-+	err = ringbuf_validate(r);
-+	if (err)
-+		return err;
- 	if (n == 0)
- 		return 0;
- 
-@@ -284,14 +307,17 @@ static int64_t ringbuf_process_ring(struct ring *r, size_t n)
-  * records.
-  *
-  * Returns number of records consumed across all registered ring buffers (or
-- * n, whichever is less), or negative number if any of the callbacks return
-- * error.
-+ * n, whichever is less), or a negative error code on failure.
-  */
- int ring_buffer__consume_n(struct ring_buffer *rb, size_t n)
- {
- 	int64_t err, res = 0;
- 	int i;
- 
-+	err = ringbuf_validate_callbacks(rb);
-+	if (err)
-+		return libbpf_err(err);
-+
- 	for (i = 0; i < rb->ring_cnt; i++) {
- 		struct ring *ring = rb->rings[i];
- 
-@@ -309,14 +335,17 @@ int ring_buffer__consume_n(struct ring_buffer *rb, size_t n)
- 
- /* Consume available ring buffer(s) data without event polling.
-  * Returns number of records consumed across all registered ring buffers (or
-- * INT_MAX, whichever is less), or negative number if any of the callbacks
-- * return error.
-+ * INT_MAX, whichever is less), or a negative error code on failure.
-  */
- int ring_buffer__consume(struct ring_buffer *rb)
- {
- 	int64_t err, res = 0;
- 	int i;
- 
-+	err = ringbuf_validate_callbacks(rb);
-+	if (err)
-+		return libbpf_err(err);
-+
- 	for (i = 0; i < rb->ring_cnt; i++) {
- 		struct ring *ring = rb->rings[i];
- 
-@@ -334,13 +363,17 @@ int ring_buffer__consume(struct ring_buffer *rb)
- 
- /* Poll for available data and consume records, if any are available.
-  * Returns number of records consumed (or INT_MAX, whichever is less), or
-- * negative number, if any of the registered callbacks returned error.
-+ * a negative error code on failure.
-  */
- int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms)
- {
- 	int i, cnt;
- 	int64_t err, res = 0;
- 
-+	err = ringbuf_validate_callbacks(rb);
-+	if (err)
-+		return libbpf_err(err);
-+
- 	cnt = epoll_wait(rb->epoll_fd, rb->events, rb->ring_cnt, timeout_ms);
- 	if (cnt < 0)
- 		return libbpf_err(-errno);
++	if (unlikely(r->overwrite))
++		return -EOPNOTSUPP;
+ 	if (unlikely(!r->sample_cb))
+ 		return -EINVAL;
+ 	return 0;
 -- 
 2.53.0
 
