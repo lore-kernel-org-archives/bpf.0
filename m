@@ -1,117 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794204041;
-	b=Fe/womsOYgs2GoX6qIQI1vaBeBjgn/p2mtGOP1326PeDGaXCwr0cFc4bQsKwaTzzNw5z
-	 /IrjIwl8OsKiRZwcpS4lSmDg3FdA3wSLr/b2XeNL8/m56RkXy0SWWj6feYtDa2fy8A3a5
-	 2rv0Z/eQvPcjWd14nXGxWWo3CE45w8exLNU+y7zePKZ3I8BALV2AXfSAeWFQMs8sgHANQ
-	 2/rhTkAQXONiMUh2aD1//lBVJM1CAdilpL8+j/0shj28re8K8fWFKcB/GtoqXOC8yILuz
-	 nYBfS1owv9ugG/dw/ZvHy2gxdXFGcLcc82lQHj9djjuBei2aBVgOQbdNffxDkdf2MsQ==
+	t=1794204637;
+	b=nuPSbB9zUbwxUMqPQOlcyCwDQHfc5jCIb+B3hEqrNO5mFRnRwSrAZf7u438C92mGkRt5
+	 lNlOBeggFuAVahMupySRUQCfCOiM4Abs5kVj/JCnVztqDzX1G4kcWVbhkDxIWlQybEeOO
+	 BkmZ6cNkYdD5bjZnmS8zn977eyUeBhl8i038aqbFMTcXs3JG+hm7X5UrniFmfXQy0rwZ+
+	 tY+h+Gqnah+6Ta8plZWxLtCo5QujUY6pw93SvCYTUiwXevL+riRexraEPXaqllCGBBqwB
+	 H0g0RZb4ZuH2d4adcU3fgG99e84vfPy9P402xo6xB1lvjdSg63Er0In33CHQEk9n9CQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794204041;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=u7aSiRAyqUJJCYptUrQffwehB1VQ0X01AiRX22xwuyM=;
-	b=jpp1tGlpR6/d4lcDKP22/UaaEy+kT7w9I+kTFdT8i6NJWzHem0iy6B9tMuYMn6W4zNv/
-	 D1KIP8eitMikqYufNBPVc4NbHIvy2mEhegA7h1jNK5QsAjxUFgTPfAQOdJ2U3oue1p/vO
-	 ULiZjtN4OOkWQMIpeTf7v5JWb4gSFZO7f3yEwO2qzh/NHCKF/PRfdnxwiMnBehH6veETS
-	 Y7MJtW9dl6uM6OXj93bgKCT2lW8y0W+9sjTqHWIOKb189UcchZHodsvlWAtOUUx5sS/mE
-	 4HekgpBR4JxoUXYADnL4/+fC6DU/kHaqpth0TyfPaGivVW9McO0zuMtdKdg3H5pN1rg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794204637;
+	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
+	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
+	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=9T4Pu4J2hNrkYw/uwEMnWu0HaxwlCEogmij+cvo0z2U=;
+	b=4pNNcaBU7ikAa9bx1a5k4GbMMT27RjjydYwm+t9+j+qDHodIQqCSYHTWiBJnDQOlMVeE
+	 sQQxJdbVEJmchWh1MFXAQ1TjVA0wqDWxqPPu9SpwyEJmEZekoqJs+Px2A/HMHiDscQKSv
+	 EfZOV3gc0QlrpNuheLHGYfOkberhOeCLs6hiVOIqKC0/Y++DDwTXOFAi1Qb2+aw5eZ3PZ
+	 iPh0bdxzVyQyh5oueSfM4nqgTimzLFf8NwMAS37QqmRrBpRd+MrGCy+lfA3MUvZtiDtfI
+	 UhTQ0GjQrbrb+UZd4EYPVSxTbBfTkpsiOly4fBvUTbf/Of/8144abSSw6JcRUrwV27g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mhCpmFyH;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A115606A321;
-	Mon,  9 Nov 2026 06:00:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mhCpmFyH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ABB31F008A1;
-	Mon,  9 Nov 2026 06:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794204041;
-	bh=u7aSiRAyqUJJCYptUrQffwehB1VQ0X01AiRX22xwuyM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mhCpmFyH7SOmyvOcs7GgLvFo4llqJQLn3JD9Ni+eLlL44nVNxcNUeVegJZSzxSMdc
-	 4fJ85yE8c0ifBT0lCGnrINGc9IH004uFZD8R+b6P41elU0YmVXjixx42sa+uupOW5M
-	 t+DPMvcBgCziGhkh+DZuIoOOYMOLMaRbgFrBWnYpL64er4kcD3H71VgIaMyFEIbsWW
-	 7vjbN496UkeAwpsdLUdqap0gmN2SIES3Plx7MWAv3GZQm9V4/nH/Gg4fWSNVombPOQ
-	 WGcmvMqaVR+eRUutu7SCemogVHTSWAObX2YQSSs55qVnnpCNvnODqGljh3ZINFQgOv
-	 Pm6DPq60Ltkhw==
-Message-ID: <sashiko-outbox-204470@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 1/5] net: skbuff: skip managed zerocopy
- frags in skb_frag_ref()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mina Almasry" <almasrymina@google.com>
-Cc: "Jesper Dangaard Brouer" <hawk@kernel.org>, "Ilias Apalodimas" <ilias.apalodimas@linaro.org>, "David
- S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Neal Cardwell" <ncardwell@google.com>, "Kuniyuki
- Iwashima" <kuniyu@google.com>, "Pavel Begunkov" <asml.silence@gmail.com>, "Bobby
- Eshleman" <bobbyeshleman@meta.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Steffen
- Klassert" <steffen.klassert@secunet.com>, "Herbert Xu" <herbert@gondor.apana.org.au>, "Willem
- de Bruijn" <willemb@google.com>, "John Fastabend" <john.fastabend@gmail.com>, "Sabrina
- Dubroca" <sd@queasysnail.net>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "Michael
- S. Tsirkin" <mst@redhat.com>, "Jason Wang" <jasowangio@gmail.com>,
- =?utf-8?b?RXVnZW5pbyBQw6lyZXo=?= <eperezma@redhat.com>, "Xuan Zhuo" <xuanzhuo@linux.alibaba.com>, "Andrew
- Morton" <akpm@linux-foundation.org>, "David Hildenbrand" <david@kernel.org>, "Lorenzo
- Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, "Vlastimil
- Babka" <vbabka@kernel.org>, "Mike Rapoport" <rppt@kernel.org>, "Suren
- Baghdasaryan" <surenb@google.com>, "Michal Hocko" <mhocko@suse.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Johannes
- Berg" <johannes@sipsolutions.net>, "Byungchul Park" <byungchul@sk.com>, "Zi
- Yan" <ziy@nvidia.com>, virtualization@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, "Jonathan
- Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy
- Dunlap" <rdunlap@infradead.org>, "Lorenzo Bianconi" <lorenzo@kernel.org>, "Wen
- Gu" <guwen@linux.alibaba.com>, "Philo Lu" <lulie@linux.alibaba.com>, "Justin
- Chen" <justin.chen@broadcom.com>, "Florian Fainelli" <florian.fainelli@broadcom.com>, "Vikas
- Gupta" <vikas.gupta@broadcom.com>, "Michael Chan" <michael.chan@broadcom.com>, "Pavan
- Chebbi" <pavan.chebbi@broadcom.com>, "Doug Berger" <opendmb@gmail.com>, "Nicolai
- Buchwitz" <nb@tipi-net.de>, "Broadcom internal kernel review list" <bcm-kernel-feedback-list@broadcom.com>, "Satish
- Kharat" <satishkh@cisco.com>, "Wei Fang" <wei.fang@nxp.com>, "Frank Li" <frank.li@nxp.com>, "Shenwei
- Wang" <shenwei.wang@nxp.com>, "Joshua Washington" <joshwash@google.com>, "Harshitha
- Ramamurthy" <hramamurthy@google.com>, "Jijie Shao" <shaojijie@huawei.com>, "Jian
- Shen" <shenjian15@huawei.com>, "Fan Gong" <gongfan1@huawei.com>, "Tony
- Nguyen" <anthony.l.nguyen@intel.com>, "Przemek Kitszel" <przemyslaw.kitszel@intel.com>, "Marcin
- Wojtas" <marcin.s.wojtas@gmail.com>, "Russell King" <linux@armlinux.org.uk>, "Sunil
- Goutham" <sgoutham@marvell.com>, "Geetha sowjanya" <gakula@marvell.com>, "Ratheesh
- Kannoth" <rkannoth@marvell.com>, "Subbaraya Sundeep" <sbhatta@marvell.com>, "Bharat
- Bhushan" <bbhushan2@marvell.com>, "Felix Fietkau" <nbd@nbd.name>, "Matthias
- Brugger" <matthias.bgg@gmail.com>, "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>, "Tariq
- Toukan" <tariqt@nvidia.com>, "Saeed Mahameed" <saeedm@nvidia.com>, "Mark
- Bloch" <mbloch@nvidia.com>, "Leon Romanovsky" <leon@kernel.org>, "Ido
- Schimmel" <idosch@nvidia.com>, "Petr Machata" <petrm@nvidia.com>, "Horatiu
- Vultur" <horatiu.vultur@microchip.com>, UNGLinuxDriver@microchip.com, "Daniel
- Machon" <daniel.machon@microchip.com>, "Steen Hegelund" <Steen.Hegelund@microchip.com>, "Haiyang
- Zhang" <haiyangz@microsoft.com>, "Wei Liu" <wei.liu@kernel.org>, "Dexuan
- Cui" <decui@microsoft.com>, "Yibo Dong" <dong100@mucse.com>, "Brett Creeley" <brett.creeley@amd.com>, "Justin
- Lai" <justinlai0215@realtek.com>, "Larry Chiu" <larry.chiu@realtek.com>,
- =?utf-8?b?TmlrbGFzIFPDtmRlcmx1bmQ=?= <niklas.soderlund@ragnatech.se>, "Paul
- Barker" <paul@pbarker.dev>, "Masahisa Kojima" <kojima.masahisa@socionext.com>, "Maxime
- Chevallier" <maxime.chevallier@bootlin.com>, "Maxime Coquelin" <mcoquelin.stm32@gmail.com>, "Alexandre
- Torgue" <alexandre.torgue@foss.st.com>, "FUJITA Tomonori" <fujita.tomonori@gmail.com>, "Siddharth
- Vadapalli" <s-vadapalli@ti.com>, "Roger Quadros" <rogerq@kernel.org>, "MD
- Danish Anwar" <danishanwar@ti.com>, "Jiawen Wu" <jiawenwu@trustnetic.com>, "Mengyuan
- Lou" <mengyuanlou@net-swift.com>, "Ronak Doshi" <ronak.doshi@broadcom.com>, "Ryder
- Lee" <ryder.lee@mediatek.com>, "Shayne Chen" <shayne.chen@mediatek.com>, "Sean
- Wang" <sean.wang@mediatek.com>, "Juergen Gross" <jgross@suse.com>, "Stefano
- Stabellini" <sstabellini@kernel.org>, "Oleksandr Tyshchenko" <oleksandr_tyshchenko@epam.com>, "Jordan
- Rhee" <jordanrhee@google.com>, "Ankit Garg" <nktgrg@google.com>, "Tim
- Hostetler" <thostet@google.com>, "Eric Joyner" <eric.joyner@amd.com>, "Prabu
- Thayalan" <prabu.ponrajthayalan@amd.com>, "Nikhil P. Rao" <nikhil.rao@amd.com>, "Chintan
- Vankar" <c-vankar@ti.com>, "Nora Schiffer" <nora.schiffer@ew.tq-group.com>, "Alexander
- Sverdlin" <alex@sverdlin.org>, "Kevin Hao" <haokexin@gmail.com>, "Karl
- Mehltretter" <kmehltretter@gmail.com>, "Aleksandr Loktionov" <aleksandr.loktionov@intel.com>, "Meghana
- Malladi" <m-malladi@ti.com>, "Jacob Keller" <jacob.e.keller@intel.com>, "StanleyYP
- Wang" <StanleyYP.Wang@mediatek.com>, imx@lists.linux.dev, linux-rdma@vger.kernel.org, linux-hyperv@vger.kernel.org, Frank.Li@kernel.org, wsa+renesas@sang-engineering.com
-In-Reply-To: <20261108060016.2131509-2-almasrymina@google.com>
-References: <20261108060016.2131509-1-almasrymina@google.com>
- <20261108060016.2131509-2-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Nov 2026 06:00:34 +0000
+	dmarc=none header.from=loongson.cn;
+	spf=pass smtp.mailfrom=loongson.cn;
+	arc=none smtp.remote-ip=114.242.206.163
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCED606A321
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 06:10:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DDCED606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8AxdvDYY_FqfbkdAA--.19845S3;
+	Mon, 09 Nov 2026 14:10:32 +0800 (CST)
+Received: from [127.0.0.1] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAx3c7XY_FqOx8zAA--.38975S2;
+	Mon, 09 Nov 2026 14:10:32 +0800 (CST)
+Subject: Re: [PATCH bpf-next v2 1/2] selftests/bpf: Skip jit_insns_arena tests
+ if not supported
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20261109041207.15221-1-yangtiezhu@loongson.cn>
+ <20261109041207.15221-2-yangtiezhu@loongson.cn>
+ <sashiko-outbox-204403@kernel.org>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <488e67f5-ee17-2b4b-335a-e38268f44761@loongson.cn>
+Date: Mon, 9 Nov 2026 14:10:31 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -120,41 +54,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+In-Reply-To: <sashiko-outbox-204403@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowJAx3c7XY_FqOx8zAA--.38975S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7Gr47Cw4xCr1xZw4UGw4fCrX_yoWDWFg_Za
+	y8Kr1kGFW8Za9xt34fKF18tFs7trWxAFyUArn8KF48Ja4UJwn8uFs7Crn3Ca48WayfJr93
+	Ka4kta9xJw13uosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4
+	CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JV
+	WxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU20PS
+	UUUUU
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] net: skbuff: missing Fixes trailers for skb_frag_ref() and iptfs
-  fixes
---
+On 11/9/26 12:25 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue to consider:
+> - [Low] selftests/bpf: incomplete jit_insns_arena skip list in
+>    test_jit_insns()
 
-commit 289785b15a220a700e7ce94d6b9993ab94b82d49
-Author: Mina Almasry <almasrymina@google.com>
+...
 
-> net: skbuff: skip managed zerocopy frags in skb_frag_ref()
->
-> skb_frag_unref() and skb_release_data() skip releasing references on
-> managed zerocopy fragments (SKBFL_MANAGED_FRAG_REFS), whereas
-> skb_frag_ref() acquires a reference unconditionally. If skb_frag_ref()
-> is called on a managed zerocopy SKB, the acquired reference is never
-> released by skb_frag_unref() or skb_release_data().
->
-> Skip acquiring a reference in skb_frag_ref() when skb_zcopy_managed(skb)
-> is true so skb_frag_ref() matches skb_frag_unref() and
-> skb_release_data(), and disable share_ok in iptfs_output_queued() when
-> skb_zcopy_managed(skb) is true so iptfs_consume_frags() does not append
-> unreferenced fragments into a managed zerocopy outer SKB.
->
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> [Severity: Low]
+> Does this else branch miss the remaining subtests in jit_insns_arena?
+> 
+> Commit a9fee553d3db ("selftests/bpf: Extend the JIT instruction tests for
+> arm64 encodings") added arena_offsets (built on all architectures) as well as
+> arena_offsets_ldsx, arena_offsets_atomics, and arena_acq_rel to
+> tools/testing/selftests/bpf/progs/jit_insns_arena.c.  When BPF_MAP_TYPE_ARENA
+> is unsupported, those subtests are silently omitted rather than registered and
+> marked skipped, so targeted runs such as ./test_progs -a
+> jit_insns/arena_offsets match zero subtests.
 
-[Severity: Low]
-Since this fixes fragment reference accounting for SKBFL_MANAGED_FRAG_REFS =
-in
-skb_frag_ref() and fragment sharing in iptfs_output_queued(), should the
-commit message include:
+I will introduce test_loader__skip_all_subtests() helper as a generic
+utility to avoid hardcoded string arrays in test runners.
 
-  Fixes: 753f1ca4e1e5 ("net: introduce managed frags infrastructure")
-  Fixes: b96ba312e21c ("xfrm: iptfs: share page fragments of inner packets")
+Thanks,
+Tiezhu
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261108060016.2131=
-509-1-almasrymina@google.com?part=3D1
