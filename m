@@ -1,45 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794246142;
-	b=nzc343ZVcY6tvGGeQmO6yo4FyFJdhaqP1YIJpqVsw7UY3LgqfqqIHlZFeS5E1mJCZ60F
-	 SGSckH2qM4WfDgTZnKLZAwrX90kH8T/GwUaGqCi62GAgbXNmYr4rzx8ErqZBaReyoIG0w
-	 UXEwg0f9iYQRnt0U1+iKP8G/IQuE4aVNX7bQH4xDIEDW8AnAYiDGeFo53YO+8ITDsaKbH
-	 0izfllEn/Untulx/Jpi/ZzORqEuF62SUJxNRPVq/WVrIcDQT5yAG2LS385WrTGjfT1TWP
-	 n2dNuHBzk9tTb/VY4pw++PKvSVtmlm2pPJ2Gs1/NYIGnLfhKmMgZUgAnC1d64t0kwbg==
+	t=1794246302;
+	b=bvMApKguN7SZ2wEjhEN9zNPtHH5Jp6WnDIr30f67zoFPY0xNKzIsvYI0syGombSThgcH
+	 /FxYq5RZK4aa/kkL3+W2ijqmk5j7dM9w/3TXtpcWQPKDfKtwdbjAATzMzhBRZS5hyW8+J
+	 rKL/dwYaNrhK2CxVIzzpdvWL5ghurLsOLgbFPGW8Yr3uCIErfMKY13TkX5odqMvSRdqPa
+	 4WjsFNT1ROAg5uamQxM0Zb8KcTvyHo2AlEk48K+qkVRtKdxPOtM1iv6RV0URg8bR6Z3z2
+	 RRSH60wk80YszoIBnVVi3e3R+oAyepDXN/MaPn357SVU9/t/BReROSSG7TPmPtQn8sA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794246142;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=7ZaQpxVWiAiY8rKJg9D2aec+u+ReKo38L6WIEkkAFII=;
-	b=Mofc+Hly1HMz1knT5Iwi1epk0552OjnIpSBVG1aG1V7WZ7dOuPrEuLNNL1LIHlOiiDuI
-	 JoVI4mmwhIxoRHyU5cf3w6C+FkiX1JOIRcIgMkv7Qjwf6n+J7EQMRfvTDgZyY6r/a2ct2
-	 p6uec/22iAcjRYSIkRPnq9M1KsCNJZjDWQBtb2/SOeK1nBwLdC0XA3D6+Z0j9FSPR/XZY
-	 8yNrmC/LCk+84TJIMJ/7uQndfpiJp8DnVa21aTyQ+1hYs/CEmHkAo6YyN3BZo6dRAlDfs
-	 22BhqEQQx3XwR/Vn0D/Kkt8mNlqxM1M39rP9IAdwrlLR8cLoEgSfkQ7ajsabl5Zpr6A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794246302;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=m0ssjIBr/+gY3LAWR3lvmEG3gxTSZMmrSQ01WdIhf20=;
+	b=af3pbu3dbSh8cdN+02/qMnUywcKhiBkVkDWXT8CbK22QFetEoODbhM9VLhIbQVyhIzoS
+	 FQBQnpSG0sHaOp3P/yox0YQcQiPulozPFJEfIooVa3vSTDeJ3j5NaOwgQUaMPDnt79dUp
+	 dE7HGU0JFvVawSwAq7X1s/KoeYB7VtyU27w6LcHsZFJrdXCFSNFbcALQTadvTE1WHq1Wo
+	 2NzF3vEWdvQ3LcaUbqVyqSZL5zQtoTNlHjTdARva30nRqA5RVhs/V9NkNs5JIQWkrKQXM
+	 MBFxru83QE1uF4rtMAw+MTyucM/xSUN5aDnvOE87OQQzfs4qT3KtHQV0HMFS9GK2voQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NGMC6pU0;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jz9+kRFq;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94031606A31C;
-	Mon,  9 Nov 2026 17:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB25606A334
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 17:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NGMC6pU0
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC36F1F0089F;
-	Mon,  9 Nov 2026 17:42:21 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jz9+kRFq
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1574F1F008A2;
+	Mon,  9 Nov 2026 17:45:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794246142;
-	bh=7ZaQpxVWiAiY8rKJg9D2aec+u+ReKo38L6WIEkkAFII=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=NGMC6pU05PAvkLw2pyRzp+Hx/D/Iq4Mj14fR808BAuMJ9UUsJ2uE8fw2x5B98X5sw
-	 ibYd7sdBrDeJ6rrWVMZN1K430trfymPP97NuEkvzFMb8ccz6b8ZzBfFZHPX60W9g4W
-	 QECfbDJgi28/k/n4wJHNC9tnOILrLm8PCyYxKqbtEj25KQmeUskCI0TPZzcrZ0Ot3C
-	 Jj3rOADBmQfcZG7uyeOhvo9Djkk58hgFNuBcBCJ8zM6bnjHhf1MeHH5JOwjaAKLRiy
-	 RQ9bAAdmC836Rwx09c2DGvrvi3lyIKbg3cnMXUHnnI6nKdr4NZeEBAHWyxxNpN1v7M
-	 OJQ9rl6RWkFXA==
-Content-Type: multipart/mixed; boundary="===============0755294377799794328=="
+	s=k20260515; t=1794246302;
+	bh=m0ssjIBr/+gY3LAWR3lvmEG3gxTSZMmrSQ01WdIhf20=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=jz9+kRFqTWzI4PvG0jFupjQaMcCWYpRlCOXK0GjcqRp3zYMIIijbV22C8XSAPJXAZ
+	 Ru1JGbP8QyIE1I3/vAXYhA+PBsqHUh1ObaZePh67xARcJFa2OzvFpxEXG6+slnMe2N
+	 85gI4osAz/LVoYFOa7i2SSkSh0MDB06JeiV9H+LtSj5CMsjT8freSWvC89BNs1y2L6
+	 4Qe6tqVsyWfKaQBH05HsX59tU1pYWLz1EJaR6BNPWuTA7bkABbKT248feHIvjN5TiR
+	 sreL1/RgwCjitqpyF+GK+tt3S30vWwS0dyS7RyBtHsrYjEKT5u3qOaSwWFpUJnSH4F
+	 psZIxnKFU3kUQ==
+Message-ID: <sashiko-outbox-205331@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 bpf-next 07/18] scripts: Add LLVM plugin
+ infrastructure
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Anton Protopopov" <a.s.protopopov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261109170550.141443-8-a.s.protopopov@gmail.com>
+References: <20261109170550.141443-1-a.s.protopopov@gmail.com>
+ <20261109170550.141443-8-a.s.protopopov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 09 Nov 2026 17:45:01 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,74 +59,74 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <8ab81e05089b4f5ec1ecb1bea9e6dc5cc2953a67f16e9369db005c2f3f3ee242@mail.kernel.org>
-In-Reply-To: <20261109170550.141443-12-a.s.protopopov@gmail.com>
-References: <20261109170550.141443-12-a.s.protopopov@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 11/18] bpf: Follow PHIs in bpf_scan_ir
-From: bot+bpf-ci@kernel.org
-To: a.s.protopopov@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,almagui@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,brauner@kernel.org,kpsingh@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,sashal@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
-Cc: a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  9 Nov 2026 17:42:21 +0000 (UTC)
 
---===============0755294377799794328==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential
+issues to consider:
+- [Low] riscv: pi: filter out LLVM_PLUGINS_CFLAGS from KBUILD_CFLAGS
+- [Low] vdso: avoid stripping LLVM_PLUGINS_CFLAGS from kernel objects
+--
 
-> bpf: Follow PHIs in bpf_scan_ir
+commit 072fb07f8d2d07b80e87b0ea8e05cc60c466504e
+Author: Anton Protopopov <a.s.protopopov@gmail.com>
 
-TL;DR: Nits only: in bpf_scan_ir.cpp, isErrnoRange() duplicates
-errnoConstant()'s errno check, so the range is defined twice; also a comment
-style nit.
+scripts: Add LLVM plugin infrastructure
 
-> diff --git a/scripts/llvm-plugins/bpf_scan_ir.cpp b/scripts/llvm-plugins/bpf_scan_ir.cpp
-> --- a/scripts/llvm-plugins/bpf_scan_ir.cpp
-> +++ b/scripts/llvm-plugins/bpf_scan_ir.cpp
+This commit adds Kbuild and Kconfig infrastructure for building and loading
+LLVM IR pass plugins with -fpass-plugin, and excludes LLVM_PLUGINS_CFLAGS
+from vDSO, EFI stub, and early boot builds.
+
+> diff --git a/arch/arm64/kernel/pi/Makefile b/arch/arm64/kernel/pi/Makefile
+> index a273ab5af805c..5813bb75c9925 100644
+> --- a/arch/arm64/kernel/pi/Makefile
+> +++ b/arch/arm64/kernel/pi/Makefile
+> @@ -10,6 +10,7 @@ KBUILD_CFLAGS	:=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD=
+_CFLAGS)) -fpie \
+>  		   -D__DISABLE_EXPORTS -ffreestanding -D__NO_FORTIFY \
+>  		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
+>  		   $(CONFIG_CC_OPT_NO_ADDRSIG)
+> +KBUILD_CFLAGS	:=3D $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
+
+[Severity: Low]
+Should arch/riscv/kernel/pi/Makefile also filter out $(LLVM_PLUGINS_CFLAGS)
+from KBUILD_CFLAGS?
+
+Like arch/arm64/kernel/pi/Makefile, it compiles pre-MMU position-independent
+early boot objects with -fpie and -ffreestanding, filters out
+CC_FLAGS_FTRACE and CC_FLAGS_LTO, and prefixes symbols with __pi_ via
+objcopy.  Leaving LLVM_PLUGINS_CFLAGS enabled there can break symbol
+confinement or introduce absolute addresses before the MMU and relocations
+are active.
 
 [ ... ]
 
-> @@ -34,9 +36,40 @@ namespace {
->  
->  static constexpr int MaxErrno = 4095;
->  
-> +// is Range in [-4095, 0) ?
-> +static bool isErrnoRange(const ConstantRange &Range)
-> +{
-> +	unsigned Width = Range.getBitWidth();
+> diff --git a/lib/vdso/Makefile.include b/lib/vdso/Makefile.include
+> index cedbf15f80874..848d58296ba23 100644
+> --- a/lib/vdso/Makefile.include
+> +++ b/lib/vdso/Makefile.include
+> @@ -1,5 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> =20
+> +# vDSO code executes outside the kernel.
+> +KBUILD_CFLAGS :=3D $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
 > +
-> +	if (Width != 32 && Width != 64)
-> +		return false;
-> +
-> +	auto L = APInt(Width, 0) - APInt(Width, MaxErrno);
-> +	auto R = APInt(Width, 0);
-> +	return !Range.isEmptySet() && ConstantRange(L, R).contains(Range);
-> +}
-> +
+>  GENERIC_VDSO_MK_PATH :=3D $(abspath $(lastword $(MAKEFILE_LIST)))
+>  GENERIC_VDSO_DIR :=3D $(dir $(GENERIC_VDSO_MK_PATH))
 
-this isn't a bug, but could singleErrno() and errnoConstant() share one
-check?
+[Severity: Low]
+Does stripping $(LLVM_PLUGINS_CFLAGS) from the directory-wide KBUILD_CFLAGS
+here also drop LLVM plugins from standard in-kernel objects built in those
+directories?
 
-isErrnoRange() has a single caller, singleErrno(), which only passes it a
-range that getSingleElement() already showed to hold exactly one value.
-For that input the width check, the isEmptySet() test and the wrapped
-ConstantRange containment do the same thing as errnoConstant() below
-(width of 32 or 64, then N >= -MaxErrno && N < 0), so the errno range is
-now defined in two places, and the !Range.isEmptySet() test can never
-fail.
+Makefiles that include lib/vdso/Makefile.include also build obj-y kernel
+objects linked into vmlinux, such as arch/sparc/vdso/vma.o and the
+vdso*-image.o targets in arch/x86/entry/vdso/common/Makefile.include,
+arch/sparc/vdso/Makefile, and arch/mips/vdso/Makefile.  Those Makefiles
+scope $(GCC_PLUGINS_CFLAGS) removal to $(vobjs) (as this patch does for
+arch/x86/um/vdso/Makefile), whereas modifying KBUILD_CFLAGS unconditionally
+in lib/vdso/Makefile.include prevents enabled LLVM plugins from running on
+the in-kernel objects and drops their <generated/llvm-plugins.h> rebuild
+dependency.
 
-For example, errnoConstant() could call
-singleErrno(ConstantRange(C->getValue()), N), or singleErrno() could test
-the sign-extended element against MaxErrno directly.
-
-Also, the "// is Range in [-4095, 0) ?" comment is the only function-level
-comment in the file using // rather than /* */, and it hardcodes -4095
-where the code uses MaxErrno.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42662799554
---===============0755294377799794328==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109170550.1414=
+43-1-a.s.protopopov@gmail.com?part=3D7
