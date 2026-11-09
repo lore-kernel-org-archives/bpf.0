@@ -1,54 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=51.159.188.251
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794212826;
-	b=LM36u1jDuibyD6IPOL7r+X9+qG/JVBYiIL4gI1QZ5ezdGtLST3i34/d6Li+Ezf8D0nNl
-	 4MrhHtBtpUQXI3k6rCh561pxqTsoBqsbn+fBSciiq8/2pm1H3qUB1oqori1Enf13NPRmP
-	 bDTfT3TVUYthafrfXhIN8mvAdFGzjkMMFpPB4AW2BybDztI3S2Pyaj/EbpPfMPstq9mvu
-	 xROuX2z5EQ4EMnYjE44KWSAW/72frCMAyFkFnALDCVS0Q1dAq+5mLhdhPTZhgVn0ZXVWJ
-	 e11EZl8Y0jdPwkJ/XlTQVHJVJpvUnaYlfxgl9XI55b/OkIVX8hDZZSVrPn6QpaN6CnA==
+	t=1794215353;
+	b=4CiD55i/aHieJQ6GzMx4AZ+fP38fBN7G7NdfIB7yZf3UWr8PjPsxfPRqglgmeM+/jE9b
+	 JszWaq3UOvDh08wv6wpt5ZloBOhlNOupmadrsRsoigvM9ElQFfxZFWBgAOaSSQxI7dfE9
+	 DFrsWs+swhAIFjXXRzf+ucUOg+u2qyEWfwDYLdUUODpAKYYdh+ZUQGNyqDdfWdAXJhzbv
+	 /QH15aHXzAh/gA2xupecfA0jjGLl1k+QARc2MIed+AKTQBQUIBw6NSORjvPRs2i4y4XTO
+	 s+m5I+mu1yMyDxq+Qp0mnUzI3btKL6jt4UQve60Wjn6HCQZk1/jA93fmuuyTo6IgGIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794212826;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=AGeptgeWQKstDRZ6WhP7hNb8ulL3Tryl7XUgDrXOQgo=;
-	b=VVpXKxalE8ETlHs7fJ7QHqR1JUEMtzNH/gqA7I+PXpukhYWwJIR6PvUSv71S5X89T1TP
-	 lszoU6dL97ExYrOr96x39O/ZwY8eUiS/oDu3sCKN85j0DW/og7EZ3TABOmbWpRz+RUhTa
-	 rYfSQsOiDQaYcajspGBMSuVRRrLHbI8k0b53QdUNipbNe+3o3K4B9Uty0y6egofNpFcpc
-	 IBshViRkjOfMCxZVImo25KA9PVdRz87+aZ6f7hWUBUkC++gg1HzXUpJdmHH1Z23VrHKh3
-	 jHs7vJ7lW5CWO6FeszBeOsvc62tnUSlNOd0IwZQVqRnLS+fEpm+oVDXxDBQb7SFKiAQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794215353;
+	h=DMARC-Filter:DKIM-Signature:Received:MIME-Version:Date:From:To:Cc:
+	 Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+	 Content-Type:Content-Transfer-Encoding:X-AntiAbuse:X-AntiAbuse:
+	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-Get-Message-Sender-Via:
+	 X-Authenticated-Sender:X-Source:X-Source-Args:X-Source-Dir;
+	bh=dF7x4L6CgRyPJLEoJCQrQ4pP7smVInKwSeYvbcT8/HI=;
+	b=FmnMbrf6EoJMbuYsLmYQq3/cFpgA+Abu0l4HYm/5mtj8stu/VYNugstS4U1fkFmIb+50
+	 LeqaRr42U0pm+4oCVh7dswo3Tdo2HWpRTeC1HNSSrKW6OR/8vK0jS/g3IxoV6njsrRoZN
+	 Bo3i3f8e2RxoyKPCHoKSylVi9M7lxzVxj3AkAf7u9vGcMyr4+aNhzZtGg2GwyH4hM2F2+
+	 0BVcQLiEMnX6XA7c8R4jsTNczK5xCncRJoOV/BW7Waayp1QBu2hpSxiF2/ONgeQ3YxhCI
+	 eInxyBX/tHQsNOyaEwC7+yT+l6R4NvcycPOsVp+sQjgeXrh2lz2i6B5zh5k1e02Xd+g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RZM49RaB;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=oss.cyber.gouv.fr;
+	spf=pass smtp.mailfrom=oss.cyber.gouv.fr;
+	dkim=pass header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b="R9/kCXlh";
+	arc=none smtp.remote-ip=51.159.188.251
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70A0606A33C;
-	Mon,  9 Nov 2026 08:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A148606D803;
+	Mon,  9 Nov 2026 09:09:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8A148606D803
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RZM49RaB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD721F008A1;
-	Mon,  9 Nov 2026 08:27:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794212825;
-	bh=AGeptgeWQKstDRZ6WhP7hNb8ulL3Tryl7XUgDrXOQgo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=RZM49RaBjoTUrgYef2hsyoyz6aGV3hhPJvIouWL1z6+HXwL/wmad/wq76/YnGeOBz
-	 N7/32leH8E6ieRwlW61b/Af4sBiQ7vUFuPrucs3ob0+/vx7q1XrmqOlH+IMt0w6A2R
-	 0spSjZDh/ByCRsvFbj/Bs1Bm9mh7Peas0Ca82uGq98eTXE9pZ1xysubZMkswiflQgJ
-	 uMjOMSo6uGoaaiK36Dd0VjCcG5GQ5gYvwaLulY3N4uWJOF+MIlx7mFvksoNWul/rfp
-	 wl0P6Fv5kTeZdkqfRIKfl1puOnCEWIs3c6hIZ2JxzpWZ6pF6MG6N6m+sQu8MB8PfnJ
-	 nNdvePVu35u+g==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Vineet Gupta <vineet.gupta@linux.dev>
-Cc: rostedt@goodmis.org, mark.rutland@arm.com, mathieu.desnoyers@efficios.com, andrii@kernel.org, peterz@infradead.org, linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v4 2/2] tracing: fgraph: use scoped_guard() for the task list walk
-Date: Mon, 09 Nov 2026 17:27:02 +0900
-Message-ID: <undine-1794212822033915371-351c4118961c4f82@undined.local>
-X-Mailer: UndineD 0.1
-In-Reply-To: <20261021174406.2891598-3-vineet.gupta@linux.dev>
-References: <20261021174406.2891598-1-vineet.gupta@linux.dev> <20261021174406.2891598-3-vineet.gupta@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=R9/kCXlh
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
+	Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:
+	Reply-To:Sender:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=dF7x4L6CgRyPJLEoJCQrQ4pP7smVInKwSeYvbcT8/HI=; b=R9/kCXlhPKlWEYGNLPEHOjxGos
+	jfHH1rVhwiBDTwUo+LFfGN6U67Y0i/mw6jMLBadDIN3n89LzJnc27/S1NgfZ8mZg8a4oG2IMECGXe
+	QO9v62nQhwlK2Qwq4x4pfOzyCTdnn1gLRnyp74dexZ1g3IP8drv62Z22dR35kiWgeW/JvdGBXMers
+	2RcsrpuC8mJ1gfuaGJYEMGf3dcdL7JfF0moNvoc4u6T6oyBhmrMd1VdzQ4rb0WU4ts7CqKNwYnov0
+	NvVorK1ukJx2Zf7z1t4/e4gVHxlpFHJYgB8n+dXe2meBeyRdJHfWpKELZ0X3NW2aQgdnGXS95qwWv
+	eWiL32hw==;
+Received: from [::1] (port=36922 helo=pf-012.whm.fr-par.scw.cloud)
+	by pf-012.whm.fr-par.scw.cloud with esmtpa (Exim 4.100.1)
+	(envelope-from <nicolas.bouchinet@oss.cyber.gouv.fr>)
+	id 1xQLNB-00000007yi4-0YGr;
+	Mon, 09 Nov 2026 10:09:04 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,101 +60,99 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Date: Mon, 09 Nov 2026 10:08:59 +0100
+From: nicolas.bouchinet@oss.cyber.gouv.fr
+To: Cai Xinchen <caixinchen1@huawei.com>
+Cc: xiujianfeng@huawei.com, paul@paul-moore.com, jmorris@namei.org,
+ serge@hallyn.com, shuah@kernel.org, linux-security-module@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, lujialin4@huawei.com
+Subject: Re: [PATCH -next 0/9] lockdown: fix the securityfs interface and add
+ tests
+In-Reply-To: <20261103082421.3033195-1-caixinchen1@huawei.com>
+References: <20261103082421.3033195-1-caixinchen1@huawei.com>
+User-Agent: Roundcube Webmail/1.6.20
+Message-ID: <f118d32f369dff7182956b64e6bc1dd8@oss.cyber.gouv.fr>
+X-Sender: nicolas.bouchinet@oss.cyber.gouv.fr
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: nicolas.bouchinet@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: nicolas.bouchinet@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-On Wed, 21 Oct 2026 10:44:06 -0700, Vineet Gupta <vineet.gupta@linux.dev> wrote:
-> alloc_retstack_tasklist() open-codes rcu_read_lock() and unwinds it
-> through an unlock label. Use scoped_guard(rcu) instead and let the
-> compiler emit the unlock on every exit path.
-> 
-> The -EAGAIN case now jumps straight to the free label rather than to
-> unlock; leaving the guard's scope releases the RCU read lock on the
-> way, so the unlock label has no remaining users and is removed.
-> 
-> No functional change: objdump of fgraph.o shows identical call targets
-> and counts, including the three __rcu_read_unlock() sites the compiler
-> emits for the exits from the read-side section. A PROVE_RCU +
-> DEBUG_ATOMIC_SLEEP build with the -EAGAIN path forced several thousand
-> times is clean.
-> 
-> The preceding patch deliberately left this alone so that it stays
-> straightforward to backport. This is the follow-up.
-> 
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
-> Tested-by: Vineet Gupta <vineet.gupta@linux.dev>
+Hi Cai,
 
-This looks good to me. 
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thanks.
-
-> ---
->  kernel/trace/fgraph.c | 39 +++++++++++++++++++--------------------
->  1 file changed, 19 insertions(+), 20 deletions(-)
+Thanks for your contribution.
+> The lockdown LSM exposes /sys/kernel/security/lockdown, but the file is
+> not documented and has no selftest.  While looking at the interface we
+> also found a configuration bug and several accumulated cleanups.
 > 
-> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-> index 4c74f1a15ad4..bbf6e4e2da2d 100644
-> --- a/kernel/trace/fgraph.c
-> +++ b/kernel/trace/fgraph.c
-> @@ -1057,32 +1057,31 @@ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
->  		}
->  	}
->  
-> -	rcu_read_lock();
-> -	for_each_process_thread(g, t) {
-> -		unsigned long *rs;
-> +	scoped_guard (rcu) {
-> +		for_each_process_thread(g, t) {
-> +			unsigned long *rs;
->  
-> -		if (t->ret_stack)
-> -			continue;
-> +			if (t->ret_stack)
-> +				continue;
->  
-> -		rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
-> -		if (!rs) {
-> -			if (start == end) {
-> -				ret = -EAGAIN;
-> -				goto unlock;
-> +			rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
-> +			if (!rs) {
-> +				if (start == end) {
-> +					ret = -EAGAIN;
-> +					goto free;
-> +				}
-> +				rs = ret_stack_list[start++];
->  			}
-> -			rs = ret_stack_list[start++];
-> -		}
->  
-> -		atomic_set(&t->trace_overrun, 0);
-> -		ret_stack_init_task_vars(rs);
-> -		t->curr_ret_stack = 0;
-> -		t->curr_ret_depth = -1;
-> -		/* Make sure the tasks see the 0 first: */
-> -		smp_store_release(&t->ret_stack, rs);
-> +			atomic_set(&t->trace_overrun, 0);
-> +			ret_stack_init_task_vars(rs);
-> +			t->curr_ret_stack = 0;
-> +			t->curr_ret_depth = -1;
-> +			/* Make sure the tasks see the 0 first: */
-> +			smp_store_release(&t->ret_stack, rs);
-> +		}
->  	}
->  
-> -unlock:
-> -	rcu_read_unlock();
->  free:
->  	for (i = start; i < end; i++)
->  		kmem_cache_free(fgraph_stack_cachep, ret_stack_list[i]);
-> -- 
-> 2.53.0-Meta
+> The series is organized as follows:
 > 
->
+>   - patches 1-2 are small cleanups in lockdown_write(): stop scanning
+>     after the matching level and drop an update to a length variable
+>     that is not used afterwards.
+>   - patch 3 replaces sprintf() with scnprintf() so that the status
+>     buffer is bounded explicitly if more levels are added later.
+>   - patch 4 makes the LSM select SECURITYFS.  Without it, a kernel
+>     built with CONFIG_SECURITYFS=n logs "failed LSM lockdown core
+>     initcall with errno -19" and does not create the file advertised
+>     by the Kconfig help text.
+>   - patch 5 removes LSM_AUDIT_DATA_LOCKDOWN and its formatting code,
+>     which became dead when the SELinux lockdown implementation was
+>     removed by commit f5d0e5e9d72d.
+>   - patches 6-7 drop an unused include, simplify the securityfs
+>     registration, and move lockdown_reasons[] next to its only user.
+>   - patch 8 documents the ABI and adds the new file to the LOCKDOWN
+>     SECURITY MODULE entry in MAINTAINERS.
+>   - patch 9 adds a kselftest covering the read format, invalid levels,
+>     and the rejection of the current or a lower level.
+> 
+> The only functional change is patch 4; the rest are cleanups,
+> documentation, or test coverage.  The selftest never escalates
+> lockdown on the machine where it runs.
+> 
+> Cai Xinchen (8):
+>   lockdown: Add break in lockdown_write
+>   lockdown: bound the status string with scnprintf
+>   lockdown: select SECURITYFS
+>   lsm: remove unused lockdown audit data
+>   lockdown: drop an unused include and simplify secfs init
+>   lockdown: move lockdown_reasons next to its only user
+>   Documentation/ABI: document the lockdown securityfs file
+>   selftests/lsm: add lockdown securityfs test
+> 
+> Kalevi Kolttonen (1):
+>   lockdown: remove useless decrement operation
+> 
+>  Documentation/ABI/testing/securityfs-lockdown |  41 ++++
+>  MAINTAINERS                                   |   1 +
+>  include/linux/lsm_audit.h                     |   2 -
+>  include/linux/security.h                      |   2 -
+>  security/lockdown/Kconfig                     |   1 +
+>  security/lockdown/lockdown.c                  |  63 +++++--
+>  security/lsm_audit.c                          |   4 -
+>  security/security.c                           |  40 ----
+>  tools/testing/selftests/lsm/Makefile          |   3 +-
+>  tools/testing/selftests/lsm/common.c          |  35 +++-
+>  tools/testing/selftests/lsm/common.h          |   2 +
+>  tools/testing/selftests/lsm/lockdown_test.c   | 176 ++++++++++++++++++
+>  12 files changed, 300 insertions(+), 70 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/securityfs-lockdown
+>  create mode 100644 tools/testing/selftests/lsm/lockdown_test.c
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Those looks good to me, I've added comments in patch 9.
+I'm not at work this week so I'll tests your series next monday. Sorry
+for the inconvenience.
+
+Best regards,
+
+Nicolas
