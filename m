@@ -1,48 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.27.60.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794228386;
-	b=3fab1OoOKiJIcYrHwG0dZ1wmrmSkCWOoc8l48KRbwr8t85sO/i23058wS6Ie1ULZ4T1c
-	 dhiZ+TNkHMdbKdyfu2eD+yKV75YFR37s5NYvhtjV5R9+8TBKqgsVEQLCivFolL3biYeWu
-	 opfCLHzEheqZN6kM/elJ9+kCbFpOFCoFoR/mjFwnD0LdgPu/y7PeuIWZjgvqDnL6wep/C
-	 4e8ZBoqVjnlsh0wGyyuxhLOOAvqCNilt4dVDbw4gJ2nPromaHqFF90vIMXkXp6/M0F/L+
-	 ZxwwOnW/bqaFUkTORaKM0R12KKerINyVG4UoUsyYxT1TN5mlsw/68YrJMfX+Yb6pBFQ==
+	b=L+CxN1hPktGisRW4V2Dc+bh4UE60Mq+/Z8hon1MM+u3DMnm7uhgyqebQDZEdNvOcXSsc
+	 NLLsSxXh59OhOZ6I437HI13qBomRhaz07S/weD96ghVOc6MZ4gNn0rb4XJKp/oxrAWZH7
+	 TCE4TKIsiHmxv85Fsga3ODnriL6q5kBCI9OUE+sQbUCnGhu93OUk7LORVPqn1R2N4Jnnn
+	 f56yAS9pcaphzRr/C3Ktjf9nRJDLEiwqEs53d903lJEMw314eOk9rm89JMUoDvVcz2r28
+	 Zrt+vGsiDLVQpENw2uWZt72IrUgiXk7kfuoDaAB4XvtANHWYvlNqNNbei3uIQsD93JQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794228386;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=/X2DksPtlhZO70cM7uYMBeEMKvZfW8cBCz15/mjTiOo=;
-	b=uJJmpMANz7CqDL0vQJd8AmbGquBxwdEsrXw7vkH2eu6nIKqDduDaBUQVMGBhJuSvJ/FW
-	 JpHPgav4M5gge+WeP2k1o/c2WzjweU4CuiBwixl0t/iJ/gcD6ul8JgJ1W5fgKp5wdoSkX
-	 9J3yGmyx5YmPS/YkVArtIFxvEPFFzhUiQ27OontCgmR05r6UFwkPjGbH7f34nOqK4xeBs
-	 I1fIXJhYqAEv7seXdupIs9dxfRRnqVywjgXMVHzgesMhpJsQDZbDzpJKt+2nU1DCW7KtU
-	 0/qt6KeSdDXjcoRGOeyJSPFmGE4PSZgkc4JyaNt6H1D5HZQG9v6eJj0R47Hi56JKNPw==
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=kh7rPhttLM/9UhZnWWZ9GH6qoA/1ey+mAVM6n12p29w=;
+	b=Lx7TJFeyyPShuvkEliklU7c/5WfHgtlOSm2tQe/2q4FlGGlAQ1UNI9U0G0mnb5tzq8mr
+	 RyxbaZFICkyPjdKN1IJaH0xGMm3PnCzgIdOOW95XxvjHx188a45kd0UBOe5bS8B+QTbgA
+	 DPeRvSKqdBp0JUjYTvqGqThV1CiKIxlpFGHnsMr9QYDu0wrUJc9v/6g1h20bGyyDs6zph
+	 tQV4DHwJ08IHLOaq7liNg2oo9L0I6dpsGAuDxdqO3yETIGcDyKEjOWvvFikoBPNv7hnqe
+	 XVH3OS9N6FS0HfvoFHhUlBinTNBQecRI8wEc4mjS5TN7MaBmZewiK3fUsnG9kG40pSg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=corp.free.fr;
 	spf=pass smtp.mailfrom=corp.free.fr;
-	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=bQptTWAW;
+	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=GnJgdnUJ;
 	arc=none smtp.remote-ip=212.27.60.169
 Received: from rcs.proxad.net (rcs.proxad.net [212.27.60.169])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA49606A322;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6096606A325;
 	Mon,  9 Nov 2026 12:46:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CEA49606A322
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6096606A325
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=corp.free.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=corp.free.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=bQptTWAW
+	dkim=pass (2048-bit key) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=GnJgdnUJ
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corp.free.fr; s=rcs;
-	t=1794228383; bh=6jmmZ4W4ME6d9x/jtJIJ+LI0O9t8/g23Z4plskKUHw4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=bQptTWAWLOYZ7amrl0pHXjg459OhB941F1bebKRqQve5fceYPRp8/FHbbZWm8efbn
-	 sj4C74k6nnHHkhzpagx5L+MQDo5sgDGrpyWX92pqgPbFx8WG5Cs+HM0XtMZY1gedhG
-	 Shysqz0ueHlaciPpXAJxm/6a1WJSVrzLsB+9QYO1ymz2t4Pk5itvC33iFN/hEums4z
-	 NFjPTYpn7oz5LRgK/FHuueRytfuEoo8X851s5XT7zXmoKAM+6Kwd+GL1AFz9tYCh1/
-	 vh6dVNSJzecxZF0n5/6jpGUtoSEVSnBUq8VA/1SyZh8xRavhQzeg6JiKW3FFspI0fI
-	 lYpNeVCuVNPtA==
+	t=1794228384; bh=7ZPGTPVH0/RD8EODqPSC8V+GK04omyIfEDmcx5TbHo4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=GnJgdnUJ8FO7KxFUxm8vPAsdZCo5VNQAWW/jvWGNrYrUgrkNL9HskYrD6pUff5JIc
+	 /2qZDWwqMh5BitC7DPcAVYr1WjnjGDDqbwoKxwvfibcw3cH6TtpQqTNRSrNo52HEHK
+	 X/4vmdaDM1zi6dR/R85IB+ZcDzfr+WR7E0VmhtwEwBXNKQX75w4uuCezbopLe90pCC
+	 IYLXvqdM86WZUmvQst53V4pnuzbPbALX7PZyyBYJq8jEBomP4Wg5RFYQRCALeN0d4s
+	 wc5fpozXzfcviS3vDesAOoNILglbSrgcydfopLn51z/RwhTyJetTkZf4Uqq0cIt3p2
+	 EtDmcxyfbsbSw==
 Received: from lnxos-dev.home (82-66-150-212.subs.proxad.net [82.66.150.212])
-	by rcs.proxad.net (Postfix) with ESMTPSA id 30D3D44C0593;
+	by rcs.proxad.net (Postfix) with ESMTPSA id E6FA944C0610;
 	Mon,  9 Nov 2026 13:46:23 +0100 (CET)
 From: Alexandre Cassen <acassen@corp.free.fr>
 To: Jamal Hadi Salim <jhs@mojatatu.com>,
@@ -69,10 +70,12 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v3 0/4] net/sched: let actions drop their per CPU memory
-Date: Mon,  9 Nov 2026 13:46:11 +0100
-Message-ID: <20261109124618.933149-1-acassen@corp.free.fr>
+Subject: [PATCH net-next v3 2/4] net/sched: honor TCA_ACT_FLAGS_NO_PERCPU_STATS in bpf, ife and skbmod
+Date: Mon,  9 Nov 2026 13:46:13 +0100
+Message-ID: <20261109124618.933149-3-acassen@corp.free.fr>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261109124618.933149-1-acassen@corp.free.fr>
+References: <20261109124618.933149-1-acassen@corp.free.fr>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,52 +87,186 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series lets actions drop their per CPU stats and lets skip_sw
-tunnel_key actions drop their dst cache:
+bpf, ife and skbmod are the last actions that ignore
+TCA_ACT_FLAGS_NO_PERCPU_STATS. Commit 40bd094d65fc ("flow_offload: fill
+flags to action structure") makes them store and dump the flag. They
+still allocate per CPU stats, about 8 KB per action on a 128 CPU host.
+Yet tc reports no_percpu on them.
 
-- skbedit, police, mpls and sample honor TCA_ACT_FLAGS_NO_PERCPU_STATS.
-- bpf, ife and skbmod honor it too. All actions now do.
-- Action init sees the offload flags of the filter. A skip_sw filter
-  alone now satisfies the skbedit queue_mapping check.
-- tunnel_key skips the dst cache for skip_sw actions.
+Honor the flag here too. These actions run only in software. With
+no_percpu every packet takes tcfa_lock to update the stats. Only the
+users who set the flag pay this cost.
 
-v3:
-- Add patch 2 for bpf, ife and skbmod (Jamal).
-- Add Jamal's Reviewed-by to patch 3.
-- Correct the memory saving in patch 1 to 8 KB. The 6.5 KB in v2 ignored
-  the padding that the alignment of the stats adds.
-- Reword the title. Patch 2 does not concern hardware only actions.
+Signed-off-by: Alexandre Cassen <acassen@corp.free.fr>
+---
+ net/sched/act_bpf.c    |  8 ++++----
+ net/sched/act_ife.c    | 24 ++++++++++++------------
+ net/sched/act_skbmod.c |  8 ++++----
+ 3 files changed, 20 insertions(+), 20 deletions(-)
 
-v2: https://lore.kernel.org/netdev/20261104214607.556269-1-acassen@corp.free.fr/
-- Add the act_api patch so that a skip_sw filter is enough for the
-  tunnel_key patch (Sashiko [1], Jakub).
-- Give the memory saving in the tunnel_key patch (Sashiko [1], Jakub)
-  and in patch 1.
-- Drop the race note from patch 1. Commit 1800f27a5ef8 ("net/sched:
-  act_api: take tcfa_lock for hardware stats updates") fixes this race,
-  which Sashiko [1] also flags.
-- Add Jamal's Reviewed-by to patch 1 and the tunnel_key patch.
-
-v1: https://lore.kernel.org/netdev/20261009051930.3619697-1-acassen@corp.free.fr/
-[1] https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261009051930.3619697-1-acassen%40corp.free.fr
-
-Alexandre Cassen (4):
-  net/sched: honor TCA_ACT_FLAGS_NO_PERCPU_STATS in more actions
-  net/sched: honor TCA_ACT_FLAGS_NO_PERCPU_STATS in bpf, ife and skbmod
-  net/sched: act_api: pass the filter offload flags to action init
-  net/sched: act_tunnel_key: skip dst cache for skip_sw actions
-
- net/sched/act_api.c        | 17 +++++++----------
- net/sched/act_bpf.c        |  8 ++++----
- net/sched/act_ife.c        | 24 ++++++++++++------------
- net/sched/act_mpls.c       |  8 ++++----
- net/sched/act_police.c     | 10 +++++-----
- net/sched/act_sample.c     |  6 +++---
- net/sched/act_skbedit.c    |  9 +++++----
- net/sched/act_skbmod.c     |  8 ++++----
- net/sched/act_tunnel_key.c | 10 +++++++---
- 9 files changed, 51 insertions(+), 49 deletions(-)
-
+diff --git a/net/sched/act_bpf.c b/net/sched/act_bpf.c
+index 06d8f78b7368..3aea3ff5785f 100644
+--- a/net/sched/act_bpf.c
++++ b/net/sched/act_bpf.c
+@@ -42,7 +42,7 @@ TC_INDIRECT_SCOPE int tcf_bpf_act(struct sk_buff *skb,
+ 	int action, filter_res;
+ 
+ 	tcf_lastuse_update(&prog->tcf_tm);
+-	bstats_update(this_cpu_ptr(prog->common.cpu_bstats), skb);
++	tcf_action_update_bstats(&prog->common, skb);
+ 
+ 	filter = rcu_dereference_bh(prog->filter);
+ 	if (at_ingress) {
+@@ -76,7 +76,7 @@ TC_INDIRECT_SCOPE int tcf_bpf_act(struct sk_buff *skb,
+ 		break;
+ 	case TC_ACT_SHOT:
+ 		action = filter_res;
+-		qstats_cpu_drop_inc(prog->common.cpu_qstats);
++		tcf_action_inc_drop_qstats(&prog->common);
+ 		break;
+ 	case TC_ACT_UNSPEC:
+ 		action = prog->tcf_action;
+@@ -305,8 +305,8 @@ static int tcf_bpf_init(struct net *net, struct nlattr *nla,
+ 	index = parm->index;
+ 	ret = tcf_idr_check_alloc(tn, &index, act, bind);
+ 	if (!ret) {
+-		ret = tcf_idr_create(tn, index, est, act,
+-				     &act_bpf_ops, bind, true, flags);
++		ret = tcf_idr_create_from_flags(tn, index, est, act,
++						&act_bpf_ops, bind, flags);
+ 		if (ret < 0) {
+ 			tcf_idr_cleanup(tn, index);
+ 			return ret;
+diff --git a/net/sched/act_ife.c b/net/sched/act_ife.c
+index 3946a9589bb8..a931f0d353d2 100644
+--- a/net/sched/act_ife.c
++++ b/net/sched/act_ife.c
+@@ -551,8 +551,8 @@ static int tcf_ife_init(struct net *net, struct nlattr *nla,
+ 	}
+ 
+ 	if (!exists) {
+-		ret = tcf_idr_create(tn, index, est, a, &act_ife_ops,
+-				     bind, true, flags);
++		ret = tcf_idr_create_from_flags(tn, index, est, a,
++						&act_ife_ops, bind, flags);
+ 		if (ret) {
+ 			tcf_idr_cleanup(tn, index);
+ 			kfree(p);
+@@ -720,7 +720,7 @@ static int tcf_ife_decode(struct sk_buff *skb, const struct tc_action *a,
+ 
+ 	p = rcu_dereference_bh(ife->params);
+ 
+-	bstats_update(this_cpu_ptr(ife->common.cpu_bstats), skb);
++	tcf_action_update_bstats(&ife->common, skb);
+ 	tcf_lastuse_update(&ife->tcf_tm);
+ 
+ 	if (skb_at_tc_ingress(skb))
+@@ -728,7 +728,7 @@ static int tcf_ife_decode(struct sk_buff *skb, const struct tc_action *a,
+ 
+ 	tlv_data = ife_decode(skb, &metalen);
+ 	if (unlikely(!tlv_data)) {
+-		qstats_cpu_drop_inc(ife->common.cpu_qstats);
++		tcf_action_inc_drop_qstats(&ife->common);
+ 		return TC_ACT_SHOT;
+ 	}
+ 
+@@ -742,7 +742,7 @@ static int tcf_ife_decode(struct sk_buff *skb, const struct tc_action *a,
+ 		curr_data = ife_tlv_meta_decode(tlv_data, ifehdr_end, &mtype,
+ 						&dlen, NULL);
+ 		if (!curr_data) {
+-			qstats_cpu_drop_inc(ife->common.cpu_qstats);
++			tcf_action_inc_drop_qstats(&ife->common);
+ 			return TC_ACT_SHOT;
+ 		}
+ 
+@@ -751,7 +751,7 @@ static int tcf_ife_decode(struct sk_buff *skb, const struct tc_action *a,
+ 			/* abuse overlimits to count metadata we cannot
+ 			 * decode: no ops for it, or the decoder rejected it
+ 			 */
+-			qstats_cpu_overlimit_inc(ife->common.cpu_qstats);
++			tcf_action_inc_overlimit_qstats(&ife->common);
+ 
+ 			if (ret == -ENOENT)
+ 				pr_info_ratelimited("Unknown metaid %d dlen %d\n",
+@@ -763,7 +763,7 @@ static int tcf_ife_decode(struct sk_buff *skb, const struct tc_action *a,
+ 	}
+ 
+ 	if (WARN_ON(tlv_data != ifehdr_end)) {
+-		qstats_cpu_drop_inc(ife->common.cpu_qstats);
++		tcf_action_inc_drop_qstats(&ife->common);
+ 		return TC_ACT_SHOT;
+ 	}
+ 
+@@ -819,21 +819,21 @@ static int tcf_ife_encode(struct sk_buff *skb, const struct tc_action *a,
+ 			exceed_mtu = true;
+ 	}
+ 
+-	bstats_update(this_cpu_ptr(ife->common.cpu_bstats), skb);
++	tcf_action_update_bstats(&ife->common, skb);
+ 	tcf_lastuse_update(&ife->tcf_tm);
+ 
+ 	if (!metalen) {		/* no metadata to send */
+ 		/* abuse overlimits to count when we allow packet
+ 		 * with no metadata
+ 		 */
+-		qstats_cpu_overlimit_inc(ife->common.cpu_qstats);
++		tcf_action_inc_overlimit_qstats(&ife->common);
+ 		return action;
+ 	}
+ 	/* could be stupid policy setup or mtu config
+ 	 * so lets be conservative.. */
+ 	if ((action == TC_ACT_SHOT) || exceed_mtu) {
+ drop:
+-		qstats_cpu_drop_inc(ife->common.cpu_qstats);
++		tcf_action_inc_drop_qstats(&ife->common);
+ 		return TC_ACT_SHOT;
+ 	}
+ 
+@@ -898,9 +898,9 @@ TC_INDIRECT_SCOPE int tcf_ife_act(struct sk_buff *skb,
+ 	int ret;
+ 
+ 	if (unlikely(!tcf_ife_is_eth_skb(skb))) {
+-		bstats_update(this_cpu_ptr(ife->common.cpu_bstats), skb);
++		tcf_action_update_bstats(&ife->common, skb);
+ 		tcf_lastuse_update(&ife->tcf_tm);
+-		qstats_cpu_drop_inc(ife->common.cpu_qstats);
++		tcf_action_inc_drop_qstats(&ife->common);
+ 		return TC_ACT_SHOT;
+ 	}
+ 
+diff --git a/net/sched/act_skbmod.c b/net/sched/act_skbmod.c
+index 09e9dcf58253..72dedb9b19a6 100644
+--- a/net/sched/act_skbmod.c
++++ b/net/sched/act_skbmod.c
+@@ -32,7 +32,7 @@ TC_INDIRECT_SCOPE int tcf_skbmod_act(struct sk_buff *skb,
+ 	u64 flags;
+ 
+ 	tcf_lastuse_update(&d->tcf_tm);
+-	bstats_update(this_cpu_ptr(d->common.cpu_bstats), skb);
++	tcf_action_update_bstats(&d->common, skb);
+ 
+ 	p = rcu_dereference_bh(d->skbmod_p);
+ 	if (unlikely(p->action == TC_ACT_SHOT))
+@@ -91,7 +91,7 @@ TC_INDIRECT_SCOPE int tcf_skbmod_act(struct sk_buff *skb,
+ 	return p->action;
+ 
+ drop:
+-	qstats_cpu_overlimit_inc(d->common.cpu_qstats);
++	tcf_action_inc_overlimit_qstats(&d->common);
+ 	return TC_ACT_SHOT;
+ }
+ 
+@@ -171,8 +171,8 @@ static int tcf_skbmod_init(struct net *net, struct nlattr *nla,
+ 	}
+ 
+ 	if (!exists) {
+-		ret = tcf_idr_create(tn, index, est, a,
+-				     &act_skbmod_ops, bind, true, flags);
++		ret = tcf_idr_create_from_flags(tn, index, est, a,
++						&act_skbmod_ops, bind, flags);
+ 		if (ret) {
+ 			tcf_idr_cleanup(tn, index);
+ 			return ret;
 -- 
 2.43.0
 
