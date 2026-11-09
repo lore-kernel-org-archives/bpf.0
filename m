@@ -1,45 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794210336;
-	b=DEU5qqM+MBBWUjl1aNujNGrbIEezSgjCgwUVUjMWDubcnovnBA7H8QbzRcwV9+qiudwX
-	 MDGSsGaDSPjgD+qir8WNoKRrwa4WE+Uj9+l1gCMwjF8mXkv6GDohuyej7xmzsi75Xz2mm
-	 orGLibPeOcCpA6vxXmmXadxmt/eJ2f8iGehbyH2lRd5A5v5M4JgRNBIimi3wt9OOI43W8
-	 sjG0DfjGqRufAIIkNz41Xp0mMXmhM0d/e/au8aQv11QGWPPNUdLZBnNMv35wi38PWKXrm
-	 W29eVCRuCpSWU3fMMCRVRnevorAgUT9QK44Dq46xKqzjN1VJ22F950OIwe+Z0JJtz+Q==
+	t=1794212826;
+	b=LM36u1jDuibyD6IPOL7r+X9+qG/JVBYiIL4gI1QZ5ezdGtLST3i34/d6Li+Ezf8D0nNl
+	 4MrhHtBtpUQXI3k6rCh561pxqTsoBqsbn+fBSciiq8/2pm1H3qUB1oqori1Enf13NPRmP
+	 bDTfT3TVUYthafrfXhIN8mvAdFGzjkMMFpPB4AW2BybDztI3S2Pyaj/EbpPfMPstq9mvu
+	 xROuX2z5EQ4EMnYjE44KWSAW/72frCMAyFkFnALDCVS0Q1dAq+5mLhdhPTZhgVn0ZXVWJ
+	 e11EZl8Y0jdPwkJ/XlTQVHJVJpvUnaYlfxgl9XI55b/OkIVX8hDZZSVrPn6QpaN6CnA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794210336;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=mQiRmGiF8PMhpMrZ48ZYZrWpSaElWCNANH3Hbqdb80Y=;
-	b=sZDIVOxtPPUvV33sciD+wWsYzLueT1jL1JMm5djowrpU+EMevz9hi+L6jKoa4dtv6gEj
-	 9MAXeKXeXv79YER64sQ0BVcQNqjgmXfKxVJiZQdsFQMibQedlFYSn11e2YRvbmDKW+l49
-	 5p1AYWP1L0O+I9a6jTv07qympoZYUYxm4fWB+B5VjpoTavrciCNJFqFu+g4IhwKyUB+l/
-	 KAwZFXAweO+AHZV0crnLfY06Ou/pumwwylL/IlJhWAouXsRMM0ULbWKRiuhOyjxLhrk1S
-	 Ax9jQNKbly4Qe3hB1UKDZounOa1bx6YcB3NzCthuWpJvYwwHqD9HVxGmrl6ElcfY86w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794212826;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=AGeptgeWQKstDRZ6WhP7hNb8ulL3Tryl7XUgDrXOQgo=;
+	b=VVpXKxalE8ETlHs7fJ7QHqR1JUEMtzNH/gqA7I+PXpukhYWwJIR6PvUSv71S5X89T1TP
+	 lszoU6dL97ExYrOr96x39O/ZwY8eUiS/oDu3sCKN85j0DW/og7EZ3TABOmbWpRz+RUhTa
+	 rYfSQsOiDQaYcajspGBMSuVRRrLHbI8k0b53QdUNipbNe+3o3K4B9Uty0y6egofNpFcpc
+	 IBshViRkjOfMCxZVImo25KA9PVdRz87+aZ6f7hWUBUkC++gg1HzXUpJdmHH1Z23VrHKh3
+	 jHs7vJ7lW5CWO6FeszBeOsvc62tnUSlNOd0IwZQVqRnLS+fEpm+oVDXxDBQb7SFKiAQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SnBwDXJx;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RZM49RaB;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15516606A31C
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 07:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70A0606A33C;
+	Mon,  9 Nov 2026 08:27:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SnBwDXJx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA04C1F0089F;
-	Mon,  9 Nov 2026 07:45:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RZM49RaB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD721F008A1;
+	Mon,  9 Nov 2026 08:27:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794210335;
-	bh=mQiRmGiF8PMhpMrZ48ZYZrWpSaElWCNANH3Hbqdb80Y=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=SnBwDXJxhhmb2BNYVDC/OiotFv1Z5EVFCpyNdcUiozCINU3yhb1wAuKnA9nFsS1JE
-	 /2pGzS6jJP095fz7l6rIRFwLMXHXKlJKqpYA5p1HsKnpW2DgprnVGg9KNPTnL2dIwy
-	 R/eYlIGhzJEepXqFvkuaC7WtL6MnytPM7j+G/Zq+F2+0ypKh3Yz/xbpdNCdPdCjBIk
-	 XJrcFsTCl8753rYtal3pEAhYz9K9TPYWGMng/Zip2FLDfINUjdi+IqX8SwlazXNy5w
-	 GvOd90Pzqg/pxM2opIJkSe+f/K9BphG7KUzO2OWbEjZVfjoh7X49top144oMpT3CA5
-	 DQLlbJWEQ+CLA==
-Content-Type: multipart/mixed; boundary="===============3238441288265326375=="
+	s=k20260515; t=1794212825;
+	bh=AGeptgeWQKstDRZ6WhP7hNb8ulL3Tryl7XUgDrXOQgo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=RZM49RaBjoTUrgYef2hsyoyz6aGV3hhPJvIouWL1z6+HXwL/wmad/wq76/YnGeOBz
+	 N7/32leH8E6ieRwlW61b/Af4sBiQ7vUFuPrucs3ob0+/vx7q1XrmqOlH+IMt0w6A2R
+	 0spSjZDh/ByCRsvFbj/Bs1Bm9mh7Peas0Ca82uGq98eTXE9pZ1xysubZMkswiflQgJ
+	 uMjOMSo6uGoaaiK36Dd0VjCcG5GQ5gYvwaLulY3N4uWJOF+MIlx7mFvksoNWul/rfp
+	 wl0P6Fv5kTeZdkqfRIKfl1puOnCEWIs3c6hIZ2JxzpWZ6pF6MG6N6m+sQu8MB8PfnJ
+	 nNdvePVu35u+g==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Vineet Gupta <vineet.gupta@linux.dev>
+Cc: rostedt@goodmis.org, mark.rutland@arm.com, mathieu.desnoyers@efficios.com, andrii@kernel.org, peterz@infradead.org, linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v4 2/2] tracing: fgraph: use scoped_guard() for the task list walk
+Date: Mon, 09 Nov 2026 17:27:02 +0900
+Message-ID: <undine-1794212822033915371-351c4118961c4f82@undined.local>
+X-Mailer: UndineD 0.1
+In-Reply-To: <20261021174406.2891598-3-vineet.gupta@linux.dev>
+References: <20261021174406.2891598-1-vineet.gupta@linux.dev> <20261021174406.2891598-3-vineet.gupta@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,95 +58,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <e66de86420674857f51a844d16fe0a4dcb344446353d69c2e255dcc5209d2765@mail.kernel.org>
-In-Reply-To: <20261109064715.2382452-13-alexei.starovoitov@gmail.com>
-References: <20261109064715.2382452-13-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 12/26] bpf: Refine registers linked by scalar evolution at conditional jumps
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  9 Nov 2026 07:45:35 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 
---===============3238441288265326375==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, 21 Oct 2026 10:44:06 -0700, Vineet Gupta <vineet.gupta@linux.dev> wrote:
+> alloc_retstack_tasklist() open-codes rcu_read_lock() and unwinds it
+> through an unlock label. Use scoped_guard(rcu) instead and let the
+> compiler emit the unlock on every exit path.
+> 
+> The -EAGAIN case now jumps straight to the free label rather than to
+> unlock; leaving the guard's scope releases the RCU read lock on the
+> way, so the unlock label has no remaining users and is removed.
+> 
+> No functional change: objdump of fgraph.o shows identical call targets
+> and counts, including the three __rcu_read_unlock() sites the compiler
+> emits for the exits from the read-side section. A PROVE_RCU +
+> DEBUG_ATOMIC_SLEEP build with the -EAGAIN path forced several thousand
+> times is clean.
+> 
+> The preceding patch deliberately left this alone so that it stays
+> straightforward to backport. This is the follow-up.
+> 
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> Tested-by: Vineet Gupta <vineet.gupta@linux.dev>
 
-> bpf: Refine registers linked by scalar evolution at conditional jumps
+This looks good to me. 
 
-TL;DR: The new verifier_bug_if() slice_slots check may wrongly reject a valid
-privileged program (with a WARN splat) when a bpf_dynptr_slice_rdwr() buffer
-has a variable stack offset with gaps between tracked offsets.
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+Thanks.
 
-[ ... ]
+> ---
+>  kernel/trace/fgraph.c | 39 +++++++++++++++++++--------------------
+>  1 file changed, 19 insertions(+), 20 deletions(-)
+> 
+> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+> index 4c74f1a15ad4..bbf6e4e2da2d 100644
+> --- a/kernel/trace/fgraph.c
+> +++ b/kernel/trace/fgraph.c
+> @@ -1057,32 +1057,31 @@ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
+>  		}
+>  	}
+>  
+> -	rcu_read_lock();
+> -	for_each_process_thread(g, t) {
+> -		unsigned long *rs;
+> +	scoped_guard (rcu) {
+> +		for_each_process_thread(g, t) {
+> +			unsigned long *rs;
+>  
+> -		if (t->ret_stack)
+> -			continue;
+> +			if (t->ret_stack)
+> +				continue;
+>  
+> -		rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
+> -		if (!rs) {
+> -			if (start == end) {
+> -				ret = -EAGAIN;
+> -				goto unlock;
+> +			rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
+> +			if (!rs) {
+> +				if (start == end) {
+> +					ret = -EAGAIN;
+> +					goto free;
+> +				}
+> +				rs = ret_stack_list[start++];
+>  			}
+> -			rs = ret_stack_list[start++];
+> -		}
+>  
+> -		atomic_set(&t->trace_overrun, 0);
+> -		ret_stack_init_task_vars(rs);
+> -		t->curr_ret_stack = 0;
+> -		t->curr_ret_depth = -1;
+> -		/* Make sure the tasks see the 0 first: */
+> -		smp_store_release(&t->ret_stack, rs);
+> +			atomic_set(&t->trace_overrun, 0);
+> +			ret_stack_init_task_vars(rs);
+> +			t->curr_ret_stack = 0;
+> +			t->curr_ret_depth = -1;
+> +			/* Make sure the tasks see the 0 first: */
+> +			smp_store_release(&t->ret_stack, rs);
+> +		}
+>  	}
+>  
+> -unlock:
+> -	rcu_read_unlock();
+>  free:
+>  	for (i = start; i < end; i++)
+>  		kmem_cache_free(fgraph_stack_cachep, ret_stack_list[i]);
+> -- 
+> 2.53.0-Meta
+> 
+>
 
-> @@ -16054,6 +16060,12 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_call_arg
->  		regs[BPF_REG_0].buf = meta->slice_buf;
->  		if (meta->slice_buf.size)
->  			env->seen_stack_slice = true;
-> +		if (verifier_bug_if(meta->slice_buf.size &&
-> +				    !type_is_rdonly_mem(regs[BPF_REG_0].type) &&
-> +				    !bpf_scev_in_slice_slots(env, meta->slice_buf.off,
-> +							     meta->slice_buf.size),
-> +				    env, "slice buffer is not in scev slice_slots"))
-> +			return -EFAULT;
-
-Can this verifier_bug_if() fire for a valid privileged program whose
-bpf_dynptr_slice_rdwr() buffer has a variable stack offset?
-
-bpf_scev_in_slice_slots() requires every slot in [off, off + size) to be
-set in scev->slice_slots:
-
-    for (spi = bpf_get_spi(off + size - 1); spi <= bpf_get_spi(off); spi++)
-            if (!test_bit(spi, env->scev->slice_slots))
-                    return false;
-
-check_kfunc_call() passes the hull of a variable-offset buffer:
-
-    meta.slice_buf.off = reg_smin(buf);
-    meta.slice_buf.size = reg_smax(buf) - reg_smin(buf) + meta.arg_constant.value;
-
-find_slice_slots() builds slice_slots only from bpf_may_write_mask() of the
-call insns.  Liveness keeps up to MAX_ARG_OFFSETS exact offsets for a stack
-pointer, and record_stack_access_off() marks may_write only for the slots
-those offsets cover, not for the gaps between them.  The existing
-check_may_write_mask() accepts this on purpose ("Without @fixed_off the range
-can be wider than the mask: two offsets become a range at a join point"), so
-for a variable offset it needs only one set bit, while
-bpf_scev_in_slice_slots() needs all of them.
-
-A privileged program can get such a range, since is_widenable_reg_type()
-accepts PTR_TO_STACK and union_any_reg() widens at a loop header:
-
-    r6 = r10 - 32; r7 = r10 - 16;      // fp-32..fp-8 initialized
-    loop (counted by r8):
-      r1 = &dynptr; r2 = 0; r3 = r7; r4 = 8;
-      call bpf_dynptr_slice_rdwr
-      r7 = r6
-
-At the header r7 is widened to fp-32..fp-16 with var_off (0x..e0; 0x10).
-Liveness sees r3 in {-16, -32}, so the call's may_write_mask has the slots
-for fp-32 and fp-16 but not the one for fp-24.  check_stack_range_initialized()
-passes, then bpf_scev_in_slice_slots(env, -32, 24) finds the fp-24 slot clear
-and the program is rejected with "verifier bug: slice buffer is not in scev
-slice_slots" (plus a WARN_ONCE splat on CONFIG_DEBUG_KERNEL).
-
-The gap slot cannot actually be written through the slice, since the buffer
-is at one of the offsets liveness tracked, so scev stays sound without this
-check.
-
-Should this test only the offsets the call could write, the way
-check_may_write_mask() does for !fixed_off, or only run when the buffer
-offset is a constant (tnum_is_const())?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42577197491
---===============3238441288265326375==--
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
