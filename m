@@ -1,49 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794265211;
-	b=PLwN/xQEy4pnSWdLC2GtQzPM6Best2zWj/otuj2irmrvIkTVbpXj91SbUUe1wjl0j3wP
-	 Me1u/pXVefgUQcr5hw9fFu2nR9dkYFBdw+6T0WzuiZlou0aRyifIrVm/xvK1OIDewQ+GX
-	 fBiDgbq391umCDRe+ZujW8vULspu6PI5QIA1Js7gBjmJpv1e8L+usuwtaRwKLorC45Hbk
-	 qItrYmmYFsDoqkrcMHk8s4/aFD96h2kpLoCAOXqKUEzz2Q73o8jiPsP9XgLZi6hIb56fJ
-	 VWyL+2aZC35SylnxtwnDlFOHkgh+vJZlJ7QHl83/oDdKDd+rPE/kmP2LLCL5uuNfGng==
+	t=1794266288;
+	b=cOdjq8AEo87qGsW0laB5usr7UEfGCaCqXqy4tu7Q9omOgM/slsF19Wrld2BR1wyKqvor
+	 VXUiWipK6ELQcTvwjJyynYlH2+cKWd4PS9hfCKT/eHSSeB09WC1t6WVdvGQ1MEVjNxzpR
+	 70xh1lr8Oz3Lg3kN9y1UCZh5qlC2KBHBteosTIVowySoEHJcgvHcWSAAfVADlcMNhIu3I
+	 wajJsHsWSeFdqbQwBnKEWVmpw7AwA0orUumf1PfFPQic5qdvrMEKLWu2Ao4vhUSh2WrlY
+	 8NW9vEisJTAs7tDePetoBFzAmAEOL2xOMz3vzBRYMLtAmIIEhR4nJjS1GCM0AtWungw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794265211;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=fSm6RWRIHhMCklVSLN9b1sPg5Gcw6uv4Dw7npTL/Ly8=;
-	b=1RRoFam1tjSMjFLg703vgP4cOPoiBPm9sE8+ffvJmLkR8j7uDRJhceqrQN7wcEMPkh39
-	 jiborzYoGchE5YsrucVRTTT/fJC4c6gJI9T0qv7LkiTRr/1uyy2zfHPiwmpfvfIi5OWC8
-	 Zarcv+Ayy4+Td/Jzn1OrXU0uDch2GD/570lQvZDneheqZDknKGe02gquI1PIV8IRZkQzs
-	 tG8vR+LuhlIoKUkWPvVZ2Gt5Bok3f9V/ZEgX3I4c1Tg1UTMe7MJMos4vhurFARa53p7Lb
-	 gSuwvw23zvZfJ5vilP+DRJxBL46UileqNbpZ1mDMn3SG2czv9tBz8kywJ5kA0RsSNMA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794266288;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=ihYFkFEUH2LcCpe8eqRrXvmrLTXtXa0fIIln6xIpDYQ=;
+	b=p05JZbsUUY5pLFod+4Mlj5w1JuG5t6UAfKJQEalvsmlZURJptEYLx0F3jGvyZfPcwG5i
+	 lmBmvJjlwbAebLmYkyb/M0HXw2T8XvfK4dJa4FaBO0oR9EuVYs/QAHNq2fKH1FQ3obiet
+	 qFgqxD76F8fduNra9HWOyTJB/pK/IDXi0mwa0MUUA614zwFjYshvXGcjOnWCuRscLypgL
+	 P2e16vIMOcWUeHw1RedQoQuKVd3l2wApAJEDw31JcguHdFksBupGVYsRob1uWAeeaDA0t
+	 ARc+q0sEo4sRI4LC+F7yaoQQx3ZBNsSec5nvk1Xqx7tsYxGZCi+9cVGCALWKtbf2KIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U8MnCexl;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=w6IYyU5o;
+	arc=none smtp.remote-ip=91.218.175.49
+Received: from mta0.migadu.com (out-49.mta0.migadu.com [91.218.175.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDC2606A32A
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 23:00:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27BF7606A31C
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 23:18:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 27BF7606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U8MnCexl
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A842F1F0089F;
-	Mon,  9 Nov 2026 23:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794265210;
-	bh=fSm6RWRIHhMCklVSLN9b1sPg5Gcw6uv4Dw7npTL/Ly8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=U8MnCexlQiYn57OzAwCUsCQnsi2SymTn1RUAA1x7TIKk8eXJ/1dgBIITdGIlqx2xB
-	 ocHNNMAvEAGSRb0QruT/6dHLk5YnMst83mEfyoqa+1gj/Tx4M6qm8ZuV/ylM2nxR+z
-	 Pk3F64ugrSpL3QBiYDEWTkVq3OVdbdTUS9t0TCxNGzK1k3onSHhRQ0s2DHwoKtTN0D
-	 zmIbHJrYbd5NIXRjreE99Erjqy7MtF78WiblhKhnH7SgD3/iBaIwkT8I8uZBAs/XcO
-	 /nSJAh5eNsw9OMIx7dYlcB+sLKfKRdkB7Ked7wQBsA1IHmk3lF4qgd9Z13tjtUNysh
-	 Re/0n14H6Xsmw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9B343391AF99;
-	Mon,  9 Nov 2026 23:00:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=w6IYyU5o
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=qeIlf74Q1SwhQISt1Gbo8kqRPG0p0EGOvhCsKoDnlJg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1794266281; v=1; x=1794871081;
+ b=w6IYyU5oj7O1BNZ7/WWxtJ8tAVFdDwlUde9hphrHMLfD04aunCCrumQLcMiJkB/OKovzmebV
+ UQRQUzwh8PJn1B/oeG6+N5LgU89c75LepokAwiZJpbDL6jYb8TveydaGKrv+xLWtiP9B3dDlCXI
+ 7OsqWagfB0y7xmTGWl951LMI=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 82150212df963e71;
+	Mon, 09 Nov 2026 23:18:01 +0000
+X-Mizu-Trace-ID: 82150212df963e71
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <547975dd-9e47-40e8-b043-b93e2026d288@linux.dev>
+Date: Mon, 9 Nov 2026 16:17:57 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,56 +58,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v1 0/6] Fix ring buffer callback consumption
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179426520918.3532311.3624579682488216373.git-patchwork-notify@kernel.org>
-Date: Mon, 09 Nov 2026 23:00:09 +0000
-References: <cover.1794253561.git.memxor@gmail.com>
-In-Reply-To: <cover.1794253561.git.memxor@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, kkd@meta.com, kernel-team@meta.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] selftests/bpf: Don't include <linux/ptrace.h> in
+ BPF progs
+To: patchwork-bot+netdevbpf@kernel.org,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com
+References: <20261108163710.1881321-1-alexei.starovoitov@gmail.com>
+ <179416380493.1666345.8032685838291433805.git-patchwork-notify@kernel.org>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <179416380493.1666345.8032685838291433805.git-patchwork-notify@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
-
-On Mon,  9 Nov 2026 20:47:26 +0100 you wrote:
-> Commandeering some patches from Tamir for libbpf ringbuf callback
-> consumption fixes. See commit logs for details.
+On 11/8/26 11:50 AM, patchwork-bot+netdevbpf@kernel.org wrote:
+> Hello:
 > 
-> Tamir Duberstein (6):
->   libbpf: Honor zero consume bounds
->   libbpf: Prevent NULL callback crash
->   libbpf: Reject overwrite callback use
->   selftests/bpf: Test ring buffer consumption with a zero bound
->   selftests/bpf: Test the ring buffer consumer with a NULL sample
->     callback
->   selftests/bpf: Test that callbacks reject an overwritable ring buffer
+> This patch was applied to bpf/bpf-next.git (master)
+> by Alexei Starovoitov <ast@kernel.org>:
+
+Alexei,
+
+I added this patch to BPF CI diffs today, but it doesn't apply to bpf,
+and so aarch64 selftests build on bpf-targeting branches and on
+linux-next remains broken:
+* https://github.com/kernel-patches/bpf/actions/runs/42712433047/job/129485446405
+* https://github.com/kernel-patches/bpf/actions/runs/42679811664/job/129371245681
+
+I think this should've gone through the bpf tree. Fixing bpf now
+separately will likely cause conflicts later.
+
 > 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v1,1/6] libbpf: Honor zero consume bounds
-    https://git.kernel.org/bpf/bpf-next/c/40edacd47993
-  - [bpf-next,v1,2/6] libbpf: Prevent NULL callback crash
-    https://git.kernel.org/bpf/bpf-next/c/c0628a0659b6
-  - [bpf-next,v1,3/6] libbpf: Reject overwrite callback use
-    https://git.kernel.org/bpf/bpf-next/c/f756eedb24d4
-  - [bpf-next,v1,4/6] selftests/bpf: Test ring buffer consumption with a zero bound
-    https://git.kernel.org/bpf/bpf-next/c/c82153312a0a
-  - [bpf-next,v1,5/6] selftests/bpf: Test the ring buffer consumer with a NULL sample callback
-    https://git.kernel.org/bpf/bpf-next/c/21f96738feb7
-  - [bpf-next,v1,6/6] selftests/bpf: Test that callbacks reject an overwritable ring buffer
-    https://git.kernel.org/bpf/bpf-next/c/249c9bb9f3ac
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+> On Sun,  8 Nov 2026 16:37:10 +0000 you wrote:
+>> From: Alexei Starovoitov <ast@kernel.org>
+>>
+>> BPF CI cannot build the selftests on aarch64 since its image has new
+>> kernel headers:
+>>
+>>   CLNG-BPF [test_progs] freplace_attach_probe.bpf.o
+>>   In file included from progs/freplace_attach_probe.c:4:
+>>   In file included from /usr/include/linux/ptrace.h:188:
+>>   /usr/include/aarch64-linux-gnu/asm/ptrace.h:96:2: error: unknown type name '__u128'
+>>      96 |         __u128          vregs[32];
+>>
+>> [...]
+> 
+> Here is the summary with links:
+>   - [bpf-next] selftests/bpf: Don't include <linux/ptrace.h> in BPF progs
+>     https://git.kernel.org/bpf/bpf-next/c/a0a0c785cbca
+> 
+> You are awesome, thank you!
 
