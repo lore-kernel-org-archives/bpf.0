@@ -1,56 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794246302;
-	b=bvMApKguN7SZ2wEjhEN9zNPtHH5Jp6WnDIr30f67zoFPY0xNKzIsvYI0syGombSThgcH
-	 /FxYq5RZK4aa/kkL3+W2ijqmk5j7dM9w/3TXtpcWQPKDfKtwdbjAATzMzhBRZS5hyW8+J
-	 rKL/dwYaNrhK2CxVIzzpdvWL5ghurLsOLgbFPGW8Yr3uCIErfMKY13TkX5odqMvSRdqPa
-	 4WjsFNT1ROAg5uamQxM0Zb8KcTvyHo2AlEk48K+qkVRtKdxPOtM1iv6RV0URg8bR6Z3z2
-	 RRSH60wk80YszoIBnVVi3e3R+oAyepDXN/MaPn357SVU9/t/BReROSSG7TPmPtQn8sA==
+	t=1794246719;
+	b=QYGAL8Pgfl9HNXkAFvF4jCxsCOXQKJuw1SClGQrtM7K1V5rqvKWg4O3deE9o831+9dPK
+	 7W0rAUqRgBoXOOZAjCwjTtksPyGIFPy2JqSGJLQZl5XBnEIKXZu4Ip76fyZ4uaJwu70P+
+	 A58bQu/yiOAtbxNypegW6VOmWPEFSEBcG0GaQ+komHFGf87AsB6PQp7WBAI4O6v4GNWuf
+	 MDZMs2qgiBzShOVGuxr5zHEZv7LQq2eWOW+RcYoi8O2HRNaD7ouAQi50aPKHTqvTKSb4x
+	 mRapJ0lImz9cxoEaCuivj5SkiDV1HFppLkD/0QwIkF7PHv7EMhvU2ZZM10zIfLpOwow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794246302;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=m0ssjIBr/+gY3LAWR3lvmEG3gxTSZMmrSQ01WdIhf20=;
-	b=af3pbu3dbSh8cdN+02/qMnUywcKhiBkVkDWXT8CbK22QFetEoODbhM9VLhIbQVyhIzoS
-	 FQBQnpSG0sHaOp3P/yox0YQcQiPulozPFJEfIooVa3vSTDeJ3j5NaOwgQUaMPDnt79dUp
-	 dE7HGU0JFvVawSwAq7X1s/KoeYB7VtyU27w6LcHsZFJrdXCFSNFbcALQTadvTE1WHq1Wo
-	 2NzF3vEWdvQ3LcaUbqVyqSZL5zQtoTNlHjTdARva30nRqA5RVhs/V9NkNs5JIQWkrKQXM
-	 MBFxru83QE1uF4rtMAw+MTyucM/xSUN5aDnvOE87OQQzfs4qT3KtHQV0HMFS9GK2voQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794246719;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=i9Nv6xGB8Ae4NNlgpZyPMXjBlowBRSDkMgoiPDc8DSo=;
+	b=k8Vo4ej4R/ZsFzQl2SnPEz4dOXAo3UXoXg1K8g1Co/co098JdtOcgS2lcMiCyBbJvgFh
+	 GI/aThaXgnhO0dKUJkYylUEKqwzZ/1zmhfVlUNKMDcKV7O+dVcN39ZOuJnSY7DtP4kH0O
+	 EYkhYaUZjHCESSrU6aBgo0Dtf1FLtYmB0aM3LGsB6MBmkpSW/I2jYVgm6MZ6b84Insgp+
+	 0VuYpX0ILyKmyhaHo61S6/irKIjAmiospA1BOWr4WwR6wLe2nF3dyHs2vFuOS9L+IAUEq
+	 BRP6AEBB4FmgNTQKSaUOGxn27/F+sBKM1G0R3NdB7RO5v+UQGrUsTqgJhzcRcXRnoTQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jz9+kRFq;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZYB6xKK7;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB25606A334
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 17:45:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E745A606A33C;
+	Mon,  9 Nov 2026 17:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jz9+kRFq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1574F1F008A2;
-	Mon,  9 Nov 2026 17:45:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZYB6xKK7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECD01F008A5;
+	Mon,  9 Nov 2026 17:51:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794246302;
-	bh=m0ssjIBr/+gY3LAWR3lvmEG3gxTSZMmrSQ01WdIhf20=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=jz9+kRFqTWzI4PvG0jFupjQaMcCWYpRlCOXK0GjcqRp3zYMIIijbV22C8XSAPJXAZ
-	 Ru1JGbP8QyIE1I3/vAXYhA+PBsqHUh1ObaZePh67xARcJFa2OzvFpxEXG6+slnMe2N
-	 85gI4osAz/LVoYFOa7i2SSkSh0MDB06JeiV9H+LtSj5CMsjT8freSWvC89BNs1y2L6
-	 4Qe6tqVsyWfKaQBH05HsX59tU1pYWLz1EJaR6BNPWuTA7bkABbKT248feHIvjN5TiR
-	 sreL1/RgwCjitqpyF+GK+tt3S30vWwS0dyS7RyBtHsrYjEKT5u3qOaSwWFpUJnSH4F
-	 psZIxnKFU3kUQ==
-Message-ID: <sashiko-outbox-205331@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 07/18] scripts: Add LLVM plugin
- infrastructure
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Anton Protopopov" <a.s.protopopov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261109170550.141443-8-a.s.protopopov@gmail.com>
-References: <20261109170550.141443-1-a.s.protopopov@gmail.com>
- <20261109170550.141443-8-a.s.protopopov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Nov 2026 17:45:01 +0000
+	s=k20260515; t=1794246718;
+	bh=i9Nv6xGB8Ae4NNlgpZyPMXjBlowBRSDkMgoiPDc8DSo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ZYB6xKK7ikHLcp12dpkvJj5Weru/Un6Bp2RAV9c3ZnLngBPdNf7jlFa/6pacFIadc
+	 d/pGjG87WyjjJobuh5kFUC1OQAoc9bRk4WC1pDEeCGQuKci+PF+Uw0eYMsHcnjtlLP
+	 s++NIZ8IZuJTW/rEM1mTa4fGTme1jNwWHMubKfSQJSK6DIM7cFtopEW3DmaocUcma+
+	 CZXeDcWWnJz/AQVG1Gi3dP+iUzHahrZq6fKhJALiuBAIAGyYp7ziI2PuiuN8h+dcYJ
+	 nZjhtm8jNVudg+OXggV+9PHXgsxCrRE+ebIE0fV+E434lKUuqdYNDEcCFPIw0naYPj
+	 J7wdNcnd9Gi2g==
+Date: Mon, 9 Nov 2026 14:51:55 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Kuniyuki Iwashima <kuniyu@google.com>,
+	Alan Maguire <almagui@kernel.org>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
+	llvm@lists.linux.dev, ast@kernel.org, yonghong.song@linux.dev,
+	bpf@vger.kernel.org, kuba@kernel.org, tj@kernel.org
+Subject: Re: [BUG] bpf: tcp: bpf_tcp_ops_set_rcvlowat() missing from BTF with
+ clang KCSAN
+Message-ID: <avIIO1JOVnK8y3a7@phoenix2>
+References: <au27Y9m78_3EH2v1@gmail.com>
+ <a69dd097-7e71-41f0-9a6b-eda001773236@linux.dev>
+ <au347UiVUe5oUuxM@gmail.com>
+ <au4kpSGVSH3tYiZm@google.com>
+ <avG9bk0kxRUvonhD@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,74 +63,45 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <avG9bk0kxRUvonhD@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Low] riscv: pi: filter out LLVM_PLUGINS_CFLAGS from KBUILD_CFLAGS
-- [Low] vdso: avoid stripping LLVM_PLUGINS_CFLAGS from kernel objects
---
+On Mon, Nov 09, 2026 at 04:33:40AM -0800, Breno Leitao wrote:
+> On Fri, Nov 06, 2026 at 07:05:25PM +0000, Kuniyuki Iwashima wrote:
+> > On Fri, 06 Nov 2026 07:58:01 -0800, Breno Leitao wrote:
+> > > On Fri, Nov 06, 2026 at 09:16:24PM +0800, Jiayuan Chen wrote:
+> > > > Thanks for the report !
+> > > > 
+> > > > 
+> > > > On 11/6/26 7:38 PM, Breno Leitao wrote:
+> > > > > My arm64 KCSAN builds of linux-next fail since next-20261015, because
+> > > > > bpf_tcp_ops_set_rcvlowat() is missing from the vmlinux BTF:
+> > > > >
+> > > > >   WARN: resolve_btfids: no BTF func for kfunc bpf_tcp_ops_set_rcvlowat in bpf_tcp_ops_set_rcvlowat_kfunc_set
+> > > > >   WARN: resolve_btfids: unresolved symbol bpf_tcp_ops_set_rcvlowat
+> > > > >   Failed to generate BTF for vmlinux
+> > > > >   Try to disable CONFIG_DEBUG_INFO_BTF
+> > > > >   make[4]: *** [scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
+> > > > Has pahole fixed this issue?
+> > > 
+> > > I don't think so, see the line below:
+> > 
+> > Could you try this ?
+> 
+> Thanks, it fixes my build. I tested it on top of pahole master (9eb594d)
+> with next-20261105 and clang 22.1.3:
+> 
+>  - arm64 KCSAN, CONFIG_WERROR=y: vmlinux links again,
+>    bpf_tcp_ops_set_rcvlowat() is back in BTF, __bpf_tcp_ops_init()
+>    returns 0, and progs/tcp_autolowat.c from the selftests loads.
+> 
+>  - It also brings back scx_bpf_tid_to_task() that was work arounded by
+>    tejun.
+> 
+> Feel free to add my "Tested-by: Breno Leitao <leitao@debian.org>" tag.
 
-commit 072fb07f8d2d07b80e87b0ea8e05cc60c466504e
-Author: Anton Protopopov <a.s.protopopov@gmail.com>
+thanks, I'll check this later today,
 
-scripts: Add LLVM plugin infrastructure
-
-This commit adds Kbuild and Kconfig infrastructure for building and loading
-LLVM IR pass plugins with -fpass-plugin, and excludes LLVM_PLUGINS_CFLAGS
-from vDSO, EFI stub, and early boot builds.
-
-> diff --git a/arch/arm64/kernel/pi/Makefile b/arch/arm64/kernel/pi/Makefile
-> index a273ab5af805c..5813bb75c9925 100644
-> --- a/arch/arm64/kernel/pi/Makefile
-> +++ b/arch/arm64/kernel/pi/Makefile
-> @@ -10,6 +10,7 @@ KBUILD_CFLAGS	:=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD=
-_CFLAGS)) -fpie \
->  		   -D__DISABLE_EXPORTS -ffreestanding -D__NO_FORTIFY \
->  		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
->  		   $(CONFIG_CC_OPT_NO_ADDRSIG)
-> +KBUILD_CFLAGS	:=3D $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
-
-[Severity: Low]
-Should arch/riscv/kernel/pi/Makefile also filter out $(LLVM_PLUGINS_CFLAGS)
-from KBUILD_CFLAGS?
-
-Like arch/arm64/kernel/pi/Makefile, it compiles pre-MMU position-independent
-early boot objects with -fpie and -ffreestanding, filters out
-CC_FLAGS_FTRACE and CC_FLAGS_LTO, and prefixes symbols with __pi_ via
-objcopy.  Leaving LLVM_PLUGINS_CFLAGS enabled there can break symbol
-confinement or introduce absolute addresses before the MMU and relocations
-are active.
-
-[ ... ]
-
-> diff --git a/lib/vdso/Makefile.include b/lib/vdso/Makefile.include
-> index cedbf15f80874..848d58296ba23 100644
-> --- a/lib/vdso/Makefile.include
-> +++ b/lib/vdso/Makefile.include
-> @@ -1,5 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
-> =20
-> +# vDSO code executes outside the kernel.
-> +KBUILD_CFLAGS :=3D $(filter-out $(LLVM_PLUGINS_CFLAGS),$(KBUILD_CFLAGS))
-> +
->  GENERIC_VDSO_MK_PATH :=3D $(abspath $(lastword $(MAKEFILE_LIST)))
->  GENERIC_VDSO_DIR :=3D $(dir $(GENERIC_VDSO_MK_PATH))
-
-[Severity: Low]
-Does stripping $(LLVM_PLUGINS_CFLAGS) from the directory-wide KBUILD_CFLAGS
-here also drop LLVM plugins from standard in-kernel objects built in those
-directories?
-
-Makefiles that include lib/vdso/Makefile.include also build obj-y kernel
-objects linked into vmlinux, such as arch/sparc/vdso/vma.o and the
-vdso*-image.o targets in arch/x86/entry/vdso/common/Makefile.include,
-arch/sparc/vdso/Makefile, and arch/mips/vdso/Makefile.  Those Makefiles
-scope $(GCC_PLUGINS_CFLAGS) removal to $(vobjs) (as this patch does for
-arch/x86/um/vdso/Makefile), whereas modifying KBUILD_CFLAGS unconditionally
-in lib/vdso/Makefile.include prevents enabled LLVM plugins from running on
-the in-kernel objects and drops their <generated/llvm-plugins.h> rebuild
-dependency.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109170550.1414=
-43-1-a.s.protopopov@gmail.com?part=3D7
+- Arnaldo
