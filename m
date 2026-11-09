@@ -1,112 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794232685;
-	b=juc4nFiGYa5RQ1y1OoejCR1uQEntzNRsCOmA6mm7FggQad+tQg5KZeem9FKScUPoiE07
-	 AUFbLNEyPeplLzTapAjt+Yyiu/1NNzhQ6CkmW4XgtrCv59rBV+f3mQSl9tvlKGrq7CJ7l
-	 EW1iIg/GWFkVd4FLDVW1a3fKXBDo7EestKQrSRJpOZ9gwndqUBA7NJiZ6fQs333XTxHcN
-	 a9JL6P9H9QnkV8Zee6jO0dy00z38j0uL+nhMvSwLo9EMYHK8s74aBvU9qre4ocq1JBxT/
-	 RsK7ruR4P45sFR8PverGRJ2FrZbeBBh/QIZAYdRmWWHXqaS6BajUOT+boW526r7CFtQ==
+	t=1794232691;
+	b=MeRZhHnqmSOHpwbzB1arHx77z/T3Pl5plnmvOqS5x/zk7qOir9Vgs/u+DvI0pKpo+RUx
+	 9Nq1NMBlAXsQzphQoQjBOpil2e8LzyfOlRD2soFbHpOhNW6sz2AyWKTB/DIANribEPkF4
+	 jItlcDU53k2YDw5dG5Vd8yt3a0NlL5qUZa5YzGyqpQFfSxWu6XNJyIrSqEgouJLDYsj1C
+	 6UNxVv+7PmuqnwTHvz0rZrVa6khM6T1adQWASYWpQ27WCPb2nDOUpYNuTW5TdPIcwH0t3
+	 NFmtev/zcKWAT0nu+pys7xWv862frJo89T6lGOSk6n1w83iluTBOaQ1oN1ntRSVgaog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794232685;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794232691;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=OXy3+dOjvb/DyuvDqwYDNvmtpOyjnPw41dlk99TtK1g=;
-	b=FG47+U+OF53OeqxN7QhtZKwjg1AvQNiy/C5gGxJmloZnFMlNRGRbII0+OgIKLGQUJSFv
-	 8TpIKSobGM3OtGxtz0s8U++1HrK/sduT++lY58zgV8BSsF8i9YRnWvAlfT1sMH12y0Sm5
-	 UinSyue6Fr+i9BIEe0zOP4Y4oL8Gj8K8B/Izjcw83KNvyGC4RTWd3K8Th6bmme0Q/2JEW
-	 Jc3FGifn3qFRSNUicP9f6y/mt0nnxZpXgS+IA54teeJXSk6OjIvx1r7xwf33f5whZm17e
-	 EYGfdePRN2IpnOfthcA9GTeghCFznZaCFqhFnhdrvm42steepeLMlAWrwMpLlMCGkzA==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=dZDeE2xZH0nMQ26DQzLtMh8DKmBlzuXu6Jf57xM5sMI=;
+	b=F/GzyvcdVHPpJWxHm/9BZmCCIFH8F3Chxw6a3CJwW6ODKHBgnJFkQmhEh1tDU6/LCAe5
+	 PgU5nTp56akceJw8NivPMdOqDbQ1GAsLngYMWuHxSJGjQNg3Wx+lWnnGHSQ05bxUwHgM/
+	 c379sKwUgtVgu1jxbSQ04UcuR3YDMeubEDEv/enFwtJ5sXXzQBv+Aewf+61wHarKv2LQb
+	 a/FbMjPRcEMj+PHKb8UTutFPAjyKSHMUIcy31LQpoYErYrbuybd5YTC8zF1vzx6QzGQQU
+	 Hl8CODqRMz05gbc0s5r98tsS/BT57tFpg7681ovsRKQJPKOhboThR0Sr4Uhn54MSzEA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QYVLfAma;
-	arc=none smtp.remote-ip=209.85.128.48
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UZW5AGHG;
+	arc=none smtp.remote-ip=209.85.128.51
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547AE606A31C
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 13:58:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 547AE606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E89B606A321
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 13:58:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8E89B606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QYVLfAma
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4b467581b98so8494435e9.0
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 05:58:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UZW5AGHG
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4a35db1f202so7164055e9.3
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 05:58:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794232684; x=1794837484; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OXy3+dOjvb/DyuvDqwYDNvmtpOyjnPw41dlk99TtK1g=;
-        b=QYVLfAmakteH6TBk8iAj+RR+VKYJBwdC6qJUOcrynQWMO0wnhixaX6cx+2aF6j0oth
-         qbYWgSJxX86+9C7HTigjNqiG6K+6SqEkVnznWRjmWyAR7CkI14ZvXgJHOibzrbdQTgRz
-         s8kqHwVlDVjAdi/cnLvzUPgHm46eacZsOGld8+dyjBkTcCSfLeONp0nqJPX3t5B26AeR
-         U6PcdlWjGP+IVuzEpJK7V6x81xQW2CP7LjxbEVzzwcnib0MDC2BbQq1rb3e7pqZ0TGte
-         qKEoUZPrzQMpf3OC23E8juVFH8JkifzEMXkCMiDtFyve5utws2n0O2WaxYi+30anWATP
-         00fg==
+        d=gmail.com; s=20260707; t=1794232689; x=1794837489; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=dZDeE2xZH0nMQ26DQzLtMh8DKmBlzuXu6Jf57xM5sMI=;
+        b=UZW5AGHGlEx2E+nZP4jsvhT1FNyoMEUY4w9pUGwgzeK9NOkJ3ztKF7kVIMxNoUzxIE
+         6W+UTexBMBL6wQA0ePAIOe1EdRIHXFudhiZmFv8Nn1PAEFiribHiIfvWnwNBCsGaQxE3
+         pfc9Vflfi/6TXcny332RHT4bEG0zRHAXu1vNMDD7+EaaCUJMySoRZbTlpLjGnkPlB+Eh
+         CnYwFV+462uFf65CO7GX+KYh1U7Lt8GO8Hy8vawjTWD0foyOwk6bBFAAkgQl5E/hJ2pP
+         5MGc4dYdJaZ0UdHKirtQtikNDDB8mPBGHZkP7WXclDOE8Gr3Q7fCd9gtQ/LZbP+yP+yi
+         mxRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794232684; x=1794837484;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=OXy3+dOjvb/DyuvDqwYDNvmtpOyjnPw41dlk99TtK1g=;
-        b=Qi8tYKvtaJFt5AB3xg1pPfgsv/gtMPz8kf7Bolg7eshf5E6LAjAmztHdtPlq2OiLRh
-         b7zBu/XuxU4hHMGHeAQeymmQHXUqy7UD+Geqo/zGx5uT/7nts9H0YLenaK/ftBMSqK7h
-         3Hw6dC4r1D3rS9OPQhQw41AYFMbXl0F3Xp0nWt98ohpKvLhFkGbSuNHu+LfqrdLkrLTa
-         VoeZV4mqE61CvI5VL2ifcQnWXC88sx3fTVuzeDDnlqAlfwJGBD2c2EgSWjVaNwGp+Cd5
-         WwyUhak7rRkPOwyRjEMJYeJWc2TakpRt1AHdg3ceRrJsaNe11yrMFIXxFdh70wSdipJK
-         aMrw==
-X-Forwarded-Encrypted: i=1; AL+hErHOXy5O3paYZ9f85yVBuEYok8dZCh9xgjNiBk/YSfL8it0HJqMY1DX8yhM4HYa+lTBsMcg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9G5MWhYlk9JW9DNctD/OfyUXfaVdkBf7haLDJCOUZoEobUMRTq
-	w88dAbqEW7Gj8PHmpXqSf+l00O/ZT1dm5oY+RVWEyHqXiDAiB74WAwhC
-X-Gm-Gg: AYBFou3gdhAx91LDuDEOkXuRfRr8L4lTBfoIt/8x+GdJuVTirHz8I656nVfhqbO9k+4
-	a41RtS4FKzZsFKMJqlvaR51fK7lCG1gaB7pY/l7EhPbw/YCJMR4wyPq9YQnIgUe/wPRxyUmGIeB
-	odiEL7yaLISZ3+AMN/rhogbDikwCg7R1jNH4JIUy0zJ8k40DuqveMIlVZ3+GKoilwwGWWuTJk+v
-	s6o3ytGUakw2A6Ybx9S9o2+8EuUQiPLh86GIsrud2JCG1sF49g1w1bGvrmTQO3kA4+QHJZBtPUU
-	TUCGE+AS2IhhuMAVCBxCO2lxhPnUi9Kepx95ubetKSqTEEHOEsjGGBTO/RAyxcqbEwe+yf3lL1D
-	5PpgGQ+BM0ZU6VlXhcxfH1mCgEPj2S7omDLRBW7BPOvI83R5PxOpxSxPOrn80T2bFc0ZAbQgqAT
-	Gxu2WPF4390IDQnDj4JdH8Pynzm9miPPuiL8A1bxX2CWoTrKGD2HBYioZMjwauKHVrj7UXOvWKW
-	awwGBvLdFDXTIhIM9G3iQlzdOrwbuE6diTGucYowrZFcUAsP15xy+BIF99CRG5nGWHnwmitXFEf
-	oqZa6JaN8s8aeGTehC4sabDchTU8RyAQdZzTibTokVPo4yuQ5hjaeRBwS0K129RXIAekB+mFq1u
-	KQM/EsD56pwN61nmMP1h39Bk=
-X-Received: by 2002:a05:600c:4f43:b0:4a1:d675:b031 with SMTP id 5b1f17b1804b1-4b960d9bb82mr98922965e9.6.1794232683411;
-        Mon, 09 Nov 2026 05:58:03 -0800 (PST)
-Received: from localhost.localdomain ([86.124.84.219])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b90f119b96sm151286955e9.15.2026.11.09.05.58.01
+        d=1e100.net; s=20260707; t=1794232689; x=1794837489;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=dZDeE2xZH0nMQ26DQzLtMh8DKmBlzuXu6Jf57xM5sMI=;
+        b=Ali394OoBE7jsiKP9IrnJjDCbEPWyaKodeWI09nOZvBFHrTOlFmxZvDhO/UY0t4iaW
+         e+kfN/tJyeIBOYqsMJlMEqV+y3DEB97JMO321py60ysvvHb34w4wojZZr6lCU8sgTHNN
+         keFT7KWISBe2B9lJ5NIQvK+P9gsOhDG1RlWnjsFTXTN0w6xfBERlRsOH3XGM1e3oyKbG
+         k7yR8Hd1L6b+cXhtkZCxfALczi1ddNQdE2wOhE2uaqVHNTPl8oxsBE1q+KdJGT6QArBR
+         G10UxKhtpFJtTe8sAytetpcARAMkLEd0afXY+uJ+1kTcNB6ppuhrbXlr1eRndut/GRYt
+         eOCw==
+X-Gm-Message-State: APuU4Z91mtAafXrw/9ay4PecuaMqTjMSVXG+Grs0HCBohXF7zISt24jE
+	qfvfcAHk57jutR1KgF4pck1r39ss1NIKelP5fDzLfL40oCrs8LzqiD29uIQjOg==
+X-Gm-Gg: AYBFou1+imEowaqKC6nLX2HIjm1vQutoWJVAuHYC0DogCc2Lyda41/sHLtfUY2r8h5r
+	IiR4tEjgy9aGLb2mcNBIMYFyLWThyax9d/qGgRnDmtn66lEiwoHN0+DdK7uoaYHtiovCJpvlJ1t
+	RZVTodf/hSje25dxwo9RZHVuZAraKjCrFu99w5EN/AJ/RwZi+MuXPQHwui8loVBYFP18LNS0stg
+	6NxwmrWXdbNzpE2ROV1UqXptb4Ok3SvcyF1Bts1nf782Ug2kv393WLzvW8uIeoC8BEn1fchgz78
+	CZqkAQ4F0ukgE48IXzkgdCQd6ugDVwBFhEmoYy1IgoirsX9CaI97GE6EMj1o3InoovT7AaO++aS
+	DA3KN3oE0mMXuKs+aPpDuAcTfmeAcQ8+y8odiLlCS+g8TgvRFbx983vjP4Z4nYXYnqyi+j4uTVN
+	ZzQyWkxhNnqaG6J4ubTDosqGijmBAkgZhkfh4+q8d+ZiihcSBggoiyzgFRCuwE9VJPyV+OMHN1N
+	A+LLeAYoZ8jLRZuWbUKahmyrfrvNt0ky84ry5mbJdw1/d5OEW4tvFLlgbo7cl4/hxD0Fz7e473l
+	mS/r7gB/Qs5PI6I7IC+stukcyQtWzkNDT3vK
+X-Received: by 2002:a05:600d:84ca:10b0:4b9:ff69:19ac with SMTP id 5b1f17b1804b1-4b9ff6919f8mr13489005e9.11.1794232688967;
+        Mon, 09 Nov 2026 05:58:08 -0800 (PST)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7e32b46a3sm252430215e9.6.2026.11.09.05.58.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 05:58:02 -0800 (PST)
-From: Radu Toader <radu.m.toader@gmail.com>
-To: peterz@infradead.org,
-	mingo@redhat.com,
-	tj@kernel.org,
-	tglx@kernel.org
-Cc: juri.lelli@redhat.com,
-	vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	vschneid@redhat.com,
-	kprateek.nayak@amd.com,
-	void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com,
-	frederic@kernel.org,
-	anna-maria@linutronix.de,
-	bigeasy@linutronix.de,
-	joshdon@google.com,
-	haoluo@google.com,
-	brho@google.com,
-	linux-kernel@vger.kernel.org,
-	sched-ext@lists.linux.dev,
-	bpf@vger.kernel.org
-Subject: [PATCH v2] softirq: Treat an interrupted idle task as idle in tick_irq_exit()
-Date: Mon,  9 Nov 2026 13:57:58 +0000
-Message-ID: <20261109135758.395119-1-radu.m.toader@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Mon, 09 Nov 2026 05:58:07 -0800 (PST)
+Date: Mon, 9 Nov 2026 14:09:42 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH v1 bpf-next 16/18] selftests/bpf: Test fmod_ret
+ candidates found by bpf_scan_ir
+Message-ID: <avHUJhNSgifusdtc@mail.gmail.com>
+References: <20261106210314.1767267-1-a.s.protopopov@gmail.com>
+ <20261106210314.1767267-16-a.s.protopopov@gmail.com>
+ <sashiko-outbox-202287@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -116,190 +97,57 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <sashiko-outbox-202287@kernel.org>
 
-tick_irq_exit() only runs tick_nohz_irq_exit() if sched_core_idle_cpu(),
-which is idle_cpu() unless core scheduling is built in. idle_cpu() is
-false when the run queue has tasks while the idle task runs.
+On 26/11/06 09:09PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue to consider:
+> - [Low] selftests/bpf: missing KASAN and KCSAN exclusions for
+>   bpf_testmod_retval.o
+> --
+> 
+> commit 628c6eb28eaac0eeb5e557c0b787a65b02cd6e06
+> Author: Anton Protopopov <a.s.protopopov@gmail.com>
+> 
+> selftests/bpf: Test fmod_ret candidates found by bpf_scan_ir
+> 
+> This commit adds bpf_testmod fixtures and BPF selftests to verify the
+> fmod_ret target tags generated by the bpf_scan_ir compiler plugin and the
+> verifier's enforcement of restricted return values.
+> 
+> > diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
+> > index 031c7454ce65f..475df9a7680ea 100644
+> > --- a/tools/testing/selftests/bpf/test_kmods/Makefile
+> > +++ b/tools/testing/selftests/bpf/test_kmods/Makefile
+> > @@ -23,7 +23,16 @@ MODULES = bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
+> >  
+> >  $(foreach m,$(MODULES),$(eval obj-m += $(m:.ko=.o)))
+> >  
+> > -CFLAGS_bpf_testmod.o = -I$(src)
+> > +bpf_testmod-y := bpf_testmod_main.o
+> > +# The functions for bpf_scan_ir use clang extensions and need the plugin
+> > +bpf_testmod-$(CONFIG_CLANG_PLUGIN_BPF_SCAN_IR) += bpf_testmod_retval.o \
+> > +						  bpf_testmod_retval_strong.o
+> > +# Coverage instrumentation makes every path of the fixtures dirty
+> > +GCOV_PROFILE_bpf_testmod_retval.o := n
+> > +KCOV_INSTRUMENT_bpf_testmod_retval.o := n
+> > +KMSAN_SANITIZE_bpf_testmod_retval.o := n
+> 
+> [Severity: Low]
+> Should KASAN_SANITIZE_bpf_testmod_retval.o and
+> KCSAN_SANITIZE_bpf_testmod_retval.o also be set to n here?
+> 
+> bpf_testmod_retval_private_store() and bpf_testmod_retval_private_memset()
+> use __attribute__((optnone)) to keep their stack writes and memset in the
+> IR until OptimizerLast.  When CONFIG_KASAN or CONFIG_KCSAN is enabled, the
+> sanitizer pass runs before bpf_scan_ir and instruments those operations
+> with shadow stores and runtime calls (__asan_report_store4, __asan_memset,
+> __tsan_write4), which bpf_scan_ir rejects as side effects, causing the tags
+> subtest in test_fmodret_retval() to fail.
 
-That is the normal state of a CPU under sched_ext whose BPF scheduler
-holds back a runnable task of that CPU in one of its queues, e.g. a task
-of a cgroup at its CPU limit: the task stays queued on the CPU's run
-queue and counts in rq->nr_running, while the CPU sits in the idle loop.
+Added KCSAN and UBSAN (just in case, neither is enabled in tests).
 
-tick_nohz_irq_exit() is what marks an idle CPU as idle again for the
-scheduler clock after an interrupt in the idle loop
-(TS_FLAG_IDLE_ACTIVE, sched_clock_idle_sleep_event()). Without it, the
-next exit from the idle loop doesn't resynchronize the CPU's sched_clock
-with sched_clock_idle_wakeup_event(). With an unstable sched_clock, e.g.
-under kvm-clock without a stable TSC, the clock of a CPU in tick-stopped
-idle is clamped to its last stamp plus a tick, so a task picked after a
-reschedule IPI (which doesn't go through irq_enter()) starts with a
-stale exec_start, and the next tick charges the whole idle stretch to
-it.
-
-Measured with one thread spinning 10 ms in every 100 ms in a cgroup,
-kept off its CPU for a further 7 to 53 ms per period by a sched_ext
-scheduler: the cgroup's cpu.stat usage_usec over the thread's own
-CLOCK_MONOTONIC measurement of its busy time reached 2.00, twice the
-CPU time the thread could possibly have used, and is 0.96 with this
-patch. The same ratio with no BPF scheduler loaded is 1.005.
-
-Commit 548796e2e70b ("sched/core: introduce sched_core_idle_cpu()")
-fixed this same gate for the other case of "the idle task runs while
-nr_running > 0", forced idle under core scheduling, where the symptom
-was too little idle time in /proc/stat. sched_ext made that state
-reachable without CONFIG_SCHED_CORE, and there the symptom is idle time
-charged to a task as runtime.
-
-Ask whether the idle task is running, which covers both cases. CPUs
-whose run queue is really empty are unaffected; a CPU interrupted
-between leaving the idle loop and switching to a task has need_resched()
-set or has already left the idle accounting, see tick_nohz_irq_exit().
-sched_core_idle_cpu() has no users left and goes.
-
-The two gates test different predicates rather than one containing the
-other, and the difference is deliberate. idle_cpu() is idle_rq():
-rq->curr == rq->idle && !rq->nr_running && !rq->ttwu_pending.
-is_idle_task() tests PF_IDLE on current. Newly covered:
-
- - the two "the idle task runs while nr_running > 0" cases above;
-
- - a CPU idling with a wakeup queued by TTWU_QUEUE whose IPI has not
-   run yet;
-
- - injected idle. play_idle_precise() sets PF_IDLE on a SCHED_FIFO
-   kthread which then loops on do_idle(), so rq->curr is not rq->idle
-   there and the old gate was false off nohz_full CPUs. Interrupts
-   taken during injected idle now run tick_nohz_irq_exit() with
-   TS_FLAG_INIDLE set. That CPU is running an idle state and needs the
-   same latch for the same reason, so this is wanted rather than merely
-   harmless, but note it reaches the idle injection users in
-   drivers/powercap/idle_inject.c, intel_powerclamp and
-   cpuidle_cooling, and is not confined to sched_ext.
-
-One state is no longer covered: PF_IDLE is set by cpu_startup_entry()
-and not by init_idle(), so a CPU on its idle task before that point
-satisfied idle_cpu() but does not satisfy is_idle_task(current). Nothing
-is lost, because TS_FLAG_INIDLE is only set inside do_idle(), so
-tick_nohz_irq_exit() had nothing to do there, and nohz_full CPUs are
-covered by tick_nohz_full_cpu(cpu) either way.
-
-What keeps the new gate from giving a CPU idle accounting it should not
-have is that tick_nohz_irq_exit() tests TS_FLAG_INIDLE itself and only
-does the idle bookkeeping inside the idle loop.
-
-Compile-tested in four x86_64 defconfig variants - SCHED_CORE=y with
-NO_HZ_FULL=y, SCHED_CORE=n, NO_HZ_COMMON=n, and SCHED_CLASS_EXT=y with
-SCHED_CORE=y and NO_HZ_FULL=y - with no new warnings at W=1.
-
-The reproducer is a sched_ext scheduler that parks a tagged task on an
-otherwise idle CPU for a set time. It was patch 1 of v1 and is dropped
-from this posting at the maintainer's request; it remains in the list
-archive, see Link.
-
-Tooling: the bug was found and this patch and changelog were written by
-Claude Opus 5 (Claude Code), in a session measuring cgroup CPU limit
-enforcement under sched_ext. All of the patch and all of the changelog
-are tool-generated. The measurements above were taken on hosts that no
-longer exist and were not repeated for this posting. By the threat model
-in Documentation/process/threat-model.rst this is a regular bug and not
-a vulnerability: it misreports CPU time under a legitimate configuration
-and crosses no privilege or isolation boundary.
-
-Fixes: f0e1a0643a59 ("sched_ext: Implement BPF extensible scheduler class")
-Link: https://lore.kernel.org/lkml/20261106094343.174905-2-radu.m.toader@gmail.com/
-Signed-off-by: Radu Toader <radu.m.toader@gmail.com>
----
-v1 -> v2:
- - Dropped patch 1, the scx_tickbug reproducer, at Tejun's request. It
-   is one-off debug code and does not belong in tools/sched_ext. It
-   stays available in the v1 posting, see Link. I would still like to
-   offer it as a selftest in tools/testing/selftests/sched_ext, next to
-   nohz_tick, if a regression guard for this is wanted; say the word
-   and I will post that separately.
- - Changelog: named injected idle among the states the new gate newly
-   covers, and said that it reaches intel_powerclamp and
-   cpuidle_cooling rather than only sched_ext. Raised by Peter
-   Zijlstra and by the CI review.
- - Changelog: dropped the claim that the new gate is "strictly wider".
-   It is not: PF_IDLE is set by cpu_startup_entry() and not by
-   init_idle(), so an idle task before that point satisfied idle_cpu()
-   but does not satisfy is_idle_task(). The patch now says which state
-   that is and why nothing is lost. Raised by the CI review.
- - Changelog: put the measured ratios in the patch itself, since there
-   is no longer a cover letter to point at.
- - No code change. The diff is byte-identical to v1 patch 2.
-
- include/linux/sched.h   |  2 --
- kernel/sched/syscalls.c | 12 ------------
- kernel/softirq.c        | 12 ++++++++++--
- 3 files changed, 10 insertions(+), 16 deletions(-)
-
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 1c93da75226e..0e704ea9416f 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2326,11 +2326,9 @@ extern void sched_core_free(struct task_struct *tsk);
- extern void sched_core_fork(struct task_struct *p);
- extern int sched_core_share_pid(unsigned int cmd, pid_t pid, enum pid_type type,
- 				unsigned long uaddr);
--extern int sched_core_idle_cpu(int cpu);
- #else
- static inline void sched_core_free(struct task_struct *tsk) { }
- static inline void sched_core_fork(struct task_struct *p) { }
--static inline int sched_core_idle_cpu(int cpu) { return idle_cpu(cpu); }
- #endif
- 
- extern void sched_set_stop_task(int cpu, struct task_struct *stop);
-diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
-index 45a127deeadd..22e316680a86 100644
---- a/kernel/sched/syscalls.c
-+++ b/kernel/sched/syscalls.c
-@@ -194,18 +194,6 @@ struct task_struct *idle_task(int cpu)
- 	return cpu_rq(cpu)->idle;
- }
- 
--#ifdef CONFIG_SCHED_CORE
--int sched_core_idle_cpu(int cpu)
--{
--	struct rq *rq = cpu_rq(cpu);
--
--	if (sched_core_enabled(rq) && rq->curr == rq->idle)
--		return 1;
--
--	return idle_cpu(cpu);
--}
--#endif /* CONFIG_SCHED_CORE */
--
- /**
-  * find_process_by_pid - find a process with a matching PID value.
-  * @pid: the pid in question.
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index 7fc2200392cd..e7d649c29c0c 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -738,8 +738,16 @@ static inline void tick_irq_exit(void)
- #ifdef CONFIG_NO_HZ_COMMON
- 	int cpu = smp_processor_id();
- 
--	/* Make sure that timer wheel updates are propagated */
--	if ((sched_core_idle_cpu(cpu) && !need_resched()) || tick_nohz_full_cpu(cpu)) {
-+	/*
-+	 * Make sure that timer wheel updates are propagated. An interrupted
-+	 * idle loop counts as idle even with runnable tasks queued on the
-+	 * CPU: forced idle under core scheduling, and the tasks sched_ext
-+	 * keeps on a CPU's run queue while its BPF scheduler holds them back.
-+	 * idle_cpu() would skip the idle bookkeeping of tick_nohz_irq_exit()
-+	 * for those, and with an unstable sched_clock the CPU's clock then
-+	 * isn't resynchronized when it leaves the idle loop.
-+	 */
-+	if ((is_idle_task(current) && !need_resched()) || tick_nohz_full_cpu(cpu)) {
- 		if (hardirq_count() == HARDIRQ_OFFSET)
- 			tick_nohz_irq_exit();
- 	}
-
-base-commit: f66469d9905b39d2c260a15d7d6db450f4db67c1
--- 
-2.43.0
-
+> Sashiko AI review · https://sashiko.dev/#/patchset/20261106205523.1765622-1-a.s.protopopov@gmail.com?part=16
