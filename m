@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794194053;
-	b=VMSC9en9ei48zExfBj6OO+bFFBplzxuTB2RnxHfDrmAUZ4s2oDqDN1mc6RnS3dNTVClT
-	 C+aK+SfM4RgCq7PhEUn5FYHcJNwNcxEJfoWB2bge6xMD6iqpDfdhZ0j1ACtiFZOjFZtxI
-	 8WfE2240nAQZlb96tAMT20S0o9pGfRCV1rXMkwdRH5o6RBTE97tcDQV8a3DdnG0wtHZTb
-	 reWjzc+HiDftN5So9onn+yCP2TobUwJG3nR53796CaleHS5WRHbKiM3azmmVG5XVyzp7T
-	 6WOPSAQ8qi/8oNnb86DkpNqpl2Le16mui4cfZXWav9zxCMz0JFf15pgvaeap9QgmEPw==
+	t=1794194225;
+	b=Dg950wX6ciflQnEPap5RazD9GKaZ90ncxrx1q3dHX8DI6/xf4TDRD3loJgerNPhmvlB/
+	 bqP1KgVVY0RtdzZS4YSoL2kQwXqrJivTLqXMdN28GaOCIX/xjH4glnmotGIky2v0Miqoa
+	 GhREeA0bQIxDg+3vH5vArQ1eQrHsMHFloRC0WXMNuhtqfr85lBtTFh1/slUMv0xNls8I9
+	 O4YeMMQ48CY+288fK/X4+MemgF7l87uP071F1RZV4lT6vvtMytxg76azSxsC+Q7XSHh6v
+	 Kg6uEmXEcANBL0+QrhDqGzWK/6xDFeISKzcmRrflrwKmDDVDQ8ucvpT9FdTYWVm1NVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794194053;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794194225;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=3omd8EXgJPQAHEBwysqvnRrlkJX4hNo0IuRH7wLs2Q4=;
-	b=Ahjqf0DsUprfodGEhSXJ5HBdcMV5AhuzahtvRoD8gbLmT/eTmu0w1H+D8l+8Jhx9skHu
-	 w47wWeTNDUOhGjrm0Ace+K2Q/vNacjwkxR6CanTDkv+LVZGpiqQrXMUx0n7XllYUpQXLe
-	 WkEuGTo2KMm9i0rrbx46FmNlUyYEFL6kQ50l4Y7IAe73k7yB3F3qpknyAQM5TL2vsx1tA
-	 G6wlah+xS4vZSbb3iLFVqhkaW+99oKE5bZ8fHR6IwtLWONeFccNKx63vqzbYjK5kAK/lC
-	 hkTrtX4wTrBl8DFk3Hajv4wb1z8teb9/IMQVAmrBeAg6PBEj7/8BQtDJdIGD/VpWSIw==
+	bh=DgTEEIFLY7nWLKEAMoc3pzJDvyvQPGfrshFyaeQXNwA=;
+	b=vbVBEdNLPNsYEC9B1oZFvLKIXGCSO+snslpLeSnlxKemnSknT4RFX7FwowetnDGeoTTt
+	 zhFE7gnMqcH+bn/bicUy2qah+ceYUQAj/6pCxLflJZM0luzrA/eBjqLs/Hs8TPictM/Q2
+	 vILroomdpq6w3hd5jyVsNNreUHAvK6716Hqm4Hny0/wHV2Q5O2L74Gn5fetcMmOEpWXHC
+	 G77PjCXraeuYVeViq/lvH32bPYBkwFLbfEwt6JuGjqQ+mTTHnMD89wk7zL65B6UsuPAQJ
+	 9rINKulECIjXUEjR5qxlY79Y6lmSd/FouYPKfq72uGw95ZZSmarBjM5I/mVq3y9MHuw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OPCttz8Y;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nqKkD11j;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C14606A326
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 03:14:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F2E606A320
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 03:17:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OPCttz8Y
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06B1A1F008A6;
-	Mon,  9 Nov 2026 03:14:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nqKkD11j
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BDB01F008A2;
+	Mon,  9 Nov 2026 03:17:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794194052;
-	bh=3omd8EXgJPQAHEBwysqvnRrlkJX4hNo0IuRH7wLs2Q4=;
+	s=k20260515; t=1794194225;
+	bh=DgTEEIFLY7nWLKEAMoc3pzJDvyvQPGfrshFyaeQXNwA=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=OPCttz8Y/qOXt2ORq9w2mOkyBRKUOc8HTRJaebDQ/uLqz4bTQYmrt6b/pXsqXRNmX
-	 u4la5acHDnkIWHuTAL1OjVHr+lHbV0Jm4oekpHrzIDKFv/6SR0eQJLJBgn/3/qnXMY
-	 v7hKNwgu5GsmMGPI9zfLZAgAYM/OuzvsoKgW6sMnva20cwvKvJW8DBjVIUpze10RPi
-	 VwzfL+b3vfqV80lrWqfrNMVljdv9uARVeBmFq045tpwNx6eEQRFm3OYQtAKzUP4fkK
-	 6IKmL5k5AfQsM7xWRGvkSlJ16fs/5LDOrx5qjKJF7t97eKctAwJpP93HvXaESW/A/M
-	 Zn0IT77o2Ii4g==
-Message-ID: <sashiko-outbox-204363@kernel.org>
+	b=nqKkD11j+o8Lh3gIiClz6Mq44CzgTeLNNgddhjc2BBOkNMZ8LiYphlBxL1dcUE6iw
+	 Zo4YKpGbMHHFagXGH8w78s7dHfZGA6yRAjyMlY+PUoKATrPKVrBPQK0cb6JF1PCecQ
+	 h6siV2S2H/uzBnSGGQdhDtZ6TpGVk1zHuduaMGIoXlIela/53g3UnxtuN67k4lXgZg
+	 XDiTOvtrzmHj1gu7iGiIqQlbu6o8riV4g2CB4+5T5xuneOfOWOfqEgG/+fDZ4LRx90
+	 vh9kSf1hmf4d17CMbmZo6Iq3VSPrZY4y2aFiszOEiX4jjLdaXWvTyjfPKMGybRCNE6
+	 WYG4cqguA8ezQ==
+Message-ID: <sashiko-outbox-204366@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Test user ringbuf backlog larger
- than ring size
+Subject: Re: [PATCH bpf 1/2] bpf: Reject user ringbuf backlogs larger than
+ total ring size
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ren Wei" <weir@nebusec.ai>, bpf@vger.kernel.org
-In-Reply-To: <080cf00ad740b4cd9af71bfc6c9e9a57a6aef693.1793951856.git.rakukuip@gmail.com>
+In-Reply-To: <ecf1a73cac8881d58b0b5957fb72caaeaa055339.1793951856.git.rakukuip@gmail.com>
 References: <cover.1793951856.git.rakukuip@gmail.com>
- <080cf00ad740b4cd9af71bfc6c9e9a57a6aef693.1793951856.git.rakukuip@gmail.com>
+ <ecf1a73cac8881d58b0b5957fb72caaeaa055339.1793951856.git.rakukuip@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Nov 2026 03:14:11 +0000
+Date: Mon, 09 Nov 2026 03:17:04 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,74 +62,59 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Medium] selftests/bpf: backlog check breaks
-  test_user_ringbuf_post_larger_than_ringbuf_sz()
+- [Medium] bpf: early backlog check in __bpf_user_ringbuf_peek() breaks
+  -E2BIG return
+It also noticed 1 related pre-existing issue this patch does not
+introduce:
+- [High] bpf: compat mode ring buffer hang in __bpf_user_ringbuf_peek()
+  [1]
 --
 
-commit 23d3f0e29a2def29eb8db69c2a11a7b7fed0b563
+commit c14bce3c5f895ee2ea691c51e1942bac34af6108
 Author: Luxiao Xu <rakukuip@gmail.com>
 
-selftests/bpf: Test user ringbuf backlog larger than ring size
+bpf: Reject user ringbuf backlogs larger than total ring size
 
-This commit adds a selftest verifying that bpf_user_ringbuf_drain() returns
--EINVAL and drains no samples when producer_pos exceeds consumer_pos by more
-than the ring buffer size.
+This commit rejects user ring buffer drain operations with -EINVAL when
+the unread window between producer_pos and consumer_pos exceeds the total
+data size of the ring buffer.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c b/tool=
-s/testing/selftests/bpf/prog_tests/user_ringbuf.c
-> index 9fd3ae9873210..b455e35d616b5 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
-> @@ -280,6 +280,22 @@ static void test_user_ringbuf_post_larger_than_ringb=
-uf_sz(void)
->  	user_ringbuf_success__destroy(skel);
->  }
+> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+> index 447863ece26a3..cfd4fe4e85ee6 100644
+> --- a/kernel/bpf/ringbuf.c
+> +++ b/kernel/bpf/ringbuf.c
+> @@ -761,6 +761,9 @@ static int __bpf_user_ringbuf_peek(struct bpf_ringbuf=
+ *rb, void **sample, u32 *s
+>  	if (cons_pos >=3D prod_pos)
+>  		return -ENODATA;
+
+[Severity: High]
+This problem wasn't introduced by this patch, but can cons_pos >=3D prod_pos
+permanently stall sample processing for a 32-bit compat user-space
+producer on a 64-bit kernel [1]?
+
+A 32-bit compat application updates rb->producer_pos with a 32-bit store
+that wraps to zero at 4 GB, while the 64-bit kernel increments
+rb->consumer_pos past 4 GB using 64-bit arithmetic.  Once producer_pos
+wraps, cons_pos >=3D prod_pos evaluates to true and __bpf_user_ringbuf_peek=
+()
+returns -ENODATA on every subsequent drain.
+
 > =20
-> +static void test_user_ringbuf_post_backlog_larger_than_ringbuf_sz(void)
-> +{
-> +	struct user_ringbuf_success *skel;
-> +	struct user_ring_buffer *ringbuf;
-> +	int err;
-> +	__u32 size =3D sizeof(struct sample);
-> +
-> +	err =3D load_skel_create_user_ringbuf(&skel, &ringbuf);
-> +	if (!ASSERT_OK(err, "oversized_backlog_skel"))
-> +		return;
-> +
-> +	manually_write_test_invalid_sample(skel, size, c_ringbuf_size * 2, -EIN=
-VAL);
-> +	user_ring_buffer__free(ringbuf);
-> +	user_ringbuf_success__destroy(skel);
-> +}
+> +	if (prod_pos - cons_pos > ringbuf_total_data_sz(rb))
+> +		return -EINVAL;
 
 [Severity: Medium]
-Does the backlog check tested here break the preceding
-test_user_ringbuf_post_larger_than_ringbuf_sz() test?
+Does checking prod_pos - cons_pos > ringbuf_total_data_sz(rb) here break
+the -E2BIG return for a single oversized sample?
 
-test_user_ringbuf_post_larger_than_ringbuf_sz() passes size =3D c_ringbuf_s=
-ize
-to manually_write_test_invalid_sample(), which sets producer_pos to
-c_ringbuf_size + BPF_RINGBUF_HDR_SZ and expects bpf_user_ringbuf_drain() to
-return -E2BIG:
-
-tools/testing/selftests/bpf/prog_tests/user_ringbuf.c:test_user_ringbuf_pos=
-t_larger_than_ringbuf_sz() {
-	...
-	__u32 size =3D c_ringbuf_size;
-	...
-	manually_write_test_invalid_sample(skel, size, size, -E2BIG);
-	...
-}
-
-With commit "bpf: Reject user ringbuf backlogs larger than total ring size",
-__bpf_user_ringbuf_peek() rejects prod_pos - cons_pos >
-ringbuf_total_data_sz(rb) with -EINVAL before reading the sample header:
+Later in __bpf_user_ringbuf_peek(), total_len is checked against both
+prod_pos - cons_pos and ringbuf_total_data_sz(rb):
 
 kernel/bpf/ringbuf.c:__bpf_user_ringbuf_peek() {
 	...
-	if (prod_pos - cons_pos > ringbuf_total_data_sz(rb))
-		return -EINVAL;
-	...
+	/* The sample must fit within the region advertised by the producer positi=
+on. */
 	if (total_len > prod_pos - cons_pos)
 		return -EINVAL;
 
@@ -139,14 +124,18 @@ kernel/bpf/ringbuf.c:__bpf_user_ringbuf_peek() {
 	...
 }
 
-Because prod_pos - cons_pos <=3D ringbuf_total_data_sz(rb) and total_len <=
-=3D
-prod_pos - cons_pos are both enforced first, the total_len >
-ringbuf_total_data_sz(rb) check returning -E2BIG is now unreachable, and
-test_user_ringbuf_post_larger_than_ringbuf_sz() fails with -EINVAL instead =
-of
--E2BIG.
+Because prod_pos - cons_pos <=3D ringbuf_total_data_sz(rb) and
+total_len <=3D prod_pos - cons_pos are already enforced before reaching
+total_len > ringbuf_total_data_sz(rb), the -E2BIG branch becomes
+unreachable.  When user space publishes a single sample larger than the
+ring buffer (setting producer_pos to at least ringbuf_total_data_sz(rb) +
+BPF_RINGBUF_HDR_SZ), bpf_user_ringbuf_drain() now returns -EINVAL instead
+of the -E2BIG documented in include/uapi/linux/bpf.h and expected by
+test_user_ringbuf_post_larger_than_ringbuf_sz() in
+tools/testing/selftests/bpf/prog_tests/user_ringbuf.c.
+
+[1] https://sashiko.dev/#/bug/linux-262d24f9-bac4-4511-aaed-6698163eb6f5
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1793951856.gi=
-t.rakukuip@gmail.com?part=3D2
+t.rakukuip@gmail.com?part=3D1
