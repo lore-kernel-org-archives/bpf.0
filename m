@@ -1,66 +1,117 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794203631;
-	b=ZCFRYO/6Ylv4B/DgXL6rgzSF51Z1aFPJhPrsq+dcqmVOnQbC+Npzj+I5GeuyA+v2iDkL
-	 ZveoGZ1x2M92GVF33MNdDHZf/fDA32MERt7iFpgNc0bDHeVJOHAfSBArVRPC7mU+qXmtK
-	 o02xHStcA8lf2sj2AZSpk4lDyiUDEUz/kngvt0j5AprJtcwVBlS1COpQVgvKKmGRZprSy
-	 j9j6bfk+WAqrKC+4WQIkjACjKJcacDC3JYQZTrn7SnssCi2+QrhVFh5pkdZsjdnYkHxbT
-	 SCAYk7FtV3gb2W4d1HqGBmq2P9MkUrZegFsiDuVsiWPmRPL1XARrsYXiaaILjGsFVuA==
+	t=1794204041;
+	b=Fe/womsOYgs2GoX6qIQI1vaBeBjgn/p2mtGOP1326PeDGaXCwr0cFc4bQsKwaTzzNw5z
+	 /IrjIwl8OsKiRZwcpS4lSmDg3FdA3wSLr/b2XeNL8/m56RkXy0SWWj6feYtDa2fy8A3a5
+	 2rv0Z/eQvPcjWd14nXGxWWo3CE45w8exLNU+y7zePKZ3I8BALV2AXfSAeWFQMs8sgHANQ
+	 2/rhTkAQXONiMUh2aD1//lBVJM1CAdilpL8+j/0shj28re8K8fWFKcB/GtoqXOC8yILuz
+	 nYBfS1owv9ugG/dw/ZvHy2gxdXFGcLcc82lQHj9djjuBei2aBVgOQbdNffxDkdf2MsQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794203631;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=W1mfR/+JXbp1hpCZu9HuoqLOwrMsPqWR8ZMYk9Ds6Ng=;
-	b=4BMgLEiYnPyCwvqxwntCdA219LM38X27Gd2Eqf4zbwWBo9FQv+R/Tcqf6lLuejNk5Eik
-	 HyWwjIYSOiP9mKHKGv+lVxMi/TaDeHxfd8uXRUQ407F/VUvQdL5UXh6k4RNyOMxKJFclA
-	 ljti8dE34BC+eDYZA/7mwvz3u8jZoFnb84azkl/Pb1g1DT4dkbqOxzaXEkK93bTpiO4e+
-	 QxRzhh9KvbxL3RSw2g6QiTA/F+87YHCLeJGy+ctr6PTkdyMFr/n78+r3yjCodC6qqP4Wk
-	 JkOaSdHM9o52B5eZ5KwQH43p4NU+Xq+W3s0vAtQYgctrko0qlYVwc/4rD/Cg5xJraLg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794204041;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=u7aSiRAyqUJJCYptUrQffwehB1VQ0X01AiRX22xwuyM=;
+	b=jpp1tGlpR6/d4lcDKP22/UaaEy+kT7w9I+kTFdT8i6NJWzHem0iy6B9tMuYMn6W4zNv/
+	 D1KIP8eitMikqYufNBPVc4NbHIvy2mEhegA7h1jNK5QsAjxUFgTPfAQOdJ2U3oue1p/vO
+	 ULiZjtN4OOkWQMIpeTf7v5JWb4gSFZO7f3yEwO2qzh/NHCKF/PRfdnxwiMnBehH6veETS
+	 Y7MJtW9dl6uM6OXj93bgKCT2lW8y0W+9sjTqHWIOKb189UcchZHodsvlWAtOUUx5sS/mE
+	 4HekgpBR4JxoUXYADnL4/+fC6DU/kHaqpth0TyfPaGivVW9McO0zuMtdKdg3H5pN1rg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ijlKxu8n;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mhCpmFyH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFAF606A31C;
-	Mon,  9 Nov 2026 05:53:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A115606A321;
+	Mon,  9 Nov 2026 06:00:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ijlKxu8n
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 459FF1F0089F;
-	Mon,  9 Nov 2026 05:53:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mhCpmFyH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ABB31F008A1;
+	Mon,  9 Nov 2026 06:00:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794203630;
-	bh=W1mfR/+JXbp1hpCZu9HuoqLOwrMsPqWR8ZMYk9Ds6Ng=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ijlKxu8n/cdoHYoaEVAKvBG2RpOt+W23Lb9OFOL3uAySOP2c4vvmvXKKsfHW4RbVB
-	 9yk5/JkSPA1SQm21DI37LVMJGSnoL1NyCehVi4f8LG5XsYpXEUFvhyrVuez2mbzdel
-	 hpy3vnYy4Gf6eS9HTrZEV2hOZxLuNWRj2q0fhkrhZAjBTSTWocr6prPkZBGi1gVyG3
-	 XvMgEPU5KoeCey2RYtUrg2vSwDrWmTqkM/Fo0jhMx/ayNBz0gw8ihXy15ARQJiMzkM
-	 osdowQDUTqaumgEdN4QGi3toLKjsoVBDOidmdJHmfIKoMau6rKuGsyfp1wa1mgo1OU
-	 wb/gdwnXuc9Jg==
-Subject: Re: [PATCH net v2] net: stmmac: Disable queues before
- netif_tx_disable in xdp_release
-From: netdev-bot+sashiko@kernel.org
-To: muhammad.nazim.amirul.nazle.asmade@altera.com
-Cc: netdev@vger.kernel.org, kuba@kernel.org, maxime.chevallier@bootlin.com,
- ansuelsmth@gmail.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
- alexandre.torgue@foss.st.com, ast@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- faizal.abdul.rahim@intel.com, noor.azura.ahmad.tarmizi@intel.com,
- yoong.siang.song@intel.com, rohan.g.thomas@altera.com,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-Date: Mon, 09 Nov 2026 05:53:48 +0000
-Message-ID: <179420362880.994134.12466150409496809199@kernel.org>
-In-Reply-To: <20261105053916.22353-1-muhammad.nazim.amirul.nazle.asmade@altera.com>
-References: <20261105053916.22353-1-muhammad.nazim.amirul.nazle.asmade@altera.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1794204041;
+	bh=u7aSiRAyqUJJCYptUrQffwehB1VQ0X01AiRX22xwuyM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=mhCpmFyH7SOmyvOcs7GgLvFo4llqJQLn3JD9Ni+eLlL44nVNxcNUeVegJZSzxSMdc
+	 4fJ85yE8c0ifBT0lCGnrINGc9IH004uFZD8R+b6P41elU0YmVXjixx42sa+uupOW5M
+	 t+DPMvcBgCziGhkh+DZuIoOOYMOLMaRbgFrBWnYpL64er4kcD3H71VgIaMyFEIbsWW
+	 7vjbN496UkeAwpsdLUdqap0gmN2SIES3Plx7MWAv3GZQm9V4/nH/Gg4fWSNVombPOQ
+	 WGcmvMqaVR+eRUutu7SCemogVHTSWAObX2YQSSs55qVnnpCNvnODqGljh3ZINFQgOv
+	 Pm6DPq60Ltkhw==
+Message-ID: <sashiko-outbox-204470@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v2 1/5] net: skbuff: skip managed zerocopy
+ frags in skb_frag_ref()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Mina Almasry" <almasrymina@google.com>
+Cc: "Jesper Dangaard Brouer" <hawk@kernel.org>, "Ilias Apalodimas" <ilias.apalodimas@linaro.org>, "David
+ S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Neal Cardwell" <ncardwell@google.com>, "Kuniyuki
+ Iwashima" <kuniyu@google.com>, "Pavel Begunkov" <asml.silence@gmail.com>, "Bobby
+ Eshleman" <bobbyeshleman@meta.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Steffen
+ Klassert" <steffen.klassert@secunet.com>, "Herbert Xu" <herbert@gondor.apana.org.au>, "Willem
+ de Bruijn" <willemb@google.com>, "John Fastabend" <john.fastabend@gmail.com>, "Sabrina
+ Dubroca" <sd@queasysnail.net>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "Michael
+ S. Tsirkin" <mst@redhat.com>, "Jason Wang" <jasowangio@gmail.com>,
+ =?utf-8?b?RXVnZW5pbyBQw6lyZXo=?= <eperezma@redhat.com>, "Xuan Zhuo" <xuanzhuo@linux.alibaba.com>, "Andrew
+ Morton" <akpm@linux-foundation.org>, "David Hildenbrand" <david@kernel.org>, "Lorenzo
+ Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, "Vlastimil
+ Babka" <vbabka@kernel.org>, "Mike Rapoport" <rppt@kernel.org>, "Suren
+ Baghdasaryan" <surenb@google.com>, "Michal Hocko" <mhocko@suse.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Johannes
+ Berg" <johannes@sipsolutions.net>, "Byungchul Park" <byungchul@sk.com>, "Zi
+ Yan" <ziy@nvidia.com>, virtualization@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, "Jonathan
+ Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy
+ Dunlap" <rdunlap@infradead.org>, "Lorenzo Bianconi" <lorenzo@kernel.org>, "Wen
+ Gu" <guwen@linux.alibaba.com>, "Philo Lu" <lulie@linux.alibaba.com>, "Justin
+ Chen" <justin.chen@broadcom.com>, "Florian Fainelli" <florian.fainelli@broadcom.com>, "Vikas
+ Gupta" <vikas.gupta@broadcom.com>, "Michael Chan" <michael.chan@broadcom.com>, "Pavan
+ Chebbi" <pavan.chebbi@broadcom.com>, "Doug Berger" <opendmb@gmail.com>, "Nicolai
+ Buchwitz" <nb@tipi-net.de>, "Broadcom internal kernel review list" <bcm-kernel-feedback-list@broadcom.com>, "Satish
+ Kharat" <satishkh@cisco.com>, "Wei Fang" <wei.fang@nxp.com>, "Frank Li" <frank.li@nxp.com>, "Shenwei
+ Wang" <shenwei.wang@nxp.com>, "Joshua Washington" <joshwash@google.com>, "Harshitha
+ Ramamurthy" <hramamurthy@google.com>, "Jijie Shao" <shaojijie@huawei.com>, "Jian
+ Shen" <shenjian15@huawei.com>, "Fan Gong" <gongfan1@huawei.com>, "Tony
+ Nguyen" <anthony.l.nguyen@intel.com>, "Przemek Kitszel" <przemyslaw.kitszel@intel.com>, "Marcin
+ Wojtas" <marcin.s.wojtas@gmail.com>, "Russell King" <linux@armlinux.org.uk>, "Sunil
+ Goutham" <sgoutham@marvell.com>, "Geetha sowjanya" <gakula@marvell.com>, "Ratheesh
+ Kannoth" <rkannoth@marvell.com>, "Subbaraya Sundeep" <sbhatta@marvell.com>, "Bharat
+ Bhushan" <bbhushan2@marvell.com>, "Felix Fietkau" <nbd@nbd.name>, "Matthias
+ Brugger" <matthias.bgg@gmail.com>, "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>, "Tariq
+ Toukan" <tariqt@nvidia.com>, "Saeed Mahameed" <saeedm@nvidia.com>, "Mark
+ Bloch" <mbloch@nvidia.com>, "Leon Romanovsky" <leon@kernel.org>, "Ido
+ Schimmel" <idosch@nvidia.com>, "Petr Machata" <petrm@nvidia.com>, "Horatiu
+ Vultur" <horatiu.vultur@microchip.com>, UNGLinuxDriver@microchip.com, "Daniel
+ Machon" <daniel.machon@microchip.com>, "Steen Hegelund" <Steen.Hegelund@microchip.com>, "Haiyang
+ Zhang" <haiyangz@microsoft.com>, "Wei Liu" <wei.liu@kernel.org>, "Dexuan
+ Cui" <decui@microsoft.com>, "Yibo Dong" <dong100@mucse.com>, "Brett Creeley" <brett.creeley@amd.com>, "Justin
+ Lai" <justinlai0215@realtek.com>, "Larry Chiu" <larry.chiu@realtek.com>,
+ =?utf-8?b?TmlrbGFzIFPDtmRlcmx1bmQ=?= <niklas.soderlund@ragnatech.se>, "Paul
+ Barker" <paul@pbarker.dev>, "Masahisa Kojima" <kojima.masahisa@socionext.com>, "Maxime
+ Chevallier" <maxime.chevallier@bootlin.com>, "Maxime Coquelin" <mcoquelin.stm32@gmail.com>, "Alexandre
+ Torgue" <alexandre.torgue@foss.st.com>, "FUJITA Tomonori" <fujita.tomonori@gmail.com>, "Siddharth
+ Vadapalli" <s-vadapalli@ti.com>, "Roger Quadros" <rogerq@kernel.org>, "MD
+ Danish Anwar" <danishanwar@ti.com>, "Jiawen Wu" <jiawenwu@trustnetic.com>, "Mengyuan
+ Lou" <mengyuanlou@net-swift.com>, "Ronak Doshi" <ronak.doshi@broadcom.com>, "Ryder
+ Lee" <ryder.lee@mediatek.com>, "Shayne Chen" <shayne.chen@mediatek.com>, "Sean
+ Wang" <sean.wang@mediatek.com>, "Juergen Gross" <jgross@suse.com>, "Stefano
+ Stabellini" <sstabellini@kernel.org>, "Oleksandr Tyshchenko" <oleksandr_tyshchenko@epam.com>, "Jordan
+ Rhee" <jordanrhee@google.com>, "Ankit Garg" <nktgrg@google.com>, "Tim
+ Hostetler" <thostet@google.com>, "Eric Joyner" <eric.joyner@amd.com>, "Prabu
+ Thayalan" <prabu.ponrajthayalan@amd.com>, "Nikhil P. Rao" <nikhil.rao@amd.com>, "Chintan
+ Vankar" <c-vankar@ti.com>, "Nora Schiffer" <nora.schiffer@ew.tq-group.com>, "Alexander
+ Sverdlin" <alex@sverdlin.org>, "Kevin Hao" <haokexin@gmail.com>, "Karl
+ Mehltretter" <kmehltretter@gmail.com>, "Aleksandr Loktionov" <aleksandr.loktionov@intel.com>, "Meghana
+ Malladi" <m-malladi@ti.com>, "Jacob Keller" <jacob.e.keller@intel.com>, "StanleyYP
+ Wang" <StanleyYP.Wang@mediatek.com>, imx@lists.linux.dev, linux-rdma@vger.kernel.org, linux-hyperv@vger.kernel.org, Frank.Li@kernel.org, wsa+renesas@sang-engineering.com
+In-Reply-To: <20261108060016.2131509-2-almasrymina@google.com>
+References: <20261108060016.2131509-1-almasrymina@google.com>
+ <20261108060016.2131509-2-almasrymina@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 09 Nov 2026 06:00:34 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,186 +120,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
-
-Critical: 0 · High: 1 (1) · Medium: 1 · Low: 0
-
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [High] The patch moves the hrtimer_cancel() loop on tx_q->txtimer ahead
-  of netif_tx_disable().
-- [Medium] The reorder only blocks one of the two places that can wake a
-  TX queue after netif_tx_disable() in stmmac_xdp_release().
-
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but it is a use-
-  after-free in the same teardown.
-
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] net: skbuff: missing Fixes trailers for skb_frag_ref() and iptfs
+  fixes
 --
 
-net: stmmac: Disable queues before netif_tx_disable in xdp_release
+commit 289785b15a220a700e7ce94d6b9993ab94b82d49
+Author: Mina Almasry <almasrymina@google.com>
 
-This commit reorders stmmac_xdp_release(). NAPI is now disabled and the TX
-coalescing hrtimers are cancelled before netif_tx_disable() is called. The
-goal is to stop stmmac_tx_clean() from waking a TX queue while the DMA
-rings are being torn down, using the same order as __stmmac_release().
+> net: skbuff: skip managed zerocopy frags in skb_frag_ref()
+>
+> skb_frag_unref() and skb_release_data() skip releasing references on
+> managed zerocopy fragments (SKBFL_MANAGED_FRAG_REFS), whereas
+> skb_frag_ref() acquires a reference unconditionally. If skb_frag_ref()
+> is called on a managed zerocopy SKB, the acquired reference is never
+> released by skb_frag_unref() or skb_release_data().
+>
+> Skip acquiring a reference in skb_frag_ref() when skb_zcopy_managed(skb)
+> is true so skb_frag_ref() matches skb_frag_unref() and
+> skb_release_data(), and disable share_ok in iptfs_output_queued() when
+> skb_zcopy_managed(skb) is true so iptfs_consume_frags() does not append
+> unreferenced fragments into a managed zerocopy outer SKB.
+>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 7ffed295eb14a..7d1497392b8b5 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -7264,15 +7264,15 @@ void stmmac_xdp_release(struct net_device *dev)
->  	struct stmmac_priv *priv = netdev_priv(dev);
->  	u8 chan;
->  
-> -	/* Ensure tx function is not running */
-> -	netif_tx_disable(dev);
-> -
->  	/* Disable NAPI process */
->  	stmmac_disable_all_queues(priv);
->  
->  	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
->  		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
->  
-> +	/* Ensure tx function is not running */
-> +	netif_tx_disable(dev);
+[Severity: Low]
+Since this fixes fragment reference accounting for SKBFL_MANAGED_FRAG_REFS =
+in
+skb_frag_ref() and fragment sharing in iptfs_output_queued(), should the
+commit message include:
 
-[Severity: High]
-hrtimer_cancel() now runs before netif_tx_disable(). Can a stmmac_xmit()
-or stmmac_tso_xmit() that is already in flight re-arm tx_q->txtimer after
-the cancel has returned?
+  Fixes: 753f1ca4e1e5 ("net: introduce managed frags infrastructure")
+  Fixes: b96ba312e21c ("xfrm: iptfs: share page fragments of inner packets")
 
-stmmac_tx_timer_arm() checks the NAPI state and then acts on it:
-
-stmmac_main.c:stmmac_tx_timer_arm() {
-    ...
-	if (unlikely(!napi_is_scheduled(napi))) {
-		if (unlikely(!(hrtimer_active(&tx_q->txtimer))))
-			hrtimer_start(&tx_q->txtimer,
-				      STMMAC_COAL_TIMER(tx_coal_timer),
-				      HRTIMER_MODE_REL);
-	} else {
-    ...
-}
-
-One possible interleaving:
-
-CPU1 (stmmac_xmit, txq lock held)
-stmmac_tx_timer_arm()
-  napi_is_scheduled(napi) returns false
-  <hardirq, or preempted on PREEMPT_RT>
-
-CPU0 (stmmac_xdp_release)
-stmmac_disable_all_queues()      /* napi_disable() sets SCHED */
-hrtimer_cancel(&tx_q->txtimer)   /* nothing queued, returns */
-
-CPU1
-  hrtimer_start(&tx_q->txtimer, ...)
-
-CPU0
-netif_tx_disable()   /* waits for the txq lock, timer stays queued */
-
-stmmac_xdp_set_prog() then calls stmmac_xdp_open() straight away, and
-stmmac_xdp_open() does:
-
-	hrtimer_setup(&tx_q->txtimer, stmmac_tx_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-
-The coalesce timer defaults to 5ms and ethtool can raise it to 100ms, so
-the stray timer is likely still queued at that point. Would re-initializing
-a queued hrtimer corrupt the per-CPU hrtimer base?
-
-Before this patch, netif_tx_disable() ran first, so in-flight xmits were
-drained before the timers were cancelled.
-
-The commit message says:
-
-  "Once NAPI is disabled, NAPI_STATE_SCHED stays set, so
-  stmmac_tx_timer_arm() takes the hrtimer_try_to_cancel() path and new
-  transmissions cannot re-arm the TX timers after hrtimer_cancel()."
-
-This seems to hold only for transmissions that check the NAPI state after
-napi_disable(). Would the order stmmac_disable_all_queues() ->
-netif_tx_disable() -> hrtimer_cancel() close both this window and the
-stmmac_tx_clean() one?
-
-> +
->  	/* Free the IRQ lines */
->  	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
->  
-
-[Severity: Medium]
-Disabling NAPI first stops the wake in stmmac_tx_clean(). Is there still a
-second waker in the window between netif_tx_disable() and
-stmmac_free_irq()?
-
-stmmac_tx_err() also calls netif_tx_wake_queue(). It runs from the hard
-IRQ handlers stmmac_dma_interrupt() and stmmac_msi_intr_tx() when the
-status is tx_hard_error:
-
-stmmac_main.c:stmmac_tx_err() {
-    ...
-	stmmac_start_tx_dma(priv, chan);
-
-	priv->xstats.tx_errors++;
-	netif_tx_wake_queue(netdev_get_tx_queue(priv->dev, chan));
-}
-
-The IRQ lines stay requested until stmmac_free_irq(), which now runs after
-netif_tx_disable(). stmmac_xdp_release() never sets STMMAC_DOWN, so the
-STMMAC_DOWN check in stmmac_msi_intr_tx() does not filter this either.
-
-Suppose the DMA reports TPS or FBE in that window. The queue is woken
-again and TX DMA is restarted. Could the NET_TX softirq then call
-stmmac_xmit() while stmmac_stop_all_dma() and free_dma_desc_resources()
-are freeing the descriptor ring and tx_skbuff/tx_skbuff_dma?
-
-The trigger needs a fatal bus error or a transmit-process-stopped status in
-this window, so it is narrow. __stmmac_release() has the same
-netif_tx_disable() -> stmmac_free_irq() window. It is still the same
-failure the commit message describes: the queue restarts after
-netif_tx_disable() and ndo_start_xmit() runs during ring teardown.
-
-[Severity: High]
-This isn't a bug introduced by this patch, but it is the ndo_xdp_xmit()
-race the v2 changelog mentions. Can stmmac_xdp_xmit() write into the TX
-rings that free_dma_desc_resources() is freeing here?
-
-On program removal, stmmac_xdp_set_prog() does:
-
-	if (!prog)
-		xdp_features_clear_redirect_target(dev);
-
-	need_update = !!priv->xdp_prog != !!prog;
-	if (if_running && need_update)
-		stmmac_xdp_release(dev);
-
-Nothing waits for a grace period between these two calls.
-stmmac_disable_all_queues() only calls synchronize_rcu() when an RX queue
-has an xsk_pool.
-
-Another device's NAPI may already have passed the feature check in
-__xdp_enqueue() and queued frames in a devmap bulk queue. When it flushes
-through bq_xmit_all() -> stmmac_xdp_xmit(), the only gate is:
-
-	if (unlikely(test_bit(STMMAC_DOWN, &priv->state)))
-		return -ENETDOWN;
-
-stmmac_xdp_release() never sets STMMAC_DOWN. stmmac_xdp_xmit() also takes
-__netif_tx_lock() without checking whether the queue is stopped, so
-netif_tx_disable() does not fence it.
-
-stmmac_xdp_xmit_xdpf() then writes into tx_q->dma_tx and
-tx_q->tx_skbuff_dma. __free_dma_tx_desc_resources() releases that memory
-with dma_free_coherent() and kfree().
-
-The v2 changelog already says this will be handled separately.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261105053916.22353-1-muhammad.nazim.amirul.nazle.asmade%40altera.com
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261108060016.2131=
+509-1-almasrymina@google.com?part=3D1
