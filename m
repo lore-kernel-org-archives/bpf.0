@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794248882;
-	b=uUILEdwssl7vkbHDY3jVb9WDwpI8oL3miVdTvycKFsBLmnK3FkIsLF5b5ot9U9ykXKDf
-	 irYyeBbPKpiDUnMDxhqJYgU2+Mcjq/fjBF4bGxLAVK41BhG5xcl8o80QP/62bOh3tGuvG
-	 zX4TlygH1ZL4dHwO4JWN2OQ+1sbyEJ9m3tbpgxdYAoupCk7ipzOaVEV3ypm24Rc0Kb+p5
-	 WMuV7wjRq6E0ge3neq6Z82OFeVfOJcolTFtDONyEs8+/5IvRWaCpTxLAd7oP6Fd7RKMCY
-	 iTzhag2zgkdCR12Py9VenGseZPBl2huBtxke83yG+WihqBp1UtI5aUDCiNnnvyyYJfg==
+	t=1794248883;
+	b=1Bkha9vbn1+y+qmud6fGo9N6vul0sQqpTpBttnEYGsG+p+0kSLpSthbR8LNZlAd6vZs+
+	 Ou+MoYAEiBN5POyqhCR30ZsvNyQzrONFHvJONRMBTcs+DjdeP1Zy5nRwBK+fXApT+gIEX
+	 o/qjE7uRd+CgwQXK+ltFk/rXEUI9BL07FlM+BpvzUCKeu4g34kA4RfrEoAeTFRkRK6mAw
+	 xFgwuqbB//PuN621uEIs45pE3h153+kvDv9WiUUqy9fJkVBDNvbavHHHhRa7ssHO610ix
+	 4CFQL/J8gR5x2s3OKG6J5sKuQIBRfl7zdr7WMps12Q9UNPdKVJ8Qhnl7Q5SwnvkxFeg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794248882;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794248883;
 	h=DMARC-Filter:Received:Received:DKIM-Signature:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=tBVcLDTDQdLuRrkj3YaQGxFUQfaBfSmy+arSLpiA7uo=;
-	b=ag1DxXTiEzFLSJBgS57pLuGu0Eq61POzbAFhSxrOJCsusTUvViPLZVxMFmZG/hkiS0mQ
-	 5lZYvICa/xgt7v/vhftPm2xu4Ok8INwff9J50xZY6PsonA4D1SSX+CZtdmF/5k4tDS8xw
-	 TtxCBQ7jMeHpHcHI+L4TNc17Ut7AXhIiV7VnoxrHe7XhSHA23fCkFKJmzjT8jR4mcvOKh
-	 z+1pcGODXgpNy9CUIw/0S/7qOiTAdmk7mRbD57ZoE6TlUYHZml+r/9hwM+e03+E8cw63T
-	 GVnasgl+7hcBRd9rOANUX0xNnhJZUbvD/OI1FRVQB65hkgnvClBdn9zQdL5r/dDelBQ==
+	bh=wz7Jp+PexIzTFHlXctkjuIdtWFHAXhZSXbPSBDeuIFk=;
+	b=U9QLj6j4eXB3lirn/xEc/6i2wrGnSvHFuSC+3bALZgVf+gJZJ3QO5xe3WPCvza0tVqT4
+	 YAvcalS6qRko58tXUDBWuc4tmQyEY5cCbTpy2w6GkT7+HYfBwxsxVXooZ4v2fwpK2P4Ze
+	 WHz9odKYADBJ01aYfSrJCaclM8dJ7r+r3BPQk2Ploxrg9QIIC0HzN+1b4SlAtGbyUUBnv
+	 KcknLa8fmclfb0k8e/l9FWChpj+CTDPw0yhP5mFpsgZ4ZPzhbDqZEOe/5WYyrmIwELBQZ
+	 SpkfFzoChemH3hktzINglyEZnTxVUhDaXCZuBew71vrHVcnm9rMc+iaM+WLM/BG92Eg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=arm.com;
 	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=MrmthumD;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=lF9KVjBi;
 	arc=none smtp.remote-ip=217.140.110.172
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3B8606A31C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A2F9606CC7F;
 	Mon,  9 Nov 2026 18:28:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E3B8606A31C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5A2F9606CC7F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=MrmthumD
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=lF9KVjBi
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 281661BCB;
-	Mon,  9 Nov 2026 10:27:58 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B54A91682;
+	Mon,  9 Nov 2026 10:27:57 -0800 (PST)
 Received: from fedora (LJ9QCPV96V.austin.arm.com [10.118.150.23])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 115D73F85F;
-	Mon,  9 Nov 2026 10:28:01 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B5CE3F85F;
+	Mon,  9 Nov 2026 10:28:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1794248881; bh=lYo1Cd4405j4FxsBfBXZ4VfAkXOBhek+n65bObADoV4=;
+	t=1794248880; bh=AWhF8xfjFL5cvpPKw3tBPfCt67J602WNRROlhEqIn9g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MrmthumDbz8H2s29YVtokXEoCRNz6+HHM0q8Nph19XifQQDa6f7Pr7dyXz3E4gErs
-	 Vcgno8N4N88LO9XQURcc5Npj0FM1FNxvBfCwKgKPbFcCXhKephZuBEFUBb3v4b7rbR
-	 fT0mb798gAfVKPdZGkdXFHM33CUodIXX4BAxanOs=
+	b=lF9KVjBiaGyK0O/yUZWxgoVclBjZ5BmPS1qav4KFT6u7+RVm/6X33XSdYC5pkCcps
+	 h9IXfCi3xSRsObHIL6tzpmE1PLbZJgebO8onMhNQ2dNcUoriChX5sELRMV9C8CptrY
+	 GQuYrTyWmHXoMil89hpvwclSX3kvO3cY0gG1+ur0=
 From: Bill Roberts <bill.roberts@arm.com>
 To: "H. Peter Anvin" <hpa@zytor.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -55,9 +55,9 @@ Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Bill Roberts <bill.roberts@arm.com>
-Subject: [PATCH v5 4/6] x86/shstk: support via prctl
-Date: Mon,  9 Nov 2026 12:27:56 -0600
-Message-ID: <20261109182758.252223-5-bill.roberts@arm.com>
+Subject: [PATCH v5 2/6] selftests/x86: fix fork bug
+Date: Mon,  9 Nov 2026 12:27:54 -0600
+Message-ID: <20261109182758.252223-3-bill.roberts@arm.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261109182758.252223-1-bill.roberts@arm.com>
 References: <20261109182758.252223-1-bill.roberts@arm.com>
@@ -72,141 +72,71 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On x86, userspace shadow stack state is managed through the
-architecture-specific arch_prctl() interface. Other architectures,
-including arm64 and RISC-V, use the generic shadow stack prctl()
-interface instead.
+The shadow stack ptrace test does not check whether fork() fails
+before proceeding with the parent-side ptrace operations.
 
-This difference requires userspace runtimes, toolchains, and libc
-implementations to support architecture-specific interfaces for
-managing shadow stack state. It also complicates efforts to provide
-consistent LSM mediation of control-flow integrity state changes.
+If fork() fails, it returns -1, which is subsequently passed to
+kill() on the test's error path. Calling kill(-1, SIGKILL) sends
+SIGKILL to every process the caller has permission to signal,
+potentially terminating unrelated processes.
 
-Implement the generic PR_SET_SHADOW_STACK_STATUS,
-PR_GET_SHADOW_STACK_STATUS, and PR_LOCK_SHADOW_STACK_STATUS
-operations on x86 using the existing shadow stack helpers.
-Retain the arch_prctl() interface for compatibility with
-existing userspace.
+Check for fork() failure immediately and return an error before
+entering the ptrace test's parent-side logic.
 
-Unlike arch_prctl(), which enables or disables individual features,
-PR_SET_SHADOW_STACK_STATUS specifies the desired state of the
-supported feature set. Translate this state into the corresponding
-shadow stack and WRSS operations, changing only features whose
-state differs from the requested state.
+Shashiko pointed out this fork bug, and the relevant snippets from the
+report are below:
 
-Avoid unnecessary operations because the underlying shadow stack
-helpers check locked bits before checking whether the requested
-feature state is already satisfied. If enabling or disabling WRSS
-fails after enabling shadow stack, restore the original shadow
-stack state.
+[ ... ]
+> +int test_ptrace(void)
+> +{
+> +     unsigned long saved_ssp, ssp = 0;
+> +     struct sigaction sa = {};
+> +     struct iovec iov;
+> +     int status;
+> +     int pid;
+> +
+> +     iov.iov_base = &ssp;
+> +     iov.iov_len = sizeof(ssp);
+> +
+> +     pid = fork();
+> +     if (!pid) {
 
-Disabling shadow stack also disables WRSS, so do not disable WRSS
-separately when clearing the entire feature set. This avoids
-allowing a locked WRSS feature to prevent shadow stack disablement.
+[Severity: High]
+This is a pre-existing issue, but could this code broadcast SIGKILL to
+all user processes if fork() fails?
 
-Reject unsupported feature combinations and use the existing
-shadow stack helpers to enforce feature locking.
+If fork() returns -1 due to resource limits, execution will proceed with
+pid = -1. When ptrace() subsequently fails, the error path is triggered:
+
+out_kill:
+        kill(pid, SIGKILL);
+        return 1;
+
+Since pid is -1, POSIX specifies that this will kill all processes the
+current user has permission to terminate, potentially crashing the host
+environment.
 
 Signed-off-by: Bill Roberts <bill.roberts@arm.com>
 ---
- arch/x86/kernel/shstk.c | 80 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+ tools/testing/selftests/x86/test_shadow_stack.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index eb690ba90180..6dfe310634b0 100644
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -18,6 +18,7 @@
- #include <linux/sizes.h>
- #include <linux/user.h>
- #include <linux/syscalls.h>
-+#include <linux/prctl.h>
- #include <asm/msr.h>
- #include <asm/fpu/xstate.h>
- #include <asm/fpu/types.h>
-@@ -630,3 +631,82 @@ bool shstk_is_enabled(void)
- {
- 	return features_enabled(ARCH_SHSTK_SHSTK);
- }
-+
-+/* Handles the generic prctl interface for PR_SET_SHADOW_STACK_STATUS and its feature bits */
-+int arch_set_shadow_stack_status(struct task_struct *t, unsigned long status)
-+{
-+	int rc;
-+	bool shstk_was_enabled = features_enabled(ARCH_SHSTK_SHSTK);
-+
-+	/*
-+	 * Enable/disable the full feature set and preserve the original state for rollback.
-+	 * Only act on changed features, since shstk_prctl() checks locked bits before checking
-+	 * feature status.
-+	 */
-+	switch (status) {
-+	case 0:
-+		/*
-+		 * Do not explicitly disable WRSS. Disabling shadow stack also
-+		 * disables WRSS, and a locked WRSS must not prevent this.
-+		 */
-+		return shstk_was_enabled ?
-+			shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK) : 0;
-+
-+	case PR_SHADOW_STACK_ENABLE:
-+		if (!shstk_was_enabled) {
-+			rc = shstk_prctl(t, ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK);
-+			if (rc)
-+				return rc;
-+		}
-+
-+		if (features_enabled(ARCH_SHSTK_WRSS)) {
-+			rc = shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_WRSS);
-+			if (rc && !shstk_was_enabled)
-+				shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
-+			return rc;
-+		}
-+
-+		return 0;
-+
-+	case PR_SHADOW_STACK_ENABLE|PR_SHADOW_STACK_WRITE:
-+		if (!shstk_was_enabled) {
-+			rc = shstk_prctl(t, ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK);
-+			if (rc)
-+				return rc;
-+		}
-+
-+		if (!features_enabled(ARCH_SHSTK_WRSS)) {
-+			rc = shstk_prctl(t, ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS);
-+			if (rc && !shstk_was_enabled)
-+				shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
-+
-+			return rc;
-+		}
-+
-+		return 0;
-+
-+	/*
-+	 * Unknown bit mapping, unsupported PR_SHADOW_STACK_PUSH or *only*
-+	 * PR_SHADOW_STACK_WRITE.
-+	 */
-+	default:
-+		return -EINVAL;
+diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
+index 3d6ca33edba4..b52c5420c137 100644
+--- a/tools/testing/selftests/x86/test_shadow_stack.c
++++ b/tools/testing/selftests/x86/test_shadow_stack.c
+@@ -971,6 +971,11 @@ int test_ptrace(void)
+ 	iov.iov_len = sizeof(ssp);
+ 
+ 	pid = fork();
++	if (pid < 0) {
++		printf("[FAIL]\tFork failed for %s\n", __func__);
++		return 1;
 +	}
-+}
 +
-+/* Handles the generic prctl interface for PR_LOCK_SHADOW_STACK_STATUS and its feature bits */
-+int arch_lock_shadow_stack_status(struct task_struct *t, unsigned long status)
-+{
-+	return shstk_prctl(t, ARCH_SHSTK_LOCK, status);
-+}
-+
-+/*
-+ * We assume the prctl() feature bits line up with the arch_prctl() specific ones. If not,
-+ * the flags returned via arch_get_shadow_stack_status will be mapped wrong.
-+ */
-+static_assert(PR_SHADOW_STACK_ENABLE == ARCH_SHSTK_SHSTK);
-+static_assert(PR_SHADOW_STACK_WRITE  == ARCH_SHSTK_WRSS);
-+int arch_get_shadow_stack_status(struct task_struct *t, unsigned long __user *status)
-+{
-+	return shstk_prctl(t, ARCH_SHSTK_STATUS, (unsigned long)status);
-+}
+ 	if (!pid) {
+ 		ssp = get_ssp();
+ 
 -- 
 2.55.0
 
