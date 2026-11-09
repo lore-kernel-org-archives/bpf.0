@@ -1,97 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.138
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794253656;
-	b=dCm2QOwmHjTXH+eMbPXpwNOtXmrVjeA+VVQbdD62i1v467RkzvEElQ8nnw5iZvUx5o32
-	 Wj6lwnu3VqEaTBHLsCDeAsMNU9RJaX1WMrjbZx7Lcsl0jR6ao5Ql9Rv06ywD1wD62wBIZ
-	 t7BCQZcJWPnYl6+5/9TINYHLH8sswqgvzLo1Ygdcwua7Dt/KJMYu5/8O07BD8P1r6c0Dj
-	 hdfDKyjs6u5CMCp6NdjUHEyQKF7WTqQQa09bCpEcBZwEvgl8wBuDdAbx+vdfLDlqw3oRm
-	 b7IOGCQj8iAR2nX7tgxhAP8bb00b+uSr/UzjL0PxFcpInrhMjXH46PKjA2TrIeitQKw==
+	t=1794253657;
+	b=s3ZK1XSVYLS6G7GmiFRyq/LdfgfkraRfitzo+qfPHjIUqSaiG6gkX5+c1EkHdoCI+sko
+	 wJIYfso8f0QKgdx7VbnlPJfSmMIa5x7autbQnWYEs+BQOVZNkHAW0oxIDjBZ1dPUJFwRz
+	 DWYUsT+AoU4ArEVWpOf37jwMe99TfiqslVsh/uKawRqkEOMqSiqArpvNnwJT5NCa14nQ0
+	 +ekIvCFCPwnxxFwdvGZQhyP36BuZXLziCdlNyyRHnLWZkk2dh6cZLGWDPy9/yan+laL2B
+	 C62+5wKAhCnfIEApDzTp986lCRFn90EGHKZ95FnMFY2KlM9hbmr1eLrl4mu5eMewFog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794253656;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794253657;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:X-Developer-Signature:
-	 X-Developer-Key:Content-Transfer-Encoding;
-	bh=Meo9sbn4x1OKMRTgNLh9692a5YimUpm5Fdk5N0UX5vo=;
-	b=TzhqwYyi3qDLY43C5OBTCWRf7phSNNqdLgYggDFXG2uxte4WtFL5zif/Mxq/AtGKcgyL
-	 uYYQ4AgYs2+OAhBwlzwKWVdbI0ypGl2iVAOWFCWjqUIzuI0KiaPw1D+Lw6wYQEhwJ38Q1
-	 Ij5u0ZGpuUA6C3IWfSTpvt/xkf4wFau6+VAwOzW7zdaONuW3/sblFxZIb5jCiMO5rnJ+7
-	 +GCH1QJbTu+OR0NopDfRKk8k3hagvzvL/kkrKPYmq1S8ygkjLgHpSGdd3J4a6AGtTpoZQ
-	 yD/r4Gday9OVwzf8j/p1UMfJywsGov1NzD6Z0GLcLQTzBeMuq+jzQGTZ7b7qWDHxTHg==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
+	bh=hNVNAWptgfbriQBkfrSeZ85qymaCAPIKTSal75Fkq+k=;
+	b=sUZIQ+A1KKhetD8JPH+v+VnDuIyTXqFUVMV0y0BMLNAyLUmfP41dc7+kAosB6Yp/7Apu
+	 YqmnVi27LZFtm3R3NQJWBnRY6T87weV1LbkzB7mO7BV0L3xouHXzpc0Zj79agUxk+KG5Z
+	 iYRMK3xXjH4GB3fwh7lgE5wHqzxdgId/20cB8SJ5BYB5hxPjT67Tz5v8oNpnneATPROTT
+	 9etUVgLnY/YJArupteTC9LWNyW4UVlMCVRe4+XVBADogOQnmK1eNncqOb5+tnw1qII9SZ
+	 LqNgc0gE19dZZK8mZI9vk2QcNlfgsfcufJNwx1IJ8eZCt9Dh3XvxZ67KUvQPADMuOcg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zrsUCZp2;
-	arc=none smtp.remote-ip=74.125.225.137
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GG4aqbmG;
+	arc=none smtp.remote-ip=74.125.225.138
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451AC606A321
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 19:47:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 451AC606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9384B606A321
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 19:47:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9384B606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zrsUCZp2
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6eb11e9cso5021455e9.1
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 11:47:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GG4aqbmG
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-4b76ade741cso5347775e9.0
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 11:47:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794253654; x=1794858454; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Meo9sbn4x1OKMRTgNLh9692a5YimUpm5Fdk5N0UX5vo=;
-        b=zrsUCZp26njJpCeXp85C43RMFintjIW9orSH39mQzw+UDXyUjxuwzO/3zENFxqUnD3
-         ub2hzR7GWXr94GAAlc3WrIpY72vBbQpc0aNaC4awHPAn1mTop42F2NI6pruauMadGgXl
-         vDbji9mDJHEMyQ8+6fnY5T2o5UHwiDhHxfBlsbn8XxL+Q8RSPJi5adnYTg5t2un66Rwt
-         sI/exeUPcrpdezrtFhnBGa6bE5uvV5aOprZzWdE3/AsluiUxoEon/FigtEzcshRPw5aa
-         sAI5he5YR9bl45x1Odg/gBMJ83FQwIBf2lzwrlEFk0k9BuWLeHrVyWxnYBWukRz287j1
-         VGog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794253654; x=1794858454;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1794253656; x=1794858456; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Meo9sbn4x1OKMRTgNLh9692a5YimUpm5Fdk5N0UX5vo=;
-        b=mndaYbanS+NPnSUqdlUtfh7PWA6cBKJhx+8WYeWoj9fwB8GzGKaiBMvEGxPdmT00Ot
-         PDa5fGLavVVoN6b6lXmziQtcvKWJlsRqaVs6aVRxGF2fLeLwL+0GhVL5dMC0z2f5L8B5
-         yx4gqGXQeS/hlFZzcB1Byg4mCOKZLxulWxRH8X84VUuyvuDZVPBDnynGdLB3Z5Rib+nr
-         c9cxl0H2MwENmZHfxK+UKAVpQTnIJ7OnFoyY18O797whZDxh6m4UQMFIKKhk2ZbzuJkJ
-         IjBvylsY3J/OvPpbnwhFKHRodzsX3zKmDXv9aGSikpvFmswZ10+BgFOkATLASkNduVxo
-         taWg==
-X-Gm-Message-State: APuU4Z/hdcEyvvCgeW/+X9nYZfJeII/tZwrz4ziWpbgHBUxkeapYul+E
-	QkbOcnSVEfEfjNWDpXzrigRitRvNzzbD8jgmmIFgg4BiEPDDi1hV8vrS5kEjSPVD
-X-Gm-Gg: AYBFou2ct5jwPAQhxg2EHrpuqHkyQlpBH0W76yGzgk904z0E8fE4pCCBZEQYMmmtKvI
-	F6Hg90qXg7C/pcms2UugZhu6kVbE/vb3JIoztFuulRdEnJ0YDFb+MGLPscJy/WVvwDPe0JM3Imr
-	F9jPNSSEx+lexWUWoJZWCOx+z/rF4BbUhUTzjBshLHfkOcxcx+xKVEYDS2HmGFfvlud4eNePA1L
-	v5vK/3GKO38IGRKxlFjgoou40TqtPaSMs67UxZmlfsBsJPQE2SShJ4gLSRkYWJzkC7i07sF5rwp
-	9aoBszYgpqtIbKOIuhMa5fDTDrkhYmGqqbE0d/QM74UAnm5wYScSHq12ibj966AjM2mJIlpqWi7
-	piZmoYq95LjNy2HKf1OX6uGvFOW4Q2sL6x//xXL5NsSB4ffY/13JXz4J9VRhAiXh/ajABeMzuP+
-	aGsNARI8wVvpdk1OP6hjz9YIztwroFgYZtfZEgGUtBk6bfL5PmavIhfjiLvpxVylKdX0aLFzCRl
-	IdQkzvTFdYwH2FcaxEG1BeoRE0b31VxWNIsNzrsqovFddzSCu7+P2+AliDA8jbwsunSg1R/JO0k
-	xSead/RmviC28nQBZsA8s9agaBCgFEW1FGoxUrDNFkLd8iNKil77xxFfJcs4kArYU4mPPfUrx/e
-	oyljzuWz6fkhaSPhzOVAAkM3UAJbBLT5ld1qbmDsssQePjQOXK7QqWe2PunbiiFn5aLP9w/QxDk
-	lSryKR4iHHUc3xww==
-X-Received: by 2002:a05:600c:354a:b0:4a7:9006:b176 with SMTP id 5b1f17b1804b1-4ba023363acmr4916005e9.7.1794253654383;
-        Mon, 09 Nov 2026 11:47:34 -0800 (PST)
+        bh=hNVNAWptgfbriQBkfrSeZ85qymaCAPIKTSal75Fkq+k=;
+        b=GG4aqbmGvnTkNQ4pqm5aGvnsHjZvEk+hNXTe6g+pg3G7TTI3GnBOWIlLnj6Ze1bTQw
+         t/3BPAiKohyjFdhW4o61xd/Fmz5dEVCyf0sJ6yTPEc8IV0rCl6LfubqgOnJ4Pm2btaHK
+         cZDlpjIgPMYmzmixonMFBjeMxhy5jhGSWsoRBPE6jiJx12C1s+Fiqw98soclJVqbPrJ8
+         4Wu6BLXT8YZyjSbC6sJsP0pAHAT+bNlBAs5uFSfb6yOk0ciVQhCQdu1+tM/N/4miRzSM
+         w7DzfivFd2LhTNMyn4VoRJP/Zgda7RZ9kgAMRryKzfr2p01QzUOw2DsoKKYUb/fcuHuH
+         4qBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794253656; x=1794858456;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=hNVNAWptgfbriQBkfrSeZ85qymaCAPIKTSal75Fkq+k=;
+        b=Wa/45ZZQf8dosi9FhibId+pLByGWBtGQjZPgiKxJMIUm62Qhf/yd18Nft8my1idcif
+         IlCmBOJZniCXOp/mUoQm9J5kwlSx5YRgWRjiToKTbvd9yaZ5pFSxRVEGU+73CR6ei6fL
+         HIUqIJY9K8x5GSmv0CyB1ICcqWdXnZRL93yHGGsAtyx8tqNKzMnMdRYw51XoIptGjaYw
+         KLH9cCpt577S96OfglfetxZLXvJyJMeZ02KUfb0aSuPBe3A2lXkZ4N4RJnadSPIL9Ndv
+         ZmDARJnAKjtNfoAWC7qgc4aU1j23Y8jhDwXgj6xXtGbBoyayrvpTMoskm7LSfy87cuQo
+         L0Rw==
+X-Gm-Message-State: APuU4Z/8YW0THFeAIMTUlHZrbVyjNwK8ZEFe59wIcEd7a5XSLdy2A64a
+	0YgZ+3c3nG34/sEs655C7lS8I8UZkWAXx+Vz1YyAvJ+miUPI5BRokLCcIHblCZrS
+X-Gm-Gg: AYBFou0a2xI1BEq7c4hqF/rLo4Nkc4mfDLpZiK0VuB8HsTpQhiUu3cXzV9g2hI4Us8A
+	5dRE4hq5Sl9dO1kACQC+AD+I4Gs408rtGolZg9FaR4Lv7hqT0rFj6oqlVRm1Dmx4ZeCCK+jtwcr
+	uah3itHS4AecBr+TASd5ygbAcL9L8UA2I461FvpW2YZPw8nyum0Jxtj7rPzFHzwwIb3tOoi4BRX
+	KFjmAbgay1CpmQ0VgsuEqeRA4A7CfQqw1paZjNHXQ3iM33Zl+MT5bntA2Ktr4BUZkiv7G4VH2V0
+	km6b7B5Vv8LNLH1XIAPAK83WqHAgW0rzqDwpbzCpZ6phhLxP9L8+Ugly4d27aCmpdxjWbQ2caO0
+	Idd6mCf8ho56EgS4Nmr267yd+enncWLdyPvMcy70yCZkBfnvZ7I0cnr8HpjgI5BSW56/YyTpEEa
+	Bo0oVXLA+uzQdkPNzrngcZIS32T4B1bXlGMtiPMNWyrePKPn4dxWtpJfW8slGLwKozXezMiEbr1
+	PSwWJCf7oy3bm6LPbXVuWyD71QxQBTJMsP+ZqkwOKMUwhyvbWefFFbpO32VGKYLQweIXziCJmcl
+	97w6a8uupZ1DSDoN/4pXckYapbr5Sjp0e/mSPxme3CPjPx+SXqawYlSWaWufckTfRIjjk/HdJ3I
+	iTvDq752GLYDJY4WJnsVmdxcsS5xPz+37sqUZiWpecawIEBp7ySSbqSKfjtYJBb5teKcq5NzAMZ
+	SC9RTooI/uPIYhoQ==
+X-Received: by 2002:a05:600c:4752:b0:4a5:87a:50ba with SMTP id 5b1f17b1804b1-4ba0235ba4amr4134735e9.33.1794253655668;
+        Mon, 09 Nov 2026 11:47:35 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba02005762sm10171675e9.2.2026.11.09.11.47.33
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fea9eesm17307135e9.11.2026.11.09.11.47.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 11:47:33 -0800 (PST)
+        Mon, 09 Nov 2026 11:47:35 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+Cc: Emil Tsalapatis <emil@etsalapatis.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Tamir Duberstein <tamird@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 0/6] Fix ring buffer callback consumption
-Date: Mon,  9 Nov 2026 20:47:26 +0100
-Message-ID: <cover.1794253561.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 1/6] libbpf: Honor zero consume bounds
+Date: Mon,  9 Nov 2026 20:47:27 +0100
+Message-ID: <ad4631a937789da25e988e093c66d40e98b41806.1794253561.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <cover.1794253561.git.memxor@gmail.com>
+References: <cover.1794253561.git.memxor@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,29 +105,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=796; i=memxor@gmail.com; h=from:subject:message-id; bh=nscY8NgUHDqmRFgGodbPTd2NqE9asjLsaOe30X/RFQY=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeuT0q8V4m7epSEXatN42uT//Prdq/DnmeVO/f6Uf5H1i Xu2eul2lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCIdzxj+13gsv37TKn/h9fQt 7g7TGfzfvpFIWrEh+7F+vq96qFUuE8M/LWuGig3zdtz7tLJwkcBfW9GN2ywPpuYEXV31/mSHkcZ rBgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1112; i=memxor@gmail.com; h=from:subject:message-id; bh=pu6Hz3RMX9EFGIHlRBvAFT51voXfEQiY7xrQWVuHyLY=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeuT0q/skqJfM99YXmtg8c/xOaNdKVNVGHFP7PnHnekPh JobjBs7SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMBGHXkaG75Jd2g0Oh/p15jH+ 5de4cej30ZsayW8PXUg98kVsptK5/Qz/XVLOf/6x4X263SMti4fO/cw8fwpu/YqK2DFVdPE3o82 ijAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Commandeering some patches from Tamir for libbpf ringbuf callback
-consumption fixes. See commit logs for details.
+From: Tamir Duberstein <tamird@kernel.org>
 
-Tamir Duberstein (6):
-  libbpf: Honor zero consume bounds
-  libbpf: Prevent NULL callback crash
-  libbpf: Reject overwrite callback use
-  selftests/bpf: Test ring buffer consumption with a zero bound
-  selftests/bpf: Test the ring buffer consumer with a NULL sample
-    callback
-  selftests/bpf: Test that callbacks reject an overwritable ring buffer
+ringbuf_process_ring() checks the record bound only after advancing the
+consumer position and invoking the callback. A zero bound therefore
+consumes the first available record.
 
- tools/lib/bpf/libbpf.h                        |  12 +-
- tools/lib/bpf/ringbuf.c                       |  50 +++++-
- .../selftests/bpf/prog_tests/ringbuf.c        | 145 ++++++++++++++++++
- 3 files changed, 196 insertions(+), 11 deletions(-)
+Return before reading the ring positions when the bound is zero so
+ring_buffer__consume_n() and ring__consume_n() leave all records queued.
 
+Fixes: 4d22ea94ea33 ("libbpf: Add ring__consume_n / ring_buffer__consume_n")
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Tamir Duberstein <tamird@kernel.org>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ tools/lib/bpf/ringbuf.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-base-commit: bd75869299f1d4ff6e9f45117cce28f8badee1cd
+diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+index c8fe57401a8b..6e88ac209298 100644
+--- a/tools/lib/bpf/ringbuf.c
++++ b/tools/lib/bpf/ringbuf.c
+@@ -240,6 +240,9 @@ static int64_t ringbuf_process_ring(struct ring *r, size_t n)
+ 	bool got_new_data;
+ 	void *sample;
+ 
++	if (n == 0)
++		return 0;
++
+ 	cons_pos = smp_load_acquire(r->consumer_pos);
+ 	do {
+ 		got_new_data = false;
 -- 
 2.53.0
 
