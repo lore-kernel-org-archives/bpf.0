@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794206898;
-	b=ExNW62w2rmRzRafMKfTlXmw/nCQaUz+cfEzyE6brCJhz0zswg3OtBxofNblJeQ62EfX/
-	 xioIfWkJLvJxVDyVmHpppGTXINMkrfEOUgbPGr2E/F9NITC5/zwvatC2rIsJDe4bwG4Yj
-	 W2hW73fsfJ8ClkfxcOqIREdJuNeHriNhGdlRHGm7DYfZAaSjgVvfPKrAsM3wflzTaU3gT
-	 Ju0SmyhVmvrS1OCYAQDFpN9LFhUMFr53qmEanBR47dF68LQjtI4HR+dSYaapRap5YanBN
-	 nkDrJ/1wlpTe/rEubtesMnrjmL4bG2irx4+eh/azKVyhUrqFabulaviGmMbYZjBI22w==
+	t=1794206904;
+	b=FDXL1z97lRb6NNRNZRV5jHTGOytHyHtDq9WIIyaxQA+Qt331ZUT+b6ih/HQc1QLeJp/p
+	 skSX9ZnO4uKU22cmU0b9BInE53bdUWBTaZT/UdHEqNG7jA1sbTs+E5uBo1q/y4ARdQ8za
+	 AIUtQZx5Y3vdxnyd03IJ8AkpQ9f7xsiL98VbcWn/sRi8+mIOMpmSAD6L2XLRDsicuI4CV
+	 iPE00IBt/BiDerG5BzBGUkgPKcHrGfzPB790f1urJTE4IqAd+nFWshyr/CxzI+IWyIq7n
+	 cDcK9LP6cTvySILp+mAqaxX+DKnPoc4e8QFCaWyuWf8YZgw1DnArBSTgpyoeqESTJDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794206898;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794206904;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=OkpeMu+uswjZKtmq8ik3E24OrXbZMprFiNr5i3iykis=;
-	b=XinXgAXaog5C8JhXqKWOU9F4K3bCyUEwvWp8CgANkjereJVRvpyQS5NDiW7t+Kjn3vDC
-	 5FyVX+5WxOJTPKE+UE5+uYfXKmv7pVu5ZKh6Ge9xyG+ZctxnEH1xIYLYJaClLuBZPeFLF
-	 Akd1pm5ZfijDz1e58CnQBVUYL5ISfU/V01QnTVrq1ulzUxoaQ2zi7kBox3GLC6LftTBbF
-	 +bfpfOEP1NobL6eNN8uvxSmZmYW0RYXMs4/P2cnDPVd2cpVGIQgfa5bxXi2hAF1yblacy
-	 QX9gHmtbTlci54HFs+ZXWFjuc6HxmzOfe5FfifPvKg8vIe1NJGE6axjojhKCs/t5gDw==
+	bh=TFkOTbaH5h93PUAjrWSBGidbhek4et0s9TiTQkOx1gs=;
+	b=m1L2CBr7+HoVk4QsfoHV9VLIppjVFPeJKVYbBy3J3S9DA4LEvxexACnk/MpRTRCtD44i
+	 5DkvBdhsyTVvjJpvbTvjbh1Pcyd5fCdGcREqOB6B5Na0YBbNsU4s0QS9bEN/aXSSxDkui
+	 h7cJoohHxcdmD59rAjoc/L86yYznUTD6lRurCwu+GNm8d0vHhLepoN7G0vScbVkqecpHa
+	 p2L3CG8rYv9V8IaoVWN7+5bdzKmlcJtrgNw/rqigRR53tJq1gGsaq3mM1tggsvBjO6MxM
+	 sJmlDyr5MTOqCsCYGaP9cGN44bJk85QqP6brIu5S5EToS1PINRQYjvxGiZkabZ2cIkg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ocCf8gnA;
-	arc=none smtp.remote-ip=209.85.216.45
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jrj3lY5U;
+	arc=none smtp.remote-ip=209.85.210.181
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3554E606A31C
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 06:48:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3554E606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBB9606A321
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 06:48:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DFBB9606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ocCf8gnA
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b09a83d12aso343624a91.2
-        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 22:48:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jrj3lY5U
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8b612fd74e1so146884b3a.0
+        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 22:48:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794206897; x=1794811697; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794206903; x=1794811703; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=OkpeMu+uswjZKtmq8ik3E24OrXbZMprFiNr5i3iykis=;
-        b=ocCf8gnAqbqOIwGfpbCLjfJm3sXSgGAIDu83AqaQI13UwlZOHeLKGYVlQPbDEXPtau
-         6XCWkr8lgFfGT9qHzWNCO1zdv0WUWqDW56fXj+Wxu51IvXdNGY07WFW2ij30+n7TiyQn
-         3HQMcdAn3lWJfgpVZxz4VJlY/4tp+p2zxbSHDD2/N2WlU6H5N30nMrCtMIDu4xZioVP5
-         YGvTGIQtmUfMrGlqpCnxTd0CXBOeSvktrawToLOfZXDJGX8g3AOA0V3dtyJhHJtM8O5p
-         7BkZ6NE2rvG1FJ5Vu0RZENXSg9rTof2ZSjEC01BKYprl2ZN4hxsrffrrB7FkJDZnHLMp
-         Sq1g==
+        bh=TFkOTbaH5h93PUAjrWSBGidbhek4et0s9TiTQkOx1gs=;
+        b=jrj3lY5UWAdogCpK9iFGjMAzaXtgFHE8Zq6zOkmVA6cp8NAfOWyZqZedGREOAWal4I
+         XFMqjTLzphG0izCvukLl+teBPnBtVxnZlbbYUyS/ZCa1pa3SlEILnQCMcXDClw4daCZX
+         q/9FQBT0d3fFPjoj5XpA8MK9noUKW34tU7KZ/NO+KAC6NIEkC8ohpwYfY9yviHDLUflw
+         /bfzLNyVpWvXIoVeHS6cQiwsFS5rgYhyB6eu5fvfgenB8UGAWXYB2j2mKfGUCwjXj/vP
+         KbQBZ2m0jKVNq5BT3WQHlS7eQHYN9KRuygfWVBuMK6ZXb+k6DB5MvpXyEqGYr7OcBYbn
+         wemg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794206897; x=1794811697;
+        d=1e100.net; s=20260707; t=1794206903; x=1794811703;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OkpeMu+uswjZKtmq8ik3E24OrXbZMprFiNr5i3iykis=;
-        b=0pJGhmLRGdYu9/9ytF93/uGdlKNtA4Iiw++0euzyGS+m2U/gMNG+hnt3+TnKM5o6qz
-         DL7SIcOpj4Soq1R8wyZACJ5uUxDIAf72MqZeEcEcAIuwlx1TOcrLeRpMfRLX1YJh3PT/
-         aC3mhRW/yf0q1artz3amNx+8GRB0nXlyhSeEnGg2bAteyzva15gBq1b+ZbA+vetv47tr
-         qhxsQRR0HmlgqMVE5iUgT8WtMvLEtmsTVR6Pa60xcdfYe4354ezrGL6H4DCofUjz5F4U
-         78+TdCcrJUFgbDIMg7NpiwHYvBIY+iMR3imKqmtpJ/D216pR7mBYqmkbWh2kY2tCvhzL
-         I3bQ==
-X-Gm-Message-State: APuU4Z82/pYxnbf1Ku1UE3wBxICOpgK1it1+rA5ggKK2GQi5Wxs+LJLm
-	uRBKnoDJqUXfun0U2ugVJS/4PDL0ma/J0lyIj9YXsl1aABM6jG7MI5oWOSembA==
-X-Gm-Gg: AYBFou26mGBRpeU+eazvOOAVF+j+a6Ccf87dxf6XU5ZC8KTle9mIiMg0Fp7bs0cEnAE
-	/sL9XSvKJJONMTV0RLzQFBqKuTnRA7tibUDBjcjm/nYZq6+RUXMQ4HQ0dd2+ktddHB1xpHr9HCv
-	bAHhWLf8e5H83bfpQRMsH7ZKQ7e1PmnNKzBLmqqxa0Eh9fWIHQyJY88diPx/5VDz+Xgp1nj639C
-	N4uLO2oCf2pvS+ZzmB1LMf7pMgJ1zLsB3ydfaryY3UF1hV4JNecWw3pBxqWrwUQfngLmNOaA7ti
-	C3vNVIR98zla1LsT3obhHqQKR87W3PiQak8z6dRlmlLVXS6VCsambHv47eYo09CKQxXPKOsR2qr
-	BRMVO+UUJG/jgDPWjp2HpDZy+oJbH/akuMiqlawUw4MggNv62ucbcHHRYpUBKXUsuEecsL7mqXO
-	8kwsAuRdl4mzFBSd8jNb6WKTB3AXHJnsQwRwMlyWYNt3mXh7J3JVXh8/mQe/0wRb3ZCg0q4gxUM
-	soBvgeXcuku/IryNOlI6PlDzuVKOHspMQ0P1O2n8OrOiFKdvCwv1EcYAHYzX/iqW7ROBDAP+qyN
-	O4Tw9K+li+dA3dZa4Srz/rxXlXcHvVd3X38LKvGDpOQ6QbhZJPYN2EqwAWkUeEICVrlwdlRhr9V
-	HKWsBsNjpIixXalRSY9PaOtCJFPan5t5u4irvHjPdXPvOjBZiG6GXnxwTgK+b3J7W6m4uUY+WiA
+        bh=TFkOTbaH5h93PUAjrWSBGidbhek4et0s9TiTQkOx1gs=;
+        b=pf6X4VZn49ihzyMr8L4rfJilQjIuAvl7OkF7BANkU5uFp/KZoHPqrjCRXsQuEUMF/7
+         DySmj07yzRBRbTdxODCXcODr/Ys+qYVDDgw8RiAWhCrvuLytBbYt7T5Z8tWw3Izm8/y+
+         XpirNQ0vklVIeZcyZ5wopkMBlG/U8pOjfG//SDOLM8nYOMdWL904IkSNybvAHKr1l4wL
+         BdJikzst124hXQnLunLHnVA4wEyi1hXSzoyK/VzgKOZxGGvCDxJpGGXdmSMvr1c2YRmV
+         EICPvG+Ti4qJJNZB9SzlxNFD+LNOhJgBn002NDiE8CLzxBUSMDOKpkrxSRoivINyyWvM
+         6dHg==
+X-Gm-Message-State: APuU4Z8P3YBMfjRtBojw2W87kmyxpB+ohk1UkrL22DjPm6JQyCMV/n/N
+	Ivu84rufgJrjyOR1etBTUg73mb1qeM0lub7J3PgeGxoK0hJATLi33pERdGJ+lQ==
+X-Gm-Gg: AYBFou0hMV046rZQF90JmA+Dc9fT5TwkDuLXBLcjHZY95BzhDr1Ga/7+xffJPXwPM+d
+	+ERrh3vd+IJhC60Z0nWkqdMYGGZAX55ldhjRiBGv99wXEAtz6GJlQeoQ9q+pXAuyi1TSgTDsdRh
+	Wrqxui/WhjgJ6AKumS6wQps5EAdHGWpsyXY6tgOPEDrQR3UR3ussqjNGAlnHzNtYnDxpOEx8zLc
+	l30WbS41ztzYS7NvWr3t53BnCE4+PSWeluokQ+9l3tWQ2bXOUItq1VoclJ6o1E2k8ZBxjrZwgHr
+	sTmNw47gkK36iZuytJ5Esr3aLaZVQEySv1fc3gAix81uFivfq964ICT1OdO/3N6T0mgxrclj6ov
+	XAe5WnXvD50Qj/GAfX60vefofM9iDqRi768eY5b/Wlonz6yMWbQSHABoDDLeRlCOv5STYHXjomv
+	I5+EWvLQ2jxVIpot37YRkG/zmW1PNlakv52smGcRgThq4G/tE8WIb/izeyQXvN/JbN6FTTJxES5
+	aGdaEerGq+xtXgbBCnJwmEMQHwHQUN9cmX7T2G9EQka7ua4VgDJC2vFAh2zdGbGWzxrpNcpmvJ9
+	RFgH9ClYq6peZoh7a7dl9PY+oiu26kLEkYd3W5Z1BgPi4qehxe1cVOVkPsylWOHfsUYUxi/csjF
+	4sj3ZB6Inhzu4Z3Itt516je5ZARu+SBrYXo6ZHvlAYfFA8huYkrg5w7FROwu/jRDCLwpNTkTpcg
 	==
-X-Received: by 2002:a17:90a:d007:b0:3b0:9b3c:4434 with SMTP id 98e67ed59e1d1-3b12d4ae6e8mr2955887a91.36.1794206897271;
-        Sun, 08 Nov 2026 22:48:17 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b127891fa4sm5617493a91.4.2026.11.08.22.48.16
+X-Received: by 2002:a05:6a21:8201:b0:3e2:ac91:6bae with SMTP id adf61e73a8af0-3eed56db60amr3284407637.85.1794206903045;
+        Sun, 08 Nov 2026 22:48:23 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cdb96923071sm1201266a12.16.2026.11.08.22.48.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2026 22:48:16 -0800 (PST)
+        Sun, 08 Nov 2026 22:48:22 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 10/26] bpf: Detect a dead branch when a range and var_off don't overlap
-Date: Mon,  9 Nov 2026 06:46:54 +0000
-Message-ID: <20261109064715.2382452-11-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 11/26] bpf: Don't treat half of a 64-bit spill as a 32-bit spill on big endian
+Date: Mon,  9 Nov 2026 06:46:55 +0000
+Message-ID: <20261109064715.2382452-12-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261109064715.2382452-1-alexei.starovoitov@gmail.com>
 References: <20261109064715.2382452-1-alexei.starovoitov@gmail.com>
@@ -104,149 +104,129 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A fix of the main pass that stands alone. It is also a prerequisite of the
-patch that refines linked registers at conditional jumps: that patch
-intersects the range of one register with var_off of another one and asks
-reg_is_empty() if the intersection is empty.
+A fix of the main pass for big endian that stands alone. The patches that
+follow refine more registers and stack slots at conditional jumps, so more
+progs would run into it.
 
-  1: r0 <<= 3
-  2: r0 += 5
-  3: if r0 s< -2 goto pc+2
-  4: if r0 s> 1 goto pc+1
-  5: r0 += 3
-  verifier bug: REG INVARIANTS VIOLATION (alu): range bounds violation
+	*(u64 *)(r10 - 8) = r1
+	r2 = *(u32 *)(r10 - 8)
 
-The low three bits of r0 are 5. No value in [-2, 1] has them: the range and
-var_off don't overlap, the fall-through branch of insn 4 is dead. The
-verifier takes it with an empty register, and the addition at insn 5 trips
-over that.
+r2 gets the low 32 bits of r1 on little endian and the upper 32 bits on big
+endian. In two cases the verifier gives r2 the range of the low 32 bits on
+big endian too.
 
-simulate_both_branches_taken() refines the registers as each branch does
-and drops a branch in which a range is empty. It relies on
-reg_bounds_sync() to empty the range. __update_reg64_bounds() steps through
-var_off from umin to umax, which are 0 and U64_MAX for a range that
-crosses 0. __update_reg32_bounds() uses only the smallest and the largest
-member of var_off.
+The fill itself is right: check_stack_read_fixed_off() asks
+bpf_stack_narrow_access_ok() where the low bytes of a spill are. A fill
+from elsewhere gets an unbounded scalar.
 
-tnum_step() returns the next member of var_off. reg_is_empty() asks for the
-first one from the start of the range on and compares it with the end, in
-64 and in 32 bits. A range that crosses 0 wraps around at U64_MAX or
-U32_MAX: tnum_overlaps_cnum() splits it there. The test is sufficient, not
-exact: 64 and 32 bits are checked each on its own.
+After the 32-bit spill '*(u32 *)(r10 - 8) = r1' the half-slot at r10 - 8 is
+STACK_SPILL and spilled_ptr describes r1, whose low 32 bits it holds on
+both byte orders. Two functions take a 64-bit spill for such a slot:
 
-Two tests in verifier_bounds.c, with the values above shifted left by 32:
-no member of var_off is in [-2, 1] and the branch is dead, -3 is one in
-[-3, 1] and the branch is verified.
+ - __clean_func_state() marks a dead half-slot STACK_POISON. If that is the
+   one at r10 - 4, what remains of a 64-bit spill has the slot types of
+   a 32-bit spill.
+ - stacksafe() skips the bytes that are STACK_MISC in the old state. An old
+   32-bit spill and a current 64-bit spill are then compared by regsafe()
+   of spilled_ptr.
 
+That is right on little endian, where the half-slot at r10 - 8 has the low
+32 bits of a 64-bit spill. On big endian it has the upper 32 bits.
+
+Keep such a 64-bit spill whole in __clean_func_state(). In stacksafe()
+compare two spills only if the bytes of the old one are the low bytes of
+the current one. bpf_stack_narrow_access_ok() decides in both.
+
+Two tests in verifier_spill_fill.c, one per function. They load on little
+endian and are rejected on big endian.
+
+Fixes: be23266b4a08 ("bpf: 4-byte precise clean_verifier_state")
+Fixes: 6715df8d5d24 ("bpf: Allow reads from uninit stack")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c                         | 34 +++++++++++++++++--
- .../selftests/bpf/progs/verifier_bounds.c     | 33 ++++++++++++++++++
- 2 files changed, 65 insertions(+), 2 deletions(-)
+ kernel/bpf/states.c                           | 19 ++++++++++++
+ .../selftests/bpf/progs/verifier_spill_fill.c | 31 +++++++++++++++++++
+ 2 files changed, 50 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ae3b751b99a1..83249ecbdfb1 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2325,6 +2325,36 @@ static bool range_bounds_violation(struct bpf_reg_state *reg)
- 	return cnum32_is_empty(reg->r32) || cnum64_is_empty(reg->r64);
- }
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index efc0870b85c2..b60676349655 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -168,6 +168,16 @@ static void __clean_func_state(struct bpf_verifier_env *env,
+ 			    stype == STACK_IRQ_FLAG)
+ 				continue;
  
-+/* Do @t and [min, max] overlap: is a member of @t in the range? */
-+static bool tnum_overlaps_urange(struct tnum t, u64 min, u64 max)
-+{
-+	u64 tnum_next = tnum_step(t, min);
++			/*
++			 * When the half-slot closer to FP is dead, what remains of a
++			 * 64-bit spill looks like a 32-bit spill: the low 32 bits of
++			 * the value. On big endian the other half-slot holds the upper
++			 * 32 bits.
++			 */
++			if (hi_live && bpf_spill_size(bpf_stack_slot(st, i)) == BPF_REG_SIZE &&
++			    !bpf_stack_narrow_access_ok(0, BPF_REG_SIZE / 2, BPF_REG_SIZE))
++				continue;
 +
-+	return (min & ~t.mask) == t.value || (tnum_next > min && tnum_next <= max);
-+}
-+
-+/* The same for the cnum [@base, @base + @size]. It wraps around at @ut_max. */
-+static bool tnum_overlaps_cnum(struct tnum t, u64 base, u64 size, u64 ut_max)
-+{
-+	u64 end = (base + size) & ut_max;
-+
-+	if (base <= end)
-+		return tnum_overlaps_urange(t, base, end);
-+	return tnum_overlaps_urange(t, base, ut_max) || tnum_overlaps_urange(t, 0, end);
-+}
-+
-+/*
-+ * A range and var_off don't overlap. reg_bounds_sync() compares var_off with umin and umax: it
-+ * doesn't see that [-2, 1], which crosses 0, has no member with 5 in its low three bits.
-+ */
-+static bool reg_is_empty(struct bpf_reg_state *reg)
-+{
-+	return range_bounds_violation(reg) ||
-+	       !tnum_overlaps_cnum(reg->var_off, reg->r64.base, reg->r64.size, U64_MAX) ||
-+	       !tnum_overlaps_cnum(tnum_subreg(reg->var_off), reg->r32.base, reg->r32.size,
-+				   U32_MAX);
-+}
-+
- static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
- 				   struct bpf_reg_state *reg, const char *ctx)
- {
-@@ -18952,7 +18982,7 @@ static int simulate_both_branches_taken(struct bpf_verifier_env *env, u8 opcode,
- 	 * reg_states in the FALSE branch (i.e. reg1, reg2), the FALSE branch must be dead. Only
- 	 * TRUE branch will be taken.
- 	 */
--	if (range_bounds_violation(&env->false_reg1) || range_bounds_violation(&env->false_reg2))
-+	if (reg_is_empty(&env->false_reg1) || reg_is_empty(&env->false_reg2))
- 		return 1;
+ 			/*
+ 			 * Only scalar spills can be degraded to raw stack bytes
+ 			 * when their high half is dead. Pointer spills need the
+@@ -446,6 +456,15 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 		if (!cur_slot)
+ 			return false;
  
- 	/* Jump (TRUE) branch */
-@@ -18964,7 +18994,7 @@ static int simulate_both_branches_taken(struct bpf_verifier_env *env, u8 opcode,
- 	 * reg_states in the TRUE branch (i.e. true_reg1, true_reg2), the TRUE branch must be dead.
- 	 * Only FALSE branch will be taken.
- 	 */
--	if (range_bounds_violation(&env->true_reg1) || range_bounds_violation(&env->true_reg2))
-+	if (reg_is_empty(&env->true_reg1) || reg_is_empty(&env->true_reg2))
- 		return 0;
- 
- 	/* Both branches are possible, we can't determine which one will be taken. */
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index f55d58af8004..316e9377caa8 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -1995,6 +1995,39 @@ __naked void bounds_refinement_multiple_overlaps(void *ctx)
- 	: __clobber_all);
++		/*
++		 * The old spill is the first bytes of a wider spill. On big endian
++		 * these are not the low bytes of the value.
++		 */
++		if (old_type == STACK_SPILL && bpf_is_spilled_reg(cur_slot) &&
++		    !bpf_stack_narrow_access_ok(0, bpf_spill_size(old_slot),
++						bpf_spill_size(cur_slot)))
++			return false;
++
+ 		/*
+ 		 * 64 and 32-bit scalar spills vs MISC/INVALID slots and vice versa.
+ 		 * Load from MISC/INVALID slots produces unbound scalar.
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 0baa8e06b8d1..623ed5ef3630 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -1451,6 +1451,37 @@ __naked void imprecise_scalar_spill_half_dead(void)
+ : __clobber_all);
  }
  
 +/*
-+ * r0 is x << 32, the low three bits of x are 5. No such x is in [-2, 1], -3 is in [-3, 1].
-+ * umin and umax are unbounded for a range that crosses 0.
++ * The first half-slot of a 64-bit spill holds its low 32 bits on little endian only.
++ * The test spills to r10 - 8. The first four bytes of the slot are an offset into one byte.
 + */
-+#define RANGE_CROSSES_0(name, smin)		\
-+__naked void name(void *ctx)			\
-+{						\
-+	asm volatile(				\
-+	"call %[bpf_ktime_get_ns];"		\
-+	"r0 <<= 35;"				\
-+	"r1 = 0x500000000 ll;"			\
-+	"r0 += r1;"				\
-+	"r1 = " #smin " ll;"			\
-+	"if r0 s< r1 goto 1f;"			\
-+	"r1 = 0x100000000 ll;"			\
-+	"if r0 s> r1 goto 1f;"			\
-+	"r10 = 0;"				\
-+"1:	exit;"					\
-+	:					\
-+	: __imm(bpf_ktime_get_ns)		\
-+	: __clobber_all);			\
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++#define FIRST_HALF_IS_LOW	__success
++#else
++#define FIRST_HALF_IS_LOW	__failure __msg("access may be outside object bounds")
++#endif
++#define FIRST_HALF(name, stores)						\
++SEC("raw_tp") FIRST_HALF_IS_LOW							\
++__naked void name(void)								\
++{										\
++	asm volatile (								\
++	"call %[bpf_ktime_get_ns];"						\
++	stores									\
++	"r7 = *(u32 *)(r10 - 8); r1 = %[single_byte_buf] ll; r1 += r7; r0 = *(u8 *)(r1 + 0);"	\
++	"out_%=: r0 = 0; exit;"							\
++	:									\
++	: __imm(bpf_ktime_get_ns), __imm_addr(single_byte_buf)			\
++	: __clobber_all);							\
 +}
 +
-+SEC("socket")
-+__description("dead branch: tnum and a range that crosses 0 don't overlap")
-+__success
-+RANGE_CROSSES_0(range_crossing_0_no_tnum_overlap, -0x200000000)
++/* The low 32 bits of the value are 0. The second half-slot is dead after the jump. */
++FIRST_HALF(first_half_of_spill_second_half_dead,
++	   "r0 <<= 32; *(u64 *)(r10 - 8) = r0; if r0 == 0 goto out_%=;")
++/* One path has a 32-bit spill of r6, whose low 32 bits are 0, the other one a 64-bit spill */
++FIRST_HALF(spill_of_64_bits_vs_spill_of_32_bits,
++	   "r6 = r0; r6 <<= 32; if r0 > 5 goto 1f; *(u32 *)(r10 - 8) = r6; goto 2f;"
++	   "1: r6 = 0x7ffffff000000000 ll; *(u64 *)(r10 - 8) = r6; 2:")
 +
-+SEC("socket")
-+__description("tnum overlaps the negative part of a range that crosses 0")
-+__failure __msg("frame pointer is read only")
-+RANGE_CROSSES_0(range_crossing_0_tnum_overlap_below_0, -0x300000000)
-+
- SEC("socket")
+ /* check valid spill/fill, ptr to tp buffer */
+ SEC("raw_tracepoint.w")
  __success
- __naked void signed_unsigned_intersection32_case1(void *ctx)
 -- 
 2.55.0
 
