@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.86
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.111
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794233334;
-	b=32wLDrIFq5aB7YulI2d5oKuecP8OHGi1Pc4b15z1A5wtNK0DDMjIyw5STCiYCwlLPV+Q
-	 obGD8t78+tyRRj6rM+23Wa5ZFLwk3B5r+dwcCLPnS7y+QHWgVUGzhExVFUPwZL6BeG19D
-	 m5vvmhMAz7Jtj4XgGCL0FqUiycXTq6nRuw34SS9HMu4r8E2PJv8YYPN3kWE19T+OPgyTz
-	 A1PaxLNqRdgLf1QnmB5n49L6SoJAsm43xIw1DfF4OR3VP6Zefr2c7ixGnqEZINRHCw6nY
-	 U08bQaRep0sUdkOtepw8YaC3rnXiL4wl2Z0048y9evynWID+LnU5V4dbw6Y4//j/Peg==
+	t=1794233355;
+	b=V34xBk3HWx9uQ8lZyB9eKDdkM0d11ZrwzIPSaLdbRFzm7hM+OddE9VgIJOZAXE+kvuvQ
+	 wGXV9sb8uesqhmdckxd7BU/xOPUd9BgOC+xnfr1/6fxjbf1gSofUhSgsneR9hBQ1r7zDW
+	 /r6X07gCNDPahKTL45n/2e/pCGOWLeG6EhVfLPgkbQXZlnXvnSNPUpBNNTkX9mBfCxUBU
+	 RqcFDEYY+naWz7k8K04eylCjQr2Zr+mvwmKCo8iPY+aROsWjRYIjoCKaXGjWEp/PcO0mf
+	 yENLJ7PN+czAa5svv5Kv66sNdCy4bBc2WVWI5/taBnlcohMoOuUCS2JLM8/LQflGqRA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794233334;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794233355;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=UVHn3N+xEBgm3TI+lqi1pA3WbaqnBMdwaZiUV3kUqSM=;
-	b=yLfGO+itCymEsA9qUz7JkLybHbQjMPWNcoAptPEzeTGG5d/IzXNQdCCmxAcvBQfZLqj0
-	 Xr18uUyWlm6T6rkRS1mglPx2XJpJ55eDUouvdS2Fa9EXp2S1QP3oKAwUjpXgHyoldOb6o
-	 L/rbvc5qawgflOCtXMEz5XOCmENqRt3DLX2Cl3/UPZPqoVuCNu1yMGQCqhZqxCEAemHZh
-	 FguQbbvn8NPxi0iMl2LihThh3UWepYj5EDFegeiqoIBiXmSKDy0OpfxAFCZ9qDeTIrSdA
-	 lGEVQWSp5mSNmUcCKr/Gt07Hyt8e62MWixNzAjlQBHjIbBLwp/ESyR5Su+sg6UxUJ4A==
+	bh=iQ50Z8GrZdVWvlWB3gtz0AyrON7bR4KOzGZo59Q0ECI=;
+	b=RYy+kf8aAU8YFy6A9zTKuMkncel5ydmV2EfIDZMpT5tqiZTY5qqAz56n4wnNj9qIenHC
+	 FXXhE7t3gHfH4+BqdURrkgqT6wAnXv5ij8GmTbd4SYTFoWUZQZqdVa2wCLwJ4bgT9XS63
+	 6qFwGREDpXNkyw7iUy2DZQfop4ALhwPpvZ2cS/b3Ez7/yp1E3b+BlzTmDJhQyQTlnIy7K
+	 pBt4FAR2uPeoaAAfIbUHcWEePVnRc0frcjqLTWJ7pwcHQmjLLt8qoUv5MQXlAM4Ir4FeI
+	 Ai13Z1kd+oVjrZEwFE9PEraqwTigrFndAMYeepXXxF7H9YkukjPKeoDz7cKoUB+vXmQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SlxmIzlS;
-	arc=none smtp.remote-ip=95.215.58.86
-Received: from mta1.migadu.com (out-86.mta1.migadu.com [95.215.58.86])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=U7FEH9b3;
+	arc=none smtp.remote-ip=95.215.58.111
+Received: from mta1.migadu.com (out-111.mta1.migadu.com [95.215.58.111])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43226606A332
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 14:08:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43226606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB7A606A323
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 14:09:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DEB7A606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SlxmIzlS
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=U7FEH9b3
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Oh0LpwHnwN+48l/8Am61T7lvYQe2/m0uOcUHkqR1RPk=;
+DKIM-Signature: a=rsa-sha256; bh=eInuAVUPIVJ9rBRgFXv1dy5BH1QgCtuQ2/F9w6eAqww=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794233331; v=1; x=1794838131;
- b=SlxmIzlSF1kM9sOJR9Y7dMNH8tK7EySFXqdUii53ZObMRZq72ScotCZwy9qageedbfDP7Bm3
- j58xJtowfnetkhxSWvglgGPdJ1P4cmmcCb6+uabmmaSN/q7XoLH9cCyeOfOXHgtjH7f56nTtyVa
- EhQrA6ginkmvvseryFIiGLIA=
+ t=1794233353; v=1; x=1794838153;
+ b=U7FEH9b3omA+VvEanH6hiqgA/eWVuZVRl3XkFcaEhHle9eK0HYCaoSs/98ZjFShLw+5kX5/u
+ bDxKBHbJzayUfBzGxCun3Fa8bPqnHN3rNfh1JgTBNhk5BFwQz9kmJ0AWa4BYCy0qXS/Jz+KNW5g
+ SxtazHX3mzWy9GSb08uzNnbA=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id bc6db135e2970b17;
-	Mon, 09 Nov 2026 14:08:51 +0000
-X-Mizu-Trace-ID: bc6db135e2970b17
+Received: by smtp.migadu.com with ESMTPS id 7db8cf0a1ec2ca8c;
+	Mon, 09 Nov 2026 14:09:13 +0000
+X-Mizu-Trace-ID: 7db8cf0a1ec2ca8c
 X-Migadu-Flow: FLOW_OUT
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
@@ -72,9 +72,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH bpf-next 4/9] bpf: Add log support for cgroup prog link_create
-Date: Mon,  9 Nov 2026 22:08:11 +0800
-Message-ID: <20261109140816.5196-5-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 5/9] libbpf: Add log_opts support for BPF_TRACE_ITER
+Date: Mon,  9 Nov 2026 22:08:12 +0800
+Message-ID: <20261109140816.5196-6-leon.hwang@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261109140816.5196-1-leon.hwang@linux.dev>
 References: <20261109140816.5196-1-leon.hwang@linux.dev>
@@ -89,294 +89,86 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Cgroup prog BPF_LINK_CREATE returns errors without explaining invalid
-flags, target FDs, or relative attachment parameters. Revision mismatches,
-cgroup hierarchy restrictions, conflicting attachment flags, and the
-per-cgroup program limit can also cause unexplained failures.
+Add iter.info and iter.len to pass iterator information separately from
+log_opts. Keep the existing iter_info and iter_info_len fields working
+for callers that do not request logs.
 
-Pass the BPF_LINK_CREATE log through the cgroup attachment helpers and
-report these failures at the checks that reject the attachment. Diagnose
-relative link attachments that omit BPF_F_LINK.
+Thereafter, log_opts can work for iter link_create.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- include/linux/bpf-cgroup.h |  7 +++-
- kernel/bpf/cgroup.c        | 76 +++++++++++++++++++++++++++-----------
- kernel/bpf/syscall.c       |  4 +-
- 3 files changed, 61 insertions(+), 26 deletions(-)
+ tools/lib/bpf/bpf.c | 17 +++++++++++------
+ tools/lib/bpf/bpf.h |  8 ++++++++
+ 2 files changed, 19 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index 02ef7f899b3d..ddcdd136fd49 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -4,6 +4,7 @@
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 38dcb31e8c0e..174a8bfaf663 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -808,11 +808,6 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 	if (iter_info_len && attach_type != BPF_TRACE_ITER)
+ 		return libbpf_err(-EINVAL);
  
- #include <linux/bpf.h>
- #include <linux/bpf-cgroup-defs.h>
-+#include <linux/bpf_verifier.h>
- #include <linux/errno.h>
- #include <linux/jump_label.h>
- #include <linux/percpu.h>
-@@ -425,7 +426,8 @@ int cgroup_bpf_prog_attach(const union bpf_attr *attr,
- 			   enum bpf_prog_type ptype, struct bpf_prog *prog);
- int cgroup_bpf_prog_detach(const union bpf_attr *attr,
- 			   enum bpf_prog_type ptype);
--int cgroup_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
-+int cgroup_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *prog,
-+			   struct bpf_verifier_log *log);
- int cgroup_bpf_prog_query(const union bpf_attr *attr,
- 			  union bpf_attr __user *uattr, u32 uattr_size);
- 
-@@ -452,7 +454,8 @@ static inline int cgroup_bpf_prog_detach(const union bpf_attr *attr,
- }
- 
- static inline int cgroup_bpf_link_attach(const union bpf_attr *attr,
--					 struct bpf_prog *prog)
-+					 struct bpf_prog *prog,
-+					 struct bpf_verifier_log *log)
- {
- 	return -EINVAL;
- }
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 57a785241d42..a4d49c4df712 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -854,7 +854,8 @@ static struct bpf_prog *bpf_get_anchor_prog(u32 flags, u32 id_or_fd)
- }
- 
- static struct bpf_prog_list *get_prog_list(struct hlist_head *progs, struct bpf_prog *prog,
--					   struct bpf_cgroup_link *link, u32 flags, u32 id_or_fd)
-+					   struct bpf_cgroup_link *link, u32 flags, u32 id_or_fd,
-+					   struct bpf_verifier_log *log)
- {
- 	bool is_link = flags & BPF_F_LINK, is_id = flags & BPF_F_ID;
- 	struct bpf_prog_list *pltmp, *pl = ERR_PTR(-EINVAL);
-@@ -867,20 +868,30 @@ static struct bpf_prog_list *get_prog_list(struct hlist_head *progs, struct bpf_
- 	is_after = flags & BPF_F_AFTER;
- 	if (is_link || is_id || id_or_fd) {
- 		/* flags must have either BPF_F_BEFORE or BPF_F_AFTER */
--		if (is_before == is_after)
-+		if (is_before == is_after) {
-+			bpf_log(log, "Specify exactly one of BPF_F_BEFORE or BPF_F_AFTER.\n");
- 			return ERR_PTR(-EINVAL);
--		if ((is_link && !link) || (!is_link && !prog))
-+		}
-+		if (is_link && !link)
-+			return ERR_PTR(-EINVAL);
-+		if (!is_link && !prog) {
-+			bpf_log(log, "BPF_F_LINK is required for relative link attachment.\n");
- 			return ERR_PTR(-EINVAL);
-+		}
- 	} else if (!hlist_empty(progs)) {
- 		/* flags cannot have both BPF_F_BEFORE and BPF_F_AFTER */
--		if (is_before && is_after)
-+		if (is_before && is_after) {
-+			bpf_log(log, "BPF_F_BEFORE and BPF_F_AFTER are mutually exclusive.\n");
- 			return ERR_PTR(-EINVAL);
-+		}
+-	if (iter_info_len)
+-		iter_info = OPTS_GET(opts, iter_info, (void *)0);
+-	else
+-		log_opts = OPTS_GET(opts, log_opts, (void *)0);
+-
+ 	/* validate we don't have unexpected combinations of non-zero fields */
+ 	if (iter_info_len || target_btf_id) {
+ 		if (iter_info_len && target_btf_id)
+@@ -821,6 +816,16 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 			return libbpf_err(-EINVAL);
  	}
  
- 	if (is_link) {
- 		anchor_link = bpf_get_anchor_link(flags, id_or_fd);
--		if (IS_ERR(anchor_link))
-+		if (IS_ERR(anchor_link)) {
-+			bpf_log(log, "Invalid relative link %s.\n", is_id ? "ID" : "FD");
- 			return ERR_CAST(anchor_link);
-+		}
- 	} else if (is_id || id_or_fd) {
- 		anchor_prog = bpf_get_anchor_prog(flags, id_or_fd);
- 		if (IS_ERR(anchor_prog))
-@@ -905,13 +916,16 @@ static struct bpf_prog_list *get_prog_list(struct hlist_head *progs, struct bpf_
- 	hlist_for_each_entry(pltmp, progs, node) {
- 		if ((anchor_prog && anchor_prog == pltmp->prog) ||
- 		    (anchor_link && anchor_link == &pltmp->link->link)) {
--			if (!!(pltmp->flags & BPF_F_PREORDER) != preorder)
-+			if (!!(pltmp->flags & BPF_F_PREORDER) != preorder) {
-+				bpf_log(log, "Relative attachment BPF_F_PREORDER mismatch.\n");
- 				goto out;
-+			}
- 			pl = pltmp;
- 			goto out;
- 		}
- 	}
- 
-+	bpf_log(log, "Relative attachment not found in target cgroup.\n");
- 	pl = ERR_PTR(-ENOENT);
- out:
- 	if (anchor_link)
-@@ -923,11 +937,11 @@ static struct bpf_prog_list *get_prog_list(struct hlist_head *progs, struct bpf_
- 
- static int insert_pl_to_hlist(struct bpf_prog_list *pl, struct hlist_head *progs,
- 			      struct bpf_prog *prog, struct bpf_cgroup_link *link,
--			      u32 flags, u32 id_or_fd)
-+			      u32 flags, u32 id_or_fd, struct bpf_verifier_log *log)
- {
- 	struct bpf_prog_list *pltmp;
- 
--	pltmp = get_prog_list(progs, prog, link, flags, id_or_fd);
-+	pltmp = get_prog_list(progs, prog, link, flags, id_or_fd, log);
- 	if (IS_ERR(pltmp))
- 		return PTR_ERR(pltmp);
- 
-@@ -952,6 +966,7 @@ static int insert_pl_to_hlist(struct bpf_prog_list *pl, struct hlist_head *progs
-  * @flags: Option flags
-  * @id_or_fd: Relative prog id or fd
-  * @revision: bpf_prog_list revision
-+ * @log: Optional log for attachment errors
-  *
-  * Exactly one of @prog or @link can be non-null.
-  * Must be called with cgroup_mutex held.
-@@ -960,7 +975,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
- 			       struct bpf_prog *prog, struct bpf_prog *replace_prog,
- 			       struct bpf_cgroup_link *link,
- 			       enum bpf_attach_type type, u32 flags, u32 id_or_fd,
--			       u64 revision)
-+			       u64 revision, struct bpf_verifier_log *log)
- {
- 	u32 saved_flags = (flags & (BPF_F_ALLOW_OVERRIDE | BPF_F_ALLOW_MULTI));
- 	struct bpf_prog *old_prog = NULL;
-@@ -991,23 +1006,33 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
- 	atype = bpf_cgroup_atype_find(type, new_prog->aux->attach_btf_id);
- 	if (atype < 0)
- 		return -EINVAL;
--	if (revision && revision != cgrp->bpf.revisions[atype])
-+	if (revision && revision != cgrp->bpf.revisions[atype]) {
-+		bpf_log(log, "Cgroup revision mismatch: expected %llu, actual %llu.\n",
-+			revision, cgrp->bpf.revisions[atype]);
- 		return -ESTALE;
++	if (iter_info_len) {
++		if (OPTS_GET(opts, iter.len, 0))
++			return libbpf_err(-EINVAL);
++		iter_info = OPTS_GET(opts, iter_info, (void *)0);
++	} else {
++		log_opts = OPTS_GET(opts, log_opts, (void *)0);
++		iter_info = OPTS_GET(opts, iter.info, (void *)0);
++		iter_info_len = OPTS_GET(opts, iter.len, 0);
 +	}
- 
- 	progs = &cgrp->bpf.progs[atype];
- 
--	if (!hierarchy_allows_attach(cgrp, atype))
-+	if (!hierarchy_allows_attach(cgrp, atype)) {
-+		bpf_log(log, "Cgroup hierarchy does not allow attachment.\n");
- 		return -EPERM;
-+	}
- 
--	if (!hlist_empty(progs) && cgrp->bpf.flags[atype] != saved_flags)
-+	if (!hlist_empty(progs) && cgrp->bpf.flags[atype] != saved_flags) {
- 		/* Disallow attaching non-overridable on top
- 		 * of existing overridable in this cgroup.
- 		 * Disallow attaching multi-prog if overridable or none
- 		 */
-+		bpf_log(log, "Attachment flags conflict with existing flags.\n");
- 		return -EPERM;
-+	}
- 
--	if (prog_list_length(progs, NULL) >= BPF_CGROUP_MAX_PROGS)
-+	if (prog_list_length(progs, NULL) >= BPF_CGROUP_MAX_PROGS) {
-+		bpf_log(log, "Too many programs attached to cgroup (limit %u).\n",
-+			BPF_CGROUP_MAX_PROGS);
- 		return -E2BIG;
-+	}
- 
- 	pl = find_attach_entry(progs, prog, link, replace_prog,
- 			       flags & BPF_F_ALLOW_MULTI);
-@@ -1029,7 +1054,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
- 			return -ENOMEM;
- 		}
- 
--		err = insert_pl_to_hlist(pl, progs, prog, link, flags, id_or_fd);
-+		err = insert_pl_to_hlist(pl, progs, prog, link, flags, id_or_fd, log);
- 		if (err) {
- 			kfree(pl);
- 			bpf_cgroup_storages_free(new_storage);
-@@ -1089,13 +1114,14 @@ static int cgroup_bpf_attach(struct cgroup *cgrp,
- 			     struct bpf_prog *prog, struct bpf_prog *replace_prog,
- 			     struct bpf_cgroup_link *link,
- 			     enum bpf_attach_type type,
--			     u32 flags, u32 id_or_fd, u64 revision)
-+			     u32 flags, u32 id_or_fd, u64 revision,
-+			     struct bpf_verifier_log *log)
- {
- 	int ret;
- 
- 	cgroup_lock();
- 	ret = __cgroup_bpf_attach(cgrp, prog, replace_prog, link, type, flags,
--				  id_or_fd, revision);
-+				  id_or_fd, revision, log);
- 	cgroup_unlock();
- 	return ret;
- }
-@@ -1572,7 +1598,7 @@ int cgroup_bpf_prog_attach(const union bpf_attr *attr,
- 
- 	ret = cgroup_bpf_attach(cgrp, prog, replace_prog, NULL,
- 				attr->attach_type, attr->attach_flags,
--				attr->relative_fd, attr->expected_revision);
-+				attr->relative_fd, attr->expected_revision, NULL);
- 
- 	if (replace_prog)
- 		bpf_prog_put(replace_prog);
-@@ -1702,19 +1728,24 @@ static const struct bpf_link_ops bpf_cgroup_link_lops = {
- 	 BPF_F_PREORDER |	\
- 	 BPF_F_LINK)
- 
--int cgroup_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-+int cgroup_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *prog,
-+			   struct bpf_verifier_log *log)
- {
- 	struct bpf_link_primer link_primer;
- 	struct bpf_cgroup_link *link;
- 	struct cgroup *cgrp;
- 	int err;
- 
--	if (attr->link_create.flags & (~BPF_F_LINK_ATTACH_MASK))
-+	if (attr->link_create.flags & (~BPF_F_LINK_ATTACH_MASK)) {
-+		bpf_log(log, "Invalid flags.\n");
- 		return -EINVAL;
-+	}
- 
- 	cgrp = cgroup_get_from_fd(attr->link_create.target_fd);
--	if (IS_ERR(cgrp))
-+	if (IS_ERR(cgrp)) {
-+		bpf_log(log, "Invalid target_fd.\n");
- 		return PTR_ERR(cgrp);
-+	}
- 
- 	link = kzalloc_obj(*link, GFP_USER);
- 	if (!link) {
-@@ -1734,7 +1765,7 @@ int cgroup_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- 	err = cgroup_bpf_attach(cgrp, NULL, NULL, link,
- 				link->link.attach_type, BPF_F_ALLOW_MULTI | attr->link_create.flags,
- 				attr->link_create.cgroup.relative_fd,
--				attr->link_create.cgroup.expected_revision);
-+				attr->link_create.cgroup.expected_revision, log);
- 	if (err) {
- 		bpf_link_cleanup(&link_primer);
- 		goto out_put_cgroup;
-@@ -3184,7 +3215,8 @@ int cgroup_bpf_struct_ops_attach(struct bpf_map *map, const union bpf_attr *attr
- 	cgrp->bpf.flags[atype] = BPF_F_ALLOW_MULTI;
- 
- 	err = insert_pl_to_hlist(pl, progs, NULL, link,
--				 flags | BPF_F_ALLOW_MULTI, attr->link_create.cgroup.relative_fd);
-+				 flags | BPF_F_ALLOW_MULTI,
-+				 attr->link_create.cgroup.relative_fd, NULL);
- 	if (err)
- 		goto unlock;
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index db135859a2d1..43417824d851 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -5907,7 +5907,7 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_a
- 	case BPF_PROG_TYPE_CGROUP_DEVICE:
- 	case BPF_PROG_TYPE_CGROUP_SYSCTL:
- 	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
--		ret = cgroup_bpf_link_attach(attr, prog);
-+		ret = cgroup_bpf_link_attach(attr, prog, log);
++
+ 	memset(&attr, 0, attr_sz);
+ 	attr.link_create.prog_fd = prog_fd;
+ 	attr.link_create.target_fd = target_fd;
+@@ -970,7 +975,7 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 			return libbpf_err(-EINVAL);
  		break;
- 	case BPF_PROG_TYPE_EXT:
- 		ret = bpf_tracing_prog_attach(prog,
-@@ -5930,7 +5930,7 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_a
- 		else if (prog->expected_attach_type == BPF_TRACE_ITER)
- 			ret = bpf_iter_link_attach(attr, uattr, prog, log);
- 		else if (prog->expected_attach_type == BPF_LSM_CGROUP)
--			ret = cgroup_bpf_link_attach(attr, prog);
-+			ret = cgroup_bpf_link_attach(attr, prog, log);
- 		else if (is_tracing_multi(prog->expected_attach_type))
- 			ret = bpf_tracing_multi_attach(prog, attr, log);
- 		else
+ 	default:
+-		if (!OPTS_ZEROED(opts, iter_info_len))
++		if (!OPTS_ZEROED(opts, log_opts))
+ 			return libbpf_err(-EINVAL);
+ 		break;
+ 	}
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index fe3b7fd8512b..2ac143fd1102 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -422,6 +422,10 @@ union bpf_iter_link_info; /* defined in up-to-date linux/bpf.h */
+ struct bpf_link_create_opts {
+ 	size_t sz; /* size of this struct for forward/backward compatibility */
+ 	__u32 flags;
++	/*
++	 * iter_info and iter_info_len are deprecated, use iter.info and
++	 * iter.len instead.
++	 */
+ 	union {
+ 		union bpf_iter_link_info *iter_info;
+ 		struct bpf_log_opts *log_opts;
+@@ -478,6 +482,10 @@ struct bpf_link_create_opts {
+ 			const __u64 *cookies;
+ 			__u32 cnt;
+ 		} tracing_multi;
++		struct {
++			union bpf_iter_link_info *info;
++			__u32 len;
++		} iter;
+ 	};
+ 	size_t :0;
+ };
 -- 
 2.55.0
 
