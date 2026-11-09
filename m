@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794249131;
-	b=rj5VtFYRQGGg7TMh0LL09kRQ4u9hKQXVgp57ajfXVd0FhHvTITJ5mpF46CZNwp9KSA/V
-	 9e5xRspDgxYKMr5D2dtXB5T4s2G27mzz6dznHnolcl/9a0dhoOhuEVkqvwVbDLlgwX8bb
-	 gepddjVGrbb+7nmU0Dz6PeEaALvZYQxl6xjsUaJL7QASJbadPN89X3fS2fIWDsrCY3fiK
-	 6DkpgKyKfM76+t5hWR8NI1MJPBim6gjW3Df9mQONhbXVZHwJXzNb8Gy1KI+x+fQ+aKIXJ
-	 PzAGDBSFpbooBZw66Yq/hAnLDbt8ClQgiDb1zqcu3pnqxD9XItuJzvJoLPFG/l/b+Og==
+	t=1794249319;
+	b=ZeaZrHcjd+YPoYAXdK/aAJavuzjTuDP2hYn0AvjXmyJ+4focU/8P9O3EFHIn8gXx0uL9
+	 8COyjLhdsA2QTUOHyV47wX7mGsF/qw5M/PExbj7Z3BJJ7Tjn6C9cVlrJSgB2HxgeJMqIK
+	 uEStsgxYoZaynOnJ9lQjuLO/L48jXlSNqlBBfzdlmRc+uHgcaIMLwNOgwpLsNKHBFOMqk
+	 vGHEaWYeGdk633BrrzJsIvg3QvEQhyZdGmRrvOkCtjXw7jRluDmpP4ox3U46rFZcrSmX+
+	 Sd9rzyvnxZkrfsg1S4ixPil7FnbbDn3woeO17OcykZaBu3075wH7ByjZgDgYyIQlEyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794249131;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	a=rsa-sha256; c=relaxed/relaxed; t=1794249319;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=qDrZGbtE45lIKSq9OOM1oZZId39Cwf0gHnE2KBOHd5s=;
-	b=oEw+zCbinrbnIREJhNSokJ3PlaHVOlRvQrSQkcVzKKvT6EFUtjBfU5bKRcm0PEn6ehnm
-	 98st/Klvt1xBhmB+UZb4hFbhDEE3BTotz0vmK6vDykUKIiWAe8Y3wdCE+dYwGu65mzOHd
-	 n0UU7+RWdWbPoSjZ1QASJhLDePhMvDIeAZQv7vT6VZRPXMfmChNgNiW+3jlrrRxdSWji7
-	 7V5YHSdyDYnZc1O758LNPCBTp70q4IjS52BuneIYZlgJKOZkdAkv8nTkA3RABOEwqGwX0
-	 BAxZTKtF7NLOfaPormzxApqizBZ0sTq167dvFSpqdT1AqMp80mPaZW2iGaq6GOimPUw==
+	bh=S4YOzWBFUgxBbfQDXSdLfE9KUEn8lDmL88etHEBTpPs=;
+	b=ne4uCCqtx3baxlArajvU32ykdutUdWuptapT+9P2gOAEgO5rVzwbBIio8zRXGKz7DJOi
+	 6OYZCa+RsYUIBmNOfj3h1T8tsMDsFGF1qzQWyjDfc/WP3I4wKGL8Cxbu1GlTmq/Z68aIT
+	 d1hq9JyRiTHTon9xRsWi6D4OfVOqPmxnv9JCqqxDTrsNtOK7AdkJLV12F94uUh1/53KGW
+	 xGLNIT0c8QZ7Z3EBwBpUQgdtIQawmoeSNB/Na3drBu6nbob6gaxE8o1TLlsNDhkX1o1bS
+	 1EiNgDH/pycjw8zD/RVJeVWxP8NTBxy4foZTxwVYrM6nlwjkoVPzZsURZ9kHNb8mOFw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GxGAhb8J;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I3oka8sS;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D8F606AFDE
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 18:32:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C51606A5DC
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 18:35:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GxGAhb8J
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B50A1F008BD;
-	Mon,  9 Nov 2026 18:32:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I3oka8sS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 716C21F00902;
+	Mon,  9 Nov 2026 18:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794249130;
-	bh=qDrZGbtE45lIKSq9OOM1oZZId39Cwf0gHnE2KBOHd5s=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=GxGAhb8JqSOXx9iSdRKEhQ52j2h/RFp4fZhXeUZaJj+px0xbRR+jvC3xxOlsWNptw
-	 WW1BkD9MSWRCm6ti2GhbliSRTXX3JIFFY3Iu8MbesIpgSlzfCDzpwN8NReSEOslPE4
-	 Nv66Z+1tr1mRG4c5J3xLhtkf/1UDsg8cihypW3c5AqgPlSFM4Lf+Gch895xZPcz7sz
-	 do/MzkHZvVpI3nOoSV5lzSUTKlrFBQljlotLBDWC87yA5ezjqXseiJg5qPFIOfv8Ct
-	 DdiJraGGC2ZwSGYnEn97M7zvkwsz9ZPVdP0k0K+3X0pMEO6fpYNYz6IedjoLLsj4tJ
-	 b0mNfNcNH4k/g==
-Message-ID: <sashiko-outbox-205417@kernel.org>
+	s=k20260515; t=1794249318;
+	bh=S4YOzWBFUgxBbfQDXSdLfE9KUEn8lDmL88etHEBTpPs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=I3oka8sSkVXV1m8g4+9WSsTYYxYPXUswiYGvFw2DVOAhJuSm5hTRJRsuKXvujh3xh
+	 I2sh5vFCs9Fh5gxbjb0ocM0VQiAcLSmKx4SaP96aBKyEc8pD2fkCGmwGg/kAQpFpwc
+	 WlTuVJR0Y1uVLqEwVR7NfIJ+3dhIy3e4iJiRvbkQq9x9n1+8sSnCQUpj+5oSBz2BIz
+	 iw8OGf7hWvv2Swa7RltukhJUc+Va9lHaeoA+xj8o5lPdHsdtOccOKbVBkQXnQbevAj
+	 lNFrFiVjYq2MlMfd1QDj062KZv/PWvhkxLfMQ5LF8K1Cxdvb6wSuTM2oSN8iqW/iWI
+	 triJjwcJDLN0A==
+Message-ID: <sashiko-outbox-205422@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 4/9] selftests/bpf: libarena: Raise arena
- spinlock CPU limits
+Subject: Re: [PATCH v5 3/6] selftests/x86: add shadow stack lock test
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Emil Tsalapatis" <emil@etsalapatis.com>, bpf@vger.kernel.org
-In-Reply-To: <20261109182055.7581-5-emil@etsalapatis.com>
-References: <20261109182055.7581-1-emil@etsalapatis.com>
- <20261109182055.7581-5-emil@etsalapatis.com>
+To: "Bill Roberts" <bill.roberts@arm.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261109182758.252223-4-bill.roberts@arm.com>
+References: <20261109182758.252223-1-bill.roberts@arm.com>
+ <20261109182758.252223-4-bill.roberts@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Nov 2026 18:32:09 +0000
+Date: Mon, 09 Nov 2026 18:35:17 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,50 +62,43 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Medium] selftests/bpf: enlarged qnodes exceeds arena max_entries in
-  arena_spin_lock.c
+- [Low] selftests/x86: main() comment references nonexistent
+  test_shadow_stack_lock()
 --
 
-commit b35a00e6a80fa689cd0b2cdb4e1bcd8899fded17
-Author: Emil Tsalapatis <emil@etsalapatis.com>
+commit c2aa8d04f3f8897cd4991d5c5c2ee94b8e83b82a
+Author: Bill Roberts <bill.roberts@arm.com>
 
-selftests/bpf: libarena: Raise arena spinlock CPU limits
+selftests/x86: add shadow stack lock test
 
-This commit increases the maximum number of CPUs supported by the BPF
-arena spinlocks from 1024 to 8192.
+This commit adds a selftest that locks the WRSS shadow stack feature and
+verifies that subsequent attempts to disable it fail with -EPERM.
 
-> diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_=
-lock.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-> index 560ee18fd287f..230bd112e8d59 100644
-> --- a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-> +++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-> @@ -77,7 +77,7 @@ struct arena_qnode {
->   * 16-17: tail index
->   * 18-31: tail cpu (+1)
->   */
-> -#define _Q_MAX_CPUS		1024
-> +#define _Q_MAX_CPUS		8192
+> diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/test=
+ing/selftests/x86/test_shadow_stack.c
+> index b52c5420c1374..e047f1ceae0a7 100644
+> --- a/tools/testing/selftests/x86/test_shadow_stack.c
+> +++ b/tools/testing/selftests/x86/test_shadow_stack.c
+> @@ -1060,9 +1060,28 @@ int test_ptrace(void)
+>  	return 1;
+>  }
+> =20
+> +static int test_locking(void)
 
-[Severity: Medium]
-Does raising _Q_MAX_CPUS to 8192 exceed the 100-page arena map limit in
-tools/testing/selftests/bpf/progs/arena_spin_lock.c?
+[ ... ]
 
-tools/testing/selftests/bpf/progs/arena_spin_lock.c {
-	struct {
-		__uint(type, BPF_MAP_TYPE_ARENA);
-		__uint(map_flags, BPF_F_MMAPABLE);
-		__uint(max_entries, 100); /* number of pages */
-	...
-	} arena SEC(".maps");
-	...
-	struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
-}
+> @@ -1079,12 +1098,31 @@ int main(int argc, char *argv[])
+>  		return 1;
+>  	}
+> =20
+> +	/* Note: test_shadow_stack_lock() needs write enabled */
+>  	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS)) {
 
-With 16-byte struct arena_qnode and _Q_MAX_NODES of 4, qnodes grows from
-64 KiB to 512 KiB (128 4-KiB pages), causing bpf_object__relocate() to
-reject loading the arena_spin_lock selftest with -E2BIG on 4-KiB page
-architectures.
+[Severity: Low]
+This comment refers to test_shadow_stack_lock(), whereas the helper added a=
+nd
+called below is named test_locking().
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109182055.7581=
--1-emil@etsalapatis.com?part=3D4
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261109182758.2522=
+23-1-bill.roberts@arm.com?part=3D3
