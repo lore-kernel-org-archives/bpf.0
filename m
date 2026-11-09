@@ -1,100 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.178
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794248186;
-	b=iq/F/nG7VukmWSqpbqfbLUi9UgS21fnM91j43F58kLHjg/EuqFeNRWg7+kR+sH0zRPEk
-	 9HhkZVNFEun3ZntB0YGYmOy0NNufIP0gpx+Cpx2pa5XvcdC/u1SJt8QTKP7wHp1mW9gjG
-	 5m0MMFHVRPM12QBgFw6pz+YGMxfb8eQ0ndZuKUlrRlcRat1ohw7FJAxra7zNGuXWYft0t
-	 +BxBO49wmASqhIlDrM+RzcC3ywOABkccpjf4Yb+1wdRo7xIWuUJWS7KpzxN0iQ9oQEUBd
-	 Z7cTAbo30C/ryDGIc4FdCobSC6EXAao3Gk7NceJ82b66XwaBdn8n0nJG6hPZeHJdp/g==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794248186;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794248350;
+	b=S2mvK0pjhU4uBl6IGC4BZ6sF/5X9jf2Ng7XkdEbDsxeofizmbIKnRhdrXY7iT25iz2xN
+	 lXWUKveblmk2vWtPUHauZ1dD85e0dJWlhH0Nopl5b4rXzLs3idYwR+oATCywsebHfDuI1
+	 5nK4mnF8fxZESWjG1ngJmFDMVkEwJFeFD+gvxSCPfE59WyjnqusaWVFGVn0fy/xXqSg/f
+	 taenoNikIvFImEKdAJhfKQ86eVa8pAaGvi/2IuSrL7miFFr31lGClTINfRE3yoARHv6zz
+	 rTW9td9qQrf36ZYiC8mSjOkUfdsknJyCW1IhBdwVTdRKtFx6HLVQlucPvIX28+yQAnw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794248350;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=WguHA39buDjvDkUGeUWcjbqwEXew9kThI1dbTtyCUGs=;
-	b=CeYbjOxG+67AJi7Oga7MIh3cHvTbxnlZ5LTn2+3jK1f1d/UPoxcTBf997UXDWFMmDFLX
-	 yPbwCnJ6jAXqzkgUA+H5SCiZV9hGJw3NoeWh4uTbkUo/5w5nSrym4wQr9SeVHfSZm5puq
-	 0kkzHWNn57T1s6gvofxiRmDTu2owNoWsH1AasKZNkOCZ6ClcfAdc7JzSI9wTyjnmNW+/V
-	 rOkIYOgTOv5vcX8iwH77w6ssdt+jgiy8Mjv9ewHOibCTEgCQ+79IW+j4fuSrSOaPyZef1
-	 guRlomlWq5C5GOpWyEO+Xy0ZzYTjvGxX3db3hUACt1yPt5Ul+NAEEvFF2oj1iMwibpQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=akzXAS6V;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.178
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=Al53KaPWXGxJk13wV4PIOS4dHIMGoV2MUU+WyWUG6bM=;
+	b=cC5f6cst976E6kKi5dlrqtZj7acBhpyLmyWLtmBIl6D8Ds6eEfnQHxkK0bzjDwU7754x
+	 iI592eWEICERq76FqfoDgaKRggtqXDLUnoU9CKlOgT/67vfw+YS44aeHyCXoKDPguRhtu
+	 P5L1lkHlT8RqzPk7shkfHiClXGNEYrCyuhpYnBLnDLSBVGO6inHmvf7utq2jb0jNFuK6W
+	 3d2EbrbN7I8cIcmLqxTa0NAOaiYO9+Vn3jEyxWtQVwqDk5LVv0D+DpW2Qu8zkH07+42gw
+	 kUua8vALQCUA2CbB25MnA/gxTrA8IHwxyeX1gUqFeG//eEBtLvDsal4/3pAmk3XJVEQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=etsalapatis.com;
+	spf=pass smtp.mailfrom=etsalapatis.com;
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=pcsp3ZRU;
+	arc=none smtp.remote-ip=209.85.216.45
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB7C606A321
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 18:16:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3BB7C606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98204606A334
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 18:19:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 98204606A334
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=akzXAS6V
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-8b0cf2c0785so11299477b3.3
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 10:16:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794248185; cv=none;
-        d=google.com; s=arc-20260327;
-        b=gf7gF+kANJeXXsWnBJClaqc56hgR7r07ThBahGYrnw+stCVNJJ401ZW9maemyM9SMH
-         J4/zqkjmHCikduZzVzamCxmUKduMyWoNg5zQn66KRE7Jxzup7psGniwYQ/EYj7W4YU7X
-         JlILj16CRCFbBcdbsAOctYhZ1Uj1WpDI4bv5S/yc0UCE3fFmmcbo+sANlIUbjXfhylgY
-         kQaL7qmnItdi1t75HmNUm5uDaC/b9alBEcC7E52gHjD8Teze7kpoqYIDoxqD9GWZZn3E
-         tOgCL0dtHMK3tVJkoMS4NkJfHrl8U12RkzxvvoEgDrsFqsIrVGBrU4NtW9F4zPYnILp4
-         jHoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=WguHA39buDjvDkUGeUWcjbqwEXew9kThI1dbTtyCUGs=;
-        fh=zZGdbyEGxm8XejUPzWnVw8323rc896TrcmWZOhzlpyo=;
-        b=CFpDsjWvQlz2uER3pcwNl0Qp695XhaOsG9T7fGaDbVQoVpIDM6FFmnM+MifVIMB/z+
-         n2Qnk3VBLzDg9gfAWXU1O/R8Repn2yDpvG1/1ZhxgOyuBVKrFQUoxH9nPLlXpMpy8btU
-         1x2mVppfAa82iK1Cw0Lb7UGTNK5G/mN0wXteAwvVWriz2YVqz9MfsN9KAcNe59178JRr
-         w7CoxEqUwcHtqqDjd5puGAV23SJVPQHw15Az7ZYj6pHGEzrV2yIH/7kozPBGZePA6qmH
-         nGIDi5nb0cS7lJxcSQ5Yf7+1/oN/SJ9H0p4JP/q0T7M0OCau9TNVW7Q7GQhY1RiLq0PL
-         QxYQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=pcsp3ZRU
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b147e06befso532793a91.2
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 10:19:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794248185; x=1794852985; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=WguHA39buDjvDkUGeUWcjbqwEXew9kThI1dbTtyCUGs=;
-        b=akzXAS6VvgZQdwydBpiHrBqKmC17dbITpKkm0yJ59PgGtbOLnz081MkgWit+tQTy4r
-         FFhqSpe0aXk4/hWfHD1Bzr9lGLnj7WwbRgdCj0xLJkejWGY7BxhjgH7c4WsXgJZOK5Cr
-         i0Yb9JguBMs6CTRjnYA8o21Zvl86pU3mNV680qNuN1JTk8E31ikqESDCSbYVvqlPpIL6
-         OAjBXQszcI4vQz685iXQQrlm/JT1bCW7BW2qRFyprCeA87yCqpvMdjOpd7iuU5JYAWH+
-         OZRxSj0Wmc03D3PEyx8kc/i9xGHj/HS8c3T17ykRq0ZT4wBVkrJFqXEWw9a6UvpFlrTt
-         5o2w==
+        d=etsalapatis.com; s=google; t=1794248349; x=1794853149; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Al53KaPWXGxJk13wV4PIOS4dHIMGoV2MUU+WyWUG6bM=;
+        b=pcsp3ZRUO4Kxraaa6QaWTyNb/s/P9MoooPnk2hlaiL3905ANn2Pea/lfTQmJvzGYFf
+         h5F8x8waFIrWosUKqffBoFZ+c8Z1IX0LsHvu30pOpjRfV46O1Py5mKOCYleHTejNzD/B
+         JpPMv1OITxhWC17BalwGpViVvbX1D3vjQKiCO7HgI2QqOW9hj+7yZ5g89PvxAhT1hPbB
+         wVp9mcFuOZZwMJZEaNqO05fyD/tszVJT/8YNVhnMchdNzB8+OnXyW5IvOQi0meSRUYa1
+         Zgv0ACvuuw88i/frnBRPpeVsHotA7DE1LtQwrkxYkJW4iTmndEJLZ8+Vu2E2xxxWpnZS
+         eagQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794248185; x=1794852985;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WguHA39buDjvDkUGeUWcjbqwEXew9kThI1dbTtyCUGs=;
-        b=mea5YmNVCgoHcDRXQk6ZniDsKvbFikHfNmcIKC14ZSp2Bn8Y4fIECKMQcuZB5B4Hr+
-         eGuYSF50PLBhlJ80J7S6760qy7vpC35JlmHt+zzEE+mieFUlbdorKvZo9TvA2Z63ZCA/
-         Jpk9qEEE839mhrK2PQgDqvy00BSdu6HGsU9tvragP89kAf49HHEyv7cj6DfqMSwhqNZ3
-         gMR+dqXGgspA9o3TUAz76mR+CuI+089/efm6MgjJ0eytACybrY+0T26tgcFEm94N3dDR
-         ILd3SCd4nyY/Feab28HSnl9UtvDP5ZFJT4BL/N9C96UOkaGRogBttpk7c9gJ0P54lpCO
-         dB5Q==
-X-Gm-Message-State: APuU4Z/UjLAtBd6MCZpzVWHS4DApa2w5e6eJqYSbAyQIqfN84fjE/c5e
-	nq8HC3M9uee5V5zd6sWJcll8J3YnlwGa5oY0MtaTRGOzgjdDdKJp3P3c+WOKnQhBCDtZGMapFyV
-	a2FM87Oxv75/LFlwdZlkgDI2m+Ze69JJp/y8w
-X-Gm-Gg: AYBFou3G8ons0/TiSZFS9MpLCRZDFnkpO+uGznLsg7+np0D5jmiTNssAvWApOui7//3
-	aEhyVc5h3e/E69+s1vNQQ6RfkKDFM7pnqhmJsO5d2BvuTdoCQhSZmefDpqKcV8xnp6snwHtEF39
-	xWWfTknI5BL2v6pgXifleAGvL6j3xyByBxkmn5m0sTs0tbKNuERd4hEY7j+4aH1lIVDQ+xtPg4o
-	OQsNvlLCwxQpGAS52AsDY9pba2FVJ7DSQhb7bQJjOkmqiWScG/ElWsg45kSAhMikYvp6HfjhIXE
-	pa2RQSc1hxExO8naqTUJ6E3ALV+0pKm8pjaSv0Ot0Dta0BAJN1Lzvgm3XEOVI6PPcyev+xO48AZ
-	inVHT4zoAmURvAjeUmz5DoZMPJue9TXpQ8uaDlcuD1s9pU/EjXKtbHtj33pnhyIu1kUfjhVepsN
-	MW9uCImDPo9gd9BQ6uFNcQe+Irn+CFfAojE0F5XKQIXFaCcwyN7fA=
-X-Received: by 2002:a05:690c:102:b0:8ab:a473:fde9 with SMTP id
- 00721157ae682-8b392c78248mr933677b3.95.1794248183992; Mon, 09 Nov 2026
- 10:16:23 -0800 (PST)
+        d=1e100.net; s=20260707; t=1794248349; x=1794853149;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Al53KaPWXGxJk13wV4PIOS4dHIMGoV2MUU+WyWUG6bM=;
+        b=R983Wusr4Nh635uesGVW07ELtn6owmbO+X0w/xlaYYRAqPPaMHID5/SLFVZARWPTwg
+         SKBzfzZzzF/hqa1FuKnJXGljv4C1jGk2/PE860I07m9ctGOUYVvsg9bRiPszw0tDYK8J
+         HL+5g6qdbnzgOmwBpi0VqPhY8cWmluX59wbKJ8GmXlUvl6nWkQ5TMRkKeqY5xwTACZM3
+         PFEcLlxWXwatFBGe5E9mMV17tkp7BDzNr+EyIcppOpDl/6d5ih1VctY5M8JPcMjDinaX
+         9sENEtcgdgoxDwL8nB3BBOIWV08XrJX/qPRYuzqQtvAozeua0p9XXOkgCvvBOwODKQQt
+         cxhg==
+X-Gm-Message-State: APuU4Z8JaTqTC3+MnCm/gijlg0U+zr9wCIs710F3kMr3gYU3vulnnJb9
+	TA4vczlkMrsjWuPR2/lnbS5CiGnesZ6s7A72kU6LWpN6hFvwpzE3HGSBxHXiO1ujjVtjXb85MJa
+	U0U6l
+X-Gm-Gg: AYBFou1tz0V4JRK+74W6Je+wUlHOhD8OZ6ogE/6vYMwZFUCKZHr4GXTfHQklonApY5Z
+	sTCpmdZaQjq7P+WFlZoV/jQGdtWjNlFKMRN9gBV78jrpoywXRA481+SDmc8+Pozz5fqe1Ta8Z+c
+	MMURg4sPFZ9JmGILX2siwDj2l0rbWknCbr7NGwevsA8Tfi0gk7oicJdrjVmHW6qurGf86AAhJ68
+	lt1OxAWLtbTRoGDL1aADAoyljIKeC7WgZVosHpwUR6y2ELCX+oapakOu6GlX1/8lP+OSgisWfug
+	NkRkcyAAc8E/Q9+yCIgSWv9jRnL3ZqfVoASgVJ4WWMF4Fce0bfPLjNjKBGhZR8oUhxXSU2rcq6C
+	lkmO/n3Qn0LFJW8Ev3DkGpno+eJpyTvTyd8DrsTVXWayT1c1zz7iRi23i4skmPFAcihm6pyVBdj
+	spp8ffRWp0LFEH/k+ihTnN2mc0HGdl110MWIwyZcIGEV3ImQQUgmlcgvqA3uPZxlEAkMRmwQWI0
+	RGIaoldm42Rw3vjB3PYz7aJjHfgXaaeNKFnaEZg4uUnFJxwPfL9v/1aS/kQnJXu4ZtoH6qhzk7i
+	SSIBvKxOqq+oY2yJS8vECaLW9gNrLRZZRMpJMA/LkUYCdtL4TQksLX9eGq8ZOJZzJregJjWkAwS
+	lFYuDKWQ9EGJO6YNff321dModJvg=
+X-Received: by 2002:a17:90b:4cd0:b0:3ac:1c76:61c3 with SMTP id 98e67ed59e1d1-3b166cdc367mr433934a91.27.1794248348759;
+        Mon, 09 Nov 2026 10:19:08 -0800 (PST)
+Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b16769b937sm481075a91.4.2026.11.09.10.19.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2026 10:19:08 -0800 (PST)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Tejun Heo <tj@kernel.org>
+Subject: [PATCH bpf-next v2 0/2] bpf: expand BPF arena kernel fault handling
+Date: Mon,  9 Nov 2026 18:19:04 +0000
+Message-ID: <20261109181906.7350-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,32 +99,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261109064715.2382452-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261109064715.2382452-1-alexei.starovoitov@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 9 Nov 2026 10:16:11 -0800
-X-Gm-Features: AclHuK_1-KxkDJrw-5_U4HDm2IfgGXbo_lg0YtOMALh6-47yirom5b7AmLH10do
-Message-ID: <CAADnVQJcUAE291v2DWr=NOrTHWRVvsTrcrqyPsSytMg3-aLoiQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 00/26] bpf: Find linked registers by scalar
- evolution, remove scalar ids
-To: bpf <bpf@vger.kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 8, 2026 at 10:47=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
->
-> People do not write that, compilers do. In a loop over strings or records
-> in a buffer clang computes 'buf + i' at the end of an iteration and tests
-> i at the start of the next one. Patch 15 has such a loop.
+Currently, the BPF arena fault handler protects against
+a misbehaving BPF program passing an arena pointer to a
+kfunc then unmapping the backing pages, causing a kernel
+fault. However, it does not handle errors where the now
+unmapped arena address is instead accessed by a non-BPF
+path, or by a BPF program that has a different arena.
+The former case is already possible in sched-ext if a
+BPF program removes from the arena pages allocated
+from the genpool allocator.
 
-and I finally guessed the fix for:
-syar_file_open        |failure -> success
+Keep a list of all arenas in the system and attempt to match
+the kernel fault to all of them. If the fault does fall in
+an arena, handle it with the already established scratch
+page technique and retry the access.
 
-but broke metarmor.
+Cc: Tejun Heo <tj@kernel.org>
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-If somebody can paste the last 30 lines of veristat it would be great.
-Or embrace more spam.
+Changes from v1 to v2:
+- Replace the global arena list with a latch rbtree.
+- Restore the stack lookup fast path, checking the fault address before
+  falling back to the tree lookup.
+- Defer arena teardown with RCU work instead of synchronize_rcu().
+- Add rate-limited deferred logging for faults outside the owning BPF program.
+- Reuse bpf_testmod for the selftests instead of adding a module.
+- Skip the selftests when the compiler lacks arena address-space casts.
+- Correct the Fixes tag to reference the introduction of kernel arena accesses.
+
+Emil Tsalapatis (2):
+  bpf: recover page faults across all arenas
+  selftests/bpf: add arena fault recovery tests
+
+ kernel/bpf/arena.c                            | 119 +++++++++++++-----
+ .../selftests/bpf/prog_tests/arena_fault.c    | 100 +++++++++++++++
+ .../testing/selftests/bpf/progs/arena_fault.c |  65 ++++++++++
+ .../selftests/bpf/progs/arena_fault_noarena.c |  17 +++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  22 ++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   3 +
+ 6 files changed, 298 insertions(+), 28 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fault.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_fault.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_fault_noarena.c
+
+-- 
+2.52.0
+
