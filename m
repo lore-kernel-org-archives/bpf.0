@@ -1,89 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794261499;
-	b=c5APUl3kh78nhrwiI3w0KbEGFu8qPOvX/Qo0o4zAlr6mP920AX5cLbsyi0zzM3OXWtUA
-	 9IZyyazJdFiGN7puZXD4n4zlk7K3/214GcYP6uQWWTKu7YEBLc15TSyI1YuP8XoAozso8
-	 CDv3+uoRgzl5x0+R6OJJMoKzhhxwfoXTm/6R7TS3e2F3w1fGKe8m2hqdoepMi3Oa5nANu
-	 FKUCbknl9F5Xp2lJV2EPQqycSecWGVhFmYXwa4nmThiEp1rB3TWg1MPNYbAYHfSdLGiso
-	 9444YcfdgLhJ1nB8RUws1Ru/Ynnfets+Dmwf51BMpkpP9f03S5jPtr/TSdCKaK4Ms+A==
+	t=1794265211;
+	b=PLwN/xQEy4pnSWdLC2GtQzPM6Best2zWj/otuj2irmrvIkTVbpXj91SbUUe1wjl0j3wP
+	 Me1u/pXVefgUQcr5hw9fFu2nR9dkYFBdw+6T0WzuiZlou0aRyifIrVm/xvK1OIDewQ+GX
+	 fBiDgbq391umCDRe+ZujW8vULspu6PI5QIA1Js7gBjmJpv1e8L+usuwtaRwKLorC45Hbk
+	 qItrYmmYFsDoqkrcMHk8s4/aFD96h2kpLoCAOXqKUEzz2Q73o8jiPsP9XgLZi6hIb56fJ
+	 VWyL+2aZC35SylnxtwnDlFOHkgh+vJZlJ7QHl83/oDdKDd+rPE/kmP2LLCL5uuNfGng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794261499;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=q03BRgBOcQNLCRjgQwIL6L5lX3ohT8w/lgFYZ6hcCWg=;
-	b=jtWMazzdeOzFqRomRHYUdwrrlmfZHoAv/teQMvhUEYNQJkAMlxY1FeJVU5Yaa3OB0Zm9
-	 6KN8GaEbIjp/xnQiQTcqTH34TL2+I7IstNbDg53me5KVq5Wwx4RzZwpq+G1rbP+o3Ts3o
-	 JaHMq4lIuxpp83lItNzdQiuQfveovSH613De5SEABT9ole+yICl0H3ixQdgyACipNY0QJ
-	 ej9MBuo8QvmnIjVYIYCSOESUy0WOmT8oSQCXQmt1Ael4t1J1D+bN9KL4zhQ5nOW3SF66+
-	 NPzPFO2GBQ60tnfLtmantXvo8qGWn2Vef75KXCbaX5Dd9J5s1CprkeV6jcFEmTLbGqw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794265211;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=fSm6RWRIHhMCklVSLN9b1sPg5Gcw6uv4Dw7npTL/Ly8=;
+	b=1RRoFam1tjSMjFLg703vgP4cOPoiBPm9sE8+ffvJmLkR8j7uDRJhceqrQN7wcEMPkh39
+	 jiborzYoGchE5YsrucVRTTT/fJC4c6gJI9T0qv7LkiTRr/1uyy2zfHPiwmpfvfIi5OWC8
+	 Zarcv+Ayy4+Td/Jzn1OrXU0uDch2GD/570lQvZDneheqZDknKGe02gquI1PIV8IRZkQzs
+	 tG8vR+LuhlIoKUkWPvVZ2Gt5Bok3f9V/ZEgX3I4c1Tg1UTMe7MJMos4vhurFARa53p7Lb
+	 gSuwvw23zvZfJ5vilP+DRJxBL46UileqNbpZ1mDMn3SG2czv9tBz8kywJ5kA0RsSNMA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zYO9x1Mb;
-	arc=none smtp.remote-ip=209.85.218.42
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U8MnCexl;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF340606A325
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 21:58:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DF340606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDC2606A32A
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 23:00:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zYO9x1Mb
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c4ced671398so176250066b.3
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 13:58:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794261497; x=1794866297; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=q03BRgBOcQNLCRjgQwIL6L5lX3ohT8w/lgFYZ6hcCWg=;
-        b=zYO9x1MbNwJ+vVirkbtAQ6GaGoIyfE3bXBdqwm8xZu7VLwvhFj56va0o++rdqRLDXj
-         cX66Kt9oSCJSpPoic6oQcGqR90HFFOxD/LZDxfImAPBjX8+96UIQvHzxHYTcIYq3pSn8
-         LeGbjCvPRg0P96wlmQyrNk2DlMCC6cpXszeBXUmTCJyxQFuWMC4L2xIu2LZqJqepnUCz
-         fUSxPTQaKY9zrJpgs/A4ddA4wfQQfo8q4VgRxWqnISyokRQ7EooIkZaVRF1dd3pY47B+
-         aRuCilGOQNLoZlBPm/N6cn25j/fuxjlXwPF+ma6WsWRx+ocCE6JRIri+aWgVv/urFg9C
-         e33Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794261497; x=1794866297;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=q03BRgBOcQNLCRjgQwIL6L5lX3ohT8w/lgFYZ6hcCWg=;
-        b=0kRe8DPI/kMwOd3NM7joilppuI6+w9naucdt6eKG5SGOtUrN4XxL1P2t1EWtjD/NP3
-         6dFroaEMVrFpgAPgp2Doeh6O3DZZw3kXf/eqiX2tUlwh9HjbFS1p5ZCujOdMxx+qaZbJ
-         leuH+ChsbWgnvZnHPz8zP1rUXcC12MkNBBBRMU+O4kGPB5Tm8Q9+1Zxq2sba4HZ2hGuG
-         1YUdVLRxtc0Yt4LNylyq6UaBUI1//l97Qy7LONvbZ0vMdhVliaP1G9iS7QE/bqtKYoUn
-         NkFqHNsZ6ejQxTNoC2gdOTmmO+pyvUpaF/PiRhqBGCm14QD+ovF1D3tomPS0b4rgIk1U
-         D79A==
-X-Forwarded-Encrypted: i=1; AL+hErHl+At4pQbQGgoblZtczToCzuJc8H8sMRLEOoiAo6svj9e+0VeFLqtPG1jlgOF3l0iOtNs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/o9do6AiqSd39vtBjFK8zLThRtdfar7lG92Eib16pH/H0OLyXy
-	OARE/9SPBZvkmaNQhU72xf00yPhi5zHf7hlrU2jjaea4PYy7XjDWEX8y
-X-Gm-Gg: AYBFou1Z8i9hExti/V4EhtJU07WxxvESmERA85oFhs2YqcRn7mmOOy7RDY2eTGlidUH
-	mBCZKLHhNNGC+c6UgenuoCdgqisUzv+dhzcbyCKgYQ1Gy5n/pEpi03BNskC4B1O+RFP4cbyvVAo
-	2gQ0bHCFiuXacjl8FcG18M/wL23j/x+vLnvtpTbgq96Zo95Jwkt9/PVcB4ZT0rgD4q6wK5O1cvb
-	q1X1juOQeMf+pmPlG41qMf0bDv8Sn+UIl7ywLyLzFm07nJS4xC+/YMHmysq9e9YZJnI2EugeSHQ
-	bLUC6uzpBEZuG4BTFO6hZ25FH+O52xgPxlv1UvBvhNlTdP/eCPufkm/30T5g6Z14cdtq/ewqCk+
-	Oz69h4OCW9SfsNElItwazdLvh8RgdnrCNAWKjlcB0Mr1vvHnVSvMuo9TAdo0XYNsvW70XZVZv8v
-	iUtVYLHByoo3GdMNYNG3OAA2xw29CnrRCA3msTh/xgg3Ws72ugBUKAt8UID33IS8e9JHFI1S6kI
-	NRHCGfcsRrHjaEbfndaX6MAoWsgjkBWMSrA/l0m0Rm8DfStkHy3V6UwYp206bnrNM10Nw3fLyEm
-	V/mZS4XJR6rCx1ZEC+s4SFDp1JrJjsdwhqc/CNV8a90Olu0/3nJy/cD39XGg5J26YaeBKgd6L1a
-	eTLcwIQ==
-X-Received: by 2002:a17:907:1905:b0:c45:b99:f282 with SMTP id a640c23a62f3a-c50491c3b10mr53885866b.7.1794261497276;
-        Mon, 09 Nov 2026 13:58:17 -0800 (PST)
-Received: from ?IPV6:2a02:a03f:a75e:9a00:b7ed:a37a:5b51:f302? ([2a02:a03f:a75e:9a00:b7ed:a37a:5b51:f302])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a685f99sm20298666b.82.2026.11.09.13.58.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Nov 2026 13:58:17 -0800 (PST)
-Message-ID: <1c0bd741-0e5d-428e-ac89-3907d62c4eb9@gmail.com>
-Date: Mon, 9 Nov 2026 22:58:14 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U8MnCexl
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A842F1F0089F;
+	Mon,  9 Nov 2026 23:00:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794265210;
+	bh=fSm6RWRIHhMCklVSLN9b1sPg5Gcw6uv4Dw7npTL/Ly8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=U8MnCexlQiYn57OzAwCUsCQnsi2SymTn1RUAA1x7TIKk8eXJ/1dgBIITdGIlqx2xB
+	 ocHNNMAvEAGSRb0QruT/6dHLk5YnMst83mEfyoqa+1gj/Tx4M6qm8ZuV/ylM2nxR+z
+	 Pk3F64ugrSpL3QBiYDEWTkVq3OVdbdTUS9t0TCxNGzK1k3onSHhRQ0s2DHwoKtTN0D
+	 zmIbHJrYbd5NIXRjreE99Erjqy7MtF78WiblhKhnH7SgD3/iBaIwkT8I8uZBAs/XcO
+	 /nSJAh5eNsw9OMIx7dYlcB+sLKfKRdkB7Ked7wQBsA1IHmk3lF4qgd9Z13tjtUNysh
+	 Re/0n14H6Xsmw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9B343391AF99;
+	Mon,  9 Nov 2026 23:00:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -93,50 +53,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] net: lwtunnel: use GFP_KERNEL in build_state
- paths
-To: Max Boone <mboone@akamai.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
- Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: Donald Sharp <sharpd@nvidia.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Debabrata Banerjee <dbanerje@akamai.com>, Nick Hudson <nhudson@akamai.com>
-References: <20261106-build-state-use-gfp-kernel-v1-1-18084382f878@akamai.com>
-Content-Language: en-US
-From: Justin Iurman <justin.iurman@gmail.com>
-In-Reply-To: <20261106-build-state-use-gfp-kernel-v1-1-18084382f878@akamai.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v1 0/6] Fix ring buffer callback consumption
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179426520918.3532311.3624579682488216373.git-patchwork-notify@kernel.org>
+Date: Mon, 09 Nov 2026 23:00:09 +0000
+References: <cover.1794253561.git.memxor@gmail.com>
+In-Reply-To: <cover.1794253561.git.memxor@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, kkd@meta.com, kernel-team@meta.com
 
-On 11/6/26 12:40, Max Boone wrote:
-> Since 3d25eabbbf67 ("ip_tunnel: Add dst_cache support in lwtunnel_state
-> of ip tunnel"), build_state runs outside RCU and all its callers can
-> sleep, but paths still use GFP_ATOMIC.
-> 
-> For dst caches, that limits allocation to populated percpu pages. A
-> large burst of SRv6 nexthops outruns the refill worker and will fail
-> with -ENOMEM despite there being free memory:
-> 
->    percpu: allocation failed, size=40 align=8 atomic=1, atomic alloc
-> failed, no space left
-> 
-> Batching 20000 RTM_NEWNEXTHOP under QEMU gave 10-109 failures per run
-> before, none after.
-> 
-> This commit converts the allocations reached through ops->build_state()
-> and are called after the rcu_read_unlock():
-> 
->    - ila_build_state(), ioam6_build_state(), rpl_build_state(),
->      seg6_build_state(): build_state ops
->    - bpf_parse_prog(): only called from bpf_build_state()
->    - lwtunnel_state_alloc(): only called from build_state ops (also
->      affects mpls, ip/ip6 tunnel, xfrmi and seg6_local)
-> 
-> Signed-off-by: Max Boone <mboone@akamai.com>
-> Reviewed-by: Debabrata Banerjee <dbanerje@akamai.com>
-> Reviewed-by: Nick Hudson <nhudson@akamai.com>
+Hello:
 
-Reviewed-by: Justin Iurman <justin.iurman@gmail.com>
+This series was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+
+On Mon,  9 Nov 2026 20:47:26 +0100 you wrote:
+> Commandeering some patches from Tamir for libbpf ringbuf callback
+> consumption fixes. See commit logs for details.
+> 
+> Tamir Duberstein (6):
+>   libbpf: Honor zero consume bounds
+>   libbpf: Prevent NULL callback crash
+>   libbpf: Reject overwrite callback use
+>   selftests/bpf: Test ring buffer consumption with a zero bound
+>   selftests/bpf: Test the ring buffer consumer with a NULL sample
+>     callback
+>   selftests/bpf: Test that callbacks reject an overwritable ring buffer
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v1,1/6] libbpf: Honor zero consume bounds
+    https://git.kernel.org/bpf/bpf-next/c/40edacd47993
+  - [bpf-next,v1,2/6] libbpf: Prevent NULL callback crash
+    https://git.kernel.org/bpf/bpf-next/c/c0628a0659b6
+  - [bpf-next,v1,3/6] libbpf: Reject overwrite callback use
+    https://git.kernel.org/bpf/bpf-next/c/f756eedb24d4
+  - [bpf-next,v1,4/6] selftests/bpf: Test ring buffer consumption with a zero bound
+    https://git.kernel.org/bpf/bpf-next/c/c82153312a0a
+  - [bpf-next,v1,5/6] selftests/bpf: Test the ring buffer consumer with a NULL sample callback
+    https://git.kernel.org/bpf/bpf-next/c/21f96738feb7
+  - [bpf-next,v1,6/6] selftests/bpf: Test that callbacks reject an overwritable ring buffer
+    https://git.kernel.org/bpf/bpf-next/c/249c9bb9f3ac
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
