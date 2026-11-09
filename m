@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794253763;
-	b=kQ0Fg5WoxBtdLw66dmscyLGSNSYArpCwhhXbF0EXoJHtIOtNdqCgSX5Uvab2yeIazKI0
-	 VJ6DlMk6AblYIS2Nlpe7LSDh8muP9iIppP/LfiCfZVcKySlSuvR6hTQlPBxDYmoQS0cFO
-	 tBeZdnGS+a1xbAi0aQyl3Y12GNIcleTnhseaWIIbKfSkYcSucKxoqEv818ioNWt2D7/Y9
-	 ia44UjQNGnPJeCLrHt2YvIreJL3ToEfixWj2EYIcT7uTnEe1rSXlqtHbtZCkSeV9dPqsx
-	 5kIKM1pVtTXBTqgwCnuSA8JEe89l2pqULaX+e3xKXSytmd/+Cyxv9HRyE4iXAGGcMtQ==
+	t=1794253774;
+	b=EGsK6CQk1ga4UlvkRMgcj+2zKd6XFIZ2N9vbgzVGpskT3+f/uRSEQWMYBfbD4XXgKJWJ
+	 vJ8CtJkRPr5bvq6wX4KgCvKPJHVJDE8y3gw5dcAygTtlUpk9xfYOo0PkMZDqMbAEGu8EV
+	 tfxTwcFvCMynZP+fjqbnAMRW3LssXV6pWgi4bUzfXqMdv0Qrnb+cdVKhuoOS3RCiqiMOQ
+	 RCI4BagR9pm26xlKaDhsvFp6b02h+dcxyURO9GqEbXJhe5pTuuIgVudUw7sslnkZqLLjY
+	 Bo7mngSD2Q0K+FAYyXZdDXaCWzEImEva/UrP7p+prpgu+pQGneTJOodZTiH7QSdZxGQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794253763;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794253774;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=6uYZlzUkYuV0QU50JNXZ76p2Ot13Vwc+AOqGGnYBP2M=;
-	b=xBQg9WSDXuTzXzDEPz3azXbiv2oINaeCkfNzNiuuSBq2ZEr1+CI9V9Q7t6sbuVOqzhyw
-	 PRU+nCU4VbUfbXNsSSUK4SEPurvRzBQ8IEIbG761dXBqWEAWTgaAbyhBDUV5tyTclh6wW
-	 g/gc9d0MD5uACq02R7vJwisypi+hto1H+edcWniwqoMcJCvYWXeSjdEI/WqThoiSm14pv
-	 PrVy9h9dMW5ypnNqc94x43OgKlzU/ND9dD3isIJNRKUkRUr07zLhtIB6D7quDU2vWt9Bd
-	 jaTO8nzIKoCy5VUIULaFQcAJQhUhJngpZZnQjoZK2Oyy51ZNix95BZ4TKoSqe9uVOgA==
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=UatCj+DwgBywpSp3E9BN8ilewOuAQkyoMBcI+t7HhdU=;
+	b=aNtYwmoagKRPepUnjFBIIFIL/0y4bbgaknEMdYnap4eZnqoK4QVIJE4Tt/BwlKHF5MCd
+	 gpt6r93D8MvQx5eSvzgCIUcsTEkrOGLOWZJ19LHpaftMkiLF28KhlIUkJfu5ShgIqJahc
+	 sYKpRBV0h32RZW8d2a/lXAmL9G4ESnGidpHgONXyhYePIUOhwqtI3MTFVIPrq3wyDPu8u
+	 V31ihs6cFtebOb1RC7uuO/svqaO7CSIJmbxlcodP5rcNeNW7CHdV/BGWbPQlm2i7F/grt
+	 56a9d0LpuTnIO485R3ffZ9x840R1pZjfKIg+LFritbfGwiBmTdy8cePqw+UiblrzPfA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CI1REky4;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S0VyzQd6;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D53F606A326;
-	Mon,  9 Nov 2026 19:49:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B5E60A262E;
+	Mon,  9 Nov 2026 19:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CI1REky4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E256D1F008A1;
-	Mon,  9 Nov 2026 19:49:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S0VyzQd6
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F12EC1F008BD;
+	Mon,  9 Nov 2026 19:49:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794253762;
-	bh=6uYZlzUkYuV0QU50JNXZ76p2Ot13Vwc+AOqGGnYBP2M=;
-	h=From:To:Cc:Subject:Date;
-	b=CI1REky4h0qVA+JPGs+6PUHJD31QUllGBES8CiKFP+eZ8ss+iWTnJwPD74V3GbrVb
-	 6quiFlky3NIuS66oUYHGKqIIbiHcB2snRbDSiGMRCm8DOr/xYfFs1PHiBmvSUV0wmf
-	 pxc9gYnX/sTUSFLVZZUM3UAinDyabNi6N9oTX1VYLLnEIcwW9hGhv+Yz/M6Qf8Jacs
-	 whk5PgSb+MPmipnFYsOIe+dCqdFHsGVSLBr4hyjIYMJPCwfcTW96i/52OhLdTikB0n
-	 VPQWHXKv/NxzIck5Beka7YdekHkvt/U3YdVUvRGfa/SNVM2CbWL7l+Oj/ZIntr6As7
-	 3joODekM/qyEw==
+	s=k20260515; t=1794253773;
+	bh=UatCj+DwgBywpSp3E9BN8ilewOuAQkyoMBcI+t7HhdU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=S0VyzQd64co/Lt4/zPfz7Do1LAaZ7QmjMHFzRtexQwmFX9cSzqzaWjrLypR0MU3kz
+	 aCpBz6+8YGAneKmDIPloRpbMj6DEQEHCneEHdXVW3/AO9Fg3my66dbrVvALszTsK/R
+	 shPDPYsbocfI1/Tk04sYY5ZlX6rhhZdFcGTaABZvY+JnyUgT1XYif64I2xjmn4fl3v
+	 CSs92GeF3aZrwLj8U2Yc00xhH9B7fzG4jBBhhieKOdZ7hiy7tY40ShM9OaP1mOJKTx
+	 Us9KddQUIXMEAH9CZAqRMaAlfQ95wScnH7h5JyOluHs08VG3EwwFjQChFRKIM9AQCO
+	 TLZjoZZpt1xLw==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Masami Hiramatsu <mhiramat@kernel.org>,
 	Naveen N Rao <naveen@kernel.org>,
@@ -56,10 +56,12 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH 00/13] kprobes: Reduce registration and optimization lookup costs
-Date: Mon,  9 Nov 2026 20:49:03 +0100
-Message-ID: <20261109194916.1089703-1-jolsa@kernel.org>
+Subject: [PATCH 01/13] static_call: Index code text reservation lookups
+Date: Mon,  9 Nov 2026 20:49:04 +0100
+Message-ID: <20261109194916.1089703-2-jolsa@kernel.org>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261109194916.1089703-1-jolsa@kernel.org>
+References: <20261109194916.1089703-1-jolsa@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -71,90 +73,172 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-hi,
-this series reduces repeated lookup work when registering and preparing
-large numbers of kprobes, particularly on x86 with optimized probes.
+Text reservation checks scan every static call site. Build an address-sorted
+index for core text sites and use binary search to find the starting point
+near the requested range.
 
-The kernel already provides interfaces for registering large numbers of
-kprobes. Faster registration will become more important for our planned
-inline function tracing support, which will use kprobes.
+Module indexing is intentionally unsupported. Module reservation checks
+continue to use a linear scan, avoiding per-module index allocation and
+teardown complexity.
 
-The changes address two kinds of lookup:
-
-  - add indexes sorted by code address for core static-call and jump-label
-    reservation checks. The original tables remain sorted by key for
-    updates. Build the indexes during late init and retain linear scans
-    if allocation fails. Module reservation checks remain linear.
-
-  - add an address-ordered rbtree of registered kprobes and iterators for
-    ranges and monotonically increasing addresses. Convert instruction
-    recovery and optimization checks to reuse these iterators instead
-    of repeatedly looking up individual addresses.
-
-The series also determines x86 jump-label instruction sizes directly
-from their opcode or NOP encoding, avoiding instruction decoding.
-
-The final samples patch is included only to demonstrate the testing and
-is not intended for merging. It adds 50k functions to the kernel, along
-with sample module code that registers kprobes on them, simulating kprobes
-on inline kernel functions.
-
-There's overall speedup about 10x for registering the kprobe, please check
-the perf stats below. Plus there's one more low hanging fruit leftover I
-plan to send later for bug entry lookup that will add bit more speed up.
-
-The test below measures perf stat for the probe_many_example.ko module to
-attach kprobes to 20,000 functions.
-
-  Performance counter stats for:
-    'insmod ./samples/kprobes/kprobe_many_example.ko nr_functions=20000':
-
-  Before:
-    50,908,260,992      cycles:k                                                              
-    53,886,723,615      instructions:k                                                        
-
-      10.072721766 seconds time elapsed
-
-  After:
-     5,122,978,035      cycles:k                                                              
-     5,620,945,319      instructions:k                                                        
-
-       1.027289983 seconds time elapsed
-
-thanks,
-jirka
-
-
-Assisted-by: LLM
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (13):
-      static_call: Index code text reservation lookups
-      jump_label: Index text reservation lookups
-      jump_label/x86: Avoid decoding instructions for jump entry size
-      kprobes: Maintain an rbtree of registered probes
-      kprobes: Add an iterator for address ranges
-      kprobes: Add an address iterator for probe lookup
-      kprobes: Use kprobe iterator in get_optimized_kprobe
-      x86/kprobes: Use kprobe iterator in __recover_optprobed_insn
-      x86/kprobes: Use kprobe iterator in arch_check_optimized_kprobe
-      x86/kprobes: Use kprobe address iterator in can_optimize
-      x86/kprobes: Use kprobe address iterator in can_probe
-      x86/kprobes: Use kprobe address iterator in in copy_optimized_instructions
-      samples/kprobes: Add batch probe example
+ kernel/static_call_inline.c | 114 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 112 insertions(+), 2 deletions(-)
 
- arch/x86/kernel/jump_label.c          |  14 +++++++----
- arch/x86/kernel/kprobes/common.h      |   7 +++---
- arch/x86/kernel/kprobes/core.c        |  26 +++++++++++--------
- arch/x86/kernel/kprobes/opt.c         |  32 ++++++++++++++---------
- include/linux/kprobes.h               |  25 ++++++++++++++++++
- kernel/Makefile                       |   3 +++
- kernel/jump_label.c                   | 115 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- kernel/kprobes.c                      | 134 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------
- kernel/kprobes_many.c                 |  81 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- kernel/static_call_inline.c           | 114 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--
- samples/Kconfig                       |   8 ++++++
- samples/kprobes/Makefile              |   1 +
- samples/kprobes/kprobe_many_example.c |  80 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 13 files changed, 598 insertions(+), 42 deletions(-)
- create mode 100644 kernel/kprobes_many.c
- create mode 100644 samples/kprobes/kprobe_many_example.c
+diff --git a/kernel/static_call_inline.c b/kernel/static_call_inline.c
+index 2b6a0d99cdbe..884dfc897a1f 100644
+--- a/kernel/static_call_inline.c
++++ b/kernel/static_call_inline.c
+@@ -15,6 +15,18 @@ extern struct static_call_site __start_static_call_sites[],
+ extern struct static_call_tramp_key __start_static_call_tramp_key[],
+ 				    __stop_static_call_tramp_key[];
+ 
++struct static_call_site_index {
++	struct static_call_site *base;
++	unsigned int nr;
++	u32 entries[];
++};
++
++/*
++ * Index static call sites by code address for text reservation lookups.
++ * The site table itself is sorted by static-call-key address.
++ */
++static struct static_call_site_index *static_call_site_index;
++
+ int static_call_initialized;
+ 
+ /*
+@@ -41,7 +53,7 @@ static void static_call_unlock(void)
+ 	mutex_unlock(&static_call_mutex);
+ }
+ 
+-static inline void *static_call_addr(struct static_call_site *site)
++static inline void *static_call_addr(const struct static_call_site *site)
+ {
+ 	return (void *)((long)site->addr + (long)&site->addr);
+ }
+@@ -301,6 +313,79 @@ static int addr_conflict(struct static_call_site *site, void *start, void *end)
+ 	return 0;
+ }
+ 
++static int static_call_site_index_cmp(const void *a, const void *b, const void *priv)
++{
++	const struct static_call_site *base = priv;
++	unsigned int ia = *(u32 *)a;
++	unsigned int ib = *(u32 *)b;
++	unsigned long ca = (unsigned long)static_call_addr(base + ia);
++	unsigned long cb = (unsigned long)static_call_addr(base + ib);
++
++	return cmp_int(ca, cb);
++}
++
++static struct static_call_site_index *
++static_call_site_index_alloc(struct static_call_site *start,
++			     struct static_call_site *stop)
++{
++	struct static_call_site_index *index;
++	unsigned int nr = stop - start;
++	unsigned int i;
++
++	if (!nr)
++		return NULL;
++
++	index = kvmalloc_flex(*index, entries, nr, GFP_KERNEL);
++	if (!index)
++		return NULL;
++
++	index->nr = nr;
++	index->base = start;
++	for (i = 0; i < nr; i++)
++		index->entries[i] = i;
++
++	sort_r(index->entries, nr, sizeof(index->entries[0]),
++	       static_call_site_index_cmp, NULL, start);
++
++	return index;
++}
++
++static int
++static_call_site_index_text_reserved(struct static_call_site_index *index,
++				     void *start, void *end, bool init)
++{
++	unsigned int low = 0, high = index->nr, i;
++
++	/* Find the first site after @start. */
++	while (low < high) {
++		unsigned int mid = low + (high - low) / 2;
++		void *addr = static_call_addr(index->base + index->entries[mid]);
++
++		if (addr <= start)
++			low = mid + 1;
++		else
++			high = mid;
++	}
++
++	/* The preceding site may overlap @start. */
++	if (low)
++		low--;
++
++	for (i = low; i < index->nr; i++) {
++		struct static_call_site *site = index->base + index->entries[i];
++		void *addr = static_call_addr(site);
++
++		/* Later sites cannot overlap once this address is past @end. */
++		if (addr > end)
++			break;
++		if ((init || !static_call_is_init(site)) &&
++		    addr_conflict(site, start, end))
++			return 1;
++	}
++
++	return 0;
++}
++
+ static int __static_call_text_reserved(struct static_call_site *iter_start,
+ 				       struct static_call_site *iter_stop,
+ 				       void *start, void *end, bool init)
+@@ -483,7 +568,15 @@ static inline int __static_call_mod_text_reserved(void *start, void *end)
+ int static_call_text_reserved(void *start, void *end)
+ {
+ 	bool init = system_state < SYSTEM_RUNNING;
+-	int ret = __static_call_text_reserved(__start_static_call_sites,
++	struct static_call_site_index *index;
++	int ret;
++
++	/* Pairs with the release in static_call_site_index_build(). */
++	index = smp_load_acquire(&static_call_site_index);
++	if (index)
++		ret = static_call_site_index_text_reserved(index, start, end, init);
++	else
++		ret = __static_call_text_reserved(__start_static_call_sites,
+ 			__stop_static_call_sites, start, end, init);
+ 
+ 	if (ret)
+@@ -522,6 +615,23 @@ int __init static_call_init(void)
+ }
+ early_initcall(static_call_init);
+ 
++static int __init static_call_site_index_build(void)
++{
++	struct static_call_site_index *index;
++
++	/*
++	 * Build the index in an initcall so normal memory allocation is
++	 * available, static_call_init() can run before that.
++	 */
++	index = static_call_site_index_alloc(__start_static_call_sites,
++					     __stop_static_call_sites);
++
++	/* Publish the initialized index to static_call_text_reserved(). */
++	smp_store_release(&static_call_site_index, index);
++	return 0;
++}
++late_initcall(static_call_site_index_build);
++
+ #ifdef CONFIG_STATIC_CALL_SELFTEST
+ 
+ static int func_a(int x)
+-- 
+2.43.0
+
