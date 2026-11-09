@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794235665;
-	b=AJYB0SXoK0fH393bQSq1OjYiXMq9wWKQfT8cTiD/UBe96Mu+jDgVgsTG1asRQAINQfxu
-	 QVNXEfQXaSGswDNcFLkQMRB8DaOejKZKXkTnejk+42Yc+vOQHq+YE4JT4Hl+NfKbakhUe
-	 TYiWzzzFrlNzRSKWQXFtRMdEYgFQO9NFn+DmVxrPrLAwQbqokVb9Alb9M9ijxKNKuvjAv
-	 yTwh5cjwuVq6NQPzJFCyRCj1gWGQfGV44ym89xeXALMgMOVStr/rVrCLyD62v8/D0vw1l
-	 xZ0TebXwFfYHdht2dt5sHYYWPi4Eww2UDjjYoN+FK8Gc2OEFKwsMCT9qrxMZ1c3r58w==
+	t=1794235661;
+	b=nIvyu7ewgB3Y+k5wBlEjQiEZp9uan5KkUgBVzw1ZSEuXB+QCgLkU+YarD+yaO+mN/jPG
+	 hjCZ3Go+LGv6Q4wF1xriCi16mKvLrwOplc1RaEvOnXdGb2YwFE/0lXRNU30w1lnsM7RXw
+	 D2W6Rc6OamtUrmrs/Tuik4UKyFDLix/1GNoDCh2U6liNMYVY+JzGocXxvsD9RBW4sZsIN
+	 GhVBTCdYhBxWdD2Lepzxrd9iQ1iVSNTFuFwcJRrkMYvwy2EAx6ZT+IUDKeO83IgL/hQpZ
+	 1nGXdy4nzHCchuQRUg2RFLonnpI1XlddDUh8KTd56SukE2HE2B+pPEdQYsZgBgO6t2g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794235665;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794235661;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Bwn4oMi4wD4Hm2RlK2+vnAdq4AFCLTg3OHrUehp6rKQ=;
-	b=zCG3yLN8mSgr5bRHbp/BJhu3H4mtXl9jYwFEVrb3KQ5DwUanRbSOBm7hXQslavX+a/90
-	 GuEkD9kpIXsbFLaGB2ZNVqErSR6fU5HsxUm5Q01ScGG5da5iHSApl7X56C8g1Gg3WmrTF
-	 T1KwjYtV3Qgra2/N2ng2hQwa/ui0m2t+OqVOh1SBxVC+CbAKUEuoZhFXy8HhkJf53sc3D
-	 NXAXbXqHHvCbLawF+6D2XAaIfTgkOM3JspMp4k0RV5Us4N/JRWkAx8ihoJPZymlAQ6uI6
-	 zdypE2WmebgQX1MpAZ6BYRWyanPKDz4AmXprkOglfpe+mEsnn1i474kZA6uaLc9PvKQ==
+	bh=9cPLPAVcEOwBLk/Nk6KbuGfr7S0+BQfhEGmd0X57WrM=;
+	b=mPRHmcaPknQswEHaZJDrXIZ/opgiPEIXcI5ZfE818OZBcsaBh61wb8IW/jNtNPiVZLxP
+	 NltEqUEK/Qd2fm5ujcDGCxjMP3qNRFkm9Ln1D8McO9gSsb6o9Cvdp3uBXCAidBsKzjE04
+	 A2q62ljcUctKY2R4Pr8qHeuSXO6stOCSX15Gg9EFvGz4gxZDJ4B+xNeLiXtLazAeoynaN
+	 Ok/X02TOJCnBVRulbgswnnRxCgRjEYPnshcQqE0IHCINPfKlaoEK6pwPnNdgkdT5NAFHW
+	 697DUiXBeZWQC7bSMx/0DVzaO7A08mHkR9LJv7oqpZGV0aqVW4nb2DvzARmwuObQeaw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y1u1vckD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rhrs+P3H;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A57606D807;
-	Mon,  9 Nov 2026 14:47:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42647606A31C;
+	Mon,  9 Nov 2026 14:47:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y1u1vckD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C3521F008A6;
-	Mon,  9 Nov 2026 14:47:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rhrs+P3H
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55A511F0089F;
+	Mon,  9 Nov 2026 14:47:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794235664;
-	bh=Bwn4oMi4wD4Hm2RlK2+vnAdq4AFCLTg3OHrUehp6rKQ=;
+	s=k20260515; t=1794235660;
+	bh=9cPLPAVcEOwBLk/Nk6KbuGfr7S0+BQfhEGmd0X57WrM=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Y1u1vckDjH8hJB76C9UNV0Jie/UmxwTJ5xCoKFaBVFS4pYMvG3XP6ao8osYS5luGt
-	 7IVgAGiHiC++Y2xxERgx+6vLb53UrAUWJmxrXRdcEN4FT+hwDfqJnhGunyxwQY+1wg
-	 dySHKzmjZyPtmc2K0aXZCxNNP4iIhz5MpRZa7P8WvVU6zcSqPNJW6LFDSUBee47nYs
-	 FqF7Rk++hN2aYFPUo5ia4Wt4gc34hbT5NtZzXQM6cr9f0To21UNWQy7+Nr7aGy1//8
-	 jr959VB8xHKzHPTajKdbEL9KY3nOpthHwGV4xxp5+Nku32c1LqMm5PIz7ghcqbd3LA
-	 XFDDcIbadTZzQ==
-Content-Type: multipart/mixed; boundary="===============0156833231429614843=="
+	b=Rhrs+P3H4AnKUavy4PrxroYsuROG9hChr1Lx04aqxyz2BS7m30jUG513px0IO3ffB
+	 bH1H6TjGLP8BztwxmEUBzE7lq95rFUENYid/Ho2sOh9jFb5Ch3vSdteGs4ixbcR6tE
+	 Pz5g3o4sQXprjFGB4OvsxF3iMDxxlyiH9GWVfxRQ4axm7tvR4XxN6fOzZf1THXaDae
+	 yoBkTfx+gQ/MBPGv3F3+AAtv3y3p5y0ucCLPXRWzLrDkLPthKZrXGQPSO+1g7n6U8y
+	 uClDYUfZTcdXl2ajP1YRPb9cwL9mwu1N4mAjZD1XQYutbeJdaZgDJqJbVVHdu+UAns
+	 X4lBmaPv0TO9A==
+Content-Type: multipart/mixed; boundary="===============4240390738181790142=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,78 +49,69 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <8b9e5217cbe9c192e678ce5c8d59f573c80a659d72211f5b91c905ed00ebb799@mail.kernel.org>
-In-Reply-To: <20261109140816.5196-6-leon.hwang@linux.dev>
-References: <20261109140816.5196-6-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next 5/9] libbpf: Add log_opts support for BPF_TRACE_ITER
+Message-Id: <5ed2ec09ce8a3ce5477a658b68c6315499ef67793014be27de18ee57ec968e12@mail.kernel.org>
+In-Reply-To: <20261109140816.5196-2-leon.hwang@linux.dev>
+References: <20261109140816.5196-2-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next 1/9] bpf: Add log support for tracing link_create
 From: bot+bpf-ci@kernel.org
 To: leon.hwang@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com,kpsingh@kernel.org,matt@bobrowski.net,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  9 Nov 2026 14:47:44 +0000 (UTC)
+Date: Mon,  9 Nov 2026 14:47:40 +0000 (UTC)
 
---===============0156833231429614843==
+--===============4240390738181790142==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> libbpf: Add log_opts support for BPF_TRACE_ITER
+> bpf: Add log support for tracing link_create
 
-TL;DR:
-- libbpf BPF_TRACE_ITER case may not reject stray bytes after iter.len
-  (missing OPTS_ZEROED check), so unknown fields could be silently ignored
-- Nit: iter.len test in the legacy branch looks like dead code
+TL;DR: Logging is incomplete: the freplace max_ctx_offset check in
+bpf_tracing_prog_attach() still returns -EINVAL with an empty log, and the
+saved_dst type mismatch may too. No functional regression.
 
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
 
 [ ... ]
 
-> @@ -821,6 +816,16 @@ int bpf_link_create(int prog_fd, int target_fd,
->  			return libbpf_err(-EINVAL);
+> @@ -3843,6 +3849,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+>  	 */
+>  	if (prog->type == BPF_PROG_TYPE_EXT &&
+>  	    prog->aux->kprobe_write_ctx != tgt_prog->aux->kprobe_write_ctx) {
+> +		bpf_log(log, "Invalid kprobe_write_ctx.\n");
+>  		err = -EINVAL;
+>  		goto out_unlock;
 >  	}
->  
-> +	if (iter_info_len) {
-> +		if (OPTS_GET(opts, iter.len, 0))
-> +			return libbpf_err(-EINVAL);
-> +		iter_info = OPTS_GET(opts, iter_info, (void *)0);
-> +	} else {
-> +		log_opts = OPTS_GET(opts, log_opts, (void *)0);
-> +		iter_info = OPTS_GET(opts, iter.info, (void *)0);
-> +		iter_info_len = OPTS_GET(opts, iter.len, 0);
-> +	}
-> +
 
-When the legacy iter_info_len is non-zero, the check above already requires
-OPTS_ZEROED(opts, target_btf_id), which covers every byte from that offset
-up to sz, including iter.info and iter.len.  Can this OPTS_GET(opts,
-iter.len, 0) test ever be true?  It looks like dead code.
+The check right after this one still returns -EINVAL without writing
+anything to the log:
 
-[ ... ]
+	if (prog->type == BPF_PROG_TYPE_EXT &&
+	    (tgt_prog->type == BPF_PROG_TYPE_RAW_TRACEPOINT ||
+	     tgt_prog->type == BPF_PROG_TYPE_TRACEPOINT ||
+	     tgt_prog->type == BPF_PROG_TYPE_SYSCALL) &&
+	    prog->aux->max_ctx_offset > tgt_prog->aux->max_ctx_offset) {
+		err = -EINVAL;
+		goto out_unlock;
+	}
 
->  	switch (attach_type) {
->  	case BPF_TRACE_ITER:
->  		attr.link_create.iter_info = ptr_to_u64(iter_info);
->  		attr.link_create.iter_info_len = iter_info_len;
->  		break;
+An freplace program whose max_ctx_offset is larger than that of a
+RAW_TRACEPOINT, TRACEPOINT or SYSCALL target will get -EINVAL from
+link_create with an empty log and log_true_size of 0.  That is the same
+kind of invalid freplace target as the kprobe_write_ctx mismatch above,
+which now logs.  This isn't a functional regression, but was this check
+missed?
 
-Every other union member's case ends with a check such as:
+Would something like this cover it?
 
-    if (!OPTS_ZEROED(opts, tracing_multi))
-            return libbpf_err(-EINVAL);
+	bpf_log(log, "Extension accesses more ctx than its target.\n");
 
-Should the BPF_TRACE_ITER case do the same with OPTS_ZEROED(opts, iter)?
-
-On the new iter.info/iter.len path, nothing checks the bytes after iter.len.
-A caller that sets opts.iter.info, opts.iter.len and opts.tracing_multi.cnt
-gets the stray field silently ignored instead of -EINVAL.  Likewise, a
-later field added to the iter struct after len, built against newer
-headers, would be silently dropped by this libbpf because sz still equals
-sizeof() and OPTS_VALID() cannot see it.
-
-Legacy callers would be unaffected, since their union is already zero, and
-the iter.len test in the legacy branch could then be dropped.  The later
-commits in this series only touch selftests and do not address this.
+Also, bpf_check_attach_target() still returns a bare -EINVAL for the
+saved_dst_prog_type / saved_dst_attach_type mismatch, which is the
+"freplace attachment to a new target" case the commit message mentions.
+That code is in verifier.c, so it is outside this patch, but is it intended
+to be left without a message?
 
 
 ---
@@ -128,4 +119,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42633880300
---===============0156833231429614843==--
+--===============4240390738181790142==--
