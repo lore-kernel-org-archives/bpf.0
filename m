@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794254243;
-	b=ekDkKlmEBxBlpyOFBHiy5zrKiNWq5Dv48Z2eqn7Q+SWjER5Aw315O48QEgoSKwAkj5Jt
-	 T8an7lTaw9fhMy5l14RRps64RtXqb0pPBNimba8QR2M4BzXyhWfuJiV18YUKFA19KA7FY
-	 swVOkFWJ1lKSRn43QJmC1KCUzrOJ+01CJYwnwjIzct25sXfXmqAHmU3RTcFavHozNH4Ax
-	 6Guba0yh4on0VSQ9W5PJ+IDXxi+xl/sJ+WqY6JRRu0FVwPQFGy9n5hCY+ygS7jqp9gByu
-	 PzW6ZRn+urCDE0gzrG+WEgeGJuYm+kQ4ufn6g5pF3i9ltsgo6PfnWVAnywCB1WVCO9Q==
+	t=1794254257;
+	b=YI2cVzTAFJACgWjRa9d40FGQVndu6/9Ew71aGKSu7dANtxRy/AHVXsBlFze6w+y5zpcR
+	 b4wriwYmA8Xntvy+wyBElJ7/ynMHlw0JHfQ5NWwEZ6Beb58A1X4oS3KhkuiBaU0lDHKfq
+	 AInL4ZlHco2Ne9YwPnJC6aoJTjxXa57y8f9SWNeOkys1OzokL/UZoa17/4jGnl0Vqnv9y
+	 Nafa0/qSfdS487TTIV9ggW8KjWcw0M09TGpKTaAdOyS20whjEKme6vSaIwSiyppW0BP9M
+	 ZDPzy2tQxRt/3vlLBESgpM/bqtWw4T3dzYOLdHlcpD4MRkrNRqfE+Try1euQtmWiTTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794254243;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794254257;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=0LSUu1FKxGaYsKzFJCXoNRTLgX6dRmQ1kbiGL9NiX2w=;
-	b=oeTwNgoQaPZfmdRvcbzoJP7P6Q8jliL50tuOSmUKPNviv0MCgZHgg4ME3khSoBOzjpwu
-	 mV7getzy8em/ZySgNqFaljwbJdPwI4DWOB6JGwWiq1DkaAx1GoBDmYjzqaUctAZk0hZX3
-	 7nmbaWoGxkLF+2QrA9CwXZ9e2aftJ6CGKwJ4FCiX2u0M/dV7OjqtiQ1+VC9kvIDAlRx0c
-	 g9JJoZNrM5TIMVqT3mNazqv432wVbpqpQOt0HjEkX7t+VUuXLtgs0scOqx1FdRcBtl6BQ
-	 s+TrhSH05VEPqgrfu4zkXmQsG8wVOZCIMFg9fo7grqwiNJBjxXJ54/LVThCLEWj0Mdw==
+	bh=RqeZNMD/GyMZFkUQART8v8x1xTg3ZSj2kgmRBUS5Nyc=;
+	b=QVPZtHFa6k9uxJdL8I3XdnCjfPuNchWg9W1wNvyh+lZ7h5vQQv3Lis08TBRpOhOD43qc
+	 EtBTNJ76zogeCsyQ4KgV66+AGBZLyTUW9WzJ6zE8CrbIJAfkdDzunGKzZRnxjxZMGGLNL
+	 fq9VSt+nz6PrGNBkA6hF9boG475aX7S9MKUbe/yjABSjC/4TAnEICkPlyvYY8UpV+aTG/
+	 0FV4r5bL20eD5NhZvUkB2WKAeyj3JPmGqY3kb7IEdjPZHoR0Rl9DQtqxvXeDjpwAg9ahJ
+	 NzAV4xUTbvvLyOfpCYy1mrCW3jhhsQTSRJXIgj8iOiOooTH6SPv3M5j2SZ7aU34uQ3g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U9QGC13j;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PYHIy4UA;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22ED1606A31C;
-	Mon,  9 Nov 2026 19:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96567606A31C;
+	Mon,  9 Nov 2026 19:57:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=U9QGC13j
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D63871F0089F;
-	Mon,  9 Nov 2026 19:57:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PYHIy4UA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 985031F0089F;
+	Mon,  9 Nov 2026 19:57:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794254242;
-	bh=0LSUu1FKxGaYsKzFJCXoNRTLgX6dRmQ1kbiGL9NiX2w=;
+	s=k20260515; t=1794254257;
+	bh=RqeZNMD/GyMZFkUQART8v8x1xTg3ZSj2kgmRBUS5Nyc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=U9QGC13jcU7B2xTHW4Pxotcv/UOVUvelf/zitRP3O02rC4npcEeGCLfsoFoGfTdLd
-	 eck3nwcp80mEAE5F1vIK+5bFvRvKpZ95M2o4nvFfn1sNpw3NLSAn+JonTXTYAFST7G
-	 WkCjsxN3Jj1xZAXsaJGxD2sD5rv1Wb+9SCFd4dwfUfgD2bmeq7KKJ8fAb6eWuEJW3q
-	 cPf04GNxyQOp6WaPZ4PtblkSbq18EZ7OlGvL6G+Vs7KYCgZNrFifM8OprEXd/KIOIu
-	 Bi2yHqL769HZYHYe2DBxGg+YGp5XL9Qnm8TRSlb0mqphkLRN64P6mIy8ZRi3X7rEan
-	 4J1GTWg/6zXDg==
+	b=PYHIy4UA30DIN8+MtXFvuziRJLhsgoyllLe6J+5ftPrqZQkbCiNXTeWcf0AafEB9r
+	 Zc5ZdVtUkFlBYWG/ihjn1SuyzyamqJtebth2qs7CDJpcpEmF0CwBrzthy9GyE0l1Dr
+	 gAsnBkbq19PTPQY2bBf8VNRIn3IMAOLyJjnXLwsfU8btWG6W9T/LnAxjaLexOAOLkr
+	 DIglluy2hDiwDIrlHbuQWZ8AGjq5Bd3ex2xb0yY3Lgc0FzN7NZkmqUq2J7a8rILRH7
+	 ZrloKIVs6S3ydj5WQWK9M2ZW2KoXbwCAzGnsOtv4WhS6lkZLgf+15yycSDuaNd2COt
+	 TFO5Tzba7syqA==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Masami Hiramatsu <mhiramat@kernel.org>,
 	Naveen N Rao <naveen@kernel.org>,
@@ -56,9 +56,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH 08/13] x86/kprobes: Use kprobe iterator in __recover_optprobed_insn
-Date: Mon,  9 Nov 2026 20:57:17 +0100
-Message-ID: <20261109195717.1091179-1-jolsa@kernel.org>
+Subject: [PATCH 09/13] x86/kprobes: Use kprobe iterator in arch_check_optimized_kprobe
+Date: Mon,  9 Nov 2026 20:57:31 +0100
+Message-ID: <20261109195731.1091241-1-jolsa@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261109194916.1089703-1-jolsa@kernel.org>
 References: <20261109194916.1089703-1-jolsa@kernel.org>
@@ -73,34 +73,37 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use the kprobe range iterator to find an optimized probe covering the
-address being recovered. This replaces repeated hash lookups across the
-JMP32 instruction range.
+arch_check_optimized_kprobe() checks each byte of the optimized range
+with a separate get_kprobe() lookup. Iterate over registered probes in
+the range instead, retaining the check for probes that are still armed.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- arch/x86/kernel/kprobes/opt.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/x86/kernel/kprobes/opt.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
-index 3f8fea52619f..9da41424be77 100644
+index 9da41424be77..cdf69c939631 100644
 --- a/arch/x86/kernel/kprobes/opt.c
 +++ b/arch/x86/kernel/kprobes/opt.c
-@@ -37,12 +37,11 @@
- unsigned long __recover_optprobed_insn(kprobe_opcode_t *buf, unsigned long addr)
+@@ -334,12 +334,13 @@ static int can_optimize(unsigned long paddr)
+ /* Check optimized_kprobe can actually be optimized. */
+ int arch_check_optimized_kprobe(struct optimized_kprobe *op)
  {
- 	struct optimized_kprobe *op;
-+	struct kprobe_iter iter;
- 	struct kprobe *kp;
- 	long offs;
 -	int i;
++	unsigned long start = (unsigned long)op->kp.addr;
++	unsigned long end = start + op->optinsn.size - 1;
++	struct kprobe_iter iter;
+ 	struct kprobe *p;
  
--	for (i = 0; i < JMP32_INSN_SIZE; i++) {
--		kp = get_kprobe((void *)addr - i);
-+	for_each_kprobe(iter, kp, addr - (JMP32_INSN_SIZE - 1), addr) {
- 		/* This function only handles jump-optimized kprobe */
- 		if (kp && kprobe_optimized(kp)) {
- 			op = container_of(kp, struct optimized_kprobe, kp);
+-	for (i = 1; i < op->optinsn.size; i++) {
+-		p = get_kprobe(op->kp.addr + i);
+-		if (p && !kprobe_disarmed(p))
++	for_each_kprobe(iter, p, start + 1, end) {
++		if (!kprobe_disarmed(p))
+ 			return -EEXIST;
+ 	}
+ 
 -- 
 2.43.0
 
