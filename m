@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794206863;
-	b=l5rGp08AqXGpRv8qG5+7/d02XrRr02gMlZVGULzZCpeL+ZiRA4IskBbq6hTHE3tnFcli
-	 gzaScktqfuZUfFaN+ygvs1mRkx73NB2yrjaTha8gt43qiugK0cb1b7byz8AegHm9iDGv/
-	 4XZkxRDDZuutBeYDVUKNzyFA1lM1+BONc/PDRsemRYcVxuthmL/b23zMYIQ9Fh9gduVKt
-	 XOLYaymSsg7/iYl+3bvevwgkCeomJmEx4B3WWuVAYpEa99GAA6ShWeEFX7cAWofmTYBKz
-	 pGOS45qSxGReLedDGlBqvUOeCewQBFG+pqgUxWnoUBBrBiTJnuPIrqPgmC5KQQzkSUg==
+	t=1794206869;
+	b=ECQEsSXEi5efmkPsJLHoxJLJ1VYsAJBMH199LSWq+2VRuR+r3oCKzbawo19tOgW7eJYt
+	 JoTQQQAfBR3KK0VCrC/+QyYtCZF0YOWVo8nSkF6cYD8GRFk1FjImaJPEpuluZa+ko9rGV
+	 t9Q+eXGTbrXuKPdvXFBhix/DP/uq3NDUVKhm7gg1sO977RDmBh2qjYRGlBAlI0zTx6TWx
+	 03brKDYxdR25d2UJHlQ0+ZIrcVE7rfwAXAmDKfiZaBZc6bC+ighwuqOjC2RMxm0qYAovK
+	 BE9NYm0BLA6tcvXesLQMs/7X7r16EpO/TKwsg4FPhIxNovWW2BuPe/ghghd2wn1ml1A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794206863;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794206869;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=4IxUgNdhIYeR4crCBW+skmyMPmqkusGbizZSabXT/yU=;
-	b=i87fJ+52mVXWtGIgyDccIkLzbZzKBcShOm9+/edF4dRWrzMVPeaTvwAge2aNc4f1EkIp
-	 C+Cn0n+JusOQN40iOH1C8DpVCH0uquOufzXZs035OrRzuha7wnhdClry2ydI6mt3zgZMz
-	 OrEXK44yx9JE8dGOI93h4OoPw8l7Iv4xLbBI8vKLJnFSg4+Q2+GrPvmEBHNiPXJOXRT/y
-	 JTMg5rSV/Oia9g4pJOOC38E99h72zphNEwWhOyRhBF4YYdvldhEefvBKazSxphEoKm9JY
-	 BY+snhM5UpzNsZ55l4xEUC209pKwiTPcSDMk2ns+wJpjHpWI6HK/iSwbHCerHm1dqcw==
+	bh=hOTIipwiVlKovdD3IHTGVofZR0oWTpY2s4HPshJO5H4=;
+	b=md8w/FI0AB9CbnbWrufhOdLtzGgv6KTHa+XUweBxjKUS2jdc1HWd65N88/Cjp7/aSB1D
+	 J8REe8nmFQ7izQBXNbHqugCZl2fF1rGuQJ5CgL9Hfr3GxsueKRtBN9RNpHpUxto/9Nay1
+	 vE21dSpH6qaPIww+Ok3IbMo7pBNs/Lzi6QxnXbIzKaznQ1RKZdslNo8s7YeIfsKQnWWUI
+	 YMD+NGKTjfk0vsyMRRRNhd7ZEY+z3pwBCbrjz4+9zyoF9shVvDli4FcS6YmWEE2WqYL2H
+	 89sz45hRr7dT5UZ7mAT6QqC69YWYvrKmxqnmmjIIjYWCjJmRXenmHg1pjhTjINJPyYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xB0JD6qm;
-	arc=none smtp.remote-ip=209.85.214.178
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rw+5r1aZ;
+	arc=none smtp.remote-ip=209.85.210.171
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E526606A31C
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 06:47:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E526606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E34A606A31C
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 06:47:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1E34A606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xB0JD6qm
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e946155442so3954375ad.3
-        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 22:47:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rw+5r1aZ
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8b2f59de176so364523b3a.2
+        for <bpf@vger.kernel.org>; Sun, 08 Nov 2026 22:47:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794206862; x=1794811662; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794206868; x=1794811668; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=4IxUgNdhIYeR4crCBW+skmyMPmqkusGbizZSabXT/yU=;
-        b=xB0JD6qmiH4xeDt7WKZEi9rxt0BL/WI17wrTBNiVrIjFllcmud8IWoKrvokNebOlfb
-         8Jxd/MdyFDPRTm/IZo3QBrsiuqu+6V4BBDP6yb0GVJ0IcBT82dNhj/26I2qjw25grycA
-         vHRC2wb7E+OuRMjCXy+5DYMy0v+l+JndIIpUjah/KTgr562sFtCsg0jfwqGQ3kffy1PD
-         tzY42latLTOYqzqL9OIbR3yNJ+E76wFPE4+QerzMuD+srUG2DFEmnLCGlgutwzFKF/GZ
-         3RBlVe9wfs3G1FUycII5sd6I2FOfc6DUhQTm6IH32wUY8Hiuzezp5sVN+JiJtTSMfMfg
-         ypaw==
+        bh=hOTIipwiVlKovdD3IHTGVofZR0oWTpY2s4HPshJO5H4=;
+        b=rw+5r1aZubVdD3NyQLm7FVrpXF5EvNqy/IE8CCOL0sblsRRPj+Cv0tybVJ+ls02tLX
+         30cCp62xNlZHbIqsNsCuipprePP6kTlWhGuzy6QuWnAid4vpI+vqEQK0QsEMXOnoNIw9
+         djdce5YTgfNp+ilTsB4d9GnkLFp8uJ7H6NAEXXl7NcBW7XgK7b8/Pdn6Sa9tsOrYG60W
+         CwlYxchb0aAgquRIgwvHdndjfc4foqBEUPxZKs2bcwxfK2kiy17fl2zZ+icQFnK5oD67
+         SUL5RpCflAawjMtVbOmSd4EM71T5Yu1tFS8QQxamzZfsvcZL+Q/5h2ARny3mLH0u0grE
+         Vc6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794206862; x=1794811662;
+        d=1e100.net; s=20260707; t=1794206868; x=1794811668;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4IxUgNdhIYeR4crCBW+skmyMPmqkusGbizZSabXT/yU=;
-        b=yXZ0WipOixEKrOLr2EEATQYNeIEmzIcqQnfNGJqPrtq0waEF4y4hsQN1uQ+EvY8Roj
-         9UVKAoh15oFx72io48EfZRwhN64StpcQuhp+1Tb5Iy87nGAKQyZ2MmntSIH1IQqdu6x0
-         FVWaNvhqXBayTgaiArOfNS2i5t7TAJXZa8efh5690oPx4x4MtnJ/u9ys0vmlIP5cRHe2
-         JBQmNS0E9IQR0kmPM7xjc4pP2+FIZeOxH9vyjOOyLFpX1zLEJ/X5QUD+HPC7Lj1TPSoM
-         RhJ87fdijRRjhjCpC27efpSQCaHDHPKCgi+yB6Oceq5VQAnClFg5Y2tCe6mbr9AuYLHS
-         rpQw==
-X-Gm-Message-State: APuU4Z/rRiIxz8GKwN8EHI7h9fw0HOeFBeNXNXffjd0QUcBTIGHgZA7q
-	Xo0D5aNLTvCZNrcFikX5gSQ4Gy+RImXVQSlo/152IMK3YhVG0BsX+Rqsx14yPw==
-X-Gm-Gg: AYBFou2Sq44kBQyMspuLfoF6BrpkoJ+cWLAlFxCVkx9ghRE6kmkgBX88JjWutT9WCbz
-	NcIs4sXJu1Xl4Gea877FqHkKdPoZdMBVztbD5mYBCFTtbGagXCj6BWiIt7Hl5YqdUP1Pmd9Tp+c
-	g4KIiPjj9QP9fKDdZwWHZJoT6XhiYvsuuJNLex2/RtbZsseKq7nDXpOuz4W0Sssu+YpCePERUvc
-	zjUotDoba6MUUQMPCekFFrKmyE9Gl58Tm6r6uEDo6Iv4iGoukHO3fU61Mg92Nwtj+Kn7/WteKE1
-	8i8OI5jGgeOjaKwYQm92k/XtBW+3dUv1jPcVIjBbq+Sj2owF7IR4Xw6/pbWRcnbJxMHgxp11JSn
-	mX5o9z9CL8tibSKUaARVlHZcz+x5Osc+um3XIaEmbZbxvOQhrn3oHfAWX2RiHbkbpFCtsz6+Wf3
-	xpwP3mpagBTjYWQfviv7EZcom9DqYbUsqwnpEO4NKe1787kb+xcKSoI2pq4M5DbvuMAI/RFx4DH
-	ifyyxf+ZFDNBHdCMqQTuaRZMnbgCRAZRfdtlHJ8FSBKpKvYakim2NAQE/hyAX1YJ25HgYngsxYw
-	W9ZdgqcbaxWB8AGY+aVHU5EREnrXVfUfS2UP55FXDNWdjmi0gK3UXPeqE/8vWWduUIfSSGUz8MG
-	W+mWdOw5bzCmvqgu7WBQ+PUmbFFWeK6efE7cqcBMdIQCZms1KEVosv6FN+c5zunbEAlNNXkt/qw
+        bh=hOTIipwiVlKovdD3IHTGVofZR0oWTpY2s4HPshJO5H4=;
+        b=x3fusdLwwD4qaJZpmhm+p1Vb7FevnWMm+QL7ZsqWrv+gC+W8+ZB4aML7xFzKntO3Jm
+         DaJhweElhpFcHOHjyTS3xAYV7aZnrzMWWj1VgDFd3uV1gTc9ZkoqIHX+vejXgKe3bMW1
+         Wze4Z4McMn5lIY4T6YohimzbeeymLuAkwLkQEER6151VqQ97WPou9bZFF68EXwcuNR1h
+         T0Dvt2H6pXak3CVBx9uYkt+4z7uoi/4lkWfLqYc22W98JOhso5RNypExPJZub2wQpFnt
+         YvMDtuGRwEAqhaHIiD1exePNvVoagzSBW3uVzlHa7bYSq820O30h9R5V7iYX7G1eo76s
+         SQ/w==
+X-Gm-Message-State: APuU4Z8A5gbWIQrsD/ysLrjQk4wXImOuIpwgeo0vyZGGz6zMkgz1fLPn
+	n7xOINlvqF0x11in+bvPivECeUypby7fWIOk2zFe2dQtsEHx/GcPQixjwpZOvA==
+X-Gm-Gg: AYBFou0oSEv+sO+7+2KReKQvpXRTTvGUijYUcPOEYvfnyphO0frLETPM2l4YgTrIvc0
+	3T1qA3QGmzG/Mp3Ig7IyN7dB5fLA2/qz4CWMsPXb8DrBtel03eev0v+id8EY4U1mkVnIX4ZyO6f
+	MvfiscVnEe+vZzsd8WPxOeInjKc5pSDlKnnLFYG/A2zuyJxn0n5yE1UQbth+MQTBgCzbFJJbJMP
+	voT2j5SK3wXN4/k7m5qqyRrWz/5wVAdjvvrxr6xpz0PU8Ur1kmKt79W4nmwAPEJ6YUIJt6BAMrY
+	36HyaRMIDxGRctDAUxvV8Y+oV66shP9L5+MVXiw74D/FFVZNDfcpm1TwaQu3539qdcGrHuxaqK6
+	62EM3+6aW84lBrHu33R2vP2/7IEPAznQT295PSW0o2rDkEW+L9tTYGGrP0pamxQ8IQEAuKKjfP6
+	oImzhxzWYh4LfvWOM9fu7C3pLvl20Q0Eg+NJwpyF8gDj2WAkPCY5zUZpiE7TDYa/GDKgv4knYPK
+	vjqRvMnsaitEycJYOxvtzO69wRbY8DTg+YWAk4lQoAoGzsXoMFXAs+ZFKpWCsJZ2xClHhri7PPS
+	LdTRn8bF00A1kDEhCKf+gPUHOjEWk4iOCXfu7l+XpVPy44/bfio6iKSgEYMLJhUP9Zg82Ot2xfv
+	2vSxlhxVXX7DJng6QurLyuBMGe0CC1DKmxRnzLMROWbAIAldyXoLq41BIQRLFysgVi75nF1gm3g
 	==
-X-Received: by 2002:a17:90b:4c8a:b0:3ae:5525:dc25 with SMTP id 98e67ed59e1d1-3b12d568df4mr3101635a91.51.1794206861850;
-        Sun, 08 Nov 2026 22:47:41 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b105881e6bsm9690399a91.7.2026.11.08.22.47.41
+X-Received: by 2002:a05:6a00:1c9c:b0:869:84b4:4b36 with SMTP id d2e1a72fcca58-8b66ee0c6d9mr3033957b3a.16.1794206867784;
+        Sun, 08 Nov 2026 22:47:47 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b64933fabdsm977355b3a.24.2026.11.08.22.47.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2026 22:47:41 -0800 (PST)
+        Sun, 08 Nov 2026 22:47:47 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 04/26] bpf: Don't join dead registers in scalar evolution
-Date: Mon,  9 Nov 2026 06:46:48 +0000
-Message-ID: <20261109064715.2382452-5-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 05/26] bpf: Simplify scalar evolution expressions at construction
+Date: Mon,  9 Nov 2026 06:46:49 +0000
+Message-ID: <20261109064715.2382452-6-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261109064715.2382452-1-alexei.starovoitov@gmail.com>
 References: <20261109064715.2382452-1-alexei.starovoitov@gmail.com>
@@ -104,94 +104,328 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-This is about the cost of scalar evolution: the work per join point. The
-time in scev.c goes down by a factor of 1.7, the number of expressions
-by 2.3. It is what pruned SSA does: no phi for a dead register. Expressions
-change, but only those that have no users: a register or stack slot that is
-dead at a join point is '?' there.
+A prerequisite of the patches that find linked registers. It is about the
+shape of an expression, not about cost: a constant offset has to stand at
+the root. These patches compare the expressions of registers at every
+conditional jump:
 
-join() constructs (any a b), which stands for a phi, for each register and
-stack slot that has distinct expressions on the two edges. That is
-a traversal of both and two or three calls of add_expr(). In loops it is
-rare. A later patch computes expressions for whole subprogs. There
-every 11th insn is a join point, and 25 of the 267 registers and stack
-slots differ. One of them is live. The others:
+	r2 = r1
+	r2 += 1
+	r2 += 2
+	if r1 > 100 goto ..
 
-- Branches leave temporaries in r0 - r5 and in the slots of their spills
-  and buffers. Where two branches join, 7 of them are dead.
-- A subprog that is out of budget goes to the last exit of the subprog, on
-  an edge that the verifier adds and the CFG does not have. Nothing is
-  known on that edge, so every jump to that exit is joined with '?'
-  in all 267. Only r0 is live there. These are 6 % of the join points and
-  have 72 % of the dead registers and stack slots.
+The jump bounds r2 too if r2 is known to be r1 + 3. The scalar id of r2 is
+dropped at the second '+='. Its expression has to be (+ r1 3), however many
+insns computed it.
 
-56 % of all expressions would be constructed for them, by 76 % of the calls
-of add_expr().
+Today it is (+ (+ r1 1) 2). transfer() records what each insn does and
+folds nothing. simplify() is called later, and only for the registers at
+the header, the latches and the exits of a loop. It traverses the whole
+expression until nothing changes, and beyond depth 8 its answer is '?'.
 
-Ask reg_alive_at() first. '?' is the conservative answer: liveness is used
-to lose precision only, never to gain it.
+Simplify in expr2(). The operands of a new expression are simplified
+already, so simplify() handles the root only. Its rules construct their
+results with expr2() too, so one rule can enable the next, 8 deep at most:
+a prog can nest partial spills as deep as it likes. An expression beyond
+that limit is correct, but not as simple as it could be. This is no
+canonical form: operands are not ordered. transform_expr(), the repeated
+pass over a whole expression, goes away.
 
-What it would cost to compute expressions for all code of the selftests,
-Cilium, sched_ext, katran, bpfjailer and programs in Rust. The last two
-rows are against loops only:
+What can be seen at once: GCC unrolls the loop of while_true() in loop3.c
+8 times, with 'volatile __u64 i' on the stack. Before and after:
 
-                                           before     after
-  expressions per insn                       1.79      0.78
-  calls of add_expr() per insn                6.4       1.5
-  scev.c per insn                          291 ns    170 ns
-  kernel instructions (perf stat)          +4.2 %    +1.9 %
-  load time (veristat)                     +5.7 %    +3.2 %
+	*fp-16=(+ (+ ? ?) 7) / ?
+	loop header at 5, non-linear latch at 76
 
-mem_peak of veristat is 0.7 % less.
+	*fp-16=(+ *fp-16 8) / (linear *fp-16 8)
+	loop header at 5, header_count is [0..536870912]
 
-An edge to a join point cost up to 267 calls of mk_any(). It costs one per
-live register that differs. That is a bound per edge: the time in scev.c is
-linear in the number of insns before and after. Progs of 100 to 1000 insns
-gain most, 5 % of the load time. Above 10000 insns it is less than 1 %.
+The loop gets an iteration count (header_count: how often the header is
+executed), 4406 -> 150 insns processed. And two edges that bring the same
+value, 'r6 += 1; r6 += 1' and 'r6 += 2', bring the same expression to
+a join point. No verdict changes.
 
-With loops only, as today, it makes no difference that can be measured.
+New rules. (+ x 0) is x. A fill that is not wider than the spill gets the
+low bits of the spilled value: (sext8 (spill16 x)) is (sext8 x). Only
+(zext32 (spill32 x)) had that. Little endian only, as before. No rule drops
+a register from an expression: collect_tested_regs() and
+collect_store_base_regs() see simplified expressions now.
+
+The level 2 log has (+ r6 -2) for 'r6 -= 2' and 42 for 'w1 = 42'.
+
+A by-product: the kernel spends 0.8 % fewer instructions (perf stat) on
+loading the selftests, Cilium, sched_ext, katran, bpfjailer and programs in
+Rust.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/scev.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ kernel/bpf/scev.c                             | 112 +++++++++++-------
+ .../selftests/bpf/progs/verifier_scev.c       |  20 +++-
+ 2 files changed, 84 insertions(+), 48 deletions(-)
 
 diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 8f8ca69482ca..7031ab00a22a 100644
+index 7031ab00a22a..4f02cd62305c 100644
 --- a/kernel/bpf/scev.c
 +++ b/kernel/bpf/scev.c
-@@ -989,8 +989,10 @@ next:;
+@@ -109,6 +109,7 @@ struct scev {
+ 	int exprs_cap;
+ 	int envs_cnt;
+ 	int stack_sz;
++	int simplify_depth;
+ 	struct expr_stack_elt expr_stack[EXPR_STACK_DEPTH];
+ 	u32 ids_buf[EXPR_STACK_DEPTH];
+ };
+@@ -178,13 +179,30 @@ static int add_expr(struct scev *scev, struct expr e)
  	return id;
  }
  
--static int join(struct scev *scev, struct env *acc, struct env *cur)
-+/* @acc is the env before the insn at @idx */
-+static int join(struct bpf_verifier_env *env, struct env *acc, struct env *cur, int idx)
++static int simplify(struct scev *scev, u32 id);
++
++/*
++ * An expression is simplified at construction. Its params are simplified already, so simplify()
++ * rewrites the root only, whatever the depth of the expression.
++ * The rules construct expressions too, and one rule can enable the next: the depth of (zext32
++ * (spill32 (+ (spill32 (+ ..) 1)) 1)) is up to the prog. Beyond depth EXPR_STACK_DEPTH an
++ * expression is correct, but not simplified.
++ */
+ static int expr2(struct scev *scev, u32 op, int a, int b)
  {
-+	struct scev *scev = env->scev;
- 	int i, id;
++	int id;
++
+ 	if (a < 0)
+ 		return a;
+ 	if (b < 0)
+ 		return b;
+-	return add_expr(scev, (struct expr){ .op = op, .params = {a, b} });
++	id = add_expr(scev, (struct expr){ .op = op, .params = {a, b} });
++	if (id < 0 || scev->simplify_depth == EXPR_STACK_DEPTH)
++		return id;
++	scev->simplify_depth++;
++	id = simplify(scev, id);
++	scev->simplify_depth--;
++	return id;
+ }
  
- 	if (acc->empty) {
-@@ -1001,7 +1003,9 @@ static int join(struct scev *scev, struct env *acc, struct env *cur)
+ static int expr1(struct scev *scev, u32 op, int a)
+@@ -251,14 +269,47 @@ static bool is_zext32(struct scev *scev, int id, u32 *left)
+ 	return is_unop(scev, ZEXT32, id, left);
+ }
  
- 	for (i = 0; i < REGS_NUM; i++) {
- 		if (!same_exprs(scev, acc->reg2expr[i], cur->reg2expr[i])) {
--			id = mk_any(scev, acc->reg2expr[i], cur->reg2expr[i]);
-+			/* no phi for a dead register: pruned SSA */
-+			id = reg_alive_at(env, i, idx) ?
-+			     mk_any(scev, acc->reg2expr[i], cur->reg2expr[i]) : UNKNOWN_EXPR_ID;
- 			if (id < 0)
- 				return id;
- 			acc->reg2expr[i] = id;
-@@ -1339,7 +1343,7 @@ static int join_successor(struct bpf_verifier_env *env, int cur_header, int succ
- 		return -ENOMEM;
- 	if (log_level2)
- 		memcpy(old_env, succ_env, sizeof(*old_env));
--	err = join(scev, succ_env, cur_env);
-+	err = join(env, succ_env, cur_env, succ_idx);
- 	if (err)
- 		return err;
- 	err = worklist_push(env, cur_header, succ_idx);
+-/* The low half of the slot is the low half of @left. The other half is not known. */
+-static bool is_spill32(struct scev *scev, int id, u32 *left)
++/* (zextN x), (sextN x) and (spillN x) depend on the low N bits of x only */
++static u32 op_low_bits(u32 op)
++{
++	switch (op) {
++	case ZEXT8:
++	case SEXT8:
++	case SPILL8:
++		return 8;
++	case ZEXT16:
++	case SEXT16:
++	case SPILL16:
++		return 16;
++	case ZEXT32:
++	case SEXT32:
++	case SPILL32:
++		return 32;
++	}
++	return 0;
++}
++
++/* The low @bits bits of the slot are those of @left. The other bits are not known. */
++static bool is_spill(struct scev *scev, int id, u32 *bits, u32 *left)
+ {
++	u32 op = scev->exprs[id].op;
++
+ #ifdef __BIG_ENDIAN
+ 	/* '*(u32 *)(r10 - 8) = rX' writes the high half, see mk_fill() */
+ 	return false;
+ #endif
+-	return is_unop(scev, SPILL32, id, left);
++	if (op != SPILL8 && op != SPILL16 && op != SPILL32)
++		return false;
++	*bits = op_low_bits(op);
++	*left = scev->exprs[id].params[0];
++	return true;
++}
++
++static bool is_spill32(struct scev *scev, int id, u32 *left)
++{
++	u32 bits;
++
++	return is_spill(scev, id, &bits, left) && bits == 32;
+ }
+ 
+ static bool is_any(struct scev *scev, int id, u32 *left, u32 *right)
+@@ -1579,29 +1630,10 @@ static int transform_expr_once(struct scev *scev, u32 lvl, u32 root, void *priv,
+ 	return id < 0 ? id : fn(scev, id, priv);
+ }
+ 
+-static int transform_expr(struct scev *scev, u32 root, void *priv,
+-			  int (*fn)(struct scev *scev, u32 id, void *priv))
+-{
+-	int i = 0, id_old, id_new = root;
+-
+-	do {
+-		/*
+-		 * The depth limit is somewhat arbitrary and is essentially a failsafe.
+-		 * oscillation should not really happen. Still, it seems harsh to error out.
+-		 */
+-		if (i++ == 4 * EXPR_STACK_DEPTH)
+-			return UNKNOWN_EXPR_ID;
+-		id_old = id_new;
+-		id_new = transform_expr_once(scev, 0, id_old, priv, fn);
+-		if (id_new < 0)
+-			return id_new;
+-	} while (id_old != id_new);
+-	return id_new;
+-}
+-
+-static int simplify(struct scev *scev, u32 id, void *priv)
++static int simplify(struct scev *scev, u32 id)
+ {
+ 	int a, b, l, r, t, base, slope;
++	u32 bits, op = scev->exprs[id].op;
+ 	s64 imm1, imm2;
+ 
+ 	/* (- x imm) -> (+ x -imm) */
+@@ -1609,6 +1641,10 @@ static int simplify(struct scev *scev, u32 id, void *priv)
+ 	    is_imm(scev, r, &imm1) && imm1 != S64_MIN)
+ 		return expr2(scev, BPF_ADD, l, imm_expr(scev, -imm1));
+ 
++	/* (+ x 0) -> x */
++	if (is_add(scev, id, &l, &r) && is_imm(scev, r, &imm1) && !imm1)
++		return l;
++
+ 	/* (+ (+ x imm) imm) -> (+ x imm) */
+ 	if (is_add(scev, id, &l, &r) &&
+ 	    is_imm(scev, r, &imm2) &&
+@@ -1658,12 +1694,14 @@ static int simplify(struct scev *scev, u32 id, void *priv)
+ 		return expr1(scev, SPILL32, expr2(scev, BPF_ADD, a, b));
+ 
+ 	/*
+-	 * 'rX = *(u32 *)(r10 - 8)' loads what was stored:
++	 * 'rX = *(u32 *)(r10 - 8)' fills what was spilled, a narrower fill the low bits of it:
+ 	 * (zext32 (spill32 $a)) -> (zext32 $a)
++	 * (sext8 (spill16 $a)) -> (sext8 $a)
+ 	 * (zext32 (+ (spill32 $a) $b)) -> (zext32 (+ $a $b))
+ 	 */
+-	if (is_zext32(scev, id, &t) && is_spill32(scev, t, &a))
+-		return expr1(scev, ZEXT32, a);
++	if (op_low_bits(op) && is_spill(scev, scev->exprs[id].params[0], &bits, &a) &&
++	    op_low_bits(op) <= bits)
++		return expr1(scev, op, a);
+ 	if (is_zext32(scev, id, &t) && is_add(scev, t, &l, &b) && is_spill32(scev, l, &a))
+ 		return expr1(scev, ZEXT32, expr2(scev, BPF_ADD, a, b));
+ 
+@@ -1692,10 +1730,7 @@ static int compute_header_scevs(struct bpf_verifier_env *env, struct env *header
+ 	 *      ... at exit r1 is in {7,42} ...
+ 	 */
+ 	for (ra = 0; ra < REGS_NUM; ra++) {
+-		ra_expr = transform_expr(scev, header_env->reg2expr[ra], NULL, simplify);
+-		if (ra_expr < 0)
+-			return ra_expr;
+-		header_env->reg2expr[ra] = ra_expr;
++		ra_expr = header_env->reg2expr[ra];
+ 		/* rA = (+ rA IMM) -> (linear rA IMM) */
+ 		if (is_add(scev, ra_expr, &l, &r) &&
+ 		    is_reg(scev, l, &rb) &&
+@@ -1843,17 +1878,8 @@ static int compute_insn_scevs(struct bpf_verifier_env *env, struct env *eheader,
+ 	int id, reg;
+ 
+ 	for (reg = 0; reg < REGS_NUM; reg++) {
+-		/*
+-		 * Simplify first. 'store, load, test' of a 32-bit counter on the stack with the
+-		 * equation of the header in it is deeper than EXPR_STACK_DEPTH.
+-		 */
+-		id = transform_expr(scev, einsn->reg2expr[reg], NULL, simplify);
+-		if (id < 0)
+-			return id;
+-		id = transform_expr_once(scev, 0, id, eheader->reg2scev, instantiate_header_scevs);
+-		if (id < 0)
+-			return id;
+-		id = transform_expr(scev, id, NULL, simplify);
++		id = transform_expr_once(scev, 0, einsn->reg2expr[reg], eheader->reg2scev,
++					 instantiate_header_scevs);
+ 		if (id < 0)
+ 			return id;
+ 		einsn->reg2scev[reg] = id;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index f2a53fe5f6ad..3d73a7107cba 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -324,10 +324,11 @@ __msg("r1 += 2 {{.*}}; r1 r6 -> (+ r6 2)")
+ __msg("r1 += r7 {{.*}}; r1 r6 -> (+ r6 r7)")
+ __msg("w1 += 2 {{.*}}; r1 r6 -> (zext32 (+ r6 2))")
+ __msg("w1 += w7 {{.*}}; r1 r6 -> (zext32 (+ r6 r7))")
+-__msg("r1 -= 2 {{.*}}; r1 r6 -> (- r6 2)")
++__msg("r1 -= 2 {{.*}}; r1 r6 -> (+ r6 -2)")
+ __msg("r1 -= r7 {{.*}}; r1 r6 -> (- r6 r7)")
+-__msg("w1 -= 2 {{.*}}; r1 r6 -> (zext32 (- r6 2))")
++__msg("w1 -= 2 {{.*}}; r1 r6 -> (zext32 (+ r6 -2))")
+ __msg("w1 -= w7 {{.*}}; r1 r6 -> (zext32 (- r6 r7))")
++__msg("r1 -= 2 {{.*}}; r1 (+ r6 2) -> r6")
+ __msg("r1 *= 2 {{.*}}; r1 r6 -> (* r6 2)")
+ __msg("r1 *= r7 {{.*}}; r1 r6 -> (* r6 r7)")
+ __msg("w1 *= 2 {{.*}}; r1 r6 -> (zext32 (* r6 2))")
+@@ -375,7 +376,7 @@ __msg("w1 s>>= w7 {{.*}}; r1 r6 -> (zext32 (s>> (sext32 r6) (& r7 31)))")
+ __msg("r1 = -r1 {{.*}}; r1 r6 -> (- r6)")
+ __msg("w1 = -w1 {{.*}}; r1 r6 -> (zext32 (- r6))")
+ __msg("r1 = 42 {{.*}}; r1 r6 -> 42")
+-__msg("w1 = 42 {{.*}}; r1 r6 -> (zext32 42)")
++__msg("w1 = 42 {{.*}}; r1 r6 -> 42")
+ __msg("r1 = r7 {{.*}}; r1 r6 -> r7")
+ __msg("w1 = w7 {{.*}}; r1 r6 -> (zext32 r7)")
+ __msg("r1 = (s8)r6 {{.*}}; r1 r6 -> (sext8 r6)")
+@@ -417,6 +418,7 @@ __naked void alu_ops_exprs(void)
+ 	ALU_OP("r1 -= r7")
+ 	ALU_OP("w1 -= 2")
+ 	ALU_OP("w1 -= w7")
++	ALU_OP("r1 += 2; r1 -= 2")
+ 	ALU_OP("r1 *= 2")
+ 	ALU_OP("r1 *= r7")
+ 	ALU_OP("w1 *= 2")
+@@ -511,7 +513,7 @@ __msg("*(u16 *)(r10 -8) = r1 {{.*}}; *fp-8 -8 -> (spill16 1)")
+ __msg("*(u8 *)(r10 -8) = r1 {{.*}}; *fp-8 -8 -> (spill8 1)")
+ __msg("r1 = *(u64 *)(r10 -8) {{.*}}; r1 1 -> -8")
+ #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+-__msg("r1 = *(u32 *)(r10 -8) {{.*}}; r1 1 -> (zext32 -8)")
++__msg("r1 = *(u32 *)(r10 -8) {{.*}}; r1 1 -> 4294967288")
+ __msg("r1 = *(u16 *)(r10 -8) {{.*}}; r1 1 -> (zext16 -8)")
+ __msg("r1 = *(u8 *)(r10 -8) {{.*}}; r1 1 -> (zext8 -8)")
+ __msg("r1 = *(s32 *)(r10 -8) {{.*}}; r1 1 -> (sext32 -8)")
+@@ -519,7 +521,7 @@ __msg("r1 = *(s16 *)(r10 -8) {{.*}}; r1 1 -> (sext16 -8)")
+ __msg("r1 = *(s8 *)(r10 -8) {{.*}}; r1 1 -> (sext8 -8)")
+ __msg("r1 = load_acquire((u8 *)(r10 -8)) {{.*}}; r1 1 -> (zext8 -8)")
+ __msg("r1 = load_acquire((u16 *)(r10 -8)) {{.*}}; r1 1 -> (zext16 -8)")
+-__msg("r1 = load_acquire((u32 *)(r10 -8)) {{.*}}; r1 1 -> (zext32 -8)")
++__msg("r1 = load_acquire((u32 *)(r10 -8)) {{.*}}; r1 1 -> 4294967288")
+ #else
+ __msg("r1 = *(u32 *)(r10 -8) {{.*}}; r1 1 -> (>> -8 32)")
+ __msg("r1 = *(u16 *)(r10 -8) {{.*}}; r1 1 -> (>> -8 48)")
+@@ -543,6 +545,11 @@ __msg("r1 = atomic64_xchg((u64 *)(r10 -8), r1) {{.*}}; r1 1 -> _, *fp-8 -8 -> _"
+ __msg("r0 = atomic64_cmpxchg((u64 *)(r10 -8), r0, r2) {{.*}}; r0 0 -> _, *fp-8 -8 -> _")
+ __msg("*(u64 *)(r10 -8) = 42 {{.*}}; *fp-8 -8 -> 42")
+ __msg("*(u8 *)(r10 -7) = r0 {{.*}}; *fp-8 -8 -> _")
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++/* a fill that is not wider than the spill reads what was spilled */
++__msg("r1 = *(s8 *)(r10 -8) {{.*}}; r1 r7 -> (sext8 r7)")
++__msg("r1 = *(u16 *)(r10 -8) {{.*}}; r1 r7 -> (zext16 (spill8 r7))")
++#endif
+ __naked void store_load_exprs(void)
+ {
+ 	asm volatile (
+@@ -579,6 +586,9 @@ __naked void store_load_exprs(void)
+ 	ST_OP("*(u64 *)(r10 - 8) = 42")
+ 	ST_OP("*(u8 *)(r10 - 7) = r0")
+ 
++	ST_OP("r1 = r7; *(u16 *)(r10 - 8) = r1; r1 = *(s8 *)(r10 - 8)")
++	ST_OP("r1 = r7; *(u8 *)(r10 - 8) = r1; r1 = *(u16 *)(r10 - 8)")
++
+ 	"r7 += 1;"
+ 	"if r7 < 2 goto 1b;"
+ 	"r0 = 0;"
 -- 
 2.55.0
 
