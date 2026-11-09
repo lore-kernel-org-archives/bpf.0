@@ -1,81 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.27.60.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794228386;
-	b=L+CxN1hPktGisRW4V2Dc+bh4UE60Mq+/Z8hon1MM+u3DMnm7uhgyqebQDZEdNvOcXSsc
-	 NLLsSxXh59OhOZ6I437HI13qBomRhaz07S/weD96ghVOc6MZ4gNn0rb4XJKp/oxrAWZH7
-	 TCE4TKIsiHmxv85Fsga3ODnriL6q5kBCI9OUE+sQbUCnGhu93OUk7LORVPqn1R2N4Jnnn
-	 f56yAS9pcaphzRr/C3Ktjf9nRJDLEiwqEs53d903lJEMw314eOk9rm89JMUoDvVcz2r28
-	 Zrt+vGsiDLVQpENw2uWZt72IrUgiXk7kfuoDaAB4XvtANHWYvlNqNNbei3uIQsD93JQ==
+	t=1794228648;
+	b=P2Je0AFfIZNHtpcONtUxl6cdz+6WIGkchfREXSH6ERgtlAaRnObwuVAJAabHSPonIaC/
+	 SkgVI5bNhJgH4pk7lXC/JC34hLr+HaNP2D00nr6ugxCmtuWoKsyNiQRPvRhUwPjU1YBLg
+	 71qBWwa8WXhbSyAroLcfanrUq7Wys9XISx43sSEsWnolSCRgQoqQufLkZfgYOeHcSjR9R
+	 JFJP5x0qO1zjbLXvIhRCUIDM072wmx/zT111x5Wed3krYbhUpu39ENb5g2LCrDnBXnbMA
+	 I0kaqq5E0KNIWzSN7BHYUUREOCTjj45ENsVt0KrvDWP+B8X0kFMZppmF9/VxNcnX0eg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794228386;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=kh7rPhttLM/9UhZnWWZ9GH6qoA/1ey+mAVM6n12p29w=;
-	b=Lx7TJFeyyPShuvkEliklU7c/5WfHgtlOSm2tQe/2q4FlGGlAQ1UNI9U0G0mnb5tzq8mr
-	 RyxbaZFICkyPjdKN1IJaH0xGMm3PnCzgIdOOW95XxvjHx188a45kd0UBOe5bS8B+QTbgA
-	 DPeRvSKqdBp0JUjYTvqGqThV1CiKIxlpFGHnsMr9QYDu0wrUJc9v/6g1h20bGyyDs6zph
-	 tQV4DHwJ08IHLOaq7liNg2oo9L0I6dpsGAuDxdqO3yETIGcDyKEjOWvvFikoBPNv7hnqe
-	 XVH3OS9N6FS0HfvoFHhUlBinTNBQecRI8wEc4mjS5TN7MaBmZewiK3fUsnG9kG40pSg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794228648;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=YOpZi2VaklejSB7LucRgCO/ffxcIRCTN66BQYsC8WYw=;
+	b=IPvfobgH16r7unzvDtd6FdSX+sy4TqTJcJrHYJi7eAH66JHvdbtCYiLz3O2RhjdHcLIt
+	 +30ojyOCSAA9A0pRmNxyUxHaPpxQimbSe2qvdceFmXNJUjJ0UwaVJEwL/VE37mQcFeuQ1
+	 SVB2Zt/iurxZ3Iub862mTuMS8f66QAgx4j7aSCl3tp+X/QYe+wP0A/unjWa3WePweTYGu
+	 JLWAJLuaNcNL5Or2PYOfnUHwElXN49NXj47woqUZ7Er8ILAlc9aehJFllAyL8r/smQiOo
+	 iL8uMlyBNYKoD5cAr2sFPt836b5zWf6itYDWq1b9mnFPg+1tQ2Rca8MyNweo7d3GnAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=corp.free.fr;
-	spf=pass smtp.mailfrom=corp.free.fr;
-	dkim=pass header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=GnJgdnUJ;
-	arc=none smtp.remote-ip=212.27.60.169
-Received: from rcs.proxad.net (rcs.proxad.net [212.27.60.169])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=keaVCFqO;
+	arc=none smtp.remote-ip=209.85.128.46
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6096606A325;
-	Mon,  9 Nov 2026 12:46:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6096606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=corp.free.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=corp.free.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B86606A322
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 12:50:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1B86606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=corp.free.fr header.i=@corp.free.fr header.a=rsa-sha256 header.s=rcs header.b=GnJgdnUJ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corp.free.fr; s=rcs;
-	t=1794228384; bh=7ZPGTPVH0/RD8EODqPSC8V+GK04omyIfEDmcx5TbHo4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GnJgdnUJ8FO7KxFUxm8vPAsdZCo5VNQAWW/jvWGNrYrUgrkNL9HskYrD6pUff5JIc
-	 /2qZDWwqMh5BitC7DPcAVYr1WjnjGDDqbwoKxwvfibcw3cH6TtpQqTNRSrNo52HEHK
-	 X/4vmdaDM1zi6dR/R85IB+ZcDzfr+WR7E0VmhtwEwBXNKQX75w4uuCezbopLe90pCC
-	 IYLXvqdM86WZUmvQst53V4pnuzbPbALX7PZyyBYJq8jEBomP4Wg5RFYQRCALeN0d4s
-	 wc5fpozXzfcviS3vDesAOoNILglbSrgcydfopLn51z/RwhTyJetTkZf4Uqq0cIt3p2
-	 EtDmcxyfbsbSw==
-Received: from lnxos-dev.home (82-66-150-212.subs.proxad.net [82.66.150.212])
-	by rcs.proxad.net (Postfix) with ESMTPSA id E6FA944C0610;
-	Mon,  9 Nov 2026 13:46:23 +0100 (CET)
-From: Alexandre Cassen <acassen@corp.free.fr>
-To: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next v3 2/4] net/sched: honor TCA_ACT_FLAGS_NO_PERCPU_STATS in bpf, ife and skbmod
-Date: Mon,  9 Nov 2026 13:46:13 +0100
-Message-ID: <20261109124618.933149-3-acassen@corp.free.fr>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261109124618.933149-1-acassen@corp.free.fr>
-References: <20261109124618.933149-1-acassen@corp.free.fr>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=keaVCFqO
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4b79502c27aso8448895e9.1
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 04:50:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794228646; x=1794833446; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=YOpZi2VaklejSB7LucRgCO/ffxcIRCTN66BQYsC8WYw=;
+        b=keaVCFqOAP78EpUbHh1CL5ySC0dYGYnvn515n8Q/hAjAKRWhc9yjx1CxX6lcNI6M6O
+         Q8AH95KIWB2wleawXdJRbOdI4aTkqHkyIKP+2+KyuHJFRWROKam1o3FcBg4VC6C+Fq/f
+         5gfww6Y2/VT/jpMPgWQ4mS3p5Ns6BfImY5hrmTLExdNv5lIuu5D0Onb3hBVFQOh+d03Y
+         qTdr1M5joe/EaDhKvBbF/8+KJkR1o/hjUC5DL3FZXTFWInwO016+O+2vFlzKmHiJOyBR
+         2So+z/Iv7RIclft52QzzYWY2SaLiiRKR7C9iOBTqTX1fdACEue/jtq/Qvvz75rzCakwP
+         kxCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794228646; x=1794833446;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=YOpZi2VaklejSB7LucRgCO/ffxcIRCTN66BQYsC8WYw=;
+        b=VQe42aMdbYPcpLPywQ5kkuMy6XInEko64wBwVNCuOsSa41fhBf6U21f8dBxRjEJqwt
+         d8TI0+zDAbYwUn21Dcl4c3oHllQtY60hH2Wipa/bM6113NbGKog8ymOfeXT8vbNASDgj
+         B7+1X76lcx2y36P8kUa3dy51B3vt3LnDWtiYBVH8csZfoIaqi5qPw2JdTvDiqFijHZO5
+         czhfqtxCYxJTk89BT8qFgCAT8/FiLiHIeVsYGdqqS/TU9GAQ9Exk5g1BC1JyGOS7HwkF
+         /o1MMegGiCR0t5BZA64ghLzOnCqkWf+NGRSTJxDbca8F3eF/8M3RSHtGxpx/JD8mkbI1
+         OSjw==
+X-Gm-Message-State: APuU4Z9humjetTbvAQBe42kH+NWhaoL7kan/4XTIqHVC1kX2wo0neFqj
+	7xQPNX454M7B04LAOr5G3pljRJPWOioNbVNG5zn7QDHTYQOPsxHFf/N3
+X-Gm-Gg: AYBFou3Wdm1UJ6iF3bdN4L0UWTB0Aey6wq9jy6/EiFBlyAOy0cpwnJ6TVJ+H4ms5job
+	MxSwE/6KJJkUSP2FFVR5uXusWI2yA3yHoRCNc/s/8kYvrwhPOpN4M8H9YSZzDw4MeBOoVAqZ+go
+	6TsMN9+/Z+J+E6XzZhBurIbwpHmMrXgn6nMxQhS9x3zNO5jL9TmD0fcyE/GVB0wO0KFQ+MaJqnd
+	r+GXz11OVgf1Z3j+Pop8oAfLPzi9PG6WGbyzVGAznKflBvbYbW0kC/6O1HKeDJ/ZtMIvjGbw4YZ
+	69Mhysxb0N5ygsuxR9BA9ws3Wslpzm4xBMcR9xXaq0RMlRYt9XkWIUGgHK0yWPVvpexFkoVsD8f
+	7iFMUtpE99Ik/jFs/S3FjRIn0KxkRAR1KbJ1lIdTx84kzT7sag3IUD3xgBorh3ulLU+T89edMun
+	d046q6M7FTBdY85o4r67yHUvN0I4k4yHiAlsRNQUe3/n5R2ucmB2XsqWOC2SBRckNL6K7zJ0OHS
+	OhHvlcvzn5xVOLQU4LEQlX5ZpZWB80E428HyY4n4DCDLKz5+c60OBgDwLm6Ys7hSQ3hEkZWr5e/
+	RWJCdAtD/DalYyjZzdF2GueYvIpEnKA5vvyJfQ==
+X-Received: by 2002:a05:600c:83c7:b0:4a6:42cc:bf66 with SMTP id 5b1f17b1804b1-4b960d9bb6amr69706665e9.11.1794228645804;
+        Mon, 09 Nov 2026 04:50:45 -0800 (PST)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7efb134ccsm213302635e9.10.2026.11.09.04.50.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2026 04:50:45 -0800 (PST)
+Date: Mon, 9 Nov 2026 13:02:19 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH v1 bpf-next 02/18] bpf: Add a btf_id_set8_entry helper
+Message-ID: <avHEW-2OG8govtYR@mail.gmail.com>
+References: <20261106210314.1767267-1-a.s.protopopov@gmail.com>
+ <20261106210314.1767267-2-a.s.protopopov@gmail.com>
+ <sashiko-outbox-202267@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,188 +96,92 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <sashiko-outbox-202267@kernel.org>
 
-bpf, ife and skbmod are the last actions that ignore
-TCA_ACT_FLAGS_NO_PERCPU_STATS. Commit 40bd094d65fc ("flow_offload: fill
-flags to action structure") makes them store and dump the flag. They
-still allocate per CPU stats, about 8 KB per action on a 128 CPU host.
-Yet tc reports no_percpu on them.
+On 26/11/06 08:58PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found no new issues
+> in this patch, but noticed 1 related pre-existing issue it does not
+> introduce:
+> - [High] bpf: kfunc sets destruction on failure in
+>   btf_populate_kfunc_set() [1]
+> --
+> 
+> commit 0f99bfedbc98b8fbe7b7a25dd4038c3e714adb73
+> Author: Anton Protopopov <a.s.protopopov@gmail.com>
+> 
+> bpf: Add a btf_id_set8_entry helper
+> 
+> This commit names the element type of struct btf_id_set8 as struct
+> btf_id_set8_pair, introduces btf_id_set8_entry() to look up a pair, and
+> changes btf_id_set8_contains() to return a boolean.
+> 
+> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > index 228b93d4f8c94..61d2df6776a99 100644
+> > --- a/kernel/bpf/btf.c
+> > +++ b/kernel/bpf/btf.c
+> > @@ -9973,8 +9973,8 @@ static u32 *btf_kfunc_id_set_contains(const struct btf *btf,
+> >  				      enum btf_kfunc_hook hook,
+> >  				      u32 kfunc_btf_id)
+> >  {
+> > +	struct btf_id_set8_pair *pair;
+> >  	struct btf_id_set8 *set;
+> > -	u32 *id;
+> >  
+> >  	if (hook >= BTF_KFUNC_HOOK_MAX)
+> >  		return NULL;
+> > @@ -9983,11 +9983,10 @@ static u32 *btf_kfunc_id_set_contains(const struct btf *btf,
+> >  	set = btf->kfunc_set_tab->sets[hook];
+> >  	if (!set)
+> >  		return NULL;
+> > -	id = btf_id_set8_contains(set, kfunc_btf_id);
+> > -	if (!id)
+> > +	pair = btf_id_set8_entry(set, kfunc_btf_id);
+> > +	if (!pair)
+> >  		return NULL;
+> > -	/* The flags for BTF ID are located next to it */
+> > -	return id + 1;
+> > +	return &pair->flags;
+> >  }
+> 
+> [Severity: High]
+> This problem wasn't introduced by this patch, but...
 
-Honor the flag here too. These actions run only in software. With
-no_percpu every packet takes tcfa_lock to update the stats. Only the
-users who set the flag pay this cost.
+Maybe we can do a separate sink for such reports?  Or some tagging such that
+this is easier to follow up later?
 
-Signed-off-by: Alexandre Cassen <acassen@corp.free.fr>
----
- net/sched/act_bpf.c    |  8 ++++----
- net/sched/act_ife.c    | 24 ++++++++++++------------
- net/sched/act_skbmod.c |  8 ++++----
- 3 files changed, 20 insertions(+), 20 deletions(-)
+> btf_populate_kfunc_set() function that populates btf->kfunc_set_tab, does an
+> error on a later registration destroy all previously registered kfunc sets
+> [1]?
+> 
+> kernel/bpf/btf.c:btf_populate_kfunc_set() {
+>     ...
+> 	/* Grow set */
+> 	set = krealloc(tab->sets[hook],
+> 		       struct_size(set, pairs, set_cnt + add_set->cnt),
+> 		       GFP_KERNEL | __GFP_NOWARN);
+> 	if (!set) {
+> 		ret = -ENOMEM;
+> 		goto end;
+> 	}
+>     ...
+> end:
+> 	btf_free_kfunc_set_tab(btf);
+> 	return ret;
+> }
+> 
+> Multiple subsystems register kfunc sets into the shared vmlinux BTF.  If a
+> later registration fails in krealloc() or exceeds BTF_KFUNC_SET_MAX_CNT,
+> jumping to end calls btf_free_kfunc_set_tab(), which frees every hook's set
+> and clears btf->kfunc_set_tab, breaking all previously registered kfuncs.
 
-diff --git a/net/sched/act_bpf.c b/net/sched/act_bpf.c
-index 06d8f78b7368..3aea3ff5785f 100644
---- a/net/sched/act_bpf.c
-+++ b/net/sched/act_bpf.c
-@@ -42,7 +42,7 @@ TC_INDIRECT_SCOPE int tcf_bpf_act(struct sk_buff *skb,
- 	int action, filter_res;
- 
- 	tcf_lastuse_update(&prog->tcf_tm);
--	bstats_update(this_cpu_ptr(prog->common.cpu_bstats), skb);
-+	tcf_action_update_bstats(&prog->common, skb);
- 
- 	filter = rcu_dereference_bh(prog->filter);
- 	if (at_ingress) {
-@@ -76,7 +76,7 @@ TC_INDIRECT_SCOPE int tcf_bpf_act(struct sk_buff *skb,
- 		break;
- 	case TC_ACT_SHOT:
- 		action = filter_res;
--		qstats_cpu_drop_inc(prog->common.cpu_qstats);
-+		tcf_action_inc_drop_qstats(&prog->common);
- 		break;
- 	case TC_ACT_UNSPEC:
- 		action = prog->tcf_action;
-@@ -305,8 +305,8 @@ static int tcf_bpf_init(struct net *net, struct nlattr *nla,
- 	index = parm->index;
- 	ret = tcf_idr_check_alloc(tn, &index, act, bind);
- 	if (!ret) {
--		ret = tcf_idr_create(tn, index, est, act,
--				     &act_bpf_ops, bind, true, flags);
-+		ret = tcf_idr_create_from_flags(tn, index, est, act,
-+						&act_bpf_ops, bind, flags);
- 		if (ret < 0) {
- 			tcf_idr_cleanup(tn, index);
- 			return ret;
-diff --git a/net/sched/act_ife.c b/net/sched/act_ife.c
-index 3946a9589bb8..a931f0d353d2 100644
---- a/net/sched/act_ife.c
-+++ b/net/sched/act_ife.c
-@@ -551,8 +551,8 @@ static int tcf_ife_init(struct net *net, struct nlattr *nla,
- 	}
- 
- 	if (!exists) {
--		ret = tcf_idr_create(tn, index, est, a, &act_ife_ops,
--				     bind, true, flags);
-+		ret = tcf_idr_create_from_flags(tn, index, est, a,
-+						&act_ife_ops, bind, flags);
- 		if (ret) {
- 			tcf_idr_cleanup(tn, index);
- 			kfree(p);
-@@ -720,7 +720,7 @@ static int tcf_ife_decode(struct sk_buff *skb, const struct tc_action *a,
- 
- 	p = rcu_dereference_bh(ife->params);
- 
--	bstats_update(this_cpu_ptr(ife->common.cpu_bstats), skb);
-+	tcf_action_update_bstats(&ife->common, skb);
- 	tcf_lastuse_update(&ife->tcf_tm);
- 
- 	if (skb_at_tc_ingress(skb))
-@@ -728,7 +728,7 @@ static int tcf_ife_decode(struct sk_buff *skb, const struct tc_action *a,
- 
- 	tlv_data = ife_decode(skb, &metalen);
- 	if (unlikely(!tlv_data)) {
--		qstats_cpu_drop_inc(ife->common.cpu_qstats);
-+		tcf_action_inc_drop_qstats(&ife->common);
- 		return TC_ACT_SHOT;
- 	}
- 
-@@ -742,7 +742,7 @@ static int tcf_ife_decode(struct sk_buff *skb, const struct tc_action *a,
- 		curr_data = ife_tlv_meta_decode(tlv_data, ifehdr_end, &mtype,
- 						&dlen, NULL);
- 		if (!curr_data) {
--			qstats_cpu_drop_inc(ife->common.cpu_qstats);
-+			tcf_action_inc_drop_qstats(&ife->common);
- 			return TC_ACT_SHOT;
- 		}
- 
-@@ -751,7 +751,7 @@ static int tcf_ife_decode(struct sk_buff *skb, const struct tc_action *a,
- 			/* abuse overlimits to count metadata we cannot
- 			 * decode: no ops for it, or the decoder rejected it
- 			 */
--			qstats_cpu_overlimit_inc(ife->common.cpu_qstats);
-+			tcf_action_inc_overlimit_qstats(&ife->common);
- 
- 			if (ret == -ENOENT)
- 				pr_info_ratelimited("Unknown metaid %d dlen %d\n",
-@@ -763,7 +763,7 @@ static int tcf_ife_decode(struct sk_buff *skb, const struct tc_action *a,
- 	}
- 
- 	if (WARN_ON(tlv_data != ifehdr_end)) {
--		qstats_cpu_drop_inc(ife->common.cpu_qstats);
-+		tcf_action_inc_drop_qstats(&ife->common);
- 		return TC_ACT_SHOT;
- 	}
- 
-@@ -819,21 +819,21 @@ static int tcf_ife_encode(struct sk_buff *skb, const struct tc_action *a,
- 			exceed_mtu = true;
- 	}
- 
--	bstats_update(this_cpu_ptr(ife->common.cpu_bstats), skb);
-+	tcf_action_update_bstats(&ife->common, skb);
- 	tcf_lastuse_update(&ife->tcf_tm);
- 
- 	if (!metalen) {		/* no metadata to send */
- 		/* abuse overlimits to count when we allow packet
- 		 * with no metadata
- 		 */
--		qstats_cpu_overlimit_inc(ife->common.cpu_qstats);
-+		tcf_action_inc_overlimit_qstats(&ife->common);
- 		return action;
- 	}
- 	/* could be stupid policy setup or mtu config
- 	 * so lets be conservative.. */
- 	if ((action == TC_ACT_SHOT) || exceed_mtu) {
- drop:
--		qstats_cpu_drop_inc(ife->common.cpu_qstats);
-+		tcf_action_inc_drop_qstats(&ife->common);
- 		return TC_ACT_SHOT;
- 	}
- 
-@@ -898,9 +898,9 @@ TC_INDIRECT_SCOPE int tcf_ife_act(struct sk_buff *skb,
- 	int ret;
- 
- 	if (unlikely(!tcf_ife_is_eth_skb(skb))) {
--		bstats_update(this_cpu_ptr(ife->common.cpu_bstats), skb);
-+		tcf_action_update_bstats(&ife->common, skb);
- 		tcf_lastuse_update(&ife->tcf_tm);
--		qstats_cpu_drop_inc(ife->common.cpu_qstats);
-+		tcf_action_inc_drop_qstats(&ife->common);
- 		return TC_ACT_SHOT;
- 	}
- 
-diff --git a/net/sched/act_skbmod.c b/net/sched/act_skbmod.c
-index 09e9dcf58253..72dedb9b19a6 100644
---- a/net/sched/act_skbmod.c
-+++ b/net/sched/act_skbmod.c
-@@ -32,7 +32,7 @@ TC_INDIRECT_SCOPE int tcf_skbmod_act(struct sk_buff *skb,
- 	u64 flags;
- 
- 	tcf_lastuse_update(&d->tcf_tm);
--	bstats_update(this_cpu_ptr(d->common.cpu_bstats), skb);
-+	tcf_action_update_bstats(&d->common, skb);
- 
- 	p = rcu_dereference_bh(d->skbmod_p);
- 	if (unlikely(p->action == TC_ACT_SHOT))
-@@ -91,7 +91,7 @@ TC_INDIRECT_SCOPE int tcf_skbmod_act(struct sk_buff *skb,
- 	return p->action;
- 
- drop:
--	qstats_cpu_overlimit_inc(d->common.cpu_qstats);
-+	tcf_action_inc_overlimit_qstats(&d->common);
- 	return TC_ACT_SHOT;
- }
- 
-@@ -171,8 +171,8 @@ static int tcf_skbmod_init(struct net *net, struct nlattr *nla,
- 	}
- 
- 	if (!exists) {
--		ret = tcf_idr_create(tn, index, est, a,
--				     &act_skbmod_ops, bind, true, flags);
-+		ret = tcf_idr_create_from_flags(tn, index, est, a,
-+						&act_skbmod_ops, bind, flags);
- 		if (ret) {
- 			tcf_idr_cleanup(tn, index);
- 			return ret;
--- 
-2.43.0
+For the error itself. The only non-deterministic way to fail here
+is with -ENOMEM (on boot, which is not realistic). Other ways to fail
+will fail during tests. So any cleanup looks "reasonable".
 
+> [1] https://sashiko.dev/#/bug/linux-1a311d3c-46c9-4fa6-a26e-40badcd832d8
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20261106205523.1765622-1-a.s.protopopov@gmail.com?part=2
