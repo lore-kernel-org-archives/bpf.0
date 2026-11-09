@@ -1,56 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794194225;
-	b=Dg950wX6ciflQnEPap5RazD9GKaZ90ncxrx1q3dHX8DI6/xf4TDRD3loJgerNPhmvlB/
-	 bqP1KgVVY0RtdzZS4YSoL2kQwXqrJivTLqXMdN28GaOCIX/xjH4glnmotGIky2v0Miqoa
-	 GhREeA0bQIxDg+3vH5vArQ1eQrHsMHFloRC0WXMNuhtqfr85lBtTFh1/slUMv0xNls8I9
-	 O4YeMMQ48CY+288fK/X4+MemgF7l87uP071F1RZV4lT6vvtMytxg76azSxsC+Q7XSHh6v
-	 Kg6uEmXEcANBL0+QrhDqGzWK/6xDFeISKzcmRrflrwKmDDVDQ8ucvpT9FdTYWVm1NVw==
+	t=1794194506;
+	b=w38j0+UkcqGfXZWMV2hV1yd0GuvaWTvR4kgccRLTANXTWYTewq+u7oxEE+DWyx/kC6jj
+	 J1nWWr8QDEup5GeiEwJFb566md8hm+aLTe/ugn6CJ0e44iqeMsFq8t0Re9GFtSferrYR3
+	 jg+NtA0KLlrYvhHa91ggIFoVWJy6T/2DayOZoH2mBr+w7WOQY5dCp7qZ09qd5+Fo6TrlN
+	 zqx+9yMVCOL5DMCtuJqIbBZQHLEYBxkTv2Y3XE3dL681mSOZFnrzIEqN/6uryNL72JSbZ
+	 MS/0pIyRz1K6SUhMpsZzywaS/j900db2N4TnEt5TGgHPuyKs0jLwPSk4t89USMRggMA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794194225;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=DgTEEIFLY7nWLKEAMoc3pzJDvyvQPGfrshFyaeQXNwA=;
-	b=vbVBEdNLPNsYEC9B1oZFvLKIXGCSO+snslpLeSnlxKemnSknT4RFX7FwowetnDGeoTTt
-	 zhFE7gnMqcH+bn/bicUy2qah+ceYUQAj/6pCxLflJZM0luzrA/eBjqLs/Hs8TPictM/Q2
-	 vILroomdpq6w3hd5jyVsNNreUHAvK6716Hqm4Hny0/wHV2Q5O2L74Gn5fetcMmOEpWXHC
-	 G77PjCXraeuYVeViq/lvH32bPYBkwFLbfEwt6JuGjqQ+mTTHnMD89wk7zL65B6UsuPAQJ
-	 9rINKulECIjXUEjR5qxlY79Y6lmSd/FouYPKfq72uGw95ZZSmarBjM5I/mVq3y9MHuw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794194506;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=57oS6m1b9doBy7H5rmfFkLclTYei+DSwfk/1lcfyc1c=;
+	b=bRRK33EF5tiYndZJiXQl16bUfc/YPZK2eR5fwCF2ijBTyDDJNfTGBMNW0CEANlVb/U0f
+	 j4XqBER12yPKvz4CcmtI9PkEutqsSUzo29sdCTo0B3Fo2LlgRo1/OpqpqGrmJ+c3PAy3o
+	 U6AetUdbVWlhMwfvTglN+7u8LX/niE6CABF6gcONcoqCDrOMRSHk3SnYDtzHUsVzFSY0S
+	 guS00WmatZmQQK/Fid8Op0JDHc76X4eBSXFdDq0LLBP3kNS2LjVw6UQuqWb6+Lg5pQekO
+	 F+4FyRK9lJ8oOIjwAGtHETrCM5JgV0fgHA7UQx06bZgjAHQyWOhdpH/G+EiZ9UhQwGg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nqKkD11j;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GPFtGz7H;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F2E606A320
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 03:17:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B13606A320;
+	Mon,  9 Nov 2026 03:21:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nqKkD11j
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BDB01F008A2;
-	Mon,  9 Nov 2026 03:17:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GPFtGz7H
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA1B1F0089F;
+	Mon,  9 Nov 2026 03:21:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794194225;
-	bh=DgTEEIFLY7nWLKEAMoc3pzJDvyvQPGfrshFyaeQXNwA=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=nqKkD11j+o8Lh3gIiClz6Mq44CzgTeLNNgddhjc2BBOkNMZ8LiYphlBxL1dcUE6iw
-	 Zo4YKpGbMHHFagXGH8w78s7dHfZGA6yRAjyMlY+PUoKATrPKVrBPQK0cb6JF1PCecQ
-	 h6siV2S2H/uzBnSGGQdhDtZ6TpGVk1zHuduaMGIoXlIela/53g3UnxtuN67k4lXgZg
-	 XDiTOvtrzmHj1gu7iGiIqQlbu6o8riV4g2CB4+5T5xuneOfOWOfqEgG/+fDZ4LRx90
-	 vh9kSf1hmf4d17CMbmZo6Iq3VSPrZY4y2aFiszOEiX4jjLdaXWvTyjfPKMGybRCNE6
-	 WYG4cqguA8ezQ==
-Message-ID: <sashiko-outbox-204366@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 1/2] bpf: Reject user ringbuf backlogs larger than
- total ring size
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ren Wei" <weir@nebusec.ai>, bpf@vger.kernel.org
-In-Reply-To: <ecf1a73cac8881d58b0b5957fb72caaeaa055339.1793951856.git.rakukuip@gmail.com>
-References: <cover.1793951856.git.rakukuip@gmail.com>
- <ecf1a73cac8881d58b0b5957fb72caaeaa055339.1793951856.git.rakukuip@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Nov 2026 03:17:04 +0000
+	s=k20260515; t=1794194505;
+	bh=57oS6m1b9doBy7H5rmfFkLclTYei+DSwfk/1lcfyc1c=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=GPFtGz7HiHr6oYZ0QNpfF+ZgxAbQ2GM/oFwn9mqtHe6QgSs7tF8wNOxDOSmqjPtu+
+	 2W0Z0tBG75Cf3P0DW3WsUXKX0nSaoFE+jJLq0lWVz3uhDvhCHNz8ZHh9760xGakgAr
+	 qg+EmSGZQ2q/RxqH/LwIAF580uYFck9KG73EXZcRzv+7hB0goVB7VqXlZDBx9JLrkw
+	 TP/yYbQCUTMHDDXamTX1eUgz5gNFV9CskH3QRkUOQWsJNNOKqBDDSA/5E4gP/1h7Me
+	 AUVHe/azjKhr0eYle8aRjjL9qZjZ6WLSOX1/42TAc3EIREOL/K7IRZIouV+iAJIKss
+	 WD7zw+9OOQ6iw==
+Content-Type: multipart/mixed; boundary="===============5952342031053075532=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,83 +48,64 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <63803328eeb37398cdfa03e5991651c0fb151109c74648b599b29b9dd9508a1d@mail.kernel.org>
+In-Reply-To: <tencent_6A1D611E2DA9545DA6E76ABCCA806BC39707@qq.com>
+References: <tencent_6A1D611E2DA9545DA6E76ABCCA806BC39707@qq.com>
+Subject: Re: [PATCH bpf v4] bpf: check cpu_possible() in per-cpu helpers and map callbacks
+From: bot+bpf-ci@kernel.org
+To: treebacker@foxmail.com,bpf@vger.kernel.org
+Cc: andrii.nakryiko@gmail.com,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,netdev@vger.kernel.org,treebacker@foxmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon,  9 Nov 2026 03:21:45 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] bpf: early backlog check in __bpf_user_ringbuf_peek() breaks
-  -E2BIG return
-It also noticed 1 related pre-existing issue this patch does not
-introduce:
-- [High] bpf: compat mode ring buffer hang in __bpf_user_ringbuf_peek()
-  [1]
---
+--===============5952342031053075532==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit c14bce3c5f895ee2ea691c51e1942bac34af6108
-Author: Luxiao Xu <rakukuip@gmail.com>
+> bpf: check cpu_possible() in per-cpu helpers and map callbacks
 
-bpf: Reject user ringbuf backlogs larger than total ring size
+TL;DR: Not a bug, a design question: the new cpu_possible() check in the
+bpf_map_lookup_percpu_elem() helper looks redundant, since every per-cpu map
+callback now does the same check. Could it be dropped?
 
-This commit rejects user ring buffer drain operations with -EINVAL when
-the unread window between producer_pos and consumer_pos exceeds the total
-data size of the ring buffer.
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
-> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-> index 447863ece26a3..cfd4fe4e85ee6 100644
-> --- a/kernel/bpf/ringbuf.c
-> +++ b/kernel/bpf/ringbuf.c
-> @@ -761,6 +761,9 @@ static int __bpf_user_ringbuf_peek(struct bpf_ringbuf=
- *rb, void **sample, u32 *s
->  	if (cons_pos >=3D prod_pos)
->  		return -ENODATA;
+[ ... ]
 
-[Severity: High]
-This problem wasn't introduced by this patch, but can cons_pos >=3D prod_pos
-permanently stall sample processing for a 32-bit compat user-space
-producer on a 64-bit kernel [1]?
+> @@ -133,6 +133,10 @@ const struct bpf_func_proto bpf_map_peek_elem_proto = {
+>  BPF_CALL_3(bpf_map_lookup_percpu_elem, struct bpf_map *, map, void *, key, u32, cpu)
+>  {
+>  	WARN_ON_ONCE(!bpf_rcu_lock_held());
+> +
+> +	if (cpu >= nr_cpu_ids || !cpu_possible(cpu))
+> +		return 0;
+> +
+>  	return (unsigned long) map->ops->map_lookup_percpu_elem(map, key, cpu);
+>  }
 
-A 32-bit compat application updates rb->producer_pos with a 32-bit store
-that wraps to zero at 4 GB, while the 64-bit kernel increments
-rb->consumer_pos past 4 GB using 64-bit arithmetic.  Once producer_pos
-wraps, cons_pos >=3D prod_pos evaluates to true and __bpf_user_ringbuf_peek=
-()
-returns -ENODATA on every subsequent drain.
+This isn't a bug, but is the extra check in the
+bpf_map_lookup_percpu_elem() helper needed?
 
-> =20
-> +	if (prod_pos - cons_pos > ringbuf_total_data_sz(rb))
-> +		return -EINVAL;
+Every map_lookup_percpu_elem callback (percpu_array_map_lookup_percpu_elem(),
+htab_percpu_map_lookup_percpu_elem() and
+htab_lru_percpu_map_lookup_percpu_elem()) now rejects impossible CPUs
+itself, and check_map_func_compatibility() only admits those three map
+types for this helper.
 
-[Severity: Medium]
-Does checking prod_pos - cons_pos > ringbuf_total_data_sz(rb) here break
-the -E2BIG return for a single oversized sample?
+When bpf_do_misc_fixups() patches the call into a direct call to the
+callback, the helper body never runs.  So the helper-level check never
+decides anything on either path.
 
-Later in __bpf_user_ringbuf_peek(), total_len is checked against both
-prod_pos - cons_pos and ringbuf_total_data_sz(rb):
+Could it be dropped, to match bpf_map_lookup_elem() and friends, which
+leave argument checks to the map ops?
 
-kernel/bpf/ringbuf.c:__bpf_user_ringbuf_peek() {
-	...
-	/* The sample must fit within the region advertised by the producer positi=
-on. */
-	if (total_len > prod_pos - cons_pos)
-		return -EINVAL;
 
-	/* The sample must fit within the data region of the ring buffer. */
-	if (total_len > ringbuf_total_data_sz(rb))
-		return -E2BIG;
-	...
-}
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Because prod_pos - cons_pos <=3D ringbuf_total_data_sz(rb) and
-total_len <=3D prod_pos - cons_pos are already enforced before reaching
-total_len > ringbuf_total_data_sz(rb), the -E2BIG branch becomes
-unreachable.  When user space publishes a single sample larger than the
-ring buffer (setting producer_pos to at least ringbuf_total_data_sz(rb) +
-BPF_RINGBUF_HDR_SZ), bpf_user_ringbuf_drain() now returns -EINVAL instead
-of the -E2BIG documented in include/uapi/linux/bpf.h and expected by
-test_user_ringbuf_post_larger_than_ringbuf_sz() in
-tools/testing/selftests/bpf/prog_tests/user_ringbuf.c.
-
-[1] https://sashiko.dev/#/bug/linux-262d24f9-bac4-4511-aaed-6698163eb6f5
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1793951856.gi=
-t.rakukuip@gmail.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42553704194
+--===============5952342031053075532==--
