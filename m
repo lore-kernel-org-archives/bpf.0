@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794243303;
-	b=abXrj66byBROT8BxU+cNJK6988SXG88j5/F+wHoflfSDq23rnmustpx4M2DiCG+DbzNz
-	 7zcg9WnMbm3kBW9GKstWQ90j2XvRI1qJu6vDRWOASERdnjakUl6RMLCHO/9Mvy9R2Yl8Y
-	 D9vQ/Bb/NzdylHjBlJ7kKF0Iu1RuV9Q2eq/eJyNjnqr8mWAGRdgdgHYNY/3IZw1bcLf9S
-	 +6mlJYJeO9zOUgHTIM3RoxJB8z7lzGp9H+q2PGynxSJ809bnkOdtl5a4WrKRispd9UP4y
-	 +6bFvXjSKR3c/mH2WgQB+oHeF/RaVI2DHj+qHllEq9Tu5kD6mwXADu2+c9IQWvTeoFg==
+	t=1794243304;
+	b=H9H/Rr89xveuN5bPgyTO7iqaECvmx3Ve4FejKeNCTQtlBM60JGQiU0wQU+F9i7orEUAg
+	 P8y60R9UkPhU5fkzg1UD/nZ3UY0wv/xS+dEdnn34Ul/mZnWXEoGmuqBPz7Yde6ZtgIOwC
+	 6m4g/aQLa3sMh5ucFKRyVMwUAX+unP2uImHIrIHeQbnl7VEiwvpJqFwRSh1bZFP89RdA+
+	 IvJVWjRNL4rP5Mcu5uHvMsQ7gpR9FlHX/kR/fWzmAnUjcXTOhZo0C7bxkouoHVaO/7p7I
+	 N+sRTJunNSM5+HYNfsfHhsCOkNfp/iwjsWbMZj3nK5tmmupCNnJhulZIyQn5AxeFSVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794243303;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794243304;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=slXrTo8Cr/NVx1W/On0les0MlfgDaZcylgwq5f9qHyY=;
-	b=QEk7ba28rLJK/VCJUe/omgYvGRAqgI8Hcq4YDNOdQPaHt3IibeS8bWtfKQMkoxzHm+UB
-	 zCE5Hee6b5G6miGqm4TEg+1nnArebFq/GfIt9TaREUQ8csriZPVlRgyPPeVPk88ssN2Cn
-	 KvoTIIHy7dA9knBpgCK63Ij+/2soya4nCRVJGEPqoEyeqV8AEfXBTVuWKCsitIdtziIMT
-	 E+PMUoOV+RU0qSjujo8ZcNeoSOYBJHQQjbhF+85SvUrPFOlxfndlsvObr9SAN5PrjTOwh
-	 Xrc2s58vfSr6WwLraS9//z2hJsodFwg9HQtq95XhI0u0qGgDHNT5OVUw+G2iKUZh/qg==
+	bh=NiYqsbiEHPYukFA61TqPRmCuyZ7fxceskxzXhkevg7c=;
+	b=KGHX2LguHW0JXz0Wl5Lr1nyWCkmlg4ynjx12WzncgX/LSbcAUDtqrG9xn53nbV6+riJ1
+	 Do8rOCd7sxrlndAVOOraolsV/eyW7I3V6ZIO/4Y90+vEmYXsYGWBHiK+YOlf778mF3NLF
+	 awSGKTqDULHwjpBQ6a+9RzwwUiqsZeeou3ymCXvOvdyuRw3R0zYtwMzjQoXpDer04BxPL
+	 rwmXuAfvaG3tqSDwGEUJoUFbmYy2dR8MVGynT+LxRJ2pMQOpVOTLygVM+QDWm09LhjjNf
+	 Fx+ISZuPgxVJKgvhDe8+5OD15/nKQJ+Z9qIl4dpwkNpJJ4nKv1Lk7TVfVzCSO4jot7g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jC2F0Srs;
-	arc=none smtp.remote-ip=209.85.221.46
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kaMcoPJ3;
+	arc=none smtp.remote-ip=209.85.221.52
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21255606A8A9
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 16:55:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 21255606A8A9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2B160A2609
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 16:55:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E2B160A2609
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jC2F0Srs
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4918c2d727fso574719f8f.3
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 08:55:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kaMcoPJ3
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-49412eb1474so742764f8f.3
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 08:55:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794243300; x=1794848100; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794243302; x=1794848102; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=slXrTo8Cr/NVx1W/On0les0MlfgDaZcylgwq5f9qHyY=;
-        b=jC2F0SrsgYJYG0UFwBYmwNmg/vftlPA1YKYx1EbhdJKXsH6xummx16NFAo8wMmco6W
-         3f9qOMkEaRnkjXLoomqJXG15K+goeiFZUr7Z1QCMubYlXOANxseaf69wE4qsak4nDIdP
-         j8/xUpvdIBOL1//qt+2wFoejdnVhhvJc8RyOdoRDDLnpOx6bQDY+zsRevrJQ6RxRNLJr
-         VJQDOJINtfgmJ0s6QZjKM7rGsVciWoIbJlXSg+obKGCy4bfQ82v4SI09zBPOksBzVVlV
-         rJn6AH7IB6ZRUBYo32cEKcC4ndMpqiWS7J06MeaDrI2wsV/ILPZVc2Rt530xNHQLiKM/
-         vmfw==
+        bh=NiYqsbiEHPYukFA61TqPRmCuyZ7fxceskxzXhkevg7c=;
+        b=kaMcoPJ3K4GQeci9A0VDvbzj3TGlRVR0mYBeFV/Mv7qd2BQxpWKuR9L1cgIt+r/8c6
+         0+iO9+zCk+iPnrzB75aB97716/tz6jUN5f7YKTps2fzF2g0ila8vOWWK6bPaX8wDBWuR
+         3yD3sI0l+LVDdXSpsZwPMYEcp86YVHH4XoGPW0Zqeg+LkjmqEQPwpgO0fgmPFJqX0cyf
+         AJfQeepPT6HdWkRA4erxv6QNScSGcop/aal3rCEg2H6mhAtqsvssTfUcMgwoN9fN0AoT
+         D1KRf4Djg9nUSz3fDuYRq0l6KC4oe0yURx7trXi+ceFGZpuo0Ilbd2L0yVZtZeeXGcMk
+         ErnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794243300; x=1794848100;
+        d=1e100.net; s=20260707; t=1794243302; x=1794848102;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=slXrTo8Cr/NVx1W/On0les0MlfgDaZcylgwq5f9qHyY=;
-        b=dNliSLduQmhcewNaZ4dPQI9Nqt6YRVcE++SdhIIMXqZirJarZjh3aMioRnHEnzqnYd
-         J92EFTaFAHWvP8C0tLFitcLs2roOkB/XwEngZ3/iyHHZf0vGIHJEZewAsrtpKerBWIS8
-         BarHIOA+zyNPkUDqb4YxjWta129wShVlW5iZ/DYKkY4pDDhSEpHA7PYOuhyBBP+gHzAW
-         y9OXBjZlD1gbHcPn7MCo1Nt0zSoeHDFTd+ozcBJJmtX3cxxCXHJ0NVslaPfCahbSClsG
-         aIGrgxnZ82WuRj+V25Dzqkhu1FENBFFdsGTlEwChFPH0bCvY1RF+0N2hNI0L83KDVvcW
-         cfjA==
-X-Forwarded-Encrypted: i=1; AL+hErGdu1nmhtysZ5ZEYPV0ns9cLgAFmd9Y3m3s/6yq/bSMWDeBMPME4kXoPv0DJVWjnfkJn2k=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+9TxkAto9DV88szGsqCSd3LUwetssgoU1w8+GvHahYqYSQhGQr
-	hFAcUlYdIMnPH8sAg6WQeikBPifn42aEykhHMKCRV6qNS418asyzdEcL
-X-Gm-Gg: AYBFou3X0TrCquV6dArH1rnKh82V6pz2lQzlpEyBmweaDdlvMxhyxFevgtcwtWd8ExK
-	M97Bgvq4ndbJ1IQSWmcYOxeKoiLSfmbioHQexbtfmfhwvsALi8yMKYwHyf1OCpCqVonRtViT8dM
-	7pPFyp+wAPlwBvoy8Aj3KzPWHp4LtEMT77aQlStxwAJLiEnISL9k5vDjOIdP5ptBAqQFlqIFVL+
-	vcTDLhLRQ6TBcLkBYeNPEXNjXFmz4fdYAPzWy3gaUlgwf/UC7mhs3i3kpTjC28E0CER3t8GVV3u
-	izGWbmQ9E8PBFJivjW19qc23UY9KKPhmk3UfWtG0gZ0DGYvVsb+ZEfmX7exCjO/28p42cjfy3mn
-	jwXMTjd0zx/C5ToFudOCWsJwdjeRewvpaNZ2Ypvq3mo8rWIxH2WsiqqYKrbay+TTpG93hxcGHUR
-	RMdqrq6j++mFaWt0rOrBtvIyWg+/CSNGzl76BdCMcNdhHZoFnUqN0MXFP9MpHmDeoDP0N68/lOh
-	ujJ2zYtxi+wiG7dT4lo+GOPydCA5xEYvD+ZgUw1SMSMvuCRWUmjjZTvOUf1rEn9UYxmszts6S61
-	8yTLGzkojoiqRxwvkKM0zDbLN81LK56s3LRbL/o14AXVxKz1
-X-Received: by 2002:a05:6000:230b:b0:48d:fdd0:6ce8 with SMTP id ffacd0b85a97d-4982b28a797mr184972f8f.3.1794243300486;
-        Mon, 09 Nov 2026 08:55:00 -0800 (PST)
+        bh=NiYqsbiEHPYukFA61TqPRmCuyZ7fxceskxzXhkevg7c=;
+        b=AUk7B4l8Ms3f5iOS5EU+VUjGmcRG0Cc7lNlFegeD2lpaLGqpvWSs7vZIYYug8OW/YB
+         r0cJQXIEYwlPJCoMFiIgPGysuEU+s0LdywDLJ7wAziBr0mHfQRuqMzV+pUOY/WWNg0X0
+         m1aJ86oaWayRDFLekFasgF9fnn/04Ypxm9RJin3Us5i7ZO5DpbkcjWrtvOEkxIX8/oOJ
+         uUaWhmCyl8KQhIrfT8YEgSgrJwaluxTPUXuZF2idg2LC3z4e3wEMKWbGIUIRjAQFlZgg
+         OE7I1PC+AOdlByH0/bgi+fLx+9W1FtXggdtjM7tOL9bNbQU+Rc1zUJ9vvWfB4YcjDGwZ
+         1ssw==
+X-Forwarded-Encrypted: i=1; AL+hErFNNLC6W25nQf/vILTuJftLYxUL31BteC21L5ZmJvDmcZh9/44lWeFLGkxrIvfTxjhqoos=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+h5d935IB1IwzKwgN5Clrh7ni0UjGvTuFIdKDnbMm5QSu9BKGo
+	enaeQeX2/DK2yANreIDJ4HjJAALJIuQh80xLpePrJ5dV1AW+3y4fwkIc
+X-Gm-Gg: AYBFou1Wlz+V80CY0riAllLnZb1HZurUdxR+aorztJ/VPTRMDDB7Pdbl1y6KxoK0gsc
+	5pqNF2oA8Ig/CfQySGT7sOufHAPKxUrQm+vMmokNvF0YLxDuLaf5gUtmpw1tBH/XBdOm41o7IUz
+	/HwbFE3ZJvcNPtV+f1tdvGH9XNiE+c3Yh1QwWGREXKrMjMsWBsrNfF2ZtCBrErPCpeHEOagmD96
+	Tuuzy2DmrAESuRNPWQmvm4LpQzshK4Y118ZzLb0Lb29jT7usj5cjsPtsPsiUd3WBrkeAmnVL/wS
+	TXiXV8xSdwPmnnexPHBVE5ObTp5wXs0TKx0Qt49cQuwPrH9ZzXui83yDCvck2NoXWLI/+FR3NhW
+	AJbhF5+MbX0zPYalGTZNxNJ7y8YLXnXy5lbjp913cTxnO3T7a8f4o8JtSodN5zfONa1YASg6n10
+	caqbRoHAh0koixBvjLIKVkKrj4/tOPT1ginF6GtGDYKui3U0ktr/o/RwUk8Ot2NqPuHrp9QhD+b
+	pgeLvSmTyBFdK7EviBx9+ergyv7ojdWcPNoi3aB72v9KcT6SXYnJYwH4mD9crtHsxWzLdVxyAkV
+	YlTqgy8/GuVc5BoUR21YzjcsBf0JMiNCyjG61XtCpMpdV9U=
+X-Received: by 2002:a05:6000:1849:b0:48e:bf0:352 with SMTP id ffacd0b85a97d-4982c2d03a2mr129328f8f.5.1794243302412;
+        Mon, 09 Nov 2026 08:55:02 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4959783fd04sm11392369f8f.47.2026.11.09.08.54.58
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4959783fd04sm11392369f8f.47.2026.11.09.08.55.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 08:54:58 -0800 (PST)
+        Mon, 09 Nov 2026 08:55:01 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -97,9 +97,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v2 bpf-next 11/18] bpf: Follow PHIs in bpf_scan_ir
-Date: Mon,  9 Nov 2026 17:05:31 +0000
-Message-ID: <20261109170550.141443-12-a.s.protopopov@gmail.com>
+Subject: [PATCH v2 bpf-next 12/18] bpf: Follow integer casts in bpf_scan_ir
+Date: Mon,  9 Nov 2026 17:05:32 +0000
+Message-ID: <20261109170550.141443-13-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261109170550.141443-1-a.s.protopopov@gmail.com>
 References: <20261109170550.141443-1-a.s.protopopov@gmail.com>
@@ -114,177 +114,62 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-An error often reaches the return through a PHI in the block of the
-return which joins it with the results of other paths, some of them
-dirty. Take the incoming values of such a PHI on the edges from the
-blocks which only clean paths reach. Do not follow a PHI in an earlier
-block: a later branch may split its values between clean and dirty
-paths.
-
-Take also the errors which LazyValueInfo knows exactly: an incoming
-value on its edge and a returned value at the return.
+Follow sign extensions and truncations between integers of at least 32
+bits in the block of the return. They keep an error, for example an int
+error which a function returns as long.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- scripts/llvm-plugins/bpf_scan_ir.cpp | 84 ++++++++++++++++++++++++++--
- 1 file changed, 79 insertions(+), 5 deletions(-)
+ scripts/llvm-plugins/bpf_scan_ir.cpp | 28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
 diff --git a/scripts/llvm-plugins/bpf_scan_ir.cpp b/scripts/llvm-plugins/bpf_scan_ir.cpp
-index 0fc60b2130b1..81de8f941568 100644
+index 81de8f941568..a3c6336662fc 100644
 --- a/scripts/llvm-plugins/bpf_scan_ir.cpp
 +++ b/scripts/llvm-plugins/bpf_scan_ir.cpp
-@@ -8,11 +8,13 @@
- #include "llvm/ADT/SmallPtrSet.h"
- #include "llvm/ADT/SmallVector.h"
- #include "llvm/Analysis/CaptureTracking.h"
-+#include "llvm/Analysis/LazyValueInfo.h"
- #include "llvm/Analysis/ValueTracking.h"
- #include "llvm/Config/llvm-config.h"
- #include "llvm/IR/Analysis.h"
- #include "llvm/IR/BasicBlock.h"
- #include "llvm/IR/CFG.h"
-+#include "llvm/IR/ConstantRange.h"
- #include "llvm/IR/Constants.h"
- #include "llvm/IR/Dominators.h"
- #include "llvm/IR/GlobalVariable.h"
-@@ -34,9 +36,40 @@ namespace {
- 
- static constexpr int MaxErrno = 4095;
- 
-+// is Range in [-4095, 0) ?
-+static bool isErrnoRange(const ConstantRange &Range)
-+{
-+	unsigned Width = Range.getBitWidth();
-+
-+	if (Width != 32 && Width != 64)
-+		return false;
-+
-+	auto L = APInt(Width, 0) - APInt(Width, MaxErrno);
-+	auto R = APInt(Width, 0);
-+	return !Range.isEmptySet() && ConstantRange(L, R).contains(Range);
-+}
-+
- /* The errors which clean paths of a function return */
- using ReturnValues = SmallVector<int64_t, 8>;
- 
-+/* Return true and set N if RANGE holds a single errno */
-+static bool singleErrno(const ConstantRange &Range, int64_t &N)
-+{
-+	const APInt *C = Range.getSingleElement();
-+
-+	if (!C || !isErrnoRange(Range))
-+		return false;
-+	N = C->getSExtValue();
-+	return true;
-+}
-+
-+/* Return true and set N if the value at use U is a single errno */
-+static bool singleErrnoAtUse(const Use &U, LazyValueInfo &LVI, int64_t &N)
-+{
-+	return U.get()->getType()->isIntegerTy() &&
-+	       singleErrno(LVI.getConstantRangeAtUse(U, false), N);
-+}
-+
- /* Return true and set N if V is an errno constant */
- static bool errnoConstant(const Value *V, int64_t &N)
- {
-@@ -49,6 +82,42 @@ static bool errnoConstant(const Value *V, int64_t &N)
+@@ -82,17 +82,39 @@ static bool errnoConstant(const Value *V, int64_t &N)
  	return N >= -MaxErrno && N < 0;
  }
  
-+/*
-+ * Add the errors which V, the value returned in RET, is known to be on the
-+ * edges to RET from CLEANBBS to VALUES. V may be a PHI in RET. A PHI in an
-+ * earlier block is not followed: a later branch may split its values between
-+ * clean and dirty paths.
-+ */
-+static void collectErrnos(Value *V, BasicBlock *Ret, LazyValueInfo &LVI,
-+			  const SmallPtrSetImpl<BasicBlock *> &CleanBBs, ReturnValues &Values)
++/* A sign extension or a truncation between integers of at least 32 bits */
++static bool preservesErrnoCast(const CastInst *Cast)
 +{
-+	int64_t N;
++	Type *Src = Cast->getSrcTy(), *Dst = Cast->getDestTy();
 +
-+	auto *Phi = dyn_cast<PHINode>(V);
-+
-+	if (!Phi || Phi->getParent() != Ret)
-+		return;
-+	for (unsigned i = 0; i < Phi->getNumIncomingValues(); i++) {
-+		Value *Incoming = Phi->getIncomingValue(i);
-+		BasicBlock *Pred = Phi->getIncomingBlock(i);
-+
-+		if (!CleanBBs.contains(Pred))
-+			continue;
-+		if (errnoConstant(Incoming, N)) {
-+			Values.push_back(N);
-+			continue;
-+		}
-+		/*
-+		 * LazyValueInfo knows the ranges of integers only. On an edge it
-+		 * also uses the branch condition, as in "if (err == -EINVAL) goto
-+		 * out", where err is the error.
-+		 */
-+		if (Incoming->getType()->isIntegerTy() &&
-+		    singleErrno(LVI.getConstantRangeOnEdge(Incoming, Pred, Ret), N))
-+			Values.push_back(N);
-+	}
++	if (Src->isIntegerTy() && Dst->isIntegerTy())
++		return (Cast->getOpcode() == Instruction::SExt ||
++			Cast->getOpcode() == Instruction::Trunc) &&
++		       Src->getIntegerBitWidth() >= 32 && Dst->getIntegerBitWidth() >= 32;
++	return false;
 +}
 +
- class CleanInstructions {
- 	DominatorTree &DT;
- 	DenseMap<const Instruction *, bool> PrivateWrites;
-@@ -111,7 +180,8 @@ static bool cleanBB(BasicBlock *BB, CleanInstructions &Clean)
- }
- 
- /* Add the errors which clean paths of F are known to return to VALUES */
--static void cleanReturnValues(Function &F, CleanInstructions &Clean, ReturnValues &Values)
-+static void cleanReturnValues(Function &F, LazyValueInfo &LVI, CleanInstructions &Clean,
-+			      ReturnValues &Values)
+ /*
+  * Add the errors which V, the value returned in RET, is known to be on the
+- * edges to RET from CLEANBBS to VALUES. V may be a PHI in RET. A PHI in an
+- * earlier block is not followed: a later branch may split its values between
+- * clean and dirty paths.
++ * edges to RET from CLEANBBS to VALUES. Follow the casts in RET which keep the
++ * error to a PHI in RET. A PHI in an earlier block is not followed: a later
++ * branch may split its values between clean and dirty paths.
+  */
+ static void collectErrnos(Value *V, BasicBlock *Ret, LazyValueInfo &LVI,
+ 			  const SmallPtrSetImpl<BasicBlock *> &CleanBBs, ReturnValues &Values)
  {
- 	SmallPtrSet<BasicBlock *, 32> CleanBBs;
- 	SmallVector<BasicBlock *, 32> Worklist;
-@@ -154,8 +224,7 @@ static void cleanReturnValues(Function &F, CleanInstructions &Clean, ReturnValue
+ 	int64_t N;
  
- 	/*
- 	 * The returns of the clean blocks which only clean paths reach or which
--	 * one of them branches to. Dirty paths may also reach the latter, but
--	 * the returned constant is the same on all paths.
-+	 * one of them branches to
- 	 */
- 	for (BasicBlock &BB : F) {
- 		auto *Return = dyn_cast<ReturnInst>(BB.getTerminator());
-@@ -168,8 +237,11 @@ static void cleanReturnValues(Function &F, CleanInstructions &Clean, ReturnValue
- 			Entered |= CleanBBs.contains(Pred);
- 		if (!Entered)
- 			continue;
--		if (errnoConstant(Return->getReturnValue(), N))
-+		if (singleErrnoAtUse(Return->getOperandUse(0), LVI, N)) {
- 			Values.push_back(N);
-+			continue;
++	while (auto *Cast = dyn_cast<CastInst>(V)) {
++		if (Cast->getParent() != Ret || !preservesErrnoCast(Cast))
++			return;
++		if (singleErrnoAtUse(Cast->getOperandUse(0), LVI, N)) {
++			Values.push_back(N);
++			return;
 +		}
-+		collectErrnos(Return->getReturnValue(), &BB, LVI, CleanBBs, Values);
- 	}
- 	llvm::sort(Values);
- 	Values.erase(std::unique(Values.begin(), Values.end()), Values.end());
-@@ -237,10 +309,11 @@ public:
- 				Flags |= FMODRET_FN_WEAK;
- 			if (Ret->isIntegerTy(64))
- 				Flags |= FMODRET_FN_RET64;
-+			auto &LVI = FAM.getResult<LazyValueAnalysis>(F);
- 			auto &DT = FAM.getResult<DominatorTreeAnalysis>(F);
- 			CleanInstructions Clean(DT);
++		V = Cast->getOperand(0);
++	}
++
+ 	auto *Phi = dyn_cast<PHINode>(V);
  
--			cleanReturnValues(F, Clean, Values);
-+			cleanReturnValues(F, LVI, Clean, Values);
- 			/* A weak definition always has a record, see fmodret_metadata.h */
- 			if (!Values.empty() || (Flags & FMODRET_FN_WEAK))
- 				Descriptions.push_back({&F, Flags, std::move(Values)});
-@@ -253,6 +326,7 @@ public:
- 		PreservedAnalyses PA;
- 		PA.preserve<FunctionAnalysisManagerModuleProxy>();
- 		PA.preserveSet<CFGAnalyses>();
-+		PA.preserve<LazyValueAnalysis>();
- 		return PA;
- 	}
- 
+ 	if (!Phi || Phi->getParent() != Ret)
 -- 
 2.43.0
 
