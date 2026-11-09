@@ -1,85 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794230505;
-	b=Lzv73KTJhixEB5t0swobnoo8dh8MAgEr2Xh7cByoXuMQqucLjVRp1y0i8vBHD60913k1
-	 /Z0zplYYTVY/pufgkAr/FNOmvRDumLsUAYJ9oekhzqBqcUOT+dXy9bQIEAe+R4mr0NN1Z
-	 St4+h/D5UGpuJAm89TRJcpN9uhWfz6yeVUOSj2G4jt0FHu9NdoNafHCoF4+aXQ+LlUfCE
-	 lQZMbmQ71sBfE6G9mxMObfVw43OzXopn/uNH9xffu2OQzr7mMyqf3XdJ+Dvku2gDK/g4y
-	 I+HrPLA/wC08mFrq8e47j2BPX7Qei1WEQwSaxw9UjAsMuKQq/G1DgvByQqIIXAyi+eQ==
+	t=1794230928;
+	b=OveQZmp6QxR7GxaAODRlVv9qO/Ew/prWfA/57z8ibip/nTLe4d//UGOrkoD/wZymj7sy
+	 JOLK5Eimkje1+t2sDSDCrCgQIbcJeIvVro2FNuUJj3+FKbOrpX8VZYCNQ7Qeg9u1dWem+
+	 Ue8IgTa6gkOfx3y9L9PmZ8U9BZDkwDu8juG+4TXK+BpEJoAio/DDXwuXcLBfjTC+xiM/c
+	 q8VOkRxCACFl7EVx46qS7Yvx3OYiULS3yL9vu4pfSssr6kdXsKsZ2ZgOpwWMXS2ZsVFNJ
+	 k2GC86PUIDNLqZsN0JLpVdHX0E10nHtZWN27sWUlwhOUAUWuJLcv23mL9ctmoO/KePA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794230505;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794230928;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=pEuxbvXtluYllCu/vc7sHN+QRKtfy44dRwIe6mCBUE4=;
-	b=dVfgj0xcutsVitA4H//2DElBARiMb9Gsjq+bZQUy4zIL9q0WrJ1j/5fhSOpW1L1aZjq0
-	 5CPWtS9GAncAfly92oHgas1HhJmWh9tyP8FE5zNGnniH/JZtpyVvhRAVFRd1set4eYUGT
-	 aYFQ6NWuPpwZzkrVIW5tTY+m1vZVnEw43zFG0Zpqu6tBfh3atA4c7tgZsIsAGCnee6SMI
-	 Ctdc12vsFLwnOMnZLP0oTnS50IdSjvvoj8OTAiGik8rYCzcQkVA4NwLZzZnmj8hvx2ed+
-	 xwm+f7IuhYS7ccvtgUazMOonC/QbwOdbb/LYlgOA3ElrH2GbTnLSMUsYU6EZK3UWhMg==
+	bh=rsswYF+09a+rKyP1kcfLJoXu1lPtWtvOWjlekD34MxU=;
+	b=YwzAIfYPzfEoFZBQEgtRixV1oetf7Vp914NfISkwJslStHY5Z/ZrL6wqWkXcbZNlQoUp
+	 JlXs5CRJaEphmH4j42rbxtqV4nbOrBxYIaJ97oXuudsn0RMBSleXMWnkA9YXFOd9yDtrx
+	 i7LvXnBVSjupitHioViGQ2o+atcZlZtk05TV8gSMO9dGjKfDboyAv1ms1Oan9F71z+zp7
+	 4YKWDwIuiLvmse8navDXdiZB29E5dhrhQSOdq3CQaat2Ei4V3U00u7scfpDoCxKlfjlSo
+	 Sg3U7EilxORrcWLf0xU5deoN4jkHa8YDHrDIegey1dvGzpS5mGRrSBz8liTsRMeuFmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FQd+G5lX;
-	arc=none smtp.remote-ip=209.85.221.54
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q2PFAHXV;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A86606A322
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 13:21:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31A86606A322
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66DD606A321
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 13:28:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B66DD606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FQd+G5lX
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-491aaed7565so529238f8f.2
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 05:21:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q2PFAHXV
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a2167bd087so8634765e9.3
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 05:28:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794230502; x=1794835302; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794230926; x=1794835726; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=pEuxbvXtluYllCu/vc7sHN+QRKtfy44dRwIe6mCBUE4=;
-        b=FQd+G5lXaGVwlAm/J2w2LE1vuYTaMrYEK29bnurj4i5xIPn873J/s2JLTcfDJ7LJnA
-         e9Bi4u2cNDz/I7/25Dwv9o0k00a92rwVUUWieHNjAPzEY2isAu7bI+0wgShNQ5xrQVHZ
-         iVtZFxsoxU0FmJjFznjXPh8m3C2B/NZUeVo+E/oEGrwKVruJCzfHfbhxtL8UGNbLk5rx
-         913Wkg5hQ5dp7seaqWrxNNPbv/dW2SHu+pqIybIj7hg5yiYrcEgGD8bq7Jic6a6OfQpi
-         QF85I+9IQ2haSw45KyUYdy80QpMMijPh3SIKQeXYxoYJrlEaKkXiVa0Fmc2uVFlzhVqc
-         CycQ==
+        bh=rsswYF+09a+rKyP1kcfLJoXu1lPtWtvOWjlekD34MxU=;
+        b=q2PFAHXVc+qNSn8OFchCGNzLImP53bGX9+CY9a8Kj0gIjN9u9C/YHGrLURQqvnPz5O
+         aYyEmxlXRfZeKhc9EfbboBdPCSU0gxrRIma9vyDqInwuKvJ4Hfv0DB01lJIxJNS6XtqJ
+         p0nCs2L+V5cy5m8WyvXKrfoFZKsZloZ0jxREaXC/RWDWa0pEmdmmvkHbArfcEHF88LIR
+         ZNJcueXbCVEVd0XOoHZUziWP817JHum9ki5fIhQ5lLVM6R+kwG1wEv5r4Qffd9qUS725
+         P2s17QJS6scIDiHJWe2/dbnx9cxw6ZI5vChsK+k1UxcbB/L6hRY8Ird58rnqqKWQv+1X
+         x3Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794230502; x=1794835302;
+        d=1e100.net; s=20260707; t=1794230926; x=1794835726;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pEuxbvXtluYllCu/vc7sHN+QRKtfy44dRwIe6mCBUE4=;
-        b=IDfzHZAoikybLQ1UrWRHr3mUu3uVXeJmRD4w1X/gUFS8/T4WnhOYYkxpMB9NObUQkZ
-         LiPuE+3X3QzD/6KDJDwxJ6xYxfua+v5jyUeWX4W2F2B7Lmr+N7HUjS6/MFaa0k5+GgT8
-         7nZYIdAWZJ9U1CAxjQz9kAn9bW4KJhFG6JwfA5XgATEtAz5eYFjHsEFeX0P2KbavDhqz
-         i7BsEHpOe6OONMAiFi55rWd59YWnenuG4o37SNgFutx3iiGBHNRZiLOs2BbI9RDYYPCO
-         4MUkLEAKCOr8wqkInQ+RLDUqT7Dl2OsnTX4R4Dzf3kY+1VU31sZKcRPhZFoSnaMtbCSk
-         kyNQ==
-X-Forwarded-Encrypted: i=1; AL+hErE/3NkVEZ+yQlwwt5b+GhUCptnRG19bxSrWp0m88t0Q1aNeBr6pQoy/7WRXNMv6LywcgTQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+w93+wFGakQLKKr8oulj8KERoLEbxILydWZ/Sd3hmAZEJ81Qlo
-	GuOc/ny2RHUYlHGmZ4CUsBhrhi3latKJce3hELR7tP65pRbpLm3FjF+e
-X-Gm-Gg: AYBFou1NRV7VzRLJ0zfm3jvalp5FeF+SIZsa9oXCCzstYkYjF0p0Q9f95agULey9h0z
-	Bxx7Ejid23BUavoOCR4/sGT05PfK0cqj3g2P0Lay0DZi055yIuy2zQbju20dHq5yJtq2t6u3AXn
-	LLCOOMQdE0hu4vbwbFxdpUgWy1ImFyXBbGX5/4nygbTdDZp/NUGQ8EXgM4v7e/qVH4er3IxhDbS
-	v8pNWYadIzYtZ7guSVxIU1eFSFBbv3BuJzP3icbuhZZLE7kgrsKDWmVC7y1jGIdBSeYZAWwZymf
-	eu1Jc6a24CJjL2yvEnTVKmsIe7ZnNIIISPTr/LwwlY5PYmeLYrsxv09IvU5r1aHlc3tSfurpfAk
-	dAulmMxXbUZW/G3Dh5eTbIgUtdf7GcDdkDD/j+T5r3q9L1J0lfNNTEjsTFUzptgjM7zc13Zwz3Z
-	VETEjxl66nS0w8hOUhMY+Vj/ETyxtdp9rFcFhUGkmWQvbnZj0oR/NrV1yBXj87v+I18m3knx66o
-	S37G4TKNlVIGNMtMqjFv0I6EbGwGoks6TuPVJWq6OSK0ujyfFjV7xtpYBLH3VSa5D14WHCaA0tM
-	hVEJfKUrHrlgKOALNBcoYnrgQKqhygKgMwUNCFq/IvwfIcvU/FYRJ6IvKQ==
-X-Received: by 2002:a05:6000:98e:b0:488:654b:ccd8 with SMTP id ffacd0b85a97d-4957f21a79emr6492891f8f.6.1794230502289;
-        Mon, 09 Nov 2026 05:21:42 -0800 (PST)
+        bh=rsswYF+09a+rKyP1kcfLJoXu1lPtWtvOWjlekD34MxU=;
+        b=p4PIMs24jpa65D+Oet0uEH2RyqCtL23UeusReBsIQUePicDUkrVMiegMYWIdjXMr8H
+         qPp41BThucKkah60JHMakXPucbUIPatY49A4k+3dG311GQmvPe85tTcr8D1JNJ6ckYpe
+         YpfqVVsIXnwriECpbt8zGryDK8XNOk/zOvHk152FzffMJK8ziZICxkjKzJc+RRVAZ76v
+         lYm3D/fYE6NSjqyQDqWxjXuNzePVE1Pw5lghHWvHfYsvT/tKUkvqTUQk2cUovj1Hm7g+
+         tAb2Xaiy1pNd7alg6A9sPsyiPd65ZUIOwJjTFwY8ke4FEsE4l0sx4QJ8Az7MbmDRvW+f
+         6qzw==
+X-Forwarded-Encrypted: i=1; AL+hErHR7Hr9DYYJ7Bh4P1pdvlIMzLLAg6ysmvhFRvqEIbopYNxjEDm/WUY/7M6ilSdpadupFc0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/NSWh5JiyVm6JvliK6epnL9LR4uL/HE1fDCF7gR1aK3Ur015ZX
+	8yjrohPyuguvrv4hYc3JHxznCnelY0eKLRhyQ9Y6Q1QUQXeCoRjQzU1I
+X-Gm-Gg: AYBFou2SywUQIhTNLgFRrRCIHNZlsUa73QT2B5Sz+uOBuWryfYE/VB0d+lvkUTUNOJu
+	kFfGrSnfdD+2rYJTsRxCjwPN3CM/oI+LT5SxxpmXWpmy6c+N5npa5BufMbd+6DjhSq/D1BpE4tE
+	CNkFQE/JJlxBalZ8MQW56MMuk3MlXt2oR5rrJycx4LrmuQBDwYeuKU1PxeDEdWZSq801FyE9kaz
+	9jX0A/2jGDDA7L52nrS71spmoc8mcjx5FHFdyl3QO2xSFmdYcT/tW2PqEut+RsUlvQY2kaY2XAU
+	E+WREfpW9TdNf3pmRsA9G3C0ReyiwcNVjjH1iTUpIGqN9klay0+a/bv4yg4TDp//K1OoF2HWFin
+	H8TcY2FkTLHsiQmXXpDL/ewGQn7DKbQwScHgGTStBo3ppwhHaDfx/v5MN85rXZ6eqgcjUwCRovW
+	O/wxW77MaPMhjMX9zidQRs7dNWOE/CEzZeHotbZ0HV77hROz6U8NOxlnfAs74qZ3g4bV2PLC1Dg
+	8x3FY3sIOKG5otQxAKCKg4VznSxSmE/Q9jOLnDTewoGdLiHgE1k55UsIVMkRhOsNUZTH6f3QcXB
+	Vv+Ns3hnYccHC2vfgVVpoT0Gs33JfllZ4YjR
+X-Received: by 2002:a05:600c:4505:b0:4a0:4a8:d444 with SMTP id 5b1f17b1804b1-4b963c85de8mr77785245e9.33.1794230925937;
+        Mon, 09 Nov 2026 05:28:45 -0800 (PST)
 Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-49596ea51cbsm10925707f8f.27.2026.11.09.05.21.38
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b7da62edb4sm282951965e9.1.2026.11.09.05.28.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 05:21:41 -0800 (PST)
-Date: Mon, 9 Nov 2026 13:33:12 +0000
+        Mon, 09 Nov 2026 05:28:45 -0800 (PST)
+Date: Mon, 9 Nov 2026 13:40:19 +0000
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: bot+bpf-ci@kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -89,11 +89,10 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
 	emil@etsalapatis.com, ihor.solodrai@linux.dev, sashal@kernel.org,
 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
 	martin.lau@kernel.org, mason@kernel.org
-Subject: Re: [PATCH v1 bpf-next 15/18] resolve_btfids: Tag fmod_ret
- candidates as targets
-Message-ID: <avHLmNLouxZX5z-e@mail.gmail.com>
-References: <20261106210314.1767267-15-a.s.protopopov@gmail.com>
- <82dc259cd905abb5ad4fcbb8151553fb8680d4d71b1e52babd3e2d588a90656b@mail.kernel.org>
+Subject: Re: [PATCH v1 bpf-next 18/18] bpftool: List and show fmod_ret targets
+Message-ID: <avHNQ00KldUBEM29@mail.gmail.com>
+References: <20261106210314.1767267-18-a.s.protopopov@gmail.com>
+ <148800382a0df555432654e0021a940d6bcd283955b5e1ec88ba885d4f28cfff@mail.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,117 +104,15 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <82dc259cd905abb5ad4fcbb8151553fb8680d4d71b1e52babd3e2d588a90656b@mail.kernel.org>
+In-Reply-To: <148800382a0df555432654e0021a940d6bcd283955b5e1ec88ba885d4f28cfff@mail.kernel.org>
 
-On 26/11/06 09:50PM, bot+bpf-ci@kernel.org wrote:
-> > resolve_btfids: Tag fmod_ret candidates as targets
+On 26/11/06 09:35PM, bot+bpf-ci@kernel.org wrote:
+> > bpftool: List and show fmod_ret targets
 > 
-> TL;DR: Nits only in resolve_btfids fmodret.c: duplicated alias-walk code in
-> mark_traceable_function(), its unused bool return, and possibly obsolete
-> section names (.meminit, .cpuinit, .devinit) in section_cannot_be_attached().
-> 
-> > diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfids/fmodret.c
-> > new file mode 100644
-> > --- /dev/null
-> > +++ b/tools/bpf/resolve_btfids/fmodret.c
-> 
-> [ ... ]
-> 
-> > +static bool mark_traceable_function(struct elf_function_list *list,
-> > +				    Elf64_Section shndx, GElf_Addr address,
-> > +				    enum ftrace_site_kind kind)
-> > +{
-> > +	size_t left = 0;
-> > +	size_t right = list->nr;
-> > +	size_t first;
-> > +	size_t i;
-> > +	bool found = false;
-> 
-> [ ... ]
-> 
-> > +	if (first != SIZE_MAX) {
-> > +		while (first && list->functions[first - 1].shndx == shndx &&
-> > +		       list->functions[first - 1].value ==
-> > +						list->functions[first].value)
-> > +			first--;
-> > +		for (i = first; i < list->nr &&
-> > +		     list->functions[i].shndx == shndx &&
-> > +		     list->functions[i].value ==
-> > +					list->functions[first].value; i++) {
-> > +			list->functions[i].traceable = true;
-> > +			found = true;
-> > +		}
-> > +		return found;
-> > +	}
-> > +	if (kind == FTRACE_SITE_PATCHABLE || !left)
-> > +		return false;
-> > +
-> > +	/* The nearest preceding function owns the call site. */
-> > +	first = left - 1;
-> > +	if (list->functions[first].shndx != shndx)
-> > +		return false;
-> > +	while (first && list->functions[first - 1].shndx == shndx &&
-> > +	       list->functions[first - 1].value == list->functions[first].value)
-> > +		first--;
-> > +	for (i = first; i < list->nr &&
-> > +	     list->functions[i].shndx == shndx &&
-> > +	     list->functions[i].value == list->functions[first].value; i++) {
-> > +		if (!function_contains(&list->functions[i], address))
-> > +			continue;
-> > +		list->functions[i].traceable = true;
-> > +		found = true;
-> > +	}
-> > +	return found;
-> > +}
-> 
-> This isn't a bug, but mark_traceable_function() has two near-identical blocks
-> that walk back to the first alias at a (shndx, value) pair and then loop
-> forward over the aliases.  The second differs only by the
-> function_contains() test.
-> 
-> Could the walk back use function_at(list, shndx, list->functions[first].value),
-> with one forward loop that takes the containment test as a condition?  Then
-> the two copies would not need to be kept in sync.
-> 
-> Also, this isn't a bug, but is the bool return of mark_traceable_function()
-> meant for something, such as a -v count of unmatched ftrace sites?  None of
-> its callers in mark_relocated_ftrace_sites() and read_ftrace_site_range()
-> read the value, so could it return void and drop 'found'?
+> TL;DR: Nit only: in bpftool fmodret.c collect_targets(), the
+> TAG_FMODRET_RETVAL lookup may be unneeded, since the only caller's list path
+> doesn't appear to read ->retval.
 
-Both makes sense, will fix.
+Yes, thanks, will fix.
 
 > [ ... ]
-> 
-> > +static bool section_cannot_be_attached(const char *name)
-> > +{
-> > +	return section_prefix(name, ".init.text") ||
-> > +	       section_prefix(name, ".exit.text") ||
-> > +	       section_prefix(name, ".noinstr.text") ||
-> > +	       section_prefix(name, ".meminit.text") ||
-> > +	       section_prefix(name, ".memexit.text") ||
-> > +	       section_prefix(name, ".cpuinit.text") ||
-> > +	       section_prefix(name, ".cpuexit.text") ||
-> > +	       section_prefix(name, ".devinit.text") ||
-> > +	       section_prefix(name, ".devexit.text");
-> > +}
-> 
-> This isn't a bug, but are .meminit.text, .memexit.text, .cpuinit.text,
-> .cpuexit.text, .devinit.text and .devexit.text still emitted anywhere?
-> 
-> In include/linux/init.h, __meminit is now either empty or __init, and the
-> __cpuinit/__devinit annotations were removed.  Neither vmlinux.lds.h nor
-> scripts/module.lds.S places these sections, and modpost lists only
-> .init.text and .exit.text as init/exit text.
-> 
-> If they are gone, could section_cannot_be_attached() be reduced to
-> .init.text, .exit.text and .noinstr.text?
-> 
-
-Makes sense, will fix. Thanks robot.
-
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42294987431
-
