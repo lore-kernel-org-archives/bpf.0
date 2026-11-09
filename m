@@ -1,54 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.107
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.2
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794190541;
-	b=r7xWh7ch4cvDRPVlLqFHGK9Am8bqH4SqfzWRu9CeK19+PTHJlbjgHZuuGAf01LS7k/vH
-	 8LtAknuOl3UKgRe2Z8PtI40IQw+yqHoa3rMttyDDtCfaumdUN+lZGMnsqnqwbC8XOnN1z
-	 aEYrv5EEyWU3YRCULTPVwUyy9EFB//kFuDvGqGig0O6XFGwI8qzvplpHbvH8hpISQEPSl
-	 0QuOtkbI9qCZsSgUQCU+VyfrZX8Pw0rsa6GktF3xsqroP9IRIJ7JZG8PDzBrCkx9TEeUW
-	 sj294/fFq3dXr66H1CjB0ay/XXCoLBFT6b/+Xbw5CE8C+IZOafrfv+bMg+Z/6LAxiXA==
+	t=1794191787;
+	b=lH/HLM/D+wTvR50C4DcP/ahQ4CeJCxbJgb4kh1IQgG0+G+2ailRi95HoUvh93+2TOgkj
+	 XecBPL6FKreT32SgO6e5nf8QahzWjIqcxpjLhguMouahWDPy830HNUgETxx8mysrNaYiy
+	 l9sZ0C+IbGOsT//i6BtvGOUe4DrL+VALG1O4IZVL6aqjFyEfoLKhZo+Mx+figect1p2VQ
+	 /fxR15DcEveyxGiGogvSDa9M/O/PTdJKL7Vgu1BZ9rvo2ofJk7aTH+wpHhSntcD5AUsCF
+	 cHVla5yKPDeudOv8zdDSo9bjmgVngjaJRvnbq2In8DTmdrEi7b6x6kbI1tKw2wrpVdQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794190541;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=42Bgp9QK8SxMu4RaMFo7ITDdz1xu9H4f5I3RqLrzFX8=;
-	b=ocKFEvQcGTROH80dXnV0n6XQEFTrwwtXU/QC4Q55/EB5D2Shrg3ANhK6VV4EPtyU3jr/
-	 xcQ9XLftNfqj3B3mRHY+S5Lp+vKzOHnMX489jdDslNQCE8kisk3wE6RsR0dagaK3eu7A1
-	 7H2ZilKnI/HexskQkB4HKYCqR7ZMmtp1sUgofTwbFIVMSvbQeUYsbAN+hj7zquNbdBFYR
-	 OaMMqxyLQvwiXYhI6QGlwoFCyMMZq/V3hRw4yGx6xlqXC22POFUrzcpZvRcOkP0Fdbk+S
-	 4QmCgiRDwpWDLADwbz8ySRdw9s35rXCWG7/1rG1Ij6iH5rRQQcFnk8lR1/BvJFYmr1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794191787;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=2Si+Sm89MSx63myKBy7gbyefX/vZlVZslVZewpNyUdU=;
+	b=yzGDLuaFPn68Z+hdwQeDzG12oXramPChnHZN8rT9Nt55ivilaL9uiPJ33rTzwF8Ofdob
+	 nxgrAEsqmDqxWmbjU81Pe97oSsoLhKW5N9ZxN4sZc+7duyjTMi/3MW6dp+a5TVAC94Ipg
+	 gYQpLbUFYiL9OpC9prPhcnKtsjPOgWONFboy3jZFsBX/ysifL4C/gITeugr7pLtDCTwwg
+	 bDKOaKj47X9dAFZxjsZpNOEryZFHoFpjC0Kwcrq7FRSiFmZrxaQBlMQ3fIjd06a/WHgxH
+	 qlkMhn/1zsUVRybnmi6RuuWh9RWZPqN7caCGgxY0W55vTlqnY2A1Nkwd7uaTgzlHGoA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CkqQONWS;
-	arc=none smtp.remote-ip=95.215.58.107
-Received: from mta1.migadu.com (out-107.mta1.migadu.com [95.215.58.107])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=HUCMbrBG;
+	arc=none smtp.remote-ip=220.197.31.2
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9EE6606A321
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 02:15:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A9EE6606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A72606A330;
+	Mon,  9 Nov 2026 02:36:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 39A72606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=CkqQONWS
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=42Bgp9QK8SxMu4RaMFo7ITDdz1xu9H4f5I3RqLrzFX8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794190538; v=1; x=1794795338;
- b=CkqQONWSG9KB95QZktl/P5f9lasdYz+ixAT14Lq8aTrrFSgJ17oYYEQUzmXfkUVsDouGzGV/
- eFJImttXCM8vc5OiFQrrf+e+SETMZvZLsTb8q2lAdmK2kg1jkvotRh+G26Vvm+JW++zcLNsLoNV
- Rgi/Q4atLWoumpAfVrv9EcPs=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 8f4563db198ec34e;
-	Mon, 09 Nov 2026 02:15:37 +0000
-X-Mizu-Trace-ID: 8f4563db198ec34e
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <47eae9bc-6d8b-4b73-8fe7-869753ef9600@linux.dev>
-Date: Mon, 9 Nov 2026 10:15:21 +0800
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=HUCMbrBG
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=2S
+	i+Sm89MSx63myKBy7gbyefX/vZlVZslVZewpNyUdU=; b=HUCMbrBGwNoqjUZrav
+	UEUE2LLX8DRlRE5VBVZRFpNK0unA9LQ3MtLzVTRoxkkX5UzmEJ14SjoW7/f6TJBl
+	jD8eQxgHB4VkeBLOGgYN+2dWx84lYdx4X12fKODSRuIITV7ZvtszmagabAutrlUb
+	f6F18/ThYETvFedP00YgDZX5o=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wDn7zJ5MfFqbTfbGA--.62273S2;
+	Mon, 09 Nov 2026 10:35:38 +0800 (CST)
+From: Rongguang Wei <clementwei90@163.com>
+To: netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: willemdebruijn.kernel@gmail.com,
+	jasowangio@gmail.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	Rongguang Wei <weirongguang@kylinos.cn>
+Subject: [PATCH net v10 0/2] tun: fix re-attaching the socket filter
+Date: Mon,  9 Nov 2026 10:35:33 +0800
+Message-Id: <20261109023535.58855-1-clementwei90@163.com>
+X-Mailer: git-send-email 2.25.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,52 +68,122 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/8] bpf, sockmap: Restrict iter-context
- sockmap updates to iter/sockmap
-To: Michal Luczaj <mhal@rbox.co>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Eric Dumazet
- <edumazet@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen
- <jiayuan.chen@linux.dev>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Stanislav Fomichev <sdf@fomichev.me>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>
-References: <20261107-sockmap-update-limit-iter-v3-0-7c0bad1ad036@rbox.co>
- <20261107-sockmap-update-limit-iter-v3-2-7c0bad1ad036@rbox.co>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261107-sockmap-update-limit-iter-v3-2-7c0bad1ad036@rbox.co>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDn7zJ5MfFqbTfbGA--.62273S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxKFW8GF1DJF4kXF4fGw4xCrg_yoW7WrW3pa
+	yrW345Gr4kW34xWws3uw4xZ34Yyws7GFW5uwnrG34rZa15Wry093ySg34Yv3ZrArZ2gw1j
+	yFnFv3ZFg3WDAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbzV8UUUUU=
+X-CM-SenderInfo: 5fohzv5qwzvxizq6il2tof0z/xtbC-RuB7GrxMXslTAAA3z
+
+From: Rongguang Wei <weirongguang@kylinos.cn>
+
+This is v10 of the series that fixes attaching a queue to a TAP device which
+re-installs the socket filter of a persistent device.
+
+Patch 1 keeps a copy of the program in the kernel when it is configured,
+instead of reading tun->fprog from user space again on every later attach,
+and fixes the inverted error check in tun_attach(). The two changes are
+one patch on purpose: with only the kernel copy every re-attach returns 0
+without publishing the queue, and with only the check fixed a re-attach
+that used to succeed without a filter starts to fail. IFF_NOFILTER keeps
+working and is no longer needed to work around the re-attach bug. The
+program is verified with bpf_prog_validate_classic() when it is copied in,
+and the copy is committed only after every queue accepted it, so a program
+that is refused later, when it is built, does not replace the saved one.
+The header is zeroed before it is filled in, so TUNGETFILTER never copies
+uninitialized padding to user space.
+
+Patch 2 adds selftests: it re-attaches a queue after the buffer the program
+was copied from was made unreadable, attaches a second queue from a fresh
+socket to check that the filter is rebuilt from the kernel copy, and checks
+that a TUNATTACHFILTER with a bad length or bad instructions keeps the
+saved program, plus the ways to attach a queue without a filter.
+
+Thanks to Willem de Bruijn for the reviews, and to the CI reviews for
+the comments they raised.
+
+Rongguang Wei (2):
+  tun: keep a kernel copy of the socket filter program
+  selftests: net: add TAP socket filter attach tests
+
+---
+v10:
+  - selftest: fix the comment message. no code change is involved
+  - add to to CC bpf@
+v9:
+  - zero the whole sock_fprog header in tun_copy_filter(), so that the
+    padding TUNGETFILTER copies is not uninitialized stack
+  - https://lore.kernel.org/netdev/20261030060043.94719-1-clementwei90@163.com/
+v8:
+  - narrow the bpf_prog_validate_classic() contract to the classic
+    verifier and note that it can also return -ENOMEM; a program can still
+    be refused when it is built, and the commit message now says so
+  - commit the new program only after every queue took it, so a late
+    failure does not replace the saved one, and filter_attached is left
+    alone
+  - selftests: check the filter state and a newly attached queue in
+    attach_filter_bad_prog_keeps_program() too
+  - https://lore.kernel.org/netdev/20261028093235.148649-1-clementwei90@163.com/
+v7:
+  - verify the instructions in tun_copy_filter() before anything is
+    replaced, so an invalid program is rejected even when no queue is
+    attached
+  - fix the kernel-doc of sk_attach_filter_kern(): drop a reference to a
+    function that does not exist and complete the Return section
+  - reject a program whose length is out of range before allocating
+    memory for it
+  - document why the filter is dropped when a later step of tun_attach()
+    fails, and why filter_accept[] has three instructions
+  - selftests: add a case for a rejected program with valid length and
+    bad instructions
+  - https://lore.kernel.org/netdev/20261023092239.186665-1-clementwei90@163.com/
+v6:
+  - add description for return value of sk_attach_filter_kern(); no code
+    change is involved
+  - https://lore.kernel.org/netdev/20261016070654.170932-1-clementwei90@163.com/
+v5:
+  - add kernel-doc for sk_attach_filter_kern() describing what the missing
+    original program means for SO_GET_FILTER and sock_diag
+  - mention in the message that a rejected header now leaves the installed
+    filter alone
+  - fix the wording of the mprotect() comment and note what the IFF_NOFILTER
+    and TUNGETFILTER checks in the re-attach test
+  - https://lore.kernel.org/netdev/20261012021113.45939-1-clementwei90@163.com/
+v4:
+  - merge the kernel copy and the error check into one patch, so that no
+    step of the series turns a re-attach into a silent no-op or into a new
+    failure
+  - charge the kernel copy to the caller's memory cgroup
+  - selftests: check that the queue is attached again, and attach a new
+    queue to see that the filter was installed from the kernel copy
+  - https://lore.kernel.org/netdev/20261003063859.136895-1-clementwei90@163.com/
+v3:
+  - reorder: the kernel copy of the program comes before the corrected
+    error check
+  - add sk_attach_filter_kern() in the patch that first uses it
+  - address the review of the selftests
+  - https://lore.kernel.org/netdev/20260930080746.135017-1-clementwei90@163.com/
+v2:
+  - roll back the filter attach when a later step of tun_attach() fails
+  - keep a copy of the program in the kernel, so that a later attach does
+    not depend on the address space of the process that set the filter
+  - add selftests for the re-attach and for a rejected TUNATTACHFILTER
+  - https://lore.kernel.org/netdev/20260929093712.131096-1-clementwei90@163.com/
+v1:
+  - https://lore.kernel.org/netdev/20260923025653.59348-1-clementwei90@163.com/
+---
+
+ drivers/net/tun.c                 | 127 +++++++++++++--
+ include/linux/filter.h            |   2 +
+ net/core/filter.c                 |  67 ++++++++
+ tools/testing/selftests/net/tun.c | 249 ++++++++++++++++++++++++++++++
+ 4 files changed, 433 insertions(+), 12 deletions(-)
+
+-- 
+2.25.1
 
 
-On 11/8/26 1:58 AM, Michal Luczaj wrote:
-> Among tracing progs, allow only iter/sockmap to update sockmaps and
-> sockhashes. Previously, any BPF_TRACE_ITER program could perform these
-> updates, which caused locking issues in specific scenarios [1][2][3]. This
-> tightening is part of the broader effort to lock down the BPF API [4].
->
-> [1]: commit 4d328dd69538 ("bpf, sockmap: Fix af_unix iter deadlock")
-> [2]: commit 64c2f93fc325 ("bpf, sockmap: Take state lock for af_unix iter")
-> [3]: https://msgid.link/87echn2fhd.fsf@cloudflare.com
-> [4]: https://msgid.link/akRZ_e7DJh2aP-2i@john-p8
->
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://msgid.link/20260626205814.BAC3C1F000E9@smtp.kernel.org
-> Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-
-
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+No virus found
+		Checked by Hillstone Network AntiVirus
 
