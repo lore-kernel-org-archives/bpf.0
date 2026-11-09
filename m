@@ -1,110 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.146
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794236891;
-	b=Qrmd1auYoGEpYCo73WmGEMA+snn7n00CcLNSfrxwyntA/bvVHXJ5n92hClilxoAt4FhJ
-	 Q0VZWrFfwI7th1dTGLOIegQh5I7Jx60Q+1dIOjt+J0D3GawHmfj5P9LwMYBa0jLCnLmmD
-	 amHlBxwTEluY0KNjeqfPeZv+4j+5ZT5PEI05OthIgGjkR1eGbXQ+Nr+7LBBXdXrsLXfzt
-	 DikbGAsSZtGjtEWh0BzRZKx7OjFq4QoRN5NLlrxyXJW671goZFaQKmV7S+rqkFqpYNHsg
-	 UkWjsY44le/f/+G1Vbr281bT1wZ7EzG+olbGOemMZhxXvJkoA0oHgbh9+R2SqMIxcMA==
+	t=1794237940;
+	b=xKXc/u5RqlGi3LEj/OnzaQfqg5M3gG1wR0oMwARCmR0A1vZp+8vKT5RfKbE83idW7WEa
+	 NBAUhwj8CsO2v3j5QbYnV5IuIFvQEl8kRKN3Ati+mxOz1DgJuZOoltprdHxPW7bybjOaa
+	 hARPXGVyCdJiiFIgP15JMu6zS9KolxKUshPoF5yG/88g1tCd32IoLjrUDFsOor+KXc3EK
+	 ul4zKXsCsb8i+9op5TOTKQn/RIUv8n+/PA6z14FzqSq9HZkb1KiYu4x8AdNN1A323OFJ/
+	 Tyq2VeWajBazAnqqzqcZt3uQ+8IljnCBYjnf4KZR6aC5FSzwz8kWa2y000Yr7G99eHw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794236891;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=VApTwWJ3qmohUJ+gUV6MygaZwmFVLWa//DQWS1mUyZI=;
-	b=AHdosWafV0ktYAwBSL123PgHQiJcvWHYZQLJSnTy146QHMGGXjlKRzN/evBXDltphtCW
-	 sRCsPwiXb5aMFjStOT2+lsGN+aY9d/hnL5GC5Da4J8ogNjicqdZAMH4l60jN0HErJA8uf
-	 swlxYjtOfs+Rfx8V7973QYOfZMpjs3grvVqrhZyTwJRbb1EXv5vjMNeEJ55uknAEyGBov
-	 /RZhKzkjj4c47aewtYymiIne0bPZRFyKAsMxBIlyZ/P2v3kyef4MsI5wcRY1GiSyIyeM7
-	 5ABMwYLhOTQjlB7FyNQe7Ap2/Es1ejVk7Myo8LIEq6xqTYgzyNdoMIDsxVZalbimTbw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794237940;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:
+	 X-Google-Original-Message-ID:From:X-Google-Original-From:To:Cc:
+	 Subject:Date:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=+2eo50vndD4kHyto0T87+2tamN+YBpxl6Kj/Chr71eo=;
+	b=UBT6QtOGBprBKK/AJB49d+q4JgON1q1UrLVPiS4yF6XqTbC80jrpXBpb+GrCAiltrZc2
+	 8Seb8HNmdRla/qyc/zOktV3H59FdsLZp9RoAfawsQGEnTwB3Hx6Ahgb9wtjRt7pKhsSms
+	 3hrsORezmTU5/KLpCH2Apxkmmr3vmOkx+TGZo13AhJiBVulVgP70CJbO4tw0WLF86jwbM
+	 HBaCTOba1DPFaJsH61/gDOnTZMBYwj3wmrZZsqmKj7qt9XTCupfgWqAPhzjjHcWeXc84s
+	 hav40BQbBcgn1D0fGdH1EouQsDfJuvYqQLLNJC7bnIF0ScPC72K/oZCXynTUFKfYLrg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=roblab.la;
-	spf=pass smtp.mailfrom=roblab.la;
-	dkim=pass header.d=roblab.la header.i=@roblab.la header.a=rsa-sha256 header.s=fm2 header.b=w5qs0gob;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=AmBY2ipQ;
-	arc=none smtp.remote-ip=202.12.124.146
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QAH5Td1V;
+	arc=none smtp.remote-ip=209.85.216.43
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 007C1606A33D
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 15:08:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 007C1606A33D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=roblab.la
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=roblab.la
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04C31606A325
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 15:25:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04C31606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=roblab.la header.i=@roblab.la header.a=rsa-sha256 header.s=fm2 header.b=w5qs0gob;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=AmBY2ipQ
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfout.stl.internal (Postfix) with ESMTP id C34A01D00177
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 10:08:09 -0500 (EST)
-Received: from ams-imap-01 ([10.64.2.21])
-  by ams-compute-02.internal (MEProxy); Mon, 09 Nov 2026 10:08:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=roblab.la; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1794236886;
-	 x=1794323286; bh=VApTwWJ3qmohUJ+gUV6MygaZwmFVLWa//DQWS1mUyZI=; b=
-	w5qs0gobz7jEhvbu42EoNe0kdY1t6ZxaOYdWduC3+oH27epLriRSwWilYlhmId25
-	KnHFHd+rHat28gkgW6JHqtY/E5Y4JaAmwR1+zENdO6fgLeHKfv2rBKK5w+0m21rn
-	jWQvSg32Tw1jYkvuPqw7P3wl+duMZcnPSfYDwteCQlnHAMDhFXEeL+wtg6xYppz/
-	eagRLTdeE6BuQGyZfeNsIyiL01t6Fn+Op2BfSOMzopv4IJ6xhunOA4XUAXXGP5vs
-	gHIrrIHBReqXQxd+45Dbmjfsu2M4pKj5UB7TLf/BlNOgXoCby4rbwJuwAcrFhKCa
-	lfkY0RfO/HjcLgQLyyJ1jA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1794236886; x=
-	1794323286; bh=VApTwWJ3qmohUJ+gUV6MygaZwmFVLWa//DQWS1mUyZI=; b=A
-	mBY2ipQrm+6pDwTlkvMWIR3iwNKrvdC6t2q/OLyHd/ynclOGmYNSQpFSr1NNXZLL
-	up5j9F6USIH39S+tB6EAsmDVpcvgjHgN2yeeQdUAzwzDiC5wc9K5rehDHUJafwwD
-	JBgBYRNNwoYCFOD0fefwVslUR4eO4ehMmFiKKde5SpstHV02wddQfp6HSv1kscx6
-	MMU/tRr/3FghVClAtboTg62D83nN2g/DHX/10aqHA0QfvTE/9exXWJEdUpx1Z0/G
-	d0peQLwPuEzFrA1bowVTtYJd496fPx4RQXvjGMahnFaCAx6l1eT4YgDIAPJNqOuL
-	6VXMUguYvMd9hwnPp9AxA==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=roblab.la a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1794236886; d=roblab.la;
-	mf=PGxpbnV4QHJvYmxhYi5sYT4=; rt=PGJwZkB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:M1KNewT9dgyghyh5Jx5X2Zvf4UqcigxcrdLHS38BK1c110g
-	zj8RpA7fWKAu/XfL4Q/SudyjC3mJWnxNAKIjaC5BNuVBrVNWlNnof3moUf43c/Nf
-	ORlvFZLEU+GfNJRrcVSNaN8uMo4HlwzYRfXY6sdgViSlc7KM9KbRWMP2FiWqbFRE
-	z8rbZ7XUnxMgif4CdO9KS8lR3p+WILlI/pDGzltcjJQR2RZm2I5J4Jqq0HRzPDH8
-	JFK5SQPspFOc2Ng/7rqRq6wgdH+r27EQo0MnrP1gESAsjL9TELiyUwzLtDh34egm
-	kwWXQUHd7WrknIdj8zmuXCJeJVR5DLr2Ocz1JPg==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:ddwfNLPp0IsKXzeqZm/tuCizgfx94OIjmVEDFx1AhQ0=:K3DqAWrmELiptr52b2dyq/LsiQ1CiyUr9uR6+OXPP3s=;
-X-ME-Sender: <xms:0uHxanJY2BUty-rF6d7WbZiiY4kog_zqhazhZRwbHyKNGjQIpsjnvw>
-    <xme:0uHxal_oOu3nYRuz-mbK42dEid5ndgcLZgH8aFdX0Qx_P9JdwYRyw8kyjZTj3TS1R
-    dN5Q-5WFfezeCa23LGb40rHdibjzq3nL4XTouu0jwUmiRfolshCgwxW>
-X-ME-Proxy-Cause: dmFkZTFwNPAAGVjalJ2RlYQLODA8FyDd+IjZJLDJzZnhOTGrb2yAfnzg9QaRSawQl7DVJr
-    IUJc+bPV7ePb0ZpfHMD144cd1AuB8CuZFQ/ONKYEnweJg7/jPt/alh0tLlrmMU9EEeG9lN
-    WzUKFZdZgcuq3NpsQZDyrqLZURx7ZFWaihgPcjyJafMMEy/fnTt2lmoXpm5vQ2FoGRfmLd
-    i9gUFKBZTRYXO85hS7iMD+Q9e6wjhmQVMfxa9EgBldypk/ZGIJh05M2hqOxPCCILUQh8Ml
-    FC2WdzTXcZ5idgTnN6/yKzVJtwjcMTry8kLLPyY9ZmtBVARQPT0WyQrSRRLz3B0UPVgEOZ
-    ef3m2z18ItEFcMl7cL+2xvxu3lXQI7qFiL/1G06abo8phPKGCID4ijnrBoMA7a9fuPZKKS
-    AXg2NlmJRIIIzRARp+e5PHNojY1K0IUgWwO1pXsdPwXH6kvxT5/qizddITjHmKS9SxjXgy
-    ujB4DQ7ZmJjk6vLPCtMu+RcngFkY+i9s1RDkPSpHRRLSh27Sez50HZAf7WXWXLAVBtciQr
-    OfYpd8MQZaH9fNF59yuoKrGWJT7Wy7VzdxJcxZh3GXayFbWvgzLAerXiC+g5317bYhl8vi
-    Kjg5ZUZhUqQGsZk8iEnV4MPIUOezi6csRgz4iFkSOXhEfAu1rJo6sqi2W/1w
-X-ME-Proxy: <xmx:1OHxat5e2-nxVUpQBEN-txPwu4yv0ViWlmn1zgd_Abp8DHRyWLJWug>
-    <xmx:1OHxate4_tQruJWIjUrT6wpPWPfeeB-mqstgG5TH2HxmmZ1a_YdhJw>
-    <xmx:1OHxaoGy1-lldS9ItGS10Nj4zgIs3jkU5M5zFFqQMdR_JZxi_3SZjQ>
-    <xmx:1OHxamScr9WHq7-cfTn-A9BfBWYxVT8iao8fAphsyRmSOuNzGWWtDQ>
-    <xmx:1uHxarTgFlNq_bsRwIb1Kbnjs4f2Vd2DEX1MvAYM-GZoWBCYymyWpMRu>
-Feedback-ID: iddd147b3:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 3584EFA0090; Mon,  9 Nov 2026 10:08:02 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QAH5Td1V
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ae7626d14aso467982a91.2
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 07:25:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794237939; x=1794842739; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:subject:cc
+         :to:from:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+2eo50vndD4kHyto0T87+2tamN+YBpxl6Kj/Chr71eo=;
+        b=QAH5Td1VVsnMLp74yBsh4npC78p5NNQ1yeYU7wlnu0FWjl/bPOeUPjHSKfgSElKUaY
+         sL7qtgp1plN4TJ3twIW+lQcQWqMV52IR3AswYPfeaf3pHMgWa1T0Vo5v0HVn30K5LzJO
+         AjM6aNGBh0xyNGbzIh8womUFdwHXj0Yu8W20njfgXPOxLfw/5XXyh8shBACc/Ny3dsRc
+         0KUiBokdaY41XjPAnqRokYNmrA63vPfK9OspssxFsn+CpDg8tOFDfl8sfZDIhJhTz+gh
+         jJvN/MglHjaK1X8YBA3Z89RzXSYmdRKI9yxNToQxDj6BnYbU2Mej2WjBdVGkxHAGfRyq
+         tWJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794237939; x=1794842739;
+        h=content-transfer-encoding:content-type:mime-version:date:subject:cc
+         :to:from:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+2eo50vndD4kHyto0T87+2tamN+YBpxl6Kj/Chr71eo=;
+        b=otVlB4egg7Y9QNwJbRKqEPzoyL633AGZOLC+Xm1j3XRKa9jCphqbi+piMUfF34/DJK
+         XK8f5N33pRivo9VcPoWbRIXYUvNZMAG5s2l8Gk4LQSabBRvd8G32xOtZfep3RWjN8Mez
+         NdP/YLpZDkrOFGNQTHWhrmTaLuc7Fz4H7/t2KntGxAOfGByoeCysH5QpLk7sPhp/lue5
+         v4m5yK6vyjthGMNj3iSChKw61Qx4x4UG/DmsnTmll0TAQk9MvE0ohJ/tv/upIyZXSBaW
+         hEbrWpyVZ8eQkNdbgLfdQmsUYOiL5YwlHGYft6rZizT1mYoIH61GQpewiJwElEWvoVdn
+         aa/Q==
+X-Gm-Message-State: APuU4Z8UyXnMBnTVk4QkvHyZEIMGRcENCJXSLXRwnTLW6EnK16jDEXok
+	6kHEUXSC88Dl3pV/7fk+69ilgufCGNSVzsaVC+E8fbc89uMxMj7rLI1jDZf5vWj9YgI=
+X-Gm-Gg: AYBFou3U2v6hwm5wS1YY1ZTzWKLPceuUh5rdvlPwlZ9e0tPag29cW8sjOI60GC5BarY
+	WT6Wys8XXHQ+HJKb/lTreUpppfijbpgmnk3cSuLktFn/TN57iC306H3iT3VxnHHQ+bjQ4R1uKOB
+	4toHVyJyl78dpvjyzgAppcPzc8HYk7CymLdNWJCGgRb5WchFK8tmR66/mNAG464ujGIlAtjyjgY
+	PKxucOdoxV/4IjEXJVYPbbM3usfNhvGm7jaf1uR6QlYcEr7oecUM8NdrVPR5PDWyXA1B50CXq70
+	KoM138dDFkSAt+4O66k61CviUkj09C998jFGo5gIxUSHqP/gfLZYS0sBQuPjrvS6Ud4bLf79YjV
+	nQdDjiNc2RZZHGo3mxTQKhEVyUpXXBUCT4ZKGIujVF/vG2L/RUndT1nx7nmrnoOsFEqjBXHPfNI
+	ULo/SlEzBvnk0Y1LOItACeQ4qZcqCYuTieYozqzsPdZrzDiJcaEh+N6byUcH6T+BeRfK4bG34No
+	+D2JD7WxwrxcTQSd+DcyqTXQohQxt1dd4mpv0bA2DEwHrZHr5EKUowKb5QQ8Dz9Qngw7SdsFHJx
+	h77e41njI6Q0DZ21Iy1t4HhV9+0WwCPXvHCGFLlMBIYqli5+org=
+X-Received: by 2002:a17:90b:33ca:b0:3ac:929e:691 with SMTP id 98e67ed59e1d1-3b12d418819mr4176458a91.17.1794237938727;
+        Mon, 09 Nov 2026 07:25:38 -0800 (PST)
+Received: from hanzj-mi.. ([157.185.136.247])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b105864bffsm11462095a91.3.2026.11.09.07.25.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2026 07:25:38 -0800 (PST)
+Message-ID: <6af1e5f2.a438010f.130489.ab94@mx.google.com>
+X-Google-Original-Message-ID: <<179423792787.1832964.14629633117175086624@gmail.com>>
+From: Zhijian Han <hanzhijian1991@gmail.com>
+X-Google-Original-From: Zhijian Han <hanzhijian@zepp.com>
+To: bpf@vger.kernel.org,
+	sched-ext@lists.linux.dev
+Cc: daniel@iogearbox.net,
+	tj@kernel.org,
+	ast@kernel.org,
+	void@manifault.com,
+	arighi@nvidia.com,
+	linux-kernel@vger.kernel.org,
+	Zhijian Han <hanzhijian1991@gmail.com>
+Subject: sched_ext selftest enable_cmask fails to load on 7.4-rc2: verifier rejects arena pointer cast from scx_enable_args.cmask_arena_addr
+Date: Mon,  9 Nov 2026 23:25:32 +0800
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -114,88 +103,93 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AgAAt5wBJ-mw
-Date: Mon, 09 Nov 2026 16:07:34 +0100
-From: roblabla <linux@roblab.la>
-To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>,
- "Paul Moore" <paul@paul-moore.com>, "Daan De Meyer" <daan@amutable.com>
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
- paul.mabileau@harfanglab.fr, linux-kernel@vger.kernel.org,
- "Andrii Nakryiko" <andrii@kernel.org>
-Message-Id: <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com>
-In-Reply-To: 
- <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
-References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
- <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com>
- <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
- <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
-Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently breaks BPF
- LSMs
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Zhijian Han <hanzhijian1991@gmail.com>
 
-Thanks for the replies!
+Hello,
 
-> LSMs that need to provide a stable API must provide an abstraction
-> layer between the LSM hook callbacks and their stable API.  The LSM
-> framework is not responsible for the stability of individual LSM APIs.
+The enable_cmask selftest (tools/testing/selftests/sched_ext/, added in
+the recent merge window via d781d1b78acf "selftests/sched_ext: Check the
+cmask cid-form ops.enable() receives") fails to load on v7.4-rc2 and
+linux-next-20261105. The BPF program enable_cmask_enable is rejected by
+the verifier at load time:
 
-Understood, that lines up with my expectations. I think the biggest
-thing here would not necessarily be stability guarantees, but rather to
-make sure that the eBPFs fail to load when the compatibility is broken.
-But that's probably a problem for the eBPF side, and not LSM, I assume.
+  libbpf: prog 'enable_cmask_enable': BPF program load failed: -EACCES
+  94: (61) r1 = *(u32 *)(r8 +0)
+  R8 invalid mem access 'scalar'
+  Verification failed: Register Type Safety: Invalid dereference
 
-> So, in short, would it be possible to send a follow up to Daan's
-> commit and move `struct mnt_idmap *idmap` to the end of LSM argument
-> list?
+The test follows the usage documented in kernel/sched/ext/internal.h:
 
-If this is possible, that'd be nice so that we avoid this breakage in
-the short term, since the change isn't in a released kernel yet.
+  struct scx_enable_args {
+          u64     cmask_arena_addr;
+  };
 
-> Having said that, there is a way to handle this, although ugly and
-> *everyone* using specific LSMs would need to do this on their own.
-> Instead of using convenience BPF_PROG() macro to define BPF program,
-> you just use raw `u64 ctx[]` access, and then cast ctx[0] to either
-> `struct mnt_idmap *` on new kernel, or `struct dentry *` on old
-> kernel.
+  /*
+   * ... The address is a plain value rather than a typed pointer ...
+   * Cast it to struct scx_cmask __arena * before use.
+   */
 
-So, we already do similar tricks in the software we ship (which uses
-various eBPF program types, not just LSM) to cover kernels 4.11 to 7.3,
-using a mixture of CO-RE tricks similar to what you describe and
-per-kernel builds selected at runtime.
+i.e. enable_cmask.bpf.c:101:
 
-Here's the problem though: We ship to customers, and we don't control
-when they upgrade their kernel relative to our agent. When the kernel
-changes a hook signature, a program built before we could handle that
-new version still loads fine and just reads the wrong arguments, which
-causes some really gnarly bugs that can cause really bad breakage (such
-as accidentally denying events that should have been allowed, often
-resulting in machines left broken).
+  struct scx_cmask __arena *m =
+          (struct scx_cmask __arena *)args->cmask_arena_addr;
 
-So what would be really nice is a way to make eBPF code robust against
-kernel changes such that it either works, or fails to load, but doesn't
-do the halfway "loads but silently misbehaves". Here are two ideas that
-have been in the back of my mind that could help solve this issue (though
-I understand that they may be rather large changes, I'm putting them out
-there mostly as a conversation starter):
+The C cast does not emit an addr_space_cast insn: in the generated
+bytecode the member load (insn 1: r7 = *(u64 *)(r2 + 0)) produces
+R7=scalar(), which stays scalar across the cast and the inlined
+check_mask() prologue, so the first dereference m->base (insn 94) is
+rejected.
 
-1. Could libbpf/the kernel have a mismatch check on hook arguments? I
-   understand that libbpf and the verifier don't know the types a
-   program expects, since BPF_PROG() only casts u64s. But the macro
-   does know the types at compile time. Could it (or an opt-in variant)
-   record the expected prototype in the program's BTF, so that libbpf
-   can compare it against the LSM hook's prototype in vmlinux BTF and
-   refuse to load on a mismatch?
+The same selftest was verified by Tejun on the for-7.3-fixes branch
+(per the v3 cover letter, 20260919002838.1960071-1-tj, 16-CPU VM, three
+standalone runs plus the full suite); the verifier-side arena handling
+that changed during the 7.4 merge window appears to no longer accept
+this pattern. The struct_ops argument path (direct __arena args, e.g.
+ops.set_cmask) still works — only the u64-carried address form is
+affected.
 
-2. Since kernel BTF has parameter names for the bpf_lsm_* functions,
-   could we maybe have CO-RE-style relocation to resolve "the argument
-   named dentry" to the argument index at load time? This way, adding a
-   new argument could happen anywhere in the argument list without
-   breaking eBPFs, and removing an argument will (correctly) cause our
-   eBPF to stop loading. It does mean the eBPF programs must provide the
-   same argument names, but maybe that's an acceptable tradeoff?
+Reproducer (deterministic, two consecutive runs identical):
 
-Thanks,
-roblabla
+  # kernel: defconfig + SCHED_CLASS_EXT, DEBUG_INFO_BTF, FUNCTION_TRACER
+  make O=build -j$(nproc)
+  cd tools/testing/selftests/sched_ext
+  make LLVM=1 O=$PWD/../../../../../build OUTPUT=out/ TEST_GEN_MODS_DIR=
+
+  # initrd with out/runner + out/build + libs + busybox + kernel .config
+  # at /boot/config-$(uname -r); then:
+  qemu-system-x86_64 -enable-kvm -smp 4 -m 2G -nographic \
+    -kernel build/arch/x86/boot/bzImage -initrd initrd.cpio.gz \
+    -append "console=ttyS0"
+
+  /root # ./runner -t enable_cmask
+  not ok 1 enable_cmask #
+
+Tested on:
+  v7.4-rc2 (7475ea8b5):          FAIL  (verifier rejects at load)
+  next-20261105 (gddfe51b0a0f5): FAIL  (same rejection)
+  v7.3:                          SKIP  (struct scx_enable_args not present)
+
+Compiler versions tried: clang 18 and clang 19 — identical bytecode
+around the failing insn, identical rejection, so this does not look
+compiler-dependent.
+
+The other 40 tests in the suite pass on both 7.4-rc2 and next (after
+enabling CONFIG_FUNCTION_TRACER, without which the fentry-based tests
+maximal/kick_immediate/reload_loop fail with -EBUSY — worth a note in
+the selftest docs, but that part is config, not a bug).
+
+Possible directions (not investigated in depth):
+  - a kfunc or verifier-supported way to convert the u64 carried in
+    scx_enable_args into a PTR_TO_ARENA,
+  - or an __arena-typed member/alias in scx_enable_args once BTF can
+    express arena pointer members (the internal.h comment already
+    anticipates this),
+  - or adjusting the test to obtain the cmask through a path the
+    verifier accepts.
+
+Full verifier log and QEMU boot log available on request.
+
+Signed-off-by: Zhijian Han <hanzhijian1991@gmail.com>
