@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794235661;
-	b=nIvyu7ewgB3Y+k5wBlEjQiEZp9uan5KkUgBVzw1ZSEuXB+QCgLkU+YarD+yaO+mN/jPG
-	 hjCZ3Go+LGv6Q4wF1xriCi16mKvLrwOplc1RaEvOnXdGb2YwFE/0lXRNU30w1lnsM7RXw
-	 D2W6Rc6OamtUrmrs/Tuik4UKyFDLix/1GNoDCh2U6liNMYVY+JzGocXxvsD9RBW4sZsIN
-	 GhVBTCdYhBxWdD2Lepzxrd9iQ1iVSNTFuFwcJRrkMYvwy2EAx6ZT+IUDKeO83IgL/hQpZ
-	 1nGXdy4nzHCchuQRUg2RFLonnpI1XlddDUh8KTd56SukE2HE2B+pPEdQYsZgBgO6t2g==
+	t=1794235667;
+	b=K7xMS4AHB489AoG55JGbADXH1LuAPbgvbhZUM7DgvMJ2c0yGY9VoFr8PVM5mS6RQZsZ5
+	 aaUSn6QGvbKw165uKjRGujDgukTJPPxfLDUZ+PZ8iuViA8xY6r+MDAvknGxm0386HS2xa
+	 ByMsKzyhhWb2047F9FSkwxIz44aF6rOMEwJ3CdK+376A73oyOk8ExHPpgGtvGVFN6InoF
+	 MCiYY2wrUbxplLpPOm3p6jQr9R7+tHX7SENV/FbLrf2333uMjNWQ6tPAsMp7QCaeqhmcC
+	 Bi67yr+5N5Y4EWn7BKTD0uxfaxKACBZVoswIp8Db0PAhFZtVsIxM2Vhjzkc2ec0x4wA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794235661;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794235667;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=9cPLPAVcEOwBLk/Nk6KbuGfr7S0+BQfhEGmd0X57WrM=;
-	b=mPRHmcaPknQswEHaZJDrXIZ/opgiPEIXcI5ZfE818OZBcsaBh61wb8IW/jNtNPiVZLxP
-	 NltEqUEK/Qd2fm5ujcDGCxjMP3qNRFkm9Ln1D8McO9gSsb6o9Cvdp3uBXCAidBsKzjE04
-	 A2q62ljcUctKY2R4Pr8qHeuSXO6stOCSX15Gg9EFvGz4gxZDJ4B+xNeLiXtLazAeoynaN
-	 Ok/X02TOJCnBVRulbgswnnRxCgRjEYPnshcQqE0IHCINPfKlaoEK6pwPnNdgkdT5NAFHW
-	 697DUiXBeZWQC7bSMx/0DVzaO7A08mHkR9LJv7oqpZGV0aqVW4nb2DvzARmwuObQeaw==
+	bh=w6GLXknq6y3SwqceXuYTD6xHKDaefkjVOMui140fNzY=;
+	b=BOlGz6jv5iDRLXvErWhUhWZC9CdD7E71GOqM+PbIYBO1I7Cl3Llc5K746Ag5rHA4ejs1
+	 DrOyfa8HsacQb7e2U2cvWcgl6JFK1i7MFBjPfgpAGlErV15aQR0xmb/MfmnxclAcy5B4x
+	 pLdrLFS2XapPGkwERUGr0obd6JVvjMq9eh7PfXGiQ1QtIOKbp3prClBODrCIj1d2z72FG
+	 398Qf46+OFxWB8p30SOdbSuwLRttjCUmRrQwjyHpSkRZM89ktuGy1TTc/M/lTXX9hFCfC
+	 dLwm2W/I0i0XUdkdQ8WiC+4FYAyXbvqd2B9FwI3qZNa78Kypr4uAKFkXdkYxSLOkPIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rhrs+P3H;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ecFGce6H;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42647606A31C;
-	Mon,  9 Nov 2026 14:47:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4538606D825;
+	Mon,  9 Nov 2026 14:47:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Rhrs+P3H
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55A511F0089F;
-	Mon,  9 Nov 2026 14:47:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ecFGce6H
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DCD1F008A5;
+	Mon,  9 Nov 2026 14:47:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794235660;
-	bh=9cPLPAVcEOwBLk/Nk6KbuGfr7S0+BQfhEGmd0X57WrM=;
+	s=k20260515; t=1794235666;
+	bh=w6GLXknq6y3SwqceXuYTD6xHKDaefkjVOMui140fNzY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Rhrs+P3H4AnKUavy4PrxroYsuROG9hChr1Lx04aqxyz2BS7m30jUG513px0IO3ffB
-	 bH1H6TjGLP8BztwxmEUBzE7lq95rFUENYid/Ho2sOh9jFb5Ch3vSdteGs4ixbcR6tE
-	 Pz5g3o4sQXprjFGB4OvsxF3iMDxxlyiH9GWVfxRQ4axm7tvR4XxN6fOzZf1THXaDae
-	 yoBkTfx+gQ/MBPGv3F3+AAtv3y3p5y0ucCLPXRWzLrDkLPthKZrXGQPSO+1g7n6U8y
-	 uClDYUfZTcdXl2ajP1YRPb9cwL9mwu1N4mAjZD1XQYutbeJdaZgDJqJbVVHdu+UAns
-	 X4lBmaPv0TO9A==
-Content-Type: multipart/mixed; boundary="===============4240390738181790142=="
+	b=ecFGce6Hq7THGpXfX2jQytVd1Hy7TmpGWK+zuQkrhErR09GUy6Fd3/pYslpSPFN9W
+	 Pgar2X481Za3BS2faGbic0LtVTplhB6mS3PZe43jbZaRdYjCRJNg9AbzaUJug5oVyi
+	 49DFwMKpVSJT6YjvVuxjWJR7z9AJWqZMC9dxuiz8uhOvHrihFmkwPpuqgpVIYtxZWd
+	 TWQd6PbZB8D8cPChdmFHAz7P46cfIXLlyf9e61rs5t9pubmocX913zkhKQT4sGQqZG
+	 pDgixCLa0fZDpFw33sDT1jNn+BMosgXqTy44qDWK4PcmC+ADX5fYlqsoroHmlrzABA
+	 XYf0sPqB0RuNw==
+Content-Type: multipart/mixed; boundary="===============0931968269646556687=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,69 +49,67 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <5ed2ec09ce8a3ce5477a658b68c6315499ef67793014be27de18ee57ec968e12@mail.kernel.org>
-In-Reply-To: <20261109140816.5196-2-leon.hwang@linux.dev>
-References: <20261109140816.5196-2-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next 1/9] bpf: Add log support for tracing link_create
+Message-Id: <11d1648e59b112236d1add138094b2c057d19270ba45e0fc47f6342da665db95@mail.kernel.org>
+In-Reply-To: <20261109140816.5196-7-leon.hwang@linux.dev>
+References: <20261109140816.5196-7-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next 6/9] selftests/bpf: Verify tracing link_create logs
 From: bot+bpf-ci@kernel.org
 To: leon.hwang@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com,kpsingh@kernel.org,matt@bobrowski.net,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  9 Nov 2026 14:47:40 +0000 (UTC)
+Date: Mon,  9 Nov 2026 14:47:45 +0000 (UTC)
 
---===============4240390738181790142==
+--===============0931968269646556687==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Add log support for tracing link_create
+> selftests/bpf: Verify tracing link_create logs
 
-TL;DR: Logging is incomplete: the freplace max_ctx_offset check in
-bpf_tracing_prog_attach() still returns -EINVAL with an empty log, and the
-saved_dst type mismatch may too. No functional regression.
+TL;DR: Test issue: the invalid attach_type subtest in tracing_link.c may fail
+earlier in the generic check, so it may not exercise the new tracing log.
+Using BPF_TRACE_FEXIT on the fentry program might fix it.
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_link.c b/tools/testing/selftests/bpf/prog_tests/tracing_link.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_link.c
 
 [ ... ]
 
-> @@ -3843,6 +3849,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
->  	 */
->  	if (prog->type == BPF_PROG_TYPE_EXT &&
->  	    prog->aux->kprobe_write_ctx != tgt_prog->aux->kprobe_write_ctx) {
-> +		bpf_log(log, "Invalid kprobe_write_ctx.\n");
->  		err = -EINVAL;
->  		goto out_unlock;
->  	}
+> +static void test_log_invalid_attach_type(void)
+> +{
+> +	const char *msg = "Invalid attach_type.\n";
+> +
+> +	test_fentry_link_create_log(0, 0, 0, BPF_XDP, false, msg);
+> +}
 
-The check right after this one still returns -EINVAL without writing
-anything to the log:
+Does this subtest reach the tracing-specific log added by "bpf: Add log
+support for tracing link_create"?
 
-	if (prog->type == BPF_PROG_TYPE_EXT &&
-	    (tgt_prog->type == BPF_PROG_TYPE_RAW_TRACEPOINT ||
-	     tgt_prog->type == BPF_PROG_TYPE_TRACEPOINT ||
-	     tgt_prog->type == BPF_PROG_TYPE_SYSCALL) &&
-	    prog->aux->max_ctx_offset > tgt_prog->aux->max_ctx_offset) {
-		err = -EINVAL;
-		goto out_unlock;
-	}
+With BPF_XDP on the fentry program, link_create() fails earlier in the
+generic check:
 
-An freplace program whose max_ctx_offset is larger than that of a
-RAW_TRACEPOINT, TRACEPOINT or SYSCALL target will get -EINVAL from
-link_create with an empty log and log_true_size of 0.  That is the same
-kind of invalid freplace target as the kprobe_write_ctx mismatch above,
-which now logs.  This isn't a functional regression, but was this check
-missed?
+    ret = bpf_prog_attach_check_attach_type(prog, attr->link_create.attach_type);
+    if (ret) {
+        bpf_log(log, "Invalid attach_type.\n");
+        goto out;
+    }
 
-Would something like this cover it?
+For BPF_PROG_TYPE_TRACING, attach_type_to_prog_type(BPF_XDP) returns
+BPF_PROG_TYPE_XDP, so bpf_prog_attach_check_attach_type() returns -EINVAL
+and the case below is never reached:
 
-	bpf_log(log, "Extension accesses more ctx than its target.\n");
+    case BPF_PROG_TYPE_TRACING:
+        if (attr->link_create.attach_type != prog->expected_attach_type) {
+            bpf_log(log, "Invalid attach_type.\n");
 
-Also, bpf_check_attach_target() still returns a bare -EINVAL for the
-saved_dst_prog_type / saved_dst_attach_type mismatch, which is the
-"freplace attachment to a new target" case the commit message mentions.
-That code is in verifier.c, so it is outside this patch, but is it intended
-to be left without a message?
+Both messages are identical, so this subtest would still pass if the
+tracing-branch bpf_log() were removed.  The generic check is already
+covered by the invalid_attach_type subtest in xdp_link.c.
+
+Would passing an attach type that maps to BPF_PROG_TYPE_TRACING but
+differs from the program's expected_attach_type, for example
+BPF_TRACE_FEXIT for this fentry program, exercise the new log instead?
 
 
 ---
@@ -119,4 +117,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42633880300
---===============4240390738181790142==--
+--===============0931968269646556687==--
