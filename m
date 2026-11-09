@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794253774;
-	b=EGsK6CQk1ga4UlvkRMgcj+2zKd6XFIZ2N9vbgzVGpskT3+f/uRSEQWMYBfbD4XXgKJWJ
-	 vJ8CtJkRPr5bvq6wX4KgCvKPJHVJDE8y3gw5dcAygTtlUpk9xfYOo0PkMZDqMbAEGu8EV
-	 tfxTwcFvCMynZP+fjqbnAMRW3LssXV6pWgi4bUzfXqMdv0Qrnb+cdVKhuoOS3RCiqiMOQ
-	 RCI4BagR9pm26xlKaDhsvFp6b02h+dcxyURO9GqEbXJhe5pTuuIgVudUw7sslnkZqLLjY
-	 Bo7mngSD2Q0K+FAYyXZdDXaCWzEImEva/UrP7p+prpgu+pQGneTJOodZTiH7QSdZxGQ==
+	t=1794253785;
+	b=tCjmAxk2N+XFjXgX1H2/Jel9uHF6tOLxp9hTLs0jtkMmWJsCZxVwrRsEduoU5ui+iGUh
+	 Yu2QXbNLIBDVT30HLjVWspGFbELRZKdWishv0n6HTCpjeVX7OSV8iEPqRb++bNRgMvbGb
+	 P5qohoLqcBS0BpkUD31TEKSWg+T1T29ooIZZEgES2hg3F6t5PiI30aIRZtx6JF6ikUBBC
+	 AZg7gAPCNjdO6zpOKBFRwyDyR3P8itDl63i0qUzMlPzr6JvHFX5suCEnqVY2CA/jRP+U0
+	 FVt0cFk1ZXtTlswaUv/sr+8va1EVrZZ9GV4/a8ojsxt7KHhNmEBb5RlBzOy+eKfPM7Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794253774;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794253785;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=UatCj+DwgBywpSp3E9BN8ilewOuAQkyoMBcI+t7HhdU=;
-	b=aNtYwmoagKRPepUnjFBIIFIL/0y4bbgaknEMdYnap4eZnqoK4QVIJE4Tt/BwlKHF5MCd
-	 gpt6r93D8MvQx5eSvzgCIUcsTEkrOGLOWZJ19LHpaftMkiLF28KhlIUkJfu5ShgIqJahc
-	 sYKpRBV0h32RZW8d2a/lXAmL9G4ESnGidpHgONXyhYePIUOhwqtI3MTFVIPrq3wyDPu8u
-	 V31ihs6cFtebOb1RC7uuO/svqaO7CSIJmbxlcodP5rcNeNW7CHdV/BGWbPQlm2i7F/grt
-	 56a9d0LpuTnIO485R3ffZ9x840R1pZjfKIg+LFritbfGwiBmTdy8cePqw+UiblrzPfA==
+	bh=M8CHeRKzRhc8Z/RcnT9AUUayDTie+d/p213vXc4rCPs=;
+	b=5tjoQkbDpwTCV+uMu8Mgookr3g0+kb9jvgmAhdPBwdwXerjJazez6FNY/zmFIrDJvb/f
+	 l8ELoM3VIo43KNXLm3pTwyPMgnkM50IORDkMSZK5eIR0h2OtMfaCSUNGs1C3GfUkXG1S5
+	 9wFMCKcslgBNxgkHmNQpz6pseJTUslSUE+r8mysoVIOR81su+AR/jGQ2KZBAsfyJN1T9p
+	 l4a0Rdbr0ZduZW2yJJBs13hmHU/DLPyVzRUuO675a3VN4OgRwAyKWNQl8usVpfkdKVU7O
+	 DkYB8thpioPd1pEO680G0Z6VFMF69bBTV8li/iLu5W4y5DSkaNp6uqH+tXd7Qeny3yA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S0VyzQd6;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iusaTTqz;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B5E60A262E;
-	Mon,  9 Nov 2026 19:49:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45584606A33E;
+	Mon,  9 Nov 2026 19:49:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S0VyzQd6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F12EC1F008BD;
-	Mon,  9 Nov 2026 19:49:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iusaTTqz
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E525D1F008BC;
+	Mon,  9 Nov 2026 19:49:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794253773;
-	bh=UatCj+DwgBywpSp3E9BN8ilewOuAQkyoMBcI+t7HhdU=;
+	s=k20260515; t=1794253784;
+	bh=M8CHeRKzRhc8Z/RcnT9AUUayDTie+d/p213vXc4rCPs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=S0VyzQd64co/Lt4/zPfz7Do1LAaZ7QmjMHFzRtexQwmFX9cSzqzaWjrLypR0MU3kz
-	 aCpBz6+8YGAneKmDIPloRpbMj6DEQEHCneEHdXVW3/AO9Fg3my66dbrVvALszTsK/R
-	 shPDPYsbocfI1/Tk04sYY5ZlX6rhhZdFcGTaABZvY+JnyUgT1XYif64I2xjmn4fl3v
-	 CSs92GeF3aZrwLj8U2Yc00xhH9B7fzG4jBBhhieKOdZ7hiy7tY40ShM9OaP1mOJKTx
-	 Us9KddQUIXMEAH9CZAqRMaAlfQ95wScnH7h5JyOluHs08VG3EwwFjQChFRKIM9AQCO
-	 TLZjoZZpt1xLw==
+	b=iusaTTqz1Na7CJKZFJquB0SwxpTtCdzBF9H99sfdDdiFhc0OZtg0g8BhetnSGwlex
+	 6blLbl9sREAQmjav8D/D+ARm9OckdY3U+8r2XvmzUVpzVXqs2s9gsJdBHCeFQ4bjyA
+	 EwDx3+TbjN9aeXd7LXLuMJvVZNjO851NRt+mGDjfASLU/1yqAQA8CDEAPbocxprMTN
+	 AUB6ASJ8R175Wy7OCXduDxcAsDcBm9Mv395Mw0lVIEWl+R9er6FFzescE+EoPyCbvs
+	 D1nqcVVdMcbMVuN2+ivOZQsmK5A2Gq2ERJl9OyUDeaX0SxjOte5XThlpmVayK9KNgy
+	 vXL+aYY98vHBA==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Masami Hiramatsu <mhiramat@kernel.org>,
 	Naveen N Rao <naveen@kernel.org>,
@@ -56,9 +56,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH 01/13] static_call: Index code text reservation lookups
-Date: Mon,  9 Nov 2026 20:49:04 +0100
-Message-ID: <20261109194916.1089703-2-jolsa@kernel.org>
+Subject: [PATCH 02/13] jump_label: Index text reservation lookups
+Date: Mon,  9 Nov 2026 20:49:05 +0100
+Message-ID: <20261109194916.1089703-3-jolsa@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261109194916.1089703-1-jolsa@kernel.org>
 References: <20261109194916.1089703-1-jolsa@kernel.org>
@@ -73,73 +73,74 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Text reservation checks scan every static call site. Build an address-sorted
-index for core text sites and use binary search to find the starting point
-near the requested range.
+Text reservation checks scan every jump entry. Build an index sorted by
+code address for core entries and use binary search to find the starting
+point near the requested range. Keep the original table sorted by
+static-key address for updates.
 
-Module indexing is intentionally unsupported. Module reservation checks
-continue to use a linear scan, avoiding per-module index allocation and
-teardown complexity.
+Module reservation checks continue to use a linear scan, avoiding
+per-module index allocation and teardown complexity.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/static_call_inline.c | 114 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 112 insertions(+), 2 deletions(-)
+ kernel/jump_label.c | 115 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 114 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/static_call_inline.c b/kernel/static_call_inline.c
-index 2b6a0d99cdbe..884dfc897a1f 100644
---- a/kernel/static_call_inline.c
-+++ b/kernel/static_call_inline.c
-@@ -15,6 +15,18 @@ extern struct static_call_site __start_static_call_sites[],
- extern struct static_call_tramp_key __start_static_call_tramp_key[],
- 				    __stop_static_call_tramp_key[];
+diff --git a/kernel/jump_label.c b/kernel/jump_label.c
+index ab6b774bcfd7..64467b971efe 100644
+--- a/kernel/jump_label.c
++++ b/kernel/jump_label.c
+@@ -8,6 +8,7 @@
+  */
+ #include <linux/memory.h>
+ #include <linux/uaccess.h>
++#include <linux/cache.h>
+ #include <linux/module.h>
+ #include <linux/list.h>
+ #include <linux/slab.h>
+@@ -22,6 +23,18 @@
+ /* mutex to protect coming/going of the jump_label table */
+ static DEFINE_MUTEX(jump_label_mutex);
  
-+struct static_call_site_index {
-+	struct static_call_site *base;
++struct jump_entry_index {
++	struct jump_entry *base;
 +	unsigned int nr;
 +	u32 entries[];
 +};
 +
 +/*
-+ * Index static call sites by code address for text reservation lookups.
-+ * The site table itself is sorted by static-call-key address.
++ * Index jump entries by code address for text reservation lookups. The jump
++ * table itself is sorted by static-key address, then by code address per key.
 + */
-+static struct static_call_site_index *static_call_site_index;
++static struct jump_entry_index *jump_entry_index;
 +
- int static_call_initialized;
- 
- /*
-@@ -41,7 +53,7 @@ static void static_call_unlock(void)
- 	mutex_unlock(&static_call_mutex);
- }
- 
--static inline void *static_call_addr(struct static_call_site *site)
-+static inline void *static_call_addr(const struct static_call_site *site)
+ void jump_label_lock(void)
  {
- 	return (void *)((long)site->addr + (long)&site->addr);
- }
-@@ -301,6 +313,79 @@ static int addr_conflict(struct static_call_site *site, void *start, void *end)
+ 	mutex_lock(&jump_label_mutex);
+@@ -381,6 +394,81 @@ static int addr_conflict(struct jump_entry *entry, void *start, void *end)
  	return 0;
  }
  
-+static int static_call_site_index_cmp(const void *a, const void *b, const void *priv)
++static int jump_entry_index_cmp(const void *a, const void *b, const void *priv)
 +{
-+	const struct static_call_site *base = priv;
++	const struct jump_entry *base = priv;
 +	unsigned int ia = *(u32 *)a;
 +	unsigned int ib = *(u32 *)b;
-+	unsigned long ca = (unsigned long)static_call_addr(base + ia);
-+	unsigned long cb = (unsigned long)static_call_addr(base + ib);
++	unsigned long ca = jump_entry_code(base + ia);
++	unsigned long cb = jump_entry_code(base + ib);
 +
-+	return cmp_int(ca, cb);
++	if (ca < cb)
++		return -1;
++	if (ca > cb)
++		return 1;
++	return 0;
 +}
 +
-+static struct static_call_site_index *
-+static_call_site_index_alloc(struct static_call_site *start,
-+			     struct static_call_site *stop)
++static struct jump_entry_index *
++jump_entry_index_alloc(struct jump_entry *start, struct jump_entry *stop)
 +{
-+	struct static_call_site_index *index;
-+	unsigned int nr = stop - start;
-+	unsigned int i;
++	unsigned int i, nr = stop - start;
++	struct jump_entry_index *index;
 +
 +	if (!nr)
 +		return NULL;
@@ -154,91 +155,92 @@ index 2b6a0d99cdbe..884dfc897a1f 100644
 +		index->entries[i] = i;
 +
 +	sort_r(index->entries, nr, sizeof(index->entries[0]),
-+	       static_call_site_index_cmp, NULL, start);
-+
++	       jump_entry_index_cmp, NULL, start);
 +	return index;
 +}
 +
-+static int
-+static_call_site_index_text_reserved(struct static_call_site_index *index,
-+				     void *start, void *end, bool init)
++static int jump_entry_index_text_reserved(struct jump_entry_index *index,
++					  void *start, void *end, bool init)
 +{
++	unsigned long start_addr = (unsigned long)start;
++	unsigned long end_addr = (unsigned long)end;
 +	unsigned int low = 0, high = index->nr, i;
 +
-+	/* Find the first site after @start. */
++	/* Find the first entry after @start. */
 +	while (low < high) {
 +		unsigned int mid = low + (high - low) / 2;
-+		void *addr = static_call_addr(index->base + index->entries[mid]);
++		unsigned long addr = jump_entry_code(index->base + index->entries[mid]);
 +
-+		if (addr <= start)
++		if (addr <= start_addr)
 +			low = mid + 1;
 +		else
 +			high = mid;
 +	}
 +
-+	/* The preceding site may overlap @start. */
++	/* The preceding entry may start before @start and overlap it. */
 +	if (low)
 +		low--;
 +
 +	for (i = low; i < index->nr; i++) {
-+		struct static_call_site *site = index->base + index->entries[i];
-+		void *addr = static_call_addr(site);
++		struct jump_entry *entry = index->base + index->entries[i];
++		unsigned long addr = jump_entry_code(entry);
 +
-+		/* Later sites cannot overlap once this address is past @end. */
-+		if (addr > end)
++		/* Later entries cannot overlap once this address is past @end. */
++		if (addr > end_addr)
 +			break;
-+		if ((init || !static_call_is_init(site)) &&
-+		    addr_conflict(site, start, end))
++		if ((init || !jump_entry_is_init(entry)) &&
++		    addr_conflict(entry, start, end))
 +			return 1;
 +	}
 +
 +	return 0;
 +}
 +
- static int __static_call_text_reserved(struct static_call_site *iter_start,
- 				       struct static_call_site *iter_stop,
- 				       void *start, void *end, bool init)
-@@ -483,7 +568,15 @@ static inline int __static_call_mod_text_reserved(void *start, void *end)
- int static_call_text_reserved(void *start, void *end)
+ static int __jump_label_text_reserved(struct jump_entry *iter_start,
+ 		struct jump_entry *iter_stop, void *start, void *end, bool init)
  {
+@@ -869,8 +957,16 @@ early_initcall(jump_label_init_module);
+  */
+ int jump_label_text_reserved(void *start, void *end)
+ {
++	struct jump_entry_index *index;
  	bool init = system_state < SYSTEM_RUNNING;
--	int ret = __static_call_text_reserved(__start_static_call_sites,
-+	struct static_call_site_index *index;
+-	int ret = __jump_label_text_reserved(__start___jump_table,
 +	int ret;
 +
-+	/* Pairs with the release in static_call_site_index_build(). */
-+	index = smp_load_acquire(&static_call_site_index);
++	/* Pairs with the release in jump_entry_index_build(). */
++	index = smp_load_acquire(&jump_entry_index);
 +	if (index)
-+		ret = static_call_site_index_text_reserved(index, start, end, init);
++		ret = jump_entry_index_text_reserved(index, start, end, init);
 +	else
-+		ret = __static_call_text_reserved(__start_static_call_sites,
- 			__stop_static_call_sites, start, end, init);
++		ret = __jump_label_text_reserved(__start___jump_table,
+ 			__stop___jump_table, start, end, init);
  
  	if (ret)
-@@ -522,6 +615,23 @@ int __init static_call_init(void)
+@@ -909,6 +1005,23 @@ static void jump_label_update(struct static_key *key)
+ 		__jump_label_update(key, entry, stop, init);
  }
- early_initcall(static_call_init);
  
-+static int __init static_call_site_index_build(void)
++static int __init jump_entry_index_build(void)
 +{
-+	struct static_call_site_index *index;
++	struct jump_entry_index *index;
 +
 +	/*
 +	 * Build the index in an initcall so normal memory allocation is
-+	 * available, static_call_init() can run before that.
++	 * available; jump_label_init() runs before that.
 +	 */
-+	index = static_call_site_index_alloc(__start_static_call_sites,
-+					     __stop_static_call_sites);
++	index = jump_entry_index_alloc(__start___jump_table, __stop___jump_table);
 +
-+	/* Publish the initialized index to static_call_text_reserved(). */
-+	smp_store_release(&static_call_site_index, index);
++	/* Publish the initialized index to jump_label_text_reserved(). */
++	smp_store_release(&jump_entry_index, index);
++
 +	return 0;
 +}
-+late_initcall(static_call_site_index_build);
++late_initcall(jump_entry_index_build);
 +
- #ifdef CONFIG_STATIC_CALL_SELFTEST
- 
- static int func_a(int x)
+ #ifdef CONFIG_STATIC_KEYS_SELFTEST
+ static DEFINE_STATIC_KEY_TRUE(sk_true);
+ static DEFINE_STATIC_KEY_FALSE(sk_false);
 -- 
 2.43.0
 
