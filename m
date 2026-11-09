@@ -1,121 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794218743;
-	b=hFSL5rTPftbMHrkwtpm3DB6vx1S8s6mauApyZ0TDLOe+fTmzgWCJ8b56rVA8ZOH20nQc
-	 jp8iU3M2HSTxFi8FxC+aOpDWtKWpWR2A7sjkWFODAQlrFEIYvUoHJxTbjXCobT6a0K267
-	 LZUg8NUDw8+MvsWpMNk2gxOVGc/r2xbhhM94TUUKDzPSPStL5hdtOC5TP2uneLC2xXS7y
-	 fvj8sv1bOJfOzCclWZQdjQGz1flLgnDl3s94sudVUWT3laIX/gaJ79U72LAzfijGAMQqH
-	 DPgkA5vvPwMjnJKC1ciy5HqSE0KImFbnC29m2lPSw/PcBEbOZX+jfHjMqZCUtnEstqg==
+	t=1794219761;
+	b=zj+LiqL6dbQyFYUZJIXU/Em7riGkXjWE/Rt0u25/+uHb+8XEtV+GYhG6X9bJ5g6jgWvA
+	 L4GojnHa8FSGqq5e73Xhl9YJsUSJ35Hpzj/mTjrjjeVZTi8r8E7jTjLOD+QBYpqmAp9mZ
+	 wwpAZyWKJsYr93zJnssMwYMpmYRkBRuDufHyAfyGPWwgmgM0bDD5iUxGwItGTtm8/E6UO
+	 CJw4O8r7wbMnWU6c7bkmjAjHEexWg7339ISVN1UvVb+IL2YGMlQ3NgKnbHQiblLrLSdP+
+	 sRsOSl/JZgfBEGiWjAYrDsnm47lFR7fCA8mhy4pWXuj4YSdg83BH9CZRLALI/8AWQTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794218743;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=H4xpcwq64pI6xfZ5hDaZEZJL6Xf3GeDLcSe5pvZrhYo=;
-	b=QToZprhYJtiBq+9w+1YIk4SH/Yz/OONsf3HDEgch9g7wM/k/P6sihFWMuVvu+shkZQoP
-	 R0NQ3yTvcGErvpO7l41QLki4BmcEdVbYKKQwJGB/o56adWNtxzHYcG+tpzqNtmFdVJDVR
-	 cD9CIP5Ids9arogsRqOuFxyDJ9LpBXk6r4lYZ+XiFid4RwMPv8JQzBMXI4/6A8ga2/nsF
-	 XquPcBfLDrPgrKpgs7MtNPGjreKUw2z95E3a6rSC7AbrdjTV7SLapsUXnEQcJVGIBMbOY
-	 7uHsOnzl93qtxY45H+JaeBPSTQt0hvhRiJCUjiFhMX9oHloJbJWlIlsukC1GR8JKKrA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794219761;
+	h=DMARC-Filter:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:
+	 Organization:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Rspamd-Queue-Id;
+	bh=T7TAPE/7YhD5ngclGTREyMx61AzehRbnlDAFX5Ebjf4=;
+	b=iUDpQ1R1D3f4iau/jqPb405RhYY/vk3T0Dpsemb8pU5YcA46D4beF1MpGdWrgHlHg2ET
+	 4FEpVjpkrJo2bvASkeCxb3rUx7MHmzJxr2MWyIl313QTdvl6Hla/OLVpJJXWS7P+zWEwe
+	 ImI53GKUM0NyGH6UANDC+/RxvbuECaBn0bbXYJiIIcUieUDH3GTO1nboQHhACbkhhRfRW
+	 wZJ19jzZTCpYVJkTWIknQ5NRVkVt/kqEEVAl012Lkje4B7hOToZMj4TAZsj4TACGkbXZz
+	 aV5cwydQxTI+SNNWZIbMNChzVoIb9oS11XYiybPSikktrYb4B8ORuCfD3WWfnccwnxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vVwO0Eke;
-	arc=none smtp.remote-ip=74.125.82.171
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=none header.from=mandelbit.com;
+	spf=pass smtp.mailfrom=mandelbit.com;
+	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=Rnq7w67q;
+	arc=none smtp.remote-ip=195.10.208.55
+Received: from mout-b-110.mailbox.org (mout-b-110.mailbox.org [195.10.208.55])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C841F606A322
-	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 10:05:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C841F606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0AC606A325;
+	Mon,  9 Nov 2026 10:22:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D0AC606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vVwO0Eke
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-36dbde64409so1211288eec.0
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 02:05:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794218742; x=1794823542; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=H4xpcwq64pI6xfZ5hDaZEZJL6Xf3GeDLcSe5pvZrhYo=;
-        b=vVwO0EkeQo6/g63g8perAxJri7xduvH6z5wNddM/oKH7yoGUqfxO9qyG+j7lsOdnsc
-         g7rK/jlfvU3ZXgCBl9/UXsft4jFH53u0/ZrwY3NGz8z984t5AtASf/Ccaq3cDpc6YoLZ
-         nmPPU9KoYWhd7oBZCOSLNBYmJ+yz2B79/oDYrvT5P/YU9RwZhSCzJ9JfACd5wTL4w0vG
-         2hTSKOTufRESB/t8EekkFz8Ryy4exnl3+q4SSy+7ju5vO2k7FvhzT6ugETrjCPX4qWmT
-         lD4+mJAGejciHm/H5IXnLGg/9SCI9jRrqyc1M/uTSgexvwlbCEOkPeBatzyqSb6LQ08L
-         RIVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794218742; x=1794823542;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=H4xpcwq64pI6xfZ5hDaZEZJL6Xf3GeDLcSe5pvZrhYo=;
-        b=hjhFUWTpae+Lqqu7vTqcbKTCzhj09bxKhut8olAZWda/elutMj3iG2QBFl9OqDgJNE
-         kQg5MdOtF7TpQz3pXSMPMpv4tWXXOc/Nyqoa3+TdeLOg/Nqm1b9jzQBV1tqigOUWLMQK
-         NkhB3872H6PEUpkHhw4yJRO1n2NGGTQbELHWhde7ZMwVdfUAOgc/FQeY6G1fISEPeI6a
-         53NYk/6RGqHcRz1uOfeS1kXSdhxXwTnmsBdlqiyvkb+O3Vq474I6MU9IoBw2jZZZSIck
-         h1XP/UWmpzFLB8lsjcsdYx3NvGj9ArxPQMsGV84iIQ0Pf75/6G3Z34KTG+yP6E/+Fw50
-         nLTg==
-X-Forwarded-Encrypted: i=1; AL+hErGZcBo/3/VPXQ0V8+ZDWuFaePj9DWuw992SEumlxnKmUygaZ5nL5O/C2A1XGd40skEhqCA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+BNBMGA93mLZ2+k51VNDN3s+FacbElfe3NsyhcrmgvtjP2NV1v
-	2M47fm4POVxN78AivOYR2pEksuPs3prRXM4A8OcXvwBrUcdP6GGYpFOy
-X-Gm-Gg: AYBFou31PkUVyEKbFuhosEDrTxslmO/ASVkU6DXcFzbV1JZxJ2xp2lwaFleQ9RQJXa+
-	NoZtI/JZthigoI+jc1nc9GG5jNesG7cunMlK03T1t4qMEfBRB5bOk0y2Hs7S0uoN4el7tE8MqER
-	RBPcAxehcCPjv2mf56qCnw+eyzGtzgrlTCdPoz5hkKdVkgq3VJ7hyVSM0lFtCGHxHPsERRSpgSx
-	SxghhuVUW8IttbzOeKh4k2YO2YlVU5+PAEeqWBIJ727BPE+/z89MFVWxLhndKceKpjzr1INfD7r
-	j9dExBdg2bRaBeAdODYVU8SyzLE9xeeBfHwSTh5S5w6A/rPeMEHBYNKZPzKz0HSQ1quCse9T4xr
-	+kpbvcci+XbRpzAcY/QLSaNhnN7RuE81rsCdqpSBUiX7E3/4qdyR93PnJ/I7GkBvkHSmI8WAl+g
-	T7+yiLxfG/bddqerOPUzOg50PmXmX+V5YsXqwH4kCC1LJUsL2U6lDzCoHn9retbpe1l8E8diRus
-	mQcs4hsSCHlBAWk4wKmKjLpwK9N/GHIQm/DUMeuDreMup0yg+0l6MCy9AMy7ZB1zDLo3euhaBXy
-	GS8VK//tOPI0tel0VFtG9p3h3v2kafNi8i0rCYHowEzX
-X-Received: by 2002:a05:693c:63cf:b0:36f:4354:608 with SMTP id 5a478bee46e88-37258c27cfcmr6328144eec.37.1794218741685;
-        Mon, 09 Nov 2026 02:05:41 -0800 (PST)
-Received: from localhost.localdomain ([2406:7400:51:5a62:c2b6:f9ff:fe77:10a0])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-372667d60absm12886710eec.26.2026.11.09.02.05.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 02:05:41 -0800 (PST)
-From: Amaan Cheval <amaan.cheval@gmail.com>
-To: netdev@vger.kernel.org
-Cc: joshwash@google.com,
-	hramamurthy@google.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	bcf@google.com,
-	jordanrhee@google.com,
-	przemyslaw.kitszel@intel.com,
-	maciej.fijalkowski@intel.com,
-	pkaligineedi@google.com,
-	maolson@google.com,
-	csully@google.com,
-	willemb@google.com,
-	yangchun@google.com,
-	npl@google.com,
-	awogbemila@google.com,
-	shailend@google.com,
-	nktgrg@google.com,
-	maxyuan@google.com,
-	bpf@vger.kernel.org,
-	john.fastabend@gmail.com,
-	hawk@kernel.org,
-	sdf@fomichev.me,
-	daniel@iogearbox.net,
-	ast@kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Amaan Cheval <amaan.cheval@gmail.com>
-Subject: [PATCH net v5 2/2] gve: fix RX page refcount overflow from INT_MAX pagecnt_bias
-Date: Mon,  9 Nov 2026 15:34:37 +0530
-Message-ID: <20261109100437.331423-3-amaan.cheval@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20261109100437.331423-1-amaan.cheval@gmail.com>
-References: <20261109100437.331423-1-amaan.cheval@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=Rnq7w67q
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-b-110.mailbox.org (Postfix) with ESMTPS id 4jNQnw5dx8zNlct;
+	Mon, 09 Nov 2026 11:22:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
+	s=MBO0001; t=1794219748;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=T7TAPE/7YhD5ngclGTREyMx61AzehRbnlDAFX5Ebjf4=;
+	b=Rnq7w67qr3fdW8K0dRjJ2X5SQEXHYt+9dK6WfcRgEEH9wqqXahCq4z5TfX6F9sw3GOaGwy
+	SEJbn0MEekLBrYoRMtUPQHCOPd5TWRksWGbTtJ0+WN9kfo2Fy1VaVBWjUTS4/76B9TzWtb
+	bQfnhf2mgTI4r1DRQjews0iTccI7u0vht8j17p52PfqfY4A/O8/QB+wNIQN4bWBsmtLyt3
+	SXT1TJNvmxVHpds8f6IPmWWhCoHU/sxlGmNsKbYBQn+W9/INgwj8WXYqU7EZ0RJ1zP91Jb
+	XghtWp+xinEG90AxN+ScwFyZSmiwq3x9CjEl2gtRkLXy8mfNI6hrMxyOx4p+LQ==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
+Message-ID: <b1d44592-ddf8-4103-ae3c-dd1c67641f01@mandelbit.com>
+Date: Mon, 9 Nov 2026 11:22:24 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -125,197 +66,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v4 1/2] tun: bound the NAPI receive queue
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, jasowangio@gmail.com
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, mst@redhat.com,
+ eperezma@redhat.com, shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ maheshb@google.com, peterpenkov96@gmail.com, netdev@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20261103142232.1869185-1-antonio@mandelbit.com>
+ <20261103142232.1869185-2-antonio@mandelbit.com>
+ <willemdebruijn.kernel.20268598d87e6@gmail.com>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@mandelbit.com>
+Organization: Mandelbit SRL
+In-Reply-To: <willemdebruijn.kernel.20268598d87e6@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 4jNQnw5dx8zNlct
 
-gve's GQI and DQO-QPL RX paths set every RX page's refcount to INT_MAX and
-hand references to the stack by decrementing page_info->pagecnt_bias, to
-avoid an atomic op per packet. This leaves no room for anyone else: while
-a fresh page's buffer sits in an skb its refcount is already INT_MAX, so a
-single get_page() from the stack overflows it to negative.
+Hi,
 
-splice() of received TCP data into a pipe takes such a reference, and the
-onward splice into a socket then fails: skb_splice_from_iter() sees
-page_count() < 1, sendpage_ok() fails and the send returns -EIO (since
-commit 2e910b95329c ("net: Add a function to splice pages into an
-skbuff for MSG_SPLICE_PAGES")). tee() of the pipe fails with -EFAULT via
-try_get_page(). On GQI the reuse check gve_rx_can_recycle_buffer() also
-sees page_count() < pagecnt_bias, WARNs and calls gve_schedule_reset(),
-so a task that merely pins a fresh RX page (e.g. holds spliced data in
-an undrained tee() pipe) can reset the NIC.
+On 06/11/2026 22:04, Willem de Bruijn wrote:
+> This is quite a complex solution.
 
-Use USHRT_MAX in a u16, as igb, igc, ixgbe, i40e and hns3 do: the bias
-only has to make the per-packet atomic rare, so a small value keeps
-page_count() far below INT_MAX however many references the stack takes.
-Refill by adding a fixed batch and setting the bias to it, which keeps
-the rule `references = page_count() - bias` intact.
+Yeah, I agree. Trying to address all concerns (including Sashiko's) got 
+me a bit out of track.
 
-Refilling at 0 hands the driver's last reference to the consumer once
-every USHRT_MAX handoffs rather than once every INT_MAX, which is only
-safe because every consumer on these paths holds its reference until
-the driver has recycled the buffer. The previous patch keeps it that
-way by blocking XDP on DQO-QPL, so this one depends on it. Trees before
-6.17, without commit d8a8ca14c937 ("gve: add XDP_TX and XDP_REDIRECT
-support for DQ RDA"), still refuse XDP on every format but GQI-QPL in
-verify_xdp_configuration(), so there this patch stands alone.
+> 
+> Can we perhaps simplify it a bit? For instance:
+> 
+> On tx only keep the lockless check. Number of packets that can bypass
+> that is bounded, by the number of competing threads.
+> 
+> On rx avoid the new queue, by not temporary presenting an empty queue:
+> 
+>          spin_lock(&queue->lock);
+>          if (skb_queue_len(queue) <= budget) {
+>              skb_queue_splice_tail_init(queue, &process_queue);
+>          } else {
+>              while (skb_queue_len(&process_queue) < budget &&
+>                     (skb = __skb_dequeue(queue)))
+>                  __skb_queue_tail(&process_queue, skb);
+>          }
+>          spin_unlock(&queue->lock);
+> 
 
-Reproduced on gVNIC in GQI-QPL mode (GCE n2-standard-8, 6.12) and in
-DQO-RDA mode (GCE c3-standard-8, 6.12, where DQO-RDA still uses the
-bias) with the help of relay.py -- a small splice(2) TCP proxy --
-relaying a download while the RX ring is refilled with fresh pages:
+Ok, I get your point.
+Let me spin another simplified version.
 
-  ethtool -G eth0 rx 512 && ethtool -G eth0 rx 1024   # fresh RX pages
-  ./relay.py $HOST 8080 &                             # splice()s both ways
-  for i in $(seq 200); do curl -so /dev/null \
-      --connect-to $HOST:80:127.0.0.1:8080 http://$HOST/file; done
+Cheers,
 
-Most downloads failed with EIO before the fix (tee() with EFAULT) and
-all completed after it. relay.py is at the Link below.
+pw-bot: cr
 
-This bug was found and fixed with the help of an AI coding assistant
-(Claude Code) over an interactive session; it read the driver and
-splice/pipe code and ran the tests above.
 
-Link: https://github.com/amaanc/kernel-bias
-Fixes: 9b8dd5e5ea48 ("gve: DQO: Add RX path")
-Fixes: 58401b2a46e7 ("gve: Add rx buffer pagecnt bias")
-Fixes: 82fd151d38d9 ("gve: Reduce alloc and copy costs in the GQ rx path")
-Cc: stable@vger.kernel.org
-Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
-Tested-by: Harshitha Ramamurthy <hramamurthy@google.com>
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Amaan Cheval <amaan.cheval@gmail.com>
----
-v5:
- - Name INT_MAX in the subject. No code change; patch 1/2 changed.
-v4: https://lore.kernel.org/netdev/20261106114551.212675-3-amaan.cheval@gmail.com/
- - Add patch 1/2, blocking XDP on DQO-QPL, which this fix depends on
-   (Sashiko). Harshitha said Google would send such a patch; I'm happy
-   to drop 1/2 in favour of theirs.
- - Say "overflow" instead of "headroom" in the subject and the commit
-   message (Maciej).
- - Use USHRT_MAX directly instead of a GVE_PAGECNT_BIAS macro, as the
-   other drivers do, and move its rationale next to the refill in
-   gve_dec_pagecnt_bias() (Maciej). No functional change.
- - Added Reviewed-by from Maciej Fijalkowski.
- - Say which trees need patch 1/2, for stable.
-v3: https://lore.kernel.org/netdev/20261103090651.35399-1-amaan.cheval@gmail.com/
- - Refill when the bias reaches 0 again, as in v1. DQO-QPL is not
-   supposed to support XDP at all, and it will be blocked explicitly in
-   a separate patch, so the v2 refill-at-1 change is not needed.
- - Added Reviewed-by and Tested-by from Harshitha Ramamurthy.
-v2: https://lore.kernel.org/netdev/20261102112613.18334-1-amaan.cheval@gmail.com/
- - Refill when the bias reaches 1 instead of 0 so the driver keeps a
-   reference of its own across every handoff. At bias 0 a consumer that
-   returns its reference synchronously, such as an AF_XDP socket in copy
-   mode on an XDP_REDIRECT from DQO-QPL, freed a page still registered in
-   the QPL.
- - Commit message: explain the refill point, drop the build notes.
- - Re-tested on 6.12.113 (c3-standard-8, DQO-RDA, which still uses the
-   bias on 6.12): no EIO/EFAULT from splice/tee and no NIC reset after
-   applying the patch. DQO-QPL is untested; I have no access to that
-   hardware.
-v1: https://lore.kernel.org/netdev/20261031173449.2439047-1-amaan.cheval@gmail.com/
-
-Built allmodconfig W=1, no new warnings.
-
- drivers/net/ethernet/google/gve/gve.h                |  2 +-
- .../net/ethernet/google/gve/gve_buffer_mgmt_dqo.c    |  4 ++--
- drivers/net/ethernet/google/gve/gve_rx.c             |  8 ++++----
- drivers/net/ethernet/google/gve/gve_utils.c          | 12 ++++--------
- drivers/net/ethernet/google/gve/gve_utils.h          |  2 +-
- 5 files changed, 12 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet/google/gve/gve.h
-index b7ce6e8632db..18d7edbf4b3b 100644
---- a/drivers/net/ethernet/google/gve/gve.h
-+++ b/drivers/net/ethernet/google/gve/gve.h
-@@ -119,7 +119,7 @@ struct gve_rx_slot_page_info {
- 	void *page_address;
- 	u32 page_offset; /* offset to write to in page */
- 	unsigned int buf_size;
--	int pagecnt_bias; /* expected pagecnt if only the driver has a ref */
-+	u16 pagecnt_bias; /* expected pagecnt if only the driver has a ref */
- 	u16 pad; /* adjustment for rx padding */
- 	u8 can_flip; /* tracks if the networking stack is using the page */
- };
-diff --git a/drivers/net/ethernet/google/gve/gve_buffer_mgmt_dqo.c b/drivers/net/ethernet/google/gve/gve_buffer_mgmt_dqo.c
-index 6880d1531ba5..52223baf0303 100644
---- a/drivers/net/ethernet/google/gve/gve_buffer_mgmt_dqo.c
-+++ b/drivers/net/ethernet/google/gve/gve_buffer_mgmt_dqo.c
-@@ -149,8 +149,8 @@ int gve_alloc_qpl_page_dqo(struct gve_rx_ring *rx,
- 	buf_state->last_single_ref_offset = 0;
- 
- 	/* The page already has 1 ref. */
--	page_ref_add(buf_state->page_info.page, INT_MAX - 1);
--	buf_state->page_info.pagecnt_bias = INT_MAX;
-+	page_ref_add(buf_state->page_info.page, USHRT_MAX - 1);
-+	buf_state->page_info.pagecnt_bias = USHRT_MAX;
- 
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/google/gve/gve_rx.c b/drivers/net/ethernet/google/gve/gve_rx.c
-index 81ea800e66e9..3bed19866376 100644
---- a/drivers/net/ethernet/google/gve/gve_rx.c
-+++ b/drivers/net/ethernet/google/gve/gve_rx.c
-@@ -152,8 +152,8 @@ static void gve_setup_rx_buffer(struct gve_rx_ring *rx,
- 	page_info->buf_size = rx->packet_buffer_size;
- 	*slot_addr = cpu_to_be64(addr);
- 	/* The page already has 1 ref */
--	page_ref_add(page, INT_MAX - 1);
--	page_info->pagecnt_bias = INT_MAX;
-+	page_ref_add(page, USHRT_MAX - 1);
-+	page_info->pagecnt_bias = USHRT_MAX;
- }
- 
- static int gve_rx_alloc_buffer(struct gve_priv *priv, struct device *dev,
-@@ -230,8 +230,8 @@ static int gve_rx_prefill_pages(struct gve_rx_ring *rx,
- 			rx->qpl_copy_pool[j].buf_size = rx->packet_buffer_size;
- 
- 			/* The page already has 1 ref. */
--			page_ref_add(page, INT_MAX - 1);
--			rx->qpl_copy_pool[j].pagecnt_bias = INT_MAX;
-+			page_ref_add(page, USHRT_MAX - 1);
-+			rx->qpl_copy_pool[j].pagecnt_bias = USHRT_MAX;
- 		}
- 	}
- 
-diff --git a/drivers/net/ethernet/google/gve/gve_utils.c b/drivers/net/ethernet/google/gve/gve_utils.c
-index caed38cd5f2b..930555ac8fe9 100644
---- a/drivers/net/ethernet/google/gve/gve_utils.c
-+++ b/drivers/net/ethernet/google/gve/gve_utils.c
-@@ -93,15 +93,11 @@ void gve_dec_pagecnt_bias(struct gve_rx_slot_page_info *page_info)
- {
- 	page_info->pagecnt_bias--;
- 	if (page_info->pagecnt_bias == 0) {
--		int pagecount = page_count(page_info->page);
--
--		/* If we have run out of bias - set it back up to INT_MAX
--		 * minus the existing refs.
-+		/* Out of bias: take another batch. USHRT_MAX keeps this rare
-+		 * while leaving page_count() far below INT_MAX.
- 		 */
--		page_info->pagecnt_bias = INT_MAX - pagecount;
--
--		/* Set pagecount back up to max. */
--		page_ref_add(page_info->page, INT_MAX - pagecount);
-+		page_info->pagecnt_bias = USHRT_MAX;
-+		page_ref_add(page_info->page, USHRT_MAX);
- 	}
- }
- 
-diff --git a/drivers/net/ethernet/google/gve/gve_utils.h b/drivers/net/ethernet/google/gve/gve_utils.h
-index bf2e9a0adb36..c686142d37ea 100644
---- a/drivers/net/ethernet/google/gve/gve_utils.h
-+++ b/drivers/net/ethernet/google/gve/gve_utils.h
-@@ -25,7 +25,7 @@ struct sk_buff *gve_rx_copy_data(struct net_device *dev, struct napi_struct *nap
- struct sk_buff *gve_rx_copy(struct net_device *dev, struct napi_struct *napi,
- 			    struct gve_rx_slot_page_info *page_info, u16 len);
- 
--/* Decrement pagecnt_bias. Set it back to INT_MAX if it reached zero. */
-+/* Decrement pagecnt_bias. Top it up by USHRT_MAX if it reached zero. */
- void gve_dec_pagecnt_bias(struct gve_rx_slot_page_info *page_info);
- 
- void gve_add_napi(struct gve_priv *priv, int ntfy_idx,
 -- 
-2.47.3
+Antonio Quartulli
+
+CEO and Co-Founder
+Mandelbit Srl
+https://www.mandelbit.com
 
