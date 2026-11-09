@@ -1,58 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.223
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794187042;
-	b=bKqOPeDmxK0FZGl+qAxDuM4asbsTAsRiBdCkje3/poLiRjcQfVOJqN/2vi1S9p0UnGps
-	 I5yBTNIm+Q/JV7B9Kk3TiMfWVrPy7E3ZUj33vS0XCNN4iDAYJKntunD4FDgOXAOfheywN
-	 FfXfWlWQPSYAozzuH6IUlFUpvqzLc2ay7By79okaCb25KVwRc9xnWNY/68Gr4e9cDc9jN
-	 Hm59g3P/xpl5I3DlO/EgVD8Wm604gkWWHCcCfTJEkCBMBZCVnf+AFZ17f+AHApSEfkwJf
-	 uTQtLKTNEXYEhVj4SMXAUMe5ycX2yqe2h4R+3wF8LFMiGOKqOVcbMOxpxeLJ4q7Rteg==
+	t=1794187619;
+	b=d1XK2Ge8d21A4/IIQBB23hBIyggPrvo+7/eSuWTTaYZTZgR9fh53UfvjUIT6axIlVyjK
+	 1VcLRizMgAZvHH3dPUqFZvu/BgLFNR7dVfPPUheLYVfRONcrDDkA9ztx2PcPNAbmADpgz
+	 kh45whOAe1HgQ6rvj5CDxZJE6tDMhmDZg8wrWUe9e0EkLt1nGvAg3bhZneUxbiLUt4+PW
+	 dkrovTEQxVEzcGygBVQcg8HEdS8cZloS65v7+LKWxN76pdiMWzkmX+4MCEtmR4noq60sh
+	 /M81QEpQh1jETSEi2dmH967L7Mk69pMaTG3kF/X/2DKDyT3qYEBWMFU14hFKKIVITHg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794187042;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-	bh=yY98EimkYwoSC4veLCocaKOPiAsfw8Chonm7o9A4A9M=;
-	b=rrI70LFnWXYBteD4pRiuygm4mhXJqhhpW9dDgnaapdeAvVQU8m/XjQbhyqsKw7IraYTf
-	 y2myaMRgUBu9MvXAUO47pjc4p6lnfepga7fF6TFe42vGI5xKtXL5yfK1ChJ0HWHgDUQ+v
-	 iL0UzbSxiaSjFC+KDJbZ1hzPH0gfHsxjR0SlEactvJhRl/R66DyZ9Zoxzmu3C6fuKk4Z7
-	 k1VHatVogjg4vrh1u7/FNzL3pAvxcJQNz/z73BpYpm5QggLCMgZeOyIODTPZSceqewBcE
-	 7HfJg2wcURuu5BPJHLCz9emlsOwGQN3LZdrwCIe5807CHgDSSDXri/Eq3REErjo7sdg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794187619;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=iJgvv+vbSYiKu9D2Sb1AjohexiXFRe2YpdqwQmcxyao=;
+	b=x24ETJlSuRN3UZNVj9UfZUaVcC29ZxTo7csAE6GCTCSf/1StRowD5f8qyYJDjmwgdO28
+	 4+Kryf8r7Xb5LHTQG0Bf+DiUmNZHEES3lsDZ4qW4dOLx5/MmWPrEFWkWLVN+iGgGKdYjz
+	 zp4s69VQF2QgwJMcPrvApUNONqZNBvq/VzCc6sSPTqpXFIiiMG0KeGMOS8SKa+3x6xR36
+	 uqpjPf2yNs7dCEMshQM5nsAiiAoChHOJnxt6wvwLg+lyVDde2qip/JwkI9qs7jHByBADa
+	 ct8azuh9Vh9k4Eaq+1S7piAmIaerMkfvalxivoukwT+HGQdse/10buKmIBgZaLFz9CA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=qeQgFRRB;
-	arc=none smtp.remote-ip=113.46.200.223
-Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mwbMlECO;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B39606A31C;
-	Mon,  9 Nov 2026 01:17:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 02B39606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4AA606A31C
+	for <bpf@vger.kernel.org>; Mon,  9 Nov 2026 01:26:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=qeQgFRRB
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=yY98EimkYwoSC4veLCocaKOPiAsfw8Chonm7o9A4A9M=;
-	b=qeQgFRRBd00Rn4rcGiGW4cLpU42DjSLiYLuY0iPOxJjAWnf7mo7BPBywaBk6dbPUWAHU7dDoH
-	5Dk0lgW8/XEXIKaJb5jUbAbZdI6PYC+11Vcy1XbFjudWMWJwt82sSUOSfXtHgxtAMTm8KKQSI1X
-	BOb9/Xsi3W61XFBYhWMjjPo=
-Received: from mail.maildlp.com (unknown [172.19.163.127])
-	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4jNBhT4PhYzmVcF;
-	Mon,  9 Nov 2026 09:16:57 +0800 (CST)
-Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3ACDA40572;
-	Mon,  9 Nov 2026 09:17:11 +0800 (CST)
-Received: from [10.67.110.140] (10.67.110.140) by
- whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Mon, 9 Nov 2026 09:17:09 +0800
-Message-ID: <a890e04e-acbc-472a-ac06-d241c3e9f721@huawei.com>
-Date: Mon, 9 Nov 2026 09:17:08 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mwbMlECO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E72AD1F0089F;
+	Mon,  9 Nov 2026 01:26:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794187619;
+	bh=iJgvv+vbSYiKu9D2Sb1AjohexiXFRe2YpdqwQmcxyao=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=mwbMlECOCwvPNctzvbuoUlwitEeAMWfhOZADaBNweGXv7OrDAt6iFfEWvvuj5Dt1u
+	 ju3mQL2AmT2qizNqgvVvCSgyXXNQ2A1I25U7zxzq4OnxVcvkhsxbdGv9MJL7g9XM/n
+	 RYClXqFqsgsIYVpmyPC/0CoV8IDgqTJBwcTq0SRNGblqfu/efBn7IYdBZXWbiE3i/u
+	 Xhmoo2l7B+ZvwMBUST6HZWQ5Vmc2ZNhxfCcuBUSWGTGwUE9n9Ol2a1M8rggYKAj8p7
+	 zDN/Luqf3UMigGpogNLjcmM+8xPatWgq1mO+epTF/vcglC4Y8lLjk5tC15FmR+vUN6
+	 epPk0Ok8+Xp/w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D82B4380821F;
+	Mon,  9 Nov 2026 01:26:58 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,30 +53,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH -next 0/9] lockdown: fix the securityfs interface and add
- tests
-To: "Serge E. Hallyn" <serge@hallyn.com>
-CC: <nicolas.bouchinet@oss.cyber.gouv.fr>, <xiujianfeng@huawei.com>,
-	<paul@paul-moore.com>, <jmorris@namei.org>, <shuah@kernel.org>,
-	<linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<lujialin4@huawei.com>
-References: <20261103082421.3033195-1-caixinchen1@huawei.com>
- <au4wx1+7+Bkg3wgz@hallyn.com>
-Content-Language: en-US
-From: Cai Xinchen <caixinchen1@huawei.com>
-In-Reply-To: <au4wx1+7+Bkg3wgz@hallyn.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- whupemk100010.china.huawei.com (7.152.184.41)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 00/24] bpf: Various arm64 BPF JIT improvements
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179418761741.1922711.9741403372080027028.git-patchwork-notify@kernel.org>
+Date: Mon, 09 Nov 2026 01:26:57 +0000
+References: <cover.1794165614.git.daniel@iogearbox.net>
+In-Reply-To: <cover.1794165614.git.daniel@iogearbox.net>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: ast@kernel.org, puranjay@kernel.org, memxor@gmail.com,
+ xukuohai@huaweicloud.com, bpf@vger.kernel.org
 
-Hi, Serge. Thanks for review.
+Hello:
 
-I will change these two patches and send v2 later.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-On 11/7/2026 3:55 AM, Serge E. Hallyn wrote:
-> In patch 3, it would be nice if we had a BUILD_BUG_ON if
-> the temp len became not long enough.  In patch 6, I think
-> the original was nicer to read.
+On Sun,  8 Nov 2026 20:26:26 +0100 you wrote:
+> This series changes the arm64 BPF JIT to emit shorter and faster native
+> code for the instruction patterns that LLVM-compiled programs hit in the
+> real world. Every change stays within the lowering of a single BPF
+> instruction. This is a similar effort as done recently for x86-64 BPF
+> JIT [0].
+> 
+> On arm64 under vmtest.sh (qemu TCG), test_verifier, test_maps, jit_insns
+> and jit_insns_blinded pass in full, and test_progs and its cpuv4 and
+> no_alu32 flavors only fail tests that fail without the series as well
+> or only under TCG. The encodings were checked against Arm's machine-readable
+> A64 ISA XML: every A64_* macro and directly called encoder, run with
+> boundary and invalid operands (39028 cases), gives the encoding and
+> fields the Arm ARM expects or AARCH64_BREAK_FAULT for what it cannot
+> encode.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v3,01/24] bpf, arm64: Remove unused A64_BL, A64_BTI_C and A64_LDR32LIT
+    https://git.kernel.org/bpf/bpf-next/c/0931830cc312
+  - [bpf-next,v3,02/24] bpf, arm64: Free the offset table of a subprog in bpf_jit_free
+    https://git.kernel.org/bpf/bpf-next/c/0ff09166d3d2
+  - [bpf-next,v3,03/24] bpf, arm64: Free the private stack when a pass over the image fails
+    https://git.kernel.org/bpf/bpf-next/c/346ea1557fd7
+  - [bpf-next,v3,04/24] bpf, arm64: Emit ISB SY in the speculation barriers
+    https://git.kernel.org/bpf/bpf-next/c/6a5b148dac53
+  - [bpf-next,v3,05/24] arm64, insn: Reject sign extending loads of 64 bits
+    https://git.kernel.org/bpf/bpf-next/c/182afb043e7e
+  - [bpf-next,v3,06/24] bpf, arm64: Keep the ll/sc atomics address apart from the old value
+    https://git.kernel.org/bpf/bpf-next/c/207aac32085d
+  - [bpf-next,v3,07/24] bpf, arm64: Measure backward branches from the branch itself
+    https://git.kernel.org/bpf/bpf-next/c/1963ac21c7c2
+  - [bpf-next,v3,08/24] arm64, insn: Reject invalid and unpredictable operands in the encoders
+    https://git.kernel.org/bpf/bpf-next/c/d860f6254d60
+  - [bpf-next,v3,09/24] bpf, arm64: Widen the branch offsets before scaling them to bytes
+    https://git.kernel.org/bpf/bpf-next/c/592f36e960d0
+  - [bpf-next,v3,10/24] arm64, insn: Add the LDUR/STUR and TBZ/TBNZ encodings
+    https://git.kernel.org/bpf/bpf-next/c/1fdba03c72cb
+  - [bpf-next,v3,11/24] bpf: Divide by constants via uhmul and shmul in the verifier
+    https://git.kernel.org/bpf/bpf-next/c/ffebe8b3e369
+  - [bpf-next,v3,12/24] bpf, arm64: Consolidate the load and store emission into a helper
+    https://git.kernel.org/bpf/bpf-next/c/1bb1bc5be527
+  - [bpf-next,v3,13/24] bpf, arm64: Use the unscaled forms for negative and unaligned offsets
+    https://git.kernel.org/bpf/bpf-next/c/6b3c7bde476f
+  - [bpf-next,v3,14/24] bpf, arm64: Store zero immediates from the zero register
+    https://git.kernel.org/bpf/bpf-next/c/e4939b2a54b9
+  - [bpf-next,v3,15/24] bpf, arm64: Zero extend the arena offset in register offset accesses
+    https://git.kernel.org/bpf/bpf-next/c/07d4e6947e37
+  - [bpf-next,v3,16/24] bpf, arm64: Adjust compares with unencodable immediates by one
+    https://git.kernel.org/bpf/bpf-next/c/a33de9a3bba3
+  - [bpf-next,v3,17/24] bpf, arm64: Materialize immediates with fewer instructions
+    https://git.kernel.org/bpf/bpf-next/c/e79c67bce1a2
+  - [bpf-next,v3,18/24] bpf, arm64: Shorten the tail call sequence
+    https://git.kernel.org/bpf/bpf-next/c/7dd5500c2c4f
+  - [bpf-next,v3,19/24] bpf, arm64: Use mov or mvn for AND, OR and XOR with all ones
+    https://git.kernel.org/bpf/bpf-next/c/4835c45b11d2
+  - [bpf-next,v3,20/24] bpf, arm64: Use cbz, cbnz, tbz and tbnz for zero, sign and bit tests
+    https://git.kernel.org/bpf/bpf-next/c/abf5971d572c
+  - [bpf-next,v3,21/24] bpf, arm64: Multiply by constants with shifts, adds and subs
+    https://git.kernel.org/bpf/bpf-next/c/c9c277f5e08f
+  - [bpf-next,v3,22/24] selftests/bpf: Let the arm64 private stack check skip the BTI pad
+    https://git.kernel.org/bpf/bpf-next/c/75e665d4892b
+  - [bpf-next,v3,23/24] selftests/bpf: Test the verifier's division by constants
+    https://git.kernel.org/bpf/bpf-next/c/099c2e03f9a0
+  - [bpf-next,v3,24/24] selftests/bpf: Extend the JIT instruction tests for arm64 encodings
+    https://git.kernel.org/bpf/bpf-next/c/a9fee553d3db
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
