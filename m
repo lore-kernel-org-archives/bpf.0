@@ -1,47 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794324468;
-	b=3ThIg0p4xlXysARj40nMK/e33SD07DlScDTX87qy//JC1qkLWx6dz9mvrWR4DF+wgWdg
-	 NU/F8WFSQDeYXV213XrN1zHQDbE8uQpPTh/8DhvlM08hs7amMogdEmAwwiRtBOSjZWeTO
-	 T+o0DeArxULkpGL8j/MSJBPQLktcBgWgWj9pxwD64XfxYDFV8E4rGfuaGoXImUt3p9sl/
-	 h5OF96SBD+6hs6mcVS+5qfQDCe2yD2AG/baVzlbW4+EIRx8tdnhEcuxsfm9YLAjX6jBOs
-	 aVjfiF7dEmE7zHXAAS+6ejM4nRfVi+hpoYQgnv45Uwf+l4XOCXKJlAvDesDu2jsGafQ==
+	t=1794325089;
+	b=y3uR5yHtrRYQizdxRT07rEe8XFqsVJA7Xe5MksFW3mpNsr+n3yy5T0OqKRuu+aDOz6Za
+	 AZNMfzi1f77NCls2ul/DCG6OJZgKt09uc99X4Yi+RxpVNChTgfgP7JyGXw8QL1aH8EJQn
+	 A4Nn378S1Mj99TUgnDc13gk+BJm/uI7f5bCJIOIvTqv6JO49D7YAYu2gu23GY8+ARVTy4
+	 eUOUhslhEppqCC/Lav4tlM5o3+y6MpWYSvlKsUzybuUooDSqcEQx7qhUZb7gWuwSGC6QC
+	 HxOFyN6J62g3mH3x87mryeWBLb1vvV0ijT8GI7L0mlBtZjSiBi9P8HoeviCheTjjkag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794324468;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=hI6RrJGoR32nHOun34r6MzkSJfi8TLtc7U1OwfAK63U=;
-	b=3X78Q9NhWvKUqdiVAXy2s/ucjBPwN8kBLQ3vHt8aXuvOMK634Pz85eX/uwoR/zvqgd3V
-	 GE5Bg4UsUjAhTTQh29YPCOde0C9SzkJH1y1KNW/ZCgoJoWk5pmGMLr7I4BUfEJnLdBsTI
-	 UMwwoGDuuc1hNItKOk22CKQ/X36aoeolPMdCGgK2sRXFLrWYP71uNwXGqwadbywHOfPfV
-	 DlYqXSShlVrWOYoFVbFgWj9FDR2MBBw2m19Oy8ooHnra7XGR3S0IxVDKQqH6AGzRI2UT8
-	 5uHJmAQ+G9BRN6rHiQ6Or+xpiUDBUmbEJjKGJfOpx9csRTaWY3+7z9cPIUEJSdN49MQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794325089;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=IVo53ZWRUxUZncXLcouJ/TarKckoa/ysa4d9WVjKI9w=;
+	b=C6oUnB/wh4YI3vdij68QjELPhXR864bIvKfEtORTJ0eGod+vB93poHrkszND/hlG6HaE
+	 Ulu7YRAAjN9ZqIJud7VLdx4BvfgvCeyd2D2/finqwVK2q0CTdY8GGfWxiqxUMD+3MYOGw
+	 YZQs/xH8eRhTYYE9el8/O9rG/jGfsMqBKfP0iKvr0SvZgude9wLsxQDP0G0vuUtOmyhW+
+	 /6BqR0S2SXjM2CTvXjTSdb4iQwbmZsS6u2uayzqR2Y//FucrlcDHiktKStoNIm3NjmjHd
+	 Z7E++i9DTuLLASCVHsLk5iqlih7JMeWp3dVWg3rhjDfL8zc3aj0yDFAQL9cezUB4okA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CN2EP6Il;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VpxYX4HJ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41926606A31C;
-	Tue, 10 Nov 2026 15:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F232606A31C;
+	Tue, 10 Nov 2026 15:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CN2EP6Il
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CF791F0089F;
-	Tue, 10 Nov 2026 15:27:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VpxYX4HJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89F011F008A1;
+	Tue, 10 Nov 2026 15:38:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794324467;
-	bh=hI6RrJGoR32nHOun34r6MzkSJfi8TLtc7U1OwfAK63U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=CN2EP6Il+KD+On+yiFtvOfH0dAkLCu2EqAFqCDK7WLp/Av04Wrv5AsRcMYjuvXotV
-	 icurtL59ZKqwW8hXdJsmASUHo8jS+Y1oRds+Q0pTx8N8SVHK95574MoZA+gSq/oV1M
-	 PQ2dwA+5Uva0fJSWn2Nrl5D2t8fBqw33muc3WtSWrlNUryrUJMwTrSz3bG6fMrJBZT
-	 i/SfRNwjpXCgAvaKayWhO2BwmvVeXdpf7wv0lnAZYGWV25I5Ohc//BdUNSCEUeg67I
-	 s3aAq+xrjImJhh8vQ0PMqMjK1+E6rgG15wRB9tGCsY+3hwKMrheL5pMpNQ7ekwEuaF
-	 qnIUW991CzyDA==
-Message-ID: <4290bbfc-c72d-49d4-9d0c-66f316db9dd3@kernel.org>
-Date: Tue, 10 Nov 2026 15:27:44 +0000
+	s=k20260515; t=1794325088;
+	bh=IVo53ZWRUxUZncXLcouJ/TarKckoa/ysa4d9WVjKI9w=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=VpxYX4HJfpGO3in5SPsTkLkztMer+aY4KhEdu4iJt4LxMLP6GYp5AQStRQi8bGNTZ
+	 +Lva1wWNVdUP8kN4bWaKG2te4boPLWczOKmXofNhsbtqFqyHjaa73+Q+zdozZQxeEQ
+	 x3IKkdM3ttweOOZTdd9KYRFJi2OVVyrqtPWEf7Z1gggMJmyLqTY+dLP5YW1ESu9xo1
+	 3eeNj+M1zD+YSeQCCG89K++LjDaUiZHIhiXLIucTKEsdo45AXqsP1eDMyW0wOPLbg2
+	 AwyEWZLcm+Twz2HUfB3N5aq9ssbBBOsz1bhGvsXSr29Ocg9eVvgGb8lm9k7Ud5kzzG
+	 +kwZO5mWWwmbg==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Naveen N Rao <naveen@kernel.org>, "David S. Miller" <davem@davemloft.net>, Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Alan Maguire <almagui@kernel.org>, x86@kernel.org, linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 04/13] kprobes: Maintain an rbtree of registered probes
+Date: Wed, 11 Nov 2026 00:38:03 +0900
+Message-ID: <undine-1794325083765212173-9c2dd2a4d5c010fe@undined.local>
+X-Mailer: UndineD 0.1
+In-Reply-To: <avLz8k0gdZwYTeA5@krava>
+References: <20261109194916.1089703-1-jolsa@kernel.org> <20261109195517.1090787-1-jolsa@kernel.org> <undine-1794298339502831052-1b6960b8f9b38e7d@undined.local> <avLz8k0gdZwYTeA5@krava>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,247 +58,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v11 2/3] bpftool: Add recursive map dumping
-To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, daniel@iogearbox.net,
- ast@kernel.org, alexei.starovoitov@gmail.com, skokovmaksimevg@gmail.com
-References: <cover.1793818386.git.hi@tychen.cc>
- <9d939026aea3c4a2d4d26702de1080c6733ad566.1793818386.git.hi@tychen.cc>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <9d939026aea3c4a2d4d26702de1080c6733ad566.1793818386.git.hi@tychen.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-On 04/11/2026 18:54, Tianyi Chen wrote:
-> Dumping an array_of_maps or a hash_of_maps shows the IDs of the inner
-> maps but not their contents. Add a recursive keyword to map dump that
-> also dumps the inner map referenced by each entry, in that entry. JSON
-> entries gain an "inner_map" object next to "inner_map_id", and plain
-> output prints the inner map after the entry line. The output without
-> the keyword is unchanged.
+On Tue, 10 Nov 2026 11:37:38 +0100, Jiri Olsa <olsajiri@gmail.com> wrote:
+> On Tue, Nov 10, 2026 at 08:12:19AM +0000, Masami Hiramatsu (Google) wrote:
+> > On Mon,  9 Nov 2026 20:55:17 +0100, Jiri Olsa <jolsa@kernel.org> wrote:
+> > > Add an address-ordered rbtree for registered probes. Keep it synchronized
+> > > with the hash table when probes are added, removed, or replaced by
+> > > aggregator probes.
+> > 
+> > Could you tell me why don't you use hlist (get_kprobe) instead?
+> > I would NOT like 2 different lists which is basically doing the
+> > same thing.
 > 
-> The kernel supports a single level of map-in-map, so inner maps have
-> no inner maps of their own. Each inner map is opened by ID when its
-> entry is printed, dumped and closed, which needs one more map FD. An
-> inner map shared by several entries is dumped in each of them. If an
-> inner map cannot be opened, for example because it was replaced after
-> the outer lookup, the error is reported in that entry and the dump
-> continues.
+> The speedup comes from finding the first relevant kprobe, then iterating
+> over the remaining probes in address order. The hash table supports
+> exact-address lookups, but it doesn’t provide that ordering.
 > 
-> Link: https://github.com/libbpf/bpftool/issues/58
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
-> ---
->  .../bpf/bpftool/Documentation/bpftool-map.rst |  9 ++-
->  tools/bpf/bpftool/bash-completion/bpftool     |  3 +
->  tools/bpf/bpftool/map.c                       | 59 +++++++++++++++++--
->  3 files changed, 65 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> index e4ed7e701c9e4..729baab2b7922 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> @@ -29,7 +29,7 @@ MAP COMMANDS
->  | **bpftool** **map create**     *FILE* **type** *TYPE* **key** *KEY_SIZE* **value** *VALUE_SIZE* \
->  |     **entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**inner_map** *MAP*] \
->  |     [**offload_dev** *NAME*]
-> -| **bpftool** **map dump**       *MAP*
-> +| **bpftool** **map dump**       *MAP* [**recursive**]
->  | **bpftool** **map update**     *MAP* [**key** *DATA*] [**value** *VALUE*] [*UPDATE_FLAGS*]
->  | **bpftool** **map lookup**     *MAP* [**key** *DATA*]
->  | **bpftool** **map getnext**    *MAP* [**key** *DATA*]
-> @@ -87,10 +87,15 @@ bpftool map create *FILE* type *TYPE* key *KEY_SIZE* value *VALUE_SIZE*  entries
->      Keyword **offload_dev** expects a network interface name, and is used to
->      request hardware offload for the map.
->  
-> -bpftool map dump    *MAP*
-> +bpftool map dump    *MAP* [recursive]
->      Dump all entries in a given *MAP*.  In case of **name**, *MAP* may match
->      several maps which will all be dumped.
->  
-> +    With **recursive**, each entry of an **array_of_maps** or **hash_of_maps**
-> +    also has the dump of the inner map that it refers to. An inner map that
-> +    cannot be opened, for example because it was replaced, is reported as an
-> +    error in that entry.
-> +
->  bpftool map update  *MAP* [key *DATA*] [value *VALUE*] [*UPDATE_FLAGS*]
->      Update map entry for a given *KEY*.
->  
-> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-> index a28af31937ad4..78fdb9396e96f 100644
-> --- a/tools/bpf/bpftool/bash-completion/bpftool
-> +++ b/tools/bpf/bpftool/bash-completion/bpftool
-> @@ -718,6 +718,9 @@ _bpftool()
->                              return 0
->                              ;;
->                          *)
-> +                            if [[ $command == dump && $cword -eq 5 ]]; then
-> +                                COMPREPLY=( $( compgen -W 'recursive' -- "$cur" ) )
-> +                            fi
->                              return 0
->                              ;;
->                      esac
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index b150a06a25085..fc820c07e9f4f 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
-> @@ -22,6 +22,9 @@
->  #include "main.h"
->  
->  static struct hashmap *map_table;
-> +static bool recursive_dump;
-> +
-> +static void dump_inner_map(__u32 id);
->  
->  static bool map_is_per_cpu(__u32 type)
->  {
-> @@ -140,9 +143,14 @@ static void print_entry_json(struct bpf_map_info *info, unsigned char *key,
->  		print_hex_data_json(key, info->key_size);
->  		jsonw_name(json_wtr, "value");
->  		print_hex_data_json(value, info->value_size);
-> -		if (map_is_map_of_maps(info->type))
-> +		if (map_is_map_of_maps(info->type)) {
->  			jsonw_uint_field(json_wtr, "inner_map_id",
->  					 *(unsigned int *)value);
-> +			if (recursive_dump) {
-> +				jsonw_name(json_wtr, "inner_map");
-> +				dump_inner_map(*(unsigned int *)value);
-> +			}
-> +		}
->  		if (btf) {
->  			struct btf_dumper d = {
->  				.btf = btf,
-> @@ -273,6 +281,8 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
->  		}
->  
->  		printf("\n");
-> +		if (recursive_dump && map_is_map_of_maps(info->type))
-> +			dump_inner_map(*(unsigned int *)value);
->  	} else {
->  		unsigned int step;
->  		int i;
-> @@ -935,6 +945,36 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
->  	return err;
->  }
->  
-> +/* The kernel has one level of map-in-map: inner maps have no inner maps. */
-> +static void dump_inner_map(__u32 id)
-> +{
-> +	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts, .open_flags = BPF_F_RDONLY);
-> +	struct bpf_map_info info = {};
-> +	json_writer_t *btf_wtr = NULL;
-> +	__u32 len = sizeof(info);
-> +	int fd;
-> +
-> +	fd = bpf_map_get_fd_by_id_opts(id, &opts);
-> +	if (fd < 0) {
-> +		p_err("can't get map by id (%u): %s", id, strerror(errno));
-> +		return;
-> +	}
-> +	if (bpf_map_get_info_by_fd(fd, &info, &len)) {
-> +		p_err("can't get map info: %s", strerror(errno));
-> +		goto out;
-> +	}
-> +
-> +	if (!json_output && info.btf_value_type_id)
-> +		btf_wtr = get_btf_writer();
-> +
-> +	map_dump(fd, &info, json_output ? json_wtr : btf_wtr, true);
+> I agree that maintaining both indexes is less convenient. What do you think
+> about centralizing their updates as in the change below? untested
 
+If you can replace the hash table with other faster design, it is OK to me.
+But I would like to avoid this simple-adding another lookup table for the
+rare usage case (because of the maintenance cost, and duplicating a list
+makes it difficult to handle cases where discrepancies arise between the
+two lists.)
 
-Hi Tianyi, thanks for this version!
-
-With the design in the newer versions (dump as soon as you find the
-entry), the plain output will look something like this:
-
-   key: 01 00 00 00  inner_map_id: 80
-   80: hash  name c1202206_in2  flags 0x0
-   Found 0 elements
-   key: 00 00 00 00  inner_map_id: 79
-   79: hash  name c1202206_in1  flags 0x0
-   key: 07 00 00 00  value: 09 00 00 00
-   Found 1 element
-   Found 2 elements
-
-It's quite difficult to understand where each inner map starts and
-stops. Can we have some sort of delimiter between maps (at least one
-empty line, I think that's what we use when dumping several maps with
-the same name?), and some sort of indentation or prefix character to
-show inner map entries and items count, please?
-
-pw-bot: cr
-
-On a different note, we risk an infinite recursion here if the kernel
-ever allows inner maps to recurse. I'm not aware that there is any plan
-in that direction though, so it's probably fine to keep as-is for now.
-
-
-> +
-> +	if (btf_wtr)
-> +		jsonw_destroy(&btf_wtr);
-> +out:
-> +	close(fd);
-> +}
-> +
->  static int do_dump(int argc, char **argv)
->  {
->  	json_writer_t *wtr = NULL, *btf_wtr = NULL;
-> @@ -944,8 +984,8 @@ static int do_dump(int argc, char **argv)
->  	int *fds = NULL;
->  	int err = -1;
->  
-> -	if (argc != 2)
-> -		usage();
-> +	if (!REQ_ARGS(2))
-> +		return -1;
->  
->  	fds = malloc(sizeof(int));
->  	if (!fds) {
-> @@ -956,6 +996,16 @@ static int do_dump(int argc, char **argv)
->  	if (nb_fds < 1)
->  		goto exit_free;
->  
-> +	while (argc) {
-> +		if (**argv && is_prefix(*argv, "recursive")) {
-> +			NEXT_ARG();
-> +			recursive_dump = true;
-> +		} else {
-> +			p_err("expected 'recursive', got: '%s'", *argv);
-> +			goto exit_close;
-> +		}
-> +	}
-> +
->  	if (json_output) {
->  		wtr = json_wtr;
->  	} else {
-> @@ -1002,6 +1052,7 @@ static int do_dump(int argc, char **argv)
->  exit_free:
->  	free(fds);
->  	free_btf_vmlinux();
-> +	recursive_dump = false;
->  	return err;
->  }
->  
-> @@ -1510,7 +1561,7 @@ static int do_help(int argc, char **argv)
->  		"       %1$s %2$s create     FILE type TYPE key KEY_SIZE value VALUE_SIZE \\\n"
->  		"                                  entries MAX_ENTRIES name NAME [flags FLAGS] \\\n"
->  		"                                  [inner_map MAP] [offload_dev NAME]\n"
-> -		"       %1$s %2$s dump       MAP\n"
-> +		"       %1$s %2$s dump       MAP [recursive]\n"
->  		"       %1$s %2$s update     MAP [key DATA] [value VALUE] [UPDATE_FLAGS]\n"
->  		"       %1$s %2$s lookup     MAP [key DATA]\n"
->  		"       %1$s %2$s getnext    MAP [key DATA]\n"
-
-
-Note that there may be some interaction between this series and the one
-on batch lookups. With the approach suggested by Alexei - dump inner
-maps as soon as you find them - it would probably make sense to exclude
-the outer map from batch lookups when we do a recursive dump, to limit
-the risk of inner maps being replaced in the meantime.
+Can you change the size of the hashtable and measure how the performance
+is changed? I need more options.
 
 Thanks,
-Quentin
+
+> 
+> jirka
+> 
+> 
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
