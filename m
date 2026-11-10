@@ -1,42 +1,43 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.75
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.63
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794306005;
-	b=zIdQFXGT0DwK0R/OveClqJn8VLpIMwD1n1mvJ2s7fTk/TKBHAKuKg/85uYo/rr84gJ7F
-	 wJBJIOAZlluOMfuR0Bidus/Q9Jufqqxwg3O+CkayeLgtvKCPzjSdb9m5MeoxEFUwwhzR7
-	 bRv8MxiKgAkNvzyNVqlIkIKoTgXAkFoec3j1OndzIHwtpe+zUYTNblyOZYtRwGXnnTY2a
-	 tf8wJwqe3dHox01g1KWZRHocxClffgXsGRGtHbBNdw7v6v7yVFjLzN4GjFqQyh6jWeFcp
-	 2u/cavec+t2RHKqFYcANRYMQBsEWPJJ3yHDKo2oegGBun00qfcHf8qyiGFGAFHEV56g==
+	t=1794306017;
+	b=ZjN385LSPvDTF5Q3XjUfhtexe5UWmCHNAtdMyQjEYL2CXFx8vBpHbg6UItQT3X35J3kY
+	 pwTjOBazzJJCEaEnH3mpjYBAhFzZGBK9t+wxgEZMD6BinyUsNJk5RbTsI9SiSI2pyJYWJ
+	 ukpCvJPesgj59OrSwPSak4EKwrIdX2/rsRGL3Cyb/jhOOy23fquVzAF5acC2JtNNS69Oh
+	 RSzLh/392sbL/dOOpVeF49x2DYJwlBX7oAO4z578bSsZNwSOEMEB5gASJreufLpNZjz9e
+	 xsT0zvnjpnYMKVJZ0wjayMMde7s3b+2guZA3lWiyQdvo+qKpKqUAleNFDlQgxIzVecw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794306005;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794306017;
 	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:DKIM-Signature;
-	bh=coFjlQL4o71VpOaQUnOjY92jOAjx1XEtEHb6FBMSxL0=;
-	b=ziEG7iGorhfkeYbMF6kvB8TSAqzmhuCZq64Qu+S5QxT3kwY4VN9rKWzSrsuG+jaUih6l
-	 1e+jSiIP1ZQyn6u4kfrL7f+ssefyd0gw/su5xmh2OvT9vfAxWWZrecHoBAHxOcmU1QPXh
-	 rSH/L0GnEX7iCoYp21BIODLo59dX0pT5gIFYn8F/BSTb5JxnT9ilSZdVIsXppEflPUnfx
-	 UwvvG7VllT/xc06yT5mrTmHPs85wu8VIbDmCSMDNVxAmafz+eufChY7dX7NQoWfYY7ntY
-	 WmDUbb0trrroVF15NZP7DwK2oH70QM4S1NnwCAfjkLVRT6lUM7FVqXGKh32bvN5UtrQ==
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:DKIM-Signature;
+	bh=t6EBDerPEShbrpX5uNn+8UklubrqlD5rwGGgrRVNe5U=;
+	b=u3EL2AryUgTVRzQWrsPd4WGwPfKRW5RpoayN0Hg+OXxWOTRyHo6qDWcAD8yPrgE2/E0L
+	 6eiNKiMZ35/BuNSEZkbNh+hvqx0bJCvJkTUbHVeA6iit0ioSLLnkqsu2srgfdZPOyUmoc
+	 NP32SKM562b4JKqXQg7QKJ0Gd0jwgm1leSrwkGynq6W2VEtyJLQ7dSO6hHckfJp29oEbI
+	 +F9TM+KogsLEDgsOgCtF+W3UhK2JjW+y/2aXgecpF6nbuYss7GQl7iILBGimPA52LF8FQ
+	 /HbNM3HdE0qDGyifBPKHFX0Oxt26iOrBHEY6bNGu9IxjGyF6amrzFmHBY1gcppQNdgg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=poczta.fm;
 	spf=pass smtp.mailfrom=poczta.fm;
-	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=F6x0Wt2I;
-	arc=none smtp.remote-ip=217.74.67.75
-Received: from smtpo75.interia.pl (smtpo75.interia.pl [217.74.67.75])
+	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=ij3MHchZ;
+	arc=none smtp.remote-ip=217.74.67.63
+Received: from smtpo63.interia.pl (smtpo63.interia.pl [217.74.67.63])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0B4C606A321
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 10:20:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0B4C606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0CF4606A33F
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 10:20:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0CF4606A33F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=F6x0Wt2I
+	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=ij3MHchZ
 Received: from localhost (unknown [80.68.231.31])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
 	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-	Tue, 10 Nov 2026 11:19:50 +0100 (CET)
+	Tue, 10 Nov 2026 11:20:05 +0100 (CET)
 From: Slawomir Stepien <sst@poczta.fm>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -71,10 +72,12 @@ Cc: bpf@vger.kernel.org,
 	Yunsheng Lin <linyunsheng@huawei.com>,
 	"huangjie . albert" <huangjie.albert@bytedance.com>,
 	Slawomir Stepien <sst@poczta.fm>
-Subject: [PATCH RFC net-next v2 0/4] xdp: reuse generic skb XDP handling for veth
-Date: Tue, 10 Nov 2026 11:19:37 +0100
-Message-ID: <20261110101941.1059662-1-sst@poczta.fm>
+Subject: [PATCH RFC net-next v2 2/4] xdp: return status from generic_xdp_tx()
+Date: Tue, 10 Nov 2026 11:19:39 +0100
+Message-ID: <20261110101941.1059662-3-sst@poczta.fm>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261110101941.1059662-1-sst@poczta.fm>
+References: <20261110101941.1059662-1-sst@poczta.fm>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,156 +90,132 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
-	t=1794305994; bh=coFjlQL4o71VpOaQUnOjY92jOAjx1XEtEHb6FBMSxL0=;
+	t=1794306007; bh=t6EBDerPEShbrpX5uNn+8UklubrqlD5rwGGgrRVNe5U=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=F6x0Wt2IsFfRNdpuBAtfMnBNoUYTsjT92sKdENJ+3JE+bVXz/6+Y3eE5mqrB/7ieo
-	 mzcPBSapgxUOMKWU24NgjrijE8v1mjB5xnyWurRJ80M4udAy/eGwcDZ56pds7VaqLX
-	 GGJbbHpyVZZ6i9IajWU/a9h2fEfhey8PBerXc9XY=
+	b=ij3MHchZg1GjDQchEWpuHCADRgE0Yz0N386kAfvyUuGgzd7bvFhNOHb8TgtTGT0zP
+	 ZUPE5aYqg+CkqxQMGoW+p7sk/OH/R9vtwf/pBtHhXraawK5ASQgrb1jYqyVxO5bbty
+	 XwQiAo9Kv5NWZuFjN0/mycy4Q5e9o4QrV+0+h38M=
 
-Hi,
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-this is v2 of Maciej's RFC [1], which makes veth run XDP on skb-backed
-packets through the generic skb XDP path instead of converting them
-into xdp_frames for XDP_TX and XDP_REDIRECT. The patches are Maciej's;
-I addressed the review of v1 and measured the performance, which was
-the main open question there. Changes I made are noted in [sst: ...]
-lines in each commit message.
+Once veth will start to use __do_xdp_generic(), this will be helpful for
+correct stats values being incremented - otherwise we would not have a
+knowledge whether XDP_TX succeeded or not. With this being implemented we
+will only bump xdp_tx stat when actual transmission happened.
 
-The motivation is unchanged: veth pins the skb data with plain page
-references (veth_xdp_get()) to build an xdp_frame from an skb, and the
-rxq memory type it reports does not match memory that was copied into
-a page_pool, which makes the AF_XDP selftests splat when a program
-shrinks a multi-buffer packet. With this series, pages copied into
-veth's page_pool are recycled (0 rx_pp_recycle_released_ref, was
-~4.8M/s in the benchmark below).
+The generic redirect callers in devmap and filter keep returning success.
+generic_xdp_tx() frees and accounts a failed transmit itself, while the
+caller of a failed redirect frees the skb again, and in devmap the
+original skb may already be consumed after skb_copy(). As with native
+XDP, a redirect succeeds once the packet reached the target device.
 
-Dependencies
-============
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+[sst: drop the (void) casts and explain why the redirect paths do not
+ propagate the transmit error (Björn);
+ rebased onto Vladimir Oltean's "net: pass the XDP action to
+ generic_xdp_tx() for tracing" and "net: validate xmit skbs in
+ generic_xdp_tx()": keep the act argument, and return 0 only if the
+ driver took the skb or every segment that validation made of it]
+Signed-off-by: Slawomir Stepien <sst@poczta.fm>
+---
+ include/linux/netdevice.h |  4 ++--
+ net/core/dev.c            | 16 ++++++++++++----
+ net/core/filter.c         |  7 +++++++
+ 3 files changed, 21 insertions(+), 6 deletions(-)
 
-The series applies to net-next with these two net series applied
-first (prerequisite-patch-id below):
-
- - Tianyi Gao, "net: fix mac_len of skbs copied by generic XDP" (1/2)
-   [2]. Without it, cpumap redirect of skbs that veth copied drops
-   every packet once veth uses the generic path.
- - Vladimir Oltean, "net: pass the XDP action to generic_xdp_tx() for
-   tracing" and "net: validate xmit skbs in generic_xdp_tx()" [3].
-   Patch 2/4 changes the same function.
-
-Changes in v2
-=============
-
-1/4: MEM_TYPE_PAGE_POOL_OR_SHARED renamed to MEM_TYPE_MIXED (Björn);
-     comment on what the type means.
-2/4: Rebased on Vladimir's series. The redirect callers in devmap and
-     filter still return success: generic_xdp_tx() frees and counts a
-     failed skb itself, so propagating the error would free it twice
-     (Björn asked why the error is not propagated).
-3/4: One skb_needs_xdp_cow() predicate for generic XDP and veth
-     (shared, cloned, nonlinear or headroom too small) instead of a
-     per-caller callback and INDIRECT_CALL_2 (Jakub). The
-     skb_head_is_locked() check is gone, it would copy every locally
-     generated skb. Copies go to the caller's page_pool with
-     skb_pp_cow_data() also for programs without frags support (found
-     by the xdp_metadata selftest).
-4/4: Commit message describes how XDP_TX/XDP_REDIRECT change for
-     skb-backed packets (Björn's table). A failed skb XDP_TX is counted
-     once, in the device's tx_dropped (Sashiko). veth sets
-     skb->mac_len before running generic XDP, as
-     __netif_receive_skb_core() does; without it cpumap redirect of
-     veth skbs is dropped.
-
-Performance
-===========
-
-QEMU/KVM, 8 vCPUs, minimal config without debug options. pktgen sends
-skbs into veth v0, the XDP program runs on the peer v1 (skb path).
-Packets/s delivered to the destination, median of 12 runs of 8 s over
-4 alternating boots per kernel, 95% bootstrap confidence intervals
-within about +-2%. Base: v7.4-rc1+ (f66469d9905b) with the
-dependencies above.
-
-                              64 B                      8000 B (3 frags)
-  XDP_TX                      4.49 -> 4.04 Mpps (-10%)  2.25 -> 1.87 (-17%)
-  REDIRECT devmap -> veth     4.30 -> 3.95 (-8%)        2.18 -> 1.81 (-17%)
-  REDIRECT cpumap             4.49 -> 4.47 (0%)         2.02 -> 2.27 (+12%)
-  XDP_DROP (native veth)      5.65 -> 5.42 (-4%)        2.82 -> 2.71 (-4%)
-  XDP_DROP (xdpgeneric)       5.63 -> 5.83 (+4%)        2.94 -> 3.00 (+2%)
-
-(cpumap 8000 B base: base without Vladimir's series, which does not
-touch that path; 3 of the 12 runs of the other base kernel stalled.)
-
-cpumap avoids the skb -> xdp_frame -> skb round trip. XDP_TX and
-devmap redirect to veth are slower for two reasons:
-
- - no bulking: one ndo_start_xmit() per skb instead of ndo_xdp_xmit()
-   with up to 16 frames;
- - at 8000 B the receiving veth copies the packet a second time.
-   Before, it got an xdp_frame; now it gets an skb with frags, and
-   nonlinear skbs are always copied (kprobe on skb_pp_cow_data(): 1
-   copy per packet before, 2 after).
-
-Vladimir's validation itself costs about 3% at 64 B on these two
-paths and nothing measurable elsewhere.
-
-Questions
-=========
-
- - Is the XDP_TX/devmap regression acceptable for the simpler and
-   correct memory handling, or should it be fixed first? Options we
-   see: skb-list bulking in the generic TX path (Jesper measured +30%
-   with xmit_more), and not copying nonlinear skbs whose frags are
-   already page_pool pages. Raising veth's needed_headroom (Jesper)
-   only helps linear skbs from senders that honour it; pktgen skbs are
-   shared and always copied, so the benchmark above cannot show it.
-   We left all three for follow-ups.
- - MEM_TYPE_MIXED vs. separate memory types per source (Jesper).
- - The redirect semantics change in 4/4 (Björn).
-
-Testing
-=======
-
-Each commit builds with W=1 without new warnings, checkpatch --strict is
-clean. test_progs -t ns_xsk,xdp passes; test_xsk.sh shows the same DRV
-XDP_ADJUST_TAIL_GROW failures (also with busy poll) as without the
-series. Reproducers for shrinking frags in generic and veth XDP, XDP_TX
-of multi-buffer packets, devmap egress programs and bpf_prog_test_run
-after generic XDP on lo pass without kernel warnings.
-
-The scripts, kernel configs and raw logs behind the numbers and tests
-above are in [4], with instructions to rerun them.
-
-AI disclosure: the review changes, the tests and the benchmark were
-prepared with help from an AI coding assistant (Claude); I reviewed
-and tested all changes.
-
-[1] https://lore.kernel.org/all/20260509084858.773921-1-maciej.fijalkowski@intel.com/
-[2] https://lore.kernel.org/all/20261103200036.65764-3-tianyi@cloudflare.com/
-[3] https://lore.kernel.org/all/20261030114753.185281-1-vladimir.oltean@nxp.com/
-[4] https://github.com/s-stepien/xdp-rfc
-
-Thanks,
-Slawomir
-
-Maciej Fijalkowski (4):
-  xdp: add mixed page_pool/page_shared memory type
-  xdp: return status from generic_xdp_tx()
-  xdp: split generic XDP skb handling
-  veth: use generic skb XDP handling
-
- drivers/net/veth.c        | 191 +++++++++-----------------------------
- include/linux/netdevice.h |  33 ++++++-
- include/net/xdp.h         |   1 +
- net/core/dev.c            | 122 ++++++++++++++++++------
- net/core/filter.c         |   7 ++
- net/core/xdp.c            |  54 ++++++++++-
- 6 files changed, 222 insertions(+), 186 deletions(-)
-
-
-base-commit: fa5196392691051963726787944db872420dfa75
-prerequisite-patch-id: 7db3107f14b28c509845871045e6af93b7e267bc
-prerequisite-patch-id: 40350101232837c5a38ba1662825228d01734b39
-prerequisite-patch-id: 0b57f8c2a409470b1ddf8df747d906d5d3dbd9f3
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index f18bafb4efe2..b251c4b5c9ce 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -4357,8 +4357,8 @@ static inline void dev_consume_skb_any(struct sk_buff *skb)
+ 
+ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+ 			     const struct bpf_prog *xdp_prog);
+-void generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog,
+-		    u32 act);
++int generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog,
++		   u32 act);
+ int do_xdp_generic(const struct bpf_prog *xdp_prog, struct sk_buff **pskb);
+ int netif_rx(struct sk_buff *skb);
+ int __netif_rx(struct sk_buff *skb);
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 6e330fc415cb..12595f6b9eba 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -5854,13 +5854,17 @@ static u32 netif_receive_generic_xdp(struct sk_buff **pskb,
+  * that XDP packets are able to starve other packets going through a qdisc,
+  * and DDOS attacks will be more effective. In-driver-XDP use dedicated TX
+  * queues, so they do not have this starvation issue.
++ *
++ * Returns 0 if the driver took the skb, or all segments that validation made
++ * of it. Otherwise returns an error; the skb is consumed either way.
+  */
+-void generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog,
+-		    u32 act)
++int generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog,
++		   u32 act)
+ {
+ 	struct net_device *dev = skb->dev;
+ 	enum skb_drop_reason reason;
+ 	struct netdev_queue *txq;
++	int err = -ENETDOWN;
+ 	bool again = false;
+ 	int cpu, rc;
+ 
+@@ -5869,14 +5873,14 @@ void generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog,
+ 		trace_xdp_exception(dev, xdp_prog, act);
+ 		dev_core_stats_tx_dropped_inc(dev);
+ 		kfree_skb_reason(skb, reason);
+-		return;
++		return -EINVAL;
+ 	}
+ 
+ 	txq = netdev_core_pick_tx(dev, skb, NULL);
+ 	skb = validate_xmit_skb_list(skb, dev, &again);
+ 	if (!skb) {
+ 		trace_xdp_exception(dev, xdp_prog, act);
+-		return;
++		return -EINVAL;
+ 	}
+ 
+ 	cpu = smp_processor_id();
+@@ -5888,6 +5892,7 @@ void generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog,
+ 		rc = netdev_start_xmit(skb, dev, txq, false);
+ 		if (!dev_xmit_complete(rc)) {
+ 			skb->next = next;
++			err = -EBUSY;
+ 			break;
+ 		}
+ 		skb = next;
+@@ -5897,7 +5902,10 @@ void generic_xdp_tx(struct sk_buff *skb, const struct bpf_prog *xdp_prog,
+ 		trace_xdp_exception(dev, xdp_prog, act);
+ 		dev_core_stats_tx_dropped_inc(dev);
+ 		kfree_skb_list(skb);
++		return err;
+ 	}
++
++	return 0;
+ }
+ 
+ static DEFINE_STATIC_KEY_FALSE(generic_xdp_needed_key);
+diff --git a/net/core/filter.c b/net/core/filter.c
+index aca8160b26a1..b7241cbfd8f1 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4883,6 +4883,13 @@ int xdp_do_generic_redirect(struct net_device *dev, struct sk_buff *skb,
+ 
+ 		skb->dev = fwd;
+ 		_trace_xdp_redirect(dev, xdp_prog, ri->tgt_index);
++		/* generic_xdp_tx() consumes the skb: either the driver took it,
++		 * or the transmit failed and generic_xdp_tx() traced the drop,
++		 * counted it in the target's tx_dropped and freed the skb.
++		 * Returning its error would make our caller free the skb again,
++		 * so report success, as native XDP does once a frame has been
++		 * handed to the target device.
++		 */
+ 		generic_xdp_tx(skb, xdp_prog, XDP_REDIRECT);
+ 		return 0;
+ 	}
 -- 
 2.56.0
 
