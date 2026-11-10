@@ -1,98 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=185.203.200.13
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1794338832;
-	b=d5TbZWG1TSJbI1AVkVxIyFI7uiczoneJbQDijKjhuLlrpK/PabcvQH64V216HPmaZFKc
-	 eBQQpfhABVez0rxFgntzhdcBJRyTtmBVhKBy96rMC5doYt2ZXsuwwudgC5EgfSswQ8k93
-	 vJzV5CVDqnnKTEV8/z0hfGAnv3HTiXLuR5gepxqCTSMMf56ysPgTWXnOrN5XWmIrsi1na
-	 eyyOzNd0izcnTKw0sqU8TVUKNuE/7yLEtuK53vJD4+VLJMWQV7z9mTgpA8nAk0Ju4HR8e
-	 ostCRmd7To7TX7PMawx9YFHB5qr5jGnytwTIVdgCemCWaeBYw8lr4YtVy0xoPzq9QGg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794338832;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:
-	 References:User-Agent:Date:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=ODatzweUCW7o26hwhl5kE9FWoziqlEwZz6tErIYcf3Q=;
-	b=k8M6dz08z013fZ7xjtqK07Ro7hbIjyW34+xRvrQyT860rT48HHr9+7B6RZR6qFM+iY61
-	 31jEcQd/8eM/b1zOSrJPKG5tVQmT/k1fxiHWnD8FxC4SZ1MTdsnuslF4at2i6lMNUEaqV
-	 F3GkIMnyS6OUsEdiWp2uK8XGcYGYuVohBHM5N2ZBg4L2QCehEVIdTAiGMzmBShZulkTMq
-	 I2ILYJ4oBjCYNh6KsZ40X9lhyGhSPw5jl6CaXqJysZNF49UrTyvXRJaf7QGKdQkrWtvN8
-	 VJwoJn9XKuB1WOrvsdBXpB5H879Etjxar6pXFhxwUmm2caTHwx4lQ6XBEdSO4Ys9Tiw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=pengutronix.de;
-	spf=pass smtp.mailfrom=pengutronix.de;
-	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=axFxc57Y;
-	arc=fail smtp.remote-ip=185.203.200.13
-Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=81.19.149.116
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794339191;
+	b=3MDRvvWodgfhuuBZgcRhx1lHOMsTSToaHkOkxMbsLMPODbuZMwmmZMnnm1K5x6OxAbzd
+	 kOkB6q+FnGZiX4imFWWLwj0SC2L1NWdz+R2vw8gMZ8Zcxt2UQer4gbhq9CspQ6vq5grtd
+	 6ctYl0Wf0xdjhF9aHvkmGOrvHyOJK8ukB0miyANII0a5IkUsvezki00gMYJInfaEgbBqV
+	 lzEI2ZfSwGkmcBhcFO2ULWHYm4Lx+uXT4b1ltfwgWcEI7cJZz8pDcK4uQj9QBvMNLFOi1
+	 5Fnh+3Gp/HQLc0suCuWpWadpwGFXG6rv+nbKPprAEpBZTXkQsfxh/W30GjNstRwoVsQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794339191;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-AV-Do-Run;
+	bh=Kb6tsHIuCpbK8Ynd/HxIwOkPQSLfGDHhz1xSOv1kM98=;
+	b=z85ScK4HhuU7Ld6XbqE1pOMcadJDWmpz9RmfemokuiqO9aSe/BW1mLkrlZ6Wof0WZLs7
+	 8Q/b+J6xThmjz8InWm34XMaRscFuF+doihkOHw0HzJDWQT5/0++LJG6hv42EWNvJ2PbeU
+	 rivRakWy0Ha+WeM4qyxS3yQeVLu9Aqp3hpTV8Xmu2zSb3tOpQQa4yWoyhsHxlDqkwN6UN
+	 kLo80l7EaUiU8kMt20D1Pjx13X7OD8lEQqPXK1Ee+qdHdt2KvNmYlSDN/Wtp8X700ogbc
+	 rk04bZVW6nDAA+D83xCDw65FMnBsqMVwjwwFNyo3Bme9+pTQbHko4Z6b8kVQRA5oZFA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=engleder-embedded.com;
+	spf=pass smtp.mailfrom=engleder-embedded.com;
+	dkim=pass header.d=engleder-embedded.com header.i=@engleder-embedded.com header.a=rsa-sha256 header.s=dkim11 header.b=d1g97xJ3;
+	arc=none smtp.remote-ip=81.19.149.116
+Received: from mx06lb.world4you.com (mx06lb.world4you.com [81.19.149.116])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFF8606A323;
-	Tue, 10 Nov 2026 19:27:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ECFF8606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFB3606A321;
+	Tue, 10 Nov 2026 19:33:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9BFB3606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=axFxc57Y
-Received: from ratatoskr.pengutronix.de (unknown [IPv6:2a00:1f:f805:2b01:a03:2f4:308a:7b52])
-	(Authenticated sender: str@pengutronix.de)
-	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 8BD0E201F43;
-	Tue, 10 Nov 2026 20:27:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
-	s=20260414; t=1794338824;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ODatzweUCW7o26hwhl5kE9FWoziqlEwZz6tErIYcf3Q=;
-	b=axFxc57YGOskhC2HI2z4xDSvzgCtzuAXY8Knr9qFzsc+a7wrW8VAQx/IsBszC7lven9owS
-	2FfsB78fRdwzNe47fV2HcPaI0iWunzz5ZMUGJc2mr4/dy6FWo8ACnpoMxBeA/6pKKhXJUR
-	QB3+86oOjzX81gKVi130N9q1McuVWktylsu+C1gXCgXIQDDDEPPptbQn6t6JuUcyf5BOE4
-	rKPfn33jjKEZPYEw6ihaClJbFpa9kvhDCCqrhWT9o6YQO3z3EP83rBubBfgXjyfPN2jINo
-	NDFYV+f8O4KudinwcrmPWIyVTtNnn033e6cTBF8QesUYgkucwN+v2YtOz+SXIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
-	s=20260414; t=1794338824;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ODatzweUCW7o26hwhl5kE9FWoziqlEwZz6tErIYcf3Q=;
-	b=BuwLSFTXEPbgZoXPmMfP847UiDdg7yfDag5qeRedm6DCAisISY+tAM3ib9uJL4DxX+esnL
-	UcBIrds43eOXIbYN7JjoIqbYjk4eKlPgP+FebysRP8HEGfHmg2ycjF2biXZEnolOYSVAE3
-	/i8EdUzhzUue/XFv6aUoSDDK17iwNsGl/uZT11NPJOfp5zNEDiUmqMXI/QET/lFq8S8ys2
-	J+SFA/7woz09hIdZqXi71fQ4Z1jhE7gvLXvkjy3VT7kwq3QamOH+D5JYCJoFx81dbKRNyX
-	SMoAygzG2W/5j1E0sCrtBN7LYbyUmvkphAhjmRkN8Q3ZMh+cFaiyWcpw8Cis7Q==
-ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1794338824; a=rsa-sha256;
-	cv=none;
-	b=VP+KPQ5a7GMBOJPnXBnWZlwAKh3chavc2oaAqwJmKA6Me6u1CuToWDrd0RMFVCdEPgwjDb
-	WYEG6EhF6UgqsEk7/lKNVmEajmnuzmlhyx3UCrzdBqz/P4M3oU2csBLGv1nzZ1ABCfApN+
-	DA5gGKCqUBokK5qbDEaDBpJlQXjBYs+O/OeqXvmjFBqbEa83bTUcI0vZ+kcU5ZZ726Df6m
-	Awfrcmmy/VJT8poW8tYP3PEU1kmUeLJ/JhMLw9EfHh12unTwm2mxUs4nk8YJOf7XZ4xE47
-	krNeN+kXbw6/OEJauq2nn4qBSTWYxRQhLBig3Y1jGv29PGIe0DOepYTHrmGfXA==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=str@pengutronix.de smtp.mailfrom=s.trumtrar@pengutronix.de
-From: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>,  Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>,  "David S. Miller" <davem@davemloft.net>,
-  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,
-  Richard Cochran <richardcochran@gmail.com>,  Andrew Lunn
- <andrew+netdev@lunn.ch>,  Eugenio =?utf-8?Q?P=C3=A9rez?=
- <eperezma@redhat.com>,  Jason Wang
- <jasowangio@gmail.com>,  Alexei Starovoitov <ast@kernel.org>,  Daniel
- Borkmann <daniel@iogearbox.net>,  Jesper Dangaard Brouer
- <hawk@kernel.org>,  John Fastabend <john.fastabend@gmail.com>,  Stanislav
- Fomichev <sdf@fomichev.me>,  Eric Dumazet <edumazet@kernel.org>,
-  virtualization@lists.linux.dev,  netdev@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  bpf@vger.kernel.org,  kvm@vger.kernel.org
-Subject: Re: [PATCH RFC v4 5/6] virtio-net: add XDP rx timestamp metadata
-In-Reply-To: <willemdebruijn.kernel.9c17365c41b3@gmail.com>
-References: <20261026-v6-7-topic-virtio-net-ptp-v4-0-008af03cd43b@pengutronix.de>
-	<20261026-v6-7-topic-virtio-net-ptp-v4-5-008af03cd43b@pengutronix.de>
-	<willemdebruijn.kernel.9c17365c41b3@gmail.com>
-User-Agent: mu4e 1.14.3; emacs 31.1
-Date: Tue, 10 Nov 2026 20:27:04 +0100
-Message-ID: <87pkwczdvb.fsf@pengutronix.de>
+	dkim=pass (1024-bit key, unprotected) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.a=rsa-sha256 header.s=dkim11 header.b=d1g97xJ3
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Kb6tsHIuCpbK8Ynd/HxIwOkPQSLfGDHhz1xSOv1kM98=; b=d1g97xJ3xONMX6Y0uhEkV2nclq
+	p94D0CK0/HqOVSFQN/q93V4n+JQcgogScPzbbhsf2EK7esCKzDxZEgkMgUB6sIh+omV2rTIjst7Z0
+	1AaIrfpKHAAZNHW79ihGxgwuRF6OiZ6PY4zaH6ySBztj3AOjznbKEkNkN3gkr2+8BAaE=;
+Received: from [80.121.72.134] (helo=[10.0.0.160])
+	by mx06lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.97.1)
+	(envelope-from <gerhard@engleder-embedded.com>)
+	id 1xQraO-000000000Ux-3taX;
+	Tue, 10 Nov 2026 20:32:53 +0100
+Message-ID: <cb785718-02cd-442b-a236-c1bce6971d60@engleder-embedded.com>
+Date: Tue, 10 Nov 2026 20:32:50 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,99 +58,238 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] net: mark skb NAPI IDs independently of busy polling
+To: Ding Meng <meng.ding@siemens.com>, netdev@vger.kernel.org
+Cc: florian.bezdeka@siemens.com, jan.kiszka@siemens.com, wq.wang@siemens.com,
+ p@1g4.org, Jason Xing <kerneljasonxing@gmail.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Richard Cochran <richardcochran@gmail.com>
+References: <20261105071706.7043-1-meng.ding@siemens.com>
+Content-Language: en-US
+From: Gerhard Engleder <gerhard@engleder-embedded.com>
+In-Reply-To: <20261105071706.7043-1-meng.ding@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AV-Do-Run: Yes
 
-On 2026-11-01 at 10:12 -05, Willem de Bruijn <willemdebruijn.kernel@gmail.c=
-om> wrote:
+On 05.11.26 08:16, Ding Meng wrote:
+> Commit 97dc7cd92ac6 ("ptp: Support late timestamp determination")
+> added support for deferring RX timestamp conversion to
+> ndo_get_tstamp(). When the timestamp is consumed, get_timestamp()
+> uses the skb's NAPI ID to find the device that owns the timestamp
+> cookie and invoke its callback.
+> 
+> Commit e68b6e50fa35 ("udp: enable busy polling for all sockets")
+> gated NAPI ID bookkeeping with CONFIG_NET_RX_BUSY_POLL. As a result,
+> when busy polling is disabled, the skb may not carry a usable NAPI ID.
+> The device lookup then fails, so the driver callback is not invoked.
+> get_timestamp() falls back to hwtstamp, which does not contain the
+> converted timestamp, resulting in an incorrect RX hardware timestamp.
+> 
+> Record skb NAPI IDs independently of busy-poll support to support
+> drivers that use deferred timestamp conversion and future driver
+> features that need to look up a device by its NAPI ID.
+> 
+> Signed-off-by: Ding Meng <meng.ding@siemens.com>
+> Reviewed-by: Florian Bezdeka <florian.bezdeka@siemens.com>
+> ---
+> In the discussion of the issue reported at
+> https://lore.kernel.org/netdev/20260630112056.885071-1-meng.ding@siemens.com/
+> this previous patch added an igc-specific fallback for configurations
+> with CONFIG_NET_RX_BUSY_POLL disabled. It populated skb's hwtstamp
+> field with a timestamp converted using the default hardware timer,
+> allowing get_timestamp() to return it without invoking ndo_get_tstamp().
+> But Jakub Kicinski noted that the proposed fix appeared to be a
+> driver-specific workaround for a generic problem. The engleder driver
+> would also be affected by the same issue.
+> 
+> This patch introduces a new configuration option to enable NAPI ID
+> bookkeeping independently of busy polling. The option is enabled
+> whenever busy polling is enabled, preserving the existing behavior.
+> It is also selected by the igc and engleder drivers, ensuring that
+> skbs carry a NAPI ID even when busy polling is disabled.
+> 
+> Another approach considered was to require drivers using deferred
+> timestamp conversion, such as igc and engleder, to enable busy polling.
+> However, this would introduce an unnecessary dependency between two
+> independent features: hardware timestamp reporting should not require
+> busy polling to be enabled.
+> 
+> Timestamping has been tested only with igc; it has not been tested
+> with engleder.
+> 
+>   Documentation/networking/timestamping.rst | 11 ++++++++---
+>   drivers/net/ethernet/engleder/Kconfig     |  1 +
+>   drivers/net/ethernet/intel/Kconfig        |  1 +
+>   include/linux/skbuff.h                    |  4 ++--
+>   include/net/busy_poll.h                   |  2 +-
+>   include/trace/events/net.h                |  2 +-
+>   net/Kconfig                               |  4 ++++
+>   net/core/filter.c                         |  2 +-
+>   net/core/skbuff.c                         |  2 +-
+>   9 files changed, 20 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/networking/timestamping.rst b/Documentation/networking/timestamping.rst
+> index 2162c4f2b28a6..dbe40a1972639 100644
+> --- a/Documentation/networking/timestamping.rst
+> +++ b/Documentation/networking/timestamping.rst
+> @@ -278,9 +278,14 @@ SOF_TIMESTAMPING_OPT_PKTINFO:
+>     packets with hardware timestamps. The message contains struct
+>     scm_ts_pktinfo, which supplies the index of the real interface which
+>     received the packet and its length at layer 2. A valid (non-zero)
+> -  interface index will be returned only if CONFIG_NET_RX_BUSY_POLL is
+> -  enabled and the driver is using NAPI. The struct contains also two
+> -  other fields, but they are reserved and undefined.
+> +  interface index will be returned only if CONFIG_SKB_MARK_NAPI_ID is
+> +  enabled and the driver is using NAPI. This hidden configuration is
+> +  selected automatically by busy-poll support and by drivers that need
+> +  skb NAPI IDs to resolve deferred hardware timestamps. Drivers that
+> +  use deferred timestamp conversion must select it so the networking
+> +  stack can find the device and call its timestamp callback even when
+> +  busy polling is disabled. The struct contains also two other fields,
+> +  but they are reserved and undefined.
+>   
+>   SOF_TIMESTAMPING_OPT_TX_SWHW:
+>     Request both hardware and software timestamps for outgoing packets
+> diff --git a/drivers/net/ethernet/engleder/Kconfig b/drivers/net/ethernet/engleder/Kconfig
+> index 3df6bf476ae7e..9700a243bea11 100644
+> --- a/drivers/net/ethernet/engleder/Kconfig
+> +++ b/drivers/net/ethernet/engleder/Kconfig
+> @@ -22,6 +22,7 @@ config TSNEP
+>   	depends on PTP_1588_CLOCK_OPTIONAL
+>   	select PHYLIB
+>   	select PAGE_POOL
+> +	select SKB_MARK_NAPI_ID
+>   	help
+>   	  Support for the Engleder TSN endpoint Ethernet MAC IP Core.
+>   
+> diff --git a/drivers/net/ethernet/intel/Kconfig b/drivers/net/ethernet/intel/Kconfig
+> index 780f113986ea8..7fb63f351fc20 100644
+> --- a/drivers/net/ethernet/intel/Kconfig
+> +++ b/drivers/net/ethernet/intel/Kconfig
+> @@ -376,6 +376,7 @@ config IGC
+>   	depends on PCI
+>   	depends on PTP_1588_CLOCK_OPTIONAL
+>   	depends on ETHTOOL_NETLINK
+> +	select SKB_MARK_NAPI_ID
+>   	help
+>   	  This driver supports Intel(R) Ethernet Controller I225-LM/I225-V
+>   	  family of adapters.
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 6787fcf6ac3e4..164c862f7a403 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -1059,7 +1059,7 @@ struct sk_buff {
+>   			__u16	vlan_tci;
+>   		};
+>   	};
+> -#if defined(CONFIG_NET_RX_BUSY_POLL) || defined(CONFIG_XPS)
+> +#if defined(CONFIG_SKB_MARK_NAPI_ID) || defined(CONFIG_XPS)
+>   	union {
+>   		unsigned int	napi_id;
+>   		unsigned int	sender_cpu;
+> @@ -1267,7 +1267,7 @@ static inline bool skb_pkt_type_ok(u32 ptype)
+>    */
+>   static inline unsigned int skb_napi_id(const struct sk_buff *skb)
+>   {
+> -#ifdef CONFIG_NET_RX_BUSY_POLL
+> +#ifdef CONFIG_SKB_MARK_NAPI_ID
+>   	return skb->napi_id;
+>   #else
+>   	return 0;
+> diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
+> index 6e172d0f6ef5f..f7c0e62c6a7d7 100644
+> --- a/include/net/busy_poll.h
+> +++ b/include/net/busy_poll.h
+> @@ -130,7 +130,7 @@ static inline void sk_busy_loop(struct sock *sk, int nonblock)
+>   static inline void __skb_mark_napi_id(struct sk_buff *skb,
+>   				      const struct gro_node *gro)
+>   {
+> -#ifdef CONFIG_NET_RX_BUSY_POLL
+> +#ifdef CONFIG_SKB_MARK_NAPI_ID
+>   	/* If the skb was already marked with a valid NAPI ID, avoid overwriting
+>   	 * it.
+>   	 */
+> diff --git a/include/trace/events/net.h b/include/trace/events/net.h
+> index dbc2c5598e35a..99ed7645242eb 100644
+> --- a/include/trace/events/net.h
+> +++ b/include/trace/events/net.h
+> @@ -208,7 +208,7 @@ DECLARE_EVENT_CLASS(net_dev_rx_verbose_template,
+>   
+>   	TP_fast_assign(
+>   		__assign_str(name);
+> -#ifdef CONFIG_NET_RX_BUSY_POLL
+> +#ifdef CONFIG_SKB_MARK_NAPI_ID
+>   		__entry->napi_id = napi_id_valid(skb->napi_id) ?
+>   				   skb->napi_id : 0;
+>   #else
+> diff --git a/net/Kconfig b/net/Kconfig
+> index 76ab44aa439a6..8fa7586dc08ca 100644
+> --- a/net/Kconfig
+> +++ b/net/Kconfig
+> @@ -346,9 +346,13 @@ config CGROUP_NET_CLASSID
+>   	  Cgroup subsystem for use as general purpose socket classid marker that is
+>   	  being used in cls_cgroup and for netfilter matching.
+>   
+> +config SKB_MARK_NAPI_ID
+> +	bool
+> +
+>   config NET_RX_BUSY_POLL
+>   	bool
+>   	default y if !PREEMPT_RT || (PREEMPT_RT && !NETCONSOLE)
+> +	select SKB_MARK_NAPI_ID
+>   
+>   config BQL
+>   	bool
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index b7ac145b68b1f..e2218c18622b8 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -10274,7 +10274,7 @@ static u32 bpf_convert_ctx_access(enum bpf_access_type type,
+>   		break;
+>   
+>   	case offsetof(struct __sk_buff, napi_id):
+> -#if defined(CONFIG_NET_RX_BUSY_POLL)
+> +#if defined(CONFIG_SKB_MARK_NAPI_ID)
+>   		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->src_reg,
+>   				      bpf_target_off(struct sk_buff, napi_id, 4,
+>   						     target_size));
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index eb9fcc4b1fd1a..386a32cdc0cc8 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -1581,7 +1581,7 @@ static void __copy_skb_header(struct sk_buff *new, const struct sk_buff *old)
+>   #ifdef CONFIG_NETWORK_SECMARK
+>   	CHECK_SKB_FIELD(secmark);
+>   #endif
+> -#ifdef CONFIG_NET_RX_BUSY_POLL
+> +#ifdef CONFIG_SKB_MARK_NAPI_ID
+>   	CHECK_SKB_FIELD(napi_id);
+>   #endif
+>   #ifdef CONFIG_XPS
+> 
+> base-commit: d135ab453a7400a34930bdda1ef4bdc8acfac80e
 
-> Steffen Trumtrar wrote:
-> > For the skb, the timestamp is read from the header before the XDP
-> > program runs, so XDP_PASS keeps it even if the program changes the
-> > packet. XDP therefore works with rx timestamping enabled.
-> >=20
-> > Add xmo_rx_timestamp so XDP programs can read the timestamp with
-> > bpf_xdp_metadata_rx_timestamp(). It returns -ENODATA if timestamping
-> > is not enabled or the device did not timestamp the packet. Install the
-> > metadata ops also if only VIRTIO_NET_F_RX_TSTAMP is negotiated;
-> > rx_hash returns -ENODATA then.
-> >=20
-> > Like virtnet_xdp_rx_hash(), the callback finds the header relative to
-> > xdp->data, so it has to be called before bpf_xdp_adjust_head().
-> >=20
-> > Signed-off-by: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-> > Assisted-by: Claude:claude-opus-5-5
-> > ---
-> >  drivers/net/virtio_net.c | 26 ++++++++++++++++++++++++++
-> >  1 file changed, 26 insertions(+)
-> >=20
-> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > index 23af10c613b48..e79b65653fad7 100644
-> > --- a/drivers/net/virtio_net.c
-> > +++ b/drivers/net/virtio_net.c
-> > @@ -6848,8 +6848,30 @@ static int virtnet_xdp_rx_hash(const struct xdp_=
-md *_ctx, u32 *hash,
-> >  	return 0;
-> >  }
-> >=20=20
-> > +static int virtnet_xdp_rx_timestamp(const struct xdp_md *_ctx, u64 *ti=
-mestamp)
-> > +{
-> > +	const struct xdp_buff *xdp =3D (void *)_ctx;
-> > +	const struct virtio_net_common_hdr *hdr;
-> > +	struct virtnet_info *vi;
-> > +	u64 tstamp;
-> > +
-> > +	vi =3D netdev_priv(xdp->rxq->dev);
-> > +	if (!READ_ONCE(vi->hwts_rx_en))
-> > +		return -ENODATA;
-> > +
-> > +	hdr =3D (const struct virtio_net_common_hdr *)(xdp->data - vi->hdr_le=
-n);
->=20
->     Reading `hdr->tstamp` in place from `xdp->data - vi->hdr_len` violate=
-s the XDP
->     metadata area contract (`Documentation/networking/xdp-rx-metadata.rst=
-`: drivers
->     must copy device-reserved metadata out of `[data_hard_start, data)` b=
-efore
->     presenting the frame to XDP) and breaks standard XDP metadata consume=
-rs:
->     - `hdr->tstamp` sits at `[xdp->data - 8, xdp->data)`. Standard XDP pr=
-ograms=E2=80=94such
->       as `tools/testing/selftests/bpf/progs/xdp_hw_metadata.c`=E2=80=94ca=
-ll
->       `bpf_xdp_adjust_meta(ctx, -(int)sizeof(struct xdp_meta))` first, in=
-itialize
->       fields in `meta` (e.g. `meta->hint_valid =3D 0` at `[xdp->data - 4,=
- xdp->data)`),
->       and only then call `bpf_xdp_metadata_rx_timestamp(ctx, &meta->rx_ti=
-mestamp)`.
->       Initializing `meta` overwrites `hdr->tstamp` (and `hdr->hash_v1_hdr=
-`) before
->       this kfunc runs.
->     - Calling `bpf_xdp_adjust_head()` before reading metadata also shifts=
- `xdp->data`,
->       reading arbitrary bytes at `xdp->data - vi->hdr_len`.
->=20
->     Wrap `struct xdp_buff` in a driver struct on the stack (`container_of=
-`, and in
->     `struct xdp_buff_xsk`'s `cb` verified with `XSK_CHECK_PRIV_TYPE()` fo=
-r AF_XDP,
->     matching `gve`/`igc`/`ice`/`mlx5`) and stash `tstamp` (already extrac=
-ted in
->     `receive_buf()` and `virtnet_receive_xsk_buf()` before XDP runs) and =
-the hash
->     fields before `bpf_prog_run_xdp()`.
-
-Agreed, Sashiko complained about the same thing. I'll stash the
-timestamp in a wrapper around xdp_buff before the program runs.
-
-
-Steffen
-
---=20
-Pengutronix e.K.                | Dipl.-Inform. Steffen Trumtrar |
-Steuerwalder Str. 21            | https://www.pengutronix.de/    |
-31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
-Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
+Reviewed-by: Gerhard Engleder <gerhard@engleder-embedded.com>
