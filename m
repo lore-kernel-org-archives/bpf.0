@@ -1,63 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794318870;
-	b=M8UjpJF9ksT95HTLJ/E8LcMSWimKO3t2TJ3PPD3IWbesGCyDMy2JSC6RtmpDR0t6LatF
-	 4dZb4NQ4QXuaeLoVRvmGptUnm49euDs1drY+olEUFQ6wToDIxzq3r2IIOns1Zu6tuoH4o
-	 HW6lfHIMNVYBLRKZRO7foyIuhKn5jxwVZCgr5GVXoFVaKWNm4kkufS6WTB3B6FtBmKVv5
-	 nTOFSjoA7vcPMkz3Vl7y0uUfznUbz7Qh44e8oVECH/phe6zqnHiCW36vwTDGhmeWA9l7z
-	 DstM5onxSeosNLz22ElC2p4FZvNh7Mhv2G7fCMO4vqlZTFyGGVwGtY/M0FAOnLrHVVw==
+	t=1794319248;
+	b=x1kkH9oIPMi3MnchHmWKqiUD+FlVyveEp9Ctp/Xdf6YcD97nBzMkyJ8z+1pIVJJMiY8f
+	 xW3+RyhQMEk9SCguOEmGNN+JaJhcPqUMClfx58iRpqOjvyKgeboolKZo/xQP6YnwTcYLA
+	 KGmwXR37IY5KnEqYdm4yOseiVZ0y2DZk/pcJpEVf0L4dA5TtvxqI3ZYT9Sdh5q8nBvdp0
+	 mkQBH/mmT9aVcwlXSncMhAL8DPzgKVQUg8yPqGNGpCrsL05lwuljqQX2fSg9h47VMPz+o
+	 HDiW+zyOA4drBCId6ySWuPaYzNdJdrAIeJICDDZoEh9G/ZTONYVrMxS0sMEC7WW91LQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794318870;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=C5jgHy1nXhTFAfsOl+lfPzRSNERj7WQscjo2eO2ih+g=;
-	b=WctsuCIcIGzgViwMu9re6SDXZd32kNtf13mTOzkHeA8ouCm1L7OpswNoLNP0hUEWdVG/
-	 LeGtwLD9ntnKk0UXnRdGALH5UzlnFOk6Dwa5HmYkViJD7BrqkkWZhcgln8hBJf/chykei
-	 v277zeMUWUZrsCaKddTophSg6Ml1LFcdqCpAoFhK3hpcfHP05Uh2fVOEbzgIJuboAzst/
-	 bd7GgUTMXwjmEQ8OBNfDkzxrm//9qEnyczBma0vmmy3ZKsVC0mRdTA2bu/bb7ExD0ERZ4
-	 mqsD//Pe+DTzWzgipbNj9EEDw9J143/WU3tc/57M92ANjGG8YmAEwMZjaYfoQTKw1BQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794319248;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=3ssOTq0k8dhOqZtAYP2q7lGyoiGZLaZvlpqP26+6Bpw=;
+	b=xyx5UJISMDotyShM6pyAECVmEFLZKrVZnd19nTUnaHAEwCEGUYW+MybSSTOtWLhQ0Wq5
+	 YrQOAanVjjK9qdJPHCK3rCpuXUA945o2c+BPOZGDSxUL4a5jC33ybLxy98htFHlq9WYLM
+	 MBobMZ6FlfhohpFF3ZnaLNowUXMYuIRnG2d7wt2M3JmWTti3QSKlhrEqq3Gq8Kf9zXv/I
+	 PqWcX2LYspDeWHDSa5lu+Zgj55R6Mn2kUervgMbljLcSQVCLO6JD7ZM+zEzcnls6aMUhT
+	 WHrsp/wHbWhOb0RNgSNegj4fKhTYBc7D6kpeOKUMDSXttn+K/p1g/UwoCgWzQweX3PA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XwFeguy7;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H3tR2POv;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEE9606A31C;
-	Tue, 10 Nov 2026 13:54:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2CC606A321;
+	Tue, 10 Nov 2026 14:00:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XwFeguy7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 844621F0089F;
-	Tue, 10 Nov 2026 13:54:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H3tR2POv
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B410B1F0089F;
+	Tue, 10 Nov 2026 14:00:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794318869;
-	bh=C5jgHy1nXhTFAfsOl+lfPzRSNERj7WQscjo2eO2ih+g=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=XwFeguy7OAl2B0xbZEZf+YNpbRPun6Uxy12IDapJUugAkfnMkJMQWrACI3LnYamvS
-	 sZ7QpagwdZSe2JBSLE/lYuBRyfQnngmWmP6ZH3stPJyDv6Rg7qptN27/8L8uX1Fvf+
-	 zT2GiHGpAI8WdjU0Nx1Pyc+3Guh5HO2o5ewC8vA7wigAewUpzEcQIjSnGCAzyvJQ/v
-	 sVSxam0PSbINufDpdJBaTDu2mBq7kmD513kzL7LTM/dwxDYrdBxnLv7AHU6cqE86PR
-	 Sn4WjxxefUuJelWxydwRIVb6dHLsocUJGeARSLJdiZZ3duTvqAkZIZjq0ZH3306O78
-	 roJsnXIWaMIAw==
-Subject: Re: [PATCH net-next v9] net: stmmac: rework stmmac_rx to support XDP
- rx multi-buff
-From: netdev-bot+sashiko@kernel.org
-To: lorenzo.bianconi@oss.qualcomm.com
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- bpf@vger.kernel.org, nb@tipi-net.de
-Date: Tue, 10 Nov 2026 13:54:28 +0000
-Message-ID: <179431886808.994134.6784700644892681429@kernel.org>
-In-Reply-To: <20261106-stmmac-rx-mb-v9-1-c099c923664b@oss.qualcomm.com>
-References: <20261106-stmmac-rx-mb-v9-1-c099c923664b@oss.qualcomm.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1794319248;
+	bh=3ssOTq0k8dhOqZtAYP2q7lGyoiGZLaZvlpqP26+6Bpw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=H3tR2POv+JfzMgRYCDP2gq5P9jyo+rzgufTROYUxhw8UPhN5oqJk8gBBF+XYTh9lB
+	 JhxI5s4fnXpi4vfdZcww30hv7AFepCRBEUcobsRaaxcbLRW6pZ/AYo+DgSKNxKokSv
+	 5NuIK+ZAJ4TQX/sx3dYls1b5nKmICdeyqhjCTDgBQJhM8MCL2XYTgI6C1sr4KPjs9y
+	 zQjbJtHuYaGhDFByLFKYRv6dtsz2WUFwq4CQCGAUzRwjPRTElRkp7qFSddgsDRFj4M
+	 uNvB4LG5ZCcO1QjZ06EIknhe8faya8uOqLAHBDSz6yBoffhz5f+HG81vW8QWFacW57
+	 GN+BXnqcnVhXw==
+Message-ID: <sashiko-outbox-207171@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v6 5/6] riscv, bpf: emit LR/SC loops when Zaamo is
+ disabled
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, ojeda@kernel.org, gary@garyguo.net
+In-Reply-To: <20261110-lrsc-only-v6-5-bafc3cc0fcae@mobileye.com>
+References: <20261110-lrsc-only-v6-0-bafc3cc0fcae@mobileye.com>
+ <20261110-lrsc-only-v6-5-bafc3cc0fcae@mobileye.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 10 Nov 2026 14:00:47 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,174 +60,190 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
-
-Critical: 0 · High: 0 (1) · Medium: 1 · Low: 1
-
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] The skb head truesize grows on every received frame, including
-  with no XDP program loaded, and the commit message does not say so.
-- [Low] The commit message overstates one change.
-
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the patch
-  makes it wider.
-
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] riscv, bpf: missing full fence for fetch/xchg LR/SC in
+  emit_atomic_lrsc()
 --
 
-net: stmmac: rework stmmac_rx to support XDP rx multi-buff
+commit a367c50f4df6ecfbc1363d12bbca1b28cecbf767
+Author: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
 
-This reworks stmmac_rx() to collect all the descriptors of a frame into an
-xdp_buff, so programs with frags support see the whole packet. On XDP_PASS
-the skb is built from the xdp_buff head and its fragments. The patch also
-saves the in-progress xdp_buff in rx_q->state across NAPI polls, advertises
-NETDEV_XDP_ACT_RX_SG, and strips the FCS with a driver-local tail shrink.
+riscv, bpf: emit LR/SC loops when Zaamo is disabled
 
-> - carry the XDP metadata written with bpf_xdp_adjust_meta() into the skb
->   via skb_metadata_set(), so it is no longer dropped and TC/BPF programs
->   can read it through data_meta;
+This commit updates the RV32 and RV64 BPF JITs to emit LR/SC loops for
+BPF atomic read-modify-write operations when CONFIG_RISCV_ISA_ZAAMO is
+disabled, and adds the second exception table entry needed when an arena
+access faults on the sc instruction.
 
-[Severity: Low]
-Is this item accurate? The XDP_PASS path in stmmac_rx() already did this
-before the patch. The patch removes these lines from stmmac_rx():
-
--			metasize = ctx.xdp.data - ctx.xdp.data_meta;
--			if (metasize)
--				skb_metadata_set(skb, metasize);
-
-The same logic now lives in stmmac_build_skb().
-
-Metadata on linear frames was not being dropped before. The only frames
-that never got metadata were multi-descriptor or buf2 frames, and XDP mode
-dropped those outright. The commit message already covers that elsewhere.
-
-Could this item be reworded so it does not read as a fix for a metadata
-loss bug?
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index a2177777727ef..c215cc70caa19 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_com=
+p32.c
+> index a9e0bd5cc81d2..ea1779a236341 100644
+> --- a/arch/riscv/net/bpf_jit_comp32.c
+> +++ b/arch/riscv/net/bpf_jit_comp32.c
+> @@ -874,11 +874,67 @@ static int emit_load_r64(const s8 *dst, const s8 *s=
+rc, s16 off,
+>  	return 0;
+>  }
+> =20
+> -static int emit_bpf_atomic(s8 dst, const s8 *src, const s8 *rs,
+> -			   struct rv_jit_context *ctx,
+> -			   const struct bpf_insn *insn)
+> +/*
+> + * Read-modify-write via lr/sc for kernels built without Zaamo. T0 holds
+> + * the address. T1/T2 are not BPF registers; the address was copied out =
+of
+> + * lo(rd) before this is called, so clobbering T2 is fine.
+> + */
+> +static int emit_bpf_atomic_lrsc(s8 dst, const s8 *rs, s32 imm,
+> +				struct rv_jit_context *ctx)
+> +{
+> +	bool is_fetch =3D (imm & BPF_FETCH) || (imm =3D=3D BPF_XCHG);
+> +	bool xchg =3D imm =3D=3D BPF_XCHG;
+> +	u8 aq =3D is_fetch ? 1 : 0;
+> +	u8 rl =3D is_fetch ? 1 : 0;
+> +	u8 old =3D RV_REG_T1;
+> +	u8 tmp =3D RV_REG_T2;
+> +	int lr_off, jmp_off;
+> +	s32 op =3D xchg ? BPF_XCHG : imm & ~BPF_FETCH;
+> +
+> +	switch (op) {
+> +	case BPF_ADD:
+> +	case BPF_AND:
+> +	case BPF_OR:
+> +	case BPF_XOR:
+> +	case BPF_XCHG:
+> +		break;
+> +	default:
+> +		return -1;
+> +	}
+> +
+> +	lr_off =3D ctx->ninsns;
+> +	emit(rv_lr_w(old, 0, dst, aq, rl), ctx);
+> +
+> +	switch (op) {
+> +	case BPF_ADD:
+> +		emit(rv_add(tmp, old, lo(rs)), ctx);
+> +		break;
+> +	case BPF_AND:
+> +		emit(rv_and(tmp, old, lo(rs)), ctx);
+> +		break;
+> +	case BPF_OR:
+> +		emit(rv_or(tmp, old, lo(rs)), ctx);
+> +		break;
+> +	case BPF_XOR:
+> +		emit(rv_xor(tmp, old, lo(rs)), ctx);
+> +		break;
+> +	}
+> +
+> +	if (xchg)
+> +		emit(rv_sc_w(tmp, lo(rs), dst, aq, rl), ctx);
+> +	else
+> +		emit(rv_sc_w(tmp, tmp, dst, aq, rl), ctx);
+> +
+> +	jmp_off =3D ninsns_rvoff(lr_off - ctx->ninsns);
+> +	emit(rv_bne(tmp, RV_REG_ZERO, jmp_off >> 1), ctx);
+> +	if (is_fetch)
+> +		emit(rv_addi(lo(rs), old, 0), ctx);
+> +	return 0;
+> +}
 
 [ ... ]
 
-> @@ -2290,10 +2294,6 @@ static int __alloc_dma_rx_desc_resources(struct stmmac_priv *priv,
->  			 SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
->  	num_pages = DIV_ROUND_UP(dma_buf_sz_pad, PAGE_SIZE);
->  
-> -	rx_q->queue_index = queue;
-> -	rx_q->priv_data = priv;
-> -	rx_q->napi_skb_frag_size = num_pages * PAGE_SIZE;
-> -
->  	pp_params.flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV;
->  	pp_params.pool_size = dma_conf->dma_rx_size;
->  	pp_params.order = order_base_2(num_pages);
-> @@ -2321,6 +2321,10 @@ static int __alloc_dma_rx_desc_resources(struct stmmac_priv *priv,
->  	if (!addr)
->  		return -ENOMEM;
->  
-> +	rx_q->queue_index = queue;
-> +	rx_q->priv_data = priv;
-> +	rx_q->napi_skb_frag_size = PAGE_SIZE << pp_params.order;
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
+p64.c
+> index 01fe66774f029..94e4ddc6d965c 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -573,6 +573,79 @@ static int emit_atomic_ld_st(u8 rd, u8 rs, const str=
+uct bpf_insn *insn,
+>  	return 0;
+>  }
+> =20
+> +/*
+> + * Read-modify-write via lr/sc for kernels built without Zaamo, matching
+> + * the Zalrsc sequences in arch/riscv/include/asm/atomic.h. A relaxed op
+> + * discards the old value. A fetch op (including XCHG) uses .aqrl and
+> + * writes that value back to val. T2/T3 are not BPF registers; addr may
+> + * already be T1.
+> + */
+> +static void emit_atomic_lrsc(u8 addr, u8 val, bool is64, s32 imm,
+> +			     struct rv_jit_context *ctx)
+> +{
+> +	bool fetch =3D imm & BPF_FETCH;
+> +	u8 aq =3D fetch ? 1 : 0;
+> +	u8 rl =3D fetch ? 1 : 0;
+> +	u8 old =3D RV_REG_T2;
+> +	u8 tmp =3D RV_REG_T3;
+> +	int lr_off, jmp_off;
+> +	s32 op =3D imm =3D=3D BPF_XCHG ? BPF_XCHG : imm & ~BPF_FETCH;
 > +
+> +	lr_off =3D ctx->ninsns;
+> +	ctx->ex_insn_off =3D ctx->ninsns;
+> +	emit(is64 ? rv_lr_d(old, 0, addr, aq, rl) :
+> +	     rv_lr_w(old, 0, addr, aq, rl), ctx);
+> +
+> +	if (op !=3D BPF_XCHG) {
+> +		if (!is64 && op =3D=3D BPF_ADD)
+> +			emit(rv_addw(tmp, old, val), ctx);
+> +		else if (op =3D=3D BPF_ADD)
+> +			emit_add(tmp, old, val, ctx);
+> +		else if (op =3D=3D BPF_AND)
+> +			emit_and(tmp, old, val, ctx);
+> +		else if (op =3D=3D BPF_OR)
+> +			emit_or(tmp, old, val, ctx);
+> +		else if (op =3D=3D BPF_XOR)
+> +			emit_xor(tmp, old, val, ctx);
+> +
+> +		ctx->ex_sc_off =3D ctx->ninsns;
+> +		emit(is64 ? rv_sc_d(tmp, tmp, addr, aq, rl) :
+> +		     rv_sc_w(tmp, tmp, addr, aq, rl), ctx);
+> +	} else {
+> +		ctx->ex_sc_off =3D ctx->ninsns;
+> +		emit(is64 ? rv_sc_d(tmp, val, addr, aq, rl) :
+> +		     rv_sc_w(tmp, val, addr, aq, rl), ctx);
+> +	}
+> +
+> +	/* Branch offset is relative to this instruction, back to the lr. */
+> +	jmp_off =3D ninsns_rvoff(lr_off - ctx->ninsns);
+> +	emit(rv_bne(tmp, RV_REG_ZERO, jmp_off >> 1), ctx);
+> +
+> +	if (fetch) {
+> +		emit_mv(val, old, ctx);
+> +		if (!is64)
+> +			emit_zextw(val, val, ctx);
+> +	}
+> +	ctx->ex_jmp_off =3D ctx->ninsns;
+> +}
 
 [Severity: Medium]
-Does this change the skb head truesize for every received frame, even when
-no XDP program is attached?
+Does using .aqrl on lr and sc without a trailing fence provide the full
+memory barrier required by BPF_FETCH and BPF_XCHG in
+emit_bpf_atomic_lrsc() and emit_atomic_lrsc()?
 
-Before the patch the head size was num_pages * PAGE_SIZE. Now it is rounded
-up to the page_pool allocation order, and skb->truesize is derived from it
-here:
+Under RVWMO, lr.aqrl is a load whose .rl bit only orders prior RCsc
+accesses, and sc.aqrl is a store whose .aq bit only orders subsequent RCsc
+accesses.  A plain store before lr.aqrl and a plain load after sc.aqrl can
+therefore be reordered across the LR/SC loop.
 
-stmmac_rx()
-	bufsz = rx_q->napi_skb_frag_size;
-	...
-	xdp_init_buff(&ctx.xdp, bufsz, &rx_q->xdp_rxq);
+The Zalrsc sequence in arch/riscv/include/asm/atomic.h and emit_cmpxchg()
+in arch/riscv/net/bpf_jit.h instead emit a plain lr (aq=3D0, rl=3D0), sc.rl
+(aq=3D0, rl=3D1), and a full barrier after the retry branch:
 
-stmmac_build_skb()
-	skb = napi_build_skb(xdp->data_hard_start, xdp->frame_sz);
-
-On 4K pages, a dma_buf_sz of 8188 (BUF_SIZE_8KiB) gives num_pages = 3, so
-the head grows from 12K to 16K. A dma_buf_sz of 16368 (BUF_SIZE_16KiB)
-gives num_pages = 5, so the head grows from 20K to 32K.
-
-That shrinks the effective socket receive buffer for jumbo MTU users who
-never load XDP. The commit message calls out the fragment truesize change
-as a behavior change, but not this one. Should this be mentioned too?
-
-[ ... ]
-
-> @@ -5962,120 +6073,79 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
-
-[ ... ]
-
-> +		skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
-> +		/* For Not XDP_PASS verdict */
-> +		if (IS_ERR(skb)) {
-> +			unsigned int xdp_res = -PTR_ERR(skb);
-> +
-> +			if (xdp_res & STMMAC_XDP_CONSUMED) {
-> +				stmmac_xdp_put_buff(rx_q, &ctx.xdp, true);
-> +				rx_dropped++;
-> +			} else if (xdp_res & (STMMAC_XDP_TX |
-> +					      STMMAC_XDP_REDIRECT)) {
-> +				xdp_status |= xdp_res;
-> +			}
-> +			goto next;
-> +		}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but multi-buffer frames can now
-reach XDP_TX, which makes it worse. Does XDP_TX completion recycle pages
-into this RX queue's page_pool direct cache from the wrong NAPI context?
-
-stmmac_xdp_xmit_back() picks the TX queue by CPU, not by RX queue:
-
-stmmac_xdp_get_tx_queue()
-	while (index >= priv->plat->tx_queues_to_use)
-		index -= priv->plat->tx_queues_to_use;
-
-Completion then runs in that channel's tx_napi:
-
-stmmac_napi_poll_tx()
-  stmmac_tx_clean()
-    xdp_return_frame_rx_napi(xdpf)
-      __xdp_return(..., napi_direct=true)    /* head and every frag */
-        page_pool_put_unrefed_netmem(..., allow_direct=true)
-          page_pool_recycle_in_cache()
-
-stmmac_tx_clean() {
-	...
-		if (xdpf &&
-		    tx_q->tx_skbuff_dma[entry].buf_type == STMMAC_TXBUF_T_XDP_TX) {
-			xdp_return_frame_rx_napi(xdpf);
-	...
+arch/riscv/include/asm/atomic.h:ATOMIC_FETCH_OP() {
+	__asm__ __volatile__ (
+		"1:	lr." #asm_type " %1, %0\n"
+		"	" #asm_op " %2, %1, %3\n"
+		"	sc." #asm_type ".rl %2, %2, %0\n"
+		"	bnez %2, 1b\n"
+		RISCV_FULL_BARRIER
 }
 
-When allow_direct is already true, page_pool_put_unrefed_netmem() skips the
-page_pool_napi_local() check. That means pool->alloc.cache and
-pool->alloc.count are updated without a lock.
+Both emit_bpf_atomic_lrsc() and emit_atomic_lrsc() should use plain lr,
+sc.rl for fetch/xchg, and emit_fence_rw_rw(ctx) after the bne retry
+branch.
 
-The tx_napi is a separate NAPI instance from the rx_napi that owns the
-pool. Meanwhile the owning rx_napi can be on another CPU running
-stmmac_rx_refill() or the allow_direct=true puts in stmmac_xdp_put_buff(),
-stmmac_build_xdp_frags() and stmmac_xdp_shrink_tail().
-
-Can this corrupt the alloc cache? If so, the same page could be handed to
-two RX descriptors, or recycled while an skb still holds it.
-
-The race dates back to XDP_TX support. With this patch, though, each
-XDP_TX frame can push the head plus several fragment pages down this path.
-Would returning XDP_TX frames with xdp_return_frame() in stmmac_tx_clean()
-avoid this?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261106-stmmac-rx-mb-v9-1-c099c923664b%40oss.qualcomm.com
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110-lrsc-only-=
+v6-0-bafc3cc0fcae@mobileye.com?part=3D5
