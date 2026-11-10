@@ -1,73 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794322550;
-	b=dsDblc8maMhUxWkIHBpiqZeo5+8IGtg0MoWm+ZIP5+Z+XlFpIhldJvamKbl9ZKYBaRWL
-	 ToNBSXUlQGRokO0hgzUgy3EsX8EC6EQ9kIF/LH1sp2sfsX59nlhCgUhzG3oVyMc3SL5tj
-	 n2S/id8K8YLv/zSLnYTAMnRs5YequrcX0ugiiIou37/s/3bUaqRFIJ8gkOCAbJWIBQSX0
-	 YTeEdJ09FCK0sQgwu3aOFkvmen0Rj7F5MKhz1X5UTe+Q4wfGAgadvG7f9LJ6BK87bA7Nt
-	 ucYJYVmWodKY91oVuYcTaZd36aj/kzKALSfM6a78YcAMKMyDP8cyddjgTFJ5GUEcCcA==
+	t=1794323163;
+	b=HCxrclYsoaMVyyNP7Hgh+74tnnhQG/mPAd1ASbKVqltunJ/MoHDHj8sFdjKvYe9aHIlJ
+	 pAYPws6DNjTiKjS/0HXKjJFbNQhPGF6o8bpdlWQ1p+RbKS9p213hB9tcyHKK2rwI8Z2Y4
+	 Cpd90AgCEkq+QQUehOkRh1JLaQSrHGrRexkjIVisQUMzPp+EYKbQHFKDKyKwyu7Iy0YHU
+	 4X8zCwbv/QZD7N9W9lzJ8vSGa2gCxKOGp1X8uVGfQSgS2cFwEO1qNaUI/orUEX8p7MQ2d
+	 cVpftvh0rWQLwDgUrEvgeAqYSFO/46UoVnDbQ8PPdkBOHXEzPba6+dV5SkcwZEi85Hw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794322550;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=zSjXnOetE5oKa5v8S9LBrUhcmgizc8ch93AeD/W6gEI=;
-	b=sjS33hfS4+h+r28VKZdEwQbpSJqKu7nqrcUjvTo7k13tbqBXXDkMwcB9Lhi+Gnqt6lXl
-	 NdHzbCU+5mdYY6Ki6cI16KmUVjJ7QAgIuXLKpJqq0tumLjM0RmlEJaRG6paQPpCjRYeRf
-	 BS3Nl0udRY8OE/8GrjvZ9Y9/E3h77nJq9Mu1RfVtq0xmEKb6oMYC47Y3tWo9Iywzgusaw
-	 xD5VK4dOvXaHNJIwI+ncTJQ0IjauO5AULXxZbeLT8Cog5PcYU1rO4sWJiv27NEj3iDZ7D
-	 9VTJM4drB8h7jOinhSYG93VVnG+2dN2TSwNZUKqcNeWvPk6PmiCuWE6sgHNmQU9soUQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794323163;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=3saG5HUhHWIluByVMXbKrM1wtI4RFxTnUgkKyi8UGJA=;
+	b=Ys1UH+1deIunxZY4wRwQdqrYIc+cp4dIa0ja76+r9WCxt4sRFPakWIQU2WH0KZPP5i8Q
+	 zEf50i1qF7SViicj7c0EJ2vaFdBKNgxa+3GQx4GmfDW3uftctCA9wjczU/YnfeoWaCkqB
+	 /t4xIgBCxJvAzJY2JwE9aGyztPkAExyzkOajBNPFb7Xd/vDoosC4KzKtB8A+mbTU17+3Q
+	 wzyesU/nDnSIdIqzzyfx98upNX9/pZyRq7a9S/o5jiL8ZxYxWnhriieKOtyyOvZnDNv6B
+	 M4e8jWvnq9KS/ie4uyRWSF3Qz33aqLU8VK2glweT7Ta62ysL58FwfNHhKtnfSOXVKAQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Tcwd7Q8/";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rH6iUK0m;
+	arc=none smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32DB606A326;
-	Tue, 10 Nov 2026 14:55:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F026606A320
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 15:06:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F026606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tcwd7Q8/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D8D71F008A2;
-	Tue, 10 Nov 2026 14:55:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794322549;
-	bh=zSjXnOetE5oKa5v8S9LBrUhcmgizc8ch93AeD/W6gEI=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=Tcwd7Q8/BgCZr0AJA+q53XtkaEXHNBQAptcCIoE3INOkDT8T++JPLwFgnijhu6LIp
-	 QoJCfJqeBNhK26M7LL9xd4MzXxKVISVDOEW1cYrYEyBiFKRmR2hdLsioEex6m+2Rc5
-	 2AgfVzjCsuMDtAVvAKOrFX1qXAfAYeUYjVl2rownrESZ29DXkmWTHYRM7alPMZLQ6M
-	 DZH727vPlYTYzZb+oco6o/Bkhlk4m5LBSezhlvCb0bhHHiXIMbUlIMDObU3PIfYN46
-	 k7napT6YlagBuXnh78UDBF3WtFBwiJfcd2zG9H8WTZ7Zkc62YNaLopDBhwYuzfc472
-	 iPuH2WgxnRVeQ==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id B2761F40069;
-	Tue, 10 Nov 2026 09:55:47 -0500 (EST)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Tue, 10 Nov 2026 09:55:47 -0500
-X-ME-Sender: <xms:czDzahOxHA_IGoa_FJdwV0BFPQw-nSdKO6kKGUN5puCfrxj2G2sK_w>
-    <xme:czDzauxKYck9zKSqhpZaTHxPL9lIOi42MPCnrNTR7eaQqnpkmbe8dEx0PuhUogQkg
-    tb2W38kOzksOJlDJ4uTGR7-rkbiwtctKuF5oVtOm556TqS1yjjUw9U>
-X-ME-Proxy-Cause: dmFkZTE8jIcOTzT9axQiHwEjJScKTRkNH3ZVhgYbwXrBMnGwr/PZk5kUfGxy+RC0ezRM03
-    2Axgl1A3kstcvJQqQJ+tEirxS634eXBQm2b+wwk+7byJnMoEdYYw7Lfb7185Bnwoliq1Mt
-    XZ8lliUhOZ8AACZwbl4T2Tc7NYRy4GvnOujvSweRGBGAD4OQXGjTipshhA5n2cB6RQlk4p
-    zmTRFZMOMjoY8cueG7e24ndoN2R/gq/lSNUbCVZu/PUOrAg9f6aovYYa9SSKBBYGtgXYMN
-    0qbpFOi4S4kwXDcxuFcZlmK43Jt2p3+0W9uSzX8U3QJynW/odwma6a1hhpAbc8zEaSnbtk
-    CFI/IAk8YwHJ0hyg7qaH8oiiVC3V/1ZiobIhoPO231VrqQk5oaP4jl+jS7yMnBbNxynDhF
-    /tTsfxMaF/A9xwJBu4sKm+3lzwzMEEbqt79mE4Lq/VAgowI2/Z3gVdFMTE48DIB1KcUvAe
-    gGFx1Bx/tQmWXfeE09uUSkiQ2KYN+OrlgTMnrepjVRxO73rY2t7sodPh2AhJIAG1ZYT5ga
-    3nwb3G0mQrnmFOm4Qa4C2JwbajMdJBWMeam4uZKQraajbqcBHzCXvMtQm1fQbm3S2rexTo
-    KA6wW/vDabSoXlut9Nm5uKTSjp20eGQ9lpLOxOz31c8eLm8Mlp10sjOYDNZA
-X-ME-Proxy: <xmx:czDzaoanLMdLTFqhzMhrxv5H09chgFe3GMMhc1XBCkfiMJQ_ckta8Q>
-    <xmx:czDzauzWTK7EYc76X_4JSXvP7e9Yqejr2yggz6O-tuvCpsEWBQGUaQ>
-    <xmx:czDzasWQEDY8T3p3eaJhPzKDKFxYGPCQnFb1-n-prg7tBs3f0gJpWA>
-    <xmx:czDzaqbpJaYjvNkk5zy3xoww5EsXMA5_awnvU25FYCgSdhgQQ41Hfg>
-    <xmx:czDzavOKwCwywHfR1JNgdmNe33GAeUXrw31wmu_3YBRbMsucyl2ChD_t>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 7D2B9780070; Tue, 10 Nov 2026 09:55:47 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rH6iUK0m
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a549cd7fd2so19761215e9.0
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 07:06:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794323162; x=1794927962; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3saG5HUhHWIluByVMXbKrM1wtI4RFxTnUgkKyi8UGJA=;
+        b=rH6iUK0mFxC5SYg41GzhxuYBZQ8ZRWjcSicU/E/P8m8aSt+h7sTRxPQlU8JTL0Htoa
+         famV4KvT7Ya1jaQwHxAvdsh11CRH8Q/XH9JO5juaj5mz2Evq6ZMk9IgIxAihrMea3Asq
+         sCvgCbdDSpSGwKnDNF3CMg+Tm2RTXJL9oRW1ygHosdHUd2qPHC7/FTPQsMVS7Vy9HBpV
+         0vQrH6aVsOxYbV+Fkt/NuCfarezXqfwaaQhGGv8rqo5fRR23K+6KON7mge4K4FLeSQdd
+         LoGA3Zjxrc95B1/SBVbXyxNmZimu6JyjE5oguXnc0LmmkSOsHCZc/isFlW5A/KyfRF83
+         vvjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794323162; x=1794927962;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3saG5HUhHWIluByVMXbKrM1wtI4RFxTnUgkKyi8UGJA=;
+        b=OeKcyW1pHP8oSYjUXd6KBCZd1XOt0YJP9owoFv1UP42TvQJVfr8CyuQNaY/VQcNoOY
+         02Caa/saSjBCbcDqqinoeUSXapFHweALRbm3AwA6emPuCD/otlVK4RTSntBhNkp+Kn4L
+         Dpji3MF+iBTiY6FoAiFwCsSC3yTMpSgQgBv3MjY4pihAGISNGMWB7Wb3l+88PBRivmIc
+         +Y6P7bydtiDlYlPaw219yHlUKmyQu+xLBokXaf3dULa2InOkyrlR1cXDGX+7sQxdiMdy
+         C+Aqod0Qy/VmkPQCJwi0wQhtUL3PfSR9wJa7Hx9neENza30cmF0JTKhxUnzt5qP0A09G
+         Hbww==
+X-Forwarded-Encrypted: i=1; AL+hErE3txHe3RWYZUO7Rv2Fy7qscOQz1Z24IpoO58MpagWinQtDvYxVeEvfeLXNNjBS9uMSCYw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9cvjMas0KKnwkKIatef6/lRulFdUMmwYam0JyRwa51bWrhl23M
+	Sy1u3a7zEYqTj7OycY6wyUDGOsKvw+hLGWQqfIuraLucqY60jS7JTxiz
+X-Gm-Gg: AYBFou1afLLXtPGae+0xclzD3GZTz0QELBeer/HUyDSkQxA+5JRz2dzHwA80FTNQH1u
+	SuMcvF/smEhlqX3QTLeYIl7lhYyR61Va0Yv1jDU6hRezLba32QroNrMxUsQYvfm0rPXEa3kTlaG
+	oMmCo8ylYIkD8TABcGFygS8BLizezw7xYaj8w8/S/N8wfpLqlu1qxgskFPnrBMgP7VAq7RQSP+P
+	l5OXb827rIXta17rPPijRoWj59bFINSYbQ86mG8Lqh61UVVN6eEcHJrOXzwP08gRYC+GR/pUOOJ
+	RQOFqJJwf5qBI+QOIIrP7SV1UvLfQQvrC4Tq1vmUg/hHfzZ9pC5BaKDl75Luv+8ci42hg1/bXl5
+	Q5dz2moDPZax2lxiSu6ZEewQ55nM+4dL+tXLNfjL2zRFY2NikCcCbSpQbV27niOyRXDf+F02zYJ
+	jtYxDGut1JoUGqWSU2Bnvn5Tb1tuvd5n9almpsLZSMDHjirnHhTlTr3OXQDRXLfIJ2x/mTafRW/
+	hBzG7/lG+zSgrcuUMfGjYRTpG6jBxlwkUsvkozzHyMKuddOQavOQYINT1nKLAkO6iaGUtBwazWG
+	5SepTzQWVgaq0+qtgidvwinmICuJpoVn/93vGw==
+X-Received: by 2002:a05:600c:a013:b0:4b5:d95c:2380 with SMTP id 5b1f17b1804b1-4ba0234a040mr51183875e9.11.1794323161530;
+        Tue, 10 Nov 2026 07:06:01 -0800 (PST)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba0204342asm80488225e9.6.2026.11.10.07.05.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 07:06:00 -0800 (PST)
+Date: Tue, 10 Nov 2026 15:17:30 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, almagui@kernel.org,
+	john.fastabend@gmail.com, qmo@kernel.org, brauner@kernel.org,
+	kpsingh@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, sashal@kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	martin.lau@kernel.org, mason@kernel.org
+Subject: Re: [PATCH v2 bpf-next 15/18] resolve_btfids: Tag fmod_ret
+ candidates as targets
+Message-ID: <avM1isGoXgAv47ml@mail.gmail.com>
+References: <20261109170550.141443-16-a.s.protopopov@gmail.com>
+ <069d59babf1ed531e1a5c1bd4ec0a943f7e8f12fc1e18f0ccc8b4edd032974a0@mail.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -77,71 +103,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AKCAcWHxcB8B
-Date: Tue, 10 Nov 2026 09:55:27 -0500
-From: "Chuck Lever" <cel@kernel.org>
-To: "Christian Brauner" <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
-Cc: "Jann Horn" <jannh@google.com>, "Chris Mason" <mason@kernel.org>,
- "Josef Bacik" <josef@toxicpanda.com>, "Christoph Hellwig" <hch@lst.de>,
- "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
- linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
- "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan Kara" <jack@suse.cz>,
- "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- target-devel@vger.kernel.org, driver-core@lists.linux.dev,
- linux-mm@kvack.org, bpf@vger.kernel.org,
- linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
- apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
- fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org,
- xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev,
- linux-s390@vger.kernel.org, "Linuxppc Dev" <linuxppc-dev@lists.ozlabs.org>,
- linux-usb@vger.kernel.org, "Amir Goldstein" <amir73il@gmail.com>,
- linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
-Message-Id: <47b8b8cb-aadb-4f84-aa5c-c5a74d73fac1@app.fastmail.com>
-In-Reply-To: <20261110-work-loop-pseudo-v1-21-4c998976c6c7@kernel.org>
-References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
- <20261110-work-loop-pseudo-v1-21-4c998976c6c7@kernel.org>
-Subject: Re: [PATCH RFC 21/41] nfsd: use fc_init_pseudo()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <069d59babf1ed531e1a5c1bd4ec0a943f7e8f12fc1e18f0ccc8b4edd032974a0@mail.kernel.org>
 
-
-
-On Tue, Nov 10, 2026, at 4:14 AM, Christian Brauner wrote:
-> Initialize the nfsd filesystem as a pseudo filesystem. This raises
-> SB_I_PSEUDO and also SB_I_NOEXEC and SB_I_NODEV. It never holds
-> executables or device nodes.
->
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
-> ---
->  fs/nfsd/nfsctl.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/fs/nfsd/nfsctl.c b/fs/nfsd/nfsctl.c
-> index f32311f2d7cf..ce2666deddbd 100644
-> --- a/fs/nfsd/nfsctl.c
-> +++ b/fs/nfsd/nfsctl.c
-> @@ -9,6 +9,7 @@
->  #include <linux/namei.h>
->  #include <linux/ctype.h>
->  #include <linux/fs_context.h>
-> +#include <linux/pseudo_fs.h>
+On 26/11/09 05:42PM, bot+bpf-ci@kernel.org wrote:
+> > resolve_btfids: Tag fmod_ret candidates as targets
 > 
->  #include <linux/sunrpc/cache.h>
->  #include <linux/sunrpc/svcsock.h>
-> @@ -1375,6 +1376,7 @@ static int nfsd_init_fs_context(struct fs_context *fc)
->  {
->  	put_user_ns(fc->user_ns);
->  	fc->user_ns = get_user_ns(fc->net_ns->user_ns);
-> +	fc_init_pseudo(fc);
->  	fc->ops = &nfsd_fs_context_ops;
->  	return 0;
->  }
->
-> -- 
-> 2.53.0
+> TL;DR: resolve_btfids may tag KF_IMPLICIT_ARGS kfuncs (e.g.
+> bpf_wq_set_callback) as fmod_ret targets; the trampoline may then clobber the
+> implicit argument, and the kfunc could dereference a garbage pointer.
+> 
+> > diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+> > --- a/tools/bpf/resolve_btfids/main.c
+> > +++ b/tools/bpf/resolve_btfids/main.c
+> 
+> [ ... ]
+> 
+> > @@ -1841,6 +1888,16 @@ static int btf2btf(struct object *obj)
+> >  		}
+> >  	}
+> >  
+> > +	for (size_t i = 0; i < obj->fmodret_retvals.cnt; i++) {
+> > +		const struct fmodret_retval *retval = &obj->fmodret_retvals.retvals[i];
+> > +
+> > +		if (has_set_func(&ctx.fmodrets, retval->btf_id))
+> > +			continue;
+> > +		err = add_fmodret_retval_tags(&ctx, retval);
+> > +		if (err)
+> > +			goto out;
+> > +	}
+> > +
+> 
+> Can this loop tag a kfunc with KF_IMPLICIT_ARGS as an fmod_ret target?
 
-Acked-by: Chuck Lever <cel@kernel.org>
+Yes, looks like you're right, thanks. Will be fixed.
 
+> 
+> The kfunc loop earlier in btf2btf() has already rewritten the BTF
+> prototype of such a kfunc through process_kfunc_with_implicit_args():
+> 
+> 	t = (struct btf_type *)btf__type_by_id(btf, kfunc->btf_id);
+> 	t->type = new_proto_id;
+> 
+> so the BTF FUNC no longer lists the implicit arguments.  fmodret_collect()
+> ran before btf2btf() and compared only the return type
+> (btf_func_int_return_size()), never the argument count.  The only check
+> here is has_set_func(&ctx.fmodrets, ...), which does not consult
+> ctx.kfuncs, so the same btf_id still gets "bpf_fmodret" and
+> "bpf_fmodret_retval:...".
+> 
+> bpf_wq_set_callback() looks like a concrete case.  It is built with the
+> plugin, has an ftrace call site, and starts with a side-effect free
+> error return:
+> 
+> 	if (flags)
+> 		return -EINVAL;
+> 	return __bpf_async_set_callback(async, callback_fn, aux->prog);
+> 
+> so it would get "bpf_fmodret_retval:-22".  The kernel then adds it to
+> BTF_KFUNC_HOOK_FMODRET, and bpf_check_attach_target() accepts
+> BPF_MODIFY_RETURN through btf_kfunc_is_modify_return().
+> 
+> The trampoline model is built from the 3-argument prototype.  On x86,
+> __arch_prepare_bpf_trampoline() runs the fmod_ret programs and then calls:
+> 
+> 	restore_regs(&prog, pos_of_slot, nr_regs, regs_off)
+> 
+> with nr_regs = 3 before calling the original function.  rcx (aux) is
+> caller-saved, so __bpf_prog_enter(), the program and __bpf_prog_exit()
+> may have overwritten it.  If the program returns 0, which the verifier
+> allows, bpf_wq_set_callback() dereferences a garbage aux->prog.
+> 
+> The same seems to apply to the other KF_IMPLICIT_ARGS kfuncs that return
+> int (bpf_task_work_schedule_*, bpf_list_push_*, scx_bpf_*) whenever the
+> analysis finds an error path for them.
+> 
+> Would it make sense to skip retvals whose btf_id is a kfunc with
+> KF_IMPLICIT_ARGS in ctx.kfuncs, or any kfunc whose prototype was
+> rewritten?  No later commit in the series changes resolve_btfids.
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42662799554
 
--- 
-Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
