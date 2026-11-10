@@ -1,47 +1,77 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794329215;
-	b=1QEw/fDOTxXatGYW6KgcIlfN/UqsbqyCiAaoEQvrhGgBAuYrddamtpyOTbtLdPaVyINX
-	 kfb3K3AjO/qGeqZXmTafETjOc7PaTBMQO5rgSeDzzlWtBEJE8CSsNeyunGNg5SDjWkBwj
-	 Mga+Bzos2rofgShwS3Fg+0Xn841HZiEBISBLx1beSBlnE3+CtFxkJlL3IMB++WD2QW64e
-	 Yskee09eShwXZ10CQm5Y0VCqCHFDpuzrkC1aT8+qhrBtDfL9xFDSmW9qfsBYB+sqS5bRN
-	 e/OkoSZCg+/EN6VMJRWU+MmRxiwxSVByzJcztJvDiw3oFiNcmuNabbk2mo+LhsoxOCA==
+	t=1794329543;
+	b=MqUrDRKNkm5LTuWw/p72EmWMN8y5gRS7IKO9coqAv0GrbEWIJsBAT987R4Icfg+VWKI2
+	 uo4ni/3H9tbkzcfyK89ILbPx2po3H4aJt8bADreecaLh6FLcAahbfvoewTUJCStR54Bk0
+	 JkbQES+PqiCgbMDyF1EAIJilLbna8+LZHRvL2MPVmcTpyKzzbXa2rQF+IWXQEj0blP8ym
+	 WgivW55NuDvwXCrregevCDHueABXJ1HvJA+1Z++6bstcMbA/95HTL3+D31s3o6SMuwFgR
+	 VlIH7aw/1GBxOdCm8o9fF+QmMVKT9YNCFkJQeswK5esi27KX1ayMXXTXdDTj4VVAQYA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794329215;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=mgYDBwL3t2ZWVsbpa7bCSIH5rIRHkEyd38LzWhc7YQU=;
-	b=wQw9yc9yG/yeEQD2Vwh/0x+Q1dgw782pWlaThJd/pLmCwKQhKP2KIh8emb41P4r9vQL/
-	 2nKsYKHfjHk2kbVTsY1pHPmqQYfpv0xG2e1TRw9QY/1LO4oBTv4VW1IZ5MMVOSd1BxCzd
-	 xcOXhXr7jfqXb9ZISRLk91zkprmrUOLDN2mydQathLyf9H8biK7xubUNi19sPtrvioELo
-	 J1YGWaTQ4a/eL8A6t7qSyprNCHRUQtO+qsQ4+chhu4nA1a9sjAyxpc91WOdEK7dmyuEHv
-	 cerZbCG28lcqEwR9m5Iui/SYUGUzYdI8+MkI7ys9A0c8IvfoqbZLKcalr/ampYonKfQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794329543;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=KyDcpTwF2G84cUTe+PVKDz9G3rULU78GRC2w0kOsrLc=;
+	b=l4aw2tre8GbBz5g9LuX5bM4yQTz96CFbLG8LsM7VKIXayuVmXV30ZQ32DPTyLKLklvnF
+	 fYFQ3zY+xdGIl+RC9ylnA/C7J49VUkApYGigBDyRkZo5czIM8Cqw8hUKbFZyn1/IgtQ3m
+	 Z/RGVRymJUJsoZqE4xFLoNPCFQbl09Pa3uiRQy/26ID/0+MFb3/zKlbTzp+JvVrStnzwK
+	 eWITQsh2iQT/0NCBfg5oKIZVh3Q6CWsgmG0dT0HwHYfcy3NvJnhpa5fox9BM20Ijf/wdi
+	 YYcsCHji+6Oik6v5hEeEl7hh1kCC4piXf0Q3DTWANagDf07zGSFRMlxB9cJ+9m6KinQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XCr7enKn;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="WSR4/meg";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C943606A337;
-	Tue, 10 Nov 2026 16:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57DB6606A330;
+	Tue, 10 Nov 2026 16:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XCr7enKn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC411F0089F;
-	Tue, 10 Nov 2026 16:46:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WSR4/meg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C6B21F0089F;
+	Tue, 10 Nov 2026 16:52:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794329214;
-	bh=mgYDBwL3t2ZWVsbpa7bCSIH5rIRHkEyd38LzWhc7YQU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=XCr7enKnWsrAipMWLDNpTp6sLFZS0sKTQvZjmmF7+1Fj8O3CB3f8YH+jI6EmZFjpo
-	 7EPCK7IyLT46dg5M52aQfoX5RSAp9Z+IH3VK4DedDAlbBZMb4uF8q9iXikitC09s0P
-	 ovLiiWRSLDXXoT4ZLxklGStTWPCht/mxpeC+WGMKSyFNr8GQRrv1Pos5RbB5cpW/Am
-	 I4Sjhsr7xuQLcfyVTepE4vDaicB9xouyHIrFOi9AXfKNAERayCEDTed/rPFPeYKT9g
-	 GIyXjvkm2o1gQjbdNJfGmD0qFEcAP5gep2pDc/suvk8YRP/JayTM0Ooq62rJ9eSnFR
-	 ME/iZWDRsnkYw==
-Message-ID: <a24ec940-ca3b-419b-85ae-9de88cd991d9@kernel.org>
-Date: Tue, 10 Nov 2026 16:46:53 +0000
+	s=k20260515; t=1794329543;
+	bh=KyDcpTwF2G84cUTe+PVKDz9G3rULU78GRC2w0kOsrLc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=WSR4/megdggMO9wsDWOY+uoQSmNtO3j2yfbZkG8wNi5rB7hE651wqOzDxlgDXK7Ew
+	 RmAWiz2VBpllg4ynVFTcPIjgzyk7nAxhySjvb+byysmSgsCnpkfEzxkJqRWKHq9/mc
+	 YNAQhE0ikpxZ0sqlywqGqK0vnkiWmSjRjigl1fL7x76Q0lUOnOc+fEhl7WUDNrnt2X
+	 Hda+VOxkwzLr8arHFGMZFn9v/vCdMOGy5b+eY24hGBQ3e42uhb8xHhCF/aPlSMJPft
+	 3tCywwxXOQqTXxdhv8EqxUpg5QCSLRW2i8oyD+4B0ftty6ddfdgKmdarmtnmAcuyq1
+	 heVa4ehNncfYw==
+Date: Tue, 10 Nov 2026 17:52:03 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Cai Xinchen <caixinchen1@huawei.com>
+Cc: mic@digikod.net, gnoack@google.com, paul@paul-moore.com, 
+	jmorris@namei.org, serge@hallyn.com, corbet@lwn.net, skhan@linuxfoundation.org, 
+	utilityemal77@gmail.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	rdunlap@infradead.org, gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, 
+	johan@kernel.org, dlemoal@kernel.org, hch@lst.de, axboe@kernel.dk, 
+	viro@zeniv.linux.org.uk, jack@suse.cz, dhowells@redhat.com, code@tyhicks.com, 
+	linkinjeon@kernel.org, sj1557.seo@samsung.com, yuezhang.mo@sony.com, 
+	hirofumi@mail.parknet.co.jp, cel@kernel.org, jlayton@kernel.org, neil@brown.name, 
+	okorniev@redhat.com, Dai.Ngo@oracle.com, tom@talpey.com, hyc.lee@gmail.com, 
+	miklos@szeredi.hu, amir73il@gmail.com, senozhatsky@chromium.org, 
+	chenxiaosong@chenxiaosong.com, dsterba@suse.com, mason@kernel.org, kpsingh@kernel.org, 
+	matt@bobrowski.net, rostedt@goodmis.org, mhiramat@kernel.org, 
+	mathieu.desnoyers@efficios.com, john.johansen@canonical.com, georgia.garcia@canonical.com, 
+	zohar@linux.ibm.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, 
+	eric.snowberg@oracle.com, stephen.smalley.work@gmail.com, omosnacek@gmail.com, 
+	casey@schaufler-ca.com, takedakn@nttdata.co.jp, penguin-kernel@i-love.sakura.ne.jp, 
+	xiujianfeng@huawei.com, nanx95726@gmail.com, djwong@kernel.org, lujialin4@huawei.com, 
+	bpf@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, driver-core@lists.linux.dev, linux-block@vger.kernel.org, 
+	linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org, netfs@lists.linux.dev, 
+	ecryptfs@vger.kernel.org, exfat@lists.linux.dev, linux-nfs@vger.kernel.org, 
+	ntfs@lists.linux.dev, linux-unionfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, apparmor@lists.ubuntu.com, linux-integrity@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 -next 00/18] landlock: Add READ_METADATA and
+ WRITE_METADATA access rights
+Message-ID: <20261110-rekonstruieren-erbfolge-vollversammlung-26be74966211@brauner>
+References: <20261027121151.1887650-1-caixinchen1@huawei.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,128 +81,27 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v9 2/2] selftests/bpf: Check bpftool batch map
- dumps
-To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, daniel@iogearbox.net,
- ast@kernel.org, alexei.starovoitov@gmail.com
-References: <cover.1793821981.git.hi@tychen.cc>
- <e4cd18723b893385d66232276f44049bb86c8e51.1793821981.git.hi@tychen.cc>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <e4cd18723b893385d66232276f44049bb86c8e51.1793821981.git.hi@tychen.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261027121151.1887650-1-caixinchen1@huawei.com>
 
-On 04/11/2026 19:54, Tianyi Chen wrote:
-> Batched dumps must print the same output as individual lookups. Use an
-> fmod_ret program on security_bpf() to count the map lookups made by
-> bpftool children of the test, and to fail batch lookups with -EBUSY.
-> 
-> For each map type with batched lookups, compare plain and JSON dumps
-> with a dump whose batch lookups all fail, and check that no individual
-> lookups were needed. Cover BTF and per-CPU output, an empty map, 1-byte
-> keys and unaligned values. With 4 KiB values, check dumps that need
-> several batches, and that failing the first or second batch lookup
-> continues with individual lookups without restarting the dump.
-> 
-> Pre-size RHASH maps so asynchronous growth does not race with the
-> order-sensitive dump comparisons.
-> 
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
+On Tue, Oct 27, 2026 at 08:11:33PM +0800, Cai Xinchen wrote:
+> - The idmap is passed separately from the struct path again, instead
+>   of being derived from path->mnt inside the helpers and the hooks.
+>   As Christian explains in his review of patch 1, the idmap must be
+>   taken of the mount at the time it was checked and passed down to
+>   the filesystem so that the VFS and the filesystem are guaranteed
+>   to see the same idmap.
 
+This regresses AT_EMPTY_PATH. fchmodat2(), fchownat() and utimensat()
+with an empty path now go through CLASS(fd) which is fdget() and that 
+refuses O_PATH file descriptors. IOW, this is very very broken.
 
-Acked-by: Quentin Monnet <qmo@kernel.org>
+Please also go through Sashiko's review of v3 (cf. [1]). The new struct
+file arguments need __nullable or bpf programs can dereference NULL,
+and the ntfs3 stream setattr and overlayfs fileattr paths that bypass
+the hooks need treatment.
 
-... with a few, non-blocking suggestions, inline below.
+[1]: https://sashiko.dev/#/patchset/20261027121151.1887650-1-caixinchen1%40huawei.com
 
-
-> ---
->  .../bpf/prog_tests/bpftool_map_batch.c        | 231 ++++++++++++++++++
->  .../selftests/bpf/progs/bpftool_map_batch.c   |  42 ++++
->  2 files changed, 273 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
->  create mode 100644 tools/testing/selftests/bpf/progs/bpftool_map_batch.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
-> new file mode 100644
-> index 0000000000000..4cca77f410a06
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
-
-
-Maybe bpftool_map_dump_batch.c, so it's easier to visually group with
-the existing bpftool_map_dump.c?
-
-
-> @@ -0,0 +1,231 @@
-
-[...]
-
-> +void test_bpftool_map_batch(void)
-> +{
-> +	static const struct dump_case cases[] = {
-> +		{ "hash", BPF_MAP_TYPE_HASH, 4, 4, 100 },
-> +		{ "empty", BPF_MAP_TYPE_HASH, 4, 4, 0 },
-> +		/* The hash cursor is wider than the key; values are unaligned. */
-> +		{ "odd_sizes", BPF_MAP_TYPE_HASH, 1, 3, 100 },
-> +		{ "btf", BPF_MAP_TYPE_HASH, 4, 4, 100, true },
-> +		{ "lru_hash", BPF_MAP_TYPE_LRU_HASH, 4, 4, 100 },
-> +		{ "percpu_hash", BPF_MAP_TYPE_PERCPU_HASH, 4, 3, 100 },
-> +		{ "lru_percpu_hash", BPF_MAP_TYPE_LRU_PERCPU_HASH, 4, 4, 100 },
-
-
-If I remember correctly, lru_hash/lru_percpu_hash are mostly the same
-code as hash/percpu_hash, so I'm not sure they're worth testing, unless
-you want completeness.
-
-You could also avoid checking both plain and JSON for all types (pick
-one, and just do a few check for the other?), if you want to save some
-bpftool invocations; I don't expect differences in the code related to
-batch lookups between the plain and JSON output printing code.
-
-
-> +		{ "btf_percpu_hash", BPF_MAP_TYPE_PERCPU_HASH, 4, 4, 100, true },
-> +		{ "rhash", BPF_MAP_TYPE_RHASH, 4, 4, 100 },
-> +		{ "array", BPF_MAP_TYPE_ARRAY, 4, 4, 100 },
-> +		{ "percpu_array", BPF_MAP_TYPE_PERCPU_ARRAY, 4, 3, 100 },
-> +		{ "lpm_trie", BPF_MAP_TYPE_LPM_TRIE, 8, 4, 100 },
-> +		{ "array_of_maps", BPF_MAP_TYPE_ARRAY_OF_MAPS, 4, 4, 100 },
-> +		{ "hash_of_maps", BPF_MAP_TYPE_HASH_OF_MAPS, 4, 4, 100 },
-> +		/* Bucket and key cursors, up to 255 entries per batch. */
-> +		{ "multi_batch_hash", BPF_MAP_TYPE_HASH, 4, 4096, 256, false, true },
-> +		{ "multi_batch_array", BPF_MAP_TYPE_ARRAY, 4, 4096, 256, false, true },
-> +	};
-> +	struct bpftool_map_batch *skel;
-> +	char *expected = NULL, *output = NULL;
-> +	unsigned int i;
-> +
-> +	skel = bpftool_map_batch__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-> +		return;
-> +	skel->bss->test_tgid = getpid();
-> +	if (!ASSERT_OK(bpftool_map_batch__attach(skel), "skel_attach"))
-> +		goto out;
-> +	expected = malloc(OUTPUT_SIZE);
-> +	output = malloc(OUTPUT_SIZE);
-> +	if (!ASSERT_OK_PTR(expected, "expected") || !ASSERT_OK_PTR(output, "output"))
-> +		goto out;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(cases); i++)
-> +		if (test__start_subtest(cases[i].name))
-> +			run_case(skel, &cases[i], expected, output);
-> +out:
-> +	free(expected);
-> +	free(output);
-> +	bpftool_map_batch__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/bpftool_map_batch.c b/tools/testing/selftests/bpf/progs/bpftool_map_batch.c
-> new file mode 100644
-> index 0000000000000..0ca6f7973e880
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/bpftool_map_batch.c
-
-bpftool_map_dump_batch.c?
+-- 
