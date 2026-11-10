@@ -1,47 +1,73 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794322115;
-	b=fe2ad6Uhdkz7SmDuFW1fLqGIEV7zcvUiFapmK7TU2EDUHI9JFyZV757VO9su/ZPZCt5Y
-	 dFdWS+WBDe9n+xL/WW+O98SKQ/8y0BJCG52mZUV97z4drG1lZ8id2F+pwZujD4pAQZ0A1
-	 eWaRor+jjPtU0NeH+kDHXcxC8wV9M8qNMn5yRRf7PAtzIkQQkfAmg2JCpiVAoYA7F0Q8k
-	 8wHH5CqCo0KlTIMCbUJxiKIlfWzRyKqix4h28+Pih7vHN4x/rGV9GJoTHQiaMRtmwZ9bN
-	 MeMTru1IfZX33UpGhvfdoMb0DE1OSGLfms0QIPd5pbi04BFU6dmdQtHl6Bmp0LtDeZw==
+	t=1794322550;
+	b=dsDblc8maMhUxWkIHBpiqZeo5+8IGtg0MoWm+ZIP5+Z+XlFpIhldJvamKbl9ZKYBaRWL
+	 ToNBSXUlQGRokO0hgzUgy3EsX8EC6EQ9kIF/LH1sp2sfsX59nlhCgUhzG3oVyMc3SL5tj
+	 n2S/id8K8YLv/zSLnYTAMnRs5YequrcX0ugiiIou37/s/3bUaqRFIJ8gkOCAbJWIBQSX0
+	 YTeEdJ09FCK0sQgwu3aOFkvmen0Rj7F5MKhz1X5UTe+Q4wfGAgadvG7f9LJ6BK87bA7Nt
+	 ucYJYVmWodKY91oVuYcTaZd36aj/kzKALSfM6a78YcAMKMyDP8cyddjgTFJ5GUEcCcA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794322115;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=XUiTD1fHkup0xMFyFzR4iaCQdh2qSDIS2CmJZXGFfHc=;
-	b=nYwWVIDdglXrqT448os8w58hzaHZRu2XJJwo0pBKOOAyG0XvOxixdF4c/OFvuOtA2Hux
-	 U5r62wEWMiojnELD2ms0fhyyAf2hARr/EY5qHb3vaH6TaZhD5KtN1NXpwK0nelpiFs6ch
-	 3S/EqRNWIdbfQ0Eo5ihPLbYphY5TU1o81Z1rXPjfNvoQs7b0J2rRaw64CvC6O8WgcbQKs
-	 bowwMBo7Gf2AW0VyfURxRCvEwW9Qj8eZgO8pd1qc4nxL4a0E+4MP/NAZtULssgz6ZbZ+j
-	 NHXMRoGEaFj/3V0JLrt6Vpqvfiy+BSt76rctiq7oRnxbEDLwq8az0s4IIwrptXPU4Og==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794322550;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=zSjXnOetE5oKa5v8S9LBrUhcmgizc8ch93AeD/W6gEI=;
+	b=sjS33hfS4+h+r28VKZdEwQbpSJqKu7nqrcUjvTo7k13tbqBXXDkMwcB9Lhi+Gnqt6lXl
+	 NdHzbCU+5mdYY6Ki6cI16KmUVjJ7QAgIuXLKpJqq0tumLjM0RmlEJaRG6paQPpCjRYeRf
+	 BS3Nl0udRY8OE/8GrjvZ9Y9/E3h77nJq9Mu1RfVtq0xmEKb6oMYC47Y3tWo9Iywzgusaw
+	 xD5VK4dOvXaHNJIwI+ncTJQ0IjauO5AULXxZbeLT8Cog5PcYU1rO4sWJiv27NEj3iDZ7D
+	 9VTJM4drB8h7jOinhSYG93VVnG+2dN2TSwNZUKqcNeWvPk6PmiCuWE6sgHNmQU9soUQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tz+aZbtE;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Tcwd7Q8/";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939F760A2616;
-	Tue, 10 Nov 2026 14:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32DB606A326;
+	Tue, 10 Nov 2026 14:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tz+aZbtE
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B00331F008A7;
-	Tue, 10 Nov 2026 14:48:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tcwd7Q8/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D8D71F008A2;
+	Tue, 10 Nov 2026 14:55:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794322115;
-	bh=XUiTD1fHkup0xMFyFzR4iaCQdh2qSDIS2CmJZXGFfHc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Tz+aZbtEGDK1QeZJeYbLnEZYmje0CJnu22t/oJiUygPZWL6rL95MaUq+EDzRA/J5W
-	 U7SpamNtitK/6CszxsR0T/vfLajLMLybZ+aGme3du9zszoQ94NDMkLCimVZvegBAY2
-	 boILBaHaux2iUDtP1DykJhbtEmtGprT+V3i08pq3xpYNZKhlXyikTssqrM3C6t8Zhb
-	 0d4/eHMRdAqjlh7gc/Y/I1/MeB08yHDxlDSvGre4L6ldn6vXZTepOvmC6vZU0BNxpv
-	 1b3CtlKBAH/FGDnOT31GUx+plXev4992gbBQHqq4ate3fBAL5vik8N9LjmCPQer1rH
-	 F65zIM+qKU4dQ==
-Message-ID: <afe441ca-d616-4132-ae68-95d3ae5e111f@kernel.org>
-Date: Tue, 10 Nov 2026 15:48:26 +0100
+	s=k20260515; t=1794322549;
+	bh=zSjXnOetE5oKa5v8S9LBrUhcmgizc8ch93AeD/W6gEI=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=Tcwd7Q8/BgCZr0AJA+q53XtkaEXHNBQAptcCIoE3INOkDT8T++JPLwFgnijhu6LIp
+	 QoJCfJqeBNhK26M7LL9xd4MzXxKVISVDOEW1cYrYEyBiFKRmR2hdLsioEex6m+2Rc5
+	 2AgfVzjCsuMDtAVvAKOrFX1qXAfAYeUYjVl2rownrESZ29DXkmWTHYRM7alPMZLQ6M
+	 DZH727vPlYTYzZb+oco6o/Bkhlk4m5LBSezhlvCb0bhHHiXIMbUlIMDObU3PIfYN46
+	 k7napT6YlagBuXnh78UDBF3WtFBwiJfcd2zG9H8WTZ7Zkc62YNaLopDBhwYuzfc472
+	 iPuH2WgxnRVeQ==
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id B2761F40069;
+	Tue, 10 Nov 2026 09:55:47 -0500 (EST)
+Received: from phl-imap-15 ([10.202.2.104])
+  by phl-compute-10.internal (MEProxy); Tue, 10 Nov 2026 09:55:47 -0500
+X-ME-Sender: <xms:czDzahOxHA_IGoa_FJdwV0BFPQw-nSdKO6kKGUN5puCfrxj2G2sK_w>
+    <xme:czDzauxKYck9zKSqhpZaTHxPL9lIOi42MPCnrNTR7eaQqnpkmbe8dEx0PuhUogQkg
+    tb2W38kOzksOJlDJ4uTGR7-rkbiwtctKuF5oVtOm556TqS1yjjUw9U>
+X-ME-Proxy-Cause: dmFkZTE8jIcOTzT9axQiHwEjJScKTRkNH3ZVhgYbwXrBMnGwr/PZk5kUfGxy+RC0ezRM03
+    2Axgl1A3kstcvJQqQJ+tEirxS634eXBQm2b+wwk+7byJnMoEdYYw7Lfb7185Bnwoliq1Mt
+    XZ8lliUhOZ8AACZwbl4T2Tc7NYRy4GvnOujvSweRGBGAD4OQXGjTipshhA5n2cB6RQlk4p
+    zmTRFZMOMjoY8cueG7e24ndoN2R/gq/lSNUbCVZu/PUOrAg9f6aovYYa9SSKBBYGtgXYMN
+    0qbpFOi4S4kwXDcxuFcZlmK43Jt2p3+0W9uSzX8U3QJynW/odwma6a1hhpAbc8zEaSnbtk
+    CFI/IAk8YwHJ0hyg7qaH8oiiVC3V/1ZiobIhoPO231VrqQk5oaP4jl+jS7yMnBbNxynDhF
+    /tTsfxMaF/A9xwJBu4sKm+3lzwzMEEbqt79mE4Lq/VAgowI2/Z3gVdFMTE48DIB1KcUvAe
+    gGFx1Bx/tQmWXfeE09uUSkiQ2KYN+OrlgTMnrepjVRxO73rY2t7sodPh2AhJIAG1ZYT5ga
+    3nwb3G0mQrnmFOm4Qa4C2JwbajMdJBWMeam4uZKQraajbqcBHzCXvMtQm1fQbm3S2rexTo
+    KA6wW/vDabSoXlut9Nm5uKTSjp20eGQ9lpLOxOz31c8eLm8Mlp10sjOYDNZA
+X-ME-Proxy: <xmx:czDzaoanLMdLTFqhzMhrxv5H09chgFe3GMMhc1XBCkfiMJQ_ckta8Q>
+    <xmx:czDzauzWTK7EYc76X_4JSXvP7e9Yqejr2yggz6O-tuvCpsEWBQGUaQ>
+    <xmx:czDzasWQEDY8T3p3eaJhPzKDKFxYGPCQnFb1-n-prg7tBs3f0gJpWA>
+    <xmx:czDzaqbpJaYjvNkk5zy3xoww5EsXMA5_awnvU25FYCgSdhgQQ41Hfg>
+    <xmx:czDzavOKwCwywHfR1JNgdmNe33GAeUXrw31wmu_3YBRbMsucyl2ChD_t>
+Feedback-ID: ifa6e4810:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 7D2B9780070; Tue, 10 Nov 2026 09:55:47 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,59 +77,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 1/8] net: add tx_extra_headroom and
- LL_ALLOC_SPACE()
-To: Tianyi Gao <tianyi@cloudflare.com>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>,
- David Keogh <dkeogh@amazon.com>, Daniel Borkmann <daniel@iogearbox.net>,
- David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea <dtatulea@nvidia.com>,
- Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam <alasdair@mcwilliam.dev>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Stanislav Fomichev <sdf@fomichev.me>,
- Magnus Karlsson <magnus.karlsson@intel.com>, David Ahern
- <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
- Alexei Starovoitov <ast@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Donald Hunter <donald.hunter@gmail.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
- Randy Dunlap <rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>,
- =?UTF-8?Q?Asbj=C3=B8rn_Sloth_T=C3=B8nnesen?= <ast@fiberby.net>,
- Danielle Ratson <danieller@nvidia.com>, Kuniyuki Iwashima
- <kuniyu@google.com>, bpf@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com,
- nh-open-source@amazon.com
-References: <cover.1794020868.git.tianyi@cloudflare.com>
- <e90e748e0aefa7cbe1c2b31b8c7902ccf135c3f2.1794020868.git.tianyi@cloudflare.com>
- <willemdebruijn.kernel.1d64e7848503b@gmail.com>
- <20261107182526.69543-1-tianyi@cloudflare.com>
- <willemdebruijn.kernel.2c6a653eb65fa@gmail.com>
- <20261108214356.95406-1-tianyi@cloudflare.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20261108214356.95406-1-tianyi@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-ThreadId: AKCAcWHxcB8B
+Date: Tue, 10 Nov 2026 09:55:27 -0500
+From: "Chuck Lever" <cel@kernel.org>
+To: "Christian Brauner" <brauner@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: "Jann Horn" <jannh@google.com>, "Chris Mason" <mason@kernel.org>,
+ "Josef Bacik" <josef@toxicpanda.com>, "Christoph Hellwig" <hch@lst.de>,
+ "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan Kara" <jack@suse.cz>,
+ "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+ target-devel@vger.kernel.org, driver-core@lists.linux.dev,
+ linux-mm@kvack.org, bpf@vger.kernel.org,
+ linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+ apparmor@lists.ubuntu.com, linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
+ fuse-devel@lists.linux.dev, linux-efi@vger.kernel.org,
+ xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev,
+ linux-s390@vger.kernel.org, "Linuxppc Dev" <linuxppc-dev@lists.ozlabs.org>,
+ linux-usb@vger.kernel.org, "Amir Goldstein" <amir73il@gmail.com>,
+ linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
+Message-Id: <47b8b8cb-aadb-4f84-aa5c-c5a74d73fac1@app.fastmail.com>
+In-Reply-To: <20261110-work-loop-pseudo-v1-21-4c998976c6c7@kernel.org>
+References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
+ <20261110-work-loop-pseudo-v1-21-4c998976c6c7@kernel.org>
+Subject: Re: [PATCH RFC 21/41] nfsd: use fc_init_pseudo()
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
 
-On 11/8/26 22:43, Tianyi Gao wrote:
-> - That growth can move skbs into a larger kmalloc size without anyone
->    deciding it. On x86_64, for 1500-byte MTU UDP over IPv4 on an
->    Ethernet device, 194 bytes or more moves the skb head from
->    kmalloc-2048 to kmalloc-4096. That adds 2048 bytes to the memory and
->    the truesize of each such skb. The IFLA_TX_EXTRA_HEADROOM UAPI can
->    do the same, but then the operator chose to pay that cost.
 
-This reminds me that I have previously proposed changing both the
-generic XDP and veth headroom check to use 192 bytes instead of 256
-bytes.  This makes sense because Intel driver for native XDP already set
-this to 192 bytes.  Exactly due to 1500 MTU packets will fit into a 2048
-alignment. e.g. 2048 -192 -320 (shared_info) = 1536 bytes left.
+On Tue, Nov 10, 2026, at 4:14 AM, Christian Brauner wrote:
+> Initialize the nfsd filesystem as a pseudo filesystem. This raises
+> SB_I_PSEUDO and also SB_I_NOEXEC and SB_I_NODEV. It never holds
+> executables or device nodes.
+>
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> ---
+>  fs/nfsd/nfsctl.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/fs/nfsd/nfsctl.c b/fs/nfsd/nfsctl.c
+> index f32311f2d7cf..ce2666deddbd 100644
+> --- a/fs/nfsd/nfsctl.c
+> +++ b/fs/nfsd/nfsctl.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/namei.h>
+>  #include <linux/ctype.h>
+>  #include <linux/fs_context.h>
+> +#include <linux/pseudo_fs.h>
+> 
+>  #include <linux/sunrpc/cache.h>
+>  #include <linux/sunrpc/svcsock.h>
+> @@ -1375,6 +1376,7 @@ static int nfsd_init_fs_context(struct fs_context *fc)
+>  {
+>  	put_user_ns(fc->user_ns);
+>  	fc->user_ns = get_user_ns(fc->net_ns->user_ns);
+> +	fc_init_pseudo(fc);
+>  	fc->ops = &nfsd_fs_context_ops;
+>  	return 0;
+>  }
+>
+> -- 
+> 2.53.0
 
-Reading about, this would also translate into a performance benefit?
+Acked-by: Chuck Lever <cel@kernel.org>
 
---Jesper
+
+-- 
+Chuck Lever (Come to NFS bake-a-thon! https://nfsv4bat.org)
