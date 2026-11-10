@@ -1,54 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1794325089;
-	b=y3uR5yHtrRYQizdxRT07rEe8XFqsVJA7Xe5MksFW3mpNsr+n3yy5T0OqKRuu+aDOz6Za
-	 AZNMfzi1f77NCls2ul/DCG6OJZgKt09uc99X4Yi+RxpVNChTgfgP7JyGXw8QL1aH8EJQn
-	 A4Nn378S1Mj99TUgnDc13gk+BJm/uI7f5bCJIOIvTqv6JO49D7YAYu2gu23GY8+ARVTy4
-	 eUOUhslhEppqCC/Lav4tlM5o3+y6MpWYSvlKsUzybuUooDSqcEQx7qhUZb7gWuwSGC6QC
-	 HxOFyN6J62g3mH3x87mryeWBLb1vvV0ijT8GI7L0mlBtZjSiBi9P8HoeviCheTjjkag==
+	b=NTisToWK5iIrqOe+pQ6dpDogiUtp4SBCMqCbcsTaLfUcj9KDwyeDnTTiFYrQD5kHW/aw
+	 n7k5io7z2zOrvbPrt+/EdTiHkWBo2BR8XiMEg1Alhh9DwpWU05EGNfWqWPrM5ZMPzXicw
+	 WHIjNaFC0q1avPUie8pEUe3V9/hX1GEfp9x4ebHmG8IIN/aSnWzdzaLMYHQEk924Kho4a
+	 Q6PylLrU/GjRpXUbTs66Txl0E+zdAWSTJ17IGflAM30GHtuzVFtkfbn2z+spBJBLv7U5I
+	 JbTVv8vZEiMJ8SRIg5DscqH2oWs2XJhtg+4OR1fm/cgaSIZpeakn5/1n54LDNAxy+5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1794325089;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=IVo53ZWRUxUZncXLcouJ/TarKckoa/ysa4d9WVjKI9w=;
-	b=C6oUnB/wh4YI3vdij68QjELPhXR864bIvKfEtORTJ0eGod+vB93poHrkszND/hlG6HaE
-	 Ulu7YRAAjN9ZqIJud7VLdx4BvfgvCeyd2D2/finqwVK2q0CTdY8GGfWxiqxUMD+3MYOGw
-	 YZQs/xH8eRhTYYE9el8/O9rG/jGfsMqBKfP0iKvr0SvZgude9wLsxQDP0G0vuUtOmyhW+
-	 /6BqR0S2SXjM2CTvXjTSdb4iQwbmZsS6u2uayzqR2Y//FucrlcDHiktKStoNIm3NjmjHd
-	 Z7E++i9DTuLLASCVHsLk5iqlih7JMeWp3dVWg3rhjDfL8zc3aj0yDFAQL9cezUB4okA==
+	bh=3gKubFJsAndnwMy+71Kh/vTDw3q4Y5FuAjFKOiBoGMU=;
+	b=m3BtGMaB0efwSDbdN+SqjlkRP5mHp0Ebfu/+9WdYHvSja7/jbNhAqk1xsRBX3SztT9T2
+	 FOAEVlizqF+Sz2Lmj5NC++//V9UGHW606XjZFpF2ifKntwNK79yvMO3n5IqqwvXZ3/TmX
+	 EfrqWVuJNZKNaM5GQF7ybOkuy4+t/Ynq2nOvsahk27BJYR2cmkuhGzYkE659xgbqe7KI8
+	 MslgX06PWmtVs6hBTpa1jG5KlyAKm1mU6Jozth882C7fsMmScWx/YgSKyWGFPF4CIbAtV
+	 2JmnE3F33rjhI+z0kw1gaqbkfpwhP/MLOFmJq6CMwgTPka7V4+XcJXmvD1TYd7UnWCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VpxYX4HJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="kWADNG/S";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F232606A31C;
-	Tue, 10 Nov 2026 15:38:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F32C606A320;
+	Tue, 10 Nov 2026 15:38:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VpxYX4HJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89F011F008A1;
-	Tue, 10 Nov 2026 15:38:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kWADNG/S
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B24761F0089F;
+	Tue, 10 Nov 2026 15:38:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1794325088;
-	bh=IVo53ZWRUxUZncXLcouJ/TarKckoa/ysa4d9WVjKI9w=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=VpxYX4HJfpGO3in5SPsTkLkztMer+aY4KhEdu4iJt4LxMLP6GYp5AQStRQi8bGNTZ
-	 +Lva1wWNVdUP8kN4bWaKG2te4boPLWczOKmXofNhsbtqFqyHjaa73+Q+zdozZQxeEQ
-	 x3IKkdM3ttweOOZTdd9KYRFJi2OVVyrqtPWEf7Z1gggMJmyLqTY+dLP5YW1ESu9xo1
-	 3eeNj+M1zD+YSeQCCG89K++LjDaUiZHIhiXLIucTKEsdo45AXqsP1eDMyW0wOPLbg2
-	 AwyEWZLcm+Twz2HUfB3N5aq9ssbBBOsz1bhGvsXSr29Ocg9eVvgGb8lm9k7Ud5kzzG
-	 +kwZO5mWWwmbg==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Naveen N Rao <naveen@kernel.org>, "David S. Miller" <davem@davemloft.net>, Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Alan Maguire <almagui@kernel.org>, x86@kernel.org, linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 04/13] kprobes: Maintain an rbtree of registered probes
-Date: Wed, 11 Nov 2026 00:38:03 +0900
-Message-ID: <undine-1794325083765212173-9c2dd2a4d5c010fe@undined.local>
-X-Mailer: UndineD 0.1
-In-Reply-To: <avLz8k0gdZwYTeA5@krava>
-References: <20261109194916.1089703-1-jolsa@kernel.org> <20261109195517.1090787-1-jolsa@kernel.org> <undine-1794298339502831052-1b6960b8f9b38e7d@undined.local> <avLz8k0gdZwYTeA5@krava>
+	bh=3gKubFJsAndnwMy+71Kh/vTDw3q4Y5FuAjFKOiBoGMU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=kWADNG/SAFTOBU7/W20qxtY1BfKFVTfX4B8in6u+pRNigbK3pR+rrgb0EJh4pRITv
+	 htVv7dXVeoUcJaeBjuCHwOFqnBqZYoawP54qVUPC484iCLbUPJUkgrftjNO8xK0UwS
+	 CEk8ko14HNuQAB3psAhB1vA+fejKb/oUziEc85nhFa1L2qeUUSE90Ebi7WkQLbfqC7
+	 7QLqMMAO5hH/dWbhWxZx38rAhZjmol6n4/HiTY6Eg4plmKZ66aUp9KyJZVppGS3lmQ
+	 yfnNtLvbc7e3WX9hmCJ+AaVqqiphykLPcugOcR60DSqz1PnY53jV4LwbkiSA4cQMrq
+	 bHP7ySUz8qm1Q==
+Date: Tue, 10 Nov 2026 07:38:07 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
+ <edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>, Simon
+ Horman <horms@kernel.org>, David Keogh <dkeogh@amazon.com>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, David
+ Woodhouse <dwmw2@infradead.org>, Dragos Tatulea <dtatulea@nvidia.com>,
+ Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam
+ <alasdair@mcwilliam.dev>, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ Magnus Karlsson <magnus.karlsson@intel.com>, David Ahern
+ <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, Alexei Starovoitov
+ <ast@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Donald Hunter
+ <donald.hunter@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Jonathan
+ Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan
+ <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, Breno Leitao
+ <leitao@debian.org>, =?UTF-8?B?QXNiasO4cm4=?= Sloth =?UTF-8?B?VMO4bm5l?=
+ =?UTF-8?B?c2Vu?= <ast@fiberby.net>, Danielle Ratson <danieller@nvidia.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, bpf@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@cloudflare.com, nh-open-source@amazon.com
+Subject: Re: [PATCH net-next 8/8] selftests: net: tx_extra_headroom: test
+ veth peer at creation
+Message-ID: <20261110073807.2fa62e6c@kernel.org>
+In-Reply-To: <73b9d23a4190cdd02e89d3a2ce8a1a21ad5feadb.1794020868.git.tianyi@cloudflare.com>
+References: <cover.1794020868.git.tianyi@cloudflare.com>
+	<73b9d23a4190cdd02e89d3a2ce8a1a21ad5feadb.1794020868.git.tianyi@cloudflare.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,42 +78,17 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, 10 Nov 2026 11:37:38 +0100, Jiri Olsa <olsajiri@gmail.com> wrote:
-> On Tue, Nov 10, 2026 at 08:12:19AM +0000, Masami Hiramatsu (Google) wrote:
-> > On Mon,  9 Nov 2026 20:55:17 +0100, Jiri Olsa <jolsa@kernel.org> wrote:
-> > > Add an address-ordered rbtree for registered probes. Keep it synchronized
-> > > with the hash table when probes are added, removed, or replaced by
-> > > aggregator probes.
-> > 
-> > Could you tell me why don't you use hlist (get_kprobe) instead?
-> > I would NOT like 2 different lists which is basically doing the
-> > same thing.
-> 
-> The speedup comes from finding the first relevant kprobe, then iterating
-> over the remaining probes in address order. The hash table supports
-> exact-address lookups, but it doesn’t provide that ordering.
-> 
-> I agree that maintaining both indexes is less convenient. What do you think
-> about centralizing their updates as in the change below? untested
+On Sat,  7 Nov 2026 03:34:27 +0000 Tianyi Gao wrote:
+> +def test_veth_peer_at_creation() -> None:
+> +    """ip can set a different value on each end of a new veth pair."""
+> +    if "tx_extra_headroom" not in cmd("ip link help", fail=False).stderr:
+> +        raise KsftSkipEx("iproute2 does not support tx_extra_headroom")
+> +
+> +    with NetNS() as ns, NetNSEnter(str(ns)):
+> +        ip("link add veth0 tx_extra_headroom 256 type veth "
+> +           "peer name veth1 tx_extra_headroom 128")
 
-If you can replace the hash table with other faster design, it is OK to me.
-But I would like to avoid this simple-adding another lookup table for the
-rare usage case (because of the maintenance cost, and duplicating a list
-makes it difficult to handle cases where discrepancies arise between the
-two lists.)
-
-Can you change the size of the hashtable and measure how the performance
-is changed? I need more options.
-
-Thanks,
-
-> 
-> jirka
-> 
-> 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Please use Python YNL directly, we don't want the dependency on iproute2
