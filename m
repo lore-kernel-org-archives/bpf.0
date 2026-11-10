@@ -1,101 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794270506;
-	b=Fg1wg3KaWxDfiHmntKUw2hI6u43Fg2kxQedOda0vY6w35dTYMThJrwEo1loIoqn3Iei0
-	 Cwi4yTJMzgcEsCje/MODEyTiWeKGkgGAieGVleUCSmxCh3fezk2ITWgYx8OiWaXVNIdXx
-	 MCZnTJgzot6lEvlnqw82iX25WE01suWVzhpCJuVFr9RPUzQ/aacee94nGC/2XD8JfaYAf
-	 pDoZgVR665jV8BOHDQ9Bu3gvrX1EvkWi29oMG+PWTcAkBkbrOQLR2Y3m1zxPQikvNFNXf
-	 zAAOuPQrMEV4DmeORNSKVEU0viOGeK1N9whWXZite+TK/oUKpgWkqRwzo4VWS4c7rqQ==
+	t=1794271123;
+	b=S6aGpaPR3ZqwufkVIuqhwGTdiaI/gAtHXFp+oD7Qa6BqkQn150Cgws8b2H1NdRKl5SdF
+	 TrFiXIht+Al1/Gcw74YE/q5P6L3pzls1bpBYH0P8TT8OnM9GdUWc2ik/XGlXAIy91rkPE
+	 bC6eJ72cm6AKouozPuSpYchHasyWCMN8ry27I6vKkkRwy8kUXYY04rMMHbe9SPwQVw2Zn
+	 KlFinuzI4RgaxCE7vESMDiT50jcsbgxgPjRMbcNc5tRyEA/C3Y33iAouYH1KdxqkH/Nbw
+	 EJBgIQ3fdK4IUnBj8h+e8/kvvVBmHMGzh1qJVAhjjTxwjNh5rUM1ay2FIDOvB8rCI2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794270506;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794271123;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=FkWCmSHYek+k2N3lqZiLvp+gqdq6t1ALFR2bb2QfZzQ=;
-	b=wKsURqSk7mAOPCbs/VKVN3N3LumOwOxwDKPwQ+TszRNUp2BKsmZql0HIe+9R9BOpARcY
-	 /pER8BAvvc1B7nSXo5ii64SJlzjCAAsYKd9UbNfEDz8XcJywlLshthgA146GE+G+dYBMz
-	 5VqkSommw8IofKtSct9Tys+CU46k87w0IvzasAKF78pY3LFY2302EyvorIbk14QMBTcLC
-	 dWGYs9gzQbySSxy/K2Klt645gt6fmUn5Svq5+TzgWsyhM4SCCxX6IKuLfiQ3Ar67ZZCeq
-	 arcJ/AOmZ9WPOrqKD0BKUGarZlrNL6yP4pT/aUErub36rN79wxW4jGNn+rzIGVjpruw==
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=l+Kx5Q2MzXQktWMLbFrc8Y3IyQiOAkwrBf1MLkRxN4I=;
+	b=QmKB0cIWKP3f5oaWpDYlYtVWb9WCBnIzJ2OwWzcuyYRyemtg3OuzYBz1Asu6Mth/eCWU
+	 d4OS6znqlRj1+jkA63U7S8+6pu3JnrPlSQOQ6GldL2kjUEekVXGQpCl73crhjUEo34ACO
+	 kNwacAXncqs5OtVjFPlRA4iTDSxQw+l7+awk3aQG0LK8Kw8EYjjib/L7dzL1JTP12+W9R
+	 1yHzOm3UsiwHwgkP1sXochqzZntclkEXZJzT5swMTgQkph510BxZv0EmNhW0UWQwUdc/U
+	 cGBxu5S5FCVU6kcxCb60erCZhNVHX9dZsGvXa+7nOTz3+LVQMmtOEEwIOaeb2IVPD6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iGhWP0UR;
-	arc=none smtp.remote-ip=74.125.225.130
-Received: from mail-wm2-f2.google.com (mail-wm2-f2.google.com [74.125.225.130])
+	dmarc=none header.from=etsalapatis.com;
+	spf=pass smtp.mailfrom=etsalapatis.com;
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=mRw25CGF;
+	arc=none smtp.remote-ip=209.85.216.49
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E69606A321
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 00:28:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89E69606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7061E606A321
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 00:38:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7061E606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iGhWP0UR
-Received: by mail-wm2-f2.google.com with SMTP id 5b1f17b1804b1-4a217e6274cso5044825e9.1
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 16:28:25 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=mRw25CGF
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3ac91ac8924so889716a91.1
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 16:38:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794270504; x=1794875304; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=FkWCmSHYek+k2N3lqZiLvp+gqdq6t1ALFR2bb2QfZzQ=;
-        b=iGhWP0URI99LHCq+z+EmpcHxHE+4w921VOJMKHveszsmDKlg4nhGnJB2g/FHwcydLg
-         O3fL2Xl0/FFj5pIpl1aQioathJiZL5GR1vd5jdGvPe6olQbca+m43C3MLOXkW0Ro/4YL
-         FEKHQ44U03u8CuIJgcoKoagBij8Y0zl3g4yi1ofWckQU5DSTm0bWUuC+lrJDwnqVvb6h
-         zIiO4vTSyvw61nb3tTIMGoeqhwe+MyeWeR36Wf7rRrRhSUK+rwr9WM7jZ8dS2KlLKzYD
-         AZhJheGFGhV4i8yuDBFZUw0lBlP5M3eyyGR4NJ9L8BKlooS/t6g6NIpelyonMvipcEAe
-         ppDA==
+        d=etsalapatis.com; s=google; t=1794271122; x=1794875922; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=l+Kx5Q2MzXQktWMLbFrc8Y3IyQiOAkwrBf1MLkRxN4I=;
+        b=mRw25CGFYjzNIzE0CYf+SKq2kKbrX0DbPxZx6XDgI2srlpVo1KJ2f5jIqGsTDDFkR0
+         hKKRQBVgBidY7Xg016vIqWNPFMsz7860j0XnqFl/WUFlyBlh+VlXNr6U3rviE/2xifd6
+         5c2Swr/7A+yqsnIowg8fruTTnAxiwWhiyJgVw+6o2WmenH2q0RHrGxvxyCVjslR/k7/u
+         4E5ef1t85ZoNT4SU8djzlyoxU/QuU9yPJ2ueGJQQkFisOxDO6WXRs/+abXqIBy2tHjPh
+         W8ryKxjdPfB4E93IP+3EQ6eaqhCet8GlS3H0dBVhpwKSYts44Q6hGXYa+RtXACP4FGYK
+         nYHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794270504; x=1794875304;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=FkWCmSHYek+k2N3lqZiLvp+gqdq6t1ALFR2bb2QfZzQ=;
-        b=WPE2xaMJB9CzPGDSCeH8mQ0Pwv4++e4UNpIw7aIvZ2+vqsx2YuEncv20PWr+cirzMS
-         IZNWuArrHI3/dIeX1i8mLyTm8xI1awQwXRnQ2qLySVLZkjZ44QWZ38iPz8VWXng/3Nvu
-         E6cJjrHOXu3prGZQaoAOIV+m9S7NrzuT1sdkyWVbGv8V/cQ8aJUriq4Jgf2UeeWUsTHK
-         G6j2pREnEhZc9ETIePpWETPJJGFKi5DSJVcB4+xTwTifUr5jmVWL6+G9oQ99rlmu+T+4
-         B937q84uHQOiFdnejoNZWkWhBJNNBL3jzmRoeIYC0jW2bdExfx+9QSc5m2rVfT4Xid6O
-         o9Zg==
-X-Gm-Message-State: APuU4Z9GLOeRvLil4SzfH2T3iqWHcumaHod9QSi4mStHrlvi4GJSMiL0
-	mh+RlA239vhCHwma0w7FdPX8lL0f0mMoKPMi2NfJs0UbLCa28lQqXe84uI0uunfb
-X-Gm-Gg: AYBFou3yCI40eCrNkT5rRmh4SiwHkxhgPCbA1DMMXAUUZJcST1k9ue0qKOCclDLgYuK
-	UNER4QLIzEWLj8pDui/fibPIkPh7r/TLB95vhSMVQ9I/BQ7nM7kdSaNIENaqllubkYn81U9Lu9g
-	0xfBy8Bd0GaUgshMS9NCBSSoxljfXKkHiY9NacqXO54iWgfrOyvR5ODGC7GITJpKOnYsxc/PxGc
-	UpYXKSIbbYWS+6wBj65NDmq/sTJT7jAAUX8T2UI1gJWQ8VGGge3zMA7bsUuZPpSRYW6IUb+686/
-	d6Igu9m96v48fnoyIzKz2fBb/J7ffc3WOIm2MYGIRFsSMX50iyjL9bPNBuV8xPgQBiJWEpbhhY8
-	1T7+Byb2YkmaN7m4TUjPq4HUIRI7NuAmDUnwh1A1H9zEkuqdop62THjIgu1AfWR/kBxEGnPHy74
-	nF/k4+6Q/l/TKiwLHdT7WZc3Lvco89Fnc6BEdlpjjwj4xy/74NghS274H9mY0h5h9CYlXlEZPpl
-	68RiPaOBkl01XD7rgLGw+RMYIU7rhNanGGWWCTAPL9R2/7vtitT6DSY3JY/pI51KJzNOtFQoa08
-	MRs1CPcdAQfINsd7Xjl4RkzeFj6cpkOO1+iD9HO1O7f3dtdmcR7necmn6CqOw5z9iytVOiRvclc
-	k3M9H7ZqSYHT6wTNCRUroQTZSOBrYbaXzic9TNjzYzh5ygjQJrTKzRN0FrqZdEF5LAAZa
-X-Received: by 2002:a05:600d:82d3:b0:4a3:59c2:b41e with SMTP id 5b1f17b1804b1-4ba023064f4mr14196825e9.4.1794270503819;
-        Mon, 09 Nov 2026 16:28:23 -0800 (PST)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba02387ad9sm26377255e9.5.2026.11.09.16.28.22
+        d=1e100.net; s=20260707; t=1794271122; x=1794875922;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=l+Kx5Q2MzXQktWMLbFrc8Y3IyQiOAkwrBf1MLkRxN4I=;
+        b=YPEjL6IJygpWqFJ1VUcu0dHl1itJHi7Ni7KDZY9nJSKZXBW7/KMTMk03laxVsC+w48
+         6WwqVSxm6vcGgrmzrJp8AXOPFmbPa81EmkalNhjxrtuIro9iaBLjF3sP9C4pRUqyOMsv
+         GhWphhD7yR2fMUgxb+1Z6q+sMUZ8mK/QRv+2MtlamdbxhQUyDwZUqcIBatjlsnj5zpnl
+         lw0o5VEhJDNOlzIZ8/fhYizTCcAav1wvZ/kOaQWHhVfdUfRuJcCIzQ6Jzi5uPzhxPhiP
+         QaemlMxKc1FYogBAGLQ8Gb5QLZdRJm6EL5iErsOlW5AgyAf1T8eG/8quSFRGsgpEmYYQ
+         eJBg==
+X-Gm-Message-State: APuU4Z9yHv/rsOtgHe49qwcuVOYqQd13T5pPdDtGV3+N5+TFfDqiciZb
+	9CzNYDdxJpisnEEo6TqKs8XJYOXu4GfWGUlLsALzJmkx5hsW21zk7qC8GhjL9tkG06JGo3WBECQ
+	yC1nP
+X-Gm-Gg: AYBFou0WSqLiqhqmvgWnEs6He2gUwlIllIu/a8ZSvxoDO8H+xuRzlOhwJ0/7OMaIlX4
+	nARDLmQ+f0Hvg/XlFysW2QI9/JDvCupsGyp08RcDOOmabtMxRtyY5oX2x0m2lljnLGdeuuDUk2p
+	zoCszzlFiu5AmhkeEtlgjg3Iv9KVlrrOfDdZjpPw6XeDw6YNsNK6uBo7E7NPnHk31eFSqwrXpVO
+	lsAEJDUEQ0xEmiLeNTdZGP+tKrTZpxqsthrsuTbyNQxfZPTxUEQBDaNoMuHyE/8GO0WEM0F5VSa
+	BDNa2egiuNdqEWv3z3lN+XoVm3WL4b1Td4j2J3e5d031xnErL5iJrSlBu01C2y3DM+KKFAogFEg
+	t5vCUXZVh/Fsp+4NcEUOK/ef/oyraEbzI/xaJDzq9Yx7XoLDIHvliC5/EXfgzYUPHyMiOcYYjcU
+	hn17aLM2ElgZU+EvCwJarYIK+BWoFfndFc+8dTeSpWbrMiYMuv5iZLXaP+rvDlAtelAq2ZTSnT2
+	b6uWUvQs5AXqqTRh2QHSH6eNnSa0jBA4C9jfGK7fGXN5zPpvsjIsj1mPkZpNQQHaO4GxWM5yItN
+	+sxTZquhgNGkit6VCgCp/wVQa5b5H+5XTOLnzo4Bf86Ls5/Je596u+SIa2N2a6DUUefZOVRZJCl
+	fkxqKGIQUq1U3T6m6wHFH7XYyhXk=
+X-Received: by 2002:a17:90b:5805:b0:3a4:fe48:d410 with SMTP id 98e67ed59e1d1-3b166cef88amr1244377a91.30.1794271121541;
+        Mon, 09 Nov 2026 16:38:41 -0800 (PST)
+Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b168eacb73sm640209a91.1.2026.11.09.16.38.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 16:28:22 -0800 (PST)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+        Mon, 09 Nov 2026 16:38:41 -0800 (PST)
+From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 20/20] selftests/bpf: Test bpf_kthread_attach_cgroup()
-Date: Tue, 10 Nov 2026 01:27:42 +0100
-Message-ID: <ddfc2cdff980669823aa44380dee237e36b648cf.1794269507.git.memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <cover.1794269506.git.memxor@gmail.com>
-References: <cover.1794269506.git.memxor@gmail.com>
+	Harry Yoo <harry@kernel.org>
+Subject: [PATCH bpf-next v5 0/9] bpf libarena allocator improvements
+Date: Tue, 10 Nov 2026 00:38:29 +0000
+Message-ID: <20261110003838.8739-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,271 +99,159 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10346; i=memxor@gmail.com; h=from:subject:message-id; bh=TaBBkpRJ5mOfFgUZ84DbwzhDRAzyydaHgaW2TzyReBo=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetTopds7FV/WZ0p/2Qlf5XqJHGwnWpacTNu+kEhgW0cz 51ObQ3vKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQWPWD4Z8j8Vyv/f9ufpsk3 PYq3/5qcufUeD8vE6LQJQTN/58Vt+snIcGGf66fKeIX3J9feOe62/VH66qXCnHffn5tZqllz2n4 qFwcA
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Move a thread into a cgroup before its start and into another while it
-runs, and check through bpf_get_current_cgroup_id() in its body that
-each move took effect by its next iteration. The thread populates the
-cgroup it is in, which cgroup.events reports, and the cgroup it left is
-empty again; after the stop the second cgroup empties too, once the
-thread's exit has left it, which the test waits for since kthread_stop()
-returns before cgroup_exit() runs. The test's work directory has
-controllers enabled for its children, so a move into it is refused with
--EBUSY, the constraint cgroup.procs enforces; the check needs a domain
-controller enabled there, since threaded controllers alone leave the
-parent able to hold processes, and is skipped otherwise. Nonzero flags
-and a task that is no BPF kthread are refused as by the other control
-kfuncs.
+The libarena buddy allocator's design has up until now prioritized
+ease of verification. With new verifier features like unlimited
+global stack frames and a large stack size we can now improve
+the allocator's performance and robustness.
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../testing/selftests/bpf/bpf_experimental.h  |  2 +
- .../selftests/bpf/prog_tests/bpf_kthread.c    | 88 +++++++++++++++++++
- .../testing/selftests/bpf/progs/bpf_kthread.c | 43 ++++++++-
- 3 files changed, 132 insertions(+), 1 deletion(-)
+This patch introduces per-CPU caches for the allocator. The overall
+caching design is inspired by tcmalloc. Each CPU has its own static
+object LIFOs, one for each allocator order. This speeds up allocation
+and freeing for BPF programs that have some degree of locality. The
+CPU caches are lockless. The caches are replenished from and spilled
+into "transfer caches", per-order caches shared between the CPUs that
+amortize the cost of spilling/refilling. Data from the transfer caches
+is in turn moved from and to the allocator.
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index e41d326a0017..49d7a45f9707 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -358,6 +358,8 @@ extern struct task_struct *bpf_kthread_create(int (callback_fn)(__u64 arg), __u6
- 					      __u64 flags) __weak __ksym;
- extern int bpf_kthread_start(struct task_struct *task, __u64 flags) __weak __ksym;
- extern int bpf_kthread_bind(struct task_struct *task, __u32 cpu, __u64 flags) __weak __ksym;
-+extern int bpf_kthread_attach_cgroup(struct task_struct *task, struct cgroup *cgrp,
-+				     __u64 flags) __weak __ksym;
- extern int bpf_kthread_stop(struct task_struct *task, __u64 flags) __weak __ksym;
- extern bool bpf_kthread_should_stop(void) __weak __ksym;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_kthread.c b/tools/testing/selftests/bpf/prog_tests/bpf_kthread.c
-index e32a975c7a0d..fabd6b9e5242 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_kthread.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_kthread.c
-@@ -3,6 +3,7 @@
- 
- #include <test_progs.h>
- #include <sched.h>
-+#include "cgroup_helpers.h"
- #include "bpf_kthread.skel.h"
- #include "verifier_bpf_kthread.skel.h"
- 
-@@ -13,6 +14,7 @@ struct kthread_args {
- 	__u32 body;
- 	__u32 bind;
- 	__u32 cpu;
-+	__u64 cgroup_id;
- };
- 
- enum body {
-@@ -67,6 +69,16 @@ static int bind_thread(struct bpf_kthread *skel, __u32 idx, __u32 cpu)
- 	return retval;
- }
- 
-+static int attach_cgroup(struct bpf_kthread *skel, __u32 idx, __u64 cgroup_id)
-+{
-+	struct kthread_args args = { .idx = idx, .cgroup_id = cgroup_id };
-+	int retval;
-+
-+	if (!ASSERT_OK(run_prog(skel->progs.attach_cgroup, &args, &retval), "attach_cgroup"))
-+		return -EFAULT;
-+	return retval;
-+}
-+
- /* Returns what the program returned, which for stop_thread is what the stop returned. */
- static int control_thread(struct bpf_program *prog, __u32 idx)
- {
-@@ -383,6 +395,7 @@ static void test_misuse(void)
- 		ASSERT_EQ(retval, 0, "foreign ret");
- 		ASSERT_EQ(skel->bss->foreign_start_ret, -ESRCH, "foreign start ret");
- 		ASSERT_EQ(skel->bss->foreign_stop_ret, -ESRCH, "foreign stop ret");
-+		ASSERT_EQ(skel->bss->foreign_attach_ret, -ESRCH, "foreign attach ret");
- 	}
- 	if (ASSERT_OK(run_prog(skel->progs.misuse, NULL, &retval), "misuse"))
- 		ASSERT_EQ(retval, 0, "misuse ret");
-@@ -520,6 +533,79 @@ static void test_self_bind(void)
- 	bpf_kthread__destroy(skel);
- }
- 
-+/* Whether cgroup.events of the cgroup reports it populated, polling until it says @populated. */
-+static bool wait_populated(const char *path, bool populated)
-+{
-+	const char *want = populated ? "populated 1" : "populated 0";
-+	char buf[256];
-+	int i;
-+
-+	for (i = 0; i < 2000; i++) {
-+		if (!read_cgroup_file(path, "cgroup.events", buf, sizeof(buf)) && strstr(buf, want))
-+			return true;
-+		usleep(1000);
-+	}
-+	return false;
-+}
-+
-+/*
-+ * A thread moved into a cgroup, parked or running, runs there from its next
-+ * iteration on and populates the cgroup until it exits. The test's work
-+ * directory has controllers enabled for its children, so it cannot take the
-+ * thread itself.
-+ */
-+static void test_attach_cgroup(void)
-+{
-+	struct bpf_kthread *skel = NULL;
-+	int fd1 = -1, fd2 = -1;
-+	char subtree[256] = {};
-+	__u64 cg1, cg2;
-+	__u32 loops;
-+
-+	if (!ASSERT_OK(setup_cgroup_environment(), "setup_cgroup_environment"))
-+		return;
-+	fd1 = create_and_get_cgroup("/kthread1");
-+	fd2 = create_and_get_cgroup("/kthread2");
-+	if (!ASSERT_GE(fd1, 0, "create kthread1") || !ASSERT_GE(fd2, 0, "create kthread2"))
-+		goto out;
-+	cg1 = get_cgroup_id("/kthread1");
-+	cg2 = get_cgroup_id("/kthread2");
-+	skel = bpf_kthread__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto out;
-+	if (create_thread(skel, 0, false, BODY_WORKER))
-+		goto out;
-+	/* Only a domain controller in the children makes the parent refuse processes. */
-+	if (!read_cgroup_file("", "cgroup.subtree_control", subtree, sizeof(subtree)) &&
-+	    (strstr(subtree, "memory") || strstr(subtree, "io")))
-+		ASSERT_EQ(attach_cgroup(skel, 0, get_cgroup_id("")), -EBUSY,
-+			  "attach to inner cgroup");
-+	ASSERT_EQ(attach_cgroup(skel, 0, cg1), 0, "attach parked ret");
-+	ASSERT_EQ(start_thread(skel, 0), 0, "start ret");
-+	if (!ASSERT_TRUE(wait_past(&skel->bss->loops[0], 0), "ran"))
-+		goto out;
-+	ASSERT_EQ(skel->bss->cgids[0], cg1, "cgroup after start");
-+	ASSERT_TRUE(wait_populated("/kthread1", true), "kthread1 populated");
-+
-+	ASSERT_EQ(attach_cgroup(skel, 0, cg2), 0, "attach running ret");
-+	loops = skel->bss->loops[0];
-+	ASSERT_GE(wake_thread(skel, 0), 0, "wake ret");
-+	if (ASSERT_TRUE(wait_past(&skel->bss->loops[0], loops), "looped"))
-+		ASSERT_EQ(skel->bss->cgids[0], cg2, "cgroup after move");
-+	ASSERT_TRUE(wait_populated("/kthread1", false), "kthread1 empty");
-+	ASSERT_TRUE(wait_populated("/kthread2", true), "kthread2 populated");
-+
-+	ASSERT_EQ(stop_thread(skel, 0), 0, "stop ret");
-+	ASSERT_TRUE(wait_populated("/kthread2", false), "kthread2 empty");
-+out:
-+	bpf_kthread__destroy(skel);
-+	if (fd1 >= 0)
-+		close(fd1);
-+	if (fd2 >= 0)
-+		close(fd2);
-+	cleanup_cgroup_environment();
-+}
-+
- void test_bpf_kthread(void)
- {
- 	RUN_TESTS(verifier_bpf_kthread);
-@@ -550,4 +636,6 @@ void test_bpf_kthread(void)
- 		test_bind();
- 	if (test__start_subtest("self_bind"))
- 		test_self_bind();
-+	if (test__start_subtest("attach_cgroup"))
-+		test_attach_cgroup();
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_kthread.c b/tools/testing/selftests/bpf/progs/bpf_kthread.c
-index 99ec48339158..3eac7366514f 100644
---- a/tools/testing/selftests/bpf/progs/bpf_kthread.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_kthread.c
-@@ -30,6 +30,7 @@ struct kthread_args {
- 	__u32 body;		/* create: which callback, see enum body */
- 	__u32 bind;		/* create: bind the thread to cpu before starting it */
- 	__u32 cpu;		/* create and bind: the CPU */
-+	__u64 cgroup_id;	/* attach_cgroup: the cgroup to move the thread into */
- };
- 
- enum body {
-@@ -46,11 +47,13 @@ __u32 tids[NR_THREADS];		/* the thread's PID, per slot */
- char comms[NR_THREADS][16];	/* the comm the thread read for itself, per slot */
- __u32 cpus[NR_THREADS];		/* the CPU the thread last ran on, per slot */
- __u32 loops[NR_THREADS];	/* iterations of the body's loop, per slot */
-+__u64 cgids[NR_THREADS];	/* the cgroup the thread last ran in, per slot */
- __u32 exit_now[NR_THREADS];	/* set by the test: the callback returns idx + 1 */
- int self_stop_ret;		/* bpf_kthread_stop() on the calling thread */
- int spawn_ret;			/* bpf_kthread_start() by the spawner */
- int foreign_start_ret;		/* bpf_kthread_start() on a task that is no BPF kthread */
- int foreign_stop_ret;		/* bpf_kthread_stop() on the same */
-+int foreign_attach_ret;		/* bpf_kthread_attach_cgroup() on the same */
- __u32 ring_size;		/* set by the test: threads in the ring */
- __u32 ring_ready;		/* ring threads about to stop their successor */
- int ring_stop_ret[NR_THREADS];	/* what stopping the successor returned, per slot */
-@@ -82,6 +85,7 @@ static int worker(__u64 arg)
- 
- 	bpf_repeat(LOOP_BOUND) {
- 		cpus[idx] = bpf_get_smp_processor_id();
-+		cgids[idx] = bpf_get_current_cgroup_id();
- 		__sync_fetch_and_add(&loops[idx], 1);
- 		if (bpf_kthread_should_stop())
- 			return 0;
-@@ -311,6 +315,40 @@ int bind_thread(struct kthread_args *args)
- 	return ret;
- }
- 
-+/* Move the thread of slot idx into the cgroup args->cgroup_id, running or not. */
-+SEC("syscall")
-+int attach_cgroup(struct kthread_args *args)
-+{
-+	struct task_struct *task;
-+	struct cgroup *cgrp;
-+	int ret = -ENOENT;
-+
-+	task = take(args->idx);
-+	if (!task)
-+		return -ESRCH;
-+	cgrp = bpf_cgroup_from_id(args->cgroup_id);
-+	if (cgrp) {
-+		ret = bpf_kthread_attach_cgroup(task, cgrp, 0);
-+		bpf_cgroup_release(cgrp);
-+	}
-+	publish(args->idx, task);
-+	return ret;
-+}
-+
-+/* bpf_kthread_attach_cgroup() on the root cgroup with @flags. */
-+static int attach_root_cgroup(struct task_struct *task, __u64 flags)
-+{
-+	struct cgroup *cgrp;
-+	int ret;
-+
-+	cgrp = bpf_cgroup_from_id(1);
-+	if (!cgrp)
-+		return -ENOENT;
-+	ret = bpf_kthread_attach_cgroup(task, cgrp, flags);
-+	bpf_cgroup_release(cgrp);
-+	return ret;
-+}
-+
- /* Stop the thread of slot idx and empty the slot; returns what the stop returned. */
- SEC("syscall")
- int stop_thread(struct kthread_args *args)
-@@ -337,6 +375,7 @@ int control_foreign_task(void *ctx)
- 		return -ESRCH;
- 	foreign_start_ret = bpf_kthread_start(task, 0);
- 	foreign_stop_ret = bpf_kthread_stop(task, 0);
-+	foreign_attach_ret = attach_root_cgroup(task, 0);
- 	bpf_task_release(task);
- 	return 0;
- }
-@@ -366,8 +405,10 @@ int misuse(void *ctx)
- 		ret = 4;
- 	else if (bpf_kthread_stop(task, 1) != -EINVAL)
- 		ret = 5;
-+	else if (attach_root_cgroup(task, 1) != -EINVAL)
-+		ret = 6;
- 	else
--		ret = bpf_kthread_stop(task, 0) == -EINTR ? 0 : 6;
-+		ret = bpf_kthread_stop(task, 0) == -EINTR ? 0 : 7;
- 	bpf_task_release(task);
- 	return ret;
- }
+The patchset additionally includes code for allocator reentrancy and
+bulk allocations. The reentrancy code lets us safely allocate from an
+NMI context in general, and from a BPF syscall program context
+locklessly. The bulk allocation API is useful for replenishing the
+allocator caches and also on its own right for speeding up allocations
+during initialization.
+
+Benchmark results from patch 2, run with the options from
+run_bench_libarena.sh (-a, 64-byte allocations) in a 16-vCPU VM, as the
+mean of three runs. Rows are the number of consecutive allocations, and
+then frees, in each benchmark iteration. Columns are the number of
+producers. Each entry shows the latency in ns before and with this
+series, followed by the speedup: the latency before divided by the
+latency with this series, so higher is better.
+
+libarena-malloc-free, where each worker frees its own objects:
+
+Allocation latency (before/after ns, speedup):
+
+allocs         1 prod         2 prod         4 prod         8 prod
+     1    269/68 3.9x    641/68 9.4x  1568/68 22.9x  4550/69 66.4x
+     4    251/63 4.0x    557/63 8.9x  2326/67 34.5x  5221/74 70.4x
+    16    247/61 4.0x  1027/64 16.0x  2570/67 38.1x  5315/74 71.8x
+    64    242/75 3.2x  1129/146 7.8x 2469/190 13.0x 5521/374 14.8x
+   256   242/102 2.4x  1314/184 7.1x 2664/249 10.7x 5542/457 12.1x
+
+Free latency (before/after ns, speedup):
+
+allocs         1 prod         2 prod         4 prod         8 prod
+     1    243/55 4.4x    273/56 4.9x  1428/55 25.9x  4371/56 78.2x
+     4    242/51 4.7x    414/52 8.0x  2303/52 44.5x 5266/51 103.1x
+    16    241/50 4.8x  1056/50 20.9x  2580/50 51.6x 5330/51 105.4x
+    64    240/64 3.8x  1079/86 12.5x 2454/131 18.8x 5538/309 17.9x
+   256   238/124 1.9x 1206/107 11.2x 2681/178 15.0x 5546/406 13.7x
+
+libarena-malloc-xfree, where each worker frees the objects allocated by
+the previous invocation, so with more than one producer most frees
+happen on a different CPU from the allocation:
+
+Allocation latency (before/after ns, speedup):
+
+allocs         1 prod         2 prod         4 prod         8 prod
+     1    291/65 4.5x   857/65 13.2x  1165/67 17.5x  4172/70 59.8x
+     4    243/63 3.9x   754/64 11.7x  2170/66 32.6x  4931/79 62.2x
+    16    231/61 3.8x  1163/63 18.5x  2572/71 36.2x  5438/93 58.7x
+    64    229/75 3.1x  1249/158 7.9x 2824/213 13.3x 5760/411 14.0x
+   256   228/100 2.3x  1269/210 6.0x 2746/264 10.4x 5669/466 12.2x
+
+Free latency (before/after ns, speedup):
+
+allocs         1 prod         2 prod         4 prod         8 prod
+     1    266/55 4.8x   558/56 10.0x  1052/56 18.8x  4050/56 72.3x
+     4    231/51 4.5x   583/52 11.2x  2032/51 39.6x  4875/52 93.9x
+    16    223/50 4.5x  1019/50 20.3x  2492/50 49.6x 5396/51 106.5x
+    64    222/63 3.5x  1156/84 13.8x 2801/122 23.0x 5735/320 17.9x
+   256   221/124 1.8x 1202/113 10.7x 2736/160 17.1x 5656/387 14.6x
+
+Cc: Harry Yoo <harry@kernel.org>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+v4 -> v5 (https://lore.kernel.org/bpf/20261109182055.7581-1-emil@etsalapatis.com/)
+
+- Fix the buddy_alloc_memory() prototype in the per-CPU cache patch so
+  every intermediate patch compiles.
+- Keep buddy_cache_alloc() and buddy_cache_free() static, and make
+  buddy_alloc_nogrow() use the per-CPU caches.
+- Return 0 on arena_spin_trylock() success and -EBUSY on failure, and
+  use that convention directly in the irqsave wrapper.
+- Increase the arena_spin_lock selftest's arena size for the larger
+  qnode array.
+- Validate and poison objects before queuing deferred frees, and keep
+  deferred-drain errors from changing bulk-free ownership semantics.
+- Prevent allocator growth in NMI context.
+- Simplify the cache overflow test's prefill loop.
+
+v3 -> v4 (https://lore.kernel.org/bpf/20261023002056.6647-1-emil@etsalapatis.com/)
+
+- Rebase on bpf-next after the allocator compatibility fixes.
+- Fix arena_spin_trylock() preemption pairing and add an irqsave variant.
+- Raise the arena spinlock and per-CPU cache limits to 8192 (Harry).
+- Use trylocks for the buddy and transfer locks in NMI context, allowing
+  cache refills and spills when they succeed and deferring frees on lock
+  failure. Detach the deferred list with one atomic exchange (Alexei).
+- Move bulk spilling into the batch-refill patch, before the transfer
+  cache, and add the transfer-cache measurements to its commit log
+  (Alexei).
+- Refill from existing chunks without growing the allocator, avoiding
+  virtual-address exhaustion when only individual objects fit (Alexei).
+- Restore smp_store_release() and force buddy_cache_free() inline; the
+  measured free-latency difference disappears with inlining (Kumar).
+- Address reviewer nits and clarify the cache footprint and free contracts.
+
+v2 -> v3 (https://lore.kernel.org/bpf/20261021232641.10063-1-emil@etsalapatis.com/)
+
+- Release the per-CPU cache claim with barrier() and WRITE_ONCE()
+  instead of smp_store_release(), since only contexts on the same CPU
+  claim the cache (Harry).
+
+v1 -> v2 (https://lore.kernel.org/bpf/20261020181900.6755-1-emil@etsalapatis.com/)
+
+- In the transfer cache, avoid taking two locks per free when it is full:
+  check the transfer array's count before taking its lock, and spill the
+  local batch with buddy_free_bulk() when the array is full or busy
+  (Alexei).
+- Simplify the per-CPU caches: keep the guard in struct buddy_cache,
+  claim the cache once per miss or full cache with the refill and spill
+  paths out of line, keep the cache state in struct buddy, and move the
+  definitions into buddy.h (Alexei).
+- Make buddy_free_bulk() fail only when nothing was freed (Alexei).
+- Time frees in the benchmark, add a cross-CPU variant, and add before
+  and after numbers to the cover letter (Alexei).
+- Addressed bot feedback.
+
+Emil Tsalapatis (9):
+  selftests/bpf: libarena: Add bulk buddy allocation helpers
+  selftests/bpf: Add a parallel buddy allocator benchmark
+  selftests/bpf: libarena: Make spinlock trylock match arena_spin_unlock
+  selftests/bpf: libarena: Raise arena spinlock CPU limits
+  selftests/bpf: libarena: Add buddy per-CPU caches
+  selftests/bpf: libarena: Handle NMI reentrancy
+  selftests/bpf: libarena: Refill local caches in batches
+  selftests/bpf: libarena: Add a transfer cache
+  selftests/bpf: libarena: Cover buddy cache fast paths
+
+ tools/testing/selftests/bpf/bench.c           |   4 +
+ .../selftests/bpf/benchs/bench_libarena.c     | 118 +++-
+ .../bpf/benchs/run_bench_libarena.sh          |  16 +
+ .../bpf/libarena/benchs/bench_malloc.bpf.c    | 110 +++
+ .../libarena/include/bpf_arena_spin_lock.h    |  42 +-
+ .../bpf/libarena/include/libarena/buddy.h     |  58 ++
+ .../bpf/libarena/include/libarena/common.h    |   4 +
+ .../bpf/libarena/selftests/test_buddy.bpf.c   | 265 +++++++
+ .../selftests/bpf/libarena/src/buddy.bpf.c    | 645 +++++++++++++++++-
+ .../selftests/bpf/progs/arena_spin_lock.c     |   2 +-
+ 10 files changed, 1209 insertions(+), 55 deletions(-)
+
 -- 
-2.53.0
+2.52.0
 
