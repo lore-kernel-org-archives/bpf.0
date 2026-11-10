@@ -1,56 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794339480;
-	b=LgVkRmawVOiaaaAbi0m4BMmP+87utQaZtSzsFJYmnuDzWIBvHo/Onm9a9PcElmIjO4BE
-	 waBt52AQ/9+DNwbTyTpNHH+YnwyGeVmAiB2TQdDvAcuJ0SOsUKTaXLPcB86LTzD9kRdBy
-	 01etiMcxZYz7y197JO7KPxl9dAWU+ON6teaNxIU6Xx3T9XxiCkMvfVbbiZyb5I/W9jLyx
-	 EKfKnCo0XznhD3za7vA6HaMhexvBPJ3u9C3IvOHNJNyTd4G/F07L7JQd7UaDri+fa/UHC
-	 kCvLvjmQZG+E1+iWx8u+nFghZ8Vbw47VCWNKgM7CGtmF4FlGSOKvWnrlklwp0CgYU0A==
+	t=1794339621;
+	b=ryaFNcQgQQNdNqiufVk/rJezEC9hwdg33FjMqpX1TIZSkDHotLz4tyY9otrYuDsLxoIm
+	 FEGgYw+168GXoaFT6HvyR1/lImCyUTKdsRkacwLPM87PW7Ac0zY2Ay2CsaqD1xeTGb7BI
+	 TEY7GVRf4ZhKXTBCNuVmDsQ+I5r87MhPX6iDdaiQDtAqcP9URYLaoWyuRpU03bN/pTaJs
+	 vCLxe8d2kEbLUsLSjxhb7Ds076YPWY+F8zoFjhAMUg9CstTSZ1jOTWwleOhIZYVgWWhbt
+	 AHGKf5o7fhkwCX1gBN2ekqHlFWUlG0mWLPqjTZJHP8GGyxzW5dyNPROxYfc9JGjnUZA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794339480;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794339621;
 	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
 	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=g8oRdUIPNrM19I+aRr6Xrjnpls3CINQLfjEu+H+Ojoc=;
-	b=KtjJf/tV/dFKoLR1A0/HbYTm11dtLWzKH1pHfFZH7aYMEIiU+nfX2woia5ZJfkH9DiD9
-	 /3aTt9pPgYpBYC6JPXaYAaA/lhlPHCGIMxUUs7nvSq0fDTDc3bBi5xKCsZqo4OlMnsJCp
-	 aFMTlq0wLUu5+yFS8ctwHrCcOhZ9Pzp/2fKe9f3DhzPpVpqZILCpTjwLooHkG3hpwP2QS
-	 V5VlNPeSn8dfFt5uhyO06nrwgXQ1RV975QEkPQLfP20j02dH89JUpLXmNQ/t1c0JzB5fS
-	 kNGgD3w/lghNyawgAVeOx1NCqiXOhYnKEJdGUeNJRScctq0pc8gM1z11ywmWFoEfqPQ==
+	bh=G73EY9C4EDTA4M9pcyoo0q/AnVA2mgjUcIBxeIwlhbg=;
+	b=jxJ4CHR+IAlMwsGqDrujyo/QD9d8WM6/KwcqTf0YWV5iWqb8tCodwjCo0S1SoRsREWbG
+	 59LrmgHlS2PQy7bJDK40dpoAzYxGAXDlq8n+JB1c2qRYPEce6dVtafrcMvfSA5ptaHPWY
+	 VT13uFVlayZBJO2z/7vTz73V08/v3KK7o+NL4m2ew2gamtdXMg57JU+3cyj4SENgFno0D
+	 00Hf7YorQeNes2fV0pVo6FyGE2OSCZP6x0WmD9BmCeXXht5tWOF7zwJ8vHGl2Owcpnnnt
+	 TwsKEFe3Gbvg8ZR9x4sPn1bLLTNsgqrAh2B0kg2m+DCN5WQn6v/POf5XGjunpgRmwkQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d9RvgfLi;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jolVrtOH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF615606A321;
-	Tue, 10 Nov 2026 19:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798BE606A326;
+	Tue, 10 Nov 2026 19:40:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d9RvgfLi
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C131F0089F;
-	Tue, 10 Nov 2026 19:37:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jolVrtOH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275BD1F008BC;
+	Tue, 10 Nov 2026 19:40:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794339479;
-	bh=g8oRdUIPNrM19I+aRr6Xrjnpls3CINQLfjEu+H+Ojoc=;
+	s=k20260515; t=1794339621;
+	bh=G73EY9C4EDTA4M9pcyoo0q/AnVA2mgjUcIBxeIwlhbg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=d9RvgfLiwhMx2uoZTRk00iF9f2Tttz/2KNRZficsLgsK9BeK9joxkHvuIC08qPzh/
-	 i1cbQyRUVoxJH9VVP800QJXCaeHfMzZdoIwIf/pcad2NsAAeRqyHqZg+q5JbDW9wE0
-	 2pzP6p1fj0BYIkI0RmGsdjido0caXr7og3AyCZjfvomKN5obAxG7qeHss1H14Bi1gx
-	 gvzzC17qzHxUeOLgzCIrOxqEvhrIUe3OjYTARttXVwgaP6dOLvwu3I4g2TdFLV/HgU
-	 fJfWaixCRhxHMEW7BbMPu6rq0hF/NTPv48mYa1gq67KSZoSxpTMJ87XexFPY59l5lo
-	 oJVPpU2OeFiBA==
-Date: Tue, 10 Nov 2026 09:37:58 -1000
-Message-ID: <9a45ee48b0984bd959becb01d1d11f1c@kernel.org>
+	b=jolVrtOHWRVXPvbUc7zJiTa26lBRn0uUo4pfZLpn1ofBw4k3knn6PPZIGjAKomBnM
+	 Jjtuqkjy2gC03w7F6uUmaHjyoFKjnnZHDdUNigqu8AQlHxwn7HDJ6n/2MGIy7XZYqo
+	 8SiA14NEo+0ZB+UzDKttkjB/0FMut2AUH80e4M40Ya8wrMKgXDrD2AHoobEXDEb02S
+	 /GVVoip3d/a70LKI+YrzoComxdI7WmE5gxMBldH/s/nmgP6bHuuegr5AvK4ob+NwBk
+	 D1bChjXHIdDGbK4Z/lVqB1BGt4QMOdRkKUNMFkhZIvbPoiLWDVVuwLmxU9l1l9GPrg
+	 PGdbZamv+KIEQ==
+Date: Tue, 10 Nov 2026 09:40:20 -1000
+Message-ID: <d81460af8053a51f9be8a73186025ce7@kernel.org>
 From: Tejun Heo <tj@kernel.org>
 To: Kang Chen <k.chen@smail.nju.edu.cn>
-Cc: void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
- sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, sashiko-bot@kernel.org,
- sashiko-reviews@lists.linux.dev
-Subject: Re: [PATCH] sched_ext: make DSQ iterator stay drained after NULL
-In-Reply-To: <20261110125113.2935742-1-k.chen@smail.nju.edu.cn>
-References: <20261110125113.2935742-1-k.chen@smail.nju.edu.cn>
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ cgroups@vger.kernel.org
+Subject: Re: [PATCH] bpf: make css iterator stay drained after NULL
+In-Reply-To: <20261110125110.2935707-1-k.chen@smail.nju.edu.cn>
+References: <20261110125110.2935707-1-k.chen@smail.nju.edu.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,7 +69,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 
-Applied to sched_ext/for-7.4-fixes.
+On Tue, Nov 10, 2026 at 08:51:10PM +0800, Kang Chen wrote:
+> The css_next_*() helpers start from @start when given a NULL position.
+> bpf_iter_css_next() leaves kit->pos == NULL after the last element, but
+> keeps kit->start set, so a next() call after exhaustion starts the
+> iteration over from @start again.
+>
+> The verifier relies on the iterator contract that once next() returns
+> NULL it keeps returning NULL: process_iter_next_call() marks the
+> iterator DRAINED and treats the result of later next() calls as the
+> constant zero.  A restarted css iteration therefore hands the BPF
+> program a kernel pointer while the verifier believes R0 == 0.
+>
+> Clear kit->start when the position becomes NULL.  bpf_iter_css_destroy()
+> is a no-op, so no cleanup depends on @start after exhaustion.
+>
+> Fixes: 7251d0905e75 ("bpf: Introduce css open-coded iterator kfuncs")
+> Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
+
+Acked-by: Tejun Heo <tj@kernel.org>
+
+BPF folks, how do you want to route this? It can go through the bpf
+tree or I can take it through cgroup/for-7.4-fixes.
 
 Thanks.
 
