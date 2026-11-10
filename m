@@ -1,57 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794318707;
-	b=hVcmXCb9MnInx3oNd8L5UPR2BKfMaAeiMcgiEVWyM4wnmp45QlAvyYbSfvhdamEyJn6i
-	 PO9RnaNcStGyCv0zAzU1VbqRjl/cSWf5N6YRhzVx4WxtnMmAw6SwroWEi7dr5GqbaMMv0
-	 djALbNUlX23S2OFMeEeGb4aaZEWSOKBwZN3h5LDXY3gKu0/k8aseWniOfxOmWZ/5ETyrV
-	 gCcOjVGuhLjshmfrQRjqhbV4MNcWbb233BPikUed/TP7b/iaZdoUn2xtawJpMZbBMm1Fw
-	 U6XuiwftIYTW6cFYMOk9KScn+4UhIXVDkasfZ5vzQtQtRnZ9i2U4ORFGKDGkl8C+7fg==
+	t=1794318793;
+	b=yFHzVsO67y9lF9gRMNj9Vnt+XCD1kdKQkRg1dZm+5N2kDsIuEQa59kGrMP++8s+pwsJE
+	 MiZUqoag/U3+4AkDNx/BJApBs99AO+3ZZWALuvzEFVl/+dNWL9PNWbKirBlf+PqHEBhqn
+	 MkEcoTZL829yqVcR4wR9Wvv3KfXNkbtaPt3nmeyDepVfaHWulI2MO1WLy7gXX4KgI9YHm
+	 qN8YUmgUNVEnv2PAc+tbnL9E6OOb1DAZJcGfISRm6ziYkUtsTsGBNO3TslUwk+CWNwGVo
+	 jw47s4Aao228OZkI5A1ebwmkFdT5O5oHoFlsSeyEVRfj95nf7gv5cGLzyJfmX+axJCA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794318707;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=DgMB87bjjOhJubk+hnBQVvUaHtmOByTmAGnQuDuOPkc=;
-	b=uVfbG7lzFZTKwJ1oRQQWEx67TYtpN5NsADfg82sD9/bD8VB0G5wtrmw1mpltS/9aEg2u
-	 gLRPqOT+pKfzCF+DlSxfEdqL3gpjp7HN3FifZHXpmXhhP/LkrVoryX+CGdKxu+WQGcbJH
-	 wQ6qfLEgSK9iA8PXjUk6pE1FGygrvBys0YMtPdFIQL2nG4aIV4CLAZR5PXJWduRbw+8dM
-	 W9brjOZ3SMefYvLvxnPTTI7NjRaBnfrDCjB1l38ODCoTVMTTOnPlSkeSDUUGKNHHGsV4s
-	 VwnXqwVp1Ec9BbeGaBqPeR8Wws+jiGW1pf2RkqLAPt+54oJFIB4J8vs/YXIXYAcdKAg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794318793;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=d4NSCnrsDvRbwBgqs2GERpu46FtgR0tNjhD+8taDJQk=;
+	b=zi+JwuKBeGtdcrwauhvIKKisiM6nCVv46fdVzzmtzDe7YQzV7/vxchcSvyALPnxPqmna
+	 bcU1t0EMDpA+AJ9Z8a6vp9irj44zRoNSJUL2r67NMxIjEaCqnM+PKWaxuaGYnWsZX63xZ
+	 bvE9vX5srJiRTM+NgLYF61vogX+9fpNUdpehK77Gx1kmRULbw+LibIGI7iyVax38wuQ9U
+	 3niWEd5xhma7CaAj8cKcxKtitwBwZvlHkw8Thw4Jhw35ZCgJqtsl2C3S2JH2005JDqR8t
+	 2T9rp/voFgJNCm9uQEhc9Tqzpda+/NcvF1oOvZUO2zf6BDcXQj5yivt+fKdTWUn2daA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L35YLwyk;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=teLs5hGE;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE29606A32E;
-	Tue, 10 Nov 2026 13:51:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B84606A321
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 13:53:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C9B84606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L35YLwyk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5968F1F0089F;
-	Tue, 10 Nov 2026 13:51:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794318706;
-	bh=DgMB87bjjOhJubk+hnBQVvUaHtmOByTmAGnQuDuOPkc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L35YLwykVOSrGxvbsrb1u3khnVzNXdXgakJy4Rkd8urakgak65Pxog7+j9n13CK34
-	 oRXOCloZFEVBh8KHZtaASdAn7zOxHwlsMKpYDKZEjz+2xdMk3RHSg5SZjzrFO4cudu
-	 KGKXJGspaknuLBzI44niWPugCnd0bp/kCSgeQ0Y6REwQGNV7kcCuJaV8weXy+EERYN
-	 /PUHMwKxtwy7/Jkpju2j1tUoSPXz4Mr4CbbJJssA+A3UfX7gpcw4Jhb8xRTxOJCWCo
-	 p1eSmUoVXOTAWGk6Gz5VbeeR8JwJZ0dkwfxiLhwru5TtiaQX6nyYqgcickCDQVOqRo
-	 UvQfdeWId7beA==
-Message-ID: <sashiko-outbox-207157@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 3/6] riscv: accept the atomic extensions this kernel
- was built with
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, ojeda@kernel.org, gary@garyguo.net
-In-Reply-To: <20261110-lrsc-only-v6-3-bafc3cc0fcae@mobileye.com>
-References: <20261110-lrsc-only-v6-0-bafc3cc0fcae@mobileye.com>
- <20261110-lrsc-only-v6-3-bafc3cc0fcae@mobileye.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 10 Nov 2026 13:51:45 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=teLs5hGE
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4b7252a32c8so21871095e9.0
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 05:53:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794318791; x=1794923591; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=d4NSCnrsDvRbwBgqs2GERpu46FtgR0tNjhD+8taDJQk=;
+        b=teLs5hGEycwkTQHU/tkdfRWfHUVLf8FvNrr1j6fIqA8AwZspd3ALDl77yFSJq3YWmz
+         5fQTLeLFDFyKbnoHpEegpwvsXpoPDpyRRax1A5+FUymd+p62uImzs0BFrmhahhf71Uhi
+         WF1VAuaQDa0HA5WqfsNkFapOLbnjQFyrvAMMs0SjV5+1oI7cv0cxDMV/v8/rZmFg/DKN
+         4KNU1U8uOBxIpPBlAEx1R7Nrt5D01mpXSNl6RYSWYKrcSaT1/iq35lsE5xKDjn7BJFGI
+         aZUy+7uHSH3zyXuR0I9VOLLmcJmgMpna9rTxgF0of3s57PdOZJIQ+CIgrsFbScZCLUH5
+         X3rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794318791; x=1794923591;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=d4NSCnrsDvRbwBgqs2GERpu46FtgR0tNjhD+8taDJQk=;
+        b=OJwJwhSjkYq8c5KRIofioQrRmOjdtL6WYKp+WHFV+s3i94SD0FD0KFJb/l5TnfxO7g
+         jnSqk3x5sqhJw3kshda+JM5wg1yVbbXnwVjeJwz8IHDLKQfAsdpN77l7Do/cBfberZcY
+         FGzw0o9hMYrim9/HkIqLxk9IbBFFtbGvmxuAJ15FUQvIc9XtZLcubDNgayzayfnuDvXo
+         9HUjAU/o/SIsmkbjmd7qxgZZ5N6npWd1x8K5MlCCEmvscaMpCKKTevd+vd8IoxxgVbd5
+         Fo2j6yb9kwU/Lj4zB1XiZaiTisMIeofMuXHIeOz4qVPM3YMGk6C5ZVZfKM4EHu7wPpz0
+         AVaQ==
+X-Forwarded-Encrypted: i=1; AL+hErEwpfRjRNUEZniBBUT+ujr0lXdzKb4zJ5rwMcAaE1QuVkYoKZxf90zrfyNwrBznq0u37Mc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+vE8A5ajGHPJUNzMBS4JN0aemWETaek8+y28s3EM5XztorXxxH
+	nQFHCPkE288WZqyJj4kFbLA5qVDuKmusOFk0QvxVxuEcBueiSmhGw0Eu
+X-Gm-Gg: AYBFou3xgYAu8xJYK1q5O1tWiE807PF11VM0tnLyEMGzgHJTjtXx6Ape2mV+rMAGrqc
+	pQdI50qBtMAqCTmNOR+PoAbcFqe+DJGSdpn/WYbZAxhCzc7y+Zsrkn0vuhfdeZdYLDKY7nXn+5i
+	lBKE3icsiYA0g6wr2XUfnaes2PiXNnTHqnvvizW5QdWSZffP3FpCAXMmfdPXGxJxYHcz9YmXbCv
+	cm7/+3oSHs0jSpdPiIUiHQvUWXcUHDsShciWAwGeaYhaHbJpJHKq7YG7gN1kAGAqzYBZ4zBFj0g
+	ngDdmVVppddE4He/GBFfFqISIfTNi/Zs+qoyE5qCQJcJVIxklf1XBvXnVJrUBCcii+QgGgHCFSn
+	lKsr59J09EzWl+vprPo8jEwBdKQgAZVHYB/REzxu5DTLIctqOYqOR64kUgPVhqrA354LxhDSK8m
+	Fc6ifrDOzryBHOAvAwO4nr8ykMcYsjp46szp9PJtxrmcowmjSIl285f9S+9nLdwbLK3V9AaoEss
+	ywdbBQriJmR7qPUd65H7malmFPiwCBbryyNSA7LVMWe+MKWRs7x2uUMHg9uPKgpNSgekrYCzPpk
+	FQO1fgRUkglwPNrPkHoWaD//6npYPkL2dY00BA==
+X-Received: by 2002:a05:600c:8b66:b0:4a6:4d6b:a840 with SMTP id 5b1f17b1804b1-4ba02351009mr49636755e9.31.1794318791044;
+        Tue, 10 Nov 2026 05:53:11 -0800 (PST)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fe2c5asm104797705e9.5.2026.11.10.05.53.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 05:53:10 -0800 (PST)
+Date: Tue, 10 Nov 2026 14:04:41 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, almagui@kernel.org,
+	john.fastabend@gmail.com, qmo@kernel.org, brauner@kernel.org,
+	kpsingh@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, sashal@kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	martin.lau@kernel.org, mason@kernel.org
+Subject: Re: [PATCH v2 bpf-next 11/18] bpf: Follow PHIs in bpf_scan_ir
+Message-ID: <avMkeelRyvo-Bzuf@mail.gmail.com>
+References: <20261109170550.141443-12-a.s.protopopov@gmail.com>
+ <8ab81e05089b4f5ec1ecb1bea9e6dc5cc2953a67f16e9369db005c2f3f3ee242@mail.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,80 +101,67 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8ab81e05089b4f5ec1ecb1bea9e6dc5cc2953a67f16e9369db005c2f3f3ee242@mail.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] riscv: hwprobe_one_pair() falsely reports IMA base on
-  zalrsc-only harts
---
+On 26/11/09 05:42PM, bot+bpf-ci@kernel.org wrote:
+> > bpf: Follow PHIs in bpf_scan_ir
+> 
+> TL;DR: Nits only: in bpf_scan_ir.cpp, isErrnoRange() duplicates
+> errnoConstant()'s errno check, so the range is defined twice; also a comment
+> style nit.
+> 
+> > diff --git a/scripts/llvm-plugins/bpf_scan_ir.cpp b/scripts/llvm-plugins/bpf_scan_ir.cpp
+> > --- a/scripts/llvm-plugins/bpf_scan_ir.cpp
+> > +++ b/scripts/llvm-plugins/bpf_scan_ir.cpp
+> 
+> [ ... ]
+> 
+> > @@ -34,9 +36,40 @@ namespace {
+> >  
+> >  static constexpr int MaxErrno = 4095;
+> >  
+> > +// is Range in [-4095, 0) ?
+> > +static bool isErrnoRange(const ConstantRange &Range)
+> > +{
+> > +	unsigned Width = Range.getBitWidth();
+> > +
+> > +	if (Width != 32 && Width != 64)
+> > +		return false;
+> > +
+> > +	auto L = APInt(Width, 0) - APInt(Width, MaxErrno);
+> > +	auto R = APInt(Width, 0);
+> > +	return !Range.isEmptySet() && ConstantRange(L, R).contains(Range);
+> > +}
+> > +
+> 
+> this isn't a bug, but could singleErrno() and errnoConstant() share one
+> check?
+> 
+> isErrnoRange() has a single caller, singleErrno(), which only passes it a
+> range that getSingleElement() already showed to hold exactly one value.
+> For that input the width check, the isEmptySet() test and the wrapped
+> ConstantRange containment do the same thing as errnoConstant() below
+> (width of 32 or 64, then N >= -MaxErrno && N < 0), so the errno range is
+> now defined in two places, and the !Range.isEmptySet() test can never
+> fail.
+> 
+> For example, errnoConstant() could call
+> singleErrno(ConstantRange(C->getValue()), N), or singleErrno() could test
+> the sign-extended element against MaxErrno directly.
+> 
+> Also, the "// is Range in [-4095, 0) ?" comment is the only function-level
+> comment in the file using // rather than /* */, and it hardcodes -4095
+> where the code uses MaxErrno.
 
-commit 28e749f3a8a1535f66a4515b72ef2377c9c49282
-Author: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Yes, thanks, will fix
 
-riscv: accept the atomic extensions this kernel was built with
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42662799554
 
-This commit updates riscv_early_of_processor_hartid() to accept harts
-whose riscv,isa-extensions property lists "zalrsc" (and "zaamo" when
-CONFIG_RISCV_ISA_ZAAMO is enabled) instead of "a".
-
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index 3dbc8cc557dd1..9ba0d49c87bc3 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -82,12 +82,29 @@ int __init riscv_early_of_processor_hartid(struct dev=
-ice_node *node, unsigned lo
->  		return -ENODEV;
-> =20
->  	if (of_property_match_string(node, "riscv,isa-extensions", "i") < 0 ||
-> -	    of_property_match_string(node, "riscv,isa-extensions", "m") < 0 ||
-> -	    of_property_match_string(node, "riscv,isa-extensions", "a") < 0) {
-> -		pr_warn("CPU with hartid=3D%lu does not support ima", *hart);
-> +	    of_property_match_string(node, "riscv,isa-extensions", "m") < 0) {
-> +		pr_warn("CPU with hartid=3D%lu does not support im", *hart);
->  		return -ENODEV;
->  	}
-> =20
-> +	/*
-> +	 * Require the atomic extensions this kernel was built with. "a"
-> +	 * covers both; otherwise LR/SC is always needed and AMO is needed
-> +	 * when the kernel uses it.
-> +	 */
-> +	if (of_property_match_string(node, "riscv,isa-extensions", "a") < 0) {
-> +		if (of_property_match_string(node, "riscv,isa-extensions", "zalrsc") <=
- 0) {
-> +			pr_warn("CPU with hartid=3D%lu does not support zalrsc", *hart);
-> +			return -ENODEV;
-> +		}
-> +
-> +		if (IS_ENABLED(CONFIG_RISCV_ISA_ZAAMO) &&
-> +		    of_property_match_string(node, "riscv,isa-extensions", "zaamo") < =
-0) {
-> +			pr_warn("CPU with hartid=3D%lu does not support zaamo", *hart);
-> +			return -ENODEV;
-> +		}
-> +	}
-
-[Severity: Medium]
-As reported by Conor Dooley on v4 [1], when CONFIG_RISCV_ISA_ZAAMO is
-disabled and a hart boots with only "zalrsc" (without "a" or "zaamo"),
-does hwprobe_one_pair() still report RISCV_HWPROBE_BASE_BEHAVIOR_IMA for
-RISCV_HWPROBE_KEY_BASE_BEHAVIOR?
-
-arch/riscv/kernel/sys_hwprobe.c:hwprobe_one_pair() {
-    ...
-	case RISCV_HWPROBE_KEY_BASE_BEHAVIOR:
-		pair->value =3D RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
-		break;
-    ...
-}
-
-RISCV_HWPROBE_BASE_BEHAVIOR_IMA advertises full rv32ima or rv64ima
-support, including Zaamo AMO instructions, so userspace querying hwprobe
-on a zalrsc-only hart will be told that AMO instructions are supported and
-can fault with SIGILL when executing them.
-
-[1] https://lore.kernel.org/r/20261103-pushcart-very-04a34d0ffb0e@spud
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110-lrsc-only-=
-v6-0-bafc3cc0fcae@mobileye.com?part=3D3
