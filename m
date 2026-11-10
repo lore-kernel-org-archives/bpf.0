@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794286253;
-	b=pSOeuTUpW4t/IRr/1gLghWy33b00jbOWY7yDco+muToxMTodr/SH0kKUuLmqh2/7/nGz
-	 gfsHjwBwOufd8d1VsRfKjsMowv6QbK/J+yJKzdij2JW8xhJUTHsHl2Tx3yw6Sr+jX3EqY
-	 cJ8eVRKn3xc9wOLgRNZg6O+DBgeZ+OcnQcbqRokM8YwnJUqF/hVA+sg8UO0jNt7OOenae
-	 ts2CzVYRHSVRSUcN3VQhoTybALyuU2UobnZWhII6vlV2za63exQ+h2rBA/oWA/ZAaF6A3
-	 OG43jObFz+5IAIru8TmfJ4aobm04l8IDqqtF9jCBWw6XzVIFvzDJFT1SvTqWVU76evA==
+	t=1794286273;
+	b=BbBG9nCmMfEdXPOMR0ZziL5u37Gtjp+bjY2v+PHnEjwNgdcs4BSMRg6bz3asBQ/f416L
+	 B/d1dwkSeT9TGzc03AL8B5e3lM89oKA1pUGysbCTDLOu0JK1zCioOWINx0eDMQ0pSHyJf
+	 g6jZtBFvChsJ4y9Ye7/eQB9PONUygeqFEuJbyOaX/3g3tOX5Qwzq112KuNf1oIsjocJJg
+	 ubiGmT01OsY18Gae55wW02SZM/+XiSiQW4QyP9pASS7ogwNVbwFv/r7o23S/f3GqPCHvm
+	 qsqWPPOgMumWZJsrgdtQPLHvI083+ub67GtDJZyFvLN1ewwti00s+i2cD3A78F0npPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794286253;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794286273;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=UgNRBrRCQe+VePUdxzgMsf5ecxJa1o/Krddmi+w8YnA=;
-	b=TW2E4SPHnuNxkoDQj8fnugTqXZzDMU1ewOqZ3z9rLFmZxd/mb7mR0BuJ6OJ5B3BKnvFg
-	 uNMbMkJpVmYQSs1tSvW1UwijrTIYiYuqK9vRkMeTgO1wytWU9gE9ZWbo/M23JYrDkaIVE
-	 pqQ+S4vQVOJvkOx6oSLG1sUzpEY9ZP2CVlxppbscPltPBZuno+RPDvZXkrKjEnM0w+Ry5
-	 LBy47VptZRBV3lqLDUnM4ZUiMyN4LNI6FsKW5f7z08Ygj5hN2tKiPHZLyDUfklhHwGSfm
-	 vGc2BH/tEQ7JkKtXo6Z/nc390se72cE/r7BiclQtb8SdiT5uTzXk0EdcL+07pUKpNtQ==
+	bh=qbTSDQArvOD3jGjg04T2wFGTvQcaHANFC2X8ZHcjKuE=;
+	b=hSES6fJEMLIwsS3d+Tu4K5qgChbii0/Moyqhs33c0GUGVynTOo4zUrdPo1BCHmqtkIy2
+	 r034gLE8MsmTHWd7jwIeVdJpsHqmxUQ0Ms1PAqfFBC6A1/iTyUOOBY+qlodY9EXRjvkLB
+	 OSVC4IUXpOPDt2VQrmpNDiszahDfSSVAYqk8aB6FnUhkYmQBS0mZQ3OtwM3rXnXWHt5uV
+	 LC0Ek3BfEvkMA6Z/vSmeHUnD6tJjrNjwiAzQ8jNG54FZbNMV8gkw6wfE3QhHMaPnnFtlS
+	 H8Qt5KLxlUY5paJgd/koPJWu/wtPzvpiooykgzLl5C3jI03T62geYUVvWXpZ7HboSEg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OkMAehUk;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nJ265U8I;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F05D606A330
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 04:50:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A2D606A31C
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 04:51:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OkMAehUk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CA11F0089F;
-	Tue, 10 Nov 2026 04:50:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nJ265U8I
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B2C1F0089F;
+	Tue, 10 Nov 2026 04:51:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794286253;
-	bh=UgNRBrRCQe+VePUdxzgMsf5ecxJa1o/Krddmi+w8YnA=;
+	s=k20260515; t=1794286273;
+	bh=qbTSDQArvOD3jGjg04T2wFGTvQcaHANFC2X8ZHcjKuE=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=OkMAehUk2EdXi1irgvSTjwn4bMsDHxaLMCASZx5XJ0WgvCUJ5SomLqyT2sJcmmyBX
-	 iqqdl+NtjDDcrriNvOjSQVDgHRMkwoHNXCicz+JLpHt4r2TrfvdjhRZnR/ck8xqfD9
-	 hc2LFssxv/n6xDhgzNkh2epCot7xnA3Lh9capschIEtmVHcc+OoH0I73+EtZ3awGm9
-	 0V2rZCmGPFTkaQ/0muR1LaFTS2gV+p4iMif0uFAj1tdyChK07eWK36OfIHKqDsiuW0
-	 VHDaWIiv5yRcol/M5YTsRGfSjD4Gger73j74mxcvlKNc4qNAl0+3J457shi1OTCvJH
-	 oC9wCdyhY4hHQ==
-Content-Type: multipart/mixed; boundary="===============4085456377274220913=="
+	b=nJ265U8IJy0a0l+jT63eGTKMM9Th9JPUC17685QMOud1MBaGQfIKHuZq01om1C+r6
+	 6yI8xQt7FhZQlAd4szhklUTE4ccverPmM8erqj1LKQThwK8WJ/BP6+b3uatI/UOryL
+	 024QQAc7p4MD2w10NQFmEMMsGIhN25djzK5i5+k0ZADSixUzs+HIBHEEO/7ZPBVseL
+	 Mfami/UBxyCtYBeyGGEyk4+2naG5ML+11kYLkPZjvvSTnF+iKDisIjOvWP+lSFS5tD
+	 24cEDb2IVCf+HcN7NVRsrZ0vpl+b07bWlawezGUP0yOU0ceiJjpoJtpdszgJxOvyqj
+	 vwEu5Qp8t7McA==
+Content-Type: multipart/mixed; boundary="===============6173208538127033609=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,102 +49,67 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <2837df19d3c1760b7a3f8c5d1e2c65ecef887ce5cac5644ddd9f771b120c7b49@mail.kernel.org>
-In-Reply-To: <d3069dd53406ddc20ca68dc1a1904ee9b73c52b3.1794269506.git.memxor@gmail.com>
-References: <d3069dd53406ddc20ca68dc1a1904ee9b73c52b3.1794269506.git.memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 09/20] bpf: Register bpf_task_wake() for all program types
+Message-Id: <cb445da2a17f6123fc8e8b29c5cb8030424d521611d7ee6fbed73a90709c7eb7@mail.kernel.org>
+In-Reply-To: <20261110003838.8739-3-emil@etsalapatis.com>
+References: <20261110003838.8739-3-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v5 2/9] selftests/bpf: Add a parallel buddy allocator benchmark
 From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,tj@kernel.org,shakeel.butt@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 10 Nov 2026 04:50:53 +0000 (UTC)
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,daniel@iogearbox.net,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 10 Nov 2026 04:51:12 +0000 (UTC)
 
---===============4085456377274220913==
+--===============6173208538127033609==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Register bpf_task_wake() for all program types
+> selftests/bpf: Add a parallel buddy allocator benchmark
 
-TL;DR: Registering bpf_task_wake() for all program types may let an
-fentry/kprobe program on try_to_wake_up re-raise the deferred irq_work wake
-endlessly, possibly starving the CPU and tick.
+TL;DR: Nit only: the cross-CPU benchmark's cmpxchg() retry loop could be a
+single atomic exchange, and its "free our own list" fallback comment seems
+wrong, since can_loop expiry would skip the free.
 
-> diff --git a/kernel/bpf/task_park.c b/kernel/bpf/task_park.c
-> --- a/kernel/bpf/task_park.c
-> +++ b/kernel/bpf/task_park.c
+> diff --git a/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c b/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
+> --- a/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
 
 [ ... ]
 
-> +/*
-> + * The park stays with syscall programs, whose runner holds the program across
-> + * the sleep. The wake touches only the task and defers itself where it cannot
-> + * be issued, so every program type has it, to wake a parked task from the
-> + * kernel event that makes it worth waking.
-> + */
->  static int __init bpf_task_park_kfunc_init(void)
->  {
-> -	return register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_task_park_kfunc_set);
-> +	int ret;
+> +	/*
+> +	 * Publish this list and take the one left by the previous invocation,
+> +	 * usually allocated by a worker on another CPU. If the exchange does
+> +	 * not complete, free our own list instead.
+> +	 */
+> +	old = READ_ONCE(bench_xfree_head);
+> +	while (can_loop) {
+> +		cur = cmpxchg(&bench_xfree_head, old, head);
+> +		if (cur == old) {
+> +			head = old;
+> +			break;
+> +		}
+> +		old = cur;
+> +	}
 > +
-> +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_task_park_kfunc_set);
-> +	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &bpf_task_wake_kfunc_set);
->  }
+> +	for (i = zero; head && can_loop; i++) {
 
-Can a tracing program attached to the wake path make the deferred wake
-re-raise itself indefinitely?
+This isn't a bug, but could this cmpxchg() retry loop be a single atomic
+exchange, for example:
 
-The irq_work drain releases the task's node before it issues the wake:
+    head = __atomic_exchange_n(&bench_xfree_head, head, __ATOMIC_SEQ_CST);
 
-    static void bpf_task_wake_deferred(struct irq_work *work)
-    {
-        ...
-            /* The task may be queued again from here on. */
-            WRITE_ONCE(task->bpf_wake_node.next, NULL);
-            wake_up_state(task, TASK_INTERRUPTIBLE);
-            put_task_struct(task);
+The new value of bench_xfree_head does not depend on the old one, so the
+loop always ends up storing head.
 
-wake_up_state() calls try_to_wake_up(), and neither is in btf_id_deny, so
-an fentry or kprobe program can attach to them.  Such a program runs
-again inside the drain.  Its recursion guards (prog->active for fentry and
-raw_tp, bpf_prog_active for kprobe) are zero at that point, because the
-run that queued the wake returned earlier.
-
-The drain runs in hard irq_work with IRQs disabled, so the program's
-bpf_task_wake() takes the deferred path again:
-
-    xchg(&task->bpf_wake_pending, 1);
-    if (unlikely(irqs_disabled())) {
-        bpf_task_wake_defer(task);
-
-The cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL) claim succeeds because
-the drain just reset the node, and irq_work_queue() succeeds because
-irq_work_single() cleared IRQ_WORK_PENDING before calling the callback.
-llist_add() then returns true and irq_work_raise() sends another self-IPI.
-This happens on every run, since wake_up_state() is called even when the
-task is already running.
-
-For example, SEC("fentry/try_to_wake_up") calling
-bpf_task_wake(bpf_get_current_task_btf(), 0), or a waiter kptr read under
-RCU, would behave this way.  Once the first try_to_wake_up() with IRQs
-disabled queues the work (hrtimer_wakeup() from hardirq, say), each drain
-calls try_to_wake_up(), re-runs the program and re-raises the IPI.  Can
-that starve the interrupted context and the tick on the CPU?
-tp_btf/irq_work_exit looks like it could drive the same loop.
-
-The other irq_work-deferring helpers appear to bound this.
-do_bpf_send_signal() releases work->task only after group_send_sig_info(),
-so a re-entered program gets -EBUSY.
-
-The commit message and the new comment say the wake "defers itself where
-it cannot be issued, so every program type has it".  Does that account for
-the deferred wake re-entering programs attached to the wake path?
-
-No later commit in the series changes the wake or the drain.
+That would also drop the fallback path.  The comment says "free our own list
+instead" if the exchange does not complete, but the loop only exits without
+swapping once can_loop has expired.  At that point the following free loop,
+"head && can_loop", is already false on its first check, so the list would
+not be freed anyway.
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42755601621
---===============4085456377274220913==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42755638928
+--===============6173208538127033609==--
