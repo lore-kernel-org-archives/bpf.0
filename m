@@ -1,83 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794283045;
-	b=gWcKGy2O2EzCPIbVyOqFCQ0X5s6rw10+b/uiuwX2zLWRD28R30v+7XMG7pOzCrLr/pbl
-	 hOtLxl3S215l7CsUm2P6P/bXuQ1rHqEyRhuIx9bI4Qhuooz3BYyiotPDEQ7NU5a3UfQPN
-	 +A9PidbMrx31lHM/HR7kc9ZGuxmaTomnueNI2WKSt4NLZ9MeUOhmg7mMefjf6/aFKTt6u
-	 9b6BAA9IRAJSnivYb3MRUJfnZIBuKm0ft2OiVc4OSxo9dbvsKfh5USEUbO0OcueckrslZ
-	 GA5LuEhOEVRDleVKa1JUAy5zYkopR+jDtHjm5VpA2eZbTaqSTBThnyk+/oQJ3I3wfqw==
+	t=1794283049;
+	b=EkECEEyZzE4FtRgOvEdBbJC+x7b9cV0FO4d2W5HfdIYnYUEDA6ESJb7DU1CNlsw7QpeX
+	 q65x88Fr2oqf4IAZ+n0Omrnap6kJAx1gImbptnsvql0O7dIA2IVbLE6HuMZMZq0p/LcR/
+	 Ht4MuIjH9lvC8YDAAHhVwf9QhIb4C2YJA4C1+cEhZT8P7m/yyU7t/+qVkQlzm/yZwvO5d
+	 fXd2DNwLlJQO6ybPq+iezxuaTI7ucu1qsw3gq57u5QQ6zb58Ih8/Il8ZDxUCYgCvQnHDB
+	 CTZQfqAdJcuSnG5zB3j03PEJbS2OlTsNyXmkmcFS5Gv0vNaSJLzO2rUWVGnB9MFbp8g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794283045;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794283049;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=oKixK7Jwu6TCrx7SV2g9n1KdVg0f5barw8E7pwYTzBI=;
-	b=Un8AMtWaRAuIkjMq86WboioqpIyZtqsrta1rIcjwmKL9KVrymOPJtfFMNSkvT/dDZwLx
-	 Jou4seRWsIzgJ2ucE4zYkaJdevNH3rITUMpaYmUFi306XsQB1NM+sH8LvtBRhkJvT1t1P
-	 w/N3jREIVGxn3V7wsgPOKhbad+6gc4bxNbbg1XXL1tJlG0Z8qaXoU5+GrYXdxzf3fvuo2
-	 vq0kAPN01yckuFrTJGNrEi3MHiUjUc471lF7jg6/zYU+zA9brPZjmdrTFwhPJJDbx2yhs
-	 BjWWUVEBIP6VB8DxTrkG21NbRi9QmpwUzfON1lTt6l7Vu1AxLr5eWsHB6ym0wMb+UgA==
+	bh=L0xaW/62AQgxFhpajczQ88yBj65kDwjYHTXkn62rfdI=;
+	b=bfdwFZ4N/pdbNHhKpz+zd4IWUe7B+jOvTDWMzZdzjjpeDrWSybgfO8o9GK2tZOs24kA3
+	 iLtDBBIK4Tc49+tPJirB09mEQUy8NV3sR/z0LCVRIJil7CbPjT4v6wqAgzmbN2kw32joT
+	 jj1MzsO1r75E468mDyb2FRmyOuTdJ5biPERU7ZwyLOwLkLnJ31r06PS8aC3sxOJhWSOeH
+	 kjZKidkuEc74Lgn9g6JX7QM4tIvFVZ1U0sstU6e+jl0gV0Lz6nKadEjMcY7bqHbWsBJkF
+	 auhWulX7HyqVPf03QmcsX3OlOfXDOwCL90Y66yFiYugr6lgDJ+Qb5az9E2mVN1Lvzig==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=QaraZEkx;
-	arc=none smtp.remote-ip=209.85.208.54
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=B3UO6mYx;
+	arc=none smtp.remote-ip=209.85.208.46
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE036606A336
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 03:57:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE036606A336
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBBD606A335
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 03:57:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4CBBD606A335
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=QaraZEkx
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6b5669a5100so2126915a12.1
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 19:57:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=B3UO6mYx
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6b70d5b07faso1938719a12.0
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 19:57:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794283043; x=1794887843; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1794283047; x=1794887847; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=oKixK7Jwu6TCrx7SV2g9n1KdVg0f5barw8E7pwYTzBI=;
-        b=QaraZEkxayhccY6b502Tx2lOCXD6td300StkCrEzkQTRPruXRrO8lL0XZm1bNWe4g6
-         R1MKBfce5GYhWuTGwI8vZXMp1e1hXvUinF3fwjoXYsNfDuiI+adZ/cMFC6pYqxf9rrfz
-         F5zPy/psKAn8RLKWFcJH+RLcXRuk/neSHRXomMDf57JqLmqyUO3Af+r40vbZyDcUztta
-         FAJvg7+4AmxnWnEXvliVBm/vVRScv/pYvz5nctuvXgZ0y1zg9zdsp4JdevTT31gCsTjH
-         6+W4+WpQsMi9UlYFY59LkFue2R6D+z+pTePNoFWw9iUm55mCFT9xSm0SzYlSzdTrEaMW
-         Ic9g==
+        bh=L0xaW/62AQgxFhpajczQ88yBj65kDwjYHTXkn62rfdI=;
+        b=B3UO6mYxBrwbI4EnQx2MJCfYep/7lzLJy9J27S0G6O4GvtAuldRznLGKrqfTHxZKwy
+         8pAtP29K6ylA0zEHKeGYXZl1w2XVzbwIam1ss5NxCX8JGel0U2a4/TGaXtIpR0G132A3
+         SIjYqB5LYtz5aXQMa7VQHXjfgmJr3DFNg2bM/m4fG7KjNqLt2FW6m7RDwNDQASs5rDSZ
+         kXe3in7HjpLK7qHJkb78nOsZ3g1a7uDFw77n7dsnwPZbZ1CFq2cf20jyuaq6hsoc83El
+         MitOrxLYK+ko289aXFEf6w8Z4VKwqe8agX/YQQyNSRqsQLap+MgSPkjtzgAl0JWzJaWj
+         k/sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794283043; x=1794887843;
+        d=1e100.net; s=20260707; t=1794283047; x=1794887847;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oKixK7Jwu6TCrx7SV2g9n1KdVg0f5barw8E7pwYTzBI=;
-        b=BV4b2zArLJd78zrLRerMMCcmYYEv42UAwQm+sUbgkoc+Oond+l59/dj58YTjdHWA3Q
-         LQCvI+Aar9foIeTLzOraBQhzvYu1n4GroCaXToqEih0MqOdK0bBftW6XSz7FJERy2gYW
-         l47tgerIjS0Mb4ywo4lS0wYorWYxz7fIMROhYzYMkV5wXEZ5pu2BVIVZVyXpvkrN/UL1
-         SvZu1K/f5Oy93W2G+Cu9MfjKHUSTVfxX36iaX6TBvDejzwNGMNn9I0Xey9oNzjDpU20Z
-         7pg98YhzT+1j3M9A/zqSpBBnGLdccPL9gADYWapNdXCVF4NR5hIzKOWY4Ggykr0h/x+B
-         vQ4g==
-X-Gm-Message-State: APuU4Z8gwuHFnVSFRd0ggWzmpfvQesAK/22bHVdeDp/gkozIVdFa3SAF
-	zVZ7KykAp3Q7+3zhJkmrOAHlJD1GWEp7MjvkoRTI3cRSUYWGi2ep0ezFpdVSCjm5kvmaCSXvPGC
-	CldH0Jhs=
-X-Gm-Gg: AYBFou2WXAgzqF/zFrcV70nHsa2YbznEAtFdwZWmUeTl2qmI9kIY1JHJUDIDep5ZXcA
-	IkJAhjdpa21g1FhHIwuxFbN4Q5F2oFeJF1ucgrYJDoV1v/RHelTwsfKQgRncqgNcwv6wd05M3Lt
-	/SoLT4o+vO0+15hzhXGVKFJT8h10Kl5zdcng582JYNRCbxTRYP0Uo17/2GQRDCUiV8FPLB2jYYL
-	QFaCJmmHQvExABsttJQKtmC8Hw1OHwJw+iMgsLYFB09dTbOapeqYu13DWm/B5V0Nl6pIT1g4SFR
-	jhTYnfL116TA2x99rCqudcWvQ1YroRZ6LEsPVwA7jBwvD6rS2LZuH0hXKks2KEWBWDq7FzimrTY
-	Z+ndJimJbn7pYC3IYvSCNUuSsv0uMy4GXGvyM4KkUFhujFNh0xaEtL8X+RFMhwPW+kCNyl1GVwY
-	8kWzAy4/6eP1KBnIW4Pj+WmacumumauNzGbhhGZTScJOsG8d66xYZhcvmbjC24hRQi+Tmz4GhDB
-	CV+Aj3YXpU1/LURo7i7sL3VCyLaVvq3q8OlY2KP3ScmgN/2t+VaVFW9N4EBAt0bMMLoqJkerHDI
-	k3MKmX01WMKrypwnuT8oQZNHsdYkhaiOADUvo/qQhJuRavKct3MG4GMFxquB0b0=
-X-Received: by 2002:a05:6402:a6c7:10b0:6ac:73f8:2e4f with SMTP id 4fb4d7f45d1cf-6b756aeaf80mr752992a12.29.1794283043237;
-        Mon, 09 Nov 2026 19:57:23 -0800 (PST)
+        bh=L0xaW/62AQgxFhpajczQ88yBj65kDwjYHTXkn62rfdI=;
+        b=kkapHIgbY8WujNTPpr5/Z6nt6xFx3xaF0ltwvphFTzkiCDKaMGneQHqcTW1PFIn5Yw
+         hs2FQ+ZZgO1BkY5GdGK5KulhDV53ihF2uFRSrMY7Fqm9C/im8auTsS0DjuIf2Wv7Wcbj
+         375EIvzi5SA4EGha763wxNO2pltcyvBYkRUx0Iux9Sk8WF3LqEkovgU3+Sr7MQmSl3oO
+         cbrHPTxuAj9IQZogCP1M0si460saKA6gpW5iaJLnUPVHW9M3OXii6qA8ugRop0FG5Iov
+         SYNGWNIS1Zz6uvlGUSGk4/SqQcFBCAPwr8jlJPERdHaiVOtO1P9F6/+70MznqVHDMHaP
+         R0dw==
+X-Gm-Message-State: APuU4Z90VQH6XHpD/sU9VcWqU0GAxuVOb0Xmq+l2kMRq5OSpIIp5P4Xy
+	2w7jr4PleDp/h7rtcYPEabN1IJyVDYh0UrhGH4IrGh6pXXz2NoHkmSwnzkLmgpZ10Fpq/tgLDyr
+	T15Tv9WQ=
+X-Gm-Gg: AYBFou3K9aWDq7ECjw77jiIPW2158ORxkJ04MlFl9I7tAsHv2iKsHV9Q9ItSkmtXtUx
+	Zs9GhMHNJUr/Ra805zmRq3xEY04DOv8tH2tpb5Ot8iPIlCcYXnGH7X+BFEX+rS4xy4sv5frQ7o/
+	GrEilWziMzXcL5tiB7CPPzx6v3uiOFPjlUcmk8IUTxMS8kRLbSaM8DYp7hzY9tBWzaY1WqqlZ44
+	Ti6Dtrg8X+sR09oMRxvWLbQ1dqB0H8zOUOlKTtJdw5HII9S4bWY7y0KgzOYAKAEbwXm2tf+LY1D
+	+yUmdG9hKYDA4PvcKrkb8xxSDOTr6j87ZHQ4QaScS6DJsv05bDvftavezRr8eEeJR8oVIPYMNFB
+	Y0gUfGX1zRM7er/GRDlLZrBNffsYnQtXFTIMGoSHT5RnyEGLnm53LNT9DXJiVO05S0IRs1Nqlsh
+	8mAfmn1Saxr0wOT0YPiM2biSz3FaS4siffjHXVw+OS1PEkcHBaOB4jccwz+BMax+IgmCIRY4pci
+	re8hVtDJKqkECGM72yIhU2wQIGuHF9u6AZ7dirPMaSo1Keqb/F0Fzkfr9p5gvwe4jHmdXmqDJRQ
+	ZZOp5VybuDqexwMqM5xt7BtDijp2NTrW6RSyy8ZB4MF8BHcvN3bgc2dc0RU/0obFI3rkmYbqtqE
+	66D6kRk7E
+X-Received: by 2002:a05:6402:c4d5:10b0:6b1:d344:c62a with SMTP id 4fb4d7f45d1cf-6b756ae6169mr667065a12.30.1794283046684;
+        Mon, 09 Nov 2026 19:57:26 -0800 (PST)
 Received: from L9JK9NPFH9.lan ([104.28.20.56])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7579047c9sm548801a12.33.2026.11.09.19.57.19
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b7579047c9sm548801a12.33.2026.11.09.19.57.23
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 09 Nov 2026 19:57:21 -0800 (PST)
+        Mon, 09 Nov 2026 19:57:25 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
@@ -130,9 +131,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	llvm@lists.linux.dev,
 	kernel-team@cloudflare.com,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH bpf-next 01/15] xdp: reserve an skb core extension area after the xdp_frame
-Date: Tue, 10 Nov 2026 03:56:59 +0000
-Message-ID: <115997f55d63b507ce54fbe9e22900b59016f3c3.1794281983.git.tianyi@cloudflare.com>
+Subject: [PATCH bpf-next 02/15] net: dpaa, dpaa2: clear the skb core extension flag
+Date: Tue, 10 Nov 2026 03:57:00 +0000
+Message-ID: <bff7f72c7c28f67497e23a6629b9e4db74332da6.1794281983.git.tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <cover.1794281983.git.tianyi@cloudflare.com>
 References: <cover.1794281983.git.tianyi@cloudflare.com>
@@ -147,168 +148,50 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Reserve the skb core extension area in the headroom, right after the
-xdp_frame. An XDP program stores RX metadata there for the skb that is
-built later.
+dpaa_run_xdp() and dpaa2_eth_run_xdp() move data_hard_start to the start
+of the buffer after the XDP program runs and before XDP_REDIRECT.
+xdp_skb_ext() then returns a different address from the one used while
+storing the entries. These drivers have not implemented the XDP RX
+metadata kfuncs. Hence they now clear the XDP_FLAGS_HAS_SKB_EXT flag
+before XDP_REDIRECT, and their redirected frames carry no stored entries.
 
-The area begins with a header, struct xdp_skb_ext. It records the offset
-of each entry and the end of the last entry, in 4-byte units.
-bpf_xdp_adjust_head(), bpf_xdp_adjust_meta() and bpf_xdp_pull_data() use
-xdp_skb_ext_end() as their lower bound, so packet data and metadata
-cannot overwrite the entries.
+With the A050385 erratum workaround, dpaa already moves data_hard_start
+before the XDP program runs, so the entries remain valid. The flag is
+cleared on that path too, to keep the change simple. This can change
+when dpaa implements the XDP RX metadata kfuncs.
 
-The XDP_FLAGS_HAS_SKB_EXT flag indicates that the header is valid. Most
-drivers reuse the xdp_buff between packets, so xdp_prepare_buff() clears
-it. With BPF_F_TEST_XDP_LIVE_FRAMES, reset_ctx() restores the flags
-before each run, and ctx_was_changed() compares them.
-
-Suggested-by: Jesper Dangaard Brouer <hawk@kernel.org>
-Link: https://lore.kernel.org/all/1d5521eb-84fc-4417-a3f5-6366694d160a@kernel.org/
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
- include/net/xdp.h  | 45 +++++++++++++++++++++++++++++++++++++++++++++
- net/bpf/test_run.c |  4 +++-
- net/core/filter.c  |  8 +++-----
- 3 files changed, 51 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/freescale/dpaa/dpaa_eth.c   | 2 ++
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 07231adfb5f8..c888353425d4 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -81,6 +81,9 @@ enum xdp_buff_flags {
- 	 * XDP program is not attached.
- 	 */
- 	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
-+	XDP_FLAGS_HAS_SKB_EXT		= BIT(3), /* skb core extension header
-+						   * is valid
-+						   */
- };
+diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+index ad2d8256eb8d..4cafc0b84dc9 100644
+--- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
++++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+@@ -2654,6 +2654,8 @@ static u32 dpaa_run_xdp(struct dpaa_priv *priv, struct qm_fd *fd, void *vaddr,
+ 		/* Allow redirect to use the full headroom */
+ 		xdp.data_hard_start = vaddr;
+ 		xdp.frame_sz = DPAA_BP_RAW_SIZE;
++		/* data_hard_start moves, so the stored entries are lost */
++		xdp_buff_clear_skb_ext_flag(&xdp);
  
- struct xdp_buff {
-@@ -146,6 +149,16 @@ static __always_inline void xdp_buff_clear_frag_pfmemalloc(struct xdp_buff *xdp)
- 	xdp->flags &= ~XDP_FLAGS_FRAGS_PF_MEMALLOC;
- }
+ 		err = xdp_do_redirect(priv->net_dev, &xdp, xdp_prog);
+ 		if (err) {
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+index 7227a35dfaf2..fcefdc9daf2b 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+@@ -472,6 +472,8 @@ static u32 dpaa2_eth_run_xdp(struct dpaa2_eth_priv *priv,
+ 		/* Allow redirect use of full headroom */
+ 		xdp.data_hard_start = vaddr;
+ 		xdp.frame_sz = DPAA2_ETH_RX_BUF_RAW_SIZE;
++		/* data_hard_start moves, so the stored entries are lost */
++		xdp_buff_clear_skb_ext_flag(&xdp);
  
-+static __always_inline bool xdp_buff_has_skb_ext(const struct xdp_buff *xdp)
-+{
-+	return !!(xdp->flags & XDP_FLAGS_HAS_SKB_EXT);
-+}
-+
-+static __always_inline void xdp_buff_clear_skb_ext_flag(struct xdp_buff *xdp)
-+{
-+	xdp->flags &= ~XDP_FLAGS_HAS_SKB_EXT;
-+}
-+
- static __always_inline void
- xdp_init_buff(struct xdp_buff *xdp, u32 frame_sz, struct xdp_rxq_info *rxq)
- {
-@@ -174,6 +187,7 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
- 	xdp->data = data;
- 	xdp->data_end = data + data_len;
- 	xdp->data_meta = meta_valid ? data : data + 1;
-+	xdp_buff_clear_skb_ext_flag(xdp);
- }
- 
- /* Reserve memory area at end-of data area.
-@@ -450,6 +464,37 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
- 	return xdp_frame;
- }
- 
-+/* skb core extensions: RX metadata that an XDP program stores in the
-+ * headroom right after the xdp_frame, for the skb that is built later.
-+ */
-+enum xdp_skb_ext_id {
-+	XDP_SKB_EXT_HASH,
-+	XDP_SKB_EXT_VLAN,
-+	XDP_SKB_EXT_CSUM,
-+	XDP_SKB_EXT_NUM,
-+};
-+
-+#define XDP_SKB_EXT_ALIGN	4
-+
-+struct xdp_skb_ext {
-+	u8 offset[XDP_SKB_EXT_NUM];	/* in chunks of 4 bytes */
-+	u8 chunks;			/* same */
-+};
-+
-+static __always_inline struct xdp_skb_ext *xdp_skb_ext(struct xdp_frame *frame)
-+{
-+	return (void *)(frame + 1);
-+}
-+
-+static __always_inline void *xdp_skb_ext_end(const struct xdp_buff *xdp)
-+{
-+	struct xdp_skb_ext *ext = xdp_skb_ext(xdp->data_hard_start);
-+
-+	if (!xdp_buff_has_skb_ext(xdp))
-+		return ext;
-+	return (void *)ext + ext->chunks * XDP_SKB_EXT_ALIGN;
-+}
-+
- void __xdp_return(netmem_ref netmem, enum xdp_mem_type mem_type,
- 		  bool napi_direct, struct xdp_buff *xdp);
- void xdp_return_frame(struct xdp_frame *xdpf);
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index d6c9dc62182e..f25581851339 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -223,7 +223,8 @@ static bool ctx_was_changed(struct xdp_page_head *head)
- {
- 	return head->orig_ctx.data != head->ctx.data ||
- 		head->orig_ctx.data_meta != head->ctx.data_meta ||
--		head->orig_ctx.data_end != head->ctx.data_end;
-+		head->orig_ctx.data_end != head->ctx.data_end ||
-+		head->orig_ctx.flags != head->ctx.flags;
- }
- 
- static void reset_ctx(struct xdp_page_head *head)
-@@ -234,6 +235,7 @@ static void reset_ctx(struct xdp_page_head *head)
- 	head->ctx.data = head->orig_ctx.data;
- 	head->ctx.data_meta = head->orig_ctx.data_meta;
- 	head->ctx.data_end = head->orig_ctx.data_end;
-+	head->ctx.flags = head->orig_ctx.flags;
- 	xdp_update_frame_from_buff(&head->ctx, head->frame);
- 	head->frame->mem_type = head->orig_ctx.rxq->mem.type;
- }
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 9245009d9f1e..4f6698f75d90 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4243,9 +4243,8 @@ static unsigned long xdp_get_metalen(const struct xdp_buff *xdp)
- 
- BPF_CALL_2(bpf_xdp_adjust_head, struct xdp_buff *, xdp, int, offset)
- {
--	void *xdp_frame_end = xdp->data_hard_start + sizeof(struct xdp_frame);
- 	unsigned long metalen = xdp_get_metalen(xdp);
--	void *data_start = xdp_frame_end + metalen;
-+	void *data_start = xdp_skb_ext_end(xdp) + metalen;
- 	void *data = xdp->data + offset;
- 
- 	if (unlikely(data < data_start ||
-@@ -4547,13 +4546,12 @@ static const struct bpf_func_proto bpf_xdp_adjust_tail_proto = {
- 
- BPF_CALL_2(bpf_xdp_adjust_meta, struct xdp_buff *, xdp, int, offset)
- {
--	void *xdp_frame_end = xdp->data_hard_start + sizeof(struct xdp_frame);
- 	void *meta = xdp->data_meta + offset;
- 	unsigned long metalen = xdp->data - meta;
- 
- 	if (xdp_data_meta_unsupported(xdp))
- 		return -ENOTSUPP;
--	if (unlikely(meta < xdp_frame_end ||
-+	if (unlikely(meta < xdp_skb_ext_end(xdp) ||
- 		     meta > xdp->data))
- 		return -EINVAL;
- 	if (unlikely(xdp_metalen_invalid(metalen)))
-@@ -12794,7 +12792,7 @@ __bpf_kfunc int bpf_xdp_pull_data(struct xdp_md *x, u32 len)
- 
- 	start = xdp_data_meta_unsupported(xdp) ? xdp->data : xdp->data_meta;
- 
--	headroom = start - xdp->data_hard_start - sizeof(struct xdp_frame);
-+	headroom = start - xdp_skb_ext_end(xdp);
- 	tailroom = data_hard_end - xdp->data_end;
- 
- 	delta = len - data_len;
+ 		err = xdp_do_redirect(priv->net_dev, &xdp, xdp_prog);
+ 		if (unlikely(err)) {
 -- 
 2.56.0
 
