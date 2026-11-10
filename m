@@ -1,57 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794338271;
-	b=Y0QqbP28LHULHFkHHIT+prxVEgoQLpLTHica05eeaBjYl7KfrNi7Jl6arJsZhoejuYAc
-	 ro7lRjy5PMVQCRqOxBdIb+uCG7cA/cH+OnebzOREtMFNoxzL+w0NFUIjnPtQRCFCA6Afa
-	 VErG3+wpwlEq96RTGI8q479fNuT4KGgcrmW1vjQdxqmnf7H1aLmFCWHxFpE/pYkpQKQmI
-	 DREQ9BLYnKhpxsqG7irYe+A+Xh/NUfdGfA6s79E2lPJ2wIWM4DiqAreomHKIL8svBurIE
-	 rRdDffW0fjNEE2JxS2Kt7mHrClp/nItcbYXqdN67wAqZa+Dcd5PUQMV4F8787gJj29g==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794338271;
-	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=l2pzgkTJvNlg/2b4CeykC6mg8NcSe99cz3KRZQyFyfM=;
-	b=rRf8AQSJshLYiu+eM3HOtAzcfWEBnzg5jwlGIOUxApiVa7WabyjaXttaKUG9Do1dDNBW
-	 s+rMR80X4t6ihMjJJlgAkoXkOv8WOehZF46pJB/g1daa0zfqmkdggGu8Vn4mioA7kNTSx
-	 zx3ctPronF9s3c1nl6EPBCK3mO6yiPiplYQrW6kE5ro+1/iOPjFpzyOSl5zrpR525QDTk
-	 z4HZz0FLJJW7fxpW83H8o1lh8KATFx5it9NSI+mg38pQbfg9RfypbP4NtS9VsyvGsWPLM
-	 19KIA7n2ZaYOqeonG2bY5cusuO8JRoQkR52dTrkFVzCgI4CkoSDKMu1gmXVCG9v1blw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vf3guXSH;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794338596;
+	b=kB2SUb+W0LO7hDeNtqoL5tzAJQ85TdQWAvbwGncyJcdmIikn4eTJZyl+GwBxQ58X8yVT
+	 W5tjzmQYut2EWDk8wZB8+EMnz8rPTRA/FKzmIKksVOPee5aJJrWHYSSigzA0e3r6SxaBK
+	 F87fBPvNHsSd5onaXhqzzwnbohG+hVgL7DQroE4b03wL3aYVCx/MQVGnzES40FqsDfZ/z
+	 viVrXbqPM/u21gppODH7ikznx0c15sSrzJDbscBk0u2xHIlU/w1upE1rCUjdIxl7L7fIo
+	 1OHCntuhP1rZNeR20WaoURVycDdcV9mbaVvaiOle8gW0HT+KoedoyDwIbPRBbqebvNQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794338596;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:
+	 References:User-Agent:Date:Message-ID:MIME-Version:Content-Type;
+	bh=iPKx18V270dl9l4OtB/Y/MxcQ9Z2Zk3biIxOyRYrkNI=;
+	b=SMkCOcisjEP246hjWGniQEinNbLf9eO81Vbjqp9rVgvhrUAfBDvmy/Na2ZMOnWXiZ/7X
+	 WD5egWhrJxioux2h9A0T1EfTgi0nOTxHA6jYKEOCAOwG4z4NXO6O0s0FjO1UP5jgkPwiH
+	 29Fx4E/VozFZA2jsERcDrgd+rvjK93aTpp9Sc65V0+/EOan9/MHjboBw4PYdEYODLb1VE
+	 TnEx6PtPhu+Q6SHHQpmbyVsEr2AICMLRZE44x3hQOR91aV4GJgbxSOZIs4bXuL5Di3hAr
+	 bZ6i3t4OkpqnBEKBfuGE1HyuTJxFa4WK+IWlXWFHgFEUmniHLkHJv6SRkvKPWow8CmA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=pengutronix.de;
+	spf=pass smtp.mailfrom=pengutronix.de;
+	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=ad2kTkaY;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3A1606A320;
-	Tue, 10 Nov 2026 19:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70371606A323;
+	Tue, 10 Nov 2026 19:23:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70371606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vf3guXSH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AA761F0089F;
-	Tue, 10 Nov 2026 19:17:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794338270;
-	bh=l2pzgkTJvNlg/2b4CeykC6mg8NcSe99cz3KRZQyFyfM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Vf3guXSH7fnTrA/pBUpx1SOVUtBeS3GhNhH26y2eSMdUaeghvpri1SDlUUe5yOm50
-	 W63tG6iuomnbweMlUCdN1TTcAeX4DKxWI5H199n+oY37V5RTij9drRu9RntY9FLzrd
-	 is99LuRTOhHc2es3MLsm4r3WnDkTMq4066z+xSOJ5msA2AbavNXddsGFqjVCa93PAv
-	 MsABYGPCUP7DEFjlc+1kEAr0S2/GreF6QtQb2CR66D+WAANgi3oZ07OX//5zU2jsd2
-	 YFMESN1qtTlZy6rGxawa6Gj3RT2oK0wzM0vND9/cUSwHrxD6BjDN1+ej+XO+Z3crBV
-	 5moh4StKV+dvQ==
-Date: Tue, 10 Nov 2026 09:17:49 -1000
-Message-ID: <a7610cb55d3f6172fc3f717116ee44cc@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
- liwanwu@kylinos.cn, devnexen@gmail.com, zhaomengmeng@kylinos.cn,
- emil@etsalapatis.com, yphbchou0911@gmail.com, mingo@redhat.com,
- sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [PATCH 0/9] tools/sched_ext: robustness fixes from cold review
-In-Reply-To: <20261110125001.4167503-1-cui.tao@linux.dev>
-References: <20261110125001.4167503-1-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=ad2kTkaY
+Received: from ratatoskr.pengutronix.de (unknown [IPv6:2a00:1f:f805:2b01:a03:2f4:308a:7b52])
+	(Authenticated sender: str@pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id 62C69200912;
+	Tue, 10 Nov 2026 20:23:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1794338587;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iPKx18V270dl9l4OtB/Y/MxcQ9Z2Zk3biIxOyRYrkNI=;
+	b=ad2kTkaY76tsMkTt+onWR5PN2aKA0XKobO4S8lvFuJok+4OvS3TNiT02awZnsn0LN7UnMl
+	zEuj9RQPeQ/Ek2iWA+c+Tbnglyzcjtt1KWInsRHTLBv+fZC6wKfkHgLOo+n43brFpzAKCh
+	mwjf0g1GKgO6QyN0NRLMsn0x+G7EdOqWU4paXBCvcSa+GIKO2JyWnhB3FsNrdzOiRWoaVF
+	LrJg/8S0/Szi0KICni0p5/FiYFTM9Loif1FDPjyNNQV66jbnRa7H9RBPr6CXRItOfMP4S2
+	N/m7gZ23QU6nss06fH2RawV+9J+Q6AdqjWDN32ST0JX7sZEppYuc0HS0DgAJaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1794338587;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iPKx18V270dl9l4OtB/Y/MxcQ9Z2Zk3biIxOyRYrkNI=;
+	b=DZhaii5FfLOmOJSKmF1ZdtDdw0FP+NcYWPZ87oXuBOT7oT51WkJ3e+pvWPSXDDGOqfVz7B
+	0zGf0Cizh0awSB0MJmE1ZCbR+R8RbO+rmfPpqxyz+nBFgP6G0Ff4LbZPlHQreabSR43Phu
+	aGaRIWQQ8T+OMJFAoTPjBvagS6g2vjyD2W6e03FBpLiHWPRCcFEakpdbhQ3BrMHPNGVYr6
+	s4E7hJ84jKKOxyS0ViV9ItVCsyCaahSCiNSdHy5Nsf8qdkJ0Aus0qXV+jZXv1GZc6cBfm6
+	XncupiZVOg9WhVzKhtr6kdQtlPBHARGroupu2ZeRz40f8hiXfBe6vBlaXpKAuw==
+ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1794338587; a=rsa-sha256;
+	cv=none;
+	b=Gv1TfpYWYNfgkfi+YH0dunOFKrJ9Ove7jvwVoYUyUJVUEY5dZoP4XPggYN8odgpD8XN8Zz
+	3vroncbnCpIptWLEOkAgFDSIg9X+FhKwsnIAqkaaaSWvLWbgbIZNPvZtLdUh36RsNwl7xP
+	X0S4uA0WR8otMcdCdgzS/x2ytzLGNcg/oJxqA1J4PGMG8NgTs7n4TbbCAzNsDYvEZrZ1D7
+	h0iAM9EJ4bfFnktXSZ4bl+PdTeAVVXjlNSGjgwswtDpIdaGydsrm91HX01+LiGoU6a4nLD
+	RbSEkS2BP+234M+rHpH4lQTLlhF1V4a46G2b6Fr461f2KCLC4/vAmy/QdPHNgw==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=str@pengutronix.de smtp.mailfrom=s.trumtrar@pengutronix.de
+From: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>,  Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>,  "David S. Miller" <davem@davemloft.net>,
+  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,
+  Richard Cochran <richardcochran@gmail.com>,  Andrew Lunn
+ <andrew+netdev@lunn.ch>,  Eugenio =?utf-8?Q?P=C3=A9rez?=
+ <eperezma@redhat.com>,  Jason Wang
+ <jasowangio@gmail.com>,  Alexei Starovoitov <ast@kernel.org>,  Daniel
+ Borkmann <daniel@iogearbox.net>,  Jesper Dangaard Brouer
+ <hawk@kernel.org>,  John Fastabend <john.fastabend@gmail.com>,  Stanislav
+ Fomichev <sdf@fomichev.me>,  Eric Dumazet <edumazet@kernel.org>,
+  virtualization@lists.linux.dev,  netdev@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  bpf@vger.kernel.org,  kvm@vger.kernel.org
+Subject: Re: [PATCH RFC v4 2/6] virtio-net: support receive timestamp
+In-Reply-To: <willemdebruijn.kernel.2adf5c78ee0e8@gmail.com>
+References: <20261026-v6-7-topic-virtio-net-ptp-v4-0-008af03cd43b@pengutronix.de>
+	<20261026-v6-7-topic-virtio-net-ptp-v4-2-008af03cd43b@pengutronix.de>
+	<willemdebruijn.kernel.2adf5c78ee0e8@gmail.com>
+User-Agent: mu4e 1.14.3; emacs 31.1
+Date: Tue, 10 Nov 2026 20:23:06 +0100
+Message-ID: <87v764ze1x.fsf@pengutronix.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,29 +99,151 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-> Tao Cui (9):
->   tools/sched_ext: scx_flatcg: Reset the stats baseline on restart
->   tools/sched_ext: scx_flatcg: Validate the stats interval
->   tools/sched_ext: scx_pair: Don't abort when the dispatching cgroup
->     goes away
->   tools/sched_ext: scx_pair: Don't attach after an interrupted
->     initialization
->   tools/sched_ext: scx_pair: Reset pair_id on restart
->   tools/sched_ext: scx_qmap: Add the missing options to the usage
->     synopsis
->   tools/sched_ext: scx_qmap: Reset the hier stats baseline on restart
->   tools/sched_ext: scx_userland: Check dispatch buffer slots before
->     inserting
->   tools/sched_ext: scx_userland: Reject batch size 0
+On 2026-11-01 at 10:04 -05, Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
 
-Applied 1, 5, 6, 7 and 8 to sched_ext/for-7.5, with a garbled sentence
-in 8's description fixed. I'm skipping 2, 3, 4 and 9 as they don't
-really make a meaningful difference.
+> Steffen Trumtrar wrote:
+> > Add optional hardware rx timestamp offload for virtio-net.
+> > 
+> > Introduce the virtio feature VIRTIO_NET_F_RX_TSTAMP. If negotiated, the
+> > virtio-net header grows by room for a 64 bit TAI timestamp (header
+> > size 40 bytes), stored in struct virtio_net_common_hdr. The layout is
+> > cumulative: the field is at the same offset whether or not the
+> > features before it were negotiated. The fixed layout needs
+> > VIRTIO_F_VERSION_1, so the feature is cleared without it.
+> > 
+> > Implement ndo_hwtstamp_get/set so the timestamping can be enabled
+> > and disabled at runtime with SIOCSHWTSTAMP. The driver cannot filter
+> > what the device timestamps, so any rx filter other than NONE becomes
+> > ALL. The timestamp is read before the packet is handed to the XDP
+> > program or the stack, and attached to the skb with skb_hwtstamps().
+> > It is a raw TAI value; there is no PHC.
+> > 
+> > The header size is negotiated per device and also applies to
+> > transmitted packets. On transmit, zero the header behind the fields
+> > the driver fills in, so the device sees a zero tstamp and no stale
+> > skb->cb or headroom bytes.
+> > 
+> > On receive in big packet mode, the header is placed in front of the
+> > data in the first page. Grow padded_vnet_hdr to 48 bytes so the
+> > 40 byte header still fits there.
+> > 
+> > Tested in a guest with a patched QEMU:
+> >   guest: ./timestamping eth0 \
+> >           SOF_TIMESTAMPING_RAW_HARDWARE \
+> >           SOF_TIMESTAMPING_RX_HARDWARE
+> >   host:  nc -4 -u 192.168.1.1 319
+> > 
+> > Based on work by Willem de Bruijn.
+> > 
+> > Signed-off-by: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+> > Assisted-by: Claude:claude-opus-5-5
+> > ---
+> >  drivers/net/virtio_net.c        | 136 +++++++++++++++++++++++++++++++++++-----
+> >  include/linux/virtio_net.h      |  10 +++
+> >  include/uapi/linux/virtio_net.h |   1 +
+> >  3 files changed, 131 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index 17d3e32eed9d6..23af10c613b48 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -20,6 +20,7 @@
+> >  #include <linux/filter.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/dim.h>
+> > +#include <linux/unaligned.h>
+> >  #include <net/route.h>
+> >  #include <net/xdp.h>
+> >  #include <net/net_failover.h>
+> > @@ -416,6 +417,12 @@ struct virtnet_info {
+> >  	u32 rss_hash_types_supported;
+> >  	u32 rss_hash_types_saved;
+> >  
+> > +	/* Device passes time stamps to the driver */
+> > +	bool has_rx_tstamp;
+> > +	bool hwts_rx_en;
+> 
+> nit: cryptic name. rx_tstamp_supported and rx_tstamp_enabled or so?
 
-Thanks.
+Sure, I'll rename them.
 
---
-tejun
+> > +
+> > +	struct kernel_hwtstamp_config tstamp_config;
+> > +
+> >  	/* Has control virtqueue */
+> >  	bool has_cvq;  
+> 
+> > +static int virtnet_get_ts_info(struct net_device *dev,
+> > +			       struct kernel_ethtool_ts_info *info)
+> > +{
+> > +	struct virtnet_info *vi = netdev_priv(dev);
+> > +
+> > +	/* setup default software timestamp */
+> > +	ethtool_op_get_ts_info(dev, info);
+> > +
+> > +	if (vi->has_rx_tstamp) {
+> > +		info->so_timestamping |=
+> > +			SOF_TIMESTAMPING_RX_HARDWARE |
+> > +			SOF_TIMESTAMPING_RAW_HARDWARE;
+> > +
+> > +		info->tx_types = BIT(HWTSTAMP_TX_OFF);
+> > +		info->rx_filters = BIT(HWTSTAMP_FILTER_NONE) |
+> > +				   BIT(HWTSTAMP_FILTER_ALL);
+> > +	}
+> 
+>     `ethtool_op_get_ts_info()` leaves `info->phc_index = -1`, which breaks Ethtool
+>     Netlink `ETHTOOL_MSG_TSCONFIG_GET` and `ETHTOOL_MSG_TSCONFIG_SET`
+>     (`ethtool --show-hwtstamp-cfg` / `--set-hwtstamp-cfg`): `tsconfig_prepare_data()`
+>     in `net/ethtool/tsconfig.c` rejects `ts_info.phc_index == -1` with `-ENODEV`.
+> 
+>     Either `net/ethtool/tsconfig.c` must be taught to allow PHC-less `ndo_hwtstamp_*`
+>     drivers, or the device needs an associated PHC (e.g. `virtio_rtc`).
+>
+
+Right. (explanation mostly for myself to understand the problem)
+The PHC-less case looks easy to allow in tsconfig: tsconfig_reply_size()
+and tsconfig_fill_reply() already leave out
+ETHTOOL_A_TSCONFIG_HWTSTAMP_PROVIDER when the index is -1, only
+tsconfig_prepare_data() refuses it with -ENODEV.
+
+For TSCONFIG_SET it is worse than for GET: ethnl_set_tsconfig() calls
+dev_set_hwtstamp_phylib(), so the driver's ndo_hwtstamp_set() has
+already applied the config, and only then tsconfig_send_reply() fails
+in tsconfig_prepare_data(). Userspace gets -ENODEV although
+timestamping is now on.
+
+virtio-net is not the only one there: ngbe/txgbe (libwx) report
+hardware timestamping with phc_index -1 if CONFIG_PTP_1588_CLOCK=n,
+and dpaa does the same without a ptimer-handle. I can send that as a
+separate patch.
+
+Which clock the timestamps are in is a separate question, see my answer
+to the cover letter.
+
+> 
+> > @@ -7250,7 +7353,8 @@ static struct virtio_device_id id_table[] = {
+> >  	VIRTIO_NET_F_SPEED_DUPLEX, VIRTIO_NET_F_STANDBY, \
+> >  	VIRTIO_NET_F_RSS, VIRTIO_NET_F_HASH_REPORT, VIRTIO_NET_F_NOTF_COAL, \
+> >  	VIRTIO_NET_F_VQ_NOTF_COAL, \
+> > -	VIRTIO_NET_F_GUEST_HDRLEN, VIRTIO_NET_F_DEVICE_STATS
+> > +	VIRTIO_NET_F_GUEST_HDRLEN, VIRTIO_NET_F_DEVICE_STATS, \
+> > +	VIRTIO_NET_F_RX_TSTAMP
+> 
+>     `VIRTNET_FEATURES` expands into `features_legacy[]` as well as `features[]`.
+>     Legacy virtio only supports 32 feature bits (`0..31`) and never has
+>     `VIRTIO_F_VERSION_1`. Move `VIRTIO_NET_F_RX_TSTAMP` (bit 49) into `features[]`
+>     alongside `VIRTIO_NET_F_*_UDP_TUNNEL_GSO*`.
+>
+
+Oops, yes. Will move it to features[].
+
+
+Steffen
+
+-- 
+Pengutronix e.K.                | Dipl.-Inform. Steffen Trumtrar |
+Steuerwalder Str. 21            | https://www.pengutronix.de/    |
+31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
+Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
