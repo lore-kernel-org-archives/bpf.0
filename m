@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794302315;
-	b=5Rf3WnHBiKb/WXQMBhQAkxZEcdd3ol0xpb6zDHo2ldQM5dI4zn8cMgOTH00xOij23hxX
-	 WnMCP5Gb+5HU15/S4l3jWF4AAAPQZvp47umX6pd1a96bB5AtzM2nBms63NU94+byOxkFF
-	 BeXNc4Gxnpu3hRJWbKpy07Ab0ntcxJDFwyNru12qQSYFCF8sY5sUaJiYQkR/d1P1c5NzP
-	 JYKE2o9/d1eBQkj4t4kdOrZi7hGl0OIim3b8Wk/dVz3piJKxglQ9nUbbKVfW/C3IUijAT
-	 Fig+CtOJE/5mdIWjWGiwMrtYFpb67lIjaB4/bkeLSmMmTAik55gYvJT+52EPQJixyFA==
+	t=1794302336;
+	b=LCN+m6KicBeTo0dQE53sIU0j1t7n7SFOKgevj7ucWfM2ZPosqzBqI5Em5rGABy/02tkg
+	 qBJfAQpK78u0Ex/RuIyR9qt3nLTu4pt+j2b3VuZHsSBH51VzYx4L1vrIPmiMrBFVgEYKb
+	 suitzp7SenU5F+ogLB2De7Owl2Bua2S7j90wIFHARMSszC4mVnH9Q3w+NoHIW9eLX/WU0
+	 9LozsMG8K0GqaVP7E/SMHz3Z6d4SdhWZvnz9LFzFD8NjuJY4DSWlKMYFQUyvxL25pw7Uh
+	 W7nlQld2t9jC226GnduHeu9BbSJRviSXKQ81nqryX4imFmTsYFuYB3cU6mPW8bG2V2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794302315;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794302336;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=B8RQTNfc/eWS72nZHsD5FmaXKvsQcX/MHrv0MZNEckg=;
-	b=me4Hjo6yqGv0zhrcbzPLc+KPMPqFDqYHXhaZUqyjgvVAwZtGxzTpyK6C/RO55nVK4FdD
-	 L7cRhOO43A3UJ1pSEkG95FwRquENEJLaO0HWBvO883oRr0uwd9GP3kZuFL2zHHNQBBDkW
-	 2VGIZfVQGhApFuUejCUt3XwUvK0SJjmncrcCdqgGk2+wb4XU4Iib4XcptWkATsV8Reumy
-	 1TsfcSldYO7+nCdd31OXiFt/5ffdSSv1EW/WhimmIU0miKq9D4+YIYxvI/MnC/12756Fz
-	 RMu2AfxvgILE0QBnwIfe78gJH64qGQU+3P555MdnGlxCbUA5NE6OSV/tH3gKjZ3t80Q==
+	bh=3vbBpJ70QQUgTHc+9S4BdJlbLsLxsrAejDAnX1SbNic=;
+	b=1i2iBcMYNpO/4uruVegThLHWorlvc3yUWCccqUcKbfrZHUlxG3heMBRO/3rO/odVoug+
+	 csceGYge2Z8n8zGVspC0q7Cc+atqspkcY1E04EVGwQsztcSTej7B7/lF+/0B+GNUiAjfV
+	 1vPKUYggZEHk5eShkqSDWfRtynLnbqC8hswmhgxd8JyLpcSWi7PyrQRkL7Ps8pgUeo6ef
+	 9JOL2LFcRsx/1NOohjuVC/PQCTYGoqGR4NaJb+FLE7PacEV/JipFHKO+rMqEba9Rf/GIK
+	 GGOXJD9ZKbyhBL7ijAOsogB9mzeYgc1k6Q9T03qjlCR/uD3P+FUg7RufkkNvTq9skWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="c/Ap+R4z";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="XaFZlFw/";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615A1606B17B;
-	Tue, 10 Nov 2026 09:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1747606B165;
+	Tue, 10 Nov 2026 09:18:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c/Ap+R4z
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A20071F0089F;
-	Tue, 10 Nov 2026 09:18:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XaFZlFw/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F4BE1F0089F;
+	Tue, 10 Nov 2026 09:18:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794302315;
-	bh=B8RQTNfc/eWS72nZHsD5FmaXKvsQcX/MHrv0MZNEckg=;
+	s=k20260515; t=1794302335;
+	bh=3vbBpJ70QQUgTHc+9S4BdJlbLsLxsrAejDAnX1SbNic=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=c/Ap+R4zFMvV3/8vcuIEPdB/Gt2XHUlHZTBEX28zCRTGUeuDJCvLmXS2bTYSdzi9R
-	 0gr12Xdu/wNWC4bbLqs4TiHsR/YcW9JNs28CEkwEGUBB6TGWOirP4sbeOuKd4a7tZW
-	 afM3jYlHN6+MVYSwuAcf1MRkadLxCZQa5Ry8f4ildqJfo+Wt7K+lGKrO7TizAPDeis
-	 lj14KsNBHSrSqgHUxSQyH2WPPe6YEGnglY+yEWWsL8vk8c3l5TKaUlKahI+HbhISLF
-	 nnD6YXeLZZD0ZUXVgvIwonj2iwv3yWDlAmtq4vfzLGXczqU+vQuxgOQWxGbajWp8T+
-	 zqYWbwys3SKng==
+	b=XaFZlFw/DdnrRtOVsZEGp6QUGtmIPGuUZ+N4Hdx0OM0hwO0dbNjERxcTuZMYTcqjH
+	 niXGeBr0dTqT4XuSBUJ4fHJ8LPa5mQ0gDOgO3p3iTEzXRwE29SgFUYzxoeoORUG48o
+	 4DJ6Rk3Cvuwko+rTIDQL/lX2vrxaez+zErrVL/jJfRbWQLh2oJpIux07YdOMODEWT1
+	 AOcuJ+CDnO6LeM9EEmN9aS0LHpgFim9TfKS15MTiXRxDbWwt1Q2uZLl1zL9z5geSoA
+	 YWA/+bXNEPPKIhhzJ78YCVVL+ahtQQQJ2oXlHwFAREVtyR2al+Mwd8OYF0Lie832Vc
+	 YrFaKf6APBZQQ==
 From: Christian Brauner <brauner@kernel.org>
-Date: Tue, 10 Nov 2026 10:14:39 +0100
-Subject: [PATCH RFC 23/41] fuse: use fc_init_pseudo() for fusectl
+Date: Tue, 10 Nov 2026 10:14:42 +0100
+Subject: [PATCH RFC 26/41] xenfs: use fc_init_pseudo()
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,7 +54,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261110-work-loop-pseudo-v1-23-4c998976c6c7@kernel.org>
+Message-Id: <20261110-work-loop-pseudo-v1-26-4c998976c6c7@kernel.org>
 References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
 In-Reply-To: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
 To: linux-fsdevel@vger.kernel.org
@@ -75,42 +75,45 @@ Cc: Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>,
  linux-kselftest@vger.kernel.org, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.17-dev-ce4c1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=893; i=brauner@kernel.org;
- h=from:subject:message-id; bh=hjM1iJ4vU3paA5L4OQPDkADa3AqUdKJFLW5EmBnT+kw=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWR9erCuT2albMuTpuPqTDYzVbc45F0XFJ6y9xJTg/iJB
- vndWrxNHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABPh02ZkeGybnbLv4dlnla2P
- zh+U1FV/fVEjuEXs+QzeMzuWCLwPtWVk+PIs8Nv5vXPYWX98mZbrdj9iVbPCut91O9M+rQ7YuNr
- gHTMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1017; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=xO/6EKTyizodOr3jpQQP+lr/++u9/c+Tcs9J04rmnys=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWR9erBpDZsiO/PvrRUOZYzHr09ZKmN5JzQjsOPDecc1T
+ gv0mD6s6ihlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZjIvSqG/3GRPk4+yw9m6Lz9
+ kr3Yn+deca/qnJO3fHSPGiyKaKxs38HwV3xiCl/tWo1fM/4fmOj0yLklovHKITOdd0+MZx7UWyL
+ 0lg8A
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Initialize fusectl as a pseudo filesystem. This raises SB_I_PSEUDO and
-also SB_I_NOEXEC and SB_I_NODEV. fusectl never holds executables or
+Initialize xenfs as a pseudo filesystem. This raises SB_I_PSEUDO and
+also SB_I_NOEXEC and SB_I_NODEV. xenfs never holds executables or
 device nodes.
+
+SB_I_NOEXEC also refuses PROT_EXEC mappings. xenfs maps the xenstore
+page and guest memory through privcmd, both data.
 
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- fs/fuse/control.c | 2 ++
+ drivers/xen/xenfs/super.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/fs/fuse/control.c b/fs/fuse/control.c
-index 21ffde596d61..4497362e7df0 100644
---- a/fs/fuse/control.c
-+++ b/fs/fuse/control.c
-@@ -10,6 +10,7 @@
- #include <linux/init.h>
+diff --git a/drivers/xen/xenfs/super.c b/drivers/xen/xenfs/super.c
+index 37ea7c5c0346..aba7d038ed73 100644
+--- a/drivers/xen/xenfs/super.c
++++ b/drivers/xen/xenfs/super.c
+@@ -15,6 +15,7 @@
  #include <linux/module.h>
+ #include <linux/fs.h>
  #include <linux/fs_context.h>
 +#include <linux/pseudo_fs.h>
- #include <linux/namei.h>
+ #include <linux/magic.h>
  
- #define FUSE_CTL_SUPER_MAGIC 0x65735543
-@@ -334,6 +335,7 @@ static const struct fs_context_operations fuse_ctl_context_ops = {
+ #include <xen/xen.h>
+@@ -80,6 +81,7 @@ static const struct fs_context_operations xenfs_context_ops = {
  
- static int fuse_ctl_init_fs_context(struct fs_context *fsc)
+ static int xenfs_init_fs_context(struct fs_context *fc)
  {
-+	fc_init_pseudo(fsc);
- 	fsc->ops = &fuse_ctl_context_ops;
++	fc_init_pseudo(fc);
+ 	fc->ops = &xenfs_context_ops;
  	return 0;
  }
 
