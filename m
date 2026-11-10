@@ -1,97 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.42
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794325561;
-	b=vbrSaEeUe+JVQdJ6yBMVG9dHOmmetSOmtpPdn7B4QBRG6cgj1iD6E53DjwVQQ0xBHeYC
-	 waIIzJa3Ukyw1yCRyI/zfkah6tBBtnwD8/+DoWYu97SAjYTwNZVRi3aV0H2zYItye89g6
-	 bdItzA75IvFigl68Li+bJbU/e4gVP73u7eXdjbXcCD3PULwBiYjCjOVq+YPH2b4IX2JOQ
-	 LYcd1NwXHP1wqmDdcVXP90dB9osQN+jRIT4vgkqDY14a+vfd+P1NEXlIdJMMFB3n8Sqa3
-	 Yv6M8r8Wzj8I7LEkJvJIF04MGvY1kiYrUbQKNzsqDNVOVQQ80oQ+En7+zAdPinkFfxQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794325561;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=4joyfckgOzoxD1v9F8y539Lxr07wRquNtozOKKoNpYs=;
-	b=fC4IQn6/sC9fVXVzZ/usPByVwp8Arb3pCoIvY1hwhrKZRpWdc29omE6J0ENGS2BaFpeK
-	 e4CZ0kL+nef9y4C5Nc6oQABPxkxhcVlfgbNLhPbVTzV+KpH7s6SVVpApqSD6KNrSh5RCf
-	 9FxYYdoJ5E4aDcdC4ow3rBJCFPfZIyhSVRVHlgFf8H4M3TxLi9YkcSuK8WVUBnfdi9SSt
-	 ZHUIaEQ/3smBIyl575YAa134IuYhzyVtuv8BJFsUK1ycf36Y4UcSAPMYLMHmQT16kaQVg
-	 5X33xV8J0G4USeVQN0iekFH2yjsR5v8zuLAZu2yjXyH8edJ0wlB6laqdyBpVDTK3JmQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.161.42
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794326138;
+	b=DTaQuXnm3Ze04WFzxSIBebVBk9DhwuN6U9VJWOQr4RmHPPCQ0TloESphV/4Tz3OH1MUa
+	 l/hyjErqDHGmKxJA8cwjI2n4j1/D4xAwRu51dnwxo23UAImQYZ0egtl4BTDo/jpmonhpE
+	 UZJCNRxgZEeRW2WBers/A2QwqtzfG55DJ1W6mS1YKG8WoFN8SS/nCmmJw3cHtBpC5rIga
+	 y7JzZTXRh/71hD0TES8rRhhIqoI3tZk05eZo5PEvGQT16Kxt7InCrDBp4adkfxewxoBle
+	 1Hu/dDx5c/zOKhG1zW1pfI46L8vjG+QMwppLJQGGTXsuvK/gb+kPknhJGBuQOpwVLhg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794326138;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=SvIe1dTA5bgP0oOOky8Z1uVZhZTsydnSnODkTILXkXw=;
+	b=p/g4jx9xwtDMDKuklICSM6fK0KcGcKByPt/CKqep6ufHRILEuHHScLXikD0VZ2UWQgwl
+	 7EAjNOWq8LyMJSBX+ChtXJINOj0lmO13LoX5ncqan22r3M/W+qm/I6JZN3kFa+DxWC684
+	 4Ee8NDFFxmEVh2fiWqdq6iFMLhNTKQvEzxHG9QiknyLv0KSHblhZV1Np45wpzFzy4FujL
+	 SpWVg2110lz4JY1inmTUSNP0Mdo3UUx8eW1xpsfWwX0t5WEt8hCxiiGP/QIkIPl097SN8
+	 bIG8E6+Mx4oxYNzvxme86Ukcj2sRlgFILQqvot5VhGqbUKDJXDEr+3/3RBobsm4Ok7A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hxozIhHm;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373CF606AB54
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 15:45:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 373CF606AB54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6dde81a6820so1369213eaf.2
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 07:45:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794325555; cv=none;
-        d=google.com; s=arc-20260327;
-        b=iG4UavwsiSnmQaaB3MtxaGcJnAhWNjS0bbnqYz/4BQ1yqdO7CQySwOY4gf1uaEn0ou
-         XTYcUoq1TwIB4SFmqzNg6aeCg24qzckKc7dips3E9dg+6ilo0pSLjpHLMEMRmtwLxr6N
-         LGouXT/T2ZTK7yJ/sUmlDUS+AQPPugcwHK6JHePtXLRZ9pC1kI6jXhrNOhll84pXUf6X
-         LPh1Ycz6FcMetr9L1aq+G9qirLTR/KjqIy3218FuffLUFLVPio2+I7CMEhuBvQwO4Slv
-         loQcwgOmrOgavAOu/6VSNUKdp9lpAxm3SW0C96V+NFrJDFybiOLDTgrR0cSyWtmrELmP
-         xpSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=4joyfckgOzoxD1v9F8y539Lxr07wRquNtozOKKoNpYs=;
-        fh=K6bkF2HpaeZ+GpyPWh7PI2Kql+FRNvwfgRO1k+7uKbQ=;
-        b=J9y3TJ/bCSf0WFf/I8xDpGtZnqu6MtPObCBNrYgfd97YXkXlsm2WaC/5BjcQNXc7Qo
-         qT0Y/qwFdM6U15mSb6K/H65sA3hdRmVg6NrexoUrN2vmaNDdPftVC0IdMX+7L2/cBBhB
-         9Y3fGt7WrZwQs4ngg7dH/BUgAx30bQCH/Ei17+y5nKB/43idp1S6NjX6Pjy38EkzfvdD
-         wR+nNmcxgErJfyhyq3r9zxiOwc/RnAP+nvNHselcBeHeIQc/3lOW+F3LhcroNnK2gkXD
-         gNzgVDrqAbbKOGh3a38B9ZXzq/1vsvdoANMdWFPoGE5ce5ImJXpWzvPpTxNOCkp/xV8o
-         QzDA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1794325555; x=1794930355; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4joyfckgOzoxD1v9F8y539Lxr07wRquNtozOKKoNpYs=;
-        b=eZLW2NkFr/j9icFxNcvCAM88kGStK/E6aBuXF8X9PTB/TJstGOhvTD+oxnr2K/CFip
-         LcDYPep9GKsBbabgbijJK8fW8Ri7k+AQgTpbE0lfmYbq++4uEecMHCP8cJy+ASy5Fn1C
-         Z7cmYFLcw+cxPvYec6ZFIcz9h0hx9GUCZQNC8nte43cm5qiHbXRbnTNHTBl1+VeMbkIY
-         uqoY4pDGStIpFAnESbzX/o6nCQkRdYtqB95sCYlkXriJV8MXiOEX4NtIJW6wkeAwE2IJ
-         9SnQ/rTMEtIWDIXK5bSkmaqWrqOPx8mk6cdC7zj82UixmIlP+udjnEbIS9a3pHbUWS7o
-         nsRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794325555; x=1794930355;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=4joyfckgOzoxD1v9F8y539Lxr07wRquNtozOKKoNpYs=;
-        b=hVLEaWaHOyajPfYjFcV++kaBVWQV4DXZUEKZap5hf1pfg4iSEzY81FXwr5594RwE8m
-         FLpeFwpF1jklgsN/M+y4y/gbWVg9gP5uH+GZHn/0uA1ipprIZHKRuOJ7fE3WvQ44Q4H5
-         7E2s+v30aFPohmZ7+Dj+ReUhIh16TgdxzSYx3iLPMDK3K4ke1IfADQoyLJ6i5CyY28yr
-         OYExsHwKkZclFhHiyRhj1VtbL2/RJWCmHfdrCT7BqokzDsk657qNfLvWmBx3e99Wn0WI
-         cVOjzsjmuPW6LzKOVIH7oBh1xgmHCKRd1xTIb3fva6FB4GtDqiRQ5qmCxfV9Sz1Df0eo
-         +B1w==
-X-Forwarded-Encrypted: i=1; AL+hErG+Ed3/fV9ZNuC6QviqLj+bNcYq4nbKk2QALwZS0qUg2x7unrAyzpJpu0L23Bt4sou8CsE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+RJvLEEYofCt14yD03o4Rm+/PjqoP4zfkin4kH2UDyLVafh+4C
-	r/ZA0WhCRdnCkMPQH63Q5dFeChgPcjze1sEleelG6UNQ9TPlpxNTxdCnne/Q/zHJ/cZc+mG+oO9
-	ZMfdfqSR1ZHQqXZyc9ik8Tg+IStVJjyKNFibqrzg7xw==
-X-Gm-Gg: AYBFou3FZjYXwkRWLEDGFdg0UUzUkJbFdQExbbp4mVVS2ZRXpGRLCVPBbd9fJcHeDv/
-	LxL0fKmfRnvvEhGMzgAbxe/+LeAwzc3pJ/zYXjqYAE5Jd8lIJCfbIN5BMAfMzBB9F5MBd4gfLcL
-	b9KAsYxrwEXDQcX6IAJNnAsqXR93bLugPL8vdlLFBdjLZqaPIjP7QwPziqgUU80s7sS2RJcWCI0
-	iuSlm1SrVLLFd9IlRfk9fFweq1n4wqSLSQAJiyOytzY4pUIxxESJWa2QmA2b3apM6JI0YfcmjF0
-	imn2Yo2uuehhzsnn1Q/0HUxdS4F+km20D0/Ill8wXGXsn3FH5Kre/97ibtDYx61IQGgiGSGUS4G
-	I12I2D4rFFpHeLxARuodlp8A6MV9+I1QSfHE9NBLvdx3TOh+/R7vmBU8StWlBz106qP13NzDOh8
-	apgAG2B7Fi1w==
-X-Received: by 2002:a05:6820:c2c9:10b0:716:ddaa:40eb with SMTP id
- 006d021491bc7-718a4f92ba9mr1015097eaf.28.1794325554928; Tue, 10 Nov 2026
- 07:45:54 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370BB606A323;
+	Tue, 10 Nov 2026 15:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hxozIhHm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD06D1F0089F;
+	Tue, 10 Nov 2026 15:55:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794326138;
+	bh=SvIe1dTA5bgP0oOOky8Z1uVZhZTsydnSnODkTILXkXw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hxozIhHmmpI0orJHynU5GErfujgQcajB7c5xDfVJaCwJou8oudZLuQk/PhicbS0K7
+	 XNmgvLHiXxVpurT9ttEcApD8O0aIbqdrPmJHZNjpuRaLyqXmSQ5+Uf32xSIiKjIic0
+	 Ic5+0xgvDdFUuxitJ/dzD6YM7jV20SLaKKRi2ebOQPBPACLThIMab3dl3LbKXvLZUz
+	 5irq6W8mI0FPPZB7SGVHrNurymQtdA7AXHGWGNoomKzVQFgiiPkAq4bW2qx7B3fFcs
+	 pkwz/3s/25vWVBP7mKxlgp5d8PcnhH6WqiIQkZRln0vpFOV8I/KugDXhXFIZ9Qc4qc
+	 SvD8pzcRJX39Q==
+Date: Tue, 10 Nov 2026 16:55:32 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Eneshan Karaca <Eneshan-Karaca@yandex.com>
+Cc: kees@kernel.org, rostedt@goodmis.org, viro@zeniv.linux.org.uk, 
+	jack@suse.cz, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
+	jkoolstra@xs4all.nl, farid.m.zakaria@gmail.com, linux-fsdevel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Subject: Re: [RFC PATCH v2] binfmt_misc: add binfmt_misc_select tracepoint
+Message-ID: <20261110-gefruchtet-singt-allabendlich-ff8653eb8631@brauner>
+References: <20261029185849.8016-1-Eneshan-Karaca@yandex.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,43 +60,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1794020868.git.tianyi@cloudflare.com> <73b9d23a4190cdd02e89d3a2ce8a1a21ad5feadb.1794020868.git.tianyi@cloudflare.com>
- <20261110073807.2fa62e6c@kernel.org>
-In-Reply-To: <20261110073807.2fa62e6c@kernel.org>
-From: Tianyi Gao <tianyi@cloudflare.com>
-Date: Tue, 10 Nov 2026 15:45:44 +0000
-X-Gm-Features: AclHuK9D14tZ4FX3CoGnuGmDbJMM4Y36vINL_kHffGczXiZfZcX98tAF2DEPmTU
-Message-ID: <CAG4wq-fJfKAiCY2Z0Hv_nCBM+8gKSBq-N2Xc2KfKREkRL-VDvg@mail.gmail.com>
-Subject: Re: [PATCH net-next 8/8] selftests: net: tx_extra_headroom: test veth
- peer at creation
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>, 
-	Eric Dumazet <edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Simon Horman <horms@kernel.org>, David Keogh <dkeogh@amazon.com>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	David Woodhouse <dwmw2@infradead.org>, Dragos Tatulea <dtatulea@nvidia.com>, 
-	Nimrod Oren <noren@nvidia.com>, Alasdair McWilliam <alasdair@mcwilliam.dev>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, David Ahern <dsahern@kernel.org>, 
-	Ido Schimmel <idosch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Breno Leitao <leitao@debian.org>, 
-	=?UTF-8?B?QXNiasO4cm4gU2xvdGggVMO4bm5lc2Vu?= <ast@fiberby.net>, 
-	Danielle Ratson <danieller@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>, bpf@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-team@cloudflare.com, nh-open-source@amazon.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261029185849.8016-1-Eneshan-Karaca@yandex.com>
 
-Hi Jakub,
+On Thu, Oct 29, 2026 at 09:58:49PM +0300, Eneshan Karaca wrote:
+> From: Eneshan Erdoğan Karaca <BoxStrikesTeam@proton.me>
+> 
+> A binfmt_misc entry can select an interpreter for an exec.  With a BPF
+> 'B' handler, that selection can be made by a BPF struct_ops program.
+> The kernel commits the decision in bprm->interp and bprm->flags, but it
+> does not emit an event at the selection point.
+> 
+> Existing observers have to reconstruct the decision from
+> /proc/PID/exe, AT_EXECFD, AT_FLAGS, or /proc/PID/maps.  These sources
+> are mode-dependent: a transparent dispatch still reports the original
+> binary in /proc/PID/exe, and a short-lived process can exit before the
+> observer reads it.  A classic dispatch reports the interpreter, but
+> not which handler selected it or which invocation flags were used.
+> 
+> Add a tracepoint after the interpreter and the invocation flags are
+> selected.  The caller passes the matched entry and the raw flags; the
+> trace event resolves the handler name and masks the flags with
+> MISC_FMT_INVOCATION_FLAGS.  The event reports the binary filename, the
+> selected interpreter, the handler name, the invocation flags, and the
+> pid.
+> 
+> The tracepoint is observability only; it does not change exec
+> behavior.
+> 
+> Assisted-by: LLM
+> Signed-off-by: Eneshan Erdoğan Karaca <BoxStrikesTeam@proton.me>
+> ---
 
-On Tue, 10 Nov 2026 07:38:07 -0800, Jakub Kicinski wrote:
-> Please use Python YNL directly, we don't want the dependency on iproute2
-
-Thank you for the comment. I will use Python YNL for v2, with no
-dependency on iproute2.
-
-Cheers,
-Tianyi
+This is whitespace damaged. So Sashiko can't look at it.
+Resend it properly, please.
