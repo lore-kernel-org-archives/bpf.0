@@ -1,81 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794283900;
-	b=RRuh7EkRTKz8bCb3uNHifMIVLMI+yC1m1wDy2wJxFnwYNzBHynBaMgPC8JcLALI2FsL0
-	 cGDqnc/qcs+sn2E7HhCLCQzrm4e7hQ9Lvmla3cWFwrNbjQ/sPUedNtVp3GEVV7GFZe+Sh
-	 8zjvvdpi8T/oe2CqOdg5kzKcBlYrHahQhFV1cpT/42nbEngdlrjUaIRCQNNfkXDsmZ7Io
-	 ISmQ/RISbl3TO2e7GwQT0663O4oAsi2EGqcnRCF2gzTPnN4oD0AlRG/pdFZ2ltEtmdtwu
-	 JyTs9hRwKbHguXLzzsZo73OQka+P63N2pCNOON7PUq3zvfTq0cBREabFY/YNOzoQb/A==
+	t=1794284324;
+	b=0cA0PyCsY0yaT+J6X6PO5KHyEVjCQuPphFODci762eJTNxSXB/iMo2pt0E9ZO0tERuQT
+	 eHJ2hI8MntxRKBVpKuc5uTO3A6e8B3rkrH2111sS0n+5UWXphzc7fiQ8xmNhBSPDZF3aJ
+	 6hSBLaY4RzzHFIzINuAbzkECQaMcNQTHvc790Dgf2X9Z+02M6CbjdjoP8SLC/d/1+ma4v
+	 xUINYhOkDVC0pbjoaVI8thrnjNWDgQX40g+HzPbXHytWkQGGOmoJ0tPrFRx4bmOhsab+W
+	 lZwKYCmOM+UC6MY0AyTOsq0M5tQfbANYES6OGGqLs408h+OUI01N8/v+y8I9gj00Hzg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794283900;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=YHXidAFNXoaiLO002WziYhPSP8qLeOfv4lUIVNDDdBI=;
-	b=zZbfNqsCbS71AXew91uoTA487l739649zCR7omzUKOwV+CcmXxbhTDDawl8t73bVW8Lx
-	 n0yMUWfytHRVYJGVZjItdlSTxkpBRy9BwpcKEw9uXDHj7DwpL7eQkdTiV5Nz9iefd06Qe
-	 bcd3VBshPYFK8mgzu1A2Mv6ZHVLVG2YafsZctmkYjuMKNevn/MZ+AYX9oOsZFIESA6zlB
-	 /HHIuKN6jGEuckVfBUm1u5XqL2FjKKQVCgnJi6YUK9kRbhm+6oNhIHMXo63CXaI/0iRQg
-	 z6XRO7ojgOquAhkL+w/6mdDpYnLxkYtFFdgNUx+Yddu7JGRtykiAP/RTMftz5BYypEQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794284324;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=FCMfrEanvNuZKrktY3H61P3qHIYd7p2HmCkNinB/LRU=;
+	b=4N69xQZA9l1/d4i2p/TbkFv7YjIjeG3RtVfQN18GGdQYlHuPII0iTPh7MaezksQzXuuB
+	 LwABpzm53UqMRx9OEU2UnReAlPhB6/4O/puU6oXZ+nRKNkhBBCF9B5P9xvtwIrtTWt5ZI
+	 GsmZNbIopqbOrM5jyS8ZqDtajuPGNhNBCHryOKmVgDwmtY2zyRmHMxJTjgKh+7/DFFhOD
+	 76rmIaLp9uku2xZuhOw+fIh9aBQOwq+/mZoIhyvXSRL1LQTaTOcpCOz3drvYEu2GS6dmJ
+	 P7GjUC+MNbVJaxEC/VEalZ6+4bdPN5cEIemh7134aLoUmqbGapvig4XrVESnb4R4HHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XDQgoYhz;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bahJoU4F;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 6AC2C606AA08;
-	Tue, 10 Nov 2026 04:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21349606A31C
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 04:18:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XDQgoYhz
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 482C61F0092B;
-	Tue, 10 Nov 2026 04:11:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bahJoU4F
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D9B91F0089F;
+	Tue, 10 Nov 2026 04:18:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794283900;
-	bh=YHXidAFNXoaiLO002WziYhPSP8qLeOfv4lUIVNDDdBI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=XDQgoYhzLB1XsKLafILGmqd0YGsnN0nbPJHcJvNgo0e9h6urfd8eONU8I1fRsk9vZ
-	 t8KRELDKpo0U/YkqQ15tASfqFXYWezQ/kFtwjshV5bXG8s7NS2s5frdw26wLdn0wri
-	 4L+4v7faS0/1zWMMF/aqzaT5dam9UzUGCRp8jFyiEn1ylnSW5dmpsOvV4arI3xm6qe
-	 jQHfiWibd4x2jh6cEbk1ATEYt0rgydieaU4aAfuqaeLFt/BAPaL5JwFuKCK3txZdZf
-	 a8besfPzisZ9qNerp1H29SsSAYGosVacDRo9Hf7G6ThpnCs31+2XF6GYd397dPVLOq
-	 NGI0Dd2AU2CdQ==
-Date: Tue, 10 Nov 2026 06:11:36 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: sashiko-reviews@lists.linux.dev
-Cc: David Howells <dhowells@redhat.com>, bpf@vger.kernel.org,
-	dm-devel@lists.linux.dev, fsverity@lists.linux.dev,
-	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-	Alasdair Kergon <agk@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Ignat Korchagin <ignat@linux.win>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	James Morris <jmorris@namei.org>, Jiri Olsa <jolsa@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, Song Liu <song@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Yanteng Si <si.yanteng@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v7 2/3] KEYS: Replace assoc_array with rhashtable
-Message-ID: <avKZeB9VH0cavfr4@kernel.org>
-References: <20261110033738.2495880-1-jarkko@kernel.org>
- <20261110033738.2495880-3-jarkko@kernel.org>
- <sashiko-outbox-206155@kernel.org>
+	s=k20260515; t=1794284323;
+	bh=FCMfrEanvNuZKrktY3H61P3qHIYd7p2HmCkNinB/LRU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=bahJoU4FjVh14oWl9tyP6mySmCdyMcqc+jFvoXghgBKMYPDgYy7JzhgBK9+4Ln04C
+	 IeoqNM9sBi7SkfQemb8phMj8JCnpzA2MapUImxF0YY3xpKz5fdXVw8kHG2tw8RRGgz
+	 p/7RHveO/jRXMQj4qjWr1ZEckKnANJ5bsbeorwxqFyzgXJ0sxreMJ9vObvDnjv0RJI
+	 XeSMKy6bGRmt2AMQ+Kwwr2yEe4nyp4cucFPlr+BoYwLwV6tMmYbJ1BiX6GuP2qBaE2
+	 yhQKenj/6+vgIAlZCM6ZtyGN0mFEJoUi/C24q2E5IeD1cvmYNId/K1jPI20OtrxUwX
+	 IE3vGeObfx0Qg==
+Message-ID: <sashiko-outbox-206183@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 01/15] xdp: reserve an skb core extension area
+ after the xdp_frame
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tianyi Gao" <tianyi@cloudflare.com>, bpf@vger.kernel.org
+Cc: intel-wired-lan@lists.osuosl.org
+In-Reply-To: <115997f55d63b507ce54fbe9e22900b59016f3c3.1794281983.git.tianyi@cloudflare.com>
+References: <cover.1794281983.git.tianyi@cloudflare.com>
+ <115997f55d63b507ce54fbe9e22900b59016f3c3.1794281983.git.tianyi@cloudflare.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 10 Nov 2026 04:18:42 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,32 +60,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <sashiko-outbox-206155@kernel.org>
 
-On Tue, Nov 10, 2026 at 03:56:03AM +0000, sashiko-bot@kernel.org wrote:
-> [Severity: Medium]
-> As reported by Eric Biggers on v5 [1], should keyring_link_params set
-> .insecure_elasticity = true instead of looping on -EBUSY here?
-> 
-> Without .insecure_elasticity, rhashtable_insert_fast() enforces the
-> 16-entry bucket chain limit (RHT_ELASTICITY) and returns -EBUSY to trigger
-> a rehash.  Because keyring_obj_hashfn() only hashes the 32-bit link->hash
-> via jhash_1word(), entries with colliding 32-bit SipHash digests cannot be
-> split by rehashing with a new seed, so __key_link_begin() can spin
-> indefinitely in this loop while holding keyring->sem.  This was fixed in
-> v6 by setting .insecure_elasticity = true and dropping the retry loop, but
-> appears to have been lost in v7.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] xdp: multi-line comment style violation in include/net/xdp.h
+--
 
-Ugh, I fixed this already.
+commit c815cea2f0a60c677b6335d7bc98d4ff8c9346df
+Author: Tianyi Gao <tianyi@cloudflare.com>
 
-Clearly something went wrong with the rebase :-/
+xdp: reserve an skb core extension area after the xdp_frame
 
-I'll manually apply v6 patches and send v8.
+This commit reserves an skb core extension area in the XDP headroom after
+struct xdp_frame and updates XDP head, metadata, and pull-data helpers to
+preserve it.
 
-I honestly don't know what happened (likely the branch was not up to
-date in the first place). Sorry.
+Link: https://lore.kernel.org/all/1d5521eb-84fc-4417-a3f5-6366694d160a@kern=
+el.org/
 
-Br, Jarkko
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index 07231adfb5f82..c888353425d42 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -81,6 +81,9 @@ enum xdp_buff_flags {
+>  	 * XDP program is not attached.
+>  	 */
+>  	XDP_FLAGS_FRAGS_UNREADABLE	=3D BIT(2),
+> +	XDP_FLAGS_HAS_SKB_EXT		=3D BIT(3), /* skb core extension header
+> +						   * is valid
+> +						   */
+>  };
+
+[ ... ]
+
+> @@ -450,6 +464,37 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct x=
+dp_buff *xdp)
+>  	return xdp_frame;
+>  }
+> =20
+> +/* skb core extensions: RX metadata that an XDP program stores in the
+> + * headroom right after the xdp_frame, for the skb that is built later.
+> + */
+
+[Severity: Low]
+This isn't a bug, but BPF coding style puts the opening /* of multi-line
+comments on its own line, with the comment text starting on the next line,
+for both XDP_FLAGS_HAS_SKB_EXT and the comment above enum xdp_skb_ext_id.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1794281983.gi=
+t.tianyi@cloudflare.com?part=3D1
