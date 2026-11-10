@@ -1,102 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.56.49
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794281830;
-	b=XJB3bNJkZ+3Nr8P0qUQXiYF0IfAjYfx7sfH4YHC6WfiWj3Xsh2EhlSqUXEVr7F1T1Nb3
-	 dq568U90lZoHz98gV1TgBwqSvRLjDJPdWuNSP+sMhUYEk9QiIbtIwKxws2XjJNAOX+i6t
-	 IA9fAY7QXVmnbt3SYC2PN7kRZX9oX03xTKKhW5HaK0/IjXglDNXI1rAJFCdttdcVHcho/
-	 I4oxFcMQ4LIIbTxobdwvK/4CNxktVvQOF4356MAeo/OUMz86WWdX4HNjAzN4iuS/vnECo
-	 SY6Y6NG10BSSUMww1nftXTGQAZw3eNfzNWs7YFUs543Pa36iVIKSKMd1/GGfbN/c80A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794281830;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:From:Subject:
-	 Cc:To:X-Mailer:References:In-Reply-To:X-ClientProxiedBy:MIME-Version:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=MK71BqVlfYYwLZUylUvFhYnPqT/9TN5kxAI3LNfAMeg=;
-	b=z5eAZCfNJn/xTCHUMRvAeYzT6V+2Q55U2VYq4rddDXFgBBxi6acZqD8AmnPRFzzkpi9i
-	 Suz6Jfhamp/TKtrk6BksBe5TGZDe0P/PmX9ULw+dkJPey/r7Sf8ReabcEuEL5OtoRLaH/
-	 cD73UrkLvTiAYv95GlvOAtwydna2f+V5OcPredmLQo1/cgXZXBuesH5yjBqiZ0O8qOkcr
-	 3UaBm3Tyw98Db3hTQ4+vmqv8pcBXb5Fn+LkutJ8u20LNH1IjkdC2MgyRAWgcTHBcVRFnN
-	 Nol+BH0bdzmWtcgClHnUYr17d8RZxKdR1Qd4TonHMf4APBgQ28XCHIR/jYrD4fPfAww==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=d581dfVh;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.56.49
-Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010049.outbound.protection.outlook.com [52.101.56.49])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794281866;
+	b=4yzrrMccuig4C+y6Ldo31kx9OAn96UNNdZf5TQH5aKnKpA3Qu9Fs9H06Km7/SALBC+jZ
+	 aiqWPQK5oGnin2OL2hEKs1a+/n35c2LacnVj8wBg7tBwW1QBSZYJM6CFPU2fctb1QUAAq
+	 kyvUulbDfKuSDECbXVGVPm/9jzIDo5tQkyp73oDrtwc/ofWO/nMn6J4YVohafGGTaF7dY
+	 Q1m429SlvxSUxZbiDCqV1z+vqBbfAwUDJnC9UkFumCz/p+RlP2UEMXzqblqkuZkzlRzJA
+	 LIsJ93zeu4l5mxmAYuC9KoTXYm0VX5r34Nd6/reWonTito+yA942/afcSX8i3QyNwjQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794281866;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=0bFyB5NYJMmix1JXZ8Gfv/sgxvyiynVAalRHTQxAKf0=;
+	b=x9QVm96wlrXXNYunaIdENDww40d4IMCJSpf4mfGKppla76D6DerNznnswiWgYL/70UzI
+	 nx4dke747P2oVJeDCKqIrgdRg46NXL+Z6tkzxIIRKlj+BZEFn9m8sSpv9bWzeJ1WOvzgO
+	 QdlFlzUlM4A8h+hLiIXPA8w4Sdgx9Af00M0G3nOVvYtpWdj5rp9cDRukJAXuICCvopn62
+	 6alo6AuQJohXl2KL+B3hVF8DlMTXpd71WLs7L8jwle6DpoLmTqcUMbulrrZxC01w9Aqiw
+	 ITuPo+nEPtf5bF1/6TOaYEsninWsAEsEgvrwSS1oYK6fXYyd1jb4JxdWsoPMjfhwyzw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Dbx/iSV7";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0026260A5BE1;
-	Tue, 10 Nov 2026 03:37:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0026260A5BE1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id D6DAF60A2636;
+	Tue, 10 Nov 2026 03:37:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=d581dfVh
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ksqFe0wv+wYywUvPROB4zvGrHX5FKbDnnhNpPnFCGmPdzZj8Cse5knMEp3F8xiryOq6I8/itWBzhRg59bC6wY3NPUK+uP/PkC7wy42IFSh/YeQ14TAG34/tDnwAFFMjo4rAnXmYKjZ8lQRaxZ5kVXdD3DmmeVbmSJ1UZSFwNm3LCiW0S2u7Du108WpZdIuFZtRfAM2MUAnxcXzvtBOr8Q7BNqc4jJIdNgCe1Y9N62+Qz9L8DQ7HaBMRyVnWTPTe76NeP8qyJ00TILtevnnDMLbo1k8biGdE5Lw3P9LSnPqQzbNjaKdaJjDrl0SbKArryoZdfjU8PUzs+I1z5AwwOJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MK71BqVlfYYwLZUylUvFhYnPqT/9TN5kxAI3LNfAMeg=;
- b=PSVgO+0W2Ue+Tpx0BKc2Skfb3qTEUsgP6hiTVsPGaJ/2zuxsczucO1oK5udlhBtZo7PTFA/Aj/OZ2f0b2lczE509U+K6pTDzCg9t4iPwjjy9Dqf5N12eVgmuKh1/tsKaQujjSf+sprBOSjXaBqt1npApYck6Bz9d4I22KiEqd2LLqkQx93viqA7uVtDBKUuGLiu+6Fn3JyJN/g08R905PBQooNhjQ7YiKjkPXfcCURTeRbmPI0+CvgiS9WTPFGS4MYwDlKb5UjhmgPyoxgzsQiYw2EGFDnevRKeYBrSEHjCJoqb2gjrRGQ8hTmwRlnPYhObifgN1EIeQ70XDSUeURA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MK71BqVlfYYwLZUylUvFhYnPqT/9TN5kxAI3LNfAMeg=;
- b=d581dfVhyXhNzD5lcjDZyP8/1fAcjvJQk5fWblxLmmzhrGXvuW9RD3EDDufikQ888m7+ifXMcuIDevW/M2T+RM6eaVBarBILMUcLT67Z5jKT3Us2FnQo0B/DAnActkDmXGOGDqr3Rs6KR/TE6tJ6wBuBd+VTj346fUTueOuHXh5KJgjM7FnGpd8kaeYcsSpKBy+zH+ifrE4TrSrCH3JZADkSOypSbvRjqi4oZqjbMa5q5VMeiElfjnfjkxTYL6sVeneXKCrG81+b+mB1I3NC8WoX6TCns9BjkVXrIFHzJ6BR5FQpBGcdkgmI9Nx7fS7hfye3EtsUbRK++xH+r0bUsw==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by PH7PR12MB6977.namprd12.prod.outlook.com (2603:10b6:510:1b7::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.592.13; Tue, 10 Nov
- 2026 03:37:05 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%6]) with mapi id 15.21.0592.010; Tue, 10 Nov 2026
- 03:37:05 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 09 Nov 2026 22:37:03 -0500
-Message-Id: <DMR7TM8YG70L.SE7L6ICQOOT8@nvidia.com>
-From: "Zi Yan" <ziy@nvidia.com>
-Subject: Re: [RFC PATCH bpf-next v4 1/4] sched: add helpers for numa
- balancing
-Cc: <bpf@vger.kernel.org>, <linux-mm@kvack.org>, <cgroups@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-To: "Yafang Shao" <laoar.shao@gmail.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <mingo@redhat.com>, <peterz@infradead.org>,
- <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
- <akpm@linux-foundation.org>, <david@kernel.org>, <gourry@gourry.net>,
- <tj@kernel.org>, <hannes@cmpxchg.org>, <mkoutny@suse.com>,
- <shakeel.butt@linux.dev>, <roman.gushchin@linux.dev>,
- <yu.c.chen@intel.com>, <zhao1.liu@intel.com>, <tim.c.chen@linux.intel.com>,
- <lizhe.67@bytedance.com>, <mgorman@suse.de>
-X-Mailer: aerc 0.22.0
-References: <20261110032913.71974-1-laoar.shao@gmail.com>
- <20261110032913.71974-2-laoar.shao@gmail.com>
-In-Reply-To: <20261110032913.71974-2-laoar.shao@gmail.com>
-X-ClientProxiedBy: CH5P221CA0021.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:610:1f2::8) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Dbx/iSV7
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id D35021F008A1;
+	Tue, 10 Nov 2026 03:37:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794281865;
+	bh=0bFyB5NYJMmix1JXZ8Gfv/sgxvyiynVAalRHTQxAKf0=;
+	h=From:To:Cc:Subject:Date;
+	b=Dbx/iSV7cTFsIAJDznLTkufVlrkOhnjBV1cdey+SDcIKfykuCIOCznQDmK8cIGAKr
+	 XHRMOyPCAPRzSfBFKQuEbYxApURNV+VZZKudQVp3kvp552SweD9kMHWZ8ULW1DmDXu
+	 CC23s60NtKoKlZ6YzaXKXjW1mpq8UtU2fUfYeL/5hNf3Bm298a+LeZKmvbnMsQw84x
+	 9zjvupy5vLzpgptoLwZDevpW8tSJIBaDDBx2zq5LUUnJN3TAmAy3/ZpVHO/lfZ0tJL
+	 gefEPFVeOEQ93XKdJ/5S4C5N2qEVK16EMI6EUf1qwVxBouuRLCUoyS9qCbUkklg45k
+	 ByB2IbA7lGjfw==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	bpf@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	fsverity@lists.linux.dev,
+	keyrings@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Alasdair Kergon <agk@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Alex Shi <alexs@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ignat Korchagin <ignat@linux.win>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	James Morris <jmorris@namei.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Song Liu <song@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: [PATCH v7 0/3] KEYS: Replace assoc_array with rhashtable
+Date: Tue, 10 Nov 2026 05:37:35 +0200
+Message-ID: <20261110033738.2495880-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,96 +91,166 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|PH7PR12MB6977:EE_
-X-MS-Office365-Filtering-Correlation-Id: acd01986-a9f6-4752-dc5b-08df3edbe3ed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|23010399003|366016|22082099003|18002099003|10067099003|921020|4143699003|11063799006|261028144727099003|261102123227099003|261022075727099003|261022105027099003|56012099006|261021123027099003|261021121427099003|261026140227099003|261021135927099003|261009223027099003;
-X-Microsoft-Antispam-Message-Info:
-	OxauXoo+V2fYQWSqWrFocTC4dM0UWzeKkcJD6JFVmo1A0D79zgobNUyr/bNyzGQP81tbwMx55VCGBynJDhAbxA6FrriEJlgrBz/KcyntjfJuWtqg2v9bgqvnSJi74RKDD/SOKP6Kj6r4q7nLmwqhT2kDjc13HB0zqlIky8yl27lmyH7e6qn+zOIh7vm8Qe5N7jHbsmda8DzyDF16Y/Jjw8bDXacWhxqP9Euu3QLhUrvGdZHj6Jemb0aLshqqWFZsq10m++Hv5er2qJxBQRJ/xRPrb1ovlychmfxe3WvlUkgDAXyk3Cdt637Us9oxr2AYIqOX83otDdf5J1GG1QoB6NFaTyPVzCiNoxAFSmEmNkK/WKmufdwukEhK53UVAa0ktFuWd9HSpUyhbESKHcBSKkldPGEUkl961PGJqu8uFnCte6T0vbWqpCTTZ5kYj2wx25tH3tLAVeHcHHYDYvfl+QvhI1jgZ2Y3OQHbw/Dx4+S7nIkawV39JPiyKOjbIjTlvgyqkCFRmSc5/R6YrTZNvtJwKWUdG8U2JtTPWoK9yNn3hmpnXH/XHTvyTqKLfaH0MLKmNlIEiJF//8J6MJcRqJpPBur3kjXTBFkBrdAqqJrEqiXZVpmPMwAObsjMrS+syV3/MPquXoo4sOJeGPQnuQvUwMRv0hhQ7chux9tzvEfFrjbNUbnwwJ9vwYiR4vttWzEN6HyE0kCYtuV+byf99A==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(23010399003)(366016)(22082099003)(18002099003)(10067099003)(921020)(4143699003)(11063799006)(261028144727099003)(261102123227099003)(261022075727099003)(261022105027099003)(56012099006)(261021123027099003)(261021121427099003)(261026140227099003)(261021135927099003)(261009223027099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OXF0TWhzWVJyZ3BwVlNDbUhkam9Xc2dmUE1QeXowQkplR3RaYTBqOTRRYjRE?=
- =?utf-8?B?TEJYdHFEdzZKZzZFV29vQ1UrQjE5MGV1ODNqb0w0bERuZSsvc2VEaldraUk1?=
- =?utf-8?B?Qk00eXRzUTF2MzN1MVRCVGhHT09ma3JhYVgyYTVOTjd6eFFPaEVkWTRJVlVD?=
- =?utf-8?B?RVY3WllhVWYyRGZUbnc3eThiek5XWjlOcWwrSU0yUHQ3WjNQMkJMOWg3K3Rh?=
- =?utf-8?B?TGxkanA4N2h4Z0FqNTh2MzRERjVxaTljRTN5cFRCeTJpRGFqZm9jR2dLSzU3?=
- =?utf-8?B?MGtRNjZKREVTMFBUcC9Zb1RneXpYcFBDMlcyajRxc0JLOWcxTHkvZHgzaVMr?=
- =?utf-8?B?SFlPRjVqY1M1djNPMGR2Znp1TW9sSmpFaXVIMmpFUnlZOEdMNEl6M0MzZHA4?=
- =?utf-8?B?a3NJT1QrQzJZWThQM1AwSythMUpHRXF1bXZhTFNzUXNZNlRlSzlTWjV3QjVG?=
- =?utf-8?B?WlhkelBvS3BVRUp5QnNUTGQvVmFBNGJyNnBZYVFoQUJFYXRZWXJoZFl4UW9P?=
- =?utf-8?B?UzZBNnpsK2h3ZkNmMnJtYmNxRTVqSE8yRlNMSEVrYzFOcjltc0hCd1RaK3RG?=
- =?utf-8?B?dmZsNFFPMHNidERIQjJsbWpOTmhnRUgrU2FoQnpMR2NZNkcrc3lGa25vS2ZI?=
- =?utf-8?B?Ly9ZT3g5TnZaUUI4VExyckt6Y0x4dkhSb0FzME9pWnFSVU13ZVNLZ1JUc0lU?=
- =?utf-8?B?VUsvN2N1L3ZjQzQwbFJ3b2xRbDdhQnhSbGxFWGtNaFFkK1BmVXlzYzcwTUhS?=
- =?utf-8?B?ekJuQmEyWHpHakU3VEhhTlZGRSsvY2VtTmczQ1FtdmJGcW9EczBxRUMwSDZC?=
- =?utf-8?B?M05PNXd5Zk50K3Z4cTNGOUcwZDZrWmhzS2FocUhVaGFtRlI1blc2d0h3TERr?=
- =?utf-8?B?ckwvY0F0SFpLbzhjS0ludmlpTUdVZDNtVHErRWt0dU43Z1VNdWd1VkhlaDJw?=
- =?utf-8?B?YksyYkhyWmNZOExTVExITTBzcnYzajE2dy9qS3JyVnZ5YkNMdHIvTXpKa3VG?=
- =?utf-8?B?dldpQkpkZUtuMndKdWlnUXlBTlZiS1ZWQ3Y5UStpQjg3R2RvemwvWktCS3Jh?=
- =?utf-8?B?bkpqOE1oMjFTQWI5K1Q4cHdtZzV2MlViUUhHc3laT3c0bWhkY0hPTElWZ0Vv?=
- =?utf-8?B?ZGFhTnlpaXIvSTV1NVRhaFF6NVh4c3JSU2xoYVZlZVhtNzNMeWJsV1AzSVdV?=
- =?utf-8?B?eHBRbzR2QjRqc2dxWWE4UEVHaStMOGgwRTM5WU1yQWZuQUVNWm81MEFiZGI4?=
- =?utf-8?B?VUZLTElCSkJhYVcwOGRTZWxrdVBNUS9BcDQzMGZzMlRaa2pWdlk4Uk1GRUF6?=
- =?utf-8?B?alpaVlFPYjFjZ0dNcGtZTVVNbll4akJYV0prbkpjSVR3VUQ3MXY5TFEvQWZx?=
- =?utf-8?B?amZzQUZTN2NxcSsrWE1xYWM2SjZkN1FiNGRDUlRSQ3ZKOXQwMEFCaFRyUVhh?=
- =?utf-8?B?WEhXUGg3Wmp6MHlwR3J6UFVUVjNNRWpZRlI2aUNkWTU1YitKaXlJRUJhbUEw?=
- =?utf-8?B?eUdjc3QybmNiMmRYUkFsTGU5RTNOTVFyeHdkZjlxb0lyUTE5UXNDakxOZnJh?=
- =?utf-8?B?YWltRGlIQ01lZUxyWHpOYk1JVjVjb3RPcnBKUUUyM29oRlB0enBUZ05MNVcv?=
- =?utf-8?B?QlFOL21GV2xEUVJMeXNvM202TVprZTIwcTdQcDVNRFRpMGIwRXlOcHNjajlT?=
- =?utf-8?B?WUVDc011TnNwZUVXTW1nNGVWSVFjOGhDandXR3NYNyt1TmNsRldmd3AwRXhE?=
- =?utf-8?B?M1lXWngzNFNtK2Q3QnRNdXJoMEZVbTUxY1ZqTEd3WUIyRmR3MFdna2dBZ3Fq?=
- =?utf-8?B?aVVqREU5WXJzdkNwTnk2R0IvZU9TZENtZFdiWmZxUkpmVkJwVERMREpZMjJa?=
- =?utf-8?B?eVY5YmZCK2lpQ2tFd21reTlFWUppS1dIbTZHVm92OS9SZjlVbXhGY1RKVkt5?=
- =?utf-8?B?RmpZSUEwaWNkc0hKcW5JK0FqZ09hbUJONnBLTGhnckVvSzM2SHBuemFZU2hr?=
- =?utf-8?B?YUpOVngwUmpDS1psTkQvVUxQNjR4Zk95M1VnWWNJUFZYZXljdW5MV2RhdjR4?=
- =?utf-8?B?RCtSNXJRd0ZkVVV2NWFPU256YjI4SkF1cWNPTVBFR0VCbDYxWEhLSHRIWHFO?=
- =?utf-8?B?Z0RKV2RrZUJNakhYM3RwVEh0cnVGMWxiV3JZWmhFb09lWmRLUFM3YVFKMUND?=
- =?utf-8?B?UW5VZ1MvTkJoYlZDYlNqK2c2bnlaLy90SXJtalE0QkNBT1NRd2JtRHFQYkps?=
- =?utf-8?B?SjA3Vktva2ZVRDdJTFE1UmNtWXBwdG1IS0FZTmpVSERGRWlnV2Y3UStTWnds?=
- =?utf-8?Q?2i2FJ2MP3lrw5inSE0?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: acd01986-a9f6-4752-dc5b-08df3edbe3ed
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2026 03:37:05.3623
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Pn6K3qDmngmMfcDVVtZXGY+BDC6JDqUVurSYCtx44u7Yej9uI7NhPU+zis55lNQb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6977
+Content-Transfer-Encoding: 8bit
 
-On Mon Nov 9, 2026 at 10:29 PM EST, Yafang Shao wrote:
-> Introduce task_numab_enabled(), numab_in_normal_mode() and
-> numab_in_tiering_mode() to replace the direct accesses to the
-> sched_numa_balancing static key and the sysctl_numa_balancing_mode
-> bitmask.
->
-> No functional change.
->
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> Cc: David Hildenbrand (Arm) <david@kernel.org>
-> ---
->  include/linux/sched/numa_balancing.h | 36 ++++++++++++++++++++++++++++
->  kernel/sched/fair.c                  | 22 ++++++++---------
->  kernel/sched/sched.h                 |  1 -
->  mm/memory-tiers.c                    |  3 ++-
->  mm/mempolicy.c                       |  3 +--
->  mm/migrate.c                         |  7 +++---
->  mm/vmscan.c                          |  6 ++---
->  7 files changed, 57 insertions(+), 21 deletions(-)
->
+The keyrings subsystem is the sole user of assoc_array. It has over 1700
+lines of code, no test suite, and a long history of bugs, with LLMs now
+finding more.
 
-This looks like a nice cleanup and can be picked up separately.
+This unfortunate outcome has evolved over time by large from the shortage
+of in-kernel callers, time bandwidth and 3rd party contributors.  What the
+keyrings subsystem needs is just a generic key-value store, which performs
+well with sparse key sets. Replace assoc_array with an rhashtable-backed
+keyring index and remove assoc_array from the kernel.
 
-Acked-by: Zi Yan <ziy@nvidia.com>
+CHANGES
+=======
 
---=20
-Best Regards,
-Yan, Zi
+v7:
+- Rebased.
+
+v6:
+- Eric Biggers: Set .insecure_elasticity = true in keyring_link_params and
+  drop the -EBUSY retry loop in __key_link_begin().
+- Addeded Reviewed-by's from Eric Bigger and Ignat Korchagin.
+
+v5:
+- Eric Biggers: Include <linux/jhash.h> explicitly in keyring.c.
+- Eric Biggers: Document why hashing type/domain_tag pointers with SipHash
+  and truncating the digest to 32 bits are safe.
+- Eric Biggers: Rework the commit message for "KEYS: Replace assoc_array
+  with rhashtable", including behavioral and operational changes.
+- Retry rhashtable_insert_fast() on transient -EBUSY in __key_link_begin().
+
+v4:
+- Eric Biggers: Correct the kerneldoc summary for keyring_is_empty().
+- Eric Biggers: Truncate keyring_index_key hash to u32 and drop index_id.
+- Eric Biggers, David Howells: Use a proper struct instead of a two-element
+  array to pass the edits.
+- Eric Biggers: __keyring_link(): Call key_put() in the rollback of
+  rhashtable_replace_fast().
+- Eric Biggers: Retract from using __free(kfree) in keyring_get_index().
+- Eric Biggers: Reuse keyring_link_key() in keyring_obj_cmpfn().
+- Eric Biggers: Document why keyring_index_free() uses queue_rcu_work().
+- Eric Biggers: Fix the commit message for "KEYS: Replace assoc_array with
+  rhashtable".
+
+v3:
+- Since David is away for the next week I decided to address the
+  low hanging fruit that I reported myself.
+- Unified and sanitized function and variable naming and removed
+  unnecessary asymmetry e.g., by renaming keyring_remove_all_links
+  as keyring_index_free, 'links' as 'index' and '_edit' as 'edit'.
+- Flattened the implementation by refactoring out some useless
+  wrappers and other constructs.
+- Addressed continuation after triggered WARN_ON() on at the three
+  sites that I've described in my email response to the previous
+  patch set version.
+- Reworked keyring_read() so that it triggers the scheduler between
+  the iterations.
+- Dropped "Assisted-by: LLM" tag because checkpatch.pl told me so.
+
+v2:
+- Tried to address all the issues pointed out by David and Eric. Tell me
+  if something was ignored, as that would be an unintentional mishap.
+- Updated and trimmed the source code comments.
+- For assoc_array_edit I decided to go with two-element pointer array,
+  which shifts a bit what David suggested.
+- Dropped is_keyring flag. It was so obvious call so I mention it here
+  just in case because too obvious maxes out my self-doubt ;-)
+- Used cleanup.h primitives where I possibly could especially in order
+  to make fallible initializations more bug-resistant.
+- The already-ack'd bug fixes are included but will be dropped as soon
+  as I've sent them over to Linus.
+
+VERSIONS
+========
+
+- v6:
+  https://lore.kernel.org/keyrings/20261107195605.3929659-1-jarkko@kernel.org/
+- v5:
+  https://lore.kernel.org/keyrings/20261105031401.956609-1-jarkko@kernel.org/
+- v4:
+  https://lore.kernel.org/keyrings/20261029232437.2581640-1-jarkko@kernel.org/
+- v3:
+  https://lore.kernel.org/keyrings/20261025001105.1824178-1-jarkko@kernel.org/
+- v2:
+  https://lore.kernel.org/keyrings/20261023120953.1206778-1-jarkko@kernel.org/
+- v1:
+  https://lore.kernel.org/keyrings/20261016215326.4110064-1-jarkko@kernel.org/
+
+Cc: bpf@vger.kernel.org
+Cc: dm-devel@lists.linux.dev
+Cc: fsverity@lists.linux.dev
+Cc: keyrings@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+Cc: Alasdair Kergon <agk@redhat.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Alex Shi <alexs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Benjamin Marzinski <bmarzins@redhat.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Dongliang Mu <dzm91@hust.edu.cn>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: Ignat Korchagin <ignat@linux.win>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: James Morris <jmorris@namei.org>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Mike Snitzer <snitzer@kernel.org>
+Cc: Mikulas Patocka <mpatocka@redhat.com>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Song Liu <song@kernel.org>
+Cc: "Theodore Y. Ts'o" <tytso@mit.edu>
+Cc: Yanteng Si <si.yanteng@linux.dev>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+
+Jarkko Sakkinen (3):
+  KEYS: Introduce keyring_is_empty()
+  KEYS: Replace assoc_array with rhashtable
+  lib: Remove assoc_array
+
+ Documentation/core-api/assoc_array.rst        |  564 ------
+ Documentation/core-api/index.rst              |    1 -
+ .../zh_CN/core-api/assoc_array.rst            |  473 -----
+ .../translations/zh_CN/core-api/index.rst     |    1 -
+ drivers/md/dm-verity-verify-sig.c             |    2 +-
+ fs/verity/signature.c                         |    2 +-
+ include/keys/keyring-type.h                   |    1 -
+ include/linux/assoc_array.h                   |   88 -
+ include/linux/assoc_array_priv.h              |  178 --
+ include/linux/key-type.h                      |    1 -
+ include/linux/key.h                           |   29 +-
+ kernel/bpf/keys.c                             |    2 +-
+ lib/Kconfig                                   |   14 -
+ lib/Makefile                                  |    1 -
+ lib/assoc_array.c                             | 1724 -----------------
+ security/keys/Kconfig                         |    1 -
+ security/keys/internal.h                      |   14 +-
+ security/keys/key.c                           |   22 +-
+ security/keys/keyring.c                       |  994 +++++-----
+ security/keys/request_key.c                   |    8 +-
+ .../dm-verity/test-dm-verity-keyring.sh       |    2 +-
+ 21 files changed, 479 insertions(+), 3643 deletions(-)
+ delete mode 100644 Documentation/core-api/assoc_array.rst
+ delete mode 100644 Documentation/translations/zh_CN/core-api/assoc_array.rst
+ delete mode 100644 include/linux/assoc_array.h
+ delete mode 100644 include/linux/assoc_array_priv.h
+ delete mode 100644 lib/assoc_array.c
+
+--
+2.47.3
 
