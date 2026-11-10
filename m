@@ -1,55 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315670;
-	b=eylOiPrdTRsL7b8OnGGDdV5PdMyPvSs09awnJ8JxJgXGD4X1NttToXkLzoGkroelCKZI
-	 74LJAbWo5vjaq7doi2uWKJ+GrglgMv4CHBCSfhraywO3FYSc9hhUm7Ul2pyUKWCJqqyZY
-	 9aBdgy1OkF/Up2OZrGVVxQPj9RwGdcedOslHfnM8dxTu0lefXDvYRVzFBLC5Qlvr5gmhj
-	 ZlaG1iQHPk6NsEMTnEJ7izHuCvMved7OnMizh7udWvOFalcvHRI0qhCEP0Xgd4G1M3P1o
-	 Tdr6jf2UkR8WqoVpU9Et1vtlBBTC9T6wOskXIW89UQhXOT6jebE+N92Xhc+9Kw/eA8g==
+	t=1794315680;
+	b=LqRv3VK9ctlmU2Gat7KEvtBHJutFXPvGhoNsf2JBvon/g0qOkkPMMiBlamk4/PjM5+8z
+	 o4H4FAnf+gj5tyNmqYxTzmfswca68pZEICSsX4U4AnMP6PcuQI7UvNLdzK6PFCIvn4FO0
+	 e7gWdoU08/zbN7/imUvYsC5Ezzgfu+U26B46RY735I+jsk2mOnKRESyr53dZMN59fsDUX
+	 xyRUEkpGwYqehugvWpZfmFZYPhcyN0gPiOK/M+vkhy0JjXsrHXeDZlfPq2C+vAnoTmIsf
+	 rgowuzcfiKs9PoVMX6USU1IxYfP7xikrnMaFXrgVUSfuwvlObP65wJ98ZH75NzDbA0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315670;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315680;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=6TUsKtfw8LK+ehUFve3c8+TC971fmmWHnjkflx04kRU=;
-	b=Q73/EGqAPFcH21NWcMEg7bknHA9o+Fo/uGDJKRwBypIQx5LUquaThMS4nib9SdASIoqf
-	 WYGBz/HEfdEbMKZoLM3TibmBe73yBhIq1MwrJmVMu8bOFA1CWWn32ccDOZsx860m6tFoD
-	 KoqXR/GzWLuh0oNh458mytrL0rhlmJfASxnshBz6smrHAO+V8ZGyP4RIb6mqVj+jcdGIF
-	 VRzWIiHRThA8aTPHlEgjK/1WOFZtbmxoKzC778/QG3IYoIeO+SFQNo3sIqAcTDJ997xRT
-	 FeBYOILAKtMnoQvbr7uD5Iu1A08aGyHCSRtzPevqI0ABhQS5GBlZr5lHJapqMCzHfNw==
+	bh=uy1ycf/eSX2O23rO7hPaiWZXda5bV9zKCWMm/nVq++c=;
+	b=0niNY5uygD3nPnKHru7zMSeDERCMqkLRKFwfgydx3F4t8l6pkw5RbXdW/pyiQeLxAwxg
+	 mKF3g4T72CSvq2bfu9IgOos3OgKCWRo6kYddqkHxOi+lbmeHjpJg18C2Gr7121I5yuPfK
+	 Mt/NVKwgIi02DQgJH/3gkrLqXncPHpizH2ITqDNxqF9bAo5wrUt28RCOL0JEuQ+Yw5nRZ
+	 kgPKXaZZHm/DEvXsiqM6W7eyMdHk+571Mogk1Jsix7bSRx81AEOmQR6yaF4G2heZq8l8Q
+	 LmKDxLryyCYsM1TnCnmMnWaQi+vZZeBTnZbhAzaHYjjoKnfbtHZXg+nG31O0i2yND2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Txc+oLsS;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ecKnUQb6;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E225A606A7C2;
-	Tue, 10 Nov 2026 13:01:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920C5606A7C0;
+	Tue, 10 Nov 2026 13:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Txc+oLsS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855D21F0089F;
-	Tue, 10 Nov 2026 13:01:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ecKnUQb6
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43DBE1F0089F;
+	Tue, 10 Nov 2026 13:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794315669;
-	bh=6TUsKtfw8LK+ehUFve3c8+TC971fmmWHnjkflx04kRU=;
+	s=k20260515; t=1794315680;
+	bh=uy1ycf/eSX2O23rO7hPaiWZXda5bV9zKCWMm/nVq++c=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Txc+oLsSTya5a/uDMzUi9SyNJUdNPjbkWqSzUyNPQLOZdU3Wyhv3kDcxBU+6EOmsa
-	 6JYB0dacGUIaHf/v3K0zckowF7XZlnzQoMhxiwcCrYxMoIsTQzXvcoxBfnwM5ZFtcb
-	 4p4rMGXoLWBR4w82/jVeiqP4dL3TO+JdVney9yBXmYX5ndLAvfS2ZzHFOtBl+oyQw8
-	 Sj1idliO6yT1cNyD0HUDyAWcPYJ+kQp2W1Yx1xoKNdckm0K/aWJtFlM/Y9ERNnbb6q
-	 9eImmXMneBJ5erNerVYNpU0BhH5EUlxqUpq6pQiCkGdW/hT9wVDa9GuxkZw9l8KM+p
-	 OdgqQeRKkGYsA==
-Message-ID: <sashiko-outbox-207066@kernel.org>
+	b=ecKnUQb6D9tCB3Jqs1iR8BfTm6WD5wrjIEGcBAyphWdQQxebUR3I6pkURfxse87SX
+	 4Xrgmf8UTe2tJTCEkUIP27ZdG2a11Y7tIrxCijEWa4kdnsukv1XHXwn0bInyaQu/Hg
+	 FMGg0hHkd62OqOEBom6ddqpZI0/+v9qBBe4SYHtTGn2ZsfneHQgikpiYxt8zpftcz4
+	 uQTDwykhpri6K5E7JZ+697N6ZomKE79k7FjJBvAXobczrqKAu0wpey17/InkYuNYAB
+	 QKfPEVogIq+pVgGFiy1H6jmZAL/U+WTSHw1s8ddpxgbi3L1giUFxccOijQ756Z8rPi
+	 qjxASNETNxyNA==
+Message-ID: <sashiko-outbox-207067@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] sched_ext: make DSQ iterator stay drained after NULL
+Subject: Re: [PATCH 9/9] tools/sched_ext: scx_userland: Reject batch size 0
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kang Chen" <k.chen@smail.nju.edu.cn>
+To: "Tao Cui" <cui.tao@linux.dev>
 Cc: sched-ext@lists.linux.dev, bpf@vger.kernel.org
-In-Reply-To: <20261110125113.2935742-1-k.chen@smail.nju.edu.cn>
-References: <20261110125113.2935742-1-k.chen@smail.nju.edu.cn>
+In-Reply-To: <20261110125001.4167503-10-cui.tao@linux.dev>
+References: <20261110125001.4167503-1-cui.tao@linux.dev>
+ <20261110125001.4167503-10-cui.tao@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 10 Nov 2026 13:01:09 +0000
+Date: Tue, 10 Nov 2026 13:01:19 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,69 +60,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found no new issues
-in this patch, but noticed 1 related pre-existing issue it does not
-introduce:
-- [High] sched_ext: recursive dsq->lock deadlock via
-  bpf_iter_scx_dsq_next() in tracing [1]
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] tools/sched_ext: NULL optarg passed to fprintf() in
+  pre_bootstrap()
 --
 
-commit 892356944fb79fb9f40ab2f24779b6976bd4ec25
-Author: Kang Chen <k.chen@smail.nju.edu.cn>
+commit 0b3057c6e52c8c9370246141c70182a7501b6c0e
+Author: Tao Cui <cuitao@kylinos.cn>
 
-sched_ext: make DSQ iterator stay drained after NULL
+tools/sched_ext: scx_userland: Reject batch size 0
 
-This commit records a drained flag in the DSQ iterator cursor once
-nldsq_cursor_next_task() returns NULL so subsequent calls to
-bpf_iter_scx_dsq_next() continue returning NULL.
+This commit rejects a zero batch size in pre_bootstrap() to prevent a
+livelock when -b 0 is passed on the command line.
 
-> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-> index ebdf7b91f9d37..f2bfd43d75526 100644
-> --- a/kernel/sched/ext/ext.c
-> +++ b/kernel/sched/ext/ext.c
-
-[ ... ]
-
-> @@ -11028,13 +11030,24 @@ __bpf_kfunc int bpf_iter_scx_dsq_new(struct bpf=
-_iter_scx_dsq *it, u64 dsq_id,
->  __bpf_kfunc struct task_struct *bpf_iter_scx_dsq_next(struct bpf_iter_sc=
-x_dsq *it)
->  {
->  	struct bpf_iter_scx_dsq_kern *kit =3D (void *)it;
-> +	struct task_struct *p;
+> diff --git a/tools/sched_ext/scx_userland.c b/tools/sched_ext/scx_userlan=
+d.c
+> index b16b6db5f3650..cbd511685449f 100644
+> --- a/tools/sched_ext/scx_userland.c
+> +++ b/tools/sched_ext/scx_userland.c
+> @@ -364,6 +364,11 @@ static void pre_bootstrap(int argc, char **argv)
+>  		}
+>  	}
 > =20
-> -	if (!kit->dsq)
-> +	if (!kit->dsq || (kit->cursor.flags & __SCX_DSQ_ITER_DRAINED))
->  		return NULL;
-> =20
->  	guard(raw_spinlock_irqsave)(&kit->dsq->lock);
+> +	if (!batch_size) {
+> +		fprintf(stderr, "Invalid batch size %s\n", optarg);
+> +		exit(1);
+> +	}
 
-[Severity: High]
-This problem wasn't introduced by this patch, but can bpf_iter_scx_dsq_next=
-()
-and bpf_iter_scx_dsq_destroy() deadlock [1] on kit->dsq->lock when
-called from a BPF tracing program?
-
-The DSQ iterator kfuncs are registered in scx_kfunc_ids_any and are not
-listed in scx_kfunc_ids_no_tracing, so scx_kfunc_context_filter() allows
-BPF_PROG_TYPE_TRACING programs to call them.  If a tracing program runs
-while the current CPU already holds the same user DSQ's lock, iterating that
-DSQ attempts to acquire kit->dsq->lock recursively on the same CPU:
-
-scx_dispatch_enqueue()
-  raw_spin_lock(&dsq->lock)
-  ...
-  scx_error()
-    trace_sched_ext_exit()
-      <BPF tracing prog>
-        bpf_iter_scx_dsq_next()
-          raw_spin_lock_irqsave(&kit->dsq->lock)  <-- spins forever
-
-Adding the DSQ iterator kfuncs to scx_kfunc_ids_no_tracing would prevent
-tracing programs from calling them.
-
-[1] https://sashiko.dev/#/bug/linux-243627bf-8f5e-401e-a2af-0b6c5d9b3088
+[Severity: Low]
+Does this pass a NULL optarg to fprintf()?  Because this check runs after
+the while ((opt =3D getopt(...)) !=3D -1) loop finishes, the final getopt()
+call has already reset optarg to NULL, which prints "(null)" on glibc and
+causes a NULL pointer dereference on libcs such as musl.  Checking
+!batch_size inside case 'b' while optarg still points to the argument (or
+printing batch_size with %u) would avoid this.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110125113.2935=
-742-1-k.chen@smail.nju.edu.cn?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110125001.4167=
+503-1-cui.tao@linux.dev?part=3D9
