@@ -1,48 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794342815;
-	b=oUNN2nMJVZoKWZ2dmuAauReyvPXnKPt42HC5kYPsoNG/2gh+ZDlMP0BMmWXbvEDWpWs9
-	 1DR77QRpwB/6f9ofVDMWE/kypCLn77BlGncRsDZMOd46bLRtK+AAFko2qxhaDXWikQmtf
-	 eWFGTeLJOT8ctk5dnxU9kirj5wYRaoo0O/PsTVRw03m+bvGV7wZAYaInP8sBjHpcepngX
-	 ZiofJChXo4ZR1m58VRr4BdTz724N5xM1BS7Ar66HsLszVw+cVseDYdKIJkqplM0ehoJ8t
-	 CDNkUxJ6lxPFmUf0vsbcgA6uV7tG4X1mJB/Z4/GloCMfxOl8nKM8zd8JXQ+kbJiN5rA==
+	t=1794342968;
+	b=zh9jB/RUj1tKCi2lHTZBN/cZDH/p4AIzdvavObi4jTNpt3eXgPBY+V7S3KCQH93D30fd
+	 rDf0TBk9+d7V87kd2Iv0lF/wqCK6NWP6V+Jpu5nIol+MFpiDSh2LLb/Sua0s5x7hVGmNp
+	 Cvbqp5QUegQ155q20PftVZOa/e5UDPDLcpS/HY4T51fBlAAD+2GmQhEP0LfDvmhRzCiFV
+	 hWg9Y4a/RhDjuVvLy2wKc+gtOXnkjlnJRqPzhoEGlrY2rxybZ4uqT3B769nGLs8Yjtgcd
+	 aXSaeEX7w69NWD+Uuq0B6Mv4d5jSdPaNRKosSIBF7BiMzmpIdeT+2E4EpxxqXguw3bw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794342815;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794342968;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=/8ocYQBe3YFFmUUoCd3DPsEeCobQ/m4s1lpafYEhyRg=;
-	b=X9EOAID8DdGFcoeil1CTesvIx6/NGwxE6dflt97+Z0VKmpetc+6DIbfpgrHZKOu9i1zN
-	 SR25xOiiUkhoegxd3mUv6eB5qUihRvM0MPYjNyDChC3SU6RT7wAjGTJpBN8JRe9dRmKr8
-	 p7INRaVBAEJfrw6Dtw6PiMfxM1ciJFb6IgrNUr/L1DekIRg+zOHykE0B0rrCjW/ohcwJK
-	 H6no8N7Bvb0fhHQ8U8GYP563LOJuNlkDprmc6Q6onK2LQgVj7KhMZBcSfV2Bi+iK12eNk
-	 B2LeRHoQgNQqD8rKPSRCA3810IIz6r7ejgPNs0Jpu53SjWUmLGjoXxBhH24zIkVbPag==
+	bh=ZUgz3Zj4l1X+7pLJOjMeK6znxMPodZgNhJVee3GIBpY=;
+	b=k1vzgNVJIi3A8RYPKrsJn9Kf5eqxEb7l4pL8EVbzc0MyB+Vali61QQWapp1uzt5r/AA2
+	 BVHQ0Kln1EXnyPyrY4Lj8xyLxRgA6RNIzLieHzB3fRBTlRvlyhGwWhDdQUJi7sUrjwkWB
+	 rf9KVdRXzBI6wbl5agunPNWLGqgi62EArj6a2G0QKIOXLZ3zGeBbr+B1gxwifhSVvQci0
+	 JlRWfVVHhrFlvFYtX2pnev2ZskPuv8Thx5w68r702d0MkOyIt88aJhGK24ChjU38lvkde
+	 cXjsZXvF8xVcVxGA10Oi4hrcJV1JEoUYPiWNOWRnSTBO3g/9ed/NDFdnmEV01sGtAag==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mi6pzJbm;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AZNk0F2A;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D03606AD47;
-	Tue, 10 Nov 2026 20:33:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6DD606A321;
+	Tue, 10 Nov 2026 20:36:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mi6pzJbm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9FAE1F0089F;
-	Tue, 10 Nov 2026 20:33:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AZNk0F2A
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A6D1F0089F;
+	Tue, 10 Nov 2026 20:36:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794342815;
-	bh=/8ocYQBe3YFFmUUoCd3DPsEeCobQ/m4s1lpafYEhyRg=;
+	s=k20260515; t=1794342967;
+	bh=ZUgz3Zj4l1X+7pLJOjMeK6znxMPodZgNhJVee3GIBpY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Mi6pzJbmGbk+Y7lwP1y+fgu4twMGHVAMHHT1GHNSzeJCGFPvQY06WGUh0F8gG2d9B
-	 /46tdmMsmHUyjAa5hnJT820kJxQZpxX3Op1/JyjtNwjI1DdQs62lE+2EBrNXcaitWH
-	 voiG/bXJV3FyiQ3xLYvqu8YrDTYvbmT6E3mNzNYEfh1ZGZyOJPFQ5SN3KXspVAvYbe
-	 C8VwynMbJH3tkME+dSdl17rZ1/txeiLoBCXe9GCVQQ6+b7Q/MFDHi+WSvNvKCLJfOW
-	 EvgMKyHovR3fJ2W47FvmVHz8977Xi3TqMnyedOdXiIFANjpHXT33kCvtB1UL1Epsw/
-	 PIkgit8f9BXUg==
-Message-ID: <sashiko-outbox-207712@kernel.org>
+	b=AZNk0F2ArbqLF1NOLT+6cm2uesJciY53GvhbThDnVJqf1bZG2MCJ5/Nrvy7loZ1gW
+	 C9022AnNNRoYBC7ugXktDd2Ax7Ds7ztythfHq4vhKFNW/pTR6kxv1Y+P0P+iGmikmf
+	 WJvHD+eaEiquCd2Hf97MvozEmhoE0Um3tZRf45KlTN+rQgn3TuUunqH2NEQ2aE01wn
+	 yvFqIIAs51d+VKHVl5fKqUVNcqsC0W+3NNc1LgmpPs48SxghJ6AhbdkBq7ZaHF6JKr
+	 ozcEymvuAGr3RILoBqmRXXhSrMbt/S3EWqw9rb2DmvT5Dp8eo73DjBgL4tWEVE4wkU
+	 s85LmRmmAK0Qg==
+Message-ID: <sashiko-outbox-207715@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v3 1/6] docs: security: Describe the Kernel
- Assurance Plane design
+Subject: Re: [RFC PATCH v3 5/6] kernel: add KAP checks for unshare and setns
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "HARIHARA SUDHAN. R" <harisudhan@armoriq.io>, linux-security-module@vger.kernel.org, "Paul
  Moore" <paul@paul-moore.com>, "Kees Cook" <kees@kernel.org>, "James Morris" <jmorris@namei.org>, "Serge
@@ -58,12 +57,12 @@ Cc: "Andrew Morton" <akpm@linux-foundation.org>, "Jonathan Corbet" <corbet@lwn.n
  Prateek Nayak" <kprateek.nayak@amd.com>, "Valentin Schneider" <vschneid@redhat.com>, "Vincent
  Guittot" <vincent.guittot@linaro.org>, "Shuah Khan" <skhan@linuxfoundation.org>, "Ketan
  Bhardwaj" <ketan@armoriq.io>, bpf@vger.kernel.org, linux-mm@kvack.org
-In-Reply-To: <20261110202246.274-2-harisudhan@armoriq.io>
+In-Reply-To: <20261110202246.274-6-harisudhan@armoriq.io>
 References: <20261110202246.274-1-harisudhan@armoriq.io>
- <20261110202246.274-2-harisudhan@armoriq.io>
+ <20261110202246.274-6-harisudhan@armoriq.io>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 10 Nov 2026 20:33:30 +0000
+Date: Tue, 10 Nov 2026 20:36:04 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -75,60 +74,55 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Low] docs: security: kap: contradictory epoch semantics for bound
-  tasks
+- [High] security: kap: CLONE_NEWUSER skip in
+  kap_check_namespace_flags() breaks user:unshare rules
 --
 
-commit 77da64268c0c9921ecf4f2c4a0222c86b4687cb2
+commit 9adc8e1a3a53f48cafa9cf1ec8d4bd24d0a65150
 Author: HARIHARA SUDHAN. R <harisudhan@armoriq.io>
 
-docs: security: Describe the Kernel Assurance Plane design
+kernel: add KAP checks for unshare and setns
 
-This commit adds security documentation and securityfs ABI documentation
-describing the Kernel Assurance Plane (KAP) design, Intent Lineage Groups,
-and control plane files.
+This commit adds KAP namespace flag checks to ksys_unshare() and the setns
+syscall.
 
-> diff --git a/Documentation/security/kap.rst b/Documentation/security/kap.=
-rst
-> new file mode 100644
-> index 0000000000000..e002a081c6607
-> --- /dev/null
-> +++ b/Documentation/security/kap.rst
-
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 33760ece3bb30..3dda9f211ceae 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
 [ ... ]
+> @@ -3286,6 +3287,9 @@ int ksys_unshare(unsigned long unshare_flags)
+>  			 current->fs !=3D current->real_fs);
+> =20
+>  	err =3D check_unshare_flags(unshare_flags);
+> +	if (err)
+> +		goto bad_unshare_out;
+> +	err =3D kap_check_namespace_flags(unshare_flags, "unshare");
+>  	if (err)
+>  		goto bad_unshare_out;
+>  	/*
 
-> +O1 finishes its first stage. The controller advances O1 to a new authori=
-ty
-> +generation that is narrower: no package cache, no network. It writes the=
- new
-> +authority and a higher epoch to O1's igroup. O2's igroup is untouched.
-> +
-> +From its next check, an already running O1 worker is held to the new aut=
-hority.
-> +It cannot reach the cache or the network even though it could a moment a=
-go, it
-> +was not asked to drop anything, it was not restarted, and O2 is unaffect=
-ed. If
-> +instead the controller revokes O1, the next O1 check fails closed.
+[Severity: High]
+Does kap_check_namespace_flags() fail to enforce "user:unshare" and "user:*"
+predicates when unshare() is called with CLONE_NEWUSER?
 
-[ ... ]
+security/kap/kap_lsm.c:kap_check_namespace_flags() {
+	...
+		if (kap_namespaces[i].flag =3D=3D CLONE_NEWUSER &&
+		    strcmp(operation, "setns"))
+			continue;
+	...
+}
 
-> +``epoch``
-> +  Monotonic authority generation. Installing a higher epoch fails every =
-task
-> +  still bound to an older one closed from its next check.
-
-[Severity: Low]
-Does advancing an igroup's authority_epoch hold already-bound tasks to the
-new authority, or does it cause them to fail every check closed?
-
-The motivating example above states that writing a new authority and a
-higher epoch to O1's igroup holds an already-running O1 worker to the
-narrower authority, whereas the epoch definition here and the
-kap.authority_epoch entry in Documentation/ABI/testing/securityfs-kap say
-that installing a higher epoch causes tasks bound to an older epoch to
-fail KAP checks closed.
+Because kap_check_namespace_flags() skips CLONE_NEWUSER for "unshare", the
+check is deferred to kap_userns_create(), which passes the bare target stri=
+ng
+"user" to kap_check_static_target().  In kap_string_match(), "user" does not
+match "user:unshare" or "user:*", so allow rules using the documented
+TYPE:OPERATION syntax reject unshare(CLONE_NEWUSER) with -EACCES, while deny
+rules for "user:unshare" or "user:*" paired with a broad allow rule such as
+"*" are bypassed.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110202246.274-=
-1-harisudhan@armoriq.io?part=3D1
+1-harisudhan@armoriq.io?part=3D5
