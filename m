@@ -1,50 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.187
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.9
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794273772;
-	b=DsjWqwrSLQtsJftP1qgARqI5usD2SZImkNryrxjKgMlJZbLrjq5Qmo9sf3DCXPykhiAG
-	 qXxvdTbHUdhFEQvQwS1Cu0xyjTtqFya+nTYLW3j9cMOQTitPoGBptBCQWvUJubmSi1GpS
-	 tePI45vxeO8V4rVVu1Ems9Sn6GgkNEMUz9dZpPc99k/ncIkepT1u+CT7G5Ohxj+kga9yc
-	 IM9K83e9jfe2tu7y78o50r1kKfRQTnBLQ4IMhWVGQjwuX8kk/jlr1UncXoc0VJoSnuqZx
-	 fYy5c1X223KTKOcgVIDvrDWzY4sghEih+QikUlzUZNdr89jSE/fOtV0mCn0HXyhvzkw==
+	t=1794273776;
+	b=da7ObCxMLW/g5zcw46zDMgFS7N8sDBW8lpDxeqTvy+IVBT0ijnr6T1wm1Rcl/U4F2Ib4
+	 IPc/8B8Rw6mk5pVKeKK0b3zn55FIDUkFFarFY8zpCn92y2Anq9cLFrIrmuSIlZplECMIZ
+	 fZ/UZ2+pdSWkh7BJkVD8IWf84V9OZIPi1WTP7mWuDSFlDRuyaOab+/quPAh7BEi+EHBg2
+	 xwzkUuK25zVOtIIh4tCRPA+AZj/FJRsa3d7E+LuSffmL0RDVd1RPQy3VJ5MbblvVu+vds
+	 PiPMlFnG4TVYVlgHOwp/Ej6wd3F8eY23g8Ol6xk7zjs6ftXa1o1TkV4xnRR6zPN4k8g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794273772;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794273776;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=D+N2QRZvzfe+CFAvIEo6YK7+9V99UHaC8NPIhonyKWI=;
-	b=ldWZEq8yU9B+3VuG6YLiM1KTp9HCFqLlw/yfgMaiI0X37j5nECBq/EyA/AAYs2ozH0Ak
-	 Pe5Iv3OaZ1eH52hXqUb9W0LPaGIqg/TLB551p2fiV3IiOF6CKUPtDNjhFtNa61rBlEZBC
-	 iQodWMvJPh8gttsWxurwKpxGeJAROH+pCTUg9rQqmmu1imldHkRfh/BGLKCzDBV20lD+V
-	 dk5b9Uye1oPC9Zy9paHwXjkvTWkQBWjWRO1WwPv6MF2Zb75q9d7MmJ3s99FXgpAZyMC2h
-	 DZ4D5Tc5DNSMcXhvzN210o2A0CDol25PIST0xrFGle2sjy7IvaozuGkDUjYU5ZjvfwQ==
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=yIKtvc1ZmRXWfGxWgiVO8Ns8HZpEqAzhWlHpQ46fpV8=;
+	b=XD4S47IRw51IuXn+JOYgG3eVwYpjvgAhRvleUyVthqEl3ktZMWyOGP2LT1GdCzGGp4ne
+	 miqEIHg0cgArcFKROOAjRgo7of5R2pnKMjn4zGcKE28tNVAkQNrJ1ZPzjKM5PihmPB90V
+	 p5Q6JhV7DPPeNdVAYM3tk4dH7O8aQiKglAxgFm8ilxJp6EHGZcHMSEbEy8h8n3WlGCuJR
+	 q1sc7SUD9DXoIGyk/2KTBuL+xm4k4q6fr0f79qZDn92wXLBKL1yv3tw7gXOaoP7d1/EwC
+	 7GNL12qXkOI8zbxJO6Ohe9HHLO1QlTUwd8M23wnu6XNGao/3XvtDd3vfrDqOMV1Qgdw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=u1+vQ+IH;
-	arc=none smtp.remote-ip=91.218.175.187
-Received: from mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=OL68jl5e;
+	arc=none smtp.remote-ip=95.215.58.9
+Received: from mta1.migadu.com (out-9.mta1.migadu.com [95.215.58.9])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D3460A263E
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 01:22:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49D3460A263E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFCC60A380A
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 01:22:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7EFCC60A380A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=u1+vQ+IH
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=OL68jl5e
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=aonwTnaVCS6JFQJm6qDOQX7pACUW5lsxK/707tA3EJM=;
+DKIM-Signature: a=rsa-sha256; bh=omlSFSzGf7aOUZjYbn/5+K5lXnf2XWvd5GZpuA4NvOM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794273768; v=1; x=1794878568;
- b=u1+vQ+IH3bB2gezV08+6cO0uTX02FrG5KALC3OLqIChFlm8vuk21aDXD+6oeTBssKnxOW+i+
- qjAAhymLdXgIkC5wBC6nlSHSmDRWMakSPkb9JFUpSBqCRy0ybrqgdpdos6hjbN1gUkKybsZ0UvR
- jQdHrphNv/s7dyerw+L1geAY=
+ t=1794273773; v=1; x=1794878573;
+ b=OL68jl5eOqQZJ8A9g06Dd+WgTgxJL2Uk13W8O4uZ8gCgG7u7mC5vZa0rgv/TC/y59jdd0B4e
+ 98g5lAgc1CnXpqmBJ+TTw6PkiaVSTjM07JhLHtpkacUSfhiaHGLZQzg9Ag0u/I/X1uxhVACOSll
+ U/WNubHTjqr+do/A+UucvENs=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 5640507009fcdc41;
-	Tue, 10 Nov 2026 01:22:47 +0000
-X-Mizu-Trace-ID: 5640507009fcdc41
+Received: by smtp.migadu.com with ESMTPS id 0dd2321632bd0456;
+	Tue, 10 Nov 2026 01:22:53 +0000
+X-Mizu-Trace-ID: 0dd2321632bd0456
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: dennis@kernel.org,
@@ -71,10 +72,12 @@ Cc: longman@redhat.com,
 	justinstitt@google.com,
 	llvm@lists.linux.dev,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [RFC PATCH 0/2] percpu, local_lock: drop btf_type_tag where no compiler records it
-Date: Mon,  9 Nov 2026 17:22:33 -0800
-Message-ID: <20261110012235.1024461-1-vineet.gupta@linux.dev>
+Subject: [RFC PATCH 1/2] percpu: do not put btf_type_tag on per-cpu variable declarations
+Date: Mon,  9 Nov 2026 17:22:34 -0800
+Message-ID: <20261110012235.1024461-2-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261110012235.1024461-1-vineet.gupta@linux.dev>
+References: <20261110012235.1024461-1-vineet.gupta@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -86,77 +89,117 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+__percpu carries BTF_TYPE_TAG(percpu), which records that a pointer
+points to per-cpu memory. __PCPU_ATTRS() applies __percpu to the per-cpu
+variable itself, so DECLARE_PER_CPU() and DEFINE_PER_CPU() put the tag in
+declaration specifier position on the variable's own type.
 
-Currently PAHOLE_HAS_BTF_TAG is gated on CC_IS_CLANG and the goal is
-to allow CC_IS_GCC. There are GCC fixes (PR128479, PR125991) in the
-making [1] but despite all of them an x86 defconfig still emits ~40k
-instances of spew like:
+arch/x86/include/asm/processor.h has
 
-  arch/x86/include/asm/processor.h:232:36: warning: ignoring attributes
-  applied to 'struct cpuinfo_x86' after definition [-Wattributes]
+	DECLARE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
 
-where one is enough to break a -Werror build.
+which an x86 defconfig preprocesses to
 
-Making GCC stop warning here was proposed as PR128480 and rejected:
-the suggested answer was -Wno-attributes, which the kernel would not
-accept just to suppress this noise.
+	extern __seg_gs __attribute__((btf_type_tag("percpu")))
+	__attribute__((section(".data..percpu" "..read_mostly")))
+	__typeof__(struct cpuinfo_x86) cpu_info;
 
-And even if warnings were to be ignored, the build would still fail
-with 33 hard errors from a separate GCC bug, PR128477,
+and GCC warns:
 
-  include/linux/percpu-defs.h:216:45: error: initialization from
-  pointer to non-enclosed address space
+	processor.h:232:36: warning: ignoring attributes applied to
+	'struct cpuinfo_x86' after definition [-Wattributes]
 
-These come from the same tag on the same declarations, so this series
-removes them too.
+which -Werror turns into a build failure.
 
-The root cause is where the tag is applied. BTF_TYPE_TAG(percpu)
-records that a pointer points to per-cpu memory, but two places apply
-it where the thing qualified is an aggregate, which no compiler can
-tag (GCC or clang): every variant of an aggregate shares one DIE,
-so there is nowhere to put it.
+The message is confusing: this is a declaration, not a definition. But
+the compiler is right to object to a type tag on the aggregate, and the
+issue is fundamental: every variant of an aggregate shares one DIE, so
+there is nowhere to put it. clang drops it silently and GCC warns.
 
-  - __PCPU_ATTRS(), so DECLARE_PER_CPU() and DEFINE_PER_CPU() put the tag
-    on the per-cpu variable's own type;
-  - the type argument of DEFINE_LOCK_GUARD_1() in local_lock.h, which
-    cleanup.h turns into "typedef _type lock_<name>_t".
+The tag is meant to record that a pointer points to per-cpu memory, and
+cpu_info is not a pointer.
 
-Nothing reads a tag in either position. The verifier matches "percpu" in
-btf_ctx_access() and in the member walk in btf_struct_walk(), and both
-check btf_type_is_ptr() first, so it only ever sees the tag on a pointer.
+And this gets worse: for a pointer-typed per-cpu variable GCC attaches
+the tag to the pointee, so
 
-The aggregate case is the only one that warns. Where the per-cpu variable
-is a pointer there is no diagnostic, but the record is wrong: GCC puts
-the tag on the pointee, so
+	static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
 
-  static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
+comes out as PTR -> TYPE_TAG 'percpu' -> struct bpf_hrtimer. The truth
+is the other way round: hrtimer_running lives in per-cpu memory and
+points at ordinary memory, while that record says it is an ordinary
+pointer to per-cpu memory. clang emits no tag there at all.
 
-comes out saying hrtimer_running is an ordinary pointer to per-cpu
-memory, when in truth it lives in per-cpu memory and points at ordinary
-memory. clang records no tag there at all.
+Add __percpu_var, which skips the btf tag (__percpu under sparse) and
+use it in __PCPU_ATTRS(). The cpu_info declaration above becomes
 
-The following two patches address this:
+	extern __seg_gs
+	__attribute__((section(".data..percpu" "..read_mostly")))
+	__typeof__(struct cpuinfo_x86) cpu_info;
 
- - 1/2 provides a new variant of __percpu, __percpu_var which elides
-   the btf tag. Switches __PCPU_ATTRS to use it.
- - 2/2: Applies __percpu_var in local_lock code.
+The pointer spelling, T __percpu *p, is unchanged and keeps its tag.
 
-Binary impact, x86 defconfig built with clang: patch 1 drops 280 BTF types
-(140 TYPE_TAG and the 140 pointers carrying them, none referenced) and 3360
-bytes of .BTF, with .text unchanged. Patch 2 changes nothing at all.
+Before this patch the tag also qualified the variable's type, so &var
+had type "T __percpu *", and a pointer does have a DIE of its own:
+pahole emitted PTR -> TYPE_TAG 'percpu' -> T for each one.
+this_cpu_ptr(&var) is that shape, and that is where the records came
+from.
 
-[1] https://inbox.sourceware.org/gcc-patches/20261109213600.772524-1-vineet.gupta@linux.dev/
+Those are the records an x86 defconfig built with clang loses: 280 BTF
+types, 140 TYPE_TAG and the 140 pointers carrying them, with .BTF
+shrinking from 6831660 to 6828300 bytes. They are the derived pointers
+-- clang never recorded the declarations themselves. None of them were
+reachable: a record points at a type only if something is declared with
+it, and nothing is declared with these. The 794 places that do declare a
+"T __percpu *" keep theirs -- the tags reached by a STRUCT, UNION,
+ARRAY, FUNC_PROTO or another PTR number 117, 6, 3, 39 and 5 before and
+after. .text is byte-identical.
 
-Vineet Gupta (2):
-  percpu: do not put btf_type_tag on per-cpu variable declarations
-  local_lock: do not put btf_type_tag on the lock guard type
-
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+---
  include/linux/compiler_types.h | 8 ++++++++
- include/linux/local_lock.h     | 8 ++++----
  include/linux/percpu-defs.h    | 2 +-
- 3 files changed, 13 insertions(+), 5 deletions(-)
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index c5921f139007..0a18b3f10675 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -50,6 +50,7 @@
+ # define __user		__attribute__((noderef, address_space(__user)))
+ # define __iomem	__attribute__((noderef, address_space(__iomem)))
+ # define __percpu	__attribute__((noderef, address_space(__percpu)))
++# define __percpu_var	__percpu
+ # define __rcu		__attribute__((noderef, address_space(__rcu)))
+ static inline void __chk_user_ptr(const volatile void __user *ptr) { }
+ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+@@ -68,7 +69,14 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ #  define __user	BTF_TYPE_TAG(user)
+ # endif
+ # define __iomem
++/*
++ * btf_type_tag records "points to per-cpu memory", so it belongs on the
++ * pointer spelling only. Declaring the per-cpu variable itself puts the tag
++ * in declaration specifier position, where clang drops it and GCC attaches it
++ * to the wrong type, so __percpu_var leaves it out.
++ */
+ # define __percpu	__percpu_qual BTF_TYPE_TAG(percpu)
++# define __percpu_var	__percpu_qual
+ # define __rcu		BTF_TYPE_TAG(rcu)
+ 
+ # define __chk_user_ptr(x)	(void)0
+diff --git a/include/linux/percpu-defs.h b/include/linux/percpu-defs.h
+index dbe3267a0a13..f53fc430aaad 100644
+--- a/include/linux/percpu-defs.h
++++ b/include/linux/percpu-defs.h
+@@ -45,7 +45,7 @@
+  * that section.
+  */
+ #define __PCPU_ATTRS(sec)						\
+-	__percpu __attribute__((section(PER_CPU_BASE_SECTION sec)))	\
++	__percpu_var __attribute__((section(PER_CPU_BASE_SECTION sec)))	\
+ 	PER_CPU_ATTRIBUTES
+ 
+ #define __PCPU_DUMMY_ATTRS						\
 -- 
 2.53.0-Meta
 
