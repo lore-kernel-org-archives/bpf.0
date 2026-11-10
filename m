@@ -1,50 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.120
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315044;
-	b=G7EPZ9jwq0uIKDYsiXM4EG7/jPQpEHGVE1gKbFXHDsBpc+FEScRsIELeYAtpig2ZL2aP
-	 RT18BUQPX7vdEnrOIgqoDL0tGcqMSu+vqrItDvPN6tof7daJN7uElTgZCUSQHwkvoqKtf
-	 a+ksw67k4s+bTYfEw5G3HFBGQ3Lk/g+95ysfDsS1gTmCjyEQT1+dRzbvO2OKOXVuGVVi4
-	 k7zZgQkWvqSC3GSZVf+B+b1cwmZEhJuyeI1cNfgfvVDeuRliL7Ui34WJaa1Y07sY5Cb50
-	 J3cp9QfbSBw/PywTnmJ5qN4qF7CDQzVfwWv4pUkAi9hvXzyFw0CRDW7tOQuXnCMZ0Jg==
+	t=1794315070;
+	b=GK6N5+d7z4rqnlZIgaO4MZBcZLgjjkntLvsaJp8Los899/gd8Zd4A7sWRSY8Lu+O/Tdi
+	 zC5hEUKc89ZvgyA5MqYv+/mf7Yr4lXFa+TdnWjblfs2mF4yO1BczGk8ZufadAM9eaH9RP
+	 sWD+U/TM++SNP7SBdK6ISQwcneBLDWdT89HGofP4BWpRrFkDOkRM3gF2jiOPdHsvett6H
+	 wLiynYOxwzK6r00kRALmRAIpv6UIf316g7pagktIK6bhA5UOjHqBjPk14CTEW05sP82/6
+	 Ce5zoa4qdoUZ9P1zKE+mRc70JJsvINmfUUPrVceyJEO/Afda9IoxMsoKELqNSJoSkLQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315044;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315070;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=JkzHOqNRmLLJHznW6kn+J0uH0vJmE5wO725J9WTQ31c=;
-	b=Jvts6MR7R1HACLpk3iyyMl7Wv/ZCgOCLuYbOsfXKjrjWm6YCAGxrvkJTgcwcgwLmiCj6
-	 NGWLpMLpOf4JPfi1dZtfEbbM0oq2e2+tdJ7jgb6XGwKbCfYtGf1Kh+WCOII/860Klw+vr
-	 5wqaIdBgT/LuhcIDWeTympOL7F7fYg3PZ0nD6ov/iyvkE8biCbAKY4T3cq3YbgnOvn4OQ
-	 qUwPPJehdGRc20MdkFdQVcxu+2BDW8wltsgz9Y+25pgBbZvOh/4Els2KJjD+i+SPf501i
-	 yagAGtW5pQdAkhoaDgTCy7bL+AWLrnM9yINR8wVDtCo9/lizAQasFwJznhzVr1SRv0Q==
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=uiX2+KfbHdVEaimIsqCTOjf8NSRl8J5NyXmT1fSHCP4=;
+	b=3vF01kE4j6j4CMnh3xkVDXbP/6xIzRcOUtxW/er24DSCA1mJRcUqN/tLwpr3sVC3t4cw
+	 mqMPqk3WxV1UdrI6VTDFDDr59hxhqgnc15iZCAEMlv2SpE9WV5JxzPIf6cfY+OfLoeFjn
+	 J7pDxVkSBwtdUmeioKel8NtRN9IbCFX8dgzvaaLBfrszxoVsLaQgCW+v5mcBuUETmjJMY
+	 1iNj8H+MC8381gMyKepdM42KGydI8b04B8lzRHyDoifPVqUxNSyDwcCx0lAvtlOzvJ4L7
+	 lPbR7xLISRu5vaXp2kuIjSMVc/2a4uKspPt1foEKKwkgfOFq5tZidlz606SYk7Lpu4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=F9HvKvXX;
-	arc=none smtp.remote-ip=95.215.58.70
-Received: from mta1.migadu.com (out-70.mta1.migadu.com [95.215.58.70])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=LxAXxpMW;
+	arc=none smtp.remote-ip=95.215.58.120
+Received: from mta1.migadu.com (out-120.mta1.migadu.com [95.215.58.120])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D482C606A31C
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 12:50:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D482C606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D20B60A2603
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 12:51:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D20B60A2603
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=F9HvKvXX
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=LxAXxpMW
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ogLChbToz8v2uGO8I5xWfeJmsMC5KE6fYOWugASNSTE=;
+DKIM-Signature: a=rsa-sha256; bh=ZZIvINl33gHb4CRuKTL8hmDAGvZ37dC3WvaTtAr/R6c=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794315040; v=1; x=1794919840;
- b=F9HvKvXXxp6hhvX5pTI7BHLeTcH74VXsTuca+5AgwgtGZfYy4LMUAuufy/75HwDsQaVCZeVf
- JFDRrk8scvbEaPHtsGNn4lapk/uxttRpJNFboRSgMpreaETXJBAf4hIF+9bu58wWdi1cEA+hrLZ
- yPqlkXxVU9FOSu+mqqFbvrMw=
+ t=1794315067; v=1; x=1794919867;
+ b=LxAXxpMWIPDPvka+wv4RqEo4c7SMasgwW1xzSDKCZPJcajKfxUqXdfrfEfZHjEuYxupEZX1N
+ 6p2fg7nfZPRsoolIsUto+0xsV7fye91wRngSYdqP2ohFUZJtDgDlOgFZ9Lv54pYK+Zb4TBS7qyj
+ AcH+ijkIWRJwBvwPislEEtZ0=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1b6150941040aee2;
-	Tue, 10 Nov 2026 12:50:19 +0000
-X-Mizu-Trace-ID: 1b6150941040aee2
+Received: by smtp.migadu.com with ESMTPS id e07a28e4e753e370;
+	Tue, 10 Nov 2026 12:51:07 +0000
+X-Mizu-Trace-ID: e07a28e4e753e370
 X-Migadu-Flow: FLOW_OUT
 From: Tao Cui <cui.tao@linux.dev>
 To: tj@kernel.org
@@ -62,10 +63,12 @@ Cc: void@manifault.com,
 	bpf@vger.kernel.org,
 	cui.tao@linux.dev,
 	Tao Cui <cuitao@kylinos.cn>
-Subject: [PATCH 0/9] tools/sched_ext: robustness fixes from cold review
-Date: Tue, 10 Nov 2026 20:49:52 +0800
-Message-ID: <20261110125001.4167503-1-cui.tao@linux.dev>
+Subject: [PATCH 4/9] tools/sched_ext: scx_pair: Don't attach after an interrupted initialization
+Date: Tue, 10 Nov 2026 20:49:56 +0800
+Message-ID: <20261110125001.4167503-5-cui.tao@linux.dev>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261110125001.4167503-1-cui.tao@linux.dev>
+References: <20261110125001.4167503-1-cui.tao@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -79,69 +82,48 @@ Content-Transfer-Encoding: 8bit
 
 From: Tao Cui <cuitao@kylinos.cn>
 
-Hello,
+The cgrp_q_arr initialization loop checks exit_req and breaks early so
+that Ctrl-C doesn't make the user wait through all MAX_CGRPS iterations
+- but the break falls straight into SCX_OPS_ATTACH(). Attaching with
+part of the inner queue maps missing lets ops.cgroup_init() hand out
+slots for cgroups whose inner map was never created, and the first task
+in such a cgroup aborts the scheduler with an scx_bpf_error(). On a busy
+system the 4096-iteration loop takes long enough that hitting it with
+Ctrl-C is likely, so the intended responsive interrupt turns into a
+scheduler crash dump.
 
-This series fixes nine robustness issues in the example schedulers
-scx_pair, scx_flatcg, scx_qmap and scx_userland.
+Exit cleanly when interrupted mid-initialization instead of attaching.
 
-scx_flatcg resets its stats baseline on restart (stale counters print
-as u64 underflow garbage) and rejects a stats interval that puts
-nanosleep in an error loop (a negative or non-finite -i busy-spins at
-100% CPU). scx_pair stops aborting the scheduler when the dispatching
-cgroup goes away mid-dispatch, gates attach on an interrupted
-initialization instead of running with a half-built cgrp_q_arr, resets
-pair_id on restart, and cleans up a dead busy-check whose fall-through
-clears another cgroup's busy marker. scx_qmap documents the options it
-actually accepts and resets its hier stats baseline on restart.
-scx_userland bounds the batch against the dispatch buffer instead of
-overflowing it 13ms in, and rejects batch size 0, which livelocks the
-machine until the stall watchdog fires.
+Fixes: f0262b102c7c ("tools/sched_ext: add scx_pair scheduler")
+Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+---
+ tools/sched_ext/scx_pair.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Verified in qemu on tj/sched_ext for-next (5b740a72b55c), same
-kernel and config with and without each patch, comparing stock and
-patched binaries: a scx_flatcg restart prints six
-u64-underflow garbage counters on stock and zeros with patch 1; a
-non-finite -i busy-spins ~17k EINVAL lines in 3s on stock and is
-rejected at parse time with patch 2; SIGINT storms abort 20/30
-interrupted inits on stock with the scheduler never loading and exit
-30/30 clean with patch 4; a scx_pair restart aborts 7ms in with a
-stale pair_id on stock and runs clean for its full window with patch
-5; an oversized scx_userland batch aborts 13ms in with "dispatch
-buffer overflow" on stock and survives 25s with patch 9; and batch
-size 0, which livelocks the machine until the stall watchdog fires
-(spinner progress collapses to ~1%), is rejected immediately with
-patch 8. Beyond the A/B pairs: the scx_pair cgid-cache churn window
-is too narrow to drive (40 rounds clean on both binaries; patch 3 is
-graded by inspection), the qmap synopsis diff shows exactly the three
-added options (patch 6), and the hier stats baseline was verified with
-a clang-23.1.5-built scx_qmap run through restart cycles (patch 7,
-hier stats clean throughout).
-
-Based on sched_ext/for-next (5b740a72b55c).
-
-Tao Cui (9):
-  tools/sched_ext: scx_flatcg: Reset the stats baseline on restart
-  tools/sched_ext: scx_flatcg: Validate the stats interval
-  tools/sched_ext: scx_pair: Don't abort when the dispatching cgroup
-    goes away
-  tools/sched_ext: scx_pair: Don't attach after an interrupted
-    initialization
-  tools/sched_ext: scx_pair: Reset pair_id on restart
-  tools/sched_ext: scx_qmap: Add the missing options to the usage
-    synopsis
-  tools/sched_ext: scx_qmap: Reset the hier stats baseline on restart
-  tools/sched_ext: scx_userland: Check dispatch buffer slots before
-    inserting
-  tools/sched_ext: scx_userland: Reject batch size 0
-
- tools/sched_ext/scx_flatcg.c       |  7 ++++++-
- tools/sched_ext/scx_pair.bpf.c     | 12 ++++++++++--
- tools/sched_ext/scx_pair.c         | 14 ++++++++++++--
- tools/sched_ext/scx_qmap.c         |  3 ++-
- tools/sched_ext/scx_userland.bpf.c |  8 ++++++++
- tools/sched_ext/scx_userland.c     |  5 +++++
- 6 files changed, 43 insertions(+), 6 deletions(-)
-
+diff --git a/tools/sched_ext/scx_pair.c b/tools/sched_ext/scx_pair.c
+index 00f595b58f97..35c8a1a07f56 100644
+--- a/tools/sched_ext/scx_pair.c
++++ b/tools/sched_ext/scx_pair.c
+@@ -161,8 +161,17 @@ int main(int argc, char **argv)
+ 	printf("\n");
+ 
+ 	/*
+-	 * Fully initialized, attach and run.
++	 * Fully initialized, attach and run. An interrupt during the
++	 * initialization loop leaves the tail of cgrp_q_arr without inner
++	 * maps; attaching in that state lets ops.cgroup_init() hand out
++	 * uninitialized slots and abort the scheduler on the first cgroup
++	 * task.
+ 	 */
++	if (exit_req) {
++		scx_pair__destroy(skel);
++		return 1;
++	}
++
+ 	link = SCX_OPS_ATTACH(skel, pair_ops, scx_pair);
+ 
+ 	while (!exit_req && !UEI_EXITED(skel, uei)) {
 -- 
 2.53.0
 
+base-commit: 5b740a72b55c4267ba4d8010f17dde26b26f52d3
