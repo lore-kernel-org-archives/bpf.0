@@ -1,45 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794286391;
-	b=hPnsXt+yrw3jlTiJoyaHnCooCXlFjsMKCq47uKqpXTLE1rbNanyEnKiIGoKr9/Uq0oB6
-	 MrKWl7WiN3GJ94xtw0T9ZmVnq0J8+R99fMoXe0f6vsZoV11BxWyuAbtu7iBwuBYWVOoqC
-	 KiMz0g3FQC+ttruRU3lpPG5zJYDR0Mh/R9qQqdNRx8fT+aeU3Ke9o5EXHaxr+oaOiERsC
-	 U1w7HGIa195gLnVuH+9FtGH4qbJWtCQbiolvbm1zZKs/jKQ62Tahe+IBk2SP8IoN/xdLK
-	 BStNjdZPDjyIoLXVxhWs5i2CowS0dbd+AbQYmg1fE/oRAuF7laFxPpaOB/5NG5V6fvQ==
+	t=1794286646;
+	b=n6NXtYQkCTRyvwHT5L1SIxDi5vli09Xr76i8IN1IvoWH4N1/AuHIOQHDwMMy49aTVXD9
+	 QM3krzqutnBu21vbN9QdNHsmoOBROp24F/EagNdlTncNqCXEyhTv4Qp8D4s8cIajYqw71
+	 U84xAMmcT3uH+kmnQA1kDyjnqbgquromgmeZvsplVJlC3OvguilnU42rx1Dc4lH6sVhcf
+	 1QXRaZrcY78FtimFuH0yfGZs6/OgsUUh8NGU5oH1N2SyYmxABFLSCjgS1f1pDc/etcKJq
+	 gigU2XmRdxNIuR7pNcKAey/tMSpPBNo8dnM1TV/cxxY+7vopwVS8/yqsqHDLEwRABTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794286391;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=USevh6myHxF9emjydPOskkqmK7kqM8+0knzfuWzYf2E=;
-	b=UdbQNvq+AhNQllKRfthI7cCVIN5kWaDmoIjPhYdr4zdr/6EViUlBv9OaBn+7y7KOl3/h
-	 HQprTnPL8lC5WIXb4Ogd7ZF2jSCn4JvHWBEr/Yj5fRuy3iF4a2KzP6wGb650mSRSclx3r
-	 lsaih7NgTxgzqfN06Ed/XsY/vX77Idhw6BdTOEyVYIMrdc7e494ZqwoM5luei8r4RmCul
-	 fwdmIx+4PLqAr3hOiHrMdU8dpaB+2YiHR9xWMlSMaKS0JJR5ff+qaQIRVY5NPPUxXQXeB
-	 qxzhD6BcHsqVG6AlV7HkYaGVFiESXmBjBFIJUHDDiWHzM10cejw0E0GsfAlOdZ45mYQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794286646;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=svxxE6aa4tOgEOuICid1wcHp6IDk6Icb9UfPgrrg5LQ=;
+	b=zkJR01JnBuT7N4hov5S86VOHS54UtMkWhyqaTwuGSiPEt3j3YEd+qZPjuS/xiXO8ddR0
+	 Y0LaQ+dDcadyl6P52UcH37CE7a4237voSoE7xxN3Byb2Ym64xj8gPyqRvjre3zgUd2eGR
+	 tijqIan+y4HsxbYhOIrXsqOc8ysTdT+d7b8CpvXns3JL7aXVtSowkpy+LoG6s5Qja0lVa
+	 EIitkjDlagUXujEhWM11xyUyN3jM0y4Vuiui0YPiO2DI460+9IFpbkJ6GaDqa1x49mURd
+	 usD0OK0VqwD8ujfSE3sEMgG3MT9CVFto0xIL39ubKsIRL6sqfTYiHw7kuGAZJrZ/nMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bS8QK0uX;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Pmo0rHrZ;
+	arc=none smtp.remote-ip=209.85.218.53
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F06606A31C;
-	Tue, 10 Nov 2026 04:53:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4744F606A32E
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 04:57:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4744F606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bS8QK0uX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE1361F008A5;
-	Tue, 10 Nov 2026 04:53:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794286390;
-	bh=USevh6myHxF9emjydPOskkqmK7kqM8+0knzfuWzYf2E=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=bS8QK0uXH4CiE/pecLjA47r/58HoMdCcVoCr2Aj5ZbqYX8FUfQZw+zR3zouV2mNmK
-	 P0Ggop74FtzZ/noDXpDOmBsU8LuIgDwsRcOwIQBKYfTvnSFlvYyQp6mhCsrJj19i4E
-	 8AtFDqwQo6XuCCnMThbj3A/mquKdc778AaGUdSGFxFPfR9Cu+cvr37erupKdTLZRUZ
-	 slkziQBQN18Ol9bonmpQusu/LLhK4gYdx+hgOYyYs6truDVcFXoA9KNDzIfFgeEexk
-	 mh+SsRfu9Yhsgls4oSul1YEhpSfuBnkutavrJtXalAsKNTjUPk5VxJ5Nr9VxAgQYoD
-	 qETaCtYdWvXGA==
-Content-Type: multipart/mixed; boundary="===============6368028081372406392=="
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=Pmo0rHrZ
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c5049f267c9so62759366b.2
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 20:57:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1794286645; x=1794891445; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=svxxE6aa4tOgEOuICid1wcHp6IDk6Icb9UfPgrrg5LQ=;
+        b=Pmo0rHrZ8xzQ4pc9jzGRDfzTjtLd1IRAVVjXk3M8DK+x5lpVtGm+3Dl6uTtb4GPmpW
+         /kKBYz2hrc2Rm+Kxx9p9Y1rOYhYETA+uur0JgwJCQfbRVDCqGAQvJaSqLr/CAtouJUUp
+         4EI8JGlE4+HOHQpjKg7Wj36ghxkdR1iij2T5AfQs54lGgGxXfNWJBpU3fu6uYaxmp0iE
+         h03+ZFTJVKcxuVU+h2Ajxu9vjISLloWpvzjtjz8V+N8eqRtKz/j204rfu5i68WzK5U7n
+         uni6yfWdBejSU4Gl6uBoPfx8AeyMtwsNevJKn7zLq80NHgCRRKv4vWsIOySGtv3QDvth
+         obtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794286645; x=1794891445;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=svxxE6aa4tOgEOuICid1wcHp6IDk6Icb9UfPgrrg5LQ=;
+        b=2Bq5/zMaFvH0NBNIZTMFjBb/u7HjjheWr2ElUJIV4spH56RJGvtR/nMMo/FizYQSt6
+         zONnWlQy6HtahXWPmqatT7dej176n8/e23g2XEyTDEWAqf68/2EsEcfAUzilinBrmUWy
+         uambErwRxD2pz22kA0KrSKHIMashGEoZk9ICN7dWAqGQNWkvXvp0Z2ROpRLQkpS97c8K
+         zTpwJAyXp4ejRaaivBOw5QnUAJkxGQbcMbMDt0Ef4grYQqHCTj+LsX7m0/WXst2KmE2G
+         7scvWxgL1gygQVBiEf1CZwOnYl6YfdNnuBQp/77AS+0P2f79tcgUhVnpeVYgocKy5kJR
+         0v6A==
+X-Gm-Message-State: APuU4Z+n2BbwwVy+k86tazsv0YfUZrziw6OSCz3xPUuLKL0rg7MxNs7W
+	wo21/kXU7ex0WFRqmwDHEs3eDYn2wfpgt8TCqa7D7i5YOp7wvhaIf3qoB8mVuEH70O0=
+X-Gm-Gg: AYBFou0qMSYSTB9E4ZVSjoPXjk8ypkErovSGl60RgUxbt9Uq8GTeY6RocOcMxFwrzxx
+	FN5QM70tR68AeZWc3VH9YQISNlYpzja8AdP9aTPnXfifRtmxBincaapSBvRqFw8qCM9ArjpPEQg
+	19zbrQ/BbtqRnE4Fb2RvJSGuuBkWihqo7twgCwEoqoncipUcG0W4OJXJn3XRYU55/bKbiQNKBBh
+	3/cnNNKkVfx724MiaFxSRop6w3cKiGdHdPO08AUSWb65E+fGEYmBh6J9uvKywmyNNSrHWXq/RJI
+	dgAh/uzk4Yi/RqCTpffNM3kpXToiGnhsQFv+jJkvFTM6wtDIquN0tlr1I9CJW8Ygrh0WkeGap2c
+	lMjzURh8ochqIVs5CehsFTle0NZGS8k2QKKi8i16yViFzf3HCyegd1gSxlYsNe10T1avLZswL+o
+	7hUTiyRLjBZlV5ENY+627PtPZHPCEL/B/8Pnbhda7IOgtPHS7Uy0Pdk3HgnKccvdBK+Irodyg4B
+	x8KsFQv6JjTsuUBSIa8jbK9HUUsu4Y1i5XwaIkwBEXLxLp3uU7GpqgTygx8jZBbmYOoE23wgUj4
+	1Z8KIzdx/vWoB02IU4OQf1mb9uNgr2km2xt3FOSFkSHoNBGcxqwNfrAYylY+SQc=
+X-Received: by 2002:a17:907:c13:b0:c49:9632:9280 with SMTP id a640c23a62f3a-c5049713306mr110969466b.46.1794286644790;
+        Mon, 09 Nov 2026 20:57:24 -0800 (PST)
+Received: from L9JK9NPFH9.lan ([104.28.20.56])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c504a56c721sm61278266b.23.2026.11.09.20.57.22
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 09 Nov 2026 20:57:23 -0800 (PST)
+From: Tianyi Gao <tianyi@cloudflare.com>
+To: sashiko-bot@kernel.org
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	kernel-team@cloudflare.com
+Subject: Re: [PATCH bpf-next 10/15] xdp: warn on XDP_PASS with stored values when XDP runs on an skb
+Date: Tue, 10 Nov 2026 04:57:20 +0000
+Message-ID: <20261110045720.77278-1-tianyi@cloudflare.com>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <sashiko-outbox-206173@kernel.org>
+References: <cover.1794281983.git.tianyi@cloudflare.com> <15f830924c4d06d3d8c7e41fb8a9f8c29b63d9a7.1794281983.git.tianyi@cloudflare.com> <sashiko-outbox-206173@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,79 +100,24 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <debeafe053a315dc6c0634d019ea48075d9f9f0c68b4395deed84a9630dc77ab@mail.kernel.org>
-In-Reply-To: <15f830924c4d06d3d8c7e41fb8a9f8c29b63d9a7.1794281983.git.tianyi@cloudflare.com>
-References: <15f830924c4d06d3d8c7e41fb8a9f8c29b63d9a7.1794281983.git.tianyi@cloudflare.com>
-Subject: Re: [PATCH bpf-next 10/15] xdp: warn on XDP_PASS with stored values when XDP runs on an skb
-From: bot+bpf-ci@kernel.org
-To: tianyi@cloudflare.com,bpf@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,kuba@kernel.org,hawk@kernel.org
-Cc: john.fastabend@gmail.com,sdf@fomichev.me,lorenzo@kernel.org,deliran@verdict.gg,davem@davemloft.net,edumazet@kernel.org,pabeni@redhat.com,horms@kernel.org,andrew+netdev@lunn.ch,donald.hunter@gmail.com,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,maciej.fijalkowski@intel.com,aleksander.lobakin@intel.com,magnus.karlsson@intel.com,tushar.vyavahare@intel.com,kerneljasonxing@gmail.com,razor@blackwall.org,madalin.bucur@nxp.com,ioana.ciornei@nxp.com,corbet@lwn.net,skhan@linuxfoundation.org,shuah@kernel.org,rdunlap@infradead.org,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com,carges@cloudflare.com,jakub@cloudflare.com,linux-doc@vger.kernel.org,linux-kselftest@vger.kernel.org,intel-wired-lan@lists.osuosl.org,llvm@lists.linux.dev,kernel-team@cloudflare.com,tianyi@cloudflare.com,ast@kernel.org,andrii@kernel.org,d
- aniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 10 Nov 2026 04:53:09 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
 
---===============6368028081372406392==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi,
 
-> xdp: warn on XDP_PASS with stored values when XDP runs on an skb
-
-TL;DR: Comment nit in xdp_skb_ext_warn_pass(): the new
-generic-XDP/BPF_PROG_RUN comment is inaccurate for BPF_F_TEST_XDP_LIVE_FRAMES,
-which uses a separate rxq, and the next comment is now stale. Not a bug.
-
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
+On Tue, Nov 10, 2026 at 04:10:19AM +0000, sashiko-bot@kernel.org wrote:
+> [Severity: Critical]
+> This problem wasn't introduced by this patch, but can veth_disable_xdp()
+> unregister rq->xdp_rxq [1] while veth_xdp_rcv_skb() or
+> veth_xdp_rcv_one() is still using it?
 
 [ ... ]
 
-> @@ -1124,12 +1125,17 @@ void xdp_skb_ext_to_skb(struct sk_buff *skb, const struct xdp_skb_ext *ext)
->  void xdp_skb_ext_warn_pass(const struct bpf_prog *prog,
->  			   const struct xdp_buff *xdp)
->  {
-> -	const struct net_device *dev = xdp->rxq->dev;
-> +	const struct xdp_rxq_info *rxq = xdp->rxq;
-> +	const struct net_device *dev = rxq->dev;
->  
->  	/* The skb is built later from the xdp_frame */
->  	if (prog->expected_attach_type == BPF_XDP_CPUMAP ||
->  	    prog->expected_attach_type == BPF_XDP_DEVMAP)
->  		return;
-> +	/* Generic XDP and BPF_PROG_RUN use the netdev_rx_queue xdp_rxq */
-> +	if (rxq->queue_index < dev->num_rx_queues &&
-> +	    rxq == &dev->_rx[rxq->queue_index].xdp_rxq)
-> +		return;
->  	/* No native XDP, so only generic XDP or BPF_PROG_RUN runs on dev */
->  	if (!(dev->xdp_features & NETDEV_XDP_ACT_BASIC))
->  		return;
+The list [2] and I [3] are aware of this problem. If it is still not
+fixed in a week, I will send a fix to net.
 
-This isn't a bug, but is the new comment accurate for BPF_PROG_RUN?
+[2] https://lore.kernel.org/all/20260917185814.0f944e78@kernel.org/
+[3] https://lore.kernel.org/all/20261105143356.17062-1-tianyi@cloudflare.com/
 
-With BPF_F_TEST_XDP_LIVE_FRAMES, xdp_test_run_setup() registers a separate
-rxq embedded in struct xdp_test_data:
-
-    xdp_rxq_info_reg(&xdp->rxq, orig_ctx->rxq->dev, 0, 0)
-
-and xdp_test_run_init_page() then does:
-
-    xdp_init_buff(new_ctx, TEST_XDP_FRAME_SIZE, &xdp->rxq);
-
-so in live-frames mode rxq != &dev->_rx[rxq->queue_index].xdp_rxq and the
-early return is not taken.
-
-That also makes the following comment stale: generic XDP and non-live
-BPF_PROG_RUN now return at the new check, so only the live-frames
-BPF_PROG_RUN can reach the NETDEV_XDP_ACT_BASIC test.
-
-Would something like "Generic XDP and BPF_PROG_RUN without
-BPF_F_TEST_XDP_LIVE_FRAMES use the netdev_rx_queue xdp_rxq" match the code
-better?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42755842687
---===============6368028081372406392==--
+Cheers,
+Tianyi
