@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.161
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.168
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315097;
-	b=PnrdTNK5MTPew/MlP3JbFHmGXaHIHQIUag+6ot0P+v4nY2gQI5zjqXF8gsCvr9uannlm
-	 2q+OpdWgtYEqb9tYFXTPz9UFKcNJsHfpseQ5MAeh90D6dLmsN54q+gfR4Se91FlMBZClH
-	 7Dswxk+320XD8j5r5tlCiQnzOtNnxlpTq1BjyRoeaj83ZNYwFlG8Pi6EZjDSvy2S7NeKw
-	 1R5rvRbtfJQVmOUs35Sur87w6RtioRvedDGMwI8Ol8umuaSbgNvzy7ploA+pBGEXVRMhX
-	 4rVEfpb6AgBbZRosJs2uYEDbtbeg0ZqrlpvZXQ3UY6H/+4gTmsFPm8ED7PYznSChh8w==
+	t=1794315104;
+	b=5TmYA2fGw9sflMtllEglxsGInGN9F+CmOTgVyy+xOkPQqX7q0bjwANju3fzrCKyKNMqD
+	 q93zg4QBUhgXTmgEHRwa14PEoaxHw13LO21qYMPmfluyEMf1dGxMuLGWCHM0m9/Rc255L
+	 6QcFXZ+fBUWj6vXaFEcpGcISZ6+4M4Z6RdEhL3rOm3nW8ZnBtjIUIeQvhcAZ5cSXqoUPq
+	 XQXdl6zT6ns6OnS9ABLj1bAIGUjZB3G9X8oilsyvTZdP/DHri4qd6f317dK3psRL2r302
+	 ReciiP1aM8XfEKHK9VekyD/cJpfsnmA6IPiU+Al/WyxyHkW+qxfgqLGq2DPHoUzdsHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315097;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315104;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=RFv7UBnzr82TPaBJp6124pYT0jBn52Qd5UGAxk9lS1k=;
-	b=N33FM7+I6xdyrsNxsP7uXVwzoVKOEaIRiYxWvM/2W2BCxiDKp2TL/rgVWG5MbA/DR/2O
-	 533/rQDCsrqbbs6q2bV9dtQB+bzBJ7lUwSwF6Yvt80w+AsWYKsdV+depxt+MToEuAmAIj
-	 k5r9iaDYD/G/ZwOAfgc4QDQcXMw0CydQMi2+a7Pha0yLRleBQ5PH3xodjwtUTMIaZWm7l
-	 qZBnoeh0pLVdmge3opjcOUCUuI5bPRB5T5izfSGFu8pectaOiBmqLWzbanewtniMxQVy9
-	 pNsMe4+FjN/5ILxoxlzSw1U1r13pwvMfQKbc701tme8vPTzUeghfq62IgkHek8oJEvw==
+	bh=VpMjX1ZlWeKbqLlUjJa7WcR6waZGO36Cz4JcaOxa92k=;
+	b=WW3Wg8e4I9Yy2zU3Ly5X/gZnw9cXp0cDeFVdbjXZL44Cb5bJtTj9p1AniKu6nmmo0SuY
+	 AgcFyu2NSMpD2gAhxGyBtwQK+J1nLL6XN4DVAkU7ZdEaWJEpZMv98hMtex/MM4tiCg+um
+	 n14bGUg+4DFTrZ+1+xYRFja6uJ8xRi0iv/jOsAmtJeiBCzwk+a4UPZZqUrWdwCdfmZ40S
+	 7Wlf5RhQ70tKxskSoaxABVo9zzLLNn+nl6UBxuCQCbw3hyYE6p8qS++iXBbqB2DCVLnJf
+	 WlO14jmEaLsJUll2uFwG8VCjIIv1m4vMobuKarpfuZYcZFCdY1s4L/yVCNEyNCC5VLA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eI0hhfBk;
-	arc=none smtp.remote-ip=91.218.175.161
-Received: from mta0.migadu.com (out-161.mta0.migadu.com [91.218.175.161])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Jvy4Uqg+;
+	arc=none smtp.remote-ip=91.218.175.168
+Received: from mta0.migadu.com (out-168.mta0.migadu.com [91.218.175.168])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2801060A380E
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 12:51:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2801060A380E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37CD60A2602
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 12:51:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D37CD60A2602
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eI0hhfBk
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Jvy4Uqg+
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=yfFCdwk/e0ynSBLLJzEBbB0h06SCnoIpbB2KBYA+o3A=;
+DKIM-Signature: a=rsa-sha256; bh=Al1wsyj6h7fNvYGbVdskQYiEUmtzsBOzsT/z7s2ggFY=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794315095; v=1; x=1794919895;
- b=eI0hhfBko2JouH7RYZ9tlExYSJ9hzzgSX0XH+CTssWTj785ADQV5O/OHndy1yC/5nsNXNkPL
- dsVOHs8oR50SURwnkNmQRrXY9KV3eD8vgb7FtUlZ4j97voYIOXeI7eivz1B17jXTvRU8Cd016qS
- CNTcfsiCeGRt1Iqyg9E7H5qw=
+ t=1794315102; v=1; x=1794919902;
+ b=Jvy4Uqg+u9aMTo+tNRUG0Dhj4dae70DEFf206+6d24NRqsYMHiMzNfBMCmEgFlF8nCwluqrx
+ jq9YoB9yj/Ew+w7LNdi7TyAK4jKWEOcnS66qSDhOpOnE2vYvFxP0gs66Ah9kvmR5E0AO+ZOb6wr
+ qaawHxPiYaiJcjDO45qnYVfw=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id de0f297dc80b2cf4;
-	Tue, 10 Nov 2026 12:51:34 +0000
-X-Mizu-Trace-ID: de0f297dc80b2cf4
+Received: by smtp.migadu.com with ESMTPS id 7d0c9879619f7df7;
+	Tue, 10 Nov 2026 12:51:41 +0000
+X-Mizu-Trace-ID: 7d0c9879619f7df7
 X-Migadu-Flow: FLOW_OUT
 From: Tao Cui <cui.tao@linux.dev>
 To: tj@kernel.org
@@ -63,9 +63,9 @@ Cc: void@manifault.com,
 	bpf@vger.kernel.org,
 	cui.tao@linux.dev,
 	Tao Cui <cuitao@kylinos.cn>
-Subject: [PATCH 7/9] tools/sched_ext: scx_qmap: Reset the hier stats baseline on restart
-Date: Tue, 10 Nov 2026 20:49:59 +0800
-Message-ID: <20261110125001.4167503-8-cui.tao@linux.dev>
+Subject: [PATCH 8/9] tools/sched_ext: scx_userland: Check dispatch buffer slots before inserting
+Date: Tue, 10 Nov 2026 20:50:00 +0800
+Message-ID: <20261110125001.4167503-9-cui.tao@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261110125001.4167503-1-cui.tao@linux.dev>
 References: <20261110125001.4167503-1-cui.tao@linux.dev>
@@ -82,32 +82,44 @@ Content-Transfer-Encoding: 8bit
 
 From: Tao Cui <cuitao@kylinos.cn>
 
-hprev holds the previous per-participant counter snapshots for the
-hier stats deltas and is initialized before the restart: label, so a
-hotplug-triggered fail-safe reload leaves it holding snapshots from
-the previous generation while the scheduler's own counters start from
-zero; the first stats interval prints u64-underflow garbage.
+userland_dispatch() pops up to MAX_ENQUEUED_TASKS pids from the
+dispatched map and inserts each task into the global DSQ without
+consulting scx_bpf_dispatch_nr_slots(). The kernel's dispatch buffer
+holds 32 slots against MAX_ENQUEUED_TASKS (4096), so a single
+   full dispatch round overflows it long before that many tasks
+pile up between dispatch rounds the insert past the buffer limit aborts
+the whole scheduler. Every other tools scheduler that loops on
+scx_bpf_dsq_insert() (scx_central, scx_qmap) checks the remaining slot
+count; scx_userland is the odd one out.
 
-Reset it together with optind on reload.
+Break out when the buffer is exhausted and leave the remaining tasks
+queued for the next dispatch round.
 
-Fixes: e9151ed5c944 ("tools/sched_ext: scx_qmap - Expand hierarchical sub-scheduling")
+Fixes: cc4448d0856d ("tools/sched_ext: add scx_userland scheduler")
 Signed-off-by: Tao Cui <cuitao@kylinos.cn>
 ---
- tools/sched_ext/scx_qmap.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/sched_ext/scx_userland.bpf.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/sched_ext/scx_qmap.c b/tools/sched_ext/scx_qmap.c
-index f44802247069..414afb817e0a 100644
---- a/tools/sched_ext/scx_qmap.c
-+++ b/tools/sched_ext/scx_qmap.c
-@@ -292,6 +292,7 @@ int main(int argc, char **argv)
- 	}
- restart:
- 	optind = 1;
-+	memset(&hprev, 0, sizeof(hprev));
- 	skel = SCX_OPS_CID_OPEN(qmap_ops, scx_qmap);
+diff --git a/tools/sched_ext/scx_userland.bpf.c b/tools/sched_ext/scx_userland.bpf.c
+index f29862b89386..0a6daad84528 100644
+--- a/tools/sched_ext/scx_userland.bpf.c
++++ b/tools/sched_ext/scx_userland.bpf.c
+@@ -233,6 +233,14 @@ void BPF_STRUCT_OPS(userland_dispatch, s32 cpu, struct task_struct *prev)
+ 		s32 pid;
+ 		struct task_struct *p;
  
- 	skel->rodata->slice_ns = skel->rodata->__SCX_SLICE_DFL;
++		/*
++		 * The dispatch buffer is limited. When it runs out, leave the
++		 * remaining tasks queued for the next dispatch round instead
++		 * of inserting past the limit and aborting the scheduler.
++		 */
++		if (!scx_bpf_dispatch_nr_slots())
++			break;
++
+ 		if (bpf_map_pop_elem(&dispatched, &pid))
+ 			break;
+ 
 -- 
 2.53.0
 
