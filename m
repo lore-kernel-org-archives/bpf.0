@@ -1,56 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794332305;
-	b=NXOXxyn5duL7XpoPF/2Du6VfsrHZM4l+KQXyz5oOa49n2XyUKqJBfF+uwd0WfkZB4Z5j
-	 /I/XEpUX0LO74lcksg+MjZzLv4U2uIK4a2TAKLETYjk/Xxy6HrT933Veynqtg6si9LDhX
-	 IQDRrWodZaKEdJpzW3EuTXG1TvfViH2vtkW0bugRo0WlVV1x69Hq4xwF8BVyffsuThr2d
-	 SCvDJDdA/c+9lNe32GC2Y9wWWzHOOGwslBnvBGF9foZt6ETXgVgYET2+1PBfBsR/W4Knn
-	 I7RLlfTEkoXCCqoHFTk7dY2gHJLiWoOVaUDocTES5EaYmvN8Tkh8BHr6cJQnvAtm7zw==
+	t=1794332407;
+	b=dM2T9f67S1OfT+zDjzvNeTFRBgDcKmJcr4p3YLg2eyPOaalHDIgzB13g4QnwJ63aIj4B
+	 rfmQlaUDc8VSA8YSfoxES0Fc71t5kATFuopdm1eHfrIMf7W6uDV0UfB4ejMLdGFu/4BNa
+	 nF2zYmytTm4qsyLETNMV1l2S/z0eSE6xZIFA9o4vBFzvpE/8G2qEgmTD0tkbfEfxb7nUe
+	 xPvtTx49lSIqDPfpqVd/BQ0qEMFxxcwz5cMhK27FQ+925yDqvJOw5O0WamSbKm7duA/5F
+	 AsYWqZ24tfKPi7Zq7/oBSoZ+iIYU/DSiFKG8WCmxh0f6OGYH9JVqU6RQYebi5veacZQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794332305;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=b0Z8lLiYkQtsAhyqi5STn5oiVA9zJP+1BP74ZjyQBR4=;
-	b=2Op5MAdpYYG4LsptKe6x2hnUNnSec2jQJOCooZFZA2Kozbr4BWPPGxW12NucN8xYe5jz
-	 0oVsxx3N4YusyfMIod8xFZgnjGe3ljVVVx6ByDxrwG40WN3wwYTyi3tsIzgMxK+IZgFNV
-	 JBSCFH392KWJWeE+Wu/RZA+iW6ehDRBeoSOeTvQspDgmAbq9BGqnfUczPDZ0lV4MBrr/v
-	 SpebiS0yMybXss2hRgjoUKrsX0PCeCEj/usi4dT7elHJAHDwWC8qBtxPAFFBYNRNquBRF
-	 ruuByDZyfSMmzNb1TZYdVzzNCrvmU32uSrgZ+vVknq+P3hriC6VDVtrp21hGyRAmopw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794332407;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=vDIdWDqCs7bQzZm4Myzs55AdA8xj+ko5T/nZrnXBCKE=;
+	b=G8ayJaZPf3W0ipD8e2ULmoTKXJxqS42mXCOX36GvFXdyVU0Zo6hiAD4cTNNfbPj9JQvl
+	 Ocki7xZslxtQCvfBAyxSV3tiocu3PY23epghK9UfaWgImJko5UXFLP07qxTvXHkRzKVh7
+	 MFs0KcdluXhgrDhwN09qXB4lTN6/hk9RfhqSOEvkcm19DwCq5PhR/9uGvEAG2gkUP3Am4
+	 +VNJs3nCm0LvGuNn7PpnWxBxIZvzSret1a76oXue0FsqKiRDrdMqV+1ZcJnttqCHeLSsF
+	 OHBJx3w3eOC2i+Dp8ccBbUXuSBcifuMqC32D4fAvuz04KcuWNj0BgzdYCUgfiZyqOVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=emEEL9aQ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XnvYMYZ4;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E529C606A320
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 17:38:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E490460A5BD4;
+	Tue, 10 Nov 2026 17:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=emEEL9aQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 628871F0089F;
-	Tue, 10 Nov 2026 17:38:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XnvYMYZ4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CAE31F00937;
+	Tue, 10 Nov 2026 17:40:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794332304;
-	bh=b0Z8lLiYkQtsAhyqi5STn5oiVA9zJP+1BP74ZjyQBR4=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=emEEL9aQBgWTPCoVAg/KD4ZJJqgqJ9V/zl5VEzCWWsgfWNPf1u3RX/Ztbt1wdHCMj
-	 u6EfWpc3CppSkx0ryJiPLDeVtZvrrCMf5LcAtUl6RHMoUbrsed7RXvEAvItdFeAF9O
-	 PinVGnmXteGVUKpJqa5e3zBWiD253EvEXVuJ/Qu+7bYahL1RpVhP8ZC27RJNhXgoEA
-	 cDFLWXqtBg3XSsbuHPIOvTK+mZA410+GKGnzfC/clV52/clezON+4XfgElm04+fesL
-	 6L73FSZXgO218+BMVmlI2e97QEWIZ3jUI8nExZpBVsL2xtucfR3g/+BJCEO5Bs7T3o
-	 E4knE+R5+m+GQ==
-Message-ID: <sashiko-outbox-207493@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 bpf-next 14/18] bpf: Require the JIT for fmod_ret
- programs on found 64-bit targets
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Anton Protopopov" <a.s.protopopov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261110164046.454431-15-a.s.protopopov@gmail.com>
-References: <20261110164046.454431-1-a.s.protopopov@gmail.com>
- <20261110164046.454431-15-a.s.protopopov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 10 Nov 2026 17:38:23 +0000
+	s=k20260515; t=1794332406;
+	bh=vDIdWDqCs7bQzZm4Myzs55AdA8xj+ko5T/nZrnXBCKE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=XnvYMYZ4G8cIRDuO7q4ftQDGNfQCYbcw4Y0r+Sx9Ury9+EeXu1Ofk80fTxwxNRu7Z
+	 EIT4s+RAXmlsN2Dvpu/tkOpnjC+REH2LhaEaF4gyOki/5LJzMBps6l3RyLf/CYU2El
+	 jLNRFePMY25wEJ1AV+DvvmiJmclMZs7SHlChygHHzsgqpIlH+vhIWBM6osWL+mD89H
+	 9tBXhTdjLEkmP16EpsNPWzCpAwX4BsGLyHQ1yh5I++DR4aCCmziJJcvATJ1iWP2N8g
+	 ud5byP66KBVWAcND/DXN4y2eSfTH56fw8ZUZaZ5+gw16gVE++mJMw0exNIHSUO8aQM
+	 Z88Xri6zAsfYA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 2111839D6088;
+	Tue, 10 Nov 2026 17:40:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,51 +52,56 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/2] net: pass the XDP action to generic_xdp_tx() for
+ tracing
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179433240494.4112524.1031731452606255276.git-patchwork-notify@kernel.org>
+Date: Tue, 10 Nov 2026 17:40:04 +0000
+References: <20261030114753.185281-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20261030114753.185281-1-vladimir.oltean@nxp.com>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, kuniyu@google.com, wang.zhan@smartx.com,
+ mkarsten@uwaterloo.ca, makita.toshiaki@lab.ntt.co.jp,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, mst@redhat.com,
+ jasowangio@gmail.com, eperezma@redhat.com, xuanzhuo@linux.alibaba.com,
+ virtualization@lists.linux.dev, willemdebruijn.kernel@gmail.com
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] bpf: missing jit_required in fmodret_retval_init() for 32-bit
-  int on ppc64
---
+Hello:
 
-commit be8ba9e6d31af4b7ee8b1ec3bc7241dc8e6ff517
-Author: Anton Protopopov <a.s.protopopov@gmail.com>
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-bpf: Require the JIT for fmod_ret programs on found 64-bit targets
+On Fri, 30 Oct 2026 13:47:52 +0200 you wrote:
+> When generic_xdp_tx() fails to transmit an skb, it reports the drop
+> through trace_xdp_exception() with the action hardcoded to XDP_TX.
+> That was right when generic XDP was added, and XDP_TX was the only
+> caller. Since then, two XDP_REDIRECT paths have started to transmit
+> through generic_xdp_tx() as well:
+> 
+> - xdp_do_generic_redirect(), for a redirect to an ifindex
+> - dev_map_generic_redirect(), for DEVMAP and DEVMAP_HASH redirects,
+>   including broadcast
+> 
+> [...]
 
-This commit sets jit_required for fmod_ret programs attached to found
-targets with 8-byte return types so the BPF interpreter does not truncate
-64-bit return values to 32 bits.
+Here is the summary with links:
+  - [net,1/2] net: pass the XDP action to generic_xdp_tx() for tracing
+    https://git.kernel.org/netdev/net-next/c/655978fc71fa
+  - [net,2/2] net: validate xmit skbs in generic_xdp_tx()
+    https://git.kernel.org/netdev/net-next/c/67b0cca9ba88
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b12b57c7403e4..920ff39aac429 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -23883,6 +23883,9 @@ static int fmodret_retval_init(struct bpf_verifie=
-r_env *env, u32 btf_id,
-> =20
->  	aux->fmodret_retvals =3D retvals;
->  	aux->fmodret_retval_cnt =3D cnt;
-> +	/* The interpreter returns only 32 bits */
-> +	if (size =3D=3D 8)
-> +		env->prog->jit_required =3D 1;
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-[Severity: Medium]
-Does fmodret_retval_init() also need to set jit_required when size =3D=3D 4?
 
-On 64-bit PowerPC (which supports BPF trampolines without selecting
-ARCH_WANT_BPF_JIT_ALWAYS_ON), the ELF ABI requires a callee returning a
-32-bit signed int to sign-extend r3 to 64 bits, and callers inspect all 64
-bits of r3.  DEFINE_BPF_PROG_RUN() defines the interpreter entry points as
-returning unsigned int, which zero-extends r3 to 64 bits.
-
-In arch/powerpc/net/bpf_jit_comp.c, invoke_bpf_prog() and
-__arch_prepare_bpf_trampoline() save and restore all 64 bits of r3 without
-sign-extending 32-bit return values, so when the interpreter runs an
-fmod_ret program on a target returning int, a negative error return value
-is zero-extended to a positive 64-bit value in r3 while skipping the
-target function.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110164046.4544=
-31-1-a.s.protopopov@gmail.com?part=3D14
