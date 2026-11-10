@@ -1,49 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794279306;
-	b=JYOCxyH+mMLeeUM6W3s6KiAqicfdSOacxe8A30/J6/+6xv8pykhtSk1ugtfizshoxxNq
-	 5nL9+BDSYY2YX4jaFmS6xh1ee2Su7O7TnsxksLHqI06OiDZ7HRFEYpiim1QgeHQpsGdxL
-	 D4BAhCLEiQPKTnE4SyzzkwZVauGc9fT6URuqukBnQLNnKNBqrektLNReUIDQsItgldGvA
-	 kesMCzK3o1nzG/jh9tDl5eDcPjfuelVcM0fzCzb1hLE/0go+2I70H92/Gr+3JLsGG69ID
-	 EBL+fE+aK3x0n5XC0N3TIQaxXhPoDMLX7qa9mhXykA0sMcNVxCGayZ6GgY4YStw8mig==
+	t=1794280865;
+	b=b0BqThgGKj6Obyxbk+BFdy5N2sUQR3e1O6YbWiag20IXMKDIwWdP0KHFOzI8id3jlOz9
+	 yQdmjYxsP8CeKERId10MEvVPtSkZmsTSeD7cM7GghPBm53YkK8GA+uve1z3iUsp9i6Vw1
+	 i2fZPml+9UV0DL4GmLLFmFW88zrShQcsSz88cmiBbNFUMDarc4GMWsuW81MZ3gE488dpR
+	 ujNlR1byOcnJXsTwWtJ7qlE4rXwPreEh4h/wss/NrSNKarN1iI4okCf+aBu9XLRe1GeyU
+	 BSfTweugehpPGFrYD06qpmMXR1Ly1UiH6Nytu+vM1UJlgUGaQq94LLW56EgfhCc5boQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794279306;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=3n572mO1vWHbrUT40EU2i5Mk6sLDXAheIiNLOL8Aqt8=;
-	b=C69manjjmNgn6wEbU75/s1FlMXRLHL/MR4/igM1j+PCMWHxZcYNAfehCM6LKVCRX6yY1
-	 RIhR07gm7Hnrlcclvjli94pXmJiTA+sN85Mn3STK7OaWPfqgK0ltOIHiH+qScKAsf81ni
-	 MYbtVKVeJH4OXxAJvZPHyNhB6W3NGhuiMkEOmoFRO09aSXL2tAxryyNfSKwLVHO2mT9j2
-	 1PmYYMPjrwXqeeJAP4fcDMpYfA904TApxDFHclZIrzbPI2FYW9YFHHXP8cFfDhxzkMF61
-	 QkBCmmrHoXRe7pRtKoYcN3cpFyFBqeQ87PHGmcO9NLgis2aQKqyDgRaWDSxMAaLyGTA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794280865;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=QQYq9UN0ymiPTQymz+UkJfbvfMGgvjzLlUXXSTgUt70=;
+	b=i/rR7iy4obOrMRDa+8EBFsqnevI9hU6Gx/yOKFJlrosbURoe7enQd+5ZeSiU7R6zfz2v
+	 XXT7Aj3jmbYgYYoRG/dkDbBrZ1SMYsx7G9XYyBbUzel2yeKVCGPgz/2h03CYYiQpZNr4f
+	 2zjykN7/Jo3Yy4oGcpCSZIqQnOc4WlHpau6whTZ8ToJAQjSHdfNHzeLkfY75ueEk9hDKn
+	 YZebTfHc1y4b3/oxu3R/EwT6Z5kuV5XrH9qWi9E1qbkZPk+riE+GCi6IIYPSaQ2AYZd1v
+	 pSHm97D/TZe2eedVQwToOU2vO6VCHsWdQwlUfJ0/a8l+OIQcp3qMg8Vk6YJEh6pNS6Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EjtVTBwH;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D442460A6F76;
-	Tue, 10 Nov 2026 02:55:05 +0000 (UTC)
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=qlMRuqXO;
+	arc=none smtp.remote-ip=111.22.67.139
+Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B061F606A321;
+	Tue, 10 Nov 2026 03:21:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B061F606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EjtVTBwH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4DB91F0089F;
-	Tue, 10 Nov 2026 02:55:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794279305;
-	bh=3n572mO1vWHbrUT40EU2i5Mk6sLDXAheIiNLOL8Aqt8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=EjtVTBwHM6cRw01Z5w6fT8+MtxUfEwCjABoTc9s4ONsBVRMAK1zlzfodb4AtrGCIe
-	 jg6HR+6GX+K56GRPrnYxsQvPMGI2AhJullh3T1WodOkQXm93ALKdah+wT2j6feJqKj
-	 hX7ie7LF0sKZdFGaNAwucLOTY1SjCBsGhZ4LuopIqw6WLLKWa7i7ig8zG80dDs5yBy
-	 Nc1CBN/42JF7Yaslbh+KDVRtOBdK5maSb4D+xhB2m76opyWl9RAfMpwmnQHvLjbgsU
-	 bXac8Mgy3u9qzr0TF8h9y/t61cQgNd6VMKTp9lWzYRU6OYYOPEEj77i9Thb4ZTO07F
-	 NM1Y33SGbRvYg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9B131391AFCB;
-	Tue, 10 Nov 2026 02:55:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=qlMRuqXO
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=qlMRuqXOptJ17RYY0rNr1Zu1onjRr4pOhvNzWXVzO9BuNvGV02fm6fIyIZZ07tk3vzT6P3Ya2TwSX
+	 Qd4w/O1w8SMEe+ZOAcf48R7Pz+QnaVwb7A4Ah825mv/AvJVAcWE+yl4khh+ajWBcgEwd+puhP6nufW
+	 b9wDq3w4+FxWfSzM=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee56af28d9b55e-c7ab6;
+	Tue, 10 Nov 2026 11:21:00 +0800 (CST)
+X-RM-TRANSID:2ee56af28d9b55e-c7ab6
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from openEuler-24.03.03 (unknown[74.82.203.40])
+	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86af28d91c9a-a496c;
+	Tue, 10 Nov 2026 11:21:00 +0800 (CST)
+X-RM-TRANSID:2ee86af28d91c9a-a496c
+From: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+To: "Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowangio@gmail.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>,
+	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	netdev@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2 2/3] virtio_net: Disable AF_XDP pools on queues above curr_queue_pairs
+Date: Tue, 10 Nov 2026 20:20:47 +0900
+Message-ID: <20261110112049.11228-1-yanhaishuang@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <179422769501.994134.8613940611095428101@kernel.org>
+References: <20261108193845.73621-1-yanhaishuang@cmss.chinamobile.com> <20261108193845.73621-3-yanhaishuang@cmss.chinamobile.com> <179422769501.994134.8613940611095428101@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,46 +86,44 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3] tcp: free saved_syn after an RCU grace period
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179427930421.3612825.1201326223779642356.git-patchwork-notify@kernel.org>
-Date: Tue, 10 Nov 2026 02:55:04 +0000
-References: 
- <38fa9f2cc476502e9b1c1fef09ebba1df5dd5901.1793795528.git.x-professor@outlook.com>
-In-Reply-To: 
- <38fa9f2cc476502e9b1c1fef09ebba1df5dd5901.1793795528.git.x-professor@outlook.com>
-To: Yingjie Wang <x-professor@outlook.com>
-Cc: edumazet@kernel.org, ncardwell@google.com, kuniyu@google.com,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
- martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
 
-Hello:
+On Mon, Nov 09, 2026 at 12:34:55PM +0000, netdev-bot+sashiko@kernel.org wrote:
+> [Severity: Low]
+>
+> Is explicit XDP removal followed by closing the socket the only trigger?
+>
+> Ordinary netdev unregistration looks like it ends in the same failed
+> disable. Examples are virtio-net hot-unplug, driver unbind and module
+> unload.
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+[ ... ]
 
-On Wed, 4 Nov 2026 12:32:19 +0000 you wrote:
-> tcp_reqsk_record_syn() allocates saved_syn separately from its request
-> socket. bpf_sock_ops_get_syn() can load that pointer while processing a
-> retransmitted SYN under RCU.
-> 
-> There are two ownership transfers which can let another CPU reclaim the
-> allocation while such a reader is still using it.
-> 
-> [...]
+> The new max_queue_pairs bound fixes this path as well. The commit message
+> only hints at it with "Removing XDP must not fail". Could the message
+> also mention the unregister path?
 
-Here is the summary with links:
-  - [net,v3] tcp: free saved_syn after an RCU grace period
-    https://git.kernel.org/netdev/net/c/2b9fd1a0abf0
+Yes. Unbinding the device from virtio_net with XDP attached and a
+socket bound to an XDP queue gives "Failed to disable zero-copy!"
+without this patch and no warning with it. I'll mention that path in
+the changelog.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> [Severity: Medium]
+>
+> How does this wider qid range interact with the restore fallback that a
+> later patch in this series adds to this function?
+
+[ ... ]
+
+> Does this leak the xsk_dma_map, its dma_pages array and the DMA or IOMMU
+> mappings of the umem pages?
+
+It does, but only together with the restore fallback of patch 3, which
+looks the pool up with xsk_get_pool_from_qid(). Patch 3 has other
+problems for pools above curr_queue_pairs too, so I'll drop it from the
+series and resend patches 1 and 2 as v3. The reworked patch 3 will keep
+track of the pools in the driver instead of looking them up by queue
+id.
+
+pw-bot: cr
 
 
