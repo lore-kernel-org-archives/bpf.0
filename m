@@ -1,98 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794318793;
-	b=yFHzVsO67y9lF9gRMNj9Vnt+XCD1kdKQkRg1dZm+5N2kDsIuEQa59kGrMP++8s+pwsJE
-	 MiZUqoag/U3+4AkDNx/BJApBs99AO+3ZZWALuvzEFVl/+dNWL9PNWbKirBlf+PqHEBhqn
-	 MkEcoTZL829yqVcR4wR9Wvv3KfXNkbtaPt3nmeyDepVfaHWulI2MO1WLy7gXX4KgI9YHm
-	 qN8YUmgUNVEnv2PAc+tbnL9E6OOb1DAZJcGfISRm6ziYkUtsTsGBNO3TslUwk+CWNwGVo
-	 jw47s4Aao228OZkI5A1ebwmkFdT5O5oHoFlsSeyEVRfj95nf7gv5cGLzyJfmX+axJCA==
+	t=1794318870;
+	b=M8UjpJF9ksT95HTLJ/E8LcMSWimKO3t2TJ3PPD3IWbesGCyDMy2JSC6RtmpDR0t6LatF
+	 4dZb4NQ4QXuaeLoVRvmGptUnm49euDs1drY+olEUFQ6wToDIxzq3r2IIOns1Zu6tuoH4o
+	 HW6lfHIMNVYBLRKZRO7foyIuhKn5jxwVZCgr5GVXoFVaKWNm4kkufS6WTB3B6FtBmKVv5
+	 nTOFSjoA7vcPMkz3Vl7y0uUfznUbz7Qh44e8oVECH/phe6zqnHiCW36vwTDGhmeWA9l7z
+	 DstM5onxSeosNLz22ElC2p4FZvNh7Mhv2G7fCMO4vqlZTFyGGVwGtY/M0FAOnLrHVVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794318793;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=d4NSCnrsDvRbwBgqs2GERpu46FtgR0tNjhD+8taDJQk=;
-	b=zi+JwuKBeGtdcrwauhvIKKisiM6nCVv46fdVzzmtzDe7YQzV7/vxchcSvyALPnxPqmna
-	 bcU1t0EMDpA+AJ9Z8a6vp9irj44zRoNSJUL2r67NMxIjEaCqnM+PKWaxuaGYnWsZX63xZ
-	 bvE9vX5srJiRTM+NgLYF61vogX+9fpNUdpehK77Gx1kmRULbw+LibIGI7iyVax38wuQ9U
-	 3niWEd5xhma7CaAj8cKcxKtitwBwZvlHkw8Thw4Jhw35ZCgJqtsl2C3S2JH2005JDqR8t
-	 2T9rp/voFgJNCm9uQEhc9Tqzpda+/NcvF1oOvZUO2zf6BDcXQj5yivt+fKdTWUn2daA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794318870;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=C5jgHy1nXhTFAfsOl+lfPzRSNERj7WQscjo2eO2ih+g=;
+	b=WctsuCIcIGzgViwMu9re6SDXZd32kNtf13mTOzkHeA8ouCm1L7OpswNoLNP0hUEWdVG/
+	 LeGtwLD9ntnKk0UXnRdGALH5UzlnFOk6Dwa5HmYkViJD7BrqkkWZhcgln8hBJf/chykei
+	 v277zeMUWUZrsCaKddTophSg6Ml1LFcdqCpAoFhK3hpcfHP05Uh2fVOEbzgIJuboAzst/
+	 bd7GgUTMXwjmEQ8OBNfDkzxrm//9qEnyczBma0vmmy3ZKsVC0mRdTA2bu/bb7ExD0ERZ4
+	 mqsD//Pe+DTzWzgipbNj9EEDw9J143/WU3tc/57M92ANjGG8YmAEwMZjaYfoQTKw1BQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=teLs5hGE;
-	arc=none smtp.remote-ip=209.85.128.48
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XwFeguy7;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B84606A321
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 13:53:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C9B84606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEE9606A31C;
+	Tue, 10 Nov 2026 13:54:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=teLs5hGE
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4b7252a32c8so21871095e9.0
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 05:53:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794318791; x=1794923591; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=d4NSCnrsDvRbwBgqs2GERpu46FtgR0tNjhD+8taDJQk=;
-        b=teLs5hGEycwkTQHU/tkdfRWfHUVLf8FvNrr1j6fIqA8AwZspd3ALDl77yFSJq3YWmz
-         5fQTLeLFDFyKbnoHpEegpwvsXpoPDpyRRax1A5+FUymd+p62uImzs0BFrmhahhf71Uhi
-         WF1VAuaQDa0HA5WqfsNkFapOLbnjQFyrvAMMs0SjV5+1oI7cv0cxDMV/v8/rZmFg/DKN
-         4KNU1U8uOBxIpPBlAEx1R7Nrt5D01mpXSNl6RYSWYKrcSaT1/iq35lsE5xKDjn7BJFGI
-         aZUy+7uHSH3zyXuR0I9VOLLmcJmgMpna9rTxgF0of3s57PdOZJIQ+CIgrsFbScZCLUH5
-         X3rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794318791; x=1794923591;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=d4NSCnrsDvRbwBgqs2GERpu46FtgR0tNjhD+8taDJQk=;
-        b=OJwJwhSjkYq8c5KRIofioQrRmOjdtL6WYKp+WHFV+s3i94SD0FD0KFJb/l5TnfxO7g
-         jnSqk3x5sqhJw3kshda+JM5wg1yVbbXnwVjeJwz8IHDLKQfAsdpN77l7Do/cBfberZcY
-         FGzw0o9hMYrim9/HkIqLxk9IbBFFtbGvmxuAJ15FUQvIc9XtZLcubDNgayzayfnuDvXo
-         9HUjAU/o/SIsmkbjmd7qxgZZ5N6npWd1x8K5MlCCEmvscaMpCKKTevd+vd8IoxxgVbd5
-         Fo2j6yb9kwU/Lj4zB1XiZaiTisMIeofMuXHIeOz4qVPM3YMGk6C5ZVZfKM4EHu7wPpz0
-         AVaQ==
-X-Forwarded-Encrypted: i=1; AL+hErEwpfRjRNUEZniBBUT+ujr0lXdzKb4zJ5rwMcAaE1QuVkYoKZxf90zrfyNwrBznq0u37Mc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+vE8A5ajGHPJUNzMBS4JN0aemWETaek8+y28s3EM5XztorXxxH
-	nQFHCPkE288WZqyJj4kFbLA5qVDuKmusOFk0QvxVxuEcBueiSmhGw0Eu
-X-Gm-Gg: AYBFou3xgYAu8xJYK1q5O1tWiE807PF11VM0tnLyEMGzgHJTjtXx6Ape2mV+rMAGrqc
-	pQdI50qBtMAqCTmNOR+PoAbcFqe+DJGSdpn/WYbZAxhCzc7y+Zsrkn0vuhfdeZdYLDKY7nXn+5i
-	lBKE3icsiYA0g6wr2XUfnaes2PiXNnTHqnvvizW5QdWSZffP3FpCAXMmfdPXGxJxYHcz9YmXbCv
-	cm7/+3oSHs0jSpdPiIUiHQvUWXcUHDsShciWAwGeaYhaHbJpJHKq7YG7gN1kAGAqzYBZ4zBFj0g
-	ngDdmVVppddE4He/GBFfFqISIfTNi/Zs+qoyE5qCQJcJVIxklf1XBvXnVJrUBCcii+QgGgHCFSn
-	lKsr59J09EzWl+vprPo8jEwBdKQgAZVHYB/REzxu5DTLIctqOYqOR64kUgPVhqrA354LxhDSK8m
-	Fc6ifrDOzryBHOAvAwO4nr8ykMcYsjp46szp9PJtxrmcowmjSIl285f9S+9nLdwbLK3V9AaoEss
-	ywdbBQriJmR7qPUd65H7malmFPiwCBbryyNSA7LVMWe+MKWRs7x2uUMHg9uPKgpNSgekrYCzPpk
-	FQO1fgRUkglwPNrPkHoWaD//6npYPkL2dY00BA==
-X-Received: by 2002:a05:600c:8b66:b0:4a6:4d6b:a840 with SMTP id 5b1f17b1804b1-4ba02351009mr49636755e9.31.1794318791044;
-        Tue, 10 Nov 2026 05:53:11 -0800 (PST)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fe2c5asm104797705e9.5.2026.11.10.05.53.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 05:53:10 -0800 (PST)
-Date: Tue, 10 Nov 2026 14:04:41 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	eddyz87@gmail.com, memxor@gmail.com, almagui@kernel.org,
-	john.fastabend@gmail.com, qmo@kernel.org, brauner@kernel.org,
-	kpsingh@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, sashal@kernel.org,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	martin.lau@kernel.org, mason@kernel.org
-Subject: Re: [PATCH v2 bpf-next 11/18] bpf: Follow PHIs in bpf_scan_ir
-Message-ID: <avMkeelRyvo-Bzuf@mail.gmail.com>
-References: <20261109170550.141443-12-a.s.protopopov@gmail.com>
- <8ab81e05089b4f5ec1ecb1bea9e6dc5cc2953a67f16e9369db005c2f3f3ee242@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XwFeguy7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 844621F0089F;
+	Tue, 10 Nov 2026 13:54:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794318869;
+	bh=C5jgHy1nXhTFAfsOl+lfPzRSNERj7WQscjo2eO2ih+g=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=XwFeguy7OAl2B0xbZEZf+YNpbRPun6Uxy12IDapJUugAkfnMkJMQWrACI3LnYamvS
+	 sZ7QpagwdZSe2JBSLE/lYuBRyfQnngmWmP6ZH3stPJyDv6Rg7qptN27/8L8uX1Fvf+
+	 zT2GiHGpAI8WdjU0Nx1Pyc+3Guh5HO2o5ewC8vA7wigAewUpzEcQIjSnGCAzyvJQ/v
+	 sVSxam0PSbINufDpdJBaTDu2mBq7kmD513kzL7LTM/dwxDYrdBxnLv7AHU6cqE86PR
+	 Sn4WjxxefUuJelWxydwRIVb6dHLsocUJGeARSLJdiZZ3duTvqAkZIZjq0ZH3306O78
+	 roJsnXIWaMIAw==
+Subject: Re: [PATCH net-next v9] net: stmmac: rework stmmac_rx to support XDP
+ rx multi-buff
+From: netdev-bot+sashiko@kernel.org
+To: lorenzo.bianconi@oss.qualcomm.com
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
+ netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ bpf@vger.kernel.org, nb@tipi-net.de
+Date: Tue, 10 Nov 2026 13:54:28 +0000
+Message-ID: <179431886808.994134.6784700644892681429@kernel.org>
+In-Reply-To: <20261106-stmmac-rx-mb-v9-1-c099c923664b@oss.qualcomm.com>
+References: <20261106-stmmac-rx-mb-v9-1-c099c923664b@oss.qualcomm.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,66 +67,173 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8ab81e05089b4f5ec1ecb1bea9e6dc5cc2953a67f16e9369db005c2f3f3ee242@mail.kernel.org>
 
-On 26/11/09 05:42PM, bot+bpf-ci@kernel.org wrote:
-> > bpf: Follow PHIs in bpf_scan_ir
-> 
-> TL;DR: Nits only: in bpf_scan_ir.cpp, isErrnoRange() duplicates
-> errnoConstant()'s errno check, so the range is defined twice; also a comment
-> style nit.
-> 
-> > diff --git a/scripts/llvm-plugins/bpf_scan_ir.cpp b/scripts/llvm-plugins/bpf_scan_ir.cpp
-> > --- a/scripts/llvm-plugins/bpf_scan_ir.cpp
-> > +++ b/scripts/llvm-plugins/bpf_scan_ir.cpp
-> 
-> [ ... ]
-> 
-> > @@ -34,9 +36,40 @@ namespace {
-> >  
-> >  static constexpr int MaxErrno = 4095;
-> >  
-> > +// is Range in [-4095, 0) ?
-> > +static bool isErrnoRange(const ConstantRange &Range)
-> > +{
-> > +	unsigned Width = Range.getBitWidth();
-> > +
-> > +	if (Width != 32 && Width != 64)
-> > +		return false;
-> > +
-> > +	auto L = APInt(Width, 0) - APInt(Width, MaxErrno);
-> > +	auto R = APInt(Width, 0);
-> > +	return !Range.isEmptySet() && ConstantRange(L, R).contains(Range);
-> > +}
-> > +
-> 
-> this isn't a bug, but could singleErrno() and errnoConstant() share one
-> check?
-> 
-> isErrnoRange() has a single caller, singleErrno(), which only passes it a
-> range that getSingleElement() already showed to hold exactly one value.
-> For that input the width check, the isEmptySet() test and the wrapped
-> ConstantRange containment do the same thing as errnoConstant() below
-> (width of 32 or 64, then N >= -MaxErrno && N < 0), so the errno range is
-> now defined in two places, and the !Range.isEmptySet() test can never
-> fail.
-> 
-> For example, errnoConstant() could call
-> singleErrno(ConstantRange(C->getValue()), N), or singleErrno() could test
-> the sign-extended element against MaxErrno directly.
-> 
-> Also, the "// is Range in [-4095, 0) ?" comment is the only function-level
-> comment in the file using // rather than /* */, and it hardcodes -4095
-> where the code uses MaxErrno.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Yes, thanks, will fix
+Critical: 0 · High: 0 (1) · Medium: 1 · Low: 1
 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42662799554
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
+- [Medium] The skb head truesize grows on every received frame, including
+  with no XDP program loaded, and the commit message does not say so.
+- [Low] The commit message overstates one change.
+
+Pre-existing issues:
+- [High] This problem wasn't introduced by this patch, but the patch
+  makes it wider.
+
+--
+
+net: stmmac: rework stmmac_rx to support XDP rx multi-buff
+
+This reworks stmmac_rx() to collect all the descriptors of a frame into an
+xdp_buff, so programs with frags support see the whole packet. On XDP_PASS
+the skb is built from the xdp_buff head and its fragments. The patch also
+saves the in-progress xdp_buff in rx_q->state across NAPI polls, advertises
+NETDEV_XDP_ACT_RX_SG, and strips the FCS with a driver-local tail shrink.
+
+> - carry the XDP metadata written with bpf_xdp_adjust_meta() into the skb
+>   via skb_metadata_set(), so it is no longer dropped and TC/BPF programs
+>   can read it through data_meta;
+
+[Severity: Low]
+Is this item accurate? The XDP_PASS path in stmmac_rx() already did this
+before the patch. The patch removes these lines from stmmac_rx():
+
+-			metasize = ctx.xdp.data - ctx.xdp.data_meta;
+-			if (metasize)
+-				skb_metadata_set(skb, metasize);
+
+The same logic now lives in stmmac_build_skb().
+
+Metadata on linear frames was not being dropped before. The only frames
+that never got metadata were multi-descriptor or buf2 frames, and XDP mode
+dropped those outright. The commit message already covers that elsewhere.
+
+Could this item be reworded so it does not read as a fix for a metadata
+loss bug?
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index a2177777727ef..c215cc70caa19 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+
+[ ... ]
+
+> @@ -2290,10 +2294,6 @@ static int __alloc_dma_rx_desc_resources(struct stmmac_priv *priv,
+>  			 SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+>  	num_pages = DIV_ROUND_UP(dma_buf_sz_pad, PAGE_SIZE);
+>  
+> -	rx_q->queue_index = queue;
+> -	rx_q->priv_data = priv;
+> -	rx_q->napi_skb_frag_size = num_pages * PAGE_SIZE;
+> -
+>  	pp_params.flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV;
+>  	pp_params.pool_size = dma_conf->dma_rx_size;
+>  	pp_params.order = order_base_2(num_pages);
+> @@ -2321,6 +2321,10 @@ static int __alloc_dma_rx_desc_resources(struct stmmac_priv *priv,
+>  	if (!addr)
+>  		return -ENOMEM;
+>  
+> +	rx_q->queue_index = queue;
+> +	rx_q->priv_data = priv;
+> +	rx_q->napi_skb_frag_size = PAGE_SIZE << pp_params.order;
+> +
+
+[Severity: Medium]
+Does this change the skb head truesize for every received frame, even when
+no XDP program is attached?
+
+Before the patch the head size was num_pages * PAGE_SIZE. Now it is rounded
+up to the page_pool allocation order, and skb->truesize is derived from it
+here:
+
+stmmac_rx()
+	bufsz = rx_q->napi_skb_frag_size;
+	...
+	xdp_init_buff(&ctx.xdp, bufsz, &rx_q->xdp_rxq);
+
+stmmac_build_skb()
+	skb = napi_build_skb(xdp->data_hard_start, xdp->frame_sz);
+
+On 4K pages, a dma_buf_sz of 8188 (BUF_SIZE_8KiB) gives num_pages = 3, so
+the head grows from 12K to 16K. A dma_buf_sz of 16368 (BUF_SIZE_16KiB)
+gives num_pages = 5, so the head grows from 20K to 32K.
+
+That shrinks the effective socket receive buffer for jumbo MTU users who
+never load XDP. The commit message calls out the fragment truesize change
+as a behavior change, but not this one. Should this be mentioned too?
+
+[ ... ]
+
+> @@ -5962,120 +6073,79 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+
+[ ... ]
+
+> +		skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
+> +		/* For Not XDP_PASS verdict */
+> +		if (IS_ERR(skb)) {
+> +			unsigned int xdp_res = -PTR_ERR(skb);
+> +
+> +			if (xdp_res & STMMAC_XDP_CONSUMED) {
+> +				stmmac_xdp_put_buff(rx_q, &ctx.xdp, true);
+> +				rx_dropped++;
+> +			} else if (xdp_res & (STMMAC_XDP_TX |
+> +					      STMMAC_XDP_REDIRECT)) {
+> +				xdp_status |= xdp_res;
+> +			}
+> +			goto next;
+> +		}
+
+[Severity: High]
+This isn't a bug introduced by this patch, but multi-buffer frames can now
+reach XDP_TX, which makes it worse. Does XDP_TX completion recycle pages
+into this RX queue's page_pool direct cache from the wrong NAPI context?
+
+stmmac_xdp_xmit_back() picks the TX queue by CPU, not by RX queue:
+
+stmmac_xdp_get_tx_queue()
+	while (index >= priv->plat->tx_queues_to_use)
+		index -= priv->plat->tx_queues_to_use;
+
+Completion then runs in that channel's tx_napi:
+
+stmmac_napi_poll_tx()
+  stmmac_tx_clean()
+    xdp_return_frame_rx_napi(xdpf)
+      __xdp_return(..., napi_direct=true)    /* head and every frag */
+        page_pool_put_unrefed_netmem(..., allow_direct=true)
+          page_pool_recycle_in_cache()
+
+stmmac_tx_clean() {
+	...
+		if (xdpf &&
+		    tx_q->tx_skbuff_dma[entry].buf_type == STMMAC_TXBUF_T_XDP_TX) {
+			xdp_return_frame_rx_napi(xdpf);
+	...
+}
+
+When allow_direct is already true, page_pool_put_unrefed_netmem() skips the
+page_pool_napi_local() check. That means pool->alloc.cache and
+pool->alloc.count are updated without a lock.
+
+The tx_napi is a separate NAPI instance from the rx_napi that owns the
+pool. Meanwhile the owning rx_napi can be on another CPU running
+stmmac_rx_refill() or the allow_direct=true puts in stmmac_xdp_put_buff(),
+stmmac_build_xdp_frags() and stmmac_xdp_shrink_tail().
+
+Can this corrupt the alloc cache? If so, the same page could be handed to
+two RX descriptors, or recycled while an skb still holds it.
+
+The race dates back to XDP_TX support. With this patch, though, each
+XDP_TX frame can push the head plus several fragment pages down this path.
+Would returning XDP_TX frames with xdp_return_frame() in stmmac_tx_clean()
+avoid this?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261106-stmmac-rx-mb-v9-1-c099c923664b%40oss.qualcomm.com
