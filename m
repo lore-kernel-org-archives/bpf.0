@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794328165;
-	b=UBnsCbA0vcxqZm4HCHH9mgBzcbo3QhtnOgt5W+8oi+J3KPBXcWlTrIKt3NNgA/0kFmG/
-	 kG+pd4+Inr0bvfFcUN7qPv3BlneiNYbkE1Rzy++83nDnJk0hdL0+mTJjs+3dhx01Hd932
-	 b5i9jo8cNl6PqlgvSu6Nx9rTnkUkaV7bgueUlxeFHMUj1shEtp+vQQn4ejO9hMZvEBmW3
-	 SXSdhY076qlFh8VS8nDFxsDCn0NRuc6yZNGyn777ItRUHQhkLfivJ4Lt6RgvF/jk/Rpro
-	 58IkMiPDD9285NzLithOVvT5HPBLRHOnPsGVOpF4/Gx5+hC7eu4wF0FbahF9bY456EA==
+	t=1794328166;
+	b=YmVruxPaZmN2S/ImZeMyqJhfpNWrqWvn5RneQroMHQ/Oi1WhQM1gkgH+7EZzHbrmeUp4
+	 VB+3kQc/Yf5421/Q+kO+d9cCisAT5p09u1IACYIPr0Fy4EmlfFRn4kacVLu9vSgDTgHYf
+	 2x0tKEHKhf1ZBdZjBaZyed0rhGZw8YXKnA9JxXv5/SQXRKdGXM2ZICs1+M6NnzYM2GXcs
+	 JF6GhLZgzsszfXDI84+Zb4QSJLSzK138s74e/L0fX8R5p9nRaBuzVIQHMZgZ7solwt1TH
+	 7h2U/RHKiGxQwXnAMHtTHCc5tw27glD4ZpbSL3DG0KNsD77Pd2qe3HpDZ40yF46VDmw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794328165;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794328166;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=DLsTnaW3uXr9AC/QbRfpXuwiBDpvXM/nxSHrEfIP3lc=;
-	b=l6LxmLWWEdKXSjWl8oe2gXQjowl6T2AErdLLNCjek7TOsTwwbNZ4w60kmy5cxtcKpWF7
-	 EbiCX+8cve1hmhnw0OnukjDq/kX9nLWme3Q7raOsucQSIrEr3lSHU6wUKCowdU1UJd+Y0
-	 5f4eb2YgIuhDTKGFlC12eiOlcl1dsmFbAcBELTGt51fRV2p7f79vEgiCTK7+CqCmTml+J
-	 DJXWKq/kgxwlrXc4mJs3A9odjyp8vPSp0s78lYhxXLwpO2LUxk8lxlTCw2qQW9eQZPu+C
-	 9KC2l7J4qlymmfR/xjXI7xEpEh+dgT/GM6Ba9o2QWPOV+pyS7olCz4dpUeAwgZe/k6g==
+	bh=9Y3kCsYcaDY5qwLaKX26SOy2iD45ozQ8Dc5QEanJuFg=;
+	b=tdXFMKJutC/XXXtd97U7RwTC5LpajU5cPm3PGTgBdueIeXLuIa/sN1j12FCsFCGIOAvQ
+	 pgL/nMixw9SeD/MRrVDb2SJR5fL1w1DWiTIiUCQX/NQeOH+fWljGRZjs/Ph81RLgebWg6
+	 AqtOOMduE2pyQsYCRuoRFWn4vb00gIuj/Q4zxIysS9MoBBQfga+OetGLHZINWnbQQFZC0
+	 /PJcL8IxkSoJvVxF3mG1t/wdzNQ0YwMHCA0WECERAjl8qwFrQ2LzUpNUtGKQaAzu3ZwZV
+	 qRLk9lhPYBFYQ7FG/fDXZpaPNGwevKsFnDZ9oSBjSXJ1QidcukPWMOL4lHPi3jOOgxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vZ1RReU+;
-	arc=none smtp.remote-ip=209.85.128.53
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eoDw+66o;
+	arc=none smtp.remote-ip=209.85.128.42
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFB2606A335
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 16:29:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9FFB2606A335
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D50606D7F5
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 16:29:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48D50606D7F5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vZ1RReU+
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4a20bde60a0so23657415e9.3
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 08:29:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eoDw+66o
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4a1fbd52ab6so15001815e9.0
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 08:29:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794328163; x=1794932963; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794328165; x=1794932965; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DLsTnaW3uXr9AC/QbRfpXuwiBDpvXM/nxSHrEfIP3lc=;
-        b=vZ1RReU+7oUC/2FVAIkerBd9DuaXp0BA8s+XGa4zggwl50JQDETD+PipCAaWdCw0VO
-         Am1mOIOa+zlEUvGLPFtUoD7MBJph9LFhog3NJlUfCnf70GkgDacTqNYrDGIEXW6Q0NS8
-         QLCayZijcVItUK/6VVJuZS+wiZ9eU7d93b8/ER/kDjZK5c38Vz1RruWu4BDvdhX2Ux6s
-         FzTX193Qr07gQoGI/QLlorYuLYW2btDvgElTBByQCTQXP5Y4dLjDGQ5oSlzwUE1PeJlw
-         z7uGzptU8YpfeXanWgR8sRiTmq7s22fqCO9GwfFomxrridjp5AFv4QrOKZxLn8UwNN/t
-         7XgQ==
+        bh=9Y3kCsYcaDY5qwLaKX26SOy2iD45ozQ8Dc5QEanJuFg=;
+        b=eoDw+66o++3nkn8TX3g4q9VedazkHPxZZsCWZHjrpN77f0oykuvlO+tAXtlamuJDs/
+         ta0q0w4i8LL8ynAUj3BRe0Tn5UsEheHaQEL/WZSmE14aZlKAL9W1ymV6hDw7sFLvxEAr
+         JE+qNl3PYMh0W8mdgIy3ly8pPKbcttKSfgh1cRDz9bKgCDjg/Lv1ucfQ5tKu873IMj6o
+         QVBcmFkvKiPCn/BMhHDv0jd/V1Pjp8FnNabsCh413IesfSLhqirxBVqDfb+OAc9F764Q
+         wkaPaZsLhZSdFEmz7Y+1IOscRc6QmL5PwNLuFfCANU5WJxgjsTL9SWx30Ut1QBwcEG/0
+         WpEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794328163; x=1794932963;
+        d=1e100.net; s=20260707; t=1794328165; x=1794932965;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DLsTnaW3uXr9AC/QbRfpXuwiBDpvXM/nxSHrEfIP3lc=;
-        b=Q8rAQkfqXp7XsVb3yZH0hbVBnaoaxJt8a5CJuuz6UNoMHhRjZzkGdDw3nXxxej5lvk
-         g4YG30IuPKe33M+lvkGaA69Vtz4qk60cu/737gqVtdQAO5BFPTlccRCc4pHWTFRS7cyK
-         SwJPkQ6hJvezFiyU6XGCnFZYM5WkxtSlqSjV5e2od7YEGXPtr1kg99tFLjl8/dw7RE1y
-         8C4ZNgczwx4+HOlya4dK6CCelFejUquUZM7TI6XBF7Y34cKHwAuft5VdYBIFmtovqkyx
-         ZAvbGFzyPhb/aheXnGerg5E9BGiwfqvcvi1YMS0T+WCO+DX56oXa4mQ1CKSZNG5h4qSH
-         gN3w==
-X-Forwarded-Encrypted: i=1; AL+hErHUFi9galY1gdODdzUIVc8TgZHdZd4sMMMInd9kGyXKN2e0l4+V3afB6xHDUhhmDZHrEFU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8E3BNvOZ2LsUzyPVz16FNLGbiZXmVV8n/1OlJ/XqsghewZGEDX
-	H1l6CjTnxa3ua2Ui9vUfRWR9OtgyrGfWbatkXomXhr3Wy4Dm+DvtYXai
-X-Gm-Gg: AYBFou2l9sCqVFXBQld+M1qPMivdaLzy4dRLVlzkKTm2gOvNfnHQEOaAWsSWfRLFBAV
-	9J3lINIU73UJgcuWXCN5442RPp4ovppv8gX16eW/DX4j8M9ZdGrdMzJ/cKHxpCjmYF/8/FrqltI
-	CQg9l/5OzLgX0PapcZiFlGzUGUFDNltzGFF6MpfJYl/Jgyvkm9voDmk6O4ZPEg5YQ1QKGettdwU
-	2+RwKyYDivTLeh64ca+3hbq4cNynAGNW0DLSSeF835g/xMHlaDvNWTHlARBl3zQzC4xAExd0POA
-	MUScYVaDt0ggS0ne+OoF/uo3AvrOUM+VkJ9tB5iA5wDLg+kWCl5M32jCyqyU3tfDNC/IAH0902+
-	oDYp0XNtAhBJdrlD7UB0pNdNMvMH6eDvZhgVVeUFcwxLDrsoOY94jOvFtG6oLYdZIO/Zssi8HKI
-	2BX0Z/I37jmmlA5oaF/pLWCo5NEHCmN6TWkDnUB94bf3O90megibgvTb8Iq/gruiQvVNwFJZFlK
-	NYY2ifK2T3zfIC1DvastZsT0eCO2EBTSyDI5d6YFP1E4WjBPmH+6X//i8ENIGXte3GwQutBnyaQ
-	CZR74/4QECF/JXiL5vXWF3ATamZlUqTtbbKYJqHE8IGeJKs=
-X-Received: by 2002:a05:600c:6306:b0:4af:c210:5b3f with SMTP id 5b1f17b1804b1-4ba0234eddcmr57289025e9.24.1794328162866;
-        Tue, 10 Nov 2026 08:29:22 -0800 (PST)
+        bh=9Y3kCsYcaDY5qwLaKX26SOy2iD45ozQ8Dc5QEanJuFg=;
+        b=uk67l5pQnUbrC1L1kNyS15uMOABNIJGxz1xCxjpgabsR0zm6T42wDYmnAeTVhJKTDN
+         QvaSJEo1sbshQEn2s/jJ65nDv0UfL5xKR2nucomJ6UG9nlYZUyFSOie5qelxRj7hmbTf
+         4i4qQc6UBL6yNI7eK4dUy9pLNGH3fE26OzmRmLS0ZGAKSt7dD6LkobLklQxi83ZOfhz3
+         bzCPjxIKX98GTBewiRjLlmsyNfnwmfKPdtAG//88PfYUUc8lor4FQleRAKLoEgrtXXej
+         Rn8a20YlFZyWVqo5oq8O+7dqwBRE6ir7Bsc2asPk5TJj8ZmedLm2XkE4MK6hDdKPOlyx
+         0HdA==
+X-Forwarded-Encrypted: i=1; AL+hErEitP/SVa9nkQIRc68YbWRc/FrLwCzvMDXB/QqOjFytslEI1EaLjEf5rOMuvvvX+lGn4mA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+Pflcr8U9Otf54e5ZToXFaYIy/qDVtaAekyNgFaN7Y4wWOdqUu
+	Zr1cRNIhjtnlT6qi0HIvmraPRGz8pdoGf/nwTl4DGcTu1ShljWkIvrHY
+X-Gm-Gg: AYBFou23/4k7DQ+37fr+2hOMfZKUQUhk7YJscs5pxFfL6tK6HXo0Ir7wCq4EqEgM0R0
+	3SwzqtwYH4oWy9fBnduPi5gRNiiL/b9of84NmnKfMpMgWY3+FIaOb8NYInW4mWwVsjEs3yHxS18
+	NIkB5aofV9vfjTjKDrrFxH6HOKTLcnJOb4d/9hvY/9SKdyUkL3gbryDzLcJrlB8r+t807BXaibL
+	ftJueIteOTHq10qBq0FaDK8pjYPneLjcHDRBVR16dB1t5fYEx5B7SRfRIw4X1DZpUpU81q89dOU
+	p383JthksoFuonUtEPhnZCJgPIQrLTGsDq6iqaD1HRABisvmd+LLG/Z6A91XlZLf0kI1ujZwWBI
+	I6IJkeEeBDfBn7IELq02wbz0u2/gee26pmcnEMElQS3hSRWRNou9ribGvowblfr0dDMII3E3bHQ
+	mtm395IZeZUGmEP97BGChsIs/MloULpVSWOVHll3gn4kP0wYOCyj0VumimBPoo4cFp5oxJRb7Zy
+	75y8whPXjm9fYm4joxGoyolye/80VRKl4byLZOkr971wTJOqV12Anrwe9HvD5PyXPqt/wo+HetY
+	RgLJrDUOhVG15Dt64tLJBXvsXx1yVRBLYCA0VX+ZymW/Cbc=
+X-Received: by 2002:a05:600c:630c:b0:4a1:7c7d:8881 with SMTP id 5b1f17b1804b1-4ba023473c5mr59385725e9.13.1794328164502;
+        Tue, 10 Nov 2026 08:29:24 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fea745sm71287485e9.10.2026.11.10.08.29.21
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fea745sm71287485e9.10.2026.11.10.08.29.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 08:29:21 -0800 (PST)
+        Tue, 10 Nov 2026 08:29:23 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -97,9 +97,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v3 bpf-next 02/18] bpf: Add a btf_id_set8_entry helper
-Date: Tue, 10 Nov 2026 16:40:22 +0000
-Message-ID: <20261110164046.454431-3-a.s.protopopov@gmail.com>
+Subject: [PATCH v3 bpf-next 03/18] bpf: Build fmod_ret target sets from BTF decl tags
+Date: Tue, 10 Nov 2026 16:40:23 +0000
+Message-ID: <20261110164046.454431-4-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261110164046.454431-1-a.s.protopopov@gmail.com>
 References: <20261110164046.454431-1-a.s.protopopov@gmail.com>
@@ -114,129 +114,184 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The pairs of a struct btf_id_set8 have an anonymous type, and the
-btf_id_set8_contains() helper returns a void pointer to the pair it
-finds. All its users but one only check if a set contains an ID. The
-one which needs the flags, btf_kfunc_id_set_contains(), finds them as
-the word next to the ID.
+Mark functions tagged with the "bpf_fmodret{,_sleepable}" decl tags
+(added by resolve_btfids) as fmodret targets. Add the KF_SLEEPABLE flag
+for the latter.
 
-Name the type struct btf_id_set8_pair, and add a btf_id_set8_entry()
-helper which returns a pointer to it. Make btf_id_set8_contains()
-return bool, like btf_id_set_contains() does, and use the new helper
-in btf_kfunc_id_set_contains().
+Do this for vmlinux at fs_initcall and for a module before its BTF
+becomes visible to anyone else, so nothing can look at the set while it
+is built.
 
-The layout of the set doesn't change. Update the tools copy of
-btf_ids.h as well. A later patch uses the new helper to set the flags
-of a pair.
+The IDs come from the BTF after relocation, so they are final. Unlike
+the IDs of a set registered by a module, they must not be relocated, and
+the set is installed directly instead of through btf_populate_kfunc_set().
+(The register_btf_fmodret_id_set() keeps working, it will be removed by
+a later patch.)
+
+The set shares kfunc_set_tab with the kfunc sets, but its flags only say
+how a target may be attached. Skip it in btf_kfunc_check_flag(), so a
+kfunc which is also an fmod_ret target keeps its own flags, such as
+KF_IMPLICIT_ARGS. Otherwise btf_attach_func_proto() finds the flags of
+such a kfunc inconsistent and attaching to it fails.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- include/linux/btf.h           |  8 +++++++-
- include/linux/btf_ids.h       | 10 ++++++----
- kernel/bpf/btf.c              |  9 ++++-----
- tools/include/linux/btf_ids.h | 10 ++++++----
- 4 files changed, 23 insertions(+), 14 deletions(-)
+ kernel/bpf/btf.c | 114 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 113 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 87fad4076f0e..00495e7833b6 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -558,11 +558,17 @@ static inline bool btf_id_set_contains(const struct btf_id_set *set, u32 id)
- 	return bsearch(&id, set->ids, set->cnt, sizeof(u32), btf_id_cmp_func) != NULL;
- }
- 
--static inline void *btf_id_set8_contains(const struct btf_id_set8 *set, u32 id)
-+static inline struct btf_id_set8_pair *
-+btf_id_set8_entry(const struct btf_id_set8 *set, u32 id)
- {
- 	return bsearch(&id, set->pairs, set->cnt, sizeof(set->pairs[0]), btf_id_cmp_func);
- }
- 
-+static inline bool btf_id_set8_contains(const struct btf_id_set8 *set, u32 id)
-+{
-+	return btf_id_set8_entry(set, id) != NULL;
-+}
-+
- bool btf_param_match_suffix(const struct btf *btf,
- 			    const struct btf_param *arg,
- 			    const char *suffix);
-diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index f27b7db81100..f5985acf661b 100644
---- a/include/linux/btf_ids.h
-+++ b/include/linux/btf_ids.h
-@@ -19,13 +19,15 @@ struct btf_id_set {
-  */
- #define BTF_SET8_FMODRET	(1 << 1)
- 
-+struct btf_id_set8_pair {
-+	u32 id;
-+	u32 flags;
-+};
-+
- struct btf_id_set8 {
- 	u32 cnt;
- 	u32 flags;
--	struct {
--		u32 id;
--		u32 flags;
--	} pairs[];
-+	struct btf_id_set8_pair pairs[];
- };
- 
- #ifdef CONFIG_DEBUG_INFO_BTF
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 228b93d4f8c9..61d2df6776a9 100644
+index 61d2df6776a9..2c45e5fa1d7b 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -9973,8 +9973,8 @@ static u32 *btf_kfunc_id_set_contains(const struct btf *btf,
- 				      enum btf_kfunc_hook hook,
- 				      u32 kfunc_btf_id)
- {
-+	struct btf_id_set8_pair *pair;
- 	struct btf_id_set8 *set;
--	u32 *id;
- 
- 	if (hook >= BTF_KFUNC_HOOK_MAX)
- 		return NULL;
-@@ -9983,11 +9983,10 @@ static u32 *btf_kfunc_id_set_contains(const struct btf *btf,
- 	set = btf->kfunc_set_tab->sets[hook];
- 	if (!set)
- 		return NULL;
--	id = btf_id_set8_contains(set, kfunc_btf_id);
--	if (!id)
-+	pair = btf_id_set8_entry(set, kfunc_btf_id);
-+	if (!pair)
- 		return NULL;
--	/* The flags for BTF ID are located next to it */
--	return id + 1;
-+	return &pair->flags;
- }
- 
- static bool __btf_kfunc_is_allowed(const struct btf *btf,
-diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
-index b371ef7241b9..3b5b2856c628 100644
---- a/tools/include/linux/btf_ids.h
-+++ b/tools/include/linux/btf_ids.h
-@@ -19,13 +19,15 @@ struct btf_id_set {
-  */
- #define BTF_SET8_FMODRET	(1 << 1)
- 
-+struct btf_id_set8_pair {
-+	u32 id;
-+	u32 flags;
-+};
-+
- struct btf_id_set8 {
- 	u32 cnt;
- 	u32 flags;
--	struct {
--		u32 id;
--		u32 flags;
--	} pairs[];
-+	struct btf_id_set8_pair pairs[];
+@@ -9307,6 +9307,8 @@ enum {
  };
  
- #ifdef CONFIG_DEBUG_INFO_BTF
+ #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++static int btf_register_fmodret_tags(struct btf *btf);
++
+ struct btf_module {
+ 	struct list_head list;
+ 	struct module *module;
+@@ -9476,6 +9478,15 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 			}
+ 			goto out;
+ 		}
++		/*
++		 * Do this before the BTF is visible to anyone else. A failure
++		 * is not fatal: the module loads, but without fmod_ret targets.
++		 */
++		err = btf_register_fmodret_tags(btf);
++		if (err)
++			pr_warn("failed to register fmod_ret targets of module [%s]: %d\n",
++				mod->name, err);
++
+ 		err = btf_alloc_id(btf);
+ 		if (err) {
+ 			btf_free(btf);
+@@ -10100,7 +10111,9 @@ u32 *btf_kfunc_flags(const struct btf *btf, u32 kfunc_btf_id, const struct bpf_p
+ }
+ 
+ /*
+- * Check a single KF_* @flag on a kfunc across all of its hook sets.
++ * Check a single KF_* @flag on a kfunc across all of its hook sets. The set of
++ * fmod_ret targets is not one of them: its flags only say how a target may be
++ * attached, and a kfunc which is also a target keeps its own flags.
+  * Returns:
+  *   * 1 if @flag is set
+  *   * 0 if @flag is not set
+@@ -10115,6 +10128,8 @@ int btf_kfunc_check_flag(const struct btf *btf, u32 kfunc_btf_id, u32 flag)
+ 	u32 *flags;
+ 
+ 	for (hook = 0; hook < BTF_KFUNC_HOOK_MAX; hook++) {
++		if (hook == BTF_KFUNC_HOOK_FMODRET)
++			continue;
+ 		flags = btf_kfunc_id_set_contains(btf, hook, kfunc_btf_id);
+ 		if (!flags)
+ 			continue;
+@@ -10182,6 +10197,103 @@ int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
+ }
+ EXPORT_SYMBOL_GPL(register_btf_kfunc_id_set);
+ 
++/*
++ * Targets of fmod_ret programs are marked in BTF by resolve_btfids, see
++ * BTF_SET8_FMODRET. A "bpf_fmodret" decl tag on a function makes it a target.
++ * A target which sleepable programs may attach to also has a
++ * "bpf_fmodret_sleepable" tag, which never comes without "bpf_fmodret".
++ */
++#define BTF_FMODRET_TAG			"bpf_fmodret"
++#define BTF_FMODRET_SLEEPABLE_TAG	"bpf_fmodret_sleepable"
++
++/* Return the function which T tags with decl tag NAME, or 0 */
++static u32 btf_fmodret_tag_func(const struct btf *btf, const struct btf_type *t,
++				const char *name)
++{
++	const struct btf_type *func;
++
++	if (!btf_type_is_decl_tag(t) || btf_type_decl_tag(t)->component_idx != -1)
++		return 0;
++	if (strcmp(btf_name_by_offset(btf, t->name_off), name))
++		return 0;
++	func = btf_type_by_id(btf, t->type);
++	if (!func || !btf_type_is_func(func))
++		return 0;
++	return t->type;
++}
++
++/* Build the set of fmod_ret targets of BTF from its decl tags */
++static int btf_register_fmodret_tags(struct btf *btf)
++{
++	u32 id, func_id, nr_types = btf_nr_types(btf), cnt = 0;
++	struct btf_kfunc_set_tab *tab;
++	struct btf_id_set8 *set;
++
++	for (id = btf_start_id(btf); id < nr_types; id++)
++		cnt += !!btf_fmodret_tag_func(btf, btf_type_by_id(btf, id), BTF_FMODRET_TAG);
++	if (!cnt)
++		return 0;
++
++	set = kmalloc(struct_size(set, pairs, cnt), GFP_KERNEL | __GFP_NOWARN);
++	if (!set)
++		return -ENOMEM;
++	set->flags = 0;
++	set->cnt = 0;
++	for (id = btf_start_id(btf); id < nr_types; id++) {
++		func_id = btf_fmodret_tag_func(btf, btf_type_by_id(btf, id), BTF_FMODRET_TAG);
++		if (!func_id)
++			continue;
++		set->pairs[set->cnt].id = func_id;
++		set->pairs[set->cnt].flags = 0;
++		set->cnt++;
++	}
++	sort(set->pairs, set->cnt, sizeof(set->pairs[0]), btf_id_cmp_func, NULL);
++
++	/* Each sleepable tag marks a function which is already in the set */
++	for (id = btf_start_id(btf); id < nr_types; id++) {
++		struct btf_id_set8_pair *pair;
++
++		func_id = btf_fmodret_tag_func(btf, btf_type_by_id(btf, id),
++					       BTF_FMODRET_SLEEPABLE_TAG);
++		if (!func_id)
++			continue;
++		pair = btf_id_set8_entry(set, func_id);
++		if (pair)
++			pair->flags |= KF_SLEEPABLE;
++	}
++
++	tab = btf->kfunc_set_tab;
++	if (!tab) {
++		tab = kzalloc_obj(*tab, GFP_KERNEL | __GFP_NOWARN);
++		if (!tab) {
++			kfree(set);
++			return -ENOMEM;
++		}
++		btf->kfunc_set_tab = tab;
++	}
++	if (tab->sets[BTF_KFUNC_HOOK_FMODRET]) {
++		kfree(set);
++		return -EEXIST;
++	}
++	tab->sets[BTF_KFUNC_HOOK_FMODRET] = set;
++	return 0;
++}
++
++static int __init btf_fmodret_tags_init(void)
++{
++	struct btf *btf;
++	int err;
++
++	btf = btf_get_module_btf(NULL);
++	if (IS_ERR_OR_NULL(btf))
++		return PTR_ERR_OR_ZERO(btf);
++
++	err = btf_register_fmodret_tags(btf);
++	btf_put(btf);
++	return err;
++}
++fs_initcall(btf_fmodret_tags_init);
++
+ /* This function must be invoked only from initcalls/module init functions */
+ int register_btf_fmodret_id_set(const struct btf_kfunc_id_set *kset)
+ {
 -- 
 2.43.0
 
