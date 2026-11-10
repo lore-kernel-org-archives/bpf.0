@@ -1,100 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1794344063;
-	b=zeRszPTSlEReJA85nQiemwiFsgO+rLo8XNh2k/gXQyFiEmHmw0107KERpQIyW4Gt+ncj
-	 fmuIvrWyCTUBHKQ6pUbGkWfKpcUewAMOMJ+0zKLNQO7px0Hg6u4zBmRTi3R8LhgLBEpKB
-	 wVFsxzBkLBK1S2uwe/eYo8XGJZk2Ai7EU9gE2ZO3CdgFyTJTo+zhH6rafBasu7lHQlJSB
-	 pdljY8qNm3Dz9wQvOCIKg+lwnF9JKtgcJo5LMvsje6pCUWZhIsRkzl5rz2TlmPVCbRpXU
-	 oqHSVCnmdtRscoNCW3QwiaSCywTH9YgolpzwbEg5O9t2oXhTmspZyxFwmdeluhxFM/Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794344063;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=yvRZ4NPr9zuipnBz8AO8lnblNbdj7j1u7mqaDBMXrDI=;
-	b=1051UD91+MnzY6THGusm9IggCF+yQFR8x8ZfJURLX3XgAiAYt20FGUI67AfO043SCANH
-	 HCzj3cp7LEFu2sc1GERHow7RxzDm0929Y29TY49UKds1xy3tZ6dFBAjUtWQn04n8JP+tg
-	 jDhV99lCDiHqjkdPwBWCbivmrSmVWR1IG/eRn6SVpAAqc/FzH1qQqsa3S+9hgGl0v1Yau
-	 qz7VBT6cnmIbwButs5zCSkxCaZJMzCZaxGLqLQx9iKIEpvdKqhGeEbeyOttxUE0bKq9lI
-	 e0O9gOF/3CJYm2YDB2wV9dH9eMga5D/836uSZPndjHU8hu04NiweLlci23tP/BimHrg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JgZ5Sbyj;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.181
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794344554;
+	b=oAn1hM16Bm6QNelgSPrLboRLpwIRIF0wbvCM9dYUu7DshRFYPOQYzMPEaTW+tBwo898v
+	 mjlzRRrQJ7Qvb9kwfyg2AMpEoVHWw1+O0k8vkOS+F4d4YzpRwddZcRxYBOvijXs1IySow
+	 Cu51uumFak6PvjAkHqBIZOqIeTdu25N3VXyuSeQrixb8Nge+aaSBmLWP8smteP9VO2pX9
+	 NMFkLs5TVrY4BAJx7sAmg59o3VWlafr21jkoFWKi46Inj4xQG+aVpJ7xk6PXVCsFbi+44
+	 2x1ZsCpbZN7Tz7JWqtGVKgKj1D/Ni5s+nYRH3tPBueCxW0yb/30ahXn9bk8tb1/7J6w==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794344554;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=4UELyMN+egwkqi4+h1uopj37GrqBlJgxQd/MGkoSSAk=;
+	b=j5C/0n10dErQdrUHeWo/dxBD9QGsIdkjXr60Ws/BtbdemGr6LRKLX+Ds4ZiuxWrJlQK4
+	 hwq+aSO++tRkgZWmAuudbF/4QYNrQEquMryaH6GE36WLesnGdDwvrm84qonTOxUuLvWyd
+	 t0VzKbOwvUZ3ER0Q4bhvKqQXklsW/lLSnuPcCA2BUVcARg3dEuLoQxp7eZ8j9p8Z/oM+8
+	 Ls87QOTX0oen91db6TpsDFvW7rcre2r2l9N2uh3Y+c91j/QmN0b2v9k8usD69dut0yyD4
+	 18cYLgnfnuZzbEzC9LrbpEdwAKzCta09nN6FOLnS6Bk9WxOuEZZxoxZA/x8YB0jET4Q==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UIFweq4W;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8150C606A327
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 20:54:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8150C606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA9B606A31C;
+	Tue, 10 Nov 2026 21:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=JgZ5Sbyj
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-54492d8a988so9951cf.0
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 12:54:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794344062; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pH1Knta84wHqAN7MLmAL0g9gNCKIJE6d2vVwxlAr3jD5zr/qjwmR6hfel6SohPb4LG
-         dfY6gf+FXD+xSzZvTLVxmB+8NUu+mzA2LFPJyEvh2jJ+iF4j9hPopgEUvl8Rg0HW3BbH
-         Tcg6vVnyfrGWcsi9WHaWX1LjEyEUWv/n+yhlPGAKrNZ+F4Ru6+/NrojIuPAatAocSMmt
-         kwFueF3HRW0Mmfvt8dBSB6OR8hGIa8DpRvfjl4JEDeFR/JEXYEGNxPFLGlUOwDTFZoo5
-         cAUL6LXk4r3j4T61+YAMrjPKfXQaL82tIrcM++IiHAhpDmvJ7i/qNgW1IvOYuYBnVtL8
-         RwdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=yvRZ4NPr9zuipnBz8AO8lnblNbdj7j1u7mqaDBMXrDI=;
-        fh=L1714vWCGaVlpjsru50/NrKLNqGeQgr18/td5Ar+iiw=;
-        b=FPrKvsFAq/RWtZHmyEFaOAqT6i9pjJlMzAbKsEVIqP9EolaZvZjHlpxu5pAikvIEak
-         EWwiDCBN0J/RhceGaTFfpGUeGh1EwOg7hCLi81lWvCE6kZM74/1+u8mK3Z9z6pC4w+of
-         6/qrbttIUAT5kY3oSGal1jrfpyCtOlY9avqTApxBwIQ2ow/W8yhdnTvkfiL6RVz6gRC8
-         8K74sWga8MTUQWcPKJbOrUuNm3v8pMqhr9NWU+3vN5Q3joZahVR0PZMi8Jtk6BvK9eEA
-         74LoYwTOOqBnOYLpWxN45eCd69XiX9xsP/2xf/Wor++fwUGTr+ImaVYKWhletOnXD1xI
-         Ilcw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794344062; x=1794948862; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=yvRZ4NPr9zuipnBz8AO8lnblNbdj7j1u7mqaDBMXrDI=;
-        b=JgZ5Sbyj/bfTX1B8fNhEYDl5JbvzsY1ATjB7buyxeVt+W8gB3qInKF3nG1mSpWS7Hq
-         HOm4SmWKKTKKCnp3ZEBCWtqjTye+taOOsvKWqAl/+6vCDSMwmWTk6TVM/AwaW2zXSmaX
-         zpC+XqEpMqOgmJj7MIOauDRJgHLcDHQAUFouhWC2eeugb2VFqD2qkbIWB/GZSy3Wv0zC
-         VoPe2Jw1B1RSXo1orcbn1RmOrLIivsFCJeGUzmuzrRSdEdYjFAtWJjMgftqBs/UtEcVa
-         n+sEaWQ9fLVVINL5CH2z/MyOc5Nb25mNy7hP0DVd+Aji5+Blze+HOfFUjkYB3BCAtYgj
-         IQLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794344062; x=1794948862;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yvRZ4NPr9zuipnBz8AO8lnblNbdj7j1u7mqaDBMXrDI=;
-        b=2dAJAq2k2f8zYzLzhAnF405OZKBc4vXo4eYoFWV2rsRyTk6SusJP8J3c8rZIPq6vkx
-         ypkOqnHdobLT8mdn55hJXwfAALQ4oZ8ul/WZx5zDsrPbIi/z5MmAKBPqGl8P6Iw3iTHl
-         8g1U4B5oX0Av4EwKhRgKhWvkVvOL83XfJjQPDWBLCHd+pK0yQdeRbsEKZ8Bf7ZhOqiXI
-         k4F1vwnIcf8GWQwMbFHeUC8baGiQ+AVxn3fAXTnWyi7B1avqlXTIFU1OQ3PStNEzni0T
-         b2ahpsxftU5KfrWNGIWqa4GH4NLLPQcF5vG5CsljjoO0zh4JXxLk3//N0Nkh0clvTETr
-         gdAA==
-X-Forwarded-Encrypted: i=1; AL+hErHlyhIiojX/fkfo97cTAwWXre6FJKkc53yeJHIVvgAXE/uGR/CK8oDnmGnJoWEfs04C/rQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Z/Q1ZpUmZdNjj47kISDAozSBQckgPoQxkAzwBQP4OheZrT2aB
-	4cr+lFsijd5XHjzUajSyGRCdjUR/DtyIPMxxR5dAVE0HJFLDxj2h5ji1b/pXhpuHDaRwAwbh7s7
-	0lr3EjQtzwfT2aI5SRs5z82EEf7Xj8KucW7d57B+S
-X-Gm-Gg: AYBFou2mx1u47aeH88ac6lSaUQSNAod6HL2O4LK6f8sR9VoTnGwJeahi3c7RncMTV4i
-	X/r4b4Vc16KX/eAX5OTiYxB0W6IfSvxdub7JeYI5iV2/0YaLzE9zyWRH3v1vUvaOX6s/slx9SAj
-	96nBAHtRfluDy+fU3kScgzt4mJI6FIrG2nu1OH36PX7wqNn/rEe43iEj6X6kRxrKt26/JiDyFUm
-	7zx+pb14i/mG7TwoudREFIuhA+74U9FXSy1aG9OsFSH7ZmVP6HESaQrqvdvAdh4bFNkk+wrLSej
-	IKxiTFleBkV3C1+V/bwq2aUchcyzw7jkMiB+JB26jCTZFugL3NJA53qdD7m/G7KeH2ggjeuxjei
-	+iD1lHcF2rbJpIFcYVkzQTPFt40epE5AwfGyNjB05GUz88kzTri2eo+esxIArvFpIXu8=
-X-Received: by 2002:a05:622a:4c8c:b0:542:fc60:fe23 with SMTP id
- d75a77b69052e-5569edef00fmr3545561cf.3.1794344061730; Tue, 10 Nov 2026
- 12:54:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UIFweq4W
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAABA1F0089F;
+	Tue, 10 Nov 2026 21:02:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794344554;
+	bh=4UELyMN+egwkqi4+h1uopj37GrqBlJgxQd/MGkoSSAk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=UIFweq4W2ri1jxRcfOJKg5ZmdzmEOQrGrEsZbdNmyGr0UtcosyTUVzd22ZA/rEyu7
+	 KS6BCZAbfGjjc//5/BLGFU96uo/aVTWyHLwGMLiZbew5h9XY42CNE5QbsMXyuZdMNr
+	 WyIay3TNN4CZHsXPrxfpuo0KtfkBf00ODkoCOIkv+I9O74qvzaBs0PnyK9Emhr5UjM
+	 OwMXbcs/G5Efwsjw7KMeU3A2Al6HKhlZqc//puKPjavBsZ9LTc3wsuumXcWcBymlO1
+	 5b4mLD67PaKNu763DE5OUYHup6EIRYm+vsnOXJHrCDsQAiZCSUsc8/uqdj0kjW30Av
+	 970OL0AbtcAiQ==
+Message-ID: <sashiko-outbox-207760@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 6/6] selftests/landlock: Test capabilities guarding
+ other LSMs' policies
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+In-Reply-To: <20261110203042.2410140-7-mic@digikod.net>
+References: <20261110203042.2410140-1-mic@digikod.net>
+ <20261110203042.2410140-7-mic@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 10 Nov 2026 21:02:33 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,85 +60,80 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261104043006.1199857-1-irogers@google.com>
-In-Reply-To: <20261104043006.1199857-1-irogers@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 10 Nov 2026 12:54:09 -0800
-X-Gm-Features: AclHuK8u7iu3KreUV1BOly4WRgYcjdLxbePAeQ91RkjuMYcADS4FO3F63l0qY-8
-Message-ID: <CAP-5=fVJfHEt1NTJg43tyGoQuJO4AgBaHzBZQHN9fqPef7i5=A@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] tools build: Fixes for libbfd -lzstd dependency
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Quentin Monnet <qmo@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, James Clark <james.clark@linaro.org>, 
-	Leo Yan <leo.yan@arm.com>, linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 3, 2026 at 8:30=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
-e:
->
-> This series addresses build problems when linking against static
-> libbfd/libopcodes on distributions like Fedora where binutils is built
-> with zstd section decompression support (requiring '-liberty -lz -lzstd'
-> together).
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] selftests/landlock: missing set_root_euid() in
+  apparmor_policy_load()
+--
 
-Hi,
+commit 04d94a6e7f98554d70c200b902dd42758c1ea088
+Author: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
 
-Namhyung/Arnaldo, could you help review the tools/build and tools/perf
-parts of this (patches 1 and 2)? The objtool and bpftool changes have
-Peter's and Quentin's tags.
+selftests/landlock: Test capabilities guarding other LSMs' policies
 
-Thanks,
-Ian
+This commit adds selftests verifying that Landlock capability restrictions
+on CAP_MAC_ADMIN and CAP_MAC_OVERRIDE apply to Smack label operations and
+AppArmor policy loading, along with an audit test for Smack capability
+denials.
 
-> In v2, commit 89d001d48ec7 ("tools build: Add zstd to the binutils
-> library feature tests") landed in tools/build/feature/Makefile at the
-> same time, creating a merge conflict and only adding '|| $(BUILD_BFD)
-> -lzstd' without '-liberty -lz' or the corresponding
-> libbfd-liberty-z-zstd feature check in perf and bpftool (so even if
-> test-libbfd.bin passed with -lzstd, perf and bpftool would link only
-> '-lbfd -lopcodes' without '-lzstd').
->
-> v3 rebases onto perf-tools-next (v7.4-rc1), fixes commit 89d001d48ec7 in
-> patch 1/4, collects the Acked-by tags from Quentin Monnet and Peter
-> Zijlstra, updates the LIBOPCODES_LIBS comment in tools/objtool/Makefile,
-> and moves the AI assistance disclosure from commit trailers to the cover
-> letter.
->
-> v2: https://lore.kernel.org/all/20260909204122.1993010-1-irogers@google.c=
-om/
-> v1: https://lore.kernel.org/linux-perf-users/20260909181030.1870496-1-iro=
-gers@google.com/
->
-> AI Assistance Disclosure (per Documentation/process/coding-assistants.rst=
-):
-> - Tools used: Antigravity coding assistant and Sashiko automated patch
->   review.
-> - Summary of prompts and assistance: Rebased the 4-patch series onto
->   perf-tools-next, resolved the conflict with commit 89d001d48ec7 in
->   tools/build/feature/Makefile, incorporated review feedback and
->   Acked-by tags, and verified with scripts/checkpatch.pl.
->
-> Ian Rogers (4):
->   tools build: Add explicitly sequenced -lzstd to libbfd feature
->     fallback
->   perf build: Add explicitly sequenced -lzstd to libbfd feature fallback
->   bpftool: Add explicitly sequenced -lzstd to libbfd feature fallback
->   objtool: Add explicitly sequenced -lzstd to libopcodes fallback
->
->  tools/bpf/bpftool/Makefile   |  4 ++++
->  tools/build/Makefile.feature |  3 ++-
->  tools/build/feature/Makefile | 19 +++++++++++++------
->  tools/objtool/Makefile       |  7 ++++---
->  tools/perf/Makefile.config   |  3 +++
->  5 files changed, 26 insertions(+), 10 deletions(-)
->
-> --
-> 2.56.0.385.gac671c819a-goog
->
+> diff --git a/tools/testing/selftests/landlock/cap_test.c b/tools/testing/=
+selftests/landlock/cap_test.c
+> index 741567c5ab417..7f9b7fb2bade8 100644
+> --- a/tools/testing/selftests/landlock/cap_test.c
+> +++ b/tools/testing/selftests/landlock/cap_test.c
+[ ... ]
+> @@ -969,6 +974,180 @@ TEST_F(cap_other_hooks, capset_inheritable)
+[ ... ]
+> +/* AppArmor requires CAP_MAC_ADMIN to load policy. */
+> +TEST_F(cap_other_hooks, apparmor_policy_load)
+> +{
+> +	if (!is_lsm_active(_metadata, LSM_ID_APPARMOR))
+> +		SKIP(return, "AppArmor is not active");
+> +
+> +	if (access(APPARMOR_LOAD_PATH, F_OK)) {
+> +		set_cap(_metadata, CAP_SYS_ADMIN);
+> +		ASSERT_EQ(0, unshare(CLONE_NEWNS));
+> +		ASSERT_EQ(0, mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL));
+> +		ASSERT_EQ(0, mount("securityfs", "/sys/kernel/security",
+> +				   "securityfs", 0, NULL));
+> +		clear_cap(_metadata, CAP_SYS_ADMIN);
+> +	}
+> +	ASSERT_EQ(0, access(APPARMOR_LOAD_PATH, F_OK));
+> +
+> +	enforce_cap_variant(_metadata, variant, CAP_MAC_ADMIN);
+> +
+> +	EXPECT_EQ(EACCES, write_apparmor_load(_metadata));
+> +
+> +	set_cap(_metadata, CAP_MAC_ADMIN);
+> +	if (variant->is_allowed) {
+> +		EXPECT_EQ(EPROTONOSUPPORT, write_apparmor_load(_metadata));
+> +	} else {
+> +		EXPECT_EQ(EACCES, write_apparmor_load(_metadata));
+> +	}
+> +	clear_cap(_metadata, CAP_MAC_ADMIN);
+> +}
+
+[Severity: Low]
+Does apparmor_policy_load need to call set_root_euid(_metadata) before
+testing write_apparmor_load()?
+
+Writing to /sys/kernel/security/apparmor/.load reaches
+aa_may_manage_policy() -> aa_policy_admin_capable() ->
+aa_policy_view_capable():
+
+security/apparmor/policy.c:aa_policy_view_capable() {
+	...
+	bool root_in_user_ns =3D uid_eq(current_euid(), make_kuid(user_ns, 0)) ||
+			       in_egroup_p(make_kgid(user_ns, 0));
+	...
+}
+
+When cap_test is run as a non-root user with file capabilities,
+root_in_user_ns is false, so write_apparmor_load() returns EACCES instead
+of EPROTONOSUPPORT in the allowed variants even when CAP_MAC_ADMIN is
+effective.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110203042.2410=
+140-1-mic@digikod.net?part=3D6
