@@ -1,84 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.132
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.138
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794270472;
-	b=PQ+wV5Y7ce1vNW1ymBz2z230n0+26U4IOu0Qot9dSGu/w4WCToEtEzhPfJjNJPn/2zx3
-	 vFd2dsWeOlaG+oY3QIL6Bd6NbbI574a7Q5J+KS2Q4r28GsyCCD1p0v1/Qschgc1/vQzHf
-	 vTtSCb30HMJ3ppr2SL4JZJIj3Nyiy8KdocUXs9R47Zss1YOPoc0Xll1QICZ9ib7iJ/y+p
-	 +pVUI+NhDxYZOU/WzpxOaYW0Y1iMX7olvZi7B9TPweADBQIwRauirOxjEy+Ssy9w9OZVo
-	 Cj+bUc5mtIaGZmyUKQ3Y2pbASaMI4ljWq+mAIdQPk5AGEDBUtCx5J0W48YLgC6hr0AA==
+	t=1794270474;
+	b=tyCeEzLcflwEburUd4WjIMbeqXkU/BTzBQZ5pWc1N6ZtJYFGdOY/hBzc4NOrm23sdnU9
+	 DLUGE5b2N+aSNkb/j7eFBO8A9jEEJ9Pr8XGume8JVUJkie8I750EPdS+9gFdVTeAAewUC
+	 deZLHIEcbpSG9CoC6AZ3CpbZGjkepAxBgxqdGhXWjt82/Uag1fRDqbs7sLOvzSKdSmOp1
+	 mGHSQDEqXX7Vmm1yrHhIGbDc7FYss2lYjU3WzeK3OBlmdnyvQn2OI7YwvZctDIDagNz7H
+	 beOJZAATUfTGB9hEbEo56l3rXv+EStZIcUv7k+347L80vQmXF0axwuLfnPe3gGPoVew==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794270472;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794270474;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=jVH95qnGG3MbLgLBbbehZ/2MDmDQXwPdlXtnNIx2msc=;
-	b=t/LyJLLtQBiPy9VlMJpZcfAhwll6e4Pv6L/qwzxzwrFDamJwpwnkRJ+xaLb1zOBr6PAr
-	 p8UZ9/lLGrEUs8rAINVeAlpjTcAsse0Yp07hDnSi+ourSQhtgo6CUmGGwaseQU7YE3/OZ
-	 wPAX9GQzO5nG7IIDaZiifWMA56MU0HpCSIk+JHJmTY3E+jWA2OVv6urde2XcpkU2LtmGp
-	 DD/GHuHJ3PKjAdN+FWex3WuyToO5ujespnCQx4V87NDBETaoCQ5YdMXB9ttiMq2NPcDj1
-	 ey7UJAvcYlwuIRnKuRNIGVEudDXu9XEqL7oqLe3sImA0/FYhC0oPXpe7nQmP1CpiIvA==
+	bh=5Q/hdmTdYA6wF2W+UgC4zl71tt4/Sso8sab2ZkHMxAM=;
+	b=HYVXiL4/coDEBBGl1Y7oCdl9zMtybvaQj1Dv7vHwRiCLTve/UX3oNP5Y6/QlK9pORQVA
+	 bzvBQ2u9YuNHMSCYkoO7NOQw2zd13k9wPm5zpyr/Hgdreyrh02VDcMMEIQDpMY71sLHnb
+	 /2VdKTVXevUag77jny43bbunQo5OkAGN/SmqwYfzN8RJ8gOf7ZGtzdaxBknDwnl4P/loq
+	 A2BQ5R3lAPiTFl6AqD2o6tHUvz+PMhXxnlXk4lrk36TL8JoSD99d+vwsWvaCi6xJipGtK
+	 1ar0ezYDCXGQ2bbWdCCLhZevLcCEuZTwikQx/nwBdTvygweSx72acJ0nyR0aLT7u19w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LiFXZHfx;
-	arc=none smtp.remote-ip=74.125.225.132
-Received: from mail-wm2-f4.google.com (mail-wm2-f4.google.com [74.125.225.132])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=m+0JInoh;
+	arc=none smtp.remote-ip=74.125.225.138
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B95606A332
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 00:27:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C4B95606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB145606A31C
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 00:27:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB145606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LiFXZHfx
-Received: by mail-wm2-f4.google.com with SMTP id 5b1f17b1804b1-4a20fcb3e9aso1648665e9.1
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 16:27:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=m+0JInoh
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49ff9833fedso4328455e9.0
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 16:27:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794270470; x=1794875270; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794270472; x=1794875272; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jVH95qnGG3MbLgLBbbehZ/2MDmDQXwPdlXtnNIx2msc=;
-        b=LiFXZHfxWKDHyhM0lBP/apxUD3ppUYLQHE7xDPBEYljIw8M4tczXnjdiaEp8OQ1ndt
-         Ba+DOY3hzw+OQY64aoF5cDODTBoiXSICzkOnc1xjoWw8ueT3j8Mp3lItvFcN3GJKYhwB
-         Hbsfy8Vu2p0eToRoeaRKXmWqYL7VHAVvGfvbpnFofE1K7pbWmUSCEKp+JwcDUdbYV3lv
-         GFFhQo9akFdUbfkousUx0zx8Tcpsb3SKQlr02QQnH1SaDEhHAi405zJCJYYDeitYim/q
-         9asUnp0V3w1XyyE0gFDogPdc0wtvkF+0tihgPZdvGejfvUaRFEMeN/70/zi0+gxTIMqF
-         1Z2Q==
+        bh=5Q/hdmTdYA6wF2W+UgC4zl71tt4/Sso8sab2ZkHMxAM=;
+        b=m+0JInohRLCw3NZvlc/g5gkhPuxZwQeeHgfMUYP1j26Fxo5S+DF64mPMcbPfZRynbG
+         ZUD92suV0oqevrtJvSR4Nba7e8bXY8Wjeyd/zU7xRCPrqf1nHFIv7s/BssDiqfpDOyd3
+         M6JSDIEIgYof1062dkEpuA0iNuM/C42TWm1Smk6ZbenJ2bWP7TPTabZFVuwQXibPM8wE
+         EgL6zjr7NkksZ15Nf5z39qwl6lKIyabVA0GswpWQi2e5S3g8bQR3zZH3GkVmlM2SIk04
+         GUk5Siw8Rw9vtGXKAwR+TyUSVoERdyy8eMnEVgTy+QZZfJYBwoQGzNoaMgEJxOKOre1I
+         ccpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794270470; x=1794875270;
+        d=1e100.net; s=20260707; t=1794270472; x=1794875272;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jVH95qnGG3MbLgLBbbehZ/2MDmDQXwPdlXtnNIx2msc=;
-        b=x/3vWnedPi34GFlxu2278GN//cFzWvraL748REnF7qf/BFFczMUwNDmodO1IDnvWes
-         OcQdwUI2Lfxncc1LqFfq9R3A301ZBP9MIVO+LB/lw0cVvyuFXODTeDC4UawBPUduUC7Q
-         10QT78CT6gOwi0yYNmKCfRB2VS3zjdYbc4YrMSSFH1YLswHMaXIy2fVfmb3mUJ1KX1wg
-         PI8KVpM8qVX7Q7K9AoeNcczBDNMQucDn2veRz0M97mt4J2f0xJVQF6XqNbSdK+/xJ9js
-         I14MZOT1NtWITDbobNZh8/B3l6ePWsq8vR4ahmsYb2BVngHqCCTOdrDMEFCIkjTLU6ZP
-         t2GA==
-X-Gm-Message-State: APuU4Z8vaQSoOKoByAu/VeHnB55NkOW5jFBKr3mJdAcK0Rmk41Rx4LWX
-	O7OlxUBfYswE25b0W6w9chIIU1RHUInqOSWzYihih5fIkaIac2iMkaWTgtjy99EW
-X-Gm-Gg: AYBFou1pKeyVh8NhLU2PnEXjYeyK8TIICkwmeVPyY0ghogp9I8lhppFtGJ4pL2xirad
-	CVHzgRy62QHayVmmwBooVhCtko8M7xHXI9jSDBOqiqQsy3O1+cLayfw0x/fSIbVtcLqokBzk/8h
-	br3wDJWATzIVsdQ1D75nht6GtosIUg8YNjYE78rsRXyLZFxAcx93jp67kUHP8Tvjr0RZcrpKY+L
-	ejE9BeW+Olt4OBSASvSY56cqq5PWFlaZurZOfES52iv6hOGr7txarARSfOPSjxMyJ9GmqlT8nBT
-	r9/VKKDcZt9+GrOjeKq7H1Gkcf4EoXZ7Y/bE7Agdz81WXSIQBpb7Q1G11vgU+8JYviJNZ8vlZq8
-	9/FWUhmnyvJjIf+dXpjNAudAVs4q9mY2DUcrPnpxvZzfL9C34lBGGrf0rZQVL2R66qSUTjpqd40
-	5q2mOM51CRqV6vVeznGuHG3pPfBI3wPdq4Z/rUltOlWpTlSTpzMe66d1d6skNcJ+oweXqls+1k+
-	LJK5VyOeIqDCwKYZh5KpUw+IkA+cSPq4q6FJHEwAtQFRpPwqk2fRNVCq3/eXSqpPQzClC98B8rt
-	UorFjCKVzdeSPOPWIUUW+NON6EAbbCgbN+Z4LEyyqSvIIkIj9b6zCaaMHaoUAi86yYjj6tW+m3e
-	uS9CyWFlVsAAe25yB/xp3DV2tCFjiAvvfXPdninBvq7r/0HsK9fHhllzqzCcD7HI4tR+Nt/VKiy
-	ofTwli+SfQsb3RgQ==
-X-Received: by 2002:a05:600c:5249:b0:4a1:88df:8a2a with SMTP id 5b1f17b1804b1-4ba0234d88amr13676095e9.13.1794270469991;
-        Mon, 09 Nov 2026 16:27:49 -0800 (PST)
+        bh=5Q/hdmTdYA6wF2W+UgC4zl71tt4/Sso8sab2ZkHMxAM=;
+        b=W3keEE+mPwFSyXRe5xFdvnnWSaBUVlQP3lbsn6BKooDnLS0R4sROEKtAW0BITREE4D
+         YBzbJppdX/Lok36VHsVxyt57L1kxe6k5KhUk6DfwXjNnC+Dhp/uSvgawWsofuHESXLmx
+         FI0owx2JMC+XOVqgHP4DAcs+/ScXYR+TZTqzBq2bL42GiHAXOrTBsh8DWFTM4gwCZ3F1
+         lHJ+SMj+jFd78lRKLKkHXBzrrNo80SUtKc5If1OslIp0xc1/EHwX+a/FUv5KZXbZHTu7
+         kz/omj7vxkpzFmBE+nlW5BPpCeeABu1pWNallklW0ld8jJVQ+LrJaTdC78c8BD8XyIry
+         r9cQ==
+X-Gm-Message-State: APuU4Z+ATfhuOHgqHO4MbOC7QWTAat1g88eMBtBUcvcfL/t9wZPrIUkU
+	ITAb9eAMzApSGC5g8sFt1Rchk5yWRh9uScP6M69PRg6QBuaQAPSPAn8jic9S/gKH
+X-Gm-Gg: AYBFou22Cd52PG2Hdp7kV8tKynT7NUYuthZZcdlAlzdoyIGM8ZUti8Dxus4M2EIXYNT
+	uxdoZRTECfRecvGtGNL+4pEp9FwYtodgJSZ5NlZwpzpe/xI0jaMLjz56mg+6XEqwvFUUN5u6SJu
+	WMppK5LvtMGdxKwU0+uIWEx088T2GVsA4DRt0JCbO4VxwRmV4BbdEJTNzRra4hd2ycWE9Vc7OSN
+	kRifGzjH6uLYj//IdoOjUd8z/Tm+GUVPuH6jvgJYpBRp+QyaPA1501bEgfmHvRYsRdghiR4lex0
+	Zn5I3Ss+huYrDLpM02MPFatXi+9QMPDwVM5pDej7Zb27LlrsBilu6BMLrWRlUXP6Kz5XQfzGmnW
+	kvcBpeTDkEKPdvPA3JEfohNtYH8Ar4fB2KSj00Vgw+V1uANitCul6zJx9q7GgXGQCY4H2DsZlr8
+	aJYnUjFgsPITnPWD/CctNcWchAe3GYSGFMgf1LDXptoStkM1+Kp1OVTJGzvX0Ezk1siwOOLi/+p
+	L2oGn8fEHeALRMqvGE3CsdGAOC2RA+CnZ/wt/BcIyccWNj27kFlbbryyTHE9yk0uTUm/TgjfXDc
+	eUtYpVKE5hkwy8eRVOy8KNKeu8i0jxswexMwe8WKGErKX7QVea5YGwXmY9fHG7VuX7WZS8Nsfms
+	qjWn8Vy/hBCZbvZliswfH6vdHi/3hU4H6f3BIJqBTpSEeW3iz12V7kUfdwN0Hopokh7D2
+X-Received: by 2002:a05:600c:3143:b0:4a1:78c5:79f5 with SMTP id 5b1f17b1804b1-4ba02355f49mr11060035e9.33.1794270472166;
+        Mon, 09 Nov 2026 16:27:52 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba02387ad9sm26347705e9.5.2026.11.09.16.27.49
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fef675sm23405435e9.14.2026.11.09.16.27.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 16:27:49 -0800 (PST)
+        Mon, 09 Nov 2026 16:27:51 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -91,9 +90,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Shakeel Butt <shakeel.butt@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 02/20] bpf: Invalidate what a bpf_task_park() sleep may free
-Date: Tue, 10 Nov 2026 01:27:24 +0100
-Message-ID: <6751e6b26413cb4ea40aa63fd6bbb211e54cae49.1794269506.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 03/20] bpf: Refuse bpf_task_park() in callbacks
+Date: Tue, 10 Nov 2026 01:27:25 +0100
+Message-ID: <d7e8470a75a3ff4b2e65066f6ba6edb4e5bc14ef.1794269506.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794269506.git.memxor@gmail.com>
 References: <cover.1794269506.git.memxor@gmail.com>
@@ -106,261 +105,104 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11151; i=memxor@gmail.com; h=from:subject:message-id; bh=/Gibn7SGi56lxtjJhWE7PG6yPHUP1a8xjRaGb/HJMQs=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetTonOSAndOPPu2RR91r/qfvv1L6gDv5+XflQTWv3o39 6ZLna5lRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACZSv5WRYcbRn6+5555/E1Ht +XLP5eYr7OfWPLDkW5mtqsgkMDGlKIrhD0f3nXtTfm83WJ/9Q2Pb1E/GW+s/eDYHHBRZvLbXiXV KJQsA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4654; i=memxor@gmail.com; h=from:subject:message-id; bh=7WWfPMW5x47sqCBB26VfpuvqPTCbXWDkhSBpoxjkWYk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetTokvDPd3OkJvrG/Z4Cvhl3Fp0kmnSoSVlN3d89r9xJ DxOXnBCRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACZy4BXDP+sgN9GHcfcSubpY FlmYql3tPSZQc+Tx+7BEI9FFdSsnfWJkaL0ov/Vl5Lyk6293H66eMbv/WK67XGWkyduNwszipyN LOAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-bpf_task_park() drops the Tasks Trace RCU read section and the disabled
-migration that a sleepable program runs under, for the length of its
-sleep. Anything the program holds whose lifetime rested on either is
-not safe to touch afterwards. Teach the verifier which registers and
-stack objects those are and treat the call accordingly.
+Confine bpf_task_park() to the main body of the program and the
+functions it calls directly, at any depth, and refuse it in every
+callback frame: the synchronous callbacks of bpf_loop(),
+bpf_for_each_map_elem(), bpf_find_vma(), bpf_user_ringbuf_drain() and
+the graph helpers, the asynchronous callbacks of bpf_timer, bpf_wq,
+bpf_task_work and bpf_call_rcu(), and the exception callback.
 
-A pointer register, direct or spilled, is kept only when something other
-than the dropped protection holds its target:
+The park is sound where the only thing around the program is its
+runner, which holds the program, its maps and its context for the whole
+invocation. A callback has more around it. Kernel code called by the
+program, or a worker acting on its behalf, holds state across the
+callback that was not written with a sleep that drops the program's
+protection in mind, and each case would need its own audit:
 
- - the stack, function and instruction pointers, which describe the
-   invocation itself;
- - the context and the maps the program references directly, which the
-   runner holds for the whole invocation;
- - the values of the program's own array maps. An array allocates its
-   values with the map and frees them only with the map, and the program
-   holds the map, so nothing can free such a value during the sleep.
-   The program's global variables are values of its .data, .bss and
-   .rodata arrays, and the compiler hoists their address out of a loop;
-   without this rule no loop around a park could read a global;
- - arena memory, which the arena map holds and whose accesses tolerate
-   faults;
- - pointers backed by a verifier-tracked reference, found through their
-   own id or through their parent's id, since the reference keeps the
-   object alive regardless of grace periods.
+ - bpf_for_each_map_elem() keeps an iteration position into the map
+   across the callback. The verifier already refuses sleeping in the
+   hash map variant; nothing would refuse it in the array variant.
+ - A bpf_wq callback runs from a kworker, and bpf_wq_work() holds the
+   program through nothing but a Tasks Trace RCU read section, the very
+   section the park drops. Today the free path survives only because
+   bpf_async_cb_rcu_tasks_trace_free() notices work_busy() and waits for
+   another grace period, which a park of unbounded length turns into an
+   endless chain of grace periods after the element is deleted, and the
+   comment there assumes the callback stays inside the section.
+ - A bpf_task_work callback also runs from exit_task_work() for an
+   exiting task, after exit_signals() has set PF_EXITING; from then on
+   wants_signal() refuses every signal for it, so a park without a
+   timeout in that callback could not be interrupted.
+ - The exception callback runs while the program is being unwound after
+   bpf_throw(); nothing in it should block.
 
-Everything else is marked invalid:
-
- - values of every other map type. A concurrent delete, an LRU eviction
-   or the teardown of the owning socket, task or inode frees their
-   elements after a grace period the sleeper no longer delays, or hands
-   them straight back to a preallocated map's free list;
- - RCU and trusted pointers without a reference, including the task
-   pointer from bpf_get_current_task_btf();
- - per-CPU pointers, since the task may resume on another CPU;
- - inner maps found through a map-in-map lookup, together with their
-   values, which only the outer element holds. A map or value with
-   map_uid set came from such a lookup, so the array and map pointer
-   exemptions apply only when map_uid is zero.
-
-Dynptrs and iterators need a different treatment. They live in stack
-slots, and the program is obliged to release or destroy them later. The
-verifier cannot invalidate them the way it invalidates a register, and
-neither way of dropping them is sound:
-
- - Marking the slot's register state invalid would keep the slots typed
-   STACK_DYNPTR or STACK_ITER while zeroing the state that describes
-   them. That breaks the invariants destroy_if_dynptr_stack_slot()
-   relies on: with first_slot cleared, a later store to the slot
-   repositions to the slot above and releases whatever reference id it
-   finds there, or reads past the end of the stack array when the dynptr
-   was the topmost object.
- - Releasing their reference on the program's behalf instead would leave
-   the runtime object, a ringbuf reservation or an iterator's kernel
-   state, without the destroy the program can no longer issue.
-
-The park is therefore refused while any dynptr or iterator is live in
-any frame, naming the frame and stack offset. The one exception is
-bpf_iter_num: its state is two integers on the stack and its next and
-destroy touch nothing else, so an open-coded bpf_for() loop may contain
-a park.
-
-The invalidation runs in check_kfunc_call() after the arguments are
-checked and before the caller-saved registers are clobbered and R0 is
-set up, so the kfunc's return value is unaffected. Each scrub is
-recorded for the diagnostics layer under a new reason, so a later access
-through an invalidated pointer explains that the park invalidated it.
-
-The invalidation walks every frame of the current state, which covers
-the callers of the function that parks when they are in the state. They
-are not when the function is verified without them, as a global function
-is, and a static function that is verified on its own; later patches
-handle the two.
+Rather than audit and special-case each, the rule is that the park may
+only appear where the program is the only thing running: the main body,
+or a frame reached from it through plain calls. The check walks every
+frame of the current state and refuses the call if any is a callback
+frame. Asynchronous callbacks are verified as their own state with the
+callback as frame 0, so the walk sees them too. A static function that
+parks and is also used as a callback is rejected on the callback path,
+which is the right outcome: it cannot be made safe on that path.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/diagnostics.c |   3 ++
- kernel/bpf/diagnostics.h |   1 +
- kernel/bpf/verifier.c    | 106 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 110 insertions(+)
+ kernel/bpf/verifier.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 3de3e1486bbd..33788d6f6155 100644
---- a/kernel/bpf/diagnostics.c
-+++ b/kernel/bpf/diagnostics.c
-@@ -2231,6 +2231,9 @@ static void diag_print_mod(struct bpf_verifier_env *env, const struct bpf_diag_h
- 	case BPF_DIAG_MOD_NON_OWN_REF:
- 		reason = "leaving the protected region invalidated this borrowed pointer";
- 		break;
-+	case BPF_DIAG_MOD_TASK_PARK:
-+		reason = "the sleep in bpf_task_park() invalidated this pointer";
-+		break;
- 	case BPF_DIAG_MOD_CALLER_SAVED:
- 		reason = target->kind == BPF_DIAG_MOD_TARGET_STACK_ARG ?
- 			 "call invalidated this outgoing stack argument" :
-diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index e155d2588a51..656c0430f013 100644
---- a/kernel/bpf/diagnostics.h
-+++ b/kernel/bpf/diagnostics.h
-@@ -26,6 +26,7 @@ enum bpf_diag_mod_reason {
- 	BPF_DIAG_MOD_SLICE_BUF,
- 	BPF_DIAG_MOD_NON_OWN_REF,
- 	BPF_DIAG_MOD_CALLER_SAVED,
-+	BPF_DIAG_MOD_TASK_PARK,
- };
- 
- enum bpf_diag_context_kind {
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 20b1b9ff574c..e90cc127aedb 100644
+index e90cc127aedb..b42782c7f209 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -11222,6 +11222,98 @@ static void invalidate_non_owning_refs(struct bpf_verifier_env *env)
+@@ -11222,6 +11222,31 @@ static void invalidate_non_owning_refs(struct bpf_verifier_env *env)
  	}));
  }
  
 +/*
-+ * bpf_task_park() sleeps without the Tasks Trace RCU read section and the
-+ * disabled migration that a sleepable program otherwise runs under. A dynptr
-+ * or an iterator on the stack cannot simply be invalidated across such a
-+ * sleep: the program must still release or destroy it, and an object that
-+ * stays usable may point at memory the sleep lets go. Refuse the park while
-+ * any is live, except a bpf_iter_num, whose state lives entirely on the stack
-+ * and whose next and destroy touch nothing else.
++ * bpf_task_park() is confined to the main body of the program and the
++ * functions it calls directly. A callback runs from kernel code that holds
++ * state of its own around the call, an iteration position, a work item or
++ * timer that owns the program only through Tasks Trace RCU, an exiting task,
++ * none of it audited against a sleep that drops the program's protection.
++ * Refuse the park in any callback frame, synchronous, asynchronous or
++ * exception. Asynchronous callbacks are verified as a state of their own
++ * with the callback as frame 0, so the walk over the frames sees them too.
 + */
-+static int check_park_stack_objects(struct bpf_verifier_env *env, int insn_idx)
++static bool in_callback_frames(struct bpf_verifier_env *env)
 +{
 +	struct bpf_verifier_state *vstate = env->cur_state;
-+	int i, spi;
++	int i;
 +
 +	for (i = 0; i <= vstate->curframe; i++) {
 +		struct bpf_func_state *frame = vstate->frame[i];
 +
-+		for (spi = 0; spi < bpf_stack_nr_slots(frame); spi++) {
-+			struct bpf_stack_state *slot = bpf_stack_slot(frame, spi);
-+			struct bpf_reg_state *st = &slot->spilled_ptr;
-+
-+			switch (slot->slot_type[BPF_REG_SIZE - 1]) {
-+			case STACK_DYNPTR:
-+				/* Report the slot the program named, not the second half. */
-+				if (!st->dynptr.first_slot)
-+					continue;
-+				verbose(env, "bpf_task_park() with a live dynptr at frame %d fp%d\n",
-+					i, -(spi + 1) * BPF_REG_SIZE);
-+				break;
-+			case STACK_ITER:
-+				if (!st->id)
-+					continue;
-+				if (st->iter.btf == btf_vmlinux &&
-+				    !strcmp(iter_type_str(st->iter.btf, st->iter.btf_id), "num"))
-+					continue;
-+				verbose(env, "bpf_task_park() with a live %s iterator at frame %d fp%d\n",
-+					iter_type_str(st->iter.btf, st->iter.btf_id), i,
-+					-(spi + 1) * BPF_REG_SIZE);
-+				break;
-+			default:
-+				continue;
-+			}
-+			bpf_diag_res(env, insn_idx, "live stack object across bpf_task_park()",
-+				     "A dynptr or iterator on the stack may refer to memory that the sleep in bpf_task_park() lets go, and the verifier cannot invalidate it without losing the path that releases its reference.",
-+				     "Release or destroy the dynptr or iterator before calling bpf_task_park(), or move the park out of the loop that uses it.");
-+			return -EINVAL;
-+		}
++		if (frame->in_callback_fn || frame->in_async_callback_fn ||
++		    frame->in_exception_callback_fn)
++			return true;
 +	}
-+	return 0;
++	return false;
 +}
 +
-+/*
-+ * Invalidate what the sleep in bpf_task_park() may free. Keep only pointers
-+ * whose lifetime does not rest on the dropped protection: the stack and
-+ * instruction metadata; the context and the maps the program references
-+ * directly, which the invocation holds; the values of its array maps, which
-+ * the map allocates and frees with itself, and which hold the program's
-+ * global variables; arena memory, which the arena map holds and whose
-+ * accesses tolerate faults; and pointers backed by an explicit
-+ * verifier-tracked reference, found through their own id or the id of their
-+ * parent. An inner map found through a map-in-map lookup is not kept, nor
-+ * are its values: the outer map's element alone holds it, and its deletion
-+ * frees it after a grace period the sleeping program no longer delays.
-+ * Everything else, values of maps that free elements on delete or on their
-+ * owner's teardown, RCU and trusted pointers without a reference, per-CPU
-+ * and local storage pointers, is gone after the call.
-+ */
-+static void invalidate_regs_across_park(struct bpf_verifier_env *env)
-+{
-+	struct bpf_stack_state *stack;
-+	struct bpf_func_state *state;
-+	struct bpf_reg_state *reg;
-+
-+	bpf_for_each_reg_in_vstate_mask(env->cur_state, state, reg, stack, 1 << STACK_SPILL, ({
-+		enum bpf_reg_type type = base_type(reg->type);
-+
-+		if (!is_pointer_regtype(reg->type))
-+			continue;
-+		if ((reg->id && find_reference_state(env->cur_state, reg->id)) ||
-+		    (reg->parent_id && find_reference_state(env->cur_state, reg->parent_id)))
-+			continue;
-+		if ((type == CONST_PTR_TO_MAP || type == PTR_TO_MAP_VALUE) && !reg->map_uid &&
-+		    (type == CONST_PTR_TO_MAP || reg->map_ptr->map_type == BPF_MAP_TYPE_ARRAY))
-+			continue;
-+		if (type == PTR_TO_STACK || type == PTR_TO_FUNC || type == PTR_TO_INSN ||
-+		    type == PTR_TO_CTX || type == PTR_TO_ARENA)
-+			continue;
-+		bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_TASK_PARK);
-+		mark_reg_invalid(env, reg);
-+	}));
-+}
-+
- static void invalidate_rcu_protected_refs(struct bpf_verifier_env *env)
- {
- 	struct bpf_stack_state *stack;
-@@ -14173,6 +14265,7 @@ enum special_kfunc_type {
- 	KF_bpf_arena_alloc_pages,
- 	KF_bpf_arena_free_pages,
- 	KF_bpf_session_is_return,
-+	KF_bpf_task_park,
- };
- 
- BTF_ID_LIST(special_kfunc_list)
-@@ -14274,6 +14367,7 @@ BTF_ID(func, bpf_session_is_return)
- #else
- BTF_ID_UNUSED
- #endif
-+BTF_ID(func, bpf_task_park)
- 
- static bool is_bpf_cast_to_kern_ctx_kfunc(const struct bpf_call_arg_meta *meta)
- {
-@@ -14297,6 +14391,11 @@ static bool is_bpf_iter_css_task_new_kfunc(const struct bpf_call_arg_meta *meta)
- 	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_iter_css_task_new]);
- }
- 
-+static bool is_bpf_task_park_kfunc(u32 btf_id)
-+{
-+	return btf_id == special_kfunc_list[KF_bpf_task_park];
-+}
-+
- static bool is_bpf_obj_new_kfunc(u32 func_id)
- {
- 	return func_id == special_kfunc_list[KF_bpf_obj_new] ||
-@@ -16266,6 +16365,13 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		}
+ /*
+  * bpf_task_park() sleeps without the Tasks Trace RCU read section and the
+  * disabled migration that a sleepable program otherwise runs under. A dynptr
+@@ -16366,6 +16391,12 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
  	}
  
-+	if (is_bpf_task_park_kfunc(meta.func_id)) {
-+		err = check_park_stack_objects(env, insn_idx);
-+		if (err)
-+			return err;
-+		invalidate_regs_across_park(env);
-+	}
-+
- 	bpf_diag_record_caller_saved(env, regs);
- 	bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
- 	for (i = 0; i < CALLER_SAVED_REGS; i++) {
+ 	if (is_bpf_task_park_kfunc(meta.func_id)) {
++		if (in_callback_frames(env)) {
++			verbose(env, "bpf_task_park() is not allowed in a callback\n");
++			bpf_diag_policy(env, insn_idx, "kfunc bpf_task_park", "the call is in a callback",
++					"Call bpf_task_park() from the main program or from a function it calls directly, not from a callback.");
++			return -EINVAL;
++		}
+ 		err = check_park_stack_objects(env, insn_idx);
+ 		if (err)
+ 			return err;
 -- 
 2.53.0
 
