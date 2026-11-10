@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.117
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.123
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315050;
-	b=vfKiNcnQPEoHwHRnOV3edn9baT3oCI6XNgUNJDTa1/5Z5+vzYDom6JXaYKm7I8LgA/ij
-	 tlFy1c5d8dzBeLxnSYFGFVF9iaXJSGP2TnLcqA+V9xZrcH2xbDbhCyOH/ehgTRbDYTSPj
-	 vMCmKTCL+iO27pCqqeJhmxUGSrrZacns2fo7cG8iInBlcLzWRf0cE6u58LmieUTuRADUC
-	 FzIHKmQpYCgTgq3pkhgR/3EKibQUpbpdEl2W0dtIsIrtoPFS/JIncAb6/+GVw+LMbDbEG
-	 puJ35mkkI9hJsvo1+RDdAirui76o0KHSIs77X2tu/l69ehfF7Zrrl8gHeJY3nfA/GjA==
+	t=1794315055;
+	b=Iee9sUJhlUaP3DLHEPH2bpVtm8IdQu4m+JFmGehyXvBnRkYaNzjdiuJ9FctjSpv3SiR+
+	 oW4T+ZXZVdxhZ/4vqavR1m5S8iCcgCXajjNy/vlK4lSh1mqqPOaAlvmuRWfhg5456AvGn
+	 Kvvaroni/eaXE4vaxdz+pYSjyR0AiBkXS4KE7i2VVhjAZNrhO82QmTjTGkIryWSGitlD4
+	 oWV1eQyu/5lqVd/P1wLXm+4q/5lBgvUo/8e3PLvo0BrB8PcBi8s/u9ROzQ0WKDUQYE43S
+	 1vsqorz7o6sgcusuaGzTAuy/P38hfHCnkiKE/Qe8sEOB5viAKo+GEoXBC3hIE+G4ZJA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315050;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315055;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=MoXBY7jP4//KMMEHW8C36nJPg5ZUiDBZiR2+vsM2zFQ=;
-	b=qMOaE/mo7Dm4pVDG9MvbHQ6x42SG6RflZ5Y8UVdZCdhWu3VZbvMA7ZKUwxLLyPnq5LYn
-	 ni4jGLmtihCQH9X9LNTpLn+xAYNAagPqR3ETNigA5rZbCPOc7gULOX5zCSkBm20adUzX5
-	 yGTwToFw/eWvnEWpCYFa5Aw0cV1hK7fYPUmI5d4fO2d7HDtKjWcM1FHLgBjDnmIRkQrNi
-	 MAR3Qr9ISuH94W86n0wDxk1HtBdneO2enwcn2AOo7j1n+0tnhcPJai73SnEoaohdsmrBZ
-	 D6jO0RRrniBX7vOf08Ap56aN4GNMr3TU/QdJqlZnoEfwsAgGmlKeu4p0VXLYdl4O3lA==
+	bh=JqXiUKs5xunEl31xUYALni/1QyfIISL1eBxWiwiWH30=;
+	b=umFl3rVBYmhe9X9xx8op5VBVzbpC6r7rPzJr2eLNBZbIVfPZeV8spSydwbObWNc3Wt3N
+	 RTuE3i9rhb0ipg9LwVVOHO2bcnoqrnlaC/MohDnQHsRuuKKbxqyymrUB9EIrDmr2D5Bsh
+	 N78wgNd1a64pBkr1leBY/JFqxLgnV/046klhRkDkFTpokKdmMyHPpuGJCBOTk36PY899P
+	 gLlY/Oij/u39hsfv2/qfO9H66jvysTKCSZIVF4bxMUmh3i6t2qMGtCm2FyGnIUCdk5G3G
+	 Fg+c4FKbdflLcLeOWASmTC1ySbyDy8pk76KU1VJWhsnD0lQ2j6QNUGVAf8qXwWPnPuA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JOfSgr2z;
-	arc=none smtp.remote-ip=91.218.175.117
-Received: from mta0.migadu.com (out-117.mta0.migadu.com [91.218.175.117])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qcdZfq6E;
+	arc=none smtp.remote-ip=91.218.175.123
+Received: from mta0.migadu.com (out-123.mta0.migadu.com [91.218.175.123])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F97606A332
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 12:50:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38F97606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7487D60A2602
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 12:50:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7487D60A2602
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JOfSgr2z
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qcdZfq6E
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=nG74Kvi+0FYK1AbhxFJPmegfJsg4ATvaQ+d7OJ0WtK8=;
+DKIM-Signature: a=rsa-sha256; bh=6hiWiOyIu+LHqUNivb0i4YRtYJKUmtW8lpp6XsqXing=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794315047; v=1; x=1794919847;
- b=JOfSgr2zP4cWKwOKgIM7zFM+qWhKRL2ihindkVWHTKf/gIsyxweoeKOgVa343gcPS2pyqqud
- HcnIjf2Pp1wr7nqCUPPTyX/P7Gc3bNN3x5Prtl90yJ4eF9vjYehWN4xmfyktpJCahF3zTmZrbJu
- BMt/oq0d0A89A75BI0voqQkk=
+ t=1794315052; v=1; x=1794919852;
+ b=qcdZfq6EG7aERpqoy4mpB94kLhY8jjW7FhLOil0+gCfBTz4IfjFK1lBSgpr75uSwqV2TheRr
+ tR+I5FOR8krZ3PxdkuYsg/1JTFs01+vtgRLrTyJzHk2zbWkmQOw51Vu5UeG8yaDdxUTzqMYr07w
+ SG8FWtWyEfC4lz1SLl71K04U=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4f35b2bbf5b7c11c;
-	Tue, 10 Nov 2026 12:50:47 +0000
-X-Mizu-Trace-ID: 4f35b2bbf5b7c11c
+Received: by smtp.migadu.com with ESMTPS id 865760993d19670e;
+	Tue, 10 Nov 2026 12:50:52 +0000
+X-Mizu-Trace-ID: 865760993d19670e
 X-Migadu-Flow: FLOW_OUT
 From: Tao Cui <cui.tao@linux.dev>
 To: tj@kernel.org
@@ -63,9 +63,9 @@ Cc: void@manifault.com,
 	bpf@vger.kernel.org,
 	cui.tao@linux.dev,
 	Tao Cui <cuitao@kylinos.cn>
-Subject: [PATCH 1/9] tools/sched_ext: scx_flatcg: Reset the stats baseline on restart
-Date: Tue, 10 Nov 2026 20:49:53 +0800
-Message-ID: <20261110125001.4167503-2-cui.tao@linux.dev>
+Subject: [PATCH 2/9] tools/sched_ext: scx_flatcg: Validate the stats interval
+Date: Tue, 10 Nov 2026 20:49:54 +0800
+Message-ID: <20261110125001.4167503-3-cui.tao@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261110125001.4167503-1-cui.tao@linux.dev>
 References: <20261110125001.4167503-1-cui.tao@linux.dev>
@@ -82,34 +82,42 @@ Content-Transfer-Encoding: 8bit
 
 From: Tao Cui <cuitao@kylinos.cn>
 
-last_stats holds the previous accumulator snapshot for the stats
-deltas and is initialized before the restart: label. A hotplug
-fail-safe reload starts the scheduler with fresh counters while
-last_stats still carries the previous generation's snapshots, so the
-first stats interval prints u64-underflow garbage.
+The interval is parsed with strtod() and split into a timespec with a
+float cast in the middle: a negative value produces a negative tv_sec
+or tv_nsec (for -0.5 the seconds truncate to zero and the nanoseconds
+go negative), and any value that doesn't survive the float round-trip
+(e.g. 2^24 + 1) produces tv_nsec >= 1e9. Either way nanosleep()
+returns EINVAL, which is never checked, and the stats loop starts
+busy-spinning at 100% CPU instead of sampling at the requested
+interval.
 
-Reset it together with the rest of the reload state. last_cpu_sum and
-last_cpu_idle anchor to /proc/stat which persists across reloads and
-are intentionally left alone.
+Reject negative intervals up front and compute the nsec part from the
+double rather than through a float so the rounding hole is gone.
 
 Fixes: a4103eacc2ab ("sched_ext: Add a cgroup scheduler which uses flattened hierarchy")
 Signed-off-by: Tao Cui <cuitao@kylinos.cn>
 ---
- tools/sched_ext/scx_flatcg.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/sched_ext/scx_flatcg.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/tools/sched_ext/scx_flatcg.c b/tools/sched_ext/scx_flatcg.c
-index a223bff3746a..4c3c2cca2b85 100644
+index 4c3c2cca2b85..bac6535fa2f0 100644
 --- a/tools/sched_ext/scx_flatcg.c
 +++ b/tools/sched_ext/scx_flatcg.c
-@@ -140,6 +140,7 @@ int main(int argc, char **argv)
- 	signal(SIGINT, sigint_handler);
- 	signal(SIGTERM, sigint_handler);
- restart:
-+	memset(last_stats, 0, sizeof(last_stats));
- 	optind = 1;
- 	skel = SCX_OPS_OPEN(flatcg_ops, scx_flatcg);
- 
+@@ -158,8 +158,12 @@ int main(int argc, char **argv)
+ 			break;
+ 		case 'i':
+ 			v = strtod(optarg, NULL);
++			if (!(v >= 0) || v >= 1e18) {
++				fprintf(stderr, "Invalid interval %f\n", v);
++				exit(1);
++			}
+ 			intv_ts.tv_sec = v;
+-			intv_ts.tv_nsec = (v - (float)intv_ts.tv_sec) * 1000000000;
++			intv_ts.tv_nsec = (v - intv_ts.tv_sec) * 1000000000;
+ 			break;
+ 		case 'f':
+ 			skel->rodata->fifo_sched = true;
 -- 
 2.53.0
 
