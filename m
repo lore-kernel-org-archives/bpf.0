@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794302370;
-	b=q2j8K6lkzTIznOhKx06Y9hQ3Ues+cr7GRZUdTE4yr18IUibw51jcbUhzt2r4n+hKdSkd
-	 0b/yFirIhbIVyTWJHTCiPJvkzWDxH6Yh5XMNixk0fqHsTLjl5fp262ZVSKilBbzya1VjK
-	 QD+13xgJ7bWe+v9y6TnfU2IGiYAMwDVaQgHguaGdEPBwQSzdJ+L+OmuGIAskA/JM02NqO
-	 FIiVHraDILgj+UAQX9WIglB0VnFC+g2gQGZN899hQEMMg7A7jTwcUfuWlt8xhf8JiXTGe
-	 6EfcM8uuZbiqJyqQHR8i6pMMqHVQLVPW77lrs+dext2acy8X3TQy4WVNMTjOxxlQ1zA==
+	t=1794302384;
+	b=Q1HX1rX2nv/SRS1hrRZ8ePxHXR7iCcUNg6j4irydAM1zop4O7bkz18dyUrGbRT/oGPWq
+	 w9kwzfHYFaQ2UBBtaIo7bpOQA6CzH9cq89BTMYrTX5818kx+Kl/WlVJo2cNE8fE0BPn1u
+	 Mawm+Zl4ZHKpaLGnIIS51VlGogmKGHbQjfrekqxYNUE+ofixthvRPFeiAzIAAzYTSpbx3
+	 6Rox1CMcF8A9YmITkzL5OIniVrLHKbCGQWtXLYoolgEF3hOKiJ5t+yoMtHNXXRt1xQl8s
+	 9V+dES8yupV6N1tJgjp11CoKfyB35GSM2wCs/rhJQHWeFVeWGZFBCiAc7ekwRizR2yg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794302370;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794302384;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=61GGJusgpyzZ+uPz/Xbu5aYUeDmjAfN/VZVh7aWKvTU=;
-	b=VvfQsdIlfJtwwoplLNRMLrDpKylOjhRZJsp2LiFbqkyJYxk9bWN7H1gZeb/demj1Hphr
-	 4kJWYHAtB4XoGhyJsB5yjJhans3B8xqrkC8QG5J87vw1G2ddjcB6foQVusKAtabqqNbrP
-	 frYk/RiLS2yti7ZEfo6eKzvrViFfajovivdwNGLRLsbld2pRsLHetmoI45AWifD9WuYqx
-	 +xfw2CDkUScQefDyY+fm8ew3azafhVL6Wkw0QBZTTd8a2eVEBVPiuaWRc1sS2xN3ixkex
-	 UTFXfQU5iYJ+h45VkNWTjjMtWRw8yEo4uwUHQrVqF3OpKv7E5tiKeF/O0ECOxqsU5Fg==
+	bh=XL0wpOwuozhlRhYNz0JipJ6kxKX4QenBWX0X6ItK/K0=;
+	b=G4lz9Z/g06jFQOA6o4jPhTZKKphi1279MzBfsL3xSdzuU03Fmex9PwQNFch6R/e+B9xa
+	 W3JgHtvxsNBL0r29uc0sXcdOkHSOQMsIi6iYjBLMO+stw+unjgzHHhVWe5EdZvyKphmJV
+	 kYJP2ov+akaeBI5isL9nVF60sJPJK8VOogqVPpX4q49oQN2yDOLPZAfmzBl3NBTJhv+3E
+	 4iLXolmI2Jts7H8Rj/4OQ3gXgmhKEY4bzJjc9edAp/QGTsYE7vqar51qwdqH57BYX6X1A
+	 NdeQEOrbokYlEKXTy6H5NS9HKf+6f/kF+altIwePEWlXNm+es/A/dG9W31ZRdLrNEGA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cqE1KvWE;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CT+iOXhf;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4BFA6078861;
-	Tue, 10 Nov 2026 09:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE21F6079C26;
+	Tue, 10 Nov 2026 09:19:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cqE1KvWE
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BAF11F0089F;
-	Tue, 10 Nov 2026 09:19:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CT+iOXhf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32A91F008A4;
+	Tue, 10 Nov 2026 09:19:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794302369;
-	bh=61GGJusgpyzZ+uPz/Xbu5aYUeDmjAfN/VZVh7aWKvTU=;
+	s=k20260515; t=1794302383;
+	bh=XL0wpOwuozhlRhYNz0JipJ6kxKX4QenBWX0X6ItK/K0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=cqE1KvWEqfCGk9TU1/lVh6ReyYZK8xzJKhSLwmR1cLY0RyRyETFTNmRX/CBtNbGFm
-	 AmuFU6adAiumck8an+GpWWAeHBHqTxVKqL/rOi4J9iHi/mWcjTVLhL+WnDXPLpVbqc
-	 yNZwiqRepbCcz+qfyuBGhyN5+Hq+js5kBs4E3JLsZlH6qW37IQzTV15bwwycAzfttl
-	 5KH5f71aAWWbWtMYVn2+pgetQgDmUXbkZvrrt3OqlCUUpM/yVT8GMncN9mcbx9GAj6
-	 7GM+h1AIZhoDOm6jyzSEu1Y46hB8cYzaIFJvf0HAlzzReo76KuwOVqRDN7hOswsejZ
-	 ZJtnzm0RI4l6w==
+	b=CT+iOXhfdXS9EjWhCPxyMwbc6qpk2mfT/FYG65nH7AnMeSTgDu4gtnvPph9s+gyJQ
+	 ZvCsMu20agRk/DN1s3jOLTDIaiE9C33mbBH7UBmpmq1UA5VoUIzICSYA9Tg4ndMgTH
+	 NUHn4RW/Rt1Efr1DcrgvT2Czb0YSTQrx0YgABhREHnhLrge2ohMdRAEXc8ARjQ95GB
+	 N91PcDylNuNGgoO+A1oWCOdoVMTmydTR6bkBvDN7xjUC6o/rf57lsPcqiLH9lVYbog
+	 fqTRi61Xug5bUX+nw+zLWjcrBruwnR9lQKJTUUtPpS/C/b7PBRlfrij5xhG51EYia0
+	 M4TkDbL2tSeqg==
 From: Christian Brauner <brauner@kernel.org>
-Date: Tue, 10 Nov 2026 10:14:47 +0100
-Subject: [PATCH RFC 31/41] usb: gadget: f_fs: use fc_init_pseudo()
+Date: Tue, 10 Nov 2026 10:14:49 +0100
+Subject: [PATCH RFC 33/41] fs: add file_is_pseudo()
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,7 +54,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261110-work-loop-pseudo-v1-31-4c998976c6c7@kernel.org>
+Message-Id: <20261110-work-loop-pseudo-v1-33-4c998976c6c7@kernel.org>
 References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
 In-Reply-To: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
 To: linux-fsdevel@vger.kernel.org
@@ -75,44 +75,56 @@ Cc: Jann Horn <jannh@google.com>, Chris Mason <mason@kernel.org>,
  linux-kselftest@vger.kernel.org, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.17-dev-ce4c1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=955; i=brauner@kernel.org;
- h=from:subject:message-id; bh=Ax5jIfHABzRtvx1V7vJnXeFPM8kck0XZoDkmZlrhKu4=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWR9erAjdtX2CfKp++Zticm3SYuW8v6aMj1ObN8qo7eS1
- x8t/6ib21HKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjARrwpGhs3ZDExxtr2C+4r8
- vRsu23RvyHzNtz1BoT1I0k34U0vwB4Z/1tUpv1Njvs9dubSC+cKR5tMG9m/4Jj97kF74bYvUGf5
- udgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1523; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=fWtwbOqSVGrzkIOODqoKjdbZebK5p812wmLNWmDsq10=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWR9erDr3MIVGoy6T1c42Fn1zN66UCnoG5vsrbwj8gcLt
+ 77hOtpb11HKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCRhFRGhmevWgXzbBfJf9i+
+ 0PPiiVlFPwKL+Fc/UFjp/vmC/tGfMw8y/FNqqr0U8TxATPOxjuYj+fU+8bu+/uDa1s7jnDCrjX2
+ /FhMA
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Initialize functionfs as a pseudo filesystem. This raises SB_I_PSEUDO and
-also SB_I_NOEXEC and SB_I_NODEV. functionfs never holds executables or
-device nodes.
+Add a helper to check whether a file is a regular file on a pseudo
+filesystem. Only regular files count. Device nodes on pseudo filesystems
+such as devpts, binderfs or the block devices on bdevfs are what they
+are.
+
+Look at the inode that actually provides the data via d_real_inode().
+overlayfs accepts sysfs, cgroup2, debugfs, tracefs, configfs and
+securityfs as lower layers and reads of such an overlayfs file are
+served by the file on the pseudo filesystem. Checking the overlayfs
+inode would miss that.
+
+No functional changes.
 
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- drivers/usb/gadget/function/f_fs.c | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/fs.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index c64a268e98a4..a6b3788399a5 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -15,6 +15,7 @@
- /* #define VERBOSE_DEBUG */
- 
- #include <linux/blkdev.h>
-+#include <linux/pseudo_fs.h>
- #include <linux/dma-buf.h>
- #include <linux/dma-fence.h>
- #include <linux/dma-resv.h>
-@@ -2166,6 +2167,7 @@ static int ffs_fs_init_fs_context(struct fs_context *fc)
- 	ctx->no_disconnect = false;
- 
- 	fc->fs_private = ctx;
-+	fc_init_pseudo(fc);
- 	fc->ops = &ffs_fs_context_ops;
- 	return 0;
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 99caef43ff3c..407ffb6342ec 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2553,6 +2553,18 @@ static inline const struct inode *file_user_inode(const struct file *f)
+ 	return file_inode(f);
  }
+ 
++/*
++ * Regular files on pseudo filesystems are kernel interfaces and must not be
++ * used as storage. Look through stacking filesystems at the inode that
++ * provides the data.
++ */
++static inline bool file_is_pseudo(const struct file *file)
++{
++	const struct inode *inode = d_real_inode(file->f_path.dentry);
++
++	return S_ISREG(inode->i_mode) && (inode->i_sb->s_iflags & SB_I_PSEUDO);
++}
++
+ static inline struct file *file_clone_open(struct file *file)
+ {
+ 	return dentry_open(&file->f_path, file->f_flags, file->f_cred);
 
 -- 
 2.53.0
