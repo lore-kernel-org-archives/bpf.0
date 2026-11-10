@@ -1,57 +1,115 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315562;
-	b=lLuQjvSVL1NxSjxObuS1WVzSMdm/6rdk2whSJ1WeBFt99zfspzdHIgxS2SsFybXhI08s
-	 e7Yy7X7qS9cXpiJLXNibYbTogEBygspujXIMT6iQW7zV5bJIT7xyf80AYHzosL4l6e56k
-	 5d6ShQUjOa/aCcCbD8dyQULAAym64gP7BAo175MfNokvFvMp5jtGw988wYHB70RkMHGEj
-	 ySzcyZAa8hcCi0Gfh4Q+7nuOWsZNQ17X69ud4vWh0G9miNC8UsPt2E9XxDZOuAEQccz/Y
-	 MvyItyOBUSNvnZgXABB0XoxhsnZFYH5Jcjbxc3Sta9XmdUsAkHakW2NTDGw2+xtvLQg==
+	t=1794315544;
+	b=bV0f/HW8zV+7Q0eYqDuqSwkc8i5Pka8ktNeQaVT984ojRLipkoeD2NvyS5qCFOHqzT4L
+	 AAH10VYrEsr0IdkuoimBBPCCS7jfszt5VXOyNUG49+pBqJpWZP9HvR5t4AIwpKtlRuRcK
+	 5BMPe0VKiRM6B0X4CO0STxUhtkXSH06LpWvjweurczqemJfzkHbm18rOqfBZeG2vPArfe
+	 V592HYFX+st500q/L7KD1tEOeqHDXc7WY7Xr9mjmMrPdmcsDxLqjV70KFMverHwE4DINO
+	 OoeYOQyHbBZWqyJjXrvR2gQxXF0z4kCmlNokIdD0YvBE4BF8MgETzJePklY0WexIecg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315562;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=SdPGvMQkLBdL+5h8W1zif0+nxivxkxEgV80Gq0TGRzw=;
-	b=nM+ELkL+lt4BoP5elwJoKX4kUvEKNhV5qmHyUVxSu11NiF6lhfktam1DO7LqydCEzpuM
-	 S+Z698uOsQrJvtNvTkzsNrbUNRUQt+wcNkW8PJfbLQ5IHUa5k+k9E3zMF9HNxwdCUjhNl
-	 LOrmSMwnJDZ7tZew+4oIMnd7AlEptBMyIpdZ2MUdP1vb4PUIQQpWi9YcYvkx4qmV4sfqb
-	 PngutKFayEDvzPvYMjo3ONrGjSuS/A8B7s3fU18FEM+exIBm2VE1H0ik2qqoYXhtCF05e
-	 D/eRjEIATWgjooc6IK37alJAAL2Avf1skawhcH5iBeWkBWJhk0DugRJ0x7d9b0khn8w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315544;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Spamd-Result:X-Spam-Score:X-Spam-Level:X-Spam-Flag;
+	bh=uXIEEsQfVTIPoYksjJrq5Bxki7KhKYAms5GVjwoGo8Y=;
+	b=dBMSO/pCqdB2kMbK7i5A2mIWY0VvtzZ8wC8weyRa7JLpAIkUvQtaSZ8My94oxWSvAgDg
+	 effdv70J6dkQm3O4enigNr407KxFYrZm9A9AUyAj9bIKJvi2UKyPoNm6IA5d6cqCGEWp9
+	 nOjNu8JTGY+QjoW4v1GKgh0I3+RHfwaQbL1/tdrZQvwh4ugaMKrHu6OJAGeVNmn8RodX1
+	 jOyZd7Jl6EVh/Z6FgZ7daWTRJ8GVX3dR0XquJipLDyIPeimhNYlNW3QlhcpVDutlXI+nh
+	 kuwAVAdllMqusmxlmzkWkMnv2OOj5DvODW/LhKy60xq3UB1hOkh+C5FkJiDNKvHs8kQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mjmckKbv;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=suse.cz;
+	spf=pass smtp.mailfrom=suse.cz;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=c9mE+CRT;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=kal9kkyQ;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=c9mE+CRT;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=kal9kkyQ;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF1DA606D5CC;
-	Tue, 10 Nov 2026 12:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47776606A321;
+	Tue, 10 Nov 2026 12:59:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47776606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mjmckKbv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 627491F0089F;
-	Tue, 10 Nov 2026 12:59:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794315561;
-	bh=SdPGvMQkLBdL+5h8W1zif0+nxivxkxEgV80Gq0TGRzw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mjmckKbvLG1N3XZ3Ot11MNwSiVERdxtjqq4KIKRGHx6wvEXnzt4NpE6/5jxuAOS+o
-	 CThDq7T+G6E7xxDIJLb9OwjC6DSEdyHbC9aYy6gXpNUBJNkGZb0lXFV4lCs+z/N691
-	 VAWdo3h32DtKfAzwKbtnaR4PwtnJ1Nc68wtqCBR88N5hGsl8pEC8YMlQDfZEi4VkzS
-	 dq4U8MQGsqxdGG9jZIZftSJGzDpfDSC4knNJsNPrTVpHoUjpyeHCm7u+1I5nGt5MkB
-	 +WSzKeUBoNkd5MrowNUCsu7MV3ZLxmJbLmkO4YMowaDzuYXXUTCrXldfWlaLo6q9jN
-	 sekjRneg0Okvw==
-Message-ID: <sashiko-outbox-207063@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/9] tools/sched_ext: scx_pair: Don't abort when the
- dispatching cgroup goes away
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tao Cui" <cui.tao@linux.dev>
-Cc: sched-ext@lists.linux.dev, bpf@vger.kernel.org
-In-Reply-To: <20261110125001.4167503-4-cui.tao@linux.dev>
-References: <20261110125001.4167503-1-cui.tao@linux.dev>
- <20261110125001.4167503-4-cui.tao@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 10 Nov 2026 12:59:20 +0000
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=c9mE+CRT;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=kal9kkyQ;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=c9mE+CRT;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=kal9kkyQ
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 96EA721C3C;
+	Tue, 10 Nov 2026 12:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1794315541; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uXIEEsQfVTIPoYksjJrq5Bxki7KhKYAms5GVjwoGo8Y=;
+	b=c9mE+CRTtVzWwHCARJ1vd96Xho3nI/pS4LksT/7Mtmz/enT3ot6Jv+ishWlr43gZSQip4n
+	SM34HuYF7Cvf9TdHqnHerexkyr7m27gwbghlt5kBxleXZTpWWWludIkY/uX/1xq2ZGF1Cl
+	84ZWSnV4g+NJIksQj9LF3uDbQvrtb1Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1794315541;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uXIEEsQfVTIPoYksjJrq5Bxki7KhKYAms5GVjwoGo8Y=;
+	b=kal9kkyQ8SEr1Uo3AFh1O8jXLtIAjDTFZiXwnabICsxjbUs+efcLTV1NmhR9cGdyfqXeRJ
+	S89Jh74CnobXgdBQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1794315541; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uXIEEsQfVTIPoYksjJrq5Bxki7KhKYAms5GVjwoGo8Y=;
+	b=c9mE+CRTtVzWwHCARJ1vd96Xho3nI/pS4LksT/7Mtmz/enT3ot6Jv+ishWlr43gZSQip4n
+	SM34HuYF7Cvf9TdHqnHerexkyr7m27gwbghlt5kBxleXZTpWWWludIkY/uX/1xq2ZGF1Cl
+	84ZWSnV4g+NJIksQj9LF3uDbQvrtb1Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1794315541;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uXIEEsQfVTIPoYksjJrq5Bxki7KhKYAms5GVjwoGo8Y=;
+	b=kal9kkyQ8SEr1Uo3AFh1O8jXLtIAjDTFZiXwnabICsxjbUs+efcLTV1NmhR9cGdyfqXeRJ
+	S89Jh74CnobXgdBQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6DE921339F;
+	Tue, 10 Nov 2026 12:59:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id B0aKEhUV82qHRgAAD6G6ig
+	(envelope-from <jack@suse.cz>); Tue, 10 Nov 2026 12:59:01 +0000
+Received: by quack.suse.cz (Postfix, from userid 1000)
+	id 0FDA5224EF; Tue, 10 Nov 2026 13:59:01 +0100 (CET)
+Date: Tue, 10 Nov 2026 13:59:01 +0100
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
+	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-nfs@vger.kernel.org, netdev@vger.kernel.org, fuse-devel@lists.linux.dev, 
+	linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev, 
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org, 
+	Amir Goldstein <amir73il@gmail.com>, linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 14/41] debugfs: use fc_init_pseudo()
+Message-ID: <tqopv6vbmzwwjyp24wch4hw526xibknezzimun4tniww2dq7wu@ajdlmym5ihdu>
+References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
+ <20261110-work-loop-pseudo-v1-14-4c998976c6c7@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,59 +118,81 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261110-work-loop-pseudo-v1-14-4c998976c6c7@kernel.org>
+X-Spamd-Result: default: False [-16.80 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	REPLY(-4.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	R_RATELIMIT(0.00)[to_ip_from(RLdu9otajk16idfrkma9mbkf9b)];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,kernel.org,toxicpanda.com,lst.de,lists.infradead.org,zeniv.linux.org.uk,suse.cz,lists.linux.dev,kvack.org,lists.ubuntu.com,lists.xenproject.org,lists.ozlabs.org,gmail.com];
+	RCVD_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.cz:email,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -16.80
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] sched_ext: scx_pair: leaked active_mask bit in try_dispatch()
-  stalls pair
---
+On Tue 10-11-26 10:14:30, Christian Brauner wrote:
+> Initialize debugfs as a pseudo filesystem. This raises SB_I_PSEUDO and
+> also SB_I_NOEXEC and SB_I_NODEV. debugfs never holds executables or
+> device nodes.
+> 
+> SB_I_NOEXEC also refuses PROT_EXEC mappings. The debugfs files that
+> can be mapped, kcov, relay channels and powernv's memtrace, map data.
+> 
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-commit 0bc135e247824dc3899acf0f6cf608c43ee6328b
-Author: Tao Cui <cuitao@kylinos.cn>
+OK, makes sense. Feel free to add:
 
-tools/sched_ext: scx_pair: Don't abort when the dispatching cgroup goes away
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-This commit changes try_dispatch() in scx_pair to mark the CPU pair as
-draining and return instead of calling scx_bpf_error() when looking up the
-current cgroup ID in cgrp_q_idx_hash fails.
-
-> diff --git a/tools/sched_ext/scx_pair.bpf.c b/tools/sched_ext/scx_pair.bp=
-f.c
-> index 0d61b7b812db6..d38d3a078adee 100644
-> --- a/tools/sched_ext/scx_pair.bpf.c
-> +++ b/tools/sched_ext/scx_pair.bpf.c
-> @@ -478,8 +478,16 @@ static int try_dispatch(s32 cpu)
->  	/* again, it'd be better to do all these with the lock held, oh well */
->  	vptr =3D bpf_map_lookup_elem(&cgrp_q_idx_hash, &cgid);
->  	if (!vptr) {
-> -		scx_bpf_error("failed to lookup q_idx for cgroup[%llu]", cgid);
-> -		return -ENOENT;
-> +		/*
-> +		 * @cgid can disappear from under us: pair_cgroup_exit()
-> +		 * drops the hash entry when the cgroup is going away.
-> +		 * Mark the pair as drained and let the next dispatch
-> +		 * expire it instead of taking the whole scheduler down.
-> +		 */
-> +		bpf_spin_lock(&pairc->lock);
-> +		pairc->draining =3D true;
-> +		bpf_spin_unlock(&pairc->lock);
-> +		goto out_maybe_kick;
->  	}
-
-[Severity: Medium]
-Does this path need to clear in_pair_mask from pairc->active_mask and return
--EAGAIN, like the empty-cgroup path just below?
-
-Before dropping pairc->lock to look up cgid in cgrp_q_idx_hash,
-try_dispatch() sets pairc->active_mask |=3D in_pair_mask.  Jumping to
-out_maybe_kick returns 0 without dispatching a task, so pair_dispatch() sto=
-ps
-retrying and the current CPU goes idle with its bit still set in
-pairc->active_mask.  When the sibling CPU enters try_dispatch() and sees
-pairc->draining set, it checks pairc->active_mask, assumes this idle CPU is
-still running a task from the old cgroup, and bails out without switching to
-the next cgroup in top_q, stalling the pair.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110125001.4167=
-503-1-cui.tao@linux.dev?part=3D3
+								Honza
+> ---
+>  fs/debugfs/inode.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/fs/debugfs/inode.c b/fs/debugfs/inode.c
+> index b4915551ad31..f163f0bc5703 100644
+> --- a/fs/debugfs/inode.c
+> +++ b/fs/debugfs/inode.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/module.h>
+>  #include <linux/fs.h>
+>  #include <linux/fs_context.h>
+> +#include <linux/pseudo_fs.h>
+>  #include <linux/fs_parser.h>
+>  #include <linux/pagemap.h>
+>  #include <linux/init.h>
+> @@ -317,6 +318,7 @@ static int debugfs_init_fs_context(struct fs_context *fc)
+>  	fsi->mode = DEBUGFS_DEFAULT_MODE;
+>  
+>  	fc->s_fs_info = fsi;
+> +	fc_init_pseudo(fc);
+>  	fc->ops = &debugfs_context_ops;
+>  	return 0;
+>  }
+> 
+> -- 
+> 2.53.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
