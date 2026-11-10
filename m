@@ -1,70 +1,117 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.204.34.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315145;
-	b=oobC8jL84Wma8sStTeubeFQ0lL8p2uLjs760O8azgYZc0IMSpBou47hWiXQ2MJlmdKhE
-	 4woFg3Ua6QkDbC4S4Y3YXCL4WBRfqvfFnXnE7+/oJoXbtfquQEDqOPugcYABYfA9p6RtC
-	 q4aWfcqUDX9e9j7u64xdgeu3MACD0jWMlAtoQIx76P2QPUYQwD4PugOFm4i6W7FNsbP3P
-	 JsIlyRQvAPQWEwSaDuPnWyQyHZ64RpH6JKABZEkXWvMRc9ThHvwQvAMDkTr9Q9n4LgToF
-	 4O8uIUbY7A1oCIZbNaD1SSckYzQGB3uRoz8AzoWcAtxnC4p+46H2e7rYDOliFld8Qhw==
+	t=1794315213;
+	b=cOATsLTEcpsSTvJlb3roeQuEb6VQc0HUNnbhDgbUqlKF3soEpdByh+EDXN2Q7Sd3Jd6P
+	 kNEnfptX/zhCNUFPd2pK7R7ZmKaoWvNWsmC+AxARS9GCrfOWkhFQ5EZ/SPh0PRfbvPKe4
+	 npVn65vNkfA82VOYfcsge0/vBhDgatWVi/nP9+7G9AY803CkjjGWVbMETv+EZ6dGtMr72
+	 eNMSbi0SEHOsgEGHIZ8H8pDVVBdN2CfGsZeQzTikW/J13BeuxMRkDYhtYVZZnMXHK3tqZ
+	 EROUzIeKbUI7uzTIFsu2OWxNf4attzw93XiZF1WVZ+jLHQM6ffkGpWtlYzQmEIWMw7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315145;
-	h=DMARC-Filter:DKIM-Signature:X-QQ-mid:X-QQ-Originating-IP:Received:
-	 X-QQ-SSF:X-QQ-GoodBg:X-BIZMAIL-ID:From:To:Cc:Subject:Date:Message-Id:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-QQ-SENDSIZE:
-	 Feedback-ID:X-QQ-XMAILINFO:X-QQ-XMRINFO:X-QQ-RECHKSPAM;
-	bh=O/4t0fmDlw3ey9yibz/+cpBbJK+aVAgemr+JbdbCis4=;
-	b=k75yOrhnnGK7yimte79n96C4NsqXn8mD+80RbIhB2QmOlv8dVxkC+wTv/6yzXf9pjMyy
-	 DeSU4sQu+cmG4IFZpR1iKLcRzX3B+5j0Vs4eZltYeFYiyPaXfRPuoCxrci1sWjZIg7Ck6
-	 KkS6O9N1dDg7/r6tGL1wkdu7x40yh+w4XVKYIw0CBZ7yIEiuhGAlW3jh0fuGY0f/DsNMF
-	 OOno8xPWI40HfYhT5XckpCwrubOlDvQ+LWyY6mRBsLMwmXNH3D+AyCqJRnz3j/eokQp8D
-	 EbyFdgMc5sPsC4943ySsHQLZ0fW4e90CXSCmkPZELpqevKA8O4sRhhi/Ph/bYyRLopw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315213;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Spamd-Result:X-Spam-Score:X-Spam-Level:X-Spam-Flag;
+	bh=5gAW8eIWGI8HOfwWvZQs68yC+wpRbirnAYyZ2bTJ9+E=;
+	b=sQVVHnfkGWb1RN+IqVuDeJZQNxrKjwPrm0gQDDA4hGQTJU17ZJ+oCMzms/aZtdRW8ikt
+	 +9AAs1z+YZ8D82f5Pm0ZAD1WqkC1Q/hbWS2Qh4QUkp0P5CwWnMOhH9jDjTC+BFMI3vMgg
+	 MD6smJvCy4fA1pdw9GOU+d3/zQc9eO9tRsOPlchw5gdvCOrFW3TdlBmwzPPYzbVSPuHdZ
+	 t1YrHmf63oL/eHw6scUlsO7lJTDNJcAjH8YPuEkxFI+o78xLsJvkXzgwewJ50GSH7gV/1
+	 vnC8K7Moh+hGq8BHuKGhGTQJoE1JcfX3UJjRQOdWgJoic2SeBGJY3wZlw3S18PaG04g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=smail.nju.edu.cn;
-	spf=pass smtp.mailfrom=smail.nju.edu.cn;
-	dkim=pass header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=oe33SrFz;
-	arc=none smtp.remote-ip=54.204.34.130
-Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=none header.from=suse.cz;
+	spf=pass smtp.mailfrom=suse.cz;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=KXGDllpg;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=02akHxQo;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=KXGDllpg;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=02akHxQo;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B27C606A32A
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 12:52:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B27C606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=smail.nju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=smail.nju.edu.cn
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA11606A321;
+	Tue, 10 Nov 2026 12:53:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EA11606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=oe33SrFz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=smail.nju.edu.cn;
-	s=iohv2404; t=1794315074;
-	bh=O/4t0fmDlw3ey9yibz/+cpBbJK+aVAgemr+JbdbCis4=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=oe33SrFzaxsfFrezNkP/CJia0gvLRPVc5eAQDA2oPq8fnOmaoatArDBx8mpZUi8Qo
-	 8m1EO6ETMDXZNq4ks8qJsC5RMz0Yb9TMVbEg6HvecB76UR1UFlX2lmbloSrQye5JFZ
-	 T07mv9SwWy723wVs78V8Ibk5GMi6RiXHLPpL2BfU=
-X-QQ-mid: zesmtpip2t1794315072td94b9037
-X-QQ-Originating-IP: kUPMYRU8RXedmnEzvofaVAd6aIx214/gp9wE5oQPGe8=
-Received: from workstation-Precision-7920-Towe ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 10 Nov 2026 20:51:10 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 14794258371886372565
-From: Kang Chen <k.chen@smail.nju.edu.cn>
-To: Yonghong Song <yonghong.song@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	cgroups@vger.kernel.org
-Subject: [PATCH] bpf: make css iterator stay drained after NULL
-Date: Tue, 10 Nov 2026 20:51:10 +0800
-Message-Id: <20261110125110.2935707-1-k.chen@smail.nju.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=KXGDllpg;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=02akHxQo;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=KXGDllpg;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=02akHxQo
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 470B421F57;
+	Tue, 10 Nov 2026 12:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1794315211; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5gAW8eIWGI8HOfwWvZQs68yC+wpRbirnAYyZ2bTJ9+E=;
+	b=KXGDllpgGiBBAdkJ+94+hx57x3NvF+B6wVf1VJPhzu/vdFL2qD1xN8ea3AfxZRuIEQrDNG
+	h6ARgN9r6E1Tp0L3/IOetfpivMPJgdCx8gDCmnuEUwvvykOGvRJ3e4L8lAmSVM7Bzl5Sdl
+	8yjrsZoBB4KbKRgxMsQEsJpHPQKPfVY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1794315211;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5gAW8eIWGI8HOfwWvZQs68yC+wpRbirnAYyZ2bTJ9+E=;
+	b=02akHxQolbaeDkTqzMuoQ9qEenO8KZzqbD3pshHw2P9mLxjD414sxUGp3r+0OsfEjYG8bh
+	6lagVVxrNyrhB8AQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1794315211; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5gAW8eIWGI8HOfwWvZQs68yC+wpRbirnAYyZ2bTJ9+E=;
+	b=KXGDllpgGiBBAdkJ+94+hx57x3NvF+B6wVf1VJPhzu/vdFL2qD1xN8ea3AfxZRuIEQrDNG
+	h6ARgN9r6E1Tp0L3/IOetfpivMPJgdCx8gDCmnuEUwvvykOGvRJ3e4L8lAmSVM7Bzl5Sdl
+	8yjrsZoBB4KbKRgxMsQEsJpHPQKPfVY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1794315211;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5gAW8eIWGI8HOfwWvZQs68yC+wpRbirnAYyZ2bTJ9+E=;
+	b=02akHxQolbaeDkTqzMuoQ9qEenO8KZzqbD3pshHw2P9mLxjD414sxUGp3r+0OsfEjYG8bh
+	6lagVVxrNyrhB8AQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 197071339F;
+	Tue, 10 Nov 2026 12:53:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id HDDqOMoT82qhQAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Tue, 10 Nov 2026 12:53:31 +0000
+Received: by quack.suse.cz (Postfix, from userid 1000)
+	id 94F1F224D8; Tue, 10 Nov 2026 13:53:26 +0100 (CET)
+Date: Tue, 10 Nov 2026 13:53:26 +0100
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Jann Horn <jannh@google.com>, 
+	Chris Mason <mason@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+	Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-nfs@vger.kernel.org, netdev@vger.kernel.org, fuse-devel@lists.linux.dev, 
+	linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org, ocfs2-devel@lists.linux.dev, 
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-usb@vger.kernel.org, 
+	Amir Goldstein <amir73il@gmail.com>, linux-erofs@lists.ozlabs.org, linux-kselftest@vger.kernel.org, 
+	stable@vger.kernel.org
+Subject: Re: [PATCH RFC 01/41] loop: refuse backing files that aren't open
+ for reading
+Message-ID: <yiiin5howot4r3fgcqkqfnreblloazpfatuuqzpjpqshpvphit@zirpwlmklj3d>
+References: <20261110-work-loop-pseudo-v1-0-4c998976c6c7@kernel.org>
+ <20261110-work-loop-pseudo-v1-1-4c998976c6c7@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -74,69 +121,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:smail.nju.edu.cn:qybglogicsvrgz:qybglogicsvrgz5b-1
-X-QQ-XMAILINFO: N2K7JO7TcIoELdlYmZvit1wf8scYIkicgH8LUHLcCuKS85dRU2yf+nDs
-	op+9/GKLuwP0NGNDYxaEFmgYL8JglNcNIoGLXezg1lx+RYdNSlak2CoLHL0aeqJiKQW9b0V
-	exfv3WgyDUrYL4V5DNOAMCRnKNC/aGXaer6im4Rc4HdM6dQRfnWU9pAK6YNbMrEDlB43xst
-	hoO9pP3OZjTjRH1oOGmyqgDVJ+2Oml7HStJA9OEPz5YVsecCNhHk2ejchLUEgwVuQZ+NSnQ
-	wqtu9al5fXyn4To4/Q+Iz8MOGQjEfULhLZzgSjiA3gN9Hx+k8eXpDW887zmarHFR9T5i1mR
-	YbFdX8OeKZdjm+v74e/Gbe1nEmW8V/9tfDUvJ490U0KeRsSvUEun/xDuEEz2fZL4C5Rr9uq
-	DuC9yaU7StgMnHRHTcvsSxHga2V8T1LWV9kBVBiv1nDok1JCr4jjtwJuxRWS9m6beoWUPY+
-	HVyE8qp9uKrnjQ1gpX27lo9LcoCa3zt+nBR0Bz9xaMBnWeGoiePmBk9nxJ069UaWO7i1dDJ
-	pMMBYlmiw7o5w3BaTAy+qDVYS2kTPimXzXSmlhlHxajv0ykJ6cU+FVO5ZkJjDFINL87koYU
-	aQ9iZEmf30vQynsQ6GFcNHH9vgSX88R45FTlMNN/7Dxy6xhOYVfU4KRKGbaSoiJ/rWcIgrK
-	SPa61QO/m67ogW6lMq83sMPPwgkeOHZsSEkKA8Rn3GAV8lLfKtFBPHlAS/t4egXqjfIsdmW
-	zuEM/HyYd0I6RDBcLJr0bkE+Crj3AHihHwETURJwEb7g6jfV0blhrHXT0+LuWaNAb7oV4PY
-	/jMpuebwUW5ZiVWoMfrPxmhdQCe3modODYpB+/lYY05dE9H6IIUsmLXbjySGcKAgh86FuTY
-	+sryA+j8Nar2KZofdkfUaewsIBTeKS35FXhqRudyO2hyeytSEvGKIvHV17dOSZzc+8WmFZ+
-	p7s1QRIZf7RCPdaRcQQqkoz7kb8VCMSHn5mLEb+4UkQ3CeyLx7gH3OIWqTG1SIu4sOdDgNS
-	FFYIjYzFzhxn0zQTmH
-X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261110-work-loop-pseudo-v1-1-4c998976c6c7@kernel.org>
+X-Spamd-Result: default: False [-12.80 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[32];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	R_RATELIMIT(0.00)[to_ip_from(RLdu9otajk16idfrkma9mbkf9b)];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,google.com,kernel.org,toxicpanda.com,lst.de,lists.infradead.org,zeniv.linux.org.uk,suse.cz,lists.linux.dev,kvack.org,lists.ubuntu.com,lists.xenproject.org,lists.ozlabs.org,gmail.com];
+	RCVD_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo,suse.cz:email]
+X-Spam-Score: -12.80
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-The css_next_*() helpers start from @start when given a NULL position.
-bpf_iter_css_next() leaves kit->pos == NULL after the last element, but
-keeps kit->start set, so a next() call after exhaustion starts the
-iteration over from @start again.
+On Tue 10-11-26 10:14:17, Christian Brauner wrote:
+> loop_configure() takes any file as long as it implements ->read_iter().
+> Loop itself never checked whether the file was actually opened for
+> reading. Buffered I/O went through vfs_iter_read() which refuses files
+> without FMODE_READ. Direct I/O has called ->read_iter() of the backing
+> file directly ever since loop grew support for it.
+> 
+> Since commit f2fed441c69b ("loop: stop using vfs_iter_{read,write} for
+> buffered I/O") buffered I/O calls ->read_iter() directly as well. That
+> commit was about O_DIRECT handling and the FMODE_READ check went away
+> as a side effect.
+> 
+> So whoever can set up a loop device can read a file it was only allowed
+> to open for writing. Open the file O_WRONLY, configure a loop device
+> with it and read the contents through the loop device.
+> 
+> Refuse backing files that aren't open for reading. Loop always reads
+> from its backing file so a write-only backing file never made sense in
+> the first place.
+> 
+> Fixes: bc07c10a3603 ("block: loop: support DIO & AIO")
+> Fixes: f2fed441c69b ("loop: stop using vfs_iter_{read,write} for buffered I/O")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-The verifier relies on the iterator contract that once next() returns
-NULL it keeps returning NULL: process_iter_next_call() marks the
-iterator DRAINED and treats the result of later next() calls as the
-constant zero.  A restarted css iteration therefore hands the BPF
-program a kernel pointer while the verifier believes R0 == 0.
+Looks good. Feel free to add:
 
-Clear kit->start when the position becomes NULL.  bpf_iter_css_destroy()
-is a no-op, so no cleanup depends on @start after exhaustion.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Fixes: 7251d0905e75 ("bpf: Introduce css open-coded iterator kfuncs")
-Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
----
- kernel/bpf/cgroup_iter.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+								Honza
 
-diff --git a/kernel/bpf/cgroup_iter.c b/kernel/bpf/cgroup_iter.c
-index fd51fe3d92cc..fb7ba1e45590 100644
---- a/kernel/bpf/cgroup_iter.c
-+++ b/kernel/bpf/cgroup_iter.c
-@@ -365,6 +365,16 @@ __bpf_kfunc struct cgroup_subsys_state *bpf_iter_css_next(struct bpf_iter_css *i
- 		kit->pos = kit->pos ? kit->pos->parent : kit->start;
- 	}
- 
-+	/*
-+	 * A NULL position means either "not started yet" or "drained" for
-+	 * css_next_*(), and all of them restart from @start when passed a
-+	 * NULL position.  The verifier relies on an iterator which returned
-+	 * NULL to keep returning NULL (see process_iter_next_call()), so
-+	 * clear @start on exhaustion to make the next call return NULL.
-+	 */
-+	if (!kit->pos)
-+		kit->start = NULL;
-+
- 	return kit->pos;
- }
- 
+> ---
+>  drivers/block/loop.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+> index a3325ceab484..c96e35c3ef42 100644
+> --- a/drivers/block/loop.c
+> +++ b/drivers/block/loop.c
+> @@ -528,6 +528,9 @@ static void loop_assign_backing_file(struct loop_device *lo, struct file *file)
+>  
+>  static int loop_check_backing_file(struct file *file)
+>  {
+> +	if (!(file->f_mode & FMODE_READ))
+> +		return -EBADF;
+> +
+>  	if (!file->f_op->read_iter)
+>  		return -EINVAL;
+>  
+> 
+> -- 
+> 2.53.0
+> 
 -- 
-2.34.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
