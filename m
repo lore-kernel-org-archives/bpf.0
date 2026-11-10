@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794271132;
-	b=XXCmRP4QdQNAJS4V0AcoCkT+XtMS8bjBnfEYt4Hw9tMZeMN75Vyx0vlC/hsQS0Vb5cYT
-	 uCDcxrAoaOUXQkfzNLu4WHENYIXCWuXIniJw5FOx80Sl/gsmFvCz0iEKnwndu8xwKTIeO
-	 mZf2w7G+/g7evTAXAZXxXG4qDtnSu0ZUaQgkbf5h1GRcv92j41lM2s20XcKXXuAUJZSwA
-	 gRuMkEvPGFI4/U4rqCLQqsNbPkewwsYdxH3t7wNZztJiOZkuv9Yc0iO201VDJuSO6gg1D
-	 V/8uuEAifl5Fr4FwEuAfOFWSIFUj+/OrLuHwmGTzERMykF23uTbk8MqD4xMrKU/GTkQ==
+	t=1794271133;
+	b=d9/DMqpm8ujLo1+acmX9y/AzO34K+t8QZlF1Blj4g0XuZScecSSRak4jtb9c645+Jt+b
+	 GprbTsXCsURngkTC/PHUTiJV35qvk6a/UpqHxxlaPY3zLkRGsQWjrRsl/JPGM2i9zpPFe
+	 zvHsdNU0Ksv1oaCxXfHepdcuITFTzDz6DVHwy1xludsg2ERRHX9Kh/76Am2GxBTJpP82q
+	 YxQKU0vqpmcxhpJ3I8+axTHaRrho3hB4Rx5nPvsRV5xKc4enDn7rOrJHuAz5WhBPMy/dN
+	 ngA/cc/ap5Vr0ksruqaI+u+qO5Gi8+b6PrGGg5NbC4arw3tVr8CNW6wZscefuxgACtA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794271132;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794271133;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=vGBa7OIZ0MxlrtcjYZH37iWGX/oNsL9dA7VoB8Hddkk=;
-	b=pqiwFms1DLHoSB+hOqCOKS8HE43x1Y+lFDehJqvnOEVKvISW4dq6KH71jv3ol2vBDbe5
-	 7dYoNwsE7Leyqrsiffx7oNRbkbz6LitGfbIHN4mlnT2MdvllDNcAFmQ/U+a4w8rHdLTgM
-	 arxJpVahBHd23/hU7pqpKKkwIj3L2IbrmbtDwRZQnYvCrfzeSGUJUidCe9snS1nU0WAi9
-	 WZq4YqcJpEg52Zpe/jC/aV/1NYe7qdrrmgcqL18eFretSYnJUawFvDy2qsKF1uUXo2MVA
-	 wH53841qtFwW3WEm2HEbsE3ZULMe+3T28AsV5f0HKZKE+BnI0J7tKgUylO4WX24G+ZA==
+	bh=PTJlj2zHExKlFLfDk1iN81QDs/xPTFxW9ybiLmfL+Rc=;
+	b=qnCuJhSXB3E3KCkBnAVSaG18HDL7ZB6dIv3xNRkPGRzf5YStWI+ky6uNtRpDXzm23d/p
+	 bjbukyJ/U9Oh1721XVdUtKB3+jLg9W0gn4rMcO3MGLJU6jqj33YlK5Nn+K4gbE19GcGqi
+	 nFXqgVLWSbwPmPNNk7ANUfHeekKiJ4pU2YVBBs7gdd/Pd3dDg6rn6VYJR/hGPKhd+BNs1
+	 aa8snoFTJS+wz4mG2ZrzyUuabs5vg96yST2SrwVH5MogkaqU8rbcoyA+IHycGnZVdTDVk
+	 dZSju5UEz6w4QJN/cVkOVKpPS2Oq7SyWHmqCnSOf17l7hxpL+Sy5h5p+80HpQJhcwWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=etsalapatis.com;
 	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=IoE6djis;
-	arc=none smtp.remote-ip=209.85.216.43
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=XO+7yWKP;
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD0A60A2605
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 00:38:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BAD0A60A2605
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FB960A260C
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 00:38:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E6FB960A260C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=IoE6djis
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3b08a162d4bso852167a91.3
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 16:38:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=XO+7yWKP
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3acb11973c3so1239564a91.3
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 16:38:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis.com; s=google; t=1794271131; x=1794875931; darn=vger.kernel.org;
+        d=etsalapatis.com; s=google; t=1794271132; x=1794875932; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vGBa7OIZ0MxlrtcjYZH37iWGX/oNsL9dA7VoB8Hddkk=;
-        b=IoE6djisAVGmJV76zyIatMrTIVrGqOsHMcRTC7OFmXIkYJjWkaPb6wlNB8rMgNjuE9
-         JT/43mMdAXJ8qIQlTDAiO0lGYCEAOJSR2+iU4agpNO8+0he12R2sOHrSDQv7HDJcQvOC
-         yjd0KfRJS/2PAGkTLa9OTZfud4v7O5bES2eSD3lkcTDhpp1lCzHaMv3sbqZGa0o6Bjce
-         +WAH7bf/cTRqUZOkoSdg9tjqscl6fLXZ1w58hXZue2yhlfmpjhPa3EE62hPw4wrR9zr+
-         f9OMC7WKwn7mZkfpk6A21ZP/WRDsM+B9KtgeIHe4Xyj5UFOHrGJllaCY4WgGzR6gFX1c
-         GpPA==
+        bh=PTJlj2zHExKlFLfDk1iN81QDs/xPTFxW9ybiLmfL+Rc=;
+        b=XO+7yWKPJo6M7l58S1jLJ3GMxiLCiztrG7LScA7/cP2dIEkzYip9YL+auxqmNMwdNp
+         a5I6MUk6tmb2LqFxrFxjkSyg6hE9/fivJGFD5rT3oHAfiU743G2nbKSPpS1PhUc24qZt
+         6/uZyzVCNyuxKU/Ioxpq9E//EzSLOPIudj4SG9DwuUNu1nNHqQJoAqa9tubkIDtheKvZ
+         O0KX59t3MBNUcj26J507iBArxsEAJBzoOvuRn6lYwfdibypt5jqhs2bHhY0LR3pnUIoy
+         nLcH2SrkynZiAWnHd4oqij6uZC3Tf5WyFaAX8L0DMg7bljMMXX9fbv4onPOHcjTlmFGp
+         cVWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794271131; x=1794875931;
+        d=1e100.net; s=20260707; t=1794271132; x=1794875932;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vGBa7OIZ0MxlrtcjYZH37iWGX/oNsL9dA7VoB8Hddkk=;
-        b=Dcdv/uDjswwUHTrgtyN3QPmpPjvrGP+/g7cgvSbvkHP1UTlf9Nl1ZmLT5h7tWKP8P6
-         6qiaZlt1JgB/zTvVBYz3JgbhlBH5FFaV+hzxITcfDXH3tt9vyyze4VqkqCUc8kjJe0Zb
-         KE+QmPIeuh32syMY+HRl1KZpoVLYhcT3h/0fp7DrLXRToDEendjRFtgf0NpdMayguams
-         ob8jLBp2897db2pHv6v9ImKyGcXNPAOGI5x6VUcvQStSwX7LGicdmfcj+hkN4+Blnc6Q
-         Z5fnkgNQOB6zFAlJ54zcA0OM/RM9oBN+CTsoEMF0Mbg3EV3yrc+1Go9JiA2Ceu1yqg6w
-         2XgA==
-X-Gm-Message-State: APuU4Z+QMoWGazay6GKKf3mLyTNlrAjOKhiJbSUPJhV6xZtiCOmEL8T9
-	bxXaDzTmrc6NeLaWvioYbIIXqWQ8t5/RvsOsORfAlmKGZUXrIlM3n5lEKHfWfk9xJ/gMP/Afze5
-	287VP
-X-Gm-Gg: AYBFou0cGpnsWrThXyHXVt4jOWKVZueMK2va50hoAh91DGAdYwod9QixtXmyvDfwFro
-	AhGL5hmogt70MbgN3jQHFly+xsSvRAZ1Tafa8TbbCXBpnSuH/srdckCW75tlIrNT0mFDs/ukrN1
-	QB6knM+fZGYo5LMNDXTz3FbMwL8VwB+Uy9Mv8Iwat4UAhZ/KVN4dWznvNyGslRYwCJSner4Ugqr
-	M5FMNETnkHPpVTKq1nQcnGFg1MRAvolHXUqWYP4dz6Ff7UqHsKvsm9E8QVQ+P6Gs1vAKUCjiSzL
-	61jetaTpXGBjJCq1+8DSEQDbGBlCW5tDnkzTISljUZ++ONKDaGrBcDiQc4L4le7to3VQB66YypM
-	mAOJl3MAZnqfiX8wWQCaIbQFciYjZxAIrZQEnc+1bImebL5HUCvXsxUfwLqnh5D/K3avHniDawa
-	cL5WZr0iGVCfXSdav5iQG1gRc+VfinlgW7PCKvNZBxe/Mppm3uSSQL/nt+jsgTHcpIWWTERDCcu
-	yDvkYku6mp5Z6eqFkTORE4t/rEPSkFeY6Q9c1ZBNfs7k5iUW3SP1XZzHAofPrLRl2z31muHnnXS
-	AIaSl2T/JHs76gWcgrdwyoBOWelkawaMhldwI6VcQdrAFedx/4jFQM4ano9HG2B3kJcNI39FVyi
-	SXdIUfhInEYlT+Y2SzDp/dyJ7GeU=
-X-Received: by 2002:a17:90a:c107:b0:3ad:47ce:3876 with SMTP id 98e67ed59e1d1-3b166d3f6b4mr1195371a91.61.1794271131023;
-        Mon, 09 Nov 2026 16:38:51 -0800 (PST)
+        bh=PTJlj2zHExKlFLfDk1iN81QDs/xPTFxW9ybiLmfL+Rc=;
+        b=Ov1ux15BJQH60gx5Z4HVL6Wnfo3LkfXimjKMkqJ5Oy8+OshbY4PpycOIw8i3iy701L
+         UN4cOvJVY+fpJAnc5ksvcrIqRAsjVLFva/dyN29/Yc2KPAxNjE18XrKB1XrTKN9NDhLz
+         3/UcNP1XDNN08RcNLavVtZvRJ7OjRIAdahRK3xXk1ktNl6p/6ZFC86DDdkHl2Ya6TcXC
+         6Q3gWQsLkV4n74XZoiFUxvsPdvV8LX9dZxnr7Y48nef8c5Dd1rbBFvtLsxLfdIO+AEQU
+         ose7Zkokm0NSnmq32dVmMoUZc3NkqJwIcWRHZOkvTC9epdUaP3i2vJVKi2xwXfGKq9kV
+         isKw==
+X-Gm-Message-State: APuU4Z8J27oRMQmADYoHRKhr8wnn0YtdQVW32krW+8D/MlwcJvNrVlym
+	PpaCYGpGA/kneIgrcsZz3yeJsf4UVSg/FbUDUGEH9byFV5I07dfzPcbGgAJkIalwW0LIAh4pRdm
+	/iTXipDU=
+X-Gm-Gg: AYBFou2IWpGHMU1QCVyknLQS8LwtZC//IqQyzRUizMtQEalJP7MnOoubqdjrHh4AwuX
+	r1IFzqC2yY0vXZ+qCHI5XQhqgkzWTSSAsTfzEgnPLAiD7X0Jk2ESTcOlAZXduHKWNXeC+Su1VCl
+	CcpG0rlke5tiaZdZzwasCNKObx4gtsvH61cP0zWqvcaDI+Iq9Oei4pd8RtaGQ5Si5QAqA6wW1mM
+	ie1DJ2/7OwUtJBahDxHWSZSKz/pPIZAMceS2Nf3mMIlONG/BNZawe/qoz7TMV8iLWXBAv1KRwyb
+	pZB7KCs7s0ka8Py17ZdSDNjfeMNNZUH8u6WAt/bNsFRGG9of8/2DccG3ZCLB/VDd1r7UJPTJ9hy
+	KdDdQFoKEZymUdVcI2g2ygNtF0wS8NuTcqNJbdl9VOj/zAuvN3e+kh/eUgHkfG9GyjQWRsjgyRU
+	lzsp7eBRUyj5JsAyuKTKPyMRnb+lqALhqIbvizVEmfppgpNBCHrau/t312zzE4JM4vEq0cRa4su
+	buzp+/5e2sJbW2ySbvef6dOmQwCV55U8MHHB0vhXPCe3f6AxGKo0E7WbRwG6mkRsDTRj9KFcp4T
+	DJnErSzuVUEFjohrz2Jm7WphQq6X7/UaVowO9fbso8TBMqB2tPe+VdBoroDXXt0AqqD1DO4pdwR
+	uiUqWeP0pSbOzoFJNT5fBs01zzFzJp9y5yI5DteLWej7Hwqy+
+X-Received: by 2002:a17:90a:e7d0:b0:3ab:b39f:41b9 with SMTP id 98e67ed59e1d1-3b166fdcc2cmr1135673a91.61.1794271132235;
+        Mon, 09 Nov 2026 16:38:52 -0800 (PST)
 Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b168eacb73sm640209a91.1.2026.11.09.16.38.50
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b168eacb73sm640209a91.1.2026.11.09.16.38.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 16:38:50 -0800 (PST)
+        Mon, 09 Nov 2026 16:38:51 -0800 (PST)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -87,9 +87,9 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v5 8/9] selftests/bpf: libarena: Add a transfer cache
-Date: Tue, 10 Nov 2026 00:38:37 +0000
-Message-ID: <20261110003838.8739-9-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v5 9/9] selftests/bpf: libarena: Cover buddy cache fast paths
+Date: Tue, 10 Nov 2026 00:38:38 +0000
+Message-ID: <20261110003838.8739-10-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261110003838.8739-1-emil@etsalapatis.com>
 References: <20261110003838.8739-1-emil@etsalapatis.com>
@@ -104,254 +104,308 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Batch refills amortize local-cache misses, but every batch that refills
-an empty local array, and every free into a full one, still goes through
-the buddy lock. Under contention the buddy lock and its metadata updates
-dominate, and spare objects on one CPU cannot serve another.
+Add coverage for the bulk allocation helpers. Check object stride, bounds
+and contents, then free the objects in a non-sequential order to exercise
+their independent metadata and coalescing.
 
-Add a fixed-size shared transfer array for each cached order, protected
-by a per-order lock. A full local cache moves one batch into the
-transfer array, and an empty one takes a batch from it before falling
-back to the buddy allocator. Embed the transfer arrays in struct buddy so
-this layer requires no dynamically allocated containers.
+Exercise local-cache initialization, batch refill, LIFO reuse and capacity
+overflow. Verify that overflow moves a batch into the transfer cache and
+that a later underflow consumes it without reaching the buddy allocator.
 
-Check the transfer array's count before taking its lock, so that a full
-or empty array does not cost a lock acquisition that cannot succeed.
-When the array is full or its lock is busy, spill the local batch to the
-buddy allocator with buddy_free_bulk(), so the next frees fit in the
-local cache instead of each taking the transfer and buddy locks. Use
-trylock for both locks in NMI context, deferring frees when the buddy lock
-cannot be acquired. Keep both slow paths out of line so that cache hits
-do not pay for them.
-
-October 21 measurements in a 16-vCPU VM (means of three runs, 64 or
-256 allocations per cycle, 2-8 producers) showed 17-60% lower allocation
-latency and 60-74% lower free latency than direct bulk spilling. With
-8 producers and 256 allocations per cycle, cross-CPU allocation/free
-latencies dropped from 1188/1218 ns to 482/408 ns.
+Document and test that explicit bulk allocations bypass the per-CPU cache.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- .../bpf/libarena/include/libarena/buddy.h     |  11 ++
- .../selftests/bpf/libarena/src/buddy.bpf.c    | 122 +++++++++++++++---
- 2 files changed, 118 insertions(+), 15 deletions(-)
+ .../bpf/libarena/selftests/test_buddy.bpf.c   | 254 ++++++++++++++++++
+ .../selftests/bpf/libarena/src/buddy.bpf.c    |   5 +
+ 2 files changed, 259 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
-index a4d96909f5b0..154a5d1ed0f1 100644
---- a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
-@@ -89,6 +89,9 @@ enum buddy_cache_consts {
- 	 * Objects retained locally for each allocation order.
- 	 */
- 	BUDDY_CACHE_CAPACITY = BUDDY_CACHE_BATCH_SIZE * 2,
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_buddy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_buddy.bpf.c
+index e7c6ac76433c..886a09019566 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/test_buddy.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_buddy.bpf.c
+@@ -17,6 +17,24 @@ struct segarr_entry {
+ #define SEGARRLEN (512)
+ static struct segarr_entry __arena segarr[SEGARRLEN];
+ static void __arena *ptrs[17];
 +
-+	/* Number of objects shared between per-CPU caches for each order. */
-+	BUDDY_TRANSFER_CAPACITY = BUDDY_CACHE_BATCH_SIZE * 8,
- };
- 
- struct buddy_cache_order {
-@@ -104,11 +107,19 @@ struct buddy_cache {
- 	struct buddy_cache_order orders[BUDDY_CACHE_NUM_ORDERS];
- };
- 
-+/* Per-order array shared between the per-CPU caches. */
-+struct buddy_transfer_order {
-+	arena_spinlock_t lock;
-+	u32 elems;
-+	void __arena *objects[BUDDY_TRANSFER_CAPACITY];
-+} __attribute__((aligned(64)));
++enum buddy_alloc_path_test_consts {
++	TEST_BULK_NORDER = 3,
++	TEST_BULK_ITEMS = 1 << TEST_BULK_NORDER,
++	TEST_BULK_SIZE = 17,
++	TEST_BULK_STEP = 32,
++	TEST_CACHE_ORDER = 2,
++	TEST_CACHE_SIZE = BUDDY_MIN_ALLOC_BYTES << TEST_CACHE_ORDER,
++};
 +
- struct buddy {
- 	struct buddy_chunk __arena *first_chunk;		/* Pointer to the chunk linked list. */
- 	arena_spinlock_t lock;			/* Allocator lock */
- 	u64 vaddr;				/* Allocation into reserved vaddr */
- 	struct buddy_cache __arena *percpu[BUDDY_CACHE_MAX_CPUS];
-+	struct buddy_transfer_order transfer[BUDDY_CACHE_NUM_ORDERS];
- 	struct buddy_deferred_free __arena *deferred_free;
- };
- 
-diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-index 23be400f0eaa..467b8eb92d2a 100644
---- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-@@ -128,9 +128,81 @@ static __always_inline int buddy_cache_push(struct buddy_cache __arena *cache,
++struct buddy_alloc_path_test_storage {
++	void __arena *bulk[BUDDY_CACHE_CAPACITY + 1];
++	void __arena *to_free[BUDDY_CACHE_CAPACITY + 1];
++	void __arena *drain[BUDDY_CACHE_BATCH_SIZE];
++};
++
++static struct buddy_alloc_path_test_storage __arena alloc_path_test;
++
+ size_t __arena alloc_sizes[] = { 3, 17, 1025, 129, 16350, 333, 9, 517 };
+ size_t __arena alloc_multiple_sizes[] = { 3, 17, 1025, 129, 16350, 333, 9, 517, 2099 };
+ size_t __arena alloc_free_sizes[] = { 3, 17, 64, 129, 256, 333, 512, 517 };
+@@ -221,4 +239,240 @@ __weak int test_buddy_alignment(void)
  	return 0;
  }
  
-+static int buddy_transfer_take_batch(struct buddy __arena *buddy, int order,
-+				     struct buddy_cache_order __arena *slots)
++SEC("syscall")
++__weak int test_buddy_bulk_alloc_free(void)
 +{
-+	struct buddy_transfer_order __arena *transfer = &buddy->transfer[order];
-+	unsigned long flags;
-+	u32 elems, start;
-+	unsigned int i;
-+	int ret = 0;
++	const size_t uncached_size =
++		(BUDDY_MIN_ALLOC_BYTES << (BUDDY_CACHE_NUM_ORDERS - 1)) + 1;
++	void __arena *sentinel = (void __arena *)&alloc_path_test;
++	u8 __arena *mem;
++	unsigned int i, j, idx;
++	int ret, destroy_ret;
 +
-+	ret = buddy_lock(transfer, flags);
++	ret = buddy_init(&buddy);
 +	if (ret)
-+		return -EAGAIN;
++		return ret;
 +
-+	elems = READ_ONCE(transfer->elems);
-+	if (elems < BUDDY_CACHE_BATCH_SIZE) {
-+		ret = -ENOENT;
-+		goto out_unlock;
-+	}
-+
-+	start = elems - BUDDY_CACHE_BATCH_SIZE;
-+	for (i = zero; i < BUDDY_CACHE_BATCH_SIZE && can_loop; i++)
-+		WRITE_ONCE(slots->objects[i],
-+			   READ_ONCE(transfer->objects[start + i]));
-+
-+	WRITE_ONCE(transfer->elems, start);
-+	WRITE_ONCE(slots->elems, BUDDY_CACHE_BATCH_SIZE);
-+
-+out_unlock:
-+	arena_spin_unlock_irqrestore(&transfer->lock, flags);
-+	return ret;
-+}
-+
-+static int buddy_transfer_put_batch(struct buddy __arena *buddy, int order,
-+				    struct buddy_cache_order __arena *slots)
-+{
-+	struct buddy_transfer_order __arena *transfer = &buddy->transfer[order];
-+	unsigned long flags;
-+	u32 elems, local_elems, start;
-+	unsigned int i;
-+	int ret = 0;
-+
-+	ret = buddy_lock(transfer, flags);
-+
-+	if (ret)
-+		return -EAGAIN;
-+
-+	elems = READ_ONCE(transfer->elems);
-+	if (elems > BUDDY_TRANSFER_CAPACITY - BUDDY_CACHE_BATCH_SIZE) {
-+		ret = -ENOMEM;
-+		goto out_unlock;
-+	}
-+
-+	local_elems = READ_ONCE(slots->elems);
-+	if (local_elems < BUDDY_CACHE_BATCH_SIZE) {
-+		ret = -EINVAL;
-+		goto out_unlock;
-+	}
-+
-+	start = local_elems - BUDDY_CACHE_BATCH_SIZE;
-+	for (i = zero; i < BUDDY_CACHE_BATCH_SIZE && can_loop; i++)
-+		WRITE_ONCE(transfer->objects[elems + i],
-+			   READ_ONCE(slots->objects[start + i]));
-+
-+	WRITE_ONCE(slots->elems, start);
-+	WRITE_ONCE(transfer->elems, elems + BUDDY_CACHE_BATCH_SIZE);
-+
-+out_unlock:
-+	arena_spin_unlock_irqrestore(&transfer->lock, flags);
-+	return ret;
-+}
-+
- /*
-- * Refill an empty cache with one trip to the buddy allocator. Kept out of line
-- * so that cache hits do not pay for the refill path.
-+ * Refill an empty cache from the shared transfer array, or with one trip to the
-+ * buddy allocator. Kept out of line so that cache hits do not pay for the refill
-+ * path.
-  */
- static __noinline void __arena *
- buddy_cache_refill(struct buddy __arena *buddy, struct buddy_cache __arena *cache,
-@@ -138,6 +210,11 @@ buddy_cache_refill(struct buddy __arena *buddy, struct buddy_cache __arena *cach
- {
- 	struct buddy_cache_order __arena *slots = &cache->orders[order];
- 
-+	/* Peek without the lock, buddy_transfer_take_batch() rechecks under it. */
-+	if (READ_ONCE(buddy->transfer[order].elems) >= BUDDY_CACHE_BATCH_SIZE &&
-+	    !buddy_transfer_take_batch(buddy, order, slots))
-+		return buddy_cache_pop(cache, order);
-+
- 	if (buddy_alloc_bulk_nogrow(buddy, size, BUDDY_CACHE_BATCH_ORDER,
- 				    (void __arena * __arena *)slots->objects))
- 		return NULL;
-@@ -158,9 +235,8 @@ static void __arena *buddy_cache_alloc(struct buddy __arena *buddy, size_t size,
- 	if (!cache)
- 		return NULL;
- 
--	/* NMIs cannot take the buddy lock, so they only use what is already cached. */
- 	address = buddy_cache_pop(cache, order);
--	if (!address && !bpf_in_nmi())
-+	if (!address)
- 		address = buddy_cache_refill(buddy, cache, size, order);
- 
- 	buddy_cache_exit(cache);
-@@ -194,9 +270,10 @@ static int buddy_cache_get_order(void __arena *addr)
- }
- 
- /*
-- * Make room in a full cache by freeing its top batch to the buddy allocator,
-- * then cache the freed object. Kept out of line so that frees that fit in the
-- * cache do not pay for it.
-+ * Make room in a full cache by moving its top batch to the shared transfer
-+ * array, or to the buddy allocator when the array is full or busy, then cache
-+ * the freed object. Kept out of line so that frees that fit in the cache do not
-+ * pay for it.
-  */
- static __noinline int
- buddy_cache_spill(struct buddy __arena *buddy, struct buddy_cache __arena *cache,
-@@ -204,15 +281,25 @@ buddy_cache_spill(struct buddy __arena *buddy, struct buddy_cache __arena *cache
- {
- 	struct buddy_cache_order __arena *slots = &cache->orders[order];
- 	u32 elems;
--	int ret;
-+	int ret = -ENOMEM;
- 
--	elems = READ_ONCE(slots->elems) - BUDDY_CACHE_BATCH_SIZE;
--	ret = buddy_free_bulk(buddy, (void __arena * __arena *)&slots->objects[elems],
--			      BUDDY_CACHE_BATCH_SIZE);
--	if (ret)
--		return ret;
 +	/*
-+	 * Peek without the lock, buddy_transfer_put_batch() rechecks under it.
-+	 * NMIs just try the transfer lock and return immediately on failure.
++	 * A 17-byte request rounds up to a 32-byte buddy allocation. Verify
++	 * that the bulk allocator returns every child at the expected stride,
++	 * without writing beyond the requested output array.
 +	 */
-+	if (READ_ONCE(buddy->transfer[order].elems) <=
-+	    BUDDY_TRANSFER_CAPACITY - BUDDY_CACHE_BATCH_SIZE)
-+		ret = buddy_transfer_put_batch(buddy, order, slots);
- 
--	WRITE_ONCE(slots->elems, elems);
-+	if (ret) {
-+		elems = READ_ONCE(slots->elems) - BUDDY_CACHE_BATCH_SIZE;
-+		ret = buddy_free_bulk(buddy, (void __arena * __arena *)&slots->objects[elems],
-+				      BUDDY_CACHE_BATCH_SIZE);
-+		if (ret)
-+			return ret;
-+
-+		WRITE_ONCE(slots->elems, elems);
++	alloc_path_test.bulk[TEST_BULK_ITEMS] = sentinel;
++	ret = buddy_alloc_bulk(&buddy, TEST_BULK_SIZE, TEST_BULK_NORDER,
++			       alloc_path_test.bulk);
++	if (ret)
++		goto out;
++	if (alloc_path_test.bulk[TEST_BULK_ITEMS] != sentinel) {
++		ret = -EOVERFLOW;
++		goto out;
 +	}
- 
- 	return buddy_cache_push(cache, order, addr);
- }
-@@ -769,6 +856,9 @@ static int buddy_cache_init(struct buddy __arena *buddy)
- 	if (CONFIG_NR_CPUS > BUDDY_CACHE_MAX_CPUS)
- 		return -E2BIG;
- 
-+	for (order = zero; order < BUDDY_CACHE_NUM_ORDERS && can_loop; order++)
-+		WRITE_ONCE(buddy->transfer[order].elems, 0);
 +
- 	for (cpu = zero; cpu < CONFIG_NR_CPUS && can_loop; cpu++) {
- 		ret = buddy_alloc_bulk(buddy, sizeof(*cache), 0,
- 				       (void __arena * __arena *)&buddy->percpu[cpu]);
-@@ -786,10 +876,12 @@ static int buddy_cache_init(struct buddy __arena *buddy)
++	for (i = zero; i < TEST_BULK_ITEMS && can_loop; i++) {
++		mem = alloc_path_test.bulk[i];
++		if (!mem) {
++			ret = -ENOMEM;
++			goto out;
++		}
++		if (i && (u64)mem !=
++			 (u64)alloc_path_test.bulk[i - 1] + TEST_BULK_STEP) {
++			ret = -EINVAL;
++			goto out;
++		}
++
++		for (j = zero; j < TEST_BULK_SIZE && can_loop; j++)
++			mem[j] = (u8)(i + 1);
++	}
++
++	for (i = zero; i < TEST_BULK_ITEMS && can_loop; i++) {
++		mem = alloc_path_test.bulk[i];
++		for (j = zero; j < TEST_BULK_SIZE && can_loop; j++) {
++			if (mem[j] != (u8)(i + 1)) {
++				ret = -EINVAL;
++				goto out;
++			}
++		}
++
++		/* Five is coprime to eight, producing a permutation of all items. */
++		idx = (i * 5) & (TEST_BULK_ITEMS - 1);
++		alloc_path_test.to_free[i] = alloc_path_test.bulk[idx];
++	}
++	alloc_path_test.to_free[TEST_BULK_ITEMS] = NULL;
++
++	ret = buddy_free_bulk(&buddy, alloc_path_test.to_free,
++			      TEST_BULK_ITEMS + 1);
++	if (ret)
++		goto out;
++
++	/*
++	 * Order eight is immediately above the per-CPU cache range. Free a bulk
++	 * allocation one child at a time in a non-sequential order to exercise
++	 * independent metadata and coalescing without the cache intercepting it.
++	 */
++	ret = buddy_alloc_bulk(&buddy, uncached_size, TEST_BULK_NORDER,
++			       alloc_path_test.bulk);
++	if (ret)
++		goto out;
++
++	for (i = zero; i < TEST_BULK_ITEMS && can_loop; i++) {
++		idx = (i * 5) & (TEST_BULK_ITEMS - 1);
++		ret = buddy_free(&buddy, alloc_path_test.bulk[idx]);
++		if (ret)
++			goto out;
++	}
++
++out:
++	destroy_ret = buddy_destroy(&buddy);
++	return ret ?: destroy_ret;
++}
++
++SEC("syscall")
++__weak int test_buddy_cache_paths(void)
++{
++#ifdef BPF_ARENA_ASAN
++	return 0;
++#else
++	struct buddy_cache __arena *cache;
++	struct buddy_cache_order __arena *slots;
++	struct buddy_transfer_order __arena *transfer;
++	void __arena *direct, *cached, *reused, *refilled, *overflow_reused;
++	void __arena *transferred;
++	unsigned int cpu, i;
++	int ret, destroy_ret;
++
++	ret = buddy_init(&buddy);
++	if (ret)
++		return ret;
++
++	cpu = bpf_get_smp_processor_id();
++	cache = buddy.percpu[cpu];
++	if (!cache) {
++		ret = -EINVAL;
++		goto out;
++	}
++	slots = &cache->orders[TEST_CACHE_ORDER];
++	transfer = &buddy.transfer[TEST_CACHE_ORDER];
++	if (READ_ONCE(slots->elems) || READ_ONCE(transfer->elems)) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* A miss bulk-refills the local order and returns one object directly. */
++	direct = buddy_alloc(&buddy, TEST_CACHE_SIZE);
++	if (!direct || READ_ONCE(slots->elems) != BUDDY_CACHE_BATCH_SIZE - 1) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	/* Subsequent allocations and frees stay on the packed local stack. */
++	cached = buddy_alloc(&buddy, TEST_CACHE_SIZE);
++	if (!cached || READ_ONCE(slots->elems) != BUDDY_CACHE_BATCH_SIZE - 2) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	ret = buddy_free(&buddy, cached);
++	if (ret)
++		goto out;
++	reused = buddy_alloc(&buddy, TEST_CACHE_SIZE);
++	if (reused != cached) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* Drain the local stack, then verify that the next miss refills it. */
++	for (i = zero; i < BUDDY_CACHE_BATCH_SIZE - 2 && can_loop; i++) {
++		alloc_path_test.drain[i] = buddy_alloc(&buddy, TEST_CACHE_SIZE);
++		if (!alloc_path_test.drain[i]) {
++			ret = -ENOMEM;
++			goto out;
++		}
++	}
++	if (READ_ONCE(slots->elems)) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	refilled = buddy_alloc(&buddy, TEST_CACHE_SIZE);
++	if (!refilled ||
++	    READ_ONCE(slots->elems) != BUDDY_CACHE_BATCH_SIZE - 1) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* Bulk allocation bypasses the cache. Fill the remaining local slots. */
++	ret = buddy_alloc_bulk(&buddy, TEST_CACHE_SIZE,
++			       arena_fls(BUDDY_CACHE_CAPACITY) - 1,
++			       alloc_path_test.bulk);
++	if (ret)
++		goto out;
++
++	for (i = zero;
++	     i <= BUDDY_CACHE_CAPACITY - BUDDY_CACHE_BATCH_SIZE && can_loop;
++	     i++) {
++		ret = buddy_free(&buddy, alloc_path_test.bulk[i]);
++		if (ret)
++			goto out;
++	}
++	if (READ_ONCE(slots->elems) != BUDDY_CACHE_CAPACITY) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* A free beyond local capacity transfers a batch to the shared cache. */
++	ret = buddy_free(&buddy,
++			 alloc_path_test.bulk[BUDDY_CACHE_CAPACITY -
++					      BUDDY_CACHE_BATCH_SIZE + 1]);
++	if (ret)
++		goto out;
++	if (READ_ONCE(slots->elems) !=
++			BUDDY_CACHE_CAPACITY - BUDDY_CACHE_BATCH_SIZE + 1 ||
++	    READ_ONCE(transfer->elems) != BUDDY_CACHE_BATCH_SIZE) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	overflow_reused = buddy_alloc(&buddy, TEST_CACHE_SIZE);
++	if (overflow_reused != alloc_path_test.bulk[BUDDY_CACHE_CAPACITY -
++							 BUDDY_CACHE_BATCH_SIZE + 1] ||
++	    READ_ONCE(slots->elems) !=
++			BUDDY_CACHE_CAPACITY - BUDDY_CACHE_BATCH_SIZE) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* Drain locally, then consume the batch without touching buddy. */
++	for (i = zero;
++	     i < BUDDY_CACHE_CAPACITY - BUDDY_CACHE_BATCH_SIZE && can_loop;
++	     i++) {
++		alloc_path_test.drain[i] = buddy_alloc(&buddy, TEST_CACHE_SIZE);
++		if (!alloc_path_test.drain[i]) {
++			ret = -ENOMEM;
++			goto out;
++		}
++	}
++	transferred = buddy_alloc(&buddy, TEST_CACHE_SIZE);
++	if (transferred != alloc_path_test.bulk[BUDDY_CACHE_CAPACITY -
++						     BUDDY_CACHE_BATCH_SIZE] ||
++	    READ_ONCE(slots->elems) != BUDDY_CACHE_BATCH_SIZE - 1 ||
++	    READ_ONCE(transfer->elems)) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* Interior pointers are rejected without consuming the allocation. */
++	i = BUDDY_CACHE_CAPACITY - BUDDY_CACHE_BATCH_SIZE + 2;
++	if (!buddy_free(&buddy, (u8 __arena *)alloc_path_test.bulk[i] +
++				 BUDDY_MIN_ALLOC_BYTES)) {
++		ret = -EINVAL;
++		goto out;
++	}
++	ret = buddy_free(&buddy, alloc_path_test.bulk[i]);
++
++out:
++	destroy_ret = buddy_destroy(&buddy);
++	return ret ?: destroy_ret;
++#endif
++}
++
+ __weak char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+index 467b8eb92d2a..6e9992e3442b 100644
+--- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+@@ -1234,6 +1234,11 @@ static int buddy_alloc_bulk_memory(struct buddy __arena *buddy, size_t size, siz
+ 	if (!buddy || !out || norder >= BUDDY_CHUNK_NUM_ORDERS)
+ 		return -EINVAL;
  
- static void buddy_cache_destroy(struct buddy __arena *buddy)
- {
--	unsigned int cpu;
-+	unsigned int cpu, order;
- 
- 	for (cpu = zero; cpu < min(CONFIG_NR_CPUS, BUDDY_CACHE_MAX_CPUS) && can_loop; cpu++)
- 		WRITE_ONCE(buddy->percpu[cpu], NULL);
-+	for (order = zero; order < BUDDY_CACHE_NUM_ORDERS && can_loop; order++)
-+		WRITE_ONCE(buddy->transfer[order].elems, 0);
- }
- 
- __weak int buddy_init(struct buddy __arena *buddy)
++	/*
++	 * Bulk allocations bypass the per-cpu caches and reserve one buddy
++	 * block covering all returned objects. The buddy metadata records
++	 * each object separately so it can later be freed independently.
++	 */
+ 	order = size_to_order(size);
+ 	address = buddy_alloc_memory(buddy, size, order, norder, grow);
+ 	if (!address)
 -- 
 2.52.0
 
