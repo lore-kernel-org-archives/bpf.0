@@ -1,64 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=18.194.254.142
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.204.34.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794315128;
-	b=b+PD+s68IEQdmKJDxA9gvOYExeSR9zS5m/PG90iVCS7Z7c2+viUtAuUL3d02s2t0B3Cx
-	 zDBB6P7Om7r6V2w/ac+xZ9j32Tje5nH1CxEoIlkhybcPwlkJ1Eg2AsZ8oLopMmYyAAXg5
-	 K8h24kIby5A060X9E9cyZARiHNb27e72blnUP9wthNuSFTAG/I2nvO3uu9T7Qf8W1MIaC
-	 IM1FRfCHD4jreo24AddSJUclnAuuGaaNxpsQPlWBQPSTHtF4OU+1hoi9U013T5ycJrlo0
-	 PirABT+kfAnDIZv2Z3391OsP85K7x8pvQfO5/fy2HNtesvFsL+OWnRKVdSHCzt7cM5Q==
+	t=1794315145;
+	b=oobC8jL84Wma8sStTeubeFQ0lL8p2uLjs760O8azgYZc0IMSpBou47hWiXQ2MJlmdKhE
+	 4woFg3Ua6QkDbC4S4Y3YXCL4WBRfqvfFnXnE7+/oJoXbtfquQEDqOPugcYABYfA9p6RtC
+	 q4aWfcqUDX9e9j7u64xdgeu3MACD0jWMlAtoQIx76P2QPUYQwD4PugOFm4i6W7FNsbP3P
+	 JsIlyRQvAPQWEwSaDuPnWyQyHZ64RpH6JKABZEkXWvMRc9ThHvwQvAMDkTr9Q9n4LgToF
+	 4O8uIUbY7A1oCIZbNaD1SSckYzQGB3uRoz8AzoWcAtxnC4p+46H2e7rYDOliFld8Qhw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794315128;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794315145;
 	h=DMARC-Filter:DKIM-Signature:X-QQ-mid:X-QQ-Originating-IP:Received:
 	 X-QQ-SSF:X-QQ-GoodBg:X-BIZMAIL-ID:From:To:Cc:Subject:Date:Message-Id:
 	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-QQ-SENDSIZE:
 	 Feedback-ID:X-QQ-XMAILINFO:X-QQ-XMRINFO:X-QQ-RECHKSPAM;
-	bh=pnvsCaZarFR934HQcBQJbElxQDjkJzNi2diqewrEMhg=;
-	b=2NQWEUYL5gWPjNAayI0WnSbzTIK8jqRMs0pIKjZypSLL3wr/+108nOnstx+lgsBdCE2b
-	 kcTNGhSiv7GAaKrhf1olAfSyth7NkudOre9CqlI7+CLRXsyXHh4wPFrkyC6hUJwkvGQS3
-	 6QK50acZ0VR8NcOBtpCpks4ekilsrqH41ZM41BFOVPQaT+dOKPr3gOf94+wDuTEdL2lEQ
-	 ph9wtBQwkfW3SKRG46VQBH/nC2cep1yU4MMitzgI8LH9efO0zgmBYiEdTdH5d0L3oESlK
-	 kT+zrNhdVh/4gjmVL1YggOHsdMVXt8WziNxHgSmTOh+74P2Buw3ThCFxgCRM/9Ktl2A==
+	bh=O/4t0fmDlw3ey9yibz/+cpBbJK+aVAgemr+JbdbCis4=;
+	b=k75yOrhnnGK7yimte79n96C4NsqXn8mD+80RbIhB2QmOlv8dVxkC+wTv/6yzXf9pjMyy
+	 DeSU4sQu+cmG4IFZpR1iKLcRzX3B+5j0Vs4eZltYeFYiyPaXfRPuoCxrci1sWjZIg7Ck6
+	 KkS6O9N1dDg7/r6tGL1wkdu7x40yh+w4XVKYIw0CBZ7yIEiuhGAlW3jh0fuGY0f/DsNMF
+	 OOno8xPWI40HfYhT5XckpCwrubOlDvQ+LWyY6mRBsLMwmXNH3D+AyCqJRnz3j/eokQp8D
+	 EbyFdgMc5sPsC4943ySsHQLZ0fW4e90CXSCmkPZELpqevKA8O4sRhhi/Ph/bYyRLopw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=smail.nju.edu.cn;
 	spf=pass smtp.mailfrom=smail.nju.edu.cn;
-	dkim=pass header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=ixawTO8b;
-	arc=none smtp.remote-ip=18.194.254.142
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+	dkim=pass header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=oe33SrFz;
+	arc=none smtp.remote-ip=54.204.34.130
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2FD606A334;
-	Tue, 10 Nov 2026 12:52:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C2FD606A334
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B27C606A32A
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 12:52:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B27C606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=smail.nju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=smail.nju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=ixawTO8b
+	dkim=pass (1024-bit key) header.d=smail.nju.edu.cn header.i=@smail.nju.edu.cn header.a=rsa-sha256 header.s=iohv2404 header.b=oe33SrFz
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=smail.nju.edu.cn;
-	s=iohv2404; t=1794315080;
-	bh=pnvsCaZarFR934HQcBQJbElxQDjkJzNi2diqewrEMhg=;
+	s=iohv2404; t=1794315074;
+	bh=O/4t0fmDlw3ey9yibz/+cpBbJK+aVAgemr+JbdbCis4=;
 	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=ixawTO8byEIq2YYHy1lSYuF6NvK8R3YntTnrGkSIK9aBFuYvPjHkX2ulGaJz8VzAz
-	 IOo897Y6XpXrZCYGoKpSyK1I6la+o44VXISJ6ZWjfTZW29UIwhoKe1WVHFRFGVM1di
-	 sxiYK5RSizlzV7QxbJSCU58kAj4RKdoDceT5oun4=
-X-QQ-mid: zesmtpip2t1794315075t461bbcd2
-X-QQ-Originating-IP: zChssD5jjodbbDQewedjB0i9rLy8xA/BmneST00wK9U=
+	b=oe33SrFzaxsfFrezNkP/CJia0gvLRPVc5eAQDA2oPq8fnOmaoatArDBx8mpZUi8Qo
+	 8m1EO6ETMDXZNq4ks8qJsC5RMz0Yb9TMVbEg6HvecB76UR1UFlX2lmbloSrQye5JFZ
+	 T07mv9SwWy723wVs78V8Ibk5GMi6RiXHLPpL2BfU=
+X-QQ-mid: zesmtpip2t1794315072td94b9037
+X-QQ-Originating-IP: kUPMYRU8RXedmnEzvofaVAd6aIx214/gp9wE5oQPGe8=
 Received: from workstation-Precision-7920-Towe ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 10 Nov 2026 20:51:14 +0800 (CST)
+	id ; Tue, 10 Nov 2026 20:51:10 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 13638721071040344329
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 14794258371886372565
 From: Kang Chen <k.chen@smail.nju.edu.cn>
-To: Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>
-Cc: sched-ext@lists.linux.dev,
+To: Yonghong Song <yonghong.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH] sched_ext: make DSQ iterator stay drained after NULL
-Date: Tue, 10 Nov 2026 20:51:13 +0800
-Message-Id: <20261110125113.2935742-1-k.chen@smail.nju.edu.cn>
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	cgroups@vger.kernel.org
+Subject: [PATCH] bpf: make css iterator stay drained after NULL
+Date: Tue, 10 Nov 2026 20:51:10 +0800
+Message-Id: <20261110125110.2935707-1-k.chen@smail.nju.edu.cn>
 X-Mailer: git-send-email 2.34.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,92 +77,66 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpip:smail.nju.edu.cn:qybglogicsvrgz:qybglogicsvrgz5b-1
-X-QQ-XMAILINFO: MACXe2l6e7j9GH6PDCqUC4TKYU4Iuhqytqh0o8dj2C6gMOY0DQ6j7l4E
-	IYw+RgPPGU0Bbg0V8QjWPOh62J82yLbWEcXw33OR/tSj0CLZq9WidHLkhinpFkPvV/g9jBZ
-	XFiaqCAOYEahsLlbrC5KjIv893bEiMo68s8twJA1xIF0B3MHqNuaj+8UuMN/6mDbH/DjMJU
-	QrzfXxLUEkSbl8K48WohlZ4WF4UBZK91SlAmegQZN5t5JLU7DqRDXjpHT+TFH0TCIjUc7E3
-	6l84HACX6X6vseoQTHhRaLeU6FIg2vyjeN7/AVamv1Hh7Cmt/fjiFUI7i1BdH9Y82WJrcR0
-	bFbK/Qf64uvfupw+8d0SwN2i8MDD7y46Np2f0RaBlq/oYVSoP7kj3JD865VIWuxhmT4wmSc
-	bdBkw5vavKUiSml9aVFzlkst/ndyDqXa5p/CRXUxMIRGJ2foU9PQO8CghSNCUveUAaPqaZk
-	KAZG+1DWBHLwvTcw2mulidq4PDHQXyjtqal+RQ1lPJ+0zmQC/bPgspijnnYhkK1NswEMtoC
-	GF90poezJJ1StRGcQ0TXHDn9m0ns1LyV4xpgy6jrB+IzKAOSwPw5zoUvB2BXvlTsBASIDCx
-	dd2vm46Hnz8jffjhfohse3mhUQG1RnAbtVxA3ZhJXCA80cnB28Jw46aBk4agqEWwgFktbw8
-	YNR7uAt2HO4nPFlSxa4+NV0Kx83W/cfKPYaSWGFdOmNA/3Y1Mb0ccmDSL8pom1eQChKFF92
-	+2q+A1K61WXgbrRsTOXbfzLYtQARZIk+WmRv0nDZDn60iTwaJO6jS9k9RQMLG8r4updxayR
-	TdS71H3s/d7ICmL0efYFZbCNIfe0diRCbZ92UiM+TwSrjJppMo2zyTYek9uytwWPEkfPXdE
-	ZFkBWd4OuvHWvDMkU4dDr7icwTorvKG6vn4Hm5s4FXCrwUnpNfeO7siFBEePS4nnIMNG8KV
-	xoIylEIsf0U/Q6VY9fatehA4BhDTbzheQ0MoE/zGdtzA1Fft/lLjh+n1WhN0jWI3bZplSlf
-	IYafDugg==
-X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
+X-QQ-XMAILINFO: N2K7JO7TcIoELdlYmZvit1wf8scYIkicgH8LUHLcCuKS85dRU2yf+nDs
+	op+9/GKLuwP0NGNDYxaEFmgYL8JglNcNIoGLXezg1lx+RYdNSlak2CoLHL0aeqJiKQW9b0V
+	exfv3WgyDUrYL4V5DNOAMCRnKNC/aGXaer6im4Rc4HdM6dQRfnWU9pAK6YNbMrEDlB43xst
+	hoO9pP3OZjTjRH1oOGmyqgDVJ+2Oml7HStJA9OEPz5YVsecCNhHk2ejchLUEgwVuQZ+NSnQ
+	wqtu9al5fXyn4To4/Q+Iz8MOGQjEfULhLZzgSjiA3gN9Hx+k8eXpDW887zmarHFR9T5i1mR
+	YbFdX8OeKZdjm+v74e/Gbe1nEmW8V/9tfDUvJ490U0KeRsSvUEun/xDuEEz2fZL4C5Rr9uq
+	DuC9yaU7StgMnHRHTcvsSxHga2V8T1LWV9kBVBiv1nDok1JCr4jjtwJuxRWS9m6beoWUPY+
+	HVyE8qp9uKrnjQ1gpX27lo9LcoCa3zt+nBR0Bz9xaMBnWeGoiePmBk9nxJ069UaWO7i1dDJ
+	pMMBYlmiw7o5w3BaTAy+qDVYS2kTPimXzXSmlhlHxajv0ykJ6cU+FVO5ZkJjDFINL87koYU
+	aQ9iZEmf30vQynsQ6GFcNHH9vgSX88R45FTlMNN/7Dxy6xhOYVfU4KRKGbaSoiJ/rWcIgrK
+	SPa61QO/m67ogW6lMq83sMPPwgkeOHZsSEkKA8Rn3GAV8lLfKtFBPHlAS/t4egXqjfIsdmW
+	zuEM/HyYd0I6RDBcLJr0bkE+Crj3AHihHwETURJwEb7g6jfV0blhrHXT0+LuWaNAb7oV4PY
+	/jMpuebwUW5ZiVWoMfrPxmhdQCe3modODYpB+/lYY05dE9H6IIUsmLXbjySGcKAgh86FuTY
+	+sryA+j8Nar2KZofdkfUaewsIBTeKS35FXhqRudyO2hyeytSEvGKIvHV17dOSZzc+8WmFZ+
+	p7s1QRIZf7RCPdaRcQQqkoz7kb8VCMSHn5mLEb+4UkQ3CeyLx7gH3OIWqTG1SIu4sOdDgNS
+	FFYIjYzFzhxn0zQTmH
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
 X-QQ-RECHKSPAM: 0
 
-nldsq_cursor_next_task() unlinks the iteration cursor when it reaches the
-end of the DSQ.  A later call sees list_empty(&cursor->node), starts
-from the DSQ head again, and returns the first task of the same
-iteration.
+The css_next_*() helpers start from @start when given a NULL position.
+bpf_iter_css_next() leaves kit->pos == NULL after the last element, but
+keeps kit->start set, so a next() call after exhaustion starts the
+iteration over from @start again.
 
 The verifier relies on the iterator contract that once next() returns
 NULL it keeps returning NULL: process_iter_next_call() marks the
 iterator DRAINED and treats the result of later next() calls as the
-constant zero.  A restarted DSQ iteration therefore hands the BPF
-program a task pointer while the verifier believes R0 == 0.
+constant zero.  A restarted css iteration therefore hands the BPF
+program a kernel pointer while the verifier believes R0 == 0.
 
-Remember the drained state in the cursor flags and return NULL on every
-later next() call.  The cursor has spare flag bits and the BPF-visible
-iterator layout is unchanged.
+Clear kit->start when the position becomes NULL.  bpf_iter_css_destroy()
+is a no-op, so no cleanup depends on @start after exhaustion.
 
-Fixes: 650ba21b131e ("sched_ext: Implement DSQ iterator")
+Fixes: 7251d0905e75 ("bpf: Introduce css open-coded iterator kfuncs")
 Signed-off-by: Kang Chen <k.chen@smail.nju.edu.cn>
 ---
- kernel/sched/ext/ext.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ kernel/bpf/cgroup_iter.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-index 9bae826d69f9..03e0fbf17011 100644
---- a/kernel/sched/ext/ext.c
-+++ b/kernel/sched/ext/ext.c
-@@ -555,12 +555,14 @@ enum scx_dsq_iter_flags {
- 	/* iterate in the reverse dispatch order */
- 	SCX_DSQ_ITER_REV		= 1U << 16,
+diff --git a/kernel/bpf/cgroup_iter.c b/kernel/bpf/cgroup_iter.c
+index fd51fe3d92cc..fb7ba1e45590 100644
+--- a/kernel/bpf/cgroup_iter.c
++++ b/kernel/bpf/cgroup_iter.c
+@@ -365,6 +365,16 @@ __bpf_kfunc struct cgroup_subsys_state *bpf_iter_css_next(struct bpf_iter_css *i
+ 		kit->pos = kit->pos ? kit->pos->parent : kit->start;
+ 	}
  
-+	__SCX_DSQ_ITER_DRAINED		= 1U << 28,
- 	__SCX_DSQ_ITER_HAS_REENQ	= 1U << 29,
- 	__SCX_DSQ_ITER_HAS_SLICE	= 1U << 30,
- 	__SCX_DSQ_ITER_HAS_VTIME	= 1U << 31,
- 
- 	__SCX_DSQ_ITER_USER_FLAGS	= SCX_DSQ_ITER_REV,
- 	__SCX_DSQ_ITER_ALL_FLAGS	= __SCX_DSQ_ITER_USER_FLAGS |
-+					  __SCX_DSQ_ITER_DRAINED |
- 					  __SCX_DSQ_ITER_HAS_REENQ |
- 					  __SCX_DSQ_ITER_HAS_SLICE |
- 					  __SCX_DSQ_ITER_HAS_VTIME,
-@@ -10615,13 +10617,24 @@ __bpf_kfunc int bpf_iter_scx_dsq_new(struct bpf_iter_scx_dsq *it, u64 dsq_id,
- __bpf_kfunc struct task_struct *bpf_iter_scx_dsq_next(struct bpf_iter_scx_dsq *it)
- {
- 	struct bpf_iter_scx_dsq_kern *kit = (void *)it;
-+	struct task_struct *p;
- 
--	if (!kit->dsq)
-+	if (!kit->dsq || (kit->cursor.flags & __SCX_DSQ_ITER_DRAINED))
- 		return NULL;
- 
- 	guard(raw_spinlock_irqsave)(&kit->dsq->lock);
- 
--	return nldsq_cursor_next_task(&kit->cursor, kit->dsq);
-+	p = nldsq_cursor_next_task(&kit->cursor, kit->dsq);
 +	/*
-+	 * nldsq_cursor_next_task() unlinks the cursor and starts from the DSQ
-+	 * head when it is called again.  The verifier relies on an iterator
-+	 * which returned NULL to keep returning NULL (see
-+	 * process_iter_next_call()), so remember the drained state.
++	 * A NULL position means either "not started yet" or "drained" for
++	 * css_next_*(), and all of them restart from @start when passed a
++	 * NULL position.  The verifier relies on an iterator which returned
++	 * NULL to keep returning NULL (see process_iter_next_call()), so
++	 * clear @start on exhaustion to make the next call return NULL.
 +	 */
-+	if (!p)
-+		kit->cursor.flags |= __SCX_DSQ_ITER_DRAINED;
++	if (!kit->pos)
++		kit->start = NULL;
 +
-+	return p;
+ 	return kit->pos;
  }
  
- /**
 -- 
 2.34.1
 
