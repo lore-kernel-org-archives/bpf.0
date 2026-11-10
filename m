@@ -1,47 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794320437;
-	b=gTjcxUk9CF40LlHV+0HUUz5XrOFSMpP5hBQGuGpQRrcAIrHN8CK6PTUnB5tHM+PuH2Hr
-	 paA9K7kmvwND+v1fdYBMG34ezVdNYsDXBkSH2Oi4vy7iQYMn2wc1iHsQjLGcZno3veopg
-	 I6rFJOiEjmeZdQ0gN5MExP8ZIDk2UCUtZNmba2bak53U7V852Suwi3j/yhbLD4UTSiJme
-	 Ezh4yQgQwdGYb7Xma7WJA32ZreBQt3xbXERVLHTe6k1DvyjxwDxY+DFRWE0ZrkDBnQ9/X
-	 NhpsjI1AAaBH8xds+KR9hm60L1ewSBxcTp0zhlZshqU4b7R3dGtlbljaMgyFOjR4Elg==
+	t=1794321008;
+	b=q9e2LlGK4Y60/KmEMDuw/BPxRkdawQTeJBb9HLl+4hz9rDz5fH6Onz/gojaHeNx2TksK
+	 XXR4Z0KkrXCs0rJUeSVriJig2710B3gcqYNJ8ce4pfs6nX954snbwojioQF2RCs1h1SiW
+	 Xhnm4fVgmWdnUMC/WU/Z18tzOi4xE9uTWfF3J/Q7ia7T/NYdh9emxbCBryJ5llbw0d7QZ
+	 JaXMfwYz9hlHZS5ersCnWjtKa8j2adNAsy0r/IW8cFwUu9hn1i9VI7coxhvFwn6dRdOcg
+	 f8vcGkXpjRuKiHzjgK3ghE2OoK06deo3/wfncZGaoGE6xkPEFoIB6yxsuYslmXjjAeA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794320437;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=yxghYJJACMUSH3L8Z8k3tre7BBZpihYhe07SHtfZRzU=;
-	b=IakJkJzUl2mRPFYfKK7n3e1vWqWMil8L7fs30hBAyiTMi3uQIioBqYWGmQuLAo3CfBk0
-	 hwRPwP/lgNmwjsLVX9PvUgfQafcYwPp/VJKKEKZSKwuYBUyHbjrhBMCMtVJnBkqtBitNO
-	 JQuJKcGUG4ZKfwadfg1inHttp4z55bjM6kmxArp7jc9vaDEI5dmUSoD9B7uPc0oTRW1JB
-	 crbwVlNEQJJBebkOm0oBBinFQBvdCh4vQtuSVfNb+kw9d+8lDAeJitNnfhmb40206Qnh4
-	 AFFGNj/F6R6NYohfqry4m9WBf2UECBFtoyF7E4zVfXvSLgyV/F35Fr5JqrHNj9G6Rgg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794321008;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=6re/8M7BAKbsJAaby7V03QwRwM9/MqNLLzk54nsXA00=;
+	b=A8X7K2S7c88Mp95r51kLcO0sf/ypWipKLTHzo6xkatL1FCUj5UVK5uqqVde0LBlc9Vyr
+	 u9rrVFJ6qBv3zhJHpKVxTFfOvyEPK9MCNmaQxw6/qi+ywJIqsQ7DLj76SWnvUxkwUvLkc
+	 /kmQ0lU4RqlG2YTcOTyQlkjUuKYfvVWFb/Cyse2hl+c8XW1MxWdPPOIZHwQYowlKUVCh7
+	 lwhPIngTNgaJpaPP8qAZsiRKRIccwiRbHbumTyW79AcJltGHp07GYTN4PSixQmpuMadi/
+	 d25OQdiC2m2MDXwhqWWDCuWQXlGKUNJWV3IQw7hR4sXrGcqrFOIsTf7JaqbZCIdGasw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Tzc9Zs/y";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JlqNEHB0;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0D460A382E;
-	Tue, 10 Nov 2026 14:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B07D606A321;
+	Tue, 10 Nov 2026 14:30:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tzc9Zs/y
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 657561F008A2;
-	Tue, 10 Nov 2026 14:20:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JlqNEHB0
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A819E1F0089F;
+	Tue, 10 Nov 2026 14:30:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794320437;
-	bh=yxghYJJACMUSH3L8Z8k3tre7BBZpihYhe07SHtfZRzU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Tzc9Zs/ycPeXxJ8aNptWRv5lXPygStV7Lf+YUKUAuneDLgJyMyaAf+p0f7TpXUTOM
-	 WsEH1DhI/2Ts1lJdYM9/+VhYtt2IatVPaJZc0W6ph2hxS4vqjd6dVRdWho4YcGNpVx
-	 Hv0Z9WLWCfc5ozGerNpjq0O/HYYCk5BHBJvv1eQanba4kd3aYFLPjoELh2Qv5lMmlB
-	 1hIXqcR/hJlH5YIT+YK893I/s8nTPsglgehw4Q9MQkJgPaG/n1SQ3WuQXVj+Ttqyaz
-	 pJ5qwLkDiWJGQ4yFAALapy77jvIDGMyiEsY2GX3clx+yVz4PFTBft10FfYxT4vAwvV
-	 Z6oqX/5AyJ1SA==
-Message-ID: <197d5a54-26e1-4985-8001-5819fc702fd4@kernel.org>
-Date: Tue, 10 Nov 2026 15:20:25 +0100
+	s=k20260515; t=1794321007;
+	bh=6re/8M7BAKbsJAaby7V03QwRwM9/MqNLLzk54nsXA00=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=JlqNEHB0x83jrWOU+aXt+t6KdxBWq2a0su5gwKhZDBDzwdt1vIQ+NwqadIVD620Jl
+	 ZMlJKnzaNQn8mqKyJ431cKwCEnd14z50i39yzmzWsET+nkfQI0rpvua3TRIDtlNlIs
+	 7KNJgu85+cPAH0ouhch2WhSEoivO1FCxEzftHMCnDRMIwOywBFSqKLXWsH/34mPlV9
+	 6Z/vZWe/lIqMC5Cnyp86SOtVRvWI/qdbB0K6nMI9TKgEONPlilb/c8gOfxOH8CpsqH
+	 giLI4Stt/6YsFC+0yROroPr0/dQcoL6af4eM2KZEYtFU7qm6auzjkc3xxDdGbx1W7+
+	 N39ZX/MLnwP6Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9B09D39D0CA0;
+	Tue, 10 Nov 2026 14:30:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,80 +53,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 04/15] xdp: add a kfunc to delete skb core
- extension entries
-To: Tianyi Gao <tianyi@cloudflare.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Jakub Kicinski <kuba@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>,
- Vladimir Vdovin <deliran@verdict.gg>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter
- <donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Magnus Karlsson <magnus.karlsson@intel.com>,
- Tushar Vyavahare <tushar.vyavahare@intel.com>,
- Jason Xing <kerneljasonxing@gmail.com>,
- Nikolay Aleksandrov <razor@blackwall.org>,
- Madalin Bucur <madalin.bucur@nxp.com>, Ioana Ciornei
- <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
- Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Chris J Arges <carges@cloudflare.com>, Jakub Sitnicki
- <jakub@cloudflare.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- llvm@lists.linux.dev, kernel-team@cloudflare.com
-References: <cover.1794281983.git.tianyi@cloudflare.com>
- <2892d19e606e3809c268de0610a4ccc8bf68625a.1794281983.git.tianyi@cloudflare.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <2892d19e606e3809c268de0610a4ccc8bf68625a.1794281983.git.tianyi@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/2] net: fix mac_len of skbs copied by generic XDP
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179432100643.3999302.15619209426166377365.git-patchwork-notify@kernel.org>
+Date: Tue, 10 Nov 2026 14:30:06 +0000
+References: <20261103200036.65764-2-tianyi@cloudflare.com>
+In-Reply-To: <20261103200036.65764-2-tianyi@cloudflare.com>
+To: Tianyi Gao <tianyi@cloudflare.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, andrew+netdev@lunn.ch,
+ shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, lorenzo@kernel.org,
+ toke@redhat.com, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ kernel-team@cloudflare.com
 
+Hello:
 
+This series was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-On 11/10/26 04:57, Tianyi Gao wrote:
-> bpf_xdp_skb_ext_del() deletes the stored entry for an id. A program on
-> cpumap or veth can use it to drop RX metadata that an earlier program
-> stored.
+On Tue,  3 Nov 2026 20:00:35 +0000 you wrote:
+> Generic XDP copies the skb before it runs a program with frags support.
+> The copy happens when the skb is cloned, nonlinear, or has less than 256
+> bytes of headroom. skb_pp_cow_data() makes the copy, but it does not
+> copy mac_len. After XDP, the skb has mac_len 0.
 > 
-> Without the XDP_FLAGS_HAS_SKB_EXT flag, the kfunc does nothing, because
-> the header bytes may then belong to the packet.
+> Two places after generic XDP move skb->data by mac_len:
+> - On XDP_REDIRECT to a cpumap, cpu_map_generic_redirect() pulls mac_len
+>   bytes, the length of the Ethernet header. Then it queues the skb to
+>   the target CPU. With mac_len 0, the IP layer on that CPU sees the
+>   Ethernet header and drops the packet.
+> - On XDP_PASS, the skb can go on to tc ingress with a BPF program
+>   attached (tcx, cls_bpf or act_bpf). Before it runs the program, tc
+>   pushes mac_len bytes, the length of the Ethernet header. With
+>   mac_len 0, skb->data stays at the IP header. Therefore, the program
+>   reads the IP header as the Ethernet header.
 > 
-> The kfunc only clears XDP_SKB_EXT_ENTRY_ACTIVE, so a later store of the
-> same id reuses its offset. The flag and the size of the area stay the
-> same, also after the last delete. To give the bytes back, the kfunc
-> would have to move the entries after the deleted one. The cost is
-> headroom that bpf_xdp_adjust_head() and bpf_xdp_adjust_meta() cannot
-> use.
-> 
-> Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
-> ---
-> __skb_ext_del() frees struct skb_ext after the last delete, because it
-> comes from a slab cache. The skb core extension area uses existing
-> headroom, so it is not freed.
-> ---
->   include/net/xdp.h |  8 ++++++++
->   net/core/xdp.c    | 26 ++++++++++++++++++++++++++
->   2 files changed, 34 insertions(+)
+> [...]
 
-I think this approach of simply disabling the entry is okay.
-This is trading off performance vs small area memory usage.
+Here is the summary with links:
+  - [net,1/2] net: fix mac_len of skbs copied by generic XDP
+    https://git.kernel.org/netdev/net/c/71578e43b8a6
+  - [net,2/2] selftests: drv-net: ping: test generic XDP redirect to cpumap
+    https://git.kernel.org/netdev/net/c/71b116cf334b
 
-Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---Jesper
+
