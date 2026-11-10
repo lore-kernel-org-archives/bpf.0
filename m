@@ -1,47 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794320034;
-	b=HODBLeZpvqUnuHKcpoN49fgBFoF+sf2pnRIdfuqx2FcYXTChYOCh5R4Q+cxuo4jJ7sHk
-	 DV2Tfx2HnAJoUq9aEJ5z5s6lil8DURRMw6yrZURhhhq8O1mArAtYYkDQ8gvxrbm+LYb/c
-	 UXpaScYypNdiYyynQo2yilFPUIpThdAu0idvidpGeqTfw8wWejYTxpDyKKHdFcZ+I1GGK
-	 W0m+NLj6l/Nj/5sX68CtjIEsaoW3hNgoXUt05bR1ncHsreDilBDm2JxssLwlhAJDTbYOI
-	 Uz/A70dnUrbq9b+/FxglcyNeVwph0Q00Norcjfh/6qhZ90XHqbKWKZzj4MboICLClXQ==
+	t=1794320354;
+	b=U/Ue967JfyMCphvFD3TsToRGAq4nnU9SP/eCG8ANPVI+OpJ8HhRBFk5SIdMWty4Egxb0
+	 w08AiB1AAewisY+AChFb7vEpTnwxvr5a229ae8I3s0+kM7f7L8KGZkwIhN3ZCBHddLZJi
+	 4QBX8a0TUd67+1FFggj9FX9iNeUJ8E1xG4QWyS56PwfYEhvcn4+B46x4IP+kNe6bNLXnJ
+	 azC5sKRu8iSqqVUdycTLN3ZfTJRea6Sq0+6RfkK7puMxQSzYhCXhdblxg06rQGrts2RlO
+	 rAtvcFEJX3fSv+IOTxtfG0IRl4SddHgaus3tJgX5gARtQoJ26P04DB2TyCYwH+BgGUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794320034;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=Xd4nTp86cW9MidEl4iHRTLTDM3LxuvmF0DAhfS6CjOQ=;
-	b=dPypWLYKZ6OFvNZKinW0ZjuTxlcMOjd8MYl9TtUaAe2c7ew7YlMi4dzqgkY3SQo9kbOT
-	 6EVPNILznwAqZGpI2DsPgSW4qjCm1fQWk1iDiOkcfcNnHovmcRHaT/E7wpU3V0FXGuqfG
-	 SQAsFZG3KP6JzORy0MdYPcWO3OKX9kRE3GhtSyfFPyiiRCktuAIgONICAIi2atmKhWQLO
-	 QrY6c1nYMwSAkoRPmr7Lt0jVQn6AhNdQUltNOHQXUMuZXEDTnq3ywB117AT5pJ9FMLYpI
-	 oSit1LUfr7it5Hl0NKeaU8sn0sXtJ8tttEjJCXuzRUgNzeCxgLPd7xZetQFdDRHKcaw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794320354;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=QhTJ1UWGwR20oUsM7cXnvNb9YbQCwYXDfIW4idiD5k0=;
+	b=A+1ns+uKLzzC4hHhEJgH/W+I2rJCygWFCHa5vhdG2zIsKr/Gohz88iXyLyjveoYa9Sz1
+	 oXckP/DlpVpRWnAI6Y5vGohbQdKLjMS4lMbYmGtnodbIP3/6bBem8Zj43YcbakfICbx/O
+	 7yaTcAp6meV3yYulICObeWquU6cpniDUCwnL+sucFmuIqOzZ9KnE33k71NvWIGTrH4rqY
+	 dGDbJn6FLHyl5HSVTc+y08Nc013HfzaSZ0IJ1LGPiaVxE/ikVnm7KTrd08kAs7OpKDA3d
+	 W7ke7Sl7kSEsbCysQXQ02F952E4QjAnBK/f7+GEqdAk0o+MRSKOx+GaA9NBypFiJI9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="f8Mt1/7r";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OCEnyKXP;
+	arc=none smtp.remote-ip=209.85.221.54
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD959606A32E;
-	Tue, 10 Nov 2026 14:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A745606A331
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 14:19:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A745606A331
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f8Mt1/7r
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 850981F0089F;
-	Tue, 10 Nov 2026 14:13:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794320033;
-	bh=Xd4nTp86cW9MidEl4iHRTLTDM3LxuvmF0DAhfS6CjOQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=f8Mt1/7rCa1pZCIKwEJ+QowRw7WQd2Mil3HemNjtaswi4u+d03aYrTi40TLXxnCKw
-	 pauvn8khQlPZ8R0mn/xay1EkuRTlVn70VcrXZAEZWngUsD6lexjShgO4SZjUnAw+Y7
-	 IkXLs633FXY+yrUe4/bR9QruYsg3I9GAvk92vUcOMAd/goWCPfS5TkZXmAZlDQU2Xl
-	 CDTMbuumkOVilTAQVmB07pRXPfjrja83JxOczK9RnNr+hOr3Y+05WFCevz3qvEFves
-	 +l5bSjPbG1HZLdG4bfwyu9UpYy3uV/pWeW9XheFevIn2LpwSkiOXknAXotskv9WmEt
-	 hGecO3L5DbctA==
-Message-ID: <2f0e411d-d29a-487a-b7d3-2cd7dd92e456@kernel.org>
-Date: Tue, 10 Nov 2026 15:13:41 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=OCEnyKXP
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-490a0e72588so1125033f8f.3
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 06:19:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794320352; x=1794925152; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=QhTJ1UWGwR20oUsM7cXnvNb9YbQCwYXDfIW4idiD5k0=;
+        b=OCEnyKXPWIWFw5ljr+H0oHgSUaB0rFehTyl429KRO1pZ9/t9V7/GJ7m8ejs/lACNsZ
+         U9JlZI/IpHdVc1KPKZaYJOXH+J0PoBENn0EadHm+PW865kSg60hGVtMzm2gquoliW10+
+         spbekRFrFUI+aow8X1uRzuU9xYALTnKf6ga+8UBaLq2tY1SDvyIcMq8sf2wJwFllB5Bi
+         BmNHiYhq1l2K580vvkrrbMJxEww6fGPSQutjrGWhuTISGjh7T66D/H2s2UQ6WUi7clW5
+         Jl/lqMFIohyhRtZlzFJUia6nT93+BQafWuXRSANmYLgSe5MNUAf2kORWZC4apQeo5NVh
+         N9sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794320352; x=1794925152;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QhTJ1UWGwR20oUsM7cXnvNb9YbQCwYXDfIW4idiD5k0=;
+        b=w3sC86Dc2qXSDXLWEvW2SUgPvqTO2Q7jXwcOemDBSSJQiXkLFkJjgngii9RNFhJ4Y+
+         9ZydtipPcqqSFzQxNOok6XQE2J8FppJhlCW8grwoNa/tDf9iKg9wPbkqyCWUcZev8jkB
+         V/4d0SjjIqRcANbn9/J4IEME3SmBUGDkKg15k8q1glTju975Vm8dp2PPXNpZ9wwDW5X0
+         sR4BeJC/yJZdju5fYBSgcZIEBIY2xnORDxGF5V6vPoLDor+V6yMtlLmPUBDBCCALJ0pB
+         be4FmNv04nWgniPTd+2Nj3JFmdgHEIHowL+PpUH7FIUQYspIL/LaZAnYilRTpFJ1Mfom
+         ozGA==
+X-Forwarded-Encrypted: i=1; AL+hErG0dLGW5mTB1A/V3MaQavBrkg0vFpIIRLYeozsYn2I1/6ohYziKTH8Ry7P7gGof5ysZTEY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+5sfGrEIlF2EaZRnM5kpgAnIwTebyd+8NgcRTPmwwkkxB90tP/
+	/GYkaetxKKp0vJcnJA2imezrLvlmBZX8fuZj48m+gmh3SZc4jcwA8qaa
+X-Gm-Gg: AYBFou3sCpFKYKVqy7WPqScFkHBLwxMjtUSfqBlYjlNWudwamtWvX875q9xYS4oqxmi
+	nFM/pGuamOVjT7OBlN3z4vvKt9qbyke1Vx3AW4miEpBGyjQ6joQHjLE5IsQyIuupLYs8nc9J+hD
+	aYl0deWHsjkiJf+0pADsJVpWox2aovqPKjigX/GAcev+qUKTGYh3c1biwCEnWc2oFu9slyXxuWe
+	EnqEiRWgISfaMffNk4BuayQcitXZikEqtX7/Th1+TSN/FhnWVfvv5p5JOBqLP7Eq5stc3Ov1As+
+	4ZcF3lQSxrTPhZiRzdeTtPz+LDxhiPM0LRqk9x4BDG5Ksq0FMgZ/HzAxpWyoEJLfGTfCEndfZAZ
+	2PSQsTM7p/2R3B/2heGIPQMtKemy8Xa+kqLPZOg9BI/4eIEHppX3GOykDuUn5lzck2bM60VPLJF
+	QHDABTQikRB93tYPkFjTBX6g+sjr6HNPe3WSIccWoqAfw2dAo1ozkKEbCFgrUWL/aas+RFIzZdU
+	HH6m0kHxlmbsNH1IucHGwG/z+wJh3BcSHZDlulgf8zNyqVvBtVGLhkGJXSUJE31Q5B/unhrNAmD
+	TFlPGWCRw3sXD2YePi3nNCbPmqMwRjOLBIhxVf+an+sFI0Se4DCsH2HW+AiD
+X-Received: by 2002:a05:6000:29c9:b0:490:f98f:addc with SMTP id ffacd0b85a97d-4982ecf6719mr3325608f8f.27.1794320352301;
+        Tue, 10 Nov 2026 06:19:12 -0800 (PST)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4983284c9a6sm5139928f8f.2.2026.11.10.06.19.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2026 06:19:11 -0800 (PST)
+Date: Tue, 10 Nov 2026 14:30:41 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, almagui@kernel.org,
+	john.fastabend@gmail.com, qmo@kernel.org, brauner@kernel.org,
+	kpsingh@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, sashal@kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	martin.lau@kernel.org, mason@kernel.org
+Subject: Re: [PATCH v2 bpf-next 13/18] bpf: Check the return values of
+ fmod_ret programs on found targets
+Message-ID: <avMqkcLz6kf-XXtE@mail.gmail.com>
+References: <20261109170550.141443-14-a.s.protopopov@gmail.com>
+ <1760ad16d930af8fe5c9bdcc74de2ecb3307c2ae57db0bdcead7505d5d9ff630@mail.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,274 +103,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 03/15] xdp: add kfuncs to store RX hash and VLAN
- tag
-To: Tianyi Gao <tianyi@cloudflare.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Jakub Kicinski <kuba@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>,
- Vladimir Vdovin <deliran@verdict.gg>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Donald Hunter
- <donald.hunter@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Magnus Karlsson <magnus.karlsson@intel.com>,
- Tushar Vyavahare <tushar.vyavahare@intel.com>,
- Jason Xing <kerneljasonxing@gmail.com>,
- Nikolay Aleksandrov <razor@blackwall.org>,
- Madalin Bucur <madalin.bucur@nxp.com>, Ioana Ciornei
- <ioana.ciornei@nxp.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
- Randy Dunlap <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Chris J Arges <carges@cloudflare.com>, Jakub Sitnicki
- <jakub@cloudflare.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- llvm@lists.linux.dev, kernel-team@cloudflare.com
-References: <cover.1794281983.git.tianyi@cloudflare.com>
- <f865ab08e7e0343bcd6eb380f7003ddd32d177e2.1794281983.git.tianyi@cloudflare.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <f865ab08e7e0343bcd6eb380f7003ddd32d177e2.1794281983.git.tianyi@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1760ad16d930af8fe5c9bdcc74de2ecb3307c2ae57db0bdcead7505d5d9ff630@mail.kernel.org>
 
+On 26/11/09 05:42PM, bot+bpf-ci@kernel.org wrote:
+> > bpf: Check the return values of fmod_ret programs on found targets
+> 
+> TL;DR: The fmod_ret return check may wrongly reject valid programs: when
+> states returning two allowed constants merge at a shared exit, R0 becomes a
+> range, not a constant, and the load fails.
+> 
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> 
+> [ ... ]
+> 
+> > +/* The program must return a constant: 0 or one of the values of the tag */
+> > +static int check_fmodret_retval(struct bpf_verifier_env *env, int regno,
+> > +				const char *exit_ctx, const char *reg_name)
+> > +{
+> > +	const struct bpf_prog_aux *aux = env->prog->aux;
+> > +	struct bpf_reg_state *reg = reg_state(env, regno);
+> > +	u32 i;
+> > +
+> > +	if (reg->type == SCALAR_VALUE && tnum_is_const(reg->var_off) &&
+> > +	    fmodret_retval_allowed(aux, reg->var_off.value))
+> > +		return 0;
+> 
+> Can this reject valid programs when two allowed constants are joined at a
+> shared exit?
+> 
+> The main pass is the fixpoint in kernel/bpf/flow.c, and flow_merge() joins
+> states that reach the same basic-block head.  For SCALAR_VALUE, join_reg()
+> -> join_range() produces the union range.  flow_join_makes_up() only
+> refuses the join when flow_gap() finds values in the union that neither
+> state has, and only while flow_has_room().  The FLOW_NEED_ARG table has no
+> entry for R0 at BPF_EXIT, so flow_needed_consts_differ() does not keep the
+> constants apart.
 
+Yes. This flow.c code was merged after my code was written.
+(I will fix my code by allowing not only constants.)
 
-On 11/10/26 04:57, Tianyi Gao wrote:
-> Add bpf_xdp_skb_ext_store_rx_hash() and bpf_xdp_skb_ext_store_rx_vlan().
-> They store the RX hash and the VLAN tag in the skb core extension area.
-> A later patch sets the stored values on the skb built from the
-> xdp_frame.
+> For a target tagged "bpf_fmodret_retval:-12,-11":
 > 
-> Both kfuncs call xdp_skb_ext_add(), which reserves the entry for an id.
-> On the first store for a packet, it clears the header and sets
-> XDP_FLAGS_HAS_SKB_EXT, so stale headroom is never read as a header. A
-> second store of the same id, also after a delete, reuses its offset.
+>   r2 = *(u64 *)(r1 + 0)
+>   r0 = -11
+>   if r2 == 0 goto +1
+>   r0 = -12
+>   exit
 > 
-> xdp_skb_ext_add() returns -EOPNOTSUPP for AF_XDP zero-copy buffers. User
-> space can write their headroom while the program runs, and could change
-> the header between two stores.
+> The states at exit (R0=-11 and R0=-12) are disjoint but leave no gap, so
+> they become R0=[-12,-11] and tnum_is_const() fails.  The load then fails
+> with:
 > 
-> The store kfuncs are in their own kfunc set. They do not need a
-> device-bound program, so programs on cpumap and veth can call them.
+>   At program exit the register R0 must be a constant, it should be 0 or
+>   one of -12,-11
 > 
-> bpf_xdp_skb_ext_store_rx_vlan() accepts only ETH_P_8021Q and
-> ETH_P_8021AD, because vlan_proto_idx() warns on any other TPID.
+> even though every path returns an allowed value.
 > 
-> A BUILD_BUG_ON() in xdp_skb_ext_struct_check() limits the area to 64
-> bytes. As in skb_extensions_init(), the function is noinline
-> __no_profile so that it builds with CONFIG_GCOV_PROFILE_ALL.
+> The same can happen with the common pattern "r0 = 0 ... r0 = -1; exit" when
+> the tag contains -1, since the 64-bit constants 0 and 0xffffffffffffffff
+> touch on the circle and are joined.  Once a program uses half of the state
+> limits, flow_has_room() is false and even gapped values such as -34 and -22
+> are joined.
 > 
-> The two kfuncs are based on bpf_xdp_store_rx_hash() and
-> bpf_xdp_store_rx_vlan() by Lorenzo Bianconi in Jesper's XDP_REDIRECT RX
-> hints series V2 [1].
+> The selftest join_both_paths avoids this only by using two separate exit
+> instructions, and whether exits are merged is the compiler's choice.
 > 
-> Link: https://lore.kernel.org/all/175146831297.1421237.17665319427079757435.stgit@firesoul/ [1]
-> Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
+> Every other exit check so far was a range check via retval_range_within(),
+> but this one needs set membership.  Should R0 at the main-prog exit (and R1
+> at bpf_throw without a callback) be added to the FLOW_NEED_ARG table for
+> programs with fmodret_retvals, or should a small bounded range be accepted
+> when every value in it is 0 or in the list?
+> 
+> The feature becomes reachable once 1c163e52401e ("resolve_btfids: Tag
+> fmod_ret candidates as targets") emits the tags, and no later commit in the
+> series changes this.
+> 
+> 
 > ---
->   net/core/xdp.c | 154 ++++++++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 151 insertions(+), 3 deletions(-)
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 > 
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 1d679e8fd649..97dc0e403a78 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -990,11 +990,159 @@ bool bpf_dev_bound_kfunc_id(u32 btf_id)
->   	return btf_id_set8_contains(&xdp_metadata_kfunc_ids, btf_id);
->   }
->   
-> -static int __init xdp_metadata_init(void)
-> +#define XDP_SKB_EXT_CHUNKSIZEOF(x) DIV_ROUND_UP(sizeof(x), XDP_SKB_EXT_ALIGN)
-> +#define XDP_SKB_EXT_ENTRY_ACTIVE BIT(7)
-> +
-> +struct xdp_skb_ext_hash {
-> +	u32 val;
-> +	u32 type; /* enum xdp_rss_hash_type */
-> +};
-> +
-> +struct xdp_skb_ext_vlan {
-> +	__be16 proto;
-> +	u16 tci;
-> +};
-> +
-> +static const u8 xdp_skb_ext_type_len[] = {
-> +	[XDP_SKB_EXT_HASH] = XDP_SKB_EXT_CHUNKSIZEOF(struct xdp_skb_ext_hash),
-> +	[XDP_SKB_EXT_VLAN] = XDP_SKB_EXT_CHUNKSIZEOF(struct xdp_skb_ext_vlan),
-> +};
-> +
-> +/* Limit the header and all entries to 64 bytes, so that a new entry
-> + * cannot grow the area without notice.
-> + */
-> +static noinline void __init __no_profile xdp_skb_ext_struct_check(void)
-> +{
-> +	unsigned int chunks = XDP_SKB_EXT_CHUNKSIZEOF(struct xdp_skb_ext);
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(xdp_skb_ext_type_len); i++)
-> +		chunks += xdp_skb_ext_type_len[i];
-> +
-> +	BUILD_BUG_ON(chunks * XDP_SKB_EXT_ALIGN > 64);
-> +}
-> +
-> +static void *xdp_skb_ext_add(struct xdp_buff *xdp, enum xdp_skb_ext_id id)
-> +{
-> +	struct xdp_skb_ext *ext = xdp_skb_ext(xdp->data_hard_start);
-> +	bool valid = xdp_buff_has_skb_ext(xdp);
-> +	unsigned int newlen, newoff;
-> +	void *start;
-> +
-> +	/* User space can write the headroom of AF_XDP zero-copy buffers */
-> +	if (xdp->rxq->mem.type == MEM_TYPE_XSK_BUFF_POOL)
-> +		return ERR_PTR(-EOPNOTSUPP);
-> +
-> +	if (!valid) {
-> +		newoff = XDP_SKB_EXT_CHUNKSIZEOF(*ext);
-> +		newlen = newoff + xdp_skb_ext_type_len[id];
-> +	} else if (ext->offset[id]) {
-> +		newoff = ext->offset[id] & ~XDP_SKB_EXT_ENTRY_ACTIVE;
-
-
-Given the recent run of security bugs caused by manipulated offsets, I
-would like to limit how far a bad offset can reach here. The offset is
-read back from the packet headroom and is trusted only because
-XDP_FLAGS_HAS_SKB_EXT is set; nothing checks it against ext->chunks or
-the buffer. With the 7-bit mask it can point up to 508 bytes past the
-ext header, beyond the default headroom and into packet data, and in
-this branch the caller then writes the entry (up to 8 bytes) there. I
-have not found a way to get a bad header with this series, but the
-invariant depends on every driver leaving this area alone while the
-flag is set.
-
-The BUILD_BUG_ON() in xdp_skb_ext_struct_check() limits the header plus
-all entries to 64 bytes, which is 16 chunks, so a 4-bit mask covers
-every valid offset. A bad offset then starts at most 60 bytes after the
-ext header. It is the same AND with another constant, so it costs
-nothing in the fast path. The same mask should be used in
-xdp_skb_ext_get() in patch 7.
-
---Jesper
-
-> +		newlen = ext->chunks;
-> +	} else {
-> +		newoff = ext->chunks;
-> +		newlen = newoff + xdp_skb_ext_type_len[id];
-> +	}
-> +
-> +	start = xdp_data_meta_unsupported(xdp) ? xdp->data : xdp->data_meta;
-> +	if ((void *)ext + newlen * XDP_SKB_EXT_ALIGN > start)
-> +		return ERR_PTR(-ENOSPC);
-> +
-> +	if (!valid) {
-> +		memset(ext->offset, 0, sizeof(ext->offset));
-> +		xdp->flags |= XDP_FLAGS_HAS_SKB_EXT;
-> +	}
-> +	ext->offset[id] = newoff | XDP_SKB_EXT_ENTRY_ACTIVE;
-> +	ext->chunks = newlen;
-> +
-> +	return (void *)ext + newoff * XDP_SKB_EXT_ALIGN;
-> +}
-> +
-> +__bpf_kfunc_start_defs();
-> +
-> +/**
-> + * bpf_xdp_skb_ext_store_rx_hash - Store the RX hash of this packet.
-> + * @ctx: XDP context pointer.
-> + * @hash: RX hash value.
-> + * @rss_type: RSS hash type, see &enum xdp_rss_hash_type.
-> + *
-> + * Return:
-> + * * Returns 0 on success or ``-errno`` on error.
-> + * * ``-ENOSPC`` : not enough headroom for the entry
-> + * * ``-EOPNOTSUPP`` : AF_XDP zero-copy buffer
-> + */
-> +__bpf_kfunc int bpf_xdp_skb_ext_store_rx_hash(struct xdp_md *ctx, u32 hash,
-> +					      enum xdp_rss_hash_type rss_type)
->   {
-> -	return register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &xdp_metadata_kfunc_set);
-> +	struct xdp_buff *xdp = (struct xdp_buff *)ctx;
-> +	struct xdp_skb_ext_hash *entry;
-> +
-> +	entry = xdp_skb_ext_add(xdp, XDP_SKB_EXT_HASH);
-> +	if (IS_ERR(entry))
-> +		return PTR_ERR(entry);
-> +
-> +	entry->val = hash;
-> +	entry->type = rss_type;
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * bpf_xdp_skb_ext_store_rx_vlan - Store the VLAN tag of this packet.
-> + * @ctx: XDP context pointer.
-> + * @vlan_proto: VLAN tag protocol identifier (TPID), in network byte order.
-> + * @vlan_tci: VLAN TCI, in host byte order.
-> + *
-> + * Return:
-> + * * Returns 0 on success or ``-errno`` on error.
-> + * * ``-EINVAL`` : @vlan_proto is not 802.1Q or 802.1AD
-> + * * ``-ENOSPC`` : not enough headroom for the entry
-> + * * ``-EOPNOTSUPP`` : AF_XDP zero-copy buffer
-> + */
-> +__bpf_kfunc int bpf_xdp_skb_ext_store_rx_vlan(struct xdp_md *ctx,
-> +					      __be16 vlan_proto, u16 vlan_tci)
-> +{
-> +	struct xdp_buff *xdp = (struct xdp_buff *)ctx;
-> +	struct xdp_skb_ext_vlan *entry;
-> +
-> +	if (vlan_proto != htons(ETH_P_8021Q) &&
-> +	    vlan_proto != htons(ETH_P_8021AD))
-> +		return -EINVAL;
-> +
-> +	entry = xdp_skb_ext_add(xdp, XDP_SKB_EXT_VLAN);
-> +	if (IS_ERR(entry))
-> +		return PTR_ERR(entry);
-> +
-> +	entry->proto = vlan_proto;
-> +	entry->tci = vlan_tci;
-> +
-> +	return 0;
-> +}
-> +
-> +__bpf_kfunc_end_defs();
-> +
-> +BTF_KFUNCS_START(xdp_skb_ext_kfunc_ids)
-> +BTF_ID_FLAGS(func, bpf_xdp_skb_ext_store_rx_hash)
-> +BTF_ID_FLAGS(func, bpf_xdp_skb_ext_store_rx_vlan)
-> +BTF_KFUNCS_END(xdp_skb_ext_kfunc_ids)
-> +
-> +static const struct btf_kfunc_id_set xdp_skb_ext_kfunc_set = {
-> +	.owner = THIS_MODULE,
-> +	.set   = &xdp_skb_ext_kfunc_ids,
-> +};
-> +
-> +static int __init xdp_kfunc_init(void)
-> +{
-> +	int ret;
-> +
-> +	xdp_skb_ext_struct_check();
-> +
-> +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP,
-> +					&xdp_skb_ext_kfunc_set);
-> +	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP,
-> +						&xdp_metadata_kfunc_set);
->   }
-> -late_initcall(xdp_metadata_init);
-> +late_initcall(xdp_kfunc_init);
->   
->   void xdp_set_features_flag_locked(struct net_device *dev, xdp_features_t val)
->   {
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/42662799554
 
