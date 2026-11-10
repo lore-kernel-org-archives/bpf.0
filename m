@@ -1,54 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794274156;
-	b=UziY3EFTBYM+O2wNqXXp0RNwxvLeHduOL45DnQP6VGmXnQHhFNMc+rZuY1EL1/+s5kXM
-	 ziHHbdE0mMKBWNI8yBPv/RXC0I7Fa1YIiu9gImU/0cOBYKD31aGNTUgLy66yCaAAsppeE
-	 IyxW5L3OiRzUPrcIfX8M1KYy/g1V/XqzkCspOENlXbaB8vgm/0lrXYZ8zs7G2ouUjm32X
-	 fyUrrkt+qBVai3RQbPZonFoaCrK0WybN4bo61kdnkEznu5aYCsL9R6viWZ0/mgQWhTMaH
-	 6BehMviLVT2R+ARjULXInChrAjvtkk8EjNt7wMRmpNe/pY62I0GPsk/L6FUe9t+A0dw==
+	t=1794274495;
+	b=4T79MAtgr+Wt0PS209FXixcP14R4rPEKqVDHTOm31dKwIFiHv48414wcDvhhpg3Lk987
+	 XKxGuuzkRZ5ZLgNtuutQyxkBz4X3cSo631Y4H5axnWVQxgum165GuLPeHWD0mvH7x8c+O
+	 qWp9BxFZOqxcd/9MB3COAWT+1IZIi7GUS7VhHnDkc0qUtXMX2u/Z2zmBCBuloNfhlQ6kQ
+	 tIjUqjBsCbmDZTrhwWBFA4GTgB8OSy6fGyMwTmLsm6sglV33Fhi33xQmBuGz/oBr7XmFd
+	 RePS2c0rrcnH/hxl9KXykWDSsPMyiI2pP1yCNzztWGWOwHC8CtoGNeUt48QqdJ2HQVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794274156;
-	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
-	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
-	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=aVUk5KNfoVM/ifJWEbEfsYize+Uhc5V1gasZQZSUIGY=;
-	b=QvFlxPoJhuEV8qe/bUeFzuMSRAdzwkTTzM2JomgJUfrFzYFqluf00AfrUo20DUsvxI3X
-	 HqL42ooaPCNRQWY9dtOeIL/g81Nyq837LWS7oJ+lMo0CZZJoKSm30jlHvkgTfeEpkMQ+p
-	 KSn7fBbGn4L1ZgQS6+oukbbYjNdlYEn+dFl2+4hcb+A1kLQttvORBw7UiKzcxc2ih6kJO
-	 /zD78somK1CVjxz1UMXXzN0uqmBkiMvNL9ZLYA/vRyZCxz737dz+Yo8w17qY+S5kmCyEK
-	 6bJ4xpOFw+cWG1/5t1CmYjv/R1tIJkwhqyiHe5t/EglESH2EJFArlN4pfry2b4VmF9A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794274495;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=LwQHPSBJ1ViplmiXM5k8hFlaCvbdPMvwMCBJY2BT8p8=;
+	b=RLXDQJIJoK2kftwS+yMzW2q2L1h/PswQifrECNTF9rVHASE3GQCug9+D5Zgt4D/j4jcU
+	 dFW+bTOZQWQNCn/HG733skjYjc5tUELk4i7e4nxgnn2SsrdIo/31/FFt5IaWQTtGimpzG
+	 jMxyGaZZhRvRkFMJBGqtpwJkRXnXKkMfaWYCVAiFyHGs9Q7dEPXE+mEcMxDz4ZQos3zJh
+	 PJpdZxtORCA+ly5USe3u99VTMmevpsYEqWXnWUMisNcSUU/Q/ebMz7VCWaWQpPsG/ECCV
+	 ppcgplyM/8ngLdFDAy4wE9jj06ov7z8YxqD8Wl3su8i76nCbXMZlS2WZrWZ5XFNNqrQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69431606A321;
-	Tue, 10 Nov 2026 01:29:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69431606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8DxUNFic_JqZQQeAA--.21498S3;
-	Tue, 10 Nov 2026 09:29:06 +0800 (CST)
-Received: from [127.0.0.1] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJDxTs9gc_Jq7l0zAA--.39359S2;
-	Tue, 10 Nov 2026 09:29:05 +0800 (CST)
-Subject: Re: [PATCH v2] mm/slub: Genericize x86-specific cmpxchg16b comment
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Vlastimil Babka <vbabka@kernel.org>, Harry Yoo <harry@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>
-Cc: linux-mm@kvack.org, loongarch@lists.linux.dev, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261109035906.10857-1-yangtiezhu@loongson.cn>
- <DMQW32TTNOPX.24GN6Q7VI6QJR@gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <145c23ea-bc4d-b235-c822-df94b00a647a@loongson.cn>
-Date: Tue, 10 Nov 2026 09:29:04 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=diUeNT4q;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F572606A31C
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 01:34:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=diUeNT4q
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3431F0089F;
+	Tue, 10 Nov 2026 01:34:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794274494;
+	bh=LwQHPSBJ1ViplmiXM5k8hFlaCvbdPMvwMCBJY2BT8p8=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=diUeNT4qZnT63mW3Q/c/2XaDmYbWoYkAegu6G2DAZ8MpIXlRlzxvM4WTASNlMIVzt
+	 WmZx36XR3jrvZEQAWchROnruS2c8Z8vZA0rtwDwNfXH3Ki/4a/ze7zIBj2L+aeMJJa
+	 aox+lVvt0GY2JTKoNzv03hZ1XFrFf0qeD2zqPD1Ex9/FOLcBd5X05mfYN9WyvfsxPO
+	 B3n91XY/7vFnk/5Z0nVd7Rw8Da022W6bOWlWLkrT6iWC9oK28+TcfOqNlO2RWpFVd+
+	 twcd3ENIEwEjvCoMlMS84CyKIzDwIzb0tCrIG1ouipZchnBJgkPTtcrJTrS0WDikBT
+	 MFMHumfTkgczg==
+Message-ID: <sashiko-outbox-205971@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v5 6/9] selftests/bpf: libarena: Handle NMI
+ reentrancy
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>, bpf@vger.kernel.org
+In-Reply-To: <20261110003838.8739-7-emil@etsalapatis.com>
+References: <20261110003838.8739-1-emil@etsalapatis.com>
+ <20261110003838.8739-7-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 10 Nov 2026 01:34:54 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,52 +59,97 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-In-Reply-To: <DMQW32TTNOPX.24GN6Q7VI6QJR@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:qMiowJDxTs9gc_Jq7l0zAA--.39359S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj9xXoWruryxJF1kWr43AFykXF43urX_yoWfGFb_Cw
-	n8GF1vkw18XFnayF10kF12vryUuws2qrs7ZrZ8JFyYy34kt3s5CFs5Cr4fGr15XFsayrs3
-	Kw4DXF9xZFZxCosvyTuYvTs0mTUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbDkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-	JVW8Jr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
-	McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
-	I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF
-	x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r
-	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
-	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-	0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
 
-On 11/10/26 2:25 AM, Alexei Starovoitov wrote:
-> On Sun, Nov 08, 2026 at 07:59 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->> atomic primitive is satisfied by different hardware implementations:
->> (1) arm64: satisfies it via LSE atomics ('casp' instruction)
-> [...]
->> Update the comment to "double-width atomic cmpxchg", which provides the
->> following advantages:
->> (1) Accurately describes the cross-platform hardware invariant.
-> 
-> You ignored Hao's point about shorter commit logs.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] selftests/bpf: inconsistent error return in
+  buddy_deferred_free_start_bulk()
+--
 
-If the following shorter commit message is preferred:
+commit 6751ae768506dfa7101c71c63c2aa51a0d3eb6cc
+Author: Emil Tsalapatis <emil@etsalapatis.com>
 
-   mm/slub: Genericize x86-specific cmpxchg16b comment
+selftests/bpf: libarena: Handle NMI reentrancy
 
-   In __kmalloc_nolock_noprof(), update the comment from x86-specific
-   "cmpxchg16b" to generic "double-width atomic cmpxchg".
+This commit handles NMI reentrancy in the libarena buddy allocator by using
+a trylock in NMI context and deferring frees onto an intrusive lockless list
+when the buddy lock cannot be acquired.
 
-I will wait for a while for more feedback from mm maintainers and send
-v3 if necessary.
+> diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools=
+/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> index 58e666210fdbd..7fd74f4c50526 100644
+> --- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
 
-Thanks,
-Tiezhu
+[ ... ]
 
+> @@ -1187,6 +1201,98 @@ static __always_inline int buddy_free_unlocked(str=
+uct buddy __arena *buddy, u64
+>  	return 0;
+>  }
+> =20
+> +static bool buddy_deferred_free_pending(struct buddy __arena *buddy)
+> +{
+> +	return buddy->deferred_free !=3D NULL;
+> +}
+
+[ ... ]
+
+> +static int buddy_deferred_free_start_bulk(struct buddy __arena *buddy,
+> +		 void __arena * __arena *addrs, size_t naddrs)
+> +{
+> +	void __arena *first, *last, *addr;
+> +	unsigned int i;
+> +	int ret =3D 0, order;
+> +
+> +	/*
+> +	 * Chain the allocations into a local linked list. Possible because
+> +	 * allocations are 16 bytes minimum and so fit a pointer.
+> +	 */
+> +	first =3D NULL;
+> +	last =3D NULL;
+> +	for (i =3D zero; i < naddrs && can_loop; i++) {
+> +		addr =3D addrs[i];
+> +		if (!addr)
+> +			continue;
+> +
+> +		order =3D buddy_cache_get_order(addr);
+> +		if (order >=3D BUDDY_CHUNK_NUM_ORDERS) {
+> +			ret =3D -EINVAL;
+> +			continue;
+> +		}
+> +
+> +		asan_poison(addr, BUDDY_POISONED, BUDDY_MIN_ALLOC_BYTES << order);
+> +		asan_unpoison(addr, sizeof(void *));
+> +
+> +		if (!first)
+> +			first =3D addr;
+> +		else
+> +			*(void __arena * __arena *)last =3D addr;
+> +
+> +		last =3D addr;
+> +	}
+> +
+> +	if (!first)
+> +		return ret;
+> +
+> +	/* Splice the local list onto the deferred-free list. */
+> +	buddy_deferred_free_push(buddy, first, last);
+> +	return 0;
+> +}
+
+[Severity: Low]
+Is the return value of buddy_deferred_free_start_bulk() intended when an
+address in addrs[] has an invalid order?
+
+When a batch contains both an invalid address and at least one valid
+address, the final "return 0" discards the "ret =3D -EINVAL" recorded in the
+loop.  Conversely, when every non-NULL address in the batch is invalid,
+"!first" is true and this returns -EINVAL, whereas the locked path in
+buddy_free_bulk() returns 0 and leaves invalid-object reporting to
+buddy_free_unlocked() (which is also skipped for addresses filtered out
+here).
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110003838.8739=
+-1-emil@etsalapatis.com?part=3D6
