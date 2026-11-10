@@ -1,83 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.132
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.134
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794270478;
-	b=KsToInlnCD71Ti0LIFJQg5feD7h8ix+F6n23dzHLxNLTcJKfNqJ14zBfhZqEmcuha3OJ
-	 8LXtBFQIsoODlU9TsJF26JOydQ9eMc+pZN+Ihkram8nUc0UtRrK7dVIrMSK5Tp8OmyS38
-	 YawYEF9rASGvx4esokYhiKjciUbJRkMvpHRDU23DNeNV82wenVdjymNM0aHJIz7nYb9ff
-	 GC/5rhY3/fk/b7WbrR4pY7wld9E4I1zrEOPRYi1jZnStSDELy0XdhyB4ESKyITI3npG6G
-	 mRbEi3YXlq+KGxJKF3iT5Vs6ghDv4CQeJENYuMDIBLTTpNHcNFGLceb7T8jIz/Rhwhg==
+	t=1794270479;
+	b=pOHjQle7Yg3fTrA65mWFZrUJvecEeuW39dQ3k5LdDym8fy4WxzuAlo6/LdSyE5mdilOH
+	 I0k7Cmp7Lgw2Jn2QeIbmOb6+bdm3JVC1NtYcbmVW0m60qW1KiU4ba4+6EL/NfLfU+W9HD
+	 91296wfCDVMfjCieCEmNRsu1nf9XL9OnNSajNTMmRs4cYbfygHLXTCuM7fsZjmcgY9QSK
+	 QQLwWgMvC0CpdcKGTbHAQqOk4Sq8DBhiaVh3HlWh+mOa8s92OIbUqPCTmW8b5tBm0LlGx
+	 ISq3WKVYXa65lkQIfOvrJWpfxpf8TRuho9A4bA3PSQ9ncVQ35mzZyfAkz4gCPd7IeOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794270478;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794270479;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=wjFYq8Z2SLVpBfxAH/TUtSiilAAHjbV9+NKwd4o6ZK8=;
-	b=JKDfy/ypc7cVTk1JlSkEhbKjujrFq2RRJ1HdZ7S3kMGYaA2zx1zhZiy7SkwB6RgnP6ng
-	 ftCw4mNKYHOQ6aykJzH0QkkLVtpJfaO/7bRU//5iWurJnbqWUgGvBAQgBDw3Qi0gAWdGc
-	 hL3Yda8aEeCguEKtha7RqU6r0NUo43iWYg7/OGUMN+bnWAB/MddaKWwUdO5wvqPRQICa/
-	 C18hJWZOLe7EHYIAuSqxBtlwejGUBsMhdShzC2Pv8NGEv7l7FW9AqP90c1a/AT9dMOZ9p
-	 gYwlZmivxG0zcKqVKjhxCcZ4pyp4rjAEtwncs5NVsQVHE4ZKxeUL7TTKPtk2unyyxcQ==
+	bh=Tqj1ZHEZ0nukWtFYWQ5e3TlVo1zAZhEe+jgePKDmKHU=;
+	b=M7AjnPvt2PSWzPfyRY5+u3PoWSa0Apq1kfyunix70B39h9d0f9qVKEVZaUulBPum/tsp
+	 n+9Uc3b+LkNgNd25Nc2hJxESvmKbikLTGE36fJDFuAb1a4C44V2Hp2XBfVHfP737BwIHc
+	 /EWXXAyt7cgFdKz5PXAujwHE5R/w0O78ySSZAwCmcJZEyCwYUSkpgzUESDym8vdpbgcQ9
+	 DXD3ECfFRnqg4BpWyb5SYOPrVpOiYCqQhvWQlYy8IUv0sCGhqIRs9duVqzLemwuTfFkJ2
+	 Rw/1TwMgJvscZShpzg8+U+J9QlEXVVp6Pa9u1WR1IAcyc/VQtuOjtfMesd37LU5DEgQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=m2xWgeeJ;
-	arc=none smtp.remote-ip=74.125.225.132
-Received: from mail-wm2-f4.google.com (mail-wm2-f4.google.com [74.125.225.132])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kywELuE1;
+	arc=none smtp.remote-ip=74.125.225.134
+Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C942F606A32A
-	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 00:27:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C942F606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC47606A31C
+	for <bpf@vger.kernel.org>; Tue, 10 Nov 2026 00:27:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5BC47606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=m2xWgeeJ
-Received: by mail-wm2-f4.google.com with SMTP id 5b1f17b1804b1-4a1efc90eb9so1269005e9.0
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 16:27:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kywELuE1
+Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-4a1d25d7d5dso5751765e9.1
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2026 16:27:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794270476; x=1794875276; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1794270478; x=1794875278; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=wjFYq8Z2SLVpBfxAH/TUtSiilAAHjbV9+NKwd4o6ZK8=;
-        b=m2xWgeeJ3FqizonadziCWHJWQSXt3c8e7gs3B6uOMeVqNhXSnuD3yNcBmthN5RWNan
-         LR0Lu1eFKPPEg6FMjAdY56jICwKQTKdQOj9lzC0m+TvEFPVLASyUduOMlzN4WdiAng4Q
-         0a979zNCRP+eMmtqW8+Hfyvty6xiMHOSR4aJzSdHQQVtgNkpv9HRjTEDd7WX306++O1S
-         IF5F6IqjTGxBKqAZvlQh8ccTR8FuwTRYIhMJt2KvQ8xfyuzoaMS3fOrzxUTtO1cqIj4V
-         +5Ben03N0j+pq9uXoLNnzhnmNrlCampfkCOmUjHyT6pFy9HuKB9D3S07CDFKIBHxSHjU
-         I/UQ==
+        bh=Tqj1ZHEZ0nukWtFYWQ5e3TlVo1zAZhEe+jgePKDmKHU=;
+        b=kywELuE1VosZryS+WG5uf1nGg/mi7vuNOZc2tnKtK3vqkCc/JQ8rx3kRG5+4wQ8ZUV
+         it7c8cHNT3infg7IymWvVR6MSy4H8b03BPqd01+bjY9w/JvfPXUch718X3vWpzom03uV
+         xH37ONkn2juhCcIaF3rFw8peCvX8CZKQoIUvb6585SBmew8J3bcoWvt4FCBPtr7t7Y2M
+         uRwNJsUm4yXioX48we8CArtzX0ujaGbcSzrkYzilt6Fzm3BBIroBZbcPUIOXReTs99RS
+         obWoFDhcUEEKZJCkK7zn98b/gH/yWA1j4XWX5Aj4E4V4PqOB0F4zvdGXOWOal4vI4nPE
+         li7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794270476; x=1794875276;
+        d=1e100.net; s=20260707; t=1794270478; x=1794875278;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=wjFYq8Z2SLVpBfxAH/TUtSiilAAHjbV9+NKwd4o6ZK8=;
-        b=Dgcu6NB4a9I6adULonMVtrzsSw8gjOSU70zb42swmx9l3s4EufkiK9RxWvOxUONKJn
-         /9St0wclDQaAPUqX02RVCYvZyGek2EHa+6fLSGFjLha/jyjR+mNNnXb5lWdgMFoHNwy4
-         F6+sSmLKfmetBgTnu5tLFHebJ6CcVN8UsBm+Dal+Mgn61Yydmi+5oGdo5zbgXMMoYvZk
-         bURDVq4BSJG71WWiAeO2xaPEgB6/+b3bOORBw4vCKWdpVWvsuVqhH1pb6/gD9GXut1RH
-         x4kzMP9ZKAwUtQsT09/xj2H8IGkhiOQI80zxwplYi6qtIMaZCXJp4sVarTNqQH+pqVzM
-         wYeA==
-X-Gm-Message-State: APuU4Z9lDkW5M3GoC87A/vr9Re5QzEEWElihlCn/HCloF4ualUce14l/
-	KwmlzUxgkmkrrPFNlo4n4ugJhJldqZ5sIrly9TDT79awax1d8Dk9oWdBXEQSOPb9
-X-Gm-Gg: AYBFou0XANTX/D12KUEV0x6euq2ylxKeRHbsCSopy+DoXlJFZ3fn7n7ykFpX5+ET9AV
-	xhOVGTyYGwCG3QzDsZJbSyfGmOHlkF6o9gnPbEqmuZM8BBrKKnoul+8pzZfOYBcYSv7BqxdtqOG
-	ZBCN+zb316BrxHVg8dARD/NOdJKzCbFml8rv0FdylQurn1YwNsIM37NNeMayrG+6mKAmn7KgGYi
-	NR47EHFNAUTIzQBefRqCEn1xstegGMt2EkgNG6oeavVjPHcV4yZoQp+9E2lJI//uPe5sWhovMLS
-	ieMgYsQh+KyB6/ElPHQF7jNlEMOQ+iWtRsk5dmQmxf9JYQvZ/SaEaNM2rAyh472hQWEYiHRTqTM
-	6S542cDryhHrMftb8I6QHwWRKr/2KEvhEPsi24ho3dHjJItdRpsNy06ve7ILGNtS5NVN3VjCCXw
-	KRIKL07WSAxOXpMY/NP+QKflVAOVN/kHm+RiezUfNDuasDXMe/F1+eTQd4z+spDQdhV4cClXNuZ
-	QMpvPomXV7591DJI/AgJ96pHx/e1V+cS5PzOSZswZ3VdNj14AU66UTS7UW/XydZHCbRs96V2KCP
-	AfMC9eUFcH02Azrejlzffn/YMBQgpGtEoPxLnwQmRELZ3BgVLFbLTdn1foyd7ja7lLb8lpRSftn
-	1sZpDG7UrYV15V3TuyUgOBsI82d53mVtD8wxI3vI6CS1W6O6rrbvmqr5WpjBqdc6SPDKF
-X-Received: by 2002:a05:600c:5249:b0:4a1:88df:8a2a with SMTP id 5b1f17b1804b1-4ba0234d88amr13678245e9.13.1794270476154;
-        Mon, 09 Nov 2026 16:27:56 -0800 (PST)
+        bh=Tqj1ZHEZ0nukWtFYWQ5e3TlVo1zAZhEe+jgePKDmKHU=;
+        b=hDsqKWWaHGVx30pX98nDZSiLf8KSIfYQOpBYbyA74ubiL6+R8gAVhghGjZjhBme2PF
+         aYoEt7EPSRUADHhcv53rFboGeQyyHHEyZs35N6W2XZfqDJWHNiR3KQAZeaSh1/GnEcRv
+         t3GsJ5B327W4+XUkF0mQXC0ZvGn6dCMDmm80NFZTDeZyO0RLwQ8uMJAs1iDBwM+EJejd
+         dCmlh441KUhLLIMgkG9g/dkQBcfYBlqW15/d9ymDr5KZuTlQQ7qDYt9ojiW6iVF/kfBE
+         wRaS6ZmZ4m7gYgwkGfTgB2dvhFSCpN1CbUmeg+WbP6V5WPpyPy2Q0FZgJQIXofRxMVt5
+         P8vw==
+X-Gm-Message-State: APuU4Z+30+t4hhx1JHJQ202DuV9tu/okOWVQRYsT6pE3n5CfHl+kzSw3
+	434OLtvNblvO4TpaVpFaiomzsqxeQCYvLGikICuxFc73hX+ySxM5d5cikFjSuZ1c
+X-Gm-Gg: AYBFou0nmOlbqB4sxG/HctZ3ck8XsRIjTXaAypiUj8Ggi09IktncAfRaHJpq1iFu+7N
+	zpDRfCWScY7/HxnyrNRu/qA8NNnAS5yEYm7KuEybhKub+NXLYrgYQE1AqDecWU8gW98ReyhwLUn
+	6nRbRwj13wB0nfpUYzx3gRADZeF9UGvKhjnoBd+b+7QKaPUfXLZCYUqBCJNOlkGteQck0UI7BXI
+	KIig4TRfEQheHTNQ6GN1+fswEyklK+tEEFtlblovTK1vUqnVSpiy0s4l7A7k5ZmaFAMivjRLMH8
+	uqGQDRNBKFtA347+CRBpKcxfy0Gbb/xIgw7IrJvrouESC/oXhYIqQXLwKd2Ulvikml39j6+nTNj
+	wCjFLMstNcOq09dOL6U8eUzJJenKRnMdWoWbzUaw0Ua0Qzt+n5bsMej7vv11LZq5ml7DKfN2+9R
+	D1+EsTex2GKJwl2fuoWuo8BvOd1xSVzrcnF6+t8iSLqUS/DVHp5XgxnaXFu08gsan5zjlV4bNzH
+	vW87f8GI95iCqFGBy5JOf1SDPLUmqkuf2Ntbuynes2k5btKCG6VBc8A3n4eK7RREP4H2uzsXfrh
+	IhWdjM9AuzaoaziDitNLN57F3Co5l505+sfmcpfMVNIR7fwfmKJbZeYPSzH/0YHOzXfe3SMUEwX
+	RIJ7xWtWcffoTXmTCBvb9LJeTKG78W0EyM/zLEaMcxM5UsXm9BbaElb5gbLyYmQH6fBDQXQgP1n
+	Tv9Q+rmG83J0Jypg==
+X-Received: by 2002:a05:600c:198f:b0:4b4:49d7:bc25 with SMTP id 5b1f17b1804b1-4ba0234a940mr12340935e9.21.1794270477648;
+        Mon, 09 Nov 2026 16:27:57 -0800 (PST)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba022ff5c3sm10068725e9.0.2026.11.09.16.27.55
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba01fef1d0sm23881055e9.13.2026.11.09.16.27.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2026 16:27:55 -0800 (PST)
+        Mon, 09 Nov 2026 16:27:57 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -90,9 +91,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Shakeel Butt <shakeel.butt@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 05/20] bpf: Verify a function that parks in the context of its caller
-Date: Tue, 10 Nov 2026 01:27:27 +0100
-Message-ID: <6ee2f1d3ec2a6c12e2e368d5612c3c301360811c.1794269506.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 06/20] bpf: Defer bpf_task_wake() to irq_work when IRQs are disabled
+Date: Tue, 10 Nov 2026 01:27:28 +0100
+Message-ID: <e405280f8db39c5e378b6c42077c8b8f1f2c6d0d.1794269506.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1794269506.git.memxor@gmail.com>
 References: <cover.1794269506.git.memxor@gmail.com>
@@ -105,158 +106,230 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7040; i=memxor@gmail.com; h=from:subject:message-id; bh=AVTvf01k1xctKe95cYGSFCNahpsQhG1+eSEqsW2eBYA=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetTokuU9I8bak77eD2m/W9693Nel+oGY43WdacX3bsRX uCUvKa9o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABP5NZeRoXdTaKFC7Nvby1S6 pnvs7bebMXsWu+SCnVvf+8Xk7jRcKMHw32dVwuLat/MvNzDtuWjMkvzcOklh1gflWR37VsaL/qj OYAMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10067; i=memxor@gmail.com; h=from:subject:message-id; bh=fqjhOAkrJawV7eZaPQPcmCL4WJ5ZrUj8bIaWqasvIxE=; b=kA0DAAoWRy03e2NUL4MByyZiAGryYUWhBJE75SLav3Lq02v1dZl5BRjNbSrEFBceGjLnwSkfD oh1BAAWCgAdFiEEdP++AjPIeftRPaYLRy03e2NUL4MFAmryYUUACgkQRy03e2NUL4MqqwD9HyMS oR5n8jnmV67jy8XMFl0iAAVkmEq5f1SUiKCSl7wBAJ9rLwdx9T4/6AGeI2Sf8yC+sNV7SSlY3lF b/epiO2sC
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-A static function is verified on its own when what it does depends on
-its arguments only: it gets a state with the function as frame 0, and
-bpf_flow_return() applies the states at its exits to every call that
-waits for it. The frames of its callers are not in that state. The
-rules of bpf_task_park() look at frames. The park is refused when a
-frame is a callback or holds a live dynptr or iterator, and it
-invalidates in every frame what the sleep may free. In a function that
-is verified on its own they see the function alone, so its caller keeps
-a hash map value across the park, and a callback gets to park by
-calling a function that does.
+bpf_task_wake() ends a park with try_to_wake_up(), which takes the
+task's pi_lock and a runqueue lock. The wake is meant for tracing
+programs as much as for the program that parked: the kernel event that
+makes a parked task worth waking is usually one a tracing program sees.
+Those programs run where try_to_wake_up() may not:
 
-Verify such a function in the context of its caller, the way a function
-that changes packet data is. func_is_on_its_own() refuses a function
-that has the might_park mark, so its frame is set up on top of the
-caller's and the park finds every frame in the state.
+ - the scheduler's own tracepoints fire with IRQs disabled, sched_waking
+   under the woken task's pi_lock and sched_switch under the runqueue
+   lock;
+ - a kprobe often runs in an interrupts-off region of the function it
+   probes;
+ - a perf event program on a hardware event runs in NMI context.
 
-The mark is not enough when the program has callx. The CFG pass gives
-the mark to the function that loads an address, not to the one that
-calls it, so a function that calls an address it got from its caller
-has no mark and is verified on its own. For that, record the park in
-the state. invalidate_regs_across_park(), which the park and the call
-of a global function that parks both run, sets parked in the state of a
-function that is verified on its own. bpf_flow_return() finds the flag
-in the state at the exit, sets the mark of the function and asks for
-the call to be verified in the context of the caller, as it does for
-changed_pkt_data. If that caller is verified on its own as well, the
-park sets the flag in its state and the same happens at its exit, one
-caller at a time.
+Queue a wake that is asked for with IRQs disabled for irq_work on the
+calling CPU, which issues it as soon as IRQs are enabled again. One test
+covers both reasons to defer: a caller with IRQs enabled holds no
+scheduler lock, since every one of them is taken with IRQs disabled, and
+NMI context has IRQs disabled on every architecture. The usual case
+keeps its direct wake and pays one read of the IRQ flag. A program that
+wakes inside a bpf_local_irq_save() section holds no scheduler lock and
+could wake directly, but the kfunc cannot tell it from a caller that
+does, so its wake is deferred as well.
 
-The flag is a part of what a state stands for: states that differ in it
-are not joined, and neither is taken for the other.
+A deferred wake returns 2. It cannot tell whether the task was asleep,
+which is what the 1 and the 0 of a direct wake say, and a waker that
+reads 0 as a task that was already running, and picks another to wake,
+would otherwise wake every one of its candidates when it runs with IRQs
+disabled. The waiter learns from its own return value whether a wake
+ended its sleep.
+
+The queue runs through a node of its own in the task, bpf_wake_node,
+under the rule the scheduler's wake queues follow for theirs:
+
+ - a task is on at most one queue;
+ - the claim is a cmpxchg() of the node's next pointer from NULL;
+ - whoever holds the claim wakes the task;
+ - a waker that finds the task claimed leaves the wake to the claimant.
+
+A wake that loses the claim is not lost. The pending word is stored
+before the claim is tried, and the xchg() that stores it is a full
+barrier between the two. A claim that fails has therefore observed the
+node before the holder's reset of it, and the holder's wake, a full
+barrier after that reset, orders the word before the woken task's loads.
+If the task is parked, the claimant's wake ends the park, which then
+consumes the word; if it is not, the word waits for its next park, as a
+wake that finds the task running always has.
+
+The task's wake_q node is not used for this, although it would save the
+field. Whoever claims that node may turn away a futex, rwsem or
+semaphore wakeup that then relies on the claimant, so the drain would
+have to wake with TASK_NORMAL, and a program could aim a wake of an
+uninterruptible sleep at any task it names. Not every such sleep
+tolerates one: a new kthread sleeps once, without a loop, until its
+creator wakes it. With a node of its own the drain wakes interruptible
+sleeps only, as the direct wake does.
+
+The per-CPU queue is a stack rather than a wake_q_head. The head of a
+wake queue is two words updated without atomics, and this queue is
+pushed from NMI context while the irq_work that drains it runs in hard
+IRQ context on the same CPU. A push is a cmpxchg() on the one head
+pointer and the drain takes the whole stack with one xchg(), so a push
+that interrupts the drain lands on an empty stack and queues the work
+again, which irq_work permits because it clears its pending bit before
+running the callback. The work is a hard irq_work so that on PREEMPT_RT
+the wake is not queued behind the irq_work thread.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h |  6 ++++++
- kernel/bpf/flow.c            |  3 ++-
- kernel/bpf/join.c            |  3 ++-
- kernel/bpf/states.c          |  3 ++-
- kernel/bpf/verifier.c        | 16 ++++++++++++++++
- 5 files changed, 28 insertions(+), 3 deletions(-)
+ include/linux/sched.h  |  2 +
+ kernel/bpf/task_park.c | 86 +++++++++++++++++++++++++++++++++++++++++-
+ kernel/fork.c          |  1 +
+ 3 files changed, 87 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index b304f3ebc983..39ff1359adb9 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -559,6 +559,12 @@ struct bpf_verifier_state {
- 	 * and their packet pointers are not in the state, see bpf_flow_return().
- 	 */
- 	bool changed_pkt_data;
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 43222c34fab8..0fdd39174436 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1632,6 +1632,8 @@ struct task_struct {
+ 	struct bpf_run_ctx		*bpf_ctx;
+ 	/* Set by bpf_task_wake(), consumed by bpf_task_park() */
+ 	int				bpf_wake_pending;
++	/* On a CPU's queue of deferred bpf_task_wake() calls when not NULL */
++	struct wake_q_node		bpf_wake_node;
+ #endif
+ 	/* Used by BPF for per-TASK xdp storage */
+ 	struct bpf_net_context		*bpf_net_context;
+diff --git a/kernel/bpf/task_park.c b/kernel/bpf/task_park.c
+index 39c9f085f7a9..5a9b3124312e 100644
+--- a/kernel/bpf/task_park.c
++++ b/kernel/bpf/task_park.c
+@@ -5,10 +5,12 @@
+ #include <linux/btf.h>
+ #include <linux/btf_ids.h>
+ #include <linux/hrtimer.h>
++#include <linux/irq_work.h>
+ #include <linux/kthread.h>
+ #include <linux/rcupdate_trace.h>
+ #include <linux/sched.h>
+ #include <linux/sched/signal.h>
++#include <linux/sched/wake_q.h>
+ 
+ /*
+  * A BPF program that blocks for an event keeps its own queue of waiters and
+@@ -35,6 +37,75 @@
+  * not erased but stays pending for the next park.
+  */
+ 
++/*
++ * A wake asked for with IRQs disabled cannot be issued there: the caller may
++ * have interrupted the scheduler with the task's pi_lock or a runqueue lock
++ * held, or may run in NMI context, where try_to_wake_up() may take neither.
++ * Such wakes are queued on the CPU and issued from irq_work once IRQs are
++ * enabled again.
++ *
++ * The queue goes through a node of its own in the task, under the rule the
++ * scheduler's wake queues follow for theirs: a task is on at most one queue,
++ * whoever claimed the node wakes the task, and a waker that finds it claimed
++ * leaves the wake to the claimant. The pending word is set before the claim
++ * is tried, so a wake left this way still reaches a parked task through the
++ * claimant's wake, and any other task through its next park.
++ *
++ * The task's wake_q node would save the field, but whoever claims that node
++ * may turn away a futex, rwsem or semaphore wakeup that then relies on the
++ * claimant, and so has to wake with TASK_NORMAL. A program could then aim a
++ * wake of an uninterruptible sleep at any task it names, and not every such
++ * sleep has a loop around it: a new kthread sleeps once until its creator
++ * wakes it. With its own node the drain wakes interruptible sleeps only, as
++ * the direct wake does.
++ *
++ * The queue is a stack with a per-CPU head: pushed with cmpxchg() from
++ * whatever context asks, emptied with one xchg() by the irq_work, so a push
++ * that interrupts the drain lands on an empty stack and queues the work
++ * again.
++ */
++static DEFINE_PER_CPU(struct wake_q_node *, bpf_task_wake_queue);
++
++static void bpf_task_wake_deferred(struct irq_work *work)
++{
++	struct wake_q_node *node = xchg(this_cpu_ptr(&bpf_task_wake_queue), NULL);
++
++	while (node) {
++		struct task_struct *task = container_of(node, struct task_struct, bpf_wake_node);
++
++		node = node->next == WAKE_Q_TAIL ? NULL : node->next;
++		/* The task may be queued again from here on. */
++		WRITE_ONCE(task->bpf_wake_node.next, NULL);
++		wake_up_state(task, TASK_INTERRUPTIBLE);
++		put_task_struct(task);
++	}
++}
++
++static DEFINE_PER_CPU(struct irq_work, bpf_task_wake_work) =
++	IRQ_WORK_INIT_HARD(bpf_task_wake_deferred);
++
++static void bpf_task_wake_defer(struct task_struct *task)
++{
++	struct wake_q_node *node = &task->bpf_wake_node, *head;
++
 +	/*
-+	 * A function that is verified on its own parked the task. Its callers,
-+	 * what the sleep takes from them and whether one of them is a callback,
-+	 * are not in the state, see bpf_flow_return().
++	 * The claim, as in __wake_q_add(): NULL is free, anything else is
++	 * queued. The xchg() that stored the pending word is a full barrier
++	 * between that store and the claim, so a claim lost to another holder
++	 * is still covered: the holder's wake follows its own reset of the
++	 * node, which this claim did not observe, so the task it wakes
++	 * observes the word.
 +	 */
-+	bool parked;
- 	/*
- 	 * Not zero in a function that is verified on its own: the call that the
- 	 * state at its entry came from, see bpf_flow_call().
-diff --git a/kernel/bpf/flow.c b/kernel/bpf/flow.c
-index c9458b3ad114..47ff2fb5f11a 100644
---- a/kernel/bpf/flow.c
-+++ b/kernel/bpf/flow.c
-@@ -2309,7 +2309,8 @@ static void flow_shape_ctx(const struct bpf_verifier_state *st, struct flow_shap
- 
- 	ctx = jhash_3words(st->in_sleepable | st->callers_unknown << 1 |
- 			   st->unwound << 2 | st->changed_pkt_data << 3 |
--			   (st->active_irq_id != 0) << 4 | (st->active_lock_id != 0) << 5,
-+			   (st->active_irq_id != 0) << 4 | (st->active_lock_id != 0) << 5 |
-+			   st->parked << 6,
- 			   st->acquired_refs, st->active_locks, 0);
- 	ctx = jhash_2words(st->active_preempt_locks, st->active_rcu_locks, ctx);
- 	ctx = jhash_2words(lower_32_bits((unsigned long)st->active_lock_ptr),
-diff --git a/kernel/bpf/join.c b/kernel/bpf/join.c
-index cc4494aef187..8bd92af087c0 100644
---- a/kernel/bpf/join.c
-+++ b/kernel/bpf/join.c
-@@ -532,7 +532,8 @@ static bool join_check_state(const struct bpf_verifier_state *a,
- 		return false;
- 	if (a->speculative != b->speculative || a->in_sleepable != b->in_sleepable ||
- 	    a->callers_unknown != b->callers_unknown ||
--	    a->unwound != b->unwound || a->changed_pkt_data != b->changed_pkt_data)
-+	    a->unwound != b->unwound || a->changed_pkt_data != b->changed_pkt_data ||
-+	    a->parked != b->parked)
- 		return false;
- 	if (a->active_locks != b->active_locks ||
- 	    a->active_preempt_locks != b->active_preempt_locks ||
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index efc0870b85c2..f75161423377 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -745,7 +745,8 @@ bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state
- 	if (old->in_sleepable != cur->in_sleepable)
- 		return false;
- 
--	if (old->unwound != cur->unwound || old->changed_pkt_data != cur->changed_pkt_data)
-+	if (old->unwound != cur->unwound || old->changed_pkt_data != cur->changed_pkt_data ||
-+	    old->parked != cur->parked)
- 		return false;
- 
- 	if (!refsafe(old, cur, &env->idmap_scratch))
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d8fbdd6b9658..8edc32153226 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1792,6 +1792,7 @@ int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
- 	dst_state->callers_unknown = src->callers_unknown;
- 	dst_state->unwound = src->unwound;
- 	dst_state->changed_pkt_data = src->changed_pkt_data;
-+	dst_state->parked = src->parked;
- 	dst_state->flow_entry = src->flow_entry;
- 	dst_state->insn_idx = src->insn_idx;
- 	dst_state->curframe = src->curframe;
-@@ -11337,6 +11338,9 @@ static void invalidate_regs_across_park(struct bpf_verifier_env *env)
- 		bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_TASK_PARK);
- 		mark_reg_invalid(env, reg);
- 	}));
-+	/* the frames of the callers are looked at when the function returns to them */
-+	if (env->cur_state->flow_entry)
-+		env->cur_state->parked = true;
++	if (cmpxchg_relaxed(&node->next, NULL, WAKE_Q_TAIL))
++		return;
++	get_task_struct(task);
++	head = this_cpu_read(bpf_task_wake_queue);
++	do {
++		WRITE_ONCE(node->next, head ?: WAKE_Q_TAIL);
++	} while (!try_cmpxchg(this_cpu_ptr(&bpf_task_wake_queue), &head, node));
++	irq_work_queue(this_cpu_ptr(&bpf_task_wake_work));
++}
++
+ /*
+  * What ends a park besides a wake and the timeout: a stop or park request for
+  * a kthread, or a signal. Both are checked for every caller, since a kthread
+@@ -169,8 +240,15 @@ __bpf_kfunc int bpf_task_park(u64 timeout_ns, u64 flags)
+  * A task that is not parked keeps the pending wake until its next
+  * bpf_task_park(), which then returns at once.
+  *
+- * Return: 1 when @task was asleep and is now runnable, 0 when it was not,
+- * -EINVAL when @flags is not 0.
++ * The wake takes the task's pi_lock and a runqueue lock, which the kernel
++ * code a program runs in or interrupts may already hold, and it may not be
++ * issued in NMI context at all. Such code and NMI context both run with IRQs
++ * disabled, so a call with IRQs disabled marks the wake pending and queues it
++ * for irq_work on the calling CPU, which issues it once IRQs are enabled
++ * again. Such a call cannot tell whether the task was asleep and returns 2.
++ *
++ * Return: 1 when @task was asleep and is now runnable, 0 when it was not, 2
++ * when the wake was deferred, -EINVAL when @flags is not 0.
+  */
+ __bpf_kfunc int bpf_task_wake(struct task_struct *task, u64 flags)
+ {
+@@ -186,6 +264,10 @@ __bpf_kfunc int bpf_task_wake(struct task_struct *task, u64 flags)
+ 	 * in bpf_task_park().
+ 	 */
+ 	xchg(&task->bpf_wake_pending, 1);
++	if (unlikely(irqs_disabled())) {
++		bpf_task_wake_defer(task);
++		return 2;
++	}
+ 	return wake_up_state(task, TASK_INTERRUPTIBLE);
  }
  
- static void invalidate_rcu_protected_refs(struct bpf_verifier_env *env)
-@@ -11757,6 +11761,9 @@ static bool func_is_on_its_own(struct bpf_verifier_env *env, struct bpf_verifier
- 	if (sub->changes_pkt_data || sub->has_tail_call || sub->has_ld_abs ||
- 	    sub->is_cb || sub->is_async_cb || sub->is_exception_cb)
- 		return false;
-+	/* a park looks at every frame, and takes from each what the sleep may free */
-+	if (sub->might_park)
-+		return false;
- 	if (state->speculative)
- 		return false;
- 	if (sub->releases_inherited &&
-@@ -11936,6 +11943,15 @@ int bpf_flow_return(struct bpf_verifier_env *env, struct bpf_verifier_state *cal
- 		env->subprog_info[callee->subprogno].changes_pkt_data = true;
- 		return 1;
- 	}
-+	/*
-+	 * Likewise for a park behind such an address. It was checked against the frames
-+	 * of the function only: which caller is a callback, and what the sleep takes
-+	 * from each, is found out in the context of the caller.
-+	 */
-+	if (exit->parked) {
-+		env->subprog_info[callee->subprogno].might_park = true;
-+		return 1;
-+	}
+diff --git a/kernel/fork.c b/kernel/fork.c
+index b66eb25626c9..a272d11c6caf 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1020,6 +1020,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
+ 	RCU_INIT_POINTER(tsk->bpf_storage, NULL);
+ 	tsk->bpf_ctx = NULL;
+ 	tsk->bpf_wake_pending = 0;
++	tsk->bpf_wake_node.next = NULL;
+ #endif
+ 	return tsk;
  
- 	for (i = 0; i < CALLER_SAVED_REGS; i++)
- 		bpf_mark_reg_not_init(env, &frame->regs[caller_saved[i]]);
 -- 
 2.53.0
 
